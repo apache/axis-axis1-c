@@ -19,6 +19,9 @@
  */
 #include "Calculator.hpp"
 
+void Calculator::onFault(){}
+void Calculator::init(){}
+void Calculator::fini(){}
 
 Calculator::Calculator()
 {
