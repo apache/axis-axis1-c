@@ -47,7 +47,7 @@ DOCUMENTATION
 SAMPLES
 -------
 ! <team> 	WSDL documents for sample web services
-! <team>	Writing 2 web services for SOAPBuilders interop tests 
+* <susantha>	Writing 2 web services for SOAPBuilders interop tests 
 		1. Round 2 base and
 		2. Round 2 Group B
 
@@ -69,6 +69,7 @@ GENERAL / UNCATEGORIZED
 
 ! <team>	In the WSDDDocument.cpp write the code to handle the end element for wsdd_resflow
 
+* <susantha> 	Improve AxisEngine to send back the WSDL upon http GET request. Ex. http://url/service?wsdl
 
 FUTURE ENHANCEMENTS
 -------------------
