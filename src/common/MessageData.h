@@ -74,7 +74,7 @@
 
 #include "GDefine.h"
 #include "Param.h"
-#include "ISoapDeserializer.h"
+#include "ISoapDeSerializer.h"
 #include "ISoapSerializer.h"
 #include "IMessageData.h"
 #include "../wsdd/WSDDService.h"
