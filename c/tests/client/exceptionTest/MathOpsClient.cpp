@@ -1,4 +1,4 @@
-#include "MathOps.h"
+#include "gen_src/MathOps.h"
 #include <axis/server/AxisException.h>
 #include <ctype.h>
 
@@ -28,6 +28,7 @@ int main(int argc, char* argv[])
 	}
 	printf("Sending Requests to Server http://%s:%s ........\n\n", server, port);
 	sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
+	//sprintf(endpoint, "http://%s:%s/", server, port);
 	MathOps ws(endpoint);
 
 	op = argv[3];
