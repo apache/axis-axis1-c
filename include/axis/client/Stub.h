@@ -28,25 +28,27 @@
 #include <axis/client/Call.h>
 #include <vector>
 
-class Stub 
+class Stub
 {
-public:
-	Stub(const char* pchEndpointUri);
-	virtual ~Stub();
-	int initilizeCall();
-	void setEndPoint(char* pcEndPoint);
-        void setTransportProperty(const char* pcKey, const char* pcValue);
-	IHeaderBlock* createHeaderBlock(AxisChar *pachLocalName, 
-		AxisChar *pachPrefix, AxisChar *pachUri);
+  public:
+    Stub (const char *pchEndpointUri);
+      virtual ~ Stub ();
+    int initilizeCall ();
+    void setEndPoint (char *pcEndPoint);
+    void setTransportProperty (const char *pcKey, const char *pcValue);
+    IHeaderBlock *createHeaderBlock (AxisChar * pachLocalName,
+				     AxisChar * pachPrefix,
+				     AxisChar * pachUri);
 
-protected:
-	void setTransportProperties();
-	void setSOAPHeaders();
-	Call* m_pCall;
-	vector <char*> m_vKeys;
-	vector <char*> m_vValues;
-	vector <IHeaderBlock*> m_vSOAPHeaderBlocks;
-	
+  protected:
+    void applyUserPreferences ();
+    void setTransportProperties ();
+    void setSOAPHeaders ();
+    Call *m_pCall;
+    vector < char *>m_vKeys;
+    vector < char *>m_vValues;
+    vector < IHeaderBlock * >m_vSOAPHeaderBlocks;
+
 };
 
-#endif /* !defined(_STUB_H____OF_AXIS_INCLUDED_)*/
+#endif /* !defined(_STUB_H____OF_AXIS_INCLUDED_) */
