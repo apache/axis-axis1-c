@@ -94,3 +94,34 @@ void BeanClass::SetClassName(string &sName)
 {
 	m_Name = sName;
 }
+
+int BeanClass::GenerateSerializerAndDeSerializerImpl(File &file)
+{
+	list<Variable*>::iterator it;
+
+	file << "int " << m_Name << "::DeSerialize(ISoapDeSerializer *pDZ)" << endl;
+	file << "{" << endl;
+	for (it = m_Variables.begin(); it != m_Variables.end(); it++)
+	{
+		(*it)->GenerateDeserializerImpl(file);
+	}	
+	file << "\treturn SUCCESS;" << endl;
+	file << "}" << endl;
+	file << endl;
+
+	file << "int " << m_Name << "::Serialize(ISoapSerializer& pSZ)" << endl;
+	file << "{" << endl;
+	file << "\tm_URI = \"" << g_ClassNamespaces[m_Name] << "\"" << endl;
+	file << "\tstring sPrefix = mc->getSoapSerializer()->getNewNamespacePrefix();" << endl;
+	file << "\tm_TypeName = \"" << m_Name << "\";" << endl;
+	file << "\tpSZ << \"<\" << m_TypeName.c_str() << \" xsi:type=\\\"\" << sPrefix.c_str() <<\":\" << m_TypeName.c_str() << \" xmlns:\" << sPrefix.c_str() << \"=\\\"\" << m_URI.c_str() << \"\\\">\";" << endl;
+	for (it = m_Variables.begin(); it != m_Variables.end(); it++)
+	{
+		(*it)->GenerateSerializerImpl(file);
+	}	
+	file << "\tpSZ << \"</\" << m_TypeName.c_str() << \">\";" << endl;
+	file << "\treturn SUCCESS;" << endl;
+	file << "}" << endl;
+	file << endl;
+	return 0;
+}
