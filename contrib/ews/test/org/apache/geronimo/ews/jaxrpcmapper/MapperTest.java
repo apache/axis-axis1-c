@@ -62,4 +62,11 @@ public class MapperTest
                                      getTestFile("src/samples/mapper/frenchzip/FrenchZip.wsdl")};
         WsdlToJ2ee.main(args);
     }
+
+    public void testAnonymousTypes() throws Exception {
+        String args[] = new String[]{"-m",getTestFile("src/samples/mapper/anonymous/mapping.xml"),
+                                     "-o", getTestFile("target/generated/samples/mapper/anonymous"),
+                                     getTestFile("src/samples/mapper/anonymous/anonymous.wsdl")};
+        WsdlToJ2ee.main(args);
+    }
 }
