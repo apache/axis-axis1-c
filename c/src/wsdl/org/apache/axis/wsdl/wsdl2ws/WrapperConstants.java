@@ -67,6 +67,7 @@ public interface WrapperConstants {
 	public static final int GENERATOR_CLIENT_STUB_HPP = 19;
 	public static final int GENERATOR_PARAM_CPP_ALL = 20 ;
 	public static final int GENERATOR_SERVICE_HPP = 21 ;
+	public static final int GENERATOR_CLIENT_EXCEPTION_ALL = 50;
 	//c constants 
 	public static final int GENERATOR_CLASSLOADER_C = 22 ;
 	public static final int GENERATOR_WRAPPER_C = 23;
