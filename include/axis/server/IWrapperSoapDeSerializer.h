@@ -143,7 +143,7 @@ typedef struct {
     long (AXISCALL* getAttributeAsDuration)(void* pObj, const AxisChar* pName,
         const AxisChar* pNamespace);
     int (AXISCALL* getStatus)(void* pObj);
-  AnyType* (AXISCALL* getAnyObject)(void* pObj);
+    AnyType* (AXISCALL* getAnyObject)(void* pObj);
 } IWrapperSoapDeSerializerFunctions;
 
 typedef struct { 
@@ -287,7 +287,7 @@ public:
     virtual void setStyle(AXIS_BINDING_STYLE nStyle)=0;
     virtual int getVersion()=0;
     virtual int getHeader()=0;    
-	virtual AnyType* getAnyObject()=0;            
+	virtual AnyType* AXISCALL getAnyObject()=0;            
 
     /* following stuff is needed to provide the interface for C web services */
 public:
