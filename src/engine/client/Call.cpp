@@ -27,9 +27,8 @@
 
 
 #include <axis/client/Call.hpp>
+#include <axis/server/AxisException.hpp>
 #include "../../common/AxisConfig.h"
-#include "../../transport/axis/AxisTransport.h"
-#include "../../transport/axis/Channel.hpp"
 #include "ClientAxisEngine.h"
 #include "../SOAPTransportFactory.h"
 #include "../../transport/SOAPTransport.h"
