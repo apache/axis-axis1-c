@@ -20,9 +20,9 @@ echo "configure --prefix=$AXISCPP_DEPLOY --libdir=$AXISCPP_DEPLOY/lib --bindir=$
     --libdir=$AXISCPP_DEPLOY/lib \
     --bindir=$AXISCPP_DEPLOY/bin \
     --enable-apache2=yes \
-    --enable-apache=yes \
+    --enable-apache=no \
     --enable-expat=yes \
-    --enable-xercesc=yes
+    --enable-xercesc=no
 echo "make"
 make 2> build_errors
 echo "make install"
