@@ -13,6 +13,7 @@ libaxiscpp_client_la_SOURCES = ../Axis.cpp \
                 ../SessionScopeHandlerPool.cpp \
                 ../SharedObject.cpp \
 		Call.cpp \
+		Stub.cpp \
                 ../AxisEngineException.cpp \
                 ../SOAPTransportFactory.cpp \
                 ../XMLParserFactory.cpp 
