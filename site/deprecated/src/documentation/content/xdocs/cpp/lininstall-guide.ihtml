@@ -49,8 +49,8 @@ engine.</p>
 <h1>Installation On Linux</h1>
 <p>We tested with the following</p>
 <ul>
-  <li>Redhat Linux 8.0(2.4.18-14) RedhatLinux9.0(2.4.20-8),
-Dabian(2.6.3-1-686)(unstable)</li>
+  <li>RedhatLinux9.0(2.4.20-8), Dabian(2.6.3-1-686)(unstable),
+       Redhat Linux8.0(2.4.18-14)</li>
   <li>Apache 1.3 [apache_1.3.27.tar .gz, apache_1.3.28.tar.gz)] 
 (Source),     Apache2.0 (source)</li>
   <li>expat [expat-1.95.7.tar.gz](Source)&nbsp;</li>
@@ -146,13 +146,12 @@ apache_1.3.27.tar.gz).      Build it with sharable module support.</p>
 <p><strong>$ cp -f &lt;expatinstdirectory&gt;/include/expat.h $AXISCPP_HOME/include/expat/</strong></p>
                       
     <p>If you are using xercesc parser copy the xercesc include files</p>
-<p><strong>$ cp -rf &lt;xercescinstdirectory&gt;/include/* $AXISCPP_HOME/include/xercesc/</strong></p>
+<p><strong>$ cp -rf &lt;xercescinstdirectory&gt;/include/xercesc/* $AXISCPP_HOME/include/xercesc/</strong></p>
                       
 <p class="command"><span class="command"></span></p>
 <p><strong>$ cd $AXISCPP_HOME</strong></p>
-<p>The Folder called deploy in the $AXISCPP_HOME/ should be copied to
-apache    root folder .Rename the deploy folder as "Axis" . Give all
-permissions to   this folder.<br>
+<p>The Folder called deploy in the $AXISCPP_HOME/ should be copied to your place of choice. Rename the deploy folder 
+as "Axis" . Give all permissions to   this folder.<br>
 <br>
 <br>
 <b>$ cp -rf $AXISCPP_HOME/deploy&nbsp; /usr/local</b><br>
@@ -177,7 +176,7 @@ directory.<br>
 <p>If you are using expat parser do the following<br>
 </p>
 <p>set<b> EXPAT_HOME</b>="&lt;Your expat installation root folder&gt;"</p>
-<p>set<b> LD_LIBRARY_PATH="$EXPAT_HOME/lib:AXISCPP_HOME/bin"</b> (do
+<p>set<b> LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$EXPAT_HOME/lib:$AXISCPP_HOME/bin:$AXIS_HOME"</b> (do
 this in your .bash_profile)<br>
 <br>
 <br>
@@ -190,10 +189,8 @@ this in your .bash_profile)<br>
 <b>cp -f Makefile.am_expat Makefile.am</b> 	</p>
 <p>If you are using Xerces-c parser do the following</p>
 <p>set<b> XERCESC_HOME</b>="&lt;Your xercesc installation root folder&gt;"</p>
-<p>set<b> LD_LIBRARY_PATH="$XERCESC_HOME/lib"</b> (do this in your
+<p>set<b> LD_LIBRARY_PATH="$XERCESC_HOME/lib:$AXISCPP_HOME/bin:$AXIS_HOME"</b> (do this in your
 .bash_profile)<br>
-<br>
-<b>cp -rf $XERCESC_HOME/include/xercesc/* $AXISCPP_HOME/include/xercesc/</b><br>
 <br>
 <b>cd $AXISCPP_HOME/src/soap</b><br>
 <b>cp -f Makefile.am_xercesc Makefile.am</b><br>
@@ -225,7 +222,8 @@ things as described in it.<br>
 <br>
 </p>
 <p>libaxiscpp_mod.so (If you built for apache2 this is
-libaxiscpp_mod2.so)      should have been created in $AXISCPP_HOME/bin
+libaxiscpp_mod2.so), libaxiscpp_client.so, libserver_engine.so, libAdminService.so, 
+adminclient, simple-axis_server      should have been created in $AXISCPP_HOME/bin
 directory. Note:- you can    give  the install path inside the
 runconfigure script.</p>
 <p> Now there is no need to seperately build client side and server  
@@ -251,8 +249,8 @@ src/xml/Makefile src/server/Makefile     src/server/apache2/Makefile) </strong><
 Then to deploy it on apache<br>
 <br>
 </p>
-<p>First you need to edit /usr/local/apache/conf/httpd.conf</p>
-<p><strong>$ vi /usr/local/apache/conf/httpd.conf</strong></p>
+<p>First you need to edit &lt;apache install directory&gt;/conf/httpd.conf</p>
+<p><strong>$ vi &lt;apache install directory&gt;/conf/httpd.conf</strong></p>
 <p>At the bottom of the file you have to include following lines and
 save      it.</p>
 <p><strong>LoadModule axis_module libexec/libaxiscpp_mod.so (in apache2
@@ -287,8 +285,8 @@ start apache.<br>
 <p>Verify the above change had been correctly effected by typing</p>
 <p><strong>$ echo $AXISCPP_HOME</strong></p>
 <p><strong>$ cd $AXISCPP_HOME</strong></p>
-<p>The Folder called deploy in the $AXISCPP_HOME/ should be copied to
-apache    root folder .Rename the deploy folder as "Axis" . Give all
+<p>The Folder called deploy in the $AXISCPP_HOME/ should be copied to a folder of
+your choice .Rename the deploy folder as "Axis" . Give all
 permissions to   this folder.<br>
 <br>
 <br>
@@ -321,8 +319,8 @@ from the source. <br>
 Then to deploy it on apache<br>
 <br>
 </p>
-<p>First you need to edit /usr/local/apache/conf/httpd.conf</p>
-<p><strong>$ vi /usr/local/apache/conf/httpd.conf</strong></p>
+<p>First you need to edit &lt;apache install directory&gt;/conf/httpd.conf</p>
+<p><strong>$ vi &lt;apache install directory&gt;/conf/httpd.conf</strong></p>
 <p>At the bottom of the file you have to include following lines and
 save      it.</p>
 <p><strong>LoadModule axis_module libexec/libaxiscpp_mod.so (in apache2
