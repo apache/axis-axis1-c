@@ -62,7 +62,7 @@ class Axis2Transport:public SOAPTransport
 	throw (AxisTransportException);
     void setAttachment (const char *pcAttachmentId, const char *pcAttachment) {};
     
-    const char *getAttachment (const char *pcAttachmentId) {};
+    const char *getAttachment (const char *pcAttachmentId) { return NULL;};
     
     void setSessionId (const char *pcSessionId);
     
