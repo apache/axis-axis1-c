@@ -133,10 +133,8 @@ use only one parser. But anyway I can give instructions to build both as you've 
 <b>cp -f /usr/local/apache2/include/* $AXISCPP_HOME/include/apache2_0/</b></p>
 
 <p>Then I can build Axis C++ server, client,parser libraries, transport library and server/client samples by,<br>
-<b>
-cd $AXISCPP_HOME<br>
-sh build.sh</p>
-</b>
+<b>cd $AXISCPP_HOME</b><br>
+<b>sh build.sh</b></p>
 
 <p>Once you have finished, have a look at $AXISCPP_HOME/build_errors,<br> 
 $AXISCPP_HOME/samples/server/sample_server_build_errors and <br>
@@ -184,12 +182,11 @@ your log files, configuration files libraries etc</p>
 <b>#Transport_smtp:The SMTP transport library</b><br>
 <b>#XMLParser:The xml parser library.</b></p>
 
-<b><p>LogPath:/usr/local/Axis/logs/AxisLog<br>
-WSDDFilePath:/usr/local/Axis/conf/server.wsdd<br>
-ClientLogPath:/usr/local/Axis/logs/AxisClientLog<br>
-XMLParser:/usr/local/Axis/libs/libaxis_xmlparser.so<br>
-Transport_http:/usr/local/Axis/libs/libaxis_transport.so</p>
-</b>
+<p><b>LogPath:/usr/local/Axis/logs/AxisLog</b><br>
+<b>WSDDFilePath:/usr/local/Axis/conf/server.wsdd</b><br>
+<b>ClientLogPath:/usr/local/Axis/logs/AxisClientLog</b><br>
+<b>XMLParser:/usr/local/Axis/libs/libaxis_xmlparser.so</b><br>
+<b>Transport_http:/usr/local/Axis/libs/libaxis_transport.so</b></p>
 
 <p>Now we need to copy neccessary libraries to the correct places and start apache. To do that you can find scripts written in $AXIS_HOME.<br>
 <b>cd $AXIS_HOME</b></p>
