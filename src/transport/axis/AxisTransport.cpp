@@ -202,7 +202,6 @@ AXIS_TRANSPORT_STATUS AxisTransport::getBytes(char* pcBuffer, int* pSize)
         try
         {
             m_pcReceived = m_pReceiver->Recv();
-            AXISTRACE1("CAME4", INFO);
             if (m_pcReceived)
                 m_iBytesLeft = strlen(m_pcReceived);
             else
