@@ -102,12 +102,67 @@ AXIS_CPP_NAMESPACE_START
             }
         }
         delete maxExclusive;
-     
-    	AxisChar* serializedValue = new AxisChar[80];
-    	strftime (serializedValue, 80, "%Y-%m-%dT%H:%M:%SZ", value);
         
-        IAnySimpleType::serialize(serializedValue);
-        delete [] serializedValue;
+        AxisString serializedValue = "";
+    	AxisChar* valueAsString = new AxisChar[80];
+    	strftime (valueAsString, 80, "%Y-%m-%dT%H:%M:%S", value);
+        serializedValue += valueAsString;
+        delete [] valueAsString;
+
+        // Calculate local timezone offset
+        time_t now = 0;
+        struct tm *temp = gmtime(&now);
+        struct tm utcTime;
+        memcpy(&utcTime, temp, sizeof(struct tm));
+        temp = localtime(&now);
+        struct tm localTime;
+        memcpy(&localTime, temp, sizeof(struct tm));
+
+        long utcTimeInMinutes = (utcTime.tm_year * 60 * 24 * 365)
+            + (utcTime.tm_yday * 60 * 24)
+            + (utcTime.tm_hour * 60)
+            + utcTime.tm_min;
+
+        long localTimeInMinutes = (localTime.tm_year * 60 * 24 * 365)
+            + (localTime.tm_yday * 60 * 24)
+            + (localTime.tm_hour * 60)
+            + localTime.tm_min;
+
+        int timeOffsetInMinutes = localTimeInMinutes - utcTimeInMinutes;
+
+        if (timeOffsetInMinutes == 0)
+        {
+            serializedValue += "Z";
+        }
+        else
+        {
+            struct tm timeOffset;
+            timeOffset.tm_year = 0;
+            timeOffset.tm_yday = 0;
+            timeOffset.tm_sec = 0;
+            timeOffset.tm_min = timeOffsetInMinutes % 60;
+            timeOffsetInMinutes -= timeOffset.tm_min;
+            timeOffset.tm_hour = (timeOffsetInMinutes % (60 * 24)) / 60;
+            
+            if ( (timeOffset.tm_hour < 0) || (timeOffset.tm_min < 0) )
+            {
+                serializedValue += "-";
+                timeOffset.tm_hour *= -1;
+                timeOffset.tm_min *= -1;
+            }
+            else
+            {
+                serializedValue += "+";
+            }
+            
+            AxisChar * offSetString = new AxisChar[6];
+            sprintf(offSetString, "%02i:%02i", timeOffset.tm_hour, timeOffset.tm_min);
+            serializedValue += offSetString;
+            delete [] offSetString;
+        }
+
+        
+        IAnySimpleType::serialize(serializedValue.c_str());
 		return m_Buf;
     }
 	
@@ -120,27 +175,24 @@ AXIS_CPP_NAMESPACE_START
 	    AxisChar *cTemp2;
 	    AxisChar *cTemp3;
 
-		time_t now;
-
-		time(&now);
-
+	    time_t now;
+	    time (&now);
 	    pTm = gmtime (&now);
 
 	    struct tm result1;
 	    memcpy (&result1, pTm, sizeof (tm));
 	    pTm = localtime (&now);
 
-   		struct tm result2;
+	    struct tm result2;
 	    memcpy (&result2, pTm, sizeof (tm));
 
 	    time_t d = mktime (&result1) - mktime (&result2);
-
 	    if (d == -1)
 	    {
-	    	throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
+	        throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
 	    }
 	
-        /* dismantle m_sValue to get tm value;
+        /* dismantle valueAsChar to get tm value;
          * XSD_DATETIME format is
          * CCYY(-)MM(-)DDThh:mm:ss.ss...Z OR
          * CCYY(-)MM(-)DDThh:mm:ss.ss...+/-<UTC TIME DIFFERENCE>
@@ -149,8 +201,14 @@ AXIS_CPP_NAMESPACE_START
             &value.tm_mon, &value.tm_mday, &value.tm_hour, &value.tm_min, 
 			&value.tm_sec) != 6)
 		{
-	    	throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
-		}
+            AxisString exceptionMessage =
+            "Unable to decompose from string form of DateTime value.  Value =";
+            exceptionMessage += valueAsChar;
+            exceptionMessage += ".";
+            
+            throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                const_cast<AxisChar*>(exceptionMessage.c_str()));
+            }
 
         value.tm_year -= 1900;
         value.tm_mon--;
@@ -168,12 +226,21 @@ AXIS_CPP_NAMESPACE_START
         /*if the timezone is represented adding 'Z' at the end */
         if ((cTemp = const_cast<char*>(strpbrk (valueAsChar, "Z"))) != NULL)
         {
-            time_t temp = mktime (&value);
+            time_t temp = mktime (&value); // convert tm object to seconds
             if (temp == -1)
             {
-		    	throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
+            	throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
             }
-            pTm = localtime (&temp);
+            pTm = localtime (&temp); // construct tm object from seconds
+            memcpy (&value, pTm, sizeof (tm));
+            time_t t = mktime (&value);
+            if (t == -1)
+            {
+              throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
+            }
+
+            t = labs (t - d);
+            pTm = localtime (&t);
         }
         /*if the timezone is represented using +/-hh:mm format */
         else if (len > (sizeof (char) * 6))
@@ -187,7 +254,7 @@ AXIS_CPP_NAMESPACE_START
             time_t timeInSecs = mktime (&value);
             if (timeInSecs == -1)
             {
-		    	throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
+            	throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
             }
             
             int hours = 0;
@@ -195,7 +262,7 @@ AXIS_CPP_NAMESPACE_START
 
             if (sscanf (cUtc + 1, "%d:%d", &hours, &minutes) != 2)
             {
-		    	throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
+            	throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
             }
 
             int secs = hours * 60 * 60 + minutes * 60;
@@ -213,11 +280,11 @@ AXIS_CPP_NAMESPACE_START
             time_t t = mktime (&value);
             if (t == -1)
             {
-		    	throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
+            	throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
             }
 
             t = labs (t - d);
-            pTm = gmtime (&t);
+            pTm = localtime (&t);
         }
         /*if the zone is not represented in the date */
         else
@@ -228,7 +295,7 @@ AXIS_CPP_NAMESPACE_START
             {
 		    	throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
             }
-            pTm = gmtime (&timeInSecs);
+            pTm = localtime (&timeInSecs);
         }
         
         if(m_DateTime)

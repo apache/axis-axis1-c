@@ -93,13 +93,68 @@ AXIS_CPP_NAMESPACE_START
             }
         }
         delete maxExclusive;
-     
-     AxisChar* serializedValue = new AxisChar[80];
-     strftime (serializedValue, 80, "--%m-%d", value);
+           
+        AxisString serializedValue = "";
+        AxisChar* valueAsString = new AxisChar[80];
+        strftime (valueAsString, 80, "--%m-%d", value);
+        serializedValue += valueAsString;
+        delete [] valueAsString;
+
+        // Calculate local timezone offset
+        time_t now = 0;
+        struct tm *temp = gmtime(&now);
+        struct tm utcTime;
+        memcpy(&utcTime, temp, sizeof(struct tm));
+        temp = localtime(&now);
+        struct tm localTime;
+        memcpy(&localTime, temp, sizeof(struct tm));
+
+        long utcTimeInMinutes = (utcTime.tm_year * 60 * 24 * 365)
+            + (utcTime.tm_yday * 60 * 24)
+            + (utcTime.tm_hour * 60)
+            + utcTime.tm_min;
+
+        long localTimeInMinutes = (localTime.tm_year * 60 * 24 * 365)
+            + (localTime.tm_yday * 60 * 24)
+            + (localTime.tm_hour * 60)
+            + localTime.tm_min;
+
+        int timeOffsetInMinutes = localTimeInMinutes - utcTimeInMinutes;
+
+        if (timeOffsetInMinutes == 0)
+        {
+            serializedValue += "Z";
+        }
+        else
+        {
+            struct tm timeOffset;
+            timeOffset.tm_year = 0;
+            timeOffset.tm_yday = 0;
+            timeOffset.tm_sec = 0;
+            timeOffset.tm_min = timeOffsetInMinutes % 60;
+            timeOffsetInMinutes -= timeOffset.tm_min;
+            timeOffset.tm_hour = (timeOffsetInMinutes % (60 * 24)) / 60;
+            
+            if ( (timeOffset.tm_hour < 0) || (timeOffset.tm_min < 0) )
+            {
+                serializedValue += "-";
+                timeOffset.tm_hour *= -1;
+                timeOffset.tm_min *= -1;
+            }
+            else
+            {
+                serializedValue += "+";
+            }
+            
+            AxisChar * offSetString = new AxisChar[6];
+            sprintf(offSetString, "%02i:%02i", timeOffset.tm_hour, timeOffset.tm_min);
+            serializedValue += offSetString;
+            delete [] offSetString;
+        }
+
         
-        IAnySimpleType::serialize(serializedValue);
-        delete [] serializedValue;
-        return m_Buf;
+        IAnySimpleType::serialize(serializedValue.c_str());
+        return m_Buf;        
     }
   
     struct tm* GMonthDay::deserializeGMonthDay(const AxisChar* valueAsChar) throw (AxisSoapException)
@@ -138,7 +193,7 @@ AXIS_CPP_NAMESPACE_START
          throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
         }
 
-        value.tm_year = 1900;
+        value.tm_year = 70;
         value.tm_mon--;
         value.tm_hour = 0;
         value.tm_min = 0;
@@ -159,6 +214,14 @@ AXIS_CPP_NAMESPACE_START
                 throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
             }
             pTm = localtime (&timeInSecs);
+            memcpy (&value, pTm, sizeof (tm));
+            time_t t = mktime (&value);
+            if (t == -1)
+            {
+                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
+            }
+            t = labs (t - d);
+            pTm = localtime (&t);
         }
         else if (cTemp2 != NULL)
         {
@@ -198,7 +261,7 @@ AXIS_CPP_NAMESPACE_START
                 throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
             }
             t = labs (t - d);
-            pTm = gmtime (&t);
+            pTm = localtime (&t);
         }
         /*if the zone is not represented in the date */
         else
@@ -209,9 +272,10 @@ AXIS_CPP_NAMESPACE_START
             {
                 throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
             }
-            pTm = gmtime (&timeInSecs);
+            pTm = localtime (&timeInSecs);
         }
-        
+
+        pTm -= 70; // Take off the 70 offset we added initially        
         if(m_GMonthDay)
         {
             delete m_GMonthDay;

@@ -76,7 +76,10 @@ int main(int argc, char* argv[])
       
     time_t tim;
     tim = 1100246323;
-    tm* lt = gmtime(&tim);
+    struct tm *temp = gmtime(&tim);
+    struct tm lt;
+    memcpy(&lt, temp, sizeof(struct tm));
+
       
     buffer = (xsd__unsignedByte*)calloc (1, input->count + 2);
     strcpy ( (char *)buffer, "A");
@@ -87,9 +90,9 @@ int main(int argc, char* argv[])
         type->IntegerType = 10*(i+1);
         type->DoubleType = 11.111 * (i+1);
         type->BooleanType = true_;
-        type->DateTimeType = *lt ;
-        type->TimeType = *lt ;
-        type->DateType = *lt ;
+        type->DateTimeType = lt ;
+        type->TimeType = lt ;
+        type->DateType = lt ;
         type->IntType = (i+1);
         type->ByteType = '1';
         type->DecimalType = 10*(i+1);
