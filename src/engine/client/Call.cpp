@@ -476,17 +476,11 @@ unsigned char Call::getElementAsUnsignedByte (const AxisChar* pName,
     return m_pIWSDZ->getElementAsUnsignedByte (pName, pNamespace);
 }
 
-#ifdef WIN32
-__int64 Call::getElementAsLong (const AxisChar* pName, const AxisChar* pNamespace)
+LONGLONG Call::getElementAsLong (const AxisChar* pName, const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsLong (pName, pNamespace);
 }
-#else
-long long Call::getElementAsLong (const AxisChar* pName, const AxisChar* pNamespace)
-{
-    return m_pIWSDZ->getElementAsLong (pName, pNamespace);
-}
-#endif
+
 long Call::getElementAsInteger (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {

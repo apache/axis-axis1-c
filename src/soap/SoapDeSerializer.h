@@ -34,6 +34,8 @@
 #include "xsd/Float.hpp"
 #include "xsd/Double.hpp"
 #include "xsd/Decimal.hpp"
+#include "xsd/Integer.hpp"
+#include "../platforms/PlatformAutoSense.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -146,13 +148,8 @@ public:
         const AxisChar* pNamespace);
     unsigned char AXISCALL getElementAsUnsignedByte(const AxisChar* pName, 
         const AxisChar* pNamespace);
-#ifdef WIN32
-    __int64 AXISCALL getElementAsLong(const AxisChar* pName, 
+    LONGLONG AXISCALL getElementAsLong(const AxisChar* pName, 
         const AxisChar* pNamespace);
-#else
-    long long AXISCALL getElementAsLong(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-#endif
     long AXISCALL getElementAsInteger(const AxisChar* pName, 
         const AxisChar* pNamespace);
     unsigned long AXISCALL getElementAsUnsignedLong(const AxisChar* pName, 
@@ -263,11 +260,7 @@ private:
     xsd__base64Binary decodeFromBase64Binary(const AxisChar* pValue);
     xsd__hexBinary decodeFromHexBinary(const AxisChar* pValue);
 
-#ifdef WIN32
-	__int64 strtoll(const char *);
-#else
-	long long strtoll(const char *);
-#endif
+	LONGLONG strtoll(const char *);
 };
 
 AXIS_CPP_NAMESPACE_END

@@ -86,18 +86,14 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
             m_sSZ += m_Buf;
             break;
         case XSD_LONG:
-//FJP v Added
-#ifdef WIN32
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%I64d", *((__int64*)(pValue)));
-#else
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%lld", *((long long*)(pValue)));
-#endif
+            AxisSprintf (m_Buf, BTS_BUFFSIZE, PRINTF_LONGLONG_FORMAT_SPECIFIER, *((LONGLONG*)(pValue)));
             m_sSZ += m_Buf;
             break;
-//FJP ^ Added
         case XSD_INTEGER:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%ld", *((long*)(pValue)));
-            m_sSZ += m_Buf;
+            {
+                Integer integerSerializer;
+                m_sSZ += integerSerializer.serialize(pValue);
+            }
             break;
         case XSD_DURATION:
         	{
@@ -305,18 +301,14 @@ const AxisChar* BasicTypeSerializer::serializeAsAttribute
             m_sSZ += m_Buf;
             break;
         case XSD_LONG:
-//FJP v Added
-#ifdef WIN32
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%lld", *((__int64*)(pValue)));
-#else
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%lld", *((long long*)(pValue)));
-#endif
+            AxisSprintf (m_Buf, BTS_BUFFSIZE, PRINTF_LONGLONG_FORMAT_SPECIFIER, *((LONGLONG*)(pValue)));
             m_sSZ += m_Buf;
             break;
-//FJP ^ Added
         case XSD_INTEGER:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%ld", *((long*)(pValue)));
-            m_sSZ += m_Buf;
+            {
+                Integer integerSerializer;
+                m_sSZ += integerSerializer.serialize(pValue);
+            }
             break;
         case XSD_DURATION:
         	{

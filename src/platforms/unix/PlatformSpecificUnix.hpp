@@ -83,7 +83,6 @@
  */
 #define GETLASTERROR errno;
 
-
 /**
  * From the last error number get a sensible std::string representing it
  * @param errorNumber the error Number you are trying to get a message for
@@ -91,6 +90,16 @@
  */
 #include <string>
 #define PLATFORM_GET_ERROR_MESSAGE(errorNumber) new string(strerror(errorNumber));
+
+/**
+ * type to be used for 64bit integers
+ */
+#define LONGLONG long long
+
+/**
+ * Format string to be used in printf for 64bit integers
+ */
+#define PRINTF_LONGLONG_FORMAT_SPECIFIER "%lld"
 
 #endif
 

@@ -22,6 +22,7 @@
 #define _PARAM_H____OF_AXIS_INCLUDED_
 
 #include "ComplexObjectHandler.h"
+#include "../platforms/PlatformAutoSense.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -36,13 +37,7 @@ public:
     unsigned short usValue;
     long lValue;
     unsigned ulValue;
-//FJP v Added
-#ifdef WIN32
-    __int64 llValue;
-#else
-    long long llValue;
-#endif
-//FJP ^ Added
+    LONGLONG llValue;
     char cValue;
     unsigned char ucValue;
     float fValue;

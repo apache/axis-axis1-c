@@ -43,6 +43,7 @@
 #include "../soap/xsd/Float.hpp"
 #include "../soap/xsd/Double.hpp"
 #include "../soap/xsd/Decimal.hpp"
+#include "../soap/xsd/Integer.hpp"
 
 using namespace std;
 

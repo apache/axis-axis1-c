@@ -70,11 +70,6 @@
 
 AXIS_CPP_NAMESPACE_START
 #define INITIAL_ARRAY_SIZE 1
-#ifdef WIN32
-#define LONGLONG __int64
-#else
-#define LONGLONG long long
-#endif
     SoapDeSerializer::SoapDeSerializer ()
 {
     m_pParser = XMLParserFactory::getParserObject ();
@@ -879,6 +874,7 @@ SoapDeSerializer::getArraySize (const AnyElement * pElement)
 
 /* Following macros are used just to shorten the coding */
 #define CONV_STRTOL(str) strtol(str, &m_pEndptr, 10)
+#define CONV_STRTOINTEGER(str) AxisSoapDeSerializerStringToInteger(str)
 #define CONV_STRTOUL(str) strtoul(str, &m_pEndptr, 10)
 #define CONV_STRTODECIMAL(str) AxisSoapDeSerializerStringToDecimal(str)
 #define CONV_STRTOFLOAT(str) AxisSoapDeSerializerStringToFloat(str)
@@ -894,6 +890,12 @@ SoapDeSerializer::getArraySize (const AnyElement * pElement)
 #define CONV_STRTOSTRING(str) AxisSoapDeSerializerStringToString(str)
 #define CONV_STRTOQNAME(str) AxisSoapDeSerializerStringToQName(str)
 #define CONV_STRTONOTATION(str) AxisSoapDeSerializerStringToNotation(str)
+
+LONGLONG AxisSoapDeSerializerStringToInteger(const char *valueAsChar)
+{
+    Integer integerDeserializer;
+    return *( integerDeserializer.deserializeInteger(valueAsChar));
+}
 
 double AxisSoapDeSerializerStringToDecimal(const char *valueAsChar)
 {
@@ -1175,7 +1177,7 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 		    case XSD_LONG:
 		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (LONGLONG, CONV_STRTOUL)
 		    case XSD_INTEGER:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (long, CONV_STRTOL)
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (LONGLONG, CONV_STRTOINTEGER)
 		    case XSD_UNSIGNEDLONG:
 		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (unsigned long, CONV_STRTOUL)
 		    case XSD_FLOAT:
@@ -1453,7 +1455,7 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 	
 		// < FJP
 		case XSD_INTEGER:
-		    DESERIALIZE_LITERAL_ARRAY_BLOCK (long, CONV_STRTOL)
+		    DESERIALIZE_LITERAL_ARRAY_BLOCK (LONGLONG, CONV_STRTOINTEGER)
 		case XSD_UNSIGNEDLONG:
 			DESERIALIZE_LITERAL_ARRAY_BLOCK (unsigned long, CONV_STRTOUL)
 		case XSD_FLOAT:
@@ -2121,7 +2123,7 @@ long
 SoapDeSerializer::getAttributeAsInteger (const AxisChar * pName, const
 					 AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (long, CONV_STRTOL, INIT_VALUE_NUMBER)}
+DESERIALIZE_GET_ATTRIBUTE_AS (LONGLONG, CONV_STRTOINTEGER, INIT_VALUE_NUMBER)}
 unsigned long
 SoapDeSerializer::getAttributeAsUnsignedLong (const AxisChar *
 					      pName, const
@@ -2792,7 +2794,7 @@ long
 SoapDeSerializer::getElementAsInteger (const AxisChar * pName,
 				       const AxisChar * pNamespace)
 {
-    long ret = 0;
+    LONGLONG ret = 0;
     if (AXIS_SUCCESS != m_nStatus)
 	return ret;
     if (RPC_ENCODED == m_nStyle)
@@ -2806,9 +2808,10 @@ SoapDeSerializer::getElementAsInteger (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = strtol (m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		return ret;
+            Integer integerDeserializer;
+    		ret = *(integerDeserializer.deserializeInteger(m_pNode->m_pchNameOrValue));
+    	   	m_pNode = m_pParser->next ();	/* skip end element node too */
+    		return ret;
 	    }
 	}
 	else
@@ -2831,13 +2834,14 @@ SoapDeSerializer::getElementAsInteger (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = strtol (m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		m_pNode = NULL;
-		/* this is important in doc/lit style when deserializing
-		 * arrays 
-		 */
-		return ret;
+    		Integer integerDeserializer;
+            ret = *(integerDeserializer.deserializeInteger(m_pNode->m_pchNameOrValue));
+    		m_pNode = m_pParser->next ();	/* skip end element node too */
+    		m_pNode = NULL;
+    		/* this is important in doc/lit style when deserializing
+    		 * arrays 
+    		 */
+    		return ret;
 	    }
 	    else
 	    {
@@ -4365,8 +4369,10 @@ SoapDeSerializer::getChardataAs (void *pValue, XSDTYPE type)
 		strtol (m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
 	    break;
 	case XSD_INTEGER:
-	    *((long *) (pValue)) =
-		strtol (m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+        {
+            Integer integerDeserializer;
+            pValue = integerDeserializer.deserialize(m_pNode->m_pchNameOrValue);
+        }
 	    break;
 	case XSD_DURATION:
 		{

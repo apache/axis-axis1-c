@@ -86,8 +86,17 @@
  */
 #define PLATFORM_GET_ERROR_MESSAGE(errorNumber) getPlatformErrorMessage(errorNumber);
 
-std::string* getPlatformErrorMessage(long errorNumber);
+/**
+ * type to be used for 64bit integers
+ */
+#define LONGLONG __int64
 
+/**
+ * Format string to be used in printf for 64bit integers
+ */
+#define PRINTF_LONGLONG_FORMAT_SPECIFIER "%I64d"
+
+std::string* getPlatformErrorMessage(long errorNumber);
 
 #endif
 
