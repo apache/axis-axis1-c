@@ -34,7 +34,7 @@ Copyright:
   Copyright (c) 2001-2003 Apache Software Foundation.
 </description>
 	
-	<property name ="src" value="src"/>
+	<property name ="src" value="src/wsdl"/>
 	<property name ="lib" value="lib"/>
 	<property name ="test" value="test"/>
 	<property name ="classes" value="build/classes"/>
@@ -75,7 +75,7 @@ Copyright:
   <!-- =================================================================== -->
   <target name="jar" depends="compile">
    <mkdir dir="./build/lib"/>
-   <jar jarfile="build/lib/wsdl2ws.jar" basedir="${classes}" >
+   <jar jarfile="lib/axis/wsdl2ws.jar" basedir="${classes}" >
       <include name="org/**" />
      <manifest>
         <section name="org/apache/axis">
