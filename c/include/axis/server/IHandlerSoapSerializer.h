@@ -64,6 +64,7 @@
 #define AFX_IHANDLERSOAPSERIALIZER_H__DE308D72_BC3E_407A_9252_649D0399C90F__INCLUDED_
 
 #include "IWrapperSoapSerializer.h"
+#include "SoapHeader.h"
 class IHeaderBlock;
 /**
     @class IHandlerSoapSerializer
@@ -78,7 +79,12 @@ class IHandlerSoapSerializer : public IWrapperSoapSerializer
 public:		
 	virtual ~IHandlerSoapSerializer() {};
 	virtual IHeaderBlock* createHeaderBlock()=0;
+	virtual IHeaderBlock*  createHeaderBlock(AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri)=0;	
 	virtual int AXISCALL AddHeaderBlock(IHeaderBlock* pBlk)=0;
+	virtual int setSoapHeader(SoapHeader* pSoapHeader)=0;
+	virtual	int setSoapVersion(SOAP_VERSION)=0;
+	
+	
 	/**
 	 * A handler may get the entire soap body and encrypt/compress it and encode
 	 * to either base64Binary or hexBinary before sending to the trasport. So any

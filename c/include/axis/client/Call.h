@@ -559,8 +559,8 @@ private:
 	   So they do not belong to this object and are not created or deleted 
 	 */
 	MessageData* m_pMsgData;
-	IWrapperSoapSerializer* m_pIWSSZ;
-	IWrapperSoapDeSerializer* m_pIWSDZ;
+	IHandlerSoapSerializer* m_pIWSSZ;
+	IHandlerSoapDeSerializer* m_pIWSDZ;
 	/* 
 	   m_Soap contains transport related information and function pointers to manipulate
 	   transport layer.

@@ -211,14 +211,14 @@ public:
 	virtual int AXISCALL GetStatus()=0;
 	
 	/* Externalization of deserializer API */
-	virtual int AXISCALL SetInputStream(const Ax_soapstream* pInputStream)=0;
-	virtual int AXISCALL GetVersion()=0;
-	virtual int AXISCALL GetHeader()=0;
-	virtual	int AXISCALL Init()=0;
-	virtual PROVIDERTYPE AXISCALL GetCurrentProviderType()=0;
-	virtual void AXISCALL SetCurrentProviderType(PROVIDERTYPE nType)=0;	
-	virtual void AXISCALL SetStyle(AXIS_BINDING_STYLE nStyle)=0;
+	virtual int SetInputStream(const Ax_soapstream* pInputStream)=0;
+	virtual	int Init()=0;
+	virtual PROVIDERTYPE GetCurrentProviderType()=0;
+	virtual void SetCurrentProviderType(PROVIDERTYPE nType)=0;	
 	virtual AXIS_BINDING_STYLE AXISCALL GetStyle()=0;	
+	virtual void SetStyle(AXIS_BINDING_STYLE nStyle)=0;
+	virtual int GetVersion()=0;
+	virtual int GetHeader()=0;	
 	    	
 
 	/* following stuff is needed to provide the interface for C web services */
