@@ -26,7 +26,7 @@
 #include "../../transport/axis/AxisTransport.h"
 #include "../../transport/axis/Channel.hpp"
 #include "ClientAxisEngine.h"
-#include "../../transport/SOAPTransportFactory.h"
+#include "../SOAPTransportFactory.h"
 #include <axis/SOAPTransport.h>
 
 extern "C" int initialize_module (int bServer);

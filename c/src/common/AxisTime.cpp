@@ -175,7 +175,7 @@ int AxisTime::mkCTime ()
     int intHours = 0;
     int intMins = 0;
     int intSecs = 0;
-    unsigned int intPos, intPos1, intPos2, intPos3, intPos4, intPos5, intPos6;
+    unsigned int intPos1, intPos2, intPos3, intPos4, intPos5, intPos6;
     time_t now;
     struct tm result1, result2;
     struct tm *pTm;
@@ -472,6 +472,7 @@ int AxisTime::mkCTime ()
 
         default:;
     }
+	return AXIS_SUCCESS;
 }
 
 long AxisTime::getDuration ()

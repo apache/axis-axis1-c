@@ -37,15 +37,9 @@
 #include <axis/server/AxisTrace.h>
 #include "apr_base64.h"
 #include "HexCoder.h"
-
-
-#ifdef USE_EXPAT_PARSER
-#include "SoapParserExpat.h"
-#elif USE_XERCES_PARSER
-#include "SoapParserXerces.h"
-#else
-#include <axis/xml/SoapParser.h>
-#endif
+#include "../engine/XMLParserFactory.h"
+#include <axis/server/XMLParser.h>
+#include "../xml/QName.h"
 
 extern AxisTrace* g_pAT;
 
@@ -55,21 +49,15 @@ IWrapperSoapDeSerializerFunctions IWrapperSoapDeSerializer::ms_VFtable;
 
 SoapDeSerializer::SoapDeSerializer()
 {
-    #ifdef USE_EXPAT_PARSER
-    m_pParser = new SoapParserExpat();
-    #elif USE_XERCES_PARSER
-    m_pParser = new SoapParserXerces();
-    #else
-    m_pParser = new SoapParser();
-    #endif
+	m_pParser = XMLParserFactory::getParserObject();
     m_pEnv = NULL;
     m_pHeader = NULL;
     m_pcFaultDetail = (char*) malloc(sizeof(char) * 100);
+	m_pInputStream = 0;
 }
 
 SoapDeSerializer::~SoapDeSerializer()
 {
-    m_pParser->init();
     if (m_pEnv)
 	 delete m_pEnv;
     if(m_pHeader)
@@ -82,6 +70,7 @@ int SoapDeSerializer::setInputStream(SOAPTransport* pInputStream)
 {
     if (NULL == pInputStream)
         return AXIS_FAIL;
+	m_pInputStream = pInputStream;
     return m_pParser->setInputStream(pInputStream);
 }
 
@@ -347,7 +336,6 @@ int SoapDeSerializer::getFaultDetail(char** ppcDetail)
 int SoapDeSerializer::init()
 {
     m_pNode = 0;
-    m_nStatus = m_pParser->init();
     if (m_pEnv) 
     {
         delete m_pEnv;
@@ -571,7 +559,7 @@ int SoapDeSerializer::getArraySize(const AnyElement* pElement)
             (0 == strcmp(pElement->m_pchAttributes[i],
             SoapKeywordMapping::map(m_nSoapVersion).pchWords[SKW_ARRAYTYPE])))
         {
-            ::QName qn;
+            QName qn;
             qn.splitQNameString(pElement->m_pchAttributes[i+2], '[');
             nSize = strtol(qn.localname, &m_pEndptr, 10);
             qn.mergeQNameString('[');
@@ -605,6 +593,10 @@ int SoapDeSerializer::getArraySize(const AnyElement* pElement)
 #define CONV_STRDUP(str) strdup(str)
 #define CONV_STRTOBASE64BINARY(str) decodeFromBase64Binary(str)
 #define CONV_STRTOHEXBINARY(str) decodeFromHexBinary(str)
+
+#define INIT_VALUE_DATETIME {0,0,0,0,0,0,0,0,0}
+#define INIT_VALUE_NUMBER 0
+#define INIT_VALUE_XSDBINARY {0,0}
 
 #define DESERIALIZE_ENCODED_ARRAY_BLOCK(cpp_type, conv_func) \
 Array.m_Array = malloc(sizeof(cpp_type)*Array.m_Size);\
@@ -1061,8 +1053,8 @@ int SoapDeSerializer::getElementForAttributes(const AxisChar* pName,
     return m_nStatus;
 }
 
-#define DESERIALIZE_GET_ATTRIBUTE_AS(cpp_type, conv_func) \
-    cpp_type ret;\
+#define DESERIALIZE_GET_ATTRIBUTE_AS(cpp_type, conv_func, init_value) \
+    cpp_type ret = init_value;\
     if(!m_pCurrNode) \
     {\
         /**\
@@ -1154,113 +1146,113 @@ unsigned int SoapDeSerializer::getAttributeAsUnsignedInt(const AxisChar* pName,
                                                          const AxisChar* 
                                                          pNamespace)
 {
-    DESERIALIZE_GET_ATTRIBUTE_AS(unsigned int,CONV_STRTOUL)
+    DESERIALIZE_GET_ATTRIBUTE_AS(unsigned int,CONV_STRTOUL,INIT_VALUE_NUMBER)
 }
 short SoapDeSerializer::getAttributeAsShort(const AxisChar* pName, 
                                             const AxisChar* pNamespace)
 {
-    DESERIALIZE_GET_ATTRIBUTE_AS(short,CONV_STRTOL)
+    DESERIALIZE_GET_ATTRIBUTE_AS(short,CONV_STRTOL,INIT_VALUE_NUMBER)
 }
 unsigned short SoapDeSerializer::getAttributeAsUnsignedShort(const AxisChar* 
                                                              pName, 
                                                              const AxisChar* 
                                                              pNamespace)
 {
-    DESERIALIZE_GET_ATTRIBUTE_AS(unsigned short,CONV_STRTOUL)
+    DESERIALIZE_GET_ATTRIBUTE_AS(unsigned short,CONV_STRTOUL,INIT_VALUE_NUMBER)
 }
 char SoapDeSerializer::getAttributeAsByte(const AxisChar* pName, const 
                                           AxisChar* pNamespace)
 {
-    DESERIALIZE_GET_ATTRIBUTE_AS(char,CONV_STRTOL)
+    DESERIALIZE_GET_ATTRIBUTE_AS(char,CONV_STRTOL,INIT_VALUE_NUMBER)
 }
 unsigned char SoapDeSerializer::getAttributeAsUnsignedByte(const AxisChar* 
                                                            pName, const 
                                                            AxisChar* pNamespace)
 {
-    DESERIALIZE_GET_ATTRIBUTE_AS(unsigned char,CONV_STRTOUL)
+    DESERIALIZE_GET_ATTRIBUTE_AS(unsigned char,CONV_STRTOUL,INIT_VALUE_NUMBER)
 }
 long SoapDeSerializer::getAttributeAsLong(const AxisChar* pName, const 
                                           AxisChar* pNamespace)
 {
-    DESERIALIZE_GET_ATTRIBUTE_AS(long,CONV_STRTOL)
+    DESERIALIZE_GET_ATTRIBUTE_AS(long,CONV_STRTOL,INIT_VALUE_NUMBER)
 }
 long SoapDeSerializer::getAttributeAsInteger(const AxisChar* pName, const 
                                              AxisChar* pNamespace)
 {
-    DESERIALIZE_GET_ATTRIBUTE_AS(long,CONV_STRTOL)
+    DESERIALIZE_GET_ATTRIBUTE_AS(long,CONV_STRTOL,INIT_VALUE_NUMBER)
 }
 unsigned long SoapDeSerializer::getAttributeAsUnsignedLong(const AxisChar* 
                                                            pName, const 
                                                            AxisChar* pNamespace)
 {
-    DESERIALIZE_GET_ATTRIBUTE_AS(unsigned long,CONV_STRTOUL)
+    DESERIALIZE_GET_ATTRIBUTE_AS(unsigned long,CONV_STRTOUL,INIT_VALUE_NUMBER)
 }
 float SoapDeSerializer::getAttributeAsFloat(const AxisChar* pName, const 
                                             AxisChar* pNamespace)
 {
-    DESERIALIZE_GET_ATTRIBUTE_AS(float,CONV_STRTOD)
+    DESERIALIZE_GET_ATTRIBUTE_AS(float,CONV_STRTOD,INIT_VALUE_NUMBER)
 }
 double SoapDeSerializer::getAttributeAsDouble(const AxisChar* pName, const 
                                               AxisChar* pNamespace)
 {
-    DESERIALIZE_GET_ATTRIBUTE_AS(double,CONV_STRTOD)
+    DESERIALIZE_GET_ATTRIBUTE_AS(double,CONV_STRTOD,INIT_VALUE_NUMBER)
 }
 double SoapDeSerializer::getAttributeAsDecimal(const AxisChar* pName, const 
                                                AxisChar* pNamespace)
 {
-    DESERIALIZE_GET_ATTRIBUTE_AS(double,CONV_STRTOD)
+    DESERIALIZE_GET_ATTRIBUTE_AS(double,CONV_STRTOD,INIT_VALUE_NUMBER)
 }
 AxisChar* SoapDeSerializer::getAttributeAsString(const AxisChar* pName, const 
                                                  AxisChar* pNamespace)
 {
-    DESERIALIZE_GET_ATTRIBUTE_AS(AxisChar*,CONV_STRDUP)
+    DESERIALIZE_GET_ATTRIBUTE_AS(AxisChar*,CONV_STRDUP,INIT_VALUE_NUMBER)
 }
 AxisChar* SoapDeSerializer::getAttributeAsAnyURI(const AxisChar* pName, const 
                                                  AxisChar* pNamespace)
 {
-    DESERIALIZE_GET_ATTRIBUTE_AS(AxisChar*,CONV_STRDUP)
+    DESERIALIZE_GET_ATTRIBUTE_AS(AxisChar*,CONV_STRDUP,INIT_VALUE_NUMBER)
 }
 AxisChar* SoapDeSerializer::getAttributeAsQName(const AxisChar* pName, const 
                                                 AxisChar* pNamespace)
 {
-    DESERIALIZE_GET_ATTRIBUTE_AS(AxisChar*,CONV_STRDUP)
+    DESERIALIZE_GET_ATTRIBUTE_AS(AxisChar*,CONV_STRDUP,INIT_VALUE_NUMBER)
 }
 xsd__hexBinary SoapDeSerializer::getAttributeAsHexBinary(const AxisChar* pName,
                                                          const AxisChar* 
                                                          pNamespace)
 {
-    DESERIALIZE_GET_ATTRIBUTE_AS(xsd__hexBinary,CONV_STRTOHEXBINARY)
+    DESERIALIZE_GET_ATTRIBUTE_AS(xsd__hexBinary,CONV_STRTOHEXBINARY, INIT_VALUE_XSDBINARY)
 }
 xsd__base64Binary SoapDeSerializer::getAttributeAsBase64Binary(const AxisChar* 
                                                                pName, const 
                                                                AxisChar* 
                                                                pNamespace)
 {
-    DESERIALIZE_GET_ATTRIBUTE_AS(xsd__base64Binary,CONV_STRTOBASE64BINARY)
+    DESERIALIZE_GET_ATTRIBUTE_AS(xsd__base64Binary,CONV_STRTOBASE64BINARY, INIT_VALUE_XSDBINARY)
 }
 struct tm SoapDeSerializer::getAttributeAsDateTime(const AxisChar* pName, 
                                                    const AxisChar* pNamespace)
 {
     XSDTYPE nType = XSD_DATETIME;
-    DESERIALIZE_GET_ATTRIBUTE_AS(struct tm, CONV_STRTODATETIME)
+    DESERIALIZE_GET_ATTRIBUTE_AS(struct tm, CONV_STRTODATETIME, INIT_VALUE_DATETIME)
 }
 struct tm SoapDeSerializer::getAttributeAsDate(const AxisChar* pName, const 
                                                AxisChar* pNamespace)
 {
     XSDTYPE nType = XSD_DATE;
-    DESERIALIZE_GET_ATTRIBUTE_AS(struct tm, CONV_STRTODATETIME)
+    DESERIALIZE_GET_ATTRIBUTE_AS(struct tm, CONV_STRTODATETIME, INIT_VALUE_DATETIME)
 }
 struct tm SoapDeSerializer::getAttributeAsTime(const AxisChar* pName, const 
                                                AxisChar* pNamespace)
 {
     XSDTYPE nType = XSD_DATE;
-    DESERIALIZE_GET_ATTRIBUTE_AS(struct tm, CONV_STRTODATETIME)
+    DESERIALIZE_GET_ATTRIBUTE_AS(struct tm, CONV_STRTODATETIME, INIT_VALUE_DATETIME)
 }
 long SoapDeSerializer::getAttributeAsDuration(const AxisChar* pName, const 
                                               AxisChar* pNamespace)
 {
     XSDTYPE nType = XSD_DURATION;
-    DESERIALIZE_GET_ATTRIBUTE_AS(long, CONV_STRTODURATION)
+    DESERIALIZE_GET_ATTRIBUTE_AS(long, CONV_STRTODURATION,INIT_VALUE_NUMBER)
 }
 
 /*
@@ -2489,7 +2481,7 @@ xsd__base64Binary SoapDeSerializer::getElementAsBase64Binary(const AxisChar* pNa
 struct tm SoapDeSerializer::getElementAsDateTime(const AxisChar* pName, 
                                                  const AxisChar* pNamespace)
 {
-    struct tm ret;
+    struct tm ret = INIT_VALUE_DATETIME;
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -2561,7 +2553,7 @@ struct tm SoapDeSerializer::getElementAsDateTime(const AxisChar* pName,
 struct tm SoapDeSerializer::getElementAsDate(const AxisChar* pName, 
                                              const AxisChar* pNamespace)
 {
-    struct tm ret;
+    struct tm ret = INIT_VALUE_DATETIME;
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -2634,7 +2626,7 @@ struct tm SoapDeSerializer::getElementAsDate(const AxisChar* pName,
 struct tm SoapDeSerializer::getElementAsTime(const AxisChar* pName, 
                                              const AxisChar* pNamespace)
 {
-    struct tm ret;
+    struct tm ret = INIT_VALUE_DATETIME;
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -2914,14 +2906,14 @@ int AXISCALL SoapDeSerializer::addHeaderBlock(IHeaderBlock* pBlk)
 xsd__hexBinary SoapDeSerializer::getBodyAsHexBinary()
 {
     /* TODO */
-    xsd__hexBinary hb;
+    xsd__hexBinary hb = {0,0};
     return hb;
 }
 
 xsd__base64Binary SoapDeSerializer::getBodyAsBase64Binary()
 {
     /* TODO */
-    xsd__base64Binary bb;
+    xsd__base64Binary bb = {0,0};
     return bb;
 }
 
@@ -2941,15 +2933,7 @@ int SoapDeSerializer::flushInputStream()
 {
     int nChars = 0;
     char pBuffer[100];
-    if (TRANSPORT_IN_PROGRESS == m_pParser->getTransportStatus())
-    {
-        do
-        {
-            m_pParser->setTransportStatus(m_pParser->getInputStream()->getBytes
-				(pBuffer, &nChars));
-        }
-        while (TRANSPORT_IN_PROGRESS == m_pParser->getTransportStatus());
-    }
-    return (TRANSPORT_FINISHED == m_pParser->
-        getTransportStatus())? AXIS_SUCCESS : AXIS_FAIL;
+	if (!m_pInputStream) return AXIS_FAIL;
+	while (TRANSPORT_IN_PROGRESS == m_pInputStream->getBytes(pBuffer, &nChars));
+	return AXIS_SUCCESS;
 }

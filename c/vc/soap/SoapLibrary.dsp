@@ -114,7 +114,7 @@ SOURCE=..\..\src\soap\HexCoder.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\soap\SoapBinInputStream.cpp
+SOURCE=..\..\src\xml\xerces\SoapBinInputStream.cpp
 # End Source File
 # Begin Source File
 
@@ -142,6 +142,10 @@ SOURCE=..\..\src\soap\SoapInputSource.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\xml\xerces\SoapInputSource.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\soap\SoapKeywordMapping.cpp
 # End Source File
 # Begin Source File
@@ -158,6 +162,10 @@ SOURCE=..\..\src\soap\SoapParserXerces.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\xml\xerces\SoapParserXerces.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\soap\SoapSerializer.cpp
 # End Source File
 # Begin Source File
@@ -167,6 +175,10 @@ SOURCE=..\..\src\soap\URIMapping.cpp
 # Begin Source File
 
 SOURCE=..\..\src\soap\XercesHandler.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xml\xerces\XercesHandler.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -202,7 +214,7 @@ SOURCE=..\..\src\soap\HexCoder.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\soap\SoapBinInputStream.h
+SOURCE=..\..\src\xml\xerces\SoapBinInputStream.h
 # End Source File
 # Begin Source File
 
@@ -226,7 +238,7 @@ SOURCE=..\..\include\axis\server\SoapHeader.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\soap\SoapInputSource.h
+SOURCE=..\..\src\xml\xerces\SoapInputSource.h
 # End Source File
 # Begin Source File
 
@@ -246,6 +258,10 @@ SOURCE=..\..\src\soap\SoapParserXerces.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\xml\xerces\SoapParserXerces.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\axis\server\SoapSerializer.h
 # End Source File
 # Begin Source File
@@ -255,6 +271,10 @@ SOURCE=..\..\src\soap\URIMapping.h
 # Begin Source File
 
 SOURCE=..\..\src\soap\XercesHandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xml\xerces\XercesHandler.h
 # End Source File
 # End Group
 # End Target

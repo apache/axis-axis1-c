@@ -19,11 +19,9 @@
 
 #include "SoapBinInputStream.h"
 
-SoapBinInputStream::SoapBinInputStream(AXIS_MODULE_CALLBACK_GET_MESSAGE_BYTES 
-                                       pReadFunct, const void* pContext)
+SoapBinInputStream::SoapBinInputStream(AxisIOStream* pInputStream)
 {
-    m_pContext = pContext;
-    m_pReadFunct = pReadFunct;
+    m_pInputStream = pInputStream;
     m_nByteCount = 0;
 }
 
@@ -40,10 +38,10 @@ unsigned int SoapBinInputStream::curPos() const
     return m_nByteCount;
 }
 
-unsigned int SoapBinInputStream::readBytes(XMLByte* const toFill,
-                                           const unsigned int maxToRead)
+unsigned int SoapBinInputStream::readBytes(XMLByte* const pcToFill,
+                                           const unsigned int iMaxToRead)
 {
-    int nRead = maxToRead;
-    m_pReadFunct((const char**)&toFill, (int*)&nRead, m_pContext);
-    return nRead;
+    int iRead = iMaxToRead;
+	m_pInputStream->getBytes((char*)pcToFill, &iRead);
+    return iRead;
 }
