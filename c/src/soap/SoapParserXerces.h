@@ -28,7 +28,7 @@
 #define __SoapParserXerces_H_INCLUDED__
 
 #include <axis/server/Packet.h>
-#include "../xml/Qname.h"
+#include "../xml/QName.h"
 #include "../xml/Event.h"
 #include <axis/server/AnyElement.h>
 #include <axis/server/XMLParser.h>
