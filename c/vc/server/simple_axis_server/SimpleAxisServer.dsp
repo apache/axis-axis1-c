@@ -100,6 +100,10 @@ SOURCE=..\..\..\src\server\simple_axis_server\SimpleAxisServer.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
+SOURCE=..\..\..\include\axis\server\simple_axis_server\HTTP_KeyWords.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\include\axis\server\simple_axis_server\ServerHelper.h
 # End Source File
 # End Group
