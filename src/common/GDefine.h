@@ -80,9 +80,11 @@ typedef enum { APTHTTP=1, APTFTP, APTSMTP, APTOTHER } AXIS_PROTOCOL_TYPE;
 #define AxisXMLString basic_string<AxisXMLCh>
 
 #ifdef WIN32
-    #define AxisSprintf(X, Y, Z, W) sprintf(X, Z, W)        
+    #define AxisSprintf(X, Y, Z, W) sprintf(X, Z, W)
+    #define CONFFILENAME "c:\\program files\axiscpp.conf"
 #else //linux
-    #define AxisSprintf(X, Y, Z, W) sprintf(X, Z, W) 
+    #define AxisSprintf(X, Y, Z, W) sprintf(X, Z, W)
+    #define CONFFILENAME "/etc/axiscpp.conf"
 #endif
 
 extern void Ax_Sleep(int);
