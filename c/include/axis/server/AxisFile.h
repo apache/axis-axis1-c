@@ -84,6 +84,7 @@ public:
     int filePuts (const char* pcWrite)
     {
         fputs(pcWrite, pFILEFile);
+        return AXIS_SUCCESS;
     }
 
     /**   Use this flush the buffer 
@@ -91,6 +92,7 @@ public:
     int fileFlush ()
     {
         fflush(pFILEFile);
+        return AXIS_SUCCESS;
     }
     
     ~AxisFile()

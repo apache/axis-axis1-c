@@ -45,7 +45,7 @@ typedef struct
  * which are used in Axis C++. Each time a fault object is needed it is
  * created using this array, in SoapFault class.
  */
-static SoapFaultStruct s_arrSoapFaultStruct[FAULT_LAST];
+static SoapFaultStruct* s_parrSoapFaultStruct;
 
 /**
  *  @class SoapFault
@@ -53,6 +53,7 @@ static SoapFaultStruct s_arrSoapFaultStruct[FAULT_LAST];
  *
  *
  *  @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ *  @author damitha kumarage (damitha@jkcsworld.com, damitha@opensource.lk)
  */
 class SoapFault  
 {
@@ -60,7 +61,7 @@ friend class SoapFaultsTestCase;
 
 public:
     SoapFault(string m_sFaultcode, string m_sFaultstring, 
-    string m_sFaultactor, string m_sDetail);
+        string m_sFaultactor, string m_sDetail);
     bool operator ==(const SoapFault &objSoapFault);
     static SoapFault* getSoapFault(int);
     static void initialize();
@@ -86,7 +87,6 @@ private:
     string m_sFaultactor;
     string m_sFaultstring;
     string m_sFaultcode;
-    static map<int, SoapFaultStruct> m_sFaultMap;
     static volatile bool m_bInit;
 };
 
