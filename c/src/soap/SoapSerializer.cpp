@@ -349,6 +349,7 @@ int SoapSerializer::Init()
 
 int SoapSerializer::setSoapVersion(SOAP_VERSION nSoapVersion)
 {
+	m_iSoapVersion = nSoapVersion;
 	//here the default namespaces of the SoapEnvelop should be added and intialized as well.
 	m_pSoapEnvelope->addStandardNamespaceDecl(SoapKeywordMapping::Map(nSoapVersion).pEnv);
 	m_pSoapEnvelope->addStandardNamespaceDecl(SoapKeywordMapping::Map(nSoapVersion).pXsd);
