@@ -97,7 +97,7 @@ private:
 	string m_sFaultstring;
 	string m_sFaultcode;
 	static map<int, SoapFaultStruct> m_sFaultMap;
-	static bool m_bInit;
+	static volatile bool m_bInit;
 	//int setDetail(const string& sDetail);
 	//int setFaultactor(const string& sFaultactor);
 	//int setFaultstring(const string& sFaultstring);

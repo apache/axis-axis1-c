@@ -75,7 +75,7 @@
 //////////////////////////////////////////////////////////////////////
 
 map<int, SoapFaultStruct> SoapFault::m_sFaultMap;
-bool SoapFault::m_bInit = false;
+volatile bool SoapFault::m_bInit = false;
 
 SoapFault::SoapFault()
 {

@@ -83,7 +83,7 @@ class URIMapping
 public:
 	static void Initialize();
 	static map<string, URITYPE> m_sURIMap;
-	static bool m_bInit;
+	static volatile bool m_bInit;
 	URIMapping();
 	virtual ~URIMapping();
 	static URITYPE Map(string &uri);

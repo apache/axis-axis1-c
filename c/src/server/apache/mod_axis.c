@@ -16,117 +16,107 @@
 #include <string.h>
 #include <malloc.h>
 
-#define xxx   ap_log_rerror(APLOG_MARK,APLOG_ERR, globr,"logged here");
+#define xxx ap_log_rerror(APLOG_MARK,APLOG_ERR, globr,"logged here");
 #define yyy ap_log_rerror(APLOG_MARK, APLOG_ERR, globr,"logged here");
-
 
 /* file: mod_axis.c */
 /* here's the content handler */
 
-extern int process_request(soapstream *);
+extern int process_request(Ax_soapstream* str);
 //extern int process(soapstream *);
 extern unsigned char chEBuf[1024];
 
-//global place holder for the current request_record
-request_rec * globr;
-//global variable to store the nubmer of bytes read from ap_get_client_block
-int  len_read = 0;
-//global variable to store the remaining number of bytes to be read from the http request content
-int cont_length_remaining=0;
-
 //Should dispatch the headers from within this method
-int send_transport_information(soapstream * hdr)
+int send_transport_information(Ax_soapstream* hdr)
 {
-      ap_send_http_header(globr);
+      ap_send_http_header((request_rec*)hdr->str.op_stream);
 	  return 0;
 }
 
 //Call initialize_module() [of Packet.h] from within this method
-void module_init(server_rec *r, pool* p)
-{}
-
-int send_response_bytes(char * res)
+void module_init(server_rec *svr_rec, pool* p)
 {
-  ap_rputs(res, globr);
-  return 0;
+	initialize_module();
 }
 
-//Cal initialize_process() [of Packet.h] from within this method
-void  axis_Init(server_rec *r, pool* p)
+int send_response_bytes(char* res, void* opstream)
+{
+	ap_rputs(res, (request_rec*)opstream);
+	return 0;
+}
+
+//Call initialize_process() [of Packet.h] from within this method
+void  axis_Init(server_rec *svr_rec, pool* p)
 {}
 //Call finalize_process() [of Packet.h] from within this method
-void axis_Fini(server_rec *r, pool* p)
+void axis_Fini(server_rec *svr_rec, pool* p)
 {}
 
-int get_request_bytes(char * req, int reqsize, int* retsize)
+int get_request_bytes(char* req, int reqsize, int* retsize, void* ipstream)
 {
-
-  if(cont_length_remaining>0)
-  {
-  ap_hard_timeout("util_read", globr);
-  len_read = ap_get_client_block(globr, req, reqsize);
-
-  ap_reset_timeout(globr);
-  cont_length_remaining -= len_read;
-  *retsize =  len_read;
-  }
-  else
-  {
-    *retsize = 0;
-    }
- return 0;
+	int len_read;
+	ap_hard_timeout("util_read", (request_rec*)ipstream);
+	len_read = ap_get_client_block((request_rec*)ipstream, req, reqsize);
+	ap_reset_timeout((request_rec*)ipstream);
+	*retsize =  len_read;
+	return 0;
 }
 
-static int axis_handler(request_rec *r) 
+static int axis_handler(request_rec *req_rec) 
 {
-
 	int rc;
-	char argsbuffer[HUGE_STRING_LEN];
-	soapstream * sstr;
-	array_header * arr;
-    globr = r;
-	memset(argsbuffer,0,HUGE_STRING_LEN);
+	Ax_soapstream* sstr;
+	array_header* arr;
 
-	sstr = malloc(sizeof(soapstream));
-	sstr->trtype=APTHTTP;
-	r->content_type = "text/xml"; //for SOAP 1.2 this this should be "application/soap+xml" but keep this for the moment
+	sstr = malloc(sizeof(Ax_soapstream));
+	sstr->trtype = APTHTTP;
+	//req_rec is used as both input and output streams
+	sstr->str.ip_stream = req_rec;
+	sstr->str.op_stream = req_rec;
+	//just add some sessionid
+	sstr->sessionid = "this is temporary session id";
+
+	req_rec->content_type = "text/xml"; //for SOAP 1.2 this this should be "application/soap+xml" but keep this for the moment
 	//set up the read policy from the client.
-	if ((rc = ap_setup_client_block(r, REQUEST_CHUNKED_ERROR)) != OK)
+	if ((rc = ap_setup_client_block(req_rec, REQUEST_CHUNKED_ERROR)) != OK)
 	{
 		return rc;
 	}
 
+	//the member, "path" of "parsed_uri" contains the uri of the 
+	//request (i.e "/abc/xyz" part of http://somehost/abc/xyz)
+	sstr->so.http.uri_path = req_rec->parsed_uri.path;
+
 	//ap_table_elts returns an array_header struct. The nelts element of that struct contains the number of
 	//input header elements. Finally assigns that to the axis soap data structure. 
-	sstr->so.http.ip_headercount = ap_table_elts(r->headers_in)->nelts;  
+	sstr->so.http.ip_headercount = ap_table_elts(req_rec->headers_in)->nelts;  
 
-	//casting r->headers_in to axis header struct and assigning that to the axis soap structure. Hope this is ok
+	//casting req_rec->headers_in to axis header struct and assigning that to the axis soap structure. Hope this is ok
 
 	//obtain the array_header from the headers_in table and assign it to the axis soap structure
-	arr = ap_table_elts(r->headers_in);
-	sstr->so.http.ip_headers = (header *)arr->elts;
+	arr = ap_table_elts(req_rec->headers_in);
+	sstr->so.http.ip_headers = (Ax_header*)arr->elts;
 
 	//Determine the http method and assign it to the axis soap structure
-	switch (r->method_number)
+	switch (req_rec->method_number)
 	{
 	case M_GET:
-      sstr->so.http.ip_method = GET;
+      sstr->so.http.ip_method = AXIS_HTTP_GET;
       break;
 	case M_POST:
-      sstr->so.http.ip_method = POST;
+      sstr->so.http.ip_method = AXIS_HTTP_POST;
       break;
 	default:
-      sstr->so.http.ip_method = UNSUPPORTED;   
+      sstr->so.http.ip_method = AXIS_HTTP_UNSUPPORTED;   
 	}
 
   	//tell the client that we are ready to receive content and check whether client will send content
 	//control will pass to this block only if there is body content in the request
-    if (ap_should_client_block(globr));
-    cont_length_remaining = r->remaining;
+    if (ap_should_client_block(req_rec));
 
 	if(0 != process_request(sstr))
 	{
-		ap_rputs("SOAP Engine failed to response",r);
+		ap_rputs("SOAP Engine failed to response",req_rec);
 		return OK;
 	}
 
@@ -144,23 +134,23 @@ static handler_rec axis_handlers[] =
 /* Tell Apache what phases of the transaction we handle */
 module MODULE_VAR_EXPORT axis_module =
 {
-   STANDARD_MODULE_STUFF,
-  module_init,               /* module initializer                 */
-  NULL,               /* per-directory config creator       */
-  NULL,               /* dir config merger                  */
-  NULL,               /* server config creator              */
-  NULL,               /* server config merger               */
-  NULL,               /* command table                      */
-  axis_handlers,     /* [9]  content handlers              */
-  NULL,               /* [2]  URI-to-filename translation   */
-  NULL,               /* [5]  check/validate user_id        */
-  NULL,               /* [6]  check user_id is valid *here* */
-  NULL,               /* [4]  check access by host address  */
-  NULL,               /* [7]  MIME type checker/setter      */
-  NULL,               /* [8]  fixups                        */
-  NULL,               /* [10] logger                        */
-  NULL,               /* [3]  header parser                 */
-  axis_Init,               /* process initialization             */
-  axis_Fini,               /* process exit/cleanup               */
-  NULL                /* [1]  post read_request handling    */
+	STANDARD_MODULE_STUFF,
+	module_init,               /* module initializer                 */
+	NULL,               /* per-directory config creator       */
+	NULL,               /* dir config merger                  */
+	NULL,               /* server config creator              */
+	NULL,               /* server config merger               */
+	NULL,               /* command table                      */
+	axis_handlers,     /* [9]  content handlers              */
+	NULL,               /* [2]  URI-to-filename translation   */
+	NULL,               /* [5]  check/validate user_id        */
+	NULL,               /* [6]  check user_id is valid *here* */
+	NULL,               /* [4]  check access by host address  */
+	NULL,               /* [7]  MIME type checker/setter      */
+	NULL,               /* [8]  fixups                        */
+	NULL,               /* [10] logger                        */
+	NULL,               /* [3]  header parser                 */
+	axis_Init,               /* process initialization             */
+	axis_Fini,               /* process exit/cleanup               */
+	NULL                /* [1]  post read_request handling    */
 };

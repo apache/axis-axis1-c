@@ -77,15 +77,15 @@
 
 extern "C" int sendSoapResponse(char *cSerializedStream);
 
-int SoapSerializer::iCounter=0;
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
 SoapSerializer::SoapSerializer()
 {
-	m_pSoapEnvelope= NULL;
+	m_pSoapEnvelope = NULL;
+	m_iSoapVersion = SOAP_VER_1_1;
+	m_pOutputStream = NULL;
 }
 
 SoapSerializer::~SoapSerializer()
@@ -95,14 +95,14 @@ SoapSerializer::~SoapSerializer()
 
 int SoapSerializer::setSoapEnvelope(SoapEnvelope *pSoapEnvelope)
 {
-	m_pSoapEnvelope= pSoapEnvelope;
+	m_pSoapEnvelope = pSoapEnvelope;
 
 	return SUCCESS;
 }
 
 int SoapSerializer::setSoapHeader(SoapHeader *pSoapHeader)
 {
-	int intStatus= FAIL;
+	int intStatus = FAIL;
 
 	if(m_pSoapEnvelope) {
 
@@ -178,8 +178,9 @@ int SoapSerializer::setSoapFault(SoapFault *pSoapFault)
 	return m_sSerializedStream;
 }*/
 
-int SoapSerializer::getStream()
+int SoapSerializer::SetOutputStream(void* pStream)
 {
+	m_pOutputStream = pStream;
 	int iStatus= SUCCESS;
 
 	if(m_pSoapEnvelope) {
@@ -196,7 +197,7 @@ int SoapSerializer::getStream()
 	return iStatus;
 }
 
-void SoapSerializer::init()
+int SoapSerializer::Init()
 {
 	//initializing the members of the class. This is needed since
 	// the same object instance of this class, may be used to server
@@ -207,14 +208,28 @@ void SoapSerializer::init()
 		m_pSoapEnvelope= NULL;
 	}
 
+	//Adding SoapEnvelop and SoapBody to Serializer
+	m_pSoapEnvelope = new SoapEnvelope();
+	m_pSoapEnvelope->setSoapBody(new SoapBody());
+
 	iCounter=0;
 	m_iCurrentSerBufferSize=0;
 	m_cSerializedBuffer[0]='\0'; //make buffer to empty content (as a char*)
+	return SUCCESS;
 }
 
-int SoapSerializer::setSoapVersion(SOAP_VERSION eSOAP_VERSION)
+int SoapSerializer::setSoapVersion(SOAP_VERSION nSoapVersion)
 {
-	m_iSoapVersion= eSOAP_VERSION;
+	//here the default namespaces of the SoapEnvelop should be added and intialized as well.
+	Attribute* pNS = new Attribute(g_sObjSoapEnvVersionsStruct[nSoapVersion].pchEnvelopePrefix,
+	  "xmlns","",g_sObjSoapEnvVersionsStruct[nSoapVersion].pchEnvelopeNamespaceUri);
+	m_pSoapEnvelope->addNamespaceDecl(pNS);
+	//add namespace URIs for xsd and xsi
+	pNS = new Attribute("xsd","xmlns","","http://www.w3.org/2001/XMLSchema");
+	m_pSoapEnvelope->addNamespaceDecl(pNS);
+	pNS = new Attribute("xsi","xmlns","","http://www.w3.org/2001/XMLSchema-instance");
+	m_pSoapEnvelope->addNamespaceDecl(pNS);
+
 	return SUCCESS;
 }
 
@@ -246,7 +261,7 @@ int SoapSerializer::flushSerializedBuffer()
 	//cout<<"++++++++++++++++"<<"flushed"<<endl;
 	//cout<<"++++++++++++++++"<<m_cSerializedBuffer<<endl;
 	//sendSoapResponse(m_cSerializedBuffer);
-	send_response_bytes(m_cSerializedBuffer);
+	send_response_bytes(m_cSerializedBuffer, m_pOutputStream);
 	m_cSerializedBuffer[0]= '\0';
 	m_iCurrentSerBufferSize=0;
 

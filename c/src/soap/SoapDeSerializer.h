@@ -86,10 +86,11 @@ class SoapDeSerializer : public IWrapperSoapDeSerializer, public IHandlerSoapDeS
 private:
 	XMLStreamHandler* m_pHandler;
 	SAX2XMLReader* m_pParser;
+	void* m_pInputStream;
 public:
 	int GetVersion();
 	string& GetMethodName();
-	void Init();
+	int Init();
 	IParam* GetParam();
 	int Deserialize(IParam* pIParam, int bHref);
 	SoapFault* GetFault();
@@ -97,7 +98,7 @@ public:
 	SoapBody* GetBody();
 	ISoapHeader* GetHeader();
 	SoapEnvelope* GetEnvelope();
-	int SetStream(InputSource* sStream);
+	int SetInputStream(void* InputStream);
 	SoapDeSerializer();
 	virtual ~SoapDeSerializer();
 

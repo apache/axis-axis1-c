@@ -71,7 +71,7 @@
 #include "SoapFault.h"
 #include "SoapDeSerializer.h"
 #include "../common/GDefine.h"
-class ISoapHeader;
+#include "../common/Packet.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -83,6 +83,7 @@ SoapDeSerializer::SoapDeSerializer()
 	m_pParser = XMLReaderFactory::createXMLReader();
     m_pParser->setContentHandler(m_pHandler);
     m_pParser->setErrorHandler(m_pHandler);
+	m_pInputStream = NULL;
 }
 
 SoapDeSerializer::~SoapDeSerializer()
@@ -91,10 +92,25 @@ SoapDeSerializer::~SoapDeSerializer()
 	delete m_pParser;
 }
 
-int SoapDeSerializer::SetStream(InputSource *sStream)
+int SoapDeSerializer::SetInputStream(void* InputStream)
 {
-	//m_pParser->
-	m_pParser->parse(*sStream);
+	m_pInputStream = InputStream;
+	MemBufInputSource* pSoapInput = NULL;
+	//---------------------start--------------------------
+	//Deserialize
+	//---------START XERCES SAX2 SPCIFIC CODE---------//
+	//a huge buffer to store the whole soap request stream
+	char hugebuffer[10000];
+	//to store the number of chars returned by get_request_bytes
+	int nChars = 0;
+	//request a huge number of bytes to get the whole soap request
+	//when pull parsing is used this should change
+	get_request_bytes(hugebuffer, 10000, &nChars, m_pInputStream);
+	//if no soap then quit
+	if (nChars <= 0) return FAIL;
+	pSoapInput = new MemBufInputSource((const unsigned char*)hugebuffer, nChars ,"bufferid",false);
+
+	m_pParser->parse(*pSoapInput);
 	return SUCCESS;
 }
 
@@ -108,7 +124,7 @@ ISoapHeader* SoapDeSerializer::GetHeader()
 	//actually here a dynamic cast is not needed. But it is
 	// done for safe side, incase SoapHeader derives from 
 	// more that one interface and the deriving order changes.
-	return dynamic_cast<ISoapHeader*>(m_pHandler->m_pHead);
+	return static_cast<ISoapHeader*>(m_pHandler->m_pHead);
 }
 
 SoapBody* SoapDeSerializer::GetBody()
@@ -160,9 +176,10 @@ IParam* SoapDeSerializer::GetParam()
 	return m_pHandler->GetParam();
 }
 
-void SoapDeSerializer::Init()
+int SoapDeSerializer::Init()
 {
 	m_pHandler->Init();
+	return SUCCESS;
 }
 
 string& SoapDeSerializer::GetMethodName()

@@ -3,9 +3,9 @@
 
 #include <stdio.h>
 
-char* getheader(soapstream* soap, char* pchkey)
+char* getheader(Ax_soapstream* soap, char* pchkey)
 {
-	header* hdrs = NULL;
+	Ax_header* hdrs = NULL;
 	int count = 0;
 	switch (soap->trtype)
 	{

@@ -68,10 +68,10 @@
 #include <malloc.h>
 #include "../common/Packet.h"
 
-extern int process_request(soapstream *);
+extern int process_request(Ax_soapstream *str);
 
 //soap request with headers
-char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope \
+//char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope \
 			xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" \
 			xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" \
 			xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> \
@@ -79,7 +79,7 @@ char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope \
 			soapenv:mustUnderstand=\"true\" >Hello Req Header Val</t:Transaction></soapenv:Header> \
 			<soapenv:Body><add soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:int\">3</op1><op2 xsi:type=\"xsd:int\">4</op2></add></soapenv:Body></soapenv:Envelope>";
 
-//char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><add soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:int\">3</op1><op2 xsi:type=\"xsd:int\">4</op2></add></soapenv:Body></soapenv:Envelope>";
+char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><add soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:int\">3</op1><op2 xsi:type=\"xsd:int\">4</op2></add></soapenv:Body></soapenv:Envelope>";
 
 //	char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><echo soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:string\">Hello World!</op1></echo></soapenv:Body></soapenv:Envelope>";
 
@@ -181,26 +181,27 @@ char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope \
 		</Point>\
 		</enc:Array> </EchoPointArray></soapenv:Body></soapenv:Envelope>";
 
-int main() {	
-	
-	soapstream* str = (soapstream*)malloc(sizeof(soapstream));
+int main() 
+{		
+	Ax_soapstream* str = (Ax_soapstream*)malloc(sizeof(Ax_soapstream));
 	str->trtype = APTHTTP;
+	str->sessionid = "somesessionid";
+	str->so.http.ip_method = AXIS_HTTP_POST;
 
-	str->so.http.ip_method=POST;
-
-	str->so.http.ip_headers = (header*)malloc(sizeof(header));
+	str->so.http.ip_headers = (Ax_header*)malloc(sizeof(Ax_header));
 	str->so.http.ip_headers->headername = SOAPACTIONHEADER;
-	str->so.http.ip_headers->headervalue = "\"Maths\"";	
+	str->so.http.ip_headers->headervalue = "\"CalculatorService\"";	
 	str->so.http.ip_headercount = 1;
 
 	printf("soap request :\n %s\n", ip);
 
+	initialize_module();
 	process_request(str);	
 
 	return 0;
 }
 
-int send_response_bytes(char * res) {
+int send_response_bytes(char * res, void* pOutputStream) {
 
 	printf("sending SOAP response : \n%s\n", res);
 
@@ -218,7 +219,7 @@ int get_request_bytes(char * req, int reqsize, int* retsize) {
 	return 0;
 }
 
-int send_transport_information(soapstream* sSoapstream) {
+int send_transport_information(Ax_soapstream* sSoapstream) {
 
 	return 0;
 }

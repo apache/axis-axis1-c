@@ -67,7 +67,9 @@
 #include "../common/MessageData.h"
 #include "../common/GDefine.h"
 #include "../common/WrapperClassHandler.h"
+#include "SharedObject.h"
 
+#include <map>
 #include <string>
 
 using namespace std;
@@ -85,29 +87,42 @@ typedef int (* DELETE_OBJECT)(BasicHandler *inst);
 #else //Linux
 #include <dlfcn.h>
 #define DLHandler void*
-
 #endif
 
-class HandlerLoader {
+//status codes
+#define HANDLER_INIT_FAIL	1
+#define CREATION_FAILED		2
+#define LOADLIBRARY_FAILED	3
+#define LIBRARY_PATH_EMPTY	4
+#define HANDLER_NOT_LOADED	5
+#define HANDLER_BEING_USED	6
+#define GET_HANDLER_FAILED	7
+#define WRONG_HANDLER_TYPE	8
+#define NO_HANDLERS_CONFIGURED	9
+
+class HandlerLoader : protected SharedObject
+{
 private:
-	BasicHandler* m_pClass;
-	string m_sLib;
-	int m_nLoadOptions;
-	DLHandler m_Handler;
-	CREATE_OBJECT m_Create;
-	DELETE_OBJECT m_Delete;
+	typedef struct HandlerInformation
+	{
+		string m_sLib;
+		int m_nLoadOptions;
+		DLHandler m_Handler;
+		CREATE_OBJECT m_Create;
+		DELETE_OBJECT m_Delete;
+		int m_nObjCount;
+	} HandlerInformation;
+
+	map<int, HandlerInformation*> m_HandlerInfoList;
+
 public:
-	BasicHandler* GetHandler();
-	HandlerLoader(string &sFile, int nOptions=RTLD_LAZY);
+	int CreateHandler(BasicHandler** pHandler, int nLibId);
+	int DeleteHandler(BasicHandler* pHandler, int nLibId);
+	HandlerLoader();
 	~HandlerLoader();
-	int Initialize();
-	int Invoke(MessageData *pMsg);
-	int Finalize();
 private:
-	int LoadLib();
-	CREATE_OBJECT GetCreate();
-	DELETE_OBJECT GetDelete();
-	int UnloadLib();
+	int LoadLib(HandlerInformation* pHandlerInfo);
+	int UnloadLib(HandlerInformation* pHandlerInfo);
 };
 
 
