@@ -182,8 +182,8 @@ AxisConfig::readConfFile ()
 
 // If the name/value pair is a reference to a WSDD file, then the file must exist.
 // If the WSDD file does not exist, then echo a warning to the console.
-		if (strcmp ("WSDDFilePath", key) == NULL ||
-		    strcmp ("ClientWSDDFilePath", key) == NULL)
+		if (strcmp ("WSDDFilePath", key) == 0 ||
+		    strcmp ("ClientWSDDFilePath", key) == 0)
 		{
 		    FILE *fp = fopen (pcValue + 1, "r");
 

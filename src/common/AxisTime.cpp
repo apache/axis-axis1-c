@@ -296,7 +296,8 @@ int AxisTime::mkCTime ()
                 time_t t = mktime (&m_TM);
                 if (t == -1)
                     return AXIS_FAIL;
-                t = fabs (t - d);
+                //t = fabs (t - d);
+                t = labs (t - d); // Samisa - use correct typed methods - we need long int; not double
                 pTm = gmtime (&t);
                 memcpy (&m_TMUTC, pTm, sizeof (tm));
             }
@@ -368,7 +369,8 @@ int AxisTime::mkCTime ()
                 time_t t = mktime (&m_TM);
                 if (t == -1)
                     return AXIS_FAIL;
-                t = fabs (t - d);
+                //t = fabs (t - d);
+                t = labs (t - d); // Samisa - use correct typed methods - we need long int; not double
                 pTm = gmtime (&t);
                 memcpy (&m_TMUTC, pTm, sizeof (tm));
             }
@@ -452,7 +454,8 @@ int AxisTime::mkCTime ()
                 time_t t = mktime (&m_TM);
                 if (t == -1)
                     return AXIS_FAIL;
-                t = fabs (t - d);
+                //t = fabs (t - d);
+                t = labs (t - d); // Samisa - use correct typed methods - we need long int; not double
                 pTm = gmtime (&t);
                 memcpy (&m_TMUTC, pTm, sizeof (tm));
             }
