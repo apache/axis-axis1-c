@@ -65,7 +65,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "../../bin/win32/client"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../../include" /I "../../src/common" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FR /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../../include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FR /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -127,43 +127,43 @@ SOURCE=..\..\src\client\transport\axis\Url.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\src\client\transport\axis\AxisTransport.h
+SOURCE=..\..\include\axis\client\transport\AxisTransport.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\client\Call.h
+SOURCE=..\..\include\axis\client\Call.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\client\transport\axis\Channel.hpp
+SOURCE=..\..\include\axis\client\transport\axis\Channel.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\client\transport\axis\HttpTransport.hpp
+SOURCE=..\..\include\axis\client\transport\axis\HttpTransport.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\client\transport\axis\Platform.hpp
+SOURCE=..\..\include\axis\client\transport\axis\Platform.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\client\transport\axis\Receiver.hpp
+SOURCE=..\..\include\axis\client\transport\axis\Receiver.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\client\transport\axis\Sender.hpp
+SOURCE=..\..\include\axis\client\transport\axis\Sender.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\client\transport\axis\Transport.hpp
+SOURCE=..\..\include\axis\client\transport\axis\Transport.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\client\transport\axis\TransportFactory.hpp
+SOURCE=..\..\include\axis\client\transport\axis\TransportFactory.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\client\transport\axis\Url.hpp
+SOURCE=..\..\include\axis\client\transport\axis\Url.hpp
 # End Source File
 # End Group
 # End Target

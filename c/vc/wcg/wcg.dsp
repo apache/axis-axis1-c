@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O1 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
+# ADD CPP /nologo /W3 /GX /O1 /I "../../include" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
@@ -68,7 +68,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /ML /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
+# ADD CPP /nologo /ML /W3 /Gm /GX /ZI /Od /I "../../include" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
 # SUBTRACT CPP /YX /Yc /Yu
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -139,39 +139,39 @@ SOURCE=..\..\src\wcg\WSClass.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\src\wcg\actions.h
+SOURCE=..\..\include\axis\wcg\actions.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\wcg\BeanClass.h
+SOURCE=..\..\include\axis\wcg\BeanClass.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\wcg\cppyacc.hpp
+SOURCE=..\..\include\axis\wcg\cppyacc.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\wcg\File.h
+SOURCE=..\..\include\axis\wcg\File.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\wcg\Method.h
+SOURCE=..\..\include\axis\wcg\Method.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\wcg\TranslationUnit.h
+SOURCE=..\..\include\axis\wcg\TranslationUnit.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\wcg\Variable.h
+SOURCE=..\..\include\axis\wcg\Variable.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\wcg\WCGenerator.h
+SOURCE=..\..\include\axis\wcg\WCGenerator.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\wcg\WSClass.h
+SOURCE=..\..\include\axis\wcg\WSClass.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
