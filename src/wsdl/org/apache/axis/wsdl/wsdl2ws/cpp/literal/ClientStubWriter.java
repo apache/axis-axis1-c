@@ -594,8 +594,9 @@ public class ClientStubWriter
                                         + containedType
                                         + ", (void*) Axis_GetSize_"
                                         + containedType
-                                        + ", cPrefixAndParamName"
-                                        + i
+                                        + ", \""
+                                        + parameterName
+                                        + "\""
                                         + ", Axis_URI_"
                                         + containedType);
                             }

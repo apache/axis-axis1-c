@@ -752,7 +752,7 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 			if (m_pNode->m_type == END_ELEMENT)
 			{
 //Skip past end of item
-			    m_pNode = m_pParser->next ();
+//			    m_pNode = m_pParser->next ();
 
 			    if (0 ==
 				strcmp (pName, m_pNode->m_pchNameOrValue))

@@ -169,7 +169,9 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			else if(attribs[i].isArray()){
 				//if Array
 				if (attribs[i].isSimpleType()){
-					writer.write("\tpSZ->serializeBasicArray((Axis_Array*)(&param->"+attribs[i].getParamNameAsMember()+"),"+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+", \""+attribs[i].getParamName()+"\");\n"); 
+ 					//writer.write("\tpSZ->serializeBasicArray((Axis_Array*)(&param->"+attribs[i].getParamNameAsMember()+"),"+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+", \""+attribs[i].getParamName()+"\");\n");
+ 					// cblecken 17/01/2005
+					writer.write("\tpSZ->serializeBasicArray((Axis_Array*)(&param->"+attribs[i].getParamName()+"), Axis_URI_" + classname + ","+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+", \""+attribs[i].getParamName()+"\");\n"); 
 				}
 				else
 				{
@@ -244,16 +246,22 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			else if (attribs[i].isSimpleType()){
 				//writer.write("\tpSZ->serializeAsElement(\""+attribs[i].getElementName().getLocalPart()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 				//Samisa 22/08/2004
-				writer.write("\tpSZ->serializeAsElement( \""+attribs[i].getElementNameAsString()+"\", (void*)&(param->"+attribs[i].getParamNameAsMember()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
-				//Samisa
+ 				// writer.write("\tpSZ->serializeAsElement( \""+attribs[i].getElementNameAsString()+"\", (void*)&(param->"+attribs[i].getParamNameAsMember()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+ 				// cblecken 17/01/2005
+ 				writer.write("\tpSZ->serializeAsElement(\""+attribs[i].getElementNameAsString()+"\", Axis_URI_" + classname + ", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+ 
 			}else{
 				//if complex type
 				String elm = attribs[i].getParamName();
 				if ( attribs[i].isReference() )
 					elm = attribs[i].getTypeName();
-				writer.write("\tpSZ->serialize(\"<"+elm+"\", 0);\n");
-				writer.write("\tAxis_Serialize_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamNameAsMember()+", pSZ);\n");
-				writer.write("\tpSZ->serialize(\"</"+elm+">\", 0);\n");
+ 				//writer.write("\tpSZ->serialize(\"<"+elm+"\", 0);\n");
+ 				//writer.write("\tAxis_Serialize_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamNameAsMember()+", pSZ);\n");
+ 				//writer.write("\tpSZ->serialize(\"</"+elm+">\", 0);\n");
+                 writer.write("\tpSZ->serialize(\"<\", pSZ->getNamespacePrefix(\"" + type.getName().getNamespaceURI() + "\"), \":\", \""+elm+"\", 0);\n");
+                 writer.write("\tAxis_Serialize_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+", pSZ);\n");
+                 writer.write("\tpSZ->serialize(\"</\", pSZ->getNamespacePrefix(\"" + type.getName().getNamespaceURI() + "\"), \":\", \""+elm+"\", \">\", 0);\n");
+
 			}
 		}
 		writer.write("\treturn AXIS_SUCCESS;\n");
