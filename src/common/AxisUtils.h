@@ -43,7 +43,7 @@ AXIS_CPP_NAMESPACE_START
 
 class xsd__base64Binary;
 
-class AxisUtils
+class STORAGE_CLASS_INFO AxisUtils
 {
     friend class TypeMapping;
     friend class URIMapping;
