@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar>
+<display-name>BookQuoteService</display-name>
+	<enterprise-beans>
+		<session>
+			<display-name>BookQuoteService</display-name>
+			<ejb-name>bookquote</ejb-name>
+			<home>com.jwsbook.jaxrpc.BookQuoteHome</home>
+			<remote>com.jwsbook.jaxrpc.BookQuoteEJB</remote>
+			<ejb-class>com.jwsbook.jaxrpc.BookQuoteBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Bean</transaction-type>
+		</session>
+	</enterprise-beans>
+</ejb-jar>
