@@ -20,10 +20,11 @@
 #define AXIS_AXISUTILS_H__OF_AXIS_INCLUDED_
 
 #include <axis/GDefine.hpp>
-#include <axis/AxisUserAPI.hpp>
+//#include <axis/AxisUserAPI.hpp>
 #include <string>
 
 using namespace std;
+
 
 #define CONVERT_BUFFER_SIZE 1024
 /*
@@ -41,7 +42,9 @@ class AxisUtils
     friend class TypeMapping;
     friend class URIMapping;
     public:
-	    static xsd__base64Binary decodeFromBase64Binary(const AxisChar* pValue);
+
+	    //static xsd__base64Binary decodeFromBase64Binary(const AxisChar* pValue);
+
         /*
 	 * Converts the given character pointer value to lowercase.
 	 * @param pchWord The character pointer to be converted.
