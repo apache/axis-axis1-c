@@ -74,3 +74,4 @@ FUTURE ENHANCEMENTS
 
 * <susantha>	Implementing C++ types for xml types (datetime, date, time, HexBinary, Base64Binary etc)
 		and improve Param class to support them.
+ 
