@@ -127,7 +127,7 @@ static SoapFaultStruct g_sObjSoapFaultStruct[FAULT_LAST] =
 
 //Client faults
 	/*SF_SOAPACTIONEMPTY*/	{"Client", "Soap Action header empty", "none", ""},
-	/*SF_SERVICENOTFOUND*/	{"Client", "Requested service is not registerd of the server", "none", ""},
+	/*SF_SERVICENOTFOUND*/	{"Client", "Requested service is not registerd at the server", "none", ""},
 	/*SF_SOAPCONTENTERROR*/ {"Client", "Soap content is not valid", "none", ""},
 	/*SF_NOSOAPMETHOD*/		{"Client", "No method to invoke", "none", ""},
 	/*SF_METHODNOTALLOWED*/	{"Client", "Soap method is not allowed to invoke", "none", ""},
