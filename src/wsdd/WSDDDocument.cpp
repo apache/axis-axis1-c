@@ -96,6 +96,7 @@ int WSDDDocument::GetDeployment(const string& sWSDD, WSDDDeployment* pDeployment
 
 int WSDDDocument::ParseDocument(const string& sWSDD)
 {
+	DEBUG1("inside ParseDocument\n");
 	try
 	{
 		SAX2XMLReader * parser = XMLReaderFactory::createXMLReader();

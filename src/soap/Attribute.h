@@ -80,14 +80,14 @@ class SoapSerializer;
 class Attribute  
 {
 private:	
-	bool isSerializable();
+	bool isSerializable() const;
 	string m_localname;
 	string m_prefix;
 	string m_uri;
 	string m_value;
 	//string m_strAttrSerialized;
 public:		
-	int serialize(SoapSerializer& pSZ);
+	int serialize(SoapSerializer& pSZ) const;
 	//int serialize(string&);
 	Attribute();	
 	Attribute(const string &localname, const string &prefix, const string &uri, const string &value);

@@ -114,7 +114,7 @@ Attribute::Attribute(const string &localname, const string &prefix, const string
 /*
  *
  */
-int Attribute::serialize(SoapSerializer& pSZ)
+int Attribute::serialize(SoapSerializer& pSZ) const
 {	
 	int intStatus= FAIL;
 
@@ -156,7 +156,7 @@ int Attribute::serialize(string& sSerialized)
 }
 */
 
-bool Attribute::isSerializable()
+bool Attribute::isSerializable() const
 {
 	bool bStatus= true;
 

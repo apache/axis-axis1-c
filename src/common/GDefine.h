@@ -73,5 +73,6 @@ typedef enum { APTHTTP=1, APTFTP, APTSMTP, APTOTHER } AXIS_PROTOCOL_TYPE;
 #define SOAPACTIONHEADER "SOAPAction"
 
 extern void Ax_Sleep(int);
+extern void ModuleInitialize();
 
 #endif //__GDEFINE_INCLUDED__

@@ -82,7 +82,7 @@ extern "C"
 
 	//This function should be implemented by module authors
 	//Allows to send pieces of soap response the transport handler
-	int send_response_bytes(char* res, void* opstream);
+	int send_response_bytes(const char* res, void* opstream);
 
 	//This function should be implemented by module authors
 	//Allows axis to get pieces of the request as they come to the transport listener
