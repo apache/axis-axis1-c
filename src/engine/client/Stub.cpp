@@ -42,9 +42,15 @@ Stub::Stub(const char *pcEndPointUri, AXIS_PROTOCOL_TYPE eProtocol)
 Stub::~Stub()
 {
     delete m_pCall;
-    for (unsigned int j = 0; j < m_vSOAPHeaderBlocks.size(); j++)
+	unsigned int j=0;
+    for (j = 0; j < m_vSOAPHeaderBlocks.size(); j++)
     {
 	    delete m_vSOAPHeaderBlocks[j];
+    }
+
+    for (j = 0; j < m_vSOAPMethodAttributes.size(); j++)
+    {
+	    delete m_vSOAPMethodAttributes[j];
     }
 }
 
@@ -216,7 +222,12 @@ void Stub::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
 
 void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue)
 {
-    //Samisa
+	setSOAPMethodAttribute(pLocalname,pPrefix,NULL,pValue);
+}
+
+void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, 
+                                  const AxisChar *pUri, const AxisChar *pValue)
+{
     //Check if there is an attribute with the same local name is already set
     IAttribute* pAttribute = this->getFirstSOAPMethodAttribute();
     while( pAttribute )
@@ -233,8 +244,11 @@ void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pP
         pAttribute = this->getNextSOAPMethodAttribute();
     }
 
-    pAttribute = new Attribute(pLocalname, pPrefix, pValue);
-    m_vSOAPMethodAttributes.push_back(pAttribute);
+	if (NULL!=pUri)
+		pAttribute = new Attribute(pLocalname, pPrefix, pUri, pValue);
+	else
+		pAttribute = new Attribute(pLocalname, pPrefix, pValue);
+	m_vSOAPMethodAttributes.push_back(pAttribute);
     m_viCurrentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin();
 }
 
@@ -309,15 +323,6 @@ void Stub::deleteSOAPMethodAttribute(IAttribute* pAttribute)
         }
         currentSOAPMethodAttribute++;
     }
-}
-
-
-void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, 
-                                  const AxisChar *pUri, const AxisChar *pValue)
-{
-    IAttribute* pAttribute = new Attribute(pLocalname, pPrefix, pUri, pValue);
-	m_vSOAPMethodAttributes.push_back(pAttribute);
-    m_viCurrentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin();
 }
 
 void Stub::setTransportTimeout(const long lSeconds)
