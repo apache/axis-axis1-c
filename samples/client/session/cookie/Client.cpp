@@ -65,7 +65,7 @@ main (int argc, char *argv[])
 
 	cout << endl << " Using service at " << endpoint << endl << endl;
 
-	Total ws (endpoint, APTHTTP1_1);
+	Total ws (endpoint, APTHTTP1_0);
 
         ws.setTransportTimeout(2);
 
