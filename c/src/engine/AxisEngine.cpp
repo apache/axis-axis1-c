@@ -64,7 +64,7 @@
 #include <stdio.h>
 #include "AxisEngine.h"
 #include "../common/AxisException.h"
-#include "../common/Debug.h"
+#include "../common/AxisTrace.h"
 #include "../common/Packet.h"
 #include "../common/AxisUtils.h"
 #include "../wsdd/WSDDDeployment.h"
@@ -100,7 +100,7 @@ int AxisEngine::Process(Ax_soapstream* soap)
 {
 	int Status;
 	AXIS_TRY
-		DEBUG1("AxisEngine::Process");
+		AXISTRACE1("AxisEngine::Process");
 		MessageData* pMsg = NULL;
 		const WSDDService* pService = NULL;
 		string sSessionId = soap->sessionid;
@@ -138,7 +138,7 @@ int AxisEngine::Process(Ax_soapstream* soap)
 			AxisString service;
 			AxisUtils::convert(service, (cService == NULL)? "" : cService);
 		  
-			DEBUG2("string service = ",service.c_str());
+			AXISTRACE2("string service = ",service.c_str());
      
 			if (service.empty()) 
 			{
@@ -188,7 +188,7 @@ int AxisEngine::Process(Ax_soapstream* soap)
 			if (pSm) 
 			{
 				AxisString method = pSm->getMethodName();
-				DEBUG2("pSm->getMethodName(); :", method.c_str());
+				AXISTRACE2("pSm->getMethodName(); :", method.c_str());
 				if (!method.empty())
 				{
 					if (pService->IsAllowedMethod(method))
@@ -259,8 +259,8 @@ int AxisEngine::Process(Ax_soapstream* soap)
 		from the webserver and report the error. You can also write this
 		in a logfile specific to axis.
 		*/
-		#ifdef _DEBUG
-		DEBUG1(e->what());   
+		#ifdef _AXISTRACE
+		AXISTRACE1(e->what());   
 		delete(e);
 		#endif
 	AXIS_CATCH(...)
@@ -271,7 +271,7 @@ int AxisEngine::Process(Ax_soapstream* soap)
 		from the webserver and report the error. You can also write this
 		in a logfile specific to axis.
 		*/
-		DEBUG1("UNKNOWN EXCEPTION");
+		AXISTRACE1("UNKNOWN EXCEPTION");
 	AXIS_ENDCATCH
 	return Status;
 }
@@ -292,7 +292,7 @@ int AxisEngine::Invoke(MessageData* pMsg)
 			}
 
 		}
-		DEBUG1("AFTER invoke transport request handlers");
+		AXISTRACE1("AFTER invoke transport request handlers");
 		level++; // AE_TRH
 		//invoke global request handlers
 		if (m_pGReqFChain)
@@ -303,7 +303,7 @@ int AxisEngine::Invoke(MessageData* pMsg)
 				break; //do .. while (0)
 			}		
 		}
-		DEBUG1("AFTER invoke global request handlers");
+        AXISTRACE1("AFTER invoke global request handlers");
 		level++; //AE_GLH
 		//invoke service specific request handlers
 		if (m_pSReqFChain)
@@ -314,7 +314,7 @@ int AxisEngine::Invoke(MessageData* pMsg)
 				break; //do .. while (0)
 			}
 		}
-		DEBUG1("AFTER invoke service specific request handlers");
+		AXISTRACE1("AFTER invoke service specific request handlers");
 		level++; //AE_SERH
 		//call actual web service handler
 		if (m_pWebService)
@@ -325,7 +325,7 @@ int AxisEngine::Invoke(MessageData* pMsg)
 				break;
 			}        
 		}
-		DEBUG1("AFTER call actual web service handler");
+		AXISTRACE1("AFTER call actual web service handler");
 		level++; //AE_SERV
 	}
 	while(0);
@@ -359,7 +359,7 @@ int AxisEngine::Invoke(MessageData* pMsg)
 		//no break;
 	case AE_START:;//transport handlers have failed
 	};
-	DEBUG1("end axisengine process()");
+	AXISTRACE1("end axisengine process()");
 	return Status;
 }
 

@@ -68,7 +68,7 @@
 #endif
 
 #include "AxisEngine.h"
-#include "../common/Debug.h"
+#include "../common/AxisTrace.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
@@ -106,7 +106,7 @@
 #endif
 
 //define all global variables of the axisengine
-#ifdef _DEBUG
+#ifdef _AXISTRACE
 unsigned char chEBuf[1024];
 #endif
 
@@ -123,7 +123,7 @@ WSDDDeployment* g_pWSDDDeployment;
 
 extern "C" int process_request(Ax_soapstream *str)
 {
-	DEBUG1("in axis.cpp");	
+	AXISTRACE1("in axis.cpp");	
 	int Status = FAIL;
 	FILE * WsddFile;
 	char ReadBuffer[BYTESTOREAD];
@@ -139,13 +139,13 @@ extern "C" int process_request(Ax_soapstream *str)
 			//Handle the POST method
 			if (str->so.http.ip_method == AXIS_HTTP_POST)
 			{
-				DEBUG1("method is POST");
+				AXISTRACE1("method is POST");
 				AxisEngine* engine = new AxisEngine();	
 				if (engine)
 				{
 					Status = engine->Process(str);
-					DEBUG1("Status = engine->Process(str);");
-				    DEBUG1("are we successful?");            
+					AXISTRACE1("Status = engine->Process(str);");
+				    AXISTRACE1("are we successful?");            
 					Status = SUCCESS;
 					delete engine;
 				}
@@ -230,7 +230,7 @@ extern "C" int process_request(Ax_soapstream *str)
 extern "C" int initialize_module()
 {
 	//order of these initialization method invocation should not be changed
-	DEBUG1("inside initialize_module\n");
+	AXISTRACE1("inside initialize_module\n");
 	SoapKeywordMapping::Initialize();
 	TypeMapping::Initialize();
 	URIMapping::Initialize();
