@@ -80,6 +80,8 @@ public class WrapperInfo {
 	private String trasportUri;
 	//target endpoint (the URI the service is deployed in)
 	private String targetEndpointURI; 
+	//private target name space of the wsdl file 
+	private String targetNameSpaceOfWSDL;
 	
     public WrapperInfo(String wrapperStyle,
     					String wrapperLanguage,
@@ -88,7 +90,8 @@ public class WrapperInfo {
     					String implStyle,
     					String targetEngine,
     					String trasportUri,
-						String targetEndpointURI) {
+						String targetEndpointURI,
+						String targetNameSpaceOfWSDL) {
         this.wrapperStyle = wrapperStyle;
         this.wrapperLanguage = wrapperLanguage;
         this.encodingStyle = encodingStyle;
@@ -129,6 +132,8 @@ public class WrapperInfo {
 			this.targetEndpointURI = WrapperConstants.DEFAULT_TARGET_ENDPOINT_URI; 
 		else	
 			this.targetEndpointURI = targetEndpointURI;	
+		this.targetNameSpaceOfWSDL = (targetNameSpaceOfWSDL == null)?"":targetNameSpaceOfWSDL;
+	
     }
 
     /**
@@ -205,5 +210,24 @@ public class WrapperInfo {
     public void setTargetEngine(String targetEngine) {
         this.targetEngine = targetEngine;
     }
+	/**
+	 * @return String
+	 */
+	public String getTargetEndpointURI(){
+		return targetEndpointURI;
+	}
+	/**
+	 * @return String
+	 */
+	public String getTargetNameSpaceOfWSDL(){
+		return targetNameSpaceOfWSDL;
+	}
+
+	/**
+	 * @return String
+	 */
+	public String getTrasportUri() {
+		return trasportUri;
+	}
 
 }
