@@ -13,7 +13,7 @@ http://www.ibm.com/standards/xml/webservices/j2ee/j2ee_web_services_1_1.xsd" ver
 		<wsdl-port xmlns:ns1="http://math.testData">ns1:math</wsdl-port>
 		<service-endpoint-interface>testData.math.MathFace</service-endpoint-interface>
 		<service-impl-bean>
-			<ejb-link >MathFace</ejb-link>
+			<servlet-link>MathFace</servlet-link>
 		</service-impl-bean>
 	</port-component>
 	</webservice-description>
