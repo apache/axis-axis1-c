@@ -146,7 +146,7 @@ enum AXISC_EXCEPTIONS
     /*Following exceptions are not releated to soap faults
      */
     AXISC_UNKNOWN_ELEMENT_EXCEPTION,
-    AXISC_SOAP_FAULT_EXCEPTION,
+    AXISC_NODEVALUE_MISMATCH_EXCEPTION,
 
     /*
      * This FAULT_LAST is not used as a fault code, but instead is used 

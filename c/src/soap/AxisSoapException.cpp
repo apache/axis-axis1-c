@@ -81,6 +81,12 @@ const string AxisSoapException::getMessage (int iExceptionCode)
     switch(iExceptionCode)
     {
 
+        case SOAP_VERSIONMISMATCH :
+            sMessage = "Soap Version mismatch fault occured";
+            break;
+        case SOAP_MUSTUNDERSTAND:
+            sMessage = "Soap Must understand fault occured";
+            break;
         case CLIENT_SOAP_MESSAGEINCOMPLETE:
             sMessage = "Received message is incomplete";
             break;

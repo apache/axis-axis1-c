@@ -66,14 +66,11 @@ const string AxisException::getMessage (int iExceptionCode)
     string sMessage;
     switch(iExceptionCode)
     {
-        case SOAP_VERSIONMISMATCH :
-            sMessage = "Soap Version mismatch fault occured";
-            break;
-        case SOAP_MUSTUNDERSTAND:
-            sMessage = "Soap Must understand fault occured";
-            break;
         case SERVER_TESTEXCEPTION:
             sMessage = "This is a testing error";
+            break;
+        case AXISC_NODEVALUE_MISMATCH_EXCEPTION:
+            sMessage = "Cannot deserialize the requested element";
             break;
         default:
             sMessage = "Unknown Exception has occured";

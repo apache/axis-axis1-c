@@ -298,16 +298,7 @@ int SoapDeSerializer::checkMessageBody(const AxisChar* pName,
     //if (0 != strcmp(m_pNode->m_pchNameOrValue, pName)) return AXIS_FAIL;
     if (0 != strcmp(m_pNode->m_pchNameOrValue, pName))
     {
-        if(0 != strcmp(m_pNode->m_pchNameOrValue, "Fault"))
-        {
-            m_nStatus = AXIS_FAIL;
-            THROW_AXIS_EXCEPTION(AXISC_UNKNOWN_ELEMENT_EXCEPTION);
-        }
-        else//Body contains soap fault
-            //iResult = getFault();
-            THROW_AXIS_EXCEPTION(AXISC_SOAP_FAULT_EXCEPTION);
-            
-           
+        THROW_AXIS_EXCEPTION(AXISC_NODEVALUE_MISMATCH_EXCEPTION);    
     }
     /* we can check the namespace uri too here. Should we ?*/
     m_pNode = NULL; /*This is to indicate that node is identified and used */

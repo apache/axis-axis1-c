@@ -445,11 +445,15 @@ int SoapSerializer::createSoapMethod(const AxisChar* sLocalName,
 int SoapSerializer::createSoapFault(const AxisChar* sLocalName, 
                                      const AxisChar* sURI)
 {
-    SoapFault* pFault = new SoapFault();
-    setSoapFault(pFault);
-    pFault->setLocalName(sLocalName);
-    pFault->setPrefix(getNamespacePrefix(sURI));
-    pFault->setUri(sURI);
+    SoapFault* pSoapFault = new SoapFault();
+    setSoapFault(pSoapFault);
+    pSoapFault->setLocalName(sLocalName);
+    pSoapFault->setPrefix(getNamespacePrefix(sURI));
+    pSoapFault->setUri(sURI);
+    pSoapFault->setFaultcode("Server");
+    pSoapFault->setFaultstring("Service thrown exception");
+    pSoapFault->setFaultactor("");
+    
     return AXIS_SUCCESS;
 }
 
