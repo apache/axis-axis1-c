@@ -56,7 +56,7 @@ static void AXISCALL set_transport_information(AXIS_TRANSPORT_INFORMATION_TYPE t
 	case OPERATION_NAME: /* need to set ? */
 		break;
 	case SOAP_MESSAGE_LENGTH: 
-			key = "Content-Length"; //this is apache module and transport is http so the key
+			key = "Content-Length"; /*this is apache module and transport is http so the key*/
 		break;
 	default:;
 	}
@@ -66,7 +66,7 @@ static void AXISCALL set_transport_information(AXIS_TRANSPORT_INFORMATION_TYPE t
 	}
 #ifdef CHUNCKED_DATA_SUPPORTED
     ap_send_http_header((request_rec*)hdr->str.op_stream);
-	//should we remove the sent headers ? Sanjaya ?
+	/*should we remove the sent headers ? Sanjaya ?*/
 #endif
 }
 
@@ -128,8 +128,8 @@ static void axis_Fini(server_rec *svr_rec, pool* p)
  */
 static AXIS_TRANSPORT_STATUS AXISCALL get_request_bytes(const char** req, int* retsize, const Ax_soapstream* stream)
 {
-	// How can I detect an error when reading stream ? Sanjaya ?
-	// In case of an error set buffer to null, size 0 and return TRANSPORT_FAILED
+	 /*How can I detect an error when reading stream ? Sanjaya ?
+	 In case of an error set buffer to null, size 0 and return TRANSPORT_FAILED*/
 	int len_read;
 	ap_hard_timeout("util_read", (request_rec*)stream->str.ip_stream);
 	len_read = ap_get_client_block((request_rec*)stream->str.ip_stream, g_buffer, SIZEOFMODULEBUFFER);
@@ -179,7 +179,7 @@ static const char* AXISCALL get_transport_information(AXIS_TRANSPORT_INFORMATION
 			}
 		}
 	case SOAP_MESSAGE_LENGTH: 
-		return get_property(stream, "Content-Length"); //this is apache module and transport is http so the key
+		return get_property(stream, "Content-Length"); /*this is apache module and transport is http so the key*/
 	default:;
 	}
 	return NULL;
@@ -261,33 +261,33 @@ static int axis_handler(request_rec *req_rec)
 		return OK;
 	}
 #ifdef CHUNCKED_DATA_SUPPORTED
-	//headers have already been sent. see set_transport_information
-	//http body too have been sent
-	//Do we need to send any indication to mark end of chuncked data ? Sanjaya ?
+	/*headers have already been sent. see set_transport_information
+	http body too have been sent
+	Do we need to send any indication to mark end of chuncked data ? Sanjaya ?*/
 #else
-	//Calculate Content-Length and set header
+	/*Calculate Content-Length and set header*/
 	pbuffers = (sendbuffers*)sstr->reserved1;
 	for (index=0;index < NO_OF_SERIALIZE_BUFFERS; index++)
 	{
 		if(!pbuffers[index].buffer) break;
 		contentLength += strlen(pbuffers[index].buffer);
 	}
-	if (contentLength != 0) // do only if the http body is not empty.
+	if (contentLength != 0) /* do only if the http body is not empty.*/
 	{
 		sprintf(strtonum, "%d", contentLength);
 		set_transport_information(SOAP_MESSAGE_LENGTH, strtonum, sstr);
 		ap_send_http_header(req_rec);
-		//Send all buffers
+		/*Send all buffers*/
 		pbuffers = (sendbuffers*)sstr->reserved1;
 		for (index=0;index < NO_OF_SERIALIZE_BUFFERS; index++)
 		{
 			if(!pbuffers[index].buffer) break;
 			ap_rputs(pbuffers[index].buffer, req_rec);
-			//Let Axis know that the buffer is no longer in use
+			/*Let Axis know that the buffer is no longer in use*/
 			axis_buffer_release(pbuffers[index].buffer, pbuffers[index].bufferid , sstr);
 		}
 	}
-	//Free the array 
+	/*Free the array */
 	if (sstr->reserved1) free(sstr->reserved1);
 #endif
 	free(sstr->so.http);
