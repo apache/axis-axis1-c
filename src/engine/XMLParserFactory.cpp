@@ -62,13 +62,17 @@ int XMLParserFactory::initialize()
         {
             unloadLib();
             AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
-            throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, strdup(m_pcLibraryPath));
+            char *s = new char[strlen(m_pcLibraryPath)+1];
+            strcpy(s,m_pcLibraryPath);
+            throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, s);
         }
 	}
 	else
 	{
         AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
-        throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, strdup(m_pcLibraryPath));
+        char *s = new char[strlen(m_pcLibraryPath)+1];
+        strcpy(s,m_pcLibraryPath);
+        throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, s);
 	}
    return AXIS_SUCCESS;
 }

@@ -52,7 +52,6 @@
 #include "../server/Packet.hpp"
 #include "../server/TypeMapping.hpp"
 #include "../server/AxisUserAPI.hpp"
-#include "../server/SoapEnvVersions.hpp"
 #include "../server/WSDDDefines.hpp"
 #include "../server/IHeaderBlock.hpp"
 #include "../server/ISoapHeader.hpp"

@@ -62,8 +62,8 @@ Stub::~Stub()
     delete m_pCall;
     for (unsigned int i = 0; i < m_vKeys.size(); i++)
     {
-	    free(m_vKeys[i]);
-	    free(m_vValues[i]);
+	    delete [] m_vKeys[i];
+	    delete [] m_vValues[i];
     }
 
     for (unsigned int j = 0; j < m_vSOAPHeaderBlocks.size(); j++)
@@ -81,8 +81,12 @@ void Stub::setTransportProperty(const char *pcKey, const char *pcValue)
 {
     if (pcKey && pcValue)
     {
-	    m_vKeys.push_back(strdup(pcKey));
-	    m_vValues.push_back(strdup(pcValue));
+          char *s = new char[strlen(pcKey)+1];
+          strcpy(s,pcKey);
+	    m_vKeys.push_back(s);
+          s = new char[strlen(pcValue)+1];
+          strcpy(s,pcValue);
+	    m_vValues.push_back(s);
     }
 }
 
@@ -146,10 +150,12 @@ void Stub::deleteCurrentTrasportProperty()
 {
     if (m_viCurrentKey != m_vKeys.end())
     {
-        free(*m_viCurrentKey);
-        free(*m_viCurrentValue);
+        delete [] *m_viCurrentKey;
+        delete [] *m_viCurrentValue;
         m_vKeys.erase(m_viCurrentKey);
         m_vValues.erase(m_viCurrentValue);
+        m_viCurrentKey = m_vKeys.begin();
+        m_viCurrentValue = m_vValues.begin();
     }
 }
 
@@ -165,8 +171,8 @@ void Stub::deleteTrasportProperty(char* pcKey, unsigned int uiOccurance)
         {
              if(uiCount == uiOccurance)
              {
-				 free(*currentKey);
-				 free(*currentValue);
+                 delete [] *currentKey;
+                 delete [] *currentValue;
                  m_vKeys.erase(currentKey);
                  m_vValues.erase(currentValue);
              }

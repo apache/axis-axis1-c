@@ -65,7 +65,9 @@ int SOAPTransportFactory::initialize()
         {
             unloadLib();
             AXISTRACE1("SERVER_ENGINE_LOADING_TRANSPORT_FAILED", CRITICAL);
-            throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED,  strdup(m_pcLibraryPath));
+            char *s = new char[strlen(m_pcLibraryPath)+1];
+            strcpy(s,m_pcLibraryPath);
+            throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED,  s);
         }
         else
         {
@@ -86,7 +88,9 @@ int SOAPTransportFactory::initialize()
 	else
 	{
         AXISTRACE1("SERVER_ENGINE_LOADING_TRANSPORT_FAILED", CRITICAL);
-        throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED,  strdup(m_pcLibraryPath));
+        char *s = new char[strlen(m_pcLibraryPath)+1];
+        strcpy(s,m_pcLibraryPath);
+        throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED,  s);
 	}
 	return AXIS_SUCCESS;
 }
