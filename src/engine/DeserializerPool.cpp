@@ -18,16 +18,38 @@ DeserializerPool::~DeserializerPool()
 
 }
 
-int DeserializerPool::GetInstance(SoapDeSerializer** ppSZ)
+int DeserializerPool::GetInstance(SoapDeSerializer** ppDZ)
 {
-	//TODO
-	*ppSZ = new SoapDeSerializer();
+	lock();
+	if (!m_DZList.empty())
+	{
+		*ppDZ = m_DZList.front();
+		m_DZList.pop_front();
+	}
+	else
+	{
+		*ppDZ = new SoapDeSerializer();
+	}
+	if (!(*ppDZ))
+	{
+		unlock();
+		return FAIL;		
+	}
+	if (SUCCESS != (*ppDZ)->Init())
+	{
+		m_DZList.push_back(*ppDZ);
+		*ppDZ = NULL;
+		unlock();
+		return FAIL;
+	}
+	unlock();
 	return SUCCESS;
 }
 
-int DeserializerPool::PutInstance(SoapDeSerializer* pSZ)
+int DeserializerPool::PutInstance(SoapDeSerializer* pDZ)
 {
-	//TODO
-	delete pSZ;
+	lock();
+	m_DZList.push_back(pDZ);
+	unlock();
 	return SUCCESS;
 }
