@@ -68,7 +68,7 @@
 
 using namespace std;
 
-typedef struct uDuration
+typedef struct
 {
     int years;
     int months;
@@ -76,7 +76,7 @@ typedef struct uDuration
     int hours;
     int mins;
     double secs;
-};
+} uDuration;
 
 class AxisTime
 {
@@ -89,13 +89,15 @@ class AxisTime
         void setValue(XSDTYPE type, uParamValue Value);
         void setType(XSDTYPE m_Type);
         AxisString getValue();
-        AxisString& serialize(const AxisString& sName, struct tm tValue);
-        AxisString& serialize(const AxisString& sName, long lDuration);
+        AxisString& serialize(const AxisChar* sName, struct tm tValue, XSDTYPE nType);
+        AxisString& serialize(const AxisChar* sName, long lDuration, XSDTYPE nType);
         long getDuration();
         struct tm getDateTime();
         struct tm getDate();
         struct tm getTime();
         void mkCTime();
+		static struct tm Deserialize(const AxisChar* strValue, XSDTYPE type);
+		static long DeserializeDuration(const AxisChar* strValue, XSDTYPE type);
 
     private:
         void processValue();

@@ -448,8 +448,7 @@ const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, int nV
 
 const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, struct tm tValue, XSDTYPE type)
 {
-    return m_uAxisTime.serialize(sName, tValue).c_str();
-    //return NULL;
+    return m_BTSZ.serialize(sName, tValue, type);
 }
 
 const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, unsigned int unValue, XSDTYPE type)

@@ -75,8 +75,8 @@ AxisTime::AxisTime(struct tm ntime)
 
 AxisTime::AxisTime(time_t pTime)
 {
-		tm* pTMUTC = gmtime(&pTime);
-		memcpy(&m_TMUTC, pTMUTC, sizeof(tm));
+	tm* pTMUTC = gmtime(&pTime);
+	memcpy(&m_TMUTC, pTMUTC, sizeof(tm));
 }
 
 AxisTime::~AxisTime()
@@ -117,82 +117,82 @@ AxisString AxisTime::getValue()
 * Serialize the duration in seconds into a xml duration string
 * of the format PnYnMnDTnHnMnS
 */
-AxisString& AxisTime::serialize(const AxisString& sName, long lDuration)
+AxisString& AxisTime::serialize(const AxisChar* sName, long lDuration, XSDTYPE nType)
 {
-        AxisChar buff[4];
-        strXSDDuration = "P";
-        int x = 365 * 24 * 3600;
-        int intYears = lDuration / x;
-        //sprintf((char*)buff,"%d", intYears);
-        AxisSprintf(buff, 4, "%d", intYears);
-        strXSDDuration.append(buff);
-        strXSDDuration.append("Y");
-        lDuration = lDuration - (intYears * x);
-        x = 30 * 24 * 3600;
-        int intMonths = lDuration / x;
-        //sprintf((char*)buff,"%d", intMonths);
-        AxisSprintf(buff, 4, "%d", intMonths);
-        strXSDDuration.append(buff);
-        strXSDDuration.append("M");
-        lDuration = lDuration - (intMonths * x);
-        x = 24 * 3600;
-        int intDays = lDuration / x;
-        //sprintf((char*)buff,"%d", intDays);
-        AxisSprintf(buff, 4, "%d", intDays);
-        strXSDDuration.append(buff);
-        strXSDDuration.append("DT");
-        lDuration = lDuration - (intDays * x);
-        x = 3600;
-        int intHours = lDuration / x;
-        //sprintf((char*)buff,"%d", intHours);
-        AxisSprintf(buff, 4, "%d", intHours);
-        strXSDDuration.append(buff);
-        strXSDDuration.append("H");
-        lDuration = lDuration - (intHours * x);
-        x = 60;
-        int intMins = lDuration / x;
-        //sprintf((char*)buff,"%d", intMins);
-        AxisSprintf(buff, 4, "%d", intMins);
-        strXSDDuration.append(buff);
-        strXSDDuration.append("M");
-        int intSecs = lDuration - (intMins * x);
-        //sprintf((char*)buff,"%d", intSecs);
-        AxisSprintf(buff, 4, "%d", intSecs);
-        strXSDDuration.append(buff);
-        strXSDDuration.append("S");
+	AxisChar buff[4];
+	strXSDDuration = "P";
+	int x = 365 * 24 * 3600;
+	int intYears = lDuration / x;
+	//sprintf((char*)buff,"%d", intYears);
+	AxisSprintf(buff, 4, "%d", intYears);
+	strXSDDuration.append(buff);
+	strXSDDuration.append("Y");
+	lDuration = lDuration - (intYears * x);
+	x = 30 * 24 * 3600;
+	int intMonths = lDuration / x;
+	//sprintf((char*)buff,"%d", intMonths);
+	AxisSprintf(buff, 4, "%d", intMonths);
+	strXSDDuration.append(buff);
+	strXSDDuration.append("M");
+	lDuration = lDuration - (intMonths * x);
+	x = 24 * 3600;
+	int intDays = lDuration / x;
+	//sprintf((char*)buff,"%d", intDays);
+	AxisSprintf(buff, 4, "%d", intDays);
+	strXSDDuration.append(buff);
+	strXSDDuration.append("DT");
+	lDuration = lDuration - (intDays * x);
+	x = 3600;
+	int intHours = lDuration / x;
+	//sprintf((char*)buff,"%d", intHours);
+	AxisSprintf(buff, 4, "%d", intHours);
+	strXSDDuration.append(buff);
+	strXSDDuration.append("H");
+	lDuration = lDuration - (intHours * x);
+	x = 60;
+	int intMins = lDuration / x;
+	//sprintf((char*)buff,"%d", intMins);
+	AxisSprintf(buff, 4, "%d", intMins);
+	strXSDDuration.append(buff);
+	strXSDDuration.append("M");
+	int intSecs = lDuration - (intMins * x);
+	//sprintf((char*)buff,"%d", intSecs);
+	AxisSprintf(buff, 4, "%d", intSecs);
+	strXSDDuration.append(buff);
+	strXSDDuration.append("S");
 
-        return strXSDDuration;
+	return strXSDDuration;
 }
 
 /**
 * Serialize the c type tm struct into a xml date string.
 * The serialized date will represent UTC time
 */
-AxisString& AxisTime::serialize(const AxisString& sName, struct tm tValue)
+AxisString& AxisTime::serialize(const AxisChar* sName, struct tm tValue, XSDTYPE nType)
 {
-        /*formats the output date in the format CCYY-MM-DDThh:mm:ssZ*/
-        switch(m_Type)
-        {
-            case XSD_DATETIME:
-                strftime(buf1, 80, "%Y-%m-%dT%H:%M:%SZ", &tValue);
-                strXSDDate = buf1;
-                //AxisUtils::convert(strXSDDate, buf1);
-                break;
-            case XSD_DATE:
-                strftime(buf1, 80, "%Y-%m-%dZ", &tValue);
-                strXSDDate = buf1;
-                //AxisUtils::convert(strXSDDate, buf1);
-                break;
-            case XSD_TIME:
-                strftime(buf1, 80, "%H:%M:%SZ", &tValue);
-                strXSDDate = buf1;
-                //AxisUtils::convert(strXSDDate, buf1);
-                break;
-            default:;
+    /*formats the output date in the format CCYY-MM-DDThh:mm:ssZ*/
+    switch(nType)
+    {
+        case XSD_DATETIME:
+            strftime(buf1, 80, "%Y-%m-%dT%H:%M:%SZ", &tValue);
+            strXSDDate = buf1;
+            //AxisUtils::convert(strXSDDate, buf1);
+            break;
+        case XSD_DATE:
+            strftime(buf1, 80, "%Y-%m-%dZ", &tValue);
+            strXSDDate = buf1;
+            //AxisUtils::convert(strXSDDate, buf1);
+            break;
+        case XSD_TIME:
+            strftime(buf1, 80, "%H:%M:%SZ", &tValue);
+            strXSDDate = buf1;
+            //AxisUtils::convert(strXSDDate, buf1);
+            break;
+        default:;
 
-        }
+    }
 
-        return strXSDDate;
+    return strXSDDate;
 }
 
 /**
@@ -530,3 +530,23 @@ struct tm AxisTime::getTime()
 {
     return m_TMUTC;
 }
+
+//following function is written with no consideration of the efficiency.
+//should be changed later - Susantha 23-10-2003
+struct tm AxisTime::Deserialize(const AxisChar* strValue, XSDTYPE type)
+{
+	AxisTime at;
+	at.setType(type);
+	at.setValue(strValue);
+	return at.getDateTime();
+}
+
+long AxisTime::DeserializeDuration(const AxisChar* strValue, XSDTYPE type)
+{
+	AxisTime at;
+	at.setType(type);
+	at.setValue(strValue);
+	return at.getDuration();
+}
+
+
