@@ -34,8 +34,10 @@ wsdl2ws     Tool</a>
                        </dd>
                     <dd><a href="#scls">Building Client Side for provided 
  Samples</a>
-                         <br>
                          </dd>
+			<dd><a href="#handlers">Handlers</a>
+			<br>
+                       </dd>
                       <dd><br>
                             </dd>
                         <dd><br>
@@ -1350,7 +1352,7 @@ rename to server.wsdd,<br>
 which contain all the neccessary entries for these sevices.<br>
                                             <br></p>
                                             <b>Restart Apache</b><br>
-                                                     <a name="scls"></a>
+                                                     <p><a name="scls"></a></p>
                                                      <br>
                                                                         
                                                                         
@@ -1459,9 +1461,168 @@ to run the samples for example</p>
                                                                         
                                                                         
                                                                         
-                                                                        
-                                                          
-                                            <p><strong><strong><a name="Getting"></a>
+                                                              
+					<p><a name="handlers"></a></p>
+					<h1><strong><strong>Handlers</strong></strong></h1>
+
+					<p>
+					Handlers are pluggable components to Axis C++. We have included a set of sample handlers for your reference. You could write your own handlers by following the instructions which are given for the sample Handlers.
+					</p>					
+					<p>
+					Note: If you are using Client side Handlers you need to enter the following entry in the AXIS_HOME/axiscpp.conf configuration file.
+					</p>					
+					<p>
+					CLIENTWSDDFILEPATH:Axis\conf\client.wsdd
+					</p>					
+					<p>
+					After entering this entry your AXIS_HOME/axiscpp.conf configuration file will look like:
+					</p>					
+					<p>
+					&nbsp;&nbsp;&nbsp;&nbsp;AXISLOGPATH:Axis\logs\AxisLog.txt
+					</p>
+					<p>
+					&nbsp;&nbsp;&nbsp;&nbsp;WSDDFILEPATH:Axis\conf\server.wsdd
+					</p>
+					<p>
+					&nbsp;&nbsp;&nbsp;&nbsp;CLIENTWSDDFILEPATH:Axis\conf\client.wsdd
+					</p>
+					<br>
+
+					<p>
+					<strong><strong>Testing the sample Handlers</strong></strong>
+					</p>
+
+					<p>
+					We have included the following sample Handlers for your reference.
+					</p>
+					<p>1)      echoStringHeaderHandler (A server side handler sample)</p>
+					<p>&nbsp;&nbsp;&nbsp;&nbsp;This sample handler will simply echo (i.e send back) the string which you send in the SOAP request.</p>
+					<p>2)      testHandler (A client side handler sample)</p>
+					<p>&nbsp;&nbsp;&nbsp;&nbsp;This sample handler will simply add a SOAP Header to the generated SOAP request.</p>
+					
+					<br><p>Please note that these are very primitive sample handlers and are presented here to give you an idea about writing your own Handlers.</p>
+					<br>
+					<p><strong><strong>echoStringHeaderHandler</strong></strong></p>
+                                        <p><strong><strong>Building the Sample Handlers in RedHat linux</strong></strong></p>
+
+					<br><p><strong><strong>Building echoStringHeaderHandler (A server side handler sample)</strong></strong></p>
+					
+					<p>
+					The build files are available at AXISCPP_HOME/samples/server/echoStringHeaderHandler. Change your current directory to this direcotory and then you could execute the following.
+					</p>
+					<p>&nbsp;&nbsp;&nbsp;&nbsp; sh autogen.sh</p>
+					<p>&nbsp;&nbsp;&nbsp;&nbsp; sh runconfig</p>
+					<p>&nbsp;&nbsp;&nbsp;&nbsp; make</p>
+					<p>&nbsp;&nbsp;&nbsp;&nbsp; make install</p>
+					
+					<p>The handler so file will be created at $AXIS_HOME/handlers/custom/echoStringHeaderHandler.</p>
+                                                                                                                                                                            
+                                        <p>
+                                        <strong><strong>Configuring the Handler</strong></strong>
+                                        </p>
+
+					<p>Now edit the AXIS_HOME/conf/server.wsdd to include the handler for a particular service.</p>
+					
+					<br>
+					<p>&lt;service name="Calculator" provider="CPP:RPC" description="Simple Calculator Axis C++ Service "&gt;</p>
+					<p>&lt;requestFlow name="CalculatorHandlers"&gt;</p>
+					<p>&lt;handler name="ESHHandler" type="AXIS_HOME/handlers/custom/echoStringHeaderHandler/libeshhandler.so"&gt;</p>
+					<p>&lt;/handler&gt;</p>
+					<p>&lt;/requestFlow&gt;</p>
+					<p>&lt;responseFlow name="CalculatorHandlers"&gt;</p>
+					<p>&lt;handler name="ESHHandler" type="AXIS_HOME/handlers/custom/echoStringHeaderHandler/libeshhandler.so"&gt;</p>
+					<p>&lt;/handler&gt;</p>
+					<p>&lt;/responseFlow&gt;</p>
+                                                                                
+					<p>&lt;parameter name="allowedMethods" value="add sub mul div "/&gt;</p>
+					<p>&lt;parameter name="className" value="Axis\webservices\Calculator.dll" /&gt;</p>
+					<p>&lt;/service&gt;</p>
+
+					<br>
+					<p>
+					Note: Make sure you specify the correct path of the handler so in the server.wsdd file. Replace the AXIS_HOME with the exact relative path which AXIS_HOME points to. (eg: type="/usr/local/apache2/Axis/handlers/custom/echoStringHeaderHandler/libeshhandler.so )
+					</p>
+
+					<p>Now you are almost done to run your server side handler.</p>
+
+					<p>Restart the Apache server and that is it.</p>
+
+					<p>
+                                        <strong><strong>Running the Handler</strong></strong>
+                                        </p>
+
+					<p>
+					Since this Handler is configured to the Calculator web service in the above step, this Handler will be executed when a client send a SOAP request to the Calculator web service.
+					</p>
+
+					<br>
+					<p>
+                                        <strong><strong>testHandler</strong></strong>
+                                        </p>
+					
+					<p>
+                                        <strong><strong>Building the Sample Handlers in RedHat linux</strong></strong>
+                                        </p>
+
+					<br>
+                                        <p>
+                                        <strong><strong>Building testHandler (A client side handler sample)</strong></strong>
+                                        </p>
+
+					<p>
+					The build files are available at AXISCPP_HOME/samples/client/testHandler. Change your current directory to this direcotory and then you could execute the following.
+					</p>
+
+					<p>&nbsp;&nbsp;&nbsp;&nbsp; sh autogen.sh</p>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp; sh runconfig</p>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp; make</p>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp; make install</p>	
+
+					<p>The handler so file will be created at $AXIS_HOME/handlers/client/test_handler.</p>
+
+					<p>
+                                        <strong><strong>Configuring the Handler</strong></strong>
+                                        </p>
+
+					<p>Now edit the AXIS_HOME/conf/client.wsdd to include the handler for a particular service.</p>
+					
+					<br>
+					<p>&lt;service name="Calculator" provider="CPP:DOCUMENT" description="Calculator web service"&gt;</p>
+					<p>&lt;requestFlow name="CalculatorHandlers"&gt;</p>
+					<p>&lt;handler name="TestHandler" type="AXIS_HOME/handlers/client/test_handler/libtest_client_handler.so"&gt;</p>
+					<p>&lt;/handler&gt;</p>
+					<p>&lt;/requestFlow&gt;</p>
+					<p>&lt;/service&gt;</p>
+					<br>
+
+					<p>
+					Note: Make sure you specify the correct path of the handler so in the client.wsdd file. Replace the AXIS_HOME with the exact relative path which AXIS_HOME points to. (eg: type="/usr/local/apache2/Axis/handlers/client/test_handler/libtest_client_handler.so)
+					</p>
+
+					<p>Now you are almost done to run your client side handler.</p>
+
+					<p>Note: If you are using Client side Handlers you need to enter the CLIENTWSDDFILEPATH  entry in the AXIS_HOME/axiscpp.conf configuration file. (See above)</p>
+
+					<p>
+                                        <strong><strong>Running the Handler</strong></strong>
+                                        </p>
+
+					<p>Since this Handler is configured to the Calculator web service in the above step, this Handler will be executed when you run the calculator web service client. (It is at AXISCPP_HOME/samples/client/simple/calculator)
+</p>
+
+					<br>
+					<p>
+                                        <strong><strong>Handler Notes:</strong></strong>
+                                        </p>
+	
+					<p>1)      You can see the Handler behavior through the TCP Monitor. (TCP Monitor is a Axis Java tool)</p>
+					<p>2)      To get an idea of Handlers look at the Handler sample source files.</p>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp; a.      echoStringHeaderHandler (AXISCPP_HOME/samples/server/echoStringHeaderHandler)<p>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp; b.      testHandler (AXISCPP_HOME/samples/client/testHandler)<p>
+					
+					<br><br>
+								  
+						    <p><strong><strong><a name="Getting"></a>
                                               </strong></strong></p>
                                                                         
                                                                         
