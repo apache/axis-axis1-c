@@ -246,16 +246,6 @@ int SoapSerializer::Init()
 int SoapSerializer::setSoapVersion(SOAP_VERSION nSoapVersion)
 {
 	//here the default namespaces of the SoapEnvelop should be added and intialized as well.
-/*
-	Attribute* pNS = new Attribute(g_sObjSoapEnvVersionsStruct[nSoapVersion].pchEnvelopePrefix,
-	  "xmlns","",g_sObjSoapEnvVersionsStruct[nSoapVersion].pchEnvelopeNamespaceUri);
-	m_pSoapEnvelope->addNamespaceDecl(pNS);
-	//add namespace URIs for xsd and xsi
-	pNS = new Attribute("xsd","xmlns","","http://www.w3.org/2001/XMLSchema");
-	m_pSoapEnvelope->addNamespaceDecl(pNS);
-	pNS = new Attribute("xsi","xmlns","","http://www.w3.org/2001/XMLSchema-instance");
-	m_pSoapEnvelope->addNamespaceDecl(pNS);
-*/
 	m_pSoapEnvelope->addStandardNamespaceDecl(SoapKeywordMapping::Map(nSoapVersion).pEnv);
 	m_pSoapEnvelope->addStandardNamespaceDecl(SoapKeywordMapping::Map(nSoapVersion).pXsd);
 	m_pSoapEnvelope->addStandardNamespaceDecl(SoapKeywordMapping::Map(nSoapVersion).pXsi);
@@ -265,12 +255,11 @@ int SoapSerializer::setSoapVersion(SOAP_VERSION nSoapVersion)
 const AxisChar* SoapSerializer::getNewNamespacePrefix()
 {
 	iCounter++;
-	//swprintf(cCounter, L"ns%d", iCounter);
-    AxisSprintf(cCounter, 64, L"%d", iCounter);
+    AxisSprintf(cCounter, 64, "ns%d", iCounter);
 	return cCounter;
 }
 
-IWrapperSoapSerializer& SoapSerializer::operator <<(const char *cSerialized)
+IWrapperSoapSerializer& SoapSerializer::operator <<(const AxisChar* cSerialized)
 {
 	int iTmpSerBufferSize = strlen(cSerialized);
 	if((m_iCurrentSerBufferSize + iTmpSerBufferSize)>= SERIALIZE_BUFFER_SIZE) 
@@ -280,10 +269,8 @@ IWrapperSoapSerializer& SoapSerializer::operator <<(const char *cSerialized)
 	strcat(m_cSerializedBuffer, cSerialized);
 	m_iCurrentSerBufferSize += iTmpSerBufferSize;
 	return *this;
-	//call the ruputs to send this soap response
-	//ruputs(m_cSerializedBuffer);
 }
-
+/*
 IWrapperSoapSerializer& SoapSerializer::operator<<(const AxisChar* cSerialized)
 {
 	flushSerializedBuffer();
@@ -296,7 +283,7 @@ IWrapperSoapSerializer& SoapSerializer::operator<<(const AxisChar* cSerialized)
 	m_cSerializedBuffer[m_iCurrentSerBufferSize] = '\0';
 	return *this;
 }
-
+*/
 int SoapSerializer::flushSerializedBuffer()
 {
 	//sendSoapResponse(m_cSerializedBuffer);

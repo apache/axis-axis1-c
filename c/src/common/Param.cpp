@@ -70,6 +70,8 @@
 #include "BasicTypeSerializer.h"
 #include <stdlib.h>
 
+#include "AxisUtils.h"
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -112,20 +114,20 @@ Param::Param(const AxisChar* str, XSDTYPE type)
 	m_Type = type;
 	switch (type)
 	{
-    case XSD_DURATION: m_sName = L"Duration"; break;
-    case XSD_DATETIME: m_sName = L"DateTime"; break;
-    case XSD_TIME: m_sName = L"Time"; break;
-    case XSD_DATE: m_sName = L"Date"; break;
-    case XSD_YEARMONTH: m_sName = L"YearMonth"; break;
-    case XSD_YEAR: m_sName = L"Year"; break;
-    case XSD_MONTHDAY: m_sName = L"MonthDay"; break;
-    case XSD_DAY: m_sName = L"Day"; break;
-    case XSD_MONTH: m_sName = L"Month"; break;
-    case XSD_ANYURI: m_sName = L"AnyURIString"; break;
-    case XSD_QNAME: m_sName = L"QNameString"; break;
-	case XSD_STRING: m_sName = L"String"; break;
-	case XSD_BASE64BINARY: m_sName = L"Base64BinaryString"; break;
-	case XSD_HEXBINARY: m_sName = L"HexBinaryString"; break;
+    case XSD_DURATION: m_sName = "Duration"; break;
+    case XSD_DATETIME: m_sName = "DateTime"; break;
+    case XSD_TIME: m_sName = "Time"; break;
+    case XSD_DATE: m_sName = "Date"; break;
+    case XSD_YEARMONTH: m_sName = "YearMonth"; break;
+    case XSD_YEAR: m_sName = "Year"; break;
+    case XSD_MONTHDAY: m_sName = "MonthDay"; break;
+    case XSD_DAY: m_sName = "Day"; break;
+    case XSD_MONTH: m_sName = "Month"; break;
+    case XSD_ANYURI: m_sName = "AnyURIString"; break;
+    case XSD_QNAME: m_sName = "QNameString"; break;
+	case XSD_STRING: m_sName = "String"; break;
+	case XSD_BASE64BINARY: m_sName = "Base64BinaryString"; break;
+	case XSD_HEXBINARY: m_sName = "HexBinaryString"; break;
 	}
 }
 
@@ -141,42 +143,42 @@ Param::Param(struct tm timeStruct)
 
 Param::Param(int nValue)
 {
-	m_sName = L"Int";
+	m_sName = "Int";
 	m_Value.nValue = nValue;
 	m_Type = XSD_INT;
 }
 
 Param::Param(unsigned int unValue)
 {
-	m_sName = L"Unsigned Int";
+	m_sName = "Unsigned Int";
 	m_Value.unValue = unValue;
 	m_Type = XSD_UNSIGNEDINT;
 }
 
 Param::Param(short sValue)
 {
-    m_sName = L"Short";
+    m_sName = "Short";
 	m_Value.sValue = sValue;
 	m_Type = XSD_SHORT;	
 }
 
 Param::Param(unsigned short usValue)
 {
-    m_sName = L"Unsigned Short";
+    m_sName = "Unsigned Short";
 	m_Value.usValue = usValue;
 	m_Type = XSD_UNSIGNEDSHORT;
 }
 
 Param::Param(char cValue)
 {
-    m_sName = L"Byte";
+    m_sName = "Byte";
 	m_Value.cValue = cValue;
 	m_Type = XSD_BYTE;
 }
 
 Param::Param(unsigned char ucValue)
 {
-    m_sName = L"Unsigned Byte";
+    m_sName = "Unsigned Byte";
 	m_Value.ucValue = ucValue;
 	m_Type = XSD_UNSIGNEDBYTE;
 }
@@ -186,8 +188,8 @@ Param::Param(long lValue, XSDTYPE type)
     m_Type = type;
 	switch (type)
 	{
-        case XSD_LONG:m_sName = L"Long";
-        case XSD_INTEGER: m_sName = L"Integer";
+        case XSD_LONG:m_sName = "Long";
+        case XSD_INTEGER: m_sName = "Integer";
             m_Value.lValue = lValue;
             break;
 	}
@@ -195,14 +197,14 @@ Param::Param(long lValue, XSDTYPE type)
 
 Param::Param(unsigned long ulValue)
 {
-	m_sName = L"Unsigned Long";
+	m_sName = "Unsigned Long";
 	m_Value.ulValue = ulValue;
 	m_Type = XSD_UNSIGNEDLONG;
 }
 
 Param::Param(float fValue)
 {
-	m_sName = L"Float";
+	m_sName = "Float";
 	m_Value.fValue = fValue;
 	m_Type = XSD_FLOAT;
 }
@@ -212,12 +214,12 @@ Param::Param(double dValue, XSDTYPE type)
 	m_Type = type;
 	switch (type)
 	{
-        case XSD_DOUBLE: m_sName = L"Double";
-        case XSD_DECIMAL: m_sName = L"Decimal";
+        case XSD_DOUBLE: m_sName = "Double";
+        case XSD_DECIMAL: m_sName = "Decimal";
             m_Value.dValue = dValue;
             break;
 	}
-	/*m_sName = L"Double";
+	/*m_sName = "Double";
 	m_Value.dValue = dValue;
 	m_Type = XSD_DOUBLE;*/
 
@@ -733,36 +735,36 @@ int Param::SetValue(const AxisChar* sValue)
 	switch (m_Type)
 	{
 	case XSD_INT:
-        m_Value.nValue = wcstol(sValue, &endptr, 10);
+        m_Value.nValue = strtol(sValue, &endptr, 10);
 		break;
     case XSD_UNSIGNEDINT:
-        m_Value.nValue = wcstol(sValue, &endptr, 10);
+        m_Value.nValue = strtoul(sValue, &endptr, 10);
 		break;
     case XSD_SHORT:
-        m_Value.sValue = wcstol(sValue, &endptr, 10);
+        m_Value.sValue = strtol(sValue, &endptr, 10);
 		break;
     case XSD_UNSIGNEDSHORT:
-        m_Value.usValue = wcstol(sValue, &endptr, 10);
+        m_Value.usValue = strtoul(sValue, &endptr, 10);
 		break;
     case XSD_BYTE:
-        m_Value.cValue = wcstol(sValue, &endptr, 10);
+        m_Value.cValue = strtol(sValue, &endptr, 10);
 		break;
     case XSD_UNSIGNEDBYTE:
-		m_Value.ucValue = wcstol(sValue, &endptr, 10);
+		m_Value.ucValue = strtoul(sValue, &endptr, 10);
 		break;              
     case XSD_LONG:
     case XSD_INTEGER:
-        m_Value.lValue = wcstol(sValue, &endptr, 10);
+        m_Value.lValue = strtol(sValue, &endptr, 10);
 		break;                
     case XSD_UNSIGNEDLONG:
-		m_Value.ulValue = wcstol(sValue, &endptr, 10);
+		m_Value.ulValue = strtoul(sValue, &endptr, 10);
 		break;        
 	case XSD_FLOAT:
-		m_Value.fValue = wcstod(sValue, &endptr);
+		m_Value.fValue = strtod(sValue, &endptr);
 		break;
     case XSD_DOUBLE:
     case XSD_DECIMAL:
-		m_Value.dValue = wcstod(sValue, &endptr);
+		m_Value.dValue = strtod(sValue, &endptr);
 		break;        
 	case XSD_STRING:
 	case XSD_HEXBINARY:
@@ -961,6 +963,6 @@ void ComplexObjectHandler::Init()
 	pDelFunct = NULL; 
 	pDZFunct = NULL;
 	pSizeFunct = NULL;
-	m_TypeName = L"";
-	m_URI = L"";	
+	m_TypeName = "";
+	m_URI = "";	
 }

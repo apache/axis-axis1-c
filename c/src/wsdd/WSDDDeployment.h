@@ -81,10 +81,10 @@ class WSDDDeployment
 {
 	friend class WSDDDocument;
 public:
-	int LoadWSDD(string& sWSDD);
-	int UpdateWSDD(string& sWSDDNew);
-	const AxisString& GetLibName(int nLibId);
-	const WSDDService* GetService(const AxisString& sServiceName);
+	int LoadWSDD(const AxisChar* sWSDD);
+	int UpdateWSDD(const AxisChar* sWSDDNew);
+	const AxisChar* GetLibName(int nLibId);
+	const WSDDService* GetService(const AxisChar* sServiceName);
 	const WSDDHandlerList* GetGlobalRequestFlowHandlers();
 	const WSDDHandlerList* GetGlobalResponseFlowHandlers();
 	const WSDDHandlerList* GetTransportRequestFlowHandlers(AXIS_PROTOCOL_TYPE protocol);

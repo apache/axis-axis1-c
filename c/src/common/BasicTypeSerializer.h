@@ -72,12 +72,12 @@
 #include <string>
 using namespace std;
 
-const AxisChar XML_ENTITY_REFERENCE_CAHRS[]	= L"<>&\"\'";// Entity reference characters
-const AxisChar ENCODED_LESSER_STR[]			= L"&lt;";	// Encoded string for less than character
-const AxisChar ENCODED_GREATOR_STR[]			= L"&gt;";	// Encoded string for greator than character
-const AxisChar ENCODED_AMPERSAND_STR[]		= L"&amp;";	// Encoded string for ampersand character
-const AxisChar ENCODED_DBL_QUOTE_STR[]		= L"&quot;";	// Encoded string for single quote character
-const AxisChar ENCODED_SGL_QUOTE_STR[]		= L"&apos;";	// Encoded string for double quote character
+const AxisChar XML_ENTITY_REFERENCE_CAHRS[]	= "<>&\"\'";// Entity reference characters
+const AxisChar ENCODED_LESSER_STR[]			= "&lt;";	// Encoded string for less than character
+const AxisChar ENCODED_GREATOR_STR[]		= "&gt;";	// Encoded string for greator than character
+const AxisChar ENCODED_AMPERSAND_STR[]		= "&amp;";	// Encoded string for ampersand character
+const AxisChar ENCODED_DBL_QUOTE_STR[]		= "&quot;";	// Encoded string for single quote character
+const AxisChar ENCODED_SGL_QUOTE_STR[]		= "&apos;";	// Encoded string for double quote character
 
 class BasicTypeSerializer
 {

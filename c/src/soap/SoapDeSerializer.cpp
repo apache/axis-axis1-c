@@ -107,7 +107,7 @@ int SoapDeSerializer::SetInputStream(const void* InputStream)
 	//if no soap then quit
 	if (nChars <= 0) return FAIL;
 	MemBufInputSource Input((const unsigned char*)m_hugebuffer, nChars , "bufferid");
-	//Input.setEncoding(L"UTF-16");
+	//Input.setEncoding("UTF-16");
 	m_pParser->parse(Input);
 	return SUCCESS;
 }

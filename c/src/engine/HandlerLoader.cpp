@@ -137,12 +137,7 @@ int HandlerLoader::CreateHandler(BasicHandler** pHandler, int nLibId)
 	if (m_HandlerInfoList.find(nLibId) == m_HandlerInfoList.end())
 	{
 		HandlerInformation* pHandlerInfo = new HandlerInformation();
-
-		//memset(pHandlerInfo, 0, sizeof(HandlerInformation));
-		//pHandlerInfo->m_sLib = g_WSDDDeployment.GetLibName(nLibId);
-
-		AxisUtils::convert(pHandlerInfo->m_sLib, g_pWSDDDeployment->GetLibName(nLibId).c_str());
-
+		pHandlerInfo->m_sLib = g_pWSDDDeployment->GetLibName(nLibId);
 		if (pHandlerInfo->m_sLib.empty())
 		{
 			delete pHandlerInfo;
