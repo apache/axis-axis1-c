@@ -50,6 +50,7 @@ m_strProxyHost (""), m_uiProxyPort (0), m_bUseProxy (false)
     m_pcReceived = 0;
     m_pChannel = new Channel ();
     m_bChannelSecure = false;
+    m_viCurrentHeader = m_vHTTPHeaders.begin();
 }
 
 /*
@@ -1125,5 +1126,75 @@ throw (AxisTransportException)
     }
 
     return NULL;
+}
+
+const char* Axis2Transport::getFirstTrasportPropertyKey()
+{
+    m_viCurrentHeader = m_vHTTPHeaders.begin();
+    
+    if (m_viCurrentHeader == m_vHTTPHeaders.end())
+        return NULL;
+    else
+        return (*m_viCurrentHeader).first.c_str();
+}
+
+const char* Axis2Transport::getNextTrasportPropertyKey()
+{
+    //already at the end?
+     if (m_viCurrentHeader == m_vHTTPHeaders.end())
+        return NULL;
+    
+    m_viCurrentHeader++;
+    
+    if (m_viCurrentHeader == m_vHTTPHeaders.end())
+        return NULL;
+    else
+        return (*m_viCurrentHeader).first.c_str();
+        
+}
+
+const char* Axis2Transport::getCurrentTrasportPropertyKey()
+{
+    if (m_viCurrentHeader == m_vHTTPHeaders.end())
+        return NULL;
+    else
+        return (*m_viCurrentHeader).first.c_str();
+}
+
+const char* Axis2Transport::getCurrentTrasportPropertyValue()
+{
+    if (m_viCurrentHeader == m_vHTTPHeaders.end())
+        return NULL;
+    else
+        return (*m_viCurrentHeader).second.c_str();
+}
+
+void Axis2Transport::deleteCurrentTrasportProperty()
+{
+    if (m_viCurrentHeader != m_vHTTPHeaders.end())
+    {
+        m_vHTTPHeaders.erase(m_viCurrentHeader);
+    }
+}
+
+void Axis2Transport::deleteTrasportProperty(char* pcKey, unsigned int uiOccurance)
+{
+    vector <std::pair < std::string, std::string > >::iterator currentHeader = m_vHTTPHeaders.begin();
+    unsigned int uiCount = 1;
+
+    while(currentHeader != m_vHTTPHeaders.end() && uiCount <= uiOccurance)
+    {
+        if(strcmp(pcKey, (*currentHeader).first.c_str() ) == 0)
+        {
+             if(uiCount == uiOccurance)
+             {                 
+                 m_vHTTPHeaders.erase(currentHeader);
+                 break;
+             }
+             uiCount++;
+        }
+        currentHeader++;
+    
+    }
 }
 

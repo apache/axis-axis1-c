@@ -32,6 +32,7 @@ Stub::Stub(const char *pcEndPointUri, AXIS_PROTOCOL_TYPE eProtocol)
     m_pCall = new Call();
     m_pCall->setProtocol(eProtocol);
     m_pCall->setEndpointURI(pcEndPointUri);
+    m_pTrasport = m_pCall->getTransport();
 
 	// Initialise m_viCurrentSOAPMethodAttribute to something sensible 
 	// in case getFirstSOAPMethodAttribute isn't called first.
@@ -41,12 +42,12 @@ Stub::Stub(const char *pcEndPointUri, AXIS_PROTOCOL_TYPE eProtocol)
 Stub::~Stub()
 {
     delete m_pCall;
-    for (unsigned int i = 0; i < m_vKeys.size(); i++)
+    /*for (unsigned int i = 0; i < m_vKeys.size(); i++)
     {
 	    delete [] m_vKeys[i];
 	    delete [] m_vValues[i];
     }
-
+*/
     for (unsigned int j = 0; j < m_vSOAPHeaderBlocks.size(); j++)
     {
 	    delete m_vSOAPHeaderBlocks[j];
@@ -60,116 +61,63 @@ void Stub::setEndPoint(const char *pcEndPoint)
 
 void Stub::setTransportProperty(const char *pcKey, const char *pcValue)
 {
-    if (pcKey && pcValue)
-    {
-          char *s = new char[strlen(pcKey)+1];
-          strcpy(s,pcKey);
-	    m_vKeys.push_back(s);
-          s = new char[strlen(pcValue)+1];
-          strcpy(s,pcValue);
-	    m_vValues.push_back(s);
-    }
+    if (m_pTrasport)
+        m_pTrasport->setTransportProperty(pcKey, pcValue);
 }
 
 void Stub::setTransportProperties()
 {
-    SOAPTransport *pTrasport = NULL;
-    if (m_pCall)
-	    pTrasport = m_pCall->getTransport();
-    if (pTrasport)
+    if (m_pTrasport)
     {
-	    for (unsigned int i = 0; i < m_vKeys.size(); i++)
-	    {
-	        pTrasport->setTransportProperty(m_vKeys[i], m_vValues[i]);
-	    }
-        
-        // set cookie value
-        // Spec syntax: Cookie: NAME1=OPAQUE_STRING1; NAME2=OPAQUE_STRING2 ...
-        // This code assumes : Cookie: NAME=VALUE
         if(m_bMaintainSession && (m_strSessionKey.size() > 0) )
         {
-            pTrasport->setTransportProperty("Cookie", m_strSessionKey.c_str());
+            m_pTrasport->setTransportProperty("Cookie", m_strSessionKey.c_str());
         }
     }
 }
 
-char* Stub::getFirstTrasportPropertyKey()
+const char* Stub::getFirstTrasportPropertyKey()
 {
-    m_viCurrentKey = m_vKeys.begin();
-    m_viCurrentValue = m_vValues.begin();
-
-    if (m_viCurrentKey == m_vKeys.end())
-        return NULL;
+    if (m_pTrasport)
+        return m_pTrasport->getFirstTrasportPropertyKey();
     else
-        return (*m_viCurrentKey);
+        return NULL;
 }
 
-char* Stub::getNextTrasportPropertyKey()
+const char* Stub::getNextTrasportPropertyKey()
 {
-    //already at the end?
-    if (m_viCurrentKey == m_vKeys.end())
-        return NULL;
-
-    m_viCurrentKey++;
-    m_viCurrentValue++;
-
-    if (m_viCurrentKey == m_vKeys.end())
-        return NULL;
+    if (m_pTrasport)
+        return m_pTrasport->getNextTrasportPropertyKey();
     else
-        return (*m_viCurrentKey);
+        return NULL;
 }
 
-char* Stub::getCurrentTrasportPropertyKey()
+const char* Stub::getCurrentTrasportPropertyKey()
 {
-    if (m_viCurrentKey == m_vKeys.end())
-        return NULL;
+    if (m_pTrasport)
+        return m_pTrasport->getCurrentTrasportPropertyKey();
     else
-        return (*m_viCurrentKey);
+        return NULL;
 }
 
-char* Stub::getCurrentTrasportPropertyValue()
+const char* Stub::getCurrentTrasportPropertyValue()
 {
-    if (m_viCurrentValue == m_vValues.end())
-        return NULL;
+    if (m_pTrasport)
+        return m_pTrasport->getCurrentTrasportPropertyValue();
     else
-        return (*m_viCurrentValue);
+        return NULL;
 }
 
 void Stub::deleteCurrentTrasportProperty()
 {
-    if (m_viCurrentKey != m_vKeys.end())
-    {
-        delete [] *m_viCurrentKey;
-        delete [] *m_viCurrentValue;
-        m_vKeys.erase(m_viCurrentKey);
-        m_vValues.erase(m_viCurrentValue);
-        m_viCurrentKey = m_vKeys.begin();
-        m_viCurrentValue = m_vValues.begin();
-    }
+    if (m_pTrasport)
+        m_pTrasport->deleteCurrentTrasportProperty();
 }
 
 void Stub::deleteTrasportProperty(char* pcKey, unsigned int uiOccurance)
 {
-    vector <char*>::iterator currentKey = m_vKeys.begin();
-    vector <char*>::iterator currentValue = m_vValues.begin();
-    unsigned int uiCount = 1;
-
-    while(currentKey != m_vKeys.end() && uiCount <= uiOccurance)
-    {
-        if(strcmp(pcKey, *currentKey) == 0)
-        {
-             if(uiCount == uiOccurance)
-             {
-                 delete [] *currentKey;
-                 delete [] *currentValue;
-                 m_vKeys.erase(currentKey);
-                 m_vValues.erase(currentValue);
-             }
-             uiCount++;
-        }
-        currentKey++;
-        currentValue++;
-    }
+    if (m_pTrasport)
+        m_pTrasport->deleteTrasportProperty(pcKey, uiOccurance);
 }
 
 void Stub::setHandlerProperty(AxisChar* name, void* value, int len)

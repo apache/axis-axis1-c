@@ -58,6 +58,8 @@ Call::Call ()
     }
     
     m_pTransport = NULL;
+    m_nTransportType = APTHTTP1_1;
+    m_pTransport = SOAPTransportFactory::getTransportObject(m_nTransportType);
     m_nStatus = AXIS_SUCCESS;
 }
 

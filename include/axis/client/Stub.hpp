@@ -150,7 +150,7 @@ class STORAGE_CLASS_INFO Stub
     * @return First transport property key. If there are no trasport 
     * properties set, returns NULL.
     */
-    char* getFirstTrasportPropertyKey();
+    const char* getFirstTrasportPropertyKey();
 
   /**
     * Iterator for trasport property keys
@@ -164,7 +164,7 @@ class STORAGE_CLASS_INFO Stub
     * @return Next transport property key. If there are no trasport 
     * properties set or if iterator is at the end of the list, returns NULL.
     */
-    char* getNextTrasportPropertyKey();
+    const char* getNextTrasportPropertyKey();
 
   /**
     * Accessor for trasport property keys.
@@ -182,7 +182,7 @@ class STORAGE_CLASS_INFO Stub
     * @return Current transport property key. If there are no trasport 
     * properties set or if iterator is at the end of the list, returns NULL.
     */
-    char* getCurrentTrasportPropertyKey();
+    const char* getCurrentTrasportPropertyKey();
     
   /**
     * Accessor for trasport property values.
@@ -202,7 +202,7 @@ class STORAGE_CLASS_INFO Stub
     * @return Current transport property value. If there are no trasport 
     * properties set or if iterator is at the end of the list, returns NULL.
     */
-    char* getCurrentTrasportPropertyValue();
+    const char* getCurrentTrasportPropertyValue();
 
   /**
     * Deletes the trasport property key:value pair currently pointed to by 
@@ -561,22 +561,22 @@ class STORAGE_CLASS_INFO Stub
   /**
     * Trasport property keys
     */
-    vector < char *>m_vKeys;
+//    vector < char *>m_vKeys;
 
   /**
     * Trasport keys iterator
     */
-    vector <char*>::iterator m_viCurrentKey;
+//    vector <char*>::iterator m_viCurrentKey;
 
   /**
     * Trasport property values 
     */
-    vector < char *>m_vValues;
+//    vector < char *>m_vValues;
   
   /**
     * Trasport keys iterator
     */
-    vector <char*>::iterator m_viCurrentValue;
+//    vector <char*>::iterator m_viCurrentValue;
 
   /**
     * Vector of Header Blok pointers
@@ -612,6 +612,11 @@ class STORAGE_CLASS_INFO Stub
     * Session key sent by service 
     */
     std::string m_strSessionKey;
+    
+  /**
+    * Transport object
+    */
+    SOAPTransport* m_pTrasport;
 
 };
 
