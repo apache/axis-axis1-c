@@ -91,7 +91,19 @@ SOURCE=..\..\src\soap\Attribute.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\soap\HeaderEntry.cpp
+SOURCE=..\..\src\soap\BasicNode.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\soap\CharacterElement.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\soap\ComplexElement.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\soap\HeaderBlock.cpp
 # End Source File
 # Begin Source File
 
@@ -143,7 +155,19 @@ SOURCE=..\..\src\soap\Attribute.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\soap\HeaderEntry.h
+SOURCE=..\..\src\soap\BasicNode.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\soap\CharacterElement.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\soap\ComplexElement.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\soap\HeaderBlock.h
 # End Source File
 # Begin Source File
 

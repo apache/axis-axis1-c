@@ -81,22 +81,27 @@ using namespace std;
 class BasicNode;
 
 /**
- *	The header entry of a SOAP Header according to SOAP 1.1 specification.
+ *	The Header block of a SOAP Header according to SOAP 1.2 specification.
  *
- *	All immediate child elements of the Header element are called header
- *  entries.
- *  The encoding rules for header entries are as follows: 
- *   1) A header entry is identified by its fully qualified element name, 
- *      which consists of the namespace URI and the local name. All 
- *      immediate child elements of the SOAP Header element MUST be 
- *      namespace-qualified. 
- *   2) The SOAP encodingStyle attribute MAY be used to indicate the 
- *      encoding style used for the header entries. 
- *   3) The SOAP mustUnderstand attribute and SOAP actor attribute MAY 
- *      be used to indicate how to process the entry and by whom. 
+ *	Each child element information item of the SOAP Header is called a SOAP header block.
+ *  Each SOAP header block element information item:
+ *   1) MUST have a [namespace name] property which has a value, that is the name of the 
+ *      element MUST be namespace qualified.
+ *   2) MAY have any number of character information item children. Child character 
+        information items whose character code is amongst the white space characters 
+		as defined by XML 1.0 [XML 1.0] are considered significant.
+ *   3) MAY have any number of element information item children. Such element information 
+ *      items MAY be namespace qualified.
+ *   4) MAY have zero or more attribute information items in its [attributes] property. Among 
+ *      these MAY be any or all of the following, which have special significance for SOAP 
+ *      processing:
+ *			- encodingStyle attribute information item 
+ *			- role attribute information item 
+ *			- mustUnderstand attribute information item     
+ *			- relay attribute information item 
  *
  *	
- *	@brief	The header entry of a SOAP Header according to SOAP 1.1 specification
+ *	@brief	The Header block of a SOAP Header according to SOAP 1.2 specification.
  */
 
 class HeaderBlock  
