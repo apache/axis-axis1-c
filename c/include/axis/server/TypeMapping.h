@@ -44,13 +44,15 @@ typedef enum XSDTYPETag
 #include <string>
 
 using namespace std;
-/*
+
+/**
  *  @class TypeMapping
  *  @brief interface for the TypeMapping class.
  *
  *
  *  @author Susantha Kumara (skumara@virtusa.com)
  */
+
 class TypeMapping  
 {
 public:
