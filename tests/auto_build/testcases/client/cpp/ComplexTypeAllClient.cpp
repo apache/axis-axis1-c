@@ -52,7 +52,19 @@ int main(int argc, char* argv[])
   }
   
   // Samisa : clean up memory allocated for stub
-  delete ws;
+  try
+  {
+	  delete ws; 
+  }
+  catch(exception& exception)
+  {
+  	cout << "Exception on clean up of ws : " << exception.what()<<endl;
+  }
+  catch(...)
+  {
+  	cout << "Unknown exception on clean up of ws : " << endl;
+  }
+  cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
 
   return returnValue;
 }
