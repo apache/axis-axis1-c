@@ -145,7 +145,7 @@ int Call::Initialize(AXIS_BINDING_STYLE nStyle)
 	try {
 		m_Soap.sessionid = "somesessionid1234";
 		//remove_headers(&m_Soap);
-		if (AXIS_SUCCESS != OpenConnection()) return AXIS_FAIL;
+		if (AXIS_SUCCESS != OpenConnection(false)) return AXIS_FAIL;
 		if (m_pAxisEngine) delete m_pAxisEngine;
 		m_pAxisEngine = new ClientAxisEngine();
 		if (!m_pAxisEngine) return AXIS_FAIL;
@@ -222,10 +222,10 @@ int Call::SetTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type, const char*
  * functions with those streams at any time it wants to send/receive
  * bytes to/from the server.
  */
-int Call::OpenConnection()
+int Call::OpenConnection(bool secure)
 { 
     m_pTransport = new AxisTransport(&m_Soap);
-    return m_pTransport->OpenConnection();
+    return m_pTransport->OpenConnection(secure);
 }
 
 /**
