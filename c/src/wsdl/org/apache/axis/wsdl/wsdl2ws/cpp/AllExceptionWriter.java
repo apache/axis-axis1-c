@@ -48,7 +48,7 @@ public AllExceptionWriter(WebServiceContext wscontext){
 							String faultType =null;	 
 							String langName =null;
 							String paramName =null;
-							if (paramsFault.hasNext()){
+							while (paramsFault.hasNext()){
 								FaultInfo info = (FaultInfo)paramsFault.next();
 								faultInfoName =info.getFaultInfo();
 								ArrayList paramInfo =info.getParams();

@@ -57,12 +57,12 @@ public class RPCWebServiceGenarator implements WebServiceGenarator{
 				(new Genarator(WrapperConstants.GENERATOR_PARAM_CPP_ALL, wscontext)).genarate();	
 				(new Genarator(WrapperConstants.GENERATOR_CLASSLOADER_CPP, wscontext)).genarate();
 				(new Genarator(WrapperConstants.GENERATOR_DEPLOYMENT, wscontext)).genarate();
-				(new Genarator(WrapperConstants.GENERATOR_CLIENT_EXCEPTION_ALL, wscontext)).genarate();
+				(new Genarator(WrapperConstants.GENERATOR_EXCEPTION_ALL, wscontext)).genarate();
 				(new Genarator(WrapperConstants.GENERATOR_UNDEPLOYMENT, wscontext)).genarate();
 			}else{
 				(new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_CPP, wscontext)).genarate();
 				(new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_HPP, wscontext)).genarate();
-				(new Genarator(WrapperConstants.GENERATOR_CLIENT_EXCEPTION_ALL, wscontext)).genarate();
+				(new Genarator(WrapperConstants.GENERATOR_EXCEPTION_ALL, wscontext)).genarate();
 				(new Genarator(WrapperConstants.GENERATOR_PARAM_CPP_ALL, wscontext)).genarate();	
 			}
 		}else if(WrapperConstants.LANGUAGE_C.equalsIgnoreCase(language)){

@@ -49,7 +49,7 @@ public class SourceWriterFactory {
 				return new org.apache.axis.wsdl.wsdl2ws.cpp.ClientStubHeaderWriter(wscontext);
 			else if(genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_CPP)
 				return new org.apache.axis.wsdl.wsdl2ws.cpp.ClientStubWriter(wscontext);			
-			else if(genaratorType == WrapperConstants.GENERATOR_CLIENT_EXCEPTION_ALL) //addby nithya
+			else if(genaratorType == WrapperConstants.GENERATOR_EXCEPTION_ALL) // nithya
 						return new org.apache.axis.wsdl.wsdl2ws.cpp.AllExceptionWriter(wscontext);	
 			//C
 			else if(genaratorType == WrapperConstants.GENERATOR_PARAM_C_ALL)
@@ -85,6 +85,7 @@ public class SourceWriterFactory {
 				return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.ClientStubHeaderWriter(wscontext);
 			else if(genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_CPP)
 				return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.ClientStubWriter(wscontext);	
+			
 			//C
 			else if(genaratorType == WrapperConstants.GENERATOR_PARAM_C_ALL)
 				return new org.apache.axis.wsdl.wsdl2ws.c.literal.AllParamWriter(wscontext);
