@@ -85,7 +85,7 @@ class Tracer extends BufferedWriter {
 		String line =
 			"\n"
 				+ "    #ifdef ENABLE_AXISTRACE\n"
-				+ "    if (g_pAT) try {\n"
+				+ "    if (g_pAT && g_pAT->isTraceOn()) try {\n"
 				+ "        char traceLine[256];\n"
 				+ "        sprintf(traceLine,\"> ";
 		if (null != signature.getClassName())
@@ -112,9 +112,9 @@ class Tracer extends BufferedWriter {
 		}
 
 		line += ");\n";
-		line += "        AXISTRACE1(traceLine,INFO);" + SIGNATURE + "\n";
+		line += "        g_pAT->traceLine(traceLine);" + SIGNATURE + "\n";
 		line += "    } catch (...) {\n";
-            line += "        AXISTRACE1(\"Unknown exception caught during trace entry\",INFO);\n";
+            line += "        g_pAT->traceLine(\"Unknown exception caught during trace entry\");\n";
             line += "    }\n";
 		line += "    #endif\n";
 		write(line);
@@ -135,9 +135,9 @@ class Tracer extends BufferedWriter {
 		write("{");
 		write(
 			"\n    #ifdef ENABLE_AXISTRACE\n"
-				+ "    if (g_pAT) AXISTRACE1(\"<  "
+				+ "    if (g_pAT && g_pAT->isTraceOn()) g_pAT->traceLine(\"<  "
 				+ signature.getMethodName()
-				+ "\",INFO);"
+				+ "\");"
 				+ SIGNATURE
 				+ "\n    #endif\n");
 
@@ -192,7 +192,7 @@ class Tracer extends BufferedWriter {
 			+ " traceRet = ("
 			+ value
 			+ ");\n";
-		line += "            if (g_pAT) try {\n";
+		line += "            if (g_pAT && g_pAT->isTraceOn()) try {\n";
 		line += "                char traceLine[256];\n";
 		line += "                sprintf(traceLine,\"< "
 			+ methodName
@@ -201,9 +201,9 @@ class Tracer extends BufferedWriter {
 			+ ")\""
 			+ retValue
 			+ ");\n";
-		line += "                AXISTRACE1(traceLine,INFO);" + SIGNATURE + "\n";
+		line += "                g_pAT->traceLine(traceLine);" + SIGNATURE + "\n";
 		line += "            } catch (...) {\n";
-            line += "                AXISTRACE1(\"Unknown exception caught during trace exit\",INFO);\n";
+            line += "                g_pAT->traceLine(\"Unknown exception caught during trace exit\");\n";
 		line += "            }\n";
 		line += "            return traceRet;\n";
 		line += "        #else\n";

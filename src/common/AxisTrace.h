@@ -164,7 +164,17 @@ public:
      * (AXIS_SUCCESS) or not (AXIS_FAIL).
      */
     int openFileByClient();
-  
+
+    /**
+     * Finds out whether trace is on.
+     */
+    inline bool isTraceOn() { return m_bLoggingOn; }
+
+    /**
+     * Traces a single line.
+     */  
+    void traceLine(const char *data);
+
 private:
 	bool m_bLoggingOn;
     char m_acLine[4];

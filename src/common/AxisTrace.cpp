@@ -259,6 +259,14 @@ int AxisTrace::trace (const char *pchLog)
     return AXIS_SUCCESS;
 }
 
+void AxisTrace::traceLine(const char *data) 
+{
+    if (!isTraceOn()) return;
+    m_fileTrace.filePuts(data);
+    m_fileTrace.filePuts("\n");
+    return;
+}
+
 /*
 int main(int argc, char* argv[])
 {
