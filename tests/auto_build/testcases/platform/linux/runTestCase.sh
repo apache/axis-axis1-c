@@ -32,7 +32,7 @@ then
     URI=
   fi
 fi
-TARGET=$(echo $(basename $1 .wsdl).$2 | tr '+' 'p')
+TARGET=$(echo $(basename $1 .wsdl).$2 | tr '+' 'p')_client
 OUTPUT=$(echo $(basename $1 .wsdl).out)
 
 TIME=$(date "+%d/%m/%Y %H:%M:%S")
