@@ -43,11 +43,6 @@ class IArrayBean;
 
 class SoapSerializer : public IHandlerSoapSerializer
 {
-    typedef struct
-    {
-        volatile unsigned char inuse;
-        volatile char* buffer;
-    } SerializeBuffers;
 private:
     int m_nCounter;
     AxisChar m_Buf[8];
@@ -55,18 +50,6 @@ private:
     int m_iSoapVersion;
     /* Current Serialization Style */
     AXIS_BINDING_STYLE m_nStyle;
-    /* Table that keeps all allocated buffers */
-    volatile SerializeBuffers* m_pSZBuffers;
-    /* Size of the initial buffer created.*/
-    int m_nInitialBufferSize;
-    /* Size of the m_SZBuffers array.*/
-    int m_nMaxBuffersToCreate;
-    /* Maximum size of the buffer that is being filled */
-    int m_nCurrentBufferSize;
-    /* How much charators has been filled to the currently selected buffer */
-    int m_nFilledSize;
-    /* Currently selected buffer index*/
-    int m_nCurrentBufferIndex;
     /* Overall status of Serializer. If anything goes wrong this is not 
      * AXIS_SUCCESS 
      */
@@ -153,8 +136,6 @@ public:
     void setCurrentProviderType(PROVIDERTYPE nType) { m_ProviderType = nType;};
 
 private:
-    int sendSerializedBuffer();
-    int setNextSerilizeBuffer();
     IArrayBean* makeArrayBean(XSDTYPE nType, void* pArray);
     IArrayBean* makeArrayBean(void* pObject, void* pSZFunct, void* pDelFunct, 
         void* pSizeFunct);
@@ -192,8 +173,6 @@ public:
     int AXISCALL setBodyAsHexBinary(xsd__hexBinary body);
     int AXISCALL setBodyAsBase64Binary(xsd__base64Binary body);
     const AxisChar* AXISCALL getBodyAsString();
-	static void AXISCALL releaseBufferCallBack(const char* buffer,
-        const void* bufferid);
 	int addOutputAnyObject(AnyType* pAnyObject);
 	int serializeAnyObject(AnyType* pAnyObject);
 };

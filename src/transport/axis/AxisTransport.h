@@ -36,6 +36,7 @@
 #include "../SOAPTransport.h"
 #include "Sender.hpp"
 #include "Receiver.hpp"
+#include <string>
 
 class AxisTransport : public SOAPTransport
 {
@@ -95,10 +96,9 @@ private:
     Transport* m_pHttpTransport;
     Sender* m_pSender;
     Receiver* m_pReceiver;
-    BufferInfo m_SendBuffers[NO_OF_SERIALIZE_BUFFERS]; 
-    /* Accumulates the serialized buffers to be transported */
 	int m_iBytesLeft;
 	const char* m_pcReceived;
+    std::string m_sBytesToSend; 
   /**
     * Proxy server name.
     */

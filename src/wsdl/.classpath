@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
     <classpathentry kind="src" path=""/>
-    <classpathentry exported="true" kind="lib" path="E:/Axis/ws-axis/c/lib/axisjava/axis.jar"/>
-    <classpathentry exported="true" kind="lib" path="E:/Axis/ws-axis/c/lib/axisjava/commons-discovery.jar"/>
-    <classpathentry exported="true" kind="lib" path="E:/Axis/ws-axis/c/lib/axisjava/commons-logging.jar"/>
-    <classpathentry exported="true" kind="lib" path="E:/Axis/ws-axis/c/lib/axisjava/jaxrpc.jar"/>
-    <classpathentry exported="true" kind="lib" path="E:/Axis/ws-axis/c/lib/axisjava/saaj.jar"/>
-    <classpathentry exported="true" kind="lib" path="E:/Axis/ws-axis/c/lib/axisjava/wsdl4j.jar"/>
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+    <classpathentry kind="lib" path="E:/Axis/axis-1_2beta/lib/axis.jar"/>
+    <classpathentry kind="lib" path="E:/Axis/axis-1_2beta/lib/commons-discovery.jar"/>
+    <classpathentry kind="lib" path="E:/Axis/axis-1_2beta/lib/commons-logging.jar"/>
+    <classpathentry kind="lib" path="E:/Axis/axis-1_2beta/lib/jaxrpc.jar"/>
+    <classpathentry kind="lib" path="E:/Axis/axis-1_2beta/lib/saaj.jar"/>
+    <classpathentry kind="lib" path="E:/Axis/axis-1_2beta/lib/wsdl4j.jar"/>
+    <classpathentry kind="lib" path="E:/Axis/axis-1_2beta/lib/log4j-1.2.8.jar"/>
+    <classpathentry kind="lib" path="E:/Axis/axis-1_2beta/lib/axis-ant.jar"/>
     <classpathentry kind="output" path="bin"/>
 </classpath>

@@ -53,7 +53,7 @@ AxisTransport::AxisTransport()
     m_pHttpTransport = NULL;
 	m_pcEndpointUri = 0;
 	m_pReleaseBufferCallback = 0;
-    memset(&m_SendBuffers, 0, sizeof(BufferInfo)*NO_OF_SERIALIZE_BUFFERS);
+    m_sBytesToSend = "";
 	m_iBytesLeft = 0;
 	m_pcReceived = 0;
 }
@@ -78,7 +78,6 @@ int AxisTransport::openConnection()
     try
     {
     m_pHttpTransport = TransportFactory::GetTransport(objUrl, secure);
-    memset(&m_SendBuffers, 0, sizeof(BufferInfo)*NO_OF_SERIALIZE_BUFFERS); 
     //set the proxy
     if(m_bUseProxy)
         m_pHttpTransport->setProxy(m_strProxyHost.c_str(), m_uiProxyPort);
@@ -160,42 +159,12 @@ AXIS_TRANSPORT_STATUS AXISCALL AxisTransport::s_Send_bytes(const char*
 AXIS_TRANSPORT_STATUS AxisTransport::flushOutput()
 {
     int index;
-    /* calculate content length */
-    int nContentLength = 0;
-    for (index=0;index < NO_OF_SERIALIZE_BUFFERS; index++)
-    {
-        if(!m_SendBuffers[index].pcBuffer) break;
-        else
-        {
-            nContentLength += strlen(m_SendBuffers[index].pcBuffer);
-        }
-    }
     char buff[8];
-    sprintf(buff, "%d", nContentLength); 
+    sprintf(buff, "%d", m_sBytesToSend.length()); 
     m_pSender->SetProperty("Content-Length" , buff);
-    for (index=0;index < NO_OF_SERIALIZE_BUFFERS; index++)
-    {
-        if(!m_SendBuffers[index].pcBuffer) break;
-        else
-        {    
-            if(!m_pSender->Send(m_SendBuffers[index].pcBuffer))
-            /* some error occured in the transport */
-            {
-                /* release all the buffers */
-                for (int x=index; x<NO_OF_SERIALIZE_BUFFERS; x++)
-                {
-                    if(!m_SendBuffers[x].pcBuffer) break;
-                    m_pReleaseBufferCallback(m_SendBuffers[x].pcBuffer, 
-                        m_SendBuffers[x].pBufferId);
-                }
-                return TRANSPORT_FAILED;
-            }
-            /* release buffer */
-			if (m_pReleaseBufferCallback)
-				m_pReleaseBufferCallback(m_SendBuffers[index].pcBuffer, 
-				m_SendBuffers[index].pBufferId);
-        }
-    }
+    if (!m_pSender->Send(m_sBytesToSend.c_str()))
+        return TRANSPORT_FAILED;
+    m_sBytesToSend = ""; /*release memory*/
     return TRANSPORT_FINISHED;
 }
 
@@ -209,15 +178,7 @@ AXIS_TRANSPORT_STATUS AxisTransport::flushOutput()
 AXIS_TRANSPORT_STATUS AxisTransport::sendBytes(const char* pcSendBuffer, 
                                                 const void* pBufferId)
 {
-    for (int index=0;index < NO_OF_SERIALIZE_BUFFERS; index++)
-    {
-        if(!m_SendBuffers[index].pcBuffer)
-        {
-            m_SendBuffers[index].pcBuffer = pcSendBuffer;
-            m_SendBuffers[index].pBufferId = pBufferId;
-            break;
-        }
-    }
+    m_sBytesToSend += pcSendBuffer;
     return TRANSPORT_IN_PROGRESS;
 }
 
