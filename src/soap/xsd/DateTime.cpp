@@ -32,6 +32,9 @@ AXIS_CPP_NAMESPACE_START
 	    AxisChar *cTemp3;
 
 		time_t now;
+
+		time(&now);
+
 	    pTm = gmtime (&now);
 
 	    struct tm result1;
