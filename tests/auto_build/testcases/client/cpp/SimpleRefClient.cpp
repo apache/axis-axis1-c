@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
 	RefTestPortType ws(endpoint);
 
 	printf("invoking echoInt..\n");
-	IntType refint;
+	intType refint;
   	refint.intItem =56;
 
         if ((ws.echoInt(&refint))->intItem == 56)
