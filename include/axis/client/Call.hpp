@@ -54,7 +54,6 @@
 #include "../server/AxisUserAPI.hpp"
 #include "../server/WSDDDefines.hpp"
 #include "../server/IHeaderBlock.hpp"
-#include "../server/ISoapHeader.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -266,7 +265,6 @@ public:
     IHeaderBlock* AXISCALL createHeaderBlock(AxisChar *pachLocalName,
         AxisChar *pachUri);
     IHeaderBlock* createHeaderBlock();
-    int setSoapHeader(ISoapHeader *pSoapHeader);
     /* Methods used by stubs to get a deserialized value of XML element
      * as basic types
      */

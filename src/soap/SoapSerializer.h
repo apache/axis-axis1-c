@@ -102,7 +102,6 @@ public:
     int setSoapMethod(SoapMethod* pSoapMethod);
     int setSoapFault(SoapFault* pSoapFault);
     int setSoapBody(SoapBody* pSoapBody);
-    int setSoapHeader(ISoapHeader* pSoapHeader);
     int setSoapEnvelope(SoapEnvelope* pSoapEnvelope);
     SoapSerializer();
     virtual ~SoapSerializer();
@@ -142,6 +141,7 @@ private:
     IArrayBean* makeArrayBean(XSDTYPE nType, void* pArray);
     IArrayBean* makeArrayBean(void* pObject, void* pSZFunct, void* pDelFunct, 
         void* pSizeFunct);
+    int setSoapHeader(SoapHeader* pSoapHeader);
 
 public: /* Basic Type Serializing methods */
     int removeSoapHeader();

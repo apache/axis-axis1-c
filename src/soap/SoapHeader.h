@@ -17,8 +17,6 @@
 #if !defined(_SOAPHEADER_H____OF_AXIS_INCLUDED_)
 #define _SOAPHEADER_H____OF_AXIS_INCLUDED_
 
-#include <axis/server/ISoapHeader.hpp>
-
 /**
  * @class SoapHeader
  * @brief    The Header element information item according to SOAP 
@@ -40,6 +38,11 @@
  * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */ 
 
+#include "Attribute.h"
+#include "HeaderBlock.h"
+#include <list>
+using namespace std;
+
 /*
  * Revision 1.1  2004/06/13 roshan
  * Added doxygen comments to help autobuild API docs
@@ -58,7 +61,7 @@ typedef enum
 AXIS_CPP_NAMESPACE_START
 class Attribute;
 
-class SoapHeader : public ISoapHeader
+class SoapHeader
 {
 private:    
     int serializeNamespaceDecl(SoapSerializer& pSZ);

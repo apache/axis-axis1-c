@@ -634,12 +634,6 @@ void* Call::getCmplxObject (void* pDZFunct, void* pCreFunct, void* pDelFunct,
         pNamespace);
 }
 
-int Call::setSoapHeader (ISoapHeader* pSoapHeader)
-{
-	m_nStatus = (m_pIWSSZ->setSoapHeader (pSoapHeader));
-    return m_nStatus;
-}
-
 IHeaderBlock* Call::createHeaderBlock ()
 {
     return (m_pIWSSZ->createHeaderBlock ());

@@ -22,7 +22,6 @@
 
 AXIS_CPP_NAMESPACE_START
 
-class ISoapHeader;
 class IHeaderBlock;
 /**
   * @class IHandlerSoapSerializer
@@ -80,19 +79,6 @@ public:
 	  * @return AXIS_SUCCESS or AXIS_FAIL to indicate success or fail.
 	  */
     virtual int AXISCALL addHeaderBlock(IHeaderBlock* pBlk)=0;
-
-	/**
-	  * Sets the given Soap Header to the Serializer. If a Soap Header already
-	  * exists then this method doesn't do anything, but returns a state to
-	  * indicate this situation.
-	  *
-	  * @param pSoapHeader The Soap Header to be set.
-	  * @return Returns the following status:
-	  *		- AXIS_FAIL : to indicate failuer.
-	  *		- AXIS_SUCCESS : to indicate success.
-	  *		- AXIS_OBJECT_ALREADY_EXISTS : if a Soap Header already exists.
-	  */
-    virtual int setSoapHeader(ISoapHeader* pSoapHeader)=0;
 
 	/**
 	  * Sets the SOAP Version.

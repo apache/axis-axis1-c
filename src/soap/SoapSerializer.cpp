@@ -64,7 +64,7 @@ int SoapSerializer::setSoapEnvelope(SoapEnvelope *pSoapEnvelope)
     return AXIS_SUCCESS;
 }
 
-int SoapSerializer::setSoapHeader(ISoapHeader *pSoapHeader)
+int SoapSerializer::setSoapHeader(SoapHeader *pSoapHeader)
 {
     int intStatus = AXIS_FAIL;
 
@@ -78,7 +78,7 @@ int SoapSerializer::setSoapHeader(ISoapHeader *pSoapHeader)
         }
         else
         {
-            m_pSoapEnvelope->setSoapHeader((SoapHeader*)pSoapHeader);
+            m_pSoapEnvelope->setSoapHeader(pSoapHeader);
             intStatus= AXIS_SUCCESS;
         }
     }
