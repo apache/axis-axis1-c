@@ -3,7 +3,7 @@
  *		Calculator.cpp: implemtation for the Calculator.
  *
  */
-#include "Calculator.h"
+#include "Calculator.hpp"
 
 
 Calculator::Calculator()
