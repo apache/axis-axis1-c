@@ -69,10 +69,6 @@
 #if !defined(AFX_HANDLERPOOL_H__6C2A4C96_7115_43C6_9EFA_CDAC9247D109__INCLUDED_)
 #define AFX_HANDLERPOOL_H__6C2A4C96_7115_43C6_9EFA_CDAC9247D109__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include "../wsdd/WSDDHandler.h"
 #include "../wsdd/WSDDService.h"
 #include "../common/BasicHandler.h"

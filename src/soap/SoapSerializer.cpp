@@ -147,12 +147,36 @@ IParam* SoapSerializer::setResponseParam(XSDTYPE nType, uParamValue Value)
 {
 	Param* pParam = new Param();
 	pParam->SetValue(nType, Value);
-
 	if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
 	{
 		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->setOutputParam(pParam);
 	}
+	return pParam;
+}
 
+IParam* SoapSerializer::setResponseParam(IArrayBean* pArrayBean)
+{
+	Param* pParam = new Param();
+	pParam->m_Value.pIArray = pArrayBean;
+	pParam->m_Type = XSD_ARRAY;
+	if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
+	{
+		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->setOutputParam(pParam);
+	}
+	return pParam;
+}
+
+IParam* SoapSerializer::setResponseParam(void* pObject, void* pSZFunct, void* pDelFunct)
+{ 
+	Param* pParam = new Param();
+	pParam->m_Value.pCplxObj = new ComplexObjectHandler;
+	pParam->m_Value.pCplxObj->pObject = pObject;
+	pParam->m_Value.pCplxObj->pSZFunct = (AXIS_SERIALIZE_FUNCT)pSZFunct;
+	pParam->m_Value.pCplxObj->pDelFunct = (AXIS_OBJECT_DELETE_FUNCT)pDelFunct;
+	if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
+	{
+		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->setOutputParam(pParam);
+	}
 	return pParam;
 }
 
@@ -238,10 +262,10 @@ int SoapSerializer::setSoapVersion(SOAP_VERSION nSoapVersion)
 	return SUCCESS;
 }
 
-const char* SoapSerializer::getNewNamespacePrefix()
+const AxisChar* SoapSerializer::getNewNamespacePrefix()
 {
 	iCounter++;
-	sprintf(cCounter, "ns%d", iCounter);
+	swprintf(cCounter, L"ns%d", iCounter);
 	return cCounter;
 }
 
@@ -293,6 +317,18 @@ IArrayBean* SoapSerializer::makeArrayBean(XSDTYPE nType, void* pArray)
 	ArrayBean* pAb = new ArrayBean();
 	pAb->m_type = nType;
 	pAb->m_value.sta = pArray;
+	return pAb;
+}
+
+IArrayBean* SoapSerializer::makeArrayBean(void* pObject, void* pSZFunct, void* pDelFunct, void* pSizeFunct)
+{
+	ArrayBean* pAb = new ArrayBean();
+	pAb->m_type = USER_TYPE;
+	pAb->m_value.cta = new ComplexObjectHandler;
+	pAb->m_value.cta->pSZFunct = (AXIS_SERIALIZE_FUNCT)pSZFunct;
+	pAb->m_value.cta->pDelFunct = (AXIS_OBJECT_DELETE_FUNCT)pDelFunct;
+	pAb->m_value.cta->pSizeFunct = (AXIS_OBJECT_SIZE_FUNCT)pSizeFunct;
+	pAb->m_value.cta->pObject = pObject;
 	return pAb;
 }
 

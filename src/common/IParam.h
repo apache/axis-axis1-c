@@ -65,14 +65,34 @@
 #if !defined(AFX_IPARAM_H__25C278BB_5875_49E6_A3EC_B6AD3E543D69__INCLUDED_)
 #define AFX_IPARAM_H__25C278BB_5875_49E6_A3EC_B6AD3E543D69__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
-#include "IAccessBean.h"
 #include "TypeMapping.h"
+#include "IWrapperSoapDeSerializer.h"
+#include "IWrapperSoapSerializer.h"
+
 #include <string>
 using namespace std;
+
+typedef int (* AXIS_DESERIALIZE_FUNCT)(void*, IWrapperSoapDeSerializer*);
+//bArray is true if void* is a pointer to an array. Then nSize is the size of that array.
+typedef void (* AXIS_OBJECT_DELETE_FUNCT)(void*, bool bArray=false, int nSize=0);
+//bArray indicates that the object in void* is an element of an array (note that void* is not itself an array).
+typedef int (* AXIS_SERIALIZE_FUNCT)(void*, IWrapperSoapSerializer&, bool bArray=false);
+typedef int (* AXIS_OBJECT_SIZE_FUNCT)(void);
+
+class ComplexObjectHandler
+{
+public:
+	void* pObject;
+	AXIS_SERIALIZE_FUNCT pSZFunct;
+	AXIS_OBJECT_DELETE_FUNCT pDelFunct;
+	AXIS_DESERIALIZE_FUNCT pDZFunct;
+	AXIS_OBJECT_SIZE_FUNCT pSizeFunct;
+	AxisString m_TypeName;
+	AxisString m_URI;
+public:
+	ComplexObjectHandler();
+	void Init();
+};
 
 typedef union uParamValue
 {
@@ -82,8 +102,9 @@ typedef union uParamValue
 	//all basic types should come here
 	class ArrayBean* pArray; //this is used to hold arrays
 	class IArrayBean* pIArray; //used by wrapper classes
-	class AccessBean* pBean; //this is used to hold user types
-	class IAccessBean* pIBean; //used by wrapper classes
+//	class AccessBean* pBean; //this is used to hold user types
+//	class IAccessBean* pIBean; //used by wrapper classes
+	ComplexObjectHandler* pCplxObj;
 	//following is used by the wrapper class to set return value in case of strings	
 	const AxisChar* pStrValue; 
 } uParamValue;
@@ -100,7 +121,9 @@ public:
 	virtual const AxisString& GetBase64String()=0;
 	virtual int GetArraySize()=0;
 	virtual int SetArrayElements(void* pElements)=0;
-	virtual int SetUserType(IAccessBean* pObject)=0;
+	virtual int SetArrayElements(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct, AXIS_OBJECT_SIZE_FUNCT pSizeFunct)=0;
+//	virtual int SetUserType(IAccessBean* pObject)=0;
+	virtual int SetUserType(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct)=0;
 	virtual void SetName(const AxisChar* sName)=0;
 };
 

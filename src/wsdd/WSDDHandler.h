@@ -69,10 +69,6 @@
 #if !defined(AFX_WSDDHANDLER_H__51DC7642_033D_443B_9D97_5825C38B23DB__INCLUDED_)
 #define AFX_WSDDHANDLER_H__51DC7642_033D_443B_9D97_5825C38B23DB__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include "../common/GDefine.h"
 #include <string>
 #include <map>

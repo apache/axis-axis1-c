@@ -68,10 +68,6 @@
 #if !defined(AFX_IWRAPPERSOAPSERIALIZER_H__D3E794EC_8A67_4E0E_BE28_583DCDCE1C42__INCLUDED_)
 #define AFX_IWRAPPERSOAPSERIALIZER_H__D3E794EC_8A67_4E0E_BE28_583DCDCE1C42__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 class ISoapMethod;
 class IArrayBean;
 class IParam;
@@ -83,11 +79,14 @@ class IWrapperSoapSerializer  : public virtual ISoapSerializer
 {
 public:	
 	virtual IParam* setResponseParam(XSDTYPE nType, uParamValue Value)=0;
+	virtual IParam* setResponseParam(IArrayBean* pArrayBean)=0;
+	virtual IParam* setResponseParam(void* pObject, void* pDZFunct, void* pDelFunct)=0;
 	virtual ISoapMethod* createSoapMethod()=0;
 	virtual IWrapperSoapSerializer& operator<<(const char *cSerialized)=0;
 	virtual IWrapperSoapSerializer& operator<<(const AxisChar* cSerialized)=0;
-	virtual const char* getNewNamespacePrefix()=0;
+	virtual const AxisChar* getNewNamespacePrefix()=0;
 	virtual IArrayBean* makeArrayBean(XSDTYPE nType, void* pArray)=0;
+	virtual IArrayBean* makeArrayBean(void* pObject, void* pSZFunct, void* pDelFunct, void* pSizeFunct)=0;
 public: //Basic Type Serializing methods
 	virtual const AxisChar* SerializeBasicType(const AxisChar* sName, const AxisChar* sValue, XSDTYPE type=XSD_STRING)=0;
 	virtual const AxisChar* SerializeBasicType(const AxisChar* sName, float fValue)=0;

@@ -69,10 +69,6 @@
 #if !defined(AFX_SOAPFAULT_H__1E4329DF_59B2_4C55_971D_4B84B0FED7FF__INCLUDED_)
 #define AFX_SOAPFAULT_H__1E4329DF_59B2_4C55_971D_4B84B0FED7FF__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include <string>
 #include <map>
 #include "SoapFaults.h"

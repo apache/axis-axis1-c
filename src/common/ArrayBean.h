@@ -66,17 +66,13 @@
 #if !defined(AFX_ARRAYBEAN_H__374BEDCF_E850_4907_9CF0_F2EBC61E54CF__INCLUDED_)
 #define AFX_ARRAYBEAN_H__374BEDCF_E850_4907_9CF0_F2EBC61E54CF__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include "IArrayBean.h"
+#include "IParam.h"
 #include "BasicTypeSerializer.h"
 
 #include <list>
 using namespace std;
 
-class AccessBean;
 //This class is used inside Param class and wrapper classes only.
 class ArrayBean : public IArrayBean
 {
@@ -99,13 +95,15 @@ public:
 	union uAValue //this is useful only when Param is used as a return parameter
 	{
 		void* sta; //simple type array
-		AccessBean* cta; //complex type array
+		ComplexObjectHandler* cta; //complex type array
 	}m_value;	
 	AxisString m_TypeName;
 	AxisString m_URI;
 public: //IArrayBean Interface
 	void AddDimension(int nDim);
 	void SetItemName(const AxisChar* sName);
+	void SetTypeName(const AxisChar* sName);
+	void SetUri(const AxisChar* sURI);
 private:
 	BasicTypeSerializer m_BTSZ;
 };
