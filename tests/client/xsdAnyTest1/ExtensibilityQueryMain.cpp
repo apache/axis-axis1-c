@@ -12,7 +12,7 @@ int main(void)
     string str;
     try{
 
-        ExtensibilityQueryPortType* pStub = new ExtensibilityQueryPortType("http://localhost:5555/axis/testXSDANY",APTHTTP);
+        ExtensibilityQueryPortType* pStub = new ExtensibilityQueryPortType("http://localhost:9090/axis/testXSDANY",APTHTTP);
         AnyType* pAnyReturn = pStub->query(pAny);
 		if (!pAnyReturn)
 		{
@@ -27,7 +27,7 @@ int main(void)
     }
     catch(AxisException& e)
     {
-        e.getExceptionCode();
+        printf("%s\n", e.getExceptionCode());
     }
 
     return 0;
