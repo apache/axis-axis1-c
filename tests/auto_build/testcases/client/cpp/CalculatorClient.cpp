@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 		if (strcmp(op, "add") == 0)
 		{
         	        iResult = ws.add(i1, i2);
-                	ws.getFaultDetail(&pcDetail);
+                	//ws.getFaultDetail(&pcDetail);
 	                printf("%d\n", iResult);
         	        /*printf("pcDetail:%s\n", pcDetail);*/
 		}

@@ -13,15 +13,17 @@ int main(int argc, char* argv[])
 	int x;
 	char buffer1[100];
 	char endpoint[256];
+	const char* url="http://localhost:80/axis/MathOps";
 	const char* server="localhost";
 	const char* port="80";
+	url = argv[1];
 	try
         {
-	printf("Sending Requests to Server http://%s:%s ........\n\n", server, port);
-	sprintf(endpoint, "http://%s:%s/axis/array", server, port);
+	printf("Sending Requests to Server %s ........\n\n", url);
+	sprintf(endpoint, "%s", url);
 	ArrayTestPortType ws(endpoint);
 	//testing echoIntArray
-         intArrayType arrin;
+         IntArrayType arrin;
          arrin.intItem.m_Array = new int[ARRAYSIZE];
          arrin.intItem.m_Size = ARRAYSIZE;
          for (x=0;x<ARRAYSIZE;x++)

@@ -9,6 +9,7 @@ int main(int argc, char* argv[])
 {
 	char endpoint[256];
 	const char* server="localhost";
+	const char* url="http://localhost:80/axis/MathOps";
 	const char* port="80";
 	const char* op = 0;
 	const char* p1 = 0;
@@ -17,7 +18,9 @@ int main(int argc, char* argv[])
         int iResult;
         char* pcDetail;
 
-	sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
+	url = argv[1];
+
+	sprintf(endpoint, "%s", url);
 	MathOps ws(endpoint);
 
 	op = "div";

@@ -10,13 +10,16 @@ int main(int argc, char* argv[])
 	char endpoint[256];
 	const char* server="localhost";
 	const char* port="80";
+	const char* url="http://localhost:80/axis/MathOps";
 	const char* op = 0;
-	const char* p1 = 0;
+	char* p1 = 0;
 	const char* p2 = 0;
         int p3 = 0;
 	int i1=0, i2=0;
         int iResult;
         char* pcDetail;
+
+	url = argv[1];
 
 	op = "div";
 	
@@ -35,7 +38,8 @@ int main(int argc, char* argv[])
                             /* Sends a normal request. the result should be the division of
                              *  two numbers the user has provided
                              */
-	                    sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
+	                    //sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
+	                    sprintf(endpoint, "%s", url);
                             break;
             
                         case 1:
@@ -43,7 +47,10 @@ int main(int argc, char* argv[])
                              *  Exception : AxisSoapException:Soap action is empty
                              *  should be returned to the user.
                              */
-	                    sprintf(endpoint, "http://%s:%s/axis", server, port);
+	                    //sprintf(endpoint, "http://%s:%s/axis", server, port);
+	                    sprintf(endpoint, "%s", url);
+	                    p1 = strrchr(endpoint, '/');
+	                    *p1 = (char)NULL; // Set a NULL at the last '/' char to strip the service endpoint interface
                             break;
           
                        case 2: 
@@ -51,7 +58,10 @@ int main(int argc, char* argv[])
                             * Exception : AxisWsddException:Requested service not found
                             * should be returned to the user.
                             */
-	                    sprintf(endpoint, "http://%s:%s/axis/Math", server, port);
+	                    //sprintf(endpoint, "http://%s:%s/axis/Math", server, port);
+	                    sprintf(endpoint, "%s", url);
+	                    p1 = endpoint + (strlen(endpoint) - 3);
+	                    *p1 = (char)NULL; // Set a NULL to strip the last 3 chars
                             break;
 
                        case 3:
@@ -74,10 +84,11 @@ int main(int argc, char* argv[])
                             break;
                  
                        default:
-                            printf("Invalide option for the last parameter\n\n");
+                            printf("Invalid option for the last parameter\n\n");
                             return 0;
                     }
 	            //sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
+	            printf("ENDPOINT = %s\n", endpoint);
 	            MathOps ws(endpoint);
 		    iResult = ws.div(i1, i2);		
                     printf("Result is:%d\n", iResult);
