@@ -28,10 +28,29 @@
 
 AXIS_CPP_NAMESPACE_START
 
+/**
+ * @class Axis
+ *
+ * Contains methods to initialize and terminate the Axis runtime. Creating a stub also initializes
+ * the Axis runtime and deleting the stub terminates it. So simple applications that only ever
+ * use one stub at a time do not need to call these methods. More complicated applications that 
+ * initialize multiple stubs, use them and delete them later, should initialize Axis at the start
+ * of their application using Axis::initialize and terminate Axis at the very end of their 
+ * application with Axis::terminate. Applications that use Axis in multiple threads should also 
+ * call Axis:: initialize and terminate.
+ */
 class STORAGE_CLASS_INFO Axis
 {
   public:
+	/**
+	 * Initializes the Axis runtime.
+	 * @param bIsServer should be set to false for client applications.
+	 */
     static void initialize(bool bIsServer);
+
+	/**
+	 * Terminates the Axis runtime.
+	 */
     static void terminate();
 };
 
