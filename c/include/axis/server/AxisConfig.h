@@ -68,7 +68,7 @@ class AxisConfig
      * @return the $AXIS_HOME value
      */
 
-	char* getAxConfProperty(g_axconfig property);
+	char* getAxisConfProperty(g_axconfig property);
         
     private:         
         char* m_pcAxisHome;
