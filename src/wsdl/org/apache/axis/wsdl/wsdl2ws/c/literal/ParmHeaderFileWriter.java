@@ -122,11 +122,11 @@ public class ParmHeaderFileWriter extends ParamWriter{
 				for(int i=1; i<restrictionData.size();i++){
 					QName value = (QName)restrictionData.elementAt(i);
 					if ("enumeration".equals(value.getLocalPart())){
-						writer.write("const "+classname+" "+classname+"_"+value.getNamespaceURI()+" = \""+ value.getNamespaceURI()+"\";\n");
+						writer.write("static const "+classname+" "+classname+"_"+value.getNamespaceURI()+" = \""+ value.getNamespaceURI()+"\";\n");
 					}else if("maxLength".equals(value.getLocalPart())){
-						writer.write("const "+classname+"_MaxLength = "+value.getNamespaceURI()+";\n");
+						writer.write("static const "+classname+"_MaxLength = "+value.getNamespaceURI()+";\n");
 					}else if("minLength".equals(value.getLocalPart())){
-						writer.write("const "+classname+"_MinLength = "+value.getNamespaceURI()+";\n");
+						writer.write("static const "+classname+"_MinLength = "+value.getNamespaceURI()+";\n");
 					}
 				}
 			}
@@ -137,7 +137,7 @@ public class ParmHeaderFileWriter extends ParamWriter{
 						QName value = (QName)restrictionData.elementAt(i);
 						if ("enumeration".equals(value.getLocalPart())){
 							if (i>1) writer.write(", ");
-							writer.write("ENUM"+classname.toUpperCase()+"="+value.getNamespaceURI());		
+							writer.write("ENUM"+classname.toUpperCase()+"_"+value.getNamespaceURI()+"="+value.getNamespaceURI()); 
 						}
 					}
 					writer.write("} "+classname+";\n");
@@ -148,7 +148,7 @@ public class ParmHeaderFileWriter extends ParamWriter{
 				for(int i=1; i<restrictionData.size();i++){
 					QName value = (QName)restrictionData.elementAt(i);
 					if ("enumeration".equals(value.getLocalPart())){
-						writer.write("const "+classname+" "+classname+"_"+value.getNamespaceURI()+" = "+ value.getNamespaceURI()+";\n");
+						writer.write("static const "+classname+" "+classname+"_"+value.getNamespaceURI()+" = "+ value.getNamespaceURI()+";\n");
 					}
 				}
 			}	
