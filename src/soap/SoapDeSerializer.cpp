@@ -156,39 +156,37 @@ IHeaderBlock* SoapDeSerializer::getHeaderBlock(const AxisChar* pName,
 int SoapDeSerializer::getHeader()
 {
     if (m_pHeader) return m_nStatus;
-    m_pNode = m_pParser->next();
+        m_pNode = m_pParser->next();
+                                                                                                                                                                            
     if (!m_pNode)  /* this means a SOAP error */
     {
         m_nStatus = AXIS_FAIL;
         return m_nStatus;
     }
-
-    if ((START_ELEMENT == m_pNode->m_type) && 
-        (0 == strcmp(m_pNode->m_pchNameOrValue, 
+                                                                                                                                                                            
+    if ((START_ELEMENT == m_pNode->m_type) &&
+        (0 == strcmp(m_pNode->m_pchNameOrValue,
         SoapKeywordMapping::map(m_nSoapVersion).pchWords[SKW_HEADER])))
     {
-       if(m_pHeader)
-           delete m_pHeader;
+        if(m_pHeader)
+            delete m_pHeader;
+                                                                                                                                                                            
         m_pHeader = new SoapHeader();
         /* Set any attributes/namspaces to the SoapHeader object */
-
-        bool blnConStatus = true;
-        int iLevel = HEADER_LEVEL;
-        int iHeaderBlockStackLevel = 0;
-        HeaderBlock* pHeaderBlock;
-        ComplexElement* pComplexElement;
-        CharacterElement* pCharacterElement;
-
-        while (blnConStatus)
+                                                                                                                                                                            
+            bool blnMainLoopContStatus = true;
+                                                                                                                                                                            
+        while (blnMainLoopContStatus)
         {
-            m_pNode = m_pParser->next();
-            if (!m_pNode) 
+            m_pNode = m_pParser->next(true);
+            if (!m_pNode)
             {
                 m_nStatus = AXIS_FAIL;
                 return m_nStatus;
             }
-            if ((END_ELEMENT == m_pNode->m_type) && 
-                (0 == strcmp(m_pNode->m_pchNameOrValue, 
+                                                                                                                                                                            
+                if ((END_ELEMENT == m_pNode->m_type) &&
+                (0 == strcmp(m_pNode->m_pchNameOrValue,
                 SoapKeywordMapping::map(m_nSoapVersion).pchWords[SKW_HEADER])))
             {
                 m_pNode = NULL; /* This is to indicate that node is identified
@@ -196,88 +194,99 @@ int SoapDeSerializer::getHeader()
                 return m_nStatus;
                 break;
             }
-            else
+                                                                                                                                                                            
+                HeaderBlock* pHeaderBlock = new HeaderBlock();
+            if (m_pNode->m_pchNamespace)
+                pHeaderBlock->setUri(m_pNode->m_pchNamespace);
+            pHeaderBlock->setLocalName(m_pNode->m_pchNameOrValue);
+                                                                                                                                                                            
+            if ((m_pNode->m_pchAttributes[0]) != NULL)
             {
-                pComplexElement = new ComplexElement();
-                pHeaderBlock = new HeaderBlock();
-                if (START_ELEMENT == m_pNode->m_type)
+                int iAttributeArrayIndex = 0;
+                while (true)
                 {
-                    if (iLevel == HEADER_LEVEL)
+                    Attribute* pAttribute = new Attribute();
+                    pAttribute->setLocalName(m_pNode->
+                    m_pchAttributes[iAttributeArrayIndex++]);
+                    pAttribute->setUri(m_pNode->
+                    m_pchAttributes[iAttributeArrayIndex++]);
+                    pAttribute->setValue(m_pNode->
+                    m_pchAttributes[iAttributeArrayIndex++]);
+                                                                                                                                                                            
+                    pHeaderBlock->addAttribute(pAttribute);
+                                                                                                                                                                            
+                    if (m_pNode->m_pchAttributes
+                        [iAttributeArrayIndex] == '\0')
                     {
-                        if (m_pNode->m_pchNamespace)
-							pHeaderBlock->setUri(m_pNode->m_pchNamespace);
-                        pHeaderBlock->setLocalName(m_pNode->m_pchNameOrValue);
-
-                        if ((m_pNode->m_pchAttributes[0]) != NULL)
-                        {
-                            int iAttributeArrayIndex = 0;
-                            while (true)
-                            {
-                                Attribute* pAttribute = new Attribute();
-                                pAttribute->setLocalName(m_pNode->
-                                    m_pchAttributes[iAttributeArrayIndex++]);
-                                pAttribute->setUri(m_pNode->
-                                    m_pchAttributes[iAttributeArrayIndex++]);
-                                pAttribute->setValue(m_pNode->
-                                    m_pchAttributes[iAttributeArrayIndex++]);
-
-                                pHeaderBlock->addAttribute(pAttribute);
-                                
-                                if (m_pNode->m_pchAttributes
-                                    [iAttributeArrayIndex] == '\0')
-                                {
-                                    break;
-                                }
-                            }
-                        }
-
-                        iLevel = HEADER_BLOCK_LEVEL;
-                    }
-                    else if (iLevel == HEADER_BLOCK_LEVEL)
-                    {
-                        iHeaderBlockStackLevel++;
-						if (m_pNode->m_pchNamespace)
-							pComplexElement->setURI(m_pNode->m_pchNamespace);
-                        pComplexElement->setLocalName(m_pNode->
-                                                      m_pchNameOrValue);
-
-                        iLevel = HEADER_BLOCK_INSIDE_LEVEL;
-                    }
-                } else if (END_ELEMENT == m_pNode->m_type)
-                {
-                    if ((iLevel == HEADER_BLOCK_LEVEL) && 
-                        (iHeaderBlockStackLevel==0))
-                    {
-                        m_pHeader->addHeaderBlock(pHeaderBlock);
-                        iLevel = HEADER_LEVEL;
-                    }
-                    else if ((iLevel == HEADER_BLOCK_INSIDE_LEVEL) && 
-                        (iHeaderBlockStackLevel>0))
-                    {
-                        pHeaderBlock->addChild(pComplexElement);
-                        iHeaderBlockStackLevel--;
-                        iLevel = HEADER_BLOCK_LEVEL;
-                    }
-                }
-                else if (CHARACTER_ELEMENT == m_pNode->m_type)
-                {
-                    pCharacterElement = new CharacterElement(m_pNode->
-                                                             m_pchNameOrValue);
-
-                    if (iLevel == HEADER_BLOCK_LEVEL)
-                    {
-                        pHeaderBlock->addChild(pCharacterElement);
-                    }
-                    else
-                    {
-                        pComplexElement->addChild(pCharacterElement);
+                        break;
                     }
                 }
             }
+                                                                                                                                                                            
+                BasicNode** pNodeList = (BasicNode**) malloc(sizeof(BasicNode*) * 10);
+                int iListPos = 0;
+                int iLevel = 0;
+            bool bContinue = true;
+                                                                                                                                                                            
+                while (bContinue) {
+                        m_pNode = m_pParser->next(true);
+                        if (END_ELEMENT == m_pNode->m_type)
+                        {
+                        if (iLevel == 0) {
+                            //do nothing
+                                            m_pHeader->addHeaderBlock(pHeaderBlock);
+                                            bContinue = false;
+                            }
+                        else if (iLevel == 1) {
+                            if ((pNodeList[0]) != NULL)
+                        {
+                            //addToHeaderBlock(pNodeList[0]);
+                                        pHeaderBlock->addChild(pNodeList[0]);
+                                            m_pHeader->addHeaderBlock(pHeaderBlock);
+                                            m_pParser->next(true); //To skip the end element of the HeaderBlock
+                            bContinue = false;
+                            }
+                        }
+                        else {
+                        //addToImmediateParent(pNodeList, iListPos);
+                                    (pNodeList[iListPos-2])->addChild(pNodeList[iListPos-1]);
+                        iListPos--;
+                        iLevel--;
+                        }
+                        }
+                else if (START_ELEMENT ==  m_pNode->m_type)
+                {
+                        //createBaisNode and setValue
+                            BasicNode* pComplexElement = new ComplexElement();
+                            if (m_pNode->m_pchNamespace)
+                        pComplexElement->setURI(m_pNode->m_pchNamespace);
+                        pComplexElement->setLocalName(m_pNode->m_pchNameOrValue);
+                                                                                                                                                                            
+                            //addtoList
+                                pNodeList[iListPos] = pComplexElement;
+                            iListPos++;
+                            iLevel++;
+                        } else if (CHARACTER_ELEMENT == m_pNode->m_type)
+                {
+                        //createBasicNode and setValue
+                            BasicNode* pBasicNode = new CharacterElement(m_pNode->m_pchNameOrValue);
+                                                                                                                                                                            
+                        //addToImmidiateParent
+                                if (iLevel == 0)
+                                {
+                                        pHeaderBlock->addChild(pBasicNode);
+                                }
+                                else
+                                {
+                                (pNodeList[iListPos-1])->addChild(pBasicNode);
+                                }
+                        }
+                }
         }
     }
-
+                                                                                                                                                                            
     return m_nStatus;
+
 }
 
 int SoapDeSerializer::getBody()
