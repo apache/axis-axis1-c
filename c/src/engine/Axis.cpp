@@ -101,7 +101,7 @@
 #endif
 #else //For linux
 #ifdef AXIS_APACHE1_3
-#define WSDDFILEPATH "./Axis/conf/server.wsdd"
+#define WSDDFILEPATH "/usr/local/apache/Axis/conf/server.wsdd"
 #else
 #define WSDDFILEPATH "/usr/local/apache/Axis/conf/server.wsdd"
 #endif

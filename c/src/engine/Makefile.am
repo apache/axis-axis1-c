@@ -1,5 +1,5 @@
 noinst_LTLIBRARIES = libengine.la
-
+AM_CPPFLAGS = -Wshadow -Wall -pedantic -ansi
 libengine_la_SOURCES = Axis.cpp \
                 AxisEngine.cpp \
                 HandlerChain.cpp \
