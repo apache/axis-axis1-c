@@ -104,69 +104,69 @@ void Call::SetOperation(const char *pchOperation, const char* pchNamespace)
 	m_pIWSSZ->createSoapMethod(pchOperation, m_pIWSSZ->getNewNamespacePrefix(), pchNamespace);
 }
 
-void Call::AddParameter(int nValue,const char* pchName)
+void Call::AddParameter(int nValue,const char* pchName, XSDTYPE nType)
 {
-	m_pIWSSZ->AddOutputParam(pchName, nValue);
+	m_pIWSSZ->AddOutputParam(pchName, nValue, nType);
 }
 
-void Call::AddParameter(unsigned int unValue,const char* pchName)
+void Call::AddParameter(unsigned int unValue,const char* pchName, XSDTYPE nType)
 {
-	m_pIWSSZ->AddOutputParam(pchName, unValue);
+	m_pIWSSZ->AddOutputParam(pchName, unValue, nType);
 }
 
-void Call::AddParameter(short sValue,const char* pchName)
+void Call::AddParameter(short sValue,const char* pchName, XSDTYPE nType)
 {
-	m_pIWSSZ->AddOutputParam(pchName, sValue);
+	m_pIWSSZ->AddOutputParam(pchName, sValue, nType);
 }
 
-void Call::AddParameter(unsigned short usValue,const char* pchName)
+void Call::AddParameter(unsigned short usValue,const char* pchName, XSDTYPE nType)
 {
-	m_pIWSSZ->AddOutputParam(pchName, usValue);
+	m_pIWSSZ->AddOutputParam(pchName, usValue, nType);
 }
 
-void Call::AddParameter(long lValue,const char* pchName)
+void Call::AddParameter(long lValue,const char* pchName, XSDTYPE nType)
 {
-	m_pIWSSZ->AddOutputParam(pchName, lValue);
+	m_pIWSSZ->AddOutputParam(pchName, lValue, nType);
 }
 
-void Call::AddParameter(unsigned long ulValue,const char* pchName)
+void Call::AddParameter(unsigned long ulValue,const char* pchName, XSDTYPE nType)
 {
-	m_pIWSSZ->AddOutputParam(pchName, ulValue);
+	m_pIWSSZ->AddOutputParam(pchName, ulValue, nType);
 }
 
-void Call::AddParameter(char cValue,const char* pchName)
+void Call::AddParameter(char cValue,const char* pchName, XSDTYPE nType)
 {
-	m_pIWSSZ->AddOutputParam(pchName, cValue);
+	m_pIWSSZ->AddOutputParam(pchName, cValue, nType);
 }
 
-void Call::AddParameter(unsigned char ucValue,const char* pchName)
+void Call::AddParameter(unsigned char ucValue,const char* pchName, XSDTYPE nType)
 {
-	m_pIWSSZ->AddOutputParam(pchName, ucValue);
+	m_pIWSSZ->AddOutputParam(pchName, ucValue, nType);
 }
 
-void Call::AddParameter(float fValue,const char* pchName)
+void Call::AddParameter(float fValue,const char* pchName, XSDTYPE nType)
 {
-	m_pIWSSZ->AddOutputParam(pchName, fValue);
+	m_pIWSSZ->AddOutputParam(pchName, fValue, nType);
 }
 
-void Call::AddParameter(double dValue,const char* pchName)
+void Call::AddParameter(double dValue,const char* pchName, XSDTYPE nType)
 {
-	m_pIWSSZ->AddOutputParam(pchName, dValue);
+	m_pIWSSZ->AddOutputParam(pchName, dValue, nType);
 }
 
-void Call::AddParameter(struct tm tValue,const char* pchName)
+void Call::AddParameter(struct tm tValue,const char* pchName, XSDTYPE nType)
 {
-	m_pIWSSZ->AddOutputParam(pchName, tValue);
+	m_pIWSSZ->AddOutputParam(pchName, tValue, nType);
 }
 
-void Call::AddParameter(const AxisChar* pStrValue,const char* pchName)
+void Call::AddParameter(const AxisChar* pStrValue,const char* pchName, XSDTYPE nType)
 {
-	m_pIWSSZ->AddOutputParam(pchName, pStrValue);
+	m_pIWSSZ->AddOutputParam(pchName, pStrValue, nType);
 }
 
-void Call::AddParameter(const AxisString& sStrValue,const char* pchName)
+void Call::AddParameter(const AxisString& sStrValue,const char* pchName, XSDTYPE nType)
 {
-	m_pIWSSZ->AddOutputParam(pchName, sStrValue.c_str());	
+	m_pIWSSZ->AddOutputParam(pchName, sStrValue.c_str(), nType);	
 }
 
 /**
@@ -336,7 +336,7 @@ int Call::Initialize()
 					return SUCCESS;
 				}
 			}
-			return SUCCESS;
+			return FAIL;
 		}
 		return FAIL;
 	}
@@ -436,6 +436,6 @@ int Call::MakeArray()
 	{
 		m_pArray->m_Array = m_pIWSDZ->CreateArray(m_nArrayType, m_pArray->m_Size); 
 	}
-	return (NULL != m_pArray->m_Array);
+	return (NULL != m_pArray->m_Array)?SUCCESS:FAIL;
 }
 

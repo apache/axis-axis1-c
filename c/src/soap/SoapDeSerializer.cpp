@@ -84,6 +84,7 @@ SoapDeSerializer::SoapDeSerializer()
     m_pParser->setContentHandler(m_pHandler);
     m_pParser->setErrorHandler(m_pHandler);
 	m_pInputStream = NULL;
+	m_pLastArrayParam = NULL;
 }
 
 SoapDeSerializer::~SoapDeSerializer()
@@ -185,6 +186,7 @@ IParam* SoapDeSerializer::GetParam()
 int SoapDeSerializer::Init()
 {
 	m_hugebuffer[0] = '\0';
+	m_pLastArrayParam = NULL;
 	m_pHandler->Init();
 	return SUCCESS;
 }
@@ -245,6 +247,41 @@ Axis_Array SoapDeSerializer::GetArray(void* pDZFunct, void* pCreFunct, void* pDe
 	return Array;
 }
 
+int SoapDeSerializer::GetArraySize()
+{
+	m_pLastArrayParam = (Param*)GetParam();
+	if (m_pLastArrayParam)
+		return m_pLastArrayParam->GetArraySize();
+	else
+		return 0;
+}
+
+int SoapDeSerializer::GetArray(Axis_Array* pArray, XSDTYPE nType)
+{
+	if (!m_pLastArrayParam) 
+	{ //This cannot happen unless there is something wrong with wrapper
+		DeleteArray(pArray, nType);
+		return FAIL;
+	}
+	if (XSD_ARRAY != m_pLastArrayParam->GetType())//UNEXPECTED_PARAM_TYPE
+	{ //This cannot happen unless there is something wrong with wrapper
+		DeleteArray(pArray, nType);
+		return FAIL;
+	}
+	
+	if (SUCCESS != m_pLastArrayParam->SetArrayElements((void*)(pArray->m_Array)))
+	{
+		DeleteArray(pArray, nType);
+		return FAIL;
+	}
+	if (SUCCESS != Deserialize(m_pLastArrayParam,0))
+	{
+		DeleteArray(pArray, nType);
+		return FAIL;
+	}
+	return SUCCESS;
+}
+
 Axis_Array SoapDeSerializer::GetArray(XSDTYPE nType)
 {
 	Axis_Array Array = {NULL, 0};
@@ -266,21 +303,16 @@ Axis_Array SoapDeSerializer::GetArray(XSDTYPE nType)
 		return Array; //CF_ZERO_ARRAY_SIZE_ERROR
 	if (SUCCESS != param->SetArrayElements((void*)(Array.m_Array)))
 	{
-		DeleteArray(Array.m_Array, nType);
-		Array.m_Array = NULL;
-		Array.m_Size = 0;
+		DeleteArray(&Array, nType);
 		return Array;
 	}
 	if (SUCCESS != Deserialize(param,0))
 	{
-		DeleteArray(Array.m_Array, nType);
-		Array.m_Array = NULL;
-		Array.m_Size = 0;
+		DeleteArray(&Array, nType);
 		return Array;
 	}
 	return Array;
 }
-
 void* SoapDeSerializer::GetObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)
 {
 	Param *param = (Param*)GetParam();
@@ -475,37 +507,37 @@ void* SoapDeSerializer::CreateArray(XSDTYPE nType, int nSize)
 	}
 }
 
-void SoapDeSerializer::DeleteArray(void* pArray, XSDTYPE nType)
+void SoapDeSerializer::DeleteArray(Axis_Array* pArray , XSDTYPE nType)
 {
 	switch (nType)
 	{
 	case XSD_INT:
 	case XSD_UNSIGNEDINT:
 	case XSD_BOOLEAN:
-		delete [] ((int*)pArray); return;
+		delete [] ((int*)pArray->m_Array); break;
 	case XSD_FLOAT:
-		delete [] ((float*)pArray); return;
+		delete [] ((float*)pArray->m_Array); break;
 	case XSD_STRING:
 	case XSD_HEXBINARY:
 	case XSD_BASE64BINARY:
 	case XSD_ANYURI:
 	case XSD_QNAME:
 	case XSD_NOTATION:
-		delete [] ((AxisString*)pArray); return;
+		delete [] ((AxisString*)pArray->m_Array); break;
 	case XSD_LONG:
 	case XSD_UNSIGNEDLONG:
 	case XSD_INTEGER:
 	case XSD_DURATION:
-		delete [] ((long*)pArray); return;
+		delete [] ((long*)pArray->m_Array); break;
 	case XSD_SHORT:
 	case XSD_UNSIGNEDSHORT:
-		delete [] ((short*)pArray); return;
+		delete [] ((short*)pArray->m_Array); break;
 	case XSD_BYTE:
 	case XSD_UNSIGNEDBYTE:
-		delete [] ((char*)pArray); return;
+		delete [] ((char*)pArray->m_Array); break;
 	case XSD_DOUBLE:
 	case XSD_DECIMAL:
-		delete [] ((double*)pArray); return;
+		delete [] ((double*)pArray->m_Array); break;
 	case XSD_DATETIME:
 	case XSD_TIME:
 	case XSD_DATE:
@@ -514,8 +546,10 @@ void SoapDeSerializer::DeleteArray(void* pArray, XSDTYPE nType)
 	case XSD_MONTHDAY:
 	case XSD_DAY:
 	case XSD_MONTH:
-		delete [] ((tm*)pArray); return;
+		delete [] ((tm*)pArray->m_Array); break;
 	default:
-		return;
+		break;
 	}
+	pArray->m_Array = NULL;
+	pArray->m_Size = 0;
 }

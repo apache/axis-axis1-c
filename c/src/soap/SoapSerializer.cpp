@@ -60,6 +60,7 @@
  *
  *
  * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  *
  */
 
@@ -142,18 +143,11 @@ int SoapSerializer::setSoapMethod(SoapMethod *pSoapMethod)
 	return intStatus;
 }
 
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, XSDTYPE nType, long lValue)
-{
-	uParamValue uValue;
-	uValue.lValue = lValue;
-	return AddOutputParamHelper(pchName, nType, uValue);
-}
-
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, int nValue)
+int SoapSerializer::AddOutputParam(const AxisChar* pchName, int nValue, XSDTYPE type)
 {
 	uParamValue uValue;
 	uValue.nValue = nValue;
-	return AddOutputParamHelper(pchName, XSD_INT, uValue);
+	return AddOutputParamHelper(pchName, type, uValue);
 }
 
 int SoapSerializer::AddOutputParamHelper(const AxisChar* pchName, XSDTYPE nType, uParamValue uValue)
@@ -168,88 +162,88 @@ int SoapSerializer::AddOutputParamHelper(const AxisChar* pchName, XSDTYPE nType,
 	return SUCCESS;
 }
 
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, unsigned int unValue)
+int SoapSerializer::AddOutputParam(const AxisChar* pchName, unsigned int unValue, XSDTYPE type)
 {
 	uParamValue uValue;
 	uValue.unValue = unValue;
-	return AddOutputParamHelper(pchName, XSD_UNSIGNEDINT, uValue);
+	return AddOutputParamHelper(pchName, type, uValue);
 }
 
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, short sValue)
+int SoapSerializer::AddOutputParam(const AxisChar* pchName, short sValue, XSDTYPE type)
 {
 	uParamValue uValue;
 	uValue.sValue = sValue;
-	return AddOutputParamHelper(pchName, XSD_SHORT, uValue);
+	return AddOutputParamHelper(pchName, type, uValue);
 }
 
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, unsigned short usValue)
+int SoapSerializer::AddOutputParam(const AxisChar* pchName, unsigned short usValue, XSDTYPE type)
 {
 	uParamValue uValue;
 	uValue.usValue = usValue;
-	return AddOutputParamHelper(pchName, XSD_UNSIGNEDSHORT, uValue);
+	return AddOutputParamHelper(pchName, type, uValue);
 }
 
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, long lValue)
+int SoapSerializer::AddOutputParam(const AxisChar* pchName, long lValue, XSDTYPE type)
 {
 	uParamValue uValue;
 	uValue.lValue = lValue;
-	return AddOutputParamHelper(pchName, XSD_LONG, uValue);
+	return AddOutputParamHelper(pchName, type, uValue);
 }
 
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, unsigned long ulValue)
+int SoapSerializer::AddOutputParam(const AxisChar* pchName, unsigned long ulValue, XSDTYPE type)
 {
 	uParamValue uValue;
 	uValue.ulValue = ulValue;
-	return AddOutputParamHelper(pchName, XSD_UNSIGNEDLONG, uValue);
+	return AddOutputParamHelper(pchName, type, uValue);
 }
 
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, char cValue)
+int SoapSerializer::AddOutputParam(const AxisChar* pchName, char cValue, XSDTYPE type)
 {
 	uParamValue uValue;
 	uValue.cValue = cValue;
-	return AddOutputParamHelper(pchName, XSD_BYTE, uValue);
+	return AddOutputParamHelper(pchName, type, uValue);
 }
 
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, unsigned char ucValue)
+int SoapSerializer::AddOutputParam(const AxisChar* pchName, unsigned char ucValue, XSDTYPE type)
 {
 	uParamValue uValue;
 	uValue.ucValue = ucValue;
-	return AddOutputParamHelper(pchName, XSD_BYTE, uValue);
+	return AddOutputParamHelper(pchName, type, uValue);
 }
 
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, float fValue)
+int SoapSerializer::AddOutputParam(const AxisChar* pchName, float fValue, XSDTYPE type)
 {
 	uParamValue uValue;
 	uValue.fValue = fValue;
-	return AddOutputParamHelper(pchName, XSD_FLOAT, uValue);
+	return AddOutputParamHelper(pchName, type, uValue);
 }
 
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, double dValue)
+int SoapSerializer::AddOutputParam(const AxisChar* pchName, double dValue, XSDTYPE type)
 {
 	uParamValue uValue;
 	uValue.dValue = dValue;
-	return AddOutputParamHelper(pchName, XSD_DOUBLE, uValue);
+	return AddOutputParamHelper(pchName, type, uValue);
 }
 
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, struct tm tValue)
+int SoapSerializer::AddOutputParam(const AxisChar* pchName, struct tm tValue, XSDTYPE type)
 {
 	uParamValue uValue;
 	uValue.tValue = tValue;
-	return AddOutputParamHelper(pchName, XSD_DATETIME, uValue);
+	return AddOutputParamHelper(pchName, type, uValue);
 }
 
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, const AxisChar* pStrValue)
+int SoapSerializer::AddOutputParam(const AxisChar* pchName, const AxisChar* pStrValue, XSDTYPE type)
 {
 	uParamValue uValue;
 	uValue.pStrValue = pStrValue;
-	return AddOutputParamHelper(pchName, XSD_STRING, uValue);
+	return AddOutputParamHelper(pchName, type, uValue);
 }
 
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, const string& sStrValue)
+int SoapSerializer::AddOutputParam(const AxisChar* pchName, const string& sStrValue, XSDTYPE type)
 {
 	uParamValue uValue;
 	uValue.pStrValue = sStrValue.c_str();
-	return AddOutputParamHelper(pchName, XSD_STRING, uValue);
+	return AddOutputParamHelper(pchName, type, uValue);
 }
 
 int SoapSerializer::AddOutputParam(const AxisChar* pchName, const Axis_Array* pArray, XSDTYPE nType)
@@ -447,40 +441,40 @@ const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, const 
 	return m_BTSZ.serialize(sName, sValue.c_str(), type);
 }
 
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, int nValue)
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, int nValue, XSDTYPE type)
 {
-	return m_BTSZ.serialize(sName, nValue);		
+	return m_BTSZ.serialize(sName, nValue, type);		
 }
 
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, struct tm tValue)
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, struct tm tValue, XSDTYPE type)
 {
     return m_uAxisTime.serialize(sName, tValue).c_str();
     //return NULL;
 }
 
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, unsigned int unValue)
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, unsigned int unValue, XSDTYPE type)
 {
-    return m_BTSZ.serialize(sName, unValue);
+    return m_BTSZ.serialize(sName, unValue, type);
 }
 
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, short sValue)
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, short sValue, XSDTYPE type)
 {
-    return m_BTSZ.serialize(sName, sValue);
+    return m_BTSZ.serialize(sName, sValue, type);
 }
 
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, unsigned short usValue)
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, unsigned short usValue, XSDTYPE type)
 {
-    return m_BTSZ.serialize(sName, usValue);
+    return m_BTSZ.serialize(sName, usValue, type);
 }
 
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, char cValue)
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, char cValue, XSDTYPE type)
 {
-    return m_BTSZ.serialize(sName, cValue);
+    return m_BTSZ.serialize(sName, cValue, type);
 }
 
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, unsigned char ucValue)
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, unsigned char ucValue, XSDTYPE type)
 {
-    return m_BTSZ.serialize(sName, ucValue);
+    return m_BTSZ.serialize(sName, ucValue, type);
 }
 
 const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, long lValue, XSDTYPE type)
@@ -488,14 +482,14 @@ const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, long l
     return m_BTSZ.serialize(sName, lValue, type);
 }
 
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, unsigned long ulValue)
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, unsigned long ulValue, XSDTYPE type)
 {
-    return m_BTSZ.serialize(sName, ulValue);
+    return m_BTSZ.serialize(sName, ulValue, type);
 }
 
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, float fValue)
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, float fValue, XSDTYPE type)
 {
-    return m_BTSZ.serialize(sName, fValue);
+    return m_BTSZ.serialize(sName, fValue, type);
 }
 
 const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, double dValue, XSDTYPE type)
