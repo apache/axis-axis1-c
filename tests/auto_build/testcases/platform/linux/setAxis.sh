@@ -22,6 +22,8 @@ AXISTEST_HOME=${AXISTEST_HOME:-$TEST_HOME}
 AXISCPP_HOME=${AXISCPP_HOME:-/home/damitha/projects/cvshead/tests/auto_build/cvsautobuild}
 AXISCPP_DEPLOY=${AXISCPP_DEPLOY:-/usr/local/axicpp_deploy}
 WSDLSRC_HOME="${AXISCPP_HOME}/src/wsdl"
+WSDL2WS_HOME="${AXISCPP_HOME}/lib/axis"    # location of WSDL2Ws.jar
+AXIS_JARS_HOME=${AXIS_JARS_HOME:-/home/damitha/wsdl2ws/axisjava}  # location of axis.jar and others
 APACHE2_HOME=${APACHE2_HOME:-/usr/local/apache2}
 APACHE_HOME=${APACHE_HOME:-/usr/local/apache}
 set +x
@@ -41,15 +43,12 @@ OUTPUT_DIR=$AXISTEST_HOME/testcases/build         # where the tests are built
 # This is useful for tcpmon and WS-I
 SERVICE_CONFIG=$AXISCPP_TEST_BIN/test.config
 
-WSDL2WS_HOME="${AXISCPP_HOME}/lib/axis"    # location of WSDL2Ws.jar
-AXIS_JARS_HOME=${AXIS_JARS_HOME:-/home/damitha/wsdl2ws/axisjava}  # location of axis.jar and others
-
 # List of all the pre-req jar files needed for WSDL2Ws. Used to set CLASSPATH
 AXIS_JARS="$AXIS_JARS_HOME/axis.jar:$AXIS_JARS_HOME/commons-discovery.jar:$AXIS_JARS_HOME/commons-logging.jar:$AXIS_JARS_HOME/jaxrpc.jar:$AXIS_JARS_HOME/saaj.jar:$AXIS_JARS_HOME/wsdl4j.jar:$AXIS_JARS_HOME/xml-apis.jar"
 
 JAVA_HOME=${JAVA_HOME:-/usr/local/java}        # Where java is installed
 ANT_HOME=${ANT_HOME:-/usr/local/ant}
-CLASSPATH="$AXIS_JARS:$JAVA_HOME/lib"   # set the classpath for WSDL2Ws
+CLASSPATH="$WSDL2WS_HOME/wsdl2ws.jar:$AXIS_JARS"   # set the classpath for WSDL2Ws
 
 # set the PATH to include the test framework scripts and guraentee java
 # is in the PATH too
