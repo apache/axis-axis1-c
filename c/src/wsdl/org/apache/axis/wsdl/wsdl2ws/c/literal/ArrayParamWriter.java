@@ -131,7 +131,7 @@ public class ArrayParamWriter extends ParamWriter{
 			* </xsd:complexType>
 			*/					
 			//writer.write("\t"+attribs[0].getTypeName()+"* m_Array;\n\tint m_Size;\n} "+classname+";\n\n");
-			writer.write("\t struct "+attribs[0].getTypeName()+"Tag * m_Array;\n\tint m_Size;\n} "+classname+";\n\n");			
+			writer.write("\tstruct "+attribs[0].getTypeName()+"Tag * m_Array;\n\tint m_Size;\n} "+classname+";\n\n");			
 		} catch (IOException e) {
 			 throw new WrapperFault(e);
 		}
