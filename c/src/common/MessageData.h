@@ -94,6 +94,15 @@ public:
 	SoapSerializer* m_pSZ;
 	SoapDeSerializer* m_pDZ;
 public:
+	void getSoapSerializer(IHandlerSoapSerializer** pIHandlerSoapSerializer);
+	void getSoapSerializer(IWrapperSoapSerializer** pIWrapperSoapSerializer);	
+	ISoapDeSerializer* getSoapDeserializer();
+	/*
+	comm on 25Jul2003 at 10.00am
+	ISoapSerializer* getSoapSerializer();
+	*/
+	int setPastPivotState(bool bState);
+	bool isPastPivot();
 	void SetDeSerializer(SoapDeSerializer* pDZ);
 	void SetSerializer(SoapSerializer* pSZ);
 	void SetUserName(string& m_sUserName);
@@ -101,12 +110,13 @@ public:
 	void SetService(WSDDService* argService);
 	WSDDService* GetService();  
 	AXIS_PROTOCOL_TYPE m_Protocol;
-	ISoapDeSerializer* getSoapDeserializer();
-	ISoapSerializer* getSoapSerializer();
+	
 protected:
   string m_sUserName;
   WSDDService* m_Service;
 
+private:
+	bool m_bPastPivotState;
 };
 
 #endif // !defined(AFX_MESSAGEDATA_H__8B839E07_3D23_46C6_8743_543B4917D202__INCLUDED_)
