@@ -152,10 +152,10 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 	protected void writePreprocssorStatements() throws WrapperFault {
 		try{
 			writer.write("#include \""+CUtils.getWebServiceNameFromWrapperName(classname)+".h\"\n");
-			writer.write("#include <axis/common/WrapperClassHandler.h>\n");
-			writer.write("#include <axis/common/IMessageData.h>\n");
-			writer.write("#include <axis/common/GDefine.h>\n");
-			writer.write("#include <axis/common/AxisWrapperAPI.h>\n\n");
+			writer.write("#include <axis/server/WrapperClassHandler.h>\n");
+			writer.write("#include <axis/server/IMessageData.h>\n");
+			writer.write("#include <axis/server/GDefine.h>\n");
+			writer.write("#include <axis/server/AxisWrapperAPI.h>\n\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}

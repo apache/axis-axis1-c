@@ -18,6 +18,9 @@ extern int Axis_GetSize_SOAPStruct();
 //////////////////////////////////////////////////////////////////////
 int Axis_Serialize_SOAPStructStruct(SOAPStructStruct* param, IWrapperSoapSerializer* pSZ, bool bArray = false)
 {
+	/* first serialize attributes if any*/
+	pSZ->Serialize(">", 0);
+	/* then serialize elements if any*/
 	pSZ->SerializeAsElement("varString", (void*)&(param->varString), XSD_STRING);
 	pSZ->SerializeAsElement("varInt", (void*)&(param->varInt), XSD_INT);
 	pSZ->SerializeAsElement("varFloat", (void*)&(param->varFloat), XSD_FLOAT);

@@ -133,4 +133,9 @@ typedef AXIS_DEFINED_ARRAY(xsd__anyURI) xsd__anyURI_Array;
 static const int xsd_boolean_true = 1;
 static const int xsd_boolean_false = 0;
 
+typedef enum {
+	NORMAL_CHANNEL=0,
+	SSL_CHANNEL
+} AXIS_CHANNEL_TYPE;
+
 #endif /* !defined(AFX_AXISUSERAPI_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_) */
