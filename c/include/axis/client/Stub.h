@@ -133,7 +133,25 @@ class STORAGE_CLASS_INFO Stub
     char* getNextTrasportPropertyKey();
 
   /**
-    * Iterator for trasport property values.
+    * Accessor for trasport property keys.
+    *
+    * This method gives access to the key corresponding to the trasport key
+    * currently being pointed by trasport property key iterator.
+    *
+    * getFirstTrasportPropertyKey() method must have been called at least once
+    * before this method is called. If not behaviour is undefined.
+    *
+    * This method does not advance the iterator.
+    * Repeated calls always retuen the same key unless 
+    * getNextTrasportPropertyKey() is called in between.
+    *
+    * @return Current transport property key. If there are no trasport 
+    * properties set or if iterator is at the end of the list, returns NULL.
+    */
+    char* getCurrentTrasportPropertyKey();
+    
+  /**
+    * Accessor for trasport property values.
     *
     * This method gives access to the value corresponding to the trasport key
     * currently being pointed by trasport property key iterator.
@@ -147,12 +165,36 @@ class STORAGE_CLASS_INFO Stub
     * Repeated calls always retuen the same value unless 
     * getNextTrasportPropertyKey() is called in between.
     *
-    * @return Next transport property value. If there are no trasport 
+    * @return Current transport property value. If there are no trasport 
     * properties set or if iterator is at the end of the list, returns NULL.
     */
     char* getCurrentTrasportPropertyValue();
 
+  /**
+    * Deletes the trasport property key:value pair currently pointed to by 
+    * the iterator.
+    */
+    void deleteCurrentTrasportProperty();
 
+  /**
+    * Deletes the given occerance of the trasport property key:value pair
+    * corresponding to the given key.
+    *
+    * This method does not advance the iterator in line with the deletes done.
+    * In case you want to access the trasport properties after using this
+    * method, it is advisable to reinitialize the iterator using
+    * getFirstTrasportPropertyKey();
+    * However you can use this method despite where the iterator is 
+    * pointing currently.
+    *
+    * @param pcKey Key of the trasport property key:value pair to be deleted
+    *              If the given key is not set currently, nothing will happen.
+    * @param uiOccurance Which occerance of the key to be deleted, because 
+    *                    there can be multiple values for the same key. 
+    *                    Default is to delete the first occurance.
+    *                    Count starts from 1.
+    */
+    void deleteTrasportProperty(char* pcKey, unsigned int uiOccurance = 1);
 
   /**
     * Create and add a SOAP header block to the Stub.
@@ -219,6 +261,77 @@ class STORAGE_CLASS_INFO Stub
 				     AxisChar * pachUri);
 
   /**
+    * Iterator initiatior for SOAP header blocks
+    *
+    * This method must be called first to initiate access to the list of 
+    * SOAP header blocks.
+    *
+    * @return First SOAP header block pointer. If there are no SOAP header
+    * blocks set, returns NULL.
+    */
+    IHeaderBlock* getFirstSOAPHeaderBlock();
+
+  /**
+    * Iterator for SOAP header blocks
+    *
+    * getFirstSOAPHeaderBlock() method must have been called at least once
+    * before this method is called. If not behaviour is undefined.
+    *
+    * This method advances the iterator by one position.
+    * Repeated calls always retuen the next value.
+    *
+    * @return Next SOAP header block pointer. If there are no SOAP header 
+    * blocks set or if iterator is at the end of the list, returns NULL.
+    */
+    IHeaderBlock* getNextSOAPHeaderBlock();
+
+  /**
+    * Accessor for SOAP header blocks
+    *
+    * This method gives access to the SOAP header block pointer corresponding
+    * to the SOAP header block currently being pointed by SOAP header blocks
+    * iterator.
+    *
+    * getFirstSOAPHeaderBlock() method must have been called at least once
+    * before this method is called. If not behaviour is undefined.
+    *
+    * This method does not advance the iterator.
+    * Repeated calls always retuen the same key unless 
+    * getNextSOAPHeaderBlock() is called in between.
+    *
+    * @return Current SOAP header block pointer. If there are no SOAP header 
+    * block set or if iterator is at the end of the list, returns NULL.
+    */
+    IHeaderBlock* getCurrentSOAPHeaderBlock();
+    
+  /**
+    * Deletes the SOAP header block currently pointed to by 
+    * the iterator.
+    */
+    void deleteCurrentSOAPHeaderBlock();
+
+  /**
+    * Deletes the given SOAP header block pointer from the current list of
+    * SOAP header blocks.
+    *
+    * This method does a pointer comparison. It does not compare the contents
+    * within objects.
+    * Hence it is expected that either the pointer returned by the 
+    * create method or by one of the iterator methods would be used with 
+    * this method.
+    *
+    * This method does not advance the iterator in line with the deletes done.
+    * In case you want to access the SOAP header  blocks after using this
+    * method, it is advisable to reinitialize the iterator using
+    * getFirstSOAPHeaderBlock();
+    * However you can use this method despite where the iterator is 
+    * pointing currently.
+    *
+    * @param pHeaderBlock Pointer of the header block to be deleted.
+    */
+    void deleteSOAPHeaderBlock(IHeaderBlock* pHeaderBlock);
+
+  /**
     * Set proxy server and port for transport.
     *
     * @param pcProxyHost Host name of proxy server
@@ -235,6 +348,77 @@ class STORAGE_CLASS_INFO Stub
     * Sets a Attribute to the SOAPMethod, using the given Attribute data.
     */
     void setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar* pUri, const AxisChar *pValue);
+  
+  /**
+    * Iterator initiatior for SOAP method attributes
+    *
+    * This method must be called first to initiate access to the list of 
+    * SOAP method attributes.
+    *
+    * @return First SOAP method attribute pointer. If there are no SOAP method 
+    * attributes set, returns NULL.
+    */
+    Attribute* getFirstSOAPMethodAttribute();
+
+  /**
+    * Iterator for SOAP method attributes
+    *
+    * getFirstSOAPMethodAttribute() method must have been called at least once
+    * before this method is called. If not behaviour is undefined.
+    *
+    * This method advances the iterator by one position.
+    * Repeated calls always retuen the next value.
+    *
+    * @return Next SOAP method attribute pointer. If there are no SOAP method 
+    * attributes set or if iterator is at the end of the list, returns NULL.
+    */
+    Attribute* getNextSOAPMethodAttribute();
+
+  /**
+    * Accessor for SOAP method attributes
+    *
+    * This method gives access to the SOAP method attribute pointer corresponding
+    * to the SOAP method attribute currently being pointed by SOAP method 
+    * attributes iterator.
+    *
+    * getFirstSOAPMethodAttribute() method must have been called at least once
+    * before this method is called. If not behaviour is undefined.
+    *
+    * This method does not advance the iterator.
+    * Repeated calls always retuen the same key unless 
+    * getNextSOAPMethodAttribute() is called in between.
+    *
+    * @return Current SOAP method attribute pointer. If there are no SOAP method 
+    * attribute set or if iterator is at the end of the list, returns NULL.
+    */
+    Attribute* getCurrentSOAPMethodAttribute();
+    
+  /**
+    * Deletes the SOAP method attribute currently pointed to by 
+    * the iterator.
+    */
+    void deleteCurrentSOAPMethodAttribute();
+
+  /**
+    * Deletes the given occerance of the SOAP method attribute from
+    * the current list of SOAP method attributes
+    *
+    * This method does a pointer comparison. It does not compare the contents
+    * within objects.
+    * Hence it is expected that either the pointer returned by the 
+    * create method or by one of the iterator methods would be used with 
+    * this method.
+    *
+    * This method does not advance the iterator in line with the deletes done.
+    * In case you want to access the SOAP method attributes after using this
+    * method, it is advisable to reinitialize the iterator using
+    * getFirstSOAPMethodAttribute();
+    * However you can use this method despite where the iterator is 
+    * pointing currently.
+    *
+    * @param pAttribute Pointer of Attribute to be deleted
+    */
+    void deleteSOAPMethodAttribute(Attribute* pAttribute);
 
   /**
     * Set transport timeout.
@@ -296,7 +480,7 @@ class STORAGE_CLASS_INFO Stub
   /**
     * Trasport keys iterator
     */
-    vector <char*>::const_iterator m_viCurrentKey;
+    vector <char*>::iterator m_viCurrentKey;
 
   /**
     * Trasport property values 
@@ -306,7 +490,7 @@ class STORAGE_CLASS_INFO Stub
   /**
     * Trasport keys iterator
     */
-    vector <char*>::const_iterator m_viCurrentValue;
+    vector <char*>::iterator m_viCurrentValue;
 
   /**
     * Vector of Header Blok pointers
@@ -316,7 +500,7 @@ class STORAGE_CLASS_INFO Stub
   /**
     * Trasport keys iterator
     */
-    vector <IHeaderBlock *>::const_iterator m_viCurrentSOAPHeaderBlock;
+    vector <IHeaderBlock *>::iterator m_viCurrentSOAPHeaderBlock;
 
   /**
     * List of SOAPMethod Attributes
@@ -326,7 +510,7 @@ class STORAGE_CLASS_INFO Stub
   /**
     * Trasport keys iterator
     */
-    vector <Attribute*>::const_iterator m_viCurrentSOAPMethodAttribute;
+    vector <Attribute*>::iterator m_viCurrentSOAPMethodAttribute;
 
   /**
     * Timeout in seconds
