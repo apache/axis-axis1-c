@@ -68,6 +68,7 @@
 #include "SoapEnvelope.h"
 #include "SoapSerializer.h"
 #include "../common/GDefine.h"
+#include "../common/ArrayBean.h"
 
 extern "C" int sendSoapResponse(char *cSerializedStream);
 
@@ -130,16 +131,17 @@ int SoapSerializer::setSoapMethod(SoapMethod *pSoapMethod)
 	return intStatus;
 }
 
-int SoapSerializer::setResponseParam(Param *param)
+IParam* SoapSerializer::setResponseParam(XSDTYPE nType, uParamValue Value)
 {
-	int intStatus= FAIL;
+	Param* pParam = new Param();
+	pParam->SetValue(nType, Value);
 
-	if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) {
-		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->setOutputParam(param);
-		intStatus= SUCCESS;
+	if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
+	{
+		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->setOutputParam(pParam);
 	}
 
-	return intStatus;
+	return pParam;
 }
 
 int SoapSerializer::setSoapFault(SoapFault *pSoapFault)
@@ -246,7 +248,10 @@ ISoapMethod* SoapSerializer::createSoapMethod()
 	return pMethod;
 }
 
-/*SoapMethodBase* SoapSerializer::createSoapMethodInstance()
+IArrayBean* SoapSerializer::makeArrayBean(XSDTYPE nType, void* pArray)
 {
-
-}*/
+	ArrayBean* pAb = new ArrayBean();
+	pAb->m_type = nType;
+	pAb->m_value.sta = pArray;
+	return pAb;
+}

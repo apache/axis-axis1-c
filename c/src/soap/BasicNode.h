@@ -73,10 +73,9 @@
 #endif // _MSC_VER > 1000
 
 #include <string>
+using namespace std;
 
 class SoapSerializer;
-
-using namespace std;
 
 enum NODE_TYPE { ELEMENT_NODE=1, CHARACTER_NODE};
 
