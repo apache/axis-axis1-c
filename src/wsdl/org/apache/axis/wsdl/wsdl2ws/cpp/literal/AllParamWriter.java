@@ -92,20 +92,23 @@ public class AllParamWriter implements SourceWriter{
 //     2. Go back and modify the class to remove the #include lines that
 //        contain the unnecessary types.
 //     3. Add empty files with the same filenames as the expected includes so
-//        that the compiler will not complain. 
-						System.out.println("Creating an empty "+ qname.getLocalPart()+".h file\n");
+//        that the compiler will not complain.
+						if( qname.getLocalPart().indexOf(">") == -1)
+						{ 
+							System.out.println("Creating an empty "+ qname.getLocalPart()+".h file\n");
 						
-						BufferedWriter bw = null;
+							BufferedWriter bw = null;
 							
-						try{
-							 bw = new BufferedWriter(new FileWriter(getFilePath(qname.getLocalPart()), false));
-							 bw.write("// Header file for " + qname.getLocalPart() + ".h\n");
-							 bw.flush();
-							 bw.close();
-						 } catch (IOException e) {
-							 e.printStackTrace();
-							 throw new WrapperFault(e);
-						 }
+							try{
+								 bw = new BufferedWriter(new FileWriter(getFilePath(qname.getLocalPart()), false));
+								 bw.write("// Header file for " + qname.getLocalPart() + ".h\n");
+								 bw.flush();
+								 bw.close();
+							 } catch (IOException e) {
+								 e.printStackTrace();
+								 throw new WrapperFault(e);
+							 }
+						}
 					}
 				}	
 				else{
