@@ -81,11 +81,11 @@ public class SourceWriterFactory {
 			else if(genaratorType == WrapperConstants.GENERATOR_WRAPPER_HPP)
 				return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.WrapHeaderWriter(wscontext);
 			else if(genaratorType == WrapperConstants.GENERATOR_SERVICE_CPP)
-				return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.ServiceWriter(wscontext);
+				return new org.apache.axis.wsdl.wsdl2ws.cpp.ServiceWriter(wscontext);
 			else if(genaratorType == WrapperConstants.GENERATOR_SERVICE_HPP)
 				return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.ServiceHeaderWriter(wscontext);
 			else if(genaratorType == WrapperConstants.GENERATOR_CLASSLOADER_CPP)
-				return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.ClassLoader(wscontext);
+				return new org.apache.axis.wsdl.wsdl2ws.cpp.ClassLoader(wscontext);
 			else if(genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_HPP)
 				return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.ClientStubHeaderWriter(wscontext);
 			else if(genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_CPP)

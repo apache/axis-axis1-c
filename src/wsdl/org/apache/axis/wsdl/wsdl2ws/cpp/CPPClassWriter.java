@@ -13,13 +13,12 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
- 
+
 /**
  * @author Srinath Perera(hemapani@openource.lk)
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
-
 
 package org.apache.axis.wsdl.wsdl2ws.cpp;
 
@@ -27,42 +26,47 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.BasicFileWriter;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
+import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 
-public abstract class CPPClassWriter extends BasicFileWriter{
-	public CPPClassWriter(String classname)throws WrapperFault{
-		super(classname);
-	}
-	public void writeSource()throws WrapperFault{
-	   try{
-	  this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
-	   writeClassComment();
-	   writePreprocssorStatements();
-	   writeGlobalCodes();
+public abstract class CPPClassWriter extends BasicFileWriter
+{
+    public CPPClassWriter(String classname) throws WrapperFault
+    {
+        super(classname);
+    }
 
-	  // this.writer.write("public class "+servicename+getExtendsPart()+"{\n");
+    public void writeSource() throws WrapperFault
+    {
+        try
+        {
+            this.writer =
+                new BufferedWriter(new FileWriter(getFilePath(), false));
+            writeClassComment();
+            writePreprocssorStatements();
+            writeGlobalCodes();
 
-	   writeAttributes();
-	   writeConstructors();
-	   writeDistructors();
-	   writeMethods();
-	   //this.writer.write("}\n");
-	   //cleanup
-	   writer.flush();
-	   writer.close();
-	   if (WSDL2Ws.verbose)
-	       System.out.println(getFilePath().getAbsolutePath() + " created.....");
+            writeAttributes();
+            writeConstructors();
+            writeDistructors();
+            writeMethods();
 
-	   } catch (IOException e) {
-			e.printStackTrace();
-			throw new WrapperFault(e);
-		}
+            writer.flush();
+            writer.close();
+            if (WSDL2Ws.verbose)
+                System.out.println(
+                    getFilePath().getAbsolutePath() + " created.....");
 
-	}
-	protected void writeGlobalCodes()throws WrapperFault{}
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            throw new WrapperFault(e);
+        }
+
+    }
+
+    protected void writeGlobalCodes() throws WrapperFault
+    {}
 }
-
-
-
