@@ -36,7 +36,7 @@ int MathOps::div(int Value0, int Value1)
 	char* cFaultdetail;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "MathOps#div");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
