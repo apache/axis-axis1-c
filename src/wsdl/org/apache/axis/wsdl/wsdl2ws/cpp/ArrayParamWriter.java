@@ -86,7 +86,7 @@ public class ArrayParamWriter extends ParamWriter
             }
             else
             {
-                writer.write("#include <axis/server/AxisUserAPI.h>\n\n");
+                writer.write("#include <axis/server/AxisUserAPI.hpp>\n\n");
             }
             writeArrayStruct();
             this.writer.write(

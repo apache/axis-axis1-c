@@ -85,8 +85,8 @@ public class ExceptionHeaderWriter extends HeaderFileWriter{
 			try{				
 				    writer.write("#include <string>\n");
 				    writer.write("#include <exception>\n");
-				    writer.write("#include <axis/server/AxisException.h>\n");
-				    writer.write("#include <axis/ISoapFault.h>\n");
+				    writer.write("#include <axis/server/AxisException.hpp>\n");
+				    writer.write("#include <axis/ISoapFault.hpp>\n");
 				    getLangName();				
 				    writer.write("using namespace std;\n");			
 				    writer.write("AXIS_CPP_NAMESPACE_USE \n\n");

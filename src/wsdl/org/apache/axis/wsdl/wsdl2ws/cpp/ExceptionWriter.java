@@ -88,7 +88,7 @@ public class ExceptionWriter extends CPPExceptionClassWriter{
 			{
 				writer.write("#include \""+faultInfoName+".h\"\n\n");
 			}
-			writer.write("#include <axis/server/AxisWrapperAPI.h>\n\n");
+			writer.write("#include <axis/server/AxisWrapperAPI.hpp>\n\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}

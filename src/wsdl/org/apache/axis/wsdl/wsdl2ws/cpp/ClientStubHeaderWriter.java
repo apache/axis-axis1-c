@@ -181,9 +181,9 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 	 */
 	protected void writePreprocssorStatements() throws WrapperFault {
 		try{
-			writer.write("#include <axis/client/Stub.h>\n");
+			writer.write("#include <axis/client/Stub.hpp>\n");
 			writer.write("#include \"" + wscontext.getSerInfo().getServicename() + "_AxisClientException.h\"\n");
-			writer.write("#include <axis/ISoapFault.h>\n");
+			writer.write("#include <axis/ISoapFault.hpp>\n");
 			Type atype;
 			Iterator types = this.wscontext.getTypemap().getTypes().iterator();
 			HashSet typeSet = new HashSet();
