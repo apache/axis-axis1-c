@@ -309,9 +309,9 @@ DEBUG1(hugebuffer);
 	  if (pSoapInput) delete pSoapInput; //this should not be done if we use progressive parsing
 	  //set soap version to the serializer.
 	  //Serialize
-	  m_sResponse = "";
+	  //m_sResponse = "";
 	  int iStatus= m_pSZ->getStream();
-      send_response_bytes((char *)m_sResponse.c_str());
+      
 	  //soap->so.http.op_soap = new char(sResponse.length() + 1); 
 	  //strcpy(soap->so.http.op_soap, sResponse.c_str());
   #ifndef _DEBUG //this caused program to crash in debug mode

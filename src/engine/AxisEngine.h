@@ -81,7 +81,7 @@ private:
 	SoapDeSerializer* m_pDZ;
 	WSDDDeployment* m_pWSDD;
 	HandlerPool* m_pHandlerPool;
-  string m_sResponse;
+//  string m_sResponse;
 private:
 	BasicHandler* m_pWebService;
 	int Initialize();
