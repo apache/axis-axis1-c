@@ -28,12 +28,12 @@ static void
 usage (char *programName, char *defaultURL)
 {
     cout << "\nUsage:\n"
-	<< programName << " [-? | div number1 number2 [service_url]] " << endl
+	<< programName << " [-? | count number1 [service_url]] " << endl
 	<< "    -?             Show this help.\n"
 	<< "    service_url    URL of the service.\n"
 	<< "    Default service URL is assumed to be " << defaultURL
 	<<
-	"\n    Could use http://localhost:8080/axis/services/echo to test with Axis Java."
+	"\n    Could use http://localhost:8080/axis/services/CounterService to test with Axis Java."
 	<< endl;
 }
 
