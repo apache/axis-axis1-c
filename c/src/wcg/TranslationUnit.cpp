@@ -111,7 +111,12 @@ int TranslationUnit::GenerateWrapperClassDef()
 		file << "#define " << WCID(m_pWSClass->GetName().c_str()) << endl;
 		file << endl;
 		//add includes
-		//generate wrapper class declarations for bean classes
+		file << "#include \"" << m_sWsFileName.c_str() << "\"" << endl;
+		file << "#include \"../common/WrapperClassHandler.h\"" << endl;
+		file << "#include \"../common/IMessageData.h\"" << endl;
+		file << "#include \"../common/GDefine.h\"" << endl;
+		file << "#include \"../common/IAccessBean.h\"" << endl;
+		file << endl;
 		//generate wrapper class declaration
 		m_pWSClass->GenerateClassDef(file);
 		file << endl;
@@ -136,10 +141,17 @@ int TranslationUnit::GenerateWrapperClassImpl()
 		//add includes
 		file << "#include \"../common/ISoapDeserializer.h\"" << endl;
 		file << "#include \"../common/ISoapSerializer.h\"" << endl;
-		file << "#include \"../common/BasicTypeSerializer.h\"" << endl;
+		file << "#include \"../common/ISoapMethod.h\"" << endl;
+		file << "#include \"../common/IParam.h\"" << endl;
+
 		file << "#include <string>" << endl;
 		file << "using namespace std;" << endl;
 		file << endl;
+		//generate serializers and deserializers for bean classes
+		for (list<BeanClass*>::iterator it = m_Beans.begin(); it != m_Beans.end(); it++)
+		{
+			(*it)->GenerateSerializerAndDeSerializerImpl(file);
+		}
 		//generate wrapper class's methods
 		m_pWSClass->GenerateClassImpl(file);
 		//generate IAccessBean implementations for bean classes
@@ -170,4 +182,9 @@ void TranslationUnit::SetWSClass(WSClass *pClass)
 void TranslationUnit::AddBeanClass(BeanClass *pClass)
 {
 	m_Beans.push_back(pClass);
+}
+
+void TranslationUnit::SetWsFileName(const char *sFileName)
+{
+	m_sWsFileName = sFileName;
 }

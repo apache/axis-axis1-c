@@ -71,6 +71,15 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
+/*
+	Features:
+	Limitations:
+		1. All basic types are passed/returned to/from web service methods by value.
+		2. All user types are passed/returned to/from web service methods by reference (pointers)
+		3. No arrays can be passed or returned from web service methods.
+		4. 
+		5.
+  */
 Method::Method()
 {
 	m_Qualifier=0;
@@ -130,7 +139,7 @@ int Method::GenerateMethodImpl(string& sClassName, File &file)
 {
 	file << "int " << sClassName << "::" << m_Name << "(IMessageData* mc)" << endl; 	
 	file << "{" << endl;
-	file << "\tSetResponseMethod(mc, " << m_Name << "\");" << endl;
+	file << "\tSetResponseMethod(mc, \"" << m_Name << "\");" << endl;
 	int nParam = 0;
 	for (list<Variable*>::iterator it = m_Params.begin(); it != m_Params.end(); it++)
 	{
@@ -148,13 +157,18 @@ int Method::GenerateMethodImpl(string& sClassName, File &file)
 		}
 		else //basic types
 		{
-			file << "\t" << (*it)->GetTypeName() << " v" << nParam << " = " << "param" << nParam << "->" << GetParamGetMethod((*it)->GetType()) << "();" << endl;
+			file << "\t" << (*it)->GetTypeName() << " v" << nParam << " = " << "param" << nParam << "->" << Variable::GetParamGetMethod((*it)->GetType()) << "();" << endl;
 		}
 		nParam++;
 	}
 	file << endl;
 	file << "\t//Call actual web service method with appropriate parameters" << endl;
-	file << "\t" << m_pReturnType->GetTypeName() << " ret = pWs->" << m_Name << "(";
+	file << "\t" << m_pReturnType->GetTypeName();
+	if (m_pReturnType->IsComplexType()) 
+	{
+		file << "*"; //this is because of the convention that all user types return by reference (pointer) //
+	}
+	file << " ret = pWs->" << m_Name << "(";
 	for (int n=0; n<nParam;)
 	{
 		file << "v" << n++;
@@ -177,23 +191,3 @@ int Method::GenerateMethodImpl(string& sClassName, File &file)
 	return 0;
 }
 
-string& Method::GetParamGetMethod(int nType)
-{
-	//All get methods of Param class should be listed here
-	switch(nType)
-	{
-		case VAR_INT: m_AuxStr = "GetInt"; break;
-		case VAR_FLOAT: m_AuxStr = "GetFloat"; break;
-		case VAR_STRING: m_AuxStr = "GetString"; break;
-		case VAR_LONG: m_AuxStr = "GetLong"; break;
-		case VAR_SHORT: m_AuxStr = "GetShort"; break;
-		case VAR_CHAR: m_AuxStr = "GetChar"; break;
-		case VAR_DOUBLE: m_AuxStr = "GetDouble"; break;
-		case VAR_BOOL: m_AuxStr = "GetBool"; break;
-		case VAR_UNSIGNEDLONG: m_AuxStr = "GetUnsignedLong"; break;
-		case VAR_UNSIGNEDINT: m_AuxStr = "GetUnsignedInt"; break;
-		case VAR_UNSIGNEDSHORT: m_AuxStr = "GetUnsignedShort"; break;
-		case VAR_UNSIGNED_CHAR: m_AuxStr = "GetUnsignedChar"; break;
-	}
-	return m_AuxStr;
-}
