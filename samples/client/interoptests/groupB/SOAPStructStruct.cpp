@@ -3,8 +3,7 @@
  * This file contains functions to manipulate complex type SOAPStructStruct
  */
 
-#include <malloc.h>
-#include "SOAPStructStruct.h"
+#include "SOAPStructStruct.hpp"
 #include <axis/AxisWrapperAPI.hpp>
 
 extern int Axis_DeSerialize_SOAPStruct(SOAPStruct* param, IWrapperSoapDeSerializer* pDZ);
@@ -49,7 +48,7 @@ int Axis_DeSerialize_SOAPStructStruct(SOAPStructStruct* param, IWrapperSoapDeSer
 	param->varFloat = pIWSDZ->getElementAsFloat("varFloat",0);
 	param->varStruct = (SOAPStruct*)pIWSDZ->getCmplxObject((void*)Axis_DeSerialize_SOAPStruct
 		, (void*)Axis_Create_SOAPStruct, (void*)Axis_Delete_SOAPStruct
-		, "SOAPStruct", Axis_URI_SOAPStruct);
+		, "varStruct", Axis_URI_SOAPStruct);
 	return pIWSDZ->getStatus();
 }
 void* Axis_Create_SOAPStructStruct(SOAPStructStruct* pObj, bool bArray = false, int nSize=0)
@@ -99,6 +98,9 @@ SOAPStructStruct::SOAPStructStruct()
 {
 	/*do not allocate memory to any pointer members here
 	 because deserializer will allocate memory anyway. */
+	memset( &varString, 0, sizeof( xsd__string));
+	memset( &varInt, 0, sizeof( xsd__int));
+	memset( &varFloat, 0, sizeof( xsd__float));
 	varStruct=0;
 }
 

@@ -3,8 +3,7 @@
  * This file contains functions to manipulate complex type SOAPArrayStruct
  */
 
-#include <malloc.h>
-#include "SOAPArrayStruct.h"
+#include "SOAPArrayStruct.hpp"
 #include <axis/AxisWrapperAPI.hpp>
 
 /*
@@ -91,6 +90,9 @@ SOAPArrayStruct::SOAPArrayStruct()
 {
 	/*do not allocate memory to any pointer members here
 	 because deserializer will allocate memory anyway. */
+	memset( &varString, 0, sizeof( xsd__string));
+	memset( &varInt, 0, sizeof( xsd__int));
+	memset( &varFloat, 0, sizeof( xsd__float));
 	varArray.m_Array = 0;
 	varArray.m_Size = 0;
 }
