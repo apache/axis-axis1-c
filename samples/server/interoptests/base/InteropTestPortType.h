@@ -3,21 +3,25 @@
  * InteropTestPortType.h: interface for the InteropTestPortTypeclass.
  *
  */
-#if !defined(__INTEROPTESTPORTTYPE_SERVERSKELETON_H__OF_AXIS_INCLUDED_)
-#define __INTEROPTESTPORTTYPE_SERVERSKELETON_H__OF_AXIS_INCLUDED_
+#if !defined(__INTEROPTESTPORTTYPE_SERVERSKELETON_H__INCLUDED_)
+#define __INTEROPTESTPORTTYPE_SERVERSKELETON_H__INCLUDED_
 
 #include <axis/server/AxisUserAPI.h>
+#include "AxisServiceException.h" 
 
 #include "SOAPStruct_Array.h"
 #include "SOAPStruct.h"
 
 class InteropTestPortType 
 {
-    public:
+	public:
 		InteropTestPortType();
 	public:
 		virtual ~InteropTestPortType();
 	public: 
+		void onFault();
+		void init();
+		void fini();
 		xsd__string echoString(xsd__string Value0);
 		xsd__string_Array echoStringArray(xsd__string_Array Value0);
 		int echoInteger(int Value0);
@@ -34,4 +38,4 @@ class InteropTestPortType
 		xsd__boolean echoBoolean(xsd__boolean Value0);
 };
 
-#endif /* !defined(__INTEROPTESTPORTTYPE_SERVERSKELETON_H__OF_AXIS_INCLUDED_)*/
+#endif /* !defined(__INTEROPTESTPORTTYPE_SERVERSKELETON_H__INCLUDED_)*/

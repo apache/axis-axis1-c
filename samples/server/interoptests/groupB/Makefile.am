@@ -1,6 +1,5 @@
-lib_LTLIBRARIES = libgroupB.la
+lib_LTLIBRARIES = libInteropGroupB.la
 SUBDIRS =
-libgroupB_la_SOURCES = InteropTestPortTypeB.cpp InteropTestPortTypeBService.cpp InteropTestPortTypeBWrapper.cpp SOAPArrayStruct.cpp SOAPStruct.cpp SOAPStructStruct.cpp
-libgroupB_la_LIBADD   = $(LDFLAGS)
-
+libInteropGroupB_la_SOURCES = SOAPStruct.cpp InteropTestPortTypeBWrapper.cpp AxisServiceException.cpp SOAPArrayStruct.cpp SOAPStructStruct.cpp InteropTestPortTypeB.cpp InteropTestPortTypeBService.cpp
+libInteropGroupB_la_LIBADD = $(LDFLAGS)
 INCLUDES = -I$(AXISCPP_HOME)/include

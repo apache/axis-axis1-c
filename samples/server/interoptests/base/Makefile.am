@@ -1,6 +1,5 @@
-lib_LTLIBRARIES = libbase.la
+lib_LTLIBRARIES = libInteropBase.la
 SUBDIRS =
-libbase_la_SOURCES = InteropTestPortType.cpp InteropTestPortTypeService.cpp  SOAPStruct.cpp InteropTestPortTypeWrapper.cpp
-libbase_la_LIBADD   = $(LDFLAGS)
-
+libInteropBase_la_SOURCES = SOAPStruct.cpp AxisServiceException.cpp InteropTestPortTypeService.cpp InteropTestPortType.cpp InteropTestPortTypeWrapper.cpp
+libInteropBase_la_LIBADD = $(LDFLAGS)
 INCLUDES = -I$(AXISCPP_HOME)/include
