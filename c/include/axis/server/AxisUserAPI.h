@@ -97,4 +97,12 @@ typedef enum {
     SSL_CHANNEL
 } AXIS_CHANNEL_TYPE;
 
+typedef char* XML_String;
+
+struct AnyType
+{
+	XML_String* _array;
+	int _size;
+};
+
 #endif

@@ -143,6 +143,7 @@ typedef struct {
     long (AXISCALL* getAttributeAsDuration)(void* pObj, const AxisChar* pName,
         const AxisChar* pNamespace);
     int (AXISCALL* getStatus)(void* pObj);
+	AnyType* (AXISCALL* getAnyObject)(void* pObj);
 } IWrapperSoapDeSerializerFunctions;
 
 typedef struct { 
@@ -279,14 +280,14 @@ public:
     
     /* Externalization of deserializer API */
     virtual int setInputStream(SOAPTransport* pInputStream)=0;
-    virtual    int init()=0;
+    virtual int init()=0;
     virtual PROVIDERTYPE getCurrentProviderType()=0;
     virtual void setCurrentProviderType(PROVIDERTYPE nType)=0;    
     virtual AXIS_BINDING_STYLE getStyle()=0;    
     virtual void setStyle(AXIS_BINDING_STYLE nStyle)=0;
     virtual int getVersion()=0;
     virtual int getHeader()=0;    
-            
+	virtual AnyType* getAnyObject()=0;            
 
     /* following stuff is needed to provide the interface for C web services */
 public:
@@ -493,6 +494,9 @@ public:
     pNamespace);};
     static int AXISCALL s_GetStatus(void* pObj)
     { return ((IWrapperSoapDeSerializer*)pObj)->getStatus();};
+	static 	AnyType* AXISCALL s_GetAnyObject(void* pObj)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->getAnyObject();};
+
     static void s_Initialize()
     {
         ms_VFtable.checkMessageBody = s_CheckMessageBody;
@@ -546,6 +550,7 @@ public:
         ms_VFtable.getAttributeAsTime = s_GetAttributeAsTime;
         ms_VFtable.getAttributeAsDuration = s_GetAttributeAsDuration;
         ms_VFtable.getStatus = s_GetStatus;
+		ms_VFtable.getAnyObject = s_GetAnyObject;
     }
 };
 #endif

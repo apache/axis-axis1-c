@@ -150,6 +150,10 @@ SOURCE=..\..\include\axis\server\AdminUtils.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\ArrayBean.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\axis\server\AxisConfig.h
 # End Source File
 # Begin Source File

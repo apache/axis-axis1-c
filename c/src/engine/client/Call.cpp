@@ -580,11 +580,20 @@ int Call::getStatus()
 	return m_nStatus;
 }
 
-void 
-Call::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
+void Call::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
 {
     m_strProxyHost = pcProxyHost;
     m_uiProxyPort = uiProxyPort;
     m_bUseProxy = true;    
+}
+
+AnyType* Call::getAnyObject()
+{
+	return m_pIWSDZ->getAnyObject();
+}
+
+int Call::serializeAnyObject(AnyType* pAnyObject)
+{
+	return m_pIWSSZ->serializeAnyObject(pAnyObject);
 }
 

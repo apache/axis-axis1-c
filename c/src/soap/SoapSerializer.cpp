@@ -848,3 +848,8 @@ int SoapSerializer::setSOAPMethodAttribute(Attribute *pAttribute)
 
 	return AXIS_SUCCESS;
 }
+
+int SoapSerializer::serializeAnyObject(AnyType* pAnyObject)
+{
+	return AXIS_SUCCESS;
+}
