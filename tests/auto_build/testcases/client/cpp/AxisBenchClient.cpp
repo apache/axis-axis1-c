@@ -37,6 +37,10 @@ int main(int argc, char* argv[])
 { 
   AxisBench *ws;
 
+  BenchDataType *input = NULL;
+  BenchDataType *output = NULL;
+  xsd__unsignedByte* buffer = NULL;
+
   char *endpoint = WSDL_DEFAULT_ENDPOINT;
   bool endpoint_set = false;
   int returnValue = 1; // Assume Failure
@@ -51,9 +55,7 @@ int main(int argc, char* argv[])
     } else
       ws = new AxisBench();
 
-    BenchDataType *input;
-    BenchDataType *output;
-    xsd__unsignedByte* buffer;
+    
     int request = 1;
       
     input = new BenchDataType();
@@ -136,6 +138,12 @@ int main(int argc, char* argv[])
 #endif
 
     for ( int ii = 0; ii < request ; ii++ ) {
+        if (output) { // Samisa: memory management BP
+            for (int i = 0; i < output->infos.m_Size; i++)
+                delete (BenchBasicDataType*)(output->infos.m_Array[i]);
+            delete output;
+            output = NULL;
+        }
       output = ws->doBenchRequest(input);
     }
 
@@ -216,6 +224,18 @@ int main(int argc, char* argv[])
     cerr << "Unknown Exception occured." << endl;
     if(endpoint_set)
       free(endpoint);
+  }
+
+  // Samisa: make sure we clean up memory allocated
+  delete ws; 
+  for (int i = 0; i < input->infos.m_Size; i++)
+      delete (BenchBasicDataType*)(input->infos.m_Array[i]);
+  delete input;
+  if (output)
+  {
+    for (i = 0; i < output->infos.m_Size; i++)
+      delete (BenchBasicDataType*)(output->infos.m_Array[i]);
+    delete output;
   }
   return returnValue;
 
