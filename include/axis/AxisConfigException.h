@@ -32,7 +32,7 @@ class STORAGE_CLASS_INFO AxisConfigException :public AxisException
 public:
     AxisConfigException();
     AxisConfigException(const int iExceptionCode);
-    AxisConfigException(const int iExceptionCode, const char* pcMessage);
+    AxisConfigException(const int iExceptionCode, char* pcMessage);
     AxisConfigException(const exception* e);
     AxisConfigException(const exception* e, const int iExceptionCode);
     virtual ~AxisConfigException() throw();
@@ -44,7 +44,7 @@ private:
     void processException(const exception* e);
     void processException(const exception* e, const int iExceptionCode);
     void processException(const int iExceptionCode);
-    void processException(const int iExceptionCode, const char* pcMessage); 
+    void processException(const int iExceptionCode, char* pcMessage); 
     string m_sMessage;
     int m_iExceptionCode;
 };
