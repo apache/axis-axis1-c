@@ -91,6 +91,10 @@ SOURCE=..\..\src\common\ArrayBean.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\AxisConfig.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\AxisException.cpp
 # End Source File
 # Begin Source File
