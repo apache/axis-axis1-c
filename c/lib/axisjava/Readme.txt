@@ -1,1 +1,0 @@
-This folder will contain Axis Java libraries needed by Axis C++
