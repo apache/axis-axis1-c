@@ -22,8 +22,8 @@ public:
 public:
 	virtual ~InteropTestPortTypeBWrapper();
 public://implementation of WrapperClassHandler interface
-	int AXISCALL Invoke(IMessageData* mc);
-	void AXISCALL OnFault(IMessageData* pMsg);
+	int AXISCALL Invoke(void* mc);
+	void AXISCALL OnFault(void* pMsg);
 	int AXISCALL Init();
 	int AXISCALL Fini();
 	AXIS_BINDING_STYLE AXISCALL GetBindingStyle(){return RPC_ENCODED;};
