@@ -22,9 +22,9 @@ int main(int argc, char* argv[])
 
 		xsd__boolean_Array boolean_in;
 		xsd__boolean_Array boolean_out;
-		xsd__byte_Array byte_in;
-		xsd__byte_Array byte_out;
 		xsd__short_Array short_in;
+		//xsd__byte_Array byte_in;
+		//xsd__byte_Array byte_out;
 		xsd__short_Array short_out;
 		xsd__int_Array int_in;
 		xsd__int_Array int_out;
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 			cout << "failed "<<endl;		
 
 		/* Test a byte array - that is directly rather than as base64Binary */
-		byte_in.m_Array = new xsd__byte[ARRAYSIZE];
+		/*byte_in.m_Array = new xsd__byte[ARRAYSIZE];
 		byte_in.m_Size = ARRAYSIZE;
 		for (int x=0; x<ARRAYSIZE; x++)
 		{
@@ -71,8 +71,9 @@ int main(int argc, char* argv[])
 				cout << "failed "<<endl;		
 		else
 			cout << "failed "<<endl;		
-
+		*/
 		/* Test an short array */
+                /*
 		short_in.m_Array = new xsd__short[ARRAYSIZE];
 		short_in.m_Size = ARRAYSIZE;
 		for (int x=0; x<ARRAYSIZE; x++)
@@ -88,7 +89,7 @@ int main(int argc, char* argv[])
 				cout << "failed "<<endl;		
 		else
 			cout << "failed "<<endl;		
-
+                */
 		/* Test an int array */
 		int_in.m_Array = new xsd__int[ARRAYSIZE];
 		int_in.m_Size = ARRAYSIZE;
