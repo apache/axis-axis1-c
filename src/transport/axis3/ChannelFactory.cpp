@@ -106,16 +106,11 @@ IChannel * ChannelFactory::LoadChannelLibrary( g_ChannelType eChannelType, const
 
 // Additional code added to that when the user wants to load a different
 // library from that which is already loaded, it will now allow the change.
-			if( m_pLibName[iLibCount] != NULL)
-			{
-				delete m_pLibName[iLibCount];
-			}
+			UnLoadChannelLibrary( eChannelType, m_pChannel[iLibCount]);
 
 			m_pLibName[iLibCount] = new char[ strlen( pcLibraryName) + 1];
 
 			strcpy( m_pLibName[iLibCount], pcLibraryName);
-
-			UnLoadChannelLibrary( eChannelType, m_pChannel[iLibCount]);
 
 			m_LibHandler[iLibCount] = sLibHandler;
 
@@ -160,6 +155,8 @@ bool ChannelFactory::UnLoadChannelLibrary( g_ChannelType eChannelType, IChannel 
 	if( m_pLibName[iLibIndex] != NULL)
 	{
 		delete m_pLibName[iLibIndex];
+
+		m_pLibName[iLibIndex] = NULL;
 	}
 
 // If a channel library object handle is valid, then unload the library and
