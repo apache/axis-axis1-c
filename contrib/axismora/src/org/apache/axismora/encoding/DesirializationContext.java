@@ -97,8 +97,9 @@ import org.xmlpull.v1.XmlPullParserFactory;
  * All the desirialization work is done in this class. The XmlPullParser is 
  * hidden behind this class.
  * 
- * @author Srianth Perera (hemapani@opensource.lk)
  * @author Dimuthu Leelarathe (muthulee@opensource.lk)
+ * @author Srianth Perera (hemapani@opensource.lk)
+ * 
  */
 
 public class DesirializationContext {
@@ -109,14 +110,15 @@ public class DesirializationContext {
     private int state;
     private XmlPullParser xpp;
     private QName method;
-    private QName provider = Style.RPC.getProvider();
+    //private QName provider;
+    private Style style;
     private SOAPEnvelope env;
     /* use to create the xml elements */
     private Document doc;
 	private Vector headers;
     private int blindLevel = 0; //reads until the same level you started
 
-    public DesirializationContext(MessageContext md, InputStream ins, QName provider)
+    public DesirializationContext(MessageContext md, InputStream ins, Style style)
         throws AxisFault {
 
         try {
@@ -124,8 +126,7 @@ public class DesirializationContext {
             this.doc = AxisUtils.getCommonDomDocument();
 
             this.messageData = md;
-            if (provider != null)
-                this.provider = provider;
+            this.style = Style.RPC;    
             this.method = null;
 
             InputStreamReader in = new InputStreamReader(ins);
@@ -218,7 +219,7 @@ public class DesirializationContext {
     }
 
     /**
-     * Start Parse the Body. Parse the Body tag and if the RPC style parse the 
+     * Start Parse the Body. Parse the Body tag and if and only if RPC. 
      * First child element of the Body. 
      */
     public void startParseSOAPBody() throws AxisFault {
@@ -233,7 +234,7 @@ public class DesirializationContext {
                 throw new AxisFault("Invalied Axis format Body tag missing");
 
             //If RPC I should read the method as well
-            if (this.provider.getLocalPart().equals(Style.RPC.getProvider().getLocalPart())) {
+            if (this.style.equals("rpc")) {
                 //this two lines are to make sure we are dealing with the start tag
                 while (!(state == XmlPullParser.START_TAG || state == XmlPullParser.END_DOCUMENT))
                     this.state = this.xpp.next();
@@ -296,7 +297,7 @@ public class DesirializationContext {
                 throw this.parseFault();
 
             //If RPC I move to the next TAG
-            if (this.provider.getLocalPart().equals(Style.RPC.getProvider().getLocalPart()))
+            if (this.style.equals("rpc"))
                 //while (!(state == XmlPullParser.START_TAG || state == XmlPullParser.END_DOCUMENT))
                 //	this.state = this.xpp.next();
                 ParmWriter.tag = getTag();
