@@ -51,7 +51,7 @@ $./configure --prefix=/usr/local/axiscpp_deploy \
 
 (Give options according to your environment and requirements)
 
-Then axis c++ configuring
+This will start configuring axis c++
 
 To build use menu options in Kdevelop (Build/Make, build/Clean etc.)
 
