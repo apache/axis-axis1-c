@@ -535,6 +535,8 @@ Axis_Array SoapDeSerializer::getCmplxArray(void* pDZFunct, void* pCreFunct,
                     return Array;
                 }
             }
+
+            m_pNode = m_pParser->next(); /* skip end element node too */
             return Array;
         }
     }
@@ -729,6 +731,7 @@ for (; nIndex < Array.m_Size; nIndex++)\
     Array.m_Size = 0;\
     return Array;\
 }\
+m_pNode = m_pParser->next(); /* skip end element node too */\
 return Array;
 
 #define DESERIALIZE_LITERAL_ARRAY_BLOCK(cpp_type, conv_func) \
@@ -853,6 +856,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
                     Array.m_Size = 0;
                     return Array;
                 }
+                m_pNode = m_pParser->next(); /* skip end element node too */
                 return Array;
             case XSD_UNSIGNEDINT:
                 DESERIALIZE_ENCODED_ARRAY_BLOCK(unsigned int, CONV_STRTOUL)
