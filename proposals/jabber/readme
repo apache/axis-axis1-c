@@ -49,3 +49,9 @@ Experimental Jabber Transport for Axis 1.0
   no value.
   
   Will work on better documentation later.
+  
+  
+  
+  !!!!Btw, this requires JDK 1.4!!!!  It will not work with JDK 1.3
+  
+  
