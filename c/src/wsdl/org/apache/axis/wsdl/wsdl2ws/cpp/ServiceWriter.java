@@ -48,6 +48,7 @@ public class ServiceWriter extends CPPClassWriter{
 			targetOutputLocation = targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
 		new File(targetOutputLocation).mkdirs();
 		String fileName = targetOutputLocation + "/" + classname + ".cpp";
+		this.wscontext.addGeneratedFile(classname + ".cpp");
 		return new File(fileName);
 	}
 
