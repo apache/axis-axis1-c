@@ -75,10 +75,7 @@ public class CPPUtils {
 	private static Hashtable qname2classmap = new Hashtable();
 	private static Hashtable type2getValueMethodName = new Hashtable();
 	
-	static{
-		 /*
-		  * This type mapping is not complete. Susantha Ayya Can u please fill it 
-		  */		
+	static{	
 		 class2QNamemap.put("int", new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"));
 		 class2QNamemap.put("unsigned char", new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"));
 		 class2QNamemap.put("float", new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"));
@@ -145,7 +142,7 @@ public class CPPUtils {
 		type2getValueMethodName.put("Axis_Boolean","GetInt");
 		String methodname;
 		if((methodname = (String)type2getValueMethodName.get(typeName))!= null)
-			return methodname+"()";
+			return methodname + "()";
 		return null;	
 	}
 	

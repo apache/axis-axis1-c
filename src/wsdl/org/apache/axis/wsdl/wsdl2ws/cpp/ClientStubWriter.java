@@ -94,11 +94,11 @@ public class ClientStubWriter extends CPPClassWriter{
 	}
 	protected void writeClassComment() throws WrapperFault {
 			try{
-				writer.write("///////////////////////////////////////////////////////////////////////\n");	
-				writer.write("// This is the Client Stub implementation file genarated by WSDL2Ws tool.\n");
-				writer.write("// "+classname+".cpp: implemtation for the "+classname+".\n");
-				writer.write("//\n");
-				writer.write("//////////////////////////////////////////////////////////////////////\n\n");
+				writer.write("/*\n");	
+				writer.write(" * This is the Client Stub implementation file genarated by WSDL2Ws tool.\n");
+				writer.write(" * "+classname+".cpp: implemtation for the "+classname+".\n");
+				writer.write(" *\n");
+				writer.write(" */\n\n");
 			}catch(IOException e){
 				throw new WrapperFault(e);
 			}
@@ -137,7 +137,7 @@ public class ClientStubWriter extends CPPClassWriter{
 	 */
 	protected void writeMethods() throws WrapperFault {
 		try{
-			writer.write("\n//Methods corresponding to the web service methods\n");
+			writer.write("\n/*Methods corresponding to the web service methods*/\n");
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
 				minfo = (MethodInfo)methods.get(i);
@@ -186,9 +186,9 @@ public class ClientStubWriter extends CPPClassWriter{
 		}
 		if (returntype != null)
 			returntypeissimple = CPPUtils.isSimpleType(outparamType);
-		writer.write("\n/////////////////////////////////////////////////////////////////\n");
-		writer.write("// This method wrap the service method"+ methodName +"\n");
-		writer.write("//////////////////////////////////////////////////////////////////\n");
+		writer.write("\n/*\n");
+		writer.write(" * This method wrap the service method"+ methodName +"\n");
+		writer.write(" */\n");
 		//method signature
 		String paraTypeName;
 		boolean typeisarray = false;
@@ -277,7 +277,7 @@ public class ClientStubWriter extends CPPClassWriter{
 			writer.write("\tm_pCall->AddParameter(");			
 			if(typeisarray){
 				//arrays
-				QName qname = type.getTypNameForAttribName("item");
+				QName qname = WrapperUtils.getArrayType(type).getName();
 				String containedType = null;
 				if (CPPUtils.isSimpleType(qname)){
 					containedType = CPPUtils.getclass4qname(qname);
@@ -303,7 +303,7 @@ public class ClientStubWriter extends CPPClassWriter{
 			writer.write("\tm_pCall->UnInitialize();\n");
 		}
 		else if (returntypeisarray){
-			QName qname = retType.getTypNameForAttribName("item");
+			QName qname = WrapperUtils.getArrayType(retType).getName();
 			String containedType = null;
 			if (CPPUtils.isSimpleType(qname)){
 				containedType = CPPUtils.getclass4qname(qname);
