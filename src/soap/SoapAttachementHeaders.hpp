@@ -36,7 +36,7 @@
 #pragma warning( disable : 4786 )
 #endif
 
-#include <map>
+#include <vector>
 #include <string>
 #include <axis/GDefine.hpp>
 
@@ -47,8 +47,8 @@ class SoapSerializer;
 
 class SoapAttachementHeaders  
 {
-private:
-	map<AxisString, AxisString> m_AttachHeaders;
+private:	
+	vector < pair < AxisString, AxisString > > m_AttachHeaders;
 public:
 	AxisString getHeader(AxisString sName);
 	

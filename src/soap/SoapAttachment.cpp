@@ -40,6 +40,7 @@ SoapAttachment::SoapAttachment()
 
 	//Assigning to NULL
 	m_AttachementBody = 0;
+	
 }
 
 SoapAttachment::~SoapAttachment()
@@ -70,6 +71,7 @@ void SoapAttachment::addBody(xsd__base64Binary* objBody)
 
 void SoapAttachment::serialize(SoapSerializer &pSZ)
 {
+	
 	/* Serialize the Attachment Headers */
 	pSZ.serialize("\n", NULL);
 	m_AttachementHeaders->serialize(pSZ);
@@ -98,4 +100,12 @@ const char* SoapAttachment::getHeader(const char *pchName)
 		return m_AttachementHeaders->getHeader(pchName).c_str();
 }
 
+
+
+
+
 AXIS_CPP_NAMESPACE_END
+
+
+
+

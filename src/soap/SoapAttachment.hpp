@@ -45,15 +45,16 @@ AXIS_CPP_NAMESPACE_START
 
 class SoapSerializer;
 
-class SoapAttachment : public ISoapAttachment
+class STORAGE_CLASS_INFO SoapAttachment : public ISoapAttachment
 {
 private:
+	
 	SoapAttachementHeaders* m_AttachementHeaders;
 	xsd__base64Binary* m_AttachementBody;
 public:
+		
 	const char* getHeader(const char* pchName);
 	xsd__base64Binary* getBody();
-	
 	void serialize(SoapSerializer& pSZ);
 	void addBody(xsd__base64Binary* objBody);	
 	void addHeader(const char* pchName, const char* pchValue);
