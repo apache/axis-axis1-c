@@ -56,7 +56,7 @@ int Attribute::setLocalName(const AxisChar* localname)
 {
 	if(NULL==localname)
 	{
-		return AXIS_FAIL;
+        localname="";
 	}
     m_localname= localname;
     return AXIS_SUCCESS;
@@ -66,7 +66,7 @@ int Attribute::setPrefix(const AxisChar* prefix)
 {
 	if(NULL==prefix)
 	{
-		return AXIS_FAIL;
+        prefix="";
 	}
 	
     m_prefix= prefix;
@@ -77,7 +77,7 @@ int Attribute::setURI(const AxisChar* uri)
 {
 	if(NULL==uri)
 	{
-		return AXIS_FAIL;
+        uri="";
 	}
     m_uri= uri;
     return AXIS_SUCCESS;
@@ -87,7 +87,7 @@ int Attribute::setValue(const AxisChar* value)
 {
 	if(NULL==value)
 	{
-		return AXIS_FAIL;
+        value="";
 	}
     m_value= value;
     return AXIS_SUCCESS;
@@ -124,6 +124,12 @@ Attribute::Attribute(const AxisChar* localname, const AxisChar* prefix,
     m_prefix= prefix;
     m_uri= uri;
     m_value= value;
+}
+
+Attribute::Attribute(const AxisChar *localname, const AxisChar *prefix, 
+                     const AxisChar *value)
+{
+    Attribute(localname, prefix, "", value);
 }
 
 Attribute::Attribute(const Attribute& rCopy)
@@ -234,12 +240,5 @@ int Attribute::initializeForTesting()
 }
 #endif
 
-Attribute::Attribute(const AxisChar *localname, const AxisChar *prefix, 
-                     const AxisChar *value)
-{
-    m_localname= localname;
-    m_prefix= prefix;
-    m_value= value;
-}
 
 AXIS_CPP_NAMESPACE_END
