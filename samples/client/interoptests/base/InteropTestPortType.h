@@ -15,7 +15,7 @@ class InteropTestPortType
 private:
 	Call* m_pCall;
 public:
-	InteropTestPortType();
+	InteropTestPortType(const char* pchEndpointUri);
 public:
 	virtual ~InteropTestPortType();
 public: 

@@ -24,8 +24,8 @@ extern void Axis_Delete_SOAPStructStruct(SOAPStructStruct* param, bool bArray, i
 extern int Axis_Serialize_SOAPStructStruct(SOAPStructStruct* param, IWrapperSoapSerializer* pSZ, bool bArray);
 extern int Axis_GetSize_SOAPStructStruct();
 
-void* get_InteropTestPortTypeB_stub(){
-	return GetStubObject(APTHTTP, "http://localhost/axis/cgroupB");
+void* get_InteropTestPortTypeB_stub(const char* pchEndPointUri){
+	return GetStubObject(APTHTTP, pchEndPointUri);
 }
 void destroy_InteropTestPortTypeB_stub(void* p){
 	DestroyStubObject(p);
