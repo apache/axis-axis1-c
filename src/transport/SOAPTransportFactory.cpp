@@ -43,7 +43,11 @@ SOAPTransportFactory::~SOAPTransportFactory()
 int SOAPTransportFactory::initialize()
 {
 #ifdef WIN32
+#ifdef _DEBUG
+	m_pcLibraryPath = "AxisTransport_D.dll"; //this will be taken from configuration file
+#else
 	m_pcLibraryPath = "AxisTransport.dll"; //this will be taken from configuration file
+#endif
 #else
 	m_pcLibraryPath = "libAxisTransport.so"; //this will be taken from configuration file
 #endif
