@@ -63,7 +63,7 @@ public:
      * @return Deserialized String value.
      */
 	AxisChar* deserializeString(const AxisChar* valueAsChar) throw (AxisSoapException);
-  
+
 private:
     AxisChar* m_String;
 };

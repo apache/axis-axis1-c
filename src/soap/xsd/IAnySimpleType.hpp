@@ -24,6 +24,8 @@
 #include <axis/GDefine.hpp>
 #include <string>
 #include "../AxisSoapException.h"
+#include "constraints/WhiteSpace.hpp"
+#include "constraints/Pattern.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -80,7 +82,14 @@ public:
 	 * @return Deserialized value.
 	 */
     virtual void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException) = 0;
-    
+
+    /**
+     * Take partially serialized value, process WhiteSpace and validate Pattern.
+     * @param value
+     * @return Serialized form of value
+     */
+    AxisChar* serialize(const AxisChar* value) throw (AxisSoapException);
+
 protected:
 
     /**
@@ -89,6 +98,18 @@ protected:
      * @return String with all reserved characters replaced
      */
     const AxisString& replaceReservedCharacters(AxisString& value);
+
+    /**
+     * Creates a WhiteSpace object which preserve original string form
+     * @return WhiteSpace object
+     */
+    virtual WhiteSpace* getWhiteSpace();
+   
+    /**
+     * Create a Pattern object with no rules
+     * @return Pattern object
+     */
+    Pattern* getPattern();
 
     /**
      * Reserved Characters

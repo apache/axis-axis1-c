@@ -19,15 +19,9 @@ void* NOTATION::deserialize(const AxisChar* valueAsChar) throw (AxisSoapExceptio
 AxisChar* NOTATION::serialize(const AxisChar* value) throw (AxisSoapException)
 {
 	AxisString valueAsString = value;
-	AxisChar* returnValue = (AxisChar*) replaceReservedCharacters(valueAsString).c_str();
+	AxisChar* serializedValue = (AxisChar*) replaceReservedCharacters(valueAsString).c_str();
 
-    if(m_Buf)
-    {
-        delete [] m_Buf;
-        m_Buf = NULL;
-    }	
-	m_Buf = new char[strlen (returnValue) + 1];
-	strcpy (m_Buf, returnValue);
+    IAnySimpleType::serialize(serializedValue);
 	return m_Buf;
 }
 
@@ -41,6 +35,11 @@ AxisChar* NOTATION::deserializeNOTATION(const AxisChar* valueAsChar) throw (Axis
 	m_NOTATION = new char[strlen (valueAsChar) + 1];
 	strcpy (m_NOTATION, valueAsChar);
 	return m_NOTATION;
+}
+
+WhiteSpace* NOTATION::getWhiteSpace()
+{
+    return new WhiteSpace(REPLACE);
 }
 
 AXIS_CPP_NAMESPACE_END

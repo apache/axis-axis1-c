@@ -65,6 +65,14 @@ public:
 	 */
     struct tm* deserializeDate(const AxisChar* valueAsChar) throw (AxisSoapException);
 
+protected:
+
+    /**
+     * Creates a WhiteSpace object to collapse whitespace
+     * @return WhiteSpace object set to collapse whitespace
+     */
+    WhiteSpace* getWhiteSpace();
+
 private:
 	struct tm* m_Date;
 };

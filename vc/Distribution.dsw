@@ -99,6 +99,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "AxisXMLParserXml4c"=".\xml\xerces\AxisXMLParserXml4c.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "SimpleAxisServer"=".\server\simple_axis_server\SimpleAxisServer.dsp" - Package Owner=<4>
 
 Package=<5>

@@ -28,13 +28,7 @@ AxisChar* Integer::serialize(const LONGLONG* value) throw (AxisSoapException)
     AxisChar* serializedValue = new char[80];
     AxisSprintf (serializedValue, 80, "%lld", *value);
   
-    if (m_Buf)
-    {
-        delete [] m_Buf;
-        m_Buf = NULL;
-    }
-    m_Buf = new char[strlen (serializedValue) + 1];
-    strcpy (m_Buf, serializedValue);
+    IAnySimpleType::serialize(serializedValue);
     delete [] serializedValue;        
     return m_Buf;
 }

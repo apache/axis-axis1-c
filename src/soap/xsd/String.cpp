@@ -19,16 +19,10 @@ void* String::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
 AxisChar* String::serialize(const AxisChar* value) throw (AxisSoapException)
 {
 	AxisString valueAsString = value;
-	AxisChar* returnValue = (AxisChar*) replaceReservedCharacters(valueAsString).c_str();
+	AxisChar* serializedValue = (AxisChar*) replaceReservedCharacters(valueAsString).c_str();
 
-    if (m_Buf)
-    {
-        delete [] m_Buf;
-        m_Buf = NULL;
-    }	
-	m_Buf = new char[strlen (returnValue) + 1];
-	strcpy (m_Buf, returnValue);
-	return m_Buf;
+    IAnySimpleType::serialize(serializedValue);
+    return m_Buf;
 }
 
 AxisChar* String::deserializeString(const AxisChar* valueAsChar) throw (AxisSoapException)

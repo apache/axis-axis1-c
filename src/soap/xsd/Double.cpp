@@ -22,14 +22,8 @@ AxisChar* Double::serialize(const double* value) throw (AxisSoapException)
     AxisChar* serializedValue = new char[80];
     AxisSprintf (serializedValue, 80, "%f", *value);
 	
-	if (m_Buf)
-    {
-        delete [] m_Buf;
-        m_Buf = NULL;
-    }
-    m_Buf = new char[strlen (serializedValue) + 1];
-    strcpy (m_Buf, serializedValue);
-    delete serializedValue;        
+	IAnySimpleType::serialize(serializedValue);
+    delete [] serializedValue;        
     return m_Buf;
 }
 
@@ -46,6 +40,11 @@ double* Double::deserializeDouble(const AxisChar* valueAsChar) throw (AxisSoapEx
 	*m_Double = strtod (valueAsChar, &end);
 	
 	return m_Double;
+}
+
+WhiteSpace* Double::getWhiteSpace()
+{
+    return new WhiteSpace(COLLAPSE);
 }
 
 AXIS_CPP_NAMESPACE_END

@@ -59,6 +59,14 @@ public:
 	 * @return Deserialized boolean value.
 	 */
     xsd__boolean deserializeBoolean(const AxisChar* valueAsChar) throw (AxisSoapException);
+
+protected:
+
+    /**
+     * Creates a WhiteSpace object to collapse whitespace
+     * @return WhiteSpace object set to collapse whitespace
+     */
+    WhiteSpace* getWhiteSpace();
 };
 
 AXIS_CPP_NAMESPACE_END

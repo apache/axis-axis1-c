@@ -31,15 +31,7 @@ AXIS_CPP_NAMESPACE_START
 	    Hex_Encode (serializedValue, value->__ptr, value->__size);
 	    serializedValue[value->__size * 2] = 0;
 	    
-        if (m_Buf) // Samisa : memory management BP
-        {
-            delete [] m_Buf;
-            m_Buf = NULL;
-        }
-
-	    m_Buf = new char[strlen (serializedValue) + 1];
-	    strcpy (m_Buf, serializedValue);
-        // Samisa: serializedValue no more required, hence clean
+        IAnySimpleType::serialize(serializedValue);
         delete [] serializedValue;
 	    return m_Buf;
     }

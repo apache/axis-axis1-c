@@ -21,13 +21,7 @@ AXIS_CPP_NAMESPACE_START
 		AxisString valueAsString = value;
 		AxisChar* serializedValue = (AxisChar*) replaceReservedCharacters(valueAsString).c_str();
 		
-        if (m_Buf)
-        {
-            delete [] m_Buf;
-            m_Buf = NULL;
-        }
-		m_Buf = new char[strlen (serializedValue) + 1];
-		strcpy (m_Buf, serializedValue);
+        IAnySimpleType::serialize(serializedValue);
         delete [] serializedValue;
 		return m_Buf;
     }
@@ -42,6 +36,11 @@ AXIS_CPP_NAMESPACE_START
 		m_AnyURI = new char[strlen (valueAsChar) + 1];
 		strcpy (m_AnyURI, valueAsChar);
 		return m_AnyURI;
+    }
+
+    WhiteSpace* AnyURI::getWhiteSpace()
+    {
+        return new WhiteSpace(REPLACE);
     }
 
 AXIS_CPP_NAMESPACE_END

@@ -33,13 +33,7 @@ AxisChar* Boolean::serialize(const bool* value) throw (AxisSoapException)
 	AxisSprintf (serializedValue, 6, "%s",
             (*((int *) (value)) == false_) ? "false" : "true");
     
-    if (m_Buf)
-    {
-        delete [] m_Buf;
-        m_Buf = NULL;
-    }
-    m_Buf = new char[strlen (serializedValue) + 1];
-    strcpy (m_Buf, serializedValue);
+    IAnySimpleType::serialize(serializedValue);
     delete [] serializedValue;        
     return m_Buf;
 }
@@ -59,6 +53,11 @@ xsd__boolean Boolean::deserializeBoolean(const AxisChar* valueAsChar) throw (Axi
 	{
 		return false_;
 	}
+}
+
+WhiteSpace* Boolean::getWhiteSpace()
+{
+    return new WhiteSpace(COLLAPSE);
 }
 
 AXIS_CPP_NAMESPACE_END

@@ -21,13 +21,7 @@ AXIS_CPP_NAMESPACE_START
     	AxisChar* serializedValue = new AxisChar[80];
     	strftime (serializedValue, 80, "%Y-%m-%dZ", value);
         
-        if(m_Buf)
-        {
-            delete [] m_Buf;
-            m_Buf = NULL;
-        }
-        m_Buf = new char[strlen (serializedValue) + 1];
-		strcpy (m_Buf, serializedValue);
+        IAnySimpleType::serialize(serializedValue);
         delete [] serializedValue;
 		return m_Buf;
     }
@@ -151,5 +145,10 @@ AXIS_CPP_NAMESPACE_START
         memcpy (m_Date, pTm, sizeof (tm));
         return m_Date;
 	}
+
+    WhiteSpace* Date::getWhiteSpace()
+    {
+        return new WhiteSpace(COLLAPSE);
+    }
 	
 AXIS_CPP_NAMESPACE_END

@@ -15,6 +15,29 @@ IAnySimpleType::~IAnySimpleType()
     }
 }
 
+AxisChar* IAnySimpleType::serialize(const AxisChar* value) throw (AxisSoapException)
+{
+    WhiteSpace* whiteSpace = getWhiteSpace();
+    const AxisChar* serializedValue = whiteSpace->processWhiteSpace(value);
+
+    Pattern* pattern = getPattern();
+    if(pattern->isSet())
+    {
+        pattern->validatePattern(serializedValue);
+    }
+    delete pattern;
+
+    if (m_Buf)
+    {
+        delete [] m_Buf;
+        m_Buf = NULL;
+    } 
+    m_Buf = new char[strlen (serializedValue) + 1];
+    strcpy (m_Buf, serializedValue);
+    delete whiteSpace;
+    return m_Buf;
+}
+
 const AxisString& IAnySimpleType::replaceReservedCharacters(AxisString &value)
 {
     m_strReturnVal = "";
@@ -76,6 +99,16 @@ const AxisString& IAnySimpleType::replaceReservedCharacters(AxisString &value)
 							  */ 
     }
     return m_strReturnVal;
+}
+
+WhiteSpace* IAnySimpleType::getWhiteSpace()
+{
+    return new WhiteSpace(PRESERVE);
+}
+
+Pattern* IAnySimpleType::getPattern()
+{
+    return new Pattern();
 }
 
 AXIS_CPP_NAMESPACE_END

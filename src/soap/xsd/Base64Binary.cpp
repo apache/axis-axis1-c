@@ -32,13 +32,7 @@ AXIS_CPP_NAMESPACE_START
 	    len = apr_base64_encode_binary (serializedValue, value->__ptr, value->__size);
 	    serializedValue[len] = 0;
 	    	    
-        if (m_Buf)
-        {
-            delete [] m_Buf;
-            m_Buf = NULL;
-        }
-	    m_Buf = new char[strlen (serializedValue) + 1];
-		strcpy (m_Buf, serializedValue);
+        IAnySimpleType::serialize(serializedValue);
         delete [] serializedValue;        
 		return m_Buf;
     }

@@ -63,6 +63,14 @@ public:
 	 * @return Deserialized AnyURI value.
 	 */
     AxisChar* deserializeAnyURI(const AxisChar* valueAsChar) throw (AxisSoapException);
+
+protected:
+
+    /**
+     * Creates a WhiteSpace object to replace whitespace
+     * @return WhiteSpace object set to replace whitespace
+     */
+    WhiteSpace* getWhiteSpace();
     
 private:
     AxisChar* m_AnyURI;

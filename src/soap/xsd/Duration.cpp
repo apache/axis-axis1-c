@@ -77,13 +77,7 @@ AXIS_CPP_NAMESPACE_START
 		// Convert from String to Char[]	
 		AxisChar* returnValue = (AxisChar*) serializedValue.c_str ();
        
-        if(m_Buf)
-        {
-            delete [] m_Buf;
-            m_Buf = NULL;
-        }
-		m_Buf = new char[strlen (returnValue) + 1];
-		strcpy (m_Buf, returnValue);
+        IAnySimpleType::serialize(returnValue);
 		return m_Buf;
     }
 	
@@ -139,6 +133,11 @@ AXIS_CPP_NAMESPACE_START
 	    *m_Duration += secs;
 	    
 	    return m_Duration;
+    }
+
+    WhiteSpace* Duration::getWhiteSpace()
+    {
+        return new WhiteSpace(COLLAPSE);
     }
     
 AXIS_CPP_NAMESPACE_END

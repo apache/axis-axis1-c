@@ -19,10 +19,9 @@ AXIS_CPP_NAMESPACE_START
     AxisChar* XSD_QName::serialize(const AxisChar* value) throw (AxisSoapException)
     {
 		AxisString valueAsString = value;
-		AxisChar* returnValue = (AxisChar*) replaceReservedCharacters(valueAsString).c_str();
+		AxisChar* serializedValue = (AxisChar*) replaceReservedCharacters(valueAsString).c_str();
 		
-		m_Buf = new char[strlen (returnValue) + 1];
-		strcpy (m_Buf, returnValue);
+		IAnySimpleType::serialize(serializedValue);
 		return m_Buf;
     }
 	
@@ -31,6 +30,11 @@ AXIS_CPP_NAMESPACE_START
 		m_QName = new char[strlen (valueAsChar) + 1];
 		strcpy (m_QName, valueAsChar);
 		return m_QName;
+    }
+
+    WhiteSpace* XSD_QName::getWhiteSpace()
+    {
+        return new WhiteSpace(COLLAPSE);
     }
 
 AXIS_CPP_NAMESPACE_END

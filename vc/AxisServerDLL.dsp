@@ -270,6 +270,18 @@ SOURCE=..\src\soap\xsd\IAnySimpleType.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\Int.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\Integer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\Long.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\common\MessageData.cpp
 # End Source File
 # Begin Source File
@@ -283,6 +295,10 @@ SOURCE=..\src\soap\xsd\NOTATION.cpp
 # Begin Source File
 
 SOURCE=..\src\common\Param.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\constraints\Pattern.cpp
 # End Source File
 # Begin Source File
 
@@ -379,6 +395,10 @@ SOURCE=..\src\common\TypeMapping.cpp
 # Begin Source File
 
 SOURCE=..\src\soap\URIMapping.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\constraints\WhiteSpace.cpp
 # End Source File
 # Begin Source File
 

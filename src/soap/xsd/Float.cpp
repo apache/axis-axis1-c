@@ -28,13 +28,7 @@ AxisChar* Float::serialize(const float* value) throw (AxisSoapException)
     AxisChar* serializedValue = new char[80];
     AxisSprintf (serializedValue, 80, "%f", *value);
   
-    if (m_Buf)
-    {
-        delete [] m_Buf;
-        m_Buf = NULL;
-    }
-    m_Buf = new char[strlen (serializedValue) + 1];
-    strcpy (m_Buf, serializedValue);
+    IAnySimpleType::serialize(serializedValue);
     delete [] serializedValue;        
     return m_Buf;
 }
@@ -51,6 +45,11 @@ float* Float::deserializeFloat(const AxisChar* valueAsChar) throw (AxisSoapExcep
 	*m_Float = (float) strtod (valueAsChar, &end);
 	
 	return m_Float;
+}
+
+WhiteSpace* Float::getWhiteSpace()
+{
+    return new WhiteSpace(COLLAPSE);
 }
 
 AXIS_CPP_NAMESPACE_END

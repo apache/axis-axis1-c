@@ -38,6 +38,7 @@
 						<include name="engine/server/*.cpp"/>
 						<include name="soap/*.cpp"/>
 						<include name="soap/xsd/*.cpp"/>
+						<include name="soap/xsd/constraints/*.cpp"/>
 						<include name="soap/*.c"/>
 						<include name="wsdd/*.cpp"/>
 						<include name="xml/*.cpp"/>
@@ -70,6 +71,7 @@
 						<include name="soap/*.cpp"/>
 						<include name="soap/*.c"/>
 						<include name="soap/xsd/*.cpp"/>
+						<include name="soap/xsd/constraints/*.cpp"/>
 						<include name="wsdd/*.cpp"/>
 						<include name="xml/*.cpp"/>
 						<include name="transport/axis/AxisTransportException.cpp"/>
