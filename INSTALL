@@ -153,7 +153,7 @@ $AXIS_HOME/web_services
 
 $AXISCPP_HOME/samples/client samples are built and executable are in $AXISCPP_HOME/samples/client
 
-parser and transport layer both is loaded in to axis engine when it is
+parser and transport libraries both are loaded in to axis engine when it is
 loaded by apache.
 
 Now you need to add to $<apache install directory>/conf/httpd.conf
@@ -201,10 +201,15 @@ the name libaxis_expat.so to libaxis_xmlparser.so.
 If we use xerces we need to change
 libaxis_xercesc.so to libaxis_xmlparser.so.
 
-To run interop samples
-cd $AXISCPP_HOME/samples/client
-sh run_interoptests.sh
-
 If you have done installation successfully it will display the Axis C++ welcome page when you point to URI http://localhost/axis .
 Note: In the axis welcome page all the services in $AXIS_HOME/conf/server.wsdd are listed. This does not mean
 that the libraries corresponding to these services are deployed yet. It merely list whatever in the server.wsdd.
+
+To run interop samples
+cd $AXISCPP_HOME/samples/client
+sh run_interoptests.sh
+By default this script assumes that apache is running in the localhost at port 80
+if you have different url type
+sh run_interoptests.sh -u <url> -p <port>
+
+
