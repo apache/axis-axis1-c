@@ -11,10 +11,10 @@
 #XMLParser:The xml parser library
 #NodeName:Node name
 #ListenPort:Listening port
+#Channel_ssl:/usr/local/axiscpp_deploy/lib/libaxis2_ssl_channel.so
 
 LogPath:/usr/local/axiscpp_deploy/log/AxisLog
 WSDDFilePath:/usr/local/axiscpp_deploy/etc/server.wsdd
 ClientLogPath:/usr/local/axiscpp_deploy/log/AxisClientLog
 XMLParser:/usr/local/axiscpp_deploy/lib/libaxis_xmlparser.so
 Transport_http:/usr/local/axiscpp_deploy/lib/libaxis2_transport.so
-Channel_ssl:/usr/local/axiscpp_deploy/lib/libaxis2_ssl_channel.so
