@@ -654,20 +654,17 @@ IAttribute* HeaderBlock::createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE
                     case ROLE_NEXT:
                         pAttribute = new Attribute("role",
                             gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,
-                            "","http://www.w3.org/2003/05/soap-envelope \
-                            /role/next");
+                            "", "http://www.w3.org/2003/05/soap-envelope/role/next");
                         break;
                     case ROLE_NONE:
                         pAttribute = new Attribute("role",
                             gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,
-                            "","http://www.w3.org/2003/05/soap-envelope\
-                            /role/none");
+                            "", "http://www.w3.org/2003/05/soap-envelope/role/none");
                         break;
                     case ROLE_ULTIMATE_RECEIVER:
                         pAttribute = new Attribute("role",
                             gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,
-                            "","http://www.w3.org/2003/05/soap-envelope/role\
-                            /ultimateReceiver");
+                            "", "http://www.w3.org/2003/05/soap-envelope/role/ultimateReceiver");
                         break;
                     case MUST_UNDERSTAND_TRUE:
                         pAttribute = new Attribute("mustUnderstand",
