@@ -178,7 +178,7 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
                         pStream->sendBytes
                             ("</td><td width=\"10%\" align=\"left\"><a href=\"./",
                             NULL);
-                        if (bNoExt) pStream->sendBytes("axis/", NULL);
+                        //if (bNoExt) pStream->sendBytes("axis/", NULL);
                         pStream->sendBytes((char*) pService->
                             getServiceName (), NULL);
                         pStream->sendBytes("?wsdl", NULL);
@@ -302,10 +302,14 @@ extern "C" int initialize_module (int bServer)
             SOAPTransportFactory::initialize();
 #if defined(ENABLE_AXISTRACE)
             status = g_pAT->openFileByClient ();
+            /* //Samisa: 01/09/2004
+               //Fix for AXISCPP-127
+               //Do not stop here merely because log file location ClientLogPath is incorrect
             if (status == AXIS_FAIL)
             {
                 return AXIS_FAIL;
             }
+            */
 #endif
 			char *pClientWsddPath = 
 			g_pConfig->getAxisConfProperty(AXCONF_CLIENTWSDDFILEPATH);
