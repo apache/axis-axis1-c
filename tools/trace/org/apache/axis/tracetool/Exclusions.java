@@ -39,6 +39,10 @@ public class Exclusions {
 			"apr_base64.c",
 			"apr_base64.h",
 			"apr_xlate.h",
+                  // Axis.cpp contains a copyright sign (circle with a "C" in it) which 
+                  // makes readline throw a MalformedInputException on linux possibly due to 
+                  // locale/charset problems.
+                  "Axis.cpp",
 		//Don't trace trace
 		"AxisTrace.cpp", "AxisTrace.h", "GDefine.h", "AxisFile.h" }));
 
