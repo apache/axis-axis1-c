@@ -171,6 +171,8 @@ private:
     BasicTypeSerializer m_BTSZ;
     SOAPTransport* m_pOutputStream;
 public:
+	IHeaderBlock* getHeaderBlock(const AxisChar* pcName, const AxisChar* pcNamespace);
+	IHeaderBlock* getHeaderBlock();
 	int setSOAPMethodAttribute(Attribute* pAttribute);
 	SoapMethod* getSOAPMethod();
     IHeaderBlock* createHeaderBlock(AxisChar *pachLocalName,

@@ -37,8 +37,10 @@ public:
     virtual int AXISCALL addHeaderBlock(IHeaderBlock* pBlk)=0;
     virtual int setSoapHeader(SoapHeader* pSoapHeader)=0;
     virtual    int setSoapVersion(SOAP_VERSION)=0;
-    
-    
+	virtual IHeaderBlock* getHeaderBlock() = 0;
+	virtual IHeaderBlock* getHeaderBlock(const AxisChar *pcName, 
+											 const AxisChar *pcNamespace) = 0;
+        
     /*
      * A handler may get the entire soap body and encrypt/compress 
      * it and encode to either base64Binary or hexBinary before 

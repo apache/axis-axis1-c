@@ -157,7 +157,7 @@ IHeaderBlock* SoapDeSerializer::getHeaderBlock(const AxisChar* pName,
     if (!m_pHeader) return NULL; /* there has been no <Header> element so there
                                   * can be no Header blocks */
 
-    return m_pHeader->getHeaderBlock(pName, pNamespace);
+    return m_pHeader->getHeaderBlock(pName, pNamespace, true);
 }
                                                
 int SoapDeSerializer::getHeader()
@@ -3336,7 +3336,7 @@ HeaderBlock* SoapDeSerializer::getHeaderBlock()
 {
     if (!m_pHeader) return NULL;
 
-    return (HeaderBlock*)m_pHeader->getHeaderBlock();
+    return (HeaderBlock*)m_pHeader->getHeaderBlock(true);
 }
 /*
  * Used probably by a handler to add a header block to the Deserializer.
