@@ -255,7 +255,7 @@ public class ClientStubWriter extends CFileWriter{
 		else{
 			writer.write(";\n");
 		}
-		writer.write("\tpCall->SetHeader("+globalobjectname+", \"SOAPAction\", \""+wscontext.getSerInfo().getServicename()+"\");\n");
+		writer.write("\tpCall->SetTransportProperty("+globalobjectname+",SOAPACTION_HEADER , \""+minfo.getSoapAction()+"\");\n");		
 		writer.write("\tpCall->SetSOAPVersion("+globalobjectname+", SOAP_VER_1_1);\n"); //TODO check which version is it really.
 		writer.write("\tpCall->SetOperation("+globalobjectname+", \""+methodName+"\", \""+ wscontext.getWrapInfo().getTargetNameSpaceOfWSDL() +"\");\n");
 		for (int i = 0; i < paramsB.size(); i++) {
