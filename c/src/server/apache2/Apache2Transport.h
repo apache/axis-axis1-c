@@ -26,13 +26,21 @@
 #if !defined(AXIS_APACHE2TRANSPORT_H__OF_AXIS_INCLUDED_)
 #define AXIS_APACHE2TRANSPORT_H__OF_AXIS_INCLUDED_
 
-#include <apache2_0/httpd.h>
+/*#include <apache2_0/httpd.h>
 #include <apache2_0/http_config.h>
 #include <apache2_0/http_core.h>
 #include <apache2_0/http_protocol.h>
 #include <apache2_0/http_log.h>
 #include <apache2_0/ap_compat.h>
 #include <apache2_0/apr_tables.h>
+*/
+#include <httpd.h>
+#include <http_config.h>
+#include <http_core.h>
+#include <http_protocol.h>
+#include <http_log.h>
+#include <ap_compat.h>
+#include <apr_tables.h>
 #include "../../transport/SOAPTransport.h"
 #include <string.h>
 

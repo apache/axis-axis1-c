@@ -1,5 +1,6 @@
 noinst_LTLIBRARIES = libxml.la
-SUBDIRS = expat xerces
+SUBDIRS = @EXPATBUILD@ @XERCESCBUILD@
+#SUBDIRS = expat xerces
 #SUBDIRS = expat
 #SUBDIRS = xerces
 
