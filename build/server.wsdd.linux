@@ -63,5 +63,8 @@
 	<service name="XSDAttributeService" provider="CPP:DOCUMENT" description="Axis C++ web service">
 		<parameter name="className" value="&wspath;/libXSDAttribute.so"/>
 		<parameter name="allowedMethods" value="getDataBoolean getDataByte getDataUnsignedByte getDataShort getDataUnsignedShort getDataInt getDataUnsignedInt getDataLong getDataUnsignedLong getDataFloat getDataDouble getDataString getDataDate getDataDateTime getDataTime getDataBase64Binary getDataHexBinary getDataInteger getDataDecimal getDataQName getDataAnyURI "/>
+	<service name="FirstLevelElemType" provider="CPP:DOCUMENT" description="Axis C++ web service">
+		<parameter name="className" value="&wspath;/libFirstLevelElemType.so"/>
+		<parameter name="allowedMethods" value="RetrieveTestDoc "/>
 	</service>
 </deployment>
