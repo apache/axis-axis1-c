@@ -143,6 +143,9 @@ public:
 	int AXISCALL AddOutputCmplxParam(void* pObject, void* pSZFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
 	int AXISCALL SerializeCmplxArray(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace);
 	int AXISCALL SerializeBasicArray(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName);
+	/* following two functions are needed by serializer functions of complex types for RPC style web services */
+	void AXISCALL SerializeStartElementOfType(const AxisChar* pName, const AxisChar* pNamespace, const AxisChar* pPrefix);
+	void AXISCALL SerializeEndElementOfType(const AxisChar* pName);
 
 private:
 	int SendSerializedBuffer();

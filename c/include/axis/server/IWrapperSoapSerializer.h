@@ -89,7 +89,9 @@ typedef struct {
 	/* Basic Type Serializing methods */
 	int (AXISCALL* SerializeAsElement)(void* pObj, const AxisChar* sName, void* pValue, XSDTYPE type);
 	int (AXISCALL* SerializeAsAttribute)(void* pObj, const AxisChar* sName, const AxisChar* pNamespace, void* pValue, XSDTYPE type);
-	void (AXISCALL* Serialize)(void* pObj, const char* pFirst, ...);
+	void (AXISCALL* Serialize)(void* pObj, const char* pFirst);
+	void (AXISCALL* SerializeStartElementOfType)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace, const AxisChar* pPrefix);
+	void (AXISCALL* SerializeEndElementOfType)(void* pObj, const AxisChar* pName);
 }IWrapperSoapSerializerFunctions;
 
 #ifndef __cplusplus
@@ -105,6 +107,7 @@ typedef struct {
     @brief interface for the IWrapperSoapSerializer class.
 
 
+    @author Susantha Kumara (skumara@virtusa.com, susantha@opensource.lk)
     @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
 
 */
@@ -131,6 +134,9 @@ public:
 	virtual int AXISCALL SerializeAsElement(const AxisChar* sName, void* pValue, XSDTYPE type)=0;
 	virtual int AXISCALL SerializeAsAttribute(const AxisChar* sName, const AxisChar* pNamespace, void* pValue, XSDTYPE type)=0;
 	virtual void AXISCALL Serialize(const char* pFirst, ...)=0;
+	/* following two functions are needed by serializer functions of complex types for RPC style web services */
+	virtual void AXISCALL SerializeStartElementOfType(const AxisChar* pName, const AxisChar* pNamespace, const AxisChar* pPrefix)=0;
+	virtual void AXISCALL SerializeEndElementOfType(const AxisChar* pName)=0;
 	/* following stuff is needed to provide the interface for C web services */
 public:
 	static IWrapperSoapSerializerFunctions ms_VFtable;
@@ -156,8 +162,12 @@ public:
 	{ return ((IWrapperSoapSerializer*)pObj)->SerializeAsElement(sName, pValue, type);};
 	static int AXISCALL s_SerializeAsAttribute(void* pObj, const AxisChar* sName, const AxisChar* pNamespace, void* pValue, XSDTYPE type)
 	{ return ((IWrapperSoapSerializer*)pObj)->SerializeAsAttribute(sName, pNamespace, pValue, type);};
-	static void AXISCALL s_Serialize(void* pObj, const char* pFirst, ...)
-	{ ((IWrapperSoapSerializer*)pObj)->Serialize(pFirst);};
+	static void AXISCALL s_Serialize(void* pObj, const char* pFirst)
+	{ ((IWrapperSoapSerializer*)pObj)->Serialize(pFirst, 0);};
+	static void AXISCALL s_SerializeStartElementOfType(void* pObj, const AxisChar* pName, const AxisChar* pNamespace, const AxisChar* pPrefix)
+	{ ((IWrapperSoapSerializer*)pObj)->SerializeStartElementOfType(pName, pNamespace, pPrefix);}
+	static void AXISCALL s_SerializeEndElementOfType(void* pObj, const AxisChar* pName)
+	{ ((IWrapperSoapSerializer*)pObj)->SerializeEndElementOfType(pName);}
 	static void s_Initialize()
 	{
 		ms_VFtable.CreateSoapMethod = s_CreateSoapMethod;
@@ -172,6 +182,8 @@ public:
 		ms_VFtable.SerializeAsElement = s_SerializeAsElement;
 		ms_VFtable.SerializeAsAttribute = s_SerializeAsAttribute;
 		ms_VFtable.Serialize = s_Serialize;
+		ms_VFtable.SerializeStartElementOfType = s_SerializeStartElementOfType;
+		ms_VFtable.SerializeEndElementOfType = s_SerializeEndElementOfType;
 	}
 };
 

@@ -146,7 +146,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 				}
 			}
 		}
-		writer.write("\tpSZX->Serialize(pSZ, \">\", NULL);\n");
+		writer.write("\tpSZX->Serialize(pSZ, \">\");\n");
 		writer.write("\t/* then serialize elements if any*/\n");
 		for(int i = attributeParamCount; i< attribs.length;i++){
 			if(attribs[i].isArray()){
@@ -165,9 +165,9 @@ public class BeanParamWriter extends ParamCFileWriter{
 				writer.write("\tpSZX->SerializeAsElement(pSZ, \""+attribs[i].getParamName()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 			}else{
 				//if complex type
-				writer.write("\tpSZX->Serialize(pSZ, \"<"+attribs[i].getParamName()+">\", 0);\n");
+				writer.write("\tpSZX->Serialize(pSZ, \"<"+attribs[i].getParamName()+">\");\n");
 				writer.write("\tAxis_Serialize_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+", pSZ, false);\n");
-				writer.write("\tpSZX->Serialize(pSZ, \"</"+attribs[i].getParamName()+">\", 0);\n");
+				writer.write("\tpSZX->Serialize(pSZ, \"</"+attribs[i].getParamName()+">\");\n");
 			}			
 		}
 		writer.write("\treturn AXIS_SUCCESS;\n");

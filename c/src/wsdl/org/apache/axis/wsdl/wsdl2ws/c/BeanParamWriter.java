@@ -64,10 +64,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import javax.xml.namespace.QName;
-
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
-import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
@@ -130,18 +127,16 @@ public class BeanParamWriter extends ParamCFileWriter{
 			 System.out.println("possible error calss with no attributes....................");
 			 return;
 		}
-		writer.write("\tIWrapperSoapSerializerX* pSZX = pSZ->__vfptr;\n");
+		writer.write("\tIWrapperSoapSerializerFunctions* pSZX = pSZ->__vfptr;\n");
 		writer.write("\tconst AxisChar* sPrefix;\n");
 		writer.write("\tif (bArray)\n");
 		writer.write("\t{\n");
-		writer.write("\t\tpSZX->Serialize(pSZ, \"<\", Axis_TypeName_"+classname+", \">\", NULL);\n");
+		writer.write("\t\tpSZX->SerializeStartElementOfType(pSZ, Axis_TypeName_"+classname+", 0, 0);\n");
 		writer.write("\t}\n");
 		writer.write("\telse\n");
 		writer.write("\t{\n");
 		writer.write("\t\tsPrefix = pSZX->GetNamespacePrefix(pSZ, Axis_URI_"+classname+");\n");
-		writer.write("\t\tpSZX->Serialize(pSZ, \"<\", Axis_TypeName_"+classname+", \" xsi:type=\\\"\", sPrefix, \":\",\n"); 
-		writer.write("\t\t\tAxis_TypeName_"+classname+", \"\\\" xmlns:\", sPrefix, \"=\\\"\",\n"); 
-		writer.write("\t\t\tAxis_URI_"+classname+", \"\\\">\", NULL);\n");
+		writer.write("\t\tpSZX->SerializeStartElementOfType(pSZ, Axis_TypeName_"+classname+", Axis_URI_"+classname+", sPrefix,);\n");
 		writer.write("\t}\n\n");
 		String arrayType = null;
 		for(int i = 0; i< attribs.length;i++){
@@ -174,7 +169,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 				writer.write("\tAxis_Serialize_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+", pSZ, false);\n");
 			}			
 		}
-		writer.write("\n\tpSZX->Serialize(pSZ, \"</\", Axis_TypeName_"+classname+", \">\", NULL);\n");
+		writer.write("\n\tpSZX->SerializeEndElementOfType(pSZ, Axis_TypeName_"+classname+", 0);\n");
 		writer.write("\treturn AXIS_SUCCESS;\n");
 		writer.write("}\n\n");
 	
@@ -190,7 +185,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 			 System.out.println("possible error calss with no attributes....................");
 			 return;
 		}
-		writer.write("\tIWrapperSoapDeSerializerX* pDZX = pDZ->__vfptr;\n");
+		writer.write("\tIWrapperSoapDeSerializerFunctions* pDZX = pDZ->__vfptr;\n");
 		boolean aretherearrayattribs = false;
 		for(int i = 0; i< attribs.length;i++){
 			if(attribs[i].isArray()){

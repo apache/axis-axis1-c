@@ -76,6 +76,7 @@ public class CUtils {
 	private static Hashtable qname2classmap = new Hashtable();
 	private static Hashtable type2getValueMethodName = new Hashtable();
 	private static Hashtable type2BasicArrayName = new Hashtable();
+	private static Hashtable basicType2EnumMap = new Hashtable();
 	
 	static{	
 		class2QNamemap.put("int", new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"));
@@ -93,6 +94,12 @@ public class CUtils {
 		class2QNamemap.put("xsd__hexBinary", new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"));
 		class2QNamemap.put("xsd__decimal", new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
 		class2QNamemap.put("xsd__boolean", new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
+		class2QNamemap.put("xsd__anyURI", new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"));
+		class2QNamemap.put("xsd__unsignedByte", new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedByte"));
+		class2QNamemap.put("xsd__unsignedInt", new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedInt"));
+		class2QNamemap.put("xsd__unsignedLong", new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"));
+		class2QNamemap.put("xsd__unsignedShort", new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"));
+		class2QNamemap.put("xsd__QName", new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"));
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"), "int");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"), "unsigned char");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"), "float");
@@ -108,6 +115,12 @@ public class CUtils {
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"), "xsd__hexBinary");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"), "xsd__decimal");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"), "xsd__boolean");
+		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"), "xsd__anyURI");
+		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedByte"), "xsd__unsignedByte");
+		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedInt"), "xsd__unsignedInt");
+		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"), "xsd__unsignedLong");
+		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"), "xsd__unsignedShort");
+		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"), "xsd__QName");
 		type2getValueMethodName.put("int","Int");
 		type2getValueMethodName.put("float","Float");
 		type2getValueMethodName.put("xsd__string","String");
@@ -115,10 +128,10 @@ public class CUtils {
 		type2getValueMethodName.put("short","Short");
 		type2getValueMethodName.put("char","Char");
 		type2getValueMethodName.put("double","Double");
-		type2getValueMethodName.put("unsigned long","UnsignedLong");
-		type2getValueMethodName.put("unsigned int","UnsignedInt");
-		type2getValueMethodName.put("unsigned short","UnsignedShort");
-		type2getValueMethodName.put("unsigned char","UnsignedChar");
+		type2getValueMethodName.put("xsd__unsignedLong","UnsignedLong");
+		type2getValueMethodName.put("xsd__unsignedInt","UnsignedInt");
+		type2getValueMethodName.put("xsd__unsignedShort","UnsignedShort");
+		type2getValueMethodName.put("xsd__unsignedByte","UnsignedChar");
 		type2getValueMethodName.put("xsd__dateTime","DateTime");
 		type2getValueMethodName.put("xsd__date","Date");
 		type2getValueMethodName.put("xsd__time","Time");
@@ -126,6 +139,8 @@ public class CUtils {
 		type2getValueMethodName.put("xsd__hexBinary","HexBinary");
 		type2getValueMethodName.put("xsd__decimal","Decimal");
 		type2getValueMethodName.put("xsd__boolean","Boolean");
+		type2getValueMethodName.put("xsd__anyURI","String");
+		type2getValueMethodName.put("xsd__QName","String");
 		type2BasicArrayName.put("int","xsd__int_Array");
 		type2BasicArrayName.put("float","xsd__float_Array");
 		type2BasicArrayName.put("xsd__string","xsd__string_Array");
@@ -133,10 +148,10 @@ public class CUtils {
 		type2BasicArrayName.put("short","xsd__short_Array");
 		type2BasicArrayName.put("char","xsd__byte_Array");
 		type2BasicArrayName.put("double","xsd__double_Array");
-		type2BasicArrayName.put("unsigned long","xsd__unsignedLong_Array");
-		type2BasicArrayName.put("unsigned int","xsd__unsignedInt_Array");
-		type2BasicArrayName.put("unsigned short","xsd__unsignedShort_Array");
-		type2BasicArrayName.put("unsigned char","xsd__unsignedByte_Array");
+		type2BasicArrayName.put("xsd__unsignedLong","xsd__unsignedLong_Array");
+		type2BasicArrayName.put("xsd__unsignedInt","xsd__unsignedInt_Array");
+		type2BasicArrayName.put("xsd__unsignedShort","xsd__unsignedShort_Array");
+		type2BasicArrayName.put("xsd__unsignedByte","xsd__unsignedByte_Array");
 		type2BasicArrayName.put("xsd__dateTime","xsd__dateTime_Array");
 		type2BasicArrayName.put("xsd__date","xsd__date_Array");
 		type2BasicArrayName.put("xsd__time","xsd__time_Array");
@@ -144,7 +159,30 @@ public class CUtils {
 		type2BasicArrayName.put("xsd__hexBinary","xsd__hexBinary_Array");
 		type2BasicArrayName.put("xsd__decimal","xsd__decimal_Array");
 		type2BasicArrayName.put("xsd__boolean","xsd__boolean_Array");
+		type2BasicArrayName.put("xsd__anyURI","xsd__anyURI_Array");
+		type2BasicArrayName.put("xsd__QName","xsd__QName_Array");
+		basicType2EnumMap.put("int","XSD_INT");
+		basicType2EnumMap.put("float","XSD_FLOAT");
+		basicType2EnumMap.put("xsd__string","XSD_STRING");
+		basicType2EnumMap.put("long","XSD_LONG");
+		basicType2EnumMap.put("short","XSD_SHORT");
+		basicType2EnumMap.put("char","XSD_BYTE");
+		basicType2EnumMap.put("double","XSD_DOUBLE");
+		basicType2EnumMap.put("xsd__unsignedLong","XSD_UNSIGNEDLONG");
+		basicType2EnumMap.put("xsd__unsignedInt","XSD_UNSIGNEDINT");
+		basicType2EnumMap.put("xsd__unsignedShort","XSD_UNSIGNEDSHORT");
+		basicType2EnumMap.put("xsd__unsignedByte","XSD_UNSIGNEDBYTE");
+		basicType2EnumMap.put("xsd__dateTime","XSD_DATETIME");
+		basicType2EnumMap.put("xsd__date","XSD_DATE");
+		basicType2EnumMap.put("xsd__time","XSD_TIME");
+		basicType2EnumMap.put("xsd__base64Binary","XSD_BASE64BINARY");
+		basicType2EnumMap.put("xsd__hexBinary","XSD_HEXBINARY");
+		basicType2EnumMap.put("xsd__decimal","XSD_DECIMAL");
+		basicType2EnumMap.put("xsd__boolean","XSD_BOOLEAN");
+		basicType2EnumMap.put("xsd__anyURI","XSD_ANYURI");
+		basicType2EnumMap.put("xsd__QName","XSD_QNAME");
 	}
+	
 	public static boolean isSimpleType(String name){
 		if(class2QNamemap.containsKey(name))
 			return true;
@@ -186,25 +224,11 @@ public class CUtils {
 		return wname.substring(0, wname.length()- CUtils.WRAPPER_NAME_APPENDER.length());
 	}
 	public static String getXSDTypeForBasicType(String stype){
-		if ("int".equals(stype)) return "XSD_INT";
-		else if ("xsd__string".equals(stype)) return "XSD_STRING";
-		else if ("unsigned int".equals(stype)) return "XSD_UNSIGNEDINT";
-		else if ("short".equals(stype)) return "XSD_SHORT";
-		else if ("unsigned short".equals(stype)) return "XSD_UNSIGNEDSHORT";
-		else if ("long".equals(stype)) return "XSD_LONG";
-		else if ("unsigned long".equals(stype)) return "XSD_UNSIGNEDLONG";
-		else if ("char".equals(stype)) return "XSD_BYTE";
-		else if ("unsigned char".equals(stype)) return "XSD_BYTE";
-		else if ("float".equals(stype)) return "XSD_FLOAT";
-		else if ("double".equals(stype)) return "XSD_DOUBLE";
-		else if ("xsd__dateTime".equals(stype)) return "XSD_DATETIME";
-		else if ("xsd__date".equals(stype)) return "XSD_DATE";
-		else if ("xsd__time".equals(stype)) return "XSD_TIME";
-		else if ("xsd__base64Binary".equals(stype)) return "XSD_BASE64BINARY";
-		else if ("xsd__hexBinary".equals(stype)) return "XSD_HEXBINARY";
-		else if ("xsd__decimal".equals(stype)) return "XSD_DECIMAL";
-		else if ("xsd__boolean".equals(stype)) return "XSD_BOOLEAN";
-		else return "unknown type";
+		String enumName;
+		if((enumName = (String)basicType2EnumMap.get(stype))!= null){
+			return enumName;
+		}
+		return null;	
 	}
 	public static String getBasicArrayNameforType(String stype){
 		String arrayName;
