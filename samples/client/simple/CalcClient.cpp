@@ -1,4 +1,4 @@
-#include "Calculator.h"
+#include "Calculator.hpp"
 #include <axis/AxisException.hpp>
 #include <iostream>
 
