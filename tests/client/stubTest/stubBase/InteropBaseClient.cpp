@@ -142,24 +142,24 @@ main(int argc, char *argv[])
     else
 	printf("failed\n");
 
-    printf("Test trasport property accessors\n");
-    printf("First trasport key = %s\n", ws.getFirstTrasportPropertyKey());
-    printf("First trasport value = %s\n",
-	   ws.getCurrentTrasportPropertyValue());
+    printf("Test transport property accessors\n");
+    printf("First transport key = %s\n", ws.getFirstTransportPropertyKey());
+    printf("First transport value = %s\n",
+	   ws.getCurrentTransportPropertyValue());
     const char *key = NULL;
     int count = 1;
-    while (key = ws.getNextTrasportPropertyKey())
+    while (key = ws.getNextTransportPropertyKey())
     {
-	printf("Next trasport key = %s\n", key);
-	printf("Next trasport value = %s\n",
-	       ws.getCurrentTrasportPropertyValue());
+	printf("Next transport key = %s\n", key);
+	printf("Next transport value = %s\n",
+	       ws.getCurrentTransportPropertyValue());
 	count++;
-	//test removal of last trasport property
+	//test removal of last transport property
 	if (count == 3)
-	    ws.deleteCurrentTrasportProperty();
+	    ws.deleteCurrentTransportProperty();
     }
 
-    //ws.deleteTrasportProperty("Accept-Language", 2);
+    //ws.deleteTransportProperty("Accept-Language", 2);
 
     printf("First header block no of children = %d\n",
 	   ws.getFirstSOAPHeaderBlock()->getNoOfChildren());

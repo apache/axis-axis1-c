@@ -75,26 +75,26 @@ main(int argc, char *argv[])
         printf("Unknown exception\n");
     }
 
-    printf("Test trasport property accessors\n");
-    printf("First trasport key = %s\n", ws.getFirstTrasportPropertyKey());
-    printf("First trasport value = %s\n",
-           ws.getCurrentTrasportPropertyValue()); 
+    printf("Test transport property accessors\n");
+    printf("First transport key = %s\n", ws.getFirstTransportPropertyKey());
+    printf("First transport value = %s\n",
+           ws.getCurrentTransportPropertyValue()); 
     const char *key = NULL;
     int count = 1;
-    while (key = ws.getNextTrasportPropertyKey())
+    while (key = ws.getNextTransportPropertyKey())
     {
-        printf("Next trasport key = %s\n", key);
-        printf("Next trasport value = %s\n",
-               ws.getCurrentTrasportPropertyValue());
+        printf("Next transport key = %s\n", key);
+        printf("Next transport value = %s\n",
+               ws.getCurrentTransportPropertyValue());
         count++;
-        //test removal of last trasport property
+        //test removal of last transport property
         if (count == 4)
-            ws.deleteCurrentTrasportProperty();
+            ws.deleteCurrentTransportProperty();
     }
 
     //test removing HTTP headers
-    ws.deleteTrasportProperty("Accept-Language", 1);
-    ws.deleteTrasportProperty("Date");
+    ws.deleteTransportProperty("Accept-Language", 1);
+    ws.deleteTransportProperty("Date");
 
     //now the request should not have these removed headers
     try
