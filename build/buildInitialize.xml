@@ -19,6 +19,11 @@
 	<property name="dir.include" value="${basedir}/include"/>
 	<property name="dir.tools" value="${basedir}/tools"/>
 
+	<!--
+	  Load versioning information from version.properties
+	  -->
+	<property file="${basedir}/build/version.properties"/>
+
 	<property environment="env"/>
 
 
@@ -206,15 +211,6 @@
 		<condition property="platform" value="OS400">
 			<isset property="os400"/>
 		</condition>
-
-		<tstamp >
-			<format property="revision" pattern="yyyy_MM_dd"/>
-		</tstamp>
-		
-		<!--
-		  Load versioning information from version.properties
-		  -->
-		<property file="${basedir}/build/version.properties"/>
 		
 		<!-- Load properties from file -->
 		<property file="${basedir}/build/build.${platform}.properties"/>
