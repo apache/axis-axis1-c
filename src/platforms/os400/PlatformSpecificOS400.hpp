@@ -85,6 +85,16 @@ extern char*      cvtSingleByteAsciiToEbcdicStr( char* );
 #include <string>
 #define PLATFORM_GET_ERROR_MESSAGE(errorNumber) new string();
 
+/**
+ * type to be used for 64bit integers
+ */
+#define LONGLONG long long
+
+/**
+ * Format string to be used in printf for 64bit integers
+ */
+#define PRINTF_LONGLONG_FORMAT_SPECIFIER "%lld"
+
 #endif
 
 

@@ -35,6 +35,7 @@
 #include "xsd/Double.hpp"
 #include "xsd/Decimal.hpp"
 #include "xsd/Integer.hpp"
+#include "xsd/Long.hpp"
 #include "../platforms/PlatformAutoSense.hpp"
 
 AXIS_CPP_NAMESPACE_START

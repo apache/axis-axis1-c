@@ -86,8 +86,10 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
             m_sSZ += m_Buf;
             break;
         case XSD_LONG:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, PRINTF_LONGLONG_FORMAT_SPECIFIER, *((LONGLONG*)(pValue)));
-            m_sSZ += m_Buf;
+            {
+                Long longSerializer;
+                m_sSZ += longSerializer.serialize(pValue);
+            }
             break;
         case XSD_INTEGER:
             {
@@ -301,8 +303,10 @@ const AxisChar* BasicTypeSerializer::serializeAsAttribute
             m_sSZ += m_Buf;
             break;
         case XSD_LONG:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, PRINTF_LONGLONG_FORMAT_SPECIFIER, *((LONGLONG*)(pValue)));
-            m_sSZ += m_Buf;
+            {
+                Long longSerializer;
+                m_sSZ += longSerializer.serialize(pValue);
+            }
             break;
         case XSD_INTEGER:
             {

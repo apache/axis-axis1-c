@@ -44,6 +44,7 @@
 #include "../soap/xsd/Double.hpp"
 #include "../soap/xsd/Decimal.hpp"
 #include "../soap/xsd/Integer.hpp"
+#include "../soap/xsd/Long.hpp"
 
 using namespace std;
 
