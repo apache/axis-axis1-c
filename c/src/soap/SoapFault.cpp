@@ -125,7 +125,6 @@ void SoapFault::initialize()
  */
 SoapFault* SoapFault::getSoapFault(int iFaultCode)
 {   
-    const char* temp; 
     SoapFault* pSoapFault= NULL;
 
     /* fill the soap fault object */

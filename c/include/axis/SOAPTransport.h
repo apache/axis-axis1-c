@@ -34,12 +34,9 @@
 
 #ifdef __cplusplus
 
-class SOAPTransport  
+class AxisIOStream
 {
 public:
-	virtual ~SOAPTransport(){};
-    virtual int openConnection()=0;
-    virtual void closeConnection()=0;
 	/**
 	 * Used to send buffers to the transport layer. Axis Engine may call this method multiple 
 	 * times. Its upto the transport to decide how they are sent (chunked/unchunked etc). This 
@@ -53,15 +50,23 @@ public:
 	 */
     virtual AXIS_TRANSPORT_STATUS sendBytes(const char* pcSendBuffer, const void* pBufferid)=0;
 	/**
+	 * Used to get part of or all SOAP message. 
+	 */
+    virtual AXIS_TRANSPORT_STATUS getBytes(char* pcBuffer, int* piRetSize)=0;
+};
+
+class SOAPTransport : public AxisIOStream
+{
+public:
+	virtual ~SOAPTransport(){};
+    virtual int openConnection()=0;
+    virtual void closeConnection()=0;
+	/**
 	 * Method used to register the callback function which is called by transport layer to inform
 	 * Axis Engine that a buffer given to it is sent and it can be re-used by Axis Engine. 
 	 * 
 	 */
 	virtual void registerReleaseBufferCallback(AXIS_ENGINE_CALLBACK_RELEASE_SEND_BUFFER pFunct)=0;
-	/**
-	 * Used to get part of or all SOAP message. 
-	 */
-    virtual AXIS_TRANSPORT_STATUS getBytes(char* pcBuffer, int* piRetSize)=0;
     virtual void setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE eType, const char* pcValue)=0;
     virtual const char* getTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE eType)=0;
     virtual void setTransportProperty(const char* pcKey, const char* pcValue)=0;

@@ -37,8 +37,7 @@ enum DEPLOYMENTTYPE {DT_DEPLOYMENT, DT_UNDEPLOYMENT};
  */
 class WSDDDeployment
 {
-    friend class WSDDDocumentExpat;
-    friend class WSDDDocumentXerces;
+    friend class WSDDDocument;
 public:
     int loadWSDD(const AxisChar* sWSDD);
     int updateWSDD(const AxisChar* sWSDD);

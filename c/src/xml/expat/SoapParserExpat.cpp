@@ -23,9 +23,9 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include "../xml/Event.h"
-#include "../xml/SimpleAttribute.h"
-#include "../xml/StartElement.h"
+#include "../Event.h"
+#include "../SimpleAttribute.h"
+#include "../StartElement.h"
 
 #include "SoapParserExpat.h"
 
@@ -35,13 +35,18 @@ SoapParserExpat::SoapParserExpat()
 {
     m_pLastEvent = NULL;
     m_Parser = XML_ParserCreateNS(NULL, NAMESPACESEPARATOR);
-    m_nTransportStatus = TRANSPORT_IN_PROGRESS;
 	m_pCurrentBuffer = 0;
 }
 
 SoapParserExpat::~SoapParserExpat()
 {
     if (m_pLastEvent) delete m_pLastEvent;
+    while (!m_Events.empty())
+    {
+        m_pLastEvent = m_Events.front();
+        m_Events.pop();
+        delete m_pLastEvent;
+    }
     XML_ParserFree(m_Parser);
 }
 
@@ -238,32 +243,34 @@ const AnyElement* SoapParserExpat::next(bool isCharData)
 int SoapParserExpat::parseNext()
 {
     int nChars = EXPAT_BUFFER_SIZE;
+    AXIS_TRANSPORT_STATUS iTransportStatus;
 	m_pCurrentBuffer = (char*) XML_GetBuffer(m_Parser, EXPAT_BUFFER_SIZE);
 	if (m_pCurrentBuffer)
 	{
-		m_nTransportStatus = m_pInputStream->getBytes(m_pCurrentBuffer, &nChars);
+		iTransportStatus = m_pInputStream->getBytes(m_pCurrentBuffer, &nChars);
 		if (nChars > 0)
 		{
 			if (XML_STATUS_ERROR == XML_ParseBuffer(m_Parser, nChars, false))
 				m_nStatus = AXIS_FAIL;
 		}
-		if (TRANSPORT_FAILED == m_nTransportStatus) XML_ParseBuffer(m_Parser, 0, true);
+		if (TRANSPORT_FAILED == iTransportStatus) XML_ParseBuffer(m_Parser, 0, true);
 	}
     /* end of parsing */
-    return m_nTransportStatus;
+    return iTransportStatus;
 }
 
 int SoapParserExpat::getStatus()
 {
-    m_nStatus = AXIS_SUCCESS; /*TODO:Check if an error occured in expat */
     return m_nStatus;
 }
 
 /**
- * Resets SoapParserExpat object 
+ * Sets the new input stream and resets SoapParserExpat object state to 
+ * initial state
  */
-int SoapParserExpat::init()
+int SoapParserExpat::setInputStream(AxisIOStream* pInputStream)
 {
+    m_pInputStream = pInputStream;
     XML_ParserReset(m_Parser, NULL);
     XML_SetUserData(m_Parser, this);
     XML_SetNamespaceDeclHandler(m_Parser, s_startPrefixMapping, 
@@ -280,12 +287,34 @@ int SoapParserExpat::init()
         delete m_pLastEvent;
     }
     m_pLastEvent = NULL;
-    m_nTransportStatus = TRANSPORT_IN_PROGRESS;
     return m_nStatus;
 }
 
-int SoapParserExpat::setInputStream(SOAPTransport* pInputStream)
+#ifdef WIN32
+#define STORAGE_CLASS_INFO __declspec(dllexport)
+#else
+#define STORAGE_CLASS_INFO 
+#endif
+
+extern "C" {
+STORAGE_CLASS_INFO
+int CreateInstance(XMLParser **inst)
 {
-    m_pInputStream = pInputStream;
-    return AXIS_SUCCESS;
+	*inst = new SoapParserExpat();
+	if (*inst)
+	{
+		return AXIS_SUCCESS;
+	}
+	return AXIS_FAIL;
+}
+STORAGE_CLASS_INFO 
+int DestroyInstance(XMLParser *inst)
+{
+	if (inst)
+	{
+		delete inst;
+		return AXIS_SUCCESS;
+	}
+	return AXIS_FAIL;
+}
 }

@@ -90,11 +90,11 @@ SOURCE=..\..\src\wsdd\WSDDDeployment.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\wsdd\WSDDDocumentExpat.cpp
+SOURCE=..\..\src\wsdd\WSDDDocument.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\wsdd\WSDDDocumentXerces.cpp
+SOURCE=..\..\src\wsdd\WSDDDocument.h
 # End Source File
 # Begin Source File
 
@@ -123,18 +123,6 @@ SOURCE=..\..\include\axis\server\WSDDDefines.h
 # Begin Source File
 
 SOURCE=..\..\src\wsdd\WSDDDeployment.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\wsdd\WSDDDocument.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\wsdd\WSDDDocumentExpat.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\wsdd\WSDDDocumentXerces.h
 # End Source File
 # Begin Source File
 

@@ -56,6 +56,7 @@ private:
     /* Provider type of current service that uses this DeSerializer object */
     PROVIDERTYPE m_ProviderType;
     char* m_pcFaultDetail;
+	SOAPTransport* m_pInputStream;
 
 private:
     int AXISCALL getArraySize(const AnyElement* pElement);

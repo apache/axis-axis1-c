@@ -18,10 +18,9 @@
 
 #include "SoapInputSource.h"
 
-SoapInputSource::SoapInputSource(AXIS_MODULE_CALLBACK_GET_MESSAGE_BYTES 
-                                 pReadFunct, const void* pContext)
+SoapInputSource::SoapInputSource(AxisIOStream* pInputStream)
 {
-    m_pInputStream = new SoapBinInputStream(pReadFunct, pContext);
+    m_pInputStream = new SoapBinInputStream(pInputStream);
 }
 
 SoapInputSource::~SoapInputSource()

@@ -20,17 +20,7 @@
  */
 
 #include "WSDDDeployment.h"
-
-#ifdef USE_EXPAT_PARSER
-#include "WSDDDocumentExpat.h"
-#define WSDDDOCUMENTPARSER WSDDDocumentExpat
-#elif USE_XERCES_PARSER
-#include "WSDDDocumentXerces.h"
-#define WSDDDOCUMENTPARSER WSDDDocumentXerces
-#else
-#include "WSDDDocumentTXPP.h"
-#define WSDDDOCUMENTPARSER WSDDDocumentTXPP
-#endif
+#include "WSDDDocument.h"
 
 #include <axis/server/GDefine.h>
 #include <axis/server/AxisConfig.h>
@@ -99,7 +89,7 @@ const WSDDHandlerList* WSDDDeployment::getGlobalResponseFlowHandlers()
 
 int WSDDDeployment::updateWSDD(const AxisChar* sWSDD)
 {
-    WSDDDocument* doc = new WSDDDOCUMENTPARSER(m_pLibNameIdMap);
+    WSDDDocument* doc = new WSDDDocument(m_pLibNameIdMap);
     if (AXIS_SUCCESS != doc->updateDeployment(sWSDD, this))
     {
         delete doc;
@@ -113,7 +103,7 @@ int WSDDDeployment::updateWSDD(const AxisChar* sWSDD)
 int WSDDDeployment::loadWSDD(const AxisChar* sWSDD)
 {
     m_sWSDDPath = string(sWSDD);
-    WSDDDocument* doc = new WSDDDOCUMENTPARSER(m_pLibNameIdMap);
+    WSDDDocument* doc = new WSDDDocument(m_pLibNameIdMap);
     if (AXIS_SUCCESS != doc->getDeployment(sWSDD, this))
     {
             printf("wsdd loading failed\n");
