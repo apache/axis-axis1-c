@@ -30,7 +30,6 @@
 #include "AxisEngineException.h"
 #include "../common/AxisTrace.h"
                                                                                                                              
-extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
 extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 
 AXIS_CPP_NAMESPACE_START

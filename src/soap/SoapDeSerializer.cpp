@@ -65,8 +65,6 @@
 #include <list>
 #include <iostream>
 
-extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace *g_pAT;
-
 AXIS_CPP_NAMESPACE_START
 #define INITIAL_ARRAY_SIZE 1
 #ifdef WIN32

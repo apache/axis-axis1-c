@@ -29,12 +29,10 @@
 #include <stack>
 
 #if defined(ENABLE_AXISTRACE)  
-  #define AXISTRACE1(X, Y) g_pAT->logaxis(X,Y,__FILE__,__LINE__);
-  #define AXISTRACE2(X, Y, Z) g_pAT->logaxis(X,Y,Z,__FILE__,__LINE__);
-  #define AXISTRACE3(X) g_pAT->trace(X);
-  
-#endif
-#if !defined(ENABLE_AXISTRACE)
+  #define AXISTRACE1(X, Y) AxisTrace::logaxis(X,Y,__FILE__,__LINE__);
+  #define AXISTRACE2(X, Y, Z) AxisTrace::logaxis(X,Y,Z,__FILE__,__LINE__);
+  #define AXISTRACE3(X) AxisTrace::trace(X);
+#else
   #define AXISTRACE1(X,Y) "";
   #define AXISTRACE2(X,Y,Z) "";
   #define AXISTRACE3(X) "";
@@ -44,8 +42,6 @@ typedef enum
 { 
     CRITICAL=1, WARN, INFO, TRIVIAL
 } AXIS_SEVERITY_LEVEL;
-
-//using namespace std;
 
 /**
  * @class AxisTrace
@@ -81,8 +77,8 @@ typedef enum {
 class AxisTrace
 {
 public:
-    AxisTrace();
-    virtual ~AxisTrace();
+    AxisTrace() {};
+    virtual ~AxisTrace() {};
 
     /**
      * This is called in writing to the log file whose path is specified in 
@@ -99,7 +95,7 @@ public:
      * @return The status which indicates whether the operation is success 
      * (AXIS_SUCCESS) or not (AXIS_FAIL).
      */
-    int logaxis(const char* sLog, int level, char* arg2, int arg3);
+    static int logaxis(const char* sLog, int level, char* arg2, int arg3);
 
     /**
      * This is called in writing to the log file whose path is specified in 
@@ -117,16 +113,16 @@ public:
      * @return The status which indicates whether the operation is success 
      * (AXIS_SUCCESS) or not     * (AXIS_FAIL).
      */
-    int logaxis(const char* sLog1, const char* sLog2, int level, char* arg3, 
+    static int logaxis(const char* sLog1, const char* sLog2, int level, char* arg3, 
         int arg4);
 
     /**
      * This is called in writing to the log file whose path is specified in 
      * $AXIS_HOME/axiscpp.c     * onf file.
-     * This method is used when the caller pass first argument as string and 
-     * the second argument     * as long. First is his own message.
+     * This method is used when the caller has two string messages 
+     * as arguments. One may be his      *own message.
      * The other may be to print a trace value. User can also specify the 
-     * severity of the messag     * e by
+     * severity of the messag     *e by
      * assigning level argument to one of CRITICAL, WARN, INFO or TRIVIAL.
      * @param sLog1 string message one
      * @param sLog2 string message two  
@@ -134,10 +130,10 @@ public:
      * @param arg3 file name
      * @param arg4 line number
      * @return The status which indicates whether the operation is success 
-     * (AXIS_SUCCESS) or not  (AXIS_FAIL).
-    */
-    int logaxis(const char* sLog1, const int nLog2, int level, char* arg3, 
-        int arg4);
+     * (AXIS_SUCCESS) or not     * (AXIS_FAIL).
+     */
+    //static int logaxis(const char* sLog1, const int nLog2, int level, char* arg3, 
+    //    int arg4);
 
     /**
      * This is called in writing to the log file whose path is specified in 
@@ -155,8 +151,8 @@ public:
      * @return The status which indicates whether the operation is success
      * (AXIS_SUCCESS) or not (AXIS_FAIL).
      */
-    int logaxis(const char* sLog1, const double dLog2, int level, 
-        char* arg3, int arg4);
+    //static int logaxis(const char* sLog1, const double dLog2, int level, 
+    //    char* arg3, int arg4);
 
     /**
      * Writes the given string to the standard console. 
@@ -166,7 +162,7 @@ public:
      * @return The status which indicates whether the operation is success 
      * (AXIS_SUCCESS) or not (AXIS_FAIL).
      */
-    int trace(const char* pchLog);
+    static int trace(const char* pchLog);
 
     /**
      * Log file is opened for logging server side log messages
@@ -177,7 +173,7 @@ public:
      * @return The status which indicates whether the operation is successful
      * (AXIS_SUCCESS) or not (AXIS_FAIL).
      */
-    int openFile();
+    static int openFile();
 
     /**
      * Log file is opened for logging client side log messages
@@ -188,46 +184,48 @@ public:
      * @return The status which indicates whether the operation is success 
      * (AXIS_SUCCESS) or not (AXIS_FAIL).
      */
-    int openFileByClient();
+    static int openFileByClient();
 
     /**
      * Finds out whether trace is on.
      */
-    inline bool isTraceOn() { return m_bLoggingOn; }
+    static inline bool isTraceOn() { return m_bLoggingOn; }
 
     /**
      * Traces a single line.
      */  
-    void traceLine(const char *data);
+    static void traceLine(const char *data);
 
 	/**
 	 * Traces the entry to a method.
 	 */
-	void traceEntry(const char *className, const char *methodName, void* that, int nParms, ...);
+	static void traceEntry(const char *className, const char *methodName, void* that, int nParms, ...);
 
 	/**
 	 * Traces the exit to a method.
 	 */
-	void traceExit(const char *className, const char *methodName, int returnIndex,
+	static void traceExit(const char *className, const char *methodName, int returnIndex,
 		AxisTraceType type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0);
 
 	/**
 	 * Traces something that has been caught
 	 */
-	void traceCatch(const char *className, const char *methodName, int catchIndex,
+	static void traceCatch(const char *className, const char *methodName, int catchIndex,
 		AxisTraceType type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0);
 
-private:
-	bool m_bLoggingOn;
-    char m_acLine[4];
-    char* m_pcLevel;
-    AxisFile m_fileTrace;
-	std::stack<std::string> m_stack;
+      /**
+       * Closes the trace file
+       */
+      static void terminate() { m_bLoggingOn = false; delete m_fileTrace; m_fileTrace = NULL; };
 
-    int setFilePerm(const char* pcFileName);
-    int logthis(const char* pcLog, int level, char* arg2, int arg3);
-	void addParameter(std::string& line, AxisTraceType type, unsigned len, void *value);
-    void traceHeader();
+private:
+	static bool m_bLoggingOn;
+    static AxisFile *m_fileTrace;
+	static std::stack<std::string> m_stack;
+
+    static int logthis(const char* pcLog, int level, char* arg2, int arg3);
+	static void addParameter(std::string& line, AxisTraceType type, unsigned len, void *value);
+    static void traceHeader();
 };
 
 AXIS_CPP_NAMESPACE_END

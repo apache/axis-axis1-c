@@ -13,26 +13,4 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-
-#if !defined(_ISOAPDESERIALIZER_H____OF_AXIS_INCLUDED_)
-#define _ISOAPDESERIALIZER_H____OF_AXIS_INCLUDED_
-/*
- *  @class ISoapDeSerializer
- *  @brief interface for the ISoapDeSerializer class.
- *
- *
- *  @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- */
-
-AXIS_CPP_NAMESPACE_START
-
-class ISoapDeSerializer
-{
-public:
-    virtual ~ISoapDeSerializer() {};
-};
-
-AXIS_CPP_NAMESPACE_END
-
-#endif 
-
+#error "Please do not include ISoapDeSerializer.hpp"

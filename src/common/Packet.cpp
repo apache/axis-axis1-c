@@ -25,8 +25,6 @@
 #include <stdio.h>
 #include <axis/server/AxisTrace.h>
 
-extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
-
 extern "C"
 {
 

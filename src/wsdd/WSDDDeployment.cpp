@@ -27,8 +27,6 @@
 #include "../common/AxisTrace.h"
 #include "AxisWsddException.h"
 
-extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
-
 AXIS_CPP_NAMESPACE_START
 
 

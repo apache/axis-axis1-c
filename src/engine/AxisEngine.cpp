@@ -26,7 +26,6 @@
 #include "SerializerPool.h"
 #include "../common/AxisTrace.h"
 
-extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
 extern AXIS_CPP_NAMESPACE_PREFIX DeserializerPool* g_pDeserializerPool;
 extern AXIS_CPP_NAMESPACE_PREFIX SerializerPool* g_pSerializerPool;
 extern AXIS_CPP_NAMESPACE_PREFIX HandlerPool* g_pHandlerPool;

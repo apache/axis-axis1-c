@@ -48,7 +48,6 @@
 #include "../common/AxisTrace.h"
 #include "../common/AxisConfig.h"
 
-extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
 extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 
 extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];

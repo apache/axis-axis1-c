@@ -20,7 +20,6 @@
 #include "AxisUserAPI.hpp"
 #include "TypeMapping.hpp"
 #include "WSDDDefines.hpp"
-#include "ISoapDeSerializer.hpp"
 
 /**
     @class IWrapperSoapDeSerializer
@@ -33,7 +32,7 @@
 
 AXIS_CPP_NAMESPACE_START
 
-class IWrapperSoapDeSerializer : public ISoapDeSerializer
+class IWrapperSoapDeSerializer
 {
 public:
     virtual ~IWrapperSoapDeSerializer(){};

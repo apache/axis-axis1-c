@@ -31,7 +31,6 @@
 #include "../wsdd/WSDDDeployment.h"
 #include "../common/AxisTrace.h"
 
-extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
 extern AXIS_CPP_NAMESPACE_PREFIX WSDDDeployment* g_pWSDDDeployment;
 
 AXIS_CPP_NAMESPACE_START

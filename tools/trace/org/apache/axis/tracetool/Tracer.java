@@ -71,7 +71,6 @@ class Tracer extends BufferedWriter {
 				+ "#include \""
 				+ prefix
 				+ "common/AxisTrace.h\"\n"
-				+ "extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;\n"
 				+ "#endif\n");
 		flush();
 	}
@@ -96,8 +95,8 @@ class Tracer extends BufferedWriter {
 		String line =
 			"\n"
 				+ "\t#ifdef ENABLE_AXISTRACE\n"
-				+ "\t\tif (g_pAT && g_pAT->isTraceOn())\n"
-				+ "\t\t\tg_pAT->traceEntry("
+				+ "\t\tif (AXIS_CPP_NAMESPACE_PREFIX AxisTrace::isTraceOn())\n"
+				+ "\t\t\tAXIS_CPP_NAMESPACE_PREFIX AxisTrace::traceEntry("
 				+ getClassName()
 				+ ", \""
 				+ signature.getMethodName()
@@ -124,8 +123,8 @@ class Tracer extends BufferedWriter {
 		// Enclose the printf/return in {} in case if/then doesn't have {}
 		String line = "\t{\n";
 		line += "\t\t#ifdef ENABLE_AXISTRACE\n";
-		line += "\t\t\tif (g_pAT && g_pAT->isTraceOn())\n";
-		line += "\t\t\t\tg_pAT->traceExit("
+		line += "\t\t\tif (AXIS_CPP_NAMESPACE_PREFIX AxisTrace::isTraceOn())\n";
+		line += "\t\t\t\tAXIS_CPP_NAMESPACE_PREFIX AxisTrace::traceExit("
 			+ getClassName()
 			+ ", \""
 			+ signature.getMethodName()
@@ -173,8 +172,8 @@ class Tracer extends BufferedWriter {
 			+ " traceRet = ("
 			+ value
 			+ ");\n";
-		line += "\t\t\tif (g_pAT && g_pAT->isTraceOn())\n";
-		line += "\t\t\t\tg_pAT->traceExit("
+		line += "\t\t\tif (AXIS_CPP_NAMESPACE_PREFIX AxisTrace::isTraceOn())\n";
+		line += "\t\t\t\tAXIS_CPP_NAMESPACE_PREFIX AxisTrace::traceExit("
 			+ getClassName()
 			+ ", \""
 			+ signature.getMethodName()
@@ -200,8 +199,8 @@ class Tracer extends BufferedWriter {
 		String line =
 			"\n"
 				+ "\t#ifdef ENABLE_AXISTRACE\n"
-				+ "\t\tif (g_pAT && g_pAT->isTraceOn())\n"
-				+ "\t\t\tg_pAT->traceCatch("
+				+ "\t\tif (AXIS_CPP_NAMESPACE_PREFIX AxisTrace::isTraceOn())\n"
+				+ "\t\t\tAXIS_CPP_NAMESPACE_PREFIX AxisTrace::traceCatch("
 				+ getClassName()
 				+ ", \""
 				+ signature.getMethodName()

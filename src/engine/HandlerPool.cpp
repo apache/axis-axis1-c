@@ -28,7 +28,6 @@
 #include <axis/server/AxisException.hpp>
 #include "../common/AxisTrace.h"
 
-extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
 extern AXIS_CPP_NAMESPACE_PREFIX AppScopeHandlerPool* g_pAppScopeHandlerPool;
 extern AXIS_CPP_NAMESPACE_PREFIX RequestScopeHandlerPool* g_pRequestScopeHandlerPool;
 extern AXIS_CPP_NAMESPACE_PREFIX SessionScopeHandlerPool* g_pSessionScopeHandlerPool;

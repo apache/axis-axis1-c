@@ -86,7 +86,6 @@ HandlerPool* g_pHandlerPool;
 // Unsynchronized read-only global variables.
 WSDDDeployment* g_pWSDDDeployment;
 AxisConfig* g_pConfig;
-AxisTrace* g_pAT;
 
 //Keeps track of whether initialize_module/uninitialize_module was called
 bool g_bModuleInitialize;
@@ -268,7 +267,7 @@ extern "C" int initialize_module (int bServer)
 
 #if defined(ENABLE_AXISTRACE)
 
-            status = g_pAT->openFile ();
+            status = AxisTrace::openFile ();
             if (status == AXIS_FAIL)
             {
                 // Samisa - make sure that we start service, even if we cannot open log file
@@ -305,7 +304,7 @@ extern "C" int initialize_module (int bServer)
 			XMLParserFactory::initialize();
             SOAPTransportFactory::initialize();
 #if defined(ENABLE_AXISTRACE)
-            status = g_pAT->openFileByClient ();
+            status = AxisTrace::openFileByClient ();
             /* //Samisa: 01/09/2004
                //Fix for AXISCPP-127
                //Do not stop here merely because log file location ClientLogPath is incorrect
@@ -372,7 +371,6 @@ void ModuleInitialize ()
     // unsynchronized read-only global variables.
     g_pWSDDDeployment = new WSDDDeployment ();
     g_pConfig = new AxisConfig ();
-    g_pAT = new AxisTrace ();
 }
 
 void ModuleUnInitialize ()
@@ -388,8 +386,7 @@ void ModuleUnInitialize ()
     // unsynchronized read-only global variables.
     delete g_pWSDDDeployment;
     delete g_pConfig;
-    delete g_pAT;
-    g_pAT=0;
+    AxisTrace::terminate();
 }
 
 // Axis class method implementations
