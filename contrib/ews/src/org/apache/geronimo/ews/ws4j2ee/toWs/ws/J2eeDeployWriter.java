@@ -382,8 +382,7 @@ public class J2eeDeployWriter  extends JavaWriter{
 
 		//get the Name of the provider needed in the deploy.wsdd
 		String provider = null;
-		provider = GenerationConstants.getProperties()
-			.getProperty(GenerationConstants.WS4J2EE_PROVIDER); 
+		provider = GenerationConstants.getProperty(GenerationConstants.WS4J2EE_PROVIDER); 
 
 		while (iterator.hasNext()) {
 			Object obj = iterator.next();

@@ -19,6 +19,7 @@ package org.apache.geronimo.ews.ws4j2ee.utils.packager.load;
 import java.io.File;
 import java.util.Vector;
 
+import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.utils.UncompressingJarClassLoader;
 
@@ -38,7 +39,7 @@ public class EARPackageModule extends AbstractPackageModule {
         if (firstmodule) {
             cl =
                 new UncompressingJarClassLoader(
-                    "target/temp",
+                    GenerationConstants.CONFIG_STORE,
                     new File(zip.getName()),
                     null,
                     "");
@@ -47,27 +48,27 @@ public class EARPackageModule extends AbstractPackageModule {
             getInputStreamForJarEntry(jarFile, "META-INF/webservice.xml");
 
         //TODO parse the application.xml and find the WAR and EAR files 
-        File file = new File("target/temp");
+        File file = new File(cl.getDir());
         String[] files = file.list();
         PackageModule module = null;
-        for (int i = 0; i < files.length; i++) {
-            if (files[i].endsWith(".jar")) {
-                module =
-                    PackageModuleFactory.createPackageModule(
-                        "target/temp/" + files[i],
-                        false);
-                break;
-            }
-        }
+        if(file != null){
+			for (int i = 0; i < files.length; i++) {
+				
+				if (files[i].endsWith(".jar")) {
+					module =
+						PackageModuleFactory.createPackageModule(
+						cl.getDir() + files[i],
+							false);
+					ejbJarfile = module.getEjbJarfile();		
+					break;
+				}
+			}
 
-        if (module != null) {
-            ejbJarfile = module.getEjbJarfile();
-        } else {
             for (int i = 0; i < files.length; i++) {
                 if (files[i].endsWith(".war")) {
                     module =
                         PackageModuleFactory.createPackageModule(
-                            "target/temp/" + files[i],
+							cl.getDir() + files[i],
                             false);
                     webddfile = module.getWebddfile();
                     break;
@@ -75,7 +76,8 @@ public class EARPackageModule extends AbstractPackageModule {
             }
             if (module == null)
                 throw new GenerationFault("No jar module or war module find in EAR");
-        }
+		}
+
 
         if (wscfFile == null && firstmodule)
             throw new GenerationFault("wscf file must not be null");

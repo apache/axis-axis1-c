@@ -161,8 +161,9 @@ public class JaxRpcMapperImpl implements JaxRpcMapperContext {
 			  }
 		  }
         }
-        
-        return Utils.jni2javaName(returnType);
+        return returnType;
+       // fixed inside 
+       // return Utils.jni2javaName(returnType);
     }
 	
 			

@@ -916,6 +916,11 @@ public class Utils {
 		}	
 
 	}
+	/**
+	 * @deprecated
+	 * @param returnType
+	 * @return
+	 */
 	
 	public static String jni2javaName(String returnType){
 		if(returnType == null)

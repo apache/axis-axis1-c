@@ -19,6 +19,7 @@ package org.apache.geronimo.ews.ws4j2ee.utils.packager.load;
 import java.io.File;
 import java.util.Vector;
 
+import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.utils.UncompressingJarClassLoader;
 
@@ -37,7 +38,7 @@ public class WARPackageModule extends AbstractPackageModule {
         if (firstmodule) {
             cl =
                 new UncompressingJarClassLoader(
-                    "target/temp",
+					GenerationConstants.CONFIG_STORE,
                     new File(zip.getName()),
                     "WEB-INF/classes",
                     "WEB-INF/lib");

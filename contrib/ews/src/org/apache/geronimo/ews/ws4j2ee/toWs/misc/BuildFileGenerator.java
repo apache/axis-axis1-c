@@ -55,6 +55,13 @@
  
  package org.apache.geronimo.ews.ws4j2ee.toWs.misc;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
 import org.apache.axis.components.logger.LogFactory;
 import org.apache.commons.logging.Log;
 import org.apache.geronimo.ews.ws4j2ee.context.InputOutputFile;
@@ -63,14 +70,6 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
 import org.apache.geronimo.ews.ws4j2ee.toWs.dd.JaxrpcMapperGenerator;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Properties;
-import java.util.StringTokenizer;
-import java.util.Vector;
 
 /**
  * @author Srinath Perera(hemapani@opensource.lk)
@@ -96,15 +95,19 @@ public class BuildFileGenerator implements Generator {
 			out.write("<?xml version=\"1.0\"?>\n");
 
 			out.write("<project basedir=\".\" default=\"dist\">\n");
+			out.write("	<property name=\"build.sysclasspath\" value=\"last\"/>\n");
 			out.write("	<property name=\"src\" location=\".\"/>\n");
 			out.write("	<property name=\"build\" location=\"build\"/>\n");
 			out.write("	<property name=\"build.classes\" location=\"${build}/classes\"/>\n");
 			out.write("	<property name=\"build.lib\" location=\"${build}/lib\"/>\n");
 			out.write("	<property name=\"lib\" location=\"lib\"/>\n");
 
-			out.write("	<path id=\"classpath\">\n");
-			StringTokenizer tok = getClasspathComponets();
+			out.write("	<path id=\"classpath\" >\n");
 			String jarfile = j2eewscontext.getMiscInfo().getJarFileName();
+			File tempfile = new File("./target/classes");
+			out.write("		<pathelement location=\"/"+tempfile.getAbsolutePath()+"\"/>");
+			tempfile = new File("target/test-classes");
+			out.write("		<pathelement location=\"/"+tempfile.getAbsolutePath()+"\"/>");
 			
 			Vector classpathelements = j2eewscontext.getMiscInfo().getClasspathElements();
 			if(classpathelements != null){
@@ -113,10 +116,30 @@ public class BuildFileGenerator implements Generator {
 						+ ((File)classpathelements.get(i)).getAbsolutePath() + "\"/>\n");				
 				}
 			}
-			while (tok.hasMoreTokens()) {
-				out.write("		<pathelement location=\"" + tok.nextToken() + "\"/>\n");
+
+			String value = GenerationConstants.getProperty(GenerationConstants.MAVEN_LOCAL_REPOSITARY);
+
+			
+			if(value!= null){
+				out.write("		<fileset dir=\""+value+"\">\n");
+				out.write("		    <include name=\"axis/**/*.jar\"/>\n");
+				out.write("			<include name=\"geronimo-spec/**/*.jar\"/>\n");
+				out.write("			<include name=\"geronimo/**/*.jar\"/>\n");
+				out.write("			<include name=\"sec/**/*.jar\"/>\n");
+				out.write("			<include name=\"dom4j/**/*.jar\"/>\n");
+				out.write("			<include name=\"jaxb-ri/**/*.jar\"/>\n");
+				out.write("			<include name=\"xerces/**/*.jar\"/>\n");
+				out.write("		</fileset>\n");
+			}else{
+				StringTokenizer tok = getClasspathComponets();
+				while (tok.hasMoreTokens()) {
+					out.write("		<pathelement location=\"" + tok.nextToken() + "\"/>\n");
+				}
 			}
+			
+			
 			out.write("	</path>\n");
+
 
 			out.write("	<target name=\"compile\">\n");
 			out.write("	   <mkdir dir=\"${build.classes}\"/>\n");
@@ -153,7 +176,10 @@ public class BuildFileGenerator implements Generator {
 				
 									
 			}else{
-				out.write("		<copy file =\"${src}/META-INF/web.xml\" todir=\"${build.classes}/META-INF\"/>\n ");
+				File file = new File(j2eewscontext.getMiscInfo().getOutPutPath()+"/WEB-INF/web.xml");
+				if(file.exists()){
+					out.write("		<copy file =\"${src}/WEB-INF/web.xml\" todir=\"${build.classes}/META-INF\"/>\n ");				
+				}
 			}
 
 
@@ -194,12 +220,11 @@ public class BuildFileGenerator implements Generator {
 			out.write("	<target name=\"clean\">\n");
 			out.write("		<delete dir=\"${build}\"/>\n");
 			out.write("	</target>\n");
-
-			Properties p = GenerationConstants.getProperties();
-			String webappsLib = p.getProperty(GenerationConstants.AXIS_WEBAPPS_LIB);
-			String ejbDeploy =  p.getProperty(GenerationConstants.EJB_DEPLOY_DIR);
-			String host = p.getProperty(GenerationConstants.AXIS_HOST);
-			String port = p.getProperty(GenerationConstants.AXIS_PORT);
+			
+			String webappsLib = GenerationConstants.getProperty(GenerationConstants.AXIS_WEBAPPS_LIB);
+			String ejbDeploy =  GenerationConstants.getProperty(GenerationConstants.EJB_DEPLOY_DIR);
+			String host = GenerationConstants.getProperty(GenerationConstants.AXIS_HOST);
+			String port = GenerationConstants.getProperty(GenerationConstants.AXIS_PORT);
 			
 			if(jarfile != null){
 				out.write("	<target name=\"deploy\" depends=\"jar\">\n");
@@ -239,12 +264,7 @@ public class BuildFileGenerator implements Generator {
 
 	private StringTokenizer getClasspathComponets() {
 		String classpath = System.getProperty("java.class.path");
-		String spearator = ";";
-		if (classpath.indexOf(';') < 0) {
-			//then it is UNIX
-			spearator = ":";
-		}
-
+		String spearator = System.getProperties().getProperty("path.separator");
 		return new StringTokenizer(classpath, spearator);
 	}
 	
