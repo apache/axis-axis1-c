@@ -17,6 +17,12 @@
  
 /**
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ */
+
+/*
+ * Revision 1.1  2004/05/26 samisa
+ * Added Stub base class into code generation
  */
 
 package org.apache.axis.wsdl.wsdl2ws.cpp.literal;
@@ -72,11 +78,14 @@ public class ClientStubWriter extends CPPClassWriter{
 	 */
 	protected void writeConstructors() throws WrapperFault {
 		try{
-		writer.write(classname+"::"+classname+"()\n{\n");
+			writer.write(classname+"::"+classname+"(const char* pcEndpointUri):Stub(pcEndpointUri)\n{\n");
+		//writer.write(classname+"::"+classname+"()\n{\n");
+		/*		
 		writer.write("\tm_pCall = new Call();\n");
 		//TODO get TransportURI from WrapInfo and check what the transport is and do the following line accordingly
 		writer.write("\tm_pCall->setProtocol(APTHTTP);\n");
 		writer.write("\tm_pCall->setEndpointURI(\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\");\n");
+		*/
 		writer.write("}\n\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
@@ -88,7 +97,7 @@ public class ClientStubWriter extends CPPClassWriter{
 	 */
 	protected void writeDistructors() throws WrapperFault {
 		try{
-		writer.write(classname+"::~"+classname+"()\n{\n\tdelete m_pCall;\n}\n\n");
+		writer.write(classname+"::~"+classname+"()\n{\n}\n\n");//\tdelete m_pCall;\n}\n\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}
@@ -267,6 +276,9 @@ public class ClientStubWriter extends CPPClassWriter{
 		writer.write("\tm_pCall->setTransportProperty(SOAPACTION_HEADER , \""+minfo.getSoapAction()+"\");\n");
 		writer.write("\tm_pCall->setSOAPVersion(SOAP_VER_1_1);\n"); //TODO check which version is it really.
 		writer.write("\tm_pCall->setOperation(\""+minfo.getInputMessage().getLocalPart()+"\", \""+ minfo.getInputMessage().getNamespaceURI()+"\");\n");
+		//new calls from stub base
+		writer.write("\tsetTransportProperties();\n");
+		writer.write("\tsetSOAPHeaders();\n");
 		for (int i = 0; i < paramsB.size(); i++) {
 			type = wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName());
 			if (type != null){
