@@ -10,237 +10,139 @@
 #include "Thread.h"
 #include <axis/server/AxisWrapperAPI.h>
 
-using namespace std;
-
- Calculator::Calculator(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol)
-:Stub(pchEndpointUri, eProtocol)
+bool CallBase::bInitialized;
+CallFunctions CallBase::ms_VFtable;
+Calculator::Calculator(const char* pchEndpointUri)
 {
-}
-
-Calculator::Calculator()
-:Stub(" ", APTHTTP)
-{
-	m_pCall->setEndpointURI("http://localhost/axis/Calculator");
+	m_pCall = new Call();
+	m_pCall->setProtocol(APTHTTP);
+	m_pCall->setEndpointURI(pchEndpointUri);
 }
 
 Calculator::~Calculator()
 {
+	delete m_pCall;
 }
 
 
 /*Methods corresponding to the web service methods*/
 
 /*
- * This method wrap the service method add
+ * This method wrap the service methodadd
  */
 int Calculator::add(int Value0, int Value1)
 {
 	int Ret;
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
-	try
+	if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
+	m_pCall->setTransportProperty(SOAPACTION_HEADER , "Calculator#add");
+	m_pCall->setSOAPVersion(SOAP_VER_1_1);
+	m_pCall->setOperation("add", "http://localhost/axis/Calculator");
+	m_pCall->addParameter((void*)&Value0, "in0", XSD_INT);
+	m_pCall->addParameter((void*)&Value1, "in1", XSD_INT);
+	if (AXIS_SUCCESS == m_pCall->invoke())
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
-			return Ret;
-		m_pCall->setTransportProperty(SOAPACTION_HEADER , "Calculator#add");
-		m_pCall->setSOAPVersion(SOAP_VER_1_1);
-		m_pCall->setOperation("add", "http://localhost/axis/Calculator");
-		applyUserPreferences();
-		m_pCall->addParameter((void*)&Value0, "in0", XSD_INT);
-		m_pCall->addParameter((void*)&Value1, "in1", XSD_INT);
-		if (AXIS_SUCCESS == m_pCall->invoke())
+		if(AXIS_SUCCESS == m_pCall->checkMessage("addResponse", "http://localhost/axis/Calculator"))
 		{
-			if(AXIS_SUCCESS == m_pCall->checkMessage("addResponse", "http://localhost/axis/Calculator"))
-			{
-				Ret = m_pCall->getElementAsInt("addReturn", 0);
-			}
+			Ret = m_pCall->getElementAsInt("addReturn", 0);
+                        printf("Ret:%d\n", Ret);
 		}
-		m_pCall->unInitialize();
-		return Ret;
 	}
-	catch(AxisException& e)
-	{
-		int iExceptionCode = e.getExceptionCode();
-		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
-		{
-			throw;
-		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://localhost/axis/Calculator" ))//Exception handling code goes here
-		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisGenException(cFaultdetail);
-		}
-		else throw;
-	}
+	m_pCall->unInitialize();
+	return Ret;
 }
 
 
 /*
- * This method wrap the service method sub
+ * This method wrap the service methodsub
  */
 int Calculator::sub(int Value0, int Value1)
 {
 	int Ret;
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
-	try
+	if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
+	m_pCall->setTransportProperty(SOAPACTION_HEADER , "Calculator#sub");
+	m_pCall->setSOAPVersion(SOAP_VER_1_1);
+	m_pCall->setOperation("sub", "http://localhost/axis/Calculator");
+	m_pCall->addParameter((void*)&Value0, "in0", XSD_INT);
+	m_pCall->addParameter((void*)&Value1, "in1", XSD_INT);
+	if (AXIS_SUCCESS == m_pCall->invoke())
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
-			return Ret;
-		m_pCall->setTransportProperty(SOAPACTION_HEADER , "Calculator#sub");
-		m_pCall->setSOAPVersion(SOAP_VER_1_1);
-		m_pCall->setOperation("sub", "http://localhost/axis/Calculator");
-		applyUserPreferences();
-		m_pCall->addParameter((void*)&Value0, "in0", XSD_INT);
-		m_pCall->addParameter((void*)&Value1, "in1", XSD_INT);
-		if (AXIS_SUCCESS == m_pCall->invoke())
+		if(AXIS_SUCCESS == m_pCall->checkMessage("subResponse", "http://localhost/axis/Calculator"))
 		{
-			if(AXIS_SUCCESS == m_pCall->checkMessage("subResponse", "http://localhost/axis/Calculator"))
-			{
-				Ret = m_pCall->getElementAsInt("subReturn", 0);
-			}
+			Ret = m_pCall->getElementAsInt("subReturn", 0);
+			printf("Ret:%d\n", Ret);
 		}
-		m_pCall->unInitialize();
-		return Ret;
 	}
-	catch(AxisException& e)
-	{
-		int iExceptionCode = e.getExceptionCode();
-		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
-		{
-			throw;
-		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://localhost/axis/Calculator" ))//Exception handling code goes here
-		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisGenException(cFaultdetail);
-		}
-		else throw;
-	}
+	m_pCall->unInitialize();
+	return Ret;
 }
 
 
 /*
- * This method wrap the service method mul
+ * This method wrap the service methodmul
  */
 int Calculator::mul(int Value0, int Value1)
 {
 	int Ret;
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
-	try
+	if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
+	m_pCall->setTransportProperty(SOAPACTION_HEADER , "Calculator#mul");
+	m_pCall->setSOAPVersion(SOAP_VER_1_1);
+	m_pCall->setOperation("mul", "http://localhost/axis/Calculator");
+	m_pCall->addParameter((void*)&Value0, "in0", XSD_INT);
+	m_pCall->addParameter((void*)&Value1, "in1", XSD_INT);
+	if (AXIS_SUCCESS == m_pCall->invoke())
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
-			return Ret;
-		m_pCall->setTransportProperty(SOAPACTION_HEADER , "Calculator#mul");
-		m_pCall->setSOAPVersion(SOAP_VER_1_1);
-		m_pCall->setOperation("mul", "http://localhost/axis/Calculator");
-		applyUserPreferences();
-		m_pCall->addParameter((void*)&Value0, "in0", XSD_INT);
-		m_pCall->addParameter((void*)&Value1, "in1", XSD_INT);
-		if (AXIS_SUCCESS == m_pCall->invoke())
+		if(AXIS_SUCCESS == m_pCall->checkMessage("mulResponse", "http://localhost/axis/Calculator"))
 		{
-			if(AXIS_SUCCESS == m_pCall->checkMessage("mulResponse", "http://localhost/axis/Calculator"))
-			{
-				Ret = m_pCall->getElementAsInt("addReturn", 0);
-			}
+			Ret = m_pCall->getElementAsInt("addReturn", 0);
+			printf("Ret:%d\n", Ret);
 		}
-		m_pCall->unInitialize();
-		return Ret;
 	}
-	catch(AxisException& e)
-	{
-		int iExceptionCode = e.getExceptionCode();
-		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
-		{
-			throw;
-		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://localhost/axis/Calculator" ))//Exception handling code goes here
-		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisGenException(cFaultdetail);
-		}
-		else throw;
-	}
+	m_pCall->unInitialize();
+	return Ret;
 }
 
 
 /*
- * This method wrap the service method div
+ * This method wrap the service methoddiv
  */
 int Calculator::div(int Value0, int Value1)
 {
 	int Ret;
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
-	try
+	if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
+	m_pCall->setTransportProperty(SOAPACTION_HEADER , "Calculator#div");
+	m_pCall->setSOAPVersion(SOAP_VER_1_1);
+	m_pCall->setOperation("div", "http://localhost/axis/Calculator");
+	m_pCall->addParameter((void*)&Value0, "in0", XSD_INT);
+	m_pCall->addParameter((void*)&Value1, "in1", XSD_INT);
+	if (AXIS_SUCCESS == m_pCall->invoke())
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
-			return Ret;
-		m_pCall->setTransportProperty(SOAPACTION_HEADER , "Calculator#div");
-		m_pCall->setSOAPVersion(SOAP_VER_1_1);
-		m_pCall->setOperation("div", "http://localhost/axis/Calculator");
-		applyUserPreferences();
-		m_pCall->addParameter((void*)&Value0, "in0", XSD_INT);
-		m_pCall->addParameter((void*)&Value1, "in1", XSD_INT);
-		if (AXIS_SUCCESS == m_pCall->invoke())
+		if(AXIS_SUCCESS == m_pCall->checkMessage("divResponse", "http://localhost/axis/Calculator"))
 		{
-			if(AXIS_SUCCESS == m_pCall->checkMessage("divResponse", "http://localhost/axis/Calculator"))
-			{
-				Ret = m_pCall->getElementAsInt("addReturn", 0);
-			}
+			Ret = m_pCall->getElementAsInt("addReturn", 0);
+			printf("Ret:%d\n", Ret);
 		}
-		m_pCall->unInitialize();
-		return Ret;
 	}
-	catch(AxisException& e)
-	{
-		int iExceptionCode = e.getExceptionCode();
-		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
-		{
-			throw;
-		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://localhost/axis/Calculator" ))//Exception handling code goes here
-		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisGenException(cFaultdetail);
-		}
-		else throw;
-	}
+	m_pCall->unInitialize();
+	return Ret;
 }
 
 int Calculator::getFaultDetail(char** ppcDetail)
 {
-	return m_pCall->getFaultDetail(ppcDetail);
+    m_pCall->getFaultDetail(ppcDetail);
+	return 0;
 }
+
+
 		
 
 
 
 DWORD WINAPI Threaded( LPVOID /* lpData */ )
 {
-	Calculator cal;
-
+	char endpoint[256];
+	printf("Sending Requests to Server http://%s:%s ........\n\n", "localhost", "80");
+	sprintf(endpoint, "http://%s:%s/axis/Calculator", "localhost", "80");
+	Calculator cal(endpoint);
 	for(;;)
 	{
 		
@@ -254,8 +156,10 @@ DWORD WINAPI Threaded( LPVOID /* lpData */ )
 
 DWORD WINAPI Threaded1( LPVOID /* lpData */ )
 {
-
-	Calculator cal1;
+	char endpoint[256];
+	printf("Sending Requests to Server http://%s:%s ........\n\n", "localhost", "80");
+	sprintf(endpoint, "http://%s:%s/axis/Calculator", "localhost", "80");
+	Calculator cal1(endpoint);
 	
 	for(;;)
 	{
