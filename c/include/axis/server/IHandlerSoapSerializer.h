@@ -33,7 +33,7 @@ public:
     virtual ~IHandlerSoapSerializer() {};
     virtual IHeaderBlock* createHeaderBlock()=0;
     virtual IHeaderBlock*  createHeaderBlock(AxisChar *pachLocalName, 
-        AxisChar *pachPrefix, AxisChar *pachUri)=0;    
+		AxisChar *pachUri)=0;    
     virtual int AXISCALL addHeaderBlock(IHeaderBlock* pBlk)=0;
     virtual int setSoapHeader(SoapHeader* pSoapHeader)=0;
     virtual    int setSoapVersion(SOAP_VERSION)=0;

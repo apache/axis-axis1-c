@@ -563,25 +563,6 @@ void* Call::getCmplxObject (void* pDZFunct, void* pCreFunct, void* pDelFunct,
         pNamespace);
 }
 
-/* global function to be used in C stubs */
-extern "C" void* getStubObject (AXIS_PROTOCOL_TYPE nProtocol, 
-    AxisChar* pchEndpointURI)
-{
-    Call_C* pCall = (Call_C*) malloc (sizeof (Call_C));
-    pCall->_object = new Call ();
-    pCall->_functions = &Call::ms_VFtable;
-    ((Call*) pCall->_object)->setProtocol (nProtocol);
-    ((Call*) pCall->_object)->setEndpointURI (pchEndpointURI);
-    return pCall;
-}
-
-extern "C" void destroyStubObject (void* pCall)
-{
-    Call* pObject = (Call*) ((Call_C*)pCall)->_object;
-    delete pObject;
-    free (pCall);
-}
-
 int Call::setSoapHeader (SoapHeader* pSoapHeader)
 {
 	m_nStatus = (m_pIWSSZ->setSoapHeader (pSoapHeader));
@@ -593,10 +574,10 @@ IHeaderBlock* Call::createHeaderBlock ()
     return (m_pIWSSZ->createHeaderBlock ());
 }
 
-IHeaderBlock* Call::createHeaderBlock (AxisChar* pachLocalName, 
-    AxisChar* pachPrefix, AxisChar* pachUri)
+IHeaderBlock* Call::createHeaderBlock(AxisChar* pachLocalName, 
+                                       AxisChar* pachUri)
 {
-    return (m_pIWSSZ->createHeaderBlock (pachLocalName, pachPrefix, pachUri));
+    return (m_pIWSSZ->createHeaderBlock (pachLocalName, pachUri));
 }
 
 int Call::getStatus() 
@@ -621,3 +602,89 @@ int Call::addAnyObject(AnyType* pAnyObject)
 	return m_pIWSSZ->addOutputAnyObject(pAnyObject);
 }
 
+const AxisChar* Call::getNamespacePrefix(const AxisChar* pNamespace)
+{
+    return m_pIWSSZ->getNamespacePrefix(pNamespace);
+}
+
+HeaderBlock_C CallBase::s_CreateHeaderBlock(void *pObj, 
+    AxisChar *pachLocalName, AxisChar *pachUri)
+{
+	HeaderBlock_C blk;
+	blk._functions = &(IHeaderBlock::ms_VFtable);
+	blk._object = ((CallBase*)pObj)->createHeaderBlock(pachLocalName,
+		pachUri);
+	return blk;
+}
+
+void CallBase::s_Initialize()
+{	
+	if (bInitialized) return;
+	bInitialized = true;
+	ms_VFtable.setSOAPVersion = s_SetSOAPVersion;
+	ms_VFtable.setTransportProperty = s_SetTransportProperty;
+	ms_VFtable.setProtocol = s_SetProtocol;
+	ms_VFtable.initialize = s_InitializeCall;
+	ms_VFtable.invoke = s_Invoke;
+	ms_VFtable.unInitialize = s_UnInitialize;
+	ms_VFtable.setOperation = s_SetOperation;
+	ms_VFtable.setEndpointURI = s_SetEndpointURI;
+	ms_VFtable.addParameter = s_AddParameter;
+	ms_VFtable.addCmplxArrayParameter = s_AddCmplxArrayParameter;
+	ms_VFtable.addBasicArrayParameter = s_AddBasicArrayParameter;
+	ms_VFtable.addCmplxParameter = s_AddCmplxParameter;
+	ms_VFtable.getCmplxArray = s_GetCmplxArray;
+	ms_VFtable.getBasicArray = s_GetBasicArray;
+	ms_VFtable.getCmplxObject = s_GetCmplxObject;
+	ms_VFtable.getElementAsInt = s_GetElementAsInt;
+	ms_VFtable.getElementAsBoolean = s_GetElementAsBoolean;
+	ms_VFtable.getElementAsUnsignedInt = s_GetElementAsUnsignedInt;
+	ms_VFtable.getElementAsShort = s_GetElementAsShort;
+	ms_VFtable.getElementAsUnsignedShort = s_GetElementAsUnsignedShort;
+	ms_VFtable.getElementAsByte = s_GetElementAsByte;
+	ms_VFtable.getElementAsUnsignedByte = s_GetElementAsUnsignedByte;
+	ms_VFtable.getElementAsLong = s_GetElementAsLong;
+	ms_VFtable.getElementAsInteger = s_GetElementAsInteger;
+	ms_VFtable.getElementAsUnsignedLong = s_GetElementAsUnsignedLong;
+	ms_VFtable.getElementAsFloat = s_GetElementAsFloat;
+	ms_VFtable.getElementAsDouble = s_GetElementAsDouble;
+	ms_VFtable.getElementAsDecimal = s_GetElementAsDecimal;
+	ms_VFtable.getElementAsString = s_GetElementAsString;
+	ms_VFtable.getElementAsAnyURI = s_GetElementAsAnyURI;
+	ms_VFtable.getElementAsQName = s_GetElementAsQName;
+	ms_VFtable.getElementAsHexBinary = s_GetElementAsHexBinary;
+	ms_VFtable.getElementAsBase64Binary = s_GetElementAsBase64Binary;
+	ms_VFtable.getElementAsDateTime = s_GetElementAsDateTime;
+	ms_VFtable.getElementAsDate = s_GetElementAsDate;
+	ms_VFtable.getElementAsTime = s_GetElementAsTime;
+	ms_VFtable.getElementAsDuration = s_GetElementAsDuration;
+	ms_VFtable.getAttributeAsInt = s_GetAttributeAsInt;
+	ms_VFtable.getAttributeAsBoolean = s_GetAttributeAsBoolean;
+	ms_VFtable.getAttributeAsUnsignedInt = s_GetAttributeAsUnsignedInt;
+	ms_VFtable.getAttributeAsShort = s_GetAttributeAsShort;
+	ms_VFtable.getAttributeAsUnsignedShort = s_GetAttributeAsUnsignedShort;
+	ms_VFtable.getAttributeAsByte = s_GetAttributeAsByte;
+	ms_VFtable.getAttributeAsUnsignedByte = s_GetAttributeAsUnsignedByte;
+	ms_VFtable.getAttributeAsLong = s_GetAttributeAsLong;
+	ms_VFtable.getAttributeAsInteger = s_GetAttributeAsInteger;
+	ms_VFtable.getAttributeAsUnsignedLong = s_GetAttributeAsUnsignedLong;
+	ms_VFtable.getAttributeAsFloat = s_GetAttributeAsFloat;
+	ms_VFtable.getAttributeAsDouble = s_GetAttributeAsDouble;
+	ms_VFtable.getAttributeAsDecimal = s_GetAttributeAsDecimal;
+	ms_VFtable.getAttributeAsString = s_GetAttributeAsString;
+	ms_VFtable.getAttributeAsAnyURI = s_GetAttributeAsAnyURI;
+	ms_VFtable.getAttributeAsQName = s_GetAttributeAsQName;
+	ms_VFtable.getAttributeAsHexBinary = s_GetAttributeAsHexBinary;
+	ms_VFtable.getAttributeAsBase64Binary = s_GetAttributeAsBase64Binary;
+	ms_VFtable.getAttributeAsDateTime = s_GetAttributeAsDateTime;
+	ms_VFtable.getAttributeAsDate = s_GetAttributeAsDate;
+	ms_VFtable.getAttributeAsTime = s_GetAttributeAsTime;
+	ms_VFtable.getAttributeAsDuration = s_GetAttributeAsDuration;
+	ms_VFtable.checkMessage = s_CheckMessage;
+	ms_VFtable.checkFault = s_CheckFault;
+	ms_VFtable.getStatus = s_GetStatus;
+	ms_VFtable.getAnyObject = s_GetAnyObject;
+	ms_VFtable.addAnyObject = s_AddAnyObject;
+    ms_VFtable.getNamespacePrefix = s_GetNamespacePrefix;
+    ms_VFtable.createHeaderBlock = s_CreateHeaderBlock;
+}

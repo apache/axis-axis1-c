@@ -37,6 +37,9 @@
  * Added setTimeout
  */
 
+#ifdef WIN32
+#pragma warning (disable : 4101)
+#endif
 
 #include "Platform.hpp"
 #include "HttpTransport.hpp"

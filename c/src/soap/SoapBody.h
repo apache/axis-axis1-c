@@ -71,8 +71,9 @@ private:
 
 public:    
 
+#ifdef UNIT_TESTING_ON
     int initializeForTesting();
-
+#endif
     void addAttribute(Attribute* attr);
     /* string& serialize(); */
     int serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion);

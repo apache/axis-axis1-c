@@ -40,13 +40,16 @@
 #include "ComplexElement.h"
 #include <axis/server/CharacterElement.h>
 
+HeaderBlockFunctions IHeaderBlock::ms_VFtable;
+bool IHeaderBlock::bInitialized = false;
+
 HeaderBlock::HeaderBlock()
 {
     iNoOFChildren = 0;
 }
 
-HeaderBlock::HeaderBlock(AxisChar *pachLocalName, AxisChar *pachPrefix,
-                         AxisChar *pachUri)
+HeaderBlock::HeaderBlock(const AxisChar *pachLocalName, const AxisChar *pachPrefix,
+                         const AxisChar *pachUri)
 {
     iNoOFChildren = 0;
 
@@ -375,6 +378,7 @@ BasicNode* HeaderBlock::createChild(NODE_TYPE eNODE_TYPE)
     return pBasicNode;
 }
 
+#ifdef UNIT_TESTING_ON
 int HeaderBlock::initializeForTesting()
 {
     setPrefix("m");
@@ -410,6 +414,7 @@ int HeaderBlock::initializeForTesting()
 
     return AXIS_SUCCESS;    
 }
+#endif
 
 bool HeaderBlock::operator ==( const HeaderBlock &objHeaderBlock)
 {

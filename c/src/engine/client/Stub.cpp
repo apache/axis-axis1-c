@@ -42,54 +42,56 @@
 
 #include <axis/server/AxisWrapperAPI.h>
 
+StubFunctions Stub::ms_VFtable;
+bool Stub::bInitialized = false;
 
-Stub::Stub (const char *pcEndPointUri) : m_lTimeoutSeconds(0)
+Stub::Stub(const char *pcEndPointUri, AXIS_PROTOCOL_TYPE eProtocol) : m_lTimeoutSeconds(0)
 {
-    m_pCall = new Call ();
-    m_pCall->setProtocol (APTHTTP);
-    m_pCall->setEndpointURI (pcEndPointUri);
+    m_pCall = new Call();
+    m_pCall->setProtocol(eProtocol);
+    m_pCall->setEndpointURI(pcEndPointUri);
 }
 
-Stub::~Stub ()
+Stub::~Stub()
 {
     delete m_pCall;
-    for (unsigned int i = 0; i < m_vKeys.size (); i++)
+    for (unsigned int i = 0; i < m_vKeys.size(); i++)
     {
-	free (m_vKeys[i]);
-	free (m_vValues[i]);
+	    free(m_vKeys[i]);
+	    free(m_vValues[i]);
     }
 
-    for (unsigned int j = 0; j < m_vSOAPHeaderBlocks.size (); j++)
+    for (unsigned int j = 0; j < m_vSOAPHeaderBlocks.size(); j++)
     {
-	delete m_vSOAPHeaderBlocks[j];
+	    delete m_vSOAPHeaderBlocks[j];
     }
 }
 
-void Stub::setEndPoint (char *pcEndPoint)
+void Stub::setEndPoint(const char *pcEndPoint)
 {
-    m_pCall->setEndpointURI (pcEndPoint);
+    m_pCall->setEndpointURI(pcEndPoint);
 }
 
-void Stub::setTransportProperty (const char *pcKey, const char *pcValue)
+void Stub::setTransportProperty(const char *pcKey, const char *pcValue)
 {
     if (pcKey && pcValue)
     {
-	m_vKeys.push_back (strdup (pcKey));
-	m_vValues.push_back (strdup (pcValue));
+	    m_vKeys.push_back(strdup(pcKey));
+	    m_vValues.push_back(strdup(pcValue));
     }
 }
 
-void Stub::setTransportProperties ()
+void Stub::setTransportProperties()
 {
     SOAPTransport *pTrasport = NULL;
     if (m_pCall)
-	pTrasport = m_pCall->getTransport ();
+	    pTrasport = m_pCall->getTransport();
     if (pTrasport)
     {
-	for (unsigned int i = 0; i < m_vKeys.size (); i++)
-	{
-	    pTrasport->setTransportProperty (m_vKeys[i], m_vValues[i]);
-	}
+	    for (unsigned int i = 0; i < m_vKeys.size(); i++)
+	    {
+	        pTrasport->setTransportProperty(m_vKeys[i], m_vValues[i]);
+	    }
     }
 }
 
@@ -168,18 +170,17 @@ void Stub::deleteTrasportProperty(char* pcKey, unsigned int uiOccurance)
     }
 }
 
-IHeaderBlock * Stub::createSOAPHeaderBlock (AxisChar * pachLocalName,
-			 AxisChar * pachPrefix, AxisChar * pachUri)
+IHeaderBlock* Stub::createSOAPHeaderBlock(AxisChar * pachLocalName,
+                                           AxisChar * pachUri)
 {
-    if (pachLocalName && pachPrefix && pachUri)
+    if (pachLocalName && pachUri)
     {
-	IHeaderBlock *pNewSoapheader =
-	    new HeaderBlock (pachLocalName, pachPrefix, pachUri);
-	m_vSOAPHeaderBlocks.push_back (pNewSoapheader);
-	return pNewSoapheader;
+	    IHeaderBlock *pNewSoapheader = m_pCall->createHeaderBlock(pachLocalName, pachUri);
+	    m_vSOAPHeaderBlocks.push_back(pNewSoapheader);
+	    return pNewSoapheader;
     }
     else
-	return NULL;
+	    return NULL;
 }
 
 IHeaderBlock* Stub::getFirstSOAPHeaderBlock()
@@ -204,6 +205,15 @@ IHeaderBlock* Stub::getNextSOAPHeaderBlock()
     else
         return (*m_viCurrentSOAPHeaderBlock);
     
+}
+
+IHeaderBlock* Stub::getCurrentSOAPHeaderBlock()
+{
+    if(m_viCurrentSOAPHeaderBlock != m_vSOAPHeaderBlocks.end())
+    {
+        return (*m_viCurrentSOAPHeaderBlock);
+    }
+	return NULL;
 }
 
 void Stub::deleteCurrentSOAPHeaderBlock()
@@ -232,24 +242,24 @@ void Stub::deleteSOAPHeaderBlock(IHeaderBlock* pHeaderBlock)
     }
 }
 
-void Stub::setSOAPHeaders ()
+void Stub::setSOAPHeaders()
 {
     SoapSerializer *pSerializer = NULL;
     if (m_pCall)
-	pSerializer = m_pCall->getSOAPSerializer ();
+	pSerializer = m_pCall->getSOAPSerializer();
     if (pSerializer)
     {
-	for (unsigned int i = 0; i < m_vSOAPHeaderBlocks.size (); i++)
+	for (unsigned int i = 0; i < m_vSOAPHeaderBlocks.size(); i++)
 	{
-	    pSerializer->addHeaderBlock (m_vSOAPHeaderBlocks[i]->clone ());
+	    pSerializer->addHeaderBlock(m_vSOAPHeaderBlocks[i]);
 	}
     }
 }
 
-void Stub::applyUserPreferences ()
+void Stub::applyUserPreferences()
 {
-    setSOAPHeaders ();
-    setTransportProperties ();
+    setSOAPHeaders();
+    setTransportProperties();
     setSOAPMethodAttributes();
     setTransportTimeout();
 }
@@ -301,10 +311,10 @@ void Stub::setSOAPMethodAttributes()
 {
     SoapSerializer *pSerializer = NULL;
     if (m_pCall)
-	pSerializer = m_pCall->getSOAPSerializer ();
+	pSerializer = m_pCall->getSOAPSerializer();
     if (pSerializer)
     {
-	for (unsigned int i = 0; i < m_vSOAPMethodAttributes.size (); i++)
+	for (unsigned int i = 0; i < m_vSOAPMethodAttributes.size(); i++)
 	{
 		pSerializer->setSOAPMethodAttribute(m_vSOAPMethodAttributes[i]->clone());
 	}
@@ -355,7 +365,7 @@ void Stub::setTransportTimeout()
     {
         SOAPTransport *pTrasport = NULL;
         if (m_pCall)
-            pTrasport = m_pCall->getTransport ();
+            pTrasport = m_pCall->getTransport();
         if (pTrasport)
         {
             pTrasport->setTimeout(m_lTimeoutSeconds);
@@ -370,3 +380,115 @@ int Stub::getStatus()
     else
         return m_pCall->getStatus();
 }
+
+const AxisChar* Stub::getNamespacePrefix(const AxisChar* pNamespace)
+{
+    return m_pCall->getNamespacePrefix(pNamespace);
+}
+
+/* global function to be used in C stubs */
+extern "C" void* getStubObject (AXIS_PROTOCOL_TYPE nProtocol, 
+    AxisChar* pchEndpointURI)
+{
+    Call_C* pCall = (Call_C*) malloc (sizeof (Call_C));
+    pCall->_object = new Call ();
+    pCall->_functions = &Call::ms_VFtable;
+    ((Call*) pCall->_object)->setProtocol (nProtocol);
+    ((Call*) pCall->_object)->setEndpointURI (pchEndpointURI);
+    return pCall;
+}
+
+extern "C" void destroyStubObject (void* pCall)
+{
+    Call* pObject = (Call*) ((Call_C*)pCall)->_object;
+    delete pObject;
+    free (pCall);
+}
+
+HeaderBlock_C Stub::s_createSOAPHeaderBlock(void* pObj, 
+    AxisChar * pachLocalName, AxisChar * pachUri)
+{
+	HeaderBlock_C blk;
+	blk._functions = &(IHeaderBlock::ms_VFtable);
+	blk._object = ((Stub*)pObj)->createSOAPHeaderBlock(pachLocalName, pachUri);
+	return blk;
+}
+
+HeaderBlock_C Stub::s_getFirstSOAPHeaderBlock(void* pObj)
+{
+	HeaderBlock_C blk;
+	blk._functions = &(IHeaderBlock::ms_VFtable);
+	blk._object = ((Stub*)pObj)->getFirstSOAPHeaderBlock();
+	return blk;
+}
+
+HeaderBlock_C Stub::s_getNextSOAPHeaderBlock(void* pObj)
+{
+	HeaderBlock_C blk;
+	blk._functions = &(IHeaderBlock::ms_VFtable);
+	blk._object = ((Stub*)pObj)->getNextSOAPHeaderBlock();
+	return blk;
+}
+
+HeaderBlock_C Stub::s_getCurrentSOAPHeaderBlock(void* pObj)
+{
+	HeaderBlock_C blk;
+	blk._functions = &(IHeaderBlock::ms_VFtable);
+	blk._object = ((Stub*)pObj)->getCurrentSOAPHeaderBlock();
+	return blk;
+}
+
+Attribute_C Stub::s_getFirstSOAPMethodAttribute(void* pObj)
+{
+	Attribute_C attr;
+	attr._functions = &(Attribute::ms_VFtable);
+	attr._object = ((Stub*)pObj)->getFirstSOAPMethodAttribute();
+	return attr;
+}
+
+Attribute_C Stub::s_getNextSOAPMethodAttribute(void* pObj)
+{
+	Attribute_C attr;
+	attr._functions = &(Attribute::ms_VFtable);
+	attr._object = ((Stub*)pObj)->getNextSOAPMethodAttribute();
+	return attr;
+}
+
+Attribute_C Stub::s_getCurrentSOAPMethodAttribute(void* pObj)
+{
+	Attribute_C attr;
+	attr._functions = &(Attribute::ms_VFtable);
+	attr._object = ((Stub*)pObj)->getCurrentSOAPMethodAttribute();
+	return attr;
+}
+
+void Stub::s_Initialize()
+{	
+	if (bInitialized) return;
+	bInitialized = true;
+	ms_VFtable.setEndpoint = s_setEndpoint;
+	ms_VFtable.setTransportProperty = s_setTransportProperty;
+	ms_VFtable.getFirstTrasportPropertyKey = s_getFirstTrasportPropertyKey;
+	ms_VFtable.getNextTrasportPropertyKey = s_getNextTrasportPropertyKey;
+	ms_VFtable.getCurrentTrasportPropertyKey = s_getCurrentTrasportPropertyKey;
+	ms_VFtable.getCurrentTrasportPropertyValue = s_getCurrentTrasportPropertyValue;
+	ms_VFtable.deleteCurrentTrasportProperty = s_deleteCurrentTrasportProperty;
+	ms_VFtable.deleteTrasportProperty = s_deleteTrasportProperty;
+	ms_VFtable.createSOAPHeaderBlock = s_createSOAPHeaderBlock;
+	ms_VFtable.getFirstSOAPHeaderBlock = s_getFirstSOAPHeaderBlock;
+	ms_VFtable.getNextSOAPHeaderBlock = s_getNextSOAPHeaderBlock;
+	ms_VFtable.getCurrentSOAPHeaderBlock = s_getCurrentSOAPHeaderBlock;
+	ms_VFtable.deleteCurrentSOAPHeaderBlock = s_deleteCurrentSOAPHeaderBlock;
+	ms_VFtable.deleteSOAPHeaderBlock = s_deleteSOAPHeaderBlock;
+	ms_VFtable.setProxy = s_setProxy;
+	ms_VFtable.setSOAPMethodAttribute = s_setSOAPMethodAttribute;
+	ms_VFtable.getFirstSOAPMethodAttribute = s_getFirstSOAPMethodAttribute;
+	ms_VFtable.getNextSOAPMethodAttribute = s_getNextSOAPMethodAttribute;
+	ms_VFtable.getCurrentSOAPMethodAttribute = s_getCurrentSOAPMethodAttribute;
+	ms_VFtable.deleteCurrentSOAPMethodAttribute = s_deleteCurrentSOAPMethodAttribute;
+	ms_VFtable.deleteSOAPMethodAttribute = s_deleteSOAPMethodAttribute;
+	ms_VFtable.setTransportTimeout = s_setTransportTimeout;
+	ms_VFtable.getStatus = s_getStatus;
+	ms_VFtable.getNamespacePrefix = s_getNamespacePrefix;
+}
+

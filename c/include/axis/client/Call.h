@@ -46,6 +46,7 @@
 #include "../server/AxisWrapperAPI.h"
 #include "../server/SoapEnvVersions.h"
 #include "../server/WSDDDefines.h"
+#include "../server/IHeaderBlock.h"
 
 #ifdef __cplusplus
 #include "../server/IParam.h"
@@ -56,12 +57,6 @@ class ClientAxisEngine;
 class SOAPTransport;
 #else
 #include "../server/Packet.h"
-#endif
-
-#if defined(WIN32) 
-#define STORAGE_CLASS_INFO __declspec(dllexport)
-#else
-#define STORAGE_CLASS_INFO 
 #endif
 
 typedef struct {
@@ -209,8 +204,16 @@ typedef struct {
 	
 	/* Minimal error check */
 	int (AXISCALL* getStatus)(void *pObj);
-	AnyType* (AXISCALL* getAnyObject)(void *pObj);
-	int (AXISCALL* addAnyObject)(void *pObj, AnyType* pAnyObject);
+
+    AnyType* (AXISCALL* getAnyObject)(void *pObj);
+
+    int (AXISCALL* addAnyObject)(void *pObj, AnyType* pAnyObject);
+
+    const AxisChar* (AXISCALL* getNamespacePrefix)(void *pObj,
+        const AxisChar* pNamespace);
+
+	HeaderBlock_C (AXISCALL* createHeaderBlock)(void *pObj, 
+        AxisChar *pachLocalName, AxisChar *pachUri);
 
 } CallFunctions;
 
@@ -364,6 +367,11 @@ public:
 		
 	virtual AnyType* AXISCALL getAnyObject()=0;
 	virtual int AXISCALL addAnyObject(AnyType* pAnyObject)=0;
+    virtual const AxisChar* AXISCALL getNamespacePrefix
+        (const AxisChar* pNamespace)=0;
+
+    virtual IHeaderBlock* AXISCALL createHeaderBlock(AxisChar *pachLocalName, 
+        AxisChar *pachUri)=0;
 
 	/* following stuff is needed to provide the interface for C web services */
 public:
@@ -400,7 +408,7 @@ public:
         Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct,
         const AxisChar* pName, const AxisChar* pNamespace)
 	{ ((CallBase*)pObj)->addCmplxArrayParameter(pArray, pSZFunct, pDelFunct, 
-    pSizeFunct, pName, pNamespace);};
+		pSizeFunct, pName, pNamespace);};
 	static void AXISCALL s_AddBasicArrayParameter(void* pObj, 
         Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName)
 	{ ((CallBase*)pObj)->addBasicArrayParameter(pArray, nType, pName);};
@@ -408,7 +416,7 @@ public:
         void* pDZFunct, void* pDelFunct, const AxisChar* pName, 
         const AxisChar* pNamespace)
 	{ ((CallBase*)pObj)->addCmplxParameter(pObject, pDZFunct, pDelFunct, pName,
-    pNamespace);};
+		pNamespace);};
 
 	static int AXISCALL s_GetElementAsInt(void* pObj, const AxisChar* pName, 
         const AxisChar* pNamespace)
@@ -492,14 +500,14 @@ public:
     static unsigned short AXISCALL s_GetAttributeAsUnsignedShort(void* pObj,
         const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsUnsignedShort(pName, 
-    pNamespace);};
+		pNamespace);};
     static char AXISCALL s_GetAttributeAsByte(void* pObj, 
         const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsByte(pName, pNamespace);};
     static unsigned char AXISCALL s_GetAttributeAsUnsignedByte(void* pObj, 
         const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsUnsignedByte(pName, 
-    pNamespace);};
+		pNamespace);};
     static long AXISCALL s_GetAttributeAsLong(void* pObj, 
         const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsLong(pName, pNamespace);};
@@ -509,7 +517,7 @@ public:
     static unsigned long AXISCALL s_GetAttributeAsUnsignedLong(void* pObj, 
         const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsUnsignedLong(pName, 
-    pNamespace);};
+		pNamespace);};
 	static float AXISCALL s_GetAttributeAsFloat(void* pObj, 
         const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsFloat(pName, pNamespace);};
@@ -534,7 +542,7 @@ public:
 	static xsd__base64Binary AXISCALL s_GetAttributeAsBase64Binary(void* pObj, 
         const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsBase64Binary(pName, 
-    pNamespace);};
+		pNamespace);};
     static struct tm AXISCALL s_GetAttributeAsDateTime(void* pObj, 
         const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsDateTime(pName, pNamespace);};
@@ -552,7 +560,7 @@ public:
         void* pCreFunct, void* pDelFunct, void* pSizeFunct, 
         const AxisChar* pName, const AxisChar* pNamespace)
 	{return ((CallBase*)pObj)->getCmplxArray(pDZFunct, pCreFunct, pDelFunct,
-    pSizeFunct, pName, pNamespace);};
+		pSizeFunct, pName, pNamespace);};
 	static Axis_Array AXISCALL s_GetBasicArray(void* pObj, XSDTYPE nType, 
         const AxisChar* pName, const AxisChar* pNamespace)
 	{return ((CallBase*)pObj)->getBasicArray(nType, pName, pNamespace);};
@@ -560,7 +568,7 @@ public:
         void* pCreFunct, void* pDelFunct, const AxisChar* pName, 
         const AxisChar* pNamespace)
 	{return ((CallBase*)pObj)->getCmplxObject(pDZFunct, pCreFunct, pDelFunct, 
-    pName, pNamespace);};
+        pName, pNamespace);};
 
 	static int AXISCALL s_CheckMessage(void *pObj, const AxisChar* pName, 
         const AxisChar* pNamespace)
@@ -576,79 +584,19 @@ public:
 
 	static AnyType* AXISCALL s_GetAnyObject(void *pObj)
 	{return ((CallBase*)pObj)->getAnyObject();};
-	static int AXISCALL s_AddAnyObject(void *pObj, AnyType* pAnyObject)
+
+    static int AXISCALL s_AddAnyObject(void *pObj, AnyType* pAnyObject)
 	{return ((CallBase*)pObj)->addAnyObject(pAnyObject);};
 
-	/* and populate ms_VFtable with corresponding entry */
-	static void s_Initialize()
-	{	
-		if (bInitialized) return;
-		bInitialized = true;
-		ms_VFtable.setSOAPVersion = s_SetSOAPVersion;
-		ms_VFtable.setTransportProperty = s_SetTransportProperty;
-		ms_VFtable.setProtocol = s_SetProtocol;
-		ms_VFtable.initialize = s_InitializeCall;
-		ms_VFtable.invoke = s_Invoke;
-		ms_VFtable.unInitialize = s_UnInitialize;
-		ms_VFtable.setOperation = s_SetOperation;
-		ms_VFtable.setEndpointURI = s_SetEndpointURI;
-		ms_VFtable.addParameter = s_AddParameter;
-		ms_VFtable.addCmplxArrayParameter = s_AddCmplxArrayParameter;
-		ms_VFtable.addBasicArrayParameter = s_AddBasicArrayParameter;
-		ms_VFtable.addCmplxParameter = s_AddCmplxParameter;
-		ms_VFtable.getCmplxArray = s_GetCmplxArray;
-		ms_VFtable.getBasicArray = s_GetBasicArray;
-		ms_VFtable.getCmplxObject = s_GetCmplxObject;
-		ms_VFtable.getElementAsInt = s_GetElementAsInt;
-		ms_VFtable.getElementAsBoolean = s_GetElementAsBoolean;
-		ms_VFtable.getElementAsUnsignedInt = s_GetElementAsUnsignedInt;
-		ms_VFtable.getElementAsShort = s_GetElementAsShort;
-		ms_VFtable.getElementAsUnsignedShort = s_GetElementAsUnsignedShort;
-		ms_VFtable.getElementAsByte = s_GetElementAsByte;
-		ms_VFtable.getElementAsUnsignedByte = s_GetElementAsUnsignedByte;
-		ms_VFtable.getElementAsLong = s_GetElementAsLong;
-		ms_VFtable.getElementAsInteger = s_GetElementAsInteger;
-		ms_VFtable.getElementAsUnsignedLong = s_GetElementAsUnsignedLong;
-		ms_VFtable.getElementAsFloat = s_GetElementAsFloat;
-		ms_VFtable.getElementAsDouble = s_GetElementAsDouble;
-		ms_VFtable.getElementAsDecimal = s_GetElementAsDecimal;
-		ms_VFtable.getElementAsString = s_GetElementAsString;
-		ms_VFtable.getElementAsAnyURI = s_GetElementAsAnyURI;
-		ms_VFtable.getElementAsQName = s_GetElementAsQName;
-		ms_VFtable.getElementAsHexBinary = s_GetElementAsHexBinary;
-		ms_VFtable.getElementAsBase64Binary = s_GetElementAsBase64Binary;
-		ms_VFtable.getElementAsDateTime = s_GetElementAsDateTime;
-		ms_VFtable.getElementAsDate = s_GetElementAsDate;
-		ms_VFtable.getElementAsTime = s_GetElementAsTime;
-		ms_VFtable.getElementAsDuration = s_GetElementAsDuration;
-		ms_VFtable.getAttributeAsInt = s_GetAttributeAsInt;
-		ms_VFtable.getAttributeAsBoolean = s_GetAttributeAsBoolean;
-		ms_VFtable.getAttributeAsUnsignedInt = s_GetAttributeAsUnsignedInt;
-		ms_VFtable.getAttributeAsShort = s_GetAttributeAsShort;
-		ms_VFtable.getAttributeAsUnsignedShort = s_GetAttributeAsUnsignedShort;
-		ms_VFtable.getAttributeAsByte = s_GetAttributeAsByte;
-		ms_VFtable.getAttributeAsUnsignedByte = s_GetAttributeAsUnsignedByte;
-		ms_VFtable.getAttributeAsLong = s_GetAttributeAsLong;
-		ms_VFtable.getAttributeAsInteger = s_GetAttributeAsInteger;
-		ms_VFtable.getAttributeAsUnsignedLong = s_GetAttributeAsUnsignedLong;
-		ms_VFtable.getAttributeAsFloat = s_GetAttributeAsFloat;
-		ms_VFtable.getAttributeAsDouble = s_GetAttributeAsDouble;
-		ms_VFtable.getAttributeAsDecimal = s_GetAttributeAsDecimal;
-		ms_VFtable.getAttributeAsString = s_GetAttributeAsString;
-		ms_VFtable.getAttributeAsAnyURI = s_GetAttributeAsAnyURI;
-		ms_VFtable.getAttributeAsQName = s_GetAttributeAsQName;
-		ms_VFtable.getAttributeAsHexBinary = s_GetAttributeAsHexBinary;
-		ms_VFtable.getAttributeAsBase64Binary = s_GetAttributeAsBase64Binary;
-		ms_VFtable.getAttributeAsDateTime = s_GetAttributeAsDateTime;
-		ms_VFtable.getAttributeAsDate = s_GetAttributeAsDate;
-		ms_VFtable.getAttributeAsTime = s_GetAttributeAsTime;
-		ms_VFtable.getAttributeAsDuration = s_GetAttributeAsDuration;
-		ms_VFtable.checkMessage = s_CheckMessage;
-		ms_VFtable.checkFault = s_CheckFault;
-		ms_VFtable.getStatus = s_GetStatus;
-		ms_VFtable.getAnyObject = s_GetAnyObject;
-		ms_VFtable.addAnyObject = s_AddAnyObject;
-	}
+    static const AxisChar* AXISCALL s_GetNamespacePrefix(void *pObj, 
+        const AxisChar* pNamespace)
+    {return ((CallBase*)pObj)->getNamespacePrefix(pNamespace);};
+
+	static HeaderBlock_C AXISCALL s_CreateHeaderBlock(void *pObj, 
+        AxisChar *pachLocalName, AxisChar *pachUri);
+
+    /* and populate ms_VFtable with corresponding entry */
+	static void s_Initialize();
 };
 
 /* A separate call class object should be used by each thread */
@@ -684,8 +632,8 @@ public:
         const char* pchNamespace);
 	int AXISCALL setEndpointURI(const char* pchEndpointURI);
 public:
-	IHeaderBlock* createHeaderBlock(AxisChar *pachLocalName, 
-        AxisChar *pachPrefix, AxisChar *pachUri);
+	IHeaderBlock* AXISCALL createHeaderBlock(AxisChar *pachLocalName, 
+        AxisChar *pachUri);
 	IHeaderBlock* createHeaderBlock();
 	int setSoapHeader(SoapHeader *pSoapHeader);
 	/* Methods used by stubs to get a deserialized value of XML element 
@@ -817,6 +765,7 @@ public:
 
 	AnyType* AXISCALL getAnyObject();
 	int AXISCALL addAnyObject(AnyType* pAnyObject);
+    const AxisChar* AXISCALL getNamespacePrefix(const AxisChar* pNamespace);
 		
 private:
 	int openConnection(int secure);
@@ -864,11 +813,6 @@ private:
 
 #endif
 
-typedef struct { 
-	void* _object; /* this will be C++ Call Object */
-	CallFunctions* _functions; /* this is the static function table */
-} Call_C;
-
 #ifdef __cplusplus
 extern "C" { 
 #endif
@@ -877,10 +821,6 @@ STORAGE_CLASS_INFO void* getStubObject(AXIS_PROTOCOL_TYPE nProtocol,
 STORAGE_CLASS_INFO void destroyStubObject(void* pCall); 
 #ifdef __cplusplus
 } 
-#endif
-
-#ifndef __cplusplus
-typedef Call_C Call; 
 #endif
 
 #endif

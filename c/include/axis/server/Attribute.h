@@ -18,20 +18,25 @@
 #if !defined(_ATTRIBUTE_H____OF_AXIS_INCLUDED_)
 #define _ATTRIBUTE_H____OF_AXIS_INCLUDED_
 
+#include "GDefine.h"
+
+#ifdef __cplusplus
 #include <string>
 #include <list>
-#include "GDefine.h"
 
 using namespace std;
 
 class SoapSerializer;
 
-/*
+#endif
+
+/**
  *   @class Attribute
  *   @brief interface for the Attribute class.
  *
  *   @author Roshan Weerasuriya (roshan@opensource.lk, roshan@jkcs.slt.lk)
  *   @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ *   @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  *
  */
 
@@ -40,11 +45,27 @@ class SoapSerializer;
  * Added copy constructor
  */
 
+/*
+ * Revision 1.11  2004/06/13 susantha
+ * Added support for writing C web services and handlers
+ */
+
+typedef struct {
+	void (AXISCALL* setValue)(void* pObj, const AxisChar* value);
+	//add all other API functions here
+} AttributeFunctions;
+
+#ifdef __cplusplus
 
 class Attribute  
 {
 public:        
+	static AttributeFunctions ms_VFtable;
+	static bool bInitialized;
+
+#ifdef UNIT_TESTING_ON
     int initializeForTesting();
+#endif
     int serialize(SoapSerializer& pSZ) const;
     int serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack);
 
@@ -70,6 +91,17 @@ private:
     AxisString m_value;
 
 };
+
+#endif
+
+typedef struct { 
+	void* _object; /* this will be C++ Call Object */
+	AttributeFunctions* _functions; /* this is the static function table */
+} Attribute_C;
+
+#ifndef __cplusplus
+typedef Attribute_C Attribute; 
+#endif
 
 #endif
 

@@ -18,13 +18,18 @@
 #if !defined(_BASICNODE_H____OF_AXIS_INCLUDED_)
 #define _BASICNODE_H____OF_AXIS_INCLUDED_
 
+#include "GDefine.h"
+
+#ifdef __cplusplus
+
 #include <string>
 #include <list>
-#include "GDefine.h"
 
 using namespace std;
 
 class SoapSerializer;
+
+#endif
 
 enum NODE_TYPE { ELEMENT_NODE=1, CHARACTER_NODE};
 
@@ -46,6 +51,13 @@ enum NODE_TYPE { ELEMENT_NODE=1, CHARACTER_NODE};
  * Revision 1.2  2004/06/13 roshan
  * Added doxygen comments to help autobuild API docs
  */
+
+typedef struct {
+	int (AXISCALL* getNoOfChildren)(void* pObj);
+	//add akk itger aou fybctuibs gere.
+} BasicNodeFunctions;
+
+#ifdef __cplusplus
 
 class BasicNode
 {
@@ -166,6 +178,17 @@ protected:
       */
     AxisChar* m_pachValue;
 };
+
+#endif
+
+typedef struct { 
+	void* _object; /* this will be C++ Call Object */
+	BasicNodeFunctions* _functions; /* this is the static function table */
+} BasicNode_C;
+
+#ifndef __cplusplus
+typedef BasicNode_C BasicNode; 
+#endif
 
 #endif 
 

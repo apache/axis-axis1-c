@@ -49,7 +49,9 @@ private:
 
 public:    
 
+#ifdef UNIT_TESTING_ON
     int initializeForTesting(SOAP_VERSION eSoapVersion);
+#endif
     int setPrefix(const AxisChar* prefix);
     int addNamespaceDecl(Attribute* pAttribute);
     int addAttribute(Attribute* pAttribute);    

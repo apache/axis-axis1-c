@@ -145,6 +145,9 @@ public:
         AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri, 
         AxisChar* pachValue);
 
+#ifdef UNIT_TESTING_ON
+    int initializeForTesting();
+#endif
   /**
    * Creates a child node depending on the given type. If the type is 
    *  CHARACTER_NODE a CharacterElement is created. If the type is 
@@ -329,8 +332,8 @@ public:
       * @param pachPrefix The prefix of this Header Block.
       * @param pachUri The namespace uri of this Header Block.
       */
-    HeaderBlock(AxisChar* pachLocalName, AxisChar* pachPrefix, 
-        AxisChar* pachUri);
+    HeaderBlock(const AxisChar* pachLocalName, const AxisChar* pachPrefix, 
+        const AxisChar* pachUri);
 
     /**
       * The Constructor.

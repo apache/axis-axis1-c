@@ -18,12 +18,6 @@
  *
  */
 
-#ifdef WIN32
-#define STORAGE_CLASS_INFO __declspec(dllexport)
-#else
-#define STORAGE_CLASS_INFO
-#endif
-
 #include "ESHHandler.h"
 #include <axis/server/GDefine.h>
 
