@@ -87,6 +87,7 @@ public:
 
 	int Invoke(IMessageData* pMsg);
 	void OnFault(IMessageData* pMsg);
+	int GetType(){return CHAIN_HANDLER;};
 
 private:
 	list<Handler*> m_HandlerList;

@@ -11,13 +11,14 @@ class Handler : public BasicHandler
 {
 public:
   Handler(){};
-	virtual ~Handler(){};
+  virtual ~Handler(){};
   virtual string GetOption(string sArg)=0;
   virtual void SetOption(string sOption, string Value)=0;
   virtual void SetOptionList(map<string, string>* OptionList)=0;
+  int GetType(){return NORMAL_HANDLER;};
 
 protected:
-map<string, string>* m_Option;
+  map<string, string>* m_Option;
 };
 
 #endif //__HANDLER_INCLUDED__
