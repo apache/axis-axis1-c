@@ -230,7 +230,7 @@ SOURCE=..\..\src\soap\SoapEnvelope.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\server\SoapFault.h
+SOURCE=..\..\src\soap\SoapFault.h
 # End Source File
 # Begin Source File
 
