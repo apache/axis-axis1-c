@@ -14,11 +14,12 @@
  *   limitations under the License.
  */
 
-/*
+/**
  * @author Lilantha Darshana (lilantha@virtusa.com)
  * @author Damitha Kumarage (damitha@jkcsworld.com, damitha@opensource.lk)
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */
 
 /*
@@ -36,6 +37,14 @@
  * Revision 1.3  2004/06/08 samisa
  * Added setTimeout
  */
+
+/*
+ * Revision 1.4  2004/07/06 roshan
+ * Added code to "SetProperty (const char *p_Property, const char *p_Value)"
+ *  method. The purpose of this change is not to allow duplicating SOAPAction
+ *  HTTP Header.
+ */
+
 
 #ifdef WIN32
 #pragma warning (disable : 4101)
@@ -168,7 +177,25 @@ HttpTransport::Fini ()
 void
 HttpTransport::SetProperty (const char *p_Property, const char *p_Value)
 {
-    m_AdditionalHeader.push_back (std::make_pair ((string)p_Property,(string) p_Value));
+    bool b_SOAPActionFound = false;
+
+    if (strcmp(p_Property, "SOAPAction") == 0)
+    {
+    for (unsigned int i = 0; i < m_AdditionalHeader.size (); i++)
+    {
+        if (m_AdditionalHeader[i].first == "SOAPAction")
+        {
+            m_AdditionalHeader[i].second = (string)p_Value;
+	    b_SOAPActionFound = true;
+	    break;
+        }
+    }
+    }
+
+    if (b_SOAPActionFound == false)
+    {
+	 m_AdditionalHeader.push_back (std::make_pair ((string)p_Property,(string) p_Value));
+    }
 }
 
 
