@@ -272,7 +272,7 @@ Notes:
 	<target name="compileTestHandler" if="isHandler">
 		<mkdir dir="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}"/>
 		<cc incremental="false"
-		 outfile="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}/${handlerLibraryName}"
+		 outfile="${dir.test.generated}/${client.lang}/${testName}/${handlerLibraryName}"
 		 objdir="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}" exceptions="true"
 		 failonerror="false" outtype="shared" multithreaded="true">
 			<compiler refid="VisualC++"/>
@@ -303,9 +303,14 @@ Notes:
 	<target name="checkIfHandlerRootDirectory">
 		<basename file="${handlerDir}" property="handlerLibraryName"/>
 		<condition property="isHandler">
-			<not>
-				<equals arg1="${handlerLibraryName}" arg2="${testName}"/>
-			</not>
+			<and>
+				<not>
+					<equals arg1="${handlerLibraryName}" arg2="${testName}"/>
+				</not>
+				<not>
+					<equals arg1="${handlerLibraryName}" arg2="service"/>
+				</not>
+			</and>
 		</condition>
 	</target>
 
@@ -373,13 +378,43 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 		 message="ClientWSDDFilePath:${client.wsdd}"/>
 	</target>
 
+	<target name="checkIfServiceDirectory">
+		<condition property="serviceDirectoryExists">
+			<available file="${dir.src}/handlers/${testName}/service"/>
+		</condition>
+	</target>
+
+	<target name="setServiceNametoTestName" unless="serviceFileExists">
+		<property name="serviceName" value="${testName}"/>
+	</target>
+
+	<target name="getServiceFilename" if="serviceDirectoryExists">
+		<!-- get list of files in service directory, should be only one file -->
+		<fileset dir="${dir.src}/handlers/${testName}/service" id="serviceFiles">
+			<include name="*"/>
+		</fileset>
+
+		<!-- create a property with the fill path name of the file in the service dir -->
+		<pathconvert pathsep="," property="serviceNamePath" refid="serviceFiles"/>
+		<condition property="serviceFileExists">
+			<contains string="${serviceNamePath}" substring="service"/>
+		</condition>
+	</target>
+
+	<target name="setServiceNametoFilename" depends="getServiceFilename" if="serviceFileExists">
+		<!-- get the last element of the path name, shoudl be filename -->
+		<basename property="serviceName" file="${serviceNamePath}"/>
+	</target>
+
+	<target name="getServiceName" depends="checkIfServiceDirectory,setServiceNametoFilename,setServiceNametoTestName"/>
+
 	<!--
 	  Create start of WSDD File
 	  -->
-	<target name="createStartOfWSDDFile" if="HandlersPresent">
+	<target name="createStartOfWSDDFile" depends="getServiceName" if="HandlersPresent">
 		<property name="client.wsdd" value="${dir.test.generated}/${client.lang}/${testName}/client.wsdd"/>
 		<copy file="${dir.src}/handlers/templ_head.wsdd" tofile="${client.wsdd}" overwrite="true"/>
-		<replace file="${client.wsdd}" token="XXXX" value="${testName}"/>
+		<replace file="${client.wsdd}" token="XXXX" value="${serviceName}"/>
 	</target>
 
 	<!--
@@ -389,7 +424,7 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 		<concat destfile="${client.wsdd}" append="true">
 			<filelist dir="${dir.src}/handlers" files="templ_lib.wsdd"/>
 		</concat>
-		<replace file="${client.wsdd}" token="DDDD" value="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}/"/>
+		<replace file="${client.wsdd}" token="DDDD" value="${dir.test.generated}/${client.lang}/${testName}"/>
 		<replace file="${client.wsdd}" token="LLLL" value="${handlerLibraryName}"/>
 		<replace file="${client.wsdd}" token="PPP" value="${libraryPrefix}"/>
 		<replace file="${client.wsdd}" token="SSS" value="${librarySuffix}"/>
@@ -489,11 +524,11 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 	<target name="validateHandlerCompilation" if="isHandler">
 		<condition property="handlerCompilationStatus" value="FAILED">
 			<not>
-				<available file="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}/${handlerLibraryName}${librarySuffix}"/>
+				<available file="${dir.test.generated}/${client.lang}/${testName}/${libraryPrefix}${handlerLibraryName}${librarySuffix}"/>
 			</not>
 		</condition>
 		<condition property="handlerCompilationStatus" value="PASSED">
-			<available file="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}/${handlerLibraryName}${librarySuffix}"/>
+			<available file="${dir.test.generated}/${client.lang}/${testName}/${libraryPrefix}${handlerLibraryName}${librarySuffix}"/>
 		</condition>
 		
 		<!-- Set a flag to show compilation was successful -->
