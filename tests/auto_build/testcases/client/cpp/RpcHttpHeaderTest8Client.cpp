@@ -43,7 +43,7 @@ main(int argc, char *argv[])
     //endpoint for Axis CPP sample
     sprintf(endpoint, "http://%s:%s/axis/base", server, port);
     /*Set for HTTP transport */
-    InteropTestPortType ws(endpoint, APTHTTP);
+    InteropTestPortType ws(endpoint, APTHTTP1_1);
 
     //set HTTP headers
      ws.setTransportProperty(NULL, "lang2");

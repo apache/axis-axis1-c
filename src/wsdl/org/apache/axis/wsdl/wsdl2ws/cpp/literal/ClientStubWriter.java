@@ -142,7 +142,7 @@ public class ClientStubWriter extends CPPClassWriter
                 classname
                     + "::"
                     + classname
-                    + "()\n:Stub(\" \", APTHTTP)\n{\n");
+                    + "()\n:Stub(\" \", APTHTTP1_1)\n{\n");
             //TODO get TransportURI from WrapInfo and check what the transport is and do the following line accordingly
             writer.write(
                 "\tm_pCall->setEndpointURI(\""

@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 	//sprintf(endpoint, "http://%s:%s/axis/services/echo", server, port);
 	try
         {
-	SimpleTestSoap ws(endpoint, APTHTTP);
+	SimpleTestSoap ws(endpoint, APTHTTP1_1);
 
 	//set end point (optional)
         //ws.setEndPoint( "http://localhost:8080/axis/services/echo" );

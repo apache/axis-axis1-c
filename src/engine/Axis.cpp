@@ -110,7 +110,8 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
 
     switch (pStream->getProtocol())
     {
-        case APTHTTP:
+        case APTHTTP1_1:
+        case APTHTTP1_0:
             // Handle the POST method
             if (AXIS_HTTP_POST == pStream->getSubProtocol())
             {

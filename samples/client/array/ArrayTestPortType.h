@@ -14,7 +14,7 @@
 class ArrayTestPortType :public Stub
 {
 public:
-	ArrayTestPortType(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol=APTHTTP);
+	ArrayTestPortType(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol=APTHTTP1_1);
 	ArrayTestPortType();
 public:
 	virtual ~ArrayTestPortType();

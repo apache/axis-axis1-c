@@ -318,7 +318,7 @@ const char* AxisTransport::getServiceName()
 
 AXIS_PROTOCOL_TYPE AxisTransport::getProtocol()
 {
-	return APTHTTP;
+	return APTHTTP1_1;
 }
 
 

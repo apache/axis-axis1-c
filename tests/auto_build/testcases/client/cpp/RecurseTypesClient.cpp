@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
 
   try {
     if(endpoint_set) {
-      ws = new RecurseTypesWS(endpoint, APTHTTP);
+      ws = new RecurseTypesWS(endpoint, APTHTTP1_1);
       free(endpoint);
       endpoint_set = false;
     } else

@@ -125,12 +125,12 @@ public class ClientStubWriter extends CFileWriter
             writer.write("\tif(pchEndPointUri)\n");
             writer.write("\t{\n");
             writer.write(
-                "\t\treturn getStubObject(APTHTTP, pchEndPointUri);\n");
+                "\t\treturn getStubObject(APTHTTP1_1, pchEndPointUri);\n");
             writer.write("\t}\n");
             writer.write("\telse\n");
             writer.write("\t{\n");
             writer.write(
-                "\t\treturn getStubObject(APTHTTP, \""
+                "\t\treturn getStubObject(APTHTTP1_1, \""
                     + wscontext.getWrapInfo().getTargetEndpointURI()
                     + "\");\n");
             writer.write("\t}\n");

@@ -843,12 +843,12 @@ Axis2Transport::getServiceName ()
  * type.
  *
  * @return AXIS_PROTOCOL_TYPE Type is an enumerated type for valid HTTP
- * protocols (currently this method will always return APTHTTP).
+ * protocols (currently this method will always return APTHTTP1_1).
  */
 AXIS_PROTOCOL_TYPE
 Axis2Transport::getProtocol ()
 {
-    return APTHTTP;
+    return APTHTTP1_1;
 }
 
 /**

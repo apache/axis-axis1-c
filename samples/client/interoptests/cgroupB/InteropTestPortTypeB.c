@@ -26,11 +26,11 @@ extern int Axis_GetSize_SOAPStructStruct();
 void* get_InteropTestPortTypeB_stub(const char* pchEndPointUri)
 {	if(pchEndPointUri)
 	{
-		return getStubObject(APTHTTP, pchEndPointUri);
+		return getStubObject(APTHTTP1_1, pchEndPointUri);
 	}
 	else
 	{
-		return getStubObject(APTHTTP, "http://localhost/axis/cgroupB");
+		return getStubObject(APTHTTP1_1, "http://localhost/axis/cgroupB");
 	}
 }
 void destroy_InteropTestPortTypeB_stub(void* p){

@@ -47,7 +47,7 @@ main(int argc, char *argv[])
     printf("Usage :\n %s <server> <port>\n\n", argv[0]);
     //endpoint for Axis CPP sample
     sprintf(endpoint, "http://%s:%s/axis/base", server, port);
-    InteropTestPortType ws(endpoint, APTHTTP);
+    InteropTestPortType ws(endpoint, APTHTTP1_1);
 
     /*create a header of the form:
        <SOAP-ENV:Header>

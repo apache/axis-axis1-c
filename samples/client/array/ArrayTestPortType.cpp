@@ -21,7 +21,7 @@ ArrayTestPortType::ArrayTestPortType(const char* pchEndpointUri, AXIS_PROTOCOL_T
 }
 
 ArrayTestPortType::ArrayTestPortType()
-:Stub(" ", APTHTTP)
+:Stub(" ", APTHTTP1_1)
 {
 	m_pCall->setEndpointURI("http://localhost/axis/array");
 }

@@ -125,7 +125,7 @@ int WSDDTransport::updateWSDD(FILE* wsddfile, int tabcount)
 {
     WSDDHandlerList::iterator iter2;
     const char* trtype = 0;
-    for (int type = APTHTTP; type < APTOTHER; type++)
+    for (int type = APTHTTP1_0; type < APTOTHER; type++)
     {
         if((m_RequestHandlers && 
             (m_RequestHandlers->find((AXIS_PROTOCOL_TYPE)type) != 
@@ -134,7 +134,7 @@ int WSDDTransport::updateWSDD(FILE* wsddfile, int tabcount)
             (m_RequestHandlers->find((AXIS_PROTOCOL_TYPE)type) != 
             m_RequestHandlers->end())))
         {
-            trtype = (APTHTTP == type) ? 
+            trtype = (APTHTTP1_0 == type || APTHTTP1_1 == type) ? 
                 "http" : ((APTSMTP == type) ? "smtp" : "unsupported");
             if (fputs("\t<transport name=\"", wsddfile) < 0) return AXIS_FAIL;
             if (fputs(trtype, wsddfile) < 0) return AXIS_FAIL;

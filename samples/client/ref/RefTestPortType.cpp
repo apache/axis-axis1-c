@@ -21,7 +21,7 @@ RefTestPortType::RefTestPortType(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE 
 }
 
 RefTestPortType::RefTestPortType()
-:Stub(" ", APTHTTP)
+:Stub(" ", APTHTTP1_1)
 {
 	m_pCall->setEndpointURI("http://localhost/axis/ref");
 }

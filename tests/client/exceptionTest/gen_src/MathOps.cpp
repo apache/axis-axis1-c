@@ -15,7 +15,7 @@ using namespace std;
 }
 
 MathOps::MathOps()
-:Stub(" ", APTHTTP)
+:Stub(" ", APTHTTP1_1)
 {
 	m_pCall->setEndpointURI("http://localhost/axis/MathOps");
 }

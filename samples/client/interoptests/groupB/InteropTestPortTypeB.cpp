@@ -33,7 +33,7 @@ InteropTestPortTypeB::InteropTestPortTypeB(const char* pchEndpointUri, AXIS_PROT
 }
 
 InteropTestPortTypeB::InteropTestPortTypeB()
-:Stub(" ", APTHTTP)
+:Stub(" ", APTHTTP1_1)
 {
 	m_pCall->setEndpointURI("http://localhost/axis/groupB");
 }

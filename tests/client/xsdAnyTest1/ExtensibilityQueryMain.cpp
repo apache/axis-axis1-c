@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
     try{
 	sprintf(endpoint, "http://%s:%s/axis/testXSDANY", server, port);
         printf("endpoint:%s\n", endpoint);
-        //ExtensibilityQueryPortType* pStub = new ExtensibilityQueryPortType("http://localhost:5555/axis/testXSDANY",APTHTTP);
+        //ExtensibilityQueryPortType* pStub = new ExtensibilityQueryPortType("http://localhost:5555/axis/testXSDANY",APTHTTP1_1);
         ExtensibilityQueryPortType* pStub = new ExtensibilityQueryPortType(endpoint);
         AnyType* pAnyReturn = pStub->query(pAny);
 		if (!pAnyReturn)

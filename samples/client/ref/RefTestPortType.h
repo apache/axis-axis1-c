@@ -14,7 +14,7 @@
 class RefTestPortType :public Stub
 {
 public:
-	RefTestPortType(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol=APTHTTP);
+	RefTestPortType(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol=APTHTTP1_1);
 	RefTestPortType();
 public:
 	virtual ~RefTestPortType();

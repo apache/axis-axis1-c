@@ -60,10 +60,10 @@ public:
 private: /* methods that only be used by WSDDDepolyment. */
     int addService(WSDDService* pService);
     int addHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler,
-        AXIS_PROTOCOL_TYPE protocol=APTHTTP);
+        AXIS_PROTOCOL_TYPE protocol=APTHTTP1_1);
     int removeService(WSDDService* pService);
     int removeHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler,
-        AXIS_PROTOCOL_TYPE protocol=APTHTTP);
+        AXIS_PROTOCOL_TYPE protocol=APTHTTP1_1);
     void setDeploymentType(DEPLOYMENTTYPE nType);
 private:
     WSDDServiceMap* m_DeployedServices;

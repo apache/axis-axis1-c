@@ -49,7 +49,7 @@ main(int argc, char *argv[])
     //sprintf(endpoint, "http://%s:%s/axis/base", server, port);
     //endpoint for Axis CPP sample
     sprintf(endpoint, "http://%s:%s/axis/base", server, port);
-    InteropTestPortType ws(endpoint, APTHTTP);
+    InteropTestPortType ws(endpoint, APTHTTP1_1);
 
     /*
     <SOAP-ENV:Header>

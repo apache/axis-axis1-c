@@ -21,7 +21,7 @@ InteropTestPortType::InteropTestPortType(const char* pchEndpointUri, AXIS_PROTOC
 }
 
 InteropTestPortType::InteropTestPortType()
-:Stub(" ", APTHTTP)
+:Stub(" ", APTHTTP1_1)
 {
 	m_pCall->setEndpointURI("http://localhost/axis/InteropBase");
 }

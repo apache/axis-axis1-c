@@ -15,7 +15,7 @@
 class SimpleTestSoap :public Stub
 {
 public:
-	SimpleTestSoap(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol=APTHTTP);
+	SimpleTestSoap(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol=APTHTTP1_1);
 	SimpleTestSoap();
 public:
 	virtual ~SimpleTestSoap();

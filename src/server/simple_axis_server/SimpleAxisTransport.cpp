@@ -292,7 +292,7 @@ SimpleAxisTransport::getServiceName ()
 AXIS_PROTOCOL_TYPE
 SimpleAxisTransport::getProtocol ()
 {
-    return APTHTTP;
+    return APTHTTP1_1;
 }
 
 int

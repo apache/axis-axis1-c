@@ -247,7 +247,7 @@ const char* Apache2Transport::getServiceName()
 
 AXIS_PROTOCOL_TYPE Apache2Transport::getProtocol()
 {
-	return APTHTTP;
+	return APTHTTP1_1;
 }
 
 int Apache2Transport::getSubProtocol()

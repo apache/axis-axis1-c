@@ -15,7 +15,7 @@
 class MathOps :public Stub
 {
 public:
-	MathOps(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol=APTHTTP);
+	MathOps(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol=APTHTTP1_1);
 	MathOps();
 public:
 	virtual ~MathOps();

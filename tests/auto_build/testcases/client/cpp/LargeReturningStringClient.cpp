@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 
   try {
     if(endpoint_set) {
-      ws = new LargeReturningString(endpoint, APTHTTP);
+      ws = new LargeReturningString(endpoint, APTHTTP1_1);
       free(endpoint);
       endpoint_set = false;
     } else

@@ -29,7 +29,7 @@ extern int Axis_GetSize_SOAPStructStruct();
 InteropTestPortTypeB::InteropTestPortTypeB(const char* pchEndPointUri)
 {
 	m_pCall = new Call();
-	m_pCall->setProtocol(APTHTTP);
+	m_pCall->setProtocol(APTHTTP1_1);
 	m_pCall->setEndpointURI(pchEndPointUri);
 }
 

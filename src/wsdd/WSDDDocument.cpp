@@ -35,7 +35,7 @@ WSDDDocument::WSDDDocument(map<AxisString, int>* pLibNameIdMap)
     m_lev0 = WSDD_UNKNOWN;
     m_lev1 = WSDD_UNKNOWN;
     m_lev2 = WSDD_UNKNOWN;
-    m_CurTrType = APTHTTP;    /* default is HTTP */
+    m_CurTrType = APTHTTP1_1;    /* default is HTTP */
     m_nLibId = 0;
     m_pLibNameIdMap = pLibNameIdMap;
     /* Get the maximum Lib Id from the entries in the map if available */
@@ -253,7 +253,7 @@ void  WSDDDocument::endElement(const AnyElement* pEvent)
                 m_lev0 = WSDD_DEPLOYMENT;
                 break;
             case WSDD_TRANSPORT:
-                m_CurTrType = APTHTTP;    /* default is HTTP */
+                m_CurTrType = APTHTTP1_1;    /* default is HTTP */
                 m_lev0 = WSDD_DEPLOYMENT;
                 break;
             break;
@@ -408,7 +408,7 @@ void WSDDDocument::processAttributes(WSDDLevels eElementType,
             {
                 /* get tranport type */
                 if (0 == strcmp(pcValue, kw_http))
-                    m_CurTrType = APTHTTP;
+                    m_CurTrType = APTHTTP1_1;
                 else if (0 == strcmp(pcValue, kw_smtp))
                     m_CurTrType = APTSMTP;
                 else

@@ -36,7 +36,7 @@ MathOps::MathOps(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol)
 }
 
 MathOps::MathOps()
-:Stub(" ", APTHTTP)
+:Stub(" ", APTHTTP1_1)
 {
 	m_pCall->setEndpointURI("http://localhost/axis/MathOps");
 }

@@ -78,7 +78,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
             writer.write(
                 "public:\n\t"
                     + classname
-                    + "(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol=APTHTTP);\n");
+                    + "(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol=APTHTTP1_1);\n");
             writer.write("\t" + classname + "();\n");
         }
         catch (IOException e)

@@ -20,7 +20,7 @@ ExtensibilityQueryPortType::ExtensibilityQueryPortType(const char* pcEndpointUri
 }
 
 ExtensibilityQueryPortType::ExtensibilityQueryPortType()
-:Stub(" ", APTHTTP)
+:Stub(" ", APTHTTP1_1)
 {
 	m_pCall->setEndpointURI("http://localhost:80/axis/testXSDANY");
 }

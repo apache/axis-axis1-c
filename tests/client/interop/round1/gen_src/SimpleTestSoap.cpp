@@ -21,7 +21,7 @@ SimpleTestSoap::SimpleTestSoap(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eP
 }
 
 SimpleTestSoap::SimpleTestSoap()
-:Stub(" ", APTHTTP)
+:Stub(" ", APTHTTP1_1)
 {
 	m_pCall->setEndpointURI("http://127.0.0.1:8080/");
 }

@@ -35,7 +35,7 @@ bool CallBase::bInitialized;
 MathOps::MathOps(const char* pchEndpointUri)
 {
 	m_pCall = new Call();
-	m_pCall->setProtocol(APTHTTP);
+	m_pCall->setProtocol(APTHTTP1_1);
 	m_pCall->setEndpointURI(pchEndpointUri);
 }
 

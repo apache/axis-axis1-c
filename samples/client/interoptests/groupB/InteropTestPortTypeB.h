@@ -16,7 +16,7 @@
 class InteropTestPortTypeB :public Stub
 {
 public:
-	InteropTestPortTypeB(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol=APTHTTP);
+	InteropTestPortTypeB(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol=APTHTTP1_1);
 	InteropTestPortTypeB();
 public:
 	virtual ~InteropTestPortTypeB();

@@ -50,7 +50,7 @@ main(int argc, char *argv[])
     //endpoint for Axis CPP sample
     sprintf(endpoint, "http://%s:%s/axis/base", server, port);
     /*Set for HTTP transport */
-    InteropTestPortType ws(endpoint, APTHTTP);
+    InteropTestPortType ws(endpoint, APTHTTP1_1);
 
     //set HTTP headers
     ws.setTransportProperty("Accept-Language", " da, en-gb;q=0.8, en;q=0.7");
