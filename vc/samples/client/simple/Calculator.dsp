@@ -93,13 +93,21 @@ SOURCE=..\..\..\..\samples\client\simple\CalcClient.cpp
 
 SOURCE=..\..\..\..\samples\client\simple\Calculator.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\samples\client\simple\Calculator_AxisClientException.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\..\..\samples\client\simple\Calculator.h
+SOURCE=..\..\..\..\samples\client\simple\Calculator.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\samples\client\simple\Calculator_AxisClientException.hpp
 # End Source File
 # End Group
 # Begin Group "Resource Files"
