@@ -93,20 +93,6 @@
 //the relative location of the wsdl files hardcoded
 #define WSDLDIRECTORY	"./Axis/wsdl/"
 
-#ifdef WIN32
-#ifdef AXIS_APACHE1_3
-#define WSDDFILEPATH "./Axis/conf/server.wsdd"
-#else
-#define WSDDFILEPATH "C:/Axis/conf/server.wsdd"
-#endif
-#else //For linux
-#ifdef AXIS_APACHE1_3
-#define WSDDFILEPATH "/usr/local/apache/Axis/conf/server.wsdd"
-#else
-#define WSDDFILEPATH "/usr/local/apache/Axis/conf/server.wsdd"
-#endif
-#endif
-
 //define all global variables of the axisengine
 #ifdef _AXISTRACE
 unsigned char chEBuf[1024];
@@ -236,7 +222,7 @@ extern "C" int process_request(Ax_soapstream *str)
 	return Status;
 }
 
-extern "C" int initialize_module(int bServer)
+extern "C" int initialize_module(int bServer, const char * wsddPath)
 {
 	//order of these initialization method invocation should not be changed
 //	AXISTRACE1("inside initialize_module\n");
@@ -249,7 +235,7 @@ extern "C" int initialize_module(int bServer)
 	URIMapping::Initialize();
 	SoapFault::initialize();
 	ModuleInitialize();
-	if (SUCCESS != g_pWSDDDeployment->LoadWSDD(WSDDFILEPATH)) return FAIL;
+	if (SUCCESS != g_pWSDDDeployment->LoadWSDD(wsddPath)) return FAIL;
 	return SUCCESS;
 }
 
