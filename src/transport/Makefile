@@ -99,7 +99,7 @@ LDFLAGS = -lstdc++
 LIBOBJS = 
 LIBS = 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
-LIBWWWBUILD = libwww
+LIBWWWBUILD = 
 LINKCLIENTLIB = -L/home/samisa/autoCVS/cvsAutoBuild/src/engine/client -laxiscpp_client -ldl
 LN_S = ln -s
 LTLIBOBJS = 
@@ -164,7 +164,7 @@ sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 sysconfdir = ${prefix}/etc
 target_alias = 
-SUBDIRS = axis2 libwww
+SUBDIRS = axis2 
 all: all-recursive
 
 .SUFFIXES:

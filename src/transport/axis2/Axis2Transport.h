@@ -207,7 +207,7 @@ class Axis2Transport:public SOAPTransport
     virtual void setMaintainSession(bool bSession);
 
 
-  private:
+  protected:
     void processResponseHTTPHeaders ();
     int FindTransportPropertyIndex (std::string);
 
