@@ -1574,6 +1574,7 @@ public class SchemaUtils {
 
 		// add type and name to vector, skip it if we couldn't parse it
 		// XXX - this may need to be revisited.
+		//attributeName.getLocalPart().equals("name>lang")
 		if ((type != null) && (attributeName != null)) {
 			v.add(type);
 			v.add(attributeName);

@@ -207,6 +207,8 @@ public:
     int AXISCALL getStatus(){return m_nStatus;};
 	AnyType* AXISCALL getAnyObject();
     void serializeTag(AxisString& xmlStr, const AnyElement* node, AxisString& nsDecls);
+    void getChardataAs(void* pValue, XSDTYPE type);
+
 
 private:
     int getElementForAttributes(const AxisChar* pName, 

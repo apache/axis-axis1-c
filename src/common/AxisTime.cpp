@@ -82,8 +82,7 @@ AxisString AxisTime::getValue ()
 * of the format PnYnMnDTnHnMnS
 */
 
-AxisString & AxisTime::serialize (const AxisChar* sName, long lDuration,
-    XSDTYPE nType)
+AxisString & AxisTime::serialize(long lDuration, XSDTYPE nType)
 {
     AxisChar buff[4];
     strXSDDuration = "P";
@@ -135,8 +134,7 @@ AxisString & AxisTime::serialize (const AxisChar* sName, long lDuration,
 * Serialize the c type tm struct into a xml date string.
 * The serialized date will represent UTC time
 */
-AxisString & AxisTime::serialize (const AxisChar* sName, struct tm tValue,
-                                  XSDTYPE nType)
+AxisString & AxisTime::serialize(struct tm tValue, XSDTYPE nType)
 {
     /*formats the output date in the format CCYY-MM-DDThh:mm:ssZ */
     switch (nType)

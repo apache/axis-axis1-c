@@ -47,7 +47,7 @@ class SoapSerializer : public IHandlerSoapSerializer
 {
 private:
     int m_nCounter;
-    AxisChar m_Buf[8];
+    AxisChar m_Buf[BTS_BUFFSIZE];
     SoapEnvelope* m_pSoapEnvelope;    
     int m_iSoapVersion;
     /* Current Serialization Style */
@@ -177,6 +177,8 @@ public:
     const AxisChar* AXISCALL getBodyAsString();
 	int addOutputAnyObject(AnyType* pAnyObject);
 	int serializeAnyObject(AnyType* pAnyObject);
+    int serializeAsChardata(void* pValue, XSDTYPE type);
+
 };
 
 AXIS_CPP_NAMESPACE_END

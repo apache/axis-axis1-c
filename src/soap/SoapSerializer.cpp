@@ -819,4 +819,76 @@ IHeaderBlock* SoapSerializer::getNextHeaderBlock()
 	return m_pSoapEnvelope->m_pSoapHeader->getNextHeaderBlock();
 }
 
+int SoapSerializer::serializeAsChardata(void* pValue, XSDTYPE type)
+{
+    const char* pStr = m_Buf;
+    switch (type)
+    {
+    case XSD_INT:
+        AxisSprintf (m_Buf, BTS_BUFFSIZE, "%d", *((int*)(pValue)));
+        break;
+    case XSD_BOOLEAN:
+        AxisSprintf (m_Buf, BTS_BUFFSIZE, "%s",
+                   (*((int*)(pValue)) == false_) ? "false" : "true");
+        break;
+    case XSD_UNSIGNEDINT:
+        AxisSprintf (m_Buf, BTS_BUFFSIZE, "%u", *((unsigned int*)(pValue)));
+        break;
+    case XSD_SHORT:
+        AxisSprintf (m_Buf, BTS_BUFFSIZE, "%d", *((short*)(pValue)));
+        break;
+    case XSD_UNSIGNEDSHORT:
+        AxisSprintf (m_Buf, BTS_BUFFSIZE, "%u", 
+            *((unsigned short*)(pValue)));
+        break;
+    case XSD_BYTE:
+        AxisSprintf (m_Buf, BTS_BUFFSIZE, "%d", *((char*)(pValue)));
+        break;
+    case XSD_UNSIGNEDBYTE:
+        AxisSprintf (m_Buf, BTS_BUFFSIZE, "%u", 
+            *((unsigned char*)(pValue)));
+        break;
+    case XSD_LONG:
+    case XSD_INTEGER:
+        AxisSprintf (m_Buf, BTS_BUFFSIZE, "%d", *((long*)(pValue)));
+        break;
+    case XSD_DURATION:
+        AxisSprintf (m_Buf, BTS_BUFFSIZE, "%s", m_BTSZ.m_AxisTime.serialize(
+            *((long*)(pValue)), type).c_str ());
+        break;
+    case XSD_UNSIGNEDLONG:
+        AxisSprintf (m_Buf, BTS_BUFFSIZE, "%u", *((unsigned long*)(pValue)));
+        break;
+    case XSD_FLOAT:
+        AxisSprintf (m_Buf, BTS_BUFFSIZE, "%f", *((float*)(pValue)));
+        break;
+    case XSD_DOUBLE:
+    case XSD_DECIMAL:
+        AxisSprintf (m_Buf, BTS_BUFFSIZE, "%f", *((double*)(pValue)));
+        break;
+    case XSD_STRING:
+    case XSD_ANYURI:
+    case XSD_QNAME:
+    case XSD_NOTATION:
+        pStr = *((char**)(pValue));
+        pStr = m_BTSZ.getEntityReferenced(std::string(pStr)).c_str();
+        break;
+    case XSD_HEXBINARY:
+        pStr = m_BTSZ.encodeToHexBinary((xsd__hexBinary*)(pValue));
+        break;
+    case XSD_BASE64BINARY:
+        pStr = m_BTSZ.encodeToBase64Binary((xsd__base64Binary*)(pValue));
+        break;
+    case XSD_DATETIME:
+    case XSD_DATE:
+    case XSD_TIME:
+        AxisSprintf (m_Buf, BTS_BUFFSIZE, "%s", m_BTSZ.m_AxisTime.serialize(
+            *((struct tm*)(pValue)), type).c_str ());
+        break;
+    default:;
+    }
+    *this << pStr;
+    return AXIS_SUCCESS;
+}
+
 AXIS_CPP_NAMESPACE_END

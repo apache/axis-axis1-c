@@ -41,6 +41,11 @@ public class Type {
     private static final int MAXIMUM_NO_ATTRIBS = 101;
     private QName name;
     /**
+     * variable that represents extension base value in case of a complexType 
+     * with simpleContent
+     */
+	private ElementInfo extensionBaseType=null;    
+    /**
      * Indicate whether this is a schema defined simpleType
      */
 	private boolean isSimpleType=false;
@@ -415,6 +420,21 @@ public class Type {
 	
 	public String getElementType() {
 		return elementType;
+	}
+
+	/**
+	 * @return ElementInfo
+	 */
+	public ElementInfo getExtensionBaseType() {
+		return extensionBaseType;
+	}
+
+	/**
+	 * Sets the extensionBaseType.
+	 * @param extensionBaseType The extensionBaseType to set
+	 */
+	public void setExtensionBaseType(ElementInfo extensionBaseType) {
+		this.extensionBaseType = extensionBaseType;
 	}
 
 }

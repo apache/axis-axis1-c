@@ -128,3 +128,9 @@ int MathOpsWrapper::div(void* pMsg)
 	}
 }
 
+class OutOfBoundException : public AxisServiceException
+{
+    void 
+}
+
+

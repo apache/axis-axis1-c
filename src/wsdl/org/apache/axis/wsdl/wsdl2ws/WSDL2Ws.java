@@ -564,10 +564,21 @@ public class WSDL2Ws {
 
 		Vector restrictdata = null;
 		if(type.isSimpleType()){
-			//extended types and types declared as simpleType
-			restrictdata = CUtils.getRestrictionBaseAndValues(node,symbolTable);
-			if(restrictdata != null)
-				typedata.setRestrictiondata(restrictdata);
+			//check for extended types
+			TypeEntry base = SchemaUtils.getComplexElementExtensionBase(type.getNode(),symbolTable);
+			if (base != null){
+				String localpart = type.getQName().getLocalPart()+ "_value";
+				QName typeName = new QName(type.getQName().getNamespaceURI(),localpart);
+				ElementInfo eleinfo = new ElementInfo(typeName,createTypeInfo(base.getQName(),targetLanguage));
+				typedata.setExtensionBaseType(eleinfo);
+				System.out.print("=====complexType with simpleContent is found : "+ type.getQName().getLocalPart()+"=====\n");
+			}
+			else{
+			//types declared as simpleType
+				restrictdata = CUtils.getRestrictionBaseAndValues(node,symbolTable);
+				if(restrictdata != null)
+					typedata.setRestrictiondata(restrictdata);
+			}
 			// There can be attributes in this extended basic type
 			// Process the attributes
 			Vector attributes = SchemaUtils.getContainedAttributeTypes(

@@ -61,10 +61,9 @@ class AxisTime
         void setValue(XSDTYPE type, uParamValue Value);
         void setType(XSDTYPE m_Type);
         AxisString getValue();
-        AxisString& serialize(const AxisChar* sName, struct tm tValue, 
+        AxisString& serialize(struct tm tValue, 
             XSDTYPE nType);
-        AxisString& serialize(const AxisChar* sName, long lDuration, 
-            XSDTYPE nType);
+        AxisString& serialize(long lDuration, XSDTYPE nType);
         double getDuration();
         struct tm getDateTime();
         struct tm getDate();

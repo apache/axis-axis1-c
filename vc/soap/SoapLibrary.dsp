@@ -94,6 +94,10 @@ SOURCE=..\..\src\soap\Attribute.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\soap\AxisSoapException.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\soap\BasicNode.cpp
 # End Source File
 # Begin Source File
@@ -210,11 +214,15 @@ SOURCE=..\..\include\axis\server\Attribute.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\soap\AxisSoapException.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\axis\server\BasicNode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\server\CharacterElement.h
+SOURCE=..\..\src\soap\CharacterElement.h
 # End Source File
 # Begin Source File
 
@@ -222,7 +230,7 @@ SOURCE=..\..\src\soap\ComplexElement.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\server\HeaderBlock.h
+SOURCE=..\..\src\soap\HeaderBlock.h
 # End Source File
 # Begin Source File
 
@@ -238,7 +246,7 @@ SOURCE=..\..\src\soap\SoapBody.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\server\SoapDeSerializer.h
+SOURCE=..\..\src\soap\SoapDeSerializer.h
 # End Source File
 # Begin Source File
 
@@ -250,7 +258,7 @@ SOURCE=..\..\src\soap\SoapFault.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\server\SoapHeader.h
+SOURCE=..\..\src\soap\SoapHeader.h
 # End Source File
 # Begin Source File
 
@@ -266,27 +274,11 @@ SOURCE=..\..\src\soap\SoapMethod.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\soap\SoapParserExpat.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\soap\SoapParserXerces.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\xml\xerces\SoapParserXerces.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\axis\server\SoapSerializer.h
+SOURCE=..\..\src\soap\SoapSerializer.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\soap\URIMapping.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\soap\XercesHandler.h
 # End Source File
 # Begin Source File
 

@@ -105,6 +105,9 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		if (attribs.length == 0) {
 			System.out.println("possible error class with no attributes....................");
 			writer.write("\tpSZ->serialize(\">\", NULL);\n");
+			if (extensionBaseAttrib != null){
+				writer.write("\tpSZ->serializeAsChardata((void*)&(param->"+extensionBaseAttrib.getParamName()+"), "+CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName())+");\n");
+			}
 			writer.write("\treturn AXIS_SUCCESS;\n");
 			writer.write("}\n\n");				 
 			return;
@@ -136,6 +139,9 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			}
 		}
 		writer.write("\tpSZ->serialize(\">\", 0);\n");
+		if (extensionBaseAttrib != null){
+			writer.write("\tpSZ->serializeAsChardata((void*)&(param->"+extensionBaseAttrib.getParamName()+"), "+CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName())+");\n");
+		}
 		writer.write("\t/* then serialize elements if any*/\n");
 		for(int i = attributeParamCount; i< attribs.length;i++){
 			if(attribs[i].isAnyType()){
@@ -179,7 +185,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			writer.write("}\n\n");
 			return;
 		 }
-		String arrayType = null;
+		 String arrayType = null;
 		/* Needed for Aix xlc */
 		for(int i = 0; i< attribs.length;i++){
 			if(attribs[i].isArray()) {
@@ -213,6 +219,9 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 					"\n\t\t, (void*)Axis_Create_"+attribs[i].getTypeName()+", (void*)Axis_Delete_"+attribs[i].getTypeName()+
 					"\n\t\t, \""+attribs[i].getParamName()+"\", Axis_URI_"+attribs[i].getTypeName()+");\n");				
 			}		
+		}
+		if (extensionBaseAttrib != null){
+			writer.write("\tpIWSDZ->getChardataAs((void*)&(param->"+extensionBaseAttrib.getParamName()+"), "+CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName())+");\n");
 		}
 		writer.write("\treturn pIWSDZ->getStatus();\n");
 		writer.write("}\n");

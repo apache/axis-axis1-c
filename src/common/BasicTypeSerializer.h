@@ -56,6 +56,7 @@ AXIS_CPP_NAMESPACE_START
 
 class BasicTypeSerializer
 {
+    friend class SoapSerializer;
 public:
     BasicTypeSerializer();
     virtual ~BasicTypeSerializer();

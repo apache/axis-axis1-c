@@ -139,6 +139,7 @@ typedef struct {
         const AxisChar* pNamespace);
     int (AXISCALL* getStatus)(void* pObj);
     AnyType* (AXISCALL* getAnyObject)(void* pObj);
+    void (AXISCALL* getChardataAs)(void* pObj, void* pValue, XSDTYPE type);
 } IWrapperSoapDeSerializerFunctions;
 
 typedef struct { 
@@ -286,6 +287,7 @@ public:
     virtual int getVersion()=0;
     virtual int getHeader()=0;    
 	virtual AnyType* AXISCALL getAnyObject()=0;            
+    virtual void getChardataAs(void* pValue, XSDTYPE type)=0;
 
     /* following stuff is needed to provide the interface for C web services */
 public:
@@ -494,6 +496,9 @@ public:
     { return ((IWrapperSoapDeSerializer*)pObj)->getStatus();};
 	static 	AnyType* AXISCALL s_GetAnyObject(void* pObj)
 	{ return ((IWrapperSoapDeSerializer*)pObj)->getAnyObject();};
+    static void AXISCALL s_GetChardataAs(void* pObj, void* pValue, XSDTYPE type)
+    { ((IWrapperSoapDeSerializer*)pObj)->getChardataAs(pValue, type);};
+
 
     static void s_Initialize()
     {
@@ -549,6 +554,7 @@ public:
         ms_VFtable.getAttributeAsDuration = s_GetAttributeAsDuration;
         ms_VFtable.getStatus = s_GetStatus;
 		ms_VFtable.getAnyObject = s_GetAnyObject;
+        ms_VFtable.getChardataAs = s_GetChardataAs;
     }
 };
 #endif

@@ -146,7 +146,7 @@ SOURCE=..\..\src\common\TypeMapping.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\include\axis\server\AdminUtils.h
+SOURCE=..\..\src\common\AdminUtils.h
 # End Source File
 # Begin Source File
 
@@ -154,7 +154,15 @@ SOURCE=..\..\src\common\ArrayBean.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\server\AxisConfig.h
+SOURCE=..\..\src\common\AxisConfig.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\AxisConfigException.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\AxisConfigException.h
 # End Source File
 # Begin Source File
 
@@ -162,15 +170,31 @@ SOURCE=..\..\include\axis\server\AxisException.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\server\AxisFile.h
+SOURCE=..\..\src\common\AxisFile.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\server\AxisTime.h
+SOURCE=..\..\src\common\AxisGenException.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\server\AxisTrace.h
+SOURCE=..\..\src\common\AxisMessage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\AxisMessage.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\AxisSocketUtils.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\AxisTime.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\AxisTrace.h
 # End Source File
 # Begin Source File
 
@@ -178,11 +202,15 @@ SOURCE=..\..\include\axis\server\AxisUserAPI.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\AxisUtils.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\axis\server\AxisWrapperAPI.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\server\BasicTypeSerializer.h
+SOURCE=..\..\src\common\BasicTypeSerializer.h
 # End Source File
 # Begin Source File
 
@@ -190,7 +218,15 @@ SOURCE=..\..\include\axis\server\GDefine.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\server\IAdminUtils.h
+SOURCE=..\..\src\common\IAdminUtils.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\IArrayBean.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\IDeployerUtils.h
 # End Source File
 # Begin Source File
 
@@ -218,6 +254,10 @@ SOURCE=..\..\include\axis\server\ISoapHeader.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\ISoapMethod.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\axis\server\IWrapperSoapDeSerializer.h
 # End Source File
 # Begin Source File
@@ -226,7 +266,7 @@ SOURCE=..\..\include\axis\server\IWrapperSoapSerializer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\server\MessageData.h
+SOURCE=..\..\src\common\MessageData.h
 # End Source File
 # Begin Source File
 
@@ -234,7 +274,7 @@ SOURCE=..\..\include\axis\server\Packet.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\server\Param.h
+SOURCE=..\..\src\common\Param.h
 # End Source File
 # Begin Source File
 

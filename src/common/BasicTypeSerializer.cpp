@@ -90,7 +90,7 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
             m_sSZ += m_Buf;
             break;
         case XSD_DURATION:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%s", m_AxisTime.serialize (pName,
+            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%s", m_AxisTime.serialize(
                 *((long*)(pValue)), type).c_str ());
             m_sSZ += m_Buf;
             break;
@@ -134,7 +134,7 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
         case XSD_DATETIME:
         case XSD_DATE:
         case XSD_TIME:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%s", m_AxisTime.serialize (pName,
+            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%s", m_AxisTime.serialize(
                 *((struct tm*)(pValue)), type).c_str ());
             m_sSZ += m_Buf;
             break;
@@ -223,7 +223,7 @@ const AxisChar* BasicTypeSerializer::serializeAsAttribute
             break;
         case XSD_DURATION:
             AxisSprintf (m_Buf, BTS_BUFFSIZE, "%s",
-                m_AxisTime.serialize (pName, *((long*)(pValue)),
+                m_AxisTime.serialize (*((long*)(pValue)),
                 type).c_str ());
             m_sSZ += m_Buf;
             break;
@@ -258,7 +258,7 @@ const AxisChar* BasicTypeSerializer::serializeAsAttribute
         case XSD_DATE:
         case XSD_TIME:
             AxisSprintf (m_Buf, BTS_BUFFSIZE, "%s",
-                m_AxisTime.serialize (pName, *((struct tm *) (pValue)),
+                m_AxisTime.serialize (*((struct tm *) (pValue)),
                 type).c_str ());
             m_sSZ += m_Buf;
             break;

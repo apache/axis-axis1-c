@@ -3364,4 +3364,72 @@ void SoapDeSerializer::serializeTag(AxisString& xmlStr, const AnyElement* node, 
     }
 }
 
+void SoapDeSerializer::getChardataAs(void* pValue, XSDTYPE type)
+{
+    if (!m_pNode) m_pNode = m_pParser->next(true); /* charactor node */
+    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+    {
+        switch (type)
+        {
+        case XSD_INT:
+            *((int*)(pValue)) = strtod(m_pNode->m_pchNameOrValue, &m_pEndptr);
+            break;
+        case XSD_BOOLEAN:
+            *((int*)(pValue)) = (strcmp(m_pNode->m_pchNameOrValue, "true")==0) ? false_ : true_; 
+            break;
+        case XSD_UNSIGNEDINT:
+            *((unsigned int*)(pValue)) = strtoul(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+            break;
+        case XSD_SHORT:
+            *((short*)(pValue)) = strtod(m_pNode->m_pchNameOrValue, &m_pEndptr);
+            break;
+        case XSD_UNSIGNEDSHORT:
+            *((unsigned short*)(pValue)) = strtoul(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+            break;
+        case XSD_BYTE:
+            *((char*)(pValue)) = strtod(m_pNode->m_pchNameOrValue, &m_pEndptr);
+            break;
+        case XSD_UNSIGNEDBYTE:
+            *((unsigned char*)(pValue)) = strtoul(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+            break;
+        case XSD_LONG:
+        case XSD_INTEGER:
+            *((long*)(pValue)) = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+            break;
+        case XSD_DURATION:
+            *((long*)(pValue)) = AxisTime::deserializeDuration(m_pNode->m_pchNameOrValue, 
+                    XSD_DURATION);
+            break;
+        case XSD_UNSIGNEDLONG:
+            *((unsigned long*)(pValue)) = strtoul(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+            break;
+        case XSD_FLOAT:
+            *((float*)(pValue)) = strtod(m_pNode->m_pchNameOrValue, &m_pEndptr);
+            break;
+        case XSD_DOUBLE:
+        case XSD_DECIMAL:
+            *((double*)(pValue)) = strtod(m_pNode->m_pchNameOrValue, &m_pEndptr);
+            break;
+        case XSD_STRING:
+        case XSD_ANYURI:
+        case XSD_QNAME:
+        case XSD_NOTATION:
+            *((char**)(pValue)) = strdup(m_pNode->m_pchNameOrValue);
+            break;
+        case XSD_HEXBINARY:
+            *(xsd__hexBinary*)(pValue) = decodeFromHexBinary(m_pNode->m_pchNameOrValue);
+            break;
+        case XSD_BASE64BINARY:
+            *(xsd__base64Binary*)(pValue) = decodeFromBase64Binary(m_pNode->m_pchNameOrValue);
+            break;
+        case XSD_DATETIME:
+        case XSD_DATE:
+        case XSD_TIME:
+            *((struct tm*)(pValue)) = AxisTime::deserialize(m_pNode->m_pchNameOrValue, type);
+            break;
+        default:;
+        }
+    }
+}
+
 AXIS_CPP_NAMESPACE_END
