@@ -399,7 +399,7 @@ void* SoapDeSerializer::checkForFault(const AxisChar* pName,
 	    pFault->setCmplxFaultObjectName(pcCmplxFaultName);
 	}
 
-        setStyle(m_nStyle);
+		setStyle(m_nStyle);
 	
         return pFault;
      }
