@@ -101,7 +101,7 @@ const AxisChar* BasicTypeSerializer::SerializeAsElement(const AxisChar* pName, c
 		m_sSZ += m_Buf;
 		break;
 	case XSD_BOOLEAN:
-		AxisSprintf(m_Buf, BTS_BUFFSIZE, "%s", (*((int*)(pValue)) == 0)?"false":"true");
+		AxisSprintf(m_Buf, BTS_BUFFSIZE, "%s", (*((int*)(pValue)) == false_)?"false":"true");
 		m_sSZ += m_Buf;
 		break;
     case XSD_UNSIGNEDINT:

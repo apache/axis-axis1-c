@@ -92,7 +92,7 @@
 #define INITIAL_SERIALIZE_BUFFER_SIZE 4096
 #define NO_OF_SERIALIZE_BUFFERS 10
 
-IWrapperSoapSerializerFunctions SoapSerializer::ms_VFtable;
+IWrapperSoapSerializerFunctions IWrapperSoapSerializer::ms_VFtable;
 
 SoapSerializer::SoapSerializer()
 {

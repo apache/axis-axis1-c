@@ -74,7 +74,7 @@
 
 string MessageData::m_sBlankPropertyValue="";
 extern WSDDDeployment* g_pWSDDDeployment;
-IMessageDataFunctions MessageData::ms_VFtable;
+IMessageDataFunctions IMessageData::ms_VFtable;
 
 MessageData::MessageData()
 {
