@@ -14,10 +14,15 @@ int main(void)
 
         ExtensibilityQueryPortType* pStub = new ExtensibilityQueryPortType("http://localhost:5555/axis/testXSDANY",APTHTTP);
         AnyType* pAnyReturn = pStub->query(pAny);
-
+		if (!pAnyReturn)
+		{
+			printf("Returned AnyType is null\ntest failed\n");
+			exit(1);
+		}	
         for (int i=0; i<pAnyReturn->_size; i++)
         {
-            printf("%s\n",string(pAnyReturn->_array[i]));
+			printf("\nSent xml string: \n%s\n", pAny->_array[i]);
+			printf("\nReturned xml string: \n%s\n", pAnyReturn->_array[i]);
         }
     }
     catch(AxisException& e)
