@@ -316,6 +316,12 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 	}
 	while(0);
 
+	if (AXIS_SUCCESS != m_pDZ->FlushInputStream())
+	{
+		m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
+		return AXIS_SUCCESS;
+	}
+
 	pMsg->setPastPivotState(true);
 
 	/*
