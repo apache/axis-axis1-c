@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
         int iResult;
         int rc=1;
 
-        url = argv[1];
+        if(argc>1) url = argv[1];
 
 		bool bSuccess = false;
 		int	iRetryIterationCount = 3;
@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
         {
                 sprintf(endpoint, "%s", url);
                 Calculator ws(endpoint);
-                ws.setProxy("proxy3.in.ibm.com",80);
+                ws.setProxy("proxy.in.ibm.com",80);
                 iResult = ws.add(2,3);
                 cout<<  iResult << endl;
                 rc=0;
