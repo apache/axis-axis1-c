@@ -65,12 +65,13 @@
 
 #include "AxisEngine.h"
 #include <xercesc/util/PlatformUtils.hpp>
+#include <iostream>
 
 XERCES_CPP_NAMESPACE_USE
 
 int main(int argc, char* argv[])
 {
-//	char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><add soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:int\">3</op1><op2 xsi:type=\"xsd:int\">4</op2></add></soapenv:Body></soapenv:Envelope>";
+	char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><add soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:int\">3</op1><op2 xsi:type=\"xsd:int\">4</op2></add></soapenv:Body></soapenv:Envelope>";
 //	char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><echo soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:string\">Hello World!</op1></echo></soapenv:Body></soapenv:Envelope>";
 	
 	//user type that contains an array of another user type
@@ -150,7 +151,7 @@ int main(int argc, char* argv[])
 		</soapenv:Envelope>";
 
 	//Array of Point
-	char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"\
+	//char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"\
 		http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"\
 		xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><EchoPointArray \
 		soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><enc:Array xmlns:def=\"\
@@ -192,3 +193,10 @@ int main(int argc, char* argv[])
 	return 0;
 }
  
+extern "C" void sendSoapResponse(char* m_cSerializedBuffer)
+{  
+	char* abc="temp";
+	
+	cout<<m_cSerializedBuffer<<endl;
+	//cout<<"---------"<<endl<<m_cSerializedBuffer;
+}

@@ -73,7 +73,7 @@
 
 #include "../common/Packet.h"
 
-class AxisEngine : public BasicHandler
+class AxisEngine // : public BasicHandler
 {
 private:	
 	static AxisEngine* m_pObject; //Singleton object.
