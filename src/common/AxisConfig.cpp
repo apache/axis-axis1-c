@@ -38,12 +38,12 @@ AxisConfig::AxisConfig ()
 	The value for this is taken from the environment variable "AXIS_HOME".
 	So no need for a key for AXCONF_AXISHOME
 	*/
-	m_pcKeyArray[AXCONF_AXISHOME] = "";
+	m_pcKeyArray[AXCONF_AXISHOME] = "\0";
 	m_pcKeyArray[AXCONF_TRANSPORTHTTP]="AXISTRANSPORT_HTTP";
 	m_pcKeyArray[AXCONF_TRANSPORTSMTP]="AXISTRANSPORT_SMTP";
 	m_pcKeyArray[AXCONF_XMLPARSER] = "AXISXMLPARSER";
 
-    for(int i=0;i<NOOFPROPERTIES;i++)
+    for(int i=0;i<AXCONF_LAST;i++)
 	{
         m_pcValueArray[i] = NULL; 
 	}
@@ -60,7 +60,7 @@ AxisConfig::AxisConfig ()
 
 AxisConfig::~AxisConfig ()
 {
-    for(int i=0;i<NOOFPROPERTIES;i++)
+    for(int i=0;i<AXCONF_LAST;i++)
 	{
         free(m_pcValueArray[i]);
 	}
@@ -82,18 +82,22 @@ int AxisConfig::readConfFile ()
     sConfPath = getenv ("AXIS_HOME");
 	m_pcValueArray[AXCONF_AXISHOME] = sConfPath;
 	/*
-	Even if the AXIS_HOME environment variable is not set it is handled.
-	Therefore return AXIS_SUCCESS
+	Even if the AXIS_HOME environment variable is not set default values 
+	will be used. Therefore return AXIS_SUCCESS
 	*/
-    if (!sConfPath)
+    if (!sConfPath || (sConfPath == '\0') )
 		return AXIS_SUCCESS;
     m_pcAxisHome = (char*) malloc (CONFBUFFSIZE);
     strcpy (m_pcAxisHome, sConfPath);
 
     strcpy (sNewConfPath, sConfPath);
     strcat (sNewConfPath, "/axiscpp.conf");
+	/*
+	Even if axiscpp.conf does not exist in AXIS_HOME default values 
+	will be used. Therefore return AXIS_SUCCESS
+	*/
     if (AXIS_SUCCESS != fileConfig.fileOpen(sNewConfPath, "r"))
-        return AXIS_FAIL;
+		return AXIS_SUCCESS;
 
     while (AXIS_SUCCESS == fileConfig.fileGet(carrLine, CONFBUFFSIZE)) 
     {
@@ -111,7 +115,7 @@ int AxisConfig::readConfFile ()
         sscanf (carrLine, "%s", key);
 		iValueLength = linesize - strlen (key) - 1;
 
-        for(int i=0;i<=NOOFPROPERTIES;i++)
+        for(int i=0;i<=AXCONF_LAST;i++)
 		{
 			if(strcmp(key, m_pcKeyArray[i]) == 0)
 			{

@@ -18,7 +18,6 @@
 #define __AXIS_AXISCONFIG_H_OF_AXIS_INCLUDED__
 
 #define CONFBUFFSIZE 256
-#define NOOFPROPERTIES 7
 
 /**
  *   @class AxisConfig
@@ -34,9 +33,18 @@
  *   @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  */
 
-enum g_axconfig {AXCONF_WSDDFILEPATH, AXCONF_LOGPATH, AXCONF_CLIENTLOGPATH, 
-				 AXCONF_CLIENTWSDDFILEPATH, AXCONF_AXISHOME, 
-				 AXCONF_TRANSPORTHTTP, AXCONF_TRANSPORTSMTP, AXCONF_XMLPARSER};
+enum g_axconfig 
+{
+	AXCONF_WSDDFILEPATH=0, 
+	AXCONF_LOGPATH, 
+	AXCONF_CLIENTLOGPATH, 
+	AXCONF_CLIENTWSDDFILEPATH, 
+	AXCONF_AXISHOME, 
+	AXCONF_TRANSPORTHTTP, 
+	AXCONF_TRANSPORTSMTP, 
+	AXCONF_XMLPARSER,
+	AXCONF_LAST
+};
 
 class AxisConfig
 {
@@ -64,8 +72,8 @@ class AxisConfig
         
     private:         
         char* m_pcAxisHome;
-		char* m_pcKeyArray [NOOFPROPERTIES];
-		char* m_pcValueArray [NOOFPROPERTIES];
+		char* m_pcKeyArray [AXCONF_LAST];
+		char* m_pcValueArray [AXCONF_LAST];
 
 		void setValue(int valuelength, g_axconfig valueindex, char* value);
 };
