@@ -87,9 +87,10 @@ class Param
 public:
 	Param(){ m_Type = USER_TYPE;}; //if there is no attribute that says the type
 	Param(Param& param);
-	Param(string &str);
+	Param(string &str, XSDTYPE type=XSD_STRING);
 	Param(int nValue);
 	Param(float fValue);
+	Param(double dValue);
 	virtual ~Param();
 	void operator=(Param &param);
 
@@ -98,6 +99,7 @@ public:
 	{
 		int n;
 		float f;
+		double d;
 		//all basic types should come here
 		ArrayBean* a; //holds array types
 		AccessBean* o; //this is used to hold user types 
