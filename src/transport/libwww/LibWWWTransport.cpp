@@ -35,6 +35,10 @@
 int terminate_handler (HTRequest * request, HTResponse * response,
                                void * param, int status)
 {
+#ifdef HT_EXT_CONTINUE    
+#else
+    HTEventList_stopLoop();
+#endif
     return status;
 }
 
@@ -131,8 +135,8 @@ AXIS_TRANSPORT_STATUS LibWWWTransport::sendBytes(const char* pcSendBuffer,
         }
         strcat(m_pcData, pcSendBuffer);
         //Samisa: Callback to free memeory has been removed
-        //Q: who should relese memory in this case?
-//        m_pReleaseBufferCallback(pcSendBuffer, pBufferid);
+        //Q: who should relese memory in this case? A: Serializer
+        //m_pReleaseBufferCallback(pcSendBuffer, pBufferid);
     }
      
     return TRANSPORT_IN_PROGRESS;
@@ -329,7 +333,8 @@ AXIS_TRANSPORT_STATUS LibWWWTransport::flushOutput()
     dst = HTAnchor_findAddress(m_pcEndpointUri);
     src = HTTmpAnchor(NULL);
     HTAnchor_setDocument(src, m_pcData);
-    HTAnchor_setFormat(src, WWW_SOURCE);
+    //HTAnchor_setFormat(src, WWW_SOURCE);
+    HTAnchor_setFormat(src, HTAtom_for ("text/xml"));
     HTRequest_setOutputFormat(m_pRequest, HTAtom_for ("text/xml"));
     HTAnchor_setLength(src, strlen(m_pcData));
 
@@ -408,21 +413,22 @@ void initializeLibrary(void)
 {
     if(inited) //make sure the lib is initialized only once per client
         return;
-    //Create a new non-premptive client
-    //HTProfile_newNoCacheClient("AxisCpp", "1.3");
-    //Create a new non-premptive client (in this case no event loop is required)
+#ifdef HT_EXT_CONTINUE    
+    //Create a new premptive client (in this case no event loop is required)
     HTProfile_newPreemptiveClient("AxisCpp", "1.3");
+    HTMethod_setExtensionMethod(METHOD_EXT_0, "POST", NO);
+#else
+    //Create a new non-premptive client
+    HTProfile_newNoCacheClient("AxisCpp", "1.3");
+#endif
     inited = 1;
     //Disable interactive mode, could be useful when debugging
     HTAlert_setInteractive(NO);
     // Add our own filter to do the clean up after response received
     HTNet_addAfter(terminate_handler, NULL, NULL, HT_ALL, HT_FILTER_LAST);
     //How long we are going to wait for a response
-    HTHost_setEventTimeout(5000);
+    HTHost_setEventTimeout(50000);
 
-#ifdef HT_EXT_CONTINUE    
-    HTMethod_setExtensionMethod(METHOD_EXT_0, "POST", NO);
-#endif
 }
 }
 
