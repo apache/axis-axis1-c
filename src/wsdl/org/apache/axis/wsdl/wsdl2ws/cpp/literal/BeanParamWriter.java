@@ -400,6 +400,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 					writer.write("\t" + attribs[i].getTypeName() + " * " + attribs[i].getParamNameAsMember()+ " = NULL;\n");
 					writer.write("\tif ((" + attribs[i].getParamNameAsMember()+ " = pIWSDZ->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute())+"( \""+ soapTagName +"\",0)) != NULL)\n");
 					writer.write("\t\tparam->"+attribs[i].getParamNameAsMember()+" = *( " + attribs[i].getParamNameAsMember()+" );\n");
+                                        writer.write("\t\tdelete " + attribs[i].getParamNameAsMember()+";\n");
 				}
 			}
 			else

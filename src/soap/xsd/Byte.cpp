@@ -37,6 +37,7 @@ char* Byte::deserializeByte(const AxisChar* valueAsChar) throw (AxisSoapExceptio
     }
     m_Byte = new xsd__byte;
     *m_Byte = static_cast<xsd__byte> (*returnValue);
+    delete returnValue; // Samissa - need to clean this memory
     return m_Byte;
 }
 
