@@ -92,6 +92,11 @@ public class WebServiceGeneratorImpl implements WebServiceGenerator
                     (new Generator(WrapperConstants.GENERATOR_CLIENT_STUB_HPP,
                         wscontext))
                         .generate();
+                    if ("rpc".equals(wscontext.getWrapInfo().getWrapperStyle()))
+			    (new Generator(WrapperConstants.GENERATOR_CLIENT_EXCEPTION,
+        	                wscontext))
+                	        .generate();
+
                 }
                 // Generate objects common to Client and Server
                 (new Generator(WrapperConstants.GENERATOR_PARAM_CPP_ALL,
