@@ -48,7 +48,7 @@ It's a utility what can be found in the org.apache.axis.utils package. It provid
 <h3>When should I use it ?</h3>
 <dl><dd>
 It's a good opportunity for using this utility that you hope to monitor the SOAP messages for debugging. You can see all SOAP messages of what you want to monitor without any additional developments, special configurations or restarting of the application server.<p>
-<strong>Please note that it doesn't display any protocol specific data such as HTTP protocol headers. In case of the usage, you have to use the TCP Monitor (tcpmon). Please see the <a href="user-guide.html">Axis User's Guide<a> also</strong>.
+<strong>Please note that it doesn't display any protocol specific data such as HTTP protocol headers. If you need to do this, you should use the TCP Monitor (tcpmon). Please see the <a href="user-guide.html">Axis User's Guide</a> for details on tcpmon</strong>.
 </dl>
 
 <p><a name="Usage"></a></p>
@@ -59,8 +59,8 @@ It's a good opportunity for using this utility that you hope to monitor the SOAP
 <dl><dd>
   <b>step 1:</B> Create an account for the administrator
   <dl><dd>
-       Please open and edit the "webapps/axis/WEB-INF/users.lst".<br>
-       The default account for administrator is "admin", so please set a password to anything you want.<p>
+       Open and edit the "webapps/axis/WEB-INF/users.lst".<br>
+       The default account for administrator is "admin", set a password to anything you want.<p>
        ex.) Like as follows;</a> -  i.e. "admin password".<p>
        <dl><dd>
               user1 pass1<br>
@@ -68,17 +68,33 @@ It's a good opportunity for using this utility that you hope to monitor the SOAP
               user3 pass3<br>
               admin password<br>
        </dl>
+  </dl><p>
+
+  <b>step 2:</B> Setting CLASSPATH
+  <dl><dd>
+       Before running this utility, you'll need to make sure that your CLASSPATH includes:
+       <ul>
+         <li>axis.jar 
+         <li>jaxrpc.jar 
+         <li>saaj.jar 
+         <li>commons-logging.jar 
+         <li>commons-discovery.jar 
+         <li>activation.jar
+         <li>mail.jar
+         <li>A JAXP-1.1 compliant XML parser such as Xerces or Crimson 
+       </ul>
   </dl>
+
   <b>That's all.</B>
 </dl>
 
 <p><a name="howto"></a></p>
 <h3>How to use it ?</h3>
 <dl><dd>
-  <b>step 0:</b> Make sure <a href="#prepare">the preparation phase</a>
+  <b>step 0:</b> Make sure you have completed <a href="#prepare">the preparation phase.</a>
   <p>
 
-  <b>step 1:</b> Start the SOAPMonitor application
+  <b>step 1:</b> Start the SOAPMonitor application.
   <dl><dd>
        % java org.apache.axis.utils.SOAPMonitor [-u admin] [-w password] [-l axisURL]
        <dl><dd>
@@ -89,11 +105,11 @@ It's a good opportunity for using this utility that you hope to monitor the SOAP
 
   <b>step 2:</b> Login
   <dl><dd>
-       Please login with the account which you specified as an administrator.
+       Try login with the account which you specified as an administrator.<br>
        <img src="images/LoginDialog.jpg"><br>
   </dl><p>
 
-  <b>step 3:</b> Please wait for a while
+  <b>step 3:</b> Please wait for a while.<br>
   <dl><dd>
        <img src="images/DataLoading.jpg" width="400"><br>
   </dl><p>
@@ -105,7 +121,7 @@ It's a good opportunity for using this utility that you hope to monitor the SOAP
 
   <b>step 5-a:</b> To enable monitoring
   <dl><dd>
-       Please click services to enable monitoring, then push "Turn On" button.<br>
+       Click services to enable monitoring, then push "Turn On" button.<br>
        <img src="images/ToEnableMonitoring.jpg"><p>
        The following screen should be displayed.<br>
        <img src="images/AfterTurnOn.jpg"><br>
@@ -113,7 +129,7 @@ It's a good opportunity for using this utility that you hope to monitor the SOAP
 
   <b>step 5-b:</b> To disable monitoring
   <dl><dd>
-       Please click services to disable monitoring, then push "Turn Off" button.<br>
+       Click services to disable monitoring, then push "Turn Off" button.<br>
        <img src="images/ToDisableMonitoring.jpg"><p>
        The following screen should be displayed.<br>
        <img src="images/AfterTurnOff.jpg"><br>
@@ -121,14 +137,14 @@ It's a good opportunity for using this utility that you hope to monitor the SOAP
 
   <b>step 6:</b> Save changes
   <dl><dd>
-       Please push "Save changes" button to save the current state.<br>
+       Push "Save changes" button to save the current state.<br>
        The following screen should be displayed.<br>
        <img src="images/DeployStatus.jpg"><br>
   </dl><p>
 
   <b>step 7:</b> Monitoring
   <dl><dd>
-       Please push "Monitoring" tab to start monitoring with the current settings.<br>
+       Push "Monitoring" tab to start monitoring with the current settings.<br>
        The following screen should be displayed.<br>
        <img src="images/MonitoringScreen.jpg"><br>
   </dl><p>
@@ -147,7 +163,7 @@ It's a good opportunity for using this utility that you hope to monitor the SOAP
    <td bgcolor="#cccccc">App Type</td><td>Applet</td><td>Swing application</td>
   </tr>
   <tr>
-   <td bgcolor="#cccccc">Security</td><td>NG (No authentication)</td><td>OK (Authentication added)</td>
+   <td bgcolor="#cccccc">Security</td><td>N/A (No authentication)</td><td>OK (Authentication added)</td>
   </tr>
   <tr>
    <td bgcolor="#cccccc">Install & Use</td>
