@@ -582,6 +582,11 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 	    return Array;
 	}
 
+        if (END_ELEMENT == m_pNode->m_type)
+	{
+	    return Array;
+	}
+
 	Array.m_Size = getArraySize (m_pNode);
 
 	if (Array.m_Size > 0)
