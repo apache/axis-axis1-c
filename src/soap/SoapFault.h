@@ -42,12 +42,6 @@ typedef struct
     const char* pcFaultDetail;
 } SoapFaultStruct;
 
-/*
- * This array of structure is used to store all the soap faults
- * which are used in Axis C++. Each time a fault object is needed it is
- * created using this array, in SoapFault class.
- */
-static SoapFaultStruct* s_parrSoapFaultStruct;
 
 /**
  *  @class SoapFault

@@ -48,6 +48,14 @@
 #include "../common/AxisTrace.h"
 #include "../common/AxisConfig.h"
 
+
+/*
+ * This array of structure is used to store all the soap faults
+ * which are used in Axis C++. Each time a fault object is needed it is
+ * created using this array, in SoapFault class.
+ */
+static SoapFaultStruct* s_parrSoapFaultStruct;
+
 extern AxisConfig* g_pConfig;
 AXIS_CPP_NAMESPACE_START
 extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];
