@@ -53,30 +53,6 @@ AC_ARG_WITH(apache,
   AC_MSG_RESULT(no)
 )
 
-AC_MSG_CHECKING(whether to build expat parser library.)
-AC_ARG_WITH(expat,
-[  --with-expat[=PATH]      build expat parser library.],
-[ case "$withval" in
-  no)
-    AC_MSG_RESULT(no)
-    EXPATBUILD=""
-    ;;
-  *)
-    AC_MSG_RESULT(yes)
-    dnl test for  expat directory
-    if test -d $withval; then
-        expatinc="-I$withval/include"
-        expatlib="-L$withval/lib -lexpat -ldl"
-    else
-        AC_MSG_ERROR(could not find expat. stop)
-    fi
-    EXPATBUILD="expat"
-  
-  ;;
-  esac ],
-  AC_MSG_RESULT(no)
-)
-
 AC_MSG_CHECKING(whether to build xercesc parser library.)
 AC_ARG_WITH(xercesc,
 [  --with-xercesc[=PATH]      build xercesc parser library.],
@@ -250,7 +226,6 @@ AC_OUTPUT(Makefile \
     src/server/adminservice/Makefile \
     src/client/Makefile \
     src/client/adminclient/Makefile \
-    src/xml/expat/Makefile \
     src/xml/xerces/Makefile \
     src/xml/tspp/Makefile \
     samples/Makefile \
