@@ -76,14 +76,52 @@
   * throw AxisException(AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
   * When we catch that exception we knows that a soap fault has come.
   *
-  * 
-  *                                                                                             
-  * 
-  *         
-  * 
+  * else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://localhost/axis/MathOps" ))
+  *      //Exception handling code goes here
+  *  {
+  *      cFaultcode = m_pCall->getElementAsString("faultcode", 0);
+  *      cFaultstring = m_pCall->getElementAsString("faultstring", 0);
+  *      cFaultactor = m_pCall->getElementAsString("faultactor", 0);
+  *      if(0 == strcmp("DivByZeroStruct", cFaultstring))
+  *      {
+  *          if (AXIS_SUCCESS == m_pCall->checkFault("faultdetail","http://localhost/axis/MathOps"))
+  *          {
+  *              DivByZeroStruct* pFaultDetail = NULL;
+  *              pFaultDetail = (DivByZeroStruct*)m_pCall->
+  *                  getCmplxObject((void*) Axis_DeSerialize_DivByZeroStruct,
+  *                  (void*) Axis_Create_DivByZeroStruct,
+  *                  (void*) Axis_Delete_DivByZeroStruct,"faultstruct1", 0);
+  *              //Client developers code goes here to handle the struct can be inserted here
+  *              char* temp = pFaultDetail->varString;
+  *              printf("%s\n", temp);
+  *              printf("faultcode:%s\n", cFaultcode);
+  *              printf("faultstring:%s\n", cFaultstring);
+  *              printf("faultactor:%s\n", cFaultactor);
+  *              m_pCall->unInitialize();
+  *              throw AxisDivByZeroException(pFaultDetail);
+  *          }
+  *      }
+  * ...
+  * ...
+  * Note that we compares cFaultstring which contains soap fault's faultstring 
+  * with the DivByZeroStruct. This is so because in the server side we set the 
+  * faultstring to take the fault's generated type name. If the faultdetail
+  * is just a simple string
+  *
+  * else
+  * {
+  *     cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
+  *     throw AxisException(cFaultdetail);
+  * }
+  *
+  * You can also use this class as a test utility to test exceptions. You
+  * can generate exception in the server side and client side and test
+  * from here whether the correct exception messages come to the client.
+  * For example you can remove the shared libraries for MathOps service
+  * (libmathops.so) from $AXIS_HOME/webservices folder and try to run
+  * client here. So will get an exception message like "Service library
+  * is not loaded to the engine".
   */
-
-
 
 class MathOps 
 {
