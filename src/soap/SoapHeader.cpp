@@ -15,7 +15,15 @@
  */
 
 /*
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ * @author Roshan Weerasuriya (roshanw@jkcsworld.com, roshan@opensource.lk)
+ */
+
+/*
+ * Revision 1.1 2004/07/01 roshan
+ * Added code to the following methods to deal with NULL values.
+ *  addNamespaceDecl(Attribute *pAttribute)
+ *  addAttribute(Attribute *pAttribute)
+ *  addHeaderBlock(HeaderBlock* pHeaderBlock)
  */
 
 #ifdef WIN32
@@ -60,9 +68,12 @@ SoapHeader::~SoapHeader()
     m_attributes.clear();
 }
 
-void SoapHeader::addHeaderBlock(HeaderBlock* headerBlock)
+void SoapHeader::addHeaderBlock(HeaderBlock* pHeaderBlock)
 {
-    m_headerBlocks.push_back(headerBlock);
+    if (pHeaderBlock)
+    {
+        m_headerBlocks.push_back(pHeaderBlock);
+    }
 }
 
 int SoapHeader::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
@@ -115,9 +126,16 @@ int SoapHeader::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 
 int SoapHeader::addAttribute(Attribute *pAttribute)
 {
-    m_attributes.push_back(pAttribute);
+    if (pAttribute)
+    {
+        m_attributes.push_back(pAttribute);
 
-    return AXIS_SUCCESS;
+        return AXIS_SUCCESS;
+    }
+    else
+    {
+        return AXIS_FAIL;
+    }
 }
 
 
@@ -136,9 +154,16 @@ int SoapHeader::serializeAttributes(SoapSerializer& pSZ)
 
 int SoapHeader::addNamespaceDecl(Attribute *pAttribute)
 {
-    m_namespaceDecls.push_back(pAttribute);
+    if (pAttribute)
+    {
+        m_namespaceDecls.push_back(pAttribute);
 
-    return AXIS_SUCCESS;
+        return AXIS_SUCCESS;
+    }
+    else
+    {
+        return AXIS_FAIL;
+    }
 }
 
 int SoapHeader::serializeNamespaceDecl(SoapSerializer& pSZ)

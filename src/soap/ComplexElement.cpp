@@ -23,7 +23,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ * @author Roshan Weerasuriya (roshanw@jkcsworld.com, roshan@opensource.lk)
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  *
  */
@@ -31,6 +31,12 @@
 /*
  * Revision 1.1  2004/05/25 samisa
  * Added copy constructure and clone for copy constructing derived classes
+ */
+
+/*
+ * Revision 1.2  2004/07/01 roshan
+ * Added code to addChild(BasicNode *pBasicNode) method to deal with NULL
+ *  values.
  */
 
 /* ComplexElement.cpp: implementation of the ComplexElement class. */
@@ -123,9 +129,16 @@ int ComplexElement::setLocalName(const AxisChar* pachLocalName)
 
 int ComplexElement::addChild(BasicNode *pBasicNode)
 {
-    m_children.push_back(pBasicNode);
-    iNoOfChildren++;
-    return AXIS_SUCCESS;
+    if (pBasicNode)
+    {
+        m_children.push_back(pBasicNode);
+        iNoOfChildren++;
+        return AXIS_SUCCESS;
+    }
+    else
+    {
+        return AXIS_FAIL;
+    }
 }
 
 int ComplexElement::serialize(SoapSerializer& pSZ)
