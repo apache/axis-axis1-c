@@ -54,19 +54,19 @@ void AxisDivByZeroException::processException (DivByZeroStruct* pFault)
 {
 	/*User can do something like deserializing the struct into a string*/
         int iSize = strlen(pFault->varString) + 8;
-    char* sMessage = (char*) malloc(iSize);
-    m_sMessage = (char*) malloc(iSize);
-    char carrTempBuff[4];
-    sprintf(carrTempBuff, "%d", pFault->varInt);
-    strcat(sMessage, carrTempBuff);
-    strcat(sMessage, "\n");
-    sprintf(carrTempBuff, "%f", pFault->varFloat);
-    strcat(sMessage, carrTempBuff);
-    strcat(sMessage, "\n");
-    strcat(sMessage, pFault->varString);
-    strcat(sMessage, "\n");
-    m_sMessage = sMessage;
-    free(sMessage);
+        char* sMessage = (char*) malloc(iSize);
+        m_sMessage = (char*) malloc(iSize);
+        char carrTempBuff[4];
+        sprintf(carrTempBuff, "%d", pFault->varInt);
+        strcat(sMessage, carrTempBuff);
+        strcat(sMessage, "\n");
+        sprintf(carrTempBuff, "%f", pFault->varFloat);
+        strcat(sMessage, carrTempBuff);
+        strcat(sMessage, "\n");
+        strcat(sMessage, pFault->varString);
+        strcat(sMessage, "\n");
+        m_sMessage = sMessage;
+        free(sMessage);
 }
 
 void AxisDivByZeroException::processException(exception* e)
