@@ -170,6 +170,9 @@ private:
 public:
 	IHeaderBlock* getHeaderBlock(const AxisChar* pcName, const AxisChar* pcNamespace);
 	IHeaderBlock* getHeaderBlock();
+	IHeaderBlock* getFirstHeaderBlock();
+	IHeaderBlock* getNextHeaderBlock();
+
 	int setSOAPMethodAttribute(Attribute* pAttribute);
 	SoapMethod* getSOAPMethod();
     IHeaderBlock* createHeaderBlock(AxisChar *pachLocalName,

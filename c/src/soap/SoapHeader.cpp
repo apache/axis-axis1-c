@@ -244,3 +244,22 @@ IHeaderBlock* SoapHeader::getHeaderBlock(const AxisChar *pName,
         return NULL;
     }
 }
+
+ 
+IHeaderBlock* SoapHeader::getFirstHeaderBlock() 
+{
+	m_itHeaderBlocks = m_headerBlocks.begin();
+	IHeaderBlock* tmpIHeaderBlock=NULL;
+	if (m_itHeaderBlocks != m_headerBlocks.end())
+		tmpIHeaderBlock = *m_itHeaderBlocks;
+	return tmpIHeaderBlock;
+}
+
+IHeaderBlock* SoapHeader::getNextHeaderBlock() 
+{
+	m_itHeaderBlocks++;
+	IHeaderBlock* tmpIHeaderBlock=NULL;
+	if (m_itHeaderBlocks != m_headerBlocks.end())
+		tmpIHeaderBlock = *m_itHeaderBlocks;
+	return tmpIHeaderBlock;
+}

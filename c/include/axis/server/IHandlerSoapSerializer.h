@@ -116,7 +116,18 @@ public:
 	  */
 	virtual IHeaderBlock* getHeaderBlock(const AxisChar *pcName, 
 											 const AxisChar *pcNamespace) = 0;
-        
+     /**
+      * Used with getNextHeaderBlock, it returns the first header block,
+      * or NULL if there are no headers.
+      */
+     virtual IHeaderBlock* getFirstHeaderBlock()=0;
+ 
+     /**
+      * Used with getFirstHeaderBlock, it returns the next header block,
+      * or NULL if there are no headers.
+      */
+     virtual IHeaderBlock* getNextHeaderBlock()=0;
+
     /*
      * A handler may get the entire soap body and encrypt/compress 
      * it and encode to either base64Binary or hexBinary before 

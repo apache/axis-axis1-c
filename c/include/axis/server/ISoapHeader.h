@@ -32,6 +32,9 @@ public:
                                          const AxisChar *pNamespace, 
 										 bool bRemoveOrNot) = 0;
     virtual IHeaderBlock* getHeaderBlock(bool bRemoveOrNot)=0;
+    virtual IHeaderBlock* getFirstHeaderBlock()=0;
+    virtual IHeaderBlock* getNextHeaderBlock()=0;
+
     virtual ~ISoapHeader() {};
 };
 
