@@ -29,11 +29,16 @@ public class FaultInfo {
 		this.name = name; 	
 	}
 	
+	public String getFaultInfo(){
+		return this.name;
+	}
+	
 	public void addParam(ParameterInfo paraminfo){
 		params.add(paraminfo);
 	}
 	
 	public ArrayList getParams(){
+		System.out.println(params+" Parameter values ..............in fault info");
 		return params;
 	}
 

@@ -131,7 +131,8 @@ public class ServiceWriter extends CPPClassWriter{
 						writer.write(", AXIS_OUT_PARAM "+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" *OutValue"+j);
 					}
 				}
-				writer.write(")\n{\n}\n");
+				writer.write(")  \n{\n}\n");
+				
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -139,6 +140,7 @@ public class ServiceWriter extends CPPClassWriter{
 		}	
 	}
 
+   
 	/* (non-Javadoc)
 	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writePreprocssorStatements()
 	 */
