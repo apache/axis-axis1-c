@@ -292,7 +292,7 @@ public class ClientStubWriter extends CPPClassWriter{
 				writer.write("Value"+i+", \"" + ((ParameterInfo)paramsB.get(i)).getParamName()+"\", "+CPPUtils.getXSDTypeForBasicType(paraTypeName));
 			}else{
 				//for complex types 
-				writer.write("Value"+i+", Axis_Serialize_"+paraTypeName+", Axis_Delete_"+paraTypeName+", \"" + ((ParameterInfo)paramsB.get(i)).getParamName()+"\"");
+				writer.write("Value"+i+", (void*)Axis_Serialize_"+paraTypeName+", (void*)Axis_Delete_"+paraTypeName+", \"" + ((ParameterInfo)paramsB.get(i)).getParamName()+"\"");
 			}
 			writer.write(");\n");
 		}
