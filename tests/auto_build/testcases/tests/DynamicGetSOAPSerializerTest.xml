@@ -1,0 +1,14 @@
+<test>
+    <name>DynamicGetSOAPSerializerTest</name>
+    <description>DynamicGetSOAPSerializerTest</description>
+	<dynamicCode>true</dynamicCode>
+	<dynamicCodeDirectory>DynamicGetSOAPSerializerTest</dynamicCodeDirectory>
+    <clientLang>cpp</clientLang>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            DynamicGetSOAPSerializerTest.expected
+        </output>        	
+    </expected>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>

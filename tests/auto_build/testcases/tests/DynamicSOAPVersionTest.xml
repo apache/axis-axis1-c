@@ -1,0 +1,17 @@
+<test>
+    <name>DynamicSOAPVersionTest</name>
+    <description>DynamicSOAPVersionTest</description>
+	<dynamicCode>true</dynamicCode>
+	<dynamicCodeDirectory>DynamicSOAPVersionTest</dynamicCodeDirectory>
+    <clientLang>cpp</clientLang>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            DynamicSOAPVersionTest.expected
+        </output>	 
+        <request>
+		DynamicSOAPVersionTestRequest.out
+	  </request>	
+    </expected>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>

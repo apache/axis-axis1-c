@@ -1,0 +1,14 @@
+<test>
+    <name>DynamicCheckFaultTest</name>
+    <description>DynamicCheckFaultTest</description>
+	<dynamicCode>true</dynamicCode>
+	<dynamicCodeDirectory>DynamicCheckFaultTest</dynamicCodeDirectory>
+    <clientLang>cpp</clientLang>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            DynamicCheckFaultTest.expected
+        </output>	        
+    </expected>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>

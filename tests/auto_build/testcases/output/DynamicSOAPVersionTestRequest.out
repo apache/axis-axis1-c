@@ -1,0 +1,33 @@
+POST /Calculator/services/Calculator HTTP/1.1
+Host: localhost:13620
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "Calculator#div"
+Content-Length: 400
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:div xmlns:ns1="http://localhost/axis/Calculator">
+<ns1:arg_0_3>100</ns1:arg_0_3>
+<ns1:arg_1_3>20</ns1:arg_1_3>
+</ns1:div>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /Calculator/services/Calculator HTTP/1.1
+Host: localhost:13620
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "Calculator#div"
+Content-Length: 1140
+
+<?xml version='1.0' encoding='utf-8' ?>
+<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<env:Header><ns2:TestHeader xmlns:ns2="http://apache.axis.com" env:role="http://www.w3.org/2003/05/soap-envelope/role/next"></ns2:TestHeader><ns3:TestHeader xmlns:ns3="http://apache.axis.com" env:role="http://www.w3.org/2003/05/soap-envelope/role/none"></ns3:TestHeader><ns4:TestHeader xmlns:ns4="http://apache.axis.com" env:role="http://www.w3.org/2003/05/soap-envelope/role/ultimateReceiver"></ns4:TestHeader><ns5:TestHeader xmlns:ns5="http://apache.axis.com" env:mustUnderstand="true"></ns5:TestHeader><ns6:TestHeader xmlns:ns6="http://apache.axis.com" env:mustUnderstand="false"></ns6:TestHeader><ns7:TestHeader xmlns:ns7="http://apache.axis.com"></ns7:TestHeader></env:Header>
+<env:Body>
+<ns1:div xmlns:ns1="http://localhost/axis/Calculator">
+<ns1:arg_0_3>100</ns1:arg_0_3>
+<ns1:arg_1_3>20</ns1:arg_1_3>
+</ns1:div>
+</env:Body>
+</env:Envelope>
+
