@@ -20,25 +20,26 @@
 #if !defined(__XMLPARSER_H_OF_AXIS_INCLUDED__)
 #define __XMLPARSER_H_OF_AXIS_INCLUDED__
 
-/**
-    @class XMLParser
-    @brief Interface that any parser wrapper should implement in order to be use 
-		   in Axis as a SOAP parser.
-    @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
-*/
+/*
+ * @class XMLParser
+ * @brief Interface that any parser wrapper should implement in order to be use 
+ *        in Axis as a SOAP parser.
+ * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
+ */
 class XMLParser
 {
 public:
-	virtual ~XMLParser(){};
-	virtual int setInputStream(const Ax_soapstream* pInputStream)=0;
-	virtual const Ax_soapstream* getInputStream()=0;
-	virtual int init()=0;
-	virtual const XML_Ch* getNS4Prefix(const XML_Ch* prefix)=0;
-	virtual int getStatus()=0;
-	virtual const AnyElement* next(bool isCharData=false)=0;
-	virtual AXIS_TRANSPORT_STATUS getTransportStatus()=0;
-	virtual void setTransportStatus(AXIS_TRANSPORT_STATUS nStatus)=0;
+    virtual ~XMLParser(){};
+    virtual int setInputStream(const Ax_soapstream* pInputStream)=0;
+    virtual const Ax_soapstream* getInputStream()=0;
+    virtual int init()=0;
+    virtual const XML_Ch* getNS4Prefix(const XML_Ch* prefix)=0;
+    virtual int getStatus()=0;
+    virtual const AnyElement* next(bool isCharData=false)=0;
+    virtual AXIS_TRANSPORT_STATUS getTransportStatus()=0;
+    virtual void setTransportStatus(AXIS_TRANSPORT_STATUS nStatus)=0;
 
 };
 
 #endif
+

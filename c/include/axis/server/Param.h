@@ -29,38 +29,43 @@
 using namespace std;
 
 class ArrayBean;
-/**
-    @class Param
-    @brief interface for the Param class.
-
-
-    @author Susantha Kumara (skumara@virtusa.com)
-*/
+/*
+ *  @class Param
+ *  @brief interface for the Param class.
+ *
+ *
+ *  @author Susantha Kumara (skumara@virtusa.com)
+ */
 class Param : public IParam
 {
-	friend class SoapSerializer;
+    friend class SoapSerializer;
 public:
-	Param(){ m_Type = USER_TYPE;}; //if there is no attribute that says the type
-	virtual ~Param();
+    Param(){ m_Type = USER_TYPE;}; 
+    /* if there is no attribute that says the type */
+    virtual ~Param();
 
 private:
-	uParamValue m_Value;
-	AxisString m_sName; //Name of the parameter
-	XSDTYPE m_Type; //Type of the parameter
+    uParamValue m_Value;
+    AxisString m_sName; /* Name of the parameter */
+    XSDTYPE m_Type; /* Type of the parameter */
 
 private:
-	AxisString m_strPrefix; //needed in serialization only
-	AxisString m_strUri; //needed in serialization only
+    AxisString m_strPrefix; /* needed in serialization only */
+    AxisString m_strUri; /* needed in serialization only */
 
 public: 
-	int setValue(XSDTYPE nType, uParamValue Value);
-	int serialize(SoapSerializer& pSZ);
-	void setPrefix(const AxisChar* prefix);
-	void setUri(const AxisChar* uri);
-	int setArrayElements(void* pElements);
-	int setArrayElements(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct, AXIS_OBJECT_SIZE_FUNCT pSizeFunct);
-	int setUserType(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct);
-	void setName(const AxisChar* sName);
+    int setValue(XSDTYPE nType, uParamValue Value);
+    int serialize(SoapSerializer& pSZ);
+    void setPrefix(const AxisChar* prefix);
+    void setUri(const AxisChar* uri);
+    int setArrayElements(void* pElements);
+    int setArrayElements(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, 
+        AXIS_OBJECT_DELETE_FUNCT pDelFunct, AXIS_OBJECT_SIZE_FUNCT pSizeFunct);
+    int setUserType(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, 
+        AXIS_OBJECT_DELETE_FUNCT pDelFunct);
+    void setName(const AxisChar* sName);
 };
 
-#endif // !defined(_PARAM_H____OF_AXIS_INCLUDED_)
+#endif 
+
+

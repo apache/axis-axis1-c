@@ -28,39 +28,42 @@
 class SoapSerializer;
 
 using namespace std;
-/**
-    @class SoapFault
-    @brief interface for the SoapFault class.
-
-
-    @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
-*/
+/*
+ *  @class SoapFault
+ *  @brief interface for the SoapFault class.
+ *
+ *
+ *  @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ */
 class SoapFault  
 {
 friend class SoapFaultsTestCase;
 
 public:
-	SoapFault(string m_sFaultcode, string m_sFaultstring, string m_sFaultactor, string m_sDetail);
-	bool operator ==(const SoapFault &objSoapFault);
-	static SoapFault* getSoapFault(int);
-	static void initialize();
-    const char* getSoapString();	
-	int serialize(SoapSerializer& pSZ);	
-	//int serialize(string&);	
-	virtual ~SoapFault();
+    SoapFault(string m_sFaultcode, string m_sFaultstring, 
+        string m_sFaultactor, string m_sDetail);
+    bool operator ==(const SoapFault &objSoapFault);
+    static SoapFault* getSoapFault(int);
+    static void initialize();
+    const char* getSoapString();    
+    int serialize(SoapSerializer& pSZ);    
+    /* int serialize(string&); */
+    virtual ~SoapFault();
 private:
-	SoapFault();
-	//string m_sFaultSerialized;
-	string m_sDetail;
-	string m_sFaultactor;
-	string m_sFaultstring;
-	string m_sFaultcode;
-	static map<int, SoapFaultStruct> m_sFaultMap;
-	static volatile bool m_bInit;
-	//int setDetail(const string& sDetail);
-	//int setFaultactor(const string& sFaultactor);
-	//int setFaultstring(const string& sFaultstring);
-	//int setFaultcode(const string& sFaultcode);
+    SoapFault();
+    /* string m_sFaultSerialized; */
+    string m_sDetail;
+    string m_sFaultactor;
+    string m_sFaultstring;
+    string m_sFaultcode;
+    static map<int, SoapFaultStruct> m_sFaultMap;
+    static volatile bool m_bInit;
+    /* int setDetail(const string& sDetail); */
+    /* int setFaultactor(const string& sFaultactor); */
+    /* int setFaultstring(const string& sFaultstring); */
+    /* int setFaultcode(const string& sFaultcode); */
 };
 
-#endif // !defined(_SOAPFAULT_H____OF_AXIS_INCLUDED_)
+#endif 
+
+

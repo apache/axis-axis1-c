@@ -16,18 +16,19 @@
 
 #if !defined(_ISOAPHEADER_H____OF_AXIS_INCLUDED_)
 #define _ISOAPHEADER_H____OF_AXIS_INCLUDED_
-/**
-    @class ISoapHeader
-    @brief interface for the ISoapHeader class.
-
-
-    @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
-*/
+/*
+ *  @class ISoapHeader
+ *  @brief interface for the ISoapHeader class.
+ *
+ *
+ *  @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ */
 class ISoapHeader  
 {
 public:
-	virtual IHeaderBlock* getHeaderBlock()=0;
-	virtual ~ISoapHeader() {};
+    virtual IHeaderBlock* getHeaderBlock()=0;
+    virtual ~ISoapHeader() {};
 };
 
-#endif // !defined(_ISOAPHEADER_H____OF_AXIS_INCLUDED_)
+#endif 
+

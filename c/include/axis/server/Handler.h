@@ -1,4 +1,3 @@
-/* -*- C++ -*- */
 /*
  *   Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -13,9 +12,6 @@
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
- *
- *
- *
  */
  
 #ifdef WIN32
@@ -28,27 +24,28 @@
 #include "BasicHandler.h"
 #include <map>
 /*
-#ifdef _DEBUG
-#include "AxisTrace.h"
-#endif 
-*/
+ * #ifdef _DEBUG
+ * #include "AxisTrace.h"
+ * #endif 
+ */
 using namespace std;
-/**
-    @class Handler
-    @brief interface for handlers
-    @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
-*/
+/*
+ *  @class Handler
+ *  @brief interface for handlers
+ *  @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
+ */
 class Handler : public HandlerBase
 {
 public:
-	Handler(){};
-	virtual ~Handler(){};
-	virtual const string& getOption(const string& sArg)=0;
-	virtual void setOptionList(const map<string, string>* OptionList)=0;
-	int AXISCALL getType(){return NORMAL_HANDLER;};
+    Handler(){};
+    virtual ~Handler(){};
+    virtual const string& getOption(const string& sArg)=0;
+    virtual void setOptionList(const map<string, string>* OptionList)=0;
+    int AXISCALL getType(){return NORMAL_HANDLER;};
 
 protected:
   const map<string, string>* m_pOption;
 };
 
-#endif /*__HANDLER_OF_AXIS_INCLUDED__*/
+#endif 
+

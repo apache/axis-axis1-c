@@ -18,19 +18,20 @@
 #define __WRAPPERCLASSHANDLER_OF_AXIS_INCLUDED__
 
 #include <axis/server/BasicHandler.h>
-/**
-    @class WrapperClassHandler
-    @brief
-    @author Susantha Kumara (skumara@virtusa.com)
-
-*/
+/*
+ * @class WrapperClassHandler
+ * @brief
+ * @author Susantha Kumara (skumara@virtusa.com)
+ *
+ */
 class WrapperClassHandler : public HandlerBase 
 {
 public:
-	WrapperClassHandler(){};
-	virtual ~WrapperClassHandler(){};
-	virtual AXIS_BINDING_STYLE AXISCALL getBindingStyle()=0;
-	int AXISCALL getType(){return WEBSERVICE_HANDLER;};
+    WrapperClassHandler(){};
+    virtual ~WrapperClassHandler(){};
+    virtual AXIS_BINDING_STYLE AXISCALL getBindingStyle()=0;
+    int AXISCALL getType(){return WEBSERVICE_HANDLER;};
 };
 
-#endif //__WRAPPERCLASSHANDLER_OF_AXIS_INCLUDED__
+#endif 
+

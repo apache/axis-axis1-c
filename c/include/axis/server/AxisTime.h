@@ -35,13 +35,13 @@ typedef struct
 } uDuration;
 
 
-/**
-    @class AxisTime
-    @brief time manipulating helper class
-
-    
-    @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)    
-*/
+/*
+ *  @class AxisTime
+ *  @brief time manipulating helper class
+ *
+ *   
+ *  @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)    
+ */
 class AxisTime
 {
     public:
@@ -53,15 +53,18 @@ class AxisTime
         void setValue(XSDTYPE type, uParamValue Value);
         void setType(XSDTYPE m_Type);
         AxisString getValue();
-        AxisString& serialize(const AxisChar* sName, struct tm tValue, XSDTYPE nType);
-        AxisString& serialize(const AxisChar* sName, long lDuration, XSDTYPE nType);
+        AxisString& serialize(const AxisChar* sName, struct tm tValue, 
+            XSDTYPE nType);
+        AxisString& serialize(const AxisChar* sName, long lDuration, 
+            XSDTYPE nType);
         long getDuration();
         struct tm getDateTime();
         struct tm getDate();
         struct tm getTime();
         int mkCTime();
-		static struct tm deserialize(const AxisChar* strValue, XSDTYPE type);
-		static long deserializeDuration(const AxisChar* strValue, XSDTYPE type);
+        static struct tm deserialize(const AxisChar* strValue, XSDTYPE type);
+        static long deserializeDuration(const AxisChar* strValue, 
+            XSDTYPE type);
 
     private:
         void processValue();
@@ -86,9 +89,10 @@ class AxisTime
         uDuration duration;
         time_t m_longYears;
         time_t m_Duration;
-        //string strXSDDuration;
+        /* string strXSDDuration; */
         AxisString strXSDDuration;
         AxisString strXSDDate;
 };
 
 #endif
+

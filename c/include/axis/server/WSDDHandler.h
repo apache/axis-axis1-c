@@ -34,42 +34,43 @@ enum AXIS_HANDLER_SCOPE {AH_APPLICATION=1, AH_SESSION, AH_REQUEST};
 const AxisChar kw_scope_app[] = "application";
 const AxisChar kw_scope_ses[] = "session";
 const AxisChar kw_scope_req[] = "request";
-/**
-    @class WSDDHandler
-    @brief interface for the WSDDHandler class.
-    @author Susantha Kumara (skumara@virtusa.com)
-*/
+/*
+ *  @class WSDDHandler
+ *  @brief interface for the WSDDHandler class.
+ *  @author Susantha Kumara (skumara@virtusa.com)
+ */
 class WSDDHandler  
 {
 public:
-	const AxisChar* getLibName() const;
-	int getLibId() const;
-	int getScope() const;
-	void setScope(const AxisChar* sScope);
-	void setLibName(const AxisChar* sLibName);
-	void setLibId(int nLibId);
-	void setName(const AxisChar* sName);
-	const AxisChar* getParameter(const AxisChar* sKey) const;
-	void addParameter(const AxisChar* sKey, const AxisChar* sValue);
-	const map<AxisString, AxisString>* getParameterList() const; 
-	WSDDHandler();
-	virtual ~WSDDHandler();
-	void setDescription(const AxisChar* sDescription);
-	const AxisChar* getDescription() const;
-	virtual int updateWSDD(FILE* wsddfile, int tabcount);
+    const AxisChar* getLibName() const;
+    int getLibId() const;
+    int getScope() const;
+    void setScope(const AxisChar* sScope);
+    void setLibName(const AxisChar* sLibName);
+    void setLibId(int nLibId);
+    void setName(const AxisChar* sName);
+    const AxisChar* getParameter(const AxisChar* sKey) const;
+    void addParameter(const AxisChar* sKey, const AxisChar* sValue);
+    const map<AxisString, AxisString>* getParameterList() const; 
+    WSDDHandler();
+    virtual ~WSDDHandler();
+    void setDescription(const AxisChar* sDescription);
+    const AxisChar* getDescription() const;
+    virtual int updateWSDD(FILE* wsddfile, int tabcount);
 public:
-	void printTabs(int count);
-	WSDDHandler& operator << (const char* str);
+    void printTabs(int count);
+    WSDDHandler& operator << (const char* str);
 protected:
-	int m_nLibId;
-	int m_nScope;
-	AxisString m_sName;
-	AxisString m_sLibName;
-	AxisString m_sDescription;
-	map<AxisString, AxisString>* m_Params;
-	FILE* m_file; /* temporary file handler to wsdd file */
+    int m_nLibId;
+    int m_nScope;
+    AxisString m_sName;
+    AxisString m_sLibName;
+    AxisString m_sDescription;
+    map<AxisString, AxisString>* m_Params;
+    FILE* m_file; /* temporary file handler to wsdd file */
 };
 
 typedef list<WSDDHandler*> WSDDHandlerList;
 
-#endif // !defined(_WSDDHANDLER_H__NCLUDED_)
+#endif 
+

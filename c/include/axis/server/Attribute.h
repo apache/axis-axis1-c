@@ -25,38 +25,40 @@
 using namespace std;
 
 class SoapSerializer;
-/**
-    @class Attribute
-    @brief interface for the Attribute class.
 
+/*
+ *   @class Attribute
+ *   @brief interface for the Attribute class.
+ *
+ *   @author Roshan Weerasuriya (roshan@opensource.lk, roshan@jkcs.slt.lk)
+ */
 
-
-
-    @author Roshan Weerasuriya (roshan@opensource.lk, roshan@jkcs.slt.lk)
-*/
 class Attribute  
 {
-private:	
-	bool isSerializable() const;
-	AxisString m_localname;
-	AxisString m_prefix;
-	AxisString m_uri;
-	AxisString m_value;
-	
-public:		
-	int initializeForTesting();
-	int serialize(SoapSerializer& pSZ) const;
-	int serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack);
+private:    
+    bool isSerializable() const;
+    AxisString m_localname;
+    AxisString m_prefix;
+    AxisString m_uri;
+    AxisString m_value;
+    
+public:        
+    int initializeForTesting();
+    int serialize(SoapSerializer& pSZ) const;
+    int serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack);
 
-	Attribute();	
-	Attribute(const AxisChar* localname, const AxisChar* prefix, const AxisChar* uri, const AxisChar* value);
-	Attribute(const AxisChar* localname, const AxisChar* prefix, const AxisChar* value);
-	virtual ~Attribute();
+    Attribute();    
+    Attribute(const AxisChar* localname, const AxisChar* prefix, 
+        const AxisChar* uri, const AxisChar* value);
+    Attribute(const AxisChar* localname, const AxisChar* prefix, 
+        const AxisChar* value);
+    virtual ~Attribute();
 
-	void setValue(const AxisChar* value);
-	void setUri(const AxisChar* uri);
-	void setPrefix(const AxisChar* prefix);
-	void setLocalName(const AxisChar* localname);	
+    void setValue(const AxisChar* value);
+    void setUri(const AxisChar* uri);
+    void setPrefix(const AxisChar* prefix);
+    void setLocalName(const AxisChar* localname);    
 };
 
-#endif // !defined(_ATTRIBUTE_H____OF_AXIS_INCLUDED_)
+#endif
+

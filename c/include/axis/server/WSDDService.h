@@ -24,39 +24,40 @@
 #include <map>
 
 using namespace std;
-/**
-    @class WSDDService
-    @brief interface for the WSDDService class.
-    @author Susantha Kumara (skumara@virtusa.com)
-*/
+/*
+ *  @class WSDDService
+ *  @brief interface for the WSDDService class.
+ *  @author Susantha Kumara (skumara@virtusa.com)
+ */
 class WSDDService : public WSDDHandler 
 {
 public:
-	const list<AxisString> getAllowedMethods() const;
-	void setProvider(const AxisChar* sProvider);
-	PROVIDERTYPE getProvider() const;
-	const AxisChar* getServiceName() const;
-	bool isAllowedMethod(const AxisChar* sMethodName) const;
-	void addAllowedMethod(const AxisChar* sMethodName);
-	const WSDDHandlerList* getResponseFlowHandlers() const;
-	void addHandler(bool bRequestFlow, WSDDHandler* pHandler);
-	int removeHandler(bool bRequestFlow, WSDDHandler* pHandler);
-	const WSDDHandlerList* getRequestFlowHandlers() const;
-	void addAllowedRole(const AxisChar* sRole);
-	const list<AxisString>& getAllowedRoles();
-	WSDDService();
-	virtual ~WSDDService();
-	int updateWSDD(FILE* wsddfile, int tabcount);
+    const list<AxisString> getAllowedMethods() const;
+    void setProvider(const AxisChar* sProvider);
+    PROVIDERTYPE getProvider() const;
+    const AxisChar* getServiceName() const;
+    bool isAllowedMethod(const AxisChar* sMethodName) const;
+    void addAllowedMethod(const AxisChar* sMethodName);
+    const WSDDHandlerList* getResponseFlowHandlers() const;
+    void addHandler(bool bRequestFlow, WSDDHandler* pHandler);
+    int removeHandler(bool bRequestFlow, WSDDHandler* pHandler);
+    const WSDDHandlerList* getRequestFlowHandlers() const;
+    void addAllowedRole(const AxisChar* sRole);
+    const list<AxisString>& getAllowedRoles();
+    WSDDService();
+    virtual ~WSDDService();
+    int updateWSDD(FILE* wsddfile, int tabcount);
 private:
-	const char* getProviderString();
+    const char* getProviderString();
 private:
-	PROVIDERTYPE m_Provider;
-	list<AxisString> m_AllowedMethods;
-	WSDDHandlerList* m_RequestHandlers;
-	WSDDHandlerList* m_ResponseHandlers;
-	list<AxisString> m_AllowedRoles;
+    PROVIDERTYPE m_Provider;
+    list<AxisString> m_AllowedMethods;
+    WSDDHandlerList* m_RequestHandlers;
+    WSDDHandlerList* m_ResponseHandlers;
+    list<AxisString> m_AllowedRoles;
 };
 
 typedef map<AxisString, WSDDService*> WSDDServiceMap;
 
-#endif // !defined(_WSDDSERVICE_H__OF_AXIS_INCLUDED_)
+#endif
+

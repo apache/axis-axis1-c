@@ -16,20 +16,23 @@
 
 #if !defined(_ISOAPSERIALIZER_H____OF_AXIS_INCLUDED_)
 #define _ISOAPSERIALIZER_H____OF_AXIS_INCLUDED_
-/**
-    @class ISoapSerializer
-    @brief interface for the ISoapSerializer class.
 
+/*
+ *  @class ISoapSerializer
+ *  @brief interface for the ISoapSerializer class.
+ *
+ *
+ *  @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ */
 
-    @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
-*/
 class ISoapSerializer
 {
 public:
-	virtual ~ISoapSerializer() {};
+    virtual ~ISoapSerializer() {};
 };
 
-#endif /* !defined(_ISOAPSERIALIZER_H____OF_AXIS_INCLUDED_) */
+#endif 
+
 
 
 

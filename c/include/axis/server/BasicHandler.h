@@ -1,4 +1,3 @@
-/* -*- C++ -*- */
 /*
  *   Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -14,8 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- *
- * @author Susantha Kumara (skumara@virtusa.com)
+ *   @author Susantha Kumara (skumara@virtusa.com)
  *
  */
 
@@ -29,18 +27,19 @@ enum HANDLER_TYPE { NORMAL_HANDLER, WEBSERVICE_HANDLER, CHAIN_HANDLER };
 
 typedef struct 
 {
-	int (AXISCALL* invoke)(void* _object, void* pMsg);
-	void (AXISCALL* onFault)(void* _object, void* pMsg);
-	int (AXISCALL* init)(void* _object);
-	int (AXISCALL* fini)(void* _object);
-	int (AXISCALL* getType)(void* _object);
-	AXIS_BINDING_STYLE (AXISCALL* getBindingStyle)(void* _object);
+    int (AXISCALL* invoke)(void* _object, void* pMsg);
+    void (AXISCALL* onFault)(void* _object, void* pMsg);
+    int (AXISCALL* init)(void* _object);
+    int (AXISCALL* fini)(void* _object);
+    int (AXISCALL* getType)(void* _object);
+    AXIS_BINDING_STYLE (AXISCALL* getBindingStyle)(void* _object);
 } BasicHandlerFunctions;
 
 typedef struct 
 {
-	void* _object; /* present only for interfaces passed from C to C++ (eg:BasicHandler) */
-	BasicHandlerFunctions* _functions;
+    void* _object; 
+    /* present only for interfaces passed from C to C++ (eg:BasicHandler) */
+    BasicHandlerFunctions* _functions;
 } BasicHandler;
 
 #ifdef __cplusplus
@@ -48,14 +47,16 @@ typedef struct
 class HandlerBase  
 {
 public:
-	HandlerBase(){};
-	~HandlerBase(){};
-	virtual int AXISCALL invoke(void* pMsg)=0;
-	virtual void AXISCALL onFault(void* mMsg)=0;
-	virtual int AXISCALL init()=0;
-	virtual int AXISCALL fini()=0;
-	virtual int AXISCALL getType()=0;
+    HandlerBase(){};
+    ~HandlerBase(){};
+    virtual int AXISCALL invoke(void* pMsg)=0;
+    virtual void AXISCALL onFault(void* mMsg)=0;
+    virtual int AXISCALL init()=0;
+    virtual int AXISCALL fini()=0;
+    virtual int AXISCALL getType()=0;
 };
 #endif
 
-#endif /* !defined(_BASICHANDLER_H__OF_AXIS_INCLUDED_) */
+#endif 
+
+
