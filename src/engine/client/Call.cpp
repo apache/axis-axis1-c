@@ -187,11 +187,17 @@ void Call::AddParameter(void *pObject, void *pSZFunct, void *pDelFunct, const ch
 	m_pIWSSZ->AddOutputParam(pchName, pObject, pSZFunct, pDelFunct);
 }
 
+/**
+ * This function is used to set that the return type is a basic type
+ */
 void Call::SetReturnType(XSDTYPE nType)
 {
 	m_nReturnType = nType;
 }
 
+/**
+ * This function is used to set that the return type is a complex type
+ */
 void Call::SetReturnType(void *pDZFunct, void* pCreFunct, void *pDelFunct, const char* pchTypeName, const char * pchUri)
 {
 	m_nReturnType = USER_TYPE;
@@ -238,6 +244,7 @@ int Call::Invoke()
 	Param *pParam = NULL;
 	if (SUCCESS == (nStatus = m_pAxisEngine->Process(&m_Soap)))
 	{
+		//Get return type if it returns
 		if (USER_TYPE == m_nReturnType)
 		{
 			/*
@@ -285,19 +292,99 @@ int Call::Invoke()
 			else 
 				return FAIL; //CF_ZERO_ARRAY_SIZE_ERROR
 		}
-		else //basic type
+		else if (XSD_UNKNOWN != m_nReturnType)//basic type
 		{
 			m_pReturnValue = (Param*)m_pIWSDZ->GetParam();
+		}
+		else if (!m_OutParams.empty()) //there are out parameters
+		{
+			OutParamHolder* pOutParam = NULL;
+			// do for each parameter.
+			for (list<OutParamHolder*>::iterator it = m_OutParams.begin(); it != m_OutParams.end(); it++)
+			{
+				pOutParam = (*it);
+				if (USER_TYPE == pOutParam->m_nOutType)
+				{
+					/*
+					If it is a custom type remove the wrapper element that describes 
+					the type. Optionally you can check whether the returned type is of expected type
+					*/
+					pParam = (Param*)m_pIWSDZ->GetParam();
+					/*
+					Following lines check whether the returned type is expected type or not.
+					But this type checking is optional. So commented.
+					if (pParam && (pOutParam->m_OutCplxObj.m_TypeName == pParam->GetTypeName()))
+					{
+						pOutParam->m_OutCplxObj.pDZFunct(pOutParam->m_OutCplxObj.pObject, m_pMsgData->m_pDZ);
+					}
+					else
+					{
+						return FAIL;
+					}
+					*/
+					if (!pOutParam->m_OutCplxObj.pCreFunct || !pOutParam->m_OutCplxObj.pDZFunct)
+						return FAIL; 
+					pOutParam->m_OutCplxObj.pObject = pOutParam->m_OutCplxObj.pCreFunct();
+					if (!pOutParam->m_OutCplxObj.pObject)
+						return FAIL;
+					pOutParam->m_OutCplxObj.pDZFunct(pOutParam->m_OutCplxObj.pObject, m_pMsgData->m_pDZ);
+
+				}
+				else if (XSD_ARRAY == pOutParam->m_nOutType)
+				{
+					IParam *param0 = m_pIWSDZ->GetParam(); 
+					/* now we know that this is an array. if needed we can check that too */
+					if (!pOutParam->m_pArray) return FAIL; //No array expected ?
+					pOutParam->m_pArray->m_Size = param0->GetArraySize();
+					if (pOutParam->m_pArray->m_Size < 1) return FAIL;
+					if (USER_TYPE == pOutParam->m_nArrayType)
+					{
+						pOutParam->m_pArray->m_Array = pOutParam->m_OutCplxObj.pCreFunct(true, pOutParam->m_pArray->m_Size);
+					}
+					else
+					{
+						pOutParam->m_pArray->m_Array = m_pIWSDZ->CreateArray(pOutParam->m_nArrayType, pOutParam->m_pArray->m_Size); 
+					}
+					if (pOutParam->m_pArray->m_Array) //Array is allocated successfully
+					{
+						if (USER_TYPE == pOutParam->m_nArrayType)
+							param0->SetArrayElements((void*)(pOutParam->m_pArray->m_Array), pOutParam->m_OutCplxObj.pDZFunct, pOutParam->m_OutCplxObj.pDelFunct, pOutParam->m_OutCplxObj.pSizeFunct);
+						else
+							param0->SetArrayElements((void*)(pOutParam->m_pArray->m_Array));
+						m_pIWSDZ->Deserialize(param0,0);
+					}
+					else 
+						return FAIL; //CF_ZERO_ARRAY_SIZE_ERROR
+				}
+				else if (XSD_UNKNOWN != pOutParam->m_nOutType)//basic type
+				{
+					pOutParam->m_pOutValue = (Param*)m_pIWSDZ->GetParam();
+				}
+				else // this is an unexpected situation
+				{
+					return FAIL;
+				}			
+			}
+		}
+		else //returns void
+		{
+			//nothing to do
 		}
 	}
 	return nStatus;
 }
 
+/**
+ * Used to get the corresponding Param when the return type is basic type
+ */
 Param* Call::GetResult()
 {
 	return m_pReturnValue;
 }
 
+/**
+ * Used to get deserialized return object when the return type is complex type
+ */
 void Call::GetResult(void** pReturn)
 {
 	if (m_ReturnCplxObj.pObject)
@@ -364,6 +451,7 @@ void Call::InitializeObjects()
 	m_ReturnCplxObj.pObject = NULL;
 	m_ReturnCplxObj.pSizeFunct = NULL;
 	m_ReturnCplxObj.pSZFunct = NULL;
+	m_CurItr = NULL;
 }
 
 int Call::UnInitialize()
@@ -439,3 +527,122 @@ int Call::MakeArray()
 	return (NULL != m_pArray->m_Array)?SUCCESS:FAIL;
 }
 
+Call::OutParamHolder::OutParamHolder()
+{
+	m_nOutType = XSD_UNKNOWN;
+	m_nArrayType = XSD_UNKNOWN;
+	m_pArray = NULL;
+	m_pOutValue = NULL;
+}
+
+Call::OutParamHolder::~OutParamHolder()
+{
+
+}
+
+Call::OutParamHolder* Call::AddOutParam()
+{
+	OutParamHolder* pNew = new OutParamHolder();
+	if (pNew)
+		m_OutParams.push_back(pNew);
+	return pNew;
+}
+
+/**
+ * This function is used to set that the return type is a basic type
+ */
+void Call::AddOutParamType(XSDTYPE nType)
+{
+	OutParamHolder* pOPH = AddOutParam();
+	if (pOPH)
+	{
+		pOPH->m_nOutType = nType;
+	}
+}
+
+/**
+ * This function is used to set that the return type is a complex type
+ */
+void Call::AddOutParamType(void *pDZFunct, void* pCreFunct, void *pDelFunct, const char* pchTypeName, const char * pchUri)
+{
+	OutParamHolder* pOPH = AddOutParam();
+	if (pOPH)
+	{
+		pOPH->m_nOutType = USER_TYPE;
+		pOPH->m_OutCplxObj.pObject = NULL;
+		pOPH->m_OutCplxObj.pDZFunct = (AXIS_DESERIALIZE_FUNCT)pDZFunct;
+		pOPH->m_OutCplxObj.pCreFunct = (AXIS_OBJECT_CREATE_FUNCT)pCreFunct;
+		pOPH->m_OutCplxObj.pDelFunct = (AXIS_OBJECT_DELETE_FUNCT)pDelFunct;
+		pOPH->m_OutCplxObj.m_TypeName = pchTypeName;
+		pOPH->m_OutCplxObj.m_URI = pchUri;
+	}
+}
+
+/**
+ * This function is used to set that the return type is an array of complex types
+ */
+void Call::AddOutParamType(Axis_Array* pArray, void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName, const char* pchUri)
+{
+	OutParamHolder* pOPH = AddOutParam();
+	if (pOPH)
+	{
+		pOPH->m_pArray = pArray;
+		pOPH->m_nOutType = XSD_ARRAY;
+		pOPH->m_nArrayType = USER_TYPE;
+		pOPH->m_OutCplxObj.pDZFunct = (AXIS_DESERIALIZE_FUNCT)pDZFunct;
+		pOPH->m_OutCplxObj.pCreFunct = (AXIS_OBJECT_CREATE_FUNCT)pCreFunct;
+		pOPH->m_OutCplxObj.pDelFunct = (AXIS_OBJECT_DELETE_FUNCT)pDelFunct;
+		pOPH->m_OutCplxObj.pSizeFunct = (AXIS_OBJECT_SIZE_FUNCT)pSizeFunct;
+		pOPH->m_OutCplxObj.m_TypeName = pchTypeName;
+		pOPH->m_OutCplxObj.m_URI = pchUri;
+	}
+}
+
+/**
+ * This function is used to set that the return type is an array of basic types.
+ * @param pArray Array to which the deserialized object array is set an returned
+ *				 to the client application.
+ * @param nType Basic type of the array elements
+ */
+void Call::AddOutParamType(Axis_Array* pArray, XSDTYPE nType)
+{
+	OutParamHolder* pOPH = AddOutParam();
+	if (pOPH)
+	{
+		pOPH->m_pArray = pArray;
+		pOPH->m_nOutType = XSD_ARRAY;
+		pOPH->m_nArrayType = nType;
+	}
+}
+
+/**
+ * Used to get the corresponding Param when the out param type is basic type
+ */
+Param* Call::GetOutParam()
+{
+	if (m_CurItr == NULL) m_CurItr = m_OutParams.begin();
+	else m_CurItr++;
+	if (m_CurItr == m_OutParams.end()) return NULL; //something wrong
+	OutParamHolder* pOutParam = (*m_CurItr);
+	return pOutParam->m_pOutValue;
+}
+
+/**
+ * Used to get the deserialized object when the out param type is of complex type
+ */
+void Call::GetOutParam(void** pOut)
+{
+	if (m_CurItr == NULL) m_CurItr = m_OutParams.begin();
+	else m_CurItr++;
+	if (m_CurItr == m_OutParams.end()) return; //something wrong
+	OutParamHolder* pOutParam = (*m_CurItr);
+	if (pOutParam->m_OutCplxObj.pObject)
+	{
+		*pOut = pOutParam->m_OutCplxObj.pObject;
+		pOutParam->m_OutCplxObj.pObject = NULL; //note that returned object is handed over to the client.
+	}
+	else
+	{
+		*pOut = NULL;
+	}
+}

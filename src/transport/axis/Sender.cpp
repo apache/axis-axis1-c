@@ -64,8 +64,6 @@
 
 #include <axis/client/transport/axis/Platform.hpp>
 #include <axis/client/transport/axis/Sender.hpp>
-#include <axis/client/transport/axis/Transport.hpp>
-
 
 
 Sender::Sender(Transport *pTr)
@@ -98,6 +96,11 @@ bool Sender::Send(const std::string& what) throw (AxisException)
 	}
 
 	return true;
+}
+
+void Sender::SetProperty(const string& sProperty, const string& sValue)
+{
+	m_pTrChannel->SetProperty(sProperty, sValue);
 }
 
 

@@ -64,9 +64,6 @@
 
 #include <axis/client/transport/AxisTransport.h>
 #include <axis/client/transport/axis/TransportFactory.hpp>
-#include <axis/client/transport/axis/Transport.hpp>
-#include <axis/client/transport/axis/Sender.hpp>
-#include <axis/client/transport/axis/Receiver.hpp>
 
 AxisTransport::AxisTransport(Ax_soapstream* pSoap)
 {
@@ -160,7 +157,20 @@ int AxisTransport::Get_bytes(char* pRecvBuffer, int nBuffSize, int* pRecvSize, c
 int AxisTransport::Send_transport_information(void* pSoapStream)
 {
     Ax_soapstream* pSStream = (Ax_soapstream*) pSoapStream;
-	return SUCCESS;
+	if (pSStream)
+	{
+		Sender* pSender = (Sender*) pSStream->str.op_stream;
+		if (!pSender) return FAIL;
+		string sName, sValue;
+		for (int x=0; x<pSStream->so.http.ip_headercount;x++)
+		{
+			sName = pSStream->so.http.ip_headers[x].headername;
+			sValue = pSStream->so.http.ip_headers[x].headervalue;
+			pSender->SetProperty(sName, sValue);
+		}
+		return SUCCESS;
+	}
+	return FAIL;
 }
 
 int AxisTransport::Receive_transport_information(void* pSoapStream)
