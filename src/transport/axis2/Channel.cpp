@@ -31,7 +31,7 @@ using namespace std;
  * 
  */
 
-Channel::Channel ():m_Sock (INVALID_SOCKET)
+Channel::Channel ():m_Sock (INVALID_SOCKET), m_lTimeoutSeconds(0)
 {
 
 }
