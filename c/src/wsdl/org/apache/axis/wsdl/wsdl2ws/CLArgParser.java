@@ -1,9 +1,8 @@
-/* -*- C++ -*- */
 /*
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,7 +24,7 @@
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "SOAP" and "Apache Software Foundation" must
+ * 4. The names "Axis" and "Apache Software Foundation" must
  *    not be used to endorse or promote products derived from this
  *    software without prior written permission. For written
  *    permission, please contact apache@apache.org.
@@ -52,35 +51,54 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- *
- *
- *
- *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- *
+ */
+ 
+/**
+ * @author Srinath Perera(hemapani@openource.lk)
  */
 
-// IWrapperSoapDeSerializer.h: interface for the IWrapperSoapDeSerializer class.
-//
-//////////////////////////////////////////////////////////////////////
+package org.apache.axis.wsdl.wsdl2ws;
 
-#if !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)
-#define AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_
+import java.util.ArrayList;
+import java.util.Hashtable;
 
-#include "ISoapDeSerializer.h"
-#include "GDefine.h"
-#include <string>
-using namespace std;
-class IParam;
+public class CLArgParser {
+    public Hashtable bag;
+    public ArrayList args;
 
-class IWrapperSoapDeSerializer : public virtual ISoapDeSerializer
-{
-public:
-	virtual const AxisChar* GetMethodName()=0;
-	virtual IParam* GetParam()=0;
-	virtual int Deserialize(IParam* pIParam, int bHref)=0;
-	virtual ~IWrapperSoapDeSerializer() {};
+    public CLArgParser(String[] args) {
+        this.bag = new Hashtable();
+        this.args = new ArrayList();
+        for (int i = 0; i < args.length; i++) {
+            if (!args[i].startsWith("-"))
+                this.args.add(args[i]);
+            else {
+                System.out.println("args = " + args[i].substring(1,1));
+                bag.put(args[i].substring(1, 2), args[i].substring(2));
+            }
 
-};
+        }
+    }
 
-#endif // !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)
+    /**
+     * These are direct arguments not - type options
+     * @param i
+     */
+    public String getArgument(int i) {
+        Object obj = args.get(i);
+         if(obj == null) return null;
+        else return (String)obj;
+    }
+
+    /**
+     * These are direct arguments not - type options
+     */
+    public int getArgumentCount() {
+        return this.args.size();
+    }
+
+    public String getOptionBykey(String key) {
+        return (String) bag.get(key);
+    }
+
+}
