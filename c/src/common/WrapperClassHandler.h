@@ -71,6 +71,7 @@ class WrapperClassHandler : public BasicHandler
 public:
 	virtual int Init() = 0;
 	virtual int Fini() = 0;	
+	int GetType(){return WEBSERVICE_HANDLER;};
 };
 
 #endif //__WRAPPERCLASSHANDLER_INCLUDED__
