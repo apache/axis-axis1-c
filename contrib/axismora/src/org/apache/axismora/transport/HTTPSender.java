@@ -332,7 +332,7 @@ public class HTTPSender extends BasicHandler {
         .append(HTTPConstants.HEADER_CACHE_CONTROL_NOCACHE)
         .append("\r\n")
         .append(HTTPConstants.HEADER_SOAP_ACTION) //The SOAP action.
-        .append(": \"").append(this.soapAction.getLocalPart()).append("\"\r\n");
+        .append(": \"").append(this.soapAction.getNamespaceURI()+"$"+soapAction.getLocalPart()).append("\"\r\n");
 
         /*				if (posting) {
         					    // no chunking 
