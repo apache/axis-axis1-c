@@ -9,6 +9,9 @@
 		<copy todir="${basedir}/include/apache1_3">
 			<fileset dir="${apache13.dir.server}/include" includes="**"/>
 		</copy>
+        <antcall target="buildVersionResource" inheritall="true">
+            <param name="internalName" value="${apache13.serverLibraryName}"/>
+        </antcall>      
 		<if>
 			<not>
 				<isset property="aix"/>

@@ -4,6 +4,9 @@
 	  Compile the Apache 2.0 Axis Server Module
 	  -->
 	<target name="compileApache20Module">
+    <antcall target="buildVersionResource" inheritall="true">
+        <param name="internalName" value="${apache20.serverLibraryName}"/>
+    </antcall>  
 	<!--  NOT BUILDING THIS MODULE ON AIX DUE TO SOAPATTACHMENT ISSUES (compile and see what they are) -->
 	<if>
 		<not>

@@ -1,4 +1,4 @@
-<project name="Axis C HTTP Transport Channel" default="compileAxisHTTPChannel" basedir="..">
+<project name="Axis C HTTP Transport Channel" default="compileAxisHTTPTransportChannel" basedir="..">
 
    <!--
     Compile the Axis HTTP Transport Channel Library
@@ -6,6 +6,9 @@
 	 <target name="compileAxisHTTPTransportChannel">
       <mkdir dir="${dir.objects}"/>
       <mkdir dir="${dir.bin}"/>
+      <antcall target="buildVersionResource" inheritall="true">
+          <param name="internalName" value="${channelLibraryName}"/>
+      </antcall>
 <if>
 	<equals arg1="${transport.HTTP.ipv6}" arg2="true" casesensitive="false"/>
 	<then>

@@ -6,6 +6,9 @@
 	 <target name="compileAxisTransport">
       <mkdir dir="${dir.objects}"/>
       <mkdir dir="${dir.bin}"/>
+      <antcall target="buildVersionResource" inheritall="true">
+          <param name="internalName" value="${transportLibraryName}"/>
+      </antcall>
       <if>
          <not>
             <isset property="aix"/>

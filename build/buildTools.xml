@@ -73,6 +73,9 @@
 	  <target name="compileCBindings">
 		<mkdir dir="${dir.objects}"/>
 		<mkdir dir="${dir.bin}"/>
+        <antcall target="buildVersionResource" inheritall="true">
+            <param name="internalName" value="${cClientLibraryName}"/>
+        </antcall>    
 		<if>
 			<not>
 				<isset property="aix"/>

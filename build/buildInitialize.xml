@@ -134,6 +134,7 @@
 		  Definition of Visual C++ linker
 		  -->
 		<linker id="VisualC++Linker" name="msvc" if="windows">
+            <linkerarg value="${basedir}/build/version.res"/>
 			<linkerarg value="/debug" if="debug"/>
 			<linkerarg value="/machine:I386"/>
 			<linkerarg value="/nologo"/>

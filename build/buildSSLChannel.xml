@@ -6,6 +6,9 @@
 	 <target name="compileAxisHTTPTransportSSLChannel">
       <mkdir dir="${dir.objects}"/>
       <mkdir dir="${dir.bin}"/>
+	  <antcall target="buildVersionResource" inheritall="true">
+          <param name="internalName" value="${channelLibraryName}"/>
+	  </antcall>
 	  <!-- the ssl library is in a different place on windows ! -->
 	  <if>
 		<isset property="windows"/>

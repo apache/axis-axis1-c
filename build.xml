@@ -49,6 +49,40 @@ Notes:
 	<import file="${basedir}/build/buildWSDL2Ws.xml"/>
 	<import file="${basedir}/build/buildDocumentation.xml"/>
 
+
+    <target name="buildVersionResource" if="windows">
+        <delete>
+            <fileset dir="${basedir}/build">
+                <include name="version.res"/>
+                <include name="version.temp.rc"/>
+            </fileset>
+        </delete>   
+	    <copy todir="${basedir}/build">
+            <mapper type="glob" from="*.rc" to="*.temp.rc"/>      
+	        <filterset begintoken="&lt;" endtoken="&gt;">
+	            <filter token="Comments" value="${version.comments}"/>
+                <filter token="CompanyName" value="${version.CompanyName}"/>
+                <filter token="FileDescription" value="${version.FileDescription}"/>
+                <filter token="FileVersion" value="${version}"/>
+                <filter token="InternalName" value="${internalName}"/>
+                <filter token="LegalCopyright" value="${version.LegalCopyright}"/>
+                <filter token="LegalTrademarks" value="${version.LegalTrademarks}"/>
+                <filter token="OriginalFilename" value="${internalName}"/>
+                <filter token="PrivateBuild" value="${version.PrivateBuild}"/>
+                <filter token="ProductName" value="${version.ProductName}"/>
+                <filter token="ProductVersion" value="${version}"/>
+	        </filterset>
+	        <fileset dir="${basedir}/build">
+                <include name="version.rc"/>
+            </fileset>   
+	    </copy>
+        <exec executable="rc">
+            <arg line="/fo ${basedir}/build/version.res ${basedir}/build/version.temp.rc"/>
+        </exec>
+    </target>
+
+
+    
 	<target name="compileClient">
 		<if>
 			<equals arg1="${client}" arg2="true"/>
