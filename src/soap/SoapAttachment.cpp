@@ -21,26 +21,32 @@
  *
  */
 
+
+
 // SoapAttachment.cpp: implementation of the SoapAttachment class.
+
 //
+
 //////////////////////////////////////////////////////////////////////
+
+
 
 #include "SoapAttachment.hpp"
 #include "SoapSerializer.h"
 
 AXIS_CPP_NAMESPACE_START
-
 //////////////////////////////////////////////////////////////////////
+
 // Construction/Destruction
+
 //////////////////////////////////////////////////////////////////////
 
 SoapAttachment::SoapAttachment()
 {	
 	m_AttachementHeaders = new SoapAttachementHeaders();
-
 	//Assigning to NULL
+
 	m_AttachementBody = 0;
-	
 }
 
 SoapAttachment::~SoapAttachment()
@@ -57,13 +63,6 @@ void SoapAttachment::addHeader(const char* pchName, const char* pchValue)
 	m_AttachementHeaders->addHeader(pchName, pchValue);
 }
 
-/*
-void SoapAttachment::addBody(AxisString sBody)
-{
-	m_AttachementBody = sBody;
-}
-*/
-
 void SoapAttachment::addBody(xsd__base64Binary* objBody)
 {
 	m_AttachementBody = objBody;
@@ -71,14 +70,12 @@ void SoapAttachment::addBody(xsd__base64Binary* objBody)
 
 void SoapAttachment::serialize(SoapSerializer &pSZ)
 {
-	
 	/* Serialize the Attachment Headers */
 	pSZ.serialize("\n", NULL);
+
 	m_AttachementHeaders->serialize(pSZ);
 
 	/* Serialize the Attachment Body */
-	//pSZ.serialize("\n", m_AttachementBody.c_str(), NULL);
-
 	if (m_AttachementBody) {
 		pSZ.serialize("\n", NULL);
 		pSZ.serializeAsChardata(m_AttachementBody, XSD_BASE64BINARY);
@@ -100,11 +97,12 @@ const char* SoapAttachment::getHeader(const char *pchName)
 		return m_AttachementHeaders->getHeader(pchName).c_str();
 }
 
-
-
-
-
 AXIS_CPP_NAMESPACE_END
+
+
+
+
+
 
 
 

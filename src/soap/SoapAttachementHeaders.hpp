@@ -22,8 +22,11 @@
  */
 
 // SoapAttachementHeaders.h: interface for the SoapAttachementHeaders class.
+
 //
+
 //////////////////////////////////////////////////////////////////////
+
 
 #if !defined(AFX_SOAPATTACHEMENTHEADERS_H__88A54506_DC18_41D4_B484_AB877ADC42D4__INCLUDED_)
 #define AFX_SOAPATTACHEMENTHEADERS_H__88A54506_DC18_41D4_B484_AB877ADC42D4__INCLUDED_
@@ -41,6 +44,7 @@
 #include <axis/GDefine.hpp>
 
 AXIS_CPP_NAMESPACE_START
+
 using namespace std;
 
 class SoapSerializer;
@@ -49,15 +53,16 @@ class SoapAttachementHeaders
 {
 private:	
 	vector < pair < AxisString, AxisString > > m_AttachHeaders;
+
 public:
 	AxisString getHeader(AxisString sName);
-	
 	void serialize(SoapSerializer& pSZ);
 	void addHeader(AxisString name, AxisString value);
 	SoapAttachementHeaders();
 	virtual ~SoapAttachementHeaders();
-
 };
 
 AXIS_CPP_NAMESPACE_END
+
 #endif // !defined(AFX_SOAPATTACHEMENTHEADERS_H__88A54506_DC18_41D4_B484_AB877ADC42D4__INCLUDED_)
+

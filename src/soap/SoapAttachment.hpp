@@ -21,13 +21,17 @@
  *
  */
 
-
 // SoapAttachment.h: interface for the SoapAttachment class.
+
 //
+
 //////////////////////////////////////////////////////////////////////
+
+
 
 #if !defined(AFX_SOAPATTACHMENT_H__7E7B50DC_21AF_4C6E_83E0_F77985A38E43__INCLUDED_)
 #define AFX_SOAPATTACHMENT_H__7E7B50DC_21AF_4C6E_83E0_F77985A38E43__INCLUDED_
+
 
 #if _MSC_VER > 1000
 #pragma once
@@ -37,8 +41,8 @@
 #include <axis/AxisUserAPI.hpp>
 #include <axis/ISoapAttachment.hpp>
 #include "SoapAttachementHeaders.hpp"
-
 #include <string>
+
 using namespace std;
 
 AXIS_CPP_NAMESPACE_START
@@ -47,20 +51,21 @@ class SoapSerializer;
 
 class STORAGE_CLASS_INFO SoapAttachment : public ISoapAttachment
 {
-private:
-	
+private:	
 	SoapAttachementHeaders* m_AttachementHeaders;
 	xsd__base64Binary* m_AttachementBody;
-public:
-		
+
+public:	
 	const char* getHeader(const char* pchName);
 	xsd__base64Binary* getBody();
 	void serialize(SoapSerializer& pSZ);
-	void addBody(xsd__base64Binary* objBody);	
+	void addBody(xsd__base64Binary* objBody);
 	void addHeader(const char* pchName, const char* pchValue);
 	SoapAttachment();
 	virtual ~SoapAttachment();	
 };
 
 AXIS_CPP_NAMESPACE_END
+
 #endif // !defined(AFX_SOAPATTACHMENT_H__7E7B50DC_21AF_4C6E_83E0_F77985A38E43__INCLUDED_)
+
