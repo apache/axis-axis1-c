@@ -454,7 +454,7 @@ int SoapSerializer::createSoapFault(const AxisChar* sLocalName,
     pSoapFault->setPrefix(getNamespacePrefix(sURI));
     pSoapFault->setUri(sURI);
     pSoapFault->setFaultcode("Server");
-    pSoapFault->setFaultstring("service_exception");
+    pSoapFault->setFaultstring(sLocalName);
     pSoapFault->setFaultactor("http://endpoint/url");
     
     return AXIS_SUCCESS;
