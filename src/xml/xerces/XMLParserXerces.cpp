@@ -38,6 +38,9 @@ XMLParserXerces::XMLParserXerces()
 
 XMLParserXerces::~XMLParserXerces()
 {
+    //Samisa - Parser has memory allocated with the last AnyElement parsed; clean that
+    m_Xhandler.freeElement();
+
     if(m_pInputSource)
         delete m_pInputSource;
     delete m_pParser;
