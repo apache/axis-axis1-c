@@ -72,7 +72,7 @@
 #endif
 
 #include "ESHHandler.h"
-#include <axis/common/GDefine.h>
+#include <axis/server/GDefine.h>
 
 extern "C" {
 //the two export functions////////////////////////////////////////////
