@@ -22,15 +22,8 @@
 #include "WWWLib.h"
 #include "WWWInit.h"
 
-/*PRIVATE int printer (const char * fmt, va_list pArgs)
-{
-    return (vfprintf(stdout, fmt, pArgs));
-}*/
-
-/*PRIVATE int tracer (const char * fmt, va_list pArgs)
-{
-    return (vfprintf(stderr, fmt, pArgs));
-}*/
+// The object that acquires the lock to start event loop
+LibWWWTransport* LibWWWTransport::m_spLockingObject = NULL;
 
 int
 terminate_handler (HTRequest * request, HTResponse * response,
@@ -38,11 +31,15 @@ terminate_handler (HTRequest * request, HTResponse * response,
 {
     if (status == HT_LOADED)
     {
-	HTChunk *chunk = (HTChunk *) HTRequest_context (request);
+	//HTChunk *chunk = (HTChunk *) HTRequest_context (request);
         //HTPrint("In Handler %s\n", HTChunk_data(chunk) );
-    }
     if (HTNet_isEmpty ())
+    {
 	HTEventList_stopLoop ();
+        LibWWWTransport::m_spLockingObject = NULL;
+    }
+
+    }
 #ifdef HT_EXT_CONTINUE
 #else
     HTEventList_stopLoop ();
@@ -330,6 +327,8 @@ LibWWWTransport::flushOutput ()
 #ifdef HT_EXT_CONTINUE		//this block sends the message immediately after HTTP headers
     //without using 100-continue
 
+    //HTRequest_clear(m_pRequest);
+    HTRequest_setFlush(m_pRequest, YES);
     //HTRequest_setOutputFormat(m_pRequest, WWW_SOURCE);
     HTRequest_setOutputFormat (m_pRequest, HTAtom_for ("text/xml"));
     HTRequest_setMethod (m_pRequest, METHOD_EXT_0);
@@ -343,7 +342,7 @@ LibWWWTransport::flushOutput ()
 	HTChunk_delete (m_pResult);
 
     //m_pResult = HTLoadToChunk(m_pcEndpointUri, m_pRequest);
-    //start
+
     HTStream *target = HTStreamToChunk (m_pRequest, &m_pResult, 0);
     HTRequest_setOutputStream (m_pRequest, target);
 
@@ -353,11 +352,17 @@ LibWWWTransport::flushOutput ()
     HTRequest_setAnchor (m_pRequest, anchor);
 
     BOOL status = HTLoadToStream (m_pcEndpointUri, target, m_pRequest);
-    //end
 
-    HTEventList_loop (m_pRequest);
-    if (m_pcReceived)
-	free (m_pcReceived);
+    if (LibWWWTransport::m_spLockingObject == NULL) 
+    {
+        LibWWWTransport::m_spLockingObject = this;
+    }
+    if (LibWWWTransport::m_spLockingObject == this) 
+    {
+        HTEventList_loop (m_pRequest);
+    } 
+    //if (m_pcReceived)
+//	free (m_pcReceived);
 
     int count = 0;
     do
@@ -376,8 +381,29 @@ LibWWWTransport::flushOutput ()
 	else
 	    sleep (1);
     }
-    while (count++ < 10 && !m_pResult);
+    while (count++ < 2 && (HTRequest_bodyRead(m_pRequest) == 0 ));
 
+    if (count == 2 ) // possible deadlock
+    {
+        //stop loop
+        if (HTNet_isEmpty ())
+    {
+        HTEventList_stopLoop ();
+        LibWWWTransport::m_spLockingObject = NULL;
+    }
+        //start loop
+        if (LibWWWTransport::m_spLockingObject == NULL)
+    {
+        LibWWWTransport::m_spLockingObject = this;
+    }
+    if (LibWWWTransport::m_spLockingObject == this)
+    {
+        HTEventList_loop (m_pRequest);
+    }
+
+
+    }
+    
     if (m_pResult)
     {
 	m_pcReceived = HTChunk_data (m_pResult);
@@ -475,12 +501,13 @@ extern "C"
     }
 }
 
-int inited = 0;
+bool g_bLibWWWinitialized = false;
+
 extern "C"
 {
     STORAGE_CLASS_INFO void initializeLibrary (void)
     {
-	if (inited)		//make sure the lib is initialized only once per client
+	if (g_bLibWWWinitialized)		//make sure the lib is initialized only once per client
 	    return;
 #ifdef HT_EXT_CONTINUE
 	//Create a new non-premptive client
@@ -492,14 +519,14 @@ extern "C"
 	//Create a new non-premptive client
 	HTProfile_newNoCacheClient ("AxisCpp", "1.3");
 #endif
-	inited = 1;
+	g_bLibWWWinitialized = true;
 	//Disable interactive mode, could be useful when debugging
 	HTAlert_setInteractive (NO);
 	// Add our own filter to do the clean up after response received
 	HTNet_addAfter (terminate_handler, NULL, NULL, HT_ALL,
 			HT_FILTER_LAST);
 	//How long we are going to wait for a response
-	HTHost_setEventTimeout (50000);
+	HTHost_setEventTimeout (10000);
 
     }
 }
@@ -512,3 +539,22 @@ extern "C"
 //    HTProfile_delete();
     }
 }
+
+/*
+extern "C"
+{
+    STORAGE_CLASS_INFO void startEventLoop(void)
+    {
+        HTEventList_newLoop();
+    }
+}
+
+extern "C"
+{
+    STORAGE_CLASS_INFO void stopEventLoop(void)
+    {
+        HTEventList_stopLoop();
+    }
+}
+*/
+

@@ -18,7 +18,7 @@
  * This class 
  *
  * @author Susantha Kumara (skumara@virtusa.com, susantha@opensource.lk)
- *
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
 
 
@@ -34,6 +34,13 @@
 #define INIT_FUNCTION "initializeLibrary"
 //function to do lib level uninit jobs
 #define UNINIT_FUNCTION "uninitializeLibrary"
+
+/*
+//function to start event loop for transport (libWWW)
+#define START_EVENT_LOOP_FUNCTION "startEventLoop"
+//function to stop event loop for transport (libWWW)
+#define STOP_EVENT_LOOP_FUNCTION "stopEventLoop"
+*/
 
 #if defined(USE_LTDL)
 #include <ltdl.h>
@@ -79,6 +86,9 @@ public:
 	static SOAPTransport* getTransportObject(AXIS_PROTOCOL_TYPE eProtocol);
 	static void destroyTransportObject(SOAPTransport* pObject);
 
+    //static void startEventLoop();
+    //static void stopEventLoop();
+
 	static int loadLib();
 	static int unloadLib();
 
@@ -87,6 +97,9 @@ private:
 	static DLHandler m_LibHandler;
     static CREATE_OBJECT1 m_Create;
     static DELETE_OBJECT1 m_Delete;
+   
+//    static void (*m_startEventLoop) (void);
+//    static void (*m_stopEventLoop) (void);
 
 };
 

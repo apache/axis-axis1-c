@@ -28,6 +28,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <axis/Axis.h>
+
 using namespace std;
 
 #include "gen_src/InteropTestPortType.h"
@@ -92,7 +94,7 @@ run(void *arg)
     if (ws->echoStringArray(arrstr).m_Array == NULL)
 	printf("echoStringArray failed\n");
 
-    // testing echoInteger 
+    /*/ testing echoInteger 
     //printf("invoking echoInteger...\n");
     if (ws->echoInteger(56) != 56)
 	printf("echoInteger failed\n");
@@ -193,7 +195,7 @@ run(void *arg)
     //printf("invoking echoBoolean...\n");
     if (ws->echoBoolean(true_) != true_)
 	printf("echoBoolean failed\n");
-
+*/
     printf( "%ld Done\n", pthread_self() );
     }
     catch(AxisException& e)
@@ -236,7 +238,8 @@ main(int argc, char *argv[])
     */
 
     // initialize Axis client platform
-    initialize_module(0);
+    //initialize_module(0);
+    Axis::initialize(false);
 
     pthread_t thread[NUM_THREADS];
     pthread_attr_t attr;
@@ -261,6 +264,9 @@ main(int argc, char *argv[])
 
     /* Free attribute and wait for the other threads */
     pthread_attr_destroy(&attr);
+
+    //Axis::startTransportEventLoop();
+    
     //for (t = 0; t < NUM_THREADS; t++)
     //{
 	rc = pthread_join(thread[NUM_THREADS-1], (void **)&status);
@@ -271,20 +277,22 @@ main(int argc, char *argv[])
             printf("error:%s\n", strerror(rc));
 	    //exit(-1);
 	}
-	printf("Joined thread %ld\n", thread[t]);
+	printf("Joined thread %ld\n", thread[t-1]);
     //}*/
 
-    //{pthread_cleanup_push(cleanup, NULL);}
-    printf( "about to exut\n");
+    printf( "about to clean\n");
+    pthread_cleanup_push(cleanup, NULL);
+    printf( "about to exit\n");
     pthread_exit(NULL);
 }
-
+}
 
 void cleanup(void*arg)
 {
+    //Axis::stopTransportEventLoop();
     printf( "about to clean up\n");
     // Axis plaform terminate
-    uninitialize_module();
+    //Axis::terminate();
     printf( "Done clean up\n");
 }
 

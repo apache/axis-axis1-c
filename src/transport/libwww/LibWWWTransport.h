@@ -330,6 +330,10 @@ protected:
     int m_iBytesLeft;
     char* m_pcReceived;
 
+public:
+    // The object that acquires the lock to start event loop
+    static LibWWWTransport* m_spLockingObject;
+
 };
 
 #endif

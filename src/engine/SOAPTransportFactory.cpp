@@ -37,7 +37,8 @@ const char* SOAPTransportFactory::m_pcLibraryPath = 0;
 DLHandler SOAPTransportFactory::m_LibHandler = 0;
 CREATE_OBJECT1 SOAPTransportFactory::m_Create = 0;
 DELETE_OBJECT1 SOAPTransportFactory::m_Delete = 0;
-
+//void(*SOAPTransportFactory::m_startEventLoop)(void) = NULL;
+//void(*SOAPTransportFactory::m_stopEventLoop)(void) = NULL;
 
 SOAPTransportFactory::SOAPTransportFactory()
 {
@@ -74,6 +75,7 @@ int SOAPTransportFactory::initialize()
         }
         else
         {
+            // Load function to do lib level inits
             void (*initializeLibrary) (void);
 #if defined(USE_LTDL)
             initializeLibrary = (void (*)(void))lt_dlsym(m_LibHandler, INIT_FUNCTION);
@@ -84,6 +86,20 @@ int SOAPTransportFactory::initialize()
 #endif
             if (initializeLibrary)
                  (*initializeLibrary)();
+
+/*
+            // Load functions that does start and stop of event loop
+#if defined(USE_LTDL)
+            m_startEventLoop = (void (*)(void))lt_dlsym(m_LibHandler, START_EVENT_LOOP_FUNCTION);
+            m_stopEventLoop = (void (*)(void))lt_dlsym(m_LibHandler, STOP_EVENT_LOOP_FUNCTION);
+#elif defined(WIN32)
+            m_startEventLoop = (void (*)(void))GetProcAddress(m_LibHandler, START_EVENT_LOOP_FUNCTION);
+            m_stopEventLoop = (void (*)(void))GetProcAddress(m_LibHandler, STOP_EVENT_LOOP_FUNCTION);
+#else
+            m_startEventLoop = (void (*)(void))dlsym(m_LibHandler, START_EVENT_LOOP_FUNCTION);
+            m_stopEventLoop = (void (*)(void))dlsym(m_LibHandler, STOP_EVENT_LOOP_FUNCTION);
+#endif
+*/             
             return AXIS_SUCCESS;
         }		
 	}
@@ -162,4 +178,19 @@ int SOAPTransportFactory::unloadLib()
     return AXIS_SUCCESS;
 }
 
+/*
+void SOAPTransportFactory::startEventLoop()
+{
+    if (m_startEventLoop)
+        (*m_startEventLoop)();
+}
+
+void SOAPTransportFactory::stopEventLoop()
+{
+    if (m_stopEventLoop)
+        (*m_stopEventLoop)();
+}
+*/
+
 AXIS_CPP_NAMESPACE_END
+

@@ -17,8 +17,9 @@
  *
  * @author Sanjaya Sinharage (sanjayasing@opensource.lk)
  * @author Susantha Kumara (skumara@virtusa.com)
- *
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
+
 #ifdef WIN32
 #pragma warning (disable : 4503)
 #endif
@@ -29,12 +30,15 @@
 #include <unistd.h>
 #endif
 
+#include <axis/Axis.h>
+
 #ifdef AXIS_CLIENT_LIB
 #include <axis/client/Call.h>
 #include "AxisEngine.h"
 #else
 #include "server/ServerAxisEngine.h"
 #endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
@@ -389,3 +393,16 @@ void ModuleUnInitialize ()
     delete g_pConfig;
     delete g_pAT;
 }
+
+// Axis class method implementations
+
+void Axis::initialize(bool bIsServer)
+{
+    initialize_module(bIsServer);
+}
+
+void Axis::terminate()
+{
+    uninitialize_module();
+}
+
