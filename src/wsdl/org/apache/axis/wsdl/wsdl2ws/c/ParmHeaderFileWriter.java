@@ -57,7 +57,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                     + "_H__INCLUDED_)\n");
             this.writer.write(
                 "#define __" + classname.toUpperCase() + "_H__INCLUDED_\n\n");
-            writePreprocssorStatements();
+            writePreprocessorStatements();
             this.writer.write("typedef struct " + classname + "Tag {\n");
             writeAttributes();
             this.writer.write("} " + classname + ";\n\n");
@@ -110,7 +110,7 @@ public class ParmHeaderFileWriter extends ParamWriter
     protected void writeConstructors() throws WrapperFault
     {}
 
-    protected void writeDistructors() throws WrapperFault
+    protected void writeDestructors() throws WrapperFault
     {}
 
     protected void writeMethods() throws WrapperFault
@@ -151,7 +151,7 @@ public class ParmHeaderFileWriter extends ParamWriter
     /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.cpp.BasicFileWriter#writePreprocssorStatements()
      */
-    protected void writePreprocssorStatements() throws WrapperFault
+    protected void writePreprocessorStatements() throws WrapperFault
     {
         try
         {

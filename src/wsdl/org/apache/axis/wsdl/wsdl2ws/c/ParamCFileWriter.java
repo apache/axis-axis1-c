@@ -43,7 +43,7 @@ public abstract class ParamCFileWriter extends ParamWriter{
 	   try{
 	  		this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
 			writeClassComment();
-	   		writePreprocssorStatements();
+	   		writePreprocessorStatements();
 	   		writeGlobalCodes();
 	   		writeAttributes();
 	   		writeMethods();
@@ -70,7 +70,7 @@ public abstract class ParamCFileWriter extends ParamWriter{
 	   return new File(fileName);
    	}
    
-   	protected void writePreprocssorStatements()throws WrapperFault{
+   	protected void writePreprocessorStatements()throws WrapperFault{
 		try {
 			writer.write("#include <malloc.h>\n");
 			writer.write("#include \""+this.classname + ".h\"\n");

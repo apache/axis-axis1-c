@@ -44,12 +44,12 @@ public abstract class CPPClassWriter extends BasicFileWriter
             this.writer =
                 new BufferedWriter(new FileWriter(getFilePath(), false));
             writeClassComment();
-            writePreprocssorStatements();
+            writePreprocessorStatements();
             writeGlobalCodes();
 
             writeAttributes();
             writeConstructors();
-            writeDistructors();
+            writeDestructors();
             writeMethods();
 
             writer.flush();

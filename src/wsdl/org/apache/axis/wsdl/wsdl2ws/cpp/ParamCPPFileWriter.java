@@ -43,7 +43,7 @@ public abstract class ParamCPPFileWriter extends ParamWriter
 
     protected void writeConstructors() throws WrapperFault
     {}
-    protected void writeDistructors() throws WrapperFault
+    protected void writeDestructors() throws WrapperFault
     {}
 
     public void writeSource() throws WrapperFault
@@ -53,11 +53,11 @@ public abstract class ParamCPPFileWriter extends ParamWriter
             this.writer =
                 new BufferedWriter(new FileWriter(getFilePath(), false));
             writeClassComment();
-            writePreprocssorStatements();
+            writePreprocessorStatements();
             writeGlobalCodes();
             writeAttributes();
             writeConstructors();
-            writeDistructors();
+            writeDestructors();
             writeMethods();
             //cleanup
             writer.flush();
@@ -115,7 +115,7 @@ public abstract class ParamCPPFileWriter extends ParamWriter
         return new File(fileName);
     }
 
-    protected void writePreprocssorStatements() throws WrapperFault
+    protected void writePreprocessorStatements() throws WrapperFault
     {
         try
         {

@@ -73,11 +73,11 @@ public class ParmHeaderFileWriter extends ParamWriter
             }
             else
             {
-                writePreprocssorStatements();
+                writePreprocessorStatements();
                 this.writer.write("class " + classname + "\n{\n");
                 writeAttributes();
                 writeConstructors();
-                writeDistructors();
+                writeDestructors();
                 this.writer.write("};\n\n");
             }
             this.writer.write(
@@ -338,7 +338,7 @@ public class ParmHeaderFileWriter extends ParamWriter
         }
     }
 
-    protected void writeDistructors() throws WrapperFault
+    protected void writeDestructors() throws WrapperFault
     {
         try
         {
@@ -388,7 +388,7 @@ public class ParmHeaderFileWriter extends ParamWriter
     /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.cpp.BasicFileWriter#writePreprocssorStatements()
      */
-    protected void writePreprocssorStatements() throws WrapperFault
+    protected void writePreprocessorStatements() throws WrapperFault
     {
         try
         {

@@ -38,7 +38,7 @@ public abstract class CFileWriter extends BasicFileWriter{
 	   try{
 	  this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
 	   writeClassComment();
-	   writePreprocssorStatements();
+	   writePreprocessorStatements();
 	   writeGlobalCodes();
 	  // this.writer.write("public class "+servicename+getExtendsPart()+"{\n");
 	   writeAttributes();

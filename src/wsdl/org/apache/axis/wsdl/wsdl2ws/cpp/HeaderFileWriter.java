@@ -47,7 +47,7 @@ public abstract class HeaderFileWriter extends BasicFileWriter {
 	   this.writer.write("#if !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)\n");
 	   this.writer.write("#define __"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_\n\n");
 	   //includes
-	   writePreprocssorStatements();
+	   writePreprocessorStatements();
 		//class
 		
 		if( "AxisClientException".equals( classname))
@@ -60,7 +60,7 @@ public abstract class HeaderFileWriter extends BasicFileWriter {
 		}
 	   writeAttributes();
 	   writeConstructors();
-	   writeDistructors();
+	   writeDestructors();
 	   writeMethods();
 	   this.writer.write("};\n\n");
 	   this.writer.write("#endif /* !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)*/\n");

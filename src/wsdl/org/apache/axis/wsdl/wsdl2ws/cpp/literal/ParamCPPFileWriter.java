@@ -40,14 +40,14 @@ public abstract class ParamCPPFileWriter extends ParamWriter{
 	}
 	
 	protected void writeConstructors()throws WrapperFault{}
-	protected void writeDistructors() throws WrapperFault {}
+	protected void writeDestructors() throws WrapperFault {}
  	protected abstract void writeRestrictionCheckerFunction() throws WrapperFault;
  	
 	public void writeSource()throws WrapperFault{
 	   try{
 	  		this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
 			writeClassComment();
-	   		writePreprocssorStatements();
+	   		writePreprocessorStatements();
 			if (type.isSimpleType()){
 				writeRestrictionCheckerFunction();
 			}
@@ -55,7 +55,7 @@ public abstract class ParamCPPFileWriter extends ParamWriter{
 		   		writeGlobalCodes();
 		   		writeAttributes();
 		   		writeConstructors();
-		   		writeDistructors();
+		   		writeDestructors();
 		   		writeMethods();
 			}
 	   		writer.flush();
@@ -80,7 +80,7 @@ public abstract class ParamCPPFileWriter extends ParamWriter{
 	   return new File(fileName);
    }
    
-   protected void writePreprocssorStatements()throws WrapperFault{
+   protected void writePreprocessorStatements()throws WrapperFault{
 	try {
 		writer.write("#include <axis/server/AxisWrapperAPI.hpp>\n\n");
 		writer.write("#include \""+this.classname + ".h\"\n");

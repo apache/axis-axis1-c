@@ -113,7 +113,7 @@ public class WrapHeaderWriter extends HeaderFileWriter
     /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeDistructors()
      */
-    protected void writeDistructors() throws WrapperFault
+    protected void writeDestructors() throws WrapperFault
     {
         try
         {
@@ -161,7 +161,7 @@ public class WrapHeaderWriter extends HeaderFileWriter
     /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writePreprocssorStatements()
      */
-    protected void writePreprocssorStatements() throws WrapperFault
+    protected void writePreprocessorStatements() throws WrapperFault
     {
         try
         {

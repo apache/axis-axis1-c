@@ -318,7 +318,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 	/* (non-Javadoc)
 	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeDistructors()
 	 */
-	protected void writeDistructors() throws WrapperFault {
+	protected void writeDestructors() throws WrapperFault {
 		try{
 		writer.write("\n"+classname+"::~"+classname+"()\n{\n");
 		writer.write("\t/*delete any pointer and array members here*/\n");

@@ -215,7 +215,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
     /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writePreprocssorStatements()
      */
-    protected void writePreprocssorStatements() throws WrapperFault
+    protected void writePreprocessorStatements() throws WrapperFault
     {
         try
         {

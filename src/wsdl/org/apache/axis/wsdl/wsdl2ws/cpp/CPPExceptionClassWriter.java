@@ -48,11 +48,11 @@ public abstract class CPPExceptionClassWriter extends BasicFileWriter{
 	   	
 		   this.writer = new BufferedWriter(new FileWriter(getFilePath( filename.startsWith( "AxisClientException")), false));
 		   writeClassComment();
-		   writePreprocssorStatements();
+		   writePreprocessorStatements();
 		   writeGlobalCodes();
 		   writeAttributes();
 		   writeConstructors();
-		   writeDistructors();
+		   writeDestructors();
 		   writeMethods();
 		   writer.flush();
 		   writer.close();

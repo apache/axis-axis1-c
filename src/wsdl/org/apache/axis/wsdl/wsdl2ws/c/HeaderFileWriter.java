@@ -44,7 +44,7 @@ public abstract class HeaderFileWriter extends BasicFileWriter {
 	   this.writer.write("#if !defined(__"+classname.toUpperCase()+"_H__INCLUDED_)\n");
 	   this.writer.write("#define __"+classname.toUpperCase()+"_H__INCLUDED_\n\n");
 	   //includes
-	   writePreprocssorStatements();
+	   writePreprocessorStatements();
 		//class
 	   writeAttributes();
 	   writeMethods();

@@ -171,7 +171,7 @@ public class ArrayParamWriter extends ParamWriter
     protected void writeConstructors() throws WrapperFault
     {}
 
-    protected void writeDistructors() throws WrapperFault
+    protected void writeDestructors() throws WrapperFault
     {}
 
     protected void writeMethods() throws WrapperFault
