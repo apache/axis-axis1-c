@@ -9,3 +9,8 @@ java -classpath $AXISCPP_HOME/lib/axis/wsdl2ws.jar:$CLASSPATH org.apache.axis.ws
 
 4. Run the progrem
 ./gen_src/InquireService <service url>
+
+I could get this sample working with
+http://www-3.ibm.com/services/uddi/testregistry/inquiryapi URL.
+
+Samisa...
