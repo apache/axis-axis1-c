@@ -242,9 +242,10 @@ public class WSDL2Ws {
             Map faults = op.getFaults();
 			addFaultInfo(faults,minfo);
             
-            Iterator paramlist = op.getInput().getMessage().getParts().values().iterator();
+            Iterator paramlist = null;
             //add each parameter to parameter list
             if ("document".equals(bindingEntry.getBindingStyle().getName())){
+				paramlist = op.getInput().getMessage().getParts().values().iterator();
 				Part part = (Part) paramlist.next();
 				element = symbolTable.getElement(part.getElementName());
 				qname = element.getRefType().getQName();
@@ -281,11 +282,22 @@ public class WSDL2Ws {
 				}
 	    	}
     	   	else{
-	    	  	while (paramlist.hasNext()) { //RPC style messages can have multiple parts
-	        	 	Part p = (Part) paramlist.next();
-	            	pinfo = createParameterInfo(p);
-					if (null != pinfo) minfo.addInputParameter(pinfo);
-	           	}
+    	   		if (op.getParameterOrdering() != null){
+	    	   		for (int ix=0; ix < op.getParameterOrdering().size(); ix++){
+						Part p = (Part)(op.getInput().getMessage().getParts().get((String)op.getParameterOrdering().get(ix)));
+						if (p == null) continue;
+						pinfo = createParameterInfo(p);
+						if (null != pinfo) minfo.addInputParameter(pinfo);
+	    	   		}
+    	   		}
+    	   		else {
+					paramlist = op.getInput().getMessage().getParts().values().iterator();
+					while (paramlist.hasNext()) { //RPC style messages can have multiple parts
+						Part p = (Part) paramlist.next();
+						pinfo = createParameterInfo(p);
+						if (null != pinfo) minfo.addInputParameter(pinfo);
+					}    	   			
+    	   		}
             }
             //get the return type
 			if(op.getOutput()!=null){
@@ -328,11 +340,30 @@ public class WSDL2Ws {
 					}
 				}
 				else{
-		            while (returnlist.hasNext()) { //RPC style messages can have multiple parts
-		                Part p = ((Part) returnlist.next());
-						pinfo = createParameterInfo(p);
-						if (null != pinfo) minfo.addOutputParameter(pinfo);
-		            }
+					if (op.getParameterOrdering() != null){
+						for (int ix=0; ix < op.getParameterOrdering().size(); ix++){
+							Part p = (Part)(op.getOutput().getMessage().getParts().get((String)op.getParameterOrdering().get(ix)));
+							if (p == null) continue;
+							pinfo = createParameterInfo(p);
+							if (null != pinfo) minfo.addOutputParameter(pinfo);
+						}
+						/* there can be more output parameters than in parameterOrder list (partial parameter ordering) */
+						returnlist = op.getOutput().getMessage().getParts().values().iterator();
+						while (returnlist.hasNext()) { //RPC style messages can have multiple parts
+							Part p = (Part) returnlist.next();
+							if (op.getParameterOrdering().contains(p.getName())) continue;
+							pinfo = createParameterInfo(p);
+							if (null != pinfo) minfo.addInputParameter(pinfo);
+						}    	   				    	   			
+					}
+					else {
+						returnlist = op.getOutput().getMessage().getParts().values().iterator();
+						while (returnlist.hasNext()) { //RPC style messages can have multiple parts
+							Part p = ((Part) returnlist.next());
+							pinfo = createParameterInfo(p);
+							if (null != pinfo) minfo.addOutputParameter(pinfo);
+						}
+					}
 				}
 			}
         }
