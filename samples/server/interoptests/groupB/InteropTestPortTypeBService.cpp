@@ -6,27 +6,31 @@
 #define STORAGE_CLASS_INFO 
 #endif
 #include "InteropTestPortTypeBWrapper.h" 
+
 extern "C" {
 STORAGE_CLASS_INFO
 int GetClassInstance(BasicHandler **inst)
 {
-	WrapperClassHandler* pWCH = new InteropTestPortTypeBWrapper();
-	if (pWCH)
+	*inst = new BasicHandler();
+	InteropTestPortTypeBWrapper* pService = new InteropTestPortTypeBWrapper();
+	(*inst)->_functions = 0;
+	if (pService)
 	{
-		pWCH->Init();
-		*inst = pWCH;
-		return AXIS_SUCCESS;
+		(*inst)->_object = pService;
+		return pService->Init();
 	}
 	return AXIS_FAIL;
 }
+
 STORAGE_CLASS_INFO 
 int DestroyInstance(BasicHandler *inst)
 {
 	if (inst)
 	{
-		WrapperClassHandler* pWCH = static_cast<WrapperClassHandler*>(inst);
+		WrapperClassHandler* pWCH = static_cast<WrapperClassHandler*>(inst->_object);
 		pWCH->Fini();
 		delete pWCH;
+		delete inst;
 		return AXIS_SUCCESS;
 	}
 	return AXIS_FAIL;
