@@ -5,14 +5,34 @@
 </head>
 <body>
 <h1>EWS</h1>
-<p>How it is implemented</p>
-<h2><a href="dev/server.html">Server Side Implementation</a></h2>
-<h2><a href="dev/client.html">Client Side Implementation</a></h2>
+<p>The EWS is a part of both J2EE and the web service Stack. It defines how the both technologies can be merged for Java programmer and implements it. In the implementation we have taken an extra step from the specification by defining the Security and the transaction mappings as well. (The transaction mapping is J2EE container specific right now.)</p>
+<p>So it is very important to understood “How the EWS fit in to the big picture “</p>
+<h2>EWS and J2EE</h2>
+<image src="./images/bigpic.gif"/>
+<p>The Goals of the EWS project can be stated as follows (they are based on the JSR 109 specification but not limited to specification.)</p>
+<ol>
+<li>Integrated the parts of the Web service implementations and bind them as a platform parallel to J2EE and fill any gaps. (E.g. Jaxrpcmapping, specifying the Handler in the web service’s)</li> 
+<li>Give the web services a programming model that is equivalent to the J2EE programming model. (Deploying a web service by writing an Interface + Implementation Bean and Deployment descriptors package it and deploy it in the Container. Then the Container should implement the supporting classes and make the web service available)</li> 
+<li>Let the Web service to be implemented based on the EJB components and by doing so let it benefits from the value added services provide by the EJB container.</li>  
+<li>Define the security and transaction mapping from the web service to EJB and the EJB to web services. And make it possible to propagate transaction or the security information transparently through web service and ejbs.</li>  
+<li>Make it possible for the application deployer to provide the transaction and security service to web service which are managed by the container and added by adding a new entry to deployment descriptor.</li> 
+</ol>
+
+<p>EWS act as the part of the deploy tool for J2EE container to deploy the Web service in the J2EE container. EWS project provide a tool to accept the J2EE module as explained by the JSR109 specification and generated the required classes and the Runtime need to support the generated classes. When the code generated and the Web service is deployed the architecture will be like follows.</p>
+<h2>EWS Runtime</h2>
+<image src="./images/ewsImpl.gif"/>
+The architecture of the EWS tool will be as follows 
+<h2>EWS tool Archtecture</h2>
+<image src="./images/archi.gif"/>
 <h3>Deployment Descriptor (DD) parsing</h3> 
 <p>There are two DD added to the JSR109, they are webservice.xml file and the jaxrpc-mapping file. For those two we are using JAXB to parse them.</p>
 <p>For deal with WSDL file we are using the JAXRPC-Mapper which is a extension of WSDL2Java and Java2WSDL of axis.</p>
+
 <p>To parse the web.xml file and ejb-jar.xml the tool use DOM for the time been. We are considering possibility of using Geronimo DD parsing technique. (Use the method standalone, maybe we can get the information from Geronimo when our tool is used inside Geronimo)</p>
-<h2><a href="dev/Geronimov-axisIntegration.html">Geronimov Axis Integration</a></h2>
+<h2><a href="dev/server.html">Server Side Implementation</a></h2>
+<h2><a href="dev/client.html">Client Side Implementation</a></h2>
+
+<h2><a href="dev/Geronimov-ewsIntegration.html">Geronimov Axis Integration</a></h2>
 <h2><a href="proposedframework.html">Proposed Framework</a></h2>
 <h2><a href="dev/sec.html">Security</h2>
 <h2><a href="dev/trans.html">Transaction</h2>
