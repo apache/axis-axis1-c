@@ -74,7 +74,7 @@ main (int argc, char *argv[])
 	cout << endl << " Using service at " << endpoint << endl << endl;
 
 
-    InteropTestPortType ws (endpoint, APTHTTP1_0);
+    InteropTestPortType ws (endpoint, APTHTTP1_1);
 
 	//testing echoString 
 	printf ("invoking echoString...\n");
@@ -113,7 +113,7 @@ main (int argc, char *argv[])
         // Clean memory
         delete [] arrstr.m_Array;
 
-        ws.setTransportProtocol(APTHTTP1_1);
+        ws.setTransportProtocol(APTHTTP1_0);
 	// testing echoInteger 
 	printf ("invoking echoInteger...\n");
 	if (ws.echoInteger (56) == 56)
