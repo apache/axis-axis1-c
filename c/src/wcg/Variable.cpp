@@ -72,10 +72,24 @@
 
 Variable::Variable()
 {
-
+	m_Qualifier = 0;
+	m_Type = 0;
+	m_TypeName = "";
+	m_VarName = "";
 }
 
 Variable::~Variable()
 {
 
+}
+
+void Variable::SetType(int nType, string sType)
+{
+	m_Type = nType;
+	if (nType == VAR_USER) m_TypeName = sType;
+}
+
+void Variable::SetVarName(string &sVarName)
+{
+	m_VarName = sVarName;
 }

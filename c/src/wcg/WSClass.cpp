@@ -72,10 +72,75 @@
 
 WSClass::WSClass()
 {
-
+	m_Name = "";
+	m_pDestructor = NULL;
 }
 
 WSClass::~WSClass()
 {
+	for(list<Variable*>::iterator it = m_Variables.begin(); it != m_Variables.end(); it++)
+	{	
+		delete *it;
+	}
+	list<Method*>::iterator it1;
+	for( it1 = m_Constructors.begin(); it1 != m_Constructors.end(); it1++)
+	{	
+		delete *it1;
+	}
+	for (it1 = m_Methods.begin(); it1 != m_Methods.end(); it1++)
+	{
+		delete *it1;
+	}
+	if (m_pDestructor) delete m_pDestructor;
 
+}
+
+void WSClass::SetClassName(string &sName)
+{
+	m_Name = sName;
+}
+
+void WSClass::AddVariable(Variable *pVar)
+{
+	m_Variables.push_back(pVar);
+}
+
+void WSClass::AddConstructor(Method *pMethod)
+{
+	m_Constructors.push_back(pMethod);
+}
+
+void WSClass::AddMethod(Method *pMethod)
+{
+	m_Methods.push_back(pMethod);
+}
+
+void WSClass::SetDestructor(Method *pMethod)
+{
+	m_pDestructor = pMethod;
+}
+
+const string& WSClass::GetName()
+{
+	return m_Name;
+}
+
+int WSClass::GenerateClassDef(File &file)
+{
+	try {
+		//add wrapper class
+		file << "class " << GetName() << "Wrapper" << " : public WrapperClassHandler" << endl << "{" << endl;
+		
+		file << "};" << endl;	
+	}
+	catch(...) //any exception
+	{
+		return 1;
+	}
+	return 0; //success
+}
+
+int WSClass::GenerateClassImpl(File &file)
+{
+	return 0;
 }
