@@ -16,14 +16,19 @@
  *
  *
  * @author Susantha Kumara (skumara@virtusa.com)
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ * @author Roshan Weerasuriya (roshanw@jkcsworld.com, roshan@opensource.lk, roshan_444@yahoo.com)
  *
+ */
+
+/*
+ * Revision 1.1  2005/01/19 roshan
+ * Added decodeFromBase64Binary
  */
 
 
 #include "AxisUtils.h"
-//#include <axis/GDefine.hpp>
-//#include "../soap/apr_base64.h"
+#include <axis/AxisUserAPI.hpp>
+#include "../soap/apr_base64.h"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -130,20 +135,19 @@ char* AxisUtils::toLowerCase (const char* pchWord)
     return NULL;
 }
 
-/*
-xsd__base64Binary AxisUtils::decodeFromBase64Binary(const AxisChar *pValue)
+xsd__base64Binary* AxisUtils::decodeFromBase64Binary(const AxisChar *pValue)
 {
-    xsd__base64Binary value;
-    value.__size = apr_base64_decode_len (pValue);
-    value.__ptr = new unsigned char[value.__size + 1];
-    value.__size = apr_base64_decode_binary (value.__ptr, pValue);
+    xsd__base64Binary* value = new xsd__base64Binary();
+    value->__size = apr_base64_decode_len (pValue);
+    value->__ptr = new unsigned char[value->__size + 1];
+    value->__size = apr_base64_decode_binary (value->__ptr, pValue);
     /* put null at the end because it enables the decoded string to be used
      * as a string 
      */
-/*    value.__ptr[value.__size] = 0;
+    value->__ptr[value->__size] = 0;
 
     return value;
 }
-*/
+
 
 AXIS_CPP_NAMESPACE_END

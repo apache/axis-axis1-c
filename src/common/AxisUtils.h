@@ -20,22 +20,28 @@
 #define AXIS_AXISUTILS_H__OF_AXIS_INCLUDED_
 
 #include <axis/GDefine.hpp>
-//#include <axis/AxisUserAPI.hpp>
 #include <string>
 
 using namespace std;
 
 
 #define CONVERT_BUFFER_SIZE 1024
-/*
-    @class AxisUtils
-    @brief interface for the AxisUtils class.
+/**
+ *   @class AxisUtils
+ *   @brief interface for the AxisUtils class.
+ *
+ *   @author Susantha Kumara (skumara@virtusa.com)
+ *   @author Roshan Weerasuriya (roshanw@jkcsworld.com, roshan@opensource.lk, roshan_444@yahoo.com)
+ */
 
-    @author Susantha Kumara (skumara@virtusa.com)
-    @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
-*/
+/*
+ * Revision 1.1  2005/01/19 roshan
+ * Added decodeFromBase64Binary
+ */
 
 AXIS_CPP_NAMESPACE_START
+
+class xsd__base64Binary;
 
 class AxisUtils
 {
@@ -43,7 +49,10 @@ class AxisUtils
     friend class URIMapping;
     public:
 
-	    //static xsd__base64Binary decodeFromBase64Binary(const AxisChar* pValue);
+	/**
+	 * Decodes the given base64 string and returns it.
+	 */
+    static xsd__base64Binary* decodeFromBase64Binary(const AxisChar* pValue);
 
         /*
 	 * Converts the given character pointer value to lowercase.
