@@ -61,10 +61,13 @@
 
 #include <string>
 #include <exception>
-#include "../soap/SoapFaults.h"
+#include "../soap/SoapFault.h"
 using namespace std;
 
 #define TEST_EXCEPTION FAULT_LAST+1
+#define RECEPTION_ERROR FAULT_LAST+2
+#define SENDING_ERROR FAULT_LAST+3
+#define HTTP_ERROR FAULT_LAST+4
 
 #ifdef _DEBUG
 #define AXIS_TRY try {
