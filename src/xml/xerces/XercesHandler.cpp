@@ -31,8 +31,8 @@ XercesHandler::XercesHandler()
 {
     m_nStatus = AXIS_SUCCESS;
 	m_pCurrElement = 0;
-    m_pNextElement = (AnyElement*)malloc(sizeof (AnyElement));
-	m_pPrefixMappingElement = (AnyElement*)malloc(sizeof (AnyElement));
+    m_pNextElement = new AnyElement;
+	m_pPrefixMappingElement = new AnyElement;
     m_bEndElementFollows = false;
     m_pNextElement->m_pchNameOrValue = 0;
     m_pNextElement->m_pchNamespace = 0;
