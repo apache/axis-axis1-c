@@ -99,10 +99,10 @@ typedef enum {
 
 typedef char* XML_String;
 
-struct AnyType
+typedef struct 
 {
 	XML_String* _array;
 	int _size;
-};
+} AnyType;
 
 #endif
