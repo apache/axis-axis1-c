@@ -220,7 +220,8 @@ AXIS_TRANSPORT_STATUS AxisTransport::getBytes(char* pcBuffer, int* pSize)
 	if (0 <= m_iBytesLeft)
 	{
 		m_pcReceived = m_pReceiver->Recv();
-		m_iBytesLeft = strlen(m_pcReceived);
+		if (m_pcReceived)
+			m_iBytesLeft = strlen(m_pcReceived);
 	}
     if (m_pcReceived)
     {
