@@ -8,40 +8,69 @@
 <h1>Axis C++ Windows Developers Guide</h1>
 
 <p><a href="#buildaxis">BUILDING AND DEPLOYING AXIS C++</a><br>
-<a href="#cvscheckout">Getting a cvs checkout</a><br>
-<a href="#getapachexerces">Getting Apache and Xerces-C</a><br>
-<a href="#installapachexerces">Installing Apache and extracting
-Xerces-C</a><br>
+<a href="#cvscheckout">Getting a cvs checkout</a>
+
+<br>
+<a href="#getapacheexpat">Getting necessary third party software</a>
+
+<br>
+<a href="#installapacheexpat">Installing Apache and Expat</a>
+
+<br>
 <a href="#setupandbuildaxis">Setting up the build environment and building
-Axis</a><br>
-<a href="#deployaxis">Deploying Axis in Apache</a><br>
+Axis</a>
+
+<br>
+<a href="#deployaxis">Deploying Axis in Apache</a>
+
+<br>
 <a href="#deploywebservice">DEPLOYING A WEB SERVICE IN AXIS C++</a><br>
+
 <a href="#generatefiles">Generating Serverside Skeletons/ wrappers and client
 side stubs</a><br>
-<a href="#eclipse">Using eclipse to build and run WSDL2Ws</a><br>
-<a href="#commandline">Building and running WSDL2Ws on the command
-line</a><br>
-<a href="#builddeployws">Building and Deploying the web service</a><br>
-<a href="#consumews">CONSUMING THE WEB SERVICE WITH AXIS C++ CLIENT</a><br>
-<a href="#runclient">Coding and Running the client</a></p>
 
-<p><a name="buildaxis"></a></p>
+<a href="#eclipse">Using eclipse to build and run WSDL2Ws</a>
+<br>
+<a href="#commandline">Building and running WSDL2Ws on the command line</a>
+
+<br><a href="#builddeployws">Building and Deploying the web service</a>
+<br><a href="#providedservices">Building and deploying the provided interop web services samples</a>
+<br><a href="#providedclients">Building and deploying the provided interop client applications</a>
+
+<br>
+<a href="#consumews">CONSUMING THE WEB SERVICE WITH AXIS C++ CLIENT</a><br>
+
+
+<a href="#runclient">Coding and Running the client</a>
+
+<br><br>
+<a href="#usingxerces">BUILDING AXIS C++ WITH THE XERCES PARSER</a>
+
+</p>
+
+<p>
+<a name="buildaxis"></a></p>
 
 <h1>Building and Deploying Axis C++</h1>
 
-<p><a name="cvscheckout"></a></p>
+<p>
+<a name="cvscheckout"></a></p>
+
 
 <h2>Getting a cvs checkout</h2>
 
-<p>Visit http://ws.apache.org/ click on “axis” and then on “CVS Repository”
+
+<p>Visit <a href="#http://ws.apache.org/">http://ws.apache.org/</a> Click on “axis” and then on “CVS Repository”
 to find details on accessing the CVS Repository. It will have instructions
 similar to the following.<br>
 <br>
 “Anyone can checkout source code from our anonymous CVS server. To do so,
 simply use the following commands (if you are using a GUI CVS client,
 configure it appropriately): <br>
+
 <br>
 cvs -d :pserver:anoncvs@cvs.apache.org:/home/cvspublic login<br>
+
 password: anoncvs<br>
 <br>
 cvs -d :pserver:anoncvs@cvs.apache.org:/home/cvspublic checkout ws-axis<br>
@@ -49,7 +78,7 @@ cvs -d :pserver:anoncvs@cvs.apache.org:/home/cvspublic checkout ws-axis<br>
 The examples given below will be based on these lines of instructions.<br>
 <br>
 To use the command line cvs client go to http://www.cvshome.org, click on the
-"CVS Downloads" link. In the resulting page there will be link named
+"CVS Downloads" link. In the resulting page there will be a link named
 "historical download pages", under the heading "CVS downloads", where you can
 download the cvs binaries for Windows. Download the Windows cvs binaries.
 Extract the cvs binaries from the downloaded zip file. There will be a
@@ -70,177 +99,278 @@ The checkout of the repository will be created in the current directory in a
 folder named “ws-axis”<br>
 <br>
 The checked out folder ws-axis will be referred to as [CHECKOUT_HOME] from
-this point on.<br>
-&nbsp;</p>
+this point on.<br></p>
 
-<p><a name="getapachexerces"></a></p>
 
-<h2>Getting Apache and Xerces-C</h2>
 
-<p><b>Xerces-C</b><br>
-Download the Xerces-C ( 32 bit binary release)from:
-http://xml.apache.org/xerces-c/download.cgi<br>
+<p><a name="getapacheexpat"></a></p>
+
+<h2>Getting necessary third party software</h2>
+
+
+<P><b>Expat XML Parser</b></p>
+
+<p><br>You can get expat binaries from the url http://sourceforge.net/projects/expat/
 <br>
-<b>Apache web server</b><br>
-Download the Apache web server from www.apache.org. Currently Axis supports
+This documentation was tested with the expat 1.95.7  which is
+distributed as expat_win32bin_1_95_7.exe.<br></p>
+
+<p> (Axis Cpp Developers can use either Xerces-c or the Expat XML Parsers to build the Axis Cpp.
+The Source in CVS supports expat out of the box.)</p>
+
+
+<P><b>Apache Web Server</b></p>
+
+<p>Download the Apache web server from www.apache.org. Currently Axis supports
 apache 1.3.x and 2.X. This documentation was tested with Apache 1.3.28 and
 Apache 2.0.44.</p>
 
-<p><a name="installapachexerces"></a></p>
 
-<h2>Installing Apache and extracting Xerces-C</h2>
+<p><a name="installapacheexpat"></a></p>
 
+<h2>Installing Apache and EXpat </h2>
+
+<br>
+
+<p><b>Expat</b></p>
+<br>
+<p>Run the file
+expat_win32bin_1_95_7.exe . The folder to which Expat is unzipped will be
+referred to as [EXPAT_EXTRACT] from this point onwards.</p>
+
+<br>
+<p><b>Apache</b></p>
+<br>
 <p>Install the Apache web server. By default Apache 1.3.X is installed in
 "C:\Program Files\Apache Group\Apache" and Apache 2.X in "C:\Program
-Files\Apache Group\Apache2". This location will be referred as [APACHE_HOME]
+Files\Apache Group\Apache2". These locations will be referred to as [APACHE_HOME]
 from this point onwards.</p>
 
+
 <p><br>
-This documentation was tested with the xerces version 2.3.0 which is
-distributed as xerces-c_2_3_0-win32.zip . Unzip the file
-xerces-c_2_3_0-win32.zip. The folder to which xerces is unzipped will be
-referred to as [XERCES_EXTRACT] from this point onwards. <br>
-&nbsp;</p>
+
 
 <p><a name="setupandbuildaxis"></a></p>
 
-<h2>Setting up the build environment</h2>
+<h2>Setting up the build environment and building Axis</h2>
 
-<p>1)copy the contents inside the "[XERCES_EXTRACT] \include\xercesc" <br>
-to [CHECKOUT_HOME]\c\include\xercesc<br>
-2) Copy the include files.</p>
+
+<p>1)Copy [EXPAT_EXTRACT]\source\lib\expat.h from expat binary distribution to [CHECKOUT_HOME]\c\include\expat\ directory <br>
+<br>
+2) Copy [EXPAT_EXTRACT]\lib\libexpat.lib to [CHECKOUT_HOME]\c\lib\expat\ directory.</p>
+
+<p>3)Copy libexpat.dll file from [EXPAT_EXTRACT]\Libs  to %AXIS_HOME%/libs/
+
 
 <p><b>For apache 1.3.X:</b></p>
 
-<p>Copy the include files in "[APACHE_HOME]\include" directory to</p>
 
-<p>"[CHECKOUT_HOME] \c\include\apache1_3\"</p>
+<p>1)Copy the include files in "[APACHE_HOME]\include" directory to
+"[CHECKOUT_HOME] \c\include\apache1_3\"
+
+<br><br>
+2) Copy the ApacheCore.lib file from [APACHE_HOME]\libexec
+to [CHECKOUT_HOME]\c\lib\apache1_3.</p>
+
 
 <p><b>For apache 2.X:</b></p>
 
-<p>Copy the include files in "[APACHE_HOME]\include" directory to
-"[CHECKOUT_HOME] \c\include\apache2_0\"<br>
-3) Copy the lib files from "[XERCES_EXTRACT] \lib" to
-"[CHECKOUT_HOME]\c\lib\xercesc"<br>
-4) Copy the lib files.</p>
 
-<p><b>For apache 1.3.X:</b> copy the ApacheCore.lib file from [APACHE_HOME]
-\libexec to [CHECKOUT_HOME]\c\lib\apache1_3.</p>
 
-<p><b>For apache 2.X:</b> copy libapr.lib, libhttpd.lib files from
+<p>1)Copy the include files in "[APACHE_HOME]\include" directory to
+"[CHECKOUT_HOME]\c\include\apache2_0\"<br><br>
+
+ 2) Copy the following lib files libapr.lib, libhttpd.lib files from
 "[APACHE_HOME]\lib" to "[CHECKOUT_HOME]\c\lib\apache2_0".<br>
-5) In Visual C++ (The version used for this documentation was Visual C++ 6.0)
-open the file Axis.dsw which is in "[CHECKOUT_HOME]\ws-axis \c\vc". In the
-workspace window File View, right click on either the project "Apache1_3" or
-"Apache2_0" and click on the "Set as Active Project" to make it the Active
-Project.<br>
-6) Again in Visual C++ right click on either the project "Apache1_3" or
-"Apache2_0" in the workspace window File View and then click on Settings on
+</p>
+
+<p><b>Building Apache Modules (Apache 1.3.X and Apache 2.X) </b> </p>
+<p>
+ In Visual C++ (The version used for this documentation was Visual C++ 6.0)
+click on file ,open Visual C++ Distribution workspace (Distribution.dsw) at
+[CHECKOUT_HOME]\c\vc\.
+In the workspace window, File View, right click on either the project "Apache1_3Module files" or
+"Apache2_0Module files" and click on the "Set as Active Project" to make it the Active
+Project.<br> <br>
+
+ Again in Visual C++ right click on either the project "Apache1_3Module" or
+"Apache2_0Module" in the workspace window, File View, and then click on Settings on
 the popup menu. Select the link tab. Select General from the Category drop
 down list. In the Output file name text box put the value
 [APACHE_HOME]\modules\mod_axis.dll and click OK.</p>
 
-<p><img border="0" src="images/c/mod_axis.jpg" width="577" height="372"></p>
 
-<p>7) In Visual C++ Go to "Build -&gt; Rebuild All"“ to build mod_axis.dll<br>
+
+<p>Build either Apache1_3Module or Apache2_0Module project.
+In Visual C++ right click on either the project "Apache1_3Module" or
+"Apache2_0Module" in the workspace window, File View and click "build (selection only)"
+to build mod_axis.dll for Apache1_3Module or mod_axis2.dll for Apache2_0Module.
+<br><br>
+(From here onwards we will refer to these modules as APACHE_MODULE. Replace it 
+with the correct module for the Apache server version that you have installed)  
+<br><br>
 &nbsp;</p>
 
+<p><b>Building the AxisServer and AxisClient dlls </b> </p>
+
+
+<p>Similarly as you built the Apache modules, build the AxisServer and AxisClient projects,
+Which will build the AxisServer.dll and AxisClient.dll and also AxisServer.lib and AxisClient.lib
+in [CHECKOUT_HOME]\c\bin.</p>
+
+
 <p><a name="deployaxis"></a></p>
+
 
 <h2>Deploying Axis in Apache</h2>
 
 <p>1) Create a directory structure called "Axis" inside [APACHE_HOME] as
-follows<br>
+follows.
+<br>
+(Instead, you can copy the folder [CHECKOUT_HOME]\c\deploy [APACHE_HOME] and rename it to 
+"Axis" and you will find some of the files that you are asked to create in this guide,
+already existing in that folder)
+<br>
 <br>
 Axis<br>
-|__ libs ( Copy the two dll file from xerces-c-x.x-win32/bin and paste it
-inside)<br>
+|__ libs ( Copy [EXPAT_EXTRACT]\Libs\libexpat.dll and paste it inside)<br>
 |__ logs (log files are located here)<br>
 |__ conf (server.wsdd file is located here)<br>
 |__ webservices (The place to put webservice dlls)<br>
 |__ wsdls (The directory for the wsdl files of the deployed web services)<br>
+
 <br>
-NOTE: If you copy xerces dll files to [APACHE_HOME]\Axis\libs from a version
-other than the one you used to build the Axis source with, you may have
-trouble starting up the Apache web server.<br>
+2)Set an environment variable named AXIS_HOME and give [APACHE_HOME]\Axis as
+the value.
 <br>
-2) Set the "PATH" environment variable to the following directories.<br>
+
+<br>
+i)You will find AxisServer.dll and APACHE_MODULE in [CHECKOUT_HOME]\c\bin directory.
+<br>
+ii)Copy APACHE_MODULE to [APACHE_HOME]\modules directory of your apache installation.
+<br>
+iii)Copy AxisServer.dll to any location specified by your PATH environment variable 
+<p>
+<b>NOTE:</b>Usually it is a best practice to copy AxisServer.dll to [AXIS_HOME]\libs\ directory and
+add that directory to your PATH environment variable.
+
+
+<br> <br>
+2) Set the "PATH" environment variable to the following directories.
+
+<br>
 [APACHE_HOME]<br>
 [APACHE_HOME]\Axis\libs<br>
-<br>
+<br> 
+
 3) Change the apache configuration file [APACHE_HOME]\conf\httpd.conf to
 include the following lines at the bottom.<br>
+
+
 <br>
-LoadModule axis_module modules/mod_axis.dll<br>
-&lt;Location /axis&gt;<br>
-SetHandler axis<br>
-&lt;/Location&gt;<br>
+LoadModule axis_module modules/APACHE_MODULE
+
+<br>
+&lt;Location /axis&gt;
+
+<br>
+SetHandler axis
+
+<br>
+&lt;/Location&gt;
 <br>
 <br>
 4)create a file in [APACHE_HOME]\Axis named "axiscpp.conf" which should
-contain the following lines.<br>
+contain the following lines.
+
+<br>
+
+
 <br>
 AXISLOGPATH:XXXX<br>
 WSDDFILEPATH:YYYY<br>
+
+
 <br>
 Where XXXX will be the path to a file named AxisLog (The log file)and YYYY
 will be the path to the server.wsdd file.<br>
 <br>
 i.e.<br>
-AXISLOGPATH: [APACHE_HOME]\Axis\logs\AxisLog <br>
-WSDDFILEPATH: [APACHE_HOME]\Axis\conf\server.wsdd <br>
+AXISLOGPATH: [APACHE_HOME]\Axis\logs\AxisLog.log  
+
 <br>
-5)Set an environment variable named AXIS_HOME and give [APACHE_HOME]\Axis as
-the value.<br>
+WSDDFILEPATH: [APACHE_HOME]\Axis\conf\server.wsdd <br>
+
+
+
 <br>
 6)Select start-&gt;programs-&gt;Apache HTTP server-&gt;Control Apache
-Server-&gt;stop to stop the apache server<br>
+Server-&gt;stop to stop the apache server
+
+<br>
 (This is because apache will be started automatically by the installation
-program)<br>
+program)
+<br>
 <br>
 Open up a DOS terminal and give the command "apache -k start" to start
-apache<br>
-(IT IS IMPORTANT TO START APACHE THIS WAY.)<br>
-<br>
-(NOTE:If a 126 error occurs check whether the "path" variable has been set
-correctly as mentioned <br>
-before and whether the correct versions of the xerces dlls have been copied
-as instructed before)<br>
+apache (If Apache 2.0 server does not seem to respond when started this way, try "apache -X").
+
+
 <br>
 open a browser and verify whether you can browse http://localhost/ (or give
 the machines ip as http://xxx.xxx.xxx.xxx/). If apache is running you will
 see the Apache start page in the browser.&nbsp;</p>
 
+
+
 <p><a name="deploywebservice"></a></p>
 
+
+
 <h1>Deploying a web service in Axis C++</h1>
+
 
 <p><a name="generatefiles"></a></p>
 
 <h2>Generating Serverside Skeletons/ wrappers and client side stubs</h2>
 
+
+
 <p><a name="eclipse"></a></p>
 
 <h3>Using eclipse to build and run WSDL2Ws</h3>
 
-<p>In the checked out source code there is a tool "wsdl2ws" (i.e. wsdl-to-web
+
+
+<p>In the checked out source code there is a
+
+ "wsdl2ws" (i.e. wsdl-to-web
 services) written in java that generates server side Skeletons/wrappers and
 client side stubs using a given WSDL file. This Section describes how this is
-done.<br>
+done.
+
+<br>
 To build and run the java tool this section uses the eclipse platform. For
 this documentation eclipse 2.1.0 was used and the jdk version used was
 j2sdk1.4.1_01. You will not be able to build the java tool with jdk versions
 below 1.4.0.<br>
+
+
 <br>
 1)Start the eclipse platform IDE.<br>
 Go to File-&gt;New-&gt;Project.<br>
+
 <br>
 Select java in the "New Project" dialog and click "Next".<br>
+
 <br>
 In the "New" dialog that appears give a project Name (e.g. test). In the "New
-dialog" keep the "use default" Tick Box checked.<br>
+dialog" keep the "use default" Tick Box checked.
+<br>
 Note down the path in the "Directory" Text Box. This location will be
 referred to as [SKELSTUB_HOME] from this point onwards. Click "Next".<br>
+
+
 <br>
 Another dialog named "New” will appear. Select the “Source” tab. Select the
 project that you created (i.e. test).<br>
@@ -249,52 +379,70 @@ select the project that you created (i.e. test) and click “Create New
 Folder…”. In the “New Folder” dialog that appears give a folder name as “src”
 and click “OK”. Click “OK” in the “Source Folder Selection” dialog. Click
 “Yes” on the confirmation message box that pops up. <br>
+
+
 <br>
 Click “Libraries” in the “New” dialog. Click “Add External JARs…”. In the
 “JAR Selection” dialog that appears browse to [CHECKOUT_HOME]\
-contrib\wss4j\lib and select the following JARs.<br>
+\lib\axisjava and select the following JARs.<br>
+
+
 <br>
-axis.jar<br>
-commons-discovery.jar<br>
-commons-logging.jar<br>
+axis.jar
+<br>
+commons-discovery.jar
+<br>
+commons-logging.jar
+<br>
 jaxrpc.jar<br>
-saaj.jar<br>
-wsdl4j.jar<br>
+saaj.jar
+<br>
+wsdl4j.jar
+<br>
 xml-apis.jar<br>
 <br>
 Click “Open”.<br>
 <br>
 Click “Finish” on the “New” dialog.<br>
 <br>
-2) Copy the “org” folder inside [CHECKOUT_HOME]\ c\src\wsdl to
+2) Copy the “org” folder inside [CHECKOUT_HOME]\c\src\wsdl to
 [SKELSTUB_HOME]\src. The “org” folder contains the package structure for the
-WSDL2Ws java tool.<br>
+WSDL2Ws java tool.<br><br>
 3) Go to eclipse and right click on the “Package Explorer” window and click
 on “Refresh” in the popup menu that appears. Now you should be able to see
 the source that was copied, in the “Package Explorer” window. By now eclipse
 would have built the WSDL2Ws tool.<br>
+
+
 <br>
 For this demonstration we will use a Calculator web service and the WSDL file
-for that web service is <a
-href="../cfiles/Calculator.wsdl">Calculator.wsdl</a>.<br>
+for that web service is located at [CHECKOUT_HOME]\c\samples\server\simple.<br>
+
 <br>
 Copy the Calculator.wsdl to [SKELSTUB_HOME]<br>
+
+
 <br>
-In eclipse go to “Run-&gt;Run…”.<br>
-In the “Run” dialog select the “Main” tab. In “Project” text box give the
-name of the project you created (i.e. test).<br>
+In eclipse go to “Run-&gt;Run…”.
+
+<br>
+In the Java Application item select the New_Configuration.Then select the “Main” tab. In “Project” text box give the
+name of the project you created (i.e. test).
+<br>
 In the “Main Class” text box give the class as
-“org.apache.axis.wsdl.wsdl2ws.WSDL2Ws”.<br>
+“org.apache.axis.wsdl.wsdl2ws.WSDL2Ws”.
+
+<br>
 &nbsp;</p>
 
 <p><img border="0" src="images/c/main_class.jpg" width="627" height="340"></p>
 
-<p style="margin:0in;margin-bottom:.0001pt">Select the “Arguments” tab.</p>
+<p>Select the “Arguments” tab.</p>
 
-<p style="margin:0in;margin-bottom:.0001pt">In the “Program Arguments” text
+<p>In the “Program Arguments” text
 box give the following argument.</p>
 
-<p style="margin:0in;margin-bottom:.0001pt">“Calculator.wsdl -o./ServerOut
+<p>“Calculator.wsdl -o./ServerOut
 -lc++ -sserver”.</p>
 
 <p><img border="0" src="images/c/argument.jpg" width="626" height="272"></p>
@@ -310,7 +458,7 @@ Click “Run”.<br>
 Now the Skeletons/Wrappers will be generated and you will see messages in the
 eclipse console displaying the generated files. The generated
 Skeletons/Wrappers will be created in a folder named
-[SKELSTUB_HOME]\ServerOut as given in the arguments when the tool was run.<br>
+[SKELSTUB_HOME]\ServerOut as given in the arguments when you  run the tool.<br>
 <br>
 Similarly to generate the client stubs use the following arguments in eclipse
 and run.<br>
@@ -321,44 +469,60 @@ The generated Stubs will be created in a folder named
 
 <p><a name="commandline"></a></p>
 
+
+
 <h3>Building and running WSDL2Ws on the command line</h3>
 
 <p>For building WSDL2Ws java tool on the command line you require jdk1.4 or
 above.<br>
 <br>
 To build WSDL2Ws java tool you should set the CLASSPATH Environment Variable
-to point to the following jar files in [CHECKOUT_HOME]\ contrib\wss4j\lib.<br>
+to point to the following jar files.Create a New Folder called wsdl2wsTool\lib and put those jars in it. You can find 
+these jars in [CHECKOUT_HOME]\lib\axisjava.
+
 <br>
-axis.jar<br>
-commons-discovery.jar<br>
-commons-logging.jar<br>
+
+<br>
+axis.jar
+<br>
+commons-discovery.jar
+<br>
+commons-logging.jar
+<br>
 jaxrpc.jar<br>
-saaj.jar<br>
-wsdl4j.jar<br>
-xml-apis.jar<br>
-The CLASSPATH Environment Variable should have the absolute paths of the jars
-(including the jar file name) given as a semicolon separated list.<br>
+saaj.jar
 <br>
+wsdl4j.jar<br>
+xml-apis.jar
+
+<br><br>In adition to above jars You have to create the wsdl2ws.jar which is the jar file for the tool.
+<br>
+The CLASSPATH Environment Variable should have the absolute paths of the jars (including the jar file name) given as a semicolon separated list.
+<br><br>
 Open a command window.<br>
 Change directory to [CHECKOUT_HOME]\c\src\wsdl.<br>
-We will refer to this directory as [SKELSTUB_HOME] as we did during
-generating Skeletons/Wrappers and Stubs with eclipse<br>
-Run the following command to build the java tool.<br>
-Javac -sourcepath . org\apache\axis\wsdl\wsdl2ws\WSDL2Ws.java<br>
+We will refer to this directory as [SKELSTUB_HOME] as we did during generating Skeletons/Wrappers and Stubs with eclipse.
+<br>
+Run the following command to build the java tool.
+<br><b>
+javac -sourcepath . org\apache\axis\wsdl\wsdl2ws\WSDL2Ws.java</b>
+<br>
+NOTE: Notice the spaces between the "dot" after the -sourcepath switch
+
 <br>
 If the command finishes without any output then the java tool has been
 built.<br>
 <br>
-Now copy the <a href="../cfiles/Calculator.wsdl">Calculator.wsdl</a> file
+Now copy the Calculator.wsdl file in [CHECKOUT_HOME]\c\samples\server\simple, 
 which we use in this example to [SKELSTUB_HOME]<br>
 <br>
 Now run the following command to generate the server side skeletons and
-wrappers.<br>
+wrappers in the same [SKELSTUB_HOME].<br>
 <br>
 Java -classpath %classpath%;. org.apache.axis.wsdl.wsdl2ws.WSDL2Ws
 Calculator.wsdl -o./ServerOut -lc++ -sserver<br>
 <br>
-If the tools is successful the tool will display the files the it has
+If the tool is successful the tool will display the files it has
 generated. The skeletons and stubs will be generated in
 [SKELSTUB_HOME]\ServerOut.<br>
 <br>
@@ -368,40 +532,46 @@ Java -classpath %classpath%;. org.apache.axis.wsdl.wsdl2ws.WSDL2Ws
 Calculator.wsdl -o./ClientOut -lc++ -sclient<br>
 <br>
 The generated client stubs will be in [SKELSTUB_HOME]\ClientOut<br>
-&nbsp;</p>
+
+</p>
 
 <p><a name="builddeployws"></a></p>
 
 <h2>Building and Deploying the web service</h2>
 
-<p>1) Start Visual C++.<br>
-2) Go to File-&gt;Open and open the workspace file “Axis.dsw” in
-[CHECKOUT_HOME]\ \c\vc.<br>
-3) Go to Project-&gt;Add To Project-&gt;New…<br>
-4) Select the “Projects” tab<br>
-5) Select “Win 32 Dynamic-Link Library”<br>
-6) Give a project name (e.g. ws1) and click “OK”.<br>
-7) In the dialog that appears select “An empty DLL project” click “Finish”
-and then “OK”.<br>
-8) When this procedure is followed the ws1 project files are created in
-[CHECKOUT_HOME]\c\vc\ws1.<br>
-9) Right click on the project that you created (i.e. ws1) and click “Add
+ <p>1) If you have followed the above instructions you should have been able to generate the Server 
+side Skeletons and Wrappers for the Calculator.wsdl
+<br><br> 2) Start Visual C++.<br>
+
+<br>
+3) Go to File->New…<br>
+<br>
+4) Select the “Projects” tab.<br>
+
+<br>
+5) Select “Win 32 Dynamic-Link Library”.<br>
+<br>
+6) Give a project name (e.g. ws1), give some folder (say "deployws") as the "location" for the project, select the "create new workspace" radio button, and click “OK”.When this procedure is followed the "ws1" project files are created in a folder named "ws1" inside the "deployws" folder. <br>
+
+<br>
+7) In the dialog that appears select “An empty DLL project” click “Finish” and then “OK”.<br>
+<br>
+8) Right click on the project that you created (i.e. ws1) and click “Add
 Files to Project…” on the menu that appears. In the “Insert Files into
 Project” dialog select the generated .cpp and .h files in
 [SKELSTUB_HOME]\ServerOut and click “OK”.<br>
-10) Right click on the project (i.e. ws1)again and click on “Settings…” on
+<br>9) Right click on the project (i.e. ws1)again and click on “Settings…” on
 the menu that appears. Click the C/C++ tab and select “Preprocessor” from the
-“Category” Drop down list.<br>
-In the “Additional include directories” give “../../include”<br>
-</p>
-<img border="0" src="images/c/new_config_include.jpg" width="577"
-height="372">
+“Category” Drop down list.
+Add Axis include directory [CHECKOUT_HOME]c\include\ to the project In the 
+“Additional include directories”<br>
 
-<p style="margin:0in;margin-bottom:.0001pt">11) Now business logic should be
+<br>10).Now business logic should be
 added to the generated Skeletons. The Skeletons in this case are Calculator.h
-and Calculator.cpp<br>
-12) Two methods are available for implementation in Calculator.cpp we shall
-implement them as follows.<br>
+and Calculator.cpp
+<br><br>
+11) We shall implement two methods available in Calculator.cpp as follows.
+<br>
 int Calculator::add(int Value0, int Value1)<br>
 {<br>
 return Value0+Value1; //business logic<br>
@@ -409,20 +579,20 @@ return Value0+Value1; //business logic<br>
 int Calculator::subtract(int Value0, int Value1)<br>
 {<br>
 return Value0-Value1; //business logic<br>
-}<br>
-13) Right click on the project (i.e. ws1) and click “Build” on the menu that
+}<br><br>
+12) Right click on the project (i.e. ws1) and click “Build” on the menu that
 appears. Visual C++ should be able to build the project without any errors
 now.<br>
 <br>
-14) The ws1.dll will be build in [CHECKOUT_HOME]\c\vc\ws1\Debug by Visual
-C++<br>
-15) Place the built ws1.dll file in [APACHE_HOME]\Axis \webservices<br>
-16) In addition to this you have to create sever.wsdd file in
+13) The ws1.dll will be built in "ws1\Debug" by Visual
+C++<br><br>
+14) Place the built ws1.dll file in [APACHE_HOME]\Axis\webservices<br><br>
+15) In addition to this you have to create sever.wsdd file in
 [APACHE_HOME]\Axis\conf<br>
 <br>
-The <a href="../cfiles/server.wsdd">server.wsdd</a> file for this example is
+The server.wsdd file for this example is
 given below</p>
-<br>
+
 
 <pre>&lt;deployment&gt;
 &lt;service name="Calculator"&gt;
@@ -431,8 +601,6 @@ value="[APACHE_HOME]\Axis\webservices\ws1.dll"/&gt;
 &lt;parameter name="allowedMethods" value="subtract add "/&gt;
 &lt;/service&gt;
 &lt;/deployment&gt;</pre>
-<br>
-
 
 <p>In this file [APACHE_HOME] should be replaced with the actual value of
 [APACHE_HOME] (i.e. For this case "C:\Program Files\Apache Group\Apache" for
@@ -453,15 +621,15 @@ value, the methods exposed by the web service (i.e. subtract and add).<br>
 <b>Note: A trailing space should be put after every allowed method.</b><br>
 &lt;parameter name="allowedMethods" value="subtract add "/&gt;<br>
 <br>
-17) Now start the apache web server by typing “apache -k start”. If it is
+16) Now start the Apache web server by typing “apache -k start”. If the Apache server is
 running type “apache -k restart”<br>
 <br>
-18) Now type http://localhost/axis/ in a browser and you will see the
-“Welcome to Axis C++” page with a listing of deployed services (In this case
-the Calculator service only).<br>
+17) Now type http://localhost/axis/ in a browser and you will see the
+“Welcome to Axis C++” page with a listing of deployed services and  Calculator service .<br>
 &nbsp;</p>
 
 <p><a name="consumews"></a></p>
+
 
 <h1>Consuming the web service with Axis c++ client</h1>
 
@@ -469,54 +637,54 @@ the Calculator service only).<br>
 
 <h2>Coding and Running the client</h2>
 
-<p>1) Start Visual C++. 2) Go to File-&gt;Open and open the workspace file
-“Axis.dsw” in [CHECKOUT_HOME]\ \c\vc.<br>
-3) Go to Project-&gt;Add To Project-&gt;New…<br>
-4) Select the “Projects” tab<br>
-5) Select “Win 32 Console Application”<br>
-6) Give a project name (e.g. calclient) and click “OK”. </p>
 
-<p><img src="images/c/new_config_clientEXE.jpg"></p>
 
-<p>7) In the dialog that appears select “An empty project” click “Finish” and
-then “OK”.<br>
+<p>1) If you have followed the above instructions you should have been able to generate the Server 
+side Skeletons and Wrappers for the Calculator.wsdl.
+
+<br> 2) Start Visual C++.<br>
+3) Go to File->New…
 <br>
-8) When this procedure is followed the calclient project files are created in
-[CHECKOUT_HOME]\c\vc\calclient.<br>
-9) Right click on the project that you created (i.e. ws1) and click “Add
-Files to Project…” on the menu that appears. In the “Insert Files into
-Project” dialog select the generated .cpp and .h files in
-[SKELSTUB_HOME]\ClientOut and click “OK”.<br>
-10) Right click on the project (i.e. calclient) again and click on
-“Settings…” on the menu that appears. Click the “C/C++” tab and select
-“Preprocessor” from the “Category” Drop down list.<br>
-In the “Additional include directories” give “../../include”<br>
+4) Select the “Projects” tab<br>
+5) Select “Win 32 Console Application”
+<br>
+6) Give a project name (e.g. calclient) and click “OK”. 
+
+Give a project name (e.g. calclient), give some folder (say "wsclient") as the "location" for the project, select the "create new workspace" radio button, and click “OK”.When this procedure is followed the "calclient" project files are created in a folder named "calclient" inside the "wsclient" folder. <br>
+
+
 </p>
 
-<p><img border="0" src="images/c/new_config_client_include.jpg" width="577"
-height="372"></p>
+
+<p>7) In the dialog that appears select “An empty project” click “Finish” and
+then “OK”.
+<br>
+8) Right click on the project that you created (i.e. ws1) and click “Add
+Files to Project…” on the menu that appears.Then Add the generated .cpp and .h files from the [SKELSTUB_HOME]\ClientOut to the project and click “OK”.
+
+<br>
+9) Right click on the project (i.e. calclient) again and click on
+“Settings…” on the menu that appears. Click the “C/C++” tab and select
+“Preprocessor” from the “Category” Drop down list.<br>
+In the “Additional include directories” give [CHECKOUT_HOME]c\include as the include path.<br>
+</p>
+
 
 <p>11) Click the “Link” tab and select “Input” from the “Category” Drop down
-list. <br>
-Remove the contents of the “Object/library modules” and add the following
-libs to it.<br>
+list. 
+
+
+<br>Add AxisClient.lib to the “Object/library modules” and in the “Additional library path” give the path.
+AxisClient.lib can be found in [CHECKOUT_HOME]\c\bin once you build the AxisClient project 
+of the "Distribution" VC workspace.
 <br>
-Common_D.lib Soap_D.lib wsdd_D.lib Engine_D.lib xerces-c_2D.lib client_D.lib
-ws2_32.lib<br>
+
 <br>
-In the “Additional library path” text box give the following, comma separated
-list of paths.<br>
-<br>
-../../lib/win32/axis, ../../lib/win32/xercesc<br>
-<br>
-Click “OK”.<br>
 &nbsp;</p>
 
-<p><img border="0" src="images/c/new_config_client_lib.jpg" width="577"
-height="372"></p>
 
 <p>Now the client should be coded. Basically this will be a main method. We
-will write the main method in the file Calculator.cpp. This is the stub
+will write the main method in the file Calculator.cpp of the VC project "calclient". This is the stub
 generated by the java tool in the stub generation step.<br>
 <br>
 Add the following main method to Calculator.cpp<br>
@@ -530,11 +698,104 @@ printf("The result is : %d", result);
 <br>
 
 
-<p>Right click on the project and click “Build” on the menu that appears.<br>
+<p>Right click on the project and click “Build” on the menu that appears.
+
+<br>
 If Visual C++ complains about missing libs go to Build-&gt;Rebuild All (Do
 make sure that the apache server is stopped). Now the client exe is built.<br>
-Start the apache by typing apache -k start and run the exe from Visual C++ by
-going to Build-&gt;Execute calclient.exe. Now you will see the SOAP Request,
-SOAP Response and the result printed by the main method that we coded.</p>
+Start the Apache server by typing apache -k start and run the exe from Visual C++ by
+going to Build-&gt;Execute calclient.exe. If all went well now you should see the SOAP Request,
+SOAP Response and the result printed by calclient.exe.</p>
+
+
+<P><a name="providedservices"></a></p>
+<h2>Building and deploying the provided interop web services samples</h2>
+<p>
+<br>1.) Open the Visual C++ workspace (interoptests.dsw) at [CHECKOUT_HOME]\c\vc\samples\server\interoptests\  and do a batch build of all projects.
+<br>2.) You will find the built dynamic libraries at [CHECKOUT_HOME]\c\bin directory. Following are the built DLLs.
+<br>base.dll
+<br>cbase.dll
+<br>cGroupB.dll
+<br>doclitbase.dll
+<br>doclitgroupB.dll
+<br>groupB.dll
+<br>3.)copy these dlls to [APACHE_HOME]\Axis\webservices
+<br>4.)Add the required entries to the server.wsdd file in [APACHE_HOME]\Axis\conf to deploy these
+interop services.
+You can find the required entries in the [CHECKOUT_HOME]\c\deploy\conf\server.wsdd_win file.
+You will need to modify the "value" of the "classname" parameter of each service to to point to
+the relevant web service dll given above in [APACHE_HOME]\Axis\webservices.
+</p>
+
+<p><a name="providedclients"></a></p>
+<h2>Building and running the provided interop client applications</h2>
+<p>
+<br>1.) Open the Visual C++ workspace (interoptests.dsw) at [CHECKOUT_HOME]\c\vc\samples\client\interoptests\ and do a batch build of all projects.
+<br>2.) You need to build the AxisClient project in the "Distribution" workspace at [CHECKOUT_HOME]\c\vc\, because you need the AxisClient.lib to complile client applications and AxisClient.dll to run them.
+<br>3.) You will find the built console applications and AxisClient.dll at [CHECKOUT_HOME]\c\bin directory. Following are the built .exe files.
+	base.exe
+	cbase.exe
+	cgroupB.exe
+	doclitbase.exe
+	doclitgroupB.exe
+	groupB.exe
+<br>4.) In order to run these samples you should have AxisClient.dll in the PATH environment variable or in the same directory where the .exe is.
+</p>
+
+<p><a name="usingxerces"></a></p>
+<h2>BUILDING AXIS C++ WITH THE XERCES PARSER</h2>
+
+<p><b>Xerces-C</b>
+
+<p>A developer can use xerces-C parser as an  alternative parser for the Expat.  Once you have got Axis c++ built and deployed with EXpat using the above instructions, by following the instructions given below, you will be able to build and deploy Axis c++ with the Xerces parser.</p>
+
+<br>
+Download the Xerces-C 2.2.0( 32 bit binary release)from:
+http://xml.apache.org/xerces-c/download.cgi<br>
+
+
+
+
+
+<p><B>How to use xerces as the parser for Axis C++</B></p>
+
+<p>In windows using Visual C++ 6.0 open the workspace "distribution" from vc++ at
+[CHECKOUT_HOME]\c\vc\
+
+<p>1.)Remove the files SoapParserExpat.cpp and WSDDDocumentExpat.cpp from the "AxisServer"
+project and the "AxisClient" project.</P>
+
+<p>2.)Add the files "SoapBinInputStream.cpp", "SoapInputSource.cpp", "SoapParserXerces.cpp",
+"XercesHandler.cpp" (which will be located in  [CHECKOUT_HOME]\c\src\soap) and "WSDDDocumentXerces.cpp" (which will be located in [CHECKOUT_HOME]\c\src\wsdd) to the "AxisServer"
+project and the "AxisClient" project.</p>
+
+
+<p>3.)change the compiler directive "USE_EXPAT_PARSER" to "USE_XERCES_PARSER" (This setting is
+in "project-&gt;settings-&gt;C/C++-&gt;prepocessor-&gt;Preprocessor Definitions")
+in all the projects that this directive is used.</P>
+
+<p>4.)Add the Xerces header files from xerces binary distribution to [CHECKOUT_HOME]\c\include\xercesc folder </p>
+
+<p>5.)Add the required Xerces libs (xerces-c_2.lib for release builds, xerces-c_2D.lib for
+debug builds) from the Xerces binary distribution to [CHECKOUT_HOME]\c\lib\xerces-c folder and give either
+xerces-c_2.lib or xerces-c_2D.lib as appropriate in
+"project-&gt;settings-&gt;link-&gt;input-&gt;object/library modules"
+and give the path to those libs in "project->settings->link->additional library path"</p>
+
+<p>6.)Remove libexpat.lib from the settings of the projects.</p>
+
+<p>If you are using any other vc workspaces (e.g AxisDevelopment) do the same modifications
+to the projects of those workspaces.</p>
+
+<p>Now you can build the source. Once the source is built the dlls AxisServer.dll, AxisClient.dll, mod_axis.dll or mod_axis2.dll will be generated in [CHECKOUT_HOME]\c\bin.<br>
+You will need to put the xerces dlls somewhere pointed to by the PATH environment variable
+(xerces-c_2_2_0.dll for release builds, xerces-c_2_2_0D.dll for debug builds) to run the
+server and the client. (The recommended way of achieving this is to put the Xerces dlls in to [CHECKOUT_HOME]\Axis\libs to which you should have set the PATH environment variable already).
+<br><br>
+<br>
+NOTE: If you copy xerces dll files to [APACHE_HOME]\Axis\libs from a version
+other than the one you used to build the Axis source with, you may have
+trouble starting up the Apache web server.<br></p>
+
 </body>
 </html>
