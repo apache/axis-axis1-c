@@ -89,23 +89,11 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\..\..\src\common\AxisSocketUtils.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\common\AxisUtils.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\server\simple_axis_server\ServerHelper.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\src\server\simple_axis_server\SimpleAxisServer.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\server\simple_axis_server\SimpleAxisServerTransport.cpp
+SOURCE=..\..\..\src\server\simple_axis_server\SimpleAxisTransport.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -113,15 +101,7 @@ SOURCE=..\..\..\src\server\simple_axis_server\SimpleAxisServerTransport.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\..\src\server\simple_axis_server\HTTP_KeyWords.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\server\simple_axis_server\ServerHelper.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\server\simple_axis_server\SimpleAxisServerTransport.h
+SOURCE=..\..\..\src\server\simple_axis_server\SimpleAxisTransport.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
