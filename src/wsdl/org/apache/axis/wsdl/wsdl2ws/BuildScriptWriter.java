@@ -23,9 +23,11 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
+import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 
 /**
  * @author Susantha Kumara susantha@opensource.lk
+ * @author Samisa Abeysinghe sabeysinghe@virtusa.com
  *
  */
 public class BuildScriptWriter implements SourceWriter {
@@ -39,6 +41,12 @@ public class BuildScriptWriter implements SourceWriter {
 	 * @see org.apache.axis.wsdl.wsdl2ws.SourceWriter#writeSource()
 	 */
 	public void writeSource() throws WrapperFault {
+            // Samisa - we write the gnu make system files only at the moment
+            // hence check if user wanted gnu make files
+   
+            if ( (WSDL2Ws.makeSystem == null) || (!WSDL2Ws.makeSystem.equals("gnu")) )
+                return;
+
 		try {
 			servicename = wscontext.getSerInfo().getServicename();
 			Iterator filelist = wscontext.getGeneratedFileList().iterator();

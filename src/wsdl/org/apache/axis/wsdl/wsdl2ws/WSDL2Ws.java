@@ -66,8 +66,11 @@ import org.w3c.dom.Node;
  *  5) create WebServiceContext using above three classes and start execution 
  * 
  * @author hemapani@opensource.lk
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
 public class WSDL2Ws {
+    public static boolean verbose = false;
+    public static String makeSystem = null;
 
     private String language;
 	private boolean wsdlWrappingStyle;
@@ -79,7 +82,7 @@ public class WSDL2Ws {
 
     private String serviceStyle = null;
 
-    private boolean verbose = true;
+    //private boolean verbose = true;
     private String targetEndpointURI = null;
     private String transportURI = null;
     private String targetNameSpaceOfWSDL = null;
@@ -90,6 +93,7 @@ public class WSDL2Ws {
     private PortTypeEntry portTypeEntry;
 	private ArrayList methods;	
 
+    
     public WSDL2Ws(CLArgParser cmdLineArgs) throws WrapperFault {
         try {
             Parser wsdlParser = new Parser();
@@ -479,7 +483,7 @@ public class WSDL2Ws {
                     typeMap));
         if (wsg == null)
             throw new WrapperFault("does not support the option combination");
-        if(verbose){
+        if (WSDL2Ws.verbose){
         	Iterator it = typeMap.getTypes().iterator();
         	while(it.hasNext()){
         		System.out.println(it.next());
@@ -735,6 +739,19 @@ public class WSDL2Ws {
 		throw new WrapperFault("binding and the port type do not match");
 	}
 
+    public static void usage() {
+        System.out.println(
+                "java WSDL2Ws -<options> <wsdlfile>\n"
+                    + "-help, -h              print this message\n"
+                    + "-o<folder>             target output folder - default is current folder\n"
+                    + "-l<c++|c>              target language (c++|c) - default is c++\n"
+                    + "-s<server|client>      target side (serve|client) - default is server\n"
+                    + "-c<none|ssl>           channel security (ssl|none) - default is none\n"
+                    + "-w<wrapped|nonwrapped> wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped\n"
+                    + "-verbose, -v           be verbose\n"
+                    + "-m<none|gnu>           generate make files (none|gnu) - default is none\n");
+
+    }
     /**
      * Usage
      * =====
@@ -757,15 +774,22 @@ public class WSDL2Ws {
     public static void main(String[] args) throws Exception {
         CLArgParser data = new CLArgParser(args);
         System.out.println(data.getArgumentCount());
-        if (data.getArgumentCount() != 1)
-            System.out.println(
-                "java WSDL2Ws <wsdlfile> -<optionChar><value>\n"
-                    + "-o target output folder - default is current folder\n"
-                    + "-l target language(c|c++) - default is c++\n"
-                    + "-s target side(client|server) - default is server\n"
-                    + "-c channel security(ssl|none) - default is none\n"
-                    + "-w wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped\n");
+        if (data.getArgumentCount() != 1) {
+            usage();
+        }
         else {
+
+            if (data.isSet("v"))
+                WSDL2Ws.verbose = true;
+
+            if (data.isSet("h")) {
+                usage();
+                return; 
+            }
+
+            WSDL2Ws.makeSystem = data.getOptionBykey("m");
+
+	System.out.println( WSDL2Ws.makeSystem );
             WSDL2Ws gen = new WSDL2Ws(data);
             gen.genarateWrappers(
                 null,

@@ -17,6 +17,7 @@
  
 /**
  * @author Srinath Perera(hemapani@openource.lk)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
 
 package org.apache.axis.wsdl.wsdl2ws;
@@ -35,7 +36,7 @@ public class CLArgParser {
             if (!args[i].startsWith("-"))
                 this.args.add(args[i]);
             else {
-                System.out.println("args = " + args[i].substring(1,1));
+                System.out.println("args " + args[i].substring(1,2) + " = " + args[i].substring(2));
                 bag.put(args[i].substring(1, 2), args[i].substring(2));
             }
 
@@ -61,6 +62,10 @@ public class CLArgParser {
 
     public String getOptionBykey(String key) {
         return (String) bag.get(key);
+    }
+
+    public boolean isSet(String key) {
+        return bag.containsKey(key);
     }
 
 }
