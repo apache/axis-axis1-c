@@ -210,13 +210,82 @@ void HTTPChannel::setProxy (const char *pcProxyHost, unsigned int uiProxyPort)
     m_bUseProxy = true;
 }
 
-// Protected methods
-// -----------------
+// +--------------------------------------------------------------------------+
+// | Protected methods														  |
+// | -----------------														  |
+// +--------------------------------------------------------------------------+
 bool HTTPChannel::OpenChannel()
 {
 	bool	bSuccess = (bool) AXIS_FAIL;
 
 // Create the Client (Rx) side first.
+#ifdef IPV6
+    struct addrinfo		aiHints;
+	struct addrinfo *	paiAddrInfo;
+	struct addrinfo *	paiAddrInfo0;
+
+    // hints is used after zero cleared
+    memset( &aiHints, 0, sizeof( aiHints));
+
+    aiHints.ai_family = PF_UNSPEC;
+    aiHints.ai_socktype = SOCK_STREAM;
+
+    char szPort[7];
+   
+    const char	*	pszHost = m_URL.getHostName();
+    unsigned int	uiPort = m_URL.getPort();
+
+    if( m_bUseProxy)
+    {
+        uiPort = m_uiProxyPort;
+        pszHost = m_strProxyHost.c_str();
+    }
+ 
+    sprintf( szPort, "%hd", uiPort);
+
+    if( getaddrinfo( pszHost, szPort, &aiHints, &paiAddrInfo0))
+    {
+        throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CREATE_ERROR);
+    }
+
+    for( paiAddrInfo = paiAddrInfo0; paiAddrInfo; paiAddrInfo = paiAddrInfo->ai_next)
+    {
+        m_Sock = socket( paiAddrInfo->ai_family, paiAddrInfo->ai_socktype, paiAddrInfo->ai_protocol);
+
+        if( m_Sock < 0)
+        {
+            continue;
+        }
+
+        if( connect( m_Sock, paiAddrInfo->ai_addr, paiAddrInfo->ai_addrlen) < 0)
+        {
+            // Cannot open a channel to the remote end, shutting down the
+            // channel and then throw an exception.
+            CloseChannel();
+
+            free( paiAddrInfo0);
+
+            throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR);
+        }
+
+        break;
+    }
+
+    // Samisa: free addrInfo0 - no longer needed
+    freeaddrinfo( paiAddrInfo0);
+
+    if( m_Sock < 0)
+    {
+        // Sockets error Couldn't create socket.  Close the channel and throw
+        // an exception.
+        CloseChannel();
+
+        throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CREATE_ERROR);
+    }
+
+	bSuccess = AXIS_SUCCESS;
+
+#else // IPV6 not defined
     if( (m_Sock = socket( PF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
 	{
 		m_LastError = "Could not Create a socket.";
@@ -290,7 +359,8 @@ bool HTTPChannel::OpenChannel()
 // specifics a class and not just macros.  That way we could have e.g.
 // char * Windows#getLastErrorMessage().
 		long lLastError = GetLastError();
-#endif
+#endif // WIN32
+
 		CloseChannel();
 
 #ifdef WIN32
@@ -316,16 +386,18 @@ bool HTTPChannel::OpenChannel()
 	    LocalFree( lpErrorBuffer);
 
 		m_LastError = szErrorBuffer;
-#else
+#else // WIN32 not defined
 		m_LastError = "Cannot open a channel to the remote end.";
 
-#endif
+#endif // WIN32
 	    return bSuccess;
     }
 	else
 	{
 		bSuccess = AXIS_SUCCESS;
 	}
+
+#endif // IPV6
 
     /* Turn off the Nagle algorithm - Patch by Steve Hardy */
 

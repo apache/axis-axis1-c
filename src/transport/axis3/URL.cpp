@@ -21,7 +21,6 @@
  *
  */
 
-
 #include "Platform.hpp"
 #include "URL.hpp"
 #include <ctype.h>

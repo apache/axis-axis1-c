@@ -13,6 +13,11 @@
 #include "..\HTTPTransportException.hpp"
 #include <winsock2.h>
 
+#ifdef IPV6
+#include <ws2tcpip.h>
+#include <tpipv6.h>  // For IPv6 Tech Preview.
+#endif
+
 // What version of WinSock is required
 const int    WS_VERSION_REQD    = 0x0101;
 
