@@ -25,6 +25,7 @@
 #include <axis/SOAPTransport.h>
 #include <stdio.h>
 #include <axis/server/AxisConfig.h>
+#include <axis/AxisEngineException.h>
 
 extern AxisConfig* g_pConfig;
 
@@ -45,19 +46,8 @@ SOAPTransportFactory::~SOAPTransportFactory()
 
 int SOAPTransportFactory::initialize()
 {
-#ifdef WIN32
-#ifdef _DEBUG
 	m_pcLibraryPath = g_pConfig->getAxisConfProperty(AXCONF_TRANSPORTHTTP);
-	//m_pcLibraryPath = "AxisTransport_D.dll"; //this will be taken from configuration file
-#else
-	m_pcLibraryPath = g_pConfig->getAxisConfProperty(AXCONF_TRANSPORTHTTP);
-	//m_pcLibraryPath = "AxisTransport.dll"; //this will be taken from configuration file
-#endif
-#else
-	//m_pcLibraryPath = "/home/damitha/Axis/libs/libaxis_transport.so"; //this will be taken from configuration file
-	//m_pcLibraryPath = "/usr/local/Axis/libs/libaxis_transport.so"; //this will be taken from configuration file
-	m_pcLibraryPath = g_pConfig->getAxisConfProperty(AXCONF_TRANSPORTHTTP);
-#endif
+
 	if (!loadLib())
 	{
 #if defined(USE_LTDL)
@@ -73,12 +63,16 @@ int SOAPTransportFactory::initialize()
         if (!m_Create || !m_Delete)
         {
             unloadLib();
-            printf("Transport library loading failed");
+			throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED, strdup(m_pcLibraryPath));
         }
         else
         {
             return AXIS_SUCCESS;
         }		
+	}
+	else
+	{
+		throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED, strdup(m_pcLibraryPath));
 	}
 	return AXIS_FAIL;
 }

@@ -52,8 +52,7 @@ int XMLParserXerces::setInputStream(AxisIOStream* pInputStream)
         delete m_pInputSource;
     
     m_pInputSource = new SoapInputSource(pInputStream);
-    /* SoapInputSource is(m_pInputStream->transport.pGetFunct, 
-    m_pInputStream->str.ip_stream); */
+	m_Xhandler.reset();
     m_pParser->setContentHandler(&m_Xhandler);
      if (m_bFirstParsed)
     {
@@ -96,12 +95,6 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
             }
             if (elem)
             {
-                if ((START_PREFIX == elem->m_type) ||
-                (END_PREFIX == elem->m_type))
-                {
-                    m_Xhandler.freeElement();
-                    continue;
-                }
                 if (!isCharData && (CHARACTER_ELEMENT == elem->m_type))
                 { /* ignorable white space */
                     m_Xhandler.freeElement();
@@ -132,6 +125,11 @@ const AnyElement* XMLParserXerces::anyNext()
     bool bCanParseMore = false;
     try
     {
+		/* 
+		 * Say the SAX event handler to record prefix mappings too 
+		 * By default the event handler do not record them.
+		 */
+		m_Xhandler.setGetPrefixMappings(true);
         if(!m_bFirstParsed)
         {
             m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
@@ -149,6 +147,7 @@ const AnyElement* XMLParserXerces::anyNext()
             }
             if (elem)
             {
+				m_Xhandler.setGetPrefixMappings(false);
                 return elem;
             }
             else if (AXIS_FAIL == m_Xhandler.getStatus()) return NULL;
