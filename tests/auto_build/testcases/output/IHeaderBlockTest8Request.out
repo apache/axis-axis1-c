@@ -1,0 +1,68 @@
+POST /Calculator/services/Calculator HTTP/1.1
+Host: localhost:13620
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "Calculator#add"
+Content-Length: 560
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Header><ns2:TestHeader xmlns:ns2="http://ws.apache.org/" SOAP-ENV:actor="http://schemas.xmlsoap.org/soap/actor/next"></ns2:TestHeader></SOAP-ENV:Header>
+<SOAP-ENV:Body>
+<ns1:add xmlns:ns1="http://localhost/axis/Calculator">
+<ns1:arg_0_0>2</ns1:arg_0_0>
+<ns1:arg_1_0>3</ns1:arg_1_0>
+</ns1:add>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /Calculator/services/Calculator HTTP/1.1
+Host: localhost:13620
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "Calculator#add"
+Content-Length: 528
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Header><ns2:TestHeader xmlns:ns2="http://ws.apache.org/" SOAP-ENV:mustUnderstand="1"></ns2:TestHeader></SOAP-ENV:Header>
+<SOAP-ENV:Body>
+<ns1:add xmlns:ns1="http://localhost/axis/Calculator">
+<ns1:arg_0_0>2</ns1:arg_0_0>
+<ns1:arg_1_0>3</ns1:arg_1_0>
+</ns1:add>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /Calculator/services/Calculator HTTP/1.1
+Host: localhost:13620
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "Calculator#add"
+Content-Length: 528
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Header><ns2:TestHeader xmlns:ns2="http://ws.apache.org/" SOAP-ENV:mustUnderstand="0"></ns2:TestHeader></SOAP-ENV:Header>
+<SOAP-ENV:Body>
+<ns1:add xmlns:ns1="http://localhost/axis/Calculator">
+<ns1:arg_0_0>2</ns1:arg_0_0>
+<ns1:arg_1_0>3</ns1:arg_1_0>
+</ns1:add>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /Calculator/services/Calculator HTTP/1.1
+Host: localhost:13620
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: "Calculator#add"
+Content-Length: 500
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Header><ns2:TestHeader xmlns:ns2="http://ws.apache.org/"></ns2:TestHeader></SOAP-ENV:Header>
+<SOAP-ENV:Body>
+<ns1:add xmlns:ns1="http://localhost/axis/Calculator">
+<ns1:arg_0_0>2</ns1:arg_0_0>
+<ns1:arg_1_0>3</ns1:arg_1_0>
+</ns1:add>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+

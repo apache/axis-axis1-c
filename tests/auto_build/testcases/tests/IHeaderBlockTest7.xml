@@ -1,0 +1,17 @@
+<test>
+    <name>IHeaderBlockTest7</name>
+    <description>IHeaderBlockTest7</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>IHeaderBlockTest7Client.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            IHeaderBlockTest7.expected
+        </output>
+	<request> 
+	IHeaderBlockTest7Request.out 
+	</request> 
+
+    </expected>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>
