@@ -165,6 +165,34 @@ const string& Param::GetString()
 	return m_sValue;
 }
 
+const string& Param::GetHexString()
+{
+	if (m_Type == XSD_HEXBINARY){}
+	else if (m_Type == XSD_UNKNOWN) //see GetInt() to see why we do this
+	{
+		m_Type = XSD_HEXBINARY;
+	}
+	else 
+	{
+		//exception
+	}
+	return m_sValue;
+}
+
+const string& Param::GetBase64String()
+{
+	if (m_Type == XSD_BASE64BINARY){}
+	else if (m_Type == XSD_UNKNOWN) //see GetInt() to see why we do this
+	{
+		m_Type = XSD_BASE64BINARY;
+	}
+	else 
+	{
+		//exception
+	}
+	return m_sValue;
+}
+
 int Param::GetInt()
 {
 	if (m_Type == XSD_INT){}
@@ -199,25 +227,6 @@ float Param::GetFloat()
 	return m_Value.f;
 }
 
-//This function may be called only for basic types
-const string& Param::ToString()
-{
-	if (m_Type == XSD_STRING) return m_sValue; 
-	switch (m_Type)
-	{
-	case XSD_INT:
-		sprintf(m_Buf,"%d", m_Value.n);
-		break;
-	case XSD_FLOAT:
-		sprintf(m_Buf,"%f", m_Value.f);
-		break;
-	//Continue this for all basic types
-	default:; //this is an unexpected situation
-	}
-	m_sValue = m_Buf;
-	return m_sValue;
-}
-
 XSDTYPE Param::GetType() const
 {
 	return m_Type;
@@ -234,6 +243,12 @@ int Param::serialize(string& sSerialized)
 		break;
 	case XSD_STRING:
 		m_sSZ = BasicTypeSerializer::serialize(m_sName, m_sValue);
+		break;
+	case XSD_HEXBINARY:
+		m_sSZ = BasicTypeSerializer::serialize(m_sName, m_sValue, XSD_HEXBINARY);
+		break;
+	case XSD_BASE64BINARY:
+		m_sSZ = BasicTypeSerializer::serialize(m_sName, m_sValue, XSD_BASE64BINARY);
 		break;
 	case XSD_ARRAY:
 		//m_sSZ = "<abc:ArrayOfPhoneNumbers xmlns:abc="http://example.org/2001/06/numbers"
@@ -307,6 +322,8 @@ int Param::SetValue(string &sValue)
 		m_Value.f = atof(sValue.c_str());
 		break;
 	case XSD_STRING:
+	case XSD_HEXBINARY:
+	case XSD_BASE64BINARY:
 		m_sValue = sValue;
 		break;
 	//Continue this for all basic types
