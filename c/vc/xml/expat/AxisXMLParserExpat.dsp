@@ -100,6 +100,10 @@ SOURCE=..\..\..\src\xml\Event.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\xml\expat\ParserLoader.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\xml\QName.cpp
 # End Source File
 # Begin Source File
@@ -108,11 +112,11 @@ SOURCE=..\..\..\src\xml\SimpleAttribute.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\xml\expat\SoapParserExpat.cpp
+SOURCE=..\..\..\src\xml\StartElement.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\xml\StartElement.cpp
+SOURCE=..\..\..\src\xml\expat\XMLParserExpat.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -120,7 +124,7 @@ SOURCE=..\..\..\src\xml\StartElement.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\..\src\xml\expat\SoapParserExpat.h
+SOURCE=..\..\..\src\xml\expat\XMLParserExpat.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
