@@ -79,6 +79,8 @@ class IDeployerUtils
 {
 public:
 	virtual int UpdateWSDD(const AxisChar* sWSDDNew, string sServiceName, string sDllPath, Axis_ArrayTag inArray) =0;
+	virtual int unDeploy(const AxisChar* sWSDDNew, string sServiceName) = 0;
+	virtual int deploy(const AxisChar *sWSDDNew, string sServiceName, string sDllPath, Axis_ArrayTag inArray) = 0;
 	virtual ~IDeployerUtils() {};
 };
 
