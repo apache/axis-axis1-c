@@ -160,7 +160,7 @@
 # Channel_HTTP:          The HTTP transport channel library
 # Channel_HTTP_SSL:      The HTTP transport secure channel library
 #
-ClientLogPath:${test.directory}/ClientLog
+ClientLogPath:${test.directory}/ClientLog.taw
 Transport_http:${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
 XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}
 Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
