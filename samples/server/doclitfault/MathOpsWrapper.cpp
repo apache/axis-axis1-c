@@ -87,8 +87,7 @@ int MathOpsWrapper::div(void* pMsg) throw(AxisDivByZeroException)
 
             if(pObjFault)
                 pIWSSZ->addFaultDetail(pObjFault, (void*)Axis_Serialize_DivByZeroFault,
-                    (void*)Axis_Delete_DivByZeroFault, "DivByZeroException",
-                    Axis_URI_DivByZeroFault);
+                    (void*)Axis_Delete_DivByZeroFault, "DivByZeroException", "");
 
             throw;
         }
