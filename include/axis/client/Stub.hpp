@@ -277,6 +277,17 @@ class STORAGE_CLASS_INFO Stub
     */
     void AXISCALL setTransportProperty(const char *pcKey, const char *pcValue);
 
+  /**
+    * Get a transport property.
+	* 
+	* Returns the value of a transport property based on a key.
+	*
+	* @param key the property's name to search for
+	* @param response set to true searches the response message for the property
+	*                 set to false searches the send message for the property
+	* @return the value of the property or NULL if it was not found.
+	*/
+	const char* AXISCALL getTransportProperty(const char *key, bool response=true);
 
   /**
     * Iterator initiatior for transport property keys

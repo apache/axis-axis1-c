@@ -54,7 +54,7 @@ class HTTPTransport:public SOAPTransport
     int						setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE, const char *) throw (HTTPTransportException);
     const char *			getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE) throw (HTTPTransportException);
     int						setTransportProperty( const char *, const char *) throw (HTTPTransportException);
-    const char *			getTransportProperty( const char * pcKey) throw (HTTPTransportException);
+    const char *			getTransportProperty( const char * pcKey, bool response=true) throw (HTTPTransportException);
     void					setSessionId( const char * pcSessionId);
     const char *			getSessionId();
     const char *			getServiceName ();

@@ -256,10 +256,12 @@ public:
      * @brief Gets any transport property in the arrived message
      *
      * @param pcKey The key of the transport property to get.
+	 * @param response gets a property from the response message when true and
+	 *                 from the send message when false
      * @return Value of the transport property if available. Returns null
      *         if unavailable.
      */
-    virtual const char* getTransportProperty(const char* pcKey)=0;
+    virtual const char* getTransportProperty(const char* pcKey, bool response=true)=0;
     /**
      * Sets a SOAP attachment to be sent with outgoing message. This
      * attachment is usually the base64 or hex encoded character buffer

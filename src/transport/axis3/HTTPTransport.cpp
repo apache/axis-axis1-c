@@ -1420,15 +1420,18 @@ void HTTPTransport::setSocket( unsigned int uiNewSocket)
     m_pActiveChannel->setSocket( uiNewSocket);
 }
 
-const char * HTTPTransport::getTransportProperty( const char * pcKey) throw (HTTPTransportException)
+const char * HTTPTransport::getTransportProperty( const char * pcKey, bool response) throw (HTTPTransportException)
 {
     std::string strKeyToFind = std::string( pcKey);
+	std::vector < std::pair < std::string, std::string > > *hdrs=NULL;
+	if (response) hdrs = &m_vResponseHTTPHeaders;
+	else hdrs = &m_vHTTPHeaders;
 
-    for( unsigned int i = 0; i < m_vResponseHTTPHeaders.size(); i++)
+    for( unsigned int i = 0; i < hdrs->size(); i++)
 	{
-		if( m_vResponseHTTPHeaders[i].first == strKeyToFind)
+		if( (*hdrs)[i].first == strKeyToFind)
 		{
-			return ((string) m_vResponseHTTPHeaders[i].second).c_str();
+			return (*hdrs)[i].second.c_str();
 		}
     }
 

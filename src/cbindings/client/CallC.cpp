@@ -47,6 +47,12 @@ AXISC_STORAGE_CLASS_INFO int axiscSetTransportPropertyCall(AXISCHANDLE call, AXI
 	return c->setTransportProperty((AXIS_TRANSPORT_INFORMATION_TYPE)type, value);
 }
 
+AXISC_STORAGE_CLASS_INFO const char * axiscGetTransportPropertyCall(AXISCHANDLE call, const char *key, 
+	AxiscBool response) {
+	Call *c = (Call*)call;
+	return c->getTransportProperty(key, (bool) response);
+}
+
 AXISC_STORAGE_CLASS_INFO int axiscSetHandlerPropertyCall(AXISCHANDLE call, AxiscChar * name, 
 	void * value, int len) {
 	Call *c = (Call*)call;

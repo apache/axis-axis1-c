@@ -233,6 +233,7 @@ public:
     void AXISCALL setSOAPVersion(SOAP_VERSION version);
     int AXISCALL setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type,
         const char* value);
+	const char* AXISCALL getTransportProperty(const char *key, bool response=true);
 	int AXISCALL setHandlerProperty(AxisChar* name, void* value, int len);
 	/**
 	 * set the protocol that the underlying transport will use. 

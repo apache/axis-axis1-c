@@ -76,6 +76,10 @@ void Stub::setTransportProperty(const char *pcKey, const char *pcValue)
         m_pTransport->setTransportProperty(pcKey, pcValue);
 }
 
+const char* Stub::getTransportProperty(const char *key, bool response) 
+{
+	return m_pCall->getTransportProperty(key,response);
+}
 
 const char* Stub::getFirstTransportPropertyKey()
 {

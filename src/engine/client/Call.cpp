@@ -361,6 +361,12 @@ int Call::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char
     return iSuccess;
 }
 
+const char* Call::getTransportProperty(const char *key, bool response) 
+{
+	if (m_pTransport) return m_pTransport->getTransportProperty(key,response);
+	else return NULL;
+}
+
 int Call::setHandlerProperty(AxisChar* name, void* value, int len)
 {
 	// Unfortunately we have to cache the handler properties here

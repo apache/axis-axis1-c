@@ -409,10 +409,13 @@ public class ClientStubWriter extends CPPClassWriter
         {
             writer.write(";\n");
         }
+        writer.write("\tif (NULL==m_pCall->getTransportProperty(\"SOAPAction\",false))\n");
+        writer.write("\t{\n");
         writer.write(
             "\t\tm_pCall->setTransportProperty(SOAPACTION_HEADER , \""
                 + minfo.getSoapAction()
                 + "\");\n");
+        writer.write("\t}\n");
         writer.write("\t\tm_pCall->setSOAPVersion(SOAP_VER_1_1);\n");
         //TODO check which version is it really.
         writer.write(
