@@ -102,6 +102,18 @@ private:
     list<Attribute*> m_namespaceDecls;
 
 public:
+
+    /** 
+      * Creates a Attribute and adds it to this Header Block as a namespace. 
+      * 
+      * @param prefix The prefix of the attribute. 
+      * @param uri The namespace uri of the attribute. 
+      * 
+      * @return A pointer to the created Attribute will be returned. 
+      */
+    IAttribute* createNamespaceDecl(const AxisChar *prefix, 
+            const AxisChar *uri); 
+
     const BasicNode* getFirstChild();
 
     /**
@@ -342,7 +354,7 @@ public:
       * @return AXIS_SUCCESS to indicate successfull operation. AXIS_FAIL to
       *  to indicate unsuccessfull operation.
       */
-    int addNamespaceDecl(Attribute *pAttribute);
+    int addNamespaceDecl(IAttribute *pAttribute);
 
     /**
       * The Constructor.

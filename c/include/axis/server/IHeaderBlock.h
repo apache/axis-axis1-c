@@ -19,6 +19,7 @@
 
 #include "BasicNode.h"
 #include "SoapEnvVersions.h"
+#include <axis/IAttribute.h>
 
 #ifdef __cplusplus
 class Attribute;
@@ -68,6 +69,26 @@ typedef struct {
 class IHeaderBlock
 {
 public:
+    /** 
+      * Sets the namespace declaration of the Header Block. 
+      * 
+      * @param pAttribute The Attribute pointer which points to a valid 
+      * namespace declartion Attribute. 
+      * @return AXIS_SUCCESS to indicate successfull operation. 
+      */ 
+    virtual int addNamespaceDecl(IAttribute *pAttribute)=0;
+
+    /** 
+      * Creates a Attribute and adds it to this Header Block as a namespace. 
+      * 
+      * @param prefix The prefix of the attribute. 
+      * @param uri The namespace uri of the attribute. 
+      * 
+      * @return A pointer to the created Attribute will be returned. 
+      */ 
+    virtual IAttribute* createNamespaceDecl(const AxisChar *prefix, 
+            const AxisChar *uri)=0; 
+
     virtual const BasicNode* getFirstChild() =0;
     /**
      * Returns the number of child elements of this HeaderBlock.

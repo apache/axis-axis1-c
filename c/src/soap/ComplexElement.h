@@ -50,6 +50,7 @@
 
 #include <list>
 #include <axis/server/BasicNode.h>
+#include <axis/server/Attribute.h>
 
 using namespace std;
 
@@ -65,6 +66,31 @@ class ComplexElement : public BasicNode
 {
 public:
     ComplexElement(AxisChar* pachLocalName, AxisChar* pachPrefix, AxisChar* pachUri);
+
+    /** 
+      * Creates an Attribute and adds it to this Complex Element. 
+      * 
+      * @param localname The local name of the attribute. 
+      * @param prefix The prefix of the attribute. 
+      * @param uri The namespace uri of the attribute. 
+      * @param value The value of the attribute. 
+      * 
+      * @return A pointer to the created Attribute will be returned. 
+      */ 
+    IAttribute* createAttribute(const AxisChar* localname,
+        const AxisChar* prefix, const AxisChar* uri, const AxisChar* value);
+
+    /** 
+      * Creates an Attribute and adds it to this Complex Element. 
+      * 
+      * @param localname The local name of the attribute. 
+      * @param prefix The prefix of the attribute. 
+      * @param value The value of the attribute. 
+      * 
+      * @return A pointer to the created Attribute will be returned. 
+      */ 
+    IAttribute* createAttribute(const AxisChar* localname,
+            const AxisChar* prefix, const AxisChar* value);
 
     /**
       * Returns the number of child elements of this ComplexElement.
@@ -185,8 +211,15 @@ private:
     int iNoOfChildren;
     int serializeChildren(SoapSerializer& pSZ);
     int serializeChildren(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack);
+    int serializeNamespaceDecl(SoapSerializer &pSZ); 
+    int attrSerialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack);
     bool isSerializable();
     list<BasicNode*> m_children;
+    list<Attribute*> m_namespaceDecls;
+     /**
+      * Used to store the Attributes
+      */
+    list<Attribute*> m_attributes;
     AxisChar* m_pachPrefix;
     AxisChar* m_pachLocalName;
     AxisChar* m_pachURI;
