@@ -67,6 +67,12 @@ protected:
      * @return WhiteSpace object set to collapse whitespace
      */
     WhiteSpace* getWhiteSpace();
+
+    /**
+     * Creates an Enumeration object to collapse whitespace
+     * @return Enumeration object set to collapse whitespace
+     */
+    Enumeration* getEnumeration();
 };
 
 AXIS_CPP_NAMESPACE_END

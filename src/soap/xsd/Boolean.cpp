@@ -60,4 +60,20 @@ WhiteSpace* Boolean::getWhiteSpace()
     return new WhiteSpace(COLLAPSE);
 }
 
+Enumeration* Boolean::getEnumeration()
+{
+    static AxisChar* BooleanEnumerationValue1 = "true";
+    static AxisChar* BooleanEnumerationValue2 = "false";
+    static AxisChar* BooleanEnumerationValue3 = "1";
+    static AxisChar* BooleanEnumerationValue4 = "0";
+    AxisChar* enumerationValues[] = 
+        {
+         BooleanEnumerationValue1,
+         BooleanEnumerationValue2,
+         BooleanEnumerationValue3,
+         BooleanEnumerationValue4
+        };
+    return new Enumeration(enumerationValues, sizeof(enumerationValues)/sizeof(AxisChar*));
+}
+
 AXIS_CPP_NAMESPACE_END

@@ -242,6 +242,10 @@ SOURCE=..\src\soap\xsd\ENTITY.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\constraints\Enumeration.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\xml\Event.cpp
 # End Source File
 # Begin Source File

@@ -27,6 +27,13 @@ AxisChar* IAnySimpleType::serialize(const AxisChar* value) throw (AxisSoapExcept
     }
     delete pattern;
 
+    Enumeration* enumeration = getEnumeration();
+    if (enumeration->isSet())
+    {
+        enumeration->validateEnumeration(serializedValue);
+    }
+    delete enumeration;
+
     if (m_Buf)
     {
         delete [] m_Buf;
@@ -109,6 +116,11 @@ WhiteSpace* IAnySimpleType::getWhiteSpace()
 Pattern* IAnySimpleType::getPattern()
 {
     return new Pattern();
+}
+
+Enumeration* IAnySimpleType::getEnumeration()
+{
+    return new Enumeration();
 }
 
 AXIS_CPP_NAMESPACE_END

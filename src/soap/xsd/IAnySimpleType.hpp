@@ -26,6 +26,7 @@
 #include "../AxisSoapException.h"
 #include "constraints/WhiteSpace.hpp"
 #include "constraints/Pattern.hpp"
+#include "constraints/Enumeration.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -104,6 +105,13 @@ protected:
      * @return WhiteSpace object
      */
     virtual WhiteSpace* getWhiteSpace();
+
+    /**
+     * Creates an Enumeration object. Enumeration is not defined for IAnySimpleType
+     * so an unset Enumeration object is created.
+     * @return Enumeration object
+     */
+    virtual Enumeration* getEnumeration();
    
     /**
      * Create a Pattern object with no rules
