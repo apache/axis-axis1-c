@@ -18,13 +18,8 @@
 #   @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
 #
 
-echo "----------------------------------"
-echo "build server, client and samples"
-echo "----------------------------------"
 echo "run configure"
 ./configure --prefix=/usr/local/axiscpp_deploy \
     --with-apache2=/usr/local/apache2 \
     --with-xercesc=/usr/local/xerces-c
-echo "make"
-make 2> build_errors
 
