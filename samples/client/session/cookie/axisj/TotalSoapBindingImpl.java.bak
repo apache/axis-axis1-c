@@ -1,0 +1,17 @@
+/**
+ * TotalSoapBindingImpl.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis 1.2beta Mar 31, 2004 (12:47:03 EST) WSDL2Java emitter.
+ */
+
+package axisj;
+
+public class TotalSoapBindingImpl implements axisj.Total{
+    private double iTotal = 0.0;
+    public double inc(double in0) throws java.rmi.RemoteException {
+        iTotal += in0;
+        return iTotal;
+    }
+
+}
