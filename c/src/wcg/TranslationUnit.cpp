@@ -22,8 +22,8 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include <axis/wcg/TranslationUnit.h>
-#include <axis/wcg/File.h>
+#include "TranslationUnit.h"
+#include "File.h"
 #include <iostream>
 #include <string>
 using namespace std;

@@ -26,8 +26,8 @@
 #include <unistd.h>
 #endif
 
-#include <axis/wcg/TranslationUnit.h>
-#include <axis/wcg/File.h>
+#include "TranslationUnit.h"
+#include "File.h"
 #include <string>
 #include <map>
 #include <iostream>

@@ -22,7 +22,7 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include <axis/wcg/Variable.h>
+#include "Variable.h"
 
 string Variable::m_sAuxStr="";
 

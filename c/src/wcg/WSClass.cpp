@@ -25,7 +25,7 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include <axis/wcg/WSClass.h>
+#include "WSClass.h"
 
 WSClass::WSClass()
 {
