@@ -148,7 +148,7 @@
 	      -->
 		<linker id="LinuxLinker" name="g++" libtool="true" if="linux">
 			<linkerarg value="-g" if="debug"/>
-			<libset libs="stdc++"/>
+			<libset libs="dl"/>
 		</linker>
 		
 		<!--
