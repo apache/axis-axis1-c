@@ -65,7 +65,7 @@ const char* Channel::getURL()
 
 bool
 Channel::open () //std::string & p_RemoteNode, unsigned short p_RemoteEnd)
-throw (AxisTransportException)
+throw (AxisTransportException&)
 {
     if (!Init ())
 	throw AxisTransportException(SERVER_TRANSPORT_CHANNEL_INIT_ERROR);
@@ -410,3 +410,8 @@ int Channel::applyTimeout()
     return select(FD_SETSIZE, &set, NULL, NULL, &timeout);
 }
 
+// This is used by SimpleAxisServer
+void Channel::setSocket(unsigned int uiNewSocket)
+{
+    m_Sock = uiNewSocket;
+}

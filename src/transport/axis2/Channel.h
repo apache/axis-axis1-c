@@ -85,7 +85,7 @@ public:
     URL& getURLObject() { return m_URL; };
 
     /* Open a socket to a given remote node/server address with remote port */
-    virtual bool  open() throw (AxisTransportException);
+    virtual bool  open() throw (AxisTransportException&);
 
     /* Close all open sockets and clean up */
     virtual void  close(){closeChannel();}
@@ -108,6 +108,9 @@ public:
     * @param lSeconds Timeout in seconds
     */
     void setTimeout(const long lSeconds);
+    
+    // This is used by SimpleAxisServer
+    void setSocket(unsigned int uiNewSocket);
 
 protected:
     /* OS specific initilization */
