@@ -163,10 +163,12 @@ public class ServiceWriter extends CFileWriter{
 			Iterator types = this.wscontext.getTypemap().getTypes().iterator();
 			HashSet typeSet = new HashSet();
 			writer.write("#include <axis/common/AxisUserAPI.h>\n");
+			String typeName = null;
 			while(types.hasNext()){
 				atype = (Type)types.next();
-				typeSet.add(atype.getLanguageSpecificName());
-			}		
+				typeName = WrapperUtils.getLanguageTypeName4Type(atype);
+				if (null != typeName) typeSet.add(typeName);
+			}
 			Iterator itr = typeSet.iterator();
 			while(itr.hasNext())
 			{

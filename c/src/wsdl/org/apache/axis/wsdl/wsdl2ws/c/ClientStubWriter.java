@@ -160,68 +160,40 @@ public class ClientStubWriter extends CFileWriter{
 		Type retType = null;
 		boolean returntypeissimple = false;
 		boolean returntypeisarray = false;
-		String outparamType = null;
-		if (returntype != null)
+		boolean aretherearrayparams = false;
+		String outparamTypeName = null;
+		if (returntype != null){
+			outparamTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype, wscontext);
 			retType = wscontext.getTypemap().getType(returntype.getSchemaName());
-		if (retType != null){
-			outparamType = retType.getLanguageSpecificName();
-			returntypeisarray = retType.isArray();
+			if (retType != null){
+				returntypeisarray = retType.isArray();
+				if (CUtils.isSimpleType(retType.getLanguageSpecificName())){
+					returntypeissimple = true;
+				}
+			}
 		}
-		else if (returntype != null){
-			outparamType = returntype.getLangName();
-		}
-		if (returntype != null)
-			returntypeissimple = CUtils.isSimpleType(outparamType);
 		writer.write("\n/*\n");
 		writer.write(" * This method wrap the service method"+ methodName +"\n");
 		writer.write(" */\n");
 		//method signature
-		String paraTypeName;
+		String paramTypeName;
 		boolean typeisarray = false;
 		boolean typeissimple = false;
 		Type type;
 		if (returntype == null){
 			writer.write("void");
 		}
-		else if (returntypeissimple || returntypeisarray){
-			writer.write(outparamType);	
-		}else{
-			writer.write(outparamType+"*");
+		else {
+			writer.write(outparamTypeName);	
 		}
 		writer.write(" "+ methodName + "(");
 		ArrayList paramsB = (ArrayList)params;
-		if (0 < paramsB.size()){
-			type = wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(0)).getSchemaName());
-			if (type != null){
-				paraTypeName = type.getLanguageSpecificName();
-				typeisarray = type.isArray();
-			}
-			else {
-				paraTypeName = ((ParameterInfo)paramsB.get(0)).getLangName();
-				typeisarray = false;
-			}
-			typeissimple = CUtils.isSimpleType(paraTypeName);
-			if(typeisarray || typeissimple){
-				writer.write(paraTypeName+" Value0");
-			}else{
-				writer.write(paraTypeName+"* Value0");
-			}
-			for (int i = 1; i < paramsB.size(); i++) {
-				type = wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName());
-				if (type != null){
-					paraTypeName = type.getLanguageSpecificName();
-					typeisarray = type.isArray();
-				}
-				else {
-					paraTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();
-					typeisarray = false;
-				}
-				typeissimple = CUtils.isSimpleType(paraTypeName);
-				if(typeisarray || typeissimple){
-					writer.write(", "+paraTypeName+" Value"+i);
-				}else{
-					writer.write(", "+paraTypeName+"* Value"+i);
-				}
+		for (int i = 0; i < paramsB.size(); i++) {
+			if (i>0) writer.write(",");
+			paramTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays((ParameterInfo)paramsB.get(i), wscontext);
+			writer.write(paramTypeName+" Value"+i);
+			if((type = wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName())) != null && type.isArray()){
+				aretherearrayparams = true;
 			}
 		}
 		writer.write(")\n{\n");
@@ -231,15 +203,18 @@ public class ClientStubWriter extends CFileWriter{
 			writer.write("\t");
 			if(returntypeisarray){
 				//for arrays
-				writer.write(outparamType+" RetArray = {NULL, 0};\n");
+				writer.write(outparamTypeName+" RetArray = {NULL, 0};\n");
 			}else if(!returntypeissimple){
-				writer.write(outparamType+"* pReturn = NULL;\n");
+				writer.write(outparamTypeName+" pReturn = NULL;\n");
 				//for complex types
 			}else{
 				//for simple types
-				writer.write(outparamType+" Ret;\n");
+				writer.write(outparamTypeName+" Ret;\n");
 				//TODO initialize return parameter appropriately.
 			}
+		}
+		if (aretherearrayparams){
+			writer.write("\tAxis_Array array;\n");
 		}
 		String globalobjectname = "g_p"+classname;
 		writer.write("\tif (!"+globalobjectname+") "+globalobjectname+" = GetCallObject(APTHTTP, \""+wscontext.getWrapInfo().getTargetEndpointURI()+"\");\n");
@@ -262,14 +237,14 @@ public class ClientStubWriter extends CFileWriter{
 		for (int i = 0; i < paramsB.size(); i++) {
 			type = wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName());
 			if (type != null){
-				paraTypeName = type.getLanguageSpecificName();
+				paramTypeName = type.getLanguageSpecificName();
 				typeisarray = type.isArray();
 			}
 			else {
-				paraTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();
+				paramTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();
 				typeisarray = false;
 			}
-			typeissimple = CUtils.isSimpleType(paraTypeName);
+			typeissimple = CUtils.isSimpleType(paramTypeName);
 			if(typeisarray){
 				//arrays
 				QName qname = WrapperUtils.getArrayType(type).getName();
@@ -282,16 +257,16 @@ public class ClientStubWriter extends CFileWriter{
 				else{
 					containedType = qname.getLocalPart();
 					writer.write("\tpCall->AddCmplxArrayParameter("+globalobjectname+", ");
-					writer.write("(Axis_Array*)(&Value"+i+"), (void*)Axis_Serialize_"+containedType+", (void*)Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+", \""+((ParameterInfo)paramsB.get(i)).getParamName()+"\"");
+					writer.write("(Axis_Array*)(&Value"+i+"), (void*)Axis_Serialize_"+containedType+", (void*)Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType);
 				}
 			}else if(typeissimple){
 				//for simple types	
 				writer.write("\tpCall->AddParameter("+globalobjectname+", ");			
-				writer.write("(void*)&Value"+i+", \"" + ((ParameterInfo)paramsB.get(i)).getParamName()+"\", "+CUtils.getXSDTypeForBasicType(paraTypeName));
+				writer.write("(void*)&Value"+i+", \"" + ((ParameterInfo)paramsB.get(i)).getParamName()+"\", "+CUtils.getXSDTypeForBasicType(paramTypeName));
 			}else{
 				//for complex types 
 				writer.write("\tpCall->AddCmplxParameter("+globalobjectname+", ");			
-				writer.write("Value"+i+", (void*)Axis_Serialize_"+paraTypeName+", (void*)Axis_Delete_"+paraTypeName+", \"" + ((ParameterInfo)paramsB.get(i)).getParamName()+"\"");
+				writer.write("Value"+i+", (void*)Axis_Serialize_"+paramTypeName+", (void*)Axis_Delete_"+paramTypeName+", \"" + ((ParameterInfo)paramsB.get(i)).getParamName()+"\", 0");
 			}
 			writer.write(");\n");
 		}
@@ -306,27 +281,28 @@ public class ClientStubWriter extends CFileWriter{
 			String containedType = null;
 			if (CUtils.isSimpleType(qname)){
 				containedType = CUtils.getclass4qname(qname);
-				writer.write("\tarray = pCall->GetBasicArray("+globalobjectname+", "+CUtils.getXSDTypeForBasicType(containedType)+", 0, 0);\n");
-				writer.write("\tmemcpy(&RetArray, &array, sizeof(Axis_Array));\n");
+				writer.write("\t\t\tarray = pCall->GetBasicArray("+globalobjectname+", "+CUtils.getXSDTypeForBasicType(containedType)+", 0, 0);\n");
+				writer.write("\t\t\tmemcpy(&RetArray, &array, sizeof(Axis_Array));\n");
 			}
 			else{
 				containedType = qname.getLocalPart();
-				writer.write("\tarray = pCall->GetCmplxArray("+globalobjectname+", (void*) Axis_DeSerialize_"+containedType);
+				writer.write("\t\t\tarray = pCall->GetCmplxArray("+globalobjectname+", (void*) Axis_DeSerialize_"+containedType);
 				writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", 0, 0);\n");
-				writer.write("\tmemcpy(&RetArray, &array, sizeof(Axis_Array));\n");
+				writer.write("\t\t\tmemcpy(&RetArray, &array, sizeof(Axis_Array));\n");
 			}
 			writer.write("\t\t}\n");
 			writer.write("\t}\n\tpCall->UnInitialize("+globalobjectname+");\n");
 			writer.write("\treturn RetArray;\n");
 		}
 		else if(returntypeissimple){
-			writer.write("\t\t\tRet = pCall->"+ CUtils.getParameterGetValueMethodName(CUtils.getXSDTypeForBasicType(outparamType), false)+"("+globalobjectname+", 0, 0);\n");
+			writer.write("\t\t\tRet = pCall->"+ CUtils.getParameterGetValueMethodName(outparamTypeName, false)+"("+globalobjectname+", 0, 0);\n");
 			writer.write("\t\t}\n");
 			writer.write("\t}\n\tpCall->UnInitialize("+globalobjectname+");\n");
 			writer.write("\treturn Ret;\n");
 		}
 		else{
-			writer.write("\t\t\tpReturn = ("+outparamType+"*)pCall->GetCmplxObject("+globalobjectname+", (void*) Axis_DeSerialize_"+outparamType+", (void*) Axis_Create_"+outparamType+", (void*) Axis_Delete_"+outparamType+", 0, 0);\n"); 
+			outparamTypeName = returntype.getLangName();//need to have complex type name without *
+			writer.write("\t\t\tpReturn = ("+outparamTypeName+"*)pCall->GetCmplxObject("+globalobjectname+", (void*) Axis_DeSerialize_"+outparamTypeName+", (void*) Axis_Create_"+outparamTypeName+", (void*) Axis_Delete_"+outparamTypeName+", 0, 0);\n"); 
 			writer.write("\t\t}\n");
 			writer.write("\t}\n\tpCall->UnInitialize("+globalobjectname+");\n");
 			writer.write("\treturn pReturn;\n");						

@@ -139,12 +139,6 @@ typedef struct {
 	IWrapperSoapDeSerializerFunctions* __vfptr;
 } IWrapperSoapDeSerializer;
 
-typedef struct { 
-	void* unused; /* this corresponds to C++ virtual function pointer which is ignored in C */ 
-	void* unused_; /* this corresponds to IWrapperSoapDeSerializerFunctions pointer */
-	IHandlerSoapDeSerializerFunctions* __vfptr;
-} IHandlerSoapDeSerializer;
-
 #else
 /**
     @class IWrapperSoapDeSerializer

@@ -136,7 +136,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 		writer.write("\telse\n");
 		writer.write("\t{\n");
 		writer.write("\t\tsPrefix = pSZX->GetNamespacePrefix(pSZ, Axis_URI_"+classname+");\n");
-		writer.write("\t\tpSZX->SerializeStartElementOfType(pSZ, Axis_TypeName_"+classname+", Axis_URI_"+classname+", sPrefix,);\n");
+		writer.write("\t\tpSZX->SerializeStartElementOfType(pSZ, Axis_TypeName_"+classname+", Axis_URI_"+classname+", sPrefix);\n");
 		writer.write("\t}\n\n");
 		String arrayType = null;
 		for(int i = 0; i< attribs.length;i++){
@@ -169,7 +169,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 				writer.write("\tAxis_Serialize_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+", pSZ, false);\n");
 			}			
 		}
-		writer.write("\n\tpSZX->SerializeEndElementOfType(pSZ, Axis_TypeName_"+classname+", 0);\n");
+		writer.write("\n\tpSZX->SerializeEndElementOfType(pSZ, Axis_TypeName_"+classname+");\n");
 		writer.write("\treturn AXIS_SUCCESS;\n");
 		writer.write("}\n\n");
 	
@@ -236,15 +236,17 @@ public class BeanParamWriter extends ParamCFileWriter{
 	private void writeCreateGlobalMethod()throws IOException{
 		writer.write("void* Axis_Create_"+classname+"("+classname+"* pObj, bool bArray, int nSize)\n{\n");
 		writer.write("\tif (bArray && (nSize > 0))\n\t{\n");
-		writer.write("\t\tpObj = realloc(pObj, sizeof("+classname+")*nSize);\n");
-		writer.write("\t\tmemset(pObj+sizeof("+classname+")*nSize/2, 0, sizeof("+classname+")*nSize/2);\n");
-		writer.write("\t\treturn pObj;\n\t}\n");
-		writer.write("\telse\n\t\treturn malloc(sizeof("+classname+"));\n}\n\n");	
+		writer.write("\t\tpObj = malloc(sizeof("+classname+")*nSize);\n");
+		writer.write("\t\tmemset(pObj, 0, sizeof("+classname+")*nSize);\n");
+		writer.write("\t}\n\telse\n\t{\n");
+		writer.write("\t\tpObj = malloc(sizeof("+classname+"));\n");
+		writer.write("\t\tmemset(pObj, 0, sizeof("+classname+"));\n\t}\n");
+		writer.write("\treturn pObj;\n}\n");
 	}
-	
+
 	private void writeDeleteGlobalMethod()throws IOException{
 		writer.write("/**\n");
-		writer.write(" * This static method delete a "+classname+" type of object\n");
+		writer.write(" * This static method to deallocate a "+classname+" type of object\n");
 		writer.write(" */\n");
 		
 		writer.write("void Axis_Delete_"+classname+"("+classname+"* param, bool bArray, int nSize)\n");
@@ -254,6 +256,15 @@ public class BeanParamWriter extends ParamCFileWriter{
 			if(!attribs[i].isSimpleType()){
 				hasComplexTypeOrArray = true; break;
 			}
+			else if ("xsd__string".equals(attribs[i].getTypeName())){
+				hasComplexTypeOrArray = true; break;
+			}
+			else if ("xsd__base64Binary".equals(attribs[i].getTypeName())){
+				hasComplexTypeOrArray = true; break;
+			}
+			else if ("xsd__hexBinary".equals(attribs[i].getTypeName())){
+				hasComplexTypeOrArray = true; break;
+			}			
 		}
 		if (hasComplexTypeOrArray){
 			writer.write("\tint x;\n");
@@ -269,14 +280,23 @@ public class BeanParamWriter extends ParamCFileWriter{
 			for(int i = 0; i< attribs.length;i++){
 				if(attribs[i].isArray()){
 					if(attribs[i].isSimpleType()){
-						writer.write("\t\t\tfree(pTemp->"+attribs[i].getParamName()+".m_Array);\n");
+						writer.write("\t\t\tif (pTemp->"+attribs[i].getParamName()+".m_Array) free(pTemp->"+attribs[i].getParamName()+".m_Array);\n");
 					}
 					else{
-						writer.write("\t\t\tAxis_Delete_"+attribs[i].getTypeName()+"(pTemp->"+attribs[i].getParamName()+".m_Array, true, pTemp->"+attribs[i].getParamName()+".m_Size);\n");
+						writer.write("\t\t\tif (pTemp->"+attribs[i].getParamName()+".m_Array) Axis_Delete_"+attribs[i].getTypeName()+"(pTemp->"+attribs[i].getParamName()+".m_Array, true, pTemp->"+attribs[i].getParamName()+".m_Size);\n");
 					}
 				}
 				else if(!attribs[i].isSimpleType()){
-					writer.write("\t\t\tAxis_Delete_"+attribs[i].getTypeName()+"(pTemp->"+attribs[i].getParamName()+", false, 0);\n");					
+					writer.write("\t\t\tif (pTemp->"+attribs[i].getParamName()+") Axis_Delete_"+attribs[i].getTypeName()+"(pTemp->"+attribs[i].getParamName()+", false, 0);\n");					
+				}
+				else if ("xsd__string".equals(attribs[i].getTypeName())){
+					writer.write("\t\t\tif(pTemp->"+attribs[i].getParamName()+") free(pTemp->"+attribs[i].getParamName()+");\n");
+				}
+				else if ("xsd__base64Binary".equals(attribs[i].getTypeName())){
+					writer.write("\t\t\tif(pTemp->"+attribs[i].getParamName()+".__ptr) free(pTemp->"+attribs[i].getParamName()+".__ptr);\n");
+				}
+				else if ("xsd__hexBinary".equals(attribs[i].getTypeName())){
+					writer.write("\t\t\tif(pTemp->"+attribs[i].getParamName()+".__ptr) free(pTemp->"+attribs[i].getParamName()+".__ptr);\n");
 				}
 				else if(attribs[i].isOptional()){
 					//TODO
@@ -290,17 +310,26 @@ public class BeanParamWriter extends ParamCFileWriter{
 		writer.write("\telse\n");
 		writer.write("\t{\n");
 		writer.write("\t\t/*delete any pointer members or array members of this struct here*/\n");
-		for(int i = 1; i< attribs.length;i++){
+		for(int i = 0; i< attribs.length;i++){
 			if(attribs[i].isArray()){
 				if(attribs[i].isSimpleType()){
-					writer.write("\t\tfree(param->"+attribs[i].getParamName()+".m_Array);\n");
+					writer.write("\t\tif (param->"+attribs[i].getParamName()+".m_Array) free(param->"+attribs[i].getParamName()+".m_Array);\n");
 				}
 				else{
-					writer.write("\t\tAxis_Delete_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+".m_Array, true, param->"+attribs[i].getParamName()+".m_Size);\n");
+					writer.write("\t\tif (param->"+attribs[i].getParamName()+".m_Array) Axis_Delete_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+".m_Array, true, param->"+attribs[i].getParamName()+".m_Size);\n");
 				}
 			}
 			else if(!attribs[i].isSimpleType()){
-				writer.write("\t\tAxis_Delete_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+", false, 0);\n");
+				writer.write("\t\tif (param->"+attribs[i].getParamName()+") Axis_Delete_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+", false, 0);\n");
+			}
+			else if ("xsd__string".equals(attribs[i].getTypeName())){
+				writer.write("\t\tif(param->"+attribs[i].getParamName()+") free(param->"+attribs[i].getParamName()+");\n");
+			}
+			else if ("xsd__base64Binary".equals(attribs[i].getTypeName())){
+				writer.write("\t\tif(param->"+attribs[i].getParamName()+".__ptr) free(param->"+attribs[i].getParamName()+".__ptr);\n");
+			}
+			else if ("xsd__hexBinary".equals(attribs[i].getTypeName())){
+				writer.write("\t\tif(param->"+attribs[i].getParamName()+".__ptr) free(param->"+attribs[i].getParamName()+".__ptr);\n");
 			}
 			else if(attribs[i].isOptional()){
 				//TODO

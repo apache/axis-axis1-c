@@ -79,6 +79,10 @@ public class ArrayParamWriter extends ParamWriter{
 	public ArrayParamWriter(WebServiceContext wscontext,Type type)throws WrapperFault{
 		super(wscontext,type);
 	}
+	public boolean isSimpleTypeArray()throws WrapperFault{
+		QName qname = WrapperUtils.getArrayType(type).getName(); 
+		return CUtils.isSimpleType(qname);
+	}
 	public void writeSource()throws WrapperFault{
 	   try{
 			this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
@@ -119,7 +123,7 @@ public class ArrayParamWriter extends ParamWriter{
 	
 	protected void writeArrayStruct()throws WrapperFault{
 		try{			
-			writer.write("typedef struct "+classname+"Tag\n{\n");
+			writer.write("typedef struct {\n");
 			if(attribs[0].isSimpleType()){
 				throw new WrapperFault("Error : no need to synthesis arrays for simple types");				
 			}else{

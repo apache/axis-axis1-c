@@ -73,6 +73,8 @@
 
     @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
 */
+#ifdef __cplusplus
+
 class IHandlerSoapDeSerializer : public IWrapperSoapDeSerializer
 {
 public:
@@ -92,5 +94,15 @@ public:
 	virtual xsd__base64Binary AXISCALL GetBodyAsBase64Binary()=0;
 	virtual int AXISCALL SetNewSoapBody(AxisChar* pNewSoapBody)=0;
 };
+
+#else
+
+typedef struct { 
+	void* unused; /* this corresponds to C++ virtual function pointer which is ignored in C */ 
+	void* unused_; /* this corresponds to IWrapperSoapDeSerializerFunctions pointer */
+	IHandlerSoapDeSerializerFunctions* __vfptr;
+} IHandlerSoapDeSerializer;
+
+#endif
 
 #endif // !defined(AFX_IHANDLERSOAPDESERIALIZER_H__EAD744F9_FEB3_4885_9510_D7BAD8C5AD1C__INCLUDED_)
