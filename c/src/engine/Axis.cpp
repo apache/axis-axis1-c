@@ -73,6 +73,7 @@
 #include <stdlib.h>
 #include <malloc.h>
 #include "../common/Packet.h"
+#include "../common/AxisUtils.h"
 #include <string>
 #include <map>
 
@@ -180,14 +181,16 @@ extern "C" int process_request(Ax_soapstream *str)
 						<br>\
 						<table width=\"400\">", str->str.op_stream);
 
+					string sServiceName;
 					for (iter = pSrvMap->begin();iter != pSrvMap->end();iter++)
 					{
 						pService = iter->second;
+						AxisUtils::convert(sServiceName, pService->GetServiceName().c_str());
 						send_response_bytes("<tr><td width=\"200\">", str->str.op_stream);
-						send_response_bytes((char *)pService->GetServiceName().c_str(), str->str.op_stream);
+						send_response_bytes((char *)sServiceName.c_str(), str->str.op_stream);
 						send_response_bytes("</td><td width=\"200\"><a href=\"./", str->str.op_stream);
 						if (bNoSlash) send_response_bytes("axis/", str->str.op_stream); 
-						send_response_bytes((char *)pService->GetServiceName().c_str(), str->str.op_stream);
+						send_response_bytes((char *)sServiceName.c_str(), str->str.op_stream);
 						send_response_bytes("?wsdl", str->str.op_stream);
 						send_response_bytes("\">wsdl</a></td>", str->str.op_stream);
 						send_response_bytes("</tr>", str->str.op_stream);
