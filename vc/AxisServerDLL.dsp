@@ -274,6 +274,10 @@ SOURCE=..\src\soap\xsd\IAnySimpleType.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\constraints\IConstrainingFacet.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\xsd\Int.cpp
 # End Source File
 # Begin Source File
@@ -291,6 +295,10 @@ SOURCE=..\src\soap\xsd\constraints\MaxLength.cpp
 # Begin Source File
 
 SOURCE=..\src\common\MessageData.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\constraints\MinInclusive.cpp
 # End Source File
 # Begin Source File
 

@@ -31,7 +31,7 @@ AXIS_CPP_NAMESPACE_START
  *   @author Adrian Dick (adrian.dick@uk.ibm.com)
  *
  */
-class MinLength : private IConstrainingFacet {
+class MinLength : public IConstrainingFacet {
 
 public:
 
@@ -41,8 +41,6 @@ public:
 
     int getMinLength();
     
-    bool isSet();
-
 private:
     int m_MinLength;
 

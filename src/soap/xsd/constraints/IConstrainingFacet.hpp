@@ -35,12 +35,13 @@ AXIS_CPP_NAMESPACE_START
 class IConstrainingFacet {
 
 public:
+    
     virtual ~IConstrainingFacet () {};
 
     /**
      * To allow checking if a value has been set on this constraining facet.
      */    
-    virtual bool isSet() = 0;
+    bool isSet();
     
 protected:
     bool m_isSet;

@@ -43,10 +43,12 @@ libsoap_la_SOURCES = Attribute.cpp \
         xsd/Byte.cpp \
         xsd/NonNegativeInteger.cpp \
         xsd/UnsignedLong.cpp \
+        xsd/constraints/IConstrainingFacet.cpp \
         xsd/constraints/WhiteSpace.cpp \
         xsd/constraints/Pattern.cpp \
         xsd/constraints/MinLength.cpp \
-        xsd/constraints/MaxLength.cpp
+        xsd/constraints/MaxLength.cpp \
+        xsd/constraints/MinInclusive.cpp
 
 libsoap_la_LIBADD = $(LDFLAGS)
 INCLUDES = -I../../include

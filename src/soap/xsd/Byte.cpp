@@ -42,4 +42,9 @@ char* Byte::deserializeByte(const AxisChar* valueAsChar) throw (AxisSoapExceptio
     return m_Byte;
 }
 
+MinInclusive* Byte::getMinInclusive()
+{
+    return new MinInclusive(static_cast<LONGLONG>(-128));
+}
+
 AXIS_CPP_NAMESPACE_END

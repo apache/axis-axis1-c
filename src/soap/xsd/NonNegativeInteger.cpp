@@ -7,4 +7,9 @@ LONGLONG* NonNegativeInteger::deserializeNonNegativeInteger(const AxisChar* valu
     return (LONGLONG*) deserialize(valueAsChar);
 }
 
+MinInclusive* NonNegativeInteger::getMinInclusive()
+{   
+    return new MinInclusive((LONGLONG) 0);
+}
+
 AXIS_CPP_NAMESPACE_END

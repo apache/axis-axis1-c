@@ -42,4 +42,13 @@ int* Int::deserializeInt(const AxisChar* valueAsChar) throw (AxisSoapException)
     return m_Int;
 }
 
+MinInclusive* Int::getMinInclusive()
+{   
+  AxisChar* end;    
+  LONGLONG* minInclusive = new LONGLONG;
+  *minInclusive = strtol ("-2147483648", &end, 10);
+    
+    return new MinInclusive(*minInclusive);
+}
+
 AXIS_CPP_NAMESPACE_END

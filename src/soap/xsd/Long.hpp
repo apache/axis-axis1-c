@@ -37,6 +37,15 @@ public:
    * @return Deserialized Long value.
    */
     LONGLONG* deserializeLong(const AxisChar* valueAsChar) throw (AxisSoapException);
+    
+protected:
+
+    /**
+     * Creates a MinInclusive object.  For the Long type this is defined as
+     * -9223372036854775808.
+     * @return MinInclusive object
+     */
+    virtual MinInclusive* getMinInclusive();
 };
 
 AXIS_CPP_NAMESPACE_END

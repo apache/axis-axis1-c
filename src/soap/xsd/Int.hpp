@@ -68,7 +68,16 @@ public:
      * @return Deserialized Int value.
      */
     int* deserializeInt(const AxisChar* valueAsChar) throw (AxisSoapException);
-    
+
+protected:
+
+    /**
+     * Creates a MinInclusive object.  For the Int type this is defined as
+     * -2147483648.
+     * @return MinInclusive object
+     */
+    virtual MinInclusive* getMinInclusive();
+
 private:
     int* m_Int;
 };

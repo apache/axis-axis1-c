@@ -35,10 +35,5 @@ AXIS_CPP_NAMESPACE_START
       * provided to the constructor.
       */
     }
-    
-    bool Pattern::isSet()
-    {
-        return m_isSet;
-    }
 
 AXIS_CPP_NAMESPACE_END

@@ -23,6 +23,7 @@
 #define _FLOAT_HPP____OF_AXIS_INCLUDED_
 
 #include "IAnySimpleType.hpp"
+#include "constraints/MinInclusive.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -70,6 +71,13 @@ public:
     float* deserializeFloat(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Creates a MinInclusive object.  For the Float type this is undefined, 
+     * so an unset MinInclusive object is created.
+     * @return MinInclusive object
+     */
+    virtual MinInclusive* getMinInclusive();
 
     /**
      * Creates a WhiteSpace object to collapse whitespace

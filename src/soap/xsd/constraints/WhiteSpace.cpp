@@ -49,12 +49,6 @@ AXIS_CPP_NAMESPACE_START
         return m_Buf;
     }
     
-    bool WhiteSpace::isSet()
-    {
-        return m_isSet;
-    }
-    
-
     /**
      * Replaces all occurances of tab, line feed and carriage return with space
      * 

@@ -42,4 +42,9 @@ short* Short::deserializeShort(const AxisChar* valueAsChar) throw (AxisSoapExcep
     return m_Short;
 }
 
+MinInclusive* Short::getMinInclusive()
+{
+    return new MinInclusive(static_cast<LONGLONG>(-32768));
+}
+
 AXIS_CPP_NAMESPACE_END

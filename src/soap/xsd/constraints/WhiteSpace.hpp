@@ -38,7 +38,7 @@ typedef enum
  *   @author Adrian Dick (adrian.dick@uk.ibm.com)
  *
  */
-class WhiteSpace : private IConstrainingFacet {
+class WhiteSpace : public IConstrainingFacet {
 
 public:
 
@@ -51,8 +51,6 @@ public:
     
     WhiteSpace(whiteSpaceValue whiteSpace);
     
-    bool isSet();
-
     const AxisChar* processWhiteSpace(const AxisChar* valueToProcess);
 
 

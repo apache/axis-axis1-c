@@ -25,8 +25,30 @@ void* Integer::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException
 
 AxisChar* Integer::serialize(const LONGLONG* value) throw (AxisSoapException)
 {
+    MinInclusive* minInclusive = getMinInclusive();
+    if (minInclusive->isSet())
+    {
+        if ( *value < minInclusive->getMinInclusiveAsLONGLONG() )
+        {
+            AxisString exceptionMessage =
+            "Value to be serialized is less than MinInclusive specified for this type.  MinInclusive = ";
+            AxisChar* length = new AxisChar[25];
+            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, minInclusive->getMinInclusiveAsLONGLONG());
+            exceptionMessage += length;
+            exceptionMessage += ", Value = ";
+            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
+            exceptionMessage += length;
+            exceptionMessage += ".";
+            delete [] length;
+            
+            throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                const_cast<AxisChar*>(exceptionMessage.c_str()));
+        }
+    }
+    delete minInclusive;
+    
     AxisChar* serializedValue = new char[80];
-    AxisSprintf (serializedValue, 80, "%lld", *value);
+    AxisSprintf (serializedValue, 80, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
   
     IAnySimpleType::serialize(serializedValue);
     delete [] serializedValue;        

@@ -15,34 +15,49 @@
  */
  
  /*
-  * @file MaxLength.hpp
+  * @file MinInclusive.hpp
   */
   
-#if !defined(_MAXLENGTH_HPP____OF_AXIS_INCLUDED_)
-#define _MAXLENGTH_HPP____OF_AXIS_INCLUDED_
+#if !defined(_MININCLUSIVE_HPP____OF_AXIS_INCLUDED_)
+#define _MININCLUSIVE_HPP____OF_AXIS_INCLUDED_
 
 #include "IConstrainingFacet.hpp"
+#include "../../../platforms/PlatformAutoSense.hpp"
+#include <ctime>
 
 AXIS_CPP_NAMESPACE_START
 
 /**
- *   @class MaxLength
+ *   @class MinInclusive
  *
  *   @author Adrian Dick (adrian.dick@uk.ibm.com)
  *
  */
-class MaxLength : public IConstrainingFacet {
+class MinInclusive : public IConstrainingFacet {
 
 public:
 
-    MaxLength();
+    MinInclusive();
     
-    MaxLength(int maxLength);
+    MinInclusive(LONGLONG minInclusive);
+    
+    MinInclusive(double minInclusive);
+    
+    MinInclusive(struct tm minInclusive);
 
-    int getMaxLength();
+    LONGLONG getMinInclusiveAsLONGLONG();
+    
+    double getMinInclusiveAsDouble();
+    
+    struct tm getMinInclusiveAsStructTM();
     
 private:
-    int m_MaxLength;
+    union
+    {
+      LONGLONG longlongMinInclusive;
+      double doubleMinInclusive;  
+      struct tm structTMMinInclusive;
+    } m_MinInclusive;
 
 };
 

@@ -23,6 +23,7 @@
 #define _DURATION_HPP____OF_AXIS_INCLUDED_
 
 #include "IAnySimpleType.hpp"
+#include "constraints/MinInclusive.hpp"
 #include <string>
 
 AXIS_CPP_NAMESPACE_START
@@ -68,10 +69,19 @@ public:
 protected:
 
     /**
+     * Creates a MinInclusive object.  For the Duration type this is undefined, 
+     * so an unset MinInclusive object is created.
+     * @return MinInclusive object
+     */
+    MinInclusive* getMinInclusive();
+
+    /**
      * Creates a WhiteSpace object to collapse whitespace
      * @return WhiteSpace object set to collapse whitespace
      */
     WhiteSpace* getWhiteSpace();
+
+
 
 private:
 	long* m_Duration;

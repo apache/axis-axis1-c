@@ -32,7 +32,7 @@ AXIS_CPP_NAMESPACE_START
  *   @author Adrian Dick (adrian.dick@uk.ibm.com)
  *
  */
-class Pattern : private IConstrainingFacet {
+class Pattern : public IConstrainingFacet {
 
 public:
 
@@ -44,8 +44,6 @@ public:
 
     void validatePattern(const AxisChar* value) throw (AxisSoapException);
     
-    bool isSet();
-
 private:
     AxisChar* m_Pattern;
 

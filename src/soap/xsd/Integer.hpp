@@ -23,6 +23,7 @@
 #define _INTEGER_HPP____OF_AXIS_INCLUDED_
 
 #include "Decimal.hpp"
+#include "constraints/MinInclusive.hpp"
 #include "../../platforms/PlatformAutoSense.hpp"
 
 AXIS_CPP_NAMESPACE_START

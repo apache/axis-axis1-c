@@ -23,6 +23,7 @@
 #define _DATETIME_HPP____OF_AXIS_INCLUDED_
 
 #include "IAnySimpleType.hpp"
+#include "constraints/MinInclusive.hpp"
 #include <ctime>
 
 AXIS_CPP_NAMESPACE_START
@@ -71,6 +72,13 @@ public:
     struct tm* deserializeDateTime(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Creates a MinInclusive object.  For the DateTime type this is undefined, 
+     * so an unset MinInclusive object is created.
+     * @return MinInclusive object
+     */
+    MinInclusive* getMinInclusive();
 
     /**
      * Creates a WhiteSpace object to collapse whitespace

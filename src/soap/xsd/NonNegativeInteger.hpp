@@ -37,6 +37,16 @@ public:
    * @return Deserialized NonNegativeInteger value.
    */
     LONGLONG* deserializeNonNegativeInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
+
+protected:
+
+    /**
+     * Creates a MinInclusive object.  For the NonNegativeInteger type this is
+     * defined as 0.
+     * @return MinInclusive object
+     */
+    virtual MinInclusive* getMinInclusive();
+
 };
 
 AXIS_CPP_NAMESPACE_END

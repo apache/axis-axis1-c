@@ -68,6 +68,15 @@ public:
      * @return Deserialized Short value.
      */
     short* deserializeShort(const AxisChar* valueAsChar) throw (AxisSoapException);
+
+protected:
+
+    /**
+     * Creates a MinInclusive object.  For the Int type this is defined as
+     * -32768.
+     * @return MinInclusive object
+     */
+    virtual MinInclusive* getMinInclusive();
     
 private:
     short* m_Short;

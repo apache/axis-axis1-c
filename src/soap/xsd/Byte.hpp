@@ -68,6 +68,15 @@ public:
      * @return Deserialized Byte value.
      */
     char* deserializeByte(const AxisChar* valueAsChar) throw (AxisSoapException);
+
+protected:
+
+    /**
+     * Creates a MinInclusive object.  For the Byte type this is defined as
+     * -128.
+     * @return MinInclusive object
+     */
+    virtual MinInclusive* getMinInclusive();
     
 private:
     char* m_Byte;

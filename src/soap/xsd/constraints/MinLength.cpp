@@ -18,9 +18,4 @@ AXIS_CPP_NAMESPACE_START
         return m_MinLength;
     }
     
-    bool MinLength::isSet()
-    {
-        return m_isSet;
-    }
-
 AXIS_CPP_NAMESPACE_END

@@ -23,6 +23,7 @@
 #define _DOUBLE_HPP____OF_AXIS_INCLUDED_
 
 #include "IAnySimpleType.hpp"
+#include "constraints/MinInclusive.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -65,6 +66,13 @@ public:
     double* deserializeDouble(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
+
+    /**
+     * Creates a MinInclusive object.  For the Double type this is undefined, 
+     * so an unset MinInclusive object is created.
+     * @return MinInclusive object
+     */
+    virtual MinInclusive* getMinInclusive();
 
     /**
      * Creates a WhiteSpace object to collapse whitespace

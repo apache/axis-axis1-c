@@ -27,6 +27,24 @@ AXIS_CPP_NAMESPACE_START
 	
     AxisChar* DateTime::serialize(const struct tm* value) throw (AxisSoapException)
     {
+        MinInclusive* minInclusive = getMinInclusive();
+        if (minInclusive->isSet())
+        {
+            if ( 0 > difftime(mktime(&(minInclusive->getMinInclusiveAsStructTM())), mktime(const_cast<struct tm*>(value))) )
+            {
+                AxisString exceptionMessage =
+                "Value to be serialized is less than MinInclusive specified for this type.  MinInclusive = ";
+                exceptionMessage += asctime(&(minInclusive->getMinInclusiveAsStructTM()));
+                exceptionMessage += ", Value = ";
+                exceptionMessage += asctime(value);
+                exceptionMessage += ".";
+                
+                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                    const_cast<AxisChar*>(exceptionMessage.c_str()));
+            }
+        }
+        delete minInclusive;
+     
     	AxisChar* serializedValue = new AxisChar[80];
     	strftime (serializedValue, 80, "%Y-%m-%dT%H:%M:%SZ", value);
         
@@ -164,6 +182,11 @@ AXIS_CPP_NAMESPACE_START
         memcpy (m_DateTime, pTm, sizeof (tm));
         
         return m_DateTime;
+    }
+
+    MinInclusive* DateTime::getMinInclusive()
+    {
+        return new MinInclusive();
     }
 
     WhiteSpace* DateTime::getWhiteSpace()

@@ -7,4 +7,9 @@ LONGLONG* Long::deserializeLong(const AxisChar* valueAsChar) throw (AxisSoapExce
     return (LONGLONG*) deserialize(valueAsChar);
 }
 
+MinInclusive* Long::getMinInclusive()
+{
+    return new MinInclusive(static_cast<LONGLONG>(-9223372036854775808));
+}
+
 AXIS_CPP_NAMESPACE_END
