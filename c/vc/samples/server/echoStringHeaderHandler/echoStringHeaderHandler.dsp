@@ -92,11 +92,11 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\..\..\..\src\server\handlers\custom\echoStringHeaderHandler\EchoStringHeaderHandler.cpp
+SOURCE=..\..\..\..\samples\server\echoStringHeaderHandler\EchoStringHeaderHandler.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\src\server\handlers\custom\echoStringHeaderHandler\ESHHandler.cpp
+SOURCE=..\..\..\..\samples\server\echoStringHeaderHandler\ESHHandler.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -104,7 +104,7 @@ SOURCE=..\..\..\..\src\server\handlers\custom\echoStringHeaderHandler\ESHHandler
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\..\..\src\server\handlers\custom\echoStringHeaderHandler\ESHHandler.h
+SOURCE=..\..\..\..\samples\server\echoStringHeaderHandler\ESHHandler.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
