@@ -253,7 +253,7 @@ class Tracer extends BufferedWriter {
 			+ signature.getMethodName()
 			+ "\", "
 			+ returnIndex
-			+ getTypeParms(signature.getReturnType())
+			+ getTypeParms(signature.getReturnType(), true)
 			+ ");\t"
 			+ SIGNATURE
 			+ "\n";
@@ -318,15 +318,21 @@ class Tracer extends BufferedWriter {
 	// TODO cope with STL strings
 	// TODO cope with pointers to primitives
 	// TODO cope with references
-	private String getTypeParms(Parameter p) {
+	private String getTypeParms(Parameter p) { return getTypeParms(p,false); }
+	private String getTypeParms(Parameter p, boolean isRetType) {
 		// copes with catch (...)
 		if ("...".equals(p.getType()))
 			return " ";
 
 		String parms = ",\n\t\t\t\t\tTRACETYPE_";
 		String name = p.getName();
-		if (null == name)
+		if (isRetType)
 			name = "traceRet";
+		else if (null == name) {
+			// A parameter without a name can't be traced
+			parms += "ANONYMOUS, 0, NULL";
+			return parms;
+		}
 		name = "((void*)&" + name + ")";
 
 		String type = p.getTypeWithoutConst();

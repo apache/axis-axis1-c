@@ -15,6 +15,8 @@
  */
 package org.apache.axis.tools.common;
 
+import java.util.*;
+
 /**
  * Static utility methods. Some of these methods are similar to the methods on
  * java.lang.String except they are aware of C/C++ comments and string literals.
@@ -22,6 +24,17 @@ package org.apache.axis.tools.common;
  * TODO: Many of these methods would perform better using StringBuffer not String
  */
 public final class Utils {
+	// All the C primitive data types
+	public final static Set cPrimitives = 
+		new HashSet( Arrays.asList( new Object[] { 
+			"void", "byte", "char", "unsigned", "signed", "int", "short", "long","double","float" }));
+
+ 	// All the qualifiers that can affect C types
+	public final static Set cTypeQualifiers = 
+		new HashSet(
+			Arrays.asList(
+				new Object[] { "(", ")", "*", ",", "&", "]", "[", "const" }));
+
 	public final static String whitespace = " \t\r\n";
 
 	/** 

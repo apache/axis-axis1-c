@@ -76,6 +76,7 @@ AXIS_CPP_NAMESPACE_START
 #define TRACETYPE_DATA		13
 #define TRACETYPE_STRING	14
 #define TRACETYPE_STLSTRING	15
+#define TRACETYPE_ANONYMOUS	16
 
 class AxisTraceEntrypoints {
 public:

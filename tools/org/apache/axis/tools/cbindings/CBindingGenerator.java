@@ -344,12 +344,6 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 		return className;
 	}
 
-	private final static Set cpptypes = 
-		new HashSet(
-			Arrays.asList(
-				new Object[] { "(", ")", "*", ",", "&", "]", "[", "const", "void", 
-					"byte", "char", "unsigned", "signed", "int", "short", "long","double","float" }));
-
 	/**
 	 * Converts a C++ datatype to a C-style datatype. 
 	 * References are converted to pointers.
@@ -380,7 +374,9 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 				type += "AxiscBool";
 			} else if (-1 != tok.toLowerCase().indexOf("axis")) {
 				type += changeAxisToAxisc(tok);
-			} else if (!cpptypes.contains(tok) && !tok.startsWith("xsd")) {
+			} else if (!Utils.cTypeQualifiers.contains(tok) && 
+				!Utils.cPrimitives.contains(tok) && 
+				!tok.startsWith("xsd")) {
 				type += "AXISC_"+tok;
 			} else {
 				type += tok;

@@ -449,6 +449,10 @@ void AxisTrace::addParameter(string& line, int type, unsigned len, void *value)
 		}
 		break;
 
+	case TRACETYPE_ANONYMOUS:
+		line += "<ANONYMOUS>";				
+		break;
+
 	default:
 		sprintf(prim,"%d",type);
 		line += "<UNKNOWNTYPE";				

@@ -60,6 +60,7 @@ public class Parameter {
 			// Some methods return have void on their signature and others
 			// have nothing. So to make them both the same, if a method 
 			// doesn't return anything make type null.
+			// TODO: This assumption is wrong - methods that return nothing default to returning an int!
 			if (1 == type.size() && "void".equals(type.get(0)))
 				type = new ArrayList();
 
@@ -79,14 +80,25 @@ public class Parameter {
 			if (-1 != arrIdx)
 				nameIdx = arrIdx - 1;
 
-			// Construct the type
-			for (int i = 0; i < nameIdx; i++)
-				type.add(parts.get(i));
-
+			// Even in real method declarations, parameters may not have a name
+			boolean noName = false;
 			name = (String) parts.get(nameIdx);
-			if (-1 != arrIdx)
-				for (int i = arrIdx; i < parts.size(); i++)
+			if (Utils.cPrimitives.contains(name) || Utils.cTypeQualifiers.contains(name))
+				noName = true;
+
+			if (noName) {
+				name = null;
+				for (int i = 0; i < parts.size(); i++) 
 					type.add(parts.get(i));
+			} else {
+				// Construct the type
+				for (int i = 0; i < nameIdx; i++)
+					type.add(parts.get(i));
+	
+				if (-1 != arrIdx)
+					for (int i = arrIdx; i < parts.size(); i++)
+						type.add(parts.get(i));
+			}
 		}
 	}
 
