@@ -76,10 +76,17 @@
 
 using namespace std;
 
+const char XML_ENTITY_REFERENCE_CAHRS[]	= "<>&\"\'";// Entity reference characters
+const char ENCODED_LESSER_STR[]			= "&lt;";	// Encoded string for less than character
+const char ENCODED_GREATOR_STR[]		= "&gt;";	// Encoded string for greator than character
+const char ENCODED_AMPERSAND_STR[]		= "&amp;";	// Encoded string for ampersand character
+const char ENCODED_DBL_QUOTE_STR[]		= "&quot;";	// Encoded string for single quote character
+const char ENCODED_SGL_QUOTE_STR[]		= "&apos;";	// Encoded string for double quote character
+
 class BasicTypeSerializer
 {
 public:
-	static string& GetEntityReferenced(const string& str);
+	static string GetEntityReferenced(const string& str);
 	static string m_AuxStr;
 	static string& serialize(const string& sName, string& sValue, XSDTYPE type=XSD_STRING);
 	static string& serialize(const string& sName, float fValue);
@@ -87,7 +94,18 @@ public:
 	static const char* BasicTypeStr(XSDTYPE type);
 	BasicTypeSerializer();
 	virtual ~BasicTypeSerializer();
+
 private:
+	enum
+	{
+		GREATOR_THAN_CHAR	=		   '>',		// Greator than character
+		LESSER_THAN_CHAR	=		   '<',		// Less than character
+		SINGLE_QUOTE_CHAR	=		  '\'',		// Single quotation character
+		DOUBLE_QUOTE_CHAR	=		  '\"',		// Double quotation character
+		AMPERSAND_CHAR		=		   '&',		// Ampersand character
+	};
+private:
+
 	static void HelpSerialize(const string &sName, const string &sValue);
 	static string m_sSZ;
 	static char m_Buf[64]; //used for numeric to string conversions with sprintf
