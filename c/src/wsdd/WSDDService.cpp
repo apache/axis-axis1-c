@@ -106,13 +106,21 @@ void WSDDService::SetServiceName(const AxisChar* sServiceName)
 
 void WSDDService::SetProvider(const AxisChar* sProvider)
 {
-	if (0 == strcmp(sProvider, "C:RPC"))
+	if (0 == strcmp(sProvider, "CPP:RPC"))
 	{
-		m_Provider = RPC_PROVIDER;
+		m_Provider = CPP_RPC_PROVIDER;
+	}
+	else if (0 == strcmp(sProvider, "C:RPC"))
+	{
+		m_Provider = C_RPC_PROVIDER;
+	}
+	else if (0 == strcmp(sProvider, "CPP:DOCUMENT"))
+	{
+		m_Provider = CPP_DOC_PROVIDER;
 	}
 	else if (0 == strcmp(sProvider, "C:DOCUMENT"))
 	{
-		m_Provider = DOC_PROVIDER;
+		m_Provider = C_DOC_PROVIDER;
 	}
 	else if (0 == strcmp(sProvider, "MS:COM"))
 	{

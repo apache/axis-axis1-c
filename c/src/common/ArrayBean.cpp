@@ -219,7 +219,17 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
 			{
 				pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
 				pSZ.Serialize("<", m_ItemName.c_str(), NULL); /* note : ">" is not serialized to enable the type's serializer to add attributes */
-				m_value.cta->pSZFunct(pItem, &pSZ, true); /* no matter true or false is passed */
+				if (C_DOC_PROVIDER == pSZ.GetCurrentProviderType())
+				{
+					IWrapperSoapSerializer_C cWSS;
+					cWSS._object = &pSZ;
+					cWSS._functions = &IWrapperSoapSerializer::ms_VFtable;
+					m_value.cta->pSZFunct(pItem, &cWSS, true); /* no matter true or false is passed */
+				}
+				else
+				{
+					m_value.cta->pSZFunct(pItem, &pSZ, true); /* no matter true or false is passed */
+				}
 				pSZ.Serialize("</", m_ItemName.c_str(), ">", NULL);
 			}
 		}
@@ -232,7 +242,17 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
 			for (int x=0; x<m_nSize; x++)
 			{
 				pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
-				m_value.cta->pSZFunct(pItem, &pSZ, true);
+				if (C_RPC_PROVIDER == pSZ.GetCurrentProviderType())
+				{
+					IWrapperSoapSerializer_C cWSS;
+					cWSS._object = &pSZ;
+					cWSS._functions = &IWrapperSoapSerializer::ms_VFtable;
+					m_value.cta->pSZFunct(pItem, &cWSS, true); 
+				}
+				else
+				{
+					m_value.cta->pSZFunct(pItem, &pSZ, true);
+				}
 			}
 		}
 	}

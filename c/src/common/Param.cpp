@@ -174,12 +174,32 @@ int Param::serialize(SoapSerializer& pSZ)
 	case USER_TYPE:
 		if (RPC_ENCODED == pSZ.GetStyle())
 		{
-			m_Value.pCplxObj->pSZFunct(m_Value.pCplxObj->pObject, &pSZ, false);
+			if (C_RPC_PROVIDER == pSZ.GetCurrentProviderType())
+			{
+				IWrapperSoapSerializer_C cWSS;
+				cWSS._object = &pSZ;
+				cWSS._functions = &IWrapperSoapSerializer::ms_VFtable;
+				m_Value.pCplxObj->pSZFunct(m_Value.pCplxObj->pObject, &cWSS, false);
+			}
+			else
+			{
+				m_Value.pCplxObj->pSZFunct(m_Value.pCplxObj->pObject, &pSZ, false);
+			}
 		}
 		else
 		{
 			pSZ.Serialize("<", m_sName.c_str(), NULL);/* note : ">" is not serialized to enable the type's serializer to add attributes */
-			m_Value.pCplxObj->pSZFunct(m_Value.pCplxObj->pObject, &pSZ, false);			
+			if (C_DOC_PROVIDER == pSZ.GetCurrentProviderType())
+			{
+				IWrapperSoapSerializer_C cWSS;
+				cWSS._object = &pSZ;
+				cWSS._functions = &IWrapperSoapSerializer::ms_VFtable;
+				m_Value.pCplxObj->pSZFunct(m_Value.pCplxObj->pObject, &cWSS, false);
+			}
+			else
+			{
+				m_Value.pCplxObj->pSZFunct(m_Value.pCplxObj->pObject, &pSZ, false);			
+			}
 			pSZ.Serialize("</", m_sName.c_str(), ">", NULL);
 		}
 		break;

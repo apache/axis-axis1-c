@@ -64,15 +64,15 @@
 /**
     @class WrapperClassHandler
     @brief
-
-
-
     @author Susantha Kumara (skumara@virtusa.com)
 
 */
-class WrapperClassHandler : public BasicHandler 
+class WrapperClassHandler : public HandlerBase 
 {
 public:
+	WrapperClassHandler(){};
+	virtual ~WrapperClassHandler(){};
+	virtual AXIS_BINDING_STYLE AXISCALL GetBindingStyle()=0;
 	int AXISCALL GetType(){return WEBSERVICE_HANDLER;};
 };
 

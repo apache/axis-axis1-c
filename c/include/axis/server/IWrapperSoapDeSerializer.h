@@ -131,13 +131,13 @@ typedef struct {
 	int (AXISCALL* GetStatus)(void* pObj);
 } IWrapperSoapDeSerializerFunctions;
 
-#ifndef __cplusplus
-
 typedef struct { 
-	void* unused; /* this corresponds to C++ virtual function pointer which is ignored in C */ 
-	IWrapperSoapDeSerializerFunctions* __vfptr;
-} IWrapperSoapDeSerializer;
+	void* _object; /* this will be C++ SoapDeSerializer Object */
+	IWrapperSoapDeSerializerFunctions* _functions; /* this is the static function table */
+} IWrapperSoapDeSerializer_C;
 
+#ifndef __cplusplus
+typedef IWrapperSoapDeSerializer_C IWrapperSoapDeSerializer;
 #else
 /**
     @class IWrapperSoapDeSerializer
@@ -149,9 +149,6 @@ typedef struct {
 */
 class IWrapperSoapDeSerializer : public ISoapDeSerializer
 {
-protected:
-	void* __vfptr_IWSDZ;
-	void* __vfptr_IHSDZ;
 public:
 	virtual ~IWrapperSoapDeSerializer(){};
 
