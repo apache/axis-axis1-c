@@ -6,7 +6,7 @@
 #if !defined(__EXTENSIBILITYQUERYPORTTYPE_CLIENTSTUB_H__INCLUDED_)
 #define __EXTENSIBILITYQUERYPORTTYPE_CLIENTSTUB_H__INCLUDED_
 
-#include <axis/client/Stub.h>
+#include <axis/client/Stub.hpp>
 #include "ExtensibilityType.h"
 #include "AxisClientException.h"
 

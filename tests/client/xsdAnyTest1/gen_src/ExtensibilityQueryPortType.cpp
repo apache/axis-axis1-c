@@ -5,7 +5,7 @@
 
 #include "ExtensibilityQueryPortType.h"
 
-#include <axis/server/AxisWrapperAPI.h>
+#include <axis/server/AxisWrapperAPI.hpp>
 
 #include <string>
 
