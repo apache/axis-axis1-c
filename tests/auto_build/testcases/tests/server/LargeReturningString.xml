@@ -1,5 +1,5 @@
 <service>
-    <name>LargeReturnigString</name>
+    <name>LargeReturningString</name>
     <description>LargeReturningString Service</description>
     <serviceLang>cpp</serviceLang>
     <serviceCode>LargeReturningString.cpp</serviceCode>
