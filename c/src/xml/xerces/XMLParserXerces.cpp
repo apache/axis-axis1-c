@@ -79,33 +79,33 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
 	bool bCanParseMore = false;
     try
     {
-    if(!m_bFirstParsed)
-    {
-        m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
-        m_bFirstParsed = true;
-    }
+		if(!m_bFirstParsed)
+		{
+			m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
+			m_bFirstParsed = true;
+		}
 
-    m_Xhandler.freeElement();
-    while (true)
-    {
-        AnyElement* elem = m_Xhandler.getAnyElement();
-		if (!elem)
+		m_Xhandler.freeElement();
+		while (true)
 		{
-			bCanParseMore = m_pParser->parseNext(m_ScanToken);
-			elem = m_Xhandler.getAnyElement();
+			AnyElement* elem = m_Xhandler.getAnyElement();
+			if (!elem)
+			{
+				bCanParseMore = m_pParser->parseNext(m_ScanToken);
+				elem = m_Xhandler.getAnyElement();
+			}
+			if (elem) 
+			{
+				if (!isCharData && (CHARACTER_ELEMENT == elem->m_type))
+				{ /* ignorable white space */
+					m_Xhandler.freeElement();
+					continue;		
+				}			
+				return elem;
+			}
+			else if (AXIS_FAIL == m_Xhandler.getStatus()) return NULL;
+			else if (!bCanParseMore) return NULL;
 		}
-        if (elem) 
-		{
-			if (!isCharData && (CHARACTER_ELEMENT == elem->m_type))
-			{ /* ignorable white space */
-				m_Xhandler.freeElement();
-				continue;		
-			}			
-			return elem;
-		}
-        else if (AXIS_FAIL == m_Xhandler.getStatus()) return NULL;
-		else if (!bCanParseMore) return NULL;
-    }
     }
     catch(AxisParseException& e)
     {
