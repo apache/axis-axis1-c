@@ -10,10 +10,12 @@ include ../../inc.mk
 
 
 PACKAGE_SRCS = AccessBean.cpp \
+	AxisException.cpp \
 	Debug.cpp \
 	BasicTypeSerializer.cpp \
 	MessageData.cpp \
-	Param.cpp
+	Param.cpp \
+	Test.cpp
 
 
 PACKAGE_OBJS = $(PACKAGE_SRCS:%.cpp=$(AX_OBJ_DIR_COMMON)/%.o)
