@@ -68,7 +68,6 @@
 #include "Attribute.h"
 #include "../common/GDefine.h"
 #include "../soap/SoapSerializer.h"
-#include <iostream>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
