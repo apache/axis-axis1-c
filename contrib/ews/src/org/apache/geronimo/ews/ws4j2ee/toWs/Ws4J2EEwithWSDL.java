@@ -97,7 +97,10 @@ public class Ws4J2EEwithWSDL implements Generator {
         try {
             String wscffile = clparser.getWscffile();
             misc.setOutputPath(clparser.getOutputDirectory());
-            misc.setWsConfFileLocation(wscffile.substring(0, wscffile.lastIndexOf('/')));
+            int index = wscffile.lastIndexOf('/');
+            if(index < 0)
+            	index = wscffile.lastIndexOf('\\');
+            misc.setWsConfFileLocation(wscffile.substring(0, index));
             isSeverSideCodeGenaration = clparser.isServerSide();
     
             //we may need to pass few parameters to the J2EEWebServiceContextImpl they are TODO
@@ -119,8 +122,8 @@ public class Ws4J2EEwithWSDL implements Generator {
                         "webservice.xml file");
             wscontext.getMiscInfo().setWscfdWsDescription(wscfwsdiss[0]);
 
-            wscontext.getMiscInfo().setJaxrpcfile(Utils.getAbsolutePath(wscfwsdiss[0].getJaxrpcMappingFile(), wscffile.substring(0, wscffile.lastIndexOf('/'))));
-            wscontext.getMiscInfo().setWsdlFile(Utils.getAbsolutePath(wscfwsdiss[0].getWsdlFile(), wscffile.substring(0, wscffile.lastIndexOf('/'))));
+            wscontext.getMiscInfo().setJaxrpcfile(Utils.getAbsolutePath(wscfwsdiss[0].getJaxrpcMappingFile(), wscffile.substring(0, index)));
+            wscontext.getMiscInfo().setWsdlFile(Utils.getAbsolutePath(wscfwsdiss[0].getWsdlFile(), wscffile.substring(0, index)));
             if (isSeverSideCodeGenaration) {
                 //JAX-RPC mapper calling       
                 GeneratorFactory.createGenerator(wscontext,

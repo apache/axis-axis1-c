@@ -101,8 +101,9 @@ public class ContextValidator {
     public ContextValidator(J2EEWebServiceContext context) throws GenerationFault {
         try {
             this.context = context;
-            String configFile = AxisProperties.getProperty(GenerationConstants.OPTION_WS4J2EE_PROPERTY_FILE,
-                    GenerationConstants.WS4J2EE_PROPERTY_FILE);
+			// String configFile = AxisProperties.getProperty(GenerationConstants.OPTION_WS4J2EE_PROPERTY_FILE,
+					 //       GenerationConstants.WS4J2EE_PROPERTY_FILE);
+			String configFile = "src/conf/ws4j2ee.properties";
 
             System.out.println(">>>> configFile:" + configFile);
             Properties prperties = new Properties();
