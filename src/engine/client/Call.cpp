@@ -353,7 +353,7 @@ int Call::openConnection()
 
         m_pTransport->setEndpointUri( m_pcEndPointUri);
 
-		if( strlen( pcSSLChannelInfo) > 0)
+		if( pcSSLChannelInfo && strlen( pcSSLChannelInfo) > 0)
 		{
 			char *	pszArgPtr = NULL;
 			int		iArgIndex = 0;
