@@ -78,7 +78,7 @@ AC_ARG_WITH(xercesc,
 )
 
 AC_MSG_CHECKING(whether to build tspp xml parser library)
-AC_ARG_ENABLE(tspp, [  --enable-tspp    build tspp xml parser library. default=yes],
+AC_ARG_ENABLE(tspp, [  --enable-tspp    build tspp xml parser library. default=no],
 [ case "${enableval}" in
   no)
     AC_MSG_RESULT(no)
@@ -91,7 +91,7 @@ AC_ARG_ENABLE(tspp, [  --enable-tspp    build tspp xml parser library. default=y
     ;;
   esac ],
   AC_MSG_RESULT(no)
-  TSPPBUILD="tspp"
+  TSPPBUILD=""
 )
 
 AC_MSG_CHECKING(whether to build test cases)
