@@ -1,0 +1,16 @@
+<test>
+    <name>CalculatorDocSSL1</name>
+    <description>CalculatorDocSSL1 is for checking wrong password</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>CalculatorDocSSL1Client.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+           CalculatorDocSSL1.expected
+        </output>
+    </expected>
+        <endpoint>https://localhost:80/Calculator/services/Calculator</endpoint>
+        <nomonitor>true</nomonitor>
+        <port>9443</port>
+</test>
+

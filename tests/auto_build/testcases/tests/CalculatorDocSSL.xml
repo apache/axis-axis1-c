@@ -1,0 +1,16 @@
+<test>
+    <name>CalculatorDocSSL</name>
+    <description>CalculatorDocSSL test</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>CalculatorDocSSLClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+           CalculatorDocSSL.expected
+        </output>
+    </expected>
+        <endpoint>https://localhost:80/Calculator/services/Calculator</endpoint>
+        <nomonitor>true</nomonitor>
+        <port>9443</port>
+</test>
+
