@@ -23,50 +23,59 @@
 using namespace std;
 
 #define BTS_BUFFSIZE 32
-const AxisChar XML_ENTITY_REFERENCE_CAHRS[]	= "<>&\"\'";// Entity reference characters
-const AxisChar ENCODED_LESSER_STR[]			= "&lt;";	// Encoded string for less than character
-const AxisChar ENCODED_GREATOR_STR[]		= "&gt;";	// Encoded string for greator than character
-const AxisChar ENCODED_AMPERSAND_STR[]		= "&amp;";	// Encoded string for ampersand character
-const AxisChar ENCODED_DBL_QUOTE_STR[]		= "&quot;";	// Encoded string for single quote character
-const AxisChar ENCODED_SGL_QUOTE_STR[]		= "&apos;";	// Encoded string for double quote character
+const AxisChar XML_ENTITY_REFERENCE_CAHRS[]    = "<>&\"\'";
+/* Entity reference characters */
+const AxisChar ENCODED_LESSER_STR[]            = "&lt;";    
+/* Encoded string for less than character */
+const AxisChar ENCODED_GREATOR_STR[]        = "&gt;";    
+/* Encoded string for greator than character */
+const AxisChar ENCODED_AMPERSAND_STR[]        = "&amp;";    
+/* Encoded string for ampersand character */
+const AxisChar ENCODED_DBL_QUOTE_STR[]        = "&quot;";    
+/* Encoded string for single quote character */
+const AxisChar ENCODED_SGL_QUOTE_STR[]        = "&apos;";    
+/* Encoded string for double quote character */
 
-/**
-    @class BasicTypeSerializer
-    @brief interface for the BasicTypeSerializer class.
-
-
-    @author Susantha Kumara (skumara@virtusa.com)
-*/
+/*
+ *   @class BasicTypeSerializer
+ *   @brief interface for the BasicTypeSerializer class.
+ *
+ *   @author Susantha Kumara (skumara@virtusa.com)
+ */
 class BasicTypeSerializer
 {
 public:
-	BasicTypeSerializer();
-	virtual ~BasicTypeSerializer();
-	const AxisString& getEntityReferenced(const AxisString& str);
-	const AxisChar* serializeAsElement(const AxisChar* pName, const void* pValue, XSDTYPE type);
-	const AxisChar* serializeAsAttribute(const AxisChar* pName, const AxisChar* pPrefix, const void* pValue, XSDTYPE type);
-	const AxisChar* encodeToHexBinary(const xsd__hexBinary* pBinary);
-	const AxisChar* encodeToBase64Binary(const xsd__base64Binary* pBinary);
-	void setStyle(AXIS_BINDING_STYLE nStyle){ m_nStyle = nStyle;};
-	static const AxisChar* basicTypeStr(XSDTYPE type);
+    BasicTypeSerializer();
+    virtual ~BasicTypeSerializer();
+    const AxisString& getEntityReferenced(const AxisString& str);
+    const AxisChar* serializeAsElement(const AxisChar* pName, 
+        const void* pValue, XSDTYPE type);
+    const AxisChar* serializeAsAttribute(const AxisChar* pName, 
+        const AxisChar* pPrefix, const void* pValue, XSDTYPE type);
+    const AxisChar* encodeToHexBinary(const xsd__hexBinary* pBinary);
+    const AxisChar* encodeToBase64Binary(const xsd__base64Binary* pBinary);
+    void setStyle(AXIS_BINDING_STYLE nStyle){ m_nStyle = nStyle;};
+    static const AxisChar* basicTypeStr(XSDTYPE type);
 
 private:
-	enum
-	{
-		GREATOR_THAN_CHAR	=	L'>',	// Greator than character
-		LESSER_THAN_CHAR	=	L'<',	// Less than character
-		SINGLE_QUOTE_CHAR	=	L'\'',	// Single quotation character
-		DOUBLE_QUOTE_CHAR	=	L'\"',	// Double quotation character
-		AMPERSAND_CHAR		=	L'&'	// Ampersand character
-	};
+    enum
+    {
+        GREATOR_THAN_CHAR    =    L'>',    /* Greator than character */
+        LESSER_THAN_CHAR    =    L'<',    /* Less than character */
+        SINGLE_QUOTE_CHAR    =    L'\'',    /* Single quotation character */
+        DOUBLE_QUOTE_CHAR    =    L'\"',    /* Double quotation character */
+        AMPERSAND_CHAR        =    L'&'    /* Ampersand character */
+    };
 private:
-	AxisString m_sSZ;
-	AxisString m_AuxStr;
-	AxisString m_strReturnVal;
-	AxisChar m_Buf[BTS_BUFFSIZE]; //used for numeric to string conversions with sprintf
-	AxisTime m_AxisTime;
-	/* Current Serialization Style */
-	AXIS_BINDING_STYLE m_nStyle;
+    AxisString m_sSZ;
+    AxisString m_AuxStr;
+    AxisString m_strReturnVal;
+    AxisChar m_Buf[BTS_BUFFSIZE]; 
+    /* used for numeric to string conversions with sprintf */
+    AxisTime m_AxisTime;
+    /* Current Serialization Style */
+    AXIS_BINDING_STYLE m_nStyle;
 };
 
-#endif // !defined(_BASICTYPESERIALIZER_H____OF_AXIS_INCLUDED_)
+#endif 
+
