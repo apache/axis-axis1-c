@@ -1,51 +1,78 @@
-<head>
-<title>Axis Tests That Need Writing!</title>
-<link href="axis.css" rel=stylesheet type=text/css>
-</head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 
-<body>
-<h1>Testing, 1, 2, 3...</h1>
+<HTML>
+<HEAD>
+  <META name="generator" content=
+  "HTML Tidy for Windows (vers 1st October 2003), see www.w3.org">
 
-<p>Greetings, intrepid tester/developer/reader!</p>
+  <TITLE>Axis Tests That Need Writing!</TITLE>
+  <LINK href="axis.css" rel="stylesheet" type="text/css">
+</HEAD>
 
-<p>This file exists to keep track of various tests which someone needs to write for Axis
-at some point.  Ideally, any time you write a piece of code in Axis, you should also write
-<b>documentation</b> and <b>tests</b> for whatever functionality you work on.  Unfortunately,
-we live in the real world and that doesn't always happen.  Hence, this file.</p>
+<BODY>
+  <H1>Testing, 1, 2, 3...</H1>
 
-<p>This is a place to keep track, in simple english descriptions, of particular tests which
-need to be written.  It serves two main purposes : 1) to help us remember these things, and 2) to provide a starting point for development when people have some spare cycles or are interested in
-finding some way to participate in the Axis community.</p>
+  <P>Greetings, intrepid tester/developer/reader!</P>
 
-<p>On to the (soon-to-be) tests:</p>
+  <P>This file exists to keep track of various tests which someone
+  needs to write for Axis at some point. Ideally, any time you
+  write a piece of code in Axis, you should also write
+  <B>documentation</B> and <B>tests</B> for whatever functionality
+  you work on. Unfortunately, we live in the real world and that
+  doesn't always happen. Hence, this file.</P>
 
-<table width=100% border=1 cellpadding=3>
-  <tr> 
-    <th>Name of test</th>
-    <th>Description of test</th>
-    <th>Developer(s)</th>
-    <th>Status</th>
-  </tr>
-  <tr> 
-    <td>SkeletonMethods</td>
-    <td>confirm that the methods from the Skeleton interface are NOT exposed in 
-      the generated WSDL for services.</td>
-    <td>Glen</td>
-    <td>none</td>
-  </tr>
-  <tr>
-    <td>soap12.Version</td>
-    <td>Test that when a service is sent a SOAP 1.2 message, we get back a SOAP 
-      1.2 response.</td>
-    <td>Glen</td>
-    <td>none</td>
-  </tr>
-  <tr> 
-    <td>soap12.RpcBody</td>
-    <td>Test that our SOAP 1.2 RPC implementation only allows a single body element 
-      (should fault otherwise).</td>
-    <td>Glen</td>
-    <td>none</td>
-  </tr>
-</table>
-</body>
+  <P>This is a place to keep track, in simple english descriptions,
+  of particular tests which need to be written. It serves two main
+  purposes : 1) to help us remember these things, and 2) to provide
+  a starting point for development when people have some spare
+  cycles or are interested in finding some way to participate in
+  the Axis community.</P>
+
+  <P>On to the (soon-to-be) tests:</P>
+
+  <TABLE width="100%" border="1" cellpadding="3">
+    <TR>
+      <TH>Name of test</TH>
+
+      <TH>Description of test</TH>
+
+      <TH>Developer(s)</TH>
+
+      <TH>Status</TH>
+    </TR>
+
+    <TR>
+      <TD>SkeletonMethods</TD>
+
+      <TD>confirm that the methods from the Skeleton interface are
+      NOT exposed in the generated WSDL for services.</TD>
+
+      <TD>Glen</TD>
+
+      <TD>none</TD>
+    </TR>
+
+    <TR>
+      <TD>soap12.Version</TD>
+
+      <TD>Test that when a service is sent a SOAP 1.2 message, we
+      get back a SOAP 1.2 response.</TD>
+
+      <TD>Glen</TD>
+
+      <TD>none</TD>
+    </TR>
+
+    <TR>
+      <TD>soap12.RpcBody</TD>
+
+      <TD>Test that our SOAP 1.2 RPC implementation only allows a
+      single body element (should fault otherwise).</TD>
+
+      <TD>Glen</TD>
+
+      <TD>none</TD>
+    </TR>
+  </TABLE>
+</BODY>
+</HTML>

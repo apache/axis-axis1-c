@@ -21,8 +21,15 @@ See http://xml.apache.org/forrest/linking.html for more info
 <!-- <faq label="FAQ" href="faq.html"/>-->
  <wiki label="FAQ/Wiki" href="http://nagoya.apache.org/wiki/apachewiki.cgi?AxisProjectPages"/>
  <getinvolved label="Get Involved">
- <overview label="Overview" href="overview.html"/>
- <installation label="Installation" href="java/install.html"/>
+  <overview label="Overview" href="overview.html"/>
+  <cvs label="CVS Repository" href="cvs.html"/>
+  <mailinglist label="Mailing Lists" href="mail.html"/>
+  <library label="Reference Library" href="ref.html" target="body"/>
+  <bugs label="Bugs" href="bugs.html"/>
+ </getinvolved>
+ <axisjava label="Axis (Java)">
+  <documentation label="Documentation" href="java/index.html"/>
+  <installation label="Installation" href="java/install.html"/>
   <users label="User's Guide" href="java/user-guide.html"/>
   <developers label="Developer's Guide" href="java/developers-guide.html"/>
   <integration label="Integration Guide" href="java/integration-guide.html"/>
@@ -30,11 +37,7 @@ See http://xml.apache.org/forrest/linking.html for more info
   <reference label="Reference Guide" href="java/reference.html"/>
   <read label="Reading Guide" href="java/reading.html"/>
   <requirements label="Requirements" href="java/requirements.html"/>
-  <cvs label="CVS Repository" href="cvs.html"/>
-  <mailinglist label="Mailing Lists" href="mail.html"/>
-  <library label="Reference Library" href="ref.html" target="body"/>
-  <bugs label="Bugs" href="bugs.html"/>
-</getinvolved>
+ </axisjava>
 <downloads label="Downloads">
   <releases label="Releases" href="releases.html"/>
   <interim label="Interim Drops" href="interim.html"/>
