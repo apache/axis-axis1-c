@@ -109,6 +109,12 @@ public interface MessageContext extends javax.xml.rpc.handler.MessageContext {
      * set the SOAPVersion of the SOAP request undergoing processing
      * @return soapversion as integer
      */
+    
+	/**
+	 * Tells the serializer to use literal encoding. 
+	 */
+	public void setLitereal(boolean boo);
+    
     public int getVersion();
     /**
      * Set the result of the execution at the pivot point It must be either Parameter
