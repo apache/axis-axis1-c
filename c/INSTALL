@@ -185,7 +185,7 @@ Transport_http:/usr/local/axiscpp_deploy/lib/libaxis_transport.so
 Now we need to copy apache module(libaxiscpp_mod2.so for apache2 and libaxiscpp_mod.so for apache)
 to the correct places and start apache. To
 do that you can find scripts written in $AXISCPP_DEPLOY/bin.
-cd $AXISCPP_DEPLOY
+cd $AXISCPP_DEPLOY/bin
 
 To deploy on apache2
 sh deploy_apache2.sh
