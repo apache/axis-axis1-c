@@ -14,5 +14,5 @@ libaxiscpp_client_la_SOURCES = ../Axis.cpp \
                 ../SessionScopeHandlerPool.cpp \
                 ../SharedObject.cpp
 		
-libaxiscpp_client_la_LIBADD = ../../common/libcommon.la ../../soap/libsoap.la ../../wsdd/libwsdd.la ../../xml/libxml.la -L$(AXISCPP_HOME)/lib/expat -lexpat -lstdc++
+libaxiscpp_client_la_LIBADD = ../../common/libcommon.la ../../soap/libsoap.la ../../wsdd/libwsdd.la ../../xml/libxml.la ../../transport/axis/libtransport.la -L$(AXISCPP_HOME)/lib/expat -lexpat -lstdc++
 INCLUDES = -I$(AXISCPP_HOME)/include
