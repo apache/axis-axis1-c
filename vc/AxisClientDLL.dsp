@@ -274,6 +274,10 @@ SOURCE=..\src\soap\SoapEnvelope.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\common\SoapEnvVersions.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\SoapFault.cpp
 # End Source File
 # Begin Source File
