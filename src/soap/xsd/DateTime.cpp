@@ -6,6 +6,15 @@ AXIS_CPP_NAMESPACE_START
     {
     }
 
+    DateTime::~DateTime()
+    {
+        if (m_DateTime)
+        {
+            delete m_DateTime;
+            m_DateTime = NULL;
+        }
+    }
+
     AxisChar* DateTime::serialize(const void* value) throw (AxisSoapException)
     {
     	return serialize((struct tm*) value);
