@@ -127,13 +127,22 @@ typedef struct mm
   void ( *free_fcn)(void *ptr);
 } XML_Memory_Handling_Suite;
 
+/** Struct that holds information of the tokenized stream
+  *
+  */
 typedef struct data
 {
-        int type;
-        int ptrs_sz;
-        int num_ptrs;
+    /* Variable to hold the type of tag(eg.START_TAG) */
+    int type;
+    /* Number of tokenized strings that can be held in ptrs buffer */
+    int ptrs_sz;
+    /* Number of tokenized strings that are held in prts buffer currently*/
+    int num_ptrs;
+    /* Number of ptrs pointing to the utf8 converted and tokenized strings*/
     int num_ptrs_utf8;
-        char **ptrs;
+    /* The buffer to hold pointers to tokenized strings */
+    char **ptrs;
+    /* the buffer to hold pointers to utf8 converted tokenized strings */
     char **utf8ptrs;
 } data_t;
 

@@ -300,20 +300,22 @@ static int parser_init(xpp_context_t* ct, const XML_Char *encodingName)
 {
     if(ct)
     {
-            num_chars = 0;
-            ct->next = ct->buff;
-            ct->dirty = ct->buff;
-            state = S_0;
+        num_chars = 0;
+        ct->next = ct->buff;
+        ct->dirty = ct->buff;
+        state = S_0;
         tok_state = PROLOG;
-            ct->get_block = get_block;
-            ct->data.ptrs = NULL;
-            ct->data.utf8ptrs = NULL;
-            ct->data.ptrs_sz = 8;
+        ct->get_block = get_block;
+        ct->data.ptrs = NULL;
+        ct->data.utf8ptrs = NULL;
+        /* number of pointers that can be held in the data.ptrs buffer is initialized
+         * to this amount at the beginning
+         */
+        ct->data.ptrs_sz = 8;
         data_counter = 0;
         eventPtr = NULL;
-          eventEndPtr = NULL;
+        eventEndPtr = NULL;
         protocolEncodingName = encodingName;
-
 
         return XML_ERROR_NONE;
     }
@@ -380,7 +382,7 @@ static int add_utf8_ptr(char *ptr, data_t *data)
                 int sz = data->ptrs_sz << 1;
                 char **ptrs = (char **)malloc(sz << 2);
                 if (!ptrs)
-                        return XML_TEST_ERROR;
+                        return XML_ERROR_NO_MEMORY;
                 if (data->utf8ptrs) 
                 {
                        memmove(ptrs, data->utf8ptrs, data->num_ptrs_utf8 << 2);
