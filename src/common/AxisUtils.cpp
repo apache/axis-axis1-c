@@ -89,9 +89,10 @@ AxisUtils::~AxisUtils()
 
 }
 
-AxisXMLCh* AxisUtils::ToAxisXMLCh(const AxisChar* pch)
+const AxisXMLCh* AxisUtils::ToAxisXMLCh(const AxisChar* pch)
 {
-	return XMLString::transcode(pch); //this is ok as long as we use xerces library.
+//	return XMLString::transcode(pch); //this is ok as long as we use xerces library.
+	return pch;
 }
 
 void AxisUtils::Initialize()
@@ -106,8 +107,9 @@ void AxisUtils::Initialize()
 //for initialization purposes.
 const AxisXMLCh* AxisUtils::Convert(const AxisChar* pch)
 {
-	if (XMLString::transcode(pch, m_Buffer, CONVERT_BUFFER_SIZE))
-		return m_Buffer;
-	return NULL;
+//	if (XMLString::transcode(pch, m_Buffer, CONVERT_BUFFER_SIZE))
+//		return m_Buffer;
+//	return NULL;
+	return pch;
 }
 
