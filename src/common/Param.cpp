@@ -57,6 +57,11 @@ Param::~Param ()
             }
             break;
         case XSD_BASE64BINARY:
+            if (AxisEngine::m_bServer)
+            {
+                delete [] m_Value.b64bValue.__ptr;
+            }
+            break;
         case XSD_HEXBINARY:
             if (AxisEngine::m_bServer)
             {
@@ -171,16 +176,71 @@ int Param::serialize (SoapSerializer &pSZ)
                 pSZ.serialize ("</", m_sName.c_str (), ">\n", NULL);
             }
             break;
-  case XSD_ANY:
+      case XSD_ANY:
              pSZ.serializeAnyObject(m_Value.pAnyObject);
-	default:
-            /* all basic types */
+             break;
+	case XSD_INT:
+      case XSD_BOOLEAN:
             pSZ.serializeAsElement(m_sName.c_str (), &(m_Value.nValue), m_Type);
+            break;
+	case XSD_UNSIGNEDINT:
+            pSZ.serializeAsElement(m_sName.c_str (), &(m_Value.unValue), m_Type);
+            break;
+	case XSD_SHORT:
+            pSZ.serializeAsElement(m_sName.c_str (), &(m_Value.sValue), m_Type);
+            break;
+	case XSD_UNSIGNEDSHORT:
+            pSZ.serializeAsElement(m_sName.c_str (), &(m_Value.usValue), m_Type);
+            break;
+	case XSD_BYTE:
+            pSZ.serializeAsElement(m_sName.c_str (), &(m_Value.cValue), m_Type);
+            break;
+	case XSD_UNSIGNEDBYTE:
+            pSZ.serializeAsElement(m_sName.c_str (), &(m_Value.ucValue), m_Type);
+            break;
+	case XSD_LONG:
+            pSZ.serializeAsElement(m_sName.c_str (), &(m_Value.llValue), m_Type);
+            break;
+	case XSD_INTEGER:
+            pSZ.serializeAsElement(m_sName.c_str (), &(m_Value.lValue), m_Type);
+            break;
+	case XSD_UNSIGNEDLONG:
+            pSZ.serializeAsElement(m_sName.c_str (), &(m_Value.ulValue), m_Type);
+            break;
+	case XSD_FLOAT:
+            pSZ.serializeAsElement(m_sName.c_str (), &(m_Value.fValue), m_Type);
+            break;
+	case XSD_DOUBLE:
+	case XSD_DECIMAL:
+            pSZ.serializeAsElement(m_sName.c_str (), &(m_Value.dValue), m_Type);
+            break;
+      case XSD_STRING:
+      case XSD_ANYURI:
+      case XSD_QNAME:
+      case XSD_NOTATION:
+            pSZ.serializeAsElement(m_sName.c_str (), &(m_Value.pStrValue), m_Type);
+            break;
+	case XSD_HEXBINARY:
+            pSZ.serializeAsElement(m_sName.c_str (), &(m_Value.hbValue), m_Type);
+            break;
+	case XSD_BASE64BINARY:
+            pSZ.serializeAsElement(m_sName.c_str (), &(m_Value.b64bValue), m_Type);
+            break;
+	case XSD_DURATION:
+            pSZ.serializeAsElement(m_sName.c_str (), &(m_Value.lDuration), m_Type);
+            break;
+      case XSD_DATETIME:
+      case XSD_DATE:
+      case XSD_TIME:
+            pSZ.serializeAsElement(m_sName.c_str (), &(m_Value.tValue), m_Type);
+            break;
+      default:
+            return AXIS_FAIL; //this is an unexpected situation
     }
     return AXIS_SUCCESS;
 }
 
-int Param::setValue (XSDTYPE nType, uParamValue Value)
+int Param::setValue (XSDTYPE nType, ParamValue Value)
 {
     m_Type = nType;
     switch (m_Type)

@@ -305,7 +305,7 @@ void AxisTrace::traceEntry(const char *className, const char *methodName, void *
     m_stack.push(name);
 }
 
-void AxisTrace::traceExit(const char *className, const char *methodName, 
+void AxisTrace::traceExit(const char *className, const char *methodName, int returnIndex,
 						  AxisTraceType type, unsigned len, void *value)
 {
     if (!isTraceOn()) return;
@@ -330,6 +330,12 @@ void AxisTrace::traceExit(const char *className, const char *methodName,
 		}
 		if (NULL!=methodName) 
 			line += methodName;
+            if (0!=returnIndex) { // Zero means only one return
+                  line += "@";
+                  char prim[32];
+                  sprintf(prim,"%d",returnIndex);
+                  line += prim;
+            }
 		line += "(";
 		if (TRACETYPE_UNKNOWN != type)
 			addParameter(line,type,len,value);
@@ -340,7 +346,7 @@ void AxisTrace::traceExit(const char *className, const char *methodName,
     }
 }
 
-void AxisTrace::traceCatch(const char *className, const char *methodName, 
+void AxisTrace::traceCatch(const char *className, const char *methodName, int catchIndex,
 						   AxisTraceType type, unsigned len, void *value)
 {
     if (!isTraceOn()) return;
@@ -362,8 +368,16 @@ void AxisTrace::traceCatch(const char *className, const char *methodName,
 		if (NULL!=methodName) 
 			line += methodName;
 		line += " caught ";
+            if (0!=catchIndex) { // Zero means only one catch
+                  line += "@";
+                  char prim[32];
+                  sprintf(prim,"%d",catchIndex);
+                  line += prim;
+                  line += " ";
+            }
 		if (TRACETYPE_UNKNOWN != type)
 			addParameter(line,type,len,value);
+            else line += "\"...\"";
 		traceLine(line.c_str());
     } catch (...) {
         traceLine("Unknown exception caught during trace catch");

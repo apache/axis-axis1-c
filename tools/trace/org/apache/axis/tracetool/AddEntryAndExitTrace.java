@@ -137,14 +137,23 @@ public class AddEntryAndExitTrace {
 				outputFile.write(mp.getOriginalSignature() + "{");
 				outputFile.traceEntry(mp.getSignature());
 				BodyPart[] bps = mp.getBodyParts();
+
+                        int returnCount = 0, catchCount = 0, returnIndex = 0, catchIndex = 0;
+                        for (int i = 0; i < bps.length-1; i++) if (bps[i].isReturn()) returnCount++;
+                        for (int i = 0; i < bps.length-1; i++) if (bps[i].isCatch()) catchCount++;
+
 				for (int i = 0; i < bps.length; i++) {
 					outputFile.write(bps[i].getCodeFragment());
-					if (bps[i].isReturn())
-						outputFile.traceExit(bps[i].getReturnValue());
-					else if (bps[i].isCatch())
-						outputFile.traceCatch(bps[i].getCaughtValue());
-					else if (i < bps.length - 1)
-						outputFile.traceExit();
+					if (bps[i].isReturn()) {
+                                    if (returnCount>1) returnIndex++;
+						outputFile.traceExit(bps[i].getReturnValue(), returnIndex);
+					} else if (bps[i].isCatch()) {
+                                    if (catchCount>1) catchIndex++;
+						outputFile.traceCatch(bps[i].getCaughtValue(), catchIndex);
+					} else if (i < bps.length - 1) {
+                                    if (returnCount>1) returnIndex++;
+						outputFile.traceExit(returnIndex);
+                              }
 				}
 			} else {
 				outputFile.write(fp.toString());

@@ -26,6 +26,7 @@
 
 #include <axis/server/TypeMapping.hpp>
 #include <axis/server/IParam.hpp>
+#include "Param.h"
 
 using namespace std;
 
@@ -58,7 +59,7 @@ class AxisTime
         AxisTime(struct tm ntime);
         virtual ~AxisTime();
         void setValue(const AxisChar* strValue);
-        void setValue(XSDTYPE type, uParamValue Value);
+        void setValue(XSDTYPE type, ParamValue Value);
         void setType(XSDTYPE m_Type);
         AxisString getValue();
         AxisString& serialize(struct tm tValue, 

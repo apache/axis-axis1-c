@@ -22,7 +22,6 @@ import java.util.Hashtable;
 /**
  * A Buffered write that also contains the methods to add in in trace
  * TODO: Add in &this and threadid into each trace record
- * TODO: Sort out indentation
  */
 class Tracer extends BufferedWriter {
 	private Signature signature = null;
@@ -84,8 +83,10 @@ class Tracer extends BufferedWriter {
 
 		Parameter[] parms = signature.getParameters();
 		int len = 0;
-		if (null != parms)
-			len = parms.length;
+		if (null != parms) {
+                  if (parms[parms.length-1].isDotDotDot()) len = parms.length - 1;
+                  else len = parms.length;
+            }
 		String line =
 			"\n"
 				+ "\t#ifdef ENABLE_AXISTRACE\n"
@@ -104,7 +105,7 @@ class Tracer extends BufferedWriter {
 		flush();
 	}
 
-	void traceExit() throws Exception {
+	void traceExit(int returnIndex) throws Exception {
 		if (!signature.traceable())
 			return;
 
@@ -122,7 +123,9 @@ class Tracer extends BufferedWriter {
 			+ getClassName()
 			+ ", \""
 			+ signature.getMethodName()
-			+ "\");\t"
+			+ "\", "
+                  + returnIndex
+                  + ");\t"
 			+ SIGNATURE
 			+ "\n";
 		line += "\t\t#endif\n";
@@ -139,7 +142,7 @@ class Tracer extends BufferedWriter {
 	 * This method prints out the complete return line as well so the user
 	 * does not need to print this out themselves. 
 	 */
-	void traceExit(String value) throws Exception {
+	void traceExit(String value, int returnIndex) throws Exception {
 		if (!signature.traceable())
 			return;
 
@@ -169,7 +172,8 @@ class Tracer extends BufferedWriter {
 			+ getClassName()
 			+ ", \""
 			+ signature.getMethodName()
-			+ "\""
+			+ "\", "
+                  + returnIndex
 			+ getTypeParms(signature.getReturnType())
 			+ ");\t"
 			+ SIGNATURE
@@ -183,7 +187,7 @@ class Tracer extends BufferedWriter {
 		flush();
 	}
 
-	void traceCatch(Parameter value) throws Exception {
+	void traceCatch(Parameter value, int catchIndex) throws Exception {
 		if (!signature.traceable())
 			return;
 
@@ -195,7 +199,8 @@ class Tracer extends BufferedWriter {
 				+ getClassName()
 				+ ", \""
 				+ signature.getMethodName()
-				+ "\""
+				+ "\", "
+                        + catchIndex
                         + getTypeParms(value);
 		line += ");\t" + SIGNATURE + "\n";
 		line += "\t#endif\n";

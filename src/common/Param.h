@@ -26,6 +26,40 @@
 AXIS_CPP_NAMESPACE_START
 
 class ArrayBean;
+
+class ParamValue
+{
+public:
+    int nValue;
+    unsigned int unValue;
+    short sValue;
+    unsigned short usValue;
+    long lValue;
+    unsigned ulValue;
+//FJP v Added
+#ifdef WIN32
+    __int64 llValue;
+#else
+    long long llValue;
+#endif
+//FJP ^ Added
+    char cValue;
+    unsigned char ucValue;
+    float fValue;
+    double dValue;
+    struct tm tValue;/* this will hold the c type tm struct*/
+    xsd__hexBinary hbValue;
+    xsd__base64Binary b64bValue;
+    long lDuration;/* duration in seconds*/
+    union {
+        class ArrayBean* pArray; /* this is used to hold arrays */
+        class IArrayBean* pIArray; /* used by wrapper classes */
+    };
+    ComplexObjectHandler* pCplxObj;
+    const AxisChar* pStrValue;
+    AnyType* pAnyObject; /* used to hold AnyType struct for xsd:any */
+};
+
 /*
  *  @class Param
  *  @brief interface for the Param class.
@@ -43,16 +77,14 @@ public:
     virtual ~Param();
 
 private:
-    uParamValue m_Value;
+    ParamValue m_Value;
     AxisString m_sName; /* Name of the parameter */
     XSDTYPE m_Type; /* Type of the parameter */
-
-private:
     AxisString m_strPrefix; /* needed in serialization only */
     AxisString m_strUri; /* needed in serialization only */
 
 public: 
-    int setValue(XSDTYPE nType, uParamValue Value);
+    int setValue(XSDTYPE nType, ParamValue Value);
     int serialize(SoapSerializer& pSZ);
     void setPrefix(const AxisChar* prefix);
     void setUri(const AxisChar* uri);

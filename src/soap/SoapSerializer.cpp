@@ -599,8 +599,10 @@ int SoapSerializer::addOutputParam(const AxisChar* pchName, void* pValue,
         break;
 //FJP ^ Added
     case XSD_INTEGER:
-    case XSD_DURATION:
         pParam->m_Value.lValue = *((long*)(pValue));
+        break;        
+    case XSD_DURATION:
+        pParam->m_Value.lDuration = *((long*)(pValue));
         break;        
     case XSD_UNSIGNEDLONG:
         pParam->m_Value.ulValue = *((unsigned long*)(pValue));
@@ -612,6 +614,9 @@ int SoapSerializer::addOutputParam(const AxisChar* pchName, void* pValue,
     case XSD_DECIMAL:
         pParam->m_Value.dValue = *((double*)(pValue));
         break;              
+    case XSD_ANYURI:
+    case XSD_QNAME:
+    case XSD_NOTATION:
     case XSD_STRING:
         pParam->m_Value.pStrValue = *((char**)(pValue));
         break;

@@ -138,8 +138,9 @@ typedef unsigned short xsd__unsignedShort;
  * @class xsd__base64Binary
  * Axis C++ defined type for xml basic type base64Binary
  */
-class xsd__base64Binary {
+class STORAGE_CLASS_INFO xsd__base64Binary {
 public:
+    //AXISCALL xsd__base64Binary();
     xsd__unsignedByte * __ptr;
     xsd__int __size;
 };
@@ -148,8 +149,9 @@ public:
  * @class xsd__hexBinary
  * Axis C++ defined type for xml basic type hexBinary
  */
-class xsd__hexBinary {
+class STORAGE_CLASS_INFO xsd__hexBinary {
 public:
+    //AXISCALL xsd__hexBinary();
     xsd__unsignedByte * __ptr;
     xsd__int __size;
 };
@@ -223,13 +225,16 @@ typedef char* XML_String;
  * @class AnyType
  * Axis C++ defined type for handling xsd:any.
  */
-class AnyType
+class STORAGE_CLASS_INFO AnyType
 {
 public:
+    //AXISCALL AnyType();
+
     /**
      * @var _array Contains an array of xml encoded strings.
      */
     XML_String* _array;
+
     /**
      * @var _size Contains how many xml strings are there in _array
      */

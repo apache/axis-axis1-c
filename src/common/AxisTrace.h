@@ -207,13 +207,13 @@ public:
 	/**
 	 * Traces the exit to a method.
 	 */
-	void traceExit(const char *className, const char *methodName, 
+	void traceExit(const char *className, const char *methodName, int returnIndex,
 		AxisTraceType type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0);
 
 	/**
 	 * Traces something that has been caught
 	 */
-	void traceCatch(const char *className, const char *methodName, 
+	void traceCatch(const char *className, const char *methodName, int catchIndex,
 		AxisTraceType type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0);
 
 private:

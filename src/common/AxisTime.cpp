@@ -54,7 +54,7 @@ void AxisTime::setValue (const AxisChar* strValue)
     mkCTime ();
 }
 
-void AxisTime::setValue (XSDTYPE type, uParamValue Value)
+void AxisTime::setValue (XSDTYPE type, ParamValue Value)
 {
     m_Type = type;
     if (type == XSD_DURATION)

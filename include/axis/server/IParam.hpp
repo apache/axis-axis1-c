@@ -49,36 +49,6 @@ public:
     void init();
 };
 
-typedef union uParamValue
-{
-    int nValue;
-    unsigned int unValue;
-    short sValue;
-    unsigned short usValue;
-//FJP v Added
-#ifdef WIN32
-    __int64 llValue;
-#else
-    long long llValue;
-#endif
-//FJP ^ Added
-    long lValue;
-    unsigned ulValue;
-    char cValue;
-    unsigned char ucValue;
-    float fValue;
-    double dValue;
-    struct tm tValue;/* this will hold the c type tm struct*/
-    xsd__hexBinary hbValue;
-    xsd__base64Binary b64bValue;
-    long lDuration;/* duration in seconds*/
-    class ArrayBean* pArray; /* this is used to hold arrays */
-    class IArrayBean* pIArray; /* used by wrapper classes */
-    ComplexObjectHandler* pCplxObj;
-    const AxisChar* pStrValue;
-    AnyType* pAnyObject; /* used to hold AnyType struct for xsd:any */
-} uParamValue;
-
 class IParam  
 {
 public:

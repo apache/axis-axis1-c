@@ -24,7 +24,7 @@ import java.util.Set;
 
 /**
  * A C or C++ method signature with the ability to parse it.
- * TODO: support variable length argument lists using "..."
+ * TODO: properly support variable length argument lists using "..."
  * TODO: passing or returning function pointers (hopefully not needed)
  * TODO: Cope with ~<space>Classname()
  */
