@@ -39,7 +39,7 @@ AxisChar* NonNegativeInteger::serialize(const unsigned LONGLONG* value) throw (A
             exceptionMessage += ".";
             delete [] length;
             
-            throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                 const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
     }
@@ -61,7 +61,7 @@ AxisChar* NonNegativeInteger::serialize(const unsigned LONGLONG* value) throw (A
             exceptionMessage += ".";
             delete [] length;
             
-            throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                 const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
     }
@@ -83,7 +83,7 @@ AxisChar* NonNegativeInteger::serialize(const unsigned LONGLONG* value) throw (A
             exceptionMessage += ".";
             delete [] length;
             
-            throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                 const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
     }
@@ -105,7 +105,7 @@ AxisChar* NonNegativeInteger::serialize(const unsigned LONGLONG* value) throw (A
             exceptionMessage += ".";
             delete [] length;
             
-            throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+            throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                 const_cast<AxisChar*>(exceptionMessage.c_str()));
         }
     }

@@ -31,7 +31,7 @@ AXIS_CPP_NAMESPACE_START
                 exceptionMessage += asctime(value);
                 exceptionMessage += ".";
                 
-                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                     const_cast<AxisChar*>(exceptionMessage.c_str()));
             }
         }
@@ -50,7 +50,7 @@ AXIS_CPP_NAMESPACE_START
                 exceptionMessage += asctime(value);
                 exceptionMessage += ".";
                 
-                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                     const_cast<AxisChar*>(exceptionMessage.c_str()));
             }
         }
@@ -69,7 +69,7 @@ AXIS_CPP_NAMESPACE_START
                 exceptionMessage += asctime(value);
                 exceptionMessage += ".";
                 
-                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                     const_cast<AxisChar*>(exceptionMessage.c_str()));
             }
         }
@@ -88,7 +88,7 @@ AXIS_CPP_NAMESPACE_START
                 exceptionMessage += asctime(value);
                 exceptionMessage += ".";
                 
-                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                     const_cast<AxisChar*>(exceptionMessage.c_str()));
             }
         }
@@ -194,7 +194,7 @@ AXIS_CPP_NAMESPACE_START
         if (sscanf (valueAsChar, "%d-%d", &value.tm_year, 
             &value.tm_mon) != 2)
         {
-         throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
+         throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
         }
 
         value.tm_year -= 1900;
@@ -216,14 +216,14 @@ AXIS_CPP_NAMESPACE_START
             time_t timeInSecs = mktime (&value);
             if (timeInSecs == -1)
             {
-                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
+                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
             }
             pTm = localtime (&timeInSecs);
             memcpy (&value, pTm, sizeof (tm));
             time_t t = mktime (&value);
             if (t == -1)
             {
-                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
+                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
             }
             t = labs (t - d);
             pTm = localtime (&t);
@@ -238,14 +238,14 @@ AXIS_CPP_NAMESPACE_START
             time_t timeInSecs = mktime (&value);
             if (timeInSecs == -1)
             {
-                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
+                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
             }
             
             int hours = 0;
             int mins = 0;   
             if (sscanf (cUtc + 1, "%d:%d", &hours, &mins) != 2)
             {
-                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
+                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
             }
             
             int secs = hours * 60 * 60 + mins * 60;
@@ -263,7 +263,7 @@ AXIS_CPP_NAMESPACE_START
             time_t t = mktime (&value);
             if (t == -1)
             {
-                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
+                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
             }
             t = labs (t - d);
             pTm = localtime (&t);
@@ -275,7 +275,7 @@ AXIS_CPP_NAMESPACE_START
             time_t timeInSecs = mktime (&value);
             if (timeInSecs == -1)
             {
-                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
+                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
             }
             pTm = localtime (&timeInSecs);
         }

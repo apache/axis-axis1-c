@@ -38,7 +38,7 @@ AXIS_CPP_NAMESPACE_START
                 exceptionMessage += ".";
                 delete [] length;
                 
-                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                     const_cast<AxisChar*>(exceptionMessage.c_str()));
             }
         }
@@ -60,7 +60,7 @@ AXIS_CPP_NAMESPACE_START
                 exceptionMessage += ".";
                 delete [] length;
                 
-                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                     const_cast<AxisChar*>(exceptionMessage.c_str()));
             }
         }
@@ -82,7 +82,7 @@ AXIS_CPP_NAMESPACE_START
                 exceptionMessage += ".";
                 delete [] lengthAsString;
                 
-                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                throw AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
                     const_cast<AxisChar*>(exceptionMessage.c_str()));
             }
         }
