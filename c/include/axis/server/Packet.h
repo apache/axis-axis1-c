@@ -115,7 +115,7 @@ typedef union
  *Function pointer definitions for trasport layer
  */
 typedef int (*AXIS_SEND_SEND_BYTES)(const char*, const void*);
-typedef int (*AXIS_GET_BYTES)(char*, int, int*, const void*);
+typedef int (*AXIS_GET_BYTES)(const char**, int*, const void*);
 typedef int (*AXIS_SEND_TRANSPORT_INFORMATION)(void*); /*Ax_soapstream*/
 typedef int (*AXIS_GET_TRANSPORT_INFORMATION)(void*);/*Ax_soapstream*/
 

@@ -83,13 +83,13 @@ class SoapFault;
 class SoapDeSerializer : public IHandlerSoapDeSerializer
 {
 private:
-	//XMLStreamHandler* m_pHandler;
+	SAX::FeatureNames<std::string> fNames;
+	SAX::PropertyNames<std::string> pNames;
+
+	SAX::XMLReader<std::string>* m_pParser;
     XMLStreamHandler m_pHandler;
-	//SAX2XMLReader* m_pParser;   
-	SAX::XMLReader<std::string> m_pParser;
 	const Ax_soapstream* m_pInputStream;
-	char m_hugebuffer[HUGE_BUFFER_SIZE];
-    string m_sHugebuffer;
+	const char* m_pCurrentBuffer;
 	Param* m_pLastArrayParam;
 public:
 	int GetVersion();

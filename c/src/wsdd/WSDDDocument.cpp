@@ -108,18 +108,19 @@ int WSDDDocument::ParseDocument(const AxisChar* sWSDD)
         try
         {
             parser.setFeature(fNames.external_general, true);
-            parser.setFeature(fNames.validation, true);
+        //    parser.setFeature(fNames.validation, true);
             parser.setFeature(fNames.namespaces, true);
             parser.setFeature(fNames.namespace_prefixes, true);
     	}
       	catch(SAX::SAXException& e)
         {
-            std::cerr << e.what() << std::endl;
+//            std::cerr << e.what() << std::endl;
     	}
 
     	parser.setContentHandler(*this);
-    	parser.setDTDHandler(*this);
     	parser.setErrorHandler(*this);
+/*
+    	parser.setDTDHandler(*this);
     	parser.setEntityResolver(*this);
 
     	try
@@ -131,7 +132,7 @@ int WSDDDocument::ParseDocument(const AxisChar* sWSDD)
         {
             std::cout << e.what() << std::endl;
         } // catch
-
+*/
         string strDocPath(sWSDD);
         SAX::InputSource Input(strDocPath);
         parser.parse(Input);
@@ -595,7 +596,7 @@ void WSDDDocument::endPrefixMapping(const std::string& prefix)
 	m_NsStack.erase(__XTRC(prefix)); //I think the same prifix cannot repeat ???
 }
 
-void  WSDDDocument::characters (const std::string& chars, const unsigned int length)
+void  WSDDDocument::characters (const std::string& chars)
 {
 	//cout<<"==="<<XMLString::transcode(chars)<<"==="<<endl;
 }
@@ -609,14 +610,14 @@ void  WSDDDocument::characters (const std::string& chars, const unsigned int len
 }
 */
 
-void WSDDDocument::warning(const SAX::SAXParseException& exception)
+void WSDDDocument::warning(const SAX::SAXException& exception)
 {
 }
-void WSDDDocument::error(const SAX::SAXParseException& exception)
+void WSDDDocument::error(const SAX::SAXException& exception)
 {
 	m_bError = true;
 }
-void WSDDDocument::fatalError(const SAX::SAXParseException& exception)
+void WSDDDocument::fatalError(const SAX::SAXException& exception)
 {
 	m_bFatalError = true;
 }

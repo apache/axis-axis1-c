@@ -249,7 +249,7 @@ void XMLStreamHandler::endElement (const string& uri, const string& localname,co
 	}
 }
 
-void  XMLStreamHandler::characters (const string& chars,const unsigned int length)
+void  XMLStreamHandler::characters (const string& chars)
 {
     AXISTRACE1("characters");
 	if ((m_PL0 == SOAP_BODY) && (m_PL1 == SOAP_PARAM)) //Make this a switch statement if many cases to be handled
@@ -280,16 +280,16 @@ void XMLStreamHandler::endPrefixMapping(const std::string& prefix)
 	m_NsStack.erase(__XTRC(prefix)); //I think the same prifix cannot repeat ???
 }
 
-void XMLStreamHandler::warning(const SAX::SAXParseException& exception)
+void XMLStreamHandler::warning(const SAX::SAXException& exception)
 {
 
 }
-void XMLStreamHandler::error(const SAX::SAXParseException& exception)
+void XMLStreamHandler::error(const SAX::SAXException& exception)
 {
 //  sprintf((char*)chEBuf, "Error : %s", __TRC(exception.getMessage()));
 	m_Success = AXIS_FAIL;
 }
-void XMLStreamHandler::fatalError(const SAX::SAXParseException& exception)
+void XMLStreamHandler::fatalError(const SAX::SAXException& exception)
 {
 // sprintf((char*)chEBuf, "Fatal Error : %s", __TRC(exception.getMessage()));
 	m_Success = AXIS_FAIL;
@@ -573,12 +573,6 @@ void XMLStreamHandler::createHeaderBlock(const string& uri, const string& localn
 	m_pHeaderBlock->setLocalName(__XTRC(localname.c_str()));
 	m_pHeaderBlock->setUri(__XTRC(uri.c_str()));
 }
-
-// EntityResolver
-SAX::InputSource XMLStreamHandler::resolveEntity(const std::string& publicId, const std::string& systemId)
-{
-  return SAX::InputSource();
-} // resolveEntity
 
 /*const AxisChar* XMLStreamHandler::__XTRC(const XMLCh *pChar)
 {
