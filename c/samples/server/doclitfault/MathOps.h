@@ -9,6 +9,7 @@
 #include <axis/server/AxisUserAPI.h>
 
 #include "DivByZeroFault.h"
+#include "AxisDivByZeroException.h"
 
 class MathOps 
 {
@@ -17,7 +18,7 @@ class MathOps
 	public:
 		virtual ~MathOps();
 	public: 
-		int div(int Value0,int Value1);
+		int div(int Value0,int Value1) throw(AxisDivByZeroException);
 };
 
 #endif /* !defined(__MATHOPS_SERVERSKELETON_H__INCLUDED_)*/

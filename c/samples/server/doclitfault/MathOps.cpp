@@ -14,6 +14,8 @@ MathOps::~MathOps()
 {
 }
 
-int MathOps::div(int Value0, int Value1)
+int MathOps::div(int Value0, int Value1) throw(AxisDivByZeroException)
 {
+    if (Value1 == 0) throw AxisDivByZeroException();
+    return Value0/Value1;
 }

@@ -11,6 +11,7 @@
 #include <axis/server/IMessageData.h>
 #include <axis/server/GDefine.h>
 #include <axis/server/AxisWrapperAPI.h>
+#include "AxisDivByZeroException.h"
 
 class MathOpsWrapper : public WrapperClassHandler
 {
@@ -25,9 +26,9 @@ public:/*implementation of WrapperClassHandler interface*/
 	void AXISCALL onFault(void* pMsg);
 	int AXISCALL init();
 	int AXISCALL fini();
-	AXIS_BINDING_STYLE AXISCALL getBindingStyle(){return RPC_ENCODED;};
+	AXIS_BINDING_STYLE AXISCALL getBindingStyle(){return DOC_LITERAL;};
 private:/*Methods corresponding to the web service methods*/
-	int div(void* pMsg);
+	int div(void* pMsg) throw(AxisDivByZeroException);
 };
 
 #endif /* !defined(__MATHOPSWRAPPER_SERVERWRAPPER_H__INCLUDED_)*/
