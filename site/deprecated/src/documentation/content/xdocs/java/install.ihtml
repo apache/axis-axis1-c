@@ -704,7 +704,7 @@ java -cp "$AXISCLASSPATH" ...
  an answer to your problem.</LI>
 
  <LI>Use the <A href=
- "http://nagoya.apache.org/bugzilla/">bugzilla</A> database to
+ "http://issues.apache.org/jira/">jira</A> database to
  search for Axis bugs, both open and closed.</LI>
 
  <LI>Consult the <A href=
