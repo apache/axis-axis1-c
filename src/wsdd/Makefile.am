@@ -5,5 +5,5 @@ libwsdd_la_SOURCES = WSDDDeployment.cpp \
                 WSDDTransport.cpp \
                 WSDDDocument.cpp
 
-libwsdd_la_LIBADD = -L/usr/local/xerces_c/lib -lxerces-c
-INCLUDES = -I/usr/local/xerces_c/include
+libwsdd_la_LIBADD = -L$(XERCES_HOME)/lib -lxerces-c
+INCLUDES = -I$(XERCES_HOME)/include
