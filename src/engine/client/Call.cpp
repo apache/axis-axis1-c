@@ -98,6 +98,7 @@ int Call::setEndpointURI (const char* pchEndpointURI)
 void Call::setOperation (const char* pchOperation, const char* pchNamespace)
 {
     m_pIWSSZ->createSoapMethod (pchOperation, pchNamespace);
+    m_pAxisEngine->getMessageData()->setOperationName(pchOperation);
 }
 
 void Call::addParameter (void* pValue, const char* pchName, XSDTYPE nType)
