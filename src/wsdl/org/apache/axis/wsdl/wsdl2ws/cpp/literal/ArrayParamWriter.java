@@ -94,7 +94,19 @@ public class ArrayParamWriter extends ParamWriter{
 			QName qname = WrapperUtils.getArrayType(type).getName(); 
 			
 			if (!CUtils.isSimpleType(qname)){
-				writer.write("#include \""+attribs[0].getTypeName()+".h\"\n\n");
+				// writer.write("#include \""+attribs[0].getTypeName()+".h\"\n\n");
+				/*
+				 * Needed for self referenced  array else compilation failed (include cycles).
+				* <xsd:complexType name="Type1">
+				*	<xsd:sequence>
+				*		<xsd:element name="followings" maxOccurs="unbounded" minOccurs="0" type="tns:Type1" />
+				*		<xsd:element name="kind" type="xsd:string" />
+				*		<xsd:element name="index" type="xsd:int" />
+				*	</xsd:sequence>
+				*	<xsd:attribute name="att_kind" type="tns:Kind" />
+				* </xsd:complexType>
+				*/				
+				writer.write("class "+attribs[0].getTypeName()+";\n\n");
 			}
 			else{
 				writer.write("#include <axis/common/AxisUserAPI.h>\n\n");
