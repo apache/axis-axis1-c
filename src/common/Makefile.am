@@ -10,7 +10,6 @@ libcommon_la_SOURCES = Param.cpp \
                        AxisTrace.cpp \
                        AxisGenException.cpp \
                        AxisConfig.cpp \
-                       AxisSocketUtils.cpp \
                        AdminUtils.cpp \
                        AxisConfigException.cpp \
                        AxisMessage.cpp \
