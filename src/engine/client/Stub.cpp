@@ -51,6 +51,10 @@ Stub::Stub(const char *pcEndPointUri, AXIS_PROTOCOL_TYPE eProtocol) : m_lTimeout
     m_pCall = new Call();
     m_pCall->setProtocol(eProtocol);
     m_pCall->setEndpointURI(pcEndPointUri);
+
+	// Initialise m_viCurrentSOAPMethodAttribute to something sensible 
+	// in case getFirstSOAPMethodAttribute isn't called first.
+    m_viCurrentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin();
 }
 
 Stub::~Stub()
@@ -161,6 +165,8 @@ void Stub::deleteTrasportProperty(char* pcKey, unsigned int uiOccurance)
         {
              if(uiCount == uiOccurance)
              {
+				 free(*currentKey);
+				 free(*currentValue);
                  m_vKeys.erase(currentKey);
                  m_vValues.erase(currentValue);
              }
@@ -296,6 +302,7 @@ void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pP
 
     pAttribute = new Attribute(pLocalname, pPrefix, pValue);
     m_vSOAPMethodAttributes.push_back(pAttribute);
+    m_viCurrentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin();
 }
 
 Attribute* Stub::getFirstSOAPMethodAttribute()
@@ -337,10 +344,10 @@ void Stub::setSOAPMethodAttributes()
 	pSerializer = m_pCall->getSOAPSerializer();
     if (pSerializer)
     {
-	for (unsigned int i = 0; i < m_vSOAPMethodAttributes.size(); i++)
-	{
-		pSerializer->setSOAPMethodAttribute(m_vSOAPMethodAttributes[i]->clone());
-	}
+       for (unsigned int i = 0; i < m_vSOAPMethodAttributes.size(); i++)
+	   {
+           pSerializer->setSOAPMethodAttribute(m_vSOAPMethodAttributes[i]->clone());
+	   }
     }	
 }
 
@@ -350,7 +357,7 @@ void Stub::deleteCurrentSOAPMethodAttribute()
     {
         delete(*m_viCurrentSOAPMethodAttribute);
         m_vSOAPMethodAttributes.erase(m_viCurrentSOAPMethodAttribute);
-
+        m_viCurrentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin();
     }
 }
 
@@ -364,6 +371,7 @@ void Stub::deleteSOAPMethodAttribute(Attribute* pAttribute)
         {
             delete (*currentSOAPMethodAttribute);
             m_vSOAPMethodAttributes.erase(currentSOAPMethodAttribute);
+            m_viCurrentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin();
             bDone = true;
         }
         currentSOAPMethodAttribute++;
@@ -375,6 +383,7 @@ void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pP
 {
     Attribute* pAttribute = new Attribute(pLocalname, pPrefix, pUri, pValue);
 	m_vSOAPMethodAttributes.push_back(pAttribute);
+    m_viCurrentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin();
 }
 
 void Stub::setTransportTimeout(const long lSeconds)
