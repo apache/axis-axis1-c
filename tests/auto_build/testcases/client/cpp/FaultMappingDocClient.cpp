@@ -5,7 +5,6 @@
 #include <iostream>
 
 void sig_handler(int);
-void PrintUsage();
 
 int main(int argc, char* argv[])
 {
@@ -37,7 +36,8 @@ int main(int argc, char* argv[])
 	{
 	    for(int i = 0; i < 4; i++)
 	    {
-			printf("%d\n", i);
+            cout << i << endl;
+
 			switch(i)
 			{
 				case 0: i1 = 10; i2 = 5; break;
@@ -75,35 +75,28 @@ int main(int argc, char* argv[])
 			}
 			catch(AxisException& e)
 			{
-				printf("AxisException: %s\n", e.what());
+                cout << "AxisException: " << e.what() << endl;
 			}
 			catch(exception& e)
 			{
-				printf("Unknown Exception: \n");
+                cout << "Unknown Exception: " << endl;
 			}
 			catch(...)
 			{
-				printf("Unspecified Exception: \n");
+                cout << "Unspecified Exception: " << endl;
 			}
 	    }
 	}
 	else 
 	{
 		printf("Invalid operation %s\n\n", op);
-		PrintUsage();
 	}
 	return 0;
 }
 
-void PrintUsage()
-{
-	printf("Usage :\n FaultMappingDoc <url>\n\n");
-	exit(1);
-}
-
 void sig_handler(int sig) {
 	signal(sig, sig_handler);
-	printf("SIGNAL RECEIVED (%d)\n", sig);
+    cout << "SIGNAL RECEIVED " << sig << endl;
 	exit(1);
 }
 
