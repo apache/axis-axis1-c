@@ -121,16 +121,16 @@ to [CHECKOUT_HOME]\c\include\xercesc<br>
 <p>Copy the include files in "[APACHE_HOME]\include" directory to
 "[CHECKOUT_HOME] \c\include\apache2_0\"<br>
 3) Copy the lib files from "[XERCES_EXTRACT] \lib" to
-"[CHECKOUT_HOME]\c\lib\win32\xercesc"<br>
+"[CHECKOUT_HOME]\c\lib\xercesc"<br>
 4) Copy the lib files.</p>
 
 <p><b>For apache 1.3.X:</b> copy the ApacheCore.lib file from [APACHE_HOME]
-\libexec to [CHECKOUT_HOME]\c\lib\win32\apache1_3.</p>
+\libexec to [CHECKOUT_HOME]\c\lib\apache1_3.</p>
 
 <p><b>For apache 2.X:</b> copy libapr.lib, libhttpd.lib files from
-"[APACHE_HOME]\lib" to "[CHECKOUT_HOME]\c\lib\win32\apache2_0".<br>
+"[APACHE_HOME]\lib" to "[CHECKOUT_HOME]\c\lib\apache2_0".<br>
 5) In Visual C++ (The version used for this documentation was Visual C++ 6.0)
-open the file Axis.dsw which is in "[CHECKOUT_HOME]\ws-axis \c\ vc". In the
+open the file Axis.dsw which is in "[CHECKOUT_HOME]\ws-axis \c\vc". In the
 workspace window File View, right click on either the project "Apache1_3" or
 "Apache2_0" and click on the "Set as Active Project" to make it the Active
 Project.<br>
