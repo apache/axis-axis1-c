@@ -150,8 +150,8 @@ const Transport& HttpTransport::operator >> (const char** pPayLoad)
   if(m_IsHttpHeader == 1)
   {
       //printf("m_IsHttpHeader == 1\n");
-             m_Channel >> tmpPacket;
-      *pPayLoad = tmpPacket.c_str();
+             m_Channel >> m_PayLoad;
+      *pPayLoad = m_PayLoad.c_str();
 
       return *this;
   }
