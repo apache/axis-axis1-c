@@ -120,7 +120,7 @@ const IChannel & HTTPSSLChannel::operator >> (const char * msg)
 									  (char *) m_LastError.c_str());
     }
 
-    int	nRxBytes = ReadFromSocket( msg);
+    ReadFromSocket( msg);
 
 	return *this;
 }
@@ -140,7 +140,7 @@ const IChannel & HTTPSSLChannel::operator << (const char * msg)
 									  (char *) m_LastError.c_str());
     }
 
-	int nByteSent = WriteToSocket( msg, strlen( msg));
+	WriteToSocket( msg, strlen( msg));
 
 	return *this;
 }
@@ -516,7 +516,6 @@ void HTTPSSLChannel::OpenSSL_Initialise()
 bool HTTPSSLChannel::OpenSSL_Open()
 {
     SSL_METHOD *	req_method = SSLv23_client_method();
-    SSL_SESSION *	ssl_sessionid = NULL;
 	bool			bSuccess = (bool) AXIS_FAIL;
 	int				iSSLErrorIndex = 0;
 
