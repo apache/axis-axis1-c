@@ -291,6 +291,7 @@ int SoapEnvelope::serializeStandardNamespaceDecl(SoapSerializer &pSZ)
     return AXIS_SUCCESS;
 }
 
+#ifdef UNIT_TESTING_ON
 int SoapEnvelope::initializeForTesting(SOAP_VERSION eSoapVersion)
 {
     if (eSoapVersion == SOAP_VER_1_2)
@@ -311,4 +312,4 @@ int SoapEnvelope::initializeForTesting(SOAP_VERSION eSoapVersion)
 
     return AXIS_SUCCESS;
 }
-
+#endif

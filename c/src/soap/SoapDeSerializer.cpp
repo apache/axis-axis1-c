@@ -29,6 +29,10 @@
  * Fixed the bug AXISCPP-95 at JIRA.
  */
 
+#ifdef WIN32
+#pragma warning (disable : 4101)
+#endif
+
 #include <axis/server/SoapDeSerializer.h>
 #include "SoapEnvelope.h"
 #include "SoapKeywordMapping.h"

@@ -149,6 +149,7 @@ int SoapBody::serializeAttributes(SoapSerializer& pSZ)
     return iStatus;
 }
 
+#ifdef UNIT_TESTING_ON
 int SoapBody::initializeForTesting()
 {
     SoapMethod* pSoapMethod = new SoapMethod();
@@ -158,4 +159,4 @@ int SoapBody::initializeForTesting()
 
     return AXIS_SUCCESS;
 }
-
+#endif

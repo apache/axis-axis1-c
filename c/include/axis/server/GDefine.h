@@ -83,17 +83,6 @@ extern void ModuleUnInitialize();
 #define AXISCALL __stdcall
 #endif
 
-#if defined(__GNUC__)
-# if defined(__GNU_PATCHLEVEL__)
-#  define __GNUC_VERSION__ (__GNUC__ * 10000 \
-                            + __GNUC_MINOR__ * 100 \
-                            + __GNUC_PATCHLEVEL__)
-# else
-#  define __GNUC_VERSION__ (__GNUC__ * 10000 \
-                            + __GNUC_MINOR__ * 100)
-# endif
-#endif
-
 /*
  * Following macro define an API function of Axis C++
  * Format of the AXISAPI macro is as follows
@@ -118,19 +107,6 @@ extern void ModuleUnInitialize();
     #define APIHASPARAMS void*p,
     #define APINOPARAMS void*p
 #endif
-
-/*This was a hack to work around gcc version problems; hence commented out - samisa
-#if defined (__GNUC__)
-#if __GNUC_VERSION__ > 30000
-#define AXISDESTRUCTOR void* unused; void AXISAPI(destructor,(APINOPARAMS))
-#else
-#define AXISDESTRUCTOR void* unused; void*unused1; 
-void AXISAPI(destructor,(APINOPARAMS))
-#endif
-#else 
-#define AXISDESTRUCTOR void AXISAPI(destructor,(APINOPARAMS))
-#endif
-*/
 
 #endif 
 

@@ -8,8 +8,6 @@
 
 #include <axis/server/AxisWrapperAPI.h>
 
-bool CallBase::bInitialized;
-CallFunctions CallBase::ms_VFtable;
 extern int Axis_DeSerialize_SOAPArrayStruct(SOAPArrayStruct* param, IWrapperSoapDeSerializer *pDZ);
 extern void* Axis_Create_SOAPArrayStruct(SOAPArrayStruct *Obj, bool bArray = false, int nSize=0);
 extern void Axis_Delete_SOAPArrayStruct(SOAPArrayStruct* param, bool bArray = false, int nSize=0);
