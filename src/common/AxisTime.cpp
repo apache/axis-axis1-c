@@ -18,7 +18,7 @@
  * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  *
  */
-
+#include <math.h>
 #include <stdio.h>
 #include "AxisTime.h"
 #include "AxisUtils.h"
@@ -250,18 +250,18 @@ int AxisTime::mkCTime ()
             m_TM.tm_year -= 1900;
             m_TM.tm_mon--;
             m_TM.tm_isdst = -1;
-#if !defined(WIN32) && !defined(AIX) && !defined( __OS400__ )
+#if !defined(WIN32) && !defined(AIX) && !defined( __OS400__ ) && !defined(__sun)
             m_TM.tm_zone = NULL;
             m_TM.tm_gmtoff = -1;
 #endif
-            cTemp2 = strpbrk (m_sValue.c_str (), "T");
+            cTemp2 = const_cast<char*>(strpbrk (m_sValue.c_str (), "T"));
             cTemp3 = strrchr (cTemp2, ':');
             cTemp3[0] = '\0';
             intLen = strlen (cTemp2);
             cTemp3[0] = ':';
 
             /*if the timezone is represented adding 'Z' at the end */
-            if ((cTemp = strpbrk (m_sValue.c_str (), "Z")) != NULL)
+            if ((cTemp = const_cast<char*>(strpbrk (m_sValue.c_str (), "Z"))) != NULL)
             {
                 time_t temp = mktime (&m_TM);
                 if (temp == -1)
@@ -296,7 +296,7 @@ int AxisTime::mkCTime ()
                 time_t t = mktime (&m_TM);
                 if (t == -1)
                     return AXIS_FAIL;
-                t = abs (t - d);
+                t = fabs (t - d);
                 pTm = gmtime (&t);
                 memcpy (&m_TMUTC, pTm, sizeof (tm));
             }
@@ -329,14 +329,14 @@ int AxisTime::mkCTime ()
             m_TM.tm_min = 0;
             m_TM.tm_sec = 0;
             m_TM.tm_isdst = -1;
-#if !defined(WIN32) && !defined(AIX) && !defined( __OS400__ )
+#if !defined(WIN32) && !defined(AIX) && !defined( __OS400__ ) && !defined(__sun)
             m_TM.tm_zone = NULL;
             m_TM.tm_gmtoff = -1;
 #endif
-            cTemp3 = strpbrk (m_sValue.c_str (), ":");
+            cTemp3 = const_cast<char*>(strpbrk (m_sValue.c_str (), ":"));
 
             /* if the timezone is represented adding 'Z' at the end */
-            if ((cTemp = strpbrk (m_sValue.c_str (), "Z")) != NULL)
+            if ((cTemp = const_cast<char*>(strpbrk (m_sValue.c_str (), "Z"))) != NULL)
             {
                 time_t timeInSecs = mktime (&m_TM);
                 if (timeInSecs == -1)
@@ -346,9 +346,9 @@ int AxisTime::mkCTime ()
             }
             else if (cTemp3 != NULL)
             {
-                cUtc = strrchr (m_sValue.c_str (), '+');
+                cUtc = const_cast<char*>(strrchr (m_sValue.c_str (), '+'));
                 if (cUtc == NULL)
-                    cUtc = strrchr (m_sValue.c_str (), '-');
+                    cUtc = const_cast<char*>(strrchr (m_sValue.c_str (), '-'));
                 time_t timeInSecs = mktime (&m_TM);
                 if (timeInSecs == -1)
                     return AXIS_FAIL;
@@ -368,7 +368,7 @@ int AxisTime::mkCTime ()
                 time_t t = mktime (&m_TM);
                 if (t == -1)
                     return AXIS_FAIL;
-                t = abs (t - d);
+                t = fabs (t - d);
                 pTm = gmtime (&t);
                 memcpy (&m_TMUTC, pTm, sizeof (tm));
             }
@@ -399,7 +399,7 @@ int AxisTime::mkCTime ()
             m_TM.tm_mon = 0;
             m_TM.tm_mday = 1;     /* Day of month (1 - 31) */
             m_TM.tm_isdst = -1;
-#if !defined(WIN32) && !defined(AIX) && !defined( __OS400__ )
+#if !defined(WIN32) && !defined(AIX) && !defined( __OS400__ ) && !defined(__sun)
             m_TM.tm_zone = NULL;
             m_TM.tm_gmtoff = -1;
 #endif
@@ -417,7 +417,7 @@ int AxisTime::mkCTime ()
             cTemp3[0] = ':';
 
             /* if the timezone is represented adding 'Z' at the end */
-            if ((cTemp = strpbrk (m_sValue.c_str (), "Z")) != NULL)
+            if ((cTemp = const_cast<char*>(strpbrk (m_sValue.c_str (), "Z"))) != NULL)
             {
                 time_t temp = mktime (&m_TM);
                 if (temp == -1)
@@ -452,7 +452,7 @@ int AxisTime::mkCTime ()
                 time_t t = mktime (&m_TM);
                 if (t == -1)
                     return AXIS_FAIL;
-                t = abs (t - d);
+                t = fabs (t - d);
                 pTm = gmtime (&t);
                 memcpy (&m_TMUTC, pTm, sizeof (tm));
             }
