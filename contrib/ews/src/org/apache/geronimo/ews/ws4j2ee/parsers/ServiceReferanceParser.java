@@ -59,10 +59,10 @@ import java.io.InputStream;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.crimson.tree.TextNode;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.client.ServiceReferanceImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.ServiceReferance;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
+import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -101,7 +101,7 @@ public class ServiceReferanceParser {
             else
 				throw new GenerationFault("No service Referance in the file");	
         } catch (Exception e) {
-			throw new GenerationFault(e);
+			throw GenerationFault.createGenerationFault(e);
         }
 	}
 	/**
@@ -134,35 +134,25 @@ public class ServiceReferanceParser {
 
 		NodeList sevlele = root.getElementsByTagName("service-ref-name");
 		if(sevlele.getLength()>0){
-			ref.setServicerefName(getElementValue(sevlele.item(0)));
+			ref.setServicerefName(Utils.getElementValue(sevlele.item(0)));
 		}
 		
 		sevlele = root.getElementsByTagName("service-interface");
 		if(sevlele.getLength()>0){
-			ref.setServiceInterface(getElementValue(sevlele.item(0)));
+			ref.setServiceInterface(Utils.getElementValue(sevlele.item(0)));
 		}
 		
 		sevlele = root.getElementsByTagName("wsdl-file");
 		if(sevlele.getLength()>0){
-			ref.setWsdlFile(getElementValue(sevlele.item(0)));
+			ref.setWsdlFile(Utils.getElementValue(sevlele.item(0)));
 		}
 
 		sevlele = root.getElementsByTagName("jaxrpc-mapping-file");
 		if(sevlele.getLength()>0){
-			ref.setJaxrpcmappingFile(getElementValue(sevlele.item(0)));
+			ref.setJaxrpcmappingFile(Utils.getElementValue(sevlele.item(0)));
 		}
 	}
 	
-	public String getElementValue(Node node){
-		NodeList nodes = node.getChildNodes();
-		for(int i = 0;i<nodes.getLength();i++){
-			Node temp = nodes.item(i);
-			if(temp instanceof TextNode){
-				return ((TextNode)temp).getNodeValue();
-			}
-		}
-		return null;
-	}
     /**
      * @return
      */

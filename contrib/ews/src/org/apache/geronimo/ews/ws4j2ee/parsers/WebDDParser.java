@@ -59,12 +59,11 @@ import java.io.InputStream;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.crimson.tree.TextNode;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
+import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
@@ -101,26 +100,17 @@ public class WebDDParser {
 			if(sevlele.getLength()>0){
 				Element serv = (Element)sevlele.item(0);
 				NodeList servName = serv.getElementsByTagName("servlet-class");
-				servletClass = getElementValue(servName.item(0));
+				servletClass = Utils.getElementValue(servName.item(0));
 				
 				servName = serv.getElementsByTagName("servlet-name");
-				servletName = getElementValue(servName.item(0));
+				servletName = Utils.getElementValue(servName.item(0));
 			}
 		} catch (Exception e) {
 			throw GenerationFault.createGenerationFault(e);
 		}
 	}
 	
-	public String getElementValue(Node node){
-		NodeList nodes = node.getChildNodes();
-		for(int i = 0;i<nodes.getLength();i++){
-			Node temp = nodes.item(i);
-			if(temp instanceof TextNode){
-				return ((TextNode)temp).getNodeValue();
-			}
-		}
-		return null;
-	}
+	
 	/**
 	 * @return
 	 */
