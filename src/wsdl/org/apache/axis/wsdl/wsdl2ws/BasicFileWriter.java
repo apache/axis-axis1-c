@@ -41,4 +41,5 @@ public abstract class BasicFileWriter implements SourceWriter{
 	protected void writeDistructors()throws WrapperFault {};
 	protected abstract void writeMethods()throws WrapperFault;
 	protected abstract File getFilePath()throws WrapperFault;
+	protected abstract File getFilePath(boolean b)throws WrapperFault;
 }

@@ -53,6 +53,26 @@ public class ExceptionHeaderWriter extends HeaderFileWriter{
 	    return new File(fileName);
     }
 
+	protected File getFilePath(boolean useServiceName) throws WrapperFault {
+		String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
+		if(targetOutputLocation.endsWith("/"))
+			targetOutputLocation = targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
+		new File(targetOutputLocation).mkdirs();
+
+		String fileName = targetOutputLocation + "/" + faultInfoName + ".h";
+		
+		if( useServiceName)
+		{
+			fileName = targetOutputLocation + "/" + this.wscontext.getSerInfo().getServicename() + "_" + faultInfoName + ".h";
+		}
+		
+		return new File(fileName);
+	}
+
+	protected String getServiceName() throws WrapperFault {
+		return wscontext.getSerInfo().getServicename();
+	}
+
      	/* (non-Javadoc)
 		 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writePreprocssorStatements()
 		 */
@@ -90,11 +110,18 @@ public class ExceptionHeaderWriter extends HeaderFileWriter{
 		 */
 		protected void writeConstructors() throws WrapperFault {
 			try{
-			writer.write("public:\n\t"+faultInfoName+"();\n");
-			writer.write("\t"+faultInfoName+"(ISoapFault* pFault);\n");
-			writer.write("\t"+faultInfoName+"(int iExceptionCode);\n");
-			writer.write("\t"+faultInfoName+"(exception* e);\n");
-			writer.write("\t"+faultInfoName+"(exception* e, int iExceptionCode);\n");				
+				String faultName = faultInfoName;
+		
+				if("AxisClientException".equals(faultInfoName))
+				{
+					faultName = getServiceName()+"_"+faultInfoName;
+				}
+				
+			writer.write("public:\n\t"+faultName+"();\n");
+			writer.write("\t"+faultName+"(ISoapFault* pFault);\n");
+			writer.write("\t"+faultName+"(int iExceptionCode);\n");
+			writer.write("\t"+faultName+"(exception* e);\n");
+			writer.write("\t"+faultName+"(exception* e, int iExceptionCode);\n");				
 			}catch(IOException e){
 				throw new WrapperFault(e);
 			}
@@ -105,7 +132,14 @@ public class ExceptionHeaderWriter extends HeaderFileWriter{
 		 */
 		protected void writeDistructors() throws WrapperFault {
 			try{
-			writer.write("\tvirtual ~"+faultInfoName+"() throw();\n");
+				String faultName = faultInfoName;
+		
+				if("AxisClientException".equals(faultInfoName))
+				{
+					faultName = getServiceName()+"_"+faultInfoName;
+				}
+
+			writer.write("\tvirtual ~"+faultName+"() throw();\n");
 			}catch(IOException e){
 				throw new WrapperFault(e);
 			}

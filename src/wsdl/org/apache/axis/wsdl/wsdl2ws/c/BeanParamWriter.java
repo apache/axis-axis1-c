@@ -22,6 +22,7 @@
 
 package org.apache.axis.wsdl.wsdl2ws.c;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -317,4 +318,8 @@ public class BeanParamWriter extends ParamCFileWriter{
 		writer.write("\t}\n");
 		writer.write("}\n");
 	}	
+	protected File getFilePath(boolean useServiceName) throws WrapperFault {
+		
+		return null;
+	}
 }

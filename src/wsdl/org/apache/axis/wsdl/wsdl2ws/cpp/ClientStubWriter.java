@@ -57,6 +57,24 @@ public class ClientStubWriter extends CPPClassWriter{
 		this.wscontext.addGeneratedFile(classname + ".cpp");
 		return new File(fileName);
 	}
+	protected File getFilePath(boolean useServiceName) throws WrapperFault {
+		String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
+		if(targetOutputLocation.endsWith("/"))
+			targetOutputLocation = targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
+		new File(targetOutputLocation).mkdirs();
+
+		String fileName = targetOutputLocation + "/" + classname + ".cpp";
+		
+		if( useServiceName)
+		{
+			fileName = targetOutputLocation + "/" + this.wscontext.getSerInfo().getServicename() + "_" + classname + ".cpp";
+		}
+		
+		return new File(fileName);
+	}
+	protected String getServiceName() throws WrapperFault {
+		return wscontext.getSerInfo().getServicename();
+	}
 	protected void writeClassComment() throws WrapperFault {
 			try{
 				writer.write("/*\n");	
@@ -119,7 +137,14 @@ public class ClientStubWriter extends CPPClassWriter{
 	 */
 	protected void writePreprocssorStatements() throws WrapperFault {
 		try{
-			writer.write("#include \""+classname+".h\"\n\n");
+			if( "AxisClientException".equals(classname))
+			{
+				writer.write("#include \""+getServiceName()+"_"+classname+".h\"\n\n");
+			}
+			else
+			{
+				writer.write("#include \""+classname+".h\"\n\n");
+			}
 			writer.write("#include <axis/server/AxisWrapperAPI.h>\n\n");
             writer.write("using namespace std;\n\n ");
 		
@@ -370,7 +395,7 @@ public class ClientStubWriter extends CPPClassWriter{
 	    if (!paramsFault.hasNext())
 	    {
 			writer.write("\t\t\tm_pCall->unInitialize();\n");
-			writer.write("\t\t\tthrow AxisClientException(pSoapFault);\n");		
+			writer.write("\t\t\tthrow " + wscontext.getSerInfo().getServicename() + "_AxisClientException(pSoapFault);\n");		
 	    }
 		else
 		{
@@ -404,7 +429,7 @@ public class ClientStubWriter extends CPPClassWriter{
 		    {		    	    
 			        writer.write("\t\t\telse\n\t\t\t{\n");
 				writer.write("\t\t\t\t  m_pCall->unInitialize();\n");
-				writer.write("\t\t\t\t  throw AxisClientException(pSoapFault);\n");
+				writer.write("\t\t\t\t  throw " + wscontext.getSerInfo().getServicename() + "_AxisClientException(pSoapFault);\n");
 			        writer.write("\t\t\t}\n");		
 		    }	    
 		
@@ -425,7 +450,7 @@ public class ClientStubWriter extends CPPClassWriter{
                         writer.write("\t\t\t\t\t\t(void*) Axis_Delete_"+langName+",\""+langName+"\", 0);\n");
                         writer.write("\t\t\t\t\tpSoapFault->setCmplxFaultObject(pFaultDetail);\n");
 			writer.write("\t\t\t\t\tm_pCall->unInitialize();\n");
-                        writer.write("\t\t\t\t\tthrow AxisClientException(pSoapFault);\n");
+                        writer.write("\t\t\t\t\tthrow " + wscontext.getSerInfo().getServicename() + "_AxisClientException(pSoapFault);\n");
 			//writer.write("\t\t\t\t}\n");
 			writer.write("\t\t\t}\n");
 		}		

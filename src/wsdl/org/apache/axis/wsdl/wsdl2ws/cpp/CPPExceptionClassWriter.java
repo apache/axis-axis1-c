@@ -26,7 +26,9 @@ public abstract class CPPExceptionClassWriter extends BasicFileWriter{
 		}
 	public void writeSource()throws WrapperFault{
 		   try{
-		  this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+		   String filename = getFilePath().getName();
+	   	
+		   this.writer = new BufferedWriter(new FileWriter(getFilePath( filename.startsWith( "AxisClientException")), false));
 		   writeClassComment();
 		   writePreprocssorStatements();
 		   writeGlobalCodes();

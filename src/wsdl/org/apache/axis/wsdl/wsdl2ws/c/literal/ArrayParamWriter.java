@@ -77,6 +77,22 @@ public class ArrayParamWriter extends ParamWriter{
 		String fileName = targetOutputLocation + "/" + this.classname + ".h";
 		return new File(fileName);
 	}
+
+	protected File getFilePath(boolean useServiceName) throws WrapperFault {
+		String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
+		if(targetOutputLocation.endsWith("/"))
+			targetOutputLocation = targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
+		new File(targetOutputLocation).mkdirs();
+
+		String fileName = targetOutputLocation + "/" + classname + ".h";
+		
+		if( useServiceName)
+		{
+			fileName = targetOutputLocation + "/" + this.wscontext.getSerInfo().getServicename() + "_" + classname + ".h";
+		}
+		
+		return new File(fileName);
+	}
 	
 	protected void writeArrayStruct()throws WrapperFault{
 		try{			

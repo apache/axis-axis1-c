@@ -36,7 +36,10 @@ public abstract class HeaderFileWriter extends BasicFileWriter {
 	}
 	public void writeSource()throws WrapperFault{
 	   try{
-	  this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+		String filename = getFilePath().getName();
+	   	
+	   this.writer = new BufferedWriter(new FileWriter(getFilePath( filename.startsWith( "AxisClientException")), false));
+
 	   writeClassComment();
 	   // if this headerfile not defined define it 
 	   this.writer.write("#if !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)\n");
@@ -44,7 +47,15 @@ public abstract class HeaderFileWriter extends BasicFileWriter {
 	   //includes
 	   writePreprocssorStatements();
 		//class
-	   this.writer.write("class "+classname+getExtendsPart()+"\n{\n");
+		
+		if( "AxisClientException".equals( classname))
+		{
+			this.writer.write("class "+getServiceName()+"_"+classname+getExtendsPart()+"\n{\n");
+		}
+		else
+		{
+			this.writer.write("class "+classname+getExtendsPart()+"\n{\n");
+		}
 	   writeAttributes();
 	   writeConstructors();
 	   writeDistructors();
@@ -65,5 +76,5 @@ public abstract class HeaderFileWriter extends BasicFileWriter {
 	protected abstract String getExtendsPart();//{return " ";}
 	protected abstract File getFilePath()throws WrapperFault;
 	protected abstract String getFileType(); //will return "Param", "Server" or "Client"
-
+	protected abstract String getServiceName()throws WrapperFault;
 }
