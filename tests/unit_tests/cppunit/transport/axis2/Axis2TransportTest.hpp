@@ -31,53 +31,49 @@ class Axis2TransportTest : public CppUnit::TestFixture  {
 private:
   Axis2Transport* m_pTransport;
 public:
-	void setUp()
-  	{
-    	m_pTransport = new Axis2Transport();
-  	}
+    void setUp()
+    {
+        m_pTransport = new Axis2Transport();
+    }
 
-	void tearDown() 
-  	{
-    	delete m_pTransport;
-  	}
+    void tearDown() 
+    {
+        delete m_pTransport;
+    }
 
-	void testGetBytes()
-  	{
-		char sentMessage[32];
+    void testGetBytes()
+    {
+	char sentMessage[32];
     	char endpoint[64];
     	strcpy(sentMessage, "this is a test");
     	sprintf (endpoint, "http://127.0.0.1:1111/axis");
     	m_pTransport->setEndpointUri(endpoint);
     	m_pTransport->sendBytes(sentMessage, "buffer id");
     	m_pTransport->flushOutput();
-			printf("\ncame1\n");
     	int status = TRANSPORT_IN_PROGRESS;
     	int tempbuffsize = 1024;
         int *buffsize = &tempbuffsize;
-			printf("\ncame2\n");
     	int tempsize;
     	char* buff = (char*) malloc(*buffsize);
     	memset(buff, 0, *buffsize);
     	char msg[8192];
-		do
+        do
     	{
-			tempsize = *buffsize;
-			status = m_pTransport->getBytes(buff, buffsize);
-			printf("buffsize:%d\n", *buffsize);
-			printf("buff:\n%s\n", buff);
-			strcat(msg, buff);
-			if(*buffsize > tempsize)
-			{
-				realloc (buff, *buffsize);
-				memset(buff, 0, *buffsize);
-			}
+	    tempsize = *buffsize;
+	    status = m_pTransport->getBytes(buff, buffsize);
+	    //printf("buffsize:%d\n", *buffsize);
+	    //printf("buff:\n%s\n", buff);
+	    strcat(msg, buff);
+	    if(*buffsize > tempsize)
+	    {
+	        realloc (buff, *buffsize);
+	        memset(buff, 0, *buffsize);
+	    }
     	}
-    	//while((TRANSPORT_IN_PROGRESS == status) && (*buffsize) > 0);
-    	while(TRANSPORT_IN_PROGRESS == status);
+        while((TRANSPORT_IN_PROGRESS == status) && (*buffsize) > 0);
+    	//while(TRANSPORT_IN_PROGRESS == status);
     	//printf("msg:\n%s\n", msg);
-    	//CPPUNIT_ASSERT( NULL != msg);
-    	//CPPUNIT_ASSERT( !(*m_10_1 == *m_11_2) );
-  	}
+    }
 };
 
 
