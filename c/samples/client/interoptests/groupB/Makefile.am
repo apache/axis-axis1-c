@@ -1,7 +1,7 @@
-bin_PROGRAMS = groupb
+bin_PROGRAMS = groupB
 SUBDIRS =
 AM_CPPFLAGS = -Wshadow -Wall -pedantic -ansi
-groupb_SOURCES = InteropGroupBClient.cpp InteropTestPortTypeB.cpp SOAPArrayStruct.cpp SOAPStruct.cpp SOAPStructStruct.cpp
+groupB_SOURCES = InteropGroupBClient.cpp InteropTestPortTypeB.cpp SOAPArrayStruct.cpp SOAPStruct.cpp SOAPStructStruct.cpp
 
-groupb_LDADD   =  -L$(AXISCPP_HOME)/bin -laxiscpp_client -L$(AXISCPP_HOME)/lib/expat -lexpat -lltdl
+groupB_LDADD   =  -L$(AXISCPP_HOME)/bin -laxiscpp_client -L$(AXISCPP_HOME)/lib/expat -lexpat -lltdl
 INCLUDES = -I$(AXISCPP_HOME)/include
