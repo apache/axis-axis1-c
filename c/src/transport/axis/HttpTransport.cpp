@@ -83,7 +83,9 @@ HttpTransport::HttpTransport(Url url, bool secure) : m_Typ(POST)
     m_Secure = secure;
 
     if(secure) {
+#ifdef _SSL_ENABLED_        
         m_Channel = new SecureChannel();
+#endif        
     } else {
         m_Channel = new Channel();
     }
@@ -101,7 +103,9 @@ HttpTransport::HttpTransport(std::string& strUrl, bool secure) : m_Typ(POST)
     m_HttpBindDone = false;
 
     if(secure) {
+#ifdef _SSL_ENABLED_         
         m_Channel = new SecureChannel();
+#endif        
     } else {
         m_Channel = new Channel();
     }
