@@ -1,8 +1,0 @@
-Q1 - What are the typical usages of each category of handlers (Transport, Global and Service specific)  
-Ans -   
-Q2 - What happens if a response flow handler fails ?  
-Ans -   
-Q3 - Does any of the request flow handlers (T,G,S) use the soap body of the request ?  
-Ans -  
-Q4 - Does any of the request flow handlers (T,G,S) alter (change or replace) soap body of the request?  
-Ans -  

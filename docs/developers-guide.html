@@ -1,0 +1,95 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <title>Axis Developer's Guide</title>
+    <link href="axis.css" rel=stylesheet type=text/css>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<center>
+<h1>
+<img SRC="images/axis.jpg" height=96 width=176></h1></center>
+
+<h1>
+Axis C++ Developer's Guide</h1>
+<i>0.1 Version</i>
+<h3>
+Table of Contents</h3>
+<a href="#Introduction">Introduction</a>
+<br><a href="#General Guidelines">General Guidelines</a>
+<br><a href="#Development Environment">Development Environment</a>
+<br><a href="#Configuration Properties">Configuration Properties</a>
+<br><a href="#Compile And Run">Compile and Run</a>
+<br><a href="#Adding Testcases">Adding Testcases</a>
+<br><a href="#TestStructure">Test and Samples Structure</a>
+<br><a href="#CodeChecks">Adding Source Code Checks</a>
+<br><a href="#JUnit">CUnit and Axis</a>
+<br><a href="#Debugging">Debugging</a>
+<br>&nbsp;
+<h2>
+<a NAME="Introduction"></a>Introduction</h2>
+This document is intended for the developer who wish to download and compile and 
+test the axis C++ server.<h2>
+<a NAME="General Guidelines"></a>General Guidelines</h2>
+
+<ul>
+<li>
+TO DO ...</li>
+</ul>
+
+<h2>
+<a NAME="Development Environment"></a>Development Environment</h2>
+The following packages are required for axis development:
+<ul>
+
+<li>
+<a href="http://xml.apache.org/dist/xerces-j">xerces</a> - xml processor</li>
+</ul>
+
+<h2>
+<a NAME="Configuration Properties"></a>Configuration Properties</h2>
+<p>
+TO DO ...
+
+</ul>
+
+<h2>
+<a NAME="Compile And Run"></a>Compile and Run</h2>
+<p>&nbsp;create and export an environment variable called<br>
+XERCES_HOME. This environment variable should contain the path to the xerces 
+home directory.<br>
+<br>
+For example if your xerces is installed in<br>
+<br>
+/usr/local/xerces_c folder then <br>
+$(XERCES_HOME)/lib should expand to /usr/local/xerces_c/lib and<br>
+$(XERCES_HOME)/include should expand to /usr/local/xerces_c/include<br>
+<br>
+cd axiscpp<br>
+make clean<br>
+make<br>
+<br>
+If the build successful, libaxiscpp.so should have been created in <br>
+axiscpp/release directory.</p>
+
+<h2>
+<a NAME="Adding Testcases"></a><font color="#000000">Adding Testcases</font></h2>
+<P>See Also: <a href="#TestStructure">Test and Samples Structure</a></P>
+<font color="#000000">
+
+<h2><a NAME="TestStructure"></a>Test Structure</H2>
+
+<p>&nbsp;</p>
+<h2>
+<a NAME="CodeChecks"></a>Adding Source Code Checks</h2>
+<p>
+&nbsp;<h2>
+<a NAME="JUnit"></a>CUnit and Axis</h2>
+
+<p>
+&nbsp;<h2>
+<a NAME="Debugging"></a>Debugging</h2>
+
+</body>
+</html>

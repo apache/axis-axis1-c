@@ -1,0 +1,229 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns="http://www.w3.org/TR/REC-html40">
+	<head>
+		<title>Axis Architecture Guide</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+			<link href="axis.css" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+		<center>
+			<h1>
+				<img SRC="images/axis.jpg" height="96" width="176"></h1>
+		</center>
+		<h1>
+			Axis C++ Architecture Guide</h1>
+		<font face="Lucida Sans"><font color="#cc0000"><font size="+3">Under construction ....</font></font></font>
+		<br>
+		<i>0.1 Version</i>
+		<br>
+		<i>Feedback: <a href="mailto:axis-dev@ws.apache.org">axis-dev@ws.apache.org</a></i>
+		<h3>
+			Contents</h3>
+		<a href="#Introduction">Introduction</a>
+		<br>
+		<a href="#Overview">Architecture Overview</a>
+		<br>
+		<a href="#Subsystems">Subsystems</a>
+		<br>
+		&nbsp;&nbsp;&nbsp; <a href="#AxisEngine">AxisEngine</a>
+		<br>
+		&nbsp;&nbsp;&nbsp; <a href="#HandlerPool">HandlerPool</a>
+		<br>
+		&nbsp;&nbsp;&nbsp; <a href="#Deserializer">Soap Deserializer</a>
+		<br>
+		&nbsp;&nbsp;&nbsp; <a href="#Serializer">Soap Serializer</a>
+		<br>
+		&nbsp;&nbsp;&nbsp; <a href="#WSDD">WSDD Module&nbsp; </a>
+		<br>
+		&nbsp;&nbsp;&nbsp; <a href="#ServerConfig">Server Configuration</a>
+		<br>
+		&nbsp;&nbsp;&nbsp; <a href="#Logger">Logger</a>
+		<br>
+		<a href="#Deployment">Web Service Deployment&nbsp; </a>
+		<br>
+		<a href="#WrapClassGen">Wrapper Classes and WSDL Generation</a>
+		<br>
+		<a href="#ClientStubGen">Client Stub Generation</a>
+		<br>
+		<a href="#Open Issues">Open Issues</a>
+		<h2>
+			<a NAME="Introduction"></a>Introduction</h2>
+		This guide describes the architecture of Axis C++ implementation.<h2>
+			<a NAME="Overview"></a>Architectural Overview</h2>
+		Axis C++ is all about deploying C++ web services and processing SOAP messages. 
+		As you see later Axis C++ consists of several subsystems working together. Axis 
+		C++ architecture closely follows Axis Java in Handler and message paths.<h3>
+			Handlers and the Message Path in Axis</h3>
+		<p>
+			Axis C++ implementation follows how handlers and message paths work in Axis 
+			Java implementation.
+		</p>
+		<p>
+			When the central Axis processing logic runs, a series of <b>Handlers</b> are 
+			each invoked in order. The order of invocation is determined by two factors - 
+			deployment configuration and whether the engine is a client or a server. The 
+			object which is passed to each Handler invocation is a <b>MessageData</b>. A 
+			MessageData is a structure which contains several important parts: 1) 
+			Deserializer, 2) Serializer, and 3) a bag of properties. More on this in a bit.
+		</p>
+		<h3>
+			Message Path on the Server</h3>
+		The server side message path is shown in the following diagram. The small 
+		cylinders represent Handlers and the larger, enclosing cylinders represent <b>Chains</b>
+		(ordered collections of Handlers which will be described shortly).
+		<br>
+		<img SRC="images/ServerMessagePath.jpg" VSPACE="30" height="282" width="602">
+		<br>
+		A message arrives (in some protocol-specific manner) at a Transport Listener. 
+		In this case, let's assume the Listener is an apache module. It's the 
+		Listener's job to package the protocol-specific data into a <b>soapstream</b> object 
+		(specified in Packet.h), and pass it to AxisEngine to be processed. The <b>soapstream</b>
+		is also loaded with various <b>properties</b> by the Listener -&nbsp; in this 
+		example the property "trtype" would be set to the transport type and the value 
+		of the SOAPAction HTTP header is inserted in to a header list.
+		<p>The AxisEngine's first job is to check what the transport is. Then the 
+			MessageData object is created and populated (with Serializer, Deserializer 
+			etc). Also the Serializer and Deserializer is initialized. Then the configured 
+			handlers and the target web service handler are loaded. All transport, global 
+			and service specific handlers are loaded in to <b>Chains. </b>A <b>Chain</b>
+		is also a Handler consisting of a sequence of Handlers which are invoked in 
+		turn -- more on Chains later.
+		<p>Then the loaded handler chains are invoked in the order shown passing the 
+			MessageData object into the invoke().
+			<h2>
+				<a NAME="Subsystems"></a>Subsystems</h2>
+			Axis comprises several subsystems working together with the aim of separating 
+			responsibilities cleanly and making Axis modular. Subsystems which are properly 
+			layered enable parts of a system to be used without having to use the whole of 
+			it.
+			<h3><a name="AxisEngine"></a>AxisEngine
+			</h3>
+		<p>AxisEngine contains the core logic of the message flow. AxisEngine's "Process" 
+			method contains the message flow logic. Following sequence diagrams show the 
+			message flow logic.</p>
+		<p>Following Diagram shows how the transport listener passes the SOAP message to 
+			the AxisEngine. AxisEngine is a singleton object for a process.</p>
+		<p>
+        <img border="0" src="images/translistner.jpg" width="637" height="378"></p>
+		<p>Now following diagram depicts the Engine Initialization.</p>
+		<div class="Section1">
+			<p class="MsoNormal">
+            <img border="0" src="images/Engineinit.jpg" width="712" height="830"></p>
+		</div>
+		<p class="MsoNormal">Following diagram depicts the AxisEngine's message flow logic</p>
+		<p>
+        <img border="0" src="images/messageflow.jpg" width="743" height="821"></p>
+		<h3><a name="HandlerPool"></a>HandlerPool
+		</h3>
+		<p>AxisEngine instantiates a HandlerPool object in its constructor. HandlerPool 
+			does the following 3 tasks,</p>
+		<ol>
+			<li>
+			Loads and keeps Transport and Global handlers.
+			<li>
+			Loads service specific handlers when needed and unloads when needed.
+			<li>
+				Loads target web service handler when needed and unloads when needed.</li>
+		</ol>
+		<p>To provide above functionality the HandlerPool makes use of other two classes 
+			HandlerChain and HandlerLoader. HandlerLoader loads holds and unloads the 
+			dynamic link library (or shared object) that contain either a handler or a web 
+			service. HandlerChain is used to keep a list of handlers to be invoked in 
+			order. HandlerChain itself is a handler.</p>
+		<p>In order for the HandlerLoader to dynamically load a class, every DLL (or Shared 
+			object) must have following <b>export functions</b>.&nbsp;</p>
+		<p>int GetClassInstance(DCLInterface **inst);
+		</p>
+		<p>int DestroyInstance(DCLInterface *inst);</p>
+		<p>AxisEngine has no idea of any web service methods in the deployed web service 
+			class that is dynamically loaded from a DLL. Therefore in order to communicate 
+			with loaded class we have to have a known interface. This interface is known as <b>
+				<span style="FONT-SIZE:10pt">BasicHandler </span></b>and is known to 
+			AxisEngine. This interface is implemented by every webservice and a handler.</p>
+		<p><img border="0" src="images/handlers.jpg" width="355" height="235"></p>
+		<h3><a name="Deserializer"></a>Soap Deserializer
+		</h3>
+		<p>Currently the Soap Deserializer is implemented using SAX2 parser. Soap 
+			Deserializer exposes and API such that the API is independent of the 
+			implementation. This API is decided with a view of using XML pull parsing for 
+			the implementation. Once the Deserializer is given a message with its 
+			SetStream(..) method its GetXXX methods can be called in sequence to get the 
+			parsed SOAP data.</p>
+		<h3>
+			<br>
+			<a name="Serializer"></a>Soap Serializer</h3>
+		<p>Soap Serializer's task is to generate SOAP stream to be sent. There are a set of 
+			functions (API that is the opposite functionality with Soap Deserializer). Once 
+			the Serializer is given all the information that is required to generate a SOAP 
+			using the API, the getStream(..) function can be used to get the SOAP message.</p>
+		<h3>
+			<br>
+			<a name="WSDD"></a>WSDD Module</h3>
+		<p>WSDD module is a set of classes that parses the deployment descriptor 
+			file(server.wsdd) and makes the information available to the AxisEngine.&nbsp; 
+			A WSDDDeployment object is instantiated in AxisEngine's constructor.
+		</p>
+		<h3>
+			<br>
+			<a name="ServerConfig"></a>Server Configuration
+		</h3>
+		<h3>
+			<br>
+			<a name="Logger"></a>Logger
+		</h3>
+		<h2><a name="Deployment"></a>Web Service Deployment&nbsp;
+		</h2>
+		<p class="MsoNormal" style="MARGIN-LEFT:0.3in">The solution is to write a wrapper 
+			class for each web service class. This wrapper class is written with full 
+			awareness of the actual web service class and the corresponding WSDD. Then this 
+			wrapper class is compiled to a DLL (Shared Library in Linux) and is deployed as 
+			the web service. Following diagram shows this process.</p>
+		<p>
+        <img border="0" src="images/deployprocess.jpg" width="584" height="135"></p>
+		<p>&nbsp;</p>
+		<h2>
+			<a name="WrapClassGen"></a>Wrapper Classes and WSDL Generation</h2>
+		<p>
+			<b>WrapperClassGenerator </b>writes the wrapper class using only the web 
+			services include file and the deployment descriptor for that web service. The 
+			corresponding WSDL too is generated.</p>
+		<h3><a name="WrapClassMaping"></a>Web Service to Wrapper Class Mapping</h3>
+		<p>Following example shows how the Web service maps to the Wrapper class.</p>
+		<p><img border="0" src="images/Mappingheader.jpg" width="660" height="316"></p>
+		<p>The actual web service object is instantiated in the constructor of the wrapper 
+			class and is destroyed in the destructor. The Invoke method
+			<span style="FONT-SIZE: 12pt; FONT-FAMILY: Times New Roman">can be written 
+just by looking at the WSDD. Or else by looking at the exposed methods of the 
+web service class. The Invoke method chooses what method to be called as 
+follows.</span></p>
+		<p><img border="0" src="images/invokemethod.jpg" width="402" height="217"></p>
+		<p class="MsoNormal" style="MARGIN-LEFT:0.3in">Then each allowed method in the 
+			actual web service class is wrapped by a Wrapper method in the Wrapper class. 
+			Only a method signature is needed to write the corresponding wrapper method. 
+			This implies that following are needed,&nbsp;</p>
+		<ol>
+			<li>
+				<p class="MsoNormal" style="MARGIN-LEFT: 53.85pt; TEXT-INDENT: -0.25in">Method Name</p>
+			<li>
+				<p class="MsoNormal" style="MARGIN-LEFT: 53.85pt; TEXT-INDENT: -0.25in">No of 
+					parameters</p>
+			<li>
+				<p class="MsoNormal" style="MARGIN-LEFT: 53.85pt; TEXT-INDENT: -0.25in">
+					Sequence and types of the parameters</p>
+			<li>
+				<p class="MsoNormal" style="MARGIN-LEFT: 53.85pt; TEXT-INDENT: -0.25in">Return type</p>
+			</li>
+		</ol>
+		<p><img border="0" src="images/methodimpl.jpg" width="529" height="205"></p>
+		<h2><a name="ClientStubGen"></a>Client Stub Generation
+		</h2>
+		<p>&nbsp;</p>
+		<p></p>
+		<p>&nbsp;</p>
+		<h2>
+			<a NAME="Open Issues"></a>Open Issues</h2>
+		<p>
+			1.
+		</p>
+	</body>
+</html>
