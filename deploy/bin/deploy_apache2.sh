@@ -22,7 +22,7 @@ export APACHE2_HOME
 rm ${APACHE2_HOME}/modules/libaxiscpp_mod2.so
 rm ${AXISCPP_DEPLOY}/lib/libaxis_xmlparser.so
 cp -f ${AXISCPP_DEPLOY}/lib/libaxiscpp_mod2.so ${APACHE2_HOME}/modules/
-cp -f ${AXISCPP_DEPLOY}/lib/libaxis_expat.so ${AXISCPP_DEPLOY}/lib/libaxis_xmlparser.so
+cp -f ${AXISCPP_DEPLOY}/lib/libaxis_xercesc.so ${AXISCPP_DEPLOY}/lib/libaxis_xmlparser.so
 cp -f ${AXISCPP_DEPLOY}/etc/server.wsdd_linux ${AXISCPP_DEPLOY}/etc/server.wsdd
 cp -f ${AXISCPP_DEPLOY}/etc/client.wsdd_linux ${AXISCPP_DEPLOY}/etc/client.wsdd
 cp -f ${AXISCPP_DEPLOY}/etc/axiscpp.conf_linux ${AXISCPP_DEPLOY}/etc/axiscpp.conf
