@@ -12,7 +12,6 @@ libserver_engine_la_SOURCES = ../Axis.cpp \
                 ../SerializerPool.cpp \
                 ../SessionScopeHandlerPool.cpp \
                 ../SharedObject.cpp \
-                ../../transport/SOAPTransportFactory.cpp \
                 ../AxisEngineException.cpp \
                 ../SOAPTransportFactory.cpp \
                 ../XMLParserFactory.cpp 

@@ -23,7 +23,7 @@
 #include <string>
 #include <stdio.h>
 
-#if defined(__AXISTRACE__)  
+#if defined(ENABLE_AXISTRACE)  
   #define AXISTRACE1(X, Y) g_pAT->logaxis(X,Y,__FILE__,__LINE__);
   #define AXISTRACE2(X, Y, Z) g_pAT->logaxis(X,Y,Z,__FILE__,__LINE__);
   #define AXISTRACE3(X) g_pAT->trace(X);
