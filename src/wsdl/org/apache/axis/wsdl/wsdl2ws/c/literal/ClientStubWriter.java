@@ -75,8 +75,16 @@ public class ClientStubWriter extends CFileWriter{
 	 */
 	protected void writeMethods() throws WrapperFault {
 		try{
-			writer.write("void* get_"+classname+"_stub(){\n");
-			writer.write("\treturn getStubObject(APTHTTP, \""+wscontext.getWrapInfo().getTargetEndpointURI()+"\");\n}\n");
+			writer.write("void* get_"+classname+"_stub(const char* pchEndPointUri)\n{");
+			writer.write("\tif(pchEndPointUri)\n");
+			writer.write("\t{\n");
+			writer.write("\t\treturn getStubObject(APTHTTP, pchEndPointUri);\n");
+			writer.write("\t}\n");
+			writer.write("\telse\n");
+			writer.write("\t{\n");
+			writer.write("\t\treturn getStubObject(APTHTTP, \""+wscontext.getWrapInfo().getTargetEndpointURI()+"\");\n");
+			writer.write("\t}\n");
+			writer.write("}\n");
 			writer.write("void destroy_"+classname+"_stub(void* p){\n");
 			writer.write("\tdestroyStubObject(p);\n}\n");
 			

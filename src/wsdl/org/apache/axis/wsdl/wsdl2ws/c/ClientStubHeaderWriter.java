@@ -81,7 +81,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 		MethodInfo minfo;
 		boolean isSimpleType;
 		try{
-			writer.write("extern void* get_"+classname+"_stub();\n");
+			writer.write("extern void* get_"+classname+"_stub(const char* pchEndPointUri);\n");
 			writer.write("extern void destroy_"+classname+"_stub(void* p);\n");		
 			
 			writer.write("extern int get_" + classname + "_Status(void* pStub);\n");
