@@ -234,7 +234,7 @@ public class BeanParamWriter extends ParmWriter {
 				"\t\t\t\tif(localName.equalsIgnoreCase(\"" + attribs[0][0] + "\")) {\n");
 			//Type t;
 
-			JavaUtils.writeDeserializeCodeLine("this."+attribs[0][0],attribs[0][1],attribs[0][4],"\t\t\t\t\t",writer);
+			JavaUtils.writeDeserializeCodeLine("this."+attribs[0][0],attribs[0][1],attribs[0][4],"\t\t\t\t\t",writer,0);
 			
 //			  if (TypeMap.isSimpleType(attribs[0][1])) {
 //				  if (JavaUtils.isUnwrapperdSimpleType(attribs[0][1]))
@@ -287,7 +287,7 @@ public class BeanParamWriter extends ParmWriter {
 					"\t\t\t\t}else if (localName.equalsIgnoreCase(\""
 						+ attribs[i][0]
 						+ "\")) {\n");
-				JavaUtils.writeDeserializeCodeLine("this."+attribs[i][0],attribs[i][1],attribs[i][4],"\t\t\t\t\t",writer);
+				JavaUtils.writeDeserializeCodeLine("this."+attribs[i][0],attribs[i][1],attribs[i][4],"\t\t\t\t\t",writer,0);
 //				  if (TypeMap.isSimpleType(attribs[i][1])) {
 //					  if (JavaUtils.isUnwrapperdSimpleType(attribs[i][1]))
 //						  writer.write(
