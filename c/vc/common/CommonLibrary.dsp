@@ -186,7 +186,7 @@ SOURCE=..\..\include\axis\common\BasicTypeSerializer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\common\GDefine.h
+SOURCE=..\..\include\axis\GDefine.h
 # End Source File
 # Begin Source File
 
@@ -246,7 +246,7 @@ SOURCE=..\..\include\axis\common\IWrapperSoapSerializer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\common\MessageData.h
+SOURCE=..\..\src\common\MessageData.h
 # End Source File
 # Begin Source File
 
