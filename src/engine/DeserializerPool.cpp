@@ -27,18 +27,40 @@ AXIS_CPP_NAMESPACE_START
 using namespace std;
 
 
-DeserializerPool::DeserializerPool ()
+DeserializerPool::DeserializerPool()
 {
-
+	m_DZList.clear();
 }
 
+/*
+ * ~DeserializerPool sometimes fails on AIX, so this method has been
+ * recoded to make it more defensive and added extra trace. It fails
+ * intermittently and the last line in the trace shows the exit of
+ * the last ~SoapSerializer().
+ * 
+ * 
+ */
 DeserializerPool::~DeserializerPool ()
 {
-    for (list < IWrapperSoapDeSerializer* >::iterator it = m_DZList.begin ();
-        it != m_DZList.end (); it++)
+    list<IWrapperSoapDeSerializer*>::iterator it = m_DZList.begin();
+	while (it != m_DZList.end())
     {
-        delete (*it);
+		IWrapperSoapDeSerializer *dz = *it;
+
+#ifdef ENABLE_AXISTRACE
+		if (AxisTrace::isTraceOn()) 
+		{
+			char text[256];
+			sprintf(text, "~DeserializerPool<%p> dz=%p", this, dz);
+			AxisTrace::traceLine(text);
+		}
+#endif
+
+		if (NULL != dz)
+	        delete dz;
+		it++;
     }
+	m_DZList.clear();
 }
 
 int DeserializerPool::getInstance (IWrapperSoapDeSerializer** ppDZ)
