@@ -189,11 +189,11 @@ public class BuildFileGenerator implements Generator {
 				jarName = jarName.substring(index+1);
 			} 
 			
-			
-			File jarFile = new File(j2eewscontext.getMiscInfo().getOutPutPath()+"/"+ jarName + "-ewsimpl.jar");
-			
+			String finalJarFile = j2eewscontext.getMiscInfo().getOutPutPath() + "/"+ jarName + "-ewsimpl.jar";
+			File jarFile = new File(finalJarFile);
+			String tempFile = "${build}/lib/"+jarName + "-temp.jar";
             
-			out.write("		<jar jarfile=\""+jarFile.getAbsolutePath()+"\" >\n");
+			out.write("		<jar jarfile=\""+ tempFile + "\" basedir=\"${build.classes}\" >\n");
 			out.write("		<include name=\"**\" />\n");
 			out.write("		<manifest>\n");
 			out.write("			<section name=\"org/apache/ws4j2ee\">\n");
@@ -204,14 +204,13 @@ public class BuildFileGenerator implements Generator {
 			out.write("		</jar>\n");
 			if(jarfile != null){
 				out.write("     <java classname=\"org.apache.geronimo.ews.ws4j2ee.utils.packager.Packager\" fork=\"no\" >\n");
-				out.write("     	<arg value=\""+jarName+".jar\"/>\n");
+				out.write("     	<arg value=\""+jarFile.getAbsolutePath()+"\"/>\n");
 				out.write("     	<classpath refid=\"classpath\" />\n");
 				for(int i = 0;i<classpathelements.size();i++){
 					out.write("     	<arg value=\""
 						+ ((File)classpathelements.get(i)).getAbsolutePath() + "\"/>\n");				
 				}
-				out.write("     	<arg value=\"${build}/lib/"
-						+ jarName + "-impl.jar\"/>\n"); 
+				out.write("     	<arg value=\""	+ tempFile + "\"/>\n"); 
 				out.write("     </java>\n");
 			}
 //			out.write("		<delete dir=\"${build}\"/>\n");
