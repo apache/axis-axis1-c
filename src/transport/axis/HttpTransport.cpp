@@ -27,6 +27,10 @@
  * submitted by Adrian Dick (adrian.dick@uk.ibm.com) and John Hawkins" (HAWKINSJ@uk.ibm.com)
  */
 
+/*
+ * Revision 1.2  2004/05/31 samisa
+ * Added proxy support
+ */
 
 #include "Platform.hpp"
 #include "HttpTransport.hpp"
@@ -42,7 +46,7 @@ using namespace std;
  *  set HTTP category default to POST
  */
 HttpTransport::HttpTransport (Url url, int secure):
-m_Typ (POST)
+m_Typ (POST), m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false)
 {
     m_Url = url;
     m_IsHttpHeader = 0;
@@ -66,7 +70,7 @@ m_Typ (POST)
  *  set HTTP category default to POST
  */
 HttpTransport::HttpTransport (std::string & strUrl, int secure):
-m_Typ (POST)
+m_Typ (POST), m_bUseProxy(false)
 {
     m_Url = Url (strUrl);
     m_strUrl = strUrl;
@@ -110,8 +114,14 @@ bool HttpTransport::Init ()
     try
     {
 	m_bStatus = true;
-	std::string host = m_Url.GetHostName ();
-	m_Channel->Open (host, m_Url.GetPort ());
+	std::string host = m_Url.GetHostName();
+        unsigned int port = m_Url.GetPort();
+        if(m_bUseProxy)
+        {
+            host = m_strProxyHost;
+            port = m_uiProxyPort;
+        }
+	m_Channel->Open (host, port);
 	m_Channel->SetTransportHandler (this);
 #ifdef _DEBUG
 	cout << "Transport:init() successfull" << endl;
@@ -162,7 +172,7 @@ HttpTransport::operator >> (const char **pPayLoad)
 	/* We have the payload; this is due to Fault request made in */
 	/* earlier call to this method */
 	*pPayLoad = m_PayLoad.c_str ();
-
+	
 	return *this;
     }
 
@@ -283,13 +293,23 @@ HttpTransport::HTTPBind ()
      * directive. 
      * TODO: can be a WSDL2Ws argument
      */
-    m_OutHttpHeaders += m_Url.GetResource () + " HTTP/1.0\r\n";
+    if(m_bUseProxy) //in case of tunneling through a proxy, full URL should be set in HTTP header 
+    {
+    	m_OutHttpHeaders += m_Url.getURL() + " HTTP/1.0\r\n";
+    }
+    else
+	m_OutHttpHeaders += m_Url.GetResource () + " HTTP/1.0\r\n";
     /* no support for proxy server yet */
 #else
     /* Use HTTP 1.1; if HTTP 1.0 is required we have to manage with setting 
      * the properties 
      */
-    m_OutHttpHeaders += m_Url.GetResource () + " HTTP/1.1\r\n";
+    if(m_bUseProxy) 
+    {
+    	m_OutHttpHeaders += m_Url.getURL() + " HTTP/1.0\r\n";
+    }
+    else
+	m_OutHttpHeaders += m_Url.GetResource () + " HTTP/1.1\r\n";
     /* no support for proxy server yet */
 #endif
     m_OutHttpHeaders += "Host: " + m_Url.GetHostName ();
@@ -706,4 +726,13 @@ int
 HttpTransport::getIsHttpHeader ()
 {
     return m_IsHttpHeader;
+}
+    
+
+void 
+HttpTransport::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
+{
+    m_strProxyHost = pcProxyHost;
+    m_uiProxyPort = uiProxyPort;
+    m_bUseProxy = true;    
 }

@@ -18,7 +18,13 @@
  * @author Lilantha Darshana (lilantha@virtusa.com)
  * @author Damitha Kumarage (damitha@jkcsworld.com, damitha@opensource.lk)
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  *
+ */
+
+/*
+ * Revision 1.1  2004/05/31 samisa
+ * Added setProxy
  */
 
 
@@ -112,6 +118,14 @@ private:
     void Error(const char * err);
 
     void ClearAdditionalHeaders();
+  /**
+    * Set proxy server and port for transport.
+    *
+    * @param pcProxyHost Host name of proxy server
+    * @param uiProxyPort Port of proxy server
+    */
+    void setProxy(const char* pcProxyHost, unsigned int uiProxyPort); 
+
 
 private:
 
@@ -132,6 +146,19 @@ private:
     std::string m_sHeader;
     int m_intBodyLength;
     bool m_Secure;
+  
+  /**
+    * Proxy server name.
+    */
+    std::string m_strProxyHost;
+  /**
+    * Proxy server port.
+    */
+    unsigned int m_uiProxyPort;
+  /**
+    * Use Proxy or not?
+    */
+    bool m_bUseProxy;
 };
 
 #endif

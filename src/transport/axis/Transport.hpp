@@ -18,9 +18,13 @@
  *
  *
  * @author Lilantha Darshana (lilantha@virtusa.com)
- *
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
 
+/*
+ * Revision 1.1  2004/05/31 samisa
+ * Added setProxy
+ */
 
 
 #if !defined(_AXIS_TRANSPORT_HPP)
@@ -56,6 +60,7 @@ public:
     virtual int getBodyLength() = 0;
     virtual void setBodyLength(int bodyLength) = 0;
     virtual int getIsHttpHeader() = 0;
+    virtual void setProxy(const char* pcProxyHost, unsigned int uiProxyPort) = 0;
 
 
 protected:

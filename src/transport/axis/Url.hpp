@@ -76,6 +76,7 @@ public:
     Protocol    GetProtocol(){return m_Protocol;}
     std::string GetHostName(){return m_Host;}
     std::string GetResource(){return m_Path;}
+    std::string getURL(){return m_URL;}
 
     unsigned short GetPort(){return m_Port;}
 

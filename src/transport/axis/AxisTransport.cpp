@@ -26,6 +26,12 @@
  * Filled in the empty body of setTransportProperty
  */
 
+/*
+ * Revision 1.2  2004/05/31 samisa
+ * Added setProxy
+ */
+
+
 #ifdef WIN32
 #pragma warning (disable : 4786)
 #endif
@@ -35,6 +41,7 @@
 #include <stdio.h>
 
 AxisTransport::AxisTransport()
+:m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false)
 {
     m_pSender = NULL;
     m_pReceiver = NULL;
@@ -65,6 +72,9 @@ int AxisTransport::openConnection()
     Url objUrl(m_pcEndpointUri);
     m_pHttpTransport = TransportFactory::GetTransport(objUrl, secure);
     memset(&m_SendBuffers, 0, sizeof(BufferInfo)*NO_OF_SERIALIZE_BUFFERS); 
+    //set the proxy
+    if(m_bUseProxy)
+        m_pHttpTransport->setProxy( m_strProxyHost.c_str(), m_uiProxyPort);
     if(m_pHttpTransport->Init())
     {
        m_pSender = new Sender(m_pHttpTransport);
@@ -318,6 +328,15 @@ int AxisTransport::getSubProtocol()
 	//TODO
 	return 0;
 }
+
+void 
+AxisTransport::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
+{
+    m_strProxyHost = pcProxyHost;
+    m_uiProxyPort = uiProxyPort;
+    m_bUseProxy = true;    
+}
+
 
 #ifdef WIN32
 #define STORAGE_CLASS_INFO __declspec(dllexport)
