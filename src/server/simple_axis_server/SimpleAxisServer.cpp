@@ -87,8 +87,10 @@ acceptTCPConnection (int servSock)
 {
     int clntSock;		/* Socket descriptor for client */
     struct sockaddr_in echoClntAddr;	/* Client address */
-#ifdef WIN32
+#if defined WIN32
     int clntLen;		/* Length of client address data structure */
+#elif defined AIX
+	unsigned long clntLen;	/* Length of client address data structure */
 #else //Linux
     unsigned int clntLen;	/* Length of client address data structure */
 #endif
