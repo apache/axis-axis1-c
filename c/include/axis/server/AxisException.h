@@ -51,7 +51,7 @@ using namespace std;
 #define THROW_AXIS_OVERFLOW_ERROR(X) throw std::overflow_error
 //#define THROW_AXIS_IOS_BASE_FAILURE(X) throw std::ios_base::failure
 
-#define AXISC_THROW_SAME throw;
+#define AXISC_THROW_SAME throw
 
 #else
 
