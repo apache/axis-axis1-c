@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 		 sslkeyhome=getenv("SSL_KEYS_HOME");
 
 		if (!sslkeyhome)
-		{ 	cout << "SSL_KEY_HOME not set" << endl;	
+		{ 	cout << "SSL_KEYS_HOME not set" << endl;	
 			return 1;
 		}
 
