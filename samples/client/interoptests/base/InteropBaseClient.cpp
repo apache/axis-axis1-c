@@ -104,7 +104,7 @@ main (int argc, char *argv[])
             // Do stuff and clean memory
             for( int i = 0; i < arrstrResult.m_Size; i++ )
                 free (arrstrResult.m_Array[i]);
-            delete [] arrstrResult.m_Array;
+            free(arrstrResult.m_Array);
         }
 	else
 	    printf ("failed\n");
@@ -133,7 +133,7 @@ main (int argc, char *argv[])
         {
 	    printf ("successful\n");
             // Do stuff and clean memory
-            delete [] arrintResult.m_Array;
+            free(arrintResult.m_Array);
 	}
         else
 	    printf ("failed\n");
@@ -164,7 +164,7 @@ main (int argc, char *argv[])
 	    printf ("successful\n");
             // Do stuff & clean memory
             // It is our responsibility to deallocate deserializer allocated memory
-            delete [] arrfloatResult.m_Array;
+            free(arrfloatResult.m_Array);
         }
 	else
 	    printf ("failed\n");
@@ -288,12 +288,12 @@ main (int argc, char *argv[])
 	    printf ("failed\n");
 
 	//testing echo boolean
-	printf ("invoking echoBoolean...\n");
+	/*printf ("invoking echoBoolean...\n");
 	if (ws.echoBoolean (true_) == true_)
 	    printf ("successful\n");
 	else
 	    printf ("failed\n");
-
+*/
     }
     catch (AxisException & e)
     {
