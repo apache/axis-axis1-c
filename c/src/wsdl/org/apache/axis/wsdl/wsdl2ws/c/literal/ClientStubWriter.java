@@ -259,7 +259,7 @@ public class ClientStubWriter extends CFileWriter{
 		else{
 			writer.write(";\n");
 		}
-		writer.write("\tm_pCall->SetTransportProperty("+globalobjectname+",SOAPACTION_HEADER , \""+minfo.getSoapAction()+"\");\n");		
+		writer.write("\tpCall->SetTransportProperty("+globalobjectname+",SOAPACTION_HEADER , \""+minfo.getSoapAction()+"\");\n");		
 		writer.write("\tpCall->SetSOAPVersion("+globalobjectname+", SOAP_VER_1_1);\n"); //TODO check which version is it really.
 		writer.write("\tpCall->SetOperation("+globalobjectname+", \""+minfo.getInputMessage().getLocalPart()+"\", \""+ minfo.getInputMessage().getNamespaceURI()+"\");\n");
 		for (int i = 0; i < paramsB.size(); i++) {
@@ -323,13 +323,13 @@ public class ClientStubWriter extends CFileWriter{
 			writer.write("\treturn RetArray;\n");
 		}
 		else if(returntypeissimple){
-			writer.write("\t\t\tRet = pCall->"+ CUtils.getParameterGetValueMethodName(CUtils.getXSDTypeForBasicType(outparamType), false)+"("+globalobjectname+", \""+ returntype.getParamName()+"\", 0)\n");
+			writer.write("\t\t\tRet = pCall->"+ CUtils.getParameterGetValueMethodName(CUtils.getXSDTypeForBasicType(outparamType), false)+"("+globalobjectname+", \""+ returntype.getParamName()+"\", 0);\n");
 			writer.write("\t\t}\n");
 			writer.write("\t}\n\tpCall->UnInitialize("+globalobjectname+");\n");
 			writer.write("\treturn Ret;\n");
 		}
 		else{
-			writer.write("\t\t\tpReturn = ("+outparamType+"*)pCall->GetCmplxObject("+globalobjectname+", (void*) Axis_DeSerialize_"+outparamType+", (void*) Axis_Create_"+outparamType+", (void*) Axis_Delete_"+outparamType+",\""+returntype.getParamName()+"\", 0)\n"); 
+			writer.write("\t\t\tpReturn = ("+outparamType+"*)pCall->GetCmplxObject("+globalobjectname+", (void*) Axis_DeSerialize_"+outparamType+", (void*) Axis_Create_"+outparamType+", (void*) Axis_Delete_"+outparamType+",\""+returntype.getParamName()+"\", 0);\n"); 
 			writer.write("\t\t}\n");
 			writer.write("\t}\n\tpCall->UnInitialize("+globalobjectname+");\n");
 			writer.write("\treturn pReturn;\n");						

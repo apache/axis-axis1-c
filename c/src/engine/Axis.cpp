@@ -93,6 +93,8 @@
 #include <axis/wsdd/WSDDKeywords.h>
 #include <axis/common/AxisTrace.h>
 
+#include <axis/client/Call.h>
+
 #define BYTESTOREAD 64
 //the relative location of the wsdl files hardcoded
 #define WSDLDIRECTORY "/wsdls/"
@@ -246,6 +248,10 @@ extern "C" int initialize_module(int bServer)
 	TypeMapping::Initialize();
 	URIMapping::Initialize();
 	SoapFault::initialize();
+	CallBase::s_Initialize();
+	IWrapperSoapDeSerializer::s_Initialize();
+	IWrapperSoapSerializer::s_Initialize();
+	IMessageData::s_Initialize();
 	ModuleInitialize();
 	if (bServer) //no client side wsdd processing at the moment
 	{
@@ -321,9 +327,6 @@ void ModuleInitialize()
 	g_pWSDDDeployment = new WSDDDeployment();
     g_pConfig = new AxisConfig();
     g_pAT = new AxisTrace();
-
-    
-    
 }
 
 void ModuleUnInitialize()

@@ -290,7 +290,7 @@ public class WrapWriter extends CFileWriter{
 		writer.write("\tif (!pDZ) return AXIS_FAIL;\n");
 		writer.write("\tpDZX = pDZ->__vfptr;\n");
 		writer.write("\tif (!pDZX) return AXIS_FAIL;\n");
-		writer.write("\tif (AXIS_SUCCESS != pDZX->CheckMessageBody(\""+minfo.getInputMessage().getLocalPart()+"\", \""+minfo.getInputMessage().getNamespaceURI()+"\")) return AXIS_FAIL;\n");
+		writer.write("\tif (AXIS_SUCCESS != pDZX->CheckMessageBody(pSZ, \""+minfo.getInputMessage().getLocalPart()+"\", \""+minfo.getInputMessage().getNamespaceURI()+"\")) return AXIS_FAIL;\n");
 		writer.write("\tpSZX->CreateSoapMethod(pSZ, \""+minfo.getOutputMessage().getLocalPart()+"\", \""+minfo.getOutputMessage().getNamespaceURI()+"\");\n");
 		//create and populate variables for each parameter
 		for (int i = 0; i < paramsB.size(); i++) {

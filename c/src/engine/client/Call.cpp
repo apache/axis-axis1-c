@@ -73,8 +73,12 @@
 
 extern "C" int initialize_module(int bServer);
 
+bool CallBase::bInitialized = false;
+CallFunctions CallBase::ms_VFtable;
+
 Call::Call()
 {
+	__vfptr = &ms_VFtable;
 	m_pAxisEngine = NULL;
 	m_pMsgData = NULL;
 	m_pIWSSZ = NULL;

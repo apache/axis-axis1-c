@@ -158,15 +158,9 @@ public class WrapWriter extends CFileWriter{
 		writer.write(" * This method invokes the right service method \n");
 		writer.write(" */\n");
 		writer.write("int AXISCALL Invoke(void*p, IMessageData *mc)\n{\n");
-		writer.write("\tIMessageDataX* pmcX = mc->__vfptr;\n");
-		writer.write("\tIWrapperSoapDeSerializer *pDZ = NULL;\n");
-		writer.write("\tIWrapperSoapDeSerializerX *pDZX = NULL;\n");
 		writer.write("\tconst AxisChar* method = NULL;\n");
-		writer.write("\tpmcX->getSoapDeSerializer(mc, &pDZ);\n");
-		writer.write("\tif (!pDZ) return AXIS_FAIL;\n");
-		writer.write("\tpDZX = pDZ->__vfptr;\n");
-		writer.write("\tif (!pDZX) return AXIS_FAIL;\n");
-		writer.write("\tmethod = pDZX->GetMethodName(pDZ);\n");
+		writer.write("\tIMessageDataFunctions* pmcX = mc->__vfptr;\n");
+		writer.write("\tmethod = pmcX->GetOperationName(mc);\n");
 		//if no methods in the service simply return
 		if (methods.size() == 0) {
 			writer.write("}\n");
@@ -261,11 +255,11 @@ public class WrapWriter extends CFileWriter{
 		writer.write(" */\n");
 		//method signature
 		writer.write("int "+ methodName + CUtils.WRAPPER_METHOD_APPENDER+ "(IMessageData* mc)\n{\n");
-		writer.write("\tIMessageDataX* pmcX = mc->__vfptr;\n");
+		writer.write("\tIMessageDataFunctions* pmcX = mc->__vfptr;\n");
 		writer.write("\tIWrapperSoapDeSerializer* pDZ = NULL;\n");
-		writer.write("\tIWrapperSoapDeSerializerX* pDZX = NULL;\n");
+		writer.write("\tIWrapperSoapDeSerializerFunctions* pDZX = NULL;\n");
 		writer.write("\tIWrapperSoapSerializer* pSZ = NULL;\n");
-		writer.write("\tIWrapperSoapSerializerX* pSZX = NULL;\n");
+		writer.write("\tIWrapperSoapSerializerFunctions* pSZX = NULL;\n");
 		boolean aretherearrayparams = false;
 		for (int i = 0; i < paramsB.size(); i++) {
 			paraTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();
@@ -287,15 +281,16 @@ public class WrapWriter extends CFileWriter{
 		if (aretherearrayparams){
 			writer.write("\tAxis_Array array;\n");
 		}
-		writer.write("\tpmcX->getSoapSerializer(mc, &pSZ);\n");
+		writer.write("\tpmcX->GetSoapSerializer(mc, &pSZ);\n");
 		writer.write("\tif (!pSZ) return AXIS_FAIL;\n");
 		writer.write("\tpSZX = pSZ->__vfptr;\n");
 		writer.write("\tif (!pSZX) return AXIS_FAIL;\n");
-		writer.write("\tpmcX->getSoapDeSerializer(mc, &pDZ);\n");
+		writer.write("\tpmcX->GetSoapDeSerializer(mc, &pDZ);\n");
 		writer.write("\tif (!pDZ) return AXIS_FAIL;\n");
 		writer.write("\tpDZX = pDZ->__vfptr;\n");
 		writer.write("\tif (!pDZX) return AXIS_FAIL;\n");
-		writer.write("\tpSZX->createSoapMethod(pSZ, \""+methodName+"Response\", pSZX->getNewNamespacePrefix(pSZ), \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\");\n\n");
+		writer.write("\tif (AXIS_SUCCESS != pDZX->CheckMessageBody(pSZ, \""+minfo.getInputMessage().getLocalPart()+"\", \""+minfo.getInputMessage().getNamespaceURI()+"\")) return AXIS_FAIL;\n");
+		writer.write("\tpSZX->CreateSoapMethod(pSZ, \""+methodName+"Response\", pSZX->getNewNamespacePrefix(pSZ), \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\");\n\n");
 		//create and populate variables for each parameter
 		for (int i = 0; i < paramsB.size(); i++) {
 			paraTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();

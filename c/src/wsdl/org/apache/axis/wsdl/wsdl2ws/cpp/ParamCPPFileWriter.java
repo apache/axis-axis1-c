@@ -111,6 +111,7 @@ public abstract class ParamCPPFileWriter extends ParamWriter{
    
    protected void writePreprocssorStatements()throws WrapperFault{
 	try {
+		writer.write("#include <malloc.h>\n");
 		writer.write("#include \""+this.classname + ".h\"\n");
 		writer.write("#include <axis/common/AxisWrapperAPI.h>\n\n");
 	} catch (IOException e) {

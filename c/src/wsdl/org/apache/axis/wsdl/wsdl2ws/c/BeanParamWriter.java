@@ -160,9 +160,9 @@ public class BeanParamWriter extends ParamCFileWriter{
 				if(attribs[i].isAttribute()){
 					if(attribs[i].isOptional()){
 						writer.write("\tif(0 != param->"+attribs[i].getParamName()+")\n");
-						writer.write("\t\tpSZX->SerializeAsAttribute(pSZ, \""+attribs[i].getParamName()+"\", (void*)(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+						writer.write("\t\tpSZX->SerializeAsAttribute(pSZ, \""+attribs[i].getParamName()+"\", 0, (void*)(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 					}else{
-						writer.write("\tpSZX->SerializeAsAttribute(pSZ, \""+attribs[i].getParamName()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+						writer.write("\tpSZX->SerializeAsAttribute(pSZ, \""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 					}
 				}
 				else{
