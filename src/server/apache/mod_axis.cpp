@@ -37,7 +37,11 @@ int axis_handler_helper(request_rec* req_rec)
 
     /* for SOAP 1.2 this this should be "application/soap+xml" but keep this for
      * the moment. */
-    req_rec->content_type = "text/xml"; 
+    //req_rec->content_type = "text/xml"; 
+
+        req_rec->content_type = (M_POST == req_rec->method_number) ? 
+		"text/xml" : "text/html";
+
 	 /* Set up the read policy from the client.*/
     if ((rc = ap_setup_client_block(req_rec, REQUEST_CHUNKED_ERROR)) != OK)
     {
