@@ -97,7 +97,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 		writer.write("\t}\n");
 		writer.write("\telse\n");
 		writer.write("\t{\n");
-		writer.write("\t\tsPrefix = pSZ->_functions->GetNamespacePrefix(pSZ->_object, Axis_URI_"+classname+");\n");
+		writer.write("\t\tsPrefix = pSZ->_functions->getNamespacePrefix(pSZ->_object, Axis_URI_"+classname+");\n");
 		writer.write("\t\tpSZ->_functions->SerializeStartElementOfType(pSZ->_object, Axis_TypeName_"+classname+", Axis_URI_"+classname+", sPrefix);\n");
 		writer.write("\t}\n\n");
 		String arrayType = null;
@@ -165,11 +165,11 @@ public class BeanParamWriter extends ParamCFileWriter{
 			if(attribs[i].isArray()){
 				containedType = attribs[i].getTypeName();
 				if(attribs[i].isSimpleType()){
-					writer.write("\tarray = pDZ->_functions->GetBasicArray(pDZ->_object, "+CUtils.getXSDTypeForBasicType(containedType)+",0,0);\n");
+					writer.write("\tarray = pDZ->_functions->getBasicArray(pDZ->_object, "+CUtils.getXSDTypeForBasicType(containedType)+",0,0);\n");
 					writer.write("\tmemcpy(&(param->"+attribs[i].getParamName()+"), &array, sizeof(Axis_Array));\n");
 				}
 				else{
-					writer.write("\tarray = pDZ->_functions->GetCmplxArray(pDZ->_object, (void*)Axis_DeSerialize_"+containedType+ 
+					writer.write("\tarray = pDZ->_functions->getCmplxArray(pDZ->_object, (void*)Axis_DeSerialize_"+containedType+ 
 						"\n\t\t, (void*)Axis_Create_"+containedType+", (void*)Axis_Delete_"+containedType+
 						"\n\t\t, (void*)Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+");\n");
 					writer.write("\tmemcpy(&(param->"+attribs[i].getParamName()+"), &array, sizeof(Axis_Array));\n");
@@ -189,12 +189,12 @@ public class BeanParamWriter extends ParamCFileWriter{
 			}
 			else{
 				//if complex type
-				writer.write("\tparam->"+attribs[i].getParamName()+" = ("+attribs[i].getTypeName()+"*)pDZ->_functions->GetCmplxObject(pDZ->_object, (void*)Axis_DeSerialize_"+attribs[i].getTypeName()+
+				writer.write("\tparam->"+attribs[i].getParamName()+" = ("+attribs[i].getTypeName()+"*)pDZ->_functions->getCmplxObject(pDZ->_object, (void*)Axis_DeSerialize_"+attribs[i].getTypeName()+
 					"\n\t\t, (void*)Axis_Create_"+attribs[i].getTypeName()+", (void*)Axis_Delete_"+attribs[i].getTypeName()+
 					"\n\t\t, Axis_TypeName_"+attribs[i].getTypeName()+", Axis_URI_"+attribs[i].getTypeName()+");\n");
 			}			
 		}
-		writer.write("\treturn pDZ->_functions->GetStatus(pDZ->_object);\n");
+		writer.write("\treturn pDZ->_functions->getStatus(pDZ->_object);\n");
 		writer.write("}\n");
 	}
 	

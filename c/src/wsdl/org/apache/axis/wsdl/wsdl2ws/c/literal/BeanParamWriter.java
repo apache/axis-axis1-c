@@ -190,11 +190,11 @@ public class BeanParamWriter extends ParamCFileWriter{
 				//if Array
 				String containedType = attribs[i].getTypeName();
 				if (attribs[i].isSimpleType()){
-					writer.write("\tarray = pDZ->_functions->GetBasicArray(pDZ->_object, "+CUtils.getXSDTypeForBasicType(containedType)+ ", \""+attribs[i].getElementName().getLocalPart()+"\",0);\n");
+					writer.write("\tarray = pDZ->_functions->getBasicArray(pDZ->_object, "+CUtils.getXSDTypeForBasicType(containedType)+ ", \""+attribs[i].getElementName().getLocalPart()+"\",0);\n");
 					writer.write("\tmemcpy(&(param->"+attribs[i].getParamName()+"), &array, sizeof(Axis_Array));\n");
 				}
 				else{
-					writer.write("\tarray = pDZ->_functions->GetCmplxArray(pDZ->_object, (void*)Axis_DeSerialize_"+containedType+ 
+					writer.write("\tarray = pDZ->_functions->getCmplxArray(pDZ->_object, (void*)Axis_DeSerialize_"+containedType+ 
 						"\n\t\t, (void*)Axis_Create_"+containedType+", (void*)Axis_Delete_"+containedType+
 						"\n\t\t, (void*)Axis_GetSize_"+containedType+", \""+attribs[i].getElementName().getLocalPart()+"\", Axis_URI_"+containedType+");\n");
 					writer.write("\tmemcpy(&(param->"+attribs[i].getParamName()+"), &array, sizeof(Axis_Array));\n");
@@ -213,12 +213,12 @@ public class BeanParamWriter extends ParamCFileWriter{
 				}
 			}else{
 				//if complex type
-				writer.write("\tparam->"+attribs[i].getParamName()+" = ("+attribs[i].getTypeName()+"*)pDZ->_functions->GetCmplxObject(pDZ->_object, (void*)Axis_DeSerialize_"+attribs[i].getTypeName()+
+				writer.write("\tparam->"+attribs[i].getParamName()+" = ("+attribs[i].getTypeName()+"*)pDZ->_functions->getCmplxObject(pDZ->_object, (void*)Axis_DeSerialize_"+attribs[i].getTypeName()+
 					"\n\t\t, (void*)Axis_Create_"+attribs[i].getTypeName()+", (void*)Axis_Delete_"+attribs[i].getTypeName()+
 					"\n\t\t, \""+attribs[i].getElementName().getLocalPart()+"\", Axis_URI_"+attribs[i].getTypeName()+");\n");
 			}		
 		}
-		writer.write("\treturn pDZ->_functions->GetStatus(pDZ->_object);\n");
+		writer.write("\treturn pDZ->_functions->getStatus(pDZ->_object);\n");
 		writer.write("}\n");
 	}
 	

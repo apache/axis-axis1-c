@@ -93,7 +93,7 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 			writer.write("\tvoid AXISCALL onFault(void* pMsg);\n");
 			writer.write("\tint AXISCALL init();\n");
 			writer.write("\tint AXISCALL fini();\n");
-			writer.write("\tAXIS_BINDING_STYLE AXISCALL GetBindingStyle(){return RPC_ENCODED;};\n");
+			writer.write("\tAXIS_BINDING_STYLE AXISCALL getBindingStyle(){return RPC_ENCODED;};\n");
 			writer.write("private:/*Methods corresponding to the web service methods*/\n");
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
