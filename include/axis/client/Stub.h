@@ -15,22 +15,14 @@
  *
  */
 
-/**
- * @class Stub
+ /**
+ * @file Stub.h
  *
- * @brief This is the client Stub base class to be inherited by all stub 
- *        classes genarated by WSDL2WS tool. This class acts as the interface 
- *        between the users and the Axis C++ engine (client side). Programmer 
- *        can use the API defined here to enrich the client application 
- *        functionality. Setting transport properties, setting SOAP headers, 
- *        setting connection timeout and specifying a proxy on the client stub
- *        is facilitated with this interface.
- *
- * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
- * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
- * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
+ * Contains the Stub base class that all C++ web service stubs inherit
+ * from. The functions in this Stub base class provides the client
+ * application some added functionality to manipulate the SOAP messages. 
  */
-
+ 
 /*
  * Revision 1.1  2004/05/31 samisa
  * Added setProxy
@@ -75,9 +67,19 @@
 #include <vector>
 #endif
 
+/**
+ * @struct StubFunctions
+ *
+ * Structure that defines the set of function pointers that correspond
+ * to the Stub base class's functions. These functions are provided to
+ * C Stubs by Axis in order to have the same functionalities as those
+ * in Stub base class.
+ * @brief Structure with function pointer definitions to provide Stub
+ *        base class's functionalities for C stubs.
+ */
 typedef struct {
-	void (AXISCALL* setEndpoint)(void* pObj, const char* pchEndpoint);
-	void (AXISCALL* setTransportProperty)(void* pObj, 
+    void (AXISCALL* setEndpoint)(void* pObj, const char* pchEndpoint);
+    void (AXISCALL* setTransportProperty)(void* pObj, 
         const char *pcKey, const char *pcValue);
     char* (AXISCALL* getFirstTrasportPropertyKey)(void* pObj);
     char* (AXISCALL* getNextTrasportPropertyKey)(void* pObj);
@@ -106,13 +108,28 @@ typedef struct {
     void (AXISCALL* deleteSOAPMethodAttribute)(void* pObj,
         Attribute_C Attr);
     void (AXISCALL* setTransportTimeout)(void* pObj, const long lSeconds);
-   	int (AXISCALL* getStatus)(void* pObj);
+       int (AXISCALL* getStatus)(void* pObj);
     const AxisChar* (AXISCALL* getNamespacePrefix)(void* pObj,
         const AxisChar* pNamespace);
 } StubFunctions;
 
 #ifdef __cplusplus
 
+/**
+ * @class Stub
+ *
+ * @brief This is the client Stub base class to be inherited by all stub
+ *        classes genarated by WSDL2WS tool. This class acts as the interface
+ *        between the users and the Axis C++ engine (client side). Programmer
+ *        can use the API defined here to enrich the client application
+ *        functionality. Setting transport properties, setting SOAP headers,
+ *        setting connection timeout and specifying a proxy on the client stub
+ *        is facilitated with this interface.
+ *
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
+ * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
+ */
 class STORAGE_CLASS_INFO Stub
 {
   public:
@@ -123,7 +140,9 @@ class STORAGE_CLASS_INFO Stub
     *                       e.g. http://localhost:8080/axis/services/echo
     */
     Stub(const char *pcEndPointURI, AXIS_PROTOCOL_TYPE eProtocol);
-   
+
+  /**
+   * Default Constructor.
   /**
     * Destructor.
     */
@@ -312,7 +331,7 @@ class STORAGE_CLASS_INFO Stub
     * @return Pointer to the creater SOAP header block.
     */
     IHeaderBlock * AXISCALL createSOAPHeaderBlock(AxisChar * pachLocalName,
-				     AxisChar * pachUri);
+                     AxisChar * pachUri);
 
   /**
     * Iterator initiatior for SOAP header blocks
@@ -495,69 +514,69 @@ class STORAGE_CLASS_INFO Stub
   /**
     * Get the status of the stub to see any error situation
     */
-   	int getStatus();
+       int getStatus();
   /**
     * Get a namespace prefix for a given namespace URI
     */
     const AxisChar* AXISCALL getNamespacePrefix(const AxisChar* pNamespace);
 
   public:
-	static StubFunctions ms_VFtable;
-	static bool bInitialized;
-	/* add static functions for all interface functions here */
+    static StubFunctions ms_VFtable;
+    static bool bInitialized;
+    /* add static functions for all interface functions here */
     static void AXISCALL s_setEndpoint(void* pObj, const char* pchEndpoint)
-	{((Stub*)pObj)->setEndPoint(pchEndpoint);};
-	static void AXISCALL s_setTransportProperty(void* pObj, 
+    {((Stub*)pObj)->setEndPoint(pchEndpoint);};
+    static void AXISCALL s_setTransportProperty(void* pObj, 
         const char *pcKey, const char *pcValue)
-	{((Stub*)pObj)->setTransportProperty(pcKey, pcValue);};
+    {((Stub*)pObj)->setTransportProperty(pcKey, pcValue);};
     static char* AXISCALL s_getFirstTrasportPropertyKey(void* pObj)
-	{return ((Stub*)pObj)->getFirstTrasportPropertyKey();};
+    {return ((Stub*)pObj)->getFirstTrasportPropertyKey();};
     static char* AXISCALL s_getNextTrasportPropertyKey(void* pObj)
-	{return ((Stub*)pObj)->getNextTrasportPropertyKey();};
+    {return ((Stub*)pObj)->getNextTrasportPropertyKey();};
     static char* AXISCALL s_getCurrentTrasportPropertyKey(void* pObj)
-	{return ((Stub*)pObj)->getCurrentTrasportPropertyKey();};
+    {return ((Stub*)pObj)->getCurrentTrasportPropertyKey();};
     static char* AXISCALL s_getCurrentTrasportPropertyValue(void* pObj)
-	{return ((Stub*)pObj)->getCurrentTrasportPropertyValue();};
+    {return ((Stub*)pObj)->getCurrentTrasportPropertyValue();};
     static void AXISCALL s_deleteCurrentTrasportProperty(void* pObj)
-	{((Stub*)pObj)->deleteCurrentTrasportProperty();};
+    {((Stub*)pObj)->deleteCurrentTrasportProperty();};
     static void AXISCALL s_deleteTrasportProperty(void* pObj, char* pcKey, 
         unsigned int uiOccurance)
-	{((Stub*)pObj)->deleteTrasportProperty(pcKey, uiOccurance);};
+    {((Stub*)pObj)->deleteTrasportProperty(pcKey, uiOccurance);};
     static HeaderBlock_C AXISCALL s_createSOAPHeaderBlock(void* pObj, 
         AxisChar * pachLocalName, AxisChar * pachUri);
     static HeaderBlock_C AXISCALL s_getFirstSOAPHeaderBlock(void* pObj);
     static HeaderBlock_C AXISCALL s_getNextSOAPHeaderBlock(void* pObj);
     static HeaderBlock_C AXISCALL s_getCurrentSOAPHeaderBlock(void* pObj);
     static void AXISCALL s_deleteCurrentSOAPHeaderBlock(void* pObj)
-	{((Stub*)pObj)->deleteCurrentSOAPHeaderBlock();};
+    {((Stub*)pObj)->deleteCurrentSOAPHeaderBlock();};
     static void AXISCALL s_deleteSOAPHeaderBlock(void* pObj,
         HeaderBlock_C hdrBlk)
-	{((Stub*)pObj)->deleteSOAPHeaderBlock((IHeaderBlock*)hdrBlk._object);};
+    {((Stub*)pObj)->deleteSOAPHeaderBlock((IHeaderBlock*)hdrBlk._object);};
     static void AXISCALL s_setProxy(void* pObj, const char* pcProxyHost,
         unsigned int uiProxyPort)
-	{((Stub*)pObj)->setProxy(pcProxyHost, uiProxyPort);};
+    {((Stub*)pObj)->setProxy(pcProxyHost, uiProxyPort);};
     static void AXISCALL s_setSOAPMethodAttribute(void* pObj,
         const AxisChar *pLocalname, const AxisChar *pPrefix,
         const AxisChar* pUri, const AxisChar *pValue)
-	{((Stub*)pObj)->setSOAPMethodAttribute(pLocalname, pPrefix, pUri,
+    {((Stub*)pObj)->setSOAPMethodAttribute(pLocalname, pPrefix, pUri,
                                             pValue);};
     static Attribute_C AXISCALL s_getFirstSOAPMethodAttribute(void* pObj);
     static Attribute_C AXISCALL s_getNextSOAPMethodAttribute(void* pObj);
     static Attribute_C AXISCALL s_getCurrentSOAPMethodAttribute(void* pObj);
     static void AXISCALL s_deleteCurrentSOAPMethodAttribute(void* pObj)
-	{((Stub*)pObj)->deleteCurrentSOAPMethodAttribute();};
+    {((Stub*)pObj)->deleteCurrentSOAPMethodAttribute();};
     static void AXISCALL s_deleteSOAPMethodAttribute(void* pObj,
         Attribute_C Attr)
-	{((Stub*)pObj)->deleteSOAPMethodAttribute((Attribute*)Attr._object);};
+    {((Stub*)pObj)->deleteSOAPMethodAttribute((Attribute*)Attr._object);};
     static void AXISCALL s_setTransportTimeout(void* pObj,
         const long lSeconds)
-	{((Stub*)pObj)->setTransportTimeout(lSeconds);};
-   	static int AXISCALL s_getStatus(void* pObj)
-	{return ((Stub*)pObj)->getStatus();};
+    {((Stub*)pObj)->setTransportTimeout(lSeconds);};
+       static int AXISCALL s_getStatus(void* pObj)
+    {return ((Stub*)pObj)->getStatus();};
     static const AxisChar* AXISCALL s_getNamespacePrefix(void* pObj,
         const AxisChar* pNamespace)
-	{return ((Stub*)pObj)->getNamespacePrefix(pNamespace);};
-	static void s_Initialize();
+    {return ((Stub*)pObj)->getNamespacePrefix(pNamespace);};
+    static void s_Initialize();
 
   protected:
   /**
@@ -648,8 +667,8 @@ class STORAGE_CLASS_INFO Stub
 #endif
 
 typedef struct { 
-	void* _object; /* this will be C++ Call Object */
-	CallFunctions* _functions; /* this is the static function table */
+    void* _object; /* this will be C++ Call Object */
+    CallFunctions* _functions; /* this is the static function table */
     void* _stub_object; /* the stub object */
     StubFunctions* _stub_functions; /* this is the static function table */
 } Call_C;
