@@ -3,9 +3,11 @@
  * This file contains functions to manipulate complex type FirstLevelElemType
  */
 
-#include <C:\AxisCpp\axis-c-1.5.0-Win32-bin18-02\include\axis\AxisWrapperAPI.hpp>
-
+/* #include <C:\AxisCpp\axis-c-1.5.0-Win32-bin18-02\include\axis\AxisWrapperAPI.hpp> */
+#include <axis/AxisWrapperAPI.hpp>
 #include "FirstLevelElemType.hpp"
+
+
 extern int Axis_DeSerialize_SecondLevelElemType(SecondLevelElemType* param, IWrapperSoapDeSerializer* pDZ);
 extern void* Axis_Create_SecondLevelElemType(SecondLevelElemType* pObj, bool bArray = false, int nSize=0);
 extern void Axis_Delete_SecondLevelElemType(SecondLevelElemType* param, bool bArray = false, int nSize=0);
