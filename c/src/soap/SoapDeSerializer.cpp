@@ -321,17 +321,10 @@ int SoapDeSerializer::checkForFault(const AxisChar* pName,
      }
      else
      {
-         char* tempChar = getElementAsString("faultdetail", 0);
-         if(0 == tempChar)
-         {
-             m_nStatus = AXIS_SUCCESS;
-             return AXIS_FAIL;
-         }
-         else
-         {
-             m_pcFaultDetail = tempChar;
-             return AXIS_SUCCESS;
-         }
+         //skip faultdetail
+         m_pParser->next();
+         m_nStatus = AXIS_SUCCESS;
+         return AXIS_SUCCESS;
         
      }
  
@@ -1380,18 +1373,25 @@ int SoapDeSerializer::getElementAsInt(const AxisChar* pName,
     }
     else
     {
+        AXISTRACE1("came1", INFO);
         if (!m_pNode)
+        AXISTRACE1("came1", INFO);
             /* if there is an unprocessed node that may be one left from last 
              * array deserialization
              */
             m_pNode = m_pParser->next();
             /* wrapper node without type info  Ex: <i> */
         if (!m_pNode) return ret;
+        AXISTRACE1("came2", INFO);
+        AXISTRACE2("pName", pName,INFO);
+        AXISTRACE2("pName", m_pNode->m_pchNameOrValue,INFO);
         if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
         {
+        AXISTRACE1("came3", INFO);
             m_pNode = m_pParser->next(true); /* charactor node */
             if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
             {
+        AXISTRACE1("came4", INFO);
                 ret = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
                 m_pNode = m_pParser->next(); /* skip end element node too */
                 m_pNode = NULL;
@@ -1403,6 +1403,7 @@ int SoapDeSerializer::getElementAsInt(const AxisChar* pName,
             }
             else
             {
+        AXISTRACE1("came5", INFO);
                 /* simpleType may have xsi:nill="true" */
                 m_pNode = NULL;
                 /* this is important in doc/lit style when deserializing 
@@ -1413,6 +1414,7 @@ int SoapDeSerializer::getElementAsInt(const AxisChar* pName,
         }
         else
         {
+        AXISTRACE1("came6", INFO);
             return ret;
             /* Not a must : m_nStatus = AXIS_FAIL; unexpected SOAP stream */
         }
