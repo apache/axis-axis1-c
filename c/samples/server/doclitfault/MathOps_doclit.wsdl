@@ -10,11 +10,7 @@
         <schema xmlns="http://www.w3.org/2001/XMLSchema"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/"
-            xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-            xmlns:tns="http://localhost/axis/MathOps/types"
             targetNamespace="http://localhost/axis/MathOps/types">
-            <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
             <complexType name="DivByZeroStruct">
                 <sequence>
                     <element name="varString" type="xsd:string"/>
@@ -22,15 +18,26 @@
                     <element name="varFloat" type="xsd:float"/>
                 </sequence>
             </complexType>
-            <element name="intParam1" type="xsd:int"/>
-            <element name="intParam2" type="xsd:int"/>
-            <element name="intReturn" type="xsd:int"/>
+            <element name="divRequest">
+	    	<complexType>
+		    <sequence>
+			<element name="intParam1" type="xsd:int"/>
+			<element name="intParam2" type="xsd:int"/>	
+		    </sequence>	    
+		</complexType>
+	    </element>
+            <element name="divResponse">
+	    	<complexType>
+			<sequence>
+	     			<element name="return" type="xsd:int"/>
+			</sequence>
+		</complexType>
+	    </element> 
        </schema>
        <schema 
             xmlns="http://www.w3.org/2001/XMLSchema"
-            xmlns:tns="http://localhost/axis/MathOps/types/part"
             targetNamespace="http://localhost/axis/MathOps/types/part">
-            <element name="DivByZeroStructPart" type="ns2:DivByZeroFault"/>
+            <element name="DivByZeroStructPart" type="ns2:DivByZeroStruct"/>
         </schema>
                 
     </types>
@@ -38,14 +45,13 @@
 		<part name="faultstruct1" element="ns3:DivByZeroStructPart"/>
 	</message>
 	<message name="divRequest">
-		<part name="int0" element="ns2:intParam1"/>
-		<part name="int1" element="ns2:intParam2"/>
+		<part name="parameters" element="ns2:divRequest"/>
 	</message>
 	<message name="divResponse">
-		<part name="addReturn" element="ns2:intReturn"/>
+		<part name="parameters" element="ns2:divResponse"/>
 	</message>
 	<portType name="MathOps">
-		<operation name="div" parameterOrder ="int0 int1">
+		<operation name="div">
 			<input message="tns:divRequest"/>
 			<output message="tns:divResponse"/>
 			<fault name="DivByZero" message="tns:DivByZeroFault"/>
@@ -74,3 +80,4 @@
 		</port>
 	</service>
 </definitions>
+
