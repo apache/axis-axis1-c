@@ -1,0 +1,16 @@
+<test>
+    <name>Combo_TTest</name>
+    <description>Combo_TTest</description>
+	<dynamicCode>true</dynamicCode>
+	<dynamicCodeDirectory>Combo_TTest</dynamicCodeDirectory>
+    <clientLang>cpp</clientLang>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            Combo_TTest.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/Calculator/services/Calculator http://localhost:80/SimpleArray/services/arrayTest http://localhost:80/MathOps/services/MathOps http://localhost:9080/SimpleTypeArray/services/sampleWS</endpoint>
+	<nomonitor>true</nomonitor>
+	<verbatim>true</verbatim>
+</test>
