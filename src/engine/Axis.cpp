@@ -183,24 +183,27 @@ extern "C" int process_request(Ax_soapstream *str)
 					str->transport.pSendFunct("<html><body>\
 						<h1 align=\"center\">Welcome to Axis C++</h1>\
 						<br>\
-						<h2>List of Deployed Web services<br></h2>\
-						<h3>click on the links to view the WSDL</h3>\
-						<br>\
-						<table width=\"400\">", str->str.op_stream);
+						<h2 align=\"center\">List of Deployed Web services<br></h2>\
+						<table width=\"100%\" border=1 align=\"center\"><tbody>", str->str.op_stream);
 
+					str->transport.pSendFunct("<tr><td width=\"20%\"><b>Web Service</b></td>\
+						<td width=\"10%\" align=\"left\"><b>WSDL</b></td>\
+						<td width=\"70%\"><b>Description</b></td></tr>", str->str.op_stream);
 					for (iter = pSrvMap->begin();iter != pSrvMap->end();iter++)
 					{
 						pService = (*iter).second;
-						str->transport.pSendFunct("<tr><td width=\"200\">", str->str.op_stream);
+						str->transport.pSendFunct("<tr><td width=\"20%\">", str->str.op_stream);
 						str->transport.pSendFunct((char *)pService->GetServiceName(), str->str.op_stream);
-						str->transport.pSendFunct("</td><td width=\"200\"><a href=\"./", str->str.op_stream);
+						str->transport.pSendFunct("</td><td width=\"10%\" align=\"left\"><a href=\"./", str->str.op_stream);
 						if (bNoSlash) str->transport.pSendFunct("axis/", str->str.op_stream); 
 						str->transport.pSendFunct((char *)pService->GetServiceName(), str->str.op_stream);
 						str->transport.pSendFunct("?wsdl", str->str.op_stream);
-						str->transport.pSendFunct("\">wsdl</a></td>", str->str.op_stream);
-						str->transport.pSendFunct("</tr>", str->str.op_stream);
+						str->transport.pSendFunct("\">wsdl</a></td><td width=\"70%\">", str->str.op_stream);
+						str->transport.pSendFunct((char *)pService->GetDescription(), str->str.op_stream);
+						str->transport.pSendFunct("</td></tr>", str->str.op_stream);
 					}
-					str->transport.pSendFunct("</table></body></html>", str->str.op_stream);
+					str->transport.pSendFunct("</tbody></table>", str->str.op_stream);
+					str->transport.pSendFunct("<br><p align=\"center\">Copyright © 2001-2003 The Apache Software Foundation<br></p></body></html>", str->str.op_stream);
 					Status = SUCCESS;
 				}
 				else 
