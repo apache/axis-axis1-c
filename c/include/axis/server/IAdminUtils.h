@@ -14,22 +14,44 @@
  *   limitations under the License.
  */
 
-/*
- * @class WSDDDocument
- * @brief This Interface contains the Server side administration 
- * functionality like deploying and undeploying services/handlers dynamically.
- * @author Suasntha Kumara (skumara@virtusa.com, susantha@opensource.lk)
+/**
+ * @file IAdminUtils.h
+ *
+ * This file contains all the special functionalities that the Admin Web
+ * service is provided by the Axis Engine.
+ *
+ * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  */
-
+ 
 #if !defined(_IADMINUTILS_H____OF_AXIS_INCLUDED_)
 #define _IADMINUTILS_H____OF_AXIS_INCLUDED_
 
 #include "AxisUserAPI.h"
 
+/**
+ * @interface IAdminUtils
+ *
+ * This interface contains all the special functionalities that the Admin Web
+ * service is provided by the Axis Engine. Such as deploying and undeploying
+ * services/handlers dynamically.
+ *
+ * @brief  This Interface contains the Server side administration
+ *         functionalities
+ * @author Suasntha Kumara (skumara@virtusa.com, susantha@opensource.lk)
+ */
 class IAdminUtils  
 {
 public:
     virtual ~IAdminUtils(){};
+    /**
+     * Updates the WSDD information of the Axis Engine. This functions is
+     * called by the Admin Web service when the Admin Client is used to
+     * deploy a web service.
+     *
+     * @brief Updates the WSDD information of Axis Engine.
+     * @param wsdd A character buffer containing xml of the new wsdd.
+     * @return AXIS_SUCCESS if the WSDD update successful, AXIS_FAIL otherwise.
+     */
     virtual int updateWSDD(AxisChar* wsdd)=0;
 };
 
