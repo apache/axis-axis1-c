@@ -448,7 +448,7 @@ public:
 };
 
 /* A separate call class object should be used by each thread */
-class Call : public CallBase
+class STORAGE_CLASS_INFO Call : public CallBase
 {
 public:
 	virtual ~Call();
@@ -556,6 +556,7 @@ private:
 	 */
 	AxisTransport* m_pTransport;
 };
+
 #endif
 
 typedef struct { 

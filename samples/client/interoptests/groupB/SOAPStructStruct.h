@@ -7,7 +7,7 @@
 #if !defined(__SOAPSTRUCTSTRUCT_PARAM_H__INCLUDED_)
 #define __SOAPSTRUCTSTRUCT_PARAM_H__INCLUDED_
 
-#include <axis/common/AxisUserAPI.h>
+#include <axis/server/AxisUserAPI.h>
 
 #include "SOAPStruct.h"
 //Local name and the URI for the type

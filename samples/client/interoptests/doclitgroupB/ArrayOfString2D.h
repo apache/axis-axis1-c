@@ -7,7 +7,7 @@
 #if !defined(__ARRAYOFSTRING2D_ARRAY_H__INCLUDED_)
 #define __ARRAYOFSTRING2D_ARRAY_H__INCLUDED_
 
-#include <axis/common/AxisUserAPI.h>
+#include <axis/server/AxisUserAPI.h>
 
 typedef struct ArrayOfString2DTag
 {
