@@ -1,0 +1,13 @@
+<test>
+    <name>ManyTypeRefRoot</name>
+    <description>ManyTypeRefRoot</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>ManyTypeRefRootClient.cpp</clientCode>
+    <wsdl>ManyTypeRefRoot.wsdl</wsdl>
+    <expected>
+        <output>
+            ManyTypeRefRoot.cpp.out
+        </output>
+    </expected>
+	<endpoint>-e http://localhost:9080/ManyTypeRefRoot/services/sampleWS</endpoint>
+</test>

@@ -1,0 +1,15 @@
+<test>
+		<name>CalculatorDoc</name>
+		<description>A simple client server test to IBM WebSPhere Java server</description>
+		<clientCode>CalculatorDocClient.cpp</clientCode>
+		<wsdl>CalculatorDoc.wsdl</wsdl>
+		<expected>
+			<output>
+				CalculatorDoc.cpp.out
+			</output>
+		</expected>
+		<endpoint>
+			http://bora:9080/Calculator/services/Calculator
+		</endpoint>
+</test>
+

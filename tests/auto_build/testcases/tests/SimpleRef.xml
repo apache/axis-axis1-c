@@ -1,0 +1,13 @@
+<test>
+    <name>SimpleRef</name>
+    <description>SimpleRef</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>SimpleRefClient.cpp</clientCode>
+    <wsdl>SimpleRef.wsdl</wsdl>
+    <expected>
+        <output>
+            SimpleRef.cpp.out
+        </output>
+    </expected>
+	<endpoint>http://localhost/axis/ref</endpoint>
+</test>

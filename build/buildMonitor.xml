@@ -1,0 +1,9 @@
+
+<project name="buildMonitor" default="compileMonitorUtility" basedir="..">
+
+	<target name="compileMonitorUtility" unless="monitor.compiled">
+		<ant dir="${basedir}/tests/utils/monitor" target="production"/>
+		<property name="monitor.compiled" value="true"/>
+	</target>
+
+</project>

@@ -1,0 +1,13 @@
+<test>
+    <name>ExceptionTest</name>
+    <description>ExceptionTest</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>ExceptionTestClient.cpp</clientCode>
+    <wsdl>ExceptionTest.wsdl</wsdl>
+    <expected>
+        <output>
+            ExceptionTest.cpp.out
+        </output>
+    </expected>
+	<endpoint>http://localhost/axis/MathOps</endpoint>
+</test>

@@ -1,0 +1,13 @@
+<test>
+    <name>FaultMapping</name>
+    <description>FaultMapping</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>FaultMappingClient.cpp</clientCode>
+    <wsdl>FaultMapping.wsdl</wsdl>
+    <expected>
+        <output>
+            FaultMapping.cpp.out
+        </output>
+    </expected>
+	<endpoint>http://localhost/axis/MathOps</endpoint>
+</test>

@@ -1,0 +1,456 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<title>Ant Test Framework</title>
+<meta name="Author" content="Andrew Perry">
+<meta name="Keywords" content="Axis C++ Test Framework">
+<meta name="Description" content="Details of the Apache Ant base test framework for Axis C++">
+
+<style type="text/css">
+body {
+	font-family: arial;
+	padding-left: 2em;
+}
+h2 {
+	border-top: silver thin solid;
+	padding-top: 1em;
+	padding-bottom: 0em;
+	border-bottom: silver thin solid;
+	font-size: 130%;
+}
+div.example {
+	background-color: #efefef; 
+	margin-left: 1%;
+	margin-bottom: 0%;
+	width: 800;
+}
+p.example {
+	font-family: arial;
+	font-size: 85%;
+	font-weight: bolder;
+	margin-left: 1%;
+	margin-top: 0%;
+	background-color: #efefef; 
+	width: 90;
+}
+ol {
+	font-weight: bolder;
+}
+ul {
+	font-weight: lighter;
+}
+p.normal {
+	font-weight: 400;
+}
+dt {
+	font-weight: bolder;
+}
+</style>
+
+</head>
+<body>
+
+<h1><u>Axis C++ Ant Test Framework</u></h1>
+
+<p>
+<a href="#intro">Introduction</a><br/>
+<a href="#conventions">Conventions</a><br/>
+<a href="#running">Running the Tests</a><br/>
+<a href="#create">Creating new tests</a><br/>
+<a href="#flow">How the Framework Works</a><br/>
+<a href="#properties">Test Properties Files</a><br/>
+<a href="#conversions">Conversions</a><br/>
+<a href="#handlers">Handlers</a><br/>
+<a href="#monitor">TCP Monitor Utility</a><br/>
+<a href="#filelist">Files Specific to Ant Test Framework</a><br/>
+<a href="#required">Files Required by Ant Test Framework</a><br/>
+</p>
+
+<h2 id="intro">Introduction</h2>
+<p>
+This document describes the Apache Ant based test framework used for testing the Apache Axis C++ Web Services project.
+Please refer to the <a href="antbuild-guide.html">antbuild-guide.html</a> for information about Ant versions and pre-requisites.
+</p>
+<p>
+The entire Axis C++ source tree is not required to run the test suite, but all the files in <code>ws-axis/c/build</code> and <code>ws-axis/c/tests/auto_build/testcases</code> directories are required. The product must be installed on the test machine. Please refer to the <a href="lininstall-guide.html">lininstall-guide.html</a> for Linux install instructions or the <a href="wininstall-guide.html">wininstall-guide.html</a> for Windows install instructions.
+</p>
+
+
+<h2 id="conventions">Conventions</h2>
+<p>
+<ul>
+<li>The AXISCPP_DEPLOY directory, the directory where the product is installed into, will be referred to as the PACKAGE directory.</li>
+<li>The AXISCPP_HOME/ws-axis/c will be referred to as the BASEDIR.</li>
+<li>The XML parser library location will be referred to as XMLPARSER_HOME. This is the directory with the libraries, e.g. $XERCES_HOME/lib.</li>
+</ul>
+</p>
+
+
+<h2 id="running">Running the Tests</h2>
+<p>
+Each test has a <a href="#properties">property file</a> and all the property files are located in the <code>BASEDIR/tests/auto_build/testcases/tests</code> directory. By default all the tests which have a property file in this directory will be run, but it is possible to define a subset of tests to run or to run an individual test.</p>
+<p>
+In order for the tests to run, the location of the XML parser libraries, XMLPARSER_HOME needs to be specified, and the install location of the Axis C++ package needs to be specified. These can either be specified on the command line or added to the platform specific properties files.
+</p> 
+<p>To run all tests type:</p>
+<blockquote><code>ant -f test.xml -Ddir.xmlParser=XMLPARSER_HOME -Ddir.package=PACKAGE</code></blockquote>
+
+<p>To run a sub-set of tests a file with the name of the test property files to be used for the test run. The location of the file needs to be passed to the Ant script. If a relative path is specified then it must be relevant to the BASEDIR directory. e.g. to run the subset of tests specified in a file called tests_to_run in the BASEDIR directory run:</p>
+<blockquote><code>ant -f test.xml -Ddir.xmlParser=XMLPARSER_HOME -Ddir.package=PACKAGE -Dtest.list=tests_to_run</code></blockquote>
+
+<p>To run an individual test specify the name of the test property file. e.g. to run only the CalculatorDoc test run:</p>
+<blockquote><code>ant -f test.xml -Ddir.xmlParser=XMLPARSER_HOME -Ddir.package=PACKAGE -Dtest.name=CalculatorDoc</code></blockquote>
+
+<h2 id="create">Creating new tests</h2>
+<p>When creating a new test at least 3 files must be added to the test framework.</p>
+
+<ol>
+	<li>test client implementation code</li>
+		<ul><li>This is the client program that uses the generated stubs and has the <code>main()</code> function. This must be located in the <code>BASEDIR/tests/auto_build/testcases/client/&lt;lang&gt;</code> directory.</li></ul> 
+	<li>expected output file</li>
+		<ul><li>The output from the client is compared against this file to determine success or failure. This must be located in the <code>BASEDIR/tests/auto_build/testcases/output</code> directory.</li></ul>
+	<li>test property file</li>
+		<ul><li>This is the <a href="#properties">XML property file</a> that defines the location of the other required files. This must be located in the <code>BASEDIR/tests/auto_build/testcases/tests</code> directory.</li></ul>
+
+<p class="normal">
+Additionally the following files may also be added
+</p>
+
+	<li>test service WSDL</li>
+		<ul><li>If a new service has been created for the test then the WSDL for the new service will need to be added to the framework. This must be located in the <code>BASEDIR/tests/auto_build/testcases/wsdls</code> directory.</li></ul>
+	<li>expected request file</li>
+		<ul><li>If a test modifies the HTTP or SOAP header, then the request message should be checked on-the-wire to make sure that it has been modified as expected. The <a href="#monitor">TCP monitor utility</a> captures the message on the wire and writes it to a file which will be compared to the expected request file. This must be located in the <code>BASEDIR/tests/auto_build/testcases/output</code> directory.</li></ul>
+	<li>handler directory structure</li>
+		<ul><li>If a test requires 1 or more handlers, then the code for the handlers must be located under the <code>BASEDIR/tests/auto_build/testcases/handlers</code> directory. <a href="#handlers">(See Handlers)</a>.</li></ul>
+</ol>
+
+<h2 id="flow">How the Framework Works</h2>
+<p>When the tests are run the each test is compiled into the test output directory. This directory is created in the directory structure pointed to by the dir.obj property in the build.xx.properties files. Under the dir.obj directory the following directory structure is created.
+</P
+<div class="example">
+	<pre>
+	<code>
+	test/generated<sup>*</sup>
+	test/generated/etc<sup>*</sup>
+	test/generated/&lt;lang&gt;
+	test/generated/&lt;lang&gt;/&lt;test name&gt;
+	</code>
+	</pre>
+</div>
+<sup>*</sup>The axiscpp.conf file is created in a different location dependent upon platform
+
+<dl>
+	<dt>test/generated</dt>
+	<dd>The results.log file for the test run is created in this directory. For Windows the axiscpp.conf file is also created in this directory.</dd>
+
+	<dt>test/generated/etc</dt>
+	<dd>For non-windows platforms the axiscpp.conf file is created in this directory.</dd>
+
+	<dt>test/generated/&lt;lang&gt;</dt>
+	<dd>To easily differentiate between the possible languages of the test client a directory is created to indicate the language of the test. Valid values are c or cpp.</dd>
+
+	<dt>test/generated/&lt;lang&gt;/&lt;test name&gt;</dt>
+	<dd>Each test has its own output directory.
+		<ul><li>The generated stubs are created in this directory.</li>
+			 <li>The client test implementation code is copied here.</li>
+			 <li>The test is run from here</li>
+			 <li>The output from the test is redirected to files in this directory, &lt;test name&gt;.out and &lt;test name&gt;.err</li>
+			 <li>The <a href="#monitor">TCP monitor utility</a> output files tcpm.req and tcpm.res are created here.</li>
+			 <li>The trace output file for the current test is created here.</li>
+		</ul></dd>
+</dl>
+
+<p>After initializing and compiling the <a href="#monitor">TCP monitor utility</a>, for each <a href="#properties">test property file</a> in the list of tests to run (See <a href="#running">Running Tests</a> the framework will:
+</p>
+<ul>
+	<li>generated the stubs form the specified WSDL
+	<li>copy the client implementation code
+	<li>compile the test client
+	<li>generate the axiscpp.conf configuration file
+	<li>compile any handlers required, generate the client.wsdd file and update the axiscpp.conf configuration file
+	<li>copy the expected output and expected request files
+	<li>modify the test endpoint
+	<li>start the <a href="#monitor">monitor</a> and write a copy of the request and response
+	<li>execute the test, capturing stdout and stderr
+	<li>stop the <a href="#monitor">monitor</a>
+	<li>compare the expected and actual outputs
+	<li>compare the expected and actual requests
+	<li>write the results to the results.log file
+</ul>
+
+<h2 id="properties">Test Properties Files</h2>
+<p>
+    The test property files are pseudo XML documents that define all the 
+	 required elements to run a test (See <a href="#create">Creating new tests</a>). A basic example of the properties file
+    can be seen in example 1 which has all the mandatory elements.
+</p>
+
+    <div class="example">
+    <pre>
+
+    &lt;test&gt;
+       &lt;name&gt;CalculatorDoc&lt;/name&gt;
+       &lt;description&gt;CalculatorDoc&lt;/description&gt;
+       &lt;clientLang&gt;cpp&lt;/clientLang&gt;
+       &lt;clientCode&gt;CalculatorDocClient.cpp&lt;/clientCode&gt;
+       &lt;wsdl&gt;CalculatorDoc.wsdl&lt;/wsdl&gt;
+       &lt;expected&gt;
+           &lt;output&gt;
+                CalculatorDoc.cpp.out
+           &lt;/output&gt;
+       &lt;/expected&gt;
+       &lt;endpoint&gt;http://localhost:80/Calculator/services/Calculator&lt;/endpoint&gt;
+    &lt;/test&gt;
+    </pre>
+    </div>
+    
+    <p class="example">example 1</p>
+
+    <p>
+    Each of the XML tags in example 1 are detailed below.
+    <DL>
+    <DT>&lt;name&gt;</DT>
+	 <DD>This is the name of the test being run. This should be unique within all the test properties files listed in the <code>BASEDIR/tests/auto_build/testcases/tests</code> directory. The name is used as the name of the test client that is built, the name of the test output directory, and the name of the output files created as part of the test run.</DD>
+
+    <DT>&lt;description&gt;</DT>
+    <DD>This is for information only, but could be used for documentation purposes.</DD>
+	 
+    <DT>&lt;clientLang&gt;</DT>
+	 <DD>This is the language of the client. Valid values are c and cpp. This is used to determine which directory the client implementation code is located in.</DD>
+
+    <DT>&lt;clientCode&gt;</DT>
+    <DD>This is the name of the source code of the client test implementation.</DD>
+
+    <DT>&lt;wsdl&gt;</DT>
+    <DD>The WSDL file for the service to be used for the test. The stubs are generated from this WSDL.</DD>
+
+    <DT>&lt;expected&gt;</DT>
+    <DD>This is a parent tag which has 1 mandatory and 1 optional child elements.</DD>
+	 
+    <DT>&lt;output&gt;</DT>
+	 <DD>The name of the expected output file to be used for comparison to determine if the test has passed. This file must exist in the ws-axis/c/tests/auto_build/testcases/output/ directory, and is copied to the test output directory and converted as required <a href="#conversions">(See Conversions)</a>, and compared against the output from the client test program.</DD>
+
+    <DT>&lt;endpoint&gt;</DT>
+    <DD>This is the endpoint for the service used in the test. The server or server:port portion of the endpoint is changed to point to the <a href="#monitor">TCP monitor utility</a>, which will forward the request to the testHost:testPort combination specified in the build.xx.properties file. The <a href="#monitor">monitor</a> will be started on localhost on the port specified by the monitorPort property in the properties file.  e.g. if the web service is running on a server called testserver which is listening on port 9080, and the <a href="#monitor">monitor</a> is configured to listen on port 12345 then the endpoint in example 1 will be changed to http://localhost:12345/Calculator/services/Calculator and the <a href="#monitor">monitor</a> will forward the request to testserver:9080</DD>
+
+    </DL>
+
+    The example 2 show all the optional tags that are available.
+    </p>
+
+    <div class="example">
+    <pre>
+
+     &lt;test&gt;
+        &lt;name&gt;HandlerTest2&lt;/name&gt;
+        &lt;description&gt;CalculatorDoc with Handler Chain&lt;/description&gt;
+        &lt;clientLang&gt;cpp&lt;/clientLang&gt;
+        &lt;clientCode&gt;CalculatorDocClient.cpp&lt;/clientCode&gt;
+        &lt;wsdl&gt;CalculatorDoc.wsdl&lt;/wsdl&gt;
+        &lt;expected&gt;
+            &lt;output&gt;
+                CalculatorDoc.cpp.out
+            &lt;/output&gt;
+            &lt;request&gt;
+                HandlerTest2Request.out
+            &lt;/request&gt;
+        &lt;/expected&gt;
+        &lt;handler&gt;
+            &lt;directory&gt;
+                handler_chain
+            &lt;/directory&gt;
+            &lt;service&gt;
+                Calculator
+            &lt;/service&gt;
+        &lt;/handler&gt;
+        &lt;endpoint&gt;http://localhost:80/Calculator/services/Calculator&lt;/endpoint&gt;
+    &lt;/test&gt;
+    </pre>
+    </div>
+    <p class="example">example 2</p>
+
+    <p>
+    The optional tags shown in example 2 are detailed below.
+    </p>
+
+    <DL>
+        <DT>&lt;request&gt;</DT>
+        <DD>This is the name of the expected output of the request message sent to the service. The request message is captured by the <a href="#monitor">TCP monitor utility</a> and written to a file in the test output directory called tcpm.req. The expected output file specified by the &lt;request&gt; tag is copied to the test output directory and converted as required <a href="#conversions">(See Conversions)</a> and compared to the tcpm.req file to check that the request message is correct. This is used for tests which alter the HTTP or SOAP headers.</DD>
+
+    <DT>&lt;handler&gt;</DT>
+    <DD>This is a parent tag which has 2 mandatory child elements.</DD>
+
+    <DT>&lt;directory&gt;
+    <DD>This is the name of the parent directory which has a
+            sub-directory for each of the handlers required by a client. Each
+            of the sub-directories will be the name of the handler library,
+            and contains all the source code required to compile the handler,
+            excluding the Axis C++ include files.</DD>
+            <DT>&lt;service&gt;</DT>
+            <DD>This is the name of the web service being called. It should
+            match the service portion of the SOAPAction of the request being 
+            sent to the service.</DD>
+    </DL>
+
+
+<h2 id="conversions">Conversions</h2>
+<p>
+The expected output files, the request/response messages written by the <a href="#monitor">TCP monitor utility</a> and the output files (redirected stdout/stderr) written by the test client may be in different formats, e.g. DOS format or UNIX format or a combination of both. All the files used for comparison are first converted to the platform specific format of the machine the tests are being run on.
+</p>
+<p>
+Additionally the expected request files will have host:port combination of the original request in the HTTP header information from when it was created. This information is altered to match the location of the <a href="#monitor">TCP monitor utility</a>.
+</p>
+
+
+<h2 id="handlers">Handlers</h2>
+<p>
+If handlers have been specified in the test properties file for a test <a href="#properties">(See Test Properties Files)</a>, then the directory specified will have sub-directories matching the names of the libraries to be created. This will be the name of the library without any prefix or suffix. A prefix of lib is usual for UNIX systems, and a suffix could be .DLL, .so, or .sl depending on platform. If the sub-directory is called testhandler then this will create a library called testhandler.DLL on windows and libtesthandler.so on Linux. All the source code for the library will be in this sub-directory.
+<br/>
+e.g.
+<br/>
+In example 2 above a directory of handler_chain was specified. This directory is the parent of the library directories, but a sub directory of the ws-axis/c/tests/auto_build/testcases/handlers/ directory. The handler_chain directory structure is shown in example 3
+</p>
+
+<div class="example">
+	<pre>
+	<code>
+        handler_chain/testhandler
+        handler_chain/testhandler/TestHandler.cpp
+        handler_chain/testhandler/THandler.cpp
+        handler_chain/testhandler/THandler.h
+        handler_chain/testhandler2
+        handler_chain/testhandler2/TestHandler2.cpp
+        handler_chain/testhandler2/THandler2.h
+        handler_chain/testhandler2/THandler2.cpp
+	</code>
+	</pre>
+</div>
+    <p class="example">example 3</p>
+
+<p>
+When built this will produce 2 libraries in the test output directory called libtesthandler.so and libtesthandler2.so on Linux and testhandler.dll and testhandler2.dll on Windows.
+<br/>
+The framework also creates the client.wsdd file required to invoke the handlers when the test is run and also updated the axiscpp.conf used by the test. 
+<br/>
+At present only &lt;requestFlow ..&gt; handlers are supported.
+
+</p>
+
+<h2 id="monitor">TCP Monitor Utility</h2>
+<p>
+usage: TCPMonitor &lt;-l listen port&gt; &lt;-p forward port&gt; &lt;-h forward host&gt; &lt;-o request output file&gt; [-r response output file]
+</p>
+<dl>
+	<dt>-l listen port</dt><dd>The port the monitor listens on for incoming requests.  i.e. the port the client should send the request to.</dd>
+	<dt>-p forward port</dt><dd>The port the actual service is listening on.</dd>
+	<dt>-h forward host</dt><dd>The host name of the machine the actual service is running on.</dd>
+	<dt>-o request file</dt><dd>The filename the request is written to.</dd>
+	<dt>-r response file</dt><dd>Optional. The filename the response is written to.</dd>
+</dl>
+
+<p>
+The program will listen for all requests on the listen port and write them
+to a file. The program stays alive until a stop message is received so many
+requests for many services will be written to the same file if they are all
+sent to the same port.
+</p>
+
+<p>
+usage: StopTCPMonitor &lt;-p listen port&gt; &lt;-h host&gt;
+</p>
+<dl>
+	<dt>-p listen port</dt><dd>The port the monitor is listening on.</dd>
+	<dt>-h host</dt><dd>The host the listener is running on</dd>
+</dl>
+
+<p>
+e.g. to run CalculatorDoc through the monitor
+</p>
+<ul>
+	<li> start the monitor by typing 'java -jar /some/where/monitor.jar -l 13260 -p 80 -h localhost -o /tmp/request.out -r /tmp/response.out', either in the background (&amp;) or in a separate window.</li>
+	<li> run the client CalculatorDoc http://localhost:13260/axis/Calculator.</li>
+	<li> stop the monitor by typing 'java -cp /some/where/monitor.jar org.apache.test.StopTCPMonitor -p 13260 -h localhost'.</li>
+</ul>
+
+<p>
+This will create 2 files in /tmp called request.out and response.out.
+</p>
+
+<h2 id="filelist">Files Specific to Ant Test Framework</h2>
+
+<DL>
+<DT>ws-axis/c/test.xml</DT>
+<DD>The main Ant script to run the tests. This script imports other
+Ant scripts from the ws-axis/c/build directory</DD>
+
+<DT>ws-axis/c/build/testInitialize.xml</DT>
+<DD>Sets or derives test specific properties and has tests initialization
+targets</DD>
+
+<DT>ws-axis/c/build/buildHandler.xml</DT>
+<DD>Has targets to build any number of handlers as specified in the test
+properties xml file. This also creates the client.wsdd file for the
+test and updates the axiscpp.conf file with the location of the
+client.wsdd file</DD>
+
+<DT>ws-axis/c/build/validateTest.xml</DT>
+<DD>Has targets to validate if client and handlers compiled and whether the
+client output is as expected and if the request message is as expected</DD>
+
+<DT>ws-axis/c/build/buildTest.xml</DT>
+<DD>Has targets to generate the stubs, copy the client code and compile the
+client into a test directory</DD>
+
+<DT>ws-axis/c/build/executeTest.xml</DT>
+<DD>Has targets to copy the expected output and request files to the test
+directory, performing any conversions as required (see Conversions),
+manipulates the test endpoint to run the test through the <a href="#monitor">TCP monitor utility</a>, creates the axiscpp.conf configuration file, starts the <a href="#monitor">monitor</a>, executes the test and stops the <a href="#monitor">monitor</a></DD>
+
+<DT>ws-axis/c/build/buildMonitor.xml</DT>
+<DD>Has targets to build the <a href="#monitor">TCP monitor utility</a> program</DD>
+
+<DT>ws-axis/c/tests/auto_build/testcases/tests/</DT>
+<DD>directory containing the xml property files for each test
+(See Test Property Files)</DD>
+
+<DT>ws-axis/c/tests/auto_build/testcases/handlers/</DT>
+<DD>directory containing the source for any handlers used by the tests.
+Each sub-directory will be for a test and will have sub-directories of
+the handler name which contain the source for each handler.
+(See Handlers)</DD>
+
+<DT>ws-axis/c/tests/auto_build/testcases/output/</DT>
+<DD>directory containing the expected output files specified in the test
+properties xml files. (See Test Property Files)</DD>
+
+<DT>ws-axis/c/tests/auto_build/testcases/wsdls/</DT>
+<DD>directory containing the WSDL files for each service used by the tests</DD>
+
+<DT>ws-axis/c/tests/auto_build/testcases/client/</DT>
+<DD>directory has sub-directories for each supported language, e.g. c/c++
+within each sub-directory is the test client implementation code.</DD>
+</DL>
+
+<h2 id="required">Files Required by Ant Test Framework</h2>
+<DL>
+<DT>buildInitialize.xml</DT>
+<DD>Loads all the external task/type definitions and has the
+compiler/linker definitions. Also set platform specific properties
+and load one of the platform specific properties files listed
+below</DD>
+<DT>ws-axis/c/build/build.AIX.properties</DT>
+<DT>ws-axis/c/build/build.Linux.properties</DT>
+<DT>ws-axis/c/build/build.OS400.properties</DT>
+<DT>ws-axis/c/build/build.SunOS.properties</DT>
+<DT>ws-axis/c/build/build.Win32.properties</DT>
+</DL>
+
+
+<center>
+	<hr/>
+	<p>Created: 11/12/2004 13:23</p>
+</center>
+
+</body>
+</html>
+

@@ -1,0 +1,114 @@
+
+<project name="validateTest" default="validateTest" basedir="..">
+
+	<target name="validateTest" depends="validateTestClient, validateMessageOnWire"/>
+
+	<target name="validateClientCompilation" depends="validateClientCompilationIfBuilding, validateClientCompilationIfNotBuilding"/>
+
+	<!--
+	  Validate Client was successfully compiled
+	  -->
+	<target name="validateClientCompilationIfBuilding" unless="runOnly">
+		<condition property="clientCompilationStatus" value="FAILED">
+			<not>
+				<available file="${test.directory}/${testName}${executableSuffix}"/>
+			</not>
+		</condition>
+		<condition property="clientCompilationStatus" value="PASSED">
+			<available file="${test.directory}/${testName}${executableSuffix}"/>
+		</condition>
+		
+		<!-- Set a flag to show compilation was successful -->
+		<condition property="successfulClientCompilation">
+			<equals arg1="${clientCompilationStatus}" arg2="PASSED"/>
+		</condition>
+		
+		<!-- Display Client compilation status -->		
+ 		<echo file="${results.log}" append="true"
+ 		 message="${testName} - Client Compilation - ${clientCompilationStatus}${line.separator}"/>
+		<echo message="${testName} - Client Compilation - ${clientCompilationStatus}"/>
+	</target>
+
+	<!--
+	  Set flag for a successful client compilation, if tests are being run
+	  without building.
+	  -->
+	<target name="validateClientCompilationIfNotBuilding" if="runOnly">
+		<!-- Only running the tests (no build) so assume a previous succesful build -->
+		<property name="successfulClientCompilation" value="true"/>
+	</target>
+
+	<!--
+	  Validate the test
+	  -->
+	<target name="validateTestClient" if="successfulClientCompilation" unless="buildOnly">
+		<condition property="clientRunStatus" value="PASSED">
+			<filesmatch file1="${results.stdout}" file2="${expected.file}"/>
+		</condition>
+		<condition property="clientRunStatus" value="FAILED">
+			<not>
+				<filesmatch file1="${results.stdout}" file2="${expected.file}"/>
+			</not>
+		</condition>
+		
+		<!-- Set a flag to show run was successful -->
+		<condition property="successfulClientRun">
+			<equals arg1="${clientRunStatus}" arg2="PASSED"/>
+		</condition>
+		
+		<!-- Display Client compilation status -->		
+ 		<echo file="${results.log}" append="true"
+ 		 message="${testName} - Client Execution - ${clientRunStatus}${line.separator}"/>
+		<echo message="${testName} - Client Execution - ${clientRunStatus}"/>
+	</target>
+
+	<!--
+	  Validate the message on wire is correct
+	  ifRequestNeeded in executeTest.xml
+	  -->
+	<target name="validateMessageOnWire" if="requestFileExists">
+		<fixcrlf srcdir="${test.directory}" includes="tcpm.req"/>
+		<condition property="messageOnWireStatus" value="PASSED">
+				<filesmatch file1="${test.directory}/tcpm.req" file2="${r_expected.file}"/>
+		</condition>
+		<condition property="messageOnWireStatus" value="FAILED">
+			<and>
+				<available file="${r_expected.file}"/>
+				<not>
+					<filesmatch file1="${test.directory}/tcpm.req" file2="${r_expected.file}"/>
+				</not>
+			</and>
+		</condition>
+
+		<!-- Display Client message status -->		
+ 		<echo file="${results.log}" append="true"
+ 		 message="${testName} - Client Execution (Message on Wire) - ${messageOnWireStatus}${line.separator}"/>
+		<echo message="${testName} - Client Execution (Message on Wire) - ${messageOnWireStatus}"/>
+	</target>
+
+	<!--
+	  Validate test handler was successfully built
+	  -->
+	<target name="validateHandlerCompilation" if="isHandler">
+		<condition property="handlerCompilationStatus" value="FAILED">
+			<not>
+				<available file="${test.directory}/${libraryPrefix}${handlerLibraryName}${librarySuffix}"/>
+			</not>
+		</condition>
+		<condition property="handlerCompilationStatus" value="PASSED">
+			<available file="${test.directory}/${libraryPrefix}${handlerLibraryName}${librarySuffix}"/>
+		</condition>
+		
+		<!-- Set a flag to show compilation was successful -->
+		<condition property="successfulHandlerCompilation">
+			<equals arg1="${handlerCompilationStatus}" arg2="PASSED"/>
+		</condition>
+		
+		<!-- Display Client compilation status -->		
+ 		<echo file="${results.log}" append="true"
+ 		 message="${testName}(${handlerLibraryName}) - Handler Compilation - ${handlerCompilationStatus}${line.separator}"/>
+		<echo message="${testName} (${handlerLibraryName}) - Handler Compilation - ${handlerCompilationStatus}"/>
+	</target>
+
+</project>
+

@@ -1,0 +1,13 @@
+<test>
+    <name>inquire_v2</name>
+    <description>inquire_v2</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>inquire_v2Client.cpp</clientCode>
+    <wsdl>inquire_v2.wsdl</wsdl>
+    <expected>
+        <output>
+            inquire_v2.cpp.out
+        </output>
+    </expected>
+	<endpoint>http://www-3.ibm.com/services/uddi/testregistry/inquiryapi</endpoint>
+</test>

@@ -1,823 +1,129 @@
-<project name="AxisCTests" default="testSuite" basedir=".">
-<description >
-This ANT script generates, compiles, runs and validates the client stub tests
-for Apache.
+<project name="test" default="testSuite">
 
-This script is intended for use with Java 1.4+ and Apache ANT 1.6+.
-Ant is available from: http://ant.apache.org/
+	<import file="${basedir}/build/buildInitialize.xml"/>
+	<import file="${basedir}/build/testInitialize.xml"/>
+	<import file="${basedir}/build/buildTest.xml"/>
+	<import file="${basedir}/build/validateTest.xml"/>
+	<import file="${basedir}/build/buildHandler.xml"/>
+	<import file="${basedir}/build/executeTest.xml"/>
+	<import file="${basedir}/build/buildMonitor.xml"/>
 
-To allow the automated finding of all available tests, use has been made of the
-ant-contrib project offering.  Also, to compile C/C++ code you will require the
-cpptasks extension to ANT. You will need to place the JAR files within:
-	[ant install dir]/lib
-These are available from: http://ant-contrib.sourceforge.net/
-{Note: The cpptasks are a seperate download from ant-contrib}
 
-It is intended that the default target be used, which compiles and links all code,
-generates documentation and packages ready for distribution.
-
-Associated with this build script are property files for each platform, the script
-will automatically determine the correct one to be used;
-	- build.Win32.properties
-	- build.Linux.properties
-	- build.AIX.properties
-Please use these to configure directories to suit the needs of your system.
-
-Notes:
-* The documentation target requires doxygen be installed and available on the system path
-  This is available from: http://www.doxygen.org
-* The following compilers will be required;
-	- Windows = Microsoft Visual C++ 6.0
-	- Linux   = gcc
-	- AIX     = Visual Age
-</description>
 	<!--
-	  Load definition of C/C++ Tasks and Types
-	  To allow the compilation and linking of C/C++ code
+	  Default target that set all the required framework to build, run and report on the tests
 	  -->
-	<taskdef resource="cpptasks.tasks"/>
-	<typedef resource="cpptasks.types"/>
-
-	<property environment="env"/>
+	<target name="testSuite" depends="initialize, initializeTest, compileMonitorUtility, initializeLogFile, runTests, displayAllResults"
+	 description="Build and Run all tests"/>
 
 	<!--
-	  Load definition of Additional Tasks and Types
+	  Loop through all the test xml properties files in the tests
+	  list and call runTest target
 	  -->
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-
-	<!--
-	  These properties should be the same for all environments, so have not been
-	  included within the property files
-	  -->
-	<property name="dir.src" value="${basedir}/tests/auto_build/testcases"/>
-	<property name="test.list" value="${dir.src}/test.list"/>
-	<property name="test.endpoints" value="${dir.src}/test.endpoints"/>
-	<property name="dir.include" value="${basedir}/include"/>
-
-	<!--
-	  Compiler definitions
-	  -->
-	  
-		<!--
-		  Definition of Visual C++ compiler
-		  -->
-		<compiler id="VisualC++" name="msvc" if="windows">
-			<compilerarg value="/nologo"/>
-			<compilerarg value="/MD"/>
-			<compilerarg value="/W3"/>
-			<compilerarg value="/GX"/>
-			<compilerarg value="/Od"/>
-			<includepath path="${dir.include}"/>
-			<defineset>
-				<define name="WIN32"/>
-				<define name="NDEBUG"/>
-				<define name="_WINDOWS"/>
-				<define name="_MBCS"/>
-				<define name="_USRDLL"/>
-				<define name="ENABLE_AXIS_EXCEPTION"/>
-			</defineset>
-			<compilerarg value="/FD"/>
-			<compilerarg value="/c"/>
-		</compiler>
-		
-		<!--
-		  Definition of gcc compile for Linux
-		  -->
-		<compiler id="Linuxgcc" name="g++" if="linux">
-			<compilerarg value="-g"/>
-			<defineset>
-				<define name="ENABLE_AXIS_EXCEPTION"/>
-				<define name="HAVE_CONFIG_H"/>
-				<define name="PIC"/>
-			</defineset>
-			<includepath path="${dir.include}"/>
-		</compiler>
-	
-		<!--
-		  Definition of xlc compile for AIX
-		  -->
-		<compiler id="AIXxlc" name="xlC" if="aix">
-			<compilerarg value="-g"/>
-			<compilerarg value="-V"/>
-			<compilerarg value="-qstaticinline"/>
-
-			<defineset>
-				<define name="ENABLE_AXIS_EXCEPTION"/>
-				<define name="HAVE_CONFIG_H"/>
-				<define name="AIX"/>
-			</defineset>
-			<includepath path="${dir.include}"/>
-		</compiler>
-
-	<!--
-	  Linker Definitions
-	  -->
-	
-		<!--
-		  Definition of Visual C++ linker
-		  -->
-		<linker id="VisualC++Linker" name="msvc" if="windows">
-			<linkerarg value="/machine:I386"/>
-			<linkerarg value="/nologo"/>
-			<linkerarg value="/pdb:none"/>
-		</linker>
-	
-		<!--
-		  Definition of Linux linker
-		  -->
-		<linker id="LinuxLinker" name="g++" libtool="true" if="linux">
-			<linkerarg value="-g"/>
-			<libset libs="stdc++"/>
-			<libset libs="dl"/>
-		</linker>
-	
-		<!--
-		  Definition of AIX linker
-		  -->
-		<linker id="AIXLinker" name="xlC" libtool="false" if="aix">
-			<!-- debug is on for all -->
-			<linkerarg value="-g"/>
-		</linker>	
-
-	<!--
-	  Determine platform
-	  -->
-	<target name="pre-init">
-		<condition property="windows">
-			<os family="windows"/>
-		</condition>
-		<condition property="aix">
-			<os name="AIX"/>
-		</condition>
-		<condition property="linux">
-			<os name="Linux"/>
-		</condition>
-	</target>
-
-	<!--
-	  Check if an individual test name has been specified
-	  -->
-	<target name="checkIfIndividualTest">
-		<condition property="individualTest">
-			<isset property="test.name"/>
-		</condition>
-	</target>
-	
-	<!--
-	  Initialize properties
-      -->
-	<target name="initialize" depends="pre-init, checkIfIndividualTest">
-		<condition property="platform" value="Win32">
-			<isset property="windows"/>
-		</condition>
-		<condition property="platform" value="Linux">
-			<isset property="linux"/>
-		</condition>
-		<condition property="platform" value="AIX">
-			<isset property="aix"/>
-		</condition>
-
-		<condition property="dir.xmlParser" value="${env.XERCES_HOME}/bin">
-			<and>
-				<not>
-					<isset property="dir.xmlParser"/>
-				</not>
-				<isset property="windows"/>
-			</and>
-		</condition>
-		<condition property="dir.xmlParser" value="${env.XERCES_HOME}/lib">
-			<and>
-				<not>
-					<isset property="dir.xmlParser"/>
-				</not>
-				<not>
-					<isset property="windows"/>
-				</not>
-			</and>
-		</condition>
-		
-		<!-- Load properties from file -->
-		<property file="${basedir}/build/build.${platform}.properties"/>
-		
-		<!-- Get directory to contain log file -->
-		<dirname file="${results.log}" property="dir.results"/>
-		
-		<!-- Set location of axiscpp.conf file -->
-		<condition property="axiscpp.conf" value="${axiscpp_deploy}/axiscpp.conf">
-			<isset property="windows"/>
-		</condition>
-		<condition property="axiscpp.conf" value="${axiscpp_deploy}/etc/axiscpp.conf">
-			<not>
-				<isset property="windows"/>
-			</not>
-		</condition>
-	</target>
-
-	<!--
-	  Clear log file
-	  -->
-	<target name="initializeLogFile">
-		<mkdir dir="${dir.results}"/>
- 		<echo file="${results.log}" append="false"
- 		 message="Test Results${line.separator}${line.separator}"/>
-	</target>
-
-	<target name="compileMonitorUtility">
-		<exec executable="ant" dir="${basedir}/tests/utils/monitor"
-		 failifexecutionfails="false" vmlauncher="false">
-			<arg line="production"/>
-		</exec>
-	</target>
-
-
-
-	<!--
-	  Strip test name from WSDL filename
-	  -->
-	<target name="stripTestName">
-		<basename file="${wsdlFile}" property="testName" suffix=".wsdl"/>
-	</target>
-
-	<!--
-	  Use WSDL2Ws to generate stubs from WSDL files
-	  -->
-	<target name="generateStubs" unless="runOnly" depends="initialize, setLanguage">
-		<!-- Make directory in which all generated code shall be placed -->
-		<mkdir dir="${dir.test.generated}/${client.lang}/${testName}"/>
-		<!-- Setup classpath for WSDL2Ws -->
-		<path id ="cp">
-			<fileset dir="${dir.package.WSDL2Ws}" includes="wsdl2ws.jar"/>
-			<fileset dir="${dir.axisJARs}" includes="*.jar"/>
-		</path>
-		<!-- Run WSDL2Ws -->
-		<java classname="org.apache.axis.wsdl.wsdl2ws.WSDL2Ws" fork="true">
-			<classpath refid="cp"/>
-			<arg value="${dir.src}/wsdls/${testName}.wsdl"/>
-			<arg value="-o${dir.test.generated}/${client.lang}/${testName}"/>
-			<arg value="-l${generated.lang}"/>
-			<arg value="-sclient"/>
-		</java>
-	</target>
-
-	<!--
-	  Copy across test client, ready for compiling
-	  -->
-	<target name="copyClient" unless="runOnly">
-		<copy file="${dir.src}/client/${client.lang}/${testName}Client.${client.lang}" todir="${dir.test.generated}/${client.lang}/${testName}"/>
-	</target>
-	
-	<!--
-	  Compile test client
-	  -->
-	<target name="compileClient" unless="runOnly">
-		<delete file="${dir.test.generated}/${client.lang}/${testName}/${testName}"/>
-		<cc failonerror="false" incremental="false" outfile="${dir.test.generated}/${client.lang}/${testName}/${testName}"
-		 objdir="${dir.test.generated}/${client.lang}/${testName}" exceptions="true"
-		 outtype="executable" subsystem="console">
-		 	<!-- Compilers -->
-			<compiler refid="VisualC++"/>
-			<compiler refid="Linuxgcc"/>
-			<compiler refid="AIXxlc"/>
-			<!-- Linkers -->
-			<linker refid="VisualC++Linker"/>
-			<linker refid="LinuxLinker"/>
-			<linker refid="AIXLinker"/>
-			<!-- Additional library of Axis Client -->
-			<libset dir="${dir.obj}/bin" libs="${clientLibraryName}"/>
-			<!-- Files to be compiled -->
-			<includepath path="${dir.include}"/>
-			<fileset dir="${dir.test.generated}/${client.lang}/${testName}">
-				<include name="*.${client.lang}"/>
-			</fileset>
-		</cc>
-	</target>
-
-	<!--
-	  Compile Handler
-	  -->
-	<target name="compileTestHandler" if="isHandler">
-		<mkdir dir="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}"/>
-		<cc incremental="false"
-		 outfile="${dir.test.generated}/${client.lang}/${testName}/${handlerLibraryName}"
-		 objdir="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}" exceptions="true"
-		 failonerror="false" outtype="shared" multithreaded="true">
-			<compiler refid="VisualC++"/>
-			<compiler refid="Linuxgcc"/>
-			<compiler refid="AIXxlc"/>
-			<linker refid="VisualC++Linker"/>
-			<linker refid="LinuxLinker"/>
-			<linker refid="AIXLinker"/>
-			<includepath path="${dir.include}"/>
-			<fileset dir="${handlerDir}">
-				<include name="*.cpp"/>
-			</fileset>
-		</cc>
-	</target>
-
-	<!--
-	  Check if this client has any associated Handlers
-	  -->
-	<target name="checkIfHandlersToCompile" if="successfulClientCompilation" unless="runOnly">
-		<condition property="HandlersPresent">
-			<available file="${dir.src}/handlers/${testName}"/>
-		</condition>
-	</target>
-	
-	<!--
-	  Determine if current directory can contain a valid handler
-	  -->
-	<target name="checkIfHandlerRootDirectory">
-		<basename file="${handlerDir}" property="handlerLibraryName"/>
-		<condition property="isHandler">
-			<and>
-				<not>
-					<equals arg1="${handlerLibraryName}" arg2="${testName}"/>
-				</not>
-				<not>
-					<equals arg1="${handlerLibraryName}" arg2="service"/>
-				</not>
-			</and>
-		</condition>
-	</target>
-
-
-	<!--
-	  Builds a test handler
-	  -->
-	<target name="buildTestHandler" depends="initialize, checkIfHandlerRootDirectory, compileTestHandler, validateHandlerCompilation, insertEntriesInWSDDFile"/>
-
-	<!--
-	  Locate all Handlers needing to be build for this client
-	  -->
-	<target name="compileTestHandlers" if="HandlersPresent" unless="runOnly">
-		<path id="serviceHandlers">
-			<dirset dir="${dir.src}/handlers/${testName}"/>
-		</path>
-
-		<foreach target="buildTestHandler" param="handlerDir">
-			<path refid="serviceHandlers"/>
-			<param name="testName" value="${testName}"/>
-			<param name="client.wsdd" value="${client.wsdd}"/>
+	<target name="runTests" depends="setTestList">
+		<foreach target="runTest" param="test_property" inheritall="true">
+			<path refid="test_properties"/>
 		</foreach>
 	</target>
 
+	<!--
+	  Set the list of tests to run to either all tests, an individual test, or a selection of tests
+	  -->
+	<target name="setTestList" depends="setListType,setIndividual,setFromList,setAll"/>
 
+	<target name="setListType">
+		<condition property="allTest">
+			<and>
+				<not>
+					<isset property="test.name"/>
+				</not>
+				<not>
+					<isset property="test.list"/>
+				</not>
+			</and>
+		</condition>
+	</target>
 
 	<!--
-	  Compile Handlers
+	  Create a list of all the tests
 	  -->
-	<target name="compileHandlers" depends="checkIfHandlersToCompile, createStartOfWSDDFile, updateConfigurationWithClientWSDDEntry, compileTestHandlers, createEndOfWSDDFile"/>
-	  
+	<target name="setAll" if="allTest">
+		<echo message="setAll ${dir.autotests}/tests"/>
+		<path id="test_properties">
+			<fileset dir="${dir.autotests}/tests" includes="*.xml"/>
+		</path>
+	</target>
+
+	<!--
+	  Create a list of just 1 test from command line parameter -Dtest.name=
+	  -->
+	<target name="setIndividual" if="test.name">
+		<echo message="setIndividual ${test.name}"/>
+		<path id="test_properties">
+			<fileset dir="${dir.autotests}/tests" includes="${test.name}.xml"/>
+		</path>
+	</target>
+
+	<!--
+	  Create a list of tests from a properties file unless an individual test has been specified too
+	  -->
+	<target name="setFromList" if="test.list" unless="test.name">
+		<echo message="setFromList ${test.list}"/>
+		<path id="test_properties">
+			<fileset dir="${dir.autotests}/tests" includesfile="${test.list}"/>
+		</path>
+	</target>
+
+	<!--
+	  For the specified test_property test load the properties files and derive
+	  any other required properties, compile the test client, set the endpoint
+	  if required, run the test, and validate if successful.
+	  * setPropertiesForTest is in testInitialize.xml
+	  * validateTest is in validateTest.xml
+	  -->
+	<target name="runTest" depends="setPropertiesForTest,cleanTest,buildTest,executeTestRun,validateTest"/>
+
+	<target name="cleanTest">
+<echo message="Deleting ${dir.test.generated}/${client.lang}/${testName}"/>
+		<delete dir="${dir.test.generated}/${client.lang}/${testName}"/>
+	</target>
 
 	<!--
 	  Build test
 	  -->
-	<target name="buildTest" unless="runOnly" depends="generateStubs, copyClient, compileClient, validateClientCompilation, compileHandlers"/>
+	<target name="buildTest" depends="setPropertiesForThisTest, compileTestClient, validateClientCompilation, createConfigurationFile, compileHandlers"/>
 
-	<!--
-	  Create configuration file to use when running test
-	  -->
-	<target name="createConfigurationFile" if="successfulClientCompilation" depends="initialize">
-		<dirname file="${axiscpp.conf}" property="confFileDirectory"/>
+	<target name="setPropertiesForThisTest" depends="checkIfRequestFile">
+		<property name="test.directory" value="${dir.test.generated}/${client.lang}/${testName}"/>
+		<property name="expected.file" value="${test.directory}/${testName}.expected"/>
+		<property name="r_expected.file" value="${test.directory}/${testName}Request.expected"/>
+		<property name="results.stdout" value="${test.directory}/${testName}.out"/>
+		<property name="results.stderr" value="${test.directory}/${testName}.err"/>
+	</target>
 
-		<mkdir dir="${confFileDirectory}"/>
-		<echo file="${axiscpp.conf}">#Available directives are as follows:
-#
-# ClientLogPath:	  The path to the client log
-# ClientWSDDFilePath: The path to the client wsdd
-# Transport_http:	 The HTTP transport library
-# Transport_smtp:	 The SMTP transport library
-# XMLParser:		  The xml parser library
-#
-ClientLogPath:${dir.test.generated}/${client.lang}/${testName}/ClientLog
-Transport_http:${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
-XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}
-</echo>
+	<target name="checkIfRequestFile" if="testExpectedRequest">
+		<available file="${dir.autotests}/output/${testExpectedRequest}" property="requestFileExists"/>
+	</target>
+
+	<target name="compileTestClient">
+		<antcall target="compileClient" inheritall="true">
+			<param name="wsdl.test" value="${dir.autotests}/wsdls/${testWsdl}"/>
+			<param name="client.code" value="${dir.autotests}/client/${client.lang}/${testCode}"/>
+		</antcall>
+	</target>
+
+	<target name="executeTestRun">
+		<antcall target="executeTest" inheritall="true">
+			<param name="test.directory" value="${dir.test.generated}/${client.lang}/${testName}"/>
+		</antcall>
 	</target>
 
 	<!--
-	  If this client has associated handlers, update configuration file with
-	  an client.wsdd entry
-	  -->
-	<target name="updateConfigurationWithClientWSDDEntry" if="HandlersPresent" unless="runOnly" depends="createConfigurationFile">
-		<echo file="${axiscpp.conf}" append="true"
-		 message="ClientWSDDFilePath:${client.wsdd}"/>
-	</target>
-
-	<target name="checkIfServiceDirectory">
-		<condition property="serviceDirectoryExists">
-			<available file="${dir.src}/handlers/${testName}/service"/>
-		</condition>
-	</target>
-
-	<target name="setServiceNametoTestName" unless="serviceFileExists">
-		<property name="serviceName" value="${testName}"/>
-	</target>
-
-	<target name="getServiceFilename" if="serviceDirectoryExists">
-		<!-- get list of files in service directory, should be only one file -->
-		<fileset dir="${dir.src}/handlers/${testName}/service" id="serviceFiles">
-			<include name="*"/>
-		</fileset>
-
-		<!-- create a property with the fill path name of the file in the service dir -->
-		<pathconvert pathsep="," property="serviceNamePath" refid="serviceFiles"/>
-		<condition property="serviceFileExists">
-			<contains string="${serviceNamePath}" substring="service"/>
-		</condition>
-	</target>
-
-	<target name="setServiceNametoFilename" depends="getServiceFilename" if="serviceFileExists">
-		<!-- get the last element of the path name, shoudl be filename -->
-		<basename property="serviceName" file="${serviceNamePath}"/>
-	</target>
-
-	<target name="getServiceName" depends="checkIfServiceDirectory,setServiceNametoFilename,setServiceNametoTestName"/>
-
-	<!--
-	  Create start of WSDD File
-	  -->
-	<target name="createStartOfWSDDFile" depends="getServiceName" if="HandlersPresent">
-		<property name="client.wsdd" value="${dir.test.generated}/${client.lang}/${testName}/client.wsdd"/>
-		<copy file="${dir.src}/handlers/templ_head.wsdd" tofile="${client.wsdd}" overwrite="true"/>
-		<replace file="${client.wsdd}" token="XXXX" value="${serviceName}"/>
-	</target>
-
-	<!--
-	  Add handler entry into WSDD File
-	  -->
-	<target name="insertEntriesInWSDDFile" if="successfulHandlerCompilation">
-		<concat destfile="${client.wsdd}" append="true">
-			<filelist dir="${dir.src}/handlers" files="templ_lib.wsdd"/>
-		</concat>
-		<replace file="${client.wsdd}" token="DDDD" value="${dir.test.generated}/${client.lang}/${testName}"/>
-		<replace file="${client.wsdd}" token="LLLL" value="${handlerLibraryName}"/>
-		<replace file="${client.wsdd}" token="PPP" value="${libraryPrefix}"/>
-		<replace file="${client.wsdd}" token="SSS" value="${librarySuffix}"/>
-	</target>
-
-	<!--
-	  Create end of WSDD file
-	  -->
-	<target name="createEndOfWSDDFile" if="HandlersPresent">
-		<concat destfile="${client.wsdd}" append="true">
-			<filelist dir="${dir.src}/handlers" files="templ_foot.wsdd"/>
-		</concat>
-	</target>
-
-	<!--
-	  Copy the expected output test files to the generated client directory
-	  and convert these files to the OS specific format so the filesmatch
-	  comparison later in this script works on all platforms.
-	  -->
-	<target name="setExpectations" unless="buildOnly">
-		<property name="expected.file" value="${dir.test.generated}/${client.lang}/${testName}/${testName}.cpp.expected"/>
-		<property name="r_expected.file" value="${dir.test.generated}/${client.lang}/${testName}/${testName}Request.expected"/>
-		<condition property="requestFileExists">
-			<available file="${dir.src}/output/${testName}Request.out"/>
-		</condition>
-		<copy file="${dir.src}/output/${testName}.cpp.out" tofile="${expected.file}"/>
-		<!--
-		  Convert to OS specific format
-		  -->
-		<fixcrlf srcdir="${dir.test.generated}/${client.lang}/${testName}" includes="${testName}.cpp.expected"/>
-	</target>
-
-	<!-- Only copy expected request file if it exists -->
-	<target name="copyRequestExpectedOutput" if="requestFileExists" unless="buildOnly">
-		<!--
-		  This is an optional file and might not exist so don't fail if
-		  it doesn't.
-		  -->
-		<copy file="${dir.src}/output/${testName}Request.out" tofile="${r_expected.file}" failonerror="false"/>
-
-		<!--
-		  Convert to OS specific format
-		  -->
-		<fixcrlf srcdir="${dir.test.generated}/${client.lang}/${testName}" includes="${testName}Request.expected"/>
-	</target>
-
-	<!--
-	  Execute the test
-	  -->
-	<target name="executeTest" depends="setExpectations,copyRequestExpectedOutput" if="successfulClientCompilation" unless="buildOnly">
-		<property name="results.file" value="${dir.test.generated}/${client.lang}/${testName}/${testName}.out"/>
-
-		<trycatch>
-			<try>
-				<parallel timeout="40000" failonany="false">
-					<echo message="RUNNING TEST ${testName} ${clientArgs}"/>
-					<!-- Run Monitor utility to allow validation of message across the wire -->
-					<java classname="org.apache.test.TCPMonitor" fork="true">
-						<arg line="-l ${monitorPort}"/>
-						<arg line="-p ${testPort}"/>
-						<arg line="-h ${testHost}"/>
-						<arg line="-o ${dir.test.generated}/${client.lang}/${testName}/tcpm.out"/>
-						<arg line="-r ${dir.test.generated}/${client.lang}/${testName}/tcpm.res"/>
-						<classpath>
-							<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
-						</classpath>
-					</java>
-		
-					<sequential>
-						<echo message="EXEC Starts in 3 secs"/>
-						<!-- Wait for jvm to start monitor program -->
-						<sleep seconds="3"/>
-						<!-- Run the client test -->
-						<exec executable="${dir.test.generated}/${client.lang}/${testName}/${testName}"
-						 dir="${dir.test.generated}/${client.lang}/${testName}" output="${results.file}"
-						 error="${dir.test.generated}/${client.lang}/${testName}/${testName}.err"
-						 failifexecutionfails="false" vmlauncher="false">
-							<!-- <arg line="-p ${monitorPort}"/>
-							<arg line="-s localhost"/> -->
-							<arg line="${clientArgs}"/>
-							<env key="PATH" path="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${dir.gskit}/lib"/>
-							<env key="LD_LIBRARY_PATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${dir.gskit}/lib"/>
-							<env key="LIBPATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${dir.gskit}/lib"/>
-							<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}"/>
-						</exec>
-						<echo message="EXEC FINISHED"/>
-						<echo message="TELLING MONITOR TO STOP"/>
-						<java classname="org.apache.test.StopTCPMonitor">
-							<arg line="-p ${monitorPort}"/>
-							<arg line="-h localhost"/>
-							<classpath>
-								<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
-							</classpath>
-						</java>
-						<sleep seconds="3"/>
-						<echo message="MONITOR STOPPED"/>
-					</sequential>
-				</parallel>
-			</try>
-			<catch>
-				<echo message="IN CATCH"/>
-			</catch>
-			<finally>
-				<java classname="org.apache.test.StopTCPMonitor">
-					<arg line="-p ${monitorPort}"/>
-					<arg line="-h localhost"/>
-					<classpath>
-						<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
-					</classpath>
-				</java>
-				<sleep seconds="3"/>
-			</finally>
-		</trycatch>
-	</target>
-	
-	<!--
-	  Validate Client was successfully compiled
-	  -->
-	<target name="validateClientCompilationIfBuilding" unless="runOnly">
-		<condition property="clientCompilationStatus" value="FAILED">
-			<not>
-				<available file="${dir.test.generated}/${client.lang}/${testName}/${testName}${executableSuffix}"/>
-			</not>
-		</condition>
-		<condition property="clientCompilationStatus" value="PASSED">
-			<available file="${dir.test.generated}/${client.lang}/${testName}/${testName}${executableSuffix}"/>
-		</condition>
-		
-		<!-- Set a flag to show compilation was successful -->
-		<condition property="successfulClientCompilation">
-			<equals arg1="${clientCompilationStatus}" arg2="PASSED"/>
-		</condition>
-		
-		<!-- Display Client compilation status -->		
- 		<echo file="${results.log}" append="true"
- 		 message="${testName} - Client Compilation - ${clientCompilationStatus}${line.separator}"/>
-		<echo message="${testName} - Client Compilation - ${clientCompilationStatus}"/>
-	</target>
-	
-	<!--
-	  Set flag for a successful client compilation, if tests are being run
-	  without building.
-	  -->
-	<target name="validateClientCompilationIfNotBuilding" if="runOnly">
-		<!-- Only running the tests (no build) so assume a previous succesful build -->
-		<property name="successfulClientCompilation" value="true"/>
-	</target>
-	
-	<target name="validateClientCompilation" depends="validateClientCompilationIfBuilding, validateClientCompilationIfNotBuilding"/>
-
-	
-	<!--
-	  Validate test handler was successfully built
-	  -->
-	<target name="validateHandlerCompilation" if="isHandler">
-		<condition property="handlerCompilationStatus" value="FAILED">
-			<not>
-				<available file="${dir.test.generated}/${client.lang}/${testName}/${libraryPrefix}${handlerLibraryName}${librarySuffix}"/>
-			</not>
-		</condition>
-		<condition property="handlerCompilationStatus" value="PASSED">
-			<available file="${dir.test.generated}/${client.lang}/${testName}/${libraryPrefix}${handlerLibraryName}${librarySuffix}"/>
-		</condition>
-		
-		<!-- Set a flag to show compilation was successful -->
-		<condition property="successfulHandlerCompilation">
-			<equals arg1="${handlerCompilationStatus}" arg2="PASSED"/>
-		</condition>
-		
-		<!-- Display Client compilation status -->		
- 		<echo file="${results.log}" append="true"
- 		 message="${testName}(${handlerLibraryName}) - Handler Compilation - ${handlerCompilationStatus}${line.separator}"/>
-		<echo message="${testName} (${handlerLibraryName}) - Handler Compilation - ${handlerCompilationStatus}"/>
-	</target>
-	
-	<!--
-	  Validate the test
-	  -->
-	<target name="validateTestClient" if="successfulClientCompilation" unless="buildOnly">
-		<condition property="clientRunStatus" value="PASSED">
-			<filesmatch file1="${results.file}" file2="${expected.file}"/>
-		</condition>
-		<condition property="clientRunStatus" value="FAILED">
-			<not>
-				<filesmatch file1="${results.file}" file2="${expected.file}"/>
-			</not>
-		</condition>
-		
-		<!-- Set a flag to show run was successful -->
-		<condition property="successfulClientRun">
-			<equals arg1="${clientRunStatus}" arg2="PASSED"/>
-		</condition>
-		
-		<!-- Display Client compilation status -->		
- 		<echo file="${results.log}" append="true"
- 		 message="${testName} - Client Execution - ${clientRunStatus}${line.separator}"/>
-		<echo message="${testName} - Client Execution - ${clientRunStatus}"/>
-	</target>
-
-	<!--
-	  Validate the message on wire is correct
-	  -->
-	<target name="validateMessageOnWire" if="HandlersPresent">
-		<condition property="messageOnWireStatus" value="PASSED">
-				<filesmatch file1="${dir.test.generated}/${client.lang}/${testName}/tcpm.out" file2="${r_expected.file}"/>
-		</condition>
-		<condition property="messageOnWireStatus" value="FAILED">
-			<and>
-				<available file="${r_expected.file}"/>
-				<not>
-					<filesmatch file1="${dir.test.generated}/${client.lang}/${testName}/tcpm.out" file2="${r_expected.file}"/>
-				</not>
-			</and>
-		</condition>
-
-		<!-- Display Client message status -->		
- 		<echo file="${results.log}" append="true"
- 		 message="${testName} - Client Execution (Message on Wire) - ${messageOnWireStatus}${line.separator}"/>
-		<echo message="${testName} - Client Execution (Message on Wire) - ${messageOnWireStatus}"/>
-	</target>
-
-	<target name="validateTestRun" depends="validateTestClient, validateMessageOnWire"/>
-
-	<!--
-	  See if an endpoint has been specified for this test, otherwise set the
-	  server and port arguments
-	  -->
-	<target name="setTestArgs" depends="getTestProperties,setTestProperties"/>
-
-	<target name="getTestProperties">
-		<property file="${test.endpoints}"/>
-	</target>
-
-	<target name="setTestProperties" depends="setEPName,useDefaultEndpoint,setURI,setEP"/>
-
-	<target name="setEPName">
-		<property name="EPName" value="${testName}EP"/>
-	</target>
-
-	<!-- If there is no entry in the test.endpoints file do not set any program args -->
-	<target name="useDefaultEndpoint" unless="${EPName}">
-		<property name="clientArgs" value=""/>
-	</target>
-
-	<!-- Check to see if the entry in test.endpoints is UseSpecifiedServerPort.
-	     If so then pass -p ${monitorPort} -s localhost args, otherwise read
-		  the endpoint from the file -->
-	<target name="setURI" unless="clientArgs">
-		<propertycopy property="EP" from="${EPName}"/>
-		<condition property="emptyEP">
-			<equals arg1="${EP}" arg2="UseSpecifiedServerPort" trim="true"/>
-		</condition>
-	</target>
-
-	<!-- Check to see if the entry in test.endpoints is UseSpecifiedServerPort.
-	     If so then pass -p ${testPort} -s ${testHost} args, otherwise read
-		  the endpoint from the file -->
-	<target name="setEP">
-		<condition property="clientArgs" value="-p ${monitorPort} -s localhost">
-			<isset property="emptyEP"/>
-		</condition>
-
-		<condition property="endpoint" value="http://localhost:${monitorPort}/${EP}">
-			<not>
-				<isset property="emptyEP"/>
-			</not>
-		</condition>
-
-		<condition property="clientArgs" value="${endpoint}">
-			<isset property="endpoint"/>
-		</condition>
-	</target>
-
-	<!--
-	  Runs test for a given WSDL file
-	  -->
-	<target name="runTest" depends="initialize,stripTestName,buildTest,setTestArgs,executeTest,validateTestRun"/>
-
-	<target name="setLangList">
-		<condition property="lang.list" value="${target.lang}">
-			<isset property="target.lang"/>
-		</condition>
-		<condition property="lang.list" value="cpp,c">
-			<not>
-				<isset property="target.lang"/>
-			</not>
-		</condition>
-	</target>
-
-	<!--
-	  Find, and run, all tests
-	  -->
-	<target name="runAllTests" depends="setLangList" description="Build and run all tests">
-		<foreach target="runAllLangTests" param="client.lang" list="${lang.list}" />
-	</target>
-
-	<target name="runAllLangTests" depends="initialize,setLanguage,runTests,runIndividualTest" description="Build and run all tests per language"/>
-
-	<!--
-	  Need to set a language property for wsdl2ws
-	  -->
-	<target name="setLanguage">
-		<condition property="generated.lang" value="c++">
-			<equals arg1="${client.lang}" arg2="cpp"/>
-		</condition>
-		<condition property="generated.lang" value="c">
-			<equals arg1="${client.lang}" arg2="c"/>
-		</condition>
-	</target>
-
-	<target name="setWSDLList" depends="checkIfTestList, setFromTestList, setDefaultTestList"/>
-
-	<target name="checkIfTestList">
-		<condition property="testListExists">
-			<available file="${test.list}"/>
-		</condition>
-	</target>
-
-	<target name="setFromTestList" if="testListExists">
-		<path id="testWSDLs">
-			<fileset dir="${basedir}" includesfile="${test.list}"/>
-		</path>
-	</target>
-
-	<target name="setDefaultTestList" unless="testListExists">
-		<path id="testWSDLs">
-			<fileset dir="${dir.src}/wsdls" includes="*.wsdl"/>
-		</path>
-	</target>
-
-	<!--
-	  Locates all test WSDL files, and runs test for each
-	  -->
-	<target name="runTests" depends="setWSDLList" unless="individualTest">
-		<foreach target="runTest" param="wsdlFile">
-			<path refid="testWSDLs"/>
-		</foreach>
-	</target>
-
-	<target name="setIndividualWSDLName" if="individualTest">
-		<path id="testWSDLs">
-			<fileset dir="${dir.src}/wsdls" includes="${test.name}.wsdl"/>
-		</path>
-	</target>
-
-	<target name="runIndividualTest" depends="setIndividualWSDLName" if="individualTest">
-		<foreach target="runTest" param="wsdlFile">
-			<path refid="testWSDLs"/>
-		</foreach>
-	</target>
-
-	<!--
-	  Display all results
+	  When the test run has finished display the results file
 	  -->
 	<target name="displayAllResults">
 		<loadfile property="results" srcFile="${results.log}"/>
 		<echo message="${results}"/>
 	</target>
-	
-	<target name="testSuite" depends="initialize, compileMonitorUtility, initializeLogFile, runAllTests, displayAllResults"
-	 description="Build and Run all tests"/>
-	
-	<!--
-	  Remove all generated test artifacts
-	  -->
-	<target name="clean" depends="initialize" description="Remove all generated test artifacts">
-		<delete dir="${dir.test.generated}"/>
-		<delete dir="${dir.results}"></delete>
-	</target>
+
+
 </project>

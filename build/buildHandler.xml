@@ -1,0 +1,110 @@
+<project name="buildHandlers" default="compileHandlers" basedir="..">
+
+	<!--
+	  Compile Handler
+	  -->
+	<target name="compileTestHandler" if="isHandler">
+		<mkdir dir="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}"/>
+		<cc incremental="false"
+		 outfile="${dir.test.generated}/${client.lang}/${testName}/${handlerLibraryName}"
+		 objdir="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}" exceptions="true"
+		 failonerror="false" outtype="shared" multithreaded="true">
+			<compiler refid="VisualC++"/>
+			<compiler refid="Linuxgcc"/>
+			<compiler refid="AIXxlc"/>
+			<linker refid="VisualC++Linker"/>
+			<linker refid="LinuxLinker"/>
+			<linker refid="AIXLinker"/>
+			<includepath path="${dir.include}"/>
+			<fileset dir="${handlerDir}">
+				<include name="*.cpp"/>
+			</fileset>
+		</cc>
+	</target>
+
+	<target name="setHandlerLibraryName">
+		<basename file="${handlerDir}" property="handlerLibraryName"/>
+		<condition property="isHandler">
+			<not>
+				<equals arg1="${handlerLibraryName}" arg2="${dir.handler.chain}"/>
+			</not>
+		</condition>
+	</target>
+
+	<!--
+	  Builds a test handler
+	  -->
+	<target name="buildTestHandler" depends="setHandlerLibraryName, compileTestHandler, validateHandlerCompilation, insertEntriesInWSDDFile"/>
+
+	<!--
+	  Locate all Handlers needing to be build for this client
+	  -->
+	<target name="compileTestHandlers" if="HandlersPresent" unless="runOnly">
+		<path id="serviceHandlers">
+			<dirset dir="${dir.autotests}/handlers/${dir.handler.chain}"/>
+		</path>
+
+
+		<foreach target="buildTestHandler" param="handlerDir" inheritall="true">
+			<path refid="serviceHandlers"/>
+			<param name="testName" value="${testName}"/>
+			<param name="client.wsdd" value="${client.wsdd}"/>
+		</foreach>
+	</target>
+
+	<!--
+	  Compile Handlers
+	  -->
+	<target name="compileHandlers" depends="createStartOfWSDDFile, compileTestHandlers, createEndOfWSDDFile, updateConfigurationWithClientWSDDEntry"/>
+
+	<!--
+	  If this client has associated handlers, update configuration file with
+	  an client.wsdd entry
+	  -->
+	<target name="updateConfigurationWithClientWSDDEntry" if="HandlersPresent" unless="runOnly">
+		<echo file="${axiscpp.conf}" append="true"
+		 message="ClientWSDDFilePath:${client.wsdd}"/>
+	</target>
+
+	<!--
+	  Create start of WSDD File
+	  -->
+	<target name="createStartOfWSDDFile" if="HandlersPresent">
+		<property name="client.wsdd" value="${dir.test.generated}/${client.lang}/${testName}/client.wsdd"/>
+		<copy file="${dir.autotests}/handlers/templ_head.wsdd" tofile="${client.wsdd}" overwrite="true"/>
+		<replace file="${client.wsdd}" token="XXXX" value="${serviceName}"/>
+	</target>
+
+	<!--
+	  Add handler entry into WSDD File
+	  -->
+	<target name="insertEntriesInWSDDFile" if="successfulHandlerCompilation">
+		<concat destfile="${client.wsdd}" append="true">
+			<filelist dir="${dir.autotests}/handlers" files="templ_lib.wsdd"/>
+		</concat>
+		<replace file="${client.wsdd}" token="DDDD" value="${dir.test.generated}/${client.lang}/${testName}"/>
+		<replace file="${client.wsdd}" token="LLLL" value="${handlerLibraryName}"/>
+		<replace file="${client.wsdd}" token="PPP" value="${libraryPrefix}"/>
+		<replace file="${client.wsdd}" token="SSS" value="${librarySuffix}"/>
+	</target>
+
+	<!--
+	  Create end of WSDD file
+	  -->
+	<target name="createEndOfWSDDFile" if="HandlersPresent">
+		<concat destfile="${client.wsdd}" append="true">
+			<filelist dir="${dir.autotests}/handlers" files="templ_foot.wsdd"/>
+		</concat>
+	</target>
+
+	<!--
+	  If this client has associated handlers, update configuration file with
+	  an client.wsdd entry
+	  -->
+	<target name="updateConfigurationWithClientWSDDEntry" if="HandlersPresent" unless="runOnly"> 
+		<echo file="${axiscpp.conf}" append="true"
+		 message="ClientWSDDFilePath:${client.wsdd}"/>
+	</target>
+
+</project>
+

@@ -1,0 +1,13 @@
+<test>
+    <name>RpcHttpHeaderTest7</name>
+    <description>RpcHttpHeaderTest7</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>RpcHttpHeaderTest7Client.cpp</clientCode>
+    <wsdl>RpcHttpHeaderTest7.wsdl</wsdl>
+    <expected>
+        <output>
+            RpcHttpHeaderTest7.cpp.out
+        </output>
+    </expected>
+	<endpoint>http://localhost/axis/InteropBase</endpoint>
+</test>

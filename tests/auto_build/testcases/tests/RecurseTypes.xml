@@ -1,0 +1,13 @@
+<test>
+    <name>RecurseTypes</name>
+    <description>RecurseTypes</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>RecurseTypesClient.cpp</clientCode>
+    <wsdl>RecurseTypes.wsdl</wsdl>
+    <expected>
+        <output>
+            RecurseTypes.cpp.out
+        </output>
+    </expected>
+	<endpoint>-e http://localhost:9080/RecurseTypes/services/sampleWS</endpoint>
+</test>

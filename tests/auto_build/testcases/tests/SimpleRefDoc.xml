@@ -1,0 +1,13 @@
+<test>
+    <name>SimpleRefDoc</name>
+    <description>SimpleRefDoc</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>SimpleRefDocClient.cpp</clientCode>
+    <wsdl>SimpleRefDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            SimpleRefDoc.cpp.out
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/SimpleRef/services/RefTest</endpoint>
+</test>

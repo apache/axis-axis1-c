@@ -1,0 +1,15 @@
+<test>
+		<name>ComplexTypeAll</name>
+		<description>A simple client server test to IBM WebSPhere Java server</description>
+		<clientCode>ComplexTypeAllClient.cpp</clientCode>
+		<wsdl>ComplexTypeAll.wsdl</wsdl>
+		<expected>
+			<output>
+				ComplexTypeAll.cpp.out
+			</output>
+		</expected>
+		<endpoint>
+			-e http://bora:9080/ComplexTypeAll/services/Service
+		</endpoint>
+</test>
+

@@ -1,0 +1,13 @@
+<test>
+    <name>ExtensibilityQuery</name>
+    <description>ExtensibilityQuery</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>ExtensibilityQueryClient.cpp</clientCode>
+    <wsdl>ExtensibilityQuery.wsdl</wsdl>
+    <expected>
+        <output>
+            ExtensibilityQuery.cpp.out
+        </output>
+    </expected>
+	<endpoint>http://localhost:8080/axis/testXSDANY</endpoint>
+</test>

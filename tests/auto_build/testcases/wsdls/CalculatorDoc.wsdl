@@ -155,7 +155,7 @@
 
       <wsdl:operation name="add">
 
-         <wsdlsoap:operation soapAction=""/>
+         <wsdlsoap:operation soapAction="Calculator#add"/>
 
          <wsdl:input name="addRequest">
 
@@ -173,7 +173,7 @@
 
       <wsdl:operation name="sub">
 
-         <wsdlsoap:operation soapAction=""/>
+         <wsdlsoap:operation soapAction="Calculator#sub"/>
 
          <wsdl:input name="subRequest">
 
@@ -191,7 +191,7 @@
 
       <wsdl:operation name="mul">
 
-         <wsdlsoap:operation soapAction=""/>
+         <wsdlsoap:operation soapAction="Calculator#mul"/>
 
          <wsdl:input name="mulRequest">
 
@@ -209,7 +209,7 @@
 
       <wsdl:operation name="div">
 
-         <wsdlsoap:operation soapAction=""/>
+         <wsdlsoap:operation soapAction="Calculator#div"/>
 
          <wsdl:input name="divRequest">
 

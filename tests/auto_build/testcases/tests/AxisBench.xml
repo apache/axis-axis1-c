@@ -1,0 +1,13 @@
+<test>
+    <name>AxisBench</name>
+    <description>AxisBench</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>AxisBenchClient.cpp</clientCode>
+    <wsdl>AxisBench.wsdl</wsdl>
+    <expected>
+        <output>
+            AxisBench.cpp.out
+        </output>
+    </expected>
+	<endpoint>-e http://localhost:9080/AxisBench/services/AxisBenchSoapImpl</endpoint>
+</test>

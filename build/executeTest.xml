@@ -1,0 +1,137 @@
+<project name="executeTest" default="executeTest" basedir="..">
+
+	<!--
+	  Copy the expected output test files to the generated client directory
+	  and convert these files to the OS specific format so the filesmatch
+	  comparison later in this script works on all platforms.
+	  -->
+	<target name="setExpectations" depends="setResultExpectations, setRequestExpectations"/> 
+
+	<target name="setResultExpectations" unless="buildOnly">
+		<basename file="${expected.file}" property="expected.file.basename"/>
+		<copy file="${dir.autotests}/output/${testExpected}" tofile="${expected.file}"/>
+		<!--
+		  Convert to OS specific format
+		  -->
+		<fixcrlf srcdir="${test.directory}" includes="${expected.file.basename}"/>
+	</target>
+
+	<!-- Only copy expected request file if it exists -->
+	<target name="setRequestExpectations" if="requestFileExists" unless="buildOnly">
+		<basename file="${r_expected.file}" property="r_expected.file.basename"/>
+		<copy file="${dir.autotests}/output/${testExpectedRequest}" tofile="${r_expected.file}" failonerror="false"/>
+		<!--
+		  Convert to OS specific format
+		  -->
+		<fixcrlf srcdir="${test.directory}" includes="${r_expected.file.basename}"/>
+		<!--
+		  change the destination host in the expected request file to match the monitor we are 
+		  actually using
+		  -->
+		<replaceregexp file="${r_expected.file}" match="Host: localhost:13260" replace="Host: localhost:${monitorPort}" byline="true"/>
+	</target>
+
+	<target name="setTestArgs" depends="setEndpoint, setForMonitor"/>
+
+	<target name="setEndpoint" unless="test.endpoint">
+		<property name="clientArgs" value="" />
+	</target>
+
+	<target name="setForMonitor" if="test.endpoint">
+		<propertyregex property="protocol" input="${test.endpoint}"
+			           regexp="(.*)://" select="\1"/>
+
+        <propertyregex property="restOfURL" input="${test.endpoint}"
+                       regexp="://(.*)" select="\1"/>
+
+        <propertyregex property="context" input="${restOfURL}"
+                       regexp="/(.*)" select="\1"/>
+
+		<property name="clientArgs" value="${protocol}://localhost:${monitorPort}/${context}"/>
+	</target>
+
+	<!--
+	  Execute the test
+	  -->
+	<target name="executeTest" depends="setExpectations,setTestArgs" if="successfulClientCompilation" unless="buildOnly">
+
+		<trycatch>
+			<try>
+				<parallel timeout="40000" failonany="false">
+					<echo message="RUNNING TEST ${testName} ${clientArgs}"/>
+					<!-- Run Monitor utility to allow validation of message across the wire -->
+					<java classname="org.apache.test.TCPMonitor" fork="true">
+						<arg line="-l ${monitorPort}"/>
+						<arg line="-p ${testPort}"/>
+						<arg line="-h ${testHost}"/>
+						<arg line="-o ${test.directory}/tcpm.req"/>
+						<arg line="-r ${test.directory}/tcpm.res"/>
+						<classpath>
+							<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
+						</classpath>
+					</java>
+		
+					<sequential>
+						<!-- Wait for jvm to start monitor program -->
+						<sleep seconds="3"/>
+						<!-- Run the client test -->
+						<exec dir="${test.directory}"
+						 executable="${test.directory}/${testName}"
+						 output="${results.stdout}" error="${results.stderr}"
+						 failifexecutionfails="false" vmlauncher="false">
+							<arg line="${clientArgs}"/>
+							<env key="PATH" path="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${dir.gskit}/lib"/>
+							<env key="LD_LIBRARY_PATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${dir.gskit}/lib"/>
+							<env key="LIBPATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${dir.gskit}/lib"/>
+							<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}"/>
+						</exec>
+						<java classname="org.apache.test.StopTCPMonitor">
+							<arg line="-p ${monitorPort}"/>
+							<arg line="-h localhost"/>
+							<classpath>
+								<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
+							</classpath>
+						</java>
+					</sequential>
+				</parallel>
+			</try>
+			<catch>
+			</catch>
+			<finally>
+<!--
+				<java classname="org.apache.test.StopTCPMonitor">
+					<arg line="-p ${monitorPort}"/>
+					<arg line="-h localhost"/>
+					<classpath>
+						<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
+					</classpath>
+				</java>
+				<sleep seconds="3"/>
+-->
+			</finally>
+		</trycatch>
+	</target>
+
+	<!--
+	  Create configuration file to use when running test
+	  -->
+	<target name="createConfigurationFile" if="successfulClientCompilation">
+		<dirname file="${axiscpp.conf}" property="confFileDirectory"/>
+
+		<mkdir dir="${confFileDirectory}"/>
+		<echo file="${axiscpp.conf}">#Available directives are as follows:
+#
+# ClientLogPath:	  The path to the client log
+# ClientWSDDFilePath: The path to the client wsdd
+# Transport_http:	 The HTTP transport library
+# Transport_smtp:	 The SMTP transport library
+# XMLParser:		  The xml parser library
+#
+ClientLogPath:${test.directory}/ClientLog
+Transport_http:${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
+XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}
+</echo>
+	</target>
+
+</project>
+

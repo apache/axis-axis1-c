@@ -1,0 +1,13 @@
+<test>
+    <name>RpcSoapHeaderTest6</name>
+    <description>RpcSoapHeaderTest6</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>RpcSoapHeaderTest6Client.cpp</clientCode>
+    <wsdl>RpcSoapHeaderTest6.wsdl</wsdl>
+    <expected>
+        <output>
+            RpcSoapHeaderTest6.cpp.out
+        </output>
+    </expected>
+	<endpoint>http://localhost/axis/InteropBase</endpoint>
+</test>

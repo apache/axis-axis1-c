@@ -1,0 +1,13 @@
+<test>
+    <name>InteropTestRound1</name>
+    <description>InteropTestRound1</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>InteropTestRound1Client.cpp</clientCode>
+    <wsdl>InteropTestRound1.wsdl</wsdl>
+    <expected>
+        <output>
+            InteropTestRound1.cpp.out
+        </output>
+    </expected>
+	<endpoint>http://localhost/axis/InteropBase</endpoint>
+</test>

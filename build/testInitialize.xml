@@ -1,0 +1,76 @@
+<project name="testInitialize" default="initializeTest" basedir="..">
+
+	<property name="testProperties" value="test_properties.xml"/>
+	<property name="dir.autotests" value="${basedir}/tests/auto_build/testcases"/>
+
+	<target name="initializeTest">
+		<!-- Get directory to contain log file -->
+		<dirname file="${results.log}" property="dir.results"/>
+
+		<!-- Set location of axiscpp.conf file -->
+		<condition property="axiscpp.conf" value="${axiscpp_deploy}/axiscpp.conf">
+			<isset property="windows"/>
+		</condition>
+		<condition property="axiscpp.conf" value="${axiscpp_deploy}/etc/axiscpp.conf">
+			<not>
+				<isset property="windows"/>
+			</not>
+		</condition>
+	</target>
+
+	<target name="initializeLogFile">
+		<mkdir dir="${dir.results}"/>
+ 		<echo file="${results.log}" append="false"
+ 		 message="Test Results${line.separator}${line.separator}"/>
+	</target>
+
+	<!--
+	  Load the xml properties file for test and derive required properties
+	  -->
+	<target name="setPropertiesForTest" depends="loadXMLProperties,setTestName,setTestDesc,setTestCode,setClientLang,setTestWsdl,setTestEndpoint,setTestExpected,setTestExpectedRequest,setHandlerDirectory,setHandlerService,setHandlersPresent"/>
+
+	<target name="loadXMLProperties">
+		<echo message="Loading XML file ${test_property}"/>
+		<xmlproperty file="${test_property}" keepRoot="true"/>
+	</target>
+	<target name="setTestName" if="test.name">
+		<propertycopy property="testName" from="test.name"/>
+	</target>
+	<target name="setTestDesc" if="test.description">
+		<propertycopy property="testDesc" from="test.description"/>
+	</target>
+	<target name="setTestCode" if="test.clientCode">
+		<propertycopy property="testCode" from="test.clientCode"/>
+	</target>
+	<target name="setClientLang" if="test.clientLang">
+		<propertycopy property="client.lang" from="test.clientLang"/>
+	</target>
+	<target name="setTestWsdl" if="test.wsdl">
+		<propertycopy property="testWsdl" from="test.wsdl"/>
+	</target>
+	<target name="setTestEndpoint" if="test.endpoint">
+		<propertycopy property="testEndpoint" from="test.endpoint"/>
+	</target>
+	<target name="setTestExpected" if="test.expected.output">
+		<propertycopy property="testExpected" from="test.expected.output"/>
+	</target>
+	<target name="setTestExpectedRequest" if="test.expected.request">
+		<propertycopy property="testExpectedRequest" from="test.expected.request"/>
+	</target>
+	<target name="setHandlerDirectory" if="test.handler.directory">
+		<propertycopy property="dir.handler.chain" from="test.handler.directory"/>
+	</target>
+	<target name="setHandlerService" if="test.handler.service">
+		<propertycopy property="serviceName" from="test.handler.service"/>
+	</target>
+	<!--
+	  Only set HandlersPresent if all info available
+	  -->
+	<target name="setHandlersPresent" if="dir.handler.chain">
+		<condition property="HandlersPresent" value="true">
+			<isset property="serviceName"/>
+		</condition>
+	</target>
+
+</project>
+

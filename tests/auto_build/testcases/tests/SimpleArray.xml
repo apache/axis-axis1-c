@@ -1,0 +1,13 @@
+<test>
+    <name>SimpleArray</name>
+    <description>SimpleArray</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>SimpleArrayClient.cpp</clientCode>
+    <wsdl>SimpleArray.wsdl</wsdl>
+    <expected>
+        <output>
+            SimpleArray.cpp.out
+        </output>
+    </expected>
+	<endpoint>http://localhost/axis/array</endpoint>
+</test>

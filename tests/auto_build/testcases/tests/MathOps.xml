@@ -1,0 +1,13 @@
+<test>
+    <name>MathOps</name>
+    <description>MathOps</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>MathOpsClient.cpp</clientCode>
+    <wsdl>MathOps.wsdl</wsdl>
+    <expected>
+        <output>
+            MathOps.out
+        </output>
+    </expected>
+	<endpoint>http://localhost/axis/MathOps</endpoint>
+</test>

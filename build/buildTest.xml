@@ -1,0 +1,84 @@
+
+<project name="buildTest" default="compileClient" basedir="..">
+
+	<!--
+	  Need to set a language property for wsdl2ws
+	  -->
+	<target name="setLanguage">
+		<condition property="generated.lang" value="c++">
+			<equals arg1="${client.lang}" arg2="cpp"/>
+		</condition>
+		<condition property="generated.lang" value="c">
+			<equals arg1="${client.lang}" arg2="c"/>
+		</condition>
+	</target>
+
+	<!--
+	  Use WSDL2Ws to generate stubs from WSDL files
+	  -->
+	<target name="generateStubs" if="test.wsdl" unless="runOnly" depends="setLanguage">
+		<!-- Make directory in which all generated code shall be placed -->
+		<mkdir dir="${dir.test.generated}/${client.lang}/${testName}"/>
+		<!-- Setup classpath for WSDL2Ws -->
+		<path id ="cp">
+			<fileset dir="${dir.package.WSDL2Ws}" includes="wsdl2ws.jar"/>
+			<fileset dir="${dir.axisJARs}" includes="*.jar"/>
+		</path>
+		<!-- Run WSDL2Ws -->
+		<java jar="${dir.package.WSDL2Ws}/wsdl2ws.jar" fork="true">
+			<classpath refid="cp"/>
+			<arg value="${wsdl.test}"/>
+			<!--
+			<arg value="${dir.autotests}/wsdls/${testWsdl}"/>
+			<arg value="-o${dir.test.generated}/${client.lang}/${testName}"/>
+			-->
+			<arg value="-o${test.directory}"/>
+			<arg value="-l${generated.lang}"/>
+			<arg value="-sclient"/>
+		</java>
+	</target>
+
+	<!--
+	  Copy across test client, ready for compiling
+	  -->
+	<target name="copyClient" unless="runOnly">
+		<!--
+		<copy file="${dir.autotests}/client/${client.lang}/${testCode}" todir="${dir.test.generated}/${client.lang}/${testName}"/>
+		-->
+		<copy file="${client.code}" todir="${test.directory}"/>
+	</target>
+
+	<!--
+	  Compile test client
+	  -->
+	<target name="compileClient" depends="generateStubs, copyClient" unless="runOnly">
+		<!--
+		<cc failonerror="false" incremental="false" outfile="${dir.test.generated}/${client.lang}/${testName}/${testName}"
+		 objdir="${dir.test.generated}/${client.lang}/${testName}" exceptions="true"
+		-->
+		<cc failonerror="false" incremental="false" outfile="${test.directory}/${testName}"
+		 objdir="${test.directory}" exceptions="true"
+		 outtype="executable" subsystem="console">
+		 	<!-- Compilers -->
+			<compiler refid="VisualC++"/>
+			<compiler refid="Linuxgcc"/>
+			<compiler refid="AIXxlc"/>
+			<!-- Linkers -->
+			<linker refid="VisualC++Linker"/>
+			<linker refid="LinuxLinker"/>
+			<linker refid="AIXLinker"/>
+			<!-- Additional library of Axis Client -->
+			<libset dir="${dir.package.lib}" libs="${clientLibraryName}"/>
+			<!-- Files to be compiled -->
+			<includepath path="${dir.package.include}"/>
+			<!--
+			<fileset dir="${dir.test.generated}/${client.lang}/${testName}">
+			-->
+			<fileset dir="${test.directory}">
+				<include name="*.${client.lang}"/>
+			</fileset>
+		</cc>
+	</target>
+
+</project>
+
