@@ -117,8 +117,9 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 			writer.write("#include <axis/server/WrapperClassHandler.h>\n");
 			writer.write("#include <axis/server/IMessageData.h>\n");
 			writer.write("#include <axis/server/GDefine.h>\n");
-			writer.write("#include <axis/server/AxisWrapperAPI.h>\n\n");
-			writeFaultHeaders();
+			writer.write("#include <axis/server/AxisWrapperAPI.h>\n");
+			writer.write("#include \"AxisServiceException.h\" \n\n");
+			//writeFaultHeaders();
 			
 		}catch(IOException e){
 			throw new WrapperFault(e);
