@@ -27,93 +27,108 @@
 #include <axis/server/AxisWrapperAPI.h>
 
 
-Stub::Stub(const char* pcEndPointUri)
+Stub::Stub (const char *pcEndPointUri)
 {
-	m_pCall = new Call();
-	m_pCall->setProtocol(APTHTTP);
-	m_pCall->setEndpointURI(pcEndPointUri);
+    m_pCall = new Call ();
+    m_pCall->setProtocol (APTHTTP);
+    m_pCall->setEndpointURI (pcEndPointUri);
 }
 
-Stub::~Stub()
+Stub::~Stub ()
 {
-	delete m_pCall;
-	for (unsigned int i = 0; i < m_vKeys.size(); i++)
-        {
-		free(m_vKeys[i]);
-		free(m_vValues[i]);
-	}
+    delete m_pCall;
+    for (unsigned int i = 0; i < m_vKeys.size (); i++)
+    {
+	free (m_vKeys[i]);
+	free (m_vValues[i]);
+    }
 
-	for (unsigned int i = 0; i < m_vSOAPHeaderBlocks.size(); i++)
-        {
-                delete m_vSOAPHeaderBlocks[i];
-        }
+    for (unsigned int i = 0; i < m_vSOAPHeaderBlocks.size (); i++)
+    {
+	delete m_vSOAPHeaderBlocks[i];
+    }
 }
 
-int Stub::initilizeCall()
+int
+Stub::initilizeCall ()
 {
-    if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) return AXIS_FAIL;
-        m_pCall->setTransportProperty(SOAPACTION_HEADER , "base#echoString");
-        m_pCall->setSOAPVersion(SOAP_VER_1_1);
-        m_pCall->setOperation("echoString", "http://soapinterop.org/");
-	setTransportProperties();
-	setSOAPHeaders();
+    if (AXIS_SUCCESS !=
+	m_pCall->initialize (CPP_RPC_PROVIDER, NORMAL_CHANNEL))
+	return AXIS_FAIL;
+    m_pCall->setTransportProperty (SOAPACTION_HEADER, "base#echoString");
+    m_pCall->setSOAPVersion (SOAP_VER_1_1);
+    m_pCall->setOperation ("echoString", "http://soapinterop.org/");
+    setTransportProperties ();
+    setSOAPHeaders ();
     return AXIS_SUCCESS;
 
 }
 
-void Stub::setEndPoint(char* pcEndPoint)
+void
+Stub::setEndPoint (char *pcEndPoint)
 {
-	m_pCall->setEndpointURI(pcEndPoint);
+    m_pCall->setEndpointURI (pcEndPoint);
 }
 
 
-void Stub::setTransportProperty(const char* pcKey, const char* pcValue)
+void
+Stub::setTransportProperty (const char *pcKey, const char *pcValue)
 {
-       if (pcKey && pcValue) 
+    if (pcKey && pcValue)
+    {
+	m_vKeys.push_back (strdup (pcKey));
+	m_vValues.push_back (strdup (pcValue));
+    }
+}
+
+void
+Stub::setTransportProperties ()
+{
+    SOAPTransport *pTrasport = NULL;
+    if (m_pCall)
+	pTrasport = m_pCall->getTransport ();
+    if (pTrasport)
+    {
+	for (unsigned int i = 0; i < m_vKeys.size (); i++)
 	{
-		m_vKeys.push_back( strdup(pcKey) );
-		m_vValues.push_back( strdup(pcValue) );
+	    pTrasport->setTransportProperty (m_vKeys[i], m_vValues[i]);
 	}
+    }
 }
 
-void Stub::setTransportProperties()
+IHeaderBlock *
+Stub::createHeaderBlock (AxisChar * pachLocalName,
+			 AxisChar * pachPrefix, AxisChar * pachUri)
 {
-	SOAPTransport* pTrasport = NULL;
-	if(m_pCall)
-		pTrasport = m_pCall->getTransport();
-	if (pTrasport)
-	{
-		for (unsigned int i = 0; i < m_vKeys.size(); i++)
-	        {
-			pTrasport->setTransportProperty(m_vKeys[i], m_vValues[i]);
-	        }
-	} 
+    if (pachLocalName && pachPrefix && pachUri)
+    {
+	IHeaderBlock *pNewSoapheader =
+	    new HeaderBlock (pachLocalName, pachPrefix, pachUri);
+	m_vSOAPHeaderBlocks.push_back (pNewSoapheader);
+	return pNewSoapheader;
+    }
+    else
+	return NULL;
 }
-	
-IHeaderBlock* Stub::createHeaderBlock(AxisChar *pachLocalName, 
-	AxisChar *pachPrefix, AxisChar *pachUri)
+
+void
+Stub::setSOAPHeaders ()
 {
-	if(pachLocalName && pachPrefix && pachUri)
+    SoapSerializer *pSerializer = NULL;
+    if (m_pCall)
+	pSerializer = m_pCall->getSOAPSerializer ();
+    if (pSerializer)
+    {
+	for (unsigned int i = 0; i < m_vSOAPHeaderBlocks.size (); i++)
 	{
-		IHeaderBlock* pNewSoapheader = new HeaderBlock(pachLocalName, pachPrefix, pachUri);
-		m_vSOAPHeaderBlocks.push_back(pNewSoapheader);
-		return pNewSoapheader;
+	    pSerializer->addHeaderBlock (m_vSOAPHeaderBlocks[i]->clone ());
 	}
-	else 
-		return NULL;
+    }
 }
 
-void Stub::setSOAPHeaders()
+void
+Stub::applyUserPreferences ()
 {
-        SoapSerializer* pSerializer = NULL;
-	if(m_pCall)
-		pSerializer = m_pCall->getSOAPSerializer();
-	if (pSerializer)
-        {
-                for (unsigned int i = 0; i < m_vSOAPHeaderBlocks.size(); i++)
-                {
-			pSerializer->addHeaderBlock(m_vSOAPHeaderBlocks[i]->clone());
-                }
-        }
+    setSOAPHeaders ();
+    setTransportProperties ();
 }
-
