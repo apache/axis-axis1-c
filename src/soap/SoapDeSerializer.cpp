@@ -388,7 +388,9 @@ void* SoapDeSerializer::checkForFault(const AxisChar* pName,
 	//pFault->setFaultactor(getElementAsString("faultactor", 0));
         pcFaultactor = getElementAsString("faultactor", 0);
         pFault->setFaultactor(pcFaultactor == NULL ? "" : pcFaultactor);
-        pcDetail = getElementAsString("detail", 0);
+		// FJP Changed the namespace from null to a single space (an impossible
+		//     value) to help method know that it is parsing a fault message.
+        pcDetail = getElementAsString("detail", " ");
 	if(pcDetail)
 	{
 	    pFault->setFaultDetail(pcDetail);
@@ -2566,6 +2568,37 @@ AxisChar* SoapDeSerializer::getElementAsString(const AxisChar* pName,
             {
                 ret = strdup(m_pNode->m_pchNameOrValue);
                 /* this is because the string may not be available later */
+
+				// FJP Added this code for fault finding.  If detail is
+				//     followed by CR/LF or CR/LF then CR/LF then assume that
+				//     it is not a simple object.  As added protection against
+				//     false findings, the namespace has been set to an invalid
+				//     value of a single space character.
+				if( strlen( ret) < 3 && *pNamespace == ' ')
+				{
+					bool bReturn = false;
+
+					if( strlen( ret) == 0)
+					{
+						bReturn = true;
+					}
+					if( strlen( ret) == 1 && (*ret == '\n' || *ret == '\r'))
+					{
+						bReturn = true;
+					}
+					if( strlen( ret) == 2 && ((*ret == '\n' || *ret == '\r') && (*(ret + 1) == '\n' || *(ret + 1) == '\r')))
+					{
+						bReturn = true;
+					}
+
+					if( bReturn)
+					{
+		                m_pNode = m_pParser->next(); /* skip end element node too */
+
+						return 0;
+					}
+				}
+
                 m_pNode = m_pParser->next(); /* skip end element node too */
                 m_pNode = NULL;
                 /* this is important in doc/lit style when deserializing 
