@@ -83,12 +83,12 @@ SoapEnvelope* SoapDeSerializer::getEnvelope()
     if (0 == strcmp(m_pNode->m_pchNameOrValue, 
         SoapKeywordMapping::map(SOAP_VER_1_2).pchWords[SKW_ENVELOPE]))
     {
-        SoapEnvelope* m_pEnv = new SoapEnvelope();
+        SoapEnvelope* m_pEnvl = new SoapEnvelope();
         /* set all attributes of SoapEnvelope */
         pAttr = new Attribute();
 
         pAttr->setValue(m_pNode->m_pchNamespace);
-        m_pEnv->addNamespaceDecl(pAttr);
+        m_pEnvl->addNamespaceDecl(pAttr);
 
         if (0 == strcmp(m_pNode->m_pchNamespace, 
             SoapKeywordMapping::map(SOAP_VER_1_1).pchNamespaceUri))
@@ -112,11 +112,11 @@ SoapEnvelope* SoapDeSerializer::getEnvelope()
             pAttr->setLocalName(m_pNode->m_pchAttributes[i]);
             pAttr->setUri(m_pNode->m_pchAttributes[i+1]);
             pAttr->setValue(m_pNode->m_pchAttributes[i+2]);
-            m_pEnv->addAttribute(pAttr);
+            m_pEnvl->addAttribute(pAttr);
         }
         m_pNode = NULL; /* This is to indicate that node is identified 
                          * and used */
-        return m_pEnv;
+        return m_pEnvl;
     }
     return NULL;
 }
@@ -287,7 +287,6 @@ int SoapDeSerializer::getBody()
 int SoapDeSerializer::checkMessageBody(const AxisChar* pName, 
                                        const AxisChar* pNamespace)
 {
-    int iResult;
     /* check and skip the soap body tag */
     if (AXIS_SUCCESS != getBody()) return AXIS_FAIL;    
     if (!m_pNode) m_pNode = m_pParser->next();

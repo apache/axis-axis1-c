@@ -348,6 +348,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
                     p++;
                 }
             }
+            default:
                 break;
         }
 	/* restore Serializer's style after array serialization is finished */

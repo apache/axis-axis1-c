@@ -156,7 +156,7 @@ int ServerAxisEngine::process(SOAPTransport* pStream)
         {
             m_pSZ->setSoapVersion (SOAP_VER_1_2);
             AXISTRACE1("SOAP_VERSIONMISMATCH", CRITICAL);
-            THROW_AXIS_EXCEPTION(SOAP_VERSIONMISMATCH);
+            THROW_AXIS_SOAP_EXCEPTION(SOAP_VERSIONMISMATCH);
             //m_pSZ->setSoapFault (SoapFault::getSoapFault (SOAP_VERSIONMISMATCH));
             break; // do .. while(0)         
         }
@@ -408,7 +408,7 @@ int ServerAxisEngine::invoke (MessageData* pMsg)
         if (m_pDZ->isAnyMustUnderstandHeadersLeft ())
         {
             AXISTRACE1("SOAP_MUSTUNDERSTAND", CRITICAL);
-            THROW_AXIS_EXCEPTION(SOAP_MUSTUNDERSTAND);
+            THROW_AXIS_SOAP_EXCEPTION(SOAP_MUSTUNDERSTAND);
             //m_pSZ->setSoapFault (SoapFault::getSoapFault (SOAP_MUSTUNDERSTAND));
             break; // do .. while (0)
         }
