@@ -18,6 +18,7 @@
 /**
  * @author Srinath Perera(hemapani@openource.lk)
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
 
 package org.apache.axis.wsdl.wsdl2ws.c;
@@ -29,6 +30,7 @@ import java.io.IOException;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.BasicFileWriter;
+import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 
 public abstract class HeaderFileWriter extends BasicFileWriter {
 	public HeaderFileWriter(String classname)throws WrapperFault{
@@ -51,7 +53,8 @@ public abstract class HeaderFileWriter extends BasicFileWriter {
 	   //cleanup
 	   writer.flush();
 	   writer.close();
-	   System.out.println(getFilePath().getAbsolutePath() + " created.....");
+	   if (WSDL2Ws.verbose)
+	       System.out.println(getFilePath().getAbsolutePath() + " created.....");
 
 	   } catch (IOException e) {
 			e.printStackTrace();

@@ -2,13 +2,13 @@
 <classpath>
     <classpathentry kind="src" path=""/>
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-    <classpathentry kind="lib" path="E:/Axis/axis-1_2beta/lib/axis.jar"/>
-    <classpathentry kind="lib" path="E:/Axis/axis-1_2beta/lib/commons-discovery.jar"/>
-    <classpathentry kind="lib" path="E:/Axis/axis-1_2beta/lib/commons-logging.jar"/>
-    <classpathentry kind="lib" path="E:/Axis/axis-1_2beta/lib/jaxrpc.jar"/>
-    <classpathentry kind="lib" path="E:/Axis/axis-1_2beta/lib/saaj.jar"/>
-    <classpathentry kind="lib" path="E:/Axis/axis-1_2beta/lib/wsdl4j.jar"/>
-    <classpathentry kind="lib" path="E:/Axis/axis-1_2beta/lib/log4j-1.2.8.jar"/>
-    <classpathentry kind="lib" path="E:/Axis/axis-1_2beta/lib/axis-ant.jar"/>
+    <classpathentry kind="lib" path="/home/samisa/java/axis-1_2beta/lib/axis-ant.jar"/>
+    <classpathentry kind="lib" path="/home/samisa/java/axis-1_2beta/lib/axis.jar"/>
+    <classpathentry kind="lib" path="/home/samisa/java/axis-1_2beta/lib/commons-discovery.jar"/>
+    <classpathentry kind="lib" path="/home/samisa/java/axis-1_2beta/lib/commons-logging.jar"/>
+    <classpathentry kind="lib" path="/home/samisa/java/axis-1_2beta/lib/jaxrpc.jar"/>
+    <classpathentry kind="lib" path="/home/samisa/java/axis-1_2beta/lib/log4j-1.2.8.jar"/>
+    <classpathentry kind="lib" path="/home/samisa/java/axis-1_2beta/lib/saaj.jar"/>
+    <classpathentry kind="lib" path="/home/samisa/java/axis-1_2beta/lib/wsdl4j.jar"/>
     <classpathentry kind="output" path="bin"/>
 </classpath>

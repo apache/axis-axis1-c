@@ -17,6 +17,7 @@
  
 /**
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
 
 package org.apache.axis.wsdl.wsdl2ws.cpp;
@@ -39,6 +40,7 @@ import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo; 
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
+import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 	
 public class ClientStubWriter extends CPPClassWriter{
 	private WebServiceContext wscontext;
@@ -187,7 +189,8 @@ public class ClientStubWriter extends CPPClassWriter{
 			retType = wscontext.getTypemap().getType(returntype.getSchemaName());
 				if (retType != null){
 				returntypeisarray = retType.isArray();
-				System.out.println(retType.getLanguageSpecificName()+"LanguageName  .................... ");
+				if (WSDL2Ws.verbose)
+				    System.out.println(retType.getLanguageSpecificName()+"LanguageName  .................... ");
 				if (CUtils.isSimpleType(retType.getLanguageSpecificName())){
 					returntypeissimple = true;
 				}
@@ -205,7 +208,8 @@ public class ClientStubWriter extends CPPClassWriter{
 			writer.write("void");
 		}else{
 			writer.write(outparamTypeName);
-			System.out.println("Output Parameter type Name :"+outparamTypeName);
+			if (WSDL2Ws.verbose)
+			    System.out.println("Output Parameter type Name :"+outparamTypeName);
 		}
 		writer.write(" "+classname+"::" + methodName + "(");
 		ArrayList paramsB = (ArrayList)params;

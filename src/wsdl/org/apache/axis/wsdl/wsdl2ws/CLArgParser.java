@@ -36,7 +36,7 @@ public class CLArgParser {
             if (!args[i].startsWith("-"))
                 this.args.add(args[i]);
             else {
-                System.out.println("args " + args[i].substring(1,2) + " = " + args[i].substring(2));
+                //System.out.println("args " + args[i].substring(1,2) + " = " + args[i].substring(2));
                 bag.put(args[i].substring(1, 2), args[i].substring(2));
             }
 

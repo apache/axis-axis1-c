@@ -18,6 +18,7 @@
 /**
  * @author Srinath Perera(hemapani@openource.lk)
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
 
 package org.apache.axis.wsdl.wsdl2ws.c.literal;
@@ -35,6 +36,7 @@ import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 import org.apache.axis.wsdl.wsdl2ws.ParamWriter;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
+import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 
 public class ArrayParamWriter extends ParamWriter{
 	public ArrayParamWriter(WebServiceContext wscontext,Type type)throws WrapperFault{
@@ -63,7 +65,8 @@ public class ArrayParamWriter extends ParamWriter{
 			this.writer.write("#endif /* !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)*/\n");
 			writer.flush();
 			writer.close();
-			System.out.println(getFilePath().getAbsolutePath() + " created.....");
+		    if (WSDL2Ws.verbose)
+		        System.out.println(getFilePath().getAbsolutePath() + " created.....");
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new WrapperFault(e);

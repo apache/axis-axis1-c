@@ -17,6 +17,7 @@
 /**
  * @author Srinath Perera(hemapani@openource.lk)
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
 
 
@@ -28,6 +29,7 @@ import java.io.IOException;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.BasicFileWriter;
+import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 
 public abstract class CPPClassWriter extends BasicFileWriter{
 	public CPPClassWriter(String classname)throws WrapperFault{
@@ -50,7 +52,8 @@ public abstract class CPPClassWriter extends BasicFileWriter{
 	   //cleanup
 	   writer.flush();
 	   writer.close();
-	   System.out.println(getFilePath().getAbsolutePath() + " created.....");
+	   if (WSDL2Ws.verbose)
+	       System.out.println(getFilePath().getAbsolutePath() + " created.....");
 
 	   } catch (IOException e) {
 			e.printStackTrace();

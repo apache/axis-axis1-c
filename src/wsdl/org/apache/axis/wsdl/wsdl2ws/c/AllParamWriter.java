@@ -18,6 +18,7 @@
 /**
  * @author Srinath Perera(hemapani@openource.lk)
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
 package org.apache.axis.wsdl.wsdl2ws.c;
 import java.util.Iterator;
@@ -27,6 +28,7 @@ import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
+import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 
 /**
  * Parameter genarator.. genarate all necessary param classes
@@ -52,7 +54,8 @@ public class AllParamWriter implements SourceWriter{
 				type = (Type)enu.next();
 				if(wscontext.getWrapInfo().getImplStyle().equals(WrapperConstants.IMPL_STYLE_STRUCT)){
 					if(type.isArray()){
-						System.out.println("Array writer called ......");
+						if (WSDL2Ws.verbose)
+						    System.out.println("Array writer called ......");
 						ArrayParamWriter writer = (new ArrayParamWriter(wscontext,type));	
 						if (!writer.isSimpleTypeArray()) writer.writeSource();
 					}	
@@ -65,7 +68,8 @@ public class AllParamWriter implements SourceWriter{
 							System.out.println("ignoring anonymous type "+ type.getLanguageSpecificName()+"\n");	
 						}
 						else{
-							System.out.println("struct writer called ......");
+							if (WSDL2Ws.verbose)
+							    System.out.println("struct writer called ......");
 							(new BeanParamWriter(wscontext,type)).writeSource();
 							(new ParmHeaderFileWriter(wscontext,type)).writeSource();	
 						}

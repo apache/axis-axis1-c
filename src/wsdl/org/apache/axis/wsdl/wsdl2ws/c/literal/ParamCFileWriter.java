@@ -18,6 +18,7 @@
 /**
  * @author Srinath Perera(hemapani@openource.lk)
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
 
 package org.apache.axis.wsdl.wsdl2ws.c.literal;
@@ -31,6 +32,7 @@ import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.ParamWriter;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
+import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 
 public abstract class ParamCFileWriter extends ParamWriter{
 	public ParamCFileWriter(WebServiceContext wscontext,Type type)throws WrapperFault{
@@ -54,7 +56,8 @@ public abstract class ParamCFileWriter extends ParamWriter{
 	   		//cleanup
 	   		writer.flush();
 	   		writer.close();
-	   		System.out.println(getFilePath().getAbsolutePath() + " created.....");
+		    if (WSDL2Ws.verbose)
+	   		    System.out.println(getFilePath().getAbsolutePath() + " created.....");
 	    } catch (IOException e) {
 			e.printStackTrace();
 			throw new WrapperFault(e);

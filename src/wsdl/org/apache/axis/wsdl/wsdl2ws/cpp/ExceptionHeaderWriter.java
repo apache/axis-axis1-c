@@ -25,10 +25,13 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo; 
+import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
+
 /**
  * @author nithya
- *
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
+
 public class ExceptionHeaderWriter extends HeaderFileWriter{
 	
 	private WebServiceContext wscontext;
@@ -38,7 +41,8 @@ public class ExceptionHeaderWriter extends HeaderFileWriter{
 	public ExceptionHeaderWriter(WebServiceContext wscontext,String faultInfoName)throws WrapperFault{
 	    //super(WrapperUtils.getClassNameFromFullyQualifiedName(wscontext.getSerInfo().getQualifiedServiceName()));
 	    super("Axis"+faultInfoName+"Exception");//damitha
-        System.out.println("faultInfoName is:"+faultInfoName);
+		if (WSDL2Ws.verbose)
+            System.out.println("faultInfoName is:"+faultInfoName);
 	    this.wscontext = wscontext;
 	    this.methods = wscontext.getSerInfo().getMethods();
 	    this.faultInfoName ="Axis"+faultInfoName+"Exception" ;	

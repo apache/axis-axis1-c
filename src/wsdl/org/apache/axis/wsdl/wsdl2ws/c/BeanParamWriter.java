@@ -87,7 +87,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 		writer.write("int Axis_Serialize_"+classname+"("+classname+"* param, IWrapperSoapSerializer* pSZ, bool bArray)\n{\n");
 		if (attribs.length == 0) {
 			 //nothing to print if this is simple type we have inbuild types
-			 System.out.println("possible error calss with no attributes....................");
+			System.out.println("Possible error in class "  + classname + ": class with no attributes....................");
 			 writer.write("\t}\n\n");			 
 			 return;
 		}
@@ -148,7 +148,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 		
 		writer.write("int Axis_DeSerialize_"+classname+"("+classname+"* param, IWrapperSoapDeSerializer* pDZ)\n{\n");
 		if (attribs.length == 0) {
-			 System.out.println("possible error calss with no attributes....................");
+			System.out.println("Possible error in class "  + classname + ": class with no attributes....................");
 			 writer.write("\t}\n\n");
 			 return;
 		}

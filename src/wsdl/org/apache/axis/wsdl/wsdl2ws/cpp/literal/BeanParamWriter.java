@@ -103,7 +103,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write(" */\n");
 		writer.write("int Axis_Serialize_"+classname+"("+classname+"* param, IWrapperSoapSerializer* pSZ, bool bArray = false)\n{\n");
 		if (attribs.length == 0) {
-			System.out.println("possible error class with no attributes....................");
+			System.out.println("Possible error in class "  + classname + ": class with no attributes....................");
 			writer.write("\tpSZ->serialize(\">\", NULL);\n");
 			if (extensionBaseAttrib != null){
 				writer.write("\tpSZ->serializeAsChardata((void*)&(param->"+extensionBaseAttrib.getParamName()+"), "+CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName())+");\n");
@@ -193,7 +193,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write(" */\n");		
 		writer.write("int Axis_DeSerialize_"+classname+"("+classname+"* param, IWrapperSoapDeSerializer* pIWSDZ)\n{\n");
 		if (attribs.length == 0) {
-			System.out.println("possible error class with no attributes....................");
+			System.out.println("Possible error in class "  + classname + ": class with no attributes....................");
 			writer.write("\treturn AXIS_SUCCESS;\n");
 			writer.write("}\n\n");
 			return;

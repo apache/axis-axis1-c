@@ -578,7 +578,8 @@ public class WSDL2Ws {
 				QName typeName = new QName(type.getQName().getNamespaceURI(),localpart);
 				ElementInfo eleinfo = new ElementInfo(typeName,createTypeInfo(base.getQName(),targetLanguage));
 				typedata.setExtensionBaseType(eleinfo);
-				System.out.print("=====complexType with simpleContent is found : "+ type.getQName().getLocalPart()+"=====\n");
+				if ( WSDL2Ws.verbose)
+				    System.out.print("=====complexType with simpleContent is found : "+ type.getQName().getLocalPart()+"=====\n");
 			}
 			else{
 			//types declared as simpleType
@@ -773,7 +774,7 @@ public class WSDL2Ws {
 
     public static void main(String[] args) throws Exception {
         CLArgParser data = new CLArgParser(args);
-        System.out.println(data.getArgumentCount());
+
         if (data.getArgumentCount() != 1) {
             usage();
         }
@@ -789,16 +790,23 @@ public class WSDL2Ws {
 
             WSDL2Ws.makeSystem = data.getOptionBykey("m");
 
-	System.out.println( WSDL2Ws.makeSystem );
-            WSDL2Ws gen = new WSDL2Ws(data);
-            gen.genarateWrappers(
-                null,
-                data.getOptionBykey("o"),
-                data.getOptionBykey("l"),
-                data.getOptionBykey("i"),
-                data.getOptionBykey("s"),
-                data.getOptionBykey("c"),
-			    data.getOptionBykey("w"));
+            try {
+            
+                WSDL2Ws gen = new WSDL2Ws(data);
+                gen.genarateWrappers(
+                    null,
+                    data.getOptionBykey("o"),
+                    data.getOptionBykey("l"),
+                    data.getOptionBykey("i"),
+                    data.getOptionBykey("s"),
+                    data.getOptionBykey("c"),
+		    	    data.getOptionBykey("w"));
+		    	    
+				System.out.println( "\nCode generation completed.\n");
+            } catch (Exception e) {            	
+            	e.printStackTrace();
+				System.out.println( "\nCode generation failed. Please see errors above.\n");
+            }
         }
     }
 }
