@@ -45,6 +45,9 @@ public class ElementDecl {
 	// an xsd:any element
 	private boolean anyElement = false;
 
+	/** Field documentation */
+	private String documentation;
+
 	public ElementDecl() {
 	}
 
@@ -125,5 +128,23 @@ public class ElementDecl {
     public void setNillable(boolean b) {
         nillable = b;
     }
+
+    /**
+     *       Method getDocumentation
+     *       @return string       
+     */
+    
+    public String getDocumentation() {
+          return documentation;
+    }
+
+     /**
+      *       Method setDocumentation
+      *       @param documentation
+      */
+  
+    public void setDocumentation(String documentation) {
+           this.documentation = documentation;
+    }    
 
 }

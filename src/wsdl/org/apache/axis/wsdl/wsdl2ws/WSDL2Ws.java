@@ -531,7 +531,7 @@ public class WSDL2Ws {
 		}else{
 			//is this a SOAPEnc array type	
 			QName arrayType =
-				SchemaUtils.getArrayComponentQName(node, new IntHolder(0));
+				SchemaUtils.getArrayComponentQName(node, new IntHolder(0),symbolTable);
 			if (arrayType != null) {
 				typedata.setTypeNameForElementName(new ElementInfo(new QName("item"),
 						createTypeInfo(arrayType,targetLanguage)));
