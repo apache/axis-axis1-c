@@ -99,8 +99,9 @@ int BeanClass::GenerateSerializerAndDeSerializerImpl(File &file)
 {
 	list<Variable*>::iterator it;
 
-	file << "int " << m_Name << "::DeSerialize(ISoapDeSerializer *pDZ)" << endl;
+	file << "int " << m_Name << "::DeSerialize(IWrapperSoapDeSerializer *pDZ)" << endl;
 	file << "{" << endl;
+	file << "\tIParam* pHeadParam = pDZ->GetParam(); //do any type validation here if necessary" << endl;
 	for (it = m_Variables.begin(); it != m_Variables.end(); it++)
 	{
 		(*it)->GenerateDeserializerImpl(file);
@@ -109,7 +110,7 @@ int BeanClass::GenerateSerializerAndDeSerializerImpl(File &file)
 	file << "}" << endl;
 	file << endl;
 
-	file << "int " << m_Name << "::Serialize(ISoapSerializer& pSZ)" << endl;
+	file << "int " << m_Name << "::Serialize(IWrapperSoapSerializer& pSZ)" << endl;
 	file << "{" << endl;
 	file << "\tm_URI = \"" << g_ClassNamespaces[m_Name] << "\";" << endl;
 	file << "\tstring sPrefix = pSZ.getNewNamespacePrefix();" << endl;

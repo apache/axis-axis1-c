@@ -180,7 +180,10 @@ int WSClass::GenerateClassImpl(File &file)
 		file << "// Implementation of WrapperClassHandler interfaces." << endl;
 		file << "int " << m_Name << "::Invoke(IMessageData* mc)" << endl; 		
 		file << "{" << endl;
-		file << "\tstring method = mc->getSoapDeserializer()->GetMethodName();" << endl;
+		file << "\tIWrapperSoapDeSerializer* pIWSDZ = NULL;" << endl;
+		file << "\tmc->getSoapDeSerializer(&pIWSDZ);" << endl;
+		file << "\tif (!pIWSDZ) return FAIL;" << endl;
+		file << "\tstring method = pIWSDZ->GetMethodName();" << endl;
 		bool tab = true;
 		list<Method*>::iterator it;
 		for (it = m_Methods.begin(); it != m_Methods.end(); it++)
@@ -214,9 +217,12 @@ int WSClass::GenerateClassImpl(File &file)
 		file << "int " << m_Name << "::SetResponseMethod(IMessageData* mc, const char* name)" << endl; 			
 		file << "{" << endl;
 		file << "\tstring method = name;" << endl;
-		file << "\tISoapMethod* pMethod = mc->getSoapSerializer()->createSoapMethod();" << endl;
+		file << "\tIWrapperSoapSerializer* pIWSSZ = NULL;" << endl;
+		file << "\tmc->getSoapSerializer(&pIWSSZ);" << endl;
+		file << "\tif (!pIWSSZ) return FAIL;" << endl;
+		file << "\tISoapMethod* pMethod = pIWSSZ->createSoapMethod();" << endl;
 		file << "\tpMethod->setLocalName(method + \"Response\");" << endl;
-		file << "\tpMethod->setPrefix(" << "mc->getSoapSerializer()->getNewNamespacePrefix()" << ");"<< endl; //amp - axis method prefix :)
+		file << "\tpMethod->setPrefix(" << "pIWSSZ->getNewNamespacePrefix()" << ");"<< endl; //amp - axis method prefix :)
 		file << "\tpMethod->setUri(\"" << g_ClassNamespaces[m_AWSName] << "\");"<< endl; //http://www.opensource.lk will come from wsdd
 		file << "\treturn SUCCESS;" << endl; 
 		file << "}" << endl;
@@ -262,4 +268,5 @@ int WSClass::GenerateOperationsInBinding(File &file, string &sServiceName, int n
 	{
 		if ((*it)->GenerateOperationInBinding(file, sServiceName, nBinding, nStyle, sURI)) return 1; //error occured;
 	}
+	return 0; //success
 }
