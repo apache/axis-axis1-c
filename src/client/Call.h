@@ -81,13 +81,24 @@ public:
 	int UnInitialize();
 	int Initialize();
 	uParamValue GetResult();
+	void GetResult(void** pReturn);
 	int Invoke();
-	void SetReturnType(void* pObject, void* pDZFunct, void* pDelFunct, const char * theType, const char * uri);
+
+	/* Method to set that the return type is complex type */
+	void SetReturnType(void* pDZFunct, void* pCreFunct, void* pDelFunct, const char* pchTypeName, const char* pchUri);
+	/* Method to set that the return type is an array of complex types */
+	void SetReturnType(Axis_Array* pArray, void* pDZFunct, void* pCreFunct, void* pDelFunct, const char* pchTypeName, const char* pchUri);
+	/* Method to set that the return type is an array of basic types */
+	void SetReturnType(Axis_Array* pArray, XSDTYPE nType);
+	/* Method to set that the return type is basic type */
 	void SetReturnType(XSDTYPE nType);
 
+	/* Method for adding complex parameters */
 	void AddParameter(void* pObject, void* pSZFunct, void* pDelFunct, const char* pchName);
-	void AddParameter(IArrayBean* pArrayBean, const char* pchName);
+	/* Method for adding array parameters */
+	void AddParameter(Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName);
 
+	/* Methods for adding parameters of basic types */
 	void AddParameter(int nValue,const char* pchName);
 	void AddParameter(unsigned int unValue,const char* pchName);
 	void AddParameter(short sValue,const char* pchName);
@@ -101,24 +112,56 @@ public:
 	void AddParameter(struct tm tValue,const char* pchName);
 	void AddParameter(const AxisChar* pStrValue,const char* pchName);
 
+	/* Method that set the remote method name */
 	void SetOperation(const char* pchOperation, const char* pchNamespace);
-	void SetOperation(const char* pchOperation, const char* pchNamespace,const char* pchName);
 	int SetEndpointURI(const char* pchEndpointURI);
 	Call();
 	virtual ~Call();
 private:
 	int OpenConnection();
 	void CloseConnection();
+	void InitializeObjects();
+	int MakeArray();
+
 private:
 	ClientAxisEngine* m_pAxisEngine;
 	uParamValue m_uReturnValue;
+	/* 
+	   Following are pointers to relevant objects of the ClientAxisEngine instance 
+	   So they do not belong to this object and are not created or deleted 
+	 */
 	MessageData* m_pMsgData;
 	SoapSerializer* m_pIWSSZ;
 	SoapDeSerializer* m_pIWSDZ;
+	/* 
+	   Return type of the remote method being called 
+	 */
 	XSDTYPE m_nReturnType;
+	/* 
+	   m_ReturnCplxObj is populated with the relevant function pointers to manipulate
+	   a custom type when the return type of a method call is a custom type or an array
+	   of custom types.
+	 */
 	ComplexObjectHandler m_ReturnCplxObj;
+	/* 
+	   m_Soap contains transport related information and function pointers to manipulate
+	   transport layer.
+	 */
 	Ax_soapstream m_Soap;
+	/*
+	   Transport object
+	 */
 	AxisTransport* m_pTransport;
+	/* 
+	   m_pArray will hold the Array object passed by the client application and will be 
+	   populated with deserialized elements when the response arrives.
+	 */
+	Axis_Array* m_pArray;
+	/*
+	   m_nArrayType will contain the type of an array element when the called method returns
+	   and array.
+	 */
+	XSDTYPE m_nArrayType;
 };
 
 #endif // !defined(AFX_CALL_H__D13E5626_0A9B_43EA_B606_364B98CEDAA8__INCLUDED_)
