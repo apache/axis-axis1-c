@@ -20,7 +20,7 @@ public:
 	int varInt;
 	float varFloat;
 	DivByZeroFault();
-	~DivByZeroFault();
+	virtual ~DivByZeroFault();
         void setFaultcode();
         void setFaultstring();
         void setFaultDetail();
