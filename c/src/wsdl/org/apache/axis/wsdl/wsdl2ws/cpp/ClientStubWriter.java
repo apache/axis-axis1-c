@@ -240,8 +240,9 @@ public class ClientStubWriter extends CPPClassWriter{
 			}
 		}
 		writer.write(")\n{\n");
-		writer.write("\tint nStatus;\n\t");
+		writer.write("\tint nStatus;\n");
 		if (returntype != null){
+			writer.write("\t");
 			if(returntypeisarray){
 				//for arrays
 				writer.write(outparamType+" RetArray = {NULL, 0};\n");
@@ -255,7 +256,12 @@ public class ClientStubWriter extends CPPClassWriter{
 			}
 		}
 		writer.write("\tif (SUCCESS != m_pCall->Initialize()) return ");
-		writer.write((returntypeisarray?"RetArray":returntypeissimple?"Ret":"pReturn")+";\n\t");
+		if (returntype != null){
+			writer.write((returntypeisarray?"RetArray":returntypeissimple?"Ret":"pReturn")+";\n\t");
+		}
+		else{
+			writer.write(";\n\t");
+		}
 		writer.write("m_pCall->SetSOAPVersion(SOAP_VER_1_1);\n"); //TODO check which version is it really.
 		writer.write("\tm_pCall->SetOperation(\""+methodName+"\", \""+ wscontext.getWrapInfo().getTargetNameSpaceOfWSDL() +"\");\n");
 		for (int i = 0; i < paramsB.size(); i++) {
