@@ -3,6 +3,6 @@
     <description>FirstLevelElemType Service</description>
     <serviceLang>cpp</serviceLang>
     <serviceCode>FirstLevelElemType.cpp</serviceCode>
-    <wsdl></wsdl>
+    <wsdl>FourLevelTestDoc.wsdl</wsdl>
 	<servicename></servicename>
 </service>
