@@ -1,4 +1,4 @@
-rm ./libaxiscpp2_mod.so
+rm ./libaxiscpp_mod2.so
 rm ../Axis/webservices/libAdminService.so
 rm ../Axis/libs/libserver_engine.so
 cp -f $AXISCPP_HOME/bin/libAdminService.so ../Axis/webservices/
