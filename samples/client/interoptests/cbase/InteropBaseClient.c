@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
 	SOAPStruct stct;
 	time_t tim;
 	struct tm* lt;
-	void* pstub = get_InteropBase_stub();
+	void* pstub = get_InteropTestPortType_stub();
 	printf("invoking echoString...\n");
 	/*testing echoString */
 	if (0 == strcmp(echoString(pstub, "hello world"), "hello world"))
@@ -147,5 +147,5 @@ int main(int argc, char* argv[])
 	getchar();
 	return 0;
 */	
-	destroy_InteropBase_stub(pstub);
+	destroy_InteropTestPortType_stub(pstub);
 }

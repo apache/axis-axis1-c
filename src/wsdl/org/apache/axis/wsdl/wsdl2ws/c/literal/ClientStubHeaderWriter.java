@@ -94,13 +94,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 	/* (non-Javadoc)
 	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeAttributes()
 	 */
-	protected void writeAttributes() throws WrapperFault {
-		try {
-			writer.write("\nCall* g_p"+classname+";\n");
-		}catch(IOException e){
-			throw new WrapperFault(e);
-		}
-	}
+	protected void writeAttributes() throws WrapperFault {}
 
 	/* (non-Javadoc)
 	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeClassComment()
@@ -124,6 +118,8 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 		MethodInfo minfo;
 		boolean isSimpleType;
 		try{
+			writer.write("extern void* get_"+classname+"_stub();\n");
+			writer.write("extern void destroy_"+classname+"_stub(void* p);\n");			
 		  	for(int i = 0; i < methods.size(); i++){
 			  	minfo = (MethodInfo)this.methods.get(i);
 				boolean isAllTreatedAsOutParams = false;
@@ -140,17 +136,17 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 					isAllTreatedAsOutParams = true;
 					writer.write("extern void ");
 			  	}
-			  	writer.write(minfo.getMethodname()+"(");
+			  	writer.write(minfo.getMethodname()+"(void* pStub");
             
 			  	//write parameter names 
 			  	Iterator params = minfo.getInputParameterTypes().iterator();
 			  	if(params.hasNext()){
 			  	  	ParameterInfo fparam = (ParameterInfo)params.next();
-				  	writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
+				  	writer.write(", "+WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
 			  	}
 			  	for(int j =1; params.hasNext();j++){
 				  	ParameterInfo nparam = (ParameterInfo)params.next();
-				  	writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
+				  	writer.write(", "+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
 			  	}
 			  	if (isAllTreatedAsOutParams){
 					params = minfo.getOutputParameterTypes().iterator();

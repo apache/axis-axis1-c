@@ -11,9 +11,8 @@
 #include "SOAPStruct_Array.h"
 #include "SOAPStruct.h"
 
-extern void* get_InteropBase_stub();
-extern void destroy_InteropBase_stub(void* p);
-
+extern void* get_InteropTestPortType_stub();
+extern void destroy_InteropTestPortType_stub(void* p);
 extern xsd__string echoString(void* pStub, xsd__string Value0);
 extern xsd__string_Array echoStringArray(void* pStub, xsd__string_Array Value0);
 extern int echoInteger(void* pStub, int Value0);

@@ -12,22 +12,20 @@ extern void Axis_Delete_SOAPStruct(SOAPStruct* param, bool bArray, int nSize);
 extern int Axis_Serialize_SOAPStruct(SOAPStruct* param, IWrapperSoapSerializer* pSZ, bool bArray);
 extern int Axis_GetSize_SOAPStruct();
 
-
-void* get_InteropBase_stub(){
-	return GetStubObject(APTHTTP, "http://localhost/axis/InteropBase");
+void* get_InteropTestPortType_stub(){
+	return GetStubObject(APTHTTP, "http://localhost:5555/axis/InteropBase");
 }
-
-void destroy_InteropBase_stub(void* p){
+void destroy_InteropTestPortType_stub(void* p){
 	DestroyStubObject(p);
 }
 
 /*Methods corresponding to the web service methods*/
+
 /*
  * This method wrap the service methodechoString
  */
 xsd__string echoString(void* pStub, xsd__string Value0)
 {
-	int nStatus;
 	Call* pCall = (Call*)pStub;
 	xsd__string Ret;
 	/* Following will establish the connections with the server too */
@@ -53,7 +51,6 @@ xsd__string echoString(void* pStub, xsd__string Value0)
  */
 xsd__string_Array echoStringArray(void* pStub, xsd__string_Array Value0)
 {
-	int nStatus;
 	Call* pCall = (Call*)pStub;
 	xsd__string_Array RetArray = {NULL, 0};
 	Axis_Array array;
@@ -81,7 +78,6 @@ xsd__string_Array echoStringArray(void* pStub, xsd__string_Array Value0)
  */
 int echoInteger(void* pStub, int Value0)
 {
-	int nStatus;
 	Call* pCall = (Call*)pStub;
 	int Ret;
 	/* Following will establish the connections with the server too */
@@ -107,7 +103,6 @@ int echoInteger(void* pStub, int Value0)
  */
 xsd__int_Array echoIntegerArray(void* pStub, xsd__int_Array Value0)
 {
-	int nStatus;
 	Call* pCall = (Call*)pStub;
 	xsd__int_Array RetArray = {NULL, 0};
 	Axis_Array array;
@@ -135,7 +130,6 @@ xsd__int_Array echoIntegerArray(void* pStub, xsd__int_Array Value0)
  */
 float echoFloat(void* pStub, float Value0)
 {
-	int nStatus;
 	Call* pCall = (Call*)pStub;
 	float Ret;
 	/* Following will establish the connections with the server too */
@@ -161,7 +155,6 @@ float echoFloat(void* pStub, float Value0)
  */
 xsd__float_Array echoFloatArray(void* pStub, xsd__float_Array Value0)
 {
-	int nStatus;
 	Call* pCall = (Call*)pStub;
 	xsd__float_Array RetArray = {NULL, 0};
 	Axis_Array array;
@@ -189,7 +182,6 @@ xsd__float_Array echoFloatArray(void* pStub, xsd__float_Array Value0)
  */
 SOAPStruct* echoStruct(void* pStub, SOAPStruct* Value0)
 {
-	int nStatus;
 	Call* pCall = (Call*)pStub;
 	SOAPStruct* pReturn = NULL;
 	/* Following will establish the connections with the server too */
@@ -215,7 +207,6 @@ SOAPStruct* echoStruct(void* pStub, SOAPStruct* Value0)
  */
 SOAPStruct_Array echoStructArray(void* pStub, SOAPStruct_Array Value0)
 {
-	int nStatus;
 	Call* pCall = (Call*)pStub;
 	SOAPStruct_Array RetArray = {NULL, 0};
 	Axis_Array array;
@@ -243,7 +234,6 @@ SOAPStruct_Array echoStructArray(void* pStub, SOAPStruct_Array Value0)
  */
 void echoVoid(void* pStub)
 {
-	int nStatus;
 	Call* pCall = (Call*)pStub;
 	/* Following will establish the connections with the server too */
 	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER)) return ;
@@ -266,7 +256,6 @@ void echoVoid(void* pStub)
  */
 xsd__base64Binary echoBase64(void* pStub, xsd__base64Binary Value0)
 {
-	int nStatus;
 	Call* pCall = (Call*)pStub;
 	xsd__base64Binary Ret;
 	/* Following will establish the connections with the server too */
@@ -292,7 +281,6 @@ xsd__base64Binary echoBase64(void* pStub, xsd__base64Binary Value0)
  */
 xsd__dateTime echoDate(void* pStub, xsd__dateTime Value0)
 {
-	int nStatus;
 	Call* pCall = (Call*)pStub;
 	xsd__dateTime Ret;
 	/* Following will establish the connections with the server too */
@@ -318,7 +306,6 @@ xsd__dateTime echoDate(void* pStub, xsd__dateTime Value0)
  */
 xsd__hexBinary echoHexBinary(void* pStub, xsd__hexBinary Value0)
 {
-	int nStatus;
 	Call* pCall = (Call*)pStub;
 	xsd__hexBinary Ret;
 	/* Following will establish the connections with the server too */
@@ -344,7 +331,6 @@ xsd__hexBinary echoHexBinary(void* pStub, xsd__hexBinary Value0)
  */
 xsd__decimal echoDecimal(void* pStub, xsd__decimal Value0)
 {
-	int nStatus;
 	Call* pCall = (Call*)pStub;
 	xsd__decimal Ret;
 	/* Following will establish the connections with the server too */
@@ -370,7 +356,6 @@ xsd__decimal echoDecimal(void* pStub, xsd__decimal Value0)
  */
 xsd__boolean echoBoolean(void* pStub, xsd__boolean Value0)
 {
-	int nStatus;
 	Call* pCall = (Call*)pStub;
 	xsd__boolean Ret;
 	/* Following will establish the connections with the server too */
