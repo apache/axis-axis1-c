@@ -40,7 +40,9 @@ libsoap_la_SOURCES = Attribute.cpp \
         xsd/Time.cpp \
         xsd/XSD_QName.cpp \
         xsd/constraints/WhiteSpace.cpp \
-        xsd/constraints/Pattern.cpp
+        xsd/constraints/Pattern.cpp \
+        xsd/constraints/MinLength.cpp \
+        xsd/constraints/MaxLength.cpp
 
 libsoap_la_LIBADD = $(LDFLAGS)
 INCLUDES = -I../../include

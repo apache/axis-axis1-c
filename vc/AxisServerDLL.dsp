@@ -282,7 +282,15 @@ SOURCE=..\src\soap\xsd\Long.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\constraints\MaxLength.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\common\MessageData.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\constraints\MinLength.cpp
 # End Source File
 # Begin Source File
 

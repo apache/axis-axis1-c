@@ -25,6 +25,8 @@
 #include "IAnySimpleType.hpp"
 #include <axis/AxisUserAPI.hpp>
 #include "../HexCoder.h"
+#include "constraints/MinLength.hpp"
+#include "constraints/MaxLength.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -70,6 +72,22 @@ public:
 	 * @return Deserialized HexBinary value.
 	 */
     xsd__hexBinary* deserializeHexBinary(const AxisChar* valueAsChar) throw (AxisSoapException);
+
+protected:
+
+    /**
+     * Creates a minLength object, used to allocate storage.  By default the HexBinary
+     * object does not have this specified, so this is an unset minLength object.
+     * @return An unset MinLength object
+     */
+    MinLength* getMinLength();
+
+    /**
+     * Creates a maxLength object, used to allocate storage.  By default the HexBinary
+     * object does not have this specified, so this is an unset maxLength object.
+     * @return An unset MaxLength object
+     */
+    MaxLength* getMaxLength();
 
 private:
 	xsd__hexBinary* m_HexBinary;

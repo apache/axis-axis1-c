@@ -27,6 +27,49 @@ AXIS_CPP_NAMESPACE_START
 	
     AxisChar* Base64Binary::serialize(const xsd__base64Binary* value) throw (AxisSoapException)
     {
+        MinLength* minLength= getMinLength();
+        if (minLength->isSet())
+        {
+            if (value->__size < minLength->getMinLength())
+            {
+                AxisString exceptionMessage =
+                "Length of value to be serialized is shorter than MinLength specified for this type.  Minlength = ";
+                AxisChar* length = new AxisChar[10];
+                sprintf(length, "%d", minLength->getMinLength());
+                exceptionMessage += length;
+                exceptionMessage += ", Length of value = ";
+                sprintf(length, "%d", value->__size);
+                exceptionMessage += length;
+                exceptionMessage += ".";
+                
+                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                    const_cast<AxisChar*>(exceptionMessage.c_str()));
+            }
+            
+        }
+        delete minLength;
+        
+        MaxLength* maxLength = getMaxLength();
+        if (maxLength->isSet())
+        {
+            if (value->__size > maxLength->getMaxLength())
+            {
+                AxisString exceptionMessage =
+                "Length of value to be serialized is longer than MaxLength specified for this type.  Maxlength = ";
+                AxisChar* length = new AxisChar[10];
+                sprintf(length, "%d", maxLength->getMaxLength());
+                exceptionMessage += length;
+                exceptionMessage += ", Length of value = ";
+                sprintf(length, "%d", value->__size);
+                exceptionMessage += length;
+                exceptionMessage += ".";
+                
+                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                    const_cast<AxisChar*>(exceptionMessage.c_str()));
+            }
+        }
+        delete maxLength;
+     
 	    int len = apr_base64_encode_len (value->__size);	    
 	    AxisChar* serializedValue = new AxisChar[len + 1];
 	    len = apr_base64_encode_binary (serializedValue, value->__ptr, value->__size);
@@ -54,6 +97,16 @@ AXIS_CPP_NAMESPACE_START
 	    m_Base64Binary->__ptr[m_Base64Binary->__size] = 0;
 	
 	    return m_Base64Binary;
+    }
+
+    MinLength* Base64Binary::getMinLength()
+    {
+        return new MinLength();
+    }
+    
+    MaxLength* Base64Binary::getMaxLength()
+    {
+        return new MaxLength();
     }
 
 AXIS_CPP_NAMESPACE_END

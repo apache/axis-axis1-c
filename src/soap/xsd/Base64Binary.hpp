@@ -25,6 +25,8 @@
 #include "IAnySimpleType.hpp"
 #include "../apr_base64.h"
 #include <axis/AxisUserAPI.hpp>
+#include "constraints/MinLength.hpp"
+#include "constraints/MaxLength.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -70,6 +72,22 @@ public:
 	 * @return Deserialized Base64Binary value.
 	 */
     xsd__base64Binary* deserializeBase64Binary(const AxisChar* valueAsChar) throw (AxisSoapException);
+
+protected:
+
+    /**
+     * Creates a minLength object, used to allocate storage.  By default the Base64Binary
+     * object does not have this specified, so this is an unset minLength object.
+     * @return An unset MinLength object
+     */
+    MinLength* getMinLength();
+
+    /**
+     * Creates a maxLength object, used to allocate storage.  By default the Base64Binary
+     * object does not have this specified, so this is an unset maxLength object.
+     * @return An unset MaxLength object
+     */
+    MaxLength* getMaxLength();
 
 private:
 	xsd__base64Binary* m_Base64Binary;

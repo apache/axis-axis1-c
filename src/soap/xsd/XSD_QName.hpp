@@ -23,6 +23,8 @@
 #define _QNAME_HPP____OF_AXIS_INCLUDED_
 
 #include "IAnySimpleType.hpp"
+#include "constraints/MinLength.hpp"
+#include "constraints/MaxLength.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -71,6 +73,21 @@ protected:
      * @return WhiteSpace object set to collapse whitespace
      */
     WhiteSpace* getWhiteSpace();
+
+    /**
+     * Creates a minLength object, used to allocate storage.  By default the QName
+     * object does not have this specified, so this is an unset minLength object.
+     * @return An unset MinLength object
+     */
+    MinLength* getMinLength();
+
+    /**
+     * Creates a maxLength object, used to allocate storage.  By default the QName
+     * object does not have this specified, so this is an unset maxLength object.
+     * @return An unset MaxLength object
+     */
+    MaxLength* getMaxLength();
+
 
 private:
     AxisChar* m_QName;
