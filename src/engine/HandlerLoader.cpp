@@ -86,7 +86,7 @@ int HandlerLoader::loadLib (HandlerInformation* pHandlerInfo)
     if (!pHandlerInfo->m_Handler)
     {
         AXISTRACE1("SERVER_ENGINE_LIBRARY_LOADING_FAILED", CRITICAL);
-        throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED);
+        throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED, PLATFORM_LOADLIB_ERROR);
     }
 
     return AXIS_SUCCESS;

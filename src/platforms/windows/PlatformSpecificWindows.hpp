@@ -46,6 +46,7 @@
 #define PLATFORM_UNLOADLIB         FreeLibrary
 #define PLATFORM_GETPROCADDR       GetProcAddress
 #define PLATFORM_LOADLIBEXIT()
+#define PLATFORM_LOADLIB_ERROR     ""
 
 // =============================================================
 // National Language Support

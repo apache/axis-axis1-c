@@ -41,6 +41,7 @@
  #define PLATFORM_UNLOADLIB         lt_dlclose
  #define PLATFORM_GETPROCADDR       lt_dlsym
  #define PLATFORM_LOADLIBEXIT       lt_dlexit
+ #define PLATFORM_LOADLIB_ERROR     lt_dlerror()
 #else
  #include <dlfcn.h>
  #define DLHandler void*
@@ -50,6 +51,8 @@
  #define PLATFORM_UNLOADLIB         dlclose
  #define PLATFORM_GETPROCADDR       dlsym
  #define PLATFORM_LOADLIBEXIT()
+ #define PLATFORM_LOADLIB_ERROR     dlerror()
+
 #endif
 
 // =============================================================

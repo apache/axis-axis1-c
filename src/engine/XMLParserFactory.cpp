@@ -104,7 +104,7 @@ int XMLParserFactory::loadLib()
     if (!m_LibHandler)
     {
         AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
-        throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED);
+        throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, PLATFORM_LOADLIB_ERROR);
     }
 
     return AXIS_SUCCESS;

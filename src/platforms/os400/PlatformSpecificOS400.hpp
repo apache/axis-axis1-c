@@ -40,6 +40,7 @@
 #define PLATFORM_UNLOADLIB         os400_dlclose
 #define PLATFORM_GETPROCADDR       os400_dlsym
 #define PLATFORM_LOADLIBEXIT()
+#define PLATFORM_LOADLIB_ERROR     ""
 
 extern void	*os400_dlopen(const char *);
 extern void	*os400_dlsym(void *, const char *);

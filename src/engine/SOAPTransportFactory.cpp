@@ -127,7 +127,7 @@ int SOAPTransportFactory::loadLib()
     if (!m_LibHandler)
     {
         AXISTRACE1("SERVER_ENGINE_LOADING_TRANSPORT_FAILED", CRITICAL);
-        throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED);
+        throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED, PLATFORM_LOADLIB_ERROR);
     }
     return AXIS_SUCCESS;
 }
