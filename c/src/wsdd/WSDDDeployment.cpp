@@ -169,7 +169,7 @@ const WSDDService* WSDDDeployment::GetService(const AxisChar* sServiceName)
 	}
 }
 
-const WSDDServiceMap* WSDDDeployment::GetWSDDServiceMap()
+const WSDDServiceMap* WSDDDeployment::GetWSDDServiceMap() const
 {
 	return m_DeployedServices;
 }

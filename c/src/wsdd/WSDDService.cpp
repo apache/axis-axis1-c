@@ -108,7 +108,7 @@ void WSDDService::SetProvider(const AxisChar* sProvider)
 	m_sProvider = sProvider;
 }
 
-const AxisChar* WSDDService::GetServiceName()
+const AxisChar* WSDDService::GetServiceName() const
 {
 	return m_sName.c_str();
 }
@@ -165,3 +165,8 @@ void  WSDDService::AddHandler(bool bRequestFlow, WSDDHandler* pHandler)
 	}
 }
 
+
+const list<AxisString> WSDDService::getAllowedMethods() const
+{
+	return m_AllowedMethods;
+}
