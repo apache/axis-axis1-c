@@ -4,8 +4,7 @@ This folder contains auto build script for Axis C++ and basic regression test
 cases for the C/C++ Service/Client Web Services Stack. For each wsdl service is 
 created and built and installed into the server.  Remeber to put your correct 
 port type implementation class in the appropriate place described in the 
-documentation. Normally you don't put this implementation file if your service 
-is running in a remote server.
+documentation.
 
 ##############################################################################
 
@@ -68,15 +67,21 @@ autoBuildCVS.sh
 
 runAllTests.[sh|bat] [lang]
 
-  Run all the test cases present in the client folders for the specified
-  language, default c++. The test will only be run if there is a matching
-  client source file and wsdl
+  Run all the test cases present in the service/client folders for the specified
+  language, default c++. The test will only be successfull if there is a matching
+  service/client source files and wsdl. 
+  Note that in this case only the services and clients are built. Axis C++ is not 
+  built in this case. It is assumed that $AXISCPP_HOME/tests/auto_build/cvsautobuild 
+  is downloaded and built and installed by a previous run of autoBuildCVS.sh script.
 
 runTest.[sh|bat] wsdls\<wsdl> [lang]
 
   Run the client test for the specified WSDL file and the specified language,
-  default c++. If there is not a matching client source file for the WSDL file
-  then nothing is done.
+  default c++. If there is not a matching service/client source file for the WSDL file
+  then build may fail.
+  Note that in this case only the service and client are built. Axis C++ is not
+  built in this case. It is assumed that $AXISCPP_HOME/tests/auto_build/cvsautobuild
+  is downloaded and built and installed by a previous run of autoBuildCVS.sh script.
 
 
 ##############################################################################
@@ -101,17 +106,15 @@ When you want to add a new test please be aware of the following simple steps.
     WSDL  file plus Client.
     Example: SimpleTypeArray.wsdl -> SimpleTypeArrayClient.c[pp]
 
-4. Add the server and port running the webservice in 
-   testcases/platform/linux/test.config file. The format is
-   <wsdl file name (without .wsdl part)>:host=<your host>
-   <wsdl file name (without .wsdl part)>:port=<your port>
-   Also give your APACHE2_PORT and APACHE_PORT in
-   testcases/platform/linux/apache_ports.config file. Giving
-   these information is very important as tests are first run
-   using apache2 and then using apache. port in test.config
-   is replaced with whatever on apache_ports.config file whenever
-   the tests are run. Anyway you must initially give the port
-   in test.config file as a initialization kind of value.
+4. Give your APACHE2_HOST, APACHE_HOST, APACHE2_PORT and APACHE_PORT  in
+   testcases/platform/linux/apache_ports.config file. 
+
+   If you run autoBuildCVS.sh script then all test services are assumed 
+   to be run on the server/port specified on apache_ports.config file.
+
+   If you just run tests by giving runAllTests.sh or runTest.sh
+   you can give the server name and port of a remote machine
+   which run your service in generated test.config.
 
 5. cd to auto_build and edit the build.sh file
    according to your configure requirments.

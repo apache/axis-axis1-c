@@ -104,10 +104,15 @@ rm -f testcases/build/buildTestCase.log
 rm -f testcases/build/runTestCase.log
 APACHE2_PORT=$(echo | grep APACHE2_PORT testcases/platform/linux/apache_ports.config | grep -o "[0-9]*$")
 APACHE_PORT=$(echo | grep APACHE_PORT testcases/platform/linux/apache_ports.config | grep -o "[0-9]*$")
+APACHE2_HOST=$(echo | grep APACHE2_HOST testcases/platform/linux/apache_ports.config | grep -o "=.*$"|sed "s/=//g")
+APACHE_HOST=$(echo | grep APACHE_HOST testcases/platform/linux/apache_ports.config | grep -o "=.*$"|sed "s/=//g")
+ls testcases/wsdls/*.wsdl | sed "s/testcases\/wsdls\///g" |sed "s/.wsdl/:host=localhost/g" > ${HOME_DIR}/testcases/platform/linux/test.config
+ls testcases/wsdls/*.wsdl | sed "s/testcases\/wsdls\///g" |sed "s/.wsdl/:port=80/g" >> ${HOME_DIR}/testcases/platform/linux/test.config
 # *** Deploy with Apache 2 ***
 echo Start deploy with apache2 using expat parser library
 sed 's/xercesc/expat/g' ${AXISCPP_DEPLOY}/bin/deploy_apache2.sh > ${AXISCPP_DEPLOY}/bin/deploy_apache2_auto.sh
-sed "s/[=][0-9]*$/=${APACHE2_PORT}/g" ${HOME_DIR}/testcases/platform/linux/test.config> ./test.config
+sed "s/[port=][0-9]*$/port=${APACHE2_PORT}/g" ${HOME_DIR}/testcases/platform/linux/test.config> ./test.config
+sed "s/host=.*$/host=${APACHE2_HOST}/g" testcases/platform/linux/test.config> ./test.config
 #sed 's/9090/80/g' testcases/platform/linux/test.config > ./test.config
 cp -f test.config testcases/platform/linux
 cp -f ${AXISCPP_DEPLOY}/lib/libaxiscpp_mod2.so ${APACHE2_HOME}/modules/
@@ -130,7 +135,8 @@ sh ./runAllTests.sh
 
 echo "Start deploy with apache1 using expat parser library"
 sed 's/xercesc/expat/g' ${AXISCPP_DEPLOY}/bin/deploy_apache.sh > ${AXISCPP_DEPLOY}/bin/deploy_apache_auto.sh
-sed "s/[=][0-9]*$/=${APACHE_PORT}/g" ${HOME_DIR}/testcases/platform/linux/test.config> ./test.config
+sed "s/[port=][0-9]*$/port=${APACHE_PORT}/g" ${HOME_DIR}/testcases/platform/linux/test.config> ./test.config
+sed "s/host=.*$/host=${APACHE_HOST}/g" testcases/platform/linux/test.config> ./test.config
 #sed 's/80/9090/g' ${HOME_DIR}/testcases/platform/linux/test.config > ./test.config
 cp -f test.config ${HOME_DIR}/testcases/platform/linux
 cp -f ${AXISCPP_DEPLOY}/lib/libaxiscpp_mod.so ${APACHE_HOME}/libexec/
