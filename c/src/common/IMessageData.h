@@ -79,6 +79,7 @@ class IWrapperSoapSerializer;
 class IMessageData
 {
 public:
+    virtual ~IMessageData(){};
 	virtual int setProperty(string& sName, string& sValue)=0;
 	virtual string& getProperty(string& sName)=0;
 

@@ -131,6 +131,7 @@ Param::Param(const AxisChar* str, XSDTYPE type)
 	case XSD_STRING: m_sName = "String"; break;
 	case XSD_BASE64BINARY: m_sName = "Base64BinaryString"; break;
 	case XSD_HEXBINARY: m_sName = "HexBinaryString"; break;
+    default:;
 	}
 }
 
@@ -195,6 +196,7 @@ Param::Param(long lValue, XSDTYPE type)
         case XSD_INTEGER: m_sName = "Integer";
             m_Value.lValue = lValue;
             break;
+        default:;
 	}
 }
 
@@ -221,6 +223,7 @@ Param::Param(double dValue, XSDTYPE type)
         case XSD_DECIMAL: m_sName = "Decimal";
             m_Value.dValue = dValue;
             break;
+        default:;
 	}
 	/*m_sName = "Double";
 	m_Value.dValue = dValue;

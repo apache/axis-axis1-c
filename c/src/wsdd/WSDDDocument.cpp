@@ -149,6 +149,8 @@ void  WSDDDocument::endElement (const XMLCh *const uri, const XMLCh *const local
 				m_lev0 = WSDD_DEPLOYMENT;
 				break;
 			break;
+
+            default:;
 			}
 		}
 		else // inside a requestFlow or responseFlow elements
@@ -273,6 +275,7 @@ void WSDDDocument::ProcessAttributes(WSDDLevels ElementType, const Attributes &a
 				//unknown attribute
 			}
 			break;
+        default:;
 		}
 	}
 }
@@ -281,7 +284,7 @@ void WSDDDocument::GetParameters(WSDDLevels ElementType, const Attributes &attrs
 {
 	AxisXMLString sName, sValue, sType;
 	const AxisXMLCh *name, *value, *type;
-	bool locked;
+	//bool locked;
 	AxisXMLString Localname, Value;
 	for (int i = 0; i < attrs.getLength(); i++) 
 	{
@@ -351,6 +354,8 @@ void WSDDDocument::GetParameters(WSDDLevels ElementType, const Attributes &attrs
 			m_pHandler->AddParameter(name, value);
 		}
 		break;
+
+     default:;
 	}
 }
 
@@ -491,6 +496,7 @@ void WSDDDocument::startElement(const XMLCh *const uri,	const XMLCh *const local
 				ProcessAttributes(WSDD_RESFLOW, attrs);
 			}
 		break;
+        default:;
 		}
 	}
 	else // inside a requestFlow or responseFlow elements

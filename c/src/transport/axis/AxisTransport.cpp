@@ -58,8 +58,9 @@
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  *
  */
-
+#ifdef WIN32
 #pragma warning (disable : 4786)
+#endif
 
 #include "AxisTransport.h"
 #include "TransportFactory.hpp"

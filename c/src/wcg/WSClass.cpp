@@ -63,7 +63,9 @@
 // WSClass.cpp: implementation of the WSClass class.
 //
 //////////////////////////////////////////////////////////////////////
+#ifdef WIN32
 #pragma warning (disable : 4786)
+#endif
 
 #include "WSClass.h"
 

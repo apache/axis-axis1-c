@@ -29,7 +29,7 @@ ServerAxisEngine::~ServerAxisEngine()
 
 int ServerAxisEngine::Process(Ax_soapstream* soap) 
 {
-	int Status;
+	int Status = 0;
 	AXIS_TRY
 		AXISTRACE1("ServerAxisEngine::Process");
 		const WSDDService* pService = NULL;

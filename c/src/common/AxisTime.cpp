@@ -73,13 +73,10 @@ AxisTime::AxisTime(struct tm ntime)
     m_TMUTC = ntime;
 }
 
-AxisTime::AxisTime(time_t m_Time)
-{
-    if(m_Time != NULL)
-    {
-		tm* pTMUTC = gmtime(&m_Time);
+AxisTime::AxisTime(time_t pTime)
+{   
+		tm* pTMUTC = gmtime(&pTime);
 		memcpy(&m_TMUTC, pTMUTC, sizeof(tm));
-    }
 }
 
 AxisTime::~AxisTime()
@@ -96,7 +93,7 @@ void AxisTime::setValue(const AxisChar* strValue)
 void AxisTime::setValue(XSDTYPE type,  uParamValue Value)
 {
     m_Type = type;
-    if(type = XSD_DURATION)
+    if(type == XSD_DURATION)
     {
         m_Duration = Value.lDuration;        
     }
@@ -182,6 +179,7 @@ AxisString& AxisTime::serialize(const AxisString& sName, struct tm tValue)
                 strftime(buf1, 80, "%H:%M:%SZ", &tValue);
                 strXSDDate = buf1;
                 //AxisUtils::convert(strXSDDate, buf1);
+            default:;
             
         }
         
@@ -195,7 +193,7 @@ AxisString& AxisTime::serialize(const AxisString& sName, struct tm tValue)
 void AxisTime::mkCTime()
 {
 //    AxisChar* endptr;
-    int intPos, intPos1, intPos2, intPos3, intPos4, intPos5, intPos6;
+    unsigned int intPos, intPos1, intPos2, intPos3, intPos4, intPos5, intPos6;
     AxisChar buff[4];
     time_t now;
     struct tm result1, result2;
@@ -213,34 +211,34 @@ void AxisTime::mkCTime()
             /*XSD_DURATION is of the format PnYnMnDTnHnMnS*/
             intPos1 = m_sValue.find_first_of("Y");
             strYears = m_sValue.substr(1,intPos1 - 1);
-            intYears = atoi(strYears.c_str());
-            //intYears = wcstol(strYears.c_str(), &endptr, 10);
-            duration.years = intYears;
+            m_intYears = atoi(strYears.c_str());
+            //m_intYears = wcstol(strYears.c_str(), &endptr, 10);
+            duration.years = m_intYears;
             intPos2 = m_sValue.find_first_of("M");
             strMonths = m_sValue.substr(intPos1 + 1, intPos2 - intPos1 - 1);
-            intMonths = atoi(strMonths.c_str());
-            //intMonths = wcstol(strMonths.c_str(), &endptr, 10);
-            duration.months = intMonths;
+            m_intMonths = atoi(strMonths.c_str());
+            //m_intMonths = wcstol(strMonths.c_str(), &endptr, 10);
+            duration.months = m_intMonths;
             intPos3 = m_sValue.find_first_of("D");
             strDays = m_sValue.substr(intPos2 + 1, intPos3 - intPos2 -1);
-            intDays = atoi(strDays.c_str());
-            //intDays = wcstol(strDays.c_str(), &endptr, 10);
-            duration.days = intDays;
+            m_intDays = atoi(strDays.c_str());
+            //m_intDays = wcstol(strDays.c_str(), &endptr, 10);
+            duration.days = m_intDays;
             intPos4 = m_sValue.find_first_of("H");
             strHours = m_sValue.substr(intPos3 + 1, intPos4 - intPos3 -1);
-            intHours = atoi(strHours.c_str());
-            //intHours = wcstol(strHours.c_str(), &endptr, 10);
-            duration.hours = intHours;
+            m_intHours = atoi(strHours.c_str());
+            //m_intHours = wcstol(strHours.c_str(), &endptr, 10);
+            duration.hours = m_intHours;
             intPos5 = m_sValue.find_first_of("M");
             strMins = m_sValue.substr(intPos4 + 1, intPos5 - intPos4 -1);
-            intMins = atoi(strMins.c_str());
-            //intMins = wcstol(strMins.c_str(), &endptr, 10);
-            duration.mins = intMins;
+            m_intMins = atoi(strMins.c_str());
+            //m_intMins = wcstol(strMins.c_str(), &endptr, 10);
+            duration.mins = m_intMins;
             intPos6 = m_sValue.find_first_of("S");
             strSecs = m_sValue.substr(intPos5 + 1, intPos6 - intPos5 -1);
-            intSecs = atoi(strSecs.c_str());
-            //intSecs = wcstol(strSecs.c_str(), &endptr, 10);
-            duration.secs = intSecs;
+            m_intSecs = atoi(strSecs.c_str());
+            //m_intSecs = wcstol(strSecs.c_str(), &endptr, 10);
+            duration.secs = m_intSecs;
 
             break;
     
@@ -252,10 +250,10 @@ void AxisTime::mkCTime()
                 CCYY(-)MM(-)DDThh:mm:ss.ss...+/-<UTC TIME DIFFERENCE>            
             */        
             strYears = m_sValue.substr(0,2);
-            intYears = atoi(strYears.c_str()) - 1900;
-            //intYears = wcstol(strYears.c_str(), &endptr, 10) - 1900;
-            //sprintf((char*)buff,"%d", intYears);
-            AxisSprintf(buff, 4, "%d", intYears);
+            m_intYears = atoi(strYears.c_str()) - 1900;
+            //m_intYears = wcstol(strYears.c_str(), &endptr, 10) - 1900;
+            //sprintf((char*)buff,"%d", m_intYears);
+            AxisSprintf(buff, 4, "%d", m_intYears);
             strYears = buff;
             intPos = m_sValue.find_first_of("-");
             /* date is of the format CCYY-MM-DD */
@@ -307,14 +305,14 @@ void AxisTime::mkCTime()
                 time_t timeInSecs = mktime(&m_TM);
 				pTm = localtime(&timeInSecs);
 				memcpy(&m_TMUTC, pTm, sizeof(tm));
-                intHours = atoi(strZone.substr(1,2).c_str());
-                //intHours = wcstol(strZone.substr(1,2).c_str(), &endptr, 10);
-                intMins = atoi(strZone.substr(3,2).c_str());
-                //intMins = wcstol(strZone.substr(3,2).c_str(), &endptr, 10);
-                intSecs = intHours * 60 * 60 + intMins * 60;
+                m_intHours = atoi(strZone.substr(1,2).c_str());
+                //m_intHours = wcstol(strZone.substr(1,2).c_str(), &endptr, 10);
+                m_intMins = atoi(strZone.substr(3,2).c_str());
+                //m_intMins = wcstol(strZone.substr(3,2).c_str(), &endptr, 10);
+                m_intSecs = m_intHours * 60 * 60 + m_intMins * 60;
                 if(strZone.substr(0,1) == "+")
                 {
-                    timeInSecs += intSecs;
+                    timeInSecs += m_intSecs;
 					pTm = localtime(&timeInSecs);
 					memcpy(&m_TM, pTm, sizeof(tm));
                     time_t t = mktime(&m_TM);
@@ -325,7 +323,7 @@ void AxisTime::mkCTime()
                 else if(strZone.substr(0,1) == "-")
                 {
 
-                    timeInSecs -= intSecs;
+                    timeInSecs -= m_intSecs;
 					pTm = localtime(&timeInSecs);
 					memcpy(&m_TM, pTm, sizeof(tm));
 
@@ -353,10 +351,10 @@ void AxisTime::mkCTime()
                 CCYY(-)MM(-)DD+/-<UTC TIME DIFFERENCE>
             */
             strYears = m_sValue.substr(0,2);
-            intYears = atoi(strYears.c_str()) - 1900;
-            //intYears = wcstol(strYears.c_str(), &endptr, 10) - 1900;
-            //sprintf((char*)buff,"%d", intYears);
-            AxisSprintf(buff, 4, "%d", intYears);
+            m_intYears = atoi(strYears.c_str()) - 1900;
+            //m_intYears = wcstol(strYears.c_str(), &endptr, 10) - 1900;
+            //sprintf((char*)buff,"%d", m_intYears);
+            AxisSprintf(buff, 4, "%d", m_intYears);
             strYears = buff;
             intPos = m_sValue.find_first_of("-");
             /* date is of the format CCYY-MM-DD */
@@ -394,14 +392,14 @@ void AxisTime::mkCTime()
                 time_t timeInSecs = mktime(&m_TM);
 				pTm = localtime(&timeInSecs);
 				memcpy(&m_TMUTC, pTm, sizeof(tm));
-                intHours = atoi(strZone.substr(1,2).c_str());
-                //intHours = wcstol(strZone.substr(1,2).c_str(), &endptr, 10);
-                intMins = atoi(strZone.substr(3,2).c_str());
-                //intMins = wcstol(strZone.substr(3,2).c_str(), &endptr, 10);
-                intSecs = intHours * 60 * 60 + intMins * 60;
+                m_intHours = atoi(strZone.substr(1,2).c_str());
+                //m_intHours = wcstol(strZone.substr(1,2).c_str(), &endptr, 10);
+                m_intMins = atoi(strZone.substr(3,2).c_str());
+                //m_intMins = wcstol(strZone.substr(3,2).c_str(), &endptr, 10);
+                m_intSecs = m_intHours * 60 * 60 + m_intMins * 60;
                 if(strZone.substr(0,1) == "+")
                 {
-                    timeInSecs += intSecs;
+                    timeInSecs += m_intSecs;
 					pTm = localtime(&timeInSecs);
 					memcpy(&m_TM, pTm, sizeof(tm));
                     time_t t = mktime(&m_TM);
@@ -411,7 +409,7 @@ void AxisTime::mkCTime()
                 }
                 else if(strZone.substr(0,1) == "-")
                 {
-                    timeInSecs -= intSecs;
+                    timeInSecs -= m_intSecs;
 					pTm = localtime(&timeInSecs);
 					memcpy(&m_TM, pTm, sizeof(tm));
                     time_t t = mktime(&m_TM);
@@ -463,14 +461,14 @@ void AxisTime::mkCTime()
                 time_t timeInSecs = mktime(&m_TM);
 				pTm = localtime(&timeInSecs);
 				memcpy(&m_TMUTC, pTm, sizeof(tm));
-                intHours = atoi(strZone.substr(1,2).c_str());
-                //intHours = wcstol(strZone.substr(1,2).c_str(), &endptr, 10);
-                intMins = atoi(strZone.substr(3,2).c_str());
-                //intMins = wcstol(strZone.substr(3,2).c_str(), &endptr, 10);
-                intSecs = intHours * 60 * 60 + intMins * 60;
+                m_intHours = atoi(strZone.substr(1,2).c_str());
+                //m_intHours = wcstol(strZone.substr(1,2).c_str(), &endptr, 10);
+                m_intMins = atoi(strZone.substr(3,2).c_str());
+                //m_intMins = wcstol(strZone.substr(3,2).c_str(), &endptr, 10);
+                m_intSecs = m_intHours * 60 * 60 + m_intMins * 60;
                 if(strZone.substr(0,1) == "+")
                 {
-                    timeInSecs += intSecs;
+                    timeInSecs += m_intSecs;
 					pTm = localtime(&timeInSecs);
 					memcpy(&m_TM, pTm, sizeof(tm));
                     time_t t = mktime(&m_TM);
@@ -480,7 +478,7 @@ void AxisTime::mkCTime()
                 }
                 else if(strZone.substr(0,1) == "-")
                 {
-                    timeInSecs -= intSecs;
+                    timeInSecs -= m_intSecs;
 					pTm = localtime(&timeInSecs);
 					memcpy(&m_TM, pTm, sizeof(tm));
                     time_t t = mktime(&m_TM);
@@ -499,6 +497,7 @@ void AxisTime::mkCTime()
             }
 
             break;
+        default:;
     }    
 }
 

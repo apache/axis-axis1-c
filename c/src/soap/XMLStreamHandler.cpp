@@ -271,7 +271,7 @@ void  XMLStreamHandler::characters (const XMLCh *const chars,const unsigned int 
 			AxisChar* pchar = new AxisChar[nLen];
 			if (XMLString::transcode(chars, pchar, nLen-1))
 			{
-				CharacterElement* pCharacterElement = new CharacterElement(pchar);
+				pCharacterElement = new CharacterElement(pchar);
 			}
 			delete pchar;
 		}
@@ -279,7 +279,7 @@ void  XMLStreamHandler::characters (const XMLCh *const chars,const unsigned int 
 		{
 			if (XMLString::transcode(chars, m_Buffer, TRANSCODE_BUFFER_SIZE-1))
 			{
-				CharacterElement* pCharacterElement = new CharacterElement(m_Buffer);
+				pCharacterElement = new CharacterElement(m_Buffer);
 			}			
 		}
 		if (pCharacterElement)

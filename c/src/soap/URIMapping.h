@@ -63,7 +63,9 @@
 // URIMapping.h: interface for the URIMapping class.
 //
 //////////////////////////////////////////////////////////////////////
+#ifdef WIN32
 #pragma warning (disable : 4786)
+#endif
 
 #if !defined(AFX_URIMAPPING_H__D5B347DD_E7B0_4C76_BCB2_A7C73CFE367D__INCLUDED_)
 #define AFX_URIMAPPING_H__D5B347DD_E7B0_4C76_BCB2_A7C73CFE367D__INCLUDED_

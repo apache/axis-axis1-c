@@ -58,8 +58,9 @@
  * @author Susantha Kumara (skumara@virtusa.com)
  *
  */
-
+#ifdef WIN32
 #pragma warning (disable : 4503)
+#endif
 
 #ifdef WIN32
 #include <Windows.h> //for Sleep(0);

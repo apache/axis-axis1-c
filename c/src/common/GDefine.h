@@ -60,9 +60,10 @@
  * @author Susantha Kumara (skumara@virtusa.com)
  *
  */
-
+#ifdef WIN32
 #pragma warning (disable : 4786)
 #pragma warning (disable : 4530)
+#endif
 
 #if !defined(__GDEFINE_INCLUDED__)
 #define __GDEFINE_INCLUDED__
@@ -81,7 +82,7 @@ typedef enum { APTHTTP=1, APTFTP, APTSMTP, APTOTHER } AXIS_PROTOCOL_TYPE;
 
 #ifdef WIN32
     #define AxisSprintf(X, Y, Z, W) sprintf(X, Z, W)
-#else //linux
+#else /*linux*/
     #define AxisSprintf(X, Y, Z, W) sprintf(X, Z, W)
 #endif
 
@@ -89,4 +90,4 @@ extern void Ax_Sleep(int);
 extern void ModuleInitialize();
 extern void ModuleUnInitialize();
 
-#endif //__GDEFINE_INCLUDED__
+#endif /*__GDEFINE_INCLUDED__*/

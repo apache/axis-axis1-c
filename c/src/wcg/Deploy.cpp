@@ -241,7 +241,7 @@ int parse_header_file(const char *filename)
 	int error = 0;
 	if (filename) 
 	{
-		if (yyin = fopen( filename, "r" )) 
+		if ((yyin = fopen( filename, "r" ))) 
 		{
 			error = yyparse();
 			if ( error ) { fclose(yyin); return 1;}

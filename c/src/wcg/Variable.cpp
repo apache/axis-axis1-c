@@ -66,7 +66,9 @@
 // Variable.cpp: implementation of the Variable class.
 //
 //////////////////////////////////////////////////////////////////////
+#ifdef WIN32
 #pragma warning (disable : 4786)
+#endif
 
 #include "Variable.h"
 
@@ -287,6 +289,8 @@ int Variable::GenerateWSDLSchema(File &file)
 	file << "<element name=\"" << m_VarName << "\" type=\"";
 	if (m_Type != VAR_USER) file << "xsd:" << m_TypeName << "\" />" << endl;
 	else file << "xsdl:" << m_TypeName << "\" />" << endl;
+
+    return 0;
 }
 
 int Variable::GenerateWSDLPartInMessage(File &file, bool bInput)
@@ -304,4 +308,6 @@ int Variable::GenerateWSDLPartInMessage(File &file, bool bInput)
 	file << "\" type=\"";
 	if (m_Type != VAR_USER) file << "xsd:" << m_TypeName << "\" />" << endl;
 	else file << "xsdl:" << m_TypeName << "\" />" << endl;
+
+    return 0;
 }

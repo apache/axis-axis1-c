@@ -1,7 +1,9 @@
 // File.cpp: implementation of the File class.
 //
 //////////////////////////////////////////////////////////////////////
+#ifdef WIN32
 #pragma warning (disable : 4786)
+#endif
 
 #include "File.h"
 

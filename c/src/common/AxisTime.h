@@ -110,12 +110,12 @@ class AxisTime
         AxisString strHours;
         AxisString strMins;
         AxisString strSecs;
-        int intYears;
-        int intMonths;
-        int intDays;
-        int intHours;
-        int intMins;
-        int intSecs;
+        int m_intYears;
+        int m_intMonths;
+        int m_intDays;
+        int m_intHours;
+        int m_intMins;
+        int m_intSecs;
         AxisString strZone;
         uDuration duration;
         long m_Duration;
