@@ -33,7 +33,7 @@
 /*
  * Axis2Transport constuctor
  */
-Axis2Transport::Axis2Transport ():m_bURIChanged (false),
+Axis2Transport::Axis2Transport ():m_bReopenConnection (false),
 m_strHTTPProtocol ("HTTP/1.1"),
 m_strHTTPMethod ("POST"),
 m_bChunked (false),
@@ -103,7 +103,7 @@ throw (AxisTransportException)
     {
 	m_pChannel->setURL (pcEndpointUri);
 
-	m_bURIChanged = true;
+	m_bReopenConnection = true;
 
 	// Check if the new URI requires SSL (denoted by the https prefix).
 	if ((m_pChannel->getURLObject ()).getProtocol () == URL::https)
@@ -189,9 +189,9 @@ AXIS_TRANSPORT_STATUS
 Axis2Transport::flushOutput ()
 throw (AxisTransportException)
 {
-    if (m_bURIChanged)
+    if (m_bReopenConnection)
     {
-        m_bURIChanged = false;
+        m_bReopenConnection = false;
 	if (!m_pChannel->open ())
 	{
 	    int iStringLength = m_pChannel->GetLastError ().length () + 1;
@@ -1080,18 +1080,18 @@ Axis2Transport::processResponseHTTPHeaders ()
 
             // if HTTP/1.0 we have to always close the connection by default
             if (m_eProtocolType == APTHTTP1_0) 
-                m_bURIChanged = true;
+                m_bReopenConnection = true;
 
             // if HTTP/1.1 we have to assume persistant connection by default
 
             // We need to close the connection and open a new one if we have 'Connection: close'
             if (key == "Connection" && value == " close" )
-                m_bURIChanged = true;
+                m_bReopenConnection = true;
                 
             // For both HTTP/1.0 and HTTP/1.1,
             // We need to keep the connection if we have 'Connection: Keep-Alive'
             if (key == "Connection" && value == " Keep-Alive" )
-                m_bURIChanged = false;
+                m_bReopenConnection = false;
 	}
 	while (iPosition != std::string::npos);
     }

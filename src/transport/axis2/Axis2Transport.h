@@ -126,11 +126,12 @@ class Axis2Transport:public SOAPTransport
     int FindTransportPropertyIndex (std::string);
 
   /**
-    * Keeps track of URI changes.
+    * Keeps track of if we need to reopen connection.
     * Set true by setEndpointUri.
-    * Set false when a socket connection is established with the enpoint.
+    * Set false when a socket connection is established with the enpoint and 
+    * when there is no need renew (that is close and open again) an existing connection.
     */
-    bool m_bURIChanged;
+    bool m_bReopenConnection;
 
   /**
     * Message string to be sent.

@@ -127,6 +127,9 @@ throw (AxisTransportException&)
 #ifdef FJPDebug
 printf( ">Channel::open()\n");
 #endif
+    // if there is an open socket already, close it first
+    if (m_Sock != INVALID_SOCKET)
+        closeChannel();
 
 	// If the underlying socket transport has not been initialised properly,
 	// then thrown an exeption.
