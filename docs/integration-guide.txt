@@ -1,7 +1,6 @@
 Linux Solaris :Apache web server
 
-Download the axiscpp.tar.gz
-gunzip and untar it where ever you like.
+checkout the axiscpp from apache.
 for simplicity assume that your axiscpp is now
 /usr/local/axiscpp
 From now on I call this <axiscpp_home>
