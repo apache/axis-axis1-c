@@ -229,13 +229,15 @@ public class DesirializationContext {
             while (!(state == XmlPullParser.START_TAG || state == XmlPullParser.END_DOCUMENT))
                 this.state = this.xpp.next();
 
-            if (state == XmlPullParser.START_TAG && this.xpp.getName().equals(Constants.ELEM_BODY))
-                this.state = this.xpp.next();
-            else
+          	if (state == XmlPullParser.START_TAG && this.xpp.getName().equals(Constants.ELEM_BODY)){
+                log.info("-at the body tag");
+            }else{
                 throw new AxisFault("Invalied Axis format Body tag missing");
+            }
 
             //If RPC I should read the method as well
-            if (this.style.getName().equals("rpc")) {
+            if (this.style.equals("rpc")) {
+                log.info("It's rpc.... Parsing body");
                 //this two lines are to make sure we are dealing with the start tag
                 while (!(state == XmlPullParser.START_TAG || state == XmlPullParser.END_DOCUMENT))
                     this.state = this.xpp.next();
