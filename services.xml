@@ -222,7 +222,7 @@ Channel_HTTP:${basedir}${ps}..${ps}..${ps}..${ps}Axis${ps}lib${ps}${libraryPrefi
 				<include name="*.cpp"/>
 			</fileset>
 		</cc>
-		<copy file="${dir.test.generated}/server/${serviceLang}/${serviceName}/${libraryPrefix}${serviceName}${librarySuffix}" 
+		<copy failonerror="false" file="${dir.test.generated}/server/${serviceLang}/${serviceName}/${libraryPrefix}${serviceName}${librarySuffix}" 
 			todir="${basedir}/../../../Axis/webservices"/>
 	</target>
 
