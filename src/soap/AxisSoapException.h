@@ -30,11 +30,22 @@ class AxisSoapException :public AxisException
 {
 
 public:
-  AxisSoapException();
-  AxisSoapException(int exceptionCode);
-  AxisSoapException(exception* e);
-  AxisSoapException(exception* e, int exceptionCode);
-  virtual ~AxisSoapException() throw();
+    AxisSoapException();
+    AxisSoapException(int iExceptionCode);
+    AxisSoapException(exception* e);
+    AxisSoapException(exception* e, int iExceptionCode);
+    virtual ~AxisSoapException() throw();
+    const char* what() throw();
+    const int getExceptionCode();
+    const string getMessage(exception* e);
+    const string getMessage(int iExceptionCode);
+                                                                                                                             
+private:
+    void processException(exception* e);
+    void processException(exception* e, int iExceptionCode);
+    void processException(int iExceptionCode);
+    string m_sMessage;
+    int m_iExceptionCode;
 };
 
 #endif
