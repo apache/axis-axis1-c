@@ -367,3 +367,19 @@ int DestroyInstance(SOAPTransport *inst)
 	return AXIS_FAIL;
 }
 }
+
+extern "C" {
+STORAGE_CLASS_INFO
+void initializeLibrary(void)
+{ 
+    // Do init actions
+}
+}
+
+extern "C" {
+STORAGE_CLASS_INFO
+void uninitializeLibrary(void)
+{
+    // Do uninit actions
+}
+}

@@ -342,7 +342,6 @@ extern "C" int uninitialize_module ()
     ModuleUnInitialize ();
     SoapKeywordMapping::uninitialize ();
     XMLParserFactory::uninitialize();
-    SOAPTransportFactory::uninitialize();
     return AXIS_SUCCESS;
 }
 
