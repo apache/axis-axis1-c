@@ -20,7 +20,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  *
- * @author Roshan Weerasuriya (roshan@opensource.lk, roshan@jkcsworld.com)
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */
 
 #include <string>
@@ -92,10 +92,21 @@ main(int argc, char *argv[])
     printf("Sending Requests to end point %s \n\n", endpoint);
     printf("invoking echoString...\n");
     //testing echoString 
+    try 
+    {
     if (0 == strcmp(ws.echoString("hello world"), "hello world"))
 	printf("successful\n");
     else
 	printf("failed\n");
+    }
+    catch (AxisException& e)
+    {
+        printf("%s\n", e.what());
+    }
+    catch(...)
+    {
+        printf("Unknown exception\n");
+    }
 
     //test removing SOAP header block using pointer
     IHeaderBlock *header = NULL;
@@ -103,10 +114,21 @@ main(int argc, char *argv[])
     ws.deleteSOAPHeaderBlock(header);
     //now the request should have no SOAP headers
 
+    try
+    {
     if (0 == strcmp(ws.echoString("hello world"), "hello world"))
         printf("successful\n");
     else
         printf("failed\n");
+    }
+    catch (AxisException& e)
+    {
+        printf("%s\n", e.what());
+    }
+    catch(...)
+    {
+	printf("Unknown exception\n");
+    }
 
 
     printf("Soap Header test end\n");
