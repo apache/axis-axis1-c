@@ -99,18 +99,7 @@ void Call::addCmplxParameter (void* pObject, void* pSZFunct, void* pDelFunct,
 
 int Call::invoke ()
 {
-    try
-    {
         m_nStatus =  m_pAxisEngine->process(m_pTransport);
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return m_nStatus;
 }

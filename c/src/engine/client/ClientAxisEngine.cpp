@@ -103,21 +103,9 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
      * // Pool back the Global and Transport handlers
      * UnInitializeHandlers(sSessionId, soap->trtype);
      */
-
-     AXISC_CATCH(exception& e)
-#ifdef __ENABLE_AXIS_EXCEPTION__
-        AxisException* objException = (AxisException*) &e;
-        char* pcTempStr = (char*) objException->what();
-        AXISTRACE2("Error:", pcTempStr, CRITICAL);
-        return objException->getExceptionCode();
-#endif
-
-         
-     AXISC_CATCH(...)
-#ifdef __ENABLE_AXIS_EXCEPTION__
-         return SERVER_UNKNOWN_ERROR;
-#endif
-     AXISC_ENDCATCH 
+    AXISC_CATCH(AxisException& e)
+        AXISC_THROW_SAME;
+    AXISC_ENDCATCH
     return Status;
 }
 
