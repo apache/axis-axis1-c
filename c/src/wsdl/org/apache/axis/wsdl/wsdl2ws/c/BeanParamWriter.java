@@ -126,7 +126,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 					}
 				}
 				else{
-					writer.write("\tpSZ->_functions->SerializeAsElement(pSZ->_object, \""+attribs[i].getParamName()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+					writer.write("\tpSZ->_functions->serializeAsElement(pSZ->_object, \""+attribs[i].getParamName()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 				}
 			}
 			else{

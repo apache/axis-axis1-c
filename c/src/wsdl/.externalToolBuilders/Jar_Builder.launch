@@ -7,7 +7,7 @@
     <stringAttribute
         key="org.eclipse.ui.externaltools.ATTR_RUN_BUILD_KINDS" value="full,incremental,"/>
     <stringAttribute
-        key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="C:\susantha\ws-axis\c\bin"/>
+        key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="E:\Axis\ws-axis\c\bin"/>
     <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="C:\j2sdk1.4.1_01\bin\jar.exe"/>
     <stringAttribute key="org.eclipse.debug.ui.target_run_perspective" value="perspective_none"/>
 </launchConfiguration>

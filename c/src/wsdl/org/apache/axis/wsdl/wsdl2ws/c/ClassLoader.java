@@ -68,12 +68,12 @@ public class ClassLoader implements SourceWriter{
 	  writer.write("\t*inst = malloc(sizeof(BasicHandler));\n");
 	  writer.write("\t(*inst)->_object = 0;	/* instantiate and provide the context object if needed */\n");
 	  writer.write("\t(*inst)->_functions = &"+wrappername+"_functions;\n");
-	  writer.write("\treturn (*inst)->_functions->Init((*inst)->_object);\n");
+	  writer.write("\treturn (*inst)->_functions->init((*inst)->_object);\n");
 	  writer.write("}\n\n");
 	  writer.write("STORAGE_CLASS_INFO\n");
 	  writer.write("int DestroyInstance(BasicHandler *inst){\n");
 	  writer.write("\tif (inst){\n");
-	  writer.write("\t\tinst->_functions->Fini(inst->_object);\n");
+	  writer.write("\t\tinst->_functions->fini(inst->_object);\n");
 	  writer.write("\t\t/* destroy the context object set to inst->_object if any here */\n");
 	  writer.write("\t\tfree(inst);\n");
 	  writer.write("\t\treturn AXIS_SUCCESS;\n");

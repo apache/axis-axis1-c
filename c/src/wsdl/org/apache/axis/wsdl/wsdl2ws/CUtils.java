@@ -219,7 +219,7 @@ public class CUtils {
 	public static String getParameterGetValueMethodName(String typeName, boolean isAttrib){
 		String methodname;
 		if((methodname = (String)type2getValueMethodName.get(typeName))!= null){
-			methodname = (isAttrib ? "GetAttributeAs":"GetElementAs") + methodname;
+			methodname = (isAttrib ? "getAttributeAs":"getElementAs") + methodname;
 			return methodname;
 		}
 		return null;	

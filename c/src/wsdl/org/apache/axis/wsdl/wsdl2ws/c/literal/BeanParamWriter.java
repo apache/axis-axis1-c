@@ -145,7 +145,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 				}
 			}
 			else if (attribs[i].isSimpleType()){
-				writer.write("\tpSZ->_functions->SerializeAsElement(pSZ->_object, \""+attribs[i].getElementName().getLocalPart()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+				writer.write("\tpSZ->_functions->serializeAsElement(pSZ->_object, \""+attribs[i].getElementName().getLocalPart()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 			}else{
 				//if complex type
 				String elm = attribs[i].getParamName();

@@ -147,7 +147,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 			  }			  
 			  writer.write(");\n");
 		  }
-		  writer.write("\tint GetStatus();\n");		  
+		  writer.write("\tint getStatus();\n");		  
 		}catch (Exception e) {
 			  e.printStackTrace();
 			  throw new WrapperFault(e);
