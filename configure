@@ -2058,7 +2058,7 @@ echo "${ECHO_T}yes" >&6
 else
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-  LIBWWWBUILD="libwww"
+  LIBWWWBUILD=""
 
 fi;
 
