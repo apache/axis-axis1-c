@@ -91,8 +91,14 @@ public:
     virtual int AXISCALL serializeBasicArray
         (const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName)=0;
 
+	virtual int AXISCALL serializeBasicArray
+		(const Axis_Array* pArray, const AxisChar* pNamespace, XSDTYPE nType, const AxisChar* pName)=0;
+
     /* Basic Type Serializing methods */
     virtual int AXISCALL serializeAsElement(const AxisChar* sName, 
+        void* pValue, XSDTYPE type)=0;
+
+    virtual int AXISCALL serializeAsElement(const AxisChar* sName, const AxisChar* pNamespace, 
         void* pValue, XSDTYPE type)=0;
 
     virtual int AXISCALL serializeAsAttribute(const AxisChar* sName, 
