@@ -16,7 +16,7 @@ static const char* Axis_TypeName_intType = "intType";
 class intType
 {
 public:
-	int intItem;
+	xsd__int intItem;
 	intType();
 	virtual ~intType();
 };

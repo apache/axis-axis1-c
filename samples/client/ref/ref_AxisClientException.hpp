@@ -16,16 +16,19 @@ AXIS_CPP_NAMESPACE_USE
 class ref_AxisClientException: public AxisException
 {
 public:
-	ref_AxisClientException();
-	ref_AxisClientException(ISoapFault* pFault);
-	ref_AxisClientException(int iExceptionCode);
-	ref_AxisClientException(exception* e);
-	ref_AxisClientException(exception* e, int iExceptionCode);
-	virtual ~ref_AxisClientException() throw();
-	 const char* what() throw();
-	 const int getExceptionCode();
-	 const string getMessage(exception* e);
-	 const string getMessage(int iExceptionCode);
+	STORAGE_CLASS_INFO ref_AxisClientException();
+	STORAGE_CLASS_INFO ref_AxisClientException(ISoapFault* pFault);
+	STORAGE_CLASS_INFO ref_AxisClientException(int iExceptionCode);
+	STORAGE_CLASS_INFO ref_AxisClientException(exception* e);
+	STORAGE_CLASS_INFO ref_AxisClientException(exception* e, int iExceptionCode);
+	STORAGE_CLASS_INFO ref_AxisClientException(string sMessage);
+	STORAGE_CLASS_INFO virtual ~ref_AxisClientException() throw();
+	STORAGE_CLASS_INFO const char* what() throw();
+	STORAGE_CLASS_INFO const int getExceptionCode();
+	STORAGE_CLASS_INFO const string getMessage(exception* e);
+	STORAGE_CLASS_INFO const string getMessage(int iExceptionCode);
+	STORAGE_CLASS_INFO const ISoapFault* getFault();
+
 private:
 	 void processException(exception* e);
 	 void processException(ISoapFault* pFault);
@@ -33,6 +36,7 @@ private:
 	 void processException(int iExceptionCode);
 	 string m_sMessage;
 	 int m_iExceptionCode;
+	 ISoapFault* m_pISoapFault;
 
 };
 

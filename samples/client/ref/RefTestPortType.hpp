@@ -7,19 +7,19 @@
 #define __REFTESTPORTTYPE_CLIENTSTUB_H__INCLUDED_
 
 #include <axis/client/Stub.hpp>
-#include "ref_AxisClientException.h"
+#include "ref_AxisClientException.hpp"
 #include <axis/ISoapFault.hpp>
-#include "intType.h"
+#include "intType.hpp"
 
 class RefTestPortType :public Stub
 {
 public:
-	RefTestPortType(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol=APTHTTP1_1);
-	RefTestPortType();
+	STORAGE_CLASS_INFO RefTestPortType(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol=APTHTTP1_1);
+	STORAGE_CLASS_INFO RefTestPortType();
 public:
-	virtual ~RefTestPortType();
+	STORAGE_CLASS_INFO virtual ~RefTestPortType();
 public: 
-	intType* echoInt(intType* Value0);
+	STORAGE_CLASS_INFO intType* echoInt(intType* Value0);
 	int getFaultDetail(char** ppcDetail);
 };
 
