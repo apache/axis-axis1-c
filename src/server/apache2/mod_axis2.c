@@ -92,7 +92,7 @@ extern unsigned char chEBuf[1024];
 
 #define SIZEOFMODULEBUFFER 4096
 
-char g_buffer[SIZEOFMODULEBUFFER];
+
 
 /**
  * This method adds the http header to the Ax_soapstream. These headers will be dispatched later
@@ -185,14 +185,16 @@ static AXIS_TRANSPORT_STATUS AXISCALL get_request_bytes(const char** req, int* r
 	 /*How can I detect an error when reading stream ? Sanjaya ?
 	 In case of an error set buffer to null, size 0 and return TRANSPORT_FAILED*/
 	int len_read;
+	char* pBuffer = stream->reserved2;
+	if (!pBuffer) return TRANSPORT_FAILED;
 	/* ap_hard_timeout("util_read", (request_rec*)stream->str.ip_stream);*/
-	len_read = ap_get_client_block((request_rec*)stream->str.ip_stream, g_buffer, SIZEOFMODULEBUFFER);
+	len_read = ap_get_client_block((request_rec*)stream->str.ip_stream, pBuffer, SIZEOFMODULEBUFFER);
 	/*ap_reset_timeout((request_rec*)stream->str.ip_stream);*/
-	*req = g_buffer;
+	*req = pBuffer;
 	*retsize =  len_read;
 	if (len_read < SIZEOFMODULEBUFFER)
 	{
-		g_buffer[len_read] = '\0';
+		pBuffer[len_read] = '\0';
 		return TRANSPORT_FINISHED;
 	}
 	else
@@ -284,12 +286,17 @@ static int mod_axis_method_handler (request_rec *req_rec)
 	sstr->reserved2 = NULL;
 #else
 	sstr->reserved1 = calloc(NO_OF_SERIALIZE_BUFFERS, sizeof(sendbuffers));
-	sstr->reserved2 = NULL;
+	sstr->reserved2 = malloc(SIZEOFMODULEBUFFER);
 #endif
 
 	/*set up the read policy from the client.*/
 	if ((rc = ap_setup_client_block(req_rec, REQUEST_CHUNKED_ERROR)) != OK)
 	{
+		if (sstr->reserved1) free(sstr->reserved1); 
+        if (sstr->reserved2) free(sstr->reserved2); 
+        free(sstr->so.http); 
+        free(sstr); 
+
 		return rc;
 	}
 
@@ -338,6 +345,11 @@ static int mod_axis_method_handler (request_rec *req_rec)
 
 	if(0 != process_request(sstr))
 	{
+		if (sstr->reserved1) free(sstr->reserved1); 
+        if (sstr->reserved2) free(sstr->reserved2); 
+        free(sstr->so.http); 
+        free(sstr); 
+
 		ap_rputs("SOAP Engine failed to response",req_rec);
 		return OK;
 	}
@@ -371,6 +383,7 @@ static int mod_axis_method_handler (request_rec *req_rec)
 	}
 	/*Free the array */
 	if (sstr->reserved1) free(sstr->reserved1);
+	if (sstr->reserved2) free(sstr->reserved2);
 #endif
 
 	free(sstr);
