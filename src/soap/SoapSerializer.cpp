@@ -24,6 +24,8 @@
  *       "This product includes software developed by the
  *        Apache Software Foundation (http://www.apache.org/)."
  *    Alternately, this acknowledgment may appear in the software itself,
+
+
  *    if and wherever such third-party acknowledgments normally appear.
  *
  * 4. The names "SOAP" and "Apache Software Foundation" must
@@ -68,6 +70,7 @@
 #include "SoapEnvelope.h"
 #include "SoapSerializer.h"
 #include "../common/GDefine.h"
+#include "../common/Packet.h"
 #include "../common/ArrayBean.h"
 #include "../common/BasicTypeSerializer.h"
 
@@ -235,7 +238,8 @@ int SoapSerializer::flushSerializedBuffer()
 {
 	//cout<<"++++++++++++++++"<<"flushed"<<endl;
 	//cout<<"++++++++++++++++"<<m_cSerializedBuffer<<endl;
-	sendSoapResponse(m_cSerializedBuffer);
+	//sendSoapResponse(m_cSerializedBuffer);
+	send_response_bytes(m_cSerializedBuffer);
 	m_cSerializedBuffer[0]= '\0';
 	m_iCurrentSerBufferSize=0;
 
