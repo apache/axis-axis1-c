@@ -15,7 +15,7 @@
  */
 
 /*
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  *
  */
 
@@ -86,7 +86,9 @@ int SoapMethod::serialize(SoapSerializer& pSZ)
                 " xmlns:", m_strPrefix.c_str(),
                 "=\"", m_strUri.c_str(), "\"", NULL);
 
-            iStatus= serializeAttributes(pSZ);
+			list<AxisChar*> lstTmpNameSpaceStack;
+
+            iStatus= serializeAttributes(pSZ, lstTmpNameSpaceStack);
             if(iStatus==AXIS_FAIL)
             {
                 break;
@@ -108,6 +110,17 @@ int SoapMethod::serialize(SoapSerializer& pSZ)
             }
             
             pSZ.serialize(m_strLocalname.c_str(), ">", NULL);
+
+			/*
+			 * Removing the namespace list of this SOAPMethod from the stack.
+			 */
+			list<AxisChar*>::iterator itCurrentNamespace = 
+				lstTmpNameSpaceStack.begin();
+			while (itCurrentNamespace != lstTmpNameSpaceStack.end())
+			{
+				pSZ.removeNamespacePrefix(*itCurrentNamespace);
+				itCurrentNamespace++;
+			}
 
             iStatus= AXIS_SUCCESS;
         }
@@ -229,13 +242,14 @@ int SoapMethod::addAttribute(Attribute *pAttribute)
     return AXIS_SUCCESS;
 }
 
-int SoapMethod::serializeAttributes(SoapSerializer& pSZ)
+int SoapMethod::serializeAttributes(SoapSerializer& pSZ, 
+        list<AxisChar*>& lstTmpNameSpaceStack)
 {
     list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
     while(itCurrAttribute != m_attributes.end())
     {        
-        (*itCurrAttribute)->serialize(pSZ);
+        (*itCurrAttribute)->serialize(pSZ, lstTmpNameSpaceStack);
         itCurrAttribute++;        
     }    
 
