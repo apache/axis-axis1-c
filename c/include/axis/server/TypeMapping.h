@@ -1,3 +1,5 @@
+/* -*- C++ -*- */
+
 /*
  * The Apache Software License, Version 1.1
  *
@@ -53,12 +55,10 @@
  * <http://www.apache.org/>.
  *
  *
- *
- *
- * @author Susantha Kumara (skumara@virtusa.com)
- *
  */
-/* TypeMapping.h: interface for the TypeMapping class.*/
+// TypeMapping.h:
+//
+//////////////////////////////////////////////////////////////////////
 
 #ifdef WIN32
 #pragma warning (disable : 4786)
@@ -84,7 +84,13 @@ typedef enum XSDTYPETag
 #include <string>
 
 using namespace std;
+/**
+    @class TypeMapping
+    @brief interface for the TypeMapping class.
 
+
+    @author Susantha Kumara (skumara@virtusa.com)
+*/
 class TypeMapping  
 {
 public:

@@ -1,3 +1,5 @@
+/* -*- C++ -*- */
+
 /*
  * The Apache Software License, Version 1.1
  *
@@ -53,11 +55,11 @@
  * <http://www.apache.org/>.
  *
  *
- * @author Susantha Kumara (susantha@virtusa.com, susantha@opensource.lk)
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- *
  */
-/* IMessageData.h: interface for the IMessageData class.*/
+// IMessageData.h:
+//
+//////////////////////////////////////////////////////////////////////
+
 
 #if !defined(AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_)
 #define AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_
@@ -90,7 +92,12 @@ typedef struct {
 } IMessageData;
 
 #else
+/**
+    @class IMessageData
+    @brief interface for the IMessageData class.
 
+    @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+*/
 class IMessageData
 {
 	friend class CPP_DeploymentWrapper;

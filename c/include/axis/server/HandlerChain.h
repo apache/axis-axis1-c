@@ -55,15 +55,8 @@
  * <http://www.apache.org/>.
  *
  *
- *
- *
- * @author Susantha Kumara (skumara@virtusa.com)
- *
  */
 
-// HandlerChain.h: interface for the HandlerChain class.
-//
-//////////////////////////////////////////////////////////////////////
 
 #if !defined(AFX_HANDLERCHAIN_H__675E51BF_2FD7_4860_B3DE_F8B5A978EB99__INCLUDED_)
 #define AFX_HANDLERCHAIN_H__675E51BF_2FD7_4860_B3DE_F8B5A978EB99__INCLUDED_
@@ -73,7 +66,13 @@
 #include <list>
 
 using namespace std;
+/**
+    @class HandlerChain
+    @brief interface for the HandlerChain class.
 
+
+    @author Susantha Kumara (skumara@virtusa.com)
+*/
 class HandlerChain : public BasicHandler  
 {
 	friend class HandlerPool;

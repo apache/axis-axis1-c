@@ -52,11 +52,6 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  *
- *
- *
- *
- * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
- *
  */
  
 #ifdef WIN32
@@ -74,7 +69,13 @@
 #endif 
 */
 using namespace std;
+/**
+    @class Handler
+    @brief interface for handlers
 
+
+    @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
+*/
 class Handler : public BasicHandler
 {
 public:

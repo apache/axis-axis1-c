@@ -55,13 +55,8 @@
  * <http://www.apache.org/>.
  *
  *
- *
- *
- * @author Susantha Kumara (skumara@virtusa.com)
- *
  */
 
-/* BasicHandler.h: interface for the BasicHandler class.*/
 
 #if !defined(AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_)
 #define AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_
@@ -112,7 +107,13 @@ public:
 */
 
 #ifdef __cplusplus
+/**
+    @class BasicHandler
+    @brief interface for the BasicHandler class.
 
+
+    @author Susantha Kumara (skumara@virtusa.com)
+*/
 class BasicHandler  
 {
 public:

@@ -54,14 +54,11 @@
  * <http://www.apache.org/>.
  *
  *
- *
- *
- * @author Susantha Kumara (skumara@virtusa.com, susantha@opensource.lk)
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- *
  */
 
-/* IWrapperSoapDeSerializer.h: interface for the IWrapperSoapDeSerializer class.*/
+// IWrapperSoapDeSerializer.h:
+//
+//////////////////////////////////////////////////////////////////////
 #if !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)
 #define AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_
 
@@ -142,7 +139,13 @@ typedef struct {
 } IWrapperSoapDeSerializer;
 
 #else
+/**
+    @class IWrapperSoapDeSerializer
+    @brief interface for the IWrapperSoapDeSerializer class.
 
+
+    @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+*/
 class IWrapperSoapDeSerializer : public ISoapDeSerializer
 {
 protected:
@@ -151,11 +154,11 @@ public:
 	virtual ~IWrapperSoapDeSerializer(){};
 
 	virtual int AXISCALL CheckMessageBody(const AxisChar* pName, const AxisChar* pNamespace)=0;
-	/* Method used by wrappers to get a deserialized Array of complex types */
+	/** Method used by wrappers to get a deserialized Array of complex types */
 	virtual Axis_Array AXISCALL GetCmplxArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
-	/* Method used by wrappers to get a deserialized Array of basic types */
+	/** Method used by wrappers to get a deserialized Array of basic types */
 	virtual Axis_Array AXISCALL GetBasicArray(XSDTYPE nType, const AxisChar* pName, const AxisChar* pNamespace)=0;
-	/* Method used by wrappers to get a deserialized single object of complex type */
+	/** Method used by wrappers to get a deserialized single object of complex type */
 	virtual void* AXISCALL GetCmplxObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
 	
 	/* Methods used by wrappers to get a deserialized value of basic types */

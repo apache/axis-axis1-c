@@ -55,13 +55,9 @@
  * <http://www.apache.org/>.
  *
  *
- *
- *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- *
  */
 
-// IHeaderBlock.h: interface for the IHeaderBlock class.
+// IHeaderBlock.h:
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -69,7 +65,13 @@
 #define AFX_IHEADERBLOCK_H__1FFF90C8_3E12_4EFD_8D97_61E2E92A0BB7__INCLUDED_
 
 #include "../soap/BasicNode.h"
+/**
+    @class IHeaderBlock
+    @brief interface for the IHeaderBlock class.
 
+
+    @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+*/
 class IHeaderBlock
 {
 public:

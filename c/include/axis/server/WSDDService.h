@@ -55,13 +55,9 @@
  * <http://www.apache.org/>.
  *
  *
- *
- *
- * @author Susantha Kumara (skumara@virtusa.com)
- *
  */
 
-// WSDDService.h: interface for the WSDDService class.
+// WSDDService.h:
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -75,7 +71,13 @@
 #include <map>
 
 using namespace std;
+/**
+    @class WSDDService
+    @brief interface for the WSDDService class.
 
+
+    @author Susantha Kumara (skumara@virtusa.com)
+*/
 class WSDDService : public WSDDHandler 
 {
 public:

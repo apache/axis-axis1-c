@@ -55,14 +55,11 @@
  * <http://www.apache.org/>.
  *
  *
- *
- *
- * @author Susantha Kumara (skumara@virtusa.com, susantha@opensource.lk)
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- *
  */
 
-/* IWrapperSoapSerializer.h: interface for the IWrapperSoapSerializer class.*/
+// IWrapperSoapSerializer.h:
+//
+//////////////////////////////////////////////////////////////////////
 
 #if !defined(AFX_IWRAPPERSOAPSERIALIZER_H__D3E794EC_8A67_4E0E_BE28_583DCDCE1C42__INCLUDED_)
 #define AFX_IWRAPPERSOAPSERIALIZER_H__D3E794EC_8A67_4E0E_BE28_583DCDCE1C42__INCLUDED_
@@ -103,7 +100,14 @@ typedef struct {
 } IWrapperSoapSerializer;
 
 #else
+/**
+    @class IWrapperSoapSerializer
+    @brief interface for the IWrapperSoapSerializer class.
 
+
+    @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+
+*/
 class IWrapperSoapSerializer : public ISoapSerializer
 {
 protected:

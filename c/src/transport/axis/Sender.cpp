@@ -54,14 +54,13 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-
 /*
  *
  *
  * @author Lilantha Darshana (lilantha@virtusa.com)
+ * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  *
  */
-
 #include <axis/client/transport/axis/Platform.hpp>
 #include <axis/client/transport/axis/Sender.hpp>
 

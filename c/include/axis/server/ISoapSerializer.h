@@ -55,16 +55,20 @@
  * <http://www.apache.org/>.
  *
  *
- *
- *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- *
  */
-/* ISoapSerializer.h: interface for the ISoapSerializer class.*/
+// ISoapSerializer.h:
+//
+//////////////////////////////////////////////////////////////////////
 
 #if !defined(AFX_ISOAPSERIALIZER_H__4F8E4E72_56C8_4F1C_A488_350FDEFF9028__INCLUDED_)
 #define AFX_ISOAPSERIALIZER_H__4F8E4E72_56C8_4F1C_A488_350FDEFF9028__INCLUDED_
+/**
+    @class ISoapSerializer
+    @brief interface for the ISoapSerializer class.
 
+
+    @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+*/
 class ISoapSerializer
 {
 public:
