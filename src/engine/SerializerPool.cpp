@@ -64,6 +64,8 @@
 //////////////////////////////////////////////////////////////////////
 
 #include <axis/engine/SerializerPool.h>
+#include <axis/common/AxisTrace.h>
+extern AxisTrace* g_pAT;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -100,6 +102,7 @@ int SerializerPool::GetInstance(SoapSerializer** ppSZ)
 		delete *ppSZ;
 		*ppSZ = NULL;
 		unlock();
+        AXISTRACE1("Serializer pool could not be initialized", CRITICAL);
 		return AXIS_FAIL;
 	}
 	unlock();

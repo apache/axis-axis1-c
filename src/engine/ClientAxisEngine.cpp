@@ -5,6 +5,8 @@
 #include <axis/engine/ClientAxisEngine.h>
 #include <axis/wsdd/WSDDDeployment.h>
 #include <axis/engine/HandlerPool.h>
+#include <axis/common/AxisTrace.h>
+extern AxisTrace* g_pAT;
 
 extern WSDDDeployment* g_pWSDDDeployment;
 extern HandlerPool* g_pHandlerPool;
@@ -33,14 +35,21 @@ int ClientAxisEngine::Process(Ax_soapstream* pSoap)
 	int Status;
 	//const WSDDService* pService = NULL;
 
-	if (!pSoap) return AXIS_FAIL;
+	if (!pSoap)
+    {
+        AXISTRACE1("Ax_soapstream is null", CRITICAL);
+        return AXIS_FAIL;
+    }
 	m_pSoap = pSoap;
 
 	string sSessionId = m_pSoap->sessionid;
 
 	if (!(m_pSoap->transport.pSendFunct && m_pSoap->transport.pGetFunct &&
 		m_pSoap->transport.pSetTrtFunct && m_pSoap->transport.pGetTrtFunct))
-		return AXIS_FAIL;
+        {
+            AXISTRACE1("transport is not set properly", CRITICAL);
+            return AXIS_FAIL;
+        }
 
 	do {
 		//const char* cService = get_header(soap, SOAPACTIONHEADER);

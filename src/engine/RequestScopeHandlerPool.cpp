@@ -65,7 +65,7 @@
 
 #include <axis/engine/RequestScopeHandlerPool.h>
 #include <axis/engine/HandlerLoader.h>
-#include <axis/common/AxisTrace.h>
+
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -91,8 +91,7 @@ RequestScopeHandlerPool::~RequestScopeHandlerPool()
 }
 
 int RequestScopeHandlerPool::GetInstance(BasicHandler** pHandler, int nLibId)
-{
-    AXISTRACE1("RequestScopeHandlerPool::GetInstance");
+{    
 	lock();
 	int Status;
 	if (m_Handlers.find(nLibId) != m_Handlers.end()) 

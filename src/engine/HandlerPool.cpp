@@ -71,6 +71,7 @@
 #include <axis/engine/SessionScopeHandlerPool.h>
 #include <axis/wsdd/WSDDDeployment.h>
 #include <axis/common/AxisTrace.h>
+extern AxisTrace* g_pAT;
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -200,14 +201,13 @@ int HandlerPool::GetRequestFlowHandlerChain(HandlerChain** ppChain, string& sSes
 {
 	const WSDDHandlerList* pHandlerList = pService->GetRequestFlowHandlers();
 	if (pHandlerList)
-	{
-        AXISTRACE1("HandlerPool::GetRequestFlowHandlerChain");
+	{        
 		return GetHandlerChain(sSessionId, ppChain, pHandlerList);
 	}
 	else
 	{
 		*ppChain = NULL;
-        AXISTRACE1("No handlers configured");
+        AXISTRACE1("No handlers configured", INFO);        
 		return AXIS_SUCCESS; //NO_HANDLERS_CONFIGURED
 	}
 }
@@ -216,8 +216,7 @@ int HandlerPool::GetResponseFlowHandlerChain(HandlerChain** ppChain, string& sSe
 {
 	const WSDDHandlerList* pHandlerList = pService->GetResponseFlowHandlers();
 	if (pHandlerList)
-	{
-        AXISTRACE1("Handlers configured");
+	{        
 		return GetHandlerChain(sSessionId, ppChain, pHandlerList);
 	}
 	else
@@ -254,12 +253,9 @@ int HandlerPool::GetHandlerChain(string& sSessionId, HandlerChain** ppChain, con
 		if ((Status = GetHandler(&pBH, sSessionId, pWSDDH->GetScope(),pWSDDH->GetLibId())) == AXIS_SUCCESS)
 		{
 			if (NORMAL_HANDLER == pBH->GetType())
-			{
-                AXISTRACE1("Normal Handler");
-				((Handler*)pBH)->SetOptionList(pWSDDH->GetParameterList());
-                AXISTRACE1("((Handler*)pBH)->SetOptionList(pWSDDH->GetParameterList());");
-				pChain->AddHandler(static_cast<Handler*>(pBH), pWSDDH->GetScope(), pWSDDH->GetLibId());
-                AXISTRACE1("after pChain->AddHandler");
+			{                
+				((Handler*)pBH)->SetOptionList(pWSDDH->GetParameterList());                
+				pChain->AddHandler(static_cast<Handler*>(pBH), pWSDDH->GetScope(), pWSDDH->GetLibId());                
 			}
 			else
 			{
@@ -274,7 +270,7 @@ int HandlerPool::GetHandlerChain(string& sSessionId, HandlerChain** ppChain, con
 	}
 	if (Status != AXIS_SUCCESS) //some failure so undo whatever done here
 	{
-        AXISTRACE1("handler failure");
+        AXISTRACE1("Handler failure", WARN);        
 		string nosession = SESSIONLESSHANDLERS;
 		for (pChain->m_itCurrHandler = pChain->m_HandlerList.begin(); pChain->m_itCurrHandler != pChain->m_HandlerList.end(); pChain->m_itCurrHandler++)
 		{
