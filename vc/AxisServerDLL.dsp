@@ -204,7 +204,7 @@ SOURCE=..\src\engine\SerializerPool.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\engine\ServerAxisEngine.cpp
+SOURCE=..\src\engine\server\ServerAxisEngine.cpp
 # End Source File
 # Begin Source File
 
