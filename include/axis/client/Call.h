@@ -79,6 +79,8 @@ typedef struct {
     void (AXISCALL* setSOAPVersion)(void* pObj, SOAP_VERSION version);
     int (AXISCALL* setTransportProperty)(void* pObj,
         AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value);
+    int (AXISCALL* setHandlerProperty)(void* pObj,
+        AxisChar* name, void* value, int len);
     int (AXISCALL* setProtocol)(void* pObj, AXIS_PROTOCOL_TYPE protocol);
     int (AXISCALL* initialize)(void* pObj, PROVIDERTYPE nStyle, int secure);
     int (AXISCALL* invoke)(void* pObj);
@@ -241,6 +243,8 @@ public:
     virtual void AXISCALL setSOAPVersion(SOAP_VERSION version)=0;
     virtual int AXISCALL setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE
         type, const char* value)=0;
+	virtual int AXISCALL setHandlerProperty(AxisChar* name, 
+		void* value, int len)=0;
     virtual int AXISCALL setProtocol(AXIS_PROTOCOL_TYPE protocol)=0;
     virtual int AXISCALL initialize(PROVIDERTYPE nStyle, int secure)=0;
     virtual int AXISCALL invoke()=0;
@@ -399,6 +403,9 @@ public:
     static int AXISCALL s_SetTransportProperty(void* pObj,
         AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)
     { return ((CallBase*)pObj)->setTransportProperty(type,value);};
+    static int AXISCALL s_SetHandlerProperty(void* pObj,
+        AxisChar* name, void* value, int len)
+    { return ((CallBase*)pObj)->setHandlerProperty(name,value,len);};
     static int AXISCALL s_SetProtocol(void* pObj, AXIS_PROTOCOL_TYPE protocol)
     { return ((CallBase*)pObj)->setProtocol(protocol);};
     static int AXISCALL s_InitializeCall(void* pObj, PROVIDERTYPE nStyle,
@@ -624,6 +631,7 @@ public:
     void AXISCALL setSOAPVersion(SOAP_VERSION version);
     int AXISCALL setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type,
         const char* value);
+	int AXISCALL setHandlerProperty(AxisChar* name, void* value, int len);
     int AXISCALL setProtocol(AXIS_PROTOCOL_TYPE protocol);
     int AXISCALL unInitialize();
     int AXISCALL initialize(PROVIDERTYPE nStyle, int secure);
@@ -790,6 +798,8 @@ private:
 
 private:
     ClientAxisEngine* m_pAxisEngine;
+	list<void*> m_handlerProperties;
+
     /*
        Following are pointers to relevant objects of the ClientAxisEngine
        instance. So they do not belong to this object and are not created

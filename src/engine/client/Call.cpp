@@ -110,6 +110,13 @@ int Call::invoke ()
     return m_nStatus;
 }
 
+typedef struct
+{
+	AxisChar *name;
+	void *value;
+	int len;
+} HandlerPropertyData;
+
 int Call::initialize (PROVIDERTYPE nStyle, int secure)
 /* Does this mean that the stub that uses this Call object as well as all 
  * client side handlers have the same PROVIDERTYPE ? 
@@ -138,6 +145,16 @@ int Call::initialize (PROVIDERTYPE nStyle, int secure)
             m_pMsgData = m_pAxisEngine->getMessageData ();
             if (m_pMsgData)
             {
+				list<void*>::iterator it = m_handlerProperties.begin();
+				while (it != m_handlerProperties.end())
+				{
+					HandlerPropertyData *pHpi = (HandlerPropertyData*)(*it);
+					m_pMsgData->setProperty(pHpi->name, pHpi->value, pHpi->len);
+					free(pHpi);
+					it++;
+				}
+				m_handlerProperties.clear();
+
                 m_pMsgData->getSoapSerializer ((IWrapperSoapSerializer**) 
                     (&m_pIWSSZ));
                 m_pMsgData->getSoapDeSerializer ((IWrapperSoapDeSerializer**) 
@@ -217,6 +234,21 @@ int Call::setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type,
 {
     m_pTransport->setTransportProperty(type, value);
     return AXIS_SUCCESS;
+}
+
+int Call::setHandlerProperty(AxisChar* name, void* value, int len)
+{
+	// Unfortunately we have to cache the handler properties here
+	// in the Call object since the m_pMsgData is not set up
+	// until Call::initialize which doesn't happen until the actual
+	// web service is invoked.
+	HandlerPropertyData* pHpi = 
+		(HandlerPropertyData*) malloc(sizeof(HandlerPropertyData));
+	pHpi->name = name;
+	pHpi->value = value;
+	pHpi->len = len;
+	m_handlerProperties.push_back(pHpi);
+	return AXIS_SUCCESS;
 }
 
 /*
@@ -616,6 +648,7 @@ void CallBase::s_Initialize()
 	bInitialized = true;
 	ms_VFtable.setSOAPVersion = s_SetSOAPVersion;
 	ms_VFtable.setTransportProperty = s_SetTransportProperty;
+	ms_VFtable.setHandlerProperty = s_SetHandlerProperty;
 	ms_VFtable.setProtocol = s_SetProtocol;
 	ms_VFtable.initialize = s_InitializeCall;
 	ms_VFtable.invoke = s_Invoke;

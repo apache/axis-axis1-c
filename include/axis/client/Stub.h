@@ -97,6 +97,8 @@ typedef struct {
     void (AXISCALL* deleteCurrentTrasportProperty)(void* pObj);
     void (AXISCALL* deleteTrasportProperty)(void* pObj, char* pcKey, 
         unsigned int uiOccurance);
+    void (AXISCALL* setHandlerProperty)(void* pObj, AxisChar* name, 
+		void* value, int len);
     HeaderBlock_C (AXISCALL* createSOAPHeaderBlock)(void* pObj, 
         AxisChar * pachLocalName, AxisChar * pachUri);
     HeaderBlock_C (AXISCALL* getFirstSOAPHeaderBlock)(void* pObj);
@@ -284,6 +286,15 @@ class STORAGE_CLASS_INFO Stub
     *                    Count starts from 1.
     */
     void deleteTrasportProperty(char* pcKey, unsigned int uiOccurance = 1);
+
+  /**
+    * Sets a property that can be accessed from a handler.
+	*
+	* @param name The name of the property
+	* @param value The value of the property
+	* @param len The length of the value
+	*/
+    void setHandlerProperty(AxisChar* name, void* value, int len);
 
   /**
     * Create and add a SOAP header block to the Stub.
@@ -557,6 +568,9 @@ class STORAGE_CLASS_INFO Stub
     static void AXISCALL s_deleteTrasportProperty(void* pObj, char* pcKey, 
         unsigned int uiOccurance)
     {((Stub*)pObj)->deleteTrasportProperty(pcKey, uiOccurance);};
+    static void AXISCALL s_setHandlerProperty(void* pObj, AxisChar* name, 
+		void* value, int len)
+    {((Stub*)pObj)->setHandlerProperty(name, value, len);};
     static HeaderBlock_C AXISCALL s_createSOAPHeaderBlock(void* pObj, 
         AxisChar * pachLocalName, AxisChar * pachUri);
     static HeaderBlock_C AXISCALL s_getFirstSOAPHeaderBlock(void* pObj);

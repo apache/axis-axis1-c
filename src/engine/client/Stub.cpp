@@ -171,6 +171,11 @@ void Stub::deleteTrasportProperty(char* pcKey, unsigned int uiOccurance)
     }
 }
 
+void Stub::setHandlerProperty(AxisChar* name, void* value, int len)
+{
+	m_pCall->setHandlerProperty(name, value, len);
+}
+
 IHeaderBlock* Stub::createSOAPHeaderBlock(AxisChar * pachLocalName,
                                            AxisChar * pachUri)
 {
@@ -475,6 +480,7 @@ void Stub::s_Initialize()
 	ms_VFtable.getCurrentTrasportPropertyValue = s_getCurrentTrasportPropertyValue;
 	ms_VFtable.deleteCurrentTrasportProperty = s_deleteCurrentTrasportProperty;
 	ms_VFtable.deleteTrasportProperty = s_deleteTrasportProperty;
+	ms_VFtable.setHandlerProperty = s_setHandlerProperty;
 	ms_VFtable.createSOAPHeaderBlock = s_createSOAPHeaderBlock;
 	ms_VFtable.getFirstSOAPHeaderBlock = s_getFirstSOAPHeaderBlock;
 	ms_VFtable.getNextSOAPHeaderBlock = s_getNextSOAPHeaderBlock;
