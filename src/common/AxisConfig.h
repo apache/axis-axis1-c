@@ -3,22 +3,6 @@
 
 #define CONFBUFFSIZE 200
 
-/*
-#ifdef WIN32
-#ifdef AXIS_APACHE1_3
-#define WSDDFILEPATH "./Axis/conf/server.wsdd"
-#else
-#define WSDDFILEPATH "C:/Axis/conf/server.wsdd"
-#endif
-#else //For linux
-#ifdef AXIS_APACHE1_3
-#define WSDDFILEPATH "/usr/local/apache/Axis/conf/server.wsdd"
-#else
-#define WSDDFILEPATH "/usr/local/apache/Axis/conf/server.wsdd"
-#endif
-#endif
-*/
-
 /**
     The purpose of this class is to provide a way so that
     the server takes the configuration path where the
@@ -36,7 +20,7 @@ class AxisConfig
         char* GetAxisLogPath();
         
     private:
-        bool ReadConfFile();
+        int ReadConfFile();
         char m_WsddFilePath[CONFBUFFSIZE];
         char m_AxisLogPath[CONFBUFFSIZE];
         char m_sWsddFilePath[CONFBUFFSIZE];
