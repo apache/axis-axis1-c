@@ -15,6 +15,7 @@ volatile bool WSDDKeywords::m_bInit = false;
 #define AX_DELETE(X) delete const_cast<AxisXMLCh*>(X)
 
 const AxisXMLCh* kw_depl;
+const AxisXMLCh* kw_undepl;
 const AxisXMLCh* kw_srv;
 const AxisXMLCh* kw_glconf;
 const AxisXMLCh* kw_param; 
@@ -50,6 +51,7 @@ void WSDDKeywords::Initialize()
 	if (!m_bInit)
 	{
 		kw_depl = __TRC("deployment");
+		kw_undepl = __TRC("undeployment");
 		kw_srv = __TRC("service");
 		kw_glconf = __TRC("globalConfiguration");
 		kw_param = __TRC("parameter"); 
