@@ -54,12 +54,15 @@ class STORAGE_CLASS_INFO SoapAttachment : public ISoapAttachment
 private:	
 	SoapAttachementHeaders* m_AttachementHeaders;
 	xsd__base64Binary* m_AttachementBody;
-
+    char *m_binaryBody;
+    int iEncodingStyle;
+    
 public:	
 	const char* getHeader(const char* pchName);
 	xsd__base64Binary* getBody();
 	void serialize(SoapSerializer& pSZ);
 	void addBody(xsd__base64Binary* objBody);
+    void addBody(char* pchBinaryBody);
 	void addHeader(const char* pchName, const char* pchValue);
 	SoapAttachment();
 	virtual ~SoapAttachment();	

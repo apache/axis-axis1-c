@@ -63,7 +63,16 @@ void SoapAttachment::addHeader(const char* pchName, const char* pchValue)
 
 void SoapAttachment::addBody(xsd__base64Binary* objBody)
 {
+    iEncodingStyle = AXIS_BASE64;
 	m_AttachementBody = objBody;
+}
+
+void SoapAttachment::addBody(char* pchBinaryBody)
+{ 
+    iEncodingStyle = AXIS_BINARY;
+    m_binaryBody = new char[strlen(pchBinaryBody) + 1];
+    strcpy(m_binaryBody,pchBinaryBody);
+
 }
 
 void SoapAttachment::serialize(SoapSerializer &pSZ)
@@ -73,10 +82,19 @@ void SoapAttachment::serialize(SoapSerializer &pSZ)
 	m_AttachementHeaders->serialize(pSZ);
 
 	/* Serialize the Attachment Body */
-	if (m_AttachementBody) {
-		pSZ.serialize("\n", NULL);
-		pSZ.serializeAsChardata(m_AttachementBody, XSD_BASE64BINARY);
-	}
+    if (iEncodingStyle == AXIS_BASE64)
+    {
+	    if (m_AttachementBody) {
+		    pSZ.serialize("\n", NULL);
+		    pSZ.serializeAsChardata(m_AttachementBody, XSD_BASE64BINARY);
+	    }
+    } 
+    else if (iEncodingStyle == AXIS_BINARY)
+    {
+        pSZ.serialize("\n", NULL);
+        pSZ.serialize(m_binaryBody, NULL);
+    }
+
 	pSZ.serialize("\n", NULL);
 }
 
