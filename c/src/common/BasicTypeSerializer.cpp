@@ -67,10 +67,8 @@
 
 #include <stdio.h>
 #include <axis/server/BasicTypeSerializer.h>
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+#include "../soap/apr_base64.h"
+#include "../soap/HexCoder.h"
 
 BasicTypeSerializer::BasicTypeSerializer()
 {
@@ -188,15 +186,20 @@ const AxisChar* BasicTypeSerializer::SerializeAsElement(const AxisChar* pName, c
 
 const AxisChar* BasicTypeSerializer::EncodeToHexBinary(const xsd__hexBinary* pBinary)
 {
-	m_AuxStr = "";
-	/*TODO*/
+	char *outstr = (char*) malloc(pBinary->__size*2);
+	Hex_Encode(outstr, pBinary->__ptr, pBinary->__size);
+	m_AuxStr = outstr;
+	free(outstr);
 	return m_AuxStr.c_str();
 }
 
 const AxisChar* BasicTypeSerializer::EncodeToBase64Binary(const xsd__base64Binary* pBinary)
 {
-	m_AuxStr="";
-	/*TODO*/
+	int len = apr_base64_encode_len(pBinary->__size);
+	char *outstr = (char*) malloc(len);
+	apr_base64_encode_binary(outstr, pBinary->__ptr, len);
+	m_AuxStr = outstr;
+	free(outstr);
 	return m_AuxStr.c_str();
 }
 
