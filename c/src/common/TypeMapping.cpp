@@ -24,7 +24,7 @@
 #include "AxisUtils.h"
 #define __TRC(X) AxisUtils::Convert(X)
 
-#ifndef AIX
+#if !defined( AIX ) && !defined( __OS400__ )
 map < const AxisXMLString, XSDTYPE >
     TypeMapping::m_sTypeMap;
 #else
