@@ -68,7 +68,7 @@
 #include "Platform.hpp"
 #include "HttpTransport.hpp"
 #include <iostream>
-#include "../../../common/AxisException.h"
+#include <../common/AxisException.h>
 
 using namespace std;
 

@@ -1,7 +1,9 @@
 noinst_LTLIBRARIES = libengine.la
 AM_CPPFLAGS = -Wshadow -Wall -pedantic -ansi
 libengine_la_SOURCES = Axis.cpp \
-                AxisEngine.cpp \
+		AxisEngine.cpp \
+                ServerAxisEngine.cpp \
+		ClientAxisEngine.cpp \
                 HandlerChain.cpp \
                 HandlerLoader.cpp \
                 HandlerPool.cpp \
@@ -10,8 +12,8 @@ libengine_la_SOURCES = Axis.cpp \
 		RequestScopeHandlerPool.cpp \
 		SerializerPool.cpp \
 		SessionScopeHandlerPool.cpp \
-		ServerAxisEngine.cpp \
 		SharedObject.cpp
+		
 
 libengine_la_LIBADD = -L$(AXISCPP_HOME)/lib/xerces-c -lxerces-c -lstdc++
 INCLUDES = -I$(AXISCPP_HOME)/include
