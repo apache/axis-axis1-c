@@ -87,6 +87,10 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=..\..\..\..\..\samples\client\interoptests\groupB\AxisClientException.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\..\samples\client\interoptests\groupB\InteropGroupBClient.cpp
 # End Source File
 # Begin Source File
@@ -128,6 +132,10 @@ SOURCE=..\..\..\..\..\samples\client\interoptests\groupB\ArrayOfstring.h
 # Begin Source File
 
 SOURCE=..\..\..\..\..\samples\client\interoptests\groupB\ArrayOfString2D.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\..\samples\client\interoptests\groupB\AxisClientException.h
 # End Source File
 # Begin Source File
 
