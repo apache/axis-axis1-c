@@ -71,16 +71,8 @@ public class QualifiedName {
         this.namespace = namespace;
     }
 
-
-    public boolean isEmpty() {
-        return (name == null);
-    }
-
-    public String getName() {
-        if (name.indexOf(":") < 0)
-            return name;
-        else
-            return (name.substring(name.indexOf(":") + 1));
+	public String getName() {
+		return name;
     }
 
     public String getNameSpace() {
