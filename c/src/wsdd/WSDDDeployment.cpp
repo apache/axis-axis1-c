@@ -141,6 +141,7 @@ const WSDDHandlerList* WSDDDeployment::GetGlobalResponseFlowHandlers()
 
 int WSDDDeployment::LoadWSDD(const AxisChar* sWSDD)
 {
+	m_sWSDDPath = string(sWSDD);
 	WSDDDocument doc;
 	if (SUCCESS != doc.GetDeployment(sWSDD, this))
 	{
@@ -149,7 +150,7 @@ int WSDDDeployment::LoadWSDD(const AxisChar* sWSDD)
 	return SUCCESS;
 }
 
-int WSDDDeployment::UpdateWSDD(const AxisChar* sWSDDNew, string sServiceName, string sDllPath, Axis_ArrayTag inAllowedMethodsArray)
+int WSDDDeployment::UpdateWSDD()
 {
 	/* Do we need this method ? */
 
@@ -260,7 +261,7 @@ int WSDDDeployment::RemoveHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* 
 /**
  * Performs the undeployment.
  */
-int WSDDDeployment::unDeploy(const AxisChar *sWSDDNew, string sServiceName)
+int WSDDDeployment::unDeploy(string sServiceName)
 {
 	printf("entered to WSDDDeployment::unDeploy \n");
 
@@ -282,7 +283,7 @@ int WSDDDeployment::unDeploy(const AxisChar *sWSDDNew, string sServiceName)
 		int iWriteStatus = SUCCESS;
 
 		do {
-			file = fopen("C:/Axis/conf/server.wsdd", "w");
+			file = fopen(m_sWSDDPath.c_str(), "w");
 			if(file) {
 				printf("opened the file successfully\n");
 			} else {
@@ -386,7 +387,7 @@ int WSDDDeployment::unDeploy(const AxisChar *sWSDDNew, string sServiceName)
 /**
  * Performs the deployment.
  */
-int WSDDDeployment::deploy(const AxisChar* sWSDDNew, string sServiceName, string sDllPath, Axis_ArrayTag inAllowedMethodsArray)
+int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_ArrayTag inAllowedMethodsArray)
 {
 	printf("entered to WSDDDeployment::deploy \n");
 	printf("sServiceName = %s \n", sServiceName.c_str());
@@ -402,7 +403,8 @@ int WSDDDeployment::deploy(const AxisChar* sWSDDNew, string sServiceName, string
 	int iStatus = SUCCESS;
 
 	do {
-		file = fopen("C:/Axis/conf/server.wsdd", "w");
+		file = fopen(m_sWSDDPath.c_str(), "w");
+		
 		if(file) {
 			printf("opened the file successfully\n");
 		} else {
