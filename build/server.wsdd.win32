@@ -12,7 +12,7 @@
 		<parameter name="allowedMethods" value="doBenchRequest "/>
 	</service>
 	<service name="Calculator" provider="CPP:RPC" description="Axis C++ web service">
-		<parameter name="className" value="&wspath;/libCalculator.so"/>
+		<parameter name="className" value="&wspath;\Calculator.dll"/>
 		<parameter name="allowedMethods" value="add sub mul div "/>
 	</service>
 
@@ -37,7 +37,7 @@
 		<parameter name="allowedMethods" value="getInput "/>
 	</service>
 	<service name="MathOpsService" provider="CPP:RPC" description="Axis C++ web service">
-		<parameter name="className" value="&wspath;/libMathOps.so"/>
+		<parameter name="className" value="&wspath;\MathOps.dll"/>
 		<parameter name="allowedMethods" value="div "/>
 	</service>
 	<service name="RecurseTypesWSService" provider="CPP:DOCUMENT" description="Axis C++ web service">
