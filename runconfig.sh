@@ -18,7 +18,12 @@
 #   @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
 #
 
-echo "run configure"
+echo "run configure with the options"
+echo     "--prefix=/usr/local/axiscpp_deploy"
+echo     "--with-apache2=/usr/local/apache2"
+echo     "--with-xercesc=/usr/local/xerces-c."
+echo     "If you need to configure with different/more options modify/add before run" 
+echo     ""
 ./configure --prefix=/usr/local/axiscpp_deploy \
     --with-apache2=/usr/local/apache2 \
     --with-xercesc=/usr/local/xerces-c
