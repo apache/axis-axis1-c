@@ -62,6 +62,7 @@
  */
 
 #pragma warning (disable : 4786)
+#pragma warning (disable : 4530)
 
 #if !defined(__GDEFINE_INCLUDED__)
 #define __GDEFINE_INCLUDED__
@@ -75,7 +76,7 @@ typedef enum { APTHTTP=1, APTFTP, APTSMTP, APTOTHER } AXIS_PROTOCOL_TYPE;
 #define AxisChar char //Charactor used in Axis
 #define AxisString basic_string<char> //String used in Axis
 
-#define AxisXMLCh	unsigned short //Xerces uses 16 bit char always.
+#define AxisXMLCh char //Xerces uses 16 bit char always.
 #define AxisXMLString basic_string<AxisXMLCh>
 
 #ifdef WIN32
