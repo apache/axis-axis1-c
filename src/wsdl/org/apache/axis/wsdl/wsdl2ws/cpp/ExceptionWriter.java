@@ -135,7 +135,7 @@ public class ExceptionWriter extends BasicFileWriter
                         + CUtils.CPP_HEADER_SUFFIX
                         + "\"\n\n");
             }
-            writer.write("#include <axis/server/AxisWrapperAPI.hpp>\n\n");
+            writer.write("#include <axis/AxisWrapperAPI.hpp>\n\n");
         }
         catch (IOException e)
         {

@@ -23,7 +23,7 @@
 #endif
 
 #include "SoapEnvelope.h"
-#include <axis/server/GDefine.hpp>
+#include <axis/GDefine.hpp>
 #include "SoapSerializer.h"
 #include <stdio.h>
 #include "../common/AxisTrace.h"

@@ -19,7 +19,7 @@
 
 #include "SoapHeader.h"
 #include "SoapBody.h"
-#include <axis/server/SoapEnvVersions.hpp>
+#include <axis/SoapEnvVersions.hpp>
 
 /*
  * @class SoapEnvelope

@@ -38,7 +38,7 @@
 
 #include "SoapBody.h"
 #include "SoapSerializer.h"
-#include <axis/server/GDefine.hpp>
+#include <axis/GDefine.hpp>
 #include "Attribute.h"
 #include "../common/AxisTrace.h"
 

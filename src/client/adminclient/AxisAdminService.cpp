@@ -22,7 +22,7 @@
  */
 
 #include "AxisAdminService.h"
-#include <axis/server/AxisWrapperAPI.hpp>
+#include <axis/AxisWrapperAPI.hpp>
 
 bool CallBase::bInitialized;
 CallFunctions CallBase::ms_VFtable;

@@ -40,7 +40,7 @@
 
 #include "CharacterElement.h"
 #include "SoapSerializer.h"
-#include <axis/server/GDefine.hpp>
+#include <axis/GDefine.hpp>
 
 AXIS_CPP_NAMESPACE_START
 

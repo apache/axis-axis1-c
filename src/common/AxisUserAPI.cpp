@@ -16,7 +16,7 @@
  * @author Mark Whitlock
  */
 
-#include <axis/server/AxisUserAPI.hpp>
+#include <axis/AxisUserAPI.hpp>
 
 AXIS_CPP_NAMESPACE_START 
 

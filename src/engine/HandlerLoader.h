@@ -22,7 +22,7 @@
 #include "../platforms/PlatformAutoSense.hpp"
 
 #include "../common/MessageData.h"
-#include <axis/server/GDefine.hpp>
+#include <axis/GDefine.hpp>
 #include <axis/server/WrapperClassHandler.hpp>
 #include "SharedObject.h"
 #include "AxisEngineException.h"

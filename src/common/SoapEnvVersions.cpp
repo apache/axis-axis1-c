@@ -18,7 +18,7 @@
  *
  */
 
-#include <axis/server/SoapEnvVersions.hpp>
+#include <axis/SoapEnvVersions.hpp>
 
 SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST]=
 {

@@ -23,7 +23,7 @@
 #if !defined(_ATTRIBUTE_H____OF_AXIS_INCLUDED_)
 #define _ATTRIBUTE_H____OF_AXIS_INCLUDED_
 
-#include <axis/server/GDefine.hpp>
+#include <axis/GDefine.hpp>
 #include <axis/IAttribute.hpp>
 #include <list>
 #include <string>

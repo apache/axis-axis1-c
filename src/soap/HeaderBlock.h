@@ -18,7 +18,7 @@
 #if !defined(_HEADERBLOCK_H____OF_AXIS_INCLUDED_)
 #define _HEADERBLOCK_H____OF_AXIS_INCLUDED_
 
-#include <axis/server/IHeaderBlock.hpp>
+#include <axis/IHeaderBlock.hpp>
 #include <string>
 
 AXIS_CPP_NAMESPACE_START

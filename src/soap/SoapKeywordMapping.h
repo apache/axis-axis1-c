@@ -18,7 +18,7 @@
 #define AXIS_SOAPKEYWORDMAPPING_H__OF_AXIS_INCLUDED_
 
 #include "../common/AxisUtils.h"
-#include <axis/server/SoapEnvVersions.hpp>
+#include <axis/SoapEnvVersions.hpp>
 #include "Attribute.h"
 #include <map>
 

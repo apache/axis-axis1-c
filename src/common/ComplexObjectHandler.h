@@ -17,8 +17,8 @@
 #if !defined(_COMPLEXOBJECTHANDLER_H____OF_AXIS_INCLUDED_)
 #define _COMPLEXOBJECTHANDLER_H____OF_AXIS_INCLUDED_
 
-#include <axis/server/AxisUserAPI.hpp>
-#include <axis/server/AxisWrapperAPI.hpp>
+#include <axis/AxisUserAPI.hpp>
+#include <axis/AxisWrapperAPI.hpp>
 
 AXIS_CPP_NAMESPACE_START
 

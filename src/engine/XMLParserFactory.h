@@ -27,7 +27,7 @@
 
 #include "../platforms/PlatformAutoSense.hpp"
 
-#include <axis/server/GDefine.hpp>
+#include <axis/GDefine.hpp>
 #include "../xml/XMLParser.h"
 
 #define CREATE_FUNCTION2 "CreateInstance"

@@ -25,7 +25,7 @@
 #include "RequestScopeHandlerPool.h"
 #include "SessionScopeHandlerPool.h"
 #include "../wsdd/WSDDDeployment.h"
-#include <axis/server/AxisException.hpp>
+#include <axis/AxisException.hpp>
 #include "../common/AxisTrace.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX AppScopeHandlerPool* g_pAppScopeHandlerPool;

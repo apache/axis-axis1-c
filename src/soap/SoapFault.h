@@ -21,10 +21,10 @@
 #if !defined(_SOAPFAULT_H____OF_AXIS_INCLUDED_)
 #define _SOAPFAULT_H____OF_AXIS_INCLUDED_
 
-#include <axis/server/AxisException.hpp>
+#include <axis/AxisException.hpp>
 #include <axis/ISoapFault.hpp>
 #include "../common/Param.h"
-#include <axis/server/SoapEnvVersions.hpp>
+#include <axis/SoapEnvVersions.hpp>
 
 #include <string>
 #include <map>

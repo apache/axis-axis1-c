@@ -54,8 +54,8 @@
 
 #include "HeaderBlock.h"
 #include "SoapSerializer.h"
-#include <axis/server/GDefine.hpp>
-#include <axis/server/BasicNode.hpp>
+#include <axis/GDefine.hpp>
+#include <axis/BasicNode.hpp>
 #include "ComplexElement.h"
 #include "CharacterElement.h"
 

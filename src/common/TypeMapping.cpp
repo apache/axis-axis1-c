@@ -20,7 +20,7 @@
  */
 
 
-#include <axis/server/TypeMapping.hpp>
+#include <axis/TypeMapping.hpp>
 #include "AxisUtils.h"
 #define __TRC(X) AxisUtils::Convert(X)
 

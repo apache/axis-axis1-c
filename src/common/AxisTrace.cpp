@@ -25,7 +25,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include "AxisUtils.h"
-#include <axis/server/GDefine.hpp>
+#include <axis/GDefine.hpp>
 #include "AxisConfig.h"
 #include <string>
 // cctype is needed to make isprint compile on linux

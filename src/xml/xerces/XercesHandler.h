@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <map>
 #include <string>
-#include <axis/server/GDefine.hpp>
+#include <axis/GDefine.hpp>
 
 XERCES_CPP_NAMESPACE_USE
 

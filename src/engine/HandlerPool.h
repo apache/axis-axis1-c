@@ -25,7 +25,7 @@
 
 #include "../wsdd/WSDDHandler.h"
 #include "../wsdd/WSDDService.h"
-#include <axis/server/BasicHandler.hpp>
+#include <axis/BasicHandler.hpp>
 #include "HandlerLoader.h"
 #include "HandlerChain.h"
 #include "SharedObject.h"

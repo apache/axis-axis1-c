@@ -20,7 +20,7 @@
  */
 
 #include "AxisSocketUtils.h"
-#include <axis/server/GDefine.hpp>
+#include <axis/GDefine.hpp>
 #include <stdio.h>
 #if defined(WIN32) && !defined(CYGWIN)
 #include <winsock.h>            /* for socket(),... */

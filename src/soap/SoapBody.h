@@ -19,7 +19,7 @@
 
 #include "SoapMethod.h"
 #include "SoapFault.h"
-#include <axis/server/SoapEnvVersions.hpp>
+#include <axis/SoapEnvVersions.hpp>
 
 
 AXIS_CPP_NAMESPACE_START

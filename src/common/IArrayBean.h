@@ -19,8 +19,8 @@
 #if !defined(AXIS_IARRAYBEAN_H__OF_AXIS_INCLUDED_)
 #define AXIS_IARRAYBEAN_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/GDefine.hpp>
-#include <axis/server/AxisUserAPI.hpp>
+#include <axis/GDefine.hpp>
+#include <axis/AxisUserAPI.hpp>
 /*
  *   @class IArrayBean
  *   @brief interface for the IArrayBean class.

@@ -26,7 +26,7 @@
 #if !defined(_BASICTYPESERIALIZER_H____OF_AXIS_INCLUDED_)
 #define _BASICTYPESERIALIZER_H____OF_AXIS_INCLUDED_
 
-#include <axis/server/TypeMapping.hpp>
+#include <axis/TypeMapping.hpp>
 #include "AxisTime.h"
 #include <string>
 using namespace std;

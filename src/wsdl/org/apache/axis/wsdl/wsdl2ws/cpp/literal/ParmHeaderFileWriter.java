@@ -103,7 +103,7 @@ public class ParmHeaderFileWriter extends ParamWriter
     {
         try
         {
-            writer.write("#include <axis/server/AxisUserAPI.hpp>\n");
+            writer.write("#include <axis/AxisUserAPI.hpp>\n");
             writer.write("AXIS_CPP_NAMESPACE_USE \n\n");
 
             Vector restrictionData = type.getEnumerationdata();
@@ -397,7 +397,7 @@ public class ParmHeaderFileWriter extends ParamWriter
     {
         try
         {
-            writer.write("#include <axis/server/AxisUserAPI.hpp>\n");
+            writer.write("#include <axis/AxisUserAPI.hpp>\n");
             writer.write("AXIS_CPP_NAMESPACE_USE \n\n");
             HashSet typeSet = new HashSet();
             for (int i = 0; i < attribs.length; i++)

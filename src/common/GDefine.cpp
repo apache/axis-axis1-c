@@ -19,4 +19,4 @@
  *
  */
 
-#include <axis/server/GDefine.hpp>
+#include <axis/GDefine.hpp>

@@ -98,7 +98,7 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
         {
             writer.write("#include <string>\n");
             writer.write("#include <exception>\n");
-            writer.write("#include <axis/server/AxisException.hpp>\n");
+            writer.write("#include <axis/AxisException.hpp>\n");
             writer.write("#include <axis/ISoapFault.hpp>\n");
             getLangName();
             writer.write("using namespace std;\n");

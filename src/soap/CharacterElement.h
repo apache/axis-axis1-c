@@ -37,7 +37,7 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include <axis/server/BasicNode.hpp>
+#include <axis/BasicNode.hpp>
 
 /**
  * @class CharacterElement

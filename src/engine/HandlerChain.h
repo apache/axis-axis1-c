@@ -18,7 +18,7 @@
 #if !defined(_HANDLERCHAIN_H____OF_AXIS_INCLUDED_)
 #define _HANDLERCHAIN_H____OF_AXIS_INCLUDED_
 
-#include <axis/server/Handler.hpp>
+#include <axis/Handler.hpp>
 
 /*
  *  @class HandlerChain

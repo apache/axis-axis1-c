@@ -27,7 +27,7 @@
 
 #include "../platforms/PlatformAutoSense.hpp"
 
-#include <axis/server/GDefine.hpp>
+#include <axis/GDefine.hpp>
 
 #define CREATE_FUNCTION1 "CreateInstance"
 #define DELETE_FUNCTION1 "DestroyInstance"

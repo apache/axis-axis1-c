@@ -108,7 +108,7 @@ public abstract class ParamCPPFileWriter extends ParamWriter
     {
         try
         {
-            writer.write("#include <axis/server/AxisWrapperAPI.hpp>\n\n");
+            writer.write("#include <axis/AxisWrapperAPI.hpp>\n\n");
             writer.write(
                 "#include \""
                     + this.classname

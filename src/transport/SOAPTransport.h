@@ -31,7 +31,7 @@
 #if !defined(AXIS_SOAPTRANSPORT_H__OF_AXIS_INCLUDED_)
 #define AXIS_SOAPTRANSPORT_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/GDefine.hpp>
+#include <axis/GDefine.hpp>
 
 /**
  * @file SOAPTransport.h

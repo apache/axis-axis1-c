@@ -20,7 +20,7 @@
 #include <axis/client/Stub.hpp>
 #include <stdio.h>
 #include "../../transport/SOAPTransport.h"
-#include <axis/server/AxisWrapperAPI.hpp>
+#include <axis/AxisWrapperAPI.hpp>
 #include "../../soap/SoapSerializer.h"
 #include "../../soap/Attribute.h"
 

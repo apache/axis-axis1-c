@@ -24,9 +24,9 @@
 #define __AXISADMINSERVICEWRAPPER_SERVERWRAPPER_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/WrapperClassHandler.hpp>
-#include <axis/server/IMessageData.hpp>
-#include <axis/server/GDefine.hpp>
-#include <axis/server/AxisWrapperAPI.hpp>
+#include <axis/IMessageData.hpp>
+#include <axis/GDefine.hpp>
+#include <axis/AxisWrapperAPI.hpp>
 
 class AxisAdminServiceWrapper:public WrapperClassHandler
 {

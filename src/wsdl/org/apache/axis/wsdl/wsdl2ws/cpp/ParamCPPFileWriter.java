@@ -127,7 +127,7 @@ public abstract class ParamCPPFileWriter extends ParamWriter
                     + this.classname
                     + CUtils.CPP_HEADER_SUFFIX
                     + "\"\n");
-            writer.write("#include <axis/server/AxisWrapperAPI.hpp>\n\n");
+            writer.write("#include <axis/AxisWrapperAPI.hpp>\n\n");
         }
         catch (IOException e)
         {

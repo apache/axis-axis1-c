@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "AxisUtils.h"
-#include <axis/server/AxisUserAPI.hpp>
+#include <axis/AxisUserAPI.hpp>
 
 AXIS_CPP_NAMESPACE_START
 

@@ -17,7 +17,7 @@
 #if !defined(_WSDDKEYWORDS_H____OF_AXIS_INCLUDED_)
 #define _WSDDKEYWORDS_H____OF_AXIS_INCLUDED_
 
-#include <axis/server/GDefine.hpp>
+#include <axis/GDefine.hpp>
 
 /* keywords used in the wsdd file */
 extern const AxisXMLCh* kw_depl;

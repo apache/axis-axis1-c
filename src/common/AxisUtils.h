@@ -19,7 +19,7 @@
 #if !defined(AXIS_AXISUTILS_H__OF_AXIS_INCLUDED_)
 #define AXIS_AXISUTILS_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/GDefine.hpp>
+#include <axis/GDefine.hpp>
 #include <string>
 
 using namespace std;

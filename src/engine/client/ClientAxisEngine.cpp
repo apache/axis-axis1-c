@@ -25,7 +25,7 @@
 #include "ClientAxisEngine.h"
 #include "../../wsdd/WSDDDeployment.h"
 #include "../HandlerPool.h"
-#include <axis/server/AxisException.hpp>
+#include <axis/AxisException.hpp>
 #include "../../common/AxisTrace.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX WSDDDeployment* g_pWSDDDeployment;

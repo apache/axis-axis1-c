@@ -17,7 +17,7 @@
 #if !defined(_SOAPDESERIALIZER_H____OF_AXIS_INCLUDED_)
 #define _SOAPDESERIALIZER_H____OF_AXIS_INCLUDED_
 
-#include <axis/server/IHandlerSoapDeSerializer.hpp>
+#include <axis/IHandlerSoapDeSerializer.hpp>
 #include "HeaderBlock.h"
 #include "../xml/XMLParser.h"
 

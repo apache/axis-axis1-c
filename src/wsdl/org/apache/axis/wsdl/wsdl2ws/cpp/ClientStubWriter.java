@@ -172,7 +172,7 @@ public class ClientStubWriter extends CPPClassWriter
                         + CUtils.CPP_HEADER_SUFFIX
                         + "\"\n\n");
             }
-            writer.write("#include <axis/server/AxisWrapperAPI.hpp>\n\n");
+            writer.write("#include <axis/AxisWrapperAPI.hpp>\n\n");
             writer.write("using namespace std;\n\n ");
 
         }

@@ -41,7 +41,7 @@
 
 /* ComplexElement.cpp: implementation of the ComplexElement class. */
 
-#include <axis/server/GDefine.hpp>
+#include <axis/GDefine.hpp>
 #include "Attribute.h"
 #include "ComplexElement.h"
 #include "SoapSerializer.h"

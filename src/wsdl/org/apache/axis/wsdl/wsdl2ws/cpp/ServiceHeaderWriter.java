@@ -212,7 +212,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
             Type atype;
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
             HashSet typeSet = new HashSet();
-            writer.write("#include <axis/server/AxisUserAPI.hpp>\n");
+            writer.write("#include <axis/AxisUserAPI.hpp>\n");
             writer.write("#include \"AxisServiceException.hpp\" \n\n");
             String typeName = null;
             while (types.hasNext())

@@ -24,7 +24,7 @@
 #include "../platforms/PlatformAutoSense.hpp"
 
 #include "AxisConfig.h"
-#include <axis/server/GDefine.hpp>
+#include <axis/GDefine.hpp>
 #include "../common/AxisFile.h"
 #include "AxisUtils.h"
 #include <stdlib.h>
