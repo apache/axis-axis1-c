@@ -1,26 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
-<globalConfiguration>
-<requestFlow>
-<handler name="TestHandler1" type="/usr/local/apache/Axis/handlers/global/testhandler1/libtesthandler1.so">
-<parameter name="parm1">global input test handler</parameter>
-</handler>
-</requestFlow>
-</globalConfiguration>
-<service name="Calculator" provider="java:RPC">
-<requestFlow name="calchandlers">
-<handler name="LogAccessCount" type="/usr/local/apache/Axis/handlers/custom/loghandler/libloghandler.so">
-<parameter name="logAccessCountFile" value="/usr/local/apache/Axis/handlers/custom/loghandler/LogAccessCountFile"/>
-</handler>
-</requestFlow>
-<parameter name="className" value="/usr/local/apache/Axis/webservices/libwebservice.so"/>
-<parameter name="allowedMethods" value="Add Echo"/>
+ <globalConfiguration>
+  <requestFlow>
+    <handler name="TestHandler1" type="/usr/local/apache/Axis/handlers/global/testhandler1/libtesthandler1.so">
+      <parameter name="parm1">global input test handler</parameter>
+    </handler>
+  </requestFlow>
+
+ </globalConfiguration>
+ <service name="Calculator" provider="C:RPC">
+   <requestFlow name="calchandlers">
+       <handler name="LogAccessCount" type="/usr/local/apache/Axis/handlers/custom/loghandler/libloghandler.so">
+           <parameter name="logAccessCountFile" value="/usr/local/apache/Axis/handlers/custom/loghandler/LogAccessCountFile"/>
+       </handler>
+    </requestFlow>
+  <parameter name="className" value="/usr/local/apache/Axis/webservices/libwebservice.so"/>
+  <parameter name="allowedMethods" value="Add Echo"/>
+ </service>
+<service name="CalculatorService" provider="C:RPC">
+  <parameter name="className" value="/usr/local/apache/Axis/webservices/libcalculator.so"/>
+  <parameter name="allowedMethods" value="add subtract "/>
 </service>
-<transport name="http" >
-<requestFlow>
-<handler name="TestHandler2" type="/usr/local/apache/Axis/handlers/transport/testhandler2/libtesthandler2.so">
-<parameter name="parm1">Http transport test handler</parameter>
-</handler>
-</requestFlow>
+<service name="InteropBase" provider="C:RPC">
+  <parameter name="allowedMethods" value="echoString EchoInt echoStringArray echoInteger echoIntegerArray echoFloat echoFloatArray echoStruct echoStructArray echoVoid echoBase64 echoDate echoHexBinary echoDecimal echoBoolean "/>
+  <parameter name="className" value="/usr/local/apache/Axis/webservices/libinteropbase.so"/>
+ </service>
+ <service name="InteropGroupB" provider="C:RPC">
+  <parameter name="allowedMethods" value="echoSimpleTypesAsStruct echoNestedStruct echoNestedArray echoStructAsSimpleTypes "/>
+  <parameter name="className" value="/usr/local/apache/Axis/webservices/libinteropgroupb.so"/>
+ </service>
+
+ <transport name="http" >
+  <requestFlow>
+   <handler name="TestHandler2" type="/usr/local/apache/Axis/handlers/transport/testhandler2/libtesthandler2.so">
+     <parameter name="parm1">Http transport test handler</parameter>
+   </handler>
+  </requestFlow>
 </transport>
 </deployment>
