@@ -1,10 +1,9 @@
 package org.apache.geronimo.ews.ws4j2ee;
 
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
 import org.apache.geronimo.ews.AbstractTestCase;
-import org.apache.geronimo.ews.AppTest;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2EEwithWSDL;
 
 /**
@@ -38,12 +37,12 @@ public class GenerateTest
 	{
 		//client side
 		String args[] = new String[]{getTestFile("src/samples/jaxrpc/book/webservice.xml"),
-									 "-o" + getTestFile("target/generated/gencode/server/book")};
+									 "-o" + getTestFile("generated/withWSDL/client/book")};
 		Ws4J2EEwithWSDL.main(args);
 		//server side
 		String args1[] = new String[]{getTestFile("src/samples/jaxrpc/book/webservice.xml"),
-									 "-o" + getTestFile("target/generated/gencode/server/book"),"--server-side"};
-		Ws4J2EEwithWSDL.main(args);
+									 "-o" + getTestFile("generated/withWSDL/server/book"),"--server-side"};
+		Ws4J2EEwithWSDL.main(args1);
 		
 		//genarate the code when WSDL is not avalible, this do not work with the new
 			  //axis code ... still do not get what is the problem.
@@ -67,7 +66,11 @@ public class GenerateTest
 	public void testTimeSample() throws Exception
 	{
 		String args[] = new String[]{getTestFile("src/samples/jaxrpc/time/webservices.xml"),
-									 "-o" + getTestFile("target/generated/gencode/server/time")};
+									 "-o" + getTestFile("generated/withWSDL/client/time")};
+		Ws4J2EEwithWSDL.main(args);
+		
+		args = new String[]{getTestFile("src/samples/jaxrpc/time/webservices.xml"),
+											 "-o" + getTestFile("generated/withWSDL/server/time"),"--server-side"};
 		Ws4J2EEwithWSDL.main(args);
 	}
 }
