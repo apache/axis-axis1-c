@@ -33,9 +33,7 @@ AXIS_CPP_NAMESPACE_START
 
 ChannelFactory::ChannelFactory()
 {
-	m_iLibCount = 0;
-
-	for( int iCount = 0; iCount < ChannelFactory_MaxListSize; iCount++)
+	for( int iCount = 0; iCount < (int) MaxChannelCount; iCount++)
 	{
 		m_pLibName[iCount] = NULL;
 		m_LibHandler[iCount] = NULL;
@@ -45,7 +43,7 @@ ChannelFactory::ChannelFactory()
 
 ChannelFactory::~ChannelFactory()
 {
-	for( int iCount = 0; iCount < m_iLibCount; iCount++)
+	for( int iCount = 0; iCount < (int) MaxChannelCount; iCount++)
 	{
 		if( m_pChannel[iCount] != NULL)
 		{
@@ -73,10 +71,16 @@ ChannelFactory::~ChannelFactory()
 	}
 }
 
-IChannel * ChannelFactory::LoadChannelLibrary( const char * pcLibraryName)
+IChannel * ChannelFactory::LoadChannelLibrary( g_ChannelType eChannelType, const char * pcLibraryName)
 {
 	DLHandler	sLibHandler;
 	IChannel *	pChannel = NULL;
+	int			iLibCount = 0;
+
+	if( eChannelType == SecureChannel)
+	{
+		iLibCount = 1;
+	}
 
     sLibHandler = PLATFORM_LOADLIB( pcLibraryName);
 
@@ -101,58 +105,68 @@ IChannel * ChannelFactory::LoadChannelLibrary( const char * pcLibraryName)
         }
 
 #ifdef ENABLE_AXISTRACE
-            // Load function to do lib level inits
-            void (*initializeLibrary) (AxisTraceEntrypoints&);
-            initializeLibrary = (void (*)(AxisTraceEntrypoints&))PLATFORM_GETPROCADDR(sLibHandler, "initializeLibrary");
+// Load function to do lib level inits
+		void (*initializeLibrary) (AxisTraceEntrypoints&);
+		initializeLibrary = (void (*)(AxisTraceEntrypoints&))PLATFORM_GETPROCADDR(sLibHandler, "initializeLibrary");
 
-            AxisTraceEntrypoints ep;
-            AxisTrace::getTraceEntrypoints(ep);
-            if (initializeLibrary)
-                 (*initializeLibrary)(ep);
+		AxisTraceEntrypoints ep;
+		AxisTrace::getTraceEntrypoints( ep);
+
+		if( initializeLibrary)
+		{
+			(*initializeLibrary) ( ep);
+		}
 #endif
 
-		m_pLibName[m_iLibCount] = new char[ strlen( pcLibraryName) + 1];
+// Additional code added to that when the user wants to load a different
+// library from that which is already loaded, it will now allow the change.
+		if( m_pLibName[iLibCount] != NULL)
+		{
+			delete m_pLibName[iLibCount];
+		}
 
-		strcpy( m_pLibName[m_iLibCount], pcLibraryName);
+		m_pLibName[iLibCount] = new char[ strlen( pcLibraryName) + 1];
 
-		m_LibHandler[m_iLibCount] = sLibHandler;
+		strcpy( m_pLibName[iLibCount], pcLibraryName);
+
+		UnLoadChannelLibrary( eChannelType, m_pChannel[iLibCount]);
+
+		m_LibHandler[iLibCount] = sLibHandler;
 
 		if( sCreate)
 		{
 			sCreate( &pChannel);
 
-			m_pChannel[m_iLibCount] = pChannel;
-		}
-
-		if( m_iLibCount < ChannelFactory_MaxListSize)
-		{
-			m_iLibCount++;
+			m_pChannel[iLibCount] = pChannel;
 		}
 	}
 
 	return pChannel;
 }
 
-bool ChannelFactory::UnLoadChannelLibrary( IChannel * pIChannel)
+bool ChannelFactory::UnLoadChannelLibrary( g_ChannelType eChannelType, IChannel * pIChannel)
 {
 	bool	bSuccess = false;
+	int		iLibCount = 0;
 
-	for( int iCount = 0; iCount < m_iLibCount && !bSuccess; iCount++)
+	if( eChannelType == SecureChannel)
 	{
-		if( m_pChannel[iCount] == pIChannel)
-		{
-			DELETE_OBJECT3 sDelete = (DELETE_OBJECT3) PLATFORM_GETPROCADDR( m_LibHandler[iCount], DELETE_FUNCTION3);
+		iLibCount = 1;
+	}
 
-			sDelete( pIChannel);
+	if( m_pChannel[iLibCount] == pIChannel)
+	{
+		DELETE_OBJECT3 sDelete = (DELETE_OBJECT3) PLATFORM_GETPROCADDR( m_LibHandler[iLibCount], DELETE_FUNCTION3);
 
-			m_pChannel[iCount] = 0;
+		sDelete( pIChannel);
 
-		    PLATFORM_UNLOADLIB( m_LibHandler[iCount]);
+		m_pChannel[iLibCount] = 0;
 
-			m_LibHandler[iCount] = 0;
+		PLATFORM_UNLOADLIB( m_LibHandler[iLibCount]);
 
-			bSuccess = true;
-		}
+		m_LibHandler[iLibCount] = 0;
+
+		bSuccess = true;
 	}
 
 	return bSuccess;

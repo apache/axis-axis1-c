@@ -738,13 +738,13 @@ void HTTPTransport::setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type, 
 
 		case CHANNEL_HTTP_DLL_NAME:
 		{
-			m_pNormalChannel = m_pChannelFactory->LoadChannelLibrary( value);
+			m_pNormalChannel = m_pChannelFactory->LoadChannelLibrary( UnsecureChannel, value);
 			break;
 		}
 
 		case CHANNEL_HTTP_SSL_DLL_NAME:
 		{
-			m_pSecureChannel = m_pChannelFactory->LoadChannelLibrary( value);
+			m_pSecureChannel = m_pChannelFactory->LoadChannelLibrary( SecureChannel, value);
 			break;
 		}
 
@@ -855,6 +855,12 @@ const char * HTTPTransport::getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYP
     case SECURE_PROPERTIES:
 		{
 			pszPropValue = m_pActiveChannel->getTransportProperty( eType);
+			break;
+		}
+
+	case CHANNEL_HTTP_SSL_DLL_NAME:
+	case CHANNEL_HTTP_DLL_NAME:
+		{
 			break;
 		}
     }

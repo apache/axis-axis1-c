@@ -11,6 +11,13 @@ using namespace std;
 
 AXIS_CPP_NAMESPACE_USE
 
+enum g_ChannelType 
+{
+	UnsecureChannel,
+	SecureChannel,
+	MaxChannelCount
+};
+
 class IChannel
 {
 public:

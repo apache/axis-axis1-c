@@ -30,7 +30,6 @@
 #include <axis/GDefine.hpp>
 #include "IChannel.hpp"
 
-#define ChannelFactory_MaxListSize	2
 #define CREATE_FUNCTION3			"CreateInstance"
 #define DELETE_FUNCTION3			"DestroyInstance"
 
@@ -42,14 +41,13 @@ class ChannelFactory
 public:
 	ChannelFactory();
 	virtual ~ChannelFactory();
-	virtual IChannel * LoadChannelLibrary( const char * pcLibraryName);
-	virtual bool UnLoadChannelLibrary( IChannel *);
+	virtual IChannel * LoadChannelLibrary( g_ChannelType eChannelType, const char * pcLibraryName);
+	virtual bool UnLoadChannelLibrary( g_ChannelType eChannelType, IChannel *);
 
 private:
-	int				m_iLibCount;
-	char *			m_pLibName[ChannelFactory_MaxListSize];
-	DLHandler		m_LibHandler[ChannelFactory_MaxListSize];
-	IChannel *		m_pChannel[ChannelFactory_MaxListSize];
+	char *			m_pLibName[(int) MaxChannelCount];
+	DLHandler		m_LibHandler[(int) MaxChannelCount];
+	IChannel *		m_pChannel[(int) MaxChannelCount];
 };
 AXIS_CPP_NAMESPACE_END
 #endif 
