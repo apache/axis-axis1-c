@@ -78,5 +78,13 @@ BeanClass::BeanClass()
 
 BeanClass::~BeanClass()
 {
+	for (list<Variable*>::iterator it = m_Variables.begin(); it != m_Variables.end(); it++)
+	{
+		delete *it;
+	}
+}
 
+void BeanClass::AddVariable(Variable *pVar)
+{
+	m_Variables.push_back(pVar);
 }

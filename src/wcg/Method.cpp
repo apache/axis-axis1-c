@@ -72,10 +72,36 @@
 
 Method::Method()
 {
-
+	m_Qualifier=0;
+	m_Name="";
+	m_pReturnType = NULL;
 }
 
 Method::~Method()
 {
+	if (m_pReturnType) delete m_pReturnType;
+	for (list<Variable*>::iterator it = m_Params.begin(); it != m_Params.end(); it++)
+	{
+		delete *it;
+	}
+}
 
+void Method::AddReturnType(Variable *pVar)
+{
+	m_pReturnType = pVar;
+}
+
+void Method::AddParameter(Variable *pVar)
+{
+	m_Params.push_back(pVar);
+}
+
+void Method::SetMethodName(string &sName)
+{
+	m_Name = sName;
+}
+
+void Method::SetQualification(unsigned char sQualifier)
+{
+	m_Qualifier|=sQualifier;
 }
