@@ -78,15 +78,14 @@
 class WSDDTransport  
 {
 public:
-	void SetRequestFlowHandlers(AXIS_PROTOCOL_TYPE protocolType, WSDDHandlerList * TrReqHList);
-	void SetResponseFlowHandlers(AXIS_PROTOCOL_TYPE protocolType, WSDDHandlerList * TrResHList);
-	WSDDHandlerList* GetResponseFlowHandlers(AXIS_PROTOCOL_TYPE Protocol);
-	WSDDHandlerList* GetRequestFlowHandlers(AXIS_PROTOCOL_TYPE Protocol);
+	void AddHandler(bool bRequestFlow, AXIS_PROTOCOL_TYPE protocol, WSDDHandler* pHandler);
+	const WSDDHandlerList* GetResponseFlowHandlers(AXIS_PROTOCOL_TYPE Protocol);
+	const WSDDHandlerList* GetRequestFlowHandlers(AXIS_PROTOCOL_TYPE Protocol);
 	WSDDTransport();
 	virtual ~WSDDTransport();
 private:
-	map<AXIS_PROTOCOL_TYPE, WSDDHandlerList*> * m_RequestHandlers;
-	map<AXIS_PROTOCOL_TYPE, WSDDHandlerList*> * m_ResponseHandlers;
+	map<AXIS_PROTOCOL_TYPE, WSDDHandlerList>* m_RequestHandlers;
+	map<AXIS_PROTOCOL_TYPE, WSDDHandlerList>* m_ResponseHandlers;
 };
 
 #endif // !defined(AFX_WSDDTRANSPORT_H__A7F3A046_7764_4EAB_8867_B26A18F1A931__INCLUDED_)

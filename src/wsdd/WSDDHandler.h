@@ -81,26 +81,32 @@
 using namespace std;
 
 enum AXIS_HANDLER_SCOPE {AH_APPLICATION=1, AH_SESSION, AH_REQUEST};
+const char kw_scope_app[] = "application";
+const char kw_scope_ses[] = "session";
+const char kw_scope_req[] = "request";
 
 class WSDDHandler  
 {
 public:
-	virtual string& GetLibName();
-	virtual int GetLibID();
-	virtual int GetScope();
-	virtual void SetLibName(string& sLibName);
+	const string& GetLibName() const;
+	int GetLibId() const;
+	int GetScope() const;
+	void SetScope(const string& sScope);
+	void SetLibName(const string& sLibName);
+	void SetLibId(int nLibId);
+	const string& GetParameter(const string& sKey) const;
+	void AddParameter(const string& sKey, const string& sValue);
+	const map<string, string>* GetParameterList() const; 
 	WSDDHandler();
 	virtual ~WSDDHandler();
-  string GetOption(string sArg);
-  void SetOption(string sOption, string Value);
-  virtual map<string, string>* GetOptionList(); 
 
 protected:
 	int m_nLibId;
 	int m_nScope;
 	string m_sName;
 	string m_sLibName;
-	map<string, string>* m_Option;
+	map<string, string>* m_Params;
+	string m_sAux;
 };
 
 typedef list<WSDDHandler*> WSDDHandlerList;

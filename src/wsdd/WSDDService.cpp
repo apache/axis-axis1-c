@@ -101,78 +101,73 @@ WSDDService::~WSDDService()
 			delete (*iter);
 		}
 	}
-
-
 }
 
-void WSDDService::SetServiceName(string& sServiceName)
+void WSDDService::SetServiceName(const string& sServiceName)
 {
 	m_sName = sServiceName;
 }
 
-string& WSDDService::GetServiceName()
+void WSDDService::SetProvider(const string& sProvider)
+{
+	m_sProvider = sProvider;
+}
+
+const string& WSDDService::GetServiceName()
 {
 	return m_sName;
 }
 
-void WSDDService::SetAllowedMethod(string& sMethodName)
+void WSDDService::AddAllowedMethod(const string& sMethodName)
 {
 	m_AllowedMethods.push_back(sMethodName);
 }
 
-bool WSDDService::IsAllowedMethod(string& sServiceName)
+bool WSDDService::IsAllowedMethod(const string& sServiceName) const
 {
-	list<string>::iterator iter;
+	list<string>::const_iterator iter;
 
-	for(iter=m_AllowedMethods.begin();iter!=m_AllowedMethods.end();iter++)
+	for(iter = m_AllowedMethods.begin();iter != m_AllowedMethods.end();iter++)
 	{
-		if((*iter)==sServiceName)
+		if((*iter) == sServiceName)
 		{
-//			cout<<"we have a service by that name";
 			return true;
 		}
 	}
 	return false;
 }
 
-void WSDDService::SetRequestFlowHandlers(WSDDHandlerList * reqFlowHList)
-{
-  DEBUG1("WSDDService::SetRequestFlowHandlers");
-	m_RequestHandlers = reqFlowHList;
-}
-
-
-WSDDHandlerList* WSDDService::GetRequestFlowHandlers()
+const WSDDHandlerList* WSDDService::GetRequestFlowHandlers() const
 {
 	return m_RequestHandlers;
 }
 
-void WSDDService::SetResponseFlowHandlers(WSDDHandlerList * resFlowHList)
-{
-	m_ResponseHandlers = resFlowHList;
-}
-
-WSDDHandlerList* WSDDService::GetResponseFlowHandlers()
+const WSDDHandlerList* WSDDService::GetResponseFlowHandlers() const
 {
 	return m_ResponseHandlers;
 }
 
-void WSDDService::SetAllowedRoles(string& sRole)
+void WSDDService::AddAllowedRole(const string& sRole)
 {
 	m_AllowedRoles.push_back(sRole);
 }
 
-list<string> WSDDService::GetAllowedRoles()
+const list<string>& WSDDService::GetAllowedRoles()
 {
 	return m_AllowedRoles;
 }
 
-void WSDDService::SetIsServiceAllowed(int m_IsServiceAllowed)
+void  WSDDService::AddHandler(bool bRequestFlow, WSDDHandler* pHandler)
 {
-  m_IsServiceAllowed = m_IsServiceAllowed;
+	if (bRequestFlow)
+	{
+		if (!m_RequestHandlers) m_RequestHandlers = new WSDDHandlerList;
+		m_RequestHandlers->push_back(pHandler);
+	}
+	else
+	{
+		if (!m_ResponseHandlers) m_ResponseHandlers = new WSDDHandlerList;
+		m_ResponseHandlers->push_back(pHandler);
+	}
 }
 
-int WSDDService::GetIsServiceAllowed()
-{
-  return m_IsServiceAllowed;
-}
