@@ -38,6 +38,10 @@
   #define AXISTRACE3(X) "";
 #endif
 
+typedef enum 
+{ 
+    CRITICAL=1, WARN, INFO, TRIVIAL
+} AXIS_SEVERITY_LEVEL;
 
 //using namespace std;
 
