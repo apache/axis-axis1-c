@@ -32,7 +32,7 @@
 
 
 #include <axis/AxisGenException.hpp>
-#include "./gen_src/InteropTestPortType.h"
+#include "./gen_src/InteropTestPortType.hpp"
 
 using namespace std;
 
