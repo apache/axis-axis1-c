@@ -88,7 +88,7 @@ Copyright:
   <!-- =================================================================== -->
   <target name="compile"  depends="init">
      <javac  srcdir="${src}" destdir="${build-classes}" debug="${debug}"
-      deprecation="${deprecation}" listfiles="true">
+      deprecation="${deprecation}" listfiles="false">
       <classpath refid="cp"/>
     </javac>
     <copy file="${src}/log4j.properties" todir="${build-classes}"/>
@@ -117,9 +117,9 @@ Copyright:
   <!-- =================================================================== -->
   <!-- compile tests                                       -->
   <!-- =================================================================== -->
- <target name="compile-tests"  depends="init,compile-usage,compile-samples">
+ <target name="compile-tests"  depends="init,compile-samples">
      <javac  srcdir="${test}" destdir="${build-classes}" debug="${debug}"
-      deprecation="${deprecation}" listfiles="true">
+      deprecation="${deprecation}" listfiles="false">
       <classpath refid="cp"/>
     </javac>
   </target>
@@ -127,28 +127,35 @@ Copyright:
   <!-- =================================================================== -->
   <!-- compile samples                            -->
   <!-- =================================================================== -->
- <target name="compile-samples" depends="init,compile-usage">
+ <target name="compile-samples" depends="init">
      <javac  srcdir="${samples}" destdir="${build-classes}" debug="${debug}"
-      deprecation="${deprecation}" listfiles="true">
+      deprecation="${deprecation}" listfiles="false">
       <classpath refid="cp"/>
     </javac>
   </target>
   
+  
+  
   <!-- =================================================================== -->
   <!-- compile usage tests                           -->
   <!-- =================================================================== -->
+  <!--
+  usage tests are removed as keeping the genarated code in the 
+  cvs is have no point. The tests basesd on set fo WSDL's will comming soon.
  <target name="compile-usage" depends="init">
      <javac  srcdir="${usageTest}" destdir="${build-classes}" debug="${debug}"
-      deprecation="${deprecation}" listfiles="true">
+      deprecation="${deprecation}" listfiles="false">
       <classpath refid="cp"/>
     </javac>
   </target>
+  
+  -->
   
 
   <!-- =================================================================== -->
   <!-- functional tests                                      -->
   <!-- =================================================================== -->
-  <target name ="functional-tests" depends="compile-usage,compile-samples,compile-tests">  
+  <target name ="functional-tests" depends="compile-samples,compile-tests">  
     <mkdir dir="testresults"/>
     <junit printsummary="yes" haltonfailure="yes" >
     	<test name="AllTests" todir="testresults"> 
@@ -172,7 +179,7 @@ Copyright:
   <!-- =================================================================== -->
   <!-- build all     -->
   <!-- =================================================================== -->
-  <target name="build-all" depends="compile,compile-usage,compile-samples,compile-tests"></target>
+  <target name="build-all" depends="compile,compile-samples,compile-tests"></target>
   <!-- =================================================================== -->
   <!-- rebuild all     -->
   <!-- =================================================================== -->
