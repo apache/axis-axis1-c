@@ -111,13 +111,13 @@ public:
 	void SetSerializer(SoapSerializer* pSZ);
 	void SetUserName(string& m_sUserName);
 	string& GetUserName();
-	void SetService(WSDDService* argService);
-	WSDDService* GetService();  
+	void SetService(const WSDDService* argService);
+	const WSDDService* GetService();  
 	AXIS_PROTOCOL_TYPE m_Protocol;
 	
 protected:
   string m_sUserName;
-  WSDDService* m_Service;
+  const WSDDService* m_Service;
 
 private:
 	bool m_bPastPivotState;

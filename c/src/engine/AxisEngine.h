@@ -67,36 +67,35 @@
 #define __AXISENGINE_INCLUDED__
 
 #include "../common/GDefine.h"
-#include "../common/BasicHandler.h"
-#include "../wsdd/WSDDDeployment.h"
-#include "HandlerPool.h"
-
 #include "../common/Packet.h"
+#include "../soap/SoapSerializer.h"
+#include "../soap/SoapDeSerializer.h"
+#include "../common/BasicHandler.h"
+#include "../common/MessageData.h"
+#include "HandlerChain.h"
 
-class AxisEngine // : public BasicHandler
+class AxisEngine 
 {
 private:	
-	static AxisEngine* m_pObject; //Singleton object.
 	SoapSerializer* m_pSZ;
 	SoapDeSerializer* m_pDZ;
-	WSDDDeployment* m_pWSDD;
-	HandlerPool* m_pHandlerPool;
-//  string m_sResponse;
-private:
+	HandlerChain* m_pGReqFChain;
+	HandlerChain* m_pGResFChain;
+	HandlerChain* m_pTReqFChain;
+	HandlerChain* m_pTResFChain;
+	HandlerChain* m_pSReqFChain;
+	HandlerChain* m_pSResFChain;
 	BasicHandler* m_pWebService;
-	int Initialize();
-	void UnInitialize();
-	AxisEngine();
-
 public:
+	AxisEngine();
 	~AxisEngine();
-
+	int Process(Ax_soapstream* soap);
+private:
 	int Invoke(MessageData* pMsg);
 	void OnFault(MessageData* pMsg);
-
-	static AxisEngine* GetAxisEngine();
-	int Process(soapstream* soap);
-	WSDDDeployment* getWSDDDeployment();
+	int Initialize();
+	int InitializeHandlers(string& sSessionId, AXIS_PROTOCOL_TYPE protocol);
+	void UnInitialize();
 };
 
 #endif

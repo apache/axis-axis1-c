@@ -7,11 +7,9 @@
 
 typedef struct 
 {
-	unsigned char* ip_soap;
-	unsigned char* op_soap;
-	char* service;
-	int byte_count;
-} stream;
+	void* ip_stream;
+	void* op_stream;
+} Ax_iostream;
 /*
 typedef enum
 {
@@ -21,49 +19,49 @@ typedef enum
 */
 typedef enum
 {
-	GET,
-	POST,
-	UNSUPPORTED
-} http_method;
+	AXIS_HTTP_GET,
+	AXIS_HTTP_POST,
+	AXIS_HTTP_UNSUPPORTED
+} AXIS_HTTP_METHOD;
 
 typedef struct
 {
-	char * headername;
-	char * headervalue;
-} header;
+	char* headername;
+	char* headervalue;
+} Ax_header;
 
 typedef struct
 {
-	char * uri_path;
-	header * ip_headers;
+	char* uri_path;
+	Ax_header* ip_headers;
 	int ip_headercount;
-	header * op_headers;
+	Ax_header* op_headers;
 	int op_headercount;
-	http_method ip_method;
-	http_method op_method;
-} stream_http;
+	AXIS_HTTP_METHOD ip_method;
+	AXIS_HTTP_METHOD op_method;
+} Ax_stream_http;
 
 typedef struct
 {
 	int dummy;  
-} stream_smtp;
+} Ax_stream_smtp;
 
 typedef union
 {
-	stream_http http;
-	stream_smtp smtp;
-} soapcontent;
+	Ax_stream_http http;
+	Ax_stream_smtp smtp;
+} Ax_soapcontent;
 
 typedef struct
 {
-	soapcontent so;
+	Ax_soapcontent so;
+	Ax_iostream str;
+	char* sessionid;
 	AXIS_PROTOCOL_TYPE trtype;
-} soapstream;
+} Ax_soapstream;
 
-char* getheader(soapstream* soap, char* pchkey);
+char* getheader(Ax_soapstream* soap, char* pchkey);
 
-//This function is implemented in axis
-//int initialize_module();
 
 //This function is implemented in axis
 //int initialize_process();
@@ -75,24 +73,34 @@ char* getheader(soapstream* soap, char* pchkey);
 #ifdef __cplusplus
 extern "C"
 {
-  //This function should be implemented by module authors
-  //Allows to send pieces of soap response the transport handler
-  int send_response_bytes(char * res);
+	//This function is implemented in axis
+	int initialize_module();
 
-  //This function should be implemented by module authors
-  //Allows axis to get pieces of the request as they come to the transport listener
-  int get_request_bytes(char * req, int reqsize, int* retsize);
+	//This function is implemented in axis
+	int process_request(Ax_soapstream* str);
 
-  //This fucntion should be implemented by module authors
-  int send_transport_information(soapstream *);
+	//This function should be implemented by module authors
+	//Allows to send pieces of soap response the transport handler
+	int send_response_bytes(char* res, void* opstream);
+
+	//This function should be implemented by module authors
+	//Allows axis to get pieces of the request as they come to the transport listener
+	int get_request_bytes(char* req, int reqsize, int* retsize, void* ipstream);
+
+	//This fucntion should be implemented by module authors
+	int send_transport_information(Ax_soapstream *str);
 }
 
 #else
-  int send_response_bytes(char * res);
+	int initialize_module();
 
-  int get_request_bytes(char * req, int reqsize, int* retsize);
+	int process_request(Ax_soapstream *str);
 
-  int send_transport_information(soapstream *);
+	int send_response_bytes(char * res, void* opsteam);
+
+	int get_request_bytes(char * req, int reqsize, int* retsize, void* ipstream);
+
+	int send_transport_information(Ax_soapstream *str);
 #endif
 
 #endif
