@@ -66,13 +66,6 @@ public class QualifiedName {
 
     String name, namespace;
 
-    public QualifiedName() {
-    }
-
-    public QualifiedName(String name) {
-        this.name = name;
-    }
-
     public QualifiedName(String name, String namespace) {
         this.name = name;
         this.namespace = namespace;
@@ -95,6 +88,9 @@ public class QualifiedName {
     }
 
     public String toString() {
-        return name;
+		if (namespace == null || namespace.equals(""))
+			return name;
+		else 
+			return "{" + namespace + "}" + name;	
     }
 }
