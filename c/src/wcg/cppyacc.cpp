@@ -296,11 +296,11 @@ static const short yyrline[] =
     1053,  1055,  1062,  1066,  1067,  1071,  1079,  1091,  1092,  1096,
     1129,  1137,  1138,  1142,  1143,  1147,  1152,  1160,  1167,  1201,
     1203,  1208,  1210,  1214,  1215,  1217,  1221,  1222,  1226,  1228,
-    1234,  1234,  1273,  1290,  1297,  1299,  1305,  1306,  1310,  1310,
-    1327,  1332,  1333,  1337,  1342,  1355,  1363,  1376,  1381,  1382,
-    1386,  1391,  1392,  1397,  1398,  1402,  1406,  1411,  1418,  1436,
-    1437,  1441,  1443,  1445,  1450,  1452,  1505,  1506,  1612,  1614,
-    1694,  1695
+    1234,  1234,  1276,  1293,  1300,  1302,  1308,  1309,  1313,  1313,
+    1330,  1335,  1336,  1340,  1345,  1358,  1366,  1379,  1384,  1385,
+    1389,  1394,  1395,  1400,  1401,  1405,  1409,  1414,  1421,  1439,
+    1440,  1444,  1446,  1448,  1453,  1455,  1508,  1509,  1615,  1617,
+    1697,  1698
 };
 #endif
 
@@ -1673,44 +1673,47 @@ case 99:
 case 100:
 #line 1236 "cpp.y"
 {
-      //check if this class should be wrapped or not depending on wsdd information
-      if (is_bean_class(yyvsp[0].class_head_ptr->baselist)) //bean class
-      {
-				BeanClass* pBeanClass = new BeanClass();
-				pBeanClass->SetClassName(*(yyvsp[0].class_head_ptr->class_name));
-				g_pTranslationUnit->AddBeanClass(pBeanClass);
-				g_pCurrentBeanClass = pBeanClass;
-				g_currentclasstype = BEANCLASS;
-				g_baccessbeanmacrofound = false;
-				//following line adds default namespace for this complex type. 
-				//This should be removed when we get the namespace from the wsdd.
-				string defns = "http://www.opensource.lk/" + (*(yyvsp[0].class_head_ptr->class_name));
-				g_ClassNamespaces[*(yyvsp[0].class_head_ptr->class_name)] = defns;
-      }
-      else // we assume that this is the webservice class - there cannot be 2 web service classes
-      {
-				WSClass* pWSClass = new WSClass();
-				pWSClass->SetClassName(*(yyvsp[0].class_head_ptr->class_name));
-				g_pTranslationUnit->SetWSClass(pWSClass);
-				g_pCurrentWSClass = pWSClass;
-				g_currentclasstype = WSCLASS;
-				g_baccessbeanmacrofound = false;
-				//following line adds default namespace for this web service. 
-				//This should be removed when we get the namespace from the wsdd.
-				string defns = "http://www.opensource.lk/" + (*(yyvsp[0].class_head_ptr->class_name));
-				g_ClassNamespaces[*(yyvsp[0].class_head_ptr->class_name)] = defns;
-      }   
-  		g_classesfound.push_back(g_classname);
+	  if (!is_defined_class(yyvsp[0].class_head_ptr->class_name->c_str()))
+	  {
+		  //check if this class should be wrapped or not depending on wsdd information
+		  if (is_bean_class(yyvsp[0].class_head_ptr->baselist)) //bean class
+		  {
+					BeanClass* pBeanClass = new BeanClass();
+					pBeanClass->SetClassName(*(yyvsp[0].class_head_ptr->class_name));
+					g_pTranslationUnit->AddBeanClass(pBeanClass);
+					g_pCurrentBeanClass = pBeanClass;
+					g_currentclasstype = BEANCLASS;
+					g_baccessbeanmacrofound = false;
+					//following line adds default namespace for this complex type. 
+					//This should be removed when we get the namespace from the wsdd.
+					string defns = "http://www.opensource.lk/" + (*(yyvsp[0].class_head_ptr->class_name));
+					g_ClassNamespaces[*(yyvsp[0].class_head_ptr->class_name)] = defns;
+		  }
+		  else // we assume that this is the webservice class - there cannot be 2 web service classes
+		  {
+					WSClass* pWSClass = new WSClass();
+					pWSClass->SetClassName(*(yyvsp[0].class_head_ptr->class_name));
+					g_pTranslationUnit->SetWSClass(pWSClass);
+					g_pCurrentWSClass = pWSClass;
+					g_currentclasstype = WSCLASS;
+					g_baccessbeanmacrofound = false;
+					//following line adds default namespace for this web service. 
+					//This should be removed when we get the namespace from the wsdd.
+					string defns = "http://www.opensource.lk/" + (*(yyvsp[0].class_head_ptr->class_name));
+					g_ClassNamespaces[*(yyvsp[0].class_head_ptr->class_name)] = defns;
+		  }   
+  		  g_classesfound.push_back(g_classname);
+	   }
   	;
     break;}
 case 101:
-#line 1267 "cpp.y"
+#line 1270 "cpp.y"
 {
 			g_classname = ""; //end of class scope
    	;
     break;}
 case 102:
-#line 1275 "cpp.y"
+#line 1278 "cpp.y"
 {
     	g_classname = yyvsp[-1].string_ptr->c_str();
     	yyval.class_head_ptr = new class_head;
@@ -1719,55 +1722,55 @@ case 102:
     ;
     break;}
 case 103:
-#line 1290 "cpp.y"
+#line 1293 "cpp.y"
 {;
     break;}
 case 104:
-#line 1298 "cpp.y"
-{;
-    break;}
-case 105:
 #line 1301 "cpp.y"
 {;
     break;}
+case 105:
+#line 1304 "cpp.y"
+{;
+    break;}
 case 106:
-#line 1305 "cpp.y"
+#line 1308 "cpp.y"
 {;
     break;}
 case 107:
-#line 1306 "cpp.y"
+#line 1309 "cpp.y"
 {;
     break;}
 case 108:
-#line 1310 "cpp.y"
+#line 1313 "cpp.y"
 { g_bdestructor_seen = false;;
     break;}
 case 109:
-#line 1314 "cpp.y"
+#line 1317 "cpp.y"
 {
       add_member_declaration(yyvsp[-2].string_list_ptr, yyvsp[-1].member_declarator_list_ptr);
     ;
     break;}
 case 110:
-#line 1328 "cpp.y"
+#line 1331 "cpp.y"
 { g_baccessbeanmacrofound = true;;
     break;}
 case 113:
-#line 1338 "cpp.y"
+#line 1341 "cpp.y"
 {
       yyval.member_declarator_list_ptr = new member_declarator_list;
       yyval.member_declarator_list_ptr->push_back(yyvsp[0].member_declarator_ptr);
     ;
     break;}
 case 114:
-#line 1343 "cpp.y"
+#line 1346 "cpp.y"
 {
       yyval.member_declarator_list_ptr = yyvsp[-2].member_declarator_list_ptr;
       yyval.member_declarator_list_ptr->push_back(yyvsp[0].member_declarator_ptr);
     ;
     break;}
 case 115:
-#line 1356 "cpp.y"
+#line 1359 "cpp.y"
 {
       yyval.member_declarator_ptr = yyvsp[-1].member_declarator_ptr;
       if (yyvsp[-1].member_declarator_ptr != 0) //there is a pure specifier
@@ -1777,7 +1780,7 @@ case 115:
     ;
     break;}
 case 116:
-#line 1364 "cpp.y"
+#line 1367 "cpp.y"
 {
       yyval.member_declarator_ptr = yyvsp[-1].member_declarator_ptr;
       if (yyvsp[0].expression_ptr != NULL)
@@ -1787,56 +1790,56 @@ case 116:
     ;
     break;}
 case 117:
-#line 1377 "cpp.y"
+#line 1380 "cpp.y"
 {yyval.tokenvalue = 1;;
     break;}
 case 118:
-#line 1381 "cpp.y"
+#line 1384 "cpp.y"
 {yyval.tokenvalue = yyvsp[0].tokenvalue;;
     break;}
 case 119:
-#line 1382 "cpp.y"
+#line 1385 "cpp.y"
 {yyval.tokenvalue = 0;;
     break;}
 case 120:
-#line 1387 "cpp.y"
+#line 1390 "cpp.y"
 {yyval.expression_ptr = yyvsp[0].expression_ptr;;
     break;}
 case 121:
-#line 1391 "cpp.y"
+#line 1394 "cpp.y"
 {yyval.expression_ptr = yyvsp[0].expression_ptr;;
     break;}
 case 122:
-#line 1392 "cpp.y"
+#line 1395 "cpp.y"
 {yyval.expression_ptr = NULL;;
     break;}
 case 123:
-#line 1397 "cpp.y"
+#line 1400 "cpp.y"
 {yyval.base_specifier_list_ptr = yyvsp[0].base_specifier_list_ptr;;
     break;}
 case 124:
-#line 1398 "cpp.y"
+#line 1401 "cpp.y"
 {yyval.base_specifier_list_ptr = NULL;;
     break;}
 case 125:
-#line 1402 "cpp.y"
+#line 1405 "cpp.y"
 {yyval.base_specifier_list_ptr = yyvsp[0].base_specifier_list_ptr;;
     break;}
 case 126:
-#line 1407 "cpp.y"
+#line 1410 "cpp.y"
 {
     	yyval.base_specifier_list_ptr = new base_specifier_list;
      	yyval.base_specifier_list_ptr->push_back(yyvsp[0].base_specifier_ptr);
     ;
     break;}
 case 127:
-#line 1412 "cpp.y"
+#line 1415 "cpp.y"
 {
     	yyval.base_specifier_list_ptr->push_back(yyvsp[0].base_specifier_ptr);
     ;
     break;}
 case 128:
-#line 1428 "cpp.y"
+#line 1431 "cpp.y"
 {
     	yyval.base_specifier_ptr = new base_specifier;
      	yyval.base_specifier_ptr->access = yyvsp[-1].tokenvalue;
@@ -1844,55 +1847,55 @@ case 128:
     ;
     break;}
 case 129:
-#line 1436 "cpp.y"
+#line 1439 "cpp.y"
 {/*$$ = 1; */;
     break;}
 case 130:
-#line 1437 "cpp.y"
+#line 1440 "cpp.y"
 {/* $$ = 0; */;
     break;}
 case 131:
-#line 1442 "cpp.y"
+#line 1445 "cpp.y"
 {yyval.tokenvalue = yyvsp[0].tokenvalue; g_currentaccessspecifier = yyvsp[0].tokenvalue;;
     break;}
 case 132:
-#line 1444 "cpp.y"
+#line 1447 "cpp.y"
 {yyval.tokenvalue = yyvsp[0].tokenvalue; g_currentaccessspecifier = yyvsp[0].tokenvalue;;
     break;}
 case 133:
-#line 1446 "cpp.y"
+#line 1449 "cpp.y"
 {yyval.tokenvalue = yyvsp[0].tokenvalue; g_currentaccessspecifier = yyvsp[0].tokenvalue;;
     break;}
 case 134:
-#line 1451 "cpp.y"
+#line 1454 "cpp.y"
 {yyval.tokenvalue=yyvsp[0].tokenvalue;;
     break;}
 case 135:
-#line 1452 "cpp.y"
+#line 1455 "cpp.y"
 {yyval.tokenvalue = 0;;
     break;}
 case 136:
-#line 1505 "cpp.y"
+#line 1508 "cpp.y"
 {;
     break;}
 case 137:
-#line 1506 "cpp.y"
+#line 1509 "cpp.y"
 {;
     break;}
 case 138:
-#line 1613 "cpp.y"
+#line 1616 "cpp.y"
 {;
     break;}
 case 139:
-#line 1614 "cpp.y"
+#line 1617 "cpp.y"
 {;
     break;}
 case 140:
-#line 1694 "cpp.y"
+#line 1697 "cpp.y"
 {;
     break;}
 case 141:
-#line 1695 "cpp.y"
+#line 1698 "cpp.y"
 {;
     break;}
 }
@@ -2128,5 +2131,5 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 1747 "cpp.y"
+#line 1750 "cpp.y"
 
