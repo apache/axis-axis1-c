@@ -69,6 +69,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <axis/server/AxisException.h>
+#include <axis/server/GDefine.h>
 
 using namespace std;
 
@@ -83,7 +84,7 @@ HttpTransport::HttpTransport(Url url, int secure) : m_Typ(POST)
     m_HttpBindDone = false;
     m_Secure = secure;
 
-    if(secure) {
+    if(SECURE == secure) {
 #ifdef _SSL_ENABLED_        
         m_Channel = new SecureChannel();
 #endif        
