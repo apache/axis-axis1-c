@@ -102,7 +102,10 @@ const string& AxisWsddException::getMessage (const int iExceptionCode)
             break;
         case CLIENT_WSDD_PARA_TYPE_MISMATCH:
             m_sMessage = "AxisWsddException:Parameter type mismatch";
-            break; 
+            break;
+		case SERVER_WSDD_FILE_NOT_FOUND:
+			m_sMessage = "AxisWsddException:WSDD loading fail";
+			break;
         case SERVER_WSDD_NO_HANDLERS_CONFIGURED:
             m_sMessage = "AxisWsddException:No handlers configured in server.wsdd";
             break;
