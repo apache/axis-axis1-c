@@ -552,12 +552,12 @@ int HeaderBlock::initializeForTesting()
     setLocalName("reservation");
     setURI("http://travelcompany.example.org/reservation");
 
-    Attribute* pAttribute2 = new Attribute();
+    Attribute* pAttribute2 = new Attribute(m_attributes);
     pAttribute2->setPrefix("SOAP-ENV");
     pAttribute2->setLocalName("role");
     pAttribute2->setValue("http://www.w3.org/2003/05/soap-envelope/role/next");
 
-    Attribute* pAttribute3 = new Attribute();
+    Attribute* pAttribute3 = new Attribute(m_attributes);
     pAttribute3->setPrefix("SOAP-ENV");
     pAttribute3->setLocalName("mustUnderstand");
     pAttribute3->setValue("true");
@@ -663,14 +663,14 @@ IAttribute* HeaderBlock::createAttribute(const AxisChar * pLocalName,
 	{        
 		if( !strcmp( (*itCurrNamespaceDecls)->getPrefix(), pPrefix))
 		{
-			Attribute *	pAttribute = new Attribute( pLocalName,
+			Attribute *	pAttribute = new Attribute( m_attributes, pLocalName,
 													pPrefix,
 													(*itCurrNamespaceDecls)->getURI(),
 													pValue);
 
 			m_attributes.push_back( pAttribute);
 
-			return NULL;
+			return pAttribute;
 		}
 		else
 		{
@@ -680,7 +680,7 @@ IAttribute* HeaderBlock::createAttribute(const AxisChar * pLocalName,
 
 // If the prefix/localname pair have not previously been defined, then create
 // and return the attribute.
-	Attribute *	pAttribute = new Attribute( pLocalName, pPrefix, pURI, pValue);
+	Attribute *	pAttribute = new Attribute( m_attributes, pLocalName, pPrefix, pURI, pValue);
 
 	m_attributes.push_back( pAttribute);
 
@@ -705,17 +705,17 @@ IAttribute* HeaderBlock::createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE
                 switch(eStdAttrType)
                 {
                     case ACTOR:
-                        pAttribute = new Attribute("actor",
+                        pAttribute = new Attribute(m_attributes, "actor",
                             gs_SoapEnvVersionsStruct[SOAP_VER_1_1].pchPrefix,
                             "","http://schemas.xmlsoap.org/soap/actor/next");
                         break;
                     case MUST_UNDERSTAND_TRUE:
-                        pAttribute = new Attribute("mustUnderstand",
+                        pAttribute = new Attribute(m_attributes, "mustUnderstand",
                             gs_SoapEnvVersionsStruct
                             [SOAP_VER_1_1].pchPrefix,"","1");
                         break;
                     case MUST_UNDERSTAND_FALSE:
-                        pAttribute = new Attribute("mustUnderstand",
+                        pAttribute = new Attribute(m_attributes, "mustUnderstand",
                             gs_SoapEnvVersionsStruct
                             [SOAP_VER_1_1].pchPrefix,"","0");
                         break;
@@ -729,27 +729,27 @@ IAttribute* HeaderBlock::createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE
                 switch(eStdAttrType)
                 {
                     case ROLE_NEXT:
-                        pAttribute = new Attribute("role",
+                        pAttribute = new Attribute(m_attributes, "role",
                             gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,
                             "", "http://www.w3.org/2003/05/soap-envelope/role/next");
                         break;
                     case ROLE_NONE:
-                        pAttribute = new Attribute("role",
+                        pAttribute = new Attribute(m_attributes, "role",
                             gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,
                             "", "http://www.w3.org/2003/05/soap-envelope/role/none");
                         break;
                     case ROLE_ULTIMATE_RECEIVER:
-                        pAttribute = new Attribute("role",
+                        pAttribute = new Attribute(m_attributes, "role",
                             gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,
                             "", "http://www.w3.org/2003/05/soap-envelope/role/ultimateReceiver");
                         break;
                     case MUST_UNDERSTAND_TRUE:
-                        pAttribute = new Attribute("mustUnderstand",
+                        pAttribute = new Attribute(m_attributes, "mustUnderstand",
                             gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,
                             "","true");
                         break;
                     case MUST_UNDERSTAND_FALSE:
-                        pAttribute = new Attribute("mustUnderstand",
+                        pAttribute = new Attribute(m_attributes, "mustUnderstand",
                             gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,
                             "","false");
                         break;

@@ -42,14 +42,24 @@
 
 AXIS_CPP_NAMESPACE_START
 
-Attribute::Attribute()
+Attribute::Attribute( list<Attribute*> attribute)
 {
-    
+	if( (void *) &attribute != NULL && !attribute.empty())
+	{
+		list<Attribute*>::iterator itAttributeList = attribute.begin();
+
+		while( itAttributeList != attribute.end())
+		{
+			m_PrefixList.push_back( (*itAttributeList)->getPrefix());
+
+			itAttributeList++;
+		}
+	}
 }
 
 Attribute::~Attribute()
 {
-
+	m_PrefixList.clear();
 }
 
 int Attribute::setLocalName(const AxisChar* localname)
@@ -58,18 +68,37 @@ int Attribute::setLocalName(const AxisChar* localname)
 	{
         localname="";
 	}
+
     m_localname= localname;
     return AXIS_SUCCESS;
 }
 
 int Attribute::setPrefix(const AxisChar* prefix)
 {
-	if(NULL==prefix)
+	if( NULL == prefix)
 	{
-        prefix="";
+        prefix = "";
 	}
-	
-    m_prefix= prefix;
+
+	if( (void *) &m_PrefixList != NULL && !m_PrefixList.empty())
+	{
+		list<const char*>::iterator itPrefixList = m_PrefixList.begin();
+
+		while( itPrefixList != m_PrefixList.end())
+		{
+			if( !strcmp( (*itPrefixList), prefix))
+			{
+				return AXIS_FAIL;
+			}
+			else
+			{
+				itPrefixList++;
+			}
+		}
+	}
+
+	m_prefix = prefix;
+
     return AXIS_SUCCESS;
 }
 
@@ -117,31 +146,82 @@ const AxisChar* Attribute::getValue()
 
 
 
-Attribute::Attribute(const AxisChar* localname, const AxisChar* prefix, 
+Attribute::Attribute(list<Attribute*> attribute, const AxisChar* localname, const AxisChar* prefix, 
                      const AxisChar* uri, const AxisChar* value)
 {
     m_localname= localname;
     m_prefix= prefix;
     m_uri= uri;
     m_value= value;
+
+	if( (void *) &attribute != NULL && !attribute.empty())
+	{
+		list<Attribute*>::iterator itAttributeList = attribute.begin();
+
+		while( itAttributeList != attribute.end())
+		{
+			m_PrefixList.push_back( (*itAttributeList)->getPrefix());
+
+			itAttributeList++;
+		}
+	}
+
+	if( prefix != NULL && strlen( prefix) > 0)
+	{
+		m_PrefixList.push_back( prefix);
+	}
 }
 
-Attribute::Attribute(const AxisChar *localname, const AxisChar *prefix, 
+Attribute::Attribute(list<Attribute*> attribute, const AxisChar *localname, const AxisChar *prefix, 
                      const AxisChar *value)
 {
     m_localname= localname;
     m_prefix= prefix;
     m_uri= "";
     m_value= value;
+
+	if( (void *) &attribute != NULL && !attribute.empty())
+	{
+		list<Attribute*>::iterator itAttributeList = attribute.begin();
+
+		while( itAttributeList != attribute.end())
+		{
+			m_PrefixList.push_back( (*itAttributeList)->getPrefix());
+
+			itAttributeList++;
+		}
+	}
+
+	if( prefix != NULL && strlen( prefix) > 0)
+	{
+		m_PrefixList.push_back( prefix);
+	}
 }
 
-Attribute::Attribute(const Attribute& rCopy)
+Attribute::Attribute(list<Attribute*> attribute, const Attribute& rCopy)
 {
     //in case sting is changed to char* use new[] and strcpy here
     this->m_localname= rCopy.m_localname; 
     this->m_prefix= rCopy.m_prefix;
     this->m_uri= rCopy.m_uri;
     this->m_value= rCopy.m_value;
+
+	if( (void *) &attribute != NULL && !attribute.empty())
+	{
+		list<Attribute*>::iterator itAttributeList = attribute.begin();
+
+		while( itAttributeList != attribute.end())
+		{
+			m_PrefixList.push_back( (*itAttributeList)->getPrefix());
+
+			itAttributeList++;
+		}
+	}
+
+	if( rCopy.m_prefix.length() > 0)
+	{
+		m_PrefixList.push_back( rCopy.m_prefix.c_str());
+	}
 }
 
 Attribute* Attribute::clone()

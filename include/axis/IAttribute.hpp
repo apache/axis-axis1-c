@@ -40,6 +40,23 @@ class IAttribute
 public:        
 
     virtual ~IAttribute() {};
+    virtual const AxisChar* getValue() = 0;
+    /**
+     * Get the URI of this attribute
+     * @return The URI of this attribute
+     */
+    virtual const AxisChar* getURI() = 0;
+    /**
+     * Get the prefix of this attribute
+     * @return The prefix of this attribute
+     */
+    virtual const AxisChar* getPrefix() = 0;
+    /**
+     * Get the local name of this attribute
+     * @return The local name of this attribute
+     */
+    virtual const AxisChar* getLocalName() = 0;
+
 	/**
 	 * try to set theattribute with given value
 	 * @param AxisChar* the value to set the value to 
@@ -69,22 +86,6 @@ public:
      * Get the value of this attribute.
      * @return The value of this attribute.
      */
-    virtual const AxisChar* getValue() = 0;
-    /**
-     * Get the URI of this attribute
-     * @return The URI of this attribute
-     */
-    virtual const AxisChar* getURI() = 0;
-    /**
-     * Get the prefix of this attribute
-     * @return The prefix of this attribute
-     */
-    virtual const AxisChar* getPrefix() = 0;
-    /**
-     * Get the local name of this attribute
-     * @return The local name of this attribute
-     */
-    virtual const AxisChar* getLocalName() = 0;
 };
 
 AXIS_CPP_NAMESPACE_END

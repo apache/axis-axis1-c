@@ -52,24 +52,24 @@ public:
     int serialize(SoapSerializer& pSZ) const;
     int serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack, const AxisChar *uri=NULL);
 
-    Attribute();    
-    Attribute(const AxisChar* localname, const AxisChar* prefix, 
+    Attribute(list<Attribute*> attribute);    
+    Attribute(list<Attribute*> attribute, const AxisChar* localname, const AxisChar* prefix, 
         const AxisChar* uri, const AxisChar* value);
-    Attribute(const AxisChar* localname, const AxisChar* prefix, 
+    Attribute(list<Attribute*> attribute, const AxisChar* localname, const AxisChar* prefix, 
         const AxisChar* value);
-    Attribute(const Attribute& rCopy);   
+    Attribute(list<Attribute*> attribute, const Attribute& rCopy);
     Attribute* clone(); 
     virtual ~Attribute();
-
-    int setValue(const AxisChar* value);
-    int setURI(const AxisChar* uri);
-    int setPrefix(const AxisChar* prefix);
-    int setLocalName(const AxisChar* localname);
 
     const AxisChar* getValue();
     const AxisChar* getURI();
     const AxisChar* getPrefix();
     const AxisChar* getLocalName();
+
+    int setValue(const AxisChar* value);
+    int setURI(const AxisChar* uri);
+    int setPrefix(const AxisChar* prefix);
+    int setLocalName(const AxisChar* localname);
 
 private:    
     bool isSerializable() const;
@@ -77,7 +77,7 @@ private:
     AxisString m_prefix;
     AxisString m_uri;
     AxisString m_value;
-
+	list<const char*>	m_PrefixList;
 };
 
 AXIS_CPP_NAMESPACE_END

@@ -54,6 +54,7 @@ class SoapBody;
 class SoapEnvelope;
 class SoapHeader;
 class IHeaderBlock;
+
 using namespace std;
 /*
  *  @class SoapDeSerializer

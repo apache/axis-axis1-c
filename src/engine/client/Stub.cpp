@@ -260,9 +260,9 @@ void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pP
     }
 
 	if (NULL!=pUri)
-		pAttribute = new Attribute(pLocalname, pPrefix, pUri, pValue);
+		pAttribute = new Attribute((std::list<Attribute*>)NULL, pLocalname, pPrefix, pUri, pValue);
 	else
-		pAttribute = new Attribute(pLocalname, pPrefix, pValue);
+		pAttribute = new Attribute((std::list<Attribute*>)NULL, pLocalname, pPrefix, pValue);
 	m_vSOAPMethodAttributes.push_back(pAttribute);
     m_viCurrentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin();
 }

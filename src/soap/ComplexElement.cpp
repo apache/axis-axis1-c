@@ -151,7 +151,7 @@ IAttribute* ComplexElement::createAttribute(const AxisChar *localname,
         const AxisChar *prefix,
         const AxisChar *value)
 {
-    Attribute* pAttribute = new Attribute(localname, prefix, value);
+    Attribute* pAttribute = new Attribute(m_attributes, localname, prefix, value);
     m_attributes.push_back(pAttribute);
     
     return (IAttribute*)pAttribute;
@@ -162,7 +162,7 @@ IAttribute* ComplexElement::createAttribute(const AxisChar *localname,
         const AxisChar *uri,
         const AxisChar *value)
 {
-    Attribute* pAttribute = new Attribute(localname, prefix, uri, value);
+    Attribute* pAttribute = new Attribute(m_attributes, localname, prefix, uri, value);
     m_attributes.push_back(pAttribute);
    
     return (IAttribute*)pAttribute;
@@ -171,7 +171,7 @@ IAttribute* ComplexElement::createAttribute(const AxisChar *localname,
 IAttribute* ComplexElement::createAttribute(const AxisChar *localname,
         const AxisChar *value)
 {
-    Attribute* pAttribute = new Attribute(localname, "", value);
+    Attribute* pAttribute = new Attribute(m_attributes, localname, "", value);
     m_attributes.push_back(pAttribute);
                                                                                                                                                                             
     return (IAttribute*)pAttribute;
