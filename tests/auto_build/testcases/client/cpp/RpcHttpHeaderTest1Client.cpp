@@ -66,13 +66,13 @@ main(int argc, char *argv[])
         printf("Unknown exception\n");
     }
 
-    printf("Test trasport property accessors\n");
-    printf("First trasport key = %s\n", ws.getFirstTrasportPropertyKey());
-    printf("First trasport value = %s\n",
-           ws.getCurrentTrasportPropertyValue());
+    printf("Test transport property accessors\n");
+    printf("First transport key = %s\n", ws.getFirstTransportPropertyKey());
+    printf("First transport value = %s\n",
+           ws.getCurrentTransportPropertyValue());
 
     //test removing HTTP headers
-    ws.deleteTrasportProperty("Accept-Language");
+    ws.deleteTransportProperty("Accept-Language");
 
     //now the request should not have these removed headers
     try

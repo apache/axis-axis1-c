@@ -1,11 +1,11 @@
 invoking echoString...
 successful
-Test trasport property accessors
-First trasport key = Accept-Language
-First trasport value =  da, en-gb;q=0.8, en;q=0.7
-Next trasport key = Accept-Language
-Next trasport value = lang2
-Next trasport key = Accept-Language
-Next trasport value = lang3
+Test transport property accessors
+First transport key = Accept-Language
+First transport value =  da, en-gb;q=0.8, en;q=0.7
+Next transport key = Accept-Language
+Next transport value = lang2
+Next transport key = Accept-Language
+Next transport value = lang3
 successful
 HTTP Header test end

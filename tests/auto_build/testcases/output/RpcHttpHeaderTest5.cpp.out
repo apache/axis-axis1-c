@@ -1,7 +1,7 @@
 invoking echoString...
 successful
-Test trasport property accessors
-First trasport key = SOAPAction
-First trasport value = InteropBase#echoString
+Test transport property accessors
+First transport key = SOAPAction
+First transport value = InteropBase#echoString
 successful
 HTTP Header test end
