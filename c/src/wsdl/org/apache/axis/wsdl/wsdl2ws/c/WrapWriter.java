@@ -95,10 +95,10 @@ public class WrapWriter extends CFileWriter{
 
 	protected void writeClassComment() throws WrapperFault {
 		try{
-			writer.write("///////////////////////////////////////////////////////////////////////\n");	
-			writer.write("//This is the Wrapper implementation file genarated by WSDL2Ws tool\n");
-			writer.write("//\n");
-			writer.write("//////////////////////////////////////////////////////////////////////\n\n");
+			writer.write("/*\n");	
+			writer.write(" * This is the Wrapper implementation file genarated by WSDL2Ws tool\n");
+			writer.write(" *\n");
+			writer.write(" */\n\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}
@@ -109,12 +109,12 @@ public class WrapWriter extends CFileWriter{
 	 */
 	protected void writeMethods() throws WrapperFault {
 		try{
-			writer.write("//implementation of BasicHandler interface\n");			
+			writer.write("/*implementation of BasicHandler interface*/\n");			
 			writer.write("void AXISCALL OnFault(void*p, IMessageData *pMsg)\n{\n}\n\n");
 			writer.write("int AXISCALL Init(void*p)\n{\n\treturn SUCCESS;\n}\n\n");
 			writer.write("int AXISCALL Fini(void*p)\n{\n\treturn SUCCESS;\n}\n\n");
 			writeInvoke();
-			writer.write("\n//Methods corresponding to the web service methods\n");
+			writer.write("\n/*Methods corresponding to the web service methods*/\n");
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
 				minfo = (MethodInfo)methods.get(i);
@@ -152,9 +152,9 @@ public class WrapWriter extends CFileWriter{
 	 * @throws IOException
 	 */
 	private void writeInvoke() throws IOException {
-		writer.write("\n/////////////////////////////////////////////////////////////////\n");
-		writer.write("// This method invokes the right service method \n");
-		writer.write("//////////////////////////////////////////////////////////////////\n");
+		writer.write("\n/*\n");
+		writer.write(" * This method invokes the right service method \n");
+		writer.write(" */\n");
 		writer.write("int AXISCALL Invoke(void*p, IMessageData *mc)\n{\n");
 		writer.write("\tIMessageDataX* pmcX = mc->__vfptr;\n");
 		writer.write("\tIWrapperSoapDeSerializer *pDZ = NULL;\n");
@@ -216,7 +216,7 @@ public class WrapWriter extends CFileWriter{
 		ArrayList paramsB = new ArrayList(params);
 		Type type;
 
-		writer.write("\n//forward declaration for the c method "+methodName+" \n");
+		writer.write("\n/*forward declaration for the c method "+methodName+" */\n");
 		//TODO forward declaration writing logic should be changed when arrays come into picture
 		if (returntype == null){
 			writer.write("extern void "+methodName+"(");
@@ -238,9 +238,9 @@ public class WrapWriter extends CFileWriter{
 			}
 		}
 		writer.write(");\n");
-		writer.write("\n/////////////////////////////////////////////////////////////////\n");
-		writer.write("// This method wrap the service method \n");
-		writer.write("//////////////////////////////////////////////////////////////////\n");
+		writer.write("\n/*\n");
+		writer.write(" * This method wrap the service method \n");
+		writer.write(" */\n");
 		//method signature
 		writer.write("int "+ methodName + CUtils.WRAPPER_METHOD_APPENDER+ "(IMessageData* mc)\n{\n");
 		writer.write("\tIMessageDataX* pmcX = mc->__vfptr;\n");

@@ -144,13 +144,8 @@ public class WSDL2Ws {
 		//there seem to be a neater way to get the service,
 		// use this instead of follows       	
 		ServiceEntry sentry = getServiceEntry();	 	   
-        
-        
         //ServiceEntry sentry = symbolTable.getServiceEntry(new QName(serviceuri, servicelocalpart));
-        
-        
         Iterator ports = sentry.getService().getPorts().values().iterator();
-        
         //if the targetEndPointURI not specifed we continue having it null
         //The WrapperInfo will set a default value for the targetEndPointURI
         if (ports.hasNext()) {

@@ -89,11 +89,11 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 
 	protected void writeClassComment() throws WrapperFault {
 			try{
-				writer.write("/////////////////////////////////////////////////////////////////////////////\n");
-				writer.write("// This is the Service Class genarated by the tool WSDL2Ws\n");
-				writer.write("//		"+classname+".h: interface for the "+classname+"class.\n");
-				writer.write("//\n");
-				writer.write("//////////////////////////////////////////////////////////////////////\n");
+				writer.write("/*\n");
+				writer.write(" * This is the Service Class genarated by the tool WSDL2Ws\n");
+				writer.write(" *		"+classname+".h: interface for the "+classname+"class.\n");
+				writer.write(" *\n");
+				writer.write(" */\n");
 			}catch(IOException e){
 				throw new WrapperFault(e);
 			}
@@ -126,12 +126,12 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 	 */
 	protected void writeMethods() throws WrapperFault {
 		try{
-			writer.write("public://implementation of WrapperClassHandler interface\n");
+			writer.write("public:/*implementation of WrapperClassHandler interface*/\n");
 			writer.write("\tint Invoke(IMessageData* mc);\n");
 			writer.write("\tvoid OnFault(IMessageData* pMsg);\n");
 			writer.write("\tint Init();\n");
 			writer.write("\tint Fini();\n");
-			writer.write("private://Methods corresponding to the web service methods\n");
+			writer.write("private:/*Methods corresponding to the web service methods*/\n");
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
 					 minfo = (MethodInfo)methods.get(i);
@@ -161,7 +161,7 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 	protected String getExtendsPart(){return " : public WrapperClassHandler";}
 	protected void writeAttributes()throws WrapperFault{
 		try{
-			writer.write("private:// Actual web service object\n\t"+CPPUtils.getWebServiceNameFromWrapperName(classname)+" *pWs;\n");
+			writer.write("private:/* Actual web service object*/\n\t"+CPPUtils.getWebServiceNameFromWrapperName(classname)+" *pWs;\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}			

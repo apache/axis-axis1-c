@@ -96,7 +96,7 @@ public class ArrayParamWriter extends ParamWriter{
 				writer.write("#include <axis/common/AxisUserAPI.h>\n\n");
 			}
 			writeArrayStruct();
-			this.writer.write("#endif // !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)\n");
+			this.writer.write("#endif /* !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)*/\n");
 			writer.flush();
 			writer.close();
 			System.out.println(getFilePath().getAbsolutePath() + " created.....");

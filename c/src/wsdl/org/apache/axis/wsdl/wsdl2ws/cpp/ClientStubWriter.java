@@ -94,11 +94,11 @@ public class ClientStubWriter extends CPPClassWriter{
 	}
 	protected void writeClassComment() throws WrapperFault {
 			try{
-				writer.write("///////////////////////////////////////////////////////////////////////\n");	
-				writer.write("// This is the Client Stub implementation file genarated by WSDL2Ws tool.\n");
-				writer.write("// "+classname+".cpp: implemtation for the "+classname+".\n");
-				writer.write("//\n");
-				writer.write("//////////////////////////////////////////////////////////////////////\n\n");
+				writer.write("/*\n");	
+				writer.write(" * This is the Client Stub implementation file genarated by WSDL2Ws tool.\n");
+				writer.write(" * "+classname+".cpp: implemtation for the "+classname+".\n");
+				writer.write(" *\n");
+				writer.write(" */\n\n");
 			}catch(IOException e){
 				throw new WrapperFault(e);
 			}
@@ -137,7 +137,7 @@ public class ClientStubWriter extends CPPClassWriter{
 	 */
 	protected void writeMethods() throws WrapperFault {
 		try{
-			writer.write("\n//Methods corresponding to the web service methods\n");
+			writer.write("\n/*Methods corresponding to the web service methods*/\n");
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
 				minfo = (MethodInfo)methods.get(i);
@@ -186,9 +186,9 @@ public class ClientStubWriter extends CPPClassWriter{
 		}
 		if (returntype != null)
 			returntypeissimple = CPPUtils.isSimpleType(outparamType);
-		writer.write("\n/////////////////////////////////////////////////////////////////\n");
-		writer.write("// This method wrap the service method"+ methodName +"\n");
-		writer.write("//////////////////////////////////////////////////////////////////\n");
+		writer.write("\n/*\n");
+		writer.write(" * This method wrap the service method"+ methodName +"\n");
+		writer.write(" */\n");
 		//method signature
 		String paraTypeName;
 		boolean typeisarray = false;

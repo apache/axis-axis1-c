@@ -119,16 +119,16 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		}
 	}
 	private void writeGetSizeGlobalMethod() throws IOException{
-		writer.write("/////////////////////////////////////////////////////////////////////////////\n");
-		writer.write("// This static method gives the size of "+classname+" type of object\n");
-		writer.write("//////////////////////////////////////////////////////////////////////\n");
+		writer.write("/*\n");
+		writer.write(" * This static method gives the size of "+classname+" type of object\n");
+		writer.write(" */\n");
 		writer.write("int Axis_GetSize_"+classname+"()\n{\n\treturn sizeof("+classname+");\n}\n");
 	}
 	private void writeSerializeGlobalMethod()throws IOException{
 		Type t;
-		writer.write("/////////////////////////////////////////////////////////////////////////////\n");
-		writer.write("// This static method serialize a "+classname+" type of object\n");
-		writer.write("//////////////////////////////////////////////////////////////////////\n");
+		writer.write("/*\n");
+		writer.write(" * This static method serialize a "+classname+" type of object\n");
+		writer.write(" */\n");
 		
 		writer.write("int Axis_Serialize_"+classname+"("+classname+"* param, IWrapperSoapSerializer& pSZ, bool bArray = false)\n{\n");
 		if (attribs.length == 0) {
@@ -177,9 +177,9 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 	}
 	private void writeDeSerializeGlobalMethod()throws IOException{	
 		Type t;
-		writer.write("/////////////////////////////////////////////////////////////////////////////\n");
-		writer.write("// This static method deserialize a "+classname+" type of object\n");
-		writer.write("//////////////////////////////////////////////////////////////////////\n");
+		writer.write("/*\n");
+		writer.write(" * This static method deserialize a "+classname+" type of object\n");
+		writer.write(" */\n");
 		
 		writer.write("int Axis_DeSerialize_"+classname+"("+classname+"* param, IWrapperSoapDeSerializer *pIWSDZ)\n{\n");
 		if (attribs.length == 0) {
@@ -226,9 +226,9 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 	}
 	
 	private void writeDeleteGlobalMethod()throws IOException{
-		writer.write("/////////////////////////////////////////////////////////////////////////////\n");
-		writer.write("// This static method delete a "+classname+" type of object\n");
-		writer.write("//////////////////////////////////////////////////////////////////////\n");
+		writer.write("/*\n");
+		writer.write(" * This static method delete a "+classname+" type of object\n");
+		writer.write(" */\n");
 		
 		writer.write("void Axis_Delete_"+classname+"("+classname+"* param, bool bArray = false, int nSize=0)\n");
 		writer.write("{\n");
@@ -241,7 +241,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			}
 		}			
 		if (hasComplexType){ 
-			writer.write("\t\t//delete any pointer members or array members of this struct here\n");
+			writer.write("\t\t/*delete any pointer members or array members of this struct here*/\n");
 			writer.write("\t\t"+classname+"* pTemp = param;\n");
 			writer.write("\t\tfor (int x=0; x<nSize; x++)\n");
 			writer.write("\t\t{\n");
@@ -271,7 +271,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write("\t}\n");
 		writer.write("\telse\n");
 		writer.write("\t{\n");
-		writer.write("\t\t//delete any pointer members or array members of this struct here\n");
+		writer.write("\t\t/*delete any pointer members or array members of this struct here*/\n");
 		for(int i = 1; i< attribs.length;i++){
 			if(!CPPUtils.isSimpleType(attribs[i][1])){
 				Type memtype = wscontext.getTypemap().getType(type.getTypNameForAttribName(attribs[i][0]));

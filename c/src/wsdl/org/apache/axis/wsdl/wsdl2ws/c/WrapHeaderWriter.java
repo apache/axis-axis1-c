@@ -89,10 +89,10 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 
 	protected void writeClassComment() throws WrapperFault {
 			try{
-				writer.write("///////////////////////////////////////////////////////////////////\n");
-				writer.write("// This is the C wrapper header file genarated by the WSDL2Ws tool\n");
-				writer.write("//\n");
-				writer.write("///////////////////////////////////////////////////////////////////\n");
+				writer.write("/*\n");
+				writer.write(" * This is the C wrapper header file genarated by the WSDL2Ws tool\n");
+				writer.write(" *\n");
+				writer.write(" */\n");
 			}catch(IOException e){
 				throw new WrapperFault(e);
 			}
@@ -103,12 +103,12 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 	 */
 	protected void writeMethods() throws WrapperFault {
 		try{
-			writer.write("//implementation of BasicHandler interface\n");
+			writer.write("/*implementation of BasicHandler interface*/\n");
 			writer.write("int AXISCALL Invoke(void*p, IMessageData* mc);\n");
 			writer.write("void AXISCALL OnFault(void*p, IMessageData* mc);\n");
 			writer.write("int AXISCALL Init(void*p);\n");
 			writer.write("int AXISCALL Fini(void*p);\n");
-			writer.write("//Methods corresponding to the web service methods\n");
+			writer.write("/*Methods corresponding to the web service methods*/\n");
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
 					 minfo = (MethodInfo)methods.get(i);

@@ -93,11 +93,11 @@ public class ServiceWriter extends CFileWriter{
 
 	protected void writeClassComment() throws WrapperFault {
 		try{
-			writer.write("///////////////////////////////////////////////////////////////////////\n");	
-			writer.write("//This is the Service implementation C file genarated by WSDL2Ws tool.\n");
-			writer.write("//"+classname+".c\n");
-			writer.write("//\n");
-			writer.write("//////////////////////////////////////////////////////////////////////\n");
+			writer.write("/*\n");	
+			writer.write(" * This is the Service implementation C file genarated by WSDL2Ws tool.\n");
+			writer.write(" * "+classname+".c\n");
+			writer.write(" *\n");
+			writer.write(" */\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}
