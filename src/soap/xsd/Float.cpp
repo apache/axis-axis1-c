@@ -2,6 +2,10 @@
 
 AXIS_CPP_NAMESPACE_START
 
+Float::Float():m_Float(NULL)
+{
+}
+
 AxisChar* Float::serialize(const void* value) throw (AxisSoapException)
 {
 	return serialize((float*) value);	
@@ -15,9 +19,18 @@ void* Float::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
 
 AxisChar* Float::serialize(const float* value) throw (AxisSoapException)
 {
-	AxisSprintf (m_Buf, 80, "%f", *value);
-	
-	return m_Buf;
+    AxisChar* serializedValue = new char[80];
+    AxisSprintf (serializedValue, 80, "%f", *value);
+  
+    if (m_Buf)
+    {
+        delete [] m_Buf;
+        m_Buf = NULL;
+    }
+    m_Buf = new char[strlen (serializedValue) + 1];
+    strcpy (m_Buf, serializedValue);
+    delete serializedValue;        
+    return m_Buf;
 }
 
 float* Float::deserializeFloat(const AxisChar* valueAsChar) throw (AxisSoapException)

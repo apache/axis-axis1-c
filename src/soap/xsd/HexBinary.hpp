@@ -32,15 +32,11 @@ using namespace std;
 
 class HexBinary : public IAnySimpleType {
 public:
+
    /**
     * Constructor.
     */
     HexBinary();
-
-   /**
-    * Destructor.
-    */
-    virtual ~HexBinary();
 
 	/**
 	 * Serialize value to it's on-the-wire string form.
@@ -71,8 +67,7 @@ public:
     xsd__hexBinary* deserializeHexBinary(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 private:
-	AxisChar* m_Buf;
-	xsd__hexBinary* m_hexBinary;
+	xsd__hexBinary* m_HexBinary;
 };
 
 AXIS_CPP_NAMESPACE_END

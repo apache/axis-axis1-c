@@ -2,6 +2,10 @@
 
 AXIS_CPP_NAMESPACE_START
 
+    Duration::Duration():m_Duration(NULL)
+    {
+    }
+
     AxisChar* Duration::serialize(const void* value) throw (AxisSoapException)
     {
     	return serialize((long*) value);
@@ -72,6 +76,12 @@ AXIS_CPP_NAMESPACE_START
 
 		// Convert from String to Char[]	
 		AxisChar* returnValue = (AxisChar*) serializedValue.c_str ();
+       
+        if(m_Buf)
+        {
+            delete [] m_Buf;
+            m_Buf = NULL;
+        }
 		m_Buf = new char[strlen (returnValue) + 1];
 		strcpy (m_Buf, returnValue);
 		return m_Buf;
@@ -82,6 +92,12 @@ AXIS_CPP_NAMESPACE_START
     	AxisString valueAsString = valueAsChar;
     	AxisString buff;
 	    unsigned int intPos1, intPos2, intPos3, intPos4, intPos5, intPos6;
+
+        if (m_Duration)
+        {
+            delete m_Duration;
+            m_Duration = NULL;
+        }
 	
 	    /*XSD_DURATION is of the format PnYnMnDTnHnMnS */
 

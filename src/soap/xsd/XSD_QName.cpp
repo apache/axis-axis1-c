@@ -2,6 +2,10 @@
 
 AXIS_CPP_NAMESPACE_START
 
+    XSD_QName::XSD_QName():m_QName(NULL)
+    {
+    }
+
     AxisChar* XSD_QName::serialize(const void* value) throw (AxisSoapException)
     {
     	return serialize((AxisChar*) value);
@@ -24,9 +28,9 @@ AXIS_CPP_NAMESPACE_START
 	
     AxisChar* XSD_QName::deserializeQName(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
-		m_Buf = new char[strlen (valueAsChar) + 1];
-		strcpy (m_Buf, valueAsChar);
-		return m_Buf;
+		m_QName = new char[strlen (valueAsChar) + 1];
+		strcpy (m_QName, valueAsChar);
+		return m_QName;
     }
 
 AXIS_CPP_NAMESPACE_END

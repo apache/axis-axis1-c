@@ -2,6 +2,10 @@
 
 AXIS_CPP_NAMESPACE_START
 
+Decimal::Decimal():m_Decimal(NULL)
+{
+}
+
 AxisChar* Decimal::serialize(const void* value) throw (AxisSoapException)
 {
 	return serialize((double*) value);	
@@ -15,14 +19,29 @@ void* Decimal::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException
 
 AxisChar* Decimal::serialize(const double* value) throw (AxisSoapException)
 {
-	AxisSprintf (m_Buf, 80, "%f", *value);
+    AxisChar* serializedValue = new char[80];
+	AxisSprintf (serializedValue, 80, "%f", *value);
 	
-	return m_Buf;
+    if (m_Buf)
+    {
+        delete [] m_Buf;
+        m_Buf = NULL;
+    }
+    m_Buf = new char[strlen (serializedValue) + 1];
+    strcpy (m_Buf, serializedValue);
+    delete serializedValue;        
+    return m_Buf;
 }
 
 double* Decimal::deserializeDecimal(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
 	AxisChar* end;
+   
+    if (m_Decimal)
+    {
+        delete m_Decimal;
+        m_Decimal = NULL;
+    }
 	m_Decimal = new double;
 	*m_Decimal = strtod (valueAsChar, &end);
 	

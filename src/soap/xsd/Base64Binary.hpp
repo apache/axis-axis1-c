@@ -32,11 +32,12 @@ using namespace std;
 
 class Base64Binary : public IAnySimpleType {
 public:
-    
+
+    /**
+     * Constructor
+     */    
     Base64Binary();
     
-    ~Base64Binary();
-
 	/**
 	 * Serialize value to it's on-the-wire string form.
 	 * @param value The value to be serialized.
@@ -66,8 +67,7 @@ public:
     xsd__base64Binary* deserializeBase64Binary(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 private:
-	AxisChar* m_Buf;
-	xsd__base64Binary* m_base64Binary;
+	xsd__base64Binary* m_Base64Binary;
 };
 
 AXIS_CPP_NAMESPACE_END

@@ -2,6 +2,10 @@
 
 AXIS_CPP_NAMESPACE_START
 
+    DateTime::DateTime():m_DateTime(NULL)
+    {
+    }
+
     AxisChar* DateTime::serialize(const void* value) throw (AxisSoapException)
     {
     	return serialize((struct tm*) value);
@@ -17,8 +21,14 @@ AXIS_CPP_NAMESPACE_START
     	AxisChar* serializedValue = new AxisChar[80];
     	strftime (serializedValue, 80, "%Y-%m-%dT%H:%M:%SZ", value);
         
+        if(m_Buf)
+        {
+            delete [] m_Buf;
+            m_Buf = NULL;
+        }
         m_Buf = new char[strlen (serializedValue) + 1];
 		strcpy (m_Buf, serializedValue);
+        delete [] serializedValue;
 		return m_Buf;
     }
 	
@@ -142,6 +152,11 @@ AXIS_CPP_NAMESPACE_START
             pTm = gmtime (&timeInSecs);
         }
         
+        if(m_DateTime)
+        {
+            delete m_DateTime;
+            m_DateTime = NULL;
+        }
         m_DateTime = new struct tm;
         memcpy (m_DateTime, pTm, sizeof (tm));
         

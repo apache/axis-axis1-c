@@ -2,6 +2,19 @@
 
 AXIS_CPP_NAMESPACE_START
 
+IAnySimpleType::IAnySimpleType():m_Buf(NULL)
+{
+}
+
+IAnySimpleType::~IAnySimpleType()
+{
+    if (m_Buf)
+    {
+        delete [] m_Buf;
+        m_Buf = NULL;
+    }
+}
+
 const AxisString& IAnySimpleType::replaceReservedCharacters(AxisString &value)
 {
     m_strReturnVal = "";

@@ -31,15 +31,41 @@ using namespace std;
 class String : public IAnySimpleType {
 public:
 
+    /**
+     * Constructor
+     */
+    String();
 	
+    /**
+     * Serialize value to it's on-the-wire string form.
+     * @param value The value to be serialized.
+     * @return Serialized form of value.
+     */
 	AxisChar* serialize(const void* value) throw (AxisSoapException);
-	void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
-	
-	AxisChar* serialize(const AxisChar* value) throw (AxisSoapException);
-	AxisChar* deserializeString(const AxisChar* valueAsChar) throw (AxisSoapException);
 
+    /**
+     * Deserialize value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of value.
+     * @return Deserialized value.
+     */
+	void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
+
+    /**
+     * Serialize String value to it's on-the-wire string form.
+     * @param value The String value to be serialized.
+     * @return Serialized form of String value.
+     */	
+	AxisChar* serialize(const AxisChar* value) throw (AxisSoapException);
+
+    /**
+     * Deserialized String value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of String value.
+     * @return Deserialized String value.
+     */
+	AxisChar* deserializeString(const AxisChar* valueAsChar) throw (AxisSoapException);
+  
 private:
-	AxisChar* m_Buf;
+    AxisChar* m_String;
 };
 
 AXIS_CPP_NAMESPACE_END

@@ -32,7 +32,6 @@ using namespace std;
 class Boolean : public IAnySimpleType {
 public:
 
-	
 	/**
 	 * Serialize value to it's on-the-wire string form.
 	 * @param value The value to be serialized.
@@ -60,10 +59,6 @@ public:
 	 * @return Deserialized boolean value.
 	 */
     xsd__boolean deserializeBoolean(const AxisChar* valueAsChar) throw (AxisSoapException);
-
-private:
-	AxisChar m_Buf[6];
-
 };
 
 AXIS_CPP_NAMESPACE_END

@@ -2,6 +2,10 @@
 
 AXIS_CPP_NAMESPACE_START
 
+    AnyURI::AnyURI():m_AnyURI(NULL)
+    {
+    }
+
     AxisChar* AnyURI::serialize(const void* value) throw (AxisSoapException)
     {
     	return serialize((AxisChar*) value);
@@ -15,18 +19,29 @@ AXIS_CPP_NAMESPACE_START
     AxisChar* AnyURI::serialize(const AxisChar* value) throw (AxisSoapException)
     {
 		AxisString valueAsString = value;
-		AxisChar* returnValue = (AxisChar*) replaceReservedCharacters(valueAsString).c_str();
+		AxisChar* serializedValue = (AxisChar*) replaceReservedCharacters(valueAsString).c_str();
 		
-		m_Buf = new char[strlen (returnValue) + 1];
-		strcpy (m_Buf, returnValue);
+        if (m_Buf)
+        {
+            delete [] m_Buf;
+            m_Buf = NULL;
+        }
+		m_Buf = new char[strlen (serializedValue) + 1];
+		strcpy (m_Buf, serializedValue);
+        delete [] serializedValue;
 		return m_Buf;
     }
 	
     AxisChar* AnyURI::deserializeAnyURI(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
-		m_Buf = new char[strlen (valueAsChar) + 1];
-		strcpy (m_Buf, valueAsChar);
-		return m_Buf;
+        if (m_AnyURI)
+        {
+            delete [] m_AnyURI;
+            m_AnyURI = NULL;
+        }
+		m_AnyURI = new char[strlen (valueAsChar) + 1];
+		strcpy (m_AnyURI, valueAsChar);
+		return m_AnyURI;
     }
 
 AXIS_CPP_NAMESPACE_END

@@ -33,35 +33,39 @@ class Integer : public Decimal {
 public:
 
     /**
-    * Serialize value to it's on-the-wire string form.
-    * @param value The value to be serialized.
-    * @return Serialized form of value.
-   */
+     * Constructor
+     */
+    Integer();
+
+    /**
+     * Serialize value to it's on-the-wire string form.
+     * @param value The value to be serialized.
+     * @return Serialized form of value.
+    */
     AxisChar* serialize(const void* value) throw (AxisSoapException);
     
-  /**
-    * Deserialize value from it's on-the-wire string form.
-    * @param valueAsChar Serialized form of value.
-    * @return Deserialized value.
+    /**
+     * Deserialize value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of value.
+     * @return Deserialized value.
      */
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
     
-  /**
-    * Serialize Integer value to it's on-the-wire string form.
-    * @param value The Integer value to be serialized.
-    * @return Serialized form of Integer value.
-   */
+    /**
+     * Serialize Integer value to it's on-the-wire string form.
+     * @param value The Integer value to be serialized.
+     * @return Serialized form of Integer value.
+     */
     AxisChar* serialize(const LONGLONG* value) throw (AxisSoapException);
   
-  /**
-    * Deserialized Integer value from it's on-the-wire string form.
-   * @param valueAsChar Serialized form of Integer value.
-    * @return Deserialized Integer value.
+    /**
+     * Deserialized Integer value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of Integer value.
+     * @return Deserialized Integer value.
      */
     LONGLONG* deserializeInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 private:
-   AxisChar m_Buf[80];
    LONGLONG* m_Integer;
 };
 

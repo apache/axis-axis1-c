@@ -31,6 +31,11 @@ using namespace std;
 class Float : public IAnySimpleType {
 public:
 
+    /**
+     * Constructor
+     */
+    Float();
+
 	/**
 	 * Serialize value to it's on-the-wire string form.
 	 * @param value The value to be serialized.
@@ -60,7 +65,6 @@ public:
     float* deserializeFloat(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 private:
-	AxisChar m_Buf[80];
 	float* m_Float;
 };
 

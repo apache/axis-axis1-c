@@ -31,14 +31,41 @@ using namespace std;
 class NOTATION : public IAnySimpleType {
 public:
 
+    /**
+     * Constructor
+     */
+    NOTATION();
+
+    /**
+     * Serialize value to it's on-the-wire string form.
+     * @param value The value to be serialized.
+     * @return Serialized form of value.
+     */
 	AxisChar* serialize(const void* value) throw (AxisSoapException);
+
+    /**
+     * Deserialize value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of value.
+     * @return Deserialized value.
+     */
 	void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
-	
+
+    /**
+     * Serialize NOTATION value to it's on-the-wire string form.
+     * @param value The NOTATION value to be serialized.
+     * @return Serialized form of NOTATION value.
+     */	
 	AxisChar* serialize(const AxisChar* value) throw (AxisSoapException);
+
+    /**
+     * Deserialized NOTATION value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of NOTATION value.
+     * @return Deserialized NOTATION value.
+     */
 	AxisChar* deserializeNOTATION(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 private:
-	AxisChar* m_Buf;
+    AxisChar* m_NOTATION;
 };
 
 AXIS_CPP_NAMESPACE_END

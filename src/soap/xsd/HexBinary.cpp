@@ -2,26 +2,9 @@
 
 AXIS_CPP_NAMESPACE_START
 
-HexBinary::HexBinary()
-:m_Buf(NULL), m_hexBinary(NULL)
-{
-}
-
-HexBinary::~HexBinary()
-{
-    if (m_Buf)
+    HexBinary::HexBinary():m_HexBinary(NULL)
     {
-        delete [] m_Buf;
-        m_Buf = NULL;
     }
-
-    // Samisa: should not release m_hexBinary, as this is used by the deserializer and
-    // according to our current memory management semantics, this is deallocated at
-    // user written client code level. If we are to delete it here (which I think is the better way)
-    // we have to change the memory management semantics and updated the docs accordingly
-    
-}
-
 
     AxisChar* HexBinary::serialize(const void* value) throw (AxisSoapException)
     {
@@ -54,22 +37,22 @@ HexBinary::~HexBinary()
 	
     xsd__hexBinary* HexBinary::deserializeHexBinary(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
-        if (m_hexBinary) // Samisa : memory management BP
+        if (m_HexBinary) // Samisa : memory management BP
         {
-            delete [] m_hexBinary;
-            m_hexBinary = NULL;
+            delete [] m_HexBinary;
+            m_HexBinary = NULL;
         }
 
-    	m_hexBinary = new xsd__hexBinary();    	
-	    m_hexBinary->__size = strlen (valueAsChar) / 2;
-	    m_hexBinary->__ptr = new unsigned char[m_hexBinary->__size + 1];
-	    Hex_Decode (m_hexBinary->__ptr, valueAsChar);
+    	m_HexBinary = new xsd__hexBinary();    	
+	    m_HexBinary->__size = strlen (valueAsChar) / 2;
+	    m_HexBinary->__ptr = new unsigned char[m_HexBinary->__size + 1];
+	    Hex_Decode (m_HexBinary->__ptr, valueAsChar);
 	    /* put null at the end because it enables the decoded string to be used
 	     * as a string 
 	     */
-	    m_hexBinary->__ptr[m_hexBinary->__size] = 0;
+	    m_HexBinary->__ptr[m_HexBinary->__size] = 0;
 
-	    return m_hexBinary;
+	    return m_HexBinary;
     }
 
 AXIS_CPP_NAMESPACE_END

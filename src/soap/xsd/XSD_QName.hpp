@@ -30,6 +30,12 @@ using namespace std;
 
 class XSD_QName : public IAnySimpleType {
 public:
+
+    /**
+     * Constructor
+     */
+    XSD_QName();
+
 	/**
 	 * Serialize value to it's on-the-wire string form.
 	 * @param value The value to be serialized.
@@ -59,7 +65,8 @@ public:
     AxisChar* deserializeQName(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 private:
-	AxisChar* m_Buf;
+    AxisChar* m_QName;
+
 };
 
 AXIS_CPP_NAMESPACE_END

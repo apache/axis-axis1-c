@@ -32,6 +32,11 @@ using namespace std;
 class Duration : public IAnySimpleType {
 public:
 
+    /**
+     * Constructor
+     */
+    Duration();
+
 	/**
 	 * Serialize value to it's on-the-wire string form.
 	 * @param value The value to be serialized.
@@ -61,7 +66,6 @@ public:
     long* deserializeDuration(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 private:
-	AxisChar* m_Buf;
 	long* m_Duration;
 };
 

@@ -31,6 +31,11 @@ using namespace std;
 class Double : public IAnySimpleType {
 public:
 
+    /**
+     * Constructor
+     */
+    Double();
+
 	/**
 	 * Serialize value to it's on-the-wire string form.
 	 * @param value The value to be serialized.
@@ -60,7 +65,6 @@ public:
     double* deserializeDouble(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 private:
-	AxisChar m_Buf[80];
 	double* m_Double;
 };
 

@@ -27,18 +27,24 @@
 
 AXIS_CPP_NAMESPACE_START
 
-const AxisChar XML_ENTITY_REFERENCE_CHARS[]    = "<>&\"\'";
 /* Entity reference characters */
-const AxisChar ENCODED_LESSER_STR[]            = "&lt;";    
+const AxisChar XML_ENTITY_REFERENCE_CHARS[]    = "<>&\"\'";
+
 /* Encoded string for less than character */
-const AxisChar ENCODED_GREATER_STR[]        = "&gt;";    
+const AxisChar ENCODED_LESSER_STR[]            = "&lt;";    
+
 /* Encoded string for greator than character */
-const AxisChar ENCODED_AMPERSAND_STR[]        = "&amp;";    
+const AxisChar ENCODED_GREATER_STR[]        = "&gt;";    
+
 /* Encoded string for ampersand character */
-const AxisChar ENCODED_DBL_QUOTE_STR[]        = "&quot;";    
+const AxisChar ENCODED_AMPERSAND_STR[]        = "&amp;";    
+
 /* Encoded string for single quote character */
-const AxisChar ENCODED_SGL_QUOTE_STR[]        = "&apos;";    
+const AxisChar ENCODED_DBL_QUOTE_STR[]        = "&quot;";    
+
 /* Encoded string for double quote character */
+const AxisChar ENCODED_SGL_QUOTE_STR[]        = "&apos;";    
+
 
 
 /**
@@ -51,7 +57,16 @@ const AxisChar ENCODED_SGL_QUOTE_STR[]        = "&apos;";
 class IAnySimpleType {
 public:
 
-	virtual ~IAnySimpleType() {};
+    /**
+     * Constructor
+     */
+    IAnySimpleType();
+    
+    /**
+     * Destructor
+     */
+    virtual ~IAnySimpleType();
+
 	/**
 	 * Serialize value to it's on-the-wire string form.
 	 * @param value The value to be serialized.
@@ -67,7 +82,17 @@ public:
     virtual void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException) = 0;
     
 protected:
+
+    /**
+     * Replace all XML reserved characters in string
+     * @param value Original string
+     * @return String with all reserved characters replaced
+     */
     const AxisString& replaceReservedCharacters(AxisString& value);
+
+    /**
+     * Reserved Characters
+     */
     enum
     {
         GREATER_THAN_CHAR    =    L'>',    /* Greater than character */
@@ -76,6 +101,8 @@ protected:
         DOUBLE_QUOTE_CHAR    =    L'\"',    /* Double quotation character */
         AMPERSAND_CHAR        =    L'&'    /* Ampersand character */
     };
+
+    AxisChar* m_Buf;
     
 private:
     AxisString m_strReturnVal;

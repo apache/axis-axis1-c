@@ -31,6 +31,11 @@ using namespace std;
 class Decimal : public IAnySimpleType {
 public:
 
+    /**
+     * Constructor
+     */
+    Decimal();
+    
 	/**
 	 * Serialize value to it's on-the-wire string form.
 	 * @param value The value to be serialized.
@@ -60,7 +65,6 @@ public:
     double* deserializeDecimal(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 private:
-	AxisChar m_Buf[80];
 	double* m_Decimal;
 };
 

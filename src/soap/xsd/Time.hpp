@@ -32,6 +32,11 @@ using namespace std;
 class Time : public IAnySimpleType {
 public:
 
+    /**
+     * Constructor
+     */
+    Time();
+
 	/**
 	 * Serialize value to it's on-the-wire string form.
 	 * @param value The value to be serialized.
@@ -61,7 +66,6 @@ public:
     struct tm* deserializeTime(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 private:
-	AxisChar* m_Buf;
 	struct tm* m_Time;
 };
 

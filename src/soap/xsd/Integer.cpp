@@ -2,6 +2,10 @@
 
 AXIS_CPP_NAMESPACE_START
 
+Integer::Integer():m_Integer(NULL)
+{
+}
+
 AxisChar* Integer::serialize(const void* value) throw (AxisSoapException)
 {
     return serialize((LONGLONG*) value);  
@@ -15,13 +19,29 @@ void* Integer::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException
 
 AxisChar* Integer::serialize(const LONGLONG* value) throw (AxisSoapException)
 {
-    AxisSprintf (m_Buf, 80, "%lld", *value);
+    AxisChar* serializedValue = new char[80];
+    AxisSprintf (serializedValue, 80, "%lld", *value);
+  
+    if (m_Buf)
+    {
+        delete [] m_Buf;
+        m_Buf = NULL;
+    }
+    m_Buf = new char[strlen (serializedValue) + 1];
+    strcpy (m_Buf, serializedValue);
+    delete serializedValue;        
     return m_Buf;
 }
 
 LONGLONG* Integer::deserializeInteger(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
     AxisChar* end;
+    
+    if(m_Integer)
+    {
+        delete m_Integer;
+        m_Integer = NULL;
+    }
     m_Integer = new LONGLONG;
     *m_Integer = strtol (valueAsChar, &end, 10);
   

@@ -2,24 +2,10 @@
 
 AXIS_CPP_NAMESPACE_START
 
-    Base64Binary::Base64Binary():m_Buf(NULL), m_base64Binary(NULL)
+    Base64Binary::Base64Binary():m_Base64Binary(NULL)
     {
     }
     
-    Base64Binary::~Base64Binary()
-    {
-        if (m_Buf)
-        {
-            delete [] m_Buf;
-            m_Buf = NULL;
-        }
-        
-        /**
-         * Don't release storage for m_base64Binary as this is still needed by
-         * by customer applications, under current memory model.
-         */
-    }
-
     AxisChar* Base64Binary::serialize(const void* value) throw (AxisSoapException)
     {
     	return serialize((xsd__base64Binary*) value);
@@ -44,27 +30,27 @@ AXIS_CPP_NAMESPACE_START
         }
 	    m_Buf = new char[strlen (serializedValue) + 1];
 		strcpy (m_Buf, serializedValue);
-        delete serializedValue;        
+        delete [] serializedValue;        
 		return m_Buf;
     }
 	
     xsd__base64Binary* Base64Binary::deserializeBase64Binary(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
-        if (m_base64Binary)
+        if (m_Base64Binary)
         {
-            delete [] m_base64Binary;
-            m_base64Binary = NULL;
+            delete [] m_Base64Binary;
+            m_Base64Binary = NULL;
         }
-    	m_base64Binary = new xsd__base64Binary();
-	    m_base64Binary->__size = apr_base64_decode_len (valueAsChar);
-	    m_base64Binary->__ptr = new unsigned char[m_base64Binary->__size + 1];
-	    m_base64Binary->__size = apr_base64_decode_binary (m_base64Binary->__ptr, valueAsChar);
+    	m_Base64Binary = new xsd__base64Binary();
+	    m_Base64Binary->__size = apr_base64_decode_len (valueAsChar);
+	    m_Base64Binary->__ptr = new unsigned char[m_Base64Binary->__size + 1];
+	    m_Base64Binary->__size = apr_base64_decode_binary (m_Base64Binary->__ptr, valueAsChar);
 	    /* put null at the end because it enables the decoded string to be used
 	     * as a string 
 	     */
-	    m_base64Binary->__ptr[m_base64Binary->__size] = 0;
+	    m_Base64Binary->__ptr[m_Base64Binary->__size] = 0;
 	
-	    return m_base64Binary;
+	    return m_Base64Binary;
     }
 
 AXIS_CPP_NAMESPACE_END

@@ -31,6 +31,11 @@ using namespace std;
 class AnyURI : public IAnySimpleType {
 public:
 
+    /**
+     * Constructor
+     */
+    AnyURI();
+
 	/**
 	 * Serialize value to it's on-the-wire string form.
 	 * @param value The value to be serialized.
@@ -58,9 +63,9 @@ public:
 	 * @return Deserialized AnyURI value.
 	 */
     AxisChar* deserializeAnyURI(const AxisChar* valueAsChar) throw (AxisSoapException);
-
+    
 private:
-	AxisChar* m_Buf;
+    AxisChar* m_AnyURI;
 };
 
 AXIS_CPP_NAMESPACE_END

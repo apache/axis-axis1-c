@@ -32,6 +32,11 @@ using namespace std;
 class Date : public IAnySimpleType {
 public:
 
+    /**
+     * Constructor
+     */
+    Date();
+    
 	/**
 	 * Serialize value to it's on-the-wire string form.
 	 * @param value The value to be serialized.
@@ -61,7 +66,6 @@ public:
     struct tm* deserializeDate(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 private:
-	AxisChar* m_Buf;
 	struct tm* m_Date;
 };
 
