@@ -4,6 +4,12 @@
 	  Compile the Apache 2.0 Axis Server Module
 	  -->
 	<target name="compileApache20Module">
+	<!--  NOT BUILDING THIS MODULE ON AIX DUE TO SOAPATTACHMENT ISSUES (compile and see what they are) -->
+	<if>
+		<not>
+			<isset property="aix"/>
+		</not>
+		<then>
 		<mkdir dir="${dir.objects}"/>
 		<mkdir dir="${dir.bin}"/>
 		<copy todir="${basedir}/include/apache2_0">
@@ -34,6 +40,9 @@
 					<linker refid="SolarisLinker"/>
 					<linker refid="LinuxLinker"/>
 					<linker refid="VisualC++Linker"/>
+<!--  <syslibset libs="apr, util" dir="${apache20.dir.server}/lib"/> -->
+
+					
 			        <linker extends="OS400Linker">
 						<linkerarg value="-qDUPPROC"/>
 						<linkerarg value="-qDUPVAR"/>
@@ -72,5 +81,10 @@
 				</cc>
 			</else>
 		</if>
+		</then>
+		<else>
+			<echo message="NOT BUILDING Apache 2.0 Axis Server Module ON AIX"/>
+		</else>
+	</if>
 	</target>
 </project>
