@@ -87,7 +87,7 @@ class HeaderBlock;
 class SoapSerializer : public IWrapperSoapSerializer, public IHandlerSoapSerializer /*: public ISoapSerializer*/
 {
 private:
-	static int iCounter;
+	int iCounter;
 	char cCounter[64];
 	SoapEnvelope* m_pSoapEnvelope;	
 	int m_iSoapVersion;
@@ -100,8 +100,8 @@ public:
 	//ISoapSerializer& operator<<(const char *cSerialized);
 	const char* getNewNamespacePrefix();
 	int setSoapVersion(SOAP_VERSION);
-	void init();
-	int getStream();
+	int Init();
+	int SetOutputStream(void* pStream);
 	int setSoapFault(SoapFault* pSoapFault);
 	int setSoapMethod(SoapMethod* pSoapMethod);
 	int setSoapBody(SoapBody* pSoapBody);
@@ -120,6 +120,7 @@ public: //Basic Type Serializing methods
 	string& SerializeBasicType(const string& sName, int nValue);
 private:
 	BasicTypeSerializer m_BTSZ;
+	void* m_pOutputStream;
 };
 
 #endif // !defined(AFX_SOAPSERIALIZER_H__C37229AD_BD54_430D_9619_E4574CF95334__INCLUDED_)

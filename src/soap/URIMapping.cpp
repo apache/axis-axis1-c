@@ -70,7 +70,7 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 map<string, URITYPE> URIMapping::m_sURIMap;
-bool URIMapping::m_bInit = false;
+volatile bool URIMapping::m_bInit = false;
 
 URIMapping::URIMapping()
 {

@@ -64,21 +64,12 @@
 #include <stdio.h>
 #include "AxisEngine.h"
 #include "../common/AxisException.h"
-#include "../common/MessageData.h"
-#include "../soap/SoapSerializer.h"
-#include "../soap/SoapDeSerializer.h"
-#include "../soap/SoapFaults.h"
-#include "../soap/URIMapping.h"
 #include "../common/Debug.h"
 #include "../common/Packet.h"
-
-
-#ifdef WIN32
-//#define WSDDFILEPATH "./Axis/conf/server.wsdd"
-#define WSDDFILEPATH "C:/Apache/Axis/server.wsdd"
-#else //For linux
-#define WSDDFILEPATH "/usr/local/axiscpp/axis/server.wsdd"
-#endif
+#include "../wsdd/WSDDDeployment.h"
+#include "HandlerPool.h"
+#include "DeserializerPool.h"
+#include "SerializerPool.h"
 
 //extern int send_response_bytes(char * res);
 
@@ -86,344 +77,253 @@
 
 //extern int send_transport_information(soapstream *);
 
-
-AxisEngine* AxisEngine::m_pObject = NULL;
+extern DeserializerPool g_DeserializerPool;
+extern SerializerPool g_SerializerPool;
+extern HandlerPool g_HandlerPool;
+extern WSDDDeployment g_WSDDDeployment;
 
 AxisEngine::AxisEngine()
 {
-	//Create Serializer and Deserializer
-	m_pSZ = new SoapSerializer();
-	m_pDZ = new SoapDeSerializer();  
-	m_pWSDD = new WSDDDeployment();
-	m_pHandlerPool = new HandlerPool();
+	m_pSZ = NULL;
+	m_pDZ = NULL;  
+	m_pGReqFChain = NULL;
+	m_pGResFChain = NULL;
+	m_pTReqFChain = NULL;
+	m_pTResFChain = NULL;
+	m_pSReqFChain = NULL;
+	m_pSResFChain = NULL;
 	m_pWebService = NULL;
-  
-  //printf("Done WSDD\n");
 }
 
 AxisEngine::~AxisEngine()
 {
-	delete m_pSZ;
-	delete m_pDZ;
-	delete m_pWSDD;
-	delete m_pHandlerPool;
-	//unload xerces DLL
-	XMLPlatformUtils::Terminate();
 }
 
-WSDDDeployment * AxisEngine::getWSDDDeployment()
+int AxisEngine::Process(Ax_soapstream* soap) 
 {
-	if(m_pWSDD)
-	{
-		return m_pWSDD; 
-	}
-	return NULL;
-}
+	int Status;
+	AXIS_TRY
+		DEBUG1("AxisEngine::Process");
+		MessageData* pMsg = NULL;
+		const WSDDService* pService = NULL;
+		string sSessionId = soap->sessionid;
+		int nSoapVersion;
 
-AxisEngine* AxisEngine::GetAxisEngine()
-{
-	if (!m_pObject)
-	{
-		try
-		{
-      DEBUG1("AxisEngine::GetAxisEngine()");
-			XMLPlatformUtils::Initialize();
-			m_pObject = new AxisEngine();
-			if (!m_pObject) return NULL;
-			if(SUCCESS != m_pObject->Initialize())
+		do {
+			//create and populate MessageData
+			if (SUCCESS != Initialize())
 			{
-				m_pObject->UnInitialize();
-				delete m_pObject;
-				m_pObject = NULL;
-				return NULL;
+				nSoapVersion = m_pDZ->GetVersion();
+				nSoapVersion = (nSoapVersion == VERSION_LAST) ? SOAP_VER_1_2 : nSoapVersion;
+				m_pSZ->setSoapVersion((SOAP_VERSION)nSoapVersion);
+				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADSRV));
+				break; //do .. while(0)
 			}
-		}
-		catch (...)
-		{
-			return NULL;
-		}	
-	}
-	return m_pObject;
-}
-
-int AxisEngine::Process(soapstream* soap) 
-{
-
-  try
-  {
-    DEBUG1("AxisEngine::Process");
- 
-	  MessageData* pMsg = NULL;
-	  MemBufInputSource* pSoapInput = NULL;
-	  WSDDHandlerList* pHandlerList = NULL;
-	  WSDDService* pService = NULL;
-	  do {
-		  //Initialize Serializer and Deserializer objects
-		  m_pSZ->init();
-		  m_pDZ->Init();
-		  //create and populate MessageData
-		  pMsg = new MessageData();
-		  pMsg->m_Protocol = soap->trtype;
-		  pMsg->SetSerializer(m_pSZ);
-		  pMsg->SetDeSerializer(m_pDZ);
+			pMsg = new MessageData();
+			pMsg->m_Protocol = soap->trtype;
+			pMsg->SetSerializer(m_pSZ);
+			pMsg->SetDeSerializer(m_pDZ);
     
-		  //Adding SoapEnvelop and SoapBody to Serializer
-		  SoapEnvelope* pEnv = new SoapEnvelope();
-		  pMsg->m_pSZ->setSoapEnvelope(pEnv);
-		  pMsg->m_pSZ->setSoapBody(new SoapBody());
+			if (SUCCESS != m_pDZ->SetInputStream(soap->str.ip_stream))
+			{
+				nSoapVersion = m_pDZ->GetVersion();
+				nSoapVersion = (nSoapVersion == VERSION_LAST) ? SOAP_VER_1_2 : nSoapVersion;
+				m_pSZ->setSoapVersion((SOAP_VERSION)nSoapVersion);
+				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
+				break; //do .. while(0)
+			}
 
-		  //---------------------start--------------------------
-
-		  //Deserialize
-		  //---------START XERCES SAX2 SPCIFIC CODE---------//
-          //a huge buffer to store the whole soap request stream
-		  char hugebuffer[10000];
-         //to store the number of chars returned by get_request_bytes
-		  int nChars = 0;
-          //request a huge number of bytes to get the whole soap request
-          //when pull parsing is used this should change
-		  get_request_bytes(hugebuffer, 10000, &nChars);
-		  DEBUG1(hugebuffer);      
-          //if no soap then quit
-		  if (nChars <= 0) break;
-		  pSoapInput = new MemBufInputSource((const unsigned char*)hugebuffer, nChars ,"bufferid",false);
-
-		  if (SUCCESS != m_pDZ->SetStream(pSoapInput)) //this parses the full soap request.
-		  {
-			  pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
-			  break; //do .. while(0)
-		  }
-		  //---------END XERCES SAX2 SPCIFIC CODE---------//
-
-		  int nSoapVersion = pMsg->m_pDZ->GetVersion();
-
-		  //Set Soap version in the Serializer
-		  pMsg->m_pSZ->setSoapVersion((SOAP_VERSION)nSoapVersion);
-
-		  //---------------------end--------------------------
+			char* cService= getheader(soap, SOAPACTIONHEADER);
+			string service = (cService == NULL)? "" : cService;
 		  
-
-		  char* cService= getheader(soap, SOAPACTIONHEADER);
-			string service;
-		  if(cService==NULL) {
-				service="";
-		  }else {
-				service= cService;
-		  }
-		  
-		  DEBUG2("string service = Maths :",service.c_str());
+			DEBUG2("string service = ",service.c_str());
      
-		  if (service.empty()) 
-		  {
-			  pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPACTIONEMPTY));
-			  break; //do .. while(0)
-		  }
-		  service = service.substr(1, service.length() - 2);
-		  pService = m_pWSDD->GetService(service);
-		  if (!pService) {
-			  pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SERVICENOTFOUND));
-			  break; //do .. while(0)
-		  }
+			if (service.empty()) 
+			{
+				nSoapVersion = pMsg->m_pDZ->GetVersion();
+				nSoapVersion = (nSoapVersion == VERSION_LAST) ? SOAP_VER_1_2 : nSoapVersion;
+				m_pSZ->setSoapVersion((SOAP_VERSION)nSoapVersion);
+				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPACTIONEMPTY));
+				break; //do .. while(0)
+			}
+			if (service.find('\"') != string::npos) //if there are quotes remove them.
+			{
+				service = service.substr(1, service.length() - 2);
+			}
 
-      pMsg->SetService(pService);
+			//get service description object from the WSDD
+			pService = g_WSDDDeployment.GetService(service);
+			if (!pService) 
+			{
+				nSoapVersion = pMsg->m_pDZ->GetVersion();
+				nSoapVersion = (nSoapVersion == VERSION_LAST) ? SOAP_VER_1_2 : nSoapVersion;
+				m_pSZ->setSoapVersion((SOAP_VERSION)nSoapVersion);
+				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SERVICENOTFOUND));
+				break; //do .. while(0)
+			}
 
+			pMsg->SetService(pService);
 			
-		  //check for soap version in the request and decide whether we support it or not
-		  //if we do not support send a soapfault with version mismatch.		  
-		  if (nSoapVersion == VERSION_LAST) //version not supported
-		  {
-			  pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_VERSION_MISMATCH));
-			  break; //do .. while(0)		
-		  }		  
+			//check for soap version in the request and decide whether we support it or not
+			//if we do not support send a soapfault with version mismatch.		  
+			nSoapVersion = pMsg->m_pDZ->GetVersion();
+			if (nSoapVersion == VERSION_LAST) //version not supported
+			{
+				m_pSZ->setSoapVersion(SOAP_VER_1_2);
+				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_VERSION_MISMATCH));
+				break; //do .. while(0)		
+			}		  
 
-		  //add namespace URIs of the SoapEnvelope of the response corresponding to the soap version.
-		  Attribute* pNS = new Attribute(g_sObjSoapEnvVersionsStruct[nSoapVersion].pchEnvelopePrefix,
-			  "xmlns","",g_sObjSoapEnvVersionsStruct[nSoapVersion].pchEnvelopeNamespaceUri);
-		  pEnv->addNamespaceDecl(pNS);
-		  //add namespace URIs for xsd and xsi
-		  pNS = new Attribute("xsd","xmlns","","http://www.w3.org/2001/XMLSchema");
-		  pEnv->addNamespaceDecl(pNS);
-		  pNS = new Attribute("xsi","xmlns","","http://www.w3.org/2001/XMLSchema-instance");
-		  pEnv->addNamespaceDecl(pNS);
 
-		  SoapMethod* pSm = m_pDZ->GetMethod();
-		  if (pSm) 
-		  {
-			  string method = pSm->getMethodName();
-      
-        DEBUG2("pSm->getMethodName(); :", method.c_str());
-          
-			  if (!method.empty())
-			  {
-				  //this is done here when we use SAX parser
-				  //if we use XML pull parser this check is done within the invoke method of the wrapper class
-				  if (pService->IsAllowedMethod(method))
-				  {          
-					  //load actual web service handler
-         
-					  m_pWebService = m_pHandlerPool->LoadWebService(pService);
+			//Set Soap version in the Serializer and the envelope
+			if (SUCCESS != m_pSZ->setSoapVersion((SOAP_VERSION)nSoapVersion))
+			{
+			  m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
+			  break; //do .. while(0)
+			}
 
-                    
-					  if (!m_pWebService)
-					  {
-            
-						  pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADSRV));
-						  //Error couldnot load web service
-						  break; //do .. while(0)
-					  }
-				  }
-				  else
-				  {
-					  pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_METHODNOTALLOWED));
-					  //method is not an exposed allowed method
-					  break; //do .. while(0)
-				  }
-			  }
-			  else
-			  {
-				  pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_NOSOAPMETHOD));
-				  //no method to be invoked
-				  break; //do .. while(0)
-			  }
-		  }
-		  //create any service specific handlers
-    
-		  pHandlerList = pService->GetRequestFlowHandlers();
+			SoapMethod* pSm = m_pDZ->GetMethod();
+			if (pSm) 
+			{
+				string method = pSm->getMethodName();
+				DEBUG2("pSm->getMethodName(); :", method.c_str());
+				if (!method.empty())
+				{
+					if (pService->IsAllowedMethod(method))
+					{          
+						//load actual web service handler
+						if (SUCCESS != g_HandlerPool.GetWebService(&m_pWebService, sSessionId, pService))
+						{
+            				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADSRV));
+							//Error couldnot load web service
+							break; //do .. while(0)
+						}
+					}
+					else
+					{
+						m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_METHODNOTALLOWED));
+						//method is not an exposed allowed method
+						break; //do .. while(0)
+					}
+				}
+				else
+				{
+					m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_NOSOAPMETHOD));
+					//no method to be invoked
+					break; //do .. while(0)
+				}
+			}
+			//Get Global and Transport Handlers
+			if(SUCCESS != (Status = InitializeHandlers(sSessionId, soap->trtype)))
+			{
+			  m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADHDL));
+			  break; //do .. while(0)
+			}
+    		//Get Service specific Handlers from the pool if configured any
+			if(SUCCESS != (Status = g_HandlerPool.GetRequestFlowHandlerChain(&m_pSReqFChain, sSessionId, pService)))
+			{        
+			  m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADHDL));
+			  break; //do .. while(0)
+			}
+			if(SUCCESS != (Status = g_HandlerPool.GetResponseFlowHandlerChain(&m_pSResFChain, sSessionId, pService)))
+			{        
+			  m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADHDL));
+			  break; //do .. while(0)
+			}
 
-      DEBUG1("after pService->GetRequestFlowHandlers();");
-       
-		  if (pHandlerList)
-		  {
+			//and handlers may add headers to the Serializer.
+			//Invoke all handlers including the webservice
+			//in case of failure coresponding soap fault message will be set
+			Status = Invoke(pMsg); //we generate response in the same way even if this has failed
+		}
+		while(0);
+		if (pMsg) delete pMsg; //MessageData is no longer needed
+		//send any transoport information like http headers first
+		send_transport_information(soap);
+		//Serialize
+		m_pSZ->SetOutputStream(soap->str.ip_stream);
 
-			  if(SUCCESS != m_pHandlerPool->LoadServiceRequestFlowHandlers(pHandlerList))
-			  {        
-				  pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADHDL));
-				  break; //do .. while(0)
-			  }
-		  }
-    
-		  pHandlerList = pService->GetResponseFlowHandlers();
-    
-		  if (pHandlerList)
-		  {
-			  if(SUCCESS != m_pHandlerPool->LoadServiceResponseFlowHandlers(pHandlerList))
-			  {
-				  pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADHDL));
-				  break; //do .. while(0)
-			  }
-		  }
-		  Invoke(pMsg); //we generate response in the same way even if this has failed
-	  }
-	  while(0);
-	  //and handlers may add headers to the Serializer.
-	  //Invoke all handlers including the webservice
-	  //in case of failure coresponding soap fault message will be sent
-	  if (pMsg) delete pMsg; //MessageData is no longer needed
-	  if (pSoapInput) delete pSoapInput; //this should not be done if we use progressive parsing
-	  //set soap version to the serializer.
-	  //Serialize
-	  send_transport_information(soap);
-	  int iStatus= m_pSZ->getStream();
-      
-	  //soap->so.http.op_soap = new char(sResponse.length() + 1); 
-	  //strcpy(soap->so.http.op_soap, sResponse.c_str());
-  #ifndef _DEBUG //this caused program to crash in debug mode
-	  m_pSZ->init();
-  #endif 
-	//unload webservice handler
-  #ifndef WIN32 //this crashes in Win32 at stl map::find(..) function - I cannot find what is wrong.
-	  if (m_pWebService) m_pHandlerPool->UnloadWebService(pService);
-	  //Unload service specific handlers
-	  pHandlerList = pService->GetRequestFlowHandlers();
-	  if (pHandlerList)
-		  m_pHandlerPool->UnLoadServiceRequestFlowHandlers(pHandlerList);
-	  pHandlerList = pService->GetResponseFlowHandlers();
-	  if (pHandlerList)
-		  m_pHandlerPool->UnLoadServiceResponseFlowHandlers(pHandlerList);
-  #endif
-	  return SUCCESS;
- }
- catch(exception* e)
- {
-   //todo
-   /*
-    An exception derived from exception which is not handled will be handled here.
-    You can call a method in AxisModule which may unload the AxisEngine
-    from the webserver and report the error. You can also write this
-    in a logfile specific to axis.
-   */
-   DEBUG1(e->what());   
-   delete(e);
- }
- catch(...)
- {
-   //todo
-   /*
-    An unknown exception which is not handled will be handled here.
-    You can call a method in AxisModule which may unload the AxisEngine
-    from the webserver and report the error. You can also write this
-    in a logfile specific to axis.
-   */
-   DEBUG1("UNKNOWN EXCEPTION");
- }
+		//Pool back the Service specific handlers
+		if (m_pSReqFChain) g_HandlerPool.PoolHandlerChain(m_pSReqFChain, sSessionId);
+		if (m_pSResFChain) g_HandlerPool.PoolHandlerChain(m_pSResFChain, sSessionId);
+		//Pool back the webservice
+		if (m_pWebService) g_HandlerPool.PoolWebService(sSessionId, m_pWebService, pService); 
+		return Status;
+	AXIS_CATCH(exception* e)
+		//todo
+		/*
+		An exception derived from exception which is not handled will be handled here.
+		You can call a method in AxisModule which may unload the AxisEngine
+		from the webserver and report the error. You can also write this
+		in a logfile specific to axis.
+		*/
+		#ifdef _DEBUG
+		DEBUG1(e->what());   
+		delete(e);
+		#endif
+	AXIS_CATCH(...)
+		//todo
+		/*
+		An unknown exception which is not handled will be handled here.
+		You can call a method in AxisModule which may unload the AxisEngine
+		from the webserver and report the error. You can also write this
+		in a logfile specific to axis.
+		*/
+		DEBUG1("UNKNOWN EXCEPTION");
+	AXIS_ENDCATCH
+	return Status;
 }
 
 int AxisEngine::Invoke(MessageData* pMsg)
 {
 	enum AE_LEVEL {AE_START=1, AE_TRH, AE_GLH, AE_SERH, AE_SERV};
-	HandlerChain* pChain;
-	int ret = FAIL;
+	int Status = FAIL;
 	int level = AE_START;
 	do
 	{
 		//invoke transport request handlers
-		pChain = m_pHandlerPool->GetTransportRequestFlowHandlerChain(pMsg->m_Protocol);
-		if (pChain) {
-			if(SUCCESS != pChain->Invoke(pMsg))
+		if (m_pTReqFChain) {
+			if(SUCCESS != (Status = m_pTReqFChain->Invoke(pMsg)))
 			{
-				pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_HANDLERFAILED));
+				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_HANDLERFAILED));
 				break; //do .. while (0)
 			}
 
 		}
-    DEBUG1("AFTER pChain = m_pHandlerPool->GetTransportRequestFlowHandlerChain");
+		DEBUG1("AFTER invoke transport request handlers");
 		level++; // AE_TRH
 		//invoke global request handlers
-		pChain = m_pHandlerPool->GetGlobalRequestFlowHandlerChain();
-		if (pChain)
+		if (m_pGReqFChain)
 		{
-			if(SUCCESS != pChain->Invoke(pMsg))
+			if(SUCCESS != (Status = m_pGReqFChain->Invoke(pMsg)))
 			{
-				pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_HANDLERFAILED));
+				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_HANDLERFAILED));
 				break; //do .. while (0)
 			}		
 		}
-    DEBUG1("AFTER pChain = m_pHandlerPool->GetGlobalRequestFlowHandlerChain();");
+		DEBUG1("AFTER invoke global request handlers");
 		level++; //AE_GLH
 		//invoke service specific request handlers
-		pChain = m_pHandlerPool->GetServiceRequestFlowHandlerChain();
-		if (pChain)
+		if (m_pSReqFChain)
 		{
-			if(SUCCESS != pChain->Invoke(pMsg))
+			if(SUCCESS != (Status = m_pSReqFChain->Invoke(pMsg)))
 			{
-				pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_HANDLERFAILED));
+				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_HANDLERFAILED));
 				break; //do .. while (0)
 			}
-      DEBUG1("if(SUCCESS == pChain->Invoke(pMsg))");
 		}
-    DEBUG1("AFTER pChain = m_pHandlerPool->GetServiceRequestFlowHandlerChain();");
+		DEBUG1("AFTER invoke service specific request handlers");
 		level++; //AE_SERH
 		//call actual web service handler
-
 		if (m_pWebService)
-			if (SUCCESS != m_pWebService->Invoke(pMsg))
+		{
+			if (SUCCESS != (Status = m_pWebService->Invoke(pMsg)))
 			{
-				pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_WEBSERVICEFAILED));
+				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_WEBSERVICEFAILED));
 				break;
-			}
-
-    DEBUG1("if (m_pWebService)");      
-         
+			}        
+		}
+		DEBUG1("AFTER call actual web service handler");
 		level++; //AE_SERV
 	}
 	while(0);
@@ -433,37 +333,32 @@ int AxisEngine::Invoke(MessageData* pMsg)
 	switch (level)
 	{
 	case AE_SERV: //everything success
-    ret = SUCCESS;
-		//invoke service specific response handlers
+		Status = SUCCESS;
 		//no break;
 	case AE_SERH: //actual web service handler has failed
 		//invoke web service specific response handlers
-    pChain = m_pHandlerPool->GetServiceResponseFlowHandlerChain();
-		if (pChain)
+		if (m_pSResFChain)
 		{
-			pChain->Invoke(pMsg);
-      
+			m_pSResFChain->Invoke(pMsg);
 		}
 		//no break;
 	case AE_GLH: //web service specific handlers have failed
 		//invoke global response handlers
-		pChain = m_pHandlerPool->GetGlobalResponseFlowHandlerChain();
-		if (pChain)
+		if (m_pGResFChain)
 		{
-			pChain->Invoke(pMsg);
+			m_pGResFChain->Invoke(pMsg);
 		}
 		//no break;
 	case AE_TRH: //global handlers have failed
-		pChain = m_pHandlerPool->GetTransportResponseFlowHandlerChain(pMsg->m_Protocol);
-		if (pChain) 
+		if (m_pTResFChain) 
 		{
-			pChain->Invoke(pMsg);
+			m_pTResFChain->Invoke(pMsg);
 		}
 		//no break;
 	case AE_START:;//transport handlers have failed
 	};
-  DEBUG1("end axisengine process()");
-	return ret;
+	DEBUG1("end axisengine process()");
+	return Status;
 }
 
 void AxisEngine::OnFault(MessageData* pMsg)
@@ -473,44 +368,21 @@ void AxisEngine::OnFault(MessageData* pMsg)
 
 int AxisEngine::Initialize()
 {
-	string str(WSDDFILEPATH);
-	TypeMapping::Initialize();
-	URIMapping::Initialize();
-	SoapFault::initialize();
-  
-  DEBUG1("AxisEngine::Initialize()");
-      
-	if (SUCCESS != m_pWSDD->LoadWSDD(str)) return FAIL;
-  
-	//Load Global Handlers to the pool if configured any
-	WSDDHandlerList* pHandlerList = m_pWSDD->GetGlobalRequestFlowHandlers();
-	if (pHandlerList)
-		if(SUCCESS != m_pHandlerPool->LoadGlobalRequestFlowHandlers(pHandlerList))
-			return FAIL;
-	pHandlerList = m_pWSDD->GetGlobalResponseFlowHandlers();
-	if (pHandlerList)
-		if(SUCCESS != m_pHandlerPool->LoadGlobalResponseFlowHandlers(pHandlerList))
-			return FAIL;
-
-	//Load Transport Handlers to the pool if configured any
-	WSDDTransport* pTransport = m_pWSDD->GetTransport();
-	if (pTransport) {
-		//HTTP
-		pHandlerList = pTransport->GetRequestFlowHandlers(APTHTTP);
-		if (pHandlerList)
-			if(SUCCESS != m_pHandlerPool->LoadTransportRequestFlowHandlers(APTHTTP, pHandlerList))
-				return FAIL;
-		//FTP
-		pHandlerList = pTransport->GetRequestFlowHandlers(APTFTP);
-		if (pHandlerList)
-			if(SUCCESS != m_pHandlerPool->LoadTransportRequestFlowHandlers(APTFTP, pHandlerList))
-				return FAIL;
-		//SMTP
-		pHandlerList = pTransport->GetRequestFlowHandlers(APTSMTP);
-		if (pHandlerList)
-			if(SUCCESS != m_pHandlerPool->LoadTransportRequestFlowHandlers(APTSMTP, pHandlerList))
-				return FAIL;
+	int Status;
+	//Create and initialize Serializer and Deserializer objects
+	if (SUCCESS != (Status = g_SerializerPool.GetInstance(&m_pSZ))) return Status;
+	if (SUCCESS != (Status = m_pSZ->Init()))
+	{
+		g_SerializerPool.PutInstance(m_pSZ);
+		return Status;
 	}
+	if (SUCCESS != (Status = g_DeserializerPool.GetInstance(&m_pDZ))) return Status;
+	if (SUCCESS != (Status = m_pDZ->Init()))
+	{
+		g_DeserializerPool.PutInstance(m_pDZ);
+		return Status;
+	}
+
 	return SUCCESS;
 }
 
@@ -518,4 +390,21 @@ void AxisEngine::UnInitialize()
 {
 	//nothing to do with m_pWSDD because its destructor deletes its objects
 	//nothing to do with m_pHandlerPool because its destructor deletes its objects
+}
+
+int AxisEngine::InitializeHandlers(string &sSessionId, AXIS_PROTOCOL_TYPE protocol)
+{
+	int Status = SUCCESS;  
+	//Get Global Handlers from the pool if configured any
+	if(SUCCESS != (Status = g_HandlerPool.GetGlobalRequestFlowHandlerChain(&m_pGReqFChain, sSessionId)))
+		return Status;
+	if(SUCCESS != (Status = g_HandlerPool.GetGlobalResponseFlowHandlerChain(&m_pGResFChain, sSessionId)))
+		return Status;
+
+	//Get Transport Handlers from the pool if configured any
+	if(SUCCESS != (Status = g_HandlerPool.GetTransportRequestFlowHandlerChain(&m_pTReqFChain, sSessionId, protocol)))
+		return Status;
+	if(SUCCESS != (Status = g_HandlerPool.GetTransportResponseFlowHandlerChain(&m_pTResFChain, sSessionId, protocol)))
+		return Status;
+	return Status;
 }

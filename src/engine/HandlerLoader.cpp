@@ -64,125 +64,136 @@
 #include "HandlerLoader.h"
 #include <stdio.h>
 #include "../common/Debug.h"
+#include "../wsdd/WSDDDeployment.h"
 
-HandlerLoader::HandlerLoader(string &sFile, int nOptions)
+extern WSDDDeployment g_WSDDDeployment;
+
+HandlerLoader::HandlerLoader()
 {
-	m_sLib = sFile.c_str();
-	m_nLoadOptions = nOptions;
-	m_Handler = 0;
-	m_pClass = NULL;
 }
 
 HandlerLoader::~HandlerLoader()
 {
-	if (m_pClass)
-		m_Delete(m_pClass);
-	if (m_Handler != 0)
-		UnloadLib(); 
+	lock();
+	HandlerInformation* pHandlerInfo = NULL;
+	for (map<int, HandlerInformation*>::iterator it = m_HandlerInfoList.begin(); it != m_HandlerInfoList.end(); it++)
+	{
+		pHandlerInfo = (*it).second;
+		if (pHandlerInfo->m_nObjCount != 0); //it seems that some objects created have not been deleted - unexpected
+		UnloadLib(pHandlerInfo);
+		delete pHandlerInfo;
+	}
+	unlock();
 }
 
-int HandlerLoader::Initialize()
+int HandlerLoader::DeleteHandler(BasicHandler* pHandler, int nLibId)
 {
-	if (0 == m_Handler)
-	{    
-    DEBUG1("if (0 == m_Handler):HandlerLoader::Initialize()");
-            
-		if (LoadLib())
-		{      
-//			printf("LoadLib success\n");
-			m_Create = GetCreate();
-			m_Delete = GetDelete();
-			if (!m_Create || !m_Delete)
+	lock();
+	if (m_HandlerInfoList.find(nLibId) != m_HandlerInfoList.end())
+	{
+		HandlerInformation* pHandlerInfo = m_HandlerInfoList[nLibId];
+		pHandlerInfo->m_nObjCount--;
+		pHandlerInfo->m_Delete(pHandler);
+		if (pHandlerInfo->m_nObjCount == 0); //time to unload the DLL
+		unlock();
+		return SUCCESS;
+	}
+	else
+	{
+		unlock();
+		return HANDLER_NOT_LOADED;
+	}
+}
+
+int HandlerLoader::LoadLib(HandlerInformation* pHandlerInfo)
+{
+	DEBUG2("in HandlerLoader::LoadLib(), Lib is :", pHandlerInfo->m_sLib.c_str());
+#ifdef WIN32
+	pHandlerInfo->m_Handler = LoadLibrary(pHandlerInfo->m_sLib.c_str());
+#else //Linux
+	pHandlerInfo->m_Handler = dlopen(pHandlerInfo->m_sLib.c_str(), pHandlerInfo->m_nLoadOptions);
+	DEBUG1("after m_Handler = dlopen(pHandlerInfo->m_sLib.c_str(), pHandlerInfo->m_nLoadOptions);");  
+#endif
+	return (pHandlerInfo->m_Handler != 0)?SUCCESS:FAIL;
+}
+
+int HandlerLoader::UnloadLib(HandlerInformation* pHandlerInfo)
+{
+#ifdef WIN32
+	FreeLibrary(pHandlerInfo->m_Handler);
+#else //Linux
+	dlclose(pHandlerInfo->m_Handler);
+#endif
+	return SUCCESS;
+}
+
+int HandlerLoader::CreateHandler(BasicHandler** pHandler, int nLibId)
+{
+	lock();
+	*pHandler = NULL;
+	HandlerInformation* pHandlerInfo = NULL;
+	if (m_HandlerInfoList.find(nLibId) == m_HandlerInfoList.end())
+	{
+		HandlerInformation* pHandlerInfo = new HandlerInformation();
+		pHandlerInfo->m_sLib = g_WSDDDeployment.GetLibName(nLibId);
+		if (pHandlerInfo->m_sLib.empty())
+		{
+			delete pHandlerInfo;
+			unlock();
+			return LIBRARY_PATH_EMPTY;
+		}
+		pHandlerInfo->m_nLoadOptions = RTLD_LAZY;
+		if (SUCCESS == LoadLib(pHandlerInfo))
+		{  
+			#ifdef WIN32
+			pHandlerInfo->m_Create = (CREATE_OBJECT)GetProcAddress(pHandlerInfo->m_Handler,CREATE_FUNCTION);
+			pHandlerInfo->m_Delete = (DELETE_OBJECT)GetProcAddress(pHandlerInfo->m_Handler,DELETE_FUNCTION);
+			#else //Linux
+			pHandlerInfo->m_Create = (CREATE_OBJECT)dlsym(pHandlerInfo->m_Handler,CREATE_FUNCTION);
+			pHandlerInfo->m_Delete = (DELETE_OBJECT)dlsym(pHandlerInfo->m_Handler,DELETE_FUNCTION);
+			#endif		
+			if (!pHandlerInfo->m_Create || !pHandlerInfo->m_Delete)
 			{
-//				printf("could not get function pointers\n");
-				UnloadLib();
-				m_Handler = 0;
-				return FAIL;
+				UnloadLib(pHandlerInfo);
+				delete pHandlerInfo;
+				unlock();
+				return LOADLIBRARY_FAILED;
 			}
-			m_Create(&m_pClass);
-			return SUCCESS;
+			else //success
+			{
+				m_HandlerInfoList[nLibId] = pHandlerInfo;
+			}
 		}
 		else 
 		{
-//			printf("LoadLib failed\n");
-			return FAIL;
+			unlock();
+			return LOADLIBRARY_FAILED;
 		}
 	}
-	return SUCCESS;
-}
-
-int HandlerLoader::Invoke(MessageData *pMsg)
-{
-	if (m_pClass)
+	
+	pHandlerInfo = m_HandlerInfoList[nLibId];
+	BasicHandler* pBH = NULL;
+	pHandlerInfo->m_Create(&pBH);
+	if (pBH)
 	{
-		return m_pClass->Invoke(pMsg);
+		if (SUCCESS == pBH->Init())
+		{
+			pHandlerInfo->m_nObjCount++;
+			*pHandler = pBH;
+			unlock();
+			return SUCCESS;
+		}
+		else
+		{
+			pBH->Fini();
+			delete pBH;
+			unlock();
+			return HANDLER_INIT_FAIL;
+		}
 	}
-	return FAIL;
-}
-
-int HandlerLoader::Finalize()
-{
-	m_Delete(m_pClass);
-	m_pClass = NULL;
-	UnloadLib();
-	m_Handler = 0;
-	return SUCCESS;
-}
-
-int HandlerLoader::LoadLib()
-{
-  
-  DEBUG2("in HandlerLoader::LoadLib(), Lib is :", m_sLib.c_str());
-   	
-#ifdef WIN32
-	m_Handler = LoadLibrary(m_sLib.c_str());
-#else //Linux
-  
-	m_Handler = dlopen(m_sLib.c_str(), m_nLoadOptions);
-  
-  DEBUG1("after m_Handler = dlopen(m_sLib.c_str(), m_nLoadOptions);");
-   
-  
-      	if (!m_Handler)
+	else
 	{
-    
-//		printf("Error is :%s\n",dlerror());
+		unlock();
+		return CREATION_FAILED;
 	}
-  
-#endif
-	return (m_Handler != 0);
-}
-
-CREATE_OBJECT HandlerLoader::GetCreate()
-{
-#ifdef WIN32
-	return (CREATE_OBJECT)GetProcAddress(m_Handler,CREATE_FUNCTION);
-#else //Linux
-	return (CREATE_OBJECT)dlsym(m_Handler,CREATE_FUNCTION);
-#endif
-}
-
-DELETE_OBJECT HandlerLoader::GetDelete()
-{
-#ifdef WIN32
-	return (DELETE_OBJECT)GetProcAddress(m_Handler,DELETE_FUNCTION);
-#else //Linux
-	return (DELETE_OBJECT)dlsym(m_Handler,DELETE_FUNCTION);
-#endif
-}
-
-int HandlerLoader::UnloadLib()
-{
-#ifdef WIN32
-	FreeLibrary(m_Handler);
-#else //Linux
-	dlclose(m_Handler);
-#endif
-	return SUCCESS;
-}
-
-BasicHandler* HandlerLoader::GetHandler()
-{
-	BasicHandler* pH = m_pClass;
-	return pH;
 }

@@ -80,18 +80,27 @@ using namespace std;
 
 class HandlerChain : public BasicHandler  
 {
+	friend class HandlerPool;
+private:
+	typedef struct ChainItem
+	{
+		Handler* m_pHandler;
+		int m_nScope;
+		int m_nLibId;
+	} ChainItem;
 public:
-	int AddHandler(Handler* pHandler);
+	int AddHandler(Handler* pHandler, int nScope, int nLibId);
 	HandlerChain();
 	virtual ~HandlerChain();
-
 	int Invoke(IMessageData* pMsg);
 	void OnFault(IMessageData* pMsg);
 	int GetType(){return CHAIN_HANDLER;};
+	int Init();
+	int Fini();
 
 private:
-	list<Handler*> m_HandlerList;
-  list<Handler*>::iterator m_itCurrHandler;
+	list<ChainItem> m_HandlerList;
+	list<ChainItem>::iterator m_itCurrHandler;
 };
 
 #endif // !defined(AFX_HANDLERCHAIN_H__675E51BF_2FD7_4860_B3DE_F8B5A978EB99__INCLUDED_)

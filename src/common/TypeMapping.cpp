@@ -71,7 +71,7 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 map<string, XSDTYPE> TypeMapping::m_sTypeMap;
-bool TypeMapping::m_bInit = false;
+volatile bool TypeMapping::m_bInit = false;
 //map<string, XSDTYPE> TypeMapping::m_sTypeMap["xsd:int"] = XSD_INT;
 //map<string, XSDTYPE> TypeMapping::m_sTypeMap["xsd:string"] = XSD_STRING;
 

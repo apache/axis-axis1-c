@@ -84,17 +84,13 @@ HandlerChain::~HandlerChain()
 
 int HandlerChain::Invoke(IMessageData* pMsg)
 {
-  
-  DEBUG1("HandlerChain::Invoke(IMessageData* pMsg)");
-  
+	DEBUG1("HandlerChain::Invoke(IMessageData* pMsg)");
 	m_itCurrHandler = m_HandlerList.begin();
 	while (m_itCurrHandler != m_HandlerList.end())
 	{
-    DEBUG1("while (m_itCurrHandler != m_HandlerList.end())");
-		if (SUCCESS == (*m_itCurrHandler)->Invoke(pMsg))
+		if (SUCCESS == (*m_itCurrHandler).m_pHandler->Invoke(pMsg))
 		{
 			m_itCurrHandler++;
-      DEBUG1("if (SUCCESS == (*m_itCurrHandler)->Invoke(pMsg))");
 		}
 		else
 		{
@@ -102,7 +98,7 @@ int HandlerChain::Invoke(IMessageData* pMsg)
 			return FAIL;
 		}
 	}
-  DEBUG1("HandlerChain::Invoke end");
+	DEBUG1("HandlerChain::Invoke end");
 	return SUCCESS;
 }
 
@@ -110,14 +106,29 @@ void HandlerChain::OnFault(IMessageData* pMsg)
 {
 	while (m_itCurrHandler != m_HandlerList.begin())
 	{
-		(*m_itCurrHandler)->OnFault(pMsg);
+		(*m_itCurrHandler).m_pHandler->OnFault(pMsg);
 		m_itCurrHandler--;
 	}
 }
 
-int HandlerChain::AddHandler(Handler *pHandler)
+int HandlerChain::AddHandler(Handler* pHandler, int nScope, int nLibId)
 {
-	m_HandlerList.push_back(pHandler);
-
+	ChainItem item;
+	item.m_pHandler = pHandler;
+	item.m_nScope = nScope;
+	item.m_nLibId = nLibId;
+	m_HandlerList.push_back(item);
 	return SUCCESS;
+}
+
+int HandlerChain::Init()
+{
+	m_HandlerList.clear();
+	return SUCCESS;
+}
+
+int HandlerChain::Fini()
+{
+	m_HandlerList.clear();
+	return SUCCESS;	
 }
