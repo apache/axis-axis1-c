@@ -24,10 +24,12 @@
                        refid="ews.beans.compile.src.set"/>
 
     </preGoal>
-
+    
     <postGoal name="jar">
         <ant:mkdir dir="${basedir}/target/lib"/>
-        <deploy:copy-deps todir="${basedir}/target/lib"/>    
+        <deploy:copy-deps todir="${basedir}/target/lib"/>   
+        <ant:mkdir dir="${maven.repo.local}/ews/jars"/>
+		<ant:copy file="${basedir}/target/ews-1.0.jar" todir="${maven.repo.local}/ews/jars"/>
     </postGoal>
     
     <goal name="generate:jaxb"
@@ -76,12 +78,19 @@
     
     <preGoal name="test:test">
         <j:jelly xmlns="jelly:ant">
-		<ant:ant antfile="build.xml" inheritall="true" inheritrefs="true" dir="samples/ejb/bookquote"/>
-		<ant:ant antfile="build.xml" inheritall="true" inheritrefs="true" dir="samples/ejb/google"/>
-		<ant:ant antfile="build.xml" inheritall="true" inheritrefs="true" dir="samples/ejb/time"/>
-		<ant:ant antfile="build.xml" inheritall="true" inheritrefs="true" dir="samples/ejb/zip"/>
-		<ant:ant antfile="build.xml" inheritall="true" inheritrefs="true" dir="samples/servlet/war2"/>
-		<ant:ant antfile="build.xml" inheritall="true" inheritrefs="true" dir="samples/ejb/echo"/>
+			<ant:java classname="org.apache.geronimo.ews.ws4j2ee.utils.PropertyStore" fork="no" >
+			   	<ant:arg value="${maven.repo.local}"/>
+	  	     	<ant:classpath>
+			     	<pathelement location="${basedir}/target/classes"/>
+	  	     	</ant:classpath>
+             </ant:java>
+
+			<ant:ant antfile="build.xml" inheritall="true" inheritrefs="true" dir="samples/ejb/bookquote"/>
+			<ant:ant antfile="build.xml" inheritall="true" inheritrefs="true" dir="samples/ejb/google"/>
+			<ant:ant antfile="build.xml" inheritall="true" inheritrefs="true" dir="samples/ejb/time"/>
+			<ant:ant antfile="build.xml" inheritall="true" inheritrefs="true" dir="samples/ejb/zip"/>
+			<ant:ant antfile="build.xml" inheritall="true" inheritrefs="true" dir="samples/servlet/war2"/>
+			<ant:ant antfile="build.xml" inheritall="true" inheritrefs="true" dir="samples/ejb/echo"/>
         </j:jelly>
     </preGoal> 
     

@@ -102,11 +102,8 @@ public class WebDDParser {
 			NodeList sevlele = root.getElementsByTagName("servlet");
 			if(sevlele.getLength()>0){
 				Element serv = (Element)sevlele.item(0);
-				NodeList servName = serv.getElementsByTagName("servlet-class");
-				servletClass = Utils.getElementValue(servName.item(0));
-				
-				servName = serv.getElementsByTagName("servlet-name");
-				servletName = Utils.getElementValue(servName.item(0));
+				servletClass = Utils.getElementValue(serv.getElementsByTagName("servlet-class"));
+				servletName = Utils.getElementValue(serv.getElementsByTagName("servlet-name"));
 			}
 			context = new WebDDContextImpl(servletClass,servletName);
 		} catch (Exception e) {

@@ -54,6 +54,7 @@
  */
 package org.apache.geronimo.ews.ws4j2ee.toWs.wrapperWs.geronimo;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -65,120 +66,130 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.JavaClassWriter;
 import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 
-
 /**
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class InternalBasedWrapperClassWriter extends JavaClassWriter {
-	protected static Log log =
-		LogFactory.getLog(InternalBasedWrapperClassWriter.class.getName());
-	protected String seiName = null;
-	/**
-	 * @param j2eewscontext
-	 * @param qulifiedName
-	 * @throws GenerationFault
-	 */
-	public InternalBasedWrapperClassWriter(J2EEWebServiceContext j2eewscontext)
-		throws GenerationFault {
-		super(j2eewscontext, getName(j2eewscontext) + "Impl");
-		seiName = j2eewscontext.getMiscInfo().getJaxrpcSEI();
+    protected static Log log =
+        LogFactory.getLog(InternalBasedWrapperClassWriter.class.getName());
+    protected final String seiName;
+    protected final String ejbName;
+    /**
+     * @param j2eewscontext
+     * @param qulifiedName
+     * @throws GenerationFault
+     */
+    public InternalBasedWrapperClassWriter(J2EEWebServiceContext j2eewscontext)
+        throws GenerationFault {
+        super(j2eewscontext, getName(j2eewscontext) + "Impl");
+        seiName = j2eewscontext.getMiscInfo().getJaxrpcSEI();
+        ejbName = j2eewscontext.getEJBDDContext().getEjbName();
 
-	}
+    }
 
-	private static String getName(J2EEWebServiceContext j2eewscontext) {
-		String name = j2eewscontext.getWSDLContext().gettargetBinding().getName();
-		if (name == null) {
-			name = j2eewscontext.getMiscInfo().getJaxrpcSEI();
-		}
-		return name;
-	}
+    private static String getName(J2EEWebServiceContext j2eewscontext) {
+        String name =
+            j2eewscontext.getWSDLContext().gettargetBinding().getName();
+        if (name == null) {
+            name = j2eewscontext.getMiscInfo().getJaxrpcSEI();
+        }
+        return name;
+    }
 
-	protected String getimplementsPart() {
-		return " implements "
-			+ j2eewscontext.getMiscInfo().getJaxrpcSEI();
-	}
+    protected String getimplementsPart() {
+        return " implements " + j2eewscontext.getMiscInfo().getJaxrpcSEI();
+    }
 
-	protected void writeAttributes() throws GenerationFault {
-		out.write("\tprivate " + seiName + " bean = null;\n");
-		out.write("\tprivate org.openejb.EJBContainer container;\n");
-	}
+    protected void writeAttributes() throws GenerationFault {
+        out.write("\tprivate " + seiName + " bean = null;\n");
+        out.write("\tprivate org.openejb.EJBContainer container;\n");
+    }
 
-//	  String cotnainerIndex = ... // get container index  from request
-//	  ContainerIndex index = ContainerIndex.getInstance();
-//	  EJBContainer container = index.getContainer(containerIndex);
-//	  container.invoke(callMethod, args, primKey);
-//@see  org.openejb.cotnainerIndex#getContainer() and EJBContainer 
-//I can go though all and select the one with right ejbname for the wrost case
+    protected void writeConstructors() throws GenerationFault {
+        out.write("\tpublic " + classname + "(){\n");
+        out.write("\t}\n");
+    }
 
-	protected void writeConstructors() throws GenerationFault {
-		out.write("\tpublic " + classname + "(){\n");
-		out.write("\t\tString containerID = \""+j2eewscontext.getMiscInfo().getJ2eeComponetLink()+"\";\n"); // get container id (aka deployment id) from request
-		out.write("\t\torg.openejb.ContainerIndex index = org.openejb.ContainerIndex.getInstance();\n");
-		out.write("\t\tthis.container = index.getContainer(containerID);\n");
-		out.write("\t}\n");
-	}
+    protected void writeMethods() throws GenerationFault {
+        String parmlistStr = null;
+        ArrayList operations = j2eewscontext.getMiscInfo().getSEIOperations();
+        for (int i = 0; i < operations.size(); i++) {
+            parmlistStr = "";
+            SEIOperation op = (SEIOperation) operations.get(i);
+            String returnType = op.getReturnType();
+            if (returnType == null)
+                returnType = "void";
+            out.write(
+                "\tpublic " + returnType + " " + op.getMethodName() + "(");
 
-		protected void writeMethods() throws GenerationFault {
-		String parmlistStr = null;
-		 ArrayList operations = j2eewscontext.getMiscInfo().getSEIOperations();
-		 for(int i =0;i<operations.size();i++){
-			parmlistStr = "";
-			 SEIOperation op = (SEIOperation)operations.get(i);
-			 String returnType = op.getReturnType();
-			 if(returnType == null)
-				returnType = "void";
-			 out.write("\tpublic "+returnType+" "+op.getMethodName()+"(");
-				
-			 Iterator pas = op.getParameterNames().iterator();
-			 boolean first = true;
-			 while(pas.hasNext()){
-				 String name = (String)pas.next();
-				 String type = op.getParameterType(name);
-				 if(first){ 
-					 first = false;
-					 out.write(type + " " +name);
-					 parmlistStr = parmlistStr + name;
-				 }else{
-					 out.write(","+type + " " +name);
-					 parmlistStr = parmlistStr + ","+name;
-				 }
-						
-			 }
-				
-			 out.write(") throws java.rmi.RemoteException");
-			 ArrayList faults = op.getFaults();
-			 for(int j = 0;j<faults.size();j++){
-				 out.write(","+(String)faults.get(i));
-			 }
-			 out.write("{\n");
-			 
-			 out.write("\t\tjava.lang.reflect.Method callMethod = org.apache.geronimo.ews.ws4j2ee.utils.Utils.getJavaMethod(\""+seiName+"\",\""+op.getMethodName()+"\");\n");
-			 out.write("\t\tString primKey = null;\n");
-			 out.write("\t\tObject[] arguments = new Object[]{");
-			 pas = op.getParameterNames().iterator();
-			 first = true;
-			 while(pas.hasNext()){
-				 String name = (String)pas.next();
-				 String type = op.getParameterType(name);
-				 if(first){ 
-					 first = false;
-					 out.write(Utils.getParameter(type,name));
-				 }else{
-					out.write(","+Utils.getParameter(type,name));
-				 }
-			 }
-			 out.write("};\n");
-			out.write("\t\t\ttry{\n");
-			 out.write("\t\t\tObject result = container.invoke(callMethod, arguments, primKey);\n");
-			 if(!"void".equals(returnType))
-				 out.write("\t\t\treturn "+Utils.getReturnCode(returnType,"result")+";\n");
-			 out.write("\t\t\t}catch(Throwable e){\n");
-			out.write("\t\t\t\tthrow new org.apache.geronimo.ews.ws4j2ee.wsutils.J2EEFault(e);\n");
-			 out.write("}\n");			 
-			 out.write("\t}\n");
-		 }
-		 //out.write("}\n");	
+            Iterator pas = op.getParameterNames().iterator();
+            boolean first = true;
+            while (pas.hasNext()) {
+                String name = (String) pas.next();
+                String type = op.getParameterType(name);
+                if (first) {
+                    first = false;
+                    out.write(type + " " + name);
+                    parmlistStr = parmlistStr + name;
+                } else {
+                    out.write("," + type + " " + name);
+                    parmlistStr = parmlistStr + "," + name;
+                }
 
-	}
+            }
+
+            out.write(") throws java.rmi.RemoteException");
+            ArrayList faults = op.getFaults();
+            for (int j = 0; j < faults.size(); j++) {
+                out.write("," + (String) faults.get(i));
+            }
+            out.write("{\n");
+
+            out.write(
+                "\t\tString methodName = \"" + op.getMethodName() + "\";\n");
+            out.write(
+                "\t\tjava.lang.reflect.Method callMethod = Utils.getJavaMethod(\""
+                    + seiName
+                    + "\",\"methodName\");\n");
+            out.write(
+                "\t\tClass[] classes = callMethod.getParameterTypes();\n");
+
+            out.write("\t\tObject[] arguments = new Object[]{");
+            pas = op.getParameterNames().iterator();
+            first = true;
+            while (pas.hasNext()) {
+                String name = (String) pas.next();
+                String type = op.getParameterType(name);
+                if (first) {
+                    first = false;
+                    out.write(Utils.getParameter(type, name));
+                } else {
+                    out.write("," + Utils.getParameter(type, name));
+                }
+            }
+            out.write("};\n");
+            if (!"void".equals(returnType)) {
+                out.write(
+					"\t\t\treturn "
+						+ Utils.getReturnCode(returnType, "GeronimoUtils.invokeEJB(\""
+                        + ejbName
+                        + "\",methodName,classes,arguments)")
+						+ ";\n");
+            } else {
+                out.write(
+                    "\t\t\tGeronimoUtils.invokeEJB(\""
+                        + ejbName
+                        + "\",methodName,classes,arguments);\n");
+            }
+            out.write("\t}\n");
+        }
+    }
+    /* (non-Javadoc)
+     * @see org.apache.geronimo.ews.ws4j2ee.toWs.JavaClassWriter#writeImportStatements()
+     */
+    protected void writeImportStatements() throws GenerationFault {
+		out.write("import org.apache.geronimo.ews.ws4j2ee.wsutils.GeronimoUtils;\n");
+		out.write("import org.apache.geronimo.ews.ws4j2ee.utils.Utils;\n");
+    }
 
 }

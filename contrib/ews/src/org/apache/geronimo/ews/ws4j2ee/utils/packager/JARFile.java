@@ -69,6 +69,8 @@ import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 
+import org.apache.axis.components.logger.LogFactory;
+import org.apache.commons.logging.Log;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 
 /**
@@ -84,6 +86,9 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class JARFile {
+	protected static Log log =
+				LogFactory.getLog(JARFile.class.getName());
+	
     private HashMap jarEntries;
     private File path;
 
@@ -99,7 +104,7 @@ public class JARFile {
 
     public void addJarFile(String jarFile) throws GenerationFault {
         try {
-			System.out.println("# " + jarFile + " added ....");
+			log.info(jarFile + " added ....");
             
             JarFile file = new JarFile(jarFile);
             Enumeration e = file.entries();
@@ -109,7 +114,9 @@ public class JARFile {
                     new JARFileEntry(
                         entry.getName(),
                         file.getInputStream(entry));
-                this.jarEntries.put(entry.getName(), newEntry);
+                if(!jarEntries.containsKey(entry.getName())){
+					this.jarEntries.put(entry.getName(), newEntry);
+                }        
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -124,9 +131,6 @@ public class JARFile {
     public void createNewJarFile() throws IOException {
         if (!path.exists())
             path.createNewFile();
-
-        System.out.println("  creating " + path.getAbsolutePath() + ".......");
-
         BufferedOutputStream bo =
             new BufferedOutputStream(new FileOutputStream(path));
         JarOutputStream jo = new JarOutputStream(bo);
@@ -134,7 +138,7 @@ public class JARFile {
         for (; it.hasNext();) {
 
             JARFileEntry jarentry = (JARFileEntry) it.next();
-            System.out.println("## "+jarentry.getJarEntry().getName() + " adding ..");
+			log.info(jarentry.getJarEntry().getName() + " adding");
             InputStream instream = null;
             //            File input = new File(jarentry.getSource());
 

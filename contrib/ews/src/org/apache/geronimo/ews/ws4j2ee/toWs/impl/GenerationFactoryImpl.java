@@ -25,6 +25,7 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Writer;
+import org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2eeDeployContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2eeServerCLOptionParser;
 import org.apache.geronimo.ews.ws4j2ee.toWs.dd.J2EEContainerSpecificDDGenerator;
 import org.apache.geronimo.ews.ws4j2ee.toWs.dd.JaxrpcMapperGenerator;
@@ -85,7 +86,7 @@ public class GenerationFactoryImpl
 
     public Generator createWSDLGenerator(J2EEWebServiceContext wscontext,
     	Emitter emitter,
-    	Ws4J2eeServerCLOptionParser clparser)
+		Ws4J2eeDeployContext clparser)
         throws GenerationFault {
         return new WSDLGenerator(wscontext,emitter,clparser);
     }

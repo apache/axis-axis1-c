@@ -75,12 +75,12 @@ import org.apache.geronimo.ews.ws4j2ee.utils.packager.load.PackageModuleFactory;
 /**
  * @author hemapani
  */
-public class Ws4J2eeServerCLOptionParser {
+public class Ws4J2eeServerCLOptionParser implements Ws4J2eeDeployContext{
 	private PackageModule module;
 	private String outPutLocation;
 	private String moduleLocation = null;
 	private String implStyle = GenerationConstants.USE_LOCAL_AND_REMOTE;
-	private String contanier = GenerationConstants.JBOSS_CONTAINER;
+	private String container = GenerationConstants.JBOSS_CONTAINER;
 
 
 	private String[] args;
@@ -598,7 +598,7 @@ public class Ws4J2eeServerCLOptionParser {
 				this.implStyle = option.getArgument();
 				break;	 
 			case CONTAINER_OPT: 
-				this.contanier = option.getArgument();
+				this.container = option.getArgument();
 				break;	 	 
 	 
 
@@ -755,7 +755,7 @@ public class Ws4J2eeServerCLOptionParser {
      * @return
      */
     public String getContanier() {
-        return contanier;
+        return container;
     }
 
     /**
@@ -769,7 +769,7 @@ public class Ws4J2eeServerCLOptionParser {
      * @param string
      */
     public void setContanier(String string) {
-        contanier = string;
+        container = string;
     }
 
     /**

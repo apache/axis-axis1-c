@@ -131,26 +131,10 @@ public class ServiceReferanceParser {
 	public void parse(Element refEle){	
 		ref = new ServiceReferanceImpl();
 		Element root = refEle; 
-
-		NodeList sevlele = root.getElementsByTagName("service-ref-name");
-		if(sevlele.getLength()>0){
-			ref.setServicerefName(Utils.getElementValue(sevlele.item(0)));
-		}
-		
-		sevlele = root.getElementsByTagName("service-interface");
-		if(sevlele.getLength()>0){
-			ref.setServiceInterface(Utils.getElementValue(sevlele.item(0)));
-		}
-		
-		sevlele = root.getElementsByTagName("wsdl-file");
-		if(sevlele.getLength()>0){
-			ref.setWsdlFile(Utils.getElementValue(sevlele.item(0)));
-		}
-
-		sevlele = root.getElementsByTagName("jaxrpc-mapping-file");
-		if(sevlele.getLength()>0){
-			ref.setJaxrpcmappingFile(Utils.getElementValue(sevlele.item(0)));
-		}
+		ref.setServicerefName(Utils.getElementValue(root.getElementsByTagName("service-ref-name")));
+		ref.setServiceInterface(Utils.getElementValue( root.getElementsByTagName("service-interface")));
+		ref.setWsdlFile(Utils.getElementValue(root.getElementsByTagName("wsdl-file")));
+		ref.setJaxrpcmappingFile(Utils.getElementValue(root.getElementsByTagName("jaxrpc-mapping-file")));
 	}
 	
     /**

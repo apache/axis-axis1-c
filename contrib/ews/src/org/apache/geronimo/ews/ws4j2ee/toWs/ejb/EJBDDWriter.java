@@ -101,19 +101,21 @@ public class EJBDDWriter extends AbstractWriter {
 		  ejbname = ejbname.substring(index+1);
 		} 
 		String version = GenerationConstants.J2EE_VERSION_1_4; 
-		version = GenerationConstants.getProperty(GenerationConstants.WS4J2EE_PROVIDER); 
-
 
 		out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-		if(version == GenerationConstants.J2EE_VERSION_1_4){
-			out.write("<ejb-jar xmlns=\"http://java.sun.com/xml/ns/j2ee\">\n");
-		}else{
-			out.write("<!DOCTYPE ejb-jar PUBLIC '-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN' 'http://java.sun.com/dtd/ejb-jar_2_0.dtd'>\n");
-			out.write("<ejb-jar>\n");
-		}
-		
+//let us stack to the J2EE 1.4 and by the wy 1.3 has nothing to do with web services :) 
+//		if(version == GenerationConstants.J2EE_VERSION_1_3){
+//			out.write("<!DOCTYPE ejb-jar PUBLIC '-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN' 'http://java.sun.com/dtd/ejb-jar_2_0.dtd'>\n");
+//			out.write("<ejb-jar>\n");
+//		}else{
+//		}
+		out.write("<ejb-jar xmlns=\"http://java.sun.com/xml/ns/j2ee\"\n");
+		out.write("		 xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
+		out.write("		 xsi:schemaLocation=\"http://java.sun.com/xml/ns/j2ee\\n");
+		out.write("		 http://java.sun.com/xml/ns/j2ee/ejb-jar_2_1.xsd\"\n");
+		out.write("		 version=\"2.1\">\n");
 
-		out.write("<display-name>" + j2eewscontext.getWSCFContext().getWscfdWsDesxription().getDisplayName() + "</display-name>\n");
+		//out.write("<display-name>" + j2eewscontext.getWSCFContext().getWscfdWsDesxription().getDisplayName() + "</display-name>\n");
 		out.write("\t<enterprise-beans>\n");
 		out.write("\t\t<session>\n");
 		out.write("\t\t\t<display-name>" + j2eewscontext.getWSCFContext().getWscfdWsDesxription().getDisplayName() + "</display-name>\n");
@@ -122,7 +124,8 @@ public class EJBDDWriter extends AbstractWriter {
 		
 		String implStyle = j2eewscontext.getMiscInfo().getImplStyle();
 		if(GenerationConstants.USE_LOCAL_AND_REMOTE.equals(implStyle) 
-			|| GenerationConstants.USE_REMOTE.equals(implStyle)){
+			|| GenerationConstants.USE_REMOTE.equals(implStyle) 
+			||GenerationConstants.USE_INTERNALS.equals(implStyle)){
 			out.write("\t\t\t<home>" + ejbcontext.getEjbhomeInterface() + "</home>\n");
 			out.write("\t\t\t<remote>" + ejbcontext.getEjbRemoteInterface() + "</remote>\n");
 	
@@ -141,83 +144,15 @@ public class EJBDDWriter extends AbstractWriter {
 		out.write("\t\t\t</security-identity>\n");
 		out.write("\t\t</session\n>");
 		out.write("\t</enterprise-beans>\n");
+		out.write("\t<assembly-descriptor>\n");
+		out.write("\t    <method-permission>\n");
+		out.write("\t        <unchecked/>\n");
+		out.write("\t        <method>\n");
+		out.write("\t		     <ejb-name>" + ejbname + "</ejb-name>\n");
+		out.write("\t			 <method-name>*</method-name>\n");
+		out.write("\t		</method>\n");
+		out.write("\t     </method-permission>\n");
+		out.write("\t</assembly-descriptor>\n");
 		out.write("</ejb-jar>\n");
-//	   try {
-//				 JAXBContext jc =
-//					  JAXBContext.newInstance("org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd");
-//            
-//				  // create an ObjectFactory instance.
-//				  // if the JAXBContext had been created with mutiple pacakge names,
-//				  // we would have to explicitly use the correct package name when
-//				  // creating the ObjectFactory.            
-//				  ObjectFactory objFactory = new ObjectFactory();
-//            
-//				  // create an empty PurchaseOrder
-//				  EjbJar dd = objFactory.createEjbJar();
-//               
-//				  EjbJarType.AssemblyDescriptorType type =
-//					  objFactory.createEjbJarTypeAssemblyDescriptorType();
-//               
-//				  dd.setAssemblyDescriptor(type);
-//                
-//				  DescriptionType dtype = objFactory.createDescriptionType();
-//				  dtype.setValue(j2eewscontext.getMiscInfo().getWscfdWsDesxription().getDisplayName());
-//				  dd.setDescription(dtype);
-//                
-//				  EjbJarType.EnterpriseBeansType eb =
-//					  objFactory.createEjbJarTypeEnterpriseBeansType();
-//				  EjbJarType.EnterpriseBeansType.Session s =
-//					  objFactory.createEjbJarTypeEnterpriseBeansTypeSession();
-//            
-//				  EjbClassType bean = objFactory.createEjbClassType();
-//				  bean.setValue(j2eewscontext.getMiscInfo().getEjbbean());
-//				  Remote remote = objFactory.createRemote();
-//				  remote.setValue(j2eewscontext.getMiscInfo().getEjbsei());
-//				  Home home = objFactory.createHome();
-//				  home.setValue(j2eewscontext.getMiscInfo().getEjbhome());
-//				  EjbNameType name = objFactory.createEjbNameType();
-//				  name.setValue(j2eewscontext.getMiscInfo().getWscfport().getServiceImplBean().getEjblink());
-//				  s.setEjbClass(bean);
-//				  s.setRemote(remote);
-//				  s.setHome(home);
-//				  s.setEjbName(name);
-//                
-//				  EjbJarType.EnterpriseBeansType.SessionType.SessionTypeType session =
-//					  objFactory
-//						  .createEjbJarTypeEnterpriseBeansTypeSessionTypeSessionTypeType();
-//				  EjbJarType
-//					  .EnterpriseBeansType
-//					  .SessionType
-//					  .TransactionTypeType teansaction =
-//					  objFactory
-//						  .createEjbJarTypeEnterpriseBeansTypeSessionTypeTransactionTypeType();
-//               
-//				  //the Bean is stateless fine 
-//				  session.setValue("Stateless");
-//               
-//				  //transaction context is set to bean.
-//				  //as the jsr109 says that the EJB is stateless
-//				  //the transaction context does not apply. Is this acceptable??
-//				  teansaction.setValue("Bean");
-//                
-//				  s.setSessionType(session);
-//				  s.setTransactionType(teansaction);
-//            
-//				  eb.getSessionOrEntity().add(s);
-//				  dd.setEnterpriseBeans(eb);
-//            
-//				  Marshaller m = jc.createMarshaller();
-//				  m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-//				  m.marshal(dd, out);
-//            
-//				  out.flush();
-//				  out.close();
-//		  } catch (PropertyException e) {
-//			  e.printStackTrace();
-//			  throw new GenerationFault(e);
-//		  } catch (JAXBException e) {
-//			  e.printStackTrace();
-//			throw new GenerationFault(e);
-//		  }
 	}
 }

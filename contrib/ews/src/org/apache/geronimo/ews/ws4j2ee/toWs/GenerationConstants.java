@@ -91,7 +91,7 @@ public class GenerationConstants {
 
     public static final String J2EE_CONTAINER_DD = "j2ee-container-dd";
     public static final String WS4J2EE_PROPERTY_FILE = "ws4j2ee.properties";
-	public static final String WS4J2EE_PROVIDER =  "ws4j2ee-provider";
+	public static final String WS4J2EE_PROVIDER =  "j2ee";
 	public static final String J2EE_VERSION =  "j2ee-version";
 	public static final String J2EE_VERSION_1_3 =  "1.3";
 	public static final String J2EE_VERSION_1_4 =  "1.4";
@@ -101,10 +101,10 @@ public class GenerationConstants {
 	public static final String EJB_DEPLOY_DIR =  "ejb-deploy";
 	
 	
-	private static Ws4J2eeProperties properties = new Ws4J2eeProperties();
-	public static String getProperty(String key){
-		return properties.getProperty(key);
-	}
+//	private static Ws4J2eeProperties properties = new Ws4J2eeProperties();
+//	public static String getProperty(String key){
+//		return properties.getProperty(key);
+//	}
 
 	/** j2ee Container DDs */
     public static final String JBOSS_DD = "jboss.xml";

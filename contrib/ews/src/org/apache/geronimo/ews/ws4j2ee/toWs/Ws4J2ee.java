@@ -80,10 +80,9 @@ import org.apache.geronimo.ews.ws4j2ee.utils.packager.load.PackageModule;
 public class Ws4J2ee implements Generator {
     protected static Log log =
         LogFactory.getLog(Ws4J2ee.class.getName());
-    private String[] args;
     private J2EEWebServiceContext wscontext;
     private boolean verbose = false;
-    private Ws4J2eeServerCLOptionParser clparser;
+    private Ws4J2eeDeployContext clparser;
     private WSCFPortComponent port;
     private ClassLoader classloader;
    
@@ -100,15 +99,18 @@ public class Ws4J2ee implements Generator {
 	private Ws4J2eeFactory factory;
 
 
-    public Ws4J2ee(String[] args, boolean useSEI)
+    public Ws4J2ee(Ws4J2eeDeployContext doployContext,Emitter emitter)
         throws GenerationFault {
-		emitter = new Emitter();
-        this.args = args;
-        //create the context
-		prepareContext();
-        //parse the arguments 
-		parseCLargs();
-        
+        	if(emitter == null){
+				this.emitter = new Emitter();        	
+        	}else{
+				this.emitter = emitter;
+        	}
+			this.clparser = doployContext;
+		    //create the context
+			prepareContext();
+		    //parse the arguments 
+			parseCLargs();
     }
     
 	/**
@@ -139,7 +141,6 @@ public class Ws4J2ee implements Generator {
     }
     
     private void parseCLargs()throws GenerationFault{
-		clparser = new Ws4J2eeServerCLOptionParser(args, emitter);
 		module = clparser.getModule();
 		classloader = module.getClassLoaderWithPackageLoaded();
 
@@ -352,7 +353,9 @@ public class Ws4J2ee implements Generator {
      */
     public static void main(String[] args) throws Exception {
         Ws4J2ee gen = null;
-        gen = new Ws4J2ee(args, false);
+        Emitter emitter = new Emitter();
+		Ws4J2eeDeployContext deployContext = new Ws4J2eeServerCLOptionParser(args,emitter);
+        gen = new Ws4J2ee(deployContext,emitter);
         gen.generate();
     }
 }

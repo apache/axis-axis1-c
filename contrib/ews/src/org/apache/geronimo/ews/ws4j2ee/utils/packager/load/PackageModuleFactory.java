@@ -51,7 +51,7 @@ public class PackageModuleFactory {
 					throw new UnrecoverableGenerationFault("unknown type of file");
             }
         } catch (GenerationFault e) {
-            throw new UnrecoverableGenerationFault(e);
+            throw new UnrecoverableGenerationFault(path + " not found ",e);
         }
         throw new UnrecoverableGenerationFault("path is null");
     }

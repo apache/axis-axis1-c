@@ -97,7 +97,8 @@ public class EJBGenerator implements Generator {
 			localhomewriter = factory.getGenerationFactory().createEJBWriter(context, ejbcontext, GenerationConstants.EJB_LOCAL_HOME_INTERFACE_WRITER);
 			localwriter = factory.getGenerationFactory().createEJBWriter(context, ejbcontext, GenerationConstants.EJB_LOCAL_INTERFACE_WRITER);
 		}else if(GenerationConstants.USE_INTERNALS.equals(implStyle)){
-			//when we use the internals we do not want create anything   
+			homewriter = factory.getGenerationFactory().createEJBWriter(context, ejbcontext,GenerationConstants.EJB_HOME_INTERFACE_WRITER);
+			remotewriter = factory.getGenerationFactory().createEJBWriter(context, ejbcontext, GenerationConstants.EJB_REMOTE_INTERFACE_WRITER);
 		}
 		if(!context.getMiscInfo().isImplAvalible()){
 			beanwriter = factory.getGenerationFactory().createEJBWriter(context, ejbcontext, GenerationConstants.EJB_IMPLEMENTATION_BEAN_WRITER);

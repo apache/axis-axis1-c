@@ -65,23 +65,13 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
  */
 public class GeronimoDDWriter extends AbstractWriter {
 	public GeronimoDDWriter(J2EEWebServiceContext j2eewscontext) throws GenerationFault {
-		super(j2eewscontext,
-		(j2eewscontext.getMiscInfo().isImplwithEJB()
-			?j2eewscontext.getMiscInfo().getOutPutPath() +
-				"/META-INF/"+ GenerationConstants.GERONIMO_DD
-			:j2eewscontext.getMiscInfo().getOutPutPath() +
-				"/META-INF/"+ GenerationConstants.GERONIMO_WEB_DD));
+		super(j2eewscontext, j2eewscontext.getMiscInfo().getOutPutPath() + 
+				"/META-INF/"+ GenerationConstants.GERONIMO_DD);
 	}
 
 	
 	public void writeCode() throws GenerationFault {
-		if(out == null)
-			return;
-		if(j2eewscontext.getMiscInfo().isImplwithEJB()){
 			writeEJBDD();
-		}else{
-			writeCode();
-		}	
 	}
 	
 //	<?xml version="1.0"?>
@@ -124,6 +114,7 @@ public class GeronimoDDWriter extends AbstractWriter {
 		out.write("         </session>\n");
 		out.write("     </enterprise-beans>\n");
 		out.write("</openejb-jar>\n");
+		out.flush();
 	}
 	
 

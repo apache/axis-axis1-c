@@ -60,9 +60,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.axis.components.logger.LogFactory;
+import org.apache.commons.logging.Log;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 
 public class Packager {
+	protected static Log log =
+			LogFactory.getLog(Packager.class.getName());
+			
     private String[] args;
 
     public Packager(String[] args) throws GenerationFault {
@@ -73,7 +78,7 @@ public class Packager {
         try {
             JARFile jfile = new JARFile(new File(args[0]));
 			
-			System.out.println("######### creating the jar "+args[0]+"############");
+			log.info("creating the jar "+args[0]);
             for (int i = 1; i < args.length; i++) {
                 if (args[i].endsWith(".jar")) {
                     jfile.addJarFile(args[i]);
@@ -96,7 +101,7 @@ public class Packager {
 
                 
             }
-			System.out.println("####################### JAR FILE CREATED ###########################");
+			log.info("jar file creation done ");
             jfile.createNewJarFile();
         } catch (IOException e) {
             throw GenerationFault.createGenerationFault(e);

@@ -289,6 +289,14 @@
                 <module>true</module>
             </properties>
         </dependency>
+        <dependency>
+            <groupId>openejb</groupId>
+            <artifactId>openejb-core-2.0</artifactId>
+            <version>SNAPSHOT</version>
+            <properties>
+                <module>true</module>
+            </properties>
+        </dependency>
     </dependencies>
 </project>
 

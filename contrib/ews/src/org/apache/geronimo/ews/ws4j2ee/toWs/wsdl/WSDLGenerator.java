@@ -63,11 +63,10 @@ import org.apache.commons.logging.Log;
 import org.apache.geronimo.ews.ws4j2ee.context.ContextValidator;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.impl.AxisEmitterBasedJaxRpcMapperContext;
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.AxisEmitterBasedWSCFContext;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.impl.AxisEmitterBasedWSDLContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
-import org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2eeServerCLOptionParser;
+import org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2eeDeployContext;
 import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 
 /**
@@ -78,7 +77,7 @@ import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
  */
 public class WSDLGenerator extends Java2WSDL implements Generator {
 	private J2EEWebServiceContext wscontext;
-	private Ws4J2eeServerCLOptionParser clparser;
+	private Ws4J2eeDeployContext clparser;
 	private Emitter emitter;
 	private String wsdlFile;
 	private boolean verbose;
@@ -88,7 +87,7 @@ public class WSDLGenerator extends Java2WSDL implements Generator {
 
 	public WSDLGenerator(J2EEWebServiceContext wscontext,
 			Emitter emitter,
-			Ws4J2eeServerCLOptionParser clparser)throws GenerationFault {
+			Ws4J2eeDeployContext clparser)throws GenerationFault {
 		this.wscontext = wscontext;
 		this.emitter = emitter;
 		this.clparser = clparser;

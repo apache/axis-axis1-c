@@ -49,10 +49,13 @@ public class AntExecuter{
 			System.out.println("Ant file will not be run programatcally as the " +
 				"$JAVA_HOME/lib/tool.jar is not in the class path. To run the ant " +
 				"prgramatically add that jar to classpath");
-        }catch(BuildException e){
-			System.out.println(e.getMessage() +
-			"if it is a compile error you may not have set the maven reposiroty " +
-			"directory in the conf/ws4j2ee.propertites Build fill ignore the faliure");
+//NOW as the code is used by Geronimo we can not afford to let the build
+//failure tests beside if you use maven it works fine. it will find your maven 
+//repository itself :) 
+//        }catch(BuildException e){
+//			System.out.println(e.getMessage() +
+//			"if it is a compile error you may not have set the maven reposiroty " +
+//			"directory in the conf/ws4j2ee.propertites Build fill ignore the faliure");
         }
     }
 }

@@ -35,9 +35,10 @@ public interface GenerationFactory {
         throws GenerationFault;
     public Generator createClientSideWsGenerator(J2EEWebServiceContext j2eewscontext)
         throws GenerationFault;
-	public Generator createWSDLGenerator(J2EEWebServiceContext wscontext,
+	public Generator createWSDLGenerator(
+		J2EEWebServiceContext wscontext,
 		Emitter emitter,
-		Ws4J2eeServerCLOptionParser clparser)throws GenerationFault;
+		Ws4J2eeDeployContext clparser)throws GenerationFault;
     public Generator createServerSideWsGenerator(J2EEWebServiceContext j2eewscontext)
         throws GenerationFault;
     public Generator createHandlerGenerator(J2EEWebServiceContext j2eewscontext)

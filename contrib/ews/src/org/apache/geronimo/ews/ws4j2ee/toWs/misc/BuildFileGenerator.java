@@ -56,9 +56,12 @@
  package org.apache.geronimo.ews.ws4j2ee.toWs.misc;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -101,6 +104,43 @@ public class BuildFileGenerator implements Generator {
 			out.write("	<property name=\"build.classes\" location=\"${build}/classes\"/>\n");
 			out.write("	<property name=\"build.lib\" location=\"${build}/lib\"/>\n");
 			out.write("	<property name=\"lib\" location=\"lib\"/>\n");
+			
+			Properties pro = new Properties();
+			InputStream prpertyIn = null;
+			File file = new File(GenerationConstants.WS4J2EE_PROPERTY_FILE);
+			if(file.exists()){
+				prpertyIn = new FileInputStream(file);
+			}else{
+				file = new File("modules/axis/target/"+GenerationConstants.WS4J2EE_PROPERTY_FILE);
+				if(file.exists()){
+					prpertyIn = new FileInputStream(file);
+				}else{
+					file = new File("target/"+GenerationConstants.WS4J2EE_PROPERTY_FILE);
+					if(file.exists()){
+						prpertyIn = new FileInputStream(file);
+					}else{
+						prpertyIn = getClass().getClassLoader().getResourceAsStream(GenerationConstants.WS4J2EE_PROPERTY_FILE);
+					}				
+				}
+			}
+			if(prpertyIn!= null){
+				String location = null;
+				try{
+					pro.load(prpertyIn);
+					location = pro.getProperty(GenerationConstants.MAVEN_LOCAL_REPOSITARY);
+				}finally{
+					prpertyIn.close();
+				}
+				if(location != null){
+					out.write("	<property name=\"maven.repo.local\" location=\"" +location +"\"/>\n");
+				}else{
+					prpertyIn = null;
+				}
+
+			}else{
+				System.out.println("property file not found");
+			}
+			//out.write("	<property file=\"ws4j2ee.properties\"/>\n");
 
 			out.write("	<path id=\"classpath\" >\n");
 			File tempfile = new File("./target/classes");
@@ -115,12 +155,8 @@ public class BuildFileGenerator implements Generator {
 						+ ((File)classpathelements.get(i)).getAbsolutePath() + "\"/>\n");				
 				}
 			}
-
-			String value = GenerationConstants.getProperty(GenerationConstants.MAVEN_LOCAL_REPOSITARY);
-
-			
-			if(value!= null){
-				out.write("		<fileset dir=\""+value+"\">\n");
+			if(prpertyIn!= null){
+				out.write("		<fileset dir=\"${maven.repo.local}\">\n");
 				out.write("		    <include name=\"axis/**/*.jar\"/>\n");
 				out.write("			<include name=\"geronimo-spec/**/*.jar\"/>\n");
 				out.write("			<include name=\"geronimo/**/*.jar\"/>\n");
@@ -129,14 +165,11 @@ public class BuildFileGenerator implements Generator {
 				out.write("			<include name=\"jaxb-ri/**/*.jar\"/>\n");
 				out.write("			<include name=\"xerces/**/*.jar\"/>\n");
 				out.write("		</fileset>\n");
-			}else{
-				StringTokenizer tok = getClasspathComponets();
-				while (tok.hasMoreTokens()) {
-					out.write("		<pathelement location=\"" + tok.nextToken() + "\"/>\n");
-				}
 			}
-			
-			
+			StringTokenizer tok = getClasspathComponets();
+			while (tok.hasMoreTokens()) {
+				out.write("		<pathelement location=\"" + tok.nextToken() + "\"/>\n");
+			}
 			out.write("	</path>\n");
 
 
@@ -156,30 +189,40 @@ public class BuildFileGenerator implements Generator {
 			writeFileCopyStatement(j2eewscontext.getMiscInfo().getWsdlFile(),out);
 			writeFileCopyStatement(j2eewscontext.getMiscInfo().getWsconffile(),out);
 			
-			if(j2eewscontext.getMiscInfo().isImplwithEJB()){
-				File ejbDD = 	new File(j2eewscontext.getMiscInfo().getOutPutPath()+"/META-INF/ejb-jar.xml");
-				if(ejbDD.exists())
-					out.write("		<copy file =\""+ejbDD.getAbsolutePath()+"\" todir=\"${build.classes}/META-INF\"/>\n");
-				
-				File contianerDD = null;	
-				if(GenerationConstants.JBOSS_CONTAINER.equals(j2eewscontext.getMiscInfo().getTargetJ2EEContainer())){
-					contianerDD = new File(j2eewscontext.getMiscInfo().getOutPutPath()+"/META-INF/"+GenerationConstants.JBOSS_DD);
-				}else if(GenerationConstants.JONAS_CONTAINER.equals(j2eewscontext.getMiscInfo().getTargetJ2EEContainer())){
-					contianerDD = new File(j2eewscontext.getMiscInfo().getOutPutPath()+"/META-INF/"+GenerationConstants.JONAS_DD);
-				}else if(GenerationConstants.GERONIMO_CONTAINER.equals(j2eewscontext.getMiscInfo().getTargetJ2EEContainer())){
-					contianerDD = new File(j2eewscontext.getMiscInfo().getOutPutPath()+"/META-INF/"+GenerationConstants.GERONIMO_DD);
-				}	
-				if(contianerDD.exists()){
-						out.write("		<copy file =\""+contianerDD.getAbsolutePath()+"\" todir=\"${build.classes}/META-INF\"/>\n ");
-				}
-				
-									
-			}else{
-				File file = new File(j2eewscontext.getMiscInfo().getOutPutPath()+"/WEB-INF/web.xml");
-				if(file.exists()){
-					out.write("		<copy file =\"${src}/WEB-INF/web.xml\" todir=\"${build.classes}/META-INF\"/>\n ");				
-				}
-			}
+//			if(j2eewscontext.getMiscInfo().isImplwithEJB()){
+//				File ejbDD = 	new File(j2eewscontext.getMiscInfo().getOutPutPath()+"/META-INF/ejb-jar.xml");
+//				if(ejbDD.exists())
+//					out.write("		<copy file =\""+ejbDD.getAbsolutePath()+"\" todir=\"${build.classes}/META-INF\"/>\n");
+//				
+//				File contianerDD = null;	
+//				if(GenerationConstants.JBOSS_CONTAINER.equals(j2eewscontext.getMiscInfo().getTargetJ2EEContainer())){
+//					contianerDD = new File(j2eewscontext.getMiscInfo().getOutPutPath()+"/META-INF/"+GenerationConstants.JBOSS_DD);
+//				}else if(GenerationConstants.JONAS_CONTAINER.equals(j2eewscontext.getMiscInfo().getTargetJ2EEContainer())){
+//					contianerDD = new File(j2eewscontext.getMiscInfo().getOutPutPath()+"/META-INF/"+GenerationConstants.JONAS_DD);
+//				}else if(GenerationConstants.GERONIMO_CONTAINER.equals(j2eewscontext.getMiscInfo().getTargetJ2EEContainer())){
+//					contianerDD = new File(j2eewscontext.getMiscInfo().getOutPutPath()+"/META-INF/"+GenerationConstants.GERONIMO_DD);
+//				}	
+//				if(contianerDD.exists()){
+//						out.write("		<copy file =\""+contianerDD.getAbsolutePath()+"\" todir=\"${build.classes}/META-INF\"/>\n ");
+//				}
+//				
+//									
+//			}else{
+//				File file = new File(j2eewscontext.getMiscInfo().getOutPutPath()+"/WEB-INF/web.xml");
+//				if(file.exists()){
+//					out.write("		<copy file =\"${src}/WEB-INF/web.xml\" todir=\"${build.classes}/META-INF\"/>\n ");				
+//				}
+//			}
+			
+			out.write("		<copy todir=\"${build.classes}\">\n");
+			out.write("			<fileset dir=\"${src}\">\n");
+			out.write("				<include name=\"META-INF/*.xml\"/>\n");
+			out.write("				<include name=\"WEB-INF/*.xml\"/>\n");
+			out.write("				<include name=\"**/*.wsdl\"/>\n");
+			out.write("				<include name=\"**/*.wsdd\"/>\n");
+			out.write("			</fileset>\n");
+			out.write("		</copy>\n");
+
 
 
 			String jarName = j2eewscontext.getWSDLContext().getTargetPortType().getName().toLowerCase();
@@ -204,12 +247,12 @@ public class BuildFileGenerator implements Generator {
 			
 			out.write("     <java classname=\"org.apache.geronimo.ews.ws4j2ee.utils.packager.Packager\" fork=\"no\" >\n");
 			out.write("     	<arg value=\""+jarFile.getAbsolutePath()+"\"/>\n");
+			out.write("     	<arg value=\""	+ tempFile + "\"/>\n");
 			out.write("     	<classpath refid=\"classpath\" />\n");
 			for(int i = 0;i<classpathelements.size();i++){
 				out.write("     	<arg value=\""
 					+ ((File)classpathelements.get(i)).getAbsolutePath() + "\"/>\n");				
 			}
-			out.write("     	<arg value=\""	+ tempFile + "\"/>\n"); 
 			out.write("     </java>\n");
 //			out.write("		<delete dir=\"${build}\"/>\n");
 			out.write("	</target>\n");
@@ -221,35 +264,24 @@ public class BuildFileGenerator implements Generator {
 			out.write("		<delete dir=\"${build}\"/>\n");
 			out.write("	</target>\n");
 			
-			String webappsLib = GenerationConstants.getProperty(GenerationConstants.AXIS_WEBAPPS_LIB);
-			String ejbDeploy =  GenerationConstants.getProperty(GenerationConstants.EJB_DEPLOY_DIR);
-			String host = GenerationConstants.getProperty(GenerationConstants.AXIS_HOST);
-			String port = GenerationConstants.getProperty(GenerationConstants.AXIS_PORT);
 			
-			out.write("	<target name=\"deploy\" depends=\"jar\">\n");
-			if(webappsLib != null){
-				out.write("		<copy file=\""+ jarName + 
-					".jar\" todir=\""+webappsLib+"\"/>\n");
-			}
-			if(ejbDeploy != null){
-				out.write("		<copy file=\""+ jarName + 
-					".jar\" todir=\""+ejbDeploy+"\"/>\n");
-			}
-				
-			out.write("		<java classname=\"org.apache.axis.client.AdminClient\" fork=\"no\" >\n");
-			out.write("			<classpath refid=\"classpath\" />\n");
-			if(host != null){
-				out.write("			<arg value=\"-h\"/>\n");
-				out.write("			<arg value=\""+host+"\"/>\n");
-			}			
-			if(port != null){
-				out.write("			<arg value=\"-p\"/>\n");
-				out.write("			<arg value=\""+port+"\"/>\n"); 
-			}
-			out.write("			<arg value=\"deploy.wsdd\"/>\n");
-			out.write("		</java>\n");
-
-			out.write("	</target>\n");
+//			out.write("	<target name=\"deploy\" depends=\"jar\">\n");
+//			out.write("		<copy file=\""+ jarName + 
+//				".jar\" todir=\"${axis-webapps-lib}\"/>\n");
+//				out.write("		<copy file=\""+ jarName + 
+//					".jar\" todir=\"${ejb-deploy}\"/>\n");
+//				
+//			out.write("		<java classname=\"org.apache.axis.client.AdminClient\" fork=\"no\" >\n");
+//			out.write("			<classpath refid=\"classpath\" />\n");
+//
+//			out.write("			<arg value=\"-h\"/>\n");
+//			out.write("			<arg value=\"axis-host\"/>\n");
+//			out.write("			<arg value=\"-p\"/>\n");
+//			out.write("			<arg value=\"axis-port\"/>\n"); 
+//			out.write("			<arg value=\"deploy.wsdd\"/>\n");
+//			out.write("		</java>\n");
+//			out.write("	</target>\n");
+			
 			out.write("</project>\n");
 			out.close();
 		} catch (IOException e) {

@@ -903,7 +903,7 @@ public class Utils {
 		}else if("java.lang.Character".equals(type)||"char".equals(type)){
 			return "((java.lang.Character)"+name+").charValue()";
 		}else{
-			return name;
+			return "("+type+")"+name;
 		}
 	}
 	
@@ -960,7 +960,10 @@ public class Utils {
 		return returnType + end;
 	}
 	
-	public static String getElementValue(Node node){
+	public static String getElementValue(NodeList nodesin){
+		if(nodesin == null || nodesin.getLength() < 1)
+			return null;
+		Node node = nodesin.item(0);	
 		NodeList nodes = node.getChildNodes();
 		for(int i = 0;i<nodes.getLength();i++){
 			Node temp = nodes.item(i);

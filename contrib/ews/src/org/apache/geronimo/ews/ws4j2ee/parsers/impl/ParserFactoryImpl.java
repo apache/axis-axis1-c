@@ -25,7 +25,7 @@ import org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.Ser
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.WSCFContextImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.WSCFException;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext;
-import org.apache.geronimo.ews.ws4j2ee.parsers.EJBDDParser;
+import org.apache.geronimo.ews.ws4j2ee.parsers.DomEJBDDParser;
 import org.apache.geronimo.ews.ws4j2ee.parsers.ParserFactory;
 import org.apache.geronimo.ews.ws4j2ee.parsers.ServiceReferanceParser;
 import org.apache.geronimo.ews.ws4j2ee.parsers.WebDDParser;
@@ -46,7 +46,7 @@ public class ParserFactoryImpl implements ParserFactory {
         J2EEWebServiceContext context,
         InputStream inputStream)
         throws GenerationFault {
-			EJBDDParser ejbDDparser = new EJBDDParser(context);
+			DomEJBDDParser ejbDDparser = new DomEJBDDParser(context);
 			ejbDDparser.parse(inputStream);
         	return ejbDDparser.getContext();
     }
