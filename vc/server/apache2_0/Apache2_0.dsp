@@ -92,7 +92,7 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\..\..\src\server\apache\mod_axis2.c
+SOURCE=..\..\..\src\server\apache2\mod_axis2.c
 # End Source File
 # End Group
 # Begin Group "Header Files"
