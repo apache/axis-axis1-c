@@ -47,6 +47,19 @@ Notes:
 	<!--
 	  Compiler Definitions
 	  -->
+		<!-- Definition of cc compile for Solaris -->
+		<compiler id="SolarisCC" name="CC" if="solaris">
+			<compilerarg value="-KPIC"/>
+			<compilerarg value="-xildoff"/>
+			<compilerarg value="-pta"/>
+			<compilerarg value="-instances=global"/>
+			<defineset>
+				<define name="ENABLE_AXIS_EXCEPTION"/>
+				<define name="HAVE_CONFIG_H"/>
+				<define name="PIC"/>
+			</defineset>
+			<includepath path="${dir.include}"/>
+		</compiler>
 
 		<!--
 		  Definition of Visual C++ compiler
@@ -105,6 +118,12 @@ Notes:
 	<!--
 	  Linker Definitions
 	  -->
+		<!-- Definition of Solars linker -->
+		<linker id="SolarisLinker" name="CC" libtool="true" if="solaris">
+			<linkerarg value="-Qoption"/>
+			<linkerarg value="ld"/>
+			<linkerarg value="-zmuldefs"/>
+		</linker>
 
 		<!--
 		  Definition of Visual C++ linker
@@ -149,6 +168,9 @@ Notes:
 	  Determine platform
 	  -->
 	<target name="pre-init">
+		<condition property="solaris">
+            	<os name="SunOS"/>
+		</condition>
 		<condition property="windows">
 			<os family="windows"/>
 		</condition>
@@ -164,6 +186,9 @@ Notes:
 	  Initialize properties
       -->
 	<target name="initialize" depends="pre-init">
+		<condition property="platform" value="SunOS">
+			<isset property="solaris"/>
+		</condition>
 		<condition property="platform" value="Win32">
 			<isset property="windows"/>
 		</condition>
@@ -187,6 +212,7 @@ Notes:
 		<cc outfile="${dir.bin}/${clientLibraryName}" objdir="${dir.objects}"
 		 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
 		  	<!-- Compilers -->
+			<compiler refid="SolarisCC"/>
 			<compiler refid="Linuxgcc"/>
 			<compiler refid="AIXxlc"/>
 			<compiler extends="VisualC++">
@@ -199,6 +225,7 @@ Notes:
 				<define name="AXIS_CLIENT_LIB"/>
 			</defineset>
 			<!-- Linkers -->
+			<linker refid="SolarisLinker"/>
 			<linker refid="LinuxLinker"/>
 			<linker refid="AIXLinker"/>
 			<linker refid="VisualC++Linker"/>
@@ -228,6 +255,7 @@ Notes:
 		<cc outfile="${dir.bin}/${transportLibraryName}" objdir="${dir.objects}"
 		 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
 			<!-- Compilers -->
+			<compiler refid="SolarisCC"/>
 			<compiler refid="Linuxgcc"/>
 			<compiler refid="AIXxlc"/>
 			<compiler extends="VisualC++">
@@ -236,6 +264,7 @@ Notes:
 				</defineset>
 			</compiler>
 			<!-- Linkers -->
+			<linker refid="SolarisLinker"/>
 			<linker refid="LinuxLinker"/>
 			<linker refid="AIXLinker"/>
 			<linker extends="VisualC++Linker">
@@ -259,6 +288,7 @@ Notes:
 		<cc outfile="${dir.bin}/${xmlParserLibraryName}" objdir="${dir.objects}"
 		 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
 		 	<!-- Compilers -->
+			<compiler refid="SolarisCC"/>
 			<compiler refid="Linuxgcc"/>
 			<compiler refid="AIXxlc"/>
 			<compiler extends="VisualC++">
@@ -270,6 +300,7 @@ Notes:
 			<includepath path="${dir.xmlParser}/include"/>
 			<includepath path="${dir.xmlParser}/lib"/>
 			<!-- Linkers -->
+			<linker refid="SolarisLinker"/>
 			<linker refid="VisualC++Linker"/>
 			<linker refid="LinuxLinker"/>
 			<linker refid="AIXLinker"/>
