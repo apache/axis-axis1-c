@@ -164,13 +164,16 @@ int WSDDTransport::UpdateWSDD(FILE* wsddfile, int tabcount)
             {
                 WSDDHandlerList &list = 
                     (*m_ResponseHandlers)[(AXIS_PROTOCOL_TYPE)type];
-                if (fputs("\t\t<responseFlow>\n", wsddfile) < 0) return AXIS_FAIL;
+                if (fputs("\t\t<responseFlow>\n", wsddfile) < 0) 
+                    return AXIS_FAIL;
                 for(iter2 = list.begin(); iter2 != list.end(); iter2++)
                 {
                     if (AXIS_SUCCESS != 
-                        (*iter2)->UpdateWSDD(wsddfile, tabcount)) return AXIS_FAIL;
+                        (*iter2)->UpdateWSDD(wsddfile, tabcount)) 
+                        return AXIS_FAIL;
                 }            
-                if (fputs("\t\t</responseFlow>\n", wsddfile) < 0) return AXIS_FAIL;
+                if (fputs("\t\t</responseFlow>\n", wsddfile) < 0) 
+                    return AXIS_FAIL;
             }
             if (fputs("\t</transport>\n", wsddfile) < 0) return AXIS_FAIL;
         }

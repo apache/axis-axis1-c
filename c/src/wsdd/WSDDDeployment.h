@@ -33,7 +33,7 @@ enum DEPLOYMENTTYPE {DT_DEPLOYMENT, DT_UNDEPLOYMENT};
 /*
  *  @class WSDDDeployment
  *  @brief interface for the WSDDDeployment class.
- * @author Susantha Kumara (skumara@virtusa.com)
+ *  @author Susantha Kumara (skumara@virtusa.com)
  */
 class WSDDDeployment
 {
