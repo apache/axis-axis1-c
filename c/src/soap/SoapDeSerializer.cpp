@@ -431,13 +431,21 @@ Axis_Array SoapDeSerializer::GetCmplxArray(void* pDZFunct, void* pCreFunct, void
 					}
 					/* error : no elements deserialized */
 				}
-				/* if we come here it is an error situation */
-				m_nStatus = AXIS_FAIL;
-				m_pNode = NULL;
-				((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(Array.m_Array, true, Array.m_Size);
-				Array.m_Array = 0;
-				Array.m_Size = 0;
-				return Array;
+	        /* if we come here it is an error situation */
+    	    /**
+	         * not an  error for self referenced array or empty array
+	         * TODO: Need to verify what WS-I 1.0 say
+	         * <xsd:complexType name="Type1">
+	         *  <xsd:sequence>
+	         *    <xsd:element name="types" maxOccurs="unbounded" minOccurs="0" type="tns:Type1"/>
+	         *    <xsd:element name="type" minOccurs="0" type="xsd:string"/>
+	         *  </xsd:sequence>
+	         * </xsd:complexType>        
+	         */
+	        ((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(Array.m_Array, true, Array.m_Size);
+	        Array.m_Array = 0;
+	        Array.m_Size = 0;
+	        return Array;
 			}
 			/* if we come here that means the array allocated is not enough. So double it */
 			Array.m_Array = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)(Array.m_Array, true, Array.m_Size*2);
@@ -447,6 +455,7 @@ Axis_Array SoapDeSerializer::GetCmplxArray(void* pDZFunct, void* pCreFunct, void
 				return Array;
 			}
 			Array.m_Size *= 2;
+			/*Array.m_RealSize = Array.m_Size;*/
 		}
 	}
 	m_nStatus = AXIS_FAIL;
@@ -578,6 +587,7 @@ int SoapDeSerializer::GetArraySize(const AnyElement* pElement)
 					return Array;\
 				}\
 				Array.m_Size *= 2;\
+				/*Array.m_RealSize = Array.m_Size;*/\
 			}\
 			break;
 
@@ -709,6 +719,7 @@ Axis_Array SoapDeSerializer::GetBasicArray(XSDTYPE nType, const AxisChar* pName,
 					return Array;
 				}
 				Array.m_Size *= 2;
+				/*Array.m_RealSize= Array.m_Size;*/
 			}
 			break;
 		case XSD_UNSIGNEDINT:
@@ -809,6 +820,14 @@ void* SoapDeSerializer::GetCmplxObject(void* pDZFunct, void* pCreFunct, void* pD
 			if (0 != m_pNode->m_pchAttributes[0])
 			{
 				m_pCurrNode = m_pNode;
+		        /**
+		         * Need to verify if the return value is NULL.
+		         */
+		        if ( GetAttributeAsBoolean("nil",0) == true_ ) {
+		            m_pParser->Next();
+		            m_pNode = NULL;
+		            return NULL;
+		          }
 			}
 			m_pNode = NULL; /* node identified and used */
 			void* pObject = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)(NULL, false, 0);
@@ -836,15 +855,15 @@ void* SoapDeSerializer::GetCmplxObject(void* pDZFunct, void* pCreFunct, void* pD
 				}
 			}
 		}
-		else if ( GetAttributeAsBoolean("nil",0) == true_ ) 
-		{
-			m_pParser->Next();
-			m_pNode = NULL;
-			return NULL;
-		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+	      /**
+	       * TODO: Need to verify what WS-I 1.0 say
+	       * about the mandatory of all the elements in the response in case of
+	       * null value or none filled value. Some Web services servers work like this.
+	       * This apply for all the rest of the deserializer.
+	       */
+			return NULL;
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -883,7 +902,9 @@ int SoapDeSerializer::GetElementForAttributes(const AxisChar* pName, const AxisC
 	cpp_type ret;\
 	if(!m_pCurrNode) \
 	{\
-		m_nStatus = AXIS_FAIL;\
+		/**\
+		 * Not a failure for optional attributes\
+		 */\
 		return ret;\
 	}\
 	if (START_ELEMENT == m_pCurrNode->m_type)\
@@ -913,7 +934,7 @@ int SoapDeSerializer::GetAttributeAsInt(const AxisChar* pName, const AxisChar* p
 	int ret = 0;
 	if(!m_pCurrNode) 
 	{
-		m_nStatus = AXIS_FAIL;
+		// Optional attributes :  _ m_nStatus = AXIS_FAIL;
 		return ret;
 	}
 	if (START_ELEMENT == m_pCurrNode->m_type)
@@ -940,7 +961,7 @@ xsd__boolean SoapDeSerializer::GetAttributeAsBoolean(const AxisChar* pName, cons
 	xsd__boolean ret = false_;
 	if(!m_pCurrNode) 
 	{
-		m_nStatus = AXIS_FAIL;
+		// Optional attributes :  _ m_nStatus = AXIS_FAIL;
 		return ret;
 	}
 	if (START_ELEMENT == m_pCurrNode->m_type)
@@ -1082,15 +1103,22 @@ xsd__boolean SoapDeSerializer::GetElementAsBoolean(const AxisChar* pName, const 
 			m_pNode = m_pParser->Next(); /* charactor node */
 			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 			{
-				ret = (0 == strcmp(m_pNode->m_pchNameOrValue, "true")) ? true_: false_;
+				/* Some web services server returns 1 */
+				ret = (0 == strcmp(m_pNode->m_pchNameOrValue, "true") || 0 != strcmp(m_pNode->m_pchNameOrValue, "0" )) ? true_: false_;
 				m_pNode = m_pParser->Next(); /* skip end element node too */
 				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
 				return ret;
-			}			
+			}
+			else
+			{
+				/* simpleType may have xsi:nill="true" */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}						
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1132,11 +1160,17 @@ int SoapDeSerializer::GetElementAsInt(const AxisChar* pName, const AxisChar* pNa
 				m_pNode = m_pParser->Next(); /* skip end element node too */
 				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
 				return ret;
-			}			
+			}
+			else
+			{
+				/* simpleType may have xsi:nill="true" */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}						
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1178,11 +1212,17 @@ unsigned int SoapDeSerializer::GetElementAsUnsignedInt(const AxisChar* pName, co
 				m_pNode = m_pParser->Next(); /* skip end element node too */
 				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
 				return ret;
-			}			
+			}
+			else
+			{
+				/* simpleType may have xsi:nill="true" */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}						
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1224,11 +1264,18 @@ short SoapDeSerializer::GetElementAsShort(const AxisChar* pName, const AxisChar*
 				m_pNode = m_pParser->Next(); /* skip end element node too */
 				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
 				return ret;
+			}
+			else
+			{
+				/* simpleType may have xsi:nill="true" */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
 			}			
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1270,11 +1317,17 @@ unsigned short SoapDeSerializer::GetElementAsUnsignedShort(const AxisChar* pName
 				m_pNode = m_pParser->Next(); /* skip end element node too */
 				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
 				return ret;
-			}			
+			}
+			else
+			{
+				/* simpleType may have xsi:nill="true" */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}						
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1316,11 +1369,17 @@ char SoapDeSerializer::GetElementAsByte(const AxisChar* pName, const AxisChar* p
 				m_pNode = m_pParser->Next(); /* skip end element node too */
 				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
 				return ret;
-			}			
+			}
+			else
+			{
+				/* simpleType may have xsi:nill="true" */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}						
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1362,11 +1421,17 @@ unsigned char SoapDeSerializer::GetElementAsUnsignedByte(const AxisChar* pName, 
 				m_pNode = m_pParser->Next(); /* skip end element node too */
 				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
 				return ret;
-			}			
+			}
+			else
+			{
+				/* simpleType may have xsi:nill="true" */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}						
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must :  m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1408,11 +1473,17 @@ long SoapDeSerializer::GetElementAsLong(const AxisChar* pName, const AxisChar* p
 				m_pNode = m_pParser->Next(); /* skip end element node too */
 				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
 				return ret;
-			}			
+			}
+			else
+			{
+				/* simpleType may have xsi:nill="true" */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}						
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1454,11 +1525,17 @@ long SoapDeSerializer::GetElementAsInteger(const AxisChar* pName, const AxisChar
 				m_pNode = m_pParser->Next(); /* skip end element node too */
 				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
 				return ret;
-			}			
+			}
+			else
+			{
+				/* simpleType may have xsi:nill="true" */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}						
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1500,11 +1577,17 @@ unsigned long SoapDeSerializer::GetElementAsUnsignedLong(const AxisChar* pName, 
 				m_pNode = m_pParser->Next(); /* skip end element node too */
 				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
 				return ret;
-			}			
+			}
+			else
+			{
+				/* simpleType may have xsi:nill="true" */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}						
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1546,11 +1629,17 @@ float SoapDeSerializer::GetElementAsFloat(const AxisChar* pName, const AxisChar*
 				m_pNode = m_pParser->Next(); /* skip end element node too */
 				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
 				return ret;
-			}			
+			}
+			else
+			{
+				/* simpleType may have xsi:nill="true" */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}						
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1592,11 +1681,17 @@ double SoapDeSerializer::GetElementAsDouble(const AxisChar* pName, const AxisCha
 				m_pNode = m_pParser->Next(); /* skip end element node too */
 				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
 				return ret;
-			}			
+			}
+			else
+			{
+				/* simpleType may have xsi:nill="true" */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}						
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1638,11 +1733,17 @@ double SoapDeSerializer::GetElementAsDecimal(const AxisChar* pName, const AxisCh
 				m_pNode = m_pParser->Next(); /* skip end element node too */
 				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
 				return ret;
-			}			
+			}
+			else
+			{
+				/* simpleType may have xsi:nill="true" */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}						
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1684,11 +1785,18 @@ AxisChar* SoapDeSerializer::GetElementAsString(const AxisChar* pName, const Axis
 				m_pNode = m_pParser->Next(); /* skip end element node too */
 				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
 				return ret;
-			}			
+			} 
+			else 
+			{
+			/* Should be an empty string or simpleType with xsi:nil="true" */	
+			ret = strdup(""); /* this is because the string may not be available later */		
+			m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */		
+			return ret;
+			}
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1730,11 +1838,11 @@ AxisChar* SoapDeSerializer::GetElementAsAnyURI(const AxisChar* pName, const Axis
 				m_pNode = m_pParser->Next(); /* skip end element node too */
 				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
 				return ret;
-			}			
+			}
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1780,7 +1888,7 @@ AxisChar* SoapDeSerializer::GetElementAsQName(const AxisChar* pName, const AxisC
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1826,10 +1934,10 @@ xsd__hexBinary SoapDeSerializer::GetElementAsHexBinary(const AxisChar* pName, co
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
-	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+	m_pNode = NULL;/*m_nStatus = AXIS_FAIL;*/ /* unexpected SOAP stream */
 	return ret;
 }
 
@@ -1888,10 +1996,10 @@ xsd__base64Binary SoapDeSerializer::GetElementAsBase64Binary(const AxisChar* pNa
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
-	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+	m_pNode = NULL;/*	m_nStatus = AXIS_FAIL;*/ /* unexpected SOAP stream */
 	return ret;
 }
 
@@ -1934,7 +2042,7 @@ struct tm SoapDeSerializer::GetElementAsDateTime(const AxisChar* pName, const Ax
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1980,7 +2088,7 @@ struct tm SoapDeSerializer::GetElementAsDate(const AxisChar* pName, const AxisCh
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -2026,7 +2134,7 @@ struct tm SoapDeSerializer::GetElementAsTime(const AxisChar* pName, const AxisCh
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -2072,7 +2180,7 @@ long SoapDeSerializer::GetElementAsDuration(const AxisChar* pName, const AxisCha
 		}
 		else
 		{
-			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+			return ret; // Not a must : m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
