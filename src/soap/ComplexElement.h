@@ -12,7 +12,16 @@
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
+ *
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ *
  */
+
+/*
+ * Revision 1.1  2004/05/25 samisa
+ * Added copy constructure and clone for copy constructing derived classes
+ */
+
 
 /*
  * This software consists of voluntary contributions made by many
@@ -60,6 +69,8 @@ public:
     int serialize(SoapSerializer& pSZ);
     int serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack);
     ComplexElement();
+    ComplexElement(const ComplexElement& rCopy);
+    BasicNode* clone();
     virtual ~ComplexElement();
 
     /*

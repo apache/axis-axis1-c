@@ -24,7 +24,13 @@
  *
  *
  * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  *
+ */
+
+/*
+ * Revision 1.1  2004/05/25 samisa
+ * Added copy constructor
  */
 
 #ifdef WIN32
@@ -72,6 +78,14 @@ Attribute::Attribute(const AxisChar* localname, const AxisChar* prefix,
     m_prefix= prefix;
     m_uri= uri;
     m_value= value;
+}
+
+Attribute::Attribute(const Attribute& rCopy)
+{
+    this->m_localname= rCopy.m_localname; //in casse sting is changed to char* use strdup here
+    this->m_prefix= rCopy.m_prefix;
+    this->m_uri= rCopy.m_uri;
+    this->m_value= rCopy.m_value;
 }
 
 /*
