@@ -29,22 +29,22 @@ then
 	fi
 fi
 
-if [[ ! -f $TEST_HOME/platform/linux/setAxis.sh ]]
+if [[ ! -f $TEST_HOME/testcases/platform/linux/setAxis.sh ]]
 then
 	echo "Cannot determine where the test framework is."
     echo "The $0 script is probably in the wrong directory"
 	exit 1
 fi
 
-. $TEST_HOME/platform/linux/setAxis.sh 
+. $TEST_HOME/testcases/platform/linux/setAxis.sh 
 [[ $? -ne 0 ]] && {
 	exit 1
 }
 
 cd $AXISTEST_HOME
 
-[[ -f $OUTPUT_DIR/buildTestCase.log ]] && >$OUTPUT_DIR/buildTestCase.log
-[[ -f $OUTPUT_DIR/runTestCase.log ]] && >$OUTPUT_DIR/runTestCase.log
+[[ -f $OUTPUT_DIR/buildTestCase.log ]] && >>$OUTPUT_DIR/buildTestCase.log
+[[ -f $OUTPUT_DIR/runTestCase.log ]] && >>$OUTPUT_DIR/runTestCase.log
 runTestCase.sh $WSDL c++
 
 exit 0
