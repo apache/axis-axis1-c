@@ -59,9 +59,9 @@ public:
 	{ m_pReleaseBufferCallback = pFunct; };
     AXIS_TRANSPORT_STATUS getBytes(char* pBuffer, int* piSize);
 	void releaseBuffer(const char* pBuffer);
-    void setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value);
+    int setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value);
     const char* getTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE eType);
-    void setTransportProperty(const char* pcKey, const char* pcValue);
+    int setTransportProperty(const char* pcKey, const char* pcValue);
     const char* getTransportProperty(const char* pcKey);
 	void setAttachment(const char* pcAttachmentid, const char* pcAttachment){};
 	

@@ -77,7 +77,7 @@ AXIS_TRANSPORT_STATUS Apache2Transport::sendBytes(const char* pcSendBuffer, cons
 #endif	
 }
 
-void Apache2Transport::setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)
+int Apache2Transport::setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)
 {
     const char* key = NULL;
     switch (type)
@@ -105,6 +105,7 @@ void Apache2Transport::setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type
 		/* Should we remove the sent headers ? */
 #endif
 	}
+    return 0;
 }
 
 AXIS_TRANSPORT_STATUS Apache2Transport::flushOutput()
@@ -221,11 +222,11 @@ const char* Apache2Transport::getTransportProperty(AXIS_TRANSPORT_INFORMATION_TY
     return NULL;
 }
 
-void Apache2Transport::setTransportProperty(const char* pcKey, const char* pcValue)
+int Apache2Transport::setTransportProperty(const char* pcKey, const char* pcValue)
 {
 	/*ap_table_set(((request_rec*)m_pContext)->headers_out, pcKey, pcValue);*/
 	//ap_send_http_header((request_rec*)m_pContext);
-
+    return 0;
 }
 
 const char* Apache2Transport::getTransportProperty(const char* pcKey)

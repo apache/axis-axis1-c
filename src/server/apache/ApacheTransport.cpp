@@ -89,7 +89,7 @@ AXIS_TRANSPORT_STATUS ApacheTransport::sendBytes(const char* pcSendBuffer, const
 #endif	
 }
 
-void ApacheTransport::setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)
+int ApacheTransport::setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)
 {
     const char* key = NULL;
     switch (type)
@@ -114,6 +114,7 @@ void ApacheTransport::setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type,
 		/* Should we remove the sent headers ? */
 #endif
 	}
+    return 0;
 }
 
 AXIS_TRANSPORT_STATUS ApacheTransport::flushOutput()
@@ -217,7 +218,7 @@ const char* ApacheTransport::getTransportProperty(AXIS_TRANSPORT_INFORMATION_TYP
     return NULL;
 }
 
-void ApacheTransport::setTransportProperty(const char* pcKey, const char* pcValue)
+int ApacheTransport::setTransportProperty(const char* pcKey, const char* pcValue)
 {
 	 if (pcKey && pcValue)
     {
@@ -227,7 +228,7 @@ void ApacheTransport::setTransportProperty(const char* pcKey, const char* pcValu
 		/* Should we remove the sent headers ? */
 #endif
 	}
-
+    return 0;
 
 }
 

@@ -53,11 +53,11 @@ class Axis2Transport:public SOAPTransport
     
     AXIS_TRANSPORT_STATUS getBytes (char *, int *) throw (AxisException,
 							  AxisTransportException);
-    void setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE,
+    int setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE,
 			       const char *) throw (AxisTransportException);
     const char *getTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE)
 	throw (AxisTransportException);
-    void setTransportProperty (const char *,
+    int setTransportProperty (const char *,
 			       const char *) throw (AxisTransportException);
     const char *getTransportProperty (const char *pcKey)
 	throw (AxisTransportException);

@@ -69,7 +69,7 @@ SimpleAxisTransport::sendBytes (const char *pcSendBuffer,
     return TRANSPORT_IN_PROGRESS;
 }
 
-void
+int
 SimpleAxisTransport::
 setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type, const char *value)
 {
@@ -260,7 +260,7 @@ getTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE eType)
     return NULL;
 }
 
-void
+int
 SimpleAxisTransport::setTransportProperty (const char *pcKey,
 					   const char *pcValue)
 {

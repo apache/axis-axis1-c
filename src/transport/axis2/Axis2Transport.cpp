@@ -738,7 +738,7 @@ throw (AxisException, AxisTransportException)
  * @param const char* Value is a NULL terminated character string containing
  * the value associated with the type.
  */
-void
+int
 Axis2Transport::setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type,
 				      const char *value)
 throw (AxisTransportException)
@@ -798,6 +798,7 @@ throw (AxisTransportException)
     {
 	setTransportProperty (key, value);
     }
+    return 0;
 }
 
 /* Axis2Transport::setTransportProperty( Key, Value) Is an overloaded public
@@ -809,12 +810,12 @@ throw (AxisTransportException)
  * @param const char* Value is a NULL terminated character string containing
  * the value associated with the type.
  */
-void
+int
 Axis2Transport::setTransportProperty (const char *pcKey, const char *pcValue)
 throw (AxisTransportException)
 {
     if (!pcKey || !pcValue)	// Samisa - fix for AXISCPP-295. We must check for valid values here.
-	return;
+	return 0;
 
     bool b_KeyFound = false;
 
@@ -841,6 +842,8 @@ throw (AxisTransportException)
 	m_vHTTPHeaders.
 	    push_back (std::make_pair ((string) pcKey, (string) pcValue));
     }
+
+    return 0;
 }
 
 /* Axis2Transport::getTransportProperty( Type) Is a public method that will
