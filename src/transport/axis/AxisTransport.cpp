@@ -211,17 +211,14 @@ AXIS_TRANSPORT_STATUS AXISCALL AxisTransport::s_Get_bytes(const char** res, int*
 AXIS_TRANSPORT_STATUS AxisTransport::Get_bytes(const char** res, int* retsize, const void* pSStream)
 {
     	const char* strReceive =  m_pReceiver->Recv();
-	printf("strReceive:%s\n", strReceive);
 	if (strReceive)
 	{
-		printf("came\n");
 		*res = strReceive;
 		*retsize = strlen(strReceive);
 		return TRANSPORT_IN_PROGRESS;
 	}
 	else
 	{
-		printf("came2\n");
 		*res = NULL;
 		*retsize = 0;
 		return TRANSPORT_FINISHED;
