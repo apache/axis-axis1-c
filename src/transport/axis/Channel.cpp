@@ -307,6 +307,9 @@ Channel::readNonBlocking (std::string & msg)
     flags = 0;
 #elif defined AIX
         flags=MSG_NONBLOCK;
+#elif defined( __OS400__ )
+   fcntl(m_Sock, F_SETFL, (int)O_NONBLOCK);
+   flags = 0;
 #else
     //for linux
     flags = MSG_DONTWAIT;

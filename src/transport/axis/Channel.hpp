@@ -58,6 +58,7 @@ inline WS_VERSION_MINOR() {return LOBYTE(WS_VERSION_REQD);}
 #include    <sys/types.h>    /* basic system data types  */
 #include    <sys/socket.h>    /* basic socket definitions */
 #include    <fcntl.h>        /* for nonblocking if need  */
+#include  <sys/time.h>
 #include    <netdb.h>
 #include     <netinet/in.h>
 #include    <arpa/inet.h>    /* inet(3) functions */
