@@ -8,10 +8,10 @@ errstatus=0
 dirmode=""
 
 if test ! -d "${AXISCPP_DEPLOY}/docs"; then
-    cp -rf ./docs "${AXISCPP_DEPLOY}"
+    cp -rf "${AXISCPP_HOME}/docs" "${AXISCPP_DEPLOY}"
 fi
 if test ! -d "${AXISCPP_DEPLOY}/samples"; then
-    cp -rf ./samples "${AXISCPP_DEPLOY}"
+    cp -rf "${AXISCPP_HOME}/samples" "${AXISCPP_DEPLOY}"
 fi
 if test -d "${AXISCPP_DEPLOY}/log"; then
     chmod 777 "${AXISCPP_DEPLOY}/log"
