@@ -6,6 +6,12 @@ Int::Int():m_Int(NULL)
 {
 }
 
+Int::~Int()
+{
+    if (m_Int)
+        delete m_Int;
+}
+
 AxisChar* Int::serialize(const void* value) throw (AxisSoapException)
 {
     return serialize((int*) value);
