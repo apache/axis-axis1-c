@@ -440,12 +440,33 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 	</target>
 
 	<!--
+	  Copy the expected output test files to the generated client directory
+	  and convert these files to the OS specific format so the filesmatch
+	  comparison later in this script works on all platforms.
+	  -->
+	<target name="setExpectations">
+		<property name="expected.file" value="${dir.test.generated}/${client.lang}/${testName}/${testName}.expected"/>
+		<property name="r_expected.file" value="${dir.test.generated}/${client.lang}/${testName}/${testName}Request.expected"/>
+
+		<copy file="${dir.src}/output/${testName}.out" tofile="${expected.file}"/>
+		<!--
+		  This is an optional file and might not exist so don't fail if
+		  it doesn't.
+		  -->
+		<copy file="${dir.src}/output/${testName}Request.out" tofile="${r_expected.file}" failonerror="false"/>
+
+		<!--
+		  Convert to OS specific format
+		  -->
+		<fixcrlf srcdir="${dir.test.generated}/${client.lang}/${testName}" includes="${testName}.expected"/>
+
+	</target>
+
+	<!--
 	  Execute the test
 	  -->
-	<target name="executeTest" if="successfulClientCompilation" unless="buildOnly">
+	<target name="executeTest" depends="setExpectations" if="successfulClientCompilation" unless="buildOnly">
 		<property name="results.file" value="${dir.test.generated}/${client.lang}/${testName}/${testName}.out"/>
-		<property name="expected.file" value="${dir.src}/output/${testName}.out"/>
-		<property name="r_expected.file" value="${dir.src}/output/${testName}Request.out"/>
 
 		<trycatch>
 			<try>
