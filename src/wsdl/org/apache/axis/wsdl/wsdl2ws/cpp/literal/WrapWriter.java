@@ -260,7 +260,7 @@ public class WrapWriter extends CPPClassWriter{
 				paraTypeName = param.getLangName();
 			}
 			parameterName = param.getParamName();
-			elementName = param.getElementName().getLocalPart();
+			elementName = param.getElementNameAsString();
 			if (type != null && type.isSimpleType()){ //schema defined simpleType possibly with restrictions
 				writer.write("\t"+paraTypeName+" v"+i+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(paraTypeName, false)+"(\""+elementName+"\",0);\n");
 			}
@@ -306,7 +306,7 @@ public class WrapWriter extends CPPClassWriter{
 		}
 		writer.write("\ttry\n\t{\n"); //nithya
 		if(returntype != null){	/* Invoke the service when return type not void */
-			returnParamName = returntype.getElementName().getLocalPart();
+			returnParamName = returntype.getElementNameAsString();
 			writer.write("\t"+outparamType+((returntypeisarray || returntypeissimple)?" ":" *")+ "ret = "+"pWs->"+methodName+"(");
 			if (0<paramsB.size()){
 				for (int i = 0; i <  paramsB.size() - 1; i++) {
