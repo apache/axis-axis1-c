@@ -307,13 +307,13 @@ public class ClientStubWriter extends CFileWriter{
 			String containedType = null;
 			if (CUtils.isSimpleType(qname)){
 				containedType = CUtils.getclass4qname(qname);
-				writer.write("\tarray = pCall->_functions->GetBasicArray(pCall->_object, "+CUtils.getXSDTypeForBasicType(containedType)+", \""+returntype.getParamName()+"\", 0);\n");
+				writer.write("\tarray = pCall->_functions->GetBasicArray(pCall->_object, "+CUtils.getXSDTypeForBasicType(containedType)+", \""+returntype.getElementName().getLocalPart()+"\", 0);\n");
 				writer.write("\tmemcpy(&RetArray, &array, sizeof(Axis_Array));\n");
 			}
 			else{
 				containedType = qname.getLocalPart();
 				writer.write("\tarray = pCall->_functions->GetCmplxArray(pCall->_object, (void*) Axis_DeSerialize_"+containedType);
-				writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+returntype.getParamName()+"\", Axis_URI_"+containedType+");\n");
+				writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+returntype.getElementName().getLocalPart()+"\", Axis_URI_"+containedType+");\n");
 				writer.write("\tmemcpy(&RetArray, &array, sizeof(Axis_Array));\n");
 			}
 			writer.write("\t\t}\n");
@@ -327,7 +327,7 @@ public class ClientStubWriter extends CFileWriter{
 			writer.write("\treturn Ret;\n");
 		}
 		else{
-			writer.write("\t\t\tpReturn = ("+outparamType+"*)pCall->_functions->GetCmplxObject(pCall->_object, (void*) Axis_DeSerialize_"+outparamType+", (void*) Axis_Create_"+outparamType+", (void*) Axis_Delete_"+outparamType+",\""+returntype.getParamName()+"\", 0);\n"); 
+			writer.write("\t\t\tpReturn = ("+outparamType+"*)pCall->_functions->GetCmplxObject(pCall->_object, (void*) Axis_DeSerialize_"+outparamType+", (void*) Axis_Create_"+outparamType+", (void*) Axis_Delete_"+outparamType+",\""+returntype.getElementName().getLocalPart()+"\", 0);\n"); 
 			writer.write("\t\t}\n");
 			writer.write("\t}\n\tpCall->_functions->UnInitialize(pCall->_object);\n");
 			writer.write("\treturn pReturn;\n");						

@@ -257,32 +257,34 @@ public class WrapWriter extends CPPClassWriter{
 		//create and populate variables for each parameter
 		String paraTypeName;
 		String parameterName;
+		String elementName;
 		ArrayList paramsB = new ArrayList(params);
 		for (int i = 0; i < paramsB.size(); i++) {
 			paraTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();
 			parameterName = ((ParameterInfo)paramsB.get(i)).getParamName();
+			elementName = ((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart();
 			Type type;
 			if((CUtils.isSimpleType(((ParameterInfo)paramsB.get(i)).getLangName()))){
 				//for simple types	
-				writer.write("\t"+paraTypeName+" v"+i+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(paraTypeName, false)+"(\""+parameterName+"\",0);\n");
+				writer.write("\t"+paraTypeName+" v"+i+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(paraTypeName, false)+"(\""+elementName+"\",0);\n");
 			}else if((type = this.wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName())) != null && type.isArray()){
 				QName qname = WrapperUtils.getArrayType(type).getName();
 				String containedType = null;
 				if (CUtils.isSimpleType(qname)){
 					containedType = CUtils.getclass4qname(qname);
-					writer.write("\t"+paraTypeName+" v"+i+" = ("+CUtils.getBasicArrayNameforType(containedType)+"&)pIWSDZ->GetBasicArray("+CUtils.getXSDTypeForBasicType(containedType)+ ", \""+parameterName+"\",0);\n");
+					writer.write("\t"+paraTypeName+" v"+i+" = ("+CUtils.getBasicArrayNameforType(containedType)+"&)pIWSDZ->GetBasicArray("+CUtils.getXSDTypeForBasicType(containedType)+ ", \""+elementName+"\",0);\n");
 				}
 				else{
 					containedType = qname.getLocalPart();
 					writer.write("\t"+paraTypeName+" v"+i+" = ("+paraTypeName+"&)pIWSDZ->GetCmplxArray((void*)Axis_DeSerialize_"+containedType+ 
 						"\n\t\t, (void*)Axis_Create_"+containedType+", (void*)Axis_Delete_"+containedType+
-						"\n\t\t, (void*)Axis_GetSize_"+containedType+", \""+parameterName+"\", Axis_URI_"+containedType+");\n");
+						"\n\t\t, (void*)Axis_GetSize_"+containedType+", \""+elementName+"\", Axis_URI_"+containedType+");\n");
 				}
 			}else{
 				//for complex types 
 				writer.write("\t"+paraTypeName+" *v"+i+" = ("+paraTypeName+"*)pIWSDZ->GetCmplxObject((void*)Axis_DeSerialize_"+paraTypeName+
 					"\n\t\t, (void*)Axis_Create_"+paraTypeName+", (void*)Axis_Delete_"+paraTypeName+
-					"\n\t\t, \""+parameterName+"\", Axis_URI_"+paraTypeName+");\n");				
+					"\n\t\t, \""+elementName+"\", Axis_URI_"+paraTypeName+");\n");				
 			}
 		}
 		writer.write("\tif (AXIS_SUCCESS != (nStatus = pIWSDZ->GetStatus())) return nStatus;\n");

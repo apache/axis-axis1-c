@@ -141,6 +141,7 @@ public abstract class ParamWriter extends BasicFileWriter{
 			}
 			this.attribs[i].setType(attribType);
 			this.attribs[i].setAttribute(true);
+			this.attribs[i].setElementName(attribType.getName()); //TODO this is wrong. correct immediately. this will cause attributes serialized incorrectly
 			//TODO : how to find whether this attribute is optional or not ?
 		}
 
@@ -156,6 +157,7 @@ public abstract class ParamWriter extends BasicFileWriter{
 				this.attribs[i].setSimpleType(false);
 			}
 			this.attribs[i].setType(elementType);
+			this.attribs[i].setElementName(elem.getName());
 		   	if(elementType.isArray()){ //soap encoding arrays.
 				Type arrayType = WrapperUtils.getArrayType(elementType); //get contained type
 				this.attribs[i].setArray(true);

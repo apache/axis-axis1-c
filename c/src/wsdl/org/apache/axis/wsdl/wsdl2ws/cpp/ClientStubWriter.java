@@ -336,7 +336,7 @@ public class ClientStubWriter extends CPPClassWriter{
 			writer.write("\treturn RetArray;\n");
 		}
 		else if(returntypeissimple){
-			writer.write("\t\t\tRet = m_pCall->"+ CUtils.getParameterGetValueMethodName(outparamType, false)+"(\""+ returntype.getParamName()+"\", 0);\n\t\t}\n");
+			writer.write("\t\t\tRet = m_pCall->"+ CUtils.getParameterGetValueMethodName(outparamType, false)+"(\""+returntype.getElementName().getLocalPart()+"\", 0);\n\t\t}\n");
 			writer.write("\t}\n\tm_pCall->UnInitialize();\n");
 			writer.write("\treturn Ret;\n");
 		}
