@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  *
  */
 
@@ -82,7 +82,6 @@ extern "C" {
 STORAGE_CLASS_INFO
 int GetClassInstance(BasicHandler **inst)
 {
-	printf("in the GetClassInstance of ....");
 	*inst = new BasicHandler();
 	
 	ESHHandler* pESHHandler = new ESHHandler();
