@@ -87,7 +87,7 @@ friend class SoapFaultsTestCase;
 
 public:
 	SoapFault(string m_sFaultcode, string m_sFaultstring, string m_sFaultactor, string m_sDetail);
-	bool SoapFault::operator ==(const SoapFault &objSoapFault);
+	bool operator ==(const SoapFault &objSoapFault);
 	static SoapFault* getSoapFault(int);
 	static void initialize();
     const char* getSoapString();	
