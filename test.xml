@@ -510,6 +510,7 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 							<arg line="${clientArgs}"/>
 							<env key="PATH" value="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}/bin${path.separator}${dir.xmlParser}"/>
 							<env key="LD_LIBRARY_PATH" value="${dir.libraries}${path.separator}${dir.xmlParser}/lib${path.separator}${dir.xmlParser}"/>
+							<env key="LIBPATH" value="${dir.libraries}${path.separator}${dir.xmlParser}/lib${path.separator}${dir.xmlParser}"/>
 							<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}"/>
 						</exec>
 						<echo message="EXEC FINISHED"/>
