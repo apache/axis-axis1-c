@@ -1,2 +1,8 @@
+<requestFlow name="XXXX-req">        
 <handler name="LLLL" type="DDDD/PPPLLLLSSS">
 </handler>
+</requestFlow>
+<responseFlow name="XXXX-req">        
+<handler name="LLLL" type="DDDD/PPPLLLLSSS">
+</handler>
+</responseFlow>

@@ -1,6 +1,6 @@
 <test>
-    <name>HandlerTest2</name>
-    <description>CalculatorDoc with Handler Chain</description>
+    <name>HandlerTest5</name>
+    <description>Test IMessageData->(gs)etProperty AxisChar* property in a handler</description>
     <clientLang>cpp</clientLang>
     <clientCode>CalculatorDocClient.cpp</clientCode>
     <wsdl>CalculatorDoc.wsdl</wsdl>
@@ -8,13 +8,10 @@
         <output>
             CalculatorDoc.cpp.out
         </output>
-		<request>
-			HandlerTest2Request.out
-		</request>
     </expected>
     <handler>
         <directory>
-            handler_chain
+            handler_test5
         </directory>
        <service>
            Calculator
@@ -22,4 +19,3 @@
     </handler>
 	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
 </test>
-

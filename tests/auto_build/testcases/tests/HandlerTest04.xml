@@ -1,0 +1,24 @@
+<test>
+    <name>HandlerTest4</name>
+    <description>Test IMessageData->(gs)etUserName in a handlers</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>CalculatorDocClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            CalculatorDoc.cpp.out
+        </output>
+		<request>
+			HandlerTest4Request.out
+		</request>
+    </expected>
+    <handler>
+        <directory>
+            handler_test4
+        </directory>
+       <service>
+           Calculator
+       </service>
+    </handler>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>

@@ -1,0 +1,22 @@
+<test>
+    <name>HandlerTest7</name>
+    <description>CalculatorDoc with Handler Chain and to test IMessageData->(sg)etProperty with AxisChar* argument set in different handlers</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>CalculatorDocClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            CalculatorDoc.cpp.out
+        </output>
+    </expected>
+    <handler>
+        <directory>
+            handler_test7
+        </directory>
+       <service>
+           Calculator
+       </service>
+    </handler>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>
+

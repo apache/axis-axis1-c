@@ -1,6 +1,6 @@
 <test>
     <name>HandlerTest1</name>
-    <description>CalculatorDoc with Handler</description>
+    <description>CalculatorDoc with a Handler which adds a BasicNode to the SOAP Header</description>
     <clientLang>cpp</clientLang>
     <clientCode>CalculatorDocClient.cpp</clientCode>
     <wsdl>CalculatorDoc.wsdl</wsdl>
@@ -14,7 +14,7 @@
     </expected>
     <handler>
         <directory>
-            simple_handler
+            handler_test1
         </directory>
        <service>
            Calculator

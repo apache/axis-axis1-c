@@ -1,0 +1,22 @@
+<test>
+    <name>HandlerTest8</name>
+    <description>CalculatorDoc with Handler and IMessageData->getProperty() when no property set</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>CalculatorDocClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            CalculatorDoc.cpp.out
+        </output>
+    </expected>
+    <handler>
+        <directory>
+            handler_test8
+        </directory>
+       <service>
+           Calculator
+       </service>
+    </handler>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>
+

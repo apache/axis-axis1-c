@@ -1,0 +1,24 @@
+<test>
+    <name>HandlerTest3</name>
+    <description>Test IMessageData->getOperationName() API in a handler</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>CalculatorDocClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            CalculatorDoc.cpp.out
+        </output>
+		<request>
+			HandlerTest3Request.out
+		</request>
+    </expected>
+    <handler>
+        <directory>
+            handler_test3
+        </directory>
+       <service>
+           Calculator
+       </service>
+    </handler>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>
