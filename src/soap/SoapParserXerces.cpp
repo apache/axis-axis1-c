@@ -72,7 +72,7 @@ int SoapParserXerces::GetStatus()
     return m_nStatus;
 }
 
-const AnyElement* SoapParserXerces::Next()
+const AnyElement* SoapParserXerces::Next(bool isCharData)
 {
 
     if(!firstParsed)
@@ -86,7 +86,15 @@ const AnyElement* SoapParserXerces::Next()
     {
         m_pParser->parseNext(token);
         AnyElement* elem = Xhandler.getAnyElement();
-        if (elem) return elem;
+        if (elem) 
+		{
+			if (!isCharData && (CHARACTER_ELEMENT == elem->m_type))
+			{ /* ignorable white space */
+				Xhandler.freeElement();
+				continue;		
+			}			
+			return elem;
+		}
         else if (AXIS_FAIL == Xhandler.GetStatus()) return NULL; 
     }
 }

@@ -83,7 +83,7 @@ public:
     int Init();
     const XML_Ch* GetNS4Prefix(const XML_Ch* prefix);
     int GetStatus();
-    const AnyElement* Next();
+    const AnyElement* Next(bool isCharData=false);
     AXIS_TRANSPORT_STATUS GetTransportStatus(){ return m_nTransportStatus;};
     void SetTransportStatus(AXIS_TRANSPORT_STATUS nStatus)
     { m_nTransportStatus = nStatus;};
