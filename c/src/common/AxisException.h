@@ -1,9 +1,11 @@
 #include <string>
 #include <iostream>
 #include <exception>
+#include "../soap/SoapFaults.h"
 using namespace std;
 
-#define AXIS_TEST_ERROR 1
+#define TEST_EXCEPTION FAULT_LAST+1
+
 
 class AxisException :public exception
 {
@@ -17,7 +19,7 @@ class AxisException :public exception
 
   private:
     void processException(exception* e);
-    void processException(exception* e, int e);
+    void processException(exception* e, int exceptionCode);
     void processException(int e);
     string getMessage(exception* e);
     string getMessage(int e);    

@@ -311,7 +311,8 @@ int AxisEngine::Process(soapstream* soap)
     from the webserver and report the error. You can also write this
     in a logfile specific to axis.
    */
-   DEBUG1(e->what());
+   DEBUG1(e->what());   
+   delete(e);
  }
  catch(...)
  {
