@@ -149,6 +149,7 @@ public:
     virtual const AxisString& GetQName() = 0;
 	virtual const AxisString& GetHexString() = 0;
 	virtual const AxisString& GetBase64String() = 0;
+	virtual const AxisString& GetTypeName() = 0;
     /*return a tm struct which contain year-month-date-hour-
       minute-second*/
     virtual struct tm GetDateTime() = 0;
