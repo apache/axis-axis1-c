@@ -25,7 +25,7 @@
 #include "../common/AxisFile.h"
 #include "AxisUtils.h"
 #include <stdlib.h>
-#include <stdio.h>
+#include <iostream>
 #include <string.h>
 
 AXIS_CPP_NAMESPACE_START AxisConfig::AxisConfig ()
@@ -62,9 +62,9 @@ AXIS_CPP_NAMESPACE_START AxisConfig::AxisConfig ()
     m_pcValueArray[AXCONF_LISTENPORT] = strdup ("listen port");
 #else
     m_pcValueArray[AXCONF_XMLPARSER] =
-	strdup ("/usr/local/Axis/libs/libaxis_xmlparser.so");
+	strdup ("/usr/local/axiscpp_deploy/lib/libaxis_xmlparser.so");
     m_pcValueArray[AXCONF_TRANSPORTHTTP] =
-	strdup ("/usr/local/Axis/libs/libaxis_transport.so");
+	strdup ("/usr/local/axiscpp_deploy/lib/libaxis_transport.so");
     m_pcValueArray[AXCONF_NODENAME] = strdup ("server name");
     m_pcValueArray[AXCONF_LISTENPORT] = strdup ("listen port");
 #endif
