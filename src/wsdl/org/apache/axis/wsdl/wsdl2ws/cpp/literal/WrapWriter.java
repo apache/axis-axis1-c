@@ -252,7 +252,8 @@ public class WrapWriter extends CPPClassWriter{
 		writer.write("\tif (!pIWSDZ) return AXIS_FAIL;\n");
 		writer.write("\t/* check whether we have got correct message */\n");
 		writer.write("\tif (AXIS_SUCCESS != pIWSDZ->CheckMessageBody(\""+minfo.getInputMessage().getLocalPart()+"\", \""+minfo.getInputMessage().getNamespaceURI()+"\")) return AXIS_FAIL;\n");
-		writer.write("\tpIWSSZ->CreateSoapMethod(\""+minfo.getInputMessage().getLocalPart()+"\", \""+minfo.getOutputMessage().getNamespaceURI()+"\");\n");
+		if(minfo.getOutputMessage()!=null)
+			writer.write("\tpIWSSZ->CreateSoapMethod(\""+minfo.getOutputMessage().getLocalPart()+"\", \""+minfo.getOutputMessage().getNamespaceURI()+"\");\n");
 		//create and populate variables for each parameter
 		String paraTypeName;
 		String parameterName;
