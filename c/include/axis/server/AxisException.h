@@ -29,12 +29,8 @@
 
 #include <axis/server/GDefine.h>
 
-#include <string>
 #include <exception>
-#include <new>
-#include <typeinfo>
-#include <stdexcept>
-//#include <ios>
+
 using namespace std;
 
 

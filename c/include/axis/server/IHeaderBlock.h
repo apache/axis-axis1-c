@@ -19,7 +19,10 @@
 
 #include "BasicNode.h"
 #include "SoapEnvVersions.h"
-#include "Attribute.h"
+
+#ifdef __cplusplus
+class Attribute;
+#endif
 
 enum HEADER_BLOCK_STD_ATTR_TYPE 
 {   ROLE_NEXT=1, ROLE_NONE=2, 

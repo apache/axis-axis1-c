@@ -20,8 +20,8 @@
  */
 
 #include <axis/AxisGenException.h>
-#include <exception>
-using namespace std;
+//#include <exception>
+//using namespace std;
 
 AxisGenException::AxisGenException (const int iExceptionCode)
 {
@@ -74,14 +74,14 @@ void AxisGenException::processException(const int iExceptionCode, char* pcMessag
     delete pcMessage;
 }
 
-const string AxisGenException::getMessage (const exception* objException)
+const string& AxisGenException::getMessage (const exception* objException)
 {
     m_sMessage = objException->what();
 
     return m_sMessage;
 }
 
-const string AxisGenException::getMessage (const int iExceptionCode)
+const string& AxisGenException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {

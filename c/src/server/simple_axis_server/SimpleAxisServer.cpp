@@ -32,11 +32,9 @@
 #include <unistd.h>
 #endif
 
-//#include <stdio.h>
 #include <axis/server/Packet.h>
 #include <axis/server/AxisConfig.h>
 #include "../../common/AxisSocketUtils.h"
-//#include <axis/server/AxisTrace.h>
 #include "ServerHelper.h"
 #include <axis/server/GDefine.h>
 

@@ -22,11 +22,6 @@
 #define _PARAM_H____OF_AXIS_INCLUDED_
 
 #include "IParam.h"
-#include "BasicTypeSerializer.h"
-#include "AxisTime.h"
-
-#include <string>
-using namespace std;
 
 class ArrayBean;
 /*

@@ -28,7 +28,6 @@
 
 #ifdef __cplusplus
 
-#include <string>
 #include <list>
 
 using namespace std;

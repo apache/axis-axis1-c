@@ -84,14 +84,14 @@ void AxisConfigException::processException(const int iExceptionCode, char* pcMes
         delete pcMessage;
 }
 
-const string AxisConfigException::getMessage (const exception* objException)
+const string& AxisConfigException::getMessage (const exception* objException)
 {
     m_sMessage = objException->what();
 
     return m_sMessage;
 }
 
-const string AxisConfigException::getMessage (const int iExceptionCode)
+const string& AxisConfigException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {

@@ -18,13 +18,10 @@
 #define _IWRAPPERSOAPSERIALIZER_H____OF_AXIS_INCLUDED_
 
 #include "AxisUserAPI.h"
-
 #ifdef __cplusplus
 #include "TypeMapping.h"
 #include "ISoapSerializer.h"
 #include "WSDDDefines.h"
-#include "Packet.h"
-#include <axis/SOAPTransport.h>
 
 #endif
 
@@ -172,19 +169,24 @@ public:
     virtual void AXISCALL serializeEndElementOfType(const AxisChar* pName)=0;
 
     /* Externalization of serializer API */
+
+    /* Following functions need not be exposed. They are internal to the
+	 * Axis Engine - Commented by Susantha 02/07/2004
+
     virtual int setOutputStream(SOAPTransport* pStream)=0;
 
     virtual void markEndOfStream()=0;    
 
     virtual int init()=0;    
 
-    virtual PROVIDERTYPE getCurrentProviderType()=0;
-
-    virtual void setCurrentProviderType(PROVIDERTYPE nType)=0;    
-
     virtual void setStyle(AXIS_BINDING_STYLE nStyle)=0;
 
     virtual AXIS_BINDING_STYLE getStyle()=0;
+    */
+
+    virtual PROVIDERTYPE getCurrentProviderType()=0;
+
+    virtual void setCurrentProviderType(PROVIDERTYPE nType)=0;    
 
     virtual int addOutputAnyObject(AnyType* pAnyObject)=0;
 

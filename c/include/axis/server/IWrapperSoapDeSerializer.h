@@ -17,19 +17,15 @@
 #if !defined(_IWRAPPERSOAPDESERIALIZER_H____OF_AXIS_INCLUDED_)
 #define _IWRAPPERSOAPDESERIALIZER_H____OF_AXIS_INCLUDED_
 
-
-#include "GDefine.h"
 #include "AxisUserAPI.h"
 #include "TypeMapping.h"
 #include "WSDDDefines.h"
-#include "Packet.h"
 #include <axis/SOAPTransport.h>
 
 #ifdef __cplusplus
 
 #include "ISoapDeSerializer.h"
-#include <string>
-using namespace std;
+
 #endif
 
 typedef struct {

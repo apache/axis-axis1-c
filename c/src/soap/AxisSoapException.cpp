@@ -20,8 +20,6 @@
  */
 
 #include <axis/AxisSoapException.h>
-#include <exception>
-using namespace std;
 
 /**
  *    Default when no parameter passed. When thrown with no parameter
@@ -82,14 +80,14 @@ void AxisSoapException::processException(const int iExceptionCode, char* pcMessa
     if(pcMessage)
         delete pcMessage;
 }
-const string AxisSoapException::getMessage (const exception* objException)
+const string& AxisSoapException::getMessage (const exception* objException)
 {
     m_sMessage = objException->what();
 
     return m_sMessage;
 }
 
-const string AxisSoapException::getMessage (const int iExceptionCode)
+const string& AxisSoapException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {
