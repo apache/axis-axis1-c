@@ -25,10 +25,12 @@ package org.apache.axis.wsdl.wsdl2ws.cpp;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
+import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 
@@ -116,6 +118,30 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 			writer.write("#include <axis/server/IMessageData.h>\n");
 			writer.write("#include <axis/server/GDefine.h>\n");
 			writer.write("#include <axis/server/AxisWrapperAPI.h>\n\n");
+			writeFaultHeaders();
+			
+		}catch(IOException e){
+			throw new WrapperFault(e);
+		}
+	}
+	/* (non-Javadoc)
+	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeMethods()
+	 */
+	protected void writeFaultHeaders() throws WrapperFault {
+		try{
+			
+			MethodInfo minfo;
+			for (int i = 0; i < methods.size(); i++) {
+				minfo = (MethodInfo)methods.get(i);
+				Iterator fault = minfo.getFaultType().iterator();
+				String faultInfoName =null;		   		
+				while (fault.hasNext()){
+						FaultInfo info = (FaultInfo)fault.next();
+						faultInfoName =info.getFaultInfo();	     
+						writer.write("#include \"Axis"+faultInfoName.toString()+"Exception.h\"\n");
+				}
+				writer.write("\n");
+			}			
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}
