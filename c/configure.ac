@@ -131,6 +131,15 @@ AC_ARG_ENABLE(samples, [  --enable-samples    build samples.],
   AC_MSG_RESULT(no)
 )
 
+if test -f "$prefix"; then
+rm $prefix
+mkdir $prefix
+elif test -d "$prefix"; then
+echo "install directory in place"
+else
+mkdir $prefix
+fi
+
 if test -d "$prefix/conf"; then
 cp deploy/axiscpp.conf_linux $prefix/conf/axiscpp.conf
 else
