@@ -461,15 +461,21 @@ SoapDeSerializer::checkForFault (const AxisChar * pName,
 
 	/*We deserialize fault code in doc literal. */
 	setStyle (DOC_LITERAL);
-	//pFault->setFaultcode(getElementAsString("faultcode", 0));
 	pcFaultCode = getElementAsString ("faultcode", 0);
 	pFault->setFaultcode (pcFaultCode == NULL ? "" : pcFaultCode);
-	//pFault->setFaultstring(getElementAsString("faultstring", 0));
+        if ( pcFaultCode )
+            delete [] pcFaultCode;
+
 	pcFaultstring = getElementAsString ("faultstring", 0);
 	pFault->setFaultstring (pcFaultstring == NULL ? "" : pcFaultstring);
-	//pFault->setFaultactor(getElementAsString("faultactor", 0));
+        if ( pcFaultstring )
+            delete [] pcFaultstring;
+ 
 	pcFaultactor = getElementAsString ("faultactor", 0);
 	pFault->setFaultactor (pcFaultactor == NULL ? "" : pcFaultactor);
+        if ( pcFaultactor )
+            delete [] pcFaultactor;
+
 	// FJP Changed the namespace from null to a single space (an impossible
 	//     value) to help method know that it is parsing a fault message.
 	pcDetail = getElementAsString ("detail", " ");
@@ -3166,6 +3172,10 @@ SoapDeSerializer::getElementAsString (const AxisChar * pName,
 		    if (bReturn)
 		    {
 			m_pNode = m_pParser->next ();	/* skip end element node too */
+
+                        // Samisa: clean memory allocated for ret before return
+                        delete [] ret;
+                        ret = NULL;
 
 			return 0;
 		    }
