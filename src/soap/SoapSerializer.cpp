@@ -233,7 +233,10 @@ int SoapSerializer::setOutputStream(SOAPTransport* pStream)
     {
         serialize("<?xml version='1.0' encoding='utf-8' ?>", NULL);
         iStatus= m_pSoapEnvelope->serialize(*this, 
-            (SOAP_VERSION)m_iSoapVersion);
+            (SOAP_VERSION)m_iSoapVersion);		
+		
+		serializeAttachments(*this);
+
     }
     }
     catch(AxisSoapException& e)
@@ -916,5 +919,43 @@ int SoapSerializer::serializeAsChardata(void* pValue, XSDTYPE type)
     return AXIS_SUCCESS;
 }
 
-AXIS_CPP_NAMESPACE_END
+void SoapSerializer::serializeAttachments(SoapSerializer &pSZ)
+{
+	/*serializing the attachements*/
 
+	map<AxisXMLString, SoapAttachment*>::iterator itCurrAttach= m_SoapAttachments.begin();
+
+	while(itCurrAttach != m_SoapAttachments.end())
+    {        
+        ((*itCurrAttach).second)->serialize(pSZ);
+
+        itCurrAttach++;
+    }
+}
+
+void SoapSerializer::addAttachment(AxisString id, SoapAttachment* objAttach)
+{
+	m_SoapAttachments[id] = objAttach;
+}
+
+void SoapSerializer::addAttachmentHeader(const AxisChar* achId, const AxisChar* achHeaderName, const AxisChar* achHeaderValue)
+{
+
+	if (m_SoapAttachments[achId] == NULL) {
+		m_SoapAttachments[achId] = new SoapAttachment();		
+	}
+
+	m_SoapAttachments[achId]->addHeader(achHeaderName, achHeaderValue);
+	
+}
+
+void SoapSerializer::addAttachmentBody(const AxisChar* achId, xsd__base64Binary *pAttchBody)
+{
+	if (m_SoapAttachments[achId] == NULL) {
+		m_SoapAttachments[achId] = new SoapAttachment();		
+	}
+
+	m_SoapAttachments[achId]->addBody(pAttchBody);
+}
+
+AXIS_CPP_NAMESPACE_END

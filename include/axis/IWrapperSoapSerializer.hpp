@@ -31,6 +31,12 @@
  *
  */
 
+/*
+ * Revision 1.1  2005/01/02 Roshan
+ * Added addAttachmentBody
+ * Added addAttachmentHeader
+ */
+
 AXIS_CPP_NAMESPACE_START
 
 class IWrapperSoapSerializer
@@ -120,6 +126,10 @@ public:
     virtual int serializeAnyObject(AnyType* pAnyObject)=0;
 
     virtual int serializeAsChardata(void* pValue, XSDTYPE type)=0;
+
+	virtual void addAttachmentBody(const AxisChar* achId, xsd__base64Binary* pAttchBody)=0;
+
+	virtual void addAttachmentHeader(const AxisChar* achId, const AxisChar* achHeaderName, const AxisChar* achHeaderValue)=0;
 };
 
 AXIS_CPP_NAMESPACE_END

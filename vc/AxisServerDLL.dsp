@@ -262,6 +262,14 @@ SOURCE=..\src\xml\SimpleAttribute.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\SoapAttachementHeaders.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\SoapAttachment.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\SoapBody.cpp
 # End Source File
 # Begin Source File
@@ -351,6 +359,18 @@ SOURCE=..\include\axis\ISoapFault.h
 # Begin Source File
 
 SOURCE=..\include\axis\server\Packet.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\SoapAttachementHeaders.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\SoapAttachment.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\SoapSerializer.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

@@ -22,6 +22,7 @@
 
 #include "../common/BasicTypeSerializer.h"
 #include <axis/WSDDDefines.hpp>
+#include "SoapAttachment.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -47,9 +48,10 @@ class Attribute;
 class SoapSerializer : public IHandlerSoapSerializer
 {
 private:
+	map<AxisString, SoapAttachment*> m_SoapAttachments;
     int m_nCounter;
     AxisChar m_Buf[BTS_BUFFSIZE];
-    SoapEnvelope* m_pSoapEnvelope;    
+    SoapEnvelope* m_pSoapEnvelope;    	
     int m_iSoapVersion;
     /* Current Serialization Style */
     AXIS_BINDING_STYLE m_nStyle;
@@ -149,9 +151,13 @@ public: /* Basic Type Serializing methods */
     IHeaderBlock* createHeaderBlock();
     
 private:
+	void serializeAttachments(SoapSerializer &pSZ);
     BasicTypeSerializer m_BTSZ;
     SOAPTransport* m_pOutputStream;
 public:
+	void addAttachmentBody(const AxisChar* achId, xsd__base64Binary* pAttchBody);
+	void addAttachmentHeader(const AxisChar* achId, const AxisChar* achHeaderName, const AxisChar* achHeaderValue);
+	void addAttachment(AxisString id, SoapAttachment* objAttach);
 	IHeaderBlock* getHeaderBlock(const AxisChar* pcName, const AxisChar* pcNamespace);
 	IHeaderBlock* getHeaderBlock();
 	IHeaderBlock* getFirstHeaderBlock();
