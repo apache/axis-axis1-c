@@ -80,14 +80,14 @@ SoapHeader::SoapHeader()
 SoapHeader::~SoapHeader()
 {
 	//deletion of Header Entries
-	list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerEntries.begin();
+	list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
 
-	while(itCurrHeaderBlock != m_headerEntries.end()) {		
+	while(itCurrHeaderBlock != m_headerBlocks.end()) {		
 		delete *itCurrHeaderBlock;
 		itCurrHeaderBlock++;
 	}
 
-	m_headerEntries.clear();
+	m_headerBlocks.clear();
 
 	//deletion of attributes
 	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
@@ -102,7 +102,7 @@ SoapHeader::~SoapHeader()
 
 void SoapHeader::addHeaderBlock(HeaderBlock* headerBlock)
 {
-	m_headerEntries.push_back(headerBlock);
+	m_headerBlocks.push_back(headerBlock);
 }
 
 int SoapHeader::serialize(string& sSerialized, SOAP_VERSION eSoapVersion)
@@ -121,9 +121,9 @@ int SoapHeader::serialize(string& sSerialized, SOAP_VERSION eSoapVersion)
 
 		sSerialized= sSerialized+ ">"+ "\n";
 
-		list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerEntries.begin();
+		list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
 
-		while(itCurrHeaderBlock != m_headerEntries.end()) {
+		while(itCurrHeaderBlock != m_headerBlocks.end()) {
 			iStatus= (*itCurrHeaderBlock)->serialize(sSerialized);
 			if(iStatus==FAIL) {
 				break;
@@ -151,9 +151,9 @@ int SoapHeader::serialize(string& sSerialized, SOAP_VERSION eSoapVersion)
 
 	m_strHeaderSerialized= "<SOAP-ENV:Header>";
 
-	list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerEntries.begin();
+	list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
 
-	while(itCurrHeaderBlock != m_headerEntries.end()) {
+	while(itCurrHeaderBlock != m_headerBlocks.end()) {
 		m_strHeaderSerialized= m_strHeaderSerialized + (*itCurrHeaderBlock)->serialize();
 		itCurrHeaderBlock++;
 	}
