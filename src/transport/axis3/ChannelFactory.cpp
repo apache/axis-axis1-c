@@ -27,6 +27,7 @@
 #include "ChannelFactory.hpp"
 #include <stdio.h>
 #include "HTTPTransportException.hpp"
+#include "../common/AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -98,6 +99,15 @@ IChannel * ChannelFactory::LoadChannelLibrary( const char * pcLibraryName)
 
             throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, pszErrorInfo);
         }
+
+            // Load function to do lib level inits
+            void (*initializeLibrary) (AxisTraceEntrypoints&);
+            initializeLibrary = (void (*)(AxisTraceEntrypoints&))PLATFORM_GETPROCADDR(m_LibHandler, "initializeLibrary");
+
+            AxisTraceEntrypoints ep;
+            AxisTrace::getTraceEntrypoints(ep);
+            if (initializeLibrary)
+                 (*initializeLibrary)(ep);
 
 		m_pLibName[m_iLibCount] = new char[ strlen( pcLibraryName) + 1];
 
