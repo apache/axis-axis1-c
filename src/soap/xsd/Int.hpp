@@ -31,12 +31,21 @@ using namespace std;
 class Int : public Long {
 public:
   
+  AxisChar* serialize(const void* value) throw (AxisSoapException);
+  
+  void* deserializer(const AxisChar* valueAsChar) throw (AxisSoapException);
+  
+  AxisChar* serialize(const int* value) throw (AxisSoapException);
+  
   /**
    * Deserialized Int value from it's on-the-wire string form.
    * @param valueAsChar Serialized form of Int value.
    * @return Deserialized Int value.
    */
-    int* deserializeInt(const AxisChar* valueAsChar) throw (AxisSoapException);
+  int* deserializeInt(const AxisChar* valueAsChar) throw (AxisSoapException);
+    
+private:
+    int* m_int;
 };
 
 AXIS_CPP_NAMESPACE_END
