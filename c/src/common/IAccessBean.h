@@ -10,9 +10,9 @@
 #endif // _MSC_VER > 1000
 
 //this is a trick :-)
-#define ACCESSBEAN_SERIALIZABLE int DeSerialize(ISoapDeSerializer *pDZ);int Serialize(ISoapSerializer& pSZ); int GetSize();
+#define ACCESSBEAN_SERIALIZABLE int DeSerialize(ISoapDeSerializer *pDZ);int Serialize(IWrapperSoapSerializer& pSZ); int GetSize();
 
-#include "ISoapSerializer.h"
+#include "IWrapperSoapSerializer.h"
 #include "ISoapDeSerializer.h"
 
 class IAccessBean  
@@ -23,7 +23,7 @@ public:
 	IAccessBean(){};
 	virtual ~IAccessBean(){};
 	virtual int DeSerialize(ISoapDeSerializer *pDZ) = 0;
-	virtual int Serialize(ISoapSerializer& pSZ) = 0;
+	virtual int Serialize(IWrapperSoapSerializer& pSZ) = 0;
 	virtual int GetSize() = 0;
 protected:
 	string m_TypeName;
