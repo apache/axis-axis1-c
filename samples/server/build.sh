@@ -1,4 +1,4 @@
 sh autogen.sh
-sh runconfig.sh
+sh runconfig
 make
 make install
