@@ -22,6 +22,7 @@ libsoap_la_SOURCES = Attribute.cpp \
         SoapAttachment.cpp \
         SoapAttachementHeaders.cpp \
         SoapFaultException.cpp \
+        OtherFaultException.cpp \
         xsd/Int.cpp \
         xsd/Integer.cpp \
         xsd/Long.cpp \

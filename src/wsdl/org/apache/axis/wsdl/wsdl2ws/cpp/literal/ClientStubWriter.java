@@ -1025,7 +1025,9 @@ public class ClientStubWriter
         int j = 0;
         if (!paramsFault.hasNext())
         {
-            writer.write("\t\t\tthrow;\n");
+            writer.write("\t\t\tthrow OtherFaultException(pSoapFault->getFaultcode(),\n");
+            writer.write("\t\t\t\tpSoapFault->getFaultstring(), pSoapFault->getFaultactor(),\n");
+		writer.write("\t\t\t\tpSoapFault->getSimpleFaultDetail(), iExceptionCode);\n");
         }
         else
         {

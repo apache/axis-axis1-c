@@ -41,7 +41,7 @@ SoapFaultException::SoapFaultException()
 }
 
 SoapFaultException::SoapFaultException(
-	AxisChar *code, AxisChar *string, AxisChar *actor, int exceptionCode)
+	const AxisChar *code, const AxisChar *string, const AxisChar *actor, int exceptionCode)
 {
 	STRINGCOPY(m_code,code);
 	STRINGCOPY(m_string,string);

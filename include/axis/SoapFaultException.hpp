@@ -42,7 +42,7 @@ class STORAGE_CLASS_INFO SoapFaultException :public AxisException
 {
 public:
 	SoapFaultException();
-	SoapFaultException(AxisChar *code, AxisChar *string, AxisChar *actor, int exceptionCode);
+	SoapFaultException(const AxisChar *code, const AxisChar *string, const AxisChar *actor, int exceptionCode);
 	SoapFaultException(AxisException& ae);
 	virtual ~SoapFaultException() throw();
 

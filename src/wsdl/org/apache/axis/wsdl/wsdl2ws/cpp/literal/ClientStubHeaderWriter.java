@@ -199,7 +199,7 @@ public class ClientStubHeaderWriter
         try
         {
             writer.write("#include <axis/client/Stub.hpp>\n");
-            writer.write("#include <axis/SoapFaultException.hpp>\n");
+            writer.write("#include <axis/OtherFaultException.hpp>\n");
             writer.write("#include <axis/ISoapFault.hpp>\n");
             writer.write("AXIS_CPP_NAMESPACE_USE\n");
             Type atype;
