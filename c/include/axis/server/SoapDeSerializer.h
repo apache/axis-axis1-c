@@ -206,7 +206,7 @@ public:
     XSDTYPE getXSDType(const AnyElement* pElement);
     int AXISCALL getStatus(){return m_nStatus;};
 	AnyType* AXISCALL getAnyObject();
-    void serializeTag(AxisString& xmlStr, const AnyElement* node);
+    void serializeTag(AxisString& xmlStr, const AnyElement* node, AxisString& nsDecls);
 
 private:
     int getElementForAttributes(const AxisChar* pName, 

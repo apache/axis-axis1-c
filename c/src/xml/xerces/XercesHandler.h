@@ -34,15 +34,14 @@ class XercesHandler : public XERCES_CPP_NAMESPACE::DefaultHandler
 {
 public :
     void freeElement();
-    int getStatus(){return m_nStatus;};
+    inline int getStatus(){return m_nStatus;};
     XercesHandler();
     ~XercesHandler();
     const XML_Ch* ns4Prefix(const XML_Ch* prefix);
     const XML_Ch* prefix4NS(const XML_Ch* pcNS);
-    AnyElement* getAnyElement()
-    {
-        return m_pCurrElement;
-    }
+    AnyElement* getAnyElement();
+	void setGetPrefixMappings(bool bValue);
+	void reset();
 
 private:
     /* -----------------------------------------------------------------------
@@ -71,15 +70,13 @@ private:
 
     int m_nStatus;
 	bool m_bEndElementFollows;
-    AnyElement * Nelement;
-    AnyElement * m_pCurrElement;
-
+    AnyElement* m_pNextElement;
+    AnyElement* m_pPrefixMappingElement;
+    AnyElement* m_pCurrElement;
     map<AxisXMLString, AxisXMLString> m_NsStack;
-    void initAnyElement()
-    {
-        Nelement->m_pchNameOrValue = NULL;
-        Nelement->m_pchNamespace = NULL;
-    }
+	map<const AxisChar*, const AxisChar*> m_CurrPrefixMappings;
+	bool m_bGetPrefixMappings;
+	bool m_bStartElementWaiting;
 	void freeAttributes();
 };
 

@@ -213,8 +213,8 @@ int SoapDeSerializer::getHeader()
                 {
                     if (iLevel == HEADER_LEVEL)
                     {
-        
-                        pHeaderBlock->setUri(m_pNode->m_pchNamespace);
+                        if (m_pNode->m_pchNamespace)
+							pHeaderBlock->setUri(m_pNode->m_pchNamespace);
                         pHeaderBlock->setLocalName(m_pNode->m_pchNameOrValue);
 
                         if ((m_pNode->m_pchAttributes[0]) != NULL)
@@ -245,9 +245,8 @@ int SoapDeSerializer::getHeader()
                     else if (iLevel == HEADER_BLOCK_LEVEL)
                     {
                         iHeaderBlockStackLevel++;
-
-                        
-                        pComplexElement->setURI(m_pNode->m_pchNamespace);
+						if (m_pNode->m_pchNamespace)
+							pComplexElement->setURI(m_pNode->m_pchNamespace);
                         pComplexElement->setLocalName(m_pNode->
                                                       m_pchNameOrValue);
 
@@ -3080,6 +3079,8 @@ AnyType* SoapDeSerializer::getAnyObject()
     int lstSize = 0;
     
     AxisString xmlStr = "";
+	AxisString nsDecls = "";
+
     list<AxisString> lstXML;
     
     if (!m_pNode) m_pNode = m_pParser->anyNext();
@@ -3087,9 +3088,22 @@ AnyType* SoapDeSerializer::getAnyObject()
 
     while ((END_ELEMENT != m_pNode->m_type) || (tagCount >= 0))
     {
-        if (CHARACTER_ELEMENT != m_pNode->m_type)
+		if (START_PREFIX == m_pNode->m_type)
+		{
+			nsDecls += " xmlns";
+			if (m_pNode->m_pchNameOrValue) 
+			{
+				nsDecls += ":";
+				nsDecls += m_pNode->m_pchNameOrValue;
+			}
+			nsDecls += "=\"";
+			nsDecls += m_pNode->m_pchNamespace;
+			nsDecls += "\"";
+		}
+        else if (CHARACTER_ELEMENT != m_pNode->m_type)
         {
-            serializeTag(xmlStr, m_pNode);
+            serializeTag(xmlStr, m_pNode, nsDecls);
+			nsDecls = "";
         }
         else
         {
@@ -3128,7 +3142,7 @@ AnyType* SoapDeSerializer::getAnyObject()
 }
 
 
-void SoapDeSerializer::serializeTag(AxisString& xmlStr, const AnyElement* node)
+void SoapDeSerializer::serializeTag(AxisString& xmlStr, const AnyElement* node, AxisString& nsDecls)
 {
     /*
        Note that if this is an end tag and since m_pchNameOrValue doesn't give
@@ -3154,6 +3168,8 @@ void SoapDeSerializer::serializeTag(AxisString& xmlStr, const AnyElement* node)
         
         xmlStr += node->m_pchNameOrValue;
 
+		if (!nsDecls.empty()) xmlStr += nsDecls.c_str();
+
         if (node->m_pchAttributes)
         {
             int j;
@@ -3170,7 +3186,7 @@ void SoapDeSerializer::serializeTag(AxisString& xmlStr, const AnyElement* node)
 					if (pchPrefix)
 					{
 						xmlStr += " "; 
-						xmlStr += node->m_pchAttributes[j+1];
+						xmlStr += pchPrefix;
 						xmlStr += ":";
 						xmlStr += node->m_pchAttributes[j];
 					}
@@ -3190,7 +3206,7 @@ void SoapDeSerializer::serializeTag(AxisString& xmlStr, const AnyElement* node)
         /* if (node->m_pchNamespace) why dont parser set null if there is no
          * namespace
          */
-        if (node->m_pchNamespace && (strcmp(node->m_pchNamespace, "") != 0))
+        if (node->m_pchNamespace)
         {
 			pchPrefix = m_pParser->getPrefix4NS(node->m_pchNamespace);
 			if (pchPrefix)

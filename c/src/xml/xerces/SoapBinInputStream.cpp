@@ -43,5 +43,6 @@ unsigned int SoapBinInputStream::readBytes(XMLByte* const pcToFill,
 {
     int iRead = iMaxToRead;
 	m_pInputStream->getBytes((char*)pcToFill, &iRead);
+	m_nByteCount += iRead;
     return iRead;
 }
