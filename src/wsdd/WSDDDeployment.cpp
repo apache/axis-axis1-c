@@ -182,9 +182,7 @@ const AxisString& WSDDDeployment::GetLibName(int nLibId)
 	{
 		if ((*it).second == nLibId)
 		{
-			AxisString strReturn = (*it).first;
-			return strReturn;
-			//return (*it).first;
+			return (*it).first;
 		}
 	}
 	return m_sAux;
