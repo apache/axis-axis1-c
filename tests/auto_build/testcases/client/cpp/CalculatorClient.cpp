@@ -1,4 +1,5 @@
 #include "Calculator.hpp"
+#include <iostream>
 #include <axis/AxisException.hpp>
 #include <ctype.h>
 
