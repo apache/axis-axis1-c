@@ -186,9 +186,14 @@ public class XmlSchema extends XmlSchemaAnnotated {
         }
     }
 
-    static XmlSchema read(Document doc, ValidationEventHandler veh) {
+    public static XmlSchema read(Document doc, ValidationEventHandler veh) {
         SchemaBuilder builder = new SchemaBuilder();
         return builder.build(doc, veh);
+    }
+
+    public static XmlSchema read(Element elem) {
+        SchemaBuilder builder = new SchemaBuilder();
+        return builder.handleXmlSchemaElement(elem);
     }
 
     public XmlSchemaForm getAttributeFormDefault() {
