@@ -3,31 +3,31 @@
  * This file contains an Exception class of the web service.
  */
 
-#if !defined(__AXISDIVBYZEROEXCEPTION_EXCEPTION_H__INCLUDED_)
-#define __AXISDIVBYZEROEXCEPTION_EXCEPTION_H__INCLUDED_
+#if !defined(__AXISOUTOFBOUNDEXCEPTION_EXCEPTION_H__INCLUDED_)
+#define __AXISOUTOFBOUNDEXCEPTION_EXCEPTION_H__INCLUDED_
 
 #include <string>
 #include <exception>
 #include <axis/server/AxisException.h>
-#include "DivByZeroStruct.h"
+#include "OutOfBoundStruct.h"
 
 using namespace std;
-class AxisDivByZeroException: public AxisException
+class AxisOutOfBoundException: public AxisException
 {
 public:
-	AxisDivByZeroException();
-	AxisDivByZeroException(DivByZeroStruct* pFault);
-	AxisDivByZeroException(int iExceptionCode);
-	AxisDivByZeroException(exception* e);
-	AxisDivByZeroException(exception* e, int iExceptionCode);
-	virtual ~AxisDivByZeroException() throw();
+	AxisOutOfBoundException();
+	AxisOutOfBoundException(OutOfBoundStruct* pFault);
+	AxisOutOfBoundException(int iExceptionCode);
+	AxisOutOfBoundException(exception* e);
+	AxisOutOfBoundException(exception* e, int iExceptionCode);
+	virtual ~AxisOutOfBoundException() throw();
 	 const char* what() throw();
 	 const int getExceptionCode();
 	 const string getMessage(exception* e);
 	 const string getMessage(int iExceptionCode);
 private:
 	 void processException(exception* e);
-	 void processException(DivByZeroStruct* pFault);
+	 void processException(OutOfBoundStruct* pFault);
 	 void processException(exception* e, int iExceptionCode);
 	 void processException(int iExceptionCode);
 	 string m_sMessage;
@@ -35,4 +35,4 @@ private:
 
 };
 
-#endif /* !defined(__AXISDIVBYZEROEXCEPTION_EXCEPTION_H__INCLUDED_)*/
+#endif /* !defined(__AXISOUTOFBOUNDEXCEPTION_EXCEPTION_H__INCLUDED_)*/

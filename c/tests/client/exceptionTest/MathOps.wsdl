@@ -9,11 +9,29 @@
 					<element name="varFloat" type="xsd:float"/>
 				</sequence>
 			</complexType>
+                        <complexType name="SpecialDetailStruct">
+                            <sequence>
+                                <element name="varString" type="xsd:string"/>
+                            </sequence>
+                        </complexType>
+                        <complexType name="OutOfBoundStruct">
+                            <sequence>
+                                <element name="varString" type="xsd:string"/>
+                                <element name="varInt" type="xsd:int"/>
+                                <element name="specialDetail" type="tns:SpecialDetailStruct"/>
+                            </sequence>
+                        </complexType>
 		</schema>
 	</types>
 	<message name="DivByZeroFault">
 		<part name="faultstruct1" type="ns2:DivByZeroStruct"/>
 	</message>
+        <message name="OutOfBoundFault">
+                <part name="faultstruct1" type="ns2:OutOfBoundStruct"/>
+        </message>
+        <message name="SpecialDetailFault">
+                <part name="faultstruct1" type="ns2:SpecialDetailStruct"/>
+        </message>
 	<message name="divRequest">
 		<part name="int0" type="xsd:int"/>
 		<part name="int1" type="xsd:int"/>
@@ -26,6 +44,8 @@
 			<input message="tns:divRequest"/>
 			<output message="tns:divResponse"/>
 			<fault name="DivByZero" message="tns:DivByZeroFault"/>
+                        <fault name="OutOfBound" message="tns:OutOfBoundFault"/>
+                        <fault name="NormalDetail" message="tns:SpecialDetailFault"/>
 		 </operation>
 	</portType>
 	<binding name="MathOpsBinding" type="tns:MathOps">
@@ -46,6 +66,12 @@
 			<fault name="DivByZero">
 				<soap:fault name="DivByZero" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soapinterop.org/wsdl"/>
 			</fault>
+                        <fault name="OutOfBound">
+                                <soap:fault name="OutOfBound" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soapinterop.org/wsdl"/>
+                        </fault>
+                        <fault name="NormalDetail">
+                                <soap:fault name="NormalDetail" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soapinterop.org/wsdl"/>
+                        </fault>
 			</operation>
 		</binding>
 	<service name="MathOpsService">
