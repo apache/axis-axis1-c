@@ -284,10 +284,6 @@ public class ClientStubWriter extends CPPClassWriter{
 				writer.write("extern void Axis_Delete_"+typeName+"("+typeName+"* param, bool bArray = false, int nSize=0);\n");
 				writer.write("extern int Axis_Serialize_"+typeName+"("+typeName+"* param, IWrapperSoapSerializer& pSZ, bool bArray = false);\n");
 				writer.write("extern int Axis_GetSize_"+typeName+"("+typeName+"* param);\n\n");
-				//Local name and the URI for the type
-				writer.write("//Local name and the URI for the type\n");
-				writer.write("static const AxisChar* Axis_URI_"+typeName+" = " + "\"http://www.opensource.lk/" + typeName + "\";\n");
-				writer.write("static const AxisChar* Axis_TypeName_"+typeName+" = \"" +typeName+"\";\n\n");
 			}
 		} catch (IOException e) {
 			throw new WrapperFault(e);
