@@ -3,7 +3,7 @@
 echo "----------------------------------"
 echo "build server, client and samples"
 echo "----------------------------------"
-
+sh autogen.sh
 echo "run configure"
 ./configure --prefix=/usr/local/axiscpp_deploy \
     --with-apache2=/usr/local/apache2 \
