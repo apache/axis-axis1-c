@@ -287,6 +287,7 @@ void AxisTrace::traceEntry(const char *className, const char *methodName, void *
 			if (0!=i) line += ", ";
 			addParameter(line,type,len,value);
 		}
+            va_end(args);
 
 		line += ")";
 		traceLine(line.c_str());
