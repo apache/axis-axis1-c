@@ -25,6 +25,7 @@
 #include "AnyElement.h"
 #include <axis/SOAPTransport.h>
 #include <axis/AxisSoapException.h>
+#include <axis/AxisGenException.h>
 
 class SoapFault;
 class SoapMethod;

@@ -111,7 +111,7 @@ int MathOps::div(int Value0, int Value1)
 			else
 			{
 				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisException(cFaultdetail);
+				  throw AxisGenException(cFaultdetail);
 			}
 		}
 		else throw;
