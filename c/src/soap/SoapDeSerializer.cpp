@@ -51,6 +51,7 @@
 #include "../engine/XMLParserFactory.h"
 #include <axis/server/XMLParser.h>
 #include "../xml/QName.h"
+#include <list>
 
 extern AxisTrace* g_pAT;
 
@@ -3388,6 +3389,100 @@ AnyType* SoapDeSerializer::getAnyObject()
 	AnyType* pAny = new AnyType();
 	pAny->_array = 0;
 	pAny->_size = 0;
-	//TODO
-	return pAny;
+
+    int tagCount = 0;
+    int lstSize = 0;
+    
+    AxisString xmlStr = "";
+    list<AxisString> lstXML;
+    
+    if (!m_pNode) m_pNode = m_pParser->next();
+    tagCount++;
+
+    while ((END_ELEMENT != m_pNode->m_type) || (tagCount >= 0))
+    {
+        if (CHARACTER_ELEMENT != m_pNode->m_type)
+        {
+            xmlStr = xmlStr + serializeTag(m_pNode);
+        }
+        else
+        {
+            xmlStr = xmlStr + m_pNode->m_pchNameOrValue;
+        }
+
+        if (tagCount == 0) /* copying the First level element into the list */
+        {
+            lstXML.push_back(xmlStr);
+            xmlStr = "";
+        }
+
+        m_pNode = m_pParser->next();
+        if (END_ELEMENT == m_pNode->m_type)
+        {
+            tagCount--;
+        }
+        else if (START_ELEMENT == m_pNode->m_type)
+        {
+            tagCount++;
+        }
+
+        lstSize = lstXML.size();
+        pAny->_array = new char*[lstSize];
+        pAny->_size = 0;
+
+        list<AxisString>::iterator i;  /* Iterator for traversing the list */
+
+        for (i=lstXML.begin(); i != lstXML.end(); i++)
+        {
+            pAny->_array[pAny->_size] = strdup((*i).c_str());
+        }
+    }
+
+    return pAny;
+}
+
+
+AxisString SoapDeSerializer::serializeTag(const AnyElement* node)
+{
+    /*
+       Note that if this is an end tag and since m_pchNameOrValue doesn't give
+       the "/" sign. So we have to add that sign as well in to the end tag
+    */
+
+    AxisString tmpString;
+
+    if (START_ELEMENT == node->m_type)
+    {
+        tmpString = "<" + AxisString(node->m_pchNameOrValue);
+        if (node->m_pchAttributes)
+        {
+            int j;
+
+            /* structure of the m_pchAttributes[] array is,
+             * sequence of (local_name, namespace_uri, value)
+            */
+            
+            for (j=0; j<300; j=j+3) /* MAX_NO_OF_ATTRIBUTES = 100 */
+            {
+                if (node->m_pchAttributes[j])
+                {
+                    tmpString = tmpString + " " + node->m_pchAttributes[j+1];
+                    tmpString = tmpString + ":" + node->m_pchAttributes[j];
+                    tmpString = tmpString + "=\"" + node->m_pchAttributes[j+2] + "\"";
+                }
+            }
+        }
+        if (node->m_pchNamespace)
+        {
+            tmpString = tmpString + AxisString(" ") 
+                + AxisString(node->m_pchNamespace);
+        }
+        
+        tmpString = tmpString + AxisString(">");
+    }
+    else if (END_ELEMENT == node->m_type)
+    {
+        tmpString = "</" + AxisString(node->m_pchNameOrValue) + ">";
+    }
+    return tmpString;
 }

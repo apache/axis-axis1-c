@@ -885,6 +885,11 @@ int SoapSerializer::setSOAPMethodAttribute(Attribute *pAttribute)
 
 int SoapSerializer::serializeAnyObject(AnyType* pAnyObject)
 {
+    int i;
+    for (i=0; i<pAnyObject->_size; i++)
+    {
+        serialize(pAnyObject->_array[i]);
+    }
 	return AXIS_SUCCESS;
 }
 
