@@ -236,7 +236,7 @@ public class WrapWriter extends CPPClassWriter{
 		writer.write("\tif (!pIWSDZ) return FAIL;\n");
 		writer.write("\tSetResponseMethod(mc, \""+methodName+"Response\");\n");
 
-		//create the param classes for each parameter
+		//create and populate variables for each parameter
 		String paraTypeName;
 		ArrayList paramsB = new ArrayList(params);
 		Iterator p =  params.iterator();
@@ -246,7 +246,7 @@ public class WrapWriter extends CPPClassWriter{
 			writer.write("\tIParam *param"+i+"= pIWSDZ->GetParam();\n");			
 			if((CPPUtils.isSimpleType(((ParameterInfo)paramsB.get(i)).getLangName()))){
 				//for simple types	
-				writer.write("\t"+paraTypeName+" v"+i+" = param->"+CPPUtils.getParameterGetValueMethodName(paraTypeName)+";\n");
+				writer.write("\t"+paraTypeName+" v"+i+" = param"+i+"->"+CPPUtils.getParameterGetValueMethodName(paraTypeName)+";\n");
 			}else if((type = this.wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName())) != null 
 						&& type.isArray()){
             	//TODO for Array types				
