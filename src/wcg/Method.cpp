@@ -134,10 +134,13 @@ int Method::GenerateMethodImpl(string& sClassName, File &file)
 	int nParam = 0;
 	for (list<Variable*>::iterator it = m_Params.begin(); it != m_Params.end(); it++)
 	{
-		file << "\tParam *param" << nParam << " = mc->getSoapDeserializer()->GetParam();" << endl;
+		file << endl;
+		file << "\tIParam *param" << nParam << " = mc->getSoapDeserializer()->GetParam();" << endl;
 		if ((*it)->IsComplexType())
 		{
-			
+			file << "\t" << (*it)->GetTypeName() << "* v" << nParam << " = new " << (*it)->GetTypeName() << "();" << endl;
+			file << "\tparam" << nParam << "->" << "SetUserType(" << "v" << nParam << ");" << endl; 
+			file <<	"\tmc->getSoapDeserializer()->Deserialize(param" << nParam << ",0);" << endl; // 0 should be changed to 1 if multiref to be used			
 		}
 		else if ((*it)->IsArrayType())
 		{
@@ -149,16 +152,25 @@ int Method::GenerateMethodImpl(string& sClassName, File &file)
 		}
 		nParam++;
 	}
+	file << endl;
 	file << "\t//Call actual web service method with appropriate parameters" << endl;
-	file << "\tParam ret(pWs->" << m_Name << "(";
+	file << "\t" << m_pReturnType->GetTypeName() << " ret = pWs->" << m_Name << "(";
 	for (int n=0; n<nParam;)
 	{
 		file << "v" << n++;
 		if (n<nParam) file << ", ";
 	}
-	file << "));" << endl;
-	file << "\tret.m_sName = \"" << m_Name << "Return\";" << endl;
-	file << "\tmc->getSoapSerializer()->setResponseParam(&ret);" << endl;
+	file << ");" << endl;
+	file << endl;
+	file << "\tuParamValue value;" << endl;
+	file << "\tvalue." << m_pReturnType->GetCorrespondingUnionMemberName() << " = ret";
+	if (m_pReturnType->GetType() == VAR_STRING)
+	{
+		file << ".c_str()";
+	}
+	file <<	";" << endl;
+	file << "\tIParam* pRetParam = mc->getSoapSerializer()->setResponseParam(" << m_pReturnType->GetTypeEnumStr() << ", value);" << endl;
+	file << "\tpRetParam->SetName(\"" << m_Name << "Return\");" << endl;
 	file << "\treturn SUCCESS;" << endl; 
 	file << "}" << endl;
 	file << endl;
