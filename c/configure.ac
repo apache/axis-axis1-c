@@ -3,8 +3,9 @@ AM_INIT_AUTOMAKE(0.3)
 AM_CONFIG_HEADER(config.h)
 
 AC_MSG_CHECKING(whether to use apache2 as server transport)
-AC_ARG_ENABLE(apache2, [  --enable-apache2        use apache2 as server transport.],
-[ case "${enableval}" in
+AC_ARG_WITH(apache2,
+[  --with-apache2[=PATH]      use apache2 as server transport.],
+[ case "$withval" in
   no)
     AC_MSG_RESULT(no)
     APACHE2BUILD=""
@@ -12,8 +13,8 @@ AC_ARG_ENABLE(apache2, [  --enable-apache2        use apache2 as server transpor
   *)
     AC_MSG_RESULT(yes)
     dnl Find apache2 include dir in the path pointed by APACHE2_HOME env variable
-    if test -d ${APACHE2_HOME}; then
-        apache2inc="-I${APACHE2_HOME}/include"
+    if test -d $withval; then
+        apache2inc="-I$withval/include"
     dnl else find the apache2 include dir in /usr/local/apache2
     elif test -d '/usr/local/apache2/include'; then
         apache2inc="-I/usr/local/apache2/include"
@@ -26,9 +27,10 @@ AC_ARG_ENABLE(apache2, [  --enable-apache2        use apache2 as server transpor
   AC_MSG_RESULT(no)
 )
 
-AC_MSG_CHECKING(whether to use apache as server transport)
-AC_ARG_ENABLE(apache, [  --enable-apache        use apache as server transport.],
-[ case "${enableval}" in
+AC_MSG_CHECKING(whether to user apache as server transport.)
+AC_ARG_WITH(apache,
+[  --with-apache[=PATH]      use apache as server transport.],
+[ case "$withval" in
   no)
     AC_MSG_RESULT(no)
     APACHEBUILD=""
@@ -36,8 +38,8 @@ AC_ARG_ENABLE(apache, [  --enable-apache        use apache as server transport.]
   *)
     AC_MSG_RESULT(yes)
     dnl Find apache include dir in the path pointed by APACHE_HOME env variable
-    if test -d ${APACHE_HOME}; then
-        apacheinc="-I${APACHE_HOME}/include"
+    if test -d $withval; then
+        apacheinc="-I$withval/include"
     dnl else find the apache include dir in /usr/local/apache
     elif test -d '/usr/local/apache/include'; then
         apacheinc="-I/usr/local/apache/include"
@@ -51,50 +53,50 @@ AC_ARG_ENABLE(apache, [  --enable-apache        use apache as server transport.]
   AC_MSG_RESULT(no)
 )
 
-AC_MSG_CHECKING(whether to build xercesc parser library)
-AC_ARG_ENABLE(xercesc, [  --enable-xercesc    build xercesc parser library.],
-[ case "${enableval}" in
-  no)
-    AC_MSG_RESULT(no)
-    XERCESCBUILD=""
-    ;;
-  *)
-    AC_MSG_RESULT(yes)
-    dnl find the xercesc include dir in XERCESC_HOME
-    if test -d ${XERCESC_HOME}; then
-        xercescinc="-I${XERCESC_HOME}/include"
-        xercesclib="-L${XERCESC_HOME}/lib"
-    else
-        AC_MSG_ERROR(could not find xercesc. stop)
-	exit
-    fi
-    XERCESCBUILD="xerces"
-    
-    ;;
-  esac ],
-  AC_MSG_RESULT(no)
-)
-
-AC_MSG_CHECKING(whether to build expat parser library)
-AC_ARG_ENABLE(expat, [  --enable-expat        build expat parser library.],
-[ case "${enableval}" in
+AC_MSG_CHECKING(whether to build expat parser library.)
+AC_ARG_WITH(expat,
+[  --with-expat[=PATH]      build expat parser library.],
+[ case "$withval" in
   no)
     AC_MSG_RESULT(no)
     EXPATBUILD=""
     ;;
   *)
     AC_MSG_RESULT(yes)
-    dnl find the expat include dir in EXPAT_HOME
-    if test -d ${EXPAT_HOME}; then
-        expatinc="-I${EXPAT_HOME}/include"
-        expatlib="-I${EXPAT_HOME}/lib"
+    dnl test for  expat directory
+    if test -d $withval; then
+        expatinc="-I$withval/include"
+        expatlib="-L$withval/lib -lexpat"
     else
         AC_MSG_ERROR(could not find expat. stop)
-	exit
     fi
     EXPATBUILD="expat"
-    
+  
+  ;;
+  esac ],
+  AC_MSG_RESULT(no)
+)
+
+AC_MSG_CHECKING(whether to build xercesc parser library.)
+AC_ARG_WITH(xercesc,
+[  --with-xercesc[=PATH]      build xercesc parser library.],
+[ case "$withval" in
+  no)
+    AC_MSG_RESULT(no)
+    XERCESCBUILD=""
     ;;
+  *)
+    AC_MSG_RESULT(yes)
+    dnl test for  xercesc directory
+    if test -d $withval; then
+        xercescinc="-I$withval/include"
+        xercesclib="-L$withval/lib -lxerces-c"
+    else
+        AC_MSG_ERROR(could not find xercesc. stop)
+    fi
+    XERCESCBUILD="xerces"
+  
+  ;;
   esac ],
   AC_MSG_RESULT(no)
 )
@@ -130,32 +132,6 @@ AC_ARG_ENABLE(samples, [  --enable-samples    build samples.],
   esac ],
   AC_MSG_RESULT(no)
 )
-
-if test -f "$prefix"; then
-rm $prefix
-mkdir $prefix
-elif test -d "$prefix"; then
-echo "install directory in place"
-else
-mkdir $prefix
-fi
-
-if test -d "$prefix/conf"; then
-cp deploy/axiscpp.conf_linux $prefix/conf/axiscpp.conf
-else
-mkdir $prefix/conf
-cp deploy/conf/server.wsdd_linux $prefix/conf/server.wsdd
-cp deploy/axiscpp.conf_linux $prefix/axiscpp.conf
-cp deploy/deploy_apache2.sh $prefix
-cp deploy/deploy_apache.sh $prefix
-fi
-
-if test -d "$prefix/log"; then
-chmod 777 $prefix/log
-else
-mkdir $prefix/log
-chmod 777 $prefix/log
-fi
 
 APACHE2INC=$apache2inc
 APACHEINC=$apacheinc

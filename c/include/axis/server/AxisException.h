@@ -218,17 +218,6 @@ public:
       * @return exception message
       */
     virtual const int getExceptionCode() = 0;
-/*    virtual const AxisString getMessage(const exception* e);
-    virtual const AxisString getMessage(const int iExceptionCode);    
-
-private:
-    void processException(const exception* e);
-    void processException(const exception* e, const int iExceptionCode);
-    void processException(const int iExceptionCode);
-    void processException(const int iExceptionCode, char* pcMessage);
-    string m_sMessage; //Holds the exception messae
-    int m_iExceptionCode; //Holds the exception code
-*/
 };
 
 #endif

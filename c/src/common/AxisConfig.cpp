@@ -108,7 +108,11 @@ int AxisConfig::readConfFile ()
     strcpy (m_pcAxisHome, sConfPath);
 
     strcpy (sNewConfPath, sConfPath);
+#ifdef WIN32
     strcat (sNewConfPath, "/axiscpp.conf");
+#else
+    strcat (sNewConfPath, "/conf/axiscpp.conf");
+#endif
 	/*
 	Even if axiscpp.conf does not exist in AXISCPP_DEPLOY default values 
 	will be used. Therefore return AXIS_SUCCESS
