@@ -188,6 +188,23 @@ public class ClientStubWriter extends CPPClassWriter
                 this.writeMethodInWrapper(minfo);
                 writer.write("\n");
             }
+
+			writer.write("/*Methods for supporting SecureChannel*/\n\n");										// FJP - SecureChannel
+			writer.write("void " + classname + "::SetSecure( char * pszArguments, ...)\n");						// FJP - SecureChannel
+			writer.write("{\n");																				// FJP - SecureChannel
+			writer.write("\tchar **\tppszArgPtr = &pszArguments;\n");											// FJP - SecureChannel
+			writer.write("\tint\t\tiArgIndex = 0;\n\n");														// FJP - SecureChannel
+			writer.write("\twhile( *ppszArgPtr != NULL)\n");													// FJP - SecureChannel
+			writer.write("\t{\n");																				// FJP - SecureChannel
+			writer.write("\t\tsArguments[iArgIndex] = *ppszArgPtr;\n\n");										// FJP - SecureChannel
+			writer.write("\t\tiArgIndex++;\n");																	// FJP - SecureChannel
+			writer.write("\t\tppszArgPtr++;\n");																// FJP - SecureChannel
+			writer.write("\t}\n");																				// FJP - SecureChannel
+			writer.write("}\n\n");																				// FJP - SecureChannel
+			writer.write("void " + classname + "::includeSecure()\n");											// FJP - SecureChannel
+			writer.write("{\n");																				// FJP - SecureChannel
+			writer.write("\tm_pCall->setTransportProperty( SECURE_PROPERTIES, (const char *) &sArguments);\n");	// FJP - SecureChannel
+			writer.write("}\n");																				// FJP - SecureChannel
         }
         catch (IOException e)
         {
@@ -526,6 +543,7 @@ public class ClientStubWriter extends CPPClassWriter
         }
 
         //new calls from stub base
+		writer.write("\tincludeSecure();\n");			// FJP - SecureChannel
         writer.write("\tapplyUserPreferences();\n");
 
         for (int i = 0; i < paramsB.size(); i++)

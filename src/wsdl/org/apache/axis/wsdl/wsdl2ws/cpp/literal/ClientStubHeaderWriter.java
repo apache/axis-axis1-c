@@ -153,6 +153,8 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
         try
         {
             writer.write("public: \n");
+			writer.write("\tvoid SetSecure( char *, ...);\n"); // FJP Secure Channel
+			
             for (int i = 0; i < methods.size(); i++)
             {
                 minfo = (MethodInfo) this.methods.get(i);
@@ -232,6 +234,11 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                 }
                 writer.write(");\n");
             }
+			
+			writer.write("\nprivate:\n");					// FJP - SecureChannel
+			writer.write("\tvoid includeSecure();\n\n");	// FJP - SecureChannel
+			writer.write("protected:\n");					// FJP - SecureChannel
+			writer.write("\tstring sArguments[8];\n");		// FJP - SecureChannel
         }
         catch (Exception e)
         {
