@@ -107,7 +107,7 @@ public:
       *        IHeaderBlock* pIHeaderBlock= pISZ->createHeaderBlock();
       *
       *        pIHeaderBlock->setLocalName("echoMeStringResponse");
-      *        pIHeaderBlock->setUri("http://soapinterop.org/echoheader/");
+      *        pIHeaderBlock->setURI("http://soapinterop.org/echoheader/");
       *
       *        pachTemp = "EchoStringHeaderHandlerPr1.id";
       *

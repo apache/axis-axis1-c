@@ -125,7 +125,7 @@ public:
 
     int setCmplxFaultObject(const void* pCmplxFaultObject);
 
-    void setUri(const AxisChar* uri);
+    void setURI(const AxisChar* uri);
 
     void setLocalName(const AxisChar* localname);
 

@@ -82,7 +82,7 @@ public:
     int setValue(XSDTYPE nType, ParamValue Value);
     int serialize(SoapSerializer& pSZ);
     void setPrefix(const AxisChar* prefix);
-    void setUri(const AxisChar* uri);
+    void setURI(const AxisChar* uri);
     int setArrayElements(void* pElements);
     int setArrayElements(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, 
         AXIS_OBJECT_DELETE_FUNCT pDelFunct, AXIS_OBJECT_SIZE_FUNCT pSizeFunct);

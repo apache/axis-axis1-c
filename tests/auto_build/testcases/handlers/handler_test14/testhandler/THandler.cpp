@@ -76,7 +76,7 @@ int THandler::invoke(void *pvIMsg)
 		pISZ->setSoapVersion(SOAP_VER_1_2);
 		IHeaderBlock* pIHeaderBlock= pISZ->createHeaderBlock();
 		pIHeaderBlock->setLocalName("echoMeString");
-		pIHeaderBlock->setUri("http://soapinterop.org/soapversion/");
+		pIHeaderBlock->setURI("http://soapinterop.org/soapversion/");
 		const AxisChar* pachHeaderVal = "Soap Version Test";
 		BasicNode* pBasicNode = pIHeaderBlock->createChild(CHARACTER_NODE);
 		pBasicNode->setValue(pachHeaderVal);

@@ -305,7 +305,7 @@ int SoapEnvelope::initializeForTesting(SOAP_VERSION eSoapVersion)
         Attribute* pAttribute = new Attribute();
         pAttribute->setPrefix("xmlns");
         pAttribute->setLocalName("env");
-        pAttribute->setUri("http://www.w3.org/2003/05/soap-envelope");
+        pAttribute->setURI("http://www.w3.org/2003/05/soap-envelope");
         addNamespaceDecl(pAttribute);
 
         SoapBody* pSoapBody = new SoapBody();

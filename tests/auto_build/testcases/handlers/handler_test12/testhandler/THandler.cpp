@@ -79,7 +79,7 @@ int THandler::invoke(void *pvIMsg)
 
         IHeaderBlock* pIHeaderBlock2 = pIHeaderBlock->clone();
         pIHeaderBlock2->setLocalName("ahb2");
-        pIHeaderBlock2->setUri("http://soapinterop.org/axis2/");
+        pIHeaderBlock2->setURI("http://soapinterop.org/axis2/");
         BasicNode* pBasicNode2 = pIHeaderBlock2->createChild(CHARACTER_NODE);
         pBasicNode2->setValue("Test2");
         pIHeaderBlock2->addChild(pBasicNode2);

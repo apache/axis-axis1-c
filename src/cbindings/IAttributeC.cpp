@@ -33,7 +33,7 @@ AXISC_STORAGE_CLASS_INFO void axiscSetValueIAttribute(AXISCHANDLE attribute, con
 
 AXISC_STORAGE_CLASS_INFO void axiscSetUriIAttribute(AXISCHANDLE attribute, const AxiscChar * uri) {
 	IAttribute *attr = (IAttribute*)attribute;
-	attr->setUri(uri);
+	attr->setURI(uri);
 }
 
 AXISC_STORAGE_CLASS_INFO void axiscSetPrefixIAttribute(AXISCHANDLE attribute, const AxiscChar * prefix) {
@@ -53,7 +53,7 @@ AXISC_STORAGE_CLASS_INFO const AxiscChar * axiscGetValueIAttribute(AXISCHANDLE a
 
 AXISC_STORAGE_CLASS_INFO const AxiscChar * axiscGetUri(AXISCHANDLE attribute) {
 	IAttribute *attr = (IAttribute*)attribute;
-	return attr->getUri();
+	return attr->getURI();
 }
 
 AXISC_STORAGE_CLASS_INFO const AxiscChar * axiscGetPrefixIAttribute(AXISCHANDLE attribute) {

@@ -42,11 +42,11 @@ public:
     virtual ~IAttribute() {};
 
     virtual void setValue(const AxisChar* value) = 0;
-    virtual void setUri(const AxisChar* uri) = 0;
+    virtual void setURI(const AxisChar* uri) = 0;
     virtual void setPrefix(const AxisChar* prefix) = 0;
     virtual void setLocalName(const AxisChar* localname) = 0;    
     virtual const AxisChar* getValue() = 0;
-    virtual const AxisChar* getUri() = 0;
+    virtual const AxisChar* getURI() = 0;
     virtual const AxisChar* getPrefix() = 0;
     virtual const AxisChar* getLocalName() = 0;
 };

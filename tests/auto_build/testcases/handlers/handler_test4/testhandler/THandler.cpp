@@ -77,7 +77,7 @@ int THandler::invoke(void *pvIMsg)
 
 		IHeaderBlock* pIHeaderBlock= pISZ->createHeaderBlock();
 		pIHeaderBlock->setLocalName("getuser");
-		pIHeaderBlock->setUri("http://test.axiscpp.apache.org/testheader");
+		pIHeaderBlock->setURI("http://test.axiscpp.apache.org/testheader");
 
 		string pachHeaderVal = (string)pIMsg->getUserName();
 		BasicNode* pBasicNode = pIHeaderBlock->createChild(CHARACTER_NODE);
@@ -86,7 +86,7 @@ int THandler::invoke(void *pvIMsg)
 
 		pIHeaderBlock= pISZ->createHeaderBlock();
 		pIHeaderBlock->setLocalName("setuser");
-		pIHeaderBlock->setUri("http://test.axiscpp.apache.org/testheader");
+		pIHeaderBlock->setURI("http://test.axiscpp.apache.org/testheader");
 
 		string new_name = "Elvis";
 		pIMsg->setUserName(new_name);

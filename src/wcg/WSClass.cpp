@@ -191,7 +191,7 @@ int WSClass::GenerateClassImpl(File &file)
         file << "\tISoapMethod* pMethod = pIWSSZ->createSoapMethod();" << endl;
         file << "\tpMethod->setLocalName(name);" << endl;
         file << "\tpMethod->setPrefix(pIWSSZ->getNewNamespacePrefix());"<<endl; 
-        file << "\tpMethod->setUri(\"" << g_ClassNamespaces[m_AWSName] 
+        file << "\tpMethod->setURI(\"" << g_ClassNamespaces[m_AWSName] 
             << "\");"<< endl;
         /* http://www.opensource.lk will come from wsdd */
         file << "\treturn AXIS_SUCCESS;" << endl; 

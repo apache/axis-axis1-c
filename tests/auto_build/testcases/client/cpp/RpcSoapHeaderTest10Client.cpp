@@ -96,12 +96,12 @@ main(int argc, char *argv[])
     /* start testing the getters for SOAP Header Attributes*/
     IAttribute* pIAttribute1 = parentNode->getFirstAttribute();
     if (pIAttribute1)
-    	printf("pIAttribute1 details = %s %s \n", pIAttribute1->getLocalName(), pIAttribute1->getUri());
+    	printf("pIAttribute1 details = %s %s \n", pIAttribute1->getLocalName(), pIAttribute1->getURI());
 
     pIAttribute1 = NULL;
     int iTmpX = 0;
     while ((pIAttribute1 = parentNode->getNextAttribute()) != NULL) {
-	printf("pIAttribute1 details = %s %s \n", pIAttribute1->getLocalName(), pIAttribute1->getUri());
+	printf("pIAttribute1 details = %s %s \n", pIAttribute1->getLocalName(), pIAttribute1->getURI());
 	
 	iTmpX++;
    	if (iTmpX==2) break; /*Just for a simple logic*/
@@ -110,17 +110,17 @@ main(int argc, char *argv[])
     pIAttribute1 = NULL;
     pIAttribute1 = parentNode->getCurrentAttribute();
     if (pIAttribute1)
-        printf("pIAttribute1 details = %s %s \n", pIAttribute1->getLocalName(), pIAttribute1->getUri());
+        printf("pIAttribute1 details = %s %s \n", pIAttribute1->getLocalName(), pIAttribute1->getURI());
 
     pIAttribute1 = NULL;
     pIAttribute1 = parentNode->getLastAttribute();
     if (pIAttribute1)
-    	printf("pIAttribute1 details = %s %s \n", pIAttribute1->getLocalName(), pIAttribute1->getUri());
+    	printf("pIAttribute1 details = %s %s \n", pIAttribute1->getLocalName(), pIAttribute1->getURI());
 
     pIAttribute1 = NULL;
     pIAttribute1 = parentNode->getAttribute("", "http://ws.apache.org/axisCppTest/", "scale");
     if (pIAttribute1)
-        printf("pIAttribute1 details = %s %s \n", pIAttribute1->getLocalName(), pIAttribute1->getUri());
+        printf("pIAttribute1 details = %s %s \n", pIAttribute1->getLocalName(), pIAttribute1->getURI());
     /*----end testing the getters for SOAP Header Attributes----- */
 
     printf("invoking echoString...\n");

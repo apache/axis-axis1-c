@@ -278,7 +278,7 @@ public:
       * @param uri The namespace uri to set in.
       */
 
-    virtual void setUri(const AxisChar* uri)=0;
+    virtual void setURI(const AxisChar* uri)=0;
 
 	/* 
 	 * Commented by Susantha - 21/06/2004

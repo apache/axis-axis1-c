@@ -324,7 +324,7 @@ void Param::setPrefix (const AxisChar* prefix)
     m_strPrefix = prefix;
 }
 
-void Param::setUri (const AxisChar* uri)
+void Param::setURI (const AxisChar* uri)
 {
     m_strUri = uri;
 }

@@ -62,7 +62,7 @@ void Attribute::setPrefix(const AxisChar* prefix)
     m_prefix= prefix;
 }
 
-void Attribute::setUri(const AxisChar* uri)
+void Attribute::setURI(const AxisChar* uri)
 {
     m_uri= uri;
 }
@@ -83,7 +83,7 @@ const AxisChar* Attribute::getPrefix()
 	return m_prefix.c_str();
 }
 
-const AxisChar* Attribute::getUri()
+const AxisChar* Attribute::getURI()
 {
 	return m_uri.c_str();
 }

@@ -78,10 +78,10 @@ int THandler::invoke(void *pvIMsg)
 		IHeaderBlock* pIHeaderBlock= pISZ->createHeaderBlock();
 
 		//pIHeaderBlock->setLocalName("testClientHandlerHeader");
-		//pIHeaderBlock->setUri("http://opensource.lk/testClientHandlerHeader/");
+		//pIHeaderBlock->setURI("http://opensource.lk/testClientHandlerHeader/");
 
 		pIHeaderBlock->setLocalName("echoMeString");
-                pIHeaderBlock->setUri("http://soapinterop.org/echoheader/");
+                pIHeaderBlock->setURI("http://soapinterop.org/echoheader/");
 
        		const AxisChar* pachHeaderVal = "test Header Val";
 

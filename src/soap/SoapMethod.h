@@ -90,7 +90,7 @@ public:
     int serialize(SoapSerializer& pSZ);
     /* int serialize(string&); */
     void addOutputParam(Param *param);
-    void setUri(const AxisChar* uri);
+    void setURI(const AxisChar* uri);
     void setLocalName(const AxisChar* localname);
     void setPrefix(const AxisChar* prefix);
     SoapMethod();

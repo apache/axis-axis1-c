@@ -99,7 +99,7 @@ AXISC_STORAGE_CLASS_INFO const AxiscChar * axiscGetLocalNameIHeaderBlock(AXISCHA
 
 AXISC_STORAGE_CLASS_INFO void axiscSetUriIHeaderBlock(AXISCHANDLE headerBlock, const AxiscChar * uri) {
 	IHeaderBlock *hdr = (IHeaderBlock*)headerBlock;
-	hdr->setUri(uri);
+	hdr->setURI(uri);
 }
 
 AXISC_STORAGE_CLASS_INFO void axiscSetPrefixIHeaderBlock(AXISCHANDLE headerBlock, const AxiscChar * prefix) {

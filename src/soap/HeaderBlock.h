@@ -327,7 +327,7 @@ public:
       *
       * @param uri The namespace uri to set in.
       */
-    void setUri(const AxisChar* uri);
+    void setURI(const AxisChar* uri);
 
 	/* 
 	 * Commented by Susantha - 21/06/2004

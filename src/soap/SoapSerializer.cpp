@@ -176,7 +176,7 @@ int SoapSerializer::addOutputCmplxArrayParam(const Axis_Array* pArray,
     {
         pAb->SetItemName(pName);
 	    if (NULL != pNamespace) {
-		    pParam->setUri(pNamespace);
+		    pParam->setURI(pNamespace);
 		}
         pParam->setName("array");        
     }
@@ -425,7 +425,7 @@ int SoapSerializer::createSoapMethod(const AxisChar* sLocalName,
     setSoapMethod(pMethod);
     pMethod->setLocalName(sLocalName);
     pMethod->setPrefix(getNamespacePrefix(sURI));
-    pMethod->setUri(sURI);
+    pMethod->setURI(sURI);
     return AXIS_SUCCESS;
 }
 
@@ -438,7 +438,7 @@ int SoapSerializer::createSoapFault(const AxisChar* sLocalName,
     setSoapFault(pSoapFault);
     pSoapFault->setLocalName(sLocalName);
     pSoapFault->setPrefix(getNamespacePrefix(sURI));
-    pSoapFault->setUri(sURI);
+    pSoapFault->setURI(sURI);
     pSoapFault->setFaultcode(sFaultCode);
     pSoapFault->setFaultstring(sFaultString);
     char* pcNodeName = g_pConfig->getAxisConfProperty(AXCONF_NODENAME);

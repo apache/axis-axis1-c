@@ -619,7 +619,7 @@ IAttribute* ComplexElement::getAttribute(AxisChar* pachPrefix,
 		{
     		while( it_m_attributes != m_attributes.end())
 			{
-				if( !strcmp( (*it_m_attributes)->getUri(), pachURI))
+				if( !strcmp( (*it_m_attributes)->getURI(), pachURI))
 				{
 	    			return (IAttribute*) (*it_m_attributes);
 				}
@@ -653,7 +653,7 @@ IAttribute* ComplexElement::getAttribute(AxisChar* pachPrefix,
 		{
     		while( it_m_attributes != m_attributes.end())
 			{
-				if( !strcmp( (*it_m_attributes)->getUri(), pachURI) &&
+				if( !strcmp( (*it_m_attributes)->getURI(), pachURI) &&
 					!strcmp( (*it_m_attributes)->getPrefix(), pachPrefix))
 				{
 	    			return (IAttribute*) (*it_m_attributes);
@@ -689,7 +689,7 @@ IAttribute* ComplexElement::getAttribute(AxisChar* pachPrefix,
     		while( it_m_attributes != m_attributes.end())
 			{
 				if( !strcmp( (*it_m_attributes)->getLocalName(), pachLocalname) &&
-					!strcmp( (*it_m_attributes)->getUri(), pachURI))
+					!strcmp( (*it_m_attributes)->getURI(), pachURI))
 				{
 	    			return (IAttribute*) (*it_m_attributes);
 				}
@@ -725,7 +725,7 @@ IAttribute* ComplexElement::getAttribute(AxisChar* pachPrefix,
     		while( it_m_attributes != m_attributes.end())
 			{
 				if( !strcmp( (*it_m_attributes)->getLocalName(), pachLocalname) &&
-					!strcmp( (*it_m_attributes)->getUri(), pachURI) &&
+					!strcmp( (*it_m_attributes)->getURI(), pachURI) &&
 					!strcmp( (*it_m_attributes)->getPrefix(), pachPrefix))
 				{
 	    			return (IAttribute*) (*it_m_attributes);

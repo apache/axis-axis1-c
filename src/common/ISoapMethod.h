@@ -36,7 +36,7 @@ class ISoapMethod
 {
     public:
         virtual void setLocalName (const AxisChar* localname) = 0;
-        virtual void setUri (const AxisChar* uri) = 0;
+        virtual void setURI (const AxisChar* uri) = 0;
         virtual void setPrefix (const AxisChar* prefix) = 0;
         virtual ~ ISoapMethod ()
     {

@@ -1,5 +1,5 @@
 
-/* Tests setUri() and getUri()in IAttribute Class
+/* Tests setURI() and getURI()in IAttribute Class
 @ Author : James Jose
 */
 
@@ -25,12 +25,12 @@ int main(int argc, char* argv[])
 		IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader","http://ws.apache.org/","ns");
 		INamespace *nsp=phb->createNamespaceDecl("nsp","http://apache.com");
 		IAttribute *attr1=phb->createAttribute("Name","nsp","axis");
-		attr1->setUri(uri);
+		attr1->setURI(uri);
 		BasicNode *bn=phb->createImmediateChild(ELEMENT_NODE,"Project","","","");
 		IAttribute *attr2=bn->createAttribute("TYPE","OPEN SOURCE");
-		attr2->setUri(uri);
-		cout << endl << "Header Attribute Uri = " << attr1->getUri();
-		cout << endl << "Child Node Attribute Uri = " << attr2->getUri();
+		attr2->setURI(uri);
+		cout << endl << "Header Attribute Uri = " << attr1->getURI();
+		cout << endl << "Child Node Attribute Uri = " << attr2->getURI();
 		op = "add";
 		i1 = 2;
 		i2 = 3;

@@ -171,7 +171,7 @@ void HeaderBlock::setPrefix(const AxisChar* prefix)
     m_sPrefix= prefix;
 }
 
-void HeaderBlock::setUri(const AxisChar* uri)
+void HeaderBlock::setURI(const AxisChar* uri)
 {
     m_uri= uri;
 }
@@ -465,7 +465,7 @@ int HeaderBlock::initializeForTesting()
 {
     setPrefix("m");
     setLocalName("reservation");
-    setUri("http://travelcompany.example.org/reservation");
+    setURI("http://travelcompany.example.org/reservation");
 
     Attribute* pAttribute2 = new Attribute();
     pAttribute2->setPrefix("SOAP-ENV");

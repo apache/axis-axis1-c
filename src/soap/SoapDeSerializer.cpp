@@ -153,7 +153,7 @@ SoapDeSerializer::getEnvelope ()
 	{
 	    pAttr = new Attribute ();
 	    pAttr->setLocalName (m_pNode->m_pchAttributes[i]);
-	    pAttr->setUri (m_pNode->m_pchAttributes[i + 1]);
+	    pAttr->setURI (m_pNode->m_pchAttributes[i + 1]);
 	    pAttr->setValue (m_pNode->m_pchAttributes[i + 2]);
 	    m_pEnvl->addAttribute (pAttr);
 	}
@@ -246,7 +246,7 @@ SoapDeSerializer::getHeader ()
 
 	    if (m_pNode->m_pchNamespace)
 	    {
-		pHeaderBlock->setUri (m_pNode->m_pchNamespace);
+		pHeaderBlock->setURI (m_pNode->m_pchNamespace);
 	    }
 
 	    pHeaderBlock->setLocalName (m_pNode->m_pchNameOrValue);
@@ -261,7 +261,7 @@ SoapDeSerializer::getHeader ()
 		    pAttribute->setLocalName (m_pNode->
 					      m_pchAttributes
 					      [iAttributeArrayIndex++]);
-		    pAttribute->setUri (m_pNode->
+		    pAttribute->setURI (m_pNode->
 					m_pchAttributes
 					[iAttributeArrayIndex++]);
 		    pAttribute->setValue (m_pNode->

@@ -56,7 +56,7 @@ void SoapMethod::setLocalName(const AxisChar* localname)
     m_strLocalname = localname;
 }
 
-void SoapMethod::setUri(const AxisChar* uri)
+void SoapMethod::setURI(const AxisChar* uri)
 {
     m_strUri = uri;
 }

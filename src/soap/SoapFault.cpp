@@ -330,7 +330,7 @@ void SoapFault::setLocalName(const AxisChar* localname)
     m_strLocalname = localname;
 }
 
-void SoapFault::setUri(const AxisChar* uri)
+void SoapFault::setURI(const AxisChar* uri)
 {
     m_strUri = uri;
 }

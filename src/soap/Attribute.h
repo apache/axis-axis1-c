@@ -62,12 +62,12 @@ public:
     virtual ~Attribute();
 
     void setValue(const AxisChar* value);
-    void setUri(const AxisChar* uri);
+    void setURI(const AxisChar* uri);
     void setPrefix(const AxisChar* prefix);
     void setLocalName(const AxisChar* localname);    
 
     const AxisChar* getValue();
-    const AxisChar* getUri();
+    const AxisChar* getURI();
     const AxisChar* getPrefix();
     const AxisChar* getLocalName();
 

@@ -77,7 +77,7 @@ int THandler2::invoke(void *pvIMsg)
 		IHeaderBlock* pIHeaderBlock= pISZ->createHeaderBlock();
 
 		pIHeaderBlock->setLocalName("echoMeString2");
-		pIHeaderBlock->setUri("http://soapinterop.org/echoheader/");
+		pIHeaderBlock->setURI("http://soapinterop.org/echoheader/");
 
 		const AxisChar* pachHeaderVal = "Header Value2";
 

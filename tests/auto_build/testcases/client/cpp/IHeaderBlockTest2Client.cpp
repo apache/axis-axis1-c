@@ -1,4 +1,4 @@
-/* Tests setPrefix() and setUri() APIs in IHeaderBlock
+/* Tests setPrefix() and setURI() APIs in IHeaderBlock
 @ Author : James Jose
 */
 
@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 		const AxisChar *uri="http://axis.apache.com";
 		IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader","http://apache.org/");
 		phb->setPrefix(prefix);
-		phb->setUri(uri);		
+		phb->setURI(uri);		
 		if (strcmp(op, "add") == 0)
 		{
 			iResult=ws.add(i1, i2);	

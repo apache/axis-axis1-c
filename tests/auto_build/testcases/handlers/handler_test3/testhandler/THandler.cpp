@@ -77,7 +77,7 @@ int THandler::invoke(void *pvIMsg)
 		IHeaderBlock* pIHeaderBlock= pISZ->createHeaderBlock();
 
 		pIHeaderBlock->setLocalName("getopname");
-		pIHeaderBlock->setUri("http://test.axiscpp.apache.org/testheader");
+		pIHeaderBlock->setURI("http://test.axiscpp.apache.org/testheader");
 
 		const AxisChar* pachHeaderVal = (AxisChar*)pIMsg->getOperationName();
 
