@@ -86,7 +86,7 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
             break;
         case XSD_LONG:
         case XSD_INTEGER:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%d", *((long*)(pValue)));
+            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%ld", *((long*)(pValue)));
             m_sSZ += m_Buf;
             break;
         case XSD_DURATION:
@@ -95,7 +95,7 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
             m_sSZ += m_Buf;
             break;
         case XSD_UNSIGNEDLONG:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%u", *((unsigned long*)(pValue)));
+            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%lu", *((unsigned long*)(pValue)));
             m_sSZ += m_Buf;
             break;
         case XSD_FLOAT:
@@ -218,7 +218,7 @@ const AxisChar* BasicTypeSerializer::serializeAsAttribute
             break;
         case XSD_LONG:
         case XSD_INTEGER:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%d", *((long*)(pValue)));
+            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%ld", *((long*)(pValue)));
             m_sSZ += m_Buf;
             break;
         case XSD_DURATION:
@@ -228,7 +228,7 @@ const AxisChar* BasicTypeSerializer::serializeAsAttribute
             m_sSZ += m_Buf;
             break;
         case XSD_UNSIGNEDLONG:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%u",
+            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%lu",
                        *((unsigned long*)(pValue)));
             m_sSZ += m_Buf;
             break;
@@ -342,7 +342,7 @@ const AxisString &BasicTypeSerializer::getEntityReferenced
     /* Find entity reference characters and returns the first any of chars find
      * position
      */ 
-    int nPos = strVal.find_first_of (XML_ENTITY_REFERENCE_CAHRS);
+    unsigned int nPos = strVal.find_first_of (XML_ENTITY_REFERENCE_CAHRS);
 
     /* Check for position validity */
     if (std::AxisString::npos == nPos)
