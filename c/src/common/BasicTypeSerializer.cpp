@@ -317,6 +317,7 @@ const AxisChar* BasicTypeSerializer::BasicTypeStr(XSDTYPE type)
 /// Encode XML entities if any found in user data.
 const AxisString& BasicTypeSerializer::GetEntityReferenced(const AxisString& strVal)
 {
+	m_strReturnVal = "";
 	if (strVal.empty())
 		return strVal;
 

@@ -2101,3 +2101,22 @@ bool SoapDeSerializer::IsAnyMustUnderstandHeadersLeft()
 	/*TODO*/
 	return false;
 }
+
+int SoapDeSerializer::FlushInputStream()
+{
+	int nChars = 0;
+	const char* pBuffer;
+	if (TRANSPORT_IN_PROGRESS == m_pParser->m_nTransportStatus)
+	{
+		do
+		{
+			m_pParser->m_nTransportStatus = m_pParser->m_pInputStream->transport.pGetFunct(&pBuffer, &nChars, m_pParser->m_pInputStream);
+			if ((nChars > 0) && pBuffer) /* there can be a buffer or not */
+			{
+				m_pParser->m_pInputStream->transport.pRelBufFunct(pBuffer, m_pParser->m_pInputStream);
+			}
+
+		}while (TRANSPORT_IN_PROGRESS == m_pParser->m_nTransportStatus);
+	}
+	return (TRANSPORT_FINISHED == m_pParser->m_nTransportStatus)? AXIS_SUCCESS : AXIS_FAIL;
+}
