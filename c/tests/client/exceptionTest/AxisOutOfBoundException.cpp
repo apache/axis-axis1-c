@@ -3,11 +3,11 @@
  * This file contains implementations of an Exception class of the web service.
  */
 
-#include "AxisDivByZeroException.h"
+#include "AxisOutOfBoundException.h"
 
 #include <axis/server/AxisWrapperAPI.h>
 
-AxisDivByZeroException::AxisDivByZeroException()
+AxisOutOfBoundException::AxisOutOfBoundException()
 {
 /* This only serves the pupose of indicating that the 
  * service has thrown an excpetion 
@@ -16,75 +16,76 @@ AxisDivByZeroException::AxisDivByZeroException()
 	processException(m_iExceptionCode); 
 }
 
-AxisDivByZeroException::AxisDivByZeroException(DivByZeroStruct*pFault)
+AxisOutOfBoundException::AxisOutOfBoundException(OutOfBoundStruct*pFault)
 {
 	m_iExceptionCode = AXISC_SERVICE_THROWN_EXCEPTION;
 	processException(pFault);}
 
-AxisDivByZeroException::AxisDivByZeroException(int iExceptionCode)
+AxisOutOfBoundException::AxisOutOfBoundException(int iExceptionCode)
 {
 
 	m_iExceptionCode = iExceptionCode;
 	processException (iExceptionCode);
 }
 
-AxisDivByZeroException::AxisDivByZeroException(exception* e)
+AxisOutOfBoundException::AxisOutOfBoundException(exception* e)
 {
 	processException (e);
 }
 
-AxisDivByZeroException::AxisDivByZeroException(exception* e,int iExceptionCode)
+AxisOutOfBoundException::AxisOutOfBoundException(exception* e,int iExceptionCode)
 {
 
 	processException (e, iExceptionCode);
 }
 
-AxisDivByZeroException::~AxisDivByZeroException() throw () 
+AxisOutOfBoundException::~AxisOutOfBoundException() throw () 
 {
 	m_sMessage ="";
 }
 
-void AxisDivByZeroException:: processException(exception* e, int iExceptionCode)
+void AxisOutOfBoundException:: processException(exception* e, int iExceptionCode)
 {
 	m_sMessage = getMessage (e) + getMessage (iExceptionCode);
 }
 
-void AxisDivByZeroException::processException (DivByZeroStruct* pFault)
+void AxisOutOfBoundException::processException (OutOfBoundStruct* pFault)
 {
 	/*User can do something like deserializing the struct into a string*/
         int iSize = strlen(pFault->varString) + 8;
         char* sMessage = new char[iSize];
         m_sMessage = new char[iSize];
         char* carrTempBuff =new char[4 * sizeof(char)];
+       
+        strcpy(sMessage, pFault->varString);
+        strcat(sMessage, "\n");      
         sprintf(carrTempBuff, "%d", pFault->varInt);
-        strcpy(sMessage, carrTempBuff);
-        strcat(sMessage, "\n");
-        sprintf(carrTempBuff, "%f", pFault->varFloat);
         strcat(sMessage, carrTempBuff);
         strcat(sMessage, "\n");
-        strcat(sMessage, pFault->varString);
-        strcat(sMessage, "\n");
+        SpecialDetailStruct* pFaultDetail = pFault->specialDetail;
+        strcat(sMessage, pFaultDetail->varString);
+
         m_sMessage = sMessage;
         delete(sMessage);
 }
 
-void AxisDivByZeroException::processException(exception* e)
+void AxisOutOfBoundException::processException(exception* e)
 {
 	m_sMessage = getMessage (e);
 }
 
-void AxisDivByZeroException::processException(int iExceptionCode)
+void AxisOutOfBoundException::processException(int iExceptionCode)
 {
 	m_sMessage = getMessage (iExceptionCode);
 }
 
-const string AxisDivByZeroException::getMessage (exception* objException)
+const string AxisOutOfBoundException::getMessage (exception* objException)
 {
 	string sMessage = objException->what();
 	return sMessage;
 }
 
-const string AxisDivByZeroException::getMessage (int iExceptionCode)
+const string AxisOutOfBoundException::getMessage (int iExceptionCode)
 {
 	string sMessage;
 	switch(iExceptionCode)
@@ -98,12 +99,12 @@ const string AxisDivByZeroException::getMessage (int iExceptionCode)
 return sMessage;
 }
 
-const char* AxisDivByZeroException::what() throw ()
+const char* AxisOutOfBoundException::what() throw ()
 {
 	return m_sMessage.c_str ();
 }
 
-const int AxisDivByZeroException::getExceptionCode(){
+const int AxisOutOfBoundException::getExceptionCode(){
 	return m_iExceptionCode;
 }
 

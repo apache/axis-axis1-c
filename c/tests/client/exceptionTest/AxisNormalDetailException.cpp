@@ -3,11 +3,11 @@
  * This file contains implementations of an Exception class of the web service.
  */
 
-#include "AxisDivByZeroException.h"
+#include "AxisNormalDetailException.h"
 
 #include <axis/server/AxisWrapperAPI.h>
 
-AxisDivByZeroException::AxisDivByZeroException()
+AxisNormalDetailException::AxisNormalDetailException()
 {
 /* This only serves the pupose of indicating that the 
  * service has thrown an excpetion 
@@ -16,75 +16,69 @@ AxisDivByZeroException::AxisDivByZeroException()
 	processException(m_iExceptionCode); 
 }
 
-AxisDivByZeroException::AxisDivByZeroException(DivByZeroStruct*pFault)
+AxisNormalDetailException::AxisNormalDetailException(SpecialDetailStruct*pFault)
 {
 	m_iExceptionCode = AXISC_SERVICE_THROWN_EXCEPTION;
 	processException(pFault);}
 
-AxisDivByZeroException::AxisDivByZeroException(int iExceptionCode)
+AxisNormalDetailException::AxisNormalDetailException(int iExceptionCode)
 {
 
 	m_iExceptionCode = iExceptionCode;
 	processException (iExceptionCode);
 }
 
-AxisDivByZeroException::AxisDivByZeroException(exception* e)
+AxisNormalDetailException::AxisNormalDetailException(exception* e)
 {
 	processException (e);
 }
 
-AxisDivByZeroException::AxisDivByZeroException(exception* e,int iExceptionCode)
+AxisNormalDetailException::AxisNormalDetailException(exception* e,int iExceptionCode)
 {
 
 	processException (e, iExceptionCode);
 }
 
-AxisDivByZeroException::~AxisDivByZeroException() throw () 
+AxisNormalDetailException::~AxisNormalDetailException() throw () 
 {
 	m_sMessage ="";
 }
 
-void AxisDivByZeroException:: processException(exception* e, int iExceptionCode)
+void AxisNormalDetailException:: processException(exception* e, int iExceptionCode)
 {
 	m_sMessage = getMessage (e) + getMessage (iExceptionCode);
 }
 
-void AxisDivByZeroException::processException (DivByZeroStruct* pFault)
+void AxisNormalDetailException::processException (SpecialDetailStruct* pFault)
 {
 	/*User can do something like deserializing the struct into a string*/
         int iSize = strlen(pFault->varString) + 8;
         char* sMessage = new char[iSize];
         m_sMessage = new char[iSize];
-        char* carrTempBuff =new char[4 * sizeof(char)];
-        sprintf(carrTempBuff, "%d", pFault->varInt);
-        strcpy(sMessage, carrTempBuff);
+        strcpy(sMessage, pFault->varString);
         strcat(sMessage, "\n");
-        sprintf(carrTempBuff, "%f", pFault->varFloat);
-        strcat(sMessage, carrTempBuff);
-        strcat(sMessage, "\n");
-        strcat(sMessage, pFault->varString);
-        strcat(sMessage, "\n");
+                                                                                                                             
         m_sMessage = sMessage;
         delete(sMessage);
 }
 
-void AxisDivByZeroException::processException(exception* e)
+void AxisNormalDetailException::processException(exception* e)
 {
 	m_sMessage = getMessage (e);
 }
 
-void AxisDivByZeroException::processException(int iExceptionCode)
+void AxisNormalDetailException::processException(int iExceptionCode)
 {
 	m_sMessage = getMessage (iExceptionCode);
 }
 
-const string AxisDivByZeroException::getMessage (exception* objException)
+const string AxisNormalDetailException::getMessage (exception* objException)
 {
 	string sMessage = objException->what();
 	return sMessage;
 }
 
-const string AxisDivByZeroException::getMessage (int iExceptionCode)
+const string AxisNormalDetailException::getMessage (int iExceptionCode)
 {
 	string sMessage;
 	switch(iExceptionCode)
@@ -98,12 +92,12 @@ const string AxisDivByZeroException::getMessage (int iExceptionCode)
 return sMessage;
 }
 
-const char* AxisDivByZeroException::what() throw ()
+const char* AxisNormalDetailException::what() throw ()
 {
 	return m_sMessage.c_str ();
 }
 
-const int AxisDivByZeroException::getExceptionCode(){
+const int AxisNormalDetailException::getExceptionCode(){
 	return m_iExceptionCode;
 }
 
