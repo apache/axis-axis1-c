@@ -38,15 +38,15 @@ AxisConfig::AxisConfig ()
 AxisConfig::~AxisConfig ()
 {
     if (m_sWsddFilePath)
-        delete m_sWsddFilePath;
+        free(m_sWsddFilePath);
     if (m_sAxisLogPath)
-        delete m_sAxisLogPath;
+        free(m_sAxisLogPath);
     if (m_sClientWsddFilePath)
-        delete m_sClientWsddFilePath;
+        free(m_sClientWsddFilePath);
     if (m_sAxisHome)
-        delete m_sAxisHome;
+        free(m_sAxisHome);
     if (m_sValue)
-        delete m_sValue;
+        free(m_sValue);
 }
 
 int AxisConfig::readConfFile ()
