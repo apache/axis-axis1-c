@@ -40,7 +40,7 @@ public:
     AXIS_TRANSPORT_STATUS getBytes(char* pcBuffer, int* piSize);
     void setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE eType, const char* pcValue);
     const char* getTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE eType);
-    void setTransportProperty(const char* pcKey, const char* pcValue){};
+    void setTransportProperty(const char* pcKey, const char* pcValue);
     const char* getTransportProperty(const char* pcKey){return "value";};
 	void setAttachment(const char* pcAttachmentId, const char* pcAttachment){};
 	const char* getAttachment(const char* pcAttachmentId){return "value";};
