@@ -389,7 +389,7 @@ BasicNode* HeaderBlock::getLastChild()
 
 BasicNode* HeaderBlock::getChild(int iChildPosition)
 {
-    if (iChildPosition > iNoOFChildren)
+    if ( (iChildPosition<=0) || (iChildPosition > iNoOFChildren) )
     {
         return NULL;
     }
