@@ -34,6 +34,7 @@ typedef struct
 
 typedef struct
 {
+	char * uri_path;
 	header * ip_headers;
 	int ip_headercount;
 	header * op_headers;
