@@ -160,15 +160,21 @@ public class Type {
         // an underscore to make sure we don't run
         // into name collisions with similarly named
         // non-anonymous types
-        StringBuffer sb = new StringBuffer(attribName);
-        int aidx = -1;
+        // StringBuffer sb = new StringBuffer(attribName);
+        // int aidx = -1;
 
-        while ((aidx = sb.toString().indexOf(SymbolTable.ANON_TOKEN)) > -1) {
-            sb.replace(aidx, aidx + SymbolTable.ANON_TOKEN.length(), "_");
-        }
+        // while ((aidx = sb.toString().indexOf(SymbolTable.ANON_TOKEN)) > -1) {
+        // sb.replace(aidx, aidx + SymbolTable.ANON_TOKEN.length(), "_");
+        // }
 
-        attribName = sb.toString();
-
+        // attribName = sb.toString();
+	// Nithya:
+	// To resolve fault soap message issue
+	
+	if (attribName.lastIndexOf('>') > 1 )
+	{
+	    attribName =attribName.substring(attribName.lastIndexOf('>')+1,attribName.length());
+        }        
         attribName = TypeMap.resoleveWSDL2LanguageNameClashes(attribName,this.language);
 
         if (hasOrder)
@@ -200,15 +206,21 @@ public class Type {
         	// an underscore to make sure we don't run
 	        // into name collisions with similarly named
         	// non-anonymous types
-	        StringBuffer sb = new StringBuffer(attribName);
-        	int aidx = -1;
+	        //StringBuffer sb = new StringBuffer(attribName);
+        	//int aidx = -1;
 
-	        while ((aidx = sb.toString().indexOf(SymbolTable.ANON_TOKEN)) > -1) {
-        	    sb.replace(aidx, aidx + SymbolTable.ANON_TOKEN.length(), "_");
-	        }
+	        //while ((aidx = sb.toString().indexOf(SymbolTable.ANON_TOKEN)) > -1) {
+        	//    sb.replace(aidx, aidx + SymbolTable.ANON_TOKEN.length(), "_");
+	       // }
 
-        	attribName = sb.toString();
+        	//attribName = sb.toString();
+		//Nithya:
+		//to resolve fault soap message
 		
+		if (attribName.lastIndexOf('>') > 1 )
+		{
+		    attribName =attribName.substring(attribName.lastIndexOf('>')+1,attribName.length());
+		}		
 		// Samisa: This second call to TypeMap.resoleveWSDL2LanguageNameClashes
 		// is made to make sure after replacinf ANON_TOKEN it is still not a keyword
 	        attribName = TypeMap.resoleveWSDL2LanguageNameClashes(attribName,this.language);
