@@ -1,10 +1,8 @@
-/*
- * Created on Apr 5, 2004
- *
- *
- */
 package org.apache.geronimo.ews.ws4j2ee.context.security;
 
+
+
+import javax.security.auth.callback.CallbackHandler;
 import javax.security.cert.X509Certificate;
 
 /**
@@ -83,4 +81,12 @@ public interface SecurityContext4J2EE {
 	 * @return the X509 Certificate.
 	 */
 	public byte[] getKerberoseTicket(); 
+	
+	/**
+	 * Returns a PasswordCallbackHandler which can be used in 
+	 * authentication done using JAAS module at the wrapper web service.
+	 * @return CallbackHandler.
+	 */
+	public CallbackHandler getPWDCallbackHandler4J2EE();
+	
 }

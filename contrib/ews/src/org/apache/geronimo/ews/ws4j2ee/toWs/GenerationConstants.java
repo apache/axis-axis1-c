@@ -55,9 +55,6 @@
 
 package org.apache.geronimo.ews.ws4j2ee.toWs;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.Properties;
 
 /**
  * <p>This interface has constants that are specific to the generators.</p>

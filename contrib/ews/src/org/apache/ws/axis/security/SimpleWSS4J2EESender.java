@@ -3,7 +3,7 @@
  *
  *
  */
-package org.apache.geronimo.ews.ws4j2ee.context.security;
+package org.apache.ws.axis.security;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -28,6 +28,16 @@ import org.apache.ws.security.WSPasswordCallback;
 import org.apache.ws.security.message.token.UsernameToken;
 
 /**
+ * 
+ * This is a server side Axis handler that can be used to retrieve the
+ * credentials available in the UsernameToken element. This will 
+ * retrieve the credentials and populate the SecurityContext4J2EE 
+ * property with them.
+ * 
+ * This is a very simple handler that can handle only UsernameToken 
+ * elements. So that this can be used for testing peroposes and
+ * other simple works.
+ * 
  * @author Rajith Priyanga (rpriyanga@yahoo.com)
  * @date May 29, 2004 
  * 
@@ -191,7 +201,7 @@ public class SimpleWSS4J2EESender extends BasicHandler {
 		if(pwd==null)
 			throw new Exception("Password is not provided! Can't create UsernameToken.");
 		return  pwd;
-	}
+	} 
 	
 
 }

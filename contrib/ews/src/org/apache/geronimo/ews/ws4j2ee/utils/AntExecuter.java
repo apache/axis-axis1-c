@@ -45,7 +45,7 @@ public class AntExecuter{
 			ant.setAntfile(file.getAbsolutePath());
 			ant.setDir(file.getParentFile());
 			ant.execute();        
-		}catch(ClassCastException e){
+		}catch(ClassNotFoundException e){
 			System.out.println("Ant file will not be run programatcally as the " +
 				"$JAVA_HOME/lib/tool.jar is not in the class path. To run the ant " +
 				"prgramatically add that jar to classpath");

@@ -3,12 +3,14 @@
  *
  *
  */
-package org.apache.geronimo.ews.ws4j2ee.context.security;
+package org.apache.ws.axis.security;
 
 import org.apache.ws.axis.security.WSDoAllConstants;
 
 
 /**
+ * Defines the Constants used or WS-J2EE security Mapping implementation.
+ * 
  * @author Rajith Priyanga (rpriyanga@yahoo.com)
  * @date May 28, 2004 
  * 
@@ -23,4 +25,6 @@ public class WSS4J2EEConstants extends WSDoAllConstants {
 	 */
 	public static final String SEC_CONTEXT_4J2EE = "SEC_CONTEXT_4J2EE";
 	
+	
+	public static final String AUTH_AT_AXIS = "AuthenticationAtAxis";
 }

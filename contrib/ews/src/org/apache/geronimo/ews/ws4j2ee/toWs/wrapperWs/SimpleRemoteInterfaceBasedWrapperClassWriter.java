@@ -136,10 +136,11 @@ public abstract class SimpleRemoteInterfaceBasedWrapperClassWriter extends Wrapp
 	   out.write("\t\tif(msgcontext == null){\n");
 	   out.write("\t\t		msgcontext = org.apache.axis.MessageContext.getCurrentContext();\n");
 	   out.write("\t\t}\n");
-
+	   out.write("\t\torg.apache.geronimo.ews.ws4j2ee.context.security.SecurityContext4J2EE seccontext =\n"); 
+	   out.write("\t\t			   (org.apache.geronimo.ews.ws4j2ee.context.security.SecurityContext4J2EE)msgcontext\n");
+	   out.write("\t\t.getProperty(org.apache.ws.axis.security.WSS4J2EEConstants.SEC_CONTEXT_4J2EE);\n");
 	   out.write("\t\t    javax.security.auth.callback.CallbackHandler handler\n");
-	   out.write("\t\t        = org.apache.geronimo.ews.ws4j2ee.wsutils.security.jaasmodules.\n");
-	   out.write("\t\t            AutenticationCallbackHandlerFactory.createCallbackHandler(msgcontext);\n");
+	   out.write("\t\t        = seccontext.getPWDCallbackHandler4J2EE();\n");
 	   out.write("\t\t    if(handler != null){\n");
 	   out.write("\t\t        javax.security.auth.login.LoginContext lc\n"); 
 	   out.write("\t\t            = new javax.security.auth.login.LoginContext(\"TestClient\", handler);\n");

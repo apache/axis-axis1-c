@@ -1,14 +1,9 @@
-/*
- * Created on Apr 6, 2004
- *
- *
- */
 package org.apache.geronimo.ews.ws4j2ee.context.security.impl;
 
+import javax.security.auth.callback.CallbackHandler;
 import javax.security.cert.X509Certificate;
 
 import org.apache.geronimo.ews.ws4j2ee.context.security.SecurityContext4J2EE;
-
 /**
  * @author Rajith Priyanga (rpriyanga@yahoo.com)
  * @date Apr 6, 2004 
@@ -27,15 +22,8 @@ public class SecurityContext4J2EEImpl implements SecurityContext4J2EE {
 	private boolean privacy 	= false;
 	private boolean integrity 	= false;
 	private boolean isPwdDigested= false;
-	//private MessageContext cntxt;
+	private CallbackHandler cbh;
 		
-	/**
-	 * This has a circular reference to the MessageContext.
-	 * @param cntxt
-	 */	
-	/*public SecurityContext4J2EEImpl(MessageContext cntxt){
-		this.cntxt = cntxt;
-	}*/
 	
 	
 	public SecurityContext4J2EEImpl(){	
@@ -192,6 +180,19 @@ public class SecurityContext4J2EEImpl implements SecurityContext4J2EE {
 	 */
 	public void setPassword(char[] password) {
 		this.pwd = password;
+	}
+
+
+	/**
+	 * @see org.apache.geranimo.ews.ws4j2ee.context.security.SecurityContext4J2EE#getPWDCallbackHandler4J2EE()
+	 */
+	public CallbackHandler getPWDCallbackHandler4J2EE() {		
+		return this.cbh;
+	}
+	
+	
+	public void setPWDCallbackHandler4J2EE(CallbackHandler callbackHandler){
+		this.cbh = callbackHandler;
 	}
 
 }

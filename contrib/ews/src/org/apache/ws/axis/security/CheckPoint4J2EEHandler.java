@@ -3,12 +3,17 @@
  *
  *
  */
-package org.apache.geronimo.ews.ws4j2ee.context.security;
+package org.apache.ws.axis.security;
 
 import org.apache.axis.AxisFault;
 import org.apache.axis.MessageContext;
 import org.apache.axis.handlers.BasicHandler;
+import org.apache.geronimo.ews.ws4j2ee.context.security.SecurityContext4J2EE;
+
 /**
+ * 
+ * Still this is not in use. But may be in future...
+ * 
  * @author Rajith Priyanga (rpriyanga@yahoo.com)
  * @date Apr 6, 2004 
  * 
@@ -42,7 +47,7 @@ public abstract class CheckPoint4J2EEHandler extends BasicHandler {
 	
 	
 	/**
-	 * Returns the password of the gicen user. This should be retrieved 
+	 * Returns the password of the given user. This should be retrieved 
 	 * from a password store.
 	 * @param username
 	 * @return The actual password.
