@@ -31,6 +31,9 @@ public class SourceWriterFactory {
 		else if (genaratorType == WrapperConstants.GENERATOR_UNDEPLOYMENT){
 			return new UndeploymentWriter(wscontext);			
 		}
+		else if (genaratorType == WrapperConstants.GENERATOR_BUILDSCRIPT){
+			return new BuildScriptWriter(wscontext);
+		}
 		if("rpc".equals(wscontext.getWrapInfo().getWrapperStyle())){
 			//C++
 			if(genaratorType == WrapperConstants.GENERATOR_PARAM_CPP_ALL)

@@ -54,6 +54,7 @@ public class ExceptionWriter extends CPPExceptionClassWriter{
 				targetOutputLocation = targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
 			new File(targetOutputLocation).mkdirs();
 			String fileName = targetOutputLocation + "/" + faultInfoName + ".cpp";
+			this.wscontext.addGeneratedFile(faultInfoName + ".cpp");
 			return new File(fileName);
 		}	
 		

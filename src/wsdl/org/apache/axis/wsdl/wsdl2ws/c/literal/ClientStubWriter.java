@@ -54,6 +54,7 @@ public class ClientStubWriter extends CFileWriter{
 			targetOutputLocation = targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
 		new File(targetOutputLocation).mkdirs();
 		String fileName = targetOutputLocation + "/" + classname + ".c";
+		this.wscontext.addGeneratedFile(classname + ".c");
 		return new File(fileName);
 	}
 	protected void writeClassComment() throws WrapperFault {
