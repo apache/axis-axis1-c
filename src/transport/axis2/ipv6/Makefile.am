@@ -6,7 +6,8 @@ libaxis2ipv6_transport_la_SOURCES = IPV6Channel.cpp \
                                ../Channel.cpp \
                                ../URL.cpp \
                                ../Axis2Transport.cpp \
-                               ../AxisTransportException.cpp
+                               ../AxisTransportException.cpp \
+                               ../ChannelFactory.cpp
 
 libaxis2ipv6_transport_la_LIBADD = -lstdc++ 
 INCLUDES = -I../../../../include
