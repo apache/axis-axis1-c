@@ -73,17 +73,18 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include <string>
-#include "../soap/TypeMapping.h"
-#include "ISoapSerializer.h"
+#include "IParam.h"
 
+#include <string>
 using namespace std;
 
 class AccessBean;
 class ArrayBean;
 
-class Param  
+class Param : public IParam
 {
+	friend class SoapDeSerializer;
+	friend class XMLStreamHandler;
 public:
 	Param(){ m_Type = USER_TYPE;}; //if there is no attribute that says the type
 	Param(Param& param);
@@ -94,18 +95,9 @@ public:
 	virtual ~Param();
 	void operator=(Param &param);
 
-public:
-	union uValue
-	{
-		int n;
-		float f;
-		double d;
-		//all basic types should come here
-		ArrayBean* a; //holds array types
-		AccessBean* o; //this is used to hold user types 
-	} m_Value;
-
-	string m_sValue; //value in case of XSD_STRING 
+private:
+	uParamValue m_Value;
+	string m_sValue; //value in case of XSD_STRING, XSD_HEXBINARY and XSD_BASE64BINARY
 	string m_sName; //Name of the parameter
 	XSDTYPE m_Type; //Type of the parameter
 
@@ -118,6 +110,7 @@ private:
 
 public: //Conversion functions
 	int SetValue(string& sValue);
+	int SetValue(XSDTYPE nType, uParamValue Value);
 	XSDTYPE GetType() const;	
 	int serialize(ISoapSerializer& pSZ);
 
@@ -129,6 +122,10 @@ public: //Conversion functions
 	const string& GetBase64String();
 	void setPrefix(const string &prefix);
 	void setUri(const string &uri);
+	int GetArraySize();
+	int SetArrayElements(void* pElements);
+	int SetUserType(IAccessBean* pObject);
+	void SetName(char* sName);
 };
 
 #endif // !defined(AFX_PARAM_H__351B13BB_5D03_40C5_93F5_56D17295A8BD__INCLUDED_)
