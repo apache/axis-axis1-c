@@ -164,6 +164,19 @@ throw (AxisTransportException&)
     printf( "<IPV6Channel::open()=true, m_Sock=%d\n", m_Sock);
 #endif
 
+    /* Turn off the Nagle algorithm - Patch by Steve Hardy */
+
+    /* This is needed, because our TCP stack would otherwise wait at most
+     * 200 ms before actually sending data to the server (while waiting for
+     * a full packet). This limits performance to around 5 requests per
+     * second, which is not acceptable. Turning off the Nagle algorithm
+     * allows for much faster transmission of small packets, but may
+     * degrade high-bandwidth transmissions.
+     */
+
+    int one = 1;
+    setsockopt(m_Sock, IPPROTO_TCP, TCP_NODELAY, (char *)&one, sizeof(int));
+
     return true;
 }
 
