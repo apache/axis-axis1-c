@@ -230,7 +230,6 @@ AC_OUTPUT(Makefile \
     samples/server/interoptests/doclitbase/Makefile \
     samples/server/interoptests/doclitgroupB/Makefile \
     samples/server/simple/Makefile \
-    samples/server/array/Makefile \
     samples/server/rpcfault/Makefile \
     samples/server/doclitfault/Makefile \
     samples/server/echoStringHeaderHandler/Makefile \
