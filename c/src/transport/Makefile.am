@@ -1,1 +1,1 @@
-SUBDIRS = axis libwww
+SUBDIRS = axis @LIBWWWBUILD@

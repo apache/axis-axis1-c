@@ -114,6 +114,12 @@ Following are some of the options availble with configure
                      By default test cases are built. If you don't want building
                      the test cases then you need to specifically say no
 
+--enable-log : Whether to enable log facility. By dafault this is enabled. If you don't need
+               it say no to this
+
+--enable-libwww : By default libwww client transport library  is built. If you don't need it
+                  say no to this.
+
 You may rename and edit build.sh_sample for one step builing and installing.
 
 Once you finished, have a look at $AXISCPP_HOME/build_errors. Most probably you will see many warnings.

@@ -135,6 +135,40 @@ AC_ARG_ENABLE(samples, [  --enable-samples    build samples.],
   SAMPLESBUILD="samples"
 )
 
+AC_MSG_CHECKING(whether to build libwww client transport library)
+AC_ARG_ENABLE(libwww, [  --enable-libwww    build libwww client transport library.],
+[ case "${enableval}" in
+  no)
+    AC_MSG_RESULT(no)
+    LIBWWWBUILD=""
+    ;;
+  *)
+    AC_MSG_RESULT(yes)
+    LIBWWWBUILD="libwww"
+    
+    ;;
+  esac ],
+  AC_MSG_RESULT(no)
+  LIBWWWBUILD="libwww"
+)
+
+AC_MSG_CHECKING(whether write to log)
+AC_ARG_ENABLE(log, [  --enable-log    enable log facility.],
+[ case "${enableval}" in
+  no)
+    AC_MSG_RESULT(no)
+    ENABLELOGGING=""
+    ;;
+  *)
+    AC_MSG_RESULT(yes)
+    ENABLELOGGING="-DENABLE_AXISTRACE"
+    
+    ;;
+  esac ],
+  AC_MSG_RESULT(no)
+  ENABLELOGGING="-DENABLE_AXISTRACE"
+)
+
 APACHE2INC=$apache2inc
 APACHEINC=$apacheinc
 XERCESCINC=$xercescinc
@@ -155,9 +189,10 @@ AC_SUBST(APACHEBUILD)
 AC_SUBST(LINKCLIENTLIB)
 AC_SUBST(TESTCASESBUILD)
 AC_SUBST(SAMPLESBUILD)
+AC_SUBST(LIBWWWBUILD)
 
-CFLAGS="-Wall -Wshadow -DENABLE_AXISTRACE"
-CPPFLAGS="-Wall -Wshadow -DENABLE_AXISTRACE"
+CFLAGS="-Wall -Wshadow ${ENABLELOGGING}"
+CPPFLAGS="-Wall -Wshadow ${ENABLELOGGING}"
 LDFLAGS="-s -lstdc++"
 AC_PROG_CC
 AC_PROG_CXX
