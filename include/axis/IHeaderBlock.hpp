@@ -151,6 +151,9 @@ public:
      * SOAP_VERSION.
      * To use ACTOR, MUST_UNDERSTAND_TRUE, MUST_UNDERSTAND_FALSE the user has 
      * to pass SOAP_VER_1_1 as the SOAP_VERSION.
+     * NOTE: No checking is done to see if the attributs being created on the header are correct for SOAP.
+     * e.g. if two MUST_UNDERSTAND_TRUE headers are created then the SOAP message is invalid but it will still
+     * get sent across to the server. In such instances we expect most servers to respond with a server fault.
      *
      * @param eStdAttrType The standard attribute to be created.
      * The current values that can be passes are: ROLE_NEXT, ROLE_NONE, 
