@@ -13,7 +13,7 @@
 
 <BODY>
   <CENTER>
-    <H1><IMG src="images/axis.jpg" height="96" width="176"></H1>
+ <H1><IMG src="images/axis.jpg" height="96" width="176"></H1>
   </CENTER>
 
   <H1>Axis User's Guide</H1>
@@ -25,48 +25,48 @@
   <H3>Table of Contents</H3>
 
   <UL>
-    <LI><A href="#Introduction">Introduction</A></LI>
+ <LI><A href="#Introduction">Introduction</A></LI>
 
-    <LI><A href="#Installation">Installing Axis</A></LI>
+ <LI><A href="#Installation">Installing Axis</A></LI>
 
-    <LI><A href="#ConsumingServices">Consuming Web Services with
-    Axis</A></LI>
+ <LI><A href="#ConsumingServices">Consuming Web Services with
+ Axis</A></LI>
 
-    <LI><A href="#PublishingServices">Publishing Web Services with
-    Axis</A></LI>
+ <LI><A href="#PublishingServices">Publishing Web Services with
+ Axis</A></LI>
 
-    <LI><A href="#DataMapping">XML &lt;-&gt; Java Data Mapping in
-    Axis</A></LI>
+ <LI><A href="#DataMapping">XML &lt;-&gt; Java Data Mapping in
+ Axis</A></LI>
 
-    <LI><A href="#WSDL">Using WSDL with Axis</A></LI>
+ <LI><A href="#WSDL">Using WSDL with Axis</A></LI>
 
-    <LI style="list-style: none">
-      <UL>
-        <LI><A href=
-        "#WSDL:%20Obtaining%20WSDL%20for%20deployed%20services">?WSDL:
-        Obtaining WSDL for deployed services</A></LI>
+ <LI style="list-style: none">
+   <UL>
+  <LI><A href=
+  "#WSDL:%20Obtaining%20WSDL%20for%20deployed%20services">?WSDL:
+  Obtaining WSDL for deployed services</A></LI>
 
-        <LI><A href=
-        "#WSDL2Java:%20Building%20stubs,%20skeletons,%20and%20data">
-        WSDL2Java: Building stubs, skeletons, and data</A></LI>
+  <LI><A href=
+  "#WSDL2Java:%20Building%20stubs,%20skeletons,%20and%20data">
+  WSDL2Java: Building stubs, skeletons, and data</A></LI>
 
-        <LI><A href=
-        "#Java2WSDL:%20Building%20WSDL%20from%20Java">Java2WSDL:
-        Building WSDL from Java</A></LI>
-      </UL>
-    </LI>
+  <LI><A href=
+  "#Java2WSDL:%20Building%20WSDL%20from%20Java">Java2WSDL:
+  Building WSDL from Java</A></LI>
+   </UL>
+ </LI>
 
-    <LI><A href="#published%20interfaces">Published
-    Interfaces</A></LI>
+ <LI><A href="#published%20interfaces">Published
+ Interfaces</A></LI>
 
-    <LI><A href="#newbie">Newbie Tips: Finding Your Way
-    Around</A></LI>
+ <LI><A href="#newbie">Newbie Tips: Finding Your Way
+ Around</A></LI>
 
-    <LI><A href="#tcpmon">Appendix : Using TCPMon</A></LI>
+ <LI><A href="#tcpmon">Appendix : Using TCPMon</A></LI>
 
-    <LI><A href="#soapmon">Appendix : Using SOAP Monitor</A></LI>
+ <LI><A href="#soapmon">Appendix : Using SOAP Monitor</A></LI>
 
-    <LI><A href="#Glossary">Glossary</A></LI>
+ <LI><A href="#Glossary">Glossary</A></LI>
   </UL>
 
   <H2><A name="Introduction"></A>Introduction</H2>
@@ -101,19 +101,19 @@
   <P>But Axis isn't just a SOAP engine -- it also includes:</P>
 
   <UL>
-    <LI>a simple stand-alone server,</LI>
+ <LI>a simple stand-alone server,</LI>
 
-    <LI>a server which plugs into servlet engines such as
-    Tomcat,</LI>
+ <LI>a server which plugs into servlet engines such as
+ Tomcat,</LI>
 
-    <LI>extensive support for the <I>Web Service Description
-    Language (WSDL)</I>,</LI>
+ <LI>extensive support for the <I>Web Service Description
+ Language (WSDL)</I>,</LI>
 
-    <LI>emitter tooling that generates Java classes from WSDL.</LI>
+ <LI>emitter tooling that generates Java classes from WSDL.</LI>
 
-    <LI>some sample programs, and</LI>
+ <LI>some sample programs, and</LI>
 
-    <LI>a tool for monitoring TCP/IP packets.</LI>
+ <LI>a tool for monitoring TCP/IP packets.</LI>
   </UL>
 
   <P>Axis is the third generation of Apache SOAP (which began at
@@ -132,36 +132,36 @@
   direction, Axis now delivers the following key features:</P>
 
   <UL>
-    <LI><B>Speed.</B> Axis uses SAX (event-based) parsing to
-    acheive significantly greater speed than earlier versions of
-    Apache SOAP.</LI>
+ <LI><B>Speed.</B> Axis uses SAX (event-based) parsing to
+ acheive significantly greater speed than earlier versions of
+ Apache SOAP.</LI>
 
-    <LI><B>Flexibility.</B> The Axis architecture gives the
-    developer complete freedom to insert extensions into the engine
-    for custom header processing, system management, or anything
-    else you can imagine.</LI>
+ <LI><B>Flexibility.</B> The Axis architecture gives the
+ developer complete freedom to insert extensions into the engine
+ for custom header processing, system management, or anything
+ else you can imagine.</LI>
 
-    <LI><B>Stability.</B> Axis defines a set of <A href=
-    "#published%20interfaces">published interfaces</A> which change
-    relatively slowly compared to the rest of Axis.</LI>
+ <LI><B>Stability.</B> Axis defines a set of <A href=
+ "#published%20interfaces">published interfaces</A> which change
+ relatively slowly compared to the rest of Axis.</LI>
 
-    <LI><B>Component-oriented deployment.</B> You can easily define
-    reusable networks of Handlers to implement common patterns of
-    processing for your applications, or to distribute to
-    partners.</LI>
+ <LI><B>Component-oriented deployment.</B> You can easily define
+ reusable networks of Handlers to implement common patterns of
+ processing for your applications, or to distribute to
+ partners.</LI>
 
-    <LI><B>Transport framework.</B> We have a clean and simple
-    abstraction for designing transports (i.e., senders and
-    listeners for SOAP over various protocols such as SMTP, FTP,
-    message-oriented middleware, etc), and the core of the engine
-    is completely transport-independent.</LI>
+ <LI><B>Transport framework.</B> We have a clean and simple
+ abstraction for designing transports (i.e., senders and
+ listeners for SOAP over various protocols such as SMTP, FTP,
+ message-oriented middleware, etc), and the core of the engine
+ is completely transport-independent.</LI>
 
-    <LI><B>WSDL support.</B> Axis supports the <A href=
-    "http://www.w3.org/TR/wsdl">Web Service Description
-    Language</A>, version 1.1, which allows you to easily build
-    stubs to access remote services, and also to automatically
-    export machine-readable descriptions of your deployed services
-    from Axis.</LI>
+ <LI><B>WSDL support.</B> Axis supports the <A href=
+ "http://www.w3.org/TR/wsdl">Web Service Description
+ Language</A>, version 1.1, which allows you to easily build
+ stubs to access remote services, and also to automatically
+ export machine-readable descriptions of your deployed services
+ from Axis.</LI>
   </UL>
 
   <P>We hope you enjoy using Axis. Please note that this is an
@@ -185,52 +185,52 @@
   <P>This release includes the following features:</P>
 
   <UL>
-    <LI>SOAP 1.1/1.2 compliant engine</LI>
+ <LI>SOAP 1.1/1.2 compliant engine</LI>
 
-    <LI>Flexible configuration / deployment system</LI>
+ <LI>Flexible configuration / deployment system</LI>
 
-    <LI>Support for "drop-in" deployment of SOAP services
-    (JWS)</LI>
+ <LI>Support for "drop-in" deployment of SOAP services
+ (JWS)</LI>
 
-    <LI>Support for all basic types, and a type mapping system for
-    defining new serializers/deserializers</LI>
+ <LI>Support for all basic types, and a type mapping system for
+ defining new serializers/deserializers</LI>
 
-    <LI>Automatic serialization/deserialization of Java Beans,
-    including customizable mapping of fields to XML
-    elements/attributes</LI>
+ <LI>Automatic serialization/deserialization of Java Beans,
+ including customizable mapping of fields to XML
+ elements/attributes</LI>
 
-    <LI>Automatic two-way conversions between Java Collections and
-    SOAP Arrays</LI>
+ <LI>Automatic two-way conversions between Java Collections and
+ SOAP Arrays</LI>
 
-    <LI>Providers for RPC and message based SOAP services</LI>
+ <LI>Providers for RPC and message based SOAP services</LI>
 
-    <LI>Automatic WSDL generation from deployed services</LI>
+ <LI>Automatic WSDL generation from deployed services</LI>
 
-    <LI>WSDL2Java tool for building Java proxies and skeletons from
-    WSDL documents</LI>
+ <LI>WSDL2Java tool for building Java proxies and skeletons from
+ WSDL documents</LI>
 
-    <LI>Java2WSDL tool for building WSDL from Java classes.</LI>
+ <LI>Java2WSDL tool for building WSDL from Java classes.</LI>
 
-    <LI>Preliminary security extensions, which can integrate with
-    Servlet 2.2 security/roles</LI>
+ <LI>Preliminary security extensions, which can integrate with
+ Servlet 2.2 security/roles</LI>
 
-    <LI>Support for session-oriented services, via HTTP cookies or
-    transport-independent SOAP headers</LI>
+ <LI>Support for session-oriented services, via HTTP cookies or
+ transport-independent SOAP headers</LI>
 
-    <LI>Preliminary support for the <B>SOAP with Attachments</B>
-    specification</LI>
+ <LI>Preliminary support for the <B>SOAP with Attachments</B>
+ specification</LI>
 
-    <LI>An EJB provider for accessing EJB's as Web Services</LI>
+ <LI>An EJB provider for accessing EJB's as Web Services</LI>
 
-    <LI>HTTP servlet-based transport</LI>
+ <LI>HTTP servlet-based transport</LI>
 
-    <LI>JMS based transport</LI>
+ <LI>JMS based transport</LI>
 
-    <LI>Standalone version of the server (with HTTP support)</LI>
+ <LI>Standalone version of the server (with HTTP support)</LI>
 
-    <LI>Examples, including a client and server for the
-    SoapBuilders community interoperability tests and experimental
-    TCP, JMS, and file-based transports.</LI>
+ <LI>Examples, including a client and server for the
+ SoapBuilders community interoperability tests and experimental
+ TCP, JMS, and file-based transports.</LI>
   </UL>
 
   <H3>What's still to do?</H3>
@@ -252,23 +252,23 @@
   axis-1_1/lib):</P>
 
   <UL>
-    <LI>axis-1_1/lib/axis.jar</LI>
+ <LI>axis-1_1/lib/axis.jar</LI>
 
-    <LI>axis-1_1/lib/jaxrpc.jar</LI>
+ <LI>axis-1_1/lib/jaxrpc.jar</LI>
 
-    <LI>axis-1_1/lib/saaj.jar</LI>
+ <LI>axis-1_1/lib/saaj.jar</LI>
 
-    <LI>axis-1_1/lib/commons-logging.jar</LI>
+ <LI>axis-1_1/lib/commons-logging.jar</LI>
 
-    <LI>axis-1_1/lib/commons-discovery.jar</LI>
+ <LI>axis-1_1/lib/commons-discovery.jar</LI>
 
-    <LI>axis-1_1/lib/wsdl4j.jar</LI>
+ <LI>axis-1_1/lib/wsdl4j.jar</LI>
 
-    <LI>axis-1_1/ <I><FONT color="#9966FF">(for the sample
-    code)</FONT></I></LI>
+ <LI>axis-1_1/ <I><FONT color="#9966FF">(for the sample
+ code)</FONT></I></LI>
 
-    <LI>A JAXP-1.1 compliant XML parser such as Xerces or
-    Crimson</LI>
+ <LI>A JAXP-1.1 compliant XML parser such as Xerces or
+ Crimson</LI>
   </UL>
 
   <H2><A name="ConsumingServices"></A>Consuming Web Services with
@@ -280,32 +280,32 @@
   call the <B>echoString</B> method on the public Axis server at
   Apache.</P>
   <PRE class="example">
-1   import org.apache.axis.client.Call;
-2   import org.apache.axis.client.Service;
-3   import javax.xml.namespace.QName;
-4   
-5   public class TestClient {
-6      public static void main(String [] args) {
-7          try {
-8              String endpoint =
-9                       "http://nagoya.apache.org:5049/axis/services/echo";
-10  
-11             Service  service = new Service();
-12             Call     call    = (Call) service.createCall();
-13  
-14             call.setTargetEndpointAddress( new java.net.URL(endpoint) );
-15             call.setOperationName(new QName("<FONT color=
+1  import org.apache.axis.client.Call;
+2  import org.apache.axis.client.Service;
+3  import javax.xml.namespace.QName;
+4  
+5  public class TestClient {
+6   public static void main(String [] args) {
+7 try {
+8  String endpoint =
+9   "http://nagoya.apache.org:5049/axis/services/echo";
+10 
+11 Service  service = new Service();
+12 Call  call = (Call) service.createCall();
+13 
+14 call.setTargetEndpointAddress( new java.net.URL(endpoint) );
+15 call.setOperationName(new QName("<FONT color=
 "#009933">http://soapinterop.org/</FONT>", "<FONT color=
 "#993333">echoString</FONT>"));
-16  
-17             String ret = (String) call.invoke( new Object[] { "<FONT color="#CC00CC">Hello!</FONT>" } );
+16 
+17 String ret = (String) call.invoke( new Object[] { "<FONT color="#CC00CC">Hello!</FONT>" } );
 18  
-19             System.out.println("Sent 'Hello!', got '" + ret + "'");
-20         } catch (Exception e) {
-21             System.err.println(e.toString());
-22         }
-23     }
-24  }
+19 System.out.println("Sent 'Hello!', got '" + ret + "'");
+20   } catch (Exception e) {
+21 System.err.println(e.toString());
+22   }
+23  }
+24 }
 </PRE>
 
   <P>(You'll find this file in <A href=
@@ -335,15 +335,15 @@ Sent 'Hello!', got 'Hello!'
   <PRE class="xml">
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;SOAP-ENV:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-                   xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
-                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+       xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
   &lt;SOAP-ENV:Body&gt;
-    &lt;ns1:<B><FONT color=
+ &lt;ns1:<B><FONT color=
 "#993333">echoString</FONT></B> xmlns:ns1="<B><FONT color=
 "#009933">http://soapinterop.org/</FONT></B>"&gt;
-      &lt;arg0 xsi:type="xsd:string"&gt;<B><FONT color=
+   &lt;arg0 xsi:type="xsd:string"&gt;<B><FONT color=
 "#CC00CC">Hello!</FONT></B>&lt;/arg0&gt;
-    &lt;/ns1:echoString&gt;
+ &lt;/ns1:echoString&gt;
   &lt;/SOAP-ENV:Body&gt;
 &lt;/SOAP-ENV:Envelope&gt;
 </PRE>
@@ -367,8 +367,8 @@ Sent 'Hello!', got 'Hello!'
   <TT>setReturnType</TT> for the return, like so:</P>
   <PRE class="example">
   call.addParameter("testParam", 
-                    org.apache.axis.Constants.XSD_STRING,
-                    javax.xml.rpc.ParameterMode.IN);
+     org.apache.axis.Constants.XSD_STRING,
+     javax.xml.rpc.ParameterMode.IN);
   call.setReturnType(org.apache.axis.Constants.XSD_STRING); 
 </PRE>
 
@@ -382,13 +382,13 @@ Sent 'Hello!', got 'Hello!'
   <PRE class="xml">
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;SOAP-ENV:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-                   xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
-                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+       xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
   &lt;SOAP-ENV:Body&gt;
-    &lt;ns1:echoString xmlns:ns1="http://soapinterop.org/"&gt;
-      &lt;<FONT color=
+ &lt;ns1:echoString xmlns:ns1="http://soapinterop.org/"&gt;
+   &lt;<FONT color=
 "#CC00CC">testParam</FONT> xsi:type="xsd:string"&gt;Hello!&lt;/<FONT color="#CC00CC">testParam</FONT>&gt;
-    &lt;/ns1:echoString&gt;
+ &lt;/ns1:echoString&gt;
   &lt;/SOAP-ENV:Body&gt;
 &lt;/SOAP-ENV:Envelope&gt;
 </PRE>
@@ -410,11 +410,11 @@ Sent 'Hello!', got 'Hello!'
   <PRE class="xml">
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;<BR>
  &lt;SOAP-ENV:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-                    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
-                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt; 
+     xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt; 
   &lt;SOAP-ENV:Body&gt;
    &lt;ns1:echoStringResponse xmlns:ns1="http://soapinterop.org/"&gt; 
-    &lt;result <FONT color=
+ &lt;result <FONT color=
 "#FF0000">xsi:type="xsd:string"</FONT>&gt;Hello!&lt;/result&gt;
    &lt;/ns1:echoStringResponse&gt; 
   &lt;/SOAP-ENV:Body&gt;
@@ -432,8 +432,8 @@ Sent 'Hello!', got 'Hello!'
   <PRE class="xml">
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;SOAP-ENV:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-                   xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
-                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+       xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
  &lt;SOAP-ENV:Body&gt;
   &lt;ns1:echoStringResponse xmlns:ns1="http://soapinterop.org/"&gt;
    &lt;result&gt;Hello, I'm a string!&lt;/result&gt;
@@ -475,12 +475,12 @@ call.setReturnClass(String.class);
 public class Calculator {
   public int add(int i1, int i2)
   {
-    return i1 + i2; 
+ return i1 + i2; 
   }
   
   public int subtract(int i1, int i2)
   {
-    return i1 - i2;
+ return i1 - i2;
   }
 }
 </PRE>
@@ -558,7 +558,7 @@ Got result : 1
   "http://cvs.apache.org/viewcvs.cgi/*checkout*/ws-axis/java/samples/userguide/example3/deploy.wsdd">samples/userguide/example3/deploy.wsdd</A>):</P>
   <PRE class="example">
 &lt;deployment xmlns="http://xml.apache.org/axis/wsdd/"
-            xmlns:java="http://xml.apache.org/axis/wsdd/providers/java"&gt;
+   xmlns:java="http://xml.apache.org/axis/wsdd/providers/java"&gt;
  &lt;service name="MyService" provider="java:RPC"&gt;
   &lt;parameter name="className" value="samples.userguide.example3.MyService"/&gt;
   &lt;parameter name="allowedMethods" value="*"/&gt;
@@ -633,7 +633,8 @@ Got result : 1
   Check it out by running the Client class - it should look like
   this:</P>
   <PRE class="example">
-% java samples.userguide.example3.Client -lhttp://localhost:8080/axis/services/MyService "test me!"
+% java samples.userguide.example3.Client
+ -lhttp://localhost:8080/axis/services/MyService "test me!"
 You typed : test me!
 %
 </PRE>
@@ -669,7 +670,7 @@ You typed : test me!
   samples/userguide):</P>
   <PRE class="example">
 &lt;deployment xmlns="http://xml.apache.org/axis/wsdd/"
-            xmlns:java="http://xml.apache.org/axis/wsdd/providers/java"&gt;
+   xmlns:java="http://xml.apache.org/axis/wsdd/providers/java"&gt;
   &lt;!-- define the logging handler configuration --&gt;
  &lt;handler name="track" type="java:samples.userguide.example4.LogHandler"&gt;
   &lt;parameter name="filename" value="MyService.log"/&gt;
@@ -767,13 +768,13 @@ You typed : test me!
   containing a purchase order:</P>
   <PRE class="xml">
 &lt;soap:Envelope xmlns="http://xml.apache.org/axis/wsdd/"
-            xmlns:java="http://xml.apache.org/axis/wsdd/providers/java"&gt;
+   xmlns:java="http://xml.apache.org/axis/wsdd/providers/java"&gt;
   &lt;soap:Body&gt;
-    &lt;myNS:PurchaseOrder xmlns:myNS="http://commerce.com/PO"&gt;
-      &lt;item&gt;SK001&lt;/item&gt;
-      &lt;quantity&gt;1&lt;/quantity&gt;
-      &lt;description&gt;Sushi Knife&lt;/description&gt;
-    &lt;/myNS:PurchaseOrder&gt;
+ &lt;myNS:PurchaseOrder xmlns:myNS="http://commerce.com/PO"&gt;
+   &lt;item&gt;SK001&lt;/item&gt;
+   &lt;quantity&gt;1&lt;/quantity&gt;
+   &lt;description&gt;Sushi Knife&lt;/description&gt;
+ &lt;/myNS:PurchaseOrder&gt;
   &lt;/soap:Body&gt;
 &lt;/soap:Envelope&gt;
 </PRE>
@@ -782,11 +783,11 @@ You typed : test me!
   <PRE class="xml">
 &lt;schema targetNamespace="http://commerce.com/PO"&gt;
   &lt;complexType name="POType"&gt;
-    &lt;sequence&gt;
-      &lt;element name="item" type="xsd:string"/&gt;
-      &lt;element name="quantity" type="xsd:int"/&gt;
-      &lt;element name="description" type="xsd:string"/&gt;
-    &lt;/sequence&gt;
+ &lt;sequence&gt;
+   &lt;element name="item" type="xsd:string"/&gt;
+   &lt;element name="quantity" type="xsd:int"/&gt;
+   &lt;element name="description" type="xsd:string"/&gt;
+ &lt;/sequence&gt;
   &lt;/complexType&gt;
   &lt;element name="PurchaseOrder" type="POType"/&gt;
 &lt;/deployment&gt;
@@ -878,12 +879,12 @@ public Element[] echoElements(Element [] elems)
   the full WSDD for the <CODE>MessageService</CODE> class:</P>
   <PRE class="XML">
 &lt;deployment name="test" xmlns="http://xml.apache.org/axis/wsdd/"
-      xmlns:java="http://xml.apache.org/axis/wsdd/providers/java"
-      xmlns:xsi="http://www.w3.org/2000/10/XMLSchema-instance"&gt;
-        &lt;service name="MessageService" <FONT color=
+   xmlns:java="http://xml.apache.org/axis/wsdd/providers/java"
+   xmlns:xsi="http://www.w3.org/2000/10/XMLSchema-instance"&gt;
+  &lt;service name="MessageService" <FONT color=
 "#FF0000">style="message"</FONT>&gt;
-    &lt;parameter name="className" value="samples.message.MessageService"/&gt;
-    &lt;parameter name="allowedMethods" value="echoElements"/&gt;
+ &lt;parameter name="className" value="samples.message.MessageService"/&gt;
+ &lt;parameter name="allowedMethods" value="echoElements"/&gt;
   &lt;/service&gt;<BR>
 &lt;/deployment&gt;
 </PRE>
@@ -918,89 +919,89 @@ public Element[] echoElements(Element [] elems)
   <H4>Standard mappings from WSDL to Java</H4>
 
   <TABLE>
-    <TR>
-      <TD>xsd:base64Binary</TD>
+ <TR>
+   <TD>xsd:base64Binary</TD>
 
-      <TD><TT>byte[]</TT></TD>
-    </TR>
+   <TD><TT>byte[]</TT></TD>
+ </TR>
 
-    <TR>
-      <TD>xsd:boolean</TD>
+ <TR>
+   <TD>xsd:boolean</TD>
 
-      <TD><TT>boolean</TT></TD>
-    </TR>
+   <TD><TT>boolean</TT></TD>
+ </TR>
 
-    <TR>
-      <TD>xsd:byte</TD>
+ <TR>
+   <TD>xsd:byte</TD>
 
-      <TD><TT>byte</TT></TD>
-    </TR>
+   <TD><TT>byte</TT></TD>
+ </TR>
 
-    <TR>
-      <TD>xsd:dateTime</TD>
+ <TR>
+   <TD>xsd:dateTime</TD>
 
-      <TD><TT>java.util.Calendar</TT></TD>
-    </TR>
+   <TD><TT>java.util.Calendar</TT></TD>
+ </TR>
 
-    <TR>
-      <TD>xsd:decimal</TD>
+ <TR>
+   <TD>xsd:decimal</TD>
 
-      <TD><TT>java.math.BigDecimal</TT></TD>
-    </TR>
+   <TD><TT>java.math.BigDecimal</TT></TD>
+ </TR>
 
-    <TR>
-      <TD>xsd:double</TD>
+ <TR>
+   <TD>xsd:double</TD>
 
-      <TD><TT>double</TT></TD>
-    </TR>
+   <TD><TT>double</TT></TD>
+ </TR>
 
-    <TR>
-      <TD>xsd:float</TD>
+ <TR>
+   <TD>xsd:float</TD>
 
-      <TD><TT>float</TT></TD>
-    </TR>
+   <TD><TT>float</TT></TD>
+ </TR>
 
-    <TR>
-      <TD>xsd:hexBinary</TD>
+ <TR>
+   <TD>xsd:hexBinary</TD>
 
-      <TD><TT>byte[]</TT></TD>
-    </TR>
+   <TD><TT>byte[]</TT></TD>
+ </TR>
 
-    <TR>
-      <TD>xsd:int</TD>
+ <TR>
+   <TD>xsd:int</TD>
 
-      <TD><TT>int</TT></TD>
-    </TR>
+   <TD><TT>int</TT></TD>
+ </TR>
 
-    <TR>
-      <TD>xsd:integer</TD>
+ <TR>
+   <TD>xsd:integer</TD>
 
-      <TD><TT>java.math.BigInteger</TT></TD>
-    </TR>
+   <TD><TT>java.math.BigInteger</TT></TD>
+ </TR>
 
-    <TR>
-      <TD>xsd:long</TD>
+ <TR>
+   <TD>xsd:long</TD>
 
-      <TD><TT>long</TT></TD>
-    </TR>
+   <TD><TT>long</TT></TD>
+ </TR>
 
-    <TR>
-      <TD>xsd:QName</TD>
+ <TR>
+   <TD>xsd:QName</TD>
 
-      <TD><TT>javax.xml.namespace.QName</TT></TD>
-    </TR>
+   <TD><TT>javax.xml.namespace.QName</TT></TD>
+ </TR>
 
-    <TR>
-      <TD>xsd:short</TD>
+ <TR>
+   <TD>xsd:short</TD>
 
-      <TD><TT>short</TT></TD>
-    </TR>
+   <TD><TT>short</TT></TD>
+ </TR>
 
-    <TR>
-      <TD>xsd:string</TD>
+ <TR>
+   <TD>xsd:string</TD>
 
-      <TD><TT>java.lang.String</TT></TD>
-    </TR>
+   <TD><TT>java.lang.String</TT></TD>
+ </TR>
   </TABLE>
 
   <P>If the WSDL says that an object can be <TT>nillable</TT>, that
@@ -1131,7 +1132,7 @@ public Element[] echoElements(Element [] elems)
   looks like this:</P>
   <PRE class="xml">
 &lt;beanMapping qname="ns:local" xmlns:ns="someNamespace"
-             languageSpecificType="java:my.java.thingy"/&gt;
+    languageSpecificType="java:my.java.thingy"/&gt;
 </PRE>
 
   <P>The &lt;beanMapping&gt; tag maps a Java class (presumably a
@@ -1163,7 +1164,8 @@ You seem to have ordered the following:
 1 of item : mp3jukebox
 4 of item : 1600mahBattery
 
-If this had been a real order processing system, we'd probably have charged you about now.
+If this had been a real order processing system, we'd probably have charged
+you about now.
 %
 
 </PRE>
@@ -1194,10 +1196,10 @@ If this had been a real order processing system, we'd probably have charged you 
   this with a typeMapping tag in WSDD, which looks like this:</P>
   <PRE class="xml">
 &lt;typeMapping qname="ns:local" xmlns:ns="someNamespace"
-             languageSpecificType="java:my.java.thingy"
-             serializer="my.java.Serializer"
-             deserializer="my.java.DeserializerFactory"
-             encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
+    languageSpecificType="java:my.java.thingy"
+    serializer="my.java.Serializer"
+    deserializer="my.java.DeserializerFactory"
+    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
 </PRE>
 
   <P>This looks a lot like the &lt;beanMapping&gt; tag we saw
@@ -1232,17 +1234,17 @@ If this had been a real order processing system, we'd probably have charged you 
   <P>Axis supports WSDL in three ways:</P>
 
   <OL>
-    <LI>When you deploy a service in Axis, users may then access
-    your service's URL with a standard web browser and by appending
-    "?WSDL" to the end of the URL, they will obtain an
-    automatically-generated WSDL document which describes your
-    service.</LI>
+ <LI>When you deploy a service in Axis, users may then access
+ your service's URL with a standard web browser and by appending
+ "?WSDL" to the end of the URL, they will obtain an
+ automatically-generated WSDL document which describes your
+ service.</LI>
 
-    <LI>We provide a "WSDL2Java" tool which will build Java proxies
-    and skeletons for services with WSDL descriptions.</LI>
+ <LI>We provide a "WSDL2Java" tool which will build Java proxies
+ and skeletons for services with WSDL descriptions.</LI>
 
-    <LI>We provide a "Java2WSDL" tool which will build WSDL from
-    Java classes.</LI>
+ <LI>We provide a "Java2WSDL" tool which will build WSDL from
+ Java classes.</LI>
   </OL>
 
   <H3><A name=
@@ -1301,48 +1303,48 @@ If this had been a real order processing system, we'd probably have charged you 
   Namespaces will be discussed in detail later.</P>
 
   <TABLE border cols="2" width="100%">
-    <TR>
-      <TD><B>WSDL clause</B></TD>
+ <TR>
+   <TD><B>WSDL clause</B></TD>
 
-      <TD><B>Java class(es) generated</B></TD>
-    </TR>
+   <TD><B>Java class(es) generated</B></TD>
+ </TR>
 
-    <TR>
-      <TD>For each entry in the type section</TD>
+ <TR>
+   <TD>For each entry in the type section</TD>
 
-      <TD>A java class</TD>
-    </TR>
+   <TD>A java class</TD>
+ </TR>
 
-    <TR>
-      <TD></TD>
+ <TR>
+   <TD></TD>
 
-      <TD>A holder if this type is used as an inout/out
-      parameter</TD>
-    </TR>
+   <TD>A holder if this type is used as an inout/out
+   parameter</TD>
+ </TR>
 
-    <TR>
-      <TD>For each portType</TD>
+ <TR>
+   <TD>For each portType</TD>
 
-      <TD>A java interface</TD>
-    </TR>
+   <TD>A java interface</TD>
+ </TR>
 
-    <TR>
-      <TD>For each binding</TD>
+ <TR>
+   <TD>For each binding</TD>
 
-      <TD>A stub class</TD>
-    </TR>
+   <TD>A stub class</TD>
+ </TR>
 
-    <TR>
-      <TD>For each service</TD>
+ <TR>
+   <TD>For each service</TD>
 
-      <TD>A service interface</TD>
-    </TR>
+   <TD>A service interface</TD>
+ </TR>
 
-    <TR>
-      <TD></TD>
+ <TR>
+   <TD></TD>
 
-      <TD>A service implementation (the locator)</TD>
-    </TR>
+   <TD>A service implementation (the locator)</TD>
+ </TR>
   </TABLE>
 
   <P>There is an <A href="ant/axis-wsdl2java.html">Ant Task</A> to
@@ -1358,9 +1360,9 @@ If this had been a real order processing system, we'd probably have charged you 
   <PRE class="example">
 &lt;xsd:complexType name="phone"&gt;
   &lt;xsd:all&gt;
-    &lt;xsd:element name="areaCode" type="xsd:int"/&gt;
-    &lt;xsd:element name="exchange" type="xsd:string"/&gt;
-    &lt;xsd:element name="number" type="xsd:string"/&gt;
+ &lt;xsd:element name="areaCode" type="xsd:int"/&gt;
+ &lt;xsd:element name="exchange" type="xsd:string"/&gt;
+ &lt;xsd:element name="number" type="xsd:string"/&gt;
   &lt;/xsd:all&gt;
 &lt;/xsd:complexType&gt;
 </PRE>
@@ -1368,15 +1370,15 @@ If this had been a real order processing system, we'd probably have charged you 
   <P>WSDL2Java will generate:</P>
   <PRE class="example">
 public class Phone implements java.io.Serializable {
-    public Phone() {...}
-    public int getAreaCode() {...}
-    public void setAreaCode(int areaCode) {...}
-    public java.lang.String getExchange() {...}
-    public void setExchange(java.lang.String exchange) {...}
-    public java.lang.String getNumber() {...}
-    public void setNumber(java.lang.String number) {...}
-    public boolean equals(Object obj) {...}
-    public int hashCode() {...}
+ public Phone() {...}
+ public int getAreaCode() {...}
+ public void setAreaCode(int areaCode) {...}
+ public java.lang.String getExchange() {...}
+ public void setExchange(java.lang.String exchange) {...}
+ public java.lang.String getNumber() {...}
+ public void setNumber(java.lang.String number) {...}
+ public boolean equals(Object obj) {...}
+ public int hashCode() {...}
 }
 </PRE>
 
@@ -1423,15 +1425,15 @@ public class Phone implements java.io.Serializable {
   <PRE class="example">
 package samples.addr.holders;
 public final class PhoneHolder implements javax.xml.rpc.holders.Holder {
-    public samples.addr.Phone value;
+ public samples.addr.Phone value;
 
-    public PhoneHolder()
-    {
-    }
+ public PhoneHolder()
+ {
+ }
 
-    public PhoneHolder(samples.addr.Phone value) {
-        this.value = value;
-    }
+ public PhoneHolder(samples.addr.Phone value) {
+  this.value = value;
+ }
 }
 </PRE>
 
@@ -1457,8 +1459,8 @@ public final class PhoneHolder implements javax.xml.rpc.holders.Holder {
 &lt;/message&gt;
 &lt;portType name="AddressBook"&gt;
   &lt;operation name="addEntry"&gt;
-    &lt;input message="tns:AddEntryRequest"/&gt;
-    &lt;output message="tns:empty"/&gt;
+ &lt;input message="tns:AddEntryRequest"/&gt;
+ &lt;output message="tns:empty"/&gt;
   &lt;/operation&gt;
 &lt;/portType&gt;
 </PRE>
@@ -1466,7 +1468,8 @@ public final class PhoneHolder implements javax.xml.rpc.holders.Holder {
   <P>WSDL2Java will generate:</P>
   <PRE class="example">
 public interface AddressBook extends java.rmi.Remote {
-    public void addEntry(String name, Address address) throws java.rmi.RemoteException;
+ public void addEntry(String name, Address address) throws
+  java.rmi.RemoteException;
 }
 </PRE>
 
@@ -1526,21 +1529,21 @@ public interface AddressBook extends java.rmi.Remote {
   <P>WSDL2Java will generate:</P>
   <PRE class="example">
 public class AddressBookSOAPBindingStub extends org.apache.axis.client.Stub
-                                        implements AddressBook {
-    public AddressBookSOAPBindingStub() throws org.apache.axis.AxisFault
-    {...}
+          implements AddressBook {
+ public AddressBookSOAPBindingStub() throws org.apache.axis.AxisFault
+ {...}
 
-    public AddressBookSOAPBindingStub(URL endpointURL, 
-                                      javax.xml.rpc.Service service)
-        throws org.apache.axis.AxisFault
-    {...}
+ public AddressBookSOAPBindingStub(URL endpointURL, 
+           javax.xml.rpc.Service service)
+  throws org.apache.axis.AxisFault
+ {...}
 <BR>
-    public AddressBookSOAPBindingStub(javax.xml.rpc.Service service)
-        throws org.apache.axis.AxisFault
-    {...}
+ public AddressBookSOAPBindingStub(javax.xml.rpc.Service service)
+  throws org.apache.axis.AxisFault
+ {...}
 <BR>
-    public void addEntry(String name, Address address) throws RemoteException
-    {...}<BR>
+ public void addEntry(String name, Address address) throws RemoteException
+ {...}<BR>
 }
 </PRE>
 
@@ -1554,7 +1557,7 @@ public class AddressBookSOAPBindingStub extends org.apache.axis.client.Stub
   <PRE class="example">
 &lt;service name="AddressBookService"&gt;
   &lt;port name="AddressBook" binding="tns:AddressBookSOAPBinding"&gt;
-    &lt;soap:address location="http://localhost:8080/axis/services/AddressBook"/&gt;
+ &lt;soap:address location="http://localhost:8080/axis/services/AddressBook"/&gt;
   &lt;/port&gt;
 &lt;/service&gt;
 </PRE>
@@ -1562,11 +1565,12 @@ public class AddressBookSOAPBindingStub extends org.apache.axis.client.Stub
   <P>WSDL2Java will generate the service interface:</P>
   <PRE class="example">
 public interface AddressBookService extends javax.xml.rpc.Service {
-    public String getAddressBookAddress();
+ public String getAddressBookAddress();
 <BR>
-    public AddressBook getAddressBook() throws javax.xml.rpc.ServiceException;
+ public AddressBook getAddressBook() throws javax.xml.rpc.ServiceException;
 <BR>
-    public AddressBook getAddressBook(URL portAddress) throws javax.xml.rpc.ServiceException;
+ public AddressBook getAddressBook(URL portAddress)
+  throws javax.xml.rpc.ServiceException;
 }
 </PRE>
 
@@ -1574,8 +1578,8 @@ public interface AddressBookService extends javax.xml.rpc.Service {
   interface:</P>
   <PRE class="example">
 public class AddressBookServiceLocator extends org.apache.axis.client.Service
-                                       implements AddressBookService {
-    ...
+            implements AddressBookService {
+ ...
 }
 </PRE>
 
@@ -1591,17 +1595,17 @@ public class AddressBookServiceLocator extends org.apache.axis.client.Service
   <PRE class="example">
 public class Tester
 {
-    public static void main(String [] args) throws Exception {
-        // Make a service
-        AddressBookService service = new AddressBookServiceLocator();
+ public static void main(String [] args) throws Exception {
+  // Make a service
+  AddressBookService service = new AddressBookServiceLocator();
  
-        // Now use the service to get a stub which implements the SDI.
-        AddressBook port = service.getAddressBook();
+  // Now use the service to get a stub which implements the SDI.
+  AddressBook port = service.getAddressBook();
  
-        // Make the actual call
-        Address address = new Address(...);
-        port.addEntry("Russell Butek", address);
-    }<BR>
+  // Make the actual call
+  Address address = new Address(...);
+  port.addEntry("Russell Butek", address);
+ }<BR>
 }
 </PRE>
 
@@ -1613,7 +1617,8 @@ public class Tester
   "--server-side --skeletonDeploy true" options to WSDL2Java. For
   instance, using the AddressBook.wsdl as we had above:</P>
   <PRE class="example">
-% java org.apache.axis.wsdl.WSDL2Java --server-side --skeletonDeploy true AddressBook.wsdl
+% java org.apache.axis.wsdl.WSDL2Java --server-side
+  --skeletonDeploy true AddressBook.wsdl
 </PRE>
 
   <P>You will see that WSDL2Java generates all the classes that
@@ -1623,35 +1628,35 @@ public class Tester
    </P>
 
   <TABLE border cols="2" width="100%">
-    <TR>
-      <TD><B>WSDL clause</B></TD>
+ <TR>
+   <TD><B>WSDL clause</B></TD>
 
-      <TD><B>Java class(es) generated</B></TD>
-    </TR>
+   <TD><B>Java class(es) generated</B></TD>
+ </TR>
 
-    <TR>
-      <TD>For each binding</TD>
+ <TR>
+   <TD>For each binding</TD>
 
-      <TD>A skeleton class</TD>
-    </TR>
+   <TD>A skeleton class</TD>
+ </TR>
 
-    <TR>
-      <TD></TD>
+ <TR>
+   <TD></TD>
 
-      <TD>An implementation template class</TD>
-    </TR>
+   <TD>An implementation template class</TD>
+ </TR>
 
-    <TR>
-      <TD>For all services</TD>
+ <TR>
+   <TD>For all services</TD>
 
-      <TD>One deploy.wsdd file</TD>
-    </TR>
+   <TD>One deploy.wsdd file</TD>
+ </TR>
 
-    <TR>
-      <TD></TD>
+ <TR>
+   <TD></TD>
 
-      <TD>One undeploy.wsdd file</TD>
-    </TR>
+   <TD>One undeploy.wsdd file</TD>
+ </TR>
   </TABLE>
 
   <P>If you don't specify the "--skeletonDeploy true" option, a
@@ -1670,29 +1675,29 @@ public class Tester
    </P>
 
   <TABLE border cols="2" width="100%">
-    <TR>
-      <TD><B>WSDL clause</B></TD>
+ <TR>
+   <TD><B>WSDL clause</B></TD>
 
-      <TD><B>Java class(es) generated</B></TD>
-    </TR>
+   <TD><B>Java class(es) generated</B></TD>
+ </TR>
 
-    <TR>
-      <TD>For each binding</TD>
+ <TR>
+   <TD>For each binding</TD>
 
-      <TD>An implementation template class</TD>
-    </TR>
+   <TD>An implementation template class</TD>
+ </TR>
 
-    <TR>
-      <TD>For all services</TD>
+ <TR>
+   <TD>For all services</TD>
 
-      <TD>One deploy.wsdd file with operation meta data</TD>
-    </TR>
+   <TD>One deploy.wsdd file with operation meta data</TD>
+ </TR>
 
-    <TR>
-      <TD></TD>
+ <TR>
+   <TD></TD>
 
-      <TD>One undeploy.wsdd file</TD>
-    </TR>
+   <TD>One undeploy.wsdd file</TD>
+ </TR>
   </TABLE>
 
   <H4>Bindings</H4>
@@ -1705,22 +1710,22 @@ public class Tester
   AddressBook binding, WSDL2Java will generate:</P>
   <PRE class="example">
 public class AddressBookSOAPBindingSkeleton implements AddressBook,
-                                                       org.apache.axis.wsdl.Skeleton {
-    private AddressBook impl;
+           org.apache.axis.wsdl.Skeleton {
+ private AddressBook impl;
  
-    public AddressBookSOAPBindingSkeleton() {
-        this.impl = new AddressBookSOAPBindingImpl();
-    }
+ public AddressBookSOAPBindingSkeleton() {
+  this.impl = new AddressBookSOAPBindingImpl();
+ }
  
-    public AddressBookSOAPBindingSkeleton(AddressBook impl) {
-        this.impl = impl;
-    }
+ public AddressBookSOAPBindingSkeleton(AddressBook impl) {
+  this.impl = impl;
+ }
  
-    public void addEntry(java.lang.String name, Address address)
-        throws java.rmi.RemoteException
-    {
-        impl.addEntry(name, address);
-    }
+ public void addEntry(java.lang.String name, Address address)
+  throws java.rmi.RemoteException
+ {
+  impl.addEntry(name, address);
+ }
 }
 </PRE>
 
@@ -1741,9 +1746,9 @@ public class AddressBookSOAPBindingSkeleton implements AddressBook,
   <PRE class="example">
 public class AddressBookSOAPBindingImpl implements AddressBook {
 <BR>
-    public void addEntry(String name, Address address)
-        throws java.rmi.RemoteException {
-    }
+ public void addEntry(String name, Address address)
+  throws java.rmi.RemoteException {
+ }
 }
 </PRE>
 
@@ -1787,8 +1792,8 @@ package samples.userguide.example6;
  * Interface describing a web service to set and get Widget prices.
  **/
 public interface WidgetPrice {
-    public void setWidgetPrice(String widgetName, String price);
-    public String getWidgetPrice(String widgetName);
+ public void setWidgetPrice(String widgetName, String price);
+ public String getWidgetPrice(String widgetName);
 }
 </PRE>
 
@@ -1805,25 +1810,28 @@ public interface WidgetPrice {
   (<TT>wp.wsdl</TT>) from the interface described in the previous
   section:</P>
   <PRE class="example">
-% java org.apache.axis.wsdl.Java2WSDL -o wp.wsdl  -l"http://localhost:8080/axis/services/WidgetPrice" -n  "urn:Example6" -p"samples.userguide.example6" "urn:Example6"  samples.userguide.example6.WidgetPrice
+% java org.apache.axis.wsdl.Java2WSDL -o wp.wsdl
+  -l"http://localhost:8080/axis/services/WidgetPrice"
+  -n  "urn:Example6" -p"samples.userguide.example6" "urn:Example6"
+  samples.userguide.example6.WidgetPrice
 </PRE>
 
   <P>Where:</P>
 
   <UL>
-    <LI>-o indicates the name of the <B><I>output WSDL</I></B>
-    file</LI>
+ <LI>-o indicates the name of the <B><I>output WSDL</I></B>
+ file</LI>
 
-    <LI>-l indicates the<B><I>location of the service</I></B></LI>
+ <LI>-l indicates the<B><I>location of the service</I></B></LI>
 
-    <LI>-n is the target <B><I>namespace</I></B> of the WSDL
-    file</LI>
+ <LI>-n is the target <B><I>namespace</I></B> of the WSDL
+ file</LI>
 
-    <LI>-p indicates a mapping from the <B><I>package to a
-    namespace</I></B>.  There may be multiple mappings.</LI>
+ <LI>-p indicates a mapping from the <B><I>package to a
+ namespace</I></B>.  There may be multiple mappings.</LI>
 
-    <LI>the class specified contains the interface of the
-    webservice.</LI>
+ <LI>the class specified contains the interface of the
+ webservice.</LI>
   </UL>
 
   <P>The output WSDL document will contain the appropriate WSDL
@@ -1847,46 +1855,47 @@ public interface WidgetPrice {
   client/server bindings for the web service (see <A href=
   "#WSDL2Java:%20Building%20stubs,%20skeletons,%20and%20data">WSDL2Java</A>):</P>
   <PRE class="example">
-% java org.apache.axis.wsdl.WSDL2Java -o . -d Session -s -S true  -Nurn:Example6 samples.userguide.example6 wp.wsdl
+% java org.apache.axis.wsdl.WSDL2Java -o . -d Session -s -S true
+  -Nurn:Example6 samples.userguide.example6 wp.wsdl
 </PRE>
 
   <P>This will generate the following files:</P>
 
   <UL>
-    <LI><B><TT>WidgetPriceSoapBindingImpl.java</TT></B> : Java file
-    containing the default server implementation of the WidgetPrice
-    web service.</LI>
+ <LI><B><TT>WidgetPriceSoapBindingImpl.java</TT></B> : Java file
+ containing the default server implementation of the WidgetPrice
+ web service.</LI>
 
-    <LI style="list-style: none"><BR>
-    You will need to modify the *SoapBindingImpl file to add your
-    implementation (see  <A href=
-    "http://cvs.apache.org/viewcvs.cgi/*checkout*/ws-axis/java//samples/userguide/example6/WidgetPriceSoapBindingImpl.java">
-    samples/userguide/example6/WidgetPriceSoapBindingImpl.java</A>
-    ).</LI>
+ <LI style="list-style: none"><BR>
+ You will need to modify the *SoapBindingImpl file to add your
+ implementation (see  <A href=
+ "http://cvs.apache.org/viewcvs.cgi/*checkout*/ws-axis/java//samples/userguide/example6/WidgetPriceSoapBindingImpl.java">
+ samples/userguide/example6/WidgetPriceSoapBindingImpl.java</A>
+ ).</LI>
 
-    <LI><B><TT>WidgetPrice.java</TT></B>:  New interface file that
-    contains the appropriate <B><TT>java.rmi.Remote</TT></B>
-    usages.</LI>
+ <LI><B><TT>WidgetPrice.java</TT></B>:  New interface file that
+ contains the appropriate <B><TT>java.rmi.Remote</TT></B>
+ usages.</LI>
 
-    <LI><B><TT>WidgetPriceService.java</TT></B>: Java file
-    containing the client side service interface.</LI>
+ <LI><B><TT>WidgetPriceService.java</TT></B>: Java file
+ containing the client side service interface.</LI>
 
-    <LI><B><TT>WidgetPriceServiceLocator.java</TT></B>: Java file
-    containing the client side service implementation class.</LI>
+ <LI><B><TT>WidgetPriceServiceLocator.java</TT></B>: Java file
+ containing the client side service implementation class.</LI>
 
-    <LI><B><TT>WidgetPriceSoapBindingSkeleton.java</TT></B>: Server
-    side skeleton.</LI>
+ <LI><B><TT>WidgetPriceSoapBindingSkeleton.java</TT></B>: Server
+ side skeleton.</LI>
 
-    <LI><B><TT>WidgetPriceSoapBindingStub.java</TT></B>: Client
-    side stub.</LI>
+ <LI><B><TT>WidgetPriceSoapBindingStub.java</TT></B>: Client
+ side stub.</LI>
 
-    <LI><B><TT>deploy.wsdd</TT></B>: Deployment descriptor</LI>
+ <LI><B><TT>deploy.wsdd</TT></B>: Deployment descriptor</LI>
 
-    <LI><B><TT>undeploy.wsdd</TT></B>: Undeployment descriptor</LI>
+ <LI><B><TT>undeploy.wsdd</TT></B>: Undeployment descriptor</LI>
 
-    <LI>(data types):  Java files will be produced for all of the
-    other types and holders necessary for the web service.  There
-    are no additional files for the WidgetPrice web service.</LI>
+ <LI>(data types):  Java files will be produced for all of the
+ other types and holders necessary for the web service.  There
+ are no additional files for the WidgetPrice web service.</LI>
   </UL>
 
   <P>Now you have all of the necessary files to build your
@@ -1917,204 +1926,204 @@ public interface WidgetPrice {
   <P>The current list of published interfaces is as follows:</P>
 
   <UL>
-    <LI>JAX-RPC interfaces. These interfaces are from JAX-RPC 1.0
-    specification, and will change only when new versions of the
-    specification are released.
+ <LI>JAX-RPC interfaces. These interfaces are from JAX-RPC 1.0
+ specification, and will change only when new versions of the
+ specification are released.
 
-      <UL>
-        <LI>javax.xml.messaging.Endpoint</LI>
+   <UL>
+  <LI>javax.xml.messaging.Endpoint</LI>
 
-        <LI>javax.xml.messaging.URLEndpoint</LI>
+  <LI>javax.xml.messaging.URLEndpoint</LI>
 
-        <LI>javax.xml.rpc.Call</LI>
+  <LI>javax.xml.rpc.Call</LI>
 
-        <LI>javax.xml.rpc.FaultException</LI>
+  <LI>javax.xml.rpc.FaultException</LI>
 
-        <LI>javax.xml.rpc.JAXRPCException</LI>
+  <LI>javax.xml.rpc.JAXRPCException</LI>
 
-        <LI>javax.xml.rpc.ParameterMode</LI>
+  <LI>javax.xml.rpc.ParameterMode</LI>
 
-        <LI>javax.xml.rpc.Service</LI>
+  <LI>javax.xml.rpc.Service</LI>
 
-        <LI>javax.xml.rpc.ServiceException</LI>
+  <LI>javax.xml.rpc.ServiceException</LI>
 
-        <LI>javax.xml.rpc.ServiceFactory</LI>
+  <LI>javax.xml.rpc.ServiceFactory</LI>
 
-        <LI>javax.xml.rpc.Stub</LI>
+  <LI>javax.xml.rpc.Stub</LI>
 
-        <LI>javax.xml.rpc.encoding.DeserializationContext</LI>
+  <LI>javax.xml.rpc.encoding.DeserializationContext</LI>
 
-        <LI>javax.xml.rpc.encoding.Deserializer</LI>
+  <LI>javax.xml.rpc.encoding.Deserializer</LI>
 
-        <LI>javax.xml.rpc.encoding.DeserializerFactory</LI>
+  <LI>javax.xml.rpc.encoding.DeserializerFactory</LI>
 
-        <LI>javax.xml.rpc.encoding.SerializationContext</LI>
+  <LI>javax.xml.rpc.encoding.SerializationContext</LI>
 
-        <LI>javax.xml.rpc.encoding.Serializer</LI>
+  <LI>javax.xml.rpc.encoding.Serializer</LI>
 
-        <LI>javax.xml.rpc.encoding.SerializerFactory</LI>
+  <LI>javax.xml.rpc.encoding.SerializerFactory</LI>
 
-        <LI>javax.xml.rpc.encoding.TypeMapping</LI>
+  <LI>javax.xml.rpc.encoding.TypeMapping</LI>
 
-        <LI>javax.xml.rpc.encoding.TypeMappingRegistry</LI>
+  <LI>javax.xml.rpc.encoding.TypeMappingRegistry</LI>
 
-        <LI>javax.xml.rpc.handler.Handler</LI>
+  <LI>javax.xml.rpc.handler.Handler</LI>
 
-        <LI>javax.xml.rpc.handler.HandlerChain</LI>
+  <LI>javax.xml.rpc.handler.HandlerChain</LI>
 
-        <LI>javax.xml.rpc.handler.HandlerInfo</LI>
+  <LI>javax.xml.rpc.handler.HandlerInfo</LI>
 
-        <LI>javax.xml.rpc.handler.HandlerRegistry</LI>
+  <LI>javax.xml.rpc.handler.HandlerRegistry</LI>
 
-        <LI>javax.xml.rpc.handler.MessageContext</LI>
+  <LI>javax.xml.rpc.handler.MessageContext</LI>
 
-        <LI>javax.xml.rpc.handler.soap.SOAPMessageContext</LI>
+  <LI>javax.xml.rpc.handler.soap.SOAPMessageContext</LI>
 
-        <LI>javax.xml.rpc.holders.BigDecimalHolder</LI>
+  <LI>javax.xml.rpc.holders.BigDecimalHolder</LI>
 
-        <LI>javax.xml.rpc.holders.BigIntegerHolder</LI>
+  <LI>javax.xml.rpc.holders.BigIntegerHolder</LI>
 
-        <LI>javax.xml.rpc.holders.BooleanHolder</LI>
+  <LI>javax.xml.rpc.holders.BooleanHolder</LI>
 
-        <LI>javax.xml.rpc.holders.BooleanWrapperHolder</LI>
+  <LI>javax.xml.rpc.holders.BooleanWrapperHolder</LI>
 
-        <LI>javax.xml.rpc.holders.ByteArrayHolder</LI>
+  <LI>javax.xml.rpc.holders.ByteArrayHolder</LI>
 
-        <LI>javax.xml.rpc.holders.ByteHolder</LI>
+  <LI>javax.xml.rpc.holders.ByteHolder</LI>
 
-        <LI>javax.xml.rpc.holders.ByteWrapperArrayHolder</LI>
+  <LI>javax.xml.rpc.holders.ByteWrapperArrayHolder</LI>
 
-        <LI>javax.xml.rpc.holders.ByteWrapperHolder</LI>
+  <LI>javax.xml.rpc.holders.ByteWrapperHolder</LI>
 
-        <LI>javax.xml.rpc.holders.CalendarHolder</LI>
+  <LI>javax.xml.rpc.holders.CalendarHolder</LI>
 
-        <LI>javax.xml.rpc.holders.DateHolder</LI>
+  <LI>javax.xml.rpc.holders.DateHolder</LI>
 
-        <LI>javax.xml.rpc.holders.DoubleHolder</LI>
+  <LI>javax.xml.rpc.holders.DoubleHolder</LI>
 
-        <LI>javax.xml.rpc.holders.DoubleWrapperHolder</LI>
+  <LI>javax.xml.rpc.holders.DoubleWrapperHolder</LI>
 
-        <LI>javax.xml.rpc.holders.FloatHolder</LI>
+  <LI>javax.xml.rpc.holders.FloatHolder</LI>
 
-        <LI>javax.xml.rpc.holders.FloatWrapperHolder</LI>
+  <LI>javax.xml.rpc.holders.FloatWrapperHolder</LI>
 
-        <LI>javax.xml.rpc.holders.Holder</LI>
+  <LI>javax.xml.rpc.holders.Holder</LI>
 
-        <LI>javax.xml.rpc.holders.IntHolder</LI>
+  <LI>javax.xml.rpc.holders.IntHolder</LI>
 
-        <LI>javax.xml.rpc.holders.IntegerWrapperHolder</LI>
+  <LI>javax.xml.rpc.holders.IntegerWrapperHolder</LI>
 
-        <LI>javax.xml.rpc.holders.LongHolder</LI>
+  <LI>javax.xml.rpc.holders.LongHolder</LI>
 
-        <LI>javax.xml.rpc.holders.LongWrapperHolder</LI>
+  <LI>javax.xml.rpc.holders.LongWrapperHolder</LI>
 
-        <LI>javax.xml.rpc.holders.ObjectHolder</LI>
+  <LI>javax.xml.rpc.holders.ObjectHolder</LI>
 
-        <LI>javax.xml.rpc.holders.QNameHolder</LI>
+  <LI>javax.xml.rpc.holders.QNameHolder</LI>
 
-        <LI>javax.xml.rpc.holders.ShortHolder</LI>
+  <LI>javax.xml.rpc.holders.ShortHolder</LI>
 
-        <LI>javax.xml.rpc.holders.ShortWrapperHolder</LI>
+  <LI>javax.xml.rpc.holders.ShortWrapperHolder</LI>
 
-        <LI>javax.xml.rpc.holders.StringHolder</LI>
+  <LI>javax.xml.rpc.holders.StringHolder</LI>
 
-        <LI>javax.xml.rpc.namespace.QName</LI>
+  <LI>javax.xml.rpc.namespace.QName</LI>
 
-        <LI>javax.xml.rpc.server.ServiceLifecycle</LI>
+  <LI>javax.xml.rpc.server.ServiceLifecycle</LI>
 
-        <LI>javax.xml.rpc.soap.SOAPFault</LI>
+  <LI>javax.xml.rpc.soap.SOAPFault</LI>
 
-        <LI>javax.xml.rpc.soap.SOAPHeaderFault</LI>
+  <LI>javax.xml.rpc.soap.SOAPHeaderFault</LI>
 
-        <LI>javax.xml.transform.Source</LI>
-      </UL>
-    </LI>
+  <LI>javax.xml.transform.Source</LI>
+   </UL>
+ </LI>
 
-    <LI>Axis interfaces. These have less guarantees of stability:
+ <LI>Axis interfaces. These have less guarantees of stability:
 
-      <UL>
-        <LI>org.apache.axis.AxisFault</LI>
+   <UL>
+  <LI>org.apache.axis.AxisFault</LI>
 
-        <LI>org.apache.axis.Handler</LI>
+  <LI>org.apache.axis.Handler</LI>
 
-        <LI>org.apache.axis.DefaultEngineConfigurationFactory</LI>
+  <LI>org.apache.axis.DefaultEngineConfigurationFactory</LI>
 
-        <LI>org.apache.axis.EngineConfiguration</LI>
+  <LI>org.apache.axis.EngineConfiguration</LI>
 
-        <LI>org.apache.axis.EngineConfigurationFactory</LI>
+  <LI>org.apache.axis.EngineConfigurationFactory</LI>
 
-        <LI>org.apache.axis.Message</LI>
+  <LI>org.apache.axis.Message</LI>
 
-        <LI>org.apache.axis.MessageContext</LI>
+  <LI>org.apache.axis.MessageContext</LI>
 
-        <LI>org.apache.axis.SOAPPart</LI>
+  <LI>org.apache.axis.SOAPPart</LI>
 
-        <LI>org.apache.axis.client.Call</LI>
+  <LI>org.apache.axis.client.Call</LI>
 
-        <LI>org.apache.axis.client.Service</LI>
+  <LI>org.apache.axis.client.Service</LI>
 
-        <LI>org.apache.axis.client.ServiceFactory</LI>
+  <LI>org.apache.axis.client.ServiceFactory</LI>
 
-        <LI>org.apache.axis.client.Stub</LI>
+  <LI>org.apache.axis.client.Stub</LI>
 
-        <LI>org.apache.axis.client.Transport</LI>
+  <LI>org.apache.axis.client.Transport</LI>
 
-        <LI>org.apache.axis.description.TypeDesc</LI>
+  <LI>org.apache.axis.description.TypeDesc</LI>
 
-        <LI>org.apache.axis.description.AttributeDesc</LI>
+  <LI>org.apache.axis.description.AttributeDesc</LI>
 
-        <LI>org.apache.aixs.description.ElementDesc</LI>
+  <LI>org.apache.aixs.description.ElementDesc</LI>
 
-        <LI>org.apache.axis.encoding.DeserializationContext</LI>
+  <LI>org.apache.axis.encoding.DeserializationContext</LI>
 
-        <LI>org.apache.axis.encoding.Deserializer</LI>
+  <LI>org.apache.axis.encoding.Deserializer</LI>
 
-        <LI>org.apache.axis.encoding.DeserializerFactory</LI>
+  <LI>org.apache.axis.encoding.DeserializerFactory</LI>
 
-        <LI>org.apache.axis.encoding.DeserializerTarget</LI>
+  <LI>org.apache.axis.encoding.DeserializerTarget</LI>
 
-        <LI>org.apache.axis.encoding.FieldTarget</LI>
+  <LI>org.apache.axis.encoding.FieldTarget</LI>
 
-        <LI>org.apache.axis.encoding.MethodTarget</LI>
+  <LI>org.apache.axis.encoding.MethodTarget</LI>
 
-        <LI>org.apache.axis.encoding.SerializationContext</LI>
+  <LI>org.apache.axis.encoding.SerializationContext</LI>
 
-        <LI>org.apache.axis.encoding.Serializer</LI>
+  <LI>org.apache.axis.encoding.Serializer</LI>
 
-        <LI>org.apache.axis.encoding.SerializerFactory</LI>
+  <LI>org.apache.axis.encoding.SerializerFactory</LI>
 
-        <LI>org.apache.axis.encoding.SimpleType</LI>
+  <LI>org.apache.axis.encoding.SimpleType</LI>
 
-        <LI>org.apache.axis.encoding.Target</LI>
+  <LI>org.apache.axis.encoding.Target</LI>
 
-        <LI>org.apache.axis.encoding.TypeMapping</LI>
+  <LI>org.apache.axis.encoding.TypeMapping</LI>
 
-        <LI>org.apache.axis.encoding.TypeMappingRegistry</LI>
+  <LI>org.apache.axis.encoding.TypeMappingRegistry</LI>
 
-        <LI>
-        org.apache.axis.encoding.ser.BaseDeserializerFactory</LI>
+  <LI>
+  org.apache.axis.encoding.ser.BaseDeserializerFactory</LI>
 
-        <LI>org.apache.axis.encoding.ser.BaseSerializerFactory</LI>
+  <LI>org.apache.axis.encoding.ser.BaseSerializerFactory</LI>
 
-        <LI>org.apache.axis.encoding.ser.BeanPropertyTarget</LI>
+  <LI>org.apache.axis.encoding.ser.BeanPropertyTarget</LI>
 
-        <LI>org.apache.axis.encoding.ser.SimpleSerializer</LI>
+  <LI>org.apache.axis.encoding.ser.SimpleSerializer</LI>
 
-        <LI>org.apache.axis.encoding.ser.SimpleDeserializer</LI>
+  <LI>org.apache.axis.encoding.ser.SimpleDeserializer</LI>
 
-        <LI>org.apache.axis.session.Session</LI>
+  <LI>org.apache.axis.session.Session</LI>
 
-        <LI>org.apache.axis.transport.http.SimpleAxisServer</LI>
+  <LI>org.apache.axis.transport.http.SimpleAxisServer</LI>
 
-        <LI>org.apache.axis.transport.jms.SimpleJMSListener</LI>
+  <LI>org.apache.axis.transport.jms.SimpleJMSListener</LI>
 
-        <LI>org.apache.axis.utils.BeanProperty</LI>
+  <LI>org.apache.axis.utils.BeanProperty</LI>
 
-        <LI>org.apache.axis.wsdl.WSDL2Java</LI>
+  <LI>org.apache.axis.wsdl.WSDL2Java</LI>
 
-        <LI>org.apache.axis.wsdl.Java2WSDL</LI>
-      </UL>
-    </LI>
+  <LI>org.apache.axis.wsdl.Java2WSDL</LI>
+   </UL>
+ </LI>
   </UL>
 
   <H2><A name="newbie"></A>Newbie Tips: Finding Your Way
@@ -2133,36 +2142,36 @@ public interface WidgetPrice {
   <P>Here are the big categories.</P>
 
   <UL>
-    <LI><A href="http://cvs.apache.org/viewcvs.cgi/*checkout*/ws-axis/java/samples/"><B>The samples.</B></A> These
-    examples are complete with deployment descriptors and often
-    contain both client and server code.</LI>
+ <LI><A href="http://cvs.apache.org/viewcvs.cgi/*checkout*/ws-axis/java/samples/"><B>The samples.</B></A> These
+ examples are complete with deployment descriptors and often
+ contain both client and server code.</LI>
 
-    <LI><B>The Javadocs.</B> Full Javadocs are included with the
-    binary distribution. The Javadocs can be intimidating at first,
-    but once you know the major user classes, they are one of the
-    fastest ways to an answer.</LI>
+ <LI><B>The Javadocs.</B> Full Javadocs are included with the
+ binary distribution. The Javadocs can be intimidating at first,
+ but once you know the major user classes, they are one of the
+ fastest ways to an answer.</LI>
 
-    <LI><B><A href="http://ws.apache.org/axis/mail.html">The
-    mailing list archives.</A></B> If you know what you want but
-    don't know what it's called in Axis, this is the best place to
-    look. Chances are someone has wanted the same thing and someone
-    else has used (or developed) Axis long enough know the
-    name.</LI>
+ <LI><B><A href="http://ws.apache.org/axis/mail.html">The
+ mailing list archives.</A></B> If you know what you want but
+ don't know what it's called in Axis, this is the best place to
+ look. Chances are someone has wanted the same thing and someone
+ else has used (or developed) Axis long enough know the
+ name.</LI>
 
-    <LI>Consult the <A href="http://ws.apache.org/axis">Axis web
-    site</A> for updated documentation and the <A href=
-    "http://nagoya.apache.org/wiki/apachewiki.cgi?AxisProjectPages">
-    Axis Wiki</A> for its Frequently Asked Questions (FAQ),
-    installation notes, interoperability issues lists, and other
-    useful information.</LI>
+ <LI>Consult the <A href="http://ws.apache.org/axis">Axis web
+ site</A> for updated documentation and the <A href=
+ "http://nagoya.apache.org/wiki/apachewiki.cgi?AxisProjectPages">
+ Axis Wiki</A> for its Frequently Asked Questions (FAQ),
+ installation notes, interoperability issues lists, and other
+ useful information.</LI>
 
-    <LI><B>WSDL2Java.</B> Point WSDL2Java at a known webservice
-    that does some of the things you want to do. See what comes
-    out. This is useful even if you will be writing the actual
-    service or client from scratch. If you want nice,
-    human-readable descriptions of existing web services, try
-    <A href=
-    "http://www.xmethods.net">http://www.xmethods.net</A>.</LI>
+ <LI><B>WSDL2Java.</B> Point WSDL2Java at a known webservice
+ that does some of the things you want to do. See what comes
+ out. This is useful even if you will be writing the actual
+ service or client from scratch. If you want nice,
+ human-readable descriptions of existing web services, try
+ <A href=
+ "http://www.xmethods.net">http://www.xmethods.net</A>.</LI>
   </UL>
 
   <H3>Classes to Know</H3>
@@ -2175,32 +2184,32 @@ public interface WidgetPrice {
   the MessageContext. Here Axis stores:</P>
 
   <UL>
-    <LI>A reference to the AxisEngine</LI>
+ <LI>A reference to the AxisEngine</LI>
 
-    <LI>The request and response messages
-    (<CODE>org.apache.axis.Message</CODE> objects available via
-    getter and setter methods)</LI>
+ <LI>The request and response messages
+ (<CODE>org.apache.axis.Message</CODE> objects available via
+ getter and setter methods)</LI>
 
-    <LI>Information about statefulness and service scope (whether
-    the service is maintaining session information, etc.)</LI>
+ <LI>Information about statefulness and service scope (whether
+ the service is maintaining session information, etc.)</LI>
 
-    <LI>The current status of processing (whether or not the
-    "pivot" has been passed, which determines whether the request
-    or response is the current message)</LI>
+ <LI>The current status of processing (whether or not the
+ "pivot" has been passed, which determines whether the request
+ or response is the current message)</LI>
 
-    <LI>Authentication information (username and password, which
-    can be provided by a servlet container or other means)</LI>
+ <LI>Authentication information (username and password, which
+ can be provided by a servlet container or other means)</LI>
 
-    <LI>Properties galore. Almost anything you would want to know
-    about the message can be retrieved via
-    <CODE>MessageContext.getProperty()</CODE>. You only need to
-    know the name of the property. This can be tricky, but it is
-    usually a constant, like those defined in
-    <CODE>org.apache.axis.transport.http.HTTPConstants</CODE>. So,
-    for example, to retrieve the ServletContext for the Axis
-    Servlet, you would want:
-    <CODE>((HttpServlet)msgC.getProperty(HTTPConstants.MC_HTTP_SERVLET)).getServletContext();</CODE><BR>
-    </LI>
+ <LI>Properties galore. Almost anything you would want to know
+ about the message can be retrieved via
+ <CODE>MessageContext.getProperty()</CODE>. You only need to
+ know the name of the property. This can be tricky, but it is
+ usually a constant, like those defined in
+ <CODE>org.apache.axis.transport.http.HTTPConstants</CODE>. So,
+ for example, to retrieve the ServletContext for the Axis
+ Servlet, you would want:
+ <CODE>((HttpServlet)msgC.getProperty(HTTPConstants.MC_HTTP_SERVLET)).getServletContext();</CODE><BR>
+ </LI>
   </UL>
 
   <P>From within your service, the current MessageContext object is
@@ -2218,15 +2227,15 @@ public interface WidgetPrice {
   above. A Message has:</P>
 
   <UL>
-    <LI>MIME headers (if the message itself has MIME
-    information)</LI>
+ <LI>MIME headers (if the message itself has MIME
+ information)</LI>
 
-    <LI>Attachments (if the message itself has attachments)</LI>
+ <LI>Attachments (if the message itself has attachments)</LI>
 
-    <LI>A SOAPPart (and a convenience method for quick retrieval of
-    the SOAPPart's SOAPEnvelope). The SOAPPart gives you access to
-    the SOAP "guts" of the message (everything inside the
-    &lt;soap:Envelope&gt; tags)</LI>
+ <LI>A SOAPPart (and a convenience method for quick retrieval of
+ the SOAPPart's SOAPEnvelope). The SOAPPart gives you access to
+ the SOAP "guts" of the message (everything inside the
+ &lt;soap:Envelope&gt; tags)</LI>
   </UL>
 
   <H4>org.apache.axis.SOAPEnvelope</H4>
@@ -2255,7 +2264,7 @@ public interface WidgetPrice {
   which looks like this:</P>
 
   <CENTER>
-    <P><IMG src="images/tcpmon1.jpg" height="599" width="599"></P>
+ <P><IMG src="images/tcpmon1.jpg" height="599" width="599"></P>
   </CENTER>
 
   <P>To use the program, you should select a local port which
@@ -2267,7 +2276,7 @@ public interface WidgetPrice {
   something like this:</P>
 
   <CENTER>
-    <P><IMG src="images/tcpmon2.jpg" height="600" width="599"></P>
+ <P><IMG src="images/tcpmon2.jpg" height="600" width="599"></P>
   </CENTER>
 
   <P>Now each time a SOAP connection is made to the local port, you
@@ -2321,32 +2330,32 @@ public interface WidgetPrice {
   <H2><A name="Glossary">Glossary</A></H2>
 
   <DL>
-    <DT><I>Handler</I></DT>
+ <DT><I>Handler</I></DT>
 
-    <DD>A reusable class which is responsible for processing a
-    MessageContext in some custom way. The Axis engine invokes a
-    series of Handlers whenever a request comes in from a client or
-    a transport listener.</DD>
+ <DD>A reusable class which is responsible for processing a
+ MessageContext in some custom way. The Axis engine invokes a
+ series of Handlers whenever a request comes in from a client or
+ a transport listener.</DD>
 
-    <DT><I>SOAP</I></DT>
+ <DT><I>SOAP</I></DT>
 
-    <DD>The Simple Object Access Protocol (yes, despite the fact
-    that it sometimes doesn't seem so simple, and doesn't have
-    anything to do with objects... :)). You can read the SOAP 1.1
-    specification at <A href=
-    "http://www.w3.org/TR/SOAP">http://www.w3.org/TR/SOAP</A>. The
-    W3C is currently in the midst of work on SOAP 1.2, under the
-    auspices of the <A href="http://www.w3.org/2000/xp/Group/">XML
-    Protocol Group</A>.</DD>
+ <DD>The Simple Object Access Protocol (yes, despite the fact
+ that it sometimes doesn't seem so simple, and doesn't have
+ anything to do with objects... :)). You can read the SOAP 1.1
+ specification at <A href=
+ "http://www.w3.org/TR/SOAP">http://www.w3.org/TR/SOAP</A>. The
+ W3C is currently in the midst of work on SOAP 1.2, under the
+ auspices of the <A href="http://www.w3.org/2000/xp/Group/">XML
+ Protocol Group</A>.</DD>
 
-    <DT><I>Provider</I></DT>
+ <DT><I>Provider</I></DT>
 
-    <DD>A provider is the "back-end" Handler which is responsible
-    for actually performing the "meat" of the desired SOAP
-    operation. Typically this means calling a method on some
-    back-end service object. The two commonly used providers are
-    RPCProvider and MsgProvider, both in the
-    org.apache.axis.providers.java package.</DD>
+ <DD>A provider is the "back-end" Handler which is responsible
+ for actually performing the "meat" of the desired SOAP
+ operation. Typically this means calling a method on some
+ back-end service object. The two commonly used providers are
+ RPCProvider and MsgProvider, both in the
+ org.apache.axis.providers.java package.</DD>
   </DL>
 </BODY>
 </HTML>
