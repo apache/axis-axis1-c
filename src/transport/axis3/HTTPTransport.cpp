@@ -942,12 +942,7 @@ const char * HTTPTransport::getServiceName()
     return NULL;
 }
 
-/* HTTPTransport::getProtocol() Is a public method to return the HTTP protocol
- * type.
- *
- * @return AXIS_PROTOCOL_TYPE Type is an enumerated type for valid HTTP
- * protocols (currently this method will always return APTHTTP1_1).
- */
+
 AXIS_PROTOCOL_TYPE HTTPTransport::getProtocol()
 {
     return m_eProtocolType;

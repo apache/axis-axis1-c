@@ -58,7 +58,18 @@ class HTTPTransport:public SOAPTransport
     void					setSessionId( const char * pcSessionId);
     const char *			getSessionId();
     const char *			getServiceName ();
+    /* HTTPTransport::getProtocol() Is a public method to return the HTTP protocol
+	 * type.
+	 *
+	 * @return AXIS_PROTOCOL_TYPE Type is an enumerated type for valid HTTP
+	 * protocols
+	 */
     AXIS_PROTOCOL_TYPE		getProtocol();
+    /* HTTPTransport::setProtocol() Is a public method to set the HTTP protocol
+	 * type.
+	 *
+	 * @return AXIS_SUCCESS if the set worked and the protocol is supported AXIS_FAIL otherwise
+	 */
     int						setProtocol( AXIS_PROTOCOL_TYPE eProtocol);
     int						getSubProtocol();
     AXIS_TRANSPORT_STATUS	flushOutput() throw (HTTPTransportException);

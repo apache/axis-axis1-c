@@ -292,15 +292,33 @@ int Call::unInitialize ()
 
 int Call::setProtocol (AXIS_PROTOCOL_TYPE protocol)
 {
-    m_nTransportType = protocol;
+	int success = AXIS_FAIL;
     if (m_pTransport)
-        m_pTransport->setProtocol(m_nTransportType);
-    return AXIS_SUCCESS;
+    {
+    	if( m_pTransport->setProtocol(protocol)==AXIS_SUCCESS)
+    	{
+    		m_nTransportType=protocol;
+    		success = AXIS_SUCCESS;
+    	}
+    }
+    else
+    {
+    		m_nTransportType=protocol;
+    		success = AXIS_SUCCESS;
+    }
+   	return success;
 }
 
 AXIS_PROTOCOL_TYPE Call::getProtocol ()
 {
-	return m_nTransportType;
+	if(m_pTransport)
+	{
+		return m_pTransport->getProtocol();
+	}
+	else
+	{
+		return m_nTransportType;
+	}
 }
 
 int Call::setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type,

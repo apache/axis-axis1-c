@@ -234,7 +234,18 @@ public:
     int AXISCALL setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type,
         const char* value);
 	int AXISCALL setHandlerProperty(AxisChar* name, void* value, int len);
+	/**
+	 * set the protocol that the underlying transport will use. 
+	 * If there is not transport set then the transport protocol is stored locally until there is a transport.
+	 * 
+	 * @param protocol the protocol that you want. Allowed values are  defined in GDefine.hpp AXIS_PROTOCOL_TYPE
+	 * @return AXIS_SUCCESS if the protocol was set correctly in the underlying transport or, if there is no transport then the value was stored safely.
+	 */
     int AXISCALL setProtocol(AXIS_PROTOCOL_TYPE protocol);
+    /**
+     * Get the protocol that the transport is or will use.
+     * @return the transport protocol being used.
+     */
     AXIS_PROTOCOL_TYPE AXISCALL getProtocol();
     int AXISCALL unInitialize();
     int AXISCALL initialize(PROVIDERTYPE nStyle);
