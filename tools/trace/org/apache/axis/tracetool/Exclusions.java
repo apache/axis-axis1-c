@@ -53,6 +53,7 @@ public class Exclusions {
 			"SoapSerializer.h",
 			"SoapDeSerializer.h",
 			"HeaderBlock.h",
+			"SoapSerializer.cpp", // fails on "..."
 
 		// Axis.cpp contains a copyright sign (circle with a "C" in it) which 
 		// makes readline throw a MalformedInputException on linux possibly due to 

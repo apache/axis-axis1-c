@@ -26,6 +26,7 @@
 
 #include "AxisFile.h"
 #include <string>
+#include <stack>
 
 #if defined(ENABLE_AXISTRACE)  
   #define AXISTRACE1(X, Y) g_pAT->logaxis(X,Y,__FILE__,__LINE__);
@@ -70,7 +71,9 @@ typedef enum {
 	TRACETYPE_UDOUBLE,
 	TRACETYPE_DOUBLE,
 	TRACETYPE_FLOAT,
+	TRACETYPE_BOOL,
 	TRACETYPE_POINTER,
+	TRACETYPE_DATA,
 	TRACETYPE_STRING
 } AxisTraceType;
 
@@ -218,13 +221,12 @@ private:
     char m_acLine[4];
     char* m_pcLevel;
     AxisFile m_fileTrace;
+	std::stack<std::string> m_stack;
 
     int setFilePerm(const char* pcFileName);
     int logthis(const char* pcLog, int level, char* arg2, int arg3);
 	void addParameter(std::string& line, AxisTraceType type, unsigned len, void *value);
 };
-
-/* static AxisTrace tracer; */
 
 AXIS_CPP_NAMESPACE_END
 

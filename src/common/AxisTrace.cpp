@@ -257,9 +257,10 @@ void AxisTrace::traceEntry(const char *className, const char *methodName, void *
 {
     if (!isTraceOn()) return;
 
-	try 
-	{
-		string line = "{ ";
+	try {
+		string line;
+		for (int is=0; is<m_stack.size(); is++) line += " ";
+		line += "{ ";
 		if (NULL!=className) {
 			line += className;
 			if (NULL!=that) {
@@ -278,8 +279,7 @@ void AxisTrace::traceEntry(const char *className, const char *methodName, void *
 
 		va_list args;
 		va_start(args, nParms);
-		for (int i=0; i<nParms; i++) 
-		{
+		for (int i=0; i<nParms; i++) {
 			AxisTraceType type = va_arg(args, AxisTraceType);
 			unsigned len = va_arg(args, unsigned);
 			void *value = va_arg(args, void*);
@@ -292,6 +292,11 @@ void AxisTrace::traceEntry(const char *className, const char *methodName, void *
     } catch (...) {
         traceLine("Unknown exception caught during trace entry");
     }
+
+	string name = className;
+	name += "::";
+	name += methodName;
+	m_stack.push(name);
 }
 
 void AxisTrace::traceExit(const char *className, const char *methodName, 
@@ -299,9 +304,17 @@ void AxisTrace::traceExit(const char *className, const char *methodName,
 {
     if (!isTraceOn()) return;
 
-	try 
-	{
-		string line = "} ";
+	try {
+		// Careful here in case entries and exits don't match
+		string name = className;
+		name += "::";
+		name += methodName;
+		while (m_stack.size()>0 && name!=m_stack.top()) m_stack.pop();
+		if (m_stack.size()>0) m_stack.pop();
+
+		string line;
+		for (int is=0; is<m_stack.size(); is++) line += " ";
+		line += "} ";
 		if (NULL!=className) {
 			line += className;
 			line += "::";
@@ -323,9 +336,16 @@ void AxisTrace::traceCatch(const char *className, const char *methodName,
 {
     if (!isTraceOn()) return;
 
-	try 
-	{
+	try {
+		// The method that caught the exception may not be top of the stack.
+		string name = className;
+		name += "::";
+		name += methodName;
+		while (m_stack.size()>0 && name!=m_stack.top()) m_stack.pop();
+
 		string line;
+		for (int is=0; is<m_stack.size(); is++) line += " ";
+		line += "!";
 		if (NULL!=className) {
 			line += className;
 			line += "::";
@@ -344,18 +364,23 @@ void AxisTrace::traceCatch(const char *className, const char *methodName,
 void AxisTrace::addParameter(string& line, AxisTraceType type, unsigned len, void *value)
 {
 	char prim[32]; // Plenty big enough to hold a primitive
+      char *pcValue = (char*)value;
 	switch (type) 
 	{
 	case TRACETYPE_CHAR:	sprintf(prim,"%c" ,*((char  *)value));	line += prim;	break;
 	case TRACETYPE_USHORT:	sprintf(prim,"%hu",*((short *)value));	line += prim;	break;
 	case TRACETYPE_SHORT:	sprintf(prim,"%hd",*((short *)value));	line += prim;	break;
 	case TRACETYPE_UINT:	sprintf(prim,"%u" ,*((int   *)value));	line += prim;	break;
-	case TRACETYPE_INT:		sprintf(prim,"%d" ,*((int   *)value));	line += prim;	break;
+	case TRACETYPE_INT:	sprintf(prim,"%d" ,*((int   *)value));	line += prim;	break;
 	case TRACETYPE_ULONG:	sprintf(prim,"%lu",*((long  *)value));	line += prim;	break;
 	case TRACETYPE_LONG:	sprintf(prim,"%ld",*((long  *)value));	line += prim;	break;
 	case TRACETYPE_UDOUBLE:	sprintf(prim,"%Lu",*((double*)value));	line += prim;	break;
 	case TRACETYPE_DOUBLE:	sprintf(prim,"%Ld",*((double*)value));	line += prim;	break;
 	case TRACETYPE_FLOAT:	sprintf(prim,"%f" ,*((float *)value));	line += prim;	break;
+
+	case TRACETYPE_BOOL:
+		line += *((bool*)value)?"true":"false";
+		break;
 
 	/*
 	 * This code only prints out the first 32 bytes of storage pointed at by a 
@@ -365,10 +390,13 @@ void AxisTrace::addParameter(string& line, AxisTraceType type, unsigned len, voi
 	 * in a more human-friendly format.
 	 */
 	case TRACETYPE_POINTER:	
-		sprintf(prim,"%p ",value);	
+            pcValue = *((char**)pcValue);
+		sprintf(prim,"%p ",pcValue);	
 		line += prim;	
+		// no break!
+	
+	case TRACETYPE_DATA:	
 		try {
-			char *pcValue = (char*)value;
 			line += "[";
 			for (int i=0; i<len && i<32; i++) {
 				int x = (int)(pcValue[i]);
@@ -377,7 +405,9 @@ void AxisTrace::addParameter(string& line, AxisTraceType type, unsigned len, voi
 			}
 			line += "] <";
 			for (int j=0; j<len && j<32; j++) {
-				sprintf(prim,"%c",pcValue[j]);
+				char c = pcValue[j];
+				if (!isprint(c)) c='.';
+				sprintf(prim,"%c",c);
 				line += prim;
 			}
 			line += ">";
@@ -388,8 +418,9 @@ void AxisTrace::addParameter(string& line, AxisTraceType type, unsigned len, voi
 
 	case TRACETYPE_STRING:	
 		try {
+                  pcValue = *((char**)pcValue);
 			line += "\"";	
-			line += (char*)value;	
+			line += pcValue;	
 			line += "\"";	
 		} catch (...) {
 			line += "<BADPOINTER>";
@@ -397,8 +428,9 @@ void AxisTrace::addParameter(string& line, AxisTraceType type, unsigned len, voi
 		break;
 
 	default:
-		line += "<UNKNOWN TYPE";				
-		line += type;
+		sprintf(prim,"%d",type);
+		line += "<UNKNOWNTYPE";				
+		line += prim;
 		line += ">";
 		break;
 	}
