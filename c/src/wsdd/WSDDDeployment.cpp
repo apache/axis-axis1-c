@@ -70,6 +70,7 @@
 #include <axis/wsdd/WSDDDocument.h>
 #include <axis/common/GDefine.h>
 #include <axis/common/AxisConfig.h>
+#include <axis/common/AxisTrace.h>
 
 extern unsigned char chEBuf[1024];
 //////////////////////////////////////////////////////////////////////
@@ -263,7 +264,7 @@ int WSDDDeployment::RemoveHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* 
  */
 int WSDDDeployment::unDeploy(string sServiceName)
 {
-	printf("entered to WSDDDeployment::unDeploy \n");
+	AXISTRACE3("entered to WSDDDeployment::unDeploy");
 
 	int iStatus = FAIL;
 
@@ -285,9 +286,9 @@ int WSDDDeployment::unDeploy(string sServiceName)
 		do {
 			file = fopen(m_sWSDDPath.c_str(), "w");
 			if(file) {
-				printf("opened the file successfully\n");
+				AXISTRACE3("WSDDDeployment::unDeploy, opened the file successfully");
 			} else {
-				printf("FAILED: couldn't open the file successfully\n\n");
+				AXISTRACE3("FAILED: WSDDDeployment::unDeploy, couldn't open the file successfully");
 				iWriteStatus = FAIL;
 				break;
 			}
@@ -296,20 +297,20 @@ int WSDDDeployment::unDeploy(string sServiceName)
 			
 			iWriteResult = fputs("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", file);
 			if (iWriteResult<0) {
-				printf("writing to the file is UNSUCCESSFULL\n");
+				AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is UNSUCCESSFULL");
 				iWriteStatus = FAIL;
 				break;
 			} else {
-				printf("writing to the file is SUCCESSFULL\n");
+				AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is SUCCESSFULL");
 			}
 
 			iWriteResult = fputs("<deployment xmlns=\"http://xml.apache.org/axis/wsdd/\" xmlns:java=\"http://xml.apache.org/axis/wsdd/providers/java\">\n", file);
 			if (iWriteResult<0) {
-				printf("writing to the file is UNSUCCESSFULL\n");
+				AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is UNSUCCESSFULL");
 				iWriteStatus = FAIL;
 				break;
 			} else {
-				printf("writing to the file is SUCCESSFULL\n");
+				AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is SUCCESSFULL");
 			}
 
 			if(m_DeployedServices)
@@ -323,8 +324,8 @@ int WSDDDeployment::unDeploy(string sServiceName)
 					pAchLibName = pWSDDService->GetLibName();
 					lstAllowedMethods = pWSDDService->getAllowedMethods();				
 									
-					printf("pAchServiceName = %s\n", pAchServiceName);
-					printf("pAchLibName = %s\n", pAchLibName);
+					AXISTRACE3(strcat("WSDDDeployment::unDeploy, pAchServiceName = ", pAchServiceName));
+					AXISTRACE3(strcat("WSDDDeployment::unDeploy, pAchLibName = ", pAchLibName));
 					
 					strcat(achTmpChar, " <service name=\"");
 					strcat(achTmpChar, pAchServiceName);
@@ -337,7 +338,7 @@ int WSDDDeployment::unDeploy(string sServiceName)
 					list<AxisString>::iterator iteAllowedMethods = lstAllowedMethods.begin();
 					while (iteAllowedMethods != lstAllowedMethods.end()) {	
 						
-						printf("sAllowedMethod = %s\n", (*iteAllowedMethods).c_str());					
+						AXISTRACE3(strcat("WSDDDeployment::unDeploy, sAllowedMethod = ", (*iteAllowedMethods).c_str()));					
 						const AxisChar* tmpChar = (*iteAllowedMethods).c_str();
 						strcat(achTmpChar, tmpChar);
 						if(iteAllowedMethods != lstAllowedMethods.end()) {
@@ -351,22 +352,22 @@ int WSDDDeployment::unDeploy(string sServiceName)
 
 					iWriteResult = fputs(achTmpChar, file);
 					if (iWriteResult<0) {
-						printf("writing to the file is UNSUCCESSFULL\n");
+						AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is UNSUCCESSFULL");
 						iWriteStatus = FAIL;
 						break;
 					} else {
-						printf("writing to the file is SUCCESSFULL\n");
+						AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is SUCCESSFULL");
 					}				
 				}
 			}
 
 			iWriteResult = fputs("</deployment>", file);
 			if (iWriteResult<0) {
-				printf("writing to the file is UNSUCCESSFULL\n");
+				AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is UNSUCCESSFULL");
 				iWriteStatus = FAIL;
 				break;
 			} else {
-				printf("writing to the file is SUCCESSFULL\n");
+				AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is SUCCESSFULL");
 			}
 			
 			
@@ -389,9 +390,9 @@ int WSDDDeployment::unDeploy(string sServiceName)
  */
 int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_ArrayTag inAllowedMethodsArray)
 {
-	printf("entered to WSDDDeployment::deploy \n");
-	printf("sServiceName = %s \n", sServiceName.c_str());
-	printf("sDllPath = %s \n", sDllPath.c_str());	
+	AXISTRACE3("entered to WSDDDeployment::deploy");
+	AXISTRACE3(strcat("WSDDDeployment::deploy, sServiceName = ", sServiceName.c_str()));
+	AXISTRACE3(strcat("WSDDDeployment::deploy, sDllPath = ", sDllPath.c_str()));	
 
 	const AxisChar* pAchServiceName;
 	const AxisChar* pAchLibName;
@@ -406,9 +407,9 @@ int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_ArrayTag i
 		file = fopen(m_sWSDDPath.c_str(), "w");
 		
 		if(file) {
-			printf("opened the file successfully\n");
+			AXISTRACE3("WSDDDeployment::deploy, opened the file successfully");
 		} else {
-			printf("FAILED: couldn't open the file successfully\n\n");
+			AXISTRACE3("WSDDDeployment::deploy, FAILED: couldn't open the file successfully");
 			iStatus = FAIL;
 			break;
 		}
@@ -417,20 +418,20 @@ int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_ArrayTag i
 		
 		iWriteResult = fputs("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", file);
 		if (iWriteResult<0) {
-			printf("writing to the file is UNSUCCESSFULL\n");
+			AXISTRACE3("WSDDDeployment::deploy, writing to the file is UNSUCCESSFULL");
 			iStatus = FAIL;
 			break;
 		} else {
-			printf("writing to the file is SUCCESSFULL\n");
+			AXISTRACE3("WSDDDeployment::deploy, writing to the file is SUCCESSFULL");
 		}
 
 		iWriteResult = fputs("<deployment xmlns=\"http://xml.apache.org/axis/wsdd/\" xmlns:java=\"http://xml.apache.org/axis/wsdd/providers/java\">\n", file);
 		if (iWriteResult<0) {
-			printf("writing to the file is UNSUCCESSFULL\n");
+			AXISTRACE3("WSDDDeployment::deploy, writing to the file is UNSUCCESSFULL");
 			iStatus = FAIL;
 			break;
 		} else {
-			printf("writing to the file is SUCCESSFULL\n");
+			AXISTRACE3("WSDDDeployment::deploy, writing to the file is SUCCESSFULL");
 		}
 
 		if(m_DeployedServices)
@@ -444,8 +445,8 @@ int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_ArrayTag i
 				pAchLibName = pWSDDService->GetLibName();
 				lstAllowedMethods = pWSDDService->getAllowedMethods();				
 								
-				printf("pAchServiceName = %s\n", pAchServiceName);
-				printf("pAchLibName = %s\n", pAchLibName);
+				AXISTRACE3(strcat("WSDDDeployment::deploy, pAchServiceName = ", pAchServiceName));
+				AXISTRACE3(strcat("WSDDDeployment::deploy, pAchLibName = ", pAchLibName));
 				
 				strcat(achTmpChar, " <service name=\"");
 				strcat(achTmpChar, pAchServiceName);
@@ -458,7 +459,7 @@ int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_ArrayTag i
 				list<AxisString>::iterator iteAllowedMethods = lstAllowedMethods.begin();
 				while (iteAllowedMethods != lstAllowedMethods.end()) {	
 					
-					printf("sAllowedMethod = %s\n", (*iteAllowedMethods).c_str());					
+					AXISTRACE3(strcat("WSDDDeployment::deploy, sAllowedMethod = ", (*iteAllowedMethods).c_str()));
 					const AxisChar* tmpChar = (*iteAllowedMethods).c_str();
 					strcat(achTmpChar, tmpChar);
 					if(iteAllowedMethods != lstAllowedMethods.end()) {
@@ -472,11 +473,11 @@ int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_ArrayTag i
 
 				iWriteResult = fputs(achTmpChar, file);
 				if (iWriteResult<0) {
-					printf("writing to the file is UNSUCCESSFULL\n");
+					AXISTRACE3("WSDDDeployment::deploy, writing to the file is UNSUCCESSFULL");
 					iStatus = FAIL;
 					break;
 				} else {
-					printf("writing to the file is SUCCESSFULL\n");
+					AXISTRACE3("WSDDDeployment::deploy, writing to the file is SUCCESSFULL");
 				}				
 			}
 		}
@@ -495,7 +496,7 @@ int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_ArrayTag i
 
 		string* sAllowedMethods = (string*)inAllowedMethodsArray.m_Array;
 		for (int i=0; i<inAllowedMethodsArray.m_Size; i++ ) {
-			printf("Allowed method = %s\n", (sAllowedMethods[i]).c_str());
+			AXISTRACE3(strcat("WSDDDeployment::deploy, Allowed method = ", (sAllowedMethods[i]).c_str()));
 			strcat(achTmpChar, (sAllowedMethods[i]).c_str());
 			if(i != ((inAllowedMethodsArray.m_Size)-1)) {
 				strcat(achTmpChar, " ");
@@ -506,11 +507,11 @@ int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_ArrayTag i
 
 		iWriteResult = fputs(achTmpChar, file);
 		if (iWriteResult<0) {
-			printf("writing to the file is UNSUCCESSFULL\n");
+			AXISTRACE3("WSDDDeployment::deploy, writing to the file is UNSUCCESSFULL");
 			iStatus = FAIL;
 			break;
 		} else {
-			printf("writing to the file is SUCCESSFULL\n");
+			AXISTRACE3("WSDDDeployment::deploy, writing to the file is SUCCESSFULL");
 		}		
 		
 		/*
@@ -520,11 +521,11 @@ int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_ArrayTag i
 		
 		iWriteResult = fputs("</deployment>", file);
 		if (iWriteResult<0) {
-			printf("writing to the file is UNSUCCESSFULL\n");
+			AXISTRACE3("WSDDDeployment::deploy, writing to the file is UNSUCCESSFULL");
 			iStatus = FAIL;
 			break;
 		} else {
-			printf("writing to the file is SUCCESSFULL\n");
+			AXISTRACE3("WSDDDeployment::deploy, writing to the file is SUCCESSFULL");
 		}
 		
 		
