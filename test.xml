@@ -363,7 +363,7 @@ Notes:
 # Transport_smtp:	 The SMTP transport library
 # XMLParser:		  The xml parser library
 #
-ClientLogPath:${dir.test.generated}/${client.lang}/${testName}/ClientLog
+#ClientLogPath:${dir.test.generated}/${client.lang}/${testName}/ClientLog
 Transport_http:${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
 XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}
 </echo>
