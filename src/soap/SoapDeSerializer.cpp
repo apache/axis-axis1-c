@@ -602,10 +602,10 @@ Axis_Array SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 				m_pNode = m_pParser->next ();
 		/* wrapper node without type info  Ex: <item> */
 				if (!m_pNode)
-				{
-					delete[]Array.m_Array;
-					Array.m_Size = 0;
-
+				{  
+                    ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct)(Array.m_Array, true, Array.m_Size);
+                    Array.m_Array = 0;
+                    Array.m_Size = 0;
 					return Array;
 				}
 
@@ -628,9 +628,9 @@ Axis_Array SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 
 				if (!m_pNode)
 				{
-					delete[]Array.m_Array;
-					Array.m_Size = 0;
-
+                    ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct)(Array.m_Array, true, Array.m_Size);
+                    Array.m_Array = 0;
+                    Array.m_Size = 0;
 					return Array;
 				}
 			}
@@ -669,9 +669,9 @@ Axis_Array SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 		/* wrapper node without type info  Ex: <phonenumbers> */
 				if (!m_pNode)
 				{
-					delete[]Array.m_Array;
-					Array.m_Size = 0;
-
+                    ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct)(Array.m_Array, true, Array.m_Size);
+                    Array.m_Array = 0;
+                    Array.m_Size = 0;
 					return Array;
 				}
 
