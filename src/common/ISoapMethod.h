@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
 // ISoapMethod.h: interface for the ISoapMethod class.
@@ -80,6 +80,7 @@ public:
 	virtual void setLocalName(const string &localname)=0;
 	virtual void setUri(const string &uri)=0;
 	virtual void setPrefix(const string &prefix)=0;
+	virtual ~ISoapMethod() {};
 };
 
 #endif // !defined(AFX_SOAPMETHODBASE_H__B8E08E22_3337_442C_A0DF_19DFA020E4D5__INCLUDED_)
