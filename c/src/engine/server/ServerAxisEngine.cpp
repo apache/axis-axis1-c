@@ -2,14 +2,14 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "../soap/SoapBody.h"
-#include "../soap/SoapMethod.h"
+#include "../../soap/SoapBody.h"
+#include "../../soap/SoapMethod.h"
 #include "ServerAxisEngine.h"
 #include <stdio.h>
 #include <axis/server/AxisException.h>
-#include "../common/AxisUtils.h"
-#include "../wsdd/WSDDDeployment.h"
-#include "HandlerPool.h"
+#include "../../common/AxisUtils.h"
+#include "../../wsdd/WSDDDeployment.h"
+#include "../HandlerPool.h"
 #include <axis/server/AxisTrace.h>
 extern AxisTrace* g_pAT;
 
