@@ -94,6 +94,10 @@ SOURCE=..\..\src\common\ArrayBean.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\soap\Attribute.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\AxisConfig.cpp
 # End Source File
 # Begin Source File
@@ -151,6 +155,10 @@ SOURCE=..\..\src\common\AdminUtils.h
 # Begin Source File
 
 SOURCE=..\..\src\common\ArrayBean.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\soap\Attribute.h
 # End Source File
 # Begin Source File
 
@@ -223,6 +231,10 @@ SOURCE=..\..\src\common\IAdminUtils.h
 # Begin Source File
 
 SOURCE=..\..\src\common\IArrayBean.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\axis\IAttribute.hpp
 # End Source File
 # Begin Source File
 
