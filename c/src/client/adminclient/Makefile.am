@@ -3,5 +3,5 @@ SUBDIRS =
 AM_CPPFLAGS = $(CPPFLAGS)
 adminclient_SOURCES = AxisAdminService.cpp AdminClient.cpp
 
-adminclient_LDADD   =  $(LDFLAGS)  -L$(AXISCPP_HOME)/bin -laxiscpp_client -lltdl
+adminclient_LDADD   =  $(LDFLAGS) ../../engine/client/libaxiscpp_client.la -lltdl
 INCLUDES = -I$(AXISCPP_HOME)/include
