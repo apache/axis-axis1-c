@@ -512,7 +512,8 @@ Attribute* HeaderBlock::createAttribute(const AxisChar *localname,
 
     if (localname)
     {
-        Attribute* pAttribute = new Attribute(localname, prefix, value);
+        //Attribute* pAttribute = new Attribute(localname, prefix, value); 
+        pAttribute = new Attribute(localname, prefix, value); // Samisa - possible bug in line above 
         m_attributes.push_back(pAttribute);
     }
 
@@ -728,3 +729,4 @@ const BasicNode* HeaderBlock::getFirstChild()
 }
 
 AXIS_CPP_NAMESPACE_END
+
