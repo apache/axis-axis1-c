@@ -1,0 +1,3 @@
+#!/bin/bash
+./configure --bindir=$AXISCPP_HOME/bin
+
