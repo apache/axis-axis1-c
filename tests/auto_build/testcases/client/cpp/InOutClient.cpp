@@ -1,3 +1,18 @@
+
+/*
+   Perform a variety of tests.
+   1) pass no parameters and get no return
+   2) pass no parameters and get an int return
+   3) pass a mixture of primitive parameters and get no return
+   4) pass a mixture of primitives, arrays and complex types all of which are not nillable
+   5) pass a mixture of primitives, arrays and complex types some of which are nillable
+   6) pass multiple arrays of different primitive types and get an int return
+   7) pass a complex type which has primitives, arrays and complex type and return the 
+      same type
+   8) pass a complex type which has primitives, arrays and complex type and return the 
+      same type with element set as nil
+*/
+
 #include "InOut.hpp"
 #include <axis/AxisException.hpp>
 #include <iostream>
@@ -107,6 +122,25 @@ int main(int argc, char* argv[])
 		cout << "multiArrayParametersIntReturn" << endl;
 		int mapir = ws.multiArrayParametersIntReturn(int_in, double_in, string_in);
 		cout << "multiArrayParametersIntReturn returned " << mapir << endl;
+
+		ComplexType2 ct2;
+		ct2.ctLong = (xsd__long)98765432;
+		ct2.ctIntArray = intArray;
+		ct2.ctString = "Complex2";
+		ct2.ctComplex = &ct;
+
+		cout << "complexParameterComplexReturn" << endl;
+		ComplexType2* ctr = ws.complexParameterComplexReturn(&ct2);
+		cout << "complexParameterComplexReturn returned " << ctr->ctString << endl;
+
+		ct2.ctLong = (xsd__long)22222222;
+		ct2.ctString = NULL;
+		ct2.ctComplex = NULL;
+
+		cout << "complexParameterComplexReturn with nil parameters" << endl;
+		ctr = ws.complexParameterComplexReturn(&ct2);
+		cout << "complexParameterComplexReturn with nil parameters returned " << ctr->ctLong << endl;
+
 
 	}
 	catch(AxisException& e)

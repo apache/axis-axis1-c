@@ -10,4 +10,8 @@ multiComplexParametersNilIntReturn
 multiComplexParametersNilIntReturn returned 42
 multiArrayParametersIntReturn
 multiArrayParametersIntReturn returned 43
+complexParameterComplexReturn
+complexParameterComplexReturn returned Complex2
+complexParameterComplexReturn with nil parameters
+complexParameterComplexReturn with nil parameters returned 22222222
 ---------------------- TEST COMPLETE -----------------------------
