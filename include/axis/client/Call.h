@@ -210,7 +210,7 @@ typedef struct {
 	/* Minimal error check */
 	int (AXISCALL* getStatus)(void *pObj);
 	AnyType* (AXISCALL* getAnyObject)(void *pObj);
-	int (AXISCALL* serializeAnyObject)(void *pObj, AnyType* pAnyObject);
+	int (AXISCALL* addAnyObject)(void *pObj, AnyType* pAnyObject);
 
 } CallFunctions;
 
@@ -363,7 +363,7 @@ public:
 	virtual int AXISCALL getStatus()=0;
 		
 	virtual AnyType* AXISCALL getAnyObject()=0;
-	virtual int AXISCALL serializeAnyObject(AnyType* pAnyObject)=0;
+	virtual int AXISCALL addAnyObject(AnyType* pAnyObject)=0;
 
 	/* following stuff is needed to provide the interface for C web services */
 public:
@@ -576,8 +576,8 @@ public:
 
 	static AnyType* AXISCALL s_GetAnyObject(void *pObj)
 	{return ((CallBase*)pObj)->getAnyObject();};
-	static int AXISCALL s_SerializeAnyObject(void *pObj, AnyType* pAnyObject)
-	{return ((CallBase*)pObj)->serializeAnyObject(pAnyObject);};
+	static int AXISCALL s_AddAnyObject(void *pObj, AnyType* pAnyObject)
+	{return ((CallBase*)pObj)->addAnyObject(pAnyObject);};
 
 	/* and populate ms_VFtable with corresponding entry */
 	static void s_Initialize()
@@ -647,7 +647,7 @@ public:
 		ms_VFtable.checkFault = s_CheckFault;
 		ms_VFtable.getStatus = s_GetStatus;
 		ms_VFtable.getAnyObject = s_GetAnyObject;
-		ms_VFtable.serializeAnyObject = s_SerializeAnyObject;
+		ms_VFtable.addAnyObject = s_AddAnyObject;
 	}
 };
 
@@ -816,7 +816,7 @@ public:
     void setProxy(const char* pcProxyHost, unsigned int uiProxyPort); 
 
 	AnyType* AXISCALL getAnyObject();
-	int AXISCALL serializeAnyObject(AnyType* pAnyObject);
+	int AXISCALL addAnyObject(AnyType* pAnyObject);
 		
 private:
 	int openConnection(int secure);

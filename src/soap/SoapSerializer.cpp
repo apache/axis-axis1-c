@@ -853,3 +853,17 @@ int SoapSerializer::serializeAnyObject(AnyType* pAnyObject)
 {
 	return AXIS_SUCCESS;
 }
+
+int SoapSerializer::addOutputAnyObject(AnyType* pAnyObject)
+{
+    Param* pParam = new Param();
+    pParam->m_Type = XSD_ANY;
+    pParam->m_Value.pAnyObject = pAnyObject;
+    if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->
+        m_pSoapBody->m_pSoapMethod))
+    {
+        m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->addOutputParam(pParam);
+    }
+    return AXIS_SUCCESS;
+}
+

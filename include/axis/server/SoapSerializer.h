@@ -189,6 +189,7 @@ public:
     int AXISCALL setBodyAsBase64Binary(xsd__base64Binary body);
     const AxisChar* AXISCALL getBodyAsString();
 	static void AXISCALL releaseBufferCallBack(const char* buffer, const void* bufferid);
+	int addOutputAnyObject(AnyType* pAnyObject);
 	int serializeAnyObject(AnyType* pAnyObject);
 };
 
