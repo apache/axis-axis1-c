@@ -7,9 +7,9 @@
       <mkdir dir="${dir.objects}"/>
       <mkdir dir="${dir.bin}"/>
 <if>
-	<equals arg1="transport.HTTP.ipv6" arg2="true" casesensitive="false"/>
+	<equals arg1="${transport.HTTP.ipv6}" arg2="true" casesensitive="false"/>
 	<then>
-		<property name="IPV6"/>
+		<property name="IPV6" value="true"/>
 	</then>
 </if>
       <if>
@@ -24,6 +24,7 @@
             <cc outfile="${dir.bin}/${channelLibraryName}" objdir="${dir.objects}"
              exceptions="true" outtype="shared" multithreaded="true">
                <!-- Compilers -->
+               <includepath path="${HTTP.transport.IPV6.dir}/include" if="windows"/>
                <compiler refid="SolarisCC"/>
                <compiler refid="Linuxgcc"/>
                <compiler extends="VisualC++">
