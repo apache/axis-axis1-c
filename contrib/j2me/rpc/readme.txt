@@ -10,7 +10,8 @@ Here's some hints for you to build an runtime implementation from source codes f
 2. Compile src/shared and configuration/your_choice together with kxml2.jar and xmlpull_1_1_3_1.jar.
 3. Deploy the compiled classes, kxml2.jar and xmlpull_1_1_3_1.jar to your desired J2ME platform.
 
-src/tool has WsdlToJ2me and its necessary classes. In order to build it, you need wsdl4j.jar, axis.jar and jaxrpc.jar from the latest CVS head.
+src/tool has WsdlToJ2me and its necessary classes. In order to build it, make your own build.properties from build.properties.sample and simply run "ant" with the latest Axis from CVS HEAD.
+
 How to use WsdlToJ2me is basically the same as WSDL2Java in Axis. Please refer to the user guide of Axis.
 
 Note: some emulation environments and real devices prohibit you from deploying java.rmi package for security. Please consult with their providers on the issue, or you can use a less-constrained development kit such as XVM from http://www.developerzone.co.kr/ENGLISH/ . 
