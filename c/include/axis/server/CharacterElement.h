@@ -79,9 +79,15 @@
 class CharacterElement : public BasicNode
 {
 public:
+	bool operator ==( const CharacterElement &objChEle);
 	int setValue(const AxisChar* sValue);
 	const AxisString& getValue();
 	int serialize(SoapSerializer& pSZ);
+	/**
+	 * This method is actualy not used in this class. This method was just
+	 * included to adhere its interface.
+	 */
+	int serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack) {return AXIS_SUCCESS;}
 	NODE_TYPE getNodeType();
 	CharacterElement(const AxisChar* sValue);
 	CharacterElement();

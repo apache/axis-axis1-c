@@ -445,3 +445,13 @@ extern "C" Call* GetCallObject(AXIS_PROTOCOL_TYPE nProtocol, AxisChar* pchEndpoi
 	return pCall;
 }
 
+
+int Call::SetSoapHeader(SoapHeader *pSoapHeader)
+{
+	return (m_pIWSSZ->setSoapHeader(pSoapHeader));
+}
+
+IHeaderBlock* Call::createHeaderBlock()
+{
+	return (m_pIWSSZ->createHeaderBlock());
+}

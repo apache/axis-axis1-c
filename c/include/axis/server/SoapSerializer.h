@@ -119,10 +119,27 @@ private:
 	map<AxisXMLString, AxisXMLString> m_NsStack;
 
 public:
+	int setOutputStreamForTesting(const Ax_soapstream* pStream);
 	int AXISCALL CreateSoapMethod(const AxisChar* sLocalName, const AxisChar* sURI);	
+
 //	IWrapperSoapSerializer& operator<<(const char* cSerialized);
 	IWrapperSoapSerializer& operator<<(const AxisChar* cSerialized);
+	/**
+	 * Returns the corrosponding namespace prefix.
+	 * @param pNamespace The namespace.
+	 * @return The corrosponding prefix.
+	 */
 	const AxisChar* AXISCALL GetNamespacePrefix(const AxisChar* pNamespace);
+	/**
+	 * Returns the corrosponding namespace prefix. This method is called when the 
+	 * caller also wants to know whether this is a new namespace or not as appose
+	 * to its overloaded other member.
+	 * @param pNamespace The namespace.
+	 * @param blnIsNewPrefix The boolean which behaves as a out parameter to indicate
+	 *  whether this is a new namespace or not.
+	 * @return The corrosponding prefix.
+	 */
+	const AxisChar* AXISCALL GetNamespacePrefix(const AxisChar* pNamespace, bool& blnIsNewPrefix);
 	void AXISCALL RemoveNamespacePrefix(const AxisChar* pNamespace);
 	int setSoapVersion(SOAP_VERSION);
 	int Init();

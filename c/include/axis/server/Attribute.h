@@ -65,6 +65,7 @@
 #define AFX_ATTRIBUTE_H__10ABD25E_AF15_4DE7_AA27_6AB96102087C__INCLUDED_
 
 #include <string>
+#include <list>
 #include "../common/GDefine.h"
 
 using namespace std;
@@ -89,7 +90,9 @@ private:
 	AxisString m_value;
 	//string m_strAttrSerialized;
 public:		
+	int initializeForTesting();
 	int serialize(SoapSerializer& pSZ) const;
+	int serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack);
 	//int serialize(string&);
 	Attribute();	
 	Attribute(const AxisChar* localname, const AxisChar* prefix, const AxisChar* uri, const AxisChar* value);

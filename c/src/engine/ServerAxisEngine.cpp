@@ -194,7 +194,7 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 			 * A header may be added to the Deserializer ONLY IF there is a CAN BE
 			 * a handler in this soap processor to handle it.
 			 */
-			if (AXIS_SUCCESS != m_pDZ->GetHeader())
+ 			if (AXIS_SUCCESS != m_pDZ->GetHeader())
 			{
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
 				break; //do .. while(0)				
