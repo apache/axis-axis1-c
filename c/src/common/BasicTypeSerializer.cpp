@@ -140,7 +140,7 @@ const char* BasicTypeSerializer::BasicTypeStr(XSDTYPE type)
 	}
 }
 
-string& BasicTypeSerializer::GetEntityReferenced(string &str)
+string& BasicTypeSerializer::GetEntityReferenced(const string &str)
 {
 	return str;
 }
