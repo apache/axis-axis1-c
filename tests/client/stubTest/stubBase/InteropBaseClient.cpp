@@ -146,7 +146,7 @@ main(int argc, char *argv[])
     printf("First trasport key = %s\n", ws.getFirstTrasportPropertyKey());
     printf("First trasport value = %s\n",
 	   ws.getCurrentTrasportPropertyValue());
-    char *key = NULL;
+    const char *key = NULL;
     int count = 1;
     while (key = ws.getNextTrasportPropertyKey())
     {
@@ -159,7 +159,7 @@ main(int argc, char *argv[])
 	    ws.deleteCurrentTrasportProperty();
     }
 
-    ws.deleteTrasportProperty("Accept-Language", 2);
+    //ws.deleteTrasportProperty("Accept-Language", 2);
 
     printf("First header block no of children = %d\n",
 	   ws.getFirstSOAPHeaderBlock()->getNoOfChildren());

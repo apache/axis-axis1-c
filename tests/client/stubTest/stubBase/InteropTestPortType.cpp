@@ -40,8 +40,7 @@ xsd__string InteropTestPortType::echoString(xsd__string Value0)
 	m_pCall->setTransportProperty(SOAPACTION_HEADER , "base#echoString");
 	m_pCall->setSOAPVersion(SOAP_VER_1_1);
 	m_pCall->setOperation("echoString", "http://soapinterop.org/");
-	setTransportProperties();
-	setSOAPHeaders();
+	applyUserPreferences();
 	m_pCall->addParameter((void*)&Value0, "inputString", XSD_STRING);
 	if (AXIS_SUCCESS == m_pCall->invoke())
 	{
@@ -83,8 +82,7 @@ xsd__string_Array InteropTestPortType::echoStringArray(xsd__string_Array Value0)
 	m_pCall->setTransportProperty(SOAPACTION_HEADER , "base#echoStringArray");
 	m_pCall->setSOAPVersion(SOAP_VER_1_1);
 	m_pCall->setOperation("echoStringArray", "http://soapinterop.org/");
-	setTransportProperties();
-	setSOAPHeaders();
+	applyUserPreferences();
 	m_pCall->addBasicArrayParameter((Axis_Array*)(&Value0), XSD_STRING, "inputStringArray");
 	if (AXIS_SUCCESS == m_pCall->invoke())
 	{
