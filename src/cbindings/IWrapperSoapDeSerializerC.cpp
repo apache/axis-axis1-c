@@ -253,7 +253,7 @@ AXISC_STORAGE_CLASS_INFO unsigned char axiscGetAttributeAsUnsignedByteIWrapperSo
 	return dz->getAttributeAsUnsignedByte(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO long axiscGetAttributeAsLongIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__long axiscGetAttributeAsLongIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getAttributeAsLong(pName,pNamespace);

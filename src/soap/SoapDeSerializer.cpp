@@ -1852,11 +1852,11 @@ SoapDeSerializer::getAttributeAsUnsignedByte (const AxisChar *
 {
 DESERIALIZE_GET_ATTRIBUTE_AS (unsigned char, CONV_STRTOUL,
 				  INIT_VALUE_NUMBER)}
-long
+LONGLONG
 SoapDeSerializer::getAttributeAsLong (const AxisChar * pName, const
 				      AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (long, CONV_STRTOL, INIT_VALUE_NUMBER)}
+DESERIALIZE_GET_ATTRIBUTE_AS (LONGLONG, CONV_STRTOLONG, INIT_VALUE_NUMBER)}
 long
 SoapDeSerializer::getAttributeAsInteger (const AxisChar * pName, const
 					 AxisChar * pNamespace)

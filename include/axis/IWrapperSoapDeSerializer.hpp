@@ -116,7 +116,7 @@ public:
         const AxisChar* pNamespace)=0;
     virtual unsigned char AXISCALL getAttributeAsUnsignedByte(const AxisChar* 
         pName, const AxisChar* pNamespace)=0;
-    virtual long AXISCALL getAttributeAsLong(const AxisChar* pName, 
+    virtual xsd__long AXISCALL getAttributeAsLong(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
     virtual long AXISCALL getAttributeAsInteger(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;

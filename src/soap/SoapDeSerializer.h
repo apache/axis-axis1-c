@@ -202,7 +202,7 @@ public:
         const AxisChar* pNamespace);
     unsigned char AXISCALL getAttributeAsUnsignedByte(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    long AXISCALL getAttributeAsLong(const AxisChar* pName, 
+    LONGLONG AXISCALL getAttributeAsLong(const AxisChar* pName, 
         const AxisChar* pNamespace);
     long AXISCALL getAttributeAsInteger(const AxisChar* pName, 
         const AxisChar* pNamespace);
