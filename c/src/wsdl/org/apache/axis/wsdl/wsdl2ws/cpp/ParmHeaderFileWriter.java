@@ -84,7 +84,6 @@ public class ParmHeaderFileWriter extends ParamWriter{
 			this.writer.write("#if !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)\n");
 			this.writer.write("#define __"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_\n\n");
 			writePreprocssorStatements();
-			this.writer.write("\n");
 			this.writer.write("class "+classname+"\n{\n");
 			writeAttributes();
 			this.writer.write("};\n\n");
@@ -141,6 +140,10 @@ public class ParmHeaderFileWriter extends ParamWriter{
 				}
 			}
 		}
+		//Local name and the URI for the type
+		writer.write("//Local name and the URI for the type\n");
+		writer.write("static const char* Axis_URI_"+classname+" = \""+type.getName().getNamespaceURI()+"\";\n");
+		writer.write("static const char* Axis_TypeName_"+classname+" = \""+type.getName().getLocalPart()+"\";\n\n");
 	  }catch(IOException e){
 	  	throw new WrapperFault(e);
 	  }

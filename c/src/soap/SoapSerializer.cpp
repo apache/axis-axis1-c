@@ -245,6 +245,13 @@ int SoapSerializer::AddOutputParam(const AxisChar* pchName, const AxisChar* pStr
 	return AddOutputParamHelper(pchName, XSD_STRING, uValue);
 }
 
+int SoapSerializer::AddOutputParam(const AxisChar* pchName, const string& sStrValue)
+{
+	uParamValue uValue;
+	uValue.pStrValue = sStrValue.c_str();
+	return AddOutputParamHelper(pchName, XSD_STRING, uValue);
+}
+
 int SoapSerializer::AddOutputParam(const AxisChar* pchName, const Axis_Array* pArray, XSDTYPE nType)
 {
 	IArrayBean* pAb = makeArrayBean(nType, (void*)(pArray->m_Array));

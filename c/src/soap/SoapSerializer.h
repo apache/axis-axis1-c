@@ -123,6 +123,7 @@ public:
 	int AddOutputParam(const AxisChar* pchName, double dValue);
 	int AddOutputParam(const AxisChar* pchName, struct tm tValue);
 	int AddOutputParam(const AxisChar* pchName, const AxisChar* pStrValue);
+	int AddOutputParam(const AxisChar* pchName, const string& sStrValue);
 	//for arrays of basic types
 	int AddOutputParam(const AxisChar* pchName, const Axis_Array* pArray, XSDTYPE nType);
 	//for arrays of complex types
