@@ -34,6 +34,7 @@ import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
+import org.apache.axis.wsdl.symbolTable.SymbolTable;
 
 public class Type {
     /* max no of attribs expected in a type */
@@ -153,12 +154,22 @@ public class Type {
  * they will convert to "name"  Is that acceptable ....  
  */
     public void setTypeForAttributeName(String attribName, Type type) {
-		attribName = TypeMap.resoleveWSDL2LanguageNameClashes(attribName,this.language);
+	//Samisa:	
+        // Check to see if this is an anonymous type,
+        // if it is, replace Axis' ANON_TOKEN with
+        // an underscore to make sure we don't run
+        // into name collisions with similarly named
+        // non-anonymous types
+        StringBuffer sb = new StringBuffer(attribName);
+        int aidx = -1;
 
-	        if (attribName.lastIndexOf('>') > 1 )
-		{
-		    attribName =attribName.substring(attribName.lastIndexOf('>')+1,attribName.length());
-                }	 
+        while ((aidx = sb.toString().indexOf(SymbolTable.ANON_TOKEN)) > -1) {
+            sb.replace(aidx, aidx + SymbolTable.ANON_TOKEN.length(), "_");
+        }
+
+        attribName = sb.toString();
+
+        attribName = TypeMap.resoleveWSDL2LanguageNameClashes(attribName,this.language);
 
         if (hasOrder)
             this.attribOrder.add(attribName);
@@ -183,10 +194,24 @@ public class Type {
 	public void setTypeNameForElementName(ElementInfo element) {
 		String attribName = TypeMap.resoleveWSDL2LanguageNameClashes(element.getName().getLocalPart(),this.language);
 
-		if (attribName.lastIndexOf('>') > 1 )
-            	{
- 		    attribName =attribName.substring(attribName.lastIndexOf('>')+1,attribName.length());	
-		}                		
+        	//Samisa:	
+        	// Check to see if this is an anonymous type,
+	        // if it is, replace Axis' ANON_TOKEN with
+        	// an underscore to make sure we don't run
+	        // into name collisions with similarly named
+        	// non-anonymous types
+	        StringBuffer sb = new StringBuffer(attribName);
+        	int aidx = -1;
+
+	        while ((aidx = sb.toString().indexOf(SymbolTable.ANON_TOKEN)) > -1) {
+        	    sb.replace(aidx, aidx + SymbolTable.ANON_TOKEN.length(), "_");
+	        }
+
+        	attribName = sb.toString();
+		
+		// Samisa: This second call to TypeMap.resoleveWSDL2LanguageNameClashes
+		// is made to make sure after replacinf ANON_TOKEN it is still not a keyword
+	        attribName = TypeMap.resoleveWSDL2LanguageNameClashes(attribName,this.language);
 
 		if (hasOrder)
 			this.attribOrder.add(attribName);
