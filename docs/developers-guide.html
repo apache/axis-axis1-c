@@ -309,7 +309,9 @@ style='font-family:Verdana'> <o:p></o:p></span></p>
 <a href="#General_Guidelines">General Guidelines</a> <br>
 <a href="#Development_Environment">Development Environment</a> <br>
 <a href="#Configuration_Properties">Configuration Properties</a> <br>
-<a href="#Compile_And_Run">Compile and Run</a> <br>
+
+<a href="#Compile_And_Run">Compile and Run</a>
+ <br>
 <a href="#Adding_Testcases">Adding <span class=SpellE>Testcases</span></a> <o:p></o:p></span></p>
 
 <p class=MsoNormal><span style='font-family:Verdana'><a href="#ModuleAPI">Writing
@@ -356,25 +358,111 @@ Properties<o:p></o:p></span></h2>
 <h2><a name="Compile_And_Run"></a><span style='font-family:Verdana'>Compile and
 Run<o:p></o:p></span></h2>
 
-<p><span style='font-family:Verdana'>&nbsp;<span class=GramE>create</span> and
-export an environment variable called<br>
-XERCES_HOME. This environment variable should contain the path to the <span
-class=SpellE>xerces</span> home directory.<br>
+
+
+
+
+
+
+
+
+
+
+
+
+<p><span style='font-family:Verdana'>
+
+
+
+
+
+
+This document is intended for the developer who wish to download and test the axiscpp server.<br>
+
+Checkout axiscpp from cvs repository.<br><br>
+To build axisengine library<br>
+==================<br><br>
+When you download the source you have only Makfile.am's and configure.ac and
+autogen.sh script for building.
+<br><br>
+make sure you create and  set the environment variable AXISCPP_HOME
+to reflect the path to the directory where you downloaded the axiscpp.
+for example I have it as following
+<br><br>
+AXISCPP_HOME="/home/damitha/projects/axiscpp/c" <br> <br>where c is the rood directory
+for axiscpp source. There you find autogen.sh, configure.ac etc.<br>
+
 <br>
-For example if your <span class=SpellE>xerces</span> is installed in<br>
-<br>
-/<span class=SpellE>usr/local/xerces_c</span> folder then <br>
-$(XERCES_HOME)/lib should expand to /<span class=SpellE>usr/local/xerces_c/lib</span>
-and<br>
-$(XERCES_HOME)/include should expand to /<span class=SpellE>usr/local/xerces_c/include</span><br>
-<br>
-<span class=SpellE>cd</span> <span class=SpellE>axiscpp</span><br>
-make clean<br>
+to build go to $AXISCPP_HOME dirctory.<br><br>
+sh autogen.sh
+<br><br>
+To avoid cluttering of the source with object files use the build directory
+to generate your object files.
+<br><br>
+Now from c/build directory run<br><br>
+sh runconfigure
+<br><br>
+This will create all the Makefiles in a tree starting from build directory.<br><br>
 make<br>
+then<br>
+make install<br>
 <br>
-If the build successful, <span class=SpellE>libaxiscpp.so</span> should have
-been created in <br>
-<span class=SpellE>axiscpp</span>/release directory.<o:p></o:p></span></p>
+this will install libaxiscpp_mod.so in c/release directory.<br><br>
+copy this to <apache home>/libexec directory and restart apache
+to load the axisengine in apache.
+<br><br>
+Note: in $AXISCPP_HOME/include you have folder called xercesc apache1_3
+apache2_0. Copy the corresponding include files into them.
+<br><br><br>
+To build samples<br>
+===========<br>
+Go to the samples folder<br><br>
+$(AXISCPP_HOME)/src/server/samples<br><br>
+and select the sample you want. As an example we try on
+simplewebservice<br>
+type the following commands in that order<br><br>
+sh autogen.sh<br>
+sh runconfig<br>
+make<br>
+make install<br>
+<br>
+this will install the sample library in /usr/local/apache/Axis/webservices 
+<br><br>
+note: the server.wsdd file for this sample has to be put in<br><br>
+/usr/local/apache/Axis/conf folder.<br><br>
+This path is hardcoded in Axis.cpp file as following
+<br><br>
+#define WSDDFILEPATH "/usr/local/apache/Axis/conf/server.wsdd"<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</span></p>
+
+
+
+
 
 <h2><a name="Adding_Testcases"></a><span style='font-family:Verdana'>Adding <span
 class=SpellE>Testcases</span><o:p></o:p></span></h2>
