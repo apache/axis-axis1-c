@@ -67,6 +67,7 @@
 #include "Platform.hpp"
 #include "HttpTransport.hpp"
 #include <iostream>
+#include <stdio.h>
 #include <axis/server/AxisException.h>
 
 using namespace std;
