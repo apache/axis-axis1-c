@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<java-wsdl-mapping xmlns="http://java.sun.com/xml/ns/j2ee"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+				   http://www.ibm.com/webservices/xsd/j2ee_jaxrpc_mapping_1_1.xsd"
+				   version="1.1">
+    <package-mapping>
+        <package-type>org.objectweb.wssample.gen.google</package-type>
+        <namespaceURI>urn:GoogleSearch</namespaceURI>
+    </package-mapping>
+    <java-xml-type-mapping>
+        <java-type>org.objectweb.wssample.gen.google.MyGoogleSearchResult</java-type>
+        <root-type-qname xmlns:ns="urn:GoogleSearch">ns:GoogleSearchResult</root-type-qname>
+        <qname-scope>complexType</qname-scope>
+    </java-xml-type-mapping>
+    <java-xml-type-mapping>
+        <java-type>org.objectweb.wssample.gen.google.ResultElement</java-type>
+        <root-type-qname xmlns:ns="urn:GoogleSearch">ns:ResultElement</root-type-qname>
+        <qname-scope>complexType</qname-scope>
+    </java-xml-type-mapping>
+    <java-xml-type-mapping>
+        <java-type>org.objectweb.wssample.gen.google.ResultElement[]</java-type>
+        <root-type-qname xmlns:ns="urn:GoogleSearch">ns:ResultElementArray</root-type-qname>
+        <qname-scope>complexType</qname-scope>
+    </java-xml-type-mapping>
+    <java-xml-type-mapping>
+        <java-type>org.objectweb.wssample.gen.google.DirectoryCategory[]</java-type>
+        <root-type-qname xmlns:ns="urn:GoogleSearch">ns:DirectoryCategoryArray</root-type-qname>
+        <qname-scope>complexType</qname-scope>
+    </java-xml-type-mapping>
+    <java-xml-type-mapping>
+        <java-type>org.objectweb.wssample.gen.google.DirectoryCategory</java-type>
+        <root-type-qname xmlns:ns="urn:GoogleSearch">ns:DirectoryCategory</root-type-qname>
+        <qname-scope>complexType</qname-scope>
+    </java-xml-type-mapping>
+
+</java-wsdl-mapping>
