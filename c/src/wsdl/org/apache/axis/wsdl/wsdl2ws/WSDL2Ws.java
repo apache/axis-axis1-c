@@ -208,10 +208,19 @@ public class WSDL2Ws {
             if ("document".equals(bindingEntry.getBindingStyle().getName())){
 				paramlist = op.getInput().getMessage().getParts().values().iterator();
 				Part part = (Part) paramlist.next();
+				QName minfoqname;
 				element = symbolTable.getElement(part.getElementName());
-				qname = element.getRefType().getQName();
+				if ( element == null ) {
+					// the part reference a type.
+					qname =  symbolTable.getType(part.getTypeName()).getQName();
+					minfoqname = symbolTable.getType(part.getTypeName()).getQName();
+				}
+				else {
+					qname = element.getRefType().getQName();
+					minfoqname = element.getQName();
+				}
 				if (qname != null){
-					minfo.setInputMessage(element.getQName());
+					minfo.setInputMessage(minfoqname);
 					type = this.typeMap.getType(qname);
 					boolean wrapped = true; //TODO take this from a commandline argument
 					if (wrapped){
@@ -265,10 +274,19 @@ public class WSDL2Ws {
 	            Iterator returnlist = op.getOutput().getMessage().getParts().values().iterator();
 				if (returnlist.hasNext() && "document".equals(bindingEntry.getBindingStyle().getName())){
 					Part part = (Part) returnlist.next();
+					QName minfoqname;
 					element = symbolTable.getElement(part.getElementName());
-					qname = element.getRefType().getQName();
+					if ( element == null ) {
+						// the part reference a type.
+						qname =  symbolTable.getType(part.getTypeName()).getQName();
+						minfoqname = symbolTable.getType(part.getTypeName()).getQName();
+					}
+					else {
+						qname = element.getRefType().getQName();
+						minfoqname = element.getQName();
+					}
 					if (qname != null){
-						minfo.setOutputMessage(element.getQName());
+						minfo.setOutputMessage(minfoqname);
 						type = this.typeMap.getType(qname);				
 						boolean wrapped = true; //TODO take this from a commandline argument
 						if (wrapped){
