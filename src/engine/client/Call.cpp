@@ -119,12 +119,16 @@ int Call::invoke ()
     return m_nStatus;
 }
 
-typedef struct
+class HandlerProperty
 {
+public:
+	HandlerProperty(AxisChar *n, void *v, int l) {name=n; value=v; len=l;}
+
+	// The storage pointed at by name and value is not owned by HandlerProperty
 	AxisChar *name;
 	void *value;
 	int len;
-} HandlerPropertyData;
+};
 
 int Call::initialize (PROVIDERTYPE nStyle, int secure)
 /* Does this mean that the stub that uses this Call object as well as all 
@@ -157,9 +161,9 @@ int Call::initialize (PROVIDERTYPE nStyle, int secure)
 				list<void*>::iterator it = m_handlerProperties.begin();
 				while (it != m_handlerProperties.end())
 				{
-					HandlerPropertyData *pHpi = (HandlerPropertyData*)(*it);
-					m_pMsgData->setProperty(pHpi->name, pHpi->value, pHpi->len);
-					free(pHpi);
+					HandlerProperty *pHp = (HandlerProperty*)(*it);
+					m_pMsgData->setProperty(pHp->name, pHp->value, pHp->len);
+					delete pHp;
 					it++;
 				}
 				m_handlerProperties.clear();
@@ -261,12 +265,7 @@ int Call::setHandlerProperty(AxisChar* name, void* value, int len)
 	// in the Call object since the m_pMsgData is not set up
 	// until Call::initialize which doesn't happen until the actual
 	// web service is invoked.
-	HandlerPropertyData* pHpi = 
-		(HandlerPropertyData*) malloc(sizeof(HandlerPropertyData));
-	pHpi->name = name;
-	pHpi->value = value;
-	pHpi->len = len;
-	m_handlerProperties.push_back(pHpi);
+	m_handlerProperties.push_back(new HandlerProperty(name,value,len));
 	return AXIS_SUCCESS;
 }
 
