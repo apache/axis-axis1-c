@@ -976,7 +976,6 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
             DESERIALIZE_LITERAL_ARRAY_BLOCK(unsigned char, CONV_STRTOUL)
         case XSD_LONG:
         case XSD_INTEGER:
-        case XSD_BOOLEAN:
             DESERIALIZE_LITERAL_ARRAY_BLOCK(long, CONV_STRTOL)
         case XSD_UNSIGNEDLONG:
             DESERIALIZE_LITERAL_ARRAY_BLOCK(unsigned long, CONV_STRTOUL)
@@ -998,6 +997,94 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
             DESERIALIZE_LITERAL_ARRAY_BLOCK(struct tm, CONV_STRTODATETIME)     
         case XSD_DURATION:
             DESERIALIZE_LITERAL_ARRAY_BLOCK(long, CONV_STRTODURATION)
+        case XSD_BOOLEAN:
+//          DESERIALIZE_LITERAL_ARRAY_BLOCK(long, CONV_STRTOL)
+// Originally, The above macro was all that was required, but because boolean
+// can have any of the following values '0', '1', 'false' or 'true', special,
+// non-standard processing is required.  Thus the standard macro has had to be
+// expanded and extended to cover the additional tests, unique to this type.
+            Array.m_Array = malloc(sizeof(long)*INITIAL_ARRAY_SIZE);
+            if (!Array.m_Array) return Array;
+            Array.m_Size = INITIAL_ARRAY_SIZE;
+            while(true)
+            {
+                for (; nIndex < Array.m_Size; nIndex++)
+                {
+                    if (!m_pNode) 
+                    /* if there is an unprocessed node that may be one left */
+                    /* from last array deserialization */
+                        m_pNode = m_pParser->next();
+                        /* wrapper node without type info Ex: <phonenumbers>*/
+                    if (!m_pNode)
+                    {
+                        m_nStatus = AXIS_FAIL;
+                        free(Array.m_Array);
+                        Array.m_Array = 0;
+                        Array.m_Size = 0;
+                        return Array;
+                    }
+                    if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+                    {
+                        m_pNode = m_pParser->next(true); /* charactor node */
+                        if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+                        {
+							if( !stricmp( "false", m_pNode->m_pchNameOrValue))
+							{
+	                            ((long*)Array.m_Array)[nIndex] = 0;
+							}
+							else if( !stricmp( "true", m_pNode->m_pchNameOrValue))
+							{
+	                            ((long*)Array.m_Array)[nIndex] = 1;
+							}
+							else
+							{
+	                            ((long*)Array.m_Array)[nIndex] = (long) (strtol( m_pNode->m_pchNameOrValue, &m_pEndptr, 10) & 1);
+							}
+
+                            m_pNode = m_pParser->next(); 
+                            /* skip end element node too */
+                            m_pNode = NULL; 
+                            /* this is important in doc/lit style when */
+                            /* deserializing arrays */
+                            continue;
+                        }
+                        /* error : unexpected element type or */
+                        /* end of the stream */
+                    }
+                    else
+                    {
+                        if (nIndex > 0)
+                        {
+                            Array.m_Size = nIndex; 
+                            /* put the actual deserialized item size */
+                            /* note we do not make m_pNode = NULL because */
+                            /* this node doesnot belong to this array */
+                            return Array;
+                        }
+                        /* error : no elements deserialized */
+                    }
+                    /* if we come here it is an error situation */
+                    m_nStatus = AXIS_FAIL;
+                    m_pNode = NULL;
+                    free(Array.m_Array);
+                    Array.m_Array = 0;
+                    Array.m_Size = 0;
+                    return Array;
+                }
+                /* if we come here that means the array allocated is */
+                /* not enough. So double it */
+                Array.m_Array = realloc(Array.m_Array, 
+                    sizeof(long)*(Array.m_Size*2));
+                if (!Array.m_Array) 
+                {
+                    Array.m_Size = 0;
+                    return Array;
+                }
+                Array.m_Size *= 2;
+                /*Array.m_RealSize = Array.m_Size;*/
+            }
+            break;
+
         default:;
         }
     }
