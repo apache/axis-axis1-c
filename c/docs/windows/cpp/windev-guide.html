@@ -186,6 +186,12 @@ to [CHECKOUT_HOME]\c\lib\apache1_3.</p>
 "[APACHE_HOME]\lib" to "[CHECKOUT_HOME]\c\lib\apache2_0".<br>
 </p>
 
+<p><b>Building the AxisServer and AxisClient dlls </b> </p>
+
+<p>Build the AxisServer and AxisClient projects,
+Which will build the AxisServer.dll and AxisClient.dll and also AxisServer.lib and AxisClient.lib
+in [CHECKOUT_HOME]\c\bin.</p>
+
 <p><b>Building Apache Modules (Apache 1.3.X and Apache 2.X) </b> </p>
 <p>
  In Visual C++ (The version used for this documentation was Visual C++ 6.0)
@@ -201,16 +207,14 @@ the popup menu. Select the link tab. Select General from the Category drop
 down list. In the Output file name text box put the value
 [APACHE_HOME]\modules\mod_axis.dll and click OK.</p>
 
-
-
 <p>Build either Apache1_3Module or Apache2_0Module project.
 In Visual C++ right click on either the project "Apache1_3Module" or
 "Apache2_0Module" in the workspace window, File View and click "build (selection only)"
 to build mod_axis.dll for Apache1_3Module or mod_axis2.dll for Apache2_0Module.
 <br><br>
 (From here onwards we will refer to these modules as APACHE_MODULE. Replace it 
-with the correct module for the Apache server version that you have installed)  
-<br><br>
+with the correct module for the Apache server version that you have installed). Then build SimpleAxisServer.  
+
 &nbsp;</p>
 
 <p><b>Axis Transport Library</b></p>
@@ -224,12 +228,7 @@ with the correct module for the Apache server version that you have installed)
 <br>Build the AxisTransport and AxisXMLParser projects,Which will build the AxisTransport.dll and AxisXMLParser.dll and also AxisTransport.lib and AxisXMLParser.lib
 in [CHECKOUT_HOME]\c\bin.</p>
 
-<p><b>Building the AxisServer and AxisClient dlls </b> </p>
 
-
-<p>Similarly as you built the Apache modules, build the AxisServer and AxisClient projects,
-Which will build the AxisServer.dll and AxisClient.dll and also AxisServer.lib and AxisClient.lib
-in [CHECKOUT_HOME]\c\bin.</p>
 
 
 
