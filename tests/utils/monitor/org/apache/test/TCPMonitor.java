@@ -1,18 +1,10 @@
-package org.apache.test;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
 
-//import javax.net.ServerSocketFactory;
-//import javax.net.SocketFactory;
+package org.apache.test;
+
+import java.io.FileWriter;
 
 /**
- * @author hawkeye
+ * @author perryan
  * This class is designed to listen on a given port and send the request received on that
  * port to the given RequestHandler. 
  * This class is meant to be used in a test suite scenario. where an instance of this class
@@ -20,10 +12,12 @@ import java.net.Socket;
  * 
  */
 public class TCPMonitor {
-	private ServerSocket serverSocket;
-	private String forwardingURL;
-	private String responseFile;
-	private int forwardingPort;
+
+	private static TCPMonitor singleton = null;
+	private static FileWriter requestFileWriter;
+	private static FileWriter responseFileWriter;
+	private static boolean responseFileWriterOpen = false;
+	private static TestClientListener T = null;
 
 	/**
 	 * Creates a new TCPMonitor listening on the given port for incoming requests (this is always on localhost of course!)
@@ -31,89 +25,75 @@ public class TCPMonitor {
 	 * @param listenerPort the port to listen for incoming requests
 	 * @throws IOException if any issues occur listening for connections or supporting them. 
 	 */
-	public TCPMonitor(
+	private TCPMonitor(
 		int listenerPort,
-		String urlToForwardTo,
-		int forwardingPort,
+		String serviceHost,
+		int servicePort,
+		String requestFile,
 		String responseFile)
-		throws IOException {
-		serverSocket = new ServerSocket(listenerPort);
-		this.forwardingURL = urlToForwardTo;
-		this.forwardingPort = forwardingPort;
-		this.responseFile = responseFile;
+		throws Exception {
+
+		requestFileWriter = new FileWriter(requestFile);
+		if(! responseFile.equals("")) {
+			responseFileWriter = new FileWriter(responseFile);
+			responseFileWriterOpen = true;
+		}
+
+		/*
+		 * Create a thread which listens for incoming requests
+		 */
+		T = new TestClientListener(listenerPort, serviceHost, servicePort);
+		T.startListener();
 	}
 
-	/**
-	 * Listen for incoming connections and give them to the handler.
-	 * 
-	 * Only one listen is called on the server socket. If more than one incoming connection is
-	 * expected then this will not be handled.
-	 *   
-	 * @param handler
-	 */
-	public void listen(RequestHandler handler) throws IOException {
-		Socket clientSocket = serverSocket.accept();
+	public static TCPMonitor getInstance() throws Exception {
+		if(singleton == null) {
+			throw new Exception("TCPMonitor has not been initialised.");
+		}
+		return singleton;
+	}
 
-		// Create a reader to read the request sent from the client
-		BufferedReader bufferedReader =
-			new BufferedReader(
-				new InputStreamReader(clientSocket.getInputStream()));
+	public static TCPMonitor getInstance(
+		int listenerPort,
+		String serviceHost,
+		int servicePort,
+		String requestFile,
+		String responseFile) throws Exception {
+		if(singleton == null) {
+			singleton = new TCPMonitor(listenerPort,serviceHost,servicePort,requestFile,responseFile);
+		}
+		return singleton;
+	}
 
-		// Open the socket to the server to forward the request
-		Socket outputSocket = new Socket(forwardingURL, forwardingPort);
-
-		// Create a writer to write the incoming client request to
-		BufferedWriter urlOutputWriter =
-			new BufferedWriter(
-				new OutputStreamWriter(outputSocket.getOutputStream()));
-
-		// We have to read in parallel thread.
-		RequestForwarder requestReader =
-			new RequestForwarder(bufferedReader, urlOutputWriter, handler);
-		
-		// spin off the thread to listen for a client request
-		requestReader.start();
-
-		// Now handle the reply coming back from the forwarded URL
-		
-		// Create a reader to read the response from the server
-		BufferedReader uriBufferedReader =
-			new BufferedReader(
-				new InputStreamReader(outputSocket.getInputStream()));
-
-		// Create the writer to send it back to the client
-		BufferedWriter bufferedWriter =
-			new BufferedWriter(
-				new OutputStreamWriter(clientSocket.getOutputStream()));
-
-		RequestForwarder responseReader =
-			new RequestForwarder(
-				uriBufferedReader,
-				bufferedWriter,
-				new MyRequestHandler(responseFile));
-		
-		// spin off the thread to listen for a client request
-		responseReader.start();
+	public static void stop() {
+		T.stopListener();
 		try {
-			// Wait for the request reader to finish
-			requestReader.join(25000);
-
-			// If the response reader is still running then
-			// ask it to stop and wait for it.
-			if(responseReader.isAlive()) {
-				responseReader.cease();
-				responseReader.join(2000);
-			}
-		} catch (Exception me) {
+			requestFileWriter.close();
+			responseFileWriter.close();
+		} catch (Exception e) {
 			;
-		} finally {
-			try {
-				outputSocket.close();
-				clientSocket.close();
-				serverSocket.close();
-			} catch (IOException mie) {
-				;
+		}
+		singleton=null;
+		System.exit(0);
+	}
+
+	public void writeRequest(String inputLine) {
+		try {
+			requestFileWriter.write(inputLine);
+			requestFileWriter.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void writeResponse(String inputLine) {
+		try {
+			if(responseFileWriterOpen) {
+				responseFileWriter.write(inputLine);
+				responseFileWriter.flush();
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -123,7 +103,7 @@ public class TCPMonitor {
 			int listener_port = 0;
 			int forward_port = 0;
 			String forward_host = "";
-			String output_file = "";
+			String request_file = "";
 			String response_file = "";
 			for (int i = 0; i < args.length; i++) {
 				if (args[i].equals("-l")) {
@@ -139,7 +119,7 @@ public class TCPMonitor {
 					continue;
 				}
 				if (args[i].equals("-o")) {
-					output_file = new String(args[++i]);
+					request_file = new String(args[++i]);
 					continue;
 				}
 				if (args[i].equals("-r")) {
@@ -150,67 +130,16 @@ public class TCPMonitor {
 			if (listener_port == 0
 				|| forward_port == 0
 				|| forward_host.equals("")
-				|| output_file.equals("")) {
+				|| request_file.equals("")) {
 				System.out.println(
 					"usage: TCPMonitor <-l listen port> <-p forward port> <-h forward host> <-o request output file> [-r response output file]");
 				return;
 			}
 			TCPMonitor monitor =
-				new TCPMonitor(listener_port, forward_host, forward_port, response_file);
-			long now = System.currentTimeMillis();
-			monitor.listen(new MyRequestHandler(output_file));
-			System.err.println("**** Listened for " + (System.currentTimeMillis() - now) + " ms" );
-		} catch (IOException exception) {
+				TCPMonitor.getInstance(listener_port, forward_host, forward_port, request_file, response_file);
+		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
 	}
 }
 
-class MyRequestHandler extends RequestHandler {
-	private FileWriter output;
-	private boolean output_set = false;
-
-	public MyRequestHandler() {
-		output_set = false;
-	}
-
-	public MyRequestHandler(String output_file) throws IOException {
-		if(output_file.equals("")) {
-			output_set = false;
-		} else {
-			output = new FileWriter(output_file);
-			output_set = true;
-		}
-	}
-	/* (non-Javadoc)
-	 * @see RequestHandler#handleWritingException(java.io.IOException)
-	 */
-	public void handleWritingException(IOException exception) {
-		exception.printStackTrace();
-	}
-	/* (non-Javadoc)
-	 * @see RequestHandler#handleReadingException(java.io.IOException)
-	 */
-	public void handleReadingException(Throwable exception) {
-		exception.printStackTrace();
-	}
-
-	/* (non-Javadoc)
-	 * @see RequestHandler#incomingRequestLine(java.lang.String)
-	 */
-	public void incomingRequestLine(String line) throws IOException {
-		if (output_set) {
-			output.write(line);
-		}
-	}
-
-	public void close() {
-		if (output_set) {
-			try {
-				output.close();
-			} catch (IOException e) {
-				// do nothing
-			}
-		}
-	}
-}

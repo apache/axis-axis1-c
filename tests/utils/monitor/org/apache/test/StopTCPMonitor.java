@@ -16,11 +16,12 @@ public class StopTCPMonitor {
 
 	public void stopMonitor() {
 		Socket socket = null;
-		DataOutputStream dos = null;
+		BufferedWriter dos = null;
 		try {
+			String stopString = "STOPTCPM";
 			socket = new Socket(hostname, port);
-			dos = new DataOutputStream(socket.getOutputStream());
-			dos.writeUTF("STOPTCPM");
+			dos = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			dos.write(stopString);
 		} catch (UnknownHostException uhe) {
 			uhe.printStackTrace();
 		} catch (ConnectException ce) {
