@@ -174,8 +174,8 @@ public class AxisEngine extends BasicHandler {
                     new InputStreamReader(
                         this.getClass().getClassLoader().getResourceAsStream(
                             (Constants.CLIENT_CONFIG_FILE.equals(filename)
-                                ? "lk/opensource/axis2/client/"
-                                : "lk/opensource/axis2/server/")
+                                ? "org/apache/axismora/client/"
+                                : "org/apache/axismora/server/")
                                 + filename)));
             String line;
             while ((line = re.readLine()) != null) {
@@ -211,16 +211,32 @@ public class AxisEngine extends BasicHandler {
      *  The Code does not start a new thread, If used in simple manner the process method will not execute 
      *  In parellel, But the process method is thread safe. To make the code parellel what should be done is 
      *  Called the process() in new thread. That is what done by the TomCat by default.    
+     * @param SOAPAction   is both service name and method name
      */
     public void process(
-        String serviceName,
+        String SOAPAction,
         InputStream in,
         OutputStream out,
         Session session,
         String usrname,
         char[] passwd,
         String encoding) {
-        log.info("start processing service " + serviceName);
+    
+       
+    log.info("start processing service " + SOAPAction);
+    // supporting both method name - Dimuthu.
+	String methodName="";
+	String serviceName="";   
+   
+	int index = SOAPAction.indexOf('$');
+	  
+		 if(index==-1){
+		  serviceName=SOAPAction.trim();
+		 }else{
+		   serviceName=SOAPAction.substring(0,index).trim();
+		   methodName=SOAPAction.substring(index+1).trim();
+		 }
+   
         MessageContext data = null;
         try {
             //create MessageData
@@ -228,9 +244,6 @@ public class AxisEngine extends BasicHandler {
             // to change here and message data
 
             WSDDService service = deployment.getService(new QName(serviceName));
-
-            //TODO use encoding
-            //SOAPAction gives you the name
 
             handlers = new Handler[7];
             /**
@@ -271,6 +284,11 @@ public class AxisEngine extends BasicHandler {
             data =
                 new BasicMessageContext(in, out, nodeinfo, 
                 			service, servicepool, session, encoding);
+            
+            if(!methodName.equals("")){
+                data.setMethodName(new QName(serviceName,methodName));
+            }
+            
             //load the provider
             org.apache.axismora.provider.Provider provider 
             				= ProviderFactory.getProvider(data);
@@ -331,8 +349,8 @@ public class AxisEngine extends BasicHandler {
                 faultCode = org.apache.axis.Constants.FAULT_SOAP12_SENDER;
                 message =
                     "Error occured Most probebly the Service "
-                        + serviceName
-                        + " does not exists in the engine please check your SOAPAction";
+                        + SOAPAction
+                        + " does not exists in the engine please check your SOAPAction. Usage ServiceName$MethodName";
             }
             if (data != null)
                 data.setSoapFault(
