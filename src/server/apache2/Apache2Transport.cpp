@@ -92,6 +92,9 @@ void Apache2Transport::setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type
 		/* This is apache module and transport is http so the key */ 
             key = "Content-Length"; 
             break;
+	case CONTENT_TYPE:
+	    ((request_rec*)m_pContext)->content_type = value;
+	    break;
         default:;
     }
     if (key)
@@ -153,13 +156,13 @@ AXIS_TRANSPORT_STATUS Apache2Transport::getBytes(char* pBuffer, int* piSize)
     len_read = ap_get_client_block((request_rec*) m_pContext, pBuffer, *piSize);
 	
  	if (strstr(pBuffer, "Content-Id")) {
-//		pAttachmentHelper = new AttachmentHelper();
+	//	pAttachmentHelper = new AttachmentHelper();
 		char *pAttachBuffer = (char*)malloc(1000);
 		char *mimeBoundary = (char*)malloc(1000);		
 
-//		pAttachmentHelper->extract_Attachment(pBuffer);		
-//		pAttachmentHelper->extract_SOAPMimeHeaders(pBuffer);	
-//		pAttachmentHelper->extract_Soap(pBuffer);
+	//	pAttachmentHelper->extract_Attachment(pBuffer);		
+	//	pAttachmentHelper->extract_SOAPMimeHeaders(pBuffer);	
+	//	pAttachmentHelper->extract_Soap(pBuffer);
 				
 	}
 
@@ -220,6 +223,8 @@ const char* Apache2Transport::getTransportProperty(AXIS_TRANSPORT_INFORMATION_TY
 
 void Apache2Transport::setTransportProperty(const char* pcKey, const char* pcValue)
 {
+	ap_table_set(((request_rec*)m_pContext)->headers_out, pcKey, pcValue);
+	//ap_send_http_header((request_rec*)m_pContext);
 
 }
 
@@ -303,6 +308,6 @@ ISoapAttachment*  Apache2Transport::getAttachment(const char* pcAttachmentid)
 
 char* Apache2Transport::getIncomingSOAPMimeHeaders()
 {
-	// return pAttachmentHelper->getIncomingSOAPMimeHeaders();
+//	 return pAttachmentHelper->getIncomingSOAPMimeHeaders();
 	return NULL;
 }
