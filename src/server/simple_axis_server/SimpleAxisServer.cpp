@@ -11,12 +11,17 @@
 #include <unistd.h>
 #endif
 
-#include <stdio.h>
+//#include <stdio.h>
 #include "../../common/Packet.h"
 #include "ServerHelper.h"
 
 #define MAXPENDING 5    /* Maximum outstanding connection requests */
 #define RCVBUFSIZE 1000   /* Size of receive buffer */
+#ifdef WIN32
+#define AXIS_SOCKET_ERROR SOCKET_ERROR
+#else //Linux
+#define AXIS_SOCKET_ERROR 1
+#endif
 
 char echoBuffer[RCVBUFSIZE];        /* Buffer for echo string */
 const char *pcHttpBody;
@@ -36,13 +41,13 @@ int executeWork() {
 	str->so.http.ip_headercount = 0;
 	str->so.http.uri_path = "http://someurl/axis/Calculator";
 
-	printf("soap request :\n %s\n", echoBuffer);
+	//DEBUG line
+	//printf("soap request :\n %s\n", echoBuffer);
 //	wprintf(L"soap request :\n %s\n", ip);
 
 	initialize_module();
 	
-	process_request(str);
-	printf("\n");
+	process_request(str);	
 	
 	uninitialize_module();
 	free(str->so.http.ip_headers);
@@ -58,7 +63,7 @@ int send_response_bytes(const char * res, const void* opstream)
 
 	int iMsgSize = strlen(res);
 	
-	if (send(iClntSocket, res, iMsgSize, 0) == SOCKET_ERROR)
+	if (send(iClntSocket, res, iMsgSize, 0) == AXIS_SOCKET_ERROR)
 		printf("%s\n","send() failed");	
 
 	return 0;
@@ -84,7 +89,7 @@ int send_transport_information(Ax_soapstream* sSoapstream)
 
 	int iMsgSize = strlen(res);
 
-	if (send(iClntSocket, res, iMsgSize, 0) == SOCKET_ERROR)
+	if (send(iClntSocket, res, iMsgSize, 0) == AXIS_SOCKET_ERROR)
 		printf("%s\n","send() failed");
 
 	return 0;
@@ -169,7 +174,8 @@ int acceptTCPConnection(int servSock)
     
     /* clntSock is connected to a client! */
     
-    printf("Handling client %s\n", inet_ntoa(echoClntAddr.sin_addr));
+	//Debug line
+    //printf("Handling client %s\n", inet_ntoa(echoClntAddr.sin_addr));
 
     return clntSock;
 }
@@ -210,7 +216,11 @@ void handleTCPClient(int clntSocket)
 
 	executeWork();		
 
+	#ifdef WIN32
 	closesocket(clntSocket);    /* Close client socket */
+	#else //Linux
+	close(clntSocket);
+	#endif
 }
 
 int main(int argc, char *argv[ ])
@@ -238,9 +248,9 @@ int main(int argc, char *argv[ ])
 
 
 	if (argc < 2) {
-		printf("Problem occured.\nUsage: %s <Server Port>", argv[0]);		
+		printf("Problem occured.\nUsage: %s <Server Port>", argv[0]);	
 		exit(1);
-	}	
+	}
 
 	#ifdef WIN32
 	if (WSAStartup(MAKEWORD(2, 0), &wsaData) != 0) /* Load Winsock 2.0 DLL */
@@ -281,7 +291,8 @@ int main(int argc, char *argv[ ])
 		{        
 			if (FD_ISSET(servSock[0], &sockSet))
 			{
-				printf("Request on port %d (cmd-line position):  \n", 0);
+				//DEBUG line
+				//printf("Request on port %d (cmd-line position):  \n", 0);
 				handleTCPClient(acceptTCPConnection(servSock[0]));				
 			}
 		}
