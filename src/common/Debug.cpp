@@ -21,7 +21,7 @@ Debug::Debug()
 Debug::~Debug()
 {
   fout->close();
-  fout = NULL;
+  delete fout;
 }
 
 int Debug::debug(const string &sLog,string arg2, int arg3)

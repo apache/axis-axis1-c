@@ -17,7 +17,15 @@ RequestScopeHandlerPool::RequestScopeHandlerPool()
 
 RequestScopeHandlerPool::~RequestScopeHandlerPool()
 {
-
+	for (map<int, list<BasicHandler*> >::iterator it = m_Handlers.begin(); it != m_Handlers.end(); it++)
+	{
+		for (list<BasicHandler*>::iterator itr = (*it).second.begin(); itr != (*it).second.end(); itr++)
+		{
+			g_HandlerLoader.DeleteHandler(*itr, (*it).first);
+		}
+		(*it).second.clear();
+	}
+	m_Handlers.clear();
 }
 
 int RequestScopeHandlerPool::GetInstance(BasicHandler** pHandler, int nLibId)
