@@ -150,16 +150,47 @@ void XercesHandler::freeElement()
     if (m_pCurrElement)
     {
         if (m_bEndElementFollows)
-            /* free only attributes list if available */
+        /* free only attributes list if available. Next time 
+		 * the same Nelement is freed.
+		 */
         {
             m_bEndElementFollows = false;
             Nelement->m_type = END_ELEMENT;
+			freeAttributes();
             Nelement->m_pchAttributes[0] = NULL;
         }
         else
-            /* free all inner strings */
+        /* free all inner strings */
         {
+			if (Nelement->m_pchNameOrValue)
+			{
+				XMLString::release(const_cast<char**>(&(Nelement->m_pchNameOrValue)));
+				Nelement->m_pchNameOrValue = 0;
+			}
+			if (Nelement->m_pchNamespace)
+			{
+				XMLString::release(const_cast<char**>(&(Nelement->m_pchNamespace)));
+				Nelement->m_pchNamespace = 0;
+			}
+			freeAttributes();
             m_pCurrElement = 0;
         }
     }
 }
+
+void XercesHandler::freeAttributes()
+{
+	for (int x=0; Nelement->m_pchAttributes[x]; x+=3)
+	{
+		if (Nelement->m_pchAttributes[x])
+		{
+			XMLString::release(const_cast<char**>(&(Nelement->m_pchAttributes[x])));
+			Nelement->m_pchAttributes[x] = 0;
+			if (Nelement->m_pchAttributes[x+1])
+				XMLString::release(const_cast<char**>(&(Nelement->m_pchAttributes[x+1])));
+			if (Nelement->m_pchAttributes[x+2])
+				XMLString::release(const_cast<char**>(&(Nelement->m_pchAttributes[x+2])));
+		}
+	}
+}
+

@@ -80,6 +80,6 @@ private:
         Nelement->m_pchNameOrValue = NULL;
         Nelement->m_pchNamespace = NULL;
     }
-
+	void freeAttributes();
 };
 
