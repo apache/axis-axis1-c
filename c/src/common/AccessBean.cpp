@@ -11,7 +11,7 @@ int AccessBean::DeSerialize(ISoapDeSerializer *pDZ)
 }
 
 //this is never called. just default method
-int AccessBean::Serialize(ISoapSerializer& pSZ)
+int AccessBean::Serialize(IWrapperSoapSerializer& pSZ)
 {
 	return SUCCESS;
 }

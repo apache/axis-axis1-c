@@ -189,7 +189,7 @@ int ArrayBean::DeSerializeArray(list<int>::iterator it, int nItemOffset, int nIt
 	return SUCCESS;
 }
 */
-int ArrayBean::Serialize(ISoapSerializer& pSZ)
+int ArrayBean::Serialize(IWrapperSoapSerializer& pSZ)
 {	
 	switch (m_type)
 	{

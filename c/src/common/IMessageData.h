@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
 // IMessageData.h: interface for the IMessageData class.
@@ -71,15 +71,24 @@
 using namespace std;
 
 class ISoapDeSerializer;
-class ISoapSerializer;
+//class ISoapSerializer;
+class IHandlerSoapSerializer;
+class IWrapperSoapSerializer;
 
 class IMessageData
 {
 public:
+	virtual void getSoapSerializer(IHandlerSoapSerializer** pIHandlerSoapSerializer)=0;
+	virtual void getSoapSerializer(IWrapperSoapSerializer** pIWrapperSoapSerializer)=0;
+	/*
+	comm on 26Jul2003 2.50pm
 	virtual ISoapSerializer* getSoapSerializer()=0;
+	*/
 	virtual ISoapDeSerializer* getSoapDeserializer()=0;
 	virtual void SetUserName(string& m_sUserName)=0;
 	virtual string& GetUserName()=0;
+	virtual bool isPastPivot()=0;
+	virtual int setPastPivotState(bool bState)=0;
 
 protected:
   string m_sUserName;  
