@@ -1,0 +1,13 @@
+<test>
+    <name>NestedComplex</name>
+    <description>NestedComplex</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>NestedComplexClient.cpp</clientCode>
+    <wsdl>NestedComplex.wsdl</wsdl>
+    <expected>
+        <output>
+            NestedComplex.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/NestedComplex/services/NestedComplex</endpoint>
+</test>

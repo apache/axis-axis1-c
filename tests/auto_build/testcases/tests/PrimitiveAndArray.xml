@@ -1,0 +1,13 @@
+<test>
+    <name>PrimitiveAndArray</name>
+    <description>PrimitiveAndArray</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>PrimitiveAndArrayClient.cpp</clientCode>
+    <wsdl>PrimitiveAndArray.wsdl</wsdl>
+    <expected>
+        <output>
+            PrimitiveAndArray.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/PrimitiveAndArray/services/PrimitiveAndArray</endpoint>
+</test>
