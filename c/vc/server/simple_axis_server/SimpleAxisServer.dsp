@@ -76,7 +76,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 Engine_D.lib Common_D.lib Soap_D.lib wsdd_D.lib xerces-c_2D.lib wsock32.lib /nologo /subsystem:console /debug /machine:I386 /out:"../../../release/win32/SimpleAxisServer_D.exe" /pdbtype:sept /libpath:"../../../lib/win32/axis" /libpath:"../../../lib/win32/xercesc"
+# ADD LINK32 Engine_D.lib Common_D.lib Soap_D.lib wsdd_D.lib xerces-c_2D.lib wsock32.lib /nologo /subsystem:console /debug /machine:I386 /out:"../../../release/win32/SimpleAxisServer_D.exe" /pdbtype:sept /libpath:"../../../lib/axis" /libpath:"../../../lib/xerces-c"
 
 !ENDIF 
 
