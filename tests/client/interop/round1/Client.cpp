@@ -24,17 +24,18 @@ int main(int argc, char* argv[])
 	sprintf(endpoint, "http://%s:%s/axis/base", server, port);
 	//endpoint for Axis Java sample
 	//sprintf(endpoint, "http://%s:%s/axis/services/echo", server, port);
-
+	try
+        {
 	SimpleTestSoap ws(endpoint, APTHTTP);
 
 	//set end point (optional)
         //ws.setEndPoint( "http://localhost:8080/axis/services/echo" );
         //ws.setEndPoint( "http://www.mssoapinterop.org/asmx/simple.asmx" );
-        ws.setEndPoint( "http://4.34.185.52/ilab/ilab.dll?Handler=Default" );
+        //ws.setEndPoint( "http://4.34.185.52/ilab/ilab.dll?Handler=Default" );
         //set proxy (optional)
-        ws.setProxy( "proxy.my.ibm.com", 80 );
+        //ws.setProxy( "proxy.my.ibm.com", 80 );
 
-getchar();
+//getchar();
 	//set timeout
 	ws.setTransportTimeout(5);
         //set HTTP headers
@@ -198,7 +199,19 @@ getchar();
 		printf("successful\n");
 	else
 		printf("failed\n");
-		
-	getchar();
+	}
+	catch(AxisException& e)
+	{
+		printf("%s\n", e.what());
+	}
+	catch(exception& e)
+	{
+		printf("%s\n", e.what());
+	}
+	catch(...)
+	{
+		printf("Unknown exception has occured\n");
+	}
+	//getchar();
 	return 0;
 }
