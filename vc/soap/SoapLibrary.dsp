@@ -86,6 +86,10 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=..\..\src\soap\apr_base64.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\soap\Attribute.cpp
 # End Source File
 # Begin Source File
@@ -103,6 +107,10 @@ SOURCE=..\..\src\soap\ComplexElement.cpp
 # Begin Source File
 
 SOURCE=..\..\src\soap\HeaderBlock.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\soap\HexCoder.cpp
 # End Source File
 # Begin Source File
 
@@ -166,6 +174,10 @@ SOURCE=..\..\src\soap\XercesHandler.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
+SOURCE=..\..\src\soap\apr_base64.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\axis\server\Attribute.h
 # End Source File
 # Begin Source File
@@ -183,6 +195,10 @@ SOURCE=..\..\src\soap\ComplexElement.h
 # Begin Source File
 
 SOURCE=..\..\include\axis\server\HeaderBlock.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\soap\HexCoder.h
 # End Source File
 # Begin Source File
 
