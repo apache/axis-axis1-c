@@ -253,7 +253,7 @@ int Call::unInitialize ()
                 delete [] m_pchSessionID;
                 m_pchSessionID = NULL;
             }
-            m_pchSessionID = new char[len + 1];  // Samisa: should have space for terminating car
+            m_pchSessionID = new char[len + 1];  // Samisa: should have space for terminating char
             strcpy(m_pchSessionID, pachTemp);
         }
         else //Samisa: there is no session key

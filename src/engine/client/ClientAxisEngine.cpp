@@ -73,7 +73,7 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
 	        else
 	        {
 		        char * pchTempService = new char [strlen(pchService)+1];
-				// Skip the starting double quote
+			// Skip the starting double quote
 		        strcpy(pchTempService, pchService+1);
 		
 		        /* The String returned as the service name has the format "Calculator#add".
@@ -82,7 +82,7 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
 
 		        /* get service description object from the WSDD Deployment object */
 		        pService = g_pWSDDDeployment->getService (pchTempService);
-		        delete pchTempService;
+		        delete [] pchTempService; // Samisa: should delete the whole array
 	        }
 
 	        //Get Global and Transport Handlers
