@@ -71,7 +71,7 @@ const char* Receiver::Recv() throw (AxisException)
         catch(...)
         {
                   printf("catch(...)\n");
-            throw AxisException(SERVER_TRANSPORT_RECEPTIONEXCEPTION);
+            throw AxisException(SERVER_TRANSPORT_RECEPTION_EXCEPTION);
         }
     }
         /* printf("m_MsgSize:%d\n", m_MsgSize); */

@@ -81,37 +81,37 @@ const string AxisEngineException::getMessage (int iExceptionCode)
     string sMessage;
     switch(iExceptionCode)
     {
-        case SERVER_ENGINE_COULDNOTLOADSRV:
+        case SERVER_ENGINE_COULD_NOT_LOAD_SRV:
             sMessage = "Could not load service";
             break;
-        case SERVER_ENGINE_COULDNOTLOADHDL:
+        case SERVER_ENGINE_COULD_NOT_LOAD_HDL:
             sMessage = "Could not load handler";
             break;
-        case SERVER_ENGINE_HANDLERFAILED:
+        case SERVER_ENGINE_HANDLER_FAILED:
             sMessage = "Handler failed";
             break;
-        case SERVER_ENGINE_WEBSERVICEFAILED:
+        case SERVER_ENGINE_WEBSERVICE_FAILED:
             sMessage = "Web Service failed";
             break;
-        case SERVER_ENGINE_HANDLERINITFAILED:
+        case SERVER_ENGINE_HANDLER_INIT_FAILED:
             sMessage = "Handler initialization failed";
             break;
-        case SERVER_ENGINE_HANDLERCREATIONFAILED:
+        case SERVER_ENGINE_HANDLER_CREATION_FAILED:
             sMessage = "Handler creation failed";
             break;
-        case SERVER_ENGINE_LIBRARYLOADINGFAILED:
+        case SERVER_ENGINE_LIBRARY_LOADING_FAILED:
             sMessage = "Library loading failed";
             break;
-        case SERVER_ENGINE_HANDLERNOTLOADED:
+        case SERVER_ENGINE_HANDLER_NOT_LOADED:
             sMessage = "Handler is not loaded";
             break;
-        case SERVER_ENGINE_HANDLERBEINGUSED:
+        case SERVER_ENGINE_HANDLER_BEING_USED:
             sMessage = "Handler is being used";
             break;
-        case SERVER_ENGINE_GETHANDLERFAILED:
+        case SERVER_ENGINE_GET_HANDLER_FAILED:
             sMessage = "Get handler failed";
             break;
-        case SERVER_ENGINE_WRONGHANDLERTYPE:
+        case SERVER_ENGINE_WRONG_HANDLER_TYPE:
             sMessage = "Wrong handler type";
             break;
         default:

@@ -75,7 +75,7 @@ int HandlerLoader::deleteHandler (BasicHandler* pHandler, int nLibId)
     else
     {
         unlock ();
-        return SERVER_ENGINE_HANDLERNOTLOADED;
+        THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_HANDLER_NOT_LOADED);
     }
 }
 
@@ -86,8 +86,8 @@ int HandlerLoader::loadLib (HandlerInformation* pHandlerInfo)
     pHandlerInfo->m_Handler = lt_dlopen (pHandlerInfo->m_sLib.c_str ());
     if (!pHandlerInfo->m_Handler)
     {
-        AXISTRACE1("DLOPEN FAILED", CRITICAL);
-        THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_LIBRARYLOADINGFAILED);
+        AXISTRACE1("SERVER_ENGINE_LIBRARY_LOADING_FAILED", CRITICAL);
+        THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_LIBRARY_LOADING_FAILED);
     }
 #elif defined(WIN32)
     pHandlerInfo->m_Handler = LoadLibrary (pHandlerInfo->m_sLib.c_str ());
@@ -98,7 +98,7 @@ int HandlerLoader::loadLib (HandlerInformation* pHandlerInfo)
     if (!pHandlerInfo->m_Handler)
     {
         AXISTRACE1("DLOPEN FAILED", CRITICAL);
-        THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_LIBRARYLOADINGFAILED);
+        THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_LIBRARY_LOADING_FAILED);
         //printf ("DLOPEN FAILED: %s\n", dlerror ());
         //exit (1);
     }
@@ -132,8 +132,8 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
         {
             delete pHandlerInfo;
             unlock ();
-            AXISTRACE1("SERVER_CONFIG_LIBRARYPATHEMPTY", CRITICAL);
-            THROW_AXIS_CONFIG_EXCEPTION(SERVER_CONFIG_LIBRARYPATHEMPTY);
+            AXISTRACE1("SERVER_CONFIG_LIBRARY_PATH_EMPTY", CRITICAL);
+            THROW_AXIS_CONFIG_EXCEPTION(SERVER_CONFIG_LIBRARY_PATH_EMPTY);
             //return SERVER_CONFIG_LIBRARYPATHEMPTY;
         }
         // pHandlerInfo->m_nLoadOptions = RTLD_LAZY;
@@ -168,7 +168,7 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
                 delete pHandlerInfo;
                 unlock ();
                 AXISTRACE1 ("Library loading failed", CRITICAL);
-                THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_LIBRARYLOADINGFAILED);
+                THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_LIBRARY_LOADING_FAILED);
                 //return SERVER_ENGINE_LIBRARYLOADINGFAILED;
             }
             else // success
@@ -180,7 +180,7 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
         {
             unlock ();
             AXISTRACE1 ("Library loading failed", CRITICAL);
-            THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_LIBRARYLOADINGFAILED);
+            THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_LIBRARY_LOADING_FAILED);
             //return SERVER_ENGINE_LIBRARYLOADINGFAILED;
         }
     }
@@ -205,15 +205,15 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
                 pBH->_functions->fini (pBH->_object);
                 pHandlerInfo->m_Delete (pBH);
                 unlock ();
-                AXISTRACE1("SERVER_ENGINE_HANDLERINITFAILED", CRITICAL);
-                THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_HANDLERINITFAILED);
+                AXISTRACE1("SERVER_ENGINE_HANDLER_INIT_FAILED", CRITICAL);
+                THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_HANDLER_INIT_FAILED);
                 //return SERVER_ENGINE_HANDLERINITFAILED;
             }
         }
         else if (0 == pBH->_object)
         {
-            AXISTRACE1("SERVER_ENGINE_HANDLERCREATIONFAILED", CRITICAL);
-            THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_HANDLERCREATIONFAILED);
+            AXISTRACE1("SERVER_ENGINE_HANDLER_CREATION_FAILED", CRITICAL);
+            THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_HANDLER_CREATION_FAILED);
             //return SERVER_ENGINE_HANDLERCREATIONFAILED;
         }
         else
@@ -231,8 +231,8 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
                 ((HandlerBase*) pBH->_object)->fini ();
                 pHandlerInfo->m_Delete (pBH);
                 unlock ();
-                AXISTRACE1("SERVER_ENGINE_HANDLERINITFAILED", CRITICAL);
-                THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_HANDLERINITFAILED);
+                AXISTRACE1("SERVER_ENGINE_HANDLER_INIT_FAILED", CRITICAL);
+                THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_HANDLER_INIT_FAILED);
                 //return SERVER_ENGINE_HANDLERINITFAILED;
             }
         }
@@ -240,8 +240,8 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
     else
     {
         unlock ();
-        AXISTRACE1("SERVER_ENGINE_HANDLERCREATIONFAILED", CRITICAL);
-        THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_HANDLERCREATIONFAILED);
+        AXISTRACE1("SERVER_ENGINE_HANDLER_CREATION_FAILED", CRITICAL);
+        THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_HANDLER_CREATION_FAILED);
         //return SERVER_ENGINE_HANDLERCREATIONFAILED;
     }
 }
