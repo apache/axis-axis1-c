@@ -174,10 +174,11 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				else
 				{
 					Iterator	itForTypes = wscontext.getTypemap().getTypes().iterator();
-					boolean		foundService = false;
-					boolean		nillable = false;
-        	
-					while( itForTypes.hasNext() && !foundService)
+					boolean		nillable = isNillable();
+					boolean		moreThanOne = isMoreThanOne();
+
+/*
+					while( itForTypes.hasNext())
 					{
 						Type aType = (Type) itForTypes.next();
         		
@@ -185,8 +186,6 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 						{
 							Iterator	itForElemName = aType.getElementnames();
 					
-							foundService = true;
-
 							while( itForElemName.hasNext() && !nillable)
 							{
 								String key = (String) itForElemName.next();
@@ -194,11 +193,23 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 								if( aType.getElementForElementName( key).getNillable())
 								{
 									nillable = true;
+									
+									Iterator itForElementType = aType.getElementForElementName( key).getType().getElementnames();
+									
+									while( itForElementType.hasNext())
+									{
+										String name = (String) itForElementType.next();
+										
+										if( "count".equals( name))
+										{
+											moreThanOne = true;
+										}
+									}
 								}
 							}
 						}
 					}
-					
+*/
 					arrayType = attribs[i].getTypeName();
 					writer.write("\t// Additional code to find is reference is pointer or pointer to a pointer\n");
 					
@@ -206,15 +217,28 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 					{
 						writer.write("\tAxis_Array\tsAA;\n\n");
 						writer.write("\tsAA.m_Size = 1;\n\n");
-						writer.write("\tfor( int iCount = 0; iCount < param->count; iCount++)\n");
-						writer.write("\t{\n");
-						writer.write("\t\tsAA.m_Array = (void **)param->"+attribs[i].getElementNameAsString()+".m_Array[iCount];\n\n");
-						writer.write("\tpSZ->serializeCmplxArray( &sAA,\n");
-						writer.write("\t\t\t\t\t\t (void*) Axis_Serialize_"+arrayType+",\n");
-						writer.write("\t\t\t\t\t\t (void*) Axis_Delete_"+arrayType+",\n");
-						writer.write("\t\t\t\t\t\t (void*) Axis_GetSize_"+arrayType+",\n");
-						writer.write("\t\t\t\t\t\t \""+attribs[i].getElementNameAsString()+"\", Axis_URI_"+arrayType+");\n");
-						writer.write("\t}\n");
+						
+						if( moreThanOne)
+						{
+							writer.write("\tfor( int iCount = 0; iCount < param->count; iCount++)\n");
+							writer.write("\t{\n");
+							writer.write("\t\tsAA.m_Array = (void **)param->"+attribs[i].getElementNameAsString()+".m_Array[iCount];\n\n");
+							writer.write("\t\tpSZ->serializeCmplxArray( &sAA,\n");
+							writer.write("\t\t\t\t\t\t\t (void*) Axis_Serialize_"+arrayType+",\n");
+							writer.write("\t\t\t\t\t\t\t (void*) Axis_Delete_"+arrayType+",\n");
+							writer.write("\t\t\t\t\t\t\t (void*) Axis_GetSize_"+arrayType+",\n");
+							writer.write("\t\t\t\t\t\t\t \""+attribs[i].getElementNameAsString()+"\", Axis_URI_"+arrayType+");\n");
+							writer.write("\t}\n");
+						}
+						else
+						{
+							writer.write("\tsAA.m_Array = (void **)param->"+attribs[i].getElementNameAsString()+".m_Array;\n\n");
+							writer.write("\tpSZ->serializeCmplxArray( &sAA,\n");
+							writer.write("\t\t\t\t\t\t (void*) Axis_Serialize_"+arrayType+",\n");
+							writer.write("\t\t\t\t\t\t (void*) Axis_Delete_"+arrayType+",\n");
+							writer.write("\t\t\t\t\t\t (void*) Axis_GetSize_"+arrayType+",\n");
+							writer.write("\t\t\t\t\t\t \""+attribs[i].getElementNameAsString()+"\", Axis_URI_"+arrayType+");\n");
+						}
 					}
 					else
 					{
@@ -289,10 +313,10 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				else
 				{
 					Iterator	itForTypes = wscontext.getTypemap().getTypes().iterator();
-					boolean		foundService = false;
-					boolean		nillable = false;
-        	
-					while( itForTypes.hasNext() && !foundService)
+					boolean		nillable = isNillable();
+					boolean		moreThanOne = isMoreThanOne();
+/*        	
+					while( itForTypes.hasNext())
 					{
 						Type aType = (Type) itForTypes.next();
         		
@@ -300,8 +324,6 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 						{
 							Iterator	itForElemName = aType.getElementnames();
 					
-							foundService = true;
-
 							while( itForElemName.hasNext() && !nillable)
 							{
 								String key = (String) itForElemName.next();
@@ -309,11 +331,23 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 								if( aType.getElementForElementName( key).getNillable())
 								{
 									nillable = true;
+									
+									Iterator itForElementType = aType.getElementForElementName( key).getType().getElementnames();
+									
+									while( itForElementType.hasNext())
+									{
+										String name = (String) itForElementType.next();
+										
+										if( "count".equals( name))
+										{
+											moreThanOne = true;
+										}
+									}
 								}
 							}
 						}
 					}
-					
+*/					
 					arrayType = attribs[i].getTypeName();
 					writer.write("\tarray = pIWSDZ->getCmplxArray((void*)Axis_DeSerialize_"+arrayType+",\n"+ 
 								 "\t\t\t\t\t\t\t\t  (void*)Axis_Create_"+arrayType+",\n"+
@@ -493,5 +527,70 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 	protected File getFilePath(boolean useServiceName) throws WrapperFault {
 		
 		return null;
+	}
+	
+	private boolean isNillable()
+	{
+		Iterator	itForTypes = wscontext.getTypemap().getTypes().iterator();
+		boolean		nillable = false;
+
+		while( itForTypes.hasNext() && !nillable)
+		{
+			Type aType = (Type) itForTypes.next();
+        		
+			if( aType.getLanguageSpecificName().indexOf( ">") > -1)
+			{
+				Iterator	itForElemName = aType.getElementnames();
+					
+				while( itForElemName.hasNext() && !nillable)
+				{
+					String key = (String) itForElemName.next();
+        				
+					if( aType.getElementForElementName( key).getNillable())
+					{
+						nillable = true;
+					}
+				}
+			}
+		}
+		
+		return nillable;
+	}
+	private boolean isMoreThanOne()
+	{
+		Iterator	itForTypes = wscontext.getTypemap().getTypes().iterator();
+		boolean 	moreThanOne = false;
+        	
+		while( itForTypes.hasNext() && !moreThanOne)
+		{
+			Type aType = (Type) itForTypes.next();
+        		
+			if( aType.getLanguageSpecificName().indexOf( ">") > -1)
+			{
+				Iterator	itForElemName = aType.getElementnames();
+					
+				while( itForElemName.hasNext() && !moreThanOne)
+				{
+					String key = (String) itForElemName.next();
+        				
+					if( aType.getElementForElementName( key).getNillable())
+					{
+						Iterator itForElementType = aType.getElementForElementName( key).getType().getElementnames();
+									
+						while( itForElementType.hasNext())
+						{
+							String name = (String) itForElementType.next();
+										
+							if( "count".equals( name))
+							{
+								moreThanOne = true;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return moreThanOne;
 	}
 }

@@ -26,17 +26,22 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Hashtable;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
+import org.apache.axis.wsdl.symbolTable.Element;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.ParamWriter;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
+import org.apache.axis.wsdl.wsdl2ws.info.ElementInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
+import org.apache.axis.wsdl.wsdl2ws.info.TypeMap;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
+import org.apache.xerces.dom3.TypeInfo;
 
 public class ArrayParamWriter extends ParamWriter
 {
@@ -157,10 +162,9 @@ public class ArrayParamWriter extends ParamWriter
         try
         {
         	Iterator	itForTypes = wscontext.getTypemap().getTypes().iterator();
-        	boolean		foundService = false;
         	boolean		nillable = false;
         	
-        	while( itForTypes.hasNext() && !foundService)
+        	while( itForTypes.hasNext())
         	{
         		Type aType = (Type) itForTypes.next();
         		
@@ -168,8 +172,6 @@ public class ArrayParamWriter extends ParamWriter
         		{
 					Iterator	itForElemName = aType.getElementnames();
 					
-        			foundService = true;
-
         			while( itForElemName.hasNext() && !nillable)
         			{
         				String key = (String) itForElemName.next();
@@ -190,7 +192,6 @@ public class ArrayParamWriter extends ParamWriter
             {
             	stars = "**";
             }
-            System.out.println(attribs[0].getTypeName() + stars + " m_Array;\n\tint m_Size;\n} " + classname);
             
             writer.write(
                 "\t"
