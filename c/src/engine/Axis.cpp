@@ -69,7 +69,7 @@
 #endif
 
 #include "ServerAxisEngine.h"
-//#include "../common/AxisTrace.h"
+#include "../common/AxisTrace.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
@@ -142,8 +142,7 @@ extern "C" int process_request(Ax_soapstream *str)
 					if (SUCCESS == engine->Initialize())
 					{
 						Status = engine->Process(str);
-	//					AXISTRACE1("Status = engine->Process(str);");
-	//				    AXISTRACE1("are we successful?");            
+						AXISTRACE1("Status = engine->Process(str):status:");        
 					}
 					delete engine;
 				}
@@ -233,6 +232,7 @@ extern "C" int process_request(Ax_soapstream *str)
 			str->transport.pSendFunct("Unknown Protocol", str->str.op_stream);
 		break;
 	}
+    AXISTRACE1("before return Status;"); 
 	return Status;
 }
 
