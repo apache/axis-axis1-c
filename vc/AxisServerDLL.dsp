@@ -146,6 +146,10 @@ SOURCE=..\src\common\AxisException.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\common\AxisMessage.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\AxisSoapException.cpp
 # End Source File
 # Begin Source File
