@@ -111,6 +111,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "AxisXMLParserTspp"=".\tspp\AxisXMLParserTspp.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "AxisXMLParserXerces"=".\xml\xerces\AxisXMLParserXerces.dsp" - Package Owner=<4>
 
 Package=<5>
