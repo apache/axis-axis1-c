@@ -44,17 +44,13 @@ int SoapFault::serialize(SoapSerializer& pSZ)
     int iStatus= AXIS_SUCCESS;
         
     pSZ.serialize("<SOAP-ENV:Fault>", NULL);    
-    AXISTRACE1("came11", INFO);
     m_pFaultcodeParam->serialize(pSZ);
     //pSZ.serialize("<faultcode>", m_sFaultcode.c_str(), "</faultcode>", NULL);
-    AXISTRACE1("came12", INFO);
     m_pFaultstringParam->serialize(pSZ);
     //pSZ.serialize("<faultstring>", m_sFaultstring.c_str(), "</faultstring>", NULL);
-    AXISTRACE1("came13", INFO);
 
     if(m_pFaultactorParam)
     {        
-        AXISTRACE1("came14", INFO);
         m_pFaultactorParam->serialize(pSZ);
         //pSZ.serialize("<faultactor>", m_sFaultactor.c_str(), "</faultactor>", NULL);
     } 
@@ -69,17 +65,14 @@ int SoapFault::serialize(SoapSerializer& pSZ)
         if(m_bIsSimpleDetail)
         {
             m_pFaultDetail->serialize(pSZ);
-            AXISTRACE1("came161", INFO);
         }
         else
         {
             pSZ.serialize("<faultdetail>", NULL);
-            AXISTRACE1("came162", INFO);
             m_pFaultDetail->serialize(pSZ);
             pSZ.serialize("</faultdetail>", NULL);
         }
     }
-    AXISTRACE1("came17", INFO);
     
     pSZ.serialize("</SOAP-ENV:Fault>", NULL);
 
@@ -221,7 +214,6 @@ int SoapFault::setFaultDetail(const string& sFaultDetail)
 
 int SoapFault::setFaultDetail(const Param* pFaultDetail)
 {
-    AXISTRACE1("came10", INFO);
     m_pFaultDetail = (Param*) pFaultDetail;
 
     return AXIS_SUCCESS;
