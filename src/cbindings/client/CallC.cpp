@@ -226,6 +226,7 @@ AXISC_STORAGE_CLASS_INFO xsdc__hexBinary axiscGetElementAsHexBinaryCall(AXISCHAN
 	const AxiscChar * pNamespace) {
 	//TODO: Unimplemented
 	xsdc__hexBinary hb;
+	memset(&hb,0,sizeof(hb));
 	return hb;
 }
 
@@ -233,6 +234,7 @@ AXISC_STORAGE_CLASS_INFO xsdc__base64Binary axiscGetElementAsBase64BinaryCall(AX
 	const AxiscChar * pNamespace) {
 	//TODO: Unimplemented
 	xsdc__base64Binary bb;
+	memset(&bb,0,sizeof(bb));
 	return bb;
 }
 
@@ -360,6 +362,7 @@ AXISC_STORAGE_CLASS_INFO xsdc__hexBinary axiscGetAttributeAsHexBinaryCall(AXISCH
 	const AxiscChar * pNamespace) {
 	//TODO: Unimplemented
 	xsdc__hexBinary hb;
+	memset(&hb,0,sizeof(hb));
 	return hb;
 }
 
@@ -367,6 +370,7 @@ AXISC_STORAGE_CLASS_INFO xsdc__base64Binary axiscGetAttributeAsBase64BinaryCall(
 	const AxiscChar * pNamespace) {
 	//TODO: Unimplemented
 	xsdc__base64Binary bb;
+	memset(&bb,0,sizeof(bb));
 	return bb;
 }
 
@@ -406,6 +410,7 @@ AXISC_STORAGE_CLASS_INFO Axisc_Array axiscGetCmplxArrayCall(AXISCHANDLE call, vo
 	const AxiscChar * pName, const AxiscChar * pNamespace) {
 	//TODO: Unimplemented
 	Axisc_Array aa;
+	memset(&aa,0,sizeof(aa));
 	return aa;
 }
 
@@ -413,6 +418,7 @@ AXISC_STORAGE_CLASS_INFO Axisc_Array axiscGetBasicArrayCall(AXISCHANDLE call, AX
 	const AxiscChar * pName, const AxiscChar * pNamespace) {
 	//TODO: Unimplemented
 	Axisc_Array aa;
+	memset(&aa,0,sizeof(aa));
 	return aa;
 }
 
