@@ -36,8 +36,8 @@ public class WrapperInfo
     private String targetEngine;
     //output location
     private String targetOutputLocation;
-    //trasport method specified in the binding
-    private String trasportUri;
+    //transport method specified in the binding
+    private String transportUri;
     //target endpoint (the URI the service is deployed in)
     private String targetEndpointURI;
     //private target name space of the wsdl file 
@@ -48,7 +48,7 @@ public class WrapperInfo
     String targetOutputLocation,
         String implStyle,
         String targetEngine,
-        String trasportUri,
+        String transportUri,
         String targetEndpointURI,
         String targetNameSpaceOfWSDL)
     {
@@ -106,13 +106,13 @@ public class WrapperInfo
             this.targetEngine = WrapperConstants.CLIENT;
         }
 
-        if (trasportUri == null)
+        if (transportUri == null)
         {
-            this.trasportUri = WrapperConstants.TRANSPORT_HTTP;
+            this.transportUri = WrapperConstants.TRANSPORT_HTTP;
         }
         else
         {
-            this.trasportUri = trasportUri;
+            this.transportUri = transportUri;
         }
 
         if (targetEndpointURI == null)
@@ -215,9 +215,9 @@ public class WrapperInfo
     /**
      * @return String
      */
-    public String getTrasportUri()
+    public String getTransportUri()
     {
-        return trasportUri;
+        return transportUri;
     }
 
 }

@@ -166,7 +166,7 @@ public class WSDL2Ws
 
         //the service style (rpc|doc|msg)
         this.serviceStyle = bindingEntry.getBindingStyle().getName();
-        //extract the trasport type as a uri
+        //extract the transport type as a uri
         this.transportURI =
             SymbolTableParsingUtils.getTransportType(bindingEntry.getBinding());
         List operations = bindingEntry.getBinding().getBindingOperations();
