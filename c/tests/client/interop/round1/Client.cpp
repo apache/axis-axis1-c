@@ -33,7 +33,10 @@ int main(int argc, char* argv[])
         ws.setEndPoint( "http://4.34.185.52/ilab/ilab.dll?Handler=Default" );
         //set proxy (optional)
         ws.setProxy( "proxy.my.ibm.com", 80 );
-//getchar();
+
+getchar();
+	//set timeout
+	ws.setTransportTimeout(5);
         //set HTTP headers
         //ws.setTransportProperty( "Accept-Language", " da, en-gb;q=0.8, en;q=0.7" );
         //ws.setTransportProperty( "Accept-Language2", " my da, en-gb;q=0.8, en;q=0.7" );

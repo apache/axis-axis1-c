@@ -31,6 +31,10 @@
  * Added setProxy
  */
 
+/*
+ * Revision 1.3  2004/06/08 samisa
+ * Added setTimeout
+ */
 
 #ifdef WIN32
 #pragma warning (disable : 4786)
@@ -74,7 +78,7 @@ int AxisTransport::openConnection()
     memset(&m_SendBuffers, 0, sizeof(BufferInfo)*NO_OF_SERIALIZE_BUFFERS); 
     //set the proxy
     if(m_bUseProxy)
-        m_pHttpTransport->setProxy( m_strProxyHost.c_str(), m_uiProxyPort);
+        m_pHttpTransport->setProxy(m_strProxyHost.c_str(), m_uiProxyPort);
     if(m_pHttpTransport->Init())
     {
        m_pSender = new Sender(m_pHttpTransport);
@@ -337,6 +341,10 @@ AxisTransport::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
     m_bUseProxy = true;    
 }
 
+void AxisTransport::setTimeout(const long lSeconds)
+{
+    m_pHttpTransport->setTimeout(lSeconds);
+}
 
 #ifdef WIN32
 #define STORAGE_CLASS_INFO __declspec(dllexport)

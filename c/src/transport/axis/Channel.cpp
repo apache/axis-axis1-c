@@ -26,6 +26,11 @@
  * by Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
 
+/*
+ * Revision 1.2  2004/06/08 samisa
+ * Added setTimeout
+ */
+
 #include "Platform.hpp"
 #include "Channel.hpp"
 #include <iostream>
@@ -235,6 +240,30 @@ Channel::operator >> (std::string & msg)
     const int BUF_SIZE = 1024;
     char buf[BUF_SIZE];
 
+    //assume timeout not set; set default tatus to OK
+    int iTimeoutStatus = 1;
+
+    //check if timeout set
+    if(m_lTimeoutSeconds)
+        iTimeoutStatus = applyTimeout();
+
+    //handle timeout outcome
+    if(iTimeoutStatus < 0)//error
+    {
+        perror ("select SOCKET_ERROR");
+        Error ("Channel error while waiting for timeout.");
+        return *this;
+    }
+
+    if(iTimeoutStatus == 0)//timeout expired
+    {
+        perror ("select timeout expired");
+        Error ("Channel error connection timeout before receving.");
+        return *this;
+    }
+
+    //either timeout was not set or data available before timeout; so read
+
     if ((nByteRecv = recv (m_Sock, (char *) &buf, BUF_SIZE - 1, 0))
 	== SOCKET_ERROR)
     {
@@ -347,3 +376,26 @@ Channel::Error (const char *err)
     std::cerr << err << std::endl;
 #endif
 }
+
+void Channel::setTimeout(const long lSeconds)
+{
+    m_lTimeoutSeconds = lSeconds;
+}
+
+int Channel::applyTimeout()
+{
+    fd_set set;
+    struct timeval timeout;
+
+    /* Initialize the file descriptor set. */
+    FD_ZERO(&set);
+    FD_SET(m_Sock, &set);
+
+    /* Initialize the timeout data structure. */
+    timeout.tv_sec = m_lTimeoutSeconds;
+    timeout.tv_usec = 0;
+
+    /* select returns 0 if timeout, 1 if input available, -1 if error. */
+    return select(FD_SETSIZE, &set, NULL, NULL, &timeout);
+}
+

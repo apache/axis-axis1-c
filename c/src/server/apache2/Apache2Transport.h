@@ -15,7 +15,12 @@
  *
  *
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
- *
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ */
+
+/*
+ * Revision 1.1  2004/06/08 samisa
+ * Added setTimeout
  */
 
 #if !defined(AXIS_APACHE2TRANSPORT_H__OF_AXIS_INCLUDED_)
@@ -57,6 +62,14 @@ public:
 	AXIS_PROTOCOL_TYPE getProtocol();
 	int getSubProtocol();
 	AXIS_TRANSPORT_STATUS flushOutput();
+  /**
+    * Set transport timeout.
+    * TODO: need to implement
+    *
+    * @param lSeconds Timeout in seconds
+    */
+    void setTimeout(const long lSeconds) {};
+
 private:
 	void* m_pContext;
 #ifndef CHUNCKED_DATA_SUPPORTED

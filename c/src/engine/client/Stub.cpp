@@ -44,7 +44,7 @@
 
 
 Stub::Stub (const char *pcEndPointUri)
-:m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false)
+:m_lTimeoutSeconds(0)
 {
     m_pCall = new Call ();
     m_pCall->setProtocol (APTHTTP);
@@ -148,29 +148,13 @@ Stub::applyUserPreferences ()
 {
     setSOAPHeaders ();
     setTransportProperties ();
-	setSOAPMethodAttributes();
+    setSOAPMethodAttributes();
+    setTransportTimeout();
 }
 
 void Stub::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
 {
-    /*m_strProxyHost = pcProxyHost;
-    m_uiProxyPort = uiProxyPort;
-    m_bUseProxy = true;    */
     m_pCall->setProxy(pcProxyHost, uiProxyPort);
-}
-
-void Stub::setProxy()
-{
-    /*if(m_bUseProxy)
-    {
-        SOAPTransport *pTrasport = NULL;
-        if (m_pCall)
-            pTrasport = m_pCall->getTransport ();
-        if (pTrasport)
-        {
-            pTrasport->setProxy(m_strProxyHost, m_uiProxyPort);
-        }
-    }*/
 }
 
 void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue)
@@ -198,3 +182,23 @@ void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pP
     Attribute* pAttribute = new Attribute(pLocalname, pPrefix, pUri, pValue);
 	m_vSOAPMethodAttributes.push_back(pAttribute);
 }
+
+void Stub::setTransportTimeout(const long lSeconds)
+{
+    m_lTimeoutSeconds = lSeconds;
+}
+
+void Stub::setTransportTimeout()
+{
+    if(m_lTimeoutSeconds)
+    {
+        SOAPTransport *pTrasport = NULL;
+        if (m_pCall)
+            pTrasport = m_pCall->getTransport ();
+        if (pTrasport)
+        {
+            pTrasport->setTimeout(m_lTimeoutSeconds);
+        }
+    }    
+}
+
