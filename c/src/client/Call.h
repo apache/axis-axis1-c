@@ -80,8 +80,8 @@ public:
 	int SetProtocol(AXIS_PROTOCOL_TYPE protocol);
 	int UnInitialize();
 	int Initialize();
-	uParamValue GetResult();
 	void GetResult(void** pReturn);
+	Param* GetResult();
 	int Invoke();
 
 	/* Method to set that the return type is complex type */
@@ -118,6 +118,7 @@ public:
 	/* Method that set the remote method name */
 	void SetOperation(const char* pchOperation, const char* pchNamespace);
 	int SetEndpointURI(const char* pchEndpointURI);
+
 	Call();
 	virtual ~Call();
 private:
@@ -128,7 +129,7 @@ private:
 
 private:
 	ClientAxisEngine* m_pAxisEngine;
-	uParamValue m_uReturnValue;
+	Param* m_pReturnValue;
 	/* 
 	   Following are pointers to relevant objects of the ClientAxisEngine instance 
 	   So they do not belong to this object and are not created or deleted 

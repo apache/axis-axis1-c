@@ -85,6 +85,7 @@ Call::Call()
 	m_pTransport = NULL;
 	m_nReturnType = XSD_UNKNOWN;
 	m_nArrayType = XSD_UNKNOWN;
+	m_pReturnValue = NULL;
 }
 
 Call::~Call()
@@ -273,32 +274,28 @@ int Call::Invoke()
 			/* now we know that this is an array. if needed we can check that too */
 			if (!m_pArray) return FAIL; //No array expected ?
 			m_pArray->m_Size = param0->GetArraySize();
-			if (m_pArray->m_Size > 0)
+			if (SUCCESS == MakeArray()) //Array is allocated successfully
 			{
-				if (SUCCESS == MakeArray()) //Array is allocated successfully
-				{
-					if (USER_TYPE == m_nArrayType)
-						param0->SetArrayElements((void*)(m_pArray->m_Array), m_ReturnCplxObj.pDZFunct, m_ReturnCplxObj.pDelFunct, m_ReturnCplxObj.pSizeFunct);
-					else
-						param0->SetArrayElements((void*)(m_pArray->m_Array));
-					m_pIWSDZ->Deserialize(param0,0);
-				}
+				if (USER_TYPE == m_nArrayType)
+					param0->SetArrayElements((void*)(m_pArray->m_Array), m_ReturnCplxObj.pDZFunct, m_ReturnCplxObj.pDelFunct, m_ReturnCplxObj.pSizeFunct);
+				else
+					param0->SetArrayElements((void*)(m_pArray->m_Array));
+				m_pIWSDZ->Deserialize(param0,0);
 			}
 			else 
 				return FAIL; //CF_ZERO_ARRAY_SIZE_ERROR
 		}
 		else //basic type
 		{
-			pParam = (Param*)m_pIWSDZ->GetParam();
-			if (pParam) m_uReturnValue = pParam->GetValue();
+			m_pReturnValue = (Param*)m_pIWSDZ->GetParam();
 		}
 	}
 	return nStatus;
 }
 
-uParamValue Call::GetResult()
+Param* Call::GetResult()
 {
-	return m_uReturnValue;
+	return m_pReturnValue;
 }
 
 void Call::GetResult(void** pReturn)
@@ -417,60 +414,16 @@ void Call::SetSOAPVersion(SOAP_VERSION version)
  */
 int Call::MakeArray()
 {
+	if (m_pArray->m_Size < 1) return FAIL;
+
 	if (USER_TYPE == m_nArrayType)
 	{
 		m_pArray->m_Array = m_ReturnCplxObj.pCreFunct(true, m_pArray->m_Size);
 	}
 	else
 	{
-		switch (m_nArrayType)
-		{
-		case XSD_INT:
-		case XSD_UNSIGNEDINT:
-			m_pArray->m_Array = new int[m_pArray->m_Size];
-			break;
-		case XSD_FLOAT:
-			m_pArray->m_Array = new float[m_pArray->m_Size];
-			break;
-		case XSD_STRING:
-		case XSD_HEXBINARY:
-		case XSD_BASE64BINARY:
-		case XSD_ANYURI:
-		case XSD_QNAME:
-		case XSD_NOTATION:
-			m_pArray->m_Array = new AxisString[m_pArray->m_Size];
-			break;
-		case XSD_LONG:
-		case XSD_UNSIGNEDLONG:
-		case XSD_INTEGER:
-		case XSD_DURATION:
-			m_pArray->m_Array = new long[m_pArray->m_Size];
-			break;
-		case XSD_SHORT:
-		case XSD_UNSIGNEDSHORT:
-			m_pArray->m_Array = new short[m_pArray->m_Size];
-			break;
-		case XSD_BYTE:
-		case XSD_UNSIGNEDBYTE:
-			m_pArray->m_Array = new char[m_pArray->m_Size];
-			break;
-		case XSD_DOUBLE:
-		case XSD_DECIMAL:
-			m_pArray->m_Array = new double[m_pArray->m_Size];
-			break;
-		case XSD_DATETIME:
-		case XSD_TIME:
-		case XSD_DATE:
-		case XSD_YEARMONTH:
-		case XSD_YEAR:
-		case XSD_MONTHDAY:
-		case XSD_DAY:
-		case XSD_MONTH:
-			m_pArray->m_Array = new tm[m_pArray->m_Size];
-			break;
-		default:
-			return FAIL;
-		}
+		m_pArray->m_Array = m_pIWSDZ->CreateArray(m_nArrayType, m_pArray->m_Size); 
 	}
-	return SUCCESS;
+	return (NULL != m_pArray->m_Array);
 }
+

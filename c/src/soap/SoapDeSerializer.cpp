@@ -204,3 +204,316 @@ int SoapDeSerializer::GetVersion()
 {
 	return m_pHandler->m_nSoapVersion;	
 }
+
+Axis_Array SoapDeSerializer::GetArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)
+{
+	Axis_Array Array = {NULL, 0};
+	Param *param = (Param*)GetParam();
+	if (!param) return Array;
+	if (XSD_ARRAY != param->GetType()) return Array; //UNEXPECTED_PARAM_TYPE
+	/* Check whether the array is of expected type */
+//	if (param->GetTypeName() == pchTypeName) return Array; //UNEXPECTED_PARAM_TYPE
+//	if (param->GetURI() == pchURI) return Array; //UNEXPECTED_PARAM_TYPE
+	
+	Array.m_Size = param->GetArraySize();
+	if (Array.m_Size > 0)
+	{
+		Array.m_Array = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)(true, Array.m_Size);
+		if (!Array.m_Array) 
+		{
+			Array.m_Size = 0;
+			return Array;
+		}
+	}
+	else 
+		return Array; //CF_ZERO_ARRAY_SIZE_ERROR
+	if (SUCCESS != param->SetArrayElements((void*)(Array.m_Array), (AXIS_DESERIALIZE_FUNCT)pDZFunct, 
+		(AXIS_OBJECT_DELETE_FUNCT)pDelFunct, (AXIS_OBJECT_SIZE_FUNCT)pSizeFunct))
+	{
+		((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(Array.m_Array, true, Array.m_Size);
+		Array.m_Array = NULL;
+		Array.m_Size = 0;
+		return Array;
+	}
+	if (SUCCESS != Deserialize(param,0))
+	{
+		((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(Array.m_Array, true, Array.m_Size);
+		Array.m_Array = NULL;
+		Array.m_Size = 0;
+		return Array;
+	}
+	return Array;
+}
+
+Axis_Array SoapDeSerializer::GetArray(XSDTYPE nType)
+{
+	Axis_Array Array = {NULL, 0};
+	Param *param = (Param*)GetParam();
+	if (!param) return Array;
+	if (XSD_ARRAY != param->GetType()) return Array; //UNEXPECTED_PARAM_TYPE
+	
+	Array.m_Size = param->GetArraySize();
+	if (Array.m_Size > 0)
+	{
+		Array.m_Array = CreateArray(nType, Array.m_Size);
+		if (!Array.m_Array) 
+		{
+			Array.m_Size = 0;
+			return Array;
+		}
+	}
+	else 
+		return Array; //CF_ZERO_ARRAY_SIZE_ERROR
+	if (SUCCESS != param->SetArrayElements((void*)(Array.m_Array)))
+	{
+		DeleteArray(Array.m_Array, nType);
+		Array.m_Array = NULL;
+		Array.m_Size = 0;
+		return Array;
+	}
+	if (SUCCESS != Deserialize(param,0))
+	{
+		DeleteArray(Array.m_Array, nType);
+		Array.m_Array = NULL;
+		Array.m_Size = 0;
+		return Array;
+	}
+	return Array;
+}
+
+void* SoapDeSerializer::GetObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)
+{
+	Param *param = (Param*)GetParam();
+	if (!param) return NULL;
+	if (USER_TYPE != param->GetType()) return NULL; //UNEXPECTED_PARAM_TYPE
+	/* Check whether the object is of expected type */
+//	if (param->GetTypeName() == pchTypeName) return NULL; //UNEXPECTED_PARAM_TYPE
+//	if (param->GetURI() == pchURI) return NULL; //UNEXPECTED_PARAM_TYPE
+
+	void* pObject = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)();
+	if (!pObject) return NULL;
+
+	if (SUCCESS != param->SetUserType(pObject, (AXIS_DESERIALIZE_FUNCT)pDZFunct, (AXIS_OBJECT_DELETE_FUNCT)pDelFunct))
+	{
+		((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(pObject);
+		return NULL;
+	}
+	if (SUCCESS != Deserialize(param,0))
+	{
+		((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(pObject);
+		return NULL;
+	}
+	return pObject;
+}
+
+int SoapDeSerializer::GetInt()
+{
+	Param *param = (Param*)GetParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetInt();
+}
+unsigned int SoapDeSerializer::GetUnsignedInt()
+{
+	Param *param = (Param*)GetParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetUnsignedInt();
+}
+short SoapDeSerializer::GetShort()
+{
+	Param *param = (Param*)GetParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetShort();
+}
+unsigned short SoapDeSerializer::GetUnsignedShort()
+{
+	Param *param = (Param*)GetParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetUnsignedShort();
+}
+char SoapDeSerializer::GetByte()
+{
+	Param *param = (Param*)GetParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetByte();
+}
+unsigned char SoapDeSerializer::GetUnsignedByte()
+{
+	Param *param = (Param*)GetParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetUnsignedByte();
+}
+long SoapDeSerializer::GetLong()
+{
+	Param *param = (Param*)GetParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetLong();
+}
+long SoapDeSerializer::GetInteger()
+{
+	Param *param = (Param*)GetParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetInteger();
+}
+unsigned long SoapDeSerializer::GetUnsignedLong()
+{
+	Param *param = (Param*)GetParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetUnsignedLong();
+}
+float SoapDeSerializer::GetFloat()
+{
+	Param *param = (Param*)GetParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetFloat();
+}
+double SoapDeSerializer::GetDouble()
+{
+	Param *param = (Param*)GetParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetDouble();
+}
+double SoapDeSerializer::GetDecimal()
+{
+	Param *param = (Param*)GetParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetDecimal();
+}
+const AxisChar* SoapDeSerializer::GetString()
+{
+	Param *param = (Param*)GetParam();
+	if (!param) return NULL; //TODO this is an error situation. Should be handled.
+	return param->GetString();
+}
+const AxisChar* SoapDeSerializer::GetAnyURI()
+{
+	Param *param = (Param*)GetParam();
+	if (!param) return NULL; //TODO this is an error situation. Should be handled.
+	return param->GetAnyURI();
+}
+const AxisChar* SoapDeSerializer::GetQName()
+{
+	Param *param = (Param*)GetParam();
+	if (!param) return NULL; //TODO this is an error situation. Should be handled.
+	return param->GetQName();
+}
+const AxisChar* SoapDeSerializer::GetHexString()
+{
+	Param *param = (Param*)GetParam();
+	if (!param) return NULL; //TODO this is an error situation. Should be handled.
+	return param->GetHexString();
+}
+const AxisChar* SoapDeSerializer::GetBase64String()
+{
+	Param *param = (Param*)GetParam();
+	if (!param) return NULL; //TODO this is an error situation. Should be handled.
+	return param->GetBase64String();
+}
+struct tm SoapDeSerializer::GetDateTime()
+{
+	Param *param = (Param*)GetParam();
+	return param->GetDateTime();
+}
+struct tm SoapDeSerializer::GetDate()
+{
+	Param *param = (Param*)GetParam();
+	return param->GetDate();
+}
+struct tm SoapDeSerializer::GetTime()
+{
+	Param *param = (Param*)GetParam();
+	return param->GetTime();
+}
+long SoapDeSerializer::GetDuration()
+{
+	Param *param = (Param*)GetParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetDuration();
+}
+
+void* SoapDeSerializer::CreateArray(XSDTYPE nType, int nSize)
+{
+	switch (nType)
+	{
+	case XSD_INT:
+	case XSD_UNSIGNEDINT:
+		return new int[nSize];
+	case XSD_FLOAT:
+		return new float[nSize];
+	case XSD_STRING:
+	case XSD_HEXBINARY:
+	case XSD_BASE64BINARY:
+	case XSD_ANYURI:
+	case XSD_QNAME:
+	case XSD_NOTATION:
+		return new AxisString[nSize];
+	case XSD_LONG:
+	case XSD_UNSIGNEDLONG:
+	case XSD_INTEGER:
+	case XSD_DURATION:
+		return new long[nSize];
+	case XSD_SHORT:
+	case XSD_UNSIGNEDSHORT:
+		return new short[nSize];
+	case XSD_BYTE:
+	case XSD_UNSIGNEDBYTE:
+		return new char[nSize];
+	case XSD_DOUBLE:
+	case XSD_DECIMAL:
+		return new double[nSize];
+	case XSD_DATETIME:
+	case XSD_TIME:
+	case XSD_DATE:
+	case XSD_YEARMONTH:
+	case XSD_YEAR:
+	case XSD_MONTHDAY:
+	case XSD_DAY:
+	case XSD_MONTH:
+		return new tm[nSize];
+	default:
+		return NULL;
+	}
+}
+
+void SoapDeSerializer::DeleteArray(void* pArray, XSDTYPE nType)
+{
+	switch (nType)
+	{
+	case XSD_INT:
+	case XSD_UNSIGNEDINT:
+		delete [] ((int*)pArray); return;
+	case XSD_FLOAT:
+		delete [] ((float*)pArray); return;
+	case XSD_STRING:
+	case XSD_HEXBINARY:
+	case XSD_BASE64BINARY:
+	case XSD_ANYURI:
+	case XSD_QNAME:
+	case XSD_NOTATION:
+		delete [] ((AxisString*)pArray); return;
+	case XSD_LONG:
+	case XSD_UNSIGNEDLONG:
+	case XSD_INTEGER:
+	case XSD_DURATION:
+		delete [] ((long*)pArray); return;
+	case XSD_SHORT:
+	case XSD_UNSIGNEDSHORT:
+		delete [] ((short*)pArray); return;
+	case XSD_BYTE:
+	case XSD_UNSIGNEDBYTE:
+		delete [] ((char*)pArray); return;
+	case XSD_DOUBLE:
+	case XSD_DECIMAL:
+		delete [] ((double*)pArray); return;
+	case XSD_DATETIME:
+	case XSD_TIME:
+	case XSD_DATE:
+	case XSD_YEARMONTH:
+	case XSD_YEAR:
+	case XSD_MONTHDAY:
+	case XSD_DAY:
+	case XSD_MONTH:
+		delete [] ((tm*)pArray); return;
+	default:
+		return;
+	}
+}

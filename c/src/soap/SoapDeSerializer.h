@@ -100,7 +100,41 @@ public:
 	int SetInputStream(const Ax_soapstream* pInputStream);
 	SoapDeSerializer();
 	virtual ~SoapDeSerializer();
-
+	/* Method used by wrappers to get a deserialized Array of complex types */
+	Axis_Array GetArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI);
+	/* Method used by wrappers to get a deserialized Array of basic types */
+	Axis_Array GetArray(XSDTYPE nType);
+	/* Method used by wrappers to get a deserialized single object of complex type */
+	void* GetObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pchTypeName, const AxisChar* pchURI);
+	
+	/* Methods used by wrappers to get a deserialized value of basic types */
+	int GetInt();
+    unsigned int GetUnsignedInt();
+    short GetShort();
+    unsigned short GetUnsignedShort();
+    char GetByte();
+    unsigned char GetUnsignedByte();
+    long GetLong();
+    long GetInteger();
+    unsigned long GetUnsignedLong();
+	float GetFloat();
+    double GetDouble();
+    double GetDecimal();
+	const AxisChar* GetString();
+    const AxisChar* GetAnyURI();
+    const AxisChar* GetQName();
+	const AxisChar* GetHexString();
+	const AxisChar* GetBase64String();
+    /*return a tm struct which contain year-month-date-hour-
+      minute-second*/
+    struct tm GetDateTime();
+    struct tm GetDate();
+    struct tm GetTime();
+    /*return a tm struct which contain years-months-dates-hours-
+      minutes-seconds which represents a duration*/
+    long GetDuration();
+	void* CreateArray(XSDTYPE nType, int nSize);
+	void DeleteArray(void* pArray, XSDTYPE nType);
 };
 
 #endif // !defined(AFX_SOAPDESERIALIZER_H__FD0E7C3B_B887_480A_9E2A_20736A88B09B__INCLUDED_)

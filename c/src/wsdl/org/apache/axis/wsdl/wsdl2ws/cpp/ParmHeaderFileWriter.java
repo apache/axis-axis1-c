@@ -64,6 +64,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
@@ -132,14 +133,22 @@ public class ParmHeaderFileWriter extends ParamWriter{
 		Type atype;
 		Iterator types = this.wscontext.getTypemap().getTypes().iterator();
 		writer.write("#include <string>\nusing namespace std;\n\n");
+		HashSet typeSet = new HashSet();
 		while(types.hasNext()){
 			atype = (Type)types.next();
 			if(!(atype.equals(this.type))){
 				if (this.type.isContainedType(atype)){ 
-					writer.write("#include \""+atype.getLanguageSpecificName()+".h\"\n");
+					typeSet.add(atype.getLanguageSpecificName());
 				}
 			}
-		}
+		}		
+		Iterator itr = typeSet.iterator();
+		while(itr.hasNext())
+		{
+			writer.write("#include \""+itr.next().toString()+".h\"\n");
+		}		
+		
+				
 		//Local name and the URI for the type
 		writer.write("//Local name and the URI for the type\n");
 		writer.write("static const char* Axis_URI_"+classname+" = \""+type.getName().getNamespaceURI()+"\";\n");
