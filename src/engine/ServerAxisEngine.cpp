@@ -30,7 +30,7 @@ ServerAxisEngine::~ServerAxisEngine()
 int ServerAxisEngine::Process(Ax_soapstream* soap) 
 {
 	int Status = 0;
-	AXIS_TRY
+//	AXIS_TRY
 		AXISTRACE1("ServerAxisEngine::Process");
 		const WSDDService* pService = NULL;
 		string sSessionId = soap->sessionid;
@@ -177,7 +177,7 @@ int ServerAxisEngine::Process(Ax_soapstream* soap)
 		//Pool back the webservice
 		if (m_pWebService) g_pHandlerPool->PoolWebService(sSessionId, m_pWebService, pService); 
 		return Status;
-	AXIS_CATCH(exception* e)
+//	AXIS_CATCH(exception* e)
 		//todo
 		/*
 		An exception derived from exception which is not handled will be handled here.
@@ -189,7 +189,7 @@ int ServerAxisEngine::Process(Ax_soapstream* soap)
 //		AXISTRACE1(e->what());   
 		delete(e);
 		#endif
-	AXIS_CATCH(...)
+//	AXIS_CATCH(...)
 		//todo
 		/*
 		An unknown exception which is not handled will be handled here.
@@ -198,7 +198,7 @@ int ServerAxisEngine::Process(Ax_soapstream* soap)
 		in a logfile specific to axis.
 		*/
 //		AXISTRACE1("UNKNOWN EXCEPTION");
-	AXIS_ENDCATCH
+//	AXIS_ENDCATCH
 	return Status;
 }
 

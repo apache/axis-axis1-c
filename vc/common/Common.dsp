@@ -163,7 +163,15 @@ SOURCE=..\..\src\common\AxisTrace.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\AxisUserAPI.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\AxisUtils.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\AxisWrapperAPI.h
 # End Source File
 # Begin Source File
 
