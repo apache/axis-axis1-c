@@ -67,6 +67,9 @@ ComplexElement::ComplexElement(AxisChar *pachLocalName, AxisChar *pachPrefix,
     strcpy(m_pachPrefix, pachPrefix);
     m_pachURI = new AxisChar[strlen(pachUri)+1];
     strcpy(m_pachURI, pachUri);
+
+    m_iNodeType= ELEMENT_NODE;
+    iNoOfChildren = 0;
 }
 
 ComplexElement::ComplexElement(const ComplexElement& rCopy)
@@ -96,6 +99,9 @@ ComplexElement::ComplexElement(const ComplexElement& rCopy)
     	  this->m_pachURI = new char[strlen(rCopy.m_pachURI)+1];
         strcpy(this->m_pachURI,rCopy.m_pachURI);
     }
+
+    this->m_iNodeType= rCopy.m_iNodeType;
+    this->iNoOfChildren = rCopy.iNoOfChildren;
 }
 
 BasicNode* ComplexElement::clone()
