@@ -37,6 +37,6 @@ int main(int argc, char* argv[])
 	{
 	    cout << "Unknown exception has occured" <<endl;
 	}
-		
+  cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;		
 	return rc;
 }
