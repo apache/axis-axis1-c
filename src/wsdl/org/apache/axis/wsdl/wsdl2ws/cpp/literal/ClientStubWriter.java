@@ -954,7 +954,7 @@ public class ClientStubWriter
         {
             flag = true;
             writer.write(
-                "\t\t\tpcCmplxFaultName = pSoapFault->getCmplxFaultObjectName().c_str();\n");
+                "\t\t\tpcCmplxFaultName = pSoapFault->getCmplxFaultObjectName();\n");
         }
         while (paramsFault.hasNext())
         {
@@ -1052,11 +1052,11 @@ public class ClientStubWriter
             writer.write("\t\t\t\t\t\t\"" + faultInfoName + "\",\n");
             writer.write("\t\t\t\t\t\t0);\n\n");
             writer.write(
-            	"\t\t\t\tpFaultDetail->setFaultCode(pSoapFault->getFaultcode().c_str());\n");
+            	"\t\t\t\tpFaultDetail->setFaultCode(pSoapFault->getFaultcode());\n");
             writer.write(
-            	"\t\t\t\tpFaultDetail->setFaultString(pSoapFault->getFaultstring().c_str());\n");
+            	"\t\t\t\tpFaultDetail->setFaultString(pSoapFault->getFaultstring());\n");
             writer.write(
-            	"\t\t\t\tpFaultDetail->setFaultActor(pSoapFault->getFaultactor().c_str());\n");
+            	"\t\t\t\tpFaultDetail->setFaultActor(pSoapFault->getFaultactor());\n");
             writer.write(
             	"\t\t\t\tpFaultDetail->setExceptionCode(e.getExceptionCode());\n");
             writer.write("\t\t\t\tm_pCall->unInitialize();\n");

@@ -224,7 +224,7 @@ SoapFault* SoapFault::getSoapFault(int iFaultCode)
      */
      string strFaultcode = s_parrSoapFaultStruct[iFaultCode].pcFaultcode;
      string strSoapEnvVerStruct = gs_SoapEnvVersionsStruct[SOAP_VER_1_1].pchPrefix;
-     pSoapFault->setFaultcode(strSoapEnvVerStruct + ":" + strFaultcode);
+     pSoapFault->setFaultcode((strSoapEnvVerStruct + ":" + strFaultcode).c_str());
      //pSoapFault->setFaultcode(string(gs_SoapEnvVersionsStruct[SOAP_VER_1_1].pchPrefix) + 
      //    ":" + s_parrSoapFaultStruct[iFaultCode].pcFaultcode);
      pSoapFault->setFaultstring(s_parrSoapFaultStruct[iFaultCode].pcFaultstring);
@@ -238,7 +238,7 @@ SoapFault* SoapFault::getSoapFault(int iFaultCode)
     string strUrl = pcNodeName;
     strUrl += ":";
     strUrl += string(pcPort);
-    pSoapFault->setFaultactor(strUrl);			 
+    pSoapFault->setFaultactor(strUrl.c_str());			 
     pSoapFault->setFaultDetail(s_parrSoapFaultStruct[iFaultCode].pcFaultDetail);
     
 return pSoapFault;
@@ -263,37 +263,37 @@ int SoapFault::setParam(Param* pParam, const AxisChar* pchName, const void* pVal
     return AXIS_SUCCESS;
 }
 
-int SoapFault::setFaultcode(const string& sFaultcode)
+int SoapFault::setFaultcode(const AxisChar* sFaultcode)
 {
     m_pFaultcodeParam = new Param();
     //setParam(m_pFaultcodeParam, "faultcode", &sFaultcode, XSD_STRING); 
-	setParam(m_pFaultcodeParam, "faultcode", sFaultcode.c_str(), XSD_STRING); 
+	setParam(m_pFaultcodeParam, "faultcode", sFaultcode, XSD_STRING); 
     m_sFaultcode= sFaultcode;
 
     return AXIS_SUCCESS;
 }
 
-int SoapFault::setFaultstring(const string& sFaultstring)
+int SoapFault::setFaultstring(const AxisChar* sFaultstring)
 {
     m_pFaultstringParam = new Param();
-    setParam(m_pFaultstringParam, "faultstring", sFaultstring.c_str(), XSD_STRING); 
+    setParam(m_pFaultstringParam, "faultstring", sFaultstring, XSD_STRING); 
     m_sFaultstring= sFaultstring;
 
     return AXIS_SUCCESS;
 }
-int SoapFault::setFaultactor(const string& sFaultactor)
+int SoapFault::setFaultactor(const AxisChar* sFaultactor)
 {
     m_pFaultactorParam = new Param();
-    setParam(m_pFaultactorParam, "faultactor", sFaultactor.c_str(), XSD_STRING); 
+    setParam(m_pFaultactorParam, "faultactor", sFaultactor, XSD_STRING); 
     m_sFaultactor = sFaultactor;
     
     return AXIS_SUCCESS;
 }
 
-int SoapFault::setFaultDetail(const string& sFaultDetail)
+int SoapFault::setFaultDetail(const AxisChar* sFaultDetail)
 {
     m_pFaultDetail = new Param();
-    setParam(m_pFaultDetail, "detail", sFaultDetail.c_str(), XSD_STRING);
+    setParam(m_pFaultDetail, "detail", sFaultDetail, XSD_STRING);
     m_sFaultDetail = sFaultDetail;
     m_bIsSimpleDetail = true;
 
@@ -345,29 +345,29 @@ const char* SoapFault::getSoapString()
     return m_sFaultstring.c_str(); 
 }
 
-string SoapFault::getFaultcode()
+const AxisChar* SoapFault::getFaultcode()
 {
-    return m_sFaultcode;
+    return m_sFaultcode.c_str();
 }
 
-string SoapFault::getFaultstring()
+const AxisChar* SoapFault::getFaultstring()
 {
-    return m_sFaultstring;
+    return m_sFaultstring.c_str();
 }
 
-string SoapFault::getFaultactor()
+const AxisChar* SoapFault::getFaultactor()
 {
-    return m_sFaultactor;
+    return m_sFaultactor.c_str();
 }
 
-string SoapFault::getSimpleFaultDetail()
+const AxisChar* SoapFault::getSimpleFaultDetail()
 {
-    return m_sFaultDetail;
+    return m_sFaultDetail.c_str();
 }
 
-string SoapFault::getCmplxFaultObjectName()
+const AxisChar* SoapFault::getCmplxFaultObjectName()
 {
-    return m_sCmplxFaultObjectName;
+    return m_sCmplxFaultObjectName.c_str();
 }
 
 void* SoapFault::getCmplxFaultObject(void* pDZFunct, void* pCreFunct, void* pDelFunct,

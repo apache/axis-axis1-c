@@ -449,7 +449,7 @@ int SoapSerializer::createSoapFault(const AxisChar* sLocalName,
     string strUrl = pcNodeName;
     strUrl += ":";
     strUrl += string(pcPort);
-    pSoapFault->setFaultactor(strUrl);
+    pSoapFault->setFaultactor(strUrl.c_str());
     
     return AXIS_SUCCESS;
 }

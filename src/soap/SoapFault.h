@@ -96,25 +96,25 @@ public:
 
     virtual ~SoapFault();
 
-    int setFaultDetail(const string& sDetail);
+    int setFaultDetail(const AxisChar* sDetail);
 
     int setFaultDetail(const Param* pFaultDetail);
 
-    int setFaultactor(const string& sFaultactor);
+    int setFaultactor(const AxisChar* sFaultactor);
 
-    int setFaultstring(const string& sFaultstring);
+    int setFaultstring(const AxisChar* sFaultstring);
 
-    int setFaultcode(const string& sFaultcode);
+    int setFaultcode(const AxisChar* sFaultcode);
 
-    string getFaultcode();
+    const AxisChar* getFaultcode();
 
-    string getFaultstring();
+    const AxisChar* getFaultstring();
 
-    string getFaultactor();
+    const AxisChar* getFaultactor();
 
-    string getSimpleFaultDetail();
+    const AxisChar* getSimpleFaultDetail();
     
-    string getCmplxFaultObjectName();
+    const AxisChar* getCmplxFaultObjectName();
  
     void* getCmplxFaultObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, 
         const AxisChar* pName, const AxisChar* pNamespace);

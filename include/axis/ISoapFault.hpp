@@ -55,7 +55,7 @@ public:
       * 
       * @return name of the complex fault
       */
-    virtual string getCmplxFaultObjectName() = 0;
+    virtual const AxisChar* getCmplxFaultObjectName() = 0;
     
     /** Once we know the complex fault name we can pass the information such as the
       * knowledge to deserialize the complex fault by calling this method.
@@ -76,33 +76,33 @@ public:
       *
       * @return Simple fault detail
       */
-    virtual string getSimpleFaultDetail() = 0;
+    virtual const AxisChar* getSimpleFaultDetail() = 0;
 
     /** To retrive the soap fault code
       *
       * @return fault code
       */
-    virtual string getFaultcode() = 0;
+    virtual const AxisChar* getFaultcode() = 0;
 
     /** To retrive the soap fault string
       *
       * @return fault string
       */
-    virtual string getFaultstring() = 0;
+    virtual const AxisChar* getFaultstring() = 0;
 
     /** To retrive the soap fault actor
       *
       * @return fault actor
       */
-    virtual string getFaultactor() = 0;
+    virtual const AxisChar* getFaultactor() = 0;
 
-    virtual int setFaultcode(const string& sFaultcode) = 0;
+    virtual int setFaultcode(const AxisChar* sFaultcode) = 0;
 
-    virtual int setFaultstring(const string& sFaultstring) = 0;
+    virtual int setFaultstring(const AxisChar* sFaultstring) = 0;
 
-    virtual int setFaultactor(const string& sFaultactor) = 0;
+    virtual int setFaultactor(const AxisChar* sFaultactor) = 0;
 
-    virtual int setFaultDetail(const string& sFaultdetail) = 0;
+    virtual int setFaultDetail(const AxisChar* sFaultdetail) = 0;
 
     virtual int setCmplxFaultObject(const void* pCmplxFaultObject) = 0;
 
