@@ -250,6 +250,21 @@ int SoapSerializer::setOutputStream(SOAPTransport* pStream)
     if(m_pSoapEnvelope)
     {
 		if (checkAttachmentAvailability()) {
+
+            string asStartID;
+            string asSOAPMimeHeaders;
+            asSOAPMimeHeaders   = pStream->getIncomingSOAPMimeHeaders();
+            int start= asSOAPMimeHeaders.find("Content-Type");
+            int startPosIdValue = asSOAPMimeHeaders.find ("<",start+strlen("Content-Id:"))+1;
+            int endPosIdValue   = asSOAPMimeHeaders.find(">", start+strlen("Content-Type"));
+            int length          = endPosIdValue - startPosIdValue ;
+            asStartID           = asSOAPMimeHeaders.substr (startPosIdValue,length); 
+        
+            string * asContentType = new string("multipart/related; type=\"text/xml\"; start=\"<");
+            *asContentType=*asContentType + asStartID + ">\"";
+            *asContentType=*asContentType +";  boundary=\"------=MIME BOUNDARY\"";
+            pStream->setTransportProperty(CONTENT_TYPE, (*asContentType).c_str()); 
+
 			serialize("\n------=MIME BOUNDARY\n", NULL);
 			serialize(pStream->getIncomingSOAPMimeHeaders(), "\n\n", NULL);
 		}
@@ -912,7 +927,7 @@ IHeaderBlock* SoapSerializer::getNextHeaderBlock()
 
 int SoapSerializer::serializeAsChardata(void* pValue, XSDTYPE type)
 {
-    const char* pStr = m_Buf;
+    char* pStr = m_Buf;
     switch (type)
     {
     case XSD_INT:
@@ -1031,7 +1046,8 @@ int SoapSerializer::serializeAsChardata(void* pValue, XSDTYPE type)
     case XSD_BASE64BINARY:
         {
             Base64Binary base64BinarySerializer;
-            pStr = base64BinarySerializer.serialize(pValue);
+            //pStr = base64BinarySerializer.serialize(pValue);
+            strcpy(pStr, base64BinarySerializer.serialize(pValue));            
         }
         break;
     case XSD_DATETIME:
