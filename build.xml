@@ -103,7 +103,8 @@ Notes:
 			<equals arg1="${xmlParser.xml4c}" arg2="true"/>
 			<then>
 				<antcall target="compileAxisXMLParser" inheritall="true">
-					<param name="xmlParser" value="xml4c"/>
+					<!-- We can re-use the Xerces parser layer for XML4C -->
+					<param name="xmlParser" value="xerces"/>
 					<param name="dir.xmlParser" value="${xml4c.dir.xmlParser}"/>
 					<param name="xmlParserLibrary" value="${xml4c.xmlParserLibrary}"/>
 					<param name="xmlParserLibraryName" value="${xml4c.xmlParserLibraryName}"/>
