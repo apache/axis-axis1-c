@@ -77,7 +77,7 @@ typedef struct
 
 typedef struct 
 {
-	void* _object; // present only for interfaces passed from C to C++ (eg:BasicHandler) 
+	void* _object; /* present only for interfaces passed from C to C++ (eg:BasicHandler) */
 	BasicHandlerFunctions* _functions;
 } BasicHandler;
 
