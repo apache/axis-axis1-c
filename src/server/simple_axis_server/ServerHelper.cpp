@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  *
  */
 
@@ -69,8 +69,9 @@
 #include <stdio.h>
 #include "ServerHelper.h"
 #include "../../common/AxisUtils.h"
+#include <axis/server/Packet.h>
 
-int getSeperatedHTTPParts(string sClientReqStream, string& sHTTPHeaders, string& sHTTPBody, map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> *map_HTTP_Headers) {
+int getSeperatedHTTPParts(string sClientReqStream, string& sHTTPHeaders, string& sHTTPBody, map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> *map_HTTP_Headers, Ax_soapstream* str, HttpHeaders* pHttpHeaders, int iHeaderArraySize, int* piHeaderCount) {
 			
 	int iFindStartLocation=0;
 	string sTmpHttpHeader= "";
@@ -82,6 +83,7 @@ int getSeperatedHTTPParts(string sClientReqStream, string& sHTTPHeaders, string&
 	/*
 	 *Extracts the HTTP Headers from the stream
 	 */
+
 	while(bContinue) {
 		
 		sTmpHttpHeader="";
@@ -109,8 +111,8 @@ int getSeperatedHTTPParts(string sClientReqStream, string& sHTTPHeaders, string&
 			}	
 			/*-------------end-----------------*/
 			
-			initializeHeaderMap(sTmpHttpHeader, map_HTTP_Headers);
-			//initializeHeaderMap(map_HTTP_Headers);
+			/* TODO Have to check the header count with iHeaderArraySize, i.e HEADER_ARRAY_SIZE*/
+			initializeHeaderMap(sTmpHttpHeader, map_HTTP_Headers, str, pHttpHeaders, piHeaderCount);
 		}
 
 		iFindStartLocation = iLocation+1;
@@ -126,7 +128,7 @@ int getSeperatedHTTPParts(string sClientReqStream, string& sHTTPHeaders, string&
 	return 1;
 }
 
-int	initializeHeaderMap(const string &sHeaderLine, map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> *map_HTTP_Headers) {
+int	initializeHeaderMap(const string &sHeaderLine, map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> *map_HTTP_Headers, Ax_soapstream* str, HttpHeaders* pHttpHeaders, int* piHeaderCount) {
 
 	bool bIsHttpHeader = true;
 	int iHeaderLineLength = sHeaderLine.size();
@@ -134,6 +136,11 @@ int	initializeHeaderMap(const string &sHeaderLine, map<HTTP_MAP_KEYWORDS, HTTP_M
 	if (!AxisUtils::isCharacterAvailable(sHeaderLine, ':')) {
 		bIsHttpHeader = false;
 	}
+
+	int iLocation = 0;
+	int iFindStartLocation = 0;
+	int iGap= 0;
+	string *sTmpValue;
 	
 	if (!bIsHttpHeader) {
 		/* 
@@ -141,16 +148,10 @@ int	initializeHeaderMap(const string &sHeaderLine, map<HTTP_MAP_KEYWORDS, HTTP_M
 		The logic is based on this pattern
 		*/
 
-		int iLocation = 0;
-		int iFindStartLocation = 0;
-		int iGap= 0;		
-
 		for (int iRoundNo= 0; iRoundNo<3; iRoundNo++) {
 			/*
 			 *Seperate the Method, URI, and HTTP Version from the string HeaderLine and add them to the map
 			 */
-			
-			string *sTmpValue = new string("");
 			
 			if (iRoundNo == 2) {
 				iGap = (iHeaderLineLength) - iFindStartLocation;
@@ -160,9 +161,9 @@ int	initializeHeaderMap(const string &sHeaderLine, map<HTTP_MAP_KEYWORDS, HTTP_M
 				iGap = iLocation-iFindStartLocation;
 			}
 			if (iGap == 0) {
-				*sTmpValue = sHeaderLine.substr(iFindStartLocation, 1);		
+				sTmpValue = new string(sHeaderLine.substr(iFindStartLocation, 1));		
 			} else {
-				*sTmpValue = sHeaderLine.substr(iFindStartLocation, iGap);		
+				sTmpValue = new string(sHeaderLine.substr(iFindStartLocation, iGap));		
 			}
 
 			iFindStartLocation = iLocation+1;
@@ -171,21 +172,19 @@ int	initializeHeaderMap(const string &sHeaderLine, map<HTTP_MAP_KEYWORDS, HTTP_M
 			HTTP_MAP_TYPE* objHTTP_MAP_Value = (HTTP_MAP_TYPE*)malloc(sizeof(HTTP_MAP_TYPE));
 
 			switch (iRoundNo) {
-			/*
+			
 			case 0:
-				/*sTmpValue = AxisUtils::toLowerCase(sTmpValue);
-				if (sTmpValue == "post") {*/
-		/*		if (sTmpValue == "POST") {
-					objuHttpMapContent.eHTTP_KEYWORD = HK_POST;
-					
-				/*if (sTmpValue == "get") {*/
-		/*		} else if (sTmpValue == "GET") {
-					objuHttpMapContent.eHTTP_KEYWORD = HK_GET;
+				/*sTmpValue = AxisUtils::toLowerCase(sTmpValue);*/
+				if ((*sTmpValue == "POST") || (*sTmpValue == "post")) {
+					objuHttpMapContent->eHTTP_KEYWORD = HK_POST;
+				} else if ((*sTmpValue == "GET") || (*sTmpValue == "get")) {
+					objuHttpMapContent->eHTTP_KEYWORD = HK_GET;
 				}
-				objHTTP_MAP_Value.eCONTENT_TYPE= HTTP_KEYWORD_TYPE;
-				objHTTP_MAP_Value.objuHttpMapContent =  objuHttpMapContent;
+
+				objHTTP_MAP_Value->eCONTENT_TYPE= HTTP_KEYWORD_TYPE;
+				objHTTP_MAP_Value->objuHttpMapContent =  objuHttpMapContent;
 				(*map_HTTP_Headers)[HMK_METHOD] = objHTTP_MAP_Value;
-				break;*/
+				break;
 			case 1:
 				objuHttpMapContent->msValue = sTmpValue->c_str();
 				objHTTP_MAP_Value->eCONTENT_TYPE= STRING_TYPE;
@@ -195,26 +194,72 @@ int	initializeHeaderMap(const string &sHeaderLine, map<HTTP_MAP_KEYWORDS, HTTP_M
 				printf("in case1 = %s\n", (*map_HTTP_Headers)[HMK_URI]->objuHttpMapContent->msValue);
 				*/
 				break;
-		/*	case 2:
-				/*sTmpValue = AxisUtils::toLowerCase(sTmpValue);
-				if (sTmpValue == "http/1.1") {*/
-		/*		if (sTmpValue == "HTTP/1.1") {
-					objuHttpMapContent.eHTTP_KEYWORD = HK_HTTP_1_1;
-					
+			case 2:
+				/*sTmpValue = AxisUtils::toLowerCase(sTmpValue);*/
+				if ((*sTmpValue == "http/1.1") || (*sTmpValue == "HTTP/1.1")) {
+					objuHttpMapContent->eHTTP_KEYWORD = HK_HTTP_1_1;					
 				} else {
-					objuHttpMapContent.eHTTP_KEYWORD = HK_HTTP_UNKNOWN_VERSION;
+					objuHttpMapContent->eHTTP_KEYWORD = HK_HTTP_UNKNOWN_VERSION;
 				}
-				objHTTP_MAP_Value.eCONTENT_TYPE= HTTP_KEYWORD_TYPE;
-				objHTTP_MAP_Value.objuHttpMapContent =  objuHttpMapContent;
+				objHTTP_MAP_Value->eCONTENT_TYPE= HTTP_KEYWORD_TYPE;
+				objHTTP_MAP_Value->objuHttpMapContent =  objuHttpMapContent;
 				(*map_HTTP_Headers)[HMK_VERSION] = objHTTP_MAP_Value;
-				break;*/
+				break;
 			}			
 		}
 	} else {
 		/*
-		 *	Seperate the Header name and value from ":" and put them to the map
+		 *	Seperate the Header name and value from ":" and put them to the structure
 		 */
-		//map_HTTP_Headers[HK_URI] = "extracted Value";
+
+		/*
+		iLocation = sHeaderLine.find(":");
+		sTmpValue = new string(sHeaderLine.substr(iFindStartLocation, iLocation));
+		iFindStartLocation = iLocation + 2;
+
+		HttpHeaders* pHttpHeader= new HttpHeaders();
+		//pHttpHeader->header_name = sTmpValue->c_str();
+		pHttpHeader->header_name = strdup(sTmpValue->c_str());
+		sTmpValue = new string(sHeaderLine.substr(iFindStartLocation));
+		//pHttpHeader->header_value= sTmpValue->c_str();
+		pHttpHeader->header_value = strdup(sTmpValue->c_str());
+
+		pHttpHeaders[*piHeaderCount] = pHttpHeader;
+		(*piHeaderCount)++;
+		*/
+		
+		/*
+		pHttpHeaders[*piHeaderCount].header_name = strdup("SOAPAction");
+		pHttpHeaders[*piHeaderCount].header_value = strdup("InteropBase#EchoString");
+
+		(*piHeaderCount)++;
+		*/
+		
+		iLocation = sHeaderLine.find(":");
+		sTmpValue = new string(sHeaderLine.substr(iFindStartLocation, iLocation));
+		iFindStartLocation = iLocation + 2;
+
+		pHttpHeaders[*piHeaderCount].header_name = strdup(sTmpValue->c_str());
+		if (strcmp(sTmpValue->c_str(),"SOAPAction") == 0) {
+			sTmpValue = new string(sHeaderLine.substr(iFindStartLocation));
+			bool blnContinue = true;
+			int iPosition = 0;
+			while (blnContinue) {
+				iPosition = sTmpValue->find("\"");
+				if (iPosition != string::npos) {
+					sTmpValue->replace(iPosition, 1, "");
+				} else {
+					blnContinue = false;
+				}
+			}
+			
+			pHttpHeaders[*piHeaderCount].header_value = strdup(sTmpValue->c_str());
+		} else {
+			sTmpValue = new string(sHeaderLine.substr(iFindStartLocation));
+			pHttpHeaders[*piHeaderCount].header_value = strdup(sTmpValue->c_str());
+		}
+
+		(*piHeaderCount)++;
 	}
 
 	return 1;
