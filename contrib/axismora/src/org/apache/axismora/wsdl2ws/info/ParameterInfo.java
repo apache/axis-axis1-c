@@ -56,6 +56,7 @@
 package org.apache.axismora.wsdl2ws.info;
 
 import javax.xml.namespace.QName;
+
 /**
  * this class represents Parameter(message in the wsdl) 
  * @author Srinath Perera(hemapani@opensource.lk)
@@ -63,23 +64,8 @@ import javax.xml.namespace.QName;
 public class ParameterInfo {
     private Type type;
     private String attribName;
-
-    public String getLangName() {
-        return type.getLanguageSpecificName();
-    }
-
-    public void setLangName(String langName) {
-        this.type.setLanguageSpecificName(langName);
-    }
-
-    public QName getSchemaName() {
-        return this.type.getName();
-    }
-
-    public void setSchemaName(QName schemaName) {
-        this.type.setName(schemaName);
-    }
-
+	private QName elementName;
+	
     public String getParamName() {
         return attribName;
     }
@@ -88,15 +74,34 @@ public class ParameterInfo {
         this.attribName = paramName;
     }
 
-    public ParameterInfo(
-        String langName,
-        QName schemaName,
-        String attribName,
-        String language) {
-        this.type = new Type(schemaName, langName, false, language);
+    public ParameterInfo(Type type,String attribName) {
+        this.type = type;
         this.attribName = attribName;
     }
     public Type getType() {
         return type;
     }
+    
+    /**
+     * @return
+     */
+    public QName getElementName() {
+        return elementName;
+    }
+
+    /**
+     * @param name
+     */
+    public void setElementName(QName name) {
+        elementName = name;
+    }
+    
+	public String getLangName(){
+		return this.type.getLanguageSpecificName();
+	}
+	
+	public QName getSchemaName(){
+		return this.type.getName();
+	}
+
 }

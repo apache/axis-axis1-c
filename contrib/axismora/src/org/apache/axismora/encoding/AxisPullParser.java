@@ -71,9 +71,10 @@ public class AxisPullParser {
     XmlPullParser xpp;
     private int state, level;
 
-    public AxisPullParser(XmlPullParser xp) {
+    public AxisPullParser(XmlPullParser xp)throws XmlPullParserException {
         this.level = 0;
         this.xpp = xp;
+        state = xpp.getEventType();
     }
 
     public XmlPullParser getParser() {
@@ -89,15 +90,14 @@ public class AxisPullParser {
      */
     public int next() throws AxisFault {
         try {
-            state = xpp.next();
-
+            this.state = xpp.next();
             if (state != XmlPullParser.TEXT) {
                 return state;
             } else {
                 if (xpp.isWhitespace())
                     return xpp.next(); // next one musn't be whitesapce
                 else
-                    return state;
+                    return this.state;
             }
         } catch (XmlPullParserException e) {
             e.printStackTrace();
@@ -204,4 +204,14 @@ public class AxisPullParser {
         return this.xpp.getText();
     }
 
+    /**
+     * @return
+     */
+    public int getState()throws AxisFault {
+		try{
+        	return xpp.getEventType();
+		}catch(Exception e){
+			throw AxisFault.makeFault(e);
+		}
+    }
 }

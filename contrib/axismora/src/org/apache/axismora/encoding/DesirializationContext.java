@@ -117,6 +117,7 @@ public class DesirializationContext {
     private Document doc;
 	private Vector headers;
     private int blindLevel = 0; //reads until the same level you started
+    private AxisPullParser axispullparser;
 
     public DesirializationContext(MessageContext md, InputStream ins, Style style)
         throws AxisFault {
@@ -140,6 +141,7 @@ public class DesirializationContext {
             factory.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
             this.xpp = factory.newPullParser();
             xpp.setInput(in);
+			this.axispullparser = new AxisPullParser(this.xpp);
         } catch (FactoryConfigurationError e) {
             log.error(e);
             e.printStackTrace();
@@ -169,7 +171,6 @@ public class DesirializationContext {
         xpp = factory.newPullParser();
         xpp.setInput(new FileReader(file));
         this.state = xpp.next();
-        System.out.println("Testing DesirializationContext ...." + xpp.getText());
     }
 
     /**
@@ -214,8 +215,8 @@ public class DesirializationContext {
         }
     }
 
-    public AxisPullParser getAxisPullParser() {
-        return new AxisPullParser(this.xpp);
+    public AxisPullParser getAxisPullParser()throws AxisFault {
+			return axispullparser;
     }
 
     /**
@@ -241,10 +242,9 @@ public class DesirializationContext {
                 if (this.state == XmlPullParser.END_DOCUMENT)
                     throw new AxisFault("parsing error Illegal format - method not specified ");
                 this.method = new QName(this.xpp.getNamespace(), this.xpp.getName());
-                System.out.println("\n r u correct"+this.method);
+
                 this.messageData.setMethodName(this.method);
-                //TODO removethis.state = this.xpp.next();
-                ParmWriter.tag = getTag();
+				axispullparser.next();
             }
             //ok sounds perfect, the control is passed to wrapper		
         } catch (AxisFault e) {
@@ -294,14 +294,16 @@ public class DesirializationContext {
                 throw new AxisFault("parsing error Illegal format - method not specified ");
             //let is there a SOAP fault
             QName nextTag = new QName(this.xpp.getNamespace(), this.xpp.getName());
-            if (new QName(soapConstants.getEnvelopeURI(), Constants.ELEM_FAULT).equals(nextTag))
+            if (new QName(Constants.URI_SOAP11_ENV, Constants.ELEM_FAULT).equals(nextTag)
+            	|| new QName(Constants.URI_SOAP12_ENV, Constants.ELEM_FAULT).equals(nextTag))
                 throw this.parseFault();
+                
 
             //If RPC I move to the next TAG
-            if (this.style.equals("rpc"))
+            if (this.style.getName().equals("rpc"))
                 //while (!(state == XmlPullParser.START_TAG || state == XmlPullParser.END_DOCUMENT))
                 //	this.state = this.xpp.next();
-                ParmWriter.tag = getTag();
+				axispullparser.next();	
 
             //ok sounds perfect, the control is passed to wrapper		
         } catch (XmlPullParserException e) {
@@ -616,6 +618,7 @@ public class DesirializationContext {
             // bellow things should be done for all tags
             tag = new XMLTextData(this.state, value, uri, localName, attrType);
             //this.state = xpp.next();
+         //   System.out.println(tag.getLocalpart()+"|"+tag.getType());
             return tag;
 
         } catch (XmlPullParserException e) {
@@ -901,7 +904,8 @@ public class DesirializationContext {
     public String nextText() throws AxisFault {
         try {
             String text = null;
-            //first try to find a start TAG	
+            //first try to find a start TAG
+            state = xpp.getEventType();	
             while (state != XmlPullParser.START_TAG) {
                 if (state == XmlPullParser.END_DOCUMENT)
                     throw new AxisFault("end of the document reached");

@@ -71,6 +71,8 @@ public class MethodInfo {
     private String soapAction;
     private List inputEncoding;
     private List outputEncoding;
+    private String inputUse;
+    private String outputUse;
 
     public MethodInfo() {
         this.returnType = null;
@@ -159,6 +161,34 @@ public class MethodInfo {
      */
     public void setSoapAction(String string) {
         soapAction = string;
+    }
+
+    /**
+     * @return
+     */
+    public String getInputUse() {
+        return inputUse;
+    }
+
+    /**
+     * @return
+     */
+    public String getOutputUse() {
+        return outputUse;
+    }
+
+    /**
+     * @param string
+     */
+    public void setInputUse(String string) {
+        inputUse = string;
+    }
+
+    /**
+     * @param string
+     */
+    public void setOutputUse(String string) {
+        outputUse = string;
     }
 
 }

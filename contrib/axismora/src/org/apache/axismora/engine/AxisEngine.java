@@ -139,7 +139,6 @@ public class AxisEngine extends BasicHandler {
 			String realWebInfPath = servletcontext.getRealPath(appWebInfPath);
 
 			   if (realWebInfPath != null)
-			   	   System.out.println(realWebInfPath);	
 				   file = new File(realWebInfPath, filename);
 				   if(file == null || !file.exists()){
 					/**
@@ -221,7 +220,6 @@ public class AxisEngine extends BasicHandler {
         String usrname,
         char[] passwd,
         String encoding) {
-    
        
     log.info("start processing service " + SOAPAction);
     // supporting both method name - Dimuthu.

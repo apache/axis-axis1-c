@@ -87,7 +87,7 @@ public class ArrayParamWriter extends ParmWriter {
         super(wscontext, type);
 
         this.isDirectReturn =
-            this.wscontext.getSerInfo().isDirectReturn(type.getLanguageSpecificName());
+            this.wscontext.getSerInfo().isDirectReturn(type.getName());
 		Type t = WrapperUtils.getArrayType(type);
 		qname = t.getName();
 		this.arrtype = t.getLanguageSpecificName();
@@ -96,39 +96,30 @@ public class ArrayParamWriter extends ParmWriter {
     public void writeDesireializeCode() throws WrapperFault {
         try {
             writer.write("\t\tjava.util.Vector obj = new java.util.Vector();\n");
+			writer.write("\t\torg.apache.axismora.encoding.AxisPullParser psr = msgdata.getAxisParser();\n");
             writer.write("\t\tjavax.xml.namespace.QName arrayname = null;\n");
-            writer.write(
-                "\t\tif(org.apache.axismora.wsdl2ws.java.ParmWriter.tag == null)\n");
-            writer.write(
-                "\t\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tag = msgdata.getTag();\n\n");
-            writer.write(
-                "\t\twhile(org.apache.axismora.wsdl2ws.java.ParmWriter.tag.getType() != org.xmlpull.v1.XmlPullParser.START_TAG) {\n");
-            writer.write(
-                "\t\t\tif (org.apache.axismora.wsdl2ws.java.ParmWriter.tag.getType() == org.xmlpull.v1.XmlPullParser.END_DOCUMENT) {\n");
+            writer.write("\t\twhile(psr.getState() != org.xmlpull.v1.XmlPullParser.START_TAG) {\n");
+            writer.write("\t\t\tif (psr.getState() == org.xmlpull.v1.XmlPullParser.END_DOCUMENT) {\n");
 			writer.write("\t\t\t\tthrow new org.apache.axis.AxisFault(\"end of the document\");\n");
 			writer.write("\t\t\t}\n");
-            writer.write(
-                "\t\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tag = msgdata.getTag();\n");
+			writer.write("\t\tpsr.next();\n");
 			writer.write("\t\t}\n");
-            writer.write(
-                "\t\tarrayname = new javax.xml.namespace.QName(org.apache.axismora.wsdl2ws.java.ParmWriter.tag.getUri(),org.apache.axismora.wsdl2ws.java.ParmWriter.tag.getLocalpart());\n");
-            writer.write(
-                "\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tag = msgdata.getTag();\n\n");
-
-            writer.write(
-                "\t\t//if the type of the next tag is end tag that means the content of element is null\n");
-            writer.write(
-                "\t\tif(org.apache.axismora.wsdl2ws.java.ParmWriter.tag.getType() == org.xmlpull.v1.XmlPullParser.END_TAG)\n");
+			
+            writer.write("\t\tarrayname = new javax.xml.namespace.QName(psr.getNamespace(),psr.getName());\n");
+			writer.write("\t\tpsr.next();\n");
+            writer.write("\t\t//if the type of the next tag is end tag that means the content of element is null\n");
+            writer.write("\t\tif(psr.getState() == org.xmlpull.v1.XmlPullParser.END_TAG)\n");
 			writer.write("\t\t\treturn null;\n\n");
 
+            writer.write("\t\twhile(!((psr.getState() == org.xmlpull.v1.XmlPullParser.END_TAG) && \n");
             writer.write(
-                "\t\twhile(!((org.apache.axismora.wsdl2ws.java.ParmWriter.tag.getType() == org.xmlpull.v1.XmlPullParser.END_TAG) && \n");
+                "\t\t\t\t\t arrayname.equals(new javax.xml.namespace.QName(psr.getNamespace(),psr.getName())))){\n");
             writer.write(
-                "\t\t\t\t\t arrayname.equals(new javax.xml.namespace.QName(org.apache.axismora.wsdl2ws.java.ParmWriter.tag.getUri(),org.apache.axismora.wsdl2ws.java.ParmWriter.tag.getLocalpart())))){\n");
-            writer.write(
-                "\t\t\tif(org.apache.axismora.wsdl2ws.java.ParmWriter.tag.getType() != org.xmlpull.v1.XmlPullParser.START_TAG){\n");
-            writer.write(
-                "\t\t\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tag = msgdata.getTag();\n\t\t\t\tcontinue;\n\t\t\t}\n");
+                "\t\t\tif(psr.getState() != org.xmlpull.v1.XmlPullParser.START_TAG){\n");
+			writer.write("\t\tpsr.next();\n");
+            writer.write("\t\t\t\tcontinue;\n");
+            
+			writer.write("\t\t\t}\n");
             if (!TypeMap.isSimpleType(arrtype)) {
                 writer.write(
                     "\t\t\t"
@@ -148,8 +139,7 @@ public class ArrayParamWriter extends ParmWriter {
                         + "(msgdata));\n");
                 writer.write("\t\t\t\t\tobj.add(item);\n");
             }
-            writer.write(
-                "\t\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tag = msgdata.getTag();\n");
+			writer.write("\t\tpsr.next();\n");
 			writer.write("\t\t}\n\n");
             writer.write("\t\tint length = obj.size();\n");
 
@@ -183,29 +173,29 @@ public class ArrayParamWriter extends ParmWriter {
 
     public void writeSerialieCode() throws WrapperFault {
         try {
-			if (this.isDirectReturn) {
-            	writer.write(
-                	"\t\tString m_URI =\"" + type.getName().getNamespaceURI() + "\";\n");
-            	writer.write(
-                	"\t\tString type_name = \""
-                    + type.getName().getLocalPart()
-                    + "\";\n");
-
-            
-                SerializationContext context;
-                writer.write(
-                    "\t\tboolean writeOutTag = !org.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten;\n");
-                writer.write("\t\tif(writeOutTag){\n");
-                writer.write(
-                    "\t\t\tcontext.writeString(\"<prf:\");\n" 
-                    +"\t\t\tcontext.writeString(type_name);\n"
-                    +"\t\t\tcontext.writeString(\" xmlns:prf =\\\"\");\n"
-                    +"\t\t\tcontext.writeString(m_URI);\n"
-                    +"\t\t\tcontext.writeString(\"\\\" >\");\n");
-				writer.write("\t\t}\n");   
-            }
-            writer.write(
-                "\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten = false;\n");
+//			if (this.isDirectReturn) {
+//            	writer.write(
+//                	"\t\tString m_URI =\"" + type.getName().getNamespaceURI() + "\";\n");
+//            	writer.write(
+//                	"\t\tString type_name = \""
+//                    + type.getName().getLocalPart()
+//                    + "\";\n");
+//
+//            
+//                SerializationContext context;
+//                writer.write(
+//                    "\t\tboolean writeOutTag = !org.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten;\n");
+//                writer.write("\t\tif(writeOutTag){\n");
+//                writer.write(
+//                    "\t\t\tcontext.writeString(\"<prf:\");\n" 
+//                    +"\t\t\tcontext.writeString(type_name);\n"
+//                    +"\t\t\tcontext.writeString(\" xmlns:prf =\\\"\");\n"
+//                    +"\t\t\tcontext.writeString(m_URI);\n"
+//                    +"\t\t\tcontext.writeString(\"\\\" >\");\n");
+//				writer.write("\t\t}\n");   
+//            }
+//            writer.write(
+//                "\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten = false;\n");
 
             writer.write("\t\tfor (int i = 0; i < param.length; i++) {\n");
             writer.write(
@@ -215,23 +205,23 @@ public class ArrayParamWriter extends ParmWriter {
             writer.write(
                 JavaUtils.isJavaSimpleType(arrtype) ? "" : "\t\t\tif(param[i]!=null){\n");
             if (!org.apache.axismora.wsdl2ws.info.TypeMap.isSimpleType(arrtype)) {
-                writer.write(
-                    "\t\t\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten = true;\n");
+//                writer.write(
+//                    "\t\t\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten = true;\n");
                 writer.write("\t\t\t\tparam[i].serialize(context);\n");
             } else
                 writer.write("\t\t\t\tcontext.writeString(String.valueOf(param[i]));\n");
             writer.write(JavaUtils.isJavaSimpleType(arrtype) ? "" : "\t\t\t}\n");
             writer.write("\t\t\tcontext.writeString(\"</item\"+i+ \">\");\n\t\t}\n");
-            writer.write("\t\t//name of parameter will be written by upper level\n");
-            if (this.isDirectReturn) {
-                writer.write("\t\t//write the end tag\n");
-                writer.write("\t\tif(writeOutTag){\n");
-                writer.write(
-                    "\t\t\tcontext.writeString(\"</prf:\");\n"
-                    +"\t\t\tcontext.writeString(type_name);\n"
-                    +"\t\t\tcontext.writeString(\">\");\n");
-				writer.write("\t\t}\n");    
-            }
+//            writer.write("\t\t//name of parameter will be written by upper level\n");
+//            if (this.isDirectReturn) {
+//                writer.write("\t\t//write the end tag\n");
+//                writer.write("\t\tif(writeOutTag){\n");
+//                writer.write(
+//                    "\t\t\tcontext.writeString(\"</prf:\");\n"
+//                    +"\t\t\tcontext.writeString(type_name);\n"
+//                    +"\t\t\tcontext.writeString(\">\");\n");
+//				writer.write("\t\t}\n");    
+//            }
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -84,8 +84,8 @@ import org.apache.axismora.wsdl2ws.info.WebServiceContext;
  * @author JayaKumaran
  */
 public abstract class ParmWriter extends JavaClassWriter {
-    public static boolean tagWritten = false;
-    public static XMLTextData tag = null;
+    //public static boolean tagWritten = false;
+    //public static XMLTextData tag = null;
 
     protected static final int INPUT_PARM = 0;
     protected static final int RETURN_PARM = 1;
@@ -319,9 +319,7 @@ public abstract class ParmWriter extends JavaClassWriter {
 				attribs[i][5] = arrayType.getName().getNamespaceURI();
 				attribs[i][6] = arrayType.getName().getLocalPart();
  
-			}
-			
-			if(element.getMaxOccurs() > 1){
+			}else if(element.getMaxOccurs() > 1){
 				attribs[i][1] = attribs[i][1] + "[]";
 				Type typedata = new Type(new QName(name.getNamespaceURI(),name.getLocalPart()+"Array")
 					,null,false,WrapperConstants.LANGUAGE_JAVA);
@@ -377,7 +375,7 @@ public abstract class ParmWriter extends JavaClassWriter {
                         + " "
                         + attribs[0][0]);
                 for (int i = 1; i < this.attribs.length; i++)
-                    writer.write(attribs[i][1]
+                    writer.write(","+attribs[i][1]
                             + " "
                             + attribs[i][0]);
             }

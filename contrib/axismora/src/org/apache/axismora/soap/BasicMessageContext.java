@@ -75,6 +75,7 @@ import org.apache.axismora.client.ClientRequestContext;
 import org.apache.axismora.client.InputParameterInfo;
 import org.apache.axismora.client.RequestBodyContent;
 import org.apache.axismora.deployment.AxisDeployment;
+import org.apache.axismora.encoding.AxisPullParser;
 import org.apache.axismora.encoding.DesirializationContext;
 import org.apache.axismora.encoding.OutParameter;
 import org.apache.axismora.encoding.Serializable;
@@ -240,7 +241,7 @@ public class BasicMessageContext implements MessageContext {
         this.service = service;
         this.outStream = requestContext.getSender().getOut();
         this.streamEncoding = requestContext.getEncoding();
-        this.style=service.getStyle();
+        this.style = requestContext.getStyle();//service.getStyle();
         //initialize desirialization context - this drives the desiarialization
         this.deserializer =
             new DesirializationContext(
@@ -306,11 +307,11 @@ public class BasicMessageContext implements MessageContext {
     }
 
     public boolean setSoapBodyContent(Object result) throws AxisFault {
-        System.out.println(""+this.style.getName());
-        if (result instanceof OutParameter){
+       if (result instanceof OutParameter){
            if(this.style.getName().equals("document")){
                 this.resultValue = new DocLiteralResult((OutParameter)result);
-           }else this.resultValue = new RPCResult((OutParameter) result, this.methodName);	
+           }else 
+           		this.resultValue = new RPCResult((OutParameter) result, this.methodName);	
         }else if (result instanceof Element[])
             this.resultValue = new MSGResult((Element[]) result);
         else if (result instanceof InputParameterInfo[])
@@ -830,6 +831,10 @@ public class BasicMessageContext implements MessageContext {
 	 */
 	public DesirializationContext getDeserializer() {
 		return deserializer;
+	}
+	
+	public AxisPullParser getAxisParser()throws AxisFault{
+		return deserializer.getAxisPullParser();
 	}
 
 }

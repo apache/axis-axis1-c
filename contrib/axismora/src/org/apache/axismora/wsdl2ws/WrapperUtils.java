@@ -266,7 +266,7 @@ public class WrapperUtils {
         throws WrapperFault {
         if (param == null)
             return "void";
-        Type type = wscontext.getTypemap().getType(param.getSchemaName());
+        Type type = param.getType();
         if (type != null && type.isArray()) {
             Enumeration e = type.getElementnames();
             
@@ -295,7 +295,7 @@ public class WrapperUtils {
             } else
                 throw new WrapperFault("enumeration no type is given ?????");
         } else
-            return param.getLangName();
+            return type.getLanguageSpecificName();
     }
     
     public static Type getArrayType(Type type)throws WrapperFault{

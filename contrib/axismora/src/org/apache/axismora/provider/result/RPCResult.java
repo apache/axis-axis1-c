@@ -73,10 +73,12 @@ import org.apache.axis.encoding.SerializationContext;
 public class RPCResult implements Serializable {
     private OutParameter parm;
     private QName method;
+    private String xsiString; 
 
     public RPCResult(OutParameter param, QName method) {
         this.parm = param;
         this.method = method;
+		//TODO write the xs String        
     }
 
     /**
@@ -103,10 +105,10 @@ public class RPCResult implements Serializable {
 					buf.append("\">\n");
                 }
                 sc.writeString(buf.toString());
-
+				sc.writeString("<retunValue>\n");
                 //write body content
                 parm.serialize(sc);
-
+				sc.writeString("</retunValue>\n");
                 //write ed tag
                 buf = new StringBuffer();
                 if (uri != null && !("".equals(uri))) {

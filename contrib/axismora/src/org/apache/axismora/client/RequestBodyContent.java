@@ -62,6 +62,7 @@ import javax.xml.namespace.QName;
 import org.apache.axismora.encoding.Serializable;
 
 import org.apache.axis.AxisFault;
+import org.apache.axis.Constants;
 import org.apache.axis.encoding.SerializationContext;
 
 /**
@@ -83,7 +84,8 @@ public class RequestBodyContent implements Serializable {
      * @see org.apache.axismora.encoding.Serializable#serialize(org.apache.axis.encoding.SerializationContext)
      */
     public void serialize(SerializationContext sc) throws IOException {
-        sc.writeString("<" + methodName.getLocalPart() + ">");
+    	
+        sc.writeString("<" + methodName.getLocalPart() + " xmlns:soapenc=\""+Constants.URI_SOAP11_ENC+"\">");
         for (int i = 0; i < inparams.length; i++) {
             inparams[i].serialize(sc);
         }

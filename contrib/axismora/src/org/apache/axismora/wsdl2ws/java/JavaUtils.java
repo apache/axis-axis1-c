@@ -98,13 +98,13 @@ public class JavaUtils {
         WebServiceContext wscontext,
         int i)
         throws WrapperFault {
-        String paramUsualName = inparam.getLangName();
+        String paramUsualName = inparam.getType().getLanguageSpecificName();
         String paraTypeName =
             WrapperUtils.getWrapperName4FullyQualifiedName(paramUsualName);
         StringBuffer code = new StringBuffer();
 
         Type type;
-        if ((TypeMap.isSimpleType(inparam.getLangName()))) {
+        if ((TypeMap.isSimpleType(inparam.getType().getLanguageSpecificName()))) {
             if (isUnwrapperdSimpleType(paramUsualName))
                 code.append(
                     "\t\t" + paramUsualName + " paramIn" + i 
@@ -115,7 +115,7 @@ public class JavaUtils {
                     "\t\t" + paramUsualName + " paramIn" + i
                         + " =  (new  " + paraTypeName  + "(msgdata)).getParam();\n");
         } else if (
-            (type = wscontext.getTypemap().getType(inparam.getSchemaName()))
+            (type = inparam.getType())
                 != null
                 && type.isArray()) {
             String ContentparaTypeName =
