@@ -67,6 +67,7 @@
 
 #include "WSDDService.h"
 #include <iostream>
+#include "../common/Debug.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -136,6 +137,7 @@ bool WSDDService::IsAllowedMethod(string& sServiceName)
 
 void WSDDService::SetRequestFlowHandlers(WSDDHandlerList * reqFlowHList)
 {
+  DEBUG1("WSDDService::SetRequestFlowHandlers");
 	m_RequestHandlers = reqFlowHList;
 }
 
@@ -163,4 +165,14 @@ void WSDDService::SetAllowedRoles(string& sRole)
 list<string> WSDDService::GetAllowedRoles()
 {
 	return m_AllowedRoles;
+}
+
+void WSDDService::SetIsServiceAllowed(int m_IsServiceAllowed)
+{
+  m_IsServiceAllowed = m_IsServiceAllowed;
+}
+
+int WSDDService::GetIsServiceAllowed()
+{
+  return m_IsServiceAllowed;
 }
