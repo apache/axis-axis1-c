@@ -34,4 +34,5 @@ void ArrayTestPortType::fini()
 }
 intArrayType* ArrayTestPortType::echoIntArray(intArrayType* Value0)  
 {
+	return Value0;
 }
