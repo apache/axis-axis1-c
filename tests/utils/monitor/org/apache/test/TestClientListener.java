@@ -83,8 +83,7 @@ public class TestClientListener implements Runnable {
 					    } 
 					    catch (Exception se) 
 					    {
-					        System.err.println("Failed to open socket to service");
-					        se.printStackTrace(System.err);
+					        System.err.println("Failed to open socket to service: "+se);
 					        if(retry<=0)
 					        {
 					            stayAlive = false;
@@ -99,6 +98,10 @@ public class TestClientListener implements Runnable {
 					        }
 					    }
                     }while(serviceSocket==null && retry-- >0);
+					if(serviceSocket==null)
+					{
+					    continue;
+					}
 					
 					requestReader = new TestClientThread(clientSocket, serviceSocket, CAPTURE_REQUEST);
 					responseReader = new TestClientThread(clientSocket, serviceSocket, CAPTURE_RESPONSE);
