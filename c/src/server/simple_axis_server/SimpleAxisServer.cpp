@@ -75,10 +75,10 @@
 #endif
 
 //#include <stdio.h>
-#include "../../common/Packet.h"
-#include "../../common/AxisConfig.h"
-#include "../../common/AxisSocketUtils.h"
-#include "ServerHelper.h"
+#include <axis/common/Packet.h>
+#include <axis/common/AxisConfig.h>
+#include <axis/common/AxisSocketUtils.h>
+#include <axis/server/simple_axis_server/ServerHelper.h>
 
 #define MAXPENDING 5    /* Maximum outstanding connection requests */
 #define RCVBUFSIZE 1000   /* Size of receive buffer */
