@@ -225,9 +225,7 @@ AC_OUTPUT(Makefile \
     samples/server/Makefile \
     samples/server/interoptests/Makefile \
     samples/server/interoptests/base/Makefile \
-    samples/server/interoptests/cbase/Makefile \
     samples/server/interoptests/groupB/Makefile \
-    samples/server/interoptests/cgroupB/Makefile \
     samples/server/interoptests/doclitbase/Makefile \
     samples/server/interoptests/doclitgroupB/Makefile \
     samples/server/simple/Makefile \
@@ -239,9 +237,7 @@ AC_OUTPUT(Makefile \
     samples/client/Makefile \
     samples/client/interoptests/Makefile \
     samples/client/interoptests/base/Makefile \
-    samples/client/interoptests/cbase/Makefile \
     samples/client/interoptests/groupB/Makefile \
-    samples/client/interoptests/cgroupB/Makefile \
     samples/client/interoptests/doclitbase/Makefile \
     samples/client/interoptests/doclitgroupB/Makefile \
     samples/client/simple/Makefile \
