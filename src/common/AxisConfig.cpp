@@ -55,21 +55,27 @@ AxisConfig::AxisConfig ()
 #ifdef WIN32
 	m_pcValueArray[AXCONF_XMLPARSER] = "AxisXMLParser_D.dll";
 	m_pcValueArray[AXCONF_TRANSPORTHTTP] = "AxisTransport_D.dll";
+    m_pcValueArray[AXCONF_NODENAME] = "server name";
+    m_pcValueArray[AXCONF_LISTENPORT] = "listen port";
 #else
 	m_pcValueArray[AXCONF_XMLPARSER] = "/usr/local/Axis/libs/libaxis_xmlparser.so";
 	m_pcValueArray[AXCONF_TRANSPORTHTTP] = "/usr/local/Axis/libs/libaxis_transport.so";
+    m_pcValueArray[AXCONF_NODENAME] = "server name";
+    m_pcValueArray[AXCONF_LISTENPORT] = "listen port";
 #endif
 #else
 #ifdef WIN32
     m_pcValueArray[AXCONF_XMLPARSER] = "AxisXMLParser.dll";
 	m_pcValueArray[AXCONF_TRANSPORTHTTP] = "AxisTransport.dll";
+    m_pcValueArray[AXCONF_NODENAME] = "server name";
+    m_pcValueArray[AXCONF_LISTENPORT] = "listen port";
 #else
 	m_pcValueArray[AXCONF_XMLPARSER] = "/usr/local/axiscpp_deploy/lib/libaxis_xmlparser.so";
 	m_pcValueArray[AXCONF_TRANSPORTHTTP] = "/usr/local/axiscpp_deploy/lib/libaxis_transport.so";
-        m_pcValueArray[AXCONF_LOGPATH] = "/usr/local/axiscpp_deploy/log/AxisLog";
-        m_pcValueArray[AXCONF_CLIENTLOGPATH] = "/usr/local/axiscpp_deploy/log/AxisClientLog";
-        m_pcValueArray[AXCONF_NODENAME] = "<server name>";
-        m_pcValueArray[AXCONF_LISTENPORT] = "<listen port>";
+    m_pcValueArray[AXCONF_LOGPATH] = "/usr/local/axiscpp_deploy/log/AxisLog";
+    m_pcValueArray[AXCONF_CLIENTLOGPATH] = "/usr/local/axiscpp_deploy/log/AxisClientLog";
+    m_pcValueArray[AXCONF_NODENAME] = "server name";
+    m_pcValueArray[AXCONF_LISTENPORT] = "listen port";
 #endif
 #endif
 
