@@ -43,10 +43,19 @@ AxisConfig::AxisConfig ()
 	m_pcKeyArray[AXCONF_TRANSPORTSMTP]="AXISTRANSPORT_SMTP";
 	m_pcKeyArray[AXCONF_XMLPARSER] = "AXISXMLPARSER";
 
-	for(int i=0;i<NOOFPROPERTIES;i++)
+    for(int i=0;i<NOOFPROPERTIES;i++)
 	{
-        m_pcValueArray[i] = '\0';
+        m_pcValueArray[i] = NULL; 
 	}
+
+#ifdef _DEBUG
+	m_pcValueArray[AXCONF_XMLPARSER] = "AxisXMLParser_D.dll";
+	m_pcValueArray[AXCONF_TRANSPORTHTTP] = "AxisTransport_D.dll";
+#else
+    m_pcValueArray[AXCONF_XMLPARSER] = "AxisXMLParser.dll";
+	m_pcValueArray[AXCONF_TRANSPORTHTTP] = "AxisTransport.dll";
+#endif
+
 }
 
 AxisConfig::~AxisConfig ()
@@ -65,12 +74,16 @@ int AxisConfig::readConfFile ()
     char* sConfPath = NULL;
     char* sNewConfPath = (char*) malloc(CONFBUFFSIZE);
     char* key;
+	int iValueLength = 0;
+	const char* pcSeparator = ":";
+	const char pcComment = '#';
 
 
     sConfPath = getenv ("AXIS_HOME");
 	m_pcValueArray[AXCONF_AXISHOME] = sConfPath;
     if (!sConfPath)
-        return AXIS_FAIL;
+        //return AXIS_FAIL;
+		return AXIS_SUCCESS;
     m_pcAxisHome = (char*) malloc (CONFBUFFSIZE);
     strcpy (m_pcAxisHome, sConfPath);
 
@@ -82,74 +95,62 @@ int AxisConfig::readConfFile ()
     while (AXIS_SUCCESS == fileConfig.fileGet(carrLine, CONFBUFFSIZE)) 
     {
         int linesize = strlen (carrLine);
-        pcValue = strpbrk (carrLine, ":");
+		/*
+		Ignore lines starting with # and empty lines
+		*/
+		if(carrLine[0]== pcComment || carrLine[0]=='\0')
+			continue;
+        pcValue = strpbrk (carrLine, pcSeparator);
         if (!pcValue)
             break;
         key = (char*) malloc (strlen (pcValue));
         pcValue[0] = '\0';
         sscanf (carrLine, "%s", key);
+		iValueLength = linesize - strlen (key) - 1;
 
-        if (strcmp (key, "WSDDFILEPATH") == 0)
-        {
-			m_pcValueArray[AXCONF_WSDDFILEPATH] =  (char*) malloc (CONFBUFFSIZE);
-            strncpy (m_pcValueArray[AXCONF_WSDDFILEPATH], pcValue + 
-				1, linesize - strlen (key) - 2);
-			*(m_pcValueArray[AXCONF_WSDDFILEPATH]+linesize - strlen (key) - 2)
-				= '\0';
+        //if (strcmp (key, "WSDDFILEPATH") == 0)
+		if (strcmp (key, m_pcKeyArray[AXCONF_WSDDFILEPATH]) == 0)
+		{
+			setValue(iValueLength, AXCONF_WSDDFILEPATH, pcValue+1);
         }
         if (strcmp (key, "AXISLOGPATH") == 0)
         {
-			m_pcValueArray[AXCONF_LOGPATH] =  (char*) malloc (CONFBUFFSIZE);
-            strncpy (m_pcValueArray[AXCONF_LOGPATH], pcValue + 
-				1, linesize - strlen (key) - 2);
-			*(m_pcValueArray[AXCONF_LOGPATH]+linesize - strlen (key) - 2)
-				= '\0';
+			setValue(iValueLength, AXCONF_LOGPATH, pcValue+1);
         }
         if (strcmp (key, "AXISCLIENTLOGPATH") == 0)
         {
-			m_pcValueArray[AXCONF_CLIENTLOGPATH] =  (char*) malloc (CONFBUFFSIZE);
-            strncpy (m_pcValueArray[AXCONF_CLIENTLOGPATH], pcValue + 
-				1, linesize - strlen (key) - 2);
-			*(m_pcValueArray[AXCONF_CLIENTLOGPATH]+linesize - strlen (key) - 2)
-				= '\0';
+			setValue(iValueLength, AXCONF_CLIENTLOGPATH, pcValue+1);
         }
         if (strcmp (key, "CLIENTWSDDFILEPATH") == 0)
         {
-			m_pcValueArray[AXCONF_CLIENTWSDDFILEPATH] =  (char*) malloc (CONFBUFFSIZE);
-            strncpy (m_pcValueArray[AXCONF_CLIENTWSDDFILEPATH], pcValue + 
-				1, linesize - strlen (key) - 2);
-			*(m_pcValueArray[AXCONF_CLIENTWSDDFILEPATH]+linesize - 
-				strlen (key) - 2) = '\0';
+			setValue(iValueLength, AXCONF_CLIENTWSDDFILEPATH, pcValue+1);
         }
         if (strcmp (key, "AXISTRANSPORT_HTTP") == 0)
         {
-			m_pcValueArray[AXCONF_TRANSPORTHTTP] =  (char*) malloc (CONFBUFFSIZE);
-            strncpy (m_pcValueArray[AXCONF_TRANSPORTHTTP], pcValue + 
-				1, linesize - strlen (key) - 2);
-			*(m_pcValueArray[AXCONF_TRANSPORTHTTP]+linesize - 
-				strlen (key) - 2) = '\0';
+			setValue(iValueLength, AXCONF_TRANSPORTHTTP, pcValue+1);
         }
         if (strcmp (key, "AXISTRANSPORT_SMTP") == 0)
         {
-			m_pcValueArray[AXCONF_TRANSPORTSMTP] =  (char*) malloc (CONFBUFFSIZE);
-            strncpy (m_pcValueArray[AXCONF_TRANSPORTSMTP], pcValue + 
-				1, linesize - strlen (key) - 2);
-			*(m_pcValueArray[AXCONF_TRANSPORTSMTP]+linesize - 
-				strlen (key) - 2) = '\0';
+			setValue(iValueLength, AXCONF_TRANSPORTSMTP, pcValue+1);
         }
         if (strcmp (key, "AXISXMLPARSER") == 0)
         {
-			m_pcValueArray[AXCONF_XMLPARSER] =  (char*) malloc (CONFBUFFSIZE);
-            strncpy (m_pcValueArray[AXCONF_XMLPARSER], pcValue + 
-				1, linesize - strlen (key) - 2);
-			*(m_pcValueArray[AXCONF_XMLPARSER]+linesize - 
-				strlen (key) - 2) = '\0';
+			setValue(iValueLength, AXCONF_XMLPARSER, pcValue+1);
         }
 
     }
 
     return AXIS_SUCCESS;
 }
+
+void AxisConfig::setValue(int valuelength, g_axconfig valueindex, char* value)
+{
+    m_pcValueArray[valueindex] =  (char*) malloc (valuelength);
+    strncpy (m_pcValueArray[valueindex], value, valuelength);
+	*(m_pcValueArray[valueindex]+valuelength)
+        = '\0';
+}
+
 
 char* AxisConfig::getAxConfProperty(g_axconfig property)
 {
