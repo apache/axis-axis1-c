@@ -55,6 +55,9 @@
 
 package org.apache.geronimo.ews.ws4j2ee.toWs;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
+
 /**
  * <p>This denotes the Exception occured at the code genaration.
  * There is a isssue of wrapping the Exception such that JDK1.3 compatibility.
@@ -72,9 +75,19 @@ public class GenerationFault extends Exception {
      */
     public Throwable detail;
 
-    public GenerationFault(Exception e) {
+    private GenerationFault(Exception e) {
         initCause(null); // Disallow subsequent initCause
+//        setStackTrace(e.getStackTrace());
         detail = e;
+        try{
+			PrintWriter w = new PrintWriter(new FileWriter("error.log"));
+			e.printStackTrace(w);
+			w.flush();
+			w.close();
+        }catch(Exception e1){
+	        
+        }
+
     }
 
     public GenerationFault(String message) {
@@ -89,9 +102,9 @@ public class GenerationFault extends Exception {
      * @param ex the nested exception
      */
     public GenerationFault(String s, Throwable ex) {
-        super(s);
         initCause(null); // Disallow subsequent initCause
-        detail = ex;
+		detail = ex;
+//		setStackTrace(ex.getStackTrace());
     }
 
     /**
@@ -104,9 +117,8 @@ public class GenerationFault extends Exception {
         if (detail == null) {
             return super.getMessage();
         } else {
-            return super.getMessage()
-                    + "; nested exception is: \n\t"
-                    + detail.toString();
+			return super.getMessage() +
+                    detail.getMessage();
         }
     }
 
@@ -116,12 +128,15 @@ public class GenerationFault extends Exception {
      * @return the wrapped exception, which may be <tt>null</tt>.
      */
     public Throwable getCause() {
-        return detail;
+		return detail;
+        
     }
 
     public static GenerationFault createGenerationFault(Exception e) {
         if (e instanceof GenerationFault) {
             return (GenerationFault) e;
+//        }else if(e instanceof RuntimeException){
+//        	return (RuntimeException)e;
         } else
             return new GenerationFault(e);
     }

@@ -101,7 +101,7 @@ public class ClientSideWsGenerator implements Generator {
 		this.j2eewscontext = j2eewscontext;
 	}
 
-	public void genarate() throws GenerationFault {
+	public void generate() throws GenerationFault {
 		try {
 			String confFileLocation =
 					j2eewscontext.getMiscInfo().getWsConfFileLocation();
@@ -136,7 +136,7 @@ public class ClientSideWsGenerator implements Generator {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new GenerationFault(e);
+			throw GenerationFault.createGenerationFault(e);
 		}
         
 	}

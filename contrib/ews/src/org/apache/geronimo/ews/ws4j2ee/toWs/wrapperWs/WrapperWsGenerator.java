@@ -78,7 +78,7 @@ public class WrapperWsGenerator implements Generator {
 		writer = WrapperClassGeneratorFactory.createInstance(j2eewscontext);
 	}
     
-	public void genarate() throws GenerationFault {
+	public void generate() throws GenerationFault {
 		writer.writeCode();
 	}
 }

@@ -83,7 +83,7 @@ public class J2EEContainerSpecificDDGenerator implements Generator {
             new GenerationFault("unsupported j2ee container " + j2eewscontext.getMiscInfo().getTargetJ2EEContainer());
     }
 
-    public void genarate() throws GenerationFault {
+    public void generate() throws GenerationFault {
     	if(writer != null)
 			writer.writeCode();
     }

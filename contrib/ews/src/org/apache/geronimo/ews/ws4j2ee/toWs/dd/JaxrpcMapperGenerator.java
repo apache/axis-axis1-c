@@ -83,7 +83,7 @@ public class JaxrpcMapperGenerator extends Java2WSDL implements Generator {
 		this.j2eewscontext = j2eewscontext;
 	}
 
-	public void genarate() throws GenerationFault {
+	public void generate() throws GenerationFault {
 		try {
 			String fileName = j2eewscontext.getMiscInfo().getJaxrpcfile();
 
@@ -94,7 +94,7 @@ public class JaxrpcMapperGenerator extends Java2WSDL implements Generator {
 				log.info(fileName + " genarated .................");
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new GenerationFault(e);
+			throw GenerationFault.createGenerationFault(e);
 		}
 	}
 

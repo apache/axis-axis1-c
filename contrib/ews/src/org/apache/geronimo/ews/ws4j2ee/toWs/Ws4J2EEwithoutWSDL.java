@@ -93,7 +93,7 @@ public class Ws4J2EEwithoutWSDL implements Generator {
     private Vector genarators;
     private String[] args;
     private J2EEWebServiceContext wscontext;
-    private boolean verbose = true;
+    private boolean verbose = false;
     private Ws4J2eeWtihoutWSDLCLOptionParser clparser;
 	private File jarfile;
 	private JarFileLoader jarfileLoader;
@@ -132,7 +132,7 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 			if (verbose)
 				log.info(wscffile + " parsed ..");
 		}catch(FileNotFoundException e){
-			throw new GenerationFault(e);
+			throw GenerationFault.createGenerationFault(e);
 		}	
     }
 
@@ -166,7 +166,7 @@ public class Ws4J2EEwithoutWSDL implements Generator {
      * 
      * @see org.apache.geronimo.ews.ws4j2ee.toWs.Generator#genarate()
      */
-    public void genarate() throws GenerationFault {
+    public void generate() throws GenerationFault {
 		WSCFWebserviceDescription[] wscfwsdiss = wscontext.getWSCFContext().getWebServicesDescription();
 		//TODO fix this to handle multiple discriptions let us take the first discription
 		if (wscfwsdiss == null || wscfwsdiss.length == 0)
@@ -249,11 +249,11 @@ public class Ws4J2EEwithoutWSDL implements Generator {
                 log.info("genarating jaxrpc-mapper.xml ..............");
 			Generator jaxrpcfilegen = GeneratorFactory.createGenerator(wscontext,
                     GenerationConstants.JAXRPCMAPPER_GENERATOR);
-			jaxrpcfilegen.genarate();
+			jaxrpcfilegen.generate();
 			
 			Generator seiAndTypegen = GeneratorFactory.createGenerator(wscontext,
                     GenerationConstants.SEI_AND_TYPES_GENERATOR);
-			seiAndTypegen.genarate();
+			seiAndTypegen.generate();
 			
 			ContextValidator cvalidater = new ContextValidator(wscontext);
 			cvalidater.validateWithWSDL();        
@@ -288,7 +288,7 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 				if (verbose)
 						log.info("genarating ejb >>");
 				GeneratorFactory.createGenerator(wscontext,
-					GenerationConstants.EJB_GENERATOR).genarate();
+					GenerationConstants.EJB_GENERATOR).generate();
 			}else{
 				wscontext.getMiscInfo().setImplwithEJB(false);
 				//parse the web.xml file and gereratre wrapper
@@ -310,10 +310,14 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 			}
 			Generator wrapgen = GeneratorFactory.createGenerator(wscontext,
 				GenerationConstants.AXIS_WEBSERVICE_WRAPPER_GENERATOR);
-			wrapgen.genarate();
+			wrapgen.generate();
+			
+			Generator handlerGen = GeneratorFactory.createGenerator(wscontext,
+							GenerationConstants.HANDLER_GENERATOR);
+						handlerGen.generate();
 			
 			Generator buildFileGen = GeneratorFactory.createGenerator(wscontext, GenerationConstants.BUILD_FILE_GENERATOR);
-			buildFileGen.genarate();
+			buildFileGen.generate();
 //uncomment this to run the build file programatically
 //			AntExecuter executer = new AntExecuter();
 //			executer.execute(wscontext.getMiscInfo().getOutPutPath() + "/build.xml");
@@ -348,6 +352,6 @@ public class Ws4J2EEwithoutWSDL implements Generator {
     	}else{
 			gen = new Ws4J2EEwithoutWSDL(args,false);    	
     	}
-        gen.genarate();
+        gen.generate();
     }
 }

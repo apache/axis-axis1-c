@@ -107,7 +107,6 @@ public abstract class WrapperClassWriter extends JavaClassWriter{
 		String filename = j2eewscontext.getMiscInfo().getOutPutPath()+"/"+
 				getName(j2eewscontext).replace('.','/') +"Impl.java";
 				//j2eewscontext.getMiscInfo().getJaxrpcSEI().replace('.','/')+"BindingImpl.java";
-		log.info(filename + " generating.....................");
 		return filename;
 	}
 }

@@ -65,5 +65,5 @@ public interface Generator {
      * it is suppose to be genarate. Usally the Genarator is a assembly of
      * One or more writers.</p>
      */
-    public abstract void genarate() throws GenerationFault;
+    public abstract void generate() throws GenerationFault;
 }

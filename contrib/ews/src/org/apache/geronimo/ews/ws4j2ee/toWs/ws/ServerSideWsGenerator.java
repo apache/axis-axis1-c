@@ -97,7 +97,7 @@ public class ServerSideWsGenerator implements Generator {
 		this.j2eewscontext = j2eewscontext;
 	}
 
-	public void genarate() throws GenerationFault {
+	public void generate() throws GenerationFault {
 		try {
 
 			String mappingfile = j2eewscontext.getMiscInfo().getJaxrpcfile();
@@ -109,12 +109,17 @@ public class ServerSideWsGenerator implements Generator {
 				log.info("jaxrpc mapping file = " + mappingfile);
 				log.info("calling the jaxrpcmapper >> ");
 			}
+
 			j2ee.setMappingFilePath(mappingfile);
 			j2ee.setOutputDir(j2eewscontext.getMiscInfo().getOutPutPath());
 			j2ee.setServerSide(true);
 			j2ee.setVerbose(j2eewscontext.getMiscInfo().isVerbose());
 			j2ee.setHelperWanted(true);
 			j2ee.runServerSide(wsdlfile);
+			
+			J2eeDeployWriter deploywriter = new J2eeDeployWriter(j2ee,j2eewscontext);
+			deploywriter.generate();
+			
 			SymbolTable axisSymboltable = j2ee.getSymbolTable();
 			j2eewscontext.setWSDLContext(ContextFactory.createWSDLContext(axisSymboltable));
 
@@ -122,8 +127,12 @@ public class ServerSideWsGenerator implements Generator {
 			j2eewscontext.setJAXRPCMappingContext(ContextFactory.createJaxRpcMapperContext(new Object[]{mapper,j2ee}));
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new GenerationFault(e);
+			if(e instanceof RuntimeException){
+				throw (RuntimeException)e;
+			}else{
+				e.printStackTrace();
+				throw GenerationFault.createGenerationFault(e);
+			}
 		}
 	}
 

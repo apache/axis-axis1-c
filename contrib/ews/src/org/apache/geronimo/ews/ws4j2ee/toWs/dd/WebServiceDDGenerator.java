@@ -80,7 +80,7 @@ public class WebServiceDDGenerator implements Generator {
 		this.j2eewscontext = j2eewscontext;
 	}
 
-	public void genarate() throws GenerationFault {
+	public void generate() throws GenerationFault {
 		try {
 			if(j2eewscontext.getMiscInfo().isVerbose())
 				log.info(j2eewscontext.getMiscInfo().getWsConfFileLocation()+" generated ....");

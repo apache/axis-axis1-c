@@ -90,7 +90,7 @@ public class Ws4J2EEClientwithWSDL implements Generator {
      * 
      * @see org.apache.geronimo.ews.ws4j2ee.toWs.Generator#genarate()
      */
-    public void genarate() throws GenerationFault {
+    public void generate() throws GenerationFault {
         try {
 			J2EEWebServiceContext wscontext = new J2EEWebServiceContextImpl(true);
 			wscontext.setMiscInfo(misc);
@@ -106,9 +106,12 @@ public class Ws4J2EEClientwithWSDL implements Generator {
             //parsing of the webservice.xml happen here 
             ServiceReferanceParser parser 
             	= new ServiceReferanceParser(new FileInputStream(wscfClientfile));
-            if (verbose)
-                log.info(wscfClientfile + " parsed ..");
 			ServiceReferance ref = parser.getRef();
+            if (verbose){
+				log.info(wscfClientfile + " parsed ..");
+				log.info(ref.getJaxrpcmappingFile());       
+				log.info(ref.getWsdlFile());
+           }
 
             wscontext.getMiscInfo().setJaxrpcfile(Utils.getAbsolutePath(ref.getJaxrpcmappingFile(),misc.getWsConfFileLocation()));
             wscontext.getMiscInfo().setWsdlFile(Utils.getAbsolutePath(ref.getWsdlFile(), misc.getWsConfFileLocation()));
@@ -120,21 +123,21 @@ public class Ws4J2EEClientwithWSDL implements Generator {
                 log.info("starting client side code genaration .. ");
 			Generator clientStubGen = GeneratorFactory.createGenerator(wscontext,
                     GenerationConstants.CLIENT_STUB_GENERATOR);
-			clientStubGen.genarate();
+			clientStubGen.generate();
 			ContextValidator cvalidator = new ContextValidator(wscontext);
 			//cvalidator.validateWithWSDL();
 			Generator handlerGen = GeneratorFactory.createGenerator(wscontext,
                     GenerationConstants.HANDLER_GENERATOR);
-			handlerGen.genarate();
+			handlerGen.generate();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new GenerationFault(e);
+            throw GenerationFault.createGenerationFault(e);
         }
     }
 
 
     public static void main(String[] args) throws Exception {
         Ws4J2EEClientwithWSDL gen = new Ws4J2EEClientwithWSDL(args);
-        gen.genarate();
+        gen.generate();
     }
 }

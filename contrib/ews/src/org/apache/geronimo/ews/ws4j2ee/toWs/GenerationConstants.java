@@ -131,7 +131,7 @@ public class GenerationConstants {
 				proIn = GenerationConstants.class.getResourceAsStream("META-INF/"+WS4J2EE_PROPERTY_FILE);
 			}
 			if(proIn == null){
-				proIn = new FileInputStream("src/conf/"+WS4J2EE_PROPERTY_FILE);
+				proIn = new FileInputStream("conf/"+WS4J2EE_PROPERTY_FILE);
 			}
 			if(proIn == null){
 				proIn = new FileInputStream(WS4J2EE_PROPERTY_FILE);
