@@ -6,6 +6,12 @@ Integer::Integer():m_Integer(NULL)
 {
 }
 
+Integer::~Integer()
+{
+    if (m_Integer)
+        delete m_Integer;
+}
+
 AxisChar* Integer::serialize(const void* value) throw (AxisSoapException)
 {
     return serialize((LONGLONG*) value);  
@@ -29,7 +35,7 @@ AxisChar* Integer::serialize(const LONGLONG* value) throw (AxisSoapException)
     }
     m_Buf = new char[strlen (serializedValue) + 1];
     strcpy (m_Buf, serializedValue);
-    delete serializedValue;        
+    delete [] serializedValue;        
     return m_Buf;
 }
 

@@ -38,6 +38,11 @@ public:
     Integer();
 
     /**
+     * Destructor
+     */
+    ~Integer();
+
+    /**
      * Serialize value to it's on-the-wire string form.
      * @param value The value to be serialized.
      * @return Serialized form of value.
