@@ -439,14 +439,6 @@ void AxisTrace::addParameter(string& line, int type, unsigned len, void *value)
 	}
 }
 
-void AxisTrace::getTraceEntrypoints(AxisTraceEntrypoints& entrypoints) {
-    entrypoints.m_traceLine = traceLineInternal;
-    entrypoints.m_traceEntry = traceEntryInternal;
-    entrypoints.m_traceExit = traceExitInternal;
-    entrypoints.m_traceCatch = traceCatchInternal;
-    entrypoints.m_traceOn = m_bLoggingOn;
-}
-
 /*
 int main(int argc, char* argv[])
 {

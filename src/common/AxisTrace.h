@@ -250,7 +250,20 @@ public:
       /**
        * Returns the trace entrypoints to pass to a dynamically loaded library.
        */
-      static void getTraceEntrypoints(AxisTraceEntrypoints& entrypoints);
+#ifdef AXISTRACE_LIBRARY
+      static void getTraceEntrypoints(AxisTraceEntrypoints& entrypoints) {
+         entrypoints = *g_traceEntrypoints;
+      }
+#else
+      static void getTraceEntrypoints(AxisTraceEntrypoints& entrypoints) {
+         entrypoints.m_traceLine = traceLineInternal;
+         entrypoints.m_traceEntry = traceEntryInternal;
+         entrypoints.m_traceExit = traceExitInternal;
+         entrypoints.m_traceCatch = traceCatchInternal;
+         entrypoints.m_traceOn = m_bLoggingOn;
+      }
+#endif
+
 #ifdef AXISTRACE_LIBRARY
       static void setTraceEntrypoints(AxisTraceEntrypoints& entrypoints) {
           g_traceEntrypoints = new AxisTraceEntrypoints;
