@@ -311,11 +311,13 @@ extern "C" int initialize_module (int bServer)
 
 extern "C" int uninitialize_module ()
 {
-    // XMLPlatformUtils::Terminate();
+#ifdef USE_XERCES_PARSER
+    XMLPlatformUtils::Terminate ();
+#endif
     ModuleUnInitialize ();
+    SoapKeywordMapping::uninitialize ();
     return AXIS_SUCCESS;
 }
-
 
 void Ax_Sleep (int nTime)
 {

@@ -17,6 +17,7 @@
 #if !defined(AXIS_SOAPKEYWORDMAPPING_H__OF_AXIS_INCLUDED_)
 #define AXIS_SOAPKEYWORDMAPPING_H__OF_AXIS_INCLUDED_
 
+#include "../common/AxisUtils.h"
 #include <axis/server/SoapEnvVersions.h>
 #include <map>
 
@@ -43,11 +44,13 @@ public:
     SoapKeywordMapping();
     virtual ~SoapKeywordMapping();
 private:
-    static map<int, SoapKeywordStruct> m_Map;
+    //static map<int, SoapKeywordStruct> m_Map;
+    static SoapKeywordStruct m_Map[VERSION_LAST];
     static volatile bool m_bInit;
 public:
     static void initialize();
     static const SoapKeywordStruct& map(int nVersion);
+    static void uninitialize();
 };
 
 #endif
