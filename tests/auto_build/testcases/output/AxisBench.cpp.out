@@ -2,6 +2,7 @@ Input Count : 100
 Count : 100
  ----------------------------------------------
  StringType StringType
+ IntType 1
  IntegerType 10
  DoubleType 11.111
  BooleanType 1
@@ -18,6 +19,7 @@ Count : 100
  HexBinaryType 0
  ----------------------------------------------
  StringType StringType
+ IntType 2
  IntegerType 20
  DoubleType 22.222
  BooleanType 1
@@ -36,6 +38,7 @@ Count : 100
  HexBinaryType A
  ----------------------------------------------
  StringType StringType
+ IntType 3
  IntegerType 30
  DoubleType 33.333
  BooleanType 1
@@ -54,6 +57,7 @@ Count : 100
  HexBinaryType AA
  ----------------------------------------------
  StringType StringType
+ IntType 4
  IntegerType 40
  DoubleType 44.444
  BooleanType 1
@@ -72,6 +76,7 @@ Count : 100
  HexBinaryType AAA
  ----------------------------------------------
  StringType StringType
+ IntType 5
  IntegerType 50
  DoubleType 55.555
  BooleanType 1
@@ -90,6 +95,7 @@ Count : 100
  HexBinaryType AAAA
  ----------------------------------------------
  StringType StringType
+ IntType 6
  IntegerType 60
  DoubleType 66.666
  BooleanType 1
@@ -108,6 +114,7 @@ Count : 100
  HexBinaryType AAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 7
  IntegerType 70
  DoubleType 77.777
  BooleanType 1
@@ -126,6 +133,7 @@ Count : 100
  HexBinaryType AAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 8
  IntegerType 80
  DoubleType 88.888
  BooleanType 1
@@ -144,6 +152,7 @@ Count : 100
  HexBinaryType AAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 9
  IntegerType 90
  DoubleType 99.999
  BooleanType 1
@@ -162,6 +171,7 @@ Count : 100
  HexBinaryType AAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 10
  IntegerType 100
  DoubleType 111.11
  BooleanType 1
@@ -180,6 +190,7 @@ Count : 100
  HexBinaryType AAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 11
  IntegerType 110
  DoubleType 122.221
  BooleanType 1
@@ -198,6 +209,7 @@ Count : 100
  HexBinaryType AAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 12
  IntegerType 120
  DoubleType 133.332
  BooleanType 1
@@ -216,6 +228,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 13
  IntegerType 130
  DoubleType 144.443
  BooleanType 1
@@ -234,6 +247,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 14
  IntegerType 140
  DoubleType 155.554
  BooleanType 1
@@ -252,6 +266,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 15
  IntegerType 150
  DoubleType 166.665
  BooleanType 1
@@ -270,6 +285,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 16
  IntegerType 160
  DoubleType 177.776
  BooleanType 1
@@ -288,6 +304,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 17
  IntegerType 170
  DoubleType 188.887
  BooleanType 1
@@ -306,6 +323,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 18
  IntegerType 180
  DoubleType 199.998
  BooleanType 1
@@ -324,6 +342,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 19
  IntegerType 190
  DoubleType 211.109
  BooleanType 1
@@ -342,6 +361,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 20
  IntegerType 200
  DoubleType 222.22
  BooleanType 1
@@ -360,6 +380,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 21
  IntegerType 210
  DoubleType 233.331
  BooleanType 1
@@ -378,6 +399,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 22
  IntegerType 220
  DoubleType 244.442
  BooleanType 1
@@ -396,6 +418,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 23
  IntegerType 230
  DoubleType 255.553
  BooleanType 1
@@ -414,6 +437,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 24
  IntegerType 240
  DoubleType 266.664
  BooleanType 1
@@ -432,6 +456,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 25
  IntegerType 250
  DoubleType 277.775
  BooleanType 1
@@ -450,6 +475,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 26
  IntegerType 260
  DoubleType 288.886
  BooleanType 1
@@ -468,6 +494,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 27
  IntegerType 270
  DoubleType 299.997
  BooleanType 1
@@ -486,6 +513,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 28
  IntegerType 280
  DoubleType 311.108
  BooleanType 1
@@ -504,6 +532,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 29
  IntegerType 290
  DoubleType 322.219
  BooleanType 1
@@ -522,6 +551,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 30
  IntegerType 300
  DoubleType 333.33
  BooleanType 1
@@ -540,6 +570,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 31
  IntegerType 310
  DoubleType 344.441
  BooleanType 1
@@ -558,6 +589,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 32
  IntegerType 320
  DoubleType 355.552
  BooleanType 1
@@ -576,6 +608,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 33
  IntegerType 330
  DoubleType 366.663
  BooleanType 1
@@ -594,6 +627,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 34
  IntegerType 340
  DoubleType 377.774
  BooleanType 1
@@ -612,6 +646,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 35
  IntegerType 350
  DoubleType 388.885
  BooleanType 1
@@ -630,6 +665,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 36
  IntegerType 360
  DoubleType 399.996
  BooleanType 1
@@ -648,6 +684,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 37
  IntegerType 370
  DoubleType 411.107
  BooleanType 1
@@ -666,6 +703,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 38
  IntegerType 380
  DoubleType 422.218
  BooleanType 1
@@ -684,6 +722,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 39
  IntegerType 390
  DoubleType 433.329
  BooleanType 1
@@ -702,6 +741,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 40
  IntegerType 400
  DoubleType 444.44
  BooleanType 1
@@ -720,6 +760,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 41
  IntegerType 410
  DoubleType 455.551
  BooleanType 1
@@ -738,6 +779,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 42
  IntegerType 420
  DoubleType 466.662
  BooleanType 1
@@ -756,6 +798,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 43
  IntegerType 430
  DoubleType 477.773
  BooleanType 1
@@ -774,6 +817,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 44
  IntegerType 440
  DoubleType 488.884
  BooleanType 1
@@ -792,6 +836,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 45
  IntegerType 450
  DoubleType 499.995
  BooleanType 1
@@ -810,6 +855,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 46
  IntegerType 460
  DoubleType 511.106
  BooleanType 1
@@ -828,6 +874,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 47
  IntegerType 470
  DoubleType 522.217
  BooleanType 1
@@ -846,6 +893,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 48
  IntegerType 480
  DoubleType 533.328
  BooleanType 1
@@ -864,6 +912,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 49
  IntegerType 490
  DoubleType 544.439
  BooleanType 1
@@ -882,6 +931,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 50
  IntegerType 500
  DoubleType 555.55
  BooleanType 1
@@ -900,6 +950,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 51
  IntegerType 510
  DoubleType 566.661
  BooleanType 1
@@ -918,6 +969,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 52
  IntegerType 520
  DoubleType 577.772
  BooleanType 1
@@ -936,6 +988,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 53
  IntegerType 530
  DoubleType 588.883
  BooleanType 1
@@ -954,6 +1007,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 54
  IntegerType 540
  DoubleType 599.994
  BooleanType 1
@@ -972,6 +1026,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 55
  IntegerType 550
  DoubleType 611.105
  BooleanType 1
@@ -990,6 +1045,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 56
  IntegerType 560
  DoubleType 622.216
  BooleanType 1
@@ -1008,6 +1064,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 57
  IntegerType 570
  DoubleType 633.327
  BooleanType 1
@@ -1026,6 +1083,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 58
  IntegerType 580
  DoubleType 644.438
  BooleanType 1
@@ -1044,6 +1102,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 59
  IntegerType 590
  DoubleType 655.549
  BooleanType 1
@@ -1062,6 +1121,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 60
  IntegerType 600
  DoubleType 666.66
  BooleanType 1
@@ -1080,6 +1140,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 61
  IntegerType 610
  DoubleType 677.771
  BooleanType 1
@@ -1098,6 +1159,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 62
  IntegerType 620
  DoubleType 688.882
  BooleanType 1
@@ -1116,6 +1178,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 63
  IntegerType 630
  DoubleType 699.993
  BooleanType 1
@@ -1134,6 +1197,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 64
  IntegerType 640
  DoubleType 711.104
  BooleanType 1
@@ -1152,6 +1216,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 65
  IntegerType 650
  DoubleType 722.215
  BooleanType 1
@@ -1170,6 +1235,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 66
  IntegerType 660
  DoubleType 733.326
  BooleanType 1
@@ -1188,6 +1254,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 67
  IntegerType 670
  DoubleType 744.437
  BooleanType 1
@@ -1206,6 +1273,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 68
  IntegerType 680
  DoubleType 755.548
  BooleanType 1
@@ -1224,6 +1292,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 69
  IntegerType 690
  DoubleType 766.659
  BooleanType 1
@@ -1242,6 +1311,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 70
  IntegerType 700
  DoubleType 777.77
  BooleanType 1
@@ -1260,6 +1330,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 71
  IntegerType 710
  DoubleType 788.881
  BooleanType 1
@@ -1278,6 +1349,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 72
  IntegerType 720
  DoubleType 799.992
  BooleanType 1
@@ -1296,6 +1368,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 73
  IntegerType 730
  DoubleType 811.103
  BooleanType 1
@@ -1314,6 +1387,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 74
  IntegerType 740
  DoubleType 822.214
  BooleanType 1
@@ -1332,6 +1406,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 75
  IntegerType 750
  DoubleType 833.325
  BooleanType 1
@@ -1350,6 +1425,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 76
  IntegerType 760
  DoubleType 844.436
  BooleanType 1
@@ -1368,6 +1444,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 77
  IntegerType 770
  DoubleType 855.547
  BooleanType 1
@@ -1386,6 +1463,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 78
  IntegerType 780
  DoubleType 866.658
  BooleanType 1
@@ -1404,6 +1482,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 79
  IntegerType 790
  DoubleType 877.769
  BooleanType 1
@@ -1422,6 +1501,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 80
  IntegerType 800
  DoubleType 888.88
  BooleanType 1
@@ -1440,6 +1520,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 81
  IntegerType 810
  DoubleType 899.991
  BooleanType 1
@@ -1458,6 +1539,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 82
  IntegerType 820
  DoubleType 911.102
  BooleanType 1
@@ -1476,6 +1558,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 83
  IntegerType 830
  DoubleType 922.213
  BooleanType 1
@@ -1494,6 +1577,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 84
  IntegerType 840
  DoubleType 933.324
  BooleanType 1
@@ -1512,6 +1596,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 85
  IntegerType 850
  DoubleType 944.435
  BooleanType 1
@@ -1530,6 +1615,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 86
  IntegerType 860
  DoubleType 955.546
  BooleanType 1
@@ -1548,6 +1634,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 87
  IntegerType 870
  DoubleType 966.657
  BooleanType 1
@@ -1566,6 +1653,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 88
  IntegerType 880
  DoubleType 977.768
  BooleanType 1
@@ -1584,6 +1672,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 89
  IntegerType 890
  DoubleType 988.879
  BooleanType 1
@@ -1602,6 +1691,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 90
  IntegerType 900
  DoubleType 999.99
  BooleanType 1
@@ -1620,6 +1710,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 91
  IntegerType 910
  DoubleType 1011.1
  BooleanType 1
@@ -1638,6 +1729,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 92
  IntegerType 920
  DoubleType 1022.21
  BooleanType 1
@@ -1656,6 +1748,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 93
  IntegerType 930
  DoubleType 1033.32
  BooleanType 1
@@ -1674,6 +1767,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 94
  IntegerType 940
  DoubleType 1044.43
  BooleanType 1
@@ -1692,6 +1786,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 95
  IntegerType 950
  DoubleType 1055.55
  BooleanType 1
@@ -1710,6 +1805,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 96
  IntegerType 960
  DoubleType 1066.66
  BooleanType 1
@@ -1728,6 +1824,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 97
  IntegerType 970
  DoubleType 1077.77
  BooleanType 1
@@ -1746,6 +1843,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 98
  IntegerType 980
  DoubleType 1088.88
  BooleanType 1
@@ -1764,6 +1862,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 99
  IntegerType 990
  DoubleType 1099.99
  BooleanType 1
@@ -1782,6 +1881,7 @@ Count : 100
  HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  ----------------------------------------------
  StringType StringType
+ IntType 100
  IntegerType 1000
  DoubleType 1111.1
  BooleanType 1

@@ -137,6 +137,7 @@ int main(int argc, char* argv[])
       for ( ; i < output->count ; i++ ) {
           cout << " ----------------------------------------------" << endl;
           cout << " StringType " << output->infos.m_Array[i].StringType << endl;
+          cout << " IntType " << output->infos.m_Array[i].IntType << endl;
           cout << " IntegerType " << output->infos.m_Array[i].IntegerType << endl;
           cout << " DoubleType " << output->infos.m_Array[i].DoubleType << endl;
           cout << " BooleanType " << output->infos.m_Array[i].BooleanType << endl;
