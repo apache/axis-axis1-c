@@ -332,7 +332,7 @@ public class WSDL2Ws {
 							Part p = (Part) returnlist.next();
 							if (op.getParameterOrdering().contains(p.getName())) continue;
 							pinfo = createParameterInfo(p);
-							if (null != pinfo) minfo.addInputParameter(pinfo);
+							if (null != pinfo) minfo.addOutputParameter(pinfo);
 						}    	   				    	   			
 					}
 					else {

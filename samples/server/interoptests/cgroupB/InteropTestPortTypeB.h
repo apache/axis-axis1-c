@@ -3,8 +3,8 @@
  * InteropTestPortTypeB.h: interface for the InteropTestPortTypeBclass.
  *
  */
-#if !defined(__INTEROPTESTPORTTYPEB_H__INCLUDED_)
-#define __INTEROPTESTPORTTYPEB_H__INCLUDED_
+#if !defined(__INTEROPTESTPORTTYPEB_H__OF_AXIS_INCLUDED_)
+#define __INTEROPTESTPORTTYPEB_H__OF_AXIS_INCLUDED_
 
 #include <axis/client/Call.h>
 #include <axis/server/AxisWrapperAPI.h>
@@ -20,4 +20,4 @@ extern SOAPStructStruct* echoNestedStruct(void* pStub, SOAPStructStruct* Value0)
 extern SOAPArrayStruct* echoNestedArray(void* pStub, SOAPArrayStruct* Value0);
 
 
-#endif // !defined(__INTEROPTESTPORTTYPEB_H__INCLUDED_)
+#endif // !defined(__INTEROPTESTPORTTYPEB_H__OF_AXIS_INCLUDED_)

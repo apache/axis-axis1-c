@@ -3,8 +3,8 @@
  * InteropTestPortTypeB.h: interface for the InteropTestPortTypeBclass.
  *
  */
-#if !defined(__INTEROPTESTPORTTYPEB_SERVERSKELETON_H__INCLUDED_)
-#define __INTEROPTESTPORTTYPEB_SERVERSKELETON_H__INCLUDED_
+#if !defined(__INTEROPTESTPORTTYPEB_SERVERSKELETON_H__OF_AXIS_INCLUDED_)
+#define __INTEROPTESTPORTTYPEB_SERVERSKELETON_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/AxisUserAPI.h>
 
@@ -25,4 +25,4 @@ class InteropTestPortTypeB
 		SOAPArrayStruct* echoNestedArray(SOAPArrayStruct* Value0);
 };
 
-#endif /* !defined(__INTEROPTESTPORTTYPEB_SERVERSKELETON_H__INCLUDED_)*/
+#endif /* !defined(__INTEROPTESTPORTTYPEB_SERVERSKELETON_H__OF_AXIS_INCLUDED_)*/

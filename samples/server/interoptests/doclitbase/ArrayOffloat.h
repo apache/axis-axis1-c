@@ -4,8 +4,8 @@
 //Parameters and wrapper methos to manipulate ArrayOffloat
 ////////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__ARRAYOFFLOAT_ARRAY_H__INCLUDED_)
-#define __ARRAYOFFLOAT_ARRAY_H__INCLUDED_
+#if !defined(__ARRAYOFFLOAT_ARRAY_H__OF_AXIS_INCLUDED_)
+#define __ARRAYOFFLOAT_ARRAY_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/AxisUserAPI.h>
 
@@ -15,4 +15,4 @@ typedef struct ArrayOffloatTag
 	int m_Size;
 } ArrayOffloat;
 
-#endif // !defined(__ARRAYOFFLOAT_ARRAY_H__INCLUDED_)
+#endif // !defined(__ARRAYOFFLOAT_ARRAY_H__OF_AXIS_INCLUDED_)

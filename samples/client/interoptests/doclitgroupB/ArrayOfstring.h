@@ -4,8 +4,8 @@
 //Parameters and wrapper methos to manipulate ArrayOfstring
 ////////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__ARRAYOFSTRING_ARRAY_H__INCLUDED_)
-#define __ARRAYOFSTRING_ARRAY_H__INCLUDED_
+#if !defined(__ARRAYOFSTRING_ARRAY_H__OF_AXIS_INCLUDED_)
+#define __ARRAYOFSTRING_ARRAY_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/AxisUserAPI.h>
 
@@ -15,4 +15,4 @@ typedef struct ArrayOfstringTag
 	int m_Size;
 } ArrayOfstring;
 
-#endif // !defined(__ARRAYOFSTRING_ARRAY_H__INCLUDED_)
+#endif // !defined(__ARRAYOFSTRING_ARRAY_H__OF_AXIS_INCLUDED_)

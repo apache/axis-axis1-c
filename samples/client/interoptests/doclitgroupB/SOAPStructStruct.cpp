@@ -19,14 +19,14 @@ extern int Axis_GetSize_SOAPStruct();
 int Axis_Serialize_SOAPStructStruct(SOAPStructStruct* param, IWrapperSoapSerializer* pSZ, bool bArray = false)
 {
 	/* first serialize attributes if any*/
-	pSZ->Serialize(">", 0);
+	pSZ->serialize(">", 0);
 	/* then serialize elements if any*/
-	pSZ->SerializeAsElement("varString", (void*)&(param->varString), XSD_STRING);
-	pSZ->SerializeAsElement("varInt", (void*)&(param->varInt), XSD_INT);
-	pSZ->SerializeAsElement("varFloat", (void*)&(param->varFloat), XSD_FLOAT);
-	pSZ->Serialize("<varStruct>", 0);
+	pSZ->serializeAsElement("varString", (void*)&(param->varString), XSD_STRING);
+	pSZ->serializeAsElement("varInt", (void*)&(param->varInt), XSD_INT);
+	pSZ->serializeAsElement("varFloat", (void*)&(param->varFloat), XSD_FLOAT);
+	pSZ->serialize("<varStruct>", 0);
 	Axis_Serialize_SOAPStruct(param->varStruct, pSZ);
-	pSZ->Serialize("</varStruct>", 0);
+	pSZ->serialize("</varStruct>", 0);
 	return AXIS_SUCCESS;
 }
 
@@ -35,10 +35,10 @@ int Axis_Serialize_SOAPStructStruct(SOAPStructStruct* param, IWrapperSoapSeriali
 //////////////////////////////////////////////////////////////////////
 int Axis_DeSerialize_SOAPStructStruct(SOAPStructStruct* param, IWrapperSoapDeSerializer *pIWSDZ)
 {
-	param->varString = pIWSDZ->GetElementAsString("varString",0);
-	param->varInt = pIWSDZ->GetElementAsInt("varInt",0);
-	param->varFloat = pIWSDZ->GetElementAsFloat("varFloat",0);
-	param->varStruct = (SOAPStruct*)pIWSDZ->GetCmplxObject((void*)Axis_DeSerialize_SOAPStruct
+	param->varString = pIWSDZ->getElementAsString("varString",0);
+	param->varInt = pIWSDZ->getElementAsInt("varInt",0);
+	param->varFloat = pIWSDZ->getElementAsFloat("varFloat",0);
+	param->varStruct = (SOAPStruct*)pIWSDZ->getCmplxObject((void*)Axis_DeSerialize_SOAPStruct
 		, (void*)Axis_Create_SOAPStruct, (void*)Axis_Delete_SOAPStruct
 		, "varStruct", Axis_URI_SOAPStruct);
 	return AXIS_SUCCESS;

@@ -21,22 +21,22 @@ int Axis_Serialize_SOAPStructStruct(SOAPStructStruct* param, IWrapperSoapSeriali
 {
 	if (bArray)
 	{
-		pSZ->Serialize("<", Axis_TypeName_SOAPStructStruct, ">", NULL);
+		pSZ->serialize("<", Axis_TypeName_SOAPStructStruct, ">", NULL);
 	}
 	else
 	{
-		const AxisChar* sPrefix = pSZ->GetNamespacePrefix(Axis_URI_SOAPStructStruct);
-		pSZ->Serialize("<", Axis_TypeName_SOAPStructStruct, " xsi:type=\"", sPrefix, ":",
+		const AxisChar* sPrefix = pSZ->getNamespacePrefix(Axis_URI_SOAPStructStruct);
+		pSZ->serialize("<", Axis_TypeName_SOAPStructStruct, " xsi:type=\"", sPrefix, ":",
 			Axis_TypeName_SOAPStructStruct, "\" xmlns:", sPrefix, "=\"",
 			Axis_URI_SOAPStructStruct, "\">", NULL);
 	}
 
-	pSZ->SerializeAsElement("varString", (void*)&(param->varString), XSD_STRING);
-	pSZ->SerializeAsElement("varInt", (void*)&(param->varInt), XSD_INT);
-	pSZ->SerializeAsElement("varFloat", (void*)&(param->varFloat), XSD_FLOAT);
+	pSZ->serializeAsElement("varString", (void*)&(param->varString), XSD_STRING);
+	pSZ->serializeAsElement("varInt", (void*)&(param->varInt), XSD_INT);
+	pSZ->serializeAsElement("varFloat", (void*)&(param->varFloat), XSD_FLOAT);
 	Axis_Serialize_SOAPStruct(param->varStruct, pSZ);
 
-	pSZ->Serialize("</", Axis_TypeName_SOAPStructStruct, ">", NULL);
+	pSZ->serialize("</", Axis_TypeName_SOAPStructStruct, ">", NULL);
 	return AXIS_SUCCESS;
 }
 
@@ -45,13 +45,13 @@ int Axis_Serialize_SOAPStructStruct(SOAPStructStruct* param, IWrapperSoapSeriali
  */
 int Axis_DeSerialize_SOAPStructStruct(SOAPStructStruct* param, IWrapperSoapDeSerializer *pIWSDZ)
 {
-	param->varString = pIWSDZ->GetElementAsString("varString",0);
-	param->varInt = pIWSDZ->GetElementAsInt("varInt",0);
-	param->varFloat = pIWSDZ->GetElementAsFloat("varFloat",0);
-	param->varStruct = (SOAPStruct*)pIWSDZ->GetCmplxObject((void*)Axis_DeSerialize_SOAPStruct
+	param->varString = pIWSDZ->getElementAsString("varString",0);
+	param->varInt = pIWSDZ->getElementAsInt("varInt",0);
+	param->varFloat = pIWSDZ->getElementAsFloat("varFloat",0);
+	param->varStruct = (SOAPStruct*)pIWSDZ->getCmplxObject((void*)Axis_DeSerialize_SOAPStruct
 		, (void*)Axis_Create_SOAPStruct, (void*)Axis_Delete_SOAPStruct
 		, "varStruct", Axis_URI_SOAPStruct);
-	return pIWSDZ->GetStatus();
+	return pIWSDZ->getStatus();
 }
 void* Axis_Create_SOAPStructStruct(SOAPStructStruct* pObj, bool bArray = false, int nSize=0)
 {

@@ -32,16 +32,16 @@ AxisAdminServiceWrapper::~AxisAdminServiceWrapper ()
 }
 
 /* Implementation of WrapperClassHandler interface */
-void AxisAdminServiceWrapper::OnFault (void* pMsg)
+void AxisAdminServiceWrapper::onFault (void* pMsg)
 {
 }
 
-int AxisAdminServiceWrapper::Init ()
+int AxisAdminServiceWrapper::init ()
 {
     return AXIS_SUCCESS;
 }
 
-int AxisAdminServiceWrapper::Fini ()
+int AxisAdminServiceWrapper::fini ()
 {
     return AXIS_SUCCESS;
 }
@@ -50,10 +50,10 @@ int AxisAdminServiceWrapper::Fini ()
 /*
  * This method invokes the right service method 
  */
-int AxisAdminServiceWrapper::Invoke (void* pMsg)
+int AxisAdminServiceWrapper::invoke (void* pMsg)
 {
     IMessageData* mc = (IMessageData*) pMsg;
-    const AxisChar* method = mc->GetOperationName ();
+    const AxisChar* method = mc->getOperationName ();
     if (0 == strcmp (method, "updateWSDD"))
         return updateWSDD (mc);
     else
@@ -71,29 +71,29 @@ int AxisAdminServiceWrapper::updateWSDD (void* pMsg)
     IMessageData* mc = (IMessageData*) pMsg;
     int nStatus;
     IWrapperSoapSerializer* pIWSSZ = NULL;
-    mc->GetSoapSerializer (&pIWSSZ);
+    mc->getSoapSerializer (&pIWSSZ);
     if (!pIWSSZ)
         return AXIS_FAIL;
     IWrapperSoapDeSerializer* pIWSDZ = NULL;
-    mc->GetSoapDeSerializer (&pIWSDZ);
+    mc->getSoapDeSerializer (&pIWSDZ);
     if (!pIWSDZ)
         return AXIS_FAIL;
     /* check whether we have got correct message */
     if (AXIS_SUCCESS !=
-        pIWSDZ->CheckMessageBody ("updateWSDD", "http://www.opensource.lk/xsd"))
+        pIWSDZ->checkMessageBody ("updateWSDD", "http://www.opensource.lk/xsd"))
         return AXIS_FAIL;
-    pIWSSZ->CreateSoapMethod ("updateWSDDResponse",
+    pIWSSZ->createSoapMethod ("updateWSDDResponse",
         "http://www.opensource.lk/xsd");
-    xsd__base64Binary v0 = pIWSDZ->GetElementAsBase64Binary ("wsdd", 0);
-    if (AXIS_SUCCESS != (nStatus = pIWSDZ->GetStatus ()))
+    xsd__base64Binary v0 = pIWSDZ->getElementAsBase64Binary ("wsdd", 0);
+    if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus ()))
         return nStatus;
     xsd__boolean ret = false_;
     IAdminUtils* pAdminUtils;
-    mc->GetAdminUtils (&pAdminUtils);
+    mc->getAdminUtils (&pAdminUtils);
     if (pAdminUtils)
     {
-        if (AXIS_SUCCESS == pAdminUtils->UpdateWSDD ((char*) v0.__ptr))
+        if (AXIS_SUCCESS == pAdminUtils->updateWSDD ((char*) v0.__ptr))
               ret = true_;
     }
-    return pIWSSZ->AddOutputParam ("return", (void*) &ret, XSD_BOOLEAN);
+    return pIWSSZ->addOutputParam ("return", (void*) &ret, XSD_BOOLEAN);
 }

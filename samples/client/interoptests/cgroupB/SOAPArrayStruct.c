@@ -16,20 +16,20 @@ int Axis_Serialize_SOAPArrayStruct(SOAPArrayStruct* param, IWrapperSoapSerialize
 	const AxisChar* sPrefix;
 	if (bArray)
 	{
-		pSZ->_functions->SerializeStartElementOfType(pSZ->_object, Axis_TypeName_SOAPArrayStruct, 0, 0);
+		pSZ->_functions->serializeStartElementOfType(pSZ->_object, Axis_TypeName_SOAPArrayStruct, 0, 0);
 	}
 	else
 	{
-		sPrefix = pSZ->_functions->GetNamespacePrefix(pSZ->_object, Axis_URI_SOAPArrayStruct);
-		pSZ->_functions->SerializeStartElementOfType(pSZ->_object, Axis_TypeName_SOAPArrayStruct, Axis_URI_SOAPArrayStruct, sPrefix);
+		sPrefix = pSZ->_functions->getNamespacePrefix(pSZ->_object, Axis_URI_SOAPArrayStruct);
+		pSZ->_functions->serializeStartElementOfType(pSZ->_object, Axis_TypeName_SOAPArrayStruct, Axis_URI_SOAPArrayStruct, sPrefix);
 	}
 
-	pSZ->_functions->SerializeAsElement(pSZ->_object, "varString", (void*)&(param->varString), XSD_STRING);
-	pSZ->_functions->SerializeAsElement(pSZ->_object, "varInt", (void*)&(param->varInt), XSD_INT);
-	pSZ->_functions->SerializeAsElement(pSZ->_object, "varFloat", (void*)&(param->varFloat), XSD_FLOAT);
-	pSZ->_functions->SerializeBasicArray(pSZ->_object, (Axis_Array*)(&param->varArray),XSD_STRING, "varArray");
+	pSZ->_functions->serializeAsElement(pSZ->_object, "varString", (void*)&(param->varString), XSD_STRING);
+	pSZ->_functions->serializeAsElement(pSZ->_object, "varInt", (void*)&(param->varInt), XSD_INT);
+	pSZ->_functions->serializeAsElement(pSZ->_object, "varFloat", (void*)&(param->varFloat), XSD_FLOAT);
+	pSZ->_functions->serializeBasicArray(pSZ->_object, (Axis_Array*)(&param->varArray),XSD_STRING, "varArray");
 
-	pSZ->_functions->SerializeEndElementOfType(pSZ->_object, Axis_TypeName_SOAPArrayStruct);
+	pSZ->_functions->serializeEndElementOfType(pSZ->_object, Axis_TypeName_SOAPArrayStruct);
 	return AXIS_SUCCESS;
 }
 
@@ -39,12 +39,12 @@ int Axis_Serialize_SOAPArrayStruct(SOAPArrayStruct* param, IWrapperSoapSerialize
 int Axis_DeSerialize_SOAPArrayStruct(SOAPArrayStruct* param, IWrapperSoapDeSerializer *pDZ)
 {
 	Axis_Array array;
-	param->varString = pDZ->_functions->GetElementAsString(pDZ->_object,0,0);
-	param->varInt = pDZ->_functions->GetElementAsInt(pDZ->_object,0,0);
-	param->varFloat = pDZ->_functions->GetElementAsFloat(pDZ->_object,0,0);
-	array = pDZ->_functions->GetBasicArray(pDZ->_object, XSD_STRING,0,0);
+	param->varString = pDZ->_functions->getElementAsString(pDZ->_object,0,0);
+	param->varInt = pDZ->_functions->getElementAsInt(pDZ->_object,0,0);
+	param->varFloat = pDZ->_functions->getElementAsFloat(pDZ->_object,0,0);
+	array = pDZ->_functions->getBasicArray(pDZ->_object, XSD_STRING,0,0);
 	memcpy(&(param->varArray), &array, sizeof(Axis_Array));
-	return pDZ->_functions->GetStatus(pDZ->_object);
+	return pDZ->_functions->getStatus(pDZ->_object);
 }
 void* Axis_Create_SOAPArrayStruct(SOAPArrayStruct* pObj, bool bArray, int nSize)
 {
