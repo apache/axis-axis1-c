@@ -60,14 +60,14 @@ public:
      * @param value The Short value to be serialized.
      * @return Serialized form of Short value.
      */  
-    AxisChar* serialize(const short* value) throw (AxisSoapException);
+    AxisChar* serialize(const xsd__short* value) throw (AxisSoapException);
   
     /**
      * Deserialized Short value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of Short value.
      * @return Deserialized Short value.
      */
-    short* deserializeShort(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__short* deserializeShort(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 
@@ -100,7 +100,7 @@ protected:
     virtual MaxExclusive* getMaxExclusive();
     
 private:
-    short* m_Short;
+    xsd__short* m_Short;
 };
 
 AXIS_CPP_NAMESPACE_END

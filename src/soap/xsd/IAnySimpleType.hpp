@@ -23,6 +23,7 @@
 
 #include <axis/GDefine.hpp>
 #include <string>
+#include <axis/AxisUserAPI.hpp>
 #include "../AxisSoapException.h"
 #include "constraints/WhiteSpace.hpp"
 #include "constraints/Pattern.hpp"

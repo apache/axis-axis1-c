@@ -60,14 +60,14 @@ public:
      * @param value The UnsignedInt value to be serialized.
      * @return Serialized form of UnsignedInt value.
      */  
-    AxisChar* serialize(const unsigned int* value) throw (AxisSoapException);
+    AxisChar* serialize(const xsd__unsignedInt* value) throw (AxisSoapException);
   
   /**
    * Deserialized UnsignedInt value from it's on-the-wire string form.
    * @param valueAsChar Serialized form of UnsignedInt value.
    * @return Deserialized UnsignedInt value.
    */
-    unsigned int* deserializeUnsignedInt(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__unsignedInt* deserializeUnsignedInt(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 
@@ -79,7 +79,7 @@ protected:
     virtual MaxInclusive* getMaxInclusive();
     
 private:
-    unsigned int *m_UnsignedInt;
+    xsd__unsignedInt *m_UnsignedInt;
 };
 
 AXIS_CPP_NAMESPACE_END

@@ -60,14 +60,14 @@ public:
      * @param value The Byte value to be serialized.
      * @return Serialized form of Byte value.
      */  
-    AxisChar* serialize(const char* value) throw (AxisSoapException);
+    AxisChar* serialize(const xsd__byte* value) throw (AxisSoapException);
   
     /**
      * Deserialized Byte value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of Byte value.
      * @return Deserialized Byte value.
      */
-    char* deserializeByte(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__byte* deserializeByte(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 
@@ -100,7 +100,7 @@ protected:
     virtual MaxExclusive* getMaxExclusive();
     
 private:
-    char* m_Byte;
+    xsd__byte* m_Byte;
 };
 
 AXIS_CPP_NAMESPACE_END

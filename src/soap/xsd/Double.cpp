@@ -17,7 +17,7 @@ void* Double::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
 }
 
 
-AxisChar* Double::serialize(const double* value) throw (AxisSoapException)
+AxisChar* Double::serialize(const xsd__double* value) throw (AxisSoapException)
 {
     MinInclusive* minInclusive = getMinInclusive();
     if (minInclusive->isSet())
@@ -117,7 +117,7 @@ AxisChar* Double::serialize(const double* value) throw (AxisSoapException)
     return m_Buf;
 }
 
-double* Double::deserializeDouble(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__double* Double::deserializeDouble(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
 	AxisChar* end;
    
@@ -126,7 +126,7 @@ double* Double::deserializeDouble(const AxisChar* valueAsChar) throw (AxisSoapEx
         delete m_Double;
         m_Double = NULL;
     }
-	m_Double = new double;
+	m_Double = new xsd__double;
 	*m_Double = strtod (valueAsChar, &end);
 	
 	return m_Double;

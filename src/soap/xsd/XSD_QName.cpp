@@ -8,7 +8,7 @@ AXIS_CPP_NAMESPACE_START
 
     AxisChar* XSD_QName::serialize(const void* value) throw (AxisSoapException)
     {
-    	return serialize((AxisChar*) value);
+    	return serialize((xsd__QName) value);
     }
 	
     void* XSD_QName::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
@@ -16,7 +16,7 @@ AXIS_CPP_NAMESPACE_START
     	return (void*) deserializeQName(valueAsChar);
     }
 	
-    AxisChar* XSD_QName::serialize(const AxisChar* value) throw (AxisSoapException)
+    AxisChar* XSD_QName::serialize(const xsd__QName value) throw (AxisSoapException)
     {
         MinLength* minLength= getMinLength();
         if (minLength->isSet())
@@ -91,7 +91,7 @@ AXIS_CPP_NAMESPACE_START
 		return m_Buf;
     }
 	
-    AxisChar* XSD_QName::deserializeQName(const AxisChar* valueAsChar) throw (AxisSoapException)
+    xsd__QName XSD_QName::deserializeQName(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
 		m_QName = new char[strlen (valueAsChar) + 1];
 		strcpy (m_QName, valueAsChar);

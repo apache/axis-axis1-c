@@ -58,14 +58,14 @@ public:
 	 * @param value The AnyURI value to be serialized.
 	 * @return Serialized form of AnyURI value.
 	 */
-    AxisChar* serialize(const AxisChar* value) throw (AxisSoapException);
+    AxisChar* serialize(const xsd__anyURI value) throw (AxisSoapException);
 	
 	/**
 	 * Deserialized AnyURI value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of AnyURI value.
 	 * @return Deserialized AnyURI value.
 	 */
-    AxisChar* deserializeAnyURI(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__anyURI deserializeAnyURI(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 
@@ -97,7 +97,7 @@ protected:
     Length* getLength();
     
 private:
-    AxisChar* m_AnyURI;
+    xsd__anyURI m_AnyURI;
 };
 
 AXIS_CPP_NAMESPACE_END

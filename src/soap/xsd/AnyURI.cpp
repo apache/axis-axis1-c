@@ -8,7 +8,7 @@ AXIS_CPP_NAMESPACE_START
 
     AxisChar* AnyURI::serialize(const void* value) throw (AxisSoapException)
     {
-    	return serialize((AxisChar*) value);
+    	return serialize((xsd__anyURI) value);
     }
 	
     void* AnyURI::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
@@ -16,7 +16,7 @@ AXIS_CPP_NAMESPACE_START
     	return (void*) deserializeAnyURI(valueAsChar);
     }
 	
-    AxisChar* AnyURI::serialize(const AxisChar* value) throw (AxisSoapException)
+    AxisChar* AnyURI::serialize(const xsd__anyURI value) throw (AxisSoapException)
     {
         MinLength* minLength= getMinLength();
         if (minLength->isSet())

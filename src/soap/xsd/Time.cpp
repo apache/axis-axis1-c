@@ -8,7 +8,7 @@ AXIS_CPP_NAMESPACE_START
 
     AxisChar* Time::serialize(const void* value) throw (AxisSoapException)
     {
-    	return serialize((struct tm*) value);
+    	return serialize((xsd__time*) value);
     }
 	
     void* Time::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
@@ -16,7 +16,7 @@ AXIS_CPP_NAMESPACE_START
     	return (void*) deserializeTime(valueAsChar);
     }
 	
-    AxisChar* Time::serialize(const struct tm* value) throw (AxisSoapException)
+    AxisChar* Time::serialize(const xsd__time* value) throw (AxisSoapException)
     {
         MinInclusive* minInclusive = getMinInclusive();
         if (minInclusive->isSet())
@@ -157,7 +157,7 @@ AXIS_CPP_NAMESPACE_START
         return m_Buf;
     }
 	
-    struct tm* Time::deserializeTime(const AxisChar* valueAsChar) throw (AxisSoapException)
+    xsd__time* Time::deserializeTime(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
     	struct tm value;
     	struct tm* pTm;
@@ -294,7 +294,7 @@ AXIS_CPP_NAMESPACE_START
             m_Time = NULL;
         }
     	
-    	m_Time = new struct tm;
+    	m_Time = new xsd__time;
 		memcpy (m_Time, pTm, sizeof (tm));
     	return m_Time;
     }

@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
 	xsd__date* dateResult;			// typedef of struct tm
 	xsd__dateTime* dateTimeResult;	// typedef of struct tm
 	xsd__time* timeResult;			// typedef of struct tm
-	//xsd__duration no implemented yet
+	xsd__duration* durationResult;
 	xsd__string strResult;
 	xsd__integer* intResult;
 	xsd__decimal* decResult;
@@ -83,8 +83,8 @@ int main(int argc, char* argv[])
 	xsd__date dateInput;			// typedef of struct tm
 	xsd__dateTime dateTimeInput;	// typedef of struct tm
 	xsd__time timeInput;			// typedef of struct tm
-	//xsd__duration no implemented yet
-	xsd__string strInput=(xsd__string)"never odd or even";
+	xsd__duration durationInput = (xsd__duration) 123456789;
+ 	xsd__string strInput=(xsd__string)"never odd or even";
 	xsd__integer intInput=(xsd__integer)919191919;
 	xsd__decimal decInput=(xsd__decimal)929292929.5555555555555;
 	xsd__base64Binary b64Input;
@@ -137,7 +137,7 @@ int main(int argc, char* argv[])
 		printf("unsigned int=%d\n", *uiResult);
 
 		lResult = ws->setGetDataLong(&lInput);
-		printf("long=%d\n", *lResult);
+		cout << "long=" << *lResult << endl;
 		ulResult = ws->setGetDataUnsignedLong(&ulInput);
 		printf("unsigned long=%d\n", *ulResult);
 
@@ -146,6 +146,9 @@ int main(int argc, char* argv[])
 
 		dResult = ws->setGetDataDouble(&dInput);
 		printf("double=%.5f\n", *dResult); fflush(stdout);
+
+        durationResult = ws->setGetDataDurationType(&durationInput);
+        cout << "duration=" << *durationResult << endl;
 
 		dateResult = ws->setGetDateType(&testDate);
 		strftime(dateTime, 50, "%a %b %d %Y", dateResult);

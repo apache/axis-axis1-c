@@ -8,7 +8,7 @@ NOTATION::NOTATION():m_NOTATION(NULL)
 
 AxisChar* NOTATION::serialize(const void* value) throw (AxisSoapException)
 {
-	return serialize((AxisChar*) value);
+	return serialize((xsd__notation) value);
 }
 
 void* NOTATION::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
@@ -16,7 +16,7 @@ void* NOTATION::deserialize(const AxisChar* valueAsChar) throw (AxisSoapExceptio
 	return (void*) deserializeNOTATION(valueAsChar);
 }
 
-AxisChar* NOTATION::serialize(const AxisChar* value) throw (AxisSoapException)
+AxisChar* NOTATION::serialize(const xsd__notation value) throw (AxisSoapException)
 {
     MinLength* minLength= getMinLength();
     if (minLength->isSet())
@@ -91,7 +91,7 @@ AxisChar* NOTATION::serialize(const AxisChar* value) throw (AxisSoapException)
 	return m_Buf;
 }
 
-AxisChar* NOTATION::deserializeNOTATION(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__notation NOTATION::deserializeNOTATION(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
     if (m_NOTATION)
     {

@@ -12,7 +12,7 @@ Byte::~Byte()
 
 AxisChar* Byte::serialize(const void* value) throw (AxisSoapException)
 {
-    return serialize((char*) value);
+    return serialize((xsd__byte*) value);
 }
 
 void* Byte::deserializer(const AxisChar* valueAsChar) throw (AxisSoapException)
@@ -22,21 +22,21 @@ void* Byte::deserializer(const AxisChar* valueAsChar) throw (AxisSoapException)
 
 AxisChar* Byte::serialize(const char* value) throw (AxisSoapException)
 {
-    short valueAsShort = static_cast<short>(*value);
+    xsd__short valueAsShort = static_cast<xsd__short>(*value);
     return Short::serialize(&valueAsShort);
 }
 
 char* Byte::deserializeByte(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
-    short* returnValue = Short::deserializeShort(valueAsChar);
+    xsd__short* returnValue = Short::deserializeShort(valueAsChar);
  
     if(m_Byte)
     {
         delete m_Byte;
         m_Byte = NULL;
     }
-    m_Byte = new char;
-    *m_Byte = static_cast<char> (*returnValue);
+    m_Byte = new xsd__byte;
+    *m_Byte = static_cast<xsd__byte> (*returnValue);
     return m_Byte;
 }
 

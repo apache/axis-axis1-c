@@ -60,14 +60,14 @@ public:
 	 * @param value The Duration value to be serialized.
 	 * @return Serialized form of Duration value.
 	 */
-    AxisChar* serialize(const long* value) throw (AxisSoapException);
+    AxisChar* serialize(const xsd__duration* value) throw (AxisSoapException);
 	
 	/**
 	 * Deserialized Duration value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of Duration value.
 	 * @return Deserialized Duration value.
 	 */
-    long* deserializeDuration(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__duration* deserializeDuration(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 
@@ -108,7 +108,7 @@ protected:
 
 
 private:
-	long* m_Duration;
+	xsd__duration* m_Duration;
 };
 
 AXIS_CPP_NAMESPACE_END

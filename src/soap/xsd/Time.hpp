@@ -60,14 +60,14 @@ public:
 	 * @param value The Time value to be serialized.
 	 * @return Serialized form of Time value.
 	 */
-    AxisChar* serialize(const struct tm* value) throw (AxisSoapException);
+    AxisChar* serialize(const xsd__time* value) throw (AxisSoapException);
 	
 	/**
 	 * Deserialized Time value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of Time value.
 	 * @return Deserialized Time value.
 	 */
-    struct tm* deserializeTime(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__time* deserializeTime(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 
@@ -106,7 +106,7 @@ protected:
     WhiteSpace* getWhiteSpace();
 
 private:
-	struct tm* m_Time;
+	xsd__time* m_Time;
 };
 
 AXIS_CPP_NAMESPACE_END

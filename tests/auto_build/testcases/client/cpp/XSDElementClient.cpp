@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
 	xsd__date dateResult;			// typedef of struct tm
 	xsd__dateTime dateTimeResult;	// typedef of struct tm
 	xsd__time timeResult;			// typedef of struct tm
-	//xsd__duration no implemented yet
+	xsd__duration durationResult = (xsd__duration) 0;
 	xsd__string strResult=(xsd__string)0;
 	xsd__integer intResult=(xsd__integer)0;
 	xsd__decimal decResult=(xsd__decimal)0;
@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
 		printf("unsigned int=%d\n", uiResult);
 
 		lResult = ws->setGetDataLong((xsd__long)35);
-		printf("long=%d\n", lResult);
+	    cout << "long=" << lResult << endl;
 		ulResult = ws->setGetDataUnsignedLong((xsd__unsignedLong)42);
 		printf("unsigned long=%d\n", ulResult);
 
@@ -122,6 +122,9 @@ int main(int argc, char* argv[])
 
 		dResult = ws->setGetDataDouble((xsd__double)70.7175888888);
 		printf("double=%.5f\n", dResult); fflush(stdout);
+
+        durationResult = ws->setGetDataDurationType((xsd__duration)123456789);
+        cout << "duration=" << durationResult << endl;
 
 		dateResult = ws->setGetDateType(testDate);
 		strftime(dateTime, 50, "%a %b %d %Y", &dateResult);

@@ -61,14 +61,14 @@ public:
      * @param value The Integer value to be serialized.
      * @return Serialized form of Integer value.
      */
-    AxisChar* serialize(const LONGLONG* value) throw (AxisSoapException);
+    AxisChar* serialize(const xsd__integer* value) throw (AxisSoapException);
   
     /**
      * Deserialized Integer value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of Integer value.
      * @return Deserialized Integer value.
      */
-    LONGLONG* deserializeInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__integer* deserializeInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 
@@ -79,7 +79,7 @@ protected:
     FractionDigits* getFractionDigits();
 
 private:
-   LONGLONG* m_Integer;
+   xsd__integer* m_Integer;
 };
 
 AXIS_CPP_NAMESPACE_END

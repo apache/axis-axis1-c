@@ -12,7 +12,7 @@ UnsignedLong::~UnsignedLong()
 
 AxisChar* UnsignedLong::serialize(const void* value) throw (AxisSoapException)
 {
-    return serialize((unsigned long*) value);
+    return serialize((xsd__unsignedLong*) value);
 }
 
 void* UnsignedLong::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
@@ -20,13 +20,13 @@ void* UnsignedLong::deserialize(const AxisChar* valueAsChar) throw (AxisSoapExce
     return (void*) deserializeUnsignedLong(valueAsChar);
 }
 
-AxisChar* UnsignedLong::serialize(const unsigned long* value) throw (AxisSoapException)
+AxisChar* UnsignedLong::serialize(const xsd__unsignedLong* value) throw (AxisSoapException)
 {
     unsigned LONGLONG valueAsLong = static_cast<unsigned LONGLONG>(*value);
     return NonNegativeInteger::serialize(&valueAsLong);
 }
 
-unsigned long* UnsignedLong::deserializeUnsignedLong(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__unsignedLong* UnsignedLong::deserializeUnsignedLong(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
     unsigned LONGLONG* returnValue = NonNegativeInteger::deserializeNonNegativeInteger(valueAsChar);
  
@@ -35,8 +35,8 @@ unsigned long* UnsignedLong::deserializeUnsignedLong(const AxisChar* valueAsChar
         delete m_UnsignedLong;
         m_UnsignedLong = NULL;
     }
-    m_UnsignedLong = new unsigned long;
-    *m_UnsignedLong = static_cast<unsigned long> (*returnValue);
+    m_UnsignedLong = new xsd__unsignedLong;
+    *m_UnsignedLong = static_cast<xsd__unsignedLong> (*returnValue);
     return m_UnsignedLong;
 }
 

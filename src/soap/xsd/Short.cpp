@@ -12,7 +12,7 @@ Short::~Short()
 
 AxisChar* Short::serialize(const void* value) throw (AxisSoapException)
 {
-    return serialize((short*) value);
+    return serialize((xsd__short*) value);
 }
 
 void* Short::deserializer(const AxisChar* valueAsChar) throw (AxisSoapException)
@@ -20,23 +20,23 @@ void* Short::deserializer(const AxisChar* valueAsChar) throw (AxisSoapException)
     return (void*) deserializeShort(valueAsChar);
 }
 
-AxisChar* Short::serialize(const short* value) throw (AxisSoapException)
+AxisChar* Short::serialize(const xsd__short* value) throw (AxisSoapException)
 {
-    int valueAsInt = static_cast<int>(*value);
+    xsd__int valueAsInt = static_cast<xsd__int>(*value);
     return Int::serialize(&valueAsInt);
 }
 
-short* Short::deserializeShort(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__short* Short::deserializeShort(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
-    int* returnValue = Int::deserializeInt(valueAsChar);
+    xsd__int* returnValue = Int::deserializeInt(valueAsChar);
  
     if(m_Short)
     {
         delete m_Short;
         m_Short = NULL;
     }
-    m_Short = new short;
-    *m_Short = static_cast<short> (*returnValue);
+    m_Short = new xsd__short;
+    *m_Short = static_cast<xsd__short> (*returnValue);
     return m_Short;
 }
 

@@ -58,14 +58,14 @@ public:
      * @param value The String value to be serialized.
      * @return Serialized form of String value.
      */	
-	AxisChar* serialize(const AxisChar* value) throw (AxisSoapException);
+	AxisChar* serialize(const xsd__string value) throw (AxisSoapException);
 
     /**
      * Deserialized String value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of String value.
      * @return Deserialized String value.
      */
-	AxisChar* deserializeString(const AxisChar* valueAsChar) throw (AxisSoapException);
+	xsd__string deserializeString(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 
@@ -91,7 +91,7 @@ protected:
     Length* getLength();
 
 private:
-    AxisChar* m_String;
+    xsd__string m_String;
 };
 
 AXIS_CPP_NAMESPACE_END

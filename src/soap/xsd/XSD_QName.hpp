@@ -58,14 +58,14 @@ public:
 	 * @param value The QName to be serialized.
 	 * @return Serialized form of QName.
 	 */
-    AxisChar* serialize(const AxisChar* value) throw (AxisSoapException);
+    AxisChar* serialize(const xsd__QName value) throw (AxisSoapException);
 	
 	/**
 	 * Deserialize QName from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of QName.
 	 * @return Deserialized QName.
 	 */
-    AxisChar* deserializeQName(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__QName deserializeQName(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 
@@ -97,7 +97,7 @@ protected:
     Length* getLength();
 
 private:
-    AxisChar* m_QName;
+    xsd__QName m_QName;
 
 };
 

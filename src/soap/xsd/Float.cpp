@@ -12,7 +12,7 @@ Float::~Float()
 
 AxisChar* Float::serialize(const void* value) throw (AxisSoapException)
 {
-	return serialize((float*) value);	
+	return serialize((xsd__float*) value);	
 }
 
 void* Float::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
@@ -21,7 +21,7 @@ void* Float::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
 }
 
 
-AxisChar* Float::serialize(const float* value) throw (AxisSoapException)
+AxisChar* Float::serialize(const xsd__float* value) throw (AxisSoapException)
 {
     MinInclusive* minInclusive = getMinInclusive();
     if (minInclusive->isSet())
@@ -120,7 +120,7 @@ AxisChar* Float::serialize(const float* value) throw (AxisSoapException)
     return m_Buf;
 }
 
-float* Float::deserializeFloat(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__float* Float::deserializeFloat(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
 	AxisChar* end;
         if (m_Float)
@@ -128,7 +128,7 @@ float* Float::deserializeFloat(const AxisChar* valueAsChar) throw (AxisSoapExcep
             delete m_Float;
             m_Float = NULL;
         }
-	m_Float = new float;
+	m_Float = new xsd__float;
 	*m_Float = (float) strtod (valueAsChar, &end);
 	
 	return m_Float;

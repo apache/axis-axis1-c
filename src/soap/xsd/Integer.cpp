@@ -12,7 +12,7 @@ Integer::~Integer()
 
 AxisChar* Integer::serialize(const void* value) throw (AxisSoapException)
 {
-    return serialize((LONGLONG*) value);  
+    return serialize((xsd__integer*) value);  
 }
 
 void* Integer::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
@@ -21,7 +21,7 @@ void* Integer::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException
 }
 
 
-AxisChar* Integer::serialize(const LONGLONG* value) throw (AxisSoapException)
+AxisChar* Integer::serialize(const xsd__integer* value) throw (AxisSoapException)
 {
     MinInclusive* minInclusive = getMinInclusive();
     if (minInclusive->isSet())
@@ -135,7 +135,7 @@ AxisChar* Integer::serialize(const LONGLONG* value) throw (AxisSoapException)
     return m_Buf;
 }
 
-LONGLONG* Integer::deserializeInteger(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__integer* Integer::deserializeInteger(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
     AxisChar* end;
     
@@ -144,7 +144,7 @@ LONGLONG* Integer::deserializeInteger(const AxisChar* valueAsChar) throw (AxisSo
         delete m_Integer;
         m_Integer = NULL;
     }
-    m_Integer = new LONGLONG;
+    m_Integer = new xsd__integer;
     *m_Integer = strtol (valueAsChar, &end, 10);
   
     return m_Integer;

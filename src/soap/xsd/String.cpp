@@ -8,7 +8,7 @@ String::String():m_String(NULL)
 
 AxisChar* String::serialize(const void* value) throw (AxisSoapException)
 {
-	return serialize((AxisChar*) value);
+	return serialize((xsd__string) value);
 }
 
 void* String::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
@@ -16,7 +16,7 @@ void* String::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
 	return (void*) deserializeString(valueAsChar);
 }
 
-AxisChar* String::serialize(const AxisChar* value) throw (AxisSoapException)
+AxisChar* String::serialize(const xsd__string value) throw (AxisSoapException)
 {
     MinLength* minLength= getMinLength();
     if (minLength->isSet())
@@ -91,7 +91,7 @@ AxisChar* String::serialize(const AxisChar* value) throw (AxisSoapException)
     return m_Buf;
 }
 
-AxisChar* String::deserializeString(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__string String::deserializeString(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
     if (m_String)
     {

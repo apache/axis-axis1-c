@@ -58,14 +58,14 @@ public:
      * @param value The NOTATION value to be serialized.
      * @return Serialized form of NOTATION value.
      */	
-	AxisChar* serialize(const AxisChar* value) throw (AxisSoapException);
+	AxisChar* serialize(const xsd__notation value) throw (AxisSoapException);
 
     /**
      * Deserialized NOTATION value from it's on-the-wire string form.
      * @param valueAsChar Serialized form of NOTATION value.
      * @return Deserialized NOTATION value.
      */
-	AxisChar* deserializeNOTATION(const AxisChar* valueAsChar) throw (AxisSoapException);
+	xsd__notation deserializeNOTATION(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 
@@ -97,7 +97,7 @@ protected:
     Length* getLength();
 
 private:
-    AxisChar* m_NOTATION;
+    xsd__notation m_NOTATION;
 };
 
 AXIS_CPP_NAMESPACE_END

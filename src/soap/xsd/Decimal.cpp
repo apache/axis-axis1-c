@@ -12,7 +12,7 @@ Decimal::~Decimal()
 
 AxisChar* Decimal::serialize(const void* value) throw (AxisSoapException)
 {
-	return serialize((double*) value);	
+	return serialize((xsd__decimal*) value);	
 }
 
 void* Decimal::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
@@ -21,7 +21,7 @@ void* Decimal::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException
 }
 
 
-AxisChar* Decimal::serialize(const double* value) throw (AxisSoapException)
+AxisChar* Decimal::serialize(const xsd__decimal* value) throw (AxisSoapException)
 {
     MinInclusive* minInclusive = getMinInclusive();
     if (minInclusive->isSet())
@@ -149,7 +149,7 @@ AxisChar* Decimal::serialize(const double* value) throw (AxisSoapException)
     return m_Buf;
 }
 
-double* Decimal::deserializeDecimal(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__decimal* Decimal::deserializeDecimal(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
 	AxisChar* end;
    
@@ -158,7 +158,7 @@ double* Decimal::deserializeDecimal(const AxisChar* valueAsChar) throw (AxisSoap
         delete m_Decimal;
         m_Decimal = NULL;
     }
-	m_Decimal = new double;
+	m_Decimal = new xsd__decimal;
 	*m_Decimal = strtod (valueAsChar, &end);
 	
 	return m_Decimal;

@@ -12,7 +12,7 @@ AXIS_CPP_NAMESPACE_START
 
     AxisChar* DateTime::serialize(const void* value) throw (AxisSoapException)
     {
-    	return serialize((struct tm*) value);
+    	return serialize((xsd__dateTime*) value);
     }
 	
     void* DateTime::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
@@ -20,7 +20,7 @@ AXIS_CPP_NAMESPACE_START
     	return (void*) deserializeDateTime(valueAsChar);
     }
 	
-    AxisChar* DateTime::serialize(const struct tm* value) throw (AxisSoapException)
+    AxisChar* DateTime::serialize(const xsd__dateTime* value) throw (AxisSoapException)
     {
         MinInclusive* minInclusive = getMinInclusive();
         if (minInclusive->isSet())
@@ -161,7 +161,7 @@ AXIS_CPP_NAMESPACE_START
 		return m_Buf;
     }
 	
-    struct tm* DateTime::deserializeDateTime(const AxisChar* valueAsChar) throw (AxisSoapException)
+    xsd__dateTime* DateTime::deserializeDateTime(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
     	struct tm value;
     	struct tm* pTm;
@@ -304,7 +304,7 @@ AXIS_CPP_NAMESPACE_START
             delete m_DateTime;
             m_DateTime = NULL;
         }
-        m_DateTime = new struct tm;
+        m_DateTime = new xsd__dateTime;
         memcpy (m_DateTime, pTm, sizeof (tm));
         
         return m_DateTime;

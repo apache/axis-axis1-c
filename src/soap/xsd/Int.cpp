@@ -12,31 +12,31 @@ Int::~Int()
 
 AxisChar* Int::serialize(const void* value) throw (AxisSoapException)
 {
-    return serialize((int*) value);
+    return serialize((xsd__int*) value);
 }
 
-void* Int::deserializer(const AxisChar* valueAsChar) throw (AxisSoapException)
+void* Int::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
     return (void*) deserializeInt(valueAsChar);
 }
 
-AxisChar* Int::serialize(const int* value) throw (AxisSoapException)
+AxisChar* Int::serialize(const xsd__int* value) throw (AxisSoapException)
 {
-    LONGLONG valueAsLong = static_cast<LONGLONG>(*value);
+    xsd__long valueAsLong = static_cast<xsd__long>(*value);
     return Long::serialize(&valueAsLong);
 }
 
-int* Int::deserializeInt(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__int* Int::deserializeInt(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
-    LONGLONG* returnValue = Long::deserializeLong(valueAsChar);
+    xsd__long* returnValue = Long::deserializeLong(valueAsChar);
  
     if(m_Int)
     {
         delete m_Int;
         m_Int = NULL;
     }
-    m_Int = new int;
-    *m_Int = static_cast<int> (*returnValue);
+    m_Int = new xsd__int;
+    *m_Int = static_cast<xsd__int> (*returnValue);
     return m_Int;
 }
 

@@ -2,9 +2,43 @@
 
 AXIS_CPP_NAMESPACE_START
 
-LONGLONG* Long::deserializeLong(const AxisChar* valueAsChar) throw (AxisSoapException)
+Long::Long():m_Long(NULL)
 {
-    return (LONGLONG*) deserialize(valueAsChar);
+}
+
+Long::~Long()
+{
+}
+
+
+AxisChar* Long::serialize(const void* value) throw (AxisSoapException)
+{
+    return serialize((xsd__long*) value);
+}
+
+void* Long::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
+{
+    return (void*) deserializeLong(valueAsChar);
+}
+
+AxisChar* Long::serialize(const xsd__long* value) throw (AxisSoapException)
+{
+    xsd__integer valueAsLong = static_cast<xsd__integer>(*value);
+    return Integer::serialize(&valueAsLong);
+}
+
+xsd__long* Long::deserializeLong(const AxisChar* valueAsChar) throw (AxisSoapException)
+{
+    xsd__integer* returnValue = Integer::deserializeInteger(valueAsChar);
+ 
+    if(m_Long)
+    {
+        delete m_Long;
+        m_Long = NULL;
+    }
+    m_Long = new xsd__long;
+    *m_Long = static_cast<xsd__long> (*returnValue);
+    return m_Long;
 }
 
 MinInclusive* Long::getMinInclusive()

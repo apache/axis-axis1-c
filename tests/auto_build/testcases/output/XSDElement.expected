@@ -9,6 +9,7 @@ long=35
 unsigned long=42
 float=35.35359
 double=70.71759
+duration=123456789
 date=Fri Nov 12 2004
 dateTime=Fri Nov 12 07:58:43 2004
 string=never odd or even

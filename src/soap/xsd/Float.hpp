@@ -65,14 +65,14 @@ public:
 	 * @param value The Float value to be serialized.
 	 * @return Serialized form of Float value.
 	 */
-    AxisChar* serialize(const float* value) throw (AxisSoapException);
+    AxisChar* serialize(const xsd__float* value) throw (AxisSoapException);
 	
 	/**
 	 * Deserialized Float value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of Float value.
 	 * @return Deserialized Float value.
 	 */
-    float* deserializeFloat(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__float* deserializeFloat(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 
@@ -111,7 +111,7 @@ protected:
     WhiteSpace* getWhiteSpace();
 
 private:
-	float* m_Float;
+	xsd__float* m_Float;
 };
 
 AXIS_CPP_NAMESPACE_END

@@ -66,14 +66,14 @@ public:
 	 * @param value The Decimal value to be serialized.
 	 * @return Serialized form of Decimal value.
 	 */
-    AxisChar* serialize(const double* value) throw (AxisSoapException);
+    AxisChar* serialize(const xsd__decimal* value) throw (AxisSoapException);
 	
 	/**
 	 * Deserialized Decimal value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of Decimal value.
 	 * @return Deserialized Decimal value.
 	 */
-    double* deserializeDecimal(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__decimal* deserializeDecimal(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 
@@ -126,7 +126,7 @@ protected:
     FractionDigits* getFractionDigits();
 
 private:
-	double* m_Decimal;
+	xsd__decimal* m_Decimal;
 };
 
 AXIS_CPP_NAMESPACE_END

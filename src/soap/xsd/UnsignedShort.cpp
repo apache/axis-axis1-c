@@ -22,13 +22,13 @@ void* UnsignedShort::deserialize(const AxisChar* valueAsChar) throw (AxisSoapExc
 
 AxisChar* UnsignedShort::serialize(xsd__unsignedShort * value) throw (AxisSoapException)
 {
-    unsigned int valueAsInt = static_cast<unsigned int>(*value);
+    xsd__unsignedInt valueAsInt = static_cast<xsd__unsignedInt>(*value);
     return UnsignedInt::serialize(&valueAsInt);
 }
 
 xsd__unsignedShort* UnsignedShort::deserializeUnsignedShort(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
-    unsigned int* returnValue = UnsignedInt::deserializeUnsignedInt(valueAsChar);
+    xsd__unsignedInt* returnValue = UnsignedInt::deserializeUnsignedInt(valueAsChar);
  
     if(m_UnsignedShort)
     {

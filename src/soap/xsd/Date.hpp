@@ -60,14 +60,14 @@ public:
 	 * @param value The Date value to be serialized.
 	 * @return Serialized form of Date value.
 	 */
-    AxisChar* serialize(const struct tm* value) throw (AxisSoapException);
+    AxisChar* serialize(const xsd__date* value) throw (AxisSoapException);
 	
 	/**
 	 * Deserialized Date value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of Date value.
 	 * @return Deserialized Date value.
 	 */
-    struct tm* deserializeDate(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__date* deserializeDate(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 
@@ -106,7 +106,7 @@ protected:
     WhiteSpace* getWhiteSpace();
 
 private:
-	struct tm* m_Date;
+	xsd__date* m_Date;
 };
 
 AXIS_CPP_NAMESPACE_END

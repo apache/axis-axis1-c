@@ -30,13 +30,43 @@ using namespace std;
 
 class Long : public Integer {
 public:
+    /**
+     * Constructor
+     */
+    Long();
+
+    /**
+     * Destructor
+     */
+    ~Long();
+
+    /**
+     * Serialize value to it's on-the-wire string form.
+     * @param value The value to be serialized.
+     * @return Serialized form of value.
+     */  
+    AxisChar* serialize(const void* value) throw (AxisSoapException);
+
+    /**
+     * Deserialize value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of value.
+     * @return Deserialized value.
+     */  
+    void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
+
+    /**
+     * Serialize Long value to it's on-the-wire string form.
+     * @param value The Long value to be serialized.
+     * @return Serialized form of Long value.
+     */  
+    AxisChar* serialize(const xsd__long* value) throw (AxisSoapException);
   
   /**
    * Deserialized Long value from it's on-the-wire string form.
    * @param valueAsChar Serialized form of Long value.
    * @return Deserialized Long value.
    */
-    LONGLONG* deserializeLong(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__long* deserializeLong(const AxisChar* valueAsChar) throw (AxisSoapException);
     
 protected:
 
@@ -52,7 +82,10 @@ protected:
      * 9223372036854775807.
      * @return MaxInclusive object
      */
-    virtual MaxInclusive* getMaxInclusive();   
+    virtual MaxInclusive* getMaxInclusive();  
+
+private:
+    xsd__long* m_Long; 
 };
 
 AXIS_CPP_NAMESPACE_END

@@ -59,14 +59,14 @@ public:
 	 * @param value The Double value to be serialized.
 	 * @return Serialized form of Double value.
 	 */
-    AxisChar* serialize(const double* value) throw (AxisSoapException);
+    AxisChar* serialize(const xsd__double* value) throw (AxisSoapException);
 	
 	/**
 	 * Deserialized Double value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of Double value.
 	 * @return Deserialized Double value.
 	 */
-    double* deserializeDouble(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__double* deserializeDouble(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 
@@ -105,7 +105,7 @@ protected:
     WhiteSpace* getWhiteSpace();
 
 private:
-	double* m_Double;
+	xsd__double* m_Double;
 };
 
 AXIS_CPP_NAMESPACE_END

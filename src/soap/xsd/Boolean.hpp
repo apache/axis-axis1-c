@@ -23,7 +23,6 @@
 #define _BOOLEAN_HPP____OF_AXIS_INCLUDED_
 
 #include "IAnySimpleType.hpp"
-#include <axis/AxisUserAPI.hpp>
 
 AXIS_CPP_NAMESPACE_START
 

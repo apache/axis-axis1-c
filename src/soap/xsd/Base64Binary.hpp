@@ -24,7 +24,6 @@
 
 #include "IAnySimpleType.hpp"
 #include "../apr_base64.h"
-#include <axis/AxisUserAPI.hpp>
 #include "constraints/MinLength.hpp"
 #include "constraints/MaxLength.hpp"
 #include "constraints/Length.hpp"
