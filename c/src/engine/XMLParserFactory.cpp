@@ -25,6 +25,7 @@
 #include <axis/server/XMLParser.h>
 #include <stdio.h>
 #include <axis/server/AxisConfig.h>
+#include <axis/AxisEngineException.h>
 
 extern AxisConfig* g_pConfig;
 
@@ -45,19 +46,8 @@ XMLParserFactory::~XMLParserFactory()
 
 int XMLParserFactory::initialize()
 {
-#ifdef WIN32
-#ifdef _DEBUG
-	//m_pcLibraryPath = "AxisXMLParser_D.dll"; //this will be taken from configuration file
     m_pcLibraryPath = g_pConfig->getAxisConfProperty(AXCONF_XMLPARSER);
-#else
-	//m_pcLibraryPath = "AxisXMLParser.dll"; //this will be taken from configuration file
-    m_pcLibraryPath = g_pConfig->getAxisConfProperty(AXCONF_XMLPARSER);
-#endif
-#else
-	//m_pcLibraryPath = "/home/damitha/Axis/libs/libaxis_xmlparser.so"; //this will be taken from configuration file
-	//m_pcLibraryPath = "/usr/local/Axis/libs/libaxis_xmlparser.so"; //this will be taken from configuration file
-	m_pcLibraryPath = g_pConfig->getAxisConfProperty(AXCONF_XMLPARSER);
-#endif
+
 	if (!loadLib())
 	{
 #if defined(USE_LTDL)
@@ -73,12 +63,16 @@ int XMLParserFactory::initialize()
         if (!m_Create || !m_Delete)
         {
             unloadLib();
-            printf("Parser library loading failed");
+			throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED, strdup(m_pcLibraryPath));
         }
         else
         {
             return AXIS_SUCCESS;
         }		
+	}
+	else
+	{
+		throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED, strdup(m_pcLibraryPath));
 	}
 	return AXIS_FAIL;
 }
