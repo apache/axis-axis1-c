@@ -21,7 +21,7 @@ InteropTestPortType::InteropTestPortType()
 {
 	m_pCall = new Call();
 	m_pCall->SetProtocol(APTHTTP);
-	m_pCall->SetEndpointURI("http://localhost/axis/InteropBaseDL");
+	m_pCall->SetEndpointURI("http://localhost/axis/baseDL");
 }
 
 InteropTestPortType::~InteropTestPortType()
@@ -40,7 +40,7 @@ AxisChar* InteropTestPortType::echoString(AxisChar* Value0)
 	int nStatus;
 	AxisChar* Ret = '\0';
 	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER, 0)) return Ret;
-	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropBaseDL#echoString");
+	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "baseDL#echoString");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoString", "http://soapinterop.org/");
 	m_pCall->AddParameter((void*)&Value0, "inputString", XSD_STRING);
@@ -65,7 +65,7 @@ ArrayOfstring InteropTestPortType::echoStringArray(ArrayOfstring Value0)
 	int nStatus;
 	ArrayOfstring RetArray = {NULL, 0};
 	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER, 0)) return RetArray;
-	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropBaseDL#echoStringArray");
+	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "baseDL#echoStringArray");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoStringArray", "http://soapinterop.org/");
 	m_pCall->AddBasicArrayParameter((Axis_Array*)(&Value0), XSD_STRING, "inputStringArray");
@@ -90,7 +90,7 @@ int InteropTestPortType::echoInteger(int Value0)
 	int nStatus;
 	int Ret;
 	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER, 0)) return Ret;
-	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropBaseDL#echoInteger");
+	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "baseDL#echoInteger");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoInteger", "http://soapinterop.org/");
 	m_pCall->AddParameter((void*)&Value0, "inputInteger", XSD_INT);
@@ -115,7 +115,7 @@ ArrayOfint InteropTestPortType::echoIntegerArray(ArrayOfint Value0)
 	int nStatus;
 	ArrayOfint RetArray = {NULL, 0};
 	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER, 0)) return RetArray;
-	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropBaseDL#echoIntegerArray");
+	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "baseDL#echoIntegerArray");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoIntegerArray", "http://soapinterop.org/");
 	m_pCall->AddBasicArrayParameter((Axis_Array*)(&Value0), XSD_INT, "inputIntegerArray");
@@ -140,7 +140,7 @@ float InteropTestPortType::echoFloat(float Value0)
 	int nStatus;
 	float Ret;
 	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER, 0)) return Ret;
-	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropBaseDL#echoFloat");
+	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "baseDL#echoFloat");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoFloat", "http://soapinterop.org/");
 	m_pCall->AddParameter((void*)&Value0, "inputFloat", XSD_FLOAT);
@@ -169,7 +169,7 @@ ArrayOffloat InteropTestPortType::echoFloatArray(ArrayOffloat Value0)
 	int nStatus;
 	ArrayOffloat RetArray = {NULL, 0};
 	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER, 0)) return RetArray;
-	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropBaseDL#echoFloatArray");
+	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "baseDL#echoFloatArray");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoFloatArray", "http://soapinterop.org/");
 	m_pCall->AddBasicArrayParameter((Axis_Array*)(&Value0), XSD_FLOAT, "inputFloatArray");
@@ -194,7 +194,7 @@ SOAPStruct* InteropTestPortType::echoStruct(SOAPStruct* Value0)
 	int nStatus;
 	SOAPStruct* pReturn = NULL;
 	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER, 0)) return pReturn;
-	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropBaseDL#echoStruct");
+	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "baseDL#echoStruct");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoStruct", "http://soapinterop.org/");
 	m_pCall->AddCmplxParameter(Value0, (void*) Axis_Serialize_SOAPStruct, (void*) Axis_Delete_SOAPStruct, "structInput", "");
@@ -219,7 +219,7 @@ ArrayOfSOAPStruct InteropTestPortType::echoStructArray(ArrayOfSOAPStruct Value0)
 	int nStatus;
 	ArrayOfSOAPStruct RetArray = {NULL, 0};
 	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER, 0)) return RetArray;
-	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropBaseDL#echoStructArray");
+	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "baseDL#echoStructArray");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoStructArray", "http://soapinterop.org/");
 	m_pCall->AddCmplxArrayParameter((Axis_Array*)(&Value0), (void*)Axis_Serialize_SOAPStruct, (void*)Axis_Delete_SOAPStruct, (void*) Axis_GetSize_SOAPStruct, "structArray", "");
@@ -243,7 +243,7 @@ void InteropTestPortType::echoVoid()
 {
 	int nStatus;
 	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER, 0)) return;
-	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropBaseDL#echoVoid");
+	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "baseDL#echoVoid");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoVoid", "http://soapinterop.org/");
 	nStatus = m_pCall->Invoke();
@@ -266,7 +266,7 @@ xsd__base64Binary InteropTestPortType::echoBase64(xsd__base64Binary Value0)
 	int nStatus;
 	xsd__base64Binary Ret;
 	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER, 0)) return Ret;
-	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropBaseDL#echoBase64");
+	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "baseDL#echoBase64");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoBase64", "http://soapinterop.org/");
 	m_pCall->AddParameter((void*)&Value0, "inputBase64", XSD_BASE64BINARY);
@@ -291,7 +291,7 @@ xsd__dateTime InteropTestPortType::echoDate(xsd__dateTime Value0)
 	int nStatus;
 	xsd__dateTime Ret;
 	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER, 0)) return Ret;
-	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropBaseDL#echoDate");
+	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "baseDL#echoDate");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoDate", "http://soapinterop.org/");
 	m_pCall->AddParameter((void*)&Value0, "inputDate", XSD_DATETIME);
@@ -316,7 +316,7 @@ xsd__hexBinary InteropTestPortType::echoHexBinary(xsd__hexBinary Value0)
 	int nStatus;
 	xsd__hexBinary Ret;
 	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER, 0)) return Ret;
-	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropBaseDL#echoHexBinary");
+	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "baseDL#echoHexBinary");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoHexBinary", "http://soapinterop.org/");
 	m_pCall->AddParameter((void*)&Value0, "inputHexBinary", XSD_HEXBINARY);
@@ -341,7 +341,7 @@ xsd__decimal InteropTestPortType::echoDecimal(xsd__decimal Value0)
 	int nStatus;
 	xsd__decimal Ret;
 	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER, 0)) return Ret;
-	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropBaseDL#echoDecimal");
+	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "baseDL#echoDecimal");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoDecimal", "http://soapinterop.org/");
 	m_pCall->AddParameter((void*)&Value0, "inputDecimal", XSD_DECIMAL);
@@ -366,7 +366,7 @@ xsd__boolean InteropTestPortType::echoBoolean(xsd__boolean Value0)
 	int nStatus;
 	xsd__boolean Ret;
 	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER, 0)) return Ret;
-	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropBaseDL#echoBoolean");
+	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "baseDL#echoBoolean");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoBoolean", "http://soapinterop.org/");
 	m_pCall->AddParameter((void*)&Value0, "inputBoolean", XSD_BOOLEAN);

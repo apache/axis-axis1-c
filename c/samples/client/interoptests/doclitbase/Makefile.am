@@ -1,7 +1,7 @@
 bin_PROGRAMS =doclitbase
 SUBDIRS =
-AM_CPPFLAGS = -Wshadow -Wall -pedantic -ansi
+AM_CPPFLAGS = $(CPPFLAGS)
 doclitbase_SOURCES = InteropBaseClient.cpp InteropTestPortType.cpp  SOAPStruct.cpp 
 
-doclitbase_LDADD   = -L$(AXISCPP_HOME)/bin -laxiscpp_client -L$(AXISCPP_HOME)/lib/expat -lexpat -lltdl -lssl -lstdc++
+doclitbase_LDADD = $(LDFLAGS)
 INCLUDES = -I$(AXISCPP_HOME)/include

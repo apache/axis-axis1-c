@@ -1,9 +1,10 @@
 AC_INIT(FULL-PACKAGE-NAME, VERSION, BUG-REPORT-ADDRESS)
 AM_INIT_AUTOMAKE(0.3)
 AM_CONFIG_HEADER(config.h)
-LDFLAGS="-s"
+CPPFLAGS="-Wshadow -Wall -pedantic -ansi"
+LDFLAGS="-s -L$AXISCPP_HOME/bin -laxiscpp_client -L$AXISCPP_HOME/lib/expat -lexpat -lltdl -lssl -lstdc++"
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
-AC_OUTPUT(Makefile ssl_client/Makefile interoptests/Makefile interoptests/base/Makefile interoptests/cbase/Makefile interoptests/groupB/Makefile interoptests/doclitbase/Makefile interoptests/doclitgroupB/Makefile)
+AC_OUTPUT(Makefile ssl_client/Makefile interoptests/Makefile interoptests/base/Makefile interoptests/cbase/Makefile interoptests/groupB/Makefile interoptests/cgroupB/Makefile interoptests/doclitbase/Makefile interoptests/doclitgroupB/Makefile)
