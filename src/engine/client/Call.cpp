@@ -35,7 +35,6 @@
 #include "../../soap/SoapSerializer.h"
 #include "../../soap/SoapDeSerializer.h"
 #include "../../soap/HeaderBlock.h"
-#include <axis/server/AxisException.hpp>
 
 extern "C" int initialize_module (int bServer);
 extern "C" int uninitialize_module ();
