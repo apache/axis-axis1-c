@@ -59,6 +59,7 @@
  */
 package org.apache.axis.wsdl.wsdl2ws;
 
+import java.util.Enumeration;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
@@ -221,6 +222,17 @@ public class WrapperUtils {
 			}
 		}else
 			return param.getLangName();			
+	}
+	
+	public static Type getArrayType(Type type)throws WrapperFault{
+		if(!type.isArray())
+			return null;
+		Enumeration elements = type.getElementnames();
+		if(elements.hasMoreElements()){
+			return type.getElementForElementName(
+				(String)elements.nextElement()).getType();
+		}
+		throw new WrapperFault("Array type do not have any attibutes");
 	}
 }
 
