@@ -139,33 +139,28 @@ int ESHHandler::Invoke(void *pvIMsg)
 		IHandlerSoapDeSerializer* pIHandlerSoapDeSerializer;
 		pIMsg->getSoapDeSerializer(&pIHandlerSoapDeSerializer);
 
-		IHeaderBlock* pIHeaderBlock= pIHandlerSoapDeSerializer->GetHeaderBlock("reservation", "http://travelcompany.example.org/reservation");
+		IHeaderBlock* pIHeaderBlock= pIHandlerSoapDeSerializer->GetHeaderBlock("echoMeString", "http://soapinterop.org/echoheader/");
 		
 		if (pIHeaderBlock != NULL) {
 
 			const BasicNode* pBasicNode= pIHeaderBlock->getFirstChild();
-			const BasicNode* pBasicNode2= pBasicNode->getFirstChild();
 						
 			const AxisChar* pachHeaderValue;
-			const AxisChar* pachHeaderValue2;
-			if((pBasicNode2->getNodeType()) == CHARACTER_NODE) {
-				pachHeaderValue= pBasicNode2->getValue();
-			} else {
-				pachHeaderValue = "This was not the expected value Ros";
+
+			if (pBasicNode != NULL) 
+			{
+				if((pBasicNode->getNodeType()) == CHARACTER_NODE) {
+					pachHeaderValue= pBasicNode->getValue();
+				} else {
+					pachHeaderValue = "This was not the expected value Ros";
+				}
+			} else 
+			{
+				pachHeaderValue = "pBascNode is NULL";
 			}
 
-			const BasicNode* pBasicNode3= pIHeaderBlock->getLastChild();
-			const BasicNode* pBasicNode4 =pBasicNode3->getFirstChild();
-			if((pBasicNode4->getNodeType()) == CHARACTER_NODE) {
-				pachHeaderValue2= pBasicNode4->getValue();
-			} else {
-				pachHeaderValue2= "This was not the expected value2 Ros";
-			}
-
-			AxisChar* pachTmpValue = (AxisChar*) malloc(strlen(pachHeaderValue)+ strlen(pachHeaderValue2) +4);
+			AxisChar* pachTmpValue = (AxisChar*) malloc(strlen(pachHeaderValue) + 4);
 			strcpy(pachTmpValue, pachHeaderValue);
-			strcat(pachTmpValue, " : ");
-			strcat(pachTmpValue, pachHeaderValue2);
 
 			pachTemp = "EchoStringHeaderHandlerPr1.id";
 			pIMsg->setProperty(pachTemp, pachTmpValue);
