@@ -1,7 +1,7 @@
-AC_INIT(axis-c, 1-3-beta-linux, BUG-REPORT-ADDRESS)
+AC_INIT(axis-c-src, 1-3-beta-linux, BUG-REPORT-ADDRESS)
 AM_INIT_AUTOMAKE(0.3)
 AM_CONFIG_HEADER(config.h)
-PACKAGE=axis-c
+PACKAGE=axis-c-src
 AC_MSG_CHECKING(whether to use apache2 as server transport)
 AC_ARG_WITH(apache2,
 [  --with-apache2[=PATH]      use apache2 as server transport.],
