@@ -172,6 +172,7 @@ public class WrapperUtils {
 			if (type.isArray()){
 				String arrayName = CUtils.getCmplxArrayNameforType(getArrayType(type).getName());
 				if (null == arrayName){//simple type array
+					/* Does the program flow ever come to this place ? if so in which situation ? - Susantha 20/10/2004 */
 					arrayName = CUtils.getBasicArrayNameforType(CUtils.getclass4qname(getArrayType(type).getName()));
 				}
 				return arrayName;
@@ -179,7 +180,19 @@ public class WrapperUtils {
 			else{
 				return param.getLangName()+"*"; //All complex types will be pointers	
 			}
-		}else
+		}else if(param.isArray()){
+			/* This enables having simple type array declarations in the wrapping element
+			 * <s:element name="GetProjectNamesResponse">
+				<s:complexType>
+					<s:sequence>
+						<s:element minOccurs="0" maxOccurs="unbounded" form="unqualified" name="return" type="s:string" />
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			 */
+			return CUtils.getBasicArrayNameforType(CUtils.getclass4qname(type.getName()));
+		}
+		else
 			return param.getLangName();			
 	}
 	

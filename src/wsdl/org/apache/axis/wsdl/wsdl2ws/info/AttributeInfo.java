@@ -31,7 +31,6 @@ public class AttributeInfo extends ParameterInfo {
 	private boolean isSimpleType = true;
 	private boolean isAttribute = false;
 	private boolean isOptional = false;
-	private boolean isArray = false;
 	private String typeName;
 	private String typeNamespace;
         private String className;
@@ -101,21 +100,6 @@ public class AttributeInfo extends ParameterInfo {
 	 */
 	public void setTypeNamespace(String typeNamespace) {
 		this.typeNamespace = typeNamespace;
-	}
-
-	/**
-	 * @return boolean
-	 */
-	public boolean isArray() {
-		return isArray;
-	}
-
-	/**
-	 * Sets the isArray.
-	 * @param isArray The isArray to set
-	 */
-	public void setArray(boolean isArray) {
-		this.isArray = isArray;
 	}
 
 	/**

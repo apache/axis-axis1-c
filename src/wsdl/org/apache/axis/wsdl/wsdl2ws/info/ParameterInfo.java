@@ -29,8 +29,23 @@ public class ParameterInfo {
     protected String attribName;
 	protected QName elementName;
 	private boolean isAnyType = false;
-	
+	protected boolean isArray = false;	
 	private boolean isAttribute = false;
+	
+	/**
+	 * @return boolean
+	 */
+	public boolean isArray() {
+		return isArray;
+	}
+
+	/**
+	 * Sets the isArray.
+	 * @param isArray The isArray to set
+	 */
+	public void setArray(boolean isArray) {
+		this.isArray = isArray;
+	}
 	
 	public boolean isAttribute(){
 		return this.isAttribute;

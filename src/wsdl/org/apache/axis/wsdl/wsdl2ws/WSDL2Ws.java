@@ -193,6 +193,7 @@ public class WSDL2Ws {
 		Element element;
 		QName qname;
         ParameterInfo pinfo;
+		ElementInfo eleinfo;
 		Type type;
         org.apache.axis.wsdl.symbolTable.Type ptype;
         //for each operation
@@ -245,8 +246,12 @@ public class WSDL2Ws {
 							Type innerType;
 							for (int i = 0 ; i < elementlist.size(); i++) {
 								String elementname = (String)elementlist.get(i);
-								innerType = type.getElementForElementName(elementname).getType();
+								eleinfo = type.getElementForElementName(elementname);
+								innerType = eleinfo.getType();
 								pinfo = new ParameterInfo(innerType,elementname);
+								if (eleinfo.getMaxOccurs() > 1){
+									pinfo.setArray(true);									
+								}
 								pinfo.setElementName(type.getElementForElementName(elementname).getName());
 								if (innerType.getName().equals(CUtils.anyTypeQname))
 									pinfo.setAnyType(true);
@@ -342,8 +347,12 @@ public class WSDL2Ws {
 								Type innerType;
 								for (int i = 0 ; i < elementlist.size(); i++) {
 									String elementname = (String)elementlist.get(i);
-									innerType = type.getElementForElementName(elementname).getType();
+									eleinfo = type.getElementForElementName(elementname);
+									innerType = eleinfo.getType();
 									pinfo = new ParameterInfo(innerType,elementname);
+									if (eleinfo.getMaxOccurs() > 1){
+										pinfo.setArray(true);									
+									}
 									pinfo.setElementName(type.getElementForElementName(elementname).getName());
 									if (innerType.getName().equals(CUtils.anyTypeQname))
 										pinfo.setAnyType(true);
