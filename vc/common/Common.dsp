@@ -171,6 +171,10 @@ SOURCE=..\..\src\common\IArrayBean.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\IHandlerSoapDeSerializer.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\IHandlerSoapSerializer.h
 # End Source File
 # Begin Source File
@@ -200,6 +204,10 @@ SOURCE=..\..\src\common\ISoapMethod.h
 # Begin Source File
 
 SOURCE=..\..\src\common\ISoapSerializer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\IWrapperSoapDeSerializer.h
 # End Source File
 # Begin Source File
 
