@@ -13,6 +13,8 @@ MESSAGE PARSING / ENCODING
 --------------------------
 ! <team> 	Improving the SoapDeserializer to parse SOAP headers
 ! <team> 	Changing SAX2 parser to use progressive parsing and then adopt XMLpull parsing
+* <susantha> 	Improving Deserializer/Serializer and related area to support multi-dimensional arrays 
+* <susantha> 	Improving Deserializer/Serializer and related area to support partially transmitted arrays 
 
 CLIENT API
 ----------
@@ -22,7 +24,6 @@ SCHEMA SUPPORT
 
 SOAP 1.1 SUPPORT
 ----------------
-* <susantha> 	Improving Deserializer/Serializer and related area to support multi-dimensional arrays 
 
 SOAP 1.2 SUPPORT
 -----------------
