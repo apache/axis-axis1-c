@@ -91,11 +91,11 @@ SOURCE=..\..\src\common\AccessBean.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\AxisLog.cpp
+SOURCE=..\..\src\common\BasicTypeSerializer.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\BasicTypeSerializer.cpp
+SOURCE=..\..\src\common\Debug.cpp
 # End Source File
 # Begin Source File
 
