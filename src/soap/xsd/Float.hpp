@@ -36,6 +36,11 @@ public:
      */
     Float();
 
+    /**
+     * Destructor
+     */
+    ~Float();
+
 	/**
 	 * Serialize value to it's on-the-wire string form.
 	 * @param value The value to be serialized.
