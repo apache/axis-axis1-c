@@ -238,7 +238,19 @@ public class ClientStubWriter extends CPPClassWriter{
 				//for complex types
 			}else{
 				//for simple types
-				writer.write(outparamTypeName+" Ret;\n");
+                                String initValue = CUtils.getInitValue(outparamTypeName);
+                                if (initValue != null)
+				    writer.write(outparamTypeName+" Ret = " + initValue + ";\n");
+				else if (outparamTypeName.equals("xsd__base64Binary") || outparamTypeName.equals("xsd__hexBinary"))
+                                {
+                                    writer.write(outparamTypeName+" Ret;\n");
+                                    writer.write("\tRet.__ptr = NULL;\n");
+                                    writer.write("\tRet.__size = 0;\n");
+                                }
+
+				else
+				    writer.write(outparamTypeName+" Ret;\n");
+				    
 				//TODO initialize return parameter appropriately.
 			}
 		}

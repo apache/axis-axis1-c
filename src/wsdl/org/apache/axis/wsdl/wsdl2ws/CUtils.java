@@ -44,6 +44,7 @@ public class CUtils {
 	/* This type mapping only maps simple types the mapping for
 	   complex types are done with in the type class */
 	private static Hashtable class2QNamemap = new Hashtable();
+	private static Hashtable initValues = new Hashtable();
 	private static Hashtable qname2classmap = new Hashtable();
 	private static Hashtable schemaDefinedSimpleTypesMap = new Hashtable();
 	private static Hashtable type2getValueMethodName = new Hashtable();
@@ -75,6 +76,7 @@ public class CUtils {
 		class2QNamemap.put("xsd__unsignedShort", new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"));
 		class2QNamemap.put("xsd__QName", new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"));
 		class2QNamemap.put("xsd__NMTOKEN", new QName(WrapperConstants.SCHEMA_NAMESPACE,"NMTOKEN"));
+
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"), "int");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"), "unsigned char");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"), "float");
@@ -196,6 +198,32 @@ public class CUtils {
 		basicType2EnumMap.put("xsd__anyURI","XSD_ANYURI");
 		basicType2EnumMap.put("xsd__QName","XSD_QNAME");
 		basicType2EnumMap.put("xsd__NMTOKEN","XSD_NMTOKEN");
+
+
+		initValues.put("int", "0"); 
+		initValues.put("unsigned char", "0"); 
+		initValues.put("float", "0.0"); 
+		initValues.put("long", "0"); 
+		initValues.put("long", "0"); 
+		initValues.put("double", "0.0"); 
+		initValues.put("char", "0"); 
+		initValues.put("short", "0"); 
+		initValues.put("xsd__string", "NULL"); 
+		//initValues.put("xsd__dateTime", "0"); 
+		//initValues.put("xsd__date", "0"); 
+		//initValues.put("xsd__time", "0"); 
+		//initValues.put("xsd__base64Binary", "0"); 
+		//initValues.put("xsd__hexBinary", "0"); 
+		initValues.put("xsd__decimal", "0.0"); 
+		initValues.put("xsd__boolean", "false_"); 
+		initValues.put("xsd__byte", "0"); 
+		initValues.put("xsd__anyURI", "NULL"); 
+		initValues.put("xsd__unsignedByte", "0"); 
+		initValues.put("xsd__unsignedInt", "0"); 
+		initValues.put("xsd__unsignedLong", "0"); 
+		initValues.put("xsd__unsignedShort", "0"); 
+		initValues.put("xsd__QName", "NULL"); 
+		initValues.put("xsd__NMTOKEN", "NULL"); 
 	}
 	
 	public static void addSchemaDefinedSimpleType(QName qname, String type){
@@ -256,6 +284,15 @@ public class CUtils {
 			return (String) val;
 		return null;
 	}
+
+	 public static String getInitValue(String typeName) {
+		Object val = initValues.get(typeName);
+		if (val != null)
+			return (String) val;
+                
+		return null;
+	}
+        
 	public static String getWebServiceNameFromWrapperName(String wname){
 		return wname.substring(0, wname.length()- CUtils.WRAPPER_NAME_APPENDER.length());
 	}
