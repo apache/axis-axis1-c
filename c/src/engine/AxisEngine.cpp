@@ -97,6 +97,8 @@ AxisEngine::AxisEngine()
 
 AxisEngine::~AxisEngine()
 {
+	if (m_pSZ) g_SerializerPool.PutInstance(m_pSZ);
+	if (m_pDZ) g_DeserializerPool.PutInstance(m_pDZ);
 }
 
 int AxisEngine::Process(Ax_soapstream* soap) 
@@ -371,18 +373,7 @@ int AxisEngine::Initialize()
 	int Status;
 	//Create and initialize Serializer and Deserializer objects
 	if (SUCCESS != (Status = g_SerializerPool.GetInstance(&m_pSZ))) return Status;
-	if (SUCCESS != (Status = m_pSZ->Init()))
-	{
-		g_SerializerPool.PutInstance(m_pSZ);
-		return Status;
-	}
 	if (SUCCESS != (Status = g_DeserializerPool.GetInstance(&m_pDZ))) return Status;
-	if (SUCCESS != (Status = m_pDZ->Init()))
-	{
-		g_DeserializerPool.PutInstance(m_pDZ);
-		return Status;
-	}
-
 	return SUCCESS;
 }
 

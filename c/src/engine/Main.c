@@ -183,6 +183,7 @@ char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:so
 
 int main() 
 {		
+	int xx;
 	Ax_soapstream* str = (Ax_soapstream*)malloc(sizeof(Ax_soapstream));
 	str->trtype = APTHTTP;
 	str->sessionid = "somesessionid";
@@ -190,21 +191,21 @@ int main()
 
 	str->so.http.ip_headers = (Ax_header*)malloc(sizeof(Ax_header));
 	str->so.http.ip_headers->headername = SOAPACTIONHEADER;
-	str->so.http.ip_headers->headervalue = "\"CalculatorService\"";	
+	str->so.http.ip_headers->headervalue = "\"Calculator\"";	
 	str->so.http.ip_headercount = 1;
 
 	printf("soap request :\n %s\n", ip);
 
 	initialize_module();
-	process_request(str);	
+	for (xx =0; xx < 100 ; xx++)
+		process_request(str);	
 
 	return 0;
 }
 
 int send_response_bytes(char * res, void* pOutputStream) {
 
-	printf("sending SOAP response : \n%s\n", res);
-
+//	printf("sending SOAP response : \n%s\n", res);
 	return 0;
 }
 
@@ -212,10 +213,8 @@ int get_request_bytes(char * req, int reqsize, int* retsize) {
 
 	req[0]= '\0';
 	strcat(req, ip);
-	printf("strlen(ip)%d", strlen(ip));
+//	printf("strlen(ip)%d", strlen(ip));
 	*retsize= strlen(ip);
-	
-
 	return 0;
 }
 

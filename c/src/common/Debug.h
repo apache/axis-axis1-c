@@ -6,7 +6,7 @@
 #include <string>
 #include <fstream>
 
-#define DEBUG
+//#define DEBUG
 #if defined(DEBUG)
   #define DEBUG1(X) debugger.debug(X,__FILE__,__LINE__);  
   #define DEBUG2(X,Y) debugger.debug(X,Y,__FILE__,__LINE__);
