@@ -188,7 +188,10 @@ void HTTPTransport::closeConnection()
 
     m_iContentLength = 0;
 
-	m_pActiveChannel->close();
+	if( m_pActiveChannel != NULL)
+	{
+		m_pActiveChannel->close();
+	}
 }
 
 /*

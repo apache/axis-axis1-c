@@ -163,17 +163,22 @@ bool ChannelFactory::UnLoadChannelLibrary( g_ChannelType eChannelType, IChannel 
 		iLibCount = 1;
 	}
 
+// Check that requested channel is the same as recorded channel
 	if( m_pChannel[iLibCount] == pIChannel)
 	{
-		DELETE_OBJECT3 sDelete = (DELETE_OBJECT3) PLATFORM_GETPROCADDR( m_LibHandler[iLibCount], DELETE_FUNCTION3);
+// Check that recorded channel is not actually NULL
+		if( m_pChannel[iLibCount] != NULL)
+		{
+			DELETE_OBJECT3 sDelete = (DELETE_OBJECT3) PLATFORM_GETPROCADDR( m_LibHandler[iLibCount], DELETE_FUNCTION3);
 
-		sDelete( pIChannel);
+			sDelete( pIChannel);
 
-		m_pChannel[iLibCount] = 0;
+			m_pChannel[iLibCount] = 0;
 
-		PLATFORM_UNLOADLIB( m_LibHandler[iLibCount]);
+			PLATFORM_UNLOADLIB( m_LibHandler[iLibCount]);
 
-		m_LibHandler[iLibCount] = 0;
+			m_LibHandler[iLibCount] = 0;
+		}
 
 		bSuccess = true;
 	}
