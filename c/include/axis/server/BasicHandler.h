@@ -74,7 +74,6 @@
 
 enum HANDLER_TYPE { NORMAL_HANDLER, WEBSERVICE_HANDLER, CHAIN_HANDLER };
 
-
 #ifdef __cplusplus
 
 class BasicHandler  

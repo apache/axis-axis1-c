@@ -68,15 +68,15 @@
 #if !defined(AFX_IHANDLERSOAPSERIALIZER_H__DE308D72_BC3E_407A_9252_649D0399C90F__INCLUDED_)
 #define AFX_IHANDLERSOAPSERIALIZER_H__DE308D72_BC3E_407A_9252_649D0399C90F__INCLUDED_
 
-#include "ISoapSerializer.h"
+#include "../common/IWrapperSoapSerializer.h"
 class IHeaderBlock;
 
-class IHandlerSoapSerializer : public virtual ISoapSerializer
+class IHandlerSoapSerializer : public IWrapperSoapSerializer
 
 {
 public:		
-	virtual IHeaderBlock* createHeaderBlock()=0;
 	virtual ~IHandlerSoapSerializer() {};
+	virtual IHeaderBlock* createHeaderBlock()=0;
 };
 
 #endif // !defined(AFX_IHANDLERSOAPSERIALIZER_H__DE308D72_BC3E_407A_9252_649D0399C90F__INCLUDED_)

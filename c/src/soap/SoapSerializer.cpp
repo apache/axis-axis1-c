@@ -676,6 +676,7 @@ void SoapSerializer::Serialize(const char* pFirst, ...)
 {
 	va_list vList;
 	const char* pArg;
+	if (pFirst) *this << pFirst;
 	va_start( vList, pFirst );     /* Initialize variable arguments. */
 	do
 	{

@@ -69,7 +69,6 @@
 #if !defined(AFX_SOAPSERIALIZER_H__C37229AD_BD54_430D_9619_E4574CF95334__INCLUDED_)
 #define AFX_SOAPSERIALIZER_H__C37229AD_BD54_430D_9619_E4574CF95334__INCLUDED_
 
-#include "../common/IWrapperSoapSerializer.h"
 #include "../common/IHandlerSoapSerializer.h"
 #include "../common/BasicTypeSerializer.h"
 #include "../common/AxisTime.h"
@@ -86,7 +85,7 @@ class SoapBody;
 class SoapFault;
 class HeaderBlock;
 
-class SoapSerializer : public IWrapperSoapSerializer, public IHandlerSoapSerializer /*: public ISoapSerializer*/
+class SoapSerializer : public IHandlerSoapSerializer /*: public ISoapSerializer*/
 {
 private:
 	int iCounter;
