@@ -117,7 +117,6 @@ handleTCPClient (int clntSocket)
 {
     SimpleAxisTransport *pTransport = new SimpleAxisTransport (clntSocket);
 
-    printf ("Calling process_request \n");
     if (0 != process_request (pTransport))
     {
 	printf ("process_request FAILED\n");
