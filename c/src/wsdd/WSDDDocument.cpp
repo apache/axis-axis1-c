@@ -58,6 +58,7 @@
  *
  *
  * @author Sanjaya Singharage
+ * @author Suasntha Kumara (skumara@virtusa.com, susantha@opensource.lk)
  *
  */
 
@@ -66,28 +67,18 @@
 #include <string>
 #include "../common/Debug.h"
 
-#define toString(X) XMLString::transcode(X)
-#define toXMLCh(X) XMLString::transcode(X)
-#define REL(X) XMLString::release(X);
+#define __TRC(X) XMLString::transcode(X)
+#define __REL(X) XMLString::release(X)
 
 
 WSDDDocument::WSDDDocument()
 {
-	lev0 =WSDD_UNKNOWN;
-	lev1 =WSDD_UNKNOWN;
-	lev2 =WSDD_UNKNOWN;
-	tempHandlerList=NULL;
-	globReqFlowHanList=NULL;
-	globResFlowHanList=NULL;
-	svsMap = new WSDDServiceMap();
-	tempTr = new WSDDTransport();
-	protocol = APTOTHER;
-	ch = NULL;
-	//xch = NULL;
-	xchName = NULL;
-	xchValue = NULL;
-	xchType = NULL;
-	svsch = NULL;
+	m_lev0 = WSDD_UNKNOWN;
+	m_lev1 = WSDD_UNKNOWN;
+	m_lev2 = WSDD_UNKNOWN;
+	m_CurTrType = APTHTTP;//default is HTTP
+	m_nLibId = 0;
+	m_pLibNameIdMap = new map<string, int>;
 }
 
 WSDDDocument::~WSDDDocument()
@@ -95,28 +86,23 @@ WSDDDocument::~WSDDDocument()
 
 }
 
-int WSDDDocument::GetDeployment(string& sWSDD, WSDDDeployment * dep)
+int WSDDDocument::GetDeployment(const string& sWSDD, WSDDDeployment* pDeployment)
 {
-	if (SUCCESS != ParseDocument(sWSDD)) return FAIL;    
-
-	dep->SetGlobalRequestFlowHandlers(globReqFlowHanList);
-	dep->SetGlobalResponseFlowHandlers(globResFlowHanList);
-	dep->SetServices(svsMap);
-	dep->SetTransport(tempTr);
-
+	m_pDeployment = pDeployment; //this enables the access to Deployment object while parsing
+	if (SUCCESS != ParseDocument(sWSDD)) return FAIL;
+	m_pDeployment->SetLibIdMap(m_pLibNameIdMap);
 	return SUCCESS;
 }
 
-int WSDDDocument::ParseDocument(string& sWSDD)
+int WSDDDocument::ParseDocument(const string& sWSDD)
 {
 	try
 	{
 		SAX2XMLReader * parser = XMLReaderFactory::createXMLReader();
 		parser->setContentHandler(this);
 		parser->setErrorHandler(this);     
-    DEBUG1("BEFORE parser->parse(sWSDD.c_str());");
+		DEBUG1("BEFORE parser->parse(sWSDD.c_str());");
 		parser->parse(sWSDD.c_str());      
-
 	}
 	catch (...)
 	{
@@ -125,444 +111,439 @@ int WSDDDocument::ParseDocument(string& sWSDD)
 	return SUCCESS;
 }
 
-
-void WSDDDocument::startElement(const XMLCh *const uri,
-							const XMLCh *const localname,
-							const XMLCh *const qname,
-							const Attributes &attrs)
+void  WSDDDocument::endElement (const XMLCh *const uri, const XMLCh *const localname, const XMLCh *const qname)
 {
-
-	ch = XMLString::transcode(localname);
-	xchName = toXMLCh("name");
-	xchValue = toXMLCh("value");
-	xchType = toXMLCh("type");
-	svsch = toString(attrs.getValue(xchName));
-
-	switch(lev0)
+	char *pcLocalName = __TRC(localname);
+	if (pcLocalName)
 	{
-		case WSDD_UNKNOWN:
-
-			if(strcmp(ch, "globalConfiguration")==0)
-			{  
-
-				lev0=WSDD_GLOBCONF;
-			}
-			if(strcmp(ch, "service")==0)
-			{  
-
-				lev0=WSDD_SERVICE;
-			}
-			if(strcmp(ch, "transport")==0)
-			{  
-
-				lev0=WSDD_TRANSPORT;
-			}
-			if(lev0==WSDD_UNKNOWN)
+		if (0 != strcmp(pcLocalName, kw_param)) //just neglect endElement of parameter
+		{
+			if (m_lev1 == WSDD_UNKNOWN) //not inside a requestFlow or responseFlow elements
 			{
-				break;
-			}
-		break;
-	}
-
-
-	switch(lev0)
-	{  
-
-		case WSDD_GLOBCONF:
-			//cout<<"we are in glob conf"<<endl;  
-
-			if(strcmp(ch, "requestFlow")==0)
-			{
-				globReqFlowHanList = new WSDDHandlerList();
-				lev1=WSDD_REQFLOW;
-			}  
-
-			if(strcmp(ch, "responseFlow")==0)
-			{
-				globResFlowHanList = new WSDDHandlerList();
-				lev1=WSDD_RESFLOW;
-			}  
-
-			//xch = toXMLCh("type");
-			switch(lev1)
-			{
-				case WSDD_REQFLOW:
-					//cout<<"we are in glob conf>requestflow"<<endl;  
-
-					if(strcmp(ch, "handler")==0)
-					{
-						tempHandler = new WSDDHandler();
-						string sLibName = toString(attrs.getValue(xchType));
-						tempHandler->SetLibName(sLibName);
-						globReqFlowHanList->push_back(tempHandler);
-						tempHandler = NULL;
-					}  
-
-				break;
-				case WSDD_RESFLOW:
-					if(strcmp(ch, "handler")==0)
-					{
-						tempHandler = new WSDDHandler();
-						string sLibName = toString(attrs.getValue(xchType));
-						tempHandler->SetLibName(sLibName);
-						globResFlowHanList->push_back(tempHandler);
-						tempHandler = NULL;
-					}  
-
-				break;
-			}
-
-			//REL(&xch);
-		break;
-
-
-		case WSDD_SERVICE:      
-			if(strcmp(ch, "service")==0)
-			{
-
-				tempService = new WSDDService();
-				string sSrvName = toString(attrs.getValue(xchName));
-				tempService->SetServiceName(sSrvName);
-				(*svsMap)[toString(attrs.getValue(xchName))]=tempService;
-
-			//	cout<<toString(attrs.getValue(toXMLCh("name")))<<endl;
-			}  
-
-			//The check for lev1==WSDD_UNKNOWN is necessary because
-			//parameter elements can occur inside handler elements
-			if(strcmp(ch, "parameter")==0 && (lev1==WSDD_UNKNOWN))
-			{
-				lev1=WSDD_PARAM;
-			} 
-
-
-      if(strcmp(ch, "requestFlow")==0)
-			{
-				lev1=WSDD_REQFLOW;
-				tempHandlerList = new WSDDHandlerList();
-			}  
-
-      if(strcmp(ch, "responseFlow")==0)
-			{
-				lev1=WSDD_RESFLOW;
-				tempHandlerList = new WSDDHandlerList();
-			}
-
-
-      switch(lev1)
-			{
-				case WSDD_PARAM:
-					if(strcmp(svsch, "className")==0)
-					{ 
-
-						string sLibName = toString(attrs.getValue(xchValue));
-						tempService->SetLibName(sLibName);
-						//cout<<toString(attrs.getValue(toXMLCh("value")))<<" The class name"<<endl;
-					}
-					if(strcmp(svsch, "allowedMethods")==0)
-					{
-						string sLibName = toString(attrs.getValue(xchValue));
-						//cout<<toString(attrs.getValue(toXMLCh("value")))<<" The class name"<<endl;
-
-						char * x = toString(attrs.getValue(xchValue));
-						char * y;
-						if(x)
-						{
-							y=strtok(x," ");
-							while (y!=NULL)
-							{
-								string sY = y;
-								tempService->SetAllowedMethod(sY);
-								y=strtok(NULL," ");
-							}
-						}
-						REL(&x);
-						delete y;
-
-						x=NULL;
-						y=NULL;
-					}
-				break;
-
-				case WSDD_REQFLOW:
-					if(strcmp(ch, "handler")==0)
-					{
-						lev2=WSDD_HANDLER;
-						tempHandler = new WSDDHandler();
-						string sLibName = toString(attrs.getValue(xchType));
-						tempHandler->SetLibName(sLibName);
-						tempHandlerList->push_back(tempHandler);
-					}
-					switch(lev2)
-					{
-						case WSDD_HANDLER:
-							if(strcmp(ch, "parameter")==0)
-							{
-								tempHandler->SetOption(toString(attrs.getValue(xchName)),
-														toString(attrs.getValue(xchValue)));
-
-                  DEBUG1("After tempHandler->SetOption");
-
-							}
-						break;
-					}
-				break;
-
-				case WSDD_RESFLOW:
-					if(strcmp(ch, "handler")==0)
-					{
-						lev2=WSDD_HANDLER;
-						tempHandler = new WSDDHandler();
-						string sLibName = toString(attrs.getValue(xchType));
-						tempHandler->SetLibName(sLibName);
-						tempHandlerList->push_back(tempHandler);
-						//tempHandler = NULL;
-					}
-					switch(lev2)
-					{
-						case WSDD_HANDLER:
-							if(strcmp(ch, "parameter")==0)
-							{
-								tempHandler->SetOption(toString(attrs.getValue(xchName)),
-														toString(attrs.getValue(xchValue)));
-							}
-						break;
-					}
-				break;
-			}
-
-		break;  
-
-		case WSDD_TRANSPORT:
-			if(strcmp(ch, "transport")==0)
-			{
-				//tempHandlerList = new WSDDHandlerList();
-				if(strcmp(svsch, "http")==0)
+				switch(m_lev0)
 				{
-					protocol =APTHTTP;
-				}
-				if(strcmp(svsch, "local")==0)
-				{
-					protocol =APTFTP;
-				}
-				if(protocol==APTOTHER)
-				{
+				case WSDD_DEPLOYMENT:
+					m_lev0 = WSDD_UNKNOWN;
 					break;
+				case WSDD_GLOBCONF:
+					m_lev0 = WSDD_DEPLOYMENT;
+					break;
+				case WSDD_SERVICE:
+					if (0 == strcmp(pcLocalName, kw_srv))
+					{
+						//add service object to Deployment object
+						m_pDeployment->AddService(m_pService);
+						m_pService = NULL;
+						m_lev0 = WSDD_DEPLOYMENT;
+					}
+					else
+					{
+
+					}
+					break;
+				case WSDD_HANDLER:
+					//just ignore the handlers defined outside ??? //TODO
+					delete m_pHandler;
+					m_pHandler = NULL;
+					m_lev0 = WSDD_DEPLOYMENT;
+					break;
+				case WSDD_TRANSPORT:
+					m_CurTrType = APTHTTP;//default is HTTP
+					m_lev0 = WSDD_DEPLOYMENT;
+					break;
+				break;
+				}
+			}
+			else // inside a requestFlow or responseFlow elements
+			{
+				if(0 == strcmp(pcLocalName, kw_hdl))
+				{
+					m_lev2 = WSDD_UNKNOWN;
+					//add handler in m_pHandler to the corresponding container.
+					switch (m_lev0)
+					{
+						case WSDD_GLOBCONF:
+							{
+								m_pDeployment->AddHandler(true,(m_lev1 == WSDD_REQFLOW) , m_pHandler);
+								m_pHandler = NULL;
+							}
+							break;
+						case WSDD_TRANSPORT:
+							{
+								m_pDeployment->AddHandler(false,(m_lev1 == WSDD_REQFLOW) , m_pHandler, m_CurTrType);
+								m_pHandler = NULL;
+							}
+							break;
+						case WSDD_SERVICE:
+							{
+								m_pService->AddHandler((m_lev1 == WSDD_REQFLOW) , m_pHandler);
+								m_pHandler = NULL;
+							}
+							break;
+						default: ; //this cannot happen ?? 
+					}
+				}
+				else if(0 == strcmp(pcLocalName, kw_rqf))
+				{  
+					m_lev1 = WSDD_UNKNOWN;
+				}
+				else if(0 == strcmp(pcLocalName, kw_rsf))
+				{  
+					m_lev1 = WSDD_UNKNOWN;
+				}						
+			}
+		}
+		__REL(&pcLocalName);
+	}
+}
+
+void WSDDDocument::ProcessAttributes(WSDDLevels ElementType, const Attributes &attrs)
+{
+	char* pc; 
+	for (int i = 0; i < attrs.getLength(); i++) 
+	{
+		pc = __TRC(attrs.getLocalName(i));
+		string local = pc;
+		__REL(&pc);
+		pc = __TRC(attrs.getValue(i));
+		string value = pc;
+		__REL(&pc);
+		switch(ElementType)
+		{
+		case WSDD_SERVICE: //add this attribute to current service object
+			if (local == kw_name)
+			{
+				m_pService->SetServiceName(value);
+			}
+			else if (local == kw_prv)
+			{
+				m_pService->SetProvider(value);
+			}
+			else
+			{
+				//unknown attribute
+			}
+			break;
+		case WSDD_HANDLER: //add this attribute to current handler object
+			if (local == kw_name)
+			{
+				//usefull ? ignore for now .. //TODO
+			}
+			else if (local == kw_type)
+			{
+				//we get the libname for the hanlder here ???
+				m_pHandler->SetLibName(value);
+				if (m_pLibNameIdMap->find(value.c_str()) != m_pLibNameIdMap->end()) //libray name already in the map
+				{
+					m_pHandler->SetLibId((*m_pLibNameIdMap)[value.c_str()]);
+				}
+				else
+				{
+					(*m_pLibNameIdMap)[value.c_str()] = ++m_nLibId;
+					m_pHandler->SetLibId((*m_pLibNameIdMap)[value.c_str()]);
+				}
+			}
+			else
+			{
+				//unknown attribute
+			}
+			break;
+		case WSDD_REQFLOW:
+		case WSDD_RESFLOW:
+			if (local == kw_name)
+			{
+				//usefull ? ignore for now .. //TODO
+			}
+			else
+			{
+				//unknown attribute
+			}
+			break;
+		case WSDD_TRANSPORT:
+			if (local == kw_name)
+			{
+				//get tranport type
+				if (value == kw_http)
+					m_CurTrType = APTHTTP;
+				else if (value == kw_smtp)
+					m_CurTrType = APTSMTP;
+				else
+				{
+					//unhandled transport type
+				}
+			}
+			else
+			{
+				//unknown attribute
+			}
+			break;
+		}
+	}
+}
+
+void WSDDDocument::GetParameters(WSDDLevels ElementType, const Attributes &attrs)
+{
+	char* pc; 
+	string name, value, type;
+	bool locked;
+	string Localname, Value;
+	for (int i = 0; i < attrs.getLength(); i++) 
+	{
+		pc = __TRC(attrs.getLocalName(i));
+		Localname = pc;
+		__REL(&pc);
+		pc = __TRC(attrs.getValue(i));
+		Value = pc;
+		__REL(&pc);
+		if (Localname == kw_name)
+		{
+			name = Value;
+		}
+		else if (Localname == kw_value)
+		{
+			value = Value;
+		}
+		else if (Localname == kw_type)
+		{
+			type = Value;
+		}
+	}
+	switch(ElementType)
+	{
+	case WSDD_GLOBCONF: //parameters just inside globalConfiguration
+		//TODO
+		break;
+	case WSDD_SERVICE:
+		if (name == kw_am)
+		{
+			AddAllowedMethodsToService(value);
+		}
+		else if(name == kw_cn)
+		{
+			m_pService->SetLibName(value);
+			if (m_pLibNameIdMap->find(value.c_str()) != m_pLibNameIdMap->end()) //libray name already in the map
+			{
+				m_pService->SetLibId((*m_pLibNameIdMap)[value.c_str()]);
+			}
+			else
+			{
+				(*m_pLibNameIdMap)[value.c_str()] = ++m_nLibId;
+				m_pService->SetLibId((*m_pLibNameIdMap)[value.c_str()]);
+			}
+		}
+		else if (name == kw_scope)
+		{
+			m_pService->SetScope(value);
+		}
+		else if (name == kw_ar)
+		{
+			AddAllowedRolesToService(value);
+		}
+		else
+		{
+			m_pService->AddParameter(name, value);
+		}
+		break;
+	case WSDD_HANDLER:
+		if (name == kw_scope)
+		{
+			m_pHandler->SetScope(value);
+		}
+		else
+		{
+			m_pHandler->AddParameter(name, value);
+		}
+		break;
+	}
+}
+
+void WSDDDocument::AddAllowedRolesToService(string& value)
+{
+	int prepos = 0, pos = 0;
+	if (value.find('*') == string::npos)
+	{
+		do 
+		{
+			pos = value.find(ROLENAME_SEPARATOR, prepos);
+//			cout << value.substr(prepos, pos) << endl;
+			m_pService->AddAllowedRole(value.substr(prepos, pos));
+			prepos = pos + 1;
+		} while(string::npos != pos);
+	}
+}
+
+void WSDDDocument::AddAllowedMethodsToService(string& value)
+{
+	int prepos = 0, pos = 0;
+	if (value.find('*') == string::npos)
+	{
+		do 
+		{
+			pos = value.find(METHODNAME_SEPARATOR, prepos);
+//			cout << value.substr(prepos, pos) << endl;
+			m_pService->AddAllowedMethod(value.substr(prepos, pos));
+			prepos = pos + 1;
+		} while(string::npos != pos);
+	}
+}
+
+void WSDDDocument::startElement(const XMLCh *const uri,	const XMLCh *const localname, const XMLCh *const qname,	const Attributes &attrs)
+{
+	char *pcLocalName = __TRC(localname);
+	if (pcLocalName)
+	{
+		if (m_lev1 == WSDD_UNKNOWN) //not inside a requestFlow or responseFlow elements
+		{
+			switch(m_lev0)
+			{
+			case WSDD_UNKNOWN:
+				if(0 == strcmp(pcLocalName, kw_depl))
+				{  
+					m_lev0 = WSDD_DEPLOYMENT;
+					//nothing to get
+				}
+				break;
+			case WSDD_DEPLOYMENT:
+				if(0 == strcmp(pcLocalName, kw_glconf))
+				{  
+					m_lev0 = WSDD_GLOBCONF;
+					//nothing to get
+				}
+				else if(0 == strcmp(pcLocalName, kw_srv))
+				{  
+					m_lev0 = WSDD_SERVICE;
+					m_pService = new WSDDService();
+					//get service name and proider if any
+					ProcessAttributes(WSDD_SERVICE, attrs);
+				}
+				else if(0 == strcmp(pcLocalName, kw_hdl))
+				{  
+					m_lev0 = WSDD_HANDLER;
+					m_pHandler = new WSDDHandler();
+					ProcessAttributes(WSDD_HANDLER, attrs);
+					//get handler name and type if any
+				}
+				else if(0 == strcmp(pcLocalName, kw_tr))
+				{  
+					m_lev0 = WSDD_TRANSPORT;
+					ProcessAttributes(WSDD_TRANSPORT, attrs);
+				}
+				else
+				{
+					//error : unknown element type in wsdd file
+				}
+				break;
+			case WSDD_GLOBCONF:
+				if(0 == strcmp(pcLocalName, kw_param))
+				{  
+					GetParameters(WSDD_GLOBCONF, attrs);
+				}
+				else if(0 == strcmp(pcLocalName, kw_rqf))
+				{  
+					m_lev1 = WSDD_REQFLOW;
+					ProcessAttributes(WSDD_REQFLOW, attrs);
+				}
+				else if(0 == strcmp(pcLocalName, kw_rsf))
+				{  
+					m_lev1 = WSDD_RESFLOW;
+					ProcessAttributes(WSDD_RESFLOW, attrs);
+				}
+				else
+				{
+					//yet unhandled element type
+				}
+			break; 
+			case WSDD_SERVICE:
+				if(0 == strcmp(pcLocalName, kw_param))
+				{  
+					GetParameters(WSDD_SERVICE, attrs);
+				}
+				else if(0 == strcmp(pcLocalName, kw_rqf))
+				{  
+					m_lev1 = WSDD_REQFLOW;
+					ProcessAttributes(WSDD_REQFLOW, attrs);
+				}
+				else if(0 == strcmp(pcLocalName, kw_rsf))
+				{  
+					m_lev1 = WSDD_RESFLOW;
+					ProcessAttributes(WSDD_RESFLOW, attrs);
+				}
+				else
+				{
+					//yet unhandled element type like namespace
+				}
+			break;
+			case WSDD_HANDLER:
+				if(0 == strcmp(pcLocalName, kw_param))
+				{  
+					GetParameters(WSDD_HANDLER, attrs);
 				}
 
+			break;
+			case WSDD_TRANSPORT:
+				if(0 == strcmp(pcLocalName, kw_rqf))
+				{  
+					m_lev1 = WSDD_REQFLOW;
+					ProcessAttributes(WSDD_REQFLOW, attrs);
+				}
+				else if(0 == strcmp(pcLocalName, kw_rsf))
+				{  
+					m_lev1 = WSDD_RESFLOW;
+					ProcessAttributes(WSDD_RESFLOW, attrs);
+				}
+			break;
 			}
-			if(strcmp(ch, "requestFlow")==0)
-			{
-				lev1=WSDD_REQFLOW;
-				tempHandlerList = new WSDDHandlerList();
-			}
-			if(strcmp(ch, "responseFlow")==0)
-			{
-				lev1=WSDD_RESFLOW;
-				tempHandlerList = new WSDDHandlerList();
-			}
-			switch(lev1)
-			{
-				case WSDD_REQFLOW:
-					//cout<<"we are in glob conf>requestflow"<<endl;
-					if(strcmp(ch, "handler")==0)
-					{
-						tempHandler = new WSDDHandler();
-						string sLibName = toString(attrs.getValue(xchType));
-						tempHandler->SetLibName(sLibName);
-						tempHandlerList->push_back(tempHandler);
-						tempHandler = NULL;
-					}
-				break;
-
-				case WSDD_RESFLOW:
-					//cout<<"we are in glob conf>requestflow"<<endl;
-					if(strcmp(ch, "handler")==0)
-					{
-						tempHandler = new WSDDHandler();
-						string sLibName = toString(attrs.getValue(xchType));
-						tempHandler->SetLibName(sLibName);
-						tempHandlerList->push_back(tempHandler);
-						tempHandler = NULL;
-					}
-				break;
-
+		}
+		else // inside a requestFlow or responseFlow elements
+		{
+			if(0 == strcmp(pcLocalName, kw_param))
+			{  
+				GetParameters(m_lev2, attrs); //must be parameters of a handler or a chain
 			}
 
-		break;
+			else if(0 == strcmp(pcLocalName, kw_hdl))
+			{  
+				m_lev2 = WSDD_HANDLER;
+				m_pHandler = new WSDDHandler();
+				ProcessAttributes(WSDD_HANDLER, attrs);
+				//get handler name and type if any
+			}
+			else if(0 == strcmp(pcLocalName, kw_chain))
+			{
+
+			}
+			else
+			{
+				//error : unknown element type in wsdd file
+			}
+
+		}
+		__REL(&pcLocalName);
 	}
-	REL(&ch);
-	REL(&xchName);
-	REL(&xchValue);
-	REL(&xchType);
-	REL(&svsch);
-
 }
 
-void  WSDDDocument::endElement (const XMLCh *const uri,
-				  const XMLCh *const localname,
-				  const XMLCh *const qname)
+void WSDDDocument::startPrefixMapping(const XMLCh* const prefix, const XMLCh* const uri)
 {
-	ch = XMLString::transcode(localname);
-	switch (lev0)
-	{  
-
-		case WSDD_GLOBCONF:
-			if(strcmp(ch, "globalConfiguration")==0)
-			{
-				lev0=WSDD_UNKNOWN;
-			}
-			switch(lev1)
-			{
-				case WSDD_REQFLOW:
-					if(strcmp(ch, "requestFlow")==0)
-					{
-						lev1=WSDD_UNKNOWN;
-					}
-					switch(lev2)
-					{
-						case WSDD_HANDLER:
-							if(strcmp(ch, "handler")==0)
-							{
-								lev2=WSDD_UNKNOWN;
-							}
-						break;
-					}
-
-				break;
-				case WSDD_RESFLOW:
-					if(strcmp(ch, "responseFlow")==0)
-					{
-						lev1=WSDD_UNKNOWN;
-					}
-					switch(lev2)
-					{
-						case WSDD_HANDLER:
-							if(strcmp(ch, "handler")==0)
-							{
-								lev2=WSDD_UNKNOWN;
-							}
-						break;
-					}
-				break;
-			}
-		break;
-
-		case WSDD_REQFLOW:
-			if(strcmp(ch, "requestFlow")==0)
-			{
-				lev0=WSDD_UNKNOWN;
-			}
-		break; 
-
-		case WSDD_SERVICE:
-			if(strcmp(ch, "service")==0)
-			{
-				lev0=WSDD_UNKNOWN;
-				tempService = NULL;
-			}
-			switch(lev1)
-			{
-				case WSDD_PARAM:
-					if(strcmp(ch, "parameter")==0)
-					{
-						lev1=WSDD_UNKNOWN;
-					}
-				break;
-				case WSDD_REQFLOW:
-					if(strcmp(ch, "requestFlow")==0)
-					{
-						lev1=WSDD_UNKNOWN;
-						if(!tempHandlerList->empty())
-						{
-							tempService->SetRequestFlowHandlers(tempHandlerList);
-						}
-						else
-						{
-							delete tempHandlerList;
-							tempService->SetRequestFlowHandlers(NULL);
-						}
-						tempHandlerList = NULL;
-					}
-					switch(lev2)
-					{
-						case WSDD_HANDLER:
-							if(strcmp(ch, "handler")==0)
-							{
-								lev2=WSDD_UNKNOWN;
-								tempHandler = NULL;
-							}
-
-						break;
-					}
-				break;
-				case WSDD_RESFLOW:
-					if(strcmp(ch, "responseFlow")==0)
-					{
-						lev1=WSDD_UNKNOWN;
-						if(!tempHandlerList->empty())
-						{
-							tempService->SetResponseFlowHandlers(tempHandlerList);
-						}
-						else
-						{
-							delete tempHandlerList;
-							tempService->SetResponseFlowHandlers(NULL);
-						}
-						tempHandlerList= NULL;
-					}
-					switch(lev2)
-					{
-						case WSDD_HANDLER:
-							if(strcmp(ch, "handler")==0)
-							{
-								lev2=WSDD_UNKNOWN;
-								tempHandler = NULL;
-							}
-
-						break;
-					}
-				break;
-			}
-		break;  
-
-		case WSDD_TRANSPORT:
-			if(strcmp(ch, "transport")==0)
-			{
-				protocol=APTOTHER;
-				lev0=WSDD_UNKNOWN;
-			}
-
-			switch(lev1)
-			{
-				case WSDD_REQFLOW:
-					if(strcmp(ch, "requestFlow")==0)
-					{
-						tempTr->SetRequestFlowHandlers(protocol, tempHandlerList);
-						tempHandlerList = NULL;
-						lev1=WSDD_UNKNOWN;
-					}
-				break;
-
-				case WSDD_RESFLOW:
-
-					if(strcmp(ch, "responseFlow")==0)
-					{
-						tempTr->SetResponseFlowHandlers(protocol, tempHandlerList);
-						tempHandlerList = NULL;
-						lev1=WSDD_UNKNOWN;
-					}
-
-				break;
-			}
-		break;
-	}
-	REL(&ch);
-
+	char* pc; 
+	pc = __TRC(prefix);
+	string sPrifix = pc;
+	__REL(&pc);
+	pc = __TRC(uri);
+	string sUri = pc;
+	__REL(&pc);
+	m_NsStack[sPrifix] = sUri; //I think the same prifix cannot repeat ???
 }
 
-void  WSDDDocument::characters (const XMLCh *const chars,
-				  const unsigned int length)
+void WSDDDocument::endPrefixMapping(const XMLCh* const prefix)
+{
+	char* pc; 
+	pc = __TRC(prefix);
+	string sPrifix = pc;
+	__REL(&pc);
+	m_NsStack.erase(sPrifix); //I think the same prifix cannot repeat ???
+}
+
+void  WSDDDocument::characters (const XMLCh *const chars, const unsigned int length)
 {
 	//cout<<"==="<<XMLString::transcode(chars)<<"==="<<endl;
 }

@@ -58,6 +58,7 @@
  *
  *
  * @author sanjaya
+ * @author Suasntha Kumara (skumara@virtusa.com, susantha@opensource.lk)
  *
  */
 
@@ -78,51 +79,69 @@
 #include <string>
 #include <map>
 
-
-
 using namespace std;
 
-enum WSDDLevels {WSDD_UNKNOWN=1, WSDD_DEPLOYMENT, WSDD_GLOBCONF, WSDD_SERVICE, WSDD_HANDLER, WSDD_PARAM, WSDD_REQFLOW, WSDD_RESFLOW, WSDD_TRANSPORT};
+enum WSDDLevels {WSDD_UNKNOWN=1, WSDD_DEPLOYMENT, WSDD_UNDEPLOYMENT, WSDD_GLOBCONF, WSDD_SERVICE, WSDD_HANDLER, WSDD_CHAIN, WSDD_TRANSPORT, WSDD_REQFLOW, WSDD_RESFLOW, WSDD_PARAM };
 
 XERCES_CPP_NAMESPACE_USE;
+
+//wsdd file related defines
+#define METHODNAME_SEPARATOR " "
+#define ROLENAME_SEPARATOR ","
+
+//keywords used in the wsdd file
+const char kw_depl[] = "deployment";
+const char kw_srv[] = "service";
+const char kw_glconf[] = "globalConfiguration";
+const char kw_param[] = "parameter"; 
+const char kw_hdl[] = "handler";
+const char kw_chain[] = "chain";
+const char kw_ns[] = "namespace";
+const char kw_prv[] = "provider";
+const char kw_cn[] = "className"; //must be changed to libname or so
+const char kw_am[] = "allowedMethods";
+const char kw_ar[] = "allowedRoles";
+const char kw_rqf[] = "requestFlow";
+const char kw_rsf[] = "responseFlow";
+const char kw_tr[] = "transport";
+const char kw_name[] = "name";
+const char kw_value[] = "value";
+const char kw_type[] = "type"; //what about this ? change to libname ?
+const char kw_scope[] = "scope";
+const char kw_http[] = "http";
+const char kw_smtp[] = "smtp";
 
 class WSDDDocument:public DefaultHandler
 {
 private:
+	int m_nLibId;
+	map<string, int>* m_pLibNameIdMap;
+	WSDDDeployment* m_pDeployment; 
+	WSDDLevels m_lev0;
+	WSDDLevels m_lev1; //gets values WSDD_REQFLOW or WSDD_RESFLOW
+	WSDDLevels m_lev2; //gets values WSDD_HANDLER or WSDD_CHAIN
+	map<string, string> m_NsStack;
+	WSDDService* m_pService; //Place holder for currently created Service object
+	WSDDHandler* m_pHandler; //Place holder for currently created Handler object
+	//map<string, string> m_GlobalConfParams;
+	AXIS_PROTOCOL_TYPE m_CurTrType; //Current transport type of transport handlers
 
-	WSDDServiceMap * dsmap;
-	WSDDService * ds;
-	char * serviceName;
-	WSDDLevels lev0;
-	WSDDLevels lev1;
-	WSDDLevels lev2;
-	WSDDHandlerList * globReqFlowHanList;
-	WSDDHandlerList * globResFlowHanList;
-	WSDDHandlerList * tempHandlerList;
-	WSDDHandler * tempHandler;
-	WSDDServiceMap * svsMap;
-	WSDDService * tempService;
-	WSDDTransport * tempTr;
-	AXIS_PROTOCOL_TYPE protocol;
-	char * ch;
-	XMLCh * xch;
-	XMLCh * xchName;
-	XMLCh * xchValue;
-	XMLCh * xchType;
-	char * svsch;
+private:
+	void ProcessAttributes(WSDDLevels ElementType, const Attributes &attrs);
+	void GetParameters(WSDDLevels ElementType, const Attributes &attrs);
+	void AddAllowedRolesToService(string& value);
+	void AddAllowedMethodsToService(string& value);
+
 public:
 	WSDDDocument();
 	~WSDDDocument();
-	int ParseDocument(string& sWSDD);
-	int GetDeployment(string& sWSDD, WSDDDeployment * dep);
-	void startElement(const XMLCh *const uri,
-							const XMLCh *const localname,
-							const XMLCh *const qname,
-							const Attributes &attrs);
-	void  characters (const XMLCh *const chars, const unsigned int length);
-	void  endElement (const XMLCh *const uri,
-						const XMLCh *const localname,
-						const XMLCh *const qname);
+	int ParseDocument(const string& sWSDD);
+	int GetDeployment(const string& sWSDD, WSDDDeployment* pDeployment);
+	void startElement(const XMLCh *const uri, const XMLCh *const localname,	const XMLCh *const qname, const Attributes &attrs);
+	void characters (const XMLCh *const chars, const unsigned int length);
+	void endElement (const XMLCh *const uri, const XMLCh *const localname,	const XMLCh *const qname);
+	void startPrefixMapping(const XMLCh* const prefix, const XMLCh* const uri);
+	void endPrefixMapping(const XMLCh* const prefix);
 };
 
 #endif //__WSDDDOCUMENTS_H_INCLUDED__
