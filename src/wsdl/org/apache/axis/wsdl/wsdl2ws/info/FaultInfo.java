@@ -37,8 +37,7 @@ public class FaultInfo {
 		params.add(paraminfo);
 	}
 	
-	public ArrayList getParams(){
-		System.out.println(params+" Parameter values ..............in fault info");
+	public ArrayList getParams(){		
 		return params;
 	}
 

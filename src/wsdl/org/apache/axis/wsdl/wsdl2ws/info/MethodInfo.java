@@ -205,8 +205,7 @@ public class MethodInfo {
 	 * Sets the faultMessage.
 	 * @param faultMessage The faultMessage to set
 	 */
-	public void setFaultMessage(QName faultMessage) {
-		System.out.print(faultMessage);
+	public void setFaultMessage(QName faultMessage) {		
 		this.faultMessage = faultMessage;
 	}
 	//end of nithya
