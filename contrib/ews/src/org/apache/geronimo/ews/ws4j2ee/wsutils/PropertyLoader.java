@@ -12,10 +12,10 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class PropertyLoader {
-	public static Properties loadProperties(String propertyFile) throws GenerationFault{
+	public Properties loadProperties(String propertyFile) throws GenerationFault{
 		try {
 			Properties properties = new Properties();
-			InputStream proIn = PropertyLoader.class.getResourceAsStream(propertyFile);
+			InputStream proIn = getClass().getClassLoader().getResourceAsStream(propertyFile);
 			if(proIn == null){
 				proIn = GenerationConstants.class.getResourceAsStream("META-INF/"+propertyFile);
 			}

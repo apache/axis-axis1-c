@@ -324,6 +324,13 @@ public class Ws4J2EEwithoutWSDL implements Generator {
                         wscontext,
                         GenerationConstants.EJB_GENERATOR)
                     .generate();
+				if (verbose)
+						log.info("genarating j2ee dd >>");
+					Generator j2eeContainerDDGen =
+						GeneratorFactory.createGenerator(
+							wscontext,
+							GenerationConstants.J2EE_CONTAINER_DD_GENERATOR);
+					j2eeContainerDDGen.generate();    
             } else {
                 wscontext.getMiscInfo().setImplwithEJB(false);
                 //parse the web.xml file and gereratre wrapper
