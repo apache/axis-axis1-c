@@ -48,25 +48,29 @@ int test1::invoke(void *pvIMsg)
 		pIHeaderBlock->setLocalName("TestHeader");
 		pIHeaderBlock->setURI("http://soapinterop.org/echoheader/");
 
-//........ creating the User Name.......
+//........ Creating the 1st Element Node.......
 
-        	BasicNode* pBasicNode = pIHeaderBlock->createChild(ELEMENT_NODE);
+        BasicNode* pBasicNode = pIHeaderBlock->createChild(ELEMENT_NODE);
 		pBasicNode->setLocalName("User Name");
 		
 		pIHeaderBlock->addChild(pBasicNode);
+
+//..........Creating the 1st Character Node.........
 
         BasicNode* pBasicNode1 = pIHeaderBlock->createChild(CHARACTER_NODE);
 		pBasicNode1->setValue("TestName");
 		
 		pBasicNode->addChild(pBasicNode1);
 
-        //........ creating the Password.......
+//........ Creating the 2nd Element Node.......
 
 
         BasicNode* pBasicNode2 = pIHeaderBlock->createChild(ELEMENT_NODE);
 		pBasicNode2->setLocalName("Password");
 		
 		pIHeaderBlock->addChild(pBasicNode2);
+
+//.......Creating the 2nd Character Node.......
 
         BasicNode* pBasicNode3 = pIHeaderBlock->createChild(CHARACTER_NODE);
 		pBasicNode3->setValue("Testpw");
