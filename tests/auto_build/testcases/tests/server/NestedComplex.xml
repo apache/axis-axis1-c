@@ -1,0 +1,8 @@
+<service>
+    <name>NestedComplex</name>
+    <description>NestedComplex</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>NestedComplex.cpp</serviceCode>
+    <wsdl>NestedComplex.wsdl</wsdl>
+	<servicename></servicename>
+</service>
