@@ -77,6 +77,10 @@ class AxisUtils
 	friend class TypeMapping;
 	friend class URIMapping;
 public:
+	/*
+	 *Clears the content of passed character array
+	 */
+	static int clearArray(char* arrCh, int iSize);
 	static void Initialize();
 	static const AxisXMLCh* ToAxisXMLCh(const AxisChar* pch);
 	AxisUtils();

@@ -106,3 +106,12 @@ const AxisXMLCh* AxisUtils::Convert(const AxisChar* pch)
 	return pch;
 }
 
+
+int AxisUtils::clearArray(char *arrCh, int iSize)
+{
+	for(int iTmp=0; iTmp<iSize; iTmp++) {
+		arrCh[iTmp] = '\0';
+	}
+
+	return SUCCESS;
+}
