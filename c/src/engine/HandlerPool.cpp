@@ -257,6 +257,7 @@ int HandlerPool::GetHandlerChain(string& sSessionId, HandlerChain** ppChain, con
 			if (NORMAL_HANDLER == pBH->GetType())
 			{
                 AXISTRACE1("Normal Handler");
+				((Handler*)pBH)->SetOptionList(pWSDDH->GetParameterList());
 				pChain->AddHandler(static_cast<Handler*>(pBH), pWSDDH->GetScope(), pWSDDH->GetLibId());
                 AXISTRACE1("after pChain->AddHandler");
 			}

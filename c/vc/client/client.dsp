@@ -133,6 +133,38 @@ SOURCE=..\..\src\client\transport\axis\AxisTransport.h
 
 SOURCE=..\..\src\client\Call.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\src\client\transport\axis\Channel.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\client\transport\axis\HttpTransport.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\client\transport\axis\Platform.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\client\transport\axis\Receiver.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\client\transport\axis\Sender.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\client\transport\axis\Transport.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\client\transport\axis\TransportFactory.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\client\transport\axis\Url.hpp
+# End Source File
 # End Group
 # End Target
 # End Project
