@@ -350,31 +350,31 @@ SOURCE=..\src\engine\XMLParserFactory.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\include\axis\AxisConfigException.h
+SOURCE=..\include\axis\Axis.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\axis\AxisEngineException.h
+SOURCE=..\include\axis\AxisException.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\axis\server\AxisException.hpp
+SOURCE=..\include\axis\AxisGenException.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\axis\AxisParseException.h
+SOURCE=..\include\axis\AxisUserAPI.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\axis\AxisSoapException.h
+SOURCE=..\include\axis\AxisWrapperAPI.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\axis\AxisTransportException.h
+SOURCE=..\include\axis\BasicHandler.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\axis\AxisWsddException.h
+SOURCE=..\include\axis\BasicNode.hpp
 # End Source File
 # Begin Source File
 
@@ -382,11 +382,59 @@ SOURCE=..\include\axis\client\Call.hpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\axis\GDefine.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\axis\Handler.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\axis\IAttribute.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\axis\IHandlerSoapDeSerializer.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\axis\IHandlerSoapSerializer.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\axis\IHeaderBlock.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\axis\IMessageData.hpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\axis\ISoapFault.hpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\axis\IWrapperSoapDeSerializer.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\axis\IWrapperSoapSerializer.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\axis\SoapEnvVersions.hpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\axis\client\Stub.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\axis\TypeMapping.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\axis\WSDDDefines.hpp
 # End Source File
 # End Group
 # Begin Group "Resource Files"
