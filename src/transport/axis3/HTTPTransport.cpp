@@ -180,17 +180,15 @@ void HTTPTransport::setEndpointUri( const char * pcEndpointUri) throw (HTTPTrans
  * HTTPTransport::openConnection().
  */
 
-int HTTPTransport::openConnection ()
+int HTTPTransport::openConnection()
 {
-	m_pActiveChannel->open();
-
-    return AXIS_SUCCESS;
+	return m_pActiveChannel->open();
 }
 
 /*
  * HTTPTransport::closeConnection().
  */
-void HTTPTransport::closeConnection ()
+void HTTPTransport::closeConnection()
 {
     // get ready for a new message.
     m_bReadPastHTTPHeaders = false;
@@ -199,6 +197,8 @@ void HTTPTransport::closeConnection ()
     m_strReceived = "";
 
     m_iContentLength = 0;
+
+	m_pActiveChannel->close();
 }
 
 /*
@@ -736,9 +736,15 @@ void HTTPTransport::setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type, 
 		}
 
 		case TRANSPORT_PROPERTIES:
-		case SECURE_PROPERTIES:
 		{
 			m_pActiveChannel->setTransportProperty( type, value);
+
+			break;
+		}
+
+		case SECURE_PROPERTIES:
+		{
+			m_pActiveChannel->setSecureProperties( value);
 
 			break;
 		}

@@ -71,6 +71,18 @@ bool HTTPChannel::open() throw (HTTPTransportException&)
 	return bSuccess;
 }
 
+bool HTTPChannel::close()
+{
+	if( m_Sock != INVALID_SOCKET)
+	{
+		CloseChannel();
+	}
+
+	m_Sock = INVALID_SOCKET;
+
+	return AXIS_SUCCESS;
+}
+
 const std::string & HTTPChannel::GetLastErrorMsg()
 {
 	return m_LastError;

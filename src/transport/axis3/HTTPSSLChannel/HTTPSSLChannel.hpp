@@ -58,6 +58,7 @@ public:
 	virtual void		setURL( const char * cpURL);
     virtual URL &		getURLObject();
     bool				open() throw (HTTPTransportException&);
+    bool				close();
     const std::string &	GetLastErrorMsg();
     const IChannel &	operator >> (const char * msg);
     const IChannel &	operator << (const char * msg);
