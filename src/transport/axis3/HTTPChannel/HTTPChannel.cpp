@@ -18,7 +18,7 @@ HTTPChannel::HTTPChannel()
     m_uiProxyPort = 0;
 
 #ifdef WIN32
-	m_lTimeoutSeconds = 100;
+	m_lTimeoutSeconds = 10;
 #else
 	m_lTimeoutSeconds = 0;
 #endif
@@ -220,8 +220,7 @@ const IChannel & HTTPChannel::operator >> (const char * msg)
 
     if( (nByteRecv = recv( m_Sock, (char *) &buf, iBufSize, 0)) == SOCKET_ERROR)
     {
-		// Recv SOCKET_ERROR, Channel error while getting data
-		m_LastError = "Channel error while getting data";
+		ReportError( "Channel error", "while reading data");
 
 		CloseChannel();
 
@@ -275,7 +274,7 @@ const IChannel & HTTPChannel::operator << (const char * msg)
 // throw an exception.
 		CloseChannel();
 
-		m_LastError = "Output streaming error while writing data";
+		ReportError( "Channel error", "while writing data");
 
 		throw HTTPTransportException( SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR,
 									  (char *) m_LastError.c_str());
@@ -444,21 +443,20 @@ bool HTTPChannel::OpenChannel()
             // Cannot open a channel to the remote end, shutting down the
             // channel and then throw an exception.
             // Before we do anything else get the last error message;
-			long dw = GETLASTERROR
+			long dwError = GETLASTERROR
 
 			CloseChannel();
             freeaddrinfo( paiAddrInfo0);
 			
-			string* message = PLATFORM_GET_ERROR_MESSAGE(dw);
-
-			char fullMessage[600];
+			string *	message = PLATFORM_GET_ERROR_MESSAGE( dwError);
+			char		fullMessage[600];
 			sprintf(fullMessage,
 				"Failed to open connection to server: \n \
 				hostname='%s'\n\
 				port='%d'\n\
 				Error Message='%s'\
 				Error Code='%d'\n",
-				m_URL.getHostName(), m_URL.getPort(), message->c_str(), (int) dw);
+				m_URL.getHostName(), m_URL.getPort(), message->c_str(), (int) dwError);
 				
 			delete( message);
 
@@ -714,4 +712,15 @@ int HTTPChannel::applyTimeout()
 
     /* select returns 0 if timeout, 1 if input available, -1 if error. */
     return select( FD_SETSIZE, &set, NULL, NULL, &timeout);
+}
+
+void HTTPChannel::ReportError( char * szText1, char * szText2)
+{
+	long		dwMsg = GETLASTERROR
+	string *	sMsg = PLATFORM_GET_ERROR_MESSAGE( dwMsg);
+	char		szMsg[600];
+
+	sprintf( szMsg, "%s %d %s: '%s'\n", szText1, (int) dwMsg, szText2, sMsg->c_str());
+
+	m_LastError = szMsg;
 }

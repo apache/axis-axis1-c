@@ -72,6 +72,7 @@ protected:
 	bool				StartSockets();
 	void				StopSockets();
 	int					applyTimeout();
+	void				ReportError( char * szText1, char * szText2);
 
 private:
     URL				m_URL;				// URL
