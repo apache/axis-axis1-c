@@ -1,1 +1,1 @@
-SUBDIRS = cbase
+SUBDIRS = cbase base

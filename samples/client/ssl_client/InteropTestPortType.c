@@ -8,7 +8,7 @@
 
 
 void* get_InteropTestPortType_stub(){
-	return GetStubObject(APTHTTPS, "http://192.168.101.4/axis/InteropBase");
+	return GetStubObject(APTHTTPS, "https://192.168.101.4:443/axis/InteropBase");
 }
 void destroy_InteropTestPortType_stub(void* p){
 	DestroyStubObject(p);
