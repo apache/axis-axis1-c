@@ -26,6 +26,13 @@
  *    Alternately, this acknowledgment may appear in the software itself,
 
 
+
+
+
+
+
+
+
  *    if and wherever such third-party acknowledgments normally appear.
  *
  * 4. The names "SOAP" and "Apache Software Foundation" must
@@ -72,12 +79,21 @@
 #include "../soap/SoapFaults.h"
 #include "../soap/URIMapping.h"
 #include "../common/Debug.h"
+#include "../common/Packet.h"
+
 
 #ifdef WIN32
 #define WSDDFILEPATH "C:/Apache/Axis/server.wsdd"
 #else //For linux
 #define WSDDFILEPATH "/usr/local/axiscpp/axis/server.wsdd"
 #endif
+
+//extern int send_response_bytes(char * res);
+
+//extern int get_request_bytes(char * req, int reqsize, int* retsize);
+
+//extern int send_transport_information(soapstream *);
+
 
 AxisEngine* AxisEngine::m_pObject = NULL;
 
@@ -133,10 +149,11 @@ AxisEngine* AxisEngine::GetAxisEngine()
 
 int AxisEngine::Process(soapstream* soap) 
 {
+	send_response_bytes("in process");
   try
   {
     DEBUG1("AxisEngine::Process");
-  
+
 	  MessageData* pMsg = NULL;
 	  MemBufInputSource* pSoapInput = NULL;
 	  WSDDHandlerList* pHandlerList = NULL;
@@ -176,7 +193,18 @@ int AxisEngine::Process(soapstream* soap)
    
 		  //Deserialize
 		  //---------START XERCES SAX2 SPCIFIC CODE---------//
-		  pSoapInput = new MemBufInputSource((const unsigned char*)soap->so.http.ip_soap, soap->so.http.ip_soapcount,"bufferid",false); 
+          //a huge buffer to store the whole soap request stream
+		  char hugebuffer[10000];
+         //to store the number of chars returned by get_request_bytes
+		  int nChars = 0;
+          //request a huge number of bytes to get the whole soap request
+          //when pull parsing is used this should change
+		  get_request_bytes(hugebuffer, 10000, &nChars);
+DEBUG1(hugebuffer);      
+          //if no soap then quit
+		  if (nChars <= 0) break;
+		  pSoapInput = new MemBufInputSource((const unsigned char*)hugebuffer, nChars ,"bufferid",false);
+ 
 		  if (SUCCESS != m_pDZ->SetStream(pSoapInput)) //this parses the full soap request.
 		  {
 			  pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
@@ -213,7 +241,7 @@ int AxisEngine::Process(soapstream* soap)
         DEBUG2("pSm->getMethodName(); :", method.c_str());
           
 			  if (!method.empty())
-			  {        
+			  {
 				  //this is done here when we use SAX parser
 				  //if we use XML pull parser this check is done within the invoke method of the wrapper class
 				  if (pService->IsAllowedMethod(method))
@@ -253,7 +281,7 @@ int AxisEngine::Process(soapstream* soap)
        
 		  if (pHandlerList)
 		  {
-      
+
 			  if(SUCCESS != m_pHandlerPool->LoadServiceRequestFlowHandlers(pHandlerList))
 			  {        
 				  pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADHDL));
@@ -281,9 +309,9 @@ int AxisEngine::Process(soapstream* soap)
 	  if (pSoapInput) delete pSoapInput; //this should not be done if we use progressive parsing
 	  //set soap version to the serializer.
 	  //Serialize
-    m_sResponse = "";
+	  m_sResponse = "";
 	  int iStatus= m_pSZ->getStream();
-	  soap->so.http.op_soap = m_sResponse.c_str();
+      send_response_bytes((char *)m_sResponse.c_str());
 	  //soap->so.http.op_soap = new char(sResponse.length() + 1); 
 	  //strcpy(soap->so.http.op_soap, sResponse.c_str());
   #ifndef _DEBUG //this caused program to crash in debug mode
@@ -373,6 +401,7 @@ int AxisEngine::Invoke(MessageData* pMsg)
     DEBUG1("AFTER pChain = m_pHandlerPool->GetServiceRequestFlowHandlerChain();");
 		level++; //AE_SERH
 		//call actual web service handler
+
 		if (m_pWebService)
 			if (SUCCESS != m_pWebService->Invoke(pMsg))
 			{
@@ -385,16 +414,15 @@ int AxisEngine::Invoke(MessageData* pMsg)
 		level++; //AE_SERV
 	}
 	while(0);
-
 	switch (level)
 	{
 	case AE_SERV: //everything success
-		ret = SUCCESS;
+    ret = SUCCESS;
 		//invoke service specific response handlers
 		//no break;
 	case AE_SERH: //actual web service handler has failed
 		//invoke web service specific response handlers
-		pChain = m_pHandlerPool->GetServiceResponseFlowHandlerChain();
+    pChain = m_pHandlerPool->GetServiceResponseFlowHandlerChain();
 		if (pChain)
 		{
 			pChain->Invoke(pMsg);
@@ -416,7 +444,7 @@ int AxisEngine::Invoke(MessageData* pMsg)
 			pChain->Invoke(pMsg);
 		}
 		//no break;
-	case AE_START: ;//transport handlers have failed
+	case AE_START:;//transport handlers have failed
 	};
   DEBUG1("end axisengine process()");
 	return ret;
