@@ -72,7 +72,7 @@ public class CUtils {
 		class2QNamemapCpp.put("xsd__byte", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"byte"));
 		class2QNamemapCpp.put("xsd__float", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"float"));
 		class2QNamemapCpp.put("xsd__long", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"long"));
-		class2QNamemapCpp.put("xsd__long", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"integer"));
+		class2QNamemapCpp.put("xsd__integer", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"integer"));
 		class2QNamemapCpp.put("xsd__double", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"double"));
 		class2QNamemapCpp.put("xsd__char", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"char"));
 		class2QNamemapCpp.put("xsd__short", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"short"));
@@ -99,7 +99,7 @@ public class CUtils {
 		class2QNamemapC.put("xsdc__byte", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"byte"));
 		class2QNamemapC.put("xsdc__float", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"float"));
 		class2QNamemapC.put("xsdc__long", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"long"));
-		class2QNamemapC.put("xsdc__long", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"integer"));
+		class2QNamemapC.put("xsdc__integer", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"integer"));
 		class2QNamemapC.put("xsdc__double", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"double"));
 		class2QNamemapC.put("xsdc__char", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"char"));
 		class2QNamemapC.put("xsdc__short", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"short"));
@@ -125,7 +125,7 @@ public class CUtils {
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"),			"xsd__byte");
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"),			"xsd__float");
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"),			"xsd__long");
-		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"),			"xsd__long");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"),			"xsd__integer");
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"),			"xsd__double");
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"),			"xsd__char");
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"),			"xsd__short");
@@ -151,7 +151,7 @@ public class CUtils {
 		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"),			"xsdc__byte");
 		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"),			"xsdc__float");
 		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"),			"xsdc__long");
-		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"),			"xsdc__long");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"),			"xsdc__integer");
 		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"),			"xsdc__double");
 		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"),			"xsdc__char");
 		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"),			"xsdc__short");
@@ -180,7 +180,7 @@ public class CUtils {
 		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"),			"xsd__byte");
 		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "float"),			"xsd__float");
 		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "long"),			"xsd__long");
-		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "integer"),		"xsd__long");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "integer"),		"xsd__integer");
 		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "double"),			"xsd__double");
 		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "char"),			"xsd__char");
 		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "short"),			"xsd__short");
@@ -215,7 +215,7 @@ public class CUtils {
 		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"),			"xsdc__byte");
 		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "float"),			"xsdc__float");
 		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "long"),			"xsdc__long");
-		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "integer"),		"xsdc__long");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "integer"),		"xsdc__integer");
 		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "double"),			"xsdc__double");
 		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "char"),			"xsdc__char");
 		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "short"),			"xsdc__short");
@@ -245,6 +245,7 @@ public class CUtils {
 		type2getValueMethodNameCpp.put("xsd__float",			"Float");
 		type2getValueMethodNameCpp.put("xsd__string",			"String");
 		type2getValueMethodNameCpp.put("xsd__long",			"Long");
+		type2getValueMethodNameCpp.put("xsd__integer",			"Long");
 		type2getValueMethodNameCpp.put("xsd__short",			"Short");
 		type2getValueMethodNameCpp.put("xsd__char",			"Char");
 		type2getValueMethodNameCpp.put("xsd__double",			"Double");
@@ -270,6 +271,7 @@ public class CUtils {
 		type2getValueMethodNameC.put("xsdc__float",			"Float");
 		type2getValueMethodNameC.put("xsdc__string",			"String");
 		type2getValueMethodNameC.put("xsdc__long",			"Long");
+		type2getValueMethodNameC.put("xsdc__integer",		"Integer");
 		type2getValueMethodNameC.put("xsdc__short",			"Short");
 		type2getValueMethodNameC.put("xsdc__char",			"Char");
 		type2getValueMethodNameC.put("xsdc__double",			"Double");
@@ -294,6 +296,7 @@ public class CUtils {
 		type2BasicArrayNameCpp.put("xsd__float",				"xsd__float_Array");
 		type2BasicArrayNameCpp.put("xsd__string",				"xsd__string_Array");
 		type2BasicArrayNameCpp.put("xsd__long",				"xsd__long_Array");
+		type2BasicArrayNameCpp.put("xsd__integer",				"xsd__integer_Array");
 		type2BasicArrayNameCpp.put("xsd__short",				"xsd__short_Array");
 		type2BasicArrayNameCpp.put("xsd__char",				"xsd__byte_Array");
 		type2BasicArrayNameCpp.put("xsd__double",				"xsd__double_Array");
@@ -318,6 +321,7 @@ public class CUtils {
 		type2BasicArrayNameC.put("xsdc__float",				"xsdc__float_Array");
 		type2BasicArrayNameC.put("xsdc__string",				"xsdc__string_Array");
 		type2BasicArrayNameC.put("xsdc__long",				"xsdc__long_Array");
+		type2BasicArrayNameC.put("xsdc__integer",				"xsdc__integer_Array");
 		type2BasicArrayNameC.put("xsdc__short",				"xsdc__short_Array");
 		type2BasicArrayNameC.put("xsdc__char",				"xsdc__byte_Array");
 		type2BasicArrayNameC.put("xsdc__double",				"xsdc__double_Array");
@@ -341,6 +345,7 @@ public class CUtils {
 		basicType2EnumMapCpp.put("xsd__float",					"XSD_FLOAT");
 		basicType2EnumMapCpp.put("xsd__string",				"XSD_STRING");
 		basicType2EnumMapCpp.put("xsd__long",					"XSD_LONG");
+		basicType2EnumMapCpp.put("xsd__integer",				"XSD_INTEGER");
 		basicType2EnumMapCpp.put("xsd__short",					"XSD_SHORT");
 		basicType2EnumMapCpp.put("xsd__byte",			"XSD_BYTE");
 		basicType2EnumMapCpp.put("xsd__double",				"XSD_DOUBLE");
@@ -365,6 +370,7 @@ public class CUtils {
 		basicType2EnumMapC.put("xsdc__float",					"XSD_FLOAT");
 		basicType2EnumMapC.put("xsdc__string",				"XSD_STRING");
 		basicType2EnumMapC.put("xsdc__long",					"XSD_LONG");
+		basicType2EnumMapC.put("xsdc__integer",					"XSD_INTEGER");
 		basicType2EnumMapC.put("xsdc__short",					"XSD_SHORT");
 		basicType2EnumMapC.put("xsdc__byte",			"XSD_BYTE");
 		basicType2EnumMapC.put("xsdc__double",				"XSD_DOUBLE");
@@ -387,7 +393,8 @@ public class CUtils {
 
 		initValuesCpp.put("xsd__int",				"0"); 
 		initValuesCpp.put("xsd__unsignedByte",		"0"); 
-		initValuesCpp.put("xsd__float",			"0.0"); 
+		initValuesCpp.put("xsd__float",			"0.0");
+		initValuesCpp.put("xsd__integer",			"0");
 		initValuesCpp.put("xsd__long",				"0"); 
 		initValuesCpp.put("xsd__double",			"0.0"); 
 		initValuesCpp.put("xsd__char",				"0"); 
@@ -415,6 +422,7 @@ public class CUtils {
 		initValuesC.put("xsdc__unsignedByte",		"0"); 
 		initValuesC.put("xsdc__float",			"0.0"); 
 		initValuesC.put("xsdc__long",				"0"); 
+		initValuesC.put("xsdc__integer",				"0");
 		initValuesC.put("xsdc__double",			"0.0"); 
 		initValuesC.put("xsdc__char",				"0"); 
 		initValuesC.put("xsdc__short",			"0"); 
