@@ -162,12 +162,12 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				throw new WrapperFault("Error : an attribute is not basic type");
 			}
 			else{
-				if (attribs[i].isOptional()){
-					writer.write("\tif (0 != param->"+attribs[i].getParamName()+")\n");
-					writer.write("\t\tpSZ->SerializeAsAttribute(\""+attribs[i].getParamName()+"\", 0, (void*)(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
-				}
-				else{
-					writer.write("\tpSZ->SerializeAsAttribute(\""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");				
+				writer.write("\tif (0 != param->"+attribs[i].getParamName()+")\n");
+				writer.write("\t\tpSZ->SerializeAsAttribute(\""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");				
+				if (!attribs[i].isOptional()){
+					/* This avoid segmentation fault in runtime */
+					writer.write("\telse\n");
+					writer.write("\t\tAXISTRACE1(\"The mandatory attribute "+attribs[i].getParamName()+" is not set\", CRITICAL);\n");
 				}
 			}
 		}
