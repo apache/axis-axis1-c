@@ -2,6 +2,7 @@ package org.apache.geronimo.ews.ws4j2ee.toWs.dd.jboss;
 
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.AbstractWriter;
+import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 
 /**
@@ -14,7 +15,7 @@ public class JBossDDWriter extends AbstractWriter {
 
 	public String getFileName() {
 		return j2eewscontext.getMiscInfo().getOutPutPath() +
-				"/META-INF/" + j2eewscontext.getMiscInfo().getJ2eeContainerDDName();
+				"/META-INF/jboss.xml";
 	}
 
 	/* (non-Javadoc)
@@ -34,7 +35,14 @@ public class JBossDDWriter extends AbstractWriter {
 		out.write("  <enterprise-beans>\n");
 		out.write("	<session>\n");
 		out.write("	  <ejb-name>" + ejbname+ "</ejb-name>\n");
-		out.write("	  <jndi-name>" + "ejb/" +ejbname+ "</jndi-name>\n");
+		if(j2eewscontext.getMiscInfo().isSupportLocalAndRemote() 
+					|| GenerationConstants.USE_REMOTE.equals(j2eewscontext.getMiscInfo().getImplStyle())){
+			out.write("	  <jndi-name>" + "ejb/" +ejbname+ "</jndi-name>\n");
+		}
+		if(j2eewscontext.getMiscInfo().isSupportLocalAndRemote() 
+			|| GenerationConstants.USE_LOCAL.equals(j2eewscontext.getMiscInfo().getImplStyle())){
+			out.write("	  <local-jndi-name>" + "ejb/" +ejbname+ "Local"+"</local-jndi-name>\n");
+		}
 		out.write("	</session>\n");
 		out.write("  </enterprise-beans>\n");
 		out.write("</jboss>\n");

@@ -58,6 +58,7 @@ package org.apache.geronimo.ews.ws4j2ee.toWs;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.ejb.EJBDDWriter;
 import org.apache.geronimo.ews.ws4j2ee.toWs.ejb.EJBHomeWriter;
+import org.apache.geronimo.ews.ws4j2ee.toWs.ejb.EJBLocalHomeWriter;
 import org.apache.geronimo.ews.ws4j2ee.toWs.ejb.EJBRemoteWriter;
 import org.apache.geronimo.ews.ws4j2ee.toWs.ejb.SessionBeanWriter;
 
@@ -75,8 +76,12 @@ public class WriterFactory {
             return new EJBHomeWriter(j2eewscontext);
         else if (GenerationConstants.EJB_REMOTE_INTERFACE_WRITER == writerType)
             return new EJBRemoteWriter(j2eewscontext);
-        else if (GenerationConstants.EJB_IMPLEMENTATION_BEAN_WRITER == writerType)
-            return new SessionBeanWriter(j2eewscontext);
+        else if (GenerationConstants.EJB_LOCAL_HOME_INTERFACE_WRITER == writerType)
+            return new EJBLocalHomeWriter(j2eewscontext);
+		else if (GenerationConstants.EJB_LOCAL_INTERFACE_WRITER == writerType)
+			return new EJBLocalHomeWriter(j2eewscontext);
+		else if (GenerationConstants.EJB_IMPLEMENTATION_BEAN_WRITER == writerType)
+			return new SessionBeanWriter(j2eewscontext);    
         else
             throw new GenerationFault("the writer not found");
     }

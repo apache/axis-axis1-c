@@ -55,6 +55,8 @@
 
 package org.apache.geronimo.ews.ws4j2ee.toWs.wsdl;
 
+import java.util.List;
+
 import org.apache.axis.components.logger.LogFactory;
 import org.apache.axis.encoding.TypeMapping;
 import org.apache.axis.encoding.TypeMappingImpl;
@@ -70,9 +72,6 @@ import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.AxisEmitterBas
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.impl.AxisEmitterBasedWSDLContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
-
-import java.io.File;
-import java.util.List;
 
 /**
  * <p>This genarated theWrapper WS required in the
@@ -138,22 +137,6 @@ public class WSDLGenarator extends Java2WSDL implements Generator {
             
             // Find the class using the name
             emitter.setCls(className);
-
-            //make sure the output dir exits
-            String outputlocation = wsdlFilename.substring(0, wsdlFilename.lastIndexOf('/'));
-            int index = outputlocation.indexOf("/META-INF");
-
-            File file = new File(outputlocation);
-            if (!file.exists())
-                file.mkdirs();
-
-//            if (index > 0)
-//                outputlocation = outputlocation.substring(0, index);
-
-            j2eewscontext.getMiscInfo()
-                    .setOutputPath(outputlocation);
-
-
             // Generate a full wsdl, or interface & implementation wsdls
             if (wsdlImplFilename == null) {
                 emitter.emit(wsdlFilename, mode);
@@ -182,9 +165,6 @@ public class WSDLGenarator extends Java2WSDL implements Generator {
             //initiate the wscf context 
             this.j2eewscontext.setWSCFContext(new AxisEmitterBasedWSCFContext(emitter, j2eewscontext));
 
-            j2eewscontext.getMiscInfo().setWsdlFile(wsdlFilename);
-            j2eewscontext.getMiscInfo().setJaxrpcfile(j2eewscontext.getMiscInfo().getOutPutPath() + "/jaxrpc-mapping.xml");
-            j2eewscontext.getMiscInfo().setWsConfFileLocation(j2eewscontext.getMiscInfo().getOutPutPath() + "/webservice.xml");
             //validate the j2ee context
             validator.validateWithOutWSDL(emitter);
         } catch (Exception e) {

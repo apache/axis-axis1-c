@@ -55,23 +55,6 @@
 
 package org.apache.geronimo.ews.ws4j2ee.utils;
 
-import org.apache.axis.Constants;
-import org.apache.axis.encoding.Base64;
-import org.w3c.dom.Attr;
-import org.w3c.dom.CharacterData;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
-import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -82,6 +65,25 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Stack;
+
+import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.apache.axis.Constants;
+import org.apache.axis.encoding.Base64;
+import org.apache.axis.utils.JavaUtils;
+import org.w3c.dom.Attr;
+import org.w3c.dom.CharacterData;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * This class was taken from the axis XMLUtils. It should be properly adopted if to be used permanantly
@@ -790,5 +792,15 @@ public class Utils {
     		charName[0] = Character.toLowerCase(charName[0]); 
     	return new String(charName); 	
     }
-
+	public static String firstCharacterToUpperCase(String name){
+			char[] charName = name.toCharArray();
+			if(charName.length > 0)
+				charName[0] = Character.toUpperCase(charName[0]); 
+			return new String(charName); 	
+	}
+	
+	public static String qName2JavaName(QName qname){
+		return org.apache.axis.wsdl.toJava.Utils.makePackageName(qname.getNamespaceURI())
+			+"."+firstCharacterToUpperCase(JavaUtils.xmlNameToJava(qname.getLocalPart()));
+	}
 }

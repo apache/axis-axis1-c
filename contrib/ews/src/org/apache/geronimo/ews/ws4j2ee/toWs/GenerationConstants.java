@@ -74,6 +74,9 @@ public interface GenerationConstants {
     //writers
     public static final int EJB_REMOTE_INTERFACE_WRITER = 5;
     public static final int EJB_HOME_INTERFACE_WRITER = 6;
+	public static final int EJB_LOCAL_INTERFACE_WRITER = 13;
+	public static final int EJB_LOCAL_HOME_INTERFACE_WRITER = 14;
+    
     public static final int EJB_IMPLEMENTATION_BEAN_WRITER = 7;
     public static final int EJB_DD_WRITER = 8;
     public static final int AXIS_WEBSERVICE_WRAPPER_WRITER = 9;
@@ -90,4 +93,13 @@ public interface GenerationConstants {
     public static final String JBOSS_DD = "jboss.xml";
     public static final String JONAS_DD = "jonas-ejb-jar.xml";
     public static final String GERONIMO_DD = "geronimo.xml";
+    
+    public static final String JBOSS_CONTAINER = "jboss";
+	public static final String JONAS_CONTAINER = "jonas";
+	public static final String GERONIMO_CONTAINER = "geronimo";
+	
+	public static final String USE_REMOTE ="use-remote";
+	public static final String USE_LOCAL =  "use-local";
+	public static final String USE_INTERNALS = "use-internals"; 
+ 
 }

@@ -135,7 +135,7 @@ public class J2EEWebServiceContextImpl implements J2EEWebServiceContext {
      * @param info 
      */
     public void setMiscInfo(MiscInfo info) {
-        miscInfo = info;
+        this.miscInfo = info;
     }
 
     /* (non-Javadoc)
