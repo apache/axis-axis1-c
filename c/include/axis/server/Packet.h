@@ -111,24 +111,77 @@ typedef union
 	Ax_stream_smtp smtp;
 } Ax_soapcontent;
 
-/**
- *Function pointer definitions for trasport layer
- */
-typedef int (*AXIS_SEND_SEND_BYTES)(const char*, const void*);
-typedef int (*AXIS_GET_BYTES)(const char**, int*, const void*);
-typedef int (*AXIS_SEND_TRANSPORT_INFORMATION)(void*); /*Ax_soapstream*/
-typedef int (*AXIS_GET_TRANSPORT_INFORMATION)(void*);/*Ax_soapstream*/
+typedef enum
+{
+	TRANSPORT_FINISHED=0,
+	TRANSPORT_IN_PROGRESS,
+	TRANSPORT_FAILED
+} AXIS_TRANSPORT_STATUS;
 
 /**
- *Each transport module on the server side should populate following struct with 
- *their transport function pointers in order for the Axis Engine to work properly.
+ * Function pointer definitions for axis trasport module call backs 
+ */
+
+/**
+ * This function is provided by the transport modules. Called by Axis engine when it needs to send SOAP
+ * message. This function may be called several times.
+ * @return
+ *	TRANSPORT_FINISHED - Transport done and buffer is free to re-use.
+ *  TRANSPORT_IN_PROGRESS - Transport is in progress and buffer cannot be re-used yet.
+ *  TRANSPORT_FAILED - Transport has failed and no use of trying to send any more bytes. Better to abort.
+ */
+typedef AXIS_TRANSPORT_STATUS (AXISCALL * AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES)(const char*, const void*);
+
+/**
+ * This function is provided by the transport modules. Called by Axis engine when it needs to get SOAP
+ * message. This function may be called several times.
+ * @return
+ *	TRANSPORT_FINISHED - No any more message bytes to be received. If a buffer is present it is the last
+ *						 buffer.
+ *  TRANSPORT_IN_PROGRESS - There may be more message bytes to be received. Axis Engine may call this 
+ *							function again to get any subsequent message buffers. Buffer should be present.
+ *  TRANSPORT_FAILED - Transport has failed and no use of trying to get any more bytes. Better to abort.
+ */
+typedef AXIS_TRANSPORT_STATUS (AXISCALL * AXIS_MODULE_CALLBACK_GET_MESSAGE_BYTES)(const char**, int*, const void*);
+/**
+ * This function is provided by the transport modules. Called by Axis engine when it needs to say the
+ * transport module that the engine is no longer using the buffer and can be re-used.
+ */
+typedef void (AXISCALL * AXIS_MODULE_CALLBACK_RELEASE_RECEIVE_BUFFER)(const char*, const void*);
+/**
+ * This function is provided by the transport modules. Called by Axis engine when it needs to send any
+ * transport information such as http headers. This function can be called only once.
+ */
+typedef int (AXISCALL * AXIS_MODULE_CALLBACK_SEND_TRANSPORT_INFORMATION)(void*); /*Ax_soapstream*/
+/**
+ * This function is provided by the transport modules. Called by Axis engine when it needs to get any
+ * transport information such as http headers. This function can be called only once.
+ */
+typedef int (AXISCALL * AXIS_MODULE_CALLBACK_GET_TRANSPORT_INFORMATION)(void*);/*Ax_soapstream*/
+
+/**
+ * Function pointer definitions for axis call backs 
+ */
+
+/**
+ * This function is provided by the Axis Engine. Called by transport module when it needs to say that
+ * a message buffer passed to is is no longer being used by the transpor and can be re-used by the 
+ * Axis engine.This function should be called for each buffer if AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES
+ * returned TRANSPORT_IN_PROGRESS.
+ */
+typedef void (AXISCALL * AXIS_ENGINE_CALLBACK_RELEASE_SEND_BUFFER)(const char*, const void*);
+
+/**
+ * Each transport module on the server side should populate following struct with 
+ * their transport function pointers in order for the Axis Engine to work properly.
  */
 typedef struct
 {
-	AXIS_SEND_SEND_BYTES pSendFunct;
-	AXIS_GET_BYTES pGetFunct;
-	AXIS_SEND_TRANSPORT_INFORMATION pSendTrtFunct;
-	AXIS_GET_TRANSPORT_INFORMATION pGetTrtFunct;
+	AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES pSendFunct;
+	AXIS_MODULE_CALLBACK_GET_MESSAGE_BYTES pGetFunct;
+	AXIS_MODULE_CALLBACK_RELEASE_RECEIVE_BUFFER pRelBufFunct;
+	AXIS_MODULE_CALLBACK_SEND_TRANSPORT_INFORMATION pSendTrtFunct;
+	AXIS_MODULE_CALLBACK_GET_TRANSPORT_INFORMATION pGetTrtFunct;
 } Ax_transport;
 
 typedef struct
@@ -157,27 +210,36 @@ void remove_headers(Ax_soapstream* soap);
 extern "C"
 {
 #endif
-	/*This function is implemented in axis*/
-	int uninitialize_module();
+/**
+ * This function is implemented in axis and should be called ONCE to uninitialize Axis Engine when the 
+ * Axis SOAP processor shuts down.
+ */
+int uninitialize_module();
 
-	/*This function is implemented in axis*/
-	int initialize_module(int bServer);
+/**
+ * This function is implemented in axis and should be called ONCE to initialize Axis Engine.
+ */
+int initialize_module(int bServer);
 
-	/*This function is implemented in axis*/
-	int process_request(Ax_soapstream* str);
+/**
+ * This callback function is implemented in axis and should be called by the transport module in order to
+ * start processing a SOAP message. 
+ * @param 
+ *		str - contains information about the SOAP stream and the message. This also should be populated with
+ *			  the trasport module's callback functions.
+ */
+int process_request(Ax_soapstream* str);
 
-	/*This function should be implemented by module authors*/
-	/*Allows to send pieces of soap response the transport handler*/
-	/*int send_response_bytes(const char* res, const void* opstream);*/
+/**
+ * This callback function is implemented in axis and should be called by the transport module. 
+ * @param 
+ *		buffer - Buffer passed to transport by calling transport's AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES 
+ *				 callback
+ *		pContext - Context object passed to transport by calling transport's AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES 
+ *				 callback
+ */
+ int axis_buffer_release(const char* buffer, const void* pContext);
 
-	/*This function should be implemented by module authors*/
-	/*Allows axis to get pieces of the request as they come to the transport listener*/
-	/*int get_request_bytes(char* req, int reqsize, int* retsize, const void* ipstream);*/
-
-	/*This fucntion should be implemented by module authors*/
-	/*int send_transport_information(Ax_soapstream *str);*/
-
-	/*int receive_transport_information(Ax_soapstream *str);*/
 #ifdef __cplusplus
 }
 #endif

@@ -82,12 +82,27 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
+// Following values should come from axis configuration files.
+#define INITIAL_SERIALIZE_BUFFER_SIZE 4096
+#define NO_OF_SERIALIZE_BUFFERS 10
 
 SoapSerializer::SoapSerializer()
 {
 	m_pSoapEnvelope = NULL;
 	m_iSoapVersion = SOAP_VER_1_1;
 	m_pOutputStream = NULL;
+	m_nMaxBuffersToCreate = NO_OF_SERIALIZE_BUFFERS;
+	m_nInitialBufferSize = INITIAL_SERIALIZE_BUFFER_SIZE;
+	m_pSZBuffers = new SerializeBuffers[m_nMaxBuffersToCreate];
+	for (int x=0; x<NO_OF_SERIALIZE_BUFFERS; x++)
+	{
+		m_pSZBuffers[x].inuse = 0;
+		m_pSZBuffers[x].buffer = NULL;
+	}
+	m_nNextBufferSize = m_nInitialBufferSize;
+	m_nCurrentBufferSize = 0;
+	m_nFilledSize = 0;
+	m_nCurrentBufferIndex = 0;
 }
 
 SoapSerializer::~SoapSerializer()
@@ -362,39 +377,65 @@ const AxisChar* SoapSerializer::getNewNamespacePrefix()
 IWrapperSoapSerializer& SoapSerializer::operator <<(const AxisChar* cSerialized)
 {
 	int iTmpSerBufferSize = strlen(cSerialized);
-	if((m_iCurrentSerBufferSize + iTmpSerBufferSize)>= SERIALIZE_BUFFER_SIZE) 
+	if((m_nFilledSize + iTmpSerBufferSize)>= m_nCurrentBufferSize) 
 	{
-		flushSerializedBuffer();		
+		flushSerializedBuffer();
+		/*
+		 * Above call will send the current buffer to the transport and gets
+		 * another buffer to be filled
+		 */
+		strcat(m_SZBuffers[m_nCurrentBufferIndex].buffer, cSerialized);
+		m_nFilledSize += iTmpSerBufferSize;
 	}
-	strcat(m_cSerializedBuffer, cSerialized);
-	m_iCurrentSerBufferSize += iTmpSerBufferSize;
+	else
+	{
+		strcat(m_SZBuffers[m_nCurrentBufferIndex].buffer, cSerialized);
+		m_nFilledSize += iTmpSerBufferSize;
+	}
 	return *this;
 }
-/*
-IWrapperSoapSerializer& SoapSerializer::operator<<(const AxisChar* cSerialized)
-{
-	flushSerializedBuffer();
-	//following is done for the time being
-	int slen = wcslen(cSerialized);
-	for (m_iCurrentSerBufferSize=0; m_iCurrentSerBufferSize < slen; m_iCurrentSerBufferSize++)
-	{
-		m_cSerializedBuffer[m_iCurrentSerBufferSize] = (char) cSerialized[m_iCurrentSerBufferSize];
-	}
-	m_cSerializedBuffer[m_iCurrentSerBufferSize] = '\0';
-	return *this;
-}
-*/
+
 int SoapSerializer::flushSerializedBuffer()
 {
-	//sendSoapResponse(m_cSerializedBuffer);
+	int nStatus;
 	if (NULL != m_pOutputStream->transport.pSendFunct)
-		m_pOutputStream->transport.pSendFunct(m_cSerializedBuffer, m_pOutputStream->str.op_stream);
-	m_cSerializedBuffer[0]= '\0';
-	m_iCurrentSerBufferSize=0;
+	{
+		nStatus = m_pOutputStream->transport.pSendFunct(
+		m_SZBuffers[m_nCurrentBufferIndex].buffer, (void*)(&(m_SZBuffers[m_nCurrentBufferIndex].inuse)));
+		if (TRANSPORT_FINISHED == nStatus) 
+		/* transport layer has done with the buffer.So same buffer can be re-used*/
+		{
+			m_SZBuffers[m_nCurrentBufferIndex].buffer[0] = '\0'; /* put nul */
+			m_nFilledSize = 0;
+		}
+		else if (TRANSPORT_IN_PROGRESS == nStatus) 
+		/* buffer is being used by the transport layer. So we have to use another buffer*/
+		{
+			return SetNextSerilizeBuffer();
+		}
+		else
+		{
+			return AXIS_FAIL;
+		}
+	}
+	else
+	{
+		return AXIS_FAIL;
+	}
 	return AXIS_SUCCESS;
 }
 
-int SoapSerializer::createSoapMethod(const AxisChar* sLocalName, const AxisChar* sPrefix, const AxisChar* sURI)
+/**
+ * This method sets the next buffer to be used for serialization.
+ *
+ */
+int SoapSerializer::SetNextSerilizeBuffer()
+{
+	return AXIS_FAIL;
+}
+
+int SoapSerializer::createSoapMethod(const AxisChar* sLocalName, 
+									 const AxisChar* sPrefix, const AxisChar* sURI)
 {
 	SoapMethod* pMethod = new SoapMethod();
 	setSoapMethod(pMethod);
@@ -709,6 +750,20 @@ void SoapSerializer::Serialize(const char* pFirst, ...)
 	va_end( vList);              /* Reset variable arguments.      */
 }
 
+/**
+ * Callback function that should be called by the transport module to release a buffer passed to it by a Serializer. 
+ * @param 
+ *		buffer - Buffer passed to transport by calling transport's AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES 
+ *				 callback
+ *		pContext - Context object passed to transport by calling transport's AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES 
+ *				 callback
+ */
+int axis_buffer_release(const char* buffer, const void* pContext)
+{
+	int* pInt = (int*)pContext;
+	*pInt = 0; /* set that the buffer is not in use */
+	buffer[0] = '\0'; /* set nul */ 
+}
 
 
 

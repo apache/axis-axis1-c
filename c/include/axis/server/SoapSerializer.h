@@ -75,9 +75,6 @@
 #include "../common/Packet.h"
 #include "SoapEnvVersions.h"
 
-
-#define SERIALIZE_BUFFER_SIZE 8192
-
 class SoapEnvelope;
 class SoapHeader;
 class SoapMethod;
@@ -85,15 +82,31 @@ class SoapBody;
 class SoapFault;
 class HeaderBlock;
 
-class SoapSerializer : public IHandlerSoapSerializer /*: public ISoapSerializer*/
+class SoapSerializer : public IHandlerSoapSerializer
 {
+	typedef struct SerializeBuffersTag
+	{
+		volatile unsigned char inuse;
+		volatile char* buffer;
+	} SerializeBuffers;
 private:
 	int iCounter;
 	AxisChar cCounter[64];
 	SoapEnvelope* m_pSoapEnvelope;	
 	int m_iSoapVersion;
-	char m_cSerializedBuffer[SERIALIZE_BUFFER_SIZE];
-	int m_iCurrentSerBufferSize;
+
+	/* Table that keeps all allocated buffers */
+	volatile SerializeBuffers* m_SZBuffers;
+	/* Size of the initial buffer created.*/
+	int m_nInitialBufferSize;
+	/* Size of the m_SZBuffers array.*/
+	int m_nMaxBuffersToCreate;
+	/* Maximum size of the buffer that is being filled */
+	int m_nCurrentBufferSize;
+	/* How much charators has been filled to the currently selected buffer */
+	int m_nFilledSize;
+	/* Currently selected buffer index*/
+	int m_nCurrentBufferIndex;
 public:
 	int AXISCALL createSoapMethod(const AxisChar* sLocalName, const AxisChar* sPrefix, const AxisChar* sURI);	
 //	IWrapperSoapSerializer& operator<<(const char* cSerialized);
@@ -135,6 +148,7 @@ public:
 private:
 	int AddOutputParamHelper(const AxisChar* pchName, XSDTYPE nType, uParamValue Value);
 	int flushSerializedBuffer();
+	int SetNextSerilizeBuffer()
 	IArrayBean* makeArrayBean(XSDTYPE nType, void* pArray);
 	IArrayBean* makeArrayBean(void* pObject, void* pSZFunct, void* pDelFunct, void* pSizeFunct);
 
