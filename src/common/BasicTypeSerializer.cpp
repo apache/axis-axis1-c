@@ -119,7 +119,7 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
                  */
                 m_sSZ = "<";
                 m_sSZ += pName;
-                m_sSZ += " xsi:nil=\"true\"/>";
+                m_sSZ += " xsi:nil=\"true\"/>\n";
                 return m_sSZ.c_str ();
             }
             m_AuxStr = pStr;
@@ -144,7 +144,7 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
 
     m_sSZ += "</";
     m_sSZ += pName;
-    m_sSZ += ">";
+    m_sSZ += ">\n";
     return m_sSZ.c_str ();
 }
 

@@ -91,13 +91,13 @@ int SoapEnvelope::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
     int iStatus= AXIS_SUCCESS;
     do
     {            
-        pSZ.serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
+        pSZ.serialize("\n<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
             ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_ENVELOPE],
             NULL);    
         serializeStandardNamespaceDecl(pSZ);
         serializeNamespaceDecl(pSZ);
         serializeAttributes(pSZ);
-        pSZ.serialize(">", NULL);
+        pSZ.serialize(">\n", NULL);
         if (m_pSoapHeader!=NULL)
         {
             iStatus= m_pSoapHeader->serialize(pSZ, eSoapVersion);
@@ -123,7 +123,7 @@ int SoapEnvelope::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
                 
         pSZ.serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
             ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_ENVELOPE],
-            ">", NULL);
+            ">\n\n", NULL);
     } while (0);
 
     return iStatus;

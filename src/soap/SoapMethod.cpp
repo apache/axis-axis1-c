@@ -95,7 +95,7 @@ int SoapMethod::serialize(SoapSerializer& pSZ)
                 break;
             }
             
-            pSZ.serialize(">", NULL);
+            pSZ.serialize(">\n", NULL);
 
             iStatus= serializeOutputParam(pSZ);
             if(iStatus==AXIS_FAIL)
@@ -110,7 +110,7 @@ int SoapMethod::serialize(SoapSerializer& pSZ)
                 pSZ.serialize(m_strPrefix.c_str(), ":", NULL);
             }
             
-            pSZ.serialize(m_strLocalname.c_str(), ">", NULL);
+            pSZ.serialize(m_strLocalname.c_str(), ">\n", NULL);
 
 			/*
 			 * Removing the namespace list of this SOAPMethod from the stack.

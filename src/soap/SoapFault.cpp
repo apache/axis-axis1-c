@@ -80,7 +80,7 @@ int SoapFault::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
     {
         pSZ.setStyle(DOC_LITERAL);
     pSZ.serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":",
-        gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">", NULL); 
+        gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">\n", NULL); 
 	
     m_pFaultcodeParam->serialize(pSZ);
     //pSZ.serialize("<faultcode>", m_sFaultcode.c_str(), "</faultcode>", NULL);
@@ -113,12 +113,12 @@ int SoapFault::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
     }
     
 	pSZ.serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":",
-		gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">", NULL); 
+		gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">\n", NULL); 
     }
     else
     {
         pSZ.serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":",
-        gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">", NULL);
+        gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">\n", NULL);
 
     m_pFaultcodeParam->serialize(pSZ);
     //pSZ.serialize("<faultcode>", m_sFaultcode.c_str(), "</faultcode>", NULL);
@@ -145,12 +145,12 @@ int SoapFault::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         {*/
             pSZ.serialize("<faultdetail>", NULL);
             m_pFaultDetail->serialize(pSZ);
-            pSZ.serialize("</faultdetail>", NULL);
+            pSZ.serialize("</faultdetail>\n", NULL);
         //}
     }
 
         pSZ.serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":",
-                gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">", NULL);
+                gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">\n", NULL);
     }
     return iStatus;
 }

@@ -91,7 +91,7 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
             break;
         }
         
-        pSZ.serialize(">", NULL);
+        pSZ.serialize(">\n", NULL);
 
         if(NULL != m_pSoapFault) 
         {        
@@ -122,7 +122,7 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         
         pSZ.serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
             ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_BODY],
-            ">", NULL);
+            ">\n", NULL);
     } while(0);
 
     return iStatus;

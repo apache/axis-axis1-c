@@ -131,7 +131,7 @@ int Param::serialize (SoapSerializer &pSZ)
                     pSZ.serialize (Buf, NULL);
                 }
 
-                pSZ.serialize ("\">", NULL);
+                pSZ.serialize ("\">\n", NULL);
                 m_Value.pArray->Serialize (pSZ); //Only serializes the inner items
                 pSZ.serialize ("</", NULL);
                 if (!m_strPrefix.empty ())
@@ -144,7 +144,7 @@ int Param::serialize (SoapSerializer &pSZ)
                     pSZ.serialize (m_sName.c_str (), "Array", NULL);
                 }
                 pSZ.removeNamespacePrefix (m_Value.pArray->m_URI.c_str ());
-                pSZ.serialize (">", NULL);
+                pSZ.serialize (">\n", NULL);
             }
             else /* no wrapper element in doc/lit style. 
 		  * So directly call Array Serializer 
@@ -168,7 +168,7 @@ int Param::serialize (SoapSerializer &pSZ)
                  * to add attributes 
                  */
                 m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false);
-                pSZ.serialize ("</", m_sName.c_str (), ">", NULL);
+                pSZ.serialize ("</", m_sName.c_str (), ">\n", NULL);
             }
             break;
   case XSD_ANY:
