@@ -27,12 +27,12 @@ int main(int argc, char* argv[])
 	SOAPArrayStruct sas;
 	sas.varFloat = 12345.67890;
 	sas.varInt = 5000;
-	sas.varString = "varString content of SOAPArrayStruct";
+	sas.varString = strdup("varString content of SOAPArrayStruct");
 	sas.varArray.m_Array = new AxisChar*[ARRAYSIZE];
 	sas.varArray.m_Size = ARRAYSIZE;
 	for (x=0; x<ARRAYSIZE; x++)
 	{
-		sas.varArray.m_Array[x] = "content of string array element";
+		sas.varArray.m_Array[x] = strdup("content of string array element");
 	}
 	printf("invoking echoNestedArray...\n");
 	if (ws.echoNestedArray(&sas) != NULL)
@@ -44,11 +44,11 @@ int main(int argc, char* argv[])
 	SOAPStructStruct sss;
 	sss.varFloat = 12345.67890;
 	sss.varInt = 5000;
-	sss.varString = "varString content of SOAPStructStruct";
+	sss.varString = strdup("varString content of SOAPStructStruct");
 	sss.varStruct = new SOAPStruct();
 	sss.varStruct->varFloat = 67890.12345;
 	sss.varStruct->varInt = 54321;
-	sss.varStruct->varString = "varString content of SOAPStruct";
+	sss.varStruct->varString = strdup("varString content of SOAPStruct");
 	printf("invoking echoNestedStruct...\n");
 	if (ws.echoNestedStruct(&sss) != NULL)
 		printf("successful\n");
@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
 	SOAPStruct ss;
 	ss.varFloat = 12345.67890;
 	ss.varInt = 5000;
-	ss.varString = "content of string passed";
+	ss.varString = strdup("content of string passed");
 	char* outStr;
 	int outInt;
 	float outFloat;
