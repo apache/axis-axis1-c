@@ -35,26 +35,17 @@ using namespace std;
  */
 Channel::Channel ():m_Sock (INVALID_SOCKET), m_iMsgLength( 0), m_sMsg(NULL), m_lTimeoutSeconds(0)
 {
-#ifdef FJPDebug
-printf( ">Channel::Channel()\n");
-#endif
 
 #ifdef WIN32
 	m_lTimeoutSeconds = 10;
 #endif
 
-#ifdef FJPDebug
-printf( "<Channel::Channel()\n");
-#endif
 }
 
 /** Channel::~Channel() Destructor
  */
 Channel::~Channel ()
 {
-#ifdef FJPDebug
-printf( ">Channel::~Channel()\n");
-#endif
 
 	// If the socket value is not invalid, then close the socket before
 	// deleting the Channel object.
@@ -66,9 +57,6 @@ printf( ">Channel::~Channel()\n");
         if (m_sMsg)
             delete [] m_sMsg;
 
-#ifdef FJPDebug
-printf( "<Channel::~Channel()\n");
-#endif
 }
 
 /** Channel::setURL( URL) sets the URL for the channel.
@@ -78,9 +66,6 @@ printf( "<Channel::~Channel()\n");
  */
 void Channel::setURL(const char* cpURL)
 {
-#ifdef FJPDebug
-printf( ">Channel::setURL( const char* cpURL=%s)\n", cpURL);
-#endif
 
 	// Set the Channel URL to the new value.
 	// NB: This will cause problems if the new URL is diferent in type from the
@@ -88,9 +73,6 @@ printf( ">Channel::setURL( const char* cpURL=%s)\n", cpURL);
 	//     problems will occur because each type operates differently.
     m_URL.setURL( cpURL);
 
-#ifdef FJPDebug
-printf( "<Channel::setURL()\n");
-#endif
 }
     
 /** Channel::getURL() gets the URL for the channel.
@@ -100,12 +82,6 @@ printf( "<Channel::setURL()\n");
  */
 const char* Channel::getURL() 
 {
-#ifdef FJPDebug
-printf( ">Channel::getURL()\n");
-#endif
-#ifdef FJPDebug
-printf( "<Channel::getURL() = %s\n", m_URL.getURL());
-#endif
 
 	// Return the URL currently assicated with the channel object.
     return m_URL.getURL();
@@ -127,9 +103,6 @@ bool
 Channel::open () //std::string & p_RemoteNode, unsigned short p_RemoteEnd)
 throw (AxisTransportException&)
 {
-#ifdef FJPDebug
-printf( ">Channel::open()\n");
-#endif
     // if there is an open socket already, close it first
     if (m_Sock != INVALID_SOCKET)
         closeChannel();
@@ -138,9 +111,6 @@ printf( ">Channel::open()\n");
 	// then thrown an exeption.
     if( !Init())
 	{
-#ifdef FJPDebug
-printf( "<Channel::open()=exception\n");
-#endif
 
 		throw AxisTransportException( SERVER_TRANSPORT_CHANNEL_INIT_ERROR);
 	}
@@ -162,9 +132,6 @@ printf( "<Channel::open()=exception\n");
 			// shutting down the channel and then throw an exception.
 			closeChannel();
 
-#ifdef FJPDebug
-printf( "<Channel::open()=exception\n");
-#endif
 
 			throw AxisTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR);
 		}
@@ -200,14 +167,45 @@ printf( "<Channel::open()=exception\n");
 		{
 			// Cannot open a channel to the remote end, shutting down the
 			// channel and then throw an exception.
+#ifdef WIN32
+			// Before we do anything else get the last error message;
+			// I'd like to put the getting of the error message into platform specifics but not sure how !
+			// I think it would be nicer to make the platform specifics a class and not just macros.
+			// That way we could have e.g. char* Windows#getLastErrorMessage()
+			long dw = GetLastError();
+#endif
 			closeChannel();
 
-#ifdef FJPDebug
-printf( "<Channel::open()=exception\n");
-#endif
+#ifdef WIN32
+			TCHAR szBuf[200]; 
+		    LPVOID lpMsgBuf;
 
+			FormatMessage(
+			FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+			FORMAT_MESSAGE_FROM_SYSTEM,
+			NULL,
+			dw,
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+			(LPTSTR) &lpMsgBuf,
+			0, NULL );
+
+			sprintf(szBuf, 
+				"failed to open connection to server:\n \
+				hostname='%s'\n\
+				port='%d'\n\
+				Error Message='%s'\
+				Error Code='%d'\n",                     \
+				m_URL.getHostName(), m_URL.getPort(), lpMsgBuf, dw); 
+ 
+
+		    LocalFree(lpMsgBuf);
+
+			throw AxisTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR, szBuf);
+#endif
+			// else we don't know how to do this for non-windows platforms
 			throw AxisTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR);
 		}
+
     }
     else
     {
@@ -215,16 +213,10 @@ printf( "<Channel::open()=exception\n");
 		// an exception.
 		closeChannel();
 
-#ifdef FJPDebug
-printf( "<Channel::open()=exeption\n");
-#endif
 
 		throw AxisTransportException( SERVER_TRANSPORT_SOCKET_CREATE_ERROR);
     }
 
-#ifdef FJPDebug
-printf( "<Channel::open()=true, m_Sock=%d\n", m_Sock);
-#endif
 
     /* Turn off the Nagle algorithm - Patch by Steve Hardy */
 
@@ -251,9 +243,6 @@ printf( "<Channel::open()=true, m_Sock=%d\n", m_Sock);
 
 bool Channel::Init ()
 {
-#ifdef FJPDebug
-printf( ">Channel::Init()\n");
-#endif
 
 #ifdef WIN32
     WSADATA wsaData;	// Contains vendor-specific information, such as the
@@ -266,10 +255,6 @@ printf( ">Channel::Init()\n");
 		// Error - Could not setup underlying Windows socket transport
 		//         mechanism.
 		m_LastErr = "WinSock DLL not responding.";
-
-#ifdef FJPDebug
-printf( "<Channel::Init()=false\n");
-#endif
 
 		return false;
     }
@@ -292,9 +277,6 @@ printf( "<Channel::Init()=false\n");
 
 			closeChannel();
 
-#ifdef FJPDebug
-printf( "<Channel::Init()=false\n");
-#endif
 
 			return false;
 		}
@@ -304,9 +286,6 @@ printf( "<Channel::Init()=false\n");
     /* other OS specific Intitialization goes here */
 #endif
 
-#ifdef FJPDebug
-printf( "<Channel::Init()=true\n");
-#endif
 
     return true;
 }
@@ -331,9 +310,6 @@ printf( "<Channel::Init()=true\n");
  */
 const Channel &Channel::operator << (const char *msg)
 {
-#ifdef FJPDebug
-printf( ">Channel::operator << msg=%s, ", msg);
-#endif
 
 	// Check that the Tx/Rx sockets are valid (this will have been done if the
 	// application has called the open method first.
@@ -341,9 +317,6 @@ printf( ">Channel::operator << msg=%s, ", msg);
     {
 		// Error - Writing cannot be done without having a open socket to
 		//         remote end.  Throw an exception.
-#ifdef FJPDebug
-printf( "<Channel::operator << exception\n");
-#endif
 
 		throw AxisTransportException( SERVER_TRANSPORT_INVALID_SOCKET);
     }
@@ -356,11 +329,6 @@ printf( "<Channel::operator << exception\n");
 		size = m_iMsgLength;
 	}
 
-#ifdef FJPDebug
-printf( "size=%d, m_Sock=%d\n", size, m_Sock);
-
-hexOutput( (char *) msg, size);
-#endif
 
     if( (nByteSent = send( m_Sock, msg, size, MSG_DONTROUTE)) == SOCKET_ERROR)
     {
@@ -368,16 +336,10 @@ hexOutput( (char *) msg, size);
 		// throw an exception.
 		closeChannel();
 
-#ifdef FJPDebug
-printf( "<Channel::operator << exception\n");
-#endif
 
 		throw AxisTransportException(SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR);
     }
 
-#ifdef FJPDebug
-printf( "<Channel::operator <<\n");
-#endif
 
     return *this;
 }
@@ -399,9 +361,6 @@ printf( "<Channel::operator <<\n");
  */
 const Channel &Channel::operator >> (std::string & msg)
 {
-#ifdef FJPDebug
-printf( ">Channel::operator >> m_Sock=%d\n", m_Sock);
-#endif
 
     msg = "";
 
@@ -411,9 +370,6 @@ printf( ">Channel::operator >> m_Sock=%d\n", m_Sock);
 		//         streaming error on undefined channel; please open the
 		//		   channel first
 
-#ifdef FJPDebug
-printf( "<Channel::operator >> exception=SERVER_TRANSPORT_INVALID_SOCKET\n");
-#endif
 
 		throw AxisTransportException( SERVER_TRANSPORT_INVALID_SOCKET);
     }
@@ -445,9 +401,6 @@ printf( "<Channel::operator >> exception=SERVER_TRANSPORT_INVALID_SOCKET\n");
     {
 		// Error
 
-#ifdef FJPDebug
-printf( "<Channel::operator >> exception=SERVER_TRANSPORT_TIMEOUT_EXCEPTION\n");
-#endif
 
         // Select SOCKET_ERROR. Channel error while waiting for timeout
         throw AxisTransportException( SERVER_TRANSPORT_TIMEOUT_EXCEPTION, 
@@ -459,9 +412,6 @@ printf( "<Channel::operator >> exception=SERVER_TRANSPORT_TIMEOUT_EXCEPTION\n");
 		// Timeout expired - select timeout expired.
         // Channel error connection timeout before receving
 
-#ifdef FJPDebug
-printf( "<Channel::operator >> exception=SERVER_TRANSPORT_TIMEOUT_EXPIRED\n");
-#endif
 
         throw AxisTransportException( SERVER_TRANSPORT_TIMEOUT_EXPIRED, 
                                      "Channel error: connection timed out before receving");
@@ -474,9 +424,6 @@ printf( "<Channel::operator >> exception=SERVER_TRANSPORT_TIMEOUT_EXPIRED\n");
 		// Recv SOCKET_ERROR, Channel error while getting data
 		/* closeChannel(); */
 
-#ifdef FJPDebug
-printf( "<Channel::operator >> exception=SERVER_TRANSPORT_INPUT_STREAMING_ERROR\n");
-#endif
 
 		throw AxisTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR, 
 									  "Channel error while getting data");
@@ -512,12 +459,6 @@ printf( "<Channel::operator >> exception=SERVER_TRANSPORT_INPUT_STREAMING_ERROR\
 	;//printf ("execution break\n");
     }
 
-#ifdef FJPDebug
-hexOutput( m_sMsg, m_iMsgLength);
-
-printf( "m_iMsgLength=%d\n", m_iMsgLength);
-printf( "<Channel::operator >> msg = %s\n", buf);
-#endif
     return *this;
 }
 
@@ -602,15 +543,9 @@ const Channel &Channel::readNonBlocking( std::string & msg, bool bBlockingRequir
  */
 void Channel::closeChannel ()
 {
-#ifdef FJPDebug
-printf( ">Channel::closeChannel()\n");
-#endif
 
     if( INVALID_SOCKET == m_Sock) // Check if socket already closed : AXISCPP-185
 	{
-#ifdef FJPDebug
-printf( "<Channel::closeChannel()\n");
-#endif
         return;
 	}
 
@@ -628,9 +563,6 @@ printf( "<Channel::closeChannel()\n");
 #endif
     m_Sock = INVALID_SOCKET; // fix for AXISCPP-185
 
-#ifdef FJPDebug
-printf( "<Channel::closeChannel()\n");
-#endif
 }
 
 /**
@@ -651,15 +583,9 @@ void Channel::Error( const char *err)
  */
 void Channel::setTimeout(const long lSeconds)
 {
-#ifdef FJPDebug
-printf( ">Channel::setTimeout(const long lSeconds=%d)\n", lSeconds);
-#endif
 
     m_lTimeoutSeconds = lSeconds;
 
-#ifdef FJPDebug
-printf( "<Channel::setTimeout()\n");
-#endif
 }
 
 /**
@@ -669,9 +595,6 @@ printf( "<Channel::setTimeout()\n");
  */
 int Channel::applyTimeout()
 {
-#ifdef FJPDebug
-printf( ">Channel::applyTimeout()\n");
-#endif
 
     fd_set set;
     struct timeval timeout;
@@ -685,9 +608,6 @@ printf( ">Channel::applyTimeout()\n");
     timeout.tv_usec = 0;
 
     /* select returns 0 if timeout, 1 if input available, -1 if error. */
-#ifdef FJPDebug
-printf( "<Channel::applyTimeout()\n");
-#endif
     return select( FD_SETSIZE, &set, NULL, NULL, &timeout);
 }
 

@@ -29,26 +29,14 @@ using namespace std;
 
 IPV6Channel::IPV6Channel ()
 {
-#ifdef FJPDebug
-    printf( ">IPV6Channel::IPV6Channel()\n");
-#endif
 
 #ifdef WIN32
-
     m_lTimeoutSeconds = 10;
-#endif
-
-#ifdef FJPDebug
-    printf( "<IPV6Channel::IPV6Channel()\n");
 #endif
 }
 
 IPV6Channel::~IPV6Channel ()
 {
-#ifdef FJPDebug
-    printf( ">IPV6Channel::~IPV6Channel()\n");
-#endif
-
     // If the socket value is not invalid, then close the socket before
     // deleting the IPV6Channel object.
     if( m_Sock != INVALID_SOCKET)
@@ -56,9 +44,6 @@ IPV6Channel::~IPV6Channel ()
         closeChannel();
     }
 
-#ifdef FJPDebug
-    printf( "<IPV6Channel::~IPV6Channel()\n");
-#endif
 }
 
 
@@ -80,9 +65,6 @@ bool
 IPV6Channel::open () //std::string & p_RemoteNode, unsigned short p_RemoteEnd)
 throw (AxisTransportException&)
 {
-#ifdef FJPDebug
-    printf( ">IPV6Channel::open()\n");
-#endif
     // if there is an open socket already, close it first
     if (m_Sock != INVALID_SOCKET)
         closeChannel();
@@ -91,10 +73,6 @@ throw (AxisTransportException&)
     // then thrown an exeption.
     if( !init())
     {
-#ifdef FJPDebug
-        printf( "<IPV6Channel::open()=exception\n");
-#endif
-
         throw AxisTransportException( SERVER_TRANSPORT_CHANNEL_INIT_ERROR);
     }
 
@@ -112,9 +90,6 @@ throw (AxisTransportException&)
     int err = getaddrinfo(m_URL.getHostName(), port, &hints, &addrInfo0);
     if (err)
     {
-#ifdef FJPDebug
-        fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(err));
-#endif
 
         throw AxisTransportException( SERVER_TRANSPORT_SOCKET_CREATE_ERROR);
     }
@@ -124,9 +99,6 @@ throw (AxisTransportException&)
         m_Sock = socket(addrInfo->ai_family, addrInfo->ai_socktype, addrInfo->ai_protocol);
         if (m_Sock < 0)
         {
-#ifdef FJPDebug
-            fprintf(stderr, "socket() faild: %d\n", m_Sock);
-#endif
             continue;
         }
 
@@ -136,9 +108,6 @@ throw (AxisTransportException&)
             // channel and then throw an exception.
             closeChannel();
 
-#ifdef FJPDebug
-            printf( "<IPV6Channel::open()=exception\n");
-#endif
             free (addrInfo0);
             throw AxisTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR);
             continue;
@@ -155,17 +124,10 @@ throw (AxisTransportException&)
         // an exception.
         closeChannel();
 
-#ifdef FJPDebug
-        printf( "<IPV6Channel::open()=exeption\n");
-        fprintf(stderr, "can't connect %s\n", m_URL.getHostName() );
-#endif
 
         throw AxisTransportException( SERVER_TRANSPORT_SOCKET_CREATE_ERROR);
     }
  
-#ifdef FJPDebug
-    printf( "<IPV6Channel::open()=true, m_Sock=%d\n", m_Sock);
-#endif
 
     /* Turn off the Nagle algorithm - Patch by Steve Hardy */
 
@@ -192,9 +154,6 @@ throw (AxisTransportException&)
 
 bool IPV6Channel::init ()
 {
-#ifdef FJPDebug
-    printf( ">IPV6Channel::init()\n");
-#endif
 
 #ifdef WIN32
 
@@ -209,9 +168,6 @@ bool IPV6Channel::init ()
         //         mechanism.
         m_LastErr = "WinSock DLL not addrInfoponding.";
 
-#ifdef FJPDebug
-        printf( "<IPV6Channel::init()=false\n");
-#endif
 
         return false;
     }
@@ -234,20 +190,12 @@ bool IPV6Channel::init ()
 
             closeChannel();
 
-#ifdef FJPDebug
-            printf( "<IPV6Channel::init()=false\n");
-#endif
-
             return false;
         }
     }
 #else
     /* cout << "no need for linux" << endl; */
     /* other OS specific Intitialization goes here */
-#endif
-
-#ifdef FJPDebug
-    printf( "<IPV6Channel::init()=true\n");
 #endif
 
     return true;

@@ -201,11 +201,11 @@ AXIS_TRANSPORT_STATUS
 	m_bReopenConnection = false;
 	if (!m_pChannel->open ())
 	{
-	    int iStringLength = m_pChannel->GetLastError ().length () + 1;
+	    int iStringLength = m_pChannel->GetLastErrorMsg ().length () + 1;
 	    const char *pszLastError = new char[iStringLength];
 
 	    memcpy ((void *) pszLastError,
-		    m_pChannel->GetLastError ().c_str (), iStringLength);
+		    m_pChannel->GetLastErrorMsg ().c_str (), iStringLength);
 	    ;
 
 	    throw

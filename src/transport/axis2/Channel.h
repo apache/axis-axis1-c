@@ -106,7 +106,7 @@ public:
     virtual const Channel& operator << (const char* msg);
     
     /* Return last error (if any). */
-    virtual const std::string& GetLastError(){return m_LastErr;}
+    virtual const std::string& GetLastErrorMsg(){return m_LastErr;}
 
   /**
     * Set transport timeout.
