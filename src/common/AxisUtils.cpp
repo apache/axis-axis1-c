@@ -149,5 +149,20 @@ xsd__base64Binary* AxisUtils::decodeFromBase64Binary(const AxisChar *pValue)
     return value;
 }
 
+bool AxisUtils::isStringOnlyWithSpaces(const char* pchWord)
+{
+	bool blnStatus = true;
+
+	int iLen = strlen(pchWord);
+
+	for (int i=0; i<iLen; i++) {	
+		if (pchWord[i] != ' ') {
+			blnStatus = false;	
+			break;
+		}
+	}
+
+	return blnStatus;
+}
 
 AXIS_CPP_NAMESPACE_END

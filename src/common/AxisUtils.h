@@ -49,6 +49,8 @@ class STORAGE_CLASS_INFO AxisUtils
     friend class URIMapping;
     public:
 
+        static bool isStringOnlyWithSpaces(const char* pchWord);
+
 	/**
 	 * Decodes the given base64 string and returns it.
 	 */
