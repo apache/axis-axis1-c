@@ -724,7 +724,7 @@ for (; nIndex < Array.m_Size; nIndex++)\
     }\
     /* error : unexpected element type or end of stream */\
     m_nStatus = AXIS_FAIL;\
-    delete [] Array.m_Array;\
+    delete [] (cpp_type*)Array.m_Array;\
     Array.m_Array = 0;\
     Array.m_Size = 0;\
     return Array;\
@@ -747,7 +747,7 @@ return Array;
                     if (!m_pNode)\
                     {\
                         m_nStatus = AXIS_FAIL;\
-                        delete [] Array.m_Array;\
+                        delete [] (cpp_type*)Array.m_Array;\
                         Array.m_Array = 0;\
                         Array.m_Size = 0;\
                         return Array;\
@@ -784,7 +784,7 @@ return Array;
                     /* if we come here it is an error situation */\
                     m_nStatus = AXIS_FAIL;\
                     m_pNode = NULL;\
-                    delete [] Array.m_Array;\
+                    delete [] (cpp_type*)Array.m_Array;\
                     Array.m_Array = 0;\
                     Array.m_Size = 0;\
                     return Array;\
@@ -799,7 +799,7 @@ return Array;
                     return Array;\
                 }\
                 memcpy(Array.m_Array,tmp,Array.m_Size*sizeof(cpp_type));\
-                delete [] tmp;\
+                delete [] (cpp_type*)tmp;\
                 Array.m_Size *= 2;\
                 /*Array.m_RealSize = Array.m_Size;*/\
             }\
@@ -848,7 +848,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
                     }
                     /* error : unexpected element type or end of stream */
                     m_nStatus = AXIS_FAIL;
-                    delete [] Array.m_Array;
+                    delete [] (int*)Array.m_Array;
                     Array.m_Array = 0;
                     Array.m_Size = 0;
                     return Array;
@@ -928,7 +928,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
 					}
 					/* error : unexpected element type or end of stream */
 					m_nStatus = AXIS_FAIL;
-					delete [] Array.m_Array;
+					delete [] (long*)Array.m_Array;
 					Array.m_Array = 0;
 					Array.m_Size = 0;
 					return Array;
@@ -959,7 +959,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
                     if (!m_pNode) 
                     {
                         m_nStatus = AXIS_FAIL;
-                        delete [] Array.m_Array;
+                        delete [] (int*)Array.m_Array;
                         Array.m_Array = 0;
                         Array.m_Size = 0;
                         return Array;
@@ -996,7 +996,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
                     /* if we come here it is an error situation */
                     m_nStatus = AXIS_FAIL;
                     m_pNode = NULL;
-                    delete [] Array.m_Array;
+                    delete [] (int*)Array.m_Array;
                     Array.m_Array = 0;
                     Array.m_Size = 0;
                     return Array;
@@ -1012,7 +1012,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
                     return Array;
                 }
                 memcpy(Array.m_Array,tmp,Array.m_Size*sizeof(int));
-                delete [] tmp;
+                delete [] (int*)tmp;
                 Array.m_Size *= 2;
                 /* Array.m_RealSize = Array.m_Size;*/
             }
@@ -1078,7 +1078,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
                     if (!m_pNode)
                     {
                         m_nStatus = AXIS_FAIL;
-                        delete [] Array.m_Array;
+                        delete [] (long*)Array.m_Array;
                         Array.m_Array = 0;
                         Array.m_Size = 0;
                         return Array;
@@ -1126,7 +1126,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
                     /* if we come here it is an error situation */
                     m_nStatus = AXIS_FAIL;
                     m_pNode = NULL;
-                    delete [] Array.m_Array;
+                    delete [] (long*)Array.m_Array;
                     Array.m_Array = 0;
                     Array.m_Size = 0;
                     return Array;
@@ -1141,7 +1141,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
                     return Array;
                 }
                 memcpy(Array.m_Array,tmp,Array.m_Size*sizeof(long));
-                delete [] tmp;
+                delete [] (long*)tmp;
                 Array.m_Size *= 2;
                 /*Array.m_RealSize = Array.m_Size;*/
             }
