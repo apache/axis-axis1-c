@@ -627,7 +627,7 @@ Service
  "<B>java:<I>class.name</I></B>". The optional "name" attribute
  allows you to refer to this Handler definition in other parts
  of the deployment. May contain an arbitrary number of
- <B><FONT face="Courier New, Courier, mono">&lt;option
+ <B><FONT face="Courier New, Courier, mono">&lt;parameter
  name="</FONT></B><FONT face=
  "Courier New, Courier, mono"><I>name</I></FONT><B><FONT face=
  "Courier New, Courier, mono">" value="</FONT></B><FONT face=
