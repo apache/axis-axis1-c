@@ -18,14 +18,7 @@
 /**
  * @author Srinath Perera(hemapani@openource.lk)
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
- * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
-
-/*
- * Revision 1.1  2004/05/26 samisa
- * Added Stub base class into code generation
- */
-
 
 package org.apache.axis.wsdl.wsdl2ws.cpp;
 
@@ -69,7 +62,7 @@ public abstract class HeaderFileWriter extends BasicFileWriter {
 		}
 
 	}
-	abstract protected String getExtendsPart();//{return " ";}
+	protected String getExtendsPart(){return " ";}
 	protected abstract File getFilePath()throws WrapperFault;
 	protected abstract String getFileType(); //will return "Param", "Server" or "Client"
 

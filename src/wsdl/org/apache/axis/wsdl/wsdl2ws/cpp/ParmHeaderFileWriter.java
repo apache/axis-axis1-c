@@ -83,7 +83,7 @@ public class ParmHeaderFileWriter extends ParamWriter{
 	   
 	protected void writeDistructors() throws WrapperFault {
 		try{
-			writer.write("\t~"+classname+"();\n");
+			writer.write("\tvirtual ~"+classname+"();\n");//damitha added virtual
 		} catch (IOException e) {
 			 throw new WrapperFault(e);
 		}
