@@ -72,8 +72,6 @@
 #include "../soap/URIMapping.h"
 #include "../common/Debug.h"
 
-
-DEBUG_INCLUDE;
 #ifdef WIN32
 #define WSDDFILEPATH "C:/Apache/Axis/server.wsdd"
 #else //For linux
@@ -93,10 +91,6 @@ AxisEngine::AxisEngine()
 	m_pHandlerPool = new HandlerPool();
 	m_pWebService = NULL;
   
-
-#if defined( DEBUG)
-DEBUG_ONE_PARA_LEVEL("Created DeployedServiceInfo No problem ..........");
-#endif
   //printf("Done WSDD\n");
 }
 
@@ -116,9 +110,7 @@ AxisEngine* AxisEngine::GetAxisEngine()
 	{
 		try
 		{
-#if defined( DEBUG)
-DEBUG_ONE_PARA_LEVEL("GetAxisEngine********************");
-#endif
+      DEBUG1("AxisEngine::GetAxisEngine()");
 			XMLPlatformUtils::Initialize();
 			m_pObject = new AxisEngine();
 			if (!m_pObject) return NULL;
@@ -140,6 +132,9 @@ DEBUG_ONE_PARA_LEVEL("GetAxisEngine********************");
 
 int AxisEngine::Process(soapstream* soap) 
 {
+  
+  DEBUG1("AxisEngine::Process");
+  
 	MessageData* pMsg = NULL;
 	MemBufInputSource* pSoapInput = NULL;
 	WSDDHandlerList* pHandlerList = NULL;
@@ -161,9 +156,9 @@ int AxisEngine::Process(soapstream* soap)
 
 		string service = "Maths";//getheader(soap, SOAPACTIONHEADER);
 
-#if defined( DEBUG)         
-DEBUG_TWO_PARA_LEVEL("service name is :",service.c_str())  
-#endif    
+    
+      DEBUG2("string service = Maths :",service.c_str());
+     
 		if (service.empty()) 
 		{
 			pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPACTIONEMPTY));
@@ -175,14 +170,8 @@ DEBUG_TWO_PARA_LEVEL("service name is :",service.c_str())
 			break; //do .. while(0)
 		}
 
-#if defined( DEBUG)     
-DEBUG_ONE_PARA_LEVEL("Before SetService***************");
-#endif
     pMsg->SetService(pService);
-
-#if defined( DEBUG)     
-DEBUG_ONE_PARA_LEVEL("After SetService***************");
-#endif    
+   
 		//Deserialize
 		//---------START XERCES SAX2 SPCIFIC CODE---------//
 		pSoapInput = new MemBufInputSource((const unsigned char*)soap->so.http.ip_soap, soap->so.http.ip_soapcount,"bufferid",false); 
@@ -218,40 +207,25 @@ DEBUG_ONE_PARA_LEVEL("After SetService***************");
 		if (pSm) 
 		{
 			string method = pSm->getMethodName();
-
-#if defined( DEBUG)       
-DEBUG_TWO_PARA_LEVEL("method name is :", method.c_str());     
-#endif      
+      
+      DEBUG2("pSm->getMethodName(); :", method.c_str());
+          
 			if (!method.empty())
-			{
-
-#if defined( DEBUG)         
-DEBUG_ONE_PARA_LEVEL("method is not empty");    
-#endif        
+			{        
 				//this is done here when we use SAX parser
 				//if we use XML pull parser this check is done within the invoke method of the wrapper class
 				if (pService->IsAllowedMethod(method))
-				{
-
-#if defined( DEBUG)           
-DEBUG_ONE_PARA_LEVEL("method is allowed*****************");         
-#endif          
+				{          
 					//load actual web service handler
-
-#if defined( DEBUG)           
-DEBUG_ONE_PARA_LEVEL("before loading web service");          
-#endif          
+         
 					m_pWebService = m_pHandlerPool->LoadWebService(pService);
 
-#if defined( DEBUG)           
-DEBUG_ONE_PARA_LEVEL("web service is loaded**********************");          
-#endif          
+          #if defined( DEBUG)
+            ("after m_pHandlerPool->LoadWebService(pService);");
+          #endif         
 					if (!m_pWebService)
 					{
-
-#if defined( DEBUG)             
-DEBUG_ONE_PARA_LEVEL("web service is empty*************************");         
-#endif            
+            
 						pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADSRV));
 						//Error couldnot load web service
 						break; //do .. while(0)
@@ -272,36 +246,23 @@ DEBUG_ONE_PARA_LEVEL("web service is empty*************************");
 			}
 		}
 		//create any service specific handlers
-
-#if defined( DEBUG)     
-DEBUG_ONE_PARA_LEVEL("before getting handlers*********************");     
-#endif    
+    
 		pHandlerList = pService->GetRequestFlowHandlers();
 
-#if defined( DEBUG)     
-DEBUG_ONE_PARA_LEVEL("after calling request handlers list***************");     
-#endif    
+    DEBUG1("after pService->GetRequestFlowHandlers();");
+       
 		if (pHandlerList)
 		{
-
-#if defined( DEBUG)       
-DEBUG_ONE_PARA_LEVEL("after getting request handlers list**************");       
-#endif      
+      
 			if(SUCCESS != m_pHandlerPool->LoadServiceRequestFlowHandlers(pHandlerList))
 			{        
 				pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADHDL));
 				break; //do .. while(0)
 			}
 		}
-
-#if defined( DEBUG)     
-DEBUG_ONE_PARA_LEVEL("before getting response handlers****************");     
-#endif    
+    
 		pHandlerList = pService->GetResponseFlowHandlers();
-
-#if defined( DEBUG)     
-DEBUG_ONE_PARA_LEVEL("after getting response handlers****************");     
-#endif    
+    
 		if (pHandlerList)
 		{
 			if(SUCCESS != m_pHandlerPool->LoadServiceResponseFlowHandlers(pHandlerList))
@@ -380,7 +341,8 @@ int AxisEngine::Invoke(MessageData* pMsg)
 			{
 				pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_HANDLERFAILED));
 				break; //do .. while (0)
-			}		
+			}
+      DEBUG1("if(SUCCESS == pChain->Invoke(pMsg))");
 		}
 		level++; //AE_SERH
 		//call actual web service handler
@@ -390,6 +352,7 @@ int AxisEngine::Invoke(MessageData* pMsg)
 				pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_WEBSERVICEFAILED));
 				break;
 			}
+         
 		level++; //AE_SERV
 	}
 	while(0);
@@ -406,6 +369,7 @@ int AxisEngine::Invoke(MessageData* pMsg)
 		if (pChain)
 		{
 			pChain->Invoke(pMsg);
+      
 		}
 		//no break;
 	case AE_GLH: //web service specific handlers have failed
@@ -425,7 +389,7 @@ int AxisEngine::Invoke(MessageData* pMsg)
 		//no break;
 	case AE_START: ;//transport handlers have failed
 	};
-
+  DEBUG1("end axisengine process()");
 	return ret;
 }
 
@@ -441,6 +405,8 @@ int AxisEngine::Initialize()
 	URIMapping::Initialize();
 	SoapFault::initialize();
   
+  DEBUG1("AxisEngine::Initialize()");
+      
 	if (SUCCESS != m_pWSDD->LoadWSDD(str)) return FAIL;
   
 	//Load Global Handlers to the pool if configured any
