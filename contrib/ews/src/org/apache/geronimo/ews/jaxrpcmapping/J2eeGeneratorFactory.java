@@ -374,11 +374,7 @@ public class J2eeGeneratorFactory implements GeneratorFactory {
                         // is will be used to javify the name
                         QName typeQName = tEntry.getQName();
                         if ((typeQName.getLocalPart().
-                                indexOf(SymbolTable.ANON_TOKEN) < 0)) {
-                            // Normal Case: The ref'd type is not anonymous
-                            // Simply construct the java name from
-                            // the qName
-                            tEntry.setName(emitter.getJavaName(typeQName));
+                                indexOf(SymbolTable.ANON_TOKEN) >= 0)) {
                         } else {
                             // This is an anonymous type name.
                             // Axis uses '>' as a nesting token to generate
@@ -426,14 +422,13 @@ public class J2eeGeneratorFactory implements GeneratorFactory {
                                                 localName);
                             }
                             anonQNames.put(typeQName, typeQName);
-
-                            // Now set the name with the constructed qname
-                            String javaType = mapper.getJavaType(typeQName);
-                            if (javaType == null) {
-                                tEntry.setName(emitter.getJavaName(typeQName));
-                            } else {
-                                tEntry.setName(javaType);
-                            }
+                        }
+                        // Now set the name with the constructed qname
+                        String javaType = mapper.getJavaType(typeQName);
+                        if (javaType == null) {
+                            tEntry.setName(emitter.getJavaName(typeQName));
+                        } else {
+                            tEntry.setName(javaType);
                         }
                     }
                     // Set the entry with the same name as the ref'd entry
