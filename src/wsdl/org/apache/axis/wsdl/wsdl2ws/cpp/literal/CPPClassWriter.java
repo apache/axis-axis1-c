@@ -66,6 +66,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
+import org.apache.axis.wsdl.wsdl2ws.BasicFileWriter;
 
 public abstract class CPPClassWriter extends BasicFileWriter{
 	public CPPClassWriter(String classname)throws WrapperFault{

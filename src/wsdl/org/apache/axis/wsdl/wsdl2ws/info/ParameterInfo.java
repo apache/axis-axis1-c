@@ -109,4 +109,12 @@ public class ParameterInfo {
 		return this.type.getLanguageSpecificName();
 	}
 
+	/**
+	 * Sets the type.
+	 * @param type The type to set
+	 */
+	public void setType(Type type) {
+		this.type = type;
+	}
+
 }

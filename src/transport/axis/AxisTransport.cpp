@@ -65,8 +65,6 @@
 #include <axis/client/transport/AxisTransport.h>
 #include <axis/client/transport/axis/TransportFactory.hpp>
 
-#define READCHUNCKSIZE 1024
-
 AxisTransport::AxisTransport(Ax_soapstream* pSoap)
 {
     m_pSoap = pSoap;

@@ -74,6 +74,7 @@ import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 
 public class WrapWriter extends CFileWriter{
 	private WebServiceContext wscontext;
@@ -112,6 +113,7 @@ public class WrapWriter extends CFileWriter{
 			writer.write("void AXISCALL OnFault(void*p, IMessageData *pMsg)\n{\n}\n\n");
 			writer.write("int AXISCALL Init(void*p)\n{\n\treturn AXIS_SUCCESS;\n}\n\n");
 			writer.write("int AXISCALL Fini(void*p)\n{\n\treturn AXIS_SUCCESS;\n}\n\n");
+			writer.write("AXIS_BINDING_STYLE AXISCALL GetBindingStyle(void*p)\n{\n\treturn RPC_ENCODED;\n}\n\n");
 			writeInvoke();
 			writer.write("\n/*Methods corresponding to the web service methods*/\n");
 			MethodInfo minfo;
@@ -299,7 +301,7 @@ public class WrapWriter extends CFileWriter{
 			paraTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();
 			if((CUtils.isSimpleType(((ParameterInfo)paramsB.get(i)).getLangName()))){
 				//for simple types	
-				writer.write("\tv"+i+" = pDZX->"+CUtils.getParameterGetValueMethodName(paraTypeName)+"(pDZ);\n");
+				writer.write("\tv"+i+" = pDZX->"+CUtils.getParameterGetValueMethodName(paraTypeName, false)+"(pDZ);\n");
 			}else if((type = this.wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName())) != null && type.isArray()){
 				QName qname = WrapperUtils.getArrayType(type).getName();
 				String containedType = null;
