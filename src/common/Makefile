@@ -1,34 +1,36 @@
-# Makefile for axishandlers
+# Makefile for axiscommon
 #
 #
 # Modify the TOPDIR variable to point to the top of the
 # directory tree where the Axis_Lib dir may be found.
 #
 
-BASE_PATH = ../../..
-include ../../../inc.mk
+BASE_PATH = ../..
+include ../../inc.mk
 
-PACKAGE_SRCS = LogHandler.cpp \
-		LogAccessCount.cpp
 
-PACKAGE_OBJS = $(PACKAGE_SRCS:%.cpp=$(AX_OBJ_DIR_HANDLERS)/%.o)
+PACKAGE_SRCS = AccessBean.cpp \
+	Debug.cpp \
+	BasicTypeSerializer.cpp \
+	MessageData.cpp \
+	Param.cpp
+
+
+PACKAGE_OBJS = $(PACKAGE_SRCS:%.cpp=$(AX_OBJ_DIR_COMMON)/%.o)
 
 all: MAKE_LIB
 
 MAKE_LIB:OBJS
-	echo "making handlers.a" ;
-	$(AX_AR) $(AX_LIB_HANDLERS) $(AX_OBJ_DIR_HANDLERS)/*.o
-	@echo "making libcount.so shared library" ;
-	$(AX_SO) $(AX_SO_HANDLERS) $(AX_OBJ_DIR_HANDLERS)/*.o -ldl -lstdc++
-
-#$(AX_OBJ_DIR_HANDLERS)/timestamp objects:
+	echo "making common.a" ;
+	$(AX_AR) $(AX_LIB_COMMON) $(AX_OBJ_DIR_COMMON)/*.o
+#$(AX_OBJ_DIR_COMMON)/timestamp objects:
 #	@( cd $(AX_SRC_DIR) ; $(MAKE) -$(MAKEFLAGS) )
 
 OBJS: $(PACKAGE_OBJS)
 
 
 clean:
-	-@rm -rf $(AX_OBJ_DIR)/server/handlers/*
+	-@rm -rf $(AX_OBJ_DIR)/common/*
 	-@rm -rf $(OBJS) *~
 
 
