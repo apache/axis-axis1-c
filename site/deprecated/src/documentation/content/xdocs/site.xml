@@ -42,6 +42,7 @@ See http://xml.apache.org/forrest/linking.html for more info
   <axisc label="Latest Axis C++ Release!" href="cpp/index.html"/>
   <documentation label="Documenation" href="cpp/documentation.html"/>
   <download label="Download" href="cpp/download.html"/>
+  <wiki label="Wiki Pages" href="http://nagoya.apache.org/wiki/apachewiki.cgi?AxisCPPProjectPages"/>
   <who label="Who we are" href="cpp/who.html"/>
   </axiscpp>
 <downloads label="Downloads">
