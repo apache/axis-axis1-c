@@ -43,31 +43,9 @@ ChannelFactory::ChannelFactory()
 
 ChannelFactory::~ChannelFactory()
 {
-	for( int iCount = 0; iCount < (int) MaxChannelCount; iCount++)
+	for( int eChannelType = 0; eChannelType < (int) MaxChannelCount; eChannelType++)
 	{
-		if( m_pChannel[iCount] != NULL)
-		{
-			if( m_LibHandler[iCount] != NULL)
-			{
-				DELETE_OBJECT3 sDelete = (DELETE_OBJECT3) PLATFORM_GETPROCADDR( m_LibHandler[iCount], DELETE_FUNCTION3);
-
-				sDelete( m_pChannel[iCount]);
-			}
-
-			m_pChannel[iCount] = 0;
-		}
-
-		if( m_pLibName[iCount] != NULL)
-		{
-			delete m_pLibName[iCount];
-		}
-
-		if( m_LibHandler[iCount] != NULL)
-		{
-		    PLATFORM_UNLOADLIB( m_LibHandler[iCount]);
-
-			m_LibHandler[iCount] = 0;
-		}
+		UnLoadChannelLibrary( (g_ChannelType) eChannelType, m_pChannel[eChannelType]);
 	}
 }
 
@@ -77,10 +55,7 @@ IChannel * ChannelFactory::LoadChannelLibrary( g_ChannelType eChannelType, const
 	IChannel *	pChannel = NULL;
 	int			iLibCount = 0;
 
-	if( eChannelType == SecureChannel)
-	{
-		iLibCount = 1;
-	}
+	iLibCount = (int) eChannelType;
 
 // Additional code added to block reloading of DLL if name has not changed.
 	if( m_pLibName[iLibCount] == NULL ||
@@ -105,7 +80,14 @@ IChannel * ChannelFactory::LoadChannelLibrary( g_ChannelType eChannelType, const
 
 				strcpy( pszErrorInfo, pcLibraryName);
 
-				throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, pszErrorInfo);
+				if( eChannelType == UnsecureChannel)
+				{
+					throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, pszErrorInfo);
+				}
+				else
+				{
+					throw HTTPTransportException( SERVER_TRANSPORT_LOADING_SSLCHANNEL_FAILED, pszErrorInfo);
+				}
 			}
 
 #ifdef ENABLE_AXISTRACE
@@ -156,29 +138,37 @@ IChannel * ChannelFactory::LoadChannelLibrary( g_ChannelType eChannelType, const
 bool ChannelFactory::UnLoadChannelLibrary( g_ChannelType eChannelType, IChannel * pIChannel)
 {
 	bool	bSuccess = false;
-	int		iLibCount = 0;
+	int		iLibIndex = (int) eChannelType;
 
-	if( eChannelType == SecureChannel)
+	if( m_pChannel[iLibIndex] != NULL)
 	{
-		iLibCount = 1;
+		if( m_LibHandler[iLibIndex] != NULL)
+		{
+// If there is a channel library object handle then find the entry point in
+// the library to call the channel library destructor (DestroyInstance) which
+// in turn calls the channel destructor.  On return from this call, the
+// m_pChannel[iLibIndex] object no longer exists.
+			DELETE_OBJECT3 sDelete = (DELETE_OBJECT3) PLATFORM_GETPROCADDR( m_LibHandler[iLibIndex], DELETE_FUNCTION3);
+
+			sDelete( m_pChannel[iLibIndex]);
+		}
+
+		m_pChannel[iLibIndex] = 0;
 	}
 
-// Check that requested channel is the same as recorded channel
-	if( m_pChannel[iLibCount] == pIChannel)
+// Delete library name from the library name list.
+	if( m_pLibName[iLibIndex] != NULL)
 	{
-// Check that recorded channel is not actually NULL
-		if( m_pChannel[iLibCount] != NULL)
-		{
-			DELETE_OBJECT3 sDelete = (DELETE_OBJECT3) PLATFORM_GETPROCADDR( m_LibHandler[iLibCount], DELETE_FUNCTION3);
+		delete m_pLibName[iLibIndex];
+	}
 
-			sDelete( pIChannel);
+// If a channel library object handle is valid, then unload the library and
+// reset the handle.
+	if( m_LibHandler[iLibIndex] != NULL)
+	{
+	    PLATFORM_UNLOADLIB( m_LibHandler[iLibIndex]);
 
-			m_pChannel[iLibCount] = 0;
-
-			PLATFORM_UNLOADLIB( m_LibHandler[iLibCount]);
-
-			m_LibHandler[iLibCount] = 0;
-		}
+		m_LibHandler[iLibIndex] = 0;
 
 		bSuccess = true;
 	}
