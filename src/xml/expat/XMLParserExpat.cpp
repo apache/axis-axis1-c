@@ -117,10 +117,10 @@ void  XMLParserExpat::characters(const XML_Ch *chars, int length)
 void XMLParserExpat::startPrefixMapping(const XML_Ch *prefix,
                                          const XML_Ch *uri)
 {
-    if (prefix && uri)
+    if (uri)
     {
         StartPrefix* pEvent = new StartPrefix();
-        pEvent->m_NameOrValue = prefix;
+        if (prefix) pEvent->m_NameOrValue = prefix;
         pEvent->m_Namespace = uri;
         m_Events.push(pEvent);
     }
@@ -233,8 +233,9 @@ const AnyElement* XMLParserExpat::next(bool isCharData)
                     }
                     return &m_Element;
                 case START_PREFIX:
-                    m_NsStack[m_pLastEvent->m_NameOrValue] =
-                        ((StartPrefix*)m_pLastEvent)->m_Namespace;
+					if (!(m_pLastEvent->m_NameOrValue.empty()))
+						m_NsStack[m_pLastEvent->m_NameOrValue] =
+							((StartPrefix*)m_pLastEvent)->m_Namespace;
                     /* I think the same prifix cannot repeat ??? */
                     delete m_pLastEvent;
                     m_pLastEvent = NULL;
@@ -412,12 +413,20 @@ const AnyElement* XMLParserExpat::anyNext()
                     m_Element.m_type = type;
                     return &m_Element;
                 case START_PREFIX:
-                    m_NsStack[m_pLastEvent->m_NameOrValue] =
-                        ((StartPrefix*)m_pLastEvent)->m_Namespace;
+					if (!(m_pLastEvent->m_NameOrValue.empty()))
+						m_NsStack[m_pLastEvent->m_NameOrValue] =
+							((StartPrefix*)m_pLastEvent)->m_Namespace;
                     m_Element.m_pchNamespace = ((StartElement*)m_pLastEvent)->
                         m_Namespace.c_str();
-                    m_Element.m_pchNameOrValue = ((StartElement*)m_pLastEvent)
-                        ->m_NameOrValue.c_str();
+					if (!(m_pLastEvent->m_NameOrValue.empty()))
+					{
+						m_Element.m_pchNameOrValue = ((StartElement*)m_pLastEvent)
+							->m_NameOrValue.c_str();
+					}
+					else
+					{
+						m_Element.m_pchNameOrValue = 0;
+					}
                     m_Element.m_type = type;
                     return &m_Element;
                 case END_PREFIX:

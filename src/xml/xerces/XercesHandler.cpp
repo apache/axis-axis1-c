@@ -86,7 +86,7 @@ const XML_Ch* XercesHandler::ns4Prefix(const XML_Ch* prefix)
 
 const XML_Ch* XercesHandler::prefix4NS(const XML_Ch* pcNS)
 {
-    for (map<AxisXMLString, AxisXMLString>::iterator it;
+    for (map<AxisXMLString, AxisXMLString>::iterator it=m_NsStack.begin();
          it!=m_NsStack.end(); it++)
     {
         if ((*it).second == pcNS)
