@@ -66,7 +66,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "WSDDService.h"
-//#include "../common/AxisTrace.h"
+#include "../common/AxisTrace.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -155,6 +155,7 @@ void  WSDDService::AddHandler(bool bRequestFlow, WSDDHandler* pHandler)
 {
 	if (bRequestFlow)
 	{
+        //AXISTRACE1("WSDDService::AddHandler");
 		if (!m_RequestHandlers) m_RequestHandlers = new WSDDHandlerList;
 		m_RequestHandlers->push_back(pHandler);
 	}
