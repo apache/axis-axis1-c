@@ -154,6 +154,13 @@ int AxisTrace::trace(const char* sLog1, const char* sLog2,char* arg3, int arg4)
     }
 }
 
+int AxisTrace::trace(const char *pchLog)
+{
+	printf("DEBUG LINE :\n%s\n", pchLog);
+
+	return SUCCESS;
+}
+
 /*
 int main(int argc, char* argv[])
 {
@@ -161,3 +168,5 @@ int main(int argc, char* argv[])
   return 0;
 }
 */
+
+
