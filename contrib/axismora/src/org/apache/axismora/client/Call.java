@@ -81,6 +81,7 @@ import org.apache.axismora.wrappers.simpleType.ShortParam;
 import org.apache.axismora.wrappers.simpleType.StringParam;
 
 import org.apache.axis.AxisFault;
+import org.apache.axis.enum.Style;
 import org.apache.axis.soap.SOAPConstants;
 
 /**
@@ -110,7 +111,7 @@ public class Call implements javax.xml.rpc.Call {
     /* if authentication used the passwd */
     private char[] passwd;
 
-    private QName style;
+    private Style style;
 
     private SOAPConstants constants = SOAPConstants.SOAP12_CONSTANTS;
 
@@ -409,17 +410,15 @@ public class Call implements javax.xml.rpc.Call {
     }
 
     /**
-     * @param name
-     */
-    public void setStyle(QName name) {
-        style = name;
-    }
-
-    /**
      * @param string
      */
     public void setUsername(String string) {
         username = string;
     }
 
-}
+    /**
+     * @param name
+     */
+    public void setStyle(Style st) {
+        style=st;
+    }}

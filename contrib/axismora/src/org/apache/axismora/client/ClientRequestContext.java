@@ -74,7 +74,7 @@ public class ClientRequestContext {
     private QName methodName;
 
     private Serializable[] inparams;
-    private QName style;
+    private Style style;
     private String encoding;
 
     public ClientRequestContext(
@@ -82,7 +82,7 @@ public class ClientRequestContext {
         QName soapAction,
         QName methodName,
         Serializable[] inparams,
-        QName style,
+        Style style,
         String encoding)
         throws AxisFault {
         if (soapAction == null)
@@ -92,7 +92,7 @@ public class ClientRequestContext {
         this.inparams = inparams;
         this.soapAction = soapAction;
         this.methodName = methodName;
-        this.style = (style == null ? Style.RPC.getProvider() : style);
+        this.style = (style == null ? Style.RPC : style);
         this.encoding = encoding;
     }
 
@@ -113,7 +113,7 @@ public class ClientRequestContext {
     /**
      * @return
      */
-    public QName getStyle() {
+    public Style getStyle() {
         return style;
     }
 
