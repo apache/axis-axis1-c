@@ -94,19 +94,19 @@ SoapMethod::~SoapMethod()
 	if (m_pOutputParam) delete m_pOutputParam;
 }
 
-void SoapMethod::setPrefix(const AxisString &prefix)
+void SoapMethod::setPrefix(const AxisChar* prefix)
 {
-	m_strPrefix = prefix.c_str();
+	m_strPrefix = prefix;
 }
 
-void SoapMethod::setLocalName(const AxisString &localname)
+void SoapMethod::setLocalName(const AxisChar* localname)
 {
-	m_strLocalname = localname.c_str();
+	m_strLocalname = localname;
 }
 
-void SoapMethod::setUri(const AxisString &uri)
+void SoapMethod::setUri(const AxisChar* uri)
 {
-	m_strUri = uri.c_str();
+	m_strUri = uri;
 }
 
 void SoapMethod::addInputParam(Param *param)
@@ -232,9 +232,9 @@ int SoapMethod::serializeOutputParam(string& sSerialized)
 }
 */
 
-const AxisString& SoapMethod::getMethodName()
+const AxisChar* SoapMethod::getMethodName()
 {
-	return m_strLocalname;
+	return m_strLocalname.c_str();
 }
 
 bool SoapMethod::isSerializable()
