@@ -16,7 +16,7 @@ import java.net.*;
  */
 
 public class TestClientListener implements Runnable {
-
+    private int CREATE_SOCKET_TO_SERVER_RETRY=5;
 	int listenPort = 0;
 	int servicePort = 0;
 	String serviceHost = null;
@@ -72,13 +72,34 @@ public class TestClientListener implements Runnable {
 				//server.setSoTimeout(500);
 				try {
 					clientSocket = server.accept();
-					try {
-						serviceSocket = new Socket(serviceHost, servicePort);
-					} catch (Exception se) {
-						System.err.println("Failed to open socket to service");
-						stayAlive = false;
-						continue;
-					}
+					
+					// Now create the socket to the server
+					int retry=CREATE_SOCKET_TO_SERVER_RETRY;
+					do
+                    {
+					    try 
+					    {
+					        serviceSocket = new Socket(serviceHost, servicePort);
+					    } 
+					    catch (Exception se) 
+					    {
+					        System.err.println("Failed to open socket to service");
+					        se.printStackTrace(System.err);
+					        if(retry<=0)
+					        {
+					            stayAlive = false;
+					            continue;
+					        }
+					        else
+					        {
+					            // go to sleep
+					            System.err.println( "Going to sleep");
+							    Thread.currentThread().sleep(2500);
+							    System.err.println( "Woke up ");
+					        }
+					    }
+                    }while(serviceSocket==null && retry-- >0);
+					
 					requestReader = new TestClientThread(clientSocket, serviceSocket, CAPTURE_REQUEST);
 					responseReader = new TestClientThread(clientSocket, serviceSocket, CAPTURE_RESPONSE);
 					requestReader.start();
