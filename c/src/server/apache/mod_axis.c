@@ -44,6 +44,10 @@ void  axis_Init(server_rec *svr_rec, pool* p)
 void axis_Fini(server_rec *svr_rec, pool* p)
 {}
 
+/**
+ * This function is called by the Axis Engine whenever it needs to get bytes from the 
+ * transport layer.
+ */
 int get_request_bytes(char* req, int reqsize, int* retsize, const void* ipstream)
 {
 	int len_read;
@@ -61,6 +65,11 @@ static int axis_handler(request_rec *req_rec)
 	array_header* arr;
 
 	sstr = malloc(sizeof(Ax_soapstream));
+	/*populate Ax_soapstream struct with relevant transport function pointers*/
+	sstr->transport.pSendFunct = send_response_bytes;
+	sstr->transport.pGetFunct = get_request_bytes;
+	sstr->transport.pSendTrtFunct = send_transport_information;
+	sstr->transport.pGetTrtFunct = NULL; /*isn't there a get transport information function for apache module ?*/
 	sstr->trtype = APTHTTP;
 	/*req_rec is used as both input and output streams*/
 	sstr->str.ip_stream = req_rec;
