@@ -94,7 +94,7 @@ using namespace std;
 
 XERCES_CPP_NAMESPACE_USE
 
-enum SOAP_PARSE_LEVEL { SOAP_UNKNOWN=1, SOAP_ENVELOP, SOAP_HEADER, SOAP_FAULT, SOAP_BODY, SOAP_METHOD, SOAP_PARAM};
+enum SOAP_PARSE_LEVEL { SOAP_UNKNOWN=1, SOAP_ENVELOP, SOAP_HEADER, SOAP_FAULT, SOAP_BODY, SOAP_METHOD, SOAP_PARAM, SOAP_HEADER_BLOCK};
 
 class XMLStreamHandler:public DefaultHandler
 {
@@ -122,7 +122,10 @@ private:
 	SOAP_PARSE_LEVEL m_PL1;
 	SOAP_PARSE_LEVEL m_PL2;
 	string m_sLastElement;
+
+	HeaderBlock* pHeaderBlock;
 private:
+	void createHeaderBlock(const XMLCh *const uri,const XMLCh *const localname,const XMLCh *const qname,const Attributes &attrs);
 	int m_nParamNestingLevel;
 	int SetArrayDimensions(string& sDimensions);
 	void FillMethod(const XMLCh *const uri,const XMLCh *const localname,const XMLCh *const qname,const Attributes &attrs);

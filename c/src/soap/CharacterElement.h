@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
 
@@ -77,13 +77,13 @@
 class CharacterElement : public BasicNode
 {
 public:
+	int setValue(string& sValue);
+	string& getValue();
 	int serialize(SoapSerializer& pSZ);
 	NODE_TYPE getNodeType();
 	CharacterElement(const string& sValue);
+	CharacterElement();
 	virtual ~CharacterElement();
-
-private:
-	string m_sValue;
 };
 
 #endif // !defined(AFX_HARACTERELEMENT_H__55176899_E8B1_40ED_BA39_CB8C5590B4D2__INCLUDED_)

@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
 
@@ -84,7 +84,7 @@ class SoapBody;
 class SoapFault;
 class HeaderBlock;
 
-class SoapSerializer : public virtual IWrapperSoapSerializer, public virtual IHandlerSoapSerializer /*: public ISoapSerializer*/
+class SoapSerializer : public IWrapperSoapSerializer, public IHandlerSoapSerializer /*: public ISoapSerializer*/
 {
 private:
 	static int iCounter;

@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
 
@@ -74,6 +74,7 @@
 
 #include "HeaderBlock.h"
 #include "SoapEnvVersions.h"
+#include "../common/ISoapHeader.h"
 
 /**
  *	The Header element information item according to SOAP 1.2 specification.
@@ -90,7 +91,7 @@
  *	@brief	The Header element information item according to SOAP 1.2 specification
  */
 
-class SoapHeader  
+class SoapHeader : public ISoapHeader
 {
 private:	
 	int serializeNamespaceDecl(SoapSerializer& pSZ);
@@ -102,12 +103,14 @@ private:
 	list<HeaderBlock*> m_headerBlocks;
 	//string m_strHeaderSerialized;
 public:
+	IHeaderBlock* getHeaderBlock();
 	int addNamespaceDecl(Attribute* pAttribute);
 	int addAttribute(Attribute* pAttribute);
 	//string& serialize();
 	int serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion);
 	//int serialize(string&, SOAP_VERSION eSoapVersion);	
 	void addHeaderBlock(HeaderBlock* headerBlock);
+
 	SoapHeader();
 	virtual ~SoapHeader();
 
