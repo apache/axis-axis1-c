@@ -784,64 +784,148 @@ int SoapSerializer::addOutputParam( const AxisChar * pchName,
     {
     case XSD_INT:
     case XSD_BOOLEAN:
-        pParam->m_Value.nValue = new int;
-        *(pParam->m_Value.nValue) = *((int *) (pValue));
+        if (pValue == NULL)
+        {
+            pParam->m_Value.nValue = NULL;
+        }
+        else
+        {
+            pParam->m_Value.nValue = new int;
+            *(pParam->m_Value.nValue) = *((int *) (pValue));
+        }
         break; 
 
     case XSD_UNSIGNEDINT:
-        pParam->m_Value.unValue = new unsigned int;
-        *(pParam->m_Value.unValue) = *((unsigned int *) (pValue));
+        if (pValue == NULL)
+        {
+            pParam->m_Value.unValue = NULL;
+        }
+        else
+        {
+            pParam->m_Value.unValue = new unsigned int;
+            *(pParam->m_Value.unValue) = *((unsigned int *) (pValue));
+        }
         break;
 
     case XSD_SHORT:
-        pParam->m_Value.sValue = new short;
-        *(pParam->m_Value.sValue) = *((short *) (pValue));
+        if (pValue == NULL)
+        {
+            pParam->m_Value.sValue = NULL;
+        }
+        else
+        {
+            pParam->m_Value.sValue = new short;
+            *(pParam->m_Value.sValue) = *((short *) (pValue));
+        }
         break; 
 
     case XSD_UNSIGNEDSHORT:
-        pParam->m_Value.usValue = new unsigned short;
-        *(pParam->m_Value.usValue) = *((unsigned short *) (pValue));
+        if (pValue == NULL)
+        {
+             pParam->m_Value.usValue = NULL;
+        }
+        else 
+        {
+            pParam->m_Value.usValue = new unsigned short;
+            *(pParam->m_Value.usValue) = *((unsigned short *) (pValue));
+        }
         break;         
 
     case XSD_BYTE:
-        pParam->m_Value.cValue = new char;
-        *(pParam->m_Value.cValue) = *((char *) (pValue));
+        if (pValue == NULL)
+        {
+            pParam->m_Value.cValue = NULL;
+        }
+        else
+        {
+            pParam->m_Value.cValue = new char;
+            *(pParam->m_Value.cValue) = *((char *) (pValue));
+        }
         break; 
 
     case XSD_UNSIGNEDBYTE:
-        pParam->m_Value.ucValue = new unsigned char;
-        *(pParam->m_Value.ucValue) = *((unsigned char *) (pValue));
+        if (pValue == NULL)
+        {
+            pParam->m_Value.ucValue = NULL; 
+        }
+        else
+        {
+            pParam->m_Value.ucValue = new unsigned char;
+            *(pParam->m_Value.ucValue) = *((unsigned char *) (pValue));
+        }
         break;
 
     case XSD_LONG:
-        pParam->m_Value.llValue = new LONGLONG;
-        *(pParam->m_Value.llValue) = *((LONGLONG *) (pValue));
+        if (pValue == NULL)
+        {
+            pParam->m_Value.llValue = NULL;
+        }
+        else
+        {        
+            pParam->m_Value.llValue = new LONGLONG;
+            *(pParam->m_Value.llValue) = *((LONGLONG *) (pValue));
+        }
         break;
 
     case XSD_INTEGER:
-        pParam->m_Value.lValue = new long;
-        *(pParam->m_Value.lValue) = *((long *) (pValue));
+        if (pValue == NULL)
+        {
+            pParam->m_Value.lValue = NULL;
+        }
+        else
+        {
+            pParam->m_Value.lValue = new long;
+            *(pParam->m_Value.lValue) = *((long *) (pValue));
+        }
         break;        
 
     case XSD_DURATION:
-        pParam->m_Value.lDuration = new long;
-        *(pParam->m_Value.lDuration) = *((long *) (pValue));
+        if (pValue == NULL)
+        {
+            pParam->m_Value.lDuration = NULL;
+        }
+        else
+        {
+            pParam->m_Value.lDuration = new long;
+            *(pParam->m_Value.lDuration) = *((long *) (pValue));
+        }
         break;        
 
     case XSD_UNSIGNEDLONG:
-        pParam->m_Value.ulValue = new unsigned long;
-        *(pParam->m_Value.ulValue) = *((unsigned long *) (pValue));
+        if (pValue == NULL)
+        {
+            pParam->m_Value.ulValue = NULL;
+        }
+        else
+        {
+            pParam->m_Value.ulValue = new unsigned long;
+            *(pParam->m_Value.ulValue) = *((unsigned long *) (pValue));
+        }
         break;
 
     case XSD_FLOAT:
-        pParam->m_Value.fValue = new float;
-        *(pParam->m_Value.fValue) = *((float *) (pValue));
+        if (pValue == NULL)
+        {
+            pParam->m_Value.fValue = NULL;
+        }
+        else
+        {
+            pParam->m_Value.fValue = new float;
+            *(pParam->m_Value.fValue) = *((float *) (pValue));
+        }
         break;
 
     case XSD_DOUBLE:
     case XSD_DECIMAL:
-        pParam->m_Value.dValue = new double;
-        *(pParam->m_Value.dValue) = *((double *) (pValue));
+        if (pValue == NULL)
+        {
+            pParam->m_Value.dValue = NULL;
+        }
+        else
+        {
+            pParam->m_Value.dValue = new double;
+            *(pParam->m_Value.dValue) = *((double *) (pValue));
+        }
         break;              
 
     case XSD_ANYURI:
@@ -860,24 +944,45 @@ int SoapSerializer::addOutputParam( const AxisChar * pchName,
         break;
 
     case XSD_HEXBINARY:
-        pParam->m_Value.hbValue = new xsd__hexBinary;
-        pParam->m_Value.hbValue->__size = (*((xsd__hexBinary *) (pValue))).__size;
-        pParam->m_Value.hbValue->__ptr = new xsd__unsignedByte[pParam->m_Value.hbValue->__size + 1];
-        strcpy((char*)(pParam->m_Value.hbValue->__ptr), (char*)(*((xsd__hexBinary *) (pValue))).__ptr);        
+        if (pValue == NULL)
+        {
+             pParam->m_Value.hbValue = NULL;
+        }
+        else
+        {
+            pParam->m_Value.hbValue = new xsd__hexBinary;
+            pParam->m_Value.hbValue->__size = (*((xsd__hexBinary *) (pValue))).__size;
+            pParam->m_Value.hbValue->__ptr = new xsd__unsignedByte[pParam->m_Value.hbValue->__size + 1];
+            strcpy((char*)(pParam->m_Value.hbValue->__ptr), (char*)(*((xsd__hexBinary *) (pValue))).__ptr);        
+        }
         break;
 
     case XSD_BASE64BINARY:
-        pParam->m_Value.b64bValue = new xsd__base64Binary;
-        pParam->m_Value.b64bValue->__size = (*((xsd__base64Binary *) (pValue))).__size;
-        pParam->m_Value.b64bValue->__ptr = new xsd__unsignedByte[pParam->m_Value.b64bValue->__size + 1];
-        strcpy((char*)(pParam->m_Value.b64bValue->__ptr), (char*)(*((xsd__base64Binary *) (pValue))).__ptr);
+        if (pValue == NULL)
+        {
+            pParam->m_Value.b64bValue = NULL;
+        }
+        else
+        {
+            pParam->m_Value.b64bValue = new xsd__base64Binary;
+            pParam->m_Value.b64bValue->__size = (*((xsd__base64Binary *) (pValue))).__size;
+            pParam->m_Value.b64bValue->__ptr = new xsd__unsignedByte[pParam->m_Value.b64bValue->__size + 1];
+            strcpy((char*)(pParam->m_Value.b64bValue->__ptr), (char*)(*((xsd__base64Binary *) (pValue))).__ptr);
+        }
         break;
 
     case XSD_DATETIME:
     case XSD_DATE:
     case XSD_TIME:
-        pParam->m_Value.tValue = new struct tm;
-        *(pParam->m_Value.tValue) = *((struct tm *) (pValue));
+        if (pValue == NULL)
+        {
+            pParam->m_Value.tValue = NULL;
+        }
+        else
+        {
+            pParam->m_Value.tValue = new struct tm;
+            *(pParam->m_Value.tValue) = *((struct tm *) (pValue));
+        }
         break; 
 
     default:
@@ -1421,7 +1526,8 @@ void SoapSerializer::addAttachmentBody( const AxisChar * achId,
 void SoapSerializer::addNamespaceToEnvelope( AxisChar * pachNamespaceURI,
 											 AxisChar * pachPrefix)
 {
-	Attribute * pNameSpace = new Attribute( (std::list<Attribute*>) NULL,
+        std::list<Attribute*> attributeList;
+	Attribute * pNameSpace = new Attribute( attributeList,
 											pachPrefix,
 											"xmlns",
 											pachNamespaceURI);
