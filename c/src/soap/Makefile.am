@@ -15,7 +15,6 @@ libsoap_la_SOURCES = Attribute.cpp \
         SoapSerializer.cpp \
         URIMapping.cpp \
 	SoapKeywordMapping.cpp \
-	SoapParserExpat.cpp \
 	apr_base64.c \
 	HexCoder.cpp \
         AxisSoapException.cpp
