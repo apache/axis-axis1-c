@@ -1194,6 +1194,20 @@ return Array;
                     }\
                     if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))\
                     {\
+                        /* if this node contain attributes check if this elemet is nil.*/ \
+                        if (0 != m_pNode->m_pchAttributes[0])\
+                        {\
+                            m_pCurrNode = m_pNode;\
+                            /* Need to verify if the return value is NULL. */\
+                            xsd__boolean * isNill = getAttributeAsBoolean("nil", 0);\
+                            if (NULL != isNill && true_ == *isNill)\
+                            {\
+                                ((cpp_type*)Array.m_Array)[nIndex] = NULL;\
+                                m_pNode = m_pParser->next();\
+                                m_pNode = NULL;\
+                                continue;\
+                            }\
+                        }\
                         m_pNode = m_pParser->next(true); /* charactor node */\
                         if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))\
                         {\
