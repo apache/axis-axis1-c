@@ -1,1 +1,1 @@
-SUBDIRS = base cbase groupB cgroupB
+SUBDIRS = base cbase groupB
