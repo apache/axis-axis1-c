@@ -418,7 +418,15 @@ SOURCE=..\src\soap\xsd\XSD_QName.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
+SOURCE=..\src\common\AdminUtils.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\Attribute.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\common\AxisUtils.h
 # End Source File
 # Begin Source File
 
