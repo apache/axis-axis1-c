@@ -20,12 +20,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import org.apache.axis.tools.trace.TraceInstrumentor;
+import java.util.List;
 
 public class Headers implements FileActor {
 	private ArrayList instanceMethods = new ArrayList();
 	private ArrayList staticMethods = new ArrayList();
+	private ArrayList allMethods = new ArrayList();
+	private ArrayList classNames = new ArrayList();
 	private boolean failed = false;
 
 	public void actOnFile(File header, File ignored, int depth)
@@ -51,6 +52,13 @@ public class Headers implements FileActor {
 				String className = pp.className();
 				if (null==className)
 					continue;
+				String trimClassName = className;
+				if (className.endsWith("::"))
+					trimClassName =
+						className.substring(0, className.length() - 2);
+				if (!classNames.contains(trimClassName))
+					classNames.add(trimClassName);
+				
 				Signature sign = new Signature(fp.toString());
 				sign.setClassName(className);
 				
@@ -67,6 +75,8 @@ public class Headers implements FileActor {
 		}
 
 		inputFile.close();
+		allMethods.addAll(staticMethods);
+		allMethods.addAll(instanceMethods);
 	}
 
 	public boolean failed() {
@@ -91,5 +101,23 @@ public class Headers implements FileActor {
 				return true;
 		}
 		return false;
+	}
+	
+	public List getMethods(String method) {
+		ArrayList list = new ArrayList();
+		if (null == method)
+			return list;
+
+		Iterator it = allMethods.iterator();
+		while (it.hasNext()) {
+			Signature s = (Signature) it.next();
+			if (method.equals(s.getMethodName()))
+				list.add(s);
+		}
+		return list;
+	}
+	
+	public boolean isClassName(String text) {
+		return classNames.contains(text);
 	}
 }

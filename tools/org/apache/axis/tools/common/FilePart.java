@@ -32,6 +32,7 @@ public class FilePart {
 	public final static int CLASSATTRIBUTE = 9;
 	public final static int ENUM = 10;
 	public final static int PROTOTYPE = 11;
+	public final static int TYPEDEF = 12;
 
 	protected String cppsource;
 	protected int type;

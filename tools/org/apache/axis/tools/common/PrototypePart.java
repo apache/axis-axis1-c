@@ -22,9 +22,10 @@ public class PrototypePart extends FilePart {
 	private Signature signature;
 
 	public PrototypePart(String s, String className) {
-		super(s, FilePart.PROTOTYPE);
+		super(s, PROTOTYPE);
 		signature = new Signature(s);
-		signature.setClassName(className);
+		if (null != className)
+			signature.setClassName(className);
 	}
 
 	String className() {
@@ -33,5 +34,9 @@ public class PrototypePart extends FilePart {
 	
 	public Signature getSignature() {
 		return signature;
+	}
+	
+	public void setScope(String scope) {
+		signature.setScope(scope);
 	}
 }

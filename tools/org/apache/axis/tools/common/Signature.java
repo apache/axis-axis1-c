@@ -36,6 +36,7 @@ public class Signature {
 	private Parameter returnType = null;
 	private Parameter[] params = null;
 	private String trailingAttributes;
+	private String scope = "public";
 	private boolean failed = false;
 	private boolean traceable = true;
 
@@ -231,7 +232,12 @@ public class Signature {
 		while (it.hasNext()) {
 			if (attributes.length() > 0)
 				attributes += " ";
-			attributes += (String) it.next();
+			String next = (String) it.next();
+			if ("public".equals(next)
+				|| "protected".equals(next)
+				|| "private".equals(next))
+				scope = next;
+			attributes += next;
 		}
 	}
 
@@ -358,6 +364,10 @@ public class Signature {
 		return className;
 	}
 
+	public String getTrimClassName() {
+		return trimClassName(className);
+	}
+
 	public String getMethodName() {
 		return methodName;
 	}
@@ -369,6 +379,25 @@ public class Signature {
 	public Parameter[] getParameters() {
 		return params;
 	}
+	
+	public boolean isConstructor() {
+		return className != null
+			&& methodName != null
+			&& trimClassName(className).equals(methodName);
+	}
+
+	public boolean isDestructor() {
+		return className != null
+			&& methodName != null
+			&& methodName.startsWith("~")
+			&& methodName.endsWith(trimClassName(className));
+	}
+	
+	private static String trimClassName(String name) {
+		if (name.endsWith("::"))
+			return name.substring(0, name.length() - 2);
+		return name;
+	}
 
 	void setClassName(String className) {
 		if (null == className)
@@ -376,6 +405,19 @@ public class Signature {
 		if (!className.endsWith("::"))
 			className += "::";
 		this.className = className;
+	}
+	
+	public String getScope() {
+		return scope;
+	}
+
+    /**
+     * Sets the scope, but only if the scope is not set by an explicit
+     * attribute in the signature.
+     */
+	public void setScope(String scope) {
+		if (-1 == attributes.indexOf(this.scope))
+			this.scope = scope;
 	}
 
 	/**

@@ -166,4 +166,10 @@ public class Parameter {
 			return getType();
 		return getType() + " " + name;
 	}
+	
+	public Iterator iterator() {
+		if (null == type)
+			return null;
+		return type.iterator();
+	}
 }

@@ -56,6 +56,7 @@ public class InputCppSourceCode {
 
 		String rest, text = "";
 		int scopedepth = 0;
+		String scope = "public";
 		String currentClass = null;
 		for (int idx = 0; idx < str.length(); /* No idx++ */
 			) {
@@ -108,6 +109,7 @@ public class InputCppSourceCode {
 				// TODO: better checking that this brace really ends the class
 				if (0 == scopedepth)
 					currentClass = null;
+				scope = "public";
 				parts.add(new FilePart("}", FilePart.ENDSCOPE));
 				idx++;
 
@@ -172,6 +174,7 @@ public class InputCppSourceCode {
 						name,
 						lineNo(str, idx),
 						rest.substring(0, rest.indexOf("\n")));
+			    scope = str.substring(idx, idx + colon);
 				text = str.substring(idx, idx + colon + 1);
 				FilePart fp = new FilePart(text, FilePart.CLASSATTRIBUTE);
 				parts.add(fp);
@@ -190,7 +193,7 @@ public class InputCppSourceCode {
 
 				if (-1 == brace || semicolon < brace) {
 					// Simple typedef
-					text = str.substring(idx, idx + semicolon);
+					text = str.substring(idx, idx + semicolon + 1);
 				} else {
 					// Typedef of a struct, etc
 					int endbrace = Utils.findMatching(rest, '{', '}');
@@ -198,7 +201,7 @@ public class InputCppSourceCode {
 					semicolon = Utils.indexOf(rest2, ';');
 					text = str.substring(idx, idx + endbrace + semicolon + 1);
 				}
-				FilePart fp = new FilePart(text, FilePart.FIELD);
+				FilePart fp = new FilePart(text, FilePart.TYPEDEF);
 				parts.add(fp);
 				idx += text.length();
 
@@ -214,6 +217,10 @@ public class InputCppSourceCode {
 							name,
 							lineNo(str, idx),
 							signature.getOriginal());
+					if (null != currentClass
+						&& null == signature.getClassName())
+						signature.setClassName(currentClass);
+				    signature.setScope(scope);
 
 					String body = rest.substring(brace);
 					int endBrace = Utils.findMatching(body, '{', '}');
@@ -222,7 +229,7 @@ public class InputCppSourceCode {
 						idx + signature.originalLength() + body.length();
 					text = str.substring(idx, endIdx);
 					MethodPart mp =
-						new MethodPart(text, FilePart.METHOD, signature, body);
+						new MethodPart(text, signature, body);
 					parts.add(mp);
 					idx += text.length();
 
@@ -236,8 +243,9 @@ public class InputCppSourceCode {
 				} else if (isPrototype(rest)) {
 					int semicolon = Utils.indexOf(rest, ';');
 					text = str.substring(idx, idx + semicolon + 1);
-					FilePart fp = new PrototypePart(text, currentClass);
-					parts.add(fp);
+					PrototypePart pp = new PrototypePart(text, currentClass);
+					pp.setScope(scope);
+					parts.add(pp);
 					idx += text.length();
 
 				} else {
@@ -276,12 +284,19 @@ public class InputCppSourceCode {
 		if (isMethod(s))
 			return false;
 
-		if (Utils.startsWith(s, "class"))
-			return true;
+		int brace = Utils.indexOf(s, '{');
+		int semicolon = Utils.indexOf(s, ';');
+
+		// Return false for class prototypes, but true for class definitions.
+		if (Utils.startsWith(s, "class")) {
+			if (-1 == brace)
+				return false;
+			if (-1 == semicolon)
+				return true;
+			return brace < semicolon;
+		}
 
 		if (Utils.startsWith(s, "struct")) {
-			int brace = Utils.indexOf(s, '{');
-			int semicolon = Utils.indexOf(s, ';');
 			if (-1 == brace || -1 == semicolon)
 				return false;
 			return brace < semicolon;
@@ -374,6 +389,10 @@ public class InputCppSourceCode {
 	private static boolean isField(String s) throws ParsingException {
 		int semicolon = Utils.indexOf(s, ';');
 		return !isMethod(s) && !isPrototype(s) && -1 != semicolon;
+	}
+	
+	public String getName() {
+		return name;
 	}
 
 	public String toString() {

@@ -24,8 +24,8 @@ public class MethodPart extends FilePart {
 	private Signature signature;
 	private String body;
 
-	MethodPart(String s, int type, Signature signature, String body) {
-		super(s, type);
+	MethodPart(String s, Signature signature, String body) {
+		super(s, METHOD);
 		this.signature = signature;
 		this.body = body;
 	}
