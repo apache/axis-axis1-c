@@ -20,7 +20,7 @@
 #if !defined(__XMLPARSER_H_OF_AXIS_INCLUDED__)
 #define __XMLPARSER_H_OF_AXIS_INCLUDED__
 
-/*
+/**
  * @class XMLParser
  * @brief Interface that any parser wrapper should implement in order to be use 
  *        in Axis as a SOAP parser.

@@ -34,11 +34,13 @@ enum AXIS_HANDLER_SCOPE {AH_APPLICATION=1, AH_SESSION, AH_REQUEST};
 const AxisChar kw_scope_app[] = "application";
 const AxisChar kw_scope_ses[] = "session";
 const AxisChar kw_scope_req[] = "request";
-/*
+
+/**
  *  @class WSDDHandler
  *  @brief interface for the WSDDHandler class.
  *  @author Susantha Kumara (skumara@virtusa.com)
  */
+
 class WSDDHandler  
 {
 public:

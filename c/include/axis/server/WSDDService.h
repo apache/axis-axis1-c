@@ -24,7 +24,7 @@
 #include <map>
 
 using namespace std;
-/*
+/**
  *  @class WSDDService
  *  @brief interface for the WSDDService class.
  *  @author Susantha Kumara (skumara@virtusa.com)
