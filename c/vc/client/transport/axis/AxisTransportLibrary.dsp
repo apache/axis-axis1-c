@@ -85,35 +85,35 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\..\..\..\src\client\transport\axis\AxisTransport.cpp
+SOURCE=..\..\..\..\src\transport\axis\AxisTransport.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\src\client\transport\axis\Channel.cpp
+SOURCE=..\..\..\..\src\transport\axis\Channel.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\src\client\transport\axis\HttpTransport.cpp
+SOURCE=..\..\..\..\src\transport\axis\HttpTransport.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\src\client\transport\axis\Receiver.cpp
+SOURCE=..\..\..\..\src\transport\axis\Receiver.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\src\client\transport\axis\Sender.cpp
+SOURCE=..\..\..\..\src\transport\axis\Sender.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\src\client\transport\axis\Transport.cpp
+SOURCE=..\..\..\..\src\transport\axis\Transport.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\src\client\transport\axis\TransportFactory.cpp
+SOURCE=..\..\..\..\src\transport\axis\TransportFactory.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\src\client\transport\axis\Url.cpp
+SOURCE=..\..\..\..\src\transport\axis\Url.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -121,7 +121,7 @@ SOURCE=..\..\..\..\src\client\transport\axis\Url.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\..\..\src\client\transport\axis\AxisTransport.h
+SOURCE=..\..\..\..\src\transport\axis\AxisTransport.h
 # End Source File
 # End Group
 # End Target

@@ -146,23 +146,7 @@ SOURCE=..\..\..\src\engine\AppScopeHandlerPool.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\include\axis\engine\AxisEngine.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\include\client\Call.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\include\axis\engine\ClientAxisEngine.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\src\engine\DeserializerPool.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\include\axis\engine\HandlerChain.h
 # End Source File
 # Begin Source File
 
