@@ -492,7 +492,7 @@ int ServerAxisEngine::setFaultOutputStream(int iFaultCode, SOAPTransport* pStrea
     AxisMessage objMessage;
     string sMessage = objMessage.getMessage(iFaultCode);
     SoapFault* pObjSoapFault = SoapFault::getSoapFault(iFaultCode);
-    pObjSoapFault->setFaultDetail(sMessage);
+    pObjSoapFault->setFaultDetail(sMessage.c_str());
     m_pSZ->setSoapFault(pObjSoapFault);
     m_pSZ->setOutputStream(pStream);
     releaseHandlers(pStream);
