@@ -48,7 +48,7 @@
 			</fault>
 			</operation>
 		</binding>
-	<service name="MathOpsService">
+	<service name="MathOps">
 		<port name="MathOps" binding="tns:MathOpsBinding">
 			<soap:address location="http://localhost/axis/MathOps"/>
 		</port>
