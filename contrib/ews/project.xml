@@ -75,7 +75,7 @@
         </includes>
       </resource>
       <resource>
-        <directory>src/conf</directory>
+        <directory>conf</directory>
         <includes>
           <include>**/*Provider</include>
           <include>**/*.properties</include>
@@ -89,6 +89,32 @@
     <!-- ============ -->
 
     <dependencies>
+		<!-- -->
+        <dependency>
+            <groupId>sec</groupId>
+            <artifactId>wss4j</artifactId>
+            <version>SNAPSHOT</version>
+            <properties>
+                <module>true</module>
+            </properties>
+        </dependency>
+		
+        <dependency>
+            <groupId>sec</groupId>
+            <artifactId>xmlsec</artifactId>
+            <version>SNAPSHOT</version>
+            <properties>
+                <module>true</module>
+            </properties>
+        </dependency>
+        <dependency>
+            <groupId>geronimo-spec</groupId>
+            <artifactId>geronimo-spec-ejb</artifactId>
+            <version>DEV</version>
+            <properties>
+                <module>true</module>
+            </properties>
+        </dependency>
 
         <!-- Module Dependencies -->
         <dependency>
@@ -196,7 +222,6 @@
                 <module>true</module>
             </properties>
         </dependency>
-
     </dependencies>
 </project>
 
