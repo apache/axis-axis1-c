@@ -1,0 +1,58 @@
+/*
+ *   Copyright 2003-2004 The Apache Software Foundation.
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+package org.apache.axis.tracetool;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+public class Exclusions {
+
+	private final static Set badFiles =
+		new HashSet(Arrays.asList(new Object[] {
+		// Tool fails on these files
+		"Url.cpp",
+			"libAxiscpp.cpp",
+			"cpplex.cpp",
+			"cppyacc.cpp",
+			"asciitab.h",
+			"iasciitab.h",
+			"latin1tab.h",
+			"spp_converter.h",
+			"utf8tab.h",
+			"SoapBinInputStream.h",
+			"SoapInputSource.h",
+			"XMLParserXerces.h",
+			"apr_base64.c",
+			"apr_base64.h",
+			"apr_xlate.h",
+		//Don't trace trace
+		"AxisTrace.cpp", "AxisTrace.h", "GDefine.h", "AxisFile.h" }));
+
+	static boolean shouldTraceFile(String s) {
+		return !badFiles.contains(s);
+	}
+
+	// TODO: needs implementing
+	static boolean shouldTraceClass(String s) {
+		return true;
+	}
+
+	// TODO: needs implementing
+	static boolean shouldTraceMethod(String className, String method) {
+		return true;
+	}
+}
