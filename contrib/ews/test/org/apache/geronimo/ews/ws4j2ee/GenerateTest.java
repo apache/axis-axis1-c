@@ -36,7 +36,14 @@ public class GenerateTest
     public void testBookSample() throws Exception
     {
         String args[] = new String[]{getTestFile("src/samples/jaxrpc/book/webservice.xml"),
-                                     "-o" + getTestFile("target/generated/gencode/server")};
+                                     "-o" + getTestFile("target/generated/gencode/server/book")};
+        Ws4J2EEwithWSDL.main(args);
+    }
+
+    public void testTimeSample() throws Exception
+    {
+        String args[] = new String[]{getTestFile("src/samples/jaxrpc/time/webservices.xml"),
+                                     "-o" + getTestFile("target/generated/gencode/server/time")};
         Ws4J2EEwithWSDL.main(args);
     }
 }
