@@ -38,31 +38,37 @@ class AxisConfig
         AxisConfig();
         ~AxisConfig();
         /**
-	     * This is called to get the server.wsdd file path.
+	 * This is called to get the server.wsdd file path.
          * 
-	     * @return the server.wsdd file path 
-	     */
+	 * @return the server.wsdd file path 
+	 */
         char* getWsddFilePath();
         /**
-	     * This is called to get the AxisLog file path.
+	 * This is called to get the AxisLog file path.
          *
-	     * @return the AxisLog file path.
-	     */
+	 * @return the AxisLog file path.
+	 */
         char* getAxisLogPath();
+        /**
+         * This is called to get the AxisClientLog file path.
+         *
+         * @return the AxisClientLog file path.
+         */
+        char* AxisConfig::getAxisClientLogPath ();
 		
-		/**
-	     * This is called to get the client.wsdd file path.
+	/**
+	 * This is called to get the client.wsdd file path.
          * 
-	     * @return the client.wsdd file path 
-	     */
+	 * @return the client.wsdd file path 
+	 */
         char* getClientWsddFilePath();
 
         /**
-	     * This method will read from the configuration file called axiscpp.conf
+	 * This method will read from the configuration file called axiscpp.conf
          * which is located in a place defined by AXIS_HOME environment variable. 
 	 
-	     * @return The status which indicates whether the operation is success (AXIS_SUCCESS) or not (AXIS_FAIL).
-	     */
+	 * @return The status which indicates whether the operation is success (AXIS_SUCCESS) or not (AXIS_FAIL).
+	 */
         int readConfFile();
 
 		char* getAxisHomePath();
@@ -72,10 +78,11 @@ class AxisConfig
         //char m_AxisLogPath[CONFBUFFSIZE];
         //char m_sWsddFilePath[CONFBUFFSIZE];
         //char m_sAxisLogPath[CONFBUFFSIZE];
-		char* m_sAxisHome;
+        char* m_sAxisHome;
         char* m_sWsddFilePath;
         char* m_sAxisLogPath;
-		char* m_sClientWsddFilePath;
+        char* m_sAxisClientLogPath;
+        char* m_sClientWsddFilePath;
         char* m_sValue;
         char m_sLine[CONFBUFFSIZE];
 };
