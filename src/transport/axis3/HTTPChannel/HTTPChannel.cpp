@@ -223,7 +223,7 @@ const IChannel & HTTPChannel::operator >> (const char * msg)
 		// Recv SOCKET_ERROR, Channel error while getting data
 		m_LastError = "Channel error while getting data";
 
-		//CloseChannel();
+		CloseChannel();
 
 		throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR, 
 									  (char *) m_LastError.c_str());
@@ -311,7 +311,8 @@ void HTTPChannel::setSocket( unsigned int uiNewSocket)
 }
 
 /**
- * HTTPChannel::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char * value)
+ * HTTPChannel::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type,
+ *									  const char * value)
  *
  * The following list can be set using this property:-
  * SOAPACTION_HEADER			- No action
@@ -429,7 +430,9 @@ bool HTTPChannel::OpenChannel()
 
     for( paiAddrInfo = paiAddrInfo0; paiAddrInfo; paiAddrInfo = paiAddrInfo->ai_next)
     {
-        m_Sock = socket( paiAddrInfo->ai_family, paiAddrInfo->ai_socktype, paiAddrInfo->ai_protocol);
+        m_Sock = socket( paiAddrInfo->ai_family,
+						 paiAddrInfo->ai_socktype,
+						 paiAddrInfo->ai_protocol);
 
         if( m_Sock < 0)
         {
@@ -455,11 +458,12 @@ bool HTTPChannel::OpenChannel()
 				port='%d'\n\
 				Error Message='%s'\
 				Error Code='%d'\n",
-				m_URL.getHostName(), m_URL.getPort(), message->c_str(), (int)dw);
+				m_URL.getHostName(), m_URL.getPort(), message->c_str(), (int) dw);
 				
-			delete(message);
+			delete( message);
 
-			throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED, fullMessage);
+			throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,
+										  fullMessage);
         }
 
         break;
@@ -587,7 +591,7 @@ bool HTTPChannel::OpenChannel()
 
     int one = 1;
 
-    setsockopt( m_Sock, IPPROTO_TCP, TCP_NODELAY, (char *)&one, sizeof(int));
+    setsockopt( m_Sock, IPPROTO_TCP, TCP_NODELAY, (char *) &one, sizeof( int));
 
     return bSuccess;
 }
@@ -644,10 +648,14 @@ bool HTTPChannel::StartSockets()
 			(LOBYTE( wsaData.wVersion) == WS_VERSION_MAJOR() &&
 			 HIBYTE( wsaData.wVersion) <  WS_VERSION_MINOR()))
 		{
-// Error - Underlying Windows socket transport version is not compatible with what is required.
+// Error - Underlying Windows socket transport version is not compatible with
+//		   what is required.
 			char 	szErrorBuffer[100];
 
-			sprintf( szErrorBuffer, "Windows Sockets version %d.%d is not supported by winsock2.dll", LOBYTE( wsaData.wVersion), HIBYTE( wsaData.wVersion));
+			sprintf( szErrorBuffer,
+					 "Windows Sockets version %d.%d is not supported by winsock2.dll",
+					 LOBYTE( wsaData.wVersion),
+					 HIBYTE( wsaData.wVersion));
 
 			m_LastError = szErrorBuffer;
 
@@ -659,8 +667,8 @@ bool HTTPChannel::StartSockets()
 		}
     }
 #else
-    /* cout << "no need for linux" << endl; */
-    /* other OS specific Intitialization goes here */
+// Other OS specific Intitialization goes here
+
 	bSuccess = true;
 #endif
 

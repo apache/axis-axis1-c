@@ -274,7 +274,8 @@ void HTTPSSLChannel::setSocket( unsigned int uiNewSocket)
 }
 
 /**
- * HTTPSSLChannel::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char * value)
+ * HTTPSSLChannel::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type,
+ *										 const char * value)
  *
  * The following list can be set using this property:-
  * SOAPACTION_HEADER			- No action
@@ -392,7 +393,9 @@ bool HTTPSSLChannel::OpenChannel()
 
     for( paiAddrInfo = paiAddrInfo0; paiAddrInfo; paiAddrInfo = paiAddrInfo->ai_next)
     {
-        m_Sock = socket( paiAddrInfo->ai_family, paiAddrInfo->ai_socktype, paiAddrInfo->ai_protocol);
+        m_Sock = socket( paiAddrInfo->ai_family,
+						 paiAddrInfo->ai_socktype,
+						 paiAddrInfo->ai_protocol);
 
         if( m_Sock < 0)
         {
@@ -407,22 +410,24 @@ bool HTTPSSLChannel::OpenChannel()
 			long dw = GETLASTERROR
 
 			CloseChannel();
+
             free( paiAddrInfo0);
 			
-			string* message = PLATFORM_GET_ERROR_MESSAGE(dw);
+			string *	message = PLATFORM_GET_ERROR_MESSAGE( dw);
+			char		fullMessage[600];
 
-			char fullMessage[600];
-			sprintf(fullMessage,
-				"Failed to open connection to server: \n \
-				hostname='%s'\n\
-				port='%d'\n\
-				Error Message='%s'\
-				Error Code='%d'\n",
-				m_URL.getHostName(), m_URL.getPort(), message->c_str(), (int)dw);
+			sprintf( fullMessage,
+					 "Failed to open connection to server: \n \
+					 hostname='%s'\n\
+					 port='%d'\n\
+					 Error Message='%s'\
+					 Error Code='%d'\n",
+					 m_URL.getHostName(), m_URL.getPort(), message->c_str(), (int) dw);
 				
-			delete(message);
+			delete( message);
 
-			throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED, fullMessage);
+			throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,
+										  fullMessage);
         }
 
         break;
@@ -610,7 +615,10 @@ bool HTTPSSLChannel::StartSockets()
 // Error - Underlying Windows socket transport version is not compatible with what is required.
 			char 	szErrorBuffer[100];
 
-			sprintf( szErrorBuffer, "Windows Sockets version %d.%d is not supported by winsock2.dll", LOBYTE( wsaData.wVersion), HIBYTE( wsaData.wVersion));
+			sprintf( szErrorBuffer,
+					 "Windows Sockets version %d.%d is not supported by winsock2.dll",
+					 LOBYTE( wsaData.wVersion),
+					 HIBYTE( wsaData.wVersion));
 
 			m_LastError = szErrorBuffer;
 
@@ -756,7 +764,7 @@ bool HTTPSSLChannel::OpenSSL_Open()
 
     m_sslContext = SSL_CTX_new( req_method);
 
-    if(!m_sslContext)
+    if( !m_sslContext)
     {
         iSSLErrorIndex = ERR_get_error();
 
