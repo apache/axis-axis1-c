@@ -30,6 +30,7 @@ XercesHandler::XercesHandler()
 {
     m_nStatus = AXIS_SUCCESS;
     Nelement = (AnyElement*)malloc(sizeof (AnyElement));
+	m_bEndElementFollows = false;
 }
 
 XercesHandler::~XercesHandler()
@@ -99,6 +100,13 @@ void XercesHandler::endElement (const XMLCh *const uri,
                                 const XMLCh *const localname,
                                 const XMLCh *const qname)
 {
+	if (m_pCurrElement && (START_ELEMENT == m_pCurrElement->m_type)) 
+	/* it seems that both startElement and endElemen events fired within a 
+	single parseNext call */
+	{
+		m_bEndElementFollows = true;
+		return;
+	}
     m_pCurrElement = Nelement;
     Nelement->m_type = END_ELEMENT;
     Nelement->m_pchNameOrValue = XMLString::transcode(localname);
@@ -126,7 +134,17 @@ void XercesHandler::freeElement()
 {
     if (m_pCurrElement)
     {
-        /* free inner variables */
-        m_pCurrElement = 0;
+		if (m_bEndElementFollows)
+			/* free only attributes list if available */
+		{
+			m_bEndElementFollows = false;
+			Nelement->m_type = END_ELEMENT;
+			Nelement->m_pchAttributes[0] = NULL;
+		}
+		else
+			/* free all inner strings */
+		{
+			m_pCurrElement = 0;
+		}
     }
 }

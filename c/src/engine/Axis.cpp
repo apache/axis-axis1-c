@@ -157,7 +157,7 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
                     pStream->sendBytes("<html><body>\
                         <h1 align=\"center\">Welcome to Axis C++</h1>\
                         <br>\
-                        <h2 align=\"center\">List of Deployed Web services<br></h2>\
+                        <h2 align=\"center\">List of Deployed Web services</h2><br>\
                         <table width=\"100%\" border=1 align=\"center\"><tbody>", NULL);
 
                     pStream->sendBytes
