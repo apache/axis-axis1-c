@@ -34,127 +34,152 @@ const string AxisMessage::getMessage(int iExceptionCode)
             m_sMessage = "Cannot deserialize the requested element";
             break;
         case SERVER_CONFIG_TRANSPORT_CONF_FAILED:
-            m_sMessage = "Transport layer is not configured properly";
+            m_sMessage = "AxisConfigException:Transport layer is not" \
+                " configured properly";
             break;
         case SERVER_CONFIG_LIBRARY_PATH_EMPTY:
-            m_sMessage = "Library path is empty(Not in server.wsdd file)";
+            m_sMessage = "AxisConfigException:Library path is empty(Not" \
+                " in server.wsdd file)";
             break; 
         case SOAP_VERSION_MISMATCH :
-            m_sMessage = "Soap Version mismatch fault occured";
+            m_sMessage = "AxisSoapException:Soap Version mismatch fault" \
+                " occured";
             break;
         case SOAP_MUST_UNDERSTAND:
-            m_sMessage = "Soap Must understand fault occured";
+            m_sMessage = "AxisSoapException:Soap Must understand fault" \
+                " occured";
             break;
         case CLIENT_SOAP_MESSAGE_INCOMPLETE:
-            m_sMessage = "Received message is incomplete";
+            m_sMessage = "AxisSoapException:Received message is incomplete";
             break;
         case CLIENT_SOAP_SOAP_ACTION_EMTPY:
-            m_sMessage = "Soap action is empty";
+            m_sMessage = "AxisSoapException:Soap action is empty";
             break;
         case CLIENT_SOAP_SOAP_CONTENT_ERROR:
-            m_sMessage = "Received content is faulty";
+            m_sMessage = "AxisSoapException:Received content is faulty";
             break;
         case CLIENT_SOAP_NO_SOAP_METHOD:
-            m_sMessage = "Request method is not a soap method";
+            m_sMessage = "AxisSoapException:Request method is not a soap" \
+                " method";
             break; 
         case CLIENT_SOAP_CONTENT_NOT_SOAP:
-            m_sMessage = "Content is not a valid soap message";
+            m_sMessage = "AxisSoapException:Content is not a valid soap" \
+                " message";
             break;
         case CLIENT_WSDD_SERVICE_NOT_FOUND:
-            m_sMessage = "Requested service not found";
+            m_sMessage = "AxisWsddException:Requested service not found";
             break;
         case CLIENT_WSDD_METHOD_NOT_ALLOWED:
-            m_sMessage = "Requested method is not allowed";
+            m_sMessage = "AxisWsddException:Requested method is not allowed";
             break;
         case CLIENT_WSDD_PARA_TYPE_MISMATCH:
-            m_sMessage = "Parameter type mismatch";
+            m_sMessage = "AxisWsddException:Parameter type mismatch";
             break;
         case SERVER_WSDD_NO_HANDLERS_CONFIGURED:
-            m_sMessage = "No handlers configured in server.wsdd";
+            m_sMessage = "AxisWsddException:No handlers configured in" \
+                " server.wsdd";
             break;
         case SERVER_ENGINE_COULD_NOT_LOAD_SRV:
-            m_sMessage = "Could not load service";
+            m_sMessage = "AxisEngineException:Could not load service";
             break;
         case SERVER_ENGINE_COULD_NOT_LOAD_HDL:
-            m_sMessage = "Could not load handler";
+            m_sMessage = "AxisEngineException:Could not load handler";
             break;
         case SERVER_ENGINE_HANDLER_FAILED:
-            m_sMessage = "Handler failed";
+            m_sMessage = "AxisEngineException:Handler failed";
             break;
         case SERVER_ENGINE_WEBSERVICE_FAILED:
-            m_sMessage = "Web Service failed";
+            m_sMessage = "AxisEngineException:Web Service failed";
             break;
         case SERVER_ENGINE_HANDLER_INIT_FAILED:
-            m_sMessage = "Handler initialization failed";
+            m_sMessage = "AxisEngineException:Handler initialization failed";
             break;
         case SERVER_ENGINE_HANDLER_CREATION_FAILED:
-            m_sMessage = "Handler creation failed";
+            m_sMessage = "AxisEngineException:Handler creation failed";
             break;
         case SERVER_ENGINE_LIBRARY_LOADING_FAILED:
-            m_sMessage = "Library loading failed";
+            m_sMessage = "AxisEngineException:Library loading failed";
             break;
         case SERVER_ENGINE_HANDLER_NOT_LOADED:
-            m_sMessage = "Handler is not loaded";
+            m_sMessage = "AxisEngineException:Handler is not loaded";
             break;
         case SERVER_ENGINE_HANDLER_BEING_USED:
-            m_sMessage = "Handler is being used";
+            m_sMessage = "AxisEngineException:Handler is being used";
             break;
         case SERVER_ENGINE_GET_HANDLER_FAILED:
-            m_sMessage = "Get handler failed"; 
+            m_sMessage = "AxisEngineException:Get handler failed"; 
             break;
         case SERVER_ENGINE_WRONG_HANDLER_TYPE:
-            m_sMessage = "Wrong handler type";
+            m_sMessage = "AxisEngineException:Wrong handler type";
             break;
         case SERVER_TRANSPORT_RECEPTION_EXCEPTION:
-            m_sMessage = "Problem occured when receiving the stream";
+            m_sMessage = "AxisTransportException:Problem occured when" \
+                " receiving the stream";
             break;
         case SERVER_TRANSPORT_SENDING_EXCEPTION:
-            m_sMessage = "Problem occured when sending the stream";
+            m_sMessage = "AxisTransportException:Problem occured when" \
+                " sending the stream";
             break;
         case SERVER_TRANSPORT_HTTP_EXCEPTION:
-            m_sMessage = "HTTP transport error";
+            m_sMessage = "AxisTransportException:HTTP transport error";
             break;
         case SERVER_TRANSPORT_PROCESS_EXCEPTION:
-            m_sMessage = "HTTP Error, cannot process response message";
+            m_sMessage = "AxisTransportException:HTTP Error, cannot" \
+                " process response message";
             break;
         case SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE:
-            m_sMessage = "Unknow HTTP response, cannot process response message";
+            m_sMessage = "AxisTransportException:Unknow HTTP response," \
+                " cannot process response message";
             break;
         case SERVER_TRANSPORT_UNEXPECTED_STRING:
-            m_sMessage = "Unexpected string";
+            m_sMessage = "AxisTransportException:Unexpected string";
             break;
         case SERVER_TRANSPORT_CHANNEL_INIT_ERROR:
-            m_sMessage = "Cannot initialize a channel to the remote end";
+            m_sMessage = "AxisTransportException:Cannot initialize a channel" \
+                " to the remote end";
             break;
         case SERVER_TRANSPORT_SOCKET_CREATE_ERROR:
-            m_sMessage = "Sockets error Couldn't create socket"; 
+            m_sMessage = "AxisTransportException:Sockets error Couldn't" \
+                " create socket"; 
             break;
         case SERVER_TRANSPORT_SOCKET_CONNECT_ERROR:
-            m_sMessage = "Cannot open a channel to the remote end, shutting down the channel";
+            m_sMessage = "AxisTransportException:Cannot open a channel to" \
+                " the remote end, shutting down the channel";
             break;
         case SERVER_TRANSPORT_INVALID_SOCKET:
-            m_sMessage = "Invalid socket. Socket may not be open";
+            m_sMessage = "AxisTransportException:Invalid socket. Socket may" \
+                " not be open";
             break;
         case SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR:
-            m_sMessage = "Output streaming error on Channel while writing data";
+            m_sMessage = "AxisTransportException:Output streaming error on" \
+                " Channel while writing data";
             break;
         case SERVER_TRANSPORT_INPUT_STREAMING_ERROR:
-            m_sMessage = "Input streaming error while getting data";
+            m_sMessage = "AxisTransportException:Input streaming error while" \
+                " getting data";
             break;
         case SERVER_TRANSPORT_TIMEOUT_EXCEPTION:
-            m_sMessage = "Channel error while waiting for timeout";
+            m_sMessage = "AxisTransportException:Channel error while waiting" \
+                " for timeout";
             break;
         case SERVER_TRANSPORT_TIMEOUT_EXPIRED:
-            m_sMessage = "Channel error connection timeout before receving";
+            m_sMessage = "AxisTransportException:Channel error connection" \
+                " timeout before receving";
             break;
         case SERVER_TRANSPORT_BUFFER_EMPTY:
-            m_sMessage = "Transport buffer is empty";
+            m_sMessage = "AxisTransportException:Transport buffer is empty";
             break;
         case SERVER_PARSE_BUFFER_EMPTY:
-            m_sMessage = "Buffer received from the parser is empty";
+            m_sMessage = "AxisParseException:Buffer received from the parser" \
+                " is empty";
             break;
         case SERVER_PARSE_PARSER_FAILED:
-            m_sMessage = "Parser failed";
+            m_sMessage = "AxisParseException:XML_STATUS_ERROR thrown from" \
+                " parser";
+            break;
+        case SERVER_PARSE_TRANSPORT_FAILED:
+            m_sMessage = "AxisParseException:Error when getting the byte" \
+                " stream from the transport";
             break;
         default:
             m_sMessage = "Unknown Exception has occured";
