@@ -98,7 +98,7 @@ public:
 	/* Method for adding complex type array parameters */
 	void AddParameter(Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName, const char* pchURI, const char* pchName);
 	/* Method for adding basic type array parameters */
-	void AddParameter(Axis_Array* pArray, XSDTYPE nType, const char* pchTypeName);
+	void AddParameter(Axis_Array* pArray, XSDTYPE nType, const char* pchName);
 
 	/* Methods for adding parameters of basic types */
 	void AddParameter(int nValue,const char* pchName);
@@ -113,6 +113,7 @@ public:
 	void AddParameter(double dValue,const char* pchName);
 	void AddParameter(struct tm tValue,const char* pchName);
 	void AddParameter(const AxisChar* pStrValue,const char* pchName);
+	void AddParameter(const AxisString& sStrValue,const char* pchName);
 
 	/* Method that set the remote method name */
 	void SetOperation(const char* pchOperation, const char* pchNamespace);

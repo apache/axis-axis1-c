@@ -163,26 +163,22 @@ void Call::AddParameter(const AxisChar* pStrValue,const char* pchName)
 	m_pIWSSZ->AddOutputParam(pchName, pStrValue);
 }
 
+void Call::AddParameter(const AxisString& sStrValue,const char* pchName)
+{
+	m_pIWSSZ->AddOutputParam(pchName, sStrValue.c_str());	
+}
+
 /**
  * Method used to add arrays of basic types as parameters
  */
-void Call::AddParameter(Axis_Array* pArray, XSDTYPE nType, const char* pchTypeName)
+void Call::AddParameter(Axis_Array* pArray, XSDTYPE nType, const char* pchName)
 {
-	IArrayBean* pAb = m_pIWSSZ->makeArrayBean(nType, (void*)(pArray->m_Array));
-	pAb->AddDimension(pArray->m_Size);
-	pAb->SetItemName("item");
-	IParam* pRetParam = m_pIWSSZ->AddOutputParam(pAb);
-	pRetParam->SetName(pchTypeName);
+	m_pIWSSZ->AddOutputParam(pchName, pArray, nType);
 }
 
-void Call::AddParameter(Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName)
+void Call::AddParameter(Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName, const char* pchURI, const char* pchName)
 {
-	IArrayBean* pAb = m_pIWSSZ->makeArrayBean((void*)(pArray->m_Array), pSZFunct, pDelFunct, pDelFunct);
-	pAb->AddDimension(pArray->m_Size);
-	pAb->SetItemName("item");
-	pAb->SetTypeName(pchTypeName);
-	IParam* pRetParam = m_pIWSSZ->AddOutputParam(pAb);
-	pRetParam->SetName(pchTypeName);
+	m_pIWSSZ->AddOutputParam(pchName, pArray, pSZFunct, pDelFunct, pSizeFunct, pchTypeName, pchURI);
 }
 
 void Call::AddParameter(void *pObject, void *pSZFunct, void *pDelFunct, const char* pchName)
