@@ -6,8 +6,10 @@ HOME_DIR=$PWD
 CHECKOUT_DIR=cvsautobuild
 LOG=${HOME_DIR}/log
 ERROR_LOG=${HOME_DIR}/log_error
-SOURCE_BUILD_MESSAGES=${HOME_DIR}/log_source_build_messages_`date +%Y-%m-%d@%H:%M:%S`
-SOURCE_BUILD_ERRORS=${HOME_DIR}/log_source_build_errors_`date +%Y-%m-%d@%H:%M:%S`
+#SOURCE_BUILD_MESSAGES=${HOME_DIR}/log_source_build_messages_`date +%Y-%m-%d@%H:%M:%S`
+#SOURCE_BUILD_ERRORS=${HOME_DIR}/log_source_build_errors_`date +%Y-%m-%d@%H:%M:%S`
+SOURCE_BUILD_MESSAGES=${HOME_DIR}/log_source_build_messages
+SOURCE_BUILD_ERRORS=${HOME_DIR}/log_source_build_errors
 
 export CVSROOT HOME_DIR CHECKOUT_DIR LOG ERROR_LOG SOURCE_BUILD_MESSAGES SOURCE_BUILD_ERRORS
 
@@ -79,8 +81,12 @@ then
 	echo Source Build  Sucessfull
 	echo `date` Source Build  Sucessfull >> ${LOG}
 else
-	echo Source Build Failed
-	echo `date` Source Build Failed >> ${LOG}
+    echo Source Build Failed
+    echo `date` Source Build Failed >> ${LOG}
+    if test -f mailto; then
+        cd testcases/build
+        cat log_source_build_messages | mutt -s "[test-results]Axis C++ Autobuild and regression test" -a "log_source_build_errors" -x axis-c-dev@ws.apache.org
+    fi
 	exit
 fi
 
@@ -142,5 +148,5 @@ sh runAllTests.sh
 #folder. This file has no meaning except this purpose
 if test -f mailto; then
 cd testcases/build
-cat runTestCase.log | mutt -s "[test-results]Axis C++ Autobuild" -a "buildTestCase.log" -x axis-c-dev@ws.apache.org
+cat runTestCase.log | mutt -s "[test-results]Axis C++ Autobuild and regression test" -a "buildTestCase.log" -x axis-c-dev@ws.apache.org
 fi
