@@ -41,16 +41,14 @@ void Sender::ClearAdditionalHeaders()
     m_pTrChannel->ClearAdditionalHeaders();
 }
 
-bool Sender::Send(const char* what) throw (AxisException)
+bool Sender::Send(const char* what)
 {
-    try
-    {
+    AXISC_TRY
         *m_pTrChannel << what;
-    }
-    catch(...)
-    {
-        THROW(SERVER_TRANSPORT_SENDING_EXCEPTION);
-    }
+    AXISC_CATCH(...)
+        AXISTRACE1("SERVER_TRANSPORT_SENDING_EXCEPTION", CRITICAL);
+        THROW_AXIS_TRANSPORT_EXCEPTION(SERVER_TRANSPORT_SENDING_EXCEPTION);
+    AXISC_ENDCATCH
 
     return true;
 }
