@@ -117,13 +117,13 @@ AxisString AxisTime::getValue()
 * Serialize the duration in seconds into a xml duration string
 * of the format PnYnMnDTnHnMnS
 */
-AxisString& AxisTime::serialize(const AxisChar* sName, long long lDuration, XSDTYPE nType)
+AxisString& AxisTime::serialize(const AxisChar* sName, long lDuration, XSDTYPE nType)
 {
 	AxisChar buff[4];
 	strXSDDuration = "P";
 	int x = 365 * 24 * 3600;
 	int intYears = lDuration / x;
-    long long tempYears = (long long) intYears * x;
+    long tempYears = intYears * x;
 	//sprintf((char*)buff,"%d", intYears);
 	AxisSprintf(buff, 4, "%d", intYears);
 	strXSDDuration.append(buff);
@@ -221,7 +221,7 @@ void AxisTime::mkCTime()
             /*XSD_DURATION is of the format PnYnMnDTnHnMnS*/
             intPos1 = m_sValue.find_first_of("Y");
             strYears = m_sValue.substr(1,intPos1 - 1);
-            m_longYears = (long long) atoi(strYears.c_str());
+            m_longYears = atoi(strYears.c_str());
             //m_intYears = wcstol(strYears.c_str(), &endptr, 10);
             duration.years = m_longYears;
             intPos2 = m_sValue.find_first_of("M");
