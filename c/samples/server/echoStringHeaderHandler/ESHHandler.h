@@ -72,7 +72,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include <axis/common/Handler.h>
+#include <axis/server/Handler.h>
 
 class ESHHandler : public Handler
 {
