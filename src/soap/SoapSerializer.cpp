@@ -836,7 +836,8 @@ int SoapSerializer::addOutputParam( const AxisChar * pchName,
     case XSD_QNAME:
     case XSD_NOTATION:
     case XSD_STRING:
-        pParam->m_Value.pStrValue = (char *) (pValue);
+        pParam->m_Value.pStrValue = new char[strlen((const char*)pValue)+1];
+        strcpy((char*)(pParam->m_Value.pStrValue),(const char*)pValue);
         break;
 
     case XSD_HEXBINARY:
