@@ -123,24 +123,25 @@ SoapFault* SoapDeSerializer::GetFault()
 }
 
 //this function is more usefull with XMLpull parser
-int SoapDeSerializer::Deserialize(Param* pParam, int bHref)
+int SoapDeSerializer::Deserialize(IParam* pIParam, int bHref)
 {
+	Param* pParam = (Param*)pIParam;
 	//if multiref add to m_Multirefs map
 	//else call its deserializer
 	switch (pParam->m_Type)
 	{
 	case XSD_ARRAY:
-		if (pParam->m_Value.a && pParam->m_Value.a->m_value.sta)
+		if (pParam->m_Value.pArray && pParam->m_Value.pArray->m_value.sta)
 		{
-			pParam->m_Value.a->DeSerialize(this);
+			pParam->m_Value.pArray->DeSerialize(this);
 		}
 		else
 			return FAIL;
 		break;
 	case USER_TYPE:
-		if (pParam->m_Value.o)
+		if (pParam->m_Value.pBean)
 		{
-			pParam->m_Value.o->DeSerialize(this);
+			pParam->m_Value.pBean->DeSerialize(this);
 		}
 		else
 			return FAIL;
@@ -150,7 +151,7 @@ int SoapDeSerializer::Deserialize(Param* pParam, int bHref)
 	return SUCCESS;
 }
 
-Param* SoapDeSerializer::GetParam()
+IParam* SoapDeSerializer::GetParam()
 {
 	return m_pHandler->GetParam();
 }

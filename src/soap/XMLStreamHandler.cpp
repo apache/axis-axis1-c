@@ -323,9 +323,9 @@ void XMLStreamHandler::SetParamType(const Attributes &attrs)
 						{
 							//custom data type
 							m_Param.m_Type = USER_TYPE;
-							m_Param.m_Value.o = &m_ArrayBean; //ArrayBean can be used as an AccessBean;
-							m_Param.m_Value.o->m_TypeName = sType;
-							m_Param.m_Value.o->m_URI = m_NsStack[sPrefix];
+							m_Param.m_Value.pBean = &m_AccessBean; //ArrayBean can be used as an AccessBean;
+							m_Param.m_Value.pBean->m_TypeName = sType;
+							m_Param.m_Value.pBean->m_URI = m_NsStack[sPrefix];
 						}
 					}
 					else
@@ -347,7 +347,7 @@ void XMLStreamHandler::SetParamType(const Attributes &attrs)
 			if (local == "arrayType")
 			{
 				m_Param.m_Type = XSD_ARRAY;
-				m_Param.m_Value.a = &m_ArrayBean;
+				m_Param.m_Value.pArray = &m_ArrayBean;
 
 				int colonindex = value.find(':'); 
 				if (colonindex != string::npos) 
@@ -366,12 +366,13 @@ void XMLStreamHandler::SetParamType(const Attributes &attrs)
 						if(URIMapping::Map(m_NsStack[sPrefix]) == URI_XSD)
 						{
 							//check for xml data types
-							m_Param.m_Value.a->m_type = TypeMapping::Map(sType);
+							m_Param.m_Value.pArray->m_type = TypeMapping::Map(sType);
 						}
 						else
 						{
-							m_Param.m_Value.a->m_TypeName = sType;
-							m_Param.m_Value.a->m_URI = m_NsStack[sPrefix];
+							m_Param.m_Value.pArray->m_TypeName = sType;
+							m_Param.m_Value.pArray->m_URI = m_NsStack[sPrefix];
+							m_Param.m_Value.pArray->m_type = USER_TYPE;
 							//array of custom data types
 						}
 						if(SUCCESS != SetArrayDimensions(sDimensions))
@@ -421,7 +422,7 @@ int XMLStreamHandler::SetArrayDimensions(string &sDimensions)
 	{
 		si = sDimensions.find('[',ei);
 		ei = sDimensions.find(']',si);
-		m_Param.m_Value.a->m_size.push_back(atoi((sDimensions.substr(si+1,ei)).c_str()));
+		m_Param.m_Value.pArray->m_size.push_back(atoi((sDimensions.substr(si+1,ei)).c_str()));
 	} while (sDimensions.find('[',ei) != string::npos);
 	return SUCCESS;
 }
