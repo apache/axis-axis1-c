@@ -63,8 +63,6 @@ SoapFault::~SoapFault()
     delete m_pFaultstringParam;
     delete m_pFaultactorParam;
     delete m_pFaultDetail;
-    if(m_pDZ)
-        delete(m_pDZ);
 
     m_pFaultcodeParam = NULL;
     m_pFaultstringParam = NULL;
