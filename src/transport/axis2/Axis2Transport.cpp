@@ -1393,7 +1393,7 @@ Axis2Transport::setSocket (unsigned int uiNewSocket)
 }
 
 const char *
-Axis2Transport::getTransportProperty (const char *pcKey)
+Axis2Transport::getTransportProperty (const char *pcKey, bool response)
 throw (AxisTransportException)
 {
 
