@@ -5,6 +5,7 @@ using namespace std;
 
 #include "RefTestPortType.hpp" 
 #include <axis/AxisException.hpp>
+#include <iostream>
 
 #define ARRAYSIZE 2
 
@@ -22,27 +23,33 @@ int main(int argc, char* argv[])
 		sprintf(endpoint, "%s", url);
 		RefTestPortType ws(endpoint);
 
-		printf("invoking echoInt..\n");
+		cout << "invoking echoInt.."<<endl;
 		IntType refint;
 		refint.intItem =56;
 
 		if ((ws.echoInt(&refint))->intItem == 56)
-			printf("successful\n");
+		{
+			cout << "successful"<<endl;
+		}
 		else
-			printf("failed \n");
+		{
+			cout << "failed "<<endl;
+		}
 
 	}
 	catch(AxisException& e)
 	{
-	    printf("Exception : %s\n", e.what());
+	    cout << "Exception : " << e.what() << endl;
 	}
 	catch(exception& e)
 	{
-	    printf("Unknown exception has occured\n");
+	    cout << "Unexpected exception has occured" << e.what() << endl;
 	}
 	catch(...)
 	{
-	    printf("Unknown exception has occured\n");
+	    cout << "Unknown exception has occured" << endl;
 	}
+	cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
+	
 	return 0;
 }

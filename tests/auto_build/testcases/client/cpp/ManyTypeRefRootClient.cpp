@@ -65,6 +65,7 @@ int main(int argc, char* argv[])
         if(endpoint_set)
             free(endpoint);
     }
+  	cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
     return returnValue;
 }
 

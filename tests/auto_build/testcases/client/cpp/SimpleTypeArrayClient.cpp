@@ -62,6 +62,21 @@ int main(int argc, char* argv[])
     if(endpoint_set)
       free(endpoint);
   }
+  
+  // clean up
+  try
+  {
+  	delete ws;
+  }
+  catch(exception& exception)
+  {
+  	cerr << "Exception on clean up of ws : " << exception.what()<<endl;
+  }
+  catch(...)
+  {
+  	cerr << "Unknown exception on clean up of ws : " << endl;
+  }
+  cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
   return returnValue;
 
 }
