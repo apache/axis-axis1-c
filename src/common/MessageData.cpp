@@ -74,6 +74,7 @@ MessageData::MessageData()
 {
 	m_pSZ = NULL;
 	m_pDZ = NULL;
+	m_bPastPivotState= false;
 }
 
 MessageData::~MessageData()
@@ -111,12 +112,37 @@ WSDDService* MessageData::GetService()
 
 }
 
+/*
+comm on 25Jul2003 at 10.00am
 ISoapSerializer* MessageData::getSoapSerializer()
 {
 	return m_pSZ;
 }
+*/
 
 ISoapDeSerializer* MessageData::getSoapDeserializer()
 {
 	return m_pDZ;
+}
+
+bool MessageData::isPastPivot()
+{
+	return m_bPastPivotState;
+}
+
+int MessageData::setPastPivotState(bool bState)
+{
+	m_bPastPivotState = bState;
+
+	return SUCCESS;
+}
+
+void MessageData::getSoapSerializer(IHandlerSoapSerializer **pIHandlerSoapSerializer)
+{
+	*pIHandlerSoapSerializer = dynamic_cast<IHandlerSoapSerializer*>(m_pSZ);
+}
+
+void MessageData::getSoapSerializer(IWrapperSoapSerializer **pIWrapperSoapSerializer)
+{
+	*pIWrapperSoapSerializer = dynamic_cast<IWrapperSoapSerializer*>(m_pSZ);
 }
