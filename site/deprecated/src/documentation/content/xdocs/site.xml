@@ -38,6 +38,11 @@ See http://xml.apache.org/forrest/linking.html for more info
   <read label="Reading Guide" href="java/reading.html"/>
   <requirements label="Requirements" href="java/requirements.html"/>
  </axisjava>
+ <axiscpp label="Axis (C++)">
+  <users label="User's Guide" href="cpp/user-guide.html"/>
+  <developers label="Developer's Guide" href="cpp/developers-guide.html"/>
+  <integration label="Integration Guide" href="cpp/integration-guide.html"/>
+  <architecture label="Architecture Guide" href="cpp/architecture-guide.html"/> </axiscpp>
 <downloads label="Downloads">
   <releases label="Releases" href="releases.html"/>
   <interim label="Interim Drops" href="interim.html"/>
