@@ -94,7 +94,7 @@
 
 #define BYTESTOREAD 64
 //the relative location of the wsdl files hardcoded
-#define WSDLDIRECTORY	"./Axis/wsdl/"
+#define WSDLDIRECTORY	"./Axis/wsdls/"
 
 //define all global variables of the axisengine
 #ifdef _AXISTRACE
