@@ -139,6 +139,12 @@ int ServerAxisEngine::Process(Ax_soapstream* soap)
 					break; //do .. while(0)
 				}
 			}
+            else
+			{
+                m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_NOSOAPMETHOD));
+                //no method to be invoked
+                break; //do .. while(0)
+			}
 			//Get Global and Transport Handlers
 			if(AXIS_SUCCESS != (Status = InitializeHandlers(sSessionId, soap->trtype)))
 			{
@@ -248,6 +254,7 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 		{
 			if (AXIS_SUCCESS != (Status = m_pWebService->Invoke(pMsg)))
 			{
+                AXISTRACE1("Web service failed");
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_WEBSERVICEFAILED));
 				break;
 			}        

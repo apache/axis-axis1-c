@@ -61,7 +61,8 @@
  *
  */
 //#include <stdlib.h>
-#include <axis/soap/XMLStreamHandler.h>
+//#include <axis/soap/XMLStreamHandler.h>
+#include <axis/soap/XMLSimpleHandler.h>
 #include <axis/common/TypeMapping.h>
 #include <axis/soap/URIMapping.h>
 #include <axis/soap/Attribute.h>
@@ -69,10 +70,15 @@
 #include <axis/soap/CharacterElement.h>
 #include <axis/common/AxisUtils.h>
 
+#include <axis/common/AxisTrace.h>
+
+
 #define __XTRC(x) x
 
 XMLStreamHandler::XMLStreamHandler()
 {
+
+    AXISTRACE1("XMLStreamHandler");
 	m_pEnv = NULL;
 	m_pHead = NULL;
 	m_pBody = NULL;
@@ -111,14 +117,15 @@ XMLStreamHandler::~XMLStreamHandler()
 
 */
 
-void XMLStreamHandler::startElement(const std::string& uri,const std::string& localname,const std::string& qname,const AttributesT &attrs)
+void XMLStreamHandler::startElement(const string& uri,const string& localname,const string& qname,const AttributesT &attrs)
 {
+    AXISTRACE1("startElement");
 	AxisXMLString sLname = __XTRC(localname);
 	const AxisXMLCh* lname = sLname.c_str();
 	switch (m_PL0)
 	{
 	case SOAP_UNKNOWN:
-	if(XMLString::equals(lname,SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_ENVELOPE]))
+	if(0 == strcmp(lname,SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_ENVELOPE]))
 	{
 		m_PL0 = SOAP_ENVELOP;
 		m_pEnv = new SoapEnvelope();
@@ -127,21 +134,22 @@ void XMLStreamHandler::startElement(const std::string& uri,const std::string& lo
 	}
 	break;
 	case SOAP_ENVELOP:
-	if(XMLString::equals(lname,SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_BODY]))
+	if(0 == strcmp(lname,SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_BODY]))
 	{
 		m_PL0 = SOAP_BODY;
 		m_pBody = new SoapBody();
 		//set all attributes of SoapBody
 		FillBody(uri,localname,qname,attrs);	
 	}
-	else if (XMLString::equals(lname,SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_HEADER]))
+	else if (0 == strcmp(lname,SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_HEADER]))
 	{
 		m_PL0 = SOAP_HEADER;
 		m_pHead = new SoapHeader();
+        
 		//set all attributes of SoapHeader
 		FillHeader(uri,localname,qname,attrs);
 	}
-	else if (XMLString::equals(lname,SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_FAULT]))
+	else if (0 == strcmp(lname,SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_FAULT]))
 	{
 		//m_PL0 = SOAP_FAULT;
 		//m_pFault = SoapFault::getSoapFault(1);
@@ -149,7 +157,7 @@ void XMLStreamHandler::startElement(const std::string& uri,const std::string& lo
 		//FillFault(uri,localname,qname,attrs);
 	}
 	else { //Soap error
-		m_Success = AXIS_FAIL;
+		m_Success = FAIL;
 	}
 	break;
 	case SOAP_HEADER:
@@ -164,7 +172,7 @@ void XMLStreamHandler::startElement(const std::string& uri,const std::string& lo
 		switch (m_PL1)
 		{
 		case SOAP_UNKNOWN:
-			if (XMLString::equals(lname,SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_MULTIREF]))
+			if (0 == strcmp(lname,SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_MULTIREF]))
 			{
 				m_sLastElement = lname;
 				SetParamType(attrs); 
@@ -174,6 +182,7 @@ void XMLStreamHandler::startElement(const std::string& uri,const std::string& lo
 			{
 				m_PL1 = SOAP_METHOD;
 				m_pMethod = new SoapMethod();
+                AXISTRACE2("startElement:localname: ", localname.c_str());
 				FillMethod(uri,localname,qname,attrs);
 			}
 			break;
@@ -196,15 +205,15 @@ void XMLStreamHandler::startElement(const std::string& uri,const std::string& lo
 			m_nParamNestingLevel++;
 			break;
 		default:
-			m_Success = AXIS_FAIL;
+			m_Success = FAIL;
 		}
 	break;
 	default:
-		m_Success = AXIS_FAIL;
+		m_Success = FAIL;
 	}
 }
 
-void XMLStreamHandler::endElement (const std::string& uri, const std::string& localname,const std::string& qname)
+void XMLStreamHandler::endElement (const string& uri, const string& localname,const string& qname)
 {
 	AxisXMLString sLname = __XTRC(localname);
 	const AxisXMLCh* lname = sLname.c_str();
@@ -236,83 +245,54 @@ void XMLStreamHandler::endElement (const std::string& uri, const std::string& lo
 		m_PL1= SOAP_UNKNOWN;
 		break;
 	default:
-		m_Success = AXIS_FAIL;
+		m_Success = FAIL;
 	}
 }
 
-void  XMLStreamHandler::characters (const std::string& chars,const unsigned int length)
+void  XMLStreamHandler::characters (const string& chars,const unsigned int length)
 {
+    AXISTRACE1("characters");
 	if ((m_PL0 == SOAP_BODY) && (m_PL1 == SOAP_PARAM)) //Make this a switch statement if many cases to be handled
 	{
-		//Get value of the parameter
-		int nLen = XMLString::stringLen(chars);
-		if ( nLen > TRANSCODE_BUFFER_SIZE-1)
-		{
-			AxisChar* pchar = new AxisChar[nLen];
-			if (XMLString::transcode(chars, pchar, nLen-1))
-			{
-				m_Param.SetValue(pchar);
-			}
-			delete pchar;
-		}
-		else
-		{
-			if (XMLString::transcode(chars, m_Buffer, TRANSCODE_BUFFER_SIZE-1))
-			{
-				m_Param.SetValue(m_Buffer);
-			}			
-		}
+			
+		m_Param.SetValue(chars.c_str());
 	} 
 	else if ((m_PL0 == SOAP_HEADER) && (m_PL1 == SOAP_HEADER_BLOCK)) 
 	{
 		//Get the value of the header entry
 		CharacterElement* pCharacterElement = NULL;
-		int nLen = XMLString::stringLen(chars);
-		if ( nLen > TRANSCODE_BUFFER_SIZE-1)
-		{
-			AxisChar* pchar = new AxisChar[nLen];
-			if (XMLString::transcode(chars, pchar, nLen-1))
-			{
-				pCharacterElement = new CharacterElement(pchar);
-			}
-			delete pchar;
-		}
-		else
-		{
-			if (XMLString::transcode(chars, m_Buffer, TRANSCODE_BUFFER_SIZE-1))
-			{
-				pCharacterElement = new CharacterElement(m_Buffer);
-			}			
-		}
+		
+		pCharacterElement = new CharacterElement(chars.c_str());
+			
 		if (pCharacterElement)
 			m_pHeaderBlock->addChild(pCharacterElement);
 	}
 }
 
-void XMLStreamHandler::startPrefixMapping(const XMLCh* const prefix, const XMLCh* const uri)
+void XMLStreamHandler::startPrefixMapping(const std::string& prefix, const std::string& uri)
 {
 	AxisXMLString sPrefix = __XTRC(prefix); 
 	m_NsStack[sPrefix.c_str()] = __XTRC(uri); //I think the same prifix cannot repeat ???
 }
 
-void XMLStreamHandler::endPrefixMapping(const XMLCh* const prefix)
+void XMLStreamHandler::endPrefixMapping(const std::string& prefix)
 {
 	m_NsStack.erase(__XTRC(prefix)); //I think the same prifix cannot repeat ???
 }
 
-void XMLStreamHandler::warning(const SAXParseException& exception)
+void XMLStreamHandler::warning(const SAX::SAXParseException& exception)
 {
 
 }
-void XMLStreamHandler::error(const SAXParseException& exception)
+void XMLStreamHandler::error(const SAX::SAXParseException& exception)
 {
 //  sprintf((char*)chEBuf, "Error : %s", __TRC(exception.getMessage()));
-	m_Success = AXIS_FAIL;
+	m_Success = FAIL;
 }
-void XMLStreamHandler::fatalError(const SAXParseException& exception)
+void XMLStreamHandler::fatalError(const SAX::SAXParseException& exception)
 {
 // sprintf((char*)chEBuf, "Fatal Error : %s", __TRC(exception.getMessage()));
-	m_Success = AXIS_FAIL;
+	m_Success = FAIL;
 }
 
 int XMLStreamHandler::Success()
@@ -320,7 +300,7 @@ int XMLStreamHandler::Success()
 	return m_Success;
 }
 
-void XMLStreamHandler::SetParamType(const Attributes &attrs)
+void XMLStreamHandler::SetParamType(const AttributesT &attrs)
 {
 	//in case there are no attributes describing the type the default is set to XSD_UNKNOWN
 	m_Param.m_Type = XSD_UNKNOWN;
@@ -330,11 +310,11 @@ void XMLStreamHandler::SetParamType(const Attributes &attrs)
 		AxisXMLString sLocal = __XTRC(attrs.getLocalName(i));
 		const AxisXMLCh* local = sLocal.c_str();
 		sValue = __XTRC(attrs.getValue(i));
-		URITYPE urit = URIMapping::Map(__XTRC(attrs.getURI(i)));
+		URITYPE urit = URIMapping::Map(__XTRC(attrs.getURI(i).c_str()));
 		switch (urit)
 		{
 		case URI_XSI: //xsi:type="xsd:int"
-			if (XMLString::equals(local, SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_TYPE]))
+			if (0 == strcmp(local, SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_TYPE]))
 			{
 				int colonindex = sValue.find(':'); 
 				if (colonindex != AxisXMLString::npos) 
@@ -373,7 +353,7 @@ void XMLStreamHandler::SetParamType(const Attributes &attrs)
 			}
 			break;
 		case URI_ENC: //enc:arrayType="xs:string[6]"
-			if (XMLString::equals(local, SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_ARRAYTYPE]))
+			if (0 == strcmp(local, SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_ARRAYTYPE]))
 			{
 				m_Param.m_Type = XSD_ARRAY;
 				m_Param.m_Value.pArray = &m_ArrayBean;
@@ -404,7 +384,7 @@ void XMLStreamHandler::SetParamType(const Attributes &attrs)
 							m_Param.m_Value.pArray->m_type = USER_TYPE;
 							//array of custom data types
 						}
-						if(AXIS_SUCCESS != SetArrayDimensions(sDimensions))
+						if(SUCCESS != SetArrayDimensions(sDimensions))
 						{
 							//couldnt get dimension of the array - error condition
 						}
@@ -426,12 +406,12 @@ void XMLStreamHandler::SetParamType(const Attributes &attrs)
 			break;
 		case URI_UNKNOWN:
 			//check for accessors for multiref values
-			if (XMLString::equals(local, SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_HREF]))
+			if (0 == strcmp(local, SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_HREF]))
 			{
 				m_Param.m_Type = ACCESSOR;
 				//m_Param.m_sValue = sValue.substr(sValue.find('#')+1);
 			}
-			else if (XMLString::equals(local, SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_ID]))
+			else if (0 == strcmp(local, SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_ID]))
 			{
 				//m_Param.m_sName = sValue;
 			}
@@ -456,7 +436,7 @@ int XMLStreamHandler::SetArrayDimensions(AxisXMLString &sDimensions)
 		m_Param.m_Value.pArray->m_size.push_back(atoi(sDimensions.substr(si+1,(ei-si-1)).c_str()));
 		si = ei;
 	} while (sDimensions.find(',', si+1) != string::npos);
-	return AXIS_SUCCESS;
+	return SUCCESS;
 }
 
 Param* XMLStreamHandler::GetParam()
@@ -495,7 +475,7 @@ void XMLStreamHandler::Init()
 	m_PL0 = SOAP_UNKNOWN;
 	m_PL1 = SOAP_UNKNOWN;
 	m_PL2 = SOAP_UNKNOWN;
-	m_Success = AXIS_SUCCESS;
+	m_Success = SUCCESS;
 	m_nSoapVersion = SOAP_VER_1_1;
 	for (m_it = m_Params.begin(); m_it != m_Params.end(); m_it++)
 	{
@@ -507,7 +487,7 @@ void XMLStreamHandler::Init()
 	m_nParamNestingLevel = 0;
 }
 
-void XMLStreamHandler::FillEnvelope(const std::string& uri, const std::string& localname, const std::string& qname, const Attributes &attrs)
+void XMLStreamHandler::FillEnvelope(const string& uri, const string& localname, const string& qname, const AttributesT &attrs)
 {
 	AxisXMLString str;
 	const AxisXMLCh* pchURI;
@@ -527,11 +507,11 @@ void XMLStreamHandler::FillEnvelope(const std::string& uri, const std::string& l
 	pAttr->setValue(pchURI);
 	m_pEnv->addNamespaceDecl(pAttr);
 
-	if (XMLString::equals(pchURI, SoapKeywordMapping::Map(SOAP_VER_1_1).pchNamespaceUri))
+	if (0 == strcmp(pchURI, SoapKeywordMapping::Map(SOAP_VER_1_1).pchNamespaceUri))
 	{
 		m_nSoapVersion = SOAP_VER_1_1;
 	}
-	else if (XMLString::equals(pchURI, SoapKeywordMapping::Map(SOAP_VER_1_2).pchNamespaceUri))
+	else if (0 == strcmp(pchURI, SoapKeywordMapping::Map(SOAP_VER_1_2).pchNamespaceUri))
 	{
 		m_nSoapVersion = SOAP_VER_1_2;
 	}
@@ -545,30 +525,30 @@ void XMLStreamHandler::FillEnvelope(const std::string& uri, const std::string& l
 	for (unsigned int ix=0;ix<nAttrs;ix++)
 	{
 		pAttr = new Attribute();
-		pAttr->setPrefix(__XTRC(attrs.getQName(ix)));
-		pAttr->setValue(__XTRC(attrs.getValue(ix)));
-		pAttr->setLocalName(__XTRC(attrs.getLocalName(ix)));
-		pAttr->setUri(__XTRC(attrs.getURI(ix)));
+		pAttr->setPrefix(__XTRC(attrs.getQName(ix).c_str()));
+		pAttr->setValue(__XTRC(attrs.getValue(ix).c_str()));
+		pAttr->setLocalName(__XTRC(attrs.getLocalName(ix).c_str()));
+		pAttr->setUri(__XTRC(attrs.getURI(ix).c_str()));
 		m_pEnv->addAttribute(pAttr);	
 	}
 }
 
-void XMLStreamHandler::FillBody(const std::string& uri, const std::string& localname, const std::string& qname, const Attributes &attrs)
+void XMLStreamHandler::FillBody(const string& uri, const string& localname, const string& qname, const AttributesT &attrs)
 {
 	//nothing to do
 }
 
-void XMLStreamHandler::FillHeader(const std::string& uri, const std::string& localname, const std::string& qname, const Attributes &attrs)
+void XMLStreamHandler::FillHeader(const string& uri, const string& localname, const string& qname, const AttributesT &attrs)
 {
 	//nothing to do
 }
 
-void XMLStreamHandler::FillFault(const std::string& uri, const std::string& localname, const std::string& qname, const Attributes &attrs)
+void XMLStreamHandler::FillFault(const string& uri, const string& localname, const string& qname, const AttributesT &attrs)
 {
 	//nothing to do
 }
 
-void XMLStreamHandler::FillMethod(const std::string& uri, const std::string& localname, const std::string& qname, const Attributes &attrs)
+void XMLStreamHandler::FillMethod(const string& uri, const string& localname, const string& qname, const AttributesT &attrs)
 {
 	AxisXMLString str = __XTRC(qname);
 	if (str.find(':') != AxisXMLString::npos) 
@@ -578,10 +558,10 @@ void XMLStreamHandler::FillMethod(const std::string& uri, const std::string& loc
 		str = __XTRC(uri);
 		m_pMethod->setUri(str.c_str());
 	}
-	m_pMethod->setLocalName(__XTRC(localname));
+	m_pMethod->setLocalName(__XTRC(localname.c_str()));
 }
 
-void XMLStreamHandler::createHeaderBlock(const std::string& uri, const std::string& localname, const std::string& qname, const Attributes &attrs)
+void XMLStreamHandler::createHeaderBlock(const string& uri, const string& localname, const string& qname, const AttributesT &attrs)
 {
 	m_pHeaderBlock= new HeaderBlock();
 	AxisXMLString str = __XTRC(qname);	
@@ -590,9 +570,15 @@ void XMLStreamHandler::createHeaderBlock(const std::string& uri, const std::stri
 		str = str.substr(0, str.find(':'));
 		m_pHeaderBlock->setPrefix(str.c_str());		
 	}
-	m_pHeaderBlock->setLocalName(__XTRC(localname));
-	m_pHeaderBlock->setUri(__XTRC(uri));
+	m_pHeaderBlock->setLocalName(__XTRC(localname.c_str()));
+	m_pHeaderBlock->setUri(__XTRC(uri.c_str()));
 }
+
+// EntityResolver
+SAX::InputSource XMLStreamHandler::resolveEntity(const std::string& publicId, const std::string& systemId)
+{
+  return SAX::InputSource();
+} // resolveEntity
 
 /*const AxisChar* XMLStreamHandler::__XTRC(const XMLCh *pChar)
 {
