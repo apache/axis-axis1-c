@@ -5,21 +5,39 @@
 	  -->
 	<target name="compileTestHandler" if="isHandler">
 		<mkdir dir="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}"/>
-		<cc incremental="false"
-		 outfile="${dir.test.generated}/${client.lang}/${testName}/${handlerLibraryName}"
-		 objdir="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}" exceptions="true"
-		 failonerror="false" outtype="shared" multithreaded="true">
-			<compiler refid="VisualC++"/>
-			<compiler refid="Linuxgcc"/>
-			<compiler refid="AIXxlc"/>
-			<linker refid="VisualC++Linker"/>
-			<linker refid="LinuxLinker"/>
-			<linker refid="AIXLinker"/>
-			<includepath path="${dir.include}"/>
-			<fileset dir="${handlerDir}">
-				<include name="*.cpp"/>
-			</fileset>
-		</cc>
+		<if>
+			<not>
+				<isset property="aix"/>
+			</not>
+			<then>
+				<cc incremental="false"
+				 outfile="${dir.test.generated}/${client.lang}/${testName}/${handlerLibraryName}"
+				 objdir="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}" exceptions="true"
+				 failonerror="false" outtype="shared" multithreaded="true">
+					<compiler refid="VisualC++"/>
+					<compiler refid="Linuxgcc"/>
+					<linker refid="VisualC++Linker"/>
+					<linker refid="LinuxLinker"/>
+					<includepath path="${dir.include}"/>
+					<fileset dir="${handlerDir}">
+						<include name="*.cpp"/>
+					</fileset>
+				</cc>
+			</then>
+			<else>
+				<cc incremental="false"
+				 outfile="${dir.test.generated}/${client.lang}/${testName}/${libraryPrefix}${handlerLibraryName}${librarySuffix}"
+				 objdir="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}" exceptions="true"
+				 failonerror="false" multithreaded="true">
+					<compiler refid="AIXxlc"/>
+					<linker refid="AIXLinker"/>
+					<includepath path="${dir.include}"/>
+					<fileset dir="${handlerDir}">
+						<include name="*.cpp"/>
+					</fileset>
+				</cc>
+			</else>
+		</if>
 	</target>
 
 	<target name="setHandlerLibraryName">
