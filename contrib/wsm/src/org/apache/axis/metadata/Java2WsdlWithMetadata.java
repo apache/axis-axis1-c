@@ -131,6 +131,7 @@ public class Java2WsdlWithMetadata extends org.apache.axis.wsdl.Java2WSDL {
 			).soapStyle();
 			
 			// Currently the following commented-out block doesn't work.
+			// This block works from Tiger beta 2 b38.
 			
 			/*
 			switch (style) {
