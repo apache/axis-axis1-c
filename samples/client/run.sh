@@ -1,6 +1,6 @@
-echo "running sslclient..."
-echo "-----------------------------"
-./sslclient
+#echo "running sslclient..."
+#echo "-----------------------------"
+#./sslclient
 
 echo "-----------------------------"
 
@@ -30,13 +30,3 @@ echo "-----------------------------"
 echo "-----------------------------"
 
 
-echo "running doclitbase..."
-echo "-----------------------------"
-./doclitbase
-
-echo "-----------------------------"
-
-
-echo "running doclitgroupB..."
-echo "-----------------------------"
-./doclitgroupB
