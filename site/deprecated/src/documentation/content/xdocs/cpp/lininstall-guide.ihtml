@@ -262,8 +262,7 @@ libaxiscpp_mod2.so)</strong></p>
 <p><strong>SetHandler axis</strong></p>
 <p><strong>&lt;/Location&gt;</strong></p>
 <br>
-<p><b>cd /usr/local/apache/libexec (If apache2
-/usr/local/apache2/modules)</b></p>
+<p><b>cd /usr/local/Axis</b></p>
 <p><b>cp -f $AXIS_HOME/deploy.sh_apache ./deploy.sh</b>
 <br>(if apache2)
 <b>cp -f $AXIS_HOME/deploy.sh_apache2 ./deploy.sh </b>
@@ -333,8 +332,7 @@ libaxiscpp_mod2.so)</strong></p>
 <p><strong>SetHandler axis</strong></p>
 <p><strong>&lt;/Location&gt;</strong></p>
 <br>
-<p><b>cd /usr/local/apache/libexec (If apache2
-/usr/local/apache2/modules)</b></p>
+<p><b>cd /usr/local/Axis </b></p>
 <p><b>cp -f $AXIS_HOME/deploy.sh_apache &nbsp;./deploy.sh</b>
 <br><b>(if apache2)
 <br>cp -f $AXIS_HOME/deploy.sh_apache2 ./deploy.sh</b>
