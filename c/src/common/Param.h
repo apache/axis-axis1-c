@@ -118,7 +118,8 @@ private:
 
 public: //Conversion functions
 	int SetValue(string& sValue);
-	XSDTYPE GetType() const;
+	XSDTYPE GetType() const;	
+	int serialize(string& sSerialized, SoapSerializer& pSZ);
 	int serialize(string& sSerialized);
 
 	//Following functions are used by wrapper class methods making sure of the valid type.
