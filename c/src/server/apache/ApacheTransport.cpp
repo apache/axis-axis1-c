@@ -15,8 +15,15 @@
  *
  *
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  *
  */
+
+/*
+ * Revision 1.1  2004/05/24 samisa
+ * Filled in the empty body of setTransportProperty
+ */
+
 
 #include "ApacheTransport.h"
 
@@ -204,6 +211,15 @@ const char* ApacheTransport::getTransportProperty(AXIS_TRANSPORT_INFORMATION_TYP
 
 void ApacheTransport::setTransportProperty(const char* pcKey, const char* pcValue)
 {
+	 if (pcKey && pcValue)
+    {
+		ap_table_set (((request_rec*)m_pContext)->headers_out, pcKey, pcValue);
+#ifdef CHUNCKED_DATA_SUPPORTED
+		ap_send_http_header ((request_rec*)m_pContext);
+		/* Should we remove the sent headers ? */
+#endif
+	}
+
 
 }
 
