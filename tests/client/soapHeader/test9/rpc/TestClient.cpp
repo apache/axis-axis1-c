@@ -51,16 +51,16 @@ main(int argc, char *argv[])
     sprintf(endpoint, "http://%s:%s/axis/base", server, port);
     InteropTestPortType ws(endpoint, APTHTTP);
 
-    /*create a header of the form:
-       <SOAP-ENV:Header>
-       <th:newName xmlns:th="http://ws.apache.org/axisCppTest/">
-       <TestAuthHeader>
-       <username>Test User</username>
-       <password>Test Password</password>
-       </TestAuthHeader>
-       </th:newName>
-       </SOAP-ENV:Header>
-     */
+    /*
+    <SOAP-ENV:Header>
+    	<ns2:TestHeader xmlns:ns2="http://ws.apache.org/axisCppTest/" xmlns:namesp1="http://mynamespace.com">
+	    <Credentials ns2:type="normal">
+		<username ns2:usertype="normal_user">Test User</username>
+		<password>Test Password</password>
+	    </Credentials>
+	</ns2:TestHeader>
+    </SOAP-ENV:Header>
+    */
 
     //set SOAP headers
     IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader", 

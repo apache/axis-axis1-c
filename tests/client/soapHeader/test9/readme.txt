@@ -20,8 +20,8 @@
  */
 
 
-This client application can be used to test adding attributes to SOAP Headers.
-In the first part of the program it sets some soap headders with the Attributes. Then it calls echostring method.
+This client application can be used to test adding attributes and namespaces to SOAP Headers.
+In the first part of the program it sets some soap headders with the Attributes and namespaces. Then it calls echostring method.
 
 Steps to Run the Test
 =====================
