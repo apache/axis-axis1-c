@@ -160,7 +160,10 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				}
 			}
 			else if (attribs[i].isSimpleType()){
-				writer.write("\tpSZ->serializeAsElement(\""+attribs[i].getElementName().getLocalPart()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");				
+				//writer.write("\tpSZ->serializeAsElement(\""+attribs[i].getElementName().getLocalPart()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+				//Samisa 22/08/2004
+				writer.write("\tpSZ->serializeAsElement(\""+attribs[i].getElementNameAsString()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+				//Samisa
 			}else{
 				//if complex type
 				String elm = attribs[i].getParamName();
@@ -212,7 +215,10 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				}
 			}else if(attribs[i].isSimpleType()){
 				//TODO handle optional attributes
-				writer.write("\tparam->"+attribs[i].getParamName()+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute())+"(\""+(attribs[i].isAttribute() ? attribs[i].getParamName():attribs[i].getElementName().getLocalPart())+"\",0);\n");
+				//Samisa
+				//writer.write("\tparam->"+attribs[i].getParamName()+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute())+"(\""+(attribs[i].isAttribute() ? attribs[i].getParamName():attribs[i].getElementName().getLocalPart())+"\",0);\n");
+				writer.write("\tparam->"+attribs[i].getParamName()+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute())+"(\""+(attribs[i].isAttribute() ? attribs[i].getParamName():attribs[i].getElementNameAsString())+"\",0);\n");
+				//Samisa
 			} else{
 				//if complex type
 				writer.write("\tparam->"+attribs[i].getParamName()+" = ("+attribs[i].getTypeName()+"*)pIWSDZ->getCmplxObject((void*)Axis_DeSerialize_"+attribs[i].getTypeName()+

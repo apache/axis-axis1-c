@@ -17,6 +17,8 @@
 package org.apache.axis.wsdl.wsdl2ws.info;
 
 import javax.xml.namespace.QName;
+import org.apache.axis.wsdl.symbolTable.SymbolTable;
+import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 
 /**
  * this class represents Parameter(message in the wsdl) 
@@ -58,6 +60,13 @@ public class ParameterInfo {
 	}
 
     public void setParamName(String paramName) {
+        //Samisa: 21/08/2004
+        if (paramName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1 )
+        {
+            paramName = paramName.substring(paramName.lastIndexOf(SymbolTable.ANON_TOKEN)+1,paramName.length());
+        }
+        paramName = TypeMap.resoleveWSDL2LanguageNameClashes(paramName, WrapperConstants.LANGUAGE_CPP);
+        //Samisa
         this.attribName = paramName;
     }
 
@@ -80,6 +89,18 @@ public class ParameterInfo {
     public QName getElementName() {
         return elementName;
     }
+    //Samisa 21/08/2004
+    public String getElementNameAsString() {
+        String paramName = elementName.getLocalPart();
+        if (paramName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1 )
+        {
+            paramName = paramName.substring(paramName.lastIndexOf(SymbolTable.ANON_TOKEN)+1,paramName.length());
+        }
+        paramName = TypeMap.resoleveWSDL2LanguageNameClashes(paramName, WrapperConstants.LANGUAGE_CPP);
+	return paramName;
+
+    }
+    //Samisa
 
     /**
      * @param name

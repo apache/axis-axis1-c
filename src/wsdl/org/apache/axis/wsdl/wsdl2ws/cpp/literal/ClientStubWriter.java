@@ -355,7 +355,10 @@ public class ClientStubWriter extends CPPClassWriter{
 				 }
 				 else
 				 {
-					String parameterName = ((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart();
+					//String parameterName = ((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart();
+					//Samisa 22/08/2004
+					String parameterName = ((ParameterInfo)paramsB.get(i)).getElementNameAsString();
+					//Samisa
 					String namespace = ((ParameterInfo)paramsB.get(i)).getElementName().getNamespaceURI();
 					int	stringLength = 8 + 1 + parameterName.length() + 1; 
 					 
@@ -475,7 +478,10 @@ public class ClientStubWriter extends CPPClassWriter{
 					//for anyTtype 
 					writer.write("\t\t\t" + currentParamName + " = ("+currentParaType+"*)m_pCall->getAnyObject();\n");
 				}else{
-				   writer.write("\t\t\t" + currentParamName + " = ("+currentParaType+"*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"+currentParaType+", (void*) Axis_Create_"+currentParaType+", (void*) Axis_Delete_"+currentParaType+",\""+currentType.getElementName().getLocalPart()+"\", 0);\n"); 
+				   //writer.write("\t\t\t" + currentParamName + " = ("+currentParaType+"*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"+currentParaType+", (void*) Axis_Create_"+currentParaType+", (void*) Axis_Delete_"+currentParaType+",\""+currentType.getElementName().getLocalPart()+"\", 0);\n"); 
+				   //Samisa 22/08/2004
+				   writer.write("\t\t\t" + currentParamName + " = ("+currentParaType+"*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"+currentParaType+", (void*) Axis_Create_"+currentParaType+", (void*) Axis_Delete_"+currentParaType+",\""+currentType.getElementNameAsString()+"\", 0);\n"); 
+				   //Samisa
 				}				
 			}	
 			writer.write("\t\t}\n");
@@ -511,7 +517,10 @@ public class ClientStubWriter extends CPPClassWriter{
 			writer.write("\t}\n\tm_pCall->unInitialize();\n");
 			writer.write("\treturn pReturn;\n");						
 		}else{
-			writer.write("\t\t\tpReturn = ("+outparamType+"*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"+outparamType+", (void*) Axis_Create_"+outparamType+", (void*) Axis_Delete_"+outparamType+",\""+returntype.getElementName().getLocalPart()+"\", 0);\n\t\t}\n"); 
+			//writer.write("\t\t\tpReturn = ("+outparamType+"*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"+outparamType+", (void*) Axis_Create_"+outparamType+", (void*) Axis_Delete_"+outparamType+",\""+returntype.getElementName().getLocalPart()+"\", 0);\n\t\t}\n"); 
+			//Samisa 22/08/2004
+			writer.write("\t\t\tpReturn = ("+outparamType+"*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"+outparamType+", (void*) Axis_Create_"+outparamType+", (void*) Axis_Delete_"+outparamType+",\""+returntype.getElementNameAsString()+"\", 0);\n\t\t}\n"); 
+			//Samisa
 			writer.write("\t}\n\tm_pCall->unInitialize();\n");
 			writer.write("\treturn pReturn;\n");						
 		}

@@ -149,7 +149,9 @@ public class BeanParamWriter extends ParamCFileWriter{
 				}
 			}
 			else if (attribs[i].isSimpleType()){
-				writer.write("\tpSZ->_functions->serializeAsElement(pSZ->_object, \""+attribs[i].getElementName().getLocalPart()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+				//Samisa 22/08/2004
+				writer.write("\tpSZ->_functions->serializeAsElement(pSZ->_object, \""+attribs[i].getElementNameAsString()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+				//Samisa
 			}else{
 				//if complex type
 				String elm = attribs[i].getParamName();
