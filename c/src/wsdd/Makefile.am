@@ -7,5 +7,5 @@ libwsdd_la_SOURCES = WSDDDeployment.cpp \
                 WSDDDocument.cpp \
 		WSDDKeywords.cpp
 
-libwsdd_la_LIBADD = -L$(AXISCPP_HOME)/lib/arabica -lArabica -lexpat
+libwsdd_la_LIBADD = -L$(AXISCPP_HOME)/lib/expat -lexpat
 INCLUDES = -I$(AXISCPP_HOME)/include

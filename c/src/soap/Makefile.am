@@ -14,8 +14,8 @@ libsoap_la_SOURCES = Attribute.cpp \
         SoapMethod.cpp \
         SoapSerializer.cpp \
         URIMapping.cpp \
-        XMLSimpleHandler.cpp \
-	SoapKeywordMapping.cpp
+	SoapKeywordMapping.cpp \
+	SoapParser.cpp
 
-libsoap_la_LIBADD = -L$(AXISCPP_HOME)/lib/arabica -lArabica -lexpat
+libsoap_la_LIBADD = -L$(AXISCPP_HOME)/lib/expat -lexpat
 INCLUDES = -I$(AXISCPP_HOME)/include

@@ -15,5 +15,5 @@ libengine_la_SOURCES = Axis.cpp \
 		SharedObject.cpp
 		
 
-libengine_la_LIBADD = -L$(AXISCPP_HOME)/lib/arabica -lArabica -lexpat -lstdc++
+libengine_la_LIBADD = -L$(AXISCPP_HOME)/lib/expat -lexpat -lstdc++
 INCLUDES = -I$(AXISCPP_HOME)/include
