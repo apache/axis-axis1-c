@@ -39,8 +39,13 @@
  * a SOAP header block.
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */ 
+
+/*
+ * Revision 1.1  2004/06/13 roshan
+ * Added doxygen comments to help autobuild API docs
+ */
 
 typedef enum 
 { 
@@ -51,32 +56,75 @@ class SoapHeader : public ISoapHeader
 {
 private:    
     int serializeNamespaceDecl(SoapSerializer& pSZ);
-    /* int serializeNamespaceDecl(string&); */
+    
     int serializeAttributes(SoapSerializer& pSZ);
-    /* int serializeAttributes(string&); */
+    
     list<Attribute*> m_attributes;
     list<Attribute*> m_namespaceDecls;
     list<HeaderBlock*> m_headerBlocks;
-    /* string m_strHeaderSerialized; */
+    
     const char* m_pcPrefix;
 public:
+    /**
+      * Gets and returns the Header Block, of the given name.
+      *
+      * @param pName The local name of the requested Header Block.
+      * @param pNamespace The namespace uri of the requested Header Block.
+      * @return A pointer to the requested Header Block will be returned if
+      * found or else if not found a NULL pointer will be retured. In case of
+      * the requested Header Block is found, also it will be removed from the
+      * list of Header Blocks of this Soap Header, before returning a pointer.
+      */
     IHeaderBlock* getHeaderBlock(const AxisChar* pName, 
         const AxisChar* pNamespace);
+
+    /**
+      * Sets the Prefix of the Header Block.
+      *
+      * @param pcPrefix The prefix to set.
+      */
     int setPrefix(const char* pcPrefix);
+
     /**
      * Removes the next HeaderBlock from the list and returns it. 
      * But will not delete it.
      * @return The removed HeaderBlock of the list.
      */
     IHeaderBlock* getHeaderBlock();
+
+    /**
+      * Sets the namespace declaration of the Soap Header.
+      *
+      * @param pAttribute The Attribute pointer which points to a valid 
+      * namespace declartion Attribute.
+      * @return AXIS_SUCCESS to indicate successfull operation.
+      */
     int addNamespaceDecl(Attribute* pAttribute);
+
+    /**
+      * Adds a Attribute to this Soap Header.
+      *
+      * @param attr The Attribute to be added.
+      */
     int addAttribute(Attribute* pAttribute);
-    /* string& serialize(); */
+    
     int serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion);
-    /* int serialize(string&, SOAP_VERSION eSoapVersion); */
+    
+    /**
+      * Adds a Header Block to this Soap Header.
+      *
+      * @param headerBlock The Header Block to be added.
+      */
     void addHeaderBlock(HeaderBlock* headerBlock);
 
+    /**
+      * The Constructor.
+      */
     SoapHeader();
+
+    /**
+      * The Destructor.
+      */
     virtual ~SoapHeader();
 
 };
