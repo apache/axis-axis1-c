@@ -15,7 +15,9 @@ libsoap_la_SOURCES = Attribute.cpp \
         SoapSerializer.cpp \
         URIMapping.cpp \
 	SoapKeywordMapping.cpp \
-	SoapParserExpat.cpp
+	SoapParserExpat.cpp \
+	apr_base64.c \
+	HexCoder.cpp 	
 
 libsoap_la_LIBADD = -L$(AXISCPP_HOME)/lib/expat -lexpat
 INCLUDES = -I$(AXISCPP_HOME)/include
