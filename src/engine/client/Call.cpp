@@ -64,6 +64,8 @@ Call::Call ()
 
 Call::~Call ()
 {
+	    SOAPTransportFactory::destroyTransportObject(m_pTransport);
+		m_pTransport = NULL;
     if (m_bModuleInitialized)
         uninitialize_module();
     if (m_pcEndPointUri)
@@ -291,7 +293,8 @@ int Call::openConnection(int secure)
 {
     try
     {
-    m_pTransport = SOAPTransportFactory::getTransportObject(m_nTransportType);
+        if (!m_pTransport) 
+            m_pTransport = SOAPTransportFactory::getTransportObject(m_nTransportType);
 	if (!m_pTransport) return AXIS_FAIL;
 
     m_pTransport->setEndpointUri(m_pcEndPointUri);
@@ -322,8 +325,8 @@ void Call::closeConnection()
 {
 	if (m_pTransport) {
         m_pTransport->closeConnection();
-	    SOAPTransportFactory::destroyTransportObject(m_pTransport);
-		m_pTransport = NULL;
+	//    SOAPTransportFactory::destroyTransportObject(m_pTransport);
+	//	m_pTransport = NULL;
 	}
 }
 

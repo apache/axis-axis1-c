@@ -94,6 +94,7 @@ throw (AxisTransportException)
 	bUpdateURL = true;
     }
 
+
     // If there is a new URI, then this flag will be set.  Depending on whether
     // GSKit is available, if the new URI is a secure connection, a secure
     // channel will be opened.  If GSKit is not available and the URL requires
@@ -129,13 +130,16 @@ throw (AxisTransportException)
 	else
 	{
 	    // URI does not require a secure channel.  Delete the existing
-	    // channel (as it may be secure) and create a new unsecure
+	    // channel if it is secure and create a new unsecure
 	    // channel.
-	    delete m_pChannel;
+            if (m_bChannelSecure)
+            {
+	        delete m_pChannel;
 
-	    m_pChannel = new Channel ();
-	    m_pChannel->setURL (pcEndpointUri);
-	    m_bChannelSecure = false;
+                m_pChannel = new Channel ();
+                m_pChannel->setURL (pcEndpointUri);
+                m_bChannelSecure = false;
+            }
 	}
     }
 }
@@ -187,6 +191,7 @@ throw (AxisTransportException)
 {
     if (m_bURIChanged)
     {
+        m_bURIChanged = false;
 	if (!m_pChannel->open ())
 	{
 	    int iStringLength = m_pChannel->GetLastError ().length () + 1;
@@ -1087,14 +1092,17 @@ Axis2Transport::processResponseHTTPHeaders ()
 
 	    iStartPosition = iPosition + 1;
 
-	    m_vResponseHTTPHeaders.
-		push_back (std::
-			   make_pair (strHeaderLine.substr (0, iSeperator),
-				      strHeaderLine.substr (iSeperator + 1,
-							    strHeaderLine.
-							    length () -
-							    iSeperator - 1 -
-							    1)));
+            string key = strHeaderLine.substr (0, iSeperator);
+            string value = strHeaderLine.substr (iSeperator + 1,
+                                                            strHeaderLine.
+                                                            length () -
+                                                            iSeperator - 1 -
+                                                            1);
+	    m_vResponseHTTPHeaders.push_back (std::make_pair (key, value));
+
+            if (key == "Connection" && value == " close" ) // We need to close the connection and open a new one
+                m_bURIChanged = true;
+                
 	}
 	while (iPosition != std::string::npos);
     }
