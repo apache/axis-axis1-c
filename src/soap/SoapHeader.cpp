@@ -41,8 +41,7 @@ AXIS_CPP_NAMESPACE_START
 extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];
 
 SoapHeader::SoapHeader()
-{
-	m_itHeaderBlocks = NULL;
+{	
 }
 
 SoapHeader::~SoapHeader()
@@ -270,15 +269,11 @@ IHeaderBlock* SoapHeader::getNextHeaderBlock()
 
 IHeaderBlock* SoapHeader::getCurrentHeaderBlock()
 {
-	if (m_itHeaderBlocks == NULL) {
-		return NULL;
-	} else {
-		IHeaderBlock* tmpIHeaderBlock=NULL;
-		if (m_itHeaderBlocks != m_headerBlocks.end())
-			tmpIHeaderBlock = *m_itHeaderBlocks;
+	IHeaderBlock* tmpIHeaderBlock=NULL;
+	if (m_itHeaderBlocks != m_headerBlocks.end())
+		tmpIHeaderBlock = *m_itHeaderBlocks;
 
-		return tmpIHeaderBlock;
-	}
+	return tmpIHeaderBlock;
 }
 
 AXIS_CPP_NAMESPACE_END
