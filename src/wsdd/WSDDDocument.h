@@ -115,9 +115,9 @@ public:
 	~WSDDDocument();
 	int ParseDocument(string& sWSDD);
 	int GetDeployment(string& sWSDD, WSDDDeployment * dep);
-	void startElement(const XMLCh *const uri, 
-							const XMLCh *const localname, 
-							const XMLCh *const qname, 
+	void startElement(const XMLCh *const uri,
+							const XMLCh *const localname,
+							const XMLCh *const qname,
 							const Attributes &attrs);
 	void  characters (const XMLCh *const chars, const unsigned int length);
 	void  endElement (const XMLCh *const uri,

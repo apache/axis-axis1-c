@@ -321,6 +321,7 @@ int AxisEngine::Invoke(MessageData* pMsg)
 			}
 
 		}
+    DEBUG1("AFTER pChain = m_pHandlerPool->GetTransportRequestFlowHandlerChain");
 		level++; // AE_TRH
 		//invoke global request handlers
 		pChain = m_pHandlerPool->GetGlobalRequestFlowHandlerChain();
@@ -332,6 +333,7 @@ int AxisEngine::Invoke(MessageData* pMsg)
 				break; //do .. while (0)
 			}		
 		}
+    DEBUG1("AFTER pChain = m_pHandlerPool->GetGlobalRequestFlowHandlerChain();");
 		level++; //AE_GLH
 		//invoke service specific request handlers
 		pChain = m_pHandlerPool->GetServiceRequestFlowHandlerChain();
@@ -344,6 +346,7 @@ int AxisEngine::Invoke(MessageData* pMsg)
 			}
       DEBUG1("if(SUCCESS == pChain->Invoke(pMsg))");
 		}
+    DEBUG1("AFTER pChain = m_pHandlerPool->GetServiceRequestFlowHandlerChain();");
 		level++; //AE_SERH
 		//call actual web service handler
 		if (m_pWebService)
@@ -352,6 +355,8 @@ int AxisEngine::Invoke(MessageData* pMsg)
 				pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_WEBSERVICEFAILED));
 				break;
 			}
+
+    DEBUG1("if (m_pWebService)");      
          
 		level++; //AE_SERV
 	}
@@ -381,7 +386,7 @@ int AxisEngine::Invoke(MessageData* pMsg)
 		}
 		//no break;
 	case AE_TRH: //global handlers have failed
-		pChain = m_pHandlerPool->GetTransportRequestFlowHandlerChain(pMsg->m_Protocol);
+		pChain = m_pHandlerPool->GetTransportResponseFlowHandlerChain(pMsg->m_Protocol);
 		if (pChain) 
 		{
 			pChain->Invoke(pMsg);
