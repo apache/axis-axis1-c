@@ -144,8 +144,11 @@ const WSDDHandlerList* WSDDDeployment::GetGlobalResponseFlowHandlers()
 int WSDDDeployment::LoadWSDD(const AxisChar* sWSDD)
 {
 	m_sWSDDPath = string(sWSDD);
-	WSDDDocument doc;
-	if (AXIS_SUCCESS != doc.GetDeployment(sWSDD, this))
+
+	WSDDDocument* doc = new WSDDDocument();
+	if (AXIS_SUCCESS != doc->GetDeployment(sWSDD, this))
+
+
 	{
 		return AXIS_FAIL;
 	}
@@ -389,7 +392,7 @@ int WSDDDeployment::unDeploy(string sServiceName)
 /**
  * Performs the deployment.
  */
-int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_ArrayTag inAllowedMethodsArray)
+int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_Array inAllowedMethodsArray)
 {
 	AXISTRACE3("entered to WSDDDeployment::deploy");
 	AXISTRACE3(strcat("WSDDDeployment::deploy, sServiceName = ", sServiceName.c_str()));

@@ -74,9 +74,11 @@
 
 string MessageData::m_sBlankPropertyValue="";
 extern WSDDDeployment* g_pWSDDDeployment;
+IMessageDataFunctions IMessageData::ms_VFtable;
 
 MessageData::MessageData()
 {
+	__vfptr = &ms_VFtable;
 	m_pSZ = NULL;
 	m_pDZ = NULL;
 	m_bPastPivotState= false;
@@ -148,12 +150,12 @@ void MessageData::getSoapSerializer(IHandlerSoapSerializer **pIHandlerSoapSerial
 	*pIHandlerSoapSerializer = static_cast<IHandlerSoapSerializer*>(m_pSZ);
 }
 
-void MessageData::getSoapSerializer(IWrapperSoapSerializer **pIWrapperSoapSerializer)
+void MessageData::GetSoapSerializer(IWrapperSoapSerializer **pIWrapperSoapSerializer)
 {
 	*pIWrapperSoapSerializer = static_cast<IWrapperSoapSerializer*>(m_pSZ);
 }
 
-void MessageData::getSoapDeSerializer(IWrapperSoapDeSerializer **pIWrapperSoapDeSerializer)
+void MessageData::GetSoapDeSerializer(IWrapperSoapDeSerializer **pIWrapperSoapDeSerializer)
 {
 	*pIWrapperSoapDeSerializer= static_cast<IWrapperSoapDeSerializer*>(m_pDZ);
 }
