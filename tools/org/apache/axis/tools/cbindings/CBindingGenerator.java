@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.*;
 
 import org.apache.axis.tools.common.CParsingTool;
 import org.apache.axis.tools.common.Configuration;
@@ -140,11 +141,7 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 
 				case FilePart.TYPEDEF :
 					prevPart = fp.getType();
-					// TODO: make sure all typedefs are prefixed with AXISC_
-					text = changeAxisToAxisc(fp.toString().trim());
-                              text = replaceInString(text,"bool","AxiscBool",null);
-					outputFile.write(text);
-					outputFile.newLine();
+					generateTypedef(fp, outputFile);
 					break;
 
 				case FilePart.METHOD :
@@ -184,16 +181,15 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 		//TODO: replace axis with axisc, etc
 		String text = fp.toString().trim();
 		if (-1 != text.indexOf("include")) {
-			StringBuffer sb = new StringBuffer(text);
-			int ext = sb.indexOf(".hpp");
-			int dot = sb.indexOf(".");
-			if (-1 != ext) {
-				// change .hpp ext to .h 
-				sb.delete(ext + 2, ext + 4);
-				text = sb.toString();
-			} else if (-1 == dot) {
+			if (-1 == text.indexOf(".")) {
 				// remove C++ includes with no ext
 				text = new String();
+			} else {
+				// Putting #includes of GDefine and AxisUserAPI in <> not "" is needed for the
+				// ant build because those 2 headers aren't generated.
+				text = replaceInString(text,"\"GDefine.hpp\"","<axis/GDefine.hpp>",null);
+				text = replaceInString(text,"\"AxisUserAPI.hpp\"","<axis/AxisUserAPI.hpp>",null);
+				text = replaceInString(text,".hpp",".h",null);
 			}
 			outputFile.write(text);
 			outputFile.newLine();
@@ -209,6 +205,24 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 			else if (-1 != text.indexOf("endif"))
 				keepIfdef = false;
 		}
+	}
+
+	private void generateTypedef(
+		FilePart fp,
+		BufferedWriter outputFile)
+		throws Exception {
+
+		String text = changeAxisToAxisc(fp.toString().trim());
+		text = replaceInString(text,"bool","AxiscBool",null);
+
+            // Put AXISC_ on to the front of the typedef name which is always at the end.
+		StringTokenizer st = new StringTokenizer(text);
+		String tok = null;
+		while (st.hasMoreTokens()) tok = st.nextToken();
+		text = replaceInString(text,tok,"AXISC_"+tok,null);
+
+		outputFile.write(text);
+		outputFile.newLine();
 	}
 
 	private void generateFunctionPrototype(
@@ -268,9 +282,9 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 		}
 
 		if (sign.isConstructor()) {
-			text += "AXISCHANDLE AXISC_STORAGE_CLASS_INFO axiscCreate" + classname + "(";
+			text += "AXISC_STORAGE_CLASS_INFO AXISCHANDLE axiscCreate" + classname + "(";
 		} else if (sign.isDestructor()) {
-			text += "void AXISC_STORAGE_CLASS_INFO axiscDestroy" + classname + "(AXISCHANDLE ";
+			text += "AXISC_STORAGE_CLASS_INFO void axiscDestroy" + classname + "(AXISCHANDLE ";
 			String prettyClass = classNamePretty(classname);
 			text += Character.toLowerCase(prettyClass.charAt(0));
 			text += prettyClass.substring(1);
@@ -278,7 +292,7 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 				text += ", ";
 		} else {
 			String retType = toCType(sign.getReturnType());
-			text += retType + " AXISC_STORAGE_CLASS_INFO ";
+			text += "AXISC_STORAGE_CLASS_INFO " + retType + " ";
 			text += "axisc";
 			text += Character.toUpperCase(method.charAt(0));
 			text += method.substring(1);
@@ -330,6 +344,12 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 		return className;
 	}
 
+	private final static Set cpptypes = 
+		new HashSet(
+			Arrays.asList(
+				new Object[] { "(", ")", "*", ",", "&", "]", "[", "const", "void", 
+					"byte", "char", "unsigned", "signed", "int", "short", "long","double","float" }));
+
 	/**
 	 * Converts a C++ datatype to a C-style datatype. 
 	 * References are converted to pointers.
@@ -358,8 +378,12 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 				type += "AxiscAnyType";
 			} else if ("bool".equals(tok)) {
 				type += "AxiscBool";
-			} else {
+			} else if (-1 != tok.toLowerCase().indexOf("axis")) {
 				type += changeAxisToAxisc(tok);
+			} else if (!cpptypes.contains(tok) && !tok.startsWith("xsd")) {
+				type += "AXISC_"+tok;
+			} else {
+				type += tok;
 			}
 			if (it.hasNext())
 				type += " ";
@@ -413,6 +437,7 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 	}
 
 	public static void main(String[] args) {
+		boolean failed = false;
 		try {
 			CBindingGenerator gen = new CBindingGenerator(args);
 			File source = gen.checkFile("-source");
@@ -424,15 +449,17 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 					gen,
 					new HashSet(Arrays.asList(new Object[] { "hpp" })));
 			tree.walkTree(source, target, 0);
-			if (gen.failed) {
-				Utils.outputDebugString("Finished! (but encountered problems)");
-				System.exit(-2);
-			}
+			failed = gen.failed;
 		} catch (Exception exception) {
 			exception.printStackTrace();
-		} finally {
-			Utils.outputDebugString("Finished!");
+			failed = true;
 		}
+
+		if (failed) {
+			Utils.outputDebugString("Finished! (but encountered problems)");
+			System.exit(-2);
+		} 
+		Utils.outputDebugString("Finished!");
 	}
 
 	protected void printUsage() {

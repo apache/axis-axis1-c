@@ -161,6 +161,7 @@ public class TraceInstrumentor extends CParsingTool implements FileActor {
 	}
 
 	public static void main(String[] args) {
+		boolean failed = false;
 		try {
 			TraceInstrumentor ti = new TraceInstrumentor(args);
 			File source = ti.checkFile("-source");
@@ -169,15 +170,17 @@ public class TraceInstrumentor extends CParsingTool implements FileActor {
 
 			DirectoryTree tree = new DirectoryTree(ti, null);
 			tree.walkTree(source, target, 0);
-			if (ti.failed) {
-				Utils.outputDebugString("Finished! (but encountered problems)");
-				System.exit(-2);
-			}
+			failed = ti.failed;
 		} catch (Exception exception) {
 			exception.printStackTrace();
-		} finally {
-			Utils.outputDebugString("Finished!");
+			failed = true;
 		}
+
+		if (failed) {
+			Utils.outputDebugString("Finished! (but encountered problems)");
+			System.exit(-2);
+		} 
+		Utils.outputDebugString("Finished!");
 	}
 
 	protected void printUsage() {

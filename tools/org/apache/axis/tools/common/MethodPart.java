@@ -57,14 +57,19 @@ public class MethodPart extends FilePart {
                   if (-1 == idxC || (-1 != idxR && idxR < idxC)) {
 				String frag = b.substring(0, idxR);
 				String rest = b.substring(idxR + "return".length());
-				String retVal = rest.substring(0, Utils.indexOf(rest, ';'));
+
+				int semicolon = Utils.indexOf(rest, ';');
+                        if (-1==semicolon) Utils.rude("Missing semicolon in "+signature);
+				String retVal = rest.substring(0, semicolon);
 				BodyPart bp = new BodyPart(frag, retVal);
 				al.add(bp);
 				b = b.substring(idxR + "return".length() + retVal.length() + 1);
                   } else {
 				String frag = b.substring(0, idxC);
 				String rest = b.substring(idxC);
+
                         int brace = Utils.indexOf(rest, "{");
+                        if (-1==brace) Utils.rude("Missing open brace in "+signature);
                         Signature signature = new Signature(rest.substring(0,brace));
                         frag = frag + rest.substring(0,brace+1);
 				BodyPart bp = new BodyPart(frag, signature.getParameters()[0]);
@@ -94,7 +99,9 @@ public class MethodPart extends FilePart {
 		// exit is added before the last brace. This could be tricky to fix.
 		if ((0 == al.size() || -1 != Utils.indexOf(b, ';'))
 			&& null == signature.getReturnType().getType()) {
+
 			int last = b.lastIndexOf('}');
+                  if (-1==last) Utils.rude("Missing end brace in "+signature);
 			String b2 = b.substring(0, last);
 			al.add(new BodyPart(b2));
 			b = b.substring(last);

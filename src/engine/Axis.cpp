@@ -351,7 +351,6 @@ int initialize_module (int bServer)
 						  */
         if (status == AXIS_SUCCESS)
         {
-			XMLParserFactory::initialize();
 #if defined(ENABLE_AXISTRACE)
             status = AxisTrace::openFileByClient ();
             /* //Samisa: 01/09/2004
@@ -363,9 +362,10 @@ int initialize_module (int bServer)
             }
             */
 #endif
+		XMLParserFactory::initialize();
             SOAPTransportFactory::initialize();
-			char *pClientWsddPath = 
-			g_pConfig->getAxisConfProperty(AXCONF_CLIENTWSDDFILEPATH);
+		char *pClientWsddPath = 
+		g_pConfig->getAxisConfProperty(AXCONF_CLIENTWSDDFILEPATH);
 
             /* May be there is no client side handlers configured. So may not 
 	     * have CLIENTWSDDFILEPATH entry in axiscpp.conf 
