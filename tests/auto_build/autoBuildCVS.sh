@@ -107,25 +107,6 @@ fi
 echo "running the tests"
 sh ./runAllTests.sh
 
-echo "Start deploy with apache2 using xercesc parser library"
-sed 's/expat/xercesc/g' ${AXISCPP_DEPLOY}/bin/deploy_apache2.sh > ${AXISCPP_DEPLOY}/bin/deploy_apache2_auto.sh
-sed 's/9090/80/g' testcases/platform/linux/test.config > ./test.config
-cp -f test.config testcases/platform/linux
-cp -f ${AXISCPP_DEPLOY}/lib/libaxiscpp_mod2.so ${APACHE2_HOME}/modules/
-sh ${AXISCPP_DEPLOY}/bin/deploy_apache2_auto.sh
-
-if [ $? = 0 ]
-then
-        echo Apache2 Start  Sucessfull
-        echo `date` Apache Start  Sucessfull >> ${LOG}
-else
-        echo Apache2 Start Failed
-        echo `date` Apache Start Failed >> ${LOG}
-	exit
-fi
-
-echo "running the tests"
-sh ./runAllTests.sh
 # *** Deploy with Apache 1 ***
 
 echo "Start deploy with apache1 using expat parser library"
