@@ -1,5 +1,5 @@
 noinst_LTLIBRARIES = libtransport.la
-AM_CPPFLAGS = -Wshadow -Wall -pedantic
+AM_CPPFLAGS = $(CPPFLAGS)
 libtransport_la_SOURCES = Channel.cpp HttpTransport.cpp Receiver.cpp Sender.cpp \
         Transport.cpp TransportFactory.cpp Url.cpp AxisTransport.cpp
 
