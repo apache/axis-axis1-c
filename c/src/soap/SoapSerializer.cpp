@@ -632,44 +632,65 @@ int SoapSerializer::AddOutputParam(const AxisChar* pchName, void* pValue, XSDTYP
 	return SUCCESS;
 }
 
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* pchName, void* pValue, XSDTYPE type)
+int SoapSerializer::SerializeBasicType(const AxisChar* pchName, void* pValue, XSDTYPE type)
 {
+	const AxisChar* pSerialized;
 	switch(type)
 	{
 	case XSD_INT:
 	case XSD_BOOLEAN:
-		return SerializeBasicType(pchName,*((int*)(pValue)),type);
+		pSerialized = SerializeBasicType(pchName,*((int*)(pValue)),type);
+		break;
     case XSD_UNSIGNEDINT:
-		return SerializeBasicType(pchName,*((unsigned int*)(pValue)),type);
+		pSerialized = SerializeBasicType(pchName,*((unsigned int*)(pValue)),type);
+		break;
     case XSD_SHORT:
-		return SerializeBasicType(pchName,*((short*)(pValue)),type);
+		pSerialized = SerializeBasicType(pchName,*((short*)(pValue)),type);
+		break;
     case XSD_UNSIGNEDSHORT:
-		return SerializeBasicType(pchName,*((unsigned short*)(pValue)),type);
+		pSerialized = SerializeBasicType(pchName,*((unsigned short*)(pValue)),type);
+		break;
     case XSD_BYTE:
-		return SerializeBasicType(pchName,*((char*)(pValue)),type);
+		pSerialized = SerializeBasicType(pchName,*((char*)(pValue)),type);
+		break;
     case XSD_UNSIGNEDBYTE:
-		return SerializeBasicType(pchName,*((unsigned char*)(pValue)),type);
+		pSerialized = SerializeBasicType(pchName,*((unsigned char*)(pValue)),type);
+		break;
     case XSD_LONG:
     case XSD_INTEGER:
 	case XSD_DURATION:
-		return SerializeBasicType(pchName,*((long*)(pValue)),type);
+		pSerialized = SerializeBasicType(pchName,*((long*)(pValue)),type);
+		break;
     case XSD_UNSIGNEDLONG:
-		return SerializeBasicType(pchName,*((unsigned long*)(pValue)),type);
+		pSerialized = SerializeBasicType(pchName,*((unsigned long*)(pValue)),type);
+		break;
 	case XSD_FLOAT:
-		return SerializeBasicType(pchName,*((float*)(pValue)),type);
+		pSerialized = SerializeBasicType(pchName,*((float*)(pValue)),type);
+		break;
     case XSD_DOUBLE:
     case XSD_DECIMAL:
-		return SerializeBasicType(pchName,*((double*)(pValue)),type);
+		pSerialized = SerializeBasicType(pchName,*((double*)(pValue)),type);
+		break;
 	case XSD_STRING:
 	case XSD_HEXBINARY:
 	case XSD_BASE64BINARY:
-		return SerializeBasicType(pchName,((char*)(pValue)),type);
+		pSerialized = SerializeBasicType(pchName,((char*)(pValue)),type);
+		break;
     case XSD_DATETIME:
     case XSD_DATE:
     case XSD_TIME:
-		return SerializeBasicType(pchName,*((struct tm*)(pValue)),type);
+		pSerialized = SerializeBasicType(pchName,*((struct tm*)(pValue)),type);
+		break;
 	}
-	return NULL;
+	if (NULL != pSerialized)
+	{
+		*this << pSerialized;
+		return SUCCESS;
+	}
+	else
+	{
+		return FAIL;
+	}
 }
 
 void SoapSerializer::Serialize(const char* pFirst, ...)

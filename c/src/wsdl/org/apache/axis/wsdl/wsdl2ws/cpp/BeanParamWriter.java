@@ -130,7 +130,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write(" * This static method serialize a "+classname+" type of object\n");
 		writer.write(" */\n");
 		
-		writer.write("int Axis_Serialize_"+classname+"("+classname+"* param, IWrapperSoapSerializer& pSZ, bool bArray = false)\n{\n");
+		writer.write("int Axis_Serialize_"+classname+"("+classname+"* param, IWrapperSoapSerializer* pSZ, bool bArray = false)\n{\n");
 		if (attribs.length == 0) {
 			 //nothing to print if this is simple type we have inbuild types
 			 System.out.println("possible error calss with no attributes....................");
@@ -138,30 +138,30 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		 }
 		writer.write("\tif (bArray)\n");
 		writer.write("\t{\n");
-		writer.write("\t	pSZ << \"<\" << Axis_TypeName_"+classname+" << \">\";\n");
+		writer.write("\t\tpSZ->Serialize(\"<\", Axis_TypeName_"+classname+", \">\", NULL);\n");
 		writer.write("\t}\n");
 		writer.write("\telse\n");
 		writer.write("\t{\n");
-		writer.write("\t	const AxisChar* sPrefix = pSZ.getNewNamespacePrefix();\n");
-		writer.write("\t	pSZ << \"<\" << Axis_TypeName_"+classname+" << \" xsi:type=\\\"\" << sPrefix <<\":\"\n"); 
-		writer.write("\t		<< Axis_TypeName_"+classname+" << \"\\\" xmlns:\" << sPrefix << \"=\\\"\"\n"); 
-		writer.write("\t		<< Axis_URI_"+classname+" << \"\\\">\";\n");
+		writer.write("\t\tconst AxisChar* sPrefix = pSZ.getNewNamespacePrefix();\n");
+		writer.write("\t\tpSZ->Serialize(\"<\", Axis_TypeName_"+classname+", \" xsi:type=\\\"\", sPrefix, \":\",\n"); 
+		writer.write("\t\t\tAxis_TypeName_"+classname+", \"\\\" xmlns:\", sPrefix, \"=\\\"\",\n"); 
+		writer.write("\t\t\tAxis_URI_"+classname+", \"\\\">\", NULL);\n");
 		writer.write("\t}\n\n");
 		for(int i = 0; i< attribs.length;i++){
 			if(CPPUtils.isSimpleType(attribs[i][1])){
 				//if simple type
-				writer.write("\tpSZ << pSZ.SerializeBasicType(\""+attribs[i][0]+"\", param->"+attribs[i][0]+", "+ CPPUtils.getXSDTypeForBasicType(attribs[i][1])+");\n");
+				writer.write("\tpSZ->Serialize(pSZ->SerializeBasicType(\""+attribs[i][0]+"\", param->"+attribs[i][0]+", "+ CPPUtils.getXSDTypeForBasicType(attribs[i][1])+"), NULL);\n");
 			}else if((t = wscontext.getTypemap().getType(new QName(attribs[i][2],attribs[i][3])))!= null && t.isArray()){
 				//if Array
 				QName qname = t.getTypNameForAttribName("item");
 				String arrayType = null;
 				if (CPPUtils.isSimpleType(qname)){
 					arrayType = CPPUtils.getclass4qname(qname);
-					writer.write("\tpSZ.SerializeArray((Axis_Array*)(&param->"+attribs[i][0]+"),"+CPPUtils.getXSDTypeForBasicType(arrayType)+", \""+attribs[i][0]+"\");\n"); 
+					writer.write("\tpSZ->SerializeArray((Axis_Array*)(&param->"+attribs[i][0]+"),"+CPPUtils.getXSDTypeForBasicType(arrayType)+", \""+attribs[i][0]+"\");\n"); 
 				}
 				else{
 					arrayType = qname.getLocalPart();
-					writer.write("\tpSZ.SerializeArray((Axis_Array*)(&param->"+attribs[i][0]+"),\n"); 
+					writer.write("\tpSZ->SerializeArray((Axis_Array*)(&param->"+attribs[i][0]+"),\n"); 
 					writer.write("\t\t(void*) Axis_Serialize_"+arrayType+", (void*) Axis_Delete_"+arrayType+", (void*) Axis_GetSize_"+arrayType+",\n"); 
 					writer.write("\t\tAxis_TypeName_"+arrayType+", Axis_URI_"+arrayType+", \""+attribs[i][0]+"\");\n");
 				}
@@ -170,7 +170,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				writer.write("\tAxis_Serialize_"+attribs[i][1]+"(param->"+attribs[i][0]+", pSZ);\n");
 			}
 		}
-		writer.write("\n\tpSZ << \"</\" << Axis_TypeName_"+classname+" << \">\";\n");
+		writer.write("\n\tpSZ->Serialize(\"</\", Axis_TypeName_"+classname+", \">\", NULL);\n");
 		writer.write("\treturn SUCCESS;\n");
 		writer.write("}\n\n");
 	

@@ -104,7 +104,7 @@ typedef struct IWrapperSoapSerializerXTag
 	virtual int AXISAPI(SerializeCmplxArray,(APIHASPARAMS const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI, const AxisChar* pchArrayName))
 	virtual int AXISAPI(SerializeBasicArray,(APIHASPARAMS const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pchArrayName))
 	/* Basic Type Serializing methods */
-	virtual const AxisChar* AXISAPI(SerializeBasicType,(APIHASPARAMS const AxisChar* sName, void* pValue, XSDTYPE type))
+	virtual int AXISAPI(SerializeBasicType,(APIHASPARAMS const AxisChar* sName, void* pValue, XSDTYPE type))
 	virtual void AXISAPI(Serialize, (APIHASPARAMS const char* pFirst, ...))
 
 #ifdef __cplusplus
