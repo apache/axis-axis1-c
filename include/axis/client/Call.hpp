@@ -426,6 +426,17 @@ public:
 
     AnyType* AXISCALL getAnyObject();
     int AXISCALL addAnyObject(AnyType* pAnyObject);
+
+	/**
+	 * Returns the prefix for a previously defined namespace. If the 
+	 * namespace has not previously been associated with a prefix, it
+	 * creates a new prefix, which is unique and returns that. It will
+	 * only return prefixes for user-defined namespaces, so passing a 
+	 * standard namespace will cause a new prefix to be created.
+	 * 
+	 * @param pNamespace the namespace to look for
+	 * @return the prefix for this namespace
+	 */
     const AxisChar* AXISCALL getNamespacePrefix(const AxisChar* pNamespace);
 	
 	/**
