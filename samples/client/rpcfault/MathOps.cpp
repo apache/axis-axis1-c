@@ -32,7 +32,7 @@ extern int Axis_GetSize_DivByZeroStruct();
 using namespace std;
 
  bool CallBase::bInitialized;
-CallFunctions CallBase::ms_VFtable;
+//CallFunctions CallBase::ms_VFtable;
 
 MathOps::MathOps(const char* pchEndpointUri)
 {
