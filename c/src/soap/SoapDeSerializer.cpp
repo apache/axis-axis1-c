@@ -73,9 +73,6 @@
 #include <axis/common/GDefine.h>
 #include <axis/common/Packet.h>
 
-#include <arabica/SAX/helpers/FeatureNames.h>
-#include <arabica/SAX/helpers/PropertyNames.h>
-
 #include <axis/common/AxisTrace.h>
 
 
@@ -87,13 +84,12 @@ SoapDeSerializer::SoapDeSerializer()
 {
 	m_pInputStream = NULL;
 	m_pLastArrayParam = NULL;
-	m_pParser = NULL;
-    m_pParser = new SAX::XMLReader<std::string>;
+	m_pParser = new SoapParser();
 }
 
 SoapDeSerializer::~SoapDeSerializer()
 {
-	m_pHandler.Init();
+	m_pParser->Init();
     if (m_pParser) delete m_pParser;
 }
 
@@ -103,13 +99,12 @@ int SoapDeSerializer::SetInputStream(const Ax_soapstream* pInputStream)
 	int nChars = 0;
 	if (NULL != m_pInputStream->transport.pGetFunct)
 	{
-		m_pParser->parse_start();
 		do {
 			m_pInputStream->transport.pGetFunct(&m_pCurrentBuffer, &nChars, m_pInputStream->str.ip_stream);
 			if ((nChars > 0) && m_pCurrentBuffer)
-				m_pParser->parse_continue(m_pCurrentBuffer, nChars);
+				m_pParser->Parse(m_pCurrentBuffer, nChars);
 		} while (nChars > 0);
-		m_pParser->parse_end();
+		m_pParser->ParseEnd();
 	}
 	return AXIS_SUCCESS;
 }
@@ -117,7 +112,7 @@ int SoapDeSerializer::SetInputStream(const Ax_soapstream* pInputStream)
 SoapEnvelope* SoapDeSerializer::GetEnvelope()
 {
     AXISTRACE1("SoapDeSerializer::GetEnvelope");
-	return m_pHandler.m_pEnv;
+	return m_pParser->m_pEnv;
 }
 
 ISoapHeader* SoapDeSerializer::GetHeader()
@@ -125,24 +120,24 @@ ISoapHeader* SoapDeSerializer::GetHeader()
 	//actually here a dynamic cast is not needed. But it is
 	// done for safe side, incase SoapHeader derives from 
 	// more that one interface and the deriving order changes.
-	return static_cast<ISoapHeader*>(m_pHandler.m_pHead);
+	return static_cast<ISoapHeader*>(m_pParser->m_pHead);
 }
 
 SoapBody* SoapDeSerializer::GetBody()
 {
     AXISTRACE1("SoapDeSerializer::GetBody");
-	return m_pHandler.m_pBody;
+	return m_pParser->m_pBody;
 }
 
 SoapMethod* SoapDeSerializer::GetMethod()
 {
     AXISTRACE1("SoapDeSerializer::GetMethod");
-	return m_pHandler.m_pMethod;
+	return m_pParser->m_pMethod;
 }
 
 SoapFault* SoapDeSerializer::GetFault()
 {
-	return m_pHandler.m_pFault;
+	return m_pParser->m_pFault;
 }
 
 //this function is more usefull with XMLpull parser
@@ -184,28 +179,13 @@ int SoapDeSerializer::Deserialize(IParam* pIParam, int bHref)
 IParam* SoapDeSerializer::GetParam()
 {
     AXISTRACE1("SoapDeSerializer::GetParam");
-	return m_pHandler.GetParam();
+	return m_pParser->GetParam();
 }
 
 int SoapDeSerializer::Init()
 {
-	try
-	{
-		m_pHandler.Init();
-		
-	    m_pParser->setFeature(fNames.external_general, true);
-        m_pParser->setFeature(fNames.namespaces, true);
-        m_pParser->setFeature(fNames.namespace_prefixes, true);
-		m_pParser->setContentHandler(m_pHandler);
-		m_pParser->setErrorHandler(m_pHandler);
-    }
-    catch(SAX::SAXException& e)
-    {
-		return AXIS_FAIL;
-    }
-	
+	m_pParser->Init();	
 	m_pLastArrayParam = NULL;
-
 	return AXIS_SUCCESS;
 }
 
@@ -213,17 +193,17 @@ int SoapDeSerializer::Init()
 
 const AxisChar* SoapDeSerializer::GetMethodName()
 {
-	if (m_pHandler.m_pMethod)
+	if (m_pParser->m_pMethod)
 	{
         AXISTRACE1("SoapDeSerializer::GetMethodName");
-		return m_pHandler.m_pMethod->getMethodName();
+		return m_pParser->m_pMethod->getMethodName();
 	}
 	return NULL;
 }
 
 int SoapDeSerializer::GetVersion()
 {
-	return m_pHandler.m_nSoapVersion;	
+	return m_pParser->m_nSoapVersion;	
 }
 
 Axis_Array SoapDeSerializer::GetCmplxArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)

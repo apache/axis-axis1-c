@@ -67,8 +67,8 @@
 #include <string>
 #include <axis/common/AxisTrace.h>
 
-
-#define __XTRC(x) x
+#define NAMESPACESEPARATOR 0x03 /*Heart*/
+#define FILEBUFFSIZE 1024
 
 WSDDDocument::WSDDDocument()
 {
@@ -97,69 +97,50 @@ int WSDDDocument::GetDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployme
 
 int WSDDDocument::ParseDocument(const AxisChar* sWSDD)
 {
-//	AXISTRACE1("inside ParseDocument\n");
-	try
-	{
-		//SAX2XMLReader* parser = XMLReaderFactory::createXMLReader();
-        
-        SAX::XMLReader<std::string> parser;
-        SAX::FeatureNames<std::string> fNames;
-        SAX::PropertyNames<std::string> pNames;
-        try
-        {
-            parser.setFeature(fNames.external_general, true);
-        //    parser.setFeature(fNames.validation, true);
-            parser.setFeature(fNames.namespaces, true);
-            parser.setFeature(fNames.namespace_prefixes, true);
-    	}
-      	catch(SAX::SAXException& e)
-        {
-//            std::cerr << e.what() << std::endl;
-    	}
-
-    	parser.setContentHandler(*this);
-    	parser.setErrorHandler(*this);
-/*
-    	parser.setDTDHandler(*this);
-    	parser.setEntityResolver(*this);
-
-    	try
-        {
-            parser.setProperty(pNames.declHandler, static_cast<SAX::DeclHandler&>(*this));
-            parser.setProperty(pNames.lexicalHandler, static_cast<SAX::LexicalHandler&>(*this));
-        }
-    	catch(SAX::SAXException& e)
-        {
-            std::cout << e.what() << std::endl;
-        } // catch
-*/
-        string strDocPath(sWSDD);
-        SAX::InputSource Input(strDocPath);
-        parser.parse(Input);
-        
-
-        
-		//parser->setContentHandler(this);
-		//parser->setErrorHandler(this);     
-		//AXISTRACE1("BEFORE parser->parse(sWSDD);");
-
-		//parser->parse(sWSDD);
-   
-		//delete parser;
-
-	}
-	catch (...)
-	{
+	XMLCh Buff[FILEBUFFSIZE];
+	XML_Parser Parser = XML_ParserCreateNS(NULL, NAMESPACESEPARATOR);
+	XML_SetUserData(Parser, this);
+	XML_SetNamespaceDeclHandler(Parser, s_startPrefixMapping, s_endPrefixMapping);
+	XML_SetElementHandler(Parser, s_startElement, s_endElement);
+	XML_SetCharacterDataHandler(Parser, s_characters);
+	FILE *file = fopen(sWSDD, "r");
+	if (NULL == file) 
+	{ 
+		XML_ParserFree(Parser); 
 		return AXIS_FAIL;
 	}
+	for (;;) 
+	{
+		int done;
+		int len;
+		len = fread(Buff, 1, FILEBUFFSIZE, file);
+		if (ferror(file)) 
+		{
+			fclose(file);
+			XML_ParserFree(Parser); 
+			return AXIS_FAIL;
+		}
+		done = feof(file);
+		if (XML_Parse(Parser, Buff, len, done) == XML_STATUS_ERROR) 
+		{
+			fclose(file);
+			XML_ParserFree(Parser); 
+			return AXIS_FAIL;
+		}
+
+		if (done)
+			break;
+	}
+	fclose(file);
+	XML_ParserFree(Parser); 
 	return AXIS_SUCCESS;
 }
 
-void  WSDDDocument::endElement (const std::string& uri, const std::string& localname, const std::string& qname)
+void  WSDDDocument::endElement (const XMLCh *qname)
 {
-	AxisXMLString sLname = __XTRC(localname);
-	const AxisXMLCh* lname = sLname.c_str();
-	if (0 != strcmp(lname, kw_param)) //just neglect endElement of parameter
+	QName qn;
+	qn.SplitQNameString(qname);
+	if (0 != strcmp(qn.localname, kw_param)) //just neglect endElement of parameter
 	{
 		if (m_lev1 == WSDD_UNKNOWN) //not inside a requestFlow or responseFlow elements
 		{
@@ -172,7 +153,7 @@ void  WSDDDocument::endElement (const std::string& uri, const std::string& local
 				m_lev0 = WSDD_DEPLOYMENT;
 				break;
 			case WSDD_SERVICE:
-				if (0 == strcmp(lname, kw_srv))
+				if (0 == strcmp(qn.localname, kw_srv))
 				{
 					//add service object to Deployment object
 					m_pDeployment->AddService(m_pService);
@@ -201,7 +182,7 @@ void  WSDDDocument::endElement (const std::string& uri, const std::string& local
 		}
 		else // inside a requestFlow or responseFlow elements
 		{
-			if(0 == strcmp(lname, kw_hdl))
+			if(0 == strcmp(qn.localname, kw_hdl))
 			{
 				m_lev2 = WSDD_UNKNOWN;
 				//add handler in m_pHandler to the corresponding container.
@@ -228,42 +209,39 @@ void  WSDDDocument::endElement (const std::string& uri, const std::string& local
 					default: ; //this cannot happen ?? 
 				}
 			}
-			else if(0 == strcmp(lname, kw_rqf))
+			else if(0 == strcmp(qn.localname, kw_rqf))
 			{  
 				m_lev1 = WSDD_UNKNOWN;
 			}
-			else if(0 == strcmp(lname, kw_rsf))
+			else if(0 == strcmp(qn.localname, kw_rsf))
 			{  
 				m_lev1 = WSDD_UNKNOWN;
 			}						
 		}
 	}
+	qn.MergeQNameString();
 }
 
-void WSDDDocument::ProcessAttributes(WSDDLevels ElementType, const AttributesT &attrs)
+void WSDDDocument::ProcessAttributes(WSDDLevels ElementType, const XMLCh **attrs)
 {
-	AxisXMLString sLocal;
-	AxisXMLString sValue;
-	const AxisXMLCh* local;
-	const AxisXMLCh* value;
-	for (int i = 0; i < attrs.getLength(); i++) 
+	QName qn;
+	const XMLCh* value;
+	for (int i = 0; attrs[i]; i += 2) 
 	{
-		sLocal = __XTRC(attrs.getLocalName(i));
-		sValue = __XTRC(attrs.getValue(i));
-		local = sLocal.c_str();
-		value = sValue.c_str();
+		qn.SplitQNameString(attrs[i]);
+		value = attrs[i+1];
 		switch(ElementType)
 		{
 		case WSDD_SERVICE: //add this attribute to current service object
-			if (0 == strcmp(local, kw_name))
+			if (0 == strcmp(qn.localname, kw_name))
 			{
 				m_pService->SetServiceName(value);
 			}
-			else if (0 == strcmp(local, kw_prv))
+			else if (0 == strcmp(qn.localname, kw_prv))
 			{
 				m_pService->SetProvider(value);
 			}
-			else if (0 == strcmp(local, kw_desc))
+			else if (0 == strcmp(qn.localname, kw_desc))
 			{
 				m_pService->SetDescription(value);
 			}
@@ -273,11 +251,11 @@ void WSDDDocument::ProcessAttributes(WSDDLevels ElementType, const AttributesT &
 			}
 			break;
 		case WSDD_HANDLER: //add this attribute to current handler object
-			if (0 == strcmp(local, kw_name))
+			if (0 == strcmp(qn.localname, kw_name))
 			{
 				//usefull ? ignore for now .. //TODO
 			}
-			else if (0 == strcmp(local, kw_type))
+			else if (0 == strcmp(qn.localname, kw_type))
 			{
 				//we get the libname for the hanlder here ???
 				m_pHandler->SetLibName(value);
@@ -291,7 +269,7 @@ void WSDDDocument::ProcessAttributes(WSDDLevels ElementType, const AttributesT &
 					m_pHandler->SetLibId((*m_pLibNameIdMap)[value]);
 				}
 			}
-			else if (0 == strcmp(local, kw_desc))
+			else if (0 == strcmp(qn.localname, kw_desc))
 			{
 				m_pHandler->SetDescription(value);
 			}
@@ -302,7 +280,7 @@ void WSDDDocument::ProcessAttributes(WSDDLevels ElementType, const AttributesT &
 			break;
 		case WSDD_REQFLOW:
 		case WSDD_RESFLOW:
-			if (0 == strcmp(local, kw_name))
+			if (0 == strcmp(qn.localname, kw_name))
 			{
 				//usefull ? ignore for now .. //TODO
 			}
@@ -312,7 +290,7 @@ void WSDDDocument::ProcessAttributes(WSDDLevels ElementType, const AttributesT &
 			}
 			break;
 		case WSDD_TRANSPORT:
-			if (0 == strcmp(local, kw_name))
+			if (0 == strcmp(qn.localname, kw_name))
 			{
 				//get tranport type
 				if (0 == strcmp(value, kw_http))
@@ -331,36 +309,34 @@ void WSDDDocument::ProcessAttributes(WSDDLevels ElementType, const AttributesT &
 			break;
         default:;
 		}
+		qn.MergeQNameString();
 	}
 }
 
-void WSDDDocument::GetParameters(WSDDLevels ElementType, const AttributesT &attrs)
+void WSDDDocument::GetParameters(WSDDLevels ElementType, const XMLCh **attrs)
 {
-	AxisXMLString sName, sValue, sType;
-	const AxisXMLCh *name, *value, *type;
-	//bool locked;
-	AxisXMLString Localname, Value;
-	for (int i = 0; i < attrs.getLength(); i++) 
+	QName qn;
+	const XMLCh* value;
+	const XMLCh* type;
+	const XMLCh* name;
+	for (int i = 0; attrs[i]; i += 2) 
 	{
-		Localname = __XTRC(attrs.getLocalName(i));
-		Value = __XTRC(attrs.getValue(i));
-		if (0 == strcmp(Localname.c_str(), kw_name))
+		qn.SplitQNameString(attrs[i]);
+		value = attrs[i+1];
+		if (0 == strcmp(qn.localname, kw_name))
 		{
-			sName = Value.c_str();
+			name = value;
 		}
-		else if (0 == strcmp(Localname.c_str(), kw_value))
+		else if (0 == strcmp(qn.localname, kw_value))
 		{
-			sValue = Value.c_str();
+			value = value;
 		}
-		else if (0 == strcmp(Localname.c_str(), kw_type))
+		else if (0 == strcmp(qn.localname, kw_type))
 		{
-			sType = Value.c_str();
+			type = value;
 		}
+		qn.MergeQNameString();
 	}
-	
-	name = sName.c_str();
-	value = sValue.c_str();
-	type = sType.c_str();
 
 	switch(ElementType)
 	{
@@ -446,48 +422,47 @@ void WSDDDocument::AddAllowedMethodsToService(const AxisXMLCh* value)
 }
 
 
-void WSDDDocument::startElement(const std::string& uri,	const std::string& localname, const std::string& qname,	const AttributesT &attrs)
+void WSDDDocument::startElement(const XMLCh *qname,const XMLCh **attrs)
 {
-	AxisXMLString sLname = __XTRC(localname);
-	const AxisXMLCh* lname = sLname.c_str();
-
+	QName qn;
+	qn.SplitQNameString(qname);
 	if (m_lev1 == WSDD_UNKNOWN) //not inside a requestFlow or responseFlow elements
 	{
 		switch(m_lev0)
 		{
 		case WSDD_UNKNOWN:
-			if(0 == strcmp(lname, kw_depl))
+			if(0 == strcmp(qn.localname, kw_depl))
 			{  
 				m_lev0 = WSDD_DEPLOYMENT;
 				m_pDeployment->SetDeploymentType(DT_DEPLOYMENT);
 			}
-			else if(0 == strcmp(lname, kw_undepl))
+			else if(0 == strcmp(qn.localname, kw_undepl))
 			{  
 				m_lev0 = WSDD_DEPLOYMENT;
 				m_pDeployment->SetDeploymentType(DT_UNDEPLOYMENT);
 			}
 			break;
 		case WSDD_DEPLOYMENT:
-			if(0 == strcmp(lname, kw_glconf))
+			if(0 == strcmp(qn.localname, kw_glconf))
 			{  
 				m_lev0 = WSDD_GLOBCONF;
 				//nothing to get
 			}
-			else if(0 == strcmp(lname, kw_srv))
+			else if(0 == strcmp(qn.localname, kw_srv))
 			{  
 				m_lev0 = WSDD_SERVICE;
 				m_pService = new WSDDService();
 				//get service name and proider if any
 				ProcessAttributes(WSDD_SERVICE, attrs);
 			}
-			else if(0 == strcmp(lname, kw_hdl))
+			else if(0 == strcmp(qn.localname, kw_hdl))
 			{  
 				m_lev0 = WSDD_HANDLER;
 				m_pHandler = new WSDDHandler();
 				ProcessAttributes(WSDD_HANDLER, attrs);
 				//get handler name and type if any
 			}
-			else if(0 == strcmp(lname, kw_tr))
+			else if(0 == strcmp(qn.localname, kw_tr))
 			{  
 				m_lev0 = WSDD_TRANSPORT;
 				ProcessAttributes(WSDD_TRANSPORT, attrs);
@@ -498,16 +473,16 @@ void WSDDDocument::startElement(const std::string& uri,	const std::string& local
 			}
 			break;
 		case WSDD_GLOBCONF:
-			if(0 == strcmp(lname, kw_param))
+			if(0 == strcmp(qn.localname, kw_param))
 			{  
 				GetParameters(WSDD_GLOBCONF, attrs);
 			}
-			else if(0 == strcmp(lname, kw_rqf))
+			else if(0 == strcmp(qn.localname, kw_rqf))
 			{  
 				m_lev1 = WSDD_REQFLOW;
 				ProcessAttributes(WSDD_REQFLOW, attrs);
 			}
-			else if(0 == strcmp(lname, kw_rsf))
+			else if(0 == strcmp(qn.localname, kw_rsf))
 			{  
 				m_lev1 = WSDD_RESFLOW;
 				ProcessAttributes(WSDD_RESFLOW, attrs);
@@ -518,16 +493,16 @@ void WSDDDocument::startElement(const std::string& uri,	const std::string& local
 			}
 		break; 
 		case WSDD_SERVICE:
-			if(0 == strcmp(lname, kw_param))
+			if(0 == strcmp(qn.localname, kw_param))
 			{  
 				GetParameters(WSDD_SERVICE, attrs);
 			}
-			else if(0 == strcmp(lname, kw_rqf))
+			else if(0 == strcmp(qn.localname, kw_rqf))
 			{  
 				m_lev1 = WSDD_REQFLOW;
 				ProcessAttributes(WSDD_REQFLOW, attrs);
 			}
-			else if(0 == strcmp(lname, kw_rsf))
+			else if(0 == strcmp(qn.localname, kw_rsf))
 			{  
 				m_lev1 = WSDD_RESFLOW;
 				ProcessAttributes(WSDD_RESFLOW, attrs);
@@ -538,19 +513,19 @@ void WSDDDocument::startElement(const std::string& uri,	const std::string& local
 			}
 		break;
 		case WSDD_HANDLER:
-			if(0 == strcmp(lname, kw_param))
+			if(0 == strcmp(qn.localname, kw_param))
 			{  
 				GetParameters(WSDD_HANDLER, attrs);
 			}
 
 		break;
 		case WSDD_TRANSPORT:
-			if(0 == strcmp(lname, kw_rqf))
+			if(0 == strcmp(qn.localname, kw_rqf))
 			{  
 				m_lev1 = WSDD_REQFLOW;
 				ProcessAttributes(WSDD_REQFLOW, attrs);
 			}
-			else if(0 == strcmp(lname, kw_rsf))
+			else if(0 == strcmp(qn.localname, kw_rsf))
 			{  
 				m_lev1 = WSDD_RESFLOW;
 				ProcessAttributes(WSDD_RESFLOW, attrs);
@@ -561,19 +536,19 @@ void WSDDDocument::startElement(const std::string& uri,	const std::string& local
 	}
 	else // inside a requestFlow or responseFlow elements
 	{
-		if(0 == strcmp(lname, kw_param))
+		if(0 == strcmp(qn.localname, kw_param))
 		{  
 			GetParameters(m_lev2, attrs); //must be parameters of a handler or a chain
 		}
 
-		else if(0 == strcmp(lname, kw_hdl))
+		else if(0 == strcmp(qn.localname, kw_hdl))
 		{  
 			m_lev2 = WSDD_HANDLER;
 			m_pHandler = new WSDDHandler();
 			ProcessAttributes(WSDD_HANDLER, attrs);
 			//get handler name and type if any
 		}
-		else if(0 == strcmp(lname, kw_chain))
+		else if(0 == strcmp(qn.localname, kw_chain))
 		{
 
 		}
@@ -581,45 +556,23 @@ void WSDDDocument::startElement(const std::string& uri,	const std::string& local
 		{
 			//error : unknown element type in wsdd file
 		}
-
 	}
+	qn.MergeQNameString();
 }
 
-void WSDDDocument::startPrefixMapping(const std::string& prefix, const std::string& uri)
+void WSDDDocument::startPrefixMapping(const XMLCh *prefix, const XMLCh *uri)
 {
-	m_NsStack[__XTRC(prefix)] = __XTRC(uri); //I think the same prifix cannot repeat ???
+	if (prefix) m_NsStack[prefix] = uri; //I think the same prifix cannot repeat ???
 }
 
-void WSDDDocument::endPrefixMapping(const std::string& prefix)
+void WSDDDocument::endPrefixMapping(const XMLCh *prefix)
 {
-//	string sPrifix = prefix;
-	m_NsStack.erase(__XTRC(prefix)); //I think the same prifix cannot repeat ???
+	if (prefix) m_NsStack.erase(prefix); //I think the same prifix cannot repeat ???
 }
 
-void  WSDDDocument::characters (const std::string& chars)
+void  WSDDDocument::characters (const XMLCh* chars,int length)
 {
 	//cout<<"==="<<XMLString::transcode(chars)<<"==="<<endl;
-}
-
-/*const AxisChar* WSDDDocument::__XTRC(const XMLCh *pChar)
-{
-	if (true == (XMLString::transcode(pChar, m_Buffer, TRANSCODE_BUFFER_SIZE-1)))
-		return m_Buffer;
-	else 
-		return ""; 
-}
-*/
-
-void WSDDDocument::warning(const SAX::SAXParseException& exception)
-{
-}
-void WSDDDocument::error(const SAX::SAXParseException& exception)
-{
-	m_bError = true;
-}
-void WSDDDocument::fatalError(const SAX::SAXParseException& exception)
-{
-	m_bFatalError = true;
 }
 
 

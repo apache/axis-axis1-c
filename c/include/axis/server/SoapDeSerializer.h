@@ -68,8 +68,7 @@
 #define AFX_SOAPDESERIALIZER_H__FD0E7C3B_B887_480A_9E2A_20736A88B09B__INCLUDED_
 
 #include <axis/common/IHandlerSoapDeSerializer.h>
-//#include "XMLStreamHandler.h"
-#include <axis/soap/XMLSimpleHandler.h>
+#include "SoapParser.h"
 #include <string>
 
 #define HUGE_BUFFER_SIZE 8192
@@ -83,11 +82,7 @@ class SoapFault;
 class SoapDeSerializer : public IHandlerSoapDeSerializer
 {
 private:
-	SAX::FeatureNames<std::string> fNames;
-	SAX::PropertyNames<std::string> pNames;
-
-	SAX::XMLReader<std::string>* m_pParser;
-    XMLStreamHandler m_pHandler;
+    SoapParser* m_pParser;
 	const Ax_soapstream* m_pInputStream;
 	const char* m_pCurrentBuffer;
 	Param* m_pLastArrayParam;

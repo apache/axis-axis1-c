@@ -92,8 +92,6 @@
 #include <axis/common/AxisConfig.h>
 #include <axis/wsdd/WSDDKeywords.h>
 
-#include <xercesc/util/TransService.hpp>
-
 #define BYTESTOREAD 64
 //the relative location of the wsdl files hardcoded
 #define WSDLDIRECTORY	"./Axis/wsdls/"
