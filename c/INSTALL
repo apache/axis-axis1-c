@@ -49,7 +49,7 @@ AXISCPP_HOME is where you checkout Axis C++
 
 ------------------------------------------------------------
 AXISCPP_HOME="/home/damitha/projects/axiscpp"
-AXIS_HOME="/home/damitha/Axis"
+AXIS_HOME="/usr/local/Axis"
 EXPAT_HOME="/usr/local/expat1957"
 XERCESC_HOME="/usr/local/xerces-c"
 LD_LIBRARY_PATH="$XERCESC_HOME/lib:$EXPAT_HOME/lib:$AXISCPP_HOME/bin:$AXIS_HOME/libs:$LD_LIBRARY_PATH"
@@ -159,10 +159,19 @@ by,
 cd $AXISCPP_HOME
 sh build.sh
 
+Once you finished, have a look at $AXISCPP_HOME/build_errors, 
+$AXISCPP_HOME/samples/server/sample_server_build_errors and 
+$AXISCPP_HOME/samples/client/sample_client_build_errors to identify
+any warnings and errors. Most probably you will see many warnings.
+Just ignore them. But if you see any errors it means that build was 
+not successful and check whether you followed the instructions 
+carefully. Note that if you see errors on build_errors file then
+client samples will also fail since it depends on libaxiscpp_client.so.
+
 You can see the folder $AXISCPP_HOME/bin to see what are created
 
-libaxis_mod.so is apache module which is loaded when apache loads
-libaxis_mod2.so is apache2 module which is loaded when apache2 loads
+libaxiscpp_mod.so is apache module which is loaded when apache loads
+libaxiscpp_mod2.so is apache2 module which is loaded when apache2 loads
 libserver_engine.so is the Axis C++ server engine which is loaded by libaxis_mod(2).so module
 libaxiscpp_client.so is Axis C++ client library
 libaxis_transport.so is the Axis C++ client transport library
@@ -173,9 +182,6 @@ Also $AXISCPP_HOME/sampels/server samples are built and installed in
 $AXIS_HOME/web_services
 
 $AXISCPP_HOME/samples/client samples are built and executable are in $AXISCPP_HOME/samples/client
-
-parser and transport libraries both are loaded in to axis engine when it is
-loaded by apache.
 
 Now you need to add to $<apache install directory>/conf/httpd.conf
 $ vi <apache install directory>/conf/httpd.conf
@@ -228,7 +234,14 @@ sh deploy_apache2.sh
 To deploy on apache
 sh deploy_apache.sh
 
-all the libraries are loaded.
+When you run the above script all the libraries are copied into corresponding places.
+libaxiscpp_mod2.so is copied to <your apache home>/modules folder.
+libserver_engine.so and libaxis_expat.so is copied to $AXIS_HOME/libs folder(and renamed
+libaxis_xmlparser.so). Also apache is started and libaxiscpp_mod2.so is loaded into apache.
+libaxiscpp_mod2.so is the apache module for Axis C++. This will in term load Axis C++ server engine
+(libserver_engine.so).
+Note that libaxis_xmlparser.so is loaded by the engine dynamically as parsing is required from the
+engine.
 
 Note that in the line no. 12 of the script above we change
 the name libaxis_expat.so to libaxis_xmlparser.so.
