@@ -112,6 +112,10 @@ SOURCE=..\..\..\src\transport\axis2\ChannelFactory.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\platforms\windows\PlatformSpecificWindows.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\transport\axis2\SecureChannel.cpp
 # End Source File
 # Begin Source File
