@@ -401,7 +401,7 @@ void WSDDDocument::startElement(const XMLCh *const uri,	const XMLCh *const local
 		switch(m_lev0)
 		{
 		case WSDD_UNKNOWN:
-			if(XMLString::equals(lname, kw_depl))
+			if((XMLString::equals(lname, kw_depl)) || (XMLString::equals(lname, kw_undepl)))
 			{  
 				m_lev0 = WSDD_DEPLOYMENT;
 				//nothing to get
