@@ -74,17 +74,18 @@
 #include "WSDDService.h"
 #include "WSDDHandler.h"
 #include "WSDDTransport.h"
+#include "../common/IDeployerUtils.h"
 
 #include <list>
 
 using namespace std;
 
-class WSDDDeployment  
+class WSDDDeployment : public IDeployerUtils
 {
 	friend class WSDDDocument;
 public:
 	int LoadWSDD(const AxisChar* sWSDD);
-	int UpdateWSDD(const AxisChar* sWSDDNew);
+	int UpdateWSDD(const AxisChar* sWSDDNew, string sServiceName, string sDllPath, Axis_ArrayTag inArray);
 	const AxisChar* GetLibName(int nLibId);
 	const WSDDService* GetService(const AxisChar* sServiceName);
 	const WSDDHandlerList* GetGlobalRequestFlowHandlers();
