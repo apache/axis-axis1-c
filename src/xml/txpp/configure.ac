@@ -8,7 +8,7 @@ AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
 AC_MSG_CHECKING(whether to build testcases)
-AC_ARG_ENABLE(testcases, [  --enable-testcases    build testcases.],
+AC_ARG_ENABLE(tests, [  --enable-tests    build tests.],
 [ case "${enableval}" in
   no)
     AC_MSG_RESULT(no)
@@ -16,11 +16,11 @@ AC_ARG_ENABLE(testcases, [  --enable-testcases    build testcases.],
     ;;
   *)
     AC_MSG_RESULT(yes)
-    echo "tests"
     TESTS="tests"
     ;;
   esac ],
   AC_MSG_RESULT(no)
+  TESTS="tests"
 )
 LINKTXPPLIB="-L$prefix/lib -ltxpp"
 AC_SUBST(TESTS)
