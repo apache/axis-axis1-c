@@ -70,6 +70,7 @@
 #include "ISoapDeSerializer.h"
 #include "GDefine.h"
 #include "AxisUserAPI.h"
+#include "TypeMapping.h"
 #include <string>
 using namespace std;
 class IParam;
