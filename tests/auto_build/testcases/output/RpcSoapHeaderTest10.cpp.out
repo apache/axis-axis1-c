@@ -1,0 +1,9 @@
+pIAttribute1 details = type http://ws.apache.org/axisCppTest/ 
+pIAttribute1 details = scale http://ws.apache.org/axisCppTest/ 
+pIAttribute1 details = lang1 http://ws.apache.org/axisCppTest/ 
+pIAttribute1 details = lang1 http://ws.apache.org/axisCppTest/ 
+pIAttribute1 details = lang3 http://ws.apache.org/axisCppTest/ 
+pIAttribute1 details = scale http://ws.apache.org/axisCppTest/ 
+invoking echoString...
+successful
+Soap Header test end
