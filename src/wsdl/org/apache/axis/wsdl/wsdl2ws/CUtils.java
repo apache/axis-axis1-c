@@ -83,6 +83,7 @@ public class CUtils {
 	   complex types are done with in the type class */
 	private static Hashtable class2QNamemap = new Hashtable();
 	private static Hashtable qname2classmap = new Hashtable();
+	private static Hashtable schemaDefinedSimpleTypesMap = new Hashtable();
 	private static Hashtable type2getValueMethodName = new Hashtable();
 	private static Hashtable type2BasicArrayName = new Hashtable();
 	private static Hashtable basicType2EnumMap = new Hashtable();
@@ -192,6 +193,16 @@ public class CUtils {
 		basicType2EnumMap.put("xsd__QName","XSD_QNAME");
 	}
 	
+	public static void addSchemaDefinedSimpleType(QName qname, String type){
+		schemaDefinedSimpleTypesMap.put(qname, type);
+	}
+	
+	public static boolean isBasicType(QName qname){
+		if(qname2classmap.containsKey(qname)){
+			return true;
+		}
+		return false;
+	}
 	public static boolean isSimpleType(String name){
 		if(class2QNamemap.containsKey(name))
 			return true;
@@ -199,8 +210,12 @@ public class CUtils {
 	} 
 
 	public static boolean isSimpleType(QName name){
-		if(qname2classmap.containsKey(name))
+		if(qname2classmap.containsKey(name)){
 			return true;
+		}
+		else if (schemaDefinedSimpleTypesMap.containsKey(name)){
+			return true;
+		}
 		return false;	
 	} 
 
@@ -226,8 +241,10 @@ public class CUtils {
 		Object val = qname2classmap.get(qname);
 		if (val != null)
 			return (String) val;
-		else
-			return null;
+		val = schemaDefinedSimpleTypesMap.get(qname);
+		if (val != null)
+			return (String) val;
+		return null;
 	}
 	public static String getWebServiceNameFromWrapperName(String wname){
 		return wname.substring(0, wname.length()- CUtils.WRAPPER_NAME_APPENDER.length());
