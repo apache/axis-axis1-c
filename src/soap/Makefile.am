@@ -1,6 +1,6 @@
 noinst_LTLIBRARIES = libsoap.la
 
-AM_CPPFLAGS = -Wall -DUSE_EXPAT_PARSER
+AM_CPPFLAGS = $(CPPFLAGS)
 libsoap_la_SOURCES = Attribute.cpp \
         BasicNode.cpp \
         CharacterElement.cpp \
@@ -19,5 +19,5 @@ libsoap_la_SOURCES = Attribute.cpp \
 	apr_base64.c \
 	HexCoder.cpp 	
 
-libsoap_la_LIBADD = -L$(AXISCPP_HOME)/lib/expat -lexpat
+libsoap_la_LIBADD = $(LDFLAGS)
 INCLUDES = -I$(AXISCPP_HOME)/include
