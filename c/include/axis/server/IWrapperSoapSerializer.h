@@ -82,13 +82,13 @@ typedef struct {
 	/* for basic types */
 	int (AXISCALL* AddOutputParam)(void* pObj, const AxisChar* pchName, void* pValue, XSDTYPE type);
 	/* for arrays */
-	int (AXISCALL* AddOutputCmplxArrayParam)(void* pObj, const AxisChar* pchName, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI);
-	int (AXISCALL* AddOutputBasicArrayParam)(void* pObj, const AxisChar* pchName, const Axis_Array* pArray, XSDTYPE nType);
+	int (AXISCALL* AddOutputCmplxArrayParam)(void* pObj, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	int (AXISCALL* AddOutputBasicArrayParam)(void* pObj, const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName);
 	/* for complex types */
-	int (AXISCALL* AddOutputCmplxParam)(void* pObj, const AxisChar* pchName, void* pObject, void* pDZFunct, void* pDelFunct);
+	int (AXISCALL* AddOutputCmplxParam)(void* pObj, void* pObject, void* pDZFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
 	/* Methods used to serialize arrays */
-	int (AXISCALL* SerializeCmplxArray)(void* pObj, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI, const AxisChar* pchArrayName);
-	int (AXISCALL* SerializeBasicArray)(void* pObj, const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pchArrayName);
+	int (AXISCALL* SerializeCmplxArray)(void* pObj, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	int (AXISCALL* SerializeBasicArray)(void* pObj, const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName);
 	/* Basic Type Serializing methods */
 	int (AXISCALL* SerializeAsElement)(void* pObj, const AxisChar* sName, void* pValue, XSDTYPE type);
 	int (AXISCALL* SerializeAsAttribute)(void* pObj, const AxisChar* sName, const AxisChar* pNamespace, void* pValue, XSDTYPE type);
@@ -132,9 +132,42 @@ public:
 	static IWrapperSoapSerializerFunctions ms_VFtable;
 	static int AXISCALL s_CreateSoapMethod(void* pObj, const AxisChar* sLocalName, const AxisChar* sURI)
 	{ return ((IWrapperSoapSerializer*)pObj)->CreateSoapMethod(sLocalName, sURI);};
+	static const AxisChar* AXISCALL s_GetNamespacePrefix(void* pObj, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapSerializer*)pObj)->GetNamespacePrefix(pNamespace);};
+	static void AXISCALL s_RemoveNamespacePrefix(void* pObj, const AxisChar* pNamespace)
+	{ ((IWrapperSoapSerializer*)pObj)->RemoveNamespacePrefix(pNamespace);};
+	static int AXISCALL s_AddOutputParam(void* pObj, const AxisChar* pchName, void* pValue, XSDTYPE type)
+	{ return ((IWrapperSoapSerializer*)pObj)->AddOutputParam(pchName, pValue, type);};
+	static int AXISCALL s_AddOutputCmplxArrayParam(void* pObj, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapSerializer*)pObj)->AddOutputCmplxArrayParam(pArray, pSZFunct, pDelFunct, pSizeFunct, pName, pNamespace);};
+	static int AXISCALL s_AddOutputBasicArrayParam(void* pObj, const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName)
+	{ return ((IWrapperSoapSerializer*)pObj)->AddOutputBasicArrayParam(pArray, nType, pName);};
+	static int AXISCALL s_AddOutputCmplxParam(void* pObj, void* pObject, void* pDZFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapSerializer*)pObj)->AddOutputCmplxParam(pObject, pDZFunct, pDelFunct, pName, pNamespace);};
+	static int AXISCALL s_SerializeCmplxArray(void* pObj, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapSerializer*)pObj)->SerializeCmplxArray(pArray, pSZFunct, pDelFunct, pSizeFunct, pName, pNamespace);};
+	static int AXISCALL s_SerializeBasicArray(void* pObj, const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName)
+	{ return ((IWrapperSoapSerializer*)pObj)->SerializeBasicArray(pArray, nType, pName);};
+	static int AXISCALL s_SerializeAsElement(void* pObj, const AxisChar* sName, void* pValue, XSDTYPE type)
+	{ return ((IWrapperSoapSerializer*)pObj)->SerializeAsElement(sName, pValue, type);};
+	static int AXISCALL s_SerializeAsAttribute(void* pObj, const AxisChar* sName, const AxisChar* pNamespace, void* pValue, XSDTYPE type)
+	{ return ((IWrapperSoapSerializer*)pObj)->SerializeAsAttribute(sName, pNamespace, pValue, type);};
+	static void AXISCALL s_Serialize(void* pObj, const char* pFirst, ...)
+	{ ((IWrapperSoapSerializer*)pObj)->Serialize(pFirst);};
 	static void s_Initialize()
 	{
 		ms_VFtable.CreateSoapMethod = s_CreateSoapMethod;
+		ms_VFtable.GetNamespacePrefix = s_GetNamespacePrefix;
+		ms_VFtable.RemoveNamespacePrefix = s_RemoveNamespacePrefix;
+		ms_VFtable.AddOutputParam = s_AddOutputParam;
+		ms_VFtable.AddOutputCmplxArrayParam = s_AddOutputCmplxArrayParam;
+		ms_VFtable.AddOutputBasicArrayParam = s_AddOutputBasicArrayParam;
+		ms_VFtable.AddOutputCmplxParam = s_AddOutputCmplxParam;
+		ms_VFtable.SerializeCmplxArray = s_SerializeCmplxArray;
+		ms_VFtable.SerializeBasicArray = s_SerializeBasicArray;
+		ms_VFtable.SerializeAsElement = s_SerializeAsElement;
+		ms_VFtable.SerializeAsAttribute = s_SerializeAsAttribute;
+		ms_VFtable.Serialize = s_Serialize;
 	}
 };
 

@@ -260,7 +260,6 @@ public class ClientStubWriter extends CPPClassWriter{
 		else{
 			writer.write(";\n\t");
 		}
-		//SetTransportProperty(SOAPACTION_HEADER, "InteropBaseDL#echoString");
 		writer.write("\tm_pCall->SetTransportProperty(SOAPACTION_HEADER , \""+minfo.getSoapAction()+"\");\n");
 		writer.write("m_pCall->SetSOAPVersion(SOAP_VER_1_1);\n"); //TODO check which version is it really.
 		writer.write("\tm_pCall->SetOperation(\""+methodName+"\", \""+ wscontext.getWrapInfo().getTargetNameSpaceOfWSDL() +"\");\n");
@@ -312,12 +311,12 @@ public class ClientStubWriter extends CPPClassWriter{
 			String containedType = null;
 			if (CPPUtils.isSimpleType(qname)){
 				containedType = CPPUtils.getclass4qname(qname);
-				writer.write("\tm_pCall->SetReturnType((Axis_Array*)(&RetArray), "+CPPUtils.getXSDTypeForBasicType(containedType)+");\n");
+				writer.write("\tRetArray = ("+outparamType+"&)m_pCall->GetBasicArray("+CPPUtils.getXSDTypeForBasicType(containedType)+", \""+returntype.getParamName()+"\", 0);\n");
 			}
 			else{
 				containedType = qname.getLocalPart();
-				writer.write("\tm_pCall->SetReturnType((Axis_Array*)(&RetArray), (void*) Axis_DeSerialize_"+containedType);
-				writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+");\n");
+				writer.write("\tRetArray = ("+outparamType+"&)m_pCall->GetCmplxArray((void*) Axis_DeSerialize_"+containedType);
+				writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+returntype.getParamName()+"\", Axis_URI_"+containedType+");\n");
 			}
 			writer.write("\t}\n\tm_pCall->UnInitialize();\n");
 			writer.write("\treturn RetArray;\n");
