@@ -638,8 +638,16 @@ public class ClientStubWriter
                                         + ", \""
                                         + parameterName
                                         + "\""
-                                        + ", Axis_URI_"
+                                        + ", ");
+                                if (namespace.length() == 0)
+                                {
+                                	writer.write("NULL");
+                                }
+                                else
+                                {
+                                	writer.write("Axis_URI_"
                                         + containedType);
+                                }
                             }
                         }
                     }
