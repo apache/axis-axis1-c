@@ -7,6 +7,9 @@
 
 #include "Calculator.hpp"
 #include <iostream>
+#include <signal.h>
+
+void sig_handler(int);
 
 int main(int argc, char* argv[])
 {
@@ -15,6 +18,13 @@ int main(int argc, char* argv[])
         int iResult;
 	const char* sslkeyhome = 0;
         char keylocation[255];
+
+	signal(SIGILL, sig_handler);
+	signal(SIGABRT, sig_handler);
+	signal(SIGSEGV, sig_handler);
+	//signal(SIGQUIT, sig_handler);
+	//signal(SIGBUS, sig_handler);
+	signal(SIGFPE, sig_handler);
 
         url = argv[1];
 
@@ -51,5 +61,11 @@ int main(int argc, char* argv[])
         }
         cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
         return 0;
+}
+
+void sig_handler(int sig) {
+	signal(sig, sig_handler);
+    cout << "SIGNAL RECEIVED " << sig << endl;
+	exit(1);
 }
 
