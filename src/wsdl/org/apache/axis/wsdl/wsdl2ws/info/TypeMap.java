@@ -93,9 +93,10 @@ public class TypeMap
         basicTypeClass2QNamemap.put(
             "xsd__QName",
             new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"));
-        basicTypeClass2QNamemap.put(
+/*        basicTypeClass2QNamemap.put(
             "xsd__NCName",
             new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"));
+            */
         basicTypeClass2QNamemap.put(
             "xsd__date",
             new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"));
@@ -138,9 +139,10 @@ public class TypeMap
         basicTypeQname2classmap.put(
             new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"),
             "xsd__QName");
-        basicTypeQname2classmap.put(
+/*        basicTypeQname2classmap.put(
             new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"),
             "xsd__NCName");
+            */
         basicTypeQname2classmap.put(
             new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"),
             "xsd__dateTime");
@@ -212,9 +214,10 @@ public class TypeMap
         basicTypeQname2classmap.put(
             new QName(WrapperConstants.SOAPENC_NAMESPACE, "QName"),
             "xsd__QName");
-        basicTypeQname2classmap.put(
+/*      basicTypeQname2classmap.put(
             new QName(WrapperConstants.SOAPENC_NAMESPACE, "NCName"),
             "xsd__NCName");
+            */
         basicTypeQname2classmap.put(
             new QName(WrapperConstants.SOAPENC_NAMESPACE, "dateTime"),
             "xsd__dateTime");

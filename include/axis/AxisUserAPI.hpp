@@ -96,7 +96,7 @@ typedef AxisChar * xsd__QName;
  * @typedef xsd__NCName
  * Axis C++ defined type for xml basic type NCName
  */
-typedef AxisChar * xsd__NCName;
+//typedef AxisChar * xsd__NCName;
 /**
  * @typedef xsd__dateTime
  * Axis C++ defined type for xml basic type dateTime
@@ -201,7 +201,7 @@ AXIS_DEFINED_ARRAY(xsd__float)
 AXIS_DEFINED_ARRAY(xsd__double)
 AXIS_DEFINED_ARRAY(xsd__boolean)
 AXIS_DEFINED_ARRAY(xsd__QName)
-AXIS_DEFINED_ARRAY(xsd__NCName)
+//AXIS_DEFINED_ARRAY(xsd__NCName)
 AXIS_DEFINED_ARRAY(xsd__dateTime)
 AXIS_DEFINED_ARRAY(xsd__unsignedByte)
 AXIS_DEFINED_ARRAY(xsd__unsignedInt)

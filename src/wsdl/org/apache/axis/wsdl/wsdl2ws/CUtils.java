@@ -91,7 +91,7 @@ public class CUtils {
 		class2QNamemapCpp.put("xsd__unsignedLong", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"unsignedLong"));
 		class2QNamemapCpp.put("xsd__unsignedShort", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"unsignedShort"));
 		class2QNamemapCpp.put("xsd__QName", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"QName"));
-		class2QNamemapCpp.put("xsd__NCName", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"NCName"));
+//		class2QNamemapCpp.put("xsd__NCName", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"NCName"));
 		class2QNamemapCpp.put("xsd__NMTOKEN", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"NMTOKEN"));
 
 		class2QNamemapC.put("xsdc__int",new QName(WrapperConstants.SCHEMA_NAMESPACE,				"int"));
@@ -117,7 +117,7 @@ public class CUtils {
 		class2QNamemapC.put("xsdc__unsignedLong", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"unsignedLong"));
 		class2QNamemapC.put("xsdc__unsignedShort", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"unsignedShort"));
 		class2QNamemapC.put("xsdc__QName", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"QName"));
-		class2QNamemapC.put("xsdc__NCName", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"NCName"));
+//		class2QNamemapC.put("xsdc__NCName", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"NCName"));
 		class2QNamemapC.put("xsdc__NMTOKEN", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"NMTOKEN"));
 
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"),				"xsd__int");
@@ -142,7 +142,7 @@ public class CUtils {
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"),	"xsd__unsignedLong");
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"),	"xsd__unsignedShort");
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"),			"xsd__QName");
-		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"),			"xsd__NCName");
+//		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"),			"xsd__NCName");
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"),			"xsd__NMTOKEN");
 		
 		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"),				"xsdc__int");
@@ -167,7 +167,7 @@ public class CUtils {
 		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"),	"xsdc__unsignedLong");
 		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"),	"xsdc__unsignedShort");
 		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"),			"xsdc__QName");
-		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"),			"xsdc__NCName");
+//		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"),			"xsdc__NCName");
 		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"),			"xsdc__NMTOKEN");
 		
 		/* TODO:
@@ -196,7 +196,7 @@ public class CUtils {
 		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedLong"),	"xsd__unsignedLong");
 		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedShort"),	"xsd__unsignedShort");
 		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "QName"),			"xsd__QName");		
-		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NCName"),			"xsd__NCName");		
+//		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NCName"),			"xsd__NCName");		
 
 
 		/* TODO:
@@ -230,7 +230,7 @@ public class CUtils {
 		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedLong"),	"xsdc__unsignedLong");
 		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedShort"),	"xsdc__unsignedShort");
 		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "QName"),			"xsdc__QName");		
-		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NCName"),			"xsdc__NCName");		
+//		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NCName"),			"xsdc__NCName");		
 
 
 		/* TODO:
@@ -259,7 +259,7 @@ public class CUtils {
 		type2getValueMethodNameCpp.put("xsd__boolean",			"Boolean");
 		type2getValueMethodNameCpp.put("xsd__anyURI",			"String");
 		type2getValueMethodNameCpp.put("xsd__QName",			"String");
-		type2getValueMethodNameCpp.put("xsd__NCName",			"String");
+//		type2getValueMethodNameCpp.put("xsd__NCName",			"String");
 		type2getValueMethodNameCpp.put("xsd__NMTOKEN",			"String");
 		
 		type2getValueMethodNameC.put("xsdc__int",				"Int");
@@ -283,7 +283,7 @@ public class CUtils {
 		type2getValueMethodNameC.put("xsdc__boolean",			"Boolean");
 		type2getValueMethodNameC.put("xsdc__anyURI",			"String");
 		type2getValueMethodNameC.put("xsdc__QName",			"String");
-		type2getValueMethodNameC.put("xsdc__NCName",			"String");
+//		type2getValueMethodNameC.put("xsdc__NCName",			"String");
 		type2getValueMethodNameC.put("xsdc__NMTOKEN",			"String");
 		
 		type2BasicArrayNameCpp.put("xsd__int",					"xsd__int_Array");
@@ -306,7 +306,7 @@ public class CUtils {
 		type2BasicArrayNameCpp.put("xsd__boolean",				"xsd__boolean_Array");
 		type2BasicArrayNameCpp.put("xsd__anyURI",				"xsd__anyURI_Array");
 		type2BasicArrayNameCpp.put("xsd__QName",				"xsd__QName_Array");
-		type2BasicArrayNameCpp.put("xsd__NCName",				"xsd__NCName_Array");
+//		type2BasicArrayNameCpp.put("xsd__NCName",				"xsd__NCName_Array");
 		type2BasicArrayNameCpp.put("xsd__NMTOKEN",				"xsd__NMTOKEN_Array");
 		
 		type2BasicArrayNameC.put("xsdc__int",					"xsdc__int_Array");
@@ -329,7 +329,7 @@ public class CUtils {
 		type2BasicArrayNameC.put("xsdc__boolean",				"xsdc__boolean_Array");
 		type2BasicArrayNameC.put("xsdc__anyURI",				"xsdc__anyURI_Array");
 		type2BasicArrayNameC.put("xsdc__QName",				"xsdc__QName_Array");
-		type2BasicArrayNameC.put("xsdc__NCName",				"xsdc__NCName_Array");
+//		type2BasicArrayNameC.put("xsdc__NCName",				"xsdc__NCName_Array");
 		type2BasicArrayNameC.put("xsdc__NMTOKEN",				"xsdc__NMTOKEN_Array");
 		
 		basicType2EnumMapCpp.put("xsd__int",					"XSD_INT");
@@ -352,7 +352,7 @@ public class CUtils {
 		basicType2EnumMapCpp.put("xsd__boolean",				"XSD_BOOLEAN");
 		basicType2EnumMapCpp.put("xsd__anyURI",				"XSD_ANYURI");
 		basicType2EnumMapCpp.put("xsd__QName",					"XSD_QNAME");
-		basicType2EnumMapCpp.put("xsd__NCName",				"XSD_NCNAME");
+//		basicType2EnumMapCpp.put("xsd__NCName",				"XSD_NCNAME");
 		basicType2EnumMapCpp.put("xsd__NMTOKEN",				"XSD_NMTOKEN");
 
 		basicType2EnumMapC.put("xsdc__int",					"XSD_INT");
@@ -375,7 +375,7 @@ public class CUtils {
 		basicType2EnumMapC.put("xsdc__boolean",				"XSD_BOOLEAN");
 		basicType2EnumMapC.put("xsdc__anyURI",				"XSD_ANYURI");
 		basicType2EnumMapC.put("xsdc__QName",					"XSD_QNAME");
-		basicType2EnumMapC.put("xsdc__NCName",				"XSD_NCNAME");
+//		basicType2EnumMapC.put("xsdc__NCName",				"XSD_NCNAME");
 		basicType2EnumMapC.put("xsdc__NMTOKEN",				"XSD_NMTOKEN");
 
 
@@ -401,7 +401,7 @@ public class CUtils {
 		initValuesCpp.put("xsd__unsignedLong",		"0"); 
 		initValuesCpp.put("xsd__unsignedShort",	"0"); 
 		initValuesCpp.put("xsd__QName",			"NULL"); 
-		initValuesCpp.put("xsd__NCName",			"NULL"); 
+		//initValuesCpp.put("xsd__NCName",			"NULL"); 
 		initValuesCpp.put("xsd__NMTOKEN",			"NULL"); 
 		
 		initValuesC.put("xsdc__int",				"0"); 
@@ -426,7 +426,7 @@ public class CUtils {
 		initValuesC.put("xsdc__unsignedLong",		"0"); 
 		initValuesC.put("xsdc__unsignedShort",	"0"); 
 		initValuesC.put("xsdc__QName",			"NULL"); 
-		initValuesC.put("xsdc__NCName",			"NULL"); 
+//		initValuesC.put("xsdc__NCName",			"NULL"); 
 		initValuesC.put("xsdc__NMTOKEN",			"NULL"); 
 	}
 	
