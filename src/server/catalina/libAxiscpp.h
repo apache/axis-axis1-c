@@ -75,6 +75,9 @@
 #endif
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 static void
 jni_throw(JNIEnv* env, const char* exception, const char* msg)
@@ -89,6 +92,10 @@ jni_throw(JNIEnv* env, const char* exception, const char* msg)
     env->ThrowNew(jexception, msg);
 }
 
+
+#ifdef __cplusplus
+}
+#endif
 
 #define JNI_ASSERT(assert, name, msg) \
     do \
@@ -114,14 +121,36 @@ public:
 
     char* operator [] (int i) const;
 	void push_back(const char* str);
+	void clear();
 
 private:
 
     JNIEnv* m_pEnv;
     jobject m_jVector;
 	jmethodID m_jmGet;
+	jmethodID m_jmClear;
+	jmethodID m_jmAdd;
 };
 
+/*
 
+
+class JNIString
+{
+public:
+    JNIStringBuffer(JNIEnv* p_Env, jobject p_jStr);
+    ~JNIStringBuffer();
+
+    operator const char* () const;
+	JNIStringBuffer& operator = (const char* p_pch);
+	jstring getJNIString();
+
+private:
+
+    JNIEnv*		m_pEnv;
+    jobject		m_jStr;
+    const char* m_pch;
+};
+*/
 #endif //_AXIS_LIBAXISCPP_HPP
 
