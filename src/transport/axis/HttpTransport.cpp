@@ -64,8 +64,8 @@
  */
 
 
-#include <axis/client/transport/axis/Platform.hpp>
-#include <axis/client/transport/axis/HttpTransport.hpp>
+#include <client/transport/axis/Platform.hpp>
+#include <client/transport/axis/HttpTransport.hpp>
 #include <iostream>
 #include <axis/common/AxisException.h>
 

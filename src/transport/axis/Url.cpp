@@ -63,8 +63,8 @@
  */
 
 
-#include <axis/client/transport/axis/Platform.hpp>
-#include <axis/client/transport/axis/Url.hpp>
+#include <client/transport/axis/Platform.hpp>
+#include <client/transport/axis/Url.hpp>
 #include <ctype.h>
 #include <iostream>
 using namespace std;
