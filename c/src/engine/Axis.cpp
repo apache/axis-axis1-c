@@ -67,7 +67,7 @@
 #include <unistd.h>
 #endif
 
-#include "AxisEngine.h"
+#include "ServerAxisEngine.h"
 //#include "../common/AxisTrace.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -144,13 +144,15 @@ extern "C" int process_request(Ax_soapstream *str)
 			if (str->so.http.ip_method == AXIS_HTTP_POST)
 			{
 //				AXISTRACE1("method is POST");
-				AxisEngine* engine = new AxisEngine();	
+				AxisEngine* engine = new ServerAxisEngine();	
 				if (engine)
 				{
-					Status = engine->Process(str);
-//					AXISTRACE1("Status = engine->Process(str);");
-//				    AXISTRACE1("are we successful?");            
-					Status = SUCCESS;
+					if (SUCCESS == engine->Initialize())
+					{
+						Status = engine->Process(str);
+	//					AXISTRACE1("Status = engine->Process(str);");
+	//				    AXISTRACE1("are we successful?");            
+					}
 					delete engine;
 				}
 			}

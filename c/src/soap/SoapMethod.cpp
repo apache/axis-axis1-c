@@ -75,23 +75,26 @@
 
 SoapMethod::SoapMethod()
 {
-	m_pOutputParam = NULL;
 }
 
 SoapMethod::~SoapMethod()
 {
-	list<Param*>::iterator itCurrInputParam= m_inputParams.begin();
+	list<Param*>::iterator itParam= m_InputParams.begin();
 
-	while(itCurrInputParam != m_inputParams.end()) {		
-		delete *itCurrInputParam;
-		itCurrInputParam++;
+	while(itParam != m_InputParams.end()) {		
+		delete *itParam;
+		itParam++;
 	}
-	m_inputParams.clear();
+	m_InputParams.clear();
 	for (list<Attribute*>::iterator it = m_attributes.begin(); it != m_attributes.end(); it++)
 	{
 		delete (*it);
 	}
-	if (m_pOutputParam) delete m_pOutputParam;
+	for (itParam = m_OutputParams.begin(); itParam != m_OutputParams.end(); itParam++)
+	{
+		delete (*itParam);
+	}
+	m_OutputParams.clear();
 }
 
 void SoapMethod::setPrefix(const AxisChar* prefix)
@@ -111,14 +114,14 @@ void SoapMethod::setUri(const AxisChar* uri)
 
 void SoapMethod::addInputParam(Param *param)
 {
-	m_inputParams.push_back(param);
+	m_InputParams.push_back(param);
 }
 
-void SoapMethod::setOutputParam(Param *param)
+void SoapMethod::AddOutputParam(Param *param)
 {
 	if (param)
 	{
-		m_pOutputParam = param;
+		m_OutputParams.push_back(param);
 	}
 }
 
@@ -221,7 +224,15 @@ int SoapMethod::serialize(string& sSerialized)
 
 int SoapMethod::serializeOutputParam(SoapSerializer& pSZ)
 {	
-	return m_pOutputParam->serialize(pSZ);
+	int nStatus;
+	for (list<Param*>::iterator it = m_OutputParams.begin(); it != m_OutputParams.end(); it++)
+	{
+		if (SUCCESS != (nStatus = (*it)->serialize(pSZ)))
+		{
+			return nStatus;
+		}
+	}
+	return SUCCESS;
 }
 
 /*

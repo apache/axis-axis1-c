@@ -109,9 +109,9 @@ public:
 	int setSoapEnvelope(SoapEnvelope* pSoapEnvelope);
 	SoapSerializer();
 	virtual ~SoapSerializer();
-	IParam* setResponseParam(XSDTYPE nType, uParamValue Value);
-	IParam* setResponseParam(IArrayBean* pArrayBean);
-	IParam* setResponseParam(void* pObject, void* pDZFunct, void* pDelFunct);
+	IParam* AddOutputParam(XSDTYPE nType, uParamValue Value);
+	IParam* AddOutputParam(IArrayBean* pArrayBean);
+	IParam* AddOutputParam(void* pObject, void* pDZFunct, void* pDelFunct);
 	IArrayBean* makeArrayBean(XSDTYPE nType, void* pArray);
 	IArrayBean* makeArrayBean(void* pObject, void* pSZFunct, void* pDelFunct, void* pSizeFunct);
 public: //Basic Type Serializing methods

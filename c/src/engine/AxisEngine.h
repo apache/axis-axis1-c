@@ -76,7 +76,7 @@
 
 class AxisEngine 
 {
-private:	
+protected:	
 	SoapSerializer* m_pSZ;
 	SoapDeSerializer* m_pDZ;
 	HandlerChain* m_pGReqFChain;
@@ -85,17 +85,17 @@ private:
 	HandlerChain* m_pTResFChain;
 	HandlerChain* m_pSReqFChain;
 	HandlerChain* m_pSResFChain;
-	BasicHandler* m_pWebService;
+	MessageData* m_pMsgData;
 public:
 	AxisEngine();
-	~AxisEngine();
-	int Process(Ax_soapstream* soap);
-private:
-	int Invoke(MessageData* pMsg);
-	void OnFault(MessageData* pMsg);
-	int Initialize();
-	int InitializeHandlers(string& sSessionId, AXIS_PROTOCOL_TYPE protocol);
-	void UnInitialize();
+	virtual ~AxisEngine();
+	virtual int Initialize();
+	virtual void UnInitialize();
+	virtual int Process(Ax_soapstream* soap)=0;
+protected:
+	virtual int Invoke(MessageData* pMsg)=0;
+	virtual void OnFault(MessageData* pMsg)=0;
+	virtual int InitializeHandlers(string& sSessionId, AXIS_PROTOCOL_TYPE protocol);
 };
 
 #endif

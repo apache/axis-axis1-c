@@ -81,6 +81,7 @@ MessageData::MessageData()
 
 MessageData::~MessageData()
 {
+	//nothing to do
 }
 
 void MessageData::SetSerializer(SoapSerializer *pSZ)
