@@ -50,14 +50,18 @@ int MathOps::div(int Value0, int Value1)
                 else if(AXIS_SUCCESS == m_pCall->checkMessage("fault",
                     "http://localhost/axis/MathOps")) //Exception handling code goes here
                 {
-                    cFaultcode = m_pCall->getElementAsChar("", 0);
-                    cFaultstring = m_pCall->getElementAsChar("", 0); 
-                    cFaultactor = m_pCall->getElementAsChar("", 0);
-                    SOAPStructFault* pFaultDetail = NULL;
-                    pFaultDetail = (SOAPStructFault*)m_pCall->
-                        getCmplxObject((void*) Axis_DeSerialize_SOAPStructFault, 
-                        (void*) Axis_Create_SOAPStructFault, 
-                        (void*) Axis_Delete_SOAPStructFault,"faultstruct", 0);
+                    cFaultcode = m_pCall->getElementAsString("faultcode", 0);
+                    cFaultstring = m_pCall->getElementAsString("faultstring", 0); 
+                    cFaultactor = m_pCall->getElementAsString("faultactor", 0);
+                    if(AXIS_SUCCESS == m_pCall->checkMessage("detail",
+                        "http://localhost/axis/MathOps"))
+                    {
+                        SOAPStructFault* pFaultDetail = NULL;
+                        pFaultDetail = (SOAPStructFault*)m_pCall->
+                            getCmplxObject((void*) Axis_DeSerialize_SOAPStructFault, 
+                            (void*) Axis_Create_SOAPStructFault, 
+                            (void*) Axis_Delete_SOAPStructFault,"faultstruct", 0);
+                    }
                 }
 	}
 	m_pCall->unInitialize();
