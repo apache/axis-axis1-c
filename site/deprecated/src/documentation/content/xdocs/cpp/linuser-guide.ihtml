@@ -8,7 +8,7 @@
   <body>
                      
 <h1>Contents</h1>
-                     
+
 <dl>
 <dt><a href="#Introducti">Introduction&nbsp;</a>
           </dt>
@@ -98,7 +98,7 @@ CVS checkout</a>
                                                                         
                                                    
                                             <p> What is SOAP?&nbsp;</p>
-                                                                        
+
                                                                         
                                                                         
                                                                         
@@ -143,7 +143,7 @@ has some major architectural innovations over Axis  Java in order to achieve
                                                           
                                             <h1>What's in this release?</h1>
                                                                         
-                                                                        
+
                                                                         
                                                                         
                                                           
@@ -188,7 +188,7 @@ Wrappers</p>
                                                                         
                                                                         
                                                                         
-                                                          
+
                                             <p>- Client side &#8211; Stubs</p>
                                                                         
                                                                         
@@ -233,7 +233,7 @@ Wrappers</p>
 HTTP support)</p>
                                                                         
                                                                         
-                                                                        
+
                                                                         
                                                           
                                             <p>- Web server modules for Apache
@@ -278,7 +278,7 @@ client   applications.</p>
  support<br>
                                           </p>
                                                                         
-                                                                        
+
                                                                         
                                                                         
                                                           
@@ -368,7 +368,7 @@ the package to                                       <a href="mailto:axis-user@x
                 </p>
                                                                         
                                                                         
-                                                                        
+
                                                                         
                                                           
                                             <h1>Installing Axis and Using
@@ -413,7 +413,7 @@ for instructions on installing Axis C++</p>
                                                                         
                                                           
                                             <p>- Axis C++</p>
-                                                                        
+
                                                                         
                                                                         
                                                                         
@@ -458,7 +458,7 @@ for instructions on installing Axis C++</p>
                                             <h1></h1>
                                                                         
                                                                         
-                                                                        
+
                                                                         
                                                           
                                             <p>Let's take a look at a sample
@@ -503,7 +503,7 @@ for instructions on installing Axis C++</p>
                                                                         
                                                           
                                             <p></p>
-                                                                        
+
                                                                         
                                                                         
                                                                         
@@ -548,7 +548,7 @@ for instructions on installing Axis C++</p>
                                             <p>- commons-logging.jar</p>
                                                                         
                                                                         
-                                                                        
+
                                                                         
                                                           
                                             <p>- jaxrpc.jar</p>
@@ -593,7 +593,7 @@ for instructions on installing Axis C++</p>
                                                                         
                                                                         
                                                                         
-                                                                        
+
                                                           
                                             <p>Here is a sample <strong> /home/axisuser/.bash_profile</strong>
        file where  we specified those</p>
@@ -638,7 +638,7 @@ for instructions on installing Axis C++</p>
                                                           
                                             <p><strong>JAVA_HOME="/usr/java"</strong></p>
                                                                         
-                                                                        
+
                                                                         
                                                                         
                                                           
@@ -683,7 +683,7 @@ for instructions on installing Axis C++</p>
  CLASSPATH</strong></p>
                                                                         
                                                                         
-                                                                        
+
                                                                         
                                                           
                                             <p></p>
@@ -818,7 +818,7 @@ Wrappers   Generated by the wsdl2ws Tool</h1>
                                                                         
                                                                         
                                                                         
-                                                                        
+
                                                           
                                             <p></p>
                                                                         
@@ -863,7 +863,7 @@ sample with the already generated files in the first round and<br>
                                             </strong></p>
                                             <p><br>
                                             <strong>cd $AXISCPP_HOME/samples/server/simple</strong></p>
-                                                                        
+
                                                                         
                                                                         
                                                                         
@@ -908,7 +908,7 @@ sample with the already generated files in the first round and<br>
                                             <p></p>
                                                                         
                                                                         
-                                                                        
+
                                                                         
                                                           
                                             <p><a name="Deploying"></a>
@@ -998,7 +998,7 @@ sample with the already generated files in the first round and<br>
                                                                         
                                                           
                                             <p></p>
-                                                                        
+
                                                                         
                                                                         
                                                                         
@@ -1043,7 +1043,7 @@ in<br>
                                                           
                                             <p><strong>$AXIS_HOME/webservices 
  where   $AXIS_HOME = /usr/local/apache/Axis</strong></p>
-                                                                        
+
                                                                         
                                                                         
                                                                         
@@ -1088,7 +1088,7 @@ entry given below appropriately  filled for this service).</p>
                                      
                                             <p><strong>&lt;/deployment&gt;</strong></p>
                                                                         
-                                                                        
+
                                                                         
                                                                         
                                                           
@@ -1133,7 +1133,7 @@ entry given below appropriately  filled for this service).</p>
                                                           
                                             <p></p>
                                                                         
-                                                                        
+
                                                                         
                                                                         
                                                           
@@ -1178,7 +1178,7 @@ entry given below appropriately  filled for this service).</p>
                                                                         
                                                                         
                                                                         
-                                                                        
+
                                                           
                                             <p><strong>$ cd $AXISCPP_HOME/samples/client/simple</strong></p>
                                             <p><strong>$ cp -f $AXISCPP_HOME/samples/server/simple/Calculator.wsdl
@@ -1223,48 +1223,48 @@ instance  is created and  its methods  are called.</p>
                                                                         
                                                                         
                                                                         
-                                                                        
+
                                                           
                                             <p></p>
                                                                         
                                                                         
                                                                         
-                                                                        
-                                                          
+
+
                                             <p>Then fill the samples with
  the relevant business logics .</p>
-                                                                        
-                                                                        
-                                     
+
+
+
                                             <p>Then fill the main method in
 a file as follows</p>
-                                                                        
-                                                                        
-                                     
-                                            <p><b>#include&lt;stdio.h&gt;</b><br>
-    <b>int main()</b><br>
-    <b>&nbsp;{</b><br>
-    <b>&nbsp; &nbsp;Calculator c;</b><br>
-    <b>&nbsp; &nbsp;int result = c.add(20, 40);</b><br>
-    <b>&nbsp; &nbsp;printf("result is = %d", result);</b><br>
-    <b>&nbsp; &nbsp;return 0;</b><br>
-    <b>}</b></p>
-                                                                        
-                                                                        
-                                     
+
+    <p>
+    <b>#include "Calculator.h" </b><br>
+    <b>#include&lt;stdio.h&gt; </b> <br>
+    <b> int main()</b> <br>
+    <b>&nbsp;{ </b> <br>
+    <b>&nbsp;&nbsp;Calculator c;</b> <br>
+    <b>&nbsp;&nbsp;int intOut;</b><br>
+    <b>&nbsp;&nbsp;c.add(20, 40, intOut); </b> <br>
+    <b>&nbsp;&nbsp;printf("result is = %d\n", intOut);</b><br>
+    <b>&nbsp;&nbsp;return 0; </b><br>
+    <b>&nbsp;}</b>
+     </p>
+
                                             <p>Then build by<br>
                                             <b>cd $AXISCPP_HOME/samples/client</b><br>
                                             </p>
                                             <p><b>sh build.sh</b><br>
 Then to run the calculator  sample</p>
-                                                                        
-                                                                        
-                                     
+
+
+
                                             <p><b>$ cd AXISCPP_HOME/samples/simple</b></p>
-                                                                        
-                                                                        
-                                     
-                                            <p><b>./calculator &lt;server&gt; 
+
+
+
+                                            <p><b>./calculator &lt;server&gt;
  &lt;port&gt; &nbsp;&lt;command&gt; &nbsp;&lt;param1&gt; &nbsp;&lt;param2&gt;</b><br>
                                           <br>
      Example:<br>
