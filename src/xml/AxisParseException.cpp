@@ -78,7 +78,8 @@ void AxisParseException::processException(const int iExceptionCode, char* pcMess
 {
     AxisString sMessage = strdup(pcMessage);
     m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
-    delete pcMessage;
+    if(pcMessage)
+        delete pcMessage;
 }
 const string AxisParseException::getMessage (const exception* objException)
 {
