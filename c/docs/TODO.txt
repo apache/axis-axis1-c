@@ -57,21 +57,27 @@ WSDL2C++
 AXISDEPLOY
 ----------
 ! <team>	WrapperClassGenerator 		
-		1. writing a set of classes that can store information that parser obtains by 		   parsing the user web service's include files.		2. writing c++ parser that reads and parses the web service's include files
+		1. writing a set of classes that can store information that parser obtains by 		   
+		   parsing the user web service's include files.		
+		2. writing c++ parser that reads and parses the web service's include files
 
 GENERAL / UNCATEGORIZED
 -----------------------
-X <sanjaya>	In the WSDDDocument.cpp for each and every XMLString::transcode() you have to 
+! <team>	In the WSDDDocument.cpp for each and every XMLString::transcode() you have to 
 		use a corrosponding XMLString::release() to relase the allocated memeory
 
-X <sanjaya>	In the WSDDDocument.cpp write the code to handle Responseflows in the Transport
-element.
-* <susantha> 	Improve AxisEngine to send back the WSDL upon http GET request. Ex. http://url/service?wsdl
+! <team>	In the WSDDDocument.cpp write the code to handle the end element for wsdd_resflow
+* <sanjaya> 	Improve AxisEngine to send back the WSDL upon http GET request. Ex. http://url/service?wsdl
 
 FUTURE ENHANCEMENTS
 -------------------
-! <team> 	Currently the keywords which are namespace specific are hard coded. We have to		put these keywords in to a list/map and pickup them when ever needed from it.		eg: 		a) enc		   http://www.w3.org/2003/05/soap-encoding		   float, double, .... etc		   ! <team> 	The current code supports only int, float, string out of simple types. This code		has to be improved to support other simplet types as well.
+! <team> 	Currently the keywords which are namespace specific are hard coded. We have to		
+		put these keywords in to a list/map and pickup them when ever needed from it.		
+		eg: 		
+			a) enc		   http://www.w3.org/2003/05/soap-encoding		   
+			   		   
+! <team> 	The current code supports only int, float, string out of simple types. This code		
+		has to be improved to support other simplet types as well. float, double, .... etc
 
 * <susantha>	Implementing C++ types for xml types (datetime, date, time, HexBinary, Base64Binary etc)
 		and improve Param class to support them.
- 
