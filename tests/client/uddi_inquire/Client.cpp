@@ -27,11 +27,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <axis/server/AxisException.h>
+#include <axis/AxisException.hpp>
 using namespace std;
 
-#include "gen_src/Inquire.h"
-#include "gen_src/InquireService_AxisClientException.h"
+#include "./gen_src/Inquire.hpp"
+#include "./gen_src/InquireService_AxisClientException.hpp"
 
 #define ARRAYSIZE 1 
 
@@ -42,7 +42,7 @@ main(int argc, char *argv[])
 {
     if( argc < 2 )
     {
-        printf( "Usage: %s [endpoint] ", argv[0]);
+        printf( "Usage: %s [endpoint] \n", argv[0]);
         exit(0);
     }
 
