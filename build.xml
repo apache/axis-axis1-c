@@ -43,6 +43,55 @@ Notes:
 	  -->
 	<property name="dir.src" value="${basedir}/src"/>
 	<property name="dir.include" value="${basedir}/include"/>
+	<property name="dir.tools" value="${basedir}/tools"/>
+
+      <!-- 
+        Uncomment the trace property (or put it in your favourite properties file) to 
+        instrument the Axis C++ source code with entry/exit trace. This is off by default.
+	  <property name="trace" value="true"/> 
+        -->
+
+	<!--
+	  Compile the Trace tool
+	  -->
+	<target name="compileTraceTool" depends="initialize" if="trace">
+		<mkdir dir="${dir.classes}"/>
+		<javac srcdir="${dir.tools}/trace" destdir="${dir.classes}" listfiles="true">
+    	      </javac>
+	</target>
+	
+	<!--
+	  Package Trace tool code into tracetool.jar
+	  -->
+	<target name="buildTraceTool" depends="compileTraceTool" if="trace">
+		<jar jarfile="${dir.classes}/tracetool.jar" basedir="${dir.classes}">
+			<include name="org/apache/axis/tracetool/**"/>
+			<manifest>
+				<attribute name="Main-Class"
+				 value="org.apache.axis.tracetool.AddEntryAndExitTrace"/>
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="copyUntracedSource" if="trace">
+		<copy todir="${dir.classes}/..">
+			<fileset dir="${dir.src}/..">
+                        <include name="src/**"/>
+                  </fileset>
+		</copy>
+	</target>
+
+	<target name="runTraceTool" depends="copyUntracedSource" if="trace">
+		<java jar="${dir.classes}/tracetool.jar" fork="true">
+			<arg value="${dir.src.instrumented}"/>
+		</java>
+      </target>
+
+	<!--
+	  Compile, package and run the trace tool
+	  -->
+	<target name="addTrace" depends="buildTraceTool, runTraceTool" if="trace"
+	  description="Compile, jar and run the trace tool"/>
 
 	<!--
 	  Compiler Definitions
@@ -201,6 +250,15 @@ Notes:
 		
 		<!-- Load properties from file -->
 		<property file="${basedir}/build.${platform}.properties"/>
+
+		<condition property="dir.src.instrumented" value="${dir.classes}/../src">
+			<isset property="trace"/>
+		</condition>
+		<condition property="dir.src.instrumented" value="${dir.src}">
+                  <not>
+			     <isset property="trace"/>
+                  </not>
+		</condition>
 	</target>
 
 	<!--
@@ -223,6 +281,7 @@ Notes:
 			<!-- Additional compiler flag for Client library on all platforms -->
 			<defineset>
 				<define name="AXIS_CLIENT_LIB"/>
+				<define name="ENABLE_AXISTRACE" if="trace"/>
 			</defineset>
 			<!-- Linkers -->
 			<linker refid="SolarisLinker"/>
@@ -230,7 +289,7 @@ Notes:
 			<linker refid="AIXLinker"/>
 			<linker refid="VisualC++Linker"/>
 			<!-- Files to be compiled -->
-			<fileset dir="${dir.src}">
+			<fileset dir="${dir.src.instrumented}">
 				<include name="common/*.cpp"/>
 				<include name="engine/*.cpp"/>
 				<include name="engine/client/*.cpp"/>
@@ -418,7 +477,7 @@ Notes:
 	<target name="packageWSDL2Ws">
 		<mkdir dir="${dir.package.WSDL2Ws}"/>
 		<jar jarfile="${dir.package.WSDL2Ws}/wsdl2ws.jar" basedir="${dir.classes}">
-			<include name="org/**"/>
+			<include name="org/apache/axis/wsdl/**"/>
 			<manifest>
 				<attribute name="Main-Class"
 				 value="org.apache.axis.wsdl.wsdl2ws.WSDL2Ws"/>
@@ -518,7 +577,7 @@ Notes:
 	<!--
 	  Build and package all artifacts ready for distribution
 	  -->
-	<target name="production" depends="compile, documentation, package, validate"
+	<target name="production" depends="addTrace, compile, documentation, package, validate"
 	 description="Build and package all artifacts ready for distribution"/>
 
 	<!--
