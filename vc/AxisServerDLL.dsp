@@ -106,6 +106,10 @@ SOURCE=..\src\common\AdminUtils.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\AnyURI.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\engine\AppScopeHandlerPool.cpp
 # End Source File
 # Begin Source File
@@ -174,11 +178,19 @@ SOURCE=..\src\wsdd\AxisWsddException.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\Base64Binary.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\BasicNode.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\common\BasicTypeSerializer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\Boolean.cpp
 # End Source File
 # Begin Source File
 
@@ -190,7 +202,27 @@ SOURCE=..\src\soap\ComplexElement.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\Date.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\DateTime.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\Decimal.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\engine\DeserializerPool.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\Double.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\Duration.cpp
 # End Source File
 # Begin Source File
 
@@ -199,6 +231,10 @@ SOURCE=..\src\xml\Element.cpp
 # Begin Source File
 
 SOURCE=..\src\xml\Event.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\Float.cpp
 # End Source File
 # Begin Source File
 
@@ -222,11 +258,23 @@ SOURCE=..\src\soap\HeaderBlock.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\HexBinary.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\HexCoder.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\IAnySimpleType.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\common\MessageData.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\NOTATION.cpp
 # End Source File
 # Begin Source File
 
@@ -314,6 +362,14 @@ SOURCE=..\src\xml\StartElement.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\String.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\Time.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\common\TypeMapping.cpp
 # End Source File
 # Begin Source File
@@ -347,6 +403,10 @@ SOURCE=..\src\wsdd\WSDDTransport.cpp
 # Begin Source File
 
 SOURCE=..\src\engine\XMLParserFactory.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\XSD_QName.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
