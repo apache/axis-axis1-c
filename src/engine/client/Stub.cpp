@@ -17,26 +17,6 @@
  * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */
 
-/*
- * This is the client Stub base class
- * Stub.cpp: implemtation for the Stub.
- */
-
-/*
- * Revision 1.1  2004/05/31 samisa
- * Added setProxy
- */
-
-/*
- * Revision 1.2  2004/05/31 roshan
- * Added calling conventions
- */
-
-/*
- * Revision 1.3  2004/06/01 roshan
- * Added setSOAPMethodAttribute
- */
-
 #include <axis/client/Stub.hpp>
 #include <stdio.h>
 #include "../../transport/SOAPTransport.h"
@@ -46,7 +26,8 @@
 
 AXIS_CPP_NAMESPACE_USE
 
-Stub::Stub(const char *pcEndPointUri, AXIS_PROTOCOL_TYPE eProtocol) : m_lTimeoutSeconds(0)
+Stub::Stub(const char *pcEndPointUri, AXIS_PROTOCOL_TYPE eProtocol) 
+: m_lTimeoutSeconds(0), m_bMaintainSession(false), m_strSessionKey("")
 {
     m_pCall = new Call();
     m_pCall->setProtocol(eProtocol);
@@ -101,6 +82,14 @@ void Stub::setTransportProperties()
 	    {
 	        pTrasport->setTransportProperty(m_vKeys[i], m_vValues[i]);
 	    }
+        
+        // set cookie value
+        // Spec syntax: Cookie: NAME1=OPAQUE_STRING1; NAME2=OPAQUE_STRING2 ...
+        // This code assumes : Cookie: NAME=VALUE
+        if(m_bMaintainSession && (m_strSessionKey.size() > 0) )
+        {
+            pTrasport->setTransportProperty("Cookie", m_strSessionKey.c_str());
+        }
     }
 }
 
@@ -281,6 +270,10 @@ void Stub::applyUserPreferences()
     setSOAPMethodAttributes();
     setTransportTimeout();
 }
+void Stub::updateStateAfterResponse()
+{
+    getCookieValue();
+}
 
 void Stub::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
 {
@@ -425,3 +418,37 @@ const AxisChar* Stub::getNamespacePrefix(const AxisChar* pNamespace)
     return m_pCall->getNamespacePrefix(pNamespace);
 }
 
+void Stub::getCookieValue() 
+{
+    if(m_bMaintainSession && !(m_strSessionKey.size() > 0) )
+    {
+        SOAPTransport *pTrasport = NULL;
+        if (m_pCall)
+            pTrasport = m_pCall->getTransport();
+        if (pTrasport)
+        {            
+            const char* pcSessionKey = pTrasport->getTransportProperty("Set-Cookie");
+            if (pcSessionKey)
+                m_strSessionKey = pcSessionKey;
+            else 
+                return;
+            
+            // Spec syntax : Set-Cookie: NAME=VALUE; expires=DATE; path=PATH; domain=DOMAIN_NAME; secure
+            // This code assumes it to be : Set-Cookie: NAME=VALUE; Anything_else
+            // And discards stuff after first ';'
+            // This is the same assumption used in Axis Java
+            unsigned long ulKeyEndsAt = m_strSessionKey.find(";");
+            if (ulKeyEndsAt != std::string::npos)
+            {
+                m_strSessionKey = m_strSessionKey.substr(0, ulKeyEndsAt);
+            }
+            
+        }
+    }  
+
+}
+
+void Stub::setMaintainSession(bool bSession)
+{
+    m_bMaintainSession = bSession;
+}

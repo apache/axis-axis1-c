@@ -489,6 +489,12 @@ class STORAGE_CLASS_INFO Stub
     */
     const AxisChar* AXISCALL getNamespacePrefix(const AxisChar* pNamespace);
 
+  /**
+    * Set whether to Maitain session with service ot not.
+    * @param bSession - true is session should be maintained. False otherwise.
+    */
+    void setMaintainSession(bool bSession);
+
   protected:
   /**
     * Apply user set preferences to each call made on the Stub object.
@@ -497,6 +503,13 @@ class STORAGE_CLASS_INFO Stub
     * Foxing this approach would make the engine much more efficient.
     */
     void applyUserPreferences();
+
+  /**
+    * After the response is received and the results gathered update the Stub  
+    * object's state with whatever information left over (e.g. get Set-Cookie 
+    * value from trasport to be used for subsequent calls) 
+    */
+    void updateStateAfterResponse();
     
   /**
     * Set transport properties stored in m_vKeys and m_vValues vectors.
@@ -521,6 +534,11 @@ class STORAGE_CLASS_INFO Stub
     * Called by applyUserPreferences for each and every method invocation. 
     */
     void setTransportTimeout();
+  
+  /**
+    * Get Set-Cookie header value from transport.
+    */
+    void getCookieValue();
 
   /**
     * Call object of the Stub. This is the point of access to the internals
@@ -572,6 +590,16 @@ class STORAGE_CLASS_INFO Stub
     * Timeout in seconds
     */
     long m_lTimeoutSeconds;
+
+  /**
+    * Should the Stub maintain session with service?
+    */
+    bool m_bMaintainSession;
+
+  /**
+    * Session key sent by service 
+    */
+    std::string m_strSessionKey;
 
 };
 
