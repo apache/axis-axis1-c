@@ -133,9 +133,9 @@ bool HttpTransport::Init ()
 	cout << "Transport:init() successfull" << endl;
 #endif
     AXISC_CATCH(AxisTransportException & chEx)
-	 AXISC_THROW_SAME
+	 AXISC_THROW_SAME;
     AXISC_CATCH(AxisException & chEx)
-         AXISC_THROW_SAME
+         AXISC_THROW_SAME;
     AXISC_ENDCATCH
     return true;
 }

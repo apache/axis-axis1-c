@@ -32,7 +32,7 @@ Receiver::~Receiver()
 
 }
 
-const char* Receiver::Recv() throw (AxisException)
+const char* Receiver::Recv()
 {
       int bodyLength;
       int isHttpHeader;
@@ -45,8 +45,7 @@ const char* Receiver::Recv() throw (AxisException)
             return NULL;
     if (0 == m_BytesRead)
     {
-        try
-        {
+        AXISC_TRY
 #ifdef _DEBUG
                     printf("try\n");
 #endif
@@ -57,9 +56,7 @@ const char* Receiver::Recv() throw (AxisException)
                         return NULL;
             }
             m_MsgSize = strlen(m_pMsg);        
-        }
-        catch(AxisException& ex)
-        {
+        AXISC_CATCH(AxisException& ex)
                   printf("catch\n");
             /* Get the fault message. */
             *m_pTrChannel >> (&m_pMsg);
@@ -67,12 +64,10 @@ const char* Receiver::Recv() throw (AxisException)
             #ifdef _DEBUG
             /*    std::cerr << ex.GetErrorMsg() << std::endl; */
             #endif
-        }
-        catch(...)
-        {
-                  printf("catch(...)\n");
-            throw AxisException(SERVER_TRANSPORT_RECEPTION_EXCEPTION);
-        }
+        AXISC_CATCH(...)
+            AXISTRACE1("SERVER_TRANSPORT_RECEPTION_EXCEPTION", CRITICAL);
+            throw THROW_AXIS_TRANSPORT_EXCEPTION(SERVER_TRANSPORT_RECEPTION_EXCEPTION);
+        AXISC_ENDCATCH
     }
         /* printf("m_MsgSize:%d\n", m_MsgSize); */
     if (m_MsgSize > 0)
