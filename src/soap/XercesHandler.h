@@ -1,4 +1,3 @@
-/* -*- C++ -*- */
 /*
  *   Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -16,7 +15,7 @@
  */
 
 /*
- *	@author sanjaya singharage (sanjayas@opensource.lk)
+ *    @author sanjaya singharage (sanjayas@opensource.lk)
  */
 
 #include    <xercesc/sax/HandlerBase.hpp>
@@ -34,52 +33,58 @@ using namespace std;
 class XercesHandler : public XERCES_CPP_NAMESPACE::DefaultHandler
 {
 public :
-	void freeElement();
-	int GetStatus(){return m_nStatus;};
-    // -----------------------------------------------------------------------
-    //  Constructors
-    // -----------------------------------------------------------------------
+    void freeElement();
+    int GetStatus(){return m_nStatus;};
+    /* -----------------------------------------------------------------------
+     *  Constructors
+     * -----------------------------------------------------------------------
+     */
     XercesHandler();
     ~XercesHandler();
 
 
 
-	const XML_Ch* XercesHandler::NS4Prefix(const XML_Ch* prefix);
+    const XML_Ch* XercesHandler::NS4Prefix(const XML_Ch* prefix);
 
-	AnyElement* getAnyElement()
-	{
-		return m_pCurrElement;
-	}
+    AnyElement* getAnyElement()
+    {
+        return m_pCurrElement;
+    }
 
 private:
-    // -----------------------------------------------------------------------
-    //  Handlers for the SAX DocumentHandler interface
-    // -----------------------------------------------------------------------
-	void startElement(const XMLCh *const uri,const XMLCh *const localname,const XMLCh *const qname,const Attributes &attrs);
-	void endElement (const XMLCh *const uri,const XMLCh *const localname,const XMLCh *const qname);
+    /* -----------------------------------------------------------------------
+     *  Handlers for the SAX DocumentHandler interface
+     * -----------------------------------------------------------------------
+     */
+    void startElement(const XMLCh *const uri,const XMLCh *const localname,
+        const XMLCh *const qname,const Attributes &attrs);
+    void endElement (const XMLCh *const uri,const XMLCh *const localname,
+        const XMLCh *const qname);
     void characters(const XMLCh* const chars, const unsigned int length);
-	void startPrefixMapping(const XMLCh* const prefix, const XMLCh* const uri);
-	void endPrefixMapping(const XMLCh* const prefix);
-    void ignorableWhitespace(const XMLCh* const chars, const unsigned int length);
+    void startPrefixMapping(const XMLCh* const prefix, const XMLCh* const uri);
+    void endPrefixMapping(const XMLCh* const prefix);
+    void ignorableWhitespace(const XMLCh* const chars, 
+        const unsigned int length);
     void resetDocument();
 
 
-    // -----------------------------------------------------------------------
-    //  Implementations of the SAX ErrorHandler interface
-    // -----------------------------------------------------------------------
+    /* -----------------------------------------------------------------------
+     *  Implementations of the SAX ErrorHandler interface
+     * -----------------------------------------------------------------------
+     */
     void warning(const SAXParseException& exception);
     void error(const SAXParseException& exception);
     void fatalError(const SAXParseException& exception);
 
-	int m_nStatus;
-	AnyElement * Nelement;
-	AnyElement * m_pCurrElement;
+    int m_nStatus;
+    AnyElement * Nelement;
+    AnyElement * m_pCurrElement;
 
-	map<AxisXMLString, AxisXMLString> m_NsStack;
-	void initAnyElement()
-	{
-		Nelement->m_pchNameOrValue = NULL;
-		Nelement->m_pchNamespace = NULL;
-	}
+    map<AxisXMLString, AxisXMLString> m_NsStack;
+    void initAnyElement()
+    {
+        Nelement->m_pchNameOrValue = NULL;
+        Nelement->m_pchNamespace = NULL;
+    }
 
 };
