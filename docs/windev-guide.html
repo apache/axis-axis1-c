@@ -47,9 +47,13 @@ side stubs</a><br>
 <a href="#transport">Creating and Building your own transport layer</a>
 <br>
 <a href="#parser">Creating and Building your own parser</a>
-
 </p>
 <p> <b>Before going through this guide, please go through the </b><a href="winuser-guide.html"><b>Windows User Guide</b></a> <b> and also be familiar with how to use binaries.</b></p>
+
+<p><b>*Note:</b>The Expat XML Parser module is not currently maintained and also contains some bugs. So it is removed from the 1.4 release. Please ignore any references to the Expat parser 
+in the documentation. The documentation will be updated regarding this later.
+</p>
+
 
 <p>
 <a name="buildaxis"></a></p>
@@ -111,6 +115,8 @@ this point on.<br></p>
 
 
 <P><b>Expat XML Parser</b></p>
+<p><b>Note:</b>The Expat XML Parser module is not currently maintained and also contains some bugs. For more information refer the *Note:at the top of the page.
+</p>
 
 <p><br>You can get expat binaries from the url http://sourceforge.net/projects/expat/
 <br>
@@ -143,6 +149,8 @@ referred to as [Xerces_Folder] from this point onwards.</p>
 
 <p><b>Expat</b></p>
 <br>
+<p><b>Note:</b>The Expat XML Parser module is not currently maintained and also contains some bugs. For more information refer the *Note:at the top of the page.
+</p>
 <p>Run the file
 expat_win32bin_1_95_7.exe . The folder to which Expat is unzipped will be
 referred to as [Expat_Folder] from this point onwards.</p>
@@ -164,6 +172,8 @@ from this point onwards.</p>
 <h2>Setting up the build environment and building Axis</h2>
 <br>
 <P><b>For Expat Parser</b></p>
+<p><b>Note:</b>The Expat XML Parser module is not currently maintained and also contains some bugs. For more information refer the *Note:at the top of the page.
+</p>
 <p>1) Copy [Expat_Folder]\source\lib\expat.h from expat binary distribution to [Checkout_Folder]\c\include\expat\ directory <br>
 <br>
 2) Copy [Expat_Folder]\lib\libexpat.lib to [Checkout_Folder]\c\lib\expat\ directory.</p>
@@ -786,6 +796,7 @@ the relevant web service dll given above in [Apache_Folder]\Axis\webservices.
 <div id="pdf" align="right">
 <a href="windev-guide.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
           PDF</a>
+
 
 </p>
 

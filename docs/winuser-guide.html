@@ -25,13 +25,18 @@
 <a href="#transport">Axis Transport and Parser Library</a><br>
 
 <a href="#handlers">Handlers</a><br><br>
-
+</p>
+<p>
 <b>Before you follow this guide, please make sure that you have followed the</b> <a
-href="wininstall-guide.html"><b>Windows Installation guide</b>
+href="wininstall-guide.html"><b>Windows Installation guide</b> </a>
+</p>
+
+<p><b>Note:</b>The Expat XML Parser module is not currently maintained and also contains some bugs. So it is removed from the 1.4 release. Please ignore any references to the Expat parser 
+in the documentation. The documentation will be updated regarding this later.
 </p>
 
 <p>
-</a>
+
 <b>Definitions:</b> <br>
 Axis_Extract -> The folder to which the Axis c++ binary distribution is extracted <br>
 [Axis_Folder] -> The deploy folder of the binary distribution which is copied to the apache installation
@@ -287,6 +292,9 @@ int main()
 <p><a name="transport"></a></p>
 
 <h2>Transport Library and Parser Library</h2>
+
+<p><b>Note:</b>The Expat XML Parser module is not currently maintained and also contains some bugs. For more information refer the Note at the top of the page.
+</p>
 <p>AxisTransport.dll (Which can be found at Axis_Extract/bin) should be placed in the path, and should be specified as the value to the key "Transport_http" in axiscpp.conf [Axis_Folder]/axiscpp.conf Or in the same place as the client.exe. </p> 
 <p>Rename either AxisXMLParser_Expat.dll or AxisXMLParser_Xerces.dll to AxisXMLParser.dll (depending on the parser you use), 
  and give the path of the AxisXMLParser.dll as the value of the key XMLParser in axiscpp.conf Or in the  same place as the client.exe. 
@@ -403,6 +411,7 @@ a.	echoStringHeaderHandler (Axis_Extract/samples/server/echoStringHeaderHandler)
 <br>
 b.	testHandler
 (Axis_Extract/samples/client/testHandler)
+
 
 <div id="pdf" align="right">
 <a href="winuser-guide.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
