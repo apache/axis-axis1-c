@@ -184,7 +184,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			if(CPPUtils.isSimpleType(attribs[i][1])){
 				//if symple type
 				//TODO deserialize from attribute if this is an attribute
-				writer.write("\tparam->"+attribs[i][0]+" = pIWSDZ->"+CPPUtils.getParameterGetValueMethodName(attribs[i][1], false)+";\n");
+				writer.write("\tparam->"+attribs[i][0]+" = pIWSDZ->"+CPPUtils.getParameterGetValueMethodName(attribs[i][1], false)+"(\""+attribs[i][0]+"\",0);\n");
 			}else if((t = wscontext.getTypemap().getType(new QName(attribs[i][2],attribs[i][3])))!= null && t.isArray()){
 				//if Array
 				QName qname = WrapperUtils.getArrayType(t).getName();

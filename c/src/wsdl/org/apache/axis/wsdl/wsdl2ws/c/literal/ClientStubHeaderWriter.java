@@ -68,7 +68,6 @@ import java.util.Iterator;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
-import org.apache.axis.wsdl.wsdl2ws.cpp.CPPUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
@@ -132,7 +131,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 				  writer.write("extern void ");
 			  else {
 			  	  String outparam = minfo.getReturnType().getLangName();
-				  isSimpleType = CPPUtils.isSimpleType(outparam);
+				  isSimpleType = CUtils.isSimpleType(outparam);
 				  writer.write("extern "+WrapperUtils.getClassNameFromParamInfoConsideringArrays(minfo.getReturnType(),wscontext)+" ");
 			  }
 			  writer.write(minfo.getMethodname()+"(");
@@ -141,12 +140,12 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 			  Iterator params = minfo.getParameterTypes().iterator();
 			  if(params.hasNext()){
 			  	  ParameterInfo fparam = (ParameterInfo)params.next();
-				  isSimpleType = CPPUtils.isSimpleType(fparam.getLangName());
+				  isSimpleType = CUtils.isSimpleType(fparam.getLangName());
 				  writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
 			  }
 			  for(int j =1; params.hasNext();j++){
 				  ParameterInfo nparam = (ParameterInfo)params.next();
-				  isSimpleType = CPPUtils.isSimpleType(nparam.getLangName());
+				  isSimpleType = CUtils.isSimpleType(nparam.getLangName());
 				  writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
 			  }
 			  writer.write(");\n");
