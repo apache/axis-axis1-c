@@ -6,6 +6,7 @@ AM_CONFIG_HEADER(config.h)
 
 
 LINKCLIENTLIB="-L${AXISCPP_DEPLOY}/lib -laxiscpp_client -ldl"
+AC_SUBST(LINKCLIENTLIB)
 
 LDFLAGS="-lstdc++"
 AC_PROG_CC
@@ -17,24 +18,25 @@ AC_OUTPUT(Makefile \
     server/Makefile \
     server/interoptests/Makefile \
     server/interoptests/base/Makefile \
-    server/interoptests/cbase/Makefile \
     server/interoptests/groupB/Makefile \
-    server/interoptests/cgroupB/Makefile \
     server/interoptests/doclitbase/Makefile \
     server/interoptests/doclitgroupB/Makefile \
     server/simple/Makefile \
+    server/array/Makefile \
+    server/ref/Makefile \
     server/rpcfault/Makefile \
     server/doclitfault/Makefile \
     server/echoStringHeaderHandler/Makefile \
     client/Makefile \
     client/interoptests/Makefile \
     client/interoptests/base/Makefile \
-    client/interoptests/cbase/Makefile \
     client/interoptests/groupB/Makefile \
-    client/interoptests/cgroupB/Makefile \
     client/interoptests/doclitbase/Makefile \
     client/interoptests/doclitgroupB/Makefile \
     client/simple/Makefile \
+    client/ssl_client/Makefile \
+    client/array/Makefile \
+    client/ref/Makefile \
     client/rpcfault/Makefile \
     client/doclitfault/Makefile \
     client/testHandler/Makefile)
