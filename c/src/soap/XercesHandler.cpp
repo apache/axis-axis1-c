@@ -61,7 +61,7 @@ void XercesHandler::startElement(const XMLCh *const uri,const XMLCh *const
     Nelement->m_pchAttributes[len*3]=NULL;
 }
 
-const XML_Ch* XercesHandler::NS4Prefix(const XML_Ch* prefix)
+const XML_Ch* XercesHandler::ns4Prefix(const XML_Ch* prefix)
 {
     if (m_NsStack.find(prefix) != m_NsStack.end())
     {

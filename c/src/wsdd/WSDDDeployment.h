@@ -18,8 +18,8 @@
 #pragma warning (disable : 4786)
 #endif
 
-#if !defined(AXIS_WSDDDEPLOYMENT_H__INCLUDED_)
-#define AXIS_WSDDDEPLOYMENT_H__INCLUDED_
+#if !defined(AXIS_WSDDDEPLOYMENT_H__OF_AXIS_INCLUDED_)
+#define AXIS_WSDDDEPLOYMENT_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/WSDDService.h>
 #include <axis/server/WSDDHandler.h>
@@ -40,29 +40,29 @@ class WSDDDeployment
     friend class WSDDDocumentExpat;
     friend class WSDDDocumentXerces;
 public:
-    int LoadWSDD(const AxisChar* sWSDD);
-    int UpdateWSDD(const AxisChar* sWSDD);
-    int SaveWSDD();
-    const AxisChar* GetLibName(int nLibId);
-    const WSDDService* GetService(const AxisChar* sServiceName);
-    const WSDDHandlerList* GetGlobalRequestFlowHandlers();
-    const WSDDHandlerList* GetGlobalResponseFlowHandlers();
-    const WSDDHandlerList* GetTransportRequestFlowHandlers
+    int loadWSDD(const AxisChar* sWSDD);
+    int updateWSDD(const AxisChar* sWSDD);
+    int saveWSDD();
+    const AxisChar* getLibName(int nLibId);
+    const WSDDService* getService(const AxisChar* sServiceName);
+    const WSDDHandlerList* getGlobalRequestFlowHandlers();
+    const WSDDHandlerList* getGlobalResponseFlowHandlers();
+    const WSDDHandlerList* getTransportRequestFlowHandlers
         (AXIS_PROTOCOL_TYPE protocol);
-    const WSDDHandlerList* GetTransportResponseFlowHandlers
+    const WSDDHandlerList* getTransportResponseFlowHandlers
         (AXIS_PROTOCOL_TYPE protocol);
-    const WSDDServiceMap* GetWSDDServiceMap() const;
-    DEPLOYMENTTYPE GetDeploymentType() const;
+    const WSDDServiceMap* getWSDDServiceMap() const;
+    DEPLOYMENTTYPE getDeploymentType() const;
     WSDDDeployment();
     virtual ~WSDDDeployment();
 private: /* methods that only be used by WSDDDepolyment. */
-    int AddService(WSDDService* pService);
-    int AddHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler,
+    int addService(WSDDService* pService);
+    int addHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler,
         AXIS_PROTOCOL_TYPE protocol=APTHTTP);
-    int RemoveService(WSDDService* pService);
-    int RemoveHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler,
+    int removeService(WSDDService* pService);
+    int removeHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler,
         AXIS_PROTOCOL_TYPE protocol=APTHTTP);
-    void SetDeploymentType(DEPLOYMENTTYPE nType);
+    void setDeploymentType(DEPLOYMENTTYPE nType);
 private:
     WSDDServiceMap* m_DeployedServices;
     WSDDHandlerList* m_GlobalRequestHandlers;

@@ -20,8 +20,8 @@
  *   @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  */
 
-#if !defined(AXIS_ATTRIBUTE_H__INCLUDED_)
-#define AXIS_ATTRIBUTE_H__INCLUDED_
+#if !defined(AXIS_ATTRIBUTE_H__OF_AXIS_INCLUDED_)
+#define AXIS_ATTRIBUTE_H__OF_AXIS_INCLUDED_
 #include <string>
 using namespace std;
 

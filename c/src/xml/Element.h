@@ -20,8 +20,8 @@
  *   @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  */
 
-#if !defined(AXIS_ELEMENT_H__INCLUDED_)
-#define AXIS_ELEMENT_H__INCLUDED_
+#if !defined(AXIS_ELEMENT_H__OF_AXIS_INCLUDED_)
+#define AXIS_ELEMENT_H__OF_AXIS_INCLUDED_
 
 #include "Event.h"
 
@@ -32,17 +32,17 @@ public:
     virtual ~Element();
     string m_Namespace;
 public:
-    virtual XML_NODE_TYPE GetType() { return END_ELEMENT;};
+    virtual XML_NODE_TYPE getType() { return END_ELEMENT;};
 };
 
 class StartPrefix : public Element
 {
-    virtual XML_NODE_TYPE GetType() { return START_PREFIX;};        
+    virtual XML_NODE_TYPE getType() { return START_PREFIX;};        
 };
 
 class EndPrefix : public Element
 {
-    virtual XML_NODE_TYPE GetType() { return END_PREFIX;};        
+    virtual XML_NODE_TYPE getType() { return END_PREFIX;};        
 };
 
 typedef Element EndElement;

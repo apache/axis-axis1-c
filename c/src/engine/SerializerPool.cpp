@@ -38,7 +38,7 @@ SerializerPool::~SerializerPool ()
 }
 
 // Pooling should be implemented
-int SerializerPool::GetInstance (IWrapperSoapSerializer** ppSZ)
+int SerializerPool::getInstance (IWrapperSoapSerializer** ppSZ)
 {
     lock ();
     if (!m_SZList.empty ())
@@ -55,7 +55,7 @@ int SerializerPool::GetInstance (IWrapperSoapSerializer** ppSZ)
 #endif
         
     }
-    if (AXIS_SUCCESS != (*ppSZ)->Init ())
+    if (AXIS_SUCCESS != (*ppSZ)->init ())
     {
         delete *ppSZ;
         *ppSZ = NULL;
@@ -67,7 +67,7 @@ int SerializerPool::GetInstance (IWrapperSoapSerializer** ppSZ)
     return AXIS_SUCCESS;
 }
 
-int SerializerPool::PutInstance (IWrapperSoapSerializer* pSZ)
+int SerializerPool::putInstance (IWrapperSoapSerializer* pSZ)
 {
     lock ();
     m_SZList.push_back (pSZ);

@@ -14,8 +14,8 @@
  *   limitations under the License.
  */
 
-#if !defined(AXIS_HEXCODER_H____INCLUDED_)
-#define AXIS_HEXCODER_H____INCLUDED_
+#if !defined(AXIS_HEXCODER_H____OF_AXIS_INCLUDED_)
+#define AXIS_HEXCODER_H____OF_AXIS_INCLUDED_
 
 int Hex_Encode(char * coded_dst, const unsigned char *plain_src,
                int len_plain_src);

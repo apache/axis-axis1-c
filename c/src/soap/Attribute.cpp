@@ -83,14 +83,14 @@ int Attribute::serialize(SoapSerializer& pSZ) const
 
     if (isSerializable())
     {        
-        pSZ.Serialize(" ", NULL);
+        pSZ.serialize(" ", NULL);
 
         if(!m_prefix.empty())
         {            
-            pSZ.Serialize(m_prefix.c_str(), ":", NULL);
+            pSZ.serialize(m_prefix.c_str(), ":", NULL);
         }
 
-        pSZ.Serialize(m_localname.c_str(), "=\"", m_value.c_str(), "\"", NULL);
+        pSZ.serialize(m_localname.c_str(), "=\"", m_value.c_str(), "\"", NULL);
 
         intStatus= AXIS_SUCCESS;
     }
@@ -105,7 +105,7 @@ int Attribute::serialize(SoapSerializer& pSZ,
 
     if (isSerializable())
     {        
-        pSZ.Serialize(" ", NULL);
+        pSZ.serialize(" ", NULL);
 
         /*
          * Following code figures out the prefix to be serialized and 
@@ -113,22 +113,22 @@ int Attribute::serialize(SoapSerializer& pSZ,
          */
         if(!m_prefix.empty())
         {            
-            pSZ.Serialize(m_prefix.c_str(), ":", NULL);
+            pSZ.serialize(m_prefix.c_str(), ":", NULL);
         }
         else if (!m_uri.empty())
         {
             bool blnIsNewNamespace = false;
-            m_prefix = pSZ.GetNamespacePrefix(m_uri.c_str(), 
+            m_prefix = pSZ.getNamespacePrefix(m_uri.c_str(), 
                 blnIsNewNamespace);
             if (blnIsNewNamespace)
             {
                 lstTmpNameSpaceStack.push_back((AxisChar*)m_uri.c_str());
             }
 
-            pSZ.Serialize(m_prefix.c_str(), ":", NULL);
+            pSZ.serialize(m_prefix.c_str(), ":", NULL);
         }
 
-        pSZ.Serialize(m_localname.c_str(), "=\"", m_value.c_str(), "\"", NULL);
+        pSZ.serialize(m_localname.c_str(), "=\"", m_value.c_str(), "\"", NULL);
 
         intStatus= AXIS_SUCCESS;
     }

@@ -47,7 +47,7 @@ SessionScopeHandlerPool::~SessionScopeHandlerPool ()
                 (*itr).second.begin (); ite != (*itr).second.end ();
                 ite++)
             {
-                g_pHandlerLoader->DeleteHandler (*ite, (*it).first);
+                g_pHandlerLoader->deleteHandler (*ite, (*it).first);
             }
             (*itr).second.clear ();
         }
@@ -56,7 +56,7 @@ SessionScopeHandlerPool::~SessionScopeHandlerPool ()
     m_Handlers.clear ();
 }
 
-int SessionScopeHandlerPool::GetInstance (string &sSessionId,
+int SessionScopeHandlerPool::getInstance (string &sSessionId,
     BasicHandler** pHandler, int nLibId)
 {
     lock ();
@@ -73,7 +73,7 @@ int SessionScopeHandlerPool::GetInstance (string &sSessionId,
                 if ((*pSesHandlers)[SESSIONLESSHANDLERS].empty ())
                 {
                     unlock ();
-                    return g_pHandlerLoader->CreateHandler (pHandler, nLibId);
+                    return g_pHandlerLoader->createHandler (pHandler, nLibId);
                 }
                 else
                 {
@@ -91,7 +91,7 @@ int SessionScopeHandlerPool::GetInstance (string &sSessionId,
                 return AXIS_SUCCESS;
             }
             unlock ();
-            return g_pHandlerLoader->CreateHandler (pHandler, nLibId);
+            return g_pHandlerLoader->createHandler (pHandler, nLibId);
         }
         else // No handler list for this session id
         {
@@ -99,7 +99,7 @@ int SessionScopeHandlerPool::GetInstance (string &sSessionId,
             if ((*pSesHandlers)[SESSIONLESSHANDLERS].empty ())
             {
                 unlock ();
-                return g_pHandlerLoader->CreateHandler (pHandler, nLibId);
+                return g_pHandlerLoader->createHandler (pHandler, nLibId);
             }
             else
             {
@@ -112,7 +112,7 @@ int SessionScopeHandlerPool::GetInstance (string &sSessionId,
     }
     else // Not even the handler DLL loaded
     {
-        Status = g_pHandlerLoader->CreateHandler (pHandler, nLibId);
+        Status = g_pHandlerLoader->createHandler (pHandler, nLibId);
         if (AXIS_SUCCESS == Status)
         {
             /* This just creates the entry in m_Handlers so that next time we 
@@ -127,7 +127,7 @@ int SessionScopeHandlerPool::GetInstance (string &sSessionId,
     }
 }
 
-int SessionScopeHandlerPool::PutInstance (string &sSessionId,
+int SessionScopeHandlerPool::putInstance (string &sSessionId,
     BasicHandler* pHandler, int nLibId)
 {
     lock ();
@@ -148,7 +148,7 @@ int SessionScopeHandlerPool::PutInstance (string &sSessionId,
     return AXIS_SUCCESS;
 }
 
-void SessionScopeHandlerPool::EndSession (string &sSessionId)
+void SessionScopeHandlerPool::endSession (string &sSessionId)
 {
     /* Traverse all the lists and remove corresponding handlers if any and put 
      * to SESSIONLESSHANDLERS        

@@ -16,8 +16,8 @@
 
 #include <stdlib.h>
 
-#ifndef XPP_H_INCLUDED
-#define XPP_H_INCLUDED
+#ifndef XPP_H_OF_AXIS_INCLUDED
+#define XPP_H_OF_AXIS_INCLUDED
 #ifdef XML_UNICODE     /* Information is UTF-16 encoded. */
 #ifdef XML_UNICODE_WCHAR_T
 typedef wchar_t XML_Char;

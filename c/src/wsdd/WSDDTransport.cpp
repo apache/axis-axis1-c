@@ -61,7 +61,7 @@ WSDDTransport::~WSDDTransport()
     }
 }
 
-const WSDDHandlerList* WSDDTransport::GetRequestFlowHandlers
+const WSDDHandlerList* WSDDTransport::getRequestFlowHandlers
 (AXIS_PROTOCOL_TYPE Protocol)
 {
     if (m_RequestHandlers && m_RequestHandlers->find(Protocol) !=
@@ -71,7 +71,7 @@ const WSDDHandlerList* WSDDTransport::GetRequestFlowHandlers
 }
 
 
-const WSDDHandlerList* WSDDTransport::GetResponseFlowHandlers
+const WSDDHandlerList* WSDDTransport::getResponseFlowHandlers
 (AXIS_PROTOCOL_TYPE Protocol)
 {
     if (m_ResponseHandlers && m_ResponseHandlers->find(Protocol) !=
@@ -80,7 +80,7 @@ const WSDDHandlerList* WSDDTransport::GetResponseFlowHandlers
     return NULL;
 }
 
-void WSDDTransport::AddHandler(bool bRequestFlow, AXIS_PROTOCOL_TYPE protocol,
+void WSDDTransport::addHandler(bool bRequestFlow, AXIS_PROTOCOL_TYPE protocol,
                                WSDDHandler* pHandler)
 {
     if (bRequestFlow)
@@ -97,7 +97,7 @@ void WSDDTransport::AddHandler(bool bRequestFlow, AXIS_PROTOCOL_TYPE protocol,
     }
 }
 
-int WSDDTransport::RemoveHandler(bool bRequestFlow, 
+int WSDDTransport::removeHandler(bool bRequestFlow, 
                                  AXIS_PROTOCOL_TYPE protocol,
                                  WSDDHandler* pHandler)
 {
@@ -109,7 +109,7 @@ int WSDDTransport::RemoveHandler(bool bRequestFlow,
         for (WSDDHandlerList::iterator itr = pList->begin();
              itr != pList->end(); itr++)
         {
-            if (strcmp((*itr)->GetLibName(), pHandler->GetLibName()) == 0)
+            if (strcmp((*itr)->getLibName(), pHandler->getLibName()) == 0)
             {
                 pList->remove(*itr);
                 delete (*itr);
@@ -121,7 +121,7 @@ int WSDDTransport::RemoveHandler(bool bRequestFlow,
     return AXIS_NO_SUCH_HANDLER;    
 }
 
-int WSDDTransport::UpdateWSDD(FILE* wsddfile, int tabcount)
+int WSDDTransport::updateWSDD(FILE* wsddfile, int tabcount)
 {
     WSDDHandlerList::iterator iter2;
     const char* trtype = 0;
@@ -151,7 +151,7 @@ int WSDDTransport::UpdateWSDD(FILE* wsddfile, int tabcount)
                 for(iter2 = list.begin(); iter2 != list.end(); iter2++)
                 {
                     if (AXIS_SUCCESS != 
-                        (*iter2)->UpdateWSDD(wsddfile, tabcount)) 
+                        (*iter2)->updateWSDD(wsddfile, tabcount)) 
                         return AXIS_FAIL;
                 }            
                 if (fputs("\t\t</requestFlow>\n", wsddfile) < 0) 
@@ -169,7 +169,7 @@ int WSDDTransport::UpdateWSDD(FILE* wsddfile, int tabcount)
                 for(iter2 = list.begin(); iter2 != list.end(); iter2++)
                 {
                     if (AXIS_SUCCESS != 
-                        (*iter2)->UpdateWSDD(wsddfile, tabcount)) 
+                        (*iter2)->updateWSDD(wsddfile, tabcount)) 
                         return AXIS_FAIL;
                 }            
                 if (fputs("\t\t</responseFlow>\n", wsddfile) < 0) 

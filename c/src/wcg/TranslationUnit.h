@@ -27,8 +27,8 @@
 /* TranslationUnit.h: interface for the TranslationUnit class. */
 
 
-#if !defined(AXIS_HEADERFILE_H__INCLUDED_)
-#define AXIS_HEADERFILE_H__INCLUDED_
+#if !defined(AXIS_HEADERFILE_H__OF_AXIS_INCLUDED_)
+#define AXIS_HEADERFILE_H__OF_AXIS_INCLUDED_
 
 #include "WSClass.h"
 #include "BeanClass.h"

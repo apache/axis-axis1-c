@@ -14,8 +14,8 @@
  *   limitations under the License.
  */
 
-#ifndef XmlRole_INCLUDED
-#define XmlRole_INCLUDED 1
+#ifndef XmlRole_OF_AXIS_INCLUDED
+#define XmlRole_OF_AXIS_INCLUDED 1
 
 #ifdef __VMS
 /*      0        1         2         3      0        1         2         3
@@ -124,6 +124,6 @@ void XmlPrologStateInitExternalEntity(PROLOG_STATE *);
 }
 #endif
 
-#endif /* not XmlRole_INCLUDED */
+#endif /* not XmlRole_OF_AXIS_INCLUDED */
 
 

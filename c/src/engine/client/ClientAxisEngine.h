@@ -15,8 +15,8 @@
  *   limitations under the License.
  */
 
-#if !defined(AXIS_CLIENTAXISENGINE_H__INCLUDED_)
-#define AXIS_CLIENTAXISENGINE_H__INCLUDED_
+#if !defined(AXIS_CLIENTAXISENGINE_H__OF_AXIS_INCLUDED_)
+#define AXIS_CLIENTAXISENGINE_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/AxisEngine.h>
 /*
@@ -29,13 +29,13 @@
 class ClientAxisEngine:public AxisEngine
 {
     public:
-        MessageData* GetMessageData ();
+        MessageData* getMessageData ();
         ClientAxisEngine ();
         virtual ~ ClientAxisEngine ();
-        virtual int Process (Ax_soapstream* pSoap);
+        virtual int process (Ax_soapstream* pSoap);
     protected:
-        virtual int Invoke (MessageData* pMsg);
-        virtual void OnFault (MessageData* pMsg);
+        virtual int invoke (MessageData* pMsg);
+        virtual void onFault (MessageData* pMsg);
     private:
         Ax_soapstream* m_pSoap;
         char* get_service_name (const char* pch_uri_path);

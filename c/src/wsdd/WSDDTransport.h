@@ -15,8 +15,8 @@
  */
 
 
-#if !defined(AXIS_WSDDTRANSPORT_H__INCLUDED_)
-#define AXIS_WSDDTRANSPORT_H__INCLUDED_
+#if !defined(AXIS_WSDDTRANSPORT_H__OF_AXIS_INCLUDED_)
+#define AXIS_WSDDTRANSPORT_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/WSDDHandler.h>
 #include <map>
@@ -28,16 +28,16 @@
 class WSDDTransport  
 {
 public:
-    void AddHandler(bool bRequestFlow, AXIS_PROTOCOL_TYPE protocol,
+    void addHandler(bool bRequestFlow, AXIS_PROTOCOL_TYPE protocol,
         WSDDHandler* pHandler);
-    int RemoveHandler(bool bRequestFlow, AXIS_PROTOCOL_TYPE protocol,
+    int removeHandler(bool bRequestFlow, AXIS_PROTOCOL_TYPE protocol,
         WSDDHandler* pHandler);
-    const WSDDHandlerList* GetResponseFlowHandlers
+    const WSDDHandlerList* getResponseFlowHandlers
         (AXIS_PROTOCOL_TYPE Protocol);
-    const WSDDHandlerList* GetRequestFlowHandlers(AXIS_PROTOCOL_TYPE Protocol);
+    const WSDDHandlerList* getRequestFlowHandlers(AXIS_PROTOCOL_TYPE Protocol);
     WSDDTransport();
     virtual ~WSDDTransport();
-    int UpdateWSDD(FILE* wsddfile, int tabcount);
+    int updateWSDD(FILE* wsddfile, int tabcount);
 private:
     map<AXIS_PROTOCOL_TYPE, WSDDHandlerList>* m_RequestHandlers;
     map<AXIS_PROTOCOL_TYPE, WSDDHandlerList>* m_ResponseHandlers;
