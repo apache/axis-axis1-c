@@ -71,6 +71,10 @@ typedef struct
      * Type of SAX event whose data that an AnyElement can contain.
      */
     XML_NODE_TYPE m_type;
+
+    // This is to handle empty elements, e.g. <tag/>, where start and end events are fired at once
+    XML_NODE_TYPE m_type2;
+
     /**
      * Local name in case of StartElement or EndElement event. Character data
      * in case of character data event. Namespace prefix in case of prefix 

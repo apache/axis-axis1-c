@@ -150,6 +150,7 @@ void XercesHandler::endElement (const XMLCh *const uri,
     /* it seems that both startElement and endElemen events fired within a
     single parseNext call */
     {
+        m_pCurrElement->m_type2 = END_ELEMENT;
         m_bEndElementFollows = true;
         return;
     }

@@ -582,7 +582,7 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 	    return Array;
 	}
 
-        if (END_ELEMENT == m_pNode->m_type)
+        if (END_ELEMENT == m_pNode->m_type2)
 	{
 	    return Array;
 	}
