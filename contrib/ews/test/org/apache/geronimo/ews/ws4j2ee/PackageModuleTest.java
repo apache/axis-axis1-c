@@ -42,7 +42,7 @@ public class PackageModuleTest extends AbstractTestCase {
         throws GenerationFault, ClassNotFoundException {
         PackageModule wmod =
             PackageModuleFactory.createPackageModule(
-                "target/generated/samples/simple.war",
+                getTestFile("target/generated/samples/simple.war"),
                 true);
         ClassLoader cl = wmod.getClassLoaderWithPackageLoaded();
         cl.loadClass("com.jwsbook.jaxrpc.BookQuote");
@@ -51,14 +51,14 @@ public class PackageModuleTest extends AbstractTestCase {
         throws GenerationFault, ClassNotFoundException {
         PackageModule wmod =
             PackageModuleFactory.createPackageModule(
-                "target/generated/samples/bookquote.ear",
+                getTestFile("target/generated/samples/bookquote.ear"),
                 true);
         ClassLoader cl = wmod.getClassLoaderWithPackageLoaded();
         cl.loadClass("com.jwsbook.jaxrpc.BookQuote");
     }
     
     public void testLoadJarUsingURLClassLoader() throws MalformedURLException, ClassNotFoundException{
-    	URLClassLoader cl = new URLClassLoader(new URL[]{(new File("target/temp/bookquote.jar")).toURL()});
+    	URLClassLoader cl = new URLClassLoader(new URL[]{(new File("target/generated/samples/bookquote.jar")).toURL()});
 		cl.loadClass("com.jwsbook.jaxrpc.BookQuote");
     }
 

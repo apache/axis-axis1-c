@@ -80,7 +80,8 @@ public class WebServiceDDTest extends AbstractTestCase{
 	public void testGoogleDD() throws Exception{
 		WSCFContext wscfcontext 
 			= ContextFactory.createWSCFContext(
-				new FileInputStream(sampleDir + "mapper/google/webservices.xml"));
+				new FileInputStream(getTestFile(sampleDir 
+				+ "mapper/google/webservices.xml")));
 		Assert.assertNull(wscfcontext.getDescription());
 		Assert.assertNull(wscfcontext.getLargeIcon());
 		Assert.assertNull(wscfcontext.getSmallIcon());
@@ -116,7 +117,8 @@ public class WebServiceDDTest extends AbstractTestCase{
 	public void testHandlerDD() throws Exception{
 		WSCFContext wscfcontext 
 			= ContextFactory.createWSCFContext(
-				new FileInputStream(testDir + "testData/math/webservice-withHandler.xml"));
+				new FileInputStream(
+					getTestFile(testDir + "testData/math/webservice-withHandler.xml")));
 		WSCFWebserviceDescription[] wsarray = wscfcontext.getWebServicesDescription();
 		Assert.assertNotNull(wsarray);	
 		Assert.assertTrue(wsarray.length > 0);

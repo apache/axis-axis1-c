@@ -77,7 +77,10 @@ public class GenerateWithoutWSDLTest extends AbstractTestCase {
 
 	public void testMathSample() throws Exception{
 		try{
-			String[] args2 = new String[]{testDir+"testData/math/webservice.xml","-o"+outDir+"withoutWSDL/math/server" ,"-l" ,"http://127.0.0.1/aixs/math"};
+			String[] args2 = new String[]{
+				getTestFile(testDir+"testData/math/webservice.xml")
+				,"-o"+outDir+"withoutWSDL/math/server" ,"-l" ,
+				"http://127.0.0.1/aixs/math"};
 			Ws4J2EEwithoutWSDL.main(args2);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -85,40 +88,55 @@ public class GenerateWithoutWSDLTest extends AbstractTestCase {
 	}
 	
 	public void testServletBasedMathSample() throws Exception{
-		String[] args2 = new String[]{testDir + "testData/math/webservice-ServletBased.xml","-o"+outDir+"withoutWSDL/math/server-servlet" ,"-l" ,"http://127.0.0.1/aixs/math"};
+		String[] args2 = new String[]{
+			getTestFile(testDir + "testData/math/webservice-ServletBased.xml"),
+			"-o"+outDir+"withoutWSDL/math/server-servlet" ,"-l" ,
+			"http://127.0.0.1/aixs/math"};
 		Ws4J2EEwithoutWSDL.main(args2);
 	}
 	public void testMathSampleWithHandlers() throws Exception{
 		try{
-			String[] args2 = new String[]{testDir + "testData/math/webservice-withHandler.xml","-o"+outDir+"withoutWSDL/math-withHandlers/server" ,"-l" ,"http://127.0.0.1/aixs/math"};
+			String[] args2 = new String[]{
+				getTestFile(testDir + "testData/math/webservice-withHandler.xml"),
+				"-o"+outDir+"withoutWSDL/math-withHandlers/server" ,"-l" ,
+				"http://127.0.0.1/aixs/math"};
 			Ws4J2EEwithoutWSDL.main(args2);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
 	public void testBookSampleJar() throws Exception{
-		String[] args2 = new String[]{"target/generated/samples/bookquote.jar","-o"+outDir+"withoutWSDL/bookquote-jar/"};
+		String[] args2 = new String[]{
+			getTestFile("target/generated/samples/bookquote.jar"),
+			"-o"+outDir+"withoutWSDL/bookquote-jar/"};
 		Ws4J2EEwithoutWSDL.main(args2);
 	}
 	public void testGoogleSampleJar() throws Exception{
-		String[] args2 = new String[]{"target/generated/samples/google.jar","-o"+outDir+"withoutWSDL/google-jar/"};
+		String[] args2 = new String[]{
+			getTestFile("target/generated/samples/google.jar"),
+				"-o"+outDir+"withoutWSDL/google-jar/"};
 		Ws4J2EEwithoutWSDL.main(args2);
 	}
 	public void testTimeSampleJar() throws Exception{
-		String[] args2 = new String[]{"target/generated/samples/time.jar","-o"+outDir+"withoutWSDL/time-jar/"};
+		String[] args2 = new String[]{getTestFile("target/generated/samples/time.jar"),
+			"-o"+outDir+"withoutWSDL/time-jar/"};
 		Ws4J2EEwithoutWSDL.main(args2);
 	}
 	public void testZipampleJar() throws Exception{
-		String[] args2 = new String[]{"target/generated/samples/zip.jar","-o"+outDir+"withoutWSDL/zip-jar/"};
+		String[] args2 = new String[]{getTestFile("target/generated/samples/zip.jar"),
+			"-o"+outDir+"withoutWSDL/zip-jar/"};
 		Ws4J2EEwithoutWSDL.main(args2);
 	}
 	
 	public void testBookSampleWar() throws Exception{
-		String[] args2 = new String[]{"target/generated/samples/simple.war","-o"+outDir+"withoutWSDL/bookquote-war/"};
+		String[] args2 = new String[]{getTestFile("target/generated/samples/simple.war"),
+			"-o"+outDir+"withoutWSDL/bookquote-war/"};
 		Ws4J2EEwithoutWSDL.main(args2);
 	}
 	public void testBookSampleEar() throws Exception{
-		String[] args2 = new String[]{"target/generated/samples/bookquote.ear","-o"+outDir+"withoutWSDL/bookquote-ear/"};
+		String[] args2 = new String[]{
+				getTestFile("target/generated/samples/bookquote.ear"),
+				"-o"+outDir+"withoutWSDL/bookquote-ear/"};
 		Ws4J2EEwithoutWSDL.main(args2);
 	}
 }

@@ -91,7 +91,8 @@ public class EJBDDTest extends AbstractTestCase{
 				}
 			};
 		   EJBDDParser pars = new EJBDDParser(con);
-		   pars.parse(new FileInputStream(testDir+"testData/Math/ejb-jar.xml"));
+		   pars.parse(new FileInputStream(
+		   	getTestFile(testDir+"testData/Math/ejb-jar.xml")));
 		   //Assert.assertEquals(con.getMiscInfo().getEjbName(),"MathFace"); 
 		}catch(Exception e){
 			e.printStackTrace();

@@ -92,7 +92,7 @@ public class WebDDTest extends AbstractTestCase{
 			}
 		};
 	   WebDDParser pars = new WebDDParser(con);
-	   pars.parse(new FileInputStream(sampleDir + "servlet/math/web.xml"));
+	   pars.parse(new FileInputStream(getTestFile(sampleDir + "servlet/math/web.xml")));
 	   Assert.assertEquals("org.apache.axis.transport.http.AxisServlet",pars.getServletClass()); 
 	}
 }
