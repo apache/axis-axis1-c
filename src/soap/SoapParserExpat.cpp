@@ -70,19 +70,11 @@ using namespace axisxml;
 
 #include <axis/soap/SoapParserExpat.h>
 
-/*
-#include <axis/common/TypeMapping.h>
-#include <axis/soap/URIMapping.h>
-#include <axis/soap/Attribute.h>
-#include <axis/soap/SoapEnvVersions.h>
-#include <axis/soap/CharacterElement.h>
-#include <axis/common/AxisUtils.h>
-*/
-
 SoapParserExpat::SoapParserExpat()
 {
 	m_pLastEvent = NULL;
 	m_Parser = XML_ParserCreateNS(NULL, NAMESPACESEPARATOR);
+	m_nTransportStatus = TRANSPORT_IN_PROGRESS;
 }
 
 SoapParserExpat::~SoapParserExpat()
@@ -247,17 +239,16 @@ const AnyElement* SoapParserExpat::Next()
 
 int SoapParserExpat::ParseNext()
 {
-	int nStatus;
 	int nChars = 0;
-	nStatus = m_pInputStream->transport.pGetFunct(&m_pCurrentBuffer, &nChars, m_pInputStream);
+	m_nTransportStatus = m_pInputStream->transport.pGetFunct(&m_pCurrentBuffer, &nChars, m_pInputStream);
 	if ((nChars > 0) && m_pCurrentBuffer) /* there can be a buffer or not */
 	{
 		if (XML_STATUS_ERROR == XML_Parse(m_Parser, m_pCurrentBuffer, nChars, false))
 			m_nStatus = AXIS_FAIL;
 		m_pInputStream->transport.pRelBufFunct(m_pCurrentBuffer, m_pInputStream);
 	}
-	if (TRANSPORT_FAILED == nStatus) XML_Parse(m_Parser, NULL, 0, true); /* end of parsing */
-	return nStatus;
+	if (TRANSPORT_FAILED == m_nTransportStatus) XML_Parse(m_Parser, NULL, 0, true); /* end of parsing */
+	return m_nTransportStatus;
 }
 
 int SoapParserExpat::GetStatus()
@@ -286,6 +277,7 @@ int SoapParserExpat::Init()
 		delete m_pLastEvent;
 	}
 	m_pLastEvent = NULL;
+	m_nTransportStatus = TRANSPORT_IN_PROGRESS;
 	return m_nStatus;
 }
 

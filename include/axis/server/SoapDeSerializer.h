@@ -115,6 +115,7 @@ public:
 	int GetVersion();
 	SoapEnvelope* GetEnvelope();
 	int GetHeader();
+	int FlushInputStream();
 	/*
 	 * Methods to manipulate entire body when the body is compressed or encrypted 
 	 * These functions are provided for handlers to manipulate entire soap body.
