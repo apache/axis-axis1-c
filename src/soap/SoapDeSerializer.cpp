@@ -2963,3 +2963,12 @@ int SoapDeSerializer::flushInputStream()
 	while (TRANSPORT_IN_PROGRESS == m_pInputStream->getBytes(pBuffer, &nChars));
 	return AXIS_SUCCESS;
 }
+
+AnyType* SoapDeSerializer::getAnyObject()
+{
+	AnyType* pAny = new AnyType();
+	pAny->_array = 0;
+	pAny->_size = 0;
+	//TODO
+	return pAny;
+}
