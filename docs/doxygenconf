@@ -301,7 +301,7 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                  = ../ ../src ../src/common ../src/engine ../src/soap ../src/wsdd ../src/xml ../src/server ../src/server/apache ../src/wcg ../src/wsdl
+INPUT                  = ../ ../src ../src/common ../src/engine ../src/soap ../src/wsdd ../src/xml ../src/server ../src/server/apache ../src/wcg ../src/wsdl ../include/axis/client
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
