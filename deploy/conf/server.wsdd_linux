@@ -28,8 +28,8 @@
 		<parameter name="className" value="/usr/local/axiscpp_deploy/lib/libdoclitgroupB.so" />
 	</service>
 	<service name="base" provider="CPP:RPC" description="SOAPBuilders Interoperability Lab Round 2 base test suite described at http://www.whitemesa.com/interop/proposal2.html ">
-		<parameter name="allowedMethods" value="echoIntArray "/>
-		<parameter name="className" value="/usr/local/axiscpp_deploy/lib/libInteropBase.so" />
+		<parameter name="allowedMethods" value="echoString EchoInt echoStringArray echoInteger echoIntegerArray echoFloat echoFloatArray echoStruct echoStructArray echoVoid echoBase64 echoDate echoHexBinary echoDecimal echoBoolean "/>	
+		<parameter name="className" value="/usr/local/axiscpp_deploy/lib/libbase.so" />
 	</service>
 	<service name="array" provider="CPP:RPC" description="">
  	   <parameter name="allowedMethods" value="echoIntArray "/>
