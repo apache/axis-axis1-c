@@ -427,6 +427,9 @@ int AxisEngine::Invoke(MessageData* pMsg)
 		level++; //AE_SERV
 	}
 	while(0);
+
+	pMsg->setPastPivotState(true);
+
 	switch (level)
 	{
 	case AE_SERV: //everything success
