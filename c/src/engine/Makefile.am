@@ -5,5 +5,5 @@ libengine_la_SOURCES = Axis.cpp \
                 HandlerLoader.cpp \
                 HandlerPool.cpp
 
-libengine_la_LIBADD = -L/usr/local/xerces_c/lib -lxerces-c
-INCLUDES = -I/usr/local/xerces_c/include
+libengine_la_LIBADD = -L$(XERCES_HOME) -lxerces-c
+INCLUDES = -I$(XERCES_HOME)/include

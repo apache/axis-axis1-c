@@ -6,12 +6,12 @@
 #include "http_protocol.h"
 */
 
-#include <apache/httpd.h>
-#include <apache/http_config.h>
-#include <apache/http_core.h>
-#include <apache/http_log.h>
-#include <apache/http_protocol.h>
-#include <apache/http_main.h>
+#include <httpd.h>
+#include <http_config.h>
+#include <http_core.h>
+#include <http_log.h>
+#include <http_protocol.h>
+#include <http_main.h>
 #include "../../common/Packet.h"
 #include <string.h>
 #include <malloc.h>
