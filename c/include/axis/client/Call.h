@@ -163,6 +163,9 @@ typedef struct {
 	Axis_Array (AXISCALL* GetBasicArray)(void* pObj, XSDTYPE nType, const AxisChar* pName, const AxisChar* pNamespace);
 
 	int (AXISCALL* CheckMessage)(void *pObj, const AxisChar* pName, const AxisChar* pNamespace);
+	
+	/* Minimal error check */
+	 int (AXISCALL* GetStatus)(void *pObj);
 } CallFunctions;
 
 #ifdef __cplusplus
@@ -246,6 +249,10 @@ public:
 	virtual Axis_Array AXISCALL GetBasicArray(XSDTYPE nType, const AxisChar* pName, const AxisChar* pNamespace)=0;
 
 	virtual int AXISCALL CheckMessage(const AxisChar* pName, const AxisChar* pNamespace)=0;
+
+	/* Minimal error check */
+	virtual int AXISCALL GetStatus()=0;
+		
 	/* following stuff is needed to provide the interface for C web services */
 public:
 	static CallFunctions ms_VFtable;
@@ -378,6 +385,10 @@ public:
 
 	static int AXISCALL s_CheckMessage(void *pObj, const AxisChar* pName, const AxisChar* pNamespace)
 	{return ((CallBase*)pObj)->CheckMessage(pName, pNamespace);};
+	
+	/* Minimal error check */
+	static int AXISCALL s_GetStatus(void *pObj)
+	{return ((CallBase*)pObj)->GetStatus();};
 
 	/* and populate ms_VFtable with corresponding entry */
 	static void s_Initialize()
@@ -444,6 +455,7 @@ public:
 		ms_VFtable.GetAttributeAsTime = s_GetAttributeAsTime;
 		ms_VFtable.GetAttributeAsDuration = s_GetAttributeAsDuration;
 		ms_VFtable.CheckMessage = s_CheckMessage;
+		ms_VFtable.GetStatus = s_GetStatus;
 	}
 };
 
@@ -532,6 +544,9 @@ public:
 	Axis_Array AXISCALL GetBasicArray(XSDTYPE nType, const AxisChar* pName, const AxisChar* pNamespace);
 
 	int AXISCALL CheckMessage(const AxisChar* pName, const AxisChar* pNamespace);
+
+	int AXISCALL GetStatus();
+		
 private:
 	int OpenConnection(int secure);
 	void CloseConnection();
@@ -544,8 +559,8 @@ private:
 	   So they do not belong to this object and are not created or deleted 
 	 */
 	MessageData* m_pMsgData;
-	SoapSerializer* m_pIWSSZ;
-	SoapDeSerializer* m_pIWSDZ;
+	IWrapperSoapSerializer* m_pIWSSZ;
+	IWrapperSoapDeSerializer* m_pIWSDZ;
 	/* 
 	   m_Soap contains transport related information and function pointers to manipulate
 	   transport layer.
@@ -555,6 +570,9 @@ private:
 	   Transport object
 	 */
 	AxisTransport* m_pTransport;
+	
+	/* Minimal error check */
+	int m_nStatus;
 };
 
 #endif

@@ -40,6 +40,7 @@ Call::Call ()
     m_pIWSDZ = NULL;
     initialize_module (0);
     m_pTransport = NULL;
+    m_nStatus = AXIS_SUCCESS;
 }
 
 Call::~Call ()
@@ -66,7 +67,7 @@ void Call::SetOperation (const char* pchOperation, const char* pchNamespace)
 
 void Call::AddParameter (void* pValue, const char* pchName, XSDTYPE nType)
 {
-    m_pIWSSZ->AddOutputParam (pchName, pValue, nType);
+     m_nStatus = m_pIWSSZ->AddOutputParam (pchName, pValue, nType);
 }
 
 /*
@@ -75,27 +76,28 @@ void Call::AddParameter (void* pValue, const char* pchName, XSDTYPE nType)
 void Call::AddBasicArrayParameter (Axis_Array* pArray, XSDTYPE nType,
     const AxisChar* pName)
 {
-    m_pIWSSZ->AddOutputBasicArrayParam (pArray, nType, pName);
+    m_nStatus = m_pIWSSZ->AddOutputBasicArrayParam (pArray, nType, pName);
 }
 
 void Call::AddCmplxArrayParameter (Axis_Array* pArray, void* pSZFunct,
     void* pDelFunct, void* pSizeFunct, const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
-    m_pIWSSZ->AddOutputCmplxArrayParam (pArray, pSZFunct, pDelFunct, pSizeFunct,
+     m_nStatus = m_pIWSSZ->AddOutputCmplxArrayParam (pArray, pSZFunct, pDelFunct, pSizeFunct,
         pName, pNamespace);
 }
 
 void Call::AddCmplxParameter (void* pObject, void* pSZFunct, void* pDelFunct,
     const AxisChar* pName, const AxisChar* pNamespace)
 {
-    m_pIWSSZ->AddOutputCmplxParam (pObject, pSZFunct, pDelFunct, pName,
+     m_nStatus = m_pIWSSZ->AddOutputCmplxParam (pObject, pSZFunct, pDelFunct, pName,
         pNamespace);
 }
 
 int Call::Invoke ()
 {
-    return m_pAxisEngine->Process (&m_Soap);
+     m_nStatus =  m_pAxisEngine->Process (&m_Soap);
+     return m_nStatus;
 }
 
 int Call::Initialize (PROVIDERTYPE nStyle, int secure)
@@ -109,14 +111,19 @@ int Call::Initialize (PROVIDERTYPE nStyle, int secure)
     try
     {
         m_Soap.sessionid = "somesessionid1234";
+        m_nStatus = AXIS_SUCCESS;
         // remove_headers(&m_Soap);
-        if (AXIS_SUCCESS != OpenConnection (secure))
+        if (AXIS_SUCCESS != OpenConnection (secure)) {
+        	m_nStatus = AXIS_FAIL;
             return AXIS_FAIL;
+        }
         if (m_pAxisEngine)
             delete m_pAxisEngine;
         m_pAxisEngine = new ClientAxisEngine ();
-        if (!m_pAxisEngine)
+        if (!m_pAxisEngine) {
+        	m_nStatus = AXIS_FAIL;
             return AXIS_FAIL;
+        }
         if (AXIS_SUCCESS == m_pAxisEngine->Initialize ())
         {
             m_pMsgData = m_pAxisEngine->GetMessageData ();
@@ -151,18 +158,22 @@ int Call::Initialize (PROVIDERTYPE nStyle, int secure)
                     return AXIS_SUCCESS;
                 }
             }
+            m_nStatus = AXIS_FAIL;
             return AXIS_FAIL;
         }
+        m_nStatus = AXIS_FAIL;        
         return AXIS_FAIL;
     }
     catch (ChannelException e)
     {
         /* printf(e.GetErr().c_str()); */
+        m_nStatus = AXIS_FAIL;        
         return AXIS_FAIL;
     }
     catch (...)
     {
         /* printf("Unknown exception occured in the client"); */
+        m_nStatus = AXIS_FAIL;        
         return AXIS_FAIL;
     }
 }
@@ -171,6 +182,13 @@ int Call::UnInitialize ()
 {
     if (m_pAxisEngine)
     {
+		/* Initialization,serialization, invokation or check message success */
+		if ( m_nStatus == AXIS_SUCCESS &&  m_pIWSDZ != NULL ) 
+		{
+			/* Test if deserialization failed */
+			m_nStatus = m_pIWSDZ->GetStatus();
+		}
+			
         m_pAxisEngine->UnInitialize ();
         delete m_pAxisEngine;
         m_pAxisEngine = NULL;
@@ -200,14 +218,14 @@ int Call::SetProtocol (AXIS_PROTOCOL_TYPE protocol)
             m_Soap.so.https->op_headers = NULL;
             break;
     }
-    return 0;
+    return AXIS_SUCCESS;
 }
 
 int Call::SetTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type,
     const char* value)
 {
     m_pTransport->SetTransportInformation (type, value, &m_Soap);
-    return 0;
+    return AXIS_SUCCESS;
 }
 
 /*
@@ -221,7 +239,8 @@ int Call::SetTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type,
 int Call::OpenConnection (int secure)
 {
     m_pTransport = new AxisTransport (&m_Soap);
-    return m_pTransport->OpenConnection (secure);
+    m_nStatus = m_pTransport->OpenConnection (secure);
+    return m_nStatus;
 }
 
 /*
@@ -507,7 +526,8 @@ long Call::GetAttributeAsDuration (const AxisChar* pName,
 
 int Call::CheckMessage (const AxisChar* pName, const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->CheckMessageBody (pName, pNamespace);
+	 m_nStatus = m_pIWSDZ->CheckMessageBody (pName, pNamespace);
+    return m_nStatus;
 }
 
 void* Call::GetCmplxObject (void* pDZFunct, void* pCreFunct, void* pDelFunct,
@@ -538,7 +558,8 @@ extern "C" void DestroyStubObject (void* pCall)
 
 int Call::SetSoapHeader (SoapHeader* pSoapHeader)
 {
-    return (m_pIWSSZ->setSoapHeader (pSoapHeader));
+	m_nStatus = (m_pIWSSZ->setSoapHeader (pSoapHeader));
+    return m_nStatus;
 }
 
 IHeaderBlock* Call::createHeaderBlock ()
@@ -550,4 +571,9 @@ IHeaderBlock* Call::createHeaderBlock (AxisChar* pachLocalName,
     AxisChar* pachPrefix, AxisChar* pachUri)
 {
     return (m_pIWSSZ->createHeaderBlock (pachLocalName, pachPrefix, pachUri));
+}
+
+int Call::GetStatus() 
+{
+	return m_nStatus;
 }
