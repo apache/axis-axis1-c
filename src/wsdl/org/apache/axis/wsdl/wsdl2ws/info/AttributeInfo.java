@@ -40,7 +40,6 @@ public class AttributeInfo extends ParameterInfo {
 	 * @param attribName
 	 */
 	public AttributeInfo() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	/**

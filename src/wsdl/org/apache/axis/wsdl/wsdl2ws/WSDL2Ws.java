@@ -242,6 +242,8 @@ public class WSDL2Ws {
 								innerType = type.getElementForElementName(elementname).getType();
 								pinfo = new ParameterInfo(innerType,elementname);
 								pinfo.setElementName(type.getElementForElementName(elementname).getName());
+								if (innerType.getName().equals(CUtils.anyTypeQname))
+									pinfo.setAnyType(true);
 								minfo.addInputParameter(pinfo);		
 							}
 							//remove the type that represents the wrapping element so that such type is not created.
@@ -309,10 +311,10 @@ public class WSDL2Ws {
 									innerType = type.getElementForElementName(elementname).getType();
 									pinfo = new ParameterInfo(innerType,elementname);
 									pinfo.setElementName(type.getElementForElementName(elementname).getName());
+									if (innerType.getName().equals(CUtils.anyTypeQname))
+										pinfo.setAnyType(true);
 									minfo.addOutputParameter(pinfo);		
 								}							
-								pinfo = new ParameterInfo(type,part.getName());
-								pinfo.setElementName(part.getElementName());
 								//remove the type that represents the wrapping element so that such type is not created.							
 								this.typeMap.removeType(qname);
 							}
@@ -572,21 +574,28 @@ public class WSDL2Ws {
 											te.getNode(), symbolTable);
 					if (elements != null) {
 						for (int j=0; j<elements.size(); j++) {
-							ElementDecl elem = (ElementDecl)elements.get(j);
-							QName typeName = elem.getType().getQName();
 							ElementInfo eleinfo = null;
-							if(typeName.getLocalPart().indexOf('[')>0){
-								String localpart = typeName.getLocalPart().substring(0,typeName.getLocalPart().indexOf('['));
-								typeName = new QName(typeName.getNamespaceURI(),localpart);
-								if (CUtils.isBasicType(typeName)){
-									eleinfo = new ElementInfo(elem.getName(),createTypeInfo(typeName,targetLanguage));
-								}
-								else{
-									eleinfo = new ElementInfo(elem.getName(),createTypeInfo(elem.getType(),targetLanguage)); 
-								}
+							ElementDecl elem = (ElementDecl)elements.get(j);
+							if (elem.getAnyElement()){
+								System.out.println("Any Type found inside "+ type.getQName().toString());
+								Type anyType = new Type(CUtils.anyTypeQname, CUtils.anyTypeQname.getLocalPart(), true, targetLanguage);
+								eleinfo = new ElementInfo(elem.getName(),anyType);							
 							}
 							else{
-								eleinfo = new ElementInfo(elem.getName(),createTypeInfo(typeName,targetLanguage));								
+								QName typeName = elem.getType().getQName();
+								if(typeName.getLocalPart().indexOf('[')>0){
+									String localpart = typeName.getLocalPart().substring(0,typeName.getLocalPart().indexOf('['));
+									typeName = new QName(typeName.getNamespaceURI(),localpart);
+									if (CUtils.isBasicType(typeName)){
+										eleinfo = new ElementInfo(elem.getName(),createTypeInfo(typeName,targetLanguage));
+									}
+									else{
+										eleinfo = new ElementInfo(elem.getName(),createTypeInfo(elem.getType(),targetLanguage)); 
+									}
+								}
+								else{
+									eleinfo = new ElementInfo(elem.getName(),createTypeInfo(typeName,targetLanguage));								
+								}
 							}
 							eleinfo.setMinOccurs(elem.getMinOccrs());
 							eleinfo.setMaxOccurs(elem.getMaxOccurs());

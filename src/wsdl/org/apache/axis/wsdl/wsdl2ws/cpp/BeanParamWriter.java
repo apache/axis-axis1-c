@@ -57,13 +57,13 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		{
 			typeName = itr.next().toString();
 			if ( ! typeName.equals(type.getName().getLocalPart())) {
-				writer.write("extern int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer *pDZ);\n");
+				writer.write("extern int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer* pDZ);\n");
 				writer.write("extern void* Axis_Create_"+typeName+"("+typeName+"* pObj, bool bArray = false, int nSize=0);\n");
 				writer.write("extern void Axis_Delete_"+typeName+"("+typeName+"* param, bool bArray = false, int nSize=0);\n");
 				writer.write("extern int Axis_Serialize_"+typeName+"("+typeName+"* param, IWrapperSoapSerializer* pSZ, bool bArray = false);\n");
 				writer.write("extern int Axis_GetSize_"+typeName+"();\n\n");
 			} else {
-				writer.write("int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer *pDZ);\n");
+				writer.write("int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer* pDZ);\n");
 				writer.write("void* Axis_Create_"+typeName+"("+typeName+"* pObj, bool bArray, int nSize);\n");
 				writer.write("void Axis_Delete_"+typeName+"("+typeName+"* param, bool bArray, int nSize);\n");
 				writer.write("int Axis_Serialize_"+typeName+"("+typeName+"* param, IWrapperSoapSerializer* pSZ, bool bArray);\n");
@@ -150,7 +150,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write("/*\n");
 		writer.write(" * This static method deserialize a "+classname+" type of object\n");
 		writer.write(" */\n");		
-		writer.write("int Axis_DeSerialize_"+classname+"("+classname+"* param, IWrapperSoapDeSerializer *pIWSDZ)\n{\n");
+		writer.write("int Axis_DeSerialize_"+classname+"("+classname+"* param, IWrapperSoapDeSerializer* pIWSDZ)\n{\n");
 		if (attribs.length == 0) {
 			System.out.println("possible error class with no attributes....................");
 			writer.write("\t}\n\n");
