@@ -134,7 +134,15 @@ const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, unsigned s
 const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, long lValue, XSDTYPE type)
 {
 	m_Type = type;
-	AxisSprintf(m_Buf, BTS_BUFFSIZE, "%d", lValue);
+	if (XSD_DURATION == type)
+	{
+		const AxisChar* pChar = m_AxisTime.serialize(sName, lValue, type).c_str();
+		strcpy(m_Buf, pChar);
+	}
+	else
+	{
+		AxisSprintf(m_Buf, BTS_BUFFSIZE, "%d", lValue);
+	}
 	HelpSerialize(sName, sName);
 	return m_sSZ.c_str();
 }
@@ -171,10 +179,17 @@ const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, const Axis
 	return m_sSZ.c_str();
 }
 
-const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, tm datetime, XSDTYPE type)
+const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, tm tValue, XSDTYPE type)
 {
 	m_Type = type;
-	return ""; //TODO: Damitha could you please look in to this.
+	const AxisChar* pChar = m_AxisTime.serialize(sName, tValue, type).c_str();
+	if (pChar && (strlen(pChar) < BTS_BUFFSIZE))
+	{
+		strcpy(m_Buf, pChar);
+		HelpSerialize(sName, sName);
+		return m_sSZ.c_str();
+	}
+	return "";
 }
 
 void BasicTypeSerializer::HelpSerialize(const AxisChar* sName, const AxisChar* sValue)

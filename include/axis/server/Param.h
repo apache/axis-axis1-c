@@ -152,10 +152,6 @@ public: //Conversion functions
 	int SetUserType(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct);
 	void SetName(const AxisChar* sName);
 	uParamValue GetValue(){ return m_Value;};
-private:
-	BasicTypeSerializer m_BTSZ;
-    AxisTime m_uAxisTime;
-    //uDuration duration;
 };
 
 #endif // !defined(AFX_PARAM_H__351B13BB_5D03_40C5_93F5_56D17295A8BD__INCLUDED_)
