@@ -1,4 +1,3 @@
-/* -*- C++ -*- */
 /*
  *   Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -15,19 +14,14 @@
  *   limitations under the License.
  */
 
-// SoapInputSource.cpp: implementation of the SoapInputSource class.
-//
-//////////////////////////////////////////////////////////////////////
+/* SoapInputSource.cpp: implementation of the SoapInputSource class. */
 
 #include "SoapInputSource.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-
-SoapInputSource::SoapInputSource(AXIS_MODULE_CALLBACK_GET_MESSAGE_BYTES pReadFunct, const void* pContext)
+SoapInputSource::SoapInputSource(AXIS_MODULE_CALLBACK_GET_MESSAGE_BYTES 
+                                 pReadFunct, const void* pContext)
 {
-	m_pInputStream = new SoapBinInputStream(pReadFunct, pContext);
+    m_pInputStream = new SoapBinInputStream(pReadFunct, pContext);
 }
 
 SoapInputSource::~SoapInputSource()
@@ -37,5 +31,5 @@ SoapInputSource::~SoapInputSource()
 
 BinInputStream* SoapInputSource::makeStream() const
 {
-	return m_pInputStream;
+    return m_pInputStream;
 }
