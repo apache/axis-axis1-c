@@ -40,7 +40,8 @@
                   </defineset>
                </compiler>
 		<!-- required libraries -->
-		<syslibset libs="${HTTP.SSLChannel.libs}" dir="${HTTP.SSLChannel.dir}/lib" unless="os400"/>
+		<syslibset libs="${HTTP.SSLChannel.libs}" dir="${HTTP.SSLChannel.dir}/out32dll" if="windows"/>
+		<syslibset libs="${HTTP.SSLChannel.libs}" dir="${HTTP.SSLChannel.dir}/lib" unless="windows"/>
                <defineset>
                   <define name="ENABLE_AXISTRACE" if="trace"/>
                   <define name="AXISTRACE_LIBRARY"/>
