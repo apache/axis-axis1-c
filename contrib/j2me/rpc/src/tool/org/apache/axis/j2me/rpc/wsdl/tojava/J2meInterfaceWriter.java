@@ -165,7 +165,7 @@ public class J2meInterfaceWriter extends JavaClassWriter {
     protected void writeOperation(PrintWriter pw, Operation operation)
             throws IOException {
 
-        writeComment(pw, operation.getDocumentationElement());
+        writeComment(pw, operation.getDocumentationElement(), true);
 
         Parameters parms = bEntry.getParameters(operation);
 

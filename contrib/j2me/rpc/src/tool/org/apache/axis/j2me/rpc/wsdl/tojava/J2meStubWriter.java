@@ -586,7 +586,7 @@ public class J2meStubWriter extends JavaClassWriter {
         boolean oneway,
         int opIndex) {
 
-        writeComment(pw, operation.getDocumentationElement());
+        writeComment(pw, operation.getDocumentationElement(), true);
         pw.println(parms.signature + " {");
         Message inputMessage = operation.getOperation().getInput().getMessage();
         Map parts = inputMessage.getParts();
