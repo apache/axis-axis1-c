@@ -144,15 +144,106 @@ int SoapSerializer::setSoapMethod(SoapMethod *pSoapMethod)
 	return intStatus;
 }
 
-IParam* SoapSerializer::AddOutputParam(XSDTYPE nType, uParamValue Value)
+IParam* SoapSerializer::AddOutputParam(XSDTYPE nType, long lValue)
+{
+	uParamValue uValue;
+	uValue.lValue = lValue;
+	return AddOutputParamHelper(nType, uValue);
+}
+
+IParam* SoapSerializer::AddOutputParam(int nValue)
+{
+	uParamValue uValue;
+	uValue.nValue = nValue;
+	return AddOutputParamHelper(XSD_INT, uValue);
+}
+
+IParam* SoapSerializer::AddOutputParamHelper(XSDTYPE nType, uParamValue uValue)
 {
 	Param* pParam = new Param();
-	pParam->SetValue(nType, Value);
+	pParam->SetValue(nType, uValue);
 	if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
 	{
 		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->AddOutputParam(pParam);
 	}
 	return pParam;
+}
+
+IParam* SoapSerializer::AddOutputParam(unsigned int unValue)
+{
+	uParamValue uValue;
+	uValue.unValue = unValue;
+	return AddOutputParamHelper(XSD_UNSIGNEDINT, uValue);
+}
+
+IParam* SoapSerializer::AddOutputParam(short sValue)
+{
+	uParamValue uValue;
+	uValue.sValue = sValue;
+	return AddOutputParamHelper(XSD_SHORT, uValue);
+}
+
+IParam* SoapSerializer::AddOutputParam(unsigned short usValue)
+{
+	uParamValue uValue;
+	uValue.usValue = usValue;
+	return AddOutputParamHelper(XSD_UNSIGNEDSHORT, uValue);
+}
+
+IParam* SoapSerializer::AddOutputParam(long lValue)
+{
+	uParamValue uValue;
+	uValue.lValue = lValue;
+	return AddOutputParamHelper(XSD_LONG, uValue);
+}
+
+IParam* SoapSerializer::AddOutputParam(unsigned long ulValue)
+{
+	uParamValue uValue;
+	uValue.ulValue = ulValue;
+	return AddOutputParamHelper(XSD_UNSIGNEDLONG, uValue);
+}
+
+IParam* SoapSerializer::AddOutputParam(char cValue)
+{
+	uParamValue uValue;
+	uValue.cValue = cValue;
+	return AddOutputParamHelper(XSD_BYTE, uValue);
+}
+
+IParam* SoapSerializer::AddOutputParam(unsigned char ucValue)
+{
+	uParamValue uValue;
+	uValue.ucValue = ucValue;
+	return AddOutputParamHelper(XSD_BYTE, uValue);
+}
+
+IParam* SoapSerializer::AddOutputParam(float fValue)
+{
+	uParamValue uValue;
+	uValue.fValue = fValue;
+	return AddOutputParamHelper(XSD_FLOAT, uValue);
+}
+
+IParam* SoapSerializer::AddOutputParam(double dValue)
+{
+	uParamValue uValue;
+	uValue.dValue = dValue;
+	return AddOutputParamHelper(XSD_DOUBLE, uValue);
+}
+
+IParam* SoapSerializer::AddOutputParam(struct tm tValue)
+{
+	uParamValue uValue;
+	uValue.tValue = tValue;
+	return AddOutputParamHelper(XSD_DATETIME, uValue);
+}
+
+IParam* SoapSerializer::AddOutputParam(const AxisChar* pStrValue)
+{
+	uParamValue uValue;
+	uValue.pStrValue = pStrValue;
+	return AddOutputParamHelper(XSD_STRING, uValue);
 }
 
 IParam* SoapSerializer::AddOutputParam(IArrayBean* pArrayBean)
