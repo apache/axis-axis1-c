@@ -76,8 +76,8 @@ public abstract class HeaderFileWriter extends BasicFileWriter {
 	  this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
 	   writeClassComment();
 	   // if this headerfile not defined define it 
-	   this.writer.write("#if !defined(__"+classname.toUpperCase()+"_H__INCLUDED_)\n");
-	   this.writer.write("#define __"+classname.toUpperCase()+"_H__INCLUDED_\n\n");
+	   this.writer.write("#if !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)\n");
+	   this.writer.write("#define __"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_\n\n");
 	   //includes
 	   writePreprocssorStatements();
 		//class
@@ -87,7 +87,7 @@ public abstract class HeaderFileWriter extends BasicFileWriter {
 	   writeDistructors();
 	   writeMethods();
 	   this.writer.write("};\n\n");
-	   this.writer.write("#endif // !defined(__"+classname.toUpperCase()+"_H__INCLUDED_)\n");
+	   this.writer.write("#endif // !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)\n");
 	   //cleanup
 	   writer.flush();
 	   writer.close();
@@ -101,5 +101,6 @@ public abstract class HeaderFileWriter extends BasicFileWriter {
 	}
 	protected String getExtendsPart(){return " ";}
 	protected abstract File getFilePath()throws WrapperFault;
+	protected abstract String getFileType(); //will return "Param", "Server" or "Client"
 
 }

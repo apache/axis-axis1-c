@@ -75,6 +75,10 @@ public class SourceWriterFactory {
 			return new org.apache.axis.wsdl.wsdl2ws.cpp.ServiceWriter(wscontext);
 		else if(genaratorType == WrapperConstants.GENERATOR_SERVICE_HPP)
 			return new org.apache.axis.wsdl.wsdl2ws.cpp.ServiceHeaderWriter(wscontext);
+		else if(genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_CPP)
+			return new org.apache.axis.wsdl.wsdl2ws.cpp.ClientStubWriter(wscontext);	
+		else if(genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_HPP)
+			return new org.apache.axis.wsdl.wsdl2ws.cpp.ClientStubHeaderWriter(wscontext);
 		//C
 		else if(genaratorType == WrapperConstants.GENERATOR_PARAM_C_ALL)
 			return new org.apache.axis.wsdl.wsdl2ws.c.AllParamWriter(wscontext);
