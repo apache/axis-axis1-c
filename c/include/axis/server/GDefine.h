@@ -74,11 +74,11 @@ typedef enum { APTHTTP=1, APTFTP, APTSMTP, APTOTHER } AXIS_PROTOCOL_TYPE;
 
 #define SOAPACTIONHEADER "SOAPAction"
 
-#define AxisChar char //Charactor used in Axis
-#define AxisXMLCh char //Xerces uses 16 bit char always.
+#define AxisChar char
+#define AxisXMLCh char
 
 #ifdef __cplusplus
-#define AxisString basic_string<char> //String used in Axis
+#define AxisString basic_string<char>
 #define AxisXMLString basic_string<AxisXMLCh>
 #endif
 
@@ -92,18 +92,22 @@ extern void Ax_Sleep(int);
 extern void ModuleInitialize();
 extern void ModuleUnInitialize();
 
+#if defined(__GNUC__)
+#define AXISCALL __attribute__((stdcall))
+#else
+#define AXISCALL __stdcall
+#endif
 /**
  * Following macro define an API function of Axis C++
  * Format of the AXISAPI macro is as follows
  *		AXISAPI(<METHOD NAME>, <PARAMETER LIST>)
  */
-#define AXISCALL __stdcall
 
 #ifdef __cplusplus
 #define AXISAPI(M, P) AXISCALL M P = 0;
 #define APIHASPARAMS
 #define APINOPARAMS 
-#else //C
+#else 
 #define virtual 
 #if !defined(bool)
 #define bool unsigned char
