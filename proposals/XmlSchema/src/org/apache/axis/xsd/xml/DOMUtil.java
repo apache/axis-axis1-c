@@ -2,7 +2,7 @@
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 1999-2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -20,11 +20,11 @@
  * 3. The end-user documentation included with the redistribution,
  *    if any, must include the following acknowledgment:
  *       "This product includes software developed by the
- *        Apache Software Foundation (http://www.apache.org/)."
+ *    Apache Software Foundation (http://www.apache.org/)."
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Xerces" and "Apache Software Foundation" must
+ * 4. The names "Axis" and "Apache Software Foundation" must
  *    not be used to endorse or promote products derived from this
  *    software without prior written permission. For written
  *    permission, please contact apache@apache.org.
@@ -48,9 +48,7 @@
  * ====================================================================
  *
  * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation and was
- * originally based on software copyright (c) 1999, International
- * Business Machines, Inc., http://www.apache.org.  For more
+ * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
@@ -59,7 +57,6 @@ package org.apache.axis.xsd.xml;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -82,7 +79,8 @@ public class DOMUtil {
     //
 
     /** This class cannot be instantiated. */
-    protected DOMUtil() {}
+    protected DOMUtil() {
+    }
 
     //
     // Public static methods
@@ -95,7 +93,7 @@ public class DOMUtil {
         Node child = parent.getFirstChild();
         while (child != null) {
             if (child.getNodeType() == Node.ELEMENT_NODE) {
-                return (Element)child;
+                return (Element) child;
             }
             child = child.getNextSibling();
         }
@@ -112,7 +110,7 @@ public class DOMUtil {
         Node child = parent.getLastChild();
         while (child != null) {
             if (child.getNodeType() == Node.ELEMENT_NODE) {
-                return (Element)child;
+                return (Element) child;
             }
             child = child.getPreviousSibling();
         }
@@ -130,7 +128,7 @@ public class DOMUtil {
         Node sibling = node.getNextSibling();
         while (sibling != null) {
             if (sibling.getNodeType() == Node.ELEMENT_NODE) {
-                return (Element)sibling;
+                return (Element) sibling;
             }
             sibling = sibling.getNextSibling();
         }
@@ -148,7 +146,7 @@ public class DOMUtil {
         while (child != null) {
             if (child.getNodeType() == Node.ELEMENT_NODE) {
                 if (child.getNodeName().equals(elemName)) {
-                    return (Element)child;
+                    return (Element) child;
                 }
             }
             child = child.getNextSibling();
@@ -167,7 +165,7 @@ public class DOMUtil {
         while (child != null) {
             if (child.getNodeType() == Node.ELEMENT_NODE) {
                 if (child.getNodeName().equals(elemName)) {
-                    return (Element)child;
+                    return (Element) child;
                 }
             }
             child = child.getPreviousSibling();
@@ -186,7 +184,7 @@ public class DOMUtil {
         while (sibling != null) {
             if (sibling.getNodeType() == Node.ELEMENT_NODE) {
                 if (sibling.getNodeName().equals(elemName)) {
-                    return (Element)sibling;
+                    return (Element) sibling;
                 }
             }
             sibling = sibling.getNextSibling();
@@ -207,8 +205,8 @@ public class DOMUtil {
             if (child.getNodeType() == Node.ELEMENT_NODE) {
                 String childURI = child.getNamespaceURI();
                 if (childURI != null && childURI.equals(uri) &&
-                    child.getLocalName().equals(localpart)) {
-                    return (Element)child;
+                        child.getLocalName().equals(localpart)) {
+                    return (Element) child;
                 }
             }
             child = child.getNextSibling();
@@ -229,8 +227,8 @@ public class DOMUtil {
             if (child.getNodeType() == Node.ELEMENT_NODE) {
                 String childURI = child.getNamespaceURI();
                 if (childURI != null && childURI.equals(uri) &&
-                    child.getLocalName().equals(localpart)) {
-                    return (Element)child;
+                        child.getLocalName().equals(localpart)) {
+                    return (Element) child;
                 }
             }
             child = child.getPreviousSibling();
@@ -251,8 +249,8 @@ public class DOMUtil {
             if (sibling.getNodeType() == Node.ELEMENT_NODE) {
                 String siblingURI = sibling.getNamespaceURI();
                 if (siblingURI != null && siblingURI.equals(uri) &&
-                    sibling.getLocalName().equals(localpart)) {
-                    return (Element)sibling;
+                        sibling.getLocalName().equals(localpart)) {
+                    return (Element) sibling;
                 }
             }
             sibling = sibling.getNextSibling();
@@ -272,7 +270,7 @@ public class DOMUtil {
             if (child.getNodeType() == Node.ELEMENT_NODE) {
                 for (int i = 0; i < elemNames.length; i++) {
                     if (child.getNodeName().equals(elemNames[i])) {
-                        return (Element)child;
+                        return (Element) child;
                     }
                 }
             }
@@ -293,7 +291,7 @@ public class DOMUtil {
             if (child.getNodeType() == Node.ELEMENT_NODE) {
                 for (int i = 0; i < elemNames.length; i++) {
                     if (child.getNodeName().equals(elemNames[i])) {
-                        return (Element)child;
+                        return (Element) child;
                     }
                 }
             }
@@ -314,7 +312,7 @@ public class DOMUtil {
             if (sibling.getNodeType() == Node.ELEMENT_NODE) {
                 for (int i = 0; i < elemNames.length; i++) {
                     if (sibling.getNodeName().equals(elemNames[i])) {
-                        return (Element)sibling;
+                        return (Element) sibling;
                     }
                 }
             }
@@ -337,8 +335,8 @@ public class DOMUtil {
                 for (int i = 0; i < elemNames.length; i++) {
                     String uri = child.getNamespaceURI();
                     if (uri != null && uri.equals(elemNames[i][0]) &&
-                        child.getLocalName().equals(elemNames[i][1])) {
-                        return (Element)child;
+                            child.getLocalName().equals(elemNames[i][1])) {
+                        return (Element) child;
                     }
                 }
             }
@@ -361,8 +359,8 @@ public class DOMUtil {
                 for (int i = 0; i < elemNames.length; i++) {
                     String uri = child.getNamespaceURI();
                     if (uri != null && uri.equals(elemNames[i][0]) &&
-                        child.getLocalName().equals(elemNames[i][1])) {
-                        return (Element)child;
+                            child.getLocalName().equals(elemNames[i][1])) {
+                        return (Element) child;
                     }
                 }
             }
@@ -385,8 +383,8 @@ public class DOMUtil {
                 for (int i = 0; i < elemNames.length; i++) {
                     String uri = sibling.getNamespaceURI();
                     if (uri != null && uri.equals(elemNames[i][0]) &&
-                        sibling.getLocalName().equals(elemNames[i][1])) {
-                        return (Element)sibling;
+                            sibling.getLocalName().equals(elemNames[i][1])) {
+                        return (Element) sibling;
                     }
                 }
             }
@@ -402,7 +400,7 @@ public class DOMUtil {
      * Finds and returns the first child node with the given name and
      * attribute name, value pair.
      */
-    public static Element getFirstChildElement(Node   parent,
+    public static Element getFirstChildElement(Node parent,
                                                String elemName,
                                                String attrName,
                                                String attrValue) {
@@ -411,9 +409,9 @@ public class DOMUtil {
         Node child = parent.getFirstChild();
         while (child != null) {
             if (child.getNodeType() == Node.ELEMENT_NODE) {
-                Element element = (Element)child;
+                Element element = (Element) child;
                 if (element.getNodeName().equals(elemName) &&
-                    element.getAttribute(attrName).equals(attrValue)) {
+                        element.getAttribute(attrName).equals(attrValue)) {
                     return element;
                 }
             }
@@ -429,18 +427,18 @@ public class DOMUtil {
      * Finds and returns the last child node with the given name and
      * attribute name, value pair.
      */
-    public static Element getLastChildElement(Node   parent,
-                                               String elemName,
-                                               String attrName,
-                                               String attrValue) {
+    public static Element getLastChildElement(Node parent,
+                                              String elemName,
+                                              String attrName,
+                                              String attrValue) {
 
         // search for node
         Node child = parent.getLastChild();
         while (child != null) {
             if (child.getNodeType() == Node.ELEMENT_NODE) {
-                Element element = (Element)child;
+                Element element = (Element) child;
                 if (element.getNodeName().equals(elemName) &&
-                    element.getAttribute(attrName).equals(attrValue)) {
+                        element.getAttribute(attrName).equals(attrValue)) {
                     return element;
                 }
             }
@@ -457,7 +455,7 @@ public class DOMUtil {
      * attribute name, value pair. Since only elements have attributes,
      * the node returned will be of type Node.ELEMENT_NODE.
      */
-    public static Element getNextSiblingElement(Node   node,
+    public static Element getNextSiblingElement(Node node,
                                                 String elemName,
                                                 String attrName,
                                                 String attrValue) {
@@ -466,9 +464,9 @@ public class DOMUtil {
         Node sibling = node.getNextSibling();
         while (sibling != null) {
             if (sibling.getNodeType() == Node.ELEMENT_NODE) {
-                Element element = (Element)sibling;
+                Element element = (Element) sibling;
                 if (element.getNodeName().equals(elemName) &&
-                    element.getAttribute(attrName).equals(attrValue)) {
+                        element.getAttribute(attrName).equals(attrValue)) {
                     return element;
                 }
             }
@@ -503,8 +501,7 @@ public class DOMUtil {
             short type = child.getNodeType();
             if (type == Node.TEXT_NODE) {
                 str.append(child.getNodeValue());
-            }
-            else if (type == Node.CDATA_SECTION_NODE) {
+            } else if (type == Node.CDATA_SECTION_NODE) {
                 str.append(getChildText(child));
             }
             child = child.getNextSibling();
@@ -521,17 +518,17 @@ public class DOMUtil {
     } // getLocalName(Element):  String
 
     /** returns local name of this element if not null, otherwise
-        returns the name of the node
-    */
+     returns the name of the node
+     */
     public static String getLocalName(Node node) {
         String name = node.getLocalName();
-        return (name!=null)? name:node.getNodeName();
+        return (name != null)? name:node.getNodeName();
     } // getLocalName(Element):  String
 
     public static Element getParent(Element elem) {
         Node parent = elem.getParentNode();
         if (parent instanceof Element)
-            return (Element)parent;
+            return (Element) parent;
         return null;
     } // getParent(Element):Element
 
@@ -543,9 +540,9 @@ public class DOMUtil {
     // return this Document's root node
     public static Element getRoot(Document doc) {
         return doc.getDocumentElement();
-     } // getRoot(Document(:  Element
+    } // getRoot(Document(:  Element
 
-   // some methods for handling attributes:
+    // some methods for handling attributes:
 
     // return the right attribute node
     public static Attr getAttr(Element elem, String name) {
@@ -554,16 +551,16 @@ public class DOMUtil {
 
     // return the right attribute node
     public static Attr getAttrNS(Element elem, String nsUri,
-            String localName) {
+                                 String localName) {
         return elem.getAttributeNodeNS(nsUri, localName);
     } // getAttrNS(Element, String):Attr
 
     // get all the attributes for an Element
     public static Attr[] getAttrs(Element elem) {
         NamedNodeMap attrMap = elem.getAttributes();
-        Attr [] attrArray = new Attr[attrMap.getLength()];
-        for (int i=0; i<attrMap.getLength(); i++)
-            attrArray[i] = (Attr)attrMap.item(i);
+        Attr[] attrArray = new Attr[attrMap.getLength()];
+        for (int i = 0; i < attrMap.getLength(); i++)
+            attrArray[i] = (Attr) attrMap.item(i);
         return attrArray;
     } // getAttrs(Element):  Attr[]
 
@@ -586,7 +583,7 @@ public class DOMUtil {
     // return the value of the attribute of the given element
     // with the given name
     public static String getAttrValueNS(Element elem, String nsUri,
-            String localName) {
+                                        String localName) {
         return elem.getAttributeNS(nsUri, localName);
     } // getAttrValueNS(Element, String):Attr
 
