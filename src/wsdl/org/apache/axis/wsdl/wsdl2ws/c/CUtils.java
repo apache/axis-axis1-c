@@ -85,24 +85,32 @@ public class CUtils {
 		 class2QNamemap.put("float", new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"));
 		 class2QNamemap.put("long", new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"));
 		 class2QNamemap.put("double", new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"));
-		 class2QNamemap.put("int", new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
 		 class2QNamemap.put("char", new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"));
 		 class2QNamemap.put("short", new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"));
 		 class2QNamemap.put("char*", new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"));
-		 class2QNamemap.put("struct tm", new QName(WrapperConstants.SCHEMA_NAMESPACE, "datetime"));
-		 class2QNamemap.put("char*", new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
+		 class2QNamemap.put("Axis_DateTime", new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
+		 class2QNamemap.put("Axis_Date", new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"));
+		 class2QNamemap.put("Axis_Time", new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"));
+		 class2QNamemap.put("Axis_Base64Binary", new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
+		 class2QNamemap.put("Axis_HexBinary", new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"));
+		 class2QNamemap.put("Axis_Decimal", new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
+		 class2QNamemap.put("Axis_Boolean", new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
 
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"), "int");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"), "unsigned char");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"), "float");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"), "long");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"), "double");
-		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"), "int");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"), "char");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"), "short");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"), "char*");
-		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "datetime"), "struct tm");
-		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"), "char*");
+		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"), "Axis_DateTime");
+		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"), "Axis_Date");
+		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"), "Axis_Time");
+		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"), "Axis_Base64Binary");
+		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"), "Axis_HexBinary");
+		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"), "Axis_Decimal");
+		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"), "Axis_Boolean");
 	}
 	public static boolean isSimpleType(String name){
 		if(class2QNamemap.containsKey(name))
@@ -118,22 +126,27 @@ public class CUtils {
 
 	
 	public static String getParameterGetValueMethodName(String typeName){
-		type2getValueMethodName.put("int","GetInt()");
-		type2getValueMethodName.put("float","GetFloat()");
-		type2getValueMethodName.put("string","GetString()");
-		type2getValueMethodName.put("long","GetLong()");
-		type2getValueMethodName.put("short","GetShort()");
-		type2getValueMethodName.put("char","GetChar()");
-		type2getValueMethodName.put("double","GetDouble()");
-		type2getValueMethodName.put("bool","GetBool()");
-		type2getValueMethodName.put("unsigned long","GetUnsignedLong()");
-		type2getValueMethodName.put("unsigned int","GetUnsignedInt()");
-		type2getValueMethodName.put("unsigned short","GetUnsignedShort()");
-		type2getValueMethodName.put("unsigned char","GetUnsignedChar()");
-		type2getValueMethodName.put("char*","GetString().c_str()");
+		type2getValueMethodName.put("int","GetInt");
+		type2getValueMethodName.put("float","GetFloat");
+		type2getValueMethodName.put("long","GetLong");
+		type2getValueMethodName.put("short","GetShort");
+		type2getValueMethodName.put("char","GetChar");
+		type2getValueMethodName.put("double","GetDouble");
+		type2getValueMethodName.put("unsigned long","GetUnsignedLong");
+		type2getValueMethodName.put("unsigned int","GetUnsignedInt");
+		type2getValueMethodName.put("unsigned short","GetUnsignedShort");
+		type2getValueMethodName.put("unsigned char","GetUnsignedChar");
+		type2getValueMethodName.put("char*","GetString");
+		type2getValueMethodName.put("Axis_DateTime","GetDateTime");
+		type2getValueMethodName.put("Axis_Date","GetDate");
+		type2getValueMethodName.put("Axis_Time","GetTime");
+		type2getValueMethodName.put("Axis_Base64Binary","GetBase64String");
+		type2getValueMethodName.put("Axis_HexBinary","GetHexString");
+		type2getValueMethodName.put("Axis_Decimal","GetDecimal");
+		type2getValueMethodName.put("Axis_Boolean","GetInt");
 		String methodname;
 		if((methodname = (String)type2getValueMethodName.get(typeName))!= null)
-			return methodname;
+			return methodname + "()";
 		return null;	
 	}
 	

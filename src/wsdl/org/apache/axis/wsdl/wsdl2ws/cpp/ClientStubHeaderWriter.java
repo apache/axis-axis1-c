@@ -150,7 +150,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 		  for(int i = 0; i < methods.size(); i++){
 			  minfo = (MethodInfo)this.methods.get(i);
 			  //write return type
-			  if(minfo.getReturnType().getLangName()==null)
+			  if(minfo.getReturnType()==null)
 				  writer.write("\tvoid ");
 			  else {
 			  	  String outparam = minfo.getReturnType().getLangName();

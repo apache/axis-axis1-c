@@ -121,8 +121,6 @@ public class Type {
         	//remove any funny Charactors
 			this.languageSpecificName.replaceAll("/","_");  
 			this.languageSpecificName.replaceAll(":","_");   
-			//give it A GOOD java look :)
-			this.languageSpecificName = WrapperUtils.firstCharacterToLowercase(this.languageSpecificName);
 			
         }    
        	this.attribOrder = new Vector();
