@@ -113,7 +113,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write("\t{\n");
 		writer.write("\t	const AxisChar* sPrefix = pSZ.getNewNamespacePrefix();\n");
 		writer.write("\t	pSZ << \"<\" << Axis_TypeName_"+classname+" << \" xsi:type=\\\"\" << sPrefix <<\":\"\n"); 
-		writer.write("\t		<< Axis_TypeName_"+classname+" << \" xmlns:\" << sPrefix << \"=\\\"\"\n"); 
+		writer.write("\t		<< Axis_TypeName_"+classname+" << \"\\\" xmlns:\" << sPrefix << \"=\\\"\"\n"); 
 		writer.write("\t		<< Axis_URI_"+classname+" << \"\\\">\";\n");
 		writer.write("\t}\n\n");
 		for(int i = 0; i< attribs.length;i++){
