@@ -158,7 +158,7 @@ extern "C"
 	int uninitialize_module();
 
 	/*This function is implemented in axis*/
-	int initialize_module(int bServer);
+	int initialize_module(int bServer, const char * wsddPath);
 
 	/*This function is implemented in axis*/
 	int process_request(Ax_soapstream* str);
