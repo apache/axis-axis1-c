@@ -24,7 +24,8 @@
 
 #include "../SOAPTransport.h"
 #include "Channel.h"
-#include "SecureChannel.h"
+#include "SecureChannel.hpp"
+#include "ChannelFactory.hpp"
 #include <string>
 #include <vector>
 
@@ -368,7 +369,8 @@ class Axis2Transport:public SOAPTransport
     std::string m_strMimeContentTransferEncoding;
     std::string m_strMimeContentID;
     std::string m_strMimeContentLocation; 
-    std::string m_strMimeReceived; 
+    std::string m_strMimeReceived;
+    ChannelFactory* m_pFactory;
 };
 
 #endif

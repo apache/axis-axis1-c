@@ -7,7 +7,7 @@ libaxis2_transport_la_SOURCES = SecureChannel.cpp \
 				Axis2Transport.cpp \
 				AxisTransportException.cpp \
 				Axis2TransportInstantiator.cpp \
-				SSLChannelFactory.cpp
+				ChannelFactory.cpp
 
 libaxis2_transport_la_LIBADD = -lstdc++
 INCLUDES = -I../../../include

@@ -20,13 +20,13 @@
  *
  */
 
-#include "OpenSSLChannel.hpp"
+#include "../SecureChannel.hpp"
 
 extern "C" {
 STORAGE_CLASS_INFO
-int CreateInstance(SSLChannel **inst)
+int CreateInstance(SecureChannel **inst)
 {
-	*inst = new OpenSSLChannel();
+	*inst = new SecureChannel();
 	if (*inst)
 	{
 		return AXIS_SUCCESS;
@@ -34,7 +34,7 @@ int CreateInstance(SSLChannel **inst)
 	return AXIS_FAIL;
 }
 STORAGE_CLASS_INFO 
-int DestroyInstance(SSLChannel *inst)
+int DestroyInstance(SecureChannel *inst)
 {
 	if (inst)
 	{
