@@ -10,11 +10,11 @@
 
 bool CallBase::bInitialized;
 CallFunctions CallBase::ms_VFtable;
-AxisAdminService::AxisAdminService()
+AxisAdminService::AxisAdminService(const char* pchUri)
 {
 	m_pCall = new Call();
 	m_pCall->SetProtocol(APTHTTP);
-	m_pCall->SetEndpointURI("http://localhost/axis/AxisAdmin");
+	m_pCall->SetEndpointURI(pchUri);
 }
 
 AxisAdminService::~AxisAdminService()
@@ -26,42 +26,19 @@ AxisAdminService::~AxisAdminService()
 /*Methods corresponding to the web service methods*/
 
 /*
- * This method wrap the service methoddeploy
+ * This method wrap the service methodupdateWSDD
  */
-xsd__boolean AxisAdminService::deploy(xsd__base64Binary Value0)
+xsd__boolean AxisAdminService::updateWSDD(xsd__base64Binary Value0)
 {
 	xsd__boolean Ret;
 	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER, NORMAL_CHANNEL)) return Ret;
-		m_pCall->SetTransportProperty(SOAPACTION_HEADER , "AxisAdmin#deploy");
+		m_pCall->SetTransportProperty(SOAPACTION_HEADER , "AxisAdmin#updateWSDD");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
-	m_pCall->SetOperation("deploy", "http://www.opensource.lk/xsd");
+	m_pCall->SetOperation("updateWSDD", "http://www.opensource.lk/xsd");
 	m_pCall->AddParameter((void*)&Value0, "wsdd", XSD_BASE64BINARY);
 	if (AXIS_SUCCESS == m_pCall->Invoke())
 	{
-		if(AXIS_SUCCESS == m_pCall->CheckMessage("deployResponse", "http://www.opensource.lk/xsd"))
-		{
-			Ret = m_pCall->GetElementAsBoolean("return", 0);
-		}
-	}
-	m_pCall->UnInitialize();
-	return Ret;
-}
-
-
-/*
- * This method wrap the service methodundeploy
- */
-xsd__boolean AxisAdminService::undeploy(xsd__base64Binary Value0)
-{
-	xsd__boolean Ret;
-	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER, NORMAL_CHANNEL)) return Ret;
-		m_pCall->SetTransportProperty(SOAPACTION_HEADER , "AxisAdmin#undeploy");
-	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
-	m_pCall->SetOperation("undeploy", "http://www.opensource.lk/xsd");
-	m_pCall->AddParameter((void*)&Value0, "wsdd", XSD_BASE64BINARY);
-	if (AXIS_SUCCESS == m_pCall->Invoke())
-	{
-		if(AXIS_SUCCESS == m_pCall->CheckMessage("undeployResponse", "http://www.opensource.lk/xsd"))
+		if(AXIS_SUCCESS == m_pCall->CheckMessage("updateWSDDResponse", "http://www.opensource.lk/xsd"))
 		{
 			Ret = m_pCall->GetElementAsBoolean("return", 0);
 		}

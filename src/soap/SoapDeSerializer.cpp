@@ -2023,9 +2023,12 @@ xsd__hexBinary SoapDeSerializer::GetElementAsHexBinary(const AxisChar* pName, co
 xsd__base64Binary SoapDeSerializer::DecodeFromBase64Binary(const AxisChar* pValue)
 {
 	xsd__base64Binary value;
-	value.__ptr = (unsigned char*) malloc(strlen(pValue)*2);
 	value.__size = apr_base64_decode_len(pValue);
-	apr_base64_decode_binary(value.__ptr, pValue);
+	value.__ptr = (unsigned char*) malloc(value.__size+1);
+	value.__size = apr_base64_decode_binary(value.__ptr, pValue);
+	/* put null at the end because it enables the decoded string to be used
+	 * as a string */
+	value.__ptr[value.__size] = 0;
 	return value;
 }
 
@@ -2033,8 +2036,11 @@ xsd__hexBinary SoapDeSerializer::DecodeFromHexBinary(const AxisChar* pValue)
 {
 	xsd__hexBinary value;
 	value.__size = strlen(pValue)/2;
-	value.__ptr = (unsigned char*) malloc(value.__size);
+	value.__ptr = (unsigned char*) malloc(value.__size+1);
 	Hex_Decode(value.__ptr, pValue);
+	/* put null at the end because it enables the decoded string to be used
+	 * as a string */
+	value.__ptr[value.__size] = 0;
 	return value;
 }
 

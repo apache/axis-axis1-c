@@ -155,6 +155,7 @@ int WSDDDeployment::UpdateWSDD(const AxisChar* sWSDD)
     printf("server.wsdd loading successful\n");
 #endif
 	delete doc;
+	SaveWSDD();
 	return AXIS_SUCCESS;		
 }
 
@@ -186,7 +187,7 @@ int WSDDDeployment::SaveWSDD()
 	 */
 	file = fopen(m_sWSDDPath.c_str(), "w");
 	if(!file) return AXIS_FAIL;
-	while(true)
+	do
 	{
 		if (fputs("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", file) < 0) break;
 		if (fputs("<deployment xmlns=\"http://xml.apache.org/axis/wsdd/\" xmlns:C=\"http://xml.apache.org/axis/wsdd/providers/C\" xmlns:CPP=\"http://xml.apache.org/axis/wsdd/providers/CPP\">\n", file) < 0) break;
@@ -224,12 +225,14 @@ int WSDDDeployment::SaveWSDD()
 		{
 			for(iter2=m_DeployedServices->begin(); iter2!=m_DeployedServices->end(); iter2++)
 			{
-				((*iter2).second)->UpdateWSDD(file, 3);
+				((*iter2).second)->UpdateWSDD(file, 1);
 			}
 		}
 		
 		if (fputs("</deployment>", file) < 0) break;
-	}
+	} while(0);
+	fflush(file);
+	fclose(file);
 	if (AXIS_SUCCESS != Status)
 	{
 		/*TODO use the previous server.wsdd file itself. Undo renaming*/
