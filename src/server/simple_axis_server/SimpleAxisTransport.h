@@ -59,9 +59,13 @@ AXIS_CPP_NAMESPACE_USE class SimpleAxisTransport:public SOAPTransport
     void setAttachment (const char *pcAttachmentid, const char *pcAttachment)
     {
     };
-    const char *getAttachment (const char *pcAttachmentid)
+    ISoapAttachment* getAttachment (const char *pcAttachmentid)
     {
-	return "value";
+	return NULL;
+    };
+
+    char* getIncomingSOAPMimeHeaders() {
+	return "incoming headers";
     };
     void setEndpointUri (const char *pcEndpointUri)
     {
