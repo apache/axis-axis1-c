@@ -103,12 +103,12 @@ private:
 	WSDDHandler* m_pHandler; //Place holder for currently created Handler object
 	//map<string, string> m_GlobalConfParams;
 	AXIS_PROTOCOL_TYPE m_CurTrType; //Current transport type of transport handlers
-	AxisChar m_Buffer[TRANSCODE_BUFFER_SIZE]; //used to transcode XMLCh to AxisChar
+	AxisChar m_Buffer[TRANSCODE_BUFFER_SIZE]; //used to transcode 'XMLCh' to AxisChar
 
 private:
 	//const AxisChar* __XTRC(const string& pChar);
-	void ProcessAttributes(WSDDLevels ElementType, const XMLCh **attrs);
-	void GetParameters(WSDDLevels ElementType, const XMLCh **attrs);
+	void ProcessAttributes(WSDDLevels ElementType, const XML_Ch **attrs);
+	void GetParameters(WSDDLevels ElementType, const XML_Ch **attrs);
 	void AddAllowedRolesToService(const AxisXMLCh* value);
 	void AddAllowedMethodsToService(const AxisXMLCh* value);
 
@@ -118,21 +118,21 @@ public:
 	int ParseDocument(const AxisChar* sWSDD);
 	int GetDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment);
 
-	void startElement(const XMLCh *qname,const XMLCh **attrs);
-	void endElement(const XMLCh *qname);
-	void characters(const XMLCh *chars,int length);
-	void startPrefixMapping(const XMLCh *prefix, const XMLCh *uri);
-	void endPrefixMapping(const XMLCh *prefix);
+	void startElement(const XML_Ch *qname,const XML_Ch **attrs);
+	void endElement(const XML_Ch *qname);
+	void characters(const XML_Ch *chars,int length);
+	void startPrefixMapping(const XML_Ch *prefix, const XML_Ch *uri);
+	void endPrefixMapping(const XML_Ch *prefix);
 
-	inline static void XMLCALL s_startElement(void* p, const XMLCh *qname,const XMLCh **attrs)
+	inline static void XMLCALL s_startElement(void* p, const XML_Ch *qname,const XML_Ch **attrs)
 	{((WSDDDocument*)p)->startElement(qname,attrs);};
-	inline static void XMLCALL s_endElement(void* p, const XMLCh *qname)
+	inline static void XMLCALL s_endElement(void* p, const XML_Ch *qname)
 	{((WSDDDocument*)p)->endElement(qname);};
-	inline static void XMLCALL s_characters(void* p, const XMLCh *chars,int length)
+	inline static void XMLCALL s_characters(void* p, const XML_Ch *chars,int length)
 	{((WSDDDocument*)p)->characters(chars,length);};
-	inline static void XMLCALL s_startPrefixMapping(void* p, const XMLCh *prefix, const XMLCh *uri)
+	inline static void XMLCALL s_startPrefixMapping(void* p, const XML_Ch *prefix, const XML_Ch *uri)
 	{((WSDDDocument*)p)->startPrefixMapping(prefix, uri);};
-	inline static void XMLCALL s_endPrefixMapping(void* p, const XMLCh *prefix)
+	inline static void XMLCALL s_endPrefixMapping(void* p, const XML_Ch *prefix)
 	{((WSDDDocument*)p)->endPrefixMapping(prefix);};
 };
 

@@ -97,29 +97,29 @@ public:
 	SoapParserExpat();
 	~SoapParserExpat();
 private:
-	void startElement(const XMLCh *qname,const XMLCh **attrs);
-	void endElement(const XMLCh *qname);
-	void characters(const XMLCh *chars,int length);
-	void startPrefixMapping(const XMLCh *prefix, const XMLCh *uri);
-	void endPrefixMapping(const XMLCh *prefix);
+	void startElement(const XML_Ch *qname,const XML_Ch **attrs);
+	void endElement(const XML_Ch *qname);
+	void characters(const XML_Ch *chars,int length);
+	void startPrefixMapping(const XML_Ch *prefix, const XML_Ch *uri);
+	void endPrefixMapping(const XML_Ch *prefix);
 	int ParseNext();
 
-	inline static void XMLCALL s_startElement(void* p, const XMLCh *qname,const XMLCh **attrs)
+	inline static void XMLCALL s_startElement(void* p, const XML_Ch *qname,const XML_Ch **attrs)
 	{((SoapParserExpat*)p)->startElement(qname,attrs);};
-	inline static void XMLCALL s_endElement(void* p, const XMLCh *qname)
+	inline static void XMLCALL s_endElement(void* p, const XML_Ch *qname)
 	{((SoapParserExpat*)p)->endElement(qname);};
-	inline static void XMLCALL s_characters(void* p, const XMLCh *chars,int length)
+	inline static void XMLCALL s_characters(void* p, const XML_Ch *chars,int length)
 	{((SoapParserExpat*)p)->characters(chars,length);};
-	inline static void XMLCALL s_startPrefixMapping(void* p, const XMLCh *prefix, const XMLCh *uri)
+	inline static void XMLCALL s_startPrefixMapping(void* p, const XML_Ch *prefix, const XML_Ch *uri)
 	{((SoapParserExpat*)p)->startPrefixMapping(prefix, uri);};
-	inline static void XMLCALL s_endPrefixMapping(void* p, const XMLCh *prefix)
+	inline static void XMLCALL s_endPrefixMapping(void* p, const XML_Ch *prefix)
 	{((SoapParserExpat*)p)->endPrefixMapping(prefix);};
 
 public:
 	int SetInputStream(const Ax_soapstream* pInputStream);
 	const Ax_soapstream* GetInputStream(){return m_pInputStream;};
 	int Init();
-	const XMLCh* GetNS4Prefix(const XMLCh* prefix);
+	const XML_Ch* GetNS4Prefix(const XML_Ch* prefix);
 	int GetStatus();
 	const AnyElement* Next();
 	AXIS_TRANSPORT_STATUS GetTransportStatus(){ return m_nTransportStatus;};
