@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-#include "xpp.h"
+#include "spp.h"
 #ifndef PREFIX
 #define PREFIX(ident) ident
 #endif

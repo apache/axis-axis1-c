@@ -25,7 +25,7 @@
 #endif /* ndef COMPILED_FROM_DSP */
 
 #include "internal.h"
-#include "xmltok.h"
+#include "spp_converter.h"
 #include "nametab.h"
 
 #ifdef XML_DTD
@@ -35,7 +35,7 @@
 #endif
 
 /**
- * tokenizeProlog and tokenizeContent are defined in xmltok_impl.c
+ * tokenizeProlog and tokenizeContent are defined in spp_tokenizer.c
  * tokenizeProlog tokenize the xml declaration
  * tokenizeContent tokenize the xml content
  */
@@ -227,7 +227,7 @@ struct normal_encoding
 
 static int FASTCALL checkCharRefNumber(int);
 
-#include "xmltok_impl.h"
+#include "spp_tokenizer.h"
 #include "ascii.h"
 
 #ifdef XML_MIN_SIZE
@@ -300,7 +300,7 @@ sb_charMatches(const ENCODING *enc, const char *p, int c)
 #endif
 
 #define PREFIX(ident) normal_ ## ident
-#include "xmltok_impl.c"
+#include "spp_tokenizer.c"
 
 #undef MINBPC
 #undef BYTE_TYPE
@@ -392,17 +392,6 @@ after:
   *toP = to;
 }
 
-#ifdef XML_NS
-static const struct normal_encoding utf8_encoding_ns = 
-{
-  { VTABLE1, utf8_toUtf8, utf8_toUtf16, 1, 1, 0 },
-  {
-#include "asciitab.h"
-#include "utf8tab.h"
-  },
-  STANDARD_VTABLE(sb_) NORMAL_VTABLE(utf8_)
-};
-#endif
 
 static const struct normal_encoding utf8_encoding = 
 {
@@ -416,19 +405,7 @@ static const struct normal_encoding utf8_encoding =
   STANDARD_VTABLE(sb_) NORMAL_VTABLE(utf8_)
 };
 
-#ifdef XML_NS
 
-static const struct normal_encoding internal_utf8_encoding_ns = 
-{
-  { VTABLE1, utf8_toUtf8, utf8_toUtf16, 1, 1, 0 },
-  {
-#include "iasciitab.h"
-#include "utf8tab.h"
-  },
-  STANDARD_VTABLE(sb_) NORMAL_VTABLE(utf8_)
-};
-
-#endif
 
 static const struct normal_encoding internal_utf8_encoding = 
 {
@@ -479,19 +456,6 @@ latin1_toUtf16(const ENCODING *enc,
     *(*toP)++ = (unsigned char)*(*fromP)++;
 }
 
-#ifdef XML_NS
-
-static const struct normal_encoding latin1_encoding_ns = 
-{
-  { VTABLE1, latin1_toUtf8, latin1_toUtf16, 1, 0, 0 },
-  {
-#include "asciitab.h"
-#include "latin1tab.h"
-  },
-  STANDARD_VTABLE(sb_)
-};
-
-#endif
 
 static const struct normal_encoding latin1_encoding = 
 {
@@ -514,19 +478,6 @@ ascii_toUtf8(const ENCODING *enc,
     *(*toP)++ = *(*fromP)++;
 }
 
-#ifdef XML_NS
-
-static const struct normal_encoding ascii_encoding_ns = 
-{
-  { VTABLE1, ascii_toUtf8, latin1_toUtf16, 1, 1, 0 },
-  {
-#include "asciitab.h"
-/* BT_NONXML == 0 */
-  },
-  STANDARD_VTABLE(sb_)
-};
-
-#endif
 
 static const struct normal_encoding ascii_encoding = 
 {
@@ -724,7 +675,7 @@ little2_isNmstrtMin(const ENCODING *enc, const char *p)
 #define IS_NMSTRT_CHAR(enc, p, n) (0)
 #define IS_NMSTRT_CHAR_MINBPC(enc, p) LITTLE2_IS_NMSTRT_CHAR_MINBPC(enc, p)
 
-#include "xmltok_impl.c"
+#include "spp_tokenizer.c"
 
 #undef MINBPC
 #undef BYTE_TYPE
@@ -867,7 +818,7 @@ big2_isNmstrtMin(const ENCODING *enc, const char *p)
 #define IS_NMSTRT_CHAR(enc, p, n) (0)
 #define IS_NMSTRT_CHAR_MINBPC(enc, p) BIG2_IS_NMSTRT_CHAR_MINBPC(enc, p)
 
-#include "xmltok_impl.c"
+#include "spp_tokenizer.c"
 
 #undef MINBPC
 #undef BYTE_TYPE
@@ -1738,7 +1689,6 @@ initScan(int* parserState, TokDataStruct* data, const ENCODING **encodingTable,
 
 #define NS(x) x
 #define ns(x) x
-#include "xmltok_ns.c"
 #undef NS
 #undef ns
 
@@ -1747,7 +1697,6 @@ initScan(int* parserState, TokDataStruct* data, const ENCODING **encodingTable,
 #define NS(x) x ## NS
 #define ns(x) x ## _ns
 
-#include "xmltok_ns.c"
 
 #undef NS
 #undef ns
@@ -1768,4 +1717,146 @@ XmlInitUnknownEncodingNS(void *mem,
 
 
 
+
+
+const ENCODING *
+XmlGetUtf8InternalEncoding(void)
+{
+  return &(internal_utf8_encoding).enc;
+}
+
+const ENCODING *
+XmlGetUtf16InternalEncoding(void)
+{
+#if BYTEORDER == 1234
+  return &(internal_little2_encoding).enc;
+#elif BYTEORDER == 4321
+  return &(internal_big2_encoding).enc;
+#else
+  const short n = 1;
+  return (*(const char *)&n
+          ? &(internal_little2_encoding).enc
+          : &(internal_big2_encoding).enc);
+#endif
+}
+
+static const ENCODING *encodings[] = 
+{
+  &(latin1_encoding).enc,
+  &(ascii_encoding).enc,
+  &(utf8_encoding).enc,
+  &(big2_encoding).enc,
+  &(big2_encoding).enc,
+  &(little2_encoding).enc,
+  &(utf8_encoding).enc /* NO_ENC */
+};
+
+static int PTRCALL
+initScanProlog(int* parserState, TokDataStruct* data,const ENCODING *enc, 
+                   int* numOfChars, char *end,
+                   const char **nextTokPtr)
+{
+  /* printf("XML_PROLOG_STATE:%d\n", XML_PROLOG_STATE); */
+  return initScan(parserState, data, encodings,(const INIT_ENCODING *)enc,
+                  XML_PROLOG_STATE, numOfChars, end, nextTokPtr);
+}
+
+static int PTRCALL
+initScanContent(int* parserState, TokDataStruct* data,const ENCODING *enc, 
+                    int* numOfChars, char *end,
+                    const char **nextTokPtr)
+{
+  /* printf("XML_CONTENT_STATE:%d\n", XML_PROLOG_STATE); */
+  return initScan(parserState, data, encodings,(const INIT_ENCODING *)enc,
+                  XML_CONTENT_STATE, numOfChars, end, nextTokPtr);
+}
+
+int
+XmlInitEncoding(INIT_ENCODING *p, const ENCODING **encPtr,
+                    const char *name)
+{
+  int i = getEncodingIndex(name);
+  if (i == UNKNOWN_ENC)
+    return 0;
+  SET_INIT_ENC_INDEX(p, i);
+  p->initEnc.scanners[XML_PROLOG_STATE] = initScanProlog;
+  p->initEnc.scanners[XML_CONTENT_STATE] = initScanContent;
+  p->encPtr = encPtr;
+  *encPtr = &(p->initEnc);
+  /*printf("encoding:%d\n", i);*/
+  /** This is where the encoding table(defined in xmltol.c
+    * eg:
+    *     #ifdef XML_NS
+    *     static const struct normal_encoding utf8_encoding_ns =
+    *     {
+    *         { VTABLE1, utf8_toUtf8, utf8_toUtf16, 1, 1, 0 },
+    *         {
+    *             #include "asciitab.h"
+    *             #include "utf8tab.h"
+    *         },
+    *         STANDARD_VTABLE(sb_) NORMAL_VTABLE(utf8_)
+    *      };
+    *      #endif)
+    *
+    * is assigned to the encoding pointer.
+    *
+    */
+  *encPtr = encodings[i];
+
+  return 1;
+}
+
+static const ENCODING *
+findEncoding(const ENCODING *enc, const char *ptr, const char *end)
+{
+#define ENCODING_MAX 128
+  char buf[ENCODING_MAX];
+  char *p = buf;
+  int i;
+  XmlUtf8Convert(enc, &ptr, end, &p, p + ENCODING_MAX - 1);
+  if (ptr != end)
+    return 0;
+  *p = 0;
+  if (streqci(buf, KW_UTF_16) && enc->minBytesPerChar == 2)
+    return enc;
+  i = getEncodingIndex(buf);
+  if (i == UNKNOWN_ENC)
+    return 0;
+  return encodings[i];
+}
+
+int
+XmlParseXmlDecl(int isGeneralTextEntity,
+                    const ENCODING *enc,
+                    const char *ptr,
+                    const char *end,
+                    const char **badPtr,
+                    const char **versionPtr,
+                    const char **versionEndPtr,
+                    const char **encodingName,
+                    const ENCODING **encoding,
+                    int *standalone)
+{
+  return doParseXmlDecl(findEncoding,
+                        isGeneralTextEntity,
+                        enc,
+                        ptr,
+                        end,
+                        badPtr,
+                        versionPtr,
+                        versionEndPtr,
+                        encodingName,
+                        encoding,
+                        standalone);
+}
+
+int SppUtf8Convert(const ENCODING *enc, const char **fromPtr,
+                      const char *rawNameEnd,
+    const char **toPtr, const char *bufEnd)
+{
+    /* printf("fromPtr:%s\n", *fromPtr); */
+    /* printf("rawNameEnd:%s\n", rawNameEnd); */
+    /*This method is defined in spp_converter.h*/
+    XmlUtf8Convert(enc, fromPtr, rawNameEnd, toPtr, bufEnd);
+}
 

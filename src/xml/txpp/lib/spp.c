@@ -18,8 +18,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "internal.h"
-#include "xpp.h"
-#include "xmltok.h"
+#include "spp.h"
+#include "spp_converter.h"
 #ifdef HAVE_XPP_CONFIG_H
 #include "../xpp_config.h"
 #endif
@@ -39,7 +39,6 @@
 #define tokState (ct->m_tokState)
 #define state (ct->m_state)
 #define numOfChars (ct->m_numOfChars)
-#define XmlParseXmlDeclNS XmlParseXmlDecl
 #define dataCounter (ct->m_dataCounter)
 #define namespaceSeparator (ct->m_namespaceSeparator)
 
@@ -94,9 +93,7 @@ processXmlDecl(SPPParser* ct, int isGeneralTextEntity,
     /* const XML_Char *storedversion = NULL; */
     int standalone = -1;
 
-    if (!(ns
-        ? XmlParseXmlDeclNS
-        : XmlParseXmlDecl)(isGeneralTextEntity,
+    if (!(XmlParseXmlDecl)(isGeneralTextEntity,
         /*Default encoding*/
         encoding,
         s,
@@ -136,7 +133,7 @@ enum SPP_Error parseProlog(SPPParser* ct)
         {
             initializeEncoding(ct);
             /* printf("numOfChars:%d\n", numOfChars); */
-            /* XmlPrologTok is defined in xmltok.h
+            /* XmlPrologTok is defined in spp_converter.h
              */
             ret_status = XmlPrologTok(&state, &ct->m_data, encoding, &numOfChars, 
                 ct->m_prevTokPoint, &ct->m_currentTokPoint);
@@ -169,7 +166,7 @@ enum SPP_Error parseContent(SPPParser* ct)
             initializeEncoding(ct);
             /* printf("numOfChars:%d\n", numOfChars); */
 
-            /* XmlPrologTok is defined in xmltok.h. While method is executed
+            /* XmlPrologTok is defined in spp_converter.h. While method is executed
              * prevTokPoint is not changed. currentTokPoint moves forward*/
             ret_status = XmlPrologTok(&state, &ct->m_data, encoding, &numOfChars, 
             ct->m_prevTokPoint, &ct->m_currentTokPoint);
@@ -185,10 +182,10 @@ enum SPP_Error parseContent(SPPParser* ct)
         {
             tokState = CONTENT;
             /* printf("numOfChars:%d\n", numOfChars); */
-            /* XmlContentTok is defined in xmltok.h.*/
+            /* XmlContentTok is defined in spp_converter.h.*/
 
             
-            /* XmlContentTok is defined in xmltok.h. While method is executed
+            /* XmlContentTok is defined in spp_converter.h. While method is executed
              * prevTokPoint is not changed. currentTokPoint moves forward 
              * until a valid tag element is completed*/
             ret_status = XmlContentTok(&state, &ct->m_data, encoding,
@@ -289,13 +286,6 @@ int getBlock(char *buff, int toBeFilledSize, int* numchars)
 SPPParser* parserCreate(const XML_Char *encodingName)
 {
     return parserCreate_mh(encodingName, NULL, NULL);
-}
-
-SPPParser* parserCreate_ns(const XML_Char *encodingName, XML_Char nsSep)
-{
-    XML_Char tmp[2];
-    *tmp = nsSep;
-    return parserCreate_mh(encodingName, NULL, tmp);
 }
 
 SPPParser* parserCreate_mh(const XML_Char *encodingName, 
@@ -408,7 +398,7 @@ static int initializeEncoding(SPPParser* ct)
     /* printf("protocolEncodingName:%s\n", protocolEncodingName); */
     s = protocolEncodingName;
     #endif
-    if ((ns ? XmlInitEncodingNS : XmlInitEncoding)(&initEncoding,
+    if (XmlInitEncoding(&initEncoding,
         &encoding, s))
         return SPP_ERROR_NONE;
     /* return handleUnknownEncoding(parser, protocolEncodingName); */
@@ -424,7 +414,7 @@ TokDataStruct* next(SPPParser* ct)
     dataCounter = 0;
     if(SPP_ERROR_NONE == parseContent(ct))
     {
-        processData(ct, encoding);
+        /*processData(ct, encoding);*/
         return &ct->m_data;
     }
     else
@@ -511,11 +501,11 @@ int getNextElementAsInt(SPPParser* ct, int* parseError)
     char* temp;
 
     dataCounter = 0;
-        temp = ct->m_data.utf8PtrBuff[dataCounter +  1][1];
-        ct->m_data.utf8PtrBuff[dataCounter + 1][1] = XML_T('\0');
+        temp = ct->m_data.ptrBuff[dataCounter +  1][1];
+        ct->m_data.ptrBuff[dataCounter + 1][1] = XML_T('\0');
     /* printf("ct->m_data.ptrBuff[0]:%s\n", ct->m_data.ptrBuff[0]); */
-        sscanf(ct->m_data.utf8PtrBuff[dataCounter], "%d", &intTemp);
-        ct->m_data.utf8PtrBuff[dataCounter + 1][1] = temp;
+        sscanf(ct->m_data.ptrBuff[dataCounter], "%d", &intTemp);
+        ct->m_data.ptrBuff[dataCounter + 1][1] = temp;
                         
     *parseError = SPP_ERROR_NONE;    
     return intTemp;
@@ -538,12 +528,12 @@ int getNextAttributeAsInt(SPPParser* ct, int* parseError)
     }
     dataCounter += 2;
     temp = ct->m_data.ptrBuff[dataCounter + 1][1];
-    ct->m_data.utf8PtrBuff[dataCounter+1][1] = '\0';
+    ct->m_data.ptrBuff[dataCounter+1][1] = '\0';
     /* printf("ct->m_data.ptrBuff[dataCounter]:%s\n", 
      * ct->m_data.ptrBuff[dataCounter]); 
      */
-    sscanf(ct->m_data.utf8PtrBuff[dataCounter], "%d", &intTemp);
-    ct->m_data.utf8PtrBuff[dataCounter+1][1] = temp;
+    sscanf(ct->m_data.ptrBuff[dataCounter], "%d", &intTemp);
+    ct->m_data.ptrBuff[dataCounter+1][1] = temp;
     
     *parseError = SPP_ERROR_NONE;
     return intTemp;
