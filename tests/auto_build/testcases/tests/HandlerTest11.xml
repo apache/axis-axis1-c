@@ -1,0 +1,25 @@
+<test>
+    <name>HandlerTest11</name>
+    <description>CalculatorDoc with handler to createSoapHeaderBlock with specifying name and namespace</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>CalculatorDocClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            CalculatorDoc.cpp.out
+        </output>
+		<request>
+			HandlerTest11Request.out
+		</request>
+    </expected>
+    <handler>
+        <directory>
+            handler_test11
+        </directory>
+       <service>
+           Calculator
+       </service>
+    </handler>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>
+

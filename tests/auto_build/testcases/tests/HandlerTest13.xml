@@ -1,0 +1,25 @@
+<test>
+    <name>HandlerTest13</name>
+    <description>CalculatorDoc with Handler using addSoapHeaderBlock. cloned from existing header before values set on existing header block</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>CalculatorDocClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            CalculatorDoc.cpp.out
+        </output>
+		<request>
+			HandlerTest12Request.out
+		</request>
+    </expected>
+    <handler>
+        <directory>
+            handler_test13
+        </directory>
+       <service>
+           Calculator
+       </service>
+    </handler>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>
+

@@ -1,0 +1,25 @@
+<test>
+    <name>HandlerTest15</name>
+    <description>CalculatorDoc with Handler Chain and IMessageData->(sg)etProperty with a void* argument set in different handlers</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>CalculatorDocClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            HandlerTest15.expected
+        </output>
+        <request>
+            HandlerTest15Request.out
+        </request>
+    </expected>
+    <handler>
+        <directory>
+            handler_test15
+        </directory>
+       <service>
+           Calculator
+       </service>
+    </handler>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>
+

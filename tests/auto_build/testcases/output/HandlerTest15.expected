@@ -1,0 +1,13 @@
+getFirstHeaderBlock()            - hb1:child(1) - Value = Test1
+getNextHeaderBlock()             - hb2:child(1) - Value = Test2
+getNextHeaderBlock()             - hb3:child(1) - Value = Test3
+getNextHeaderBlock()             - HeaderBlock is NULL
+getHeaderBlock("hb2", namespace) - hb2:child(1) - Value = Test2
+getCurrentHeaderBlock()          - HeaderBlock is NULL
+getHeaderBlock("hb3", namespace) - hb3:child(1) - Value = Test3
+getHeaderBlock("hb1", namespace) - hb1:child(1) - Value = Test1
+getFirstHeaderBlock()            - hb1:child(1) - Value = Test1
+getCurrentHeaderBlock()          - hb1:child(1) - Value = Test1
+getNextHeaderBlock()             - hb2:child(1) - Value = Test2
+getCurrentHeaderBlock()          - hb2:child(1) - Value = Test2
+5
