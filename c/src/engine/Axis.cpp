@@ -300,8 +300,10 @@ extern "C" int initialize_module(int bServer)
         if(status == AXIS_SUCCESS)
         {
             char* pClientWsddPath = g_pConfig->GetClientWsddFilePath();
+			/* May be there is no client side handlers configured. So may not have 
+			 * CLIENTWSDDFILEPATH entry in axiscpp.conf */
+			if (!pClientWsddPath) return status; 
             if (AXIS_SUCCESS != g_pWSDDDeployment->LoadWSDD(pClientWsddPath)) return AXIS_FAIL;
-
 			#if defined(__AXISTRACE__)
 			status = g_pAT->openFileByClient();
 			if(status == AXIS_FAIL)
@@ -321,8 +323,6 @@ extern "C" int initialize_module(int bServer)
             return AXIS_FAIL;
         }
     }
-
-    
 	return AXIS_SUCCESS;
 }
 
