@@ -182,7 +182,9 @@ int SoapDeSerializer::Init()
 	return SUCCESS;
 }
 
-const AxisString& SoapDeSerializer::GetMethodName()
+
+
+const AxisChar* SoapDeSerializer::GetMethodName()
 {
 	if (m_pHandler->m_pMethod)
 	{

@@ -145,7 +145,7 @@ int Method::GenerateMethodImpl(string& sClassName, File &file)
 	file << "\tIWrapperSoapDeSerializer* pIWSDZ = NULL;" << endl;
 	file << "\tmc->getSoapDeSerializer(&pIWSDZ);" << endl;
 	file << "\tif (!pIWSDZ) return FAIL;" << endl;
-	file << "\tSetResponseMethod(mc, \"" << m_Name << "\");" << endl;
+	file << "\tSetResponseMethod(mc, L\"" << m_Name << "Response\");" << endl;
 	int nParam = 0;
 	for (list<Variable*>::iterator it = m_Params.begin(); it != m_Params.end(); it++)
 	{
@@ -154,7 +154,9 @@ int Method::GenerateMethodImpl(string& sClassName, File &file)
 		if ((*it)->IsComplexType())
 		{
 			file << "\t" << (*it)->GetTypeName() << "* v" << nParam << " = new " << (*it)->GetTypeName() << "();" << endl;
-			file << "\tparam" << nParam << "->" << "SetUserType(" << "v" << nParam << ");" << endl; 
+			file << "\tparam" << nParam << "->" << "SetUserType(" << "v" << nParam <<
+				", (AXIS_DESERIALIZE_FUNCT)Axis_DeSerialize_" << (*it)->GetTypeName() <<
+				", (AXIS_OBJECT_DELETE_FUNCT)Axis_Delete_" << (*it)->GetTypeName() << ");" << endl; 
 			file <<	"\tpIWSDZ->Deserialize(param" << nParam << ",0);" << endl; // 0 should be changed to 1 if multiref to be used			
 		}
 		else if ((*it)->IsArrayType())
@@ -182,15 +184,23 @@ int Method::GenerateMethodImpl(string& sClassName, File &file)
 	}
 	file << ");" << endl;
 	file << endl;
-	file << "\tuParamValue value;" << endl;
-	file << "\tvalue." << m_pReturnType->GetCorrespondingUnionMemberName() << " = ret";
-	if (m_pReturnType->GetType() == VAR_STRING)
+	if (m_pReturnType->IsComplexType()) 
 	{
-		file << ".c_str()";
+		file << "\tIParam* pRetParam = pIWSSZ->setResponseParam(ret, (AXIS_SERIALIZE_FUNCT)Axis_Serialize_" <<
+		m_pReturnType->GetTypeName() << ", (AXIS_OBJECT_DELETE_FUNCT)Axis_Delete_" << m_pReturnType->GetTypeName() << ");" << endl;		
 	}
-	file <<	";" << endl;
-	file << "\tIParam* pRetParam = pIWSSZ->setResponseParam(" << m_pReturnType->GetTypeEnumStr() << ", value);" << endl;
-	file << "\tpRetParam->SetName(\"" << m_Name << "Return\");" << endl;
+	else
+	{
+		file << "\tuParamValue value;" << endl;
+		file << "\tvalue." << m_pReturnType->GetCorrespondingUnionMemberName() << " = ret";
+		if (m_pReturnType->GetType() == VAR_STRING)
+		{
+			file << ".c_str()";
+		}
+		file <<	";" << endl;
+		file << "\tIParam* pRetParam = pIWSSZ->setResponseParam(" << m_pReturnType->GetTypeEnumStr() << ", value);" << endl;
+	}
+	file << "\tpRetParam->SetName(L\"" << m_Name << "Return\");" << endl;
 	file << "\treturn SUCCESS;" << endl; 
 	file << "}" << endl;
 	file << endl;

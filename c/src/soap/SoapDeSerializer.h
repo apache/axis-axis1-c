@@ -88,7 +88,7 @@ private:
 	char m_hugebuffer[HUGE_BUFFER_SIZE];
 public:
 	int GetVersion();
-	const AxisString& GetMethodName();
+	const AxisChar* GetMethodName();
 	int Init();
 	IParam* GetParam();
 	int Deserialize(IParam* pIParam, int bHref);
