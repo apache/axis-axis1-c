@@ -1,3 +1,0 @@
-<undeployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
-	<service name=="ArrayCalc"\>
-</undeployment>	

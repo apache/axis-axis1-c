@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-	<SOAP-ENV:Body>
-		<m:add xmlns:m="Some-URI">
-			<x>8</x>
-			<y>2</y>
-		</m:add>
-	</SOAP-ENV:Body>
-</SOAP-ENV:Envelope>

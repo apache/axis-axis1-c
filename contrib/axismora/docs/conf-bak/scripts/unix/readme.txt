@@ -1,1 +1,0 @@
-run these files from the ./classes file with the ./lib contains jar files
