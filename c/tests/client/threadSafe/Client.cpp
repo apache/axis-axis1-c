@@ -33,7 +33,9 @@ using namespace std;
 #include "gen_src/InteropTestPortType.h"
 
 #define ARRAYSIZE 2
-#define NUM_THREADS     30
+
+#define MACRO_NUM_THREADS 4*1
+int NUM_THREADS = MACRO_NUM_THREADS;
 
 
 const char *server = "localhost";
@@ -202,20 +204,25 @@ run(void *arg)
     {
         printf("Unknown exception has occured\n");
     }
+    
+    delete ws;
     return 0;
 }
 
 int
 main(int argc, char *argv[])
 {
-    if (argc > 2)
+    if( argc > 1 )
+      NUM_THREADS = atoi(argv[1]);
+
+    if (argc > 3)
     {
-	server = argv[1];
-	port = argv[2];
+	server = argv[2];
+	port = argv[3];
     }
 
     InteropTestPortType *ws = NULL;;
-    if (argc > 3)
+    /*if (argc > 3)
     {
 	printf("Usage :\n %s <server> <port>\n\n", argv[0]);
 	printf("Sending Requests to Server http://%s:%s ........\n\n", server,
@@ -225,7 +232,7 @@ main(int argc, char *argv[])
 	//endpoint for Axis Java sample
 	sprintf(endpoint, "http://%s:%s/axis/services/echo", server, port);
 	ws = new InteropTestPortType(endpoint);
-    }
+    }*/
 
     pthread_t thread[NUM_THREADS];
     pthread_attr_t attr;
@@ -239,6 +246,7 @@ main(int argc, char *argv[])
     {
 	printf("Creating thread %d\n", t);
 	rc = pthread_create(&thread[t], &attr, run, (void*)ws);
+	rc = pthread_join(thread[t], (void **)&status);
 	if (rc)
 	{
 	    printf("ERROR; return code from pthread_create() is %d\n", rc);
