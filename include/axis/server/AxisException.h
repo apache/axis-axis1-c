@@ -43,7 +43,7 @@ using namespace std;
 #define AXISC_CATCH(X) } catch (X) { 
 #define AXISC_ENDCATCH }
 
-#define THROW_AXIS_EXCEPTION(X) throw AxisException(X)
+#define THROW_AXIS_EXCEPTION(X) throw AxisGenException(X)
 #define THROW_AXIS_CONFIG_EXCEPTION(X) throw AxisConfigException(X)
 #define THROW_AXIS_SOAP_EXCEPTION(X) throw AxisSoapException(X)
 #define THROW_AXIS_WSDD_EXCEPTION(X) throw AxisWsddException(X)
@@ -51,7 +51,7 @@ using namespace std;
 #define THROW_AXIS_TRANSPORT_EXCEPTION(X) throw AxisTransportException(X)
 #define THROW_AXIS_PARSE_EXCEPTION(X) throw AxisParseException(X)
 
-#define THROW_AXIS_EXCEPTION2(X, Y) throw AxisException(X, Y)
+#define THROW_AXIS_EXCEPTION2(X, Y) throw AxisGenException(X, Y)
 #define THROW_AXIS_CONFIG_EXCEPTION2(X, Y) throw AxisConfigException(X, Y)
 #define THROW_AXIS_SOAP_EXCEPTION2(X, Y) throw AxisSoapException(X, Y)
 #define THROW_AXIS_WSDD_EXCEPTION2(X, Y) throw AxisWsddException(X, Y)
@@ -216,7 +216,7 @@ class STORAGE_CLASS_INFO AxisException :public exception
 
 public:
     /** No parameter constructor*/
-    AxisException(){};
+    //AxisException(){};
 
     /** This can be used to throw an exception with the exception code
       * which is defined in the AxisException.h file, under AXISC_EXCEPTIONS
@@ -227,7 +227,7 @@ public:
       * 
       * @example throw AxisException(AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
       */
-    AxisException(const int iExceptionCode);
+    //AxisException(const int iExceptionCode);
 
     /** This can be used to throw an exception with exception code which is
       * is defined in the AxisException.h file, under AXISC_EXCEPTIONS type.
@@ -240,7 +240,7 @@ public:
       * @example throw AxisException(AXISC_NODE_VALUE_MISMATCH_EXCEPTION, 
             "Some additional exception info");
       */
-    AxisException(const int iExceptionCode, char* pcMessage);
+    //AxisException(const int iExceptionCode, char* pcMessage);
 
     /** This can be used to throw an exception with another exception as a
       * parameter. One situation in which this can be used is when we catch
@@ -250,7 +250,7 @@ public:
       *
       * @example throw AxisException(std::bad_alloc);
       */
-    AxisException(const exception* e);
+    //AxisException(const exception* e);
 
     /** This accept two parameters, both an exception code an exception object
       * derived from std::exception
@@ -258,21 +258,21 @@ public:
       * @param An exception class derived from std::exception
       * @param An exception code
       */
-    AxisException(const exception* e, const int iExceptionCode);
+    //AxisException(const exception* e, const int iExceptionCode);
     
     /** This accept an exception message
       *
       * @param An exception message
       */
-    AxisException(const char* pcMessage){m_sMessage = pcMessage;};
+    //AxisException(const char* pcMessage){m_sMessage = pcMessage;};
     
     /** Destructor */
-    virtual ~AxisException() throw();
+    virtual ~AxisException() throw(){};
 
     /** This method is defined in std::exception. AxisException and derived
       * classes will override this to print exception messages
       */
-    virtual const char* what() throw();
+    virtual const char* what() throw() = 0;
 
     /** This can be called to get the exception code which is passed
       * in the constructor. This returns -1 value when the 
@@ -283,8 +283,8 @@ public:
       *
       * @return exception message
       */
-    virtual const int getExceptionCode();
-    virtual const AxisString getMessage(const exception* e);
+    virtual const int getExceptionCode() = 0;
+/*    virtual const AxisString getMessage(const exception* e);
     virtual const AxisString getMessage(const int iExceptionCode);    
 
 private:
@@ -294,6 +294,7 @@ private:
     void processException(const int iExceptionCode, char* pcMessage);
     string m_sMessage; //Holds the exception messae
     int m_iExceptionCode; //Holds the exception code
+*/
 };
 
 #endif

@@ -24,6 +24,7 @@
 #include <axis/client/Stub.h>
 #include "DivByZeroFault.h"
 #include "AxisDivByZeroException.h"
+#include <axis/AxisGenException.h>
 
 class MathOps 
 {

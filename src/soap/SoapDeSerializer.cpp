@@ -343,17 +343,17 @@ int SoapDeSerializer::checkMessageBody(const AxisChar* pName,
     /* check and skip the soap body tag */
     if (AXIS_SUCCESS != getBody()) 
         //return AXIS_FAIL;    
-        throw AxisException(SERVER_UNKNOWN_ERROR);
+        throw AxisGenException(SERVER_UNKNOWN_ERROR);
        
     if (!m_pNode) m_pNode = m_pParser->next();
     if (!m_pNode || (START_ELEMENT != m_pNode->m_type))
         //return AXIS_FAIL;
-        throw AxisException(SERVER_UNKNOWN_ERROR);
+        throw AxisGenException(SERVER_UNKNOWN_ERROR);
     //if (0 != strcmp(m_pNode->m_pchNameOrValue, pName)) return AXIS_FAIL;
     if (0 != strcmp(m_pNode->m_pchNameOrValue, pName))
     {
         AXISTRACE1("AXISC_NODE_VALUE_MISMATCH_EXCEPTION", CRITICAL);
-        throw AxisException(AXISC_NODE_VALUE_MISMATCH_EXCEPTION);    
+        throw AxisGenException(AXISC_NODE_VALUE_MISMATCH_EXCEPTION);    
     }
     /* we can check the namespace uri too here. Should we ?*/
     m_pNode = NULL; /*This is to indicate that node is identified and used */
