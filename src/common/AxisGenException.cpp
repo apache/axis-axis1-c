@@ -81,7 +81,7 @@ void AxisGenException::processException(const int iExceptionCode, char* pcMessag
     AxisString sMessage = pcMessage;
     m_sMessage = getMessage(iExceptionCode) + sMessage;
     if(pcMessage)
-        delete pcMessage;
+        delete [] pcMessage;
 }
 
 const string AxisGenException::getMessage (const exception* objException)
