@@ -116,7 +116,7 @@ public:
 
     /**
      * This is called in writing to the log file whose path is specified in 
-     * $AXIS_HOME/axiscpp.c     * onf file.
+     * $AXISCPP_DEPLOY/axiscpp.conf file.
      * This method is used when the caller has two string messages 
      * as arguments. One may be his      *own message.
      * The other may be to print a trace value. User can also specify the 
@@ -147,7 +147,7 @@ public:
      * Log file is opened for logging server side log messages
      *
      * The file is created( if one is already not there) with the name and 
-     * path specified in $AXIS_HOME/axiscpp.conf file when web server loads.
+     * path specified in AXISCPP_DEPLOY/axiscpp.conf file when web server loads.
      *
      * @return The status which indicates whether the operation is successful
      * (AXIS_SUCCESS) or not (AXIS_FAIL).

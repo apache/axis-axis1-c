@@ -84,7 +84,7 @@ test2
 test3
 
      You may runt the test by removing the target service library
-     $AXIS_HOME/webservices/libmathops.so and restarting apache
+     $AXISCPP_DEPLOY/webservices/libmathops.so and restarting apache
 
      Message returned
 
@@ -102,7 +102,7 @@ test4
 
 test5
     To run the application correctly you should have libaxis_xmlparser.so(parser
-    library) in $AXIS_HOME/libs folder with the exact name given. You can run the
+    library) in $AXISCPP_DEPLOY/libs folder with the exact name given. You can run the
     test with the name changed.
 
     Message returned
@@ -111,7 +111,7 @@ test5
 
 test6
     To run the application correctly you should have libaxis_transport.so(transport
-    library) in $AXIS_HOME/libs folder with the exact name given. You can run the
+    library) in $AXISCPP_DEPLOY/libs folder with the exact name given. You can run the
     test with the name changed.
 
     Message returned

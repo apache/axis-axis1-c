@@ -273,7 +273,7 @@ In your PATH environment variable add path to &lt;antinstall dir&gt/bin. <br>
 
 <p> Copy this service library into $AXICPP_DEPLOY/lib  </p>
 
-<p>Modify the <strong>$AXIS_HOME/conf/</strong><strong>server.wsdd</strong> .&nbsp; (You have a sample server.wsdd file entry given below appropriately filled for this service).</p>
+<p>Modify the <strong>$AXISCPP_DEPLOY/conf/</strong><strong>server.wsdd</strong> .&nbsp; (You have a sample server.wsdd file entry given below appropriately filled for this service).</p>
 <p>
 <strong>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</strong>
 <br> 
@@ -418,9 +418,9 @@ To run the samples
 <h3>Handlers</h3>
 </div>
 <p>Handlers are pluggable components to Axis C++. We have included a set of sample handlers for your reference. You could write your own handlers by following the instructions which are given for the sample Handlers.</p>
-<p>Note: If you are using Client side Handlers you need to enter the following entry in the AXIS_HOME/axiscpp.conf configuration file.</p>
+<p>Note: If you are using Client side Handlers you need to enter the following entry in the AXISCPP_DEPLOY/axiscpp.conf configuration file.</p>
 <p>CLIENTWSDDFILEPATH:Axis\conf\client.wsdd</p>
-<p>After entering this entry your AXIS_HOME/axiscpp.conf configuration file will look like:</p>
+<p>After entering this entry your AXISCPP_DEPLOY/axiscpp.conf configuration file will look like:</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;AXISLOGPATH:Axis\logs\AxisLog.txt</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;WSDDFILEPATH:Axis\conf\server.wsdd</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;CLIENTWSDDFILEPATH:Axis\conf\client.wsdd</p>

@@ -88,7 +88,7 @@ I have used libwww-config in the Makefile.am to pick LibWWW specific settings.
 
 3. Using the LibWWW transport
 Once you build the library, you could use it by specifying the location of the 
-lib in $AXIS_HOME/axiscpp.conf file. 
+lib in $AXISCPP_DEPLOY/axiscpp.conf file. 
 e.g.
 Transport_http:/usr/local/Axis/libs/libaxis_LibWWWTransport.so
 
@@ -97,7 +97,7 @@ Notes:
 Thread Safety:
 http://www.w3.org/Library/User/Architecture/Events.html says 
 “LibWWW is not posix thread safe but it uses a 'pseudo-thread' 
-model based on non-blocking sockets and interleaved IO.” 
+model based on non-blocking sockets and interleaved IO.�? 
 I did a bit of research and figured out how to make LibWWW thread safe. 
 However I was unable to successfully use the 'pseudo-thread'
 model of LibWWW and achieve thread safety with Axis C++. I think the problem 

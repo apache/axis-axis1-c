@@ -34,7 +34,7 @@
  *   
  *   The purpose of this class is to provide a way so that
  *   the server takes the configuration path where the
- *   axiscpp.conf lies from the environment variable AXIS_HOME.
+ *   axiscpp.conf lies from the environment variable AXISCPP_DEPLOY.
  *   User has to set this variable pointing the path to axiscpp.conf file.
  *   This axiscpp.conf file contains all the configuration paths
  *   like wsdd configuration file path, axis log path etc.
@@ -69,7 +69,7 @@ class AxisConfig
 
     /**
      * This method will read from the configuration file called axiscpp.conf
-     * which is located in a place defined by AXIS_HOME environment variable. 
+     * which is located in a place defined by AXISCPP_DEPLOY environment variable. 
      *
      * @return The status which indicates whether the operation is success 
      * (AXIS_SUCCESS) or not (AXIS_FAIL).
@@ -80,7 +80,7 @@ class AxisConfig
      * This is called to get the value of a property as defined by the g_axconfig
 	 * enumeration.
      * 
-     * @return the $AXIS_HOME value
+     * @return the requested value or NULL if the property is not set.
      */
 
 	char* getAxisConfProperty(g_axconfig property);

@@ -7,7 +7,7 @@ Case 1: Test all samples/tests with transport.
 
 Case 2: Test with transport not in place as specified by axiscpp.conf        
        
-       Transport entry is in $AXIS_HOME/axiscpp.conf as given below 
+       Transport entry is in $AXISCPP_DEPLOY/axiscpp.conf as given below 
        
        Transport_http:/usr/local/Axis/libs/libaxis_transport.so
        
@@ -15,7 +15,7 @@ Case 2: Test with transport not in place as specified by axiscpp.conf
        
        $ mkdir temp
              
-       Move $AXIS_HOME/libs/libaxis_transport.so file to the temp directory
+       Move $AXISCPP_DEPLOY/libs/libaxis_transport.so file to the temp directory
         
        $ mv $AXISCPP_HOME/libs/libaxis_transport.so [Place of choice]/temp/        
        
@@ -24,11 +24,11 @@ Case 2: Test with transport not in place as specified by axiscpp.conf
 Case 3: Test with no transport specified in axiscpp.conf
         
        Move [Place of choice]/temp/libaxis_transport.so file back 
-       to original location on $AXIS_HOME/libs/
+       to original location on $AXISCPP_DEPLOY/libs/
         
        $ mv [Place of choice]/temp/libaxis_transport.so $AXISCPP_HOME/libs/ 
 
-       Comment "Transport_http" in $AXIS_HOME/axiscpp.conf as follows:
+       Comment "Transport_http" in $AXISCPP_DEPLOY/axiscpp.conf as follows:
        
        #Transport_http:/usr/local/Axis/libs/libaxis_transport.so
        
