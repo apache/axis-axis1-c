@@ -669,12 +669,22 @@ public class J2eeGeneratorFactory implements GeneratorFactory {
                     }
                     sEntry.setName(siName);
                     Service service = sEntry.getService();
-// get ports
+                    // get ports
                     Map portMap = service.getPorts();
                     Iterator portIterator = portMap.values().iterator();
 
                     while (portIterator.hasNext()) {
                         Port p = (Port) portIterator.next();
+
+                        Binding binding = p.getBinding();
+                        BindingEntry bEntry =
+                            symbolTable.getBindingEntry(binding.getQName());
+
+                        // If this isn't a SOAP binding, skip it
+                        if (bEntry.getBindingType() != BindingEntry.TYPE_SOAP) {
+                            continue;
+                        }
+
                         String portName = mapper.getPortName(p);
                         if (portName == null) {
                             portName = p.getName();
