@@ -31,19 +31,20 @@ class STORAGE_CLASS_INFO AxisConfigException :public AxisException
 
 public:
     AxisConfigException();
-    AxisConfigException(int iExceptionCode);
-    AxisConfigException(exception* e);
-    AxisConfigException(exception* e, int iExceptionCode);
+    AxisConfigException(const int iExceptionCode);
+    AxisConfigException(const int iExceptionCode, const char* pcMessage);
+    AxisConfigException(const exception* e);
+    AxisConfigException(const exception* e, const int iExceptionCode);
     virtual ~AxisConfigException() throw();
     const char* what() throw();
     const int getExceptionCode();
-    const string getMessage(exception* e);
-    const string getMessage(int iExceptionCode);
-                                                                                                                             
+    const string getMessage(const exception* e);
+    const string getMessage(const int iExceptionCode);
 private:
-    void processException(exception* e);
-    void processException(exception* e, int iExceptionCode);
-    void processException(int iExceptionCode);
+    void processException(const exception* e);
+    void processException(const exception* e, const int iExceptionCode);
+    void processException(const int iExceptionCode);
+    void processException(const int iExceptionCode, const char* pcMessage); 
     string m_sMessage;
     int m_iExceptionCode;
 };

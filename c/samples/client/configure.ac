@@ -4,6 +4,7 @@ AM_CONFIG_HEADER(config.h)
 CFLAGS="-Wshadow -Wall -pedantic -ansi"
 CPPFLAGS="-Wshadow -Wall -pedantic -ansi"
 LDFLAGS="-s -L$AXISCPP_HOME/bin -laxiscpp_client -ldl -lstdc++"
+#LDFLAGS="-s -L$AXISCPP_HOME/bin -ldl -lstdc++"
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL

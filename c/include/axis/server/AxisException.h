@@ -51,6 +51,14 @@ using namespace std;
 #define THROW_AXIS_TRANSPORT_EXCEPTION(X) throw AxisTransportException(X)
 #define THROW_AXIS_PARSE_EXCEPTION(X) throw AxisParseException(X)
 
+#define THROW_AXIS_EXCEPTION2(X, Y) throw AxisException(X)
+#define THROW_AXIS_CONFIG_EXCEPTION2(X, Y) throw AxisConfigException(X, Y)
+#define THROW_AXIS_SOAP_EXCEPTION2(X, Y) throw AxisSoapException(X, Y)
+#define THROW_AXIS_WSDD_EXCEPTION2(X, Y) throw AxisWsddException(X, Y)
+#define THROW_AXIS_ENGINE_EXCEPTION2(X, Y) throw AxisEngineException(X, Y)
+#define THROW_AXIS_TRANSPORT_EXCEPTION2(X, Y) throw AxisTransportException(X, Y)
+#define THROW_AXIS_PARSE_EXCEPTION2(X, Y) throw AxisParseException(X, Y)
+
 #define THROW_AXIS_BAD_ALLOC() throw std::bad_alloc
 #define THROW_AXIS_BAD_CAST() throw std::bad_cast
 #define THROW_AXIS_BAD_TYPEID() throw std::bad_typeid
@@ -75,6 +83,14 @@ using namespace std;
 #define THROW_AXIS_ENGINE_EXCEPTION(X) return X
 #define THROW_AXIS_TRANSPORT_EXCEPTION(X) return X
 #define THROW_AXIS_PARSE_EXCEPTION(X) return X
+
+#define THROW_AXIS_EXCEPTION2(X, Y) return X
+#define THROW_AXIS_CONFIG_EXCEPTION2(X, Y) return X
+#define THROW_AXIS_SOAP_EXCEPTION2(X, Y) return X
+#define THROW_AXIS_WSDD_EXCEPTION2(X, Y) return X
+#define THROW_AXIS_ENGINE_EXCEPTION2(X, Y) return X
+#define THROW_AXIS_TRANSPORT_EXCEPTION2(X, Y) return X
+#define THROW_AXIS_PARSE_EXCEPTION2(X, Y) return X
 
 #define THROW_AXIS_BAD_ALLOC()
 #define THROW_AXIS_BAD_CAST()
@@ -201,7 +217,7 @@ public:
     /** No parameter constructor*/
     AxisException(){};
 
-    /** This can be used throw an exception with the exception code
+    /** This can be used to throw an exception with the exception code
       * which is defined in the AxisException.h file, under AXISC_EXCEPTIONS
       * type. Axis C++ exception model heavily use this.
       *
@@ -210,7 +226,20 @@ public:
       * 
       * @example throw AxisException(AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
       */
-    AxisException(int iExceptionCode);
+    AxisException(const int iExceptionCode);
+
+    /** This can be used to throw an exception with exception code which is
+      * is defined in the AxisException.h file, under AXISC_EXCEPTIONS type.
+      * An additional description of the exception could be appended.
+      *
+      * @param Exception code which is defined in the AxisException.h file,
+      *  under AXISC_EXCEPTIONS type.
+      * @param A char pointer that will point to an exception message.
+      *
+      * @example throw AxisException(AXISC_NODE_VALUE_MISMATCH_EXCEPTION, 
+            "Some additional exception info");
+      */
+    AxisException(const int iExceptionCode, const char* pcMessage);
 
     /** This can be used to throw an exception with another exception as a
       * parameter. One situation in which this can be used is when we catch
@@ -220,7 +249,7 @@ public:
       *
       * @example throw AxisException(std::bad_alloc);
       */
-    AxisException(exception* e);
+    AxisException(const exception* e);
 
     /** This accept two parameters, both an exception code an exception object
       * derived from std::exception
@@ -228,13 +257,13 @@ public:
       * @param An exception class derived from std::exception
       * @param An exception code
       */
-    AxisException(exception* e, int iExceptionCode);
+    AxisException(const exception* e, const int iExceptionCode);
     
     /** This accept an exception message
       *
       * @param An exception message
       */
-    AxisException(char* pcMessage){m_sMessage = pcMessage;};
+    AxisException(const char* pcMessage){m_sMessage = pcMessage;};
     
     /** Destructor */
     virtual ~AxisException() throw();
@@ -254,13 +283,14 @@ public:
       * @return exception message
       */
     virtual const int getExceptionCode();
-    virtual const string getMessage(exception* e);
-    virtual const string getMessage(int iExceptionCode);    
+    virtual const AxisString getMessage(const exception* e);
+    virtual const AxisString getMessage(const int iExceptionCode);    
 
 private:
-    void processException(exception* e);
-    void processException(exception* e, int iExceptionCode);
-    void processException(int iExceptionCode);
+    void processException(const exception* e);
+    void processException(const exception* e, const int iExceptionCode);
+    void processException(const int iExceptionCode);
+    void processException(const int iExceptionCode, const char* pcMessage);
     string m_sMessage; //Holds the exception messae
     int m_iExceptionCode; //Holds the exception code
 };
