@@ -108,11 +108,11 @@ SOURCE=..\..\..\src\transport\axis2\Channel.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\transport\axis2\SecureChannel.cpp
+SOURCE=..\..\..\src\transport\axis2\ChannelFactory.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\transport\axis2\SSLChannelFactory.cpp
+SOURCE=..\..\..\src\transport\axis2\SecureChannel.cpp
 # End Source File
 # Begin Source File
 
@@ -136,19 +136,19 @@ SOURCE=..\..\..\src\transport\axis2\Channel.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\transport\axis2\ChannelFactory.hpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\transport\axis2\Platform.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\transport\axis2\SecureChannel.h
+SOURCE=..\..\..\src\transport\axis2\SecureChannel.hpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\transport\SSLChannel.hpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\transport\axis2\SSLChannelFactory.hpp
 # End Source File
 # Begin Source File
 
