@@ -56,6 +56,8 @@ int MathOps::div(int Value0, int Value1)
 			Ret = m_pCall->getElementAsInt("divReturn", 0);
 		}
 	}
+        m_pCall->unInitialize();
+        return Ret;
     }
     catch(AxisException& e)
     {
@@ -64,18 +66,13 @@ int MathOps::div(int Value0, int Value1)
         {
             throw;
         }
-	else if(AXIS_SUCCESS == m_pCall->checkFault("Fault",
+        if(AXIS_SUCCESS == m_pCall->checkFault("Fault",
             "http://localhost/axis/MathOps/types")) //Exception handling code goes here
         {
             cFaultcode = m_pCall->getElementAsString("faultcode", 0);
             cFaultstring = m_pCall->getElementAsString("faultstring", 0);
             cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-            if(0 != strcmp("service_exception", cFaultstring))
-            {
-                cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-                throw AxisException(cFaultdetail);
-            }
-            else
+            if(0 == strcmp("DivByZeroFault", cFaultstring))
             {
                 if(AXIS_SUCCESS == m_pCall->checkFault("faultdetail",
                     "http://localhost/axis/MathOps/types"))
@@ -97,12 +94,15 @@ int MathOps::div(int Value0, int Value1)
                     throw AxisDivByZeroException(pFaultDetail);
                 }
             }
+            else
+            {
+                cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
+                throw AxisException(cFaultdetail);
+            }
         }
         else throw;
     }
 
-    m_pCall->unInitialize();
-    return Ret;
 }
 
 int MathOps::getFaultDetail(char** ppcDetail)
