@@ -7,7 +7,6 @@
 
 #Build the wsdl2ws tool from the source
 ant -lib ${AXIS_JARS_HOME} -buildfile ${AXISCPP_HOME}/src/wsdl/build.xml
-
 #Server sample build and install
 TARGET_SERVER=$(echo $OUTPUT_DIR/$(basename $1 .wsdl).$2 | tr '+' 'p')_server
 SERVICE_FILE_NAME=$(echo | grep portType $1|grep -o '".*"'|sed "s/\"//g").$2
@@ -39,6 +38,7 @@ else
 fi
 
 #Client sample build
+cd "${OUTPUT_DIR}/../.."
 TARGET_CLIENT=$(echo $OUTPUT_DIR/$(basename $1 .wsdl).$2 | tr '+' 'p')_client
 CLIENT=$(echo testcases/client/$2/$(basename $1 .wsdl)Client.$2 | tr '+' 'p')
 
