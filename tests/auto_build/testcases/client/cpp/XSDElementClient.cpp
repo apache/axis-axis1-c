@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
 		iResult = ws->setGetDataInt(21);
 		printf("int=%d\n", iResult);
 		uiResult = ws->setGetDataUnsignedInt(28);
-		printf("unsigned int=%d\n", uiResult);
+		printf("unsigned int=%d\n", uiResult);fflush(stdout);
 
 		lResult = ws->setGetDataLong((xsd__long)35);
 	    cout << "long=" << lResult << endl;

@@ -134,7 +134,7 @@ int main(int argc, char* argv[])
 		printf("int=%d\n", *iResult);
 
 		uiResult = ws->setGetDataUnsignedInt(&uiInput);
-		printf("unsigned int=%d\n", *uiResult);
+		printf("unsigned int=%d\n", *uiResult);fflush(stdout);
 
 		lResult = ws->setGetDataLong(&lInput);
 		cout << "long=" << *lResult << endl;
