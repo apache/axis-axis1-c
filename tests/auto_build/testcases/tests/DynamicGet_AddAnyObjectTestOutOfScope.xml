@@ -1,0 +1,14 @@
+<test>
+    <name>DynamicGet_AddAnyObjectTestOutOfScope</name>
+    <description>DynamicGet_AddAnyObjectTestOutOfScope</description>
+	<dynamicCode>true</dynamicCode>
+	<dynamicCodeDirectory>DynamicGet_AddAnyObjectTestOutOfScope</dynamicCodeDirectory>
+    <clientLang>cpp</clientLang>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            DynamicGet_AddAnyObjectTestOutOfScope.expected
+        </output>        	
+    </expected>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>
