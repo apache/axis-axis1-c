@@ -146,6 +146,10 @@ SOURCE=..\..\..\src\engine\AppScopeHandlerPool.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\engine\client\ClientAxisEngine.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\engine\DeserializerPool.h
 # End Source File
 # Begin Source File
