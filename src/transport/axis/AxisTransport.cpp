@@ -64,6 +64,7 @@
 
 #include "AxisTransport.h"
 #include "TransportFactory.hpp"
+#include <stdio.h>
 
 AxisTransport::AxisTransport(Ax_soapstream* pSoap)
 {
