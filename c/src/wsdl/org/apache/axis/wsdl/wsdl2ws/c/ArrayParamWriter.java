@@ -57,52 +57,86 @@
  * @author Srinath Perera(hemapani@openource.lk)
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
  */
-package org.apache.axis.wsdl.wsdl2ws.c;
-import java.util.Iterator;
 
-import org.apache.axis.wsdl.wsdl2ws.SourceWriter;
-import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
+
+package org.apache.axis.wsdl.wsdl2ws.c;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import javax.xml.namespace.QName;
+
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
+import org.apache.axis.wsdl.wsdl2ws.cpp.CPPUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
-/**
- * Parameter genarator.. genarate all necessary param classes
- * @author hemapani
- */
-public class AllParamWriter implements SourceWriter{
-	private WebServiceContext wscontext;
-	
-	public AllParamWriter(WebServiceContext wscontext){
-		this.wscontext =wscontext;
+public class ArrayParamWriter extends ParamWriter{
+	public ArrayParamWriter(WebServiceContext wscontext,Type type)throws WrapperFault{
+		super(wscontext,type);
 	}
-
-	/**
-	 * genarate all the wrappets for custom complex types.
-	 * @see org.apache.axis.wsdl.wsdl2ws.SourceWriter#writeSource()
-	 */
-	public void writeSource() throws WrapperFault {
-		Iterator enu = wscontext.getTypemap().getTypes().iterator();
-		String generator = wscontext.getWrapInfo().getImplStyle();
-		Type type;
-		while(enu.hasNext()){	
-		try{	
-			type = (Type)enu.next();
-			if(wscontext.getWrapInfo().getImplStyle().equals(WrapperConstants.IMPL_STYLE_STRUCT)){
-					if(type.isArray()){
-						System.out.println("Array writer called ......");
-						(new org.apache.axis.wsdl.wsdl2ws.c.ArrayParamWriter(wscontext,type)).writeSource();	
-					}	
-					else{	
-						System.out.println("struct writer called ......");
-						(new org.apache.axis.wsdl.wsdl2ws.c.BeanParamWriter(wscontext,type)).writeSource();
-						(new ParmHeaderFileWriter(wscontext,type)).writeSource();	
-					}	
-				}	
-			}catch(Exception e){
-				System.out.println("Error occured yet we continue to genarate other classes ... you should check the error");
-				e.printStackTrace();
-			}	
+	public void writeSource()throws WrapperFault{
+	   try{
+			this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+			writeClassComment();
+			// if this headerfile not defined define it 
+			this.writer.write("#if !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)\n");
+			this.writer.write("#define __"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_\n\n");
+			if (attribs.length != 1){
+				System.out.println("Array "+classname+" contains unexpected no of variables");
+				throw new WrapperFault("Array type "+classname+" contain unexpected no of types");
+			}
+			//include header file for the contained type
+			QName qname = type.getTypNameForAttribName("item");
+			if (!CPPUtils.isSimpleType(qname)){
+				writer.write("#include \""+attribs[0][1]+".h\"\n\n");
+			}
+			else{
+				writer.write("#include <axis/common/AxisUserAPI.h>\n\n");
+			}
+			writeArrayStruct();
+			this.writer.write("#endif /* !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)*/\n");
+			writer.flush();
+			writer.close();
+			System.out.println(getFilePath().getAbsolutePath() + " created.....");
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new WrapperFault(e);
 		}
+	}
+	protected File getFilePath() throws WrapperFault {
+		String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
+		if(targetOutputLocation.endsWith("/"))
+			targetOutputLocation = targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
+		new File(targetOutputLocation).mkdirs();
+		String fileName = targetOutputLocation + "/" + this.classname + ".h";
+		return new File(fileName);
+	}
+	
+	protected void writeArrayStruct()throws WrapperFault{
+		try{			
+			writer.write("typedef struct "+classname+"Tag\n{\n");
+			QName qname = new QName(attribs[0][2],attribs[0][3]);
+			if(CUtils.isSimpleType(qname)){
+				writer.write("\t"+CUtils.getclass4qname(qname)+"* m_Array;\n\tint m_Size;\n} "+classname+";\n\n");				
+			}else{
+				writer.write("\t"+attribs[0][1]+"* m_Array;\n\tint m_Size;\n} "+classname+";\n\n");
+			}
+		} catch (IOException e) {
+			 throw new WrapperFault(e);
+		}
+	}
+		
+	protected void writeConstructors()throws WrapperFault{}
+	   
+	protected void writeDistructors() throws WrapperFault {}
+	
+	protected void writeMethods()throws WrapperFault{}
+	
+	protected String getFileType()
+	{
+		return "Array";	
 	}
 }

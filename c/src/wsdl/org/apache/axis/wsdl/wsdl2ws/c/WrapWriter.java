@@ -70,7 +70,6 @@ import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
-import org.apache.axis.wsdl.wsdl2ws.cpp.CPPUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
@@ -132,6 +131,7 @@ public class WrapWriter extends CFileWriter{
 	 */
 	protected void writePreprocssorStatements() throws WrapperFault {
 		try{
+			writer.write("#include <string.h>\n");
 			writer.write("#include \""+classname+".h\"\n");
 			//As there is no service header file for C the header files for types should be included here itself
 			Type atype;
@@ -210,7 +210,7 @@ public class WrapWriter extends CFileWriter{
 			else{
 				outparamType = returntype.getLangName();
 			}
-			returntypeissimple = CPPUtils.isSimpleType(outparamType);
+			returntypeissimple = CUtils.isSimpleType(outparamType);
 		}
 		String paraTypeName;
 		ArrayList paramsB = new ArrayList(params);
@@ -228,7 +228,7 @@ public class WrapWriter extends CFileWriter{
 		for (int i = 0; i < paramsB.size(); i++) {
 			if (i>0) writer.write(",");
 			paraTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();
-			if((CPPUtils.isSimpleType(paraTypeName))){
+			if((CUtils.isSimpleType(paraTypeName))){
 				//for simple types	
 				writer.write(paraTypeName);
 			}else if((type = this.wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName())) != null && type.isArray()){
@@ -251,7 +251,7 @@ public class WrapWriter extends CFileWriter{
 		boolean aretherearrayparams = false;
 		for (int i = 0; i < paramsB.size(); i++) {
 			paraTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();
-			if((CPPUtils.isSimpleType(((ParameterInfo)paramsB.get(i)).getLangName()))){
+			if((CUtils.isSimpleType(((ParameterInfo)paramsB.get(i)).getLangName()))){
 				//for simple types	
 				writer.write("\t"+paraTypeName+" v"+i+";\n");
 			}else if((type = this.wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName())) != null && type.isArray()){
@@ -281,15 +281,15 @@ public class WrapWriter extends CFileWriter{
 		//create and populate variables for each parameter
 		for (int i = 0; i < paramsB.size(); i++) {
 			paraTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();
-			if((CPPUtils.isSimpleType(((ParameterInfo)paramsB.get(i)).getLangName()))){
+			if((CUtils.isSimpleType(((ParameterInfo)paramsB.get(i)).getLangName()))){
 				//for simple types	
-				writer.write("\tv"+i+" = pDZX->"+CPPUtils.getParameterGetValueMethodName(paraTypeName)+"(pDZ);\n");
+				writer.write("\tv"+i+" = pDZX->"+CUtils.getParameterGetValueMethodName(paraTypeName)+"(pDZ);\n");
 			}else if((type = this.wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName())) != null && type.isArray()){
 				QName qname = type.getTypNameForAttribName("item");
 				String containedType = null;
-				if (CPPUtils.isSimpleType(qname)){
-					containedType = CPPUtils.getclass4qname(qname);
-					writer.write("\tarray = pDZX->GetBasicArray(pDZ, "+CPPUtils.getXSDTypeForBasicType(containedType)+");\n");
+				if (CUtils.isSimpleType(qname)){
+					containedType = CUtils.getclass4qname(qname);
+					writer.write("\tarray = pDZX->GetBasicArray(pDZ, "+CUtils.getXSDTypeForBasicType(containedType)+");\n");
 					writer.write("\tmemcpy(&v"+i+", &array, sizeof(Axis_Array));\n");
 					writer.write("\tif (v"+i+".m_Size < 1) return FAIL;\n");
 				}
@@ -302,7 +302,7 @@ public class WrapWriter extends CFileWriter{
 				}
 			}else{
 				//for complex types 
-				writer.write("\t"+paraTypeName+" *v"+i+" = ("+paraTypeName+"*)pDZX->GetObject(pDZ, (void*)Axis_DeSerialize_"+paraTypeName+
+				writer.write("\tv"+i+" = ("+paraTypeName+"*)pDZX->GetObject(pDZ, (void*)Axis_DeSerialize_"+paraTypeName+
 					"\n\t\t, (void*)Axis_Create_"+paraTypeName+", (void*)Axis_Delete_"+paraTypeName+
 					"\n\t\t, Axis_TypeName_"+paraTypeName+", Axis_URI_"+paraTypeName+");\n");
 			}
@@ -310,7 +310,7 @@ public class WrapWriter extends CFileWriter{
 		
 		if(returntype != null){
 			/* Invoke the service when return type not void */
-			writer.write("\t"+outparamType+((returntypeisarray || returntypeissimple)?" ":" *")+ "ret = "+methodName+"(");
+			writer.write("\tret = "+methodName+"(");
 			if (0<paramsB.size()){
 				for (int i = 0; i <  paramsB.size() - 1; i++) {
 					writer.write("v" + i + ",");
@@ -320,13 +320,13 @@ public class WrapWriter extends CFileWriter{
 			writer.write(");\n");
 			/* set the result */
 			if (returntypeissimple){
-				writer.write("\treturn pSZX->AddOutputParam(pSZ, \""+methodName+"Return\", (void*)&ret, "+CPPUtils.getXSDTypeForBasicType(outparamType)+");\n");
+				writer.write("\treturn pSZX->AddOutputParam(pSZ, \""+methodName+"Return\", (void*)&ret, "+CUtils.getXSDTypeForBasicType(outparamType)+");\n");
 			}else if(returntypeisarray){
 				QName qname = retType.getTypNameForAttribName("item");
 				String containedType = null;
-				if (CPPUtils.isSimpleType(qname)){
-					containedType = CPPUtils.getclass4qname(qname);
-					writer.write("\treturn pSZX->AddOutputBasicArrayParam(pSZ, \""+methodName+"Return\", (Axis_Array*)(&ret),"+CPPUtils.getXSDTypeForBasicType(containedType)+");\n");
+				if (CUtils.isSimpleType(qname)){
+					containedType = CUtils.getclass4qname(qname);
+					writer.write("\treturn pSZX->AddOutputBasicArrayParam(pSZ, \""+methodName+"Return\", (Axis_Array*)(&ret),"+CUtils.getXSDTypeForBasicType(containedType)+");\n");
 				}
 				else{
 					containedType = qname.getLocalPart();
@@ -340,14 +340,14 @@ public class WrapWriter extends CFileWriter{
 			}
 		}else{//method does not return anything
 			/* Invoke the service when return type is void */
-			writer.write("\tpWs->" + methodName + "(");
+			writer.write("\t" + methodName + "(");
 			if (0<paramsB.size()){
 				for (int i = 0; i <  paramsB.size() - 1; i++) {
 					writer.write("v" + i + ",");
 				}
 				writer.write("v" + ( paramsB.size() - 1));
 			}
-			writer.write(")\n");
+			writer.write(");\n");
 			writer.write("\treturn SUCCESS;\n");
 		}
 		//write end of method

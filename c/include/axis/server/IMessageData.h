@@ -53,8 +53,7 @@
  * <http://www.apache.org/>.
  *
  *
- *
- *
+ * @author Susantha Kumara (susantha@virtusa.com, susantha@opensource.lk)
  * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
@@ -63,23 +62,19 @@
 #if !defined(AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_)
 #define AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_
 
-#include "AxisWrapperAPI.h"
-
 #ifdef __cplusplus
 
 #include "../wsdd/WSDDService.h"
 #include <string>
 using namespace std;
 
-#include "IWrapperSoapDeSerializer.h"
-#include "IWrapperSoapSerializer.h"
 #include "IHandlerSoapDeSerializer.h"
 #include "IHandlerSoapSerializer.h"
 class IDeployerUtils;
-
-#else
-
 #endif
+
+#include "IWrapperSoapDeSerializer.h"
+#include "IWrapperSoapSerializer.h"
 
 #ifdef __cplusplus
 

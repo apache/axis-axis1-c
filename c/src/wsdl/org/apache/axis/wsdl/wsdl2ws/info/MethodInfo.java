@@ -67,6 +67,7 @@ public class MethodInfo {
     private String methodname;
     private ArrayList parameters;
     private ParameterInfo returnType;
+    private String soapAction;
 
     public MethodInfo() {
         this.returnType = null;
