@@ -1,88 +1,16 @@
-                           TO DO LIST FOR AXIS C++
-                           -----------------------
-
-Please help to maintain this file, as accuracy is critical.  Major topic
-areas are headed by section headings, and individual items are prefixed
-with "!" (needs doing) "*" (in progress) or "X" (done), followed by the
-owner (if any) in "<>" brackets. Also the priority order is postfixed with
-a number where 0 - least priority. Example:
-
-                 *2 <Glen> Write TO DO list //2 is the priority
-
-! <team> Update the TO DO list to be current!
-
-
-MESSAGE PARSING / ENCODING
---------------------------
-! <team> 	Improving the SoapDeserializer to parse SOAP headers
-! <team> 	Changing SAX2 parser to use progressive parsing and then adopt XMLpull parsing
-
-CLIENT API
-----------
-
-SCHEMA SUPPORT
---------------
-
-SOAP 1.1 SUPPORT
-----------------
-
-
-SOAP 1.2 SUPPORT
------------------
-
-! <team> 	Change the SOAP header coding
-! <team> 	Change the SOAP fault coding
-
-
-PERFORMANCE
------------
-! <team>	Improving Serializer code so that it avoids string operations(+= operator etc)
-		Directly calling Transport's function (eg: ap_rputs(..))
-DOCUMENTATION
--------------
-* <damitha> 	writing Integration-guide
-! <team> 	writing user-guide
-! <team> 	writing handler API
-
-SAMPLES
--------
-! <team> 	WSDL documents for sample web services
-* <susantha>	Writing 2 web services for SOAPBuilders interop tests 
+                           TO DO LIST FOR AXIS C++                           -----------------------Please help to maintain this file, as accuracy is critical.  Major topicareas are headed by section headings, and individual items are prefixedwith "!" (needs doing) "*" (in progress) or "X" (done), followed by theowner (if any) in "<>" brackets. Also the priority order is postfixed with
+a number where 0 - least priority. Example:                 *2 <Glen> Write TO DO list //2 is the priority! <team> Update the TO DO list to be current!MESSAGE PARSING / ENCODING--------------------------! <team> 	Improving the SoapDeserializer to parse SOAP headers! <team> 	Changing SAX2 parser to use progressive parsing and then adopt XMLpull parsingCLIENT API----------SCHEMA SUPPORT--------------SOAP 1.1 SUPPORT----------------SOAP 1.2 SUPPORT-----------------! <team> 	Change the SOAP header coding! <team> 	Change the SOAP fault codingPERFORMANCE-----------! <team>	Improving Serializer code so that it avoids string operations(+= operator etc)		Directly calling Transport's function (eg: ap_rputs(..))DOCUMENTATION-------------* <damitha> 	writing Integration-guide! <team> 	writing user-guide! <team> 	writing handler APISAMPLES-------! <team> 	WSDL documents for sample web services* <susantha>	Writing 2 web services for SOAPBuilders interop tests 
 		1. Round 2 base and
 		2. Round 2 Group B
-
-WSDL2C++
----------
-
-AXISDEPLOY
-----------
-! <team>	WrapperClassGenerator 
-		1. writing a set of classes that can store information that parser obtains by 
-		   parsing the user web service's include files.
-		2. writing c++ parser that reads and parses the web service's include files
-
-GENERAL / UNCATEGORIZED
------------------------
+WSDL2C++---------
+AXISDEPLOY----------! <team>	WrapperClassGenerator 		1. writing a set of classes that can store information that parser obtains by 		   parsing the user web service's include files.		2. writing c++ parser that reads and parses the web service's include filesGENERAL / UNCATEGORIZED-----------------------
 
 ! <team>	In the WSDDDocument.cpp for each and every XMLString::transcode() you have to 
 		use a corrosponding XMLString::release() to relase the allocated memeory
 
 ! <team>	In the WSDDDocument.cpp write the code to handle the end element for wsdd_resflow
-
 * <susantha> 	Improve AxisEngine to send back the WSDL upon http GET request. Ex. http://url/service?wsdl
-
-FUTURE ENHANCEMENTS
--------------------
-
-! <team> 	Currently the keywords which are namespace specific are hard coded. We have to
-		put these keywords in to a list/map and pickup them when ever needed from it.
-		eg: 
-		a) enc
-		   http://www.w3.org/2003/05/soap-encoding
-		   float, double, .... etc
-		   
-! <team> 	The current code supports only int, float, string out of simple types. This code
-		has to be improved to support other simplet types as well.
+FUTURE ENHANCEMENTS-------------------! <team> 	Currently the keywords which are namespace specific are hard coded. We have to		put these keywords in to a list/map and pickup them when ever needed from it.		eg: 		a) enc		   http://www.w3.org/2003/05/soap-encoding		   float, double, .... etc		   ! <team> 	The current code supports only int, float, string out of simple types. This code		has to be improved to support other simplet types as well.
 
 * <susantha>	Implementing C++ types for xml types (datetime, date, time, HexBinary, Base64Binary etc)
 		and improve Param class to support them.
