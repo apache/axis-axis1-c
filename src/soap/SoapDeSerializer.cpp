@@ -4152,7 +4152,7 @@ SoapDeSerializer::getChardataAs (void *pValue, XSDTYPE type)
 	{
 	case XSD_INT:
 	    *((int *) (pValue)) =
-		strtod (m_pNode->m_pchNameOrValue, &m_pEndptr);
+		(int) strtod (m_pNode->m_pchNameOrValue, &m_pEndptr);
 	    break;
 	case XSD_BOOLEAN:
 	    *((int *) (pValue)) =
@@ -4165,7 +4165,7 @@ SoapDeSerializer::getChardataAs (void *pValue, XSDTYPE type)
 	    break;
 	case XSD_SHORT:
 	    *((short *) (pValue)) =
-		strtod (m_pNode->m_pchNameOrValue, &m_pEndptr);
+		(short) strtod (m_pNode->m_pchNameOrValue, &m_pEndptr);
 	    break;
 	case XSD_UNSIGNEDSHORT:
 	    *((unsigned short *) (pValue)) =
@@ -4173,7 +4173,7 @@ SoapDeSerializer::getChardataAs (void *pValue, XSDTYPE type)
 	    break;
 	case XSD_BYTE:
 	    *((char *) (pValue)) =
-		strtod (m_pNode->m_pchNameOrValue, &m_pEndptr);
+		(char) strtod (m_pNode->m_pchNameOrValue, &m_pEndptr);
 	    break;
 	case XSD_UNSIGNEDBYTE:
 	    *((unsigned char *) (pValue)) =
