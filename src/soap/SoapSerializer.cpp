@@ -84,6 +84,7 @@
 #include <stdarg.h>
 
 #include <axis/common/AxisTrace.h>
+extern AxisTrace* g_pAT;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -405,7 +406,7 @@ int SoapSerializer::SetNextSerilizeBuffer()
 			return AXIS_SUCCESS;
 		}
 	}
-	AXISTRACE1("No buffers left for serialization");
+	
 	return AXIS_FAIL;
 }
 
