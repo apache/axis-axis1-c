@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 	const char* port="80";
 	sprintf(endpoint, "http://%s:%s/axis/base", server, port);
 	try
-        {
+	{
 	   InteropTestPortType ws(endpoint, APTHTTP);
 
 

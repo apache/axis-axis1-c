@@ -8,53 +8,57 @@ bool IsNumber(const char* p);
 int main(int argc, char* argv[])
 {
 	char endpoint[256];
+	const char* url="http://localhost:80/axis/MathOps";
 	const char* server="localhost";
 	const char* port="80";
 	const char* op = 0;
 	const char* p1 = 0;
 	const char* p2 = 0;
 	int i1=0, i2=0;
-        int iResult;
-        char* pcDetail;
-        try
-        {
-	sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
-	MathOps ws(endpoint);
+	int iResult;
+	char* pcDetail;
 
-	op = "div";/*Operation name*/
-	i1 = 10;/*First parameter*/
-	i2 = 5;/*Second parameter*/
+	url = argv[1];
 
-	if (strcmp(op, "div") == 0)
+	try
 	{
-	    iResult = ws.div(i1, i2);		
-            printf("Result is:%d\n", iResult);
+		sprintf(endpoint, "%s", url);
+		MathOps ws(endpoint);
+
+		op = "div";/*Operation name*/
+		i1 = 10;/*First parameter*/
+		i2 = 5;/*Second parameter*/
+
+		if (strcmp(op, "div") == 0)
+		{
+			iResult = ws.div(i1, i2);		
+			printf("Result is:%d\n", iResult);
+		}
+		else 
+		{
+			printf("Invalid operation %s\n\n", op);
+			PrintUsage();
+		}
 	}
-	else 
+	catch(AxisException& e)
 	{
-		printf("Invalid operation %s\n\n", op);
-		PrintUsage();
+	    printf("%s\n", e.what());
 	}
-        }
-        catch(AxisException& e)
-        {
-            printf("%s\n", e.what());
-        }
-        catch(exception& e)
-        {
+	catch(exception& e)
+	{
 	    printf("Unknown exception has occured\n");
-        }
-        catch(...)
-        {
-	    printf("Unknown exception has occured\n");
-        }
+	}
+	catch(...)
+	{
+	    printf("Unspecified exception has occured\n");
+	}
 	
 	return 0;
 }
 
 void PrintUsage()
 {
-	printf("Usage :\n MathOps <server> <port> <operation> <parameter> <parameter>\n\n");
+	printf("Usage :\n MathOps <url>\n\n");
 	exit(1);
 }
 

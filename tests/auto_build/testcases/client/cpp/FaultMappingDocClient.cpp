@@ -15,8 +15,8 @@ int main(int argc, char* argv[])
 	const char* p1 = 0;
 	const char* p2 = 0;
 	int i1=0, i2=0;
-        int iResult;
-        char* pcDetail;
+	int iResult;
+	char* pcDetail;
 
 	url = argv[1];
 
@@ -27,36 +27,38 @@ int main(int argc, char* argv[])
 
 	if (strcmp(op, "div") == 0)
 	{
-            for(int i = 0; i < 4; i++)
-            {
-                printf("%d\n", i);
-                switch(i)
-                {
-                    case 0: i1 = 10; i2 = 5; break;
-                    case 1: i1 = 10; i2 = 0; break;
-                    case 2: i1 = 1000; i2 = 5; break;
-                    case 3: i1 = 10; i2 = -5; break;
-                }
-                try
-                {
-		    iResult = ws.div(i1, i2);		
-                    printf("Result is:%d\n", iResult);
-                }
-                catch(MathOpsService_AxisClientException& e)
-                {
-                    printf("%s\n", e.what());
-                }
-                catch(AxisException& e)
-                {
-                    printf("Exception : %s\n", e.what());
-                }
-                catch(exception& e)
-                {
-                }
-                catch(...)
-                {
-                }
-            }
+	    for(int i = 0; i < 4; i++)
+	    {
+			printf("%d\n", i);
+			switch(i)
+			{
+				case 0: i1 = 10; i2 = 5; break;
+				case 1: i1 = 10; i2 = 0; break;
+				case 2: i1 = 1000; i2 = 5; break;
+				case 3: i1 = 10; i2 = -5; break;
+			}
+			try
+			{
+				iResult = ws.div(i1, i2);		
+				printf("Result is:%d\n", iResult);
+			}
+			catch(MathOpsService_AxisClientException& e)
+			{
+				printf("MathOpsService Exception: %s\n", e.what());
+			}
+			catch(AxisException& e)
+			{
+				printf("AxisException : %s\n", e.what());
+			}
+			catch(exception& e)
+			{
+				printf("Unknown Exception : \n");
+			}
+			catch(...)
+			{
+				printf("Unspecified Exception : \n");
+			}
+	    }
 	}
 	else 
 	{
@@ -68,7 +70,7 @@ int main(int argc, char* argv[])
 
 void PrintUsage()
 {
-	printf("Usage :\n MathOps <server> <port> <operation> <parameter> <parameter>\n\n");
+	printf("Usage :\n FaultMappingDoc <url>\n\n");
 	exit(1);
 }
 
