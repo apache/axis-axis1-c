@@ -386,16 +386,43 @@ void WSDDDocument::AddAllowedRolesToService(const AxisXMLCh* value)
 void WSDDDocument::AddAllowedMethodsToService(const AxisXMLCh* value)
 {
 	AxisString sValue = value;
-	int prepos = 0, pos = 0;
+	int prepos = 0, pos = 0, len = 0;
+	/*
+	Fix for bug 23556.
+	This routine makes sure that the value of allowedMethods (a list
+	of method names separated by spaces) in the WSDD file is immune 
+	to having trailing and leading spaces, and multiple spaces 
+	between items.
+	*/
 	if (sValue.find('*') == AxisString::npos)
 	{
+		len = sValue.length();
 		do 
 		{
 			pos = sValue.find(METHODNAME_SEPARATOR, prepos);
-			if (AxisString::npos == pos) break;
-			m_pService->AddAllowedMethod(sValue.substr(prepos, pos-prepos).c_str());
-			prepos = pos + 1;
+
+			if((AxisString::npos != pos) && (pos!=prepos))
+			{
+				m_pService->AddAllowedMethod(sValue.substr(prepos, pos-prepos).c_str());
+			}
+			else if (AxisString::npos != pos)
+			{
+				prepos = pos+1;
+			}
+			else if (strchr(sValue.substr(prepos, len-(prepos+1)).c_str(), METHODNAME_SEPARATOR)==NULL && (len!=prepos))
+			{
+				m_pService->AddAllowedMethod(sValue.substr(prepos, len-(prepos-1)).c_str());
+				break;
+			}
+			else
+			{
+				break;
+			}
+
+			prepos = pos+1;
+
 		} while (true);
+
 	}
 }
 
