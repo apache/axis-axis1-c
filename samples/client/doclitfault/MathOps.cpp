@@ -57,7 +57,7 @@ xsd__int MathOps::div(xsd__int Value0, xsd__int Value1)
 			Ret = m_pCall->getElementAsInt("_return", 0);
 		}
 	}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 	return Ret;
 	}
@@ -80,13 +80,13 @@ xsd__int MathOps::div(xsd__int Value0, xsd__int Value1)
 					(void*) Axis_Create_DivByZeroStruct,
 					(void*) Axis_Delete_DivByZeroStruct,"DivByZero", 0);
 				pSoapFault->setCmplxFaultObject(pFaultDetail);
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 				throw MathOpsDL_AxisClientException(pSoapFault);
 			}
 			else
 			{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 				  throw MathOpsDL_AxisClientException(pSoapFault);
 			}

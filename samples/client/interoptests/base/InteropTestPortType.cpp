@@ -56,7 +56,7 @@ xsd__string InteropTestPortType::echoString(xsd__string Value0)
 				Ret = m_pCall->getElementAsString("_return", 0);
 			}
 		}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 		return Ret;
 	}
@@ -65,14 +65,14 @@ xsd__string InteropTestPortType::echoString(xsd__string Value0)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/base" );
 		if(pSoapFault)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(pSoapFault);
 		}
@@ -104,7 +104,7 @@ xsd__string_Array InteropTestPortType::echoStringArray(xsd__string_Array Value0)
 				RetArray = (xsd__string_Array&)m_pCall->getBasicArray(XSD_STRING, "_return", 0);
 			}
 		}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 		return RetArray;
 	}
@@ -113,14 +113,14 @@ xsd__string_Array InteropTestPortType::echoStringArray(xsd__string_Array Value0)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/base" );
 		if(pSoapFault)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(pSoapFault);
 		}
@@ -152,7 +152,7 @@ xsd__int InteropTestPortType::echoInteger(xsd__int Value0)
 				Ret = m_pCall->getElementAsInt("_return", 0);
 			}
 		}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 		return Ret;
 	}
@@ -161,14 +161,14 @@ xsd__int InteropTestPortType::echoInteger(xsd__int Value0)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/base" );
 		if(pSoapFault)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(pSoapFault);
 		}
@@ -200,7 +200,7 @@ xsd__int_Array InteropTestPortType::echoIntegerArray(xsd__int_Array Value0)
 				RetArray = (xsd__int_Array&)m_pCall->getBasicArray(XSD_INT, "_return", 0);
 			}
 		}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 		return RetArray;
 	}
@@ -209,14 +209,14 @@ xsd__int_Array InteropTestPortType::echoIntegerArray(xsd__int_Array Value0)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/base" );
 		if(pSoapFault)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(pSoapFault);
 		}
@@ -248,7 +248,7 @@ xsd__float InteropTestPortType::echoFloat(xsd__float Value0)
 				Ret = m_pCall->getElementAsFloat("_return", 0);
 			}
 		}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 		return Ret;
 	}
@@ -257,14 +257,14 @@ xsd__float InteropTestPortType::echoFloat(xsd__float Value0)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/base" );
 		if(pSoapFault)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(pSoapFault);
 		}
@@ -296,7 +296,7 @@ xsd__float_Array InteropTestPortType::echoFloatArray(xsd__float_Array Value0)
 				RetArray = (xsd__float_Array&)m_pCall->getBasicArray(XSD_FLOAT, "_return", 0);
 			}
 		}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 		return RetArray;
 	}
@@ -305,14 +305,14 @@ xsd__float_Array InteropTestPortType::echoFloatArray(xsd__float_Array Value0)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/base" );
 		if(pSoapFault)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(pSoapFault);
 		}
@@ -344,7 +344,7 @@ SOAPStruct* InteropTestPortType::echoStruct(SOAPStruct* Value0)
 				pReturn = (SOAPStruct*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_SOAPStruct, (void*) Axis_Create_SOAPStruct, (void*) Axis_Delete_SOAPStruct,"_return", 0);
 		}
 		}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 		return pReturn;
 	}
@@ -353,14 +353,14 @@ SOAPStruct* InteropTestPortType::echoStruct(SOAPStruct* Value0)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/base" );
 		if(pSoapFault)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(pSoapFault);
 		}
@@ -392,7 +392,7 @@ SOAPStruct_Array InteropTestPortType::echoStructArray(SOAPStruct_Array Value0)
 				RetArray = (SOAPStruct_Array&)m_pCall->getCmplxArray((void*) Axis_DeSerialize_SOAPStruct, (void*) Axis_Create_SOAPStruct, (void*) Axis_Delete_SOAPStruct, (void*) Axis_GetSize_SOAPStruct, "_return", Axis_URI_SOAPStruct);
 			}
 		}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 		return RetArray;
 	}
@@ -401,14 +401,14 @@ SOAPStruct_Array InteropTestPortType::echoStructArray(SOAPStruct_Array Value0)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/base" );
 		if(pSoapFault)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(pSoapFault);
 		}
@@ -438,7 +438,7 @@ void InteropTestPortType::echoVoid()
 			/*not successful*/
 		}
 		}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 	}
 	catch(AxisException& e)
@@ -446,14 +446,14 @@ void InteropTestPortType::echoVoid()
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/base" );
 		if(pSoapFault)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(pSoapFault);
 		}
@@ -487,7 +487,7 @@ xsd__base64Binary InteropTestPortType::echoBase64(xsd__base64Binary Value0)
 				Ret = m_pCall->getElementAsBase64Binary("_return", 0);
 			}
 		}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 		return Ret;
 	}
@@ -496,14 +496,14 @@ xsd__base64Binary InteropTestPortType::echoBase64(xsd__base64Binary Value0)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/base" );
 		if(pSoapFault)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(pSoapFault);
 		}
@@ -535,7 +535,7 @@ xsd__dateTime InteropTestPortType::echoDate(xsd__dateTime Value0)
 				Ret = m_pCall->getElementAsDateTime("_return", 0);
 			}
 		}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 		return Ret;
 	}
@@ -544,14 +544,14 @@ xsd__dateTime InteropTestPortType::echoDate(xsd__dateTime Value0)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/base" );
 		if(pSoapFault)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(pSoapFault);
 		}
@@ -585,7 +585,7 @@ xsd__hexBinary InteropTestPortType::echoHexBinary(xsd__hexBinary Value0)
 				Ret = m_pCall->getElementAsHexBinary("_return", 0);
 			}
 		}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 		return Ret;
 	}
@@ -594,14 +594,14 @@ xsd__hexBinary InteropTestPortType::echoHexBinary(xsd__hexBinary Value0)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/base" );
 		if(pSoapFault)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(pSoapFault);
 		}
@@ -633,7 +633,7 @@ xsd__decimal InteropTestPortType::echoDecimal(xsd__decimal Value0)
 				Ret = m_pCall->getElementAsDecimal("_return", 0);
 			}
 		}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 		return Ret;
 	}
@@ -642,14 +642,14 @@ xsd__decimal InteropTestPortType::echoDecimal(xsd__decimal Value0)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/base" );
 		if(pSoapFault)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(pSoapFault);
 		}
@@ -681,7 +681,7 @@ xsd__boolean InteropTestPortType::echoBoolean(xsd__boolean Value0)
 				Ret = m_pCall->getElementAsBoolean("_return", 0);
 			}
 		}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 		return Ret;
 	}
@@ -690,14 +690,14 @@ xsd__boolean InteropTestPortType::echoBoolean(xsd__boolean Value0)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/base" );
 		if(pSoapFault)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw base_AxisClientException(pSoapFault);
 		}

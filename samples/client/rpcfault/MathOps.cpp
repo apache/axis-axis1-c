@@ -57,7 +57,7 @@ xsd__int MathOps::div(xsd__int Value0, xsd__int Value1)
 				Ret = m_pCall->getElementAsInt("addReturn", 0);
 			}
 		}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 		return Ret;
 	}
@@ -66,7 +66,7 @@ xsd__int MathOps::div(xsd__int Value0, xsd__int Value1)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw MathOps_AxisClientException(e.what());
 		}
@@ -82,13 +82,13 @@ xsd__int MathOps::div(xsd__int Value0, xsd__int Value1)
 						(void*) Axis_Create_DivByZeroStruct,
 						(void*) Axis_Delete_DivByZeroStruct,"DivByZeroStruct", 0);
 					pSoapFault->setCmplxFaultObject(pFaultDetail);
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 					throw MathOps_AxisClientException(pSoapFault);
 			}
 			else
 			{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 				  m_pCall->unInitialize();
 				  throw MathOps_AxisClientException(pSoapFault);

@@ -56,7 +56,7 @@ intType* RefTestPortType::echoInt(intType* Value0)
 				pReturn = (intType*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_intType, (void*) Axis_Create_intType, (void*) Axis_Delete_intType,"_return", 0);
 		}
 		}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 		return pReturn;
 	}
@@ -65,14 +65,14 @@ intType* RefTestPortType::echoInt(intType* Value0)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw ref_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/ref" );
 		if(pSoapFault)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw ref_AxisClientException(pSoapFault);
 		}

@@ -51,7 +51,7 @@ xsd__int Calculator::add(xsd__int Value0, xsd__int Value1)
 				Ret = m_pCall->getElementAsInt("addReturn", 0);
 			}
 		}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 		return Ret;
 	}
@@ -60,14 +60,14 @@ xsd__int Calculator::add(xsd__int Value0, xsd__int Value1)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw Calculator_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/Calculator" );
 		if(pSoapFault)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw Calculator_AxisClientException(pSoapFault);
 		}
@@ -100,7 +100,7 @@ xsd__int Calculator::sub(xsd__int Value0, xsd__int Value1)
 				Ret = m_pCall->getElementAsInt("subReturn", 0);
 			}
 		}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 		return Ret;
 	}
@@ -109,14 +109,14 @@ xsd__int Calculator::sub(xsd__int Value0, xsd__int Value1)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw Calculator_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/Calculator" );
 		if(pSoapFault)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw Calculator_AxisClientException(pSoapFault);
 		}
@@ -149,7 +149,7 @@ xsd__int Calculator::mul(xsd__int Value0, xsd__int Value1)
 				Ret = m_pCall->getElementAsInt("addReturn", 0);
 			}
 		}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 		return Ret;
 	}
@@ -158,14 +158,14 @@ xsd__int Calculator::mul(xsd__int Value0, xsd__int Value1)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw Calculator_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/Calculator" );
 		if(pSoapFault)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw Calculator_AxisClientException(pSoapFault);
 		}
@@ -198,7 +198,7 @@ xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 				Ret = m_pCall->getElementAsInt("addReturn", 0);
 			}
 		}
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 		return Ret;
 	}
@@ -207,14 +207,14 @@ xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw Calculator_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/Calculator" );
 		if(pSoapFault)
 		{
-	updateStateAfterResponse();
+	
 	m_pCall->unInitialize();
 			throw Calculator_AxisClientException(pSoapFault);
 		}
