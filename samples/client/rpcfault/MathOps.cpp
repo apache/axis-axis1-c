@@ -129,5 +129,6 @@ int MathOps::getStatus()
 int MathOps::getFaultDetail(char** ppcDetail)
 {
 	return m_pCall->getFaultDetail(ppcDetail);
+	return 0;
 }
 

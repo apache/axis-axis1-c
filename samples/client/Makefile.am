@@ -1,1 +1,1 @@
-SUBDIRS = simple interoptests rpcfault doclitfault
+SUBDIRS = simple interoptests rpcfault doclitfault testHandler
