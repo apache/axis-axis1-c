@@ -23,7 +23,6 @@
 #include <string>
 #include <stdio.h>
 
-#define __AXISTRACE__
 #if defined(__AXISTRACE__)  
   #define AXISTRACE1(X, Y) g_pAT->logaxis(X,Y,__FILE__,__LINE__);
   #define AXISTRACE2(X, Y, Z) g_pAT->logaxis(X,Y,Z,__FILE__,__LINE__);
@@ -107,7 +106,7 @@ public:
      * @return The status which indicates whether the operation is success 
      * (AXIS_SUCCESS) or not  (AXIS_FAIL).
     */
-    int logaxis(const char* sLog1, const long nLog2, int level, char* arg3, 
+    int logaxis(const char* sLog1, const int nLog2, int level, char* arg3, 
         int arg4);
 
     /**
