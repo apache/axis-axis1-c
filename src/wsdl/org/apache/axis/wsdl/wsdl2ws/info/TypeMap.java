@@ -143,6 +143,7 @@ public class TypeMap {
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "short"), "java.lang.Short");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "string"), "java.lang.String");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"), "java.math.BigDecimal");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"), "javax.xml.namespace.QName");		
 
 		String[] words1 ={"abstract","default","if","private","this","boolean","do","implements",
 			"protected","throw","break","double","import","public","throws","byte","else","instanceof",
