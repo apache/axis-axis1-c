@@ -100,16 +100,18 @@ public class RPCWebServiceGenarator implements WebServiceGenarator{
 				(new Genarator(WrapperConstants.GENERATOR_PARAM_CPP_ALL, wscontext)).genarate();	
 			}
 		}else if(WrapperConstants.LANGUAGE_C.equalsIgnoreCase(language)){
-			//if(WrapperConstants.SERVER.equals(wscontext.getWrapInfo().getTargetEngine())){
-				 (new Genarator(WrapperConstants.GENERATOR_WRAPPER_C, wscontext)).genarate();
-				 (new Genarator(WrapperConstants.GENERATOR_WRAPPER_H, wscontext)).genarate();
-			 //}else{
-				 //(new Genarator(WrapperConstants.GENERATOR_CLIENT_WRAPPER_C, wscontext)).genarate();
-				 //(new Genarator(WrapperConstants.GENERATOR_CLIENT_WRAPPER_H, wscontext)).genarate();
-				 //}
-				 (new Genarator(WrapperConstants.GENERATOR_SERVICE_C, wscontext)).genarate();
+			if(WrapperConstants.SERVER.equals(wscontext.getWrapInfo().getTargetEngine())){
+				(new Genarator(WrapperConstants.GENERATOR_WRAPPER_C, wscontext)).genarate();
+				(new Genarator(WrapperConstants.GENERATOR_WRAPPER_H, wscontext)).genarate();
+				(new Genarator(WrapperConstants.GENERATOR_SERVICE_C, wscontext)).genarate();
+				(new Genarator(WrapperConstants.GENERATOR_PARAM_C_ALL, wscontext)).genarate();	
+				(new Genarator(WrapperConstants.GENERATOR_CLASSLOADER_CPP, wscontext)).genarate();				 				 	
+			}else{
+				 (new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_C, wscontext)).genarate();
+				 (new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_H, wscontext)).genarate();
 				 (new Genarator(WrapperConstants.GENERATOR_PARAM_C_ALL, wscontext)).genarate();	
-				 (new Genarator(WrapperConstants.GENERATOR_CLASSLOADER_CPP, wscontext)).genarate();				 				 	
+				 (new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_C_WRAPPER, wscontext)).genarate();
+			}				 				 	
 		}		
 		else{
 			throw new WrapperFault("Unsupported Language"+language);
