@@ -16,11 +16,11 @@ extern void Axis_Delete_DivByZeroFault(DivByZeroFault* param, bool bArray = fals
 extern int Axis_Serialize_DivByZeroFault(DivByZeroFault* param, IWrapperSoapSerializer* pSZ, bool bArray = false);
 extern int Axis_GetSize_DivByZeroFault();
 
-MathOps::MathOps()
+MathOps::MathOps(const char* pchEndpointUri)
 {
 	m_pCall = new Call();
 	m_pCall->setProtocol(APTHTTP);
-	m_pCall->setEndpointURI("http://localhost/axis/MathOpsPort");
+	m_pCall->setEndpointURI(pchEndpointUri);
 }
 
 MathOps::~MathOps()
