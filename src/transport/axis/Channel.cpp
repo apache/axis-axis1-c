@@ -300,11 +300,13 @@ Channel::readNonBlocking (std::string & msg)
     //there is no MSG_DONTWAIT defined in Winsock
     int flags = 0;
 
-#ifdef WIN32
+#if defined WIN32
     // Set the socket I/O mode; iMode = 0 for blocking; iMode != 0 for non-blocking
     int iMode = 1;
     ioctlsocket(m_Sock, FIONBIO, (u_long FAR*) &iMode);
     flags = 0;
+#elif defined AIX
+        flags=MSG_NONBLOCK;
 #else
     //for linux
     flags = MSG_DONTWAIT;
