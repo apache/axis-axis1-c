@@ -527,7 +527,9 @@ void WSDDDocument::addAllowedMethodsToService(const AxisXMLCh* pcValue)
         do 
         {
             pos = sValue.find(METHODNAME_SEPARATOR, prepos);
-            if (AxisString::npos == pos) break;
+            if (AxisString::npos == pos) // Handle the case of no trailing space in AllowedMethods
+                pos = sValue.size();
+            if (pos <= prepos) break;
             m_pService->addAllowedMethod(sValue.substr(prepos,
                 pos-prepos).c_str());
             prepos = pos + 1;
