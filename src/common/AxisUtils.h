@@ -56,6 +56,7 @@
  *
  *
  * @author Susantha Kumara (skumara@virtusa.com)
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
 // AxisUtils.h: interface for the AxisUtils class.
@@ -77,8 +78,46 @@ class AxisUtils
 	friend class TypeMapping;
 	friend class URIMapping;
 public:
-	/*
-	 *Clears the content of passed character array
+	/**
+	 * Converts the given character pointer value to lowercase.
+	 * @param pchWord The character pointer to be converted.
+	 * @return The converted lowercase character value
+	 */
+	static char* toLowerCase(const char* pchWord);
+	/**
+	 * Converts the given string to lowercase.
+	 * @param pchWord The string to be converted.
+	 * @return The converted lowercase string value
+	 */
+	static string toLowerCase(const string sWord);
+	/**
+	 * Converts the given character pointer value to uppercase.
+	 * @param pchWord The character pointer to be converted.
+	 * @return The converted uppercase character value
+	 */
+	static char* toUpperCase(const char* pchWord);
+	/**
+	 * Converts the given string to uppercase.
+	 * @param pchWord The string to be converted.
+	 * @return The converted uppercase string value
+	 */
+	static string toUpperCase(const string sWord);
+	/**
+	 * Searchs for the specified character in the given character array and returns whether it is found or not.
+	 * @param pchStringToSearch The character array to be searched.
+	 * @param cCharacter The character to search.
+	 */
+	static bool isCharacterAvailable(const char *pchStringToSearch, const char cCharacter);
+	/**
+	 * Searchs for the specified character in the given string and returns whether it is found or not.
+	 * @param sString The string array to be searched.
+	 * @param cCharacter The character to search.
+	 */
+	static bool isCharacterAvailable(const string &sString, const char cCharacter);
+	/**
+	 * Clears the content of passed character array
+	 * @param arrCh The character array which is to be cleared.
+	 * @param iSize The size of the array which is to be cleared.
 	 */
 	static int clearArray(char* arrCh, int iSize);
 	static void Initialize();
