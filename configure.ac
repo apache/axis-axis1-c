@@ -101,6 +101,23 @@ AC_ARG_WITH(xercesc,
   AC_MSG_RESULT(no)
 )
 
+AC_MSG_CHECKING(whether to build tspp xml parser library)
+AC_ARG_ENABLE(tspp, [  --enable-tspp    build tspp xml parser library.],
+[ case "${enableval}" in
+  no)
+    AC_MSG_RESULT(no)
+    TSPPBUILD=""
+    ;;
+  *)
+    AC_MSG_RESULT(yes)
+    TSPPBUILD="tspp"
+
+    ;;
+  esac ],
+  AC_MSG_RESULT(no)
+  TSPPBUILD=""
+)
+
 AC_MSG_CHECKING(whether to build test cases)
 AC_ARG_ENABLE(testcases, [  --enable-testcases    build test cases.],
 [ case "${enableval}" in
@@ -221,6 +238,7 @@ AC_OUTPUT(Makefile \
     src/client/adminclient/Makefile \
     src/xml/expat/Makefile \
     src/xml/xerces/Makefile \
+    src/xml/tspp/Makefile \
     samples/Makefile \
     samples/server/Makefile \
     samples/server/interoptests/Makefile \
