@@ -1091,11 +1091,13 @@ public class WSDL2Ws
      * Options and Values 
      * ======= === ======
      * -o target output folder
-     * -l target language(c|java|c++) default is java
-     * --help (later ???? not emplemented)
+     * -l target language(c|c++) default is c++
+     * -help (later ???? not emplemented)
+     * -h print usage()
      * -i implementation style (struct|order|simple) default is struct--- (usergetvalue() with PP or use getTag() ect ....)
      * -s (client|server|both)  
      * -w wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped
+     * -m create GNU make files
      * 
      * Note:  PP - pull parser
      * @param args
@@ -1105,13 +1107,13 @@ public class WSDL2Ws
     public static void main(String[] args) throws Exception
     {
         CLArgParser data = new CLArgParser(args);
-
-        if (data.getArgumentCount() != 1)
+        if (data.getArgumentCount() != 1 || !checkArguments(data))
         {
             usage();
         }
         else
         {
+            
 
             if (data.isSet("v"))
                 WSDL2Ws.verbose = true;
@@ -1144,5 +1146,67 @@ public class WSDL2Ws
                     "\nCode generation failed. Please see errors above.\n");
             }
         }
+    }
+
+    /**
+     * This method checks that we do not have extraneous inputs to the tool that we do not support
+     * @param data the args coming in
+     * @return tre if the args are all supported false otherwise.
+     */
+    private static boolean checkArguments(CLArgParser data)
+    {
+        for(int i=0; i<data.getArgumentCount(); i++)
+        {
+            // Check that those supported args have only the acceptable options.
+            // target language
+            String language = data.getOptionBykey("l");
+            if(language!=null)
+            {
+                if(!language.equals("c++") && !language.equals("c"))
+                {
+                    return false;
+                }
+            }
+            
+            // target side
+            String targetSide = data.getOptionBykey("s");
+            if(targetSide!=null)
+            {
+                if(!targetSide.equals("server") && !targetSide.equals("client") && !targetSide.equals("both"))
+                {
+                    return false;
+                }
+            }
+            
+            //wrapped
+            String wrapped=data.getOptionBykey("w");
+            if(wrapped!=null)
+            {
+                if(!wrapped.equals("wrapped") && !wrapped.equals("nonwrapped"))
+                {
+                    return false;
+                }
+            }
+            // make file generation
+            String makeFiles = data.getOptionBykey("m");
+            if(makeFiles!=null)
+            {
+                if(!makeFiles.equals("none") && !makeFiles.equals("gnu"))
+                {
+                    return false;
+                }
+            }
+            
+            // implementation style
+            String implementationStyle=data.getOptionBykey("i");
+            if(implementationStyle!=null)
+            {
+                if(!implementationStyle.equals("struct") && !implementationStyle.equals("order")&& !implementationStyle.equals("simple"))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
