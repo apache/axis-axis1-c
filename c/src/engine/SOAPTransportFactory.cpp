@@ -47,10 +47,10 @@ int SOAPTransportFactory::initialize()
 {
 #ifdef WIN32
 #ifdef _DEBUG
-	m_pcLibraryPath = g_pConfig->getAxConfProperty(AXCONF_TRANSPORTHTTP);
+	m_pcLibraryPath = g_pConfig->getAxisConfProperty(AXCONF_TRANSPORTHTTP);
 	//m_pcLibraryPath = "AxisTransport_D.dll"; //this will be taken from configuration file
 #else
-	m_pcLibraryPath = g_pConfig->getAxConfProperty(AXCONF_TRANSPORTHTTP);
+	m_pcLibraryPath = g_pConfig->getAxisConfProperty(AXCONF_TRANSPORTHTTP);
 	//m_pcLibraryPath = "AxisTransport.dll"; //this will be taken from configuration file
 #endif
 #else
