@@ -48,7 +48,6 @@ int AxisConfig::ReadConfFile()
         }
 
         strcat(sNewConfPath, "/axiscpp.conf");
-        system(delcmd);
         if ((fileConfig2 = fopen(sNewConfPath, "rb")) == NULL)
         return FAIL;
 
@@ -79,6 +78,7 @@ int AxisConfig::ReadConfFile()
 
     }
     fclose(fileConfig);
+    system(delcmd);
     return SUCCESS;
 }
 
