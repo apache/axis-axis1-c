@@ -64,7 +64,7 @@
 #define __WSDDDOCUMENTS_H_INCLUDED__
 
 #include "WSDDDeployment.h"
-#include <axis/wsdd/WSDDService.h>
+#include <axis/server/WSDDService.h>
 #include "../xml/QName.h"
 
 #include <expat/expat.h>

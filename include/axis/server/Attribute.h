@@ -66,7 +66,7 @@
 
 #include <string>
 #include <list>
-#include "../common/GDefine.h"
+#include "GDefine.h"
 
 using namespace std;
 

@@ -1,10 +1,10 @@
-#include <server/apache1_3/httpd.h>
-#include <server/apache1_3/http_config.h>
-#include <server/apache1_3/http_core.h>
-#include <server/apache1_3/http_log.h>
-#include <server/apache1_3/http_protocol.h>
-#include <server/apache1_3/http_main.h>
-#include <axis/common/Packet.h>
+#include <apache1_3/httpd.h>
+#include <apache1_3/http_config.h>
+#include <apache1_3/http_core.h>
+#include <apache1_3/http_log.h>
+#include <apache1_3/http_protocol.h>
+#include <apache1_3/http_main.h>
+#include <axis/server/Packet.h>
 #include <string.h>
 #include <malloc.h>
 

@@ -63,11 +63,11 @@
 #if !defined(AFX_SOAPSERIALIZER_H__C37229AD_BD54_430D_9619_E4574CF95334__INCLUDED_)
 #define AFX_SOAPSERIALIZER_H__C37229AD_BD54_430D_9619_E4574CF95334__INCLUDED_
 
-#include "../common/IHandlerSoapSerializer.h"
-#include "../common/BasicTypeSerializer.h"
-#include "../common/AxisTime.h"
-#include "../common/Packet.h"
-#include "../wsdd/WSDDDefines.h"
+#include "IHandlerSoapSerializer.h"
+#include "BasicTypeSerializer.h"
+#include "AxisTime.h"
+#include "Packet.h"
+#include "WSDDDefines.h"
 #include "SoapEnvVersions.h"
 
 class SoapEnvelope;

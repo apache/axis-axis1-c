@@ -66,9 +66,9 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "SoapBody.h"
-#include <axis/soap/SoapSerializer.h>
-#include <axis/common/GDefine.h>
-#include <axis/soap/Attribute.h>
+#include <axis/server/SoapSerializer.h>
+#include <axis/server/GDefine.h>
+#include <axis/server/Attribute.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

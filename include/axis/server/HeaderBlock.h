@@ -71,8 +71,8 @@
 using namespace std;
 
 class BasicNode;
-#include "../common/IHeaderBlock.h"
-#include "../soap/SoapEnvVersions.h"
+#include "IHeaderBlock.h"
+#include "SoapEnvVersions.h"
 
 /**
     @class BasicNode

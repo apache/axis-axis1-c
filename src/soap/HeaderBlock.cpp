@@ -69,12 +69,12 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include <axis/soap/HeaderBlock.h>
-#include <axis/soap/SoapSerializer.h>
-#include <axis/common/GDefine.h>
-#include <axis/soap/BasicNode.h>
+#include <axis/server/HeaderBlock.h>
+#include <axis/server/SoapSerializer.h>
+#include <axis/server/GDefine.h>
+#include <axis/server/BasicNode.h>
 #include "ComplexElement.h"
-#include <axis/soap/CharacterElement.h>
+#include <axis/server/CharacterElement.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

@@ -67,7 +67,7 @@
 #if !defined(_AXIS_SECURECHANNEL_HPP)
 #define _AXIS_SECURECHANNEL_HPP
 
-#include <axis/common/AxisException.h>
+#include <axis/server/AxisException.h>
 #include "Channel.hpp"
 #include <openssl/ssl.h>
 #include <openssl/err.h>
