@@ -8,7 +8,11 @@ Axis Async Todo's
    would be MessageExchange impl providers.  It's a subtle, but important
    change.
    
-2. Build a generic wrapper for existing Transports
+2. Build a generic wrapper for existing Transports 
+
+   Update: basically done.  needs refinement.  
+     org.apache.axis.ime.internal.util.handler.HandlerWrapper1
+     org.apache.axis.ime.internal.util.handler.HandlerWrapper2
 
 3. Modify the Call object to use MessageExchangeSynchronizer
 
