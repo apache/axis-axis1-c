@@ -82,13 +82,13 @@ make install >> ${SOURCE_INSTALL_MESSAGES} 2>>${SOURCE_INSTALL_ERRORS}
 
 if [ $? = 0 ]
 then
-    echo Source Build  Sucessfull
-    echo `date` Source Build  Sucessfull >> ${LOG}
+    echo Source Build/Install  Sucessfull
+    echo `date` Source Build/Install  Sucessfull >> ${LOG}
 else
-    echo Source Build Failed
-    echo `date` Source Build Failed >> ${LOG}
-    if test -f mailto; then
-        cat log_source_build_messages log_source_install_messages | mutt -s "[test-results]Axis C++ Autobuild and regression test" -a "log_source_build_errors" -a "log_source_install_errors" -x axis-c-dev@ws.apache.org
+    echo Source Build/Install Failed
+    echo `date` Source Build/Install Failed >> ${LOG}
+    if test -f $HOME_DIR/mailto; then
+        cat $HOME_DIR/log_source_build_messages $HOME_DIR/log_source_install_messages $HOME_DIR/log | mutt -s "[test-results]Axis C++ Autobuild and regression test" -a "$HOME_DIR/log_source_build_errors" -a "$HOME_DIR/log_source_install_errors" -x axis-c-dev@ws.apache.org
     fi
     exit
 fi
@@ -149,7 +149,7 @@ sh runAllTests.sh
 #Only if there is a file called mailto in the current folder, do the step.
 #If you need to mail results create a file called mailto in the current
 #folder. This file has no meaning except this purpose
-if test -f mailto; then
+if test -f $HOME_DIR/mailto; then
     cd testcases/build
     cat runTestCase.log | mutt -s "[test-results]Axis C++ Autobuild and regression test" -a "buildTestCase.log" -x axis-c-dev@ws.apache.org
 fi
