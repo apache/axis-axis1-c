@@ -493,13 +493,9 @@ int ServerAxisEngine::setFaultOutputStream(int iFaultCode, SOAPTransport* pStrea
     string sMessage = objMessage.getMessage(iFaultCode);
     SoapFault* pObjSoapFault = SoapFault::getSoapFault(iFaultCode);
     pObjSoapFault->setFaultDetail(sMessage);
-    AXISTRACE1("came70", INFO);
     m_pSZ->setSoapFault(pObjSoapFault);
-    AXISTRACE1("came71", INFO);
     m_pSZ->setOutputStream(pStream);
-    AXISTRACE1("came72", INFO);
     releaseHandlers(pStream);
-    AXISTRACE1("came73", INFO);
     return AXIS_SUCCESS;
 }
 
