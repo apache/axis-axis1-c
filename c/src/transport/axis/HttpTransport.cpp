@@ -134,13 +134,13 @@ void  HttpTransport::SetProperty(const std::string& p_Property, const std::strin
  *
  */
 
-const Transport& HttpTransport::operator >> (std::string& p_Payload)
+const Transport& HttpTransport::operator >> (const char** pPayLoad)
 {
 	if(!m_bStatus) 
 	{
 		// We have the payload; this is due to Fault request made in earlier call 
 		// to this method
-		p_Payload = m_PayLoad;
+		*pPayLoad = m_PayLoad.c_str();
 		return *this;
 	}
 
@@ -155,7 +155,7 @@ const Transport& HttpTransport::operator >> (std::string& p_Payload)
 	if(!m_bStatus) HTTPValidate(tmpPacket);
 
 	// At this point we have the payload at hand so give it out
-	p_Payload = m_PayLoad;
+	*pPayLoad = m_PayLoad.c_str();
 	return *this;
 }
 

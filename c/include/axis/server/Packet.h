@@ -186,7 +186,7 @@ typedef void (AXISCALL * AXIS_MODULE_CALLBACK_RELEASE_RECEIVE_BUFFER)(const char
  *		2nd - Information value
  *		3rd - Ax_soapstream object		
  */
-typedef void (AXISCALL * AXIS_MODULE_CALLBACK_SET_TRANSPORT_INFORMATION)(AXIS_TRANSPORT_INFORMATION_TYPE, const char*, void*);
+typedef void (AXISCALL * AXIS_MODULE_CALLBACK_SET_TRANSPORT_INFORMATION)(AXIS_TRANSPORT_INFORMATION_TYPE, const char*, const void*);
 
 /**
  * This function is provided by the transport modules. Called by Axis engine when it needs to get any
@@ -195,7 +195,7 @@ typedef void (AXISCALL * AXIS_MODULE_CALLBACK_SET_TRANSPORT_INFORMATION)(AXIS_TR
  *		1st - Transport information type to get
  *		2nd - Ax_soapstream object		
  */
-typedef const char* (AXISCALL * AXIS_MODULE_CALLBACK_GET_TRANSPORT_INFORMATION)(AXIS_TRANSPORT_INFORMATION_TYPE, void*);
+typedef const char* (AXISCALL * AXIS_MODULE_CALLBACK_GET_TRANSPORT_INFORMATION)(AXIS_TRANSPORT_INFORMATION_TYPE, const void*);
 
 /**
  * Function pointer definitions for axis call backs 
