@@ -1,0 +1,60 @@
+<project>
+	<target name="decideserverproperties">
+	<if>
+		<isset property="windows"/>
+		<then>
+			<echo message="we are in windows"/>
+			<property name="ps" value="\"/>
+			<!-- environment variables start from here in pairs -->
+			<property name="serverenv.env1" value="AXISCPP_DEPLOY" />
+			<property name="serverenv.env1.value" value="${basedir}\..\..\..\Axis"/>
+			<property name="serverenv.env2" value="PATH"/>
+			<property name="serverenv.env2.value" 
+				value="${java.library.path};${basedir}\..\..\..\Axis\lib"/>
+
+			<!-- The path to axiscpp.conf -->
+			<property name="axiscppconffile" value="${basedir}\..\..\..\Axis\axiscpp.conf" />
+
+			<if>
+			<istrue value="${server.apache1}"/>
+				<then>
+					<property name="serverexecutable" value="${env.APACHE_HOME}\apache"/>
+					<property name="startargs" value="-k start"/>
+					<property name="stopargs" value=" -k stop"/>
+
+				</then>
+				<else>
+					<if>
+					<istrue value="${server.apache2}"/>
+					<then>
+						<property name="serverexecutable" value="${env.APACHE2_HOME}\bin\apache"/>
+						<property name="startargs" value=" "/>
+					</then>
+					<elseif>
+						<istrue value="${server.simpleaxisserver}"/>
+						<then>
+						<property name="serverexecutable" 
+							value="${basedir}/../../../obj/bin/${simpleAxisServerExecutableName}${executableSuffix}"/>
+						<property name="startargs" value=" ${testPort}"/>
+						</then>
+					</elseif>
+					</if>
+				</else>
+			</if>
+
+
+		</then>
+		<elseif>
+		<isset property="linux"/>
+		<then>
+			<echo message="we are in linux" />
+			<property name="ps" value="/"/>
+
+			<!-- The path to axiscpp.conf -->
+			<property name="axiscppconffile" value="${basedir}\..\..\..\Axis\axiscpp.conf" />
+		</then>
+		</elseif>
+	</if>
+
+	</target>
+</project>
