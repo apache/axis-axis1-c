@@ -1,6 +1,10 @@
 
 <project name="buildTest" default="compileClient" basedir="..">
 
+	<target name="buildClient" unless="runOnly">
+		<antcall target="compileClient" inheritAll="true"/>
+	</target>
+
 	<!--
 	  Need to set a language property for wsdl2ws
 	  -->
@@ -16,7 +20,7 @@
 	<!--
 	  Use WSDL2Ws to generate stubs from WSDL files
 	  -->
-	<target name="generateStubs" if="test.wsdl" unless="runOnly" depends="setLanguage">
+	<target name="generateStubs" if="test.wsdl" unless="test.dynamicCode" depends="setLanguage">
 		<!-- Make directory in which all generated code shall be placed -->
 		<mkdir dir="${dir.test.generated}/${client.lang}/${testName}"/>
 		<!-- Setup classpath for WSDL2Ws -->
@@ -28,10 +32,6 @@
 		<java jar="${dir.wsdl2ws}/wsdl2ws.jar" fork="true">
 			<classpath refid="cp"/>
 			<arg value="${wsdl.test}"/>
-			<!--
-			<arg value="${dir.autotests}/wsdls/${testWsdl}"/>
-			<arg value="-o${dir.test.generated}/${client.lang}/${testName}"/>
-			-->
 			<arg value="-o${test.directory}"/>
 			<arg value="-l${generated.lang}"/>
 			<arg value="-sclient"/>
@@ -41,17 +41,25 @@
 	<!--
 	  Copy across test client, ready for compiling
 	  -->
-	<target name="copyClient" unless="runOnly">
-		<!--
-		<copy file="${dir.autotests}/client/${client.lang}/${testCode}" todir="${dir.test.generated}/${client.lang}/${testName}"/>
-		-->
+	<target name="getClient" depends="copyStubClient, copyDynamicClient"/>
+
+	<target name="copyStubClient" depends="generateStubs" unless="test.dynamicCode">
 		<copy file="${client.code}" todir="${test.directory}"/>
+	</target>
+
+	<target name="copyDynamicClient" if="test.dynamicCode">
+		<copy todir="${test.directory}">
+			<fileset dir="${dir.autotests}/dynamic/${test.dynamicCodeDirectory}">
+				<include name="*.cpp"/>
+				<include name="*.hpp"/>
+			</fileset>
+		</copy>
 	</target>
 
 	<!--
 	  Compile test client
 	  -->
-	<target name="compileClient" depends="generateStubs, copyClient" unless="runOnly">
+	<target name="compileClient" depends="getClient">
 		<cc failonerror="false" incremental="false" outfile="${test.directory}/${testName}"
 		 objdir="${test.directory}" exceptions="true"
 		 outtype="executable" subsystem="console">
@@ -67,9 +75,6 @@
 			<libset dir="${dir.lib}" libs="${clientLibraryName}"/>
 			<!-- Files to be compiled -->
 			<includepath path="${dir.include}"/>
-			<!--
-			<fileset dir="${dir.test.generated}/${client.lang}/${testName}">
-			-->
 			<fileset dir="${test.directory}">
 				<include name="*.${client.lang}"/>
 			</fileset>

@@ -61,6 +61,7 @@ dt {
 <a href="#properties">Test Properties Files</a><br/>
 <a href="#conversions">Conversions</a><br/>
 <a href="#handlers">Handlers</a><br/>
+<a href="#dynamic">Dynamic Clients</a><br/>
 <a href="#monitor">TCP Monitor Utility</a><br/>
 <a href="#filelist">Files Specific to Ant Test Framework</a><br/>
 <a href="#required">Files Required by Ant Test Framework</a><br/>
@@ -93,13 +94,13 @@ Each test has a <a href="#properties">property file</a> and all the property fil
 In order for the tests to run, the location of the XML parser libraries, XMLPARSER_HOME needs to be specified, and the install location of the Axis C++ package needs to be specified. These can either be specified on the command line or added to the platform specific properties files.
 </p> 
 <p>To run all tests type:</p>
-<blockquote><code>ant -f test.xml -Ddir.xmlParser=XMLPARSER_HOME -Ddir.package=PACKAGE</code></blockquote>
+<blockquote><code>ant -f test.xml -Ddir.xmlParser=XMLPARSER_HOME -Ddir.release=PACKAGE</code></blockquote>
 
 <p>To run a sub-set of tests a file with the name of the test property files to be used for the test run. The location of the file needs to be passed to the Ant script. If a relative path is specified then it must be relevant to the BASEDIR directory. e.g. to run the subset of tests specified in a file called tests_to_run in the BASEDIR directory run:</p>
-<blockquote><code>ant -f test.xml -Ddir.xmlParser=XMLPARSER_HOME -Ddir.package=PACKAGE -Dtest.list=tests_to_run</code></blockquote>
+<blockquote><code>ant -f test.xml -Ddir.xmlParser=XMLPARSER_HOME -Ddir.release=PACKAGE -Dtest.list=tests_to_run</code></blockquote>
 
 <p>To run an individual test specify the name of the test property file. e.g. to run only the CalculatorDoc test run:</p>
-<blockquote><code>ant -f test.xml -Ddir.xmlParser=XMLPARSER_HOME -Ddir.package=PACKAGE -Dtest.name=CalculatorDoc</code></blockquote>
+<blockquote><code>ant -f test.xml -Ddir.xmlParser=XMLPARSER_HOME -Ddir.release=PACKAGE -Dtest.name=CalculatorDoc</code></blockquote>
 
 <h2 id="create">Creating new tests</h2>
 <p>When creating a new test at least 3 files must be added to the test framework.</p>
@@ -234,15 +235,17 @@ Additionally the following files may also be added
     <DD>This is the endpoint for the service used in the test. The server or server:port portion of the endpoint is changed to point to the <a href="#monitor">TCP monitor utility</a>, which will forward the request to the testHost:testPort combination specified in the build.xx.properties file. The <a href="#monitor">monitor</a> will be started on localhost on the port specified by the monitorPort property in the properties file.  e.g. if the web service is running on a server called testserver which is listening on port 9080, and the <a href="#monitor">monitor</a> is configured to listen on port 12345 then the endpoint in example 1 will be changed to http://localhost:12345/Calculator/services/Calculator and the <a href="#monitor">monitor</a> will forward the request to testserver:9080</DD>
 
     </DL>
+	 </p>
 
-    The example 2 show all the optional tags that are available.
+	 <p>
+	 The example 2 shows all the optional tags that are available for handler tests.
     </p>
 
     <div class="example">
     <pre>
 
      &lt;test&gt;
-        &lt;name&gt;HandlerTest2&lt;/name&gt;
+        &lt;name&gt;HandlerTest02&lt;/name&gt;
         &lt;description&gt;CalculatorDoc with Handler Chain&lt;/description&gt;
         &lt;clientLang&gt;cpp&lt;/clientLang&gt;
         &lt;clientCode&gt;CalculatorDocClient.cpp&lt;/clientCode&gt;
@@ -257,7 +260,7 @@ Additionally the following files may also be added
         &lt;/expected&gt;
         &lt;handler&gt;
             &lt;directory&gt;
-                handler_chain
+                handler_test2
             &lt;/directory&gt;
             &lt;service&gt;
                 Calculator
@@ -292,6 +295,44 @@ Additionally the following files may also be added
             sent to the service.</DD>
     </DL>
 
+	 <p>
+	 The example 3 shows all the optional tags that are available for dynamic client tests <a href="#dynamic">(See Dynamic Clients)</a>.
+    </p>
+
+    <div class="example">
+    <pre>
+
+     &lt;test&gt;
+        &lt;name&gt;DynamicTest01&lt;/name&gt;
+        &lt;description&gt;CalculatorDoc implemented as a dynamic client&lt;/description&gt;
+        &lt;dynamicCode&gt;true&lt;/dynamicCode&gt;
+        &lt;dynamicCodeDirectory&gt;Test01&lt;/dynamicCodeDirectory&gt;
+        &lt;clientLang&gt;cpp&lt;/clientLang&gt;
+        &lt;wsdl&gt;CalculatorDoc.wsdl&lt;/wsdl&gt;
+        &lt;expected&gt;
+            &lt;output&gt;
+                CalculatorDoc.cpp.out
+            &lt;/output&gt;
+        &lt;/expected&gt;
+        &lt;endpoint&gt;http://localhost:80/Calculator/services/Calculator&lt;/endpoint&gt;
+    &lt;/test&gt;
+    </pre>
+    </div>
+    <p class="example">example 3</p>
+
+    <p>
+    The optional tags shown in example 3 are detailed below.
+    </p>
+
+    <DL>
+        <DT>&lt;dynamicCode&gt;</DT>
+		  <DD>This is a flag to indicate that the client is a dynamic client. The value has no relevance but must be set to something. WARNING setting it to false will have no effect. This property should only be used for dynamic client tests. Having this property will cause the framework to get the source from a different location and not to generate any stubs from the WSDL.</DD>
+
+        <DT>&lt;dynamicCodeDirectory&gt;</DT>
+		  <DD>This is the name of the directory where all the dynamic code is copied from. All .cpp and .hpp files will be copied from this directory to the generated output directory.</DD>
+
+    </DL>
+
 
 <h2 id="conversions">Conversions</h2>
 <p>
@@ -308,9 +349,8 @@ If handlers have been specified in the test properties file for a test <a href="
 <br/>
 e.g.
 <br/>
-In example 2 above a directory of handler_chain was specified. This directory is the parent of the library directories, but a sub directory of the ws-axis/c/tests/auto_build/testcases/handlers/ directory. The handler_chain directory structure is shown in example 3
+In example 2 above a directory of handler_chain was specified. This directory is the parent of the library directories, but a sub directory of the ws-axis/c/tests/auto_build/testcases/handlers/ directory. The handler_chain directory structure is shown in example 4
 </p>
-
 <div class="example">
 	<pre>
 	<code>
@@ -325,7 +365,7 @@ In example 2 above a directory of handler_chain was specified. This directory is
 	</code>
 	</pre>
 </div>
-    <p class="example">example 3</p>
+    <p class="example">example 4</p>
 
 <p>
 When built this will produce 2 libraries in the test output directory called libtesthandler.so and libtesthandler2.so on Linux and testhandler.dll and testhandler2.dll on Windows.
@@ -335,6 +375,25 @@ The framework also creates the client.wsdd file required to invoke the handlers 
 At present only &lt;requestFlow ..&gt; handlers are supported.
 
 </p>
+
+<h2 id="dynamic">Dynamic Clients</h2>
+<p>
+A dynamic client is a client that uses the Call object directly and all initialization must be done manually. A dynamic client does NOT use stubs generated from the WSDL. Of course the dynamic client may have been based originally on a generated Stub. Using the dynamic client approach gives the developer greater control over when the APIs are called and may provide access to data protected via the Stub interface. The big disadvtage of a dynamic client is that a new release of AxisC++ may break the client more easily than if generated Stubs were used. All the code for dynamic client needs to be placed into a sub-directory of the dynamic directory <code>ws-axis/c/tests/auto_build/testcases/dynamic</code>.
+<br/>
+e.g.
+<br/>
+In example 3 above a dynamicCodeDirectory of Test01 was specified. This directory is a sub directory of the ws-axis/c/tests/auto_build/testcases/dynamic directory. This directory structure is shown in example 5.
+</p>
+<div class="example">
+	<pre>
+	<code>
+        Test01/Calculator.cpp
+        Test01/Calculator.hpp
+	</code>
+	</pre>
+</div>
+    <p class="example">example 5</p>
+
 
 <h2 id="monitor">TCP Monitor Utility</h2>
 <p>
