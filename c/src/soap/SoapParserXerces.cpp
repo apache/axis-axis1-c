@@ -63,7 +63,7 @@ int SoapParserXerces::init()
 
 const XML_Ch* SoapParserXerces::getNS4Prefix(const XML_Ch* prefix)
 {
-    return Xhandler.NS4Prefix(prefix);
+    return Xhandler.ns4Prefix(prefix);
 }
 
 int SoapParserXerces::getStatus()
@@ -95,6 +95,6 @@ const AnyElement* SoapParserXerces::next(bool isCharData)
 			}			
 			return elem;
 		}
-        else if (AXIS_FAIL == Xhandler.GetStatus()) return NULL; 
+        else if (AXIS_FAIL == Xhandler.getStatus()) return NULL; 
     }
 }
