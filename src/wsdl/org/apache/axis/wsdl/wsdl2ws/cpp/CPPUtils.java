@@ -88,6 +88,7 @@ public class CPPUtils {
 		 class2QNamemap.put("char", new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"));
 		 class2QNamemap.put("short", new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"));
 		 class2QNamemap.put("string", new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"));
+		 class2QNamemap.put("string", new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
 
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"), "int");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"), "unsigned char");
@@ -98,6 +99,7 @@ public class CPPUtils {
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"), "char");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"), "short");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"), "string");
+		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"), "string");
 	}
 	public static boolean isSimpleType(String name){
 		if(class2QNamemap.containsKey(name))
