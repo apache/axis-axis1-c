@@ -364,7 +364,7 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 	  an client.wsdd entry
 	  -->
 	<target name="updateConfigurationWithClientWSDDEntry" if="HandlersPresent" unless="runOnly" depends="createConfigurationFile">
-		<echo file="${axiscpp_deploy}/axiscpp.conf" append="true"
+		<echo file="${axiscpp.conf}" append="true"
 		 message="ClientWSDDFilePath:${client.wsdd}"/>
 	</target>
 
