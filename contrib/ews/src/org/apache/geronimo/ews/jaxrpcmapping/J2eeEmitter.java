@@ -105,9 +105,8 @@ public class J2eeEmitter extends Emitter {
     private boolean seiNeeded = true;
 
 	public J2eeEmitter() {
-	   J2eeGeneratorFactory factory = new J2eeGeneratorFactory();
+	   J2eeGeneratorFactory factory = new J2eeGeneratorFactory(this);
 	   setFactory(factory);
-	   factory.setEmitter(this);
 	} // ctor
     public J2eeEmitter(boolean usedByws4j2ee,boolean needSei) {
     	this.usedbyws4j2ee = usedByws4j2ee;
