@@ -153,7 +153,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 		for(int i = 0; i< attribs.length;i++){
 			if(CPPUtils.isSimpleType(attribs[i][1])){
 				//if simple type
-				writer.write("\tpSZX->Serialize(pSZ, pSZX->SerializeBasicType(pSZ, \""+attribs[i][0]+"\", (void*)&(param->"+attribs[i][0]+"), "+ CPPUtils.getXSDTypeForBasicType(attribs[i][1])+"), NULL);\n");
+				writer.write("\tpSZX->SerializeBasicType(pSZ, \""+attribs[i][0]+"\", (void*)&(param->"+attribs[i][0]+"), "+ CPPUtils.getXSDTypeForBasicType(attribs[i][1])+");\n");
 			}else if((t = wscontext.getTypemap().getType(new QName(attribs[i][2],attribs[i][3])))!= null && t.isArray()){
 				//if Array
 				QName qname = t.getTypNameForAttribName("item");
