@@ -41,12 +41,12 @@ public:
 private:
     const char* m_pMsg;
 
-    Transport *m_pTrChannel;
 
     unsigned int m_RecvPort;
 
     int m_MsgSize;
     int m_BytesRead;
+    Transport *m_pTrChannel;
 };
 
 #endif

@@ -153,6 +153,8 @@ int WSDDDocument::parseDocument(const AxisChar* pcWSDDFileName)
 		case END_ELEMENT:
 			endElement(pNode);
 			break;
+                default:
+                        break;
 		}
 	}
 	XMLParserFactory::destroyParserObject(pParser);
@@ -197,6 +199,8 @@ int WSDDDocument::updateDeployment(const AxisChar* pcWSDDMemBuffer,
 		case END_ELEMENT:
 			endElement(pNode);
 			break;
+                default:
+                        break;
 		}
 	}
 	XMLParserFactory::destroyParserObject(pParser);
@@ -498,7 +502,7 @@ void WSDDDocument::getParameters(WSDDLevels eElementType,
 void WSDDDocument::addAllowedRolesToService(const AxisXMLCh* pcValue)
 {
     AxisString sValue = pcValue;
-    int prepos = 0, pos = 0;
+    unsigned int prepos = 0, pos = 0;
     if (sValue.find('*') == AxisString::npos)
     {
         do 
