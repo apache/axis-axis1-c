@@ -72,7 +72,7 @@ public:
     AxisTransport(Ax_soapstream* pSoap);
     virtual ~AxisTransport();
 
-    int OpenConnection(bool secure);
+    int OpenConnection(int secure);
     void CloseConnection();
 	AXIS_TRANSPORT_STATUS Send_bytes(const char* pSendBuffer, const void* bufferid, const void* pSStream);
 	AXIS_TRANSPORT_STATUS Get_bytes(const char** res, int* retsize, const void* pSStream);

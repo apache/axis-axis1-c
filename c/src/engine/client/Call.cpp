@@ -93,6 +93,8 @@ Call::~Call()
 	case APTHTTP:
 		delete m_Soap.so.http;
 		/* do for other protocols too */
+	case APTHTTPS:
+		delete m_Soap.so.http;
 	}
 }
 
@@ -135,7 +137,7 @@ int Call::Invoke()
 	return m_pAxisEngine->Process(&m_Soap);
 }
 
-int Call::Initialize(PROVIDERTYPE nStyle)
+int Call::Initialize(PROVIDERTYPE nStyle, int secure)
 /* does this mean that the stub that uses this Call object as well as all client side
  * handlers have the same PROVIDERTYPE ? */
 {
@@ -146,7 +148,7 @@ int Call::Initialize(PROVIDERTYPE nStyle)
 	try {
 		m_Soap.sessionid = "somesessionid1234";
 		//remove_headers(&m_Soap);
-		if (AXIS_SUCCESS != OpenConnection(false)) return AXIS_FAIL;
+		if (AXIS_SUCCESS != OpenConnection(secure)) return AXIS_FAIL;
 		if (m_pAxisEngine) delete m_pAxisEngine;
 		m_pAxisEngine = new ClientAxisEngine();
 		if (!m_pAxisEngine) return AXIS_FAIL;
@@ -223,6 +225,13 @@ int Call::SetProtocol(AXIS_PROTOCOL_TYPE protocol)
 		m_Soap.so.http->op_headers = NULL;
 		break;
 		/* do for other protocols too */
+	case APTHTTPS:
+		m_Soap.so.https = new Ax_stream_https; 
+		m_Soap.so.https->ip_headercount = 0;
+		m_Soap.so.https->ip_headers = NULL;
+		m_Soap.so.https->op_headercount = 0;
+		m_Soap.so.https->op_headers = NULL;
+		break;
 	}
 	return 0;
 }
@@ -241,7 +250,7 @@ int Call::SetTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type, const char*
  * functions with those streams at any time it wants to send/receive
  * bytes to/from the server.
  */
-int Call::OpenConnection(bool secure)
+int Call::OpenConnection(int secure)
 { 
     m_pTransport = new AxisTransport(&m_Soap);
     return m_pTransport->OpenConnection(secure);

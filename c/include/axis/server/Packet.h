@@ -115,6 +115,17 @@ typedef struct
 
 typedef struct
 {
+	const char* uri_path;
+	Ax_header* ip_headers;
+	int ip_headercount;
+	Ax_header* op_headers;
+	int op_headercount;
+	AXIS_HTTP_METHOD ip_method;
+	AXIS_HTTP_METHOD op_method;
+} Ax_stream_https;
+
+typedef struct
+{
 	int dummy;  
 } Ax_stream_smtp;
 
@@ -122,6 +133,7 @@ typedef union
 {
 	Ax_stream_http* http;
 	Ax_stream_smtp* smtp;
+	Ax_stream_https* https;
 	void* other; /*transport specific other protocols can have its own structs here*/
 } Ax_soapcontent;
 
