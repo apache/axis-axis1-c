@@ -391,7 +391,7 @@ public class ClientStubWriter extends CPPClassWriter{
 		writer.write("\t\tif(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)\n");
         writer.write("\t\t{\n");
         writer.write("\t\t\tm_pCall->unInitialize();\n");
-        writer.write("\t\t\tthrow;\n");
+        writer.write("\t\t\tthrow " + wscontext.getSerInfo().getServicename() + "_AxisClientException(e.what());\n");
         writer.write("\t\t}\n");
 //ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault", "http://localhost/axis/MathOps");
 

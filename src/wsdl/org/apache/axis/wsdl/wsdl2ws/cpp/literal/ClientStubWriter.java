@@ -550,8 +550,8 @@ public class ClientStubWriter extends CPPClassWriter{
 			writer.write("\tcatch(AxisException& e)\n\t{\n");
 			writer.write("\t\tint iExceptionCode = e.getExceptionCode();\n");
 		    writer.write("\t\tif(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)\n");
-            writer.write("\t\t{\n");
-            writer.write("\t\t\tthrow;\n");
+            writer.write("\t\t{\n");           
+		    writer.write("\t\t\tthrow " + wscontext.getSerInfo().getServicename() + "_AxisClientException(e.what());\n");
             writer.write("\t\t}\n");
             writer.write("\t\tISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault(\"Fault\",\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\" );\n");
             writer.write("\t\tif(pSoapFault)\n");

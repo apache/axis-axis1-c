@@ -150,6 +150,13 @@ public class ExceptionWriter extends CPPExceptionClassWriter{
 		writer.write("{\n\n");
 		writer.write("\tprocessException (e, iExceptionCode);\n");
 		writer.write("}\n\n");	
+		
+		writer.write(faultName+"::"+faultName+"(string sMessage)\n");
+ 	        writer.write("{\n");		
+		writer.write("\t m_sMessage =sMessage;\n");
+		writer.write("}\n\n");
+		
+		
 	    }catch(IOException e){
 			throw new WrapperFault(e);
 		}	
@@ -166,7 +173,7 @@ public class ExceptionWriter extends CPPExceptionClassWriter{
 				{
 					faultName = getServiceName()+"_"+faultInfoName;
 				}
-			writer.write(faultName+"::~"+faultName+"() throw () \n{\n\tm_sMessage =\"\";\n}\n\n");
+			writer.write(faultName+"::~"+faultName+"() throw () \n{\n\tm_sMessage =\"\";\n}\n\n");			
 			}catch(IOException e){
 				throw new WrapperFault(e);
 			}
@@ -234,6 +241,8 @@ public class ExceptionWriter extends CPPExceptionClassWriter{
 		writer.write("{\n");
 		writer.write("\treturn m_pISoapFault;\n");
 		writer.write("}\n\n");
+		
+		
 			  	     
 	 }catch(IOException e){
 					 throw new WrapperFault(e);

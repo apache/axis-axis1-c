@@ -72,6 +72,7 @@ public class ExceptionHeaderWriter extends HeaderFileWriter{
 		
 		return new File(fileName);
 	}
+	
 
 	protected String getServiceName() throws WrapperFault {
 		return wscontext.getSerInfo().getServicename();
@@ -125,7 +126,8 @@ public class ExceptionHeaderWriter extends HeaderFileWriter{
 			writer.write("\t"+faultName+"(ISoapFault* pFault);\n");
 			writer.write("\t"+faultName+"(int iExceptionCode);\n");
 			writer.write("\t"+faultName+"(exception* e);\n");
-			writer.write("\t"+faultName+"(exception* e, int iExceptionCode);\n");				
+			writer.write("\t"+faultName+"(exception* e, int iExceptionCode);\n");
+			writer.write("\t"+faultName+"(string sMessage);\n");
 			}catch(IOException e){
 				throw new WrapperFault(e);
 			}
