@@ -36,6 +36,7 @@ AxisException::AxisException (exception* e)
 
 AxisException::AxisException (exception* e, int iExceptionCode)
 {
+    m_iExceptionCode = iExceptionCode;
     processException (e, iExceptionCode);
 }
 
@@ -66,6 +67,9 @@ const string AxisException::getMessage (int iExceptionCode)
     string sMessage;
     switch(iExceptionCode)
     {
+        case AXISC_SERVICE_THROWN_EXCEPTION:
+            sMessage = "A service has thrown an exception. see detail";
+            break;
         case SERVER_TESTEXCEPTION:
             sMessage = "This is a testing error";
             break;
