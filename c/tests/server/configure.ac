@@ -8,4 +8,4 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
-AC_OUTPUT(Makefile exceptionTest/Makefile)
+AC_OUTPUT(Makefile exceptionTest/Makefile exceptionTest/gen_src/Makefile)
