@@ -72,6 +72,8 @@
 #include <axis/common/AxisConfig.h>
 #include <axis/common/AxisTrace.h>
 
+extern AxisTrace* g_pAT;
+
 extern unsigned char chEBuf[1024];
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -150,8 +152,10 @@ int WSDDDeployment::LoadWSDD(const AxisChar* sWSDD)
 
 
 	{
+        printf("server.wsdd loading failed\n");
 		return AXIS_FAIL;
 	}
+    printf("server.wsdd loading successful\n");
 	return AXIS_SUCCESS;
 }
 

@@ -7,10 +7,11 @@
 #include <axis/engine/ServerAxisEngine.h>
 #include <stdio.h>
 #include <axis/common/AxisException.h>
-#include <axis/common/AxisTrace.h>
 #include <axis/common/AxisUtils.h>
 #include <axis/wsdd/WSDDDeployment.h>
 #include <axis/engine/HandlerPool.h>
+#include <axis/common/AxisTrace.h>
+extern AxisTrace* g_pAT;
 
 extern HandlerPool* g_pHandlerPool;
 extern WSDDDeployment* g_pWSDDDeployment;
@@ -32,16 +33,17 @@ ServerAxisEngine::~ServerAxisEngine()
 int ServerAxisEngine::Process(Ax_soapstream* stream) 
 {
 	int Status = 0;
-	/*AXIS_TRY*/
-		AXISTRACE1("ServerAxisEngine::Process");
+	/*AXIS_TRY*/		
 		const WSDDService* pService = NULL;
-		string sSessionId = stream->sessionid;
-        AXISTRACE2("ServerAxisEngine::Process", sSessionId.c_str());
+		string sSessionId = stream->sessionid;        
 		int nSoapVersion;
 
 		if (!(stream->transport.pSendFunct && stream->transport.pGetFunct &&
 			stream->transport.pSetTrtFunct && stream->transport.pGetTrtFunct))
-			return AXIS_FAIL;
+            {
+                AXISTRACE1("transport is not set properly", CRITICAL);
+                return AXIS_FAIL;
+            }
 
 		do {
 			/* populate MessageData with transport information */
@@ -63,8 +65,7 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 				break; //do .. while(0)
 			}
 			AxisString service = (cService == NULL)? "" : cService;
-		  
-			AXISTRACE2("string service = ",service.c_str());
+		  			
      
 			if (service.empty()) 
 			{
@@ -176,7 +177,7 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 			  m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADHDL));
 			  break; //do .. while(0)
 			}
-            AXISTRACE1("received request flow handler chain");
+            
 			if(AXIS_SUCCESS != (Status = g_pHandlerPool->GetResponseFlowHandlerChain(&m_pSResFChain, sSessionId, pService)))
 			{        
 			  m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADHDL));
@@ -234,7 +235,7 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 		in a logfile specific to axis.
 		*/
 		#ifdef _AXISTRACE
-//		AXISTRACE1(e->what());   
+
 		delete(e);
 		#endif
 //	AXIS_CATCH(...)
@@ -245,7 +246,7 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 		from the webserver and report the error. You can also write this
 		in a logfile specific to axis.
 		*/
-//		AXISTRACE1("UNKNOWN EXCEPTION");
+
 //	AXIS_ENDCATCH
 	return Status;
 }
@@ -260,14 +261,12 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 		//invoke transport request handlers
 		if (m_pTReqFChain) {
 			if(AXIS_SUCCESS != (Status = m_pTReqFChain->Invoke(pMsg)))
-			{
-                AXISTRACE1("handler chain invoke not successful");
+			{                
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_HANDLERFAILED));
 				break; //do .. while (0)
 			}
 
 		}
-		AXISTRACE1("AFTER invoke transport request handlers");
 		level++; // AE_TRH
 		//invoke global request handlers
 		if (m_pGReqFChain)
@@ -277,8 +276,7 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_HANDLERFAILED));
 				break; //do .. while (0)
 			}		
-		}
-        AXISTRACE1("AFTER invoke global request handlers");
+		}        
 		level++; //AE_GLH
 		//invoke service specific request handlers
 		if (m_pSReqFChain)
@@ -288,8 +286,7 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_HANDLERFAILED));
 				break; //do .. while (0)
 			}
-		}
-		AXISTRACE1("AFTER invoke service specific request handlers");
+		}		
 		level++; //AE_SERH
 		/*
 		 * Before processing the soap body check whether there is any header blocks
@@ -305,13 +302,11 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 		if (m_pWebService)
 		{
 			if (AXIS_SUCCESS != (Status = m_pWebService->Invoke(pMsg)))
-			{
-                AXISTRACE1("Web service failed");
+			{                
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_WEBSERVICEFAILED));
 				break;
 			}        
-		}
-		AXISTRACE1("AFTER call actual web service");
+		}		
 		level++; //AE_SERV
 	}
 	while(0);
@@ -334,8 +329,7 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 	switch (level)
 	{
 	
-	case AE_SERV: //Everything Success.
-        AXISTRACE1("case AE_SERV:");
+	case AE_SERV: //Everything Success.        
 		Status = AXIS_SUCCESS;
 		//no break;
 	case AE_SERH: //actual web service handler has failed
@@ -359,8 +353,7 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 		}
 		//no break;
 	case AE_START:;//transport handlers have failed
-	};
-	AXISTRACE1("end axisengine process()");
+	};	
 	return Status;
 }
 

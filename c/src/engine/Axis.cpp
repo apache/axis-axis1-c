@@ -70,7 +70,6 @@
 
 
 #include <axis/engine/ServerAxisEngine.h>
-#include <axis/common/AxisTrace.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
@@ -92,10 +91,11 @@
 #include <axis/common/AxisUtils.h>
 #include <axis/common/AxisConfig.h>
 #include <axis/wsdd/WSDDKeywords.h>
+#include <axis/common/AxisTrace.h>
 
 #define BYTESTOREAD 64
 //the relative location of the wsdl files hardcoded
-#define WSDLDIRECTORY	"./Axis/wsdls/"
+#define WSDLDIRECTORY "/wsdls/"
 
 //define all global variables of the axisengine
 #ifdef _AXISTRACE
@@ -113,11 +113,11 @@ HandlerPool* g_pHandlerPool;
 //un synchronized read-only global variables.
 WSDDDeployment* g_pWSDDDeployment;
 AxisConfig* g_pConfig;
+AxisTrace* g_pAT;
 
 
 extern "C" int process_request(Ax_soapstream *stream)
 {
-//	AXISTRACE1("in axis.cpp");	
 	int Status = AXIS_FAIL;
 	FILE * WsddFile;
 	char ReadBuffer[BYTESTOREAD];
@@ -136,14 +136,12 @@ extern "C" int process_request(Ax_soapstream *stream)
 			//Handle the POST method
 			if (stream->so.http->ip_method == AXIS_HTTP_POST)
 			{
-//				AXISTRACE1("method is POST");
 				AxisEngine* engine = new ServerAxisEngine();	
 				if (engine)
 				{
 					if (AXIS_SUCCESS == engine->Initialize())
 					{
-						Status = engine->Process(stream);
-						AXISTRACE1("Status = engine->Process(stream):status:");        
+						Status = engine->Process(stream);						
 					}
 					delete engine;
 				}
@@ -204,7 +202,8 @@ extern "C" int process_request(Ax_soapstream *stream)
 				}
 				else 
 				{
-					sServiceName = WSDLDIRECTORY + sUriWOAxis + ".wsdl";
+                    sServiceName = g_pConfig->GetAxisHomePath();
+                    sServiceName += WSDLDIRECTORY + sUriWOAxis + ".wsdl";
 					//check whether wsdl file is available
 					if((WsddFile = fopen(sServiceName.c_str(),"r"))==NULL)
 					{
@@ -231,14 +230,14 @@ extern "C" int process_request(Ax_soapstream *stream)
 			stream->transport.pSendFunct("Unknown Protocol", NULL, stream);
 		break;
 	}
-    AXISTRACE1("before return Status;"); 
+        
 	return Status;
 }
 
 extern "C" int initialize_module(int bServer)
 {
+    int status = 0;
 	//order of these initialization method invocation should not be changed
-//	AXISTRACE1("inside initialize_module\n");
 	//XMLPlatformUtils::Initialize();
 	AxisEngine::m_bServer = bServer;
 	AxisUtils::Initialize();
@@ -250,9 +249,44 @@ extern "C" int initialize_module(int bServer)
 	ModuleInitialize();
 	if (bServer) //no client side wsdd processing at the moment
 	{
-		char* pWsddPath = g_pConfig->GetWsddFilePath();
-		if (AXIS_SUCCESS != g_pWSDDDeployment->LoadWSDD(pWsddPath)) return AXIS_FAIL;
+		int status = g_pConfig->ReadConfFile();/*Read from the configuration file*/
+        if(status == AXIS_SUCCESS)
+        {
+            char* pWsddPath = g_pConfig->GetWsddFilePath();
+            if (AXIS_SUCCESS != g_pWSDDDeployment->LoadWSDD(pWsddPath)) return AXIS_FAIL;
+
+            #if defined(__AXISTRACE__)
+            status = g_pAT->openFile();
+            if(status == AXIS_FAIL)
+            {
+                return AXIS_FAIL;
+            }
+            #endif
+        }
+        else
+        {
+            AXISTRACE1("Reading from the configuration file failed. " \
+            "Check for error in the configuration file", CRITICAL);
+            /*TODO:Improve the AxisTrace so that it will log
+            these kind of messages into a log file according to the
+            critical level specified.
+            */
+            return AXIS_FAIL;
+        }
+
 	}
+    else if(bServer == 0)//client side module initialization
+    {
+        #if defined(__AXISTRACE__)
+        status = g_pAT->openFileByClient();
+        if(status == AXIS_FAIL)
+        {
+            return AXIS_FAIL;
+        }
+        #endif
+    }
+
+    
 	return AXIS_SUCCESS;
 }
 
@@ -286,6 +320,8 @@ void ModuleInitialize()
 	//un synchronized read-only global variables.
 	g_pWSDDDeployment = new WSDDDeployment();
     g_pConfig = new AxisConfig();
+    g_pAT = new AxisTrace();
+
     
     
 }
@@ -303,4 +339,6 @@ void ModuleUnInitialize()
 	//un synchronized read-only global variables.
 	delete g_pWSDDDeployment;
     delete g_pConfig;
+    delete g_pAT;
+
 }
