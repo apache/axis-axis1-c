@@ -71,9 +71,8 @@ xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 		cout << endl << pf << " is returned as prefix for non existing namespace URI" <<endl;
 
 	/* Passing all existing URIs */
-       cout<< m_pCall->getNamespacePrefix("http://schemas.xmlsoap.org/soap/envelope/")<<endl;
-       cout<< m_pCall->getNamespacePrefix("http://www.w3.org/2001/XMLSchema")<<endl;
-       cout<< m_pCall->getNamespacePrefix("http://www.w3.org/2001/XMLSchema-instance")<<endl;
+       cout<< m_pCall->getNamespacePrefix("http://localhost/axis/Calculator")<<endl;	
+       cout<< m_pCall->getNamespacePrefix("http://localhost/apache/axis/Calculator")<<endl;       
 	   cout<< m_pCall->getNamespacePrefix("http://localhost/axis/Calculator")<<endl;	
 
 
