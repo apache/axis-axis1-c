@@ -36,18 +36,24 @@ AXIS_CPP_NAMESPACE_START
 
 SoapAttachment::SoapAttachment()
 {	
+	m_AttachementHeaders = new SoapAttachementHeaders();
+
 	//Assigning to NULL
 	m_AttachementBody = 0;
 }
 
 SoapAttachment::~SoapAttachment()
 {
+	delete m_AttachementHeaders;
+	m_AttachementHeaders =0;
 
+	delete m_AttachementBody;
+	m_AttachementBody =0;
 }
 
-void SoapAttachment::addHeader(AxisString name, AxisString value)
+void SoapAttachment::addHeader(const char* pchName, const char* pchValue)
 {
-	m_AttachementHeaders.addHeader(name, value);
+	m_AttachementHeaders->addHeader(pchName, pchValue);
 }
 
 /*
@@ -66,7 +72,7 @@ void SoapAttachment::serialize(SoapSerializer &pSZ)
 {
 	/* Serialize the Attachment Headers */
 	pSZ.serialize("\n", NULL);
-	m_AttachementHeaders.serialize(pSZ);
+	m_AttachementHeaders->serialize(pSZ);
 
 	/* Serialize the Attachment Body */
 	//pSZ.serialize("\n", m_AttachementBody.c_str(), NULL);
@@ -77,6 +83,19 @@ void SoapAttachment::serialize(SoapSerializer &pSZ)
 	}
 
 	pSZ.serialize("\n", NULL);
+}
+
+xsd__base64Binary* SoapAttachment::getBody()
+{
+	return m_AttachementBody;
+}
+
+const char* SoapAttachment::getHeader(const char *pchName)
+{
+	if (m_AttachementHeaders->getHeader(pchName).empty())
+		return "";
+	else
+		return m_AttachementHeaders->getHeader(pchName).c_str();
 }
 
 AXIS_CPP_NAMESPACE_END

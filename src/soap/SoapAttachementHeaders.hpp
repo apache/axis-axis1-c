@@ -48,6 +48,7 @@ class SoapAttachementHeaders
 private:
 	map<AxisString, AxisString> m_AttachHeaders;
 public:
+	AxisString getHeader(AxisString sName);
 	
 	void serialize(SoapSerializer& pSZ);
 	void addHeader(AxisString name, AxisString value);

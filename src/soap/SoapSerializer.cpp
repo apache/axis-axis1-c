@@ -923,19 +923,19 @@ void SoapSerializer::serializeAttachments(SoapSerializer &pSZ)
 {
 	/*serializing the attachements*/
 
-	map<AxisXMLString, SoapAttachment*>::iterator itCurrAttach= m_SoapAttachments.begin();
+	map<AxisXMLString, ISoapAttachment*>::iterator itCurrAttach= m_SoapAttachments.begin();
 
 	while(itCurrAttach != m_SoapAttachments.end())
     {        
-        ((*itCurrAttach).second)->serialize(pSZ);
+        ((SoapAttachment*)((*itCurrAttach).second))->serialize(pSZ);
 
         itCurrAttach++;
     }
 }
 
-void SoapSerializer::addAttachment(AxisString id, SoapAttachment* objAttach)
+void SoapSerializer::addAttachment(const AxisChar* achId, ISoapAttachment* pAttach)
 {
-	m_SoapAttachments[id] = objAttach;
+	m_SoapAttachments[achId] = pAttach;
 }
 
 void SoapSerializer::addAttachmentHeader(const AxisChar* achId, const AxisChar* achHeaderName, const AxisChar* achHeaderValue)
@@ -971,6 +971,13 @@ void SoapSerializer::addNamespaceToEnvelope(AxisChar *pachNamespaceURI, AxisChar
 void SoapSerializer::addNamespaceToNamespaceList(const AxisChar *pachNamespaceURI, const AxisChar* pachPrefix)
 {
 	m_NsStack[pachNamespaceURI] = pachPrefix;
+}
+
+ISoapAttachment* SoapSerializer::createSoapAttachement()
+{
+	SoapAttachment* pSAttch = new SoapAttachment();
+
+	return pSAttch;
 }
 
 AXIS_CPP_NAMESPACE_END

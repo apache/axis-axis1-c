@@ -20,6 +20,7 @@
 #include "AxisUserAPI.hpp"
 #include "TypeMapping.hpp"
 #include "WSDDDefines.hpp"
+#include "ISoapAttachment.hpp"
 
 /*
  *  @class IWrapperSoapSerializer
@@ -35,6 +36,11 @@
  * Revision 1.1  2005/01/02 Roshan
  * Added addAttachmentBody
  * Added addAttachmentHeader
+ */
+
+/*
+ * Revision 1.2  2005/01/07 Roshan
+ * Added addAttachment
  */
 
 AXIS_CPP_NAMESPACE_START
@@ -127,9 +133,21 @@ public:
 
     virtual int serializeAsChardata(void* pValue, XSDTYPE type)=0;
 
+    virtual void addAttachment(const AxisChar* achId, ISoapAttachment* objAttach)=0;
+
 	virtual void addAttachmentBody(const AxisChar* achId, xsd__base64Binary* pAttchBody)=0;
 
 	virtual void addAttachmentHeader(const AxisChar* achId, const AxisChar* achHeaderName, const AxisChar* achHeaderValue)=0;
+
+	/**
+    * creates and returns a SoapAttachment object to the caller of this methods.
+	*  The user can use this object and fill in the attachment details. This
+	*  method doesn't add the created SoapAttachment object to the Serializer.
+	*  The user will have to add this object explictly by calling the addAttachment 
+	*  method of the IWrapperSoapSerializer interface
+    *     
+    */
+	virtual ISoapAttachment* createSoapAttachement()=0;
 };
 
 AXIS_CPP_NAMESPACE_END

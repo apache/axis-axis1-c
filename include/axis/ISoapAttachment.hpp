@@ -15,51 +15,57 @@
  */
 
 /*
- * @author Rangika Mendis (rangika@opensource.lk)
  * @author Nithyakala Thangarajah (nithya@opensource.lk)
+ * @author Rangika Mendis (rangika@opensource.lk) 
  * @author Roshan Weerasuriya (roshan@opensource.lk, roshan@jkcsworld.com)
  *
  */
 
-
-// SoapAttachment.h: interface for the SoapAttachment class.
+// ISoapAttachment.h: interface for the ISoapAttachment class.
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_SOAPATTACHMENT_H__7E7B50DC_21AF_4C6E_83E0_F77985A38E43__INCLUDED_)
-#define AFX_SOAPATTACHMENT_H__7E7B50DC_21AF_4C6E_83E0_F77985A38E43__INCLUDED_
+#if !defined(AFX_ISOAPATTACHMENT_H__8B3A65FD_40A6_45B2_A8C5_295DE4222952__INCLUDED_)
+#define AFX_ISOAPATTACHMENT_H__8B3A65FD_40A6_45B2_A8C5_295DE4222952__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include <axis/GDefine.hpp>
 #include <axis/AxisUserAPI.hpp>
-#include <axis/ISoapAttachment.hpp>
-#include "SoapAttachementHeaders.hpp"
-
-#include <string>
-using namespace std;
 
 AXIS_CPP_NAMESPACE_START
 
-class SoapSerializer;
-
-class SoapAttachment : public ISoapAttachment
+class ISoapAttachment  
 {
-private:
-	SoapAttachementHeaders* m_AttachementHeaders;
-	xsd__base64Binary* m_AttachementBody;
 public:
-	const char* getHeader(const char* pchName);
-	xsd__base64Binary* getBody();
-	
-	void serialize(SoapSerializer& pSZ);
-	void addBody(xsd__base64Binary* objBody);	
-	void addHeader(const char* pchName, const char* pchValue);
-	SoapAttachment();
-	virtual ~SoapAttachment();	
+
+	/**
+	  * Allows the user to add the Attachment Body
+	  */
+	virtual void addBody(xsd__base64Binary* objBody)=0;	
+
+	/**
+	  * Allows the user to add the Attachment Headers
+	  */
+	virtual void addHeader(const char* pchName, const char* pchValue)=0;
+
+	/**
+	  * Allows the user to get the Attachment Body
+	  */
+	virtual xsd__base64Binary* getBody()=0;	
+
+	/**
+	  * Allows the user to get the required Attachment Header
+	  *
+	  * @param pchName The name of the required Attachement Header
+	  */
+	virtual const char* getHeader(const char* pchName)=0;
+
+	virtual ~ISoapAttachment() {};
+
 };
 
 AXIS_CPP_NAMESPACE_END
-#endif // !defined(AFX_SOAPATTACHMENT_H__7E7B50DC_21AF_4C6E_83E0_F77985A38E43__INCLUDED_)
+
+#endif // !defined(AFX_ISOAPATTACHMENT_H__8B3A65FD_40A6_45B2_A8C5_295DE4222952__INCLUDED_)

@@ -34,6 +34,7 @@ class SoapFault;
 class HeaderBlock;
 class IArrayBean;
 class Attribute;
+class ISoapAttachment;
 
 /**
  *  @class SoapSerializer
@@ -48,7 +49,7 @@ class Attribute;
 class SoapSerializer : public IHandlerSoapSerializer
 {
 private:
-	map<AxisString, SoapAttachment*> m_SoapAttachments;
+	map<AxisString, ISoapAttachment*> m_SoapAttachments;
     int m_nCounter;
     AxisChar m_Buf[BTS_BUFFSIZE];
     SoapEnvelope* m_pSoapEnvelope;    	
@@ -155,11 +156,12 @@ private:
     BasicTypeSerializer m_BTSZ;
     SOAPTransport* m_pOutputStream;
 public:
+	ISoapAttachment* createSoapAttachement();
 	void addNamespaceToNamespaceList(const AxisChar *pachNamespaceURI, const AxisChar* pachPrefix);
 	void addNamespaceToEnvelope(AxisChar *pachNamespaceURI, AxisChar* pachPrefix);
 	void addAttachmentBody(const AxisChar* achId, xsd__base64Binary* pAttchBody);
 	void addAttachmentHeader(const AxisChar* achId, const AxisChar* achHeaderName, const AxisChar* achHeaderValue);
-	void addAttachment(AxisString id, SoapAttachment* objAttach);
+	void addAttachment(const AxisChar* achId, ISoapAttachment* pAttach);
 	IHeaderBlock* getHeaderBlock(const AxisChar* pcName, const AxisChar* pcNamespace);
 	IHeaderBlock* getHeaderBlock();
 	IHeaderBlock* getFirstHeaderBlock();

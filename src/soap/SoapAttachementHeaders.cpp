@@ -63,4 +63,12 @@ void SoapAttachementHeaders::serialize(SoapSerializer &pSZ)
     }
 }
 
+AxisString SoapAttachementHeaders::getHeader(AxisString sName)
+{
+	if (m_AttachHeaders.find(sName) == m_AttachHeaders.end())
+		return "";
+	else
+		return m_AttachHeaders[sName];
+}
+
 AXIS_CPP_NAMESPACE_END
