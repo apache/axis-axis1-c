@@ -52,7 +52,7 @@ Notes:
 	<property name="dir.src" value="${basedir}/tests/auto_build/testcases"/>
 	<property name="test.list" value="${dir.src}/test.list"/>
 	<property name="test.endpoints" value="${dir.src}/test.endpoints"/>
-	<property name="dir.include" value="${dir.package}/include"/>
+	<property name="dir.include" value="${basedir}/include"/>
 
 	<!--
 	  Compiler definitions
@@ -250,7 +250,7 @@ Notes:
 			<fileset dir="${dir.axisJARs}" includes="*.jar"/>
 		</path>
 		<!-- Run WSDL2Ws -->
-		<java jar="${dir.package.WSDL2Ws}/wsdl2ws.jar" fork="true">
+		<java classname="org.apache.axis.wsdl.wsdl2ws.WSDL2Ws" fork="true">
 			<classpath refid="cp"/>
 			<arg value="${dir.src}/wsdls/${testName}.wsdl"/>
 			<arg value="-o${dir.test.generated}/${client.lang}/${testName}"/>
@@ -283,7 +283,7 @@ Notes:
 			<linker refid="LinuxLinker"/>
 			<linker refid="AIXLinker"/>
 			<!-- Additional library of Axis Client -->
-			<libset dir="${dir.package.lib}" libs="${clientLibraryName}"/>
+			<libset dir="${dir.obj}/bin" libs="${clientLibraryName}"/>
 			<!-- Files to be compiled -->
 			<includepath path="${dir.include}"/>
 			<fileset dir="${dir.test.generated}/${client.lang}/${testName}">
