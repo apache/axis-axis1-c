@@ -340,7 +340,7 @@ void* SoapDeSerializer::checkForFault(const AxisChar* pName,
             m_nStatus = AXIS_SUCCESS;
             m_pNode = NULL;
             AXISTRACE1("AXISC_NODE_VALUE_MISMATCH_EXCEPTION", CRITICAL);
-            THROW_AXIS_EXCEPTION(AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
+            throw AxisGenException(AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
         }
         /* we can check the namespace uri too here. Should we ?*/
         m_nStatus = AXIS_SUCCESS;
@@ -371,7 +371,7 @@ void* SoapDeSerializer::checkForFault(const AxisChar* pName,
      }
      else
      {
-         THROW_AXIS_EXCEPTION(AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
+         throw AxisGenException(AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
         
      } 
 }
