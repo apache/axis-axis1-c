@@ -70,7 +70,7 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-map<string, XSDTYPE> TypeMapping::m_sTypeMap;
+map<AxisString, XSDTYPE> TypeMapping::m_sTypeMap;
 volatile bool TypeMapping::m_bInit = false;
 //map<string, XSDTYPE> TypeMapping::m_sTypeMap["xsd:int"] = XSD_INT;
 //map<string, XSDTYPE> TypeMapping::m_sTypeMap["xsd:string"] = XSD_STRING;
@@ -90,13 +90,13 @@ void TypeMapping::Initialize()
 {
 	if (!m_bInit)
 	{
-		m_sTypeMap["int"] = XSD_INT;
-		m_sTypeMap["string"] = XSD_STRING;
+		m_sTypeMap[L"int"] = XSD_INT;
+		m_sTypeMap[L"string"] = XSD_STRING;
 		m_bInit = true;
 	}
 }
 
-XSDTYPE TypeMapping::Map(string &sType)
+XSDTYPE TypeMapping::Map(AxisString &sType)
 {
 	if (m_sTypeMap.find(sType) != m_sTypeMap.end())
 	{

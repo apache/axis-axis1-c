@@ -98,7 +98,8 @@ private:
 public:
 	ISoapMethod* createSoapMethod();	
 	int flushSerializedBuffer();
-	IWrapperSoapSerializer& operator<<(const char *cSerialized);
+	IWrapperSoapSerializer& operator<<(const char* cSerialized);
+	IWrapperSoapSerializer& operator<<(const AxisChar* cSerialized);
 	//ISoapSerializer& operator<<(const char *cSerialized);
 	const char* getNewNamespacePrefix();
 	int setSoapVersion(SOAP_VERSION);
@@ -117,9 +118,9 @@ public: //Basic Type Serializing methods
 	int removeSoapHeader();
 	int setHeaderBlock(HeaderBlock* pHeaderBlock);
 	IHeaderBlock* createHeaderBlock();
-	string& SerializeBasicType(const string& sName, string& sValue, XSDTYPE type=XSD_STRING);
-	string& SerializeBasicType(const string& sName, float fValue);
-	string& SerializeBasicType(const string& sName, int nValue);
+	const AxisChar* SerializeBasicType(const AxisChar* sName, const AxisChar* sValue, XSDTYPE type=XSD_STRING);
+	const AxisChar* SerializeBasicType(const AxisChar* sName, float fValue);
+	const AxisChar* SerializeBasicType(const AxisChar* sName, int nValue);
 private:
 	BasicTypeSerializer m_BTSZ;
 	const void* m_pOutputStream;

@@ -64,11 +64,15 @@
 // SoapEnvVersions.h:
 //
 //////////////////////////////////////////////////////////////////////
+#pragma warning (disable : 4786)
 
 #ifndef __SOAPENVVERSIONS_H_INCLUDED___
 #define __SOAPENVVERSIONS_H_INCLUDED___
 
-#include "Attribute.h"
+#include <stdlib.h>
+#include "../common/GDefine.h"
+
+class Attribute;
 
 /*
  *Here SKW stands for SoapKeyWord. This is a internal naming convension
@@ -98,22 +102,81 @@ enum SOAP_VERSION {
 	VERSION_LAST
 };
 
-struct SoapEnvVersionsStruct {	
-	char* pchEnvelopeNamespaceUri;
-	char* pchEnvelopePrefix;
-	char* pcharWords[SOAP_WORDS_LAST];
+struct SoapEnvVersionsStruct 
+{	
+	const AxisChar* pchNamespaceUri;
+	const AxisChar* pchPrefix;
+	const AxisChar* pchWords[SOAP_WORDS_LAST];
 	const Attribute* pEnv;
 	const Attribute* pXsi;
 	const Attribute* pXsd;
 };
 
-static SoapEnvVersionsStruct g_sObjSoapEnvVersionsStruct[VERSION_LAST]=
-	{
-		//SOAP_VER_1_1
-		{ 
-			"http://schemas.xmlsoap.org/soap/envelope/",
-			"SOAP-ENV",
-			{
+static SoapEnvVersionsStruct ObjSoapEnvVersionsStruct[VERSION_LAST]=
+{
+	//SOAP_VER_1_1
+	{ 
+		L"http://schemas.xmlsoap.org/soap/envelope/",
+		L"SOAP-ENV",
+		{
+/*SKW_ENVELOPE*/		L"Envelope",
+/*SKW_HEADER*/			L"Header",
+/*SKW_BODY*/			L"Body",
+/*SKW_MUSTUNDERSTAND*/	L"mustUnderstand",
+/*SKW_ACTOR*/			L"actor",
+/*SKW_ENCODING_STYLE*/	L"encodingStyle",
+/*SKW_FAULT*/			L"Fault",
+/*SKW_FAULT_CODE*/		L"faultcode",
+/*SKW_FAULT_STRING*/	L"faultstring",
+/*SKW_FAULT_ACTOR*/		L"faultactor",
+/*SKW_DETAIL*/			L"detail",
+/*SKW_MULTIREF*/		L"multiRef"
+		},
+		//attributes for soap 1.1 envelope
+		NULL,
+		NULL,
+		NULL
+	},
+
+	//SOAP_VER_1_2
+	{ 
+		L"http://www.w3.org/2003/05/soap-envelope",
+		L"env",
+		{
+/*SKW_ENVELOPE*/		L"Envelope",
+/*SKW_HEADER*/			L"Header",
+/*SKW_BODY*/			L"Body",
+/*SKW_MUSTUNDERSTAND*/	L"mustUnderstand",
+/*SKW_ACTOR*/			L"actor",
+/*SKW_ENCODING_STYLE*/	L"encodingStyle",
+/*SKW_FAULT*/			L"Fault",
+/*SKW_FAULT_CODE*/		L"Code",
+/*SKW_FAULT_STRING*/	L"Reason",
+/*SKW_FAULT_ACTOR*/		L"Role",
+/*SKW_DETAIL*/			L"Detail",
+/*SKW_MULTIREF*/		L"multiRef"
+		},
+		//attributes for soap 1.2 envelope
+		NULL,
+		NULL,
+		NULL
+	}
+};
+
+struct SoapEnvVersionsStructTemp 
+{	
+	const char* pchNamespaceUri;
+	const char* pchPrefix;
+	const char* pchWords[SOAP_WORDS_LAST];
+};
+
+static SoapEnvVersionsStructTemp ObjSoapEnvVersionsStructTemp[VERSION_LAST]=
+{
+	//SOAP_VER_1_1
+	{ 
+		"http://schemas.xmlsoap.org/soap/envelope/",
+		"SOAP-ENV",
+		{
 /*SKW_ENVELOPE*/		"Envelope",
 /*SKW_HEADER*/			"Header",
 /*SKW_BODY*/			"Body",
@@ -126,18 +189,14 @@ static SoapEnvVersionsStruct g_sObjSoapEnvVersionsStruct[VERSION_LAST]=
 /*SKW_FAULT_ACTOR*/		"faultactor",
 /*SKW_DETAIL*/			"detail",
 /*SKW_MULTIREF*/		"multiRef"
-			},
-			//attributes for soap 1.1 envelope
-			new Attribute("SOAP-ENV","xmlns","","http://schemas.xmlsoap.org/soap/envelope/"),
-			new Attribute("xsi","xmlns","","http://www.w3.org/2001/XMLSchema-instance"),
-			new Attribute("xsd","xmlns","","http://www.w3.org/2001/XMLSchema"),
 		},
+	},
 
-		//SOAP_VER_1_2
-		{ 
-			"http://www.w3.org/2003/05/soap-envelope",
-			"env",
-			{
+	//SOAP_VER_1_2
+	{ 
+		"http://www.w3.org/2003/05/soap-envelope",
+		"env",
+		{
 /*SKW_ENVELOPE*/		"Envelope",
 /*SKW_HEADER*/			"Header",
 /*SKW_BODY*/			"Body",
@@ -150,11 +209,8 @@ static SoapEnvVersionsStruct g_sObjSoapEnvVersionsStruct[VERSION_LAST]=
 /*SKW_FAULT_ACTOR*/		"Role",
 /*SKW_DETAIL*/			"Detail",
 /*SKW_MULTIREF*/		"multiRef"
-			},
-			//attributes for soap 1.2 envelope
-			new Attribute("env","xmlns","","http://www.w3.org/2003/05/soap-envelope"),
-			new Attribute("xsi","xmlns","","http://www.w3.org/2001/XMLSchema-instance"),
-			new Attribute("xsd","xmlns","","http://www.w3.org/2001/XMLSchema"),
-		}
-	};	
+		},
+	}
+};
+
 #endif //__SOAPENVVERSIONS_H_INCLUDED___

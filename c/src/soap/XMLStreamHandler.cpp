@@ -109,135 +109,126 @@ XMLStreamHandler::~XMLStreamHandler()
 
 void XMLStreamHandler::startElement(const XMLCh *const uri,const XMLCh *const localname,const XMLCh *const qname,const Attributes &attrs)
 {
-	char *pcLocalName = __TRC(localname);
-	if (pcLocalName)
+	switch (m_PL0)
 	{
-		switch (m_PL0)
+	case SOAP_UNKNOWN:
+	if(0 == wcscmp(localname,SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_ENVELOPE]))
+	{
+		m_PL0 = SOAP_ENVELOP;
+		m_pEnv = new SoapEnvelope();
+		//set all attributes of SoapEnvelope
+		FillEnvelope(uri,localname,qname,attrs);
+	}
+	break;
+	case SOAP_ENVELOP:
+	if(0 == wcscmp(localname,SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_BODY]))
+	{
+		m_PL0 = SOAP_BODY;
+		m_pBody = new SoapBody();
+		//set all attributes of SoapBody
+		FillBody(uri,localname,qname,attrs);	
+	}
+	else if (0 == wcscmp(localname,SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_HEADER]))
+	{
+		m_PL0 = SOAP_HEADER;
+		m_pHead = new SoapHeader();
+		//set all attributes of SoapHeader
+		FillHeader(uri,localname,qname,attrs);
+	}
+	else if (0 == wcscmp(localname,SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_FAULT]))
+	{
+		//m_PL0 = SOAP_FAULT;
+		//m_pFault = SoapFault::getSoapFault(1);
+		//set all attributes of SoapFault
+		//FillFault(uri,localname,qname,attrs);
+	}
+	else { //Soap error
+		m_Success = FAIL;
+	}
+	break;
+	case SOAP_HEADER:
+		//Soap header entry
+		createHeaderBlock(uri, localname, qname, attrs);
+		m_PL1= SOAP_HEADER_BLOCK;
+		break;
+	case SOAP_FAULT:
+		//Soap fault sub element
+		break;
+	case SOAP_BODY:
+		switch (m_PL1)
 		{
 		case SOAP_UNKNOWN:
-		if(0 == strcmp(pcLocalName,g_sObjSoapEnvVersionsStruct[m_nSoapVersion].pcharWords[SKW_ENVELOPE]))
-		{
-			m_PL0 = SOAP_ENVELOP;
-			m_pEnv = new SoapEnvelope();
-			//set all attributes of SoapEnvelope
-			FillEnvelope(uri,localname,qname,attrs);
-		}
-		break;
-		case SOAP_ENVELOP:
-		if(0 == strcmp(pcLocalName,g_sObjSoapEnvVersionsStruct[m_nSoapVersion].pcharWords[SKW_BODY]))
-		{
-			m_PL0 = SOAP_BODY;
-			m_pBody = new SoapBody();
-			//set all attributes of SoapBody
-			FillBody(uri,localname,qname,attrs);	
-		}
-		else if (0 == strcmp(pcLocalName,g_sObjSoapEnvVersionsStruct[m_nSoapVersion].pcharWords[SKW_HEADER]))
-		{
-			m_PL0 = SOAP_HEADER;
-			m_pHead = new SoapHeader();
-			//set all attributes of SoapHeader
-			FillHeader(uri,localname,qname,attrs);
-		}
-		else if (0 == strcmp(pcLocalName,g_sObjSoapEnvVersionsStruct[m_nSoapVersion].pcharWords[SKW_FAULT]))
-		{
-			//m_PL0 = SOAP_FAULT;
-			//m_pFault = SoapFault::getSoapFault(1);
-			//set all attributes of SoapFault
-			//FillFault(uri,localname,qname,attrs);
-		}
-		else { //Soap error
-			m_Success = FAIL;
-		}
-		break;
-		case SOAP_HEADER:
-			//Soap header entry
-			createHeaderBlock(uri, localname, qname, attrs);
-			m_PL1= SOAP_HEADER_BLOCK;
-			break;
-		case SOAP_FAULT:
-			//Soap fault sub element
-			break;
-		case SOAP_BODY:
-			switch (m_PL1)
+			if (0 == wcscmp(localname,SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_MULTIREF]))
 			{
-			case SOAP_UNKNOWN:
-				if (0 == strcmp(pcLocalName,g_sObjSoapEnvVersionsStruct[m_nSoapVersion].pcharWords[SKW_MULTIREF]))
-				{
-					m_sLastElement = pcLocalName;
-					SetParamType(attrs); 
-					m_PL1 = SOAP_PARAM;
-				}
-				else //now comes method name in RPC Style
-				{
-					m_PL1 = SOAP_METHOD;
-					m_pMethod = new SoapMethod();
-					FillMethod(uri,localname,qname,attrs);
-				}
-				break;
-			case SOAP_METHOD: //now comes parameters
-				//Get Param name and type
-				m_Param.m_sName = pcLocalName;
-				m_sLastElement = pcLocalName;
+				m_sLastElement = localname;
 				SetParamType(attrs); 
 				m_PL1 = SOAP_PARAM;
-				m_nParamNestingLevel++;
-				break;
-			case SOAP_PARAM: //Custom types
-				if (m_sLastElement != pcLocalName)
-				{
-					m_Params.push_back(new Param(m_Param)); //parent param
-				}
-				m_Param.m_sName = pcLocalName;
-				m_sLastElement = pcLocalName;
-				SetParamType(attrs); 
-				m_nParamNestingLevel++;
-				break;
-			default:
-				m_Success = FAIL;
 			}
-		break;
+			else //now comes method name in RPC Style
+			{
+				m_PL1 = SOAP_METHOD;
+				m_pMethod = new SoapMethod();
+				FillMethod(uri,localname,qname,attrs);
+			}
+			break;
+		case SOAP_METHOD: //now comes parameters
+			//Get Param name and type
+			//m_Param.m_sName = localname;
+			m_sLastElement = localname;
+			SetParamType(attrs); 
+			m_PL1 = SOAP_PARAM;
+			m_nParamNestingLevel++;
+			break;
+		case SOAP_PARAM: //Custom types
+			if (m_sLastElement != localname)
+			{
+				m_Params.push_back(new Param(m_Param)); //parent param
+			}
+			//m_Param.m_sName = localname;
+			m_sLastElement = localname;
+			SetParamType(attrs); 
+			m_nParamNestingLevel++;
+			break;
 		default:
 			m_Success = FAIL;
 		}
-		__REL(&pcLocalName);
+	break;
+	default:
+		m_Success = FAIL;
 	}
 }
 
 void XMLStreamHandler::endElement (const XMLCh *const uri,const XMLCh *const localname,const XMLCh *const qname)
 {
-	char *pcLocalName = __TRC(localname);
-	if (pcLocalName) {
-		switch (m_PL1)
-		{
-		case SOAP_UNKNOWN: 
-			if(m_PL0==SOAP_HEADER) {
-				m_PL0= SOAP_ENVELOP;
-			}
-			break;
-		case SOAP_METHOD: //end of method element
-			if (m_nParamNestingLevel == 0)
-				m_PL1 = SOAP_UNKNOWN;
-			m_nParamNestingLevel--;
-			break;
-		case SOAP_PARAM: //end of a parameter
-			//Add parameter to list
-			if (m_sLastElement == pcLocalName)
-			{
-				m_Params.push_back(new Param(m_Param)); //current param
-			}
-			m_PL1 = SOAP_METHOD; //next parameter can be Nth parameter just within the Method element.
-			m_nParamNestingLevel--;
-			break;
-		case SOAP_HEADER_BLOCK: //enf of a HeaderBlock
-			//Add HeaderBlock to Header
-			m_pHead->addHeaderBlock(pHeaderBlock);
-
-			m_PL1= SOAP_UNKNOWN;
-			break;
-		default:
-			m_Success = FAIL;
+	switch (m_PL1)
+	{
+	case SOAP_UNKNOWN: 
+		if(m_PL0==SOAP_HEADER) {
+			m_PL0= SOAP_ENVELOP;
 		}
-		__REL(&pcLocalName);
+		break;
+	case SOAP_METHOD: //end of method element
+		if (m_nParamNestingLevel == 0)
+			m_PL1 = SOAP_UNKNOWN;
+		m_nParamNestingLevel--;
+		break;
+	case SOAP_PARAM: //end of a parameter
+		//Add parameter to list
+		if (m_sLastElement == localname)
+		{
+			m_Params.push_back(new Param(m_Param)); //current param
+		}
+		m_PL1 = SOAP_METHOD; //next parameter can be Nth parameter just within the Method element.
+		m_nParamNestingLevel--;
+		break;
+	case SOAP_HEADER_BLOCK: //enf of a HeaderBlock
+		//Add HeaderBlock to Header
+		m_pHead->addHeaderBlock(pHeaderBlock);
+
+		m_PL1= SOAP_UNKNOWN;
+		break;
+	default:
+		m_Success = FAIL;
 	}
 }
 
@@ -246,43 +237,23 @@ void  XMLStreamHandler::characters (const XMLCh *const chars,const unsigned int 
 	if ((m_PL0 == SOAP_BODY) && (m_PL1 == SOAP_PARAM)) //Make this a switch statement if many cases to be handled
 	{
 		//Get value of the parameter
-		char *value = __TRC(chars);
-		if (value)
-		{
-			string str = value;
-			m_Param.SetValue(str);
-			__REL(&value);
-		}
-	} else if ((m_PL0 == SOAP_HEADER) && (m_PL1 == SOAP_HEADER_BLOCK)) {
+		m_Param.SetValue(chars);
+	} else if ((m_PL0 == SOAP_HEADER) && (m_PL1 == SOAP_HEADER_BLOCK)) 
+	{
 		//Get the value of the header entry
-		char *value = __TRC(chars);
-		if(value) {
-			string str= value;
-			CharacterElement* pCharacterElement= new CharacterElement(str);
-			pHeaderBlock->addChild(pCharacterElement);
-		}
+		CharacterElement* pCharacterElement= new CharacterElement(chars);
+		pHeaderBlock->addChild(pCharacterElement);
 	}
 }
 
 void XMLStreamHandler::startPrefixMapping(const XMLCh* const prefix, const XMLCh* const uri)
 {
-	char* pc; 
-	pc = __TRC(prefix);
-	string sPrifix = pc;
-	__REL(&pc);
-	pc = __TRC(uri);
-	string sUri = pc;
-	__REL(&pc);
-	m_NsStack[sPrifix] = sUri; //I think the same prifix cannot repeat ???
+	m_NsStack[prefix] = uri; //I think the same prifix cannot repeat ???
 }
 
 void XMLStreamHandler::endPrefixMapping(const XMLCh* const prefix)
 {
-	char* pc; 
-	pc = __TRC(prefix);
-	string sPrifix = pc;
-	__REL(&pc);
-	m_NsStack.erase(sPrifix); //I think the same prifix cannot repeat ???
+	m_NsStack.erase(prefix); //I think the same prifix cannot repeat ???
 }
 
 void XMLStreamHandler::warning(const SAXParseException& exception)
@@ -307,31 +278,24 @@ int XMLStreamHandler::Success()
 
 void XMLStreamHandler::SetParamType(const Attributes &attrs)
 {
-	char* pc; 
 	//in case there are no attributes describing the type the default is set to XSD_UNKNOWN
 	m_Param.m_Type = XSD_UNKNOWN; 
 	for (int i = 0; i < attrs.getLength(); i++) 
 	{
-		pc = __TRC(attrs.getURI(i));
-		string URI = pc;
-		__REL(&pc);
-		pc = __TRC(attrs.getLocalName(i));
-		string local = pc;
-		__REL(&pc);
-		pc = __TRC(attrs.getValue(i));
-		string value = pc;
-		__REL(&pc);
+		const AxisChar* URI = attrs.getURI(i); 
+		const AxisChar* local = attrs.getLocalName(i);
+		AxisString value = attrs.getValue(i);
 		URITYPE urit = URIMapping::Map(URI);
 		switch (urit)
 		{
 		case URI_XSI: //xsi:type="xsd:int"
-			if (local == "type")
+			if (0 == wcscmp(local,L"type"))
 			{
-				int colonindex = value.find(':'); 
-				if (colonindex != string::npos) 
+				int colonindex = value.find(L':'); 
+				if (colonindex != AxisString::npos) 
 				{
-					string sPrefix = value.substr(0, colonindex);
-					string sType = value.substr(colonindex+1,string::npos);
+					AxisString sPrefix = value.substr(0, colonindex);
+					AxisString sType = value.substr(colonindex+1,AxisString::npos);
 					if (m_NsStack.find(sPrefix) != m_NsStack.end())
 					{
 						if(URIMapping::Map(m_NsStack[sPrefix]) == URI_XSD)
@@ -364,22 +328,22 @@ void XMLStreamHandler::SetParamType(const Attributes &attrs)
 			}
 			break;
 		case URI_ENC: //enc:arrayType="xs:string[6]"
-			if (local == "arrayType")
+			if (0 == wcscmp(local,L"arrayType"))
 			{
 				m_Param.m_Type = XSD_ARRAY;
 				m_Param.m_Value.pArray = &m_ArrayBean;
 
-				int colonindex = value.find(':'); 
-				if (colonindex != string::npos) 
+				int colonindex = value.find(L':'); 
+				if (colonindex != AxisString::npos) 
 				{
-					string sPrefix = value.substr(0, colonindex);
-					int bracketindex = value.find('[');
-					if (bracketindex == string::npos)
+					AxisString sPrefix = value.substr(0, colonindex);
+					int bracketindex = value.find(L'[');
+					if (bracketindex == AxisString::npos)
 					{
 						//no [] - this is an error condition
 					}
-					string sType = value.substr(colonindex+1,bracketindex-colonindex-1);
-					string sDimensions = value.substr(bracketindex);
+					AxisString sType = value.substr(colonindex+1,bracketindex-colonindex-1);
+					AxisString sDimensions = value.substr(bracketindex);
 
 					if (m_NsStack.find(sPrefix) != m_NsStack.end())
 					{
@@ -417,14 +381,14 @@ void XMLStreamHandler::SetParamType(const Attributes &attrs)
 			break;
 		case URI_UNKNOWN:
 			//check for accessors for multiref values
-			if (local == "href")
+			if (0 == wcscmp(local,L"href"))
 			{
 				m_Param.m_Type = ACCESSOR;
-				m_Param.m_sValue = value.substr(value.find('#')+1);
+				//m_Param.m_sValue = value.substr(value.find('#')+1);
 			}
-			else if (local == "id")
+			else if (0 == wcscmp(local,L"id"))
 			{
-				m_Param.m_sName = value;
+				//m_Param.m_sName = value;
 			}
 
 		default:; // is this an error condition ???
@@ -434,16 +398,17 @@ void XMLStreamHandler::SetParamType(const Attributes &attrs)
 
 // Input is a string like "[3]" or "[2,3]" which is the dimension of the array type
 // being parsed. 
-int XMLStreamHandler::SetArrayDimensions(string &sDimensions)
+int XMLStreamHandler::SetArrayDimensions(AxisString &sDimensions)
 {
 	int si=0;
 	int ei=0;
+	AxisChar* endptr;
 	do
 	{
-		si = sDimensions.find('[',ei);
-		ei = sDimensions.find(']',si);
-		m_Param.m_Value.pArray->m_size.push_back(atoi((sDimensions.substr(si+1,ei)).c_str()));
-	} while (sDimensions.find('[',ei) != string::npos);
+		si = sDimensions.find(L'[',ei);
+		ei = sDimensions.find(L']',si);
+		m_Param.m_Value.pArray->m_size.push_back(wcstol((sDimensions.substr(si+1,ei)).c_str(),&endptr, 10));
+	} while (sDimensions.find(L'[',ei) != string::npos);
 	return SUCCESS;
 }
 
@@ -494,30 +459,24 @@ void XMLStreamHandler::Init()
 
 void XMLStreamHandler::FillEnvelope(const XMLCh *const uri, const XMLCh *const localname, const XMLCh *const qname, const Attributes &attrs)
 {
-	char* pc; 
-	string str;
+	AxisString str;
 	Attribute* pAttr;
-	pc = __TRC(qname);
-	str = pc;
-	__REL(&pc);
+	str = qname;
 	pAttr = new Attribute();
-	if (str.find(':') != string::npos) 
+	if (str.find(L':') != AxisString::npos) 
 	{
-		str = str.substr(0, str.find(':'));
-		m_pEnv->setPrefix(str);
-		pAttr->setPrefix(str);
+		str = str.substr(0, str.find(L':'));
+		m_pEnv->setPrefix(str.c_str());
+		pAttr->setPrefix(str.c_str());
 	}
-	pc =__TRC(uri);
-	str = pc;
-	__REL(&pc);
-	pAttr->setValue(str);
+	pAttr->setValue(uri);
 	m_pEnv->addNamespaceDecl(pAttr);
 
-	if (str == g_sObjSoapEnvVersionsStruct[SOAP_VER_1_1].pchEnvelopeNamespaceUri)
+	if (0 == wcscmp(uri, SoapKeywordMapping::Map(SOAP_VER_1_1).pchNamespaceUri))
 	{
 		m_nSoapVersion = SOAP_VER_1_1;
 	}
-	else if (str == g_sObjSoapEnvVersionsStruct[SOAP_VER_1_2].pchEnvelopeNamespaceUri)
+	else if (0 == wcscmp(uri, SoapKeywordMapping::Map(SOAP_VER_1_2).pchNamespaceUri))
 	{
 		m_nSoapVersion = SOAP_VER_1_2;
 	}
@@ -531,27 +490,10 @@ void XMLStreamHandler::FillEnvelope(const XMLCh *const uri, const XMLCh *const l
 	for (unsigned int ix=0;ix<nAttrs;ix++)
 	{
 		pAttr = new Attribute();
-		
-		pc = __TRC(attrs.getQName(ix));
-		str = pc;
-		__REL(&pc);
-		pAttr->setPrefix(str);
-
-		pc = __TRC(attrs.getValue(ix));
-		str = pc;
-		__REL(&pc);
-		pAttr->setValue(str);
-
-		pc = __TRC(attrs.getLocalName(ix));
-		str = pc;
-		__REL(&pc);
-		pAttr->setLocalName(str);
-
-		pc = __TRC(attrs.getURI(ix));
-		str = pc;
-		__REL(&pc);
-		pAttr->setUri(str);
-
+		pAttr->setPrefix(attrs.getQName(ix));
+		pAttr->setValue(attrs.getValue(ix));
+		pAttr->setLocalName(attrs.getLocalName(ix));
+		pAttr->setUri(attrs.getURI(ix));
 		m_pEnv->addAttribute(pAttr);	
 	}
 }
@@ -573,23 +515,15 @@ void XMLStreamHandler::FillFault(const XMLCh *const uri, const XMLCh *const loca
 
 void XMLStreamHandler::FillMethod(const XMLCh *const uri, const XMLCh *const localname, const XMLCh *const qname, const Attributes &attrs)
 {
-	char* pc; 
-	string str;
-	pc = __TRC(qname);
-	str = pc;
-	__REL(&pc);
-	if (str.find(':') != string::npos) 
+	AxisString str = qname;
+	if (str.find(':') != AxisString::npos) 
 	{
-		str = str.substr(0, str.find(':'));
+		str = str.substr(0, str.find(L':'));
 		m_pMethod->setPrefix(str);
-		pc = __TRC(uri);
-		str = pc;
-		__REL(&pc);
+		str = uri;
 		m_pMethod->setUri(str);
 	}
-	pc = __TRC(localname);
-	str = pc;
-	__REL(&pc);
+	str = localname;
 	m_pMethod->setLocalName(str);
 /*
 	//Set Attributes
@@ -626,31 +560,13 @@ void XMLStreamHandler::FillMethod(const XMLCh *const uri, const XMLCh *const loc
 void XMLStreamHandler::createHeaderBlock(const XMLCh *const uri, const XMLCh *const localname, const XMLCh *const qname, const Attributes &attrs)
 {
 	pHeaderBlock= new HeaderBlock();
-	//pHeaderBlock->setPrefix("A");
-	//pHeaderBlock->setLocalName("A");
-	pHeaderBlock->setUri("A");
-
-
-	char* pc; 
-	string str;	
-	pc = __TRC(qname);
-	str = pc;
-	__REL(&pc);
-	
-	if (str.find(':') != string::npos) 
+	AxisString str;	
+	str = qname;
+	if (str.find(L':') != AxisString::npos) 
 	{
-		str = str.substr(0, str.find(':'));
-		pHeaderBlock->setPrefix(str);		
+		str = str.substr(0, str.find(L':'));
+		pHeaderBlock->setPrefix(str.c_str());		
 	}
-
-	pc = __TRC(localname);
-	str = pc;
-	__REL(&pc);
-	pHeaderBlock->setLocalName(str);
-
-	pc = __TRC(uri);
-	str = pc;
-	__REL(&pc);
-	pHeaderBlock->setUri(str);
-
+	pHeaderBlock->setLocalName(localname);
+	pHeaderBlock->setUri(uri);
 }

@@ -78,7 +78,7 @@ CharacterElement::CharacterElement()
 	m_iNodeType= CHARACTER_NODE;
 }
 
-CharacterElement::CharacterElement(const string& sValue)
+CharacterElement::CharacterElement(const AxisChar* sValue)
 {
 	m_sValue= sValue;
 	m_iNodeType= CHARACTER_NODE;
@@ -115,12 +115,12 @@ int CharacterElement::serialize(string &sSerialized)
 }
 */
 
-string& CharacterElement::getValue()
+const AxisString& CharacterElement::getValue()
 {
 	return m_sValue;
 }
 
-int CharacterElement::setValue(string &sValue)
+int CharacterElement::setValue(const AxisChar* sValue)
 {
 	m_sValue= sValue;
 

@@ -116,12 +116,12 @@ private:
 	bool isSerializable();		
 	int attrSerialize(SoapSerializer& pSZ);
 	//int attrSerialize(string&);
-	string m_localname;
-	string m_prefix;
-	string m_uri;
+	AxisString m_localname;
+	AxisString m_prefix;
+	AxisString m_uri;
 	list<Attribute*> m_attributes;
 	list<Attribute*> m_namespaceDecls;
-	string m_value;
+	AxisString m_value;
 	//string m_strSerialized;
 
 public:
@@ -132,11 +132,11 @@ public:
 
 	int serialize(SoapSerializer& pSZ);
 	//int serialize(string&);
-	void setValue(const string &value);
+	void setValue(const AxisChar* value);
 	void addAttribute(Attribute* attr);
-	void setUri(const string &uri);
-	void setPrefix(const string &prefix);
-	void setLocalName(const string &localname);
+	void setUri(const AxisChar* uri);
+	void setPrefix(const AxisChar* prefix);
+	void setLocalName(const AxisChar* localname);
 	HeaderBlock();
 	virtual ~HeaderBlock();
 

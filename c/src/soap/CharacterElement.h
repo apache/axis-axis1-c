@@ -77,11 +77,11 @@
 class CharacterElement : public BasicNode
 {
 public:
-	int setValue(string& sValue);
-	string& getValue();
+	int setValue(const AxisChar* sValue);
+	const AxisString& getValue();
 	int serialize(SoapSerializer& pSZ);
 	NODE_TYPE getNodeType();
-	CharacterElement(const string& sValue);
+	CharacterElement(const AxisChar* sValue);
 	CharacterElement();
 	virtual ~CharacterElement();
 };
