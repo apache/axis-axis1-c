@@ -1,0 +1,71 @@
+/*
+ *   Copyright 2003-2004 The Apache Software Foundation.
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
+ *
+ *   @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
+ *
+ */ 
+ 
+   This README explains the test case of testing the Axis C++ fault mapping.
+   It is recommended that you also read the README file of 
+   $AXISCPP_HOME/tests/client/fault_mapping/README
+
+   This sample is generated from the FaultMapping.wsdl. This is intended as the server
+   side sample for fault mapping.
+
+   This wsdl
+   simply have several complex types. One such type is DivByZeroStruct which
+   consists of three simple types(xsd:int,* xsd:foat and xsd:string).
+   For portType operation "div" we have a fault named
+   DivByZero the message for which is DivByZeroFault which is of the complex
+   type mentioned above(DivByZeroStruct).
+
+   The other two complex types are SpecialDetailStruct and OutOfBoundStruct.
+   Note that OutOfBoundStruct is even more complex!!.
+
+   In the MathOps service class I have a div method which accepts two parameters.
+   In order to demonstrate the possible exceptions I have the following scenarios.
+   
+   When you generated the client side it will generate header and
+   implementation files for the following
+
+   MathOps: Service class which have a div method which may throw possible
+       exceptions.
+   
+   MathOpsWrapper: Axis C++ wrapper class for the service
+   MathOpsService: A Class needed by Axis C++
+
+   DivByZeroStruct: The type corresponding to the complex type DivByZeroStruct
+       in the MathOps.wsdl
+                                                                                                                             
+   OutOfBoundStruct: The type corresponding to the complex type OutOfBoundStruct
+       in the MathOps.wsdl
+                                                                                                                             
+   SpecialDetailStruct:The type corresponding to the complex type SpecialDetailStruct
+       in the MathOps.wsdl
+                                                                                                                             
+   AxisDivByZeroException: For each fault in wsdl we generate an exception
+       class which is derived from AxisException base class which is the root
+       class for exceptions in Axis C++. This root class in tern is derived
+       from std::exception. AxisDivByzeroException is the exception type
+       corresponding to DivByZero fault.
+                                                                                                                             
+   AxisOutOfBountException: Exception type corresponding to OutOfBound fault.
+                                                                                                                             
+   AxisNormalDetailException: Exception type corresponding to NormalDetail fault.
+
+   
+
+
