@@ -94,9 +94,9 @@ public interface MiscInfo {
 
     public String getEjbsei();
 
-    public void setEjbbean(String string);
+    public void setEndpointImplbean(String string);
 
-    public String getEjbbean();
+    public String getEndpointImplbean();
 
     public void setEjbsei(String string);
 
@@ -151,10 +151,7 @@ public interface MiscInfo {
 
    
     
-    public void setUseRemoteInterface(boolean useRemoteInterface);
     
-	public boolean isUseRemoteInterface();
-
 	public String getImplStyle();
 
 	public String getTargetJ2EEContainer();
@@ -166,10 +163,10 @@ public interface MiscInfo {
 	public String getEjblocalsei();
 	public void setEjblocalhome(String string);
 	public void setEjblocalsei(String string);
-	public boolean isSupportLocalAndRemote(); 
-	public void setSupportLocalAndRemote(boolean b);
 	public boolean isImplwithEJB();
 	public void setImplwithEJB(boolean b);
 	public boolean isImplAvalible();
 	public void setImplAvalible(boolean b);
-}
+	public String getWsconffile(); 
+	public void setWsconffile(String string);
+	}

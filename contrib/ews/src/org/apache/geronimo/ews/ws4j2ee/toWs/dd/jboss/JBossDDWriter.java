@@ -35,12 +35,13 @@ public class JBossDDWriter extends AbstractWriter {
 		out.write("  <enterprise-beans>\n");
 		out.write("	<session>\n");
 		out.write("	  <ejb-name>" + ejbname+ "</ejb-name>\n");
-		if(j2eewscontext.getMiscInfo().isSupportLocalAndRemote() 
-					|| GenerationConstants.USE_REMOTE.equals(j2eewscontext.getMiscInfo().getImplStyle())){
+		String implStyle = j2eewscontext.getMiscInfo().getImplStyle();
+		if( GenerationConstants.USE_LOCAL_AND_REMOTE.equals(implStyle)
+					|| GenerationConstants.USE_REMOTE.equals(implStyle)){
 			out.write("	  <jndi-name>" + "ejb/" +ejbname+ "</jndi-name>\n");
 		}
-		if(j2eewscontext.getMiscInfo().isSupportLocalAndRemote() 
-			|| GenerationConstants.USE_LOCAL.equals(j2eewscontext.getMiscInfo().getImplStyle())){
+		if(GenerationConstants.USE_LOCAL_AND_REMOTE.equals(implStyle) 
+			|| GenerationConstants.USE_LOCAL.equals(implStyle)){
 			out.write("	  <local-jndi-name>" + "ejb/" +ejbname+ "Local"+"</local-jndi-name>\n");
 		}
 		out.write("	</session>\n");

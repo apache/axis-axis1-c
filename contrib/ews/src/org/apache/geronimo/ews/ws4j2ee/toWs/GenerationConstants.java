@@ -70,6 +70,7 @@ public interface GenerationConstants {
     public static final int WEBSERVICEDD_GENERATOR = 15;
     public static final int J2EE_CONTAINER_DD_GENERATOR = 16;
     public static final int BUILD_FILE_GENERATOR = 17;
+	public static final int WEB_CONTAINER_DD_GENERATOR = 18;
 
     //writers
     public static final int EJB_REMOTE_INTERFACE_WRITER = 5;
@@ -101,5 +102,6 @@ public interface GenerationConstants {
 	public static final String USE_REMOTE ="use-remote";
 	public static final String USE_LOCAL =  "use-local";
 	public static final String USE_INTERNALS = "use-internals"; 
+	public static final String USE_LOCAL_AND_REMOTE = "use-local-remote"; 
  
 }

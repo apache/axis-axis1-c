@@ -54,7 +54,7 @@
     </xsd:documentation>
   </xsd:annotation>
 
-
+	<xsd:include schemaLocation="j2ee_1_4.xsd"/>
 <!-- **************************************************** -->
 
   <xsd:complexType name="port-component-refType">

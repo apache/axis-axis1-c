@@ -53,30 +53,81 @@
  * <http://www.apache.org/>.
  */
 
-package org.apache.geronimo.ews.ws4j2ee.wsutils;
+package org.apache.geronimo.ews.ws4j2ee.parsers;
 
-import java.rmi.RemoteException;
+import java.io.InputStream;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.apache.crimson.tree.TextNode;
+import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
+import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
- * <p>this error is throwd if the error happen at the ejb side
- * in the wrapper WebService class.</p> 
- * @author Srinath Perera(hemapani@opensource.lk)
+ * <web-app> .....
+ *  <servlet>
+ *   <servlet-name>AxisServlet</servlet-name>
+ *   <display-name>Apache-Axis Servlet</display-name>
+ *   <servlet-class>
+ *       org.apache.axis.transport.http.AxisServlet
+ *   </servlet-class>
+ * </servlet>
+ * 
+ * ...
+ * </web-app>
+ * @author hemapani
  */
-public class J2EEFault extends RemoteException{
+public class WebDDParser {
+	private J2EEWebServiceContext j2eewscontext;
+	private String servletClass = null;
 
-    public J2EEFault() {
-        super();
-    }
+	public WebDDParser(J2EEWebServiceContext j2eewscontext) {
+		this.j2eewscontext = j2eewscontext;
+	}
 
-    public J2EEFault(String message) {
-        super(message);
-    }
+	public void parse(InputStream inputStream) throws GenerationFault {
+		try {
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			dbf.setNamespaceAware(true);
+			Document doc = dbf.newDocumentBuilder().parse(inputStream);
+			Element root =  doc.getDocumentElement();
+			NodeList sevlele = root.getElementsByTagName("servlet");
+			if(sevlele.getLength()>0){
+				Element serv = (Element)sevlele.item(0);
+				NodeList servName = serv.getElementsByTagName("servlet-class");
+				servletClass = getElementValue(servName.item(0));
+			}
+		} catch (Exception e) {
+			throw GenerationFault.createGenerationFault(e);
+		}
+	}
+	
+	public String getElementValue(Node node){
+		NodeList nodes = node.getChildNodes();
+		for(int i = 0;i<nodes.getLength();i++){
+			Node temp = nodes.item(i);
+			if(temp instanceof TextNode){
+				return ((TextNode)temp).getNodeValue();
+			}
+		}
+		return null;
+	}
+	/**
+	 * @return
+	 */
+	public String getServletClass() {
+		return servletClass;
+	}
 
-   public J2EEFault(String message, Throwable cause) {
-        super(message, cause);
-    }
+	/**
+	 * @param string
+	 */
+	public void setServletClass(String string) {
+		servletClass = string;
+	}
 
-   public J2EEFault(Throwable cause) {
-        super(cause.getMessage(),cause);
-    }
 }

@@ -63,6 +63,7 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.Writer;
 import org.apache.geronimo.ews.ws4j2ee.toWs.WriterFactory;
 
 /**
+ * <p>This class crete the nessacsaary EJB artifacts</p>
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class EJBGenarator implements Generator {
@@ -76,34 +77,30 @@ public class EJBGenarator implements Generator {
 
 	public EJBGenarator(J2EEWebServiceContext context) throws GenerationFault {
 		this.context = context;
-		if(context.getMiscInfo().isUseRemoteInterface()){
-		
-			if(context.getMiscInfo().isSupportLocalAndRemote()){
+		String implStyle = context.getMiscInfo().getImplStyle();
+			if(GenerationConstants.USE_LOCAL_AND_REMOTE.equals(implStyle) 
+				|| GenerationConstants.USE_REMOTE.equals(implStyle)){
 				homewriter = WriterFactory.createWriter(context, GenerationConstants.EJB_HOME_INTERFACE_WRITER);
 				remotewriter = WriterFactory.createWriter(context, GenerationConstants.EJB_REMOTE_INTERFACE_WRITER);
+			}else if(GenerationConstants.USE_LOCAL_AND_REMOTE.equals(implStyle) 
+				|| GenerationConstants.USE_LOCAL.equals(implStyle)){
 				localhomewriter = WriterFactory.createWriter(context, GenerationConstants.EJB_LOCAL_HOME_INTERFACE_WRITER);
 				localwriter = WriterFactory.createWriter(context, GenerationConstants.EJB_LOCAL_INTERFACE_WRITER);
-			
-			}else if(GenerationConstants.USE_REMOTE.equals(context.getMiscInfo().getImplStyle())){
-				homewriter = WriterFactory.createWriter(context, GenerationConstants.EJB_HOME_INTERFACE_WRITER);
-				remotewriter = WriterFactory.createWriter(context, GenerationConstants.EJB_REMOTE_INTERFACE_WRITER);
-			}else{
-				localhomewriter = WriterFactory.createWriter(context, GenerationConstants.EJB_LOCAL_HOME_INTERFACE_WRITER);
-				localwriter = WriterFactory.createWriter(context, GenerationConstants.EJB_LOCAL_INTERFACE_WRITER);
+			}else if(GenerationConstants.USE_INTERNALS.equals(implStyle)){
+				//when we use the internals we do not want create anything   
+			}
+			if(!context.getMiscInfo().isImplAvalible()){
+				beanwriter = WriterFactory.createWriter(context, GenerationConstants.EJB_IMPLEMENTATION_BEAN_WRITER);
+				ddwriter = WriterFactory.createWriter(context, GenerationConstants.EJB_DD_WRITER);
 			}	
-		}
-		if(!context.getMiscInfo().isImplAvalible()){
-			beanwriter = WriterFactory.createWriter(context, GenerationConstants.EJB_IMPLEMENTATION_BEAN_WRITER);
-			ddwriter = WriterFactory.createWriter(context, GenerationConstants.EJB_DD_WRITER);
-		}	
-		
+
 	}
 
 	public void genarate() throws GenerationFault {
-		if(context.getMiscInfo().isUseRemoteInterface()){
+		if(homewriter != null)
 			homewriter.writeCode();
+		if(remotewriter != null)	
 			remotewriter.writeCode();
-		}
 		if(beanwriter != null)
 			beanwriter.writeCode();
 		if(ddwriter!=null)	
