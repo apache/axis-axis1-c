@@ -44,8 +44,8 @@
 
 #include "ComplexElement.h"
 #include "SoapSerializer.h"
-#include <axis/server/GDefine.h>
-#include <axis/server/Attribute.h>
+#include <axis/server/GDefine.hpp>
+#include <axis/server/Attribute.hpp>
 
 AXIS_CPP_NAMESPACE_START
 

@@ -29,8 +29,8 @@
 #include "SoapEnvelope.h"
 #include "SoapSerializer.h"
 #include "HeaderBlock.h"
-#include <axis/server/GDefine.h>
-#include <axis/server/Packet.h>
+#include <axis/server/GDefine.hpp>
+#include <axis/server/Packet.hpp>
 #include "../common/ArrayBean.h"
 #include "../common/BasicTypeSerializer.h"
 #include "../soap/SoapKeywordMapping.h"

@@ -37,8 +37,8 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include <axis/server/Attribute.h>
-#include <axis/server/GDefine.h>
+#include <axis/server/Attribute.hpp>
+#include <axis/server/GDefine.hpp>
 #include "SoapSerializer.h"
 
 AXIS_CPP_NAMESPACE_START

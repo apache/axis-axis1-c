@@ -31,7 +31,7 @@
 #if !defined(AXIS_SOAPTRANSPORT_H__OF_AXIS_INCLUDED_)
 #define AXIS_SOAPTRANSPORT_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/Packet.h>
+#include <axis/server/Packet.hpp>
 
 /**
  * @file SOAPTransport.h

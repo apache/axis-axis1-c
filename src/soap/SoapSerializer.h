@@ -17,11 +17,11 @@
 #if !defined(_SOAPSERIALIZER_H____OF_AXIS_INCLUDED_)
 #define _SOAPSERIALIZER_H____OF_AXIS_INCLUDED_
 
-#include <axis/server/IHandlerSoapSerializer.h>
+#include <axis/server/IHandlerSoapSerializer.hpp>
 #include "../transport/SOAPTransport.h"
 
 #include "../common/BasicTypeSerializer.h"
-#include <axis/server/WSDDDefines.h>
+#include <axis/server/WSDDDefines.hpp>
 
 AXIS_CPP_NAMESPACE_START
 

@@ -43,8 +43,8 @@
 #include "SoapFault.h"
 #include "SoapSerializer.h"
 #include "SoapDeSerializer.h"
-#include <axis/server/SoapEnvVersions.h>
-#include <axis/server/GDefine.h>
+#include <axis/server/SoapEnvVersions.hpp>
+#include <axis/server/GDefine.hpp>
 #include "../common/AxisTrace.h"
 #include "../common/AxisConfig.h"
 

@@ -54,11 +54,11 @@
 
 #include "HeaderBlock.h"
 #include "SoapSerializer.h"
-#include <axis/server/GDefine.h>
-#include <axis/server/BasicNode.h>
+#include <axis/server/GDefine.hpp>
+#include <axis/server/BasicNode.hpp>
 #include "ComplexElement.h"
 #include "CharacterElement.h"
-#include <axis/server/Attribute.h>
+#include <axis/server/Attribute.hpp>
 
 AXIS_CPP_NAMESPACE_START
 

@@ -21,8 +21,8 @@
 
 
 #include "SoapMethod.h"
-#include <axis/server/Attribute.h>
-#include <axis/server/GDefine.h>
+#include <axis/server/Attribute.hpp>
+#include <axis/server/GDefine.hpp>
 
 AXIS_CPP_NAMESPACE_START
 

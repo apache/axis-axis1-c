@@ -23,9 +23,9 @@
 #endif
 
 #include "SoapEnvelope.h"
-#include <axis/server/GDefine.h>
+#include <axis/server/GDefine.hpp>
 #include "SoapSerializer.h"
-#include <axis/server/Attribute.h>
+#include <axis/server/Attribute.hpp>
 
 #include <stdio.h>
 #include "../common/AxisTrace.h"

@@ -51,17 +51,17 @@
 #include "SoapFault.h"
 #include "ComplexElement.h"
 #include "CharacterElement.h"
-#include <axis/server/GDefine.h>
-#include <axis/server/Packet.h>
+#include <axis/server/GDefine.hpp>
+#include <axis/server/Packet.hpp>
 #include "../common/AxisTrace.h"
 #include "apr_base64.h"
 #include "HexCoder.h"
 #include "../engine/XMLParserFactory.h"
 #include "../xml/XMLParser.h"
 #include "../xml/QName.h"
-#include <axis/server/Attribute.h>
+#include <axis/server/Attribute.hpp>
 #include "AxisSoapException.h"
-#include <axis/AxisGenException.h>
+#include <axis/AxisGenException.hpp>
 
 #include <list>
 #include <iostream>

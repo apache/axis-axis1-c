@@ -54,7 +54,7 @@
 #include "HttpTransport.hpp"
 #include <iostream>
 #include <stdio.h>
-#include <axis/server/GDefine.h>
+#include <axis/server/GDefine.hpp>
 
 using namespace std;
 

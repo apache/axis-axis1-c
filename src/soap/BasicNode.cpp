@@ -34,7 +34,7 @@
  */
 
 
-#include <axis/server/BasicNode.h>
+#include <axis/server/BasicNode.hpp>
 
 AXIS_CPP_NAMESPACE_START
 

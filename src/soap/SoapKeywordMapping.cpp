@@ -20,7 +20,7 @@
  */
 
 #include "SoapKeywordMapping.h"
-#include <axis/server/Attribute.h>
+#include <axis/server/Attribute.hpp>
 #include "../common/AxisUtils.h"
 
 AXIS_CPP_NAMESPACE_START

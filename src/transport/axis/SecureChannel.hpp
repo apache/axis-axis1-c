@@ -22,7 +22,7 @@
 #if !defined(_AXIS_SECURECHANNEL_HPP)
 #define _AXIS_SECURECHANNEL_HPP
 
-#include <axis/server/AxisException.h>
+#include <axis/server/AxisException.hpp>
 #include "Channel.hpp"
 #include <openssl/ssl.h>
 #include <openssl/err.h>

@@ -49,8 +49,8 @@
 #endif
 
 #include <list>
-#include <axis/server/BasicNode.h>
-#include <axis/server/Attribute.h>
+#include <axis/server/BasicNode.hpp>
+#include <axis/server/Attribute.hpp>
 
 AXIS_CPP_NAMESPACE_START
 

@@ -18,7 +18,7 @@
 #include "Platform.hpp"
 #include "TransportFactory.hpp"
 #include "HttpTransport.hpp"
-#include <axis/server/GDefine.h>
+#include <axis/server/GDefine.hpp>
 
 
 Transport* TransportFactory::GetTransport(Url& url, bool secure)
