@@ -105,16 +105,17 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 	protected void writeMethods() throws WrapperFault {
 		try{
 			writer.write("/*implementation of BasicHandler interface*/\n");
-			writer.write("int AXISCALL Invoke(void*p, IMessageData* mc);\n");
-			writer.write("void AXISCALL OnFault(void*p, IMessageData* mc);\n");
-			writer.write("int AXISCALL Init(void*p);\n");
-			writer.write("int AXISCALL Fini(void*p);\n");
-			writer.write("AXIS_BINDING_STYLE AXISCALL GetBindingStyle(void*p);\n");
+			writer.write("int AXISCALL "+classname+"_Invoke(void*p, void* pMsg);\n");
+			writer.write("void AXISCALL "+classname+"_OnFault(void*p, void* pMsg);\n");
+			writer.write("int AXISCALL "+classname+"_Init(void*p);\n");
+			writer.write("int AXISCALL "+classname+"_Fini(void*p);\n");
+			writer.write("int AXISCALL "+classname+"_GetType(void*p);\n");
+			writer.write("AXIS_BINDING_STYLE AXISCALL "+classname+"_GetBindingStyle(void*p);\n");
 			writer.write("/*Methods corresponding to the web service methods*/\n");
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
 					 minfo = (MethodInfo)methods.get(i);
-					 writer.write("int "+minfo.getMethodname()+CUtils.WRAPPER_METHOD_APPENDER+"(IMessageData* mc);");
+					 writer.write("int "+minfo.getMethodname()+CUtils.WRAPPER_METHOD_APPENDER+"(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ);");
 					 writer.write("\n");
 			}
 		}catch(IOException e){
