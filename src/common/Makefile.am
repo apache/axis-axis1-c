@@ -8,7 +8,7 @@ libcommon_la_SOURCES = Param.cpp \
                        GDefine.cpp \
                        AxisUtils.cpp \
                        AxisTrace.cpp \
-                       AxisException.cpp \
+                       AxisGenException.cpp \
                        AxisConfig.cpp \
                        AxisSocketUtils.cpp \
                        AdminUtils.cpp \

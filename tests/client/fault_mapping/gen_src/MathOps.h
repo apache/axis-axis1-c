@@ -14,6 +14,7 @@
 #include "AxisOutOfBoundException.h"
 #include "AxisDivByZeroException.h"
 #include "AxisNormalDetailException.h"
+#include <axis/AxisGenException.h>
 
 
 class MathOps :public Stub
