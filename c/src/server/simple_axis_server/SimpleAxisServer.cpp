@@ -393,7 +393,7 @@ void handleTCPClient (int clntSocket)
     str->transport.pSendFunct = send_response_bytes;
     str->transport.pGetFunct = get_request_bytes;
     str->transport.pSetTrtFunct = set_transport_information;
-    str->transport.pGetTrtFunct = get_transport_information;
+    str->transport.pGetTrtFunct = (AXIS_MODULE_CALLBACK_GET_TRANSPORT_INFORMATION)get_transport_information;
     str->transport.pRelBufFunct = release_receive_buffer;
 
     str->trtype = APTHTTP;
