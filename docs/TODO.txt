@@ -60,6 +60,12 @@ AXISDEPLOY
 GENERAL / UNCATEGORIZED
 -----------------------
 
+! <team>	In the WSDDDocument.cpp for each and every XMLString::transcode() you have to 
+		use a corrosponding XMLString::release() to relase the allocated memeory
+
+! <team>	In the WSDDDocument.cpp write the code to handle the end element for wsdd_resflow
+
+
 FUTURE ENHANCEMENTS
 -------------------
 
