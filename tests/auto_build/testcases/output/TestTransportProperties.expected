@@ -1,0 +1,16 @@
+Full properties list 
+current transport property key = Accept-Language value =  da, en-gb;q=0.8, en;q=0.7
+current transport property key = Accept-Language value = l1
+current transport property key = Date value = Mon Dec  6 13:37:06 GMT 2004
+current transport property key = Accept-Language value = l22
+****************************************************** 
+After deleteTransportProperty(key,int) method  
+current transport property key = Accept-Language value =  da, en-gb;q=0.8, en;q=0.7
+current transport property key = Date value = Mon Dec  6 13:37:06 GMT 2004
+current transport property key = Accept-Language value = l22
+****************************************************** 
+After deleteCurrentProperty method 
+current transport property key = Accept-Language value =  da, en-gb;q=0.8, en;q=0.7
+current transport property key = Date value = Mon Dec  6 13:37:06 GMT 2004
+****************************************************** 
+5
