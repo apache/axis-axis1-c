@@ -246,7 +246,7 @@ main(int argc, char *argv[])
     {
 	printf("Creating thread %d\n", t);
 	rc = pthread_create(&thread[t], &attr, run, (void*)ws);
-	rc = pthread_join(thread[t], (void **)&status);
+//	rc = pthread_join(thread[t], (void **)&status);
 	if (rc)
 	{
 	    printf("ERROR; return code from pthread_create() is %d\n", rc);
