@@ -275,7 +275,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write("\telse\n");
 		writer.write("\t{\n");
 		writer.write("\t\t/*delete any pointer members or array members of this struct here*/\n");
-		for(int i = 1; i< attribs.length;i++){
+		for(int i = 0; i< attribs.length;i++){
 			if(!CPPUtils.isSimpleType(attribs[i][1])){
 				//to understand what happens here please refer to where the 
 					//attribs[][] is created. (ParamWriter) 		
