@@ -128,8 +128,8 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 	 */
 	protected void writePreprocssorStatements() throws WrapperFault {
 		try{
-			writer.write("#include <axis/common/IMessageData.h>\n");
-			writer.write("#include <axis/common/AxisWrapperAPI.h>\n\n");
+			writer.write("#include <axis/server/IMessageData.h>\n");
+			writer.write("#include <axis/server/AxisWrapperAPI.h>\n\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}

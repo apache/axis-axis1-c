@@ -100,7 +100,7 @@ public class ArrayParamWriter extends ParamWriter{
 				writer.write("#include \""+attribs[0].getTypeName()+".h\"\n\n");
 			}
 			else{
-				writer.write("#include <axis/common/AxisUserAPI.h>\n\n");
+				writer.write("#include <axis/server/AxisUserAPI.h>\n\n");
 			}
 			writeArrayStruct();
 			this.writer.write("#endif /* !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)*/\n");

@@ -366,7 +366,8 @@ public class WSDL2Ws {
         String targetoutputLocation,
         String targetLanguage,
         String targetImplementationStyle,
-        String targetEngine)
+        String targetEngine,
+        String security)
         throws WrapperFault {
         	
 		this.language = targetLanguage;
@@ -395,7 +396,8 @@ public class WSDL2Ws {
                         targetEngine,
                         transportURI,
                         targetEndpointURI,
-                        targetNameSpaceOfWSDL),
+                        targetNameSpaceOfWSDL,
+                        security),
                     new ServiceInfo(servicename, qualifiedServiceName, methods),
                     typeMap));
         if (wsg == null)
@@ -644,7 +646,8 @@ public class WSDL2Ws {
                 "java WSDL2Ws <wsdlfile> -<optionChar><value>\n"
                     + "-o target output folder - default is current folder\n"
                     + "-l target language(c|c++) - default is c++\n"
-                    + "-s (client|server) - default is server\n");
+                    + "-s target side(client|server) - default is server\n"
+                    + "-c channel security(ssl|none) - default is none\n");
         else {
             WSDL2Ws gen = new WSDL2Ws(data);
             gen.genarateWrappers(
@@ -652,7 +655,8 @@ public class WSDL2Ws {
                 data.getOptionBykey("o"),
                 data.getOptionBykey("l"),
                 data.getOptionBykey("i"),
-                data.getOptionBykey("s"));
+                data.getOptionBykey("s"),
+                data.getOptionBykey("c"));
         }
     }
 }
