@@ -39,6 +39,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "HandlerFiles"=".\HandlerFiles\HandlerFiles.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "ServerEngineLibrary"=".\server\engine\ServerEngineLibrary.dsp" - Package Owner=<4>
 
 Package=<5>
