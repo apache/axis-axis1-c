@@ -1,6 +1,7 @@
 #include "MathOps.hpp"
 #include <axis/AxisException.hpp>
 #include <ctype.h>
+#include <iostream>
 
 void PrintUsage();
 bool IsNumber(const char* p);
@@ -70,8 +71,8 @@ int main(int argc, char* argv[])
 			      * should be returned to the user.
 			      */
 			    /*sprintf(endpoint, "http://%s:%s/", server, port);*/
-			    printf("This test has been temporarily terminated" \
-			    " due to an unresolved bug\n");
+			    cout << "This test has been temporarily terminated"  
+			    << " due to an unresolved bug"<< endl;
 			    exit(0); /* This is temporary code*/
 			    break;
 
@@ -84,33 +85,34 @@ int main(int argc, char* argv[])
 			    break;
 		 
 		       default:
-			    printf("Invalid option for the last parameter\n\n");
+			    cout << "Invalid option for the last parameter"<<endl<<endl;
 			    return 0;
 		    }
 		    //sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
 		    MathOps ws(endpoint);
 		    iResult = ws.div(i1, i2);		
-		    printf("Result is:%d\n", iResult);
+		    cout << "Result is:" << iResult << endl;
 		}
 		catch(AxisException& e)
 		{
-		    printf("AxisException has occured: %s\n", e.what());
+		    cout << "AxisException has occured: " << e.what()<<endl;
 		}
 		catch(exception& e)
 		{
-		    printf("Unknown exception has occured\n");
+		    cout << "Unknown exception has occured"<< endl;
 		}
 		catch(...)
 		{
-		    printf("Unspecified exception has occured\n");
+		    cout << "Unspecified exception has occured" << endl;
 		}
 	    }
 	}
 	else 
 	{
-		printf("Invalid operation %s\n\n", op);
+		cout << "Invalid operation " << op <<endl<<endl;
 		PrintUsage();
 	}
+	cout << "---------------------- TEST COMPLETE -----------------------------" << endl;
 	return 0;
 }
 

@@ -172,7 +172,8 @@ int main(int argc, char* argv[])
 
       cout << "Input Count : " << input->count << endl;
       cout << "Count : " << output->count << endl;
-      for ( ; i < output->count ; i++ ) {
+      for ( ; i < output->count ; i++ ) 
+      {
 		  if( output->infos.m_Array[i] != (BenchBasicDataType *) 0xcdcdcdcd)
 		  {
 			  cout << " ----------------------------------------------" << endl;
@@ -206,8 +207,8 @@ int main(int argc, char* argv[])
 				cout << " HexBinaryType " << output->infos.m_Array[i]->HexBinary.__ptr << endl;
 			  }
 		  }
+		  returnValue=0;
       }
-      returnValue = 0; // Success
     }
 
     if(verbose) {
@@ -227,16 +228,28 @@ int main(int argc, char* argv[])
   }
 
   // Samisa: make sure we clean up memory allocated
-  delete ws; 
-  for (int i = 0; i < input->infos.m_Size; i++)
-      delete (BenchBasicDataType*)(input->infos.m_Array[i]);
-  delete input;
-  if (output)
+  try
   {
-    for (int i = 0; i < output->infos.m_Size; i++)
-      delete (BenchBasicDataType*)(output->infos.m_Array[i]);
-    delete output;
+	  delete ws; 
+	  for (int i = 0; i < input->infos.m_Size; i++)
+	      delete (BenchBasicDataType*)(input->infos.m_Array[i]);
+	  delete input;
+	  if (output)
+	  {
+	    for (int i = 0; i < output->infos.m_Size; i++)
+	      delete (BenchBasicDataType*)(output->infos.m_Array[i]);
+	    delete output;
+	  }
   }
+  catch(exception& exception)
+  {
+  	cout << "Exception on clean up: " << exception.what()<<endl;
+  }
+  catch(...)
+  {
+  	cout << "Unknown exception on clean up: " << endl;
+  }
+  cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
   return returnValue;
 
 }

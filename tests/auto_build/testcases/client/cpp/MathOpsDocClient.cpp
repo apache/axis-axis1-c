@@ -1,6 +1,7 @@
 #include "MathOps.hpp"
 #include <axis/AxisException.hpp>
 #include <ctype.h>
+#include <iostream>
 
 void PrintUsage();
 bool IsNumber(const char* p);
@@ -16,7 +17,6 @@ int main(int argc, char* argv[])
 	const char* p2 = 0;
 	int i1=0, i2=0;
 	int iResult;
-	char* pcDetail;
 
 	url = argv[1];
 
@@ -32,33 +32,34 @@ int main(int argc, char* argv[])
 		if (strcmp(op, "div") == 0)
 		{
 			iResult = ws.div(i1, i2);		
-			printf("Result is:%d\n", iResult);
+			cout << "Result is:" << iResult << endl;
 		}
 		else 
 		{
-			printf("Invalid operation %s\n\n", op);
+			cout << "Invalid operation "<< op<< endl<<endl;
 			PrintUsage();
 		}
 	}
 	catch(AxisException& e)
 	{
-	    printf("%s\n", e.what());
+	    cout << e.what()<<endl;
 	}
 	catch(exception& e)
 	{
-	    printf("Unknown exception has occured\n");
+	    cout << "Unknown exception has occured" << e.what() << endl;
 	}
 	catch(...)
 	{
-	    printf("Unspecified exception has occured\n");
+	    cout << "Unspecified exception has occured" << endl;
 	}
+	cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
 	
 	return 0;
 }
 
 void PrintUsage()
 {
-	printf("Usage :\n MathOps <url>\n\n");
+	cout << "Usage :\n MathOps <url>"<<endl<<endl;
 	exit(1);
 }
 

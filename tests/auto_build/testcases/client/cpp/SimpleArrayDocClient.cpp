@@ -5,6 +5,7 @@ using namespace std;
 
 #include "ArrayTestPortType.hpp"
 #include <axis/AxisException.hpp>
+#include <iostream>
 
 #define ARRAYSIZE 2
 
@@ -29,23 +30,24 @@ int main(int argc, char* argv[])
 		{
 			arrin.intItem.m_Array[x] = x;
 		}
-		printf("invoking echoIntArray...\n");
+		cout << "invoking echoIntArray..."<<endl;
 		if (ws.echoIntArray(&arrin)->intItem.m_Array != NULL)
-			printf("successful \n");
+			cout << "successful "<<endl;
 		else
-			printf("failed \n");		
+			cout << "failed "<<endl;		
 	}
 	catch(AxisException& e)
 	{
-	    printf("Exception : %s\n", e.what());
+	    cout << "Exception : "<< e.what()<<endl;
 	}
 	catch(exception& e)
 	{
-	    printf("Unknown exception has occured\n");
+	    cout << "Unknown exception has occured"<<endl;
 	}
 	catch(...)
 	{
-	    printf("Unknown exception has occured\n");
+	    cout << "Unknown exception has occured"<<endl;
 	}
+	cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
 	return 0;
 }

@@ -91,6 +91,8 @@ int main(int argc, char* argv[])
 	{
 		cout << "Invalid operation " << op << endl;
 	}
+	cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
+	
 	return 0;
 }
 

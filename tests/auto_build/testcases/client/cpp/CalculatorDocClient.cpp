@@ -1,6 +1,7 @@
 #include "Calculator.hpp"
 #include <axis/AxisException.hpp>
 #include <ctype.h>
+#include <iostream>
 
 void PrintUsage();
 bool IsNumber(const char* p);
@@ -27,21 +28,23 @@ int main(int argc, char* argv[])
 		if (strcmp(op, "add") == 0)
 		{
 			iResult = ws.add(i1, i2);
-			printf("%d\n", iResult);
+			cout << iResult << endl;
 		}
 	}
 	catch(AxisException& e)
 	{
-	    printf("Exception : %s\n", e.what());
+	    cout << "Exception : " << e.what() << endl;
 	}
 	catch(exception& e)
 	{
-	    printf("Unknown exception has occured\n" );
+	    cout << "Unknown exception has occured" << endl;
 	}
 	catch(...)
 	{
-	    printf("Unknown exception has occured\n" );
+	    cout << "Unknown exception has occured" << endl;
 	}
+  cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
+	
 	return 0;
 }
 
