@@ -65,7 +65,7 @@ IChannel * ChannelFactory::LoadChannelLibrary( g_ChannelType eChannelType, const
 
 		if( !sLibHandler)
 		{
-			throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED);
+			throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, PLATFORM_LOADLIB_ERROR);
 		}
 		else
 		{
