@@ -11,14 +11,15 @@ To compile C/C++ code you will require the ant-contrib and cpptasks extensions t
 These are available from: http://ant-contrib.sourceforge.net/
 {Note: You will require both the cpptasks and ant-contrib downloads }
 
-It is intended that the default target be used, which compiles and links all code,
-generates documentation and packages ready for distribution.
+It is intended that the default target be used, which compiles and links all code
+and generates documentation.
 
 Associated with this build script are property files for each platform, the script
 will automatically determine the correct one to be used;
 	- build.Win32.properties
 	- build.Linux.properties
 	- build.AIX.properties
+	- build.SunOS.properties
 Please use these to configure directories to suit the needs of your system.
 
 Notes:
@@ -107,128 +108,46 @@ Notes:
 		</if>
 	</target>
 
-
-	<target name="compileWithDebug">
-		<antcall target="compileAxisClient" inheritall="true">
-			<param name="debug" value="on"/>
-			<param name="dir.bin" value="${dir.bin}/debug"/>
-			<param name="dir.objects" value="${dir.objects}/debug"/>
-		</antcall>
-		<antcall target="compileTransport" inheritall="true">
-			<param name="debug" value="on"/>
-			<param name="dir.bin" value="${dir.bin}/debug"/>
-			<param name="dir.objects" value="${dir.objects}/debug"/>
-		</antcall>
-		<antcall target="compileXMLParser" inheritall="true">
-			<param name="debug" value="on"/>
-			<param name="dir.bin" value="${dir.bin}/debug"/>
-			<param name="dir.objects" value="${dir.objects}/debug"/>
-		</antcall>
-	</target>
-
-	<target name="compileWithoutDebug">
+	<target name="compile">
 		<antcall target="compileAxisClient" inheritall="true"/>
 		<antcall target="compileTransport" inheritall="true"/>
 		<antcall target="compileXMLParser" inheritall="true"/>
 	</target>
 
-	<target name="compileWithTrace" depends="initialize, addTrace">
-		<antcall target="compileWithDebug" inheritall="true">
-			<param name="trace" value="true"/>
-			<param name="dir.src" value="${dir.src.instrumented}"/>
-			<param name="dir.bin" value="${dir.bin}/trace"/>
-			<param name="dir.objects" value="${dir.objects}/trace"/>
-		</antcall>
-		<antcall target="compileWithoutDebug" inheritall="true">
-			<param name="trace" value="true"/>
-			<param name="dir.src" value="${dir.src.instrumented}"/>
-			<param name="dir.bin" value="${dir.bin}/trace"/>
-			<param name="dir.objects" value="${dir.objects}/trace"/>
-		</antcall>
-	</target>
-
-	<target name="compileWithoutTrace" depends="initialize">
-		<antcall target="compileWithDebug" inheritall="true"/>
-		<antcall target="compileWithoutDebug" inheritall="true"/>
-	</target>
-	  
-	<target name="compile" depends="compileWithTrace, compileWithoutTrace, compileWSDL2Ws, buildWSDL2WsJARFile"
-	  description="Compile all C/C++ code and WSDL2Ws java code"/>
-
 	<import file="${basedir}/buildDocumentation.xml"/>
 
-	<target name="build" depends="compile, documentation"/>
+	<target name="buildAll" depends="compile, compileWSDL2Ws, buildWSDL2WsJARFile, documentation"/>
 
-	<!--
-	  Validate all artifacts produced for Windows platform
-	  -->
-	<target name="validateWindows" depends="initialize" if="windows">
-		<condition property="missingArtifact">
-			<not>
-				<and>
-					<!-- DLLs -->
-					<available file="${dir.package.bin}/${clientLibraryName}.dll"/>
-					<available file="${dir.package.bin}/${transportLibraryName}.dll"/>
-					<available file="${dir.package.bin}/${xmlParserLibraryName}.dll"/>
-					<available file="${dir.package.lib}/${clientLibraryName}.lib"/>
-				</and>
-			</not>
-		</condition>
-		<fail message="Not all artifacts have been produced for windows" if="missingArtifact"/>
+
+	<target name="build" depends="initialize"
+	 description="Build runtime libraries, WSDL2Ws tool and API Documentation">
+		<antcall target="buildAll" inheritall="true"/>
 	</target>
 
-	<!--
-	  Validate all artifacts produced for Unix platform
-	  -->
-	<target name="validateUnix" depends="initialize" unless="windows">
-		<condition property="missingArtifact">
-			<not>
-				<and>
-					<!-- Shared Libraries -->
-					<available file="${dir.package.lib}/lib${clientLibraryName}.so.${majorVersion}"/>
-					<available file="${dir.package.lib}/lib${clientLibraryName}.so.${version}"/>
-					<available file="${dir.package.lib}/lib${transportLibraryName}.so.${majorVersion}"/>
-					<available file="${dir.package.lib}/lib${transportLibraryName}.so.${version}"/>
-					<available file="${dir.package.lib}/lib${xmlParserLibraryName}.so.${majorVersion}"/>
-					<available file="${dir.package.lib}/lib${xmlParserLibraryName}.so.${version}"/>
-				</and>
-			</not>
-		</condition>
-		<fail message="Not all artifacts have been produced for unix" if="missingArtifact"/>
+	<target name="buildWithTrace" depends="initialize"
+ 	 description="Build traced runtime libraries, WSDL2Ws tool and API Documentation">
+		<antcall target="addTrace" inheritall="true"/>
+		<property name="trace" value="true"/>
+		<antcall target="build" inheritall="true">
+			<param name="dir.src" value="${dir.src.instrumented}"/>
+		</antcall>
+	</target>
+
+	<target name="buildWithDebug" depends="initialize"
+	 description="Build runtime libraries (with debug symbols), WSDL2Ws tool and API Documentation">
+		<property name="debug" value="true"/>
+		<antcall target="build" inheritall="true"/>
 	</target>
 	
-	<target name="validateAIX" depends="validateUnix" if="aix">
-		<condition property="missingArtifact">
-			<not>
-				<and>
-					<available file="${dir.package.lib}/lib${clientLibraryName}.a"/>
-					<available file="${dir.package.lib}/lib${transportLibraryName}.a"/>
-					<available file="${dir.package.lib}/lib${xmlParserLibraryName}.a"/>
-				</and>
-			</not>
-		</condition>
-		<fail message="Not all artifacts have been produced for AIX" if="missingArtifact"/>
+	<target name="buildWithTraceAndDebug" depends="initialize"
+	 description="Build traced runtime libraries (with debug symbols), WSDL2Ws tool and API Documentation">
+		<antcall target="addTrace" inheritall="true"/>
+		<property name="debug" value="true"/>
+		<property name="trace" value="true"/>
+		<antcall target="build" inheritall="true">
+			<param name="dir.src" value="${dir.src.instrumented}"/>
+		</antcall>
 	</target>
-
-	<!--
-	  Validate all artifacts produced
-	  -->
-	<target name="validate" depends="validateWindows, validateUnix, validateAIX">
-		<condition property="missingArtifact">
-			<not>
-				<and>
-					<!-- WSDL2Ws Tool -->
-					<available file="${dir.package.WSDL2Ws}/wsdl2ws.jar"/>
-					<!-- Header Files -->
-					<available file="${dir.package.include}/axis" type="dir"/>
-					<!-- Documentation -->
-					<available file="${dir.package.docs}" type="dir"/>
-				</and>
-			</not>
-		</condition>
-		<fail message="Not all artifacts have been produced" if="missingArtifact"/>
-	</target>
-
 	<!--
 	  Remove all generated artifaces
 	  -->

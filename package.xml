@@ -1,5 +1,26 @@
 <project name="Apache Axis C Packaging" default="package" basedir=".">
+	<description>
+This ANT script packages the Apache AxisC runtime binaries, WSDL2Ws tooling and
+documentation.  You will need to use build.xml to produce all binaries, etc.
 
+This script is intended for use with Java 1.4+ and Apache ANT 1.6+.
+Ant is available from: http://ant.apache.org/
+
+You will require the ant-contrib extensions to ANT, within:
+	[ant install dir]/lib
+These are available from: http://ant-contrib.sourceforge.net/
+
+It is intended that the default target be used, produces the complete source and
+binary deliverables.
+
+Associated with this build script are property files for each platform, the script
+will automatically determine the correct one to be used;
+	- build.Win32.properties
+	- build.Linux.properties
+	- build.AIX.properties
+	- build.SunOS.properties
+Please use these to configure directories to suit the needs of your system.
+	</description>
 	<import file="${basedir}/buildInitialize.xml"/>
 
 	<target name="copySource">
@@ -190,10 +211,11 @@
 		<antcall target="copySource" inheritall="true"/>
 		<antcall target="copyTraceInstrumentedSource" inheritall="true"/>
 		<antcall target="copyWSDL2Ws" inheritall="true"/>
-		<antcall target="packageDeliverable" inheritall="true"/>
+		<antcall target="packageDeliverable" inheritall="true">
+		</antcall>
 	</target>
 
-	<target name="packageWithoutTrace">
+	<target name="packageAll">
 		<antcall target="packageBinaryRelease" inheritall="true">
 			<param name="release" value="${release}-bin"/>
 			<param name="dir.release" value="${dir.release}-bin"/>
@@ -204,22 +226,20 @@
 		</antcall>
 	</target>
 
-	<target name="packageWithTrace">
-		<antcall target="packageBinaryRelease" inheritall="true">
-			<param name="dir.bin" value="${dir.bin}/trace"/>
-			<param name="release" value="${release}-bin-trace"/>
-			<param name="dir.release" value="${dir.release}-bin-trace"/>
-		</antcall>
-		<antcall target="packageSourceRelease" inheritall="true">
-			<param name="trace" value="true"/>
-			<param name="release" value="${release}-src-trace"/>
-			<param name="dir.release" value="${dir.release}-src-trace"/>
-		</antcall>
-	</target>
-
-	<target name="package" depends="initialize" description="Package ready for delivery">
-		<antcall target="packageWithoutTrace" inheritall="true"/>
-		<antcall target="packageWithTrace" inheritall="true"/>
+	<target name="package" depends="initialize">
+		<if>
+			<available file="${dir.src.instrumented}" type="dir"/>
+			<then>
+				<antcall target="packageAll" inheritall="true">
+					<param name="trace" value="true"/>
+					<param name="release" value="${release}-trace"/>
+					<param name="dir.release" value="${dir.release}-trace"/>
+				</antcall>
+			</then>
+			<else>
+				<antcall target="packageAll" inheritall="true"/>
+			</else>
+		</if>
 	</target>
 	
 	<target name="clean" depends="initialize" description="Remove built packages">
