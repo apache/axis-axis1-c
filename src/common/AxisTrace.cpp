@@ -43,7 +43,8 @@ AxisTrace::~AxisTrace ()
 
 int AxisTrace::openFile ()
 {
-    char* sFileName = g_pConfig->getAxisLogPath ();
+    //char* sFileName = g_pConfig->getAxisLogPath ();
+	char* sFileName = g_pConfig->getAxConfProperty(AXCONF_LOGPATH);
 	if (!sFileName) return AXIS_FAIL;
 #ifndef WIN32
     setFilePerm(sFileName);
@@ -56,7 +57,8 @@ int AxisTrace::openFile ()
 
 int AxisTrace::openFileByClient ()
 {
-    char* sFileName = g_pConfig->getAxisClientLogPath ();
+    //char* sFileName = g_pConfig->getAxisClientLogPath ();
+	char* sFileName = g_pConfig->getAxConfProperty(AXCONF_CLIENTLOGPATH);
 	if (!sFileName) return AXIS_FAIL;
 #ifndef WIN32
     setFilePerm(sFileName);
