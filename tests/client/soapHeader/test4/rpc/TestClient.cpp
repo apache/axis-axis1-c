@@ -43,7 +43,6 @@ main(int argc, char *argv[])
 	port = argv[2];
     }
     printf("Usage :\n %s <server> <port>\n\n", argv[0]);
-    //sprintf(endpoint, "http://%s:%s/axis/base", server, port);
     //endpoint for Axis CPP sample
     sprintf(endpoint, "http://%s:%s/axis/base", server, port);
     InteropTestPortType ws(endpoint, APTHTTP);
@@ -100,19 +99,24 @@ main(int argc, char *argv[])
     //create parent node
     parentNode = phb->createChild(ELEMENT_NODE);
     parentNode->setLocalName("Credentials2");
+     //create a element node
+    pElementNode = phb->createChild(ELEMENT_NODE);
+    pElementNode->setLocalName("ConfidentialStuff");
+
     childNode = phb->createChild(ELEMENT_NODE);
     childNode->setLocalName("username");
     valueNode = phb->createChild(CHARACTER_NODE);
     valueNode->setValue("Test User");
     childNode->addChild(valueNode);
-    parentNode->addChild(childNode);
+    pElementNode->addChild(childNode);
     //add another node set
     childNode = phb->createChild(ELEMENT_NODE);
     childNode->setLocalName("password");
     valueNode = phb->createChild(CHARACTER_NODE);
     valueNode->setValue("Test Password");
     childNode->addChild(valueNode);
-    parentNode->addChild(childNode);
+    pElementNode->addChild(childNode);
+    parentNode->addChild(pElementNode);
     phb->addChild(parentNode);
 
 
@@ -126,6 +130,9 @@ main(int argc, char *argv[])
 
     //test removing SOAP header block using pointer
     IHeaderBlock *header = NULL;
+    header = ws.getFirstSOAPHeaderBlock();
+    ws.deleteSOAPHeaderBlock(header);
+    header = NULL;
     header = ws.getFirstSOAPHeaderBlock();
     ws.deleteSOAPHeaderBlock(header);
     //now the request should have no SOAP headers
