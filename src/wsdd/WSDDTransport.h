@@ -1,5 +1,3 @@
-/* -*- C++ -*- */
-
 /*
  * The Apache Software License, Version 1.1
  *
@@ -69,14 +67,13 @@
 /**
     @class WSDDTransport
     @brief interface for the WSDDTransport class.
-
-
     @author Susantha Kumara (skumara@virtusa.com)
 */
 class WSDDTransport  
 {
 public:
 	void AddHandler(bool bRequestFlow, AXIS_PROTOCOL_TYPE protocol, WSDDHandler* pHandler);
+	int RemoveHandler(bool bRequestFlow, AXIS_PROTOCOL_TYPE protocol, WSDDHandler* pHandler);
 	const WSDDHandlerList* GetResponseFlowHandlers(AXIS_PROTOCOL_TYPE Protocol);
 	const WSDDHandlerList* GetRequestFlowHandlers(AXIS_PROTOCOL_TYPE Protocol);
 	WSDDTransport();

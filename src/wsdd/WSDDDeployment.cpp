@@ -1,5 +1,3 @@
-/* -*- C++ -*- */
-
 /*
  * The Apache Software License, Version 1.1
  *
@@ -55,10 +53,9 @@
  * <http://www.apache.org/>.
  *
  *
- *
- *
  * @author Sanjaya Singharage
  * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ * @author Susantha Kumara (skumara@virtusa.com, susantha@opensource.lk)
  *
  */
 
@@ -67,17 +64,23 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "WSDDDeployment.h"
-#include "WSDDDocument.h"
+
+#ifdef USE_EXPAT_PARSER
+#include "WSDDDocumentExpat.h"
+#define WSDDDOCUMENTPARSER WSDDDocumentExpat
+#elif USE_XERCES_PARSER
+#include "WSDDDocumentXerces.h"
+#define WSDDDOCUMENTPARSER WSDDDocumentXerces
+#else
+#include "WSDDDocumentTXPP.h"
+#define WSDDDOCUMENTPARSER WSDDDocumentTXPP
+#endif
+
 #include <axis/server/GDefine.h>
 #include <axis/server/AxisConfig.h>
 #include <axis/server/AxisTrace.h>
 
 extern AxisTrace* g_pAT;
-
-extern unsigned char chEBuf[1024];
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
 WSDDDeployment::WSDDDeployment()
 {
@@ -87,6 +90,7 @@ WSDDDeployment::WSDDDeployment()
 	m_GlobalResponseHandlers = NULL;
 	m_GlobalRequestHandlers = NULL;
 	m_DeplType = DT_DEPLOYMENT;
+	m_pLibNameIdMap = new map<AxisString, int>;
 }
 
 WSDDDeployment::~WSDDDeployment()
@@ -126,12 +130,6 @@ WSDDDeployment::~WSDDDeployment()
 	}
 }
 
-void WSDDDeployment::SetLibIdMap(map<AxisString, int>* pLibNameIdMap)
-{
-	m_pLibNameIdMap = pLibNameIdMap;
-}
-
-
 const WSDDHandlerList* WSDDDeployment::GetGlobalRequestFlowHandlers()
 {
 	return m_GlobalRequestHandlers;
@@ -142,24 +140,44 @@ const WSDDHandlerList* WSDDDeployment::GetGlobalResponseFlowHandlers()
 	return m_GlobalResponseHandlers;
 }
 
-int WSDDDeployment::LoadWSDD(const AxisChar* sWSDD)
+int WSDDDeployment::UpdateWSDD(const AxisChar* sWSDD)
 {
-	m_sWSDDPath = string(sWSDD);
-	WSDDDocument* doc = new WSDDDocument();
-	if (AXIS_SUCCESS != doc->GetDeployment(sWSDD, this))
+	WSDDDocument* doc = new WSDDDOCUMENTPARSER(m_pLibNameIdMap);
+	if (AXIS_SUCCESS != doc->UpdateDeployment(sWSDD, this))
 	{
 #ifdef _DEBUG
         printf("server.wsdd loading failed\n");
 #endif
+		delete doc;
 		return AXIS_FAIL;
 	}
 #ifdef _DEBUG
     printf("server.wsdd loading successful\n");
 #endif
+	delete doc;
+	return AXIS_SUCCESS;		
+}
+
+int WSDDDeployment::LoadWSDD(const AxisChar* sWSDD)
+{
+	m_sWSDDPath = string(sWSDD);
+	WSDDDocument* doc = new WSDDDOCUMENTPARSER(m_pLibNameIdMap);
+	if (AXIS_SUCCESS != doc->GetDeployment(sWSDD, this))
+	{
+#ifdef _DEBUG
+        printf("server.wsdd loading failed\n");
+#endif
+		delete doc;
+		return AXIS_FAIL;
+	}
+#ifdef _DEBUG
+    printf("server.wsdd loading successful\n");
+#endif
+	delete doc;
 	return AXIS_SUCCESS;
 }
 
-int WSDDDeployment::UpdateWSDD()
+int WSDDDeployment::SaveWSDD()
 {
 	FILE* file;
 	int Status = AXIS_FAIL;
@@ -254,7 +272,14 @@ const AxisChar* WSDDDeployment::GetLibName(int nLibId)
 int WSDDDeployment::AddService(WSDDService* pService)
 {
 	if (!m_DeployedServices) m_DeployedServices = new WSDDServiceMap;
-	(*m_DeployedServices)[pService->GetServiceName()] = pService;
+	if (m_DeployedServices->find(pService->GetServiceName()) != m_DeployedServices->end())
+	{
+		AXISTRACE1("The service already exists and the attempt to re-deploy is ignored", WARN);
+	}
+	else
+	{
+		(*m_DeployedServices)[pService->GetServiceName()] = pService;
+	}
 	return AXIS_SUCCESS;
 }		
 
@@ -293,309 +318,47 @@ const WSDDHandlerList* WSDDDeployment::GetTransportResponseFlowHandlers(AXIS_PRO
 	return m_pTransportHandlers->GetResponseFlowHandlers(protocol);
 }
 
-int WSDDDeployment::RemoveService(string sServiceName)
+int WSDDDeployment::RemoveService(WSDDService* pService)
 {
-	int iStatus = AXIS_FAIL;
-
-	if (m_DeployedServices) {
-		WSDDServiceMap::iterator it = (*m_DeployedServices).find(sServiceName);
-		if (it != (*m_DeployedServices).end()) {
-			WSDDService* pService = (*m_DeployedServices)[sServiceName];
-			
-			(*m_DeployedServices).erase(it);
-
-			delete pService;
-			pService = NULL;
-
-			iStatus = AXIS_SUCCESS;			
-		}
+	if (m_DeployedServices && (m_DeployedServices->find(pService->GetServiceName()) != m_DeployedServices->end()))
+	{
+		WSDDService* pTheService = (*m_DeployedServices)[pService->GetServiceName()];
+		m_pLibNameIdMap->erase(pTheService->GetLibName());
+		m_DeployedServices->erase(pService->GetServiceName());
+		delete pTheService;	
+		delete pService;
+		return AXIS_SUCCESS;
 	}
-
-	return iStatus;
+	return AXIS_NO_SUCH_SERVICE;
 }
 
 int WSDDDeployment::RemoveHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL_TYPE protocol)
 {
-	return AXIS_SUCCESS;	
-}
-
-/**
- * Performs the undeployment.
- */
-int WSDDDeployment::unDeploy(string sServiceName)
-{
-	AXISTRACE3("entered to WSDDDeployment::unDeploy");
-
-	int iStatus = AXIS_FAIL;
-
-	if (RemoveService(sServiceName) == AXIS_SUCCESS) {
-		/*
-		 Write to the server WSDD file
-		 CODE comes here
-		 */
-
-		const AxisChar* pAchServiceName;
-		const AxisChar* pAchLibName;
-		list<AxisString> lstAllowedMethods;
-
-		WSDDServiceMap::iterator itCurrService;
-
-		FILE* file;
-		int iWriteStatus = AXIS_SUCCESS;
-
-		do {
-			file = fopen(m_sWSDDPath.c_str(), "w");
-			if(file) {
-				AXISTRACE3("WSDDDeployment::unDeploy, opened the file successfully");
-			} else {
-				AXISTRACE3("FAILED: WSDDDeployment::unDeploy, couldn't open the file successfully");
-				iWriteStatus = AXIS_FAIL;
-				break;
-			}
-
-			int iWriteResult = 0;
-			
-			iWriteResult = fputs("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", file);
-			if (iWriteResult<0) {
-				AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is UNSUCCESSFULL");
-				iWriteStatus = AXIS_FAIL;
-				break;
-			} else {
-				AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is SUCCESSFULL");
-			}
-
-			iWriteResult = fputs("<deployment xmlns=\"http://xml.apache.org/axis/wsdd/\" xmlns:java=\"http://xml.apache.org/axis/wsdd/providers/java\">\n", file);
-			if (iWriteResult<0) {
-				AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is UNSUCCESSFULL");
-				iWriteStatus = AXIS_FAIL;
-				break;
-			} else {
-				AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is SUCCESSFULL");
-			}
-
-			if(m_DeployedServices)
-			{
-				for(itCurrService=m_DeployedServices->begin()
-						;itCurrService!=m_DeployedServices->end();itCurrService++)
-				{
-					const WSDDService* pWSDDService = (*itCurrService).second;
-					AxisChar achTmpChar[1000] = {0};
-					pAchServiceName = pWSDDService->GetServiceName();
-					pAchLibName = pWSDDService->GetLibName();
-					lstAllowedMethods = pWSDDService->getAllowedMethods();				
-									
-					AXISTRACE3(strcat("WSDDDeployment::unDeploy, pAchServiceName = ", pAchServiceName));
-					AXISTRACE3(strcat("WSDDDeployment::unDeploy, pAchLibName = ", pAchLibName));
-					
-					strcat(achTmpChar, " <service name=\"");
-					strcat(achTmpChar, pAchServiceName);
-					strcat(achTmpChar, "\" provider=\"java:RPC\">\n");
-					strcat(achTmpChar, "  <parameter name=\"className\" value=\"");
-					strcat(achTmpChar, pAchLibName);
-					strcat(achTmpChar, "\"/>\n");
-					strcat(achTmpChar, "  <parameter name=\"allowedMethods\" value=\"");	
-					
-					list<AxisString>::iterator iteAllowedMethods = lstAllowedMethods.begin();
-					while (iteAllowedMethods != lstAllowedMethods.end()) {	
-						
-						AXISTRACE3(strcat("WSDDDeployment::unDeploy, sAllowedMethod = ", (*iteAllowedMethods).c_str()));					
-						const AxisChar* tmpChar = (*iteAllowedMethods).c_str();
-						strcat(achTmpChar, tmpChar);
-						if(iteAllowedMethods != lstAllowedMethods.end()) {
-							strcat(achTmpChar, " ");
-						}
-											
-						iteAllowedMethods++;
-					}
-
-					strcat(achTmpChar, "\"/>\n </service>\n");
-
-					iWriteResult = fputs(achTmpChar, file);
-					if (iWriteResult<0) {
-						AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is UNSUCCESSFULL");
-						iWriteStatus = AXIS_FAIL;
-						break;
-					} else {
-						AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is SUCCESSFULL");
-					}				
-				}
-			}
-
-			iWriteResult = fputs("</deployment>", file);
-			if (iWriteResult<0) {
-				AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is UNSUCCESSFULL");
-				iWriteStatus = AXIS_FAIL;
-				break;
-			} else {
-				AXISTRACE3("WSDDDeployment::unDeploy, writing to the file is SUCCESSFULL");
-			}
-			
-			
-		} while (0);
-
-		fclose(file);
-
-		LoadWSDD("C:/Axis/conf/server.wsdd");
-
-		if (iWriteStatus == AXIS_SUCCESS) {
-			iStatus = AXIS_SUCCESS;
-		}
-	} 
-
-	return iStatus;
-}
-
-/**
- * Performs the deployment.
- */
-int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_Array inAllowedMethodsArray)
-{
-	AXISTRACE3("entered to WSDDDeployment::deploy");
-	AXISTRACE3(strcat("WSDDDeployment::deploy, sServiceName = ", sServiceName.c_str()));
-	AXISTRACE3(strcat("WSDDDeployment::deploy, sDllPath = ", sDllPath.c_str()));	
-
-	const AxisChar* pAchServiceName;
-	const AxisChar* pAchLibName;
-	list<AxisString> lstAllowedMethods;
-
-	WSDDServiceMap::iterator itCurrService;
-
-	FILE* file;
-	int iStatus = AXIS_SUCCESS;
-
-	do {
-		file = fopen(m_sWSDDPath.c_str(), "w");
-		
-		if(file) {
-			AXISTRACE3("WSDDDeployment::deploy, opened the file successfully");
-		} else {
-			AXISTRACE3("WSDDDeployment::deploy, FAILED: couldn't open the file successfully");
-			iStatus = AXIS_FAIL;
-			break;
-		}
-
-		int iWriteResult = 0;
-		
-		iWriteResult = fputs("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", file);
-		if (iWriteResult<0) {
-			AXISTRACE3("WSDDDeployment::deploy, writing to the file is UNSUCCESSFULL");
-			iStatus = AXIS_FAIL;
-			break;
-		} else {
-			AXISTRACE3("WSDDDeployment::deploy, writing to the file is SUCCESSFULL");
-		}
-
-		iWriteResult = fputs("<deployment xmlns=\"http://xml.apache.org/axis/wsdd/\" xmlns:java=\"http://xml.apache.org/axis/wsdd/providers/java\">\n", file);
-		if (iWriteResult<0) {
-			AXISTRACE3("WSDDDeployment::deploy, writing to the file is UNSUCCESSFULL");
-			iStatus = AXIS_FAIL;
-			break;
-		} else {
-			AXISTRACE3("WSDDDeployment::deploy, writing to the file is SUCCESSFULL");
-		}
-
-		if(m_DeployedServices)
+	m_pLibNameIdMap->erase(pHandler->GetLibName());
+	if (bGlobal)
+	{
+		WSDDHandlerList* pTempList = bRequestFlow ? m_GlobalRequestHandlers : m_GlobalResponseHandlers;
+		if(pTempList)
 		{
-			for(itCurrService=m_DeployedServices->begin()
-					;itCurrService!=m_DeployedServices->end();itCurrService++)
+			for (WSDDHandlerList::iterator itr = pTempList->begin();
+				 itr != pTempList->end(); itr++)
 			{
-				const WSDDService* pWSDDService = (*itCurrService).second;
-				AxisChar achTmpChar[1000] = {0};
-				pAchServiceName = pWSDDService->GetServiceName();
-				pAchLibName = pWSDDService->GetLibName();
-				lstAllowedMethods = pWSDDService->getAllowedMethods();				
-								
-				AXISTRACE3(strcat("WSDDDeployment::deploy, pAchServiceName = ", pAchServiceName));
-				AXISTRACE3(strcat("WSDDDeployment::deploy, pAchLibName = ", pAchLibName));
-				
-				strcat(achTmpChar, " <service name=\"");
-				strcat(achTmpChar, pAchServiceName);
-				strcat(achTmpChar, "\" provider=\"java:RPC\">\n");
-				strcat(achTmpChar, "  <parameter name=\"className\" value=\"");
-				strcat(achTmpChar, pAchLibName);
-				strcat(achTmpChar, "\"/>\n");
-				strcat(achTmpChar, "  <parameter name=\"allowedMethods\" value=\"");	
-				
-				list<AxisString>::iterator iteAllowedMethods = lstAllowedMethods.begin();
-				while (iteAllowedMethods != lstAllowedMethods.end()) {	
-					
-					AXISTRACE3(strcat("WSDDDeployment::deploy, sAllowedMethod = ", (*iteAllowedMethods).c_str()));
-					const AxisChar* tmpChar = (*iteAllowedMethods).c_str();
-					strcat(achTmpChar, tmpChar);
-					if(iteAllowedMethods != lstAllowedMethods.end()) {
-						strcat(achTmpChar, " ");
-					}
-										
-					iteAllowedMethods++;
+				if (strcmp((*itr)->GetLibName(), pHandler->GetLibName()) == 0)
+				{
+					pTempList->remove(*itr);
+					delete (*itr);
+					delete pHandler;
+					return AXIS_SUCCESS;
 				}
-
-				strcat(achTmpChar, "\"/>\n </service>\n");
-
-				iWriteResult = fputs(achTmpChar, file);
-				if (iWriteResult<0) {
-					AXISTRACE3("WSDDDeployment::deploy, writing to the file is UNSUCCESSFULL");
-					iStatus = AXIS_FAIL;
-					break;
-				} else {
-					AXISTRACE3("WSDDDeployment::deploy, writing to the file is SUCCESSFULL");
-				}				
 			}
 		}
-
-		/*
-		 *New web service details which is to deploy
-		 */
-		AxisChar achTmpChar[1000] = {0};
-		strcat(achTmpChar, " <service name=\"");
-		strcat(achTmpChar, sServiceName.c_str());
-		strcat(achTmpChar, "\" provider=\"java:RPC\">\n");
-		strcat(achTmpChar, "  <parameter name=\"className\" value=\"");
-		strcat(achTmpChar, sDllPath.c_str());
-		strcat(achTmpChar, "\"/>\n");
-		strcat(achTmpChar, "  <parameter name=\"allowedMethods\" value=\"");
-
-		string* sAllowedMethods = (string*)inAllowedMethodsArray.m_Array;
-		for (int i=0; i<inAllowedMethodsArray.m_Size; i++ ) {
-			AXISTRACE3(strcat("WSDDDeployment::deploy, Allowed method = ", (sAllowedMethods[i]).c_str()));
-			strcat(achTmpChar, (sAllowedMethods[i]).c_str());
-			if(i != ((inAllowedMethodsArray.m_Size)-1)) {
-				strcat(achTmpChar, " ");
-			}
-		}
-
-		strcat(achTmpChar, "\"/>\n </service>\n");
-
-		iWriteResult = fputs(achTmpChar, file);
-		if (iWriteResult<0) {
-			AXISTRACE3("WSDDDeployment::deploy, writing to the file is UNSUCCESSFULL");
-			iStatus = AXIS_FAIL;
-			break;
-		} else {
-			AXISTRACE3("WSDDDeployment::deploy, writing to the file is SUCCESSFULL");
-		}		
-		
-		/*
-		 *--------------------------------------------
-		 */
-
-		
-		iWriteResult = fputs("</deployment>", file);
-		if (iWriteResult<0) {
-			AXISTRACE3("WSDDDeployment::deploy, writing to the file is UNSUCCESSFULL");
-			iStatus = AXIS_FAIL;
-			break;
-		} else {
-			AXISTRACE3("WSDDDeployment::deploy, writing to the file is SUCCESSFULL");
-		}
-		
-		
-	} while (0);
-
-	fclose(file);
-
-	LoadWSDD("C:/Axis/conf/server.wsdd");
-
-	return AXIS_SUCCESS;
+	}
+	else //transport
+	{
+		if (!m_pTransportHandlers) return AXIS_NO_SUCH_HANDLER;
+		return m_pTransportHandlers->RemoveHandler(bRequestFlow, protocol, pHandler);
+	}
+	return AXIS_NO_SUCH_HANDLER;	
 }
 
 DEPLOYMENTTYPE WSDDDeployment::GetDeploymentType() const

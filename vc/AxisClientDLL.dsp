@@ -94,6 +94,10 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=..\src\common\AdminUtils.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\engine\AppScopeHandlerPool.cpp
 # End Source File
 # Begin Source File
@@ -310,7 +314,7 @@ SOURCE=..\src\wsdd\WSDDDeployment.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\wsdd\WSDDDocument.cpp
+SOURCE=..\src\wsdd\WSDDDocumentExpat.cpp
 # End Source File
 # Begin Source File
 
