@@ -29,7 +29,7 @@
         <ant:mkdir dir="${basedir}/target/lib"/>
         <deploy:copy-deps todir="${basedir}/target/lib"/>   
         <ant:mkdir dir="${maven.repo.local}/ews/jars"/>
-		<ant:copy file="${basedir}/target/ews-1.0.jar" todir="${maven.repo.local}/ews/jars"/>
+		<ant:copy file="${basedir}/target/ews-1.0.jar" tofile="${maven.repo.local}/ews/jars/ews-SNAPSHOT.jar"/>
     </postGoal>
     
     <goal name="generate:jaxb"
