@@ -49,6 +49,7 @@ Notes:
 	  -->
 	<property name="dir.src" value="${basedir}/tests/auto_build/testcases"/>
 	<property name="test.list" value="${dir.src}/test.list"/>
+	<property name="test.endpoints" value="${dir.src}/test.endpoints"/>
 
 	<!--
 	  Compiler definitions
@@ -143,11 +144,11 @@ Notes:
 			<os family="windows"/>
 		</condition>
 		<condition property="aix">
-            <os name="AIX"/>
-        </condition>
-        <condition property="linux">
-            <os name="Linux"/>
-        </condition>
+			<os name="AIX"/>
+		</condition>
+		<condition property="linux">
+			<os name="Linux"/>
+		</condition>
 	</target>
 
 	<!--
@@ -446,11 +447,21 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 	  and convert these files to the OS specific format so the filesmatch
 	  comparison later in this script works on all platforms.
 	  -->
-	<target name="setExpectations">
+	<target name="setExpectations" unless="buildOnly">
 		<property name="expected.file" value="${dir.test.generated}/${client.lang}/${testName}/${testName}.cpp.expected"/>
 		<property name="r_expected.file" value="${dir.test.generated}/${client.lang}/${testName}/${testName}Request.expected"/>
-
+		<condition property="requestFileExists">
+			<available file="${dir.src}/output/${testName}Request.out"/>
+		</condition>
 		<copy file="${dir.src}/output/${testName}.cpp.out" tofile="${expected.file}"/>
+		<!--
+		  Convert to OS specific format
+		  -->
+		<fixcrlf srcdir="${dir.test.generated}/${client.lang}/${testName}" includes="${testName}.cpp.expected"/>
+	</target>
+
+	<!-- Only copy expected request file if it exists -->
+	<target name="copyRequestExpectedOutput" if="requestFileExists" unless="buildOnly">
 		<!--
 		  This is an optional file and might not exist so don't fail if
 		  it doesn't.
@@ -460,19 +471,19 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 		<!--
 		  Convert to OS specific format
 		  -->
-		<fixcrlf srcdir="${dir.test.generated}/${client.lang}/${testName}" includes="${testName}.expected"/>
-
+		<fixcrlf srcdir="${dir.test.generated}/${client.lang}/${testName}" includes="${testName}Request.expected"/>
 	</target>
 
 	<!--
 	  Execute the test
 	  -->
-	<target name="executeTest" depends="setExpectations" if="successfulClientCompilation" unless="buildOnly">
+	<target name="executeTest" depends="setExpectations,copyRequestExpectedOutput" if="successfulClientCompilation" unless="buildOnly">
 		<property name="results.file" value="${dir.test.generated}/${client.lang}/${testName}/${testName}.out"/>
 
 		<trycatch>
 			<try>
-				<parallel timeout="30000">
+				<parallel timeout="40000" failonany="false">
+					<echo message="RUNNING TEST ${testName} ${clientArgs}"/>
 					<!-- Run Monitor utility to allow validation of message across the wire -->
 					<java classname="org.apache.test.TCPMonitor">
 						<arg line="-l ${monitorPort}"/>
@@ -486,33 +497,40 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 					</java>
 		
 					<sequential>
+						<echo message="EXEC Starts in 3 secs"/>
 						<!-- Wait for jvm to start monitor program -->
-						<sleep seconds="5"/>
+						<sleep seconds="3"/>
 						<!-- Run the client test -->
 						<exec executable="${dir.test.generated}/${client.lang}/${testName}/${testName}"
 						 dir="${dir.test.generated}/${client.lang}/${testName}" output="${results.file}"
 						 error="${dir.test.generated}/${client.lang}/${testName}/${testName}.err"
 						 failifexecutionfails="false" vmlauncher="false">
-							<arg line="-p ${monitorPort}"/>
-							<arg line="-s localhost"/>
+							<!-- <arg line="-p ${monitorPort}"/>
+							<arg line="-s localhost"/> -->
+							<arg line="${clientArgs}"/>
 							<env key="PATH" value="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}/bin${path.separator}${dir.xmlParser}"/>
 							<env key="LD_LIBRARY_PATH" value="${dir.libraries}${path.separator}${dir.xmlParser}/lib${path.separator}${dir.xmlParser}"/>
 							<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}"/>
 						</exec>
-
-						<sleep seconds="2"/>
-
-						<java classname="org.apache.test.StopTCPMonitor">
-							<arg line="-p ${monitorPort}"/>
-							<arg line="-h localhost"/>
-							<classpath>
-								<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
-							</classpath>
-						</java>
+						<echo message="EXEC FINISHED"/>
 					</sequential>
 				</parallel>
 			</try>
-			<catch/>
+			<catch>
+				<echo message="IN CATCH"/>
+			</catch>
+			<finally>
+				<echo message="TELLING MONITOR TO STOP"/>
+				<sleep seconds="3"/>
+				<java classname="org.apache.test.StopTCPMonitor">
+					<arg line="-p ${monitorPort}"/>
+					<arg line="-h localhost"/>
+					<classpath>
+						<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
+					</classpath>
+				</java>
+				<echo message="MONITOR STOPPED"/>
+			</finally>
 		</trycatch>
 	</target>
 	
@@ -625,9 +643,43 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 	<target name="validateTestRun" depends="validateTestClient, validateMessageOnWire"/>
 
 	<!--
+	  See if an endpoint has been specified for this test, otherwise set the
+	  server and port arguments
+	  -->
+	<target name="setTestArgs" depends="getTestProperties,setTestProperties"/>
+
+	<target name="getTestProperties">
+		<property file="${test.endpoints}"/>
+	</target>
+
+	<target name="setTestProperties" depends="setEPName,setURI,setEP"/>
+
+	<target name="setEPName">
+		<property name="EPName" value="${testName}EP"/>
+	</target>
+
+	<target name="setURI" if="${EPName}">
+		<propertycopy property="EP" from="${EPName}"/>
+	</target>
+
+	<target name="setEP">
+		<condition property="clientArgs" value="-p ${monitorPort} -s localhost">
+			<not>
+				<isset property="EP"/>
+			</not>
+		</condition>
+		<condition property="endpoint" value="http://localhost:${monitorPort}/${EP}">
+			<isset property="EP"/>
+		</condition>
+		<condition property="clientArgs" value="${endpoint}">
+			<isset property="endpoint"/>
+		</condition>
+	</target>
+
+	<!--
 	  Runs test for a given WSDL file
 	  -->
-	<target name="runTest" depends="initialize, stripTestName, buildTest, executeTest, validateTestRun"/>
+	<target name="runTest" depends="initialize,stripTestName,buildTest,setTestArgs,executeTest,validateTestRun"/>
 
 	<target name="setLangList">
 		<condition property="lang.list" value="${target.lang}">
