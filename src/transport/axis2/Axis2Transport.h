@@ -45,40 +45,46 @@ class Axis2Transport:public SOAPTransport
     * @param pcEndPointURI End point URI of the service to connect to.
     *                       e.g. http://localhost:8080/axis/services/echo
     */
-    void setEndpointUri( const char *) throw (AxisTransportException);
-    int openConnection();
-    void closeConnection();
-    AXIS_TRANSPORT_STATUS sendBytes( const char *, const void *);
-    void registerReleaseBufferCallback( AXIS_ENGINE_CALLBACK_RELEASE_SEND_BUFFER pFunct)
+    void setEndpointUri (const char *) throw (AxisTransportException);
+    int openConnection ();
+    void closeConnection ();
+    AXIS_TRANSPORT_STATUS sendBytes (const char *, const void *);
+    void registerReleaseBufferCallback
+	(AXIS_ENGINE_CALLBACK_RELEASE_SEND_BUFFER pFunct)
     {
-		m_pReleaseBufferCallback = pFunct;
+	m_pReleaseBufferCallback = pFunct;
     };
-    AXIS_TRANSPORT_STATUS getBytes( char *, int *) throw (AxisException, AxisTransportException);
-    void setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE, const char *) throw (AxisTransportException);
-    const char *getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE) throw (AxisTransportException);
-    void setTransportProperty( const char *, const char *) throw (AxisTransportException);
-    const char *getTransportProperty( const char *pcKey) throw (AxisTransportException)
+    AXIS_TRANSPORT_STATUS getBytes (char *, int *) throw (AxisException,
+							  AxisTransportException);
+    void setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE,
+			       const char *) throw (AxisTransportException);
+    const char *getTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE)
+	throw (AxisTransportException);
+    void setTransportProperty (const char *,
+			       const char *) throw (AxisTransportException);
+    const char *getTransportProperty (const char *pcKey)
+	throw (AxisTransportException)
     {
-		return "value";
+	return "value";
     };
     void setAttachment (const char *pcAttachmentId, const char *pcAttachment)
     {
     };
     const char *getAttachment (const char *pcAttachmentId)
     {
-		return "value";
+	return "value";
     };
     void setSessionId (const char *pcSessionId)
     {
     };
-    const char *getSessionId()
+    const char *getSessionId ()
     {
-		return "some session id";
+	return "some session id";
     };
-    const char *getServiceName();
-    AXIS_PROTOCOL_TYPE getProtocol();
-    int getSubProtocol();
-    AXIS_TRANSPORT_STATUS flushOutput() throw (AxisTransportException);
+    const char *getServiceName ();
+    AXIS_PROTOCOL_TYPE getProtocol ();
+    int getSubProtocol ();
+    AXIS_TRANSPORT_STATUS flushOutput () throw (AxisTransportException);
 
   /**
     * Set proxy server and port for transport.
@@ -98,7 +104,7 @@ class Axis2Transport:public SOAPTransport
   /**
     * @return HTTP protocol in use - HTTP/1.1 or HTTP/1.0
     */
-    const char *getHTTPProtocol();
+    const char *getHTTPProtocol ();
 
   /**
     * Sets the HTTP protocol to be 1.1 or 1.0
@@ -111,23 +117,23 @@ class Axis2Transport:public SOAPTransport
   /**
     * @return HTTP Method in use - POST, GET etc.
     */
-    const char *getHTTPMethod();
+    const char *getHTTPMethod ();
 
   /**
     * Set HTTP Method to use
     * @param cpMethod - Possible values POST, GET, etc. 
     *        Only POST is handled correctly at the moment
     */
-    void setHTTPMethod( const char *);
+    void setHTTPMethod (const char *);
 
-    const char *getHTTPHeaders();
+    const char *getHTTPHeaders ();
 
     // This is used by SimpleAxisServer
-    void setSocket( unsigned int);
+    void setSocket (unsigned int);
 
   private:
-    void	processResponseHTTPHeaders();
-	int		FindTransportPropertyIndex( std::string);
+    void processResponseHTTPHeaders ();
+    int FindTransportPropertyIndex (std::string);
 
   /**
     * Keeps track of URI changes.
@@ -220,10 +226,11 @@ class Axis2Transport:public SOAPTransport
   /**
     * Vector to hold response HTTP header key/value pairs
     */
-    std::vector < std::pair < std::string, std::string > >m_vResponseHTTPHeaders;
+    std::vector < std::pair < std::string,
+	std::string > >m_vResponseHTTPHeaders;
 
-    Channel *	m_pChannel;				// Channel used for communication
-	bool		m_bChannelSecure;
+    Channel *m_pChannel;	// Channel used for communication
+    bool m_bChannelSecure;
     std::string m_strHeaderBytesToSend;	// Message header string to be sent.
 
 };
