@@ -17,9 +17,15 @@ echo "-----------------------------"
 echo "-----------------------------"
 
 
-echo "running groupb..."
+echo "running groupB..."
 echo "-----------------------------"
-./groupb
+./groupB
+
+echo "-----------------------------"
+
+echo "running cgroupB..."
+echo "-----------------------------"
+./cgroupB
 
 echo "-----------------------------"
 
@@ -31,6 +37,6 @@ echo "-----------------------------"
 echo "-----------------------------"
 
 
-echo "running doclitgroupb..."
+echo "running doclitgroupB..."
 echo "-----------------------------"
-./doclitgroupb
+./doclitgroupB
