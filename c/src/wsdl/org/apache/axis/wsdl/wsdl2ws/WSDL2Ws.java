@@ -380,8 +380,6 @@ public class WSDL2Ws {
 			//type is a inbild type or a already created type
 			return typedata;  
 		}
-
-					
 		System.out.println(
 			"############## the type found =" + type.getQName());
 		typedata =

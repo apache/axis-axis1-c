@@ -53,24 +53,45 @@
  * <http://www.apache.org/>.
  */
  
-
-package org.apache.axis.wsdl.wsdl2ws;
-
-import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
-import org.apache.axis.wsdl.wsdl2ws.rpc.RPCWebServiceGenarator;
-import org.apache.axis.wsdl.wsdl2ws.doclit.DocLitWebServiceGenarator;
 /**
- * Create the concreate WebService Genarator depends on the options.
- * @author Srinath Perera (hemapani@opensource.lk)
- * @author Dimuthu Leelarathne (muthulee@opensource.lk)
+ * @author Srinath Perera(hemapani@openource.lk)
+ * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
  */
-public class WebServiceGenaratorFactory {
-	public static WebServiceGenarator createWebServiceGenarator(WebServiceContext wscontext){
-		if(wscontext.getWrapInfo().getWrapperStyle() == WrapperConstants.STYLE_RPC)
-			return new 	RPCWebServiceGenarator(wscontext);	
-		else if(wscontext.getWrapInfo().getWrapperStyle() == WrapperConstants.STYLE_DOCUMENT)										
-			return new 	DocLitWebServiceGenarator(wscontext);
-		else	
-			return null;
+package org.apache.axis.wsdl.wsdl2ws.c.literal;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
+
+public abstract class CFileWriter extends BasicFileWriter{
+	public CFileWriter(String classname)throws WrapperFault{
+		super(classname);
 	}
+	public void writeSource()throws WrapperFault{
+	   try{
+	  this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+	   writeClassComment();
+	   writePreprocssorStatements();
+	   writeGlobalCodes();
+	  // this.writer.write("public class "+servicename+getExtendsPart()+"{\n");
+	   writeAttributes();
+	   writeMethods();
+	   //this.writer.write("}\n");
+	   //cleanup
+	   writer.flush();
+	   writer.close();
+	   System.out.println(getFilePath().getAbsolutePath() + " created.....");
+
+	   } catch (IOException e) {
+			e.printStackTrace();
+			throw new WrapperFault(e);
+		}
+
+	}
+	protected void writeGlobalCodes()throws WrapperFault{}
 }
+
+
+
