@@ -42,6 +42,11 @@ AxisConfig::AxisConfig ()
 	m_pcKeyArray[AXCONF_TRANSPORTHTTP]="AXISTRANSPORT_HTTP";
 	m_pcKeyArray[AXCONF_TRANSPORTSMTP]="AXISTRANSPORT_SMTP";
 	m_pcKeyArray[AXCONF_XMLPARSER] = "AXISXMLPARSER";
+
+	for(int i=0;i<NOOFPROPERTIES;i++)
+	{
+        m_pcValueArray[i] = '\0';
+	}
 }
 
 AxisConfig::~AxisConfig ()
