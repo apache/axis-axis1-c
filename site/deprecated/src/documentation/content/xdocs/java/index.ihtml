@@ -32,6 +32,8 @@
 
     <LI><A href="user-guide.html">User's Guide</A></LI>
 
+    <LI><A href="client-side-axis.html">Client-side Axis</A></LI>
+
     <LI><A href="security.html">Securing an Axis-based Web
     Service</A></LI>
 
