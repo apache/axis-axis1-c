@@ -242,7 +242,7 @@ public class WrapWriter extends JavaClassWriter {
 			paramList.add(param.getParamName());
 			wrapper = TypeMap.getWrapperCalssNameForJavaClass(paramUsualName);	
 			writer.write("\t\t" + paramUsualName +" "+ param.getParamName() +";\n");  
-			JavaUtils.writeDeserializeCodeLine(param.getParamName(),paramUsualName,ArrayType,"\t\t",writer);
+			JavaUtils.writeDeserializeCodeLine(param.getParamName(),paramUsualName,ArrayType,"\t\t",writer,i);
         	
 //            writer.write(
 //                JavaUtils.getSimpleTypeParameterCreationCode(

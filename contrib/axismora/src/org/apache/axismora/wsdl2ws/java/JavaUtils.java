@@ -155,7 +155,7 @@ public class JavaUtils {
         return code.toString();
     }
     
-    public static void writeDeserializeCodeLine(String target,String javatype,String ArrayTypeWrapper,String INDENT,Writer writer)throws IOException{
+    public static void writeDeserializeCodeLine(String target,String javatype,String ArrayTypeWrapper,String INDENT,Writer writer,int i)throws IOException{
 
 		String wrapper = TypeMap.getWrapperCalssNameForJavaClass(javatype);
 		
@@ -191,12 +191,12 @@ public class JavaUtils {
 			
 			writer.write(INDENT
 					+ ArrayTypeWrapper
-					+ " arrayT0 = (new "
+					+ " arrayT"+i+" = (new "
 					+ ArrayTypeWrapper
 					+ "());\n");
 					
-			writer.write(INDENT+"arrayT0.desierialize(msgdata);\n");
-			writer.write(INDENT+ target + " = arrayT0.getParam();\n");
+			writer.write(INDENT+"arrayT"+i+".desierialize(msgdata);\n");
+			writer.write(INDENT+ target + " = arrayT"+i+".getParam();\n");
 		} else {
 			writer.write(INDENT+target
 					+ "= (new "
