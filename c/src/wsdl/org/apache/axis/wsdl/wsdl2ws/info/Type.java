@@ -95,8 +95,16 @@ public class Type {
     private String languageSpecificName;
 	/* element names and the type of the elements (QName,ElementInfo)*/
     private Hashtable elements;
+	/* This vector was added to preserve the order of types parsed from the wsdl. 
+	 * This may be a hack. Should be improved if necessary
+	 */
+    private Vector vElements;
 	/* attribute names and the type of the attributes (QName,QName)*/
     private Hashtable attributes;
+    /* This vector was added to preserve the order of types parsed from the wsdl. 
+     * This may be a hack. Should be improved if necessary
+     */
+    private Vector vAttributes;
     /* has the attributes are specified with order <sequence> in the schema */
     private boolean hasOrder;
     /*if order presents the order is set in the vector */
@@ -117,6 +125,8 @@ public class Type {
         this.name = name;
 		elements = new Hashtable();
 		attributes = new Hashtable();
+		vElements = new Vector();
+		vAttributes = new Vector();
         if(language == null)
 			this.language = WrapperConstants.LANGUAGE_JAVA;
         else
@@ -161,8 +171,9 @@ public class Type {
         this.name = name;
     }
 
-    public Enumeration getAttributeNames() {
-       	return this.attributes.keys();
+    public Iterator getAttributeNames()
+    {
+    	return this.vAttributes.iterator();
     }
 
 
@@ -175,14 +186,16 @@ public class Type {
         if (hasOrder)
             this.attribOrder.add(attribName);
         this.attributes.put(attribName, type);
+        this.vAttributes.add(attribName);
     }
 
 	public Type getTypForAttribName(String attribName) {
 		return (Type) this.attributes.get(attribName);
 	}
 
-	public Enumeration getElementnames() {
-		return this.elements.keys();
+	public Iterator getElementnames()
+	{
+		return this.vElements.iterator();
 	}
 
 
@@ -195,6 +208,7 @@ public class Type {
 		if (hasOrder)
 			this.attribOrder.add(attribName);
 		this.elements.put(attribName, element);
+		this.vElements.add(attribName);
 	}
 
 	public ElementInfo getElementForElementName(String attribName) {
@@ -205,10 +219,6 @@ public class Type {
     public void setAttribOrder(Vector order) {
         this.attribOrder = order;
     }
-
-
-
-
 
     public boolean hasOrder() {
         return this.hasOrder;
