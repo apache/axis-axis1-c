@@ -58,18 +58,18 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.apache.geronimo.ews.AbstractTestCase;
-import org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2EEClientwithWSDL;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2EEwithWSDL;
 
 /**
  * Unit test for simple App.
  *
  * @author <a href="mailto:jason@zenplex.com">Jason van Zyl</a>
+ * @author <a href="mailto:hemapani@opensource.lk">Srinath Perera</a>
  */
 public class GenerateTest 
 	extends AbstractTestCase
 {
-	private String outDir = "target/generated/samples/";
+	
 	/**
 	 * Create the test case
 	 *
@@ -91,57 +91,47 @@ public class GenerateTest
 
 	public void testBookSample() throws Exception
 	{
-		//client side
-		String args[] = new String[]{getTestFile("src/samples/jaxrpc/book/webserviceClient.xml"),
-									 "-o" + getTestFile(outDir+"withWSDL/client/book/"),"-Iuse-remote"};
-		Ws4J2EEClientwithWSDL.main(args);
-
 		//server side
-		String args1[] = new String[]{getTestFile("src/samples/jaxrpc/book/webservice.xml"),
+		String args1[] = new String[]{getTestFile(sampleDir+"jaxrpc/book/webservice.xml"),
 									 "-o" + getTestFile(outDir+"withWSDL/server/book/remote"),"--server-side","-Iuse-remote"};
 		Ws4J2EEwithWSDL.main(args1);
-    	args1 = new String[]{getTestFile("src/samples/jaxrpc/book/webservice.xml"),
+    	args1 = new String[]{getTestFile(sampleDir + "jaxrpc/book/webservice.xml"),
 									   "-o" + getTestFile(outDir+"withWSDL/server/book/local"),"--server-side","-Iuse-local"};
 		Ws4J2EEwithWSDL.main(args1);
-		args1 = new String[]{getTestFile("src/samples/jaxrpc/book/webservice.xml"),
+		args1 = new String[]{getTestFile(sampleDir + "jaxrpc/book/webservice.xml"),
 										   "-o" + getTestFile(outDir+"withWSDL/server/book/internal"),"--server-side","-Iuse-internals","-Cgeronimo"};
-			  Ws4J2EEwithWSDL.main(args1);
+		Ws4J2EEwithWSDL.main(args1);
 	}
+	
 
 	public void testTimeSample() throws Exception{
-		String args[] = new String[]{getTestFile("src/samples/jaxrpc/time/webserviceClient.xml"),
-									 "-o" + getTestFile(outDir+"withWSDL/client/time")};
-		Ws4J2EEClientwithWSDL.main(args);
-		
-		args = new String[]{getTestFile("src/samples/jaxrpc/time/webservices.xml"),
+		String[] args;
+		args = new String[]{getTestFile(sampleDir + "jaxrpc/time/webservices.xml"),
 											 "-o" + getTestFile(outDir+"withWSDL/server/time"),"--server-side"};
 		Ws4J2EEwithWSDL.main(args);
 	}
 	
+
 	public void testZipSample() throws Exception{
-			String args[] = new String[]{getTestFile("src/samples/mapper/frenchzip/webserviceClient.xml"),
-										 "-o" + getTestFile(outDir+"withWSDL/client/zip")};
-			Ws4J2EEClientwithWSDL.main(args);
-		
-			args = new String[]{getTestFile("src/samples/mapper/frenchzip/webservices.xml"),
+			String[] args = new String[]{getTestFile(sampleDir +"mapper/frenchzip/webservices.xml"),
 												 "-o" + getTestFile(outDir+"withWSDL/server/zip"),"--server-side"};
 			Ws4J2EEwithWSDL.main(args);
 	}
 	public void testGoogleSample() throws Exception{
-				String args[] = new String[]{getTestFile("src/samples/mapper/google/webserviceClient.xml"),
-											 "-o" + getTestFile(outDir+"withWSDL/client/google")};
-				Ws4J2EEClientwithWSDL.main(args);
-		
-				args = new String[]{getTestFile("src/samples/mapper/google/webservices.xml"),
-													 "-o" + getTestFile(outDir+"withWSDL/server/google"),"--server-side"};
-				Ws4J2EEwithWSDL.main(args);
+			String[] args; 
+			args = new String[]{getTestFile(sampleDir +"mapper/google/webservices.xml"),
+												 "-o" + getTestFile(outDir+"withWSDL/server/google"),"--server-side"};
+			Ws4J2EEwithWSDL.main(args);
 	}	
 	
-	public void testServletBasedSample()throws Exception{
-//		String[] args = new String[]{getTestFile("src/test/testData/math/webservice.xml"),
-//															 "-o" + getTestFile(outDir+"withWSDL/server/servletBasedSample"),"--server-side"};
-//		Ws4J2EEwithWSDL.main(args);
+	public void testServletBasedMathSample()throws Exception{
+		String[] args = new String[]{getTestFile(sampleDir +"servlet/math/webservice.xml"),
+															 "-o" + getTestFile(outDir+"withWSDL/server/servletBasedMathSample"),"--server-side"};
+		Ws4J2EEwithWSDL.main(args);
 	}
-	
-	
+	public void testEJBBasedMathSample()throws Exception{
+			String[] args = new String[]{getTestFile(sampleDir +"ejb/math/webservice.xml"),
+																 "-o" + getTestFile(outDir+"withWSDL/server/ejbBasedMathSample"),"--server-side"};
+			Ws4J2EEwithWSDL.main(args);
+	}
 }

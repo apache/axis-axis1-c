@@ -52,49 +52,65 @@
  * <http://www.apache.org/>.
  *
  */
-package org.apache.geronimo.ews.ws4j2ee;
+ package org.apache.geronimo.ews.ws4j2ee;
 
-import javax.xml.namespace.QName;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
-import junit.framework.Assert;
-
-import org.apache.axis.wsdl.symbolTable.BindingEntry;
-import org.apache.axis.wsdl.symbolTable.PortEntry;
 import org.apache.geronimo.ews.AbstractTestCase;
-import org.apache.geronimo.ews.jaxrpcmapping.J2eeEmitter;
-import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
-import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
+import org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2EEClientwithWSDL;
 
 /**
- * @author hemapani
+ * Unit test for simple App.
+ *
+ * @author <a href="mailto:jason@zenplex.com">Jason van Zyl</a>
  */
-public class WSDLTest extends AbstractTestCase{
-    /**
-     * @param testName
-     */
-    public WSDLTest(String testName) {
-        super(testName);
-    }
-
-	public void testGoogleWSDL() throws Exception{
-		   String mappingfile = sampleDir +"mapper/google/GoogleSearch.xml";
-		   String wsdlfile = sampleDir + "mapper/google/GoogleSearch.wsdl";
-		   J2eeEmitter j2ee = new J2eeEmitter();
-		   j2ee.setMappingFilePath(mappingfile);
-		   j2ee.setOutputDir(outDir);
-		   j2ee.setServerSide(true);
-		   j2ee.setVerbose(false);
-		   j2ee.setHelperWanted(true);
-		   System.out.println();
-		   j2ee.runServerSide(wsdlfile);
-		   WSDLContext wscontext = ContextFactory.createWSDLContext(j2ee.getSymbolTable());
-		   PortEntry port = wscontext.getPort(new QName("GoogleSearchPort"));
-		   BindingEntry be = wscontext.getBinding(new QName("urn:GoogleSearch","GoogleSearchBinding"));
-		   
-		   Assert.assertEquals(wscontext.getTargetNSURI(),"urn:GoogleSearch");
-		   Assert.assertNotNull(port);
-		   Assert.assertNotNull(be);
-		   Assert.assertNotNull(wscontext.getService(
-				new QName("urn:GoogleSearch","GoogleSearchService")));
+public class GenerateClientTest 
+	extends AbstractTestCase
+{
+	private String outDir = "target/generated/samples/";
+	/**
+	 * Create the test case
+	 *
+	 * @param testName name of the test case
+	 */
+	public GenerateClientTest( String testName )
+	{
+		super( testName );
 	}
+
+	/**
+	 * @return the suite of tests being tested
+	 */
+	public static Test suite()
+	{
+		return new TestSuite( GenerateClientTest.class );
+	}
+	public void testDummy() {}
+	
+	public void testBookSample() throws Exception
+	{
+		//client side
+		String args[] = new String[]{getTestFile(sampleDir + "jaxrpc/book/webserviceClient.xml"),
+									 "-o" + getTestFile(outDir+"withWSDL/client/book/"),"-Iuse-remote"};
+		Ws4J2EEClientwithWSDL.main(args);
+	}
+
+	public void testTimeSample() throws Exception{
+		String[] args;
+		args = new String[]{getTestFile(sampleDir + "jaxrpc/time/webserviceClient.xml"),
+									 "-o" + getTestFile(outDir+"withWSDL/client/time")};
+		Ws4J2EEClientwithWSDL.main(args);
+	}
+	public void testZipSample() throws Exception{
+			String args[] = new String[]{getTestFile(sampleDir + "mapper/frenchzip/webserviceClient.xml"),
+										 "-o" + getTestFile(outDir+"withWSDL/client/zip")};
+			Ws4J2EEClientwithWSDL.main(args);
+	}
+	public void testGoogleSample() throws Exception{
+			String[] args; 
+			args = new String[]{getTestFile(sampleDir + "mapper/google/webserviceClient.xml"),
+										 "-o" + getTestFile(outDir+"withWSDL/client/google")};
+			Ws4J2EEClientwithWSDL.main(args);
+	}	
 }

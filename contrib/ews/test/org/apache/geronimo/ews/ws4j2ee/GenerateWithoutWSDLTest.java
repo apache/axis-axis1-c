@@ -55,8 +55,7 @@
 
 package org.apache.geronimo.ews.ws4j2ee;
 
-import junit.framework.TestCase;
-
+import org.apache.geronimo.ews.AbstractTestCase;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2EEwithoutWSDL;
 
 /**
@@ -67,16 +66,50 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2EEwithoutWSDL;
  * 	GenerateWithoutWSDL &lt;webservice.xml-file&gt; -o&lt;targetoutput&gt; &lt;additionl argument that are given toJava2WSDL&gt;   
  * @author Srinath Perera(hemapani@opensource.lk)
  */
-public class GenerateWithoutWSDLTest extends TestCase {
+public class GenerateWithoutWSDLTest extends AbstractTestCase {
 	private String outDir = "target/generated/samples/";
-	
+    /**
+     * @param testName
+     */
+    public GenerateWithoutWSDLTest(String testName) {
+        super(testName);
+    }
+
 	public void testMathSample() throws Exception{
-		String[] args2 = new String[]{"src/test/testData/math/webservice.xml","-o"+outDir+"withoutWSDL/math/server" ,"-l" ,"http://127.0.0.1/aixs/math"};
-		Ws4J2EEwithoutWSDL.main(args2);
+		try{
+			String[] args2 = new String[]{testDir+"testData/math/webservice.xml","-o"+outDir+"withoutWSDL/math/server" ,"-l" ,"http://127.0.0.1/aixs/math"};
+			Ws4J2EEwithoutWSDL.main(args2);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 	public void testServletBasedMathSample() throws Exception{
-		String[] args2 = new String[]{"src/test/testData/math/webservice-servletBase.xml","-o"+outDir+"withoutWSDL/math/server-servlet" ,"-l" ,"http://127.0.0.1/aixs/math"};
+		String[] args2 = new String[]{testDir + "testData/math/webservice-ServletBased.xml","-o"+outDir+"withoutWSDL/math/server-servlet" ,"-l" ,"http://127.0.0.1/aixs/math"};
+		Ws4J2EEwithoutWSDL.main(args2);
+	}
+	public void testMathSampleWithHandlers() throws Exception{
+		try{
+			String[] args2 = new String[]{testDir + "testData/math/webservice-withHandler.xml","-o"+outDir+"withoutWSDL/math-withHandlers/server" ,"-l" ,"http://127.0.0.1/aixs/math"};
+			Ws4J2EEwithoutWSDL.main(args2);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	public void testBookSampleJar() throws Exception{
+		String[] args2 = new String[]{"target/generated/samples/bookquote.jar","-o"+outDir+"withoutWSDL/bookquote-jar/"};
+		Ws4J2EEwithoutWSDL.main(args2);
+	}
+	public void testGoogleSampleJar() throws Exception{
+		String[] args2 = new String[]{"target/generated/samples/google.jar","-o"+outDir+"withoutWSDL/google-jar/"};
+		Ws4J2EEwithoutWSDL.main(args2);
+	}
+	public void testTimeSampleJar() throws Exception{
+		String[] args2 = new String[]{"target/generated/samples/time.jar","-o"+outDir+"withoutWSDL/time-jar/"};
+		Ws4J2EEwithoutWSDL.main(args2);
+	}
+	public void testZipampleJar() throws Exception{
+		String[] args2 = new String[]{"target/generated/samples/zip.jar","-o"+outDir+"withoutWSDL/zip-jar/"};
 		Ws4J2EEwithoutWSDL.main(args2);
 	}
 }

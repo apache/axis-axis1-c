@@ -55,24 +55,32 @@
 package org.apache.geronimo.ews.ws4j2ee;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 import junit.framework.Assert;
 
+import org.apache.geronimo.ews.AbstractTestCase;
 import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFHandler;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
-import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 
 /**
  * @author hemapani
  */
-public class WebServiceDDTest {
-	public void testGoogleDD() throws FileNotFoundException, GenerationFault{
+public class WebServiceDDTest extends AbstractTestCase{
+    /**
+     * @param testName
+     */
+    public WebServiceDDTest(String testName) {
+        super(testName);
+        // TODO Auto-generated constructor stub
+    }
+
+	public void testGoogleDD() throws Exception{
 		WSCFContext wscfcontext 
 			= ContextFactory.createWSCFContext(
-				new FileInputStream("src/samples/mapper/google/webservice.xml"));
+				new FileInputStream(sampleDir + "mapper/google/webservices.xml"));
 		Assert.assertNull(wscfcontext.getDescription());
 		Assert.assertNull(wscfcontext.getLargeIcon());
 		Assert.assertNull(wscfcontext.getSmallIcon());
@@ -101,7 +109,33 @@ public class WebServiceDDTest {
 		Assert.assertEquals(tpc.getServiceEndpointInterface(),"org.objectweb.wssample.gen.google.GoogleSearchPort");
 		Assert.assertEquals(tpc.getServiceImplBean().getEjblink(),"GoogleBean");
 		Assert.assertEquals(tpc.getWsdlPort().getNamespaceURI(),"urn:GoogleSearch");
-		Assert.assertEquals(tpc.getWsdlPort().getNamespaceURI(),"GoogleSearchPort");
+		Assert.assertEquals(tpc.getWsdlPort().getLocalpart(),"GoogleSearchPort");
 		
 	}
+	
+	public void testHandlerDD() throws Exception{
+		WSCFContext wscfcontext 
+			= ContextFactory.createWSCFContext(
+				new FileInputStream(testDir + "testData/math/webservice-withHandler.xml"));
+		WSCFWebserviceDescription[] wsarray = wscfcontext.getWebServicesDescription();
+		Assert.assertNotNull(wsarray);	
+		Assert.assertTrue(wsarray.length > 0);
+		WSCFWebserviceDescription wsdes = wsarray[0];
+		WSCFPortComponent[] pc = wsdes.getPortComponent();
+		Assert.assertNotNull(pc);
+		Assert.assertTrue(pc.length > 0);
+		WSCFPortComponent tpc = pc[0];
+		WSCFHandler[] handlers = tpc.getHandlers();
+		Assert.assertNotNull(handlers);
+		Assert.assertTrue(handlers.length == 2);
+		WSCFHandler h1 = handlers[0];
+		Assert.assertEquals("sample.ValidationHandler",h1.getHandlerName());
+		Assert.assertEquals("sample.ValidationHandler",h1.getHandlerClass());
+		
+		WSCFHandler h2 = handlers[1];
+		Assert.assertEquals("sample.LoggingHandler",h2.getHandlerName());
+		Assert.assertEquals("sample.LoggingHandler",h2.getHandlerClass());
+		
+	}
+
 }
