@@ -102,11 +102,13 @@ echo "	Build errors/warnings 		:${SOURCE_BUILD_ERRORS}"
 cd ${HOME_DIR}
 rm -f testcases/build/buildTestCase.log
 rm -f testcases/build/runTestCase.log
-
+APACHE2_PORT=$(echo | grep APACHE2_PORT testcases/platform/linux/test.config | grep -o "[0-9]*$")
+APACHE_PORT=$(echo | grep APACHE_PORT testcases/platform/linux/test.config | grep -o "[0-9]*$")
 # *** Deploy with Apache 2 ***
 echo Start deploy with apache2 using expat parser library
 sed 's/xercesc/expat/g' ${AXISCPP_DEPLOY}/bin/deploy_apache2.sh > ${AXISCPP_DEPLOY}/bin/deploy_apache2_auto.sh
-sed 's/9090/80/g' testcases/platform/linux/test.config > ./test.config
+grep port testcases/platform/linux/test.config | sed "s/[0-9]*$/${APACHE2_PORT}/g" > ./test.config
+#sed 's/9090/80/g' testcases/platform/linux/test.config > ./test.config
 cp -f test.config testcases/platform/linux
 cp -f ${AXISCPP_DEPLOY}/lib/libaxiscpp_mod2.so ${APACHE2_HOME}/modules/
 sh ${AXISCPP_DEPLOY}/bin/deploy_apache2_auto.sh
@@ -128,7 +130,8 @@ sh ./runAllTests.sh
 
 echo "Start deploy with apache1 using expat parser library"
 sed 's/xercesc/expat/g' ${AXISCPP_DEPLOY}/bin/deploy_apache.sh > ${AXISCPP_DEPLOY}/bin/deploy_apache_auto.sh
-sed 's/80/9090/g' ${HOME_DIR}/testcases/platform/linux/test.config > ./test.config
+grep port testcases/platform/linux/test.config | sed "s/[0-9]*$/${APACHE_PORT}/g" > ./test.config
+#sed 's/80/9090/g' ${HOME_DIR}/testcases/platform/linux/test.config > ./test.config
 cp -f test.config ${HOME_DIR}/testcases/platform/linux
 cp -f ${AXISCPP_DEPLOY}/lib/libaxiscpp_mod.so ${APACHE_HOME}/libexec/
 sh ${AXISCPP_DEPLOY}/bin/deploy_apache_auto.sh
