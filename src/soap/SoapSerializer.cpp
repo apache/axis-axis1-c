@@ -168,6 +168,10 @@ int SoapSerializer::getStream(string& sSerialized)
 
 	if(m_pSoapEnvelope) {
 		iStatus= m_pSoapEnvelope->serialize(sSerialized, (SOAP_VERSION)m_iSoapVersion);
+		//does this need to be handled here or at the top level. Discuss this.
+		//if(iStatus==FAIL) {
+		//	sSerialized="";
+		//}
 	}
 
 	return iStatus;
