@@ -6,6 +6,15 @@ Decimal::Decimal():m_Decimal(NULL)
 {
 }
 
+Decimal::~Decimal()
+{
+    if (m_Decimal)
+    {
+        delete m_Decimal;
+        m_Decimal = NULL;
+    }
+}
+
 AxisChar* Decimal::serialize(const void* value) throw (AxisSoapException)
 {
 	return serialize((double*) value);	
