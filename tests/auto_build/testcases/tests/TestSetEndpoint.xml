@@ -6,8 +6,11 @@
     <wsdl>CalculatorDoc.wsdl</wsdl>
     <expected>
         <output>
-            TestSetEndpoint.expected
+			   CalculatorDoc.cpp.out
         </output>
+        <request>
+            TestSetEndpoint.request
+			</request>
     </expected>
 	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
 </test>
