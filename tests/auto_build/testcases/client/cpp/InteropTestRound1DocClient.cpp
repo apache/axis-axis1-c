@@ -15,6 +15,11 @@ int main(int argc, char* argv[])
 	const char* server="localhost";
 	const char* port="80";
 	sprintf(endpoint, "http://%s:%s/axis/base", server, port);
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
+
+		do
+		{
 	try
 	{
 	   InteropTestPortType ws(endpoint, APTHTTP1_1);
@@ -170,10 +175,29 @@ int main(int argc, char* argv[])
 		printf("successful\n");
 	else
 		printf("failed\n");
+
+	bSuccess = true;
 	}
 	catch(AxisException& e)
 	{
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
 		printf("%s\n", e.what());
+			}
 	}
 	catch(exception& e)
 	{
@@ -183,6 +207,8 @@ int main(int argc, char* argv[])
 	{
 		printf("Unknown exception has occured\n");
 	}
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
 	//getchar();
 	return 0;
 }

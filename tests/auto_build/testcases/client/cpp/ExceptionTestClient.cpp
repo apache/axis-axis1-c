@@ -30,6 +30,11 @@ int main(int argc, char* argv[])
 	{
             for(p3 = 0; p3 < 3; p3++)
             {
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
+
+		do
+		{
                 try
                 {     
                     switch(p3)
@@ -92,10 +97,29 @@ int main(int argc, char* argv[])
 	            MathOps ws(endpoint);
 		    iResult = ws.div(i1, i2);		
                     printf("Result is:%d\n", iResult);
+						bSuccess = true;
+
                 }
                 catch(AxisException& e)
                 {
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
                     printf("%s\n", e.what());
+			}
                 }
                 catch(exception& e)
                 {
@@ -105,6 +129,8 @@ int main(int argc, char* argv[])
                 {
 		    printf("Unknown exception has occured\n");
                 }
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
             }
 	}
 	else 

@@ -14,6 +14,11 @@ int main(int argc, char* argv[])
     pAny->_array[1] = strdup("<getQuoteResponse xmlns=\"http://www.getquote.org/test\"><result><name>Widgets Inc.</name><symbol>WID</symbol><public>true</public></result></getQuoteResponse>");
 
     string str;
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
+
+		do
+		{
     try{
 	sprintf(endpoint, "%s", url);
         ExtensibilityQueryPortType* pStub = new ExtensibilityQueryPortType(endpoint);
@@ -28,11 +33,31 @@ int main(int argc, char* argv[])
 			printf("\nSent xml string: \n%s\n", pAny->_array[i]);
 			printf("\nReturned xml string: \n%s\n", pAnyReturn->_array[i]);
         }
+		bSuccess = true;
     }
     catch(AxisException& e)
     {
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
         printf("%s\n", e.getExceptionCode());
+			}
     }
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
 
     return 0;
 }

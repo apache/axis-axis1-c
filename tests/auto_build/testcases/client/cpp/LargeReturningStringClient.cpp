@@ -24,6 +24,11 @@ int main(int argc, char* argv[])
 
   endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
+
+		do
+		{
   try {
     if(endpoint_set) {
       ws = new LargeReturningString(endpoint, APTHTTP1_1);
@@ -43,14 +48,29 @@ int main(int argc, char* argv[])
       cout << strlen(result) << endl;
       returnValue = 0; // Success
     }
+
+	bSuccess = true;
   } catch(AxisException &e) {
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
     cerr << e.what() << endl;
-    if(endpoint_set)
-      free(endpoint);
+			}
   } catch(...) {
     cerr << "Unknown Exception occured." << endl;
-    if(endpoint_set)
-      free(endpoint);
   }
   try
   {
@@ -64,6 +84,10 @@ int main(int argc, char* argv[])
   {
   	cout << "Unknown exception on clean up of ws: " << endl;
   }
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
+    if(endpoint_set)
+      free(endpoint);
   cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
   
   return returnValue;

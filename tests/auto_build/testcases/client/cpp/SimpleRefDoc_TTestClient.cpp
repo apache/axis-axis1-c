@@ -38,6 +38,11 @@ RETTYPE ThreadFunc(ARGTYPE Param)
         const char* url="http://puppet.in.ibm.com:9060/Calculator/services/Calculator";
         if(p!=NULL)
              url=p;
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
+
+		do
+		{
         try
         {
                 sprintf(endpoint, "%s", url);
@@ -53,10 +58,29 @@ RETTYPE ThreadFunc(ARGTYPE Param)
 					cout << "failed "<<endl;
 				}
 
+				bSuccess = true;
+
         }
         catch(AxisException& e)
         {
-            cout << "Exception : " << e.what() << endl;
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
+				cout << "Exception : " << e.what() << endl;
+			}
         }
         catch(exception& e)
         {
@@ -66,6 +90,8 @@ RETTYPE ThreadFunc(ARGTYPE Param)
         {
             cout << "Unknown exception has occured" << endl;
         }
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
                 #ifndef WIN32
                         pthread_exit(0);
                 #endif

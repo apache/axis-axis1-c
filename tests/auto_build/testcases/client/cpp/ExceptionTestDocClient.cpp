@@ -40,6 +40,11 @@ int main(int argc, char* argv[])
 	{
 	    for(p3 = 0; p3 < 3; p3++)
 	    {
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
+
+		do
+		{
 		try
 		{     
 		    switch(p3)
@@ -101,10 +106,28 @@ int main(int argc, char* argv[])
 		    MathOps ws(endpoint);
 		    iResult = ws.div(i1, i2);		
 		    cout << "Result is:" << iResult << endl;
+			bSuccess = true;
 		}
 		catch(AxisException& e)
 		{
-		    cout << "AxisException has occured: " << e.what()<<endl;
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
+				cout << "AxisException has occured: " << e.what() << endl;
+			}
 		}
 		catch(exception& e)
 		{
@@ -114,6 +137,8 @@ int main(int argc, char* argv[])
 		{
 		    cout << "Unspecified exception has occured" << endl;
 		}
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
 	    }
 	}
 	else 

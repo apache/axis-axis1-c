@@ -47,7 +47,11 @@ main(int argc, char *argv[])
     Inquire *ws = new Inquire(endpoint); 
     //ws->setProxy("localhost", 9090);
 
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
 
+		do
+		{
     try 
     {
         char buffer[100];
@@ -135,7 +139,7 @@ main(int argc, char *argv[])
             //printf("overviewURL = %s\n", result.m_Array[i].overviewDoc_Ref->overviewURL);
         }
 
-        
+        bSuccess = true;
         /*name* val1 = new name();
         val1->name_value = "TEST";
         tModelInfos* tModels =  ws->find_tModel(NULL, val1, NULL, NULL, "2.0",5);
@@ -145,8 +149,27 @@ main(int argc, char *argv[])
     } 
     catch(AxisException& e)
     {
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
         printf("Exception caught : %s\n", e.what());
+			}
     }
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
 
     return 0;
 }

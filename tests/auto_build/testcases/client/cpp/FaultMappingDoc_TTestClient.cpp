@@ -75,12 +75,18 @@ RETTYPE ThreadFunc(ARGTYPE Param)
 				case 2: i1 = 1000; i2 = 5; break;
 				case 3: i1 = 10; i2 = -5; break;
 			}
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
+
+		do
+		{
 			try
 			{
 				MathOps ws(endpoint);
 				//cout << "Trying to " << op << " " << i1 << " by " << i2 << endl;
 				iResult = ws.div(i1, i2);		
 				//cout << "Result is " << iResult << endl;
+				bSuccess = true;
 			}
 			catch(DivByZeroStruct& dbzs)
 			{
@@ -91,6 +97,7 @@ RETTYPE ThreadFunc(ARGTYPE Param)
 					<< ", " 
 					<< dbzs.varFloat 
 					<< endl; */
+					  bSuccess = true;
 			}
 			catch(SpecialDetailStruct& sds)
 			{
@@ -98,6 +105,7 @@ RETTYPE ThreadFunc(ARGTYPE Param)
 					<< sds.varString 
 					<< "\"" 
 					<< endl;*/
+					  bSuccess = true;
 			}
 			catch(OutOfBoundStruct& oobs)
 			{
@@ -110,7 +118,10 @@ RETTYPE ThreadFunc(ARGTYPE Param)
 					<< "\"" 
 					<< endl;*/
 				  if(i==3)
+				  {
 					  cout<<"Success"<<endl;
+				  }
+					  bSuccess = true;
 			}
 			catch(SoapFaultException& sfe)
 			{
@@ -118,7 +129,24 @@ RETTYPE ThreadFunc(ARGTYPE Param)
 			}
 			catch(AxisException& e)
 			{
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
                 cout << "AxisException: " << e.what() << endl;
+				}
 			}
 			catch(exception& e)
 			{
@@ -128,6 +156,8 @@ RETTYPE ThreadFunc(ARGTYPE Param)
 			{
                 cout << "Unspecified Exception: " << endl;
 			}
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
 	    }
 	}
 	else 

@@ -64,6 +64,11 @@ RETTYPE ThreadFunc(ARGTYPE Param)
 	{
 	    for(p3 = 0; p3 < 3; p3++)
 	    {
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
+
+		do
+		{
 		try
 		{     
 		    switch(p3)
@@ -125,12 +130,34 @@ RETTYPE ThreadFunc(ARGTYPE Param)
 		    MathOps ws(endpoint);
 		    iResult = ws.div(i1, i2);		
 		    //cout << "Result is:" << iResult << endl;
+			bSuccess = true;
+
 		}
 		catch(AxisException& e)
 		{
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
 		   // cout << "AxisException has occured: " << e.what()<<endl;
+			}
 			if(p3==2)
+			{
 				cout << "Success" << endl;
+							bSuccess = true;
+			}
 		}
 		catch(exception& e)
 		{
@@ -140,6 +167,8 @@ RETTYPE ThreadFunc(ARGTYPE Param)
 		{
 		    cout << "Unspecified exception has occured" << endl;
 		}
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
 	    }
 	}
 	else 

@@ -115,21 +115,47 @@ main(int argc, char *argv[])
 
     printf("invoking echoString...\n");
     //testing echoString 
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
+
+		do
+		{
     try
     {
     if (0 == strcmp(ws.echoString("hello world"), "hello world"))
 	printf("successful\n");
     else
 	printf("failed\n");
+
+				bSuccess = true;
     }
     catch(AxisException& e)
     {
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
         printf("%s\n", e.what());
+			}
     }
     catch(...)
     {
         printf("unknown exception\n");
     }
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
 
 
     //test removing SOAP header block using pointer
@@ -142,21 +168,47 @@ main(int argc, char *argv[])
     ws.deleteSOAPHeaderBlock(header);
 
     //now the request should have no SOAP headers
+		bSuccess = false;
+		iRetryIterationCount = 3;
+
+		do
+		{
     try
     {
     if (0 == strcmp(ws.echoString("hello world"), "hello world"))
         printf("successful\n");
     else
         printf("failed\n");
+
+				bSuccess = true;
     }
     catch(AxisException& e)
     {
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
         printf("%s\n", e.what());
+			}
     }
     catch(...)
     {
         printf("unknown exception\n");
     }
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
 
 
 

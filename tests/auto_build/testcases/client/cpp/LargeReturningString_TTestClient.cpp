@@ -40,6 +40,11 @@ RETTYPE ThreadFunc(ARGTYPE Param)
     char endpoint[256];
 	const char* url="http://localhost:LargeReturningString/services/LargeReturningString";
 	url=(char *)Param;
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
+
+		do
+		{
 try {
 			sprintf(endpoint, "%s", url);
 			LargeReturningString *ws = new LargeReturningString(endpoint, APTHTTP1_1);
@@ -51,9 +56,29 @@ try {
 			} else {
 			cout << strlen(result) << endl;
 			}
+
+			bSuccess = true;
+
 }catch(AxisException& e)
 	{
-        cout << "AxisException: " << e.what() << endl;
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
+				cout << "Exception : " << e.what() << endl;
+			}
 	}
 	catch(exception& e)
 	{
@@ -63,6 +88,8 @@ try {
 	{
         cout << "Unspecified Exception: " << endl;
 	}	
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
     #ifndef WIN32
             pthread_exit(0);
     #endif

@@ -16,6 +16,11 @@ int main(int argc, char* argv[])
         pcDetail = 0;
 
 	url = argv[1];
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
+
+		do
+		{
 
 	try
         {
@@ -33,11 +38,29 @@ int main(int argc, char* argv[])
                 	//ws.getFaultDetail(&pcDetail);
 	                printf("%d\n", iResult);
         	        /*printf("pcDetail:%s\n", pcDetail);*/
+					bSuccess = true;
 		}
         }
         catch(AxisException& e)
         {
-            printf("Exception : %s\n", e.what());
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
+				cout << "Exception : " << e.what() << endl;
+			}
         }
         catch(exception& e)
         {
@@ -47,7 +70,9 @@ int main(int argc, char* argv[])
         {
             printf("Unknown exception has occured\n" );
         }
-	return 0;
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
+		return 0;
 }
 
 void PrintUsage()

@@ -47,6 +47,11 @@ int main(int argc, char* argv[])
 
   endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
+
+		do
+		{
   try {
     if(endpoint_set) {
       ws = new AxisBench(endpoint, APTHTTP1_1);
@@ -168,7 +173,8 @@ int main(int argc, char* argv[])
         cout << "Failed" << endl;
     else 
     {
-   	  char dateTime[50];
+   	  bSuccess = true;
+	  char dateTime[50];
       int i = 0;
       if ( argc > 1 )
           i = output->count -1;
@@ -223,13 +229,26 @@ int main(int argc, char* argv[])
         cout << "Average time = " << total/request << " ms" << endl;
     }
   } catch(AxisException &e) {
-    cerr << e.what() << endl;
-    if(endpoint_set)
-      free(endpoint);
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
+				cout << "Exception : " << e.what() << endl;
+			}
   } catch(...) {
     cerr << "Unknown Exception occured." << endl;
-    if(endpoint_set)
-      free(endpoint);
   }
 
   // Samisa: make sure we clean up memory allocated
@@ -246,15 +265,23 @@ int main(int argc, char* argv[])
 	    delete output;
 	  }
   }
-  catch(exception& exception)
+  catch(AxisException& e)
   {
-  	cout << "Exception on clean up: " << exception.what()<<endl;
+    cerr << e.what() << endl;
+  }
+  catch(exception& e)
+  {
+				cout << "Exception : " << e.what() << endl;
   }
   catch(...)
   {
   	cout << "Unknown exception on clean up: " << endl;
   }
-  cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
+    if(endpoint_set)
+      free(endpoint);
+		cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;
   return returnValue;
 
 }

@@ -15,6 +15,11 @@ int main(int argc, char* argv[])
 	if(argc>1)
 		url = argv[1];
 
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
+
+		do
+		{
 	try
 	{
 		Calculator* ws = new Calculator(bogus_url);
@@ -22,11 +27,29 @@ int main(int argc, char* argv[])
 
 		iResult = ws->add(2,3);
 		cout << iResult << endl;;
+				bSuccess = true;
 		delete ws;
 	}
 	catch(AxisException& e)
 	{
-	    cout << e.what() << endl;
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
+				cout << "Exception : " << e.what() << endl;
+			}
 	}
 	catch(exception& e)
 	{
@@ -36,6 +59,8 @@ int main(int argc, char* argv[])
         {
 	    cout << "Unpecified exception has occured" << endl;
 	}
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
 	cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
 	return 0;
 }

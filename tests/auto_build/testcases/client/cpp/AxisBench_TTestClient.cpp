@@ -57,6 +57,11 @@ RETTYPE ThreadFunc(ARGTYPE Param)
         if(p!=NULL)
              url=p;
         int iResult;
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
+
+		do
+		{
         try
         {
                 sprintf(endpoint, "%s", url);
@@ -173,6 +178,7 @@ RETTYPE ThreadFunc(ARGTYPE Param)
 					cout << "Failed" << endl;
 				else 
 				{
+					bSuccess = true;
    				char dateTime[50];
 				int i = 0;
 			    
@@ -185,7 +191,24 @@ RETTYPE ThreadFunc(ARGTYPE Param)
 				}
   }catch(AxisException& e)
         {
-            cout << "Exception : " << e.what() << endl;
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
+				cout << "Exception : " << e.what() << endl;
+			}
         }
         catch(exception& e)
         {
@@ -216,6 +239,8 @@ RETTYPE ThreadFunc(ARGTYPE Param)
   {
   	cout << "Unknown exception on clean up: " << endl;
   }
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
                 #ifndef WIN32
                         pthread_exit(0);
                 #endif

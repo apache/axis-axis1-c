@@ -85,19 +85,44 @@ int main(int argc, char *argv[])
     phb->addChild(parentNode);
 
 	cout << "invoking MathOps div..." << endl;
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
+
+		do
+		{
 	try
 		{
                 iResult = ws.div(15,5);
                 cout << iResult << endl;		
+				bSuccess = true;
         }
         catch (AxisException& e)
         {
-                cout << e.what() << endl;
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
+				cout << "Exception : " << e.what() << endl;
+			}
         }
         catch(...)
         {
                 cout << "Unknown exception" << endl;
         }
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
 	
    
    IHeaderBlock *header = NULL;
@@ -105,19 +130,44 @@ int main(int argc, char *argv[])
    ws.deleteSOAPHeaderBlock(ws.getCurrentSOAPHeaderBlock());
    ws.deleteCurrentSOAPHeaderBlock();  
 
+		bSuccess = false;
+		iRetryIterationCount = 3;
+
+		do
+		{
     try
     {
                 iResult = ws.div(15,5);
                 cout << iResult << endl;
+				bSuccess = true;
     }
     catch (AxisException& e)
     {
-        cout << e.what() << endl;
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
+				cout << "Exception : " << e.what() << endl;
+			}
     }
     catch(...)
     {
         cout << "Unknown exception" << endl;
     }
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
 
 	
     return 0;

@@ -25,6 +25,11 @@ int main(int argc, char* argv[])
 
   endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
+
+		do
+		{
   try {
     if(endpoint_set) {
       ws = new operations(endpoint, APTHTTP1_1);
@@ -41,16 +46,35 @@ int main(int argc, char* argv[])
 
     returnValue = 0; // Success
 
+	bSuccess = true;
+
   } catch(AxisException &e) {
-    cerr << e.what() << endl;
-    if(endpoint_set)
-      free(endpoint);
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
+				cout << "Exception : " << e.what() << endl;
+			}
   } catch(...) {
     cerr << "Unknown Exception occured." << endl;
-    if(endpoint_set)
-      free(endpoint);
   }
-  
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
+
+  if( endpoint_set)
+	  free(endpoint);
   // Samisa : clean up memory allocated for stub
   try
   {

@@ -16,6 +16,11 @@ int main(int argc, char* argv[])
 	int i1=0, i2=0;
         int iResult;
         char* pcDetail;
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
+
+		do
+		{
         try
         {
 	sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
@@ -35,10 +40,29 @@ int main(int argc, char* argv[])
 		printf("Invalid operation %s\n\n", op);
 		PrintUsage();
 	}
+
+				bSuccess = true;
         }
         catch(AxisException& e)
         {
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
             printf("%s\n", e.what());
+			}
         }
         catch(exception& e)
         {
@@ -48,6 +72,8 @@ int main(int argc, char* argv[])
         {
 	    printf("Unknown exception has occured\n");
         }
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
 	
 	return 0;
 }

@@ -17,7 +17,6 @@ int main(int argc, char* argv[])
 	int i1=0, i2=0;
     int iResult;
 
-
 	url = argv[1];
 
 	sprintf(endpoint, "%s", url);
@@ -37,14 +36,37 @@ int main(int argc, char* argv[])
                     case 2: i1 = 1000; i2 = 5; break;
                     case 3: i1 = 10; i2 = -5; break;
                 }
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
+
+		do
+		{
                 try
                 {
 		    iResult = ws.div(i1, i2);		
                     printf("Result is:%d\n", iResult);
+					bSuccess = true;
                 }
                 catch(AxisException& e)
                 {
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
                     printf("Exception : %s\n", e.what());
+			}
                 }
                 catch(exception& e)
                 {
@@ -53,6 +75,8 @@ int main(int argc, char* argv[])
                 catch(...)
                 {
                 }
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
             }
 	}
 	else 

@@ -60,39 +60,89 @@ int main(int argc, char *argv[])
 
     cout << "invoking MathOps div..." << endl;
     //testing add function
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
+
+		do
+		{
         try
         {
                 iResult = ws.div(15,5);
                 cout << iResult << endl;
 
+				bSuccess = true;
         }
         catch (AxisException& e)
         {
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
                 cout << e.what() << endl;
+			}
         }
         catch(...)
         {
                 cout << "Unknown exception" << endl;
         }
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
 
     //test removing SOAP header block using pointer
     IHeaderBlock *header = NULL;
     header = ws.getFirstSOAPHeaderBlock();
     ws.deleteSOAPHeaderBlock(header);
 
+		bSuccess = false;
+		iRetryIterationCount = 3;
+
+		do
+		{
     try
     {
                 iResult = ws.div(15,5);
                 cout << iResult << endl;
+				bSuccess = true;
     }
     catch (AxisException& e)
     {
-        cout << e.what() << endl;
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
+                cout << e.what() << endl;
+			}
     }
     catch(...)
     {
         cout << "Unknown exception\n" << endl;
     }
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
 
 
     return 0;

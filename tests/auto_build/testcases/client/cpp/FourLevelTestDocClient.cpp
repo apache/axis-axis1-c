@@ -15,6 +15,11 @@ int main(int argc, char* argv[])
 	const char* server="localhost";
 	const char* port="80";
 	url = argv[1];
+		bool bSuccess = false;
+		int	iRetryIterationCount = 3;
+
+		do
+		{
 	try
 	{
 		sprintf(endpoint, "%s", url);
@@ -54,11 +59,28 @@ int main(int argc, char* argv[])
 		printf("Size = %d\n", out_array.m_Size);
 		printf("String = %s\n", out_array.m_Array->ThirdLevelElem.m_Array->FourthLevelElem.m_Array->SampleString);
 
-			
+		bSuccess = true;
 	}
 	catch(AxisException& e)
 	{
-	    printf("Exception : %s\n", e.what());
+			bool bSilent = false;
+
+			if( e.getExceptionCode() == CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED)
+			{
+				if( iRetryIterationCount > 0)
+				{
+					bSilent = true;
+				}
+			}
+			else
+			{
+				iRetryIterationCount = 0;
+			}
+
+            if( !bSilent)
+			{
+				cout << "Exception : " << e.what() << endl;
+			}
 	}
 	catch(exception& e)
 	{
@@ -68,5 +90,7 @@ int main(int argc, char* argv[])
 	{
 	    printf("Unknown exception has occured\n");
 	}
+		iRetryIterationCount--;
+		} while( iRetryIterationCount > 0 && !bSuccess);
 	return 0;
 }
