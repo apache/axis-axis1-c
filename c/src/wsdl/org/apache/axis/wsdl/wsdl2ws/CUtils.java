@@ -37,7 +37,7 @@ import org.apache.axis.wsdl.wsdl2ws.info.TypeMap;
 
 public class CUtils {
 	public static final String WRAPPER_NAME_APPENDER = "Wrapper";
-	public static final String CLASS_LODER_APPENDER = "Service";
+	public static final String CLASS_LOADER_APPENDER = "Service";
 	public static final String WRAPPER_METHOD_APPENDER = "Wrapped";
 	public static final QName anyTypeQname = new QName("http://ws.apache.org/axisc/types","AnyType");
 

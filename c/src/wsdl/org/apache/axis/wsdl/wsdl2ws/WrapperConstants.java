@@ -80,7 +80,8 @@ public interface WrapperConstants {
 	//common constants
 	public static final int GENERATOR_DEPLOYMENT = 40;
 	public static final int GENERATOR_UNDEPLOYMENT = 41;
-
+	public static final int GENERATOR_BUILDSCRIPT = 42;
+	
 	//implementation type
 	public static final String IMPL_STYLE_STRUCT = "struct";
 	public static final String IMPL_STYLE_VALUEORDER = "order";

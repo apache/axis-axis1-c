@@ -73,6 +73,7 @@ public abstract class ParamCPPFileWriter extends ParamWriter{
 		   targetOutputLocation = targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
 	   new File(targetOutputLocation).mkdirs();
 	   String fileName = targetOutputLocation + "/" + this.classname + ".cpp";
+		this.wscontext.addGeneratedFile(classname + ".cpp");
 	   return new File(fileName);
    }
    

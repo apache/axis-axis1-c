@@ -27,13 +27,17 @@
 
 package org.apache.axis.wsdl.wsdl2ws.info;
 
+import java.util.HashSet;
+
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 
 public class WebServiceContext {
     private WrapperInfo wrapInfo;
     private ServiceInfo serInfo;
     private TypeMap typemap;
-
+    
+	private HashSet generatedFileList = new HashSet();
+	
     public WebServiceContext(WrapperInfo wrapInfo, ServiceInfo serInfo, TypeMap typemap) throws WrapperFault {
         this.wrapInfo = wrapInfo;
         this.serInfo = serInfo;
@@ -50,6 +54,17 @@ public class WebServiceContext {
         return serInfo;
     }
 
+	/**
+	 * Adds a name of the generated file 
+	 * @param filename
+	 */
+	public void addGeneratedFile(String filename){
+		generatedFileList.add(filename);
+	}
+	
+	public HashSet getGeneratedFileList(){
+		return generatedFileList;
+	}
     /**
      * @return TypeMap
      */

@@ -56,11 +56,13 @@ public class DocLitWebServiceGenarator implements WebServiceGenarator{
 				(new Genarator(WrapperConstants.GENERATOR_DEPLOYMENT, wscontext)).genarate();
 				(new Genarator(WrapperConstants.GENERATOR_UNDEPLOYMENT, wscontext)).genarate();
 				(new Genarator(WrapperConstants.GENERATOR_EXCEPTION_ALL, wscontext)).genarate(); //nithya
+				(new Genarator(WrapperConstants.GENERATOR_BUILDSCRIPT, wscontext)).genarate();
 			}else{
 				(new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_CPP, wscontext)).genarate();
 				(new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_HPP, wscontext)).genarate();
 				(new Genarator(WrapperConstants.GENERATOR_PARAM_CPP_ALL, wscontext)).genarate();
 				(new Genarator(WrapperConstants.GENERATOR_EXCEPTION_ALL, wscontext)).genarate();//nithya
+				(new Genarator(WrapperConstants.GENERATOR_BUILDSCRIPT, wscontext)).genarate();
 			}
 		}else if(WrapperConstants.LANGUAGE_C.equalsIgnoreCase(language)){
 			if(WrapperConstants.SERVER.equals(wscontext.getWrapInfo().getTargetEngine())){
@@ -71,10 +73,12 @@ public class DocLitWebServiceGenarator implements WebServiceGenarator{
 				(new Genarator(WrapperConstants.GENERATOR_CLASSLOADER_C, wscontext)).genarate();				 				 	
 				(new Genarator(WrapperConstants.GENERATOR_DEPLOYMENT, wscontext)).genarate();
 				(new Genarator(WrapperConstants.GENERATOR_UNDEPLOYMENT, wscontext)).genarate();
+				(new Genarator(WrapperConstants.GENERATOR_BUILDSCRIPT, wscontext)).genarate();
 			}else{
 				 (new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_C, wscontext)).genarate();
 				 (new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_H, wscontext)).genarate();
 				 (new Genarator(WrapperConstants.GENERATOR_PARAM_C_ALL, wscontext)).genarate();	
+				(new Genarator(WrapperConstants.GENERATOR_BUILDSCRIPT, wscontext)).genarate();
 			}				 				 	
 		}		
 		else{

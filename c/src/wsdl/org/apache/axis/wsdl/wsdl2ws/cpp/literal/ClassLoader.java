@@ -98,7 +98,8 @@ public class ClassLoader implements SourceWriter{
 		if(targetOutputLocation.endsWith("/"))
 			targetOutputLocation = targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
 		new File(targetOutputLocation).mkdirs();
-		String fileName = targetOutputLocation + "/" + classname + CUtils.CLASS_LODER_APPENDER + ".cpp";
+		String fileName = targetOutputLocation + "/" + classname + CUtils.CLASS_LOADER_APPENDER + ".cpp";
+		this.wscontext.addGeneratedFile(classname + CUtils.CLASS_LOADER_APPENDER + ".cpp");
 		return new File(fileName);
 	}
 
