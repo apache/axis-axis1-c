@@ -149,7 +149,7 @@ AC_ARG_ENABLE(libwww, [  --enable-libwww    build libwww client transport librar
     ;;
   esac ],
   AC_MSG_RESULT(no)
-  LIBWWWBUILD="libwww"
+  LIBWWWBUILD=""
 )
 
 AC_MSG_CHECKING(whether write to log)
