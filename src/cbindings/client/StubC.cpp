@@ -174,11 +174,6 @@ AXISC_STORAGE_CLASS_INFO int axiscGetStatusStub(AXISCHANDLE stub) {
 	return s->getStatus();
 }
 
-AXISC_STORAGE_CLASS_INFO const AxiscChar * axiscGetNamespacePrefixStub(AXISCHANDLE stub, const AxiscChar * pNamespace) {
-	Stub *s = (Stub*)stub;
-	return s->getNamespacePrefix(pNamespace);
-}
-
 AXISC_STORAGE_CLASS_INFO void axiscSetMaintainSession(AXISCHANDLE stub, AxiscBool bSession) {
 	Stub *s = (Stub*)stub;
 	s->setMaintainSession(0!=bSession);

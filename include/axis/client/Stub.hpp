@@ -689,10 +689,6 @@ class STORAGE_CLASS_INFO Stub
     * Get the status of the stub to see any error situation
     */
        int getStatus();
-  /**
-    * Get a namespace prefix for a given namespace URI
-    */
-    const AxisChar* AXISCALL getNamespacePrefix(const AxisChar* pNamespace);
 
   /**
     * Set whether to Maitain session with service ot not.

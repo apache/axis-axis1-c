@@ -345,12 +345,6 @@ int Stub::getStatus()
         return m_pCall->getStatus();
 }
 
-const AxisChar* Stub::getNamespacePrefix(const AxisChar* pNamespace)
-{
-    return m_pCall->getNamespacePrefix(pNamespace);
-}
-
-
 void Stub::setMaintainSession(bool bSession)
 {
     if (m_pTransport)

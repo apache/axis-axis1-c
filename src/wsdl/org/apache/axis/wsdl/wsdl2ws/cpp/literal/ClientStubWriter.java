@@ -564,7 +564,7 @@ public class ClientStubWriter
 								+ i
 								+ ", \"%s:"
 								+ parameterName
-								+ "\", getNamespacePrefix(\""
+								+ "\", m_pCall->getNamespacePrefix(\""
 								+ namespace
 								+ "\"));\n");
 					}
