@@ -861,7 +861,6 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
                 DESERIALIZE_ENCODED_ARRAY_BLOCK(unsigned char, CONV_STRTOUL)
             case XSD_LONG:
             case XSD_INTEGER:
-            case XSD_BOOLEAN:
                 DESERIALIZE_ENCODED_ARRAY_BLOCK(long, CONV_STRTOL)
             case XSD_UNSIGNEDLONG:
                 DESERIALIZE_ENCODED_ARRAY_BLOCK(unsigned long, CONV_STRTOUL)
@@ -883,6 +882,46 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
                 DESERIALIZE_ENCODED_ARRAY_BLOCK(struct tm, CONV_STRTODATETIME)
             case XSD_DURATION:
                 DESERIALIZE_ENCODED_ARRAY_BLOCK(long, CONV_STRTODURATION)
+            case XSD_BOOLEAN:
+//              DESERIALIZE_ENCODED_ARRAY_BLOCK(long, CONV_STRTOL)
+				Array.m_Array = malloc(sizeof(long)*Array.m_Size);
+				if (!Array.m_Array)
+				{
+					Array.m_Size = 0;
+					m_nStatus = AXIS_FAIL;
+					return Array;
+				}
+				for (; nIndex < Array.m_Size; nIndex++)
+				{
+					/* wrapper node without type info  Ex: <item>*/
+					m_pNode = m_pParser->next();
+					m_pNode = m_pParser->next(true); /* charactor node */
+					if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+					{
+						if( !stricmp( "false", m_pNode->m_pchNameOrValue))
+						{
+	                        ((long*)Array.m_Array)[nIndex] = 0;
+						}
+						else if( !stricmp( "true", m_pNode->m_pchNameOrValue))
+						{
+	                        ((long*)Array.m_Array)[nIndex] = 1;
+						}
+						else
+						{
+	                        ((long*)Array.m_Array)[nIndex] = (long) (strtol( m_pNode->m_pchNameOrValue, &m_pEndptr, 10) & 1);
+						}
+
+						m_pNode = m_pParser->next(); /* skip end element node too */
+						continue;
+					}
+					/* error : unexpected element type or end of stream */
+					m_nStatus = AXIS_FAIL;
+					free(Array.m_Array);
+					Array.m_Array = 0;
+					Array.m_Size = 0;
+					return Array;
+				}
+				return Array;
             default:;
             }
         }
