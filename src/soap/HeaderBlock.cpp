@@ -581,6 +581,18 @@ IAttribute* HeaderBlock::createAttribute(const AxisChar *localname,
    {
       localname="";
    }
+   if(!prefix)
+   {
+      prefix="";
+   }
+   if(!uri)
+   {
+      uri="";
+   }
+   if(!value)
+   {
+      value = "";
+   }
    
     pAttribute = new Attribute(localname, prefix, uri, value);
 //	    m_attributes.push_back(pAttribute);
