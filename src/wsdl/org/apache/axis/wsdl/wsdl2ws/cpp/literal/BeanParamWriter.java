@@ -297,46 +297,17 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				if ( attribs[i].isSimpleType())
 				{
 					writer.write("\tarray = pIWSDZ->getBasicArray("+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+ ", \""+attribs[i].getParamName()+"\",0);\n");
-					writer.write("\tparam->"+attribs[i].getParamNameAsMember()+" = ("+CUtils.getBasicArrayNameforType(attribs[i].getTypeName())+"&)array;\n");					
+//					writer.write("\tparam->"+attribs[i].getParamNameAsMember()+" = ("+CUtils.getBasicArrayNameforType(attribs[i].getTypeName())+"&)array;\n");					
+					writer.write("\tparam->"+attribs[i].getParamNameAsMember()+".m_Array = ("+attribs[i].getTypeName()+"*)new "+attribs[i].getTypeName()+"[array.m_Size];\n");
+					writer.write("\tparam->"+attribs[i].getParamNameAsMember()+".m_Size = array.m_Size;\n\n");
+					writer.write("\tmemcpy( param->"+attribs[i].getParamNameAsMember()+".m_Array, array.m_Array, sizeof( "+attribs[i].getTypeName()+") * array.m_Size);\n");
 				}
 				else
 				{
 					Iterator	itForTypes = wscontext.getTypemap().getTypes().iterator();
 					boolean		nillable = isNillable();
 					boolean		moreThanOne = isMoreThanOne();
-/*        	
-					while( itForTypes.hasNext())
-					{
-						Type aType = (Type) itForTypes.next();
-        		
-						if( aType.getLanguageSpecificName().indexOf( ">") > -1)
-						{
-							Iterator	itForElemName = aType.getElementnames();
-					
-							while( itForElemName.hasNext() && !nillable)
-							{
-								String key = (String) itForElemName.next();
-        				
-								if( aType.getElementForElementName( key).getNillable())
-								{
-									nillable = true;
-									
-									Iterator itForElementType = aType.getElementForElementName( key).getType().getElementnames();
-									
-									while( itForElementType.hasNext())
-									{
-										String name = (String) itForElementType.next();
-										
-										if( "count".equals( name))
-										{
-											moreThanOne = true;
-										}
-									}
-								}
-							}
-						}
-					}
-*/					
+
 					arrayType = attribs[i].getTypeName();
 					writer.write("\tarray = pIWSDZ->getCmplxArray((void*)Axis_DeSerialize_"+arrayType+",\n"+ 
 								 "\t\t\t\t\t\t\t\t  (void*)Axis_Create_"+arrayType+",\n"+
@@ -482,7 +453,21 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write("\t/*delete any pointer and array members here*/\n");
 		for(int i = 0; i< attribs.length;i++){
 			if(attribs[i].isArray()){
-				writer.write("\tdelete [] (("+attribs[i].getTypeName()+"*)"+attribs[i].getParamNameAsMember()+".m_Array);\n");
+				if ( attribs[i].isSimpleType())
+				{
+					writer.write("\tdelete [] (("+attribs[i].getTypeName()+"*)"+attribs[i].getParamNameAsMember()+".m_Array);\n");
+				}
+				else
+				{
+					if( isNillable())
+					{
+						writer.write("\tdelete "+attribs[i].getParamNameAsMember()+".m_Array;\n");
+					}
+					else
+					{
+						writer.write("\tdelete [] (("+attribs[i].getTypeName()+"*)"+attribs[i].getParamNameAsMember()+".m_Array);\n");
+					}
+				}
 			}
 			else if (attribs[i].isAnyType()){
 				writer.write("\tif ("+attribs[i].getParamNameAsMember()+") \n\t{ \n");
