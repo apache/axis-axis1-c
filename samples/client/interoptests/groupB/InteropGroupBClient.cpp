@@ -1,6 +1,6 @@
 // InteropGroupBClient.cpp : Defines the entry point for the console application.
 //
-#include "InteropTestPortTypeB.h"
+#include "InteropTestPortTypeB.hpp"
 #include <axis/AxisException.hpp>
 #include <iostream>
 
