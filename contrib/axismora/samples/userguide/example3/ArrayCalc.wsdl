@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://example3.userguide" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://example3.userguide" xmlns:intf="http://example3.userguide" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns2="http://example3.userguide" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+ <wsdl:types>
+  <schema targetNamespace="http://example3.userguide" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="Point">
+	<sequence>
+     <element name="x" type="xsd:int"/>
+     <element name="y" type="xsd:int"/>
+     <element name="z" type="xsd:int"/>
+    </sequence>
+   </complexType>
+  </schema>
+  <schema targetNamespace="http://example3.userguide" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="ArrayOf_tns2_Point">
+    <complexContent>
+     <restriction base="soapenc:Array">
+      <attribute ref="soapenc:arrayType" wsdl:arrayType="tns2:Point[]"/>
+     </restriction>
+    </complexContent>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="echoArrayRequest">
+
+      <wsdl:part name="in0" type="intf:ArrayOf_tns2_Point"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addStringArrayResponse">
+
+      <wsdl:part name="addStringArrayReturn" type="intf:ArrayOf_tns2_Point"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addStringArrayRequest">
+
+      <wsdl:part name="in0" type="intf:ArrayOf_tns2_Point"/>
+
+      <wsdl:part name="in1" type="intf:ArrayOf_tns2_Point"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addArrayResponse">
+
+      <wsdl:part name="addArrayReturn" type="intf:ArrayOf_tns2_Point"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="addArrayRequest">
+
+      <wsdl:part name="in0" type="intf:ArrayOf_tns2_Point"/>
+
+      <wsdl:part name="in1" type="intf:ArrayOf_tns2_Point"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="echoArrayResponse">
+
+      <wsdl:part name="echoArrayReturn" type="intf:ArrayOf_tns2_Point"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="ArrayCalc">
+
+      <wsdl:operation name="addArray" parameterOrder="in0 in1">
+
+         <wsdl:input message="intf:addArrayRequest" name="addArrayRequest"/>
+
+         <wsdl:output message="intf:addArrayResponse" name="addArrayResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addStringArray" parameterOrder="in0 in1">
+
+         <wsdl:input message="intf:addStringArrayRequest" name="addStringArrayRequest"/>
+
+         <wsdl:output message="intf:addStringArrayResponse" name="addStringArrayResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="echoArray" parameterOrder="in0">
+
+         <wsdl:input message="intf:echoArrayRequest" name="echoArrayRequest"/>
+
+         <wsdl:output message="intf:echoArrayResponse" name="echoArrayResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="ArrayCalcSoapBinding" type="intf:ArrayCalc">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="addArray">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="addArrayRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://example3.userguide" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="addArrayResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://example3.userguide" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="addStringArray">
+
+         <wsdlsoap:operation soapAction="ArrayCalc"/>
+
+         <wsdl:input name="addStringArrayRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://example3.userguide" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="addStringArrayResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://example3.userguide" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="echoArray">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="echoArrayRequest">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://example3.userguide" use="encoded"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="echoArrayResponse">
+
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://example3.userguide" use="encoded"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="ArrayCalcService">
+
+      <wsdl:port binding="intf:ArrayCalcSoapBinding" name="ArrayCalc">
+
+         <wsdlsoap:address location="http://localhost:8080/axismora/services/ArrayCalc"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+	 <SOAP-ENV:Header>
+       <t:Transaction
+           xmlns:t="some-URI"
+           SOAP-ENV:mustUnderstand="1">
+               5
+       </t:Transaction>
+   </SOAP-ENV:Header>
+	<SOAP-ENV:Body>
+		<m:getTotel xmlns:m="Some-URI">
+			<Vector>
+				<Data>
+                   <amount>2</amount>
+				   <code>0</code>
+
+				</Data>
+				<Data>
+                   <amount>4</amount>
+				   <code>1</code>
+				</Data>
+			</Vector>
+			<Vector>
+			    <prize>
+				   <code>0</code>
+				   <value>43.75</value>	
+			    </prize>
+			    <prize>
+				   <code>1</code>
+				   <value>4.7</value>	
+			    </prize>
+			</Vector>
+		</m:getTotel>
+	</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

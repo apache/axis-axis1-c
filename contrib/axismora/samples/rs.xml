@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns1:transaction arg1="arg2" xmlns:ns1="http://thirdparty.example.org/transaction">hello<ns2:transaction xmlns:ns2="http://thirdparty.example.org/transaction2"/></ns1:transaction><ns3:transaction xmlns:ns3="http://thirdparty.example.org/transaction2"/>

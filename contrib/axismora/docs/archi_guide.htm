@@ -1,0 +1,403 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0082)http://cvs.apache.org/viewcvs/~checkout~/ws-axis/java/docs/architecture-guide.html -->
+<HTML xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns="http://www.w3.org/TR/REC-html40"><HEAD>
+<TITLE>Axis Architecture Guide</TITLE>
+<link rel="stylesheet" type="text/css" href="AxisMora.css">
+</HEAD>
+<BODY>
+<h1 align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a name="top"></a>Axis-Mora</h1>
+<h1><font size="5">Architecture Guide</font></h1>
+<BR><b>Contents</b><p><a href="#Introduction">Introduction
+</a> 
+<BR><a href="#Overview">Architecture 
+Overview</a><BR>
+<a href="#Handlers">Handlers</a> <BR>
+<a href="#SOAP Deserializer">SOAP Deserializer</a><BR><a href="#SOAP Serializer">SOAP Serializer</a>
+<BR><a href="#Wrapper">Wrapper</a>
+<BR><a href="#Provider">Provider</a>
+<BR><a href="#Deployed Service Information Manager">Deployed Service Information 
+Manager</a>
+<BR><a href="#Logger">Logger</a>
+<BR><a href="#Dynamic Class Loader">Dynamic Class Loader</a>
+<BR><a href="#Exception">Exception</a></p>
+<p>&nbsp;</p>
+<H2><A name=Introduction></A><font size="4">Introduction</font></H2><font size="3">This documentation 
+explains the design of axis-Mora.</font><H2><A name=Overview></A><font size="4">Architectural Overview</font></H2>
+<span style="font-size: 12.0pt; font-family: Verdana">The basic axis architecture 
+of Handler model has not changed in Axis-Mora.</span><p class="MsoNormal" style="text-align: justify">
+There is a request flow and a response flow and each of them has their own handlers.
+</p>
+<p class="MsoNormal" style="text-align: justify">
+<img border="0" src="images/image001ar.gif" width="618" height="383"></p>
+<h3 style="text-align: justify"><b><font size="4">The 
+processing of the SOAP request can be described as follows.</font></b></h3>
+<blockquote>
+  <ol>
+    <li>
+  <p class="MsoNormal" style="text-align: justify"><span style="font-style: normal; font-variant: normal; font-weight: normal; font-size: 7.0pt; font-family: Times New Roman">&nbsp;</span>On the first call, the Axis engine is initialized. It reads the WSDD 
+  file, creates deployment object&nbsp; and initializes the HandlerPool. (The 
+  DOM is used to parsing at this level).&nbsp; </p>
+    </li>
+   <p>&nbsp;</p> <li>
+  <p class="MsoNormal" style="text-align: justify"><span style="font-style: normal; font-variant: normal; font-weight: normal; font-size: 7.0pt; font-family: Times New Roman">&nbsp;</span><span style="font-family: Verdana">TransportListener</span> listens 
+  the HTTP request and passes the service name using SOAP action. It also passes 
+  input stream and output stream to the Axis engine.</p>
+    </li>
+   <p>&nbsp;</p> <li>
+  <p class="MsoNormal" style="text-align: justify">Axis engine creates <span style="font-family: Courier New">
+  MessageContext</span> object (Which acts as a mediator that takes care of the 
+  interaction between the components). <span style="font-family: Courier New">
+  MessageContext</span> parses the Envelope and Headers using
+  <span style="font-family: Courier New">DeserializationContext</span> and 
+  stores it in itself (i.e.<span style="font-family: Courier New"> 
+  MessageContext)</span>. The body is parsed to the
+  <span style="font-family: Courier New">Wrapper.</span> (The data is parsed 
+  only when they are needed. For this parsing we use XMLPullParser)</p>
+    </li>
+    <p>&nbsp;</p><li>
+  <p class="MsoNormal" style="text-align: justify">Request Handlers process the <span style="font-family: Courier New">
+  MessageContext</span> . Handlers are supposed to deal with the Headers only. 
+  If they are using the body (e.g.:-encryption) they should write it back to 
+  the stream.</p>
+    </li>
+   <p>&nbsp;</p> <li>
+  <p class="MsoNormal" style="text-align: justify">Then the provider (This is actually a minimal one, most of logic passed 
+  to the Wrapper) locates the wrapper and invokes the service. The result is set 
+  to the <span style="font-family: Courier New">MessageContext</span> as a 
+  result object. </p>
+    </li>
+    <p>&nbsp;</p><li>
+  <p class="MsoNormal" style="text-align: justify">Response Handlers process the <span style="font-family: Courier New">
+  MessageContext</span> .</p>
+    </li>
+    <p>&nbsp;</p><li>
+  <p class="MsoNormal" style="text-align: justify">When the <span style="font-family: Courier New">MessageContext</span> 
+  comes back to the <span style="font-family: Courier New">AxisEngine,</span> 
+  engine calls the <span style="font-family: Courier New">serialize()</span> 
+  method to write the response back.&nbsp;&nbsp; </p>
+    </li>
+  </ol>
+</blockquote>
+<p class="MsoNormal" style="text-align: justify">&nbsp;</p>
+<h2 style="text-align:justify"><b><a name="Axis Engine"><font size="4">Axis Engine</font></a></b></h2>
+<p class="MsoNormal" style="text-align:justify">There is one axis engine in the 
+system. It has <span style="font-family:&quot;Courier New&quot;">WSDDDeployment 
+and HandlerPool</span> objects. As all the requests are served as a call on the 
+engine. The concurrency has been taken care of. &nbsp;</p>
+<p class="MsoNormal" style="text-align:justify">Axis engine will call the 
+handlers in the right order. In case of error&nbsp;
+<span style="font-family:
+&quot;Courier New&quot;">SOAPFault</span> is set and the
+<span style="font-family:&quot;Courier New&quot;">Handlers</span> invoked so far 
+driven back on <span style="font-family:&quot;Courier New&quot;">onFault()</span>.</p>
+<h2 style="text-align:justify"><b><a name="Handlers"><font size="4">Handlers</font></a></b></h2>
+<h3 style="text-align: justify; text-indent: -18.0pt; margin-left: 45.0pt">
+<a name="_Toc40006130"><font size="3">
+<span style="font-family: Symbol; font-weight: normal">·</span></font><span style="font-style: normal; font-variant: normal; font-weight: normal; font-family: Times New Roman"><font size="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</font></span><font size="3">BasicHandler</font></a></h3>
+<h3 style="text-align: justify; text-indent: -18.0pt; margin-left: 45.0pt">
+<a name="_Toc40006131"><font size="3">
+<span style="font-family: Symbol; font-weight: normal">·</span></font><span style="font-style: normal; font-variant: normal; font-weight: normal; font-family: Times New Roman"><font size="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</font></span><font size="3">Handler Chain</font></a></h3>
+<h3 style="text-align: justify; text-indent: -18.0pt; margin-left: 45.0pt">
+<a name="_Toc40006132"><font size="3">
+<span style="font-family: Symbol; font-weight: normal">·</span></font><span style="font-style: normal; font-variant: normal; font-weight: normal; font-family: Times New Roman"><font size="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</font></span><font size="3">Transport Handlers</font></a></h3>
+<h3 style="text-align: justify; text-indent: -18.0pt; margin-left: 45.0pt">
+<a name="_Toc40006133"><font size="3">
+<span style="font-family: Symbol; font-weight: normal">·</span></font><span style="font-style: normal; font-variant: normal; font-weight: normal; font-family: Times New Roman"><font size="3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</font></span><font size="3">Global Handlers</font></a></h3>
+<h3 style="text-align: justify; text-indent: -18.0pt; margin-left: 45.0pt">
+<a name="_Toc40006134"><span style="font-family: Symbol; font-weight: normal">
+<font size="3">·<span style="font-style: normal; font-variant: normal; font-weight: normal; font-family: Times New Roman">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></font></span><font size="3">Axis Engine Handler </font></a></h3>
+<p class="MsoNormal">The Handler API functionally equivalent to the Axis1.1 
+Handler API. There are certain deviations due the architecture considerations. 
+For more information please refer to <a href="user_guide.html#Handler API"> <b>Handler API document</b>.</a> </p>
+<h2 style="text-align:justify"><b><a name="SOAP Deserializer"><font size="4">SOAP 
+Deserializer</font>&nbsp;</a></b></h2>
+<p class="MsoNormal" style="text-align:justify">We are using the XMLPullParser 
+for the deserialization. <b>&nbsp;</b></p>
+<h3 style="text-align:justify"><b>Reasons for using XMLPUll&nbsp;</b></h3>
+<blockquote>
+  <p class="MsoNormal" style="text-align: justify; text-indent: -18.0pt; margin-left: 18.0pt">
+  1)<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;</span>With 
+  XMLPullParser, one can parse the data only when it is needed. Everything need 
+  not be kept in memory. (Low memory requirements).</p>
+  <p class="MsoNormal" style="text-align: justify; text-indent: -18.0pt; margin-left: 18.0pt">
+  2)<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp; </span>Parsing can 
+  be done even when the whole SOAP message is not yet available.</p>
+  <p class="MsoNormal" style="text-align: justify; text-indent: -18.0pt; margin-left: 18.0pt">
+  3)<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;</span>XMLPull 
+  ideally supports our design. It allows the
+  <span style="font-family:&quot;Courier New&quot;">Wrapper</span> (without 
+  storing all the SAXevents) to ask for what does it need. The main advantage is 
+  here. Wrapper of a web service knows what to expect next (i.e. whether to 
+  expect an int , String and etc … ). So it would be faster if we give the 
+  responsibility to the wrapper to deserialize the SOAP message rather than pre-deserializtion 
+  and storing it. This design decision is expected to increase performance speed 
+  and decrease memory requirements.</p>
+</blockquote>
+<p class="MsoNormal" style="text-align:justify">Since there are fundamental 
+differences in &nbsp;deserialization we could not reuse the
+<span style="font-family:&quot;Courier New&quot;">DeserializationContext</span>. 
+Therefore we wrote our own <span style="font-family:&quot;Courier New&quot;">
+DeserializationContext</span>.&nbsp; </p>
+<h3 style="text-align:justify"><b>&nbsp;&nbsp;&nbsp; How Does 
+DeserializationContext work?</b></h3>
+<ol>
+  <li>
+<p class="MsoNormal" style="text-align: justify; text-indent: -18.0pt; margin-left: 36.0pt">
+First the 
+parser parses the Envelope and validate it. Then it creates a new
+<span style="font-family:&quot;Courier New&quot;">
+org.apache.axis.message.SOAPEnvelope</span>. (validating codes borrowed by 
+existing architecture mostly.)</p>
+  </li>
+  <p>&nbsp;</p><li>
+<p class="MsoNormal" style="text-align: justify; text-indent: -18.0pt; margin-left: 36.0pt">
+<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;</span>It parses 
+headers create the <span style="font-family:
+&quot;Courier New&quot;">SOAPHeaderElement</span>. The complex XML structures 
+available in the <span style="font-family:&quot;Courier New&quot;">SOAPHeader</span> 
+is stored in class called <span style="font-family:&quot;Courier New&quot;">
+SOAPHeaderElementContent</span>&nbsp; as a vector of
+<span style="font-family:&quot;Courier New&quot;">org.w3c.Elelements</span>. 
+This is done based on a state diagram model.</p>
+  </li>
+  <p>&nbsp;</p><li>
+<p class="MsoNormal" style="text-align: justify; text-indent: -18.0pt; margin-left: 36.0pt">
+<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;</span>Then the 
+body start tag is validated and (read the method if RPC) control is given to the 
+Wrapper.</p>
+  </li>
+  <p>&nbsp;</p><li>
+<p class="MsoNormal" style="text-align: justify; text-indent: -18.0pt; margin-left: 36.0pt">
+Deserialization of the SOAP body is done upon the request by the wrapper.</p>
+  </li>
+</ol>
+<p class="MsoNormal" style="margin-left:36.0pt;text-align:justify;text-indent:
+-36.0pt">&nbsp;</p>
+<h2 style="text-align:justify"><b><a name="SOAP Serializer"><font size="4">SOAP Serializer</font></a></b></h2>
+<p class="MsoNormal" style="text-align:justify">Serialization subsystem of axis 
+has not been changed. Serialization of axis has been completely reused in 
+axis-Mora. The serialization is done by the 
+means of calling the <span style="font-family:
+&quot;Courier New&quot;">output(SerializationContext)</span> method of the 
+SOAPEnvelope of axis. Serializing process can be briefly explained as below.</p>
+<p class="MsoNormal" style="text-align: justify; text-indent: -18.0pt; margin-left: 18.0pt">
+1)<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Headers and 
+Body are kept separately in <span style="font-family:&quot;Courier New&quot;">
+MeassageContext</span>.</p>
+<p class="MsoNormal" style="text-align: justify; text-indent: -18.0pt; margin-left: 18.0pt">
+2)<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>After 
+processing is done AxisEngine calls the serialize() method in the&nbsp;
+<span style="font-family:&quot;Courier New&quot;">MeassageContext.</span></p>
+<p class="MsoNormal" style="text-indent: -18.0pt; margin-left: 18.0pt">3)<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>At this point (i.e. within the
+<span style="font-family:&quot;Courier New&quot;">serialize()</span> method ) 
+SOAPHeaders and the SOAPBody are added to the envelope.&nbsp; Then the method
+<span style="font-family:
+&quot;Courier New&quot;">output(SerializationContext)of SOAPEnvelope</span> is 
+called. This would cause the SOAPMessage to be written to the outputstream. We 
+are simply reusing the axis<span style="font-family:&quot;Courier New&quot;"> 
+serializationContext</span>.</p>
+<p class="MsoNormal" style="text-align:justify"><b><i>Note:-</i></b><i> </i>But 
+you have to make sure the object value of the
+<span style="font-family:&quot;Courier New&quot;">SOAPHeaderElement </span>and
+<span style="font-family:&quot;Courier New&quot;">SOAPBodyElement</span> &nbsp;should 
+be such that the <span style="font-family:&quot;Courier New&quot;">
+SerializationContext</span> can find serializers for the values at the type 
+mapping.</p>
+<p class="MsoNormal" style="text-align:justify">In order to make the above 
+method to work the following had to be taken care of.</p>
+<ul style="margin-top: 0cm; margin-bottom: 0cm" type="disc">
+  <li class="MsoNormal" style="text-align: justify">
+  <font face="Verdana">Regarding SOAPHeaders - content (objvalue) are as </font>
+  <span style="font-family: Verdana">org.w3c.Element</span><font face="Verdana"> 
+  array inside </font><span style="font-family: Verdana">SOAPHeaderElementContent.</span></li>
+  <p>&nbsp;</p><li class="MsoNormal" style="text-align: justify">Regarding SOAPBody - content 
+  (objvalue) as <span style="font-family:&quot;Courier New&quot;">Result</span> 
+  object</li>
+</ul>
+<p class="MsoNormal" style="text-align:justify">We achieved this by adding two 
+custom Serializers to the <span style="font-family:&quot;Courier New&quot;">
+Typemapping</span>.</p>
+<p class="MsoNormal" style="text-align:justify">Registering the Serializers can 
+be done by adding the Seralizers which can serialize a instance of
+<span style="font-family:&quot;Courier New&quot;">Result</span>, and
+<span style="font-family:
+&quot;Courier New&quot;">HeaderElementContent</span></p>
+<p class="MsoNormal" style="text-align:justify">The serializer is added to the 
+default type mapping.</p>
+<ol>
+  <li>
+<p class="MsoNormal" style="text-align:justify">Used value is enabled by adding to default type mapping and edit the
+<span style="font-family:&quot;Courier New&quot;">DefaultTypeMappingImpl</span>
+<i>**this is used in the implementation **</i></p>
+  </li>
+  <p>&nbsp;</p><li>
+<p class="MsoNormal" style="text-align: justify; text-indent: -18.0pt; margin-left: 18.0pt">
+<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;</span>Add the 
+Serializer as a default type mapping</p>
+  </ol>
+<blockquote>
+<h2 style="text-align:justify"><span style="text-decoration: none">
+<font size="2" face="Courier New"><span style="font-weight: 400">
+TypeMappingRegistry reg = new TypeMappingRegistryImpl();</span></font></span><br style="text-align:justify">
+<span style="font-family:&quot;Courier New&quot;; text-decoration:none; font-weight:400">
+<font size="2">javax.xml.rpc.encoding.TypeMapping t = </font></span>
+<br style="text-align:justify">
+<span style="font-family:&quot;Courier New&quot;; font-weight:400">
+<font size="2"><span style="text-decoration: none">reg.getOrMakeTypeMapping(&quot;<a href="http://www.opensurce.lk/axis/encoding">www.opensurce.lk</a></span><span style="text-decoration: none"><a href="http://www.opensurce.lk/axis/encoding">/axismora/encoding</a>&quot;);</span></font></span>
+  <br style="text-align:justify">
+  <span style="font-family:&quot;Courier New&quot;; text-decoration:none; font-weight:400">
+  <font size="2">sc.getTypeMapping().register(Result.class,Constants.SOAP_RESULT,new&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+  ResultSerializerFactory(),null);</font></span>
+    <br style="text-align: left">
+  <span style="font-family:&quot;Courier New&quot;; text-decoration:none; font-weight:400">
+  <font size="2">t.register(Parameter.class,Constants.SOAP_RESULT,new 
+  resultSerializerFactory(),null);</font></span></h2>
+</blockquote>
+<h2 style="text-align:justify"><b><font size="4"><a name="Wrapper">Wrapper</a></font></b></h2>
+<p class="MsoNormal">Before going on to the wrapper part let’s see what is the 
+state of the request&nbsp; now. The request SOAP message is accessed up to the body 
+level. The rest i.e. SOAP body will be accessed by the wrapper. The SOAP body is 
+parsed into the wrapper class. Here wrapper deserializes the body, gets the 
+parameters and calls the web service. When the web service returns the result, 
+the wrapper sets it into the message data.</p>
+<h3><b>Wrapper Architecture</b></h3>
+<p class="MsoNormal">Consider a web service named <b>Ws</b> with a method name
+<b>foo</b> which returns a complex type <b>X</b> and accepts a complex type <b>Y
+</b>as an argument. </p>
+<p class="MsoNormal">Then there will be a wrapper class for the web service <b>
+Ws</b> named as <b>WsService</b>(For every service’s wrapper’s name will be the 
+service name with the appended name “Service”).</p>
+<p><span style="font-size: 12.0pt; font-family: Times New Roman">
+<img width=636
+height=573 src="images/image001wr.gif" v:shapes="_x0000_s1125 _x0000_s1126 _x0000_s1127 _x0000_s1128 _x0000_s1129 _x0000_s1130 _x0000_s1131 _x0000_s1132 _x0000_s1133 _x0000_s1134 _x0000_s1135 _x0000_s1136"></span></p>
+</p>
+<h3><b>Web service Wrapper</b></h3>
+<p class="MsoNormal">For the service named <b>Ws</b> the wrapper will be named
+<b>WsService</b>. This class extends the BasicHandler which have the method 
+invoke( MessageContext msgcontext) . In fact BasicHandler implements the Handler API, 
+&nbsp;which has one method - invoke(MessageContext msgcontext). </p>
+<p class="MsoNormal">The methods in the wrapper :: </p>
+<ul>
+  <li>
+  <p class="MsoNormal">For each method in the web service wrapper contains a 
+  private method. This private method has the same method-name as the 
+  corresponding method of the webservice.</li>
+</ul>
+<blockquote>
+  <p class="MsoNormal"><b>e.g.:</b> In this case the private method wiil be 
+  &quot;private foo(msgcontext)&quot;. This method will get the parameters for the actual 
+  method by deserializing the body and call the actual method with giving these 
+  parameters</blockquote>
+<ul>
+  <li>
+  <p class="MsoNormal">invoke(MessageContext msg)- This will be called by the 
+  AxisEngine, just like any other handler.&nbsp; Code inside the invoke method looks 
+  up the method name and it calls the private method that with the name ( refer 
+  the above diagram). </li>
+</ul>
+<p class="MsoNormal">After calling the method, the returned result is set it in 
+to the MessageContext. </p>
+<h3><b>Serializing and Deserializing the objects</b></h3>
+<p class="MsoNormal">Deserialization of the SOAPBody is done at the wrapper. 
+Wrapper is written with the complete awareness of the web service. Hence after 
+finding out the method name the wrapper knows what is there in the SOAPBody. For 
+example in the above example when the wrapper finds out the method name is “foo” 
+it knows that the SOAPBody contains the object of the complex type – X.&nbsp; 
+Therefore the deserialize methods are called at the private method corresponding 
+to the web service.</p>
+<p class="MsoNormal">Deserialization of simple types are in-built. For complex 
+types the wrapper calls the method - deserialize(MessageContext msgData) of the 
+complex type, <b>i.e.</b> each complex type object must have a method called deserialize(MessageContext msgData) where the deserialization occurs. After the 
+deserialize(MessageContext msgData) method of the complex object is called values 
+will be set to the complex type object.</p>
+<p class="MsoNormal">Wrapper class then will call the actual web service method 
+with parsing the expected parameters. Then the result will be set it to the 
+MessageContext. </p>
+<p class="MsoNormal">For example the private method in the wrapper corresponding 
+to webservice ::</p>
+<h2><span style="text-decoration: none; font-weight: 400"><font face="Courier New" size="2">private foo(MessageContext 
+msg){</font>
+<br style="text-indent:.5in"><font face="Courier New" size="2">&nbsp;&nbsp;&nbsp; X . 
+deserialize(msgdata)</font>
+<br style="text-indent:.5in"><font face="Courier New" size="2">&nbsp;&nbsp;&nbsp; Result 
+r = ws.foo(x);</font>
+<br><font face="Courier New" size="2">&nbsp;&nbsp;&nbsp; msgdata.setResult(r);</font></span>
+<br><span style="text-decoration: none; font-weight: 400"><font face="Courier New" size="2">}</font>
+</span></h2>
+<p class="MsoNormal">&nbsp;</p>
+<p class="MsoNormal">The serialization part of the result will be done by 
+calling the serialize method of the particular complex type object. This calling 
+is done by the AxisEngine , when it wants to serialize the particular result in 
+the response soap body.</p>
+<h3><b>How to deserialize the body?</b></h3>
+<p class="MsoNormal">We have discussed so far that the wrapper and type objects 
+are responsible for deserializing the body part of the SOAP Request. For doing 
+it, MessageContext interface provides the following methods.</p>
+<ul>
+  <li>
+<p class="MsoNormal">getValue():-<span style="color:black">We can simply get the 
+tag value with out looking at the tag name. This is possible when wrapper knows 
+exactly what should be the next element.</span></p>
+  </li>
+  <li>
+<p class="MsoNormal">getValue(<span style="color: black; background: white">String</span><span style="background: white">
+<span style="color:black">uri,</span> <span style="color:black">String</span>
+<span style="color:black">localpart</span></span>):-Here we can get the values 
+by giving the QName of the tag. This will give the values till the end tag of 
+the particular tag is reached.</p>
+  </li>
+  <li>
+<p class="MsoNormal"><span style="color: black; background: white">getTag(</span><span style="color:black">): 
+Here we can get the tag name and then get the values of the tag.</span></p>
+  </li>
+</ul>
+<h3><b>What happens when Error occurs?</b></h3>
+<p class="MsoNormal">If the error occurs at the wrapper level then the SOAPFault 
+is set in to the MessageContext and wrapper discard the accessing.&nbsp;</p>
+<h3><b>Built-in Classes</b></h3>
+<p class="MsoNormal">Here we have built in type classes for eight simple types 
+and String classes.</p>
+<h3><b>Wrapper Generator tool</b></h3>
+<p class="MsoNormal">We provide a <a href="WSDL2Ws%20spec.htm">wrapper generator 
+tool </a>for creating the wrapper classes, type classes and web services. This 
+is done by reading the wsdl file. So the burden of the deserialization and 
+serialization is taken care of&nbsp; generator. </p>
+<h3><b>Advantages and the Features of the &nbsp;wrapper concept.</b></h3>
+<p class="MsoNormal">Major advantage of the wrapper is, we throw away the reflexion part of the  axis and instead of it we uses the wrapper 
+concept. So it gives up the runtime mapping ,the performance is remarkable 
+compare to the axis.</p>
+<p class="MsoNormal">&nbsp;</p>
+<h2 style="text-align:justify"><b><a name="Provider"><font size="4">Provider</font></a></b></h2>
+<p class="MsoNormal" style="text-align:justify">All the types’ providers are 
+treats equally by the architecture. The wrapper will take care of actual 
+behavior. E.g. to have EJB deployed it should we wrapped by the Wrapper in 
+suitable scope.&nbsp;&nbsp;&nbsp; </p>
+<h2><b><a name="Deployed Service Information Manager"><font size="4">Deployed Service 
+Information Manager</font></a></b></h2>
+<p><span style="font-size: 12.0pt; font-family: Verdana">This is the logically 
+the same as in the existing architecture. The WSDDDeployment class is rewritten 
+using the logics of the existing WSDDDeployment as to match with the expected 
+interfaces</span></p>
+<h2><b><a name="Logger"><font size="4">Logger</font></a></b></h2>
+<p><span style="font-family: Verdana">T</span><span style="font-size: 12.0pt; font-family: Verdana">he logger 
+form apache commons-logging.jar is being used. </span></p>
+<h2><b><a name="Dynamic Class Loader"><font size="4">Dynamic Class Loader</font></a></b></h2>
+<p><span style="font-size: 12.0pt; font-family: Courier New">Class.forname()</span><span style="font-size: 12.0pt; font-family: Times New Roman"> 
+we are there. Loading the classes are done by the Handler Pool not in the 
+org.apache.axis.deployement.wsdd</span></p>
+<h2><span style="font-family: Verdana"><a name="Exception"><font size="4">Exception</font></a></span></h2>
+<p><span style="font-family: Verdana">Use the AxisFault&nbsp; for wrap the exception.
+</span></p>
+
+<p><span style="font-family: Verdana">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#top">Back to Top</a></span></p>
+
+</h2>
+
+</BODY></HTML>

@@ -1,0 +1,76 @@
+<html>
+
+<head>
+<title>FAQ</title>
+<link rel="stylesheet" type="text/css" href="AxisMora.css">
+</head>
+
+<body>
+
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <blockquote>
+        <blockquote>
+          <blockquote>
+
+<h1><a name="top"></a>Axis-Mora</h1>
+
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<h1 align="left">FAQs</h1>
+
+<p align="left"><b>Contents</b></p>
+
+<p align="left"><a href="#Trouble shooting Instructions">Trouble Shooting Instructions</a>
+
+<br align="left"><a href="#Trouble shooting WSDL2Ws">Trouble Shooting WSDL2Ws</a></p>
+
+<h2><a name="Trouble shooting Instructions">Trouble shooting Instructions</a></h2>
+
+<p>Please make sure following conditions are satisfied.</p>
+
+<p>1. You need jdk1.4.* or more to build axismora.</p>
+
+<p>2. Make sure you use axis.jar 1.1 release.(Anything taken from the newest cvs 
+should work).</p>
+
+<p>3.axismora does not support multirefs. </p>
+
+<p>&nbsp;&nbsp;&nbsp; In your client to stop sending&nbsp; multirefs(if you are 
+using axis client), then take org.apache.axis.AxisEngine classfile from axismora 
+and make sure it is at the top of the classpath in your axis client.</p>
+
+<p>4.axismora doesn't support attachment.</p>
+
+<p>5. make sure your SOAPAction should be same as the service name in the 
+service tag of the mora-server.wsdd.</p>
+
+<p>6.Make sure your endpoint URI at the client is of the form of
+<a href="http://host:port/axismora/servlet/AxisServlet">
+http://host:port/axismora/servlet/AxisServlet</a></p>
+
+<h2><a name="Trouble shooting WSDL2Ws">Trouble shooting WSDL2Ws</a></h2>
+
+<p>1.The schema in your wsdl should not contain types extended from anything 
+other than array type. </p>
+
+<p>2. The schema in wsdl should not contain enumerations.</p>
+
+<p>3.It doesn't support types like Vectors, Lists etc.</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#top">Back to Top</a></p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+</body>
+
+</html>

@@ -1,0 +1,41 @@
+
+==============
+Listen Port: 5555
+Target Host: 127.0.0.1
+Target Port: 4444
+==== Request ====
+POST / HTTP/1.0
+Content-Type: text/xml; charset=utf-8
+Accept: application/soap+xml, application/dime, multipart/related, text/*
+User-Agent: Axis/1.1
+Host: 127.0.0.1
+Cache-Control: no-cache
+Pragma: no-cache
+SOAPAction: "InteropTests"
+Content-Length: 700
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <soapenv:Body>
+  <ns1:echoIntegerArray soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns1="http://soapinterop.org/">
+   <inputIntegerArray xsi:type="soapenc:Array" soapenc:arrayType="xsd:int[4]" xmlns:ns2="http://soapinterop.org/xsd" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+    <item>12</item>
+    <item>23</item>
+    <item>24</item>
+    <item>27</item>
+   </inputIntegerArray>
+  </ns1:echoIntegerArray>
+ </soapenv:Body>
+</soapenv:Envelope>==== Response ====
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset="utf-8"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <soapenv:Body><pre:echoIntegerArrayResponse xmlns:pre="http://soapinterop.org/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+<prf:ArrayOfint xmlns:prf ="http://soapinterop.org/xsd" ><item0  xsi:type="ns5:int"  xmlns:ns5 = "http://www.w3.org/2001/XMLSchema">12</item0><item1  xsi:type="ns5:int"  xmlns:ns5 = "http://www.w3.org/2001/XMLSchema">23</item1><item2  xsi:type="ns5:int"  xmlns:ns5 = "http://www.w3.org/2001/XMLSchema">24</item2><item3  xsi:type="ns5:int"  xmlns:ns5 = "http://www.w3.org/2001/XMLSchema">27</item3></prf:ArrayOfint>
+</pre:echoIntegerArrayResponse>
+</soapenv:Body>
+</soapenv:Envelope>
+
+==============

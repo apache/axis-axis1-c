@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+	<service name="Broker" provider="java:RPC">
+		<parameter name="allowedMethods" value="*"/>
+		<parameter name="accesses" value="2"/>
+		<parameter name="className" value="services.parchase.BrokerService"/>
+	</service>
+</deployment>

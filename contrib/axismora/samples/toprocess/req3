@@ -1,0 +1,138 @@
+Listen Port: 5555
+Target Host: 127.0.0.1
+Target Port: 4444
+==== Request ====
+POST /axis/services/AmazonSearchPort HTTP/1.0
+Content-Type: text/xml; charset=utf-8
+Accept: application/soap+xml, application/dime, multipart/related, text/*
+User-Agent: Axis/1.1
+Host: 127.0.0.1
+Cache-Control: no-cache
+Pragma: no-cache
+SOAPAction: "BookShop"
+Content-Length: 953
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <soapenv:Body>
+  <ns1:ActorSearchRequest soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns1="http://soap.bookshop.com">
+   <ActorSearchRequest xsi:type="ns1:ActorRequest">
+    <actor xsi:type="xsd:string" xsi:nil="true"/>
+    <page xsi:type="xsd:string" xsi:nil="true"/>
+    <mode xsi:type="xsd:string" xsi:nil="true"/>
+    <tag xsi:type="xsd:string" xsi:nil="true"/>
+    <type xsi:type="xsd:string" xsi:nil="true"/>
+    <devtag xsi:type="xsd:string" xsi:nil="true"/>
+    <sort xsi:type="xsd:string" xsi:nil="true"/>
+    <variations xsi:type="xsd:string" xsi:nil="true"/>
+    <locale xsi:type="xsd:string" xsi:nil="true"/>
+   </ActorSearchRequest>
+  </ns1:ActorSearchRequest>
+ </soapenv:Body>
+</soapenv:Envelope>==== Response ====
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset="utf-8"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <soapenv:Body><pre:ActorSearchRequestResponse xmlns:pre="http://soap.bookshop.com" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+<prf:ProductInfo  xmlns:prf ="http://soap.bookshop.com">
+<TotalResults>string0</TotalResults>
+<TotalPages>string1</TotalPages>
+<ListName>string2</ListName>
+<Details xsi:type="soapenc:Array" soapenc:arrayType="ns2:Details[]" xmlns:ns2 = "http://soap.bookshop.com">
+<item0  xsi:type="ns2:Details"  xmlns:ns2 = "http://soap.bookshop.com"><Url>string0</Url>
+<Asin>string1</Asin>
+<ProductName>string2</ProductName>
+<Catalog>string3</Catalog>
+<KeyPhrases xsi:type="soapenc:Array" soapenc:arrayType="ns2:KeyPhrase[]" xmlns:ns2 = "http://soap.bookshop.com">
+<item0  xsi:type="ns24:KeyPhrase"  xmlns:ns24 = "http://soap.bookshop.com"><KeyPhrase>string0</KeyPhrase>
+<Type>string1</Type>
+</item0></KeyPhrases>
+<Artists xsi:type="soapenc:Array" soapenc:arrayType="ns2:string[]" xmlns:ns2 = "http://www.w3.org/2001/XMLSchema">
+<item0  xsi:type="ns22:string"  xmlns:ns22 = "http://www.w3.org/2001/XMLSchema">string5</item0></Artists>
+<Authors xsi:type="soapenc:Array" soapenc:arrayType="ns2:string[]" xmlns:ns2 = "http://www.w3.org/2001/XMLSchema">
+<item0  xsi:type="ns8:string"  xmlns:ns8 = "http://www.w3.org/2001/XMLSchema">string6</item0></Authors>
+<Mpn>string7</Mpn>
+<Starring xsi:type="soapenc:Array" soapenc:arrayType="ns2:string[]" xmlns:ns2 = "http://www.w3.org/2001/XMLSchema">
+<item0  xsi:type="ns14:string"  xmlns:ns14 = "http://www.w3.org/2001/XMLSchema">string8</item0></Starring>
+<Directors xsi:type="soapenc:Array" soapenc:arrayType="ns2:string[]" xmlns:ns2 = "http://www.w3.org/2001/XMLSchema">
+<item0  xsi:type="ns3:string"  xmlns:ns3 = "http://www.w3.org/2001/XMLSchema">string9</item0></Directors>
+<TheatricalReleaseDate>string10</TheatricalReleaseDate>
+<ReleaseDate>string11</ReleaseDate>
+<Manufacturer>string12</Manufacturer>
+<Distributor>string13</Distributor>
+<ImageUrlSmall>string14</ImageUrlSmall>
+<ImageUrlMedium>string15</ImageUrlMedium>
+<ImageUrlLarge>string16</ImageUrlLarge>
+<ListPrice>string17</ListPrice>
+<OurPrice>string18</OurPrice>
+<UsedPrice>string19</UsedPrice>
+<RefurbishedPrice>string20</RefurbishedPrice>
+<CollectiblePrice>string21</CollectiblePrice>
+<ThirdPartyNewPrice>string22</ThirdPartyNewPrice>
+<NumberOfOfferings>string23</NumberOfOfferings>
+<ThirdPartyNewCount>string24</ThirdPartyNewCount>
+<UsedCount>string25</UsedCount>
+<CollectibleCount>string26</CollectibleCount>
+<RefurbishedCount>string27</RefurbishedCount>
+<ThirdPartyProductInfo><ThirdPartyProductDetails xsi:type="soapenc:Array" soapenc:arrayType="ns2:ThirdPartyProductDetails[]" xmlns:ns2 = "http://soap.bookshop.com">
+<item0  xsi:type="ns12:ThirdPartyProductDetails"  xmlns:ns12 = "http://soap.bookshop.com"><OfferingType>string0</OfferingType>
+<SellerId>string1</SellerId>
+<SellerNickname>string2</SellerNickname>
+<ExchangeId>string3</ExchangeId>
+<OfferingPrice>string4</OfferingPrice>
+<Condition>string5</Condition>
+<ConditionType>string6</ConditionType>
+<ExchangeAvailability>string7</ExchangeAvailability>
+<SellerCountry>string8</SellerCountry>
+<SellerState>string9</SellerState>
+<ShipComments>string10</ShipComments>
+<SellerRating>string11</SellerRating>
+</item0></ThirdPartyProductDetails>
+</ThirdPartyProductInfo>
+<SalesRank>string29</SalesRank>
+<BrowseList xsi:type="soapenc:Array" soapenc:arrayType="ns2:BrowseNode[]" xmlns:ns2 = "http://soap.bookshop.com">
+<item0  xsi:type="ns25:BrowseNode"  xmlns:ns25 = "http://soap.bookshop.com"><BrowseId>string0</BrowseId>
+<BrowseName>string1</BrowseName>
+</item0></BrowseList>
+<Media>string31</Media>
+<ReadingLevel>string32</ReadingLevel>
+<Publisher>string33</Publisher>
+<NumMedia>string34</NumMedia>
+<Isbn>string35</Isbn>
+<Features xsi:type="soapenc:Array" soapenc:arrayType="ns2:string[]" xmlns:ns2 = "http://www.w3.org/2001/XMLSchema">
+<item0  xsi:type="ns5:string"  xmlns:ns5 = "http://www.w3.org/2001/XMLSchema">string36</item0></Features>
+<MpaaRating>string37</MpaaRating>
+<EsrbRating>string38</EsrbRating>
+<AgeGroup>string39</AgeGroup>
+<Availability>string40</Availability>
+<Upc>string41</Upc>
+<Tracks xsi:type="soapenc:Array" soapenc:arrayType="ns2:Track[]" xmlns:ns2 = "http://soap.bookshop.com">
+<item0  xsi:type="ns7:Track"  xmlns:ns7 = "http://soap.bookshop.com"><TrackName>string0</TrackName>
+<ByArtist>string1</ByArtist>
+</item0></Tracks>
+<Accessories xsi:type="soapenc:Array" soapenc:arrayType="ns2:string[]" xmlns:ns2 = "http://www.w3.org/2001/XMLSchema">
+<item0  xsi:type="ns13:string"  xmlns:ns13 = "http://www.w3.org/2001/XMLSchema">string43</item0></Accessories>
+<Platforms xsi:type="soapenc:Array" soapenc:arrayType="ns2:string[]" xmlns:ns2 = "http://www.w3.org/2001/XMLSchema">
+<item0  xsi:type="ns20:string"  xmlns:ns20 = "http://www.w3.org/2001/XMLSchema">string44</item0></Platforms>
+<Encoding>string45</Encoding>
+<Reviews><AvgCustomerRating>string0</AvgCustomerRating>
+<TotalCustomerReviews>string1</TotalCustomerReviews>
+<CustomerReviews xsi:type="soapenc:Array" soapenc:arrayType="ns2:CustomerReview[]" xmlns:ns2 = "http://soap.bookshop.com">
+<item0  xsi:type="ns4:CustomerReview"  xmlns:ns4 = "http://soap.bookshop.com"><Rating>string0</Rating>
+<Summary>string1</Summary>
+<Comment>string2</Comment>
+</item0></CustomerReviews>
+</Reviews>
+<SimilarProducts xsi:type="soapenc:Array" soapenc:arrayType="ns2:string[]" xmlns:ns2 = "http://www.w3.org/2001/XMLSchema">
+<item0  xsi:type="ns17:string"  xmlns:ns17 = "http://www.w3.org/2001/XMLSchema">string47</item0></SimilarProducts>
+<Lists xsi:type="soapenc:Array" soapenc:arrayType="ns2:string[]" xmlns:ns2 = "http://www.w3.org/2001/XMLSchema">
+<item0  xsi:type="ns6:string"  xmlns:ns6 = "http://www.w3.org/2001/XMLSchema">string48</item0></Lists>
+<Status>string49</Status>
+</item0></Details>
+</prf:ProductInfo>
+
+</pre:ActorSearchRequestResponse>
+</soapenv:Body>
+</soapenv:Envelope>
