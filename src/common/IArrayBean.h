@@ -79,4 +79,10 @@ public:
 	virtual void SetUri(const AxisChar* sURI)=0;
 };
 
+typedef struct Axis_ArrayTag
+{
+	void* m_Array;
+	int m_Size;
+} Axis_Array;
+
 #endif // !defined(AFX_IARRAYBEAN_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_)

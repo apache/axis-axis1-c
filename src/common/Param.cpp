@@ -639,7 +639,6 @@ int Param::serialize(IWrapperSoapSerializer& pSZ)
 		break;        
     case XSD_UNSIGNEDLONG:
         pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.ulValue);
-
 		break;
 	case XSD_FLOAT:
 		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.fValue);
