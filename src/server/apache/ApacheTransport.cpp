@@ -176,7 +176,7 @@ AXIS_TRANSPORT_STATUS ApacheTransport::getBytes(char* pBuffer, int* piSize)
 
 const char* ApacheTransport::getTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE eType)
 {
-    const char* pcValue;
+    const char* pcValue = NULL;
 	/* the member, "path" of "parsed_uri" contains the uri of the
        request (i.e "/abc/xyz" part of http://somehost/abc/xyz) */
     const char* pcUriPath =  ((request_rec*)m_pContext)->parsed_uri.path;
@@ -236,7 +236,7 @@ const char* ApacheTransport::getTransportProperty(const char* pcKey)
     /* ap_table_elts returns an array_header struct. The nelts element of that 
      * struct contains the number of input header elements. Finally assigns that
      * to the axis soap data structure. */
-    array_header* arr;
+    array_header* arr = NULL;
 	int headercount = ap_table_elts(((request_rec*)m_pContext)->headers_in)->nelts;
 	Ax_header* pHeaders = 0;
     /* casting req_rec->headers_in to axis header struct and assigning that to 
