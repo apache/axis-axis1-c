@@ -23,6 +23,10 @@
  */
 
 package org.apache.axis.wsdl.wsdl2ws.cpp.literal;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
@@ -37,9 +41,18 @@ import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 
 public class AllParamWriter implements SourceWriter{
 	private WebServiceContext wscontext;
-	
+
 	public AllParamWriter(WebServiceContext wscontext){
 		this.wscontext =wscontext;
+	}
+
+	private File getFilePath(String filename) throws WrapperFault {
+		String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
+		if(targetOutputLocation.endsWith("/"))
+			targetOutputLocation = targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
+		new File(targetOutputLocation).mkdirs();
+		String fileName = targetOutputLocation + "/" + filename + ".h";
+		return new File(fileName);
 	}
 	
 	/**
@@ -63,7 +76,37 @@ public class AllParamWriter implements SourceWriter{
 							"It seems that some thing wrong with symbolTable population - Susantha");
 					}
 					ArrayParamWriter writer = (new ArrayParamWriter(wscontext,type));	
-					if (!writer.isSimpleTypeArray()) writer.writeSource();
+					if (!writer.isSimpleTypeArray())
+					{
+						writer.writeSource();
+					}
+					else
+					{
+// FJP If the object is a simple type array, then there is no need to create a
+//     header file for it.  Unfortunately, a header file has already be
+//     declared in the base class so when the project is built, the compiler
+//     will complain because the <name>.h file will not be found.  There are
+//     at least three solutions this problem:-
+//     1. Rewrite the application to only create the class once all of the
+//        associated objects have been resolved.
+//     2. Go back and modify the class to remove the #include lines that
+//        contain the unnecessary types.
+//     3. Add empty files with the same filenames as the expected includes so
+//        that the compiler will not complain. 
+						System.out.println("Creating an empty "+ qname.getLocalPart()+".h file\n");
+						
+						BufferedWriter bw = null;
+							
+						try{
+							 bw = new BufferedWriter(new FileWriter(getFilePath(qname.getLocalPart()), false));
+							 bw.write("// Header file for " + qname.getLocalPart() + ".h\n");
+							 bw.flush();
+							 bw.close();
+						 } catch (IOException e) {
+							 e.printStackTrace();
+							 throw new WrapperFault(e);
+						 }
+					}
 				}	
 				else{
 					/* TODO check whether this type is referenced or not. Synthesize only if  reference
