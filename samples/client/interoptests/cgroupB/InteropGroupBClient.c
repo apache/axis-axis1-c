@@ -39,12 +39,12 @@ int main(int argc, char* argv[])
 	{
 		sas.varArray.m_Array[x] = strdup("content of string array element");
 	}
-	printf("invoking echoNestedArray...\n");
+/*	printf("invoking echoNestedArray...\n");
 	if (echoNestedArray(pstub, &sas) != NULL)
 		printf("successful\n");
 	else
 		printf("failed\n");
-
+*/
 	/*testing Nested Structs*/
 	sss.varFloat = 12345.67890;
 	sss.varInt = 5000;

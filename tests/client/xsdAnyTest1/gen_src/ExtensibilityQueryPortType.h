@@ -13,7 +13,7 @@
 class ExtensibilityQueryPortType  :public Stub
 {
 public:
-	ExtensibilityQueryPortType(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol);
+	ExtensibilityQueryPortType(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol=APTHTTP);
 	ExtensibilityQueryPortType();
 public:
 	virtual ~ExtensibilityQueryPortType();

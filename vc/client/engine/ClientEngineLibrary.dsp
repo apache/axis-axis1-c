@@ -138,7 +138,15 @@ SOURCE=..\..\..\src\engine\SharedObject.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\engine\SOAPTransportFactory.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\engine\client\Stub.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\engine\XMLParserFactory.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -190,7 +198,15 @@ SOURCE=..\..\..\src\engine\SharedObject.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\engine\SOAPTransportFactory.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\include\axis\client\Stub.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\engine\XMLParserFactory.h
 # End Source File
 # End Group
 # End Target

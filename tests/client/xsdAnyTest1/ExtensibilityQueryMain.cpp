@@ -12,7 +12,7 @@ int main(void)
     string str;
     try{
 
-        ExtensibilityQueryPortType* pStub = new ExtensibilityQueryPortType("http://localhost:8080/axis/testXSDANY",APTHTTP);
+        ExtensibilityQueryPortType* pStub = new ExtensibilityQueryPortType("http://localhost:5555/axis/testXSDANY",APTHTTP);
         AnyType* pAnyReturn = pStub->query(pAny);
 
         for (int i=0; i<pAnyReturn->_size; i++)
