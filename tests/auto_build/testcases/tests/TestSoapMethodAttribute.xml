@@ -1,0 +1,17 @@
+<test>
+    <name>TestSoapMethodAttribute</name>
+    <description>TestSoapMethodAttribute</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>TestSoapMethodAttributeClient.cpp</clientCode>
+    <wsdl>MathOpsDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            TestSoapMethodAttribute.expected
+        </output>
+        <request>
+            TestSoapMethodAttributeRequest.out
+        </request>
+    </expected>
+        <endpoint>http://localhost:80/MathOps/services/MathOps</endpoint>
+</test>
+

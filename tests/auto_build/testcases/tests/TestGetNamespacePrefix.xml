@@ -1,0 +1,17 @@
+<test>
+    <name>TestGetNamespacePrefix</name>
+    <description>TestGetNamespacePrefixClient</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>TestGetNamespacePrefixClient.cpp</clientCode>
+    <wsdl>MathOpsDoc.wsdl</wsdl>
+    <expected>
+        <output>
+		TestGetNamespacePrefix.expected
+        </output>
+        <request>
+            TestGetNamespacePrefixRequest.out
+        </request>
+    </expected>
+        <endpoint>http://localhost:80/MathOps/services/MathOps</endpoint>
+</test>
+

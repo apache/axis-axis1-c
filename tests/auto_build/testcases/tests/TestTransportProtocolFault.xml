@@ -1,0 +1,13 @@
+<test>
+    <name>TestTransportProtocolFault</name>
+    <description>TestTransportProtocolFault test</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>TestTransportProtocolFaultClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            TestTransportProtocolFault.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>
