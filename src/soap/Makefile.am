@@ -14,5 +14,5 @@ libsoap_la_SOURCES = Attribute.cpp \
         URIMapping.cpp \
         XMLStreamHandler.cpp
 
-libsoap_la_LIBADD = -L/usr/local/xerces_c/lib -lxerces-c
-INCLUDES = -I/usr/local/xerces_c/include
+libsoap_la_LIBADD = -L$(XERCES_HOME)/lib -lxerces-c
+INCLUDES = -I$(XERCES_HOME)/include
