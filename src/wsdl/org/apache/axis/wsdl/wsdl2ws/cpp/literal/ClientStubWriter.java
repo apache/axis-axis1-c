@@ -717,11 +717,7 @@ public class ClientStubWriter
                         {
                             containedType = qname.getLocalPart();
                             writer.write(
-                                "\t\t\t"
-                                    + currentParamName
-                                    + " = ("
-                                    + currentParaType
-                                    + "&)m_pCall->getCmplxArray((void*) Axis_DeSerialize_"
+                                "\t\t\tAxis_Array arr2 = m_pCall->getCmplxArray((void*) Axis_DeSerialize_"
                                     + containedType);
                             //writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+currentType.getElementName().getLocalPart()+"\", Axis_URI_"+containedType+");\n");
                             writer.write(
@@ -735,7 +731,11 @@ public class ClientStubWriter
                                     + currentType.getElementNameAsString()
                                     + "\", Axis_URI_"
                                     + containedType
-                                    + ");\n");
+                                    + ");\n\t\t\t"
+                                    + currentParamName
+                                    + " = ("
+                                    + currentParaType
+                                    + "&)arr2;\n");
                         }
                     }
                 }
@@ -832,9 +832,7 @@ public class ClientStubWriter
                     {
                         containedType = qname.getLocalPart();
                         writer.write(
-                            "\tRetArray = ("
-                                + outparamType
-                                + "&)m_pCall->getCmplxArray((void*) Axis_DeSerialize_"
+                            "\tAxis_Array arr2 = m_pCall->getCmplxArray((void*) Axis_DeSerialize_"
                                 + containedType);
                         //writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+returntype.getElementName().getLocalPart()+"\", Axis_URI_"+containedType+");\n\t\t}\n");
                         writer.write(
@@ -848,7 +846,9 @@ public class ClientStubWriter
                                 + returntype.getElementNameAsString()
                                 + "\", Axis_URI_"
                                 + containedType
-                                + ");\n\t\t}\n");
+                                + ");\n\t\t\tRetArray = ("
+                                    + outparamType
+                                    + "&)arr2;\n\t\t}\n");
                     }
                     writer.write("\t}\n");
                     writer.write("\tupdateStateAfterResponse();\n");
