@@ -1,1 +1,1 @@
-SUBDIRS = interoptests
+SUBDIRS = interoptests simple

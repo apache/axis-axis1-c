@@ -7,6 +7,7 @@
 #define __CALCULATOR_CLIENTSTUB_H__INCLUDED_
 
 #include <axis/client/Call.h>
+#include <ctype.h>
 
 class Calculator 
 {
