@@ -150,7 +150,7 @@ public class MSGWrapWriter extends JavaClassWriter {
                 this.writeMethodInWrapper(
                     minfo.getMethodname(),
                     minfo.getParameterTypes(),
-                    minfo.getReturnType().getLangName());
+                    minfo.getReturnType().getType().getLanguageSpecificName());
                 writer.write("\n");
             }
         } catch (IOException e) {
@@ -236,7 +236,7 @@ public class MSGWrapWriter extends JavaClassWriter {
             paraTypeName = "test";
             //WrapperUtils.getClassNameFromParamInfoConsideringArrays((ParameterInfo)paramsB.get(i),wscontext);
 
-            if ((TypeMap.isSimpleType(((ParameterInfo) paramsB.get(i)).getLangName())))
+            if ((TypeMap.isSimpleType(((ParameterInfo) paramsB.get(i)).getType().getLanguageSpecificName())))
                 writer.write(
                     paraTypeName
                         + " paramIn"

@@ -57,6 +57,8 @@ package org.apache.axismora.wsdl2ws.info;
 
 import java.util.ArrayList;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axismora.wsdl2ws.WrapperFault;
 import org.apache.axismora.wsdl2ws.WrapperUtils;
 
@@ -117,10 +119,10 @@ public class ServiceInfo {
      * @param qualifiedname
      * @return weather gvien qu. name is a direct return type ...
      */
-    public boolean isDirectReturn(String qualifiedname) {
+    public boolean isDirectReturn(QName name) {
         for (int i = 0; i < this.methods.size(); i++) {
             ParameterInfo returnType = ((MethodInfo) this.methods.get(i)).getReturnType();
-            if (returnType != null && returnType.getLangName().equals(qualifiedname))
+            if (returnType != null && returnType.getType().getName().equals(name))
                 return true;
         }
         return false;

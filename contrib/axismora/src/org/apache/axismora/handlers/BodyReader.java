@@ -82,7 +82,6 @@ public class BodyReader extends BasicHandler {
 
     public void invoke(MessageContext msgdata) {
         try {
-            System.out.println("body reader called");
             this.msData = msgdata;
             Writer w = new java.io.PrintWriter(System.out);
             new SerializationContextImpl(w).writeDOMElement(

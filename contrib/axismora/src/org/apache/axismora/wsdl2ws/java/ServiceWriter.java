@@ -110,7 +110,7 @@ public class ServiceWriter extends JavaClassWriter {
                 minfo = (MethodInfo) this.methods.get(i);
                 writer.write("\tpublic ");
                 if (minfo.getReturnType() == null
-                    || minfo.getReturnType().getLangName() == null)
+                    || minfo.getReturnType().getType().getLanguageSpecificName() == null)
                     writer.write("void ");
                 else
                     writer.write(

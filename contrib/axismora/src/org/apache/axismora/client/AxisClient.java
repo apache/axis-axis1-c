@@ -167,6 +167,7 @@ public class AxisClient extends AxisEngine {
           */
         boolean hasfault = false;
         int i = 0;
+        AxisFault fault = null;
 
         try {
             try {
@@ -187,6 +188,7 @@ public class AxisClient extends AxisEngine {
             } catch (AxisFault e) {
                 context.setSoapFault(new SOAPFault(e));
                 hasfault = true;
+                fault = e;
             }
             //if faults are exits drive back the loop
             if (hasfault) {
@@ -195,7 +197,8 @@ public class AxisClient extends AxisEngine {
                     handlers[j].onFalult(context);
                 }
                 // run the fault flow
-                pool.getSeriveFaultFlowHandlers(context.getService()).invoke(context);
+                if(context.getService() != null)
+                	pool.getSeriveFaultFlowHandlers(context.getService()).invoke(context);
             }
 
             //return the static Handlers
@@ -204,6 +207,10 @@ public class AxisClient extends AxisEngine {
 
             pool.returnGlobelResponseFlowHandlers((HandlerChain) handlers[5]);
             pool.returnTransportResponseFlowHandlers(Constants.HTTP, (HandlerChain) handlers[6]);
+            
+            if(hasfault)
+            	throw fault;
+            
         } catch (ClassImplementationNotFoundException e) {
             e.printStackTrace();
             throw AxisFault.makeFault(e);

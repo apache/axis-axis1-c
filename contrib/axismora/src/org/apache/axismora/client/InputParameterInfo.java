@@ -92,12 +92,12 @@ public class InputParameterInfo implements Serializable {
      * @see org.apache.axismora.encoding.Serializable#serialize(org.apache.axis.encoding.SerializationContext)
      */
     public void serialize(SerializationContext sc) throws IOException {
-        ParamWriter.tagWritten = true;
+ //       ParamWriter.tagWritten = true;
         sc.writeString("<" + parameterName + ">\n");
-		org.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten = true;
+//		org.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten = true;
         outparam.serialize(sc);
         sc.writeString("\n</" + parameterName + ">\n");
-        ParamWriter.tagWritten = true;
+//        ParamWriter.tagWritten = true;
     }
 
     /**

@@ -158,8 +158,8 @@ public class StubWriter extends JavaClassWriter {
 
                 ParameterInfo returnType = minfo.getReturnType();
                 if (returnType == null
-                    || returnType.getLangName() == null
-                    || returnType.getLangName() == "void")
+                    || returnType.getType().getLanguageSpecificName() == null
+                    || returnType.getType().getLanguageSpecificName() == "void")
                     writer.write("void ");
                 else
                     writer.write(
@@ -200,14 +200,12 @@ public class StubWriter extends JavaClassWriter {
                 Iterator params1 = minfo.getParameterTypes().iterator();
                 if (params1.hasNext()) {
                     obj = params1.next();
-                    paramType =
-                        wscontext.getTypemap().getType(
-                            ((ParameterInfo) obj).getSchemaName());
-                    paramQName = ((ParameterInfo) obj).getSchemaName();
+                    paramType = ((ParameterInfo) obj).getType();
+                    paramQName = paramType.getName();
                     if (TypeMap.isSimpleType(paramQName)) {
                         String paramName =
                             WrapperUtils.getWrapperName4FullyQualifiedName(
-                                ((ParameterInfo) obj).getLangName());
+                                ((ParameterInfo) obj).getType().getLanguageSpecificName());
                         writer.write(
                             "\n\t\t"
                                 + paramName
@@ -233,7 +231,7 @@ public class StubWriter extends JavaClassWriter {
                                 + ((ParameterInfo) obj).getType().getLanguageSpecificName()
                                 + "();");
                         writer.write("\n\t\top0.setParam(param0);");
-                        paramQName = ((ParameterInfo) obj).getSchemaName();
+                        paramQName = ((ParameterInfo) obj).getType().getName();
                         writer.write(
                             "\n\t\tcall.addParameter(\"param0\",new javax.xml.namespace.QName(\""
                                 + paramQName.getNamespaceURI()
@@ -243,7 +241,7 @@ public class StubWriter extends JavaClassWriter {
                         ops = "op0";
                     } else {
                         //paramType = ((ParameterInfo)obj).getType();
-                        paramQName = ((ParameterInfo) obj).getSchemaName();
+                        paramQName = ((ParameterInfo) obj).getType().getName();
                         writer.write(
                             "\n\t\tcall.addParameter(\"param0\",new javax.xml.namespace.QName(\""
                                 + paramQName.getNamespaceURI()
@@ -255,14 +253,13 @@ public class StubWriter extends JavaClassWriter {
                 }
                 for (int j = 1; params1.hasNext(); j++) {
                     obj = params1.next();
-                    paramQName = ((ParameterInfo) obj).getSchemaName();
-                    paramType =
-                        wscontext.getTypemap().getType(
-                            ((ParameterInfo) obj).getSchemaName());
+                    paramType = ((ParameterInfo) obj).getType();
+					paramQName = paramType.getName();
+					
                     if (TypeMap.isSimpleType(paramQName)) {
                         String paramName =
                             WrapperUtils.getWrapperName4FullyQualifiedName(
-                                ((ParameterInfo) obj).getLangName());
+								paramType.getLanguageSpecificName());
 
                         writer.write(
                             "\n\t\t"
@@ -296,7 +293,7 @@ public class StubWriter extends JavaClassWriter {
                                 + ((ParameterInfo) obj).getType().getLanguageSpecificName()
                                 + "();\n");
                         writer.write("\n\t\top" + j + ".setParam(param" + j + ");");
-                        paramQName = ((ParameterInfo) obj).getSchemaName();
+                        paramQName = ((ParameterInfo) obj).getType().getName();
                         writer.write(
                             "\n\t\tcall.addParameter(\"param"
                                 + j
@@ -307,7 +304,7 @@ public class StubWriter extends JavaClassWriter {
                                 + "\"),javax.xml.rpc.ParameterMode.IN);");
                         ops = ops + ",op" + j;
                     } else {
-                        paramQName = ((ParameterInfo) obj).getSchemaName();
+                        paramQName = ((ParameterInfo) obj).getType().getName();
                         writer.write(
                             "\n\t\tcall.addParameter(\"param"
                                 + j
@@ -323,10 +320,10 @@ public class StubWriter extends JavaClassWriter {
                 returnType = (ParameterInfo) minfo.getReturnType();
                 writer.write("\n\t\tcall.setTargetEndpointAddress(this.enduri);");
                 if (returnType != null) {
-                    paramQName = returnType.getSchemaName();
+                    paramQName = returnType.getType().getName();
                     paramType =
                         wscontext.getTypemap().getType(
-                            ((ParameterInfo) minfo.getReturnType()).getSchemaName());
+                            ((ParameterInfo) minfo.getReturnType()).getType().getName());
                     writer.write(
                         "\n\t\tcall.setReturnType(new javax.xml.namespace.QName(\""
                             + paramQName.getNamespaceURI()
@@ -340,7 +337,7 @@ public class StubWriter extends JavaClassWriter {
                     if (TypeMap.isSimpleType(paramQName)) {
                         String paramName =
                             WrapperUtils.getWrapperName4FullyQualifiedName(
-                                minfo.getReturnType().getLangName());
+                                minfo.getReturnType().getType().getLanguageSpecificName());
                         writer.write(
                             "\n\t\t" + paramName + " res = new " + paramName + "(mx);");
                         //TODO prob here now fixed I think

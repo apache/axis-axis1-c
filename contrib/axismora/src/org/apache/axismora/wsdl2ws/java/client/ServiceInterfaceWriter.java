@@ -117,8 +117,8 @@ public class ServiceInterfaceWriter extends JavaInterfaceWriter {
                 ParameterInfo returnType = minfo.getReturnType();
 
                 if (returnType == null
-                    || returnType.getLangName() == null
-                    || returnType.getLangName() == "void")
+                    || returnType.getType().getLanguageSpecificName() == null
+                    || returnType.getType().getLanguageSpecificName() == "void")
                     writer.write("void ");
                 else
                     writer.write(

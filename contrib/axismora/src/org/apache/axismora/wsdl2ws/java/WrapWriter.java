@@ -216,7 +216,7 @@ public class WrapWriter extends JavaClassWriter {
         if (returntype == null)
             outparam = "void";
         else
-            outparam = returntype.getLangName();
+            outparam = returntype.getType().getLanguageSpecificName();
 
         //method signature
         writer.write(
@@ -265,7 +265,7 @@ public class WrapWriter extends JavaClassWriter {
             boolean isSimpleType = TypeMap.isSimpleType(outparam);
             boolean isArray = false;
             Type type;
-            if ((type = this.wscontext.getTypemap().getType(returntype.getSchemaName()))
+            if ((type = this.wscontext.getTypemap().getType(returntype.getType().getName()))
                 != null)
                 isArray = type.isArray();
 
@@ -288,9 +288,9 @@ public class WrapWriter extends JavaClassWriter {
             } else if (isArray) {
                 writer.write(
                     "\t\t"
-                        + returntype.getLangName()
+                        + returntype.getType().getLanguageSpecificName()
                         + " ar = new "
-                        + returntype.getLangName()
+                        + returntype.getType().getLanguageSpecificName()
                         + "();");
                 writer.write("\t\tar.setParam(service." + methodName + "(");
                 if (paramsB.size() > 0) {

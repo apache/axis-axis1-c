@@ -1,6 +1,5 @@
 package org.apache.axismora.wsdl2ws;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,6 +9,8 @@ import javax.wsdl.BindingOperation;
 import javax.wsdl.BindingOutput;
 import javax.wsdl.Port;
 import javax.wsdl.extensions.soap.SOAPOperation;
+
+import org.apache.axismora.wsdl2ws.info.MethodInfo;
 
 /**
  * @author hemapani
@@ -52,7 +53,7 @@ public class SymbolTableParsingUtils {
 		}
 		return null;
 	}
-	public static List getInputEncodingStype(BindingInput input){
+	public static List getInputInfo(BindingInput input,MethodInfo methodinfo){
 	  if (input == null)
 			return null;
 	  List soapbodies = input.getExtensibilityElements();
@@ -61,15 +62,17 @@ public class SymbolTableParsingUtils {
 		  for (int j = 0; j < soapbodies.size(); j++) {
 			  if (soapbodies.get(j)
 				  instanceof javax.wsdl.extensions.soap.SOAPBody) {
-				  return  ((javax.wsdl.extensions.soap.SOAPBody) soapbodies
-						  .get(j))
-						  .getEncodingStyles();
+					javax.wsdl.extensions.soap.SOAPBody body =
+						 ((javax.wsdl.extensions.soap.SOAPBody) soapbodies
+						  .get(j));
+					methodinfo.setInputEncoding(body.getEncodingStyles());
+					methodinfo.setInputUse(body.getUse());
 			  }
 		  }
 	  }
 	  return null;
 	}
-	public static List getOutputEncodingStype(BindingOutput input){
+	public static List getOutputInfo(BindingOutput input,MethodInfo methodinfo){
 	  if (input == null)
 			return null;
 	  List soapbodies = input.getExtensibilityElements();
@@ -78,9 +81,11 @@ public class SymbolTableParsingUtils {
 		  for (int j = 0; j < soapbodies.size(); j++) {
 			  if (soapbodies.get(j)
 				  instanceof javax.wsdl.extensions.soap.SOAPBody) {
-				  return  ((javax.wsdl.extensions.soap.SOAPBody) soapbodies
-						  .get(j))
-						  .getEncodingStyles();
+					javax.wsdl.extensions.soap.SOAPBody body =
+						 ((javax.wsdl.extensions.soap.SOAPBody) soapbodies
+						  .get(j));
+					methodinfo.setInputEncoding(body.getEncodingStyles());
+					methodinfo.setInputUse(body.getUse());
 			  }
 		  }
 	  }

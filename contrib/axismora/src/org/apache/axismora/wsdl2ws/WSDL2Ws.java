@@ -61,7 +61,6 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.wsdl.Binding;
-import javax.wsdl.BindingInput;
 import javax.wsdl.Fault;
 import javax.wsdl.Operation;
 import javax.wsdl.Part;
@@ -70,6 +69,7 @@ import javax.wsdl.PortType;
 import javax.xml.namespace.QName;
 import javax.xml.rpc.holders.IntHolder;
 
+import org.apache.axis.wsdl.gen.Parser;
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.CollectionType;
 import org.apache.axis.wsdl.symbolTable.Element;
@@ -81,8 +81,6 @@ import org.apache.axis.wsdl.symbolTable.SymTabEntry;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.toJava.Utils;
-
-import org.apache.axis.wsdl.gen.Parser;
 import org.apache.axismora.util.CLArgParser;
 import org.apache.axismora.wsdl2ws.info.ElementInfo;
 import org.apache.axismora.wsdl2ws.info.FaultInfo;
@@ -93,7 +91,6 @@ import org.apache.axismora.wsdl2ws.info.Type;
 import org.apache.axismora.wsdl2ws.info.TypeMap;
 import org.apache.axismora.wsdl2ws.info.WebServiceContext;
 import org.apache.axismora.wsdl2ws.info.WrapperInfo;
-
 import org.w3c.dom.Node;
 
 /**
@@ -139,11 +136,9 @@ public class WSDL2Ws {
             wsdlParser.run(wsdlfile);
 
             symbolTable = wsdlParser.getSymbolTable();
-            // symbolTable.dump(System.out);
             
             //get the target namespace
 			targetNameSpaceOfWSDL = symbolTable.getDefinition().getTargetNamespace();
- //           porttype = this.getWebServiceInfo();
         } catch (Exception e) {
             e.printStackTrace();
             throw new WrapperFault(e);
@@ -160,11 +155,10 @@ public class WSDL2Ws {
 		this.serviceentry = getServiceEntry();
 		Iterator ports = this.serviceentry.getService().getPorts().values().iterator();
 		
-		//TODO resolve this
-		/*
-			this code support only the service with onebindings it will not care about the
-			second binding if exists.. if the NO binding specified it will failed
-		 */
+//		TODO  resolve this
+//			  this code support only the service with onebindings it will not care about the
+//			  second binding if exists.. if the NO binding specified it will failed
+//			  this should be resolved by let user specify which binding to use.
 		Binding binding = null;
 		if (ports.hasNext())
 			binding = ((Port) ports.next()).getBinding();
@@ -206,15 +200,13 @@ public class WSDL2Ws {
         if (operations != null) {
 
             for (int i = 0; i < operations.size(); i++) {
-                //for the first binding operation found
+                //for the each binding operation found
                 if (operations.get(i) instanceof javax.wsdl.BindingOperation) {
-                	
 					javax.wsdl.BindingOperation bindinop = (javax.wsdl.BindingOperation) operations.get(i);
 					MethodInfo method = getMethodInfoByName(bindinop.getName());
 					method.setSoapAction(SymbolTableParsingUtils.getSoapAction(bindinop));
-					method.setInputEncoding(SymbolTableParsingUtils.getInputEncodingStype(bindinop.getBindingInput()));
-                    method.setOutputEncoding(SymbolTableParsingUtils.getOutputEncodingStype(bindinop.getBindingOutput()));
-					break;
+					SymbolTableParsingUtils.getInputInfo(bindinop.getBindingInput(),method);
+                    SymbolTableParsingUtils.getOutputInfo(bindinop.getBindingOutput(),method);
                 }
             }
         }
@@ -225,7 +217,7 @@ public class WSDL2Ws {
      * When possible the user can have the schema QName if he like
      */
 
-    private ArrayList getServiceInfo(PortType porttype) {
+    private ArrayList getServiceInfo(PortType porttype)throws WrapperFault {
         //get opeation list
         Iterator oplist = porttype.getOperations().iterator();
         ArrayList methods = new ArrayList();
@@ -252,20 +244,7 @@ public class WSDL2Ws {
             //add each parameter to parameter list
             while (paramlist.hasNext()) {
                 Part p = (Part) paramlist.next();
-
-                //TODO some types type name is null we neglect them is that right??
-                if (p.getTypeName() == null) {
-                    continue;
-                }
-
-                ptype = symbolTable.getType(p.getTypeName());
-                pinfo =
-                    new ParameterInfo(
-                        ptype.getName(),
-                        ptype.getQName(),
-                        p.getName(),
-                        language);
-
+                pinfo = createParameterInfo(p);
                 minfo.addParameter(pinfo);
             }
 
@@ -274,14 +253,7 @@ public class WSDL2Ws {
                 op.getOutput().getMessage().getParts().values().iterator();
             if (returnlist.hasNext()) {
                 Part p = ((Part) returnlist.next());
-
-                //TODO some types type name is null we neglect them is that right??
-                if (p.getTypeName() == null)
-                    continue;
-
-                ptype = symbolTable.getType(p.getTypeName());
-                minfo.setReturnType(
-                    new ParameterInfo(ptype.getName(), ptype.getQName(), null, language));
+   		        minfo.setReturnType(createParameterInfo(p));
             }
         }
         return methods;
@@ -326,8 +298,8 @@ public class WSDL2Ws {
 		
 		QName serviceqname = serviceentry.getService().getQName();
 		servicename = serviceqname.getLocalPart();
+		typeMap = this.getTypeInfo(targetLanguage);
         methods = this.getServiceInfo(this.portTypeEntry.getPortType());
-        TypeMap typeMap = this.getTypeInfo(targetLanguage);
         this.getWebServiceInfo();
         
         //TODO	chaeck weather the name at the WrapperConstant Doclit is right "doc"
@@ -507,7 +479,7 @@ public class WSDL2Ws {
 		return typedata;
 	}
 
-	private void addFaultInfo(Map faults,MethodInfo methodinfo){
+	private void addFaultInfo(Map faults,MethodInfo methodinfo)throws WrapperFault{
 		if(faults == null)
 			return;
 		Iterator faultIt = faults.values().iterator();
@@ -517,13 +489,13 @@ public class WSDL2Ws {
 			Map parts = fault.getMessage().getParts();
 			Iterator partIt = parts.values().iterator();
 			while(partIt.hasNext()){
-				faultinfo.addParam(createParameterInfo((Part)partIt.next(),language));
+				faultinfo.addParam(createParameterInfo((Part)partIt.next()));
 			}			  
 		}	 
 	
 	}
 	
-	private ParameterInfo createParameterInfo(Part part,String language){
+	private ParameterInfo createParameterInfo(Part part)throws WrapperFault{
 		QName qname = part.getTypeName();
 		if(qname == null){
 			Element element = symbolTable.getElement(part.getElementName());
@@ -531,8 +503,14 @@ public class WSDL2Ws {
 		}
 		TypeEntry tentry = symbolTable.getType(qname);
 		
-		return new ParameterInfo(tentry.getName(),qname,part.getName(),language);
-			
+		Type type = this.typeMap.getType(qname);
+		if(type == null)
+			throw new WrapperFault("unregisterd type "+qname+" refered");
+		
+		ParameterInfo parainfo = 
+			new ParameterInfo(type,part.getName());
+		parainfo.setElementName(part.getElementName());
+		return parainfo;
 	}
 
 	private MethodInfo getMethodInfoByName(String name)throws WrapperFault{

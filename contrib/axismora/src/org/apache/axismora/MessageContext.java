@@ -62,6 +62,7 @@ import java.util.Vector;
 import javax.xml.namespace.QName;
 
 import org.apache.axismora.deployment.AxisDeployment;
+import org.apache.axismora.encoding.AxisPullParser;
 import org.apache.axismora.soap.XMLTextData;
 
 import org.apache.axis.AxisFault;
@@ -312,4 +313,6 @@ public interface MessageContext extends javax.xml.rpc.handler.MessageContext {
      * @throws AxisFault
      */
     public String nextText() throws AxisFault;
+    
+	public AxisPullParser getAxisParser()throws AxisFault;
 }

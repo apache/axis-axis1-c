@@ -249,20 +249,24 @@ public class TypeMap {
     	return name;
     }
     
-    private static Hashtable unregisterdArrayTypes = new Hashtable();
+    //private static Hashtable unregisterdArrayTypes = new Hashtable();
+    
+	private static Vector unregisterdArrayTypes = new Vector();
     
     public static String regestorArrayTypeToCreate(Type type)throws WrapperFault{
-    	QName arrayType = WrapperUtils.getArrayType(type).getName();
-		Object obj = unregisterdArrayTypes.get(arrayType);
-		if(obj != null)
-			return ((Type)obj).getLanguageSpecificName();
-		else{
-			unregisterdArrayTypes.put(arrayType,type);
-			return type.getLanguageSpecificName();
-		}	
+//    	QName arrayType = WrapperUtils.getArrayType(type).getName();
+//		Object obj = unregisterdArrayTypes.get(arrayType);
+//		if(obj != null)
+//			return ((Type)obj).getLanguageSpecificName();
+//		else{
+//			unregisterdArrayTypes.put(arrayType,type);
+//			return type.getLanguageSpecificName();
+//		}	
+		unregisterdArrayTypes.add(type);
+		return type.getLanguageSpecificName();
     }
     
     public static Iterator getUnregisterdArrayTypes(){
-		return unregisterdArrayTypes.values().iterator();
+		return unregisterdArrayTypes.iterator();
     }
 }
