@@ -214,6 +214,10 @@ SOURCE=..\..\include\axis\server\IParam.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\axis\server\ISoapHeader.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\axis\server\IWrapperSoapDeSerializer.h
 # End Source File
 # Begin Source File
