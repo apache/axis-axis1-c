@@ -6,7 +6,7 @@
 
 #include "InteropTestPortType.h"
 
-#include <axis/server/AxisWrapperAPI.h>
+#include <axis/server/AxisWrapperAPI.hpp>
 
 //bool CallBase::bInitialized;
 //CallFunctions CallBase::ms_VFtable;
