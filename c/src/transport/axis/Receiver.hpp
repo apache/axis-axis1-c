@@ -24,8 +24,7 @@
 #if !defined(_AXIS_RECEIVER_HPP)
 #define _AXIS_RECEIVER_HPP
 
-#include <axis/server/AxisException.h>
-#include "AxisTransportException.h"
+#include <axis/AxisTransportException.h>
 #include <axis/server/AxisTrace.h>
 extern AxisTrace* g_pAT;
 

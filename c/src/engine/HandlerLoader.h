@@ -23,8 +23,8 @@
 #include <axis/server/GDefine.h>
 #include <axis/server/WrapperClassHandler.h>
 #include "SharedObject.h"
-#include "AxisEngineException.h"
-#include "../common/AxisConfigException.h"
+#include <axis/AxisEngineException.h>
+#include <axis/AxisConfigException.h>
 
 #include <map>
 #include <string>
