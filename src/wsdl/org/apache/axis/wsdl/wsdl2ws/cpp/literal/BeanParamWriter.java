@@ -129,8 +129,17 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				throw new WrapperFault("Error : an attribute is not basic type");
 			}
 			else{
+				//Samisa
+				//remove _Ref sufix and _ prefix in SOAP tag name
+				String soapTagName = attribs[i].getParamName();
+				if( soapTagName.lastIndexOf("_Ref") > -1 )
+					soapTagName = soapTagName.substring(0, soapTagName.lastIndexOf("_Ref") );
+				if( soapTagName.charAt(0) == '_' )
+					soapTagName = soapTagName.substring(1, soapTagName.length() );
+				//end remove _Ref sufix and _ prefix in SOAP tag name
 				writer.write("\tif (0 != param->"+attribs[i].getParamName()+")\n");
-				writer.write("\t\tpSZ->serializeAsAttribute(\""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");				
+				//writer.write("\t\tpSZ->serializeAsAttribute(\""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");				
+				writer.write("\t\tpSZ->serializeAsAttribute(\""+ soapTagName +"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");				
 				if (!attribs[i].isOptional()){
 					/* This avoid segmentation fault at runtime */
 					/*writer.write("\telse\n");
@@ -218,14 +227,28 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			}else if(attribs[i].isSimpleType()){
 				//TODO handle optional attributes
 				//Samisa
-				//writer.write("\tparam->"+attribs[i].getParamName()+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute())+"(\""+(attribs[i].isAttribute() ? attribs[i].getParamName():attribs[i].getElementName().getLocalPart())+"\",0);\n");
-				writer.write("\tparam->"+attribs[i].getParamName()+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute())+"(\""+(attribs[i].isAttribute() ? attribs[i].getParamName():attribs[i].getElementNameAsString())+"\",0);\n");
+				//remove _Ref sufix and _ prefix in SOAP tag name
+				String soapTagName = (attribs[i].isAttribute() ? attribs[i].getParamName():attribs[i].getElementNameAsString());
+				if( soapTagName.lastIndexOf("_Ref") > -1 )
+					soapTagName = soapTagName.substring(0, soapTagName.lastIndexOf("_Ref") );
+				if( soapTagName.charAt(0) == '_' )
+					soapTagName = soapTagName.substring(1, soapTagName.length() );
+				//end remove _Ref sufix and _ prefix in SOAP tag name
+				writer.write("\tparam->"+attribs[i].getParamName()+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute())+"(\""+ soapTagName +"\",0);\n");
 				//Samisa
 			} else{
 				//if complex type
+				//Samisa
+				//remove _Ref sufix and _ prefix in SOAP tag name
+				String soapTagName = attribs[i].getParamName();
+				if( soapTagName.lastIndexOf("_Ref") > -1 )
+					soapTagName = soapTagName.substring(0, soapTagName.lastIndexOf("_Ref") );
+				if( soapTagName.charAt(0) == '_' )
+					soapTagName = soapTagName.substring(1, soapTagName.length() );
+				//end remove _Ref sufix and _ prefix in SOAP tag name
 				writer.write("\tparam->"+attribs[i].getParamName()+" = ("+attribs[i].getTypeName()+"*)pIWSDZ->getCmplxObject((void*)Axis_DeSerialize_"+attribs[i].getTypeName()+
 					"\n\t\t, (void*)Axis_Create_"+attribs[i].getTypeName()+", (void*)Axis_Delete_"+attribs[i].getTypeName()+
-					"\n\t\t, \""+attribs[i].getParamName()+"\", Axis_URI_"+attribs[i].getTypeName()+");\n");				
+					"\n\t\t, \""+ soapTagName +"\", Axis_URI_"+attribs[i].getTypeName()+");\n");				
 			}		
 		}
 		if (extensionBaseAttrib != null){
