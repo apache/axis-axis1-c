@@ -32,7 +32,9 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#ifdef WIN32
 #pragma warning( disable : 4786 )
+#endif
 
 #include <map>
 #include <string>
