@@ -12,6 +12,8 @@
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
+ *
+ * @author Sanjaya Singharage (sanjayas@opensource.lk, sanjayas@jkcsworld.com)
  */
  
 #if !defined(__AXIS_AXISCONFIG_H_OF_AXIS_INCLUDED__)

@@ -13,6 +13,9 @@
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
+ *
+ * @author Sanjaya Singharage (sanjayas@opensource.lk, sanjayas@jkcsworld.com)
+ * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  */
 
 #include "ApacheTransport.h"
