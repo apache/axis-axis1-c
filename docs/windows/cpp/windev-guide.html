@@ -49,6 +49,7 @@ side stubs</a><br>
 <a href="#parser">Creating and Building your own parser</a>
 
 </p>
+<p> <b>Before you follow this guide, make sure that you have followed the <a href="winuser-guide.html">Windows User Guide</a> also knows how to use binaries</b></p>
 
 <p>
 <a name="buildaxis"></a></p>
@@ -102,8 +103,6 @@ folder named “ws-axis”<br>
 <br>
 The checked out folder ws-axis will be referred to as [CHECKOUT_HOME] from
 this point on.<br></p>
-
-
 
 <p><a name="getapacheexpat"></a></p>
 
@@ -161,7 +160,7 @@ from this point onwards.</p>
 <br>
 2) Copy [EXPAT_EXTRACT]\lib\libexpat.lib to [CHECKOUT_HOME]\c\lib\expat\ directory.</p>
 
-<p>3)Copy libexpat.dll file from [EXPAT_EXTRACT]\Libs  to %AXIS_HOME%/libs/
+<p>3)Copy libexpat.dll file from [EXPAT_EXTRACT]\Libs  to %AXIS_HOME%/libs/ 
 
 
 <p><b>For apache 1.3.X:</b></p>
@@ -188,9 +187,8 @@ to [CHECKOUT_HOME]\c\lib\apache1_3.</p>
 
 <p><b>Building the AxisServer and AxisClient dlls </b> </p>
 
-<p>Build the AxisServer and AxisClient projects,
-Which will build the AxisServer_D.dll and AxisClient_D.dll and also AxisServer_D.lib and AxisClient_D.lib
-in [CHECKOUT_HOME]\c\bin.</p>
+<p>Build the AxisServer and AxisClient projects.(Click on file in Visual C++ ,open Visual C++ Distribution workspace (Distribution.dsw) at [CHECKOUT_HOME]\c\vc\.
+In the workspace window, File View, right click on  the AxisServer project and AxisClient project ).Which will build the AxisServer_D.dll and AxisClient_D.dll </p>
 
 <p><b>Building Apache Modules (Apache 1.3.X and Apache 2.X) </b> </p>
 <p>
@@ -205,7 +203,7 @@ Project.<br> <br>
 "Apache2_0Module" in the workspace window, File View, and then click on Settings on
 the popup menu. Select the link tab. Select General from the Category drop
 down list. In the Output file name text box put the value
-[APACHE_HOME]\modules\mod_axis.dll and click OK.</p>
+[APACHE_HOME]\modules\mod_axis.dll and click OK.(To build a Apache Module AxisServer.lib should be in the settings Link tab ) </p>
 
 <p>Build either Apache1_3Module or Apache2_0Module project.
 In Visual C++ right click on either the project "Apache1_3Module" or
@@ -223,7 +221,7 @@ with the correct module for the Apache server version that you have installed). 
 <p>In VC++ distribution workspace build either AxisXMLParserXerces project or AxisXMLParserExpat project. Then AxisXMLParser.dll will be built.</p>  
 
 <p><b> Building AxisTransport_D.dll  and AxisXMLParser_D.dll</b>
-<br>Build the AxisTransport and AxisXMLParser projects. Which will build the AxisTransport_D.dll and AxisXMLParser_D.dll in [CHECKOUT_HOME]\c\bin. Also will build  libexpat.lib or xerces-c_2.lib or  xerces-c_2D.lib in [CHECKOUT_HOME]\c\lib  </p>
+<br>Build the AxisTransport and AxisXMLParser projects. Which will build the AxisTransport_D.dll and AxisXMLParser_D.dll in [CHECKOUT_HOME]\c\bin. </p>
 
 <p><a name="deployaxis"></a></p>
 
@@ -233,7 +231,7 @@ with the correct module for the Apache server version that you have installed). 
 <p>1) Create a directory structure called "Axis" inside [APACHE_HOME] as
 follows.
 <br>
-(Instead, you can copy the folder [CHECKOUT_HOME]\c\deploy [APACHE_HOME] and rename it to 
+(Instead, you can copy the folder [CHECKOUT_HOME]\c\deploy to [APACHE_HOME] and rename it to 
 "Axis" and you will find some of the files that you are asked to create in this guide,
 already existing in that folder)
 <br>
