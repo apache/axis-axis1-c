@@ -19,6 +19,8 @@
 
 #include <axis/IMessageData.hpp>
 #include "AdminUtils.h"
+#include "../transport/SOAPTransport.h"
+
 
 /*
  *  @class MessageData
@@ -47,6 +49,7 @@ public:
 public:
     IWrapperSoapSerializer* m_pSZ;
     IWrapperSoapDeSerializer* m_pDZ;
+    SOAPTransport* pSoapTransport ;
 private:
     void getAdminUtils(IAdminUtils** pIAdminUtils);
 public:
@@ -69,6 +72,9 @@ public:
     void setUserName(string& m_sUserName);
     string& getUserName();
     AXIS_PROTOCOL_TYPE m_Protocol;
+    void setTransport(SOAPTransport* pStream);
+    int setTransportProperty(const char* pcKey, const char* pcValue);
+    const char* getTransportProperty(const char* pcKey);    
     
 protected:
     string m_sUserName;

@@ -179,7 +179,7 @@ int Call::initialize(PROVIDERTYPE nStyle)
         	m_nStatus = AXIS_FAIL;
             return AXIS_FAIL;
         }
-        if (AXIS_SUCCESS == m_pAxisEngine->initialize ())
+        if (AXIS_SUCCESS == m_pAxisEngine->initialize (m_pTransport))
         {
             MessageData *msgData = m_pAxisEngine->getMessageData ();
             if (msgData)

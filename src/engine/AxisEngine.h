@@ -33,6 +33,7 @@
 #include "../soap/SoapDeSerializer.h"
 #include "../common/MessageData.h"
 #include "HandlerChain.h"
+#include "../transport/SOAPTransport.h"
 
 /*
  *   @class AxisEngine
@@ -61,7 +62,7 @@ public:
 public:
     AxisEngine();
     virtual ~AxisEngine();
-    virtual int initialize();
+    virtual int initialize(SOAPTransport* pStream);
     virtual void unInitialize();
     virtual int process(SOAPTransport* pSoap)=0;
 protected:

@@ -148,7 +148,7 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
                 AxisEngine *engine = new ServerAxisEngine ();
                 if (engine)
                 {
-                    if (AXIS_SUCCESS == engine->initialize ())
+                    if (AXIS_SUCCESS == engine->initialize (pStream))
                     {
                         Status = engine->process(pStream);
 						if (AXIS_SUCCESS == Status)

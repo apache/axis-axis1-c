@@ -26,6 +26,8 @@
 #include "SerializerPool.h"
 #include "../common/AxisTrace.h"
 
+
+
 extern AXIS_CPP_NAMESPACE_PREFIX DeserializerPool* g_pDeserializerPool;
 extern AXIS_CPP_NAMESPACE_PREFIX SerializerPool* g_pSerializerPool;
 extern AXIS_CPP_NAMESPACE_PREFIX HandlerPool* g_pHandlerPool;
@@ -57,7 +59,7 @@ AxisEngine::~AxisEngine ()
         delete m_pMsgData;
 }
 
-int AxisEngine::initialize ()
+int AxisEngine::initialize (SOAPTransport* pStream)
 {
     int Status;
     m_pMsgData = new MessageData ();
@@ -70,6 +72,7 @@ int AxisEngine::initialize ()
         return Status;
     m_pMsgData->setSerializer (m_pSZ);
     m_pMsgData->setDeSerializer (m_pDZ);
+    m_pMsgData->setTransport(pStream);    
 
     return AXIS_SUCCESS;
 }
