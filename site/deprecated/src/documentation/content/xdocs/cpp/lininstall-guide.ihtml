@@ -91,14 +91,16 @@ http://sourceforge.net/projects/expat/</a> </p>
 <p>You have to follow the expat installation guide to install it</p>
 <p><a name="Xercesc"></a></p>
 <h1><b>Installing Xerces-c</b></h1>
-<p>You can get expat from the uri <a
- href="http://www.xml.apache.org/xerces-c/download.cgi">
-http://www.xml.apache.org/xerces-c/download.cgi</a> <br>
-<br>
-You have to follow the the expat installation giude to install it.<br>
-<br>
-</p>
-<p><a name="Installing1"></a> </p>
+        <p>You can get xercesc from the uri <a href="http://www.xml.apache.org/xerces-c/download.cgi">
+        http://www.xml.apache.org/xerces-c/download.cgi</a>
+        <br>
+        <br>
+        You have to follow the the xercesc installation giude to install it.<br>
+        <br>
+</p>               
+<p><a name="Installing1"></a>
+        </p>
+                     
 <h1>Installing Apache</h1>
 <p>Get the apache downloadable software. (We used the source
 apache_1.3.27.tar.gz).      Build it with sharable module support.</p>
@@ -138,11 +140,14 @@ apache_1.3.27.tar.gz).      Build it with sharable module support.</p>
 <p><strong></strong></p>
 <p class="command"><span class="command"></span></p>
 <p>Copy apache include files</p>
-<p><strong>$ cp -f &lt;apacheinstdirectory&gt;/include/*
-$AXISCPP_HOME/include/apache1_3/</strong></p>
-<p>Copy the expat include files</p>
-<p><strong>$ cp -f &lt;expatinstdirectory&gt;/include/expat.h
-$AXISCPP_HOME/include/expat/</strong></p>
+                      
+<p><strong>$ cp -f &lt;apacheinstdirectory&gt;/include/* $AXISCPP_HOME/include/apache1_3/</strong></p>
+    <p>If you are using expat parser copy the expat include files</p>
+<p><strong>$ cp -f &lt;expatinstdirectory&gt;/include/expat.h $AXISCPP_HOME/include/expat/</strong></p>
+                      
+    <p>If you are using xercesc parser copy the xercesc include files</p>
+<p><strong>$ cp -rf &lt;xercescinstdirectory&gt;/include/* $AXISCPP_HOME/include/xercesc/</strong></p>
+                      
 <p class="command"><span class="command"></span></p>
 <p><strong>$ cd $AXISCPP_HOME</strong></p>
 <p>The Folder called deploy in the $AXISCPP_HOME/ should be copied to
@@ -184,7 +189,7 @@ this in your .bash_profile)<br>
 </b> <br>
 <b>cp -f Makefile.am_expat Makefile.am</b> 	</p>
 <p>If you are using Xerces-c parser do the following</p>
-<p>set<b> XERCES_HOME</b>="&lt;Your xercesc installation root folder&gt;"</p>
+<p>set<b> XERCESC_HOME</b>="&lt;Your xercesc installation root folder&gt;"</p>
 <p>set<b> LD_LIBRARY_PATH="$XERCESC_HOME/lib"</b> (do this in your
 .bash_profile)<br>
 <br>
