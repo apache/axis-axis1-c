@@ -347,7 +347,7 @@ public class WSDL2Ws {
     } //end of method
 
     public void genarateWrappers(
-      //  String servicename,
+        String servicename,
         String targetoutputLocation,
         String targetLanguage,
         String targetImplementationStyle,
@@ -371,7 +371,7 @@ public class WSDL2Ws {
                         transportURI,
                         targetEndpointURI,
                         targetNameSpaceOfWSDL),
-                    new ServiceInfo(qualifiedServiceName, methods),
+                    new ServiceInfo(servicename,qualifiedServiceName, methods),
                     typeMap));
         if (wsg == null)
             throw new WrapperFault("does not support the option combination");
@@ -517,6 +517,7 @@ public class WSDL2Ws {
         else {
             WSDL2Ws gen = new WSDL2Ws(data);
             gen.genarateWrappers(
+            	null,
                 data.getParameterValueBykey("o"),
                 data.getParameterValueBykey("l"),
                 data.getParameterValueBykey("i"),
