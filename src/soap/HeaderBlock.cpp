@@ -82,7 +82,7 @@ m_prefix(rCopy.m_prefix), m_uri(rCopy.m_uri)
     }
 }
 
-HeaderBlock* HeaderBlock::clone()
+IHeaderBlock* HeaderBlock::clone()
 {
     return new HeaderBlock(*this);
 }
