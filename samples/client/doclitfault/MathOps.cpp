@@ -30,7 +30,7 @@ extern int Axis_Serialize_DivByZeroStruct(DivByZeroStruct* param, IWrapperSoapSe
 extern int Axis_GetSize_DivByZeroStruct();
 
 bool CallBase::bInitialized;
-CallFunctions CallBase::ms_VFtable;
+//CallFunctions CallBase::ms_VFtable;
 
 MathOps::MathOps(const char* pchEndpointUri)
 {
