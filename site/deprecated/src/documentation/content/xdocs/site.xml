@@ -50,6 +50,9 @@ See http://xml.apache.org/forrest/linking.html for more info
   <interim label="Interim Drops" href="interim.html"/>
   <sourcecode label="Source Code" href="http://cvs.apache.org/viewcvs/ws-axis/"/>
 </downloads>
+<translation label="Translation">
+  <releases label="Japanese (Unofficial)" href="http://ws.apache.org/~toshi/jp-site/axis/index.html"/>
+</translation>
 <related label="Related Projects">
   <wsif label="WSIF" href="http://ws.apache.org/wsif/"/>
   <wsil label="WSIL" href="http://cvs.apache.org/viewcvs/*checkout*/ws-wsil/java/README.htm"/>
