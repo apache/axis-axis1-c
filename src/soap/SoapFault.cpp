@@ -205,3 +205,23 @@ SoapFault* SoapFault::getSoapFault(int intFaultNo)
 	
 	return pSoapFault;
 }
+
+SoapFault::SoapFault(string sFaultcode, string sFaultstring, string sFaultactor, string sDetail) 
+{
+	m_sFaultcode= sFaultcode;
+	m_sFaultstring= sFaultstring;
+	m_sFaultactor= sFaultactor;
+	m_sDetail= sDetail;	
+}
+
+bool SoapFault::operator ==(const SoapFault &objSoapFault)
+{
+	if ((m_sFaultcode == objSoapFault.m_sFaultcode) &&
+		(m_sFaultstring == objSoapFault.m_sFaultstring) &&
+		(m_sFaultactor == objSoapFault.m_sFaultactor) &&
+		(m_sDetail == objSoapFault.m_sDetail)) {
+		return true;
+	}
+
+	return false;
+}
