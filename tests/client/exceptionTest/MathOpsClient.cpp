@@ -108,9 +108,11 @@ int main(int argc, char* argv[])
             }
             catch(exception& e)
             {
+		printf("Unknown exception has occured\n");
             }
             catch(...)
             {
+		printf("Unknown exception has occured\n");
             }
 	}
 	else 

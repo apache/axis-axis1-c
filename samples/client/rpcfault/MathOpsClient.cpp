@@ -16,7 +16,8 @@ int main(int argc, char* argv[])
 	int i1=0, i2=0;
         int iResult;
         char* pcDetail;
-
+        try
+        {
 	if (argc < 6)
 	{
 		PrintUsage();
@@ -75,6 +76,20 @@ int main(int argc, char* argv[])
 		printf("Invalid operation %s\n\n", op);
 		PrintUsage();
 	}
+        }
+        catch(AxisException& e)
+        {
+            printf("Exception : %s\n", e.what());
+        }
+        catch(exception& e)
+        {
+	    printf("Unknown exception has occured\n");
+        }
+        catch(...)
+        {
+	    printf("Unknown exception has occured\n");
+        }
+	
 	return 0;
 }
 
