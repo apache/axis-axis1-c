@@ -84,6 +84,7 @@ WSDDDeployment::WSDDDeployment()
 	m_pTransportHandlers = NULL;
 	m_GlobalResponseHandlers = NULL;
 	m_GlobalRequestHandlers = NULL;
+	m_DeplType = DT_DEPLOYMENT;
 }
 
 WSDDDeployment::~WSDDDeployment()
@@ -537,3 +538,15 @@ int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_ArrayTag i
 
 	return SUCCESS;
 }
+
+DEPLOYMENTTYPE WSDDDeployment::GetDeploymentType() const
+{
+	return m_DeplType;
+}
+
+void WSDDDeployment::SetDeploymentType(DEPLOYMENTTYPE nType)
+{
+	m_DeplType = nType;
+}
+
+
