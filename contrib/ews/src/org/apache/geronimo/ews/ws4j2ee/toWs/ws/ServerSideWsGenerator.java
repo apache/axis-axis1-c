@@ -117,8 +117,8 @@ public class ServerSideWsGenerator implements Generator {
 			j2ee.setHelperWanted(true);
 			j2ee.runServerSide(wsdlfile);
 			
-			J2eeDeployWriter deploywriter = new J2eeDeployWriter(j2ee,j2eewscontext);
-			deploywriter.generate();
+//			J2eeDeployWriter deploywriter = new J2eeDeployWriter(j2ee,j2eewscontext);
+//			deploywriter.generate();
 			
 			SymbolTable axisSymboltable = j2ee.getSymbolTable();
 			j2eewscontext.setWSDLContext(ContextFactory.createWSDLContext(axisSymboltable));

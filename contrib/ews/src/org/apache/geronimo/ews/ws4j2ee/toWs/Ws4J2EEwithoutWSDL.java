@@ -69,7 +69,6 @@ import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.ContextValidator;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.impl.AxisEmitterBasedJaxRpcMapperContext;
-import org.apache.geronimo.ews.ws4j2ee.context.impl.J2EEWebServiceContextImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.AxisEmitterBasedWSCFContext;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
@@ -78,7 +77,6 @@ import org.apache.geronimo.ews.ws4j2ee.context.wsdl.impl.AxisEmitterBasedWSDLCon
 import org.apache.geronimo.ews.ws4j2ee.parsers.EJBDDParser;
 import org.apache.geronimo.ews.ws4j2ee.parsers.WebDDParser;
 import org.apache.geronimo.ews.ws4j2ee.toWs.wsdl.WSDLGenerator;
-//import org.apache.geronimo.ews.ws4j2ee.utils.AntExecuter;
 import org.apache.geronimo.ews.ws4j2ee.utils.JarFileLoader;
 import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 
@@ -116,7 +114,7 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 			
 			
 			//create the context
-	        this.wscontext = new J2EEWebServiceContextImpl(false);
+	        this.wscontext = ContextFactory.getJ2EEWsContext(false);
 	        this.wscontext.setMiscInfo(ContextFactory.createMiscInfo());
 			wscontext.getMiscInfo().setVerbose(verbose);
 			
@@ -147,7 +145,7 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 			webddin = jarfileLoader.getWebddfile();
 			
 			//create the context
-			this.wscontext = new J2EEWebServiceContextImpl(false);
+			this.wscontext = ContextFactory.getJ2EEWsContext(false);
 			this.wscontext.setMiscInfo(ContextFactory.createMiscInfo());
 			wscontext.getMiscInfo().setVerbose(verbose);
 			wscontext.getMiscInfo().setJarFileName(jarfile.getAbsolutePath());

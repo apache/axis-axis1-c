@@ -59,13 +59,16 @@ package org.apache.geronimo.ews.jaxrpcmapping;
  *
  */
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Vector;
 
 import javax.wsdl.Binding;
@@ -109,6 +112,7 @@ import org.apache.axis.wsdl.toJava.JavaServiceWriter;
 import org.apache.axis.wsdl.toJava.JavaTypeWriter;
 import org.apache.axis.wsdl.toJava.JavaUndeployWriter;
 import org.apache.axis.wsdl.toJava.Utils;
+import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
 
 /**
  * This is WsdlToJ2ee's implementation of the GeneratorFactory
@@ -177,8 +181,7 @@ public class J2eeGeneratorFactory implements GeneratorFactory {
 
     protected void addDefinitionGenerators() {
         addGenerator(Definition.class, JavaDefinitionWriter.class); // for faults
-        //addGenerator(Definition.class, JavaDeployWriter.class); // for deploy.wsdd
-		addGenerator(Definition.class, J2eeDeployWriter.class); // for deploy.wsdd
+		addGenerator(Definition.class, getDeployerWriterClass()); // for deploy.wsdd
         addGenerator(Definition.class, JavaUndeployWriter.class); // for undeploy.wsdd
     } // addDefinitionGenerators
 
@@ -1119,5 +1122,32 @@ public class J2eeGeneratorFactory implements GeneratorFactory {
             };
         }
         return btm;
+    }
+    private Class getDeployerWriterClass(){
+        try {
+            Properties properties = new Properties();
+            InputStream proIn = GenerationConstants.class.getResourceAsStream("ws4j2ee.properties");
+            if(proIn == null){
+            	proIn = GenerationConstants.class.getResourceAsStream("META-INF/ws4j2ee.properties");
+            }
+            if(proIn == null){
+            	proIn = new FileInputStream("conf/ws4j2ee.properties");
+            }
+            if(proIn == null){
+            	proIn = new FileInputStream("ws4j2ee.properties");
+            }
+            if(proIn != null){
+            	properties.load(proIn);
+            }
+            
+            String provider = properties.getProperty("ws4j2ee-provider");
+            if(provider != null && provider.equals("j2ee")){
+            	return Class.forName("org.apache.geronimo.ews.ws4j2ee.toWs.ws.J2eeDeployWriter");
+            }else 
+            	return  J2eeDeployWriter.class;
+            
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

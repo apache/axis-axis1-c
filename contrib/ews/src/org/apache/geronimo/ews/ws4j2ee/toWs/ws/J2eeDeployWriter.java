@@ -98,6 +98,7 @@ import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.toJava.Emitter;
 import org.apache.axis.wsdl.toJava.JavaWriter;
 import org.apache.axis.wsdl.toJava.Utils;
+import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFHandler;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFInitParam;
@@ -113,20 +114,7 @@ public class J2eeDeployWriter  extends JavaWriter{
 
 	/** Field symbolTable */
 	protected SymbolTable symbolTable;
-	
 	protected J2EEWebServiceContext wscontext;
-
-	/**
-	 * Constructor.
-	 * 
-	 * @param emitter     
-	 * @param definition  
-	 * @param symbolTable 
-	 */
-	public J2eeDeployWriter(Emitter emitter, J2EEWebServiceContext wscontext) {
-		this(emitter,emitter.getSymbolTable().getDefinition(),emitter.getSymbolTable());
-		this.wscontext = wscontext;
-	} 
 
 	/**
 	 * Constructor.
@@ -139,9 +127,9 @@ public class J2eeDeployWriter  extends JavaWriter{
 							SymbolTable symbolTable) {
 
 		super(emitter, "deploy");
-
 		this.definition = definition;
 		this.symbolTable = symbolTable;
+		this.wscontext = ContextFactory.getCurrentJ2EEWsContext();
 	}    // ctor
 
 	/**
@@ -168,12 +156,7 @@ public class J2eeDeployWriter  extends JavaWriter{
 
 		String dir =
 				emitter.getNamespaces().getAsDir(definition.getTargetNamespace());
-		String filename = wscontext.getMiscInfo().getOutPutPath()+ "/deploy.wsdd";
-		File file = new File(dir + "deploy.wsdd");
-		if(file.exists()){
-			file.delete();
-		}
-		return filename; 
+		return dir + "deploy.wsdd"; 
 	}    // getFileName
 
 	/**

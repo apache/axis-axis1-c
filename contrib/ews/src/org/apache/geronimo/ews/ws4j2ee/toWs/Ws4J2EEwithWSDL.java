@@ -64,7 +64,6 @@ import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.ContextValidator;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.MiscInfo;
-import org.apache.geronimo.ews.ws4j2ee.context.impl.J2EEWebServiceContextImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
@@ -99,7 +98,7 @@ public class Ws4J2EEwithWSDL implements Generator {
                 misc.setWsconffile(wscffile);
                 misc.setOutputPath(clparser.getOutputDirectory());
                 misc.setWsConfFileLocation(Utils.getRootDirOfFile(wscffile));
-                wscontext = new J2EEWebServiceContextImpl(true);
+                wscontext = ContextFactory.getJ2EEWsContext(true);
                 wscontext.setMiscInfo(misc);
                 //parsing of the webservice.xml happen here 
                 WSCFContext wscfcontext = ContextFactory.createWSCFContext(new FileInputStream(wscffile));

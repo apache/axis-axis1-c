@@ -63,7 +63,6 @@ import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.ContextValidator;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.MiscInfo;
-import org.apache.geronimo.ews.ws4j2ee.context.impl.J2EEWebServiceContextImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.ServiceReferance;
 import org.apache.geronimo.ews.ws4j2ee.parsers.ServiceReferanceParser;
 import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
@@ -92,7 +91,7 @@ public class Ws4J2EEClientwithWSDL implements Generator {
      */
     public void generate() throws GenerationFault {
         try {
-			J2EEWebServiceContext wscontext = new J2EEWebServiceContextImpl(true);
+			J2EEWebServiceContext wscontext = ContextFactory.getJ2EEWsContext(true);
 			wscontext.setMiscInfo(misc);
 
             String wscfClientfile = clparser.getWscffile();

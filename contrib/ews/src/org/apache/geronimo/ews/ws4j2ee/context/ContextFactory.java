@@ -60,6 +60,7 @@ import java.io.InputStream;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.geronimo.ews.jaxrpcmapping.J2eeEmitter;
 import org.apache.geronimo.ews.jaxrpcmapping.JaxRpcMapper;
+import org.apache.geronimo.ews.ws4j2ee.context.impl.J2EEWebServiceContextImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.impl.JaxRpcMapperImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.impl.MiscInfoImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.WSCFContextImpl;
@@ -76,6 +77,7 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenerationFault;
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class ContextFactory {
+	private static J2EEWebServiceContext currentContext;
     public static WSDLContext createWSDLContext(Object info) {
         if (info instanceof SymbolTable)
             return new AxisWSDLContext((SymbolTable) info);
@@ -100,4 +102,13 @@ public class ContextFactory {
     public static MiscInfo createMiscInfo() {
         return new MiscInfoImpl();
     }
+    
+    public static J2EEWebServiceContext getCurrentJ2EEWsContext(){
+		return currentContext;
+    }
+	public static J2EEWebServiceContext getJ2EEWsContext(boolean hasWSDL){
+		currentContext = new J2EEWebServiceContextImpl(hasWSDL);
+		return currentContext;
+	} 
+ 
 }
