@@ -90,6 +90,7 @@ public class RPCWebServiceGenarator implements WebServiceGenarator{
 				//genarate deployment and undeployment discriptors
 				(new Genarator(WrapperConstants.GENERATOR_DEPLOYMENT_DISCRIPTOR, wscontext)).genarate();
 				(new Genarator(WrapperConstants.GENERATOR_UNDEPLOYMENT_DISCRIPTOR, wscontext)).genarate();
+				(new Genarator(WrapperConstants.GENERATOR_RPC_TESTCASE, wscontext)).genarate();
 			}
 			else if(WrapperConstants.SERVER.equals(wscontext.getWrapInfo().getTargetEngine())){
 				(new Genarator(WrapperConstants.GENERATOR_WRAPPER_JAVA, wscontext)).genarate();
@@ -105,10 +106,10 @@ public class RPCWebServiceGenarator implements WebServiceGenarator{
 				(new Genarator(WrapperConstants.GENERATOR_STUB_LOCATOR_JAVA, wscontext)).genarate();
 				(new Genarator(WrapperConstants.GENERATOR_STUB_SERVICE_INTERFACE_JAVA, wscontext)).genarate();
 				(new Genarator(WrapperConstants.GENERATOR_STUB_JAVA, wscontext)).genarate();
+				(new Genarator(WrapperConstants.GENERATOR_RPC_TESTCASE, wscontext)).genarate();
 			}
 			//all the time genarate param classes		
 			(new Genarator(WrapperConstants.GENERATOR_PARAM_JAVA, wscontext)).genarate();
-			(new Genarator(WrapperConstants.GENERATOR_RPC_TESTCASE, wscontext)).genarate();
 		}else if(WrapperConstants.LANGUAGE_CPP.equalsIgnoreCase(language)){
 			//if(WrapperConstants.SERVER.equals(wscontext.getWrapInfo().getTargetEngine())){
 				 (new Genarator(WrapperConstants.GENERATOR_WRAPPER_CPP, wscontext)).genarate();
