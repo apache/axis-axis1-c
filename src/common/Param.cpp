@@ -77,7 +77,7 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-bool AxisEngine::m_bServer;
+int AxisEngine::m_bServer;
 
 Param::Param(const Param& param)
 {
@@ -619,39 +619,40 @@ int Param::serialize(IWrapperSoapSerializer& pSZ)
 	AxisString ATprefix;
 	switch (m_Type){
 	case XSD_INT:
-        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.nValue);
+	case XSD_BOOLEAN:
+        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.nValue, m_Type);
 		break; 
     case XSD_UNSIGNEDINT:
-        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.unValue);
+        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.unValue, m_Type);
 		break;           
     case XSD_SHORT:
-        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.sValue);
+        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.sValue, m_Type);
 		break; 
     case XSD_UNSIGNEDSHORT:
-        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.usValue);
+        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.usValue, m_Type);
 		break;         
     case XSD_BYTE:
-        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.cValue);
+        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.cValue, m_Type);
 		break; 
     case XSD_UNSIGNEDBYTE:
-        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.ucValue);
+        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.ucValue, m_Type);
 		break;
     case XSD_LONG:
     case XSD_INTEGER:
-        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.lValue);
+        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.lValue, m_Type);
 		break;        
     case XSD_UNSIGNEDLONG:
-        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.ulValue);
+        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.ulValue, m_Type);
 		break;
 	case XSD_FLOAT:
-		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.fValue);
+		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.fValue, m_Type);
 		break;
     case XSD_DOUBLE:
     case XSD_DECIMAL:
-		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.dValue);
+		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.dValue, m_Type);
 		break;              
 	case XSD_STRING:
-		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_sValue.c_str());
+		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_sValue.c_str(), m_Type);
 		break;
 	case XSD_HEXBINARY:
 		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_sValue.c_str(), XSD_HEXBINARY);
@@ -773,6 +774,9 @@ int Param::SetValue(const AxisChar* sValue)
 	case XSD_STRING:
 	case XSD_HEXBINARY:
 	case XSD_BASE64BINARY:
+	case XSD_ANYURI:
+	case XSD_QNAME:
+	case XSD_NOTATION:			
 		m_sValue = sValue;
 		break;
     case XSD_DURATION:
@@ -798,6 +802,7 @@ int Param::SetValue(XSDTYPE nType, uParamValue Value)
 	switch (m_Type)
 	{
 	case XSD_INT:
+	case XSD_BOOLEAN:
         m_Value.nValue = Value.nValue;
 		break;
 	case XSD_UNSIGNEDINT:
