@@ -238,6 +238,9 @@
 				<property name="xerces.xmlParserLibraryName_D" value="${xerces.xmlParserLibraryName}_D"/>
 				<property name="axis2.transportLibraryName_D" value="${axis2.transportLibraryName}_D"/>
 				<property name="axis2.ipv6.transportLibraryName_D" value="${axis2.ipv6.transportLibraryName}_D"/>
+				<property name="HTTP.SecureChannelLibraryName_D" value="${HTTP.SecureChannelLibraryName}_D"/>
+				<property name="HTTP.transportLibraryName_D" value="${HTTP.transportLibraryName}_D"/>
+				<property name="HTTP.ChannelLibraryName_D" value="${HTTP.ChannelLibraryName}_D"/>
 
 				<propertycopy property="clientLibraryName" from="clientLibraryName_D" override="true"/>
 				<propertycopy property="transportLibraryName" from="transportLibraryName_D" override="true"/>
@@ -246,6 +249,9 @@
 				<propertycopy property="xerces.xmlParserLibraryName" from="xerces.xmlParserLibraryName_D" override="true"/>
 				<propertycopy property="axis2.transportLibraryName" from="axis2.transportLibraryName_D" override="true"/>
 				<propertycopy property="axis2.ipv6.transportLibraryName" from="axis2.ipv6.transportLibraryName_D" override="true"/>
+				<propertycopy property="HTTP.SecureChannelLibraryName" from="HTTP.SecureChannelLibraryName_D" override="true"/>
+				<propertycopy property="HTTP.transportLibraryName" from="HTTP.transportLibraryName_D" override="true"/>
+				<propertycopy property="HTTP.ChannelLibraryName" from="HTTP.ChannelLibraryName_D" override="true"/>
 			</then>
 		</if>
 	</target>
