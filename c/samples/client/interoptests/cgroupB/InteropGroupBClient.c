@@ -9,7 +9,7 @@
 int main(int argc, char* argv[])
 {
 	int x;
-	void* pstub = get_InteropTestPortTypeB_stub();
+	void* pstub;
 	SOAPArrayStruct sas;
 	SOAPStructStruct sss;
 	SOAPStruct ss;
@@ -17,6 +17,19 @@ int main(int argc, char* argv[])
 	int outInt;
 	float outFloat;
 	char* str;
+	char endpoint[256];
+	const char* server="localhost";
+	const char* port="80";
+	if (argc == 3)
+	{
+		server = argv[1];
+		port = argv[2];
+	}
+	printf("Usage :\n %s <server> <port>\n\n", argv[0]);
+	printf("Sending Requests to Server http://%s:%s ........\n\n", server, port);
+	sprintf(endpoint, "http://%s:%s/axis/cgroupB", server, port);
+	pstub = get_InteropTestPortTypeB_stub(endpoint);
+
 	sas.varFloat = 12345.67890;
 	sas.varInt = 5000;
 	sas.varString = strdup("varString content of SOAPArrayStruct");
