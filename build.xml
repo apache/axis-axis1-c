@@ -6,10 +6,10 @@ WSDL2Ws tooling.
 This script is intended for use with Java 1.4+ and Apache ANT 1.6+.
 Ant is available from: http://ant.apache.org/
 
-To compile C/C++ code you will require the cpptasks extension to ANT, within:
+To compile C/C++ code you will require the ant-contrib and cpptasks extensions to ANT, within:
 	[ant install dir]/lib
-This is available from: http://ant-contrib.sourceforge.net/
-{Note: you will require the cpptasks download, not ant-contrib}
+These are available from: http://ant-contrib.sourceforge.net/
+{Note: You will require both the cpptasks and ant-contrib downloads }
 
 It is intended that the default target be used, which compiles and links all code,
 generates documentation and packages ready for distribution.
@@ -36,6 +36,11 @@ Notes:
 	  -->
 	<taskdef resource="cpptasks.tasks"/>
 	<typedef resource="cpptasks.types"/>
+
+	<!--
+	  Load definition of Additional Tasks and Types
+	  -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 
 	<!--
 	  These properties will be the same for all environments, so have not been
@@ -202,15 +207,7 @@ Notes:
 	      -->
 		<linker id="AIXLinker" name="xlC" libtool="false" if="aix">
 			<linkerarg value="-g" if="debug"/>
-			<linkerarg value="-qmkshrobj=104"/>
-	 		<linkerarg value="-brtl"/>
-			<linkerarg value="-C"/>
-			<linkerarg value="-shared"/>
-			<linkerarg value="-G"/>
-			<linkerarg value="-brtl"/>
-			<linkerarg value="-bdynamic"/>
-			<linkerarg value="-bnoentry"/>
-			<linkerarg value="-p10"/>
+			<linkerarg value="-qmkshrobj"/>
 			<linkerarg value="-L/usr/lib/threads"/>
 			<linkerarg value="-lpthreads"/>
 			<linkerarg value="-lm"/>
@@ -272,42 +269,75 @@ Notes:
 	<target name="compileAxisClient" depends="initialize">
 		<mkdir dir="${dir.objects}"/>
 		<mkdir dir="${dir.bin}"/>
-		<cc outfile="${dir.bin}/${clientLibraryName}" objdir="${dir.objects}"
-		 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
-		  	<!-- Compilers -->
-			<compiler refid="SolarisCC"/>
-			<compiler refid="Linuxgcc"/>
-			<compiler refid="AIXxlc"/>
-			<compiler extends="VisualC++">
-				<defineset>
-					<define name="AXISCLIENTDLL_EXPORTS"/>
-				</defineset>
-			</compiler>
-			<!-- Additional compiler flag for Client library on all platforms -->
-			<defineset>
-				<define name="AXIS_CLIENT_LIB"/>
-				<define name="ENABLE_AXISTRACE" if="trace"/>
-			</defineset>
-			<!-- Linkers -->
-			<linker refid="SolarisLinker"/>
-			<linker refid="LinuxLinker"/>
-			<linker refid="AIXLinker"/>
-			<linker refid="VisualC++Linker"/>
-			<!-- Files to be compiled -->
-			<fileset dir="${dir.src.instrumented}">
-				<include name="common/*.cpp"/>
-				<include name="engine/*.cpp"/>
-				<include name="engine/client/*.cpp"/>
-				<include name="soap/*.cpp"/>
-				<include name="soap/*.c"/>
-				<include name="wsdd/*.cpp"/>
-				<include name="xml/*.cpp"/>
-				<include name="transport/axis/AxisTransportException.cpp"/>
-				<!-- The following files need to be excluded -->
-				<exclude name="common/Packet.cpp"/>
-				<exclude name="common/AxisSocketUtils.cpp"/>
-			</fileset>
-		</cc>
+		<if>
+			<not>
+				<isset property="aix"/>
+			</not>
+			<then>
+				<cc outfile="${dir.bin}/${clientLibraryName}" objdir="${dir.objects}"
+				 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
+				  	<!-- Compilers -->
+					<compiler refid="SolarisCC"/>
+					<compiler refid="Linuxgcc"/>
+					<compiler extends="VisualC++">
+						<defineset>
+							<define name="AXISCLIENTDLL_EXPORTS"/>
+						</defineset>
+					</compiler>
+					<!-- Additional compiler flag for Client library on all platforms -->
+					<defineset>
+						<define name="AXIS_CLIENT_LIB"/>
+						<define name="ENABLE_AXISTRACE" if="trace"/>
+					</defineset>
+					<!-- Linkers -->
+					<linker refid="SolarisLinker"/>
+					<linker refid="LinuxLinker"/>
+					<linker refid="VisualC++Linker"/>
+					<!-- Files to be compiled -->
+					<fileset dir="${dir.src.instrumented}">
+						<include name="common/*.cpp"/>
+						<include name="engine/*.cpp"/>
+						<include name="engine/client/*.cpp"/>
+						<include name="soap/*.cpp"/>
+						<include name="soap/*.c"/>
+						<include name="wsdd/*.cpp"/>
+						<include name="xml/*.cpp"/>
+						<include name="transport/axis/AxisTransportException.cpp"/>
+						<!-- The following files need to be excluded -->
+						<exclude name="common/Packet.cpp"/>
+						<exclude name="common/AxisSocketUtils.cpp"/>
+					</fileset>
+				</cc>
+			</then>
+			<else>
+				<cc outfile="${dir.bin}/${clientLibraryFileName}" objdir="${dir.objects}"
+				 exceptions="true" failonerror="false" multithreaded="true">
+				  	<!-- Compilers -->
+					<compiler refid="AIXxlc"/>
+					<!-- Additional compiler flag for Client library on all platforms -->
+					<defineset>
+						<define name="AXIS_CLIENT_LIB"/>
+						<define name="ENABLE_AXISTRACE" if="trace"/>
+					</defineset>
+					<!-- Linkers -->
+					<linker refid="AIXLinker"/>
+					<!-- Files to be compiled -->
+					<fileset dir="${dir.src.instrumented}">
+						<include name="common/*.cpp"/>
+						<include name="engine/*.cpp"/>
+						<include name="engine/client/*.cpp"/>
+						<include name="soap/*.cpp"/>
+						<include name="soap/*.c"/>
+						<include name="wsdd/*.cpp"/>
+						<include name="xml/*.cpp"/>
+						<include name="transport/axis/AxisTransportException.cpp"/>
+						<!-- The following files need to be excluded -->
+						<exclude name="common/Packet.cpp"/>
+						<exclude name="common/AxisSocketUtils.cpp"/>
+					</fileset>
+				</cc>
+			</else>
+		</if>
 	</target>
 
 	<!--
@@ -316,31 +346,51 @@ Notes:
 	<target name="compileAxisTransport" depends="initialize">
 		<mkdir dir="${dir.objects}"/>
 		<mkdir dir="${dir.bin}"/>
-		<cc outfile="${dir.bin}/${transportLibraryName}" objdir="${dir.objects}"
-		 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
-			<!-- Compilers -->
-			<compiler refid="SolarisCC"/>
-			<compiler refid="Linuxgcc"/>
-			<compiler refid="AIXxlc"/>
-			<compiler extends="VisualC++">
-				<defineset>
-					<define name="AXISTRANSPORTDLL_EXPORTS"/>
-				</defineset>
-			</compiler>
-			<!-- Linkers -->
-			<linker refid="SolarisLinker"/>
-			<linker refid="LinuxLinker"/>
-			<linker refid="AIXLinker"/>
-			<linker extends="VisualC++Linker">
-				<syslibset libs="wsock32"/>
-			</linker>
-			<!-- Files to compile -->
-			<fileset dir="${dir.src}">
-				<include name="transport/axis/*.cpp"/>
-				<!-- The following files need to be excluded -->
-				<exclude name="transport/axis/SecureChannel.cpp"/>
-			</fileset>
-		</cc>
+		<if>
+			<not>
+				<isset property="aix"/>
+			</not>
+			<then>
+				<cc outfile="${dir.bin}/${transportLibraryName}" objdir="${dir.objects}"
+				 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
+					<!-- Compilers -->
+					<compiler refid="SolarisCC"/>
+					<compiler refid="Linuxgcc"/>
+					<compiler extends="VisualC++">
+						<defineset>
+							<define name="AXISTRANSPORTDLL_EXPORTS"/>
+						</defineset>
+					</compiler>
+					<!-- Linkers -->
+					<linker refid="SolarisLinker"/>
+					<linker refid="LinuxLinker"/>
+					<linker extends="VisualC++Linker">
+						<syslibset libs="wsock32"/>
+					</linker>
+					<!-- Files to compile -->
+					<fileset dir="${dir.src}">
+						<include name="transport/axis/*.cpp"/>
+						<!-- The following files need to be excluded -->
+						<exclude name="transport/axis/SecureChannel.cpp"/>
+					</fileset>
+				</cc>
+			</then>
+			<else>
+				<cc outfile="${dir.bin}/${transportLibraryFileName}" objdir="${dir.objects}"
+				 exceptions="true" failonerror="false" multithreaded="true">
+					<!-- Compilers -->
+					<compiler refid="AIXxlc"/>
+					<!-- Linkers -->
+					<linker refid="AIXLinker"/>
+					<!-- Files to compile -->
+					<fileset dir="${dir.src}">
+						<include name="transport/axis/*.cpp"/>
+						<!-- The following files need to be excluded -->
+						<exclude name="transport/axis/SecureChannel.cpp"/>
+					</fileset>
+				</cc>
+			</else>
+		</if>
 	</target>
 
 	<!--
@@ -349,33 +399,59 @@ Notes:
 	<target name="compileAxisXMLParser" depends="initialize">
 		<mkdir dir="${dir.objects}/${xmlParserLibraryName}"/>
 		<mkdir dir="${dir.bin}"/>
-		<cc outfile="${dir.bin}/${xmlParserLibraryName}" objdir="${dir.objects}"
-		 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
-		 	<!-- Compilers -->
-			<compiler refid="SolarisCC"/>
-			<compiler refid="Linuxgcc"/>
-			<compiler refid="AIXxlc"/>
-			<compiler extends="VisualC++">
-				<defineset>
-					<define name="AXISXMLPARSERXERCES_EXPORTS"/>
-				</defineset>
-			</compiler>
-			<!-- Additional include directory for XML Parser -->
-			<includepath path="${dir.xmlParser}/include"/>
-			<includepath path="${dir.xmlParser}/lib"/>
-			<!-- Linkers -->
-			<linker refid="SolarisLinker"/>
-			<linker refid="VisualC++Linker"/>
-			<linker refid="LinuxLinker"/>
-			<linker refid="AIXLinker"/>
-			<!-- Additional library of XMLParser -->
-			<libset dir="${dir.xmlParser}/lib" libs="${xmlParserLibrary}"/>
-			<!-- Files to be compiled -->
-			<fileset dir="${dir.src}">
-				<include name="xml/${xmlParser}/*.cpp"/>
-				<include name="xml/AxisParseException.cpp"/>
-			</fileset>
-		</cc>
+		<if>
+			<not>
+				<isset property="aix"/>
+			</not>
+			<then>
+				<cc outfile="${dir.bin}/${xmlParserLibraryName}" objdir="${dir.objects}"
+				 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
+				 	<!-- Compilers -->
+					<compiler refid="SolarisCC"/>
+					<compiler refid="Linuxgcc"/>
+					<compiler refid="AIXxlc"/>
+					<compiler extends="VisualC++">
+						<defineset>
+							<define name="AXISXMLPARSERXERCES_EXPORTS"/>
+						</defineset>
+					</compiler>
+					<!-- Additional include directory for XML Parser -->
+					<includepath path="${dir.xmlParser}/include"/>
+					<includepath path="${dir.xmlParser}/lib"/>
+					<!-- Linkers -->
+					<linker refid="SolarisLinker"/>
+					<linker refid="VisualC++Linker"/>
+					<linker refid="LinuxLinker"/>
+					<linker refid="AIXLinker"/>
+					<!-- Additional library of XMLParser -->
+					<libset dir="${dir.xmlParser}/lib" libs="${xmlParserLibrary}"/>
+					<!-- Files to be compiled -->
+					<fileset dir="${dir.src}">
+						<include name="xml/${xmlParser}/*.cpp"/>
+						<include name="xml/AxisParseException.cpp"/>
+					</fileset>
+				</cc>
+			</then>
+			<else>
+				<cc outfile="${dir.bin}/${xmlParserLibraryFileName}" objdir="${dir.objects}"
+				 exceptions="true" failonerror="false" multithreaded="true">
+				 	<!-- Compilers -->
+					<compiler refid="AIXxlc"/>
+					<!-- Additional include directory for XML Parser -->
+					<includepath path="${dir.xmlParser}/include"/>
+					<includepath path="${dir.xmlParser}/lib"/>
+					<!-- Linkers -->
+					<linker refid="AIXLinker"/>
+					<!-- Additional library of XMLParser -->
+					<libset dir="${dir.xmlParser}/lib" libs="${xmlParserLibrary}"/>
+					<!-- Files to be compiled -->
+					<fileset dir="${dir.src}">
+						<include name="xml/${xmlParser}/*.cpp"/>
+						<include name="xml/AxisParseException.cpp"/>
+					</fileset>
+				</cc>
+			</else>
+		</if>
 	</target>
 
 	<!--
