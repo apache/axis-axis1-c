@@ -75,6 +75,8 @@
 #include <axis/common/Packet.h>
 #include <malloc.h>
 
+#define AXIS_URI_EXTENSION "/axis/"
+
 /*
 The apache 2.0 module for Axis. THIS IS NOT COMPLETED
 */

@@ -39,7 +39,7 @@ int ClientAxisEngine::Process(Ax_soapstream* pSoap)
 	string sSessionId = m_pSoap->sessionid;
 
 	if (!(m_pSoap->transport.pSendFunct && m_pSoap->transport.pGetFunct &&
-		m_pSoap->transport.pSendTrtFunct && m_pSoap->transport.pGetTrtFunct))
+		m_pSoap->transport.pSetTrtFunct && m_pSoap->transport.pGetTrtFunct))
 		return AXIS_FAIL;
 
 	do {
@@ -126,10 +126,8 @@ int ClientAxisEngine::Invoke(MessageData* pMsg)
 	
 	do 
 	{
-		if (AXIS_SUCCESS != (Status = m_pSoap->transport.pSendTrtFunct(m_pSoap))) break;
 		if (AXIS_SUCCESS != (Status = m_pSZ->SetOutputStream(m_pSoap))) break;
 		pMsg->setPastPivotState(true);
-		if (AXIS_SUCCESS != (Status = m_pSoap->transport.pGetTrtFunct(m_pSoap))) break;
 		if (AXIS_SUCCESS != (Status = m_pDZ->SetInputStream(m_pSoap))) break;
 	}
 	while(0);

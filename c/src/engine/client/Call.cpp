@@ -79,10 +79,12 @@ Call::Call()
 	m_pMsgData = NULL;
 	m_pIWSSZ = NULL;
 	m_pIWSDZ = NULL;
-	m_Soap.so.http.ip_headercount = 0;
-	m_Soap.so.http.ip_headers = NULL;
-	m_Soap.so.http.op_headercount = 0;
-	m_Soap.so.http.op_headers = NULL;
+	m_Soap.so.http = new Ax_stream_http; //this is done for the moment only
+	//we have to check what the transport protocol is and create that
+	m_Soap.so.http->ip_headercount = 0;
+	m_Soap.so.http->ip_headers = NULL;
+	m_Soap.so.http->op_headercount = 0;
+	m_Soap.so.http->op_headers = NULL;
 	initialize_module(0);
 	m_pTransport = NULL;
 	m_nReturnType = XSD_UNKNOWN;
@@ -92,12 +94,13 @@ Call::Call()
 
 Call::~Call()
 {
-
+	delete m_Soap.so.http; //this is done for the moment only
+	//we have to check what the transport protocol is and create that
 }
 
 int Call::SetEndpointURI(const char *pchEndpointURI)
 {
-	m_Soap.so.http.uri_path = pchEndpointURI;
+	m_Soap.so->http.uri_path = pchEndpointURI;
 	return AXIS_SUCCESS;
 }
 
@@ -409,7 +412,7 @@ int Call::Initialize()
 	try {
 		InitializeObjects();
 		m_Soap.sessionid = "somesessionid1234";
-		remove_headers(&m_Soap);
+		//remove_headers(&m_Soap);
 		if (AXIS_SUCCESS != OpenConnection()) return AXIS_FAIL;
 		if (m_pAxisEngine) delete m_pAxisEngine;
 		m_pAxisEngine = new ClientAxisEngine();

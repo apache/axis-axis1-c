@@ -27,25 +27,25 @@ ServerAxisEngine::~ServerAxisEngine()
 
 }
 
-int ServerAxisEngine::Process(Ax_soapstream* soap) 
+int ServerAxisEngine::Process(Ax_soapstream* stream) 
 {
 	int Status = 0;
 //	AXIS_TRY
 		AXISTRACE1("ServerAxisEngine::Process");
 		const WSDDService* pService = NULL;
-		string sSessionId = soap->sessionid;
+		string sSessionId = stream->sessionid;
         AXISTRACE2("ServerAxisEngine::Process", sSessionId.c_str());
 		int nSoapVersion;
 
-		if (!(soap->transport.pSendFunct && soap->transport.pGetFunct &&
-			soap->transport.pSendTrtFunct && soap->transport.pGetTrtFunct))
+		if (!(stream->transport.pSendFunct && stream->transport.pGetFunct &&
+			stream->transport.pSetTrtFunct && stream->transport.pGetTrtFunct))
 			return AXIS_FAIL;
 
 		do {
 			//populate MessageData with transport information
-			m_pMsgData->m_Protocol = soap->trtype;
+			m_pMsgData->m_Protocol = stream->trtype;
     
-			if (AXIS_SUCCESS != m_pDZ->SetInputStream(soap))
+			if (AXIS_SUCCESS != m_pDZ->SetInputStream(stream))
 			{
 				nSoapVersion = m_pDZ->GetVersion();
 				nSoapVersion = (nSoapVersion == VERSION_LAST) ? SOAP_VER_1_2 : nSoapVersion;
@@ -54,10 +54,11 @@ int ServerAxisEngine::Process(Ax_soapstream* soap)
 				break; //do .. while(0)
 			}
 
-			const char* cService = get_header(soap, SOAPACTIONHEADER);
-			if (!cService) //get from URL if http
+			const char* cService = stream->transport.pGetTrtFunct(SERVICE_URI, stream);
+			if (!cService)
 			{
-				cService = get_service_from_uri(soap);
+				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
+				break; //do .. while(0)
 			}
 			AxisString service = (cService == NULL)? "" : cService;
 			//AxisUtils::convert(service, (cService == NULL)? "" : cService);
@@ -90,7 +91,7 @@ int ServerAxisEngine::Process(Ax_soapstream* soap)
 
 			m_pMsgData->SetService(pService);
 			
-			//check for soap version in the request and decide whether we support it or not
+			//check for stream version in the request and decide whether we support it or not
 			//if we do not support send a soapfault with version mismatch.		  
 			nSoapVersion = m_pMsgData->m_pDZ->GetVersion();
 			if (nSoapVersion == VERSION_LAST) //version not supported
@@ -146,7 +147,7 @@ int ServerAxisEngine::Process(Ax_soapstream* soap)
                 break; //do .. while(0)
 			}
 			//Get Global and Transport Handlers
-			if(AXIS_SUCCESS != (Status = InitializeHandlers(sSessionId, soap->trtype)))
+			if(AXIS_SUCCESS != (Status = InitializeHandlers(sSessionId, stream->trtype)))
 			{
 			  m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADHDL));
 			  break; //do .. while(0)
@@ -166,20 +167,18 @@ int ServerAxisEngine::Process(Ax_soapstream* soap)
 
 			//and handlers may add headers to the Serializer.
 			//Invoke all handlers including the webservice
-			//in case of failure coresponding soap fault message will be set
+			//in case of failure coresponding stream fault message will be set
 			Status = Invoke(m_pMsgData); //we generate response in the same way even if this has failed
 		}
 		while(0);
-		//send any transoport information like http headers first
-		soap->transport.pSendTrtFunct(soap);
 		//Serialize
-		m_pSZ->SetOutputStream(soap);
+		m_pSZ->SetOutputStream(stream);
 
 		//Pool back the Service specific handlers
 		if (m_pSReqFChain) g_pHandlerPool->PoolHandlerChain(m_pSReqFChain, sSessionId);
 		if (m_pSResFChain) g_pHandlerPool->PoolHandlerChain(m_pSResFChain, sSessionId);
 		//Pool back the Global and Transport handlers
-		//UnInitializeHandlers(sSessionId, soap->trtype);
+		//UnInitializeHandlers(sSessionId, stream->trtype);
 		//Pool back the webservice
 		if (m_pWebService) g_pHandlerPool->PoolWebService(sSessionId, m_pWebService, pService); 
 		return Status;

@@ -86,7 +86,7 @@ AxisTransport::~AxisTransport()
 int AxisTransport::OpenConnection()
 {
     //Step 1 - Open Transport layer connection taking into account protocol and endpoint URI in m_Soap
-    Url objUrl(m_pSoap->so.http.uri_path);
+    Url objUrl(m_pSoap->so.http->uri_path);
     m_pHttpTransport = TransportFactory::GetTransport(objUrl);
     if(m_pHttpTransport->Init())
     {
@@ -99,8 +99,8 @@ int AxisTransport::OpenConnection()
        //Step 3 - Add function pointers to the m_Soap structure
        m_pSoap->transport.pGetFunct = Get_bytes;
        m_pSoap->transport.pSendFunct = Send_bytes;
-       m_pSoap->transport.pGetTrtFunct = Receive_transport_information;
-       m_pSoap->transport.pSendTrtFunct = Send_transport_information; 
+       m_pSoap->transport.pGetTrtFunct = ReceiveTransportInformation;
+       m_pSoap->transport.pSetTrtFunct = SetTransportInformation; 
 	   return AXIS_SUCCESS;
     }
     else
@@ -126,19 +126,19 @@ void AxisTransport::CloseConnection()
 	m_pSoap->transport.pGetFunct = NULL;
 	m_pSoap->transport.pSendFunct = NULL;
 	m_pSoap->transport.pGetTrtFunct = NULL;
-	m_pSoap->transport.pSendTrtFunct = NULL;
+	m_pSoap->transport.pSetTrtFunct = NULL;
 }
 
-int AxisTransport::Send_bytes(const char* pSendBuffer, const void* pStream)
+AXIS_TRANSPORT_STATUS AXISCALL AxisTransport::Send_bytes(const char* pSendBuffer, const void* bufferid, const void* pStream)
 {
     Sender* pSender = (Sender*) pStream;
     if(pSender->Send(pSendBuffer))
-        return AXIS_SUCCESS;
-    return AXIS_FAIL;
+        return TRANSPORT_FINISHED;
+    return TRANSPORT_FAILED;
     
 }
 
-int AxisTransport::Get_bytes(const char** res, int* retsize, const void* pStream)
+AXIS_TRANSPORT_STATUS AXISCALL AxisTransport::Get_bytes(const char** res, int* retsize, const void* pStream)
 {
     Receiver* pReceiver = (Receiver*) pStream;
     const string& strReceive =  pReceiver->Recv();
@@ -146,32 +146,32 @@ int AxisTransport::Get_bytes(const char** res, int* retsize, const void* pStream
 	*retsize = strReceive.length();
     if(!res || *retsize == 0)
     {
-		return AXIS_FAIL;
+		return TRANSPORT_FINISHED;
     }
     else
-        return AXIS_SUCCESS;   
+        return TRANSPORT_IN_PROGRESS;   
 }
 
-int AxisTransport::Send_transport_information(void* pSoapStream)
+void AXISCALL AxisTransport::SetTransportInformation(AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value, void* pSoapStream)
 {
     Ax_soapstream* pSStream = (Ax_soapstream*) pSoapStream;
 	if (pSStream)
 	{
 		Sender* pSender = (Sender*) pSStream->str.op_stream;
-		if (!pSender) return AXIS_FAIL;
+		if (!pSender) return;
 		string sName, sValue;
-		for (int x=0; x<pSStream->so.http.ip_headercount;x++)
+		for (int x=0; x<pSStream->so.http->op_headercount;x++)
 		{
-			sName = pSStream->so.http.ip_headers[x].headername;
-			sValue = pSStream->so.http.ip_headers[x].headervalue;
+			sName = pSStream->so.http->op_headers[x].headername;
+			sValue = pSStream->so.http->op_headers[x].headervalue;
 			pSender->SetProperty(sName, sValue);
 		}
-		return AXIS_SUCCESS;
+		return;
 	}
-	return AXIS_FAIL;
+	return;
 }
 
-int AxisTransport::Receive_transport_information(void* pSoapStream)
+const char* AXISCALL AxisTransport::ReceiveTransportInformation(AXIS_TRANSPORT_INFORMATION_TYPE type, void* pSoapStream)
 {
-	return AXIS_SUCCESS;
+	return NULL;
 }
