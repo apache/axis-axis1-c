@@ -1,0 +1,10 @@
+If you want to avoid cluttering of the source with object files use the build directory
+to generate your object files. To do that do it as follows.
+Copy the axisconfigure file from c directory to c/build directory.
+Next just change the following line of it
+./configure --libdir=/home/damitha/projects/axiscpp/c/release
+into
+../configure --libdir=/home/damitha/projects/axiscpp/c/release
+
+Now from c/build directory run
+sh axisconfigure
