@@ -1,0 +1,33 @@
+create environment variable TXPP_HOME to point where
+txpp is.
+TXPP_HOME="/home/damitha/txpp"
+
+export TXPP_HOME
+
+Now
+cd $TXPP_HOME/lib
+
+to build
+
+sh build.sh
+
+This will install libtxpp.so in $TXPP_HOME/lib
+
+To build and run the samples
+
+set environment variable LD_LIBRARY_PATH to point to
+TXPP_HOME/lib
+
+LD_LIBRARY_PATH="$TXPP_HOME/lib:$LD_LIBRARY_PATH"
+
+export LD_LIBRARY_PATH
+
+cd $TXPP_HOME/examples
+
+sh build_test1.sh
+sh build_test2.sh
+
+to run
+
+sh run_test1.sh
+sh run_test2.sh
