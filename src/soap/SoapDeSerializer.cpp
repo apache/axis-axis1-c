@@ -74,8 +74,16 @@
 #include <axis/soap/SoapFault.h>
 #include <axis/common/GDefine.h>
 #include <axis/common/Packet.h>
-
 #include <axis/common/AxisTrace.h>
+
+#ifdef USE_EXPAT_PARSER
+#include <axis/soap/SoapParserExpat.h>
+#elif USE_XERCES_PARSER
+#include <axis/soap/SoapParserXerces.h>
+#else
+#include <axis/xml/SoapParser.h>
+#endif
+
 extern AxisTrace* g_pAT;
 
 #define INITIAL_ARRAY_SIZE 1
@@ -87,8 +95,14 @@ IWrapperSoapDeSerializerFunctions IWrapperSoapDeSerializer::ms_VFtable;
 
 SoapDeSerializer::SoapDeSerializer()
 {
-	__vfptr = &ms_VFtable;
+	__vfptr_IWSDZ = &ms_VFtable;
+	#ifdef USE_EXPAT_PARSER
 	m_pParser = new SoapParserExpat();
+	#elif USE_XERCES_PARSER
+	m_pParser = new SoapParserXerces();
+	#else
+	m_pParser = new SoapParser();
+	#endif
 	m_pEnv = NULL;
 	m_pHeader = NULL;
 }
@@ -702,10 +716,10 @@ void* SoapDeSerializer::GetCmplxObject(void* pDZFunct, void* pCreFunct, void* pD
 					m_pParser->Next(); /* skip end node too */
 					return pObject;
 				}
-			}
-			else
-			{
-				((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(pObject, false, 0);
+				else
+				{
+					((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(pObject, false, 0);
+				}
 			}
 		}
 		else
@@ -1974,7 +1988,7 @@ XSDTYPE SoapDeSerializer::GetXSDType(const AnyElement* pElement)
 	}
 	return XSD_UNKNOWN;
 }
-
+/*
 void* SoapDeSerializer::CreateArray(XSDTYPE nType, int nSize)
 {
 	switch (nType)
@@ -2066,6 +2080,7 @@ void SoapDeSerializer::DeleteArray(Axis_Array* pArray , XSDTYPE nType)
 	pArray->m_Array = NULL;
 	pArray->m_Size = 0;
 }
+*/
 
 /**
  * Used by the Axis Engine to get any left header blocks in the deserializer even after
@@ -2119,17 +2134,17 @@ int SoapDeSerializer::FlushInputStream()
 {
 	int nChars = 0;
 	const char* pBuffer;
-	if (TRANSPORT_IN_PROGRESS == m_pParser->m_nTransportStatus)
+	if (TRANSPORT_IN_PROGRESS == m_pParser->GetTransportStatus())
 	{
 		do
 		{
-			m_pParser->m_nTransportStatus = m_pParser->m_pInputStream->transport.pGetFunct(&pBuffer, &nChars, m_pParser->m_pInputStream);
+			m_pParser->SetTransportStatus(m_pParser->GetInputStream()->transport.pGetFunct(&pBuffer, &nChars, m_pParser->GetInputStream()));
 			if ((nChars > 0) && pBuffer) /* there can be a buffer or not */
 			{
-				m_pParser->m_pInputStream->transport.pRelBufFunct(pBuffer, m_pParser->m_pInputStream);
+				m_pParser->GetInputStream()->transport.pRelBufFunct(pBuffer, m_pParser->GetInputStream());
 			}
 
-		}while (TRANSPORT_IN_PROGRESS == m_pParser->m_nTransportStatus);
+		}while (TRANSPORT_IN_PROGRESS == m_pParser->GetTransportStatus());
 	}
-	return (TRANSPORT_FINISHED == m_pParser->m_nTransportStatus)? AXIS_SUCCESS : AXIS_FAIL;
+	return (TRANSPORT_FINISHED == m_pParser->GetTransportStatus())? AXIS_SUCCESS : AXIS_FAIL;
 }
