@@ -13,7 +13,8 @@ libcommon_la_SOURCES = Param.cpp \
                        AxisSocketUtils.cpp \
                        AdminUtils.cpp \
                        AxisConfigException.cpp \
-                       AxisMessage.cpp
+                       AxisMessage.cpp \
+                       AxisUserAPI.cpp
 
 libcommon_la_LIBADD = $(LDFLAGS)
 INCLUDES = -I../../include
