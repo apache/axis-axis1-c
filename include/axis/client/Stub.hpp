@@ -118,118 +118,249 @@ class STORAGE_CLASS_INFO Stub
     void AXISCALL setEndPoint(const char *pcEndPointURI);
 
   /**
+    * @deprecated To fix spelling mistake.
+    *
     * Set transport property.
     *
     * Handling the semantics of the headers is up to the user.
     * The user has to make sure that the key:value paires passed to this method 
-    * would make sense at trasport level.
+    * would make sense at transport level.
     * The Stub class does not validate the key value paires to see if the properties
-    * make sense to the undelying trasport.
+    * make sense to the undelying transport.
     * 
-    * Some example trasport properties:
+    * Some example transport properties:
     * <BR>  For HTTP: "Accept-Language: da, en-gb;q=0.8, en;q=0.7"
     * <BR>  For SMTP: "Reply-To: user@apache.org" 
     * 
     * @param pcKey Header name e.g. "Accept-Language". 
     *              Note that the key is not tested for uniqueness.
     *              One can set several values to the same key and they all will
-    *              appear in the outgoing trasport header.
+    *              appear in the outgoing transport header.
     *              e.g. If the method is called twise with (k,v1) and (k,v2) 
-    *              both k:v1 and k:v2 will appear in trasport header as 
+    *              both k:v1 and k:v2 will appear in transport header as 
     *              seperate properties.
     * @param pcValue Header value e.g. "da, en-gb;q=0.8, en;q=0.7"
     */
-    void AXISCALL setTransportProperty(const char *pcKey, const char *pcValue);
+    void AXISCALL setTrasportProperty(const char *pcKey, const char *pcValue) {};
 
   /**
-    * Iterator initiatior for trasport property keys
+    * @deprecated To fix spelling mistake.
+    *
+    * Iterator initiatior for transport property keys
     *
     * This method must be called first to initiate access to the list of 
     * transport property keys.
     *
-    * @return First transport property key. If there are no trasport 
+    * @return First transport property key. If there are no transport 
     * properties set, returns NULL.
     */
-    const char* getFirstTrasportPropertyKey();
+    const char* getFirstTrasportPropertyKey() {return NULL;};
+
 
   /**
-    * Iterator for trasport property keys
+    * @deprecated To fix spelling mistake.
+    *  
+    * Iterator for transport property keys
     *
-    * getFirstTrasportPropertyKey() method must have been called at least once
+    * getFirstTransportPropertyKey() method must have been called at least once
     * before this method is called. If not behaviour is undefined.
     *
     * This method advances the iterator by one position.
     * Repeated calls always retuen the next value.
     *
-    * @return Next transport property key. If there are no trasport 
+    * @return Next transport property key. If there are no transport 
     * properties set or if iterator is at the end of the list, returns NULL.
     */
-    const char* getNextTrasportPropertyKey();
+    const char* getNextTrasportPropertyKey() {return NULL;};
 
   /**
-    * Accessor for trasport property keys.
+    * @deprecated To fix spelling mistake.
+    *  
+    * Accessor for transport property keys.
     *
-    * This method gives access to the key corresponding to the trasport key
-    * currently being pointed by trasport property key iterator.
+    * This method gives access to the key corresponding to the transport key
+    * currently being pointed by transport property key iterator.
     *
-    * getFirstTrasportPropertyKey() method must have been called at least once
+    * getFirstTransportPropertyKey() method must have been called at least once
     * before this method is called. If not behaviour is undefined.
     *
     * This method does not advance the iterator.
     * Repeated calls always retuen the same key unless 
-    * getNextTrasportPropertyKey() is called in between.
+    * getNextTransportPropertyKey() is called in between.
     *
-    * @return Current transport property key. If there are no trasport 
+    * @return Current transport property key. If there are no transport 
     * properties set or if iterator is at the end of the list, returns NULL.
     */
-    const char* getCurrentTrasportPropertyKey();
+    const char* getCurrentTrasportPropertyKey() {return NULL;};
     
   /**
-    * Accessor for trasport property values.
+    * @deprecated To fix spelling mistake.
+    *  
+    * Accessor for transport property values.
     *
-    * This method gives access to the value corresponding to the trasport key
-    * currently being pointed by trasport property key iterator.
+    * This method gives access to the value corresponding to the transport key
+    * currently being pointed by transport property key iterator.
     * As keys and values are treated as paires, access to the value field is 
     * based on the access to the key field.
     *
-    * getFirstTrasportPropertyKey() method must have been called at least once
+    * getFirstTransportPropertyKey() method must have been called at least once
     * before this method is called. If not behaviour is undefined.
     *
     * This method does not advance the iterator.
     * Repeated calls always retuen the same value unless 
-    * getNextTrasportPropertyKey() is called in between.
+    * getNextTransportPropertyKey() is called in between.
     *
-    * @return Current transport property value. If there are no trasport 
+    * @return Current transport property value. If there are no transport 
     * properties set or if iterator is at the end of the list, returns NULL.
     */
-    const char* getCurrentTrasportPropertyValue();
+    const char* getCurrentTrasportPropertyValue() {return NULL;};
 
   /**
-    * Deletes the trasport property key:value pair currently pointed to by 
+    * @deprecated To fix spelling mistake.
+    *  
+    * Deletes the transport property key:value pair currently pointed to by 
     * the iterator.
     */
-    void deleteCurrentTrasportProperty();
+    void deleteCurrentTrasportProperty(){};
 
   /**
-    * Deletes the given occerance of the trasport property key:value pair
+    * @deprecated To fix spelling mistake.
+    *  
+    * Deletes the given occerance of the transport property key:value pair
     * corresponding to the given key.
     *
     * This method does not advance the iterator in line with the deletes done.
-    * In case you want to access the trasport properties after using this
+    * In case you want to access the transport properties after using this
     * method, it is advisable to reinitialize the iterator using
-    * getFirstTrasportPropertyKey();
+    * getFirstTransportPropertyKey();
     * However you can use this method despite where the iterator is 
     * pointing currently.
     *
-    * @param pcKey Key of the trasport property key:value pair to be deleted
+    * @param pcKey Key of the transport property key:value pair to be deleted
     *              If the given key is not set currently, nothing will happen.
     * @param uiOccurance Which occerance of the key to be deleted, because 
     *                    there can be multiple values for the same key. 
     *                    Default is to delete the first occurance.
     *                    Count starts from 1.
     */
-    void deleteTrasportProperty(char* pcKey, unsigned int uiOccurance = 1);
+    void deleteTrasportProperty(char* pcKey, unsigned int uiOccurance = 1){};
 
+  /**
+    * Set transport property.
+    *
+    * Handling the semantics of the headers is up to the user.
+    * The user has to make sure that the key:value paires passed to this method
+    * would make sense at transport level.
+    * The Stub class does not validate the key value paires to see if the properties
+    * make sense to the undelying transport.
+    *
+    * Some example transport properties:
+    * <BR>  For HTTP: "Accept-Language: da, en-gb;q=0.8, en;q=0.7"
+    * <BR>  For SMTP: "Reply-To: user@apache.org"
+    *
+    * @param pcKey Header name e.g. "Accept-Language".
+    *              Note that the key is not tested for uniqueness.
+    *              One can set several values to the same key and they all will
+    *              appear in the outgoing transport header.
+    *              e.g. If the method is called twise with (k,v1) and (k,v2)
+    *              both k:v1 and k:v2 will appear in transport header as
+    *              seperate properties.
+    * @param pcValue Header value e.g. "da, en-gb;q=0.8, en;q=0.7"
+    */
+    void AXISCALL setTransportProperty(const char *pcKey, const char *pcValue);
+
+
+  /**
+    * Iterator initiatior for transport property keys
+    *
+    * This method must be called first to initiate access to the list of 
+    * transport property keys.
+    *
+    * @return First transport property key. If there are no transport 
+    * properties set, returns NULL.
+    */
+    const char* getFirstTransportPropertyKey();
+
+
+  /**
+    * Iterator for transport property keys
+    *
+    * getFirstTransportPropertyKey() method must have been called at least once
+    * before this method is called. If not behaviour is undefined.
+    *
+    * This method advances the iterator by one position.
+    * Repeated calls always retuen the next value.
+    *
+    * @return Next transport property key. If there are no transport 
+    * properties set or if iterator is at the end of the list, returns NULL.
+    */
+    const char* getNextTransportPropertyKey();
+
+  /**
+    * Accessor for transport property keys.
+    *
+    * This method gives access to the key corresponding to the transport key
+    * currently being pointed by transport property key iterator.
+    *
+    * getFirstTransportPropertyKey() method must have been called at least once
+    * before this method is called. If not behaviour is undefined.
+    *
+    * This method does not advance the iterator.
+    * Repeated calls always retuen the same key unless 
+    * getNextTransportPropertyKey() is called in between.
+    *
+    * @return Current transport property key. If there are no transport 
+    * properties set or if iterator is at the end of the list, returns NULL.
+    */
+    const char* getCurrentTransportPropertyKey();
+    
+  /**
+    * Accessor for transport property values.
+    *
+    * This method gives access to the value corresponding to the transport key
+    * currently being pointed by transport property key iterator.
+    * As keys and values are treated as paires, access to the value field is 
+    * based on the access to the key field.
+    *
+    * getFirstTransportPropertyKey() method must have been called at least once
+    * before this method is called. If not behaviour is undefined.
+    *
+    * This method does not advance the iterator.
+    * Repeated calls always retuen the same value unless 
+    * getNextTransportPropertyKey() is called in between.
+    *
+    * @return Current transport property value. If there are no transport 
+    * properties set or if iterator is at the end of the list, returns NULL.
+    */
+    const char* getCurrentTransportPropertyValue();
+
+  /**
+    * Deletes the transport property key:value pair currently pointed to by 
+    * the iterator.
+    */
+    void deleteCurrentTransportProperty();
+
+  /**
+    * Deletes the given occerance of the transport property key:value pair
+    * corresponding to the given key.
+    *
+    * This method does not advance the iterator in line with the deletes done.
+    * In case you want to access the transport properties after using this
+    * method, it is advisable to reinitialize the iterator using
+    * getFirstTransportPropertyKey();
+    * However you can use this method despite where the iterator is 
+    * pointing currently.
+    *
+    * @param pcKey Key of the transport property key:value pair to be deleted
+    *              If the given key is not set currently, nothing will happen.
+    * @param uiOccurance Which occerance of the key to be deleted, because 
+    *                    there can be multiple values for the same key. 
+    *                    Default is to delete the first occurance.
+    *                    Count starts from 1.
+    */
+    void deleteTransportProperty(char* pcKey, unsigned int uiOccurance = 1);
+    
+    
   /**
     * Sets a property that can be accessed from a handler.
 	*
@@ -519,7 +650,7 @@ class STORAGE_CLASS_INFO Stub
   /**
     * After the response is received and the results gathered update the Stub  
     * object's state with whatever information left over (e.g. get Set-Cookie 
-    * value from trasport to be used for subsequent calls) 
+    * value from transport to be used for subsequent calls) 
     */
     void updateStateAfterResponse();
     
@@ -552,7 +683,7 @@ class STORAGE_CLASS_INFO Stub
   #pragma warning (default : 4251)
 #endif
   /**
-    * Trasport keys iterator
+    * Transport keys iterator
     */
     vector <IHeaderBlock *>::iterator m_viCurrentSOAPHeaderBlock;
 
@@ -567,14 +698,14 @@ class STORAGE_CLASS_INFO Stub
   #pragma warning (default : 4251)
 #endif
   /**
-    * Trasport keys iterator
+    * Transport keys iterator
     */
     vector <IAttribute*>::iterator m_viCurrentSOAPMethodAttribute;
 
   /**
     * Transport object
     */
-    SOAPTransport* m_pTrasport;
+    SOAPTransport* m_pTransport;
 
 };
 

@@ -31,7 +31,7 @@ Stub::Stub(const char *pcEndPointUri, AXIS_PROTOCOL_TYPE eProtocol)
     m_pCall = new Call();
     m_pCall->setProtocol(eProtocol);
     m_pCall->setEndpointURI(pcEndPointUri);
-    m_pTrasport = m_pCall->getTransport();
+    m_pTransport = m_pCall->getTransport();
 
 	// Initialise m_viCurrentSOAPMethodAttribute to something sensible 
 	// in case getFirstSOAPMethodAttribute isn't called first.
@@ -54,53 +54,53 @@ void Stub::setEndPoint(const char *pcEndPoint)
 
 void Stub::setTransportProperty(const char *pcKey, const char *pcValue)
 {
-    if (m_pTrasport)
-        m_pTrasport->setTransportProperty(pcKey, pcValue);
+    if (m_pTransport)
+        m_pTransport->setTransportProperty(pcKey, pcValue);
 }
 
 
-const char* Stub::getFirstTrasportPropertyKey()
+const char* Stub::getFirstTransportPropertyKey()
 {
-    if (m_pTrasport)
-        return m_pTrasport->getFirstTrasportPropertyKey();
+    if (m_pTransport)
+        return m_pTransport->getFirstTransportPropertyKey();
     else
         return NULL;
 }
 
-const char* Stub::getNextTrasportPropertyKey()
+const char* Stub::getNextTransportPropertyKey()
 {
-    if (m_pTrasport)
-        return m_pTrasport->getNextTrasportPropertyKey();
+    if (m_pTransport)
+        return m_pTransport->getNextTransportPropertyKey();
     else
         return NULL;
 }
 
-const char* Stub::getCurrentTrasportPropertyKey()
+const char* Stub::getCurrentTransportPropertyKey()
 {
-    if (m_pTrasport)
-        return m_pTrasport->getCurrentTrasportPropertyKey();
+    if (m_pTransport)
+        return m_pTransport->getCurrentTransportPropertyKey();
     else
         return NULL;
 }
 
-const char* Stub::getCurrentTrasportPropertyValue()
+const char* Stub::getCurrentTransportPropertyValue()
 {
-    if (m_pTrasport)
-        return m_pTrasport->getCurrentTrasportPropertyValue();
+    if (m_pTransport)
+        return m_pTransport->getCurrentTransportPropertyValue();
     else
         return NULL;
 }
 
-void Stub::deleteCurrentTrasportProperty()
+void Stub::deleteCurrentTransportProperty()
 {
-    if (m_pTrasport)
-        m_pTrasport->deleteCurrentTrasportProperty();
+    if (m_pTransport)
+        m_pTransport->deleteCurrentTransportProperty();
 }
 
-void Stub::deleteTrasportProperty(char* pcKey, unsigned int uiOccurance)
+void Stub::deleteTransportProperty(char* pcKey, unsigned int uiOccurance)
 {
-    if (m_pTrasport)
-        m_pTrasport->deleteTrasportProperty(pcKey, uiOccurance);
+    if (m_pTransport)
+        m_pTransport->deleteTransportProperty(pcKey, uiOccurance);
 }
 
 void Stub::setHandlerProperty(AxisChar* name, void* value, int len)
@@ -316,9 +316,9 @@ void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pP
 
 void Stub::setTransportTimeout(const long lSeconds)
 {
-    if (m_pTrasport)
+    if (m_pTransport)
     {
-        m_pTrasport->setTimeout(lSeconds);
+        m_pTransport->setTimeout(lSeconds);
     }
 }
 
@@ -338,9 +338,9 @@ const AxisChar* Stub::getNamespacePrefix(const AxisChar* pNamespace)
 
 void Stub::setMaintainSession(bool bSession)
 {
-    if (m_pTrasport)
+    if (m_pTransport)
     {
-        m_pTrasport->setMaintainSession(bSession);
+        m_pTransport->setMaintainSession(bSession);
     }
 }
 
