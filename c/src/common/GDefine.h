@@ -66,7 +66,7 @@
 
 #if !defined(__GDEFINE_INCLUDED__)
 #define __GDEFINE_INCLUDED__
-// This file contains all global definitions that are valid across whole Axis C++ project.
+/* This file contains all global definitions that are valid across whole Axis C++ project.*/
 
 typedef enum { SUCCESS=0, FAIL = -1, OBJECT_ALREADY_EXISTS=1} AXIS_GLOBAL_ERROR;
 typedef enum { APTHTTP=1, APTFTP, APTSMTP, APTOTHER } AXIS_PROTOCOL_TYPE;

@@ -126,35 +126,35 @@ typedef struct
 const char* get_header(const Ax_soapstream* soap, const char* pchkey);
 const char* get_service_from_uri(const Ax_soapstream* soap);
 
-//This function is implemented in axis
-//int initialize_process();
+/*This function is implemented in axis*/
+/*int initialize_process();*/
 
 
-//This function is implemented in axis
-//int finalize_process();
+/*This function is implemented in axis*/
+/*int finalize_process();*/
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-	//This function is implemented in axis
+	/*This function is implemented in axis*/
 	int uninitialize_module();
 
-	//This function is implemented in axis
+	/*This function is implemented in axis*/
 	int initialize_module();
 
-	//This function is implemented in axis
+	/*This function is implemented in axis*/
 	int process_request(Ax_soapstream* str);
 
-	//This function should be implemented by module authors
-	//Allows to send pieces of soap response the transport handler
+	/*This function should be implemented by module authors*/
+	/*Allows to send pieces of soap response the transport handler*/
 	int send_response_bytes(const char* res, const void* opstream);
 
-	//This function should be implemented by module authors
-	//Allows axis to get pieces of the request as they come to the transport listener
+	/*This function should be implemented by module authors*/
+	/*Allows axis to get pieces of the request as they come to the transport listener*/
 	int get_request_bytes(char* req, int reqsize, int* retsize, const void* ipstream);
 
-	//This fucntion should be implemented by module authors
+	/*This fucntion should be implemented by module authors*/
 	int send_transport_information(Ax_soapstream *str);
 #ifdef __cplusplus
 }
