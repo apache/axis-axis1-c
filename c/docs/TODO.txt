@@ -26,8 +26,9 @@ SOAP 1.1 SUPPORT
 
 SOAP 1.2 SUPPORT
 -----------------
-! <team> 	Change the SOAP header coding
-! <team> 	Change the SOAP fault coding
+* <roshan> 	Change the SOAP header coding
+* <roshan> 	Change the SOAP fault coding
+* <roshan> 	Change the SOAP body coding
 
 PERFORMANCE
 -----------
@@ -69,6 +70,32 @@ X <sanjaya>	In the WSDDDocument.cpp for each and every XMLString::transcode() yo
 
 X <sanjaya>	In the WSDDDocument.cpp write the code to handle the end element for wsdd_resflow
 * <sanjaya> 	Improve AxisEngine to send back the WSDL upon http GET request. Ex. http://url/service?wsdl
+
+Session
+-------
+! <team> 	Some encapsulation of the idea of a session that's transport-independent
+! <team> 	An example/sample for a SOAP session header/handler
+
+Transport
+---------
+! <team> 	Pluggable transport API
+! <team> 	HTTPS listener and sender
+! <team> 	Support for "SOAP messages with attachments"
+
+Security
+--------
+! <team> 	Support transport-level security
+! <team> 	Support SOAP-level security
+! <team> 	Support for existing security SOAP-level standards
+! <team> 	An example/sample for a SOAP Basic Authentication header/handler
+
+Service Description and Discovery (WSDL)
+----------------------------------------
+! <team> 	Support the ability to query a service's description at runtime (e.g. 
+		GET ...?wsdl)
+! <team> 	Support a basic html page describing the service (via an HTTP GET)
+! <team> 	Support a pretty html page describing the service (via an HTTP GET)
+! <team> 	Tools and/or run-time support for proxy generation from WSDL and/or WSDD
 
 FUTURE ENHANCEMENTS
 -------------------
