@@ -276,7 +276,7 @@ Channel::operator >> (std::string & msg)
 	/* printf("buf:%s\n", buf); */
     }
     else
-	printf ("execution break\n");
+	;//printf ("execution break\n");
     
     return *this;
 }
