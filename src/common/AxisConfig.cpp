@@ -29,9 +29,10 @@
 #include <iostream>
 #include <string.h>
 
-AXIS_CPP_NAMESPACE_START AxisConfig::AxisConfig ()
+AXIS_CPP_NAMESPACE_START 
+
+AxisConfig::AxisConfig ()
 {
-    m_pcAxisHome = 0;
     m_pcKeyArray[AXCONF_WSDDFILEPATH] = "WSDDFilePath";
     m_pcKeyArray[AXCONF_LOGPATH] = "LogPath";
     m_pcKeyArray[AXCONF_CLIENTLOGPATH] = "ClientLogPath";
@@ -47,71 +48,50 @@ AXIS_CPP_NAMESPACE_START AxisConfig::AxisConfig ()
     m_pcKeyArray[AXCONF_NODENAME] = "NodeName";
     m_pcKeyArray[AXCONF_LISTENPORT] = "ListenPort";
 
-    for (int i = 0; i < AXCONF_LAST; i++)
-    {
-	m_pcValueArray[i] = NULL;
-    }
-
 #ifdef _DEBUG
 #ifdef WIN32
-    // Samisa : I used strdup here so that I could use free in destructor
-    // This was done to make sure that the memory allocated in AxisConfig::setValue
-    // is freed properly
-    m_pcValueArray[AXCONF_XMLPARSER] = strdup ("AxisXMLParser_D.dll");
-    m_pcValueArray[AXCONF_TRANSPORTHTTP] = strdup ("AxisTransport_D.dll");
-    m_pcValueArray[AXCONF_NODENAME] = strdup ("server name");
-    m_pcValueArray[AXCONF_LISTENPORT] = strdup ("listen port");
+    m_pcValueArray[AXCONF_XMLPARSER] = "AxisXMLParser_D.dll";
+    m_pcValueArray[AXCONF_TRANSPORTHTTP] = "AxisTransport_D.dll";
+    m_pcValueArray[AXCONF_NODENAME] = "server name";
+    m_pcValueArray[AXCONF_LISTENPORT] = "listen port";
 #else
-    m_pcValueArray[AXCONF_XMLPARSER] =
-	strdup ("/usr/local/axiscpp_deploy/lib/libaxis_xmlparser.so");
+    m_pcValueArray[AXCONF_XMLPARSER] = 
+		"/usr/local/axiscpp_deploy/lib/libaxis_xmlparser.so";
     m_pcValueArray[AXCONF_TRANSPORTHTTP] =
-	strdup ("/usr/local/axiscpp_deploy/lib/libaxis_transport.so");
-    m_pcValueArray[AXCONF_NODENAME] = strdup ("server name");
-    m_pcValueArray[AXCONF_LISTENPORT] = strdup ("listen port");
+		"/usr/local/axiscpp_deploy/lib/libaxis_transport.so";
+    m_pcValueArray[AXCONF_NODENAME] = "server name";
+    m_pcValueArray[AXCONF_LISTENPORT] = "listen port";
 #endif
 #else
 #ifdef WIN32
-    m_pcValueArray[AXCONF_XMLPARSER] = strdup ("AxisXMLParser.dll");
-    m_pcValueArray[AXCONF_TRANSPORTHTTP] = strdup ("AxisTransport.dll");
-    m_pcValueArray[AXCONF_NODENAME] = strdup ("server name");
-    m_pcValueArray[AXCONF_LISTENPORT] = strdup ("listen port");
+    m_pcValueArray[AXCONF_XMLPARSER] = "AxisXMLParser.dll";
+    m_pcValueArray[AXCONF_TRANSPORTHTTP] = "AxisTransport.dll";
+    m_pcValueArray[AXCONF_NODENAME] = "server name";
+    m_pcValueArray[AXCONF_LISTENPORT] = "listen port";
 #else
     m_pcValueArray[AXCONF_XMLPARSER] =
-	strdup ("/usr/local/axiscpp_deploy/lib/libaxis_xmlparser.so");
+		"/usr/local/axiscpp_deploy/lib/libaxis_xmlparser.so";
     m_pcValueArray[AXCONF_TRANSPORTHTTP] =
-	strdup ("/usr/local/axiscpp_deploy/lib/libaxis_transport.so");
+		"/usr/local/axiscpp_deploy/lib/libaxis_transport.so";
     m_pcValueArray[AXCONF_LOGPATH] =
-	strdup ("/usr/local/axiscpp_deploy/log/AxisLog");
+		"/usr/local/axiscpp_deploy/log/AxisLog";
     m_pcValueArray[AXCONF_CLIENTLOGPATH] =
-	strdup ("/usr/local/axiscpp_deploy/log/AxisClientLog");
-    m_pcValueArray[AXCONF_NODENAME] = strdup ("server name");
-    m_pcValueArray[AXCONF_LISTENPORT] = strdup ("listen port");
+		"/usr/local/axiscpp_deploy/log/AxisClientLog";
+    m_pcValueArray[AXCONF_NODENAME] = "server name";
+    m_pcValueArray[AXCONF_LISTENPORT] = "listen port";
 #endif
 #endif
 
 }
 
-AxisConfig::~AxisConfig ()
-{
-    for (int i = 0; i < AXCONF_LAST; i++)
-    {
-        if (m_pcValueArray[i])
-	    free(m_pcValueArray[i]);
-    }
-
-    if (m_pcAxisHome)
-        free(m_pcAxisHome);
-}
-
-int
-AxisConfig::readConfFile ()
+int AxisConfig::readConfFile ()
 {
     char carrLine[CONFBUFFSIZE];
     char *pcValue;
     AxisFile fileConfig;	/*AxisFile is AxisC++ resource for file manipulation */
     char *sConfPath = NULL;
-    char *sNewConfPath = (char *) malloc (CONFBUFFSIZE);
-    char *key;
+    char sNewConfPath[CONFBUFFSIZE];
+    char key[CONFBUFFSIZE];
     int iValueLength = 0;
     const char *pcSeparator = ":";
     const char pcComment = '#';
@@ -119,18 +99,15 @@ AxisConfig::readConfFile ()
     sConfPath = getenv ("AXISCPP_DEPLOY");
     if (!sConfPath)
         sConfPath = "";
-    m_pcValueArray[AXCONF_AXISHOME] = strdup(sConfPath);
+    m_pcValueArray[AXCONF_AXISHOME] = sConfPath;
     /*
        Even if the AXISCPP_DEPLOY environment variable is not set default values 
        will be used. Therefore return AXIS_SUCCESS
      */
     if (!sConfPath || (sConfPath == '\0'))
     {
-	free (sNewConfPath);
-	return AXIS_SUCCESS;
+	    return AXIS_SUCCESS;
     }
-    m_pcAxisHome = (char *) malloc (CONFBUFFSIZE);
-    strcpy (m_pcAxisHome, sConfPath);
 
     strcpy (sNewConfPath, sConfPath);
 #ifdef WIN32
@@ -147,17 +124,14 @@ AxisConfig::readConfFile ()
 	
 
 #ifdef _DEBUG
-	printf
-	    ("Warning - The configuration file was not found (%s).\n          Using the following default file paths.\n",
-	     sNewConfPath);
-
-	OutputConfigInfo ();
+		printf("Warning - The configuration file was not found (%s).\n", sNewConfPath);
+		printf("          Using the following default file paths.\n");
+		OutputConfigInfo ();
 #else
-	printf ("Warning - The configuration file was not found (%s).\n",
+		printf ("Warning - The configuration file was not found (%s).\n",
 		sNewConfPath);
 #endif
-        free (sNewConfPath);
-	return AXIS_SUCCESS;
+	    return AXIS_SUCCESS;
     }
 
     while (AXIS_SUCCESS == fileConfig.fileGet (carrLine, CONFBUFFSIZE))
@@ -171,7 +145,6 @@ AxisConfig::readConfFile ()
 	pcValue = strpbrk (carrLine, pcSeparator);
 	if (!pcValue)
 	    break;
-	key = (char *) malloc (pcValue - carrLine + 1);
 	pcValue[0] = '\0';
 	sscanf (carrLine, "%s", key);
 	iValueLength = linesize - strlen (key) - 1;
@@ -180,12 +153,12 @@ AxisConfig::readConfFile ()
 
 	for (int i = 0; i < AXCONF_LAST; i++)
 	{
-	    if (strcmp (key, m_pcKeyArray[i]) == 0)
+	    if (m_pcKeyArray[i] == key)
 	    {
 		setValue (iValueLength, (g_axconfig) i, pcValue + 1);
 
-// If the name/value pair is a reference to a WSDD file, then the file must exist.
-// If the WSDD file does not exist, then echo a warning to the console.
+		// If the name/value pair is a reference to a WSDD file, then the file must exist.
+		// If the WSDD file does not exist, then echo a warning to the console.
 		if (strcmp ("WSDDFilePath", key) == 0 ||
 		    strcmp ("ClientWSDDFilePath", key) == 0)
 		{
@@ -213,10 +186,7 @@ AxisConfig::readConfFile ()
 	    printf ("Warning - Unknown key (%s) in config file.\n", key);
 	}
 
-	free (key);
     }
-
-    free (sNewConfPath);
 
 #ifdef _DEBUG
     printf ("The AXIS configuration has now been set to:-\n");
@@ -226,21 +196,18 @@ AxisConfig::readConfFile ()
     return AXIS_SUCCESS;
 }
 
-void
-AxisConfig::setValue (int valuelength, g_axconfig valueindex, char *value)
+void AxisConfig::setValue (int valuelength, g_axconfig valueindex, char *value)
 {
-    // erase memory allocated for default value
-    if (m_pcValueArray[valueindex])
-        free (m_pcValueArray[valueindex]);
-    m_pcValueArray[valueindex] = (char *) malloc (valuelength + 1);
-    strncpy (m_pcValueArray[valueindex], value, valuelength + 1);
+	// m_pcValueArray is a string and the string class will copy the value, so 
+	// no need to copy the value into our own storage here.
+    m_pcValueArray[valueindex] = value;
 }
 
 
-char *
-AxisConfig::getAxisConfProperty (g_axconfig property)
+char* AxisConfig::getAxisConfProperty (g_axconfig property)
 {
-    return m_pcValueArray[property];
+    if (0 == m_pcValueArray[property].length()) return NULL;
+	return (char*)(m_pcValueArray[property].c_str());
 }
 
 
@@ -262,86 +229,86 @@ int main(void)
 void
 AxisConfig::OutputConfigInfo ()
 {
-    if (m_pcValueArray[AXCONF_WSDDFILEPATH] == NULL)
+    if (m_pcValueArray[AXCONF_WSDDFILEPATH].length() == 0)
     {
 	printf ("WSDD           (null)\n");
     }
     else
     {
-	printf ("WSDD           %s\n", m_pcValueArray[AXCONF_WSDDFILEPATH]);
+	printf ("WSDD           %s\n", m_pcValueArray[AXCONF_WSDDFILEPATH].c_str());
     }
-    if (m_pcValueArray[AXCONF_LOGPATH] == NULL)
+    if (m_pcValueArray[AXCONF_LOGPATH].length() == 0)
     {
 	printf ("Log            (null)\n");
     }
     else
     {
-	printf ("Log            %s\n", m_pcValueArray[AXCONF_LOGPATH]);
+	printf ("Log            %s\n", m_pcValueArray[AXCONF_LOGPATH].c_str());
     }
-    if (m_pcValueArray[AXCONF_CLIENTLOGPATH] == NULL)
+    if (m_pcValueArray[AXCONF_CLIENTLOGPATH].length() == 0)
     {
 	printf ("Client Log     (null)\n");
     }
     else
     {
-	printf ("Client Log     %s\n", m_pcValueArray[AXCONF_CLIENTLOGPATH]);
+	printf ("Client Log     %s\n", m_pcValueArray[AXCONF_CLIENTLOGPATH].c_str());
     }
-    if (m_pcValueArray[AXCONF_CLIENTWSDDFILEPATH] == NULL)
+    if (m_pcValueArray[AXCONF_CLIENTWSDDFILEPATH].length() == 0)
     {
 	printf ("ClientWSDD     (null)\n");
     }
     else
     {
 	printf ("ClientWSDD     %s\n",
-		m_pcValueArray[AXCONF_CLIENTWSDDFILEPATH]);
+		m_pcValueArray[AXCONF_CLIENTWSDDFILEPATH].c_str());
     }
-    if (m_pcValueArray[AXCONF_AXISHOME] == NULL)
+    if (m_pcValueArray[AXCONF_AXISHOME].length() == 0)
     {
 	printf ("AXIS HOME      (null)\n");
     }
     else
     {
-	printf ("AXIS HOME      %s\n", m_pcValueArray[AXCONF_AXISHOME]);
+	printf ("AXIS HOME      %s\n", m_pcValueArray[AXCONF_AXISHOME].c_str());
     }
-    if (m_pcValueArray[AXCONF_TRANSPORTHTTP] == NULL)
+    if (m_pcValueArray[AXCONF_TRANSPORTHTTP].length() == 0)
     {
 	printf ("Transport HTTP (null)\n");
     }
     else
     {
-	printf ("Transport HTTP %s\n", m_pcValueArray[AXCONF_TRANSPORTHTTP]);
+	printf ("Transport HTTP %s\n", m_pcValueArray[AXCONF_TRANSPORTHTTP].c_str());
     }
-    if (m_pcValueArray[AXCONF_TRANSPORTSMTP] == NULL)
+    if (m_pcValueArray[AXCONF_TRANSPORTSMTP].length() == 0)
     {
 	printf ("Transport SMTP (null)\n");
     }
     else
     {
-	printf ("Transport SMTP %s\n", m_pcValueArray[AXCONF_TRANSPORTSMTP]);
+	printf ("Transport SMTP %s\n", m_pcValueArray[AXCONF_TRANSPORTSMTP].c_str());
     }
-    if (m_pcValueArray[AXCONF_XMLPARSER] == NULL)
+    if (m_pcValueArray[AXCONF_XMLPARSER].length() == 0)
     {
 	printf ("XML Parser     (null)\n");
     }
     else
     {
-	printf ("XML Parser     %s\n", m_pcValueArray[AXCONF_XMLPARSER]);
+	printf ("XML Parser     %s\n", m_pcValueArray[AXCONF_XMLPARSER].c_str());
     }
-    if (m_pcValueArray[AXCONF_NODENAME] == NULL)
+    if (m_pcValueArray[AXCONF_NODENAME].length() == 0)
     {
 	printf ("Node Name      (null)\n");
     }
     else
     {
-	printf ("Node Name      %s\n", m_pcValueArray[AXCONF_NODENAME]);
+	printf ("Node Name      %s\n", m_pcValueArray[AXCONF_NODENAME].c_str());
     }
-    if (m_pcValueArray[AXCONF_LISTENPORT] == NULL)
+    if (m_pcValueArray[AXCONF_LISTENPORT].length() == 0)
     {
 	printf ("Listen Port    (null)\n");
     }
     else
     {
-	printf ("Listen Port    %s\n", m_pcValueArray[AXCONF_LISTENPORT]);
+	printf ("Listen Port    %s\n", m_pcValueArray[AXCONF_LISTENPORT].c_str());
     }
 }
 

@@ -27,6 +27,7 @@
 
 #define CONFBUFFSIZE 256
 #include <axis/server/GDefine.h>
+#include <string>
 /**
  *   @class AxisConfig
  *   @brief class for taking configuration parameters.
@@ -62,7 +63,6 @@ class AxisConfig
 {
     public:
     AxisConfig();
-    ~AxisConfig();
 
     /**
      * This method will read from the configuration file called axiscpp.conf
@@ -83,9 +83,8 @@ class AxisConfig
 	char* getAxisConfProperty(g_axconfig property);
         
     private:         
-        char* m_pcAxisHome;
-		char* m_pcKeyArray [AXCONF_LAST];
-		char* m_pcValueArray [AXCONF_LAST];
+		std::string m_pcKeyArray [AXCONF_LAST];
+		std::string m_pcValueArray [AXCONF_LAST];
 
 		void setValue(int valuelength, g_axconfig valueindex, char* value);
 
