@@ -1,5 +1,5 @@
 noinst_LTLIBRARIES = libwsdd.la
-AM_CPPFLAGS = -Wall -DUSE_EXPAT_PARSER
+AM_CPPFLAGS = $(CPPFLAGS)
 libwsdd_la_SOURCES = WSDDDeployment.cpp \
                 WSDDHandler.cpp \
                 WSDDService.cpp \
@@ -7,5 +7,5 @@ libwsdd_la_SOURCES = WSDDDeployment.cpp \
                 WSDDDocumentExpat.cpp \
 		WSDDKeywords.cpp
 
-libwsdd_la_LIBADD = -L$(AXISCPP_HOME)/lib/expat -lexpat
+libwsdd_la_LIBADD = $(LDFLAGS)
 INCLUDES = -I$(AXISCPP_HOME)/include
