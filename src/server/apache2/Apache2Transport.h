@@ -34,6 +34,7 @@
 #include <apache2_0/http_log.h>
 #include <apache2_0/ap_compat.h>
 #include <apache2_0/apr_tables.h>
+#include "../../transport/SOAPTransport.h"
 #else
 #include <httpd.h>
 #include <http_config.h>
