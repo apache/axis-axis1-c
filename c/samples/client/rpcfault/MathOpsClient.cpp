@@ -1,5 +1,6 @@
 #include "MathOps.h"
 #include <axis/server/AxisException.h>
+#include <ctype.h>
 
 void PrintUsage();
 bool IsNumber(const char* p);
@@ -27,7 +28,7 @@ int main(int argc, char* argv[])
 	}
 	printf("Sending Requests to Server http://%s:%s ........\n\n", server, port);
 	sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
-	MathOps ws(endpoint);
+	MathOps ws;
 
 	op = argv[3];
 	p1 = argv[4];
