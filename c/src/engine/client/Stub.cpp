@@ -66,7 +66,7 @@ Stub::~Stub ()
     }
 }
 
-int
+/*int
 Stub::initilizeCall ()
 {
     if (AXIS_SUCCESS !=
@@ -79,7 +79,7 @@ Stub::initilizeCall ()
     setSOAPHeaders ();
     return AXIS_SUCCESS;
 
-}
+}*/
 
 void
 Stub::setEndPoint (char *pcEndPoint)
