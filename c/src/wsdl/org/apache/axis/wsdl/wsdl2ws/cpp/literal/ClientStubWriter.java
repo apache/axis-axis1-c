@@ -471,11 +471,12 @@ public class ClientStubWriter extends CPPClassWriter{
 					faultType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(par,wscontext);
 					writeExceptions(faultType,faultInfoName,paramName,langName);
 					}
+				writer.write("\t\t\telse{ \n");
+				writer.write("\t\t\t\t  cFaultdetail = m_pCall->getElementAsString(\"faultdetail\", 0);\n");//damitha
+				writer.write("\t\t\t\t  throw AxisException(cFaultdetail);\n");//damitha
+				writer.write("\t\t\t}\n");
 				}
-			writer.write("\t\t\telse{ \n");
-			writer.write("\t\t\t\t  cFaultdetail = m_pCall->getElementAsString(\"faultdetail\", 0);\n");//damitha
-			writer.write("\t\t\t\t  throw AxisException(cFaultdetail);\n");//damitha
-			writer.write("\t\t\t}\n");
+			
 			writer.write("\t\t}\n");//damitha
 			writer.write("\t\telse throw;\n");//damitha
 			writer.write("\t}\n");//damitha
