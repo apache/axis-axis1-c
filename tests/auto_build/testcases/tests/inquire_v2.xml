@@ -3,7 +3,7 @@
     <description>inquire_v2</description>
     <clientLang>cpp</clientLang>
     <clientCode>inquire_v2Client.cpp</clientCode>
-    <wsdl>inquire_v2.wsdl</wsdl>
+    <wsdl>UDDI.wsdl</wsdl>
     <expected>
         <output>
             inquire_v2.cpp.out
