@@ -83,7 +83,7 @@ typedef struct {
 	void (AXISCALL* SetSOAPVersion)(void* pObj, SOAP_VERSION version);
 	int (AXISCALL* SetTransportProperty)(void* pObj, AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value);
 	int (AXISCALL* SetProtocol)(void* pObj, AXIS_PROTOCOL_TYPE protocol);
-	int (AXISCALL* Initialize)(void* pObj, PROVIDERTYPE nStyle);
+	int (AXISCALL* Initialize)(void* pObj, PROVIDERTYPE nStyle, int secure);
 	int (AXISCALL* Invoke)(void* pObj);
 	int (AXISCALL* UnInitialize)(void* pObj);
 
@@ -166,7 +166,7 @@ public:
 	virtual void AXISCALL SetSOAPVersion(SOAP_VERSION version)=0;
 	virtual int AXISCALL SetTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)=0;
 	virtual int AXISCALL SetProtocol(AXIS_PROTOCOL_TYPE protocol)=0;
-	virtual int AXISCALL Initialize(PROVIDERTYPE nStyle)=0;
+	virtual int AXISCALL Initialize(PROVIDERTYPE nStyle, int secure)=0;
 	virtual int AXISCALL Invoke()=0;
 	virtual int AXISCALL UnInitialize()=0;
 
@@ -250,8 +250,8 @@ public:
 	{ return ((CallBase*)pObj)->SetTransportProperty(type,value);};
 	static int AXISCALL s_SetProtocol(void* pObj, AXIS_PROTOCOL_TYPE protocol)
 	{ return ((CallBase*)pObj)->SetProtocol(protocol);};
-	static int AXISCALL s_Initialize(void* pObj, PROVIDERTYPE nStyle)
-	{ return ((CallBase*)pObj)->Initialize(nStyle);};
+	static int AXISCALL s_Initialize(void* pObj, PROVIDERTYPE nStyle, int secure)
+	{ return ((CallBase*)pObj)->Initialize(nStyle, secure);};
 	static int AXISCALL s_Invoke(void* pObj)
 	{ return ((CallBase*)pObj)->Invoke();};
 	static int AXISCALL s_UnInitialize(void* pObj)
@@ -449,7 +449,7 @@ public:
 	int AXISCALL SetTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value);
 	int AXISCALL SetProtocol(AXIS_PROTOCOL_TYPE protocol);
 	int AXISCALL UnInitialize();
-	int AXISCALL Initialize(PROVIDERTYPE nStyle);
+	int AXISCALL Initialize(PROVIDERTYPE nStyle, int secure);
 	int AXISCALL Invoke();
 
 	/* Method for adding complex parameters */
@@ -526,7 +526,7 @@ public:
 
 	int AXISCALL CheckMessage(const AxisChar* pName, const AxisChar* pNamespace);
 private:
-	int OpenConnection(bool secure);
+	int OpenConnection(int secure);
 	void CloseConnection();
 	int MakeArray();
 
