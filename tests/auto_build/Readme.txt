@@ -39,6 +39,9 @@ variables.
 Variable          | Description
 ------------------------------------------------------------------------------
 AXISCPP_HOME      | Axis C++ build directory
+-----------------------------------------------------------------------------
+AXISCPP_DEPLOY    | Axis C++ deployed here. Server and Client libraries
+                  | are taken from here
 ------------------------------------------------------------------------------
 AXISTEST_HOME     | This specifies the location of the testcase framework with
                   | the directory structure specified above. Path is
