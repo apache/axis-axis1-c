@@ -84,6 +84,7 @@ class WSDDHandler
 {
 public:
 	virtual string& GetLibName();
+	int GetLibID();
 	virtual void SetLibName(string& sLibName);
 	WSDDHandler();
 	virtual ~WSDDHandler();
@@ -92,6 +93,7 @@ public:
   virtual map<string, string>* GetOptionList(); 
 
 protected:
+	int m_nLibId;
 	string m_sName;
 	string m_sLibName;
 	map<string, string>* m_Option;
