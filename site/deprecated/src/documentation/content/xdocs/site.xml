@@ -39,10 +39,11 @@ See http://xml.apache.org/forrest/linking.html for more info
   <requirements label="Requirements" href="java/requirements.html"/>
  </axisjava>
  <axiscpp label="Axis (C++)">
-  <users label="User's Guide" href="cpp/user-guide.html"/>
-  <developers label="Developer's Guide" href="cpp/developers-guide.html"/>
-  <integration label="Integration Guide" href="cpp/integration-guide.html"/>
-  <architecture label="Architecture Guide" href="cpp/architecture-guide.html"/> </axiscpp>
+  <axisc label="Axis C++ alpha released!" href="cpp/index.html"/>
+  <documentation label="Documenation" href="cpp/documentation.html"/>
+  <download label="Download" href="cpp/download.html"/>
+  <who label="Who we are" href="cpp/who.html"/>
+  </axiscpp>
 <downloads label="Downloads">
   <releases label="Releases" href="releases.html"/>
   <interim label="Interim Drops" href="interim.html"/>
