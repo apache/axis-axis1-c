@@ -28,7 +28,7 @@
 #include "IPV6Transport.hpp"
 
 /*
- * Instanciate functions for Axis2Transport instances.
+ * Instanciate functions for IPV6Transport instances.
  */
 
 extern "C"
