@@ -149,4 +149,18 @@ public class CPPUtils {
 	public static String getWebServiceNameFromWrapperName(String wname){
 		return wname.substring(0, wname.length()- CPPUtils.WRAPPER_NAME_APPENDER.length());
 	}
+	public static String getUnionMemberForBasicType(String stype){
+		if ("int".equals(stype)) return "nValue";
+		else if ("unsigned int".equals(stype)) return "unValue";
+		else if ("short".equals(stype)) return "sValue";
+		else if ("unsigned short".equals(stype)) return "usValue";
+		else if ("long".equals(stype)) return "lValue";
+		else if ("unsigned long".equals(stype)) return "ulValue";
+		else if ("char".equals(stype)) return "cValue";
+		else if ("unsigned char".equals(stype)) return "ucValue";
+		else if ("float".equals(stype)) return "fValue";
+		else if ("double".equals(stype)) return "dValue";
+		else if ("struct tm".equals(stype)) return "tValue";
+		else return "unknown type";
+	}
 }
