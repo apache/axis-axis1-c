@@ -183,7 +183,7 @@ const AnyElement* SoapParserExpat::Next()
 		if (m_Events.empty())
 		{
 			nStatus = ParseNext();
-			if (TRANSPORT_FAILED == nStatus) return NULL;
+			if ((TRANSPORT_FAILED == nStatus) || (TRANSPORT_FINISHED == nStatus)) return NULL;
 			if (AXIS_FAIL == m_nStatus) return NULL;
 		}
 
@@ -196,7 +196,7 @@ const AnyElement* SoapParserExpat::Next()
 			{
 				m_Events.push(m_pLastEvent);
 				nStatus = ParseNext();
-				if (TRANSPORT_FAILED == nStatus) return NULL;
+				if ((TRANSPORT_FAILED == nStatus) || (TRANSPORT_FINISHED == nStatus)) return NULL;
 			}
 			else
 			{
