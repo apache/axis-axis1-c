@@ -53,7 +53,7 @@ am_libcommon_la_OBJECTS = Param.lo TypeMapping.lo MessageData.lo \
 	BasicTypeSerializer.lo ArrayBean.lo AxisTime.lo GDefine.lo \
 	AxisUtils.lo AxisTrace.lo AxisGenException.lo AxisConfig.lo \
 	AxisSocketUtils.lo AdminUtils.lo AxisConfigException.lo \
-	AxisMessage.lo
+	AxisMessage.lo AxisUserAPI.lo SoapEnvVersions.lo
 libcommon_la_OBJECTS = $(am_libcommon_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -66,10 +66,12 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/AxisMessage.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/AxisSocketUtils.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/AxisTime.Plo ./$(DEPDIR)/AxisTrace.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/AxisUserAPI.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/AxisUtils.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/BasicTypeSerializer.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/GDefine.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/MessageData.Plo ./$(DEPDIR)/Param.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/SoapEnvVersions.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/TypeMapping.Plo
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -147,6 +149,7 @@ SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
 TESTCASESBUILD = @TESTCASESBUILD@
+TSPPBUILD = @TSPPBUILD@
 VERSION = @VERSION@
 XERCESCBUILD = @XERCESCBUILD@
 XERCESCINC = @XERCESCINC@
@@ -207,7 +210,9 @@ libcommon_la_SOURCES = Param.cpp \
                        AxisSocketUtils.cpp \
                        AdminUtils.cpp \
                        AxisConfigException.cpp \
-                       AxisMessage.cpp
+                       AxisMessage.cpp \
+                       AxisUserAPI.cpp \
+                       SoapEnvVersions.cpp
 
 libcommon_la_LIBADD = $(LDFLAGS)
 INCLUDES = -I../../include
@@ -271,11 +276,13 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AxisSocketUtils.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AxisTime.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AxisTrace.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AxisUserAPI.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AxisUtils.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BasicTypeSerializer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GDefine.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MessageData.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Param.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SoapEnvVersions.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TypeMapping.Plo@am__quote@
 
 .cpp.o:

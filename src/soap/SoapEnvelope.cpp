@@ -30,6 +30,7 @@
 #include "Attribute.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
+extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];
 
 AXIS_CPP_NAMESPACE_START
 

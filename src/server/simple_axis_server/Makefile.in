@@ -54,7 +54,8 @@ am_simple_axis_server_OBJECTS = SimpleAxisTransport.$(OBJEXT) \
 	SimpleAxisServer.$(OBJEXT)
 simple_axis_server_OBJECTS = $(am_simple_axis_server_OBJECTS)
 am__DEPENDENCIES_1 =
-simple_axis_server_DEPENDENCIES = $(am__DEPENDENCIES_1)
+simple_axis_server_DEPENDENCIES = $(am__DEPENDENCIES_1) \
+	../../common/libcommon.la
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -192,7 +193,7 @@ target_alias = @target_alias@
 SUBDIRS = 
 AM_CPPFLAGS = $(CPPFLAGS)
 simple_axis_server_SOURCES = SimpleAxisTransport.cpp SimpleAxisServer.cpp
-simple_axis_server_LDADD = $(LDFLAGS) -L$(AXISCPP_HOME)/src/engine/server -lserver_engine -ldl
+simple_axis_server_LDADD = $(LDFLAGS) -L$(AXISCPP_HOME)/src/engine/server ../../common/libcommon.la -lserver_engine -ldl
 INCLUDES = -I../../../include
 all: all-recursive
 

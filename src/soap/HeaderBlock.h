@@ -27,6 +27,7 @@ using namespace std;
 class BasicNode;
 class Attribute;
 
+
 /*
  *  @class BasicNode
  *  @brief    The Header block of a SOAP Header according to 

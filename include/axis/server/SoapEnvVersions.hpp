@@ -20,6 +20,8 @@
 
 /* SoapEnvVersions.h:*/
 
+#include "../server/GDefine.hpp"
+
 #ifdef WIN32
 #pragma warning (disable : 4786)
 #endif
@@ -69,57 +71,5 @@ struct SoapEnvVersionsStruct
     const AxisChar* pchWords[SOAP_WORDS_LAST];
 };
 
-static SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST]=
-{
-    /* SOAP_VER_1_1 */
-    { 
-        "http://schemas.xmlsoap.org/soap/envelope/",
-        "SOAP-ENV",
-        {
-/*SKW_ENVELOPE*/        "Envelope",
-/*SKW_HEADER*/            "Header",
-/*SKW_BODY*/            "Body",
-/*SKW_MUSTUNDERSTAND*/    "mustUnderstand",
-/*SKW_ACTOR*/            "actor",
-/*SKW_ENCODING_STYLE*/    "encodingStyle",
-/*SKW_FAULT*/            "Fault",
-/*SKW_FAULT_CODE*/        "faultcode",
-/*SKW_FAULT_STRING*/    "faultstring",
-/*SKW_FAULT_ACTOR*/        "faultactor",
-/*SKW_DETAIL*/            "detail",
-/*SKW_MULTIREF*/        "multiRef",
-
-/*SKW_TYPE*/            "type",
-/*SKW_ARRAYTYPE*/        "arrayType",
-/*SKW_HREF*/            "href",
-/*SKW_ID*/                "id"
-        },
-    },
-
-    /*SOAP_VER_1_2*/
-    { 
-        "http://www.w3.org/2003/05/soap-envelope",
-        "env",
-        {
-/*SKW_ENVELOPE*/        "Envelope",
-/*SKW_HEADER*/            "Header",
-/*SKW_BODY*/            "Body",
-/*SKW_MUSTUNDERSTAND*/    "mustUnderstand",
-/*SKW_ACTOR*/            "actor",
-/*SKW_ENCODING_STYLE*/    "encodingStyle",
-/*SKW_FAULT*/            "Fault",
-/*SKW_FAULT_CODE*/        "Code",
-/*SKW_FAULT_STRING*/    "Reason",
-/*SKW_FAULT_ACTOR*/        "Role",
-/*SKW_DETAIL*/            "Detail",
-/*SKW_MULTIREF*/        "multiRef",
-
-/*SKW_TYPE*/            "type",
-/*SKW_ARRAYTYPE*/        "arrayType",
-/*SKW_HREF*/            "href",
-/*SKW_ID*/                "id"
-        },
-    }
-};
 #endif
 

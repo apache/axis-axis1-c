@@ -14,7 +14,8 @@ libcommon_la_SOURCES = Param.cpp \
                        AdminUtils.cpp \
                        AxisConfigException.cpp \
                        AxisMessage.cpp \
-                       AxisUserAPI.cpp
+                       AxisUserAPI.cpp \
+                       SoapEnvVersions.cpp
 
 libcommon_la_LIBADD = $(LDFLAGS)
 INCLUDES = -I../../include

@@ -51,6 +51,8 @@
 extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
 extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 
+extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];
+
 AXIS_CPP_NAMESPACE_START
 
 volatile bool SoapFault::m_bInit = false;

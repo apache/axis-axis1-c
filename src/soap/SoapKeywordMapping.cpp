@@ -22,6 +22,8 @@
 #include "SoapKeywordMapping.h"
 #include "../common/AxisUtils.h"
 
+extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];
+
 AXIS_CPP_NAMESPACE_START
 
 //map<int, SoapKeywordStruct> SoapKeywordMapping::m_Map;
