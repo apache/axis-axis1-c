@@ -39,7 +39,7 @@ bool got_all_options();
 bool is_parameters_valid();
 bool is_webservice_header_compilable();
 
-const char* VCCOMPILECOMMAND = "cl *.cpp /c /ML /W3 /GX /O2 ";
+const char* VCCOMPILECOMMAND = "cl *.cpp /c /ML /W3 /GX /O2 /D \"WIN32\" ";
 const char* VCLINKERCOMMAND = "link *.obj /dll /pdb:none /machine:I386 ";
 
 #ifdef WIN32
@@ -196,7 +196,7 @@ int main(int argc, char* argv[])
 
 	cout << "Deleting temporary files ...";
 	command = DELETECOMMAND;
-	command += "*.obj ";
+	command += "*.obj *.exp *.lib ";
 	if (!bDontDeleteSourceFiles)
 	{
 		command += "*.cpp *.hpp";
