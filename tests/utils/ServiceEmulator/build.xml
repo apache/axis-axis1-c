@@ -1,4 +1,4 @@
-<project name="AxisCMockServer" default="production" basedir=".">
+<project name="AxisCServiceEmulator" default="production" basedir=".">
 
 	<!--
 	  Compile monitor code
@@ -20,7 +20,7 @@
 		</jar>
 	</target>
 	
-	<target name="production" depends="compile, package" description="Build and package TCPMonitor utility"/>
+	<target name="production" depends="compile, package" description="Build and package MockServer utility"/>
 	
 	<!--
 	  Remove all generated artifacts
