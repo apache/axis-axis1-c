@@ -285,6 +285,7 @@ const AxisChar* BasicTypeSerializer::serializeAsAttribute
                 UnsignedInt unsignedIntSerializer;
                 m_sSZ += unsignedIntSerializer.serialize(pValue);
             }
+            break;
         case XSD_SHORT:
             {
                 Short shortSerializer;
