@@ -32,7 +32,15 @@ enum NODE_TYPE { ELEMENT_NODE=1, CHARACTER_NODE};
  *   @brief interface for the BasicNode class.
  *
  *   @author Roshan Weerasuriya (roshan@jkcsworld.com, roshan@opensource.lk)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ *
  */
+
+/*
+ * Revision 1.1  2004/05/25 samisa
+ * Added constructors, copy constructure and pure virtual clone for copy constructing derived classes
+ */
+
 class BasicNode
 {
 public:
@@ -57,7 +65,11 @@ public:
     virtual int serialize(SoapSerializer& pSZ) =0;
     virtual int serialize(SoapSerializer& pSZ, 
         list<AxisChar*>& lstTmpNameSpaceStack) =0;
-    virtual ~BasicNode() {};
+    BasicNode();
+    BasicNode(const AxisChar* pachValue, NODE_TYPE eNodeType = ELEMENT_NODE);
+    BasicNode(const BasicNode& rCopy);
+    virtual BasicNode* clone() = 0;
+    virtual ~BasicNode();
 
 protected:
     NODE_TYPE m_iNodeType;
