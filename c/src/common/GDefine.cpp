@@ -6,6 +6,9 @@
 #include <unistd.h>
 #endif
 
+#include "../soap/Attribute.h"
+#include "../soap/SoapEnvVersions.h"
+
 void Ax_Sleep(int nTime)
 {
 #ifdef WIN32
@@ -13,4 +16,9 @@ void Ax_Sleep(int nTime)
 #else
 		sleep(0);
 #endif
+}
+
+void ModuleInitialize()
+{
+
 }

@@ -81,6 +81,8 @@ class SoapEnvelope
 friend class SoapSerializer;
 
 private:
+	int serializeStandardNamespaceDecl(SoapSerializer& pSZ);
+	int addStandardNamespaceDecl(const Attribute* pAttribute);
 	int serializeNamespaceDecl(SoapSerializer& pSZ);
 	//int serializeNamespaceDecl(string&);
 	int serializeAttributes(SoapSerializer& pSZ);
@@ -90,6 +92,7 @@ private:
 	//string m_strEnvelopSerialized;
 	list<Attribute*> m_attributes;
 	list<Attribute*> m_namespaceDecls;
+	list<const Attribute*> m_StandardNamespaceDecls;
 	string m_sPrefix;	
 
 public:	

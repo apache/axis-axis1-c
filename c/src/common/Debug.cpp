@@ -10,7 +10,7 @@ using namespace std;
 
 Debug::Debug()
 {
-  sFileName = "/usr/local/axiscpp/axis/logs/Debug";
+  sFileName = "E:\\Program Files\\Apache Group\\Apache\\Axis\\logs\\Debug.txt";
   if(!sFileName.empty())
   {
     FileName = sFileName.c_str();

@@ -39,7 +39,7 @@ void module_init(server_rec *svr_rec, pool* p)
 	initialize_module();
 }
 
-int send_response_bytes(char* res, void* opstream)
+int send_response_bytes(const char* res, void* opstream)
 {
 	ap_rputs(res, (request_rec*)opstream);
 	return 0;
