@@ -186,7 +186,11 @@ void HTTPTransport::setEndpointUri( const char * pcEndpointUri) throw (HTTPTrans
 
 int HTTPTransport::openConnection()
 {
-	return m_pActiveChannel->open();
+     // Samisa : opening the connection is really done in flushOutput method
+     // hence it is not reqquired to do that in here, and makes the trasport 
+     // relatively faster
+     // Fix for AXISCPP-481
+     return AXIS_SUCCESS;
 }
 
 /*
@@ -202,10 +206,9 @@ void HTTPTransport::closeConnection()
 
     m_iContentLength = 0;
 
-	if( m_pActiveChannel != NULL)
-	{
-		m_pActiveChannel->close();
-	}
+    // Samisa : closing the connection is done in setEndpointUri
+    // no need to close here
+    // Fix for AXISCPP-481
 }
 
 /*
@@ -1497,3 +1500,4 @@ const char * HTTPTransport::getLastChannelError()
 
 	return NULL;
 }
+
