@@ -39,9 +39,9 @@ QName::~QName()
 
 }
 
-void QName::SplitQNameString(const XMLCh* qname, XMLCh sep)
+void QName::SplitQNameString(const XML_Ch* qname, XML_Ch sep)
 {
-	XMLCh *p = const_cast<XMLCh*>(qname);
+	XML_Ch *p = const_cast<XML_Ch*>(qname);
 	while (*p)
 	{
 		if (*p == sep)
@@ -58,11 +58,11 @@ void QName::SplitQNameString(const XMLCh* qname, XMLCh sep)
 	uri = 0; //no uri
 }
 
-void QName::MergeQNameString(XMLCh sep)
+void QName::MergeQNameString(XML_Ch sep)
 {
 	if (uri)
 	{
-		XMLCh* p = const_cast<XMLCh*>(localname);
+		XML_Ch* p = const_cast<XML_Ch*>(localname);
 		*(--p) = sep;
 	}
 }

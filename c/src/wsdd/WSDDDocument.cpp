@@ -97,7 +97,7 @@ int WSDDDocument::GetDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployme
 
 int WSDDDocument::ParseDocument(const AxisChar* sWSDD)
 {
-	XMLCh Buff[FILEBUFFSIZE];
+	XML_Ch Buff[FILEBUFFSIZE];
 	XML_Parser Parser = XML_ParserCreateNS(NULL, NAMESPACESEPARATOR);
 	XML_SetUserData(Parser, this);
 	XML_SetNamespaceDeclHandler(Parser, s_startPrefixMapping, s_endPrefixMapping);
@@ -136,7 +136,7 @@ int WSDDDocument::ParseDocument(const AxisChar* sWSDD)
 	return AXIS_SUCCESS;
 }
 
-void  WSDDDocument::endElement (const XMLCh *qname)
+void  WSDDDocument::endElement (const XML_Ch *qname)
 {
 	QName qn;
 	qn.SplitQNameString(qname,NAMESPACESEPARATOR);
@@ -222,10 +222,10 @@ void  WSDDDocument::endElement (const XMLCh *qname)
 	qn.MergeQNameString(NAMESPACESEPARATOR);
 }
 
-void WSDDDocument::ProcessAttributes(WSDDLevels ElementType, const XMLCh **attrs)
+void WSDDDocument::ProcessAttributes(WSDDLevels ElementType, const XML_Ch **attrs)
 {
 	QName qn;
-	const XMLCh* value;
+	const XML_Ch* value;
 	for (int i = 0; attrs[i]; i += 2) 
 	{
 		qn.SplitQNameString(attrs[i],NAMESPACESEPARATOR);
@@ -313,12 +313,12 @@ void WSDDDocument::ProcessAttributes(WSDDLevels ElementType, const XMLCh **attrs
 	}
 }
 
-void WSDDDocument::GetParameters(WSDDLevels ElementType, const XMLCh **attrs)
+void WSDDDocument::GetParameters(WSDDLevels ElementType, const XML_Ch **attrs)
 {
 	QName qn;
-	const XMLCh* value;
-	const XMLCh* type;
-	const XMLCh* name;
+	const XML_Ch* value;
+	const XML_Ch* type;
+	const XML_Ch* name;
 	for (int i = 0; attrs[i]; i += 2) 
 	{
 		qn.SplitQNameString(attrs[i],NAMESPACESEPARATOR);
@@ -422,7 +422,7 @@ void WSDDDocument::AddAllowedMethodsToService(const AxisXMLCh* value)
 }
 
 
-void WSDDDocument::startElement(const XMLCh *qname,const XMLCh **attrs)
+void WSDDDocument::startElement(const XML_Ch *qname,const XML_Ch **attrs)
 {
 	QName qn;
 	qn.SplitQNameString(qname,NAMESPACESEPARATOR);
@@ -560,17 +560,17 @@ void WSDDDocument::startElement(const XMLCh *qname,const XMLCh **attrs)
 	qn.MergeQNameString(NAMESPACESEPARATOR);
 }
 
-void WSDDDocument::startPrefixMapping(const XMLCh *prefix, const XMLCh *uri)
+void WSDDDocument::startPrefixMapping(const XML_Ch *prefix, const XML_Ch *uri)
 {
 	if (prefix) m_NsStack[prefix] = uri; //I think the same prifix cannot repeat ???
 }
 
-void WSDDDocument::endPrefixMapping(const XMLCh *prefix)
+void WSDDDocument::endPrefixMapping(const XML_Ch *prefix)
 {
 	if (prefix) m_NsStack.erase(prefix); //I think the same prifix cannot repeat ???
 }
 
-void  WSDDDocument::characters (const XMLCh* chars,int length)
+void  WSDDDocument::characters (const XML_Ch* chars,int length)
 {
 	//cout<<"==="<<XMLString::transcode(chars)<<"==="<<endl;
 }

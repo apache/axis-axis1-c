@@ -76,7 +76,7 @@ public:
 	virtual int SetInputStream(const Ax_soapstream* pInputStream)=0;
 	virtual const Ax_soapstream* GetInputStream()=0;
 	virtual int Init()=0;
-	virtual const XMLCh* GetNS4Prefix(const XMLCh* prefix)=0;
+	virtual const XML_Ch* GetNS4Prefix(const XML_Ch* prefix)=0;
 	virtual int GetStatus()=0;
 	virtual const AnyElement* Next()=0;
 	virtual AXIS_TRANSPORT_STATUS GetTransportStatus()=0;

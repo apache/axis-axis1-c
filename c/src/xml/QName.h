@@ -95,14 +95,14 @@
 class QName  
 {
 public:
-	const XMLCh* uri;
-	const XMLCh* localname;
+	const XML_Ch* uri;
+	const XML_Ch* localname;
 
 public:
 	QName();
 	virtual ~QName();
-	void SplitQNameString(const XMLCh* qname, XMLCh sep);
-	void MergeQNameString(XMLCh sep);
+	void SplitQNameString(const XML_Ch* qname, XML_Ch sep);
+	void MergeQNameString(XML_Ch sep);
 };
 
 #endif // !defined(AFX_QNAME_H__7E4E7E7B_F051_4989_89A6_F0248109C410__INCLUDED_)

@@ -75,7 +75,7 @@ typedef enum { CRITICAL=1, WARN, INFO, TRIVIAL} AXIS_SEVERITY_LEVEL;
 
 #define AxisChar char
 #define AxisXMLCh char
-#define XMLCh AxisChar
+#define XML_Ch AxisChar
 
 #ifdef __cplusplus
 #define AxisString basic_string<char>
