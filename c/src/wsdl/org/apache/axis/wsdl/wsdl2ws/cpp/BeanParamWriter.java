@@ -155,10 +155,10 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				if (attribs[i].isAttribute()){
 					if (attribs[i].isOptional()){
 						writer.write("\tif (0 != param->"+attribs[i].getParamName()+")\n");
-						writer.write("\t\tpSZ->SerializeAsAttribute(\""+attribs[i].getParamName()+"\", (void*)(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+						writer.write("\t\tpSZ->SerializeAsAttribute(\""+attribs[i].getParamName()+"\", 0, (void*)(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 					}
 					else{
-						writer.write("\tpSZ->SerializeAsAttribute(\""+attribs[i].getParamName()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");				
+						writer.write("\tpSZ->SerializeAsAttribute(\""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");				
 					}
 				}
 				else
