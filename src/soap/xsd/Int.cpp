@@ -48,7 +48,9 @@ MinInclusive* Int::getMinInclusive()
   LONGLONG* minInclusive = new LONGLONG;
   *minInclusive = strtol ("-2147483648", &end, 10);
     
-    return new MinInclusive(*minInclusive);
+    MinInclusive* retVal = new MinInclusive(*minInclusive);
+    delete minInclusive;
+    return retVal;
 }
 
 MinExclusive* Int::getMinExclusive()
@@ -56,8 +58,10 @@ MinExclusive* Int::getMinExclusive()
   AxisChar* end;    
   LONGLONG* minExclusive = new LONGLONG;
   *minExclusive = strtol ("-2147483649", &end, 10);
-    
-    return new MinExclusive(*minExclusive);
+
+    MinExclusive* retVal = new MinExclusive(*minExclusive);
+    delete minExclusive;
+    return retVal;
 }
 
 MaxInclusive* Int::getMaxInclusive()
@@ -66,7 +70,9 @@ MaxInclusive* Int::getMaxInclusive()
   LONGLONG* maxInclusive = new LONGLONG;
   *maxInclusive = strtol ("2147483647", &end, 10);
     
-    return new MaxInclusive(*maxInclusive);
+    MaxInclusive* retVal = new MaxInclusive(*maxInclusive);
+    delete maxInclusive;
+    return retVal;
 }
 
 MaxExclusive* Int::getMaxExclusive()
@@ -75,7 +81,9 @@ MaxExclusive* Int::getMaxExclusive()
   LONGLONG* maxExclusive = new LONGLONG;
   *maxExclusive = strtol ("2147483648", &end, 10);
     
-    return new MaxExclusive(*maxExclusive);
+    MaxExclusive* retVal = new MaxExclusive(*maxExclusive);
+    delete maxExclusive;
+    return retVal;
 }
 
 AXIS_CPP_NAMESPACE_END
