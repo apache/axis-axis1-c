@@ -282,7 +282,7 @@ int AxisEngine::Process(soapstream* soap)
 	  //set soap version to the serializer.
 	  //Serialize
     m_sResponse = "";
-	  int iStatus= m_pSZ->getStream(m_sResponse);
+	  int iStatus= m_pSZ->getStream();
 	  soap->so.http.op_soap = m_sResponse.c_str();
 	  //soap->so.http.op_soap = new char(sResponse.length() + 1); 
 	  //strcpy(soap->so.http.op_soap, sResponse.c_str());
