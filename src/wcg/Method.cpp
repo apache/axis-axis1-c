@@ -67,7 +67,7 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include "Method.h"
+#include <axis/wcg/Method.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

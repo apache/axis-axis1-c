@@ -10,8 +10,8 @@
 #include <unistd.h>
 #endif
 
-#include "TranslationUnit.h"
-#include "File.h"
+#include <axis/wcg/TranslationUnit.h>
+#include <axis/wcg/File.h>
 #include <string>
 #include <map>
 #include <iostream>

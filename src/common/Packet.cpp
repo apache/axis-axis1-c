@@ -59,7 +59,7 @@
  *
  */
 
-#include "Packet.h"
+#include <axis/common/Packet.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>

@@ -61,11 +61,11 @@
  *
  */
 
-#include "HandlerLoader.h"
+#include <axis/engine/HandlerLoader.h>
 #include <stdio.h>
-#include "../common/AxisTrace.h"
-#include "../common/AxisUtils.h"
-#include "../wsdd/WSDDDeployment.h"
+#include <axis/common/AxisTrace.h>
+#include <axis/common/AxisUtils.h>
+#include <axis/wsdd/WSDDDeployment.h>
 
 extern WSDDDeployment* g_pWSDDDeployment;
 

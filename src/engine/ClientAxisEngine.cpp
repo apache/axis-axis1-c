@@ -2,9 +2,9 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "ClientAxisEngine.h"
-#include "../wsdd/WSDDDeployment.h"
-#include "HandlerPool.h"
+#include <axis/engine/ClientAxisEngine.h>
+#include <axis/wsdd/WSDDDeployment.h>
+#include <axis/engine/HandlerPool.h>
 
 extern WSDDDeployment* g_pWSDDDeployment;
 extern HandlerPool* g_pHandlerPool;

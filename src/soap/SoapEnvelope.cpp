@@ -65,9 +65,9 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "SoapEnvelope.h"
-#include "../common/GDefine.h"
-#include "SoapSerializer.h"
+#include <axis/soap/SoapEnvelope.h>
+#include <axis/common/GDefine.h>
+#include <axis/soap/SoapSerializer.h>
 
 #include <stdio.h>
 

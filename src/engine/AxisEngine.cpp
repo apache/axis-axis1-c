@@ -61,17 +61,12 @@
  *
  */
 
-#include "AxisEngine.h"
+#include <axis/engine/AxisEngine.h>
 #include <stdio.h>
-//#include "../common/AxisException.h"
-//#include "../common/AxisTrace.h"
-//#include "../common/Packet.h"
-//#include "../common/AxisUtils.h"
-//#include "../wsdd/WSDDDeployment.h"
 
-#include "HandlerPool.h"
-#include "DeserializerPool.h"
-#include "SerializerPool.h"
+#include <axis/engine/HandlerPool.h>
+#include <axis/engine/DeserializerPool.h>
+#include <axis/engine/SerializerPool.h>
 
 extern DeserializerPool* g_pDeserializerPool;
 extern SerializerPool* g_pSerializerPool;

@@ -59,7 +59,7 @@
  *
  */
 
-#include "AxisException.h"
+#include <axis/common/AxisException.h>
 
 #include <exception>
 using namespace std;

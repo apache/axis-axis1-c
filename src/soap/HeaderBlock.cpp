@@ -65,11 +65,11 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "HeaderBlock.h"
-#include "SoapSerializer.h"
-#include "../common/GDefine.h"
-#include "BasicNode.h"
-#include "CharacterElement.h"
+#include <axis/soap/HeaderBlock.h>
+#include <axis/soap/SoapSerializer.h>
+#include <axis/common/GDefine.h>
+#include <axis/soap/BasicNode.h>
+#include <axis/soap/CharacterElement.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
