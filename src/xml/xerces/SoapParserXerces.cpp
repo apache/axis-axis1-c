@@ -86,8 +86,12 @@ const AnyElement* SoapParserXerces::next(bool isCharData)
     m_Xhandler.freeElement();
     while (true)
     {
-        bCanParseMore = m_pParser->parseNext(m_ScanToken);
         AnyElement* elem = m_Xhandler.getAnyElement();
+		if (!elem)
+		{
+			bCanParseMore = m_pParser->parseNext(m_ScanToken);
+			elem = m_Xhandler.getAnyElement();
+		}
         if (elem) 
 		{
 			if (!isCharData && (CHARACTER_ELEMENT == elem->m_type))

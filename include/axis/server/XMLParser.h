@@ -25,7 +25,7 @@
  * @class XMLParser
  * @brief Interface that any parser wrapper should implement in order to be use 
  *        in Axis as a XML PULL parser. Its the responsibility of the implementation
- *        class to free and memory allocated inside the class. The class should not 
+ *        class to free any memory allocated inside the class. The class should not 
  *		  deallocate either the given input stream or any memory buffers that it gets
  *		  from the stream.
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
