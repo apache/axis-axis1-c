@@ -1,6 +1,7 @@
 // WCGenerator.cpp: implementation of the WCGenerator class.
 //
 //////////////////////////////////////////////////////////////////////
+#pragma warning (disable : 4786)
 
 #include "WCGenerator.h"
 
@@ -8,7 +9,7 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 #include "WSClass.h"
-#include "HeaderFile.h"
+#include "TranslationUnit.h"
 
 WCGenerator::WCGenerator()
 {
@@ -39,7 +40,7 @@ int WCGenerator::DoDeploy()
 {
 	return 0;
 }
-
+/*
 int main(int argc, char*argv[])
 {
 	WSClass* pCl = new WSClass();
@@ -49,3 +50,4 @@ int main(int argc, char*argv[])
 	hf.GenerateWrapperClassDef();
 	return 0;
 }
+*/

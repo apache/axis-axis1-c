@@ -63,6 +63,7 @@
 // WSClass.cpp: implementation of the WSClass class.
 //
 //////////////////////////////////////////////////////////////////////
+#pragma warning (disable : 4786)
 
 #include "WSClass.h"
 
@@ -97,7 +98,8 @@ WSClass::~WSClass()
 
 void WSClass::SetClassName(string &sName)
 {
-	m_Name = sName;
+	m_AWSName = sName;
+	m_Name = sName + "Wrapper";
 }
 
 void WSClass::AddVariable(Variable *pVar)
@@ -129,8 +131,26 @@ int WSClass::GenerateClassDef(File &file)
 {
 	try {
 		//add wrapper class
-		file << "class " << GetName() << "Wrapper" << " : public WrapperClassHandler" << endl << "{" << endl;
-		
+		file << "class " << m_Name << " : public WrapperClassHandler" << endl << "{" << endl;
+		file << "public:" << endl;
+		//default constructor
+		file << "\t" << m_Name << "();" << endl; 
+		//destructor
+		file << "\tvirtual ~" << m_Name << "();" << endl; 
+		file << "public:" << "//implementation of WrapperClassHandler interface" << endl;	
+		file << "\tint Invoke(IMessageData* mc);" << endl; 		
+		file << "\tvoid OnFault(IMessageData* pMsg);" << endl; 		
+		file << "\tint Init();" << endl; 		
+		file << "\tint Fini();" << endl; 	
+		file << "private:" << "//Methods corresponding to the web service methods" << endl;
+		file << "\tint SetResponseMethod(IMessageData* mc, const char* name);" << endl; 			
+		//wrapper methods for each webservice method
+		for (list<Method*>::iterator it = m_Methods.begin(); it != m_Methods.end(); it++)
+		{
+			(*it)->GenerateMethodDef(file);
+		}
+		file << "private:" << "// Actual web service object" << endl;
+		file << "\t" << m_AWSName << " *pWs;" << endl; 
 		file << "};" << endl;	
 	}
 	catch(...) //any exception
@@ -142,5 +162,75 @@ int WSClass::GenerateClassDef(File &file)
 
 int WSClass::GenerateClassImpl(File &file)
 {
-	return 0;
+	try {
+		//default constructor
+		file << m_Name << "::" << m_Name << "()" << endl;
+		file << "{" << endl;
+		file << "\tpWs = new " << m_AWSName << "();" << endl;
+		file << "}" << endl;
+		file << endl;
+		//destructor
+		file << m_Name << "::~" << m_Name << "()" << endl;
+		file << "{" << endl;
+		file << "\tdelete pWs;" << endl; 
+		file << "}" << endl;
+		file << endl;
+
+		//implementation of WrapperClassHandler interface
+		file << "// Implementation of WrapperClassHandler interfaces." << endl;
+		file << "int " << m_Name << "::Invoke(IMessageData* mc)" << endl; 		
+		file << "{" << endl;
+		file << "\tstring method = mc->getSoapDeserializer()->GetMethodName();" << endl;
+		bool tab = true;
+		list<Method*>::iterator it;
+		for (it = m_Methods.begin(); it != m_Methods.end(); it++)
+		{
+			if (tab) { file << "\t"; tab = false;} 
+			file << "if (method == \"" << (*it)->GetName() << "\")" << endl;
+			file << "\t\treturn " << (*it)->GetName() << "(mc);" << endl;
+			file << "\telse ";
+		}
+		file << "return FAIL;" << endl;
+		file << "}" << endl;
+		file << endl;
+
+		file << "void" << m_Name << "::OnFault(IMessageData* pMsg)" << endl; 		
+		file << "{" << endl;
+		file << "}" << endl;
+		file << endl;
+
+		file << "int " << m_Name << "::Init()" << endl; 		
+		file << "{" << endl;
+		file << "\treturn 0;" << endl; 
+		file << "}" << endl;
+		file << endl;
+
+		file << "int " << m_Name << "::Fini()" << endl; 	
+		file << "{" << endl;
+		file << "\treturn 0;" << endl; 
+		file << "}" << endl;
+		file << endl;
+
+		file << "int " << m_Name << "::SetResponseMethod(IMessageData* mc, const char* name)" << endl; 			
+		file << "{" << endl;
+		file << "\tstring method = name;" << endl;
+		file << "\tISoapMethod* pMethod = mc->getSoapSerializer()->createSoapMethod();" << endl;
+		file << "\tpMethod->setLocalName(method + \"Response\");" << endl;
+		file << "\tpMethod->setPrefix(\"" << "amp" << "\");"<< endl; //amp - axis method prefix :)
+		file << "\tpMethod->setUri(\"" << g_ClassNamespaces[m_AWSName] << "\");"<< endl; //http://www.opensource.lk will come from wsdd
+		file << "\treturn SUCCESS;" << endl; 
+		file << "}" << endl;
+		file << endl;
+
+		//wrapper methods for each webservice method
+		for (it = m_Methods.begin(); it != m_Methods.end(); it++)
+		{
+			(*it)->GenerateMethodImpl(m_Name, file);
+		}
+	}
+	catch(...) //any exception
+	{
+		return 1;
+	}
+	return 0; //success}
 }
