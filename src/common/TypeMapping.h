@@ -60,28 +60,40 @@
  * @author Susantha Kumara (skumara@virtusa.com)
  *
  */
-
-// BasicHandler.h: interface for the BasicHandler class.
+// TypeMapping.h: interface for the TypeMapping class.
 //
 //////////////////////////////////////////////////////////////////////
+#pragma warning (disable : 4786)
 
-#if !defined(AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_)
-#define AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_
+#if !defined(AFX_TYPEMAPPING_H__B09703CE_154D_400E_A4E6_ED01901B33A0__INCLUDED_)
+#define AFX_TYPEMAPPING_H__B09703CE_154D_400E_A4E6_ED01901B33A0__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "IMessageData.h"
+#include <map>
+#include <string>
 
-class BasicHandler  
+using namespace std;
+
+enum XSDTYPE { XSD_UNKNOWN=1, XSD_INT, XSD_FLOAT, XSD_STRING, XSD_LONG, XSD_SHORT, XSD_BYTE, XSD_UNSIGNEDLONG, \
+				XSD_BOOLEAN, XSD_UNSIGNEDINT, XSD_UNSIGNEDSHORT, XSD_UNSIGNEDBYTE, \
+				XSD_DOUBLE, XSD_DECIMAL, XSD_DURATION, XSD_DATETIME, XSD_TIME, XSD_DATE, \
+				XSD_YEARMONTH, XSD_YEAR, XSD_MONTHDAY, XSD_DAY, XSD_MONTH, XSD_HEXBINARY, \
+				XSD_BASE64BINARY, XSD_ANYURI, XSD_QNAME, XSD_NOTATION, XSD_INTEGER, \
+				XSD_ARRAY, USER_TYPE, ACCESSOR };
+
+class TypeMapping  
 {
 public:
-	BasicHandler(){};
-	virtual ~BasicHandler(){};
+	static XSDTYPE Map(string& sType);
+	static void Initialize();
+	static map<string, XSDTYPE> m_sTypeMap;
+	static bool m_bInit;
+	TypeMapping();
+	virtual ~TypeMapping();
 
-	virtual int Invoke(IMessageData* pMsg) = 0;
-	virtual void OnFault(IMessageData* pMsg) = 0;
 };
 
-#endif // !defined(AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_)
+#endif // !defined(AFX_TYPEMAPPING_H__B09703CE_154D_400E_A4E6_ED01901B33A0__INCLUDED_)

@@ -74,7 +74,7 @@
 
 #include "GDefine.h"
 #include "IAccessBean.h"
-#include "../soap/TypeMapping.h"
+#include "TypeMapping.h"
 
 #include <string>
 using namespace std;

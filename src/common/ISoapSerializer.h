@@ -71,7 +71,7 @@ class ISoapMethod;
 class IArrayBean;
 class IParam;
 union uParamValue;
-#include "../soap/TypeMapping.h"
+#include "TypeMapping.h"
 
 class ISoapSerializer
 {
@@ -81,6 +81,11 @@ public:
 	virtual ISoapSerializer& operator<<(const char *cSerialized)=0;
 	virtual const char* getNewNamespacePrefix()=0;
 	virtual IArrayBean* makeArrayBean(XSDTYPE nType, void* pArray)=0;
+public: //Basic Type Serializing methods
+	virtual string& SerializeBasicType(const string& sName, string& sValue, XSDTYPE type=XSD_STRING)=0;
+	virtual string& SerializeBasicType(const string& sName, float fValue)=0;
+	virtual string& SerializeBasicType(const string& sName, int nValue)=0;
+
 };
 
 #endif // !defined(AFX_ISOAPSERIALIZER_H__4F8E4E72_56C8_4F1C_A488_350FDEFF9028__INCLUDED_)
