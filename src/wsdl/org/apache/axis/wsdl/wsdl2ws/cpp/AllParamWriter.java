@@ -56,11 +56,6 @@ public class AllParamWriter implements SourceWriter
             try
             {
                 type = (Type) types.next();
-                if (wscontext
-                    .getWrapInfo()
-                    .getImplStyle()
-                    .equals(WrapperConstants.IMPL_STYLE_STRUCT))
-                {
                     if (type.isArray())
                     {
                         if (WSDL2Ws.verbose)
@@ -111,7 +106,6 @@ public class AllParamWriter implements SourceWriter
                         }
                     }
                 }
-            }
             catch (Exception e)
             {
                 System.out.println(

@@ -616,7 +616,6 @@ public class WSDL2Ws
         String servicename,
         String targetoutputLocation,
         String targetLanguage,
-        String targetImplementationStyle,
         String targetEngine,
         String wsdlWrapStyle)
         throws WrapperFault
@@ -660,7 +659,6 @@ public class WSDL2Ws
                         serviceStyle,
                         targetLanguage,
                         targetoutputLocation,
-                        targetImplementationStyle,
                         targetEngine,
                         transportURI,
                         targetEndpointURI,
@@ -1094,7 +1092,6 @@ public class WSDL2Ws
      * -l target language(c|c++) default is c++
      * -help (later ???? not emplemented)
      * -h print usage()
-     * -i implementation style (struct|order|simple) default is struct--- (usergetvalue() with PP or use getTag() ect ....)
      * -s (client|server|both)  
      * -w wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped
      * -m create GNU make files
@@ -1132,7 +1129,7 @@ public class WSDL2Ws
                 gen.generateWrappers(
                     null,
                     data.getOptionBykey("o"),
-                    data.getOptionBykey("l"),
+//                    data.getOptionBykey("l"),
                     data.getOptionBykey("i"),
                     data.getOptionBykey("s"),
                     data.getOptionBykey("w"));
@@ -1157,6 +1154,15 @@ public class WSDL2Ws
     {
         for(int i=0; i<data.getArgumentCount(); i++)
         {
+            // implementation style- NO LONGER SUPPORTED
+            String implementationStyle=data.getOptionBykey("i");
+            if(implementationStyle!=null)
+            {
+                // This is no longer supported so return false;
+                return false;
+            }
+
+            
             // Check that those supported args have only the acceptable options.
             // target language
             String language = data.getOptionBykey("l");
@@ -1197,15 +1203,6 @@ public class WSDL2Ws
                 }
             }
             
-            // implementation style
-            String implementationStyle=data.getOptionBykey("i");
-            if(implementationStyle!=null)
-            {
-                if(!implementationStyle.equals("struct") && !implementationStyle.equals("order")&& !implementationStyle.equals("simple"))
-                {
-                    return false;
-                }
-            }
         }
         return true;
     }

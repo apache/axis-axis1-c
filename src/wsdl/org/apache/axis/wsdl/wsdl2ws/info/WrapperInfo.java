@@ -31,7 +31,7 @@ public class WrapperInfo
     // programming language
     private String wrapperLanguage;
     // use getvalue or get TAG or SIMPlE
-    private String implStyle;
+//    private String implStyle;
     //serverside or client side
     private String targetEngine;
     //output location
@@ -44,9 +44,7 @@ public class WrapperInfo
     private String targetNameSpaceOfWSDL;
 
     public WrapperInfo(String wrapperStyle, String wrapperLanguage,
-    //    					String encodingStyle, 
     String targetOutputLocation,
-        String implStyle,
         String targetEngine,
         String transportUri,
         String targetEndpointURI,
@@ -54,9 +52,7 @@ public class WrapperInfo
     {
         this.wrapperStyle = wrapperStyle;
         this.wrapperLanguage = wrapperLanguage;
-        //       this.encodingStyle = encodingStyle;
         this.targetOutputLocation = targetOutputLocation;
-        this.implStyle = implStyle;
 
         //validate the data
         if (this.wrapperLanguage == null
@@ -86,15 +82,6 @@ public class WrapperInfo
             targetOutputLocation = ".";
         }
 
-        if (implStyle == null
-            || implStyle.equals(WrapperConstants.IMPL_STYLE_STRUCT))
-        {
-            this.implStyle = WrapperConstants.IMPL_STYLE_STRUCT;
-        }
-        else
-        {
-            this.implStyle = this.implStyle.toLowerCase();
-        }
 
         if (targetEngine == null
             || !WrapperConstants.CLIENT.equalsIgnoreCase(targetEngine))
@@ -174,19 +161,6 @@ public class WrapperInfo
     /**
      * @return String
      */
-    public String getImplStyle()
-    {
-        return implStyle;
-    }
-
-    /**
-     * Sets the implStyle.
-     * @param implStyle The implStyle to set
-     */
-    public void setImplStyle(String implStyle)
-    {
-        this.implStyle = implStyle;
-    }
 
     public String getTargetEngine()
     {
