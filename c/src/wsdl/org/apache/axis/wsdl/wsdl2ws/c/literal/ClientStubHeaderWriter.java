@@ -86,8 +86,10 @@ public class ClientStubHeaderWriter extends HeaderFileWriter {
 		boolean isSimpleType;
 		try {
 			writer.write("extern void* get_" + classname + "_stub();\n");
-			writer.write("extern void destroy_" + classname
-					+ "_stub(void* p);\n");
+			writer.write("extern void destroy_" + classname + "_stub(void* p);\n");
+			
+			writer.write("extern int get_" + classname + "_Status(void* pStub);\n");
+								
 			for (int i = 0; i < methods.size(); i++) {
 				minfo = (MethodInfo) this.methods.get(i);
 				boolean isAllTreatedAsOutParams = false;

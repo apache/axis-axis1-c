@@ -76,6 +76,12 @@ public class ClientStubWriter extends CFileWriter{
 			writer.write("\treturn GetStubObject(APTHTTP, \""+wscontext.getWrapInfo().getTargetEndpointURI()+"\");\n}\n");
 			writer.write("void destroy_"+classname+"_stub(void* p){\n");
 			writer.write("\tDestroyStubObject(p);\n}\n");
+			
+			writer.write("int get_"+classname+"_Status(void* pStub){\n");
+			writer.write("\tCall* pCall = (Call*)pStub;\n");
+			writer.write("\tif ( pStub == NULL ) return AXIS_SUCCESS; else return pCall->_functions->GetStatus(pCall->_object);\n");
+			writer.write("\t}\n");
+			
 			writer.write("\n/*Methods corresponding to the web service methods*/\n");
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
