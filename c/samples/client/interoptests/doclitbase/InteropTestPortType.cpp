@@ -38,7 +38,7 @@ InteropTestPortType::~InteropTestPortType()
 AxisChar* InteropTestPortType::echoString(AxisChar* Value0)
 {
 	int nStatus;
-	AxisChar* Ret;
+	AxisChar* Ret = '\0';
 	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER, 0)) return Ret;
 	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropBaseDL#echoString");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
