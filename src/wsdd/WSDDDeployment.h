@@ -93,6 +93,7 @@ public:
 	WSDDHandlerList* GetGlobalRequestFlowHandlers();
 	int SetGlobalResponseFlowHandlers(WSDDHandlerList * gresflow);
 	WSDDHandlerList* GetGlobalResponseFlowHandlers();
+	const WSDDServiceMap* GetWSDDServiceMap();
 	WSDDDeployment();
 	virtual ~WSDDDeployment();
 private:
