@@ -76,6 +76,7 @@ WSDDHandler::WSDDHandler()
 	m_nLibId = 0;
 	m_nScope = AH_REQUEST; //default
 	m_Params = NULL;
+	m_sDescription = "No description provided";
 }
 
 WSDDHandler::~WSDDHandler()
@@ -135,4 +136,16 @@ const map<AxisString, AxisString>* WSDDHandler::GetParameterList() const
 {
 	return m_Params;
 }
+
+void WSDDHandler::SetDescription(const AxisChar* sDescription)
+{
+	m_sDescription = sDescription;
+}
+
+const AxisChar* WSDDHandler::GetDescription() const
+{
+	return m_sDescription.c_str();
+}
+
+
 

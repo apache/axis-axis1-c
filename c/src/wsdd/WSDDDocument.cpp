@@ -217,6 +217,10 @@ void WSDDDocument::ProcessAttributes(WSDDLevels ElementType, const Attributes &a
 			{
 				m_pService->SetProvider(value);
 			}
+			else if (XMLString::equals(local, kw_desc))
+			{
+				m_pService->SetDescription(value);
+			}
 			else
 			{
 				//unknown attribute
@@ -240,6 +244,10 @@ void WSDDDocument::ProcessAttributes(WSDDLevels ElementType, const Attributes &a
 					(*m_pLibNameIdMap)[value] = ++m_nLibId;
 					m_pHandler->SetLibId((*m_pLibNameIdMap)[value]);
 				}
+			}
+			else if (XMLString::equals(local, kw_desc))
+			{
+				m_pHandler->SetDescription(value);
 			}
 			else
 			{
