@@ -571,12 +571,12 @@ int SoapSerializer::serializeCmplxArray(const Axis_Array* pArray,
     {
         bool blnIsNewNamespacePrefix = false;
         const AxisChar* np = getNamespacePrefix(pNamespace, blnIsNewNamespacePrefix);
+        const AxisChar* originalNamespace = getNamespace(); // Store original namespace
+        pParam->setPrefix(np);
         if (blnIsNewNamespacePrefix)
         {
             removeNamespacePrefix(pNamespace);
         }
-        const AxisChar* originalNamespace = getNamespace(); // Store original namespace
-        pParam->setPrefix(np);
         setNamespace(pNamespace);
         pParam->serialize(*this);
         setNamespace(originalNamespace); // Revert back original namespace
@@ -634,12 +634,12 @@ int SoapSerializer::serializeBasicArray(const Axis_Array* pArray,
     {
         bool blnIsNewNamespacePrefix = false;
         const AxisChar* np = getNamespacePrefix(pNamespace, blnIsNewNamespacePrefix);
+        const AxisChar* originalNamespace = getNamespace(); // Store original namespace
+        pParam->setPrefix(np);
         if (blnIsNewNamespacePrefix)
         {
             removeNamespacePrefix(pNamespace);
         }
-        const AxisChar* originalNamespace = getNamespace(); // Store original namespace
-        pParam->setPrefix(np);
         setNamespace(pNamespace);
         pParam->serialize(*this);
         setNamespace(originalNamespace); // Revert back original namespace
