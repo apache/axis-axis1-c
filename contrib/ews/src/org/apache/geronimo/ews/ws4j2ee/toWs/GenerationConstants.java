@@ -87,18 +87,20 @@ public interface GenerationConstants {
 
     public static final String OPTION_WS4J2EE_PROPERTY_FILE = "ws4j2ee.ConfigFile";
 
-    //more to come
     public static final String J2EE_CONTAINER_DD = "j2ee-container-dd";
     public static final String WS4J2EE_PROPERTY_FILE = "ws4j2ee.properties";
 
+	/** j2ee Container DDs */
     public static final String JBOSS_DD = "jboss.xml";
     public static final String JONAS_DD = "jonas-ejb-jar.xml";
     public static final String GERONIMO_DD = "geronimo.xml";
     
+	/** j2ee Containers*/
     public static final String JBOSS_CONTAINER = "jboss";
 	public static final String JONAS_CONTAINER = "jonas";
 	public static final String GERONIMO_CONTAINER = "geronimo";
 	
+	/** implementation styles */
 	public static final String USE_REMOTE ="use-remote";
 	public static final String USE_LOCAL =  "use-local";
 	public static final String USE_INTERNALS = "use-internals"; 

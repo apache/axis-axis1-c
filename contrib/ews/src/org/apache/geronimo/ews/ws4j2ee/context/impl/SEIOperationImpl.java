@@ -61,7 +61,8 @@ import java.util.HashMap;
 import org.apache.geronimo.ews.ws4j2ee.context.SEIOperation;
 
 /**
- * @author hemapani
+ * @see SEIOperation
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class SEIOperationImpl implements SEIOperation {
     private String methodName;

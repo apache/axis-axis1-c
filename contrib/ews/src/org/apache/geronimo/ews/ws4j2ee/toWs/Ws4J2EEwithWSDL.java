@@ -56,6 +56,7 @@
 package org.apache.geronimo.ews.ws4j2ee.toWs;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -78,10 +79,8 @@ public class Ws4J2EEwithWSDL implements Generator {
     protected static Log log =
             LogFactory.getLog(Ws4J2EEwithWSDL.class.getName());
 
-    /* indicate code to genarate is server side or the client side*/
-    private boolean isSeverSideCodeGenaration = true;
-
     private MiscInfo misc;
+	private J2EEWebServiceContext wscontext;
 
     public Ws4J2EEwithWSDL(String[] args) throws Exception {
         clparser = new Ws4J2eeCLOptionParser(args);
@@ -94,85 +93,81 @@ public class Ws4J2EEwithWSDL implements Generator {
      * @see org.apache.geronimo.ews.ws4j2ee.toWs.Generator#genarate()
      */
     public void genarate() throws GenerationFault {
-        try {
-            String wscffile = clparser.getWscffile();
-			misc.setWsconffile(wscffile);
-            misc.setOutputPath(clparser.getOutputDirectory());
-            int index = wscffile.lastIndexOf('/');
-            if(index < 0)
-            	index = wscffile.lastIndexOf('\\');
-            misc.setWsConfFileLocation(wscffile.substring(0, index));
-            isSeverSideCodeGenaration = clparser.isServerSide();
-            
-    
-            //we may need to pass few parameters to the J2EEWebServiceContextImpl they are TODO
-            J2EEWebServiceContext wscontext = new J2EEWebServiceContextImpl(true);
-            wscontext.setMiscInfo(misc);
-            //parsing of the webservice.xml happen here 
-            WSCFContext wscfcontext = ContextFactory.createWSCFContext(new FileInputStream(wscffile));
-            wscontext.setWSCFContext(wscfcontext);
-            wscontext.getMiscInfo().setImplStyle(clparser.getImplStyle());
-			wscontext.getMiscInfo().setTargetJ2EEContainer(clparser.getContanier());
-			
-            if (verbose)
-                log.info(wscffile + " parsed ..");
 
-            WSCFWebserviceDescription[] wscfwsdiss = wscfcontext.getWebServicesDescription();
-            //let us take the first discription
-            if (wscfwsdiss == null || wscfwsdiss.length == 0)
-                throw new UnrecoverableGenarationFault("no webservice discription found in the" +
-                        "webservice.xml file");
-            wscontext.getMiscInfo().setWscfdWsDescription(wscfwsdiss[0]);
-
-            wscontext.getMiscInfo().setJaxrpcfile(Utils.getAbsolutePath(wscfwsdiss[0].getJaxrpcMappingFile(), wscffile.substring(0, index)));
-            wscontext.getMiscInfo().setWsdlFile(Utils.getAbsolutePath(wscfwsdiss[0].getWsdlFile(), wscffile.substring(0, index)));
-			wscontext.getMiscInfo().setVerbose(verbose);
-            if (isSeverSideCodeGenaration) {
-                //JAX-RPC mapper calling       
-                GeneratorFactory.createGenerator(wscontext,
-                        GenerationConstants.SEI_AND_TYPES_GENERATOR).genarate();
-                (new ContextValidator(wscontext)).validateWithWSDL();
-                //get and populate the symbol table 
+            try {
+                String wscffile = clparser.getWscffile();
+                misc.setWsconffile(wscffile);
+                misc.setOutputPath(clparser.getOutputDirectory());
+                misc.setWsConfFileLocation(Utils.getRootDirOfFile(wscffile));
+                wscontext = new J2EEWebServiceContextImpl(true);
+                wscontext.setMiscInfo(misc);
+                //parsing of the webservice.xml happen here 
+                WSCFContext wscfcontext = ContextFactory.createWSCFContext(new FileInputStream(wscffile));
+                wscontext.setWSCFContext(wscfcontext);
+                wscontext.getMiscInfo().setImplStyle(clparser.getImplStyle());
+                wscontext.getMiscInfo().setTargetJ2EEContainer(clparser.getContanier());
                 
-				WSCFPortComponent port = wscontext.getMiscInfo().getWscfport();
-                String ejbLink = port.getServiceImplBean().getEjblink();
-                if(wscontext.getMiscInfo().isImplwithEJB()){
-					if (verbose)
-						log.info("genarating ejb >>");
-						GeneratorFactory.createGenerator(wscontext,
-							GenerationConstants.EJB_GENERATOR).genarate();
-					if (verbose)
-						log.info("genarating web service wrapper >>");
-					GeneratorFactory.createGenerator(wscontext,
-							GenerationConstants.AXIS_WEBSERVICE_WRAPPER_GENERATOR).genarate();
-					if (verbose)
-						log.info("genarating j2ee dd >>");
-					GeneratorFactory.createGenerator(wscontext, GenerationConstants.J2EE_CONTAINER_DD_GENERATOR).genarate();
-                }else{
-                	//in this case user should fill the implementation 
-                	//in the *BindingImpl class 
-					wscontext.getMiscInfo().setImplwithEJB(false);
-					GeneratorFactory.createGenerator(wscontext, GenerationConstants.WEB_CONTAINER_DD_GENERATOR).genarate();
-                }
-				GeneratorFactory.createGenerator(wscontext, GenerationConstants.BUILD_FILE_GENERATOR).genarate();
-            } else {
-                //JAX-RPC mapper calling
                 if (verbose)
-                    log.info("starting client side code genaration .. ");
-
-                GeneratorFactory.createGenerator(wscontext,
-                        GenerationConstants.CLIENT_STUB_GENERATOR).genarate();
-                (new ContextValidator(wscontext)).validateWithWSDL();
-
-            }
-
-            GeneratorFactory.createGenerator(wscontext,
-                    GenerationConstants.HANDLER_GENERATOR).genarate();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new GenerationFault(e);
+                    log.info(wscffile + " parsed ..");
+                
+                WSCFWebserviceDescription[] wscfwsdiss = wscfcontext.getWebServicesDescription();
+                //let us take the first discription
+                if (wscfwsdiss == null || wscfwsdiss.length == 0)
+                    throw new UnrecoverableGenarationFault("no webservice discription found in the" +
+                            "webservice.xml file");
+                genarate(wscfwsdiss[0]);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                throw new GenerationFault(e);
+            }            
         }
+		public void genarate(WSCFWebserviceDescription wscfwsdis) throws GenerationFault {            
+                        
+            wscontext.getMiscInfo().setWscfdWsDescription(wscfwsdis);
+
+            wscontext.getMiscInfo().setJaxrpcfile(Utils.getAbsolutePath(wscfwsdis.getJaxrpcMappingFile(),misc.getWsConfFileLocation()));
+            wscontext.getMiscInfo().setWsdlFile(Utils.getAbsolutePath(wscfwsdis.getWsdlFile(), misc.getWsConfFileLocation()));
+			wscontext.getMiscInfo().setVerbose(verbose);
+			
+			
+            //JAX-RPC mapper calling       
+			Generator jaxrpcmapperGen = GeneratorFactory.createGenerator(wscontext,
+                    GenerationConstants.SEI_AND_TYPES_GENERATOR);
+			jaxrpcmapperGen.genarate();
+			ContextValidator cvalidater = new ContextValidator(wscontext);
+			cvalidater.validateWithWSDL();
+            //get and populate the symbol table 
+            
+			WSCFPortComponent port = wscontext.getMiscInfo().getWscfport();
+			wscontext.getMiscInfo().setHandlers(port.getHandlers());
+            String ejbLink = port.getServiceImplBean().getEjblink();
+            if(wscontext.getMiscInfo().isImplwithEJB()){
+				if (verbose)
+					log.info("genarating ejb >>");
+				Generator ejbGen =	GeneratorFactory.createGenerator(wscontext,
+						GenerationConstants.EJB_GENERATOR);
+				ejbGen.genarate();
+				if (verbose)
+					log.info("genarating web service wrapper >>");
+				Generator wrapperWsGen = GeneratorFactory.createGenerator(wscontext,
+						GenerationConstants.AXIS_WEBSERVICE_WRAPPER_GENERATOR);
+				wrapperWsGen.genarate();
+				if (verbose)
+					log.info("genarating j2ee dd >>");
+				Generator j2eeContainerDDGen = GeneratorFactory.createGenerator(wscontext, GenerationConstants.J2EE_CONTAINER_DD_GENERATOR);
+				j2eeContainerDDGen.genarate();
+            }else{
+            	//in this case user should fill the implementation 
+            	//in the *BindingImpl class 
+				wscontext.getMiscInfo().setImplwithEJB(false);
+				Generator webCointainerDDGen = GeneratorFactory.createGenerator(wscontext, GenerationConstants.WEB_CONTAINER_DD_GENERATOR);
+				webCointainerDDGen.genarate();
+            }
+			Generator buildFileGen = GeneratorFactory.createGenerator(wscontext, GenerationConstants.BUILD_FILE_GENERATOR);
+			buildFileGen.genarate();
+			Generator handlerGen = GeneratorFactory.createGenerator(wscontext,
+                GenerationConstants.HANDLER_GENERATOR);
+			handlerGen.genarate();
     }
 
 

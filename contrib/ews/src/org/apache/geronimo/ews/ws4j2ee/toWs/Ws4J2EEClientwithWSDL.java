@@ -53,72 +53,88 @@
  * <http://www.apache.org/>.
  */
 
-package org.apache.geronimo.ews.ws4j2ee.toWs.ws;
+package org.apache.geronimo.ews.ws4j2ee.toWs;
 
-import org.apache.axis.components.logger.LogFactory;
-import org.apache.axis.wsdl.symbolTable.SymbolTable;
+import java.io.FileInputStream;
+
 import org.apache.commons.logging.Log;
-import org.apache.geronimo.ews.jaxrpcmapping.J2eeEmitter;
-import org.apache.geronimo.ews.jaxrpcmapping.JaxRpcMapper;
+import org.apache.commons.logging.LogFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
+import org.apache.geronimo.ews.ws4j2ee.context.ContextValidator;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
-import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
-import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
+import org.apache.geronimo.ews.ws4j2ee.context.MiscInfo;
+import org.apache.geronimo.ews.ws4j2ee.context.impl.J2EEWebServiceContextImpl;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.ServiceReferance;
+import org.apache.geronimo.ews.ws4j2ee.parsers.ServiceReferanceParser;
 import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 
 /**
- * <p>This genarated the Client side SEI and other classes required in the
- * Axis.</p>
- * 
- * @author Srinath Perera(hemapani@opensource.lk)
+ * <p>this class genarate the code when the WSDL presents.</p>
  */
-public class ClientSideWsGenarator implements Generator {
-    private J2EEWebServiceContext j2eewscontext;
+public class Ws4J2EEClientwithWSDL implements Generator {
+    private boolean verbose = false;
+    private Ws4J2eeCLOptionParser clparser;
     protected static Log log =
-            LogFactory.getLog(ServerSideWsGenarator.class.getName());
+            LogFactory.getLog(Ws4J2EEClientwithWSDL.class.getName());
 
-    public ClientSideWsGenarator(J2EEWebServiceContext j2eewscontext) {
-        this.j2eewscontext = j2eewscontext;
+
+    private MiscInfo misc;
+
+    public Ws4J2EEClientwithWSDL(String[] args) throws Exception {
+        clparser = new Ws4J2eeCLOptionParser(args);
+        misc = ContextFactory.createMiscInfo();
     }
 
+    /**
+     * genarate. what is genarated is depend on genarators included.
+     * 
+     * @see org.apache.geronimo.ews.ws4j2ee.toWs.Generator#genarate()
+     */
     public void genarate() throws GenerationFault {
         try {
-            String confFileLocation =
-                    j2eewscontext.getMiscInfo().getWsConfFileLocation();
-            WSCFWebserviceDescription wscfwsdis =
-                    j2eewscontext.getMiscInfo().getWscfdWsDesxription();
-            String mappingfile =
-                    Utils.getAbsolutePath(j2eewscontext.getMiscInfo().getJaxrpcfile(),
-                            confFileLocation);
-            String wsdlfile =
-                    Utils.getAbsolutePath(j2eewscontext.getMiscInfo().getWsdlFile(),
-                            confFileLocation);
-            J2eeEmitter j2ee = new J2eeEmitter();
+			J2EEWebServiceContext wscontext = new J2EEWebServiceContextImpl(true);
+			wscontext.setMiscInfo(misc);
 
-            if (j2eewscontext.getMiscInfo().isVerbose()) {
-                log.info("wsdl file = " + wsdlfile);
-                log.info("jaxrpc mapping file = " + mappingfile);
-                log.info("calling the jaxrpcmapper >> ");
-            }
+            String wscfClientfile = clparser.getWscffile();
+			misc.setWsconffile(wscfClientfile);
+            misc.setOutputPath(clparser.getOutputDirectory());
+            misc.setWsConfFileLocation(Utils.getRootDirOfFile(wscfClientfile));
+			wscontext.getMiscInfo().setImplStyle(clparser.getImplStyle());
+			wscontext.getMiscInfo().setTargetJ2EEContainer(clparser.getContanier());
+            
+            
+            //parsing of the webservice.xml happen here 
+            ServiceReferanceParser parser 
+            	= new ServiceReferanceParser(new FileInputStream(wscfClientfile));
+            if (verbose)
+                log.info(wscfClientfile + " parsed ..");
+			ServiceReferance ref = parser.getRef();
 
-            j2ee.setMappingFilePath(mappingfile);
-            j2ee.setOutputDir(j2eewscontext.getMiscInfo().getOutPutPath());
-            j2ee.setServerSide(false);
-            j2ee.setVerbose(j2eewscontext.getMiscInfo().isVerbose());
-            j2ee.setHelperWanted(true);
-            j2ee.setTestCaseWanted(true);
-            j2ee.run(wsdlfile);
-            SymbolTable axisSymboltable = j2ee.getSymbolTable();
-            j2eewscontext.setWSDLContext(ContextFactory.createWSDLContext(axisSymboltable));
-            JaxRpcMapper mapper = j2ee.getJaxRpcMapper();
-            j2eewscontext.setJAXRPCMappingContext(ContextFactory.createJaxRpcMapperContext(new Object[]{mapper,j2ee}));
-           
-
+            wscontext.getMiscInfo().setJaxrpcfile(Utils.getAbsolutePath(ref.getJaxrpcmappingFile(),misc.getWsConfFileLocation()));
+            wscontext.getMiscInfo().setWsdlFile(Utils.getAbsolutePath(ref.getWsdlFile(), misc.getWsConfFileLocation()));
+			wscontext.getMiscInfo().setVerbose(verbose);
+			wscontext.getMiscInfo().setHandlers(ref.getHandlers()); 
+			
+            //JAX-RPC mapper calling
+            if (verbose)
+                log.info("starting client side code genaration .. ");
+			Generator clientStubGen = GeneratorFactory.createGenerator(wscontext,
+                    GenerationConstants.CLIENT_STUB_GENERATOR);
+			clientStubGen.genarate();
+			ContextValidator cvalidator = new ContextValidator(wscontext);
+			//cvalidator.validateWithWSDL();
+			Generator handlerGen = GeneratorFactory.createGenerator(wscontext,
+                    GenerationConstants.HANDLER_GENERATOR);
+			handlerGen.genarate();
         } catch (Exception e) {
             e.printStackTrace();
             throw new GenerationFault(e);
         }
     }
 
+
+    public static void main(String[] args) throws Exception {
+        Ws4J2EEClientwithWSDL gen = new Ws4J2EEClientwithWSDL(args);
+        gen.genarate();
+    }
 }

@@ -82,6 +82,7 @@ import java.util.Map;
  * <li>do not have WSDL</li>
  * </ul>
  * <p>if some method is not requried please throw java.lang.UnsupportedOperationException</p>
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
 public interface WSDLContext {
     /**

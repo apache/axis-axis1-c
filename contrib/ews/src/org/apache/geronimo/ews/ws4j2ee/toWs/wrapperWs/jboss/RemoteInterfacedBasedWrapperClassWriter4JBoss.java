@@ -59,7 +59,7 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.wrapperWs.SimpleRemoteInterfaceBasedWrapperClassWriter;
 
 /**
- * @author hemapani
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class RemoteInterfacedBasedWrapperClassWriter4JBoss extends SimpleRemoteInterfaceBasedWrapperClassWriter{
 

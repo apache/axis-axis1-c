@@ -65,7 +65,7 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.wrapperWs.jboss.RemoteInterfacedBase
 import org.apache.geronimo.ews.ws4j2ee.toWs.wrapperWs.jonas.RemoteInterfacedBasedWrapperClassWriter4JOnAS;
 
 /**
- * @author hemapani
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class WrapperClassGeneratorFactory {
 	public static Writer createInstance(J2EEWebServiceContext context) throws GenerationFault{

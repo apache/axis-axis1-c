@@ -896,5 +896,12 @@ public class Utils {
 			return name;
 		}
 	}
+	
+	public static String getRootDirOfFile(String file){
+		int index = file.lastIndexOf('/');
+		if(index < 0)
+			index = file.lastIndexOf('\\');
+		return file.substring(0, index);
+	}
 
 }

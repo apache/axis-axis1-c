@@ -81,7 +81,7 @@ import org.apache.geronimo.ews.ws4j2ee.context.wsdl.type.SchemaType;
  * <p>This Class is a wrapper fo the Axis SymbolTable. Since SymbolTable is parsed
  * completly it is not editable so the methods will throw the
  * UnsupportedOperationException.</p>
- * 
+ * @see org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class AxisWSDLContext implements WSDLContext {

@@ -62,7 +62,7 @@ import org.apache.geronimo.ews.ws4j2ee.context.SEIOperation;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 
 /**
- * @author hemapani
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class SimpleLocalInterfaceBasedWrapperClassWriter extends WrapperClassWriter{
 

@@ -76,12 +76,14 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
  */
 public interface JaxRpcMapperContext {
     /**
+     * how the excpetion type map to the java class
      * @param messageQName 
      * @return 
      */
     public abstract String getExceptionType(QName messageQName);
 
     /**
+     * how the wsdl operation name map to the java method name 
      * @param bEntry    
      * @param operation 
      * @return 
@@ -90,6 +92,7 @@ public interface JaxRpcMapperContext {
                                              Operation operation);
 
     /**
+     * how the parameters in the wsdl opration map to the java method parameters. 
      * @param bEntry    
      * @param operation 
      * @param position  
@@ -100,6 +103,7 @@ public interface JaxRpcMapperContext {
                                                   int position,QName type);
 
     /**
+     * how the return type in the wsdl opration map to the java method return type.
      * @param bEntry    
      * @param operation 
      * @return 
@@ -108,6 +112,7 @@ public interface JaxRpcMapperContext {
                                                    Operation operation);
 
     /**
+     * QName to java type mapping  
      * @param typeQName 
      * @return 
      */
@@ -119,12 +124,14 @@ public interface JaxRpcMapperContext {
     public abstract JavaWsdlMapping getMapping();
 
     /**
+     * get the name of the port used in this webservice 
      * @param port 
      * @return 
      */
     public abstract String getPortName(Port port);
 
     /**
+     * how port type maps to the java class
      * @param ptEntry 
      * @param bEntry  
      * @return 

@@ -68,7 +68,7 @@ import java.io.PrintWriter;
 /**
  * This class genarate the webservice.xml file.
  * 
- * @author hemapani
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class WebServiceDDGenarator implements Generator {
     private J2EEWebServiceContext j2eewscontext;
@@ -91,5 +91,4 @@ public class WebServiceDDGenarator implements Generator {
             throw GenerationFault.createGenerationFault(e);
         }
     }
-
 }

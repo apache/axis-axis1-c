@@ -67,7 +67,8 @@ import org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd.EjbJarType.EnterpriseBeansT
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 
 /**
- * @author hemapani
+ * Parse the ejb-jar.xml file and get the name of the EJB
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class EJBDDParser {
 	private J2EEWebServiceContext j2eewscontext;
@@ -93,7 +94,6 @@ public class EJBDDParser {
 			j2eewscontext.getMiscInfo().setEjbName(ejbName);
 			j2eewscontext.getMiscInfo().setEndpointImplbean(session.getEjbClass().getValue());
 			j2eewscontext.getMiscInfo().setEjbhome(session.getHome().getValue());
-//			j2eewscontext.getMiscInfo().setEjbsei(session.getRemote().getValue());
 		} catch (Exception e) {
 			throw GenerationFault.createGenerationFault(e);
 		}
