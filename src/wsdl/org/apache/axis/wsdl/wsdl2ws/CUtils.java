@@ -52,193 +52,390 @@ public class CUtils {
 
 	/* This type mapping only maps simple types the mapping for
 	   complex types are done with in the type class */
-	private static Hashtable class2QNamemap = new Hashtable();
-	private static Hashtable initValues = new Hashtable();
-	private static Hashtable qname2classmap = new Hashtable();
+	private static Hashtable class2QNamemapCpp = new Hashtable();
+	private static Hashtable class2QNamemapC = new Hashtable();
+	private static Hashtable initValuesCpp = new Hashtable();
+	private static Hashtable initValuesC = new Hashtable();
+	private static Hashtable qname2classmapCpp = new Hashtable();
+	private static Hashtable qname2classmapC = new Hashtable();
 	private static Hashtable schemaDefinedSimpleTypesMap = new Hashtable();
-	private static Hashtable type2getValueMethodName = new Hashtable();
-	private static Hashtable type2BasicArrayName = new Hashtable();
-	private static Hashtable basicType2EnumMap = new Hashtable();
+	private static Hashtable type2getValueMethodNameCpp = new Hashtable();
+	private static Hashtable type2getValueMethodNameC = new Hashtable();
+	private static Hashtable type2BasicArrayNameCpp = new Hashtable();
+	private static Hashtable type2BasicArrayNameC = new Hashtable();
+	private static Hashtable basicType2EnumMapCpp = new Hashtable();
+	private static Hashtable basicType2EnumMapC = new Hashtable();
+	private static boolean cpp = true;
 	
 	static{	
-		class2QNamemap.put("xsd__int",new QName(WrapperConstants.SCHEMA_NAMESPACE,				"int"));
-		class2QNamemap.put("xsd__unsignedByte", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"byte"));
-		class2QNamemap.put("xsd__float", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"float"));
-		class2QNamemap.put("xsd__long", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"long"));
-		class2QNamemap.put("xsd__long", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"integer"));
-		class2QNamemap.put("xsd__double", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"double"));
-		class2QNamemap.put("xsd__char", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"char"));
-		class2QNamemap.put("xsd__short", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"short"));
-		class2QNamemap.put("xsd__string", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"string"));
-		class2QNamemap.put("xsd__dateTime", new QName(WrapperConstants.SCHEMA_NAMESPACE,		"dateTime"));
-		class2QNamemap.put("xsd__date", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"date"));
-		class2QNamemap.put("xsd__time", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"time"));
-		class2QNamemap.put("xsd__base64Binary", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"base64Binary"));
-		class2QNamemap.put("xsd__hexBinary", new QName(WrapperConstants.SCHEMA_NAMESPACE,		"hexBinary"));
-		class2QNamemap.put("xsd__decimal", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"decimal"));
-		class2QNamemap.put("xsd__boolean", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"boolean"));
-		class2QNamemap.put("xsd__byte", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"byte"));
-		class2QNamemap.put("xsd__anyURI", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"anyURI"));
-		class2QNamemap.put("xsd__unsignedByte", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"unsignedByte"));
-		class2QNamemap.put("xsd__unsignedInt", new QName(WrapperConstants.SCHEMA_NAMESPACE,		"unsignedInt"));
-		class2QNamemap.put("xsd__unsignedLong", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"unsignedLong"));
-		class2QNamemap.put("xsd__unsignedShort", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"unsignedShort"));
-		class2QNamemap.put("xsd__QName", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"QName"));
-		class2QNamemap.put("xsd__NCName", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"NCName"));
-		class2QNamemap.put("xsd__NMTOKEN", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"NMTOKEN"));
+		class2QNamemapCpp.put("xsd__int",new QName(WrapperConstants.SCHEMA_NAMESPACE,				"int"));
+		class2QNamemapCpp.put("xsd__unsignedByte", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"byte"));
+		class2QNamemapCpp.put("xsd__float", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"float"));
+		class2QNamemapCpp.put("xsd__long", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"long"));
+		class2QNamemapCpp.put("xsd__long", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"integer"));
+		class2QNamemapCpp.put("xsd__double", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"double"));
+		class2QNamemapCpp.put("xsd__char", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"char"));
+		class2QNamemapCpp.put("xsd__short", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"short"));
+		class2QNamemapCpp.put("xsd__string", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"string"));
+		class2QNamemapCpp.put("xsd__dateTime", new QName(WrapperConstants.SCHEMA_NAMESPACE,		"dateTime"));
+		class2QNamemapCpp.put("xsd__date", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"date"));
+		class2QNamemapCpp.put("xsd__time", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"time"));
+		class2QNamemapCpp.put("xsd__base64Binary", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"base64Binary"));
+		class2QNamemapCpp.put("xsd__hexBinary", new QName(WrapperConstants.SCHEMA_NAMESPACE,		"hexBinary"));
+		class2QNamemapCpp.put("xsd__decimal", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"decimal"));
+		class2QNamemapCpp.put("xsd__boolean", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"boolean"));
+		class2QNamemapCpp.put("xsd__byte", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"byte"));
+		class2QNamemapCpp.put("xsd__anyURI", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"anyURI"));
+		class2QNamemapCpp.put("xsd__unsignedByte", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"unsignedByte"));
+		class2QNamemapCpp.put("xsd__unsignedInt", new QName(WrapperConstants.SCHEMA_NAMESPACE,		"unsignedInt"));
+		class2QNamemapCpp.put("xsd__unsignedLong", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"unsignedLong"));
+		class2QNamemapCpp.put("xsd__unsignedShort", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"unsignedShort"));
+		class2QNamemapCpp.put("xsd__QName", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"QName"));
+		class2QNamemapCpp.put("xsd__NCName", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"NCName"));
+		class2QNamemapCpp.put("xsd__NMTOKEN", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"NMTOKEN"));
 
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"),				"xsd__int");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"),			"xsd__unsignedByte");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"),			"xsd__float");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"),			"xsd__long");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"),			"xsd__long");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"),			"xsd__double");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"),			"xsd__char");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"),			"xsd__short");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"),			"xsd__string");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"),		"xsd__dateTime");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"),			"xsd__date");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"),			"xsd__time");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"),	"xsd__base64Binary");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"),		"xsd__hexBinary");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"),			"xsd__decimal");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"),			"xsd__boolean");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"),			"xsd__anyURI");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedByte"),	"xsd__unsignedByte");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedInt"),		"xsd__unsignedInt");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"),	"xsd__unsignedLong");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"),	"xsd__unsignedShort");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"),			"xsd__QName");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"),			"xsd__NCName");
-		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"),			"xsd__NMTOKEN");
+		class2QNamemapC.put("xsdc__int",new QName(WrapperConstants.SCHEMA_NAMESPACE,				"int"));
+		class2QNamemapC.put("xsdc__unsignedByte", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"byte"));
+		class2QNamemapC.put("xsdc__float", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"float"));
+		class2QNamemapC.put("xsdc__long", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"long"));
+		class2QNamemapC.put("xsdc__long", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"integer"));
+		class2QNamemapC.put("xsdc__double", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"double"));
+		class2QNamemapC.put("xsdc__char", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"char"));
+		class2QNamemapC.put("xsdc__short", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"short"));
+		class2QNamemapC.put("xsdc__string", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"string"));
+		class2QNamemapC.put("xsdc__dateTime", new QName(WrapperConstants.SCHEMA_NAMESPACE,		"dateTime"));
+		class2QNamemapC.put("xsdc__date", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"date"));
+		class2QNamemapC.put("xsdc__time", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"time"));
+		class2QNamemapC.put("xsdc__base64Binary", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"base64Binary"));
+		class2QNamemapC.put("xsdc__hexBinary", new QName(WrapperConstants.SCHEMA_NAMESPACE,		"hexBinary"));
+		class2QNamemapC.put("xsdc__decimal", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"decimal"));
+		class2QNamemapC.put("xsdc__boolean", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"boolean"));
+		class2QNamemapC.put("xsdc__byte", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"byte"));
+		class2QNamemapC.put("xsdc__anyURI", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"anyURI"));
+		class2QNamemapC.put("xsdc__unsignedByte", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"unsignedByte"));
+		class2QNamemapC.put("xsdc__unsignedInt", new QName(WrapperConstants.SCHEMA_NAMESPACE,		"unsignedInt"));
+		class2QNamemapC.put("xsdc__unsignedLong", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"unsignedLong"));
+		class2QNamemapC.put("xsdc__unsignedShort", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"unsignedShort"));
+		class2QNamemapC.put("xsdc__QName", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"QName"));
+		class2QNamemapC.put("xsdc__NCName", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"NCName"));
+		class2QNamemapC.put("xsdc__NMTOKEN", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"NMTOKEN"));
+
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"),				"xsd__int");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"),			"xsd__unsignedByte");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"),			"xsd__float");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"),			"xsd__long");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"),			"xsd__long");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"),			"xsd__double");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"),			"xsd__char");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"),			"xsd__short");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"),			"xsd__string");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"),		"xsd__dateTime");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"),			"xsd__date");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"),			"xsd__time");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"),	"xsd__base64Binary");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"),		"xsd__hexBinary");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"),			"xsd__decimal");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"),			"xsd__boolean");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"),			"xsd__anyURI");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedByte"),	"xsd__unsignedByte");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedInt"),		"xsd__unsignedInt");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"),	"xsd__unsignedLong");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"),	"xsd__unsignedShort");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"),			"xsd__QName");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"),			"xsd__NCName");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"),			"xsd__NMTOKEN");
+		
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"),				"xsdc__int");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"),			"xsdc__unsignedByte");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"),			"xsdc__float");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"),			"xsdc__long");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"),			"xsdc__long");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"),			"xsdc__double");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"),			"xsdc__char");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"),			"xsdc__short");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"),			"xsdc__string");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"),		"xsdc__dateTime");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"),			"xsdc__date");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"),			"xsdc__time");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"),	"xsdc__base64Binary");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"),		"xsdc__hexBinary");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"),			"xsdc__decimal");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"),			"xsdc__boolean");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"),			"xsdc__anyURI");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedByte"),	"xsdc__unsignedByte");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedInt"),		"xsdc__unsignedInt");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"),	"xsdc__unsignedLong");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"),	"xsdc__unsignedShort");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"),			"xsdc__QName");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"),			"xsdc__NCName");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"),			"xsdc__NMTOKEN");
 		
 		/* TODO:
 		 *   Should be removed when the following issue will be fixed :
 		 * 	-> http://marc.theaimsgroup.com/?t=107907748000002&r=1&w=2 
 		 */
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "int"),			"xsd__int");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"),			"xsd__unsignedByte");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "float"),			"xsd__float");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "long"),			"xsd__long");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "integer"),		"xsd__long");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "double"),			"xsd__double");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "char"),			"xsd__char");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "short"),			"xsd__short");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "string"),			"xsd__string");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "dateTime"),		"xsd__dateTime");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "date"),			"xsd__date");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "time"),			"xsd__time");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64Binary"),	"xsd__base64Binary");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "hexBinary"),		"xsd__hexBinary");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "decimal"),		"xsd__decimal");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "boolean"),		"xsd__boolean");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "anyURI"),			"xsd__anyURI");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedByte"),	"xsd__unsignedByte");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedInt"),	"xsd__unsignedInt");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedLong"),	"xsd__unsignedLong");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedShort"),	"xsd__unsignedShort");
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "QName"),			"xsd__QName");		
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NCName"),			"xsd__NCName");		
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "int"),			"xsd__int");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"),			"xsd__unsignedByte");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "float"),			"xsd__float");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "long"),			"xsd__long");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "integer"),		"xsd__long");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "double"),			"xsd__double");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "char"),			"xsd__char");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "short"),			"xsd__short");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "string"),			"xsd__string");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "dateTime"),		"xsd__dateTime");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "date"),			"xsd__date");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "time"),			"xsd__time");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64Binary"),	"xsd__base64Binary");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "hexBinary"),		"xsd__hexBinary");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "decimal"),		"xsd__decimal");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "boolean"),		"xsd__boolean");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "anyURI"),			"xsd__anyURI");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedByte"),	"xsd__unsignedByte");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedInt"),	"xsd__unsignedInt");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedLong"),	"xsd__unsignedLong");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedShort"),	"xsd__unsignedShort");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "QName"),			"xsd__QName");		
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NCName"),			"xsd__NCName");		
 
 
 		/* TODO:
 		 *  Another strange issue from Axis 1.1 runtime when base64binary is in input/output operations.
 		 */	
-		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64"), "xsd__base64Binary");		
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64"), "xsd__base64Binary");		
 		
-		type2getValueMethodName.put("xsd__int",				"Int");
-		type2getValueMethodName.put("xsd__float",			"Float");
-		type2getValueMethodName.put("xsd__string",			"String");
-		type2getValueMethodName.put("xsd__long",			"Long");
-		type2getValueMethodName.put("xsd__short",			"Short");
-		type2getValueMethodName.put("xsd__char",			"Char");
-		type2getValueMethodName.put("xsd__double",			"Double");
-		type2getValueMethodName.put("xsd__unsignedByte",	"Byte");			
-		type2getValueMethodName.put("xsd__unsignedLong",	"UnsignedLong");
-		type2getValueMethodName.put("xsd__unsignedInt",		"UnsignedInt");
-		type2getValueMethodName.put("xsd__unsignedShort",	"UnsignedShort");
-		type2getValueMethodName.put("xsd__unsignedByte",	"UnsignedByte");
-		type2getValueMethodName.put("xsd__dateTime",		"DateTime");
-		type2getValueMethodName.put("xsd__date",			"Date");
-		type2getValueMethodName.put("xsd__time",			"Time");
-		type2getValueMethodName.put("xsd__base64Binary",	"Base64Binary");
-		type2getValueMethodName.put("xsd__hexBinary",		"HexBinary");
-		type2getValueMethodName.put("xsd__decimal",			"Decimal");
-		type2getValueMethodName.put("xsd__boolean",			"Boolean");
-		type2getValueMethodName.put("xsd__anyURI",			"String");
-		type2getValueMethodName.put("xsd__QName",			"String");
-		type2getValueMethodName.put("xsd__NCName",			"String");
-		type2getValueMethodName.put("xsd__NMTOKEN",			"String");
-		type2BasicArrayName.put("xsd__int",					"xsd__int_Array");
-		type2BasicArrayName.put("xsd__float",				"xsd__float_Array");
-		type2BasicArrayName.put("xsd__string",				"xsd__string_Array");
-		type2BasicArrayName.put("xsd__long",				"xsd__long_Array");
-		type2BasicArrayName.put("xsd__short",				"xsd__short_Array");
-		type2BasicArrayName.put("xsd__char",				"xsd__byte_Array");
-		type2BasicArrayName.put("xsd__double",				"xsd__double_Array");
-		type2BasicArrayName.put("xsd__unsignedLong",		"xsd__unsignedLong_Array");
-		type2BasicArrayName.put("xsd__unsignedInt",			"xsd__unsignedInt_Array");
-		type2BasicArrayName.put("xsd__unsignedShort",		"xsd__unsignedShort_Array");
-		type2BasicArrayName.put("xsd__unsignedByte",		"xsd__unsignedByte_Array");
-		type2BasicArrayName.put("xsd__dateTime",			"xsd__dateTime_Array");
-		type2BasicArrayName.put("xsd__date",				"xsd__date_Array");
-		type2BasicArrayName.put("xsd__time",				"xsd__time_Array");
-		type2BasicArrayName.put("xsd__base64Binary",		"xsd__base64Binary_Array");
-		type2BasicArrayName.put("xsd__hexBinary",			"xsd__hexBinary_Array");
-		type2BasicArrayName.put("xsd__decimal",				"xsd__decimal_Array");
-		type2BasicArrayName.put("xsd__boolean",				"xsd__boolean_Array");
-		type2BasicArrayName.put("xsd__anyURI",				"xsd__anyURI_Array");
-		type2BasicArrayName.put("xsd__QName",				"xsd__QName_Array");
-		type2BasicArrayName.put("xsd__NCName",				"xsd__NCName_Array");
-		type2BasicArrayName.put("xsd__NMTOKEN",				"xsd__NMTOKEN_Array");
-		basicType2EnumMap.put("xsd__int",					"XSD_INT");
-		basicType2EnumMap.put("xsd__float",					"XSD_FLOAT");
-		basicType2EnumMap.put("xsd__string",				"XSD_STRING");
-		basicType2EnumMap.put("xsd__long",					"XSD_LONG");
-		basicType2EnumMap.put("xsd__short",					"XSD_SHORT");
-		basicType2EnumMap.put("xsd__unsignedByte",			"XSD_BYTE");
-		basicType2EnumMap.put("xsd__double",				"XSD_DOUBLE");
-		basicType2EnumMap.put("xsd__unsignedLong",			"XSD_UNSIGNEDLONG");
-		basicType2EnumMap.put("xsd__unsignedInt",			"XSD_UNSIGNEDINT");
-		basicType2EnumMap.put("xsd__unsignedShort",			"XSD_UNSIGNEDSHORT");
-		basicType2EnumMap.put("xsd__unsignedByte",			"XSD_UNSIGNEDBYTE");
-		basicType2EnumMap.put("xsd__dateTime",				"XSD_DATETIME");
-		basicType2EnumMap.put("xsd__date",					"XSD_DATE");
-		basicType2EnumMap.put("xsd__time",					"XSD_TIME");
-		basicType2EnumMap.put("xsd__base64Binary",			"XSD_BASE64BINARY");
-		basicType2EnumMap.put("xsd__hexBinary",				"XSD_HEXBINARY");
-		basicType2EnumMap.put("xsd__decimal",				"XSD_DECIMAL");
-		basicType2EnumMap.put("xsd__boolean",				"XSD_BOOLEAN");
-		basicType2EnumMap.put("xsd__anyURI",				"XSD_ANYURI");
-		basicType2EnumMap.put("xsd__QName",					"XSD_QNAME");
-		basicType2EnumMap.put("xsd__NCName",				"XSD_NCNAME");
-		basicType2EnumMap.put("xsd__NMTOKEN",				"XSD_NMTOKEN");
+		/* TODO:
+		 *   Should be removed when the following issue will be fixed :
+		 * 	-> http://marc.theaimsgroup.com/?t=107907748000002&r=1&w=2 
+		 */
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "int"),			"xsdc__int");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"),			"xsdc__unsignedByte");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "float"),			"xsdc__float");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "long"),			"xsdc__long");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "integer"),		"xsdc__long");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "double"),			"xsdc__double");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "char"),			"xsdc__char");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "short"),			"xsdc__short");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "string"),			"xsdc__string");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "dateTime"),		"xsdc__dateTime");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "date"),			"xsdc__date");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "time"),			"xsdc__time");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64Binary"),	"xsdc__base64Binary");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "hexBinary"),		"xsdc__hexBinary");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "decimal"),		"xsdc__decimal");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "boolean"),		"xsdc__boolean");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "anyURI"),			"xsdc__anyURI");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedByte"),	"xsdc__unsignedByte");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedInt"),	"xsdc__unsignedInt");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedLong"),	"xsdc__unsignedLong");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedShort"),	"xsdc__unsignedShort");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "QName"),			"xsdc__QName");		
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NCName"),			"xsdc__NCName");		
 
 
-		initValues.put("xsd__int",				"0"); 
-		initValues.put("xsd__unsignedByte",		"0"); 
-		initValues.put("xsd__float",			"0.0"); 
-		initValues.put("xsd__long",				"0"); 
-		initValues.put("xsd__double",			"0.0"); 
-		initValues.put("xsd__char",				"0"); 
-		initValues.put("xsd__short",			"0"); 
-		initValues.put("xsd__string",			"NULL"); 
-		//initValues.put("xsd__dateTime",		"0"); 
-		//initValues.put("xsd__date",			"0"); 
-		//initValues.put("xsd__time",			"0"); 
-		//initValues.put("xsd__base64Binary",	"0"); 
-		//initValues.put("xsd__hexBinary",		"0"); 
-		initValues.put("xsd__decimal",			"0.0"); 
-		initValues.put("xsd__boolean",			"false_"); 
-		initValues.put("xsd__byte",				"0"); 
-		initValues.put("xsd__anyURI",			"NULL"); 
-		initValues.put("xsd__unsignedByte",		"0"); 
-		initValues.put("xsd__unsignedInt",		"0"); 
-		initValues.put("xsd__unsignedLong",		"0"); 
-		initValues.put("xsd__unsignedShort",	"0"); 
-		initValues.put("xsd__QName",			"NULL"); 
-		initValues.put("xsd__NCName",			"NULL"); 
-		initValues.put("xsd__NMTOKEN",			"NULL"); 
+		/* TODO:
+		 *  Another strange issue from Axis 1.1 runtime when base64binary is in input/output operations.
+		 */	
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64"), "xsdc__base64Binary");		
+		
+		type2getValueMethodNameCpp.put("xsd__int",				"Int");
+		type2getValueMethodNameCpp.put("xsd__float",			"Float");
+		type2getValueMethodNameCpp.put("xsd__string",			"String");
+		type2getValueMethodNameCpp.put("xsd__long",			"Long");
+		type2getValueMethodNameCpp.put("xsd__short",			"Short");
+		type2getValueMethodNameCpp.put("xsd__char",			"Char");
+		type2getValueMethodNameCpp.put("xsd__double",			"Double");
+		type2getValueMethodNameCpp.put("xsd__unsignedByte",	"Byte");			
+		type2getValueMethodNameCpp.put("xsd__unsignedLong",	"UnsignedLong");
+		type2getValueMethodNameCpp.put("xsd__unsignedInt",		"UnsignedInt");
+		type2getValueMethodNameCpp.put("xsd__unsignedShort",	"UnsignedShort");
+		type2getValueMethodNameCpp.put("xsd__unsignedByte",	"UnsignedByte");
+		type2getValueMethodNameCpp.put("xsd__dateTime",		"DateTime");
+		type2getValueMethodNameCpp.put("xsd__date",			"Date");
+		type2getValueMethodNameCpp.put("xsd__time",			"Time");
+		type2getValueMethodNameCpp.put("xsd__base64Binary",	"Base64Binary");
+		type2getValueMethodNameCpp.put("xsd__hexBinary",		"HexBinary");
+		type2getValueMethodNameCpp.put("xsd__decimal",			"Decimal");
+		type2getValueMethodNameCpp.put("xsd__boolean",			"Boolean");
+		type2getValueMethodNameCpp.put("xsd__anyURI",			"String");
+		type2getValueMethodNameCpp.put("xsd__QName",			"String");
+		type2getValueMethodNameCpp.put("xsd__NCName",			"String");
+		type2getValueMethodNameCpp.put("xsd__NMTOKEN",			"String");
+		
+		type2getValueMethodNameC.put("xsdc__int",				"Int");
+		type2getValueMethodNameC.put("xsdc__float",			"Float");
+		type2getValueMethodNameC.put("xsdc__string",			"String");
+		type2getValueMethodNameC.put("xsdc__long",			"Long");
+		type2getValueMethodNameC.put("xsdc__short",			"Short");
+		type2getValueMethodNameC.put("xsdc__char",			"Char");
+		type2getValueMethodNameC.put("xsdc__double",			"Double");
+		type2getValueMethodNameC.put("xsdc__unsignedByte",	"Byte");			
+		type2getValueMethodNameC.put("xsdc__unsignedLong",	"UnsignedLong");
+		type2getValueMethodNameC.put("xsdc__unsignedInt",		"UnsignedInt");
+		type2getValueMethodNameC.put("xsdc__unsignedShort",	"UnsignedShort");
+		type2getValueMethodNameC.put("xsdc__unsignedByte",	"UnsignedByte");
+		type2getValueMethodNameC.put("xsdc__dateTime",		"DateTime");
+		type2getValueMethodNameC.put("xsdc__date",			"Date");
+		type2getValueMethodNameC.put("xsdc__time",			"Time");
+		type2getValueMethodNameC.put("xsdc__base64Binary",	"Base64Binary");
+		type2getValueMethodNameC.put("xsdc__hexBinary",		"HexBinary");
+		type2getValueMethodNameC.put("xsdc__decimal",			"Decimal");
+		type2getValueMethodNameC.put("xsdc__boolean",			"Boolean");
+		type2getValueMethodNameC.put("xsdc__anyURI",			"String");
+		type2getValueMethodNameC.put("xsdc__QName",			"String");
+		type2getValueMethodNameC.put("xsdc__NCName",			"String");
+		type2getValueMethodNameC.put("xsdc__NMTOKEN",			"String");
+		
+		type2BasicArrayNameCpp.put("xsd__int",					"xsd__int_Array");
+		type2BasicArrayNameCpp.put("xsd__float",				"xsd__float_Array");
+		type2BasicArrayNameCpp.put("xsd__string",				"xsd__string_Array");
+		type2BasicArrayNameCpp.put("xsd__long",				"xsd__long_Array");
+		type2BasicArrayNameCpp.put("xsd__short",				"xsd__short_Array");
+		type2BasicArrayNameCpp.put("xsd__char",				"xsd__byte_Array");
+		type2BasicArrayNameCpp.put("xsd__double",				"xsd__double_Array");
+		type2BasicArrayNameCpp.put("xsd__unsignedLong",		"xsd__unsignedLong_Array");
+		type2BasicArrayNameCpp.put("xsd__unsignedInt",			"xsd__unsignedInt_Array");
+		type2BasicArrayNameCpp.put("xsd__unsignedShort",		"xsd__unsignedShort_Array");
+		type2BasicArrayNameCpp.put("xsd__unsignedByte",		"xsd__unsignedByte_Array");
+		type2BasicArrayNameCpp.put("xsd__dateTime",			"xsd__dateTime_Array");
+		type2BasicArrayNameCpp.put("xsd__date",				"xsd__date_Array");
+		type2BasicArrayNameCpp.put("xsd__time",				"xsd__time_Array");
+		type2BasicArrayNameCpp.put("xsd__base64Binary",		"xsd__base64Binary_Array");
+		type2BasicArrayNameCpp.put("xsd__hexBinary",			"xsd__hexBinary_Array");
+		type2BasicArrayNameCpp.put("xsd__decimal",				"xsd__decimal_Array");
+		type2BasicArrayNameCpp.put("xsd__boolean",				"xsd__boolean_Array");
+		type2BasicArrayNameCpp.put("xsd__anyURI",				"xsd__anyURI_Array");
+		type2BasicArrayNameCpp.put("xsd__QName",				"xsd__QName_Array");
+		type2BasicArrayNameCpp.put("xsd__NCName",				"xsd__NCName_Array");
+		type2BasicArrayNameCpp.put("xsd__NMTOKEN",				"xsd__NMTOKEN_Array");
+		
+		type2BasicArrayNameC.put("xsdc__int",					"xsdc__int_Array");
+		type2BasicArrayNameC.put("xsdc__float",				"xsdc__float_Array");
+		type2BasicArrayNameC.put("xsdc__string",				"xsdc__string_Array");
+		type2BasicArrayNameC.put("xsdc__long",				"xsdc__long_Array");
+		type2BasicArrayNameC.put("xsdc__short",				"xsdc__short_Array");
+		type2BasicArrayNameC.put("xsdc__char",				"xsdc__byte_Array");
+		type2BasicArrayNameC.put("xsdc__double",				"xsdc__double_Array");
+		type2BasicArrayNameC.put("xsdc__unsignedLong",		"xsdc__unsignedLong_Array");
+		type2BasicArrayNameC.put("xsdc__unsignedInt",			"xsdc__unsignedInt_Array");
+		type2BasicArrayNameC.put("xsdc__unsignedShort",		"xsdc__unsignedShort_Array");
+		type2BasicArrayNameC.put("xsdc__unsignedByte",		"xsdc__unsignedByte_Array");
+		type2BasicArrayNameC.put("xsdc__dateTime",			"xsdc__dateTime_Array");
+		type2BasicArrayNameC.put("xsdc__date",				"xsdc__date_Array");
+		type2BasicArrayNameC.put("xsdc__time",				"xsdc__time_Array");
+		type2BasicArrayNameC.put("xsdc__base64Binary",		"xsdc__base64Binary_Array");
+		type2BasicArrayNameC.put("xsdc__hexBinary",			"xsdc__hexBinary_Array");
+		type2BasicArrayNameC.put("xsdc__decimal",				"xsdc__decimal_Array");
+		type2BasicArrayNameC.put("xsdc__boolean",				"xsdc__boolean_Array");
+		type2BasicArrayNameC.put("xsdc__anyURI",				"xsdc__anyURI_Array");
+		type2BasicArrayNameC.put("xsdc__QName",				"xsdc__QName_Array");
+		type2BasicArrayNameC.put("xsdc__NCName",				"xsdc__NCName_Array");
+		type2BasicArrayNameC.put("xsdc__NMTOKEN",				"xsdc__NMTOKEN_Array");
+		
+		basicType2EnumMapCpp.put("xsd__int",					"XSD_INT");
+		basicType2EnumMapCpp.put("xsd__float",					"XSD_FLOAT");
+		basicType2EnumMapCpp.put("xsd__string",				"XSD_STRING");
+		basicType2EnumMapCpp.put("xsd__long",					"XSD_LONG");
+		basicType2EnumMapCpp.put("xsd__short",					"XSD_SHORT");
+		basicType2EnumMapCpp.put("xsd__unsignedByte",			"XSD_BYTE");
+		basicType2EnumMapCpp.put("xsd__double",				"XSD_DOUBLE");
+		basicType2EnumMapCpp.put("xsd__unsignedLong",			"XSD_UNSIGNEDLONG");
+		basicType2EnumMapCpp.put("xsd__unsignedInt",			"XSD_UNSIGNEDINT");
+		basicType2EnumMapCpp.put("xsd__unsignedShort",			"XSD_UNSIGNEDSHORT");
+		basicType2EnumMapCpp.put("xsd__unsignedByte",			"XSD_UNSIGNEDBYTE");
+		basicType2EnumMapCpp.put("xsd__dateTime",				"XSD_DATETIME");
+		basicType2EnumMapCpp.put("xsd__date",					"XSD_DATE");
+		basicType2EnumMapCpp.put("xsd__time",					"XSD_TIME");
+		basicType2EnumMapCpp.put("xsd__base64Binary",			"XSD_BASE64BINARY");
+		basicType2EnumMapCpp.put("xsd__hexBinary",				"XSD_HEXBINARY");
+		basicType2EnumMapCpp.put("xsd__decimal",				"XSD_DECIMAL");
+		basicType2EnumMapCpp.put("xsd__boolean",				"XSD_BOOLEAN");
+		basicType2EnumMapCpp.put("xsd__anyURI",				"XSD_ANYURI");
+		basicType2EnumMapCpp.put("xsd__QName",					"XSD_QNAME");
+		basicType2EnumMapCpp.put("xsd__NCName",				"XSD_NCNAME");
+		basicType2EnumMapCpp.put("xsd__NMTOKEN",				"XSD_NMTOKEN");
+
+		basicType2EnumMapC.put("xsdc__int",					"XSD_INT");
+		basicType2EnumMapC.put("xsdc__float",					"XSD_FLOAT");
+		basicType2EnumMapC.put("xsdc__string",				"XSD_STRING");
+		basicType2EnumMapC.put("xsdc__long",					"XSD_LONG");
+		basicType2EnumMapC.put("xsdc__short",					"XSD_SHORT");
+		basicType2EnumMapC.put("xsdc__unsignedByte",			"XSD_BYTE");
+		basicType2EnumMapC.put("xsdc__double",				"XSD_DOUBLE");
+		basicType2EnumMapC.put("xsdc__unsignedLong",			"XSD_UNSIGNEDLONG");
+		basicType2EnumMapC.put("xsdc__unsignedInt",			"XSD_UNSIGNEDINT");
+		basicType2EnumMapC.put("xsdc__unsignedShort",			"XSD_UNSIGNEDSHORT");
+		basicType2EnumMapC.put("xsdc__unsignedByte",			"XSD_UNSIGNEDBYTE");
+		basicType2EnumMapC.put("xsdc__dateTime",				"XSD_DATETIME");
+		basicType2EnumMapC.put("xsdc__date",					"XSD_DATE");
+		basicType2EnumMapC.put("xsdc__time",					"XSD_TIME");
+		basicType2EnumMapC.put("xsdc__base64Binary",			"XSD_BASE64BINARY");
+		basicType2EnumMapC.put("xsdc__hexBinary",				"XSD_HEXBINARY");
+		basicType2EnumMapC.put("xsdc__decimal",				"XSD_DECIMAL");
+		basicType2EnumMapC.put("xsdc__boolean",				"XSD_BOOLEAN");
+		basicType2EnumMapC.put("xsdc__anyURI",				"XSD_ANYURI");
+		basicType2EnumMapC.put("xsdc__QName",					"XSD_QNAME");
+		basicType2EnumMapC.put("xsdc__NCName",				"XSD_NCNAME");
+		basicType2EnumMapC.put("xsdc__NMTOKEN",				"XSD_NMTOKEN");
+
+
+		initValuesCpp.put("xsd__int",				"0"); 
+		initValuesCpp.put("xsd__unsignedByte",		"0"); 
+		initValuesCpp.put("xsd__float",			"0.0"); 
+		initValuesCpp.put("xsd__long",				"0"); 
+		initValuesCpp.put("xsd__double",			"0.0"); 
+		initValuesCpp.put("xsd__char",				"0"); 
+		initValuesCpp.put("xsd__short",			"0"); 
+		initValuesCpp.put("xsd__string",			"NULL"); 
+		//initValuesCpp.put("xsd__dateTime",		"0"); 
+		//initValuesCpp.put("xsd__date",			"0"); 
+		//initValuesCpp.put("xsd__time",			"0"); 
+		//initValuesCpp.put("xsd__base64Binary",	"0"); 
+		//initValuesCpp.put("xsd__hexBinary",		"0"); 
+		initValuesCpp.put("xsd__decimal",			"0.0"); 
+		initValuesCpp.put("xsd__boolean",			"false_"); 
+		initValuesCpp.put("xsd__byte",				"0"); 
+		initValuesCpp.put("xsd__anyURI",			"NULL"); 
+		initValuesCpp.put("xsd__unsignedByte",		"0"); 
+		initValuesCpp.put("xsd__unsignedInt",		"0"); 
+		initValuesCpp.put("xsd__unsignedLong",		"0"); 
+		initValuesCpp.put("xsd__unsignedShort",	"0"); 
+		initValuesCpp.put("xsd__QName",			"NULL"); 
+		initValuesCpp.put("xsd__NCName",			"NULL"); 
+		initValuesCpp.put("xsd__NMTOKEN",			"NULL"); 
+		
+		initValuesC.put("xsdc__int",				"0"); 
+		initValuesC.put("xsdc__unsignedByte",		"0"); 
+		initValuesC.put("xsdc__float",			"0.0"); 
+		initValuesC.put("xsdc__long",				"0"); 
+		initValuesC.put("xsdc__double",			"0.0"); 
+		initValuesC.put("xsdc__char",				"0"); 
+		initValuesC.put("xsdc__short",			"0"); 
+		initValuesC.put("xsdc__string",			"NULL"); 
+		//initValuesC.put("xsdc__dateTime",		"0"); 
+		//initValuesC.put("xsdc__date",			"0"); 
+		//initValuesC.put("xsdc__time",			"0"); 
+		//initValuesC.put("xsdc__base64Binary",	"0"); 
+		//initValuesC.put("xsdc__hexBinary",		"0"); 
+		initValuesC.put("xsdc__decimal",			"0.0"); 
+		initValuesC.put("xsdc__boolean",			"false_"); 
+		initValuesC.put("xsdc__byte",				"0"); 
+		initValuesC.put("xsdc__anyURI",			"NULL"); 
+		initValuesC.put("xsdc__unsignedByte",		"0"); 
+		initValuesC.put("xsdc__unsignedInt",		"0"); 
+		initValuesC.put("xsdc__unsignedLong",		"0"); 
+		initValuesC.put("xsdc__unsignedShort",	"0"); 
+		initValuesC.put("xsdc__QName",			"NULL"); 
+		initValuesC.put("xsdc__NCName",			"NULL"); 
+		initValuesC.put("xsdc__NMTOKEN",			"NULL"); 
+	}
+	
+	public static void setLanguage(String language) {
+		// Only C and C++ are supported here.
+		if (WrapperConstants.LANGUAGE_C.equalsIgnoreCase(language))
+			cpp = false;
+		else 
+			cpp = true; 
 	}
 	
 	public static void addSchemaDefinedSimpleType(QName qname, String type){
@@ -246,13 +443,15 @@ public class CUtils {
 	}
 	
 	public static boolean isBasicType(QName qname){
-		if(qname2classmap.containsKey(qname)){
+		if((cpp && qname2classmapCpp.containsKey(qname)) ||
+		   (!cpp && qname2classmapC.containsKey(qname))){
 			return true;
 		}
 		return false;
 	}
 	public static boolean isSimpleType(String name){
-		if(class2QNamemap.containsKey(name))
+		if((cpp && class2QNamemapCpp.containsKey(name)) ||
+		   (!cpp && class2QNamemapC.containsKey(name)))
 			return true;
 		return false;	
 	} 
@@ -260,7 +459,8 @@ public class CUtils {
 			return name.equals(anyTypeQname);
 	}
 	public static boolean isSimpleType(QName name){
-		if(qname2classmap.containsKey(name)){
+		if((cpp && qname2classmapCpp.containsKey(name)) ||
+		   (!cpp && qname2classmapC.containsKey(name))){
 			return true;
 		}
 		else if (schemaDefinedSimpleTypesMap.containsKey(name)){
@@ -274,16 +474,28 @@ public class CUtils {
 	}
 		
 	public static String getParameterGetValueMethodName(String typeName, boolean isAttrib){
-		String methodname;
-		if((methodname = (String)type2getValueMethodName.get(typeName))!= null){
-			methodname = (isAttrib ? "getAttributeAs":"getElementAs") + methodname;
+		String methodname = null;
+		if (cpp)
+			methodname = (String)type2getValueMethodNameCpp.get(typeName);
+		else
+			methodname = (String)type2getValueMethodNameC.get(typeName);
+		
+		if (methodname != null){
+			if (cpp)
+				methodname = (isAttrib ? "getAttributeAs":"getElementAs") + methodname;
+			else
+				methodname = "axisc" + (isAttrib ? "GetAttributeAs":"GetElementAs") + methodname + "Call";
 			return methodname;
 		}
 		return null;	
 	}
 	
 	public static QName getQname4class(String classname) {
-		Object val = class2QNamemap.get(classname);
+		Object val = null;
+		if (cpp)
+			val = class2QNamemapCpp.get(classname);
+		else 
+			val = class2QNamemapC.get(classname);
 		if (val != null)
 			return (QName) val;
 		else
@@ -291,7 +503,11 @@ public class CUtils {
 	}
 
 	 public static String getclass4qname(QName qname) {
-		Object val = qname2classmap.get(qname);
+		Object val = null;
+		if (cpp)
+			val = qname2classmapCpp.get(qname);
+		else
+			val = qname2classmapC.get(qname);
 		if (val != null)
 			return (String) val;
 		val = schemaDefinedSimpleTypesMap.get(qname);
@@ -301,7 +517,11 @@ public class CUtils {
 	}
 
 	 public static String getInitValue(String typeName) {
-		Object val = initValues.get(typeName);
+		Object val = null;
+		if (cpp) 
+			val = initValuesCpp.get(typeName);
+		else
+			val = initValuesC.get(typeName);
 		if (val != null)
 			return (String) val;
                 
@@ -312,15 +532,20 @@ public class CUtils {
 		return wname.substring(0, wname.length()- CUtils.WRAPPER_NAME_APPENDER.length());
 	}
 	public static String getXSDTypeForBasicType(String stype){
-		String enumName;
-		if((enumName = (String)basicType2EnumMap.get(stype))!= null){
+		String enumName = null;
+		if (cpp)
+			enumName = (String)basicType2EnumMapCpp.get(stype);
+		else
+			enumName = (String)basicType2EnumMapC.get(stype);
+		if(enumName != null){
 			return enumName;
 		}
 		return null;	
 	}
 	public static String getCmplxArrayNameforType(QName qname){
 		String arrayName = null;
-		if(!qname2classmap.containsKey(qname)){
+		if((cpp && !qname2classmapCpp.containsKey(qname)) ||
+		   (!cpp && !qname2classmapC.containsKey(qname))){
 			/* arrayName = qname.getLocalPart()+"_Array";
 			* This avoid compilation issue for wsdl SimpleTypeInnerUnboundedInOutput.wsdl
 			* See : malling list.
@@ -331,8 +556,10 @@ public class CUtils {
 	}
 	
 	public static String getBasicArrayNameforType(String stype){
-		if (type2BasicArrayName.containsKey(stype))
-			return (String)type2BasicArrayName.get(stype);
+		if (cpp && type2BasicArrayNameCpp.containsKey(stype))
+			return (String)type2BasicArrayNameCpp.get(stype);
+		else if (!cpp && type2BasicArrayNameC.containsKey(stype))
+			return (String)type2BasicArrayNameC.get(stype);
 		else
 		 	return "";
 	}

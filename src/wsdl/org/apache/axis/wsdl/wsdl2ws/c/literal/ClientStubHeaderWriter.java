@@ -50,8 +50,14 @@ public class ClientStubHeaderWriter
     {
         try
         {
-            writer.write("#include <axis/client/Stub.h>\n");
-            writer.write("#include <axis/server/AxisWrapperAPI.h>\n");
+			writer.write("#include <axis/GDefine.h>\n");
+			writer.write("#include <axis/AxisUserAPI.h>\n");
+			writer.write("#include <axis/SoapEnvVersions.h>\n");
+			writer.write("#include <axis/WSDDDefines.h>\n");
+			writer.write("#include <axis/TypeMapping.h>\n");
+			writer.write("#include <axis/client/Stub.h>\n");
+			writer.write("#include <axis/client/Call.h>\n");
+
             Type atype;
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
             Vector typeSet = new Vector();

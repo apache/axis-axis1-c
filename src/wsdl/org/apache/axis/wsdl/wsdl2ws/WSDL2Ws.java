@@ -644,6 +644,7 @@ public class WSDL2Ws
 
         perprocess();
 
+        CUtils.setLanguage(language);
         QName serviceqname = serviceentry.getService().getQName();
         servicename = serviceqname.getLocalPart();
         typeMap = this.getTypeInfo(targetLanguage);
