@@ -42,6 +42,7 @@ m_strProxyHost (""), m_uiProxyPort (0), m_bUseProxy (false)
 {
     m_pcEndpointUri = NULL;
     m_pReleaseBufferCallback = 0;
+    m_eProtocolType = APTHTTP1_1;
     m_strBytesToSend = "";
     m_strHeaderBytesToSend = "";
     m_iBytesLeft = 0;
@@ -848,7 +849,18 @@ Axis2Transport::getServiceName ()
 AXIS_PROTOCOL_TYPE
 Axis2Transport::getProtocol ()
 {
-    return APTHTTP1_1;
+    return m_eProtocolType;
+}
+
+int Axis2Transport::setProtocol(AXIS_PROTOCOL_TYPE eProtocol)
+{
+    if( eProtocol == APTHTTP1_1 || eProtocol == APTHTTP1_0 )
+    {
+       m_eProtocolType = eProtocol;
+       return AXIS_SUCCESS; 
+    }
+    else 
+        return AXIS_FAIL;
 }
 
 /**

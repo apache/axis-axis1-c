@@ -295,6 +295,16 @@ public:
      * @return The type of the transport. See AXIS_PROTOCOL_TYPE in Packet.h
      */
     virtual AXIS_PROTOCOL_TYPE getProtocol()=0;
+
+    /**
+     * Sets the protocol to be used by the transport library. 
+     *
+     * @param eProtocol - protocol to be used by transport.
+     *                    See AXIS_PROTOCOL_TYPE in GDefine.hpp
+     * @return AXIS_SUCCESS if protocol is supported. Else AXIS_FAIL.
+     */
+    virtual int setProtocol(AXIS_PROTOCOL_TYPE eProtocol)=0;
+
     /**
      * Gets the sub protocol. The usefulness of this method and the return
      * values depend on the particular implementation. For example HTTP
@@ -345,6 +355,8 @@ protected:
      * of http transports
      */ 
     AXIS_ENGINE_CALLBACK_RELEASE_SEND_BUFFER m_pReleaseBufferCallback;
+ 
+    AXIS_PROTOCOL_TYPE m_eProtocolType;
 
 };
 

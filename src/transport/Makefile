@@ -163,7 +163,7 @@ sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 sysconfdir = ${prefix}/etc
 target_alias = 
-SUBDIRS = axis axis2 
+SUBDIRS = axis2 
 all: all-recursive
 
 .SUFFIXES:

@@ -84,6 +84,7 @@ m_iBytesLeft (0), m_pcReceived (NULL)
        //How long we are going to wait for a response
        HTHost_setEventTimeout(20000);
      */
+    m_eProtocolType = APTHTTP1_1;
     m_pRequest = HTRequest_new ();
 
 }
@@ -313,7 +314,18 @@ LibWWWTransport::getServiceName ()
 
 AXIS_PROTOCOL_TYPE LibWWWTransport::getProtocol ()
 {
-    return APTHTTP;		//HTTP
+    return m_eProtocolType;		//HTTP
+}
+
+int LibWWWTransport::setProtocol(AXIS_PROTOCOL_TYPE eProtocol)
+{
+    if( eProtocol == APTHTTP1_1 || eProtocol == APTHTTP1_0 )
+    {
+       m_eProtocolType = eProtocol;
+       return AXIS_SUCCESS;
+    }
+    else
+        return AXIS_FAIL;
 }
 
 int

@@ -270,6 +270,9 @@ AXIS_CPP_NAMESPACE_USE class LibWWWTransport:public SOAPTransport
      * @return The type of the transport. See AXIS_PROTOCOL_TYPE in Packet.h
      */
     AXIS_PROTOCOL_TYPE getProtocol ();
+   
+    int setProtocol(AXIS_PROTOCOL_TYPE eProtocol);
+
     /**
      * Gets the sub protocol. The usefulness of this method and the return
      * values depend on the particular implementation. For example HTTP
