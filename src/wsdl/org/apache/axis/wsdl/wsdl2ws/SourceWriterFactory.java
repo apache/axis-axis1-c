@@ -1,9 +1,8 @@
-/* -*- C++ -*- */
 /*
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,7 +24,7 @@
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "SOAP" and "Apache Software Foundation" must
+ * 4. The names "Axis" and "Apache Software Foundation" must
  *    not be used to endorse or promote products derived from this
  *    software without prior written permission. For written
  *    permission, please contact apache@apache.org.
@@ -52,35 +51,42 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- *
- *
- *
- *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- *
  */
 
-// IWrapperSoapDeSerializer.h: interface for the IWrapperSoapDeSerializer class.
-//
-//////////////////////////////////////////////////////////////////////
+package org.apache.axis.wsdl.wsdl2ws;
 
-#if !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)
-#define AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_
-
-#include "ISoapDeSerializer.h"
-#include "GDefine.h"
-#include <string>
-using namespace std;
-class IParam;
-
-class IWrapperSoapDeSerializer : public virtual ISoapDeSerializer
-{
-public:
-	virtual const AxisChar* GetMethodName()=0;
-	virtual IParam* GetParam()=0;
-	virtual int Deserialize(IParam* pIParam, int bHref)=0;
-	virtual ~IWrapperSoapDeSerializer() {};
-
-};
-
-#endif // !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)
+import org.apache.axis.wsdl.wsdl2ws.cpp.ClassLoader;
+import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
+/**
+ * Genarate a SourceFactory depend on the reqirements. 
+ * @author Srinath Perera (hemapani@opensource.lk)
+ * @author Dimuthu Leelarathne (muthulee@opensource.lk)
+ */
+public class SourceWriterFactory {
+	public static SourceWriter createSourceWriter(int genaratorType,WebServiceContext wscontext)throws WrapperFault{
+		//C++
+		if(genaratorType == WrapperConstants.GENERATOR_PARAM_CPP_ALL)
+			return new org.apache.axis.wsdl.wsdl2ws.cpp.AllParamWriter(wscontext);
+		else if(genaratorType == WrapperConstants.GENERATOR_WRAPPER_CPP)
+			return new org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter(wscontext);
+		else if(genaratorType == WrapperConstants.GENERATOR_WRAPPER_HPP)
+			return new org.apache.axis.wsdl.wsdl2ws.cpp.WrapHeaderWriter(wscontext);
+		else if(genaratorType == WrapperConstants.GENERATOR_SERVICE_CPP)
+			return new org.apache.axis.wsdl.wsdl2ws.cpp.ServiceWriter(wscontext);
+		else if(genaratorType == WrapperConstants.GENERATOR_SERVICE_HPP)
+			return new org.apache.axis.wsdl.wsdl2ws.cpp.ServiceHeaderWriter(wscontext);
+		//C
+		else if(genaratorType == WrapperConstants.GENERATOR_PARAM_C_ALL)
+			return new org.apache.axis.wsdl.wsdl2ws.c.AllParamWriter(wscontext);
+		else if(genaratorType == WrapperConstants.GENERATOR_WRAPPER_C)
+			return new org.apache.axis.wsdl.wsdl2ws.c.WrapWriter(wscontext);
+		else if(genaratorType == WrapperConstants.GENERATOR_WRAPPER_H)
+			return new org.apache.axis.wsdl.wsdl2ws.c.WrapHeaderWriter(wscontext);
+		else if(genaratorType == WrapperConstants.GENERATOR_SERVICE_C)
+			return new org.apache.axis.wsdl.wsdl2ws.c.ServiceWriter(wscontext);
+		//Common to C & C++
+		else if(genaratorType == WrapperConstants.GENERATOR_CLASSLOADER_CPP)
+			return new ClassLoader(wscontext);
+		throw new WrapperFault("Source writer type not found");				
+	}
+}

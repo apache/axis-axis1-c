@@ -1,9 +1,8 @@
-/* -*- C++ -*- */
 /*
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,7 +24,7 @@
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "SOAP" and "Apache Software Foundation" must
+ * 4. The names "Axis" and "Apache Software Foundation" must
  *    not be used to endorse or promote products derived from this
  *    software without prior written permission. For written
  *    permission, please contact apache@apache.org.
@@ -52,35 +51,69 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- *
- *
- *
- *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- *
  */
+/**
+ * This class have the info about the class that is going to be published as WS.
+ * @author Srinath Perera (hemapani@opensource.lk)
+ * @author Dimuthu Leelarathne (muthulee@opensource.lk)
+ */
+package org.apache.axis.wsdl.wsdl2ws.info;
 
-// IWrapperSoapDeSerializer.h: interface for the IWrapperSoapDeSerializer class.
-//
-//////////////////////////////////////////////////////////////////////
+import java.util.ArrayList;
 
-#if !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)
-#define AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_
+import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
+import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 
-#include "ISoapDeSerializer.h"
-#include "GDefine.h"
-#include <string>
-using namespace std;
-class IParam;
+public class ServiceInfo {
+    private String servicename;
+    private String qualifiedServiceName;
+    private ArrayList methods;
+    private String[][] parameters;
 
-class IWrapperSoapDeSerializer : public virtual ISoapDeSerializer
-{
-public:
-	virtual const AxisChar* GetMethodName()=0;
-	virtual IParam* GetParam()=0;
-	virtual int Deserialize(IParam* pIParam, int bHref)=0;
-	virtual ~IWrapperSoapDeSerializer() {};
+    public ServiceInfo(String servicename,
+                       String qualifiedServiceName, ArrayList methods) throws WrapperFault {
+        this.methods = methods;
+        this.qualifiedServiceName = qualifiedServiceName;
+        this.servicename = servicename;
 
-};
+        //validate the infomormation
+        if (this.qualifiedServiceName == null) throw new WrapperFault("The fully qualified parameter name can't be null");
+        if (servicename == null) servicename = WrapperUtils.getClassNameFromFullyQualifiedName(qualifiedServiceName);
+        if (this.methods == null || this.methods.size() == 0)
+            throw new WrapperFault("service with no methods no point writing a wrapper");
+        if (this.parameters == null)
+            this.parameters = new String[0][0];
 
-#endif // !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)
+    }
+
+    /**
+     * @return String[]
+     */
+    public ArrayList getMethods() {
+        return methods;
+    }
+
+
+    public String getQualifiedServiceName() {
+        return qualifiedServiceName;
+    }
+
+    /**
+     * @return String
+     */
+    public String getServicename() {
+        return servicename;
+    }
+
+    /**
+     * return true if qualifiedname is a direct return type in the
+     * service
+     * @param qualifiedname
+     * @return weather gvien qu. name is a direct return type ...
+     */
+    public boolean isDirectReturn(String qualifiedname) {
+        for (int i = 0; i < this.methods.size(); i++)
+            if (((MethodInfo) this.methods.get(i)).getReturnType().getLangName().equals(qualifiedname)) return true;
+        return false;
+    }
+}
