@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  *
  */
 
@@ -123,7 +123,7 @@ int ESHHandler::Invoke(void *pvIMsg)
 		pIHeaderBlock->setLocalName("echoMeStringResponse");
 		pIHeaderBlock->setUri("http://soapinterop.org/echoheader/");
 
-        pachTemp = "EchoStringHeaderHandlerPr1.id";
+	        pachTemp = "EchoStringHeaderHandlerPr1.id";
         
 		const AxisChar* pachHeaderVal = pIMsg->getProperty(pachTemp);
 		printf("in the ESHHandler::Invoke : %s\n",pachHeaderVal);
@@ -175,6 +175,11 @@ int ESHHandler::Invoke(void *pvIMsg)
 			
 		} else {
 			//do some thing
+			//AxisChar* pachTmpValue = "Default values since no reqeust SOAP header";
+			//pachTemp = "EchoStringHeaderHandlerPr1.id";
+                        //pIMsg->setProperty(pachTemp, pachTmpValue);
+                                                                                
+                        //free(pachTmpValue);
 		}
 		
 	}
