@@ -44,8 +44,8 @@ Notes:
 	  included within the property files
 	  -->
 	<property name="dir.samples" value="${basedir}/samples"/>
-	<!--property name="samples.list" value="base doclitbase"/-->
 	<property name="dir.include" value="${basedir}/include"/>
+	<property name="dir.wsdls" value="${basedir}/deploy/wsdls"/>
 	
 	<!--property name="sampleName" value="base"/-->
 
@@ -193,6 +193,7 @@ Notes:
 		</condition>
 		
 		<!-- Load properties from file -->
+		<property file="${basedir}/build/version.properties"/>
 		<property file="${basedir}/build/build.${platform}.properties"/>
 		
 		<!-- Get directory to contain log file -->
@@ -202,14 +203,42 @@ Notes:
 		<mkdir dir="${dir.obj}/samples"/>
 	</target>
 
+        <!--
+          Use WSDL2Ws to generate stubs from WSDL files
+          -->
+        <target name="generateStubs" >
+                <!-- Setup classpath for WSDL2Ws -->
+                <path id ="cp">
+                        <fileset dir="${dir.wsdl2ws}" includes="wsdl2ws.jar"/>
+                        <fileset dir="${dir.axisJARs}" includes="*.jar"/>
+                </path>
+                <!-- Run WSDL2Ws -->
+                <!--java jar="${dir.wsdl2ws}/wsdl2ws.jar" fork="true"-->
+                <java classname="org.apache.axis.wsdl.wsdl2ws.WSDL2Ws" fork="true">
+                        <classpath refid="cp"/>
+                        <arg value="${sample.wsdl}"/>
+                        <arg value="-o${sample.directory}"/>
+                        <arg value="-l${generated.lang}"/>
+                        <arg value="-s${client.or.server}"/>
+                </java>
+        </target>
+
 
 	<target name="compileSamples">
 		
-                <for list="base,doclitbase,doclitgroupB,groupB" param="sampleName">
+                <for list="base,groupB" param="sampleName">
                     <sequential>
+			<property name="clientSampleDir" value="client"/>		
+                        <!--Generate Client-->
+			<echo>Generating client code for  ${dir.wsdls}/@{sampleName}.wsdl</echo>
+			<antcall target="generateStubs" inheritall="true">
+	                        <param name="sample.wsdl" value="${dir.wsdls}/@{sampleName}.wsdl"/>
+	                        <param name="sample.directory" value="${dir.samples}/${clientSampleDir}/@{sampleName}"/>
+	                        <param name="generated.lang" value="c++"/>
+	                        <param name="client.or.server" value="client"/>
+			</antcall>
     			<!--Build client-->
-			<property name="clientSampleDir" value="client/interoptests"/>		
-			<echo>Building ${clientSampleDir}/@{sampleName}</echo>
+			<echo>Building client ${clientSampleDir}/@{sampleName}</echo>
 			<cc failonerror="false" incremental="false" outfile="${dir.obj}/samples/@{sampleName}"
 		 objdir="${dir.obj}/objects" exceptions="true"
 		 outtype="executable" subsystem="console">
@@ -229,9 +258,17 @@ Notes:
 				<include name="*.cpp"/>
 			</fileset>
 		</cc>
+			<property name="serverSampleDir" value="server"/>		
+                        <!--Generate Client-->
+			<echo>Generating server code for  ${dir.wsdls}/@{sampleName}.wsdl</echo>
+			<antcall target="generateStubs" inheritall="true">
+	                        <param name="sample.wsdl" value="${dir.wsdls}/@{sampleName}.wsdl"/>
+	                        <param name="sample.directory" value="${dir.samples}/${serverSampleDir}/@{sampleName}"/>
+	                        <param name="generated.lang" value="c++"/>
+	                        <param name="client.or.server" value="server"/>
+			</antcall>
     			<!--Build server-->		
-			<property name="serverSampleDir" value="server/interoptests"/>		
-			<echo>Building ${serverSampleDir}/@{sampleName}</echo>
+			<echo>Building server ${serverSampleDir}/@{sampleName}</echo>
 			<cc failonerror="false" incremental="false" outfile="${dir.obj}/samples/@{sampleName}"
 		 objdir="${dir.obj}/objects" exceptions="true"
 		 outtype="shared" subsystem="console" >
