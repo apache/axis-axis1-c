@@ -33,6 +33,7 @@ import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
+import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo; 
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class ServiceHeaderWriter extends HeaderFileWriter{
@@ -170,12 +171,37 @@ public class ServiceHeaderWriter extends HeaderFileWriter{
 			{
 				writer.write("#include \""+itr.next().toString()+".h\"\n");
 			}		
+			writeFaultHeaders();
 			writer.write("\n");
 		}catch (IOException e) {
 			e.printStackTrace();
 			throw new WrapperFault(e);
 		}
 	}
+	
+	/* (non-Javadoc)
+		 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeMethods()
+		 */
+		protected void writeFaultHeaders() throws WrapperFault {
+			try{
+			
+				MethodInfo minfo;
+				for (int i = 0; i < methods.size(); i++) {
+					minfo = (MethodInfo)methods.get(i);
+					Iterator fault = minfo.getFaultType().iterator();
+					String faultInfoName =null;		   		
+					while (fault.hasNext()){
+							FaultInfo info = (FaultInfo)fault.next();
+							faultInfoName =info.getFaultInfo();	     
+							writer.write("#include \"Axis"+faultInfoName.toString()+"Exception.h\"\n");
+					}
+					writer.write("\n");
+				}			
+			}catch(IOException e){
+				throw new WrapperFault(e);
+			}
+		}
+	
 	protected String getFileType()
 	{
 		return "ServerSkeleton";	
