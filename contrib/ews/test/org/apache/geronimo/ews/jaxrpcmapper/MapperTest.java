@@ -38,25 +38,25 @@ public class MapperTest
      */
     public void testHeavyWeight()
     {
-        String args[] = new String[]{"-m","src/samples/mapper/heavyweight/BookQuote.xml",
-                                     "-o", "target/generated/samples/mapper/heavyweight",
-                                     "src/samples/mapper/heavyweight/BookQuote.wsdl"};
+        String args[] = new String[]{"-m", getTestFile("src/samples/mapper/heavyweight/BookQuote.xml"),
+                                     "-o", getTestFile("target/generated/samples/mapper/heavyweight"),
+                                     getTestFile("src/samples/mapper/heavyweight/BookQuote.wsdl")};
         WsdlToJ2ee.main(args);
     }
 
     public void testLightWeight()
     {
-        String args[] = new String[]{"-m","src/samples/mapper/lightweight/BookQuote.xml",
-                                     "-o", "target/generated/samples/mapper/lightweight",
-                                     "src/samples/mapper/lightweight/BookQuote.wsdl"};
+        String args[] = new String[]{"-m", getTestFile("src/samples/mapper/lightweight/BookQuote.xml"),
+                                     "-o", getTestFile("target/generated/samples/mapper/lightweight"),
+                                     getTestFile("src/samples/mapper/lightweight/BookQuote.wsdl")};
         WsdlToJ2ee.main(args);
     }
 
     public void testGoogle()
     {
-        String args[] = new String[]{"-m","src/samples/mapper/google/GoogleSearch.xml",
-                                     "-o", "target/generated/samples/mapper/google",
-                                     "src/samples/mapper/google/GoogleSearch.wsdl"};
+        String args[] = new String[]{"-m",getTestFile("src/samples/mapper/google/GoogleSearch.xml"),
+                                     "-o", getTestFile("target/generated/samples/mapper/google"),
+                                     getTestFile("src/samples/mapper/google/GoogleSearch.wsdl")};
         WsdlToJ2ee.main(args);
     }
 }
