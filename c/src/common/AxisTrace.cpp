@@ -89,7 +89,7 @@ int AxisTrace::setFilePerm(const char* sFileName)
 
 int AxisTrace::logthis (const char* sLog, int level, char* arg2, int arg3)
 {
-	if (!m_bLoggingOn) return AXIS_FAIL;
+    if (!m_bLoggingOn) return AXIS_FAIL;
 
     time_t ltime;
     time (&ltime);
@@ -150,28 +150,30 @@ int AxisTrace::logthis (const char* sLog, int level, char* arg2, int arg3)
 }
 int AxisTrace::logaxis (const char* sLog, int level, char* arg2, int arg3)
 {
-	if (!m_bLoggingOn) return AXIS_FAIL;
-    int intResult = logthis(sLog, level, arg2, arg3);
+    if (!m_bLoggingOn) return AXIS_FAIL;
+    int iResult = logthis(sLog, level, arg2, arg3);
    /* fputs ("\n", m_fileTrace);
     fputs ("-------------------------------------------------", m_fileTrace);
     fputs ("\n", m_fileTrace);
 
     fflush (m_fileTrace);*/
-    m_fileTrace.filePuts ("\n");
-    m_fileTrace.filePuts ("-------------------------------------------------");
-    m_fileTrace.filePuts ("\n");
+    if(AXIS_SUCCESS == iResult)
+    {
+        m_fileTrace.filePuts ("\n");
+        m_fileTrace.filePuts ("-------------------------------------------------");
+        m_fileTrace.filePuts ("\n");
 
-    m_fileTrace.fileFlush ();
-
+        m_fileTrace.fileFlush ();
+    }
     return AXIS_SUCCESS;
 }
 
 int AxisTrace::logaxis (const char* sLog1, const char* sLog2, int level,
     char* arg3, int arg4)
 {
-	if (!m_bLoggingOn) return AXIS_FAIL;
-    int intResult = logthis(sLog1, level, arg3, arg4);
-    if(AXIS_SUCCESS == intResult)
+    if (!m_bLoggingOn) return AXIS_FAIL;
+    int iResult = logthis(sLog1, level, arg3, arg4);
+    if(AXIS_SUCCESS == iResult)
     {
         /*fputs (sLog2, m_fileTrace);
         fputs ("\n", m_fileTrace);
@@ -195,10 +197,10 @@ int AxisTrace::logaxis (const char* sLog1, const char* sLog2, int level,
 int AxisTrace::logaxis (const char* sLog1, const long nLog2, int level,
     char* arg3, int arg4)
 {
-	if (!m_bLoggingOn) return AXIS_FAIL;
+    if (!m_bLoggingOn) return AXIS_FAIL;
     char* convToLong = (char*) malloc(4 * sizeof(char));
-    int intResult = logthis(sLog1, level, arg3, arg4);
-    if(AXIS_SUCCESS == intResult)
+    int iResult = logthis(sLog1, level, arg3, arg4);
+    if(AXIS_SUCCESS == iResult)
     {
 	sprintf(convToLong, "%d", nLog2);
         /*fputs (convToLong, m_fileTrace);
@@ -223,10 +225,10 @@ int AxisTrace::logaxis (const char* sLog1, const long nLog2, int level,
 int AxisTrace::logaxis (const char* sLog1, const double dLog2, int level,
     char* arg3, int arg4)
 {
-	if (!m_bLoggingOn) return AXIS_FAIL;
+    if (!m_bLoggingOn) return AXIS_FAIL;
     char* convToDouble = (char*) malloc(4 * sizeof(char));
-    int intResult = logthis(sLog1, level, arg3, arg4);
-    if(AXIS_SUCCESS == intResult)
+    int iResult = logthis(sLog1, level, arg3, arg4);
+    if(AXIS_SUCCESS == iResult)
     {
 	sprintf(convToDouble, "%f", dLog2);
         /*fputs (convToDouble, m_fileTrace);
