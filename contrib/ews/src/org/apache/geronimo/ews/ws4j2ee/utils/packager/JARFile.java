@@ -58,13 +58,18 @@ package org.apache.geronimo.ews.ws4j2ee.utils.packager;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Vector;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
+import java.util.zip.ZipEntry;
+
+import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 
 /**
  * create a jar file with given set of jar entries.
@@ -79,21 +84,36 @@ import java.util.jar.JarOutputStream;
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class JARFile {
-    private Vector jarEntries;
+    private HashMap jarEntries;
     private File path;
 
-    public JARFile(String path, Vector entries) {
+    public JARFile(String path, HashMap entries) {
         jarEntries = entries;
         this.path = new File(path);
     }
 
     public JARFile(File path) {
         this.path = path;
-        jarEntries = new Vector();
+        jarEntries = new HashMap();
+    }
+    
+    public void addJarFile(String jarFile) throws GenerationFault{
+        try {
+    		JarFile file = new JarFile(jarFile);
+    		Enumeration e = file.entries();
+    		while(e.hasMoreElements()){
+    			ZipEntry entry = (ZipEntry)e.nextElement();
+    			JARFileEntry newEntry = new JARFileEntry(entry.getName(),file.getInputStream(entry));
+				this.jarEntries.put(entry.getName(),newEntry);
+    		}
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new GenerationFault(e);
+        }
     }
 
     public void addJarEntry(JARFileEntry entry) {
-        this.jarEntries.add(entry);
+        this.jarEntries.put(entry.getJarEntry().getName(),entry);
     }
 
     public void createNewJarFile() throws IOException {
@@ -104,20 +124,21 @@ public class JARFile {
 
         BufferedOutputStream bo = new BufferedOutputStream(new FileOutputStream(path));
         JarOutputStream jo = new JarOutputStream(bo);
+		Iterator it = jarEntries.values().iterator();
+        for (; it.hasNext();) {
 
-        for (int i = 0; i < jarEntries.size(); i++) {
-
-            JARFileEntry jarentry = (JARFileEntry) jarEntries.get(i);
+            JARFileEntry jarentry = (JARFileEntry) it.next();
             System.out.println(jarentry.getSource() + " adding ..");
+			InputStream instream = null;
+//            File input = new File(jarentry.getSource());
 
-            File input = new File(jarentry.getSource());
-            InputStream instream = null;
-
-            if (input.exists())
-                instream = new FileInputStream(input);
-            else
-                instream = JARFile.class.getClassLoader()
-                        .getResourceAsStream(jarentry.getSource());
+//
+//            if (input.exists())
+//                instream = new FileInputStream(input);
+//            else
+//                instream = JARFile.class.getClassLoader()
+//                        .getResourceAsStream(jarentry.getSource());
+			instream = jarentry.getSource();           
 
             BufferedInputStream source = new BufferedInputStream(instream);
 

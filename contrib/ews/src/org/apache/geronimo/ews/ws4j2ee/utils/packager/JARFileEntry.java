@@ -55,6 +55,7 @@
 
 package org.apache.geronimo.ews.ws4j2ee.utils.packager;
 
+import java.io.InputStream;
 import java.util.jar.JarEntry;
 
 /**
@@ -66,9 +67,9 @@ import java.util.jar.JarEntry;
  */
 public class JARFileEntry {
     private JarEntry jarEntry;
-    private String source;
+    private InputStream source;
 
-    public JARFileEntry(String jarfilePath, String source) {
+    public JARFileEntry(String jarfilePath, InputStream source) {
         this.jarEntry = new JarEntry(jarfilePath);
         this.source = source;
         if (this.source == null || this.jarEntry == null)
@@ -85,7 +86,7 @@ public class JARFileEntry {
     /**
      * @return 
      */
-    public String getSource() {
+    public InputStream getSource() {
         return source;
     }
 
