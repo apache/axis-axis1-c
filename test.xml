@@ -48,6 +48,8 @@ Notes:
 	  included within the property files
 	  -->
 	<property name="dir.src" value="${basedir}/tests/auto_build/testcases"/>
+	<property name="test.list" value="${dir.src}/wsdls/test.properties"/>
+	<property name="dir.include" value="${dir.package.include}"/>
 
 	<!--
 	  Compiler definitions
@@ -222,6 +224,7 @@ Notes:
 		<mkdir dir="${dir.test.generated}/${client.lang}/${testName}"/>
 		<!-- Setup classpath for WSDL2Ws -->
 		<path id ="cp">
+			<fileset dir="${dir.package.WSDL2Ws}" includes="wsdl2ws.jar"/>
 			<fileset dir="${dir.axisJARs}" includes="*.jar"/>
 		</path>
 		<!-- Run WSDL2Ws -->
@@ -470,13 +473,14 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 
 		<trycatch>
 			<try>
-				<parallel timeout="120000">
+				<parallel timeout="30000">
 					<!-- Run Monitor utility to allow validation of message across the wire -->
 					<java classname="org.apache.test.TCPMonitor">
 						<arg line="-l ${monitorPort}"/>
 						<arg line="-p ${testPort}"/>
 						<arg line="-h ${testHost}"/>
 						<arg line="-o ${dir.test.generated}/${client.lang}/${testName}/tcpm.out"/>
+						<arg line="-r ${dir.test.generated}/${client.lang}/${testName}/tcpm.res"/>
 						<classpath>
 							<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
 						</classpath>
@@ -496,6 +500,16 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 							<env key="LD_LIBRARY_PATH" value="${dir.libraries}${path.separator}${dir.xmlParser}/lib"/>
 							<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}"/>
 						</exec>
+
+						<sleep seconds="2"/>
+
+						<java classname="org.apache.test.StopTCPMonitor">
+							<arg line="-p ${monitorPort}"/>
+							<arg line="-h localhost"/>
+							<classpath>
+								<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
+							</classpath>
+						</java>
 					</sequential>
 				</parallel>
 			</try>
@@ -634,7 +648,7 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 		<foreach target="runAllLangTests" param="client.lang" list="${lang.list}" />
 	</target>
 
-	<target name="runAllLangTests" depends="initialize, setLanguage,runTests,runIndividualTest" description="Build and run all tests per language"/>
+	<target name="runAllLangTests" depends="initialize,setLanguage,runTests,runIndividualTest" description="Build and run all tests per language"/>
 
 	<!--
 	  Need to set a language property for wsdl2ws
@@ -648,23 +662,46 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 		</condition>
 	</target>
 
-	<!--
-	  Locates all test WSDL files, and runs test for each
-	  -->
-	<target name="runTests" unless="individualTest">
+	<target name="setWSDLList" depends="checkIfTestList, setFromTestList, setDefaultTestList"/>
+
+	<target name="checkIfTestList">
+		<condition property="testListExists">
+			<available file="${test.list}"/>
+		</condition>
+	</target>
+
+	<target name="setFromTestList" if="testListExists">
+		<path id="testWSDLs">
+			<fileset dir="${basedir}" includesfile="${test.list}"/>
+		</path>
+	</target>
+
+	<target name="setDefaultTestList" unless="testListExists">
 		<path id="testWSDLs">
 			<fileset dir="${dir.src}/wsdls" includes="*.wsdl"/>
 		</path>
+	</target>
+
+	<!--
+	  Locates all test WSDL files, and runs test for each
+	  -->
+	<target name="runTests" depends="setWSDLList" unless="individualTest">
 		<foreach target="runTest" param="wsdlFile">
 			<path refid="testWSDLs"/>
 		</foreach>
 	</target>
 
-	<target name="setIndividualWSDLName">
-		<property name="wsdlFile" value="${test.name}.wsdl" />
+	<target name="setIndividualWSDLName" if="individualTest">
+		<path id="testWSDLs">
+			<fileset dir="${dir.src}/wsdls" includes="${test.name}.wsdl"/>
+		</path>
 	</target>
 
-	<target name="runIndividualTest" depends="setIndividualWSDLName, runTest" if="individualTest" />
+	<target name="runIndividualTest" depends="setIndividualWSDLName" if="individualTest">
+		<foreach target="runTest" param="wsdlFile">
+			<path refid="testWSDLs"/>
+		</foreach>
+	</target>
 
 	<!--
 	  Display all results
