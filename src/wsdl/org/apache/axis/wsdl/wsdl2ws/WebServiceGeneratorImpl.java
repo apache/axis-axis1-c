@@ -41,12 +41,12 @@ public class WebServiceGeneratorImpl implements WebServiceGenerator
 
         if (WrapperConstants.LANGUAGE_JAVA.equalsIgnoreCase(language))
         {
-            (new Genarator(WrapperConstants.GENERATOR_WRAPPER_JAVA, wscontext))
-                .genarate();
-            (new Genarator(WrapperConstants.GENERATOR_SERVICE_JAVA, wscontext))
-                .genarate();
-            (new Genarator(WrapperConstants.GENERATOR_PARAM_JAVA, wscontext))
-                .genarate();
+            (new Generator(WrapperConstants.GENERATOR_WRAPPER_JAVA, wscontext))
+                .generate();
+            (new Generator(WrapperConstants.GENERATOR_SERVICE_JAVA, wscontext))
+                .generate();
+            (new Generator(WrapperConstants.GENERATOR_PARAM_JAVA, wscontext))
+                .generate();
         }
         else
         {
@@ -57,64 +57,64 @@ public class WebServiceGeneratorImpl implements WebServiceGenerator
                     .SERVER
                     .equals(wscontext.getWrapInfo().getTargetEngine()))
                 {
-                    (new Genarator(WrapperConstants.GENERATOR_WRAPPER_CPP,
+                    (new Generator(WrapperConstants.GENERATOR_WRAPPER_CPP,
                         wscontext))
-                        .genarate();
-                    (new Genarator(WrapperConstants.GENERATOR_WRAPPER_HPP,
+                        .generate();
+                    (new Generator(WrapperConstants.GENERATOR_WRAPPER_HPP,
                         wscontext))
-                        .genarate();
-                    (new Genarator(WrapperConstants.GENERATOR_SERVICE_CPP,
+                        .generate();
+                    (new Generator(WrapperConstants.GENERATOR_SERVICE_CPP,
                         wscontext))
-                        .genarate();
-                    (new Genarator(WrapperConstants.GENERATOR_SERVICE_HPP,
+                        .generate();
+                    (new Generator(WrapperConstants.GENERATOR_SERVICE_HPP,
                         wscontext))
-                        .genarate();
-                    (new Genarator(WrapperConstants.GENERATOR_PARAM_CPP_ALL,
+                        .generate();
+                    (new Generator(WrapperConstants.GENERATOR_PARAM_CPP_ALL,
                         wscontext))
-                        .genarate();
-                    (new Genarator(WrapperConstants.GENERATOR_CLASSLOADER_CPP,
+                        .generate();
+                    (new Generator(WrapperConstants.GENERATOR_CLASSLOADER_CPP,
                         wscontext))
-                        .genarate();
-                    (new Genarator(WrapperConstants.GENERATOR_DEPLOYMENT,
+                        .generate();
+                    (new Generator(WrapperConstants.GENERATOR_DEPLOYMENT,
                         wscontext))
-                        .genarate();
-                    (new Genarator(WrapperConstants.GENERATOR_SERVER_EXCEPTION,
+                        .generate();
+                    (new Generator(WrapperConstants.GENERATOR_SERVER_EXCEPTION,
                         wscontext))
-                        .genarate();
-                    (new Genarator(WrapperConstants.GENERATOR_UNDEPLOYMENT,
+                        .generate();
+                    (new Generator(WrapperConstants.GENERATOR_UNDEPLOYMENT,
                         wscontext))
-                        .genarate();
+                        .generate();
                     /*
                      * Ensure the BuildScript generator is called last.
                      * If called earlier not all files will be added
                      * to the build script (Ex: to Makefile.am).
                      */
-                    (new Genarator(WrapperConstants.GENERATOR_BUILDSCRIPT,
+                    (new Generator(WrapperConstants.GENERATOR_BUILDSCRIPT,
                         wscontext))
-                        .genarate();
+                        .generate();
                 }
                 else
                 {
-                    (new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_CPP,
+                    (new Generator(WrapperConstants.GENERATOR_CLIENT_STUB_CPP,
                         wscontext))
-                        .genarate();
-                    (new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_HPP,
+                        .generate();
+                    (new Generator(WrapperConstants.GENERATOR_CLIENT_STUB_HPP,
                         wscontext))
-                        .genarate();
-                    (new Genarator(WrapperConstants.GENERATOR_CLIENT_EXCEPTION,
+                        .generate();
+                    (new Generator(WrapperConstants.GENERATOR_CLIENT_EXCEPTION,
                         wscontext))
-                        .genarate();
-                    (new Genarator(WrapperConstants.GENERATOR_PARAM_CPP_ALL,
+                        .generate();
+                    (new Generator(WrapperConstants.GENERATOR_PARAM_CPP_ALL,
                         wscontext))
-                        .genarate();
+                        .generate();
                     /*
                      * Ensure the BuildScript generator is called last.
                      * If called earlier not all files will be added
                      * to the build script (Ex: to Makefile.am).
                      */
-                    (new Genarator(WrapperConstants.GENERATOR_BUILDSCRIPT,
+                    (new Generator(WrapperConstants.GENERATOR_BUILDSCRIPT,
                         wscontext))
-                        .genarate();
+                        .generate();
                 }
             }
             else
@@ -126,55 +126,55 @@ public class WebServiceGeneratorImpl implements WebServiceGenerator
                         .SERVER
                         .equals(wscontext.getWrapInfo().getTargetEngine()))
                     {
-                        (new Genarator(WrapperConstants.GENERATOR_WRAPPER_C,
+                        (new Generator(WrapperConstants.GENERATOR_WRAPPER_C,
                             wscontext))
-                            .genarate();
-                        (new Genarator(WrapperConstants.GENERATOR_WRAPPER_H,
+                            .generate();
+                        (new Generator(WrapperConstants.GENERATOR_WRAPPER_H,
                             wscontext))
-                            .genarate();
-                        (new Genarator(WrapperConstants.GENERATOR_SERVICE_C,
+                            .generate();
+                        (new Generator(WrapperConstants.GENERATOR_SERVICE_C,
                             wscontext))
-                            .genarate();
-                        (new Genarator(WrapperConstants.GENERATOR_PARAM_C_ALL,
+                            .generate();
+                        (new Generator(WrapperConstants.GENERATOR_PARAM_C_ALL,
                             wscontext))
-                            .genarate();
-                        (new Genarator(WrapperConstants.GENERATOR_CLASSLOADER_C,
+                            .generate();
+                        (new Generator(WrapperConstants.GENERATOR_CLASSLOADER_C,
                             wscontext))
-                            .genarate();
-                        (new Genarator(WrapperConstants.GENERATOR_DEPLOYMENT,
+                            .generate();
+                        (new Generator(WrapperConstants.GENERATOR_DEPLOYMENT,
                             wscontext))
-                            .genarate();
-                        (new Genarator(WrapperConstants.GENERATOR_UNDEPLOYMENT,
+                            .generate();
+                        (new Generator(WrapperConstants.GENERATOR_UNDEPLOYMENT,
                             wscontext))
-                            .genarate();
+                            .generate();
                         /*
                          * Ensure the BuildScript generator is called last.
                          * If called earlier not all files will be added
                          * to the build script (Ex: to Makefile.am).
                          */
-                        (new Genarator(WrapperConstants.GENERATOR_BUILDSCRIPT,
+                        (new Generator(WrapperConstants.GENERATOR_BUILDSCRIPT,
                             wscontext))
-                            .genarate();
+                            .generate();
                     }
                     else
                     {
-                        (new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_C,
+                        (new Generator(WrapperConstants.GENERATOR_CLIENT_STUB_C,
                             wscontext))
-                            .genarate();
-                        (new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_H,
+                            .generate();
+                        (new Generator(WrapperConstants.GENERATOR_CLIENT_STUB_H,
                             wscontext))
-                            .genarate();
-                        (new Genarator(WrapperConstants.GENERATOR_PARAM_C_ALL,
+                            .generate();
+                        (new Generator(WrapperConstants.GENERATOR_PARAM_C_ALL,
                             wscontext))
-                            .genarate();
+                            .generate();
                         /*
                          * Ensure the BuildScript generator is called last.
                          * If called earlier not all files will be added
                          * to the build script (Ex: to Makefile.am).
                          */
-                        (new Genarator(WrapperConstants.GENERATOR_BUILDSCRIPT,
+                        (new Generator(WrapperConstants.GENERATOR_BUILDSCRIPT,
                             wscontext))
-                            .genarate();
+                            .generate();
                     }
                 }
                 else

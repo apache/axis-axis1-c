@@ -13,26 +13,34 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
- 
+
 package org.apache.axis.wsdl.wsdl2ws;
 
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 /**
- * This is the basic Genarator, The actual way the genarator act depend on the 
- * source writer object inside the Genarator 
+ * This is the basic Generator, the actual way the generator act depend on the 
+ * source writer object inside the Generator 
  * @author Srinath Perera (hemapani@opensource.lk)
  * @author Dimuthu Leelarathne (muthulee@opensource.lk)
  */
-public class Genarator { 
+public class Generator
+{
     private SourceWriter sourceWriter;
-	
-	public Genarator(int genaratorType,WebServiceContext wscontext)throws WrapperFault{
-		this.sourceWriter = SourceWriterFactory.createSourceWriter(genaratorType,wscontext);
-	}
-	
-	public void genarate()throws WrapperFault{
-		if(this.sourceWriter == null) throw new WrapperFault("Cant find Maching Genarator");
-		this.sourceWriter.writeSource();
-	}
+
+    public Generator(int genaratorType, WebServiceContext wscontext)
+        throws WrapperFault
+    {
+        this.sourceWriter =
+            SourceWriterFactory.createSourceWriter(genaratorType, wscontext);
+    }
+
+    public void generate() throws WrapperFault
+    {
+        if (this.sourceWriter == null)
+        {
+            throw new WrapperFault("Can't find Matching Generator");
+        }
+        this.sourceWriter.writeSource();
+    }
 }

@@ -17,7 +17,7 @@
 
 package org.apache.axis.wsdl.wsdl2ws;
 /**
- * Write a source to genarated. This instances decides how the Genarator will behave . 
+ * Write a source to genarated. This instances decides how the Generator will behave . 
  * @author Srinath Perera (hemapani@opensource.lk)
  * @author Dimuthu Leelarathne (muthulee@opensource.lk)
  */
