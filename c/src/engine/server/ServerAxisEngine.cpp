@@ -428,7 +428,6 @@ int ServerAxisEngine::invoke (MessageData* pMsg)
             {
                 Status = ((WrapperClassHandler *) m_pWebService->_object)->
                     invoke (pMsg);
-                AXISTRACE1("came", INFO);
             }
             else
                 Status = AXIS_FAIL;
