@@ -861,6 +861,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
                 DESERIALIZE_ENCODED_ARRAY_BLOCK(unsigned char, CONV_STRTOUL)
             case XSD_LONG:
             case XSD_INTEGER:
+            case XSD_BOOLEAN:
                 DESERIALIZE_ENCODED_ARRAY_BLOCK(long, CONV_STRTOL)
             case XSD_UNSIGNEDLONG:
                 DESERIALIZE_ENCODED_ARRAY_BLOCK(unsigned long, CONV_STRTOUL)
@@ -975,6 +976,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
             DESERIALIZE_LITERAL_ARRAY_BLOCK(unsigned char, CONV_STRTOUL)
         case XSD_LONG:
         case XSD_INTEGER:
+        case XSD_BOOLEAN:
             DESERIALIZE_LITERAL_ARRAY_BLOCK(long, CONV_STRTOL)
         case XSD_UNSIGNEDLONG:
             DESERIALIZE_LITERAL_ARRAY_BLOCK(unsigned long, CONV_STRTOUL)
