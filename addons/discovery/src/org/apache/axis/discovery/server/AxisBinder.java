@@ -157,6 +157,7 @@ public class AxisBinder {
             ServiceDesc service = (ServiceDesc) i.next();
             String name = service.getName();
             //service.getEndpointURL();
+
             String uri = service.getDefaultNamespace();
             if (uri == null) {
                 uri = "service:" + name;
