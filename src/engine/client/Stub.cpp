@@ -106,9 +106,21 @@ char* Stub::getFirstTrasportPropertyKey()
 
 char* Stub::getNextTrasportPropertyKey()
 {
+    //already at the end?
+    if (m_viCurrentKey == m_vKeys.end())
+        return NULL;
+
     m_viCurrentKey++;
     m_viCurrentValue++;
 
+    if (m_viCurrentKey == m_vKeys.end())
+        return NULL;
+    else
+        return (*m_viCurrentKey);
+}
+
+char* Stub::getCurrentTrasportPropertyKey()
+{
     if (m_viCurrentKey == m_vKeys.end())
         return NULL;
     else
@@ -123,6 +135,38 @@ char* Stub::getCurrentTrasportPropertyValue()
         return (*m_viCurrentValue);
 }
 
+void Stub::deleteCurrentTrasportProperty()
+{
+    if (m_viCurrentKey != m_vKeys.end())
+    {
+        free(*m_viCurrentKey);
+        free(*m_viCurrentValue);
+        m_vKeys.erase(m_viCurrentKey);
+        m_vValues.erase(m_viCurrentValue);
+    }
+}
+
+void Stub::deleteTrasportProperty(char* pcKey, unsigned int uiOccurance)
+{
+    vector <char*>::iterator currentKey = m_vKeys.begin();
+    vector <char*>::iterator currentValue = m_vValues.begin();
+    unsigned int uiCount = 1;
+
+    while(currentKey != m_vKeys.end() && uiCount <= uiOccurance)
+    {
+        if(strcmp(pcKey, *currentKey) == 0)
+        {
+             if(uiCount == uiOccurance)
+             {
+                 m_vKeys.erase(currentKey);
+                 m_vValues.erase(currentValue);
+             }
+             uiCount++;
+        }
+        currentKey++;
+        currentValue++;
+    }
+}
 
 IHeaderBlock * Stub::createSOAPHeaderBlock (AxisChar * pachLocalName,
 			 AxisChar * pachPrefix, AxisChar * pachUri)
@@ -136,6 +180,56 @@ IHeaderBlock * Stub::createSOAPHeaderBlock (AxisChar * pachLocalName,
     }
     else
 	return NULL;
+}
+
+IHeaderBlock* Stub::getFirstSOAPHeaderBlock()
+{
+    m_viCurrentSOAPHeaderBlock = m_vSOAPHeaderBlocks.begin();
+    if ( m_viCurrentSOAPHeaderBlock == m_vSOAPHeaderBlocks.end())
+        return NULL;
+    else
+        return (*m_viCurrentSOAPHeaderBlock);
+    
+}
+
+IHeaderBlock* Stub::getNextSOAPHeaderBlock()
+{
+    //already at the end?
+    if ( m_viCurrentSOAPHeaderBlock == m_vSOAPHeaderBlocks.end())
+        return NULL;
+
+    m_viCurrentSOAPHeaderBlock++;
+    if ( m_viCurrentSOAPHeaderBlock == m_vSOAPHeaderBlocks.end())
+        return NULL;
+    else
+        return (*m_viCurrentSOAPHeaderBlock);
+    
+}
+
+void Stub::deleteCurrentSOAPHeaderBlock()
+{
+    if(m_viCurrentSOAPHeaderBlock != m_vSOAPHeaderBlocks.end())
+    {
+        delete(*m_viCurrentSOAPHeaderBlock);
+        m_vSOAPHeaderBlocks.erase(m_viCurrentSOAPHeaderBlock);
+    }
+}
+
+void Stub::deleteSOAPHeaderBlock(IHeaderBlock* pHeaderBlock)
+{
+    vector <IHeaderBlock *>::iterator currentSOAPHeaderBlock = m_vSOAPHeaderBlocks.begin();
+    bool bDone = false;
+    while( !bDone && currentSOAPHeaderBlock != m_vSOAPHeaderBlocks.end())
+    {
+        if(pHeaderBlock == *currentSOAPHeaderBlock)
+        {
+            delete(*currentSOAPHeaderBlock);
+            m_vSOAPHeaderBlocks.erase(currentSOAPHeaderBlock);
+            bDone = true;
+        }
+//        if(currentSOAPHeaderBlock != m_vSOAPHeaderBlocks.end())
+            currentSOAPHeaderBlock++;
+    }
 }
 
 void Stub::setSOAPHeaders ()
@@ -171,6 +265,38 @@ void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pP
 	m_vSOAPMethodAttributes.push_back(pAttribute);
 }
 
+Attribute* Stub::getFirstSOAPMethodAttribute()
+{
+    m_viCurrentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin();
+    if (m_viCurrentSOAPMethodAttribute == m_vSOAPMethodAttributes.end())
+        return NULL;
+    else
+        return (*m_viCurrentSOAPMethodAttribute);
+}
+
+Attribute* Stub::getNextSOAPMethodAttribute()
+{
+    //already at the end?
+    if (m_viCurrentSOAPMethodAttribute == m_vSOAPMethodAttributes.end())
+        return NULL;
+
+    m_viCurrentSOAPMethodAttribute++;
+    
+    if (m_viCurrentSOAPMethodAttribute == m_vSOAPMethodAttributes.end())
+        return NULL;
+    else
+        return (*m_viCurrentSOAPMethodAttribute);
+}
+
+Attribute* Stub::getCurrentSOAPMethodAttribute()
+{
+    if (m_viCurrentSOAPMethodAttribute == m_vSOAPMethodAttributes.end())
+        return NULL;
+    else
+        return (*m_viCurrentSOAPMethodAttribute);
+}
+
+
 void Stub::setSOAPMethodAttributes()
 {
     SoapSerializer *pSerializer = NULL;
@@ -184,6 +310,33 @@ void Stub::setSOAPMethodAttributes()
 	}
     }	
 }
+
+void Stub::deleteCurrentSOAPMethodAttribute()
+{
+    if (m_viCurrentSOAPMethodAttribute != m_vSOAPMethodAttributes.end())
+    {
+        delete(*m_viCurrentSOAPMethodAttribute);
+        m_vSOAPMethodAttributes.erase(m_viCurrentSOAPMethodAttribute);
+
+    }
+}
+
+void Stub::deleteSOAPMethodAttribute(Attribute* pAttribute)
+{
+    vector <Attribute*>::iterator currentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin();
+    bool bDone = false;
+    while( !bDone && currentSOAPMethodAttribute != m_vSOAPMethodAttributes.end())
+    {
+        if(pAttribute == *currentSOAPMethodAttribute)
+        {
+            delete (*currentSOAPMethodAttribute);
+            m_vSOAPMethodAttributes.erase(currentSOAPMethodAttribute);
+            bDone = true;
+        }
+        currentSOAPMethodAttribute++;
+    }
+}
+
 
 void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pUri, const AxisChar *pValue)
 {
