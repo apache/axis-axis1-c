@@ -73,6 +73,7 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
+string Variable::m_sAuxStr="";
 
 Variable::Variable()
 {
@@ -226,3 +227,55 @@ string& Variable::GetTypeEnumStr()
 //DEL {
 //DEL 	
 //DEL }
+
+
+int Variable::GenerateSerializerImpl(File &file)
+{
+	file << "\t"; 
+	if (IsComplexType())
+	{
+		file << m_VarName << "->" << "Serialize(pSZ);";		
+	}
+	else
+	{
+		file << "pSZ << " << "pSZ.SerializeBasicType(\"" << m_VarName << "\", " << m_VarName << ").c_str();";
+	}
+	file << endl;
+	return 0;
+}
+
+int Variable::GenerateDeserializerImpl(File &file)
+{
+	file << "\t";
+	if (IsComplexType())
+	{
+		file << m_VarName << "->" << "DeSerialize(pDZ);"; 	
+	}
+	else
+	{
+		file << m_VarName << " = pDZ->GetParam()->" << GetParamGetMethod(m_Type).c_str() << "();";
+	}
+	file << endl;
+	return 0;
+}
+
+string& Variable::GetParamGetMethod(int nType)
+{
+	//All get methods of Param class should be listed here
+	switch(nType)
+	{
+		case VAR_INT: m_sAuxStr = "GetInt"; break;
+		case VAR_FLOAT: m_sAuxStr = "GetFloat"; break;
+		case VAR_STRING: m_sAuxStr = "GetString"; break;
+		case VAR_LONG: m_sAuxStr = "GetLong"; break;
+		case VAR_SHORT: m_sAuxStr = "GetShort"; break;
+		case VAR_CHAR: m_sAuxStr = "GetChar"; break;
+		case VAR_DOUBLE: m_sAuxStr = "GetDouble"; break;
+		case VAR_BOOL: m_sAuxStr = "GetBool"; break;
+		case VAR_UNSIGNEDLONG: m_sAuxStr = "GetUnsignedLong"; break;
+		case VAR_UNSIGNEDINT: m_sAuxStr = "GetUnsignedInt"; break;
+		case VAR_UNSIGNEDSHORT: m_sAuxStr = "GetUnsignedShort"; break;
+		case VAR_UNSIGNED_CHAR: m_sAuxStr = "GetUnsignedChar"; break;
+	}
+	return m_sAuxStr;
+}
