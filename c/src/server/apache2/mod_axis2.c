@@ -65,13 +65,13 @@
 #define PATH_MAX 4096
 #endif
 
-#include <apache2_0/httpd.h>
-#include <apache2_0/http_config.h>
-#include <apache2_0/http_core.h>
-#include <apache2_0/http_protocol.h>
-#include <apache2_0/http_log.h>
-#include <apache2_0/ap_compat.h>
-#include <apache2_0/apr_tables.h>
+#include <server/apache2_0/httpd.h>
+#include <server/apache2_0/http_config.h>
+#include <server/apache2_0/http_core.h>
+#include <server/apache2_0/http_protocol.h>
+#include <server/apache2_0/http_log.h>
+#include <server/apache2_0/ap_compat.h>
+#include <server/apache2_0/apr_tables.h>
 #include <axis/common/Packet.h>
 #include <malloc.h>
 
