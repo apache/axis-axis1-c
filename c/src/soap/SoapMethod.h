@@ -130,8 +130,7 @@ public:
 	void setLocalName(const string &localname);
 	void setPrefix(const string &prefix);
 	SoapMethod();
-	virtual ~SoapMethod();
-
+	virtual ~SoapMethod();	
 };
 
 #endif // !defined(AFX_SOAPMETHOD_H__85B1A3F0_CD15_4607_AAAB_665A66AA8546__INCLUDED_)
