@@ -23,11 +23,18 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  *
  */
 
 /* SoapBody.cpp: implementation of the SoapBody class. */
+
+/*
+ * Revision 1.1  2004/June/02 roshan
+ * Added the parameter "eSoapVersion" to the call of m_pSoapFault->serialize
+ * method. The SoapFault class is expecting this parameter to determine the
+ * SoapVersion.
+ */
 
 #include "SoapBody.h"
 #include <axis/server/SoapSerializer.h>
@@ -84,7 +91,7 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 
         if(NULL != m_pSoapFault) 
         {        
-            iStatus= m_pSoapFault->serialize(pSZ);
+            iStatus= m_pSoapFault->serialize(pSZ, eSoapVersion);
             if(iStatus==AXIS_FAIL)
             {
                 break;
@@ -103,7 +110,7 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
             m_pSoapFault = SoapFault::getSoapFault(SERVER_ENGINE_WEBSERVICEFAILED);
             if(m_pSoapFault!=NULL) 
             {        
-                iStatus= m_pSoapFault->serialize(pSZ);
+                iStatus= m_pSoapFault->serialize(pSZ, eSoapVersion);
                 if(iStatus==AXIS_FAIL) 
                     break;
             }
