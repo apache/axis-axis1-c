@@ -50,6 +50,10 @@ int main(int argc, char* argv[])
     if(endpoint_set)
       free(endpoint);
   }
+  
+  // Samisa : clean up memory allocated for stub
+  delete ws;
+
   return returnValue;
 }
 
