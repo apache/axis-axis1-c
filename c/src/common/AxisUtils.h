@@ -86,9 +86,11 @@ public:
 	static const AxisXMLCh* m_strLeftSqBracket;
 	static const AxisXMLCh* m_strRightSqBracket;
 	static const AxisXMLCh* m_strColon;
+    
 private:
 	static const AxisXMLCh* Convert(const AxisChar* pch);
-	static AxisXMLCh m_Buffer[CONVERT_BUFFER_SIZE]; 
+	static AxisXMLCh m_Buffer[CONVERT_BUFFER_SIZE];   
+    
 };
 
 #endif // !defined(AFX_AXISUTILS_H__B5175A8C_0210_417D_BA43_6AAAF7E03551__INCLUDED_)

@@ -64,6 +64,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "AxisUtils.h"
+#include "GDefine.h"
 
 #include <xercesc/util/XMLString.hpp>
 
