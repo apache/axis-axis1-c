@@ -139,127 +139,127 @@ SOURCE=..\..\src\common\TypeMapping.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\src\common\ArrayBean.h
+SOURCE=..\..\include\axis\common\ArrayBean.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\AxisConfig.h
+SOURCE=..\..\include\axis\common\AxisConfig.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\AxisException.h
+SOURCE=..\..\include\axis\common\AxisException.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\AxisSocketUtils.h
+SOURCE=..\..\include\axis\common\AxisSocketUtils.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\AxisTime.h
+SOURCE=..\..\include\axis\common\AxisTime.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\AxisTrace.h
+SOURCE=..\..\include\axis\common\AxisTrace.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\AxisUserAPI.h
+SOURCE=..\..\include\axis\common\AxisUserAPI.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\AxisUtils.h
+SOURCE=..\..\include\axis\common\AxisUtils.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\AxisWrapperAPI.h
+SOURCE=..\..\include\axis\common\AxisWrapperAPI.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\BasicHandler.h
+SOURCE=..\..\include\axis\common\BasicHandler.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\BasicTypeSerializer.h
+SOURCE=..\..\include\axis\common\BasicTypeSerializer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\GDefine.h
+SOURCE=..\..\include\axis\common\GDefine.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\Handler.h
+SOURCE=..\..\include\axis\common\Handler.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\IArrayBean.h
+SOURCE=..\..\include\axis\common\IArrayBean.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\IDeployerUtils.h
+SOURCE=..\..\include\axis\common\IDeployerUtils.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\IHandlerSoapDeSerializer.h
+SOURCE=..\..\include\axis\common\IHandlerSoapDeSerializer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\IHandlerSoapSerializer.h
+SOURCE=..\..\include\axis\common\IHandlerSoapSerializer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\IHeaderBlock.h
+SOURCE=..\..\include\axis\common\IHeaderBlock.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\IMessageData.h
+SOURCE=..\..\include\axis\common\IMessageData.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\IParam.h
+SOURCE=..\..\include\axis\common\IParam.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\ISoapDeserializer.h
+SOURCE=..\..\include\axis\common\ISoapDeSerializer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\ISoapHeader.h
+SOURCE=..\..\include\axis\common\ISoapHeader.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\ISoapMethod.h
+SOURCE=..\..\include\axis\common\ISoapMethod.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\ISoapSerializer.h
+SOURCE=..\..\include\axis\common\ISoapSerializer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\IWrapperSoapDeSerializer.h
+SOURCE=..\..\include\axis\common\IWrapperSoapDeSerializer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\IWrapperSoapSerializer.h
+SOURCE=..\..\include\axis\common\IWrapperSoapSerializer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\MessageData.h
+SOURCE=..\..\include\axis\common\MessageData.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\Packet.h
+SOURCE=..\..\include\axis\common\Packet.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\Param.h
+SOURCE=..\..\include\axis\common\Param.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\TypeMapping.h
+SOURCE=..\..\include\axis\common\TypeMapping.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\WrapperClassHandler.h
+SOURCE=..\..\include\axis\common\WrapperClassHandler.h
 # End Source File
 # End Group
 # End Target
