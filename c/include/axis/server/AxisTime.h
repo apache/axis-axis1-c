@@ -57,7 +57,7 @@ class AxisTime
             XSDTYPE nType);
         AxisString& serialize(const AxisChar* sName, long lDuration, 
             XSDTYPE nType);
-        long getDuration();
+        double getDuration();
         struct tm getDateTime();
         struct tm getDate();
         struct tm getTime();
@@ -88,7 +88,7 @@ class AxisTime
         AxisString strZone;
         uDuration duration;
         time_t m_longYears;
-        time_t m_Duration;
+        double m_Duration;
         /* string strXSDDuration; */
         AxisString strXSDDuration;
         AxisString strXSDDate;

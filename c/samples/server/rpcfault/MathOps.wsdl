@@ -11,7 +11,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 xmlns:s="http://soapinterop.org/xsd">
 <types>
     <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
-        targetNamespace="http://soapinterop.org/xsd">
+        targetNamespace="http://localhost/axis/MathOps">
         <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
         <complexType name="SOAPStruct">
             <sequence>
@@ -35,7 +35,7 @@ xmlns:s="http://soapinterop.org/xsd">
         <wsdl:part name="addReturn" type="xsd:int"/>
     </wsdl:message>
     <message name="DivByZeroFault">
-        <part name="faultstruct" type="s:SOAPStructFault"/>
+        <part name="faultstruct" type="intf:SOAPStructFault"/>
     </message>
     <wsdl:portType name="MathOps">
         <wsdl:operation name="div" parameterOrder="in0 in1">

@@ -171,7 +171,7 @@ int AxisTime::mkCTime ()
     AxisChar *cTemp;
     AxisChar *cTemp2;
     AxisChar *cTemp3;
-    int intLen = 0;
+    unsigned int intLen = 0;
     int intHours = 0;
     int intMins = 0;
     int intSecs = 0;
@@ -475,7 +475,7 @@ int AxisTime::mkCTime ()
 	return AXIS_SUCCESS;
 }
 
-long AxisTime::getDuration ()
+double AxisTime::getDuration ()
 {
     return m_Duration;
 }
@@ -511,7 +511,7 @@ long AxisTime::deserializeDuration (const AxisChar* strValue, XSDTYPE type)
     AxisTime at;
     at.setType (type);
     at.setValue (strValue);
-    return at.getDuration ();
+    return (long) at.getDuration ();
 }
 
 

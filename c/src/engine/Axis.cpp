@@ -252,7 +252,7 @@ extern "C" int initialize_module (int bServer)
     if (bServer) // no client side wsdd processing at the moment
     {
 		/* Read from the configuration file */
-        int status = g_pConfig->readConfFile (); 
+        status = g_pConfig->readConfFile (); 
         if (status == AXIS_SUCCESS)
         {
 			char *pWsddPath = g_pConfig->getAxConfProperty(AXCONF_WSDDFILEPATH);
