@@ -374,9 +374,9 @@ Notes:
 					</linker>
 					<!-- Files to compile -->
 					<fileset dir="${dir.src}">
-						<include name="transport/axis/*.cpp"/>
+						<include name="transport/${transport}/*.cpp"/>
 						<!-- The following files need to be excluded -->
-						<exclude name="transport/axis/SecureChannel.cpp"/>
+						<exclude name="transport/${transport}/SecureChannel.cpp"/>
 					</fileset>
 				</cc>
 			</then>
@@ -389,9 +389,9 @@ Notes:
 					<linker refid="AIXLinker"/>
 					<!-- Files to compile -->
 					<fileset dir="${dir.src}">
-						<include name="transport/axis/*.cpp"/>
+						<include name="transport/${transport}/*.cpp"/>
 						<!-- The following files need to be excluded -->
-						<exclude name="transport/axis/SecureChannel.cpp"/>
+						<exclude name="transport/${transport}/SecureChannel.cpp"/>
 					</fileset>
 				</cc>
 			</else>
@@ -402,7 +402,7 @@ Notes:
 	  Compile the Axis XML Parser Library
 	  -->
 	<target name="compileAxisXMLParser" depends="initialize">
-		<mkdir dir="${dir.objects}/${xmlParserLibraryName}"/>
+		<mkdir dir="${dir.objects}"/>
 		<mkdir dir="${dir.bin}"/>
 		<if>
 			<not>
