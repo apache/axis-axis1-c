@@ -80,7 +80,7 @@ public class TestResult implements Serializable {
      * change DefaultTypeMappingImpl to add the serializer together with the inbuild Serializers  
      * call the output as usual.
      */
-    public void serialize(SerializationContext context) {
+    public void serialize(org.apache.axis.encoding.SerializationContext context) {
 
         try {
             context.writeString("<body>");
