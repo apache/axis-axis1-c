@@ -128,7 +128,7 @@ bool WSDDService::IsAllowedMethod(string& sServiceName)
 	{
 		if((*iter)==sServiceName)
 		{
-			cout<<"we have a service by that name";
+//			cout<<"we have a service by that name";
 			return true;
 		}
 	}

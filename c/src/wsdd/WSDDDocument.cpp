@@ -225,7 +225,7 @@ void WSDDDocument::startElement(const XMLCh *const uri,
 				tempService->SetServiceName(sSrvName);
 				(*svsMap)[toString(attrs.getValue(xchName))]=tempService;
 
-				cout<<toString(attrs.getValue(toXMLCh("name")))<<endl;
+			//	cout<<toString(attrs.getValue(toXMLCh("name")))<<endl;
 			}  
 
 			//The check for lev1==WSDD_UNKNOWN is necessary because
