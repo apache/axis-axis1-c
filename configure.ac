@@ -115,7 +115,7 @@ AC_ARG_ENABLE(tspp, [  --enable-tspp    build tspp xml parser library.],
     ;;
   esac ],
   AC_MSG_RESULT(no)
-  TSPPBUILD=""
+  TSPPBUILD="tspp"
 )
 
 AC_MSG_CHECKING(whether to build test cases)
@@ -224,7 +224,6 @@ AC_OUTPUT(Makefile \
     src/wsdd/Makefile \
     src/xml/Makefile \
     src/transport/Makefile \
-    src/transport/axis/Makefile \
     src/transport/axis2/Makefile \
     src/transport/libwww/Makefile \
     src/engine/Makefile \
