@@ -93,6 +93,7 @@ public class CUtils {
 		class2QNamemap.put("unsigned char", new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"));
 		class2QNamemap.put("float", new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"));
 		class2QNamemap.put("long", new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"));
+		class2QNamemap.put("long", new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"));
 		class2QNamemap.put("double", new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"));
 		class2QNamemap.put("char", new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"));
 		class2QNamemap.put("short", new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"));
@@ -114,6 +115,7 @@ public class CUtils {
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"), "unsigned char");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"), "float");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"), "long");
+		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"), "long");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"), "double");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"), "char");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"), "short");

@@ -119,6 +119,7 @@ public class TypeMap {
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"), "byte");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"), "float");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"), "long");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"), "long");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"), "double");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"), "boolean");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"), "char");
