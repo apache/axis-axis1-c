@@ -290,16 +290,11 @@
 <h3>What You need</h3>
 </div>
 <p>It needs a few helper libraries, for logging, WSDL processing and introspection. You need to have following in order to run Axis C++ engine.</p>
-<ul>
-<li>RedHat 9(2.4.20-8) &nbsp
-expat-1.95.7(source) &nbsp
-xerces-c-src2_2_0(I build xerces from source) &nbsp
-httpd-2.0.48(source)&nbsp
-apache_1.3.27(source) &nbsp; &nbsp; &nbsp;1.3 or 2</li>
-<li>expat (if use expat parser)</li>
-<li>Xerces-c (if use xerces parser)</li>
-</ul>
-<p>
+&nbsp &nbsp &nbsp RedHat 9(2.4.20-8) <br>
+&nbsp &nbsp &nbsp expat-1.95.7(source) <br>
+&nbsp &nbsp &nbsp xerces-c-src2_2_0(I build xerces from source) <br>
+&nbsp &nbsp &nbsp httpd-2.0.48(source)<br>
+&nbsp &nbsp &nbsp apache_1.3.27(source) <p>
 
 <p><b>Note: In my environment I have autoconf 2.57, automake 1.6.3, libtool 1.4.3,  gcc 3.2.2</b></p>
 <p> You can download the Axis C++ source or binary from one of the apache mirror sites <br>
@@ -330,27 +325,27 @@ XERCESC_HOME points to where you installed xereces-c</p>
 <p>You can write your own transport or parser library according to the APIs provided. Currently Axis C++provides API implementations for Xerces-c and Expat. It also provides it's own client side transport library implementation. In the server side deployment, Axis C++ provides two modules that can be loaded into apache1.3 and apache 2 as shared libraries.</p>
 <p>So this sums upto two posibilities.<br>
 You can deploy Axis C++ server <br>
-on Apache2 with xercesc parser or expat parser(Only one parser at a time)<br>
-    on Apache1.3 with xercesc parer or expat parser<br>
+&nbsp &nbsp On Apache2 with xercesc parser or expat parser(Only one parser at a time)<br>
+&nbsp &nbsp On Apache1.3 with xercesc parer or expat parser<br>
 So if you use only Expat no need to define XERCESC_HOME vice versa.</p>
 
 <p><b>When you build Axis C++ you can give options</b></p>
 <p><b>1) Build for Apache2</b><br>
-   with Expat parser support only<br>
-   with Xerces paresr support only<br>
-   with both parser support</p>
+   With Expat parser support only<br>
+   With Xerces parser support only<br>
+   With both parser support</p>
 <p><b>2) Build for Apache1.3</b><br>
-   with Expat parser support only<br>
-   with Xerces parser support only<br>
-   with both parser support</p>
+   With Expat parser support only<br>
+   With Xerces parser support only<br>
+   With both parser support</p>
 <p>You can choose these selections on $AXISCPP_HOME/configure.ac</p>
-<br><br>
 
-<p>{apache2 block starts</p>
-<p><b>#if you use apache2 and  you need to build both axis_expat and axis_xerces libraries<br> </b><br>
+<p>#<b>{apache2 block starts</p>
+<p>#if you use apache2 <br>
+#if you need to build both axis_expat and axis_xerces libraries</b><br>
 
 
-<p>#AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile<br> src/transport/Makefile src/transport/axis/Makefile src/engine/Makefile src/engine/server/Makefile src/engine/client/Makefile <br> src/server/Makefile src/server/apache2/Makefile src/server/simple_axis_server/Makefile src/server/adminservice/Makefile<br> src/client/Makefile src/client/adminclient/Makefile src/xml/expat/Makefile src/xml/xerces/Makefile)</p>
+<p>AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile<br> src/transport/Makefile src/transport/axis/Makefile src/engine/Makefile src/engine/server/Makefile src/engine/client/Makefile <br> src/server/Makefile src/server/apache2/Makefile src/server/simple_axis_server/Makefile src/server/adminservice/Makefile<br> src/client/Makefile src/client/adminclient/Makefile src/xml/expat/Makefile src/xml/xerces/Makefile)</p>
 
 <p><b>#if you need to build only axis_expat</b></p>
 <p>#AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile<br> src/transport/Makefile src/transport/axis/Makefile src/engine/Makefile src/engine/server/Makefile src/engine/client/Makefile<br>  src/server/Makefile src/server/apache2/Makefile src/server/simple_axis_server/Makefile src/server/adminservice/Makefile<br> src/client/Makefile src/client/adminclient/Makefile src/xml/expat/Makefile)</p>
@@ -358,9 +353,9 @@ So if you use only Expat no need to define XERCESC_HOME vice versa.</p>
 <p><b>#if you need to build only axis_xerces</b></p>
 <p>#AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile<br> src/transport/Makefile src/transport/axis/Makefile src/engine/Makefile src/engine/server/Makefile src/engine/client/Makefile<br>  src/server/Makefile src/server/apache2/Makefile src/server/simple_axis_server/Makefile src/server/adminservice/Makefile<br> src/client/Makefile src/client/adminclient/Makefile src/xml/xerces/Makefile)</p>
 
-<p>apache2 block ends<br>
+<p><b>#apache2 block ends</b><br>
                                                                                                                              
-{apache1.3 block starts<br>
+#<b>{apache1.3 block starts</b><br>
 <p><b>#if you use apache1.3 and  you need to build both axis_expat and axis_xerces libraries</b></p>
 <p>#AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile<br> src/transport/Makefile src/transport/axis/Makefile src/engine/Makefile src/engine/server/Makefile src/engine/client/Makefile<br>  src/server/Makefile src/server/apache/Makefile src/server/simple_axis_server/Makefile src/server/adminservice/Makefile<br> src/client/Makefile src/client/adminclient/Makefile src/xml/expat/Makefile src/xml/xerces/Makefile)</p>
 
@@ -373,14 +368,13 @@ So if you use only Expat no need to define XERCESC_HOME vice versa.</p>
 <p>#}apache1.3 block ends</p>
 
 <p>You also need to  do a selection at $AXISCPP_HOME/src/xml/Makefile.am</p>
-<br>
 <p>SUBDIRS = expat xerces #Here I build both expat and xerces libraries<br>
 #SUBDIRS = expat<br>
-#SUBDIRS = xerces<br></p>
+#SUBDIRS = xerces</p>
 <p>And again in $AXISCPP_HOME/src/server/Makefile.am</p>
-<br>
+
 <p>#if you use apache2<br>
-SUBDIRS = apache2 adminservice #Here I build for Apache2<br><br>
+SUBDIRS = apache2 adminservice #Here I build for Apache2<br>
                                                                                                                              
 #if you use apache1.3<br>
 #SUBDIRS = apache adminservice</p>
@@ -408,7 +402,7 @@ libaxis_xercesc.so is the xercesc parser library implmentation for Axis C++</p>
 
 <p>Also $AXISCPP_HOME/samples/server samples are built and installed in $AXIS_HOME/web_services</p>
 <p>$AXISCPP_HOME/samples/client samples are built and executables are in $AXISCPP_HOME/samples/client</p>
-<p>Parser and Transport libraries both are loaded in to axis engine when it is loaded by apache.</p>
+<p>Parser and Transport libraries are loaded into axis engine when it is loaded by apache.</p>
 <p>Now you need to add to $<apache install directory>/conf/httpd.conf<br>
 $ vi <apache install directory>/conf/httpd.conf</p>
 
@@ -447,14 +441,14 @@ cd $AXIS_HOME</p>
 
 <p>To deploy on apache2<br>
 sh deploy_apache2.sh</p>
-<br>
+
 <p>To deploy on apache<br>
 sh deploy_apache.sh</p>
 
 <p>All the libraries are loaded.</p>
 
 <p><b>Note that in the line no. 12 of the script above we change the name libaxis_expat.so to libaxis_xmlparser.so.
-If we use xerces we need to change libaxis_xercesc.so to libaxis_xmlparser.so.</b></p>
+If we use xerces we need to change libaxis_xercesc.so to libaxis_xmlparser.so</b>.</p>
 
 <p>If you have done installation successfully it will display the Axis C++ welcome page when you point to URI http://localhost/axis</p> .
 <p><b>Note: In the axis welcome page all the services in $AXIS_HOME/conf/server.wsdd are listed. This does not mean
