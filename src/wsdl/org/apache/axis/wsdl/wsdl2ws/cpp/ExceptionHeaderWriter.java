@@ -145,13 +145,12 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
                 faultName = getServiceName() + "_" + faultInfoName;
             }
 
-            writer.write("public:\n\t" + faultName + "();\n");
-            writer.write("\t" + faultName + "(ISoapFault* pFault);\n");
-            writer.write("\t" + faultName + "(int iExceptionCode);\n");
-            writer.write("\t" + faultName + "(exception* e);\n");
-            writer.write(
-                "\t" + faultName + "(exception* e, int iExceptionCode);\n");
-            writer.write("\t" + faultName + "(string sMessage);\n");
+            writer.write("public:\n\tSTORAGE_CLASS_INFO " + faultName + "();\n");
+            writer.write("\tSTORAGE_CLASS_INFO " + faultName + "(ISoapFault* pFault);\n");
+            writer.write("\tSTORAGE_CLASS_INFO " + faultName + "(int iExceptionCode);\n");
+            writer.write("\tSTORAGE_CLASS_INFO " + faultName + "(exception* e);\n");
+            writer.write("\tSTORAGE_CLASS_INFO " + faultName + "(exception* e, int iExceptionCode);\n");
+            writer.write("\tSTORAGE_CLASS_INFO " + faultName + "(string sMessage);\n");
         }
         catch (IOException e)
         {
@@ -173,7 +172,7 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
                 faultName = getServiceName() + "_" + faultInfoName;
             }
 
-            writer.write("\tvirtual ~" + faultName + "() throw();\n");
+            writer.write("\tSTORAGE_CLASS_INFO virtual ~" + faultName + "() throw();\n");
         }
         catch (IOException e)
         {
@@ -187,11 +186,11 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
     {
         try
         {
-            writer.write("\t const char* what() throw();\n");
-            writer.write("\t const int getExceptionCode();\n");
-            writer.write("\t const string getMessage(exception* e);\n");
-            writer.write("\t const string getMessage(int iExceptionCode);\n");
-            writer.write("\t const ISoapFault* getFault();\n\n");
+            writer.write("\tSTORAGE_CLASS_INFO const char* what() throw();\n");
+            writer.write("\tSTORAGE_CLASS_INFO const int getExceptionCode();\n");
+            writer.write("\tSTORAGE_CLASS_INFO const string getMessage(exception* e);\n");
+            writer.write("\tSTORAGE_CLASS_INFO const string getMessage(int iExceptionCode);\n");
+            writer.write("\tSTORAGE_CLASS_INFO const ISoapFault* getFault();\n\n");
             writer.write("private:\n\t void processException(exception* e);\n");
             writer.write("\t void processException(ISoapFault* pFault);\n");
             writer.write(

@@ -57,7 +57,7 @@ public class ClientStubHeaderWriter
         try
         {
             writer.write("public: \n");
-            writer.write("\tvoid SetSecure( char *, ...);\n");
+            writer.write("\tSTORAGE_CLASS_INFO void SetSecure( char *, ...);\n");
             // FJP Secure Channel
 
             for (int i = 0; i < methods.size(); i++)
@@ -68,7 +68,7 @@ public class ClientStubHeaderWriter
                 //write return type
                 if (0 == noOfOutParams)
                 {
-                    writer.write("\tvoid ");
+                    writer.write("\tSTORAGE_CLASS_INFO void ");
                 }
                 else
                 {
@@ -80,7 +80,7 @@ public class ClientStubHeaderWriter
                                 .iterator()
                                 .next();
                         writer.write(
-                            "\t"
+                            "\tSTORAGE_CLASS_INFO "
                                 + WrapperUtils
                                     .getClassNameFromParamInfoConsideringArrays(
                                     returnParam,

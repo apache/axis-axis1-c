@@ -77,10 +77,10 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
         try
         {
             writer.write(
-                "public:\n\t"
+                "public:\n\tSTORAGE_CLASS_INFO "
                     + classname
                     + "(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol=APTHTTP1_1);\n");
-            writer.write("\t" + classname + "();\n");
+            writer.write("\tSTORAGE_CLASS_INFO " + classname + "();\n");
         }
         catch (IOException e)
         {
@@ -95,7 +95,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
     {
         try
         {
-            writer.write("public:\n\tvirtual ~" + classname + "();\n");
+            writer.write("public:\n\tSTORAGE_CLASS_INFO virtual ~" + classname + "();\n");
         }
         catch (IOException e)
         {
@@ -121,7 +121,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                 //write return type
                 if (0 == noOfOutParams)
                 {
-                    writer.write("\tvoid ");
+                    writer.write("\tSTORAGE_CLASS_INFO void ");
                 }
                 else
                 {
@@ -133,7 +133,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                                 .iterator()
                                 .next();
                         writer.write(
-                            "\t"
+                            "\tSTORAGE_CLASS_INFO "
                                 + WrapperUtils
                                     .getClassNameFromParamInfoConsideringArrays(
                                     returnParam,
@@ -143,7 +143,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                     else
                     {
                         isAllTreatedAsOutParams = true;
-                        writer.write("\tvoid ");
+                        writer.write("\tSTORAGE_CLASS_INFO void ");
                     }
                 }
                 //write return type
