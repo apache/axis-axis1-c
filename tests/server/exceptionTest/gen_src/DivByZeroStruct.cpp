@@ -5,7 +5,7 @@
 
 #include <malloc.h>
 #include "DivByZeroStruct.h"
-#include <axis/server/AxisWrapperAPI.h>
+#include <axis/server/AxisWrapperAPI.hpp>
 
 /*
  * This static method serialize a DivByZeroStruct type of object

@@ -6,7 +6,7 @@
 #if !defined(__SPECIALDETAILSTRUCT_PARAM_H__INCLUDED_)
 #define __SPECIALDETAILSTRUCT_PARAM_H__INCLUDED_
 
-#include <axis/server/AxisUserAPI.h>
+#include <axis/server/AxisUserAPI.hpp>
 
 AXIS_CPP_NAMESPACE_USE
 

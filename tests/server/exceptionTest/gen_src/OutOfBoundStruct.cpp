@@ -5,7 +5,7 @@
 
 #include <malloc.h>
 #include "OutOfBoundStruct.h"
-#include <axis/server/AxisWrapperAPI.h>
+#include <axis/server/AxisWrapperAPI.hpp>
 
 extern int Axis_DeSerialize_SpecialDetailStruct(SpecialDetailStruct* param, IWrapperSoapDeSerializer* pDZ);
 extern void* Axis_Create_SpecialDetailStruct(SpecialDetailStruct* pObj, bool bArray = false, int nSize=0);

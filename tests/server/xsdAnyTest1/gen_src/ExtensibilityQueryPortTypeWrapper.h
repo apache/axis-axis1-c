@@ -7,10 +7,10 @@
 #define __EXTENSIBILITYQUERYPORTTYPEWRAPPER_SERVERWRAPPER_H__INCLUDED_
 
 #include "ExtensibilityQueryPortType.h"
-#include <axis/server/WrapperClassHandler.h>
-#include <axis/server/IMessageData.h>
-#include <axis/server/GDefine.h>
-#include <axis/server/AxisWrapperAPI.h>
+#include <axis/server/WrapperClassHandler.hpp>
+#include <axis/server/IMessageData.hpp>
+#include <axis/server/GDefine.hpp>
+#include <axis/server/AxisWrapperAPI.hpp>
 
 AXIS_CPP_NAMESPACE_USE
 
