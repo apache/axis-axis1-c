@@ -5,7 +5,7 @@
 #include "ServerAxisEngine.h"
 #include <stdio.h>
 #include "../common/AxisException.h"
-//#include "../common/AxisTrace.h"
+#include "../common/AxisTrace.h"
 #include "../common/AxisUtils.h"
 #include "../wsdd/WSDDDeployment.h"
 #include "HandlerPool.h"
@@ -31,9 +31,10 @@ int ServerAxisEngine::Process(Ax_soapstream* soap)
 {
 	int Status;
 	AXIS_TRY
-//		AXISTRACE1("ServerAxisEngine::Process");
+		AXISTRACE1("ServerAxisEngine::Process");
 		const WSDDService* pService = NULL;
 		string sSessionId = soap->sessionid;
+        AXISTRACE2("ServerAxisEngine::Process", sSessionId.c_str());
 		int nSoapVersion;
 
 		do {
