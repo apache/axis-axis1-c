@@ -230,7 +230,7 @@ public:
      *        for predefined transport property types.
      * @param pcValue Transport property value to be set.
      */
-    virtual void setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE eType,
+    virtual int setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE eType,
     const char* pcValue)=0;
     /**
      * @brief Gets a predefined transport property in the arrived message
@@ -251,7 +251,7 @@ public:
      * @param pcKey Key for the transport property to be set.
      * @param pcValue Value for transport property to be set.
      */
-    virtual void setTransportProperty(const char* pcKey, const char* pcValue)=0;
+    virtual int setTransportProperty(const char* pcKey, const char* pcValue)=0;
     /**
      * @brief Gets any transport property in the arrived message
      *

@@ -29,7 +29,7 @@ public:
     virtual const std::string&	GetLastErrorMsg()=0;
     virtual const IChannel&		operator >> (const char * msg)=0;
     virtual const IChannel&		operator << (const char * msg)=0;
-	virtual void				setSecureProperties( const char *) {};
+	virtual int					setSecureProperties( const char *) {return true;};
 	virtual const char *		getSecureProperties() {return NULL;};
     virtual void				setTimeout( const long lSeconds)=0;
     virtual void				setSocket( unsigned int uiNewSocket)=0;

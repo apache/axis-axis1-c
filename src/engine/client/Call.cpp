@@ -41,6 +41,7 @@
 #include "../../soap/SoapSerializer.h"
 #include "../../soap/SoapDeSerializer.h"
 #include "../../soap/HeaderBlock.h"
+#include "../../common/AxisGenException.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 
@@ -322,9 +323,10 @@ AXIS_PROTOCOL_TYPE Call::getProtocol ()
 	}
 }
 
-int Call::setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type,
-    const char* value)
+int Call::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)
 {
+	int	iSuccess = AXIS_SUCCESS;
+
     // Samisa - if SOAPAction is being set add extra "" to value
     if (type == SOAPACTION_HEADER)
     {
@@ -334,8 +336,22 @@ int Call::setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type,
         delete [] tempvalue;
     }
     else
-        m_pTransport->setTransportProperty(type, value);
-    return AXIS_SUCCESS;
+	{
+		try
+		{
+			iSuccess = m_pTransport->setTransportProperty(type, value);
+		}
+		catch(AxisException& e)
+		{
+			char *	pszError = new char[strlen( e.what()) + 1];
+
+			strcpy( pszError, e.what());
+
+			throw AxisGenException(e.getExceptionCode(), const_cast<char*>(pszError));
+		}
+	}
+
+    return iSuccess;
 }
 
 int Call::setHandlerProperty(AxisChar* name, void* value, int len)

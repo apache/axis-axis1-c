@@ -715,9 +715,10 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
  * @param const char* Value is a NULL terminated character string containing
  * the value associated with the type.
  */
-void HTTPTransport::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char *value) throw (HTTPTransportException)
+int HTTPTransport::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char *value) throw (HTTPTransportException)
 {
     const char *key = NULL;
+	int			iSuccess = AXIS_SUCCESS;
 
     switch (type)
     {
@@ -752,7 +753,7 @@ void HTTPTransport::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, 
 
 		case SECURE_PROPERTIES:
 		{
-			m_pActiveChannel->setSecureProperties( value);
+			iSuccess = m_pActiveChannel->setSecureProperties( value);
 
 			break;
 		}
@@ -779,6 +780,8 @@ void HTTPTransport::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, 
     {
 		setTransportProperty( key, value);
     }
+
+	return iSuccess;
 }
 
 /* HTTPTransport::setTransportProperty( Key, Value) Is an overloaded public
@@ -790,11 +793,11 @@ void HTTPTransport::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, 
  * @param const char* Value is a NULL terminated character string containing
  * the value associated with the type.
  */
-void HTTPTransport::setTransportProperty( const char *pcKey, const char *pcValue) throw (HTTPTransportException)
+int HTTPTransport::setTransportProperty( const char *pcKey, const char *pcValue) throw (HTTPTransportException)
 {
     if( !pcKey || !pcValue)	// Samisa - fix for AXISCPP-295. We must check for valid values here.
 	{
-		return;
+		return AXIS_SUCCESS;
 	}
 
     bool b_KeyFound = false;
@@ -820,6 +823,8 @@ void HTTPTransport::setTransportProperty( const char *pcKey, const char *pcValue
     {
 		m_vHTTPHeaders.push_back( std::make_pair( (string) pcKey, (string) pcValue));
     }
+
+	return AXIS_SUCCESS;
 }
 
 /* HTTPTransport::getTransportProperty( Type) Is a public method that will

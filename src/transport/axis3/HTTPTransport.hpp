@@ -51,9 +51,9 @@ class HTTPTransport:public SOAPTransport
     void					closeConnection();
     AXIS_TRANSPORT_STATUS	sendBytes( const char *, const void *);
     AXIS_TRANSPORT_STATUS	getBytes( char *, int *) throw (AxisException, HTTPTransportException);
-    void					setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE, const char *) throw (HTTPTransportException);
+    int						setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE, const char *) throw (HTTPTransportException);
     const char *			getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE) throw (HTTPTransportException);
-    void					setTransportProperty( const char *, const char *) throw (HTTPTransportException);
+    int						setTransportProperty( const char *, const char *) throw (HTTPTransportException);
     const char *			getTransportProperty( const char * pcKey) throw (HTTPTransportException);
     void					setSessionId( const char * pcSessionId);
     const char *			getSessionId();
