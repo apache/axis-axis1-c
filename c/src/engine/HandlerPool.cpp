@@ -103,11 +103,7 @@ int HandlerPool::GetHandler(BasicHandler** ppHandler, string& sSessionId, int nS
 			}
 			else if (Status == HANDLER_BEING_USED)
 			{ //block this thread not this object
-				#ifdef WIN32
-				Sleep(0);
-				#else
-				sleep(0);
-				#endif
+				Ax_Sleep(0);
 			}
 			else
 			{
