@@ -59,6 +59,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -75,6 +76,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.axis.Constants;
 import org.apache.axis.encoding.Base64;
 import org.apache.axis.utils.JavaUtils;
+import org.apache.geronimo.ews.ws4j2ee.wsutils.J2EEFault;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
@@ -803,4 +805,96 @@ public class Utils {
 		return org.apache.axis.wsdl.toJava.Utils.makePackageName(qname.getNamespaceURI())
 			+"."+firstCharacterToUpperCase(JavaUtils.xmlNameToJava(qname.getLocalPart()));
 	}
+	public static Method getJavaMethod(String className,String methodName) throws J2EEFault{
+		String primKey = null;
+		Class sei ;
+		try {
+			sei = Class.forName(className);
+	
+			java.lang.reflect.Method callMethod = null;
+			Method[] methods = sei.getMethods();
+		
+			for(int i=0;i<methods.length;i++){
+				if(methods[i].equals(methodName)){
+					callMethod = methods[i];
+				}
+			}
+			if(callMethod == null)
+				throw new org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenarationFault("error");
+				return callMethod;
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			throw new J2EEFault(e);
+		}				
+	}
+	
+	public static Object createParameter(Object obj){
+		return obj;
+	}
+	public static Object createParameter(int in){
+			return new Integer(in);
+	}
+	public static Object createParameter(long in){
+				return new Long(in);
+	}
+	public static Object createParameter(float in){
+				return new Float(in);
+	}
+	public static Object createParameter(byte in){
+				return new Byte(in);
+	}
+	public static Object createParameter(short in){
+				return new Short(in);
+	}
+	public static Object createParameter(boolean in){
+				return new Boolean(in);
+	}
+	public static Object createParameter(double in){
+				return new Double(in);
+	}
+	
+	public static String getParameter(String type,String name){
+		if("int".equals(type)){
+			return "new Integer("+name+")";
+		}else if("float".equals(type)){
+			return "new Float("+name+")";
+		}else if("double".equals(type)){
+			return "new Double("+name+")";
+		}else if("short".equals(type)){
+			return "new Short("+name+")";
+		}else if("boolean".equals(type)){
+			return "new Boolean("+name+")";
+		}else if("byte".equals(type)){
+			return "new Byte("+name+")";
+		}else if("long".equals(type)){
+			return "new Long("+name+")";
+		}else if("char".equals(type)){
+			return "new Character("+name+")";
+		}else{
+			return name;
+		}
+	}
+	
+	public static String getReturnCode(String type,String name){
+		if("java.lang.Integer".equals(type)||"int".equals(type)){
+			return "((java.lang.Integer)"+name+").intValue()";
+		}else if("java.lang.Float".equals(type)||"float".equals(type)){
+			return "((java.lang.Float)"+name+").floatValue()";
+		}else if("java.lang.Double".equals(type)||"double".equals(type)){
+			return "((java.lang.Double)"+name+").doubleValue()";
+		}else if("java.lang.Short".equals(type)||"short".equals(type)){
+			return "((java.lang.Short)"+name+").shortValue()";
+		}else if("java.lang.Boolean".equals(type)||"boolean".equals(type)){
+			return "((java.lang.Boolean)"+name+").booleanValue()";
+		}else if("java.lang.Byte".equals(type)||"byte".equals(type)){
+			return "((java.lang.Byte)"+name+").byteValue()";
+		}else if("java.lang.Long".equals(type)||"long".equals(type)){
+			return "((java.lang.Long)"+name+").longValue()";
+		}else if("java.lang.Character".equals(type)||"char".equals(type)){
+			return "((java.lang.Character)"+name+").charValue()";
+		}else{
+			return name;
+		}
+	}
+
 }

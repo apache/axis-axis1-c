@@ -80,14 +80,16 @@ public class Ws4J2eeCLOptionParser {
     protected static final int HELPER_CLASS_OPT = 'H';
     protected static final int USERNAME_OPT = 'U';
     protected static final int PASSWORD_OPT = 'P';
-	protected static final int REMOTE_OPT = 'R';
+	protected static final int IMPL_STYLE_OPT = 'I';
+	protected static final int CONTAINER_OPT = 'C';
 
     private String wscffile;
     private String outputDirectory = ".";
     private boolean isServerSide = false;
     private String userName;
     private String password;
-    private boolean useRemoteInterface = false;
+    private String implStyle = GenerationConstants.USE_LOCAL_AND_REMOTE;
+    private String contanier = GenerationConstants.JBOSS_CONTAINER;
 
     protected static final CLOptionDescriptor[] options = new CLOptionDescriptor[]{
         new CLOptionDescriptor("server-side",
@@ -106,10 +108,14 @@ public class Ws4J2eeCLOptionParser {
                 CLOptionDescriptor.ARGUMENT_REQUIRED,
                 PASSWORD_OPT,
                 "password"),
-		new CLOptionDescriptor("useRemote",
-					   CLOptionDescriptor.ARGUMENT_DISALLOWED,
-					   REMOTE_OPT,
-					   "use the Remote interface")        
+		new CLOptionDescriptor("implStyle",
+					   CLOptionDescriptor.ARGUMENT_REQUIRED,
+					   IMPL_STYLE_OPT,
+					   "impelemtation Style"),  
+		new CLOptionDescriptor("container",
+							   CLOptionDescriptor.ARGUMENT_REQUIRED,
+							   CONTAINER_OPT,
+							   "the J2EE contianer")   					         
     };
 
     public Ws4J2eeCLOptionParser(String[] args) {
@@ -173,9 +179,12 @@ public class Ws4J2eeCLOptionParser {
                 }
                 wscffile = option.getArgument();
                 break;
-            case REMOTE_OPT:    
-				useRemoteInterface = true;  
-				break;	  
+            case IMPL_STYLE_OPT: 
+            	this.implStyle = option.getArgument();
+				break;	 
+			case CONTAINER_OPT: 
+				this.contanier = option.getArgument();
+				break;	 	 
             default:
                 throw new UnrecoverableGenarationFault("unknown option");
         }
@@ -250,19 +259,32 @@ public class Ws4J2eeCLOptionParser {
     public void setUserName(String string) {
         userName = string;
     }
+	/**
+	 * @return
+	 */
+	public String getImplStyle() {
+		return implStyle;
+	}
+
+	/**
+	 * @param string
+	 */
+	public void setImplStyle(String string) {
+		implStyle = string;
+	}
 
 	/**
 	 * @return
 	 */
-	public boolean isUseRemoteInterface() {
-		return useRemoteInterface;
+	public String getContanier() {
+		return contanier;
 	}
 
 	/**
-	 * @param b
+	 * @param string
 	 */
-	public void setUseRemoteInterface(boolean b) {
-		useRemoteInterface = b;
+	public void setContanier(String string) {
+		contanier = string;
 	}
 
 }

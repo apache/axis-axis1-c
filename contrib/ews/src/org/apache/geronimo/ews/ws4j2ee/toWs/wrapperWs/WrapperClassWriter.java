@@ -77,10 +77,7 @@ public abstract class WrapperClassWriter extends JavaClassWriter{
 	public WrapperClassWriter(J2EEWebServiceContext j2eewscontext)
 		throws GenerationFault {
 		super(j2eewscontext, getName(j2eewscontext) +"Impl");
-		if(j2eewscontext.getMiscInfo().isUseRemoteInterface())
-			seiName = j2eewscontext.getMiscInfo().getEjbsei();
-		else    
-			seiName = j2eewscontext.getMiscInfo().getJaxrpcSEI();
+		seiName = j2eewscontext.getMiscInfo().getEjbsei();
 	}
 	
 	private static String getName(J2EEWebServiceContext j2eewscontext){

@@ -96,23 +96,24 @@ public class Ws4J2EEwithWSDL implements Generator {
     public void genarate() throws GenerationFault {
         try {
             String wscffile = clparser.getWscffile();
+			misc.setWsconffile(wscffile);
             misc.setOutputPath(clparser.getOutputDirectory());
-            misc.setUseRemoteInterface(clparser.isUseRemoteInterface());
             int index = wscffile.lastIndexOf('/');
             if(index < 0)
             	index = wscffile.lastIndexOf('\\');
             misc.setWsConfFileLocation(wscffile.substring(0, index));
             isSeverSideCodeGenaration = clparser.isServerSide();
+            
     
             //we may need to pass few parameters to the J2EEWebServiceContextImpl they are TODO
             J2EEWebServiceContext wscontext = new J2EEWebServiceContextImpl(true);
             wscontext.setMiscInfo(misc);
             //parsing of the webservice.xml happen here 
-//            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-//            dbf.setNamespaceAware(true);
-//            Document wscfdoc = dbf.newDocumentBuilder().parse(wscffile);
             WSCFContext wscfcontext = ContextFactory.createWSCFContext(new FileInputStream(wscffile));
             wscontext.setWSCFContext(wscfcontext);
+            wscontext.getMiscInfo().setImplStyle(clparser.getImplStyle());
+			wscontext.getMiscInfo().setTargetJ2EEContainer(clparser.getContanier());
+			
             if (verbose)
                 log.info(wscffile + " parsed ..");
 
@@ -147,12 +148,13 @@ public class Ws4J2EEwithWSDL implements Generator {
 					if (verbose)
 						log.info("genarating j2ee dd >>");
 					GeneratorFactory.createGenerator(wscontext, GenerationConstants.J2EE_CONTAINER_DD_GENERATOR).genarate();
-					GeneratorFactory.createGenerator(wscontext, GenerationConstants.BUILD_FILE_GENERATOR).genarate();
                 }else{
                 	//in this case user should fill the implementation 
                 	//in the *BindingImpl class 
-                
+					wscontext.getMiscInfo().setImplwithEJB(false);
+					GeneratorFactory.createGenerator(wscontext, GenerationConstants.WEB_CONTAINER_DD_GENERATOR).genarate();
                 }
+				GeneratorFactory.createGenerator(wscontext, GenerationConstants.BUILD_FILE_GENERATOR).genarate();
             } else {
                 //JAX-RPC mapper calling
                 if (verbose)

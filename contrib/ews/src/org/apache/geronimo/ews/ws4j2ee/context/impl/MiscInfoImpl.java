@@ -76,6 +76,8 @@ public class MiscInfoImpl implements MiscInfo {
     private WSCFWebserviceDescription wscfdWsDesxription;
     private WSCFPortComponent wscfport;
     private boolean implwithEJB = true;
+	/* if Impl is avalible the class need not to be created agaien*/
+	private boolean implAvalible = false;
 
     private String outputPath = ".";
 
@@ -83,9 +85,6 @@ public class MiscInfoImpl implements MiscInfo {
     private BindingEntry binding;
     private PortTypeEntry portType;
     private Port port;
-    private boolean useRemoteInterface;
-    /* if Impl is avalible the class need not to be created agaien*/
-    private boolean implAvalible = false;
 
     private String ejbsei = null;
     private String ejbbean = null;
@@ -93,7 +92,7 @@ public class MiscInfoImpl implements MiscInfo {
 	private String ejblocalsei = null;
 	//private String ejblocalbean = null;
 	private String ejblocalhome = null;
-	private boolean supportLocalAndRemote = true;
+
     
     
     
@@ -104,8 +103,9 @@ public class MiscInfoImpl implements MiscInfo {
     private String wsConfFileLocation;
     private String wsdlFile;
     private String jaxrpcfile;
-    private String targetJ2EEContainer;
-    private String implStyle;
+    private String wsconffile;
+    private String targetJ2EEContainer = GenerationConstants.JBOSS_CONTAINER;
+    private String implStyle = GenerationConstants.USE_LOCAL_AND_REMOTE;
 
     /**
      * 
@@ -150,7 +150,8 @@ public class MiscInfoImpl implements MiscInfo {
 
     public void validate() {
         if (portType == null || binding == null
-                || ejbbean == null || ejbsei == null || ejbhome == null) {
+                //|| ejbbean == null || ejbsei == null || ejbhome == null
+                 ) {
             throw new UnrecoverableGenarationFault("validation of MiscInfo failed");
         }
     }
@@ -158,7 +159,7 @@ public class MiscInfoImpl implements MiscInfo {
     /**
      * @return 
      */
-    public String getEjbbean() {
+    public String getEndpointImplbean() {
         return ejbbean;
     }
 
@@ -172,7 +173,7 @@ public class MiscInfoImpl implements MiscInfo {
     /**
      * @param string 
      */
-    public void setEjbbean(String string) {
+    public void setEndpointImplbean(String string) {
         ejbbean = string;
     }
 
@@ -338,24 +339,6 @@ public class MiscInfoImpl implements MiscInfo {
     }
 
     /**
-     * @return 
-     */
-
-	/* (non-Javadoc)
-	 * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#isUseRemoteInterface()
-	 */
-	public boolean isUseRemoteInterface() {
-		return useRemoteInterface;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#setUseRemoteInterface(boolean)
-	 */
-	public void setUseRemoteInterface(boolean useRemoteInterface) {
-		this.useRemoteInterface = useRemoteInterface;
-	}
-
-    /**
      * @return
      */
     public String getImplStyle() {
@@ -414,20 +397,6 @@ public class MiscInfoImpl implements MiscInfo {
     /**
      * @return
      */
-    public boolean isSupportLocalAndRemote() {
-        return supportLocalAndRemote;
-    }
-
-    /**
-     * @param b
-     */
-    public void setSupportLocalAndRemote(boolean b) {
-        supportLocalAndRemote = b;
-    }
-
-    /**
-     * @return
-     */
     public boolean isImplwithEJB() {
         return implwithEJB;
     }
@@ -452,5 +421,19 @@ public class MiscInfoImpl implements MiscInfo {
     public void setImplAvalible(boolean b) {
         this.implAvalible = b;
     }
+
+	/**
+	 * @return
+	 */
+	public String getWsconffile() {
+		return wsconffile;
+	}
+
+	/**
+	 * @param string
+	 */
+	public void setWsconffile(String string) {
+		wsconffile = string;
+	}
 
 }

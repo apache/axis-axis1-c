@@ -156,7 +156,7 @@ public class ContextValidator {
 		String ejbLink = port.getServiceImplBean().getEjblink();
         // context.getMiscInfo().setJaxrpcSEI(port.getServiceEndpointInterface());
         if(ejbLink != null){
-	        context.getMiscInfo().setEjbbean(port.getServiceEndpointInterface() + "Bean");
+	        context.getMiscInfo().setEndpointImplbean(port.getServiceEndpointInterface() + "Bean");
 	        context.getMiscInfo().setEjbhome(port.getServiceEndpointInterface() + "Home");
 	        context.getMiscInfo().setEjbsei(port.getServiceEndpointInterface() + "EJB");
 			context.getMiscInfo().setEjblocalhome(port.getServiceEndpointInterface() + "LocalHome");

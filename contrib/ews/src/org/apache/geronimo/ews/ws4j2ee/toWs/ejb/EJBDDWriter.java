@@ -109,18 +109,21 @@ public class EJBDDWriter extends AbstractWriter {
 		out.write("\t\t<session>\n");
 		out.write("\t\t\t<display-name>" + j2eewscontext.getMiscInfo().getWscfdWsDesxription().getDisplayName() + "</display-name>\n");
 		out.write("\t\t\t<ejb-name>" + ejbname + "</ejb-name>\n");
-		if(j2eewscontext.getMiscInfo().isSupportLocalAndRemote() 
-			|| GenerationConstants.USE_REMOTE.equals(j2eewscontext.getMiscInfo().getImplStyle())){
+		
+		
+		String implStyle = j2eewscontext.getMiscInfo().getImplStyle();
+		if(GenerationConstants.USE_LOCAL_AND_REMOTE.equals(implStyle) 
+			|| GenerationConstants.USE_REMOTE.equals(implStyle)){
 			out.write("\t\t\t<home>" + j2eewscontext.getMiscInfo().getEjbhome() + "</home>\n");
 			out.write("\t\t\t<remote>" + j2eewscontext.getMiscInfo().getEjbsei() + "</remote>\n");
 	
 		}
-		if(j2eewscontext.getMiscInfo().isSupportLocalAndRemote() 
-			|| GenerationConstants.USE_LOCAL.equals(j2eewscontext.getMiscInfo().getImplStyle())){
+		if(GenerationConstants.USE_LOCAL_AND_REMOTE.equals(implStyle) 
+			|| GenerationConstants.USE_LOCAL.equals(implStyle)){
 			out.write("\t\t\t<local-home>"+j2eewscontext.getMiscInfo().getEjblocalhome()+"</local-home>");
 			out.write("\t\t\t<local>"+j2eewscontext.getMiscInfo().getEjblocalsei()+"</local>");
 		}
-		out.write("\t\t\t<ejb-class>" + j2eewscontext.getMiscInfo().getEjbbean() + "</ejb-class>\n");
+		out.write("\t\t\t<ejb-class>" + j2eewscontext.getMiscInfo().getEndpointImplbean() + "</ejb-class>\n");
 		out.write("\t\t\t<session-type>Stateless</session-type>\n");
 		out.write("\t\t\t<transaction-type>Bean</transaction-type>\n");
 		out.write("\t\t\t<security-identity>\n");

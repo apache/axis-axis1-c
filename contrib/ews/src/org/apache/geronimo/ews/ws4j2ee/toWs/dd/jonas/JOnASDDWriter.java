@@ -35,12 +35,13 @@ public class JOnASDDWriter extends AbstractWriter {
 		out.write("                                    http://www.objectweb.org/jonas/ns/jonas-ejb-jar_4_0.xsd\">\n");
 		out.write("	<jonas-session>\n");
 		out.write("	  <ejb-name>" + j2eewscontext.getMiscInfo().getEjbName() + "</ejb-name>\n");
-		if(j2eewscontext.getMiscInfo().isSupportLocalAndRemote() 
-							|| GenerationConstants.USE_REMOTE.equals(j2eewscontext.getMiscInfo().getImplStyle())){
-			out.write("	  <jndi-name>" + j2eewscontext.getMiscInfo().getEjbName() + "</jndi-name>\n");
+		String implStyle = j2eewscontext.getMiscInfo().getImplStyle();
+		if( GenerationConstants.USE_LOCAL_AND_REMOTE.equals(implStyle)
+				|| GenerationConstants.USE_REMOTE.equals(implStyle)){
+				out.write("	  <jndi-name>" + j2eewscontext.getMiscInfo().getEjbName() + "</jndi-name>\n");
 		}
-		if(j2eewscontext.getMiscInfo().isSupportLocalAndRemote() 
-			|| GenerationConstants.USE_LOCAL.equals(j2eewscontext.getMiscInfo().getImplStyle())){
+		if(GenerationConstants.USE_LOCAL_AND_REMOTE.equals(implStyle)
+			|| GenerationConstants.USE_LOCAL.equals(implStyle)){
 			//TODO fill this what is the correct tag for JonAs	
 			//out.write("	  <local-jndi-name>" + "ejb/" +ejbname+ "Local"+"</local-jndi-name>\n");
 		}

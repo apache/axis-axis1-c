@@ -54,6 +54,11 @@
  */
 package org.apache.geronimo.ews.ws4j2ee;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
+import junit.framework.TestCase;
+
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.JaxRpcMapperContext;
 import org.apache.geronimo.ews.ws4j2ee.context.MiscInfo;
@@ -61,12 +66,13 @@ import org.apache.geronimo.ews.ws4j2ee.context.impl.MiscInfoImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
 import org.apache.geronimo.ews.ws4j2ee.parsers.EJBDDParser;
+import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 
 /**
  * @author hemapani
  */
-public class EJBDDTest {
-	public void testGoogleSample(){
+public class EJBDDTest extends TestCase{
+	public void testGoogleSample() throws FileNotFoundException, GenerationFault{
 		J2EEWebServiceContext con = new J2EEWebServiceContext() {
 			public WSDLContext getWSDLContext() {return null;}
 			public void setWSDLContext(WSDLContext wsdlcontext) {}
@@ -80,7 +86,7 @@ public class EJBDDTest {
 			}
 		};
 	   EJBDDParser pars = new EJBDDParser(con);
-	   //pars.parse("a file");
-	   //Assert.assertEquals(con.getMiscInfo().getEjbName(),"Assert this for X"); 
+	   pars.parse(new FileInputStream("src/test/testData/Math/ejb-jar.xml"));
+	   //Assert.assertEquals(con.getMiscInfo().getEjbName(),"MathFace"); 
 	}
 }

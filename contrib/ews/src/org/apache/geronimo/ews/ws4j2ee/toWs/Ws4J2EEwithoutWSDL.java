@@ -72,6 +72,7 @@ import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSC
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
 import org.apache.geronimo.ews.ws4j2ee.parsers.EJBDDParser;
+import org.apache.geronimo.ews.ws4j2ee.parsers.WebDDParser;
 import org.apache.geronimo.ews.ws4j2ee.toWs.wsdl.WSDLGenarator;
 import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 
@@ -81,7 +82,8 @@ import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 public class Ws4J2EEwithoutWSDL implements Generator {
     protected static Log log =
             LogFactory.getLog(Ws4J2EEwithWSDL.class.getName());
-
+	private String implbean;
+	private String wscffile;
     private Vector genarators;
     private String[] args;
     private J2EEWebServiceContext wscontext;
@@ -89,15 +91,15 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 
     public Ws4J2EEwithoutWSDL(String[] args, boolean useSEI) throws GenerationFault {
 		try{
+			this.args = args;
 	        genarators = new Vector();
-	        this.args = args;
 	        //we may need to pass few parameters to the J2EEWebServiceContextImpl they are TODO
 	        this.wscontext = new J2EEWebServiceContextImpl(false);
 	        this.wscontext.setMiscInfo(ContextFactory.createMiscInfo());
 			wscontext.getMiscInfo().setVerbose(verbose);
-			wscontext.getMiscInfo().setUseRemoteInterface(true);
 			
-			String wscffile = args[0];
+			this.wscffile = args[0];
+			
 			wscontext.getMiscInfo().setWsConfFileLocation(wscffile);
 			int index = wscffile.lastIndexOf('/');
 			if(index < 0)
@@ -183,14 +185,6 @@ public class Ws4J2EEwithoutWSDL implements Generator {
             //and validate the Context.	
             wsdlgen.genarate();
             
-            String repeatingSEIName = wscontext.getMiscInfo().getOutPutPath()+"/"+seiName.replace('.','/')+".java"; 
-            
-            file = new File(repeatingSEIName);
-            if(file.exists()){
-            	file.delete();
-            	System.out.println(repeatingSEIName + " deleted..............");
-            }
-
             if (verbose)
                 log.info("genarating jaxrpc-mapper.xml ..............");
             GeneratorFactory.createGenerator(wscontext,
@@ -199,6 +193,14 @@ public class Ws4J2EEwithoutWSDL implements Generator {
                     GenerationConstants.SEI_AND_TYPES_GENERATOR).genarate();
 			(new ContextValidator(wscontext)).validateWithWSDL();        
                     
+			String repeatingSEIName = wscontext.getMiscInfo().getOutPutPath()+"/"+seiName.replace('.','/')+".java"; 
+            
+			file = new File(repeatingSEIName);
+			if(file.exists()){
+				file.delete();
+				System.out.println(repeatingSEIName + " deleted..............");
+			}
+
 			if(ejbLink != null){
 				wscontext.getMiscInfo().setEjbName(ejbLink);
 				EJBDDParser ejbDDparser = new EJBDDParser(wscontext);
@@ -218,6 +220,9 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 			}else{
 				wscontext.getMiscInfo().setImplwithEJB(false);
 				//parse the web.xml file and gereratre wrapper
+				WebDDParser webddp = new WebDDParser(wscontext);
+				webddp.parse(new FileInputStream(wscontext.getMiscInfo().getWsConfFileLocation()+"/web.xml"));
+				wscontext.getMiscInfo().setEndpointImplbean(webddp.getServletClass());
 			}
 			GeneratorFactory.createGenerator(
 							   wscontext,

@@ -54,9 +54,13 @@
  */
 package org.apache.geronimo.ews.ws4j2ee.toWs.wrapperWs;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import org.apache.axis.components.logger.LogFactory;
 import org.apache.commons.logging.Log;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
+import org.apache.geronimo.ews.ws4j2ee.context.SEIOperation;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.JavaClassWriter;
 
@@ -67,7 +71,6 @@ public class WebEndpointWrapperClassWriter extends JavaClassWriter {
 	protected static Log log =
 		LogFactory.getLog(WrapperWsGenarator.class.getName());
 	protected String seiName = null;
-	private J2EEWebServiceContext j2eewscontext;
 	/**
 	 * @param j2eewscontext
 	 * @param qulifiedName
@@ -76,10 +79,8 @@ public class WebEndpointWrapperClassWriter extends JavaClassWriter {
 	public WebEndpointWrapperClassWriter(J2EEWebServiceContext j2eewscontext)
 		throws GenerationFault {
 		super(j2eewscontext, getName(j2eewscontext) + "Impl");
-		if (j2eewscontext.getMiscInfo().isUseRemoteInterface())
-			seiName = j2eewscontext.getMiscInfo().getEjbsei();
-		else
-			seiName = j2eewscontext.getMiscInfo().getJaxrpcSEI();
+		seiName = j2eewscontext.getMiscInfo().getJaxrpcSEI();
+
 	}
 
 	private static String getName(J2EEWebServiceContext j2eewscontext) {
@@ -100,7 +101,10 @@ public class WebEndpointWrapperClassWriter extends JavaClassWriter {
 	}
 
 	protected void writeConstructors() throws GenerationFault {
-		out.write("\tpublic " + classname + "(){}\n");
+		out.write("\tpublic " + classname + "()throws org.apache.geronimo.ews.ws4j2ee.wsutils.J2EEFault{\n");
+		out.write("\t\tbean = ("+j2eewscontext.getMiscInfo().getEndpointImplbean()+")org.apache.geronimo.ews.ws4j2ee.wsutils.ImplBeanPool.getImplBean(\""
+			+j2eewscontext.getMiscInfo().getEndpointImplbean()+"\");\n");
+		out.write("\t}\n");
 	}
 
 	public String getFileName() {
@@ -117,8 +121,46 @@ public class WebEndpointWrapperClassWriter extends JavaClassWriter {
 	 * @see org.apache.geronimo.ews.ws4j2ee.toWs.JavaClassWriter#writeMethods()
 	 */
 	protected void writeMethods() throws GenerationFault {
-		// TODO Auto-generated method stub
-
+		String parmlistStr = null;
+ 		ArrayList operations = j2eewscontext.getMiscInfo().getSEIOperations();
+		 for(int i =0;i<operations.size();i++){
+			parmlistStr = "";
+			 SEIOperation op = (SEIOperation)operations.get(i);
+			 String returnType = op.getReturnType();
+			 if(returnType == null)
+				returnType = "void";
+			 out.write("\tpublic "+returnType+" "+op.getMethodName()+"(");
+						
+			 Iterator pas = op.getParameterNames().iterator();
+			 boolean first = true;
+			 while(pas.hasNext()){
+				 String name = (String)pas.next();
+				 String type = op.getParameterType(name);
+				 if(first){ 
+					 first = false;
+					 out.write(type + " " +name);
+					 parmlistStr = parmlistStr + name;
+				 }else{
+					 out.write(","+type + " " +name);
+					 parmlistStr = parmlistStr + ","+name;
+				 }
+								
+			 }
+						
+			 out.write(") throws java.rmi.RemoteException");
+			 ArrayList faults = op.getFaults();
+			 for(int j = 0;j<faults.size();j++){
+				 out.write(","+(String)faults.get(i));
+			 }
+			 out.write("{\n");
+		
+			 if(!"void".equals(returnType))
+				 out.write("\t\treturn bean."+op.getMethodName()+"("+parmlistStr+");\n");
+			 else
+				 out.write("\t\tbean."+op.getMethodName()+"("+parmlistStr+");\n");	
+						
+			 out.write("\t}\n");
+		 }
 	}
 
 }

@@ -74,4 +74,9 @@ public class GenerateWithoutWSDLTest extends TestCase {
 		String[] args2 = new String[]{"src/test/testData/math/webservice.xml","-o"+outDir+"withoutWSDL/math/server" ,"-l" ,"http://127.0.0.1/aixs/math"};
 		Ws4J2EEwithoutWSDL.main(args2);
 	}
+	
+	public void testServletBasedMathSample() throws Exception{
+		String[] args2 = new String[]{"src/test/testData/math/webservice-servletBase.xml","-o"+outDir+"withoutWSDL/math/server-servlet" ,"-l" ,"http://127.0.0.1/aixs/math"};
+		Ws4J2EEwithoutWSDL.main(args2);
+	}
 }

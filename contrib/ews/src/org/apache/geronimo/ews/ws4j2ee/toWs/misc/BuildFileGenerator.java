@@ -3,6 +3,7 @@ package org.apache.geronimo.ews.ws4j2ee.toWs.misc;
 import org.apache.axis.components.logger.LogFactory;
 import org.apache.commons.logging.Log;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
+import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
 import org.apache.geronimo.ews.ws4j2ee.toWs.dd.JaxrpcMapperGenarator;
@@ -60,8 +61,24 @@ public class BuildFileGenerator implements Generator {
 
 			out.write("	<target name=\"jar\" depends=\"compile\">\n");
 			out.write("		<mkdir dir=\"${build.classes}/META-INF/\"/>\n");
-			out.write("		<copy file =\"${src}/META-INF/ejb-jar.xml\" todir=\"${build.classes}/META-INF\"/>\n");
-			out.write("		<copy file =\"${src}/META-INF/jboss.xml\" todir=\"${build.classes}/META-INF\"/>\n ");
+			
+			out.write("		<copy file =\""+j2eewscontext.getMiscInfo().getJaxrpcfile()+"\" todir=\"${build.classes}/META-INF\"/>\n");
+			out.write("		<copy file =\""+j2eewscontext.getMiscInfo().getWsdlFile()+"\" todir=\"${build.classes}/META-INF\"/>\n");
+			out.write("		<copy file =\""+j2eewscontext.getMiscInfo().getWsconffile()+"\" todir=\"${build.classes}/META-INF\"/>\n");
+			
+			if(j2eewscontext.getMiscInfo().isImplwithEJB()){
+				out.write("		<copy file =\"${src}/META-INF/ejb-jar.xml\" todir=\"${build.classes}/META-INF\"/>\n");
+				if(GenerationConstants.JBOSS_CONTAINER.equals(j2eewscontext.getMiscInfo().getTargetJ2EEContainer()))
+					out.write("		<copy file =\"${src}/META-INF/jboss.xml\" todir=\"${build.classes}/META-INF\"/>\n ");
+				else if(GenerationConstants.JONAS_CONTAINER.equals(j2eewscontext.getMiscInfo().getTargetJ2EEContainer())){
+					out.write("		<copy file =\"${src}/META-INF/jboss.xml\" todir=\"${build.classes}/META-INF\"/>\n ");
+				}else if(GenerationConstants.GERONIMO_CONTAINER.equals(j2eewscontext.getMiscInfo().getTargetJ2EEContainer())){
+					out.write("		<copy file =\"${src}/META-INF/geranimo.xml\" todir=\"${build.classes}/META-INF\"/>\n ");
+				}						
+			}else{
+				out.write("		<copy file =\"${src}/META-INF/web.xml\" todir=\"${build.classes}/META-INF\"/>\n ");
+			}
+
 
 			String jarName = j2eewscontext.getMiscInfo().getTargetPortType().getName().toLowerCase();
 			int index = jarName.lastIndexOf(".");

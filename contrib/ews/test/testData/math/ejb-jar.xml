@@ -6,8 +6,8 @@
 			<display-name>BookQuoteService</display-name>
 			<ejb-name>MathFace</ejb-name>
 			<home>testData.math.MathFaceHome</home>
-			<remote>testData.math.MathFaceEJB</remote>
-			<ejb-class>com.jwsbook.jaxrpc.BookQuoteBean</ejb-class>
+			<remote>testData.math.MathFace</remote>
+			<ejb-class>testData.math.MathFaceImpl</ejb-class>
 			<session-type>Stateless</session-type>
 			<transaction-type>Bean</transaction-type>
 		</session

@@ -309,7 +309,7 @@ public class AxisEmitterBasedJaxRpcMapperContext implements JaxRpcMapperContext 
             
 //set java SEI name
             FullyQualifiedClassType seijavaName = objFactory.createFullyQualifiedClassType();
-            seijavaName.setValue(emitter.getCls().getName() + "SEI");
+            seijavaName.setValue(emitter.getCls().getName());
             seimapping.setServiceEndpointInterface(seijavaName);
 //set the wsdl finding name
             XsdQNameType bindingQName = objFactory.createXsdQNameType();

@@ -58,6 +58,7 @@ package org.apache.geronimo.ews.ws4j2ee.toWs;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.dd.J2EEContainerSpecificDDGenerator;
 import org.apache.geronimo.ews.ws4j2ee.toWs.dd.JaxrpcMapperGenarator;
+import org.apache.geronimo.ews.ws4j2ee.toWs.dd.WebContainerDDGenerator;
 import org.apache.geronimo.ews.ws4j2ee.toWs.dd.WebServiceDDGenarator;
 import org.apache.geronimo.ews.ws4j2ee.toWs.ejb.EJBGenarator;
 import org.apache.geronimo.ews.ws4j2ee.toWs.handlers.HandlerGenarator;
@@ -95,6 +96,8 @@ public class GeneratorFactory {
             return new J2EEContainerSpecificDDGenerator(j2eewscontext);
         } else if (genaratorType == GenerationConstants.BUILD_FILE_GENERATOR) {
             return new BuildFileGenerator(j2eewscontext);
+        }else if(genaratorType == GenerationConstants.WEB_CONTAINER_DD_GENERATOR){ 
+        	return new WebContainerDDGenerator(j2eewscontext);
         } else
             throw new IllegalArgumentException("No genarator exists for the genarator type given");
     }
