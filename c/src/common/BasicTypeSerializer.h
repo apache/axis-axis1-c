@@ -79,7 +79,7 @@ using namespace std;
 class BasicTypeSerializer  
 {
 public:
-	static string& serialize(const string& sName, string& sValue);
+	static string& serialize(const string& sName, string& sValue, XSDTYPE type=XSD_STRING);
 	static string& serialize(const string& sName, float fValue);
 	static string& serialize(const string& sName, int nValue);
 	static const char* BasicTypeStr(XSDTYPE type);

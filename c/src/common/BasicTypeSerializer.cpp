@@ -100,9 +100,9 @@ string& BasicTypeSerializer::serialize(const string &sName, float fValue)
 	return m_sSZ;
 }
 
-string& BasicTypeSerializer::serialize(const string &sName, string &sValue)
+string& BasicTypeSerializer::serialize(const string &sName, string &sValue, XSDTYPE type)
 {
-	m_Type = XSD_STRING;
+	m_Type = type;
 	HelpSerialize(sName, sValue);
 	return m_sSZ;
 }
@@ -114,12 +114,12 @@ void BasicTypeSerializer::HelpSerialize(const string &sName, const string &sValu
 	m_sSZ +=" xsi:type=\"xsd:";
 	m_sSZ += BasicTypeStr(m_Type);
 	m_sSZ += "\">";
-	if (m_Type == XSD_STRING)
+	switch (m_Type)
 	{
+	case XSD_STRING:
 		m_sSZ = sValue.c_str();	
-	}
-	else
-	{
+		break;
+	default:
 		m_sSZ += m_Buf;
 	}
 	m_sSZ += "</";
@@ -134,6 +134,8 @@ const char* BasicTypeSerializer::BasicTypeStr(XSDTYPE type)
 	case XSD_INT: return "int";
 	case XSD_FLOAT: return "float";
 	case XSD_STRING: return "string";
+	case XSD_HEXBINARY: return "hexBinary";
+	case XSD_BASE64BINARY: return "base64Binary";
 	default: return " ";
 	}
 }
