@@ -98,9 +98,34 @@ ArrayBean::~ArrayBean()
 	{
 		switch (m_type)
 		{
+		case XSD_BYTE:
+		case XSD_UNSIGNEDBYTE:
+			{
+				char* a = (char*)m_value.sta;
+				delete [] a;
+			}
+			break;
+		case XSD_SHORT:
+		case XSD_UNSIGNEDSHORT:
+			{
+				short* a = (short*)m_value.sta;
+				delete [] a;
+			}
+			break;
 		case XSD_INT:
+		case XSD_UNSIGNEDINT:
+		case XSD_BOOLEAN:
 			{
 				int* a = (int*)m_value.sta;
+				delete [] a;
+			}
+			break;
+		case XSD_LONG:
+		case XSD_UNSIGNEDLONG:
+		case XSD_INTEGER:
+		case XSD_DURATION:		
+			{
+				long* a = (long*)m_value.sta;
 				delete [] a;
 			}
 			break;
@@ -110,9 +135,34 @@ ArrayBean::~ArrayBean()
 				delete [] a;
 			}
 			break;
+		case XSD_DOUBLE:
+		case XSD_DECIMAL:
+			{
+				double* a = (double*)m_value.sta;
+				delete [] a;
+			}
+			break;
 		case XSD_STRING:
+		case XSD_HEXBINARY:
+		case XSD_BASE64BINARY:
+		case XSD_ANYURI:
+		case XSD_QNAME:
+		case XSD_NOTATION:			
 			{
 				string* a = (string*)m_value.sta;
+				delete [] a;
+			}
+			break;
+		case XSD_DATETIME:
+		case XSD_TIME:
+		case XSD_DATE:
+		case XSD_YEARMONTH:
+		case XSD_YEAR:
+		case XSD_MONTHDAY:
+		case XSD_DAY:
+		case XSD_MONTH:
+			{
+				tm* a = (tm*)m_value.sta;
 				delete [] a;
 			}
 			break;
@@ -148,7 +198,87 @@ int ArrayBean::DeSerialize(IWrapperSoapDeSerializer *pDZ)
 	if ((XSD_UNKNOWN == m_type) ||(0==m_size.size())||(!m_value.sta)) return FAIL;
 	switch (m_type)
 	{
+	case XSD_BYTE:
+	case XSD_UNSIGNEDBYTE:
+		{
+			char* a = (char*)m_value.sta;
+			list<int>::iterator it = m_size.begin();
+			int blocksize = GetArrayBlockSize(it);
+			for (int ix=0;ix<blocksize;ix++)
+			{
+				p = (Param*)pDZ->GetParam();
+				if (!p) return FAIL;
+				a[ix] = p->GetByte();
+			}		
+		}
+		break;
+	case XSD_SHORT:
+	case XSD_UNSIGNEDSHORT:
+		{
+			short* a = (short*)m_value.sta;
+			list<int>::iterator it = m_size.begin();
+			int blocksize = GetArrayBlockSize(it);
+			for (int ix=0;ix<blocksize;ix++)
+			{
+				p = (Param*)pDZ->GetParam();
+				if (!p) return FAIL;
+				a[ix] = p->GetShort();
+			}		
+		}
+		break;
+	case XSD_LONG:
+	case XSD_UNSIGNEDLONG:
+	case XSD_INTEGER:
+	case XSD_DURATION:		
+		{
+			long* a = (long*)m_value.sta;
+			list<int>::iterator it = m_size.begin();
+			int blocksize = GetArrayBlockSize(it);
+			for (int ix=0;ix<blocksize;ix++)
+			{
+				p = (Param*)pDZ->GetParam();
+				if (!p) return FAIL;
+				a[ix] = p->GetLong();
+			}		
+		}
+		break;
+	case XSD_DOUBLE:
+	case XSD_DECIMAL:
+		{
+			double* a = (double*)m_value.sta;
+			list<int>::iterator it = m_size.begin();
+			int blocksize = GetArrayBlockSize(it);
+			for (int ix=0;ix<blocksize;ix++)
+			{
+				p = (Param*)pDZ->GetParam();
+				if (!p) return FAIL;
+				a[ix] = p->GetDouble();
+			}		
+		}
+		break;
+	case XSD_DATETIME:
+	case XSD_TIME:
+	case XSD_DATE:
+	case XSD_YEARMONTH:
+	case XSD_YEAR:
+	case XSD_MONTHDAY:
+	case XSD_DAY:
+	case XSD_MONTH:
+		{
+			tm* a = (tm*)m_value.sta;
+			list<int>::iterator it = m_size.begin();
+			int blocksize = GetArrayBlockSize(it);
+			for (int ix=0;ix<blocksize;ix++)
+			{
+				p = (Param*)pDZ->GetParam();
+				if (!p) return FAIL;
+				a[ix] = p->GetDate();
+			}		
+		}
+		break;	
 	case XSD_INT:
+	case XSD_UNSIGNEDINT:
+	case XSD_BOOLEAN:
 		{
 			int* a = (int*)m_value.sta;
 			list<int>::iterator it = m_size.begin();
@@ -175,6 +305,11 @@ int ArrayBean::DeSerialize(IWrapperSoapDeSerializer *pDZ)
 		}
 		break;
 	case XSD_STRING:
+	case XSD_HEXBINARY:
+	case XSD_BASE64BINARY:
+	case XSD_ANYURI:
+	case XSD_QNAME:
+	case XSD_NOTATION:			
 		{
 			AxisString* a = (AxisString*)m_value.sta;
 			list<int>::iterator it = m_size.begin();
@@ -212,7 +347,82 @@ int ArrayBean::Serialize(IWrapperSoapSerializer& pSZ)
 {	
 	switch (m_type)
 	{
+	case XSD_BYTE:
+	case XSD_UNSIGNEDBYTE:
+		{
+			char* p = (char*)m_value.sta;
+			list<int>::iterator it = m_size.begin();
+			int blocksize = GetArrayBlockSize(it);
+			for (int ix=0;ix<blocksize;ix++)
+			{
+				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), *p);
+				p++;
+			}
+		}
+		break;
+	case XSD_SHORT:
+	case XSD_UNSIGNEDSHORT:
+		{
+			short* p = (short*)m_value.sta;
+			list<int>::iterator it = m_size.begin();
+			int blocksize = GetArrayBlockSize(it);
+			for (int ix=0;ix<blocksize;ix++)
+			{
+				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), *p);
+				p++;
+			}
+		}
+		break;
+	case XSD_LONG:
+	case XSD_UNSIGNEDLONG:
+	case XSD_INTEGER:
+	case XSD_DURATION:		
+		{
+			long* p = (long*)m_value.sta;
+			list<int>::iterator it = m_size.begin();
+			int blocksize = GetArrayBlockSize(it);
+			for (int ix=0;ix<blocksize;ix++)
+			{
+				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), *p);
+				p++;
+			}
+		}
+		break;
+	case XSD_DOUBLE:
+	case XSD_DECIMAL:
+		{
+			double* p = (double*)m_value.sta;
+			list<int>::iterator it = m_size.begin();
+			int blocksize = GetArrayBlockSize(it);
+			for (int ix=0;ix<blocksize;ix++)
+			{
+				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), *p);
+				p++;
+			}
+		}
+		break;
+	case XSD_DATETIME:
+	case XSD_TIME:
+	case XSD_DATE:
+	case XSD_YEARMONTH:
+	case XSD_YEAR:
+	case XSD_MONTHDAY:
+	case XSD_DAY:
+	case XSD_MONTH:
+		{
+/*			tm* p = (tm*)m_value.sta;
+			list<int>::iterator it = m_size.begin();
+			int blocksize = GetArrayBlockSize(it);
+			for (int ix=0;ix<blocksize;ix++)
+			{
+				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), *p);
+				p++;
+			}
+*/		}
+		break;
 	case XSD_INT:
+	case XSD_UNSIGNEDINT:
+	case XSD_BOOLEAN:
 		{
 			int* pInt = (int*)m_value.sta;
 			list<int>::iterator it = m_size.begin();
@@ -237,6 +447,11 @@ int ArrayBean::Serialize(IWrapperSoapSerializer& pSZ)
 		}
 		break;
 	case XSD_STRING:
+	case XSD_HEXBINARY:
+	case XSD_BASE64BINARY:
+	case XSD_ANYURI:
+	case XSD_QNAME:
+	case XSD_NOTATION:			
 		{
 			AxisString* pStr = (AxisString*)m_value.sta;
 			list<int>::iterator it = m_size.begin();
