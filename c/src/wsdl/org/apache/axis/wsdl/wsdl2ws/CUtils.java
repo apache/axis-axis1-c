@@ -132,6 +132,34 @@ public class CUtils {
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"), "xsd__unsignedLong");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"), "xsd__unsignedShort");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"), "xsd__QName");
+		
+		/* TODO:
+		 *   Should be removed when the following issue will be fixed :
+		 * 	-> http://marc.theaimsgroup.com/?t=107907748000002&r=1&w=2 
+		 */
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "int"), "int");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"), "unsigned char");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "float"), "float");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "long"), "long");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "integer"), "long");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "double"), "double");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "char"), "char");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "short"), "short");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "string"), "xsd__string");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "dateTime"), "xsd__dateTime");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "date"), "xsd__date");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "time"), "xsd__time");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64Binary"), "xsd__base64Binary");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "hexBinary"), "xsd__hexBinary");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "decimal"), "xsd__decimal");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "boolean"), "xsd__boolean");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "anyURI"), "xsd__anyURI");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedByte"), "xsd__unsignedByte");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedInt"), "xsd__unsignedInt");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedLong"), "xsd__unsignedLong");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedShort"), "xsd__unsignedShort");
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "QName"), "xsd__QName");		
+		
 		type2getValueMethodName.put("int","Int");
 		type2getValueMethodName.put("float","Float");
 		type2getValueMethodName.put("xsd__string","String");
