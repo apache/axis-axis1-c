@@ -792,7 +792,6 @@ public class ClientStubWriter
             }
             writer.write("\t\t}\n");
             writer.write("\t}\n");
-            writer.write("\tupdateStateAfterResponse();\n");
             writer.write("\tm_pCall->unInitialize();\n");
         }
         else
@@ -804,7 +803,6 @@ public class ClientStubWriter
                     writer.write("\t\t\t/*not successful*/\n\t\t}\n");
                 }
                 writer.write("\t}\n");
-                writer.write("\tupdateStateAfterResponse();\n");
                 writer.write("\tm_pCall->unInitialize();\n");
                 //writer.write("\t}\n\tm_pCall->unInitialize();\n");
             }
@@ -850,7 +848,6 @@ public class ClientStubWriter
                                     + "&)arr2;\n\t\t}\n");
                     }
                     writer.write("\t}\n");
-                    writer.write("\tupdateStateAfterResponse();\n");
                     writer.write("\tm_pCall->unInitialize();\n");
                     //        writer.write("\t}\n\tm_pCall->unInitialize();\n");
                     writer.write("\treturn RetArray;\n");
@@ -869,7 +866,6 @@ public class ClientStubWriter
                                 + returntype.getParamName()
                                 + "\", 0);\n\t\t}\n");
                         writer.write("\t}\n");
-                        writer.write("\tupdateStateAfterResponse();\n");
                         writer.write("\tm_pCall->unInitialize();\n");
                         //            writer.write("\t}\n\tm_pCall->unInitialize();\n");
                         writer.write("\treturn Ret;\n");
@@ -885,7 +881,6 @@ public class ClientStubWriter
                                     + outparamType
                                     + "*)m_pCall->getAnyObject();\n\t\t}\n");
                             writer.write("\t}\n");
-                            writer.write("\tupdateStateAfterResponse();\n");
                             writer.write("\tm_pCall->unInitialize();\n");
                             //                writer.write("\t}\n\tm_pCall->unInitialize();\n");
                             writer.write("\treturn pReturn;\n");
@@ -908,7 +903,6 @@ public class ClientStubWriter
                                     + "\", 0);\n\t\t}\n");
                             //Samisa
                             writer.write("\t}\n");
-                            writer.write("\tupdateStateAfterResponse();\n");
                             writer.write("\tm_pCall->unInitialize();\n");
                             //                writer.write("\t}\n\tm_pCall->unInitialize();\n");
                             writer.write("\treturn pReturn;\n");
@@ -947,7 +941,6 @@ public class ClientStubWriter
         int j = 0;
         if (!paramsFault.hasNext())
         {
-            writer.write("\tupdateStateAfterResponse();\n");
             writer.write("\tm_pCall->unInitialize();\n");
             //writer.write("\t\t\tm_pCall->unInitialize();\n");
             writer.write(
@@ -1024,7 +1017,6 @@ public class ClientStubWriter
         if (flag == true)
         {
             writer.write("\t\t\telse\n\t\t\t{\n");
-            writer.write("\tupdateStateAfterResponse();\n");
             writer.write("\tm_pCall->unInitialize();\n");
             //writer.write("\t\t\t\t  m_pCall->unInitialize();\n");
             writer.write(
@@ -1067,7 +1059,6 @@ public class ClientStubWriter
                     + "\", 0);\n");
             writer.write(
                 "\t\t\t\tpSoapFault->setCmplxFaultObject(pFaultDetail);\n");
-            writer.write("\tupdateStateAfterResponse();\n");
             writer.write("\tm_pCall->unInitialize();\n");
             //writer.write("\t\t\t\tm_pCall->unInitialize();\n");
             writer.write(

@@ -718,12 +718,6 @@ class STORAGE_CLASS_INFO Stub
     */
     void applyUserPreferences();
 
-  /**
-    * After the response is received and the results gathered update the Stub  
-    * object's state with whatever information left over (e.g. get Set-Cookie 
-    * value from transport to be used for subsequent calls) 
-    */
-    void updateStateAfterResponse();
     
   /**
     * Set SOAP Headers stored in m_vSOAPHeaderBlock vector.

@@ -199,10 +199,6 @@ void Stub::applyUserPreferences()
     setSOAPMethodAttributes();
 }
 
-void Stub::updateStateAfterResponse()
-{
-}
-
 void Stub::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
 {
     m_pCall->setProxy(pcProxyHost, uiProxyPort);
