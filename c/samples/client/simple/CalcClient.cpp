@@ -13,7 +13,6 @@ int main(int argc, char* argv[])
 	const char* p2 = 0;
 	int i1=0, i2=0;
         int iResult;
-        int iStatus;
         char* pcDetail;
 
 	if (argc < 6)
@@ -49,27 +48,21 @@ int main(int argc, char* argv[])
 
 	if (strcmp(op, "add") == 0)
 	{
-                iStatus = ws.add(i1, i2, iResult);
-                if(0 == iStatus)
-		    printf("Result : %d\n\n", iResult);
-                else
-                {
-                    printf("Failed\n");
-                    ws.getFaultDetail(&pcDetail);
-                    printf("pcDetail:%s\n", pcDetail);
-                }
+                iResult = ws.add(i1, i2);
+                ws.getFaultDetail(&pcDetail);
+                printf("pcDetail:%s\n", pcDetail);
 	}
 	else 	if (strcmp(op, "sub") == 0)
 	{
-		printf("Result : %d\n\n", ws.sub(i1, i2, iResult));		
+		iResult = ws.sub(i1, i2);		
 	}
 	else 	if (strcmp(op, "mul") == 0)
 	{
-		printf("Result : %d\n\n", ws.mul(i1, i2, iResult));		
+	        iResult = ws.mul(i1, i2);		
 	}
 	else 	if (strcmp(op, "div") == 0)
 	{
-		printf("Result : %d\n\n", ws.div(i1, i2, iResult));		
+		iResult = ws.div(i1, i2);		
 	}
 	else 
 	{

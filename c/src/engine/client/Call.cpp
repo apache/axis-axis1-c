@@ -271,9 +271,9 @@ Axis_Array Call::getCmplxArray (void* pDZFunct, void* pCreFunct,
         pName, pNamespace);
 }
 
-int Call::getElementAsInt (const AxisChar* pName, const AxisChar* pNamespace, int& iResult)
+int Call::getElementAsInt (const AxisChar* pName, const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->getElementAsInt (pName, pNamespace, iResult);
+    return m_pIWSDZ->getElementAsInt (pName, pNamespace);
 }
 
 int Call::getFaultDetail(char** ppcDetail)

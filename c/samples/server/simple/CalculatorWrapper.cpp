@@ -69,8 +69,8 @@ int CalculatorWrapper::add(void* pMsg)
 	/* check whether we have got correct message */
 	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("add", "http://localhost/axis/Calculator")) return AXIS_FAIL;
 	pIWSSZ->createSoapMethod("addResponse", "http://localhost/axis/Calculator");
-	int v0;pIWSDZ->getElementAsInt("in0",0, v0);
-	int v1;pIWSDZ->getElementAsInt("in1",0, v1);
+	int v0 = pIWSDZ->getElementAsInt("in0",0);
+	int v1 = pIWSDZ->getElementAsInt("in1",0);
 	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
 	int ret = pWs->add(v0,v1);
 	return pIWSSZ->addOutputParam("addReturn", (void*)&ret, XSD_INT);
@@ -93,8 +93,8 @@ int CalculatorWrapper::sub(void* pMsg)
 	/* check whether we have got correct message */
 	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("sub", "http://localhost/axis/Calculator")) return AXIS_FAIL;
 	pIWSSZ->createSoapMethod("subResponse", "http://localhost/axis/Calculator");
-	int v0;pIWSDZ->getElementAsInt("in0",0, v0);
-	int v1;pIWSDZ->getElementAsInt("in1",0, v1);
+	int v0 = pIWSDZ->getElementAsInt("in0",0);
+	int v1 = pIWSDZ->getElementAsInt("in1",0);
 	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
 	int ret = pWs->sub(v0,v1);
 	return pIWSSZ->addOutputParam("subReturn", (void*)&ret, XSD_INT);
@@ -117,8 +117,8 @@ int CalculatorWrapper::mul(void* pMsg)
 	/* check whether we have got correct message */
 	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("mul", "http://localhost/axis/Calculator")) return AXIS_FAIL;
 	pIWSSZ->createSoapMethod("mulResponse", "http://localhost/axis/Calculator");
-	int v0; pIWSDZ->getElementAsInt("in0",0, v0);
-	int v1; pIWSDZ->getElementAsInt("in1",0, v1);
+	int v0 = pIWSDZ->getElementAsInt("in0",0);
+	int v1 = pIWSDZ->getElementAsInt("in1",0);
 	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
 	int ret = pWs->mul(v0,v1);
 	return pIWSSZ->addOutputParam("mulReturn", (void*)&ret, XSD_INT);
@@ -141,8 +141,8 @@ int CalculatorWrapper::div(void* pMsg)
 	/* check whether we have got correct message */
 	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("div", "http://localhost/axis/Calculator")) return AXIS_FAIL;
 	pIWSSZ->createSoapMethod("divResponse", "http://localhost/axis/Calculator");
-	int v0; pIWSDZ->getElementAsInt("in0",0, v0 );
-	int v1; pIWSDZ->getElementAsInt("in1",0, v1);
+	int v0 = pIWSDZ->getElementAsInt("in0",0);
+	int v1 = pIWSDZ->getElementAsInt("in1",0);
 	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
 	int ret = pWs->div(v0,v1);
 	return pIWSSZ->addOutputParam("divReturn", (void*)&ret, XSD_INT);

@@ -1332,23 +1332,23 @@ xsd__boolean SoapDeSerializer::getElementAsBoolean(const AxisChar* pName,
 }
 
 int SoapDeSerializer::getElementAsInt(const AxisChar* pName, 
-                                      const AxisChar* pNamespace, int& iResult)
+                                      const AxisChar* pNamespace)
 {
     int ret = 0;
-    if (AXIS_SUCCESS != m_nStatus) return AXIS_FAIL;
+    if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
         m_pNode = m_pParser->next();
         /* wrapper node with type info  Ex: <i xsi:type="xsd:int"> */
-        if (!m_pNode) return AXIS_FAIL;
+        if (!m_pNode) return ret;
         if (XSD_INT == getXSDType(m_pNode))
         {
             m_pNode = m_pParser->next(true); /* charactor node */
             if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
             {
-                iResult = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+                ret = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
                 m_pNode = m_pParser->next(); /* skip end element node too */
-                return AXIS_SUCCESS;
+                return ret;
             }
         }
         else
@@ -1364,20 +1364,20 @@ int SoapDeSerializer::getElementAsInt(const AxisChar* pName,
              */
             m_pNode = m_pParser->next();
             /* wrapper node without type info  Ex: <i> */
-        if (!m_pNode) return AXIS_FAIL;
+        if (!m_pNode) return ret;
         if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
         {
             m_pNode = m_pParser->next(true); /* charactor node */
             if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
             {
-                iResult = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+                ret = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
                 m_pNode = m_pParser->next(); /* skip end element node too */
                 m_pNode = NULL;
                 /*
                  * this is important in doc/lit style when deserializing 
                  * arrays
                  */
-                return AXIS_SUCCESS;
+                return ret;
             }
             else
             {
@@ -1395,8 +1395,8 @@ int SoapDeSerializer::getElementAsInt(const AxisChar* pName,
             /* Not a must : m_nStatus = AXIS_FAIL; unexpected SOAP stream */
         }
     }
-    m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    return AXIS_FAIL;
+    m_nStatus = ret; /* unexpected SOAP stream */
+    return ret;
 }
 
 
