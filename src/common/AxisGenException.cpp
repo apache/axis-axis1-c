@@ -32,10 +32,10 @@ AxisGenException::AxisGenException (const int iExceptionCode)
     processException (iExceptionCode);
 }
 
-AxisGenException::AxisGenException(const int iExceptionCode, char* pcMessage)
+AxisGenException::AxisGenException(const int iExceptionCode, char* pcMessage, bool deleteInputMsg)
 {
     m_iExceptionCode = iExceptionCode;
-    processException(iExceptionCode, pcMessage);
+    processException(iExceptionCode, pcMessage, deleteInputMsg);
 }
 
 AxisGenException::AxisGenException (const exception* e)
@@ -76,11 +76,11 @@ void AxisGenException::processException(const int iExceptionCode)
     m_sMessage = getMessage (iExceptionCode);
 }
 
-void AxisGenException::processException(const int iExceptionCode, char* pcMessage)
+void AxisGenException::processException(const int iExceptionCode, char* pcMessage, bool deleteInputMsg)
 {
     AxisString sMessage = pcMessage;
     m_sMessage = getMessage(iExceptionCode) + sMessage;
-    if(pcMessage)
+    if(deleteInputMsg && pcMessage)
         delete [] pcMessage;
 }
 

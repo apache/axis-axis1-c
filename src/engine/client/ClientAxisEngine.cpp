@@ -140,7 +140,13 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
     }
     catch(AxisException& e)
     {
-		throw AxisGenException(e.getExceptionCode(), const_cast<char*>(e.what()));
+		/* Throw a AxisGenException here instead of rethrowing the original exception because
+		 * the original exception may be an transport exception which will go out of scope when
+		 * the transport library is unloaded. The original exception will delete its own message
+		 * storage, so the false as the last parameter tells AxisGenException not to try to 
+		 * delete it.
+		 */
+		throw AxisGenException(e.getExceptionCode(), const_cast<char*>(e.what()), false);
     }
     return Status;
 }
