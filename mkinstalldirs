@@ -10,8 +10,8 @@ dirmode=""
 if test ! -d "${AXISCPP_DEPLOY}/docs"; then
     cp -rf "${AXISCPP_HOME}/docs" "${AXISCPP_DEPLOY}"
 fi
-if test ! -d "${AXISCPP_DEPLOY}/samples"; then
-    cp -rf "${AXISCPP_HOME}/samples" "${AXISCPP_DEPLOY}"
+if test ! -d "${AXISCPP_DEPLOY}/include"; then
+    cp -rf "${AXISCPP_HOME}/include" "${AXISCPP_DEPLOY}"
 fi
 if test ! -d "${AXISCPP_DEPLOY}/wsdls"; then
     cp -rf "${AXISCPP_HOME}/deploy/wsdls" "${AXISCPP_DEPLOY}"
