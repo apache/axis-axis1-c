@@ -205,6 +205,8 @@ int Param::setValue (XSDTYPE nType, uParamValue Value)
             m_Value.ucValue = Value.ucValue;
             break;
         case XSD_LONG:
+            m_Value.llValue = Value.llValue;
+            break;
         case XSD_INTEGER:
             m_Value.lValue = Value.lValue;
             break;

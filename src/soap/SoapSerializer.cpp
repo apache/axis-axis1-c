@@ -590,6 +590,14 @@ int SoapSerializer::addOutputParam(const AxisChar* pchName, void* pValue,
         pParam->m_Value.ucValue = *((unsigned char*)(pValue));
         break;
     case XSD_LONG:
+//FJP v Added
+#ifdef WIN32
+        pParam->m_Value.lValue = *((__int64*)(pValue));
+#else
+        pParam->m_Value.lValue = *((long long*)(pValue));
+#endif
+        break;
+//FJP ^ Added
     case XSD_INTEGER:
     case XSD_DURATION:
         pParam->m_Value.lValue = *((long*)(pValue));
@@ -855,6 +863,14 @@ int SoapSerializer::serializeAsChardata(void* pValue, XSDTYPE type)
             *((unsigned char*)(pValue)));
         break;
     case XSD_LONG:
+//FJP v Added
+#ifdef WIN32
+        AxisSprintf (m_Buf, BTS_BUFFSIZE, "%lld", *((__int64*)(pValue)));
+#else
+        AxisSprintf (m_Buf, BTS_BUFFSIZE, "%lld", *((long long*)(pValue)));
+#endif
+        break;
+//FJP ^ Added
     case XSD_INTEGER:
         AxisSprintf (m_Buf, BTS_BUFFSIZE, "%ld", *((long*)(pValue)));
         break;

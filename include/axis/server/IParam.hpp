@@ -55,6 +55,13 @@ typedef union uParamValue
     unsigned int unValue;
     short sValue;
     unsigned short usValue;
+//FJP v Added
+#ifdef WIN32
+    __int64 llValue;
+#else
+    long long llValue;
+#endif
+//FJP ^ Added
     long lValue;
     unsigned ulValue;
     char cValue;

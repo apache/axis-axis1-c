@@ -85,6 +85,15 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
             m_sSZ += m_Buf;
             break;
         case XSD_LONG:
+//FJP v Added
+#ifdef WIN32
+            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%lld", *((__int64*)(pValue)));
+#else
+            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%lld", *((long long*)(pValue)));
+#endif
+            m_sSZ += m_Buf;
+            break;
+//FJP ^ Added
         case XSD_INTEGER:
             AxisSprintf (m_Buf, BTS_BUFFSIZE, "%ld", *((long*)(pValue)));
             m_sSZ += m_Buf;
@@ -217,6 +226,15 @@ const AxisChar* BasicTypeSerializer::serializeAsAttribute
             m_sSZ += m_Buf;
             break;
         case XSD_LONG:
+//FJP v Added
+#ifdef WIN32
+            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%lld", *((__int64*)(pValue)));
+#else
+            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%lld", *((long long*)(pValue)));
+#endif
+            m_sSZ += m_Buf;
+            break;
+//FJP ^ Added
         case XSD_INTEGER:
             AxisSprintf (m_Buf, BTS_BUFFSIZE, "%ld", *((long*)(pValue)));
             m_sSZ += m_Buf;

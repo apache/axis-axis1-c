@@ -51,7 +51,13 @@ typedef int xsd__int;
  * @typedef xsd__long
  * Axis C++ defined type for xml basic type long
  */
-typedef long xsd__long;
+//FJP v Added
+#ifdef WIN32
+typedef __int64 xsd__long;
+#else
+typedef long long xsd__long;
+#endif
+//FJP ^ Added
 /**
  * @typedef xsd__short
  * Axis C++ defined type for xml basic type short

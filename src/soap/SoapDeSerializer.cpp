@@ -865,6 +865,13 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
             case XSD_UNSIGNEDBYTE:
                 DESERIALIZE_ENCODED_ARRAY_BLOCK(unsigned char, CONV_STRTOUL)
             case XSD_LONG:
+//FJP v Added
+#ifdef WIN32
+                DESERIALIZE_ENCODED_ARRAY_BLOCK(__int64, CONV_STRTOUL)
+#else
+                DESERIALIZE_ENCODED_ARRAY_BLOCK(long long, CONV_STRTOUL)
+#endif
+//FJP ^ Added
             case XSD_INTEGER:
                 DESERIALIZE_ENCODED_ARRAY_BLOCK(long, CONV_STRTOL)
             case XSD_UNSIGNEDLONG:
@@ -1021,6 +1028,13 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
         case XSD_UNSIGNEDBYTE:
             DESERIALIZE_LITERAL_ARRAY_BLOCK(unsigned char, CONV_STRTOUL)
         case XSD_LONG:
+//FJP v Added
+#ifdef WIN32
+            DESERIALIZE_ENCODED_ARRAY_BLOCK(__int64, CONV_STRTOUL)
+#else
+            DESERIALIZE_ENCODED_ARRAY_BLOCK(long long, CONV_STRTOUL)
+#endif
+//FJP ^ Added
         case XSD_INTEGER:
             DESERIALIZE_LITERAL_ARRAY_BLOCK(long, CONV_STRTOL)
         case XSD_UNSIGNEDLONG:
@@ -3593,6 +3607,14 @@ void SoapDeSerializer::getChardataAs(void* pValue, XSDTYPE type)
             *((unsigned char*)(pValue)) = strtoul(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
             break;
         case XSD_LONG:
+//FJP v Added
+#ifdef WIN32
+            *((__int64*)(pValue)) = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+#else
+            *((long long*)(pValue)) = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+#endif
+            break;
+//FJP ^ Added
         case XSD_INTEGER:
             *((long*)(pValue)) = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
             break;

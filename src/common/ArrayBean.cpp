@@ -82,6 +82,17 @@ ArrayBean::~ArrayBean()
                 break;
             case XSD_LONG:
             case XSD_UNSIGNEDLONG:
+//FJP v Added
+			{
+#ifdef WIN32
+                __int64* a = (__int64*)m_value.sta;
+#else
+                long long* a = (long long *)m_value.sta;
+#endif
+                delete [] a;
+            }
+                break;
+//FJP ^ Added
             case XSD_INTEGER:
             case XSD_DURATION:		
             {
@@ -235,6 +246,21 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
                 break;
             case XSD_LONG:
             case XSD_UNSIGNEDLONG:
+//FJP v Added
+			{
+#ifdef WIN32
+                __int64* p = (__int64*)m_value.sta;
+#else
+                long long* p = (long long*)m_value.sta;
+#endif
+                for (int ix=0;ix<m_nSize;ix++)
+                {
+                    pSZ.serializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+                    p++;
+                }
+            }
+                break;
+//FJP ^ Added
             case XSD_INTEGER:
             case XSD_DURATION:		
             {
