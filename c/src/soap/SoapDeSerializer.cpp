@@ -3091,7 +3091,13 @@ AnyType* SoapDeSerializer::getAnyObject()
 		if (START_PREFIX == m_pNode->m_type)
 		{
 			nsDecls += " xmlns";
-			if (m_pNode->m_pchNameOrValue) 
+			/* why dont parser return null if there is no
+			 * prefix. Expat return null but not xerces.
+			 * TODO : will have to remove following strcmp s onece Xerces is 
+			 * corrected
+			 */
+			if (m_pNode->m_pchNameOrValue && (strcmp(m_pNode->m_pchNameOrValue,
+				"")!=0)) 
 			{
 				nsDecls += ":";
 				nsDecls += m_pNode->m_pchNameOrValue;
@@ -3110,7 +3116,7 @@ AnyType* SoapDeSerializer::getAnyObject()
             xmlStr += m_pNode->m_pchNameOrValue;
         }
 
-        if (tagCount == 0) /* copying the First level element into the list */
+        if (tagCount == 0 && (!xmlStr.empty())) /* copying the First level element into the list */
         {
             lstXML.push_back(xmlStr);
             xmlStr = "";
@@ -3153,13 +3159,20 @@ void SoapDeSerializer::serializeTag(AxisString& xmlStr, const AnyElement* node, 
     if (START_ELEMENT == node->m_type)
     {
         xmlStr += "<";
-        /* if (node->m_pchNamespace) why dont parser set null if there is no
-         * namespace
+        /* why dont parser set null if there is no
+         * namespace. Expat set null but not xerces.
+		 * TODO : will have to remove following strcmp s onece Xerces is 
+		 * corrected
          */
-        if (node->m_pchNamespace)
+        if (node->m_pchNamespace && (strcmp(node->m_pchNamespace, "")!=0))
         {
 			pchPrefix = m_pParser->getPrefix4NS(node->m_pchNamespace);
-			if (pchPrefix)
+			/* why dont parser return null if there is no
+			 * prefix. Expat does but not xerces.
+			 * TODO : will have to remove following strcmp s onece Xerces is 
+			 * corrected
+			 */
+			if (pchPrefix && (strcmp(pchPrefix, "")!=0))
 			{
 				xmlStr += pchPrefix;
 				xmlStr += ":";
@@ -3183,7 +3196,12 @@ void SoapDeSerializer::serializeTag(AxisString& xmlStr, const AnyElement* node, 
                 if (node->m_pchAttributes[j])
                 {
 					pchPrefix = m_pParser->getPrefix4NS(node->m_pchAttributes[j+1]);
-					if (pchPrefix)
+					/* why dont parser return null if there is no
+					 * prefix. Expat does but not xerces.
+					 * TODO : will have to remove following strcmp s onece Xerces is 
+					 * corrected
+					 */
+					if (pchPrefix && (strcmp(pchPrefix, "")!=0))
 					{
 						xmlStr += " "; 
 						xmlStr += pchPrefix;
@@ -3204,12 +3222,19 @@ void SoapDeSerializer::serializeTag(AxisString& xmlStr, const AnyElement* node, 
     {
         xmlStr += "</";
         /* if (node->m_pchNamespace) why dont parser set null if there is no
-         * namespace
+         * namespace. Expat set null but not xerces.
+		 * TODO : will have to remove following strcmp s onece Xerces is 
+		 * corrected
          */
-        if (node->m_pchNamespace)
+        if (node->m_pchNamespace && (strcmp(node->m_pchNamespace, "")!=0))
         {
 			pchPrefix = m_pParser->getPrefix4NS(node->m_pchNamespace);
-			if (pchPrefix)
+			/* why dont parser return null if there is no
+			 * prefix. Expat does but not xerces.
+			 * TODO : will have to remove following strcmp s onece Xerces is 
+			 * corrected
+			 */
+			if (pchPrefix && (strcmp(pchPrefix, "")!=0))
 			{
 				xmlStr += pchPrefix;
 				xmlStr += ":";
