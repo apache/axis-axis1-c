@@ -22,6 +22,7 @@
 #define _WHITESPACE_HPP____OF_AXIS_INCLUDED_
 
 #include "IConstrainingFacet.hpp"
+#include <cctype>
 
 AXIS_CPP_NAMESPACE_START
 
