@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+ <title>SOAPMonitor User's Guide</title>
+</head>
+<body>
+
+<h1>SOAPMonitor User's Guide</h1>
+<i>1.0 Version</i><br>
+<I>Feedback:</I> <a href="mailto:axis-dev@ws.apache.org">axis-dev@ws.apache.org</a><P>
+
+<p>
+<a name="Contents"></a>
+<h2>Contents</h2>
+<ul>
+ <LI><a href="#intro">Introduction</a>
+ <ul>
+   <LI><a href="#whats_soapmonitor">What is SOAPMonitor ?</a>
+   <LI><a href="#when_useit">When should I use it ?</a>
+ </ul>
+ <LI><a href="#usage">Usage</a>
+ <ul>
+   <LI><a href="#prepare">Prepareation</a>
+   <LI><a href="#howto">How to use it ?</a>
+ </ul>
+ <LI><a href="#appendix">Appendixes</a>
+ <ul>
+   <LI><a href="#comparison">Version comparison chart</a>
+   <LI><a href="#error">Error messages</a>
+ </ul>
+</ul>
+<p>
+
+<p><a name="intro"></a></p>
+<h2>Introduction</h2><p>
+<dl><dd>
+Web service developers often have the need to see the SOAP messages being used to invoke web services along with the results of those messages. The goal of the SOAP Monitor utility is to provide a way for these developers to monitor the SOAP messages being used without requiring any special configuration or restarting of the server.
+</dl>
+
+<p><a name="whats_soapmonitor"></a></p>
+<h3>What is SOAPMonitor ?</h3>
+<dl><dd>
+It's a utility what can be found in the org.apache.axis.utils package. It provides the monitoring capability described above to Web service developers.
+</dl>
+
+<p><a name="when_useit"></a></p>
+<h3>When should I use it ?</h3>
+<dl><dd>
+It's a good opportunity for using this utility that you hope to monitor the SOAP messages for debugging. You can see all SOAP messages of what you want to monitor without any additional developments, special configurations or restarting of the application server.<p>
+<strong>Please note that it desn't display any protocol specific data such as HTTP protocol headers. In case of the usage, you have to use the TCP Monitor (tcpmon). Please see the <a href="user-guide.html">Axis User's Guide<a> also</strong>.
+</dl>
+
+<p><a name="Usage"></a></p>
+<h2>Usage</h2><p>
+
+<p><a name="prepare"></a></p>
+<h3>Preparation</h3>
+<dl><dd>
+  <b>step 1:</B> Create an account for the administrator
+  <dl><dd>
+       Please open and edit the "webapps/axis/WEB-INF/users.lst".<br>
+       The defalut account for administrator is "admin", so please set a password anything you want.<p>
+       ex.) Like as follows;</a> -  i.e. "admin password".<p>
+       <dl><dd>
+              user1 pass1<br>
+              user2<br>
+              user3 pass3<br>
+              admin password<br>
+       </dl>
+  </dl>
+  <b>That's all.</B>
+</dl>
+
+<p><a name="howto"></a></p>
+<h3>How to use it ?</h3>
+<dl><dd>
+  <b>step 0:</b> Make sure <a href="#prepare">the preparation phase</a>
+  <p>
+
+  <b>step 1:</b> Start the SOAPMonitor application
+  <dl><dd>
+       % java org.apache.axis.utils.SOAPMonitor [-u admin] [-w password] [-l axisURL]
+       <dl><dd>
+                    or
+       </dl>
+       % javaw org.apache.axis.utils.SOAPMonitor [-u admin] [-w password] [-l axisURL]
+  </dl><p>
+
+  <b>step 2:</b> Login
+  <dl><dd>
+       Please login with the account which you specified as an administorator.
+       <img src="images/LoginDialog.jpg"><br>
+  </dl><p>
+
+  <b>step 3:</b> Please wait for a while
+  <dl><dd>
+       <img src="images/DataLoading.jpg" width="400"><br>
+  </dl><p>
+
+  <b>step 4:</b> Administration screen will be displayed
+  <dl><dd>
+       <img src="images/InitialScreen.jpg"><br>
+  </dl><p>
+
+  <b>step 5-a:</b> To enable monitoring
+  <dl><dd>
+       Please click services to enable monitoring, then push "Turn On" button.<br>
+       <img src="images/ToEnableMonitoring.jpg"><p>
+       The following screen should be displayed.<br>
+       <img src="images/AfterTurnOn.jpg"><br>
+  </dl><p>
+
+  <b>step 5-b:</b> To disable monitoring
+  <dl><dd>
+       Please click services to disable monitoring, then push "Turn Off" button.<br>
+       <img src="images/ToDisableMonitoring.jpg"><p>
+       The following screen should be displayed.<br>
+       <img src="images/AfterTurnOff.jpg"><br>
+  </dl><p>
+
+  <b>step 6:</b> Save changes
+  <dl><dd>
+       Please push "Save changes" button to save the current state.<br>
+       The following screen should be displayed.<br>
+       <img src="images/DeployStatus.jpg"><br>
+  </dl><p>
+
+  <b>step 7:</b> Monitoring
+  <dl><dd>
+       Please push "Monitoring" tab to start monitoring with the current settings.<br>
+       The following screen should be displayed.<br>
+       <img src="images/MonitoringScreen.jpg"><br>
+  </dl><p>
+</dl>
+
+<p><a name="appendix"></a><p>
+<h2>Appendixes</h2>
+
+<p><a name="comparison"></a><p>
+<h3>Version comparison chart</h3>
+<table border="1" width="100%">
+  <tr bgcolor="#aaaaaa">
+   <th>Item</th><th>SOAPMonitorApplet(Old version)</th><th>SOAPMonitor(<a href="http://cvs.apache.org/viewcvs.cgi/ws-axis/java/src/org/apache/axis/utils/SOAPMonitor.java?view=markup">This version)</th>
+  </tr>
+  <tr>
+   <td bgcolor="#cccccc">App Type</td><td>Applet</td><td>Swing application</td>
+  </tr>
+  <tr>
+   <td bgcolor="#cccccc">Security</td><td>NG (No authentication)</td><td>OK (Authentication added)</td>
+  </tr>
+  <tr>
+   <td bgcolor="#cccccc">Install & Use</td>
+   <td>1. Compile the component, at first<br>
+       2. Deploy the soapmonitor handler to "server-config.wsdd"<br>
+       3. Deploy a service which to be monitored with the soapmonitor handler<br>
+       4. Have an access to "http://localhost:8080/axis/SOAPMonitor"<br>
+       5. Redeploy the service with no soapmonitor to disable monitoring<p>
+       *) More detail is <a href="http://www.sosnoski.com/presents/java-xml/axis/axis-monitor.html">here</a>.<br>
+       *) All of steps are the non-GUI based operations and these process are complicated for users
+   </td>
+   <td>Just do "java org.apache.axis.utils.SOAPMonitor"<br>
+       (within the axis.jar)<p>
+       *) All of steps are the GUI based operations<br>
+   </td>
+  </tr>
+</table>
+
+<p><a name="error"></a><p>
+<h3>Error messages</h3>
+<dl><dd>
+  You may meet the following screens, if you have an access denied.
+  <dl><dd>
+    <b>In case of "Unknown host":</b><br>
+    <img src="images/UnknownHost.jpg"><p>
+    <b>In case of "Port mismatch":</b><br>
+    <img src="images/ConnectionRefused.jpg"><p>
+    <b>In case of "Authrization failure":</b><br>
+    <img src="images/Unauthorized.jpg"><p>
+  </dl>
+</dl>
+</body>
+</html>
