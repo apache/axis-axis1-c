@@ -26,15 +26,15 @@
 
 <a href="#handlers">Handlers</a><br><br>
 
-<b>Before you follow this guide, make sure that you have followed the</b> <a
+<b>Before you follow this guide, please make sure that you have followed the</b> <a
 href="wininstall-guide.html"><b>Windows Installation guide</b>
 </p>
 
 <p>
 </a>
-Definitions: <br>
+<b>Definitions:</b> <br>
 AXIS_EXTRACT -> The folder to which the Axis c++ binary distribution is extracted <br>
-AXIS_FOLDER -> The deploy folder from the binary distribution copied to the apache installation
+AXIS_FOLDER -> The deploy folder of the binary distribution which is copied to the apache installation
 </p>
 
 
@@ -63,47 +63,45 @@ Here the document is written with the idea that the user uses Visual C++
 
 
 <br>
-<b>Method 1</b> <br>
-This method assums that the user has written the wsdl of the service which he
+<b>Method 1</b> <br> <br>
+This method assumes that the user has written the wsdl of the service which he
 needs to deploy. In this method user will start with this wsdl and the tool
 will generate the web service skeleton and other required files. 
-
 <br>
-1) There is a folder called "simple" inside the samples/server folder in your axiscpp binary distribution.  Inside this you can find the relevant wsdl for the calculator sample .Get the wsdl (eg:<a href="../sample/server/simple/Calculator.wsdl">Calculator.wsdl</a>)
-
-
 <br>
+1) There is a folder called "simple" inside the samples/server folder in your axiscpp binary distribution.  Inside this you can find the relevant wsdl for the calculator sample. Get the wsdl (eg:<a href="../sample/server/simple/Calculator.wsdl">Calculator.wsdl</a>)
+
+
+<br> <br>
 2) Run the WSDL2WS tool (refer the section below 'How to use the WSDL2WS tool
 on the command line') and generate the server side skeletons and wrappers.
 These files will be in two new folders which are generated from the tool
 called 'ServerOut' and 'ClientOut'. 
-<br>
+<br> <br>
 3) Create a VC workspace. 
 
-<br>
+<br> <br>
 4) Create a 'Win32 Static Library' project in this workspace. 
-<br>
-5) Add the following files to this project, from the generated 'ServerOut'
-folder. Calculator.cpp Calculator.h 
-<br>
+<br> <br>
+5) From the generated 'ServerOut'folder, add the following files to this project. <br> Calculator.cpp Calculator.h 
+<br> <br>
 6) Set the include path to the include directory of the binary distribution
 (These include files are in AXIS_EXTRACT/include/). 
-<br>
+<br> <br>
 7) Fill the empty methods of the generated skeletons.
-<br>
+<br> <br>
 8) Generate the lib (eg: MyCalculator.lib) 
-<br>
+<br> <br>
 9) Now create a 'Win32 Dynamic-Link Library' project. 
-<br>
-10) Add the following files to this project, from the generated 'ServerOut'
-folder. CalculatorService.cpp CalculatorWrapper.cpp CalculatorWrapper.h 
+<br> <br>
+10) From the generated 'ServerOut'folder,add the following files to this project. <br> CalculatorService.cpp, CalculatorWrapper.cpp and CalculatorWrapper.h 
 
-<br>
+<br> <br>
 11) Set the include path to the include directory of the binary distribution.
 
-<br>
-12) Add the above created lib (Calculator.lib) as the input libraries of this
-project. <br>
+<br> <br>
+12) Add the above created lib (Calculator.lib) as the input library of this
+project. <br> <br>
 13) Build and create the DLL. (Calculator.dll)</p>
 
 <p><a name="wsdl2ws"></a></p>
@@ -116,10 +114,10 @@ project. <br>
 <br>
 
 
-<p>For using WSDL2Ws java tool on the command line you require jdk1.4 or
+<p>To use WSDL2Ws java tool on the command line you require jdk1.4 or
 above. <br>
 <br>
-To use WSDL2Ws java tool you should set the CLASSPATH Environment Variable to
+To use WSDL2Ws java tool you have to set the CLASSPATH Environment Variable to
 point to the following jar files in AXIS_EXTRACT\lib\axisjava.
 
 <br>
@@ -140,7 +138,7 @@ wsdl4j.jar
 <br>
 xml-apis.jar
 
-<br>
+<br> <br>
 The CLASSPATH Environment Variable should have the absolute paths of the jars
 (including the jar file name) given as a semicolon separated list.
 <br>
@@ -149,12 +147,12 @@ The CLASSPATH Environment Variable should have the absolute paths of the jars
 Open a command window. Change directory to AXIS_EXTRACT\lib\axis. Create a folder of your choice and we will
 call this folder as WSDL2WS_FOLDER. <br>
 <br>
-Now copy the wsdl file (eg.Calculator.wsdl) which you use to the folder
+Now copy the wsdl file (eg.Calculator.wsdl) which you use, to the folder
 WSDL2WS_FOLDER.
 <br>
 Copy the file wsdl2ws.jar from AXIS_EXTRACT\lib\axis to  WSDL2WS_FOLDER
 <br>
-Now change the directory to WSDL2WS_FOLDER and run the following command to generate the server side skeletons and
+Then change the directory to WSDL2WS_FOLDER and run the following command to generate the server side skeletons and
 wrappers.
 
 <br>
@@ -186,16 +184,15 @@ The generated client stubs will be in [WSDL2WS_FOLDER]\ClientOut</p>
 
 <br>
 
-<p>Axis cpp user can use the AdminClient tool to deploy a service or manually deploy. The first section
+<p>Axis cpp user can use the AdminClient tool to deploy a service or can manually deploy. The first section
 shows you how to deploy your Web Service manually, without using the
 AdminClient tool.
 
+<br> <br>
+Lets say that the apache installation folder is APACHE_FOLDER.
 <br>
-Say the apache installation folder is APACHE_FOLDER.
-<br>
-(For the default installation this is "C:\Program Files\Apache Group\Apache"
-for apache 1.3.X and "C:\Program Files\Apache Group\Apache2" for apache
-2.X).
+(The default installation that is for apache 1.3.X the path is "C:\Program Files\Apache Group\Apache"
+ and for apache 2.X the path is "C:\Program Files\Apache Group\Apache2")
 
 <br>
 <br>
@@ -203,7 +200,7 @@ for apache 1.3.X and "C:\Program Files\Apache Group\Apache2" for apache
 APACHE_FOLDER/Axis/webservices.
 
 <br>
-2) Go and add the following in the server.wsdd at the service level. Make
+2) Add the following to the server.wsdd at the service level. Please make
 sure you add these lines at the correct place, i.e at service level.
 (APACHE_FOLDER/Axis/conf/server.wsdd)
 
@@ -225,7 +222,7 @@ Now you have deployed your web service</p>
 
 <h2>Deploying your web service Using AdminClient Tool</h2>
 
-<p>The wsdl2ws Tool generates the deploy.wsdd and the undeploy.wsdd files needed for the AdminClient. Once we have these files, we have to deploy the web service (in this case the calculator service) with the AdminClient. We do this with the  AdminClient.exe which comes with axiscpp binary distribution. A typical invocation of the AdminClient looks like this.
+<p>The wsdl2ws Tool generates the deploy.wsdd and the undeploy.wsdd files which are needed for the AdminClient. Once we have these files, we have to deploy the web service (in this case the calculator service) with the AdminClient. We do this with the  AdminClient.exe which comes with axiscpp binary distribution. A typical invocation of the AdminClient looks like this.
 </p>
 <p>
 <b>AdminClient  &lt;server&gt; &lt;Port&gt; &lt;wsddfile&gt;</b>
@@ -243,7 +240,7 @@ where local host would be the server where the Axis cpp server is hosted and 80 
 
 <p>With the WSDL2WS tool you have almost developed your client. What you have
 to do next is write a file which has a main method and create an object of the
-stub and invoke your methods on that. <br>
+stub and invoke your methods on that. <br> <br>
 1) Create a vc workspace. <br>
 2) Create a 'Win32 Console Application'. <br>
 3) Add files to this project from the above generated 'ClientOut' folder.
@@ -259,7 +256,7 @@ Axisclient.lib
 <br>
 
 <br>
-6) Create a file with the main method which looks similar to the following
+6) Create a file with a main method which looks similar to the following
 and add this file to this project.
 <br>
 </p>
@@ -290,17 +287,18 @@ int main()
 <p><a name="transport"></a></p>
 
 <h2>Transport Library and Parser Library</h2>
-<p>AxisTransport.dll (Which can be found at AXIS_EXTRACT/bin) should be placed in the path, and be specified as the value to the key "Transport_http" in axiscpp.conf (AXIS_FOLDER/axiscpp.conf) Or in the same place as the client.exe. </p> 
-<p>AxisXMLParser.dll ( Either one of AxisXMLParser_Expat.dll or AxisXMLParser_Xerces.dll should be renamed to AxisXMLParse.dll depending on which parser you want to user) should be placed in the path and given specified as the value to the key XMLParser in axiscpp.conf Or in the  same place as the client.exe. 
+<p>AxisTransport.dll (Which can be found at AXIS_EXTRACT/bin) should be placed in the path, and should be specified as the value to the key "Transport_http" in axiscpp.conf (AXIS_FOLDER/axiscpp.conf) Or in the same place as the client.exe. </p> 
+<p>Rename either AxisXMLParser_Expat.dll or AxisXMLParser_Xerces.dll to AxisXMLParser.dll (depending on the parser you use), 
+ and give the path of the AxisXMLParser.dll as the value of the key XMLParser in axiscpp.conf Or in the  same place as the client.exe. 
 <br>
-If you choose to use Expat parser the dll, libexpat.dll should be in the path.
+If you want to use Expat parser then libexpat.dll should be given in the path.
 <br>
-If you choose to use the Xerces parser the dll, xerces-c_2_2_0.dll should be in the path.
+If you want to use the Xerces parser then xerces-c_2_2_0.dll should be given in the path.
 <br>
 
 </p>
 
-<p><b>Axiscpp.conf file contains the following paths</b><br>
+<p><b>Axiscpp.conf file contains the following paths</b><br> <br>
 LogPath:XXXX<br>
 WSDDFilePath:YYYY<br>
 Transport_http:ZZZZ (Not necessary)<br>
@@ -322,7 +320,7 @@ XMLParser:[APACHE_HOME]\Axis\libs\AxisXMLParser_D.dll <br></p>
 
 <h2>Handlers</h2>
 <p>Handlers are pluggable components in Axis C++. We have included a set of sample handlers for your reference. You could write your own handlers by following the instructions  given for the sample Handlers.</p>
-<p><b>Note: If you are using Client side Handlers you need to enter the following entry in the AXIS_FOLDER/axiscpp.conf configuration file.</b></p>
+<p><b>Note: If you are using Client side Handlers you need to enter the following entry to the AXIS_FOLDER/axiscpp.conf configuration file.</b></p>
 <p>ClientWSDDFilePath:Axis\conf\client.wsdd</p>
 <p>After entering this entry  to your AXIS_FOLDER/axiscpp.conf configuration file will look like:</p>
 <p>LogPath:Axis\logs\AxisLog.txt
@@ -369,7 +367,7 @@ XMLParser:[APACHE_HOME]\Axis\libs\AxisXMLParser_D.dll <br></p>
 <p><b>Note: Make sure you specify the correct path of the handler dll in the server.wsdd file.</b></p>
 <p>Now you are almost done to run your server side handler.
 <br>
-Restart the Apache server and thats it.</p>
+Restart the Apache server.</p>
 <br>
 <br>
 <b>Running the Handler</b>
