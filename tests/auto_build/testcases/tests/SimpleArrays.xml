@@ -6,9 +6,9 @@
     <wsdl>SimpleArrays.wsdl</wsdl>
     <expected>
         <output>
-            SimpleArrayDoc.cpp.out
+            SimpleArrays.expected
         </output>
     </expected>
-	<endpoint>http://localhost:80/SimpleArrays/services/SimpleArrays</endpoint>
+	<endpoint>http://localhost:80/SimpleArrays/services/SimpleArraysPort</endpoint>
 </test>
 
