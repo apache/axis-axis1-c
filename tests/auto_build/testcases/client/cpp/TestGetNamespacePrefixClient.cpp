@@ -27,8 +27,8 @@ int main(int argc, char* argv[])
 		
 		iResult = ws.div(15,3);
 		cout << "Result is = " << iResult << endl;
-	
-		cout << ws.getNamespacePrefix("http://ws.apache.org/axisCppTest1/") << endl;
+		//This method is no more defined in Stub API
+		//cout << ws.getNamespacePrefix("http://ws.apache.org/axisCppTest1/") << endl;
 		rc=0;
 	}
 	catch(AxisException& e)

@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 		    iResult = ws.div(i1, i2);		
                     printf("Result is:%d\n", iResult);
                 }
-                catch(MathOpsService_AxisClientException& e)
+                catch(AxisException& e)
                 {
                     printf("%s\n", e.what());
                 }

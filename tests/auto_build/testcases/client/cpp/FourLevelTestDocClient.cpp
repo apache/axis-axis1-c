@@ -3,7 +3,7 @@
 #include <string>
 using namespace std;
 
-#include "fourLevelTestDocInterface.hpp"
+#include "FourLevelTestDocInterface.hpp"
 #include <axis/AxisException.hpp>
 
 int main(int argc, char* argv[])

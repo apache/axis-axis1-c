@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 	sprintf(endpoint, "%s", url);
 	ArrayTestPortType ws(endpoint);
 	//testing echoIntArray
-         IntArrayType arrin;
+         intArrayType arrin;
          arrin.intItem.m_Array = new int[ARRAYSIZE];
          arrin.intItem.m_Size = ARRAYSIZE;
          for (x=0;x<ARRAYSIZE;x++)

@@ -17,7 +17,8 @@ int main(int argc, char *argv[])
     
 
 		MathOps ws(endpoint);
-		ws.setSOAPMethodAttribute("div","ns5","10");
+		//setSOAPMethodAttribute call does not belong to Stub class any more
+		//ws.setSOAPMethodAttribute("div","ns5","10");
 		//ws.setSOAPMethodAttribute("add", "", "http://soapinteroptest.org", "value");
 		
 
