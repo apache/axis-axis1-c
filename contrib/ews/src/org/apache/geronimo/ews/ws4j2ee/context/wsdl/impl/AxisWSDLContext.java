@@ -96,6 +96,7 @@ public class AxisWSDLContext implements WSDLContext {
     private HashMap bindings;
     private HashMap portetypes;
     private HashMap ports;
+    private boolean verbose = false;
 
     public AxisWSDLContext(SymbolTable axisSymbltable) {
         this.symbolTable = axisSymbltable;
@@ -217,7 +218,8 @@ public class AxisWSDLContext implements WSDLContext {
      * @see org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext#getPort()
      */
     public PortEntry getPort(QName name) {
-    	log.info("getting port type "+name);
+    	if(verbose)
+    		log.info("getting port type "+name);
         Object obj = this.ports.get(name);
         //when Symbol table populates the URI of the port is given as ""
         //so we have to cheat 

@@ -55,7 +55,7 @@ public class JarFileLoader {
 				throw new GenerationFault("wscf file must not be null");
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new GenerationFault(e);
+			throw GenerationFault.createGenerationFault(e);
 		}
 	}
 	public InputStream getInputStreamForJarEntry(String path) throws GenerationFault{
@@ -68,7 +68,7 @@ public class JarFileLoader {
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
-				throw new GenerationFault(e);
+				throw GenerationFault.createGenerationFault(e);
 			}
 		}
 	
@@ -82,7 +82,7 @@ public class JarFileLoader {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new GenerationFault(e);
+			throw GenerationFault.createGenerationFault(e);
 		}
 	}
 	

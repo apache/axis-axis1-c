@@ -108,7 +108,7 @@ public class JARFile {
     		}
         } catch (IOException e) {
             e.printStackTrace();
-            throw new GenerationFault(e);
+            throw GenerationFault.createGenerationFault(e);
         }
     }
 

@@ -98,7 +98,7 @@ public class MiscInfoImpl implements MiscInfo {
     private String ejbName = null;
     private String axisSEI;
     private ArrayList operations;
-    private boolean verbose = true;
+    private boolean verbose = false;
     private String wsConfFileLocation;
     private String wsdlFile;
     private String jaxrpcfile;
