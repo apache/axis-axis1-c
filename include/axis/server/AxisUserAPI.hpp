@@ -22,6 +22,8 @@
 #include <time.h>
 #include <string.h>
 
+AXIS_CPP_NAMESPACE_START
+
  /**
   * @file AxisUserAPI.hpp
   * This file contains types defined in Axis C++. The mapping of basic xsd types
@@ -222,4 +224,5 @@ typedef struct
     int _size;
 } AnyType;
 
+AXIS_CPP_NAMESPACE_END
 #endif
