@@ -116,10 +116,6 @@ SOURCE=..\..\..\src\transport\axis\Sender.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\soap\SoapFault.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\src\transport\axis\Transport.cpp
 # End Source File
 # Begin Source File

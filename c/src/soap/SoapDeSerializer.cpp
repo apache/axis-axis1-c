@@ -54,6 +54,7 @@ SoapDeSerializer::SoapDeSerializer()
     m_pHeader = NULL;
     m_pcFaultDetail = (char*) malloc(sizeof(char) * 100);
 	m_pInputStream = 0;
+	m_nStatus = AXIS_SUCCESS;
 }
 
 SoapDeSerializer::~SoapDeSerializer()
@@ -347,6 +348,7 @@ int SoapDeSerializer::init()
         m_pHeader = NULL;
     }
     m_nSoapVersion = VERSION_LAST;
+	m_nStatus = AXIS_SUCCESS;
     return m_nStatus;
 }
 
@@ -2931,7 +2933,7 @@ bool SoapDeSerializer::isAnyMustUnderstandHeadersLeft()
 
 int SoapDeSerializer::flushInputStream()
 {
-    int nChars = 0;
+    int nChars = 100;
     char pBuffer[100];
 	if (!m_pInputStream) return AXIS_FAIL;
 	while (TRANSPORT_IN_PROGRESS == m_pInputStream->getBytes(pBuffer, &nChars));

@@ -130,11 +130,23 @@ SOURCE=..\src\common\AxisConfig.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\common\AxisConfigException.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\engine\AxisEngine.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\engine\AxisEngineException.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\common\AxisException.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\AxisSoapException.cpp
 # End Source File
 # Begin Source File
 
@@ -147,6 +159,10 @@ SOURCE=..\src\common\AxisTrace.cpp
 # Begin Source File
 
 SOURCE=..\src\common\AxisUtils.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\wsdd\AxisWsddException.cpp
 # End Source File
 # Begin Source File
 
@@ -270,7 +286,7 @@ SOURCE=..\src\soap\SoapSerializer.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\transport\SOAPTransportFactory.cpp
+SOURCE=..\src\engine\SOAPTransportFactory.cpp
 # End Source File
 # Begin Source File
 
