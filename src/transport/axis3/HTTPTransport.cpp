@@ -56,6 +56,7 @@ m_bMaintainSession (false)
     m_pChannelFactory = new ChannelFactory();
     m_bMimeTrue = false;
     m_viCurrentHeader = m_vHTTPHeaders.begin();
+	m_pszRxBuffer = new char [BUF_SIZE];
 }
 
 /*
@@ -88,6 +89,8 @@ HTTPTransport::~HTTPTransport()
 
 		m_pChannelFactory = 0;
 	}
+
+	delete m_pszRxBuffer;
 }
 
 /*
@@ -215,16 +218,17 @@ AXIS_TRANSPORT_STATUS HTTPTransport::flushOutput() throw (HTTPTransportException
     {
 		m_bReopenConnection = false;
 
-		if( !m_pActiveChannel->open())
+		if( m_pActiveChannel->open() != AXIS_SUCCESS)
 		{
-		    int				iStringLength = m_pActiveChannel->GetLastErrorMsg ().length () + 1;
+		    int				iStringLength = m_pActiveChannel->GetLastErrorMsg().length() + 1;
 			const char *	pszLastError = new char[iStringLength];
 
 		    memcpy( (void *) pszLastError,
-					m_pActiveChannel->GetLastErrorMsg ().c_str(),
+					m_pActiveChannel->GetLastErrorMsg().c_str(),
 					iStringLength);
 
-		    throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED, (char *) pszLastError);
+		    throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,
+										  (char *) pszLastError);
 			}
 		}
 
@@ -370,7 +374,8 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
     {
 		try
 		{
-			*m_pActiveChannel >> m_strReceived;
+			*m_pActiveChannel >> m_pszRxBuffer;
+			m_strReceived = m_pszRxBuffer;
 
 		    if( !m_bReadPastHTTPHeaders)
 		    {
@@ -382,9 +387,8 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 					{
 						if (m_strReceived.find( "\r\n\r\n") == std::string::npos)
 						{
-						    std::string strTempReceived = "";
-						    *m_pActiveChannel >> strTempReceived;	// Assume non blocking here
-						    m_strReceived += strTempReceived;
+							*m_pActiveChannel >> m_pszRxBuffer;
+						    m_strReceived += m_pszRxBuffer;
 						}
 					} while( m_strReceived.find( "\r\n\r\n") == std::string::npos);
 
@@ -398,9 +402,8 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 						{
 							if( m_strReceived.find( "\r\n\r\n") == std::string::npos)
 							{
-								std::string strTempReceived = "";
-								*m_pActiveChannel >> strTempReceived;	// Assume non blocking here
-								m_strReceived += strTempReceived;
+								*m_pActiveChannel >> m_pszRxBuffer;
+								m_strReceived += m_pszRxBuffer;
 							}
 						} while( m_strReceived.find( "\r\n\r\n") == std::string::npos);
 			// now this must contain HTTP. Else there is a conent error.
@@ -449,7 +452,8 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 			// Samisa: We found Continue. Keep on reading and processing headers
 			// till we get a HTTP code other than 100
 			// Here it is assumed that the whole of the request is already sent
-						*m_pActiveChannel >> m_strReceived;
+						*m_pActiveChannel >> m_pszRxBuffer;
+						m_strReceived = m_pszRxBuffer;
 					}
 				} while( m_iResponseHTTPStatusCode == 100);
 
@@ -468,7 +472,8 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 	    // make sure we have a message with some content
 		    if( m_strReceived.length () == 0)
 			{
-				*m_pActiveChannel >> m_strReceived;
+				*m_pActiveChannel >> m_pszRxBuffer;
+				m_strReceived = m_pszRxBuffer;
 			}
 
 		    if( m_bChunked && m_iContentLength < 1)	// Read first chunk
@@ -502,7 +507,8 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 				{
 					do
 					{
-						*m_pActiveChannel >> m_strReceived;
+						*m_pActiveChannel >> m_pszRxBuffer;
+						m_strReceived = m_pszRxBuffer;
 						endOfChunkData = m_strReceived.find( "\r\n");
 					} while( endOfChunkData == std::string::npos);
 				}
@@ -568,9 +574,8 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 		    // Make sure that we have the found the end of previous chunk
 					while( endOfChunkData == std::string::npos)
 					{
-						std::string strTempRecv = "";
-						*m_pActiveChannel >> strTempRecv;
-						m_strReceived += strTempRecv;
+						*m_pActiveChannel >> m_pszRxBuffer;
+						m_strReceived += m_pszRxBuffer;
 						endOfChunkData = m_strReceived.find( "\r\n");
 					}
 
@@ -581,9 +586,8 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 		    // Make sure that we have the starting line of next chunk
 					while( endOfChunkData == std::string::npos)
 					{
-						std::string strTempRecv = "";
-						*m_pActiveChannel >> strTempRecv;
-						m_strReceived += strTempRecv;
+						*m_pActiveChannel >> m_pszRxBuffer;
+						m_strReceived += m_pszRxBuffer;
 						endOfChunkData = m_strReceived.find( "\r\n");
 					}
 
@@ -1212,9 +1216,8 @@ void HTTPTransport::processRootMimeBody()
 		{
 			if( m_strReceived.find( "\r\n\r\n") == std::string::npos)
 			{
-				std::string strTempReceived = "";
-				*m_pActiveChannel >> strTempReceived;	// Assume non blocking here
-				m_strReceived += strTempReceived;
+				*m_pActiveChannel >> m_pszRxBuffer;
+				m_strReceived += m_pszRxBuffer;
 			}
 		} while( m_strReceived.find( "\r\n\r\n") == std::string::npos);
 
@@ -1318,18 +1321,15 @@ void HTTPTransport::processMimeBody ()
 
 void HTTPTransport::getAttachment( char * pStrAttachment, int * pIntSize, int intAttachmentId)
 {
-    std::string strTempReceived = "";
-
-    *m_pActiveChannel >> strTempReceived;	// Assume non blocking here
-    m_strMimeReceived += strTempReceived;
+	*m_pActiveChannel >> m_pszRxBuffer;
+    m_strMimeReceived += m_pszRxBuffer;
 
     do
     {
 		if( m_strMimeReceived.find( "\r\n\r\n") == std::string::npos)
 		{
-			strTempReceived = "";
-		    *m_pActiveChannel >> strTempReceived;	// Assume non blocking here
-		    m_strMimeReceived += strTempReceived;
+			*m_pActiveChannel >> m_pszRxBuffer;
+		    m_strMimeReceived += m_pszRxBuffer;
 		}
     } while( m_strMimeReceived.find( "\r\n\r\n") == std::string::npos);
 

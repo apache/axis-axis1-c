@@ -5,6 +5,8 @@
 #include "URL.hpp"
 #include "HTTPTransportException.hpp"
 
+const int BUF_SIZE = 1024 * 8;
+
 using namespace std;
 
 AXIS_CPP_NAMESPACE_USE
@@ -17,8 +19,9 @@ public:
     virtual URL &				getURLObject()=0;
     virtual bool				open() throw (HTTPTransportException&)=0;
     virtual const std::string&	GetLastErrorMsg()=0;
-    virtual const IChannel&		operator >> (std::string& msg)=0;
-    virtual const IChannel&		operator << (const char* msg)=0;
+//    virtual const IChannel&		operator >> (std::string& msg)=0;
+    virtual const IChannel&		operator >> (const char * msg)=0;
+    virtual const IChannel&		operator << (const char * msg)=0;
 //	virtual void				setSecureProperties( const char *)=0;
 //	virtual const char *		getSecureProperties()=0;
     virtual void				setTimeout( const long lSeconds)=0;

@@ -244,6 +244,8 @@ class HTTPTransport:public SOAPTransport
     std::string m_strMimeContentLocation; 
     std::string m_strMimeReceived;
     ChannelFactory* m_pChannelFactory;
+
+	char *	m_pszRxBuffer;
 };
 
 #endif

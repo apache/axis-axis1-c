@@ -350,11 +350,14 @@ int Call::openConnection()
 			m_pTransport->setTransportProperty( CHANNEL_HTTP_SSL_DLL_NAME, pcChannelHTTPSSLLibraryPath);
 		}
 
-        m_pTransport->setEndpointUri(m_pcEndPointUri);
+        m_pTransport->setEndpointUri( m_pcEndPointUri);
     
         //if use proxy then set proxy
-        if( m_bUseProxy )
+        if( m_bUseProxy)
+		{
     	    m_pTransport->setProxy(m_strProxyHost.c_str(), m_uiProxyPort);
+		}
+
         m_nStatus = m_pTransport->openConnection();
     }
     catch(AxisException& e)
