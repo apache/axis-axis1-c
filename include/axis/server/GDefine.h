@@ -100,9 +100,14 @@ extern void ModuleUnInitialize();
 /*replaced stdcall with cdecl to make it work on some platforms with older libraries - Samisa*/
 /*#define AXISCALL __attribute__((stdcall))*/
 #define AXISCALL __attribute__((cdecl))
+#else /* unix or win32 */
+#if defined(__unix)
+#define AXISCALL
 #else
 #define AXISCALL __stdcall
 #endif
+#endif
+
 
 /*
  * Following macro define an API function of Axis C++
