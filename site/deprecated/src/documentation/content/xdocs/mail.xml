@@ -59,5 +59,40 @@ and discuss issues, code changes/additions, etc.
 </form>
 </p>
     </section>
+
+
+    <section>
+      <title>The Axis C++ User List</title>
+<p>
+<b>Medium Traffic</b>
+<link href="mailto:axis-c-user-subscribe@ws.apache.org">Subscribe</link>
+<link href="mailto:axis-c-user-unsubscribe@ws.apache.org">Unsubscribe</link>
+<link href="mailto:axis-c-user-digest-subscribe@ws.apache.org">Subscribe(Digest)</link>
+<link href="mailto:axis-c-user-digest-unsubscribe@ws.apache.org">Unsubscribe(Digest)</link>
+<link href="mailto:axis-c-user@ws.apache.org">Send mail to list</link>
+<br/>
+This list is for developers that are using Axis C++ in their own projects to 
+ask questions, share knowledge, and discuss issues related to using Axis C++.
+</p>
+    </section>
+
+
+
+    <section>
+      <title>The Axis C++ Developer List</title>
+<p>
+<b>Medium Traffic</b>
+<link href="mailto:axis-c-dev-subscribe@ws.apache.org">Subscribe</link>
+<link href="mailto:axis-c-dev-unsubscribe@ws.apache.org">Unsubscribe</link>
+<link href="mailto:axis-c-dev-digest-subscribe@ws.apache.org">Subscribe(Digest)</link>
+<link href="mailto:axis-c-dev-digest-unsubscribe@ws.apache.org">Unsubscribe(Digest)</link>
+<link href="mailto:axis-c-dev@ws.apache.org">Send mail to list</link>
+<br/>
+This is the list where participating developers of the Axis C++ project meet 
+and discuss issues, code changes/additions, etc. 
+</p>
+    </section>
+
+
   </body>
 </document>
