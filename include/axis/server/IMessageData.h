@@ -96,6 +96,7 @@ typedef struct {
     @class IMessageData
     @brief interface for the IMessageData class.
 
+    @author Susantha Kumara (skumara@virtusa.com, susantha@opensource.lk)
     @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
 */
 class IMessageData

@@ -96,7 +96,7 @@ void SoapParserExpat::startElement(const XMLCh *qname,const XMLCh **attrs)
 		qn.SplitQNameString(attrs[i], NAMESPACESEPARATOR);
 		pAt = new Attribute();
 		pAt->m_Name = qn.localname;
-		pAt->m_Namespace = qn.uri;
+		pAt->m_Namespace = qn.uri ? qn.uri : "";
 		qn.MergeQNameString(NAMESPACESEPARATOR);
 		pAt->m_Value = attrs[i+1];
 		pSE->m_Attributes.push_back(pAt);

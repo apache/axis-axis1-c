@@ -704,6 +704,24 @@ const AxisChar* SoapSerializer::GetBodyAsString()
 	return NULL;
 }
 
+/* following two functions are needed by serializer functions of complex types for RPC style web services */
+void SoapSerializer::SerializeStartElementOfType(const AxisChar* pName, const AxisChar* pNamespace, const AxisChar* pPrefix)
+{
+	if (pPrefix)
+	{
+		Serialize("<", pName, " xsi:type=\"", pPrefix, ":", pName, "\" xmlns:", pPrefix, "=\"", pNamespace, "\">", NULL);
+	}
+	else
+	{
+		Serialize("<", pName, ">", NULL);
+	}
+}
+
+void SoapSerializer::SerializeEndElementOfType(const AxisChar* pName)
+{
+	Serialize("</", pName, ">", NULL);
+}
+
 /**
  * Callback function that should be called by the transport module to release a buffer passed to it by a Serializer. 
  * @param 
