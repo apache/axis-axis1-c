@@ -27,7 +27,7 @@ extern int process_request(Ax_soapstream* str);
 /*extern int process(soapstream *);*/
 extern unsigned char chEBuf[1024];
 
-#define SIZEOFMODULEBUFFER 100
+#define SIZEOFMODULEBUFFER 512
 
 char g_buffer[SIZEOFMODULEBUFFER];
 
