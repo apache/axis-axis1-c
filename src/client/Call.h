@@ -50,8 +50,8 @@ private:
 	ClientAxisEngine* m_pAxisEngine;
 	uParamValue m_uReturnValue;
 	MessageData* m_pMsgData;
-	IWrapperSoapSerializer* m_pIWSSZ;
-	IWrapperSoapDeSerializer* m_pIWSDZ;
+	SoapSerializer* m_pIWSSZ;
+	SoapDeSerializer* m_pIWSDZ;
 	XSDTYPE m_nReturnType;
 	ComplexObjectHandler m_ReturnCplxObj;
 	Ax_soapstream m_Soap;
