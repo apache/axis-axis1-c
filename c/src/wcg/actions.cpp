@@ -217,3 +217,43 @@ int get_var_type(const char* vartypename)
 		return false;
 	return map_var_type(lexer_keys[vartypename]);
 }
+
+string makeOperatorName(int op) 
+{
+  switch( op ) {
+  case PLUS: return string("operator+");
+  case MINUS: return string("operator-");
+  case STAR: return string("operator*");
+  case DIVIDE: return string("operator/");
+  case MOD: return string("operator%");
+  case GREATER: return string("operator>");
+  case LESS: return string("operator<");
+  case EQUAL: return string("operator=");
+  case AND: return string("operator&");
+  case OR: return string("operator|");
+  case NOT: return string("operator!");
+  case XOR: return string("operator^");
+  case COMMA: return string("operator,");
+  case COMPLEMENT: return string("operator~");
+  case PLUSEQ: return string("operator+=");
+  case MINUSEQ: return string("operator-=");
+  case STAREQ: return string("operator*=");
+  case DIVEQ: return string("operator/=");
+  case MODEQ: return string("operator%=");
+  case XOREQ: return string("operator^=");
+  case ANDEQ: return string("operator&=");
+  case OREQ: return string("operator|=");
+  case LTLT: return string("operator<<");
+  case GTGT: return string("operator>>");
+  case GTGTEQ: return string("operator>>=");
+  case LTLTEQ: return string("operator<<=");
+  case EQEQ: return string("operator==");
+  case NOTEQ: return string("operator!=");
+  case LEQ: return string("operator>=");
+  case ANDAND: return string("operator||");
+  case PLUSPLUS: return string("operator++");
+  case MINUSMINUS: return string("operator--");
+  case ARROW: return string("operator->");
+  }
+  return string("");
+}

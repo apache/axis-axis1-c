@@ -130,3 +130,16 @@ int BeanClass::GenerateSerializerAndDeSerializerImpl(File &file)
 	file << endl;
 	return 0;
 }
+
+int BeanClass::GenerateWSDLSchema(File &file)
+{
+	file << "<complexType name=\"" << m_Name << "\">" << endl;
+	file << "<all>"<< endl;
+	for (list<Variable*>::iterator it = m_Variables.begin(); it != m_Variables.end(); it++)
+	{
+		(*it)->GenerateWSDLSchema(file);
+	}		
+	file << "</all>" << endl;
+	file << "</complexType>" << endl;
+	return 0;
+}

@@ -279,3 +279,28 @@ string& Variable::GetParamGetMethod(int nType)
 	}
 	return m_sAuxStr;
 }
+
+int Variable::GenerateWSDLSchema(File &file)
+{
+	if (m_Type == VAR_UNKNOWN) return 1; //error
+	file << "<element name=\"" << m_VarName << "\" type=\"";
+	if (m_Type != VAR_USER) file << "xsd:" << m_TypeName << "\" />" << endl;
+	else file << "xsdl:" << m_TypeName << "\" />" << endl;
+}
+
+int Variable::GenerateWSDLPartInMessage(File &file, bool bInput)
+{
+	if (m_Type == VAR_UNKNOWN) return 1; //error
+	file << "<part name=\"";
+	if (bInput) 
+	{
+		file << "input" << m_TypeName << m_VarName;
+	}
+	else
+	{
+		file << "return";
+	}
+	file << "\" type=\"";
+	if (m_Type != VAR_USER) file << "xsd:" << m_TypeName << "\" />" << endl;
+	else file << "xsdl:" << m_TypeName << "\" />" << endl;
+}
