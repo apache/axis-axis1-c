@@ -34,15 +34,15 @@
 #include <axis/client/Call.h>
 #include <vector>
 
-class Stub
+class STORAGE_CLASS_INFO Stub
 {
   public:
     Stub (const char *pchEndpointUri);
     virtual ~ Stub ();
-    int initilizeCall ();
-    void setEndPoint (char *pcEndPoint);
-    void setTransportProperty (const char *pcKey, const char *pcValue);
-    IHeaderBlock *createHeaderBlock (AxisChar * pachLocalName,
+    int AXISCALL initilizeCall ();
+    void AXISCALL setEndPoint (char *pcEndPoint);
+    void AXISCALL setTransportProperty (const char *pcKey, const char *pcValue);
+    IHeaderBlock * AXISCALL createHeaderBlock (AxisChar * pachLocalName,
 				     AxisChar * pachPrefix,
 				     AxisChar * pachUri);
   /**

@@ -49,9 +49,9 @@ Stub::~Stub ()
 	free (m_vValues[i]);
     }
 
-    for (unsigned int i = 0; i < m_vSOAPHeaderBlocks.size (); i++)
+    for (unsigned int j = 0; j < m_vSOAPHeaderBlocks.size (); j++)
     {
-	delete m_vSOAPHeaderBlocks[i];
+	delete m_vSOAPHeaderBlocks[j];
     }
 }
 
