@@ -7,11 +7,11 @@
 #define __INTEROPTESTPORTTYPEWRAPPER_SERVERWRAPPER_H__INCLUDED_
 
 #include "InteropTestPortType.h"
-#include <axis/common/WrapperClassHandler.h>
-#include <axis/common/IMessageData.h>
-#include <axis/common/GDefine.h>
-#include <axis/common/IWrapperSoapDeSerializer.h>
-#include <axis/common/IWrapperSoapSerializer.h>
+#include <axis/server/WrapperClassHandler.h>
+#include <axis/server/IMessageData.h>
+#include <axis/server/GDefine.h>
+#include <axis/server/IWrapperSoapDeSerializer.h>
+#include <axis/server/IWrapperSoapSerializer.h>
 
 class InteropTestPortTypeWrapper : public WrapperClassHandler
 {

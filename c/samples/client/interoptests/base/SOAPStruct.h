@@ -7,7 +7,7 @@
 #if !defined(__SOAPSTRUCT_PARAM_H__INCLUDED_)
 #define __SOAPSTRUCT_PARAM_H__INCLUDED_
 
-#include <axis/common/AxisUserAPI.h>
+#include <axis/server/AxisUserAPI.h>
 
 //Local name and the URI for the type
 static const char* Axis_URI_SOAPStruct = "http://soapinterop.org/xsd";

@@ -13,6 +13,7 @@
 #include "ArrayOfint.h"
 #include "ArrayOfstring.h"
 
+
 class InteropTestPortType 
 {
 private:

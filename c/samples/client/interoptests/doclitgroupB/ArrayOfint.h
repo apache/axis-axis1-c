@@ -7,7 +7,7 @@
 #if !defined(__ARRAYOFINT_ARRAY_H__INCLUDED_)
 #define __ARRAYOFINT_ARRAY_H__INCLUDED_
 
-#include <axis/common/AxisUserAPI.h>
+#include <axis/server/AxisUserAPI.h>
 
 typedef struct ArrayOfintTag
 {

@@ -6,7 +6,10 @@
 
 #include "InteropTestPortTypeB.h"
 
-#include <axis/common/AxisWrapperAPI.h>
+#include <axis/server/AxisWrapperAPI.h>
+
+bool CallBase::bInitialized;
+CallFunctions CallBase::ms_VFtable;
 
 extern int Axis_DeSerialize_SOAPStruct(SOAPStruct* param, IWrapperSoapDeSerializer *pDZ);
 extern void* Axis_Create_SOAPStruct(void* pObj, bool bArray = false, int nSize=0);
@@ -47,7 +50,7 @@ InteropTestPortTypeB::~InteropTestPortTypeB()
 void InteropTestPortTypeB::echoStructAsSimpleTypes(SOAPStruct* Value0, AXIS_OUT_PARAM AxisChar** outValue0, AXIS_OUT_PARAM int* outValue1, AXIS_OUT_PARAM float* outValue2)
 {
 	int nStatus;
-	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER)) return;
+	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER, 0)) return;
 	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropGroupB#echoStructAsSimpleTypes");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoStructAsSimpleTypes", "http://soapinterop.org/");
@@ -73,7 +76,7 @@ SOAPStruct* InteropTestPortTypeB::echoSimpleTypesAsStruct(float Value0, int Valu
 {
 	int nStatus;
 	SOAPStruct* pReturn = NULL;
-	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER)) return pReturn;
+	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER, 0)) return pReturn;
 	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropGroupB#echoSimpleTypesAsStruct");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoSimpleTypesAsStruct", "http://soapinterop.org/");
@@ -100,7 +103,7 @@ ArrayOfString2D InteropTestPortTypeB::echo2DStringArray(ArrayOfString2D Value0)
 {
 	int nStatus;
 	ArrayOfString2D RetArray = {NULL, 0};
-	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER)) return RetArray;
+	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER, 0)) return RetArray;
 	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropGroupB#echo2DStringArray");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echo2DStringArray", "http://soapinterop.org/");
@@ -125,7 +128,7 @@ SOAPStructStruct* InteropTestPortTypeB::echoNestedStruct(SOAPStructStruct* Value
 {
 	int nStatus;
 	SOAPStructStruct* pReturn = NULL;
-	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER)) return pReturn;
+	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER, 0)) return pReturn;
 	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropGroupB#echoNestedStruct");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoNestedStruct", "http://soapinterop.org/");
@@ -150,7 +153,7 @@ SOAPArrayStruct* InteropTestPortTypeB::echoNestedArray(SOAPArrayStruct* Value0)
 {
 	int nStatus;
 	SOAPArrayStruct* pReturn = NULL;
-	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER)) return pReturn;
+	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER, 0)) return pReturn;
 	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropGroupB#echoNestedArray");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoNestedArray", "http://soapinterop.org/");

@@ -7,7 +7,7 @@
 #if !defined(__SOAPARRAYSTRUCT_PARAM_H__INCLUDED_)
 #define __SOAPARRAYSTRUCT_PARAM_H__INCLUDED_
 
-#include <axis/common/AxisUserAPI.h>
+#include <axis/server/AxisUserAPI.h>
 
 #include "ArrayOfstring.h"
 //Local name and the URI for the type
