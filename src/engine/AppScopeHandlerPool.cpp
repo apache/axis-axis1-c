@@ -65,6 +65,7 @@
 
 #include "AppScopeHandlerPool.h"
 #include "HandlerLoader.h"
+#include "../common/AxisTrace.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -95,6 +96,7 @@ AppScopeHandlerPool::~AppScopeHandlerPool()
 //MUST block itself and wait if the requested handler is not found.
 int AppScopeHandlerPool::GetInstance(BasicHandler** pHandler, int nLibId)
 {
+    AXISTRACE1("AppScopeHandlerPool::GetInstance");
 	lock();
 	int Status;
 	if (m_Handlers.find(nLibId) != m_Handlers.end()) 

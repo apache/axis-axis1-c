@@ -67,6 +67,7 @@
 #if !defined(AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_)
 #define AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_
 
+#include "../wsdd/WSDDService.h"
 #include <string>
 using namespace std;
 
@@ -99,6 +100,8 @@ public:
 
 	virtual void SetUserName(string& m_sUserName)=0;
 	virtual string& GetUserName()=0;
+    virtual void SetService(const WSDDService* argService) = 0;
+	virtual const WSDDService* GetService() = 0; 
 	virtual bool isPastPivot()=0;
 	virtual int setPastPivotState(bool bState)=0;
 
