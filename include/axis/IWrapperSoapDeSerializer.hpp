@@ -70,13 +70,8 @@ public:
         const AxisChar* pNamespace)=0;
     virtual unsigned char AXISCALL getElementAsUnsignedByte(const AxisChar* 
         pName, const AxisChar* pNamespace)=0;
-#ifdef WIN32
-    virtual __int64 AXISCALL getElementAsLong(const AxisChar* pName, 
+    virtual xsd__long AXISCALL getElementAsLong(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-#else
-    virtual long long AXISCALL getElementAsLong(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
-#endif
     virtual long AXISCALL getElementAsInteger(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
     virtual unsigned long AXISCALL getElementAsUnsignedLong(const AxisChar* 

@@ -111,13 +111,8 @@ public:
         const AxisChar* pNamespace)=0;
     virtual unsigned char AXISCALL getElementAsUnsignedByte(const AxisChar*
         pName, const AxisChar* pNamespace)=0;
-#ifdef WIN32
-    virtual __int64 AXISCALL getElementAsLong(const AxisChar* pName,
+    virtual xsd__long AXISCALL getElementAsLong(const AxisChar* pName,
         const AxisChar* pNamespace)=0;
-#else
-    virtual long long AXISCALL getElementAsLong(const AxisChar* pName,
-        const AxisChar* pNamespace)=0;
-#endif
     virtual long AXISCALL getElementAsInteger(const AxisChar* pName,
         const AxisChar* pNamespace)=0;
     virtual unsigned long AXISCALL getElementAsUnsignedLong(const AxisChar*
@@ -287,13 +282,8 @@ public:
         const AxisChar* pNamespace);
     unsigned char AXISCALL getElementAsUnsignedByte(const AxisChar* pName,
         const AxisChar* pNamespace);
-#ifdef WIN32
-    __int64 AXISCALL getElementAsLong(const AxisChar* pName,
+    xsd__long AXISCALL getElementAsLong(const AxisChar* pName,
         const AxisChar* pNamespace);
-#else
-    long long AXISCALL getElementAsLong(const AxisChar* pName,
-        const AxisChar* pNamespace);
-#endif
     long AXISCALL getElementAsInteger(const AxisChar* pName,
         const AxisChar* pNamespace);
     unsigned long AXISCALL getElementAsUnsignedLong(const AxisChar* pName,
