@@ -85,6 +85,8 @@ WSDDDeployment* g_pWSDDDeployment;
 AxisConfig* g_pConfig;
 AxisTrace* g_pAT;
 
+//Keeps track of whether initialize_module/uninitialize_module was called
+bool g_bModuleInitialize;
 
 #ifndef AXIS_CLIENT_LIB
 
@@ -190,7 +192,7 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
                     }
                     pStream->sendBytes("</tbody></table>", NULL);
                     pStream->sendBytes
-                        ("<br><p align=\"center\">Copyright © 2001-2003 The Apache Software Foundation<br></p></body></html>", NULL);
+                        ("<br><p align=\"center\">Copyright  2001-2003 The Apache Software Foundation<br></p></body></html>", NULL);
                         Status = AXIS_SUCCESS;
                 }
                 else
@@ -235,6 +237,7 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
 
 extern "C" int initialize_module (int bServer)
 {
+    g_bModuleInitialize = true;
     int status = 0;
     // order of these initialization method invocation should not be changed
     AxisEngine::m_bServer = bServer;
@@ -338,6 +341,7 @@ extern "C" int initialize_module (int bServer)
 
 extern "C" int uninitialize_module ()
 {
+    g_bModuleInitialize = false;
     SOAPTransportFactory::uninitialize();
     ModuleUnInitialize ();
     SoapKeywordMapping::uninitialize ();
@@ -355,7 +359,7 @@ void Ax_Sleep (int nTime)
 }
 
 void ModuleInitialize ()
-{
+{    
     // synchronized global variables.
     g_pHandlerLoader = new HandlerLoader ();
     g_pAppScopeHandlerPool = new AppScopeHandlerPool ();
@@ -384,5 +388,4 @@ void ModuleUnInitialize ()
     delete g_pWSDDDeployment;
     delete g_pConfig;
     delete g_pAT;
-
 }
