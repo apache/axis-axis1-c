@@ -14,6 +14,7 @@ SERVER=$(echo testcases/server/$2/${SERVICE_FILE_NAME})
 LIB_SERVICE_NAME=$(echo | grep portType $1|grep -o '".*"'|sed "s/\"//g")
 STYLE=$(echo | grep style $1 | grep -o 'style=".*"' | grep -o '".*"' | sed "s/\"//g")
 #sed -e "s/service_name/${LIB_SERVICE_NAME}/g" -e "s/service_lib_name/${LIB_SERVICE_NAME}/g" -e "s/STYLE/${STYLE}/g" service_temp.wsdd > service.wsdd
+echo ${WSDL2WS_HOME}
 java -cp ${WSDL2WS_HOME}/wsdl2ws.jar:${AXIS_JARS} org.apache.axis.wsdl.wsdl2ws.WSDL2Ws -sserver -l$2 -o$TARGET_SERVER $1
 sed -e "s/<?xml.*>//g" -e "s/<\/deployment>//g" -e "s/<deployment.*>//g" $TARGET_SERVER/deploy.wsdd > deploy.wsdd
 if ! test -f server.wsdd_temp2; then
