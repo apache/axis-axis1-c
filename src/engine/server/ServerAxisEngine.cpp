@@ -40,21 +40,19 @@ ServerAxisEngine::~ServerAxisEngine ()
 
 }
 
-int ServerAxisEngine::process (Ax_soapstream* stream)
+int ServerAxisEngine::process(SOAPTransport* pStream)
 {
     int Status = 0;
     const WSDDService* pService = NULL;
-    string sSessionId = stream->sessionid;
     int nSoapVersion;
     AXISC_TRY
-    if (!(stream->transport.pSendFunct && stream->transport.pGetFunct &&
-        stream->transport.pSetTrtFunct && stream->transport.pGetTrtFunct))
+    if (!pStream)
     {
         AXISTRACE1 ("transport is not set properly", CRITICAL);
         AXISC_THROW(AXISC_TRANSPORT_CONF_ERROR);
     }
-    
-    
+     string sSessionId = pStream->getSessionId();
+   
     /*
      * After this point we should return AXIS_SUCCESS. Otherwise the transport 
      * layer may not send the response back (either soap fault or result).
@@ -62,9 +60,9 @@ int ServerAxisEngine::process (Ax_soapstream* stream)
     do
     {
         /* populate MessageData with transport information */
-        m_pMsgData->m_Protocol = stream->trtype;
+        m_pMsgData->m_Protocol = pStream->getProtocol();
 
-        if (AXIS_SUCCESS != m_pDZ->setInputStream (stream))
+        if (AXIS_SUCCESS != m_pDZ->setInputStream(pStream))
         {
             nSoapVersion = m_pDZ->getVersion ();
             nSoapVersion = 
@@ -76,8 +74,7 @@ int ServerAxisEngine::process (Ax_soapstream* stream)
             break; // do .. while(0)
         }
 
-        const char* cService = stream->transport.pGetTrtFunct (SERVICE_URI, 
-            stream);
+        const char* cService = pStream->getTransportProperty(SERVICE_URI);
         if (!cService)
         {
             AXISTRACE1 ("SF_SOAPCONTENTERROR", CRITICAL);
@@ -176,8 +173,7 @@ int ServerAxisEngine::process (Ax_soapstream* stream)
         /* Get the operation name from transport information Ex: from 
 	 * SOAPAction header 
 	 */
-        AxisString sOperation = stream->transport.pGetTrtFunct (OPERATION_NAME, 
-            stream);
+        AxisString sOperation = pStream->getTransportProperty(OPERATION_NAME);
         if (sOperation.empty ())
         {
             AXISTRACE1("SF_NOSOAPMETHOD", CRITICAL);
@@ -243,7 +239,7 @@ int ServerAxisEngine::process (Ax_soapstream* stream)
         
 	// Get Global and Transport Handlers
         if (AXIS_SUCCESS != (Status = initializeHandlers (sSessionId, 
-            stream->trtype)))
+            pStream->getProtocol())))
         {
             AXISTRACE1("SF_COULDNOTLOADHDL", CRITICAL);
             AXISC_THROW(SF_COULDNOTLOADHDL);
@@ -313,7 +309,7 @@ int ServerAxisEngine::process (Ax_soapstream* stream)
         else
             break;
     }
-    m_pSZ->setOutputStream (stream);
+    m_pSZ->setOutputStream (pStream);
 
     // Pool back the Service specific handlers
     if (m_pSReqFChain)
@@ -482,14 +478,13 @@ void ServerAxisEngine::onFault (MessageData* pMsg)
 {
 }
 
-int ServerAxisEngine::setFaultOutputStream(int iFaultCode, Ax_soapstream* stream)
+int ServerAxisEngine::setFaultOutputStream(int iFaultCode, SOAPTransport* pStream)
 {
     AxisException objException(iFaultCode);
     string sMessage = objException.getMessage(iFaultCode);
     SoapFault* objSoapFault = SoapFault::getSoapFault(iFaultCode);
     objSoapFault->setFaultDetail(sMessage);
-    m_pSZ->setSoapFault (objSoapFault);
-    m_pSZ->setOutputStream (stream);
-   
-    return AXIS_SUCCESS;
+    m_pSZ->setSoapFault(objSoapFault);
+    m_pSZ->setOutputStream(pStream);
+	return AXIS_SUCCESS;
 }

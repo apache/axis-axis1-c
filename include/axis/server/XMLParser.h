@@ -16,6 +16,7 @@
 
 #include "AnyElement.h"
 #include "Packet.h"
+#include <axis/SOAPTransport.h>
 
 #if !defined(__XMLPARSER_H_OF_AXIS_INCLUDED__)
 #define __XMLPARSER_H_OF_AXIS_INCLUDED__
@@ -30,8 +31,8 @@ class XMLParser
 {
 public:
     virtual ~XMLParser(){};
-    virtual int setInputStream(const Ax_soapstream* pInputStream)=0;
-    virtual const Ax_soapstream* getInputStream()=0;
+    virtual int setInputStream(SOAPTransport* pInputStream)=0;
+    virtual SOAPTransport* getInputStream()=0;
     virtual int init()=0;
     virtual const XML_Ch* getNS4Prefix(const XML_Ch* prefix)=0;
     virtual int getStatus()=0;

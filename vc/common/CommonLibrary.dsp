@@ -158,6 +158,10 @@ SOURCE=..\..\include\axis\server\AxisException.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\axis\server\AxisFile.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\axis\server\AxisTime.h
 # End Source File
 # Begin Source File

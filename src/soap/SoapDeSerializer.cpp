@@ -78,10 +78,9 @@ SoapDeSerializer::~SoapDeSerializer()
     free(m_pcFaultDetail);
 }
 
-int SoapDeSerializer::setInputStream(const Ax_soapstream* pInputStream)
+int SoapDeSerializer::setInputStream(SOAPTransport* pInputStream)
 {
-    if ((NULL == pInputStream->transport.pGetFunct) ||
-        (NULL == pInputStream->transport.pRelBufFunct))
+    if (NULL == pInputStream)
         return AXIS_FAIL;
     return m_pParser->setInputStream(pInputStream);
 }
@@ -344,7 +343,7 @@ int SoapDeSerializer::getFault()
 int SoapDeSerializer::getFaultDetail(char** ppcDetail)
 {
     *ppcDetail = m_pcFaultDetail;
-    //*ppcDetail = "hard coded test message";
+    return AXIS_SUCCESS;
 }
 
 int SoapDeSerializer::init()
@@ -2943,20 +2942,13 @@ bool SoapDeSerializer::isAnyMustUnderstandHeadersLeft()
 int SoapDeSerializer::flushInputStream()
 {
     int nChars = 0;
-    const char* pBuffer;
+    char pBuffer[100];
     if (TRANSPORT_IN_PROGRESS == m_pParser->getTransportStatus())
     {
         do
         {
-            m_pParser->setTransportStatus(m_pParser->getInputStream()->
-                transport.pGetFunct(&pBuffer, &nChars, 
-                m_pParser->getInputStream()));
-            if ((nChars > 0) && pBuffer) /* there can be a buffer or not */
-            {
-                m_pParser->getInputStream()->transport.pRelBufFunct(pBuffer, 
-                    m_pParser->getInputStream());
-            }
-
+            m_pParser->setTransportStatus(m_pParser->getInputStream()->getBytes
+				(pBuffer, &nChars));
         }
         while (TRANSPORT_IN_PROGRESS == m_pParser->getTransportStatus());
     }
