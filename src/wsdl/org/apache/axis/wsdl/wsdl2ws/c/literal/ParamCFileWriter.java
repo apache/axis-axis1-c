@@ -114,7 +114,7 @@ public abstract class ParamCFileWriter extends ParamWriter{
 		try {
 			writer.write("#include <malloc.h>\n");
 			writer.write("#include <memory.h>\n");
-			writer.write("#include <axis/common/AxisWrapperAPI.h>\n\n");
+			writer.write("#include <axis/server/AxisWrapperAPI.h>\n\n");
 			writer.write("#include \""+this.classname + ".h\"\n");
 		} catch (IOException e) {
 			e.printStackTrace();

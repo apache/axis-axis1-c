@@ -213,17 +213,26 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			return;
 		 }
 		String arrayType = null;
+		/* Needed for Aix xlc */
+		for(int i = 0; i< attribs.length;i++){
+			if(attribs[i].isArray()) {
+				writer.write("\tAxis_Array array;\n");
+				break;
+			}
+		}			
 		for(int i = 0; i< attribs.length;i++){
 			if(attribs[i].isArray()){
 				//if Array
 				if (attribs[i].isSimpleType()){
-					writer.write("\tparam->"+attribs[i].getParamName()+" = ("+CUtils.getBasicArrayNameforType(attribs[i].getTypeName())+"&)pIWSDZ->GetBasicArray("+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+ ", \""+attribs[i].getElementName().getLocalPart()+"\",0);\n");
+					writer.write("\tarray = pIWSDZ->GetBasicArray("+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+ ", \""+attribs[i].getElementName().getLocalPart()+"\",0);\n");
+					writer.write("\tparam->"+attribs[i].getParamName()+" = ("+CUtils.getBasicArrayNameforType(attribs[i].getTypeName())+"&)array;\n");					
 				}
 				else{
 					arrayType = attribs[i].getTypeName();
-					writer.write("\tparam->"+attribs[i].getParamName()+" = ("+attribs[i].getTypeName()+"_Array&)pIWSDZ->GetCmplxArray((void*)Axis_DeSerialize_"+arrayType+ 
+					writer.write("\tarray = pIWSDZ->GetCmplxArray((void*)Axis_DeSerialize_"+arrayType+ 
 						"\n\t\t, (void*)Axis_Create_"+arrayType+", (void*)Axis_Delete_"+arrayType+
 						"\n\t\t, (void*)Axis_GetSize_"+arrayType+", \""+attribs[i].getElementName().getLocalPart()+"\", Axis_URI_"+arrayType+");\n");
+					writer.write("\tparam->"+attribs[i].getParamName()+" = ("+attribs[i].getTypeName()+"_Array&)array;\n");	
 				}
 			}else if(attribs[i].isSimpleType()){
 				//TODO handle optional attributes

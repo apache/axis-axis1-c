@@ -234,7 +234,7 @@ public class ClientStubWriter extends CFileWriter{
 			}
 		}
 		writer.write("\t/* Following will establish the connections with the server too */\n");
-		writer.write("\tif (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_DOC_PROVIDER)) return ");
+		writer.write("\tif (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_DOC_PROVIDER,false_)) return ");
 		if (returntype != null){
 			writer.write((returntypeisarray?"RetArray":returntypeissimple?"Ret":"pReturn")+";\n");
 		}
