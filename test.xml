@@ -447,10 +447,10 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 	  comparison later in this script works on all platforms.
 	  -->
 	<target name="setExpectations">
-		<property name="expected.file" value="${dir.test.generated}/${client.lang}/${testName}/${testName}.expected"/>
+		<property name="expected.file" value="${dir.test.generated}/${client.lang}/${testName}/${testName}.cpp.expected"/>
 		<property name="r_expected.file" value="${dir.test.generated}/${client.lang}/${testName}/${testName}Request.expected"/>
 
-		<copy file="${dir.src}/output/${testName}.out" tofile="${expected.file}"/>
+		<copy file="${dir.src}/output/${testName}.cpp.out" tofile="${expected.file}"/>
 		<!--
 		  This is an optional file and might not exist so don't fail if
 		  it doesn't.
