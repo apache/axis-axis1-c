@@ -28,11 +28,11 @@ public class Generator
 {
     private SourceWriter sourceWriter;
 
-    public Generator(int genaratorType, WebServiceContext wscontext)
+    public Generator(int generatorType, WebServiceContext wscontext)
         throws WrapperFault
     {
         this.sourceWriter =
-            SourceWriterFactory.createSourceWriter(genaratorType, wscontext);
+            SourceWriterFactory.createSourceWriter(generatorType, wscontext);
     }
 
     public void generate() throws WrapperFault

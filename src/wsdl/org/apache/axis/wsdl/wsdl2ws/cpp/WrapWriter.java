@@ -228,6 +228,7 @@ public class WrapWriter extends CPPClassWriter
             returntype = null;
         }
         else
+        {
             if (1 == noOfOutParams)
             {
                 returntype =
@@ -240,6 +241,7 @@ public class WrapWriter extends CPPClassWriter
             {
                 isAllTreatedAsOutParams = true;
             }
+        }
         Collection params = minfo.getInputParameterTypes();
         String methodName = minfo.getMethodname();
         Type retType = null;
@@ -647,10 +649,10 @@ public class WrapWriter extends CPPClassWriter
         //write end of method
         writer.write("}\n");
     }
+    
     /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.cpp.CPPClassWriter#writeGlobalCodes()
      */
-
     private void writeExceptions(
         String faulttype,
         String faultInfoName,
