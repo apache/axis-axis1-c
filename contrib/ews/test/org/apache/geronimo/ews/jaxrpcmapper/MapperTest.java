@@ -1,4 +1,4 @@
-package org.apache.geronimo.ews.ws4j2ee;
+package org.apache.geronimo.ews.jaxrpcmapper;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
