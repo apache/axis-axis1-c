@@ -66,6 +66,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "HandlerChain.h"
+#include "../common/Debug.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -83,12 +84,16 @@ HandlerChain::~HandlerChain()
 
 int HandlerChain::Invoke(MessageData* pMsg)
 {
+  
+  DEBUG1("HandlerChain::Invoke(MessageData* pMsg)");
+  
 	m_itCurrHandler = m_HandlerList.begin();
 	while (m_itCurrHandler != m_HandlerList.end())
 	{
 		if (SUCCESS == (*m_itCurrHandler)->Invoke(pMsg))
 		{
 			m_itCurrHandler++;
+      DEBUG1("if (SUCCESS == (*m_itCurrHandler)->Invoke(pMsg))");
 		}
 		else
 		{
@@ -108,7 +113,7 @@ void HandlerChain::OnFault(MessageData* pMsg)
 	}
 }
 
-int HandlerChain::AddHandler(BasicHandler *pHandler)
+int HandlerChain::AddHandler(Handler *pHandler)
 {
 	m_HandlerList.push_back(pHandler);
 

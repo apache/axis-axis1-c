@@ -72,8 +72,6 @@
 //////////////////////////////////////////////////////////////////////
 #include "../common/Debug.h"
 
-DEBUG_INCLUDE
-
 HandlerPool::HandlerPool()
 {
 	m_pGReqFChain = NULL;
@@ -128,22 +126,12 @@ BasicHandler* HandlerPool::LoadHandler(WSDDHandler *pHandlerInfo)
 	LoadedHandler* pLh = NULL;
 	if (pHandlerInfo) 
 	{
-
-#if defined( DEBUG)     
-DEBUG_ONE_PARA_LEVEL("before loaded handler*********************");
-#endif
     
 		pLh = new LoadedHandler(pHandlerInfo->GetLibName(), RTLD_LAZY);
 
-#if defined( DEBUG)     
-DEBUG_ONE_PARA_LEVEL("after loaded handler**********************");
-#endif
 		if (SUCCESS == pLh->m_DL->Initialize())
 		{
 
-#if defined( DEBUG)       
-DEBUG_ONE_PARA_LEVEL("loaded handler initialized******************");
-#endif
 			BasicHandler* pBh = pLh->m_DL->GetHandler();
       //BasicHandler* pBh = NULL;
 			if (pBh) 
@@ -290,14 +278,24 @@ HandlerChain* HandlerPool::LoadHandlerChain(WSDDHandlerList *pHandlerList)
 	HandlerChain* pHc = NULL;
 	if (pHandlerList && !pHandlerList->empty()) {
 		pHc = new HandlerChain();
-		BasicHandler* pBh = NULL;;
+		//BasicHandler* pBh = NULL;;
+    Handler* pH = NULL;
 		for (WSDDHandlerList::iterator it=pHandlerList->begin();
 		it != pHandlerList->end(); it++)
 		{
-			if ((pBh = LoadHandler(*it)) != NULL)
+			//if ((pBh = LoadHandler(*it)) != NULL)
+      BasicHandler *pBh = LoadHandler(*it);
+      if (pBh)
 			{
-				nLoaded++;
-				pHc->AddHandler(pBh);
+        pH = dynamic_cast<Handler*>(pBh);
+        if (pH)
+			  {
+          
+          DEBUG1("if (pH)");
+          pH->SetOptionList((*it)->GetOptionList());
+				  nLoaded++;
+				  pHc->AddHandler(pH);
+        }
 			}
 		}
 		if (0!=nLoaded) 
