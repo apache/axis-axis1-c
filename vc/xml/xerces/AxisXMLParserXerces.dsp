@@ -92,6 +92,10 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=..\..\..\src\xml\xerces\ParserLoader.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\xml\xerces\SoapBinInputStream.cpp
 # End Source File
 # Begin Source File
@@ -100,11 +104,11 @@ SOURCE=..\..\..\src\xml\xerces\SoapInputSource.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\xml\xerces\SoapParserXerces.cpp
+SOURCE=..\..\..\src\xml\xerces\XercesHandler.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\src\xml\xerces\XercesHandler.cpp
+SOURCE=..\..\..\src\xml\xerces\XMLParserXerces.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -112,7 +116,7 @@ SOURCE=..\..\..\src\xml\xerces\XercesHandler.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\..\src\xml\xerces\SoapParserXerces.h
+SOURCE=..\..\..\src\xml\xerces\XMLParserXerces.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
