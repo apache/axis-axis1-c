@@ -106,11 +106,11 @@ class HeaderBlock : public IHeaderBlock
 
 private:	
 	int serializeNamespaceDecl(SoapSerializer& pSZ);
-	int serializeChildren(SoapSerializer& pSZ);
+	int serializeChildren(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack);
 	//int serializeChildren(string& sSerialized);
 	list<BasicNode*> m_children;
 	bool isSerializable();		
-	int attrSerialize(SoapSerializer& pSZ);
+	int attrSerialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack);
 	//int attrSerialize(string&);
 	AxisString m_localname;
 	AxisString m_prefix;
@@ -121,6 +121,8 @@ private:
 	//string m_strSerialized;
 
 public:
+	bool operator ==( const HeaderBlock &objHeaderBlock);
+	int initializeForTesting();
 	BasicNode* createChild(NODE_TYPE eNODE_TYPE);
 	BasicNode* getFirstChild();
 	int addNamespaceDecl(Attribute *pAttribute);
