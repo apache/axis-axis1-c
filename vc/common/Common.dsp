@@ -117,6 +117,10 @@ SOURCE=..\..\src\common\Packet.cpp
 
 SOURCE=..\..\src\common\Param.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\TypeMapping.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -192,6 +196,10 @@ SOURCE=..\..\src\common\Packet.h
 # Begin Source File
 
 SOURCE=..\..\src\common\Param.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\TypeMapping.h
 # End Source File
 # Begin Source File
 
