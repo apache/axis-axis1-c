@@ -54,15 +54,21 @@ int main(int argc, char* argv[])
 	}
 	else 	if (strcmp(op, "sub") == 0)
 	{
-		iResult = ws.sub(i1, i2);		
+		iResult = ws.sub(i1, i2);
+		ws.getFaultDetail(&pcDetail);
+        printf("pcDetail:%s\n", pcDetail);
 	}
 	else 	if (strcmp(op, "mul") == 0)
 	{
-	        iResult = ws.mul(i1, i2);		
+	        iResult = ws.mul(i1, i2);
+			ws.getFaultDetail(&pcDetail);
+            printf("pcDetail:%s\n", pcDetail);
 	}
 	else 	if (strcmp(op, "div") == 0)
 	{
-		iResult = ws.div(i1, i2);		
+		iResult = ws.div(i1, i2);
+		ws.getFaultDetail(&pcDetail);
+        printf("pcDetail:%s\n", pcDetail);
 	}
 	else 
 	{
