@@ -50,8 +50,7 @@ AxisGenException::AxisGenException (const exception* e, const int iExceptionCode
 AxisGenException::AxisGenException(const char* pcMessage)
 {
     m_sMessage = pcMessage;
-    if(pcMessage)
-        delete pcMessage;
+//    if(pcMessage)        delete pcMessage;
 }
 
 void AxisGenException::processException (const exception* e, const int iExceptionCode)
