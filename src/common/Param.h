@@ -112,7 +112,7 @@ public: //Conversion functions
 	int SetValue(string& sValue);
 	int SetValue(XSDTYPE nType, uParamValue Value);
 	XSDTYPE GetType() const;	
-	int serialize(ISoapSerializer& pSZ);
+	int serialize(IWrapperSoapSerializer& pSZ);
 
 	//Following functions are used by wrapper class methods making sure of the valid type.
 	int GetInt();
