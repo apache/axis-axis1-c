@@ -291,7 +291,7 @@ bool HTTPChannel::OpenChannel()
 				
 			delete(message);
 
-			throw AxisTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED, fullMessage);
+			throw HTTPTransportException( SERVER_TRANSPORT_OPEN_CONNECTION_FAILED, fullMessage);
         }
 
         break;
