@@ -66,11 +66,62 @@
 #if !defined(_AXIS_LIBAXISCPP_HPP)
 #define _AXIS_LIBAXISCPP_HPP
 
+#include "AxisCppContentHandler.h"
+
 #ifdef LIBAXISCPP_EXPORTS
 #define LIBAXIS_DLL_API __declspec(dllexport)
 #else
 #define LIBAXIS_DLL_API __declspec(dllimport)
 #endif
+
+
+
+static void
+jni_throw(JNIEnv* env, const char* exception, const char* msg)
+{
+    if (env->ExceptionOccurred())
+        return;
+    jclass jexception = env->FindClass(exception);
+    if (env->ExceptionOccurred())
+      return;
+    if (jexception == NULL)
+        env->FatalError(exception);
+    env->ThrowNew(jexception, msg);
+}
+
+
+#define JNI_ASSERT(assert, name, msg) \
+    do \
+    { \
+        if (p_Env->ExceptionOccurred()) \
+            return; \
+        if (! assert) \
+        { \
+            jni_throw(p_Env, name, msg); \
+            return; \
+        } \
+    } while (0)
+
+
+
+
+class JNIVector
+{
+public:
+    JNIVector(JNIEnv* p_Env, jobject p_jVector);
+	///Destructor
+    ~JNIVector();
+
+    char* operator [] (int i) const;
+	void push_back(const char* str);
+
+private:
+
+    JNIEnv* m_pEnv;
+    jobject m_jVector;
+	jmethodID m_jmGet;
+};
+
 
 #endif //_AXIS_LIBAXISCPP_HPP
 
