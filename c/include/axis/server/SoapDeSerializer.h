@@ -67,7 +67,6 @@
 #if !defined(AFX_SOAPDESERIALIZER_H__FD0E7C3B_B887_480A_9E2A_20736A88B09B__INCLUDED_)
 #define AFX_SOAPDESERIALIZER_H__FD0E7C3B_B887_480A_9E2A_20736A88B09B__INCLUDED_
 
-#include "../common/IWrapperSoapDeSerializer.h"
 #include "../common/IHandlerSoapDeSerializer.h"
 #include "XMLStreamHandler.h"
 
@@ -79,7 +78,7 @@ class SoapMethod;
 class SoapBody;
 class SoapFault;
 
-class SoapDeSerializer : public IWrapperSoapDeSerializer, public IHandlerSoapDeSerializer
+class SoapDeSerializer : public IHandlerSoapDeSerializer
 {
 private:
 	XMLStreamHandler* m_pHandler;

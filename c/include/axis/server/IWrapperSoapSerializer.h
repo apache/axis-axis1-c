@@ -75,10 +75,10 @@
 #include "TypeMapping.h"
 #include "ISoapSerializer.h"
 
-class IWrapperSoapSerializer  : public virtual ISoapSerializer
+class IWrapperSoapSerializerBase : public ISoapSerializer
 {
 public:
-	virtual ~IWrapperSoapSerializer(){};
+	virtual ~IWrapperSoapSerializerBase(){};
 
 #else
 
@@ -110,7 +110,16 @@ typedef struct IWrapperSoapSerializerXTag
 	virtual void AXISAPI(Serialize, (APIHASPARAMS const char* pFirst, ...))
 
 #ifdef __cplusplus
+};
+#else
+} IWrapperSoapSerializerX;
+#endif
 
+#ifdef __cplusplus
+class IWrapperSoapSerializer : public IWrapperSoapSerializerBase
+{
+public:
+	virtual ~IWrapperSoapSerializer(){};
 	virtual int AddOutputParam(const AxisChar* pchName, int nValue, XSDTYPE type)=0;
 	virtual int AddOutputParam(const AxisChar* pchName, unsigned int unValue, XSDTYPE type)=0;
 	virtual int AddOutputParam(const AxisChar* pchName, short sValue, XSDTYPE type)=0;
@@ -140,10 +149,6 @@ typedef struct IWrapperSoapSerializerXTag
 	//function
 	virtual IWrapperSoapSerializer& operator<<(const AxisChar* cSerialized)=0;
 	virtual int AddOutputParam(const AxisChar* pchName, const string& pStrValue, XSDTYPE type)=0;
-#endif
-#ifdef __cplusplus
 };
-#else
-} IWrapperSoapSerializerX;
 #endif
 #endif // !defined(AFX_IWRAPPERSOAPSERIALIZER_H__D3E794EC_8A67_4E0E_BE28_583DCDCE1C42__INCLUDED_)

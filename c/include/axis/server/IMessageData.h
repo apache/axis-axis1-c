@@ -87,10 +87,10 @@ class IDeployerUtils;
 
 #ifdef __cplusplus
 
-class IMessageData
+class IMessageDataBase
 {
 public:
-    virtual ~IMessageData(){};
+    virtual ~IMessageDataBase(){};
 #else
 
 typedef struct IMessageDataTag
@@ -108,8 +108,18 @@ typedef struct IMessageDataXTag
 	virtual void AXISAPI(getSoapDeSerializer,(APIHASPARAMS IWrapperSoapDeSerializer** pIWSDS))
 
 #ifdef __cplusplus
+};
+#else
+} IMessageDataX;
+#endif
 
+#ifdef __cplusplus
+
+class IMessageData : public IMessageDataBase
+{
 	friend class CPP_DeploymentWrapper;
+public:
+    virtual ~IMessageData(){};
 private:
 	virtual void getWSDDDeployment(IDeployerUtils** pIDeployerUtils) = 0;
 public:
@@ -123,12 +133,9 @@ public:
 	virtual const WSDDService* GetService() = 0; 
 	virtual bool isPastPivot()=0;
 	virtual int setPastPivotState(bool bState)=0;
-
 protected:
   string m_sUserName;  
 };
-#else
-} IMessageDataX;
 #endif
 #endif // !defined(AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_)
 

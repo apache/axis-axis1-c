@@ -80,7 +80,7 @@
 using namespace std;
 class IParam;
 
-class IWrapperSoapDeSerializer : public virtual ISoapDeSerializer
+class IWrapperSoapDeSerializer : public ISoapDeSerializer
 {
 public:
 	virtual ~IWrapperSoapDeSerializer(){};
