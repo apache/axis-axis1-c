@@ -63,7 +63,8 @@
  */
 
 #include "libAxiscpp.h"
-#include "../../common/Packet.h"
+#include "Packet.h"
+#include "Axis.h"
 #include <new>
 #include <exception>
 
@@ -91,52 +92,56 @@ JNIEXPORT void JNICALL Java_AxisCppContentHandler_processContent
 {
 	//TODO: populate soapstream with the headers & the body;
 	// invoke to process the contents
-	HTTP_PACKET* pHttpPkt = new HTTP_PACKET;
-	pHttpPkt->pchContent = new char[p_jnContentLength+1];
+	axstream* paxstream = new axstream;
 	
-	JNIInputStream inputBody(p_Env,p_jBodyReader);
+	JNIInputStream  inputBody(p_Env,p_jBodyReader);
 	JNIOutputStream outputBody(p_Env,p_jBodyWriter);
-	std::istream in(&inputBody);
-    std::ostream out(&outputBody);
+	paxstream->m_pInputContent  = new std::istream(&inputBody);
+    paxstream->m_pOutputContent = new std::ostream(&outputBody);
 
-	in.read(pHttpPkt->pchContent, p_jnContentLength);
-	pHttpPkt->pchContent[p_jnContentLength] = '\0';
-	Trace(pHttpPkt->pchContent);
-	
-	pHttpPkt->nContentLen = p_jnContentLength;
+	paxstream->m_nContentLen = p_jnContentLength;
 	
 	JNIVector jvHeader(p_Env, p_jvHeaders);
 	//set method name as a http header.
-	const int p_nHeaderCount = jvHeader.size()/2;
-	pHttpPkt->pHeaders    = new HTTP_HEADER[p_nHeaderCount];
+	int nHeaderCount = jvHeader.size()/2;
+	paxstream->m_pHeaders    = new axstream::PROT_HEADER[nHeaderCount];
 
-	for(int i=0;i < p_nHeaderCount; i++)
+	for(int i=0;i < nHeaderCount; i++)
 	{
-		pHttpPkt->pHeaders[i].name  = jvHeader[i*2];
-		pHttpPkt->pHeaders[i].value = jvHeader[i*2+1];
-		Trace(pHttpPkt->pHeaders[i].name );
-		Trace(pHttpPkt->pHeaders[i].value);
+		paxstream->m_pHeaders[i].pchName  = jvHeader[i*2];
+		paxstream->m_pHeaders[i].pchValue = jvHeader[i*2+1];
+		Trace(paxstream->m_pHeaders[i].pchName );
+		Trace(paxstream->m_pHeaders[i].pchValue);
 	}
-	pHttpPkt->nHeaderCount = p_nHeaderCount;
-	pHttpPkt->enMethod = POST;
+	paxstream->m_nHeaderCount = nHeaderCount;
+
+	paxstream->m_enProtocolType = axstream::HTTP;
+	paxstream->m_pExtendedInfo = new axstream::EXTENDED_INFO;
+	paxstream->m_pExtendedInfo->infHttp.enMethod = axstream::HTTP_INFO::POST;
+
+	//just add some sessionid
+	paxstream->m_pchSessionId = strdup("tmp session id");
+
+	AxisContentHandler::Init();
+	if(0 != AxisContentHandler::HandleContent(*paxstream))
+	{
+		throw "SOAP Engine failed to response";
+	}
 
 	jvHeader.clear();
-	jvHeader.push_back("Name_p1"); // Name_p1
-	jvHeader.push_back("Value_p1");
-	jvHeader.push_back("Name_p2");
-	jvHeader.push_back("Value_p2");
+	nHeaderCount = paxstream->m_nHeaderCount;
 
-	delete [] pHttpPkt->pchContent;
-	const char *p = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n";
-	p_jnContentLength = strlen(p);
-	pHttpPkt->pchContent = new char[1+p_jnContentLength];
-	strcpy(pHttpPkt->pchContent, p);
+	for(int j=0;j < nHeaderCount; j++)
+	{
+		jvHeader.push_back(paxstream->m_pHeaders[j].pchName);
+		jvHeader.push_back(paxstream->m_pHeaders[j].pchValue);
+		Trace(paxstream->m_pHeaders[j].pchName );
+		Trace(paxstream->m_pHeaders[j].pchValue);
+	}
 
-	out << pHttpPkt->pchContent << std::flush;
+	*paxstream->m_pOutputContent << std::flush;
 
-	delete [] pHttpPkt->pHeaders;
-	delete [] pHttpPkt->pchContent;
-	delete pHttpPkt;
+	delete paxstream;
 }
 
 
