@@ -22,6 +22,7 @@ SCHEMA SUPPORT
 
 SOAP 1.1 SUPPORT
 ----------------
+* <susantha> 	Improving Deserializer/Serializer and related area to support multi-dimensional arrays 
 
 SOAP 1.2 SUPPORT
 -----------------
