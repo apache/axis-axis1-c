@@ -53,7 +53,7 @@ AxisChar* Decimal::serialize(const double* value) throw (AxisSoapException)
     MinExclusive* minExclusive = getMinExclusive();
     if (minExclusive->isSet())
     {
-        if ( *value < minExclusive->getMinExclusiveAsDouble() )
+        if ( *value <= minExclusive->getMinExclusiveAsDouble() )
         {
             AxisString exceptionMessage =
             "Value to be serialized is less than or equal to MinExclusive specified for this type.  MinExclusive = ";
@@ -73,10 +73,10 @@ AxisChar* Decimal::serialize(const double* value) throw (AxisSoapException)
     delete minExclusive;
 
 
-MaxInclusive* maxInclusive = getMaxInclusive();
+    MaxInclusive* maxInclusive = getMaxInclusive();
     if (maxInclusive->isSet())
     {
-        if ( *value < maxInclusive->getMaxInclusiveAsDouble() )
+        if ( *value > maxInclusive->getMaxInclusiveAsDouble() )
         {
             AxisString exceptionMessage =
             "Value to be serialized is greater than MaxInclusive specified for this type.  MaxInclusive = ";
@@ -98,7 +98,7 @@ MaxInclusive* maxInclusive = getMaxInclusive();
     MaxExclusive* maxExclusive = getMaxExclusive();
     if (maxExclusive->isSet())
     {
-        if ( *value < maxExclusive->getMaxExclusiveAsDouble() )
+        if ( *value >= maxExclusive->getMaxExclusiveAsDouble() )
         {
             AxisString exceptionMessage =
             "Value to be serialized is greater than or equal to MaxExclusive specified for this type.  MaxExclusive = ";

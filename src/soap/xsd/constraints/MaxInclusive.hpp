@@ -40,12 +40,16 @@ public:
     MaxInclusive();
     
     MaxInclusive(LONGLONG maxInclusive);
+
+    MaxInclusive(unsigned LONGLONG maxInclusive);
     
     MaxInclusive(double maxInclusive);
     
     MaxInclusive(struct tm maxInclusive);
 
     LONGLONG getMaxInclusiveAsLONGLONG();
+
+    unsigned LONGLONG getMaxInclusiveAsUnsignedLONGLONG();
     
     double getMaxInclusiveAsDouble();
     
@@ -55,6 +59,7 @@ private:
     union
     {
       LONGLONG longlongMaxInclusive;
+      unsigned LONGLONG unsignedLongLongMaxInclusive;
       double doubleMaxInclusive;  
       struct tm structTMMaxInclusive;
     } m_MaxInclusive;

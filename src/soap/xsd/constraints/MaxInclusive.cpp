@@ -8,6 +8,12 @@ AXIS_CPP_NAMESPACE_START
         m_isSet = true;
     }
 
+    MaxInclusive::MaxInclusive(unsigned LONGLONG maxInclusive)
+    {
+        m_MaxInclusive.unsignedLongLongMaxInclusive = maxInclusive;
+        m_isSet = true;
+    }
+
     MaxInclusive::MaxInclusive(double maxInclusive)
     {
         m_MaxInclusive.doubleMaxInclusive = maxInclusive;
@@ -28,6 +34,11 @@ AXIS_CPP_NAMESPACE_START
     LONGLONG MaxInclusive::getMaxInclusiveAsLONGLONG()
     {
         return m_MaxInclusive.longlongMaxInclusive;
+    }
+
+    unsigned LONGLONG MaxInclusive::getMaxInclusiveAsUnsignedLONGLONG()
+    {
+        return m_MaxInclusive.unsignedLongLongMaxInclusive;
     }
     
     double MaxInclusive::getMaxInclusiveAsDouble()

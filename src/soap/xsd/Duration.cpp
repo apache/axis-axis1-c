@@ -27,10 +27,10 @@ AXIS_CPP_NAMESPACE_START
                 AxisString exceptionMessage =
                 "Value to be serialized is less than MinInclusive specified for this type.  MinInclusive = ";
                 AxisChar* length = new AxisChar[25];
-                sprintf(length, "%d", minInclusive->getMinInclusiveAsLONGLONG());
+                sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, minInclusive->getMinInclusiveAsLONGLONG());
                 exceptionMessage += length;
                 exceptionMessage += ", Value = ";
-                sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
+                sprintf(length, "%ld", *value);
                 exceptionMessage += length;
                 exceptionMessage += ".";
                 delete [] length;
@@ -44,15 +44,15 @@ AXIS_CPP_NAMESPACE_START
         MinExclusive* minExclusive = getMinExclusive();
         if (minExclusive->isSet())
         {
-            if ( *value < minExclusive->getMinExclusiveAsLONGLONG() )
+            if ( *value <= minExclusive->getMinExclusiveAsLONGLONG() )
             {
                 AxisString exceptionMessage =
                 "Value to be serialized is less than or equal to MinExclusive specified for this type.  MinExclusive = ";
                 AxisChar* length = new AxisChar[25];
-                sprintf(length, "%d", minExclusive->getMinExclusiveAsLONGLONG());
+                sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, minExclusive->getMinExclusiveAsLONGLONG());
                 exceptionMessage += length;
                 exceptionMessage += ", Value = ";
-                sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
+                sprintf(length, "%ld", *value);
                 exceptionMessage += length;
                 exceptionMessage += ".";
                 delete [] length;
@@ -67,15 +67,15 @@ AXIS_CPP_NAMESPACE_START
         MaxInclusive* maxInclusive = getMaxInclusive();
         if (maxInclusive->isSet())
         {
-            if ( *value < maxInclusive->getMaxInclusiveAsLONGLONG() )
+            if ( *value > maxInclusive->getMaxInclusiveAsLONGLONG() )
             {
                 AxisString exceptionMessage =
                 "Value to be serialized is greater than MaxInclusive specified for this type.  MaxInclusive = ";
                 AxisChar* length = new AxisChar[25];
-                sprintf(length, "%d", maxInclusive->getMaxInclusiveAsLONGLONG());
+                sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, maxInclusive->getMaxInclusiveAsLONGLONG());
                 exceptionMessage += length;
                 exceptionMessage += ", Value = ";
-                sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
+                sprintf(length, "%ld", *value);
                 exceptionMessage += length;
                 exceptionMessage += ".";
                 delete [] length;
@@ -89,15 +89,15 @@ AXIS_CPP_NAMESPACE_START
         MaxExclusive* maxExclusive = getMaxExclusive();
         if (maxExclusive->isSet())
         {
-            if ( *value < maxExclusive->getMaxExclusiveAsLONGLONG() )
+            if ( *value >= maxExclusive->getMaxExclusiveAsLONGLONG() )
             {
                 AxisString exceptionMessage =
                 "Value to be serialized is greater than or equal to MaxExclusive specified for this type.  MaxExclusive = ";
                 AxisChar* length = new AxisChar[25];
-                sprintf(length, "%d", maxExclusive->getMaxExclusiveAsLONGLONG());
+                sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, maxExclusive->getMaxExclusiveAsLONGLONG());
                 exceptionMessage += length;
                 exceptionMessage += ", Value = ";
-                sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
+                sprintf(length, "%ld", *value);
                 exceptionMessage += length;
                 exceptionMessage += ".";
                 delete [] length;

@@ -30,11 +30,12 @@ AXIS_CPP_NAMESPACE_START
         MinInclusive* minInclusive = getMinInclusive();
         if (minInclusive->isSet())
         {
-            if ( 0 > difftime(mktime(&(minInclusive->getMinInclusiveAsStructTM())), mktime(const_cast<struct tm*>(value))) )
+            struct tm minInclusiveAsStructTM = minInclusive->getMinInclusiveAsStructTM();
+            if ( 0 > difftime(mktime(&minInclusiveAsStructTM), mktime(const_cast<struct tm*>(value))) )
             {
                 AxisString exceptionMessage =
                 "Value to be serialized is less than MinInclusive specified for this type.  MinInclusive = ";
-                exceptionMessage += asctime(&(minInclusive->getMinInclusiveAsStructTM()));
+                exceptionMessage += asctime(&minInclusiveAsStructTM);
                 exceptionMessage += ", Value = ";
                 exceptionMessage += asctime(value);
                 exceptionMessage += ".";
@@ -48,11 +49,12 @@ AXIS_CPP_NAMESPACE_START
         MinExclusive* minExclusive = getMinExclusive();
         if (minExclusive->isSet())
         {
-            if ( 0 > difftime(mktime(&(minExclusive->getMinExclusiveAsStructTM())), mktime(const_cast<struct tm*>(value))) )
+            struct tm minExclusiveAsStructTM = minExclusive->getMinExclusiveAsStructTM();
+            if ( 0 >= difftime(mktime(&minExclusiveAsStructTM), mktime(const_cast<struct tm*>(value))) )
             {
                 AxisString exceptionMessage =
                 "Value to be serialized is less than or equal to MinExclusive specified for this type.  MinExclusive = ";
-                exceptionMessage += asctime(&(minExclusive->getMinExclusiveAsStructTM()));
+                exceptionMessage += asctime(&minExclusiveAsStructTM);
                 exceptionMessage += ", Value = ";
                 exceptionMessage += asctime(value);
                 exceptionMessage += ".";
@@ -66,11 +68,12 @@ AXIS_CPP_NAMESPACE_START
         MaxInclusive* maxInclusive = getMaxInclusive();
         if (maxInclusive->isSet())
         {
-            if ( 0 > difftime(mktime(&(maxInclusive->getMaxInclusiveAsStructTM())), mktime(const_cast<struct tm*>(value))) )
+            struct tm maxInclusiveAsStructTM = maxInclusive->getMaxInclusiveAsStructTM();
+            if ( 0 < difftime(mktime(&maxInclusiveAsStructTM), mktime(const_cast<struct tm*>(value))) )
             {
                 AxisString exceptionMessage =
                 "Value to be serialized is greater than MaxInclusive specified for this type.  MaxInclusive = ";
-                exceptionMessage += asctime(&(maxInclusive->getMaxInclusiveAsStructTM()));
+                exceptionMessage += asctime(&maxInclusiveAsStructTM);
                 exceptionMessage += ", Value = ";
                 exceptionMessage += asctime(value);
                 exceptionMessage += ".";
@@ -84,11 +87,12 @@ AXIS_CPP_NAMESPACE_START
         MaxExclusive* maxExclusive = getMaxExclusive();
         if (maxExclusive->isSet())
         {
-            if ( 0 > difftime(mktime(&(maxExclusive->getMaxExclusiveAsStructTM())), mktime(const_cast<struct tm*>(value))) )
+            struct tm maxExclusiveAsStructTM = maxExclusive->getMaxExclusiveAsStructTM();
+            if ( 0 <= difftime(mktime(&maxExclusiveAsStructTM), mktime(const_cast<struct tm*>(value))) )
             {
                 AxisString exceptionMessage =
                 "Value to be serialized is greater than or equal to MaxExclusive specified for this type.  MaxExclusive = ";
-                exceptionMessage += asctime(&(maxExclusive->getMaxExclusiveAsStructTM()));
+                exceptionMessage += asctime(&maxExclusiveAsStructTM);
                 exceptionMessage += ", Value = ";
                 exceptionMessage += asctime(value);
                 exceptionMessage += ".";

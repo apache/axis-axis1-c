@@ -46,6 +46,72 @@ AxisChar* Integer::serialize(const LONGLONG* value) throw (AxisSoapException)
         }
     }
     delete minInclusive;
+
+    MinExclusive* minExclusive = getMinExclusive();
+    if (minExclusive->isSet())
+    {
+        if ( *value <= minExclusive->getMinExclusiveAsLONGLONG() )
+        {
+            AxisString exceptionMessage =
+            "Value to be serialized is less than or equal to MinExclusive specified for this type.  MinExclusive = ";
+            AxisChar* length = new AxisChar[25];
+            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, minExclusive->getMinExclusiveAsLONGLONG());
+            exceptionMessage += length;
+            exceptionMessage += ", Value = ";
+            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
+            exceptionMessage += length;
+            exceptionMessage += ".";
+            delete [] length;
+            
+            throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                const_cast<AxisChar*>(exceptionMessage.c_str()));
+        }
+    }
+    delete minExclusive;
+
+    MaxInclusive* maxInclusive = getMaxInclusive();
+    if (maxInclusive->isSet())
+    {
+        if ( *value > maxInclusive->getMaxInclusiveAsLONGLONG() )
+        {
+            AxisString exceptionMessage =
+            "Value to be serialized is less than MaxInclusive specified for this type.  MaxInclusive = ";
+            AxisChar* length = new AxisChar[25];
+            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, maxInclusive->getMaxInclusiveAsLONGLONG());
+            exceptionMessage += length;
+            exceptionMessage += ", Value = ";
+            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
+            exceptionMessage += length;
+            exceptionMessage += ".";
+            delete [] length;
+            
+            throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                const_cast<AxisChar*>(exceptionMessage.c_str()));
+        }
+    }
+    delete maxInclusive;
+
+    MaxExclusive* maxExclusive = getMaxExclusive();
+    if (maxExclusive->isSet())
+    {
+        if ( *value >= maxExclusive->getMaxExclusiveAsLONGLONG() )
+        {
+            AxisString exceptionMessage =
+            "Value to be serialized is less than or equal to MaxExclusive specified for this type.  MaxExclusive = ";
+            AxisChar* length = new AxisChar[25];
+            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, maxExclusive->getMaxExclusiveAsLONGLONG());
+            exceptionMessage += length;
+            exceptionMessage += ", Value = ";
+            sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
+            exceptionMessage += length;
+            exceptionMessage += ".";
+            delete [] length;
+            
+            throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                const_cast<AxisChar*>(exceptionMessage.c_str()));
+        }
+    }
+    delete maxExclusive;
     
     AxisChar* serializedValue = new char[80];
     AxisSprintf (serializedValue, 80, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);

@@ -40,12 +40,16 @@ public:
     MinExclusive();
     
     MinExclusive(LONGLONG minExclusive);
+
+    MinExclusive(unsigned LONGLONG minExclusive);
     
     MinExclusive(double minExclusive);
     
     MinExclusive(struct tm minExclusive);
 
     LONGLONG getMinExclusiveAsLONGLONG();
+
+    unsigned LONGLONG getMinExclusiveAsUnsignedLONGLONG();
     
     double getMinExclusiveAsDouble();
     
@@ -55,6 +59,7 @@ private:
     union
     {
       LONGLONG longlongMinExclusive;
+      unsigned LONGLONG unsignedLongLongMinExclusive;
       double doubleMinExclusive;  
       struct tm structTMMinExclusive;
     } m_MinExclusive;

@@ -30,13 +30,44 @@ using namespace std;
 
 class NonNegativeInteger : public Integer {
 public:
+
+    /**
+     * Constructor
+     */
+    NonNegativeInteger();
+    
+    /**
+     * Destructor
+     */
+    ~NonNegativeInteger();
+
+    /**
+     * Serialize value to it's on-the-wire string form.
+     * @param value The value to be serialized.
+     * @return Serialized form of value.
+    */
+    AxisChar* serialize(const void* value) throw (AxisSoapException);
+    
+    /**
+     * Deserialize value from it's on-the-wire string form.
+     * @param valueAsChar Serialized form of value.
+     * @return Deserialized value.
+     */
+    void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
+    
+    /**
+     * Serialize NonNegativeInteger value to it's on-the-wire string form.
+     * @param value The NonNegativeInteger value to be serialized.
+     * @return Serialized form of NonNegativeInteger value.
+     */
+    AxisChar* serialize(const unsigned LONGLONG* value) throw (AxisSoapException);
   
   /**
    * Deserialized NonNegativeInteger value from it's on-the-wire string form.
    * @param valueAsChar Serialized form of NonNegativeInteger value.
    * @return Deserialized NonNegativeInteger value.
    */
-    LONGLONG* deserializeNonNegativeInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
+    unsigned LONGLONG* deserializeNonNegativeInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 
@@ -67,6 +98,9 @@ protected:
      * @return MaxExclusive object
      */
     virtual MaxExclusive* getMaxExclusive();
+
+private:
+   unsigned LONGLONG* m_NonNegativeInteger;
 
 };
 

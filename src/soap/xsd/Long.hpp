@@ -48,25 +48,11 @@ protected:
     virtual MinInclusive* getMinInclusive();
     
     /**
-     * Creates a MinExclusive object.  For the Long type this is defined as
-     * -9223372036854775809.
-     * @return MinExclusive object
-     */
-    virtual MinExclusive* getMinExclusive();
-    
-    /**
      * Creates a MaxInclusive object.  For the Long type this is defined as
      * 9223372036854775807.
      * @return MaxInclusive object
      */
-    virtual MaxInclusive* getMaxInclusive();
-    
-    /**
-     * Creates a MaxExclusive object.  For the Long type this is defined as
-     * 9223372036854775808.
-     * @return MaxExclusive object
-     */
-    virtual MaxExclusive* getMaxExclusive();
+    virtual MaxInclusive* getMaxInclusive();   
 };
 
 AXIS_CPP_NAMESPACE_END

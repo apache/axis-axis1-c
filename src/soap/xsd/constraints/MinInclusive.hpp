@@ -41,11 +41,15 @@ public:
     
     MinInclusive(LONGLONG minInclusive);
     
+    MinInclusive(unsigned LONGLONG minInclusive);
+    
     MinInclusive(double minInclusive);
     
     MinInclusive(struct tm minInclusive);
 
     LONGLONG getMinInclusiveAsLONGLONG();
+    
+    unsigned LONGLONG getMinInclusiveAsUnsignedLONGLONG();
     
     double getMinInclusiveAsDouble();
     
@@ -55,6 +59,7 @@ private:
     union
     {
       LONGLONG longlongMinInclusive;
+      unsigned LONGLONG unsignedLongLongMinInclusive;
       double doubleMinInclusive;  
       struct tm structTMMinInclusive;
     } m_MinInclusive;

@@ -8,6 +8,12 @@ AXIS_CPP_NAMESPACE_START
         m_isSet = true;
     }
 
+    MinExclusive::MinExclusive(unsigned LONGLONG minExclusive)
+    {
+        m_MinExclusive.unsignedLongLongMinExclusive = minExclusive;
+        m_isSet = true;
+    }
+
     MinExclusive::MinExclusive(double minExclusive)
     {
         m_MinExclusive.doubleMinExclusive = minExclusive;
@@ -28,6 +34,11 @@ AXIS_CPP_NAMESPACE_START
     LONGLONG MinExclusive::getMinExclusiveAsLONGLONG()
     {
         return m_MinExclusive.longlongMinExclusive;
+    }
+
+    unsigned LONGLONG MinExclusive::getMinExclusiveAsUnsignedLONGLONG()
+    {
+        return m_MinExclusive.unsignedLongLongMinExclusive;
     }
     
     double MinExclusive::getMinExclusiveAsDouble()

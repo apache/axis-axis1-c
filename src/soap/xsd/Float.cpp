@@ -50,7 +50,7 @@ AxisChar* Float::serialize(const float* value) throw (AxisSoapException)
     MinExclusive* minExclusive = getMinExclusive();
     if (minExclusive->isSet())
     {
-        if ( *value < static_cast<float>(minExclusive->getMinExclusiveAsDouble()) )
+        if ( *value <= static_cast<float>(minExclusive->getMinExclusiveAsDouble()) )
         {
             AxisString exceptionMessage =
             "Value to be serialized is less than or equal to MinExclusive specified for this type.  MinExclusive = ";
@@ -73,7 +73,7 @@ AxisChar* Float::serialize(const float* value) throw (AxisSoapException)
     MaxInclusive* maxInclusive = getMaxInclusive();
     if (maxInclusive->isSet())
     {
-        if ( *value < static_cast<float>(maxInclusive->getMaxInclusiveAsDouble()) )
+        if ( *value > static_cast<float>(maxInclusive->getMaxInclusiveAsDouble()) )
         {
             AxisString exceptionMessage =
             "Value to be serialized is greater than MaxInclusive specified for this type.  MaxInclusive = ";
@@ -95,7 +95,7 @@ AxisChar* Float::serialize(const float* value) throw (AxisSoapException)
     MaxExclusive* maxExclusive = getMaxExclusive();
     if (maxExclusive->isSet())
     {
-        if ( *value < static_cast<float>(maxExclusive->getMaxExclusiveAsDouble()) )
+        if ( *value >= static_cast<float>(maxExclusive->getMaxExclusiveAsDouble()) )
         {
             AxisString exceptionMessage =
             "Value to be serialized is greater than or equal to MaxExclusive specified for this type.  MaxExclusive = ";

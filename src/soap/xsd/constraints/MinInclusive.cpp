@@ -8,6 +8,12 @@ AXIS_CPP_NAMESPACE_START
         m_isSet = true;
     }
 
+    MinInclusive::MinInclusive(unsigned LONGLONG minInclusive)
+    {
+        m_MinInclusive.unsignedLongLongMinInclusive = minInclusive;
+        m_isSet = true;
+    }
+
     MinInclusive::MinInclusive(double minInclusive)
     {
         m_MinInclusive.doubleMinInclusive = minInclusive;
@@ -28,6 +34,11 @@ AXIS_CPP_NAMESPACE_START
     LONGLONG MinInclusive::getMinInclusiveAsLONGLONG()
     {
         return m_MinInclusive.longlongMinInclusive;
+    }
+
+    unsigned LONGLONG MinInclusive::getMinInclusiveAsUnsignedLONGLONG()
+    {
+        return m_MinInclusive.unsignedLongLongMinInclusive;
     }
     
     double MinInclusive::getMinInclusiveAsDouble()

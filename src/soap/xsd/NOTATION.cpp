@@ -21,7 +21,7 @@ AxisChar* NOTATION::serialize(const AxisChar* value) throw (AxisSoapException)
     MinLength* minLength= getMinLength();
     if (minLength->isSet())
     {
-        if (strlen(value) < minLength->getMinLength())
+        if (strlen(value) < (unsigned int) minLength->getMinLength())
         {
             AxisString exceptionMessage =
             "Length of value to be serialized is shorter than MinLength specified for this type.  Minlength = ";
@@ -43,7 +43,7 @@ AxisChar* NOTATION::serialize(const AxisChar* value) throw (AxisSoapException)
     MaxLength* maxLength = getMaxLength();
     if (maxLength->isSet())
     {
-        if (strlen(value) > maxLength->getMaxLength())
+        if (strlen(value) > (unsigned int) maxLength->getMaxLength())
         {
             AxisString exceptionMessage =
             "Length of value to be serialized is longer than MaxLength specified for this type.  Maxlength = ";

@@ -8,23 +8,25 @@ LONGLONG* Long::deserializeLong(const AxisChar* valueAsChar) throw (AxisSoapExce
 }
 
 MinInclusive* Long::getMinInclusive()
-{
-    return new MinInclusive(static_cast<LONGLONG>(-9223372036854775808));
-}
-
-MinExclusive* Long::getMinExclusive()
-{
-    return new MinExclusive(static_cast<LONGLONG>(-9223372036854775809));
+{ 
+    AxisChar* end;    
+    LONGLONG* minInclusive = new LONGLONG;
+    *minInclusive = strtol ("-9223372036854775808", &end, 10);
+    
+    MinInclusive* retVal = new MinInclusive(*minInclusive);
+    delete minInclusive;
+    return retVal;
 }
 
 MaxInclusive* Long::getMaxInclusive()
 {
-    return new MaxInclusive(static_cast<LONGLONG>(9223372036854775807));
-}
-
-MaxExclusive* Long::getMaxExclusive()
-{
-    return new MaxExclusive(static_cast<LONGLONG>(9223372036854775808));
+    AxisChar* end;    
+    LONGLONG* maxInclusive = new LONGLONG;
+    *maxInclusive = strtol ("9223372036854775807", &end, 10);
+    
+    MaxInclusive* retVal = new MaxInclusive(*maxInclusive);
+    delete maxInclusive;
+    return retVal;
 }
 
 AXIS_CPP_NAMESPACE_END

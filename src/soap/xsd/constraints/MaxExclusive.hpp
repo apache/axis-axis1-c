@@ -40,12 +40,16 @@ public:
     MaxExclusive();
     
     MaxExclusive(LONGLONG maxExclusive);
+
+    MaxExclusive(unsigned LONGLONG maxExclusive);
     
     MaxExclusive(double maxExclusive);
     
     MaxExclusive(struct tm maxExclusive);
 
     LONGLONG getMaxExclusiveAsLONGLONG();
+    
+    unsigned LONGLONG getMaxExclusiveAsUnsignedLONGLONG();
     
     double getMaxExclusiveAsDouble();
     
@@ -55,6 +59,7 @@ private:
     union
     {
       LONGLONG longlongMaxExclusive;
+      unsigned LONGLONG unsignedLongLongMaxExclusive;
       double doubleMaxExclusive;  
       struct tm structTMMaxExclusive;
     } m_MaxExclusive;
