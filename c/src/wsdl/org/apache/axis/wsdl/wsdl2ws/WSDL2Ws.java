@@ -346,6 +346,10 @@ public class WSDL2Ws {
         String targetEngine)
         throws WrapperFault {
 
+		if (targetLanguage == null) targetLanguage = "c++";
+		if (targetEngine == null) targetEngine = "server";
+		if (targetoutputLocation == null) targetoutputLocation = "./";
+		
         ArrayList methods = this.getServiceInfo(this.porttype, targetLanguage);
         TypeMap typeMap = this.getTypeInfo(targetLanguage);
         //TODO	chaeck weather the name at the WrapperConstant Doclit is right "doc"
@@ -502,14 +506,13 @@ public class WSDL2Ws {
         if (data.getArgumentCount() != 1)
             System.out.println(
                 "java WSDL2ws <wsdlfile> -<optionChar><value>\n"
-                    + "-o target output folder\n"
-                    + "-l target language(c|java|c++) default is java\n"
-                    + "-i implementation style (struct|order|simple) default is struct--- (usergetvalue() with PP or use getTag() ect ....)\n"
-                    + "-s (client|server|both)  default is server\n");
+                    + "-o target output folder - default is current folder\n"
+                    + "-l target language(c|c++) - default is c++\n"
+                    + "-s (client|server) - default is server\n");
         else {
             WSDL2Ws gen = new WSDL2Ws(data);
             gen.genarateWrappers(
-                args[2],
+                null,
                 data.getOptionBykey("o"),
                 data.getOptionBykey("l"),
                 data.getOptionBykey("i"),
