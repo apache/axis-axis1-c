@@ -93,6 +93,7 @@ public:
 	virtual xsd__hexBinary AXISCALL GetBodyAsHexBinary()=0;
 	virtual xsd__base64Binary AXISCALL GetBodyAsBase64Binary()=0;
 	virtual int AXISCALL SetNewSoapBody(AxisChar* pNewSoapBody)=0;
+	virtual IHeaderBlock* GetHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace) = 0;
 };
 
 #else
