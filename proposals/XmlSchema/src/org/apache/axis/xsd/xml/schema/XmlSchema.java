@@ -633,7 +633,7 @@ public class XmlSchema extends XmlSchemaAnnotated {
                     String name = restrictionEl.getAttribute("base");
                     String[] temp = Tokenizer.tokenize(name, ":");
                     String namespace = "";
-
+					
                     if (temp.length != 1) {
                         namespace = temp[0];
                     }
@@ -641,7 +641,7 @@ public class XmlSchema extends XmlSchemaAnnotated {
                     //let it crash because its mean being refered
                     //to unregistered namespace
                     namespace = schema.namespaces.get(namespace).toString();
-
+					name = Tokenizer.lastToken( name, ":")[1];	
                     restriction.baseTypeName =
                             new QualifiedName(name, namespace);
                 } else if (inlineSimpleType != null) {
@@ -708,7 +708,7 @@ public class XmlSchema extends XmlSchemaAnnotated {
                         
                     //Object nsFromEl = schema.namespaces.get(namespaceFromEl[0]); 
                     //namespace = (nsFromEl==null)?  "": nsFromEl.toString();
-                        
+					name = Tokenizer.lastToken( name, ":" )[1];    
                     list.itemTypeName =
                             new QualifiedName(name, namespace);
 
@@ -1012,7 +1012,7 @@ public class XmlSchema extends XmlSchemaAnnotated {
                 if (result == null)
                     throw new XmlSchemaException("No namespace found in "
                                                  + "given base simple content type");
-
+				name = Tokenizer.lastToken( name, ":")[1];	
                 restriction.baseTypeName =
                         new QualifiedName(name, result.toString());
             }
@@ -1076,7 +1076,7 @@ public class XmlSchema extends XmlSchemaAnnotated {
                 if (result == null)
                     throw new XmlSchemaException("No namespace found in "
                                                  + "given base simple content type");
-
+				name = Tokenizer.lastToken( name, ":")[1];	
                 ext.baseTypeName = new QualifiedName(name,
                                                      result.toString());
             }
@@ -1126,7 +1126,7 @@ public class XmlSchema extends XmlSchemaAnnotated {
                     throw new XmlSchemaException("No namespace found in "
                                                  + "given base complex content base type");
 
-
+				name = Tokenizer.lastToken( name, ":")[1];	
                 restriction.baseTypeName = new QualifiedName(name,
                                                              result.toString());
             }
@@ -1187,7 +1187,7 @@ public class XmlSchema extends XmlSchemaAnnotated {
                                                  + "given base complex content base type");
                     
                 //                    String namespace = (result==null)? "" : result.toString();
-                    
+				name = Tokenizer.lastToken( name, ":")[1];    
                 ext.baseTypeName = new QualifiedName(name,
                                                      result.toString());
             }
@@ -1249,7 +1249,7 @@ public class XmlSchema extends XmlSchemaAnnotated {
                     throw new XmlSchemaException("No namespace found in "
                                                  + "given ref name");
 
-
+				ref = Tokenizer.lastToken( ref, ":" )[1];
                 attrGroup.refName = new QualifiedName(ref, result.toString());
             }
 
@@ -1509,7 +1509,7 @@ public class XmlSchema extends XmlSchemaAnnotated {
                 if (result == null)
                     throw new XmlSchemaException("No namespace found in "
                                                  + "given ref group");
-
+				ref = Tokenizer.lastToken( ref, ":" )[1];
                 group.refName = new QualifiedName(ref, result.toString());
 
                 return group;
@@ -1566,7 +1566,7 @@ public class XmlSchema extends XmlSchemaAnnotated {
                     namespace = result.toString();
                 } else
                     namespace = schema.targetNamespace;
-
+				name = Tokenizer.lastToken( name, ":" )[1];
                 attr.schemaTypeName = new QualifiedName(name, namespace);
             }
             if (attrEl.hasAttribute("default"))
@@ -1601,9 +1601,9 @@ public class XmlSchema extends XmlSchemaAnnotated {
                     namespace = result.toString();
                 } else
                     namespace = schema.targetNamespace;
-
+				name = Tokenizer.lastToken( name, ":" )[1];
                 attr.refName = new QualifiedName(name, namespace);
-                attr.name = name.substring(name.indexOf(":") + 1);
+                attr.name = name;
             }
 
             Element simpleTypeEl =
@@ -1725,8 +1725,7 @@ public class XmlSchema extends XmlSchemaAnnotated {
                     namespace = result.toString();
                 } else
                     namespace = schema.targetNamespace;
-
-
+				typeName = Tokenizer.lastToken( typeName, ":" )[1];
                 element.schemaTypeName =
                         new QualifiedName(typeName, namespace);
             } else if (el.getAttributeNode("ref") != null) {
@@ -1743,7 +1742,7 @@ public class XmlSchema extends XmlSchemaAnnotated {
                     namespace = result.toString();
                 } else
                     namespace = schema.targetNamespace;
-
+				refName = Tokenizer.lastToken( refName, ":" )[1];
                 element.setRefName(new QualifiedName(refName, namespace));
                 element.name = refName;
             }
@@ -1790,7 +1789,7 @@ public class XmlSchema extends XmlSchemaAnnotated {
                         namespace = result.toString();
                     } else
                         namespace = schema.targetNamespace;
-
+					name = Tokenizer.lastToken( name, ":" )[1];
                     keyRef.refer = new QualifiedName(name, namespace);
                 }
 
@@ -1867,8 +1866,8 @@ public class XmlSchema extends XmlSchemaAnnotated {
                     } else
                         namespace = schema.targetNamespace;
 
-                    constraint.name = name; // need to confirm as it is not name but refer
-
+					name = Tokenizer.lastToken( name, ":" )[1];
+					constraint.name = name; // need to confirm as it is not name but refer
                     ((XmlSchemaKeyref) constraint).refer =
                             new QualifiedName(name, namespace);
 
