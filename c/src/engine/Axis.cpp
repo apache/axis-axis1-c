@@ -240,8 +240,8 @@ extern "C" int initialize_module (int bServer)
     TypeMapping::initialize ();
     URIMapping::initialize ();
     SoapFault::initialize ();
-	SOAPTransportFactory::initialize();
-	XMLParserFactory::initialize();
+
+
 #ifdef AXIS_CLIENT_LIB
     CallBase::s_Initialize ();
 #endif
@@ -255,8 +255,12 @@ extern "C" int initialize_module (int bServer)
         status = g_pConfig->readConfFile (); 
         if (status == AXIS_SUCCESS)
         {
+			XMLParserFactory::initialize();
+            SOAPTransportFactory::initialize();
 			char *pWsddPath = g_pConfig->getAxConfProperty(AXCONF_WSDDFILEPATH);
+
 #if defined(ENABLE_AXISTRACE)
+
             status = g_pAT->openFile ();
             if (status == AXIS_FAIL)
             {
@@ -279,6 +283,8 @@ extern "C" int initialize_module (int bServer)
 						  */
         if (status == AXIS_SUCCESS)
         {
+			XMLParserFactory::initialize();
+            SOAPTransportFactory::initialize();
 #if defined(ENABLE_AXISTRACE)
             status = g_pAT->openFileByClient ();
             if (status == AXIS_FAIL)
