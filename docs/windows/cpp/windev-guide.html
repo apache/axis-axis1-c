@@ -168,11 +168,11 @@ from this point onwards.</p>
 <br>
 2) Copy [EXPAT_EXTRACT]\lib\libexpat.lib to [CHECKOUT_HOME]\c\lib\expat\ directory.</p>
 
-<p>3) Copy libexpat.dll file from [EXPAT_EXTRACT]\Libs  to %AXISCPP_DEPLOY%/libs/  </p>
+<p>3) Copy libexpat.dll file from [EXPAT_EXTRACT]\Libs  to %AXISCPP_DEPLOY%/lib/  </p>
 <br> <br>
 <p><b>For Xerces Parser</b></p>
 <p>1) Copy [XERCES_EXTRACT]\lib\xerces-c_2.lib to [CHECKOUT_HOME]\c\lib\xerces\ directory.</p>
-<p>2) Copy xerces-c_2_2_0.dll file from [XERCES_EXTRACT]\bin  to %AXISCPP_DEPLOY%/libs/ </p>
+<p>2) Copy xerces-c_2_2_0.dll file from [XERCES_EXTRACT]\bin  to %AXISCPP_DEPLOY%/lib/ </p>
 <p>3) Copy [XERCES_EXTRACT]\include\xercesc to [CHECKOUT_HOME]\c\include\xerces\ directory. </p>
 
 
@@ -253,7 +253,7 @@ already existing in that folder)
 <br>
 <br>
 Axis<br>
-|__ libs (Copy [EXPAT_EXTRACT]\Libs\libexpat.dll or <br> &nbsp &nbsp [XERCES_EXTRACT]\bin\xerces-c_2_2_0.dll and paste it inside)<br>
+|__ lib (Copy [EXPAT_EXTRACT]\Libs\libexpat.dll or <br> &nbsp &nbsp [XERCES_EXTRACT]\bin\xerces-c_2_2_0.dll and paste it inside)<br>
 |__ logs (log files are located here)<br>
 |__ conf (server.wsdd file is located here)<br>
 |__ webservices (The place to put webservice dlls)<br>
@@ -269,14 +269,14 @@ i)You will find AxisServer.dll and APACHE_MODULE in [CHECKOUT_HOME]\c\bin direct
 <br>
 ii)Copy APACHE_MODULE to [APACHE_HOME]\modules directory of your apache installation.
 <br>
-<p>Copy AxisServer.dll ,AxisTransport.dll and AxisXMLParser.dll to [AXISCPP_DEPLOY]\libs\ directory and add that directory to your PATH environment variable.Or to any location specified by your PATH environment variable.</p>    
+<p>Copy AxisServer.dll ,AxisTransport.dll and AxisXMLParser.dll to [AXISCPP_DEPLOY]\lib\ directory and add that directory to your PATH environment variable.Or to any location specified by your PATH environment variable.</p>    
 
 <br> <br>
 <p>3) Set the "PATH" environment variable to the following directories.
 
 <br>
 [APACHE_HOME]<br>
-[APACHE_HOME]\Axis\libs<br>
+[APACHE_HOME]\Axis\lib<br>
 <br> 
 
 4) Include the following lines at the bottom of the apache configuration file [APACHE_HOME]\conf\httpd.conf 
@@ -317,8 +317,8 @@ LogPath:[APACHE_HOME]\Axis\logs\AxisLog.log
 
 <br>
 WSDDFilePath:[APACHE_HOME]\Axis\conf\server.wsdd <br>
-Transport_http:[APACHE_HOME]\Axis\libs\AxisTransport.dll <br>
-XMLParser:[APACHE_HOME]\Axis\libs\AxisXMLParser.dll</p>  
+Transport_http:[APACHE_HOME]\Axis\lib\AxisTransport.dll <br>
+XMLParser:[APACHE_HOME]\Axis\lib\AxisXMLParser.dll</p>  
 
 <p><b>Note:If the AxisTransport.dll and AxisXMLParser.dll paths are not given in axiscpp.conf then the hardcoded values will be used.For that set the path of these two in the PATH environment variable or copy them to the same location as the Client.exe.</b></p>
 <br>
