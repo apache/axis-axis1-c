@@ -61,6 +61,7 @@
 
 #include "AxisTrace.h"
 #include <time.h>
+#include <stdio.h>
 #include "AxisUtils.h"
 #include "GDefine.h"
 

@@ -90,102 +90,10 @@ LINK32=link.exe
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\AppScopeHandlerPool.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\Axis.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\AxisEngine.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\DeserializerPool.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\common\GDefine.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\HandlerChain.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\HandlerLoader.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\HandlerPool.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\server\apache\mod_axis2.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\RequestScopeHandlerPool.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\SerializerPool.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\SessionScopeHandlerPool.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\SharedObject.cpp
-# End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\AppScopeHandlerPool.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\AxisEngine.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\DeserializerPool.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\HandlerChain.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\HandlerLoader.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\HandlerPool.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\RequestScopeHandlerPool.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\SerializerPool.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\SessionScopeHandlerPool.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\src\engine\SharedObject.h
-# End Source File
 # End Group
 # Begin Group "Resource Files"
 
