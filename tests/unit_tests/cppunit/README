@@ -1,0 +1,30 @@
+To run cppunit tests you  need to install cppunit in your matchine
+I installed cppunit-1.8.0.tar.gz
+Then create CPPUNIT_HOME environment variable pointing to your installation location
+When you configure, by default testcases are not added to the build.
+So to build testcases and cpp unit tests you need to add the configure option
+configure --enable-testcases
+When running the tests you might need to run the test server for some tests(for
+example to run Axis2TransportTest you need this). Please refer to 
+tests/utils/simple-server-client/readme to do that.
+
+
+To add new cpp unit tests follow the steps given below
+I explain this using a test already added
+I wanted to write a testcase to test Axis2Transport's getBytes method
+I added Axis2TransportTest.hpp class in transport/axis2 folder
+Note that file name is just adding Test suffix to AxisTransport.
+Also note that we maintain the same folder structure as the source
+file structure.
+Inside it I write TestGetByte which is my test method.
+Then in runCppUnitTests.cpp I add
+
+#include "transport/axis2/Axis2TransportTest.hpp"
+
+After that we add the test as follows
+
+    suiteOfTests->addTest( new CppUnit::TestCaller<Axis2TransportTest>( 
+        "testGetBytes", 
+	&Axis2TransportTest::testGetBytes ) );
+
+That's it.
