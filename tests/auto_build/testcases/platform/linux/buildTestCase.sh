@@ -10,26 +10,16 @@ ant -lib ${AXIS_JARS_HOME} -buildfile ${AXISCPP_HOME}/src/wsdl/build.xml
 #Server sample build and install
 TARGET_SERVER=$(echo $OUTPUT_DIR/$(basename $1 .wsdl).$2 | tr '+' 'p')_server
 SERVICE_FILE_NAME=$(echo | grep portType $1|grep -o '".*"'|sed "s/\"//g").$2
-echo ${SERVICE_FILE_NAME}
 SERVER=$(echo testcases/server/$2/${SERVICE_FILE_NAME})
 LIB_SERVICE_NAME=$(echo | grep portType $1|grep -o '".*"'|sed "s/\"//g")
-
 java -cp ${WSDL2WS_HOME}/wsdl2ws.jar:${AXIS_JARS} org.apache.axis.wsdl.wsdl2ws.WSDL2Ws -sserver -l$2 -o$TARGET_SERVER $1
 
 if [ $? -eq 0 ]
 then
-  cp $AXISCPP_TEST_BIN/configure.ac $AXISCPP_TEST_BIN/autogen.sh $TARGET_SERVER
   cp $SERVER $TARGET_SERVER
   cd $TARGET_SERVER
-  ALLSOURCES=$(ls $(echo "*.$2" | tr '+' 'p') | tr -d "^M")
-  printf "libservice_la_SOURCES = " > Makefile.am_temp
-  echo "$ALLSOURCES" | awk '{printf" %s", $1}' >> Makefile.am_temp
-  echo " " >> Makefile.am_temp
-  cat $AXISCPP_TEST_BIN/Makefile.am_server >> Makefile.am_temp
-  sed "s/service/${LIB_SERVICE_NAME}/g" Makefile.am_temp > Makefile.am
-  ./autogen.sh
-  ./configure --prefix=${AXISCPP_DEPLOY}
-  make install
+  g++ -shared -I$AXISCPP_HOME/include -olibservice.so *.cpp
+  cp -f libservice.so $AXISCPP_DEPLOY/lib/lib${LIB_SERVICE_NAME}.so
   ${APACHE2_HOME}/bin/apachectl restart
   ${APACHE_HOME}/bin/apachectl restart
 else
@@ -47,18 +37,9 @@ java -cp ${WSDL2WS_HOME}/wsdl2ws.jar:${AXIS_JARS} org.apache.axis.wsdl.wsdl2ws.W
 if [ $? -eq 0 ]
 then
 
-  cp $AXISCPP_TEST_BIN/configure.ac $AXISCPP_TEST_BIN/autogen.sh $TARGET_CLIENT
   cp $CLIENT $TARGET_CLIENT
   cd $TARGET_CLIENT
-  ALLSOURCES=$(ls $(echo "*.$2" | tr '+' 'p') | tr -d "
-")
-  printf "client_SOURCES = " > Makefile.am
-  echo "$ALLSOURCES" | awk '{printf" %s", $1}' >> Makefile.am
-  echo " " >> Makefile.am
-  cat $AXISCPP_TEST_BIN/Makefile.am >> Makefile.am
-  ./autogen.sh
-  ./configure
-  make
+  g++ -I$AXISCPP_HOME/include -L$AXISCPP_DEPLOY/lib -laxiscpp_client -ldl -oclient *.cpp
 else
   echo "WSDL2Ws.sh -sclient -l$2 -o$TARGET_CLIENT $1 failed"
   exit 1
