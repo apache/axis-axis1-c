@@ -60,8 +60,9 @@
  * @author Susantha Kumara (skumara@virtusa.com)
  *
  */
-
+#ifdef WIN32
 #pragma warning (disable : 4786)
+#endif
 
 #if !defined(__AXISENGINE_INCLUDED__)
 #define __AXISENGINE_INCLUDED__

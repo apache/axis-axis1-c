@@ -64,7 +64,9 @@
 // SoapEnvVersions.h:
 //
 //////////////////////////////////////////////////////////////////////
+#ifdef WIN32
 #pragma warning (disable : 4786)
+#endif
 
 #ifndef __SOAPENVVERSIONS_H_INCLUDED___
 #define __SOAPENVVERSIONS_H_INCLUDED___

@@ -63,7 +63,9 @@
 // TypeMapping.h: interface for the TypeMapping class.
 //
 //////////////////////////////////////////////////////////////////////
+#ifdef WIN32
 #pragma warning (disable : 4786)
+#endif
 
 #if !defined(AFX_TYPEMAPPING_H__B09703CE_154D_400E_A4E6_ED01901B33A0__INCLUDED_)
 #define AFX_TYPEMAPPING_H__B09703CE_154D_400E_A4E6_ED01901B33A0__INCLUDED_

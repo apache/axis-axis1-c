@@ -1,4 +1,6 @@
+#ifdef WIN32
 #pragma warning (disable : 4786)
+#endif
 
 #include <iostream>
 #include <string>
@@ -58,8 +60,8 @@ bool is_webservice_class(const char* classname)
 
 void add_member_declaration(string_list* decl_specs, member_declarator_list* member_decl_list)
 {
-  int nVarType;
-  int nConvVarType;
+  //int nVarType;
+  //int nConvVarType;
   unsigned char nQualifier = 0;
   Variable Var;
   bool bIsCtor = false; //

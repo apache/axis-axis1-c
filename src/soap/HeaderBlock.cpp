@@ -162,50 +162,6 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
 	return iStatus;
 }
 
-/*
-int HeaderBlock::serialize(string& sSerialized)
-{
-	/*
-	 *In the code we don't look whether the m_prefix is available or
-	 *	not. Instead directly insert it. The reason is that the SOAP
-	 *  1.1 spec says that "All immediate child elements of the SOAP 
-	 *  Header element MUST be namespace-qualified".
-	 */
-
-	/*int iStatus= SUCCESS;
-
-	do {
-		if(isSerializable()) {
-
-			sSerialized= sSerialized + "<" + m_prefix + ":" + m_localname +
-								" xmlns:"+ m_prefix +"=\""+ m_uri+ "\"";			
-
-			iStatus= attrSerialize(sSerialized);
-			if(iStatus==FAIL) {
-				break;
-			}
-
-			sSerialized= sSerialized + ">";
-
-			iStatus= serializeChildren(sSerialized);
-			if(iStatus==FAIL) {
-				break;
-			}
-
-			sSerialized= sSerialized + "</"+ m_prefix + ":"+ m_localname+ ">";
-
-		//	sSerialized= sSerialized + ">" + m_value + "</"+ m_prefix + 
-		//			":"+ m_localname+ ">";
-			
-		} else {
-			iStatus= FAIL;
-		}
-	} while(0);
-
-	return iStatus;
-}
-*/
-
 int HeaderBlock::attrSerialize(SoapSerializer& pSZ)
 {
 	int iStatus= SUCCESS;
@@ -247,7 +203,7 @@ int HeaderBlock::attrSerialize(string& sSerialized)
 
 bool HeaderBlock::isSerializable()
 {
-	//bool blnStatus= true;\
+	//bool blnStatus= true;
 
 	//return blnStatus;
 
@@ -336,7 +292,7 @@ BasicNode* HeaderBlock::getFirstChild()
 
 BasicNode* HeaderBlock::createChild(NODE_TYPE eNODE_TYPE)
 {
-	BasicNode* pBasicNode;
+	BasicNode* pBasicNode = NULL;
 
 	if(eNODE_TYPE==CHARACTER_NODE) {
 		pBasicNode = new CharacterElement();

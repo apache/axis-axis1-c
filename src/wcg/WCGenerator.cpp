@@ -1,7 +1,9 @@
 // WCGenerator.cpp: implementation of the WCGenerator class.
 //
 //////////////////////////////////////////////////////////////////////
+#ifdef WIN32
 #pragma warning (disable : 4786)
+#endif
 
 #include "WCGenerator.h"
 

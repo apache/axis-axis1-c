@@ -64,7 +64,9 @@
 // TranslationUnit.cpp: implementation of the TranslationUnit class.
 //
 //////////////////////////////////////////////////////////////////////
+#ifdef WIN32
 #pragma warning (disable : 4786)
+#endif
 
 #include "TranslationUnit.h"
 #include "File.h"
@@ -322,4 +324,5 @@ int TranslationUnit::GenerateWSDLBinding(File &file, string& sServiceName, int n
 	}
 	m_pWSClass->GenerateOperationsInBinding(file, sServiceName, nBinding, nStyle, sURI); 
 	file << "</binding>" << endl;
+    return 0;
 }

@@ -72,6 +72,7 @@
 #include <string>
 using namespace std;
 
+#define BTS_BUFFSIZE 32
 const AxisChar XML_ENTITY_REFERENCE_CAHRS[]	= "<>&\"\'";// Entity reference characters
 const AxisChar ENCODED_LESSER_STR[]			= "&lt;";	// Encoded string for less than character
 const AxisChar ENCODED_GREATOR_STR[]		= "&gt;";	// Encoded string for greator than character
@@ -113,7 +114,7 @@ private:
 	AxisString m_sSZ;
 	AxisString m_AuxStr;
 	AxisString m_strReturnVal;
-	AxisChar m_Buf[32]; //used for numeric to string conversions with sprintf
+	AxisChar m_Buf[BTS_BUFFSIZE]; //used for numeric to string conversions with sprintf
 	XSDTYPE m_Type; //used to temporarily set the type of item being serialized.
 };
 

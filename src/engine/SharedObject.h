@@ -61,7 +61,9 @@
 // SharedObject.h: interface for the SharedObject class.
 //
 //////////////////////////////////////////////////////////////////////
+#ifdef WIN32
 #pragma warning (disable : 4786)
+#endif
 
 #if !defined(AFX_SHAREDOBJECT_H__0805D25C_2F7E_4B19_BECE_0A8BFE9F0830__INCLUDED_)
 #define AFX_SHAREDOBJECT_H__0805D25C_2F7E_4B19_BECE_0A8BFE9F0830__INCLUDED_
