@@ -86,6 +86,8 @@ typedef struct
     void (AXISCALL* serializeEndElementOfType)(void* pObj, 
         const AxisChar* pName);
 
+	int (AXISCALL* serializeAnyObject)(void* pObj, AnyType* pAnyObject);
+
 }IWrapperSoapSerializerFunctions;
 
 typedef struct 
@@ -173,7 +175,7 @@ public:
 
     virtual void markEndOfStream()=0;    
 
-    virtual    int init()=0;    
+    virtual int init()=0;    
 
     virtual PROVIDERTYPE getCurrentProviderType()=0;
 
@@ -182,6 +184,9 @@ public:
     virtual void setStyle(AXIS_BINDING_STYLE nStyle)=0;
 
     virtual AXIS_BINDING_STYLE getStyle()=0;
+
+	virtual int serializeAnyObject(AnyType* pAnyObject)=0;
+
 
     /* following stuff is needed to provide the interface for C web services */
 public:
@@ -268,6 +273,12 @@ public:
         const AxisChar* pName)
     { ((IWrapperSoapSerializer*)pObj)->serializeEndElementOfType(pName);}
 
+	static int AXISCALL s_SerializeAnyObject(void* pObj, 
+		AnyType* pAnyObject)
+	{
+		return ((IWrapperSoapSerializer*)pObj)->serializeAnyObject(pAnyObject);
+	}
+
     static void s_Initialize()
     {
         ms_VFtable.createSoapMethod = s_CreateSoapMethod;
@@ -286,6 +297,7 @@ public:
         ms_VFtable.serialize = s_Serialize;
         ms_VFtable.serializeStartElementOfType = s_SerializeStartElementOfType;
         ms_VFtable.serializeEndElementOfType = s_SerializeEndElementOfType;
+		ms_VFtable.serializeAnyObject = s_SerializeAnyObject;
     }
 };
 
