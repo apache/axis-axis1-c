@@ -201,7 +201,10 @@ public class WrapperUtils {
 	
 	public static String getClassNameFromParamInfoConsideringArrays(ParameterInfo param,WebServiceContext wscontext)throws WrapperFault{
 		Type type = wscontext.getTypemap().getType(param.getSchemaName());
-		if(!TypeMap.isSimpleType(param.getSchemaName())){ //array or complex types
+		if(type.isSimpleType()){
+			return param.getLangName();			
+		}
+		else if(!TypeMap.isSimpleType(param.getSchemaName())){ //array or complex types
 			if (type.isArray()){
 				String arrayName = CUtils.getCmplxArrayNameforType(getArrayType(type).getName());
 				if (null == arrayName){//simple type array

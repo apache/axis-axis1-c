@@ -254,13 +254,12 @@ public class CUtils {
 	}
 	
 	/**
-	 * If the specified node represents a supported JAX-RPC enumeration,
-	 * a Vector is returned which contains the base type and the enumeration values.
+	 * If the specified node represents a supported JAX-RPC restriction,
+	 * a Vector is returned which contains the base type and the values (enumerations etc).
 	 * The first element in the vector is the base type (an TypeEntry).
-	 * Subsequent elements are values (Strings).
-	 * If this is not an enumeration, null is returned.
+	 * Subsequent elements are QNames.
 	 */
-	public static Vector getEnumerationBaseAndValues(Node node, SymbolTable symbolTable) {
+	public static Vector getRestrictionBaseAndValues(Node node, SymbolTable symbolTable) {
 		if (node == null) {
 			return null;
 		}
@@ -319,27 +318,24 @@ public class CUtils {
 
 			// Process the enumeration elements underneath the restriction node
 			if (baseEType != null && restrictionNode != null) {
-
 				Vector v = new Vector();                
 				NodeList enums = restrictionNode.getChildNodes();
 				for (int i=0; i < enums.getLength(); i++) {
 					QName enumKind = Utils.getNodeQName(enums.item(i));
 					if (enumKind != null &&
-						enumKind.getLocalPart().equals("enumeration") &&
+						/*enumKind.getLocalPart().equals("enumeration") && lets put all not only enumerations */
 						Constants.isSchemaXSD(enumKind.getNamespaceURI())) {
-
-						// Put the enum value in the vector.
-						Node enumNode = enums.item(i);
-						String value = Utils.getAttribute(enumNode, "value");
-						if (value != null) {
-							v.add(value);
-						}
+							Node enumNode = enums.item(i);
+							String value = Utils.getAttribute(enumNode, "value");
+							/*if (value != null) {
+								v.add(value);
+							}*/
+							v.add(new QName(value, enumKind.getLocalPart()));
 					}
 				}
                 
 				// is this really an enumeration?
-				if(v.isEmpty()) return null;
-                
+				/* if(v.isEmpty()) return null; There can be restriction without any child nodes */
 				// The first element in the vector is the base type (an TypeEntry).
 				v.add(0,baseEType);
 				return v;

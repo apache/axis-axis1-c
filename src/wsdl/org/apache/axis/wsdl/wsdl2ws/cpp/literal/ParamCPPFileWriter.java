@@ -77,18 +77,23 @@ public abstract class ParamCPPFileWriter extends ParamWriter{
 	
 	protected void writeConstructors()throws WrapperFault{}
 	protected void writeDistructors() throws WrapperFault {}
-   
+ 	protected abstract void writeRestrictionCheckerFunction() throws WrapperFault;
+ 	
 	public void writeSource()throws WrapperFault{
 	   try{
 	  		this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
 			writeClassComment();
 	   		writePreprocssorStatements();
-	   		writeGlobalCodes();
-	   		writeAttributes();
-	   		writeConstructors();
-	   		writeDistructors();
-	   		writeMethods();
-	   		//cleanup
+			if (type.isSimpleType()){
+				writeRestrictionCheckerFunction();
+			}
+			else{
+		   		writeGlobalCodes();
+		   		writeAttributes();
+		   		writeConstructors();
+		   		writeDistructors();
+		   		writeMethods();
+			}
 	   		writer.flush();
 	   		writer.close();
 	   		System.out.println(getFilePath().getAbsolutePath() + " created.....");

@@ -127,6 +127,8 @@ public class TypeMap {
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"), "java.math.BigDecimal");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "Qname"), "javax.xml.namespace.QName");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"), "java.utils.Date");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"), "java.utils.Date");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"), "java.utils.Date");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"), "byte[]");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"), "byte[]");
 		
@@ -199,6 +201,9 @@ public class TypeMap {
         this.typeInfo.put(wsdlname, type);
     }
 
+	public void removeType(QName wsdlname){
+		this.typeInfo.remove(wsdlname);
+	}
     /* get all the custom types in the typeMap */
     public Collection getTypes() {
         return this.typeInfo.values();
