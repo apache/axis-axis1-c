@@ -7,6 +7,19 @@
 errstatus=0
 dirmode=""
 
+if ! test -d '${AXISCPP_DEPLOY}/docs'; then
+    cp -rf ./docs ${AXISCPP_DEPLOY}
+fi
+if ! test -d '${AXISCPP_DEPLOY}/samples'; then
+    cp -rf ./samples ${AXISCPP_DEPLOY}
+fi
+if ! test -d '${AXISCPP_DEPLOY}/tests'; then
+    cp -rf ./tests ${AXISCPP_DEPLOY}
+fi
+if ! test -d '${AXISCPP_DEPLOY}/log'; then
+    mkdir ${AXISCPP_DEPLOY}/log
+    chmod 777 ${AXISCPP_DEPLOY}/log
+fi
 usage="\
 Usage: mkinstalldirs [-h] [--help] [-m mode] dir ..."
 
@@ -89,6 +102,8 @@ do
      pathcomp="$pathcomp/"
    done
 done
+#if !(test -d '${AXISCPP_DEPLOY}/docs')
+#    cp -rf docs ${AXISCPP_DEPLOY}/
 
 exit $errstatus
 
