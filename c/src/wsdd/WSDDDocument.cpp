@@ -99,11 +99,12 @@ int WSDDDocument::ParseDocument(const string& sWSDD)
 	DEBUG1("inside ParseDocument\n");
 	try
 	{
-		SAX2XMLReader * parser = XMLReaderFactory::createXMLReader();
+		SAX2XMLReader* parser = XMLReaderFactory::createXMLReader();
 		parser->setContentHandler(this);
 		parser->setErrorHandler(this);     
 		DEBUG1("BEFORE parser->parse(sWSDD.c_str());");
-		parser->parse(sWSDD.c_str());      
+		parser->parse(sWSDD.c_str());   
+		delete parser;
 	}
 	catch (...)
 	{

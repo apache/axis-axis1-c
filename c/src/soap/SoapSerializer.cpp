@@ -178,7 +178,7 @@ int SoapSerializer::setSoapFault(SoapFault *pSoapFault)
 	return m_sSerializedStream;
 }*/
 
-int SoapSerializer::SetOutputStream(void* pStream)
+int SoapSerializer::SetOutputStream(const void* pStream)
 {
 	m_pOutputStream = pStream;
 	int iStatus= SUCCESS;

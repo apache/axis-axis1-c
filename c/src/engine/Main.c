@@ -188,7 +188,8 @@ int main()
 	str->trtype = APTHTTP;
 	str->sessionid = "somesessionid";
 	str->so.http.ip_method = AXIS_HTTP_POST;
-
+	str->str.ip_stream = "is";
+	str->str.op_stream = "os";
 	str->so.http.ip_headers = (Ax_header*)malloc(sizeof(Ax_header));
 	str->so.http.ip_headers->headername = SOAPACTIONHEADER;
 	str->so.http.ip_headers->headervalue = "\"Calculator\"";	
@@ -197,19 +198,20 @@ int main()
 	printf("soap request :\n %s\n", ip);
 
 	initialize_module();
-	for (xx =0; xx < 1000 ; xx++)
+	for (xx =0; xx < 100 ; xx++)
 		process_request(str);	
-
+	free(str->so.http.ip_headers);
+	free(str);
 	return 0;
 }
 
-int send_response_bytes(const char * res, void* pOutputStream) 
+int send_response_bytes(const char * res, const void* opstream) 
 {
-//	printf("sending SOAP response : \n%s\n", res);
+	printf("sending SOAP response : \n%s\n", res);
 	return 0;
 }
 
-int get_request_bytes(char * req, int reqsize, int* retsize) 
+int get_request_bytes(char * req, int reqsize, int* retsize, const void* ipstream) 
 {
 	req[0]= '\0';
 	strcat(req, ip);
