@@ -61,8 +61,8 @@ public:
     	{
 	    tempsize = *buffsize;
 	    status = m_pTransport->getBytes(buff, buffsize);
-	    //printf("buffsize:%d\n", *buffsize);
-	    //printf("buff:\n%s\n", buff);
+	    printf("buffsize:%d\n", *buffsize);
+	    printf("buff:\n%s\n", buff);
 	    strcat(msg, buff);
 	    if(*buffsize > tempsize)
 	    {
