@@ -15,11 +15,11 @@ HexBinary::~HexBinary()
         m_Buf = NULL;
     }
 
-    if (m_hexBinary)
-    {
-        delete [] m_hexBinary;
-        m_hexBinary = NULL;
-    }
+    // Samisa: should not release m_hexBinary, as this is used by the deserializer and
+    // according to our current memory management semantics, this is deallocated at
+    // user written client code level. If we are to delete it here (which I think is the better way)
+    // we have to change the memory management semantics and updated the docs accordingly
+    
 }
 
 
