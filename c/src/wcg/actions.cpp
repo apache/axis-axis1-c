@@ -20,6 +20,7 @@ int g_currentclasstype;
 WSClass* g_pCurrentWSClass;
 BeanClass* g_pCurrentBeanClass;
 bool g_bdestructor_seen;
+bool g_baccessbeanmacrofound;
 int g_currentaccessspecifier;
 
 //forward declarations of function in this file
@@ -54,6 +55,11 @@ bool is_bean_class(base_specifier_list* baselist)
 		}
 	}
 	return false;	
+}
+
+bool is_accessbean_macro(string& str)
+{
+	return (str == "ACCESSBEAN_SERIALIZABLE");
 }
 
 void add_member_declaration(string_list* decl_specs, member_declarator_list* member_decl_list)
@@ -109,7 +115,7 @@ void add_member_declaration(string_list* decl_specs, member_declarator_list* mem
 			if (g_currentclasstype == BEANCLASS)
 			{
 				//just ignore this method because we donot wrap methods in a bean class
-				cout << "There are methods in a bean class which is not expected" << endl;
+				cout << "Ignoring methods in a bean class" << endl;
 			}
 			else
 			{
@@ -179,6 +185,10 @@ void add_member_declaration(string_list* decl_specs, member_declarator_list* mem
 				{
 					cout << "Ignoring variables in the other classes than bean classes" << endl;
 				}
+			}
+			else
+			{
+				cout << "Ignoring variables in web service class : we dont wrap them :)" << endl;
 			}
 		}
   }
