@@ -88,9 +88,7 @@ sh autogen.sh
 
 ./configure --prefix=<Where you need to deploy axis c++> \
     --with-apache2=<path to apache2> \
-    --with-expat=/usr/local/expat1957 \
-    --enable-samples=yes \
-    --enable-testcases=yes
+    --with-expat=/usr/local/expat1957
 
 make
 
@@ -109,9 +107,14 @@ Following are some of the options availble with configure
 --with-xercesc : To build xercesc parser library
 
 --enable-samples : Whether you need to build samples(server and client)
+                   By default samples are built. If you don't want building
+                   the sample then you need to specifically say no
 
 --enable-testcases : Wthether you need to build testcases
+                     By default test cases are built. If you don't want building
+                     the test cases then you need to specifically say no
 
+You may rename and edit build.sh_sample for one step builing and installing.
 
 Once you finished, have a look at $AXISCPP_HOME/build_errors. Most probably you will see many warnings.
 Just ignore them. But if you see any errors it means that build was 
