@@ -80,7 +80,7 @@ Axis C++.</a><br>
 4. Rename copied "deploy" folder to "Axis". Lets say this folder is  AXIS_FOLDER.<br>
 <br>
 
-5. Set environment variable AXIS_HOME to point to above folder.<br>
+5. Set environment variable AXISCPP_DEPLOY to point to above folder.<br>
 <br>
 
 6. Add AXIS_FOLDER/libs to the PATH environment variable.<br>
@@ -108,7 +108,7 @@ Where AXISMODULE is either mod_axis.dll for apache 1.3.X or mod_axis2.dll for ap
 
 <p>If you decide to use the Expat parser you need to install the Expat parser. Download the Expat-1.95.7 binary version from <a href="http://sourceforge.net/projects/expat/">http://sourceforge.net/projects/expat/</a> <br>
 Extract the Expat binaries to a folder Called Expat ,we will refer to this folder as [EXPAT_EXTRACT]. <br>
-Copy libexpat.dll file from [EXPAT_EXTRACT]\Libs to [AXIS_HOME]/libs/ <br> <br>
+Copy libexpat.dll file from [EXPAT_EXTRACT]\Libs to [AXISCPP_DEPLOY]/libs/ <br> <br>
 If you want to use the Xerces parser with Axis C++, rename AxisXMLParser_Xerces.dll from AXIS_EXTRACT/bin folder to AxisXMLParser.dll and copy it to AXIS_FOLDER/libs </p>
 
 <p><b>Installing the Xerces XML parser</b>
@@ -116,7 +116,7 @@ If you want to use the Xerces parser with Axis C++, rename AxisXMLParser_Xerces.
 If you decide to use the Xerces parser you need to install the Xerces parser. Download the Xerces-C 2.2.0( 32 bit binary release)from:
 <a href="http://xml.apache.org/xerces-c/download.cgi">http://xml.apache.org/xerces-c/download.cgi</a> <br>
 <br>
-Extract the Xerces-C 2.2.0 binary version. We will refer to this folder as [XERCES_EXTRACT]. Copy xerces-c_2_2_0.dll from [XERCES_EXTRACT]/bin/ to [AXIS_HOME]/libs/ <br>
+Extract the Xerces-C 2.2.0 binary version. We will refer to this folder as [XERCES_EXTRACT]. Copy xerces-c_2_2_0.dll from [XERCES_EXTRACT]/bin/ to [AXISCPP_DEPLOY]/libs/ <br>
 <br> <br>
 
 11. Open the AXIS_FOLDER/axiscpp.conf_win for editing. The contents of the file will look as follows.<br> <br>
@@ -162,7 +162,7 @@ While testing the apache 2 module a problem was noted with the apache 2 web serv
 2. Unzip axis-c-1.1-win32.zip to a folder of your choice. Say this folder is AXIS_EXTRACT.<br> <br>
 3. Inside the extracted folder AXIS_EXTRACT there is a sub folder called deploy. Copy whole deploy folder to SIMPLE_AXIS_SERVER_FOLDER.<br> <br>
 4. Rename copied "deploy" folder to "Axis". Lets say this folder to be AXIS_FOLDER.<br> <br>
-5. Set environment variable AXIS_HOME to point to above folder.<br> <br>
+5. Set environment variable AXISCPP_DEPLOY to point to above folder.<br> <br>
 6. Copy the exe SimpleAxisServer.exe from AXIS_EXTRACT/bin to the SIMPLE_AXIS_SERVER_FOLDER. <br> <br>
 7. Copy the content of AXIS_FOLDER/libs to the SIMPLE_AXIS_SERVER_FOLDER.<br> <br>
 8. Start the SimpleAxisServer by providing the port to which operate. (eg: c:\SimpleAxisServer>SimpleAxisServer 80) </p>
