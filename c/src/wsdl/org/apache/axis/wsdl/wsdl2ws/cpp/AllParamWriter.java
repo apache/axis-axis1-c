@@ -23,6 +23,9 @@
 package org.apache.axis.wsdl.wsdl2ws.cpp;
 import java.util.Iterator;
 
+import javax.xml.namespace.QName;
+
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.SourceWriter;
 import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
@@ -48,8 +51,13 @@ public class AllParamWriter implements SourceWriter{
 		try{	
 			type = (Type)enu.next();
 			if(wscontext.getWrapInfo().getImplStyle().equals(WrapperConstants.IMPL_STYLE_STRUCT)){
-				if(type.isArray()){
+				if(type.isArray()){					
 					System.out.println("Array writer called ......");
+					QName qname = type.getName();
+					if (CUtils.isSimpleType(qname) && !CUtils.isDefinedSimpleType(qname)){
+						throw new WrapperFault("No need to create an Array for simple type "+qname+"\n" +
+							"It seems that some thing wrong with symbolTable population - Susantha");
+					}
 					ArrayParamWriter writer = (new ArrayParamWriter(wscontext,type));	
 					if (!writer.isSimpleTypeArray()) writer.writeSource();
 				}	

@@ -141,8 +141,8 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 							faultInfoName =info.getFaultInfo();	     
 							writer.write("#include \"Axis"+faultInfoName.toString()+"Exception.h\"\n");
 					}
-					writer.write("\n");
 				}			
+				writer.write("\n");
 			}catch(IOException e){
 				throw new WrapperFault(e);
 			}
