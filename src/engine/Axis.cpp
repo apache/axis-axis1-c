@@ -274,7 +274,7 @@ extern "C" int initialize_module (int bServer)
     }
     else if (bServer == 0)      // client side module initialization
     {
-        int status = g_pConfig->readConfFile (); /* Read from the configuration
+        status = g_pConfig->readConfFile (); /* Read from the configuration
 						  * file 
 						  */
         if (status == AXIS_SUCCESS)

@@ -43,7 +43,7 @@ MessageData* ClientAxisEngine::getMessageData ()
 
 int ClientAxisEngine::process (SOAPTransport* pSoap)
 {
-    int Status;
+    int Status = AXIS_FAIL;
     const WSDDService* pService = NULL;
 
     AXISC_TRY
