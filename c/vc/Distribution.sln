@@ -1,0 +1,56 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Apache1_3Module", "server\apache1_3\Apache1_3Module.vcproj", "{8EE698B3-7993-4C7B-9709-6E662DF3A79F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A5458343-4AC6-4F23-B955-490AADDFEB94} = {A5458343-4AC6-4F23-B955-490AADDFEB94}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Apache2_0Module", "server\apache2_0\Apache2_0Module.vcproj", "{CD0B3AAC-3B70-4024-8D31-070FCE89F186}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A5458343-4AC6-4F23-B955-490AADDFEB94} = {A5458343-4AC6-4F23-B955-490AADDFEB94}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AxisClient", "AxisClientDLL.vcproj", "{17C37EE3-E0E4-4A9A-A213-285EBEFCCDFE}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AxisServer", "AxisServerDLL.vcproj", "{A5458343-4AC6-4F23-B955-490AADDFEB94}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleAxisServer", "server\simple_axis_server\SimpleAxisServer.vcproj", "{0E04F173-1CD3-47F2-990A-F0057EF50B84}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A5458343-4AC6-4F23-B955-490AADDFEB94} = {A5458343-4AC6-4F23-B955-490AADDFEB94}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{8EE698B3-7993-4C7B-9709-6E662DF3A79F}.Debug.ActiveCfg = Debug|Win32
+		{8EE698B3-7993-4C7B-9709-6E662DF3A79F}.Debug.Build.0 = Debug|Win32
+		{8EE698B3-7993-4C7B-9709-6E662DF3A79F}.Release.ActiveCfg = Release|Win32
+		{8EE698B3-7993-4C7B-9709-6E662DF3A79F}.Release.Build.0 = Release|Win32
+		{CD0B3AAC-3B70-4024-8D31-070FCE89F186}.Debug.ActiveCfg = Debug|Win32
+		{CD0B3AAC-3B70-4024-8D31-070FCE89F186}.Debug.Build.0 = Debug|Win32
+		{CD0B3AAC-3B70-4024-8D31-070FCE89F186}.Release.ActiveCfg = Release|Win32
+		{CD0B3AAC-3B70-4024-8D31-070FCE89F186}.Release.Build.0 = Release|Win32
+		{17C37EE3-E0E4-4A9A-A213-285EBEFCCDFE}.Debug.ActiveCfg = Debug|Win32
+		{17C37EE3-E0E4-4A9A-A213-285EBEFCCDFE}.Debug.Build.0 = Debug|Win32
+		{17C37EE3-E0E4-4A9A-A213-285EBEFCCDFE}.Release.ActiveCfg = Release|Win32
+		{17C37EE3-E0E4-4A9A-A213-285EBEFCCDFE}.Release.Build.0 = Release|Win32
+		{A5458343-4AC6-4F23-B955-490AADDFEB94}.Debug.ActiveCfg = Debug|Win32
+		{A5458343-4AC6-4F23-B955-490AADDFEB94}.Debug.Build.0 = Debug|Win32
+		{A5458343-4AC6-4F23-B955-490AADDFEB94}.Release.ActiveCfg = Release|Win32
+		{A5458343-4AC6-4F23-B955-490AADDFEB94}.Release.Build.0 = Release|Win32
+		{0E04F173-1CD3-47F2-990A-F0057EF50B84}.Debug.ActiveCfg = Debug|Win32
+		{0E04F173-1CD3-47F2-990A-F0057EF50B84}.Debug.Build.0 = Debug|Win32
+		{0E04F173-1CD3-47F2-990A-F0057EF50B84}.Release.ActiveCfg = Release|Win32
+		{0E04F173-1CD3-47F2-990A-F0057EF50B84}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
