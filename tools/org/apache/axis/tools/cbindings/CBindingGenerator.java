@@ -141,7 +141,9 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 				case FilePart.TYPEDEF :
 					prevPart = fp.getType();
 					// TODO: make sure all typedefs are prefixed with AXISC_
-					outputFile.write(changeAxisToAxisc(fp.toString().trim()));
+					text = changeAxisToAxisc(fp.toString().trim());
+                              text = replaceInString(text,"bool","AxiscBool",null);
+					outputFile.write(text);
 					outputFile.newLine();
 					break;
 
@@ -384,32 +386,28 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
      * Does not convert Axisc, axisc or AXISC_
      */
 	private static String changeAxisToAxisc(String text) throws Exception {
-		String[] from = { "axis", "Axis", "AXIS" };
-		String[] to = { "axisc", "Axisc", "AXISC_" };
-		String[] postfix = { "c", "c", "C" };
+            text = replaceInString(text,"axis","axisc",null);
+            text = replaceInString(text,"Axis","Axisc","Axisc");
+            text = replaceInString(text,"AXIS","AXISC","AXISC_");
+		return text;
+	}
 
+	/**
+	 * Replaces from with to in text, excluding strings that start with exclude.
+	 */
+	private static String replaceInString(String text, String from, String to, String exclude) throws Exception {
 		int idx = 0;
-		while (idx < text.length()
-			&& -1 != text.toLowerCase().indexOf("axis", idx)) {
-			int newidx = text.length();
-			String c = "c";
-			for (int arridx = 0; arridx < from.length; arridx++) {
-				int axis = text.indexOf(from[arridx], idx);
-				if (-1 != axis && axis < newidx) {
-					newidx = axis;
-					if (text.indexOf(to[arridx], idx) == axis)
-						c = "";
-					else
-						c = postfix[arridx];
-				}
-			}
-
-			if (text.length() != newidx && c.length() > 0)
+		while (-1 != text.indexOf(from, idx)) {
+			int start = text.indexOf(from, idx);
+			if (null == exclude || text.indexOf(exclude, idx) != start) {
 				text =
-					text.substring(0, newidx + 4)
-						+ c
-						+ text.substring(newidx + 4);
-			idx = newidx + 4 + c.length();
+					text.substring(0, start)
+						+ to
+						+ text.substring(start + from.length());
+				idx = start + to.length();
+			} else {
+				idx = start + exclude.length();
+			}
 		}
 		return text;
 	}
