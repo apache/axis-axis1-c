@@ -124,6 +124,7 @@ Please use these to configure directories to suit the needs of your system.
 		<copy todir="${dir.release}/lib/axis">
 			<fileset dir="${dir.bin}">
 				<include name="${clientLibraryName}.lib"/>
+				<include name="${cClientLibraryName}.lib"/>
 				<include name="${serverEngineLibraryName}.lib"/>
 			</fileset>
 		</copy>

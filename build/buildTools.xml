@@ -72,7 +72,7 @@
 				<isset property="aix"/>
 			</not>
 			<then>
-				<cc outfile="${dir.bin}/${clientLibraryName}C" objdir="${dir.objects}"
+				<cc outfile="${dir.bin}/${cClientLibraryName}" objdir="${dir.objects}"
 				 exceptions="true" outtype="shared" multithreaded="true">
 				  	<!-- Compilers -->
 					<compiler refid="SolarisCC"/>
@@ -107,7 +107,7 @@
 				</cc>
 			</then>
 			<else>
-				<cc outfile="${dir.bin}/${libraryPrefix}${clientLibraryName}C${librarySuffix}" 
+				<cc outfile="${dir.bin}/${libraryPrefix}${cClientLibraryName}${librarySuffix}" 
                          objdir="${dir.objects}" exceptions="true" multithreaded="true">
 				  	<!-- Compilers -->
 					<compiler refid="AIXxlc"/>

@@ -232,6 +232,7 @@
 			</and>
 			<then>
 				<property name="clientLibraryName_D" value="${clientLibraryName}_D"/>
+				<property name="cClientLibraryName_D" value="${cClientLibraryName}_D"/>
 				<property name="transportLibraryName_D" value="${transportLibraryName}_D"/>
 				<property name="xmlParserLibraryName_D" value="${xmlParserLibraryName}_D"/>
 				<property name="xml4c.xmlParserLibraryName_D" value="${xml4c.xmlParserLibraryName}_D"/>
@@ -243,6 +244,7 @@
 				<property name="HTTP.ChannelLibraryName_D" value="${HTTP.ChannelLibraryName}_D"/>
 
 				<propertycopy property="clientLibraryName" from="clientLibraryName_D" override="true"/>
+				<propertycopy property="cClientLibraryName" from="cClientLibraryName_D" override="true"/>
 				<propertycopy property="transportLibraryName" from="transportLibraryName_D" override="true"/>
 				<propertycopy property="xmlParserLibraryName" from="xmlParserLibraryName_D" override="true"/>
 				<propertycopy property="xml4c.xmlParserLibraryName" from="xml4c.xmlParserLibraryName_D" override="true"/>
