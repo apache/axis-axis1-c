@@ -202,12 +202,25 @@ Copyright:
 			</javadoc>
     </target>
     
-    
+    <target name="jar" depends="compile">
+   	<jar jarfile="${web-inf}/lib/axismora.jar" basedir="${web-inf}/classes" >
+      <include name="AxisServlet.class"/>
+      <include name="org/apache/**" />
+      <include name="log4j.properties"/>
+      <include name="simplelog.properties"/>
+      <include name="${web-inf}/mora-server.wsdd"/>
+      <manifest>
+        <section name="org/apache/axis">
+          <attribute name="Implementation-Title" value="Apache Axismora"/>
+           <attribute name="Implementation-Vendor" value="Apache Web Services"/>
+        </section>
+      </manifest>
+    </jar>
+    </target>
     <!--
     TODO followings 
     1) task to run the tests when server is ready 
-    2) task to create jar file 
-    3) task to run all usage tests
+    2) task to run all usage tests
     
     The work is straight foward from the axis build.xml yet I try to keep the ant file 
     for time been.
