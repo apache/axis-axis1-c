@@ -250,7 +250,15 @@ SOURCE=..\..\include\axis\server\IHandlerSoapDeSerializer.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\axis\IHandlerSoapDeSerializer.hpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\axis\server\IHandlerSoapSerializer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\axis\IHandlerSoapSerializer.hpp
 # End Source File
 # Begin Source File
 
