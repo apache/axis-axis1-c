@@ -80,6 +80,8 @@ typedef enum { false_=0, true_ } xsd__boolean;
 typedef unsigned char xsd__byte;
 typedef AxisChar * xsd__QName;
 typedef struct tm xsd__dateTime;
+typedef struct tm xsd__date;
+typedef struct tm xsd__time;
 typedef unsigned char xsd__unsignedByte;
 typedef unsigned int xsd__unsignedInt;
 typedef unsigned long xsd__unsignedLong;
