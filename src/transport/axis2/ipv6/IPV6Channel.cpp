@@ -107,7 +107,7 @@ throw (AxisTransportException&)
     hints.ai_socktype = SOCK_STREAM;
 
     char port[7];
-    sprintf(port, "%ld", m_URL.getPort());
+    sprintf(port, "%hd", m_URL.getPort());
     int err = getaddrinfo(m_URL.getHostName(), port, &hints, &addrInfo0);
     if (err)
     {

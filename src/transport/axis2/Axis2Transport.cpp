@@ -933,48 +933,6 @@ Axis2Transport::getHTTPProtocol ()
     return m_strHTTPProtocol.c_str ();
 }
 
-extern "C"
-{
-    /* CreateInstance() Is a C interface.
-     */
-    STORAGE_CLASS_INFO int CreateInstance (SOAPTransport ** inst)
-    {
-        *inst = new Axis2Transport ();
-        if (*inst)
-        {
-            return AXIS_SUCCESS;
-        }
-        return AXIS_FAIL;
-    }
-
-    /* DestroyInstance() Is a C interface.
-     */
-    STORAGE_CLASS_INFO int DestroyInstance (SOAPTransport * inst)
-    {
-        if (inst)
-        {
-            delete inst;
-
-            return AXIS_SUCCESS;
-        }
-        return AXIS_FAIL;
-    }
-
-    /*  initializeLibrary() Is a C interface.
-     */
-    STORAGE_CLASS_INFO void initializeLibrary (void)
-    {
-        // Do init actions
-    }
-
-    /*  uninitializeLibrary() Is a C interface.
-     */
-    STORAGE_CLASS_INFO void uninitializeLibrary (void)
-    {
-        // Do uninit actions
-    }
-}
-
 /* axtoi( Hex) Is a private method to convert an ascii hex string to an integer.
  */
 int
@@ -1240,4 +1198,4 @@ void Axis2Transport::setSessionId (const char *pcSessionId)
 const char* Axis2Transport::getSessionId ()
 {
 	return m_strSessionKey.c_str();
-};
+}

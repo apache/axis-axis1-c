@@ -33,7 +33,7 @@ using namespace std;
 
 /** Channel::Channel() Constructor
  */
-Channel::Channel ():m_Sock (INVALID_SOCKET), m_lTimeoutSeconds(0), m_iMsgLength( 0)
+Channel::Channel ():m_Sock (INVALID_SOCKET), m_iMsgLength( 0), m_lTimeoutSeconds(0)
 {
 #ifdef FJPDebug
 printf( ">Channel::Channel()\n");

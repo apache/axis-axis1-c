@@ -51,12 +51,14 @@ libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libaxis2_transport_la_DEPENDENCIES =
 am_libaxis2_transport_la_OBJECTS = SecureChannel.lo Channel.lo URL.lo \
-	Axis2Transport.lo AxisTransportException.lo
+	Axis2Transport.lo AxisTransportException.lo \
+	Axis2TransportInstantiator.lo
 libaxis2_transport_la_OBJECTS = $(am_libaxis2_transport_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 DEP_FILES = ./$(DEPDIR)/Axis2Transport.Plo \
+	./$(DEPDIR)/Axis2TransportInstantiator.Plo \
 	./$(DEPDIR)/AxisTransportException.Plo \
 	./$(DEPDIR)/Channel.Plo \
 	./$(DEPDIR)/SecureChannel.Plo ./$(DEPDIR)/URL.Plo
@@ -124,7 +126,7 @@ LDFLAGS = -lstdc++
 LIBOBJS = 
 LIBS = 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
-LIBWWWBUILD = 
+LIBWWWBUILD = libwww
 LINKCLIENTLIB = -L/home/samisa/autoCVS/cvsAutoBuild/src/engine/client -laxiscpp_client -ldl
 LN_S = ln -s
 LTLIBOBJS = 
@@ -193,10 +195,11 @@ lib_LTLIBRARIES = libaxis2_transport.la
 SUBDIRS = ipv6 
 AM_CPPFLAGS = $(CPPFLAGS)
 libaxis2_transport_la_SOURCES = SecureChannel.cpp \
-					  Channel.cpp \
+					           Channel.cpp \
                                URL.cpp \
                                Axis2Transport.cpp \
-                               AxisTransportException.cpp
+                               AxisTransportException.cpp \
+                               Axis2TransportInstantiator.cpp
 
 libaxis2_transport_la_LIBADD = -lstdc++
 INCLUDES = -I../../../include
@@ -270,6 +273,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 include ./$(DEPDIR)/Axis2Transport.Plo
+include ./$(DEPDIR)/Axis2TransportInstantiator.Plo
 include ./$(DEPDIR)/AxisTransportException.Plo
 include ./$(DEPDIR)/Channel.Plo
 include ./$(DEPDIR)/SecureChannel.Plo

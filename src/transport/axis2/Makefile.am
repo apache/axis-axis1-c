@@ -2,10 +2,11 @@ lib_LTLIBRARIES = libaxis2_transport.la
 SUBDIRS = ipv6 
 AM_CPPFLAGS = $(CPPFLAGS)
 libaxis2_transport_la_SOURCES = SecureChannel.cpp \
-					  Channel.cpp \
+					           Channel.cpp \
                                URL.cpp \
                                Axis2Transport.cpp \
-                               AxisTransportException.cpp
+                               AxisTransportException.cpp \
+                               Axis2TransportInstantiator.cpp
 
 libaxis2_transport_la_LIBADD = -lstdc++
 INCLUDES = -I../../../include
