@@ -41,6 +41,10 @@ do	case "$o" in
 	esac
 done
 
+cd ${HOME_DIR}
+echo "" > testcases/build/buildTestCase.log
+echo "" > testcases/build/runTestCase.log
+echo "came"
 # *** Get the update from CVS ***
 echo Getting CVS Update from ${CVSROOT}
 cd ${HOME_DIR}
@@ -99,9 +103,6 @@ echo "	Build messages 			:${SOURCE_BUILD_MESSAGES}"
 echo "	Build errors/warnings 		:${SOURCE_BUILD_ERRORS}"
 
 
-cd ${HOME_DIR}
-rm -f testcases/build/buildTestCase.log
-rm -f testcases/build/runTestCase.log
 APACHE2_PORT=$(echo | grep APACHE2_PORT testcases/platform/linux/apache_ports.config | grep -o "[0-9]*$")
 APACHE_PORT=$(echo | grep APACHE_PORT testcases/platform/linux/apache_ports.config | grep -o "[0-9]*$")
 APACHE2_HOST=$(echo | grep APACHE2_HOST testcases/platform/linux/apache_ports.config | grep -o "=.*$"|sed "s/=//g")
