@@ -4,7 +4,6 @@ echo "----------------------------------"
 echo "build server, client and samples"
 echo "----------------------------------"
 echo "clean previous build"
-make distclean
 echo "run libtoolize."          && 
 libtoolize --force              && 
 echo "run aclocal."             && 
@@ -24,12 +23,10 @@ echo "make install"
 make install
 
 cd ${AXISCPP_HOME}/samples/server
-make distclean
 echo "building server samples"
 sh build.sh
 
 cd ${AXISCPP_HOME}/samples/client
-make distclean
 echo "building client samples"
 sh build.sh
 
