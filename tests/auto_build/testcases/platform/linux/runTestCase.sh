@@ -27,7 +27,6 @@ then
     URI=
   fi
 fi
-
 TARGET=$(echo $(basename $1 .wsdl).$2 | tr '+' 'p')
 OUTPUT=$(echo $(basename $1 .wsdl).out)
 
@@ -60,7 +59,7 @@ else
   $OUTPUT_DIR/$TARGET/client $URI > $OUTPUT_DIR/$TARGET/$OUTPUT
   if [ -f $OUTPUT_DIR/$TARGET/$OUTPUT ]
   then
-    diff -q output/$OUTPUT $OUTPUT_DIR/$TARGET 2>/dev/null
+    diff -q testcases/output/$OUTPUT $OUTPUT_DIR/$TARGET 2>/dev/null
     if [ $? -eq 0 ]
     then
       TIME=$(date "+%d/%m/%Y %H:%M:%S")

@@ -19,8 +19,7 @@ TEST_HOME=$PWD
 # the default value
 set -x
 AXISTEST_HOME=${AXISTEST_HOME:-$TEST_HOME}
-#AXIS_HOME=${AXIS_HOME:-$AXISTEST_HOME}
-AXISCPP_HOME=${AXISCPP_HOME:-/home/damitha/projects/cvshead}
+AXISCPP_HOME=${AXISCPP_HOME:-/home/damitha/projects/cvshead/tests/auto_build/cvsautobuild}
 WSDLSRC_HOME="${AXISCPP_HOME}/src/wsdl"
 set +x
 #
@@ -31,8 +30,8 @@ AXISCPP_HOME_INCL=$AXISCPP_HOME/include # location of the include files
 
 
 # where the test framework scripts for this platform live. Linux means UNIX
-AXISCPP_TEST_BIN=$AXISTEST_HOME/platform/linux
-OUTPUT_DIR=$AXISTEST_HOME/build         # where the tests are built
+AXISCPP_TEST_BIN=$AXISTEST_HOME/testcases/platform/linux
+OUTPUT_DIR=$AXISTEST_HOME/testcases/build         # where the tests are built
 
 # if this is set and the file exists allows for the endpoint host and port
 # of the web service in the WSDL to be altered to use the values in the file
