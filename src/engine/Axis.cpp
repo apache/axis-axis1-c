@@ -241,7 +241,9 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
 
 #endif
 
-extern "C" int initialize_module (int bServer)
+extern "C" {
+STORAGE_CLASS_INFO
+int initialize_module (int bServer)
 {
     g_bModuleInitialize = true;
     int status = 0;
@@ -337,8 +339,11 @@ extern "C" int initialize_module (int bServer)
     }
     return AXIS_SUCCESS;
 }
+}
 
-extern "C" int uninitialize_module ()
+extern "C" {
+STORAGE_CLASS_INFO
+int uninitialize_module ()
 {
     g_bModuleInitialize = false;
     SOAPTransportFactory::uninitialize();
@@ -346,6 +351,7 @@ extern "C" int uninitialize_module ()
     SoapKeywordMapping::uninitialize ();
     XMLParserFactory::uninitialize();
     return AXIS_SUCCESS;
+}
 }
 
 void Ax_Sleep (int nTime)
