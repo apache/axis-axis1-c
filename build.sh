@@ -30,11 +30,3 @@ make 2> build_errors
 echo "make install"
 make install
 
-echo "Copy configuration files"
-cp -f $AXISCPP_HOME/deploy/axiscpp.conf_linux $AXISCPP_DEPLOY/axiscpp.conf
-cp -rf $AXISCPP_HOME/deploy/conf $AXISCPP_DEPLOY/
-echo "Copy deploying files"
-cp -f $AXISCPP_HOME/deploy/deploy_apache.sh $AXISCPP_DEPLOY/
-cp -f $AXISCPP_HOME/deploy/deploy_apache2.sh $AXISCPP_DEPLOY/
-echo "Copy the log directory"
-cp -rf $AXISCPP_HOME/deploy/log $AXISCPP_DEPLOY/

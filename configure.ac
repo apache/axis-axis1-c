@@ -11,12 +11,12 @@ AC_ARG_ENABLE(apache2, [  --enable-apache2        use apache2 as server transpor
     ;;
   *)
     AC_MSG_RESULT(yes)
-    dnl find the apache2 include dir in /usr/local/apache2
-    if test -d '/usr/local/apache2/include'; then
-        apache2inc="-I/usr/local/apache2/include"
-    dnl else find it in the APACHE2_HOME env variable
-    elif test -d ${APACHE2_HOME}; then
+    dnl Find apache2 include dir in the path pointed by APACHE2_HOME env variable
+    if test -d ${APACHE2_HOME}; then
         apache2inc="-I${APACHE2_HOME}/include"
+    dnl else find the apache2 include dir in /usr/local/apache2
+    elif test -d '/usr/local/apache2/include'; then
+        apache2inc="-I/usr/local/apache2/include"
     else
         AC_MSG_ERROR(could not find apache2. stop)
     fi
@@ -35,12 +35,12 @@ AC_ARG_ENABLE(apache, [  --enable-apache        use apache as server transport.]
     ;;
   *)
     AC_MSG_RESULT(yes)
-    dnl find the apache include dir in /usr/local/apache
-    if test -d '/usr/local/apache/include'; then
-        apacheinc="-I/usr/local/apache/include"
-    dnl else find it in the APACHE_HOME env variable
-    elif test -d ${APACHE_HOME}; then
+    dnl Find apache include dir in the path pointed by APACHE_HOME env variable
+    if test -d ${APACHE_HOME}; then
         apacheinc="-I${APACHE_HOME}/include"
+    dnl else find the apache include dir in /usr/local/apache
+    elif test -d '/usr/local/apache/include'; then
+        apacheinc="-I/usr/local/apache/include"
     else
         AC_MSG_ERROR(could not find apache. stop)
         exit
@@ -130,6 +130,23 @@ AC_ARG_ENABLE(samples, [  --enable-samples    build samples.],
   esac ],
   AC_MSG_RESULT(no)
 )
+
+if test -d "$prefix/conf"; then
+cp deploy/axiscpp.conf_linux $prefix/conf/axiscpp.conf
+else
+mkdir $prefix/conf
+cp deploy/conf/server.wsdd_linux $prefix/conf/server.wsdd
+cp deploy/axiscpp.conf_linux $prefix/axiscpp.conf
+cp deploy/deploy_apache2.sh $prefix
+cp deploy/deploy_apache.sh $prefix
+fi
+
+if test -d "$prefix/log"; then
+chmod -R 777 $prefix/log
+else
+mkdir $prefix/log
+chmod -R 777 $prefix/log
+fi
 
 APACHE2INC=$apache2inc
 APACHEINC=$apacheinc
