@@ -1,1 +1,1 @@
-SUBDIRS = interoptests simple rpcfault doclitfault
+SUBDIRS = interoptests simple rpcfault doclitfault echoStringHeaderHandler
