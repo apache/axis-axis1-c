@@ -26,6 +26,8 @@
 #include "../../transport/axis/AxisTransport.h"
 #include "../../transport/axis/Channel.hpp"
 #include "ClientAxisEngine.h"
+#include "../../transport/SOAPTransportFactory.h"
+#include <axis/SOAPTransport.h>
 
 extern "C" int initialize_module (int bServer);
 
@@ -41,22 +43,17 @@ Call::Call ()
     initialize_module (0);
     m_pTransport = NULL;
     m_nStatus = AXIS_SUCCESS;
+	m_pcEndPointUri = 0;
 }
 
 Call::~Call ()
 {
-    switch (m_Soap.trtype)
-    {
-        case APTHTTP:
-        case APTHTTPS:
-            free (m_Soap.so.http->uri_path);
-            delete m_Soap.so.http;
-    }
+	
 }
 
 int Call::setEndpointURI (const char* pchEndpointURI)
 {
-    m_Soap.so.http->uri_path = strdup (pchEndpointURI);
+    m_pcEndPointUri = strdup(pchEndpointURI);
     return AXIS_SUCCESS;
 }
 
@@ -96,7 +93,7 @@ void Call::addCmplxParameter (void* pObject, void* pSZFunct, void* pDelFunct,
 
 int Call::invoke ()
 {
-     m_nStatus =  m_pAxisEngine->process (&m_Soap);
+     m_nStatus =  m_pAxisEngine->process(m_pTransport);
      return m_nStatus;
 }
 
@@ -106,11 +103,10 @@ int Call::initialize (PROVIDERTYPE nStyle, int secure)
  */
 {
     /* Initialize re-usable objects of this instance (objects may have been 
-     * populated by the previous call.
+     * populated by the previous call.)
      */
     try
     {
-        m_Soap.sessionid = "somesessionid1234";
         m_nStatus = AXIS_SUCCESS;
         // remove_headers(&m_Soap);
         if (AXIS_SUCCESS != openConnection (secure)) {
@@ -199,32 +195,14 @@ int Call::unInitialize ()
 
 int Call::setProtocol (AXIS_PROTOCOL_TYPE protocol)
 {
-    m_Soap.trtype = protocol;
-    switch (protocol)
-    {
-        case APTHTTP:
-            m_Soap.so.http = new Ax_stream_http;
-            m_Soap.so.http->ip_headercount = 0;
-            m_Soap.so.http->ip_headers = NULL;
-            m_Soap.so.http->op_headercount = 0;
-            m_Soap.so.http->op_headers = NULL;
-            break;
-            /* do for other protocols too */
-        case APTHTTPS:
-            m_Soap.so.https = new Ax_stream_https;
-            m_Soap.so.https->ip_headercount = 0;
-            m_Soap.so.https->ip_headers = NULL;
-            m_Soap.so.https->op_headercount = 0;
-            m_Soap.so.https->op_headers = NULL;
-            break;
-    }
+	m_nTransportType = protocol;
     return AXIS_SUCCESS;
 }
 
 int Call::setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type,
     const char* value)
 {
-    m_pTransport->setTransportInformation (type, value, &m_Soap);
+    m_pTransport->setTransportProperty(type, value);
     return AXIS_SUCCESS;
 }
 
@@ -236,20 +214,22 @@ int Call::setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type,
  * functions with those streams at any time it wants to send/receive
  * bytes to/from the server.
  */
-int Call::openConnection (int secure)
+int Call::openConnection(int secure)
 {
-    m_pTransport = new AxisTransport (&m_Soap);
-    m_nStatus = m_pTransport->openConnection (secure);
+    m_pTransport = SOAPTransportFactory::getTransportObject(m_nTransportType);
+	if (!m_pTransport) return AXIS_FAIL;
+	m_pTransport->setEndpointUri(m_pcEndPointUri);
+    m_nStatus = m_pTransport->openConnection();
     return m_nStatus;
 }
 
 /*
  * This method closes the connection of this object to the server
  */
-void Call::closeConnection ()
+void Call::closeConnection()
 {
-    m_pTransport->closeConnection ();
-    delete m_pTransport;
+    m_pTransport->closeConnection();
+	if (m_pTransport) SOAPTransportFactory::destroyTransportObject(m_pTransport);
 }
 
 void Call::setSOAPVersion (SOAP_VERSION version)
