@@ -9,7 +9,7 @@
       <title>WebServices - Axis - </title>
     <p>
       New Axis bugs should be reported using
-      <link href="http://nagoya.apache.org/bugzilla">Bugzilla</link> (the Apache bug database).
+      <link href="http://issues.apache.org/jira">JIRA</link> (the Apache bug database).
     </p>
     <ul>
       <li>
@@ -22,11 +22,9 @@
         mailing list for clarification.
       </li>
       <li>
-        To avoid duplicate bug reports, please query Bugzilla to
+        To avoid duplicate bug reports, please query JIRA to
         see whether the bug has already been reported (and perhaps
-        fixed). Click on
-        <link href="http://nagoya.apache.org/bugzilla/buglist.cgi?bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;email1=&amp;emailtype1=substring&amp;emailassigned_to1=1&amp;email2=&amp;emailtype2=substring&amp;emailreporter2=1&amp;bugidtype=include&amp;bug_id=&amp;changedin=&amp;votes=&amp;chfieldfrom=&amp;chfieldto=Now&amp;chfieldvalue=&amp;product=Axis&amp;short_desc=&amp;short_desc_type=substring&amp;long_desc=&amp;long_desc_type=substring&amp;bug_file_loc=&amp;bug_file_loc_type=substring&amp;keywords=&amp;keywords_type=anywords&amp;field0-0-0=noop&amp;type0-0-0=noop&amp;value0-0-0=&amp;cmdtype=doit&amp;order=%27Importance%27">Axis open bugs</link> for a list with links
-            to each bug report.
+        fixed). 
       </li>
       <li>
         If you can't find your bug in the database, it would help
@@ -35,7 +33,7 @@
       </li>
       <li>
         If you have found a new bug, please enter an Axis bug
-        report in Bugzilla. Remember to include the following
+        report in JIRA. Remember to include the following
         information: 
         <ul>
           <li>
@@ -51,7 +49,7 @@
         </ul>
         <p>
           <i>Before you can enter your first bug report, you must
-          submit your email address to Bugzilla and receive a
+          submit your email address to JIRA and receive a
           password.</i>
         </p>
       </li>
@@ -65,12 +63,8 @@
     </p>
     <ul>
       <li>
-        <link href="http://nagoya.apache.org/bugzilla/">Apache
+        <link href="http://issues.apache.org/jira/">Apache
         Bugzilla</link>
-      </li>
-      <li>
-        <link href="http://www.mozilla.org/bugs/">General Bugzilla
-        information</link>
       </li>
     </ul>
     <p>
