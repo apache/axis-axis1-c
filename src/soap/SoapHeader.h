@@ -65,6 +65,7 @@ private:
     list<Attribute*> m_attributes;
     list<Attribute*> m_namespaceDecls;
     list<IHeaderBlock*> m_headerBlocks;
+    list<IHeaderBlock*>::iterator m_itHeaderBlocks;
     
     const char* m_pcPrefix;
 public:
@@ -80,6 +81,16 @@ public:
       */
     IHeaderBlock* getHeaderBlock(const AxisChar* pName, 
         const AxisChar* pNamespace, bool bRemoveOrNot);
+ 
+     /**
+      * Returns the first header block
+      */
+     IHeaderBlock* getFirstHeaderBlock();
+ 
+     /**
+      * Returns the next header block, or null if there are no more
+      */
+     IHeaderBlock* getNextHeaderBlock();
 
     /**
       * Sets the Prefix of the Header Block.

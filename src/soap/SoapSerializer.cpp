@@ -932,3 +932,13 @@ IHeaderBlock* SoapSerializer::getHeaderBlock(const AxisChar *pcName,
 
     return m_pSoapEnvelope->m_pSoapHeader->getHeaderBlock(pcName, pcNamespace, false);
 }
+
+IHeaderBlock* SoapSerializer::getFirstHeaderBlock()
+{
+	return m_pSoapEnvelope->m_pSoapHeader->getFirstHeaderBlock();
+}
+
+IHeaderBlock* SoapSerializer::getNextHeaderBlock()
+{
+	return m_pSoapEnvelope->m_pSoapHeader->getNextHeaderBlock();
+}
