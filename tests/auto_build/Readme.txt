@@ -97,11 +97,11 @@ When you want to add a new test please be aware of the following simple steps.
 1. Put the wsdl you hope to test in
    testcases/wsdls
 
-2. Create the c/cpp file which has the name of the port type name of the wsdl
-   and implement your service
+2. Create the c/cpp file which has the name of the port name of the wsdl
+   and implement your service. Put this file in testcases/server/c[pp]
 
 3. Write the c/cpp file containing your main method of access and put
-   it in $AXISCPP_HOME/tests/auto-build/testcases/client/cpp
+   it in testcases/client/c[pp]
     NOTES: Each client cpp file must have the same basename as the 
     WSDL  file plus Client.
     Example: SimpleTypeArray.wsdl -> SimpleTypeArrayClient.c[pp]
