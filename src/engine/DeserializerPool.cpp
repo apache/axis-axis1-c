@@ -93,27 +93,27 @@ int DeserializerPool::GetInstance(SoapDeSerializer** ppDZ)
 	else
 	{
 		*ppDZ = new SoapDeSerializer();
-		if (SUCCESS != (*ppDZ)->Init())
+		if (AXIS_SUCCESS != (*ppDZ)->Init())
 		{
 			delete *ppDZ;
 			*ppDZ = NULL;
 			unlock();
-			return FAIL;
+			return AXIS_FAIL;
 		}
 	}
 	unlock();
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int DeserializerPool::PutInstance(SoapDeSerializer* pDZ)
 {
-	if (SUCCESS != pDZ->Init())
+	if (AXIS_SUCCESS != pDZ->Init())
 	{
 		delete pDZ;
-		return FAIL;
+		return AXIS_FAIL;
 	}
 	lock();
 	m_DZList.push_back(pDZ);
 	unlock();
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }

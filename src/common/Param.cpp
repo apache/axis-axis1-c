@@ -674,7 +674,7 @@ int Param::serialize(IWrapperSoapSerializer& pSZ)
 		//pSZ << "<abc:ArrayOfPhoneNumbers xmlns:abc="http://example.org/2001/06/numbers"
 		//				xmlns:enc="http://www.w3.org/2001/06/soap-encoding" 
         //              enc:arrayType="abc:phoneNumberType[2]" >";
-		if (!m_Value.pArray) return FAIL; //error condition
+		if (!m_Value.pArray) return AXIS_FAIL; //error condition
 		pSZ << "<";
 		if (!m_strPrefix.empty())
 		{
@@ -729,7 +729,7 @@ int Param::serialize(IWrapperSoapSerializer& pSZ)
 		break;
 	default:;
 	}
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -795,9 +795,9 @@ int Param::SetValue(const AxisChar* sValue)
 		//this is an error situation - probably something wrong with the soap
 		break;
 	default:
-		return FAIL; //this is an unexpected situation
+		return AXIS_FAIL; //this is an unexpected situation
 	}
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int Param::SetValue(XSDTYPE nType, uParamValue Value)
@@ -858,9 +858,9 @@ int Param::SetValue(XSDTYPE nType, uParamValue Value)
 		m_Value.pCplxObj = Value.pCplxObj;
 		break;
 	default:
-		return FAIL; //this is an unexpected situation
+		return AXIS_FAIL; //this is an unexpected situation
 	}
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 void Param::setPrefix(const AxisChar* prefix)
@@ -901,44 +901,44 @@ int Param::GetArraySize()
 /*
 int Param::SetUserType(IAccessBean* pObject)
 {
-	if (m_Type != USER_TYPE) return FAIL;
+	if (m_Type != USER_TYPE) return AXIS_FAIL;
 	m_Value.pIBean = pObject;
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 */
 
 int Param::SetUserType(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct)
 {
-	if (m_Type != USER_TYPE) return FAIL;
+	if (m_Type != USER_TYPE) return AXIS_FAIL;
 	m_Value.pCplxObj = new ComplexObjectHandler;
 	m_Value.pCplxObj->pObject = pObject;
 	m_Value.pCplxObj->pDZFunct = pDZFunct;
 	m_Value.pCplxObj->pDelFunct = pDelFunct;
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int Param::SetArrayElements(void* pElements)
 {
-	if (m_Type != XSD_ARRAY) return FAIL;
+	if (m_Type != XSD_ARRAY) return AXIS_FAIL;
 	if (m_Value.pArray)
 	{
 		if (m_Value.pArray->m_type != USER_TYPE)
 		{
 			m_Value.pArray->m_value.sta = pElements;
-			return SUCCESS;
+			return AXIS_SUCCESS;
 		}
 		else //unexpected situation
 		{
-			return FAIL;
+			return AXIS_FAIL;
 		}
 	}
-	return FAIL;
+	return AXIS_FAIL;
 }
 
 //following function is called to set array of user types.
 int Param::SetArrayElements(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct, AXIS_OBJECT_SIZE_FUNCT pSizeFunct)
 {
-	if (m_Type != XSD_ARRAY) return FAIL;
+	if (m_Type != XSD_ARRAY) return AXIS_FAIL;
 	if (m_Value.pArray)
 	{
 		if (m_Value.pArray->m_type == USER_TYPE)
@@ -948,14 +948,14 @@ int Param::SetArrayElements(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS
 			m_Value.pArray->m_value.cta->pDelFunct = pDelFunct;
 			m_Value.pArray->m_value.cta->pSizeFunct = pSizeFunct;
 			m_Value.pArray->m_value.cta->pObject = pObject;
-			return SUCCESS;
+			return AXIS_SUCCESS;
 		}
 		else //unexpected situation
 		{
-			return FAIL;
+			return AXIS_FAIL;
 		}
 	}
-	return FAIL;	
+	return AXIS_FAIL;	
 }
 
 void Param::SetName(const AxisChar* sName)
