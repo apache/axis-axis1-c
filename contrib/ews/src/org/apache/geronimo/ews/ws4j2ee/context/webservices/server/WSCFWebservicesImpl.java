@@ -107,25 +107,25 @@ public class WSCFWebservicesImpl extends WSCFElement implements WSCFWebservices 
         //extracting the description
         Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DESCRIPTION);
         if (null != element) {
-            this.description = (element.getChildNodes()).item(0).toString();
+            this.description = (element.getChildNodes()).item(0).getNodeValue();
         }
 		
         //extraction the dispaly-name
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DISPLAY_NAME);
         if (null != element) {
-            this.displayName = element.getChildNodes().item(0).toString();
+            this.displayName = element.getChildNodes().item(0).getNodeValue();
         }
 		
         //extraction the small icon
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_SMALL_ICON);
         if (null != element) {
-            this.smallIcon = element.getChildNodes().item(0).toString();
+            this.smallIcon = element.getChildNodes().item(0).getNodeValue();
         }
 				
         //extracting the large icon
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_LARGE_ICON);
         if (null != element) {
-            this.largeIcon = element.getChildNodes().item(0).toString();
+            this.largeIcon = element.getChildNodes().item(0).getNodeValue();
         }
         //TODO ********whether this is the most appropreate way to do this
         // getting the webservice description.

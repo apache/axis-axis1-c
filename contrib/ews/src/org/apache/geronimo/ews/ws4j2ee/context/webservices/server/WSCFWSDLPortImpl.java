@@ -84,13 +84,13 @@ public class WSCFWSDLPortImpl extends WSCFElement implements WSCFWSDLPort {
         //extract the namespace URI
         Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_NAMESPACE_URI);
         if (null != element) {
-            this.namespaceURI = element.getChildNodes().item(0).toString();
+            this.namespaceURI = element.getChildNodes().item(0).getNodeValue();
         }
 		
         //extract the local part
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_LOCALPART);
         if (null != element) {
-            this.localpart = element.getChildNodes().item(0).toString();
+            this.localpart = element.getChildNodes().item(0).getNodeValue();
         }
 
     }

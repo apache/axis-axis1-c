@@ -81,7 +81,7 @@ public class WSCFServiceImplBeanImpl extends WSCFElement implements WSCFServiceI
         //extracting the ejb-link
         Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_EJB_LINK);
         if (null != element) {
-            this.ejblink = element.getChildNodes().item(0).toString();
+            this.ejblink = element.getChildNodes().item(0).getNodeValue();
         }
     }
 

@@ -125,31 +125,31 @@ public class WSCFHandlerImpl extends WSCFElement implements WSCFHandler {
         //extract description
         Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DESCRIPTION);
         if (null != element) {
-            this.description = element.getChildNodes().item(0).toString();
+            this.description = element.getChildNodes().item(0).getNodeValue();
         }
 		
         //extracting the display name
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DISPLAY_NAME);
         if (null != element) {
-            this.displayName = element.getChildNodes().item(0).toString();
+            this.displayName = element.getChildNodes().item(0).getNodeValue();
         }
 		
         //extract small icon
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_SMALL_ICON);
         if (null != element) {
-            this.smallIcon = element.getChildNodes().item(0).toString();
+            this.smallIcon = element.getChildNodes().item(0).getNodeValue();
         }
 		
         //extract handler name
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_HANDLER_NAME);
         if (null != element) {
-            this.handlerName = element.getChildNodes().item(0).toString();
+            this.handlerName = element.getChildNodes().item(0).getNodeValue();
         }
 		
         // extract handler class
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_HANDLER_CLASS);
         if (null != element) {
-            this.handlerClass = element.getChildNodes().item(0).toString();
+            this.handlerClass = element.getChildNodes().item(0).getNodeValue();
         }
 		
         //extracting the params
@@ -168,7 +168,7 @@ public class WSCFHandlerImpl extends WSCFElement implements WSCFHandler {
         //extract the SOAP roles
         elements = this.getChildElements(e, WSCFConstants.ELEM_WSCF_SOAP_ROLE);
         for (int i = 0; i < elements.length; i++) {
-            this.soapRole.add(elements[i].getChildNodes().item(0).toString());
+            this.soapRole.add(elements[i].getChildNodes().item(0).getNodeValue());
         }
 
     }

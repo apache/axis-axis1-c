@@ -126,31 +126,31 @@ public class WSCFPortComponentImpl extends WSCFElement implements WSCFPortCompon
         //extract the description.
         Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DESCRIPTION);
         if (null != element) {
-            this.description = element.getChildNodes().item(0).toString();
+            this.description = element.getChildNodes().item(0).getNodeValue();
         }
 		
         //extract the display name
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DISPLAY_NAME);
         if (null != element) {
-            this.displayName = element.getChildNodes().item(0).toString();
+            this.displayName = element.getChildNodes().item(0).getNodeValue();
         }
 		
         //extract the small icon
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_SMALL_ICON);
         if (null != element) {
-            this.smallIcon = element.getChildNodes().item(0).toString();
+            this.smallIcon = element.getChildNodes().item(0).getNodeValue();
         }
 		
         //extract the large icon
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_LARGE_ICON);
         if (null != element) {
-            this.largeIcon = element.getChildNodes().item(0).toString();
+            this.largeIcon = element.getChildNodes().item(0).getNodeValue();
         }
 		
         //extract the port component name
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_PORT_COMPONENT_NAME);
         if (null != element) {
-            this.portComponentName = element.getChildNodes().item(0).toString();
+            this.portComponentName = element.getChildNodes().item(0).getNodeValue();
         }
 		
         //extract the  wsdl port
@@ -162,7 +162,7 @@ public class WSCFPortComponentImpl extends WSCFElement implements WSCFPortCompon
         //extracting the SEI
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_SERVICE_ENDPOINT_INTERFACE);
         if (null != element) {
-            this.serviceEndpointInterface = element.getChildNodes().item(0).toString();
+            this.serviceEndpointInterface = element.getChildNodes().item(0).getNodeValue();
         }
 		
         //extracting the service implementation bean
