@@ -201,6 +201,8 @@ Now you need the deployment descripter to deploy server samples you built
 
 cd $AXIS_HOME/conf
 mv server.wsdd_linux server.wsdd
+cd ..
+mv axiscpp.conf_linux axiscpp.conf
 
 In $AXIS_HOME/axiscpp.conf file you can give paths to
 your log files, configuration files libraries etc.
