@@ -73,12 +73,12 @@
 
 WSDDHandler::WSDDHandler()
 {
-
+  m_Option = new map<string, string>;
 }
 
 WSDDHandler::~WSDDHandler()
 {
-
+  delete(m_Option);
 }
 
 void WSDDHandler::SetLibName(string& sLibName)
@@ -94,14 +94,16 @@ string& WSDDHandler::GetLibName()
 
 string WSDDHandler::GetOption(string sArg)
 {
-  return m_Option[sArg]; 
+  return (*m_Option)[sArg]; 
 }
 
 void WSDDHandler::SetOption(string sOption, string sValue)
 {
-  //m_Option[m_sOption.c_str]=m_Value;
-  m_Option[sOption] = sValue;
+  (*m_Option)[sOption] = sValue; 
 }
 
-
+map<string, string>* WSDDHandler::GetOptionList()
+{
+  return m_Option;
+}
 
