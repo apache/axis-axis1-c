@@ -51,8 +51,6 @@ int main(int argc, char* argv[])
     } else
       ws = new AxisBench();
 
-	ws->SetSecure( "C:\\GSK\\Ver7c\\myKeyRing.kdb", "axis4all", "AXIS", "NONE", "05", "NONE", false);
-
     BenchDataType *input;
     BenchDataType *output;
     xsd__unsignedByte* buffer;
@@ -73,9 +71,7 @@ int main(int argc, char* argv[])
 	input->infos.m_Array = ppBBDT;
 
     input->infos.m_Size = input->count;
-
-//	input->infos.m_Array[0] = new BenchBasicDataType();
-
+      
     time_t tim;
     tim = 1100246323;
     tm* lt = gmtime(&tim);
@@ -104,17 +100,15 @@ int main(int argc, char* argv[])
         type->HexBinary.__size=i;
         type->HexBinary.__ptr=buffer;
 
-		if( i == 990)
+		if( i == 90)
 		{
-//			*ppBBDT = type;
-			*ppBBDT = NULL;
+			*ppBBDT = type;
+//			*ppBBDT = NULL;
 		}
 		else
 		{
 			*ppBBDT = type;
 		}
-
-//		input->infos.m_Array[i] = type;
 
 		ppBBDT++;
 
@@ -188,11 +182,7 @@ int main(int argc, char* argv[])
 			  cout << " ByteType " << output->infos.m_Array[i]->ByteType << endl;
 			  cout << " DecimalType " << output->infos.m_Array[i]->DecimalType << endl;
 			  cout << " FloatType " << output->infos.m_Array[i]->FloatType << endl;
-#ifdef WIN32
 			  printf( " LongType %I64d\n", output->infos.m_Array[i]->LongType);
-#else
-			  printf( " LongType %ll\n", output->infos.m_Array[i]->LongType);
-#endif
 			  cout << " QNameType " << output->infos.m_Array[i]->QNameType << endl;
 			  cout << " ShortType " << output->infos.m_Array[i]->ShortType << endl;
 
