@@ -74,11 +74,11 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
             m_sSZ += m_Buf;
             break;
         case XSD_BYTE:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%c", *((char*)(pValue)));
+            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%d", *((char*)(pValue)));
             m_sSZ += m_Buf;
             break;
         case XSD_UNSIGNEDBYTE:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%c", 
+            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%u", 
                 *((unsigned char*)(pValue)));
             m_sSZ += m_Buf;
             break;
