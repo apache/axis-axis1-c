@@ -1,12 +1,209 @@
 <html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html">
-  <title>WSDL2Ws – How To</title>
-</head>
+  <head>
+    <title>WSDL2Ws Tool </title>
 
-<body>
-<h1>WSDL2Ws – How To</h1>
-<h3>Dependencies on Axis Java tool</h3>
+    <link href="axis.css" rel=stylesheet type=text/css>
+  </head>
+
+  <body>
+<b>
+Contents
+</b>
+
+<p>
+<a href="#intro">1.Functionality</a> 
+</p>
+
+<p><a href="#webapp">1.1Types Of Classes</a>
+</p>
+
+<p><a href="#depend">1.2Programming Languages</a>
+</p>
+
+<p><a href="#websvc">1.3Encoding Style</a>
+</p>
+
+<p><a href="#start">1.4Style Of the Service</a>
+</p>
+
+<p><a href="#install-test">1.5Supports for Making Simple Custom Types </a>
+</p>
+
+<p><a href="#test">2.Architecture</a>
+</p>
+
+<p><a href="#test1">2.1 Out Line</a>
+</p>
+
+<p><a href="#test2">2.2 Mediator WsContext</a>
+</p>
+
+<p><a href="#test3">2.3 Generator</a>
+</p>
+
+<p><a href="#test4">2.4 Flow Of Execution</a>
+</p>
+
+<p><a href="#test5">2.5 Sequence Diagram</a>
+</p>
+
+<p><a href="#test6">3.Dependencies on Axis Java tool</a>
+</p>
+
+<p class="MsoNormal"><span style="font-family:Verdana;color:black">
+    <a name="intro"></a>
+      <h1>1. Functionality </h1></P>
+
+<p class="MsoNormal">
+
+      <p>The tool should be able to generate different types of Wrappers and Skeletons for the server side and client’s stubs for the client’s Side.WSDL2Ws tool in Axis C++  is written in  Java.
+    
+      
+      
+      <a name= "webapp"/></a>    
+    <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.1 Types Of Classes</h2></p>
+
+
+
+    <p>The tool should start with a WSDL document and generate following classes.</p>
+     
+
+<P class=MsoNormal style="MARGIN-LEFT: 76pt; TEXT-INDENT: -18pt">
+·&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+WSDL2WS tool is used for building the following C/C++ components<p>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   o Server side – Skeletons and Wrappers</p>
+<p>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  o Client side – Stubs</p>
+</P>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;> 
+<b>WSDL2WS tool</b> that generates wrappers which are used to deploy the Service in the Axis C++ engine. (Please refer the Wrapper Specification for more information)
+
+  <p>The generated Wrappers perform the following functions. These wrappers act as RPC Providers. </p>
+
+<p>o  Serialization</p>
+<p>o  Deserialization</p>
+<p>o  Method invocation</p>
+
+
+
+
+
+
+
+    <a name="depend"/></a>
+    <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.2  Programming Languages </h2>
+    
+<p> The tool should be able to generate classes for 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; •	C++ </p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; •	C </p>
+  </p>  
+
+<p><b>The tool should be extensible to support other programming languages if required.</b></p>
+
+
+
+    
+    <a name="websvc"/></a>
+    <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.3 encoding style</h2>
+
+    <p>The tool should be able to support SOAP1.2 encoding style and extensible to support other encoding styles as well.
+ </p>
+
+
+    <a name="start"/></a>
+    <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.4 Style Of the Service</h2>
+
+    <p>The tool should be able to generate classes for following styles</p>
+<p>•	RPC </p>
+<p>•	Document </p>
+<p>•	Messaging </P>
+ 
+
+ 
+        <a name="install-test"/></a>
+    <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.5 Supports for making simple custom types</h2>
+
+
+
+   
+     <p>Tool generates Wrappers for custom types in following conditions</p>
+<p>•	Generates the method signatures of the types (serialize(), deserialize()) so that developer &nbsp;&nbsp; can write serialize desirialize code in most efficient way.</P> 
+<p>•	Generates the complete wrappers for WSDL types like struts
+   </p>
+
+<p>•	Generates the complete wrappers for Array of any simple or WSDL types like struts </p> 
+
+
+    
+
+
+
+
+      <a name="test"/></a>
+    <h1>2.Architecture</h1>
+    
+   
+ <a name="test1"/></a>
+    <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1 Outline</h2>
+
+
+<p>The tool takes a top down approach. It starts with a wsdl document and generates all the classes necessary to deploy the web service. It generates </p>
+<p>•	Skeleton (wrapper class) </p>
+            
+<p>•	Wrapper classes for complex types </p>
+<p>•	Server side and client Side stubs 
+<br>
+The tool can be extensible to generate Service classes to be published 
+For more information about the generated classes please refer to the architecture documentation.
+<align="left">
+<img SRC="../images/c/ag/wsdl2ws.jpg" ></align></p>
+
+
+<a name="test2"/></a>
+    <h2>&nbsp;&nbsp;2.1 Mediator WsContext</h2>
+
+
+
+<p>The WSDL file and the user options are processed by the WSDLWs. The WSDL creates a class called wsContext(WebServiceContext) which is the runtime representation of the processed data. This wsContext passes to the generators.  The generators extract the information from the wsContext and creates the files.The wsContext acts as a mediator and creates a loosely coupled system.</p>
+
+<h3>wsContext has following components</h3>
+
+<p>1.  ServiceInfo –  information about service </p>
+<p>2.  WrapperInfo – information about wrapper options</p> 
+<p>3.  TypeMap – information about custom types </p>
+
+
+
+<a name="test3"/></a>
+    <h2>&nbsp;&nbsp;&nbsp;2.2 Genarator
+</h2>
+
+<p>Generator generates a class which depends on the options, It contains a class called SourceWriter and the concrete implementation of the SourceWriter decides what the Genarator generates. The SourceWriter factory creates a correct type of generator which depends on the options.</p>
+
+<a name="test4"/></a>
+    <h2>&nbsp;&nbsp;&nbsp;2.4 flow of execution
+</h2>
+
+<p>1.WSDL file and user options are processed by the WSDL2Ws and WSContext object is created.</p> 
+<p>2. WebServiceGenaratorFactory will create WebServiceGenarator which depends on the service style </p>
+<p>3. Then the WebServiceGenarator will create a right set of Generators to create the set of files</p> 
+<p>4.Each generator will invoke SourceWriter which is capable of writing each type of file. 
+Rest of the logic is upto the developer to decide (He has all the needed info as WsContext). 
+
+</p>
+
+
+<a name="test5"/></a>
+    <h2>&nbsp;&nbsp;&nbsp;2.5 Sequence Diagram
+</h2>
+
+<p><center>
+
+<img SRC="../images/c/ag/sequence.jpg" ></center></p>
+
+<a name="test6"></a>
+<h1>Dependencies on Axis Java tool</h1>
 
 <p>The document below describes the areas where Apache Axis C++ is dependant upon the Axis Java tool. </p>
 <p>The Axis jars given below are used as they are in the Axis Java tool:</p>
@@ -22,7 +219,5 @@
 
 <p>No classes have been extended at the present time.</p>
 
-<p>Except for "SchemaUtils.java" and "ElementDecl.java" the rest of the code has been developed for the Axis C++ tool and is not present in the current Axis Java tool.</p>
-
-</body>
+<p>Except for "SchemaUtils.java" and "ElementDecl.java" the rest of the code has been developed for the Axis C++ tool and is not present in the current Axis Java tool.</p>  </body>
 </html>
