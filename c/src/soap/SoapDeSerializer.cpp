@@ -92,10 +92,9 @@ SoapDeSerializer::~SoapDeSerializer()
 	delete m_pParser;
 }
 
-int SoapDeSerializer::SetInputStream(void* InputStream)
+int SoapDeSerializer::SetInputStream(const void* InputStream)
 {
 	m_pInputStream = InputStream;
-	MemBufInputSource* pSoapInput = NULL;
 	//---------------------start--------------------------
 	//Deserialize
 	//---------START XERCES SAX2 SPCIFIC CODE---------//
@@ -107,8 +106,8 @@ int SoapDeSerializer::SetInputStream(void* InputStream)
 	get_request_bytes(m_hugebuffer, HUGE_BUFFER_SIZE, &nChars, m_pInputStream);
 	//if no soap then quit
 	if (nChars <= 0) return FAIL;
-	pSoapInput = new MemBufInputSource((const unsigned char*)m_hugebuffer, nChars ,"bufferid",false);
-	m_pParser->parse(*pSoapInput);
+	MemBufInputSource Input((const unsigned char*)m_hugebuffer, nChars , "bufferid");
+	m_pParser->parse(Input);
 	return SUCCESS;
 }
 

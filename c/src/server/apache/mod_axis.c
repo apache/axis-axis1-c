@@ -39,7 +39,7 @@ void module_init(server_rec *svr_rec, pool* p)
 	initialize_module();
 }
 
-int send_response_bytes(const char* res, void* opstream)
+int send_response_bytes(const char* res, const void* opstream)
 {
 	ap_rputs(res, (request_rec*)opstream);
 	return 0;
@@ -52,7 +52,7 @@ void  axis_Init(server_rec *svr_rec, pool* p)
 void axis_Fini(server_rec *svr_rec, pool* p)
 {}
 
-int get_request_bytes(char* req, int reqsize, int* retsize, void* ipstream)
+int get_request_bytes(char* req, int reqsize, int* retsize, const void* ipstream)
 {
 	int len_read;
 	ap_hard_timeout("util_read", (request_rec*)ipstream);
