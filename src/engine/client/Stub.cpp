@@ -23,6 +23,7 @@
 #include <axis/AxisWrapperAPI.hpp>
 #include "../../soap/SoapSerializer.h"
 #include "../../soap/Attribute.h"
+#include "../../common/AxisUtils.h"
 
 AXIS_CPP_NAMESPACE_USE
 
@@ -111,14 +112,23 @@ void Stub::setHandlerProperty(AxisChar* name, void* value, int len)
 IHeaderBlock* Stub::createSOAPHeaderBlock(AxisChar * pachLocalName,
                                            AxisChar * pachUri)
 {
-    if (pachLocalName && pachUri)
-    {
-	    IHeaderBlock *pNewSoapheader = m_pCall->createHeaderBlock(pachLocalName, pachUri);
-	    m_vSOAPHeaderBlocks.push_back(pNewSoapheader);
-	    return pNewSoapheader;
+   if (pachLocalName && pachUri)
+   {       
+       if ((AxisUtils::isStringOnlyWithSpaces(pachLocalName)) || 
+           (AxisUtils::isStringOnlyWithSpaces(pachUri)) )
+        {
+            return NULL;
+        }
+        else 
+        {
+	        IHeaderBlock *pNewSoapheader = m_pCall->createHeaderBlock(pachLocalName, pachUri);
+	        m_vSOAPHeaderBlocks.push_back(pNewSoapheader);
+	        return pNewSoapheader;
+        }
     }
-    else
-	    return NULL;
+   else {
+	   return NULL;
+   }
 }
 
 IHeaderBlock* Stub::getFirstSOAPHeaderBlock()
@@ -359,10 +369,19 @@ IHeaderBlock* Stub::createSOAPHeaderBlock(AxisChar *pachLocalName, AxisChar *pac
 {
     if (pachLocalName && pachUri && pachPrefix)
     {
-	    IHeaderBlock *pNewSoapheader = m_pCall->createHeaderBlock(pachLocalName, pachUri, pachPrefix);
-	    m_vSOAPHeaderBlocks.push_back(pNewSoapheader);
-	    return pNewSoapheader;
+        if (AxisUtils::isStringOnlyWithSpaces(pachLocalName) || 
+                AxisUtils::isStringOnlyWithSpaces(pachUri) )
+        {
+            return NULL;
+        }
+        else 
+        {
+	        IHeaderBlock *pNewSoapheader = m_pCall->createHeaderBlock(pachLocalName, pachUri, pachPrefix);
+	        m_vSOAPHeaderBlocks.push_back(pNewSoapheader);
+	        return pNewSoapheader;
+        }
     }
-    else
+    else {
 	    return NULL;
+    }
 }
