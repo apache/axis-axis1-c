@@ -143,7 +143,7 @@ void Variable::SetBasicTypeName()
 
 bool Variable::IsComplexType()
 {
-	return false;
+	return (m_Type == VAR_USER);
 }
 
 bool Variable::IsArrayType()
@@ -163,3 +163,66 @@ void Variable::Reset()
 	m_TypeName = "";
 	m_VarName = "";
 }
+
+string& Variable::GetCorrespondingUnionMemberName()
+{
+	switch (m_Type)
+	{
+		case VAR_INT: m_sAuxStr = "nValue"; break;
+		case VAR_FLOAT: m_sAuxStr = "fValue"; break;
+		case VAR_STRING: m_sAuxStr = "pStrValue"; break; //note that string too is taken as a basic type
+		case VAR_LONG: m_sAuxStr = "lValue"; break;
+		case VAR_SHORT: m_sAuxStr = "sValue"; break;
+		case VAR_CHAR: m_sAuxStr = "cValue"; break;
+		case VAR_DOUBLE: m_sAuxStr = "dValue"; break;
+		case VAR_BOOL: m_sAuxStr = "bValue"; break;
+		case VAR_UNSIGNEDLONG: m_sAuxStr = "ulValue"; break;
+		case VAR_UNSIGNEDINT: m_sAuxStr = "unValue"; break;
+		case VAR_UNSIGNEDSHORT: m_sAuxStr = "usValue"; break;
+		case VAR_UNSIGNED_CHAR: m_sAuxStr = "ucValue"; break;
+		case VAR_USER: m_sAuxStr = "pIBean"; break;
+	}
+	return m_sAuxStr;	
+}
+
+string& Variable::GetTypeEnumStr()
+{
+	switch (m_Type)
+	{
+		case VAR_INT: m_sAuxStr = "XSD_INT"; break;
+		case VAR_FLOAT: m_sAuxStr = "XSD_FLOAT"; break;
+		case VAR_STRING: m_sAuxStr = "XSD_STRING"; break; //note that string too is taken as a basic type
+		case VAR_LONG: m_sAuxStr = "XSD_LONG"; break;
+		case VAR_SHORT: m_sAuxStr = "XSD_SHORT"; break;
+		case VAR_CHAR: m_sAuxStr = "XSD_CHAR"; break;
+		case VAR_DOUBLE: m_sAuxStr = "XSD_DOUBLE"; break;
+		case VAR_BOOL: m_sAuxStr = "XSD_BOOL"; break;
+		case VAR_UNSIGNEDLONG: m_sAuxStr = "XSD_UNSIGNEDLONG"; break;
+		case VAR_UNSIGNEDINT: m_sAuxStr = "XSD_UNSIGNEDINT"; break;
+		case VAR_UNSIGNEDSHORT: m_sAuxStr = "XSD_UNSIGNEDSHORT"; break;
+		case VAR_UNSIGNED_CHAR: m_sAuxStr = "XSD_UNSIGNED_CHAR"; break;
+		case VAR_USER: m_sAuxStr = "USER_TYPE"; break;
+	}
+	return m_sAuxStr;
+}
+
+/*
+ *When returning the return value of a web service method we have to set
+ *the return value from the web service method to a uParamValue union first
+ *The types in the uParamValue union is predefined. So we need to find what 
+ *reference/dereference charactors should proceed the variable name.
+ *	
+ * Ex: if web service method returns int 
+ *     value.nValue = ret; 
+ *     if web service method returns int*
+ *     value.nValue = *ret;
+ * In case of strings this is somewhat different because in uParamValue union we 
+ * have const char* for setting string value. So in this case we append ".c_str()"
+ * like,
+ *     value.pStrValue = ret.c_str() 
+ */
+
+//DEL string& Variable::GetAnyReferenceChars()
+//DEL {
+//DEL 	
+//DEL }

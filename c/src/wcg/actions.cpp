@@ -48,7 +48,7 @@ bool is_bean_class(base_specifier_list* baselist)
 	if (!baselist) return false;
 	for (base_specifier_list::iterator it = baselist->begin(); it != baselist->end(); it++)
 	{
-		if ((*(*it)->class_name) == "AccessBean")
+		if ((*(*it)->class_name) == "IAccessBean")
 		{
 			return true;
 		}
@@ -83,26 +83,17 @@ void add_member_declaration(string_list* decl_specs, member_declarator_list* mem
   {
 	for (string_list::iterator tlit = decl_specs->begin(); tlit != decl_specs->end(); tlit++)
     {
-    	string declstr = (*tlit)->c_str();
-    	if (lexer_keys.find(declstr) != lexer_keys.end())
-     	{
-     		cout << "Variable Type : " << declstr.c_str() << endl;
-      		nVarType = lexer_keys[declstr];
-			if ((nConvVarType = map_var_type(nVarType)) != 0)
-			{
-        		if (nConvVarType == VAR_USER)
-         		{
-					Var.SetType(nConvVarType, declstr);
-				}
-				else
-				{
-					Var.SetType(nConvVarType);
-				}
-			}
-			else //may be a variable qualifier like "const" or "static"
-			{
-
-			}
+		if (VAR_UNKNOWN != get_var_type((*tlit)->c_str())) //this is variable type not a qualifier
+		{
+			Var.SetType(get_var_type((*tlit)->c_str()));
+		}
+		else if (is_defined_class((*tlit)->c_str()))//user types 
+		{
+			Var.SetType(VAR_USER, (*tlit)->c_str());
+		}
+		else
+		{
+			//handle other variable qualifiers here 
 		}
 	}
   }
@@ -143,9 +134,13 @@ void add_member_declaration(string_list* decl_specs, member_declarator_list* mem
 							{
 								for (string_list::iterator slit = (*pit)->decl_specs->begin(); slit != (*pit)->decl_specs->end(); slit++)
 								{
-									if (0 != get_var_type((*slit)->c_str())) //this is variable type not a qualifier
+									if (VAR_UNKNOWN != get_var_type((*slit)->c_str())) //this is variable type not a qualifier
 									{
 										Var.SetType(get_var_type((*slit)->c_str()));
+									}
+									else if (is_defined_class((*slit)->c_str()))//user types 
+									{
+										Var.SetType(VAR_USER, (*slit)->c_str());
 									}
 									else
 									{
@@ -189,6 +184,7 @@ void add_member_declaration(string_list* decl_specs, member_declarator_list* mem
   }
 }
 
+//match parser types to our types for basic data types
 int map_var_type(int parsertype)
 {
 	switch (parsertype)
@@ -198,9 +194,10 @@ int map_var_type(int parsertype)
 		case KW_float: return VAR_FLOAT;
 		case KW_char: return VAR_CHAR;
 		case KW_double: return VAR_DOUBLE;
+		case KW_string: return VAR_STRING;
 		default:;
 	}
-	return 0;
+	return VAR_UNKNOWN;
 }
 
 int get_var_type(const char* vartypename)
