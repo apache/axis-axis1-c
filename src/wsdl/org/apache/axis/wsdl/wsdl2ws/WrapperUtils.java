@@ -215,28 +215,15 @@ public class WrapperUtils {
 	
 	public static String getClassNameFromParamInfoConsideringArrays(ParameterInfo param,WebServiceContext wscontext)throws WrapperFault{
 		Type type = wscontext.getTypemap().getType(param.getSchemaName());
-		if(type!= null && type.isArray()){
-			Enumeration e = type.getAttribNames();
-			if(e.hasMoreElements()){
-				QName qname = type.getTypNameForAttribName((String)e.nextElement());
-				Type t  = wscontext.getTypemap().getType(qname);
-				String name;    
-				   
-				if(t != null)
-						name =t.getLanguageSpecificName()+"[]";
-				else{
-					//the type should be inbuild simpletype
-					if(WrapperConstants.LANGUAGE_JAVA.equalsIgnoreCase(wscontext.getWrapInfo().getWrapperLanguage()))
-						name = TypeMap.getBasicTypeClass4qname(qname)+"[]";
-					else
-						name = CPPUtils.getclass4qname(qname)+"[]";
-				if(name == null) throw new WrapperFault("if not inbuild or not in type map what is this type "+qname);
-				} 
-				return name;
-			}else
-				throw new WrapperFault("enumeration no type is given ?????");	   
+		if(type !=null){ //array or complex types
+			if (type.isArray()){
+				return type.getLanguageSpecificName();
+			}
+			else{
+				return param.getLangName()+"*"; //All complex types will be pointers	
+			}
 		}else
-		return param.getLangName();		
+			return param.getLangName();			
 	}
 }
 

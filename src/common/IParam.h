@@ -179,18 +179,7 @@ public:
 
     virtual int GetArraySize()= 0;
 	virtual int SetArrayElements(void* pElements)= 0;
-	//virtual int SetUserType(IAccessBean* pObject)= 0;
-	//virtual void SetName(const AxisChar* sName)= 0;
-	/*virtual int GetInt()=0;
-	virtual float GetFloat()=0;
-	virtual const AxisString& GetString()=0;
-	virtual const AxisString& GetHexString()=0;
-	virtual const AxisString& GetBase64String()=0;
-	virtual int GetArraySize()=0;
-	virtual int SetArrayElements(void* pElements)=0;*/
-
 	virtual int SetArrayElements(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct, AXIS_OBJECT_SIZE_FUNCT pSizeFunct)=0;
-//	virtual int SetUserType(IAccessBean* pObject)=0;
 	virtual int SetUserType(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct)=0;
 	virtual void SetName(const AxisChar* sName)=0;
 

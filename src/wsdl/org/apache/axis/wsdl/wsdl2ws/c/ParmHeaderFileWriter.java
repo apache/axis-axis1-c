@@ -87,11 +87,6 @@ public class ParmHeaderFileWriter extends ParamWriter{
 			this.writer.write("typedef struct {\n");
 			writeAttributes();
 			this.writer.write("} "+classname+";\n\n");
-			writeArrayStruct();
-			//writeConstructors();
-			//writeDistructors();
-			//writeMethods();
-			//cleanup
 			this.writer.write("#endif // !defined(__"+classname.toUpperCase()+"_H__INCLUDED_)\n");
 			writer.flush();
 			writer.close();
@@ -117,16 +112,7 @@ public class ParmHeaderFileWriter extends ParamWriter{
 	protected void writeConstructors()throws WrapperFault{}
 	   
 	protected void writeDistructors() throws WrapperFault {}
-	
-	protected void writeArrayStruct()throws WrapperFault{
-		try{
-			writer.write("typedef struct Axis_"+classname+"_ArrayTag\n{\n");
-			writer.write("\t"+classname+"* m_Array;\n\tint m_Size;\n} Axis_"+classname+"_Array;\n\n");
-		} catch (IOException e) {
-			 throw new WrapperFault(e);
-		}
-	}
-	   
+
 	protected void writeMethods()throws WrapperFault{}
 
 	protected File getFilePath() throws WrapperFault {

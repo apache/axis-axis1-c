@@ -207,7 +207,19 @@ public class WrapWriter extends CPPClassWriter{
 	 */
 
 	public void writeMethodInWrapper(String methodName, Collection params, ParameterInfo returntype) throws WrapperFault,IOException {
-		String outparam = returntype.getLangName();
+		Type retType = wscontext.getTypemap().getType(returntype.getSchemaName());
+		String outparamType;
+		boolean returntypeissimple = false;
+		boolean returntypeisarray = false;
+		if (retType != null){
+			outparamType = retType.getLanguageSpecificName();
+			returntypeisarray = retType.isArray();
+		}
+		else{
+			outparamType = returntype.getLangName();
+		}
+		returntypeissimple = CPPUtils.isSimpleType(outparamType);
+
 		writer.write("\n/////////////////////////////////////////////////////////////////\n");
 		writer.write("// This method wrap the service method \n");
 		writer.write("//////////////////////////////////////////////////////////////////\n");
@@ -227,53 +239,51 @@ public class WrapWriter extends CPPClassWriter{
 		for (int i = 0; i < paramsB.size(); i++) {
 			paraTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();
 			Type type;
-			writer.write("\tIParam *param"+i+"= pIWSDZ->GetParam();\n");			
 			if((CPPUtils.isSimpleType(((ParameterInfo)paramsB.get(i)).getLangName()))){
 				//for simple types	
-				writer.write("\t"+paraTypeName+" v"+i+" = param"+i+"->"+CPPUtils.getParameterGetValueMethodName(paraTypeName)+";\n");
+				writer.write("\t"+paraTypeName+" v"+i+" = pIWSDZ->"+CPPUtils.getParameterGetValueMethodName(paraTypeName)+";\n");
 			}else if((type = this.wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName())) != null && type.isArray()){
 				String containedType = type.getTypNameForAttribName("item").getLocalPart();
-				writer.write("\t"+paraTypeName+" v"+i+";\n");
-				writer.write("\tv"+i+".m_Size = param"+i+"->GetArraySize();\n");
-				writer.write("\tif ("+"v"+i+".m_Size > 0)\n");
-				writer.write("\t\tv"+i+".m_Array = new "+containedType+"[v"+i+".m_Size];\n\telse\n\t\treturn FAIL; //CF_ZERO_ARRAY_SIZE_ERROR\n");
-				writer.write("param"+i+"->SetArrayElements((void*)(v"+i+".m_Array), (AXIS_DESERIALIZE_FUNCT)Axis_DeSerialize_"+containedType+", (AXIS_OBJECT_DELETE_FUNCT)Axis_Delete_"+containedType+", (AXIS_OBJECT_SIZE_FUNCT)Axis_GetSize_"+containedType+");\n");
-				writer.write("pIWSDZ->Deserialize(param"+i+",0);\n");			
+				if(CPPUtils.isSimpleType(containedType)){
+					writer.write("\t"+paraTypeName+" v"+i+" = ("+paraTypeName+"&)pIWSDZ->GetArray("+CPPUtils.getXSDTypeForBasicType(containedType)+");\n");
+				}else{
+					writer.write("\t"+paraTypeName+" v"+i+" = ("+paraTypeName+"&)pIWSDZ->GetArray((AXIS_DESERIALIZE_FUNCT)Axis_DeSerialize_"+containedType+ 
+						"\n\t\t, (AXIS_OBJECT_CREATE_FUNCT)Axis_Create_"+containedType+", (AXIS_OBJECT_DELETE_FUNCT)Axis_Delete_"+containedType+
+						"\n\t\t, (AXIS_OBJECT_SIZE_FUNCT)Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+");\n");
+				}
 			}else{
 				//for complex types 
-				writer.write("\t"+paraTypeName+" *v"+i+" = new "+paraTypeName+"();\n");
-				writer.write("\tparam"+i+"->SetUserType(v"+i+", (AXIS_DESERIALIZE_FUNCT)Axis_DeSerialize_"+paraTypeName+", (AXIS_OBJECT_DELETE_FUNCT)Axis_Delete_"+paraTypeName+");\n");
-				writer.write("\tpIWSDZ->Deserialize(param"+i+",0);\n");
+				writer.write("\t"+paraTypeName+" *v"+i+" = ("+paraTypeName+"*)pIWSDZ->GetObject((AXIS_DESERIALIZE_FUNCT)Axis_DeSerialize_"+paraTypeName+
+					"\n\t\t, (AXIS_OBJECT_CREATE_FUNCT)Axis_Create_"+paraTypeName+", (AXIS_OBJECT_DELETE_FUNCT)Axis_Delete_"+paraTypeName+
+					"\n\t\t, Axis_TypeName_"+paraTypeName+", Axis_URI_"+paraTypeName+");\n");				
 			}
 		}
 			
-		if(!(outparam == null ||outparam.equals("void"))){				
-			boolean isSimpleType = CPPUtils.isSimpleType(outparam);
-			boolean isArray = returntype.getType().isArray();
-			Type type = this.wscontext.getTypemap().getType(returntype.getSchemaName());
+		if(!(outparamType == null ||outparamType.equals("void"))){				
 			/* Invoke the service when return type not void */
-			writer.write("\t"+outparam+((isSimpleType || isArray)?" ":" *")+ "ret = "+"pWs->"+methodName+"(");
-			for (int i = 0; i <  paramsB.size() - 1; i++)
+			writer.write("\t"+outparamType+((returntypeisarray || returntypeissimple)?" ":" *")+ "ret = "+"pWs->"+methodName+"(");
+			for (int i = 0; i <  paramsB.size() - 1; i++) {
 				writer.write("v" + i + ",");
-			writer.write("v" + ( paramsB.size() - 1));					
-			writer.write(");\n");					
+			}
+			writer.write("v" + ( paramsB.size() - 1));
+			writer.write(");\n");
 			/* set the result */
-			if (isSimpleType){
+			if (returntypeissimple){
 				writer.write("\treturn pIWSSZ->AddOutputParam(\""+methodName+"Return\", ret);\n");
-			}else if(isArray){
-				String containedType = type.getTypNameForAttribName("item").getLocalPart();
+			}else if(returntypeisarray){
+				String containedType = retType.getTypNameForAttribName("item").getLocalPart();
 				if (CPPUtils.isSimpleType(containedType)){ //array of basic types
+					writer.write("\treturn pIWSSZ->AddOutputParam(\""+methodName+"Return\", (Axis_Array*)(&ret),"+CPPUtils.getXSDTypeForBasicType(containedType)+");\n");
 				}
 				else{ //array of complex types
-					writer.write("return pIWSSZ->AddOutputParam(\""+methodName+"Return\", (Axis_Array*)(&ret),"+ 
+					writer.write("\treturn pIWSSZ->AddOutputParam(\""+methodName+"Return\", (Axis_Array*)(&ret),"+ 
 					"(void*) Axis_Serialize_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+");\n");
 				}
 			}
 			else{
 				//complex type
-				writer.write("\treturn pIWSSZ->AddOutputParam(\""+methodName+"Return\", ret, (void*)Axis_Serialize_"+outparam+", (void*)Axis_Delete_"+outparam+");\n");
+				writer.write("\treturn pIWSSZ->AddOutputParam(\""+methodName+"Return\", ret, (void*)Axis_Serialize_"+outparamType+", (void*)Axis_Delete_"+outparamType+");\n");
 			}
-			writer.write("\treturn SUCCESS;\n");
 		}else{//method does not return anything
 			/* Invoke the service when return type is void */
 	 		writer.write("\t pWs->" + methodName + "(");
@@ -282,9 +292,10 @@ public class WrapWriter extends CPPClassWriter{
 			}
 			writer.write("v" + ( paramsB.size() - 1));
 			writer.write(")\n");
-	}
-	//write end of method
-	writer.write("}\n");
+			writer.write("\treturn SUCCESS;\n");
+		}
+		//write end of method
+		writer.write("}\n");
 	}
 	/* (non-Javadoc)
 	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.CPPClassWriter#writeGlobalCodes()

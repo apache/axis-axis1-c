@@ -977,7 +977,7 @@ void ComplexObjectHandler::Init()
 	m_URI = "";	
 }
 
-const AxisString & Param::GetTypeName()
+const AxisString& Param::GetTypeName()
 {
 	return this->m_Value.pCplxObj->m_TypeName;		
 }

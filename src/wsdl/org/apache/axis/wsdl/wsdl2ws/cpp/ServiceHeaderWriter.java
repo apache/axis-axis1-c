@@ -151,21 +151,21 @@ public class ServiceHeaderWriter extends HeaderFileWriter{
 			  else {
 			  	  String outparam = minfo.getReturnType().getLangName();
 				  isSimpleType = CPPUtils.isSimpleType(outparam);
-				  writer.write("\t\t"+WrapperUtils.getClassNameFromParamInfoConsideringArrays(minfo.getReturnType(),wscontext)+(isSimpleType?" ":" *"));
+				  writer.write("\t\t"+WrapperUtils.getClassNameFromParamInfoConsideringArrays(minfo.getReturnType(),wscontext));
 			  }
-			  writer.write(minfo.getMethodname()+"(");
+			  writer.write(" "+minfo.getMethodname()+"(");
             
 			  //write parameter names 
 			  Iterator params = minfo.getParameterTypes().iterator();
 			  if(params.hasNext()){
 			  	  ParameterInfo fparam = (ParameterInfo)params.next();
 				  isSimpleType = CPPUtils.isSimpleType(fparam.getLangName());
-				  writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+(isSimpleType?" Value":" *pValue")+0);
+				  writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
 			  }
 			  for(int j =1; params.hasNext();j++){
 				  ParameterInfo nparam = (ParameterInfo)params.next();
 				  isSimpleType = CPPUtils.isSimpleType(nparam.getLangName());
-				  writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+(isSimpleType?" Value":" *pValue")+j);
+				  writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
 			  }
 			  writer.write(");\n");
 		  }

@@ -147,7 +147,6 @@ public: //Conversion functions
 	int GetArraySize();
 	int SetArrayElements(void* pElements);
 	int SetArrayElements(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct, AXIS_OBJECT_SIZE_FUNCT pSizeFunct);
-//	int SetUserType(IAccessBean* pObject);
 	int SetUserType(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct);
 	void SetName(const AxisChar* sName);
 	uParamValue GetValue(){ return m_Value;};

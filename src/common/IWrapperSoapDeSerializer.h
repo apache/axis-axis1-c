@@ -69,6 +69,7 @@
 
 #include "ISoapDeSerializer.h"
 #include "GDefine.h"
+#include "AxisUserAPI.h"
 #include <string>
 using namespace std;
 class IParam;
@@ -80,6 +81,42 @@ public:
 	virtual IParam* GetParam()=0;
 	virtual int Deserialize(IParam* pIParam, int bHref)=0;
 	virtual ~IWrapperSoapDeSerializer() {};
+
+	/* Method used by wrappers to get a deserialized Array of complex types */
+	virtual Axis_Array GetArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)=0;
+	/* Method used by wrappers to get a deserialized Array of basic types */
+	virtual Axis_Array GetArray(XSDTYPE nType)=0;
+	/* Method used by wrappers to get a deserialized single object of complex type */
+	virtual void* GetObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)=0;
+	
+	/* Methods used by wrappers to get a deserialized value of basic types */
+	virtual int GetInt() = 0;
+    virtual unsigned int GetUnsignedInt() = 0;
+    virtual short GetShort() = 0;
+    virtual unsigned short GetUnsignedShort() = 0;
+    virtual char GetByte() = 0;
+    virtual unsigned char GetUnsignedByte() = 0;
+    virtual long GetLong() = 0;
+    virtual long GetInteger() = 0;
+    virtual unsigned long GetUnsignedLong() = 0;
+	virtual float GetFloat() = 0;
+    virtual double GetDouble() = 0;
+    virtual double GetDecimal() = 0;
+	virtual const AxisChar* GetString() = 0;
+    virtual const AxisChar* GetAnyURI() = 0;
+    virtual const AxisChar* GetQName() = 0;
+	virtual const AxisChar* GetHexString() = 0;
+	virtual const AxisChar* GetBase64String() = 0;
+    /*return a tm struct which contain year-month-date-hour-
+      minute-second*/
+    virtual struct tm GetDateTime() = 0;
+    virtual struct tm GetDate() = 0;
+    virtual struct tm GetTime() = 0;
+    /*return a tm struct which contain years-months-dates-hours-
+      minutes-seconds which represents a duration*/
+    virtual long GetDuration() = 0;
+	virtual void* CreateArray(XSDTYPE nType, int nSize)=0;
+	virtual void DeleteArray(void* pArray, XSDTYPE nType)=0;
 
 };
 
