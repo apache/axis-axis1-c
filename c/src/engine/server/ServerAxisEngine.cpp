@@ -326,16 +326,20 @@ int ServerAxisEngine::process(SOAPTransport* pStream)
      //m_pSZ->setSoapFault (SoapFault::getSoapFault (CLIENT_SOAP_SOAPCONTENTERROR));
 #ifdef ENABLE_AXIS_EXCEPTION
         int iExceptionCode = e.getExceptionCode();
-        char* tempStr = (char*) e.what();
-        AXISTRACE2("Exception:", tempStr, CRITICAL);
+        char* pcTempStr = (char*) e.what();
+        AXISTRACE2("Exception:", pcTempStr, CRITICAL);
         if(AXISC_SERVICE_THROWN_EXCEPTION == iExceptionCode)
         {
+            /*Writes the SoapMessage in which soap body contains only Fault*/
             m_pSZ->setOutputStream (pStream);
             releaseHandlers(pStream);
             return AXIS_SUCCESS;//Service created fault is written to the stream. 
                                 //so return success.
         }
-        else
+        else/* An exception has occured inside Axis C++ engine.(not in a
+             * webservice or handler). Later we handle this according to the
+             * exception code returned.
+             */
             return e.getExceptionCode();
 #endif
     AXISC_CATCH(exception& e)
