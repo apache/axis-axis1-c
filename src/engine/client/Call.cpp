@@ -60,7 +60,8 @@ Call::Call ()
 
 Call::~Call ()
 {
-    uninitialize_module();	
+    uninitialize_module();
+    free(m_pcEndPointUri);
 }
 
 int Call::setEndpointURI (const char* pchEndpointURI)

@@ -66,6 +66,8 @@ AxisTransport::~AxisTransport()
         delete m_pReceiver;
     if(m_pHttpTransport)
         delete m_pHttpTransport;
+    if(m_pcEndpointUri)
+        free(m_pcEndpointUri);
 }
 
 int AxisTransport::openConnection()

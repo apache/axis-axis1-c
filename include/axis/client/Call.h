@@ -808,7 +808,7 @@ private:
     MessageData* m_pMsgData;
     SoapSerializer* m_pIWSSZ;
     SoapDeSerializer* m_pIWSDZ;
-    const char* m_pcEndPointUri;
+    char* m_pcEndPointUri;
     AXIS_PROTOCOL_TYPE m_nTransportType;
     /*
        Transport object
