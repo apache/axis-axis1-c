@@ -12,80 +12,92 @@
 #include <stdio.h>
 #include "operations.h"
 #include <stdlib.h> // For malloc(), calloc(), strdup() and free()
+#include <iostream>
+#include <fstream>
+
+#define WSDL_DEFAULT_ENDPOINT "http:///"
 
 // Prototype
 bool parse_args_for_endpoint(int *argc, char *argv[], char **endpoint);
 void shift_args(int i, int *argc, char *argv[]);
+void setLogOptions(const char *output_filename);
 
+// If we re-direct cout it will be to this ofstream
+ofstream output_file;
 
-int main(int argc, char* argv[]){
-  int i;
-  xsd__string userid;
+int main(int argc, char* argv[]) {
   operations *ws;
-
 
   char *endpoint = WSDL_DEFAULT_ENDPOINT;
   bool endpoint_set = false;
+  int returnValue = 1; // Assume Failure
 
   endpoint_set = parse_args_for_endpoint(&argc, argv, &endpoint);
 
   try {
-    if(endpoint_set)
+    if(endpoint_set) {
       ws = new operations(endpoint, APTHTTP);
-    else
+      free(endpoint);
+      endpoint_set = false;
+    } else
       ws = new operations();
 
-    userid = "Durand";
+    int i;
+    xsd__string userid = "Durand";
 
-    // we are changing the EndpointURI here to redirect requests toward the TCP/IP Monitor
-    // uncomment the following if using any TCP/IP traffic monitoring tool
-    // ws->SetEndpointURI("http://localhost:9081/TradeApplication/services/Service");
-
-    printf("Requesting new ticket for user %s\n",userid);
+    cout << "Requesting new ticket for user " << userid << endl;
     long ticket = ws->getTicket(userid);
-    printf("-> received ticket: %ld\n",ticket);
+    cout << "-> received ticket: " << ticket << endl;
 
-    printf("Requesting the Quote list\n");
+    cout << "Requesting the Quote list" << endl;
     Quote_Array arrayOfQuote = ws->getAllQuotes(userid,ticket);
-    printf("-> received %d Quotes\n",arrayOfQuote.m_Size);
+    cout << "-> received " << arrayOfQuote.m_Size << " Quotes" << endl;
 
     for(i=0;i<arrayOfQuote.m_Size;i++){
       Quote quote = arrayOfQuote.m_Array[i];
-      printf("    - %s %s $%f\n",quote.symbol,quote.label,quote.price);
+      cout << "    - " << quote.symbol << " " << quote.label << " $" << quote.price << endl;
     }
 
-    printf("Requesting orders to buy some Stocks...\n");
-    printf("Order 1: 10 * q:3\n");
+    cout << "Requesting orders to buy some Stocks..." << endl;
+    cout << "Order 1: 10 * q:3" << endl;
     Order *order = ws->buyQuote(userid,ticket,10,arrayOfQuote.m_Array+3);
-    printf("-> transaction ok. id:%d\n",order->reference);
+    cout << "-> transaction ok. id:" << order->reference << endl;
 
-    printf("Order 2: 7 * q:6\n");
+    cout << "Order 2: 7 * q:6" << endl;
     order = ws->buyQuote(userid,ticket,7,arrayOfQuote.m_Array+6);
-    printf("-> transaction ok. id:%d\n",order->reference);
+    cout << "-> transaction ok. id:" << order->reference << endl;
 
-    printf("Order 3: 3 * q:9\n");
+    cout << "Order 3: 3 * q:9" << endl;
     order = ws->buyQuote(userid,ticket,3,arrayOfQuote.m_Array+9);
-    printf("-> transaction ok. id:%d\n",order->reference);
+    cout << "-> transaction ok. id:" << order->reference << endl;
 
-    printf("Requesting my Orders list\n");
+    cout << "Requesting my Orders list" << endl;
     Order_Array arrayOfOrder = ws->getAllOrders(userid,ticket);
-    printf("-> received %d Orders\n",arrayOfOrder.m_Size);
+    cout << "-> received " << arrayOfOrder.m_Size << " Orders" << endl;
 
     for(i=0;i<arrayOfOrder.m_Size;i++){
       Order anOrder = arrayOfOrder.m_Array[i];
-      printf("    - %d %s $%f %d\n",anOrder.reference,anOrder.symbol,anOrder.price,anOrder.quantity);
+      cout << "    - " << anOrder.reference << " " << anOrder.symbol << " $" << anOrder.price << " " << anOrder.quantity << endl;
     }
 
-    printf("Requesting my portfolio value\n");
+    cout << "Requesting my portfolio value" << endl;
     xsd__decimal total = ws->computePortfolio(userid,ticket);
-    printf("-> value = $%f\n",total);
+    cout << "-> value = $" << total << endl;
     
-    printf ("Compilation success\n");   
-  } catch(AxisException &e) {
-    fprintf(stderr, "%s\n", e.what());
-  }
+    cout << "SUCCESS" << endl;   
 
-  return 0;
+    returnValue = 0; // Success
+
+  } catch(AxisException &e) {
+    cerr << e.what() << endl;
+    if(endpoint_set)
+      free(endpoint);
+  } catch(...) {
+    cerr << "Unknown Exception occured." << endl;
+    if(endpoint_set)
+      free(endpoint);
+  }
+  return returnValue;
 }
 
 /* Spin through args list and check for -e -p and -s options.
@@ -97,62 +109,73 @@ int main(int argc, char* argv[]){
 */
 bool parse_args_for_endpoint(int *argc, char *argv[], char **endpoint) {
 
-	// We need at least 2 extra arg after program name
-	if(*argc < 3)
-		return false;
+    // We need at least 2 extra arg after program name
+    if(*argc < 3)
+        return false;
 
-	char *server = "localhost";
-	int  port = 80;
-	bool ep_set = false;
-	bool server_set = false;
-	bool port_set = false;
+    char *server = "localhost";
+    int  port = 80;
+    bool ep_set = false;
+    bool server_set = false;
+    bool port_set = false;
 
-	for(int i=1; i<*argc; i++) {
-		if(*argv[i] == '-') {
-			switch(*(argv[i]+1)) {
-			case 'e':
-				*endpoint = strdup(argv[i+1]);
-				ep_set = true;
-				shift_args(i, argc, argv);
-				i--;
-				break;
-			case 's':
-				server = strdup(argv[i+1]);
-				server_set = true;
-				shift_args(i, argc, argv);
-				i--;
-				break;
-			case 'p':
-				port = atoi(argv[i+1]);
-				if(port >80) port_set = true;
-				shift_args(i, argc, argv);
-				i--;
-				break;
-			default:
-				break;
-			}
-		}
-	}
+    for(int i=1; i<*argc; i++) {
+        if(*argv[i] == '-') {
+            switch(*(argv[i]+1)) {
+            case 'e':
+                *endpoint = strdup(argv[i+1]);
+                ep_set = true;
+                shift_args(i, argc, argv);
+                i--;
+                break;
+            case 's':
+                server = strdup(argv[i+1]);
+                server_set = true;
+                shift_args(i, argc, argv);
+                i--;
+                break;
+            case 'p':
+                port = atoi(argv[i+1]);
+                if(port >80) port_set = true;
+                shift_args(i, argc, argv);
+                i--;
+                break;
+            case 'o':
+                setLogOptions(argv[i+1]);
+                shift_args(i, argc, argv);
+                i--;
+                break;
+            default:
+                break;
+            }
+        }
+    }
 
-	// use the supplied server and/or port to build the endpoint
-	if(ep_set == false && (server_set || port_set)) {
-		// Set p to the location of the first '/' after the http:// (7 chars)
-		// e.g. from http://localhost:80/axis/base gets /axis/base
-		char *ep_context = strpbrk(&(*endpoint)[7], "/");
+    // use the supplied server and/or port to build the endpoint
+    if(ep_set == false && (server_set || port_set)) {
+        // Set p to the location of the first '/' after the http:// (7 chars)
+        // e.g. from http://localhost:80/axis/base gets /axis/base
+        char *ep_context = strpbrk(&(*endpoint)[7], "/");
 
-		// http://:/ is 9 characters + terminating NULL character so add 10.
-		// Allow space for port number upto 999999 6 chars
-		*endpoint = (char *)calloc(1, 10 + strlen(ep_context) + strlen(server) + 6);
-		sprintf(*endpoint, "http://%s:%d/%s", server, port, ep_context+1);
-		if(server_set) free(server);
-		ep_set = true;
-	}
+        // http://:/ is 9 characters + terminating NULL character so add 10.
+        // Allow space for port number upto 999999 6 chars
+        *endpoint = (char *)calloc(1, 10 + strlen(ep_context) + strlen(server) + 6);
+        sprintf(*endpoint, "http://%s:%d/%s", server, port, ep_context+1);
+        if(server_set) free(server);
+        ep_set = true;
+    }
 
-	return ep_set;
+    return ep_set;
 }
 
 void shift_args(int i, int *argc, char *argv[]) {
-	for(int j=i, k=i+2; j<*(argc)-2; j++, k++)
-					argv[j]=argv[k];
-	*argc-=2;
+    for(int j=i, k=i+2; j<*(argc)-2; j++, k++)
+                    argv[j]=argv[k];
+    *argc-=2;
+}
+void setLogOptions(const char *output_filename) {
+    output_file.open(output_filename, ios::out);
+    if(output_file.is_open()){
+        cout.rdbuf( output_file.rdbuf() );
+    }
 }
