@@ -1,2 +1,2 @@
 #!/bin/bash
-./configure --libdir=$AXISCPP_HOME/bin
+./configure --libdir=$AXISCPP_HOME/bin --bindir=$AXISCPP_HOME/bin
