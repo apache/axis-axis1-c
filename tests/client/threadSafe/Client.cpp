@@ -37,6 +37,8 @@ using namespace std;
 #define MACRO_NUM_THREADS 4*1
 int NUM_THREADS = MACRO_NUM_THREADS;
 
+extern "C" int initialize_module (int bServer);
+extern "C" int uninitialize_module ();
 
 extern "C" STORAGE_CLASS_INFO void initializeLibrary(void);
 const char *server = "localhost";
@@ -62,6 +64,7 @@ run(void *arg)
     else
 	ws = (InteropTestPortType *) arg;
 
+    ws->setTransportTimeout(10);
 
     //printf("invoking echoString...\n");
     //testing echoString 
@@ -223,20 +226,12 @@ main(int argc, char *argv[])
     }
 
     InteropTestPortType *ws = NULL;;
-    /*if (argc > 3)
-    {
-	printf("Usage :\n %s <server> <port>\n\n", argv[0]);
-	printf("Sending Requests to Server http://%s:%s ........\n\n", server,
-	       port);
-
-	//sprintf(endpoint, "http://%s:%s/axis/base", server, port);
-	//endpoint for Axis Java sample
-	sprintf(endpoint, "http://%s:%s/axis/services/echo", server, port);
-	ws = new InteropTestPortType(endpoint);
-    }*/
+    /*
     sprintf(endpoint, "http://%s:%s/axis/services/echo", server, port);
     ws = new InteropTestPortType(endpoint); //Samisa: this is an ugly hack to init the LibWWW lib
     ws = NULL; 
+    */
+
     pthread_t thread[NUM_THREADS];
     pthread_attr_t attr;
     int rc, t, status = 0;
@@ -249,7 +244,6 @@ main(int argc, char *argv[])
     {
 	printf("Creating thread %d\n", t);
 	rc = pthread_create(&thread[t], &attr, run, (void*)ws);
-//	rc = pthread_join(thread[t], (void **)&status);
 	if (rc)
 	{
 	    printf("ERROR; return code from pthread_create() is %d\n", rc);
