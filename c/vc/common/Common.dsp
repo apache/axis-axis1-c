@@ -91,6 +91,10 @@ SOURCE=..\..\src\common\ArrayBean.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\AxisException.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\AxisTime.cpp
 # End Source File
 # Begin Source File
@@ -128,6 +132,14 @@ SOURCE=..\..\src\common\TypeMapping.cpp
 # Begin Source File
 
 SOURCE=..\..\src\common\ArrayBean.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\AxisConfig.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\AxisException.h
 # End Source File
 # Begin Source File
 

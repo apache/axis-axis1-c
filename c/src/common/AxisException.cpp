@@ -129,7 +129,7 @@ string AxisException::getMessage(exception* e)
 string AxisException::getMessage(int e)
 {
     SoapFault* objSoap = SoapFault::getSoapFault(e);
-    char* sMessage = objSoap->getSoapString();
+    const char* sMessage = objSoap->getSoapString();
     if (sMessage == NULL)
     {
         switch(e)
