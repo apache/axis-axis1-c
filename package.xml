@@ -66,6 +66,9 @@ Please use these to configure directories to suit the needs of your system.
 		<copy todir="${dir.release}/include">
 			<fileset dir="${basedir}/include" includes="**"/>
 		</copy>
+		<copy todir="${dir.release}/include">
+			<fileset dir="${dir.obj}/include" includes="**"/>
+		</copy>
 	</target>
 
 	<target name="copyLibs">
