@@ -4,30 +4,31 @@
 	</globalConfiguration>
 	<service name="AxisAdmin" provider="CPP:DOCUMENT" description="Axis C++ Administration web service">
 		<parameter name="allowedMethods" value="updateWSDD "/>
-		<parameter name="className" value="C:\susantha\ws-axis\c\bin\AdminService.dll" />
+		<parameter name="className" value="/usr/local/apache/Axis/webservices/libAdminService.so" />
 	</service>
+
 	<service name="baseDL" provider="CPP:DOCUMENT" description="SOAPBuilders Interoperability Lab Round 2 base test suite described at http://www.whitemesa.com/interop/proposal2.html ">
 		<parameter name="allowedMethods" value="echoString EchoInt echoStringArray echoInteger echoIntegerArray echoFloat echoFloatArray echoStruct echoStructArray echoVoid echoBase64 echoDate echoHexBinary echoDecimal echoBoolean "/>
-		<parameter name="className" value="C:\susantha\ws-axis\c\bin\doclitbase.dll" />
+		<parameter name="className" value="/usr/local/apache/Axis/webservices/libdoclitbase.so" />
 	</service>
 	<service name="groupBDL" provider="CPP:DOCUMENT" description="SOAPBuilders Interoperability Lab Round 2 GroupB test suite described at http://www.whitemesa.com/interop/proposal2.html ">
 		<parameter name="allowedMethods" value="echoSimpleTypesAsStruct echoNestedStruct echoNestedArray echoStructAsSimpleTypes "/>
-		<parameter name="className" value="C:\susantha\ws-axis\c\bin\doclitgroupB.dll" />
+		<parameter name="className" value="/usr/local/apache/Axis/webservices/libdoclitgroupB.so" />
 	</service>
 	<service name="base" provider="CPP:RPC" description="SOAPBuilders Interoperability Lab Round 2 base test suite described at http://www.whitemesa.com/interop/proposal2.html ">
 		<parameter name="allowedMethods" value="echoString EchoInt echoStringArray echoInteger echoIntegerArray echoFloat echoFloatArray echoStruct echoStructArray echoVoid echoBase64 echoDate echoHexBinary echoDecimal echoBoolean "/>
-		<parameter name="className" value="C:\susantha\ws-axis\c\bin\base.dll" />
+		<parameter name="className" value="/usr/local/apache/Axis/webservices/libbase.so" />
 	</service>
 	<service name="cbase" provider="C:RPC" description="SOAPBuilders Interoperability Lab Round 2 base test suite described at http://www.whitemesa.com/interop/proposal2.html ">
 		<parameter name="allowedMethods" value="echoString EchoInt echoStringArray echoInteger echoIntegerArray echoFloat echoFloatArray echoStruct echoStructArray echoVoid echoBase64 echoDate echoHexBinary echoDecimal echoBoolean "/>
-		<parameter name="className" value="C:\susantha\ws-axis\c\bin\cbase.dll" />
+		<parameter name="className" value="/usr/local/apache/Axis/webservices/libcbase.so" />
 	</service>
 	<service name="cgroupB" provider="C:RPC" description="SOAPBuilders Interoperability Lab Round 2 GroupB test suite described at http://www.whitemesa.com/interop/proposal2.html ">
 		<parameter name="allowedMethods" value="echoSimpleTypesAsStruct echoNestedStruct echoNestedArray echoStructAsSimpleTypes "/>
-		<parameter name="className" value="C:\susantha\ws-axis\c\bin\cGroupB.dll" />
+		<parameter name="className" value="/usr/local/apache/Axis/webservices/libcgroupB.so" />
 	</service>
 	<service name="groupB" provider="CPP:RPC" description="SOAPBuilders Interoperability Lab Round 2 GroupB test suite described at http://www.whitemesa.com/interop/proposal2.html ">
 		<parameter name="allowedMethods" value="echoSimpleTypesAsStruct echoNestedStruct echoNestedArray echoStructAsSimpleTypes "/>
-		<parameter name="className" value="C:\susantha\ws-axis\c\bin\GroupB.dll" />
+		<parameter name="className" value="/usr/local/apache/Axis/webservices/libgroupB.so" />
 	</service>
 </deployment>
