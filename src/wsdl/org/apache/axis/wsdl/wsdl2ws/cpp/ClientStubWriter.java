@@ -276,9 +276,7 @@ public class ClientStubWriter extends CPPClassWriter{
 		}
 		writer.write("\t\tif (AXIS_SUCCESS == m_pCall->invoke())\n\t\t{\n");//damitha
 		writer.write("\t\t\tif(AXIS_SUCCESS == m_pCall->checkMessage(\""+minfo.getOutputMessage().getLocalPart()+"\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\"))\n\t\t\t{\n");//damitha
-		System.out.println("getInputMessage .................. "+minfo.getInputMessage().getLocalPart());
-		System.out.println("getOutputMessage .................. "+minfo.getOutputMessage().getLocalPart());
-		
+				
 		if ( isAllTreatedAsOutParams) {
 			String currentParamName;
 			String currentParaType;
@@ -377,20 +375,15 @@ public class ClientStubWriter extends CPPClassWriter{
 		String faultType =null;	 
 		String langName =null;
 		String paramName =null;
-		if (paramsFault.hasNext()){
+		while (paramsFault.hasNext()){
 			FaultInfo info = (FaultInfo)paramsFault.next();
-			faultInfoName =info.getFaultInfo();
-	      	System.out.println(info.getFaultInfo()+"FAult info %%%%%%%%%%%"); 
+			faultInfoName =info.getFaultInfo();	     
 			ArrayList paramInfo =info.getParams();
-			for (int i= 0; i < paramInfo.size(); i++) {
-				System.out.println("Info ~~~~~~~");
+			for (int i= 0; i < paramInfo.size(); i++) {				
 				ParameterInfo par =(ParameterInfo)paramInfo.get(i);                                                                                                                                                           
 				paramName  = par.getParamName();
 				langName =par.getLangName();
-				System.out.println(par.getLangName()+"get Language name +++++++++++ ");
-				System.out.println(par.getParamName()+"to get the parameter name ^^^^^^^^^^^");
 				faultType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(par,wscontext);
-				System.out.println(faultType+" Fault type  ..............   ");
 				writeExceptions(faultType,faultInfoName,paramName,langName);
 				}
 			}
