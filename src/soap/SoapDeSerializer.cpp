@@ -173,8 +173,8 @@ SoapEnvelope* SoapDeSerializer::GetEnvelope()
 IHeaderBlock* SoapDeSerializer::GetHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace)
 {
 	if (!m_pHeader) return NULL; /* there has been no <Header> element so there can be no Header blocks */
-	
-	return (HeaderBlock*)m_pHeader->getHeaderBlock(pName, pNamespace);
+
+	return m_pHeader->getHeaderBlock(pName, pNamespace);
 }
 											   
 int SoapDeSerializer::GetHeader()
@@ -204,6 +204,7 @@ int SoapDeSerializer::GetHeader()
 			if ((END_ELEMENT == m_pNode->m_type) && (0 == strcmp(m_pNode->m_pchNameOrValue, SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_HEADER]))) {
 				m_pNode = NULL; /*This is to indicate that node is identified and used */
 				return m_nStatus;
+				break;
 			} else {
 				if (START_ELEMENT == m_pNode->m_type) {
 					if (iLevel == HEADER_LEVEL) {
