@@ -24,6 +24,8 @@ int main(int argc, char* argv[])
 		server = argv[1];
 		port = argv[2];
 	}
+	try
+        {
 	printf("Sending Requests to Server http://%s:%s ........\n\n", server, port);
 	sprintf(endpoint, "http://%s:%s/axis/Calculator", server, port);
 	Calculator ws(endpoint);
@@ -75,6 +77,19 @@ int main(int argc, char* argv[])
 		printf("Invalid operation %s\n\n", op);
 		PrintUsage();
 	}
+        }
+        catch(AxisException& e)
+        {
+            printf("Exception : %s\n", e.what());
+        }
+        catch(exception& e)
+        {
+            printf("Unknown exception has occured\n" );
+        }
+	catch(...)
+        {
+            printf("Unknown exception has occured\n" );
+        }
 	return 0;
 }
 
