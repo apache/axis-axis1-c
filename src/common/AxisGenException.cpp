@@ -19,7 +19,7 @@
  *
  */
 
-#include <axis/AxisGenException.h>
+#include <axis/AxisGenException.hpp>
 #include <exception>
 
 AXIS_CPP_NAMESPACE_START

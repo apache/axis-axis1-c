@@ -19,7 +19,7 @@
  *
  */
 
-#include <axis/server/Packet.h>
+#include <axis/server/Packet.hpp>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>

@@ -22,7 +22,7 @@
  */
 
 #include "AxisConfig.h"
-#include <axis/server/GDefine.h>
+#include <axis/server/GDefine.hpp>
 #include "../common/AxisFile.h"
 #include "AxisUtils.h"
 #include <stdlib.h>

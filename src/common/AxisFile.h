@@ -23,7 +23,7 @@
  
 #if !defined(__AXIS_AXISFILE_H_OF_AXIS_INCLUDED__)
 #define __AXIS_AXISFILE_H_OF_AXIS_INCLUDED__
-#include <axis/server/GDefine.h>
+#include <axis/server/GDefine.hpp>
 #include <stdio.h>
 #include <string.h>
 

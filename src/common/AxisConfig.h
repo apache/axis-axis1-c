@@ -26,7 +26,7 @@
 #define __AXIS_AXISCONFIG_H_OF_AXIS_INCLUDED__
 
 #define CONFBUFFSIZE 256
-#include <axis/server/GDefine.h>
+#include <axis/server/GDefine.hpp>
 #include <string>
 /**
  *   @class AxisConfig

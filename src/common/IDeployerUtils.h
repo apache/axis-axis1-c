@@ -20,7 +20,7 @@
 #if !defined(AXIS_IDEPLOYERUTILS_H__OF_AXIS_INCLUDED_)
 #define AXIS_IDEPLOYERUTILS_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/AxisUserAPI.h>
+#include <axis/server/AxisUserAPI.hpp>
 
 /*
  *   @class IDeployerUtils

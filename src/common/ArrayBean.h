@@ -20,7 +20,7 @@
 #define AXIS_ARRAYBEAN_H__OF_AXIS_INCLUDED_
 
 #include "IArrayBean.h"
-#include <axis/server/IParam.h>
+#include <axis/server/IParam.hpp>
 #include "BasicTypeSerializer.h"
 
 #include <list>

@@ -24,7 +24,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include "AxisUtils.h"
-#include <axis/server/GDefine.h>
+#include <axis/server/GDefine.hpp>
 #include "AxisConfig.h"
 #include <string>
 
