@@ -292,10 +292,9 @@ AXIS_TRANSPORT_STATUS LibWWWTransport::flushOutput()
 #ifdef HT_EXT_CONTINUE    //this block sends the message immediately after HTTP headers
                  //without using 100-continue
     
-    HTRequest_setOutputFormat(m_pRequest, WWW_SOURCE);
+    //HTRequest_setOutputFormat(m_pRequest, WWW_SOURCE);
     HTRequest_setOutputFormat(m_pRequest, HTAtom_for ("text/xml"));
     HTRequest_setMethod(m_pRequest, METHOD_EXT_0);
-    HTMethod_setExtensionMethod(METHOD_EXT_0, "POST", NO);
         
     if(HTRequest_setMessageBody(m_pRequest, m_pcData) == NO)
         return TRANSPORT_FAILED;
@@ -402,21 +401,26 @@ int DestroyInstance(SOAPTransport *inst)
 }
 }
 
+int inited = 0;
 extern "C" {
 STORAGE_CLASS_INFO
 void initializeLibrary(void)
 {
+    if(inited) //make sure the lib is initialized only once per client
+        return;
     //Create a new non-premptive client
     //HTProfile_newNoCacheClient("AxisCpp", "1.3");
     //Create a new non-premptive client (in this case no event loop is required)
     HTProfile_newPreemptiveClient("AxisCpp", "1.3");
+    inited = 1;
     //Disable interactive mode, could be useful when debugging
     HTAlert_setInteractive(NO);
     // Add our own filter to do the clean up after response received
     HTNet_addAfter(terminate_handler, NULL, NULL, HT_ALL, HT_FILTER_LAST);
     //How long we are going to wait for a response
-    HTHost_setEventTimeout(50000);
+    HTHost_setEventTimeout(5000);
 
+    HTMethod_setExtensionMethod(METHOD_EXT_0, "POST", NO);
 }
 }
 
@@ -425,7 +429,7 @@ STORAGE_CLASS_INFO
 void uninitializeLibrary(void)
 {
     //Terminate libwww 
-    HTProfile_delete();
+//    HTProfile_delete();
 }
 }
 
