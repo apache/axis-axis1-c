@@ -63,6 +63,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.axismora.deployment.AxisDeployment;
 import org.apache.axismora.encoding.AxisPullParser;
+import org.apache.axismora.encoding.Serializable;
 import org.apache.axismora.soap.XMLTextData;
 
 import org.apache.axis.AxisFault;
@@ -123,6 +124,17 @@ public interface MessageContext extends javax.xml.rpc.handler.MessageContext {
      * @param result
      * @return
      */
+    
+	/**
+		* This method takes care of serializing of body according to the style.
+		* Style specific serialization is handled in the java classes in the package
+		* provider.serializers.
+		* 
+		* @param styleProvider Manages serialization of the body acording to the style.
+		* @throws AxisFault
+		*/ 
+	   public void setSoapBodyContents(Serializable styleProvider) throws AxisFault;
+	   
     public boolean setSoapBodyContent(Object result) throws AxisFault;
     /**
      * get the name of the method (wsdl operation) invoke by this requst
