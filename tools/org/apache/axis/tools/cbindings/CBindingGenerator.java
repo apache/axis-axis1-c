@@ -354,6 +354,8 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 				return "AXISCHANDLE";
 			} else if ("AnyType".equals(tok)) {
 				type += "AxiscAnyType";
+			} else if ("bool".equals(tok)) {
+				type += "AxiscBool";
 			} else {
 				type += changeAxisToAxisc(tok);
 			}

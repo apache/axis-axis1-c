@@ -95,7 +95,11 @@ public:
     AxisTraceEntrypoints *g_traceEntrypoints = NULL;
 #endif
 
-class AxisTrace
+#ifdef WIN32
+#pragma warning (disable : 4251)
+#endif
+
+class STORAGE_CLASS_INFO AxisTrace
 {
 public:
     AxisTrace() {};
@@ -175,7 +179,7 @@ public:
 #ifdef AXISTRACE_LIBRARY
     static inline bool isTraceOn() { return g_traceEntrypoints->m_traceOn; }
 #else
-    static inline bool isTraceOn() { return m_bLoggingOn; }
+    static bool isTraceOn();
 #endif
 
     /**
@@ -245,7 +249,7 @@ public:
       /**
        * Closes the trace file
        */
-      static void terminate() { m_bLoggingOn = false; delete m_fileTrace; m_fileTrace = NULL; };
+      static void terminate();
 
       /**
        * Returns the trace entrypoints to pass to a dynamically loaded library.
@@ -260,7 +264,7 @@ public:
          entrypoints.m_traceEntry = traceEntryInternal;
          entrypoints.m_traceExit = traceExitInternal;
          entrypoints.m_traceCatch = traceCatchInternal;
-         entrypoints.m_traceOn = m_bLoggingOn;
+         entrypoints.m_traceOn = isTraceOn();
       }
 #endif
 

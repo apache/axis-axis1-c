@@ -65,6 +65,18 @@ int AxisTrace::openFileByClient ()
     return AXIS_SUCCESS;
 }
 
+void AxisTrace::terminate() 
+{ 
+    m_bLoggingOn = false; 
+    delete m_fileTrace; 
+    m_fileTrace = NULL; 
+}
+
+bool AxisTrace::isTraceOn()
+{ 
+    return m_bLoggingOn; 
+}
+
 int AxisTrace::logaxis (const char* sLog1, const char* sLog2, int level,
     char* arg3, int arg4)
 {

@@ -156,7 +156,7 @@ Notes:
 		<antcall target="compileServer" inheritall="true"/>
 	</target>
 
-	<target name="buildAll" depends="compile, compileWSDL2Ws, buildWSDL2WsJARFile, generateCBindings, buildDocumentation"/>
+	<target name="buildAll" depends="compile, compileWSDL2Ws, buildWSDL2WsJARFile, buildCBindings, buildDocumentation"/>
 
 
 	<target name="build" depends="initialize"

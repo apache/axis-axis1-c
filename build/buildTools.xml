@@ -42,7 +42,10 @@
 	<!--
 	  Compile, package and run the C binding generator
 	  -->
-	<target name="generateCBindings" depends="buildTools"
+	<target name="buildCBindings" depends="generateCHeaders, compileCBindings"
+	  description="Generate the C bindings and compile and link the C bindings client library"/>
+
+	<target name="generateCHeaders" depends="buildTools"
 	  description="Run the C binding generator tool">
 		<path id ="cbindcp">
 			<fileset dir="${dir.classes}" includes="buildtools.jar"/>
@@ -58,4 +61,72 @@
 		</java>
       </target>
 
+	<!--
+	  Compile the Axis C Bindings Client Library
+	  -->
+	  <target name="compileCBindings">
+		<mkdir dir="${dir.objects}"/>
+		<mkdir dir="${dir.bin}"/>
+		<if>
+			<not>
+				<isset property="aix"/>
+			</not>
+			<then>
+				<cc outfile="${dir.bin}/${clientLibraryName}C" objdir="${dir.objects}"
+				 exceptions="true" outtype="shared" multithreaded="true">
+				  	<!-- Compilers -->
+					<compiler refid="SolarisCC"/>
+					<compiler refid="Linuxgcc"/>
+					<compiler extends="VisualC++">
+						<defineset>
+							<define name="AXISCLIENTCDLL_EXPORTS"/>
+						</defineset>
+					</compiler>
+			            <compiler refid="OS400icc"/>
+					<!-- Additional compiler flag for Client library on all platforms -->
+					<defineset>
+						<define name="AXIS_CLIENTC_LIB"/>
+						<define name="ENABLE_AXISTRACE" if="trace"/>
+					</defineset>
+					<includepath path="${dir.include}${path.separator}${dir.obj}/include"/>
+					<!-- Linkers -->
+					<linker refid="SolarisLinker"/>
+					<linker refid="LinuxLinker"/>
+					<linker refid="VisualC++Linker"/>
+			            <linker extends="OS400Linker">
+                                 <linkerarg value="-qDUPPROC"/>
+                                 <linkerarg value="-qDUPVAR"/>
+                                 <linkerarg location="end" value="${dir.bin}/lib/${clientLibraryName}.so"/>
+                              </linker>
+					<!-- Additional library of the Axis Client Library -->
+					<libset dir="${dir.bin}" libs="${clientLibraryName}" unless="os400"/>
+					<!-- Files to be compiled -->
+					<fileset dir="${dir.src}">
+						<include name="cbindings/*.cpp"/>
+					</fileset>
+				</cc>
+			</then>
+			<else>
+				<cc outfile="${dir.bin}/${libraryPrefix}${clientLibraryName}C${librarySuffix}" 
+                         objdir="${dir.objects}" exceptions="true" multithreaded="true">
+				  	<!-- Compilers -->
+					<compiler refid="AIXxlc"/>
+					<!-- Additional compiler flag for Client library on all platforms -->
+					<defineset>
+						<define name="AXIS_CLIENT_LIB"/>
+						<define name="ENABLE_AXISTRACE" if="trace"/>
+					</defineset>
+					<includepath path="${dir.include}${path.separator}${dir.obj}/include"/>
+					<!-- Linkers -->
+					<linker refid="AIXLinker"/>
+					<!-- Additional library of the Axis Client Library -->
+					<libset dir="${dir.bin}/lib" libs="${clientLibraryName}"/>
+					<!-- Files to be compiled -->
+					<fileset dir="${dir.src}">
+						<include name="cbindings/*.cpp"/>
+					</fileset>
+				</cc>
+			</else>
+		</if>
+	</target>
 </project>

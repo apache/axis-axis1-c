@@ -79,7 +79,7 @@ typedef enum
 #endif
 #endif
 
-typedef int bool;
+typedef int AxiscBool;
 typedef void* AXISCHANDLE;
 
 #endif 
