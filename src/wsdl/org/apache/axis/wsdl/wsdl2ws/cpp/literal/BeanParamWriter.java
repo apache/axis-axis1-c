@@ -330,7 +330,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 						writer.write("\tparam->"+attribs[i].getElementNameAsString()+".m_Size = array.m_Size;\n\n");
 						writer.write("\tif( param->"+attribs[i].getElementNameAsString()+".m_Array == NULL)\n");
 						writer.write("\t{\n");
-						writer.write("\t\tpp"+i+" = ("+attribs[i].getTypeName()+" **) new "+attribs[i].getTypeName()+"*[array.m_Size];\n");
+						writer.write("\t\tpp"+i+" = new "+attribs[i].getTypeName()+"*[array.m_Size];\n");
 						writer.write("\t\tparam->"+attribs[i].getElementNameAsString()+".m_Array = pp"+i+";\n");
 						writer.write("\t}\n\n");
 						writer.write("\t"+attribs[i].getTypeName()+" *	p"+i+" = ("+attribs[i].getTypeName()+" *) array.m_Array;\n\n");
@@ -339,7 +339,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 						writer.write("\t\tpp"+i+"[iCount"+i+"] = new "+attribs[i].getTypeName()+"();\n");
 						writer.write("\t\t*(pp"+i+"[iCount"+i+"]) = p"+i+"[iCount"+i+"];\n");
 						writer.write("\t}\n");
-						writer.write("\tdelete p"+i+";\n");
+						writer.write("\tdelete [] p"+i+";\n");
 					}
 					else
 					{

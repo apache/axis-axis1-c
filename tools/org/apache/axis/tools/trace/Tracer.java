@@ -54,7 +54,6 @@ class Tracer extends BufferedWriter {
 		typetable.put("unsigned long", "ULONG");
 		typetable.put("long", "LONG");
 		typetable.put("signed long", "LONG");
-		typetable.put("unsigned double", "UDOUBLE");
 		typetable.put("double", "DOUBLE");
 		typetable.put("float", "FLOAT");
 		typetable.put("bool", "BOOL");

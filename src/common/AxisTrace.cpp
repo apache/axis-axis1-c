@@ -193,11 +193,11 @@ void AxisTrace::traceLineInternal(const char *type, const char *classname,
 	struct tm *tm = localtime(&current);
 
 	// TODO: Milliseconds
+	// Use %Y not %y because %y gives a compiler warning on Linux
 	const int timelen=256;
 	char strtime[timelen];
 	memset(strtime,0,timelen);
-	strftime(strtime,timelen,"[%d/%m/%y %H:%M:%S:000 %Z]",tm);
-	strtime[timelen-1]='\0';
+	strftime(strtime,timelen,"[%d/%m/%Y %H:%M:%S:000 %Z]",tm);
 
 	string text = strtime;
 	text += " 1 ";  // TODO: this should be the thread id
@@ -342,8 +342,7 @@ void AxisTrace::addParameter(string& line, int type, unsigned len, void *value)
 	case TRACETYPE_INT:		sprintf(prim,"%d" ,*((int   *)value));	line += prim;	break;
 	case TRACETYPE_ULONG:	sprintf(prim,"%lu",*((long  *)value));	line += prim;	break;
 	case TRACETYPE_LONG:	sprintf(prim,"%ld",*((long  *)value));	line += prim;	break;
-	case TRACETYPE_UDOUBLE:	sprintf(prim,"%Lu",*((double*)value));	line += prim;	break;
-	case TRACETYPE_DOUBLE:	sprintf(prim,"%Ld",*((double*)value));	line += prim;	break;
+	case TRACETYPE_DOUBLE:	sprintf(prim,"%f" ,*((double*)value));	line += prim;	break;
 	case TRACETYPE_FLOAT:	sprintf(prim,"%f" ,*((float *)value));	line += prim;	break;
 
 	case TRACETYPE_BOOL:
