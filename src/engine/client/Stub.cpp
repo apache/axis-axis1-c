@@ -277,8 +277,25 @@ void Stub::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
 
 void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue)
 {
-	Attribute* pAttribute = new Attribute(pLocalname, pPrefix, pValue);
-	m_vSOAPMethodAttributes.push_back(pAttribute);
+    //Samisa
+    //Check if there is an attribute with the same local name is already set
+    Attribute* pAttribute = this->getFirstSOAPMethodAttribute();
+    while( pAttribute )
+    {
+        if( strcmp(pAttribute->getLocalName(), pLocalname) == 0 )
+        {
+            //found an attibute alredy set with same name
+            if(strcmp(pAttribute->getPrefix(), pPrefix) == 0 ) 
+            {
+                this->deleteCurrentSOAPMethodAttribute();
+                break;
+            }
+        }
+        pAttribute = this->getNextSOAPMethodAttribute();
+    }
+
+    pAttribute = new Attribute(pLocalname, pPrefix, pValue);
+    m_vSOAPMethodAttributes.push_back(pAttribute);
 }
 
 Attribute* Stub::getFirstSOAPMethodAttribute()
