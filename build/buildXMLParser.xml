@@ -11,7 +11,21 @@
 				<isset property="aix"/>
 			</not>
 			<then>
-				<cc outfile="${dir.bin}/${xmlParserLibraryName}" objdir="${dir.objects}"
+				<!--  Check to see if we are in debug mode -->
+				<if>
+					<and>
+						<isset property="windows"/>
+						<equals arg1="${debug}" arg2="true"/>
+					</and>
+					<then>
+						<property name="completeXmlParserLibraryName" value="${xmlParserLibraryName}_D"/>
+					</then>
+					<else>
+						<property name="completeXmlParserLibraryName" value="${xmlParserLibraryName}"/>
+					</else>
+				</if>
+
+				<cc outfile="${dir.bin}/${completeXmlParserLibraryName}" objdir="${dir.objects}"
 				 exceptions="true" outtype="shared" multithreaded="true">
 				 	<!-- Compilers -->
 					<compiler refid="SolarisCC"/>

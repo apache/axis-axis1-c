@@ -11,7 +11,21 @@
 				<isset property="aix"/>
 			</not>
 			<then>
-				<cc outfile="${dir.bin}/${clientLibraryName}" objdir="${dir.objects}"
+				<!--  Check to see if we are in debug mode so need _D library name -->
+				<if>
+					<and>
+						<isset property="windows"/>
+						<equals arg1="${debug}" arg2="true"/>
+					</and>
+					<then>
+						<property name="completeClientLibraryName" value="${clientLibraryName}_D"/>
+					</then>
+					<else>
+						<property name="completeClientLibraryName" value="${clientLibraryName}"/>
+					</else>
+				</if>
+					
+				<cc outfile="${dir.bin}/${completeClientLibraryName}" objdir="${dir.objects}"
 				 exceptions="true" outtype="shared" multithreaded="true">
 				  	<!-- Compilers -->
 					<compiler refid="SolarisCC"/>
