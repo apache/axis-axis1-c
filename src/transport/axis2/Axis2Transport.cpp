@@ -922,28 +922,6 @@ Axis2Transport::getHTTPProtocol ()
     return m_strHTTPProtocol.c_str ();
 }
 
-/* Axis2Transport::setHTTPProtocol( Version) Is a public method for setting the
- * current HTTP protocol.
- *
- * @param int Version is an integer value used to select which HTTP protocol
- * should be used. 0=HTTP v1.0 and 1(or any other value than 0)=HTTP v1.1
- */
-void
-Axis2Transport::setHTTPProtocol (int iVersion)
-{
-    switch (iVersion)
-    {
-    case 0:
-	m_strHTTPProtocol = "HTTP/1.0";
-	break;
-
-    case 1:
-    default:
-	m_strHTTPProtocol = "HTTP/1.1";
-	break;
-    }
-}
-
 extern "C"
 {
 /* CreateInstance() Is a C interface.

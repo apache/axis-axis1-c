@@ -105,14 +105,6 @@ class Axis2Transport:public SOAPTransport
     const char *getHTTPProtocol ();
 
   /**
-    * Sets the HTTP protocol to be 1.1 or 1.0
-    * @param iVersion Version to be used 
-    *        If 0 HTTP/1.0 would be used, if 1 HTTP/1.1 would be used.
-    *        Default is HTTP1.1
-    */
-    void setHTTPProtocol (int iVersion);
-
-  /**
     * @return HTTP Method in use - POST, GET etc.
     */
     const char *getHTTPMethod ();
