@@ -79,7 +79,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 Common_D.lib Soap_D.lib wsdd_D.lib xerces-c_2D.lib libapr.lib libhttpd.lib /nologo /dll /debug /machine:I386 /out:"../../../release/win32/mod_axis.dll" /pdbtype:sept /libpath:"../../../lib/win32/axis" /libpath:"../../../lib/win32/xercesc" /libpath:"../../../lib/win32/apache2_0"
+# ADD LINK32 Common_D.lib Soap_D.lib wsdd_D.lib xerces-c_2D.lib libapr.lib libhttpd.lib /nologo /dll /debug /machine:I386 /out:"../../../release/win32/mod_axis.dll" /pdbtype:sept /libpath:"../../../lib/axis" /libpath:"../../../lib/xerces-c" /libpath:"../../../lib/apache2_0"
 
 !ENDIF 
 
