@@ -1,5 +1,5 @@
-// InteropGroupBClient.cpp : Defines the entry point for the console application.
-//
+/* InteropGroupBClient.cpp : Defines the entry point for the console application.*/
+
 #include "InteropTestPortTypeB.h"
 #include <stdio.h>
 #include <string.h>
@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 	else
 		printf("failed\n");
 
-	//testing Nested Structs
+	/*testing Nested Structs*/
 	sss.varFloat = 12345.67890;
 	sss.varInt = 5000;
 	sss.varString = strdup("varString content of SOAPStructStruct");
@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 	else
 		printf("failed\n");
 
-	//testing echo Simple types as struct
+	/*testing echo Simple types as struct*/
 	str = strdup("content of string passed");
 	printf("invoking echoSimpleTypesAsStruct...\n");
 	if (echoSimpleTypesAsStruct(pstub, 12345.67890, 5000, str) != NULL)
@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
 	else
 		printf("failed\n");
 
-	//testing echo Struct as simple types.
+	/*testing echo Struct as simple types.*/
 	ss.varFloat = 12345.67890;
 	ss.varInt = 5000;
 	ss.varString = strdup("content of string passed");

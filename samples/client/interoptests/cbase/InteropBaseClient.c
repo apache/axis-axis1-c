@@ -133,7 +133,7 @@ int main(int argc, char* argv[])
 		printf("successful\n");
 	else
 		printf("failed\n");
-	//testing echo hex binary
+	/*testing echo hex binary */
 
 	printf("invoking echoHexBinary...\n");
 	hb.__ptr = (unsigned char*)strdup(bstr);

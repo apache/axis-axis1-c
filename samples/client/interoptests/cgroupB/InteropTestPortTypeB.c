@@ -41,7 +41,7 @@ void echoStructAsSimpleTypes(void* pStub, SOAPStruct* Value0, AXIS_OUT_PARAM  fl
 	Call* pCall = (Call*)pStub;
 	/* Following will establish the connections with the server too */
 	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, NORMAL_CHANNEL)) return ;
-	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "InteropGroupB#echoStructAsSimpleTypes");
+	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "cgroupB#echoStructAsSimpleTypes");
 	pCall->_functions->SetSOAPVersion(pCall->_object, SOAP_VER_1_1);
 	pCall->_functions->SetOperation(pCall->_object, "echoStructAsSimpleTypes", "http://soapinterop.org/");
 	pCall->_functions->AddCmplxParameter(pCall->_object, Value0, (void*)Axis_Serialize_SOAPStruct, (void*)Axis_Delete_SOAPStruct, "inputStruct", 0);
@@ -67,7 +67,7 @@ SOAPStruct* echoSimpleTypesAsStruct(void* pStub, float Value0, int Value1, xsd__
 	SOAPStruct* pReturn = NULL;
 	/* Following will establish the connections with the server too */
 	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, NORMAL_CHANNEL)) return pReturn;
-	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "InteropGroupB#echoSimpleTypesAsStruct");
+	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "cgroupB#echoSimpleTypesAsStruct");
 	pCall->_functions->SetSOAPVersion(pCall->_object, SOAP_VER_1_1);
 	pCall->_functions->SetOperation(pCall->_object, "echoSimpleTypesAsStruct", "http://soapinterop.org/");
 	pCall->_functions->AddParameter(pCall->_object, (void*)&Value0, "inputFloat", XSD_FLOAT);
@@ -94,7 +94,7 @@ SOAPStructStruct* echoNestedStruct(void* pStub, SOAPStructStruct* Value0)
 	SOAPStructStruct* pReturn = NULL;
 	/* Following will establish the connections with the server too */
 	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, NORMAL_CHANNEL)) return pReturn;
-	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "InteropGroupB#echoNestedStruct");
+	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "cgroupB#echoNestedStruct");
 	pCall->_functions->SetSOAPVersion(pCall->_object, SOAP_VER_1_1);
 	pCall->_functions->SetOperation(pCall->_object, "echoNestedStruct", "http://soapinterop.org/");
 	pCall->_functions->AddCmplxParameter(pCall->_object, Value0, (void*)Axis_Serialize_SOAPStructStruct, (void*)Axis_Delete_SOAPStructStruct, "inputStruct", 0);
@@ -119,7 +119,7 @@ SOAPArrayStruct* echoNestedArray(void* pStub, SOAPArrayStruct* Value0)
 	SOAPArrayStruct* pReturn = NULL;
 	/* Following will establish the connections with the server too */
 	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, NORMAL_CHANNEL)) return pReturn;
-	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "InteropGroupB#echoNestedArray");
+	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "cgroupB#echoNestedArray");
 	pCall->_functions->SetSOAPVersion(pCall->_object, SOAP_VER_1_1);
 	pCall->_functions->SetOperation(pCall->_object, "echoNestedArray", "http://soapinterop.org/");
 	pCall->_functions->AddCmplxParameter(pCall->_object, Value0, (void*)Axis_Serialize_SOAPArrayStruct, (void*)Axis_Delete_SOAPArrayStruct, "inputStruct", 0);
