@@ -92,6 +92,14 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=..\..\..\src\common\AxisException.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\xml\AxisParseException.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\xml\Element.cpp
 # End Source File
 # Begin Source File
@@ -122,6 +130,10 @@ SOURCE=..\..\..\src\xml\expat\XMLParserExpat.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=..\..\..\include\axis\AxisParseException.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\xml\expat\XMLParserExpat.h
