@@ -61,8 +61,8 @@
 #if !defined(_STUB_H____OF_AXIS_INCLUDED_)
 #define _STUB_H____OF_AXIS_INCLUDED_
 
-#include <axis/client/Call.h>
-#include <axis/server/Attribute.h>
+#include <axis/client/Call.hpp>
+#include <axis/server/Attribute.hpp>
 
 #ifdef __cplusplus
 

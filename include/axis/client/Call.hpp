@@ -48,17 +48,17 @@
 #if !defined(_CALL_H____OF_AXIS_INCLUDED_)
 #define _CALL_H____OF_AXIS_INCLUDED_
 
-#include "../server/GDefine.h"
-#include "../server/Packet.h"
+#include "../server/GDefine.hpp"
+#include "../server/Packet.hpp"
 
-#include "../server/TypeMapping.h"
-#include "../server/AxisUserAPI.h"
-#include "../server/SoapEnvVersions.h"
-#include "../server/WSDDDefines.h"
-#include "../server/IHeaderBlock.h"
+#include "../server/TypeMapping.hpp"
+#include "../server/AxisUserAPI.hpp"
+#include "../server/SoapEnvVersions.hpp"
+#include "../server/WSDDDefines.hpp"
+#include "../server/IHeaderBlock.hpp"
 
 #ifdef __cplusplus
-#include "../server/ISoapHeader.h"
+#include "../server/ISoapHeader.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
