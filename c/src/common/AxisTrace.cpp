@@ -43,7 +43,7 @@ AxisTrace::~AxisTrace ()
 
 int AxisTrace::openFile ()
 {
-    char* sFileName = g_pConfig->GetAxisLogPath ();
+    char* sFileName = g_pConfig->getAxisLogPath ();
     if ((fileTrace = fopen (sFileName, "a")) == NULL)
         return AXIS_FAIL;
     fclose (fileTrace);

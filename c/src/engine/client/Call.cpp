@@ -54,53 +54,53 @@ Call::~Call ()
     }
 }
 
-int Call::SetEndpointURI (const char* pchEndpointURI)
+int Call::setEndpointURI (const char* pchEndpointURI)
 {
     m_Soap.so.http->uri_path = strdup (pchEndpointURI);
     return AXIS_SUCCESS;
 }
 
-void Call::SetOperation (const char* pchOperation, const char* pchNamespace)
+void Call::setOperation (const char* pchOperation, const char* pchNamespace)
 {
-    m_pIWSSZ->CreateSoapMethod (pchOperation, pchNamespace);
+    m_pIWSSZ->createSoapMethod (pchOperation, pchNamespace);
 }
 
-void Call::AddParameter (void* pValue, const char* pchName, XSDTYPE nType)
+void Call::addParameter (void* pValue, const char* pchName, XSDTYPE nType)
 {
-     m_nStatus = m_pIWSSZ->AddOutputParam (pchName, pValue, nType);
+     m_nStatus = m_pIWSSZ->addOutputParam (pchName, pValue, nType);
 }
 
 /*
  * Method used to add arrays of basic types as parameters
  */
-void Call::AddBasicArrayParameter (Axis_Array* pArray, XSDTYPE nType,
+void Call::addBasicArrayParameter (Axis_Array* pArray, XSDTYPE nType,
     const AxisChar* pName)
 {
-    m_nStatus = m_pIWSSZ->AddOutputBasicArrayParam (pArray, nType, pName);
+    m_nStatus = m_pIWSSZ->addOutputBasicArrayParam (pArray, nType, pName);
 }
 
-void Call::AddCmplxArrayParameter (Axis_Array* pArray, void* pSZFunct,
+void Call::addCmplxArrayParameter (Axis_Array* pArray, void* pSZFunct,
     void* pDelFunct, void* pSizeFunct, const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
-     m_nStatus = m_pIWSSZ->AddOutputCmplxArrayParam (pArray, pSZFunct, pDelFunct, pSizeFunct,
+     m_nStatus = m_pIWSSZ->addOutputCmplxArrayParam (pArray, pSZFunct, pDelFunct, pSizeFunct,
         pName, pNamespace);
 }
 
-void Call::AddCmplxParameter (void* pObject, void* pSZFunct, void* pDelFunct,
+void Call::addCmplxParameter (void* pObject, void* pSZFunct, void* pDelFunct,
     const AxisChar* pName, const AxisChar* pNamespace)
 {
-     m_nStatus = m_pIWSSZ->AddOutputCmplxParam (pObject, pSZFunct, pDelFunct, pName,
+     m_nStatus = m_pIWSSZ->addOutputCmplxParam (pObject, pSZFunct, pDelFunct, pName,
         pNamespace);
 }
 
-int Call::Invoke ()
+int Call::invoke ()
 {
-     m_nStatus =  m_pAxisEngine->Process (&m_Soap);
+     m_nStatus =  m_pAxisEngine->process (&m_Soap);
      return m_nStatus;
 }
 
-int Call::Initialize (PROVIDERTYPE nStyle, int secure)
+int Call::initialize (PROVIDERTYPE nStyle, int secure)
 /* Does this mean that the stub that uses this Call object as well as all 
  * client side handlers have the same PROVIDERTYPE ? 
  */
@@ -113,7 +113,7 @@ int Call::Initialize (PROVIDERTYPE nStyle, int secure)
         m_Soap.sessionid = "somesessionid1234";
         m_nStatus = AXIS_SUCCESS;
         // remove_headers(&m_Soap);
-        if (AXIS_SUCCESS != OpenConnection (secure)) {
+        if (AXIS_SUCCESS != openConnection (secure)) {
         	m_nStatus = AXIS_FAIL;
             return AXIS_FAIL;
         }
@@ -124,30 +124,30 @@ int Call::Initialize (PROVIDERTYPE nStyle, int secure)
         	m_nStatus = AXIS_FAIL;
             return AXIS_FAIL;
         }
-        if (AXIS_SUCCESS == m_pAxisEngine->Initialize ())
+        if (AXIS_SUCCESS == m_pAxisEngine->initialize ())
         {
-            m_pMsgData = m_pAxisEngine->GetMessageData ();
+            m_pMsgData = m_pAxisEngine->getMessageData ();
             if (m_pMsgData)
             {
-                m_pMsgData->GetSoapSerializer ((IWrapperSoapSerializer**) 
+                m_pMsgData->getSoapSerializer ((IWrapperSoapSerializer**) 
                     (&m_pIWSSZ));
-                m_pMsgData->GetSoapDeSerializer ((IWrapperSoapDeSerializer**) 
+                m_pMsgData->getSoapDeSerializer ((IWrapperSoapDeSerializer**) 
                     (&m_pIWSDZ));
                 if (m_pIWSSZ && m_pIWSDZ)
                 {
-                    m_pIWSSZ->SetCurrentProviderType (nStyle);
-                    m_pIWSDZ->SetCurrentProviderType (nStyle);
+                    m_pIWSSZ->setCurrentProviderType (nStyle);
+                    m_pIWSDZ->setCurrentProviderType (nStyle);
                     switch (nStyle)
                     {
                         case C_RPC_PROVIDER:
                         case CPP_RPC_PROVIDER:
-                            m_pIWSSZ->SetStyle (RPC_ENCODED);
-                            m_pIWSDZ->SetStyle (RPC_ENCODED);
+                            m_pIWSSZ->setStyle (RPC_ENCODED);
+                            m_pIWSDZ->setStyle (RPC_ENCODED);
                             break;
                         case C_DOC_PROVIDER:
                         case CPP_DOC_PROVIDER:
-                            m_pIWSSZ->SetStyle (DOC_LITERAL);
-                            m_pIWSDZ->SetStyle (DOC_LITERAL);
+                            m_pIWSSZ->setStyle (DOC_LITERAL);
+                            m_pIWSDZ->setStyle (DOC_LITERAL);
                             break;
                         case COM_PROVIDER:
                             // TODO: ??
@@ -178,7 +178,7 @@ int Call::Initialize (PROVIDERTYPE nStyle, int secure)
     }
 }
 
-int Call::UnInitialize ()
+int Call::unInitialize ()
 {
     if (m_pAxisEngine)
     {
@@ -186,18 +186,18 @@ int Call::UnInitialize ()
 		if ( m_nStatus == AXIS_SUCCESS &&  m_pIWSDZ != NULL ) 
 		{
 			/* Test if deserialization failed */
-			m_nStatus = m_pIWSDZ->GetStatus();
+			m_nStatus = m_pIWSDZ->getStatus();
 		}
 			
-        m_pAxisEngine->UnInitialize ();
+        m_pAxisEngine->unInitialize ();
         delete m_pAxisEngine;
         m_pAxisEngine = NULL;
     }
-    CloseConnection ();
+    closeConnection ();
     return AXIS_SUCCESS;
 }
 
-int Call::SetProtocol (AXIS_PROTOCOL_TYPE protocol)
+int Call::setProtocol (AXIS_PROTOCOL_TYPE protocol)
 {
     m_Soap.trtype = protocol;
     switch (protocol)
@@ -221,10 +221,10 @@ int Call::SetProtocol (AXIS_PROTOCOL_TYPE protocol)
     return AXIS_SUCCESS;
 }
 
-int Call::SetTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type,
+int Call::setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type,
     const char* value)
 {
-    m_pTransport->SetTransportInformation (type, value, &m_Soap);
+    m_pTransport->setTransportInformation (type, value, &m_Soap);
     return AXIS_SUCCESS;
 }
 
@@ -236,327 +236,327 @@ int Call::SetTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type,
  * functions with those streams at any time it wants to send/receive
  * bytes to/from the server.
  */
-int Call::OpenConnection (int secure)
+int Call::openConnection (int secure)
 {
     m_pTransport = new AxisTransport (&m_Soap);
-    m_nStatus = m_pTransport->OpenConnection (secure);
+    m_nStatus = m_pTransport->openConnection (secure);
     return m_nStatus;
 }
 
 /*
  * This method closes the connection of this object to the server
  */
-void Call::CloseConnection ()
+void Call::closeConnection ()
 {
-    m_pTransport->CloseConnection ();
+    m_pTransport->closeConnection ();
     delete m_pTransport;
 }
 
-void Call::SetSOAPVersion (SOAP_VERSION version)
+void Call::setSOAPVersion (SOAP_VERSION version)
 {
     m_pIWSSZ->setSoapVersion (version);
 }
 
-Axis_Array Call::GetBasicArray (XSDTYPE nType, const AxisChar* pName,
+Axis_Array Call::getBasicArray (XSDTYPE nType, const AxisChar* pName,
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetBasicArray (nType, pName, pNamespace);
+    return m_pIWSDZ->getBasicArray (nType, pName, pNamespace);
 }
 
-Axis_Array Call::GetCmplxArray (void* pDZFunct, void* pCreFunct, 
+Axis_Array Call::getCmplxArray (void* pDZFunct, void* pCreFunct, 
     void* pDelFunct, void* pSizeFunct, const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetCmplxArray (pDZFunct, pCreFunct, pDelFunct, pSizeFunct,
+    return m_pIWSDZ->getCmplxArray (pDZFunct, pCreFunct, pDelFunct, pSizeFunct,
         pName, pNamespace);
 }
 
-int Call::GetElementAsInt (const AxisChar* pName, const AxisChar* pNamespace)
+int Call::getElementAsInt (const AxisChar* pName, const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetElementAsInt (pName, pNamespace);
+    return m_pIWSDZ->getElementAsInt (pName, pNamespace);
 }
 
-xsd__boolean Call::GetElementAsBoolean (const AxisChar* pName, 
+xsd__boolean Call::getElementAsBoolean (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetElementAsBoolean (pName, pNamespace);
+    return m_pIWSDZ->getElementAsBoolean (pName, pNamespace);
 }
 
-unsigned int Call::GetElementAsUnsignedInt (const AxisChar* pName,
+unsigned int Call::getElementAsUnsignedInt (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetElementAsUnsignedInt (pName, pNamespace);
+    return m_pIWSDZ->getElementAsUnsignedInt (pName, pNamespace);
 }
 
-short Call::GetElementAsShort (const AxisChar* pName, 
+short Call::getElementAsShort (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetElementAsShort (pName, pNamespace);
+    return m_pIWSDZ->getElementAsShort (pName, pNamespace);
 }
 
-unsigned short Call::GetElementAsUnsignedShort (const AxisChar* pName,
+unsigned short Call::getElementAsUnsignedShort (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetElementAsUnsignedShort (pName, pNamespace);
+    return m_pIWSDZ->getElementAsUnsignedShort (pName, pNamespace);
 }
 
-char Call::GetElementAsByte (const AxisChar* pName, const AxisChar* pNamespace)
+char Call::getElementAsByte (const AxisChar* pName, const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetElementAsByte (pName, pNamespace);
+    return m_pIWSDZ->getElementAsByte (pName, pNamespace);
 }
-unsigned char Call::GetElementAsUnsignedByte (const AxisChar* pName,
+unsigned char Call::getElementAsUnsignedByte (const AxisChar* pName,
     const AxisChar * pNamespace)
 {
-    return m_pIWSDZ->GetElementAsUnsignedByte (pName, pNamespace);
+    return m_pIWSDZ->getElementAsUnsignedByte (pName, pNamespace);
 }
 
-long Call::GetElementAsLong (const AxisChar* pName, const AxisChar* pNamespace)
+long Call::getElementAsLong (const AxisChar* pName, const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetElementAsLong (pName, pNamespace);
+    return m_pIWSDZ->getElementAsLong (pName, pNamespace);
 }
 
-long Call::GetElementAsInteger (const AxisChar* pName, 
+long Call::getElementAsInteger (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetElementAsInteger (pName, pNamespace);
+    return m_pIWSDZ->getElementAsInteger (pName, pNamespace);
 }
 
-unsigned long Call::GetElementAsUnsignedLong (const AxisChar* pName,
+unsigned long Call::getElementAsUnsignedLong (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetElementAsUnsignedLong (pName, pNamespace);
+    return m_pIWSDZ->getElementAsUnsignedLong (pName, pNamespace);
 }
 
-float Call::GetElementAsFloat (const AxisChar* pName, 
+float Call::getElementAsFloat (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetElementAsFloat (pName, pNamespace);
+    return m_pIWSDZ->getElementAsFloat (pName, pNamespace);
 }
 
-double Call::GetElementAsDouble (const AxisChar* pName, 
+double Call::getElementAsDouble (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetElementAsDouble (pName, pNamespace);
+    return m_pIWSDZ->getElementAsDouble (pName, pNamespace);
 }
 
-double Call::GetElementAsDecimal (const AxisChar* pName, 
+double Call::getElementAsDecimal (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetElementAsDecimal (pName, pNamespace);
+    return m_pIWSDZ->getElementAsDecimal (pName, pNamespace);
 }
 
-AxisChar* Call::GetElementAsString (const AxisChar* pName, 
+AxisChar* Call::getElementAsString (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetElementAsString (pName, pNamespace);
+    return m_pIWSDZ->getElementAsString (pName, pNamespace);
 }
 
-AxisChar* Call::GetElementAsAnyURI (const AxisChar* pName, 
+AxisChar* Call::getElementAsAnyURI (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetElementAsAnyURI (pName, pNamespace);
+    return m_pIWSDZ->getElementAsAnyURI (pName, pNamespace);
 }
 
-AxisChar* Call::GetElementAsQName (const AxisChar* pName, 
+AxisChar* Call::getElementAsQName (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetElementAsQName (pName, pNamespace);
+    return m_pIWSDZ->getElementAsQName (pName, pNamespace);
 }
 
-xsd__hexBinary Call::GetElementAsHexBinary (const AxisChar* pName, 
+xsd__hexBinary Call::getElementAsHexBinary (const AxisChar* pName, 
     const AxisChar * pNamespace)
 {
-    return m_pIWSDZ->GetElementAsHexBinary (pName, pNamespace);
+    return m_pIWSDZ->getElementAsHexBinary (pName, pNamespace);
 }
 
-xsd__base64Binary Call::GetElementAsBase64Binary (const AxisChar* pName,
+xsd__base64Binary Call::getElementAsBase64Binary (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetElementAsBase64Binary (pName, pNamespace);
+    return m_pIWSDZ->getElementAsBase64Binary (pName, pNamespace);
 }
 
-struct tm Call::GetElementAsDateTime (const AxisChar* pName,
+struct tm Call::getElementAsDateTime (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetElementAsDateTime (pName, pNamespace);
+    return m_pIWSDZ->getElementAsDateTime (pName, pNamespace);
 }
 
-struct tm Call::GetElementAsDate (const AxisChar* pName, 
+struct tm Call::getElementAsDate (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetElementAsDate (pName, pNamespace);
+    return m_pIWSDZ->getElementAsDate (pName, pNamespace);
 }
 
-struct tm Call::GetElementAsTime (const AxisChar* pName, 
+struct tm Call::getElementAsTime (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetElementAsTime (pName, pNamespace);
+    return m_pIWSDZ->getElementAsTime (pName, pNamespace);
 }
 
-long Call::GetElementAsDuration (const AxisChar* pName, 
+long Call::getElementAsDuration (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetElementAsDuration (pName, pNamespace);
+    return m_pIWSDZ->getElementAsDuration (pName, pNamespace);
 }
 
-int Call::GetAttributeAsInt (const AxisChar* pName, const AxisChar* pNamespace)
+int Call::getAttributeAsInt (const AxisChar* pName, const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetAttributeAsInt (pName, pNamespace);
+    return m_pIWSDZ->getAttributeAsInt (pName, pNamespace);
 }
 
-xsd__boolean Call::GetAttributeAsBoolean (const AxisChar* pName,
+xsd__boolean Call::getAttributeAsBoolean (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetAttributeAsBoolean (pName, pNamespace);
+    return m_pIWSDZ->getAttributeAsBoolean (pName, pNamespace);
 }
-unsigned int Call::GetAttributeAsUnsignedInt (const AxisChar* pName,
+unsigned int Call::getAttributeAsUnsignedInt (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetAttributeAsUnsignedInt (pName, pNamespace);
-}
-
-short Call::GetAttributeAsShort (const AxisChar* pName, 
-    const AxisChar* pNamespace)
-{
-    return m_pIWSDZ->GetAttributeAsShort (pName, pNamespace);
+    return m_pIWSDZ->getAttributeAsUnsignedInt (pName, pNamespace);
 }
 
-unsigned short Call::GetAttributeAsUnsignedShort (const AxisChar* pName,
+short Call::getAttributeAsShort (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetAttributeAsUnsignedShort (pName, pNamespace);
+    return m_pIWSDZ->getAttributeAsShort (pName, pNamespace);
 }
 
-char Call::GetAttributeAsByte (const AxisChar* pName, 
+unsigned short Call::getAttributeAsUnsignedShort (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetAttributeAsByte (pName, pNamespace);
-}
-unsigned char Call::GetAttributeAsUnsignedByte (const AxisChar* pName,
-    const AxisChar* pNamespace)
-{
-    return m_pIWSDZ->GetAttributeAsUnsignedByte (pName, pNamespace);
+    return m_pIWSDZ->getAttributeAsUnsignedShort (pName, pNamespace);
 }
 
-long Call::GetAttributeAsLong (const AxisChar* pName, 
+char Call::getAttributeAsByte (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetAttributeAsLong (pName, pNamespace);
+    return m_pIWSDZ->getAttributeAsByte (pName, pNamespace);
+}
+unsigned char Call::getAttributeAsUnsignedByte (const AxisChar* pName,
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsUnsignedByte (pName, pNamespace);
 }
 
-long Call::GetAttributeAsInteger (const AxisChar* pName,
+long Call::getAttributeAsLong (const AxisChar* pName, 
+    const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getAttributeAsLong (pName, pNamespace);
+}
+
+long Call::getAttributeAsInteger (const AxisChar* pName,
     const AxisChar * pNamespace)
 {
-    return m_pIWSDZ->GetAttributeAsInteger (pName, pNamespace);
+    return m_pIWSDZ->getAttributeAsInteger (pName, pNamespace);
 }
-unsigned long Call::GetAttributeAsUnsignedLong (const AxisChar* pName,
+unsigned long Call::getAttributeAsUnsignedLong (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetAttributeAsUnsignedLong (pName, pNamespace);
+    return m_pIWSDZ->getAttributeAsUnsignedLong (pName, pNamespace);
 }
 
-float Call::GetAttributeAsFloat (const AxisChar* pName,
+float Call::getAttributeAsFloat (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetAttributeAsFloat (pName, pNamespace);
+    return m_pIWSDZ->getAttributeAsFloat (pName, pNamespace);
 }
 
-double Call::GetAttributeAsDouble (const AxisChar* pName,
+double Call::getAttributeAsDouble (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetAttributeAsDouble (pName, pNamespace);
+    return m_pIWSDZ->getAttributeAsDouble (pName, pNamespace);
 }
 
-double Call::GetAttributeAsDecimal (const AxisChar* pName,
+double Call::getAttributeAsDecimal (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetAttributeAsDecimal (pName, pNamespace);
+    return m_pIWSDZ->getAttributeAsDecimal (pName, pNamespace);
 }
 
-AxisChar* Call::GetAttributeAsString (const AxisChar* pName,
+AxisChar* Call::getAttributeAsString (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetAttributeAsString (pName, pNamespace);
+    return m_pIWSDZ->getAttributeAsString (pName, pNamespace);
 }
 
-AxisChar* Call::GetAttributeAsAnyURI (const AxisChar* pName,
+AxisChar* Call::getAttributeAsAnyURI (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetAttributeAsAnyURI (pName, pNamespace);
+    return m_pIWSDZ->getAttributeAsAnyURI (pName, pNamespace);
 }
 
-AxisChar* Call::GetAttributeAsQName (const AxisChar* pName,
+AxisChar* Call::getAttributeAsQName (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetAttributeAsQName (pName, pNamespace);
+    return m_pIWSDZ->getAttributeAsQName (pName, pNamespace);
 }
 
-xsd__hexBinary Call::GetAttributeAsHexBinary (const AxisChar* pName,
+xsd__hexBinary Call::getAttributeAsHexBinary (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetAttributeAsHexBinary (pName, pNamespace);
+    return m_pIWSDZ->getAttributeAsHexBinary (pName, pNamespace);
 }
 
-xsd__base64Binary Call::GetAttributeAsBase64Binary (const AxisChar* pName,
+xsd__base64Binary Call::getAttributeAsBase64Binary (const AxisChar* pName,
     const AxisChar * pNamespace)
 {
-    return m_pIWSDZ->GetAttributeAsBase64Binary (pName, pNamespace);
+    return m_pIWSDZ->getAttributeAsBase64Binary (pName, pNamespace);
 }
-struct tm Call::GetAttributeAsDateTime (const AxisChar* pName,
+struct tm Call::getAttributeAsDateTime (const AxisChar* pName,
     const AxisChar * pNamespace)
 {
-    return m_pIWSDZ->GetAttributeAsDateTime (pName, pNamespace);
+    return m_pIWSDZ->getAttributeAsDateTime (pName, pNamespace);
 }
-struct tm Call::GetAttributeAsDate (const AxisChar* pName, 
+struct tm Call::getAttributeAsDate (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetAttributeAsDate (pName, pNamespace);
+    return m_pIWSDZ->getAttributeAsDate (pName, pNamespace);
 }
-struct tm Call::GetAttributeAsTime (const AxisChar* pName, 
+struct tm Call::getAttributeAsTime (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetAttributeAsTime (pName, pNamespace);
+    return m_pIWSDZ->getAttributeAsTime (pName, pNamespace);
 }
 
-long Call::GetAttributeAsDuration (const AxisChar* pName,
+long Call::getAttributeAsDuration (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetAttributeAsDuration (pName, pNamespace);
+    return m_pIWSDZ->getAttributeAsDuration (pName, pNamespace);
 }
 
-int Call::CheckMessage (const AxisChar* pName, const AxisChar* pNamespace)
+int Call::checkMessage (const AxisChar* pName, const AxisChar* pNamespace)
 {
-	 m_nStatus = m_pIWSDZ->CheckMessageBody (pName, pNamespace);
+	 m_nStatus = m_pIWSDZ->checkMessageBody (pName, pNamespace);
     return m_nStatus;
 }
 
-void* Call::GetCmplxObject (void* pDZFunct, void* pCreFunct, void* pDelFunct,
+void* Call::getCmplxObject (void* pDZFunct, void* pCreFunct, void* pDelFunct,
     const AxisChar* pName, const AxisChar* pNamespace)
 {
-    return m_pIWSDZ->GetCmplxObject (pDZFunct, pCreFunct, pDelFunct, pName,
+    return m_pIWSDZ->getCmplxObject (pDZFunct, pCreFunct, pDelFunct, pName,
         pNamespace);
 }
 
 /* global function to be used in C stubs */
-extern "C" void* GetStubObject (AXIS_PROTOCOL_TYPE nProtocol, 
+extern "C" void* getStubObject (AXIS_PROTOCOL_TYPE nProtocol, 
     AxisChar* pchEndpointURI)
 {
     Call_C* pCall = (Call_C*) malloc (sizeof (Call_C));
     pCall->_object = new Call ();
     pCall->_functions = &Call::ms_VFtable;
-    ((Call*) pCall->_object)->SetProtocol (nProtocol);
-    ((Call*) pCall->_object)->SetEndpointURI (pchEndpointURI);
+    ((Call*) pCall->_object)->setProtocol (nProtocol);
+    ((Call*) pCall->_object)->setEndpointURI (pchEndpointURI);
     return pCall;
 }
 
-extern "C" void DestroyStubObject (void* pCall)
+extern "C" void destroyStubObject (void* pCall)
 {
     Call* pObject = (Call*) ((Call_C*)pCall)->_object;
     delete pObject;
     free (pCall);
 }
 
-int Call::SetSoapHeader (SoapHeader* pSoapHeader)
+int Call::setSoapHeader (SoapHeader* pSoapHeader)
 {
 	m_nStatus = (m_pIWSSZ->setSoapHeader (pSoapHeader));
     return m_nStatus;
@@ -573,7 +573,7 @@ IHeaderBlock* Call::createHeaderBlock (AxisChar* pachLocalName,
     return (m_pIWSSZ->createHeaderBlock (pachLocalName, pachPrefix, pachUri));
 }
 
-int Call::GetStatus() 
+int Call::getStatus() 
 {
 	return m_nStatus;
 }

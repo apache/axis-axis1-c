@@ -68,7 +68,7 @@ int SoapHeader::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
     do
     {
         
-        pSZ.Serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
+        pSZ.serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
             ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_HEADER],
             NULL);
 
@@ -80,7 +80,7 @@ int SoapHeader::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
             break;
         }
         
-        pSZ.Serialize(">", NULL);
+        pSZ.serialize(">", NULL);
 
         list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
 
@@ -99,7 +99,7 @@ int SoapHeader::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
             break;
         }
         
-        pSZ.Serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
+        pSZ.serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
             ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_HEADER],
             ">", NULL);
         

@@ -18,8 +18,8 @@
 #pragma warning (disable : 4786)
 #endif
 
-#if !defined(AXIS_URIMAPPING_H__INCLUDED_)
-#define AXIS_URIMAPPING_H__INCLUDED_
+#if !defined(AXIS_URIMAPPING_H__OF_AXIS_INCLUDED_)
+#define AXIS_URIMAPPING_H__OF_AXIS_INCLUDED_
 
 enum URITYPE { URI_XSI, URI_XSD, URI_ENC, URI_ENVELOPE, URI_UNKNOWN};
 #include <map>
@@ -38,12 +38,12 @@ using namespace std;
 class URIMapping  
 {
 public:
-    static void Initialize();
+    static void initialize();
     static map<AxisXMLString, URITYPE> m_sURIMap;
     static volatile bool m_bInit;
     URIMapping();
     virtual ~URIMapping();
-    static URITYPE Map(const AxisXMLCh* uri);
+    static URITYPE map(const AxisXMLCh* uri);
 };
 
 #endif

@@ -18,8 +18,8 @@
 #pragma warning(disable : 4786)
 #endif
 
-#if !defined(__WSDDDOCUMENTXERCES_H_INCLUDED__)
-#define __WSDDDOCUMENTXERCES_H_INCLUDED__
+#if !defined(__WSDDDOCUMENTXERCES_H_OF_AXIS_INCLUDED__)
+#define __WSDDDOCUMENTXERCES_H_OF_AXIS_INCLUDED__
 
 #include "WSDDDocument.h"
 #include <xercesc/sax2/DefaultHandler.hpp>
@@ -43,17 +43,17 @@ class WSDDDocumentXerces : public WSDDDocument, public DefaultHandler
 {
 private:
     const AxisChar* __XTRC(const XMLCh* pChar);
-    void ProcessAttributes(WSDDLevels ElementType, const Attributes &attrs);
-    void GetParameters(WSDDLevels ElementType, const Attributes &attrs);
-    void AddAllowedRolesToService(const AxisXMLCh* value);
-    void AddAllowedMethodsToService(const AxisXMLCh* value);
-    int ParseDocument(const AxisChar* sWSDD);
+    void processAttributes(WSDDLevels ElementType, const Attributes &attrs);
+    void getParameters(WSDDLevels ElementType, const Attributes &attrs);
+    void addAllowedRolesToService(const AxisXMLCh* value);
+    void addAllowedMethodsToService(const AxisXMLCh* value);
+    int parseDocument(const AxisChar* sWSDD);
 
 public:
     WSDDDocumentXerces(map<AxisString, int>* pLibNameIdMap);
     ~WSDDDocumentXerces();
-    int GetDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment);
-    int UpdateDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment);
+    int getDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment);
+    int updateDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment);
 
     
     /*  Implementations of the SAX DocumentHandler interface */

@@ -16,8 +16,8 @@
  *
  */
 
-#if !defined(__HANDLERLOADER_H_INCLUDED__)
-#define __HANDLERLOADER_H_INCLUDED__
+#if !defined(__HANDLERLOADER_H_OF_AXIS_INCLUDED__)
+#define __HANDLERLOADER_H_OF_AXIS_INCLUDED__
 
 #include <axis/server/MessageData.h>
 #include <axis/server/GDefine.h>
@@ -89,13 +89,13 @@ class HandlerLoader:protected SharedObject
             map <int, HandlerInformation*>m_HandlerInfoList;
 
     public:
-        int CreateHandler (BasicHandler** pHandler, int nLibId);
-        int DeleteHandler (BasicHandler* pHandler, int nLibId);
+        int createHandler (BasicHandler** pHandler, int nLibId);
+        int deleteHandler (BasicHandler* pHandler, int nLibId);
         HandlerLoader ();
         ~HandlerLoader ();
     private:
-        int LoadLib (HandlerInformation* pHandlerInfo);
-        int UnloadLib (HandlerInformation* pHandlerInfo);
+        int loadLib (HandlerInformation* pHandlerInfo);
+        int unloadLib (HandlerInformation* pHandlerInfo);
 };
 
 

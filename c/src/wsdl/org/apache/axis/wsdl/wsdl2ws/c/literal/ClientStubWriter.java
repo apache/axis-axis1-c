@@ -205,7 +205,7 @@ public class ClientStubWriter extends CFileWriter{
 		String channelSecurityType = (WrapperConstants.CHANNEL_SECURITY_SSL.equals(wscontext.getWrapInfo().getChannelSecurity()))?
 										"SSL_CHANNEL" : "NORMAL_CHANNEL";
 		writer.write("\t/* Following will establish the connections with the server too */\n");
-		writer.write("\tif (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_DOC_PROVIDER, "+channelSecurityType+")) return ");
+		writer.write("\tif (AXIS_SUCCESS != pCall->_functions->initialize(pCall->_object, C_DOC_PROVIDER, "+channelSecurityType+")) return ");
 		if (returntype != null){
 			writer.write((returntypeisarray?"RetArray":returntypeissimple?"Ret":"pReturn")+";\n");
 		}
@@ -256,7 +256,7 @@ public class ClientStubWriter extends CFileWriter{
 			}
 			writer.write(");\n");
 		}
-		writer.write("\tif (AXIS_SUCCESS == pCall->_functions->Invoke(pCall->_object))\n\t{\n");
+		writer.write("\tif (AXIS_SUCCESS == pCall->_functions->invoke(pCall->_object))\n\t{\n");
 		writer.write("\t\tif(AXIS_SUCCESS == pCall->_functions->CheckMessage(pCall->_object, \""+minfo.getOutputMessage().getLocalPart()+"\", \""+minfo.getOutputMessage().getNamespaceURI()+"\"))\n\t\t{\n");
 		if ( isAllTreatedAsOutParams) {
 			String currentParamName;
@@ -305,11 +305,11 @@ public class ClientStubWriter extends CFileWriter{
 				}				
 			}	
 			writer.write("\t\t}\n");
-			writer.write("\t}\n\tpCall->_functions->UnInitialize(pCall->_object);\n");
+			writer.write("\t}\n\tpCall->_functions->unInitialize(pCall->_object);\n");
 		}
 		else if (returntype == null){
 			writer.write("\t\t\t/*not successful*/\n\t\t}\n");
-			writer.write("\t}\n\tpCall->_functions->UnInitialize(pCall->_object);\n");
+			writer.write("\t}\n\tpCall->_functions->unInitialize(pCall->_object);\n");
 		}
 		else if (returntypeisarray){
 			QName qname = WrapperUtils.getArrayType(retType).getName();
@@ -326,19 +326,19 @@ public class ClientStubWriter extends CFileWriter{
 				writer.write("\tmemcpy(&RetArray, &array, sizeof(Axis_Array));\n");
 			}
 			writer.write("\t\t}\n");
-			writer.write("\t}\n\tpCall->_functions->UnInitialize(pCall->_object);\n");
+			writer.write("\t}\n\tpCall->_functions->unInitialize(pCall->_object);\n");
 			writer.write("\treturn RetArray;\n");
 		}
 		else if(returntypeissimple){
 			writer.write("\t\t\tRet = pCall->_functions->"+ CUtils.getParameterGetValueMethodName(outparamType, false)+"(pCall->_object, \""+ returntype.getElementName().getLocalPart()+"\", 0);\n");
 			writer.write("\t\t}\n");
-			writer.write("\t}\n\tpCall->_functions->UnInitialize(pCall->_object);\n");
+			writer.write("\t}\n\tpCall->_functions->unInitialize(pCall->_object);\n");
 			writer.write("\treturn Ret;\n");
 		}
 		else{
 			writer.write("\t\t\tpReturn = ("+outparamType+"*)pCall->_functions->GetCmplxObject(pCall->_object, (void*) Axis_DeSerialize_"+outparamType+", (void*) Axis_Create_"+outparamType+", (void*) Axis_Delete_"+outparamType+",\""+returntype.getElementName().getLocalPart()+"\", 0);\n"); 
 			writer.write("\t\t}\n");
-			writer.write("\t}\n\tpCall->_functions->UnInitialize(pCall->_object);\n");
+			writer.write("\t}\n\tpCall->_functions->unInitialize(pCall->_object);\n");
 			writer.write("\treturn pReturn;\n");						
 		}
 		

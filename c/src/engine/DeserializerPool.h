@@ -16,8 +16,8 @@
  */
 
 
-#if !defined(AXIS_DESERIALIZERPOOL_H__INCLUDED_)
-#define AXIS_DESERIALIZERPOOL_H__INCLUDED_
+#if !defined(AXIS_DESERIALIZERPOOL_H__OF_AXIS_INCLUDED_)
+#define AXIS_DESERIALIZERPOOL_H__OF_AXIS_INCLUDED_
 
 #include "SharedObject.h"
 #ifdef USER_DESERIALIZER
@@ -45,8 +45,8 @@ class DeserializerPool:protected SharedObject
     private:
         list <IWrapperSoapDeSerializer*>m_DZList;
     public:
-        int GetInstance (IWrapperSoapDeSerializer** ppDZ);
-        int PutInstance (IWrapperSoapDeSerializer* pDZ);
+        int getInstance (IWrapperSoapDeSerializer** ppDZ);
+        int putInstance (IWrapperSoapDeSerializer* pDZ);
 };
 
 #endif 

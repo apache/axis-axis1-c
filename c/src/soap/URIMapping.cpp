@@ -37,7 +37,7 @@ URIMapping::~URIMapping()
 
 }
 
-void URIMapping::Initialize()
+void URIMapping::initialize()
 {
     if (!m_bInit)
     {
@@ -52,7 +52,7 @@ void URIMapping::Initialize()
     }
 }
 
-URITYPE URIMapping::Map(const AxisXMLCh* uri)
+URITYPE URIMapping::map(const AxisXMLCh* uri)
 {
     if (m_sURIMap.find(uri) != m_sURIMap.end())
     {

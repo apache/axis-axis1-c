@@ -497,7 +497,7 @@ struct tm AxisTime::getTime ()
 // following function is written with no consideration of the efficiency.
 // should be changed later - Susantha 23-10-2003
 
-struct tm AxisTime::Deserialize (const AxisChar* strValue, XSDTYPE type)
+struct tm AxisTime::deserialize (const AxisChar* strValue, XSDTYPE type)
 {
     AxisTime at;
     at.setType (type);
@@ -505,7 +505,7 @@ struct tm AxisTime::Deserialize (const AxisChar* strValue, XSDTYPE type)
     return at.getDateTime ();
 }
 
-long AxisTime::DeserializeDuration (const AxisChar* strValue, XSDTYPE type)
+long AxisTime::deserializeDuration (const AxisChar* strValue, XSDTYPE type)
 {
     AxisTime at;
     at.setType (type);

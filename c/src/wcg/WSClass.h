@@ -22,8 +22,8 @@
 /* WSClass.h: interface for the WSClass class. */
 
 
-#if !defined(AXIS_WSCLASS_H__INCLUDED_)
-#define AXIS_WSCLASS_H__INCLUDED_
+#if !defined(AXIS_WSCLASS_H__OF_AXIS_INCLUDED_)
+#define AXIS_WSCLASS_H__OF_AXIS_INCLUDED_
 
 #include "Variable.h"
 #include "Method.h"

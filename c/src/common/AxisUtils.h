@@ -16,8 +16,8 @@
  *
  */
 
-#if !defined(AXIS_AXISUTILS_H__INCLUDED_)
-#define AXIS_AXISUTILS_H__INCLUDED_
+#if !defined(AXIS_AXISUTILS_H__OF_AXIS_INCLUDED_)
+#define AXIS_AXISUTILS_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/GDefine.h>
 #include <string>
@@ -83,7 +83,7 @@ class AxisUtils
 	 * @param iSize The size of the array which is to be cleared.
 	 */
         static int clearArray (char* arrCh, int iSize);
-        static void Initialize ();
+        static void initialize ();
         static const AxisXMLCh* ToAxisXMLCh (const AxisChar* pch);
         AxisUtils ();
         virtual ~ AxisUtils ();

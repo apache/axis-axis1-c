@@ -22,8 +22,8 @@
 #pragma warning (disable : 4786)
 #endif
 
-#if !defined(__SoapParserExpat_H_INCLUDED__)
-#define __SoapParserExpat_H_INCLUDED__
+#if !defined(__SoapParserExpat_H_OF_AXIS_INCLUDED__)
+#define __SoapParserExpat_H_OF_AXIS_INCLUDED__
 
 #include <expat/expat.h>
 #include <axis/server/Packet.h>
@@ -60,7 +60,7 @@ private:
     void characters(const XML_Ch *chars,int length);
     void startPrefixMapping(const XML_Ch *prefix, const XML_Ch *uri);
     void endPrefixMapping(const XML_Ch *prefix);
-    int ParseNext();
+    int parseNext();
 
     inline static void XMLCALL s_startElement(void* p, const XML_Ch *qname,
         const XML_Ch **attrs)
@@ -78,14 +78,14 @@ private:
     {((SoapParserExpat*)p)->endPrefixMapping(prefix);};
 
 public:
-    int SetInputStream(const Ax_soapstream* pInputStream);
-    const Ax_soapstream* GetInputStream(){return m_pInputStream;};
-    int Init();
-    const XML_Ch* GetNS4Prefix(const XML_Ch* prefix);
-    int GetStatus();
-    const AnyElement* Next(bool isCharData=false);
-    AXIS_TRANSPORT_STATUS GetTransportStatus(){ return m_nTransportStatus;};
-    void SetTransportStatus(AXIS_TRANSPORT_STATUS nStatus)
+    int setInputStream(const Ax_soapstream* pInputStream);
+    const Ax_soapstream* getInputStream(){return m_pInputStream;};
+    int init();
+    const XML_Ch* getNS4Prefix(const XML_Ch* prefix);
+    int getStatus();
+    const AnyElement* next(bool isCharData=false);
+    AXIS_TRANSPORT_STATUS getTransportStatus(){ return m_nTransportStatus;};
+    void setTransportStatus(AXIS_TRANSPORT_STATUS nStatus)
     { m_nTransportStatus = nStatus;};
 };
 

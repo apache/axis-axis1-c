@@ -14,8 +14,8 @@
  *   limitations under the License.
  */
 
-#if !defined(AXIS_SOAPBODY_H__INCLUDED_)
-#define AXIS_SOAPBODY_H__INCLUDED_
+#if !defined(AXIS_SOAPBODY_H__OF_AXIS_INCLUDED_)
+#define AXIS_SOAPBODY_H__OF_AXIS_INCLUDED_
 
 #include "SoapMethod.h"
 #include <axis/server/SoapFault.h>

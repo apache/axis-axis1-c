@@ -20,8 +20,8 @@
  *
  */
 
-#if !defined(AFX_SERVERHELPER_H__INCLUDED_)
-#define AFX_SERVERHELPER_H__INCLUDED_
+#if !defined(_SERVERHELPER_H__OF_AXIS_INCLUDED_)
+#define _SERVERHELPER_H__OF_AXIS_INCLUDED_
 
 #include <string>
 #include <map>

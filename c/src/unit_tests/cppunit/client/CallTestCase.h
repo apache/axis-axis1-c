@@ -2,12 +2,8 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_ALLTESTCASE_H__2F6B4B2E_EACB_4F61_93ED_AEB3DE5943DD__INCLUDED_)
-#define AFX_ALLTESTCASE_H__2F6B4B2E_EACB_4F61_93ED_AEB3DE5943DD__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+#if !defined(AFX_ALLTESTCASE_H__2F6B4B2E_EACB_4F61_93ED_AEB3DE5943DD__OF_AXIS_INCLUDED_)
+#define AFX_ALLTESTCASE_H__2F6B4B2E_EACB_4F61_93ED_AEB3DE5943DD__OF_AXIS_INCLUDED_
 
 #include "cppunit\TestCase.h"
 #include "cppunit\TestSuite.h"
@@ -38,4 +34,4 @@ public:
 
 };
 
-#endif // !defined(AFX_ALLTESTCASE_H__2F6B4B2E_EACB_4F61_93ED_AEB3DE5943DD__INCLUDED_)
+#endif // !defined(AFX_ALLTESTCASE_H__2F6B4B2E_EACB_4F61_93ED_AEB3DE5943DD__OF_AXIS_INCLUDED_)

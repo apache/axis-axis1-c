@@ -14,8 +14,8 @@
  *   limitations under the License.
  */
 
-#if !defined(AXIS_SOAPKEYWORDMAPPING_H__INCLUDED_)
-#define AXIS_SOAPKEYWORDMAPPING_H__INCLUDED_
+#if !defined(AXIS_SOAPKEYWORDMAPPING_H__OF_AXIS_INCLUDED_)
+#define AXIS_SOAPKEYWORDMAPPING_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/SoapEnvVersions.h>
 #include <map>
@@ -46,8 +46,8 @@ private:
     static map<int, SoapKeywordStruct> m_Map;
     static volatile bool m_bInit;
 public:
-    static void Initialize();
-    static const SoapKeywordStruct& Map(int nVersion);
+    static void initialize();
+    static const SoapKeywordStruct& map(int nVersion);
 };
 
 #endif

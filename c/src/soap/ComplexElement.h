@@ -23,8 +23,8 @@
  *
  */
 
-#if !defined(AXIS_COMPLEXELEMENT_H__INCLUDED_)
-#define AXIS_COMPLEXELEMENT_H__INCLUDED_
+#if !defined(AXIS_COMPLEXELEMENT_H__OF_AXIS_INCLUDED_)
+#define AXIS_COMPLEXELEMENT_H__OF_AXIS_INCLUDED_
 
 #ifdef WIN32
 #pragma warning (disable : 4786)

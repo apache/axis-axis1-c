@@ -52,33 +52,33 @@ MessageData::~MessageData ()
     m_Properties.clear ();
 }
 
-void MessageData::SetSerializer (IWrapperSoapSerializer* pSZ)
+void MessageData::setSerializer (IWrapperSoapSerializer* pSZ)
 {
     m_pSZ = pSZ;
 }
 
-void MessageData::SetDeSerializer (IWrapperSoapDeSerializer* pDZ)
+void MessageData::setDeSerializer (IWrapperSoapDeSerializer* pDZ)
 {
     m_pDZ = pDZ;
 }
 
-void MessageData::SetUserName (string &sUserName)
+void MessageData::setUserName (string &sUserName)
 {
     m_sUserName = sUserName;
 }
 
-string &MessageData::GetUserName ()
+string &MessageData::getUserName ()
 {
     return m_sUserName;
     // return "damitha kumarage"; 
 }
 
-void MessageData::SetService (const WSDDService* argService)
+void MessageData::setService (const WSDDService* argService)
 {
     m_Service = argService;
 }
 
-const WSDDService* MessageData::GetService ()
+const WSDDService* MessageData::getService ()
 {
     return m_Service;
 }
@@ -114,13 +114,13 @@ void MessageData::getSoapSerializer
     *pIHandlerSoapSerializer = static_cast < IHandlerSoapSerializer* >(m_pSZ);
 }
 
-void MessageData::GetSoapSerializer (IWrapperSoapSerializer**
+void MessageData::getSoapSerializer (IWrapperSoapSerializer**
     pIWrapperSoapSerializer)
 {
     *pIWrapperSoapSerializer = static_cast < IWrapperSoapSerializer* >(m_pSZ);
 }
 
-void MessageData::GetSoapDeSerializer (IWrapperSoapDeSerializer**
+void MessageData::getSoapDeSerializer (IWrapperSoapDeSerializer**
     pIWrapperSoapDeSerializer)
 {
     *pIWrapperSoapDeSerializer = 
@@ -161,7 +161,7 @@ const AxisChar* MessageData::getProperty (AxisChar* pachName)
     return m_pachBlankPropertyValue;
 }
 
-void MessageData::GetAdminUtils (IAdminUtils** pIAdminUtils)
+void MessageData::getAdminUtils (IAdminUtils** pIAdminUtils)
 {
     *pIAdminUtils = &m_AdminUtil;
 }

@@ -166,7 +166,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
     if (USER_TYPE == m_type)
     {
         void* pItem;
-        AXIS_BINDING_STYLE nStyle = pSZ.GetStyle();
+        AXIS_BINDING_STYLE nStyle = pSZ.getStyle();
         int itemsize = m_value.cta->pSizeFunct();
         unsigned long ptrval = reinterpret_cast<unsigned long>(m_value.cta->pObject);
         if (DOC_LITERAL == nStyle) 
@@ -177,11 +177,11 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
             for (int x=0; x<m_nSize; x++)
             {
                 pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
-                pSZ.Serialize("<", m_ItemName.c_str(), NULL); 
+                pSZ.serialize("<", m_ItemName.c_str(), NULL); 
                 /* note : ">" is not serialized to enable the type's serializer
 		 * to add attributes 
 		 */
-                if (C_DOC_PROVIDER == pSZ.GetCurrentProviderType())
+                if (C_DOC_PROVIDER == pSZ.getCurrentProviderType())
                 {
                     IWrapperSoapSerializer_C cWSS;
                     cWSS._object = &pSZ;
@@ -194,7 +194,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
                     m_value.cta->pSZFunct(pItem, &pSZ, true); 
                     /* no matter true or false is passed */
                 }
-                pSZ.Serialize("</", m_ItemName.c_str(), ">", NULL);
+                pSZ.serialize("</", m_ItemName.c_str(), ">", NULL);
             }
         }
         else 
@@ -208,7 +208,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
             for (int x=0; x<m_nSize; x++)
             {
                 pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
-                if (C_RPC_PROVIDER == pSZ.GetCurrentProviderType())
+                if (C_RPC_PROVIDER == pSZ.getCurrentProviderType())
                 {
                     IWrapperSoapSerializer_C cWSS;
                     cWSS._object = &pSZ;
@@ -224,11 +224,11 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
     }
     else
     {
-        AXIS_BINDING_STYLE nStyle = pSZ.GetStyle();
+        AXIS_BINDING_STYLE nStyle = pSZ.getStyle();
         /* this is to prevent serializing type information for basic array 
 	 * elements 
 	 */
-       	if (RPC_ENCODED == nStyle) pSZ.SetStyle(RPC_LITERAL); 
+       	if (RPC_ENCODED == nStyle) pSZ.setStyle(RPC_LITERAL); 
         switch (m_type)
         {
             case XSD_BYTE:
@@ -237,7 +237,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
                 char* p = (char*)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.SerializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+                    pSZ.serializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
                     p++;
                 }
             }
@@ -248,7 +248,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
                 short* p = (short*)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.SerializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+                    pSZ.serializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
                     p++;
                 }
             }
@@ -261,7 +261,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
                 long* p = (long*)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.SerializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+                    pSZ.serializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
                     p++;
                 }
             }
@@ -272,7 +272,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
                 double* p = (double*)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.SerializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+                    pSZ.serializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
                     p++;
                 }
             }
@@ -289,7 +289,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
                 tm* p = (tm*)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.SerializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+                    pSZ.serializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
                     p++;
                 }
             }
@@ -301,7 +301,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
                 int* p = (int*)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.SerializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+                    pSZ.serializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
                     p++;
                 }
             }
@@ -311,7 +311,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
                 float* p = (float*)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.SerializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+                    pSZ.serializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
                     p++;
                 }
             }
@@ -324,7 +324,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
                 AxisChar** p = (AxisChar**)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.SerializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+                    pSZ.serializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
                     p++;
                 }
             }
@@ -334,7 +334,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
                 xsd__hexBinary* p = (xsd__hexBinary*)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.SerializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+                    pSZ.serializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
                     p++;
                 }
             }
@@ -344,14 +344,14 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
                 xsd__base64Binary* p = (xsd__base64Binary*)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.SerializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+                    pSZ.serializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
                     p++;
                 }
             }
                 break;
         }
 	/* restore Serializer's style after array serialization is finished */
-	if (RPC_ENCODED == nStyle) pSZ.SetStyle(RPC_ENCODED);
+	if (RPC_ENCODED == nStyle) pSZ.setStyle(RPC_ENCODED);
     }
     return AXIS_SUCCESS;
 }

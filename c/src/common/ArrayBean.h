@@ -16,8 +16,8 @@
  */
 
 
-#if !defined(AXIS_ARRAYBEAN_H__INCLUDED_)
-#define AXIS_ARRAYBEAN_H__INCLUDED_
+#if !defined(AXIS_ARRAYBEAN_H__OF_AXIS_INCLUDED_)
+#define AXIS_ARRAYBEAN_H__OF_AXIS_INCLUDED_
 
 #include "IArrayBean.h"
 #include <axis/server/IParam.h>

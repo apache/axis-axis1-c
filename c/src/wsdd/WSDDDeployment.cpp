@@ -86,34 +86,34 @@ WSDDDeployment::~WSDDDeployment()
     }
 }
 
-const WSDDHandlerList* WSDDDeployment::GetGlobalRequestFlowHandlers()
+const WSDDHandlerList* WSDDDeployment::getGlobalRequestFlowHandlers()
 {
     return m_GlobalRequestHandlers;
 }
 
-const WSDDHandlerList* WSDDDeployment::GetGlobalResponseFlowHandlers()
+const WSDDHandlerList* WSDDDeployment::getGlobalResponseFlowHandlers()
 {
     return m_GlobalResponseHandlers;
 }
 
-int WSDDDeployment::UpdateWSDD(const AxisChar* sWSDD)
+int WSDDDeployment::updateWSDD(const AxisChar* sWSDD)
 {
     WSDDDocument* doc = new WSDDDOCUMENTPARSER(m_pLibNameIdMap);
-    if (AXIS_SUCCESS != doc->UpdateDeployment(sWSDD, this))
+    if (AXIS_SUCCESS != doc->updateDeployment(sWSDD, this))
     {
         delete doc;
         return AXIS_FAIL;
     }
     delete doc;
-    SaveWSDD();
+    saveWSDD();
     return AXIS_SUCCESS;        
 }
 
-int WSDDDeployment::LoadWSDD(const AxisChar* sWSDD)
+int WSDDDeployment::loadWSDD(const AxisChar* sWSDD)
 {
     m_sWSDDPath = string(sWSDD);
     WSDDDocument* doc = new WSDDDOCUMENTPARSER(m_pLibNameIdMap);
-    if (AXIS_SUCCESS != doc->GetDeployment(sWSDD, this))
+    if (AXIS_SUCCESS != doc->getDeployment(sWSDD, this))
     {
             printf("wsdd loading failed\n");
         delete doc;
@@ -126,7 +126,7 @@ int WSDDDeployment::LoadWSDD(const AxisChar* sWSDD)
     return AXIS_SUCCESS;
 }
 
-int WSDDDeployment::SaveWSDD()
+int WSDDDeployment::saveWSDD()
 {
     FILE* file;
     int Status = AXIS_FAIL;
@@ -151,7 +151,7 @@ int WSDDDeployment::SaveWSDD()
             for(iter=m_GlobalRequestHandlers->begin();
             iter!=m_GlobalRequestHandlers->end(); iter++)
             {
-                (*iter)->UpdateWSDD(file, 3);
+                (*iter)->updateWSDD(file, 3);
             }
             if (fputs("\t\t</requestFlow>\n", file) < 0) break;
         }
@@ -162,7 +162,7 @@ int WSDDDeployment::SaveWSDD()
             for(iter=m_GlobalResponseHandlers->begin();
             iter!=m_GlobalResponseHandlers->end(); iter++)
             {
-                (*iter)->UpdateWSDD(file, 3);
+                (*iter)->updateWSDD(file, 3);
             }
             if (fputs("\t\t</responseFlow>\n", file) < 0) break;
         }
@@ -171,7 +171,7 @@ int WSDDDeployment::SaveWSDD()
 
         if(m_pTransportHandlers)
         {
-            m_pTransportHandlers->UpdateWSDD(file, 3);
+            m_pTransportHandlers->updateWSDD(file, 3);
         }
 
         WSDDServiceMap::iterator iter2;
@@ -180,7 +180,7 @@ int WSDDDeployment::SaveWSDD()
             for(iter2=m_DeployedServices->begin();
             iter2!=m_DeployedServices->end(); iter2++)
             {
-                ((*iter2).second)->UpdateWSDD(file, 1);
+                ((*iter2).second)->updateWSDD(file, 1);
             }
         }
         
@@ -196,7 +196,7 @@ int WSDDDeployment::SaveWSDD()
 }
 
 
-const WSDDService* WSDDDeployment::GetService(const AxisChar* sServiceName)
+const WSDDService* WSDDDeployment::getService(const AxisChar* sServiceName)
 {
     WSDDServiceMap::iterator iter;
     if (!m_DeployedServices) return NULL;
@@ -211,12 +211,12 @@ const WSDDService* WSDDDeployment::GetService(const AxisChar* sServiceName)
     }
 }
 
-const WSDDServiceMap* WSDDDeployment::GetWSDDServiceMap() const
+const WSDDServiceMap* WSDDDeployment::getWSDDServiceMap() const
 {
     return m_DeployedServices;
 }
 
-const AxisChar* WSDDDeployment::GetLibName(int nLibId)
+const AxisChar* WSDDDeployment::getLibName(int nLibId)
 {
     for (map<AxisString, int>::iterator it = m_pLibNameIdMap->begin();
     it != m_pLibNameIdMap->end(); it++)
@@ -229,10 +229,10 @@ const AxisChar* WSDDDeployment::GetLibName(int nLibId)
     return NULL;
 }
 
-int WSDDDeployment::AddService(WSDDService* pService)
+int WSDDDeployment::addService(WSDDService* pService)
 {
     if (!m_DeployedServices) m_DeployedServices = new WSDDServiceMap;
-    if (m_DeployedServices->find(pService->GetServiceName()) != 
+    if (m_DeployedServices->find(pService->getServiceName()) != 
         m_DeployedServices->end())
     {
         AXISTRACE1("The service already exists and the attempt to re-deploy \
@@ -240,12 +240,12 @@ int WSDDDeployment::AddService(WSDDService* pService)
     }
     else
     {
-        (*m_DeployedServices)[pService->GetServiceName()] = pService;
+        (*m_DeployedServices)[pService->getServiceName()] = pService;
     }
     return AXIS_SUCCESS;
 }        
 
-int WSDDDeployment::AddHandler(bool bGlobal, bool bRequestFlow,
+int WSDDDeployment::addHandler(bool bGlobal, bool bRequestFlow,
                                WSDDHandler* pHandler, 
                                AXIS_PROTOCOL_TYPE protocol)
 {
@@ -267,35 +267,35 @@ int WSDDDeployment::AddHandler(bool bGlobal, bool bRequestFlow,
     else /* transport */
     {
         if (!m_pTransportHandlers) m_pTransportHandlers = new WSDDTransport();
-        m_pTransportHandlers->AddHandler(bRequestFlow, protocol, pHandler);
+        m_pTransportHandlers->addHandler(bRequestFlow, protocol, pHandler);
     }
     return AXIS_SUCCESS;
 }
 
-const WSDDHandlerList* WSDDDeployment::GetTransportRequestFlowHandlers
+const WSDDHandlerList* WSDDDeployment::getTransportRequestFlowHandlers
     (AXIS_PROTOCOL_TYPE protocol)
 {
     if (!m_pTransportHandlers) return NULL;
-    return m_pTransportHandlers->GetRequestFlowHandlers(protocol);
+    return m_pTransportHandlers->getRequestFlowHandlers(protocol);
 }
 
-const WSDDHandlerList* WSDDDeployment::GetTransportResponseFlowHandlers
+const WSDDHandlerList* WSDDDeployment::getTransportResponseFlowHandlers
     (AXIS_PROTOCOL_TYPE protocol)
 {
     if (!m_pTransportHandlers) return NULL;
-    return m_pTransportHandlers->GetResponseFlowHandlers(protocol);
+    return m_pTransportHandlers->getResponseFlowHandlers(protocol);
 }
 
-int WSDDDeployment::RemoveService(WSDDService* pService)
+int WSDDDeployment::removeService(WSDDService* pService)
 {
     if (m_DeployedServices && 
-        (m_DeployedServices->find(pService->GetServiceName()) != 
+        (m_DeployedServices->find(pService->getServiceName()) != 
         m_DeployedServices->end()))
     {
         WSDDService* pTheService = 
-            (*m_DeployedServices)[pService->GetServiceName()];
-        m_pLibNameIdMap->erase(pTheService->GetLibName());
-        m_DeployedServices->erase(pService->GetServiceName());
+            (*m_DeployedServices)[pService->getServiceName()];
+        m_pLibNameIdMap->erase(pTheService->getLibName());
+        m_DeployedServices->erase(pService->getServiceName());
         delete pTheService;    
         delete pService;
         return AXIS_SUCCESS;
@@ -303,11 +303,11 @@ int WSDDDeployment::RemoveService(WSDDService* pService)
     return AXIS_NO_SUCH_SERVICE;
 }
 
-int WSDDDeployment::RemoveHandler(bool bGlobal, bool bRequestFlow, 
+int WSDDDeployment::removeHandler(bool bGlobal, bool bRequestFlow, 
                                   WSDDHandler* pHandler, 
                                   AXIS_PROTOCOL_TYPE protocol)
 {
-    m_pLibNameIdMap->erase(pHandler->GetLibName());
+    m_pLibNameIdMap->erase(pHandler->getLibName());
     if (bGlobal)
     {
         WSDDHandlerList* pTempList = 
@@ -317,7 +317,7 @@ int WSDDDeployment::RemoveHandler(bool bGlobal, bool bRequestFlow,
             for (WSDDHandlerList::iterator itr = pTempList->begin();
                  itr != pTempList->end(); itr++)
             {
-                if (strcmp((*itr)->GetLibName(), pHandler->GetLibName()) == 0)
+                if (strcmp((*itr)->getLibName(), pHandler->getLibName()) == 0)
                 {
                     pTempList->remove(*itr);
                     delete (*itr);
@@ -330,18 +330,18 @@ int WSDDDeployment::RemoveHandler(bool bGlobal, bool bRequestFlow,
     else /* transport */
     {
         if (!m_pTransportHandlers) return AXIS_NO_SUCH_HANDLER;
-        return m_pTransportHandlers->RemoveHandler(bRequestFlow, 
+        return m_pTransportHandlers->removeHandler(bRequestFlow, 
             protocol, pHandler);
     }
     return AXIS_NO_SUCH_HANDLER;    
 }
 
-DEPLOYMENTTYPE WSDDDeployment::GetDeploymentType() const
+DEPLOYMENTTYPE WSDDDeployment::getDeploymentType() const
 {
     return m_DeplType;
 }
 
-void WSDDDeployment::SetDeploymentType(DEPLOYMENTTYPE nType)
+void WSDDDeployment::setDeploymentType(DEPLOYMENTTYPE nType)
 {
     m_DeplType = nType;
 }

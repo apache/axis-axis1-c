@@ -49,15 +49,15 @@ const AxisXMLCh* kw_desc;
 
 WSDDKeywords::WSDDKeywords()
 {
-    Initialize();
+    initialize();
 }
 
 WSDDKeywords::~WSDDKeywords()
 {
-    UnInitialize();
+    unInitialize();
 }
 
-void WSDDKeywords::Initialize()
+void WSDDKeywords::initialize()
 {
     if (!m_bInit)
     {
@@ -88,7 +88,7 @@ void WSDDKeywords::Initialize()
     }
 }
 
-void WSDDKeywords::UnInitialize()
+void WSDDKeywords::unInitialize()
 {
     if (m_bInit)
     {

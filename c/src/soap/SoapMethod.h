@@ -15,8 +15,8 @@
  */
 
 
-#if !defined(AXIS_SOAPMETHOD_H__INCLUDED_)
-#define AXIS_SOAPMETHOD_H__INCLUDED_
+#if !defined(AXIS_SOAPMETHOD_H__OF_AXIS_INCLUDED_)
+#define AXIS_SOAPMETHOD_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/Param.h>
 #include "../common/ISoapMethod.h"
@@ -86,7 +86,7 @@ public:
     const AxisChar* getMethodName();
     int serialize(SoapSerializer& pSZ);
     /* int serialize(string&); */
-    void AddOutputParam(Param *param);
+    void addOutputParam(Param *param);
     void setUri(const AxisChar* uri);
     void setLocalName(const AxisChar* localname);
     void setPrefix(const AxisChar* prefix);

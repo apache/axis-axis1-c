@@ -46,7 +46,7 @@ HandlerPool::~HandlerPool ()
     }
 }
 
-int HandlerPool::GetHandler (BasicHandler** ppHandler, string & sSessionId,
+int HandlerPool::getHandler (BasicHandler** ppHandler, string & sSessionId,
     int nScope, int nLibId)
 {
     *ppHandler = NULL;
@@ -58,7 +58,7 @@ int HandlerPool::GetHandler (BasicHandler** ppHandler, string & sSessionId,
             do
             {
                 if ((Status =
-                    g_pAppScopeHandlerPool->GetInstance (ppHandler,
+                    g_pAppScopeHandlerPool->getInstance (ppHandler,
                                                           nLibId)) ==
                     AXIS_SUCCESS)
                 {
@@ -75,41 +75,41 @@ int HandlerPool::GetHandler (BasicHandler** ppHandler, string & sSessionId,
             } while (Status == HANDLER_BEING_USED);
             break;
         case AH_SESSION:
-            return g_pSessionScopeHandlerPool->GetInstance (sSessionId,
+            return g_pSessionScopeHandlerPool->getInstance (sSessionId,
                 ppHandler, nLibId);
         case AH_REQUEST:
-            return g_pRequestScopeHandlerPool->GetInstance (ppHandler, nLibId);
+            return g_pRequestScopeHandlerPool->getInstance (ppHandler, nLibId);
     }
     return Status;
 }
 
-int HandlerPool::PoolHandler (string &sSessionId, BasicHandler* pHandler,
+int HandlerPool::poolHandler (string &sSessionId, BasicHandler* pHandler,
     int nScope, int nLibId)
 {
     switch (nScope)
     {
         case AH_APPLICATION:
-            g_pAppScopeHandlerPool->PutInstance (pHandler, nLibId);
+            g_pAppScopeHandlerPool->putInstance (pHandler, nLibId);
             break;
         case AH_SESSION:
-            g_pSessionScopeHandlerPool->PutInstance (sSessionId, pHandler,
+            g_pSessionScopeHandlerPool->putInstance (sSessionId, pHandler,
                 nLibId);
             break;
         case AH_REQUEST:
-            g_pRequestScopeHandlerPool->PutInstance (pHandler, nLibId);
+            g_pRequestScopeHandlerPool->putInstance (pHandler, nLibId);
             break;
     }
     return AXIS_SUCCESS;
 }
 
-int HandlerPool::GetGlobalRequestFlowHandlerChain (HandlerChain** ppChain,
+int HandlerPool::getGlobalRequestFlowHandlerChain (HandlerChain** ppChain,
     string & sSessionId)
 {
     const WSDDHandlerList* pHandlerList =
-        g_pWSDDDeployment->GetGlobalRequestFlowHandlers ();
+        g_pWSDDDeployment->getGlobalRequestFlowHandlers ();
     if (pHandlerList)
     {
-        return GetHandlerChain (sSessionId, ppChain, pHandlerList);
+        return getHandlerChain (sSessionId, ppChain, pHandlerList);
     }
     else
     {
@@ -118,14 +118,14 @@ int HandlerPool::GetGlobalRequestFlowHandlerChain (HandlerChain** ppChain,
     }
 }
 
-int HandlerPool::GetGlobalResponseFlowHandlerChain (HandlerChain** ppChain,
+int HandlerPool::getGlobalResponseFlowHandlerChain (HandlerChain** ppChain,
     string &sSessionId)
 {
     const WSDDHandlerList *pHandlerList =
-        g_pWSDDDeployment->GetGlobalResponseFlowHandlers ();
+        g_pWSDDDeployment->getGlobalResponseFlowHandlers ();
     if (pHandlerList)
     {
-        return GetHandlerChain (sSessionId, ppChain, pHandlerList);
+        return getHandlerChain (sSessionId, ppChain, pHandlerList);
     }
     else
     {
@@ -134,14 +134,14 @@ int HandlerPool::GetGlobalResponseFlowHandlerChain (HandlerChain** ppChain,
     }
 }
 
-int HandlerPool::GetTransportRequestFlowHandlerChain (HandlerChain** ppChain,
+int HandlerPool::getTransportRequestFlowHandlerChain (HandlerChain** ppChain,
     string &sSessionId, AXIS_PROTOCOL_TYPE Protocol)
 {
     const WSDDHandlerList* pHandlerList =
-        g_pWSDDDeployment->GetTransportRequestFlowHandlers (Protocol);
+        g_pWSDDDeployment->getTransportRequestFlowHandlers (Protocol);
     if (pHandlerList)
     {
-        return GetHandlerChain (sSessionId, ppChain, pHandlerList);
+        return getHandlerChain (sSessionId, ppChain, pHandlerList);
     }
     else
     {
@@ -150,14 +150,14 @@ int HandlerPool::GetTransportRequestFlowHandlerChain (HandlerChain** ppChain,
     }
 }
 
-int HandlerPool::GetTransportResponseFlowHandlerChain (HandlerChain** ppChain,
+int HandlerPool::getTransportResponseFlowHandlerChain (HandlerChain** ppChain,
     string & sSessionId, AXIS_PROTOCOL_TYPE Protocol)
 {
     const WSDDHandlerList* pHandlerList =
-        g_pWSDDDeployment->GetTransportResponseFlowHandlers (Protocol);
+        g_pWSDDDeployment->getTransportResponseFlowHandlers (Protocol);
     if (pHandlerList)
     {
-        return GetHandlerChain (sSessionId, ppChain, pHandlerList);
+        return getHandlerChain (sSessionId, ppChain, pHandlerList);
     }
     else
     {
@@ -166,13 +166,13 @@ int HandlerPool::GetTransportResponseFlowHandlerChain (HandlerChain** ppChain,
     }
 }
 
-int HandlerPool::GetRequestFlowHandlerChain (HandlerChain** ppChain,
+int HandlerPool::getRequestFlowHandlerChain (HandlerChain** ppChain,
     string &sSessionId, const WSDDService* pService)
 {
-    const WSDDHandlerList* pHandlerList = pService->GetRequestFlowHandlers ();
+    const WSDDHandlerList* pHandlerList = pService->getRequestFlowHandlers ();
     if (pHandlerList)
     {
-        return GetHandlerChain (sSessionId, ppChain, pHandlerList);
+        return getHandlerChain (sSessionId, ppChain, pHandlerList);
     }
     else
     {
@@ -182,13 +182,13 @@ int HandlerPool::GetRequestFlowHandlerChain (HandlerChain** ppChain,
     }
 }
 
-int HandlerPool::GetResponseFlowHandlerChain (HandlerChain** ppChain,
+int HandlerPool::getResponseFlowHandlerChain (HandlerChain** ppChain,
     string &sSessionId, const WSDDService* pService)
 {
-    const WSDDHandlerList* pHandlerList = pService->GetResponseFlowHandlers ();
+    const WSDDHandlerList* pHandlerList = pService->getResponseFlowHandlers ();
     if (pHandlerList)
     {
-        return GetHandlerChain (sSessionId, ppChain, pHandlerList);
+        return getHandlerChain (sSessionId, ppChain, pHandlerList);
     }
     else
     {
@@ -197,7 +197,7 @@ int HandlerPool::GetResponseFlowHandlerChain (HandlerChain** ppChain,
     }
 }
 
-int HandlerPool::GetHandlerChain (string &sSessionId, HandlerChain** ppChain,
+int HandlerPool::getHandlerChain (string &sSessionId, HandlerChain** ppChain,
     const WSDDHandlerList* pHandlerList)
 {
     lock ();
@@ -208,7 +208,7 @@ int HandlerPool::GetHandlerChain (string &sSessionId, HandlerChain** ppChain,
     {
         pChain = m_ChainStore.front ();
         m_ChainStore.pop_front ();
-        pChain->Init ();
+        pChain->init ();
     }
     else
     {
@@ -223,8 +223,8 @@ int HandlerPool::GetHandlerChain (string &sSessionId, HandlerChain** ppChain,
          it != pHandlerList->end (); it++)
     {
         pWSDDH = (*it);
-        if ((Status = GetHandler (&pBH, sSessionId, pWSDDH->GetScope (),
-            pWSDDH->GetLibId ())) == AXIS_SUCCESS)
+        if ((Status = getHandler (&pBH, sSessionId, pWSDDH->getScope (),
+            pWSDDH->getLibId ())) == AXIS_SUCCESS)
         {
             /*
              * if (NORMAL_HANDLER == pBH->_functions->GetType(pBH->_object))
@@ -246,12 +246,12 @@ int HandlerPool::GetHandlerChain (string &sSessionId, HandlerChain** ppChain,
             }
             else if (0 != pBH->_object)
             {
-                if (NORMAL_HANDLER == ((Handler*) (pBH->_object))->GetType ())
+                if (NORMAL_HANDLER == ((Handler*) (pBH->_object))->getType ())
                 {
                     ((Handler*) (pBH->_object))->
-                        SetOptionList (pWSDDH->GetParameterList ());
-                    pChain->AddHandler (pBH, pWSDDH->GetScope (),
-                        pWSDDH->GetLibId ());
+                        setOptionList (pWSDDH->getParameterList ());
+                    pChain->addHandler (pBH, pWSDDH->getScope (),
+                        pWSDDH->getLibId ());
                 }
                 else
                 {
@@ -275,12 +275,12 @@ int HandlerPool::GetHandlerChain (string &sSessionId, HandlerChain** ppChain,
         {
             if ((*pChain->m_itCurrHandler).m_pHandler != NULL)
             {
-                PoolHandler (nosession, (*pChain->m_itCurrHandler).m_pHandler,
+                poolHandler (nosession, (*pChain->m_itCurrHandler).m_pHandler,
                     (*pChain->m_itCurrHandler).m_nScope,
                     (*pChain->m_itCurrHandler).m_nLibId);
             }
         }
-        pChain->Fini ();
+        pChain->fini ();
         m_ChainStore.push_back (pChain);
         unlock ();
         return Status;
@@ -293,7 +293,7 @@ int HandlerPool::GetHandlerChain (string &sSessionId, HandlerChain** ppChain,
     }
 }
 
-void HandlerPool::PoolHandlerChain (HandlerChain* pChain, string &sSessionId)
+void HandlerPool::poolHandlerChain (HandlerChain* pChain, string &sSessionId)
 {
     for (pChain->m_itCurrHandler = pChain->m_HandlerList.begin ();
         pChain->m_itCurrHandler != pChain->m_HandlerList.end ();
@@ -301,34 +301,34 @@ void HandlerPool::PoolHandlerChain (HandlerChain* pChain, string &sSessionId)
     {
         if ((*pChain->m_itCurrHandler).m_pHandler != NULL)
         {
-            PoolHandler (sSessionId, (*pChain->m_itCurrHandler).m_pHandler,
+            poolHandler (sSessionId, (*pChain->m_itCurrHandler).m_pHandler,
                 (*pChain->m_itCurrHandler).m_nScope, 
                 (*pChain->m_itCurrHandler).m_nLibId);
         }
     }
-    pChain->Fini ();
+    pChain->fini ();
     lock ();
     m_ChainStore.push_back (pChain);
     unlock ();
 }
 
-int HandlerPool::GetWebService (BasicHandler** ppHandler, string &sSessionId,
+int HandlerPool::getWebService (BasicHandler** ppHandler, string &sSessionId,
     const WSDDHandler* pService)
 {
     int Status;
-    if ((Status = GetHandler (ppHandler, sSessionId, pService->GetScope (),
-        pService->GetLibId ())) == AXIS_SUCCESS)
+    if ((Status = getHandler (ppHandler, sSessionId, pService->getScope (),
+        pService->getLibId ())) == AXIS_SUCCESS)
     {
         if (0 != (*ppHandler)->_functions)
         /* C web service */
         {
             if (AXIS_SUCCESS !=
                 (Status =
-                (*ppHandler)->_functions->Init ((*ppHandler)->_object)))
+                (*ppHandler)->_functions->init ((*ppHandler)->_object)))
             {
-                (*ppHandler)->_functions->Fini ((*ppHandler)->_object);
-                PoolHandler (sSessionId, *ppHandler, pService->GetScope (),
-                    pService->GetLibId ());
+                (*ppHandler)->_functions->fini ((*ppHandler)->_object);
+                poolHandler (sSessionId, *ppHandler, pService->getScope (),
+                    pService->getLibId ());
                 *ppHandler = NULL;
             }
         }
@@ -339,11 +339,11 @@ int HandlerPool::GetWebService (BasicHandler** ppHandler, string &sSessionId,
         {
             if (AXIS_SUCCESS !=
                 (Status =
-                ((HandlerBase *) (*ppHandler)->_object)->Init ()))
+                ((HandlerBase *) (*ppHandler)->_object)->init ()))
             {
-                ((HandlerBase *) (*ppHandler)->_object)->Fini ();
-                PoolHandler (sSessionId, *ppHandler, pService->GetScope (),
-                    pService->GetLibId ());
+                ((HandlerBase *) (*ppHandler)->_object)->fini ();
+                poolHandler (sSessionId, *ppHandler, pService->getScope (),
+                    pService->getLibId ());
                 *ppHandler = NULL;
             }
         }
@@ -351,9 +351,9 @@ int HandlerPool::GetWebService (BasicHandler** ppHandler, string &sSessionId,
     return Status;
 }
 
-void HandlerPool::PoolWebService (string &sSessionId, BasicHandler* pHandler,
+void HandlerPool::poolWebService (string &sSessionId, BasicHandler* pHandler,
     const WSDDHandler * pHandlerInfo)
 {
-    PoolHandler (sSessionId, pHandler, pHandlerInfo->GetScope (),
-        pHandlerInfo->GetLibId ());
+    poolHandler (sSessionId, pHandler, pHandlerInfo->getScope (),
+        pHandlerInfo->getLibId ());
 }

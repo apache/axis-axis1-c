@@ -20,8 +20,8 @@
  * AxisAdminServiceWrapper.h: interface for the AxisAdminServiceWrapperclass.
  */
 
-#if !defined(__AXISADMINSERVICEWRAPPER_SERVERWRAPPER_H__INCLUDED_)
-#define __AXISADMINSERVICEWRAPPER_SERVERWRAPPER_H__INCLUDED_
+#if !defined(__AXISADMINSERVICEWRAPPER_SERVERWRAPPER_H__OF_AXIS_INCLUDED_)
+#define __AXISADMINSERVICEWRAPPER_SERVERWRAPPER_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/WrapperClassHandler.h>
 #include <axis/server/IMessageData.h>

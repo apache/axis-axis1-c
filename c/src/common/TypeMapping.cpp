@@ -42,7 +42,7 @@ TypeMapping::~TypeMapping ()
 
 }
 
-void TypeMapping::Initialize ()
+void TypeMapping::initialize ()
 {
     if (!m_bInit)
     {
@@ -77,7 +77,7 @@ void TypeMapping::Initialize ()
     }
 }
 
-XSDTYPE TypeMapping::Map (const AxisXMLCh* sType)
+XSDTYPE TypeMapping::map (const AxisXMLCh* sType)
 {
     if (m_sTypeMap.find (sType) != m_sTypeMap.end ())
     {

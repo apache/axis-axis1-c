@@ -16,8 +16,8 @@
  *
  */
 
-#if !defined(AXIS_SERIALIZERPOOL_H__INCLUDED_)
-#define AXIS_SERIALIZERPOOL_H__INCLUDED_
+#if !defined(AXIS_SERIALIZERPOOL_H__OF_AXIS_INCLUDED_)
+#define AXIS_SERIALIZERPOOL_H__OF_AXIS_INCLUDED_
 
 #include "SharedObject.h"
 #ifdef USER_SERIALIZER
@@ -46,8 +46,8 @@ class SerializerPool:protected SharedObject
     private:
         list <IWrapperSoapSerializer*>m_SZList;
     public:
-        int GetInstance (IWrapperSoapSerializer** ppSZ);
-        int PutInstance (IWrapperSoapSerializer* pSZ);
+        int getInstance (IWrapperSoapSerializer** ppSZ);
+        int putInstance (IWrapperSoapSerializer* pSZ);
 };
 
 #endif 

@@ -17,8 +17,8 @@
 /* File.h: interface for the File class. */
 
 
-#if !defined(AXIS_FILE_H__INCLUDED_)
-#define AXIS_FILE_H__INCLUDED_
+#if !defined(AXIS_FILE_H__OF_AXIS_INCLUDED_)
+#define AXIS_FILE_H__OF_AXIS_INCLUDED_
 
 #include <string>
 #include <fstream>

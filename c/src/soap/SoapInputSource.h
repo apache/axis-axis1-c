@@ -18,12 +18,8 @@
  *    @author sanjaya singharage (sanjayas@opensource.lk)
  */
 
-#if !defined(AXIS_SOAPINPUTSOURCE_H__INCLUDED_)
-#define AXIS_SOAPINPUTSOURCE_H__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif /* _MSC_VER > 1000 */
+#if !defined(AXIS_SOAPINPUTSOURCE_H__OF_AXIS_INCLUDED_)
+#define AXIS_SOAPINPUTSOURCE_H__OF_AXIS_INCLUDED_
 
 #include <xercesc/sax/InputSource.hpp>
 #include "SoapBinInputStream.h"

@@ -37,7 +37,7 @@ DeserializerPool::~DeserializerPool ()
     }
 }
 
-int DeserializerPool::GetInstance (IWrapperSoapDeSerializer** ppDZ)
+int DeserializerPool::getInstance (IWrapperSoapDeSerializer** ppDZ)
 {
     lock ();
     if (!m_DZList.empty ())
@@ -52,7 +52,7 @@ int DeserializerPool::GetInstance (IWrapperSoapDeSerializer** ppDZ)
 #else
         *ppDZ = new SoapDeSerializer ();
 #endif                
-        if (AXIS_SUCCESS != (*ppDZ)->Init ())
+        if (AXIS_SUCCESS != (*ppDZ)->init ())
         {
             delete* ppDZ;
             *ppDZ = NULL;
@@ -65,9 +65,9 @@ int DeserializerPool::GetInstance (IWrapperSoapDeSerializer** ppDZ)
     return AXIS_SUCCESS;
 }
 
-int DeserializerPool::PutInstance (IWrapperSoapDeSerializer* pDZ)
+int DeserializerPool::putInstance (IWrapperSoapDeSerializer* pDZ)
 {
-    if (AXIS_SUCCESS != pDZ->Init ())
+    if (AXIS_SUCCESS != pDZ->init ())
     {
         delete pDZ;
         return AXIS_FAIL;

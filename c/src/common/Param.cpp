@@ -66,69 +66,69 @@ int Param::serialize (SoapSerializer &pSZ)
     switch (m_Type)
     {
         case XSD_ARRAY:
-            /* pSZ.Serialize("<abc:ArrayOfPhoneNumbers 
+            /* pSZ.serialize("<abc:ArrayOfPhoneNumbers 
 	     * xmlns:abc="http://example.org/2001/06/numbers"
 	     * xmlns:enc="http://www.w3.org/2001/06/soap-encoding" 
 	     * enc:arrayType="abc:phoneNumberType[2]" >";
 	     */
 	    if (!m_Value.pArray)
                 return AXIS_FAIL; // error condition
-            if (RPC_ENCODED == pSZ.GetStyle ())
+            if (RPC_ENCODED == pSZ.getStyle ())
             {
-                pSZ.Serialize ("<", NULL);
+                pSZ.serialize ("<", NULL);
                 if (!m_strPrefix.empty ())
                 {
-                    pSZ.Serialize (m_strPrefix.c_str (), ":", m_sName.c_str (),
+                    pSZ.serialize (m_strPrefix.c_str (), ":", m_sName.c_str (),
                         "Array", " xmlns:", m_strPrefix.c_str (), "=\"",
                         m_strUri.c_str (), "\"", NULL);
                 }
                 else
                 {
-                    pSZ.Serialize (m_sName.c_str (), "Array", NULL);
+                    pSZ.serialize (m_sName.c_str (), "Array", NULL);
                 }
                 // get a prefix from Serializer
                 ATprefix =
-                    pSZ.GetNamespacePrefix (m_Value.pArray->m_URI.c_str ());
+                    pSZ.getNamespacePrefix (m_Value.pArray->m_URI.c_str ());
 
-                pSZ.Serialize (" xmlns:enc", NULL);
-                pSZ.Serialize
+                pSZ.serialize (" xmlns:enc", NULL);
+                pSZ.serialize
                     ("=\"http://www.w3.org/2001/06/soap-encoding\" ", NULL);
                 if (m_Value.pArray->m_type == USER_TYPE)
                 {
-                    pSZ.Serialize ("xmlns:", ATprefix.c_str (), "=\"",
+                    pSZ.serialize ("xmlns:", ATprefix.c_str (), "=\"",
                         m_Value.pArray->m_URI.c_str (), "\" ", NULL);
                 }
-                pSZ.Serialize ("enc:arrayType=\"", NULL);
+                pSZ.serialize ("enc:arrayType=\"", NULL);
                 if (m_Value.pArray->m_type == USER_TYPE)
                 {
-                    pSZ.Serialize (ATprefix.c_str (), ":",
+                    pSZ.serialize (ATprefix.c_str (), ":",
                         m_Value.pArray->m_TypeName.c_str (), NULL);
                 }
                 else //basic type array
                 {
-                    pSZ.Serialize ("xsd:", BasicTypeSerializer::
-                        BasicTypeStr (m_Value.pArray->m_type), NULL);
+                    pSZ.serialize ("xsd:", BasicTypeSerializer::
+                        basicTypeStr (m_Value.pArray->m_type), NULL);
                 }
                 {
                     char Buf[10]; //maximum array dimension is 99999999
                     sprintf (Buf, "[%d]", m_Value.pArray->m_nSize);
-                    pSZ.Serialize (Buf, NULL);
+                    pSZ.serialize (Buf, NULL);
                 }
 
-                pSZ.Serialize ("\">", NULL);
+                pSZ.serialize ("\">", NULL);
                 m_Value.pArray->Serialize (pSZ); //Only serializes the inner items
-                pSZ.Serialize ("</", NULL);
+                pSZ.serialize ("</", NULL);
                 if (!m_strPrefix.empty ())
                 {
-                    pSZ.Serialize (m_strPrefix.c_str (), ":", m_sName.c_str (),
+                    pSZ.serialize (m_strPrefix.c_str (), ":", m_sName.c_str (),
                         "Array", NULL);
                 }
                 else
                 {
-                    pSZ.Serialize (m_sName.c_str (), "Array", NULL);
+                    pSZ.serialize (m_sName.c_str (), "Array", NULL);
                 }
-                pSZ.RemoveNamespacePrefix (m_Value.pArray->m_URI.c_str ());
-                pSZ.Serialize (">", NULL);
+                pSZ.removeNamespacePrefix (m_Value.pArray->m_URI.c_str ());
+                pSZ.serialize (">", NULL);
             }
             else /* no wrapper element in doc/lit style. 
 		  * So directly call Array Serializer 
@@ -141,9 +141,9 @@ int Param::serialize (SoapSerializer &pSZ)
             break;
         
 	case USER_TYPE:
-            if (RPC_ENCODED == pSZ.GetStyle ())
+            if (RPC_ENCODED == pSZ.getStyle ())
             {
-                if (C_RPC_PROVIDER == pSZ.GetCurrentProviderType ())
+                if (C_RPC_PROVIDER == pSZ.getCurrentProviderType ())
                 {
                     IWrapperSoapSerializer_C cWSS;
                     cWSS._object = &pSZ;
@@ -159,11 +159,11 @@ int Param::serialize (SoapSerializer &pSZ)
             }
             else
             {
-                pSZ.Serialize ("<", m_sName.c_str (), NULL); 
+                pSZ.serialize ("<", m_sName.c_str (), NULL); 
 		/* note : ">" is not serialized to enable the type's serializer
 		 * to add attributes 
 		 */
-                if (C_DOC_PROVIDER == pSZ.GetCurrentProviderType ())
+                if (C_DOC_PROVIDER == pSZ.getCurrentProviderType ())
                 {
                     IWrapperSoapSerializer_C cWSS;
                     cWSS._object = &pSZ;
@@ -176,18 +176,18 @@ int Param::serialize (SoapSerializer &pSZ)
                     m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject,
                         &pSZ, false);
                 }
-                pSZ.Serialize ("</", m_sName.c_str (), ">", NULL);
+                pSZ.serialize ("</", m_sName.c_str (), ">", NULL);
             }
             break;
         
 	default:
             /* all basic types */
-            pSZ.SerializeAsElement(m_sName.c_str (), &(m_Value.nValue), m_Type);
+            pSZ.serializeAsElement(m_sName.c_str (), &(m_Value.nValue), m_Type);
     }
     return AXIS_SUCCESS;
 }
 
-int Param::SetValue (XSDTYPE nType, uParamValue Value)
+int Param::setValue (XSDTYPE nType, uParamValue Value)
 {
     m_Type = nType;
     switch (m_Type)
@@ -268,7 +268,7 @@ void Param::setUri (const AxisChar* uri)
     m_strUri = uri;
 }
 
-int Param::SetUserType (void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct,
+int Param::setUserType (void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct,
     AXIS_OBJECT_DELETE_FUNCT pDelFunct)
 {
     if (m_Type != USER_TYPE)
@@ -280,7 +280,7 @@ int Param::SetUserType (void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct,
     return AXIS_SUCCESS;
 }
 
-int Param::SetArrayElements (void* pElements)
+int Param::setArrayElements (void* pElements)
 {
     if (m_Type != XSD_ARRAY)
         return AXIS_FAIL;
@@ -300,7 +300,7 @@ int Param::SetArrayElements (void* pElements)
 }
 
 // following function is called to set array of user types.
-int Param::SetArrayElements (void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct,
+int Param::setArrayElements (void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct,
     AXIS_OBJECT_DELETE_FUNCT pDelFunct, AXIS_OBJECT_SIZE_FUNCT pSizeFunct)
 {
     if (m_Type != XSD_ARRAY)
@@ -324,7 +324,7 @@ int Param::SetArrayElements (void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct,
     return AXIS_FAIL;
 }
 
-void Param::SetName (const AxisChar* sName)
+void Param::setName (const AxisChar* sName)
 {
     m_sName = sName;
 }
@@ -332,7 +332,7 @@ void Param::SetName (const AxisChar* sName)
 // ComplexObjectHandler functions
 ComplexObjectHandler::ComplexObjectHandler ()
 {
-    Init ();
+    init ();
 }
 
 ComplexObjectHandler::~ComplexObjectHandler ()
@@ -345,7 +345,7 @@ ComplexObjectHandler::~ComplexObjectHandler ()
     }
 }
 
-void ComplexObjectHandler::Init ()
+void ComplexObjectHandler::init ()
 {
     pObject = NULL;
     pSZFunct = NULL;

@@ -45,19 +45,19 @@ SoapParserExpat::~SoapParserExpat()
 void SoapParserExpat::startElement(const XML_Ch *qname,const XML_Ch **attrs)
 {
     QName qn;
-    qn.SplitQNameString(qname, NAMESPACESEPARATOR);
+    qn.splitQNameString(qname, NAMESPACESEPARATOR);
     StartElement *pSE = new StartElement();
     pSE->m_NameOrValue = qn.localname;
     pSE->m_Namespace  = qn.uri ? qn.uri : "";
-    qn.MergeQNameString(NAMESPACESEPARATOR);
+    qn.mergeQNameString(NAMESPACESEPARATOR);
     SimpleAttribute *pAt = NULL;
     for (int i = 0; attrs[i]; i += 2) 
     {
-        qn.SplitQNameString(attrs[i], NAMESPACESEPARATOR);
+        qn.splitQNameString(attrs[i], NAMESPACESEPARATOR);
         pAt = new SimpleAttribute();
         pAt->m_Name = qn.localname;
         pAt->m_Namespace = qn.uri ? qn.uri : "";
-        qn.MergeQNameString(NAMESPACESEPARATOR);
+        qn.mergeQNameString(NAMESPACESEPARATOR);
         pAt->m_Value = attrs[i+1];
         pSE->m_Attributes.push_back(pAt);
     }
@@ -67,12 +67,12 @@ void SoapParserExpat::startElement(const XML_Ch *qname,const XML_Ch **attrs)
 void SoapParserExpat::endElement(const XML_Ch *qname)
 {
     QName qn;
-    qn.SplitQNameString(qname, NAMESPACESEPARATOR);
+    qn.splitQNameString(qname, NAMESPACESEPARATOR);
     EndElement *pEE = new EndElement();
     pEE->m_NameOrValue = qn.localname;
     pEE->m_Namespace  = qn.uri ? qn.uri : "";
     m_Events.push(pEE);
-    qn.MergeQNameString(NAMESPACESEPARATOR);
+    qn.mergeQNameString(NAMESPACESEPARATOR);
 }
 
 void  SoapParserExpat::characters(const XML_Ch *chars, int length)
@@ -87,7 +87,7 @@ void  SoapParserExpat::characters(const XML_Ch *chars, int length)
     if (!m_Events.empty()) 
     {
         pLastEvent = m_Events.back();
-        if (CHARACTER_ELEMENT == pLastEvent->GetType())
+        if (CHARACTER_ELEMENT == pLastEvent->getType())
         /* continuing same character node */
         {
             pLastEvent->m_NameOrValue += pTemp;
@@ -125,7 +125,7 @@ void SoapParserExpat::endPrefixMapping(const XML_Ch *prefix)
     m_Events.push(pEvent);
 }
 
-const XML_Ch* SoapParserExpat::GetNS4Prefix(const XML_Ch* prefix)
+const XML_Ch* SoapParserExpat::getNS4Prefix(const XML_Ch* prefix)
 {
     if (m_NsStack.find(prefix) != m_NsStack.end())
     {
@@ -139,7 +139,7 @@ const XML_Ch* SoapParserExpat::GetNS4Prefix(const XML_Ch* prefix)
  * stream and hence parsing should be finished or aborted.
  * @param isCharData - say that Deserializer is expecting a character data event.
  */
-const AnyElement* SoapParserExpat::Next(bool isCharData)
+const AnyElement* SoapParserExpat::next(bool isCharData)
 {
     int nStatus = TRANSPORT_IN_PROGRESS;
     if (m_pLastEvent)
@@ -151,7 +151,7 @@ const AnyElement* SoapParserExpat::Next(bool isCharData)
     {
         if (m_Events.empty())
         {
-            nStatus = ParseNext();
+            nStatus = parseNext();
             if (TRANSPORT_FAILED == nStatus) return NULL;
             if ((TRANSPORT_FINISHED == nStatus) && m_Events.empty())
                 return NULL;
@@ -161,13 +161,13 @@ const AnyElement* SoapParserExpat::Next(bool isCharData)
         if (!m_Events.empty())
         {
             m_pLastEvent = m_Events.front();
-            XML_NODE_TYPE type = m_pLastEvent->GetType();
+            XML_NODE_TYPE type = m_pLastEvent->getType();
             m_Events.pop();
             if ((CHARACTER_ELEMENT == type) && m_Events.empty())
             /* current character element may not be parsed completly */
             {
                 m_Events.push(m_pLastEvent);
-                nStatus = ParseNext();
+                nStatus = parseNext();
                 if (TRANSPORT_FAILED == nStatus) return NULL;
                 if ((TRANSPORT_FINISHED == nStatus) && m_Events.empty()) 
                     return NULL;
@@ -232,7 +232,7 @@ const AnyElement* SoapParserExpat::Next(bool isCharData)
     return NULL;
 }
 
-int SoapParserExpat::ParseNext()
+int SoapParserExpat::parseNext()
 {
     int nChars = 0;
     m_nTransportStatus = m_pInputStream->transport.pGetFunct(&m_pCurrentBuffer,
@@ -251,7 +251,7 @@ int SoapParserExpat::ParseNext()
     return m_nTransportStatus;
 }
 
-int SoapParserExpat::GetStatus()
+int SoapParserExpat::getStatus()
 {
     m_nStatus = AXIS_SUCCESS; /*TODO:Check if an error occured in expat */
     return m_nStatus;
@@ -260,7 +260,7 @@ int SoapParserExpat::GetStatus()
 /**
  * Resets SoapParserExpat object 
  */
-int SoapParserExpat::Init()
+int SoapParserExpat::init()
 {
     XML_ParserReset(m_Parser, NULL);
     XML_SetUserData(m_Parser, this);
@@ -282,7 +282,7 @@ int SoapParserExpat::Init()
     return m_nStatus;
 }
 
-int SoapParserExpat::SetInputStream(const Ax_soapstream* pInputStream)
+int SoapParserExpat::setInputStream(const Ax_soapstream* pInputStream)
 {
     m_pInputStream = pInputStream;
     return AXIS_SUCCESS;

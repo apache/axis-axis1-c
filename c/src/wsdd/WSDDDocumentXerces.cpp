@@ -47,7 +47,7 @@ WSDDDocumentXerces::~WSDDDocumentXerces()
 
 }
 
-int WSDDDocumentXerces::GetDeployment(const AxisChar* sWSDD,
+int WSDDDocumentXerces::getDeployment(const AxisChar* sWSDD,
                                       WSDDDeployment* pDeployment)
 {
     m_pDeployment = pDeployment;   
@@ -60,7 +60,7 @@ int WSDDDocumentXerces::GetDeployment(const AxisChar* sWSDD,
     return AXIS_SUCCESS;
 }
 
-int WSDDDocumentXerces::ParseDocument(const AxisChar* sWSDD)
+int WSDDDocumentXerces::parseDocument(const AxisChar* sWSDD)
 {
     try
     {
@@ -78,7 +78,7 @@ int WSDDDocumentXerces::ParseDocument(const AxisChar* sWSDD)
     return AXIS_SUCCESS;
 }
 
-int WSDDDocumentXerces::UpdateDeployment(const AxisChar* sWSDD,
+int WSDDDocumentXerces::updateDeployment(const AxisChar* sWSDD,
                                          WSDDDeployment* pDeployment)
 {
     m_pDeployment = pDeployment; 
@@ -235,7 +235,7 @@ void  WSDDDocumentXerces::endElement (const XMLCh *const uri,
     }
 }
 
-void WSDDDocumentXerces::ProcessAttributes(WSDDLevels ElementType,
+void WSDDDocumentXerces::processAttributes(WSDDLevels ElementType,
                                            const Attributes &attrs)
 {
     AxisXMLString sLocal;
@@ -332,7 +332,7 @@ void WSDDDocumentXerces::ProcessAttributes(WSDDLevels ElementType,
     }
 }
 
-void WSDDDocumentXerces::GetParameters(WSDDLevels ElementType,
+void WSDDDocumentXerces::getParameters(WSDDLevels ElementType,
                                        const Attributes &attrs)
 {
     AxisXMLString sName, sValue, sType;
@@ -413,7 +413,7 @@ void WSDDDocumentXerces::GetParameters(WSDDLevels ElementType,
     }
 }
 
-void WSDDDocumentXerces::AddAllowedRolesToService(const AxisXMLCh* value)
+void WSDDDocumentXerces::addAllowedRolesToService(const AxisXMLCh* value)
 {
     AxisString sValue = value;
     int prepos = 0, pos = 0;
@@ -430,7 +430,7 @@ void WSDDDocumentXerces::AddAllowedRolesToService(const AxisXMLCh* value)
     }
 }
 
-void WSDDDocumentXerces::AddAllowedMethodsToService(const AxisXMLCh* value)
+void WSDDDocumentXerces::addAllowedMethodsToService(const AxisXMLCh* value)
 {
     AxisString sValue = value;
     int prepos = 0, pos = 0, len = 0;

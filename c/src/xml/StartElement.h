@@ -20,8 +20,8 @@
  *   @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  */
 
-#if !defined(AXIS_STARTELEMENT_H__INCLUDED_)
-#define AXIS_STARTELEMENT_H__INCLUDED_
+#if !defined(AXIS_STARTELEMENT_H__OF_AXIS_INCLUDED_)
+#define AXIS_STARTELEMENT_H__OF_AXIS_INCLUDED_
 
 #include <list>
 using namespace std;
@@ -36,7 +36,7 @@ public:
     virtual ~StartElement();
     list<SimpleAttribute*> m_Attributes;
 public:
-    virtual XML_NODE_TYPE GetType() { return START_ELEMENT;};
+    virtual XML_NODE_TYPE getType() { return START_ELEMENT;};
 };
 
 

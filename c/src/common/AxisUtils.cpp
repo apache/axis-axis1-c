@@ -44,7 +44,7 @@ const AxisXMLCh* AxisUtils::ToAxisXMLCh (const AxisChar* pch)
     return pch;
 }
 
-void AxisUtils::Initialize ()
+void AxisUtils::initialize ()
 {
 }
 

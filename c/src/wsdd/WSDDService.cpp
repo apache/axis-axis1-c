@@ -54,7 +54,7 @@ WSDDService::~WSDDService()
     }
 }
 
-void WSDDService::SetProvider(const AxisChar* sProvider)
+void WSDDService::setProvider(const AxisChar* sProvider)
 {
     if (0 == strcmp(sProvider, "CPP:RPC"))
     {
@@ -82,22 +82,22 @@ void WSDDService::SetProvider(const AxisChar* sProvider)
     }
 }
 
-PROVIDERTYPE WSDDService::GetProvider() const
+PROVIDERTYPE WSDDService::getProvider() const
 {
     return m_Provider;
 }
 
-const AxisChar* WSDDService::GetServiceName() const
+const AxisChar* WSDDService::getServiceName() const
 {
     return m_sName.c_str();
 }
 
-void WSDDService::AddAllowedMethod(const AxisChar* sMethodName)
+void WSDDService::addAllowedMethod(const AxisChar* sMethodName)
 {
     m_AllowedMethods.push_back(sMethodName);
 }
 
-bool WSDDService::IsAllowedMethod(const AxisChar* sServiceName) const
+bool WSDDService::isAllowedMethod(const AxisChar* sServiceName) const
 {
     list<AxisString>::const_iterator iter;
     for(iter = m_AllowedMethods.begin();iter != m_AllowedMethods.end();iter++)
@@ -110,27 +110,27 @@ bool WSDDService::IsAllowedMethod(const AxisChar* sServiceName) const
     return false;
 }
 
-const WSDDHandlerList* WSDDService::GetRequestFlowHandlers() const
+const WSDDHandlerList* WSDDService::getRequestFlowHandlers() const
 {
     return m_RequestHandlers;
 }
 
-const WSDDHandlerList* WSDDService::GetResponseFlowHandlers() const
+const WSDDHandlerList* WSDDService::getResponseFlowHandlers() const
 {
     return m_ResponseHandlers;
 }
 
-void WSDDService::AddAllowedRole(const AxisChar* sRole)
+void WSDDService::addAllowedRole(const AxisChar* sRole)
 {
     m_AllowedRoles.push_back(sRole);
 }
 
-const list<AxisString>& WSDDService::GetAllowedRoles()
+const list<AxisString>& WSDDService::getAllowedRoles()
 {
     return m_AllowedRoles;
 }
 
-void  WSDDService::AddHandler(bool bRequestFlow, WSDDHandler* pHandler)
+void  WSDDService::addHandler(bool bRequestFlow, WSDDHandler* pHandler)
 {
     if (bRequestFlow)
     {
@@ -150,7 +150,7 @@ void  WSDDService::AddHandler(bool bRequestFlow, WSDDHandler* pHandler)
  * in WSDDDeployment's <LibId, LibName> is not removed because the same handler may
  * be in use by other services. 
  */
-int WSDDService::RemoveHandler(bool bRequestFlow, WSDDHandler* pHandler)
+int WSDDService::removeHandler(bool bRequestFlow, WSDDHandler* pHandler)
 {
     WSDDHandlerList* pTempList = 
         bRequestFlow ? m_RequestHandlers : m_ResponseHandlers;
@@ -158,7 +158,7 @@ int WSDDService::RemoveHandler(bool bRequestFlow, WSDDHandler* pHandler)
     for (WSDDHandlerList::iterator itr = pTempList->begin();
          itr != pTempList->end(); itr++)
     {
-        if (strcmp((*itr)->GetLibName(), pHandler->GetLibName()) == 0)
+        if (strcmp((*itr)->getLibName(), pHandler->getLibName()) == 0)
         {
             pTempList->remove(*itr);
             delete (*itr);
@@ -174,18 +174,18 @@ const list<AxisString> WSDDService::getAllowedMethods() const
     return m_AllowedMethods;
 }
 
-int WSDDService::UpdateWSDD(FILE* wsddfile, int tabcount)
+int WSDDService::updateWSDD(FILE* wsddfile, int tabcount)
 {
     m_file = wsddfile;
-    PrintTabs(tabcount); *this << "<service name=\"" << 
-        m_sName.c_str() << "\" provider=\"" << GetProviderString() << 
+    printTabs(tabcount); *this << "<service name=\"" << 
+        m_sName.c_str() << "\" provider=\"" << getProviderString() << 
         "\" description=\"" << m_sDescription.c_str() << "\">\n";
     if (m_Params)
     {
         map<AxisString, AxisString>::iterator itr;
         for (itr = m_Params->begin(); itr != m_Params->end(); itr++)
         {
-            PrintTabs(tabcount+1); *this << "<parameter name=\"" << 
+            printTabs(tabcount+1); *this << "<parameter name=\"" << 
                 (*itr).first.c_str() << "\" value=\"" << 
                 (*itr).second.c_str() << "\" />";
         }
@@ -197,7 +197,7 @@ int WSDDService::UpdateWSDD(FILE* wsddfile, int tabcount)
         for(iter=m_RequestHandlers->begin(); iter!=m_RequestHandlers->end();
             iter++)
         {
-            (*iter)->UpdateWSDD(wsddfile, 3);
+            (*iter)->updateWSDD(wsddfile, 3);
         }
         *this << "\t\t</requestFlow>\n";
     }
@@ -208,11 +208,11 @@ int WSDDService::UpdateWSDD(FILE* wsddfile, int tabcount)
         for(iter=m_ResponseHandlers->begin(); iter!=m_ResponseHandlers->end(); 
         iter++)
         {
-            (*iter)->UpdateWSDD(wsddfile, 3);
+            (*iter)->updateWSDD(wsddfile, 3);
         }
         *this << "\t\t</responseFlow>\n";
     }
-    PrintTabs(tabcount+1); *this <<
+    printTabs(tabcount+1); *this <<
         "<parameter name=\"allowedMethods\" value=\"";
     /* for looop */
     for (list<AxisString>::iterator itrs = m_AllowedMethods.begin();
@@ -221,15 +221,15 @@ int WSDDService::UpdateWSDD(FILE* wsddfile, int tabcount)
         *this << (*itrs).c_str() << " ";
     }
     *this << "\"/>\n"; 
-    PrintTabs(tabcount+1); *this << "<parameter name=\"className\" value=\"" 
+    printTabs(tabcount+1); *this << "<parameter name=\"className\" value=\"" 
         << m_sLibName.c_str();
     *this << "\" />\n"; 
-    PrintTabs(tabcount); *this << "</service>\n";
+    printTabs(tabcount); *this << "</service>\n";
     m_file = 0;
     return AXIS_SUCCESS;
 }
 
-const char* WSDDService::GetProviderString()
+const char* WSDDService::getProviderString()
 {
     switch(m_Provider)
     {

@@ -20,8 +20,8 @@
  *   @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  */
 
-#if !defined(AXIS_Event_H__INCLUDED_)
-#define AXIS_Event_H__INCLUDED_
+#if !defined(AXIS_Event_H__OF_AXIS_INCLUDED_)
+#define AXIS_Event_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/AnyElement.h>
 
@@ -35,7 +35,7 @@ public:
     virtual ~Event();
     string m_NameOrValue; /* character data or element name */
 public:
-    virtual XML_NODE_TYPE GetType(){ return CHARACTER_ELEMENT;};
+    virtual XML_NODE_TYPE getType(){ return CHARACTER_ELEMENT;};
 };
 
 typedef Event CharElement;

@@ -41,7 +41,7 @@ AppScopeHandlerPool::~AppScopeHandlerPool ()
         for (list <BasicHandler*>::iterator itr = (*it).second.begin ();
             itr != (*it).second.end (); itr++)
         {
-            g_pHandlerLoader->DeleteHandler (*itr, (*it).first);
+            g_pHandlerLoader->deleteHandler (*itr, (*it).first);
         }
         (*it).second.clear ();
     }
@@ -52,7 +52,7 @@ AppScopeHandlerPool::~AppScopeHandlerPool ()
  * thread MUST block itself and wait if the requested handler is not found.
  */
 
-int AppScopeHandlerPool::GetInstance (BasicHandler** pHandler, int nLibId)
+int AppScopeHandlerPool::getInstance (BasicHandler** pHandler, int nLibId)
 {
     lock ();
     int Status;
@@ -77,7 +77,7 @@ int AppScopeHandlerPool::GetInstance (BasicHandler** pHandler, int nLibId)
     }
     else // Not even the handler DLL loaded
     {
-        Status = g_pHandlerLoader->CreateHandler (pHandler, nLibId);
+        Status = g_pHandlerLoader->createHandler (pHandler, nLibId);
         if (AXIS_SUCCESS == Status)
         {
             /* This just creates the entry in m_Handlers so that next time we 
@@ -90,7 +90,7 @@ int AppScopeHandlerPool::GetInstance (BasicHandler** pHandler, int nLibId)
     }
 }
 
-int AppScopeHandlerPool::PutInstance (BasicHandler* pHandler, int nLibId)
+int AppScopeHandlerPool::putInstance (BasicHandler* pHandler, int nLibId)
 {
     lock ();
     m_Handlers[nLibId].push_back (pHandler);

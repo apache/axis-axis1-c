@@ -14,8 +14,8 @@
  *   limitations under the License.
  */
 
-#if !defined(__WSDDDOCUMENT_H_INCLUDED__)
-#define __WSDDDOCUMENT_H_INCLUDED__
+#if !defined(__WSDDDOCUMENT_H_OF_AXIS_INCLUDED__)
+#define __WSDDDOCUMENT_H_OF_AXIS_INCLUDED__
 
 #include "WSDDDeployment.h"
 #include <axis/server/WSDDService.h>
@@ -56,9 +56,9 @@ protected:
     /* used to transcode 'XMLCh' to AxisChar */
 public:
     virtual ~WSDDDocument(){};
-    virtual int GetDeployment(const AxisChar* sWSDD,
+    virtual int getDeployment(const AxisChar* sWSDD,
         WSDDDeployment* pDeployment)=0;
-    virtual int UpdateDeployment(const AxisChar* sWSDD,
+    virtual int updateDeployment(const AxisChar* sWSDD,
         WSDDDeployment* pDeployment)=0;
 };
 

@@ -17,8 +17,8 @@
  */
 
 
-#if !defined(AXIS_SESSIONSCOPEHANDLERPOOL_H__INCLUDED_)
-#define AXIS_SESSIONSCOPEHANDLERPOOL_H__INCLUDED_
+#if !defined(AXIS_SESSIONSCOPEHANDLERPOOL_H__OF_AXIS_INCLUDED_)
+#define AXIS_SESSIONSCOPEHANDLERPOOL_H__OF_AXIS_INCLUDED_
 
 #define SESSIONLESSHANDLERS	"0aaaaa"
 
@@ -46,11 +46,11 @@ class SessionScopeHandlerPool:protected SharedObject
         typedef map < string, list <BasicHandler*> >SessionHandlers;
         map <int, SessionHandlers*>m_Handlers;
     public:
-        int GetInstance (string &sSessionId, BasicHandler** pHandler, 
+        int getInstance (string &sSessionId, BasicHandler** pHandler, 
             int nLibId);
-        int PutInstance (string &sSessionId, BasicHandler* pHandler, 
+        int putInstance (string &sSessionId, BasicHandler* pHandler, 
             int nLibId);
-        void EndSession (string &sSessionId);
+        void endSession (string &sSessionId);
 };
 
 #endif 

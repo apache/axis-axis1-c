@@ -16,8 +16,8 @@
  *   
  */
 
-#if !defined(AXIS_IARRAYBEAN_H__INCLUDED_)
-#define AXIS_IARRAYBEAN_H__INCLUDED_
+#if !defined(AXIS_IARRAYBEAN_H__OF_AXIS_INCLUDED_)
+#define AXIS_IARRAYBEAN_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/GDefine.h>
 #include <axis/server/AxisUserAPI.h>

@@ -15,8 +15,8 @@
  *   limitations under the License.
  */
 
-#if !defined(AXIS_AXISSOCKETUTILS_H__INCLUDED_)
-#define AXIS_AXISSOCKETUTILS_H__INCLUDED_
+#if !defined(AXIS_AXISSOCKETUTILS_H__OF_AXIS_INCLUDED_)
+#define AXIS_AXISSOCKETUTILS_H__OF_AXIS_INCLUDED_
 
 /*
  *  @class AxisSocketUtils

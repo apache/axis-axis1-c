@@ -47,7 +47,7 @@ AxisTransport::~AxisTransport()
         delete m_pHttpTransport;
 }
 
-int AxisTransport::OpenConnection(int secure)
+int AxisTransport::openConnection(int secure)
 {
     /* Step 1 - Open Transport layer connection taking into account protocol
      * and endpoint URI in m_Soap
@@ -79,7 +79,7 @@ int AxisTransport::OpenConnection(int secure)
     }
 }        
 
-void AxisTransport::CloseConnection()
+void AxisTransport::closeConnection()
 {
     /* Step 1 - Close Transport and 2 streams */
     m_pHttpTransport->Fini();
@@ -107,7 +107,7 @@ AXIS_TRANSPORT_STATUS AXISCALL AxisTransport::s_Send_bytes(const char*
 {
     Ax_soapstream* pStream = (Ax_soapstream*) pSStream;
     AxisTransport* pTransport = (AxisTransport*)(pStream->str.op_stream);
-    return pTransport->Send_bytes(pSendBuffer, bufferid, pSStream);
+    return pTransport->sendBytes(pSendBuffer, bufferid, pSStream);
 }
 
 /**
@@ -116,7 +116,7 @@ AXIS_TRANSPORT_STATUS AXISCALL AxisTransport::s_Send_bytes(const char*
  * sends all the accumulated buffers through the transport. Note that the 
  * buffers provided should be NULL terminated (no length parameter is passed.
  */
-AXIS_TRANSPORT_STATUS AxisTransport::Send_bytes(const char* pSendBuffer, 
+AXIS_TRANSPORT_STATUS AxisTransport::sendBytes(const char* pSendBuffer, 
                                                 const void* bufferid, 
                                                 const void* pSStream)
 {
@@ -181,10 +181,10 @@ AXIS_TRANSPORT_STATUS AXISCALL AxisTransport::s_Get_bytes(const char** res,
 {
     Ax_soapstream* pStream = (Ax_soapstream*) pSStream;
     AxisTransport* pTransport = (AxisTransport*)(pStream->str.ip_stream);
-    return pTransport->Get_bytes(res, retsize, pSStream);
+    return pTransport->getBytes(res, retsize, pSStream);
 }
 
-AXIS_TRANSPORT_STATUS AxisTransport::Get_bytes(const char** res, int* retsize, 
+AXIS_TRANSPORT_STATUS AxisTransport::getBytes(const char** res, int* retsize, 
                                                const void* pSStream)
 {
     const char* strReceive =  m_pReceiver->Recv();
@@ -216,10 +216,10 @@ void AXISCALL AxisTransport::s_SetTransportInformation
 {
     Ax_soapstream* pStream = (Ax_soapstream*) pSStream;
     AxisTransport* pTransport = (AxisTransport*)(pStream->str.op_stream);
-    pTransport->SetTransportInformation(type, value, pSStream);
+    pTransport->setTransportInformation(type, value, pSStream);
 }
 
-void AxisTransport::SetTransportInformation
+void AxisTransport::setTransportInformation
     (AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value, 
     const void* pSStream)
 {

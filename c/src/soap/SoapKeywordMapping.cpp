@@ -38,7 +38,7 @@ SoapKeywordMapping::~SoapKeywordMapping()
 
 }
 
-void SoapKeywordMapping::Initialize()
+void SoapKeywordMapping::initialize()
 {
     if (!m_bInit)
     {
@@ -72,7 +72,7 @@ void SoapKeywordMapping::Initialize()
     }
 }
 
-const SoapKeywordStruct& SoapKeywordMapping::Map(int nVersion)
+const SoapKeywordStruct& SoapKeywordMapping::map(int nVersion)
 {
     return m_Map[nVersion];
 }

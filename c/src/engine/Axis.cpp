@@ -112,9 +112,9 @@ extern "C" int process_request (Ax_soapstream* stream)
                 AxisEngine *engine = new ServerAxisEngine ();
                 if (engine)
                 {
-                    if (AXIS_SUCCESS == engine->Initialize ())
+                    if (AXIS_SUCCESS == engine->initialize ())
                     {
-                        Status = engine->Process (stream);
+                        Status = engine->process (stream);
                     }
                     delete engine;
                 }
@@ -136,7 +136,7 @@ extern "C" int process_request (Ax_soapstream* stream)
 
                 if (sUriWOAxis.empty ())
                 {
-                    pSrvMap = g_pWSDDDeployment->GetWSDDServiceMap ();
+                    pSrvMap = g_pWSDDDeployment->getWSDDServiceMap ();
                     if (!pSrvMap)
                     {
                         stream->transport.pSendFunct ("<html><body>\
@@ -165,19 +165,19 @@ extern "C" int process_request (Ax_soapstream* stream)
                             pSendFunct ("<tr><td width=\"20%\">", NULL,
                                             stream);
                         stream->transport.pSendFunct ((char*) pService->
-                            GetServiceName (), NULL, stream);
+                            getServiceName (), NULL, stream);
                         stream->transport.pSendFunct
                             ("</td><td width=\"10%\" align=\"left\"><a href=\"./",
                             NULL, stream);
                         if (bNoExt) stream->transport.pSendFunct ("axis/", NULL,
                             stream);
                         stream->transport.pSendFunct ((char*) pService->
-                            GetServiceName (), NULL, stream);
+                            getServiceName (), NULL, stream);
                         stream->transport.pSendFunct ("?wsdl", NULL, stream);
                         stream->transport.pSendFunct
                             ("\">wsdl</a></td><td width=\"70%\">", NULL, stream);
                         stream->transport.pSendFunct ((char*) pService->
-                            GetDescription (), NULL, stream);
+                            getDescription (), NULL, stream);
                         stream->transport.pSendFunct ("</td></tr>", NULL, stream);
                     }
                     stream->transport.pSendFunct ("</tbody></table>", NULL,
@@ -188,7 +188,7 @@ extern "C" int process_request (Ax_soapstream* stream)
                 }
                 else
                 {
-                    sServiceName = g_pConfig->GetAxisHomePath ();
+                    sServiceName = g_pConfig->getAxisHomePath ();
                     sServiceName += WSDLDIRECTORY + sUriWOAxis + ".wsdl";
                     // Check whether wsdl file is available
                     if ((WsddFile = fopen (sServiceName.c_str (), "r")) == NULL)
@@ -234,11 +234,11 @@ extern "C" int initialize_module (int bServer)
     XMLPlatformUtils::Initialize ();
 #endif
     AxisEngine::m_bServer = bServer;
-    AxisUtils::Initialize ();
-    WSDDKeywords::Initialize ();
-    SoapKeywordMapping::Initialize ();
-    TypeMapping::Initialize ();
-    URIMapping::Initialize ();
+    AxisUtils::initialize ();
+    WSDDKeywords::initialize ();
+    SoapKeywordMapping::initialize ();
+    TypeMapping::initialize ();
+    URIMapping::initialize ();
     SoapFault::initialize ();
 #ifdef AXIS_CLIENT_LIB
     CallBase::s_Initialize ();
@@ -249,12 +249,12 @@ extern "C" int initialize_module (int bServer)
     ModuleInitialize ();
     if (bServer) // no client side wsdd processing at the moment
     {
-        int status = g_pConfig->ReadConfFile (); /* Read from the configuration
+        int status = g_pConfig->readConfFile (); /* Read from the configuration
 						  * file 
 						  */
         if (status == AXIS_SUCCESS)
         {
-            char *pWsddPath = g_pConfig->GetWsddFilePath ();
+            char *pWsddPath = g_pConfig->getWsddFilePath ();
 #if defined(__AXISTRACE__)
             status = g_pAT->openFile ();
             if (status == AXIS_FAIL)
@@ -262,7 +262,7 @@ extern "C" int initialize_module (int bServer)
                 return AXIS_FAIL;
             }
 #endif
-            if (AXIS_SUCCESS != g_pWSDDDeployment->LoadWSDD (pWsddPath))
+            if (AXIS_SUCCESS != g_pWSDDDeployment->loadWSDD (pWsddPath))
                     return AXIS_FAIL;
         }
         else
@@ -279,7 +279,7 @@ extern "C" int initialize_module (int bServer)
     }
     else if (bServer == 0)      // client side module initialization
     {
-        int status = g_pConfig->ReadConfFile (); /* Read from the configuration
+        int status = g_pConfig->readConfFile (); /* Read from the configuration
 						  * file 
 						  */
         if (status == AXIS_SUCCESS)
@@ -291,13 +291,13 @@ extern "C" int initialize_module (int bServer)
                 return AXIS_FAIL;
             }
 #endif
-            char *pClientWsddPath = g_pConfig->GetClientWsddFilePath ();
+            char *pClientWsddPath = g_pConfig->getClientWsddFilePath ();
             /* May be there is no client side handlers configured. So may not 
 	     * have CLIENTWSDDFILEPATH entry in axiscpp.conf 
 	     */
             if (!pClientWsddPath)
                 return status;
-            if (AXIS_SUCCESS != g_pWSDDDeployment->LoadWSDD (pClientWsddPath))
+            if (AXIS_SUCCESS != g_pWSDDDeployment->loadWSDD (pClientWsddPath))
                 return AXIS_FAIL;
         }
         else

@@ -1,6 +1,6 @@
 
-#if !defined(_ADMINUTILS_H____INCLUDED_)
-#define _ADMINUTILS_H____INCLUDED_
+#if !defined(_ADMINUTILS_H____OF_AXIS_INCLUDED_)
+#define _ADMINUTILS_H____OF_AXIS_INCLUDED_
 
 #include <axis/server/IAdminUtils.h>
 
@@ -9,7 +9,7 @@ class AdminUtils : public IAdminUtils
 public:
 	AdminUtils();
 	virtual ~AdminUtils();
-	int UpdateWSDD(AxisChar* wsdd);
+	int updateWSDD(AxisChar* wsdd);
 };
 
-#endif // !defined(ADMINUTILS_H____INCLUDED_)
+#endif // !defined(ADMINUTILS_H____OF_AXIS_INCLUDED_)

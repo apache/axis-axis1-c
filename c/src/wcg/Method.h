@@ -20,8 +20,8 @@
  */
 /* Method.h: interface for the Method class. */
 
-#if !defined(AXIS_METHOD_H__INCLUDED_)
-#define AXIS_METHOD_H__INCLUDED_
+#if !defined(AXIS_METHOD_H__OF_AXIS_INCLUDED_)
+#define AXIS_METHOD_H__OF_AXIS_INCLUDED_
 
 #include "Variable.h"
 #include "File.h"

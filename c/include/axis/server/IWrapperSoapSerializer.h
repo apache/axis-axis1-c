@@ -1,67 +1,21 @@
-/* -*- C++ -*- */
-
 /*
- * The Apache Software License, Version 1.1
+ *   Copyright 2003-2004 The Apache Software Foundation.
  *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
- * reserved.
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *
- * 3. The end-user documentation included with the redistribution,
- *    if any, must include the following acknowledgment:
- *       "This product includes software developed by the
- *        Apache Software Foundation (http://www.apache.org/)."
- *    Alternately, this acknowledgment may appear in the software itself,
- *    if and wherever such third-party acknowledgments normally appear.
- *
- * 4. The names "SOAP" and "Apache Software Foundation" must
- *    not be used to endorse or promote products derived from this
- *    software without prior written permission. For written
- *    permission, please contact apache@apache.org.
- *
- * 5. Products derived from this software may not be called "Apache",
- *    nor may "Apache" appear in their name, without prior written
- *    permission of the Apache Software Foundation.
- *
- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
- * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
- * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- * ====================================================================
- *
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
  */
 
-/* IWrapperSoapSerializer.h:*/
-
-
-#if !defined(AFX_IWRAPPERSOAPSERIALIZER_H__D3E794EC_8A67_4E0E_BE28_583DCDCE1C42__INCLUDED_)
-#define AFX_IWRAPPERSOAPSERIALIZER_H__D3E794EC_8A67_4E0E_BE28_583DCDCE1C42__INCLUDED_
+#if !defined(_IWRAPPERSOAPSERIALIZER_H____OF_AXIS_INCLUDED_)
+#define _IWRAPPERSOAPSERIALIZER_H____OF_AXIS_INCLUDED_
 
 #ifdef __cplusplus
 
@@ -74,25 +28,25 @@
 #endif
 
 typedef struct {
-	int (AXISCALL* CreateSoapMethod)(void* pObj, const AxisChar* sLocalName, const AxisChar* sURI);
-	const AxisChar* (AXISCALL* GetNamespacePrefix)(void* pObj, const AxisChar* pNamespace);
-	void (AXISCALL* RemoveNamespacePrefix)(void* pObj, const AxisChar* pNamespace);
+	int (AXISCALL* createSoapMethod)(void* pObj, const AxisChar* sLocalName, const AxisChar* sURI);
+	const AxisChar* (AXISCALL* getNamespacePrefix)(void* pObj, const AxisChar* pNamespace);
+	void (AXISCALL* removeNamespacePrefix)(void* pObj, const AxisChar* pNamespace);
 	/* for basic types */
-	int (AXISCALL* AddOutputParam)(void* pObj, const AxisChar* pchName, void* pValue, XSDTYPE type);
+	int (AXISCALL* addOutputParam)(void* pObj, const AxisChar* pchName, void* pValue, XSDTYPE type);
 	/* for arrays */
-	int (AXISCALL* AddOutputCmplxArrayParam)(void* pObj, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace);
-	int (AXISCALL* AddOutputBasicArrayParam)(void* pObj, const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName);
+	int (AXISCALL* addOutputCmplxArrayParam)(void* pObj, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	int (AXISCALL* addOutputBasicArrayParam)(void* pObj, const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName);
 	/* for complex types */
-	int (AXISCALL* AddOutputCmplxParam)(void* pObj, void* pObject, void* pSZFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	int (AXISCALL* addOutputCmplxParam)(void* pObj, void* pObject, void* pSZFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
 	/* Methods used to serialize arrays */
-	int (AXISCALL* SerializeCmplxArray)(void* pObj, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace);
-	int (AXISCALL* SerializeBasicArray)(void* pObj, const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName);
+	int (AXISCALL* serializeCmplxArray)(void* pObj, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	int (AXISCALL* serializeBasicArray)(void* pObj, const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName);
 	/* Basic Type Serializing methods */
-	int (AXISCALL* SerializeAsElement)(void* pObj, const AxisChar* sName, void* pValue, XSDTYPE type);
-	int (AXISCALL* SerializeAsAttribute)(void* pObj, const AxisChar* sName, const AxisChar* pNamespace, void* pValue, XSDTYPE type);
-	void (AXISCALL* Serialize)(void* pObj, const char* pFirst);
-	void (AXISCALL* SerializeStartElementOfType)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace, const AxisChar* pPrefix);
-	void (AXISCALL* SerializeEndElementOfType)(void* pObj, const AxisChar* pName);
+	int (AXISCALL* serializeAsElement)(void* pObj, const AxisChar* sName, void* pValue, XSDTYPE type);
+	int (AXISCALL* serializeAsAttribute)(void* pObj, const AxisChar* sName, const AxisChar* pNamespace, void* pValue, XSDTYPE type);
+	void (AXISCALL* serialize)(void* pObj, const char* pFirst);
+	void (AXISCALL* serializeStartElementOfType)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace, const AxisChar* pPrefix);
+	void (AXISCALL* serializeEndElementOfType)(void* pObj, const AxisChar* pName);
 }IWrapperSoapSerializerFunctions;
 
 typedef struct { 
@@ -116,85 +70,85 @@ class IWrapperSoapSerializer : public ISoapSerializer
 {
 public:
 	virtual ~IWrapperSoapSerializer(){};
-	virtual int AXISCALL CreateSoapMethod(const AxisChar* sLocalName, const AxisChar* sURI)=0;
-	virtual const AxisChar* AXISCALL GetNamespacePrefix(const AxisChar* pNamespace)=0;
-	virtual void AXISCALL RemoveNamespacePrefix(const AxisChar* pNamespace)=0;
+	virtual int AXISCALL createSoapMethod(const AxisChar* sLocalName, const AxisChar* sURI)=0;
+	virtual const AxisChar* AXISCALL getNamespacePrefix(const AxisChar* pNamespace)=0;
+	virtual void AXISCALL removeNamespacePrefix(const AxisChar* pNamespace)=0;
 	/* for basic types */
-	virtual int AXISCALL AddOutputParam(const AxisChar* pchName, void* pValue, XSDTYPE type)=0;
+	virtual int AXISCALL addOutputParam(const AxisChar* pchName, void* pValue, XSDTYPE type)=0;
 	/* for arrays */
-	virtual int AXISCALL AddOutputCmplxArrayParam(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
-	virtual int AXISCALL AddOutputBasicArrayParam(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName)=0;
+	virtual int AXISCALL addOutputCmplxArrayParam(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
+	virtual int AXISCALL addOutputBasicArrayParam(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName)=0;
 	/* for complex types */
-	virtual int AXISCALL AddOutputCmplxParam(void* pObject, void* pSZFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
+	virtual int AXISCALL addOutputCmplxParam(void* pObject, void* pSZFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
 	/* Methods used to serialize arrays */
-	virtual int AXISCALL SerializeCmplxArray(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
-	virtual int AXISCALL SerializeBasicArray(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName)=0;
+	virtual int AXISCALL serializeCmplxArray(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
+	virtual int AXISCALL serializeBasicArray(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName)=0;
 	/* Basic Type Serializing methods */
-	virtual int AXISCALL SerializeAsElement(const AxisChar* sName, void* pValue, XSDTYPE type)=0;
-	virtual int AXISCALL SerializeAsAttribute(const AxisChar* sName, const AxisChar* pNamespace, void* pValue, XSDTYPE type)=0;
-	virtual void AXISCALL Serialize(const char* pFirst, ...)=0;
+	virtual int AXISCALL serializeAsElement(const AxisChar* sName, void* pValue, XSDTYPE type)=0;
+	virtual int AXISCALL serializeAsAttribute(const AxisChar* sName, const AxisChar* pNamespace, void* pValue, XSDTYPE type)=0;
+	virtual void AXISCALL serialize(const char* pFirst, ...)=0;
 	/* following two functions are needed by serializer functions of complex types for RPC style web services */
-	virtual void AXISCALL SerializeStartElementOfType(const AxisChar* pName, const AxisChar* pNamespace, const AxisChar* pPrefix)=0;
-	virtual void AXISCALL SerializeEndElementOfType(const AxisChar* pName)=0;
+	virtual void AXISCALL serializeStartElementOfType(const AxisChar* pName, const AxisChar* pNamespace, const AxisChar* pPrefix)=0;
+	virtual void AXISCALL serializeEndElementOfType(const AxisChar* pName)=0;
 
 	/* Externalization of serializer API */
-	virtual int SetOutputStream(const Ax_soapstream* pStream)=0;
-	virtual void MarkEndOfStream()=0;	
-	virtual	int Init()=0;	
-	virtual PROVIDERTYPE GetCurrentProviderType()=0;
-	virtual void SetCurrentProviderType(PROVIDERTYPE nType)=0;	
-	virtual void SetStyle(AXIS_BINDING_STYLE nStyle)=0;
-	virtual AXIS_BINDING_STYLE GetStyle()=0;
+	virtual int setOutputStream(const Ax_soapstream* pStream)=0;
+	virtual void markEndOfStream()=0;	
+	virtual	int init()=0;	
+	virtual PROVIDERTYPE getCurrentProviderType()=0;
+	virtual void setCurrentProviderType(PROVIDERTYPE nType)=0;	
+	virtual void setStyle(AXIS_BINDING_STYLE nStyle)=0;
+	virtual AXIS_BINDING_STYLE getStyle()=0;
 
 	/* following stuff is needed to provide the interface for C web services */
 public:
 	static IWrapperSoapSerializerFunctions ms_VFtable;
 	static int AXISCALL s_CreateSoapMethod(void* pObj, const AxisChar* sLocalName, const AxisChar* sURI)
-	{ return ((IWrapperSoapSerializer*)pObj)->CreateSoapMethod(sLocalName, sURI);};
+	{ return ((IWrapperSoapSerializer*)pObj)->createSoapMethod(sLocalName, sURI);};
 	static const AxisChar* AXISCALL s_GetNamespacePrefix(void* pObj, const AxisChar* pNamespace)
-	{ return ((IWrapperSoapSerializer*)pObj)->GetNamespacePrefix(pNamespace);};
+	{ return ((IWrapperSoapSerializer*)pObj)->getNamespacePrefix(pNamespace);};
 	static void AXISCALL s_RemoveNamespacePrefix(void* pObj, const AxisChar* pNamespace)
-	{ ((IWrapperSoapSerializer*)pObj)->RemoveNamespacePrefix(pNamespace);};
+	{ ((IWrapperSoapSerializer*)pObj)->removeNamespacePrefix(pNamespace);};
 	static int AXISCALL s_AddOutputParam(void* pObj, const AxisChar* pchName, void* pValue, XSDTYPE type)
-	{ return ((IWrapperSoapSerializer*)pObj)->AddOutputParam(pchName, pValue, type);};
+	{ return ((IWrapperSoapSerializer*)pObj)->addOutputParam(pchName, pValue, type);};
 	static int AXISCALL s_AddOutputCmplxArrayParam(void* pObj, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)
-	{ return ((IWrapperSoapSerializer*)pObj)->AddOutputCmplxArrayParam(pArray, pSZFunct, pDelFunct, pSizeFunct, pName, pNamespace);};
+	{ return ((IWrapperSoapSerializer*)pObj)->addOutputCmplxArrayParam(pArray, pSZFunct, pDelFunct, pSizeFunct, pName, pNamespace);};
 	static int AXISCALL s_AddOutputBasicArrayParam(void* pObj, const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName)
-	{ return ((IWrapperSoapSerializer*)pObj)->AddOutputBasicArrayParam(pArray, nType, pName);};
+	{ return ((IWrapperSoapSerializer*)pObj)->addOutputBasicArrayParam(pArray, nType, pName);};
 	static int AXISCALL s_AddOutputCmplxParam(void* pObj, void* pObject, void* pSZFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace)
-	{ return ((IWrapperSoapSerializer*)pObj)->AddOutputCmplxParam(pObject, pSZFunct, pDelFunct, pName, pNamespace);};
+	{ return ((IWrapperSoapSerializer*)pObj)->addOutputCmplxParam(pObject, pSZFunct, pDelFunct, pName, pNamespace);};
 	static int AXISCALL s_SerializeCmplxArray(void* pObj, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)
-	{ return ((IWrapperSoapSerializer*)pObj)->SerializeCmplxArray(pArray, pSZFunct, pDelFunct, pSizeFunct, pName, pNamespace);};
+	{ return ((IWrapperSoapSerializer*)pObj)->serializeCmplxArray(pArray, pSZFunct, pDelFunct, pSizeFunct, pName, pNamespace);};
 	static int AXISCALL s_SerializeBasicArray(void* pObj, const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName)
-	{ return ((IWrapperSoapSerializer*)pObj)->SerializeBasicArray(pArray, nType, pName);};
+	{ return ((IWrapperSoapSerializer*)pObj)->serializeBasicArray(pArray, nType, pName);};
 	static int AXISCALL s_SerializeAsElement(void* pObj, const AxisChar* sName, void* pValue, XSDTYPE type)
-	{ return ((IWrapperSoapSerializer*)pObj)->SerializeAsElement(sName, pValue, type);};
+	{ return ((IWrapperSoapSerializer*)pObj)->serializeAsElement(sName, pValue, type);};
 	static int AXISCALL s_SerializeAsAttribute(void* pObj, const AxisChar* sName, const AxisChar* pNamespace, void* pValue, XSDTYPE type)
-	{ return ((IWrapperSoapSerializer*)pObj)->SerializeAsAttribute(sName, pNamespace, pValue, type);};
+	{ return ((IWrapperSoapSerializer*)pObj)->serializeAsAttribute(sName, pNamespace, pValue, type);};
 	static void AXISCALL s_Serialize(void* pObj, const char* pFirst)
-	{ ((IWrapperSoapSerializer*)pObj)->Serialize(pFirst, 0);};
+	{ ((IWrapperSoapSerializer*)pObj)->serialize(pFirst, 0);};
 	static void AXISCALL s_SerializeStartElementOfType(void* pObj, const AxisChar* pName, const AxisChar* pNamespace, const AxisChar* pPrefix)
-	{ ((IWrapperSoapSerializer*)pObj)->SerializeStartElementOfType(pName, pNamespace, pPrefix);}
+	{ ((IWrapperSoapSerializer*)pObj)->serializeStartElementOfType(pName, pNamespace, pPrefix);}
 	static void AXISCALL s_SerializeEndElementOfType(void* pObj, const AxisChar* pName)
-	{ ((IWrapperSoapSerializer*)pObj)->SerializeEndElementOfType(pName);}
+	{ ((IWrapperSoapSerializer*)pObj)->serializeEndElementOfType(pName);}
 	static void s_Initialize()
 	{
-		ms_VFtable.CreateSoapMethod = s_CreateSoapMethod;
-		ms_VFtable.GetNamespacePrefix = s_GetNamespacePrefix;
-		ms_VFtable.RemoveNamespacePrefix = s_RemoveNamespacePrefix;
-		ms_VFtable.AddOutputParam = s_AddOutputParam;
-		ms_VFtable.AddOutputCmplxArrayParam = s_AddOutputCmplxArrayParam;
-		ms_VFtable.AddOutputBasicArrayParam = s_AddOutputBasicArrayParam;
-		ms_VFtable.AddOutputCmplxParam = s_AddOutputCmplxParam;
-		ms_VFtable.SerializeCmplxArray = s_SerializeCmplxArray;
-		ms_VFtable.SerializeBasicArray = s_SerializeBasicArray;
-		ms_VFtable.SerializeAsElement = s_SerializeAsElement;
-		ms_VFtable.SerializeAsAttribute = s_SerializeAsAttribute;
-		ms_VFtable.Serialize = s_Serialize;
-		ms_VFtable.SerializeStartElementOfType = s_SerializeStartElementOfType;
-		ms_VFtable.SerializeEndElementOfType = s_SerializeEndElementOfType;
+		ms_VFtable.createSoapMethod = s_CreateSoapMethod;
+		ms_VFtable.getNamespacePrefix = s_GetNamespacePrefix;
+		ms_VFtable.removeNamespacePrefix = s_RemoveNamespacePrefix;
+		ms_VFtable.addOutputParam = s_AddOutputParam;
+		ms_VFtable.addOutputCmplxArrayParam = s_AddOutputCmplxArrayParam;
+		ms_VFtable.addOutputBasicArrayParam = s_AddOutputBasicArrayParam;
+		ms_VFtable.addOutputCmplxParam = s_AddOutputCmplxParam;
+		ms_VFtable.serializeCmplxArray = s_SerializeCmplxArray;
+		ms_VFtable.serializeBasicArray = s_SerializeBasicArray;
+		ms_VFtable.serializeAsElement = s_SerializeAsElement;
+		ms_VFtable.serializeAsAttribute = s_SerializeAsAttribute;
+		ms_VFtable.serialize = s_Serialize;
+		ms_VFtable.serializeStartElementOfType = s_SerializeStartElementOfType;
+		ms_VFtable.serializeEndElementOfType = s_SerializeEndElementOfType;
 	}
 };
 
 #endif
-#endif /* !defined(AFX_IWRAPPERSOAPSERIALIZER_H__D3E794EC_8A67_4E0E_BE28_583DCDCE1C42__INCLUDED_) */
+#endif /* !defined(_IWRAPPERSOAPSERIALIZER_H____OF_AXIS_INCLUDED_) */

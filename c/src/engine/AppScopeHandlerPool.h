@@ -16,8 +16,8 @@
  *
  */
 
-#if !defined(AXIS_APPSCOPEHANDLERPOOL_H__INCLUDED_)
-#define AXIS_APPSCOPEHANDLERPOOL_H__INCLUDED_
+#if !defined(AXIS_APPSCOPEHANDLERPOOL_H__OF_AXIS_INCLUDED_)
+#define AXIS_APPSCOPEHANDLERPOOL_H__OF_AXIS_INCLUDED_
 
 #include "SharedObject.h"
 #include <axis/server/BasicHandler.h>
@@ -44,8 +44,8 @@ class AppScopeHandlerPool:protected SharedObject
     private:
         map < int, list <BasicHandler*> > m_Handlers;
     public:
-        int GetInstance (BasicHandler** pHandler, int nLibId);
-        int PutInstance (BasicHandler* pHandler, int nLibId);
+        int getInstance (BasicHandler** pHandler, int nLibId);
+        int putInstance (BasicHandler* pHandler, int nLibId);
 };
 
 #endif 

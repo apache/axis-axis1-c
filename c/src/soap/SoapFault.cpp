@@ -70,21 +70,21 @@ int SoapFault::serialize(SoapSerializer& pSZ)
 
     int iStatus= AXIS_SUCCESS;
         
-    pSZ.Serialize("<SOAP-ENV:Fault>", NULL);    
-    pSZ.Serialize("<faultcode>", m_sFaultcode.c_str(), "</faultcode>", NULL);
-    pSZ.Serialize("<faultstring>", m_sFaultstring.c_str(), "</faultstring>", NULL);
+    pSZ.serialize("<SOAP-ENV:Fault>", NULL);    
+    pSZ.serialize("<faultcode>", m_sFaultcode.c_str(), "</faultcode>", NULL);
+    pSZ.serialize("<faultstring>", m_sFaultstring.c_str(), "</faultstring>", NULL);
 
     if(!m_sFaultactor.empty())
     {        
-        pSZ.Serialize("<faultactor>", m_sFaultactor.c_str(), "</faultactor>", NULL);
+        pSZ.serialize("<faultactor>", m_sFaultactor.c_str(), "</faultactor>", NULL);
     }
 
     if(!m_sDetail.empty())
     {        
-        pSZ.Serialize("<detail>", m_sDetail.c_str(), "</detail>", NULL);
+        pSZ.serialize("<detail>", m_sDetail.c_str(), "</detail>", NULL);
     }
     
-    pSZ.Serialize("</SOAP-ENV:Fault>", NULL);
+    pSZ.serialize("</SOAP-ENV:Fault>", NULL);
 
     return iStatus;
 }

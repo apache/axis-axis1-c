@@ -14,8 +14,8 @@
  *   limitations under the License.
  */
 
-#if !defined(_WSDDKEYWORDS_H____INCLUDED_)
-#define _WSDDKEYWORDS_H____INCLUDED_
+#if !defined(_WSDDKEYWORDS_H____OF_AXIS_INCLUDED_)
+#define _WSDDKEYWORDS_H____OF_AXIS_INCLUDED_
 
 #include <axis/server/GDefine.h>
 
@@ -50,8 +50,8 @@ extern const AxisXMLCh* kw_desc;
 class WSDDKeywords  
 {
 public:
-    static void Initialize();
-    static void UnInitialize();
+    static void initialize();
+    static void unInitialize();
     WSDDKeywords();
     virtual ~WSDDKeywords();
 private:

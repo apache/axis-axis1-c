@@ -36,7 +36,7 @@ BasicTypeSerializer::~BasicTypeSerializer ()
 
 }
 
-const AxisChar* BasicTypeSerializer::SerializeAsElement (const AxisChar* pName,
+const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
     const void* pValue, XSDTYPE type)
 {
     const AxisChar* pStr;
@@ -45,7 +45,7 @@ const AxisChar* BasicTypeSerializer::SerializeAsElement (const AxisChar* pName,
     if (RPC_ENCODED == m_nStyle)
     {
         m_sSZ += " xsi:type=\"xsd:";
-        m_sSZ += BasicTypeStr (type);
+        m_sSZ += basicTypeStr (type);
         m_sSZ += "\"";
     }
     m_sSZ += ">";
@@ -121,13 +121,13 @@ const AxisChar* BasicTypeSerializer::SerializeAsElement (const AxisChar* pName,
                 return m_sSZ.c_str ();
             }
             m_AuxStr = pStr;
-            m_sSZ += GetEntityReferenced (m_AuxStr).c_str ();
+            m_sSZ += getEntityReferenced (m_AuxStr).c_str ();
             break;
         case XSD_HEXBINARY:
-            m_sSZ += EncodeToHexBinary ((xsd__hexBinary*) (pValue));
+            m_sSZ += encodeToHexBinary ((xsd__hexBinary*) (pValue));
             break;
         case XSD_BASE64BINARY:
-            m_sSZ += EncodeToBase64Binary ((xsd__base64Binary*) (pValue));
+            m_sSZ += encodeToBase64Binary ((xsd__base64Binary*) (pValue));
             break;
         case XSD_DATETIME:
         case XSD_DATE:
@@ -146,7 +146,7 @@ const AxisChar* BasicTypeSerializer::SerializeAsElement (const AxisChar* pName,
     return m_sSZ.c_str ();
 }
 
-const AxisChar* BasicTypeSerializer::EncodeToHexBinary 
+const AxisChar* BasicTypeSerializer::encodeToHexBinary 
     (const xsd__hexBinary* pBinary)
 {
     char* outstr = (char*) malloc (pBinary->__size * 2 + 1);
@@ -157,7 +157,7 @@ const AxisChar* BasicTypeSerializer::EncodeToHexBinary
     return m_AuxStr.c_str ();
 }
 
-const AxisChar* BasicTypeSerializer::EncodeToBase64Binary (const xsd__base64Binary* pBinary)
+const AxisChar* BasicTypeSerializer::encodeToBase64Binary (const xsd__base64Binary* pBinary)
 {
     int len = apr_base64_encode_len (pBinary->__size);
     char* outstr = (char*) malloc (len + 1);
@@ -168,7 +168,7 @@ const AxisChar* BasicTypeSerializer::EncodeToBase64Binary (const xsd__base64Bina
     return m_AuxStr.c_str ();
 }
 
-const AxisChar* BasicTypeSerializer::SerializeAsAttribute 
+const AxisChar* BasicTypeSerializer::serializeAsAttribute 
     (const AxisChar* pName, const AxisChar* pPrefix,
     const void* pValue, XSDTYPE type)
 {
@@ -244,13 +244,13 @@ const AxisChar* BasicTypeSerializer::SerializeAsAttribute
         case XSD_QNAME:
         case XSD_NOTATION:
             m_AuxStr = *((char**)(pValue));
-            m_sSZ += GetEntityReferenced (m_AuxStr).c_str ();
+            m_sSZ += getEntityReferenced (m_AuxStr).c_str ();
             break;
         case XSD_HEXBINARY:
-            m_sSZ += EncodeToHexBinary ((xsd__hexBinary*)(pValue));
+            m_sSZ += encodeToHexBinary ((xsd__hexBinary*)(pValue));
             break;
         case XSD_BASE64BINARY:
-            m_sSZ += EncodeToBase64Binary ((xsd__base64Binary*)(pValue));
+            m_sSZ += encodeToBase64Binary ((xsd__base64Binary*)(pValue));
             break;
         case XSD_DATETIME:
         case XSD_DATE:
@@ -267,7 +267,7 @@ const AxisChar* BasicTypeSerializer::SerializeAsAttribute
     return m_sSZ.c_str ();
 }
 
-const AxisChar* BasicTypeSerializer::BasicTypeStr (XSDTYPE type)
+const AxisChar* BasicTypeSerializer::basicTypeStr (XSDTYPE type)
 {
     switch (type)
     {
@@ -330,7 +330,7 @@ const AxisChar* BasicTypeSerializer::BasicTypeStr (XSDTYPE type)
     }
 }
 
-const AxisString &BasicTypeSerializer::GetEntityReferenced 
+const AxisString &BasicTypeSerializer::getEntityReferenced 
     (const AxisString &strVal)
 {
     m_strReturnVal = "";

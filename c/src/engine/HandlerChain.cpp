@@ -35,7 +35,7 @@ HandlerChain::~HandlerChain ()
      */
 }
 
-int HandlerChain::Invoke (void* pMsg)
+int HandlerChain::invoke (void* pMsg)
 {
     m_itCurrHandler = m_HandlerList.begin ();
     while (m_itCurrHandler != m_HandlerList.end ())
@@ -63,14 +63,14 @@ int HandlerChain::Invoke (void* pMsg)
         else if (0 != pHandler->_object)
         {
             if (AXIS_SUCCESS ==
-                ((Handler *) (pHandler->_object))->Invoke (pMsg))
+                ((Handler *) (pHandler->_object))->invoke (pMsg))
             {
                 m_itCurrHandler++;
             }
             else
             {
                 AXISTRACE1 ("Handler invoke not successful", WARN);
-                OnFault (pMsg);
+                onFault (pMsg);
                 return AXIS_FAIL;
             }
         }
@@ -79,17 +79,17 @@ int HandlerChain::Invoke (void* pMsg)
     return AXIS_SUCCESS;
 }
 
-void HandlerChain::OnFault (void* pMsg)
+void HandlerChain::onFault (void* pMsg)
 {
     while (m_itCurrHandler != m_HandlerList.begin ())
     {
         BasicHandler* pHandler = (*m_itCurrHandler).m_pHandler;
-        pHandler->_functions->OnFault (pHandler->_object, pMsg);
+        pHandler->_functions->onFault (pHandler->_object, pMsg);
         m_itCurrHandler--;
     }
 }
 
-int HandlerChain::AddHandler (BasicHandler* pHandler, int nScope, int nLibId)
+int HandlerChain::addHandler (BasicHandler* pHandler, int nScope, int nLibId)
 {
     ChainItem item;
     item.m_pHandler = pHandler;
@@ -100,13 +100,13 @@ int HandlerChain::AddHandler (BasicHandler* pHandler, int nScope, int nLibId)
     return AXIS_SUCCESS;
 }
 
-int HandlerChain::Init ()
+int HandlerChain::init ()
 {
     m_HandlerList.clear ();
     return AXIS_SUCCESS;
 }
 
-int HandlerChain::Fini ()
+int HandlerChain::fini ()
 {
     m_HandlerList.clear ();
     return AXIS_SUCCESS;

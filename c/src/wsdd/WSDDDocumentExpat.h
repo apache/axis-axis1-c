@@ -18,8 +18,8 @@
 #pragma warning(disable : 4786)
 #endif
 
-#if !defined(__WSDDDOCUMENTEXPAT_H_INCLUDED__)
-#define __WSDDDOCUMENTEXPAT_H_INCLUDED__
+#if !defined(__WSDDDOCUMENTEXPAT_H_OF_AXIS_INCLUDED__)
+#define __WSDDDOCUMENTEXPAT_H_OF_AXIS_INCLUDED__
 
 #include "WSDDDocument.h"
 #include <expat/expat.h>
@@ -37,17 +37,17 @@ using namespace std;
 class WSDDDocumentExpat : public WSDDDocument
 {
 private:
-    void ProcessAttributes(WSDDLevels ElementType, const XML_Ch **attrs);
-    void GetParameters(WSDDLevels ElementType, const XML_Ch **attrs);
-    void AddAllowedRolesToService(const AxisXMLCh* value);
-    void AddAllowedMethodsToService(const AxisXMLCh* value);
-    int ParseDocument(const AxisChar* sWSDD);
+    void processAttributes(WSDDLevels ElementType, const XML_Ch **attrs);
+    void getParameters(WSDDLevels ElementType, const XML_Ch **attrs);
+    void addAllowedRolesToService(const AxisXMLCh* value);
+    void addAllowedMethodsToService(const AxisXMLCh* value);
+    int parseDocument(const AxisChar* sWSDD);
 
 public:
     WSDDDocumentExpat(map<AxisString, int>* pLibNameIdMap);
     ~WSDDDocumentExpat();
-    int GetDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment);
-    int UpdateDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment);
+    int getDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment);
+    int updateDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment);
 
     void startElement(const XML_Ch *qname,const XML_Ch **attrs);
     void endElement(const XML_Ch *qname);

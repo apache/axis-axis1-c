@@ -34,7 +34,7 @@ class XercesHandler : public XERCES_CPP_NAMESPACE::DefaultHandler
 {
 public :
     void freeElement();
-    int GetStatus(){return m_nStatus;};
+    int getStatus(){return m_nStatus;};
     /* -----------------------------------------------------------------------
      *  Constructors
      * -----------------------------------------------------------------------
@@ -44,7 +44,7 @@ public :
 
 
 
-    const XML_Ch* XercesHandler::NS4Prefix(const XML_Ch* prefix);
+    const XML_Ch* XercesHandler::ns4Prefix(const XML_Ch* prefix);
 
     AnyElement* getAnyElement()
     {

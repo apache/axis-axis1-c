@@ -51,7 +51,7 @@ HandlerLoader::~HandlerLoader ()
                                                * created have not been deleted 
 					       * - unexpected
 					       */ 
-            UnloadLib (pHandlerInfo);
+            unloadLib (pHandlerInfo);
         delete pHandlerInfo;
     }
     unlock ();
@@ -60,7 +60,7 @@ HandlerLoader::~HandlerLoader ()
 #endif
 }
 
-int HandlerLoader::DeleteHandler (BasicHandler* pHandler, int nLibId)
+int HandlerLoader::deleteHandler (BasicHandler* pHandler, int nLibId)
 {
     lock ();
     if (m_HandlerInfoList.find (nLibId) != m_HandlerInfoList.end ())
@@ -79,7 +79,7 @@ int HandlerLoader::DeleteHandler (BasicHandler* pHandler, int nLibId)
     }
 }
 
-int HandlerLoader::LoadLib (HandlerInformation* pHandlerInfo)
+int HandlerLoader::loadLib (HandlerInformation* pHandlerInfo)
 {
 //#ifdef WIN32
 #if defined(USE_LTDL)
@@ -103,7 +103,7 @@ int HandlerLoader::LoadLib (HandlerInformation* pHandlerInfo)
     return (pHandlerInfo->m_Handler != 0) ? AXIS_SUCCESS : AXIS_FAIL;
 }
 
-int HandlerLoader::UnloadLib (HandlerInformation* pHandlerInfo)
+int HandlerLoader::unloadLib (HandlerInformation* pHandlerInfo)
 {
 //#ifdef WIN32
 #if defined(USE_LTDL)
@@ -116,7 +116,7 @@ int HandlerLoader::UnloadLib (HandlerInformation* pHandlerInfo)
     return AXIS_SUCCESS;
 }
 
-int HandlerLoader::CreateHandler (BasicHandler** pHandler, int nLibId)
+int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
 {
     lock ();
     *pHandler = NULL;
@@ -124,7 +124,7 @@ int HandlerLoader::CreateHandler (BasicHandler** pHandler, int nLibId)
     if (m_HandlerInfoList.find (nLibId) == m_HandlerInfoList.end ())
     {
         pHandlerInfo = new HandlerInformation ();
-        pHandlerInfo->m_sLib = g_pWSDDDeployment->GetLibName (nLibId);
+        pHandlerInfo->m_sLib = g_pWSDDDeployment->getLibName (nLibId);
         if (pHandlerInfo->m_sLib.empty ())
         {
             delete pHandlerInfo;
@@ -132,7 +132,7 @@ int HandlerLoader::CreateHandler (BasicHandler** pHandler, int nLibId)
             return LIBRARY_PATH_EMPTY;
         }
         // pHandlerInfo->m_nLoadOptions = RTLD_LAZY;
-        if (AXIS_SUCCESS == LoadLib (pHandlerInfo))
+        if (AXIS_SUCCESS == loadLib (pHandlerInfo))
         {
             //#ifdef WIN32
 #if defined(USE_LTDL)
@@ -159,7 +159,7 @@ int HandlerLoader::CreateHandler (BasicHandler** pHandler, int nLibId)
 #endif
             if (!pHandlerInfo->m_Create || !pHandlerInfo->m_Delete)
             {
-                UnloadLib (pHandlerInfo);
+                unloadLib (pHandlerInfo);
                 delete pHandlerInfo;
                 unlock ();
                 AXISTRACE1 ("Library loading failed", CRITICAL);
@@ -186,7 +186,7 @@ int HandlerLoader::CreateHandler (BasicHandler** pHandler, int nLibId)
         if (0 != pBH->_functions)
         /* this is a C service or handler */
         {
-            if (AXIS_SUCCESS == pBH->_functions->Init (pBH->_object))
+            if (AXIS_SUCCESS == pBH->_functions->init (pBH->_object))
             {
                 pHandlerInfo->m_nObjCount++;
                 *pHandler = pBH;
@@ -195,7 +195,7 @@ int HandlerLoader::CreateHandler (BasicHandler** pHandler, int nLibId)
             }
             else
             {
-                pBH->_functions->Fini (pBH->_object);
+                pBH->_functions->fini (pBH->_object);
                 pHandlerInfo->m_Delete (pBH);
                 unlock ();
                 return HANDLER_INIT_FAIL;
@@ -208,7 +208,7 @@ int HandlerLoader::CreateHandler (BasicHandler** pHandler, int nLibId)
         else
         /* C++ service or handler */
         {
-            if (AXIS_SUCCESS == ((HandlerBase*) pBH->_object)->Init ())
+            if (AXIS_SUCCESS == ((HandlerBase*) pBH->_object)->init ())
             {
                 pHandlerInfo->m_nObjCount++;
                 *pHandler = pBH;
@@ -217,7 +217,7 @@ int HandlerLoader::CreateHandler (BasicHandler** pHandler, int nLibId)
             }
             else
             {
-                ((HandlerBase*) pBH->_object)->Fini ();
+                ((HandlerBase*) pBH->_object)->fini ();
                 pHandlerInfo->m_Delete (pBH);
                 unlock ();
                 return HANDLER_INIT_FAIL;

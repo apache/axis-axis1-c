@@ -19,8 +19,8 @@
 #pragma warning (disable : 4786)
 #endif
 
-#if !defined(AXIS_SHAREDOBJECT_H__INCLUDED_)
-#define AXIS_SHAREDOBJECT_H__INCLUDED_
+#if !defined(AXIS_SHAREDOBJECT_H__OF_AXIS_INCLUDED_)
+#define AXIS_SHAREDOBJECT_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/GDefine.h>
 #ifdef WIN32
