@@ -70,6 +70,7 @@
 #include "RequestScopeHandlerPool.h"
 #include "SessionScopeHandlerPool.h"
 #include "../wsdd/WSDDDeployment.h"
+#include "../common/AxisTrace.h"
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -201,11 +202,13 @@ int HandlerPool::GetRequestFlowHandlerChain(HandlerChain** ppChain, string& sSes
 	const WSDDHandlerList* pHandlerList = pService->GetRequestFlowHandlers();
 	if (pHandlerList)
 	{
+        AXISTRACE1("HandlerPool::GetRequestFlowHandlerChain");
 		return GetHandlerChain(sSessionId, ppChain, pHandlerList);
 	}
 	else
 	{
 		*ppChain = NULL;
+        AXISTRACE1("No handlers configured");
 		return SUCCESS; //NO_HANDLERS_CONFIGURED
 	}
 }
@@ -215,6 +218,7 @@ int HandlerPool::GetResponseFlowHandlerChain(HandlerChain** ppChain, string& sSe
 	const WSDDHandlerList* pHandlerList = pService->GetResponseFlowHandlers();
 	if (pHandlerList)
 	{
+        AXISTRACE1("Handlers configured");
 		return GetHandlerChain(sSessionId, ppChain, pHandlerList);
 	}
 	else
@@ -252,7 +256,9 @@ int HandlerPool::GetHandlerChain(string& sSessionId, HandlerChain** ppChain, con
 		{
 			if (NORMAL_HANDLER == pBH->GetType())
 			{
+                AXISTRACE1("Normal Handler");
 				pChain->AddHandler(static_cast<Handler*>(pBH), pWSDDH->GetScope(), pWSDDH->GetLibId());
+                AXISTRACE1("after pChain->AddHandler");
 			}
 			else
 			{
@@ -267,6 +273,7 @@ int HandlerPool::GetHandlerChain(string& sSessionId, HandlerChain** ppChain, con
 	}
 	if (Status != SUCCESS) //some failure so undo whatever done here
 	{
+        AXISTRACE1("handler failure");
 		string nosession = SESSIONLESSHANDLERS;
 		for (pChain->m_itCurrHandler = pChain->m_HandlerList.begin(); pChain->m_itCurrHandler != pChain->m_HandlerList.end(); pChain->m_itCurrHandler++)
 		{

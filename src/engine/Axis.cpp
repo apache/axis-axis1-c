@@ -112,7 +112,6 @@ HandlerPool* g_pHandlerPool;
 WSDDDeployment* g_pWSDDDeployment;
 AxisConfig* g_pConfig;
 
-#define AXISTRACE1 
 
 extern "C" int process_request(Ax_soapstream *str)
 {
