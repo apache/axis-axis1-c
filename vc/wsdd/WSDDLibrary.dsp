@@ -8,12 +8,12 @@ CFG=WsddLibrary - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "WsddLibrary.mak".
+!MESSAGE NMAKE /f "WSDDLibrary.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "WsddLibrary.mak" CFG="WsddLibrary - Win32 Debug"
+!MESSAGE NMAKE /f "WSDDLibrary.mak" CFG="WsddLibrary - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
@@ -65,7 +65,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../../include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FR /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../../include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "USE_XERCES_PARSER" /FR /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -90,7 +90,11 @@ SOURCE=..\..\src\wsdd\WSDDDeployment.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\wsdd\WSDDDocument.cpp
+SOURCE=..\..\src\wsdd\WSDDDocumentExpat.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\wsdd\WSDDDocumentXerces.cpp
 # End Source File
 # Begin Source File
 
@@ -114,7 +118,7 @@ SOURCE=..\..\src\wsdd\WSDDTransport.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\include\axis\wsdd\WSDDDefines.h
+SOURCE=..\..\include\axis\server\WSDDDefines.h
 # End Source File
 # Begin Source File
 
@@ -126,7 +130,15 @@ SOURCE=..\..\src\wsdd\WSDDDocument.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\wsdd\WSDDHandler.h
+SOURCE=..\..\src\wsdd\WSDDDocumentExpat.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\wsdd\WSDDDocumentXerces.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\axis\server\WSDDHandler.h
 # End Source File
 # Begin Source File
 
@@ -134,7 +146,7 @@ SOURCE=..\..\src\wsdd\WSDDKeywords.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\wsdd\WSDDService.h
+SOURCE=..\..\include\axis\server\WSDDService.h
 # End Source File
 # Begin Source File
 

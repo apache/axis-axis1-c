@@ -54,64 +54,57 @@
  *
  *
  */
-
-// WSDDDeployment.h:
-//
-//////////////////////////////////////////////////////////////////////
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#if !defined(AFX_WSDDDEPLOYMENT_H__2B3E0205_06F3_47C1_8D9C_479CBFB8ACC2__INCLUDED_)
-#define AFX_WSDDDEPLOYMENT_H__2B3E0205_06F3_47C1_8D9C_479CBFB8ACC2__INCLUDED_
+#if !defined(__WSDDDOCUMENTEXPAT_H_INCLUDED__)
+#define __WSDDDOCUMENTEXPAT_H_INCLUDED__
 
-#include <axis/server/WSDDService.h>
-#include <axis/server/WSDDHandler.h>
-#include "WSDDTransport.h"
-
-#include <list>
+#include "WSDDDocument.h"
+#include <expat/expat.h>
+#include <string>
+#include <map>
 
 using namespace std;
 
-enum DEPLOYMENTTYPE {DT_DEPLOYMENT, DT_UNDEPLOYMENT};
 /**
-    @class WSDDDeployment
-    @brief interface for the WSDDDeployment class.
-    @author Susantha Kumara (skumara@virtusa.com)
+    @class WSDDDocumentExpat
+    @brief
+    @author sanjaya sinharage(sanjaya@opensource.lk)
+    @author Suasntha Kumara (skumara@virtusa.com, susantha@opensource.lk)
 */
-class WSDDDeployment
+class WSDDDocumentExpat : public WSDDDocument
 {
-	friend class WSDDDocumentExpat;
-	friend class WSDDDocumentXerces;
-public:
-	int LoadWSDD(const AxisChar* sWSDD);
-	int UpdateWSDD(const AxisChar* sWSDD);
-	int SaveWSDD();
-	const AxisChar* GetLibName(int nLibId);
-	const WSDDService* GetService(const AxisChar* sServiceName);
-	const WSDDHandlerList* GetGlobalRequestFlowHandlers();
-	const WSDDHandlerList* GetGlobalResponseFlowHandlers();
-	const WSDDHandlerList* GetTransportRequestFlowHandlers(AXIS_PROTOCOL_TYPE protocol);
-	const WSDDHandlerList* GetTransportResponseFlowHandlers(AXIS_PROTOCOL_TYPE protocol);
-	const WSDDServiceMap* GetWSDDServiceMap() const;
-	DEPLOYMENTTYPE GetDeploymentType() const;
-	WSDDDeployment();
-	virtual ~WSDDDeployment();
-private: //methods that only be used by WSDDDepolyment.
-	int AddService(WSDDService* pService);
-	int AddHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL_TYPE protocol=APTHTTP);
-	int RemoveService(WSDDService* pService);
-	int RemoveHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL_TYPE protocol=APTHTTP);
-	void SetDeploymentType(DEPLOYMENTTYPE nType);
 private:
-	WSDDServiceMap* m_DeployedServices;
-	WSDDHandlerList* m_GlobalRequestHandlers;
-	WSDDHandlerList* m_GlobalResponseHandlers;
-	WSDDTransport* m_pTransportHandlers;
-	map<AxisString, int>* m_pLibNameIdMap;
-	AxisString m_sAux;
-	string m_sWSDDPath;
-	DEPLOYMENTTYPE m_DeplType;
+	void ProcessAttributes(WSDDLevels ElementType, const XML_Ch **attrs);
+	void GetParameters(WSDDLevels ElementType, const XML_Ch **attrs);
+	void AddAllowedRolesToService(const AxisXMLCh* value);
+	void AddAllowedMethodsToService(const AxisXMLCh* value);
+	int ParseDocument(const AxisChar* sWSDD);
+
+public:
+	WSDDDocumentExpat(map<AxisString, int>* pLibNameIdMap);
+	~WSDDDocumentExpat();
+	int GetDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment);
+	int UpdateDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment);
+
+	void startElement(const XML_Ch *qname,const XML_Ch **attrs);
+	void endElement(const XML_Ch *qname);
+	void characters(const XML_Ch *chars,int length);
+	void startPrefixMapping(const XML_Ch *prefix, const XML_Ch *uri);
+	void endPrefixMapping(const XML_Ch *prefix);
+
+	inline static void XMLCALL s_startElement(void* p, const XML_Ch *qname,const XML_Ch **attrs)
+	{((WSDDDocumentExpat*)p)->startElement(qname,attrs);};
+	inline static void XMLCALL s_endElement(void* p, const XML_Ch *qname)
+	{((WSDDDocumentExpat*)p)->endElement(qname);};
+	inline static void XMLCALL s_characters(void* p, const XML_Ch *chars,int length)
+	{((WSDDDocumentExpat*)p)->characters(chars,length);};
+	inline static void XMLCALL s_startPrefixMapping(void* p, const XML_Ch *prefix, const XML_Ch *uri)
+	{((WSDDDocumentExpat*)p)->startPrefixMapping(prefix, uri);};
+	inline static void XMLCALL s_endPrefixMapping(void* p, const XML_Ch *prefix)
+	{((WSDDDocumentExpat*)p)->endPrefixMapping(prefix);};
 };
 
-#endif // !defined(AFX_WSDDDEPLOYMENT_H__2B3E0205_06F3_47C1_8D9C_479CBFB8ACC2__INCLUDED_)
+#endif //__WSDDDOCUMENTEXPAT_H_INCLUDED__
