@@ -61,38 +61,128 @@
  *
  */
 
-// SoapBody.h: interface for the SoapBody class.
+// ComplexElement.cpp: implementation of the ComplexElement class.
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_SOAPBODY_H__D1A60F04_287F_4688_A8F0_10BE0EA25775__INCLUDED_)
-#define AFX_SOAPBODY_H__D1A60F04_287F_4688_A8F0_10BE0EA25775__INCLUDED_
+#include "ComplexElement.h"
+#include "../common/GDefine.h"
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
 
-#include "SoapMethod.h"
-#include "SoapFault.h"
-#include "SoapEnvVersions.h"
-
-class SoapBody  
+ComplexElement::ComplexElement()
 {
-friend class SoapSerializer;
 
-private:
-	SoapMethod *m_pSoapMethod;
-	SoapFault *m_pSoapFault;
-	//string m_strBodySerialized;
+}
 
-public:
-	//string& serialize();
-	int serialize(string&, SOAP_VERSION eSoapVersion);
-	void setSoapFault(SoapFault* ptrSoapFault);
-	void setSoapMethod(SoapMethod* ptrSoapMethod);
-	SoapBody();
-	virtual ~SoapBody();
+ComplexElement::~ComplexElement()
+{
 
-};
+}
 
-#endif // !defined(AFX_SOAPBODY_H__D1A60F04_287F_4688_A8F0_10BE0EA25775__INCLUDED_)
+int ComplexElement::setPrefix(const string &sPrefix)
+{
+	m_sPrefix= sPrefix;
+
+	return SUCCESS;
+}
+
+int ComplexElement::setLocalName(const string &sLocalName)
+{
+	m_sLocalName= sLocalName;
+
+	return SUCCESS;
+}
+
+int ComplexElement::addChild(BasicNode *pBasicNode)
+{
+	m_children.push_back(pBasicNode);
+
+	return SUCCESS;
+}
+
+int ComplexElement::serialize(string &sSerialized)
+{
+	int iStatus= SUCCESS;
+
+	do {
+		if(isSerializable()) {
+
+			sSerialized+= "<";
+			
+			if(m_sPrefix.length() != 0) {
+				sSerialized+= m_sPrefix+ ":";
+			}
+
+			sSerialized+= m_sLocalName;						  
+
+			if((m_sPrefix.length() != 0) && (m_sURI.length() != 0)) {
+				sSerialized+= " xmlns:"+ m_sPrefix+ "=\""+ m_sURI+ "\"";
+			}
+
+			sSerialized+= ">";
+
+			iStatus= serializeChildren(sSerialized);
+			if(iStatus==FAIL) {
+				break;
+			}
+
+			sSerialized+= "</";
+
+			if(m_sPrefix.length() != 0) {
+				sSerialized+= m_sPrefix+ ":";			
+			}
+
+			sSerialized+= m_sLocalName+ ">"+ "\n";
+
+			iStatus= SUCCESS;
+		} else {
+			iStatus= FAIL;
+		}
+	} while(0);
+			
+	return iStatus;
+}
+
+bool ComplexElement::isSerializable()
+{
+	bool bStatus= true;
+
+	do {
+		if(m_sURI.length()!=0) {
+			if(m_sPrefix.length()==0) {
+				bStatus= false;
+				break;
+			}
+		}
+
+		if(m_sLocalName.length()==0) {
+			bStatus= false;
+			break;
+		}
+	}while(0);
+
+	return bStatus;
+}
+
+int ComplexElement::setURI(const string &sURI)
+{
+	m_sURI= sURI;
+
+	return SUCCESS;
+}
+
+int ComplexElement::serializeChildren(string &sSerialized)
+{
+
+	list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
+
+	while(itCurrBasicNode != m_children.end()) {		
+		(*itCurrBasicNode)->serialize(sSerialized);
+		itCurrBasicNode++;		
+	}	
+
+	return SUCCESS;
+}
