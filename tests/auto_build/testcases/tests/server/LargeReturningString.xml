@@ -1,0 +1,8 @@
+<service>
+    <name>LargeReturnigString</name>
+    <description>LargeReturningString Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>LargeReturningString.cpp</serviceCode>
+    <wsdl>LargeReturningString.wsdl</wsdl>
+	<servicename></servicename>
+</service>
