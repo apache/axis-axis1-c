@@ -268,14 +268,14 @@ int ComplexElement::serializeChildren(SoapSerializer& pSZ, list<AxisChar*>& lstT
 	return AXIS_SUCCESS;
 }
 
-NODE_TYPE ComplexElement::getNodeType()
+NODE_TYPE ComplexElement::getNodeType() const
 {
 	return m_iNodeType;
 }
 
-BasicNode* ComplexElement::getFirstChild()
+const BasicNode* ComplexElement::getFirstChild() const
 {
-	list<BasicNode*>::iterator itCurrChild= m_children.begin();
+	list<BasicNode*>::const_iterator itCurrChild= m_children.begin();
 
 	if (itCurrChild != m_children.end()) {		
 		return (*itCurrChild);
@@ -284,9 +284,9 @@ BasicNode* ComplexElement::getFirstChild()
 	return NULL;
 }
 
-BasicNode* ComplexElement::getLastChild()
+const BasicNode* ComplexElement::getLastChild() const
 {
-	list<BasicNode*>::reverse_iterator ritCurrChild= m_children.rbegin();
+	list<BasicNode*>::const_reverse_iterator ritCurrChild= m_children.rbegin();
 
 	if (ritCurrChild != m_children.rend()) {		
 		return (*ritCurrChild);
@@ -295,12 +295,12 @@ BasicNode* ComplexElement::getLastChild()
 	return NULL;
 }
 
-BasicNode* ComplexElement::getChild(int iChildPosition)
+const BasicNode* ComplexElement::getChild(int iChildPosition) const
 {
 	if (iChildPosition > iNoOfChildren) {
 		return NULL;
 	} else {
-		list<BasicNode*>::iterator itCurrChild= m_children.begin();
+		list<BasicNode*>::const_iterator itCurrChild= m_children.begin();
 		/*The following is done since the previous line already takes the iterator one step forward */
 		iChildPosition--;
 
