@@ -74,7 +74,8 @@
 
 
 #ifdef WIN32
-#define WSDDFILEPATH "./Axis/conf/server.wsdd"
+//#define WSDDFILEPATH "./Axis/conf/server.wsdd"
+#define WSDDFILEPATH "C:/Apache/Axis/server.wsdd"
 #else //For linux
 #define WSDDFILEPATH "/usr/local/axiscpp/axis/server.wsdd"
 #endif
@@ -171,10 +172,49 @@ int AxisEngine::Process(soapstream* soap)
 		  pMsg->m_pSZ->setSoapEnvelope(pEnv);
 		  pMsg->m_pSZ->setSoapBody(new SoapBody());
 
-		  string service = getheader(soap, SOAPACTIONHEADER);
+		  //---------------------start--------------------------
+
+		  //Deserialize
+		  //---------START XERCES SAX2 SPCIFIC CODE---------//
+          //a huge buffer to store the whole soap request stream
+		  char hugebuffer[10000];
+         //to store the number of chars returned by get_request_bytes
+		  int nChars = 0;
+          //request a huge number of bytes to get the whole soap request
+          //when pull parsing is used this should change
+		  get_request_bytes(hugebuffer, 10000, &nChars);
+		  DEBUG1(hugebuffer);      
+          //if no soap then quit
+		  if (nChars <= 0) break;
+		  pSoapInput = new MemBufInputSource((const unsigned char*)hugebuffer, nChars ,"bufferid",false);
+
+		  if (SUCCESS != m_pDZ->SetStream(pSoapInput)) //this parses the full soap request.
+		  {
+			  pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
+			  break; //do .. while(0)
+		  }
+		  //---------END XERCES SAX2 SPCIFIC CODE---------//
+
+		  int nSoapVersion = pMsg->m_pDZ->GetVersion();
+
+		  //Set Soap version in the Serializer
+		  pMsg->m_pSZ->setSoapVersion((SOAP_VERSION)nSoapVersion);
+
+		  //---------------------end--------------------------
+		  
+
+		  char* cService= getheader(soap, SOAPACTIONHEADER);
+			string service;
+		  if(cService==NULL) {
+				service="";
+		  }else {
+				service= cService;
+		  }
+		  
+		  //string service = getheader(soap, SOAPACTIONHEADER);
 		  service = service.substr(1, service.length() - 2);
 
-      DEBUG2("string service = Maths :",service.c_str());
+		  DEBUG2("string service = Maths :",service.c_str());
      
 		  if (service.empty()) 
 		  {
@@ -188,38 +228,15 @@ int AxisEngine::Process(soapstream* soap)
 		  }
 
       pMsg->SetService(pService);
-   
-		  //Deserialize
-		  //---------START XERCES SAX2 SPCIFIC CODE---------//
-          //a huge buffer to store the whole soap request stream
-		  char hugebuffer[10000];
-         //to store the number of chars returned by get_request_bytes
-		  int nChars = 0;
-          //request a huge number of bytes to get the whole soap request
-          //when pull parsing is used this should change
-		  get_request_bytes(hugebuffer, 10000, &nChars);
-DEBUG1(hugebuffer);      
-          //if no soap then quit
-		  if (nChars <= 0) break;
-		  pSoapInput = new MemBufInputSource((const unsigned char*)hugebuffer, nChars ,"bufferid",false);
 
-		  if (SUCCESS != m_pDZ->SetStream(pSoapInput)) //this parses the full soap request.
-		  {
-			  pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
-			  break; //do .. while(0)
-		  }
-		  //---------END XERCES SAX2 SPCIFIC CODE---------//
+			
 		  //check for soap version in the request and decide whether we support it or not
-		  //if we do not support send a soapfault with version mismatch.
-
-		  int nSoapVersion = pMsg->m_pDZ->GetVersion();
+		  //if we do not support send a soapfault with version mismatch.		  
 		  if (nSoapVersion == VERSION_LAST) //version not supported
 		  {
 			  pMsg->m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_VERSION_MISMATCH));
 			  break; //do .. while(0)		
-		  }
-		  //Set Soap version in the Serializer
-		  pMsg->m_pSZ->setSoapVersion((SOAP_VERSION)nSoapVersion);
+		  }		  
 
 		  //add namespace URIs of the SoapEnvelope of the response corresponding to the soap version.
 		  Attribute* pNS = new Attribute(g_sObjSoapEnvVersionsStruct[nSoapVersion].pchEnvelopePrefix,
