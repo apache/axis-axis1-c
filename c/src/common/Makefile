@@ -15,7 +15,6 @@ PACKAGE_SRCS = AccessBean.cpp \
 	BasicTypeSerializer.cpp \
 	MessageData.cpp \
 	Param.cpp \
-	Test.cpp
 
 
 PACKAGE_OBJS = $(PACKAGE_SRCS:%.cpp=$(AX_OBJ_DIR_COMMON)/%.o)
