@@ -69,6 +69,7 @@
 #include "SoapSerializer.h"
 #include "../common/GDefine.h"
 #include "../common/ArrayBean.h"
+#include "../common/BasicTypeSerializer.h"
 
 extern "C" int sendSoapResponse(char *cSerializedStream);
 
@@ -254,4 +255,19 @@ IArrayBean* SoapSerializer::makeArrayBean(XSDTYPE nType, void* pArray)
 	pAb->m_type = nType;
 	pAb->m_value.sta = pArray;
 	return pAb;
+}
+
+string& SoapSerializer::SerializeBasicType(const string& sName, string& sValue, XSDTYPE type)
+{
+	return BasicTypeSerializer::serialize(sName, sValue, type);
+}
+
+string& SoapSerializer::SerializeBasicType(const string& sName, float fValue)
+{
+	return BasicTypeSerializer::serialize(sName, fValue);	
+}
+
+string& SoapSerializer::SerializeBasicType(const string& sName, int nValue)
+{
+	return BasicTypeSerializer::serialize(sName, nValue);		
 }
