@@ -93,8 +93,8 @@ int iClntSocket;
 
 int send_response_bytes(const char * res, const void* opstream) 
 {	
-	//printf("calling send_response_bytes");
-	//printf("%s", res);
+	printf("calling send_response_bytes\n");
+	printf("%s", res);
 
 	int iMsgSize = strlen(res);
 	
@@ -138,10 +138,11 @@ int executeWork() {
 	str->str.ip_stream = "is";
 	str->str.op_stream = "os";
 	str->so.http.ip_headers = (Ax_header*)malloc(sizeof(Ax_header));
-//	str->so.http.ip_headers->headername = SOAPACTIONHEADER;
-//	str->so.http.ip_headers->headervalue = "\"Calculator\"";	
+	//str->so.http.ip_headers->headername = SOAPACTIONHEADER;
+	//str->so.http.ip_headers->headervalue = "\"Calculator\"";	
 	str->so.http.ip_headercount = 0;
 	str->so.http.uri_path = "http://someurl/axis/Calculator";
+	//str->so.http.uri_path = "http://someurl/axis/Deployment";
 
 	//set transport
 	str->transport.pSendFunct = send_response_bytes;
@@ -254,9 +255,21 @@ void handleTCPClient(int clntSocket)
         printf("%s\n","recv() failed");
 
 	//DEBUG info
-	//printf("----------START request stream of client------------\n");
-	//printf("%s\n\n", echoBuffer);	
-	//printf("----------END request stream of client------------\n");
+	printf("----------START request stream of client------------\n");
+	printf("%s\n\n", echoBuffer);	
+	printf("----------END request stream of client------------\n");
+
+	/*
+	while (recvMsgSize>0) {
+		printf("hi \n");
+		if ((recvMsgSize = recv(clntSocket, echoBuffer, RCVBUFSIZE, 64)) < 0)
+			printf("%s\n","recv() failed");
+
+		printf("%s\n\n", echoBuffer);	
+		printf("%d\n", recvMsgSize);
+		printf("----2------END request stream of client------------\n");
+	}	
+	*/
 
 	string sClientReqStream = echoBuffer;
 
@@ -341,8 +354,8 @@ int main(int argc, char *argv[ ])
 
 	//initializing Axis
 	//initialize_module();
-	
-	initialize_module(1, WSDDFILEPATH);
+
+	initialize_module(1, "");
 	
 	while (running) {
 		FD_ZERO(&sockSet);
