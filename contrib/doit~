@@ -1,0 +1,9 @@
+
+set echo
+foreach i (*) 
+  echo 'Working on $i'
+  if (-d $i) then
+    cvs add $i
+    (cd $i; tcsh c:/projects/xml-axis/contrib/doit)
+  endif
+end
