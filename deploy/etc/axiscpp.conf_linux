@@ -12,6 +12,8 @@
 #NodeName:Node name
 #ListenPort:Listening port
 #Channel_ssl:/usr/local/axiscpp_deploy/lib/libaxis2_ssl_channel.so
+#Channel_HTTP_SSL:Secure Transport channel in axis3 transport
+#Channel_HTTP:Transport channel in axis3 transport
 
 LogPath:/usr/local/axiscpp_deploy/log/AxisLog
 WSDDFilePath:/usr/local/axiscpp_deploy/etc/server.wsdd
