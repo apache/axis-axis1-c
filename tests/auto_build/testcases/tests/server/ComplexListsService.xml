@@ -1,0 +1,8 @@
+<service>
+    <name>ComplexLists</name>
+    <description>ComplexLists Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>ComplexLists.cpp</serviceCode>
+    <wsdl>ComplexLists.wsdl</wsdl>
+	<servicename></servicename>
+</service>

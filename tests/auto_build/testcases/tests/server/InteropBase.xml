@@ -1,0 +1,8 @@
+<service>
+    <name>InteropBase</name>
+    <description>InteropBase</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>InteropTestPortType.cpp</serviceCode>
+    <wsdl>RpcHttpHeaderTest1.wsdl</wsdl>
+	<servicename></servicename>
+</service>

@@ -1,0 +1,8 @@
+<service>
+    <name>TestTransportTimeout</name>
+    <description>TestTransportTimeout</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>Timeout.cpp</serviceCode>
+    <wsdl>TestTransportTimeout.wsdl</wsdl>
+	<servicename></servicename>
+</service>

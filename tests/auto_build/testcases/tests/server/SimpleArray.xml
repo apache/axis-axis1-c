@@ -1,0 +1,8 @@
+<service>
+    <name>SimpleArray</name>
+    <description>SimpleArray</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>ArrayTestPortType.cpp</serviceCode>
+    <wsdl>SimpleArray.wsdl</wsdl>
+	<servicename></servicename>
+</service>

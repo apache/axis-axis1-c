@@ -1,0 +1,8 @@
+<service>
+    <name>SimpleArrays</name>
+    <description>SimpleArrays</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>SimpleArrays.cpp</serviceCode>
+    <wsdl>SimpleArrays.wsdl</wsdl>
+	<servicename></servicename>
+</service>

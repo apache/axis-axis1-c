@@ -1,0 +1,8 @@
+<service>
+    <name>XSDElement</name>
+    <description>XSDElement Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>XSDElement.cpp</serviceCode>
+    <wsdl>XSDElement.wsdl</wsdl>
+	<servicename></servicename>
+</service>
