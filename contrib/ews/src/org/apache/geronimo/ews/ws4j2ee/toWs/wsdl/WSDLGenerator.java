@@ -79,96 +79,96 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
  * 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
-public class WSDLGenarator extends Java2WSDL implements Generator {
-    private J2EEWebServiceContext j2eewscontext;
-    private String[] args;
+public class WSDLGenerator extends Java2WSDL implements Generator {
+	private J2EEWebServiceContext j2eewscontext;
+	private String[] args;
 
-    protected static Log log =
-            LogFactory.getLog(WSDLGenarator.class.getName());
+	protected static Log log =
+			LogFactory.getLog(WSDLGenerator.class.getName());
 
-    public WSDLGenarator(J2EEWebServiceContext j2eewscontext) {
-        this.j2eewscontext = j2eewscontext;
-    }
+	public WSDLGenerator(J2EEWebServiceContext j2eewscontext) {
+		this.j2eewscontext = j2eewscontext;
+	}
 
-    public void setArgs(String[] args) {
-        this.args = args;
-    }
+	public void setArgs(String[] args) {
+		this.args = args;
+	}
 
-    /**
-     * run
-     * checks the command-line arguments and runs the tool.
-     * 
-     * @param args String[] command-line arguments.
-     */
-    protected int run(String[] args) {
-        // Parse the arguments
-        CLArgsParser argsParser = new CLArgsParser(args, options);
+	/**
+	 * run
+	 * checks the command-line arguments and runs the tool.
+	 * 
+	 * @param args String[] command-line arguments.
+	 */
+	protected int run(String[] args) {
+		// Parse the arguments
+		CLArgsParser argsParser = new CLArgsParser(args, options);
 
-        // Print parser errors, if any
-        if (null != argsParser.getErrorString()) {
-            System.err.println(Messages.getMessage("j2werror00", argsParser.getErrorString()));
-            printUsage();
-            return (1);
-        }
+		// Print parser errors, if any
+		if (null != argsParser.getErrorString()) {
+			System.err.println(Messages.getMessage("j2werror00", argsParser.getErrorString()));
+			printUsage();
+			return (1);
+		}
 
-        // Get a list of parsed options
-        List clOptions = argsParser.getArguments();
-        int size = clOptions.size();
+		// Get a list of parsed options
+		List clOptions = argsParser.getArguments();
+		int size = clOptions.size();
 
-        try {
-            // Parse the options and configure the emitter as appropriate.
-            for (int i = 0; i < size; i++) {
-                if (parseOption((CLOption) clOptions.get(i)) == false) {
-                    return (1);
-                }
-            }
+		try {
+			// Parse the options and configure the emitter as appropriate.
+			for (int i = 0; i < size; i++) {
+				if (parseOption((CLOption) clOptions.get(i)) == false) {
+					return (1);
+				}
+			}
 
-            // validate argument combinations
-            if (validateOptions() == false)
-                return (1);
+			// validate argument combinations
+			if (validateOptions() == false)
+				return (1);
 
-            // Set the namespace map
-            if (!namespaceMap.isEmpty()) {
-                emitter.setNamespaceMap(namespaceMap);
-            }
+			// Set the namespace map
+			if (!namespaceMap.isEmpty()) {
+				emitter.setNamespaceMap(namespaceMap);
+			}
             
 			TypeMapping tm = new TypeMappingImpl(emitter.getDefaultTypeMapping());
 			emitter.setTypeMapping(tm);
             
-            // Find the class using the name
-            emitter.setCls(className);
-            // Generate a full wsdl, or interface & implementation wsdls
-            if (wsdlImplFilename == null) {
-                emitter.emit(wsdlFilename, mode);
-            } else {
-                emitter.emit(wsdlFilename, wsdlImplFilename);
-            }
+			// Find the class using the name
+			emitter.setCls(className);
+			// Generate a full wsdl, or interface & implementation wsdls
+			if (wsdlImplFilename == null) {
+				emitter.emit(wsdlFilename, mode);
+			} else {
+				emitter.emit(wsdlFilename, wsdlImplFilename);
+			}
 
-            // everything is good
-            return (0);
-        } catch (Throwable t) {
-            t.printStackTrace();
-            return (1);
-        }
-    } // run
+			// everything is good
+			return (0);
+		} catch (Throwable t) {
+			t.printStackTrace();
+			return (1);
+		}
+	} // run
 
-    public void genarate() throws GenerationFault {
-        try {
-            //write the WSDLFile
-            this.run(args);
-            //initiate the wsdlContext
-            this.j2eewscontext.setWSDLContext(new AxisEmitterBasedWSDLContext(emitter.getWSDL()));
-            //parse the ejb-jar.xml here
-            ContextValidator validator = new ContextValidator(j2eewscontext);
-            //initiate the jaxrpcmapping context 
-            this.j2eewscontext.setJAXRPCMappingContext(new AxisEmitterBasedJaxRpcMapperContext(emitter, j2eewscontext));
-            //initiate the wscf context 
-            this.j2eewscontext.setWSCFContext(new AxisEmitterBasedWSCFContext(emitter, j2eewscontext));
+	public void genarate() throws GenerationFault {
+		try {
+			//write the WSDLFile
+			this.run(args);
+			//initiate the wsdlContext
+			this.j2eewscontext.setWSDLContext(new AxisEmitterBasedWSDLContext(emitter.getWSDL()));
+			//parse the ejb-jar.xml here
+			ContextValidator validator = new ContextValidator(j2eewscontext);
+			//initiate the jaxrpcmapping context 
+			this.j2eewscontext.setJAXRPCMappingContext(new AxisEmitterBasedJaxRpcMapperContext(emitter, j2eewscontext));
+			//initiate the wscf context 
+			this.j2eewscontext.setWSCFContext(new AxisEmitterBasedWSCFContext(emitter, j2eewscontext));
 
-            //validate the j2ee context
-            validator.validateWithOutWSDL(emitter);
-        } catch (Exception e) {
-            throw GenerationFault.createGenerationFault(e);
-        }
-    }
+			//validate the j2ee context
+			validator.validateWithOutWSDL(emitter);
+		} catch (Exception e) {
+			throw GenerationFault.createGenerationFault(e);
+		}
+	}
 }

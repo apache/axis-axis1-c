@@ -31,15 +31,26 @@ public class JarFileLoader {
 	private InputStream  wscfFile;
 	private InputStream  webddfile;
 	private InputStream  ejbJarfile;
+	private InputStream  wsdlfile;
+	private InputStream  jaxrpcfile;
 	private JarFile jar; 
 	
 	public JarFileLoader(String jarFile) throws GenerationFault{
 		try{	
 			System.out.println("found jar file "+jarFile);
 			jar = new JarFile(jarFile);
-			wscfFile = getInputStreamForJarEntry(jarFile,"META-INF/webservice.xml");
-			webddfile = getInputStreamForJarEntry(jarFile,"META-INF/web.xml");
-			ejbJarfile = getInputStreamForJarEntry(jarFile,"META-INF/ejb-jar.xml");
+			if(jarFile.endsWith(".jar")){
+				wscfFile = getInputStreamForJarEntry(jarFile,"META-INF/webservice.xml");
+				webddfile = getInputStreamForJarEntry(jarFile,"META-INF/web.xml");
+				ejbJarfile = getInputStreamForJarEntry(jarFile,"META-INF/ejb-jar.xml");
+			}else if(jarFile.endsWith(".war")){
+				wscfFile = getInputStreamForJarEntry(jarFile,"WEB-INF/webservice.xml");
+				webddfile = getInputStreamForJarEntry(jarFile,"WEB-INF/web.xml");
+			}else if(jarFile.endsWith(".ear")){
+				wscfFile = getInputStreamForJarEntry(jarFile,"META-INF/webservice.xml");
+				webddfile = getInputStreamForJarEntry(jarFile,"META-INF/web.xml");
+				ejbJarfile = getInputStreamForJarEntry(jarFile,"META-INF/ejb-jar.xml");
+			}
 			if(wscfFile == null)
 				throw new GenerationFault("wscf file must not be null");
 		} catch (IOException e) {
@@ -47,7 +58,19 @@ public class JarFileLoader {
 			throw new GenerationFault(e);
 		}
 	}
-	
+	public InputStream getInputStreamForJarEntry(String path) throws GenerationFault{
+			try {
+				ZipEntry zentry = jar.getEntry(path);
+				if(zentry!= null){
+					return jar.getInputStream(zentry);			
+				}else{
+					return null;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new GenerationFault(e);
+			}
+		}
 	
 	public InputStream getInputStreamForJarEntry(String jarFile,String path) throws GenerationFault{
 		try {
@@ -57,55 +80,55 @@ public class JarFileLoader {
 			}else{
 				return null;
 			}
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new GenerationFault(e);
-        }
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new GenerationFault(e);
+		}
 	}
 	
 	public void loadtheClassesInJarFile()throws GenerationFault{
 	}
 	
-    /**
-     * @return
-     */
-    public InputStream getEjbJarfile() {
-        return ejbJarfile;
-    }
+	/**
+	 * @return
+	 */
+	public InputStream getEjbJarfile() {
+		return ejbJarfile;
+	}
 
-    /**
-     * @return
-     */
-    public InputStream getWebddfile() {
-        return webddfile;
-    }
+	/**
+	 * @return
+	 */
+	public InputStream getWebddfile() {
+		return webddfile;
+	}
 
-    /**
-     * @return
-     */
-    public InputStream getWscfFile() {
-        return wscfFile;
-    }
+	/**
+	 * @return
+	 */
+	public InputStream getWscfFile() {
+		return wscfFile;
+	}
 
-    /**
-     * @param stream
-     */
-    public void setEjbJarfile(InputStream stream) {
-        ejbJarfile = stream;
-    }
+	/**
+	 * @param stream
+	 */
+	public void setEjbJarfile(InputStream stream) {
+		ejbJarfile = stream;
+	}
 
-    /**
-     * @param stream
-     */
-    public void setWebddfile(InputStream stream) {
-        webddfile = stream;
-    }
+	/**
+	 * @param stream
+	 */
+	public void setWebddfile(InputStream stream) {
+		webddfile = stream;
+	}
 
-    /**
-     * @param stream
-     */
-    public void setWscfFile(InputStream stream) {
-        wscfFile = stream;
-    }
+	/**
+	 * @param stream
+	 */
+	public void setWscfFile(InputStream stream) {
+		wscfFile = stream;
+	}
 
 }

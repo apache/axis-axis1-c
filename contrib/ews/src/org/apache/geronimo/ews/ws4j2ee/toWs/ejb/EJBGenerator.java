@@ -66,7 +66,7 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.WriterFactory;
  * <p>This class crete the nessacsaary EJB artifacts</p>
  * @author Srinath Perera(hemapani@opensource.lk)
  */
-public class EJBGenarator implements Generator {
+public class EJBGenerator implements Generator {
 	private J2EEWebServiceContext context;
 	private Writer homewriter;
 	private Writer remotewriter;
@@ -75,7 +75,7 @@ public class EJBGenarator implements Generator {
 	private Writer localwriter;
 	private Writer localhomewriter;
 
-	public EJBGenarator(J2EEWebServiceContext context) throws GenerationFault {
+	public EJBGenerator(J2EEWebServiceContext context) throws GenerationFault {
 		this.context = context;
 		String implStyle = context.getMiscInfo().getImplStyle();
 			if(GenerationConstants.USE_LOCAL_AND_REMOTE.equals(implStyle) 
@@ -91,9 +91,8 @@ public class EJBGenarator implements Generator {
 			}
 			if(!context.getMiscInfo().isImplAvalible()){
 				beanwriter = WriterFactory.createWriter(context, GenerationConstants.EJB_IMPLEMENTATION_BEAN_WRITER);
-				ddwriter = WriterFactory.createWriter(context, GenerationConstants.EJB_DD_WRITER);
 			}	
-
+		ddwriter = WriterFactory.createWriter(context, GenerationConstants.EJB_DD_WRITER);
 	}
 
 	public void genarate() throws GenerationFault {

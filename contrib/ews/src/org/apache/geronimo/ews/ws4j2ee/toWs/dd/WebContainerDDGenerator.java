@@ -67,7 +67,7 @@ public class WebContainerDDGenerator implements Generator {
     private J2EEWebServiceContext j2eewscontext;
     private Writer writer;
     protected static Log log =
-            LogFactory.getLog(JaxrpcMapperGenarator.class.getName());
+            LogFactory.getLog(JaxrpcMapperGenerator.class.getName());
 
     public WebContainerDDGenerator(J2EEWebServiceContext j2eewscontext) throws GenerationFault {
         

@@ -108,7 +108,8 @@ public class GenerationConstants {
 	/** j2ee Container DDs */
     public static final String JBOSS_DD = "jboss.xml";
     public static final String JONAS_DD = "jonas-ejb-jar.xml";
-    public static final String GERONIMO_DD = "geronimo.xml";
+    public static final String GERONIMO_DD = "openejb-jar.xml";
+	public static final String GERONIMO_WEB_DD = "geronimo-jetty.xml";
     
 	/** j2ee Containers*/
     public static final String JBOSS_CONTAINER = "jboss";

@@ -91,7 +91,7 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.JavaClassWriter;
  */
 public class WebEndpointWrapperClassWriter extends JavaClassWriter {
 	protected static Log log =
-		LogFactory.getLog(WrapperWsGenarator.class.getName());
+		LogFactory.getLog(WrapperWsGenerator.class.getName());
 	protected String seiName = null;
 	/**
 	 * @param j2eewscontext

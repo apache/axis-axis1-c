@@ -53,32 +53,41 @@
  * <http://www.apache.org/>.
  */
 
-package org.apache.geronimo.ews.ws4j2ee.toWs.wrapperWs;
+package org.apache.geronimo.ews.ws4j2ee.toWs.handlers;
 
-import org.apache.axis.components.logger.LogFactory;
-import org.apache.commons.logging.Log;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFHandler;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Writer;
 
 /**
- * <p>This genarated theWrapper WS required in the 
- * Axis.</p> 
+ * <p>Genarate the signature of the handlers as given by the webservice.xml file.</p>
+ * 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
-public class WrapperWsGenarator implements Generator {
-    private J2EEWebServiceContext j2eewscontext;
-    private Writer writer;
-	protected static Log log =
-					LogFactory.getLog(WrapperWsGenarator.class.getName());
-    
-    public WrapperWsGenarator(J2EEWebServiceContext j2eewscontext) throws GenerationFault {
-        this.j2eewscontext = j2eewscontext;
-		writer = WrapperClassGeneratorFactory.createInstance(j2eewscontext);
-    }
-    
-    public void genarate() throws GenerationFault {
-		writer.writeCode();
-    }
+public class HandlerGenerator implements Generator {
+	private J2EEWebServiceContext j2eewscontext;
+	private Writer[] writers = null;
+
+	public HandlerGenerator(J2EEWebServiceContext j2eewscontext) throws GenerationFault {
+		this.j2eewscontext = j2eewscontext;
+			WSCFHandler[] handlers = j2eewscontext.getMiscInfo().getHandlers();
+			if(handlers!= null){
+				writers = new Writer[handlers.length];
+				for (int i = 0; i < handlers.length; i++) {
+					writers[i] = new HandlerWriter(j2eewscontext, handlers[i]);
+				}
+			}else
+				writers = new Writer[0];
+	}
+
+	/**
+	 * genarate the handlers
+	 */
+	public void genarate() throws GenerationFault {
+		for (int i = 0; i < writers.length; i++) {
+			writers[i].writeCode();
+		}
+	}
 }

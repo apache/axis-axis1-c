@@ -57,16 +57,16 @@ package org.apache.geronimo.ews.ws4j2ee.toWs;
 
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.dd.J2EEContainerSpecificDDGenerator;
-import org.apache.geronimo.ews.ws4j2ee.toWs.dd.JaxrpcMapperGenarator;
+import org.apache.geronimo.ews.ws4j2ee.toWs.dd.JaxrpcMapperGenerator;
 import org.apache.geronimo.ews.ws4j2ee.toWs.dd.WebContainerDDGenerator;
-import org.apache.geronimo.ews.ws4j2ee.toWs.dd.WebServiceDDGenarator;
-import org.apache.geronimo.ews.ws4j2ee.toWs.ejb.EJBGenarator;
-import org.apache.geronimo.ews.ws4j2ee.toWs.handlers.HandlerGenarator;
+import org.apache.geronimo.ews.ws4j2ee.toWs.dd.WebServiceDDGenerator;
+import org.apache.geronimo.ews.ws4j2ee.toWs.ejb.EJBGenerator;
+import org.apache.geronimo.ews.ws4j2ee.toWs.handlers.HandlerGenerator;
 import org.apache.geronimo.ews.ws4j2ee.toWs.misc.BuildFileGenerator;
-import org.apache.geronimo.ews.ws4j2ee.toWs.wrapperWs.WrapperWsGenarator;
-import org.apache.geronimo.ews.ws4j2ee.toWs.ws.ClientSideWsGenarator;
-import org.apache.geronimo.ews.ws4j2ee.toWs.ws.ServerSideWsGenarator;
-import org.apache.geronimo.ews.ws4j2ee.toWs.wsdl.WSDLGenarator;
+import org.apache.geronimo.ews.ws4j2ee.toWs.wrapperWs.WrapperWsGenerator;
+import org.apache.geronimo.ews.ws4j2ee.toWs.ws.ClientSideWsGenerator;
+import org.apache.geronimo.ews.ws4j2ee.toWs.ws.ServerSideWsGenerator;
+import org.apache.geronimo.ews.ws4j2ee.toWs.wsdl.WSDLGenerator;
 
 /**
  * <p>This class is for keep the interface and the concreate implementation of the
@@ -77,21 +77,21 @@ public class GeneratorFactory {
     public static Generator createGenerator(J2EEWebServiceContext j2eewscontext,
                                             int genaratorType) throws GenerationFault {
         if (genaratorType == GenerationConstants.EJB_GENERATOR) {
-            return new EJBGenarator(j2eewscontext);
+            return new EJBGenerator(j2eewscontext);
         } else if (genaratorType == GenerationConstants.AXIS_WEBSERVICE_WRAPPER_GENERATOR) {
-            return new WrapperWsGenarator(j2eewscontext);
+            return new WrapperWsGenerator(j2eewscontext);
         } else if (genaratorType == GenerationConstants.CLIENT_STUB_GENERATOR) {
-            return new ClientSideWsGenarator(j2eewscontext);
+            return new ClientSideWsGenerator(j2eewscontext);
         } else if (genaratorType == GenerationConstants.WSDL_GENERATOR) {
-            return new WSDLGenarator(j2eewscontext);
+            return new WSDLGenerator(j2eewscontext);
         } else if (genaratorType == GenerationConstants.SEI_AND_TYPES_GENERATOR) {
-            return new ServerSideWsGenarator(j2eewscontext);
+            return new ServerSideWsGenerator(j2eewscontext);
         } else if (genaratorType == GenerationConstants.HANDLER_GENERATOR) {
-            return new HandlerGenarator(j2eewscontext);
+            return new HandlerGenerator(j2eewscontext);
         } else if (genaratorType == GenerationConstants.JAXRPCMAPPER_GENERATOR) {
-            return new JaxrpcMapperGenarator(j2eewscontext);
+            return new JaxrpcMapperGenerator(j2eewscontext);
         } else if (genaratorType == GenerationConstants.WEBSERVICEDD_GENERATOR) {
-            return new WebServiceDDGenarator(j2eewscontext);
+            return new WebServiceDDGenerator(j2eewscontext);
         } else if (genaratorType == GenerationConstants.J2EE_CONTAINER_DD_GENERATOR) {
             return new J2EEContainerSpecificDDGenerator(j2eewscontext);
         } else if (genaratorType == GenerationConstants.BUILD_FILE_GENERATOR) {

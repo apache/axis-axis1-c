@@ -16,47 +16,24 @@
 
 package org.apache.geronimo.ews.ws4j2ee.utils;
 
-import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Properties;
-
-import org.apache.axis.utils.ClassUtils;
 
 /**
+ * <p>To call this Class and execute a ant task the $JAVA_HOME/lib/tool.jar need
+ * to be in the class path. And so far I use the commnad line to call the Ant.
+ * It should be replaced by call to the Project class.</p>  
  * @author hemapani
  */
 public class AntExecuter {
 	private String buildFile = "build.xml";
 	
 	public void execute(String buildFile){
-		org.apache.tools.ant.Main.main(new String[]{"-f",buildFile});
-	
-	}
-	public static void main(String[] args) throws IOException{
-		AntExecuter ex = new AntExecuter();
-//		System.setProperty("ant.home","C:/ANT/jakarta-ant-1.5");
-//		String path = System.getProperty("java.class.path");
-//		path = path +";"+ "H:\\j2sdk1.4.1_01\\lib\\tools.jar";
-//		System.setProperty("java.class.path",path);
 
-		Properties p = System.getProperties();
-		
-
-//		ClassUtils.setDefaultClassLoader(ClassUtils.createClassLoader(
-//								"H:\\j2sdk1.4.1_01\\lib\\tools.jar",
-//								ex.getClass().getClassLoader()));
-		ClassLoader cl = ClassUtils.createClassLoader("H:/j2sdk1.4.1_01/lib/tools.jar",ClassLoader.getSystemClassLoader());
-		
-		org.apache.tools.ant.Main.start(new String[]{"-f","target/generated/samples/withWSDL/server/google/build.xml"},
-		null,cl);
-		//org.apache.tools.ant.Main.main(new String[]{"-f","target/generated/samples/withWSDL/server/google/build.xml"});
-		
-		Enumeration e = p.keys();
-		while(e.hasMoreElements()){
-			String key = (String)e.nextElement();
-			System.out.println(key + "= " + System.getProperty(key));
-		}
-
-		//Runtime.getRuntime().exec("ant -f target/generated/samples/withWSDL/server/google/build.xml");
+//wait till the ant jar added
+//		org.apache.tools.ant.Main.main(new String[]{"-f",buildFile});
+//TODO  following code should load the tool.jar but it does not work yet
+//		ClassLoader cl = org.apache.axis.utils.ClassUtils.createClassLoader(
+//					"H:/j2sdk1.4.1_01/lib/tools.jar",
+//					ClassLoader.getSystemClassLoader());
+//		org.apache.tools.ant.Main.start(new String[]{"-f",buildFile},null,cl);
 	}
 }

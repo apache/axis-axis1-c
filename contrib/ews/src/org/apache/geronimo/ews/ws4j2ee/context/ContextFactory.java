@@ -68,7 +68,7 @@ import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSC
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.impl.AxisWSDLContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
-import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenarationFault;
+import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenerationFault;
 
 /**
  * <p>This class decouple the concreate implementations of the
@@ -79,13 +79,13 @@ public class ContextFactory {
     public static WSDLContext createWSDLContext(Object info) {
         if (info instanceof SymbolTable)
             return new AxisWSDLContext((SymbolTable) info);
-        throw new UnrecoverableGenarationFault("unknown context type");
+        throw new UnrecoverableGenerationFault("unknown context type");
     }
 
     public static JaxRpcMapperContext createJaxRpcMapperContext(Object[] info) {
         if (info.length == 2 && info[0] instanceof JaxRpcMapper && info[1] instanceof J2eeEmitter)
             return new JaxRpcMapperImpl((JaxRpcMapper) info[0],(J2eeEmitter)info[1]);
-        throw new UnrecoverableGenarationFault("unknown mapper type");
+        throw new UnrecoverableGenerationFault("unknown mapper type");
     }
 
     public static WSCFContext createWSCFContext(InputStream in) throws GenerationFault {

@@ -113,7 +113,7 @@ public class Ws4J2EEwithWSDL implements Generator {
                 WSCFWebserviceDescription[] wscfwsdiss = wscfcontext.getWebServicesDescription();
                 //let us take the first discription
                 if (wscfwsdiss == null || wscfwsdiss.length == 0)
-                    throw new UnrecoverableGenarationFault("no webservice discription found in the" +
+                    throw new UnrecoverableGenerationFault("no webservice discription found in the" +
                             "webservice.xml file");
                 genarate(wscfwsdiss[0]);
             } catch (FileNotFoundException e) {

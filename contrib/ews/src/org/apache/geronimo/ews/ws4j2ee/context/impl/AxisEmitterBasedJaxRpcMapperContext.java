@@ -97,7 +97,7 @@ import org.apache.geronimo.ews.jaxrpcmapping.descriptor.XsdQNameType;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.JaxRpcMapperContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
-import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenarationFault;
+import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenerationFault;
 
 /**
  * This class wrap the JAXRPCMapper and only expose a interface to
@@ -115,7 +115,7 @@ public class AxisEmitterBasedJaxRpcMapperContext implements JaxRpcMapperContext 
         this.j2eewscontext = j2eewscontext;
         Method[] methods = emitter.getCls().getMethods();
         for (int i = 0; i < methods.length; i++) {
-            this.methods.put(methods[0].getName(), methods[0]);
+            this.methods.put(methods[i].getName(), methods[i]);
         }
 
     }
@@ -151,7 +151,7 @@ public class AxisEmitterBasedJaxRpcMapperContext implements JaxRpcMapperContext 
         //axis do not map the method names or types
         //so this should do 
         if (m == null)
-            throw new UnrecoverableGenarationFault("logic expected is differnet .. worng" +
+            throw new UnrecoverableGenerationFault("logic expected is differnet .. worng" +
                     "design decision");
         return m.getParameterTypes()[position].getName();
     }
@@ -167,7 +167,7 @@ public class AxisEmitterBasedJaxRpcMapperContext implements JaxRpcMapperContext 
         //axis do not map the method names or types
         //so this should do 
         if (m == null)
-            throw new UnrecoverableGenarationFault("logic expected is differnet .. worng" +
+            throw new UnrecoverableGenerationFault("logic expected is differnet .. worng" +
                     "design decision");
         return m.getReturnType().getName();
     }
@@ -302,7 +302,7 @@ public class AxisEmitterBasedJaxRpcMapperContext implements JaxRpcMapperContext 
             servciemaping.getPortMapping().add(portmap);
 
             if (binding == null)
-                throw new UnrecoverableGenarationFault("no port discription not match with the wsdl file");
+                throw new UnrecoverableGenerationFault("no port discription not match with the wsdl file");
 
             org.apache.geronimo.ews.jaxrpcmapping.descriptor.JavaWsdlMappingType.ServiceEndpointInterfaceMapping seimapping = objFactory.createJavaWsdlMappingTypeServiceEndpointInterfaceMapping();
             
@@ -344,33 +344,40 @@ public class AxisEmitterBasedJaxRpcMapperContext implements JaxRpcMapperContext 
                 //it am sure that no body will writing nor webservice.xml 
                 //or jaxrpcmapping.xml files if there is a short cut.
 				
-                //create return type  Map
-                WsdlReturnValueMappingType retvalmap = objFactory.createWsdlReturnValueMappingType();
             	
                 //set return type
-                FullyQualifiedClassType retValjavaName = objFactory.createFullyQualifiedClassType();
-                retValjavaName.setValue(((Method) methods.get(op.getName())).getReturnType().getName());
-                retvalmap.setMethodReturnValue(retValjavaName);
-            
-                //set return type info
-                Map parts = op.getOutput().getMessage().getParts();
-                if (parts != null) {
-                    Iterator partIt = parts.values().iterator();
-                    if (partIt.hasNext()) {
-                        //set wsdl message type
-                        WsdlMessageType messageType = objFactory.createWsdlMessageType();
-                        messageType.setValue(op.getOutput().getMessage().getQName());
-                        retvalmap.setWsdlMessage(messageType);
+                Method mtd = (Method) methods.get(op.getName());
+				Class ret = mtd.getReturnType();
+				if(ret!= null && !("void".equals(ret.toString()))){
+					//create return type  Map
+					WsdlReturnValueMappingType retvalmap = objFactory.createWsdlReturnValueMappingType();
+
+					FullyQualifiedClassType retValjavaName = objFactory.createFullyQualifiedClassType();
+					retValjavaName.setValue(ret.getName());
+					retvalmap.setMethodReturnValue(retValjavaName);
+					
+					//set return type info
+					Map parts = op.getOutput().getMessage().getParts();
+					if (parts != null) {
+						Iterator partIt = parts.values().iterator();
+						if (partIt.hasNext()) {
+							//set wsdl message type
+							WsdlMessageType messageType = objFactory.createWsdlMessageType();
+							messageType.setValue(op.getOutput().getMessage().getQName());
+							retvalmap.setWsdlMessage(messageType);
             			
-                        //set wsdl message part type
-                        WsdlMessagePartNameType messagePartName = objFactory.createWsdlMessagePartNameType();
-                        messagePartName.setValue(((Part) partIt.next()).getName());
-                        retvalmap.setWsdlMessagePartName(messagePartName);
-                    }
+							//set wsdl message part type
+							WsdlMessagePartNameType messagePartName = objFactory.createWsdlMessagePartNameType();
+							messagePartName.setValue(((Part) partIt.next()).getName());
+							retvalmap.setWsdlMessagePartName(messagePartName);
+						}
 
-                }
+					}
 
-                seimethodmapping.setWsdlReturnValueMapping(retvalmap);
+					seimethodmapping.setWsdlReturnValueMapping(retvalmap);
+
+				}
+            
             
             	
                 //create method param parts mappings	
@@ -434,6 +441,7 @@ public class AxisEmitterBasedJaxRpcMapperContext implements JaxRpcMapperContext 
 
             Unmarshaller u = jc.createUnmarshaller();
         } catch (Exception e) {
+        	e.printStackTrace();
             throw GenerationFault.createGenerationFault(e);
         }
     }

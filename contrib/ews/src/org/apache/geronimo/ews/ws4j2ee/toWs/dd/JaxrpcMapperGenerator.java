@@ -73,33 +73,33 @@ import java.io.PrintWriter;
  * 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
-public class JaxrpcMapperGenarator extends Java2WSDL implements Generator {
-    private J2EEWebServiceContext j2eewscontext;
+public class JaxrpcMapperGenerator extends Java2WSDL implements Generator {
+	private J2EEWebServiceContext j2eewscontext;
 
-    protected static Log log =
-            LogFactory.getLog(JaxrpcMapperGenarator.class.getName());
+	protected static Log log =
+			LogFactory.getLog(JaxrpcMapperGenerator.class.getName());
 
-    public JaxrpcMapperGenarator(J2EEWebServiceContext j2eewscontext) {
-        this.j2eewscontext = j2eewscontext;
-    }
+	public JaxrpcMapperGenerator(J2EEWebServiceContext j2eewscontext) {
+		this.j2eewscontext = j2eewscontext;
+	}
 
-    public void genarate() throws GenerationFault {
-        try {
-            String fileName = j2eewscontext.getMiscInfo().getJaxrpcfile();
+	public void genarate() throws GenerationFault {
+		try {
+			String fileName = j2eewscontext.getMiscInfo().getJaxrpcfile();
 
-            PrintWriter pw = new PrintWriter(new FileWriter(fileName));
-            this.j2eewscontext.getJAXRPCMappingContext().serialize(pw);
-            pw.close();
+			PrintWriter pw = new PrintWriter(new FileWriter(fileName));
+			this.j2eewscontext.getJAXRPCMappingContext().serialize(pw);
+			pw.close();
 			if(j2eewscontext.getMiscInfo().isVerbose())
-            	log.info(fileName + " genarated .................");
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new GenerationFault(e);
-        }
-    }
+				log.info(fileName + " genarated .................");
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new GenerationFault(e);
+		}
+	}
 
-    public Emitter getEmmiter() {
-        return emitter;
-    }
+	public Emitter getEmmiter() {
+		return emitter;
+	}
 
 }

@@ -72,7 +72,7 @@ import org.apache.geronimo.ews.jaxrpcmapping.J2eeEmitter;
 import org.apache.geronimo.ews.jaxrpcmapping.JaxRpcMapper;
 import org.apache.geronimo.ews.jaxrpcmapping.descriptor.JavaWsdlMapping;
 import org.apache.geronimo.ews.ws4j2ee.context.JaxRpcMapperContext;
-import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenarationFault;
+import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 
 /**
@@ -99,7 +99,7 @@ public class JaxRpcMapperImpl implements JaxRpcMapperContext {
         if(exceptionName == null){
 			exceptionName = j2ee.getJavaName(messageQName);
 			if(exceptionName == null)
-				throw new UnrecoverableGenarationFault("the exception name in a SEI OP can not be null" +
+				throw new UnrecoverableGenerationFault("the exception name in a SEI OP can not be null" +
 					"possibly be a bug check the WSDL2Java data extraction");
         }	
 		return 	exceptionName;
@@ -116,7 +116,7 @@ public class JaxRpcMapperImpl implements JaxRpcMapperContext {
     	if(opName == null)
 			opName = operation.getName();
 		if(opName == null)
-			throw new UnrecoverableGenarationFault("the method name in a SEI OP can not be null" +
+			throw new UnrecoverableGenerationFault("the method name in a SEI OP can not be null" +
 				"possibly be a bug check the WSDL2Java data extraction");
 		
 		return 	Utils.firstCharacterToLowerCase(opName);
@@ -135,7 +135,7 @@ public class JaxRpcMapperImpl implements JaxRpcMapperContext {
         if(type == null){
 			type = j2ee.getJavaName(parmType);
 			if(type == null)
-				throw new UnrecoverableGenarationFault("the parm type name in a SEI OP can not be null" +
+				throw new UnrecoverableGenerationFault("the parm type name in a SEI OP can not be null" +
 					"possibly be a bug check the WSDL2Java data extraction");  
 		}
         return type;
@@ -161,9 +161,12 @@ public class JaxRpcMapperImpl implements JaxRpcMapperContext {
 			  }
 		  }
         }
-		return returnType; 
-
+        
+        return Utils.jni2javaName(returnType);
     }
+	
+			
+
 
     /**
      * @param typeQName 
@@ -174,7 +177,7 @@ public class JaxRpcMapperImpl implements JaxRpcMapperContext {
         if(type == null)
         	type = j2ee.getJavaName(typeQName);
         if(type == null)
-			throw new UnrecoverableGenarationFault("the type name can" +
+			throw new UnrecoverableGenerationFault("the type name can" +
 				" not be null possibly be a bug check the WSDL2Java data extraction");
 		return type;			
     }
@@ -195,7 +198,7 @@ public class JaxRpcMapperImpl implements JaxRpcMapperContext {
         if(portName == null){
 			portName = port.getName();
 			if(portName == null)
-				throw new UnrecoverableGenarationFault("the portName can" +
+				throw new UnrecoverableGenerationFault("the portName can" +
 				" not be null, possibly be a bug check the WSDL2Java data extraction");
 		}
 		return portName;
@@ -212,7 +215,7 @@ public class JaxRpcMapperImpl implements JaxRpcMapperContext {
         if(seiName == null){
 			seiName = ptEntry.getName();
 			if(seiName == null)
-				throw new UnrecoverableGenarationFault("the seiName can" +
+				throw new UnrecoverableGenerationFault("the seiName can" +
 				" not be null, possibly be a bug check the WSDL2Java data extraction");
         }
         return seiName;
@@ -227,7 +230,7 @@ public class JaxRpcMapperImpl implements JaxRpcMapperContext {
         if(serviceInterface == null){
 			serviceInterface = entry.getName();
 			if(serviceInterface == null)
-				throw new UnrecoverableGenarationFault("the serviceInterface can" +
+				throw new UnrecoverableGenerationFault("the serviceInterface can" +
 				" not be null, possibly be a bug check the WSDL2Java data extraction");
         }
         return serviceInterface;

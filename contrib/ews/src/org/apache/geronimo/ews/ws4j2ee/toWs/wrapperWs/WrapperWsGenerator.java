@@ -53,42 +53,32 @@
  * <http://www.apache.org/>.
  */
 
-package org.apache.geronimo.ews.ws4j2ee.toWs.dd;
+package org.apache.geronimo.ews.ws4j2ee.toWs.wrapperWs;
 
 import org.apache.axis.components.logger.LogFactory;
 import org.apache.commons.logging.Log;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import org.apache.geronimo.ews.ws4j2ee.toWs.Writer;
 
 /**
- * This class genarate the webservice.xml file.
- * 
+ * <p>This genarated theWrapper WS required in the 
+ * Axis.</p> 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
-public class WebServiceDDGenarator implements Generator {
-    private J2EEWebServiceContext j2eewscontext;
-
-    protected static Log log =
-            LogFactory.getLog(JaxrpcMapperGenarator.class.getName());
-
-    public WebServiceDDGenarator(J2EEWebServiceContext j2eewscontext) {
-        this.j2eewscontext = j2eewscontext;
-    }
-
-    public void genarate() throws GenerationFault {
-        try {
-			if(j2eewscontext.getMiscInfo().isVerbose())
-				log.info(j2eewscontext.getMiscInfo().getWsConfFileLocation()+" generated ....");
-            PrintWriter out = new PrintWriter(new FileWriter(j2eewscontext.getMiscInfo().getWsConfFileLocation()));
-            j2eewscontext.getWSCFContext().serialize(out);
-            out.close();
-        } catch (IOException e) {
-            throw GenerationFault.createGenerationFault(e);
-        }
-    }
+public class WrapperWsGenerator implements Generator {
+	private J2EEWebServiceContext j2eewscontext;
+	private Writer writer;
+	protected static Log log =
+					LogFactory.getLog(WrapperWsGenerator.class.getName());
+    
+	public WrapperWsGenerator(J2EEWebServiceContext j2eewscontext) throws GenerationFault {
+		this.j2eewscontext = j2eewscontext;
+		writer = WrapperClassGeneratorFactory.createInstance(j2eewscontext);
+	}
+    
+	public void genarate() throws GenerationFault {
+		writer.writeCode();
+	}
 }

@@ -53,41 +53,42 @@
  * <http://www.apache.org/>.
  */
 
-package org.apache.geronimo.ews.ws4j2ee.toWs.handlers;
+package org.apache.geronimo.ews.ws4j2ee.toWs.dd;
 
+import org.apache.axis.components.logger.LogFactory;
+import org.apache.commons.logging.Log;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFHandler;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
-import org.apache.geronimo.ews.ws4j2ee.toWs.Writer;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
- * <p>Genarate the signature of the handlers as given by the webservice.xml file.</p>
+ * This class genarate the webservice.xml file.
  * 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
-public class HandlerGenarator implements Generator {
-    private J2EEWebServiceContext j2eewscontext;
-    private Writer[] writers = null;
+public class WebServiceDDGenerator implements Generator {
+	private J2EEWebServiceContext j2eewscontext;
 
-    public HandlerGenarator(J2EEWebServiceContext j2eewscontext) throws GenerationFault {
-        this.j2eewscontext = j2eewscontext;
-			WSCFHandler[] handlers = j2eewscontext.getMiscInfo().getHandlers();
-			if(handlers!= null){
-				writers = new Writer[handlers.length];
-				for (int i = 0; i < handlers.length; i++) {
-					writers[i] = new HandlerWriter(j2eewscontext, handlers[i]);
-				}
-			}else
-				writers = new Writer[0];
-    }
+	protected static Log log =
+			LogFactory.getLog(JaxrpcMapperGenerator.class.getName());
 
-    /**
-     * genarate the handlers
-     */
-    public void genarate() throws GenerationFault {
-        for (int i = 0; i < writers.length; i++) {
-            writers[i].writeCode();
-        }
-    }
+	public WebServiceDDGenerator(J2EEWebServiceContext j2eewscontext) {
+		this.j2eewscontext = j2eewscontext;
+	}
+
+	public void genarate() throws GenerationFault {
+		try {
+			if(j2eewscontext.getMiscInfo().isVerbose())
+				log.info(j2eewscontext.getMiscInfo().getWsConfFileLocation()+" generated ....");
+			PrintWriter out = new PrintWriter(new FileWriter(j2eewscontext.getMiscInfo().getWsConfFileLocation()));
+			j2eewscontext.getWSCFContext().serialize(out);
+			out.close();
+		} catch (IOException e) {
+			throw GenerationFault.createGenerationFault(e);
+		}
+	}
 }

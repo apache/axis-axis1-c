@@ -71,7 +71,7 @@ public class J2EEContainerSpecificDDGenerator implements Generator {
     private J2EEWebServiceContext j2eewscontext;
     private Writer writer;
     protected static Log log =
-            LogFactory.getLog(JaxrpcMapperGenarator.class.getName());
+            LogFactory.getLog(JaxrpcMapperGenerator.class.getName());
 
     public J2EEContainerSpecificDDGenerator(J2EEWebServiceContext j2eewscontext) throws GenerationFault {
         this.j2eewscontext = j2eewscontext;

@@ -61,15 +61,15 @@ package org.apache.geronimo.ews.ws4j2ee.toWs;
  * 
  * @author hemapani
  */
-public class UnrecoverableGenarationFault extends RuntimeException {
-    public UnrecoverableGenarationFault() {
-        super();
-    }
+public class UnrecoverableGenerationFault extends RuntimeException {
+	public UnrecoverableGenerationFault() {
+		super();
+	}
 
-    /**
-     * @param message 
-     */
-    public UnrecoverableGenarationFault(String message) {
-        super(message);
-    }
+	/**
+	 * @param message 
+	 */
+	public UnrecoverableGenerationFault(String message) {
+		super(message);
+	}
 }
