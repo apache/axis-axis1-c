@@ -61,9 +61,8 @@
  *
  */
 
-// SoapEnvVersions.h:
-//
-//////////////////////////////////////////////////////////////////////
+/* SoapEnvVersions.h:*/
+
 #ifdef WIN32
 #pragma warning (disable : 4786)
 #endif
@@ -79,7 +78,7 @@
  * for Axis C++.
  */
 typedef enum SOAP_WORDSTag {
-	SKW_ENVELOPE=0, //this should always be 0 - Susantha
+	SKW_ENVELOPE=0, /*this should always be 0*/
 	SKW_HEADER,
 	SKW_BODY,
 	SKW_MUSTUNDERSTAND,
@@ -97,7 +96,7 @@ typedef enum SOAP_WORDSTag {
 	SKW_HREF,
 	SKW_ID,
 
-	SOAP_WORDS_LAST //this should be the number of entries in this enum - Susantha
+	SOAP_WORDS_LAST /*this should be the number of entries in this enum */
 } SOAP_WORDS;
 
 typedef enum SOAP_VERSIONTag {
@@ -120,7 +119,7 @@ struct SoapEnvVersionsStruct
 
 static SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST]=
 {
-	//SOAP_VER_1_1
+	/*SOAP_VER_1_1*/
 	{ 
 		"http://schemas.xmlsoap.org/soap/envelope/",
 		"SOAP-ENV",
@@ -145,7 +144,7 @@ static SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST]=
 		},
 	},
 
-	//SOAP_VER_1_2
+	/*SOAP_VER_1_2*/
 	{ 
 		"http://www.w3.org/2003/05/soap-envelope",
 		"env",
@@ -172,4 +171,4 @@ static SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST]=
 };
 #endif
 
-#endif //__SOAPENVVERSIONS_H_INCLUDED___
+#endif /*__SOAPENVVERSIONS_H_INCLUDED___*/
