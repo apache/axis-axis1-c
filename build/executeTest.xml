@@ -102,7 +102,7 @@
 
 		<trycatch>
 			<try>
-				<parallel timeout="60000" failonany="false">
+				<parallel timeout="120000" failonany="false">
 
 					<antcall target="startMonitor" inheritall="true"/>
 		
