@@ -114,35 +114,34 @@ const char* Axis2Transport::getHTTPHeaders()
 {
     URL& url = m_Channel.getURLObject();
 
-    std::string strHTTPHeaders = m_strHTTPMethod + " ";
-    //strHTTPHeaders += std::string(url.getURL()) + " ";
-    strHTTPHeaders += std::string(url.getResource()) + " ";
-    strHTTPHeaders += m_strHTTPProtocol + "\r\n";
+    m_strHeaderToSend = m_strHTTPMethod + " ";
+    //m_strHeaderToSend += std::string(url.getURL()) + " ";
+    m_strHeaderToSend += std::string(url.getResource()) + " ";
+    m_strHeaderToSend += m_strHTTPProtocol + "\r\n";
 
-    strHTTPHeaders += std::string("Host: ") + url.getHostName();
+    m_strHeaderToSend += std::string("Host: ") + url.getHostName();
 
     unsigned short port = url.getPort ();
     char buff[8];
     sprintf (buff, "%u", port);
-    strHTTPHeaders += ":";
-    strHTTPHeaders += buff;
-    strHTTPHeaders += "\r\n";
+    m_strHeaderToSend += ":";
+    m_strHeaderToSend += buff;
+    m_strHeaderToSend += "\r\n";
 
-    strHTTPHeaders += "Content-Type: text/xml; charset=UTF-8\r\n";
+    m_strHeaderToSend += "Content-Type: text/xml; charset=UTF-8\r\n";
 
     // Set other HTTP headers
     for (unsigned int i = 0; i < m_vHTTPHeaders.size (); i++)
     {
 
-        strHTTPHeaders += m_vHTTPHeaders[i].first;
-        strHTTPHeaders += ": ";
-        strHTTPHeaders += m_vHTTPHeaders[i].second;
-        strHTTPHeaders += "\r\n";
+        m_strHeaderToSend += m_vHTTPHeaders[i].first;
+        m_strHeaderToSend += ": ";
+        m_strHeaderToSend += m_vHTTPHeaders[i].second;
+        m_strHeaderToSend += "\r\n";
     }
 
-    strHTTPHeaders += "\r\n";
-
-    return strHTTPHeaders.c_str();
+    m_strHeaderToSend += "\r\n";
+    return m_strHeaderToSend.c_str();
 }
 
 const char* Axis2Transport::getHTTPMethod()

@@ -150,6 +150,11 @@ class Axis2Transport:public SOAPTransport
     std::string m_strBytesToSend;
 
   /**
+    * Message header to be sent.
+    */
+    std::string m_strHeaderToSend;
+
+  /**
     * Vector to hold HTTP header key/value pairs
     */
     std::vector < std::pair < std::string, std::string > >m_vHTTPHeaders;
