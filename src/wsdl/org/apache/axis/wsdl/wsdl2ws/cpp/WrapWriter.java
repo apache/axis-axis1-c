@@ -502,7 +502,7 @@ public class WrapWriter extends CPPClassWriter
             if (returntypeissimple)
             {
             	if (returntype.isNillable()
-            			&& !(outparamTypeName.equals("xsd__string")
+            			|| (outparamTypeName.equals("xsd__string")
             					|| outparamTypeName.equals("xsd__anyURI")
 								|| outparamTypeName.equals("xsd__QName")
 								|| outparamTypeName.equals("xsd__notation")))
