@@ -35,11 +35,11 @@ class AxisAdminServiceWrapper:public WrapperClassHandler
     public:
         virtual ~ AxisAdminServiceWrapper ();
     public: /*implementation of WrapperClassHandler interface */
-        int AXISCALL Invoke (void* pMsg);
-        void AXISCALL OnFault (void* pMsg);
-        int AXISCALL Init ();
-        int AXISCALL Fini ();
-        AXIS_BINDING_STYLE AXISCALL GetBindingStyle ()
+        int AXISCALL invoke (void* pMsg);
+        void AXISCALL onFault (void* pMsg);
+        int AXISCALL init ();
+        int AXISCALL fini ();
+        AXIS_BINDING_STYLE AXISCALL getBindingStyle ()
         {
             return DOC_LITERAL;
         };

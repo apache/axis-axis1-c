@@ -17,16 +17,16 @@ CalculatorWrapper::~CalculatorWrapper()
 }
 
 /*implementation of WrapperClassHandler interface*/
-void CalculatorWrapper::OnFault(void *pMsg)
+void CalculatorWrapper::onFault(void *pMsg)
 {
 }
 
-int CalculatorWrapper::Init()
+int CalculatorWrapper::init()
 {
 	return AXIS_SUCCESS;
 }
 
-int CalculatorWrapper::Fini()
+int CalculatorWrapper::fini()
 {
 	return AXIS_SUCCESS;
 }
@@ -35,10 +35,10 @@ int CalculatorWrapper::Fini()
 /*
  * This method invokes the right service method 
  */
-int CalculatorWrapper::Invoke(void *pMsg)
+int CalculatorWrapper::invoke(void *pMsg)
 {
 	IMessageData* mc = (IMessageData*)pMsg;
-	const AxisChar *method = mc->GetOperationName();
+	const AxisChar *method = mc->getOperationName();
 	if (0 == strcmp(method, "add"))
 		return add(mc);
 	else if (0 == strcmp(method, "sub"))
@@ -61,19 +61,19 @@ int CalculatorWrapper::add(void* pMsg)
 	IMessageData* mc = (IMessageData*)pMsg;
 	int nStatus;
 	IWrapperSoapSerializer *pIWSSZ = NULL;
-	mc->GetSoapSerializer(&pIWSSZ);
+	mc->getSoapSerializer(&pIWSSZ);
 	if (!pIWSSZ) return AXIS_FAIL;
 	IWrapperSoapDeSerializer *pIWSDZ = NULL;
-	mc->GetSoapDeSerializer(&pIWSDZ);
+	mc->getSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
 	/* check whether we have got correct message */
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("add", "http://localhost/axis/Calculator")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("addResponse", "http://localhost/axis/Calculator");
-	int v0 = pIWSDZ->GetElementAsInt("in0",0);
-	int v1 = pIWSDZ->GetElementAsInt("in1",0);
-	if (AXIS_SUCCESS != (nStatus = pIWSDZ->GetStatus())) return nStatus;
+	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("add", "http://localhost/axis/Calculator")) return AXIS_FAIL;
+	pIWSSZ->createSoapMethod("addResponse", "http://localhost/axis/Calculator");
+	int v0 = pIWSDZ->getElementAsInt("in0",0);
+	int v1 = pIWSDZ->getElementAsInt("in1",0);
+	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
 	int ret = pWs->add(v0,v1);
-	return pIWSSZ->AddOutputParam("addReturn", (void*)&ret, XSD_INT);
+	return pIWSSZ->addOutputParam("addReturn", (void*)&ret, XSD_INT);
 }
 
 
@@ -85,19 +85,19 @@ int CalculatorWrapper::sub(void* pMsg)
 	IMessageData* mc = (IMessageData*)pMsg;
 	int nStatus;
 	IWrapperSoapSerializer *pIWSSZ = NULL;
-	mc->GetSoapSerializer(&pIWSSZ);
+	mc->getSoapSerializer(&pIWSSZ);
 	if (!pIWSSZ) return AXIS_FAIL;
 	IWrapperSoapDeSerializer *pIWSDZ = NULL;
-	mc->GetSoapDeSerializer(&pIWSDZ);
+	mc->getSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
 	/* check whether we have got correct message */
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("sub", "http://localhost/axis/Calculator")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("subResponse", "http://localhost/axis/Calculator");
-	int v0 = pIWSDZ->GetElementAsInt("in0",0);
-	int v1 = pIWSDZ->GetElementAsInt("in1",0);
-	if (AXIS_SUCCESS != (nStatus = pIWSDZ->GetStatus())) return nStatus;
+	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("sub", "http://localhost/axis/Calculator")) return AXIS_FAIL;
+	pIWSSZ->createSoapMethod("subResponse", "http://localhost/axis/Calculator");
+	int v0 = pIWSDZ->getElementAsInt("in0",0);
+	int v1 = pIWSDZ->getElementAsInt("in1",0);
+	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
 	int ret = pWs->sub(v0,v1);
-	return pIWSSZ->AddOutputParam("subReturn", (void*)&ret, XSD_INT);
+	return pIWSSZ->addOutputParam("subReturn", (void*)&ret, XSD_INT);
 }
 
 
@@ -109,19 +109,19 @@ int CalculatorWrapper::mul(void* pMsg)
 	IMessageData* mc = (IMessageData*)pMsg;
 	int nStatus;
 	IWrapperSoapSerializer *pIWSSZ = NULL;
-	mc->GetSoapSerializer(&pIWSSZ);
+	mc->getSoapSerializer(&pIWSSZ);
 	if (!pIWSSZ) return AXIS_FAIL;
 	IWrapperSoapDeSerializer *pIWSDZ = NULL;
-	mc->GetSoapDeSerializer(&pIWSDZ);
+	mc->getSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
 	/* check whether we have got correct message */
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("mul", "http://localhost/axis/Calculator")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("mulResponse", "http://localhost/axis/Calculator");
-	int v0 = pIWSDZ->GetElementAsInt("in0",0);
-	int v1 = pIWSDZ->GetElementAsInt("in1",0);
-	if (AXIS_SUCCESS != (nStatus = pIWSDZ->GetStatus())) return nStatus;
+	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("mul", "http://localhost/axis/Calculator")) return AXIS_FAIL;
+	pIWSSZ->createSoapMethod("mulResponse", "http://localhost/axis/Calculator");
+	int v0 = pIWSDZ->getElementAsInt("in0",0);
+	int v1 = pIWSDZ->getElementAsInt("in1",0);
+	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
 	int ret = pWs->mul(v0,v1);
-	return pIWSSZ->AddOutputParam("mulReturn", (void*)&ret, XSD_INT);
+	return pIWSSZ->addOutputParam("mulReturn", (void*)&ret, XSD_INT);
 }
 
 
@@ -133,18 +133,18 @@ int CalculatorWrapper::div(void* pMsg)
 	IMessageData* mc = (IMessageData*)pMsg;
 	int nStatus;
 	IWrapperSoapSerializer *pIWSSZ = NULL;
-	mc->GetSoapSerializer(&pIWSSZ);
+	mc->getSoapSerializer(&pIWSSZ);
 	if (!pIWSSZ) return AXIS_FAIL;
 	IWrapperSoapDeSerializer *pIWSDZ = NULL;
-	mc->GetSoapDeSerializer(&pIWSDZ);
+	mc->getSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
 	/* check whether we have got correct message */
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("div", "http://localhost/axis/Calculator")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("divResponse", "http://localhost/axis/Calculator");
-	int v0 = pIWSDZ->GetElementAsInt("in0",0);
-	int v1 = pIWSDZ->GetElementAsInt("in1",0);
-	if (AXIS_SUCCESS != (nStatus = pIWSDZ->GetStatus())) return nStatus;
+	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("div", "http://localhost/axis/Calculator")) return AXIS_FAIL;
+	pIWSSZ->createSoapMethod("divResponse", "http://localhost/axis/Calculator");
+	int v0 = pIWSDZ->getElementAsInt("in0",0);
+	int v1 = pIWSDZ->getElementAsInt("in1",0);
+	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
 	int ret = pWs->div(v0,v1);
-	return pIWSSZ->AddOutputParam("divReturn", (void*)&ret, XSD_INT);
+	return pIWSSZ->addOutputParam("divReturn", (void*)&ret, XSD_INT);
 }
 
