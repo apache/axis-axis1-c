@@ -565,26 +565,31 @@ public class ClientStubWriter extends CPPClassWriter{
                 writer.write("\t\t\tpcCmplxFaultName = pSoapFault->getCmplxFaultObjectName().c_str();\n");
 	    }
 			while (paramsFault.hasNext()){
-				j =j+1;
+				j = j + 1;
 				FaultInfo info = (FaultInfo)paramsFault.next();
-				faultInfoName =info.getFaultInfo();
+				faultInfoName = info.getFaultInfo();
+
+// FJP - D0004 > Looking through the list of attributes for the 'error' part of
+//               the fault message.  If found, update the faultInfoName with the
+//               'localname' of the qname of the attribute.				
 				Iterator infoArrayListIterator = info.getParams().iterator();
 				boolean found = false;
 				
 				while( infoArrayListIterator.hasNext() && !found)
 				{
-					ParameterInfo pi = (ParameterInfo) infoArrayListIterator.next();
+					ParameterInfo paramInfo = (ParameterInfo) infoArrayListIterator.next();
 					
-					if( pi != null)
+					if( paramInfo != null)
 					{
-						if( "error".equals( pi.getParamName()))
+						if( "error".equals( paramInfo.getParamName()))
 						{
-							faultInfoName = pi.getElementName().getLocalPart();
+							faultInfoName = paramInfo.getElementName().getLocalPart();
 						
 							found = true;
 						}
 					}
 				}
+// FJP - D0004 <				
 					     
 				ArrayList paramInfo =info.getParams();
 				for (int i= 0; i < paramInfo.size(); i++) {				
