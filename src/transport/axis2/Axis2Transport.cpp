@@ -374,6 +374,24 @@ throw (AxisException, AxisTransportException)
                 }
                 while (m_strReceived.find ("\r\n\r\n") == std::string::npos);
 
+                if (m_strReceived.find ("HTTP") == std::string::npos)
+                { 
+                    // Most probably what we read was left overs from earlier reads
+                    // Skip this \r\n\r\n
+                    m_strReceived = m_strReceived.substr (m_strReceived.find ("\r\n\r\n") + 4);
+                    do
+                    {
+                        if (m_strReceived.find ("\r\n\r\n") == std::string::npos)
+                        {
+                            std::string strTempReceived = "";
+                            *m_pChannel >> strTempReceived; // Assume non blocking here
+                            m_strReceived += strTempReceived;
+                        }
+                    }
+                    while (m_strReceived.find ("\r\n\r\n") == std::string::npos);
+                    // now this must contain HTTP. Else there is a conent error.
+                }
+
                 //now we have found the end of headers
                 m_bReadPastHTTPHeaders = true;
 
@@ -403,12 +421,19 @@ throw (AxisException, AxisTransportException)
                     m_bChunked = false;
                 }
 
+                // check if there is HTTP header. If not, there must be an error and 
+                // will be detected by processResponseHTTPHeaders()
+                // However, must make sure that the left overs from eatlier reads
+                // do not appear before HTTP/1.x
+                unsigned int start = m_strReceived.find ("HTTP"); 
+                if(start == std::string::npos)
+                    start = 0;
                 // Extract HTTP headers and process them
-                m_strResponseHTTPHeaders = m_strReceived.substr (0,
+                m_strResponseHTTPHeaders = m_strReceived.substr (start,
                                            m_strReceived.
                                            find
                                            ("\r\n\r\n")
-                                           + 2);
+                                           + 2 - start);
                 processResponseHTTPHeaders ();
 
                 if (m_iResponseHTTPStatusCode != 200 && m_iResponseHTTPStatusCode != 500)
@@ -422,7 +447,7 @@ throw (AxisException, AxisTransportException)
 
                 // Done with HTTP headers, get payload
                 m_strReceived =
-                    m_strReceived.substr (m_strReceived.find ("\r\n\r\n") +
+                    m_strReceived.substr (m_strReceived.find ("\r\n\r\n", start) +
                                           4);
             }
 
