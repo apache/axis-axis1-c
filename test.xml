@@ -1,17 +1,14 @@
 <project name="AxisCTests" default="testSuite" basedir=".">
-<description >
-This ANT script generates, compiles, runs and validates the client stub tests
-for Apache.
+<description>
+This ANT script generates, compiles and runs the client stub tests for Apache.
 
 This script is intended for use with Java 1.4+ and Apache ANT 1.6+.
 Ant is available from: http://ant.apache.org/
 
-To allow the automated finding of all available tests, use has been made of the
-ant-contrib project offering.  Also, to compile C/C++ code you will require the
-cpptasks extension to ANT. You will need to place the JAR files within:
+To compile C/C++ code you will require the cpptasks extension to ANT, within:
 	[ant install dir]/lib
-These are available from: http://ant-contrib.sourceforge.net/
-{Note: The cpptasks are a seperate download from ant-contrib}
+This is available from: http://ant-contrib.sourceforge.net/
+{Note: you will require the cpptasks download, not ant-contrib}
 
 It is intended that the default target be used, which compiles and links all code,
 generates documentation and packages ready for distribution.
@@ -48,7 +45,6 @@ Notes:
 	  included within the property files
 	  -->
 	<property name="dir.src" value="${basedir}/tests/auto_build/testcases"/>
-	<property name="dir.include" value="${basedir}/include"/>
 
 	<!--
 	  Compiler definitions
@@ -149,11 +145,20 @@ Notes:
             <os name="Linux"/>
         </condition>
 	</target>
+
+	<!--
+	  Check if an individual test name has been specified
+	  -->
+	<target name="checkIfIndividualTest">
+		<condition property="individualTest">
+			<isset property="test.name"/>
+		</condition>
+	</target>
 	
 	<!--
 	  Initialize properties
       -->
-	<target name="initialize" depends="pre-init">
+	<target name="initialize" depends="pre-init, checkIfIndividualTest">
 		<condition property="platform" value="Win32">
 			<isset property="windows"/>
 		</condition>
@@ -209,9 +214,9 @@ Notes:
 	<!--
 	  Use WSDL2Ws to generate stubs from WSDL files
 	  -->
-	<target name="generateStubs" unless="runOnly" depends="initialize">
+	<target name="generateStubs" unless="runOnly" depends="initialize, setLanguage">
 		<!-- Make directory in which all generated code shall be placed -->
-		<mkdir dir="${dir.test.generated}/${testName}"/>
+		<mkdir dir="${dir.test.generated}/${client.lang}/${testName}"/>
 		<!-- Setup classpath for WSDL2Ws -->
 		<path id ="cp">
 			<fileset dir="${dir.axisJARs}" includes="*.jar"/>
@@ -220,8 +225,8 @@ Notes:
 		<java jar="${dir.package.WSDL2Ws}/wsdl2ws.jar" fork="true">
 			<classpath refid="cp"/>
 			<arg value="${dir.src}/wsdls/${testName}.wsdl"/>
-			<arg value="-o${dir.test.generated}/${testName}"/>
-			<arg value="-lc++"/>
+			<arg value="-o${dir.test.generated}/${client.lang}/${testName}"/>
+			<arg value="-l${generated.lang}"/>
 			<arg value="-sclient"/>
 		</java>
 	</target>
@@ -230,15 +235,15 @@ Notes:
 	  Copy across test client, ready for compiling
 	  -->
 	<target name="copyClient" unless="runOnly">
-		<copy file="${dir.src}/client/cpp/${testName}Client.cpp" todir="${dir.test.generated}/${testName}"/>
+		<copy file="${dir.src}/client/${client.lang}/${testName}Client.${client.lang}" todir="${dir.test.generated}/${client.lang}/${testName}"/>
 	</target>
 	
 	<!--
 	  Compile test client
 	  -->
 	<target name="compileClient" unless="runOnly">
-		<cc failonerror="false" incremental="false" outfile="${dir.test.generated}/${testName}/${testName}"
-		 objdir="${dir.test.generated}/${testName}" exceptions="true"
+		<cc failonerror="false" incremental="false" outfile="${dir.test.generated}/${client.lang}/${testName}/${testName}"
+		 objdir="${dir.test.generated}/${client.lang}/${testName}" exceptions="true"
 		 outtype="executable" subsystem="console">
 		 	<!-- Compilers -->
 			<compiler refid="VisualC++"/>
@@ -251,8 +256,9 @@ Notes:
 			<!-- Additional library of Axis Client -->
 			<libset dir="${dir.package.lib}" libs="${clientLibraryName}"/>
 			<!-- Files to be compiled -->
-			<fileset dir="${dir.test.generated}/${testName}">
-				<include name="*.cpp"/>
+			<includepath path="${dir.include}"/>
+			<fileset dir="${dir.test.generated}/${client.lang}/${testName}">
+				<include name="*.${client.lang}"/>
 			</fileset>
 		</cc>
 	</target>
@@ -261,10 +267,10 @@ Notes:
 	  Compile Handler
 	  -->
 	<target name="compileTestHandler" if="isHandler">
-		<mkdir dir="${dir.test.generated}/${testName}/handlers/${handlerLibraryName}"/>
+		<mkdir dir="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}"/>
 		<cc incremental="false"
-		 outfile="${dir.test.generated}/${testName}/handlers/${handlerLibraryName}/${handlerLibraryName}"
-		 objdir="${dir.test.generated}/${testName}/handlers/${handlerLibraryName}" exceptions="true"
+		 outfile="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}/${handlerLibraryName}"
+		 objdir="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}" exceptions="true"
 		 failonerror="false" outtype="shared" multithreaded="true">
 			<compiler refid="VisualC++"/>
 			<compiler refid="Linuxgcc"/>
@@ -272,6 +278,7 @@ Notes:
 			<linker refid="VisualC++Linker"/>
 			<linker refid="LinuxLinker"/>
 			<linker refid="AIXLinker"/>
+			<includepath path="${dir.include}"/>
 			<fileset dir="${handlerDir}">
 				<include name="*.cpp"/>
 			</fileset>
@@ -298,11 +305,6 @@ Notes:
 			</not>
 		</condition>
 	</target>
-
-
-
-
-
 
 
 	<!--
@@ -353,7 +355,7 @@ Notes:
 # Transport_smtp:	 The SMTP transport library
 # XMLParser:		  The xml parser library
 #
-ClientLogPath:${dir.test.generated}/${testName}/ClientLog
+ClientLogPath:${dir.test.generated}/${client.lang}/${testName}/ClientLog
 Transport_http:${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
 XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}
 </echo>
@@ -372,7 +374,7 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 	  Create start of WSDD File
 	  -->
 	<target name="createStartOfWSDDFile" if="HandlersPresent">
-		<property name="client.wsdd" value="${dir.test.generated}/${testName}/client.wsdd"/>
+		<property name="client.wsdd" value="${dir.test.generated}/${client.lang}/${testName}/client.wsdd"/>
 		<copy file="${dir.src}/handlers/templ_head.wsdd" tofile="${client.wsdd}" overwrite="true"/>
 		<replace file="${client.wsdd}" token="XXXX" value="${testName}"/>
 	</target>
@@ -384,7 +386,7 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 		<concat destfile="${client.wsdd}" append="true">
 			<filelist dir="${dir.src}/handlers" files="templ_lib.wsdd"/>
 		</concat>
-		<replace file="${client.wsdd}" token="DDDD" value="${dir.test.generated}/${testName}/handlers/${handlerLibraryName}/"/>
+		<replace file="${client.wsdd}" token="DDDD" value="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}/"/>
 		<replace file="${client.wsdd}" token="LLLL" value="${handlerLibraryName}"/>
 		<replace file="${client.wsdd}" token="PPP" value="${libraryPrefix}"/>
 		<replace file="${client.wsdd}" token="SSS" value="${librarySuffix}"/>
@@ -403,43 +405,38 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 	  Execute the test
 	  -->
 	<target name="executeTest" if="successfulClientCompilation" unless="buildOnly">
-		<property name="results.file" value="${dir.test.generated}/${testName}/${testName}.out"/>
+		<property name="results.file" value="${dir.test.generated}/${client.lang}/${testName}/${testName}.out"/>
 		<property name="expected.file" value="${dir.src}/output/${testName}.out"/>
 		<property name="r_expected.file" value="${dir.src}/output/${testName}Request.out"/>
 
-		<trycatch>
-			<try>
-				<parallel timeout="120000">
-					<!-- Run Monitor utility to allow validation of message across the wire -->
-					<java classname="org.apache.test.TCPMonitor">
-						<arg line="-l ${monitorPort}"/>
-						<arg line="-p ${testPort}"/>
-						<arg line="-h ${testHost}"/>
-						<arg line="-o ${dir.test.generated}/${testName}/tcpm.out"/>
-						<classpath>
-							<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
-						</classpath>
-					</java>
-		
-					<sequential>
-						<!-- Wait for jvm to start monitor program -->
-						<sleep seconds="5"/>
-						<!-- Run the client test -->
-						<exec executable="${dir.test.generated}/${testName}/${testName}"
-						 dir="${dir.test.generated}/${testName}" output="${results.file}"
-						 error="${dir.test.generated}/${testName}/${testName}.err"
-						 failifexecutionfails="false" vmlauncher="false">
-							<arg line="-p ${monitorPort}"/>
-							<arg line="-s localhost"/>
-							<env key="PATH" value="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}/bin"/>
-							<env key="LD_LIBRARY_PATH" value="${dir.libraries}${path.separator}${dir.xmlParser}/lib"/>
-							<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}"/>
-						</exec>
-					</sequential>
-				</parallel>
-			</try>
-			<catch/>
-		</trycatch>
+		<parallel timeout="30000">
+			<!-- Run Monitor utility to allow validation of message across the wire -->
+			<java classname="org.apache.test.TCPMonitor">
+				<arg line="-l 13262"/>
+				<arg line="-p ${testPort}"/>
+				<arg line="-h ${testHost}"/>
+				<arg line="-o ${dir.test.generated}/${client.lang}/${testName}/tcpm.out"/>
+				<classpath>
+					<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
+				</classpath>
+			</java>
+
+			<sequential>
+				<!-- Wait for jvm to start monitor program -->
+				<sleep seconds="5"/>
+				<!-- Run the client test -->
+				<exec executable="${dir.test.generated}/${client.lang}/${testName}/${testName}"
+				 dir="${dir.test.generated}/${client.lang}/${testName}" output="${results.file}"
+				 error="${dir.test.generated}/${client.lang}/${testName}/${testName}.err"
+				 failifexecutionfails="false" vmlauncher="false">
+					<arg line="-p 13262"/>
+					<arg line="-s localhost"/>
+					<env key="PATH" value="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}/bin"/>
+					<env key="LD_LIBRARY_PATH" value="${dir.libraries}${path.separator}${dir.xmlParser}/lib"/>
+					<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}"/>
+				</exec>
+			</sequential>
+		</parallel>
 	</target>
 	
 	<!--
@@ -448,11 +445,11 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 	<target name="validateClientCompilationIfBuilding" unless="runOnly">
 		<condition property="clientCompilationStatus" value="FAILED">
 			<not>
-				<available file="${dir.test.generated}/${testName}/${testName}${executableSuffix}"/>
+				<available file="${dir.test.generated}/${client.lang}/${testName}/${testName}${executableSuffix}"/>
 			</not>
 		</condition>
 		<condition property="clientCompilationStatus" value="PASSED">
-			<available file="${dir.test.generated}/${testName}/${testName}${executableSuffix}"/>
+			<available file="${dir.test.generated}/${client.lang}/${testName}/${testName}${executableSuffix}"/>
 		</condition>
 		
 		<!-- Set a flag to show compilation was successful -->
@@ -484,11 +481,11 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 	<target name="validateHandlerCompilation" if="isHandler">
 		<condition property="handlerCompilationStatus" value="FAILED">
 			<not>
-				<available file="${dir.test.generated}/${testName}/handlers/${handlerLibraryName}/${handlerLibraryName}${librarySuffix}"/>
+				<available file="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}/${handlerLibraryName}${librarySuffix}"/>
 			</not>
 		</condition>
 		<condition property="handlerCompilationStatus" value="PASSED">
-			<available file="${dir.test.generated}/${testName}/handlers/${handlerLibraryName}/${handlerLibraryName}${librarySuffix}"/>
+			<available file="${dir.test.generated}/${client.lang}/${testName}/handlers/${handlerLibraryName}/${handlerLibraryName}${librarySuffix}"/>
 		</condition>
 		
 		<!-- Set a flag to show compilation was successful -->
@@ -531,13 +528,13 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 	  -->
 	<target name="validateMessageOnWire" if="HandlersPresent">
 		<condition property="messageOnWireStatus" value="PASSED">
-				<filesmatch file1="${dir.test.generated}/${testName}/tcpm.out" file2="${r_expected.file}"/>
+				<filesmatch file1="${dir.test.generated}/${client.lang}/${testName}/tcpm.out" file2="${r_expected.file}"/>
 		</condition>
 		<condition property="messageOnWireStatus" value="FAILED">
 			<and>
 				<available file="${r_expected.file}"/>
 				<not>
-					<filesmatch file1="${dir.test.generated}/${testName}/tcpm.out" file2="${r_expected.file}"/>
+					<filesmatch file1="${dir.test.generated}/${client.lang}/${testName}/tcpm.out" file2="${r_expected.file}"/>
 				</not>
 			</and>
 		</condition>
@@ -555,10 +552,42 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 	  -->
 	<target name="runTest" depends="initialize, stripTestName, buildTest, executeTest, validateTestRun"/>
 
+	<target name="setLangList">
+		<condition property="lang.list" value="${target.lang}">
+			<isset property="target.lang"/>
+		</condition>
+		<condition property="lang.list" value="cpp,c">
+			<not>
+				<isset property="target.lang"/>
+			</not>
+		</condition>
+	</target>
+
+	<!--
+	  Find, and run, all tests
+	  -->
+	<target name="runAllTests" depends="setLangList" description="Build and run all tests">
+		<foreach target="runAllLangTests" param="client.lang" list="${lang.list}" />
+	</target>
+
+	<target name="runAllLangTests" depends="initialize, setLanguage,runTests,runIndividualTest" description="Build and run all tests per language"/>
+
+	<!--
+	  Need to set a language property for wsdl2ws
+	  -->
+	<target name="setLanguage">
+		<condition property="generated.lang" value="c++">
+			<equals arg1="${client.lang}" arg2="cpp"/>
+		</condition>
+		<condition property="generated.lang" value="c">
+			<equals arg1="${client.lang}" arg2="c"/>
+		</condition>
+	</target>
+
 	<!--
 	  Locates all test WSDL files, and runs test for each
 	  -->
-	<target name="runAllTests" unless="individualTest">
+	<target name="runTests" unless="individualTest">
 		<path id="testWSDLs">
 			<fileset dir="${dir.src}/wsdls" includes="*.wsdl"/>
 		</path>
@@ -566,7 +595,13 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 			<path refid="testWSDLs"/>
 		</foreach>
 	</target>
-	
+
+	<target name="setIndividualWSDLName">
+		<property name="wsdlFile" value="${test.name}.wsdl" />
+	</target>
+
+	<target name="runIndividualTest" depends="setIndividualWSDLName, runTest" if="individualTest" />
+
 	<!--
 	  Display all results
 	  -->
