@@ -191,7 +191,7 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
                 }
                 else
                 {
-					sServiceName = g_pConfig->getAxConfProperty(AXCONF_AXISHOME);
+					sServiceName = g_pConfig->getAxisConfProperty(AXCONF_AXISHOME);
                     sServiceName += WSDLDIRECTORY + sUriWOAxis + ".wsdl";
                     // Check whether wsdl file is available
                     if ((WsddFile = fopen (sServiceName.c_str (), "r")) == NULL)
@@ -257,7 +257,7 @@ extern "C" int initialize_module (int bServer)
         {
 			XMLParserFactory::initialize();
             SOAPTransportFactory::initialize();
-			char *pWsddPath = g_pConfig->getAxConfProperty(AXCONF_WSDDFILEPATH);
+			char *pWsddPath = g_pConfig->getAxisConfProperty(AXCONF_WSDDFILEPATH);
 
 #if defined(ENABLE_AXISTRACE)
 
@@ -293,7 +293,7 @@ extern "C" int initialize_module (int bServer)
             }
 #endif
 			char *pClientWsddPath = 
-			g_pConfig->getAxConfProperty(AXCONF_CLIENTWSDDFILEPATH);
+			g_pConfig->getAxisConfProperty(AXCONF_CLIENTWSDDFILEPATH);
 
             /* May be there is no client side handlers configured. So may not 
 	     * have CLIENTWSDDFILEPATH entry in axiscpp.conf 

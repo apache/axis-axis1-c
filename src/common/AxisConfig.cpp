@@ -138,7 +138,7 @@ void AxisConfig::setValue(int valuelength, g_axconfig valueindex, char* value)
 }
 
 
-char* AxisConfig::getAxConfProperty(g_axconfig property)
+char* AxisConfig::getAxisConfProperty(g_axconfig property)
 {
 	return m_pcValueArray[property];
 }
