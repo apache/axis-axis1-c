@@ -108,12 +108,12 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
             m_sSZ += m_Buf;
             break;
         case XSD_FLOAT:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%f", *((float*)(pValue)));
+            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%g", *((float*)(pValue)));
             m_sSZ += m_Buf;
             break;
         case XSD_DOUBLE:
         case XSD_DECIMAL:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%f", *((double*)(pValue)));
+            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%g", *((double*)(pValue)));
             m_sSZ += m_Buf;
             break;
         case XSD_STRING:
