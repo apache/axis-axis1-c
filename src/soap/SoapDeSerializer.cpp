@@ -692,9 +692,11 @@ int SoapDeSerializer::getArraySize(const AnyElement* pElement)
 #define CONV_STRTOD(str) strtod(str,  &m_pEndptr)
 #define CONV_STRTODATETIME(str) AxisTime::deserialize(str, nType)
 #define CONV_STRTODURATION(str) AxisTime::deserializeDuration(str, nType)
-#define CONV_STRDUP(str) strdup(str)
+#define CONV_STRDUP(str) AxisSoapDeSerializerStringCopy(str)
 #define CONV_STRTOBASE64BINARY(str) decodeFromBase64Binary(str)
 #define CONV_STRTOHEXBINARY(str) decodeFromHexBinary(str)
+
+char *AxisSoapDeSerializerStringCopy(const char *s1) { char *s2=new char[strlen(s1)+1]; strcpy(s2,s1); return s2; }
 
 #define INIT_VALUE_DATETIME {0,0,0,0,0,0,0,0,0}
 #define INIT_VALUE_NUMBER 0

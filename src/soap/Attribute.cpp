@@ -107,7 +107,8 @@ Attribute::Attribute(const AxisChar* localname, const AxisChar* prefix,
 
 Attribute::Attribute(const Attribute& rCopy)
 {
-    this->m_localname= rCopy.m_localname; //in casse sting is changed to char* use strdup here
+    //in case sting is changed to char* use new[] and strcpy here
+    this->m_localname= rCopy.m_localname; 
     this->m_prefix= rCopy.m_prefix;
     this->m_uri= rCopy.m_uri;
     this->m_value= rCopy.m_value;

@@ -134,6 +134,10 @@ class Parameter {
 		return 0 == type.size();
 	}
 
+      boolean isDotDotDot() {
+            return 1 == type.size() && "...".equals(type.get(0));
+      }
+
 	public String toString() {
 		if (0 == type.size())
 			return "void";

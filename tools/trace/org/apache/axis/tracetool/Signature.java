@@ -310,7 +310,8 @@ class Signature {
 			}
 			
 			// Copes with void func(void)
-			if (!p.isVoid())
+                  // TODO: Cope with ...
+			if (!p.isVoid() && !p.isDotDotDot())
 				alParams.add(p);
 		}
 

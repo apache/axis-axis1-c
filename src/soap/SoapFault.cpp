@@ -278,7 +278,8 @@ int SoapFault::setParam(Param* pParam, const AxisChar* pchName, const void* pVal
     pParam->m_Type = type;
     pParam->m_sName = pchName;
     //pParam->m_Value.pStrValue = *((char**)(pValue));
-	pParam->m_Value.pStrValue = strdup((char*)(pValue));
+    pParam->m_Value.pStrValue = new char[strlen((const char*)pValue)+1];
+    strcpy((char*)(pParam->m_Value.pStrValue),(const char*)pValue);
     return AXIS_SUCCESS;
 }
 
