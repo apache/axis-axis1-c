@@ -67,8 +67,8 @@
 
 #include <iostream>
 #include <stdio.h>
-#include <axis/server/simple_axis_server/ServerHelper.h>
-#include <axis/common/AxisUtils.h>
+#include "ServerHelper.h"
+#include "../../common/AxisUtils.h"
 
 int getSeperatedHTTPParts(string sClientReqStream, string& sHTTPHeaders, string& sHTTPBody, map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> *map_HTTP_Headers) {
 			
