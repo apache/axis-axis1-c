@@ -13,38 +13,13 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.apache.axis.tracetool;
+package org.apache.axis.tools.common;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.StringTokenizer;
 
 /**
  * A C or C++ macro as it is used in the source code
- * TODO This is a simple implementation that could be improved considerably.
- * This implementation is just good enough for Axis C++.
  */
 class MacroPart extends FilePart {
-
-	private final static Set knownDefines =
-		new HashSet(
-			Arrays.asList(
-				new Object[] {
-					"AXIS_CPP_NAMESPACE_START",
-					"AXIS_CPP_NAMESPACE_END",
-					"AXIS_CPP_NAMESPACE_USE",
-					"AXIS_CPP_NAMESPACE_PREFIX",
-                              "XERCES_CPP_NAMESPACE_USE",
-					"TXPP_NAMESPACE_START",
-					"TXPP_NAMESPACE_END" }));
-	private final static Set knownMacros =
-		new HashSet(
-			Arrays.asList(
-				new Object[] {
-					"DEFINE_UTF16_TO_UTF8",
-					"DEFINE_UTF16_TO_UTF16" }));
-
 	/**
 	 * Factory method to create a MacroPart.
 	 * @param s unparsed source code which may start with a define or macro.
@@ -69,9 +44,9 @@ class MacroPart extends FilePart {
 		int len = name.length();
 		if (null == name)
 			return null;
-		else if (knownDefines.contains(name)) {
+		else if (Configuration.isDefine(name)) {
 			return s.substring(0, len);
-		} else if (knownMacros.contains(name)) {
+		} else if (Configuration.isMacro(name)) {
 			String rest = s.substring(len);
 			len += Utils.findMatching(rest, '(', ')');
 			return s.substring(0, len + 1);
@@ -83,7 +58,7 @@ class MacroPart extends FilePart {
 		if (s == null || 0 == s.length())
 			return false;
 		String name = getName(s);
-		return knownMacros.contains(name) || knownDefines.contains(name);
+		return Configuration.isMacro(name) || Configuration.isDefine(name);
 	}
 
 	private static String getName(String s) {

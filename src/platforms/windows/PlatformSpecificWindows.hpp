@@ -61,6 +61,11 @@
 #define PLATFORM_STRTOASC( x ) ( x )
 #define PLATFORM_ASCTOSTR( x ) ( x )
 
+// =============================================================
+// Miscellaneous
+// =============================================================
+#define PLATFORM_SLEEP(x) Sleep(0);
+
 #endif
 
 

@@ -42,10 +42,9 @@
 #include "Attribute.h"
 #include "../common/AxisTrace.h"
 
-extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];
-
 AXIS_CPP_NAMESPACE_START
 
+extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];
 
 SoapBody::SoapBody()
 {

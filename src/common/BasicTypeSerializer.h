@@ -60,7 +60,7 @@ class BasicTypeSerializer
 public:
     BasicTypeSerializer();
     virtual ~BasicTypeSerializer();
-    const std::AxisString& getEntityReferenced(const std::AxisString& str);
+    const AxisString& getEntityReferenced(const AxisString& str);
     const AxisChar* serializeAsElement(const AxisChar* pName, 
         const void* pValue, XSDTYPE type);
     const AxisChar* serializeAsAttribute(const AxisChar* pName, 
@@ -80,9 +80,9 @@ private:
         AMPERSAND_CHAR        =    L'&'    /* Ampersand character */
     };
 private:
-    std::AxisString m_sSZ;
-    std::AxisString m_AuxStr;
-    std::AxisString m_strReturnVal;
+    AxisString m_sSZ;
+    AxisString m_AuxStr;
+    AxisString m_strReturnVal;
     AxisChar m_Buf[BTS_BUFFSIZE]; 
     /* used for numeric to string conversions with sprintf */
     AxisTime m_AxisTime;

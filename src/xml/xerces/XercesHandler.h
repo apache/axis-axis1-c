@@ -27,6 +27,7 @@
 #include <axis/GDefine.hpp>
 
 XERCES_CPP_NAMESPACE_USE
+AXIS_CPP_NAMESPACE_USE
 
 using namespace std;
 

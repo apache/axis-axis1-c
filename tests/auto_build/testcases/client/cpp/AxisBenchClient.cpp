@@ -28,6 +28,8 @@ bool parse_args_for_endpoint(int *argc, char *argv[], char **endpoint);
 void shift_args(int i, int *argc, char *argv[]);
 void setLogOptions(const char *output_filename);
 
+using namespace std;
+
 // If we re-direct cout it will be to this ofstream
 ofstream output_file;
 

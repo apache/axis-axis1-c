@@ -21,6 +21,8 @@
 #include "SoapEnvVersions.hpp"
 #include <axis/IAttribute.hpp>
 
+AXIS_CPP_NAMESPACE_START
+
 enum HEADER_BLOCK_STD_ATTR_TYPE 
 {   ROLE_NEXT=1, ROLE_NONE=2, 
     ROLE_ULTIMATE_RECEIVER=3, 
@@ -54,7 +56,6 @@ enum HEADER_BLOCK_STD_ATTR_TYPE
  * Revision 1.12  2004/06/13 susantha
  * Added support for writing C web services and handlers
  */
-AXIS_CPP_NAMESPACE_START
 
 class IHeaderBlock
 {

@@ -12,28 +12,15 @@
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
- *
- *
- *
- * @author Susantha Kumara (skumara@virtusa.com)
- *
  */
+package org.apache.axis.tools.common;
 
-#if !defined(__WSDD_DEFINES_H__OF_AXIS_INCLUDEDED__)
-#define __WSDD_DEFINES_H__OF_AXIS_INCLUDEDED__
+import java.io.File;
 
-AXIS_CPP_NAMESPACE_START
-
-typedef enum  
-{
-    UNKNOWN_PROVIDER=0,
-    C_RPC_PROVIDER,
-    C_DOC_PROVIDER,
-    CPP_RPC_PROVIDER,
-    CPP_DOC_PROVIDER,
-    COM_PROVIDER
-} PROVIDERTYPE;
-
-AXIS_CPP_NAMESPACE_END
-#endif
-
+/**
+ * DirectoryTree calls this interface to allow implementations of this 
+ * interface to act on a file in the directory tree.
+ */
+public interface FileActor {
+	public void actOnFile(File source, File target, int depth) throws Exception;
+}

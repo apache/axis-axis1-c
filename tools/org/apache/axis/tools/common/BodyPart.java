@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.apache.axis.tracetool;
+package org.apache.axis.tools.common;
 
 /**
  * A snippet of C or C++ source code. If this snippet ends with a return 
@@ -48,30 +48,30 @@ public class BodyPart {
             type = CATCH;
 	}
 
-	String getCodeFragment() {
+	public String getCodeFragment() {
 		return codeFragment;
 	}
 
-	boolean isTrailing() {
+	public boolean isTrailing() {
 		return TRAILING==type;
 	}
 
-	boolean isReturn() {
+	public boolean isReturn() {
 		return RETURN==type;
 	}
 
-	boolean isCatch() {
+	public boolean isCatch() {
 		return CATCH==type;
 	}
 
-	String getReturnValue() {
+	public String getReturnValue() {
 		if (returnValue != null)
 			return returnValue.trim();
 		else
 			return null;
 	}
 
-	Parameter getCaughtValue() {
+	public Parameter getCaughtValue() {
 		return caughtValue;
 	}
 }

@@ -13,9 +13,17 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.apache.axis.tracetool;
-import java.io.*;
-import java.util.*;
+package org.apache.axis.tools.trace;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+import org.apache.axis.tools.common.*;
 
 /**
  * A Buffered write that also contains the methods to add in in trace
@@ -24,6 +32,12 @@ import java.util.*;
 class Tracer extends BufferedWriter {
 	private Signature signature = null;
 	private final static String SIGNATURE = "  /* AUTOINSERTED TRACE */";
+	private Headers headers;
+	private String namespace = null;
+	private String hashifdef = null;
+	private String hashelse = null;
+	private String hashendif = null;
+	private String module = null;
 
 	private static Hashtable typetable = new Hashtable();
 	static {
@@ -51,27 +65,65 @@ class Tracer extends BufferedWriter {
 	}
 
 	private final static Set charSet =
-		new HashSet(Arrays.asList(new Object[] {
-		"char", "AxisChar", "AxisXMLChar", "XML_Ch" }));
+		new HashSet(
+			Arrays.asList(
+				new Object[] { "char", "AxisChar", "AxisXMLChar", "XML_Ch" }));
 
 	/**
 	 * @param writer a writer to the output file.
 	 */
-	Tracer(Writer writer, int depth) throws IOException {
+	Tracer(Writer writer, int depth, Headers headers) throws IOException {
 		super(writer);
+		this.headers = headers;
+		namespace = Configuration.getConfigured("namespace");
+		if (null != namespace)
+			namespace += "::";
+		else
+			namespace = "";
+		
+		hashifdef = Configuration.getConfigured("ifdef");
+		if (null != hashifdef) {
+			hashifdef = "#ifdef " + hashifdef + "\n";
+			hashelse = "#else\n";
+			hashendif = "#endif\n";
+		} else {
+			hashifdef = "";
+			hashelse = "";
+			hashendif = "";
+		}
+
+		module = Configuration.getConfigured("module");
+		if (null != module)
+			module += "::";
+		else
+			module = ""; // C-style function
+
+		String include = Configuration.getConfigured("include");
+		String includefile = "";
+		if (null == include) {
+			String prefix = "";
+			if (depth > 1)
+				for (int i = 1; i < depth; i++)
+					prefix += "../";
+			includefile = "\"" + prefix + "common/AxisTrace.h\"";
+
+		} else {
+			includefile = include;
+		}
 
 		String prefix = "";
 		if (depth > 1)
 			for (int i = 1; i < depth; i++)
 				prefix += "../";
 
-		writeTrace(
-			"#ifdef ENABLE_AXISTRACE\n"
-				+ "/* TRACE ADDED BY THE AXISCPP TRACE TOOL */\n"
-				+ "#include \""
-				+ prefix
-				+ "common/AxisTrace.h\"\n"
-				+ "#endif\n");
+		String line =
+			hashifdef
+				+ "/* TRACE ADDED BY THE TRACE INSTRUMENTOR TOOL */\n"
+				+ "#include "
+				+ includefile
+				+ "\n"
+				+ hashendif;
+		writeTrace(line);
 		flush();
 	}
 
@@ -89,23 +141,39 @@ class Tracer extends BufferedWriter {
 		Parameter[] parms = signature.getParameters();
 		int len = 0;
 		if (null != parms) {
-                  if (parms[parms.length-1].isDotDotDot()) len = parms.length - 1;
-                  else len = parms.length;
-            }
+			if (parms[parms.length - 1].isDotDotDot())
+				len = parms.length - 1;
+			else
+				len = parms.length;
+		}
+
+		String that = "NULL";
+		if (headers.isInstanceMethod(signature))
+			that = "this";
+
 		String line =
 			"\n"
-				+ "\t#ifdef ENABLE_AXISTRACE\n"
-				+ "\t\tif (AXIS_CPP_NAMESPACE_PREFIX AxisTrace::isTraceOn())\n"
-				+ "\t\t\tAXIS_CPP_NAMESPACE_PREFIX AxisTrace::traceEntry("
+				+ "\t"
+				+ hashifdef
+				+ "\t\tif ("
+				+ namespace
+				+ module
+				+ "isTraceOn())\n"
+				+ "\t\t\t"
+				+ namespace
+				+ module
+				+ "traceEntry("
 				+ getClassName()
 				+ ", \""
 				+ signature.getMethodName()
-				+ "\", NULL, "
+				+ "\", "
+				+ that
+				+ ", "
 				+ len;
 		for (int i = 0; null != parms && i < parms.length; i++)
 			line += getTypeParms(parms[i]);
 		line += ");\t" + SIGNATURE + "\n";
-		line += "\t#endif\n";
+		line += "\t" + hashendif;
 		writeTrace(line);
 		flush();
 	}
@@ -122,18 +190,21 @@ class Tracer extends BufferedWriter {
 
 		// Enclose the printf/return in {} in case if/then doesn't have {}
 		String line = "\t{\n";
-		line += "\t\t#ifdef ENABLE_AXISTRACE\n";
-		line += "\t\t\tif (AXIS_CPP_NAMESPACE_PREFIX AxisTrace::isTraceOn())\n";
-		line += "\t\t\t\tAXIS_CPP_NAMESPACE_PREFIX AxisTrace::traceExit("
+		line += "\t\t" + hashifdef;
+		line += "\t\t\tif (" + namespace + module + "isTraceOn())\n";
+		line += "\t\t\t\t"
+			+ namespace
+			+ module
+			+ "traceExit("
 			+ getClassName()
 			+ ", \""
 			+ signature.getMethodName()
 			+ "\", "
-                  + returnIndex
-                  + ");\t"
+			+ returnIndex
+			+ ");\t"
 			+ SIGNATURE
 			+ "\n";
-		line += "\t\t#endif\n";
+		line += "\t\t" + hashendif;
 
 		// now print out the return line itself
 		line += "\t\treturn;\n";
@@ -166,27 +237,31 @@ class Tracer extends BufferedWriter {
 		// in brackets in case it contains an operator that might be invoked
 		// after the assignment, like another assignment.
 		String line = "\t{\n";
-		line += "\t\t#ifdef ENABLE_AXISTRACE\n";
+		line += "\t\t" + hashifdef;
 		line += "\t\t\t"
 			+ signature.getReturnType().getType()
 			+ " traceRet = ("
 			+ value
 			+ ");\n";
-		line += "\t\t\tif (AXIS_CPP_NAMESPACE_PREFIX AxisTrace::isTraceOn())\n";
-		line += "\t\t\t\tAXIS_CPP_NAMESPACE_PREFIX AxisTrace::traceExit("
+		line += "\t\t\tif (" + namespace + module + "isTraceOn())\n";
+		line += "\t\t\t\t"
+			+ namespace
+			+ module
+			+ "traceExit("
 			+ getClassName()
 			+ ", \""
 			+ signature.getMethodName()
 			+ "\", "
-                  + returnIndex
+			+ returnIndex
 			+ getTypeParms(signature.getReturnType())
 			+ ");\t"
 			+ SIGNATURE
 			+ "\n";
 		line += "\t\t\treturn traceRet;\n";
-		line += "\t\t#else\n";
-		line += "\t\t\treturn " + value + ";\n";
-		line += "\t\t#endif\n";
+		line += "\t\t" + hashelse;
+		if (hashelse.length() > 0)
+			line += "\t\t\treturn " + value + ";\n";
+		line += "\t\t" + hashendif;
 		line += "\t}\n";
 		writeTrace(line);
 		flush();
@@ -198,37 +273,45 @@ class Tracer extends BufferedWriter {
 
 		String line =
 			"\n"
-				+ "\t#ifdef ENABLE_AXISTRACE\n"
-				+ "\t\tif (AXIS_CPP_NAMESPACE_PREFIX AxisTrace::isTraceOn())\n"
-				+ "\t\t\tAXIS_CPP_NAMESPACE_PREFIX AxisTrace::traceCatch("
+				+ "\t"
+				+ hashifdef
+				+ "\t\tif ("
+				+ namespace
+				+ module
+				+ "isTraceOn())\n"
+				+ "\t\t\t"
+				+ namespace
+				+ module
+				+ "traceCatch("
 				+ getClassName()
 				+ ", \""
 				+ signature.getMethodName()
 				+ "\", "
-                        + catchIndex
-                        + getTypeParms(value);
+				+ catchIndex
+				+ getTypeParms(value);
 		line += ");\t" + SIGNATURE + "\n";
-		line += "\t#endif\n";
+		line += "\t" + hashendif;
 		writeTrace(line);
 		flush();
 	}
 
-      /*
-       * This method is careful to get the line separators because other
-       * other methods have been careless assuming that the line separator
-       * is always only \n, whereas it maybe \r\n.
-       */
+	/*
+	 * This method is careful to get the line separators because other
+	 * other methods have been careless assuming that the line separator
+	 * is always only \n, whereas it maybe \r\n.
+	 */
 	public void writeTrace(String s) throws IOException {
-            if (s.startsWith("\n") || s.startsWith("\r"))
-                super.newLine();
-            StringTokenizer st = new StringTokenizer(s,"\n\r");
-            while (st.hasMoreTokens()) {
-                super.write(st.nextToken());
-                if (st.hasMoreTokens()) super.newLine();
-            }
-            if (s.endsWith("\n") || s.endsWith("\r"))
-                super.newLine();
-		if (AddEntryAndExitTrace.verbose)
+		if (s.startsWith("\n") || s.startsWith("\r"))
+			super.newLine();
+		StringTokenizer st = new StringTokenizer(s, "\n\r");
+		while (st.hasMoreTokens()) {
+			super.write(st.nextToken());
+			if (st.hasMoreTokens())
+				super.newLine();
+		}
+		if (s.endsWith("\n") || s.endsWith("\r"))
+			super.newLine();
+		if (Options.verbose())
 			System.out.print(s);
 	}
 
@@ -236,35 +319,42 @@ class Tracer extends BufferedWriter {
 	// TODO cope with pointers to primitives
 	// TODO cope with references
 	private String getTypeParms(Parameter p) {
-            // copes with catch (...)
-            if ("...".equals(p.getType())) return " ";
+		// copes with catch (...)
+		if ("...".equals(p.getType()))
+			return " ";
 
 		String parms = ",\n\t\t\t\t\tTRACETYPE_";
 		String name = p.getName();
 		if (null == name)
 			name = "traceRet";
-            name = "((void*)&"+name+")";
+		name = "((void*)&" + name + ")";
 
 		String type = p.getTypeWithoutConst();
-		if (null == type || 0 == type.length())
+		if (null == type || 0 == type.length()) {
 			parms += "UNKNOWN, 0, NULL";
-		else if (type.endsWith("*")) {
+		} else if (typetable.keySet().contains(type)) {
+			parms += (String) typetable.get(type) + ", 0, " + name;
+		} else if (type.endsWith("*")) {
 			String contents = type.substring(0, type.length() - 1);
-			if (charSet.contains(contents))
+			if (charSet.contains(contents)) {
 				parms += "STRING, 0, " + name;
-			else if ("void".equals(contents))
+			} else if ("void".equals(contents)) {
 				// We just don't know what this void* is pointing at 
 				// so that best we can do is to print out the first byte.
 				parms += "POINTER, 1, " + name;
-			else
+			} else {
 				parms += "POINTER, sizeof(" + contents + "), " + name;
-		} else if (typetable.keySet().contains(type))
-			parms += (String) typetable.get(type) + ", 0, " + name;
-		else if (-1 != type.indexOf("&")) {
-			// TODO: cope with references
-			parms += "UNKNOWN, 0, " + name;
-		} else
+			}
+		} else if (type.endsWith("&")) {
+			String contents = type.substring(0, type.length() - 1);
+			if (typetable.keySet().contains(contents)) {
+				parms += (String) typetable.get(contents) + ", 0, " + name;
+			} else {
+				parms += "DATA, sizeof(" + type + "), " + name;
+			}
+		} else {
 			parms += "DATA, sizeof(" + type + "), " + name;
+		}
 
 		return parms;
 	}

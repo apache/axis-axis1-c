@@ -20,6 +20,7 @@
  */
 
 #include "SharedObject.h"
+#include "../platforms/PlatformAutoSense.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -50,7 +51,7 @@ int SharedObject::lock ()
 #ifdef WIN32
     while (m_bLocked)
     {
-        Ax_Sleep (0);
+        PLATFORM_SLEEP(0);
     }
 
 #else //Linux

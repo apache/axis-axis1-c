@@ -5,6 +5,7 @@
 
 #define WSDL_DEFAULT_ENDPOINT "http://localhost:9080/RecurseTypes/services/sampleWS"
 
+using namespace std;
 // If we re-direct cout it will be to this ofstream
 ofstream output_file;
 

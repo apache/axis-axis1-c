@@ -143,7 +143,7 @@ public class ClientStubHeaderWriter
             writer.write("\nprivate:\n"); // FJP - SecureChannel
             writer.write("\tvoid includeSecure();\n\n"); // FJP - SecureChannel
             writer.write("protected:\n"); // FJP - SecureChannel
-            writer.write("\tstring sArguments[8];\n"); // FJP - SecureChannel
+            writer.write("\tstd::string sArguments[8];\n"); // FJP - SecureChannel
         }
         catch (Exception e)
         {

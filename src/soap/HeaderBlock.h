@@ -88,23 +88,23 @@ private:
     int serializeNamespaceDecl(SoapSerializer& pSZ);
 
     int serializeChildren(SoapSerializer& pSZ, 
-        list<AxisChar*>& lstTmpNameSpaceStack);
+        std::list<AxisChar*>& lstTmpNameSpaceStack);
 
     /**
       * Used to hold the child nodes.
       */
-    list<BasicNode*> m_children;
+    std::list<BasicNode*> m_children;
 
     bool isSerializable();
 
     int attrSerialize(SoapSerializer& pSZ, 
-        list<AxisChar*>& lstTmpNameSpaceStack);
+        std::list<AxisChar*>& lstTmpNameSpaceStack);
 
     AxisString m_localname;
     AxisString m_sPrefix;
     AxisString m_uri;
-    list<Attribute*> m_attributes;
-    list<Attribute*> m_namespaceDecls;
+    std::list<Attribute*> m_attributes;
+    std::list<Attribute*> m_namespaceDecls;
 
 public:
 

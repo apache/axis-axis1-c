@@ -70,8 +70,8 @@ private:
     WSDDHandlerList* m_GlobalRequestHandlers;
     WSDDHandlerList* m_GlobalResponseHandlers;
     WSDDTransport* m_pTransportHandlers;
-    std::map<std::AxisString, int>* m_pLibNameIdMap;
-    std::AxisString m_sAux;
+    std::map<AxisString, int>* m_pLibNameIdMap;
+    AxisString m_sAux;
     std::string m_sWSDDPath;
     DEPLOYMENTTYPE m_DeplType;
 };

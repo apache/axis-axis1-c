@@ -13,23 +13,25 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.apache.axis.tracetool;
+package org.apache.axis.tools.common;
 
-class ParsingException extends Exception {
+/**
+ * A function prototype in an include file and possibly in a class definition.
+ */
+public class PrototypePart extends FilePart {
+	private Signature signature;
 
-	public ParsingException() {
-		super();
+	public PrototypePart(String s, String className) {
+		super(s, FilePart.PROTOTYPE);
+		signature = new Signature(s);
+		signature.setClassName(className);
 	}
 
-	public ParsingException(String message) {
-		super(message);
+	String className() {
+		return signature.getClassName();
 	}
-
-	public ParsingException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public ParsingException(Throwable cause) {
-		super(cause);
+	
+	public Signature getSignature() {
+		return signature;
 	}
 }

@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.apache.axis.tracetool;
+package org.apache.axis.tools.common;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,7 +23,7 @@ import java.util.List;
  * A parameter from a method signature. The parameter is the datatype plus its 
  * name but not its value. 
  */
-class Parameter {
+public class Parameter {
 	private ArrayList type = new ArrayList();
 	private String name = null;
 	private boolean failed = false;
@@ -90,11 +90,11 @@ class Parameter {
 		}
 	}
 
-	boolean failed() {
+	public boolean failed() {
 		return failed;
 	}
 
-	String getType() {
+	public String getType() {
 		String s = null;
 		Iterator it = type.iterator();
 		while (it.hasNext()) {
@@ -109,7 +109,7 @@ class Parameter {
 		return s;
 	}
 
-	String getTypeWithoutConst() {
+	public String getTypeWithoutConst() {
 		String s = null;
 		Iterator it = type.iterator();
 		while (it.hasNext()) {
@@ -126,17 +126,38 @@ class Parameter {
 		return s;
 	}
 
-	String getName() {
+	public String getName() {
 		return name;
 	}
 
-	boolean isVoid() {
+	public boolean isVoid() {
 		return 0 == type.size();
 	}
 
-      boolean isDotDotDot() {
-            return 1 == type.size() && "...".equals(type.get(0));
-      }
+	public boolean isDotDotDot() {
+		return 1 == type.size() && "...".equals(type.get(0));
+	}
+
+    /**
+     * For two parameters to match their types must match or both be null,
+     * but the parameters names don't have to match. Just because a parameter
+     * is called something different in a header file as in the the source file
+     * doesn't mean it's a different parameter.
+     */
+	public boolean equals(Object o) {
+		if (null == o || !(o instanceof Parameter))
+			return false;
+		Parameter that = (Parameter) o;
+		if (type.size() != that.type.size())
+			return false;
+		for (int i = 0; i < type.size(); i++) {
+			String s1 = (String) type.get(i);
+			String s2 = (String) that.type.get(i);
+			if (!Utils.safeEquals(s1,s2))
+				return false;
+		}
+		return true;
+	}
 
 	public String toString() {
 		if (0 == type.size())

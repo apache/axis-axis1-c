@@ -59,6 +59,11 @@ extern char*      cvtSingleByteAsciiToEbcdicStr( char* );
 #define PLATFORM_STRTOASC( x ) cvtSingleByteEbcdicToAsciiStr( (char*)(x) )
 #define PLATFORM_ASCTOSTR( x ) cvtSingleByteAsciiToEbcdicStr( (char*)(x) )
 
+// =============================================================
+// Miscellaneous
+// =============================================================
+#define PLATFORM_SLEEP(x) sleep(0);
+
 #endif
 
 

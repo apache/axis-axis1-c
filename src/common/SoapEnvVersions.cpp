@@ -20,6 +20,8 @@
 
 #include <axis/SoapEnvVersions.hpp>
 
+AXIS_CPP_NAMESPACE_START
+
 SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST]=
 {
     /* SOAP_VER_1_1 */
@@ -73,4 +75,4 @@ SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST]=
     }
 };
 
-
+AXIS_CPP_NAMESPACE_END

@@ -29,11 +29,8 @@
 #include <list>
 
 AXIS_CPP_NAMESPACE_START
-using namespace std;
 
 class SoapSerializer;
-
-AXIS_CPP_NAMESPACE_END
 
 enum NODE_TYPE { ELEMENT_NODE=1, CHARACTER_NODE};
 
@@ -60,9 +57,6 @@ enum NODE_TYPE { ELEMENT_NODE=1, CHARACTER_NODE};
  * Revision 1.3  2004/07/28 roshan
  * Added the method getLocalName()
  */
-
-AXIS_CPP_NAMESPACE_START
-using namespace std;
 
 class BasicNode
 {

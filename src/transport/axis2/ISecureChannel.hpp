@@ -4,6 +4,7 @@
 #include <axis/GDefine.hpp>
 
 using namespace std;
+AXIS_CPP_NAMESPACE_USE
 
 class ISecureChannel
 {

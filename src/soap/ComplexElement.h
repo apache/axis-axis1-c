@@ -216,7 +216,7 @@ public:
 
     int serialize(SoapSerializer& pSZ);
 
-    int serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack);
+    int serialize(SoapSerializer& pSZ, std::list<AxisChar*>& lstTmpNameSpaceStack);
 
     /**
       * The Constructor.
@@ -278,16 +278,16 @@ public:
 private:
     int iNoOfChildren;
     int serializeChildren(SoapSerializer& pSZ);
-    int serializeChildren(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack);
+    int serializeChildren(SoapSerializer& pSZ, std::list<AxisChar*>& lstTmpNameSpaceStack);
     int serializeNamespaceDecl(SoapSerializer &pSZ); 
-    int attrSerialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack);
+    int attrSerialize(SoapSerializer& pSZ, std::list<AxisChar*>& lstTmpNameSpaceStack);
     bool isSerializable();
-    list<BasicNode*> m_children;
-    list<Attribute*> m_namespaceDecls;
+    std::list<BasicNode*> m_children;
+    std::list<Attribute*> m_namespaceDecls;
      /**
       * Used to store the Attributes
       */
-    list<Attribute*> m_attributes;
+    std::list<Attribute*> m_attributes;
     AxisChar* m_pachPrefix;
     AxisChar* m_pachLocalName;
     AxisChar* m_pachURI;
@@ -295,7 +295,7 @@ private:
     /**
       * Attributes iterator
       */
-    list <Attribute *>::iterator m_viCurrentAttribute;
+    std::list <Attribute *>::iterator m_viCurrentAttribute;
 
 };
 

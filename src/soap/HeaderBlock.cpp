@@ -59,9 +59,9 @@
 #include "ComplexElement.h"
 #include "CharacterElement.h"
 
-extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];
-
 AXIS_CPP_NAMESPACE_START
+
+extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];
 
 HeaderBlock::HeaderBlock()
 {

@@ -12,28 +12,24 @@
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
- *
- *
- *
- * @author Susantha Kumara (skumara@virtusa.com)
- *
  */
+package org.apache.axis.tools.common;
 
-#if !defined(__WSDD_DEFINES_H__OF_AXIS_INCLUDEDED__)
-#define __WSDD_DEFINES_H__OF_AXIS_INCLUDEDED__
+public class ParsingException extends Exception {
 
-AXIS_CPP_NAMESPACE_START
+	public ParsingException() {
+		super();
+	}
 
-typedef enum  
-{
-    UNKNOWN_PROVIDER=0,
-    C_RPC_PROVIDER,
-    C_DOC_PROVIDER,
-    CPP_RPC_PROVIDER,
-    CPP_DOC_PROVIDER,
-    COM_PROVIDER
-} PROVIDERTYPE;
+	public ParsingException(String message) {
+		super(message);
+	}
 
-AXIS_CPP_NAMESPACE_END
-#endif
+	public ParsingException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
+	public ParsingException(Throwable cause) {
+		super(cause);
+	}
+}

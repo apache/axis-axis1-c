@@ -162,7 +162,7 @@ public:
 	/**
 	 * Traces the entry to a method.
 	 */
-	static void traceEntry(const char *className, const char *methodName, void* that, int nParms, ...);
+	static void traceEntry(const char *className, const char *methodName, const void* that, int nParms, ...);
 
 	/**
 	 * Traces the exit to a method.

@@ -48,12 +48,9 @@
 #include "../common/AxisTrace.h"
 #include "../common/AxisConfig.h"
 
-extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
-
-extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];
-
+extern AxisConfig* g_pConfig;
 AXIS_CPP_NAMESPACE_START
-
+extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];
 volatile bool SoapFault::m_bInit = false;
 
 SoapFault::SoapFault()

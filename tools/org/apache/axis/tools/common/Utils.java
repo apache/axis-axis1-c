@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.apache.axis.tracetool;
+package org.apache.axis.tools.common;
 
 /**
  * Static utility methods. Some of these methods are similar to the methods on
@@ -21,7 +21,8 @@ package org.apache.axis.tracetool;
  * 
  * TODO: Many of these methods would perform better using StringBuffer not String
  */
-final class Utils {
+public final class Utils {
+	public final static String whitespace = " \t\r\n";
 
 	/** 
 	 * Never instantiate this class 
@@ -33,7 +34,7 @@ final class Utils {
 	 * Is this string all whitespace?
 	 */
 	static boolean isSpace(String s) {
-		for (int i = 0; i < s.length(); i++) 
+		for (int i = 0; i < s.length(); i++)
 			if (!Character.isWhitespace(s.charAt(i)))
 				return false;
 		return true;
@@ -126,7 +127,7 @@ final class Utils {
 	 * fail in such a way that the build system knows that we've failed
 	 * for this file and can build this file without trace.
 	 */
-	static void rude(
+	public static void rude(
 		String reason,
 		String filename,
 		int lineno,
@@ -147,7 +148,7 @@ final class Utils {
 	/**
 	 * @see Utils.rude(String,String,int,String)
 	 */
-	static void rude(String reason) throws ParsingException {
+	public static void rude(String reason) throws ParsingException {
 		rude(reason, null, 0, null);
 	}
 
@@ -197,8 +198,7 @@ final class Utils {
 	private static boolean startsWithStringLiteral(String s) {
 		if (null == s || s.length() < 1)
 			return false;
-		if (s.startsWith("\"") ||
-			s.startsWith("'"))
+		if (s.startsWith("\"") || s.startsWith("'"))
 			return true;
 		return false;
 	}
@@ -209,11 +209,11 @@ final class Utils {
 		for (int i = 1; i < s.length(); i++) {
 			if (!escape && s.charAt(i) == c0)
 				return i;
-				
+
 			// \" or \' does not end the literal
 			if ('\\' == s.charAt(i))
-			    // Escaping a \ should switch escape off so \\' does end 
-			    // the literal
+				// Escaping a \ should switch escape off so \\' does end 
+				// the literal
 				escape = !escape;
 			else
 				escape = false;
@@ -221,11 +221,11 @@ final class Utils {
 		return -1;
 	}
 
-    /**
-     * If the String s starts with a string literal or a comment, return
-     * i plus the index of the end of the literal or comment. String literals
-     * are enclosed in " or ' and comments start with /* or //.
-     */
+	/**
+	 * If the String s starts with a string literal or a comment, return
+	 * i plus the index of the end of the literal or comment. String literals
+	 * are enclosed in " or ' and comments start with /* or //.
+	 */
 	private static int skip(String s, int i) {
 		int j = 0;
 		if (startsWithStringLiteral(s)) {
@@ -238,5 +238,27 @@ final class Utils {
 				return -1;
 		}
 		return i + j;
+	}
+
+    /**
+     * A better method than .equals() because it doesn't 
+     * NullPointerException when one of the parameters is null.
+     */
+	public static boolean safeEquals(Object o1, Object o2) {
+		if (null == o1 && null == o2)
+			return true;
+		if (null == o1 && null != o2)
+			return false;
+		if (null != o1 && null == o2)
+			return false;
+		return o1.equals(o2);
+	}
+
+	public static void outputDebugString(String line) {
+		if (!Options.quiet()) {
+			if (Options.verbose())
+				System.out.println();
+			System.out.println(line);
+		}
 	}
 }

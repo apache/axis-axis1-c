@@ -89,6 +89,37 @@ AxisConfig* g_pConfig;
 //Keeps track of whether initialize_module/uninitialize_module was called
 bool g_bModuleInitialize;
 
+void ModuleInitialize ()
+{    
+    // synchronized global variables.
+    g_pHandlerLoader = new HandlerLoader ();
+    g_pAppScopeHandlerPool = new AppScopeHandlerPool ();
+    g_pRequestScopeHandlerPool = new RequestScopeHandlerPool ();
+    g_pSessionScopeHandlerPool = new SessionScopeHandlerPool ();
+    g_pDeserializerPool = new DeserializerPool ();
+    g_pSerializerPool = new SerializerPool ();
+    g_pHandlerPool = new HandlerPool ();
+    // unsynchronized read-only global variables.
+    g_pWSDDDeployment = new WSDDDeployment ();
+    g_pConfig = new AxisConfig ();
+}
+
+void ModuleUnInitialize ()
+{
+    // synchronized global variables.
+    delete g_pAppScopeHandlerPool;
+    delete g_pRequestScopeHandlerPool;
+    delete g_pSessionScopeHandlerPool;
+    delete g_pHandlerLoader;
+    delete g_pDeserializerPool;
+    delete g_pSerializerPool;
+    delete g_pHandlerPool;
+    // unsynchronized read-only global variables.
+    delete g_pWSDDDeployment;
+    delete g_pConfig;
+    AxisTrace::terminate();
+}
+
 #ifndef AXIS_CLIENT_LIB
 
 STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
@@ -352,46 +383,6 @@ int uninitialize_module ()
     XMLParserFactory::uninitialize();
     return AXIS_SUCCESS;
 }
-}
-
-void Ax_Sleep (int nTime)
-{
-#ifdef WIN32
-    Sleep (0);
-#else
-    sleep (0);
-#endif
-}
-
-void ModuleInitialize ()
-{    
-    // synchronized global variables.
-    g_pHandlerLoader = new HandlerLoader ();
-    g_pAppScopeHandlerPool = new AppScopeHandlerPool ();
-    g_pRequestScopeHandlerPool = new RequestScopeHandlerPool ();
-    g_pSessionScopeHandlerPool = new SessionScopeHandlerPool ();
-    g_pDeserializerPool = new DeserializerPool ();
-    g_pSerializerPool = new SerializerPool ();
-    g_pHandlerPool = new HandlerPool ();
-    // unsynchronized read-only global variables.
-    g_pWSDDDeployment = new WSDDDeployment ();
-    g_pConfig = new AxisConfig ();
-}
-
-void ModuleUnInitialize ()
-{
-    // synchronized global variables.
-    delete g_pAppScopeHandlerPool;
-    delete g_pRequestScopeHandlerPool;
-    delete g_pSessionScopeHandlerPool;
-    delete g_pHandlerLoader;
-    delete g_pDeserializerPool;
-    delete g_pSerializerPool;
-    delete g_pHandlerPool;
-    // unsynchronized read-only global variables.
-    delete g_pWSDDDeployment;
-    delete g_pConfig;
-    AxisTrace::terminate();
 }
 
 // Axis class method implementations

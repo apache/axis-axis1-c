@@ -26,6 +26,9 @@
 #include <map>
 #include <string>
 
+AXIS_CPP_NAMESPACE_START
+using namespace std;
+
 typedef enum XSDTYPETag 
 { XSD_UNKNOWN=1, XSD_INT, XSD_FLOAT, XSD_STRING, XSD_LONG, XSD_SHORT, \
                 XSD_BYTE, XSD_UNSIGNEDLONG, \
@@ -39,10 +42,6 @@ typedef enum XSDTYPETag
                 XSD_INTEGER, \
                 XSD_ARRAY, USER_TYPE, ACCESSOR, XSD_NMTOKEN, XSD_ANY
 } XSDTYPE;
-
-AXIS_CPP_NAMESPACE_START
-
-using namespace std;
 
 /**
  *  @class TypeMapping
@@ -59,9 +58,9 @@ public:
     static void initialize();
 
 #if (defined(AIX) || (defined(_MSC_VER) && _MSC_VER >= 1300) || defined( __OS400__ ) || defined(__sun))
-    static std::map<std::AxisXMLString, XSDTYPE> m_sTypeMap;
+    static std::map<AxisXMLString, XSDTYPE> m_sTypeMap;
 #else
-    static std::map<const std::AxisXMLString, XSDTYPE> m_sTypeMap;
+    static std::map<const AxisXMLString, XSDTYPE> m_sTypeMap;
 #endif
     static volatile bool m_bInit;
     TypeMapping();

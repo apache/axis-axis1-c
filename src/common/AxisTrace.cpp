@@ -179,7 +179,7 @@ void AxisTrace::traceLine(const char *data)
     return;
 }
 
-void AxisTrace::traceEntry(const char *className, const char *methodName, void *that, int nParms, ...)
+void AxisTrace::traceEntry(const char *className, const char *methodName, const void *that, int nParms, ...)
 {
     if (!isTraceOn()) return;
 
@@ -189,18 +189,17 @@ void AxisTrace::traceEntry(const char *className, const char *methodName, void *
 		line += "{ ";
 		if (NULL!=className) {
 			line += className;
-			if (NULL!=that) {
-				line += "(";
-				char prim[32];
-				sprintf(prim,"%p",that);
-				line += prim;
-				line += ")";
-			}
 			line += "::";
 		}
-
 		if (NULL!=methodName)
 			line += methodName;
+		if (NULL!=that) {
+			line += "<";
+			char prim[32];
+			sprintf(prim,"%p",that);
+			line += prim;
+			line += ">";
+		}
 		line += "(";
 
 		va_list args;

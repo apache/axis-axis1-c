@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.apache.axis.tracetool;
+package org.apache.axis.tools.common;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,17 +21,17 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
-class InputCppSourceCode {
+public class InputCppSourceCode {
 
 	private ArrayList parts = new ArrayList();
 	private String name;
 
-	InputCppSourceCode(BufferedReader br, String name) throws Exception {
+	public InputCppSourceCode(BufferedReader br, String name) throws Exception {
 		this.name = name;
 
 		String s = null;
 		StringBuffer buff = new StringBuffer();
-		for (int i=1; ; i++) {
+		for (int i = 1;; i++) {
 			try {
 				s = br.readLine();
 			} catch (Exception e) {
@@ -40,7 +40,7 @@ class InputCppSourceCode {
 						+ name
 						+ " line number "
 						+ i);
-			    e.printStackTrace();
+				e.printStackTrace();
 				break;
 			}
 			if (s == null)
@@ -56,6 +56,7 @@ class InputCppSourceCode {
 
 		String rest, text = "";
 		int scopedepth = 0;
+		String currentClass = null;
 		for (int idx = 0; idx < str.length(); /* No idx++ */
 			) {
 			rest = str.substring(idx);
@@ -104,6 +105,9 @@ class InputCppSourceCode {
 						rest.substring(0, rest.indexOf("\n")));
 				else
 					scopedepth--;
+				// TODO: better checking that this brace really ends the class
+				if (0 == scopedepth)
+					currentClass = null;
 				parts.add(new FilePart("}", FilePart.ENDSCOPE));
 				idx++;
 
@@ -112,9 +116,9 @@ class InputCppSourceCode {
 				idx++;
 
 			} else if (
-				!Character.isLetter(rest.charAt(0)) 
-                              && '~' != rest.charAt(0) 
-                              && '_' != rest.charAt(0)) {
+				!Character.isLetter(rest.charAt(0))
+					&& '~' != rest.charAt(0)
+					&& '_' != rest.charAt(0)) {
 				Utils.rude(
 					"Lines must start with a letter ",
 					name,
@@ -132,6 +136,20 @@ class InputCppSourceCode {
 				FilePart fp = new FilePart(text, FilePart.BEGINSCOPE);
 				parts.add(fp);
 				idx += text.length();
+				if (Utils.startsWith(text, "class")) {
+					// TODO: cope with comments here
+					// TODO: split out classes into a ClassPart 
+					StringTokenizer st =
+						new StringTokenizer(text, Utils.whitespace + ":");
+					st.nextToken(); // step over "class"
+					while (st.hasMoreTokens()) {
+						String word = st.nextToken();
+						if (Configuration.isAttribute(word))
+							continue;
+						currentClass = word;
+						break;
+					}
+				}
 
 			} else if (isEnumOrUnion(rest)) {
 				int ridx = Utils.findMatching(rest, '{', '}') + 1;
@@ -215,6 +233,13 @@ class InputCppSourceCode {
 					parts.add(fp);
 					idx += text.length();
 
+				} else if (isPrototype(rest)) {
+					int semicolon = Utils.indexOf(rest, ';');
+					text = str.substring(idx, idx + semicolon + 1);
+					FilePart fp = new PrototypePart(text, currentClass);
+					parts.add(fp);
+					idx += text.length();
+
 				} else {
 					//TODO other file parts here - not sure if there are any others?
 					Utils.rude(
@@ -227,7 +252,7 @@ class InputCppSourceCode {
 		} // end for
 	}
 
-	Iterator getPartIterator() {
+	public Iterator getPartIterator() {
 		return parts.iterator();
 	}
 
@@ -310,15 +335,19 @@ class InputCppSourceCode {
 		 *
 		 * Fields must contain a semicolon
 	 * Methods may or may not contain a semicolon
+	 * Prototypes must contain a semicolon
 	 * Fields may or may not contain a brace (array initialisers do)
 	 * Methods must contain a brace
+	 * Prototypes must not contain a brace
 	 * Fields may or may not contain a bracket (casts do)
 	 * Methods must contain a bracket
+	 * Prototypes must contain a bracket
 	 *
 	 * It's a method if it contains a bracket and then a brace
 	 * before the first semicolon (if there is a semicolon). 
-	 * It's a field if it's not a method and it contains a semicolon.
-	 * If it's not a field or a method and we haven't recognised it
+	 * It's a prototype if it's not a method and it contains brackets before a semicolon.
+	 * It's a field if it's not a method or a prototype and it contains a semicolon.
+	 * If it's not a field, a method or a prototype and we haven't recognised it
 	 * previously then it's an error.
 	 */
 	private static boolean isMethod(String s) throws ParsingException {
@@ -333,9 +362,18 @@ class InputCppSourceCode {
 				&& (-1 == semicolon || brace < semicolon));
 	}
 
+	private static boolean isPrototype(String s) throws ParsingException {
+		int semicolon = Utils.indexOf(s, ';');
+		int bracket = Utils.indexOf(s, '(');
+		return !isMethod(s)
+			&& -1 != semicolon
+			&& -1 != bracket
+			&& bracket < semicolon;
+	}
+
 	private static boolean isField(String s) throws ParsingException {
 		int semicolon = Utils.indexOf(s, ';');
-		return !isMethod(s) && -1 != semicolon;
+		return !isMethod(s) && !isPrototype(s) && -1 != semicolon;
 	}
 
 	public String toString() {

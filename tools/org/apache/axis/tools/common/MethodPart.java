@@ -13,14 +13,14 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.apache.axis.tracetool;
+package org.apache.axis.tools.common;
 import java.util.ArrayList;
 
 /**
  * A C or C++ method from a piece of source code. The method has a signature and
  * a body (the bit between the braces).
  */
-class MethodPart extends FilePart {
+public class MethodPart extends FilePart {
 	private Signature signature;
 	private String body;
 
@@ -30,11 +30,11 @@ class MethodPart extends FilePart {
 		this.body = body;
 	}
 
-	Signature getSignature() {
+	public Signature getSignature() {
 		return signature;
 	}
 
-	String getOriginalSignature() {
+	public String getOriginalSignature() {
 		return signature.getOriginal();
 	}
 
@@ -44,7 +44,7 @@ class MethodPart extends FilePart {
      * where the entry trace should go. The end of every other snippet is 
      * a return from the method.
      */
-	BodyPart[] getBodyParts() throws ParsingException {
+	public BodyPart[] getBodyParts() throws ParsingException {
 		String b = body; // Don't alter field member
 		if (b.startsWith("{"))
 			b = b.substring(1);

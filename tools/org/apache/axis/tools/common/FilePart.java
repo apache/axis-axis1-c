@@ -14,23 +14,24 @@
  *   limitations under the License.
  */
 
-package org.apache.axis.tracetool;
+package org.apache.axis.tools.common;
 
 /**
  * A piece of C++ source code 
  */
-class FilePart {
-	final static int UNKNOWN = 0;
-	final static int COMMENT = 1;
-	final static int METHOD = 2;
-	final static int FIELD = 3;
-	final static int BEGINSCOPE = 4;
-	final static int ENDSCOPE = 5;
-	final static int DIRECTIVE = 6;
-	final static int WHITESPACE = 7;
-	final static int MACRO = 8;
-	final static int CLASSATTRIBUTE = 9;
-	final static int ENUM = 10;
+public class FilePart {
+	public final static int UNKNOWN = 0;
+	public final static int COMMENT = 1;
+	public final static int METHOD = 2;
+	public final static int FIELD = 3;
+	public final static int BEGINSCOPE = 4;
+	public final static int ENDSCOPE = 5;
+	public final static int DIRECTIVE = 6;
+	public final static int WHITESPACE = 7;
+	public final static int MACRO = 8;
+	public final static int CLASSATTRIBUTE = 9;
+	public final static int ENUM = 10;
+	public final static int PROTOTYPE = 11;
 
 	protected String cppsource;
 	protected int type;
@@ -40,7 +41,7 @@ class FilePart {
 		this.type = type;
 	}
 	
-    int getType() { return type; }	
+    public int getType() { return type; }	
     
 	int length() {
 		return cppsource.length();

@@ -29,6 +29,18 @@
  * Axis C++ project.
  */
 
+#define AXIS_CPP_NAMESPACE_START namespace axiscpp {
+#define AXIS_CPP_NAMESPACE_END }
+/*
+The following is necessary for the skeletons and stubs to be built
+*/
+namespace axiscpp {}
+
+#define AXIS_CPP_NAMESPACE_USE using namespace axiscpp;
+#define AXIS_CPP_NAMESPACE_PREFIX axiscpp::
+
+AXIS_CPP_NAMESPACE_START
+
 typedef enum {SECURE, UNSECURE} AXIS_SECURE_PROTOCOL;
 
 typedef enum 
@@ -59,29 +71,14 @@ typedef enum
 #define AxisChar char
 #define AxisXMLCh char
 #define XML_Ch AxisChar
-
-#define AXIS_CPP_NAMESPACE_START namespace axiscpp {
-#define AXIS_CPP_NAMESPACE_END }
-/*
-The following is necessary for the skeletons and stubs to be built
-*/
-namespace axiscpp {}
-
-#define AXIS_CPP_NAMESPACE_USE using namespace axiscpp;
-#define AXIS_CPP_NAMESPACE_PREFIX axiscpp::
-
-#define AxisString basic_string<char>
-#define AxisXMLString basic_string<AxisXMLCh>
+#define AxisString std::basic_string<char>
+#define AxisXMLString std::basic_string<AxisXMLCh>
 
 #ifdef WIN32
     #define AxisSprintf(X, Y, Z, W) sprintf(X, Z, W)
 #else /* linux */
     #define AxisSprintf(X, Y, Z, W) sprintf(X, Z, W)
 #endif
-
-extern void Ax_Sleep(int);
-extern void ModuleInitialize();
-extern void ModuleUnInitialize();
 
 #if defined(WIN32) 
 #define STORAGE_CLASS_INFO __declspec(dllexport)
@@ -101,7 +98,6 @@ extern void ModuleUnInitialize();
 #endif
 #endif
 
-
 /*
  * Following macro define an API function of Axis C++
  * Format of the AXISAPI macro is as follows
@@ -112,6 +108,7 @@ extern void ModuleUnInitialize();
 #define APIHASPARAMS
 #define APINOPARAMS 
 
+AXIS_CPP_NAMESPACE_END
 #endif 
 
 

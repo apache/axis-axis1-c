@@ -29,6 +29,8 @@
 #ifndef __SOAPENVVERSIONS_H_OF_AXIS_INCLUDED___
 #define __SOAPENVVERSIONS_H_OF_AXIS_INCLUDED___
 
+AXIS_CPP_NAMESPACE_START
+
 /*
  * Here SKW stands for SoapKeyWord. This is a internal naming convension
  * for Axis C++.
@@ -71,5 +73,6 @@ struct SoapEnvVersionsStruct
     const AxisChar* pchWords[SOAP_WORDS_LAST];
 };
 
+AXIS_CPP_NAMESPACE_END
 #endif
 

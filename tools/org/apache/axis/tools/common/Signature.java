@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package org.apache.axis.tracetool;
+package org.apache.axis.tools.common;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +28,7 @@ import java.util.Set;
  * TODO: passing or returning function pointers (hopefully not needed)
  * TODO: Cope with ~<space>Classname()
  */
-class Signature {
+public class Signature {
 	private String originalText;
 	private String attributes;
 	private String className = null;
@@ -49,19 +49,12 @@ class Signature {
 					"\"C\"",
 					"virtual",
 					"static",
-					"inline",
-					"STORAGE_CLASS_INFO",
-					"AXISCALL" }));
-
-	private final static Set spuriousAttrs =
-		new HashSet(
-			Arrays.asList(
-				new Object[] {
-					"AXISCALL" }));
+					"inline" }));
 
 	private final static Set specialOperators =
 		new HashSet(
-			Arrays.asList(new Object[] { "(", ")", "*", ",", "&", "]", "[", "=" }));
+			Arrays.asList(
+				new Object[] { "(", ")", "*", ",", "&", "]", "[", "=", "~" }));
 
 	/**
 	 * Takes an unparsed signature string and parses it.
@@ -98,8 +91,8 @@ class Signature {
 
 			// Ignore any tokens after the ) since these are (hopefully) 
 			// constructor initialisers
-			
-			traceable = Exclusions.shouldTraceMethod(className, methodName);
+
+			traceable = !Configuration.methodExcluded(className, methodName);
 		} catch (NullPointerException npe) {
 			failed = true;
 			traceable = false;
@@ -183,17 +176,19 @@ class Signature {
 		List trailAttrs,
 		List inits) {
 
-        // nameStart points to the start of the return type if there is one
-        // else the start of the method name
+		// nameStart points to the start of the return type if there is one
+		// else the start of the method name
 		int nameStart;
-		for (nameStart = 0; nameStart < tokens.size(); nameStart++)
-			if (!knownAttrs.contains(tokens.get(nameStart)))
+		for (nameStart = 0; nameStart < tokens.size(); nameStart++) {
+			String tok = (String) (tokens.get(nameStart));
+			if (!knownAttrs.contains(tok) && !Configuration.isAttribute(tok))
 				break;
+            }
 		if (nameStart == tokens.size())
 			return false;
 
-        // initStart points to the initialisers, or thrown exceptions after 
-        // the parameter list. throw is a keyword so we can safely search for it.
+		// initStart points to the initialisers, or thrown exceptions after 
+		// the parameter list. throw is a keyword so we can safely search for it.
 		int initStart = tokens.size();
 		for (int i = nameStart; i < tokens.size(); i++) {
 			String tok = (String) tokens.get(i);
@@ -216,7 +211,7 @@ class Signature {
 
 		for (int i = 0; i < tokens.size(); i++) {
 			Object tok = tokens.get(i);
-			if (i < nameStart || spuriousAttrs.contains(tok))
+			if (i < nameStart || Configuration.isAttribute((String) tok))
 				attrs.add(tok);
 			else if (i < parmStart)
 				nameAndRet.add(tok);
@@ -259,17 +254,24 @@ class Signature {
 			idx = size - 1;
 		}
 
-            // The class name comes before the method name
-		while (idx > 0 && ((String) list.get(idx - 1)).endsWith("::")) {
-                  if (null == className)
-			      className = (String) list.get(idx - 1);
-                  else
-			      className = (String) list.get(idx - 1) + className;
+		// If it's a destructor, the "~" will be split out into a separate
+		// token, so add it onto the methodName here.
+		if (idx > 0 && "~".equals(list.get(idx - 1))) {
+			methodName = "~" + methodName;
 			idx--;
 		}
 
-            // Whatever's left before the classname/methodname must be the 
-            // return type
+		// The class name comes before the method name
+		while (idx > 0 && ((String) list.get(idx - 1)).endsWith("::")) {
+			if (null == className)
+				className = (String) list.get(idx - 1);
+			else
+				className = (String) list.get(idx - 1) + className;
+			idx--;
+		}
+
+		// Whatever's left before the classname/methodname must be the 
+		// return type
 		ArrayList retParm = new ArrayList();
 		for (int i = 0; i < idx; i++)
 			retParm.add(list.get(i));
@@ -288,19 +290,22 @@ class Signature {
 			token = (String) it.next();
 
 			int template = 0; // Depth of template scope
-                  boolean foundEquals = false; // Ignore default value for an optional parameter
+			boolean foundEquals = false;
+			// Ignore default value for an optional parameter
 			ArrayList parm = new ArrayList();
 			while (!token.equals(")")
 				&& (!token.equals(",") || template > 0)) {
-                        if (token.equals("=")) foundEquals=true;
-                        if (!foundEquals)	parm.add(token);
+				if (token.equals("="))
+					foundEquals = true;
+				if (!foundEquals)
+					parm.add(token);
 				if (contains(token, "<"))
 					template++;
 				if (contains(token, ">"))
 					template--;
 				token = (String) it.next();
 			}
-			
+
 			// No parameters so break out
 			if (token.equals(")") && 0 == parm.size())
 				break;
@@ -310,7 +315,7 @@ class Signature {
 				failed = true;
 				return;
 			}
-			
+
 			// Copes with void func(void)
 			if (!p.isVoid())
 				alParams.add(p);
@@ -333,42 +338,50 @@ class Signature {
 		}
 	}
 
-	String getOriginal() {
+	public String getOriginal() {
 		return originalText;
 	}
 
-	int originalLength() {
+	public int originalLength() {
 		return originalText.length();
 	}
 
-	boolean failed() {
+	public boolean failed() {
 		return failed;
 	}
 
-	String getAttributes() {
+	public String getAttributes() {
 		return attributes;
 	}
 
-	String getClassName() {
+	public String getClassName() {
 		return className;
 	}
 
-	String getMethodName() {
+	public String getMethodName() {
 		return methodName;
 	}
 
-	Parameter getReturnType() {
+	public Parameter getReturnType() {
 		return returnType;
 	}
 
-	Parameter[] getParameters() {
+	public Parameter[] getParameters() {
 		return params;
 	}
 
-    /**
-     * Should this method be traced?
-     */	
-	boolean traceable() {
+	void setClassName(String className) {
+		if (null == className)
+			return;
+		if (!className.endsWith("::"))
+			className += "::";
+		this.className = className;
+	}
+
+	/**
+	 * Should this method be traced?
+	 */
+	public boolean traceable() {
 		return traceable;
 	}
 
@@ -380,10 +393,32 @@ class Signature {
 		return true;
 	}
 
-	public String toString() {
-		String s = attributes;
-		if (attributes.length() > 0)
-			s += " ";
+	public boolean equals(Object obj) {
+		if (null == obj || !(obj instanceof Signature))
+			return false;
+		Signature that = (Signature) obj;
+		if (!Utils.safeEquals(className, that.className))
+			return false;
+		if (!Utils.safeEquals(methodName, that.methodName))
+			return false;
+		if (!Utils.safeEquals(returnType, that.returnType))
+			return false;
+		if (null == params && null == that.params)
+			return true;
+		if (null != params && null == that.params)
+			return false;
+		if (null == params && null != that.params)
+			return false;
+		if (params.length != that.params.length)
+			return false;
+		for (int i = 0; i < params.length; i++)
+			if (!Utils.safeEquals(params[i], that.params[i]))
+				return false;
+		return true;
+	}
+
+	public String toStringWithoutAttrs() {
+		String s = new String();
 		if (returnType != null)
 			s += returnType + " ";
 		if (className != null)
@@ -395,6 +430,14 @@ class Signature {
 			s += params[i].toString();
 		}
 		s += ")";
+		return s;
+	}
+
+	public String toString() {
+		String s = attributes;
+		if (attributes.length() > 0)
+			s += " ";
+		s += toStringWithoutAttrs();
 		if (trailingAttributes.length() > 0)
 			s += " " + trailingAttributes;
 		return s;

@@ -459,10 +459,4 @@ private:
 };
 AXIS_CPP_NAMESPACE_END
 
-extern "C" { 
-STORAGE_CLASS_INFO void* getStubObject(AXIS_PROTOCOL_TYPE nProtocol, 
-                                       AxisChar* pchEndpointURI); 
-STORAGE_CLASS_INFO void destroyStubObject(void* pCall); 
-} 
-
 #endif

@@ -363,11 +363,11 @@ const AxisString &BasicTypeSerializer::getEntityReferenced
     unsigned int nPos = strVal.find_first_of (XML_ENTITY_REFERENCE_CAHRS);
 
     /* Check for position validity */
-    if (std::AxisString::npos == nPos)
+    if (AxisString::npos == nPos)
         return strVal;
 
     int nOldIdx = 0;            // Counter value
-    while (std::AxisString::npos != nPos)
+    while (AxisString::npos != nPos)
     {                         // Get pointered character
         switch (strVal.at (nPos))
         {

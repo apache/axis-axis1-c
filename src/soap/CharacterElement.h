@@ -38,6 +38,7 @@
 #endif
 
 #include <axis/BasicNode.hpp>
+#include "SoapSerializer.h"
 
 /**
  * @class CharacterElement
@@ -48,6 +49,8 @@
  */
 
 AXIS_CPP_NAMESPACE_START
+
+class SoapSerializer;
 
 class CharacterElement : public BasicNode
 {
@@ -236,7 +239,7 @@ public:
       * included to adhere its interface.
       */
     int serialize(SoapSerializer& pSZ, 
-        list<AxisChar*>& lstTmpNameSpaceStack) {return AXIS_SUCCESS;}
+        std::list<AxisChar*>& lstTmpNameSpaceStack) {return AXIS_SUCCESS;}
 
     /**
       * Returns the Node Type of this Character Element, which is 
