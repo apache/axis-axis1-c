@@ -108,6 +108,7 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 			writer.write("void AXISCALL OnFault(void*p, IMessageData* mc);\n");
 			writer.write("int AXISCALL Init(void*p);\n");
 			writer.write("int AXISCALL Fini(void*p);\n");
+			writer.write("AXIS_BINDING_STYLE AXISCALL GetBindingStyle(void*p);\n");
 			writer.write("/*Methods corresponding to the web service methods*/\n");
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
