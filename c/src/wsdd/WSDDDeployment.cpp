@@ -145,15 +145,9 @@ int WSDDDeployment::UpdateWSDD(const AxisChar* sWSDD)
 	WSDDDocument* doc = new WSDDDOCUMENTPARSER(m_pLibNameIdMap);
 	if (AXIS_SUCCESS != doc->UpdateDeployment(sWSDD, this))
 	{
-#ifdef _DEBUG
-        printf("server.wsdd loading failed\n");
-#endif
 		delete doc;
 		return AXIS_FAIL;
 	}
-#ifdef _DEBUG
-    printf("server.wsdd loading successful\n");
-#endif
 	delete doc;
 	SaveWSDD();
 	return AXIS_SUCCESS;		
@@ -165,9 +159,7 @@ int WSDDDeployment::LoadWSDD(const AxisChar* sWSDD)
 	WSDDDocument* doc = new WSDDDOCUMENTPARSER(m_pLibNameIdMap);
 	if (AXIS_SUCCESS != doc->GetDeployment(sWSDD, this))
 	{
-#ifdef _DEBUG
-        printf("wsdd loading failed\n");
-#endif
+        	printf("wsdd loading failed\n");
 		delete doc;
 		return AXIS_FAIL;
 	}
