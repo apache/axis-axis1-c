@@ -14,6 +14,7 @@
  *   limitations under the License.
  */
 
+#include <axis/AxisException.hpp>
 #include <axis/ISoapFault.hpp>
 AXIS_CPP_NAMESPACE_USE
 
