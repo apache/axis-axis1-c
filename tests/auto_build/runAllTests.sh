@@ -38,7 +38,8 @@ for X in testcases/wsdls/*.wsdl
 do
 runTestCase.sh "$X" c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
-num_tests= expr ${num_tests}+1;
+num_tests=`expr $num_tests + 1`
+echo " "
 done
 
 echo -n "${passed}/${num_tests} tests passed."
