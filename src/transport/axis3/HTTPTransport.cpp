@@ -56,6 +56,11 @@ m_bMaintainSession (false)
     m_bMimeTrue = false;
     m_viCurrentHeader = m_vHTTPHeaders.begin();
 	m_pszRxBuffer = new char [BUF_SIZE];
+#ifdef WIN32
+	m_lChannelTimeout = 10;
+#else
+	m_lChannelTimeout = 0;
+#endif
 }
 
 /*
@@ -164,6 +169,15 @@ void HTTPTransport::setEndpointUri( const char * pcEndpointUri) throw (HTTPTrans
 			}
 		}
     }
+
+// Need this code to set the channel timeout.  If the timeout was changed
+// before the channel was created, then it may not have the correct timeout.
+// By setting it here, the channel is sure to have the correct timeout value
+// next time the channel is read.
+	if( m_pActiveChannel != NULL)
+	{
+		m_pActiveChannel->setTimeout( m_lChannelTimeout);
+	}
 }
 
 /*
@@ -701,7 +715,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
  * @param const char* Value is a NULL terminated character string containing
  * the value associated with the type.
  */
-void HTTPTransport::setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type, const char *value) throw (HTTPTransportException)
+void HTTPTransport::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char *value) throw (HTTPTransportException)
 {
     const char *key = NULL;
 
@@ -990,7 +1004,12 @@ void HTTPTransport::setProxy( const char *pcProxyHost, unsigned int uiProxyPort)
  */
 void HTTPTransport::setTimeout( const long lSeconds)
 {
-    m_pActiveChannel->setTimeout (lSeconds);
+	if( m_pActiveChannel != NULL)
+	{
+		m_pActiveChannel->setTimeout( lSeconds);
+	}
+
+	m_lChannelTimeout = lSeconds;
 }
 
 /* HTTPTransport::getHTTPProtocol() Is a public method for retrieving the

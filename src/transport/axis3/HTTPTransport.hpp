@@ -247,6 +247,8 @@ class HTTPTransport:public SOAPTransport
     ChannelFactory* m_pChannelFactory;
 
 	char *	m_pszRxBuffer;
+
+	long	m_lChannelTimeout;
 };
 
 #endif
