@@ -50,6 +50,7 @@
 #include "../soap/xsd/Byte.hpp"
 #include "../soap/xsd/NonNegativeInteger.hpp"
 #include "../soap/xsd/UnsignedLong.hpp"
+#include "../soap/xsd/UnsignedInt.hpp"
 
 using namespace std;
 

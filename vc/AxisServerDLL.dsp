@@ -438,6 +438,10 @@ SOURCE=..\src\common\TypeMapping.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\UnsignedInt.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\xsd\UnsignedLong.cpp
 # End Source File
 # Begin Source File
