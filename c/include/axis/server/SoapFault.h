@@ -77,15 +77,17 @@
 #include <map>
 #include "SoapFaults.h"
 
+class SoapSerializer;
+
 using namespace std;
 
 class SoapFault  
 {
 public:
 	static SoapFault* getSoapFault(int);
-	static void initialize();
-	//string& serialize();
-	int serialize(string&);	
+	static void initialize();	
+	int serialize(SoapSerializer& pSZ);	
+	//int serialize(string&);	
 	virtual ~SoapFault();
 private:
 	SoapFault();

@@ -66,6 +66,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "CharacterElement.h"
+#include "SoapSerializer.h"
 #include "../common/GDefine.h"
 
 //////////////////////////////////////////////////////////////////////
@@ -88,6 +89,17 @@ NODE_TYPE CharacterElement::getNodeType()
 	return m_iNodeType;
 }
 
+int CharacterElement::serialize(SoapSerializer& pSZ)
+{
+
+	//the serialization code should come here	
+	pSZ<< m_sValue.c_str();
+	
+	return SUCCESS;
+}
+
+/*
+comm on 10/7/2003 6.10pm
 int CharacterElement::serialize(string &sSerialized)
 {
 
@@ -96,3 +108,4 @@ int CharacterElement::serialize(string &sSerialized)
 	
 	return SUCCESS;
 }
+*/

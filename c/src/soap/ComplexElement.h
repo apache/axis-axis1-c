@@ -82,15 +82,16 @@ class ComplexElement : public BasicNode
 {
 public:
 	int setURI(const string& sURI);
-	int serialize(string& sSerialized);
+	int serialize(SoapSerializer& pSZ);
 	int addChild(BasicNode* pBasicNode);
 	int setLocalName(const string& sLocalName);
 	int setPrefix(const string& sPrefix);
 	ComplexElement();
 	virtual ~ComplexElement();
 
-private:
-	int serializeChildren(string& sSerialized);
+private:	
+	int serializeChildren(SoapSerializer& pSZ);
+	//int serializeChildren(string& sSerialized);
 	bool isSerializable();
 	list<BasicNode*> m_children;
 	string m_sPrefix;

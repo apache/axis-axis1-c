@@ -107,12 +107,13 @@ class BasicNode;
 class HeaderBlock  
 {
 
-private:
-	int serializeChildren(string& sSerialized);
+private:	
+	int serializeChildren(SoapSerializer& pSZ);
+	//int serializeChildren(string& sSerialized);
 	list<BasicNode*> m_children;
-	bool isSerializable();
-	//string attrSerialize();
-	int attrSerialize(string&);
+	bool isSerializable();		
+	int attrSerialize(SoapSerializer& pSZ);
+	//int attrSerialize(string&);
 	string m_localname;
 	string m_prefix;
 	string m_uri;
@@ -121,9 +122,9 @@ private:
 	//string m_strSerialized;
 
 public:
-	int addChild(BasicNode* pBasicNode);
-	//string& serialize();
-	int serialize(string&);
+	int addChild(BasicNode* pBasicNode);		
+	int serialize(SoapSerializer& pSZ);
+	//int serialize(string&);
 	void setValue(const string &value);
 	void addAttribute(Attribute* attr);
 	void setUri(const string &uri);
