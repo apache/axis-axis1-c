@@ -63,10 +63,7 @@ class Axis2Transport:public SOAPTransport
     void setTransportProperty (const char *,
 			       const char *) throw (AxisTransportException);
     const char *getTransportProperty (const char *pcKey)
-	throw (AxisTransportException)
-    {
-	return "value";
-    };
+	throw (AxisTransportException);
     void setAttachment (const char *pcAttachmentId, const char *pcAttachment)
     {
     };

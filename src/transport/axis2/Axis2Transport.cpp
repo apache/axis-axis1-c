@@ -1098,3 +1098,22 @@ Axis2Transport::setSocket (unsigned int uiNewSocket)
 {
     m_pChannel->setSocket (uiNewSocket);
 }
+
+const char *
+Axis2Transport::getTransportProperty (const char *pcKey)
+throw (AxisTransportException)
+{
+
+    std::string strKeyToFind = std::string (pcKey);
+
+    for (unsigned int i = 0; i < m_vResponseHTTPHeaders.size (); i++)
+    {
+        if (m_vResponseHTTPHeaders[i].first == strKeyToFind)
+        {
+            return ((string) m_vResponseHTTPHeaders[i].second).c_str ();
+        }
+    }
+
+    return NULL;
+}
+
