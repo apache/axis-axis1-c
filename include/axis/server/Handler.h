@@ -68,9 +68,9 @@
 
 #include "BasicHandler.h"
 #include <map>
-#ifdef _DEBUG
-	#include "AxisTrace.h"
-#endif
+//#ifdef _DEBUG
+//	#include "AxisTrace.h"
+//#endif
 using namespace std;
 
 class Handler : public BasicHandler
