@@ -23,7 +23,8 @@
     case BT_LEAD ## n: \
       if (end - ptr < n) \
         return XML_TOK_PARTIAL_CHAR; \
-      if (IS_INVALID_CHAR(enc, ptr, n)) { \
+      if (IS_INVALID_CHAR(enc, ptr, n))\
+      { \
         *(nextTokPtr) = (ptr); \
         return XML_TOK_INVALID; \
       } \
@@ -44,7 +45,8 @@
    case BT_LEAD ## n: \
      if (end - ptr < n) \
        return XML_TOK_PARTIAL_CHAR; \
-     if (!IS_NAME_CHAR(enc, ptr, n)) { \
+     if (!IS_NAME_CHAR(enc, ptr, n))\
+     { \
        *nextTokPtr = ptr; \
        return XML_TOK_INVALID; \
      } \
@@ -53,7 +55,8 @@
 
 #define CHECK_NAME_CASES(enc, ptr, end, nextTokPtr) \
   case BT_NONASCII: \
-    if (!IS_NAME_CHAR_MINBPC(enc, ptr)) { \
+    if (!IS_NAME_CHAR_MINBPC(enc, ptr))\
+    { \
       *nextTokPtr = ptr; \
       return XML_TOK_INVALID; \
     } \
@@ -72,7 +75,8 @@
    case BT_LEAD ## n: \
      if (end - ptr < n) \
        return XML_TOK_PARTIAL_CHAR; \
-     if (!IS_NMSTRT_CHAR(enc, ptr, n)) { \
+     if (!IS_NMSTRT_CHAR(enc, ptr, n))\
+     { \
        *nextTokPtr = ptr; \
        return XML_TOK_INVALID; \
      } \
@@ -81,7 +85,8 @@
 
 #define CHECK_NMSTRT_CASES(enc, ptr, end, nextTokPtr) \
   case BT_NONASCII: \
-    if (!IS_NMSTRT_CHAR_MINBPC(enc, ptr)) { \
+    if (!IS_NMSTRT_CHAR_MINBPC(enc, ptr))\
+    { \
       *nextTokPtr = ptr; \
       return XML_TOK_INVALID; \
     } \
@@ -257,7 +262,8 @@ PREFIX(scanPi)(const ENCODING *enc, const char *ptr,
     *nextTokPtr = ptr;
     return XML_TOK_INVALID;
   }
-  while (ptr != end) {
+  while (ptr != end) 
+  {
     switch (BYTE_TYPE(enc, ptr)) 
     {
     CHECK_NAME_CASES(enc, ptr, end, nextTokPtr)
@@ -391,7 +397,8 @@ PREFIX(cdataSectionTok)(const ENCODING *enc, const char *ptr,
     {
 #define LEAD_CASE(n) \
     case BT_LEAD ## n: \
-      if (end - ptr < n || IS_INVALID_CHAR(enc, ptr, n)) { \
+      if (end - ptr < n || IS_INVALID_CHAR(enc, ptr, n))\
+      { \
         *nextTokPtr = ptr; \
         return XML_TOK_DATA_CHARS; \
       } \
@@ -433,7 +440,8 @@ PREFIX(scanEndTag)(const ENCODING *enc, const char *ptr,
   }
   while (ptr != end) 
   {
-    switch (BYTE_TYPE(enc, ptr)) {
+    switch (BYTE_TYPE(enc, ptr)) 
+    {
     CHECK_NAME_CASES(enc, ptr, end, nextTokPtr)
     case BT_S: case BT_CR: case BT_LF:
       for (ptr += MINBPC(enc); ptr != end; ptr += MINBPC(enc)) 
@@ -489,7 +497,8 @@ PREFIX(scanHexCharRef)(const ENCODING *enc, const char *ptr,
     }
     for (ptr += MINBPC(enc); ptr != end; ptr += MINBPC(enc)) 
     {
-      switch (BYTE_TYPE(enc, ptr)) {
+      switch (BYTE_TYPE(enc, ptr)) 
+      {
       case BT_DIGIT:
       case BT_HEX:
         break;
@@ -919,7 +928,8 @@ PREFIX(contentTok)(const ENCODING *enc, const char *ptr, const char *end,
     {
 #define LEAD_CASE(n) \
     case BT_LEAD ## n: \
-      if (end - ptr < n || IS_INVALID_CHAR(enc, ptr, n)) { \
+      if (end - ptr < n || IS_INVALID_CHAR(enc, ptr, n))\
+      { \
         *nextTokPtr = ptr; \
         return XML_TOK_DATA_CHARS; \
       } \
@@ -1797,7 +1807,8 @@ PREFIX(isPublicId)(const ENCODING *enc, const char *ptr, const char *end,
   end -= MINBPC(enc);
   for (; ptr != end; ptr += MINBPC(enc)) 
   {
-    switch (BYTE_TYPE(enc, ptr)) {
+    switch (BYTE_TYPE(enc, ptr)) 
+    {
     case BT_DIGIT:
     case BT_HEX:
     case BT_MINUS:
@@ -1867,8 +1878,10 @@ PREFIX(getAtts)(const ENCODING *enc, const char *ptr,
     switch (BYTE_TYPE(enc, ptr)) 
     {
 #define START_NAME \
-      if (state == other) { \
-        if (nAtts < attsMax) { \
+      if (state == other)\
+      { \
+        if (nAtts < attsMax)\
+        { \
           atts[nAtts].name = ptr; \
           atts[nAtts].normalized = 1; \
         } \
