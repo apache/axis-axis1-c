@@ -119,15 +119,20 @@
 		<mkdir dir="${confFileDirectory}"/>
 		<echo file="${axiscpp.conf}">#Available directives are as follows:
 #
-# ClientLogPath:	  The path to the client log
-# ClientWSDDFilePath: The path to the client wsdd
+# ClientLogPath:	 The path to the client log
+# ClientWSDDFilePath:    The path to the client wsdd
 # Transport_http:	 The HTTP transport library
 # Transport_smtp:	 The SMTP transport library
-# XMLParser:		  The xml parser library
+# XMLParser:		 The xml parser library
+# Channel_HTTP:          The HTTP transport channel library
+# Channel_HTTP_SSL:      The HTTP transport secure channel library
 #
 ClientLogPath:${test.directory}/ClientLog
 Transport_http:${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
 XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}
+Channel_HTTP:${dir.libraries}/${libraryPrefix}${channelLibraryName}${librarySuffix}
+Channel_HTTP_SSL:${dir.libraries}/${libraryPrefix}${secureChannelLibraryName}${librarySuffix}
+
 </echo>
 	</target>
 

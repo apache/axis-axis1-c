@@ -45,10 +45,8 @@ AxisConfig::AxisConfig ()
      */
     m_pcKeyArray[AXCONF_AXISHOME]		= "\0";
     m_pcKeyArray[AXCONF_TRANSPORTHTTP]	= "Transport_http";
-//	m_pcKeyArray[AXCONF_SSLCHANNEL]		= "Channel_ssl";
-//	m_pcKeyArray[AXCONF_CHANNEL]		= "Channel";
-    m_pcKeyArray[AXCONF_SSLCHANNEL_HTTP]= "Channel_HTTP_SSL";
-    m_pcKeyArray[AXCONF_CHANNEL_HTTP]	= "Channel_HTTP";
+    m_pcKeyArray[AXCONF_SSLCHANNEL_HTTP]= "Channel_HTTP_SSL";	// Was "Channel_ssl"
+    m_pcKeyArray[AXCONF_CHANNEL_HTTP]	= "Channel_HTTP";		// Was "Channel"
     m_pcKeyArray[AXCONF_TRANSPORTSMTP]	= "Transport_smtp";
     m_pcKeyArray[AXCONF_XMLPARSER]		= "XMLParser";
     m_pcKeyArray[AXCONF_NODENAME]		= "NodeName";
