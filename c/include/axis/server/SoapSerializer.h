@@ -58,6 +58,7 @@
  *
  *
  * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  *
  */
 
@@ -109,21 +110,20 @@ public:
 	int setSoapEnvelope(SoapEnvelope* pSoapEnvelope);
 	SoapSerializer();
 	virtual ~SoapSerializer();
-	int AddOutputParam(const AxisChar* pchName, XSDTYPE nType, long lValue);
 	//for basic types
-	int AddOutputParam(const AxisChar* pchName, int nValue);
-	int AddOutputParam(const AxisChar* pchName, unsigned int unValue);
-	int AddOutputParam(const AxisChar* pchName, short sValue);
-	int AddOutputParam(const AxisChar* pchName, unsigned short usValue);
-	int AddOutputParam(const AxisChar* pchName, long lValue);
-	int AddOutputParam(const AxisChar* pchName, unsigned long ulValue);
-	int AddOutputParam(const AxisChar* pchName, char cValue);
-	int AddOutputParam(const AxisChar* pchName, unsigned char ucValue);
-	int AddOutputParam(const AxisChar* pchName, float fValue);
-	int AddOutputParam(const AxisChar* pchName, double dValue);
-	int AddOutputParam(const AxisChar* pchName, struct tm tValue);
-	int AddOutputParam(const AxisChar* pchName, const AxisChar* pStrValue);
-	int AddOutputParam(const AxisChar* pchName, const string& sStrValue);
+	int AddOutputParam(const AxisChar* pchName, int nValue, XSDTYPE type);
+	int AddOutputParam(const AxisChar* pchName, unsigned int unValue, XSDTYPE type);
+	int AddOutputParam(const AxisChar* pchName, short sValue, XSDTYPE type);
+	int AddOutputParam(const AxisChar* pchName, unsigned short usValue, XSDTYPE type);
+	int AddOutputParam(const AxisChar* pchName, long lValue, XSDTYPE type);
+	int AddOutputParam(const AxisChar* pchName, unsigned long ulValue, XSDTYPE type);
+	int AddOutputParam(const AxisChar* pchName, char cValue, XSDTYPE type);
+	int AddOutputParam(const AxisChar* pchName, unsigned char ucValue, XSDTYPE type);
+	int AddOutputParam(const AxisChar* pchName, float fValue, XSDTYPE type);
+	int AddOutputParam(const AxisChar* pchName, double dValue, XSDTYPE type);
+	int AddOutputParam(const AxisChar* pchName, struct tm tValue, XSDTYPE type);
+	int AddOutputParam(const AxisChar* pchName, const AxisChar* pStrValue, XSDTYPE type);
+	int AddOutputParam(const AxisChar* pchName, const string& sStrValue, XSDTYPE type);
 	//for arrays of basic types
 	int AddOutputParam(const AxisChar* pchName, const Axis_Array* pArray, XSDTYPE nType);
 	//for arrays of complex types
@@ -144,19 +144,19 @@ public: //Basic Type Serializing methods
 	int setHeaderBlock(HeaderBlock* pHeaderBlock);
 	IHeaderBlock* createHeaderBlock();
 
-	const AxisChar* SerializeBasicType(const AxisChar* sName, const AxisChar* sValue, XSDTYPE type=XSD_STRING);
-	const AxisChar* SerializeBasicType(const AxisChar* sName, const string sValue, XSDTYPE type=XSD_STRING);
-	const AxisChar* SerializeBasicType(const AxisChar* sName, int nValue);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, struct tm tValue);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned int unValue);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, short sValue);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned short usValue);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, char cValue);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned char ucValue);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, long lValue, XSDTYPE type=XSD_LONG);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned long ulValue);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, float fValue);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, double dValue, XSDTYPE type=XSD_DOUBLE);
+	const AxisChar* SerializeBasicType(const AxisChar* sName, const AxisChar* sValue, XSDTYPE type);
+	const AxisChar* SerializeBasicType(const AxisChar* sName, const string sValue, XSDTYPE type);
+	const AxisChar* SerializeBasicType(const AxisChar* sName, int nValue, XSDTYPE type);
+    const AxisChar* SerializeBasicType(const AxisChar* sName, struct tm tValue, XSDTYPE type);
+    const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned int unValue, XSDTYPE type);
+    const AxisChar* SerializeBasicType(const AxisChar* sName, short sValue, XSDTYPE type);
+    const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned short usValue, XSDTYPE type);
+    const AxisChar* SerializeBasicType(const AxisChar* sName, char cValue, XSDTYPE type);
+    const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned char ucValue, XSDTYPE type);
+    const AxisChar* SerializeBasicType(const AxisChar* sName, long lValue, XSDTYPE type);
+    const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned long ulValue, XSDTYPE type);
+    const AxisChar* SerializeBasicType(const AxisChar* sName, float fValue, XSDTYPE type);
+    const AxisChar* SerializeBasicType(const AxisChar* sName, double dValue, XSDTYPE type);
     
 private:
 	BasicTypeSerializer m_BTSZ;
