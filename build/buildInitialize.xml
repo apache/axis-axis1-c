@@ -19,10 +19,7 @@
 	<property name="dir.include" value="${basedir}/include"/>
 	<property name="dir.tools" value="${basedir}/tools"/>
 
-	<!--
-	  Load versioning information from version.properties
-	  -->
-	<property file="${basedir}/build/version.properties"/>
+ 	<property name="dir.properties" value="${basedir}/build"/>
 
 	<property environment="env"/>
 
@@ -212,7 +209,12 @@
 			<isset property="os400"/>
 		</condition>
 		
-		<!-- Load properties from file -->
-		<property file="${basedir}/build/build.${platform}.properties"/>
+ 		<!--
+ 		  Load versioning information from version.properties
+ 		  -->
+ 		<property file="${dir.properties}/version.properties"/>
+  		
+  		<!-- Load properties from file -->
+ 		<property file="${dir.properties}/build.${platform}.properties"/>
 	</target>
 </project>
