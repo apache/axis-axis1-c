@@ -151,7 +151,7 @@ SOAPArrayStruct* echoNestedArray(SOAPArrayStruct* Value0)
 	int nStatus;
 	CallX* pCall;
 	SOAPArrayStruct* pReturn = NULL;
-	if (!g_pInteropTestPortTypeB) g_pInteropTestPortTypeB = GetCallObject(APTHTTP, "http://localhost/axis/InteropGroupB");
+	if (!g_pInteropTestPortTypeB) g_pInteropTestPortTypeB = GetCallObject(APTHTTP, "http://localhost/axis/cgroupb");
 	if (!g_pInteropTestPortTypeB || !g_pInteropTestPortTypeB->__vfptr) return pReturn;
 	pCall = g_pInteropTestPortTypeB->__vfptr;
 /* Following will establish the connections with the server too */
