@@ -65,7 +65,7 @@
 
 AxisTime::AxisTime()
 {
-    
+
 }
 
 AxisTime::AxisTime(struct tm ntime)
@@ -74,14 +74,14 @@ AxisTime::AxisTime(struct tm ntime)
 }
 
 AxisTime::AxisTime(time_t pTime)
-{   
+{
 		tm* pTMUTC = gmtime(&pTime);
 		memcpy(&m_TMUTC, pTMUTC, sizeof(tm));
 }
 
 AxisTime::~AxisTime()
 {
-    
+
 }
 
 void AxisTime::setValue(const AxisChar* strValue)
@@ -95,7 +95,7 @@ void AxisTime::setValue(XSDTYPE type,  uParamValue Value)
     m_Type = type;
     if(type == XSD_DURATION)
     {
-        m_Duration = Value.lDuration;        
+        m_Duration = Value.lDuration;
     }
     else
     {
@@ -126,35 +126,41 @@ AxisString& AxisTime::serialize(const AxisString& sName, long lDuration)
         //sprintf((char*)buff,"%d", intYears);
         AxisSprintf(buff, 4, "%d", intYears);
         strXSDDuration.append(buff);
-        lDuration = lDuration - (lDuration / x * x);
+        strXSDDuration.append("Y");
+        lDuration = lDuration - (intYears * x);
         x = 30 * 24 * 3600;
         int intMonths = lDuration / x;
         //sprintf((char*)buff,"%d", intMonths);
         AxisSprintf(buff, 4, "%d", intMonths);
         strXSDDuration.append(buff);
-        lDuration = lDuration - (lDuration / x * x);
+        strXSDDuration.append("M");
+        lDuration = lDuration - (intMonths * x);
         x = 24 * 3600;
         int intDays = lDuration / x;
         //sprintf((char*)buff,"%d", intDays);
         AxisSprintf(buff, 4, "%d", intDays);
         strXSDDuration.append(buff);
-        lDuration = lDuration - (lDuration / x * x);
+        strXSDDuration.append("DT");
+        lDuration = lDuration - (intDays * x);
         x = 3600;
         int intHours = lDuration / x;
         //sprintf((char*)buff,"%d", intHours);
         AxisSprintf(buff, 4, "%d", intHours);
         strXSDDuration.append(buff);
-        lDuration = lDuration - (lDuration / x * x);
+        strXSDDuration.append("H");
+        lDuration = lDuration - (intHours * x);
         x = 60;
         int intMins = lDuration / x;
         //sprintf((char*)buff,"%d", intMins);
         AxisSprintf(buff, 4, "%d", intMins);
         strXSDDuration.append(buff);
-        int intSecs = lDuration - (lDuration / x * x);
+        strXSDDuration.append("M");
+        int intSecs = lDuration - (intMins * x);
         //sprintf((char*)buff,"%d", intSecs);
         AxisSprintf(buff, 4, "%d", intSecs);
         strXSDDuration.append(buff);
-        
+        strXSDDuration.append("S");
+
         return strXSDDuration;
 }
 
@@ -171,18 +177,21 @@ AxisString& AxisTime::serialize(const AxisString& sName, struct tm tValue)
                 strftime(buf1, 80, "%Y-%m-%dT%H:%M:%SZ", &tValue);
                 strXSDDate = buf1;
                 //AxisUtils::convert(strXSDDate, buf1);
+                break;
             case XSD_DATE:
                 strftime(buf1, 80, "%Y-%m-%dZ", &tValue);
                 strXSDDate = buf1;
                 //AxisUtils::convert(strXSDDate, buf1);
+                break;
             case XSD_TIME:
                 strftime(buf1, 80, "%H:%M:%SZ", &tValue);
                 strXSDDate = buf1;
                 //AxisUtils::convert(strXSDDate, buf1);
+                break;
             default:;
-            
+
         }
-        
+
         return strXSDDate;
 }
 
@@ -194,7 +203,7 @@ void AxisTime::mkCTime()
 {
 //    AxisChar* endptr;
     unsigned int intPos, intPos1, intPos2, intPos3, intPos4, intPos5, intPos6;
-    AxisChar buff[4];
+    AxisChar buff[4] = {0};
     time_t now;
     struct tm result1, result2;
 	struct tm* pTm;
@@ -204,7 +213,7 @@ void AxisTime::mkCTime()
 	pTm = localtime(&now);
 	memcpy(&result2, pTm, sizeof(tm));
     time_t d = mktime(&result1) - mktime(&result2);
-    
+
     switch(m_Type)
     {
         case XSD_DURATION:
@@ -225,7 +234,7 @@ void AxisTime::mkCTime()
             //m_intDays = wcstol(strDays.c_str(), &endptr, 10);
             duration.days = m_intDays;
             intPos4 = m_sValue.find_first_of("H");
-            strHours = m_sValue.substr(intPos3 + 1, intPos4 - intPos3 -1);
+            strHours = m_sValue.substr(intPos3 + 2, intPos4 - intPos3 -2);
             m_intHours = atoi(strHours.c_str());
             //m_intHours = wcstol(strHours.c_str(), &endptr, 10);
             duration.hours = m_intHours;
@@ -241,15 +250,15 @@ void AxisTime::mkCTime()
             duration.secs = m_intSecs;
 
             break;
-    
+
         case XSD_DATETIME:
-    
+
             /*dismantle m_sValue to get tm value;
                 XSD_DATETIME format is
                 CCYY(-)MM(-)DDThh:mm:ss.ss...Z OR
-                CCYY(-)MM(-)DDThh:mm:ss.ss...+/-<UTC TIME DIFFERENCE>            
-            */        
-            strYears = m_sValue.substr(0,2);
+                CCYY(-)MM(-)DDThh:mm:ss.ss...+/-<UTC TIME DIFFERENCE>
+            */
+            strYears = m_sValue.substr(0,4);
             m_intYears = atoi(strYears.c_str()) - 1900;
             //m_intYears = wcstol(strYears.c_str(), &endptr, 10) - 1900;
             //sprintf((char*)buff,"%d", m_intYears);
@@ -259,13 +268,13 @@ void AxisTime::mkCTime()
             /* date is of the format CCYY-MM-DD */
             if(intPos != std::string::npos && intPos<=7)
             {
-                strMonths = m_sValue.substr(5,2);            
-                strDays = m_sValue.substr(8,2);            
-                strHours = m_sValue.substr(11,2);            
-                strMins = m_sValue.substr(14,2);            
+                strMonths = m_sValue.substr(5,2);
+                strDays = m_sValue.substr(8,2);
+                strHours = m_sValue.substr(11,2);
+                strMins = m_sValue.substr(14,2);
                 /*Decimal fraction of the second is omitted*/
                 strSecs = m_sValue.substr(17,2);
-                strZone = m_sValue.substr(19,m_sValue.length()-19);            
+                strZone = m_sValue.substr(19,m_sValue.length()-19);
             }
             /* date is of the format CCYYMMDD */
             else if((intPos == std::string::npos) || (intPos != std::string::npos && intPos > 7))
@@ -276,7 +285,7 @@ void AxisTime::mkCTime()
                 strMins = m_sValue.substr(12,2);
                 /*Decimal fraction of the second is omitted*/
                 strSecs = m_sValue.substr(15,2);
-                strZone = m_sValue.substr(17,m_sValue.length()-17);            
+                strZone = m_sValue.substr(17,m_sValue.length()-17);
             }
 
             m_TM.tm_year = atoi(strYears.c_str());
@@ -318,7 +327,7 @@ void AxisTime::mkCTime()
                     time_t t = mktime(&m_TM);
                     t = abs(t - d);
 					pTm = gmtime(&t);
-					memcpy(&m_TMUTC, pTm, sizeof(tm));                
+					memcpy(&m_TMUTC, pTm, sizeof(tm));
                 }
                 else if(strZone.substr(0,1) == "-")
                 {
@@ -330,7 +339,7 @@ void AxisTime::mkCTime()
                     time_t t = mktime(&m_TM);
                     t = abs(t - d);
 					pTm = gmtime(&t);
-					memcpy(&m_TMUTC, pTm, sizeof(tm));                
+					memcpy(&m_TMUTC, pTm, sizeof(tm));
                 }
             }
             /*if the zone is not represented in the date*/
@@ -350,7 +359,7 @@ void AxisTime::mkCTime()
                 CCYY(-)MM(-)DDZ OR
                 CCYY(-)MM(-)DD+/-<UTC TIME DIFFERENCE>
             */
-            strYears = m_sValue.substr(0,2);
+            strYears = m_sValue.substr(0,4);
             m_intYears = atoi(strYears.c_str()) - 1900;
             //m_intYears = wcstol(strYears.c_str(), &endptr, 10) - 1900;
             //sprintf((char*)buff,"%d", m_intYears);
@@ -405,7 +414,7 @@ void AxisTime::mkCTime()
                     time_t t = mktime(&m_TM);
                     t = abs(t - d);
 					pTm = gmtime(&t);
-					memcpy(&m_TMUTC, pTm, sizeof(tm));                
+					memcpy(&m_TMUTC, pTm, sizeof(tm));
                 }
                 else if(strZone.substr(0,1) == "-")
                 {
@@ -415,7 +424,7 @@ void AxisTime::mkCTime()
                     time_t t = mktime(&m_TM);
                     t = abs(t - d);
 					pTm = gmtime(&t);
-					memcpy(&m_TMUTC, pTm, sizeof(tm));                
+					memcpy(&m_TMUTC, pTm, sizeof(tm));
                 }
             }
             /*if the zone is not represented in the date*/
@@ -428,13 +437,13 @@ void AxisTime::mkCTime()
             }
 
             break;
-            
+
         case XSD_TIME:
             /*dismantle m_sValue to get tm value;
                 XSD_TIME format is
                 hh:mm:ss.ss...Z OR
                 hh:mm:ss.ss...+/-<UTC TIME DIFFERENCE>
-            */ 
+            */
             strHours = m_sValue.substr(0,2);
             strMins = m_sValue.substr(3,2);
             /*Decimal fraction of the second is omitted*/
@@ -474,7 +483,7 @@ void AxisTime::mkCTime()
                     time_t t = mktime(&m_TM);
                     t = abs(t - d);
 					pTm = gmtime(&t);
-					memcpy(&m_TMUTC, pTm, sizeof(tm));                
+					memcpy(&m_TMUTC, pTm, sizeof(tm));
                 }
                 else if(strZone.substr(0,1) == "-")
                 {
@@ -484,7 +493,7 @@ void AxisTime::mkCTime()
                     time_t t = mktime(&m_TM);
                     t = abs(t - d);
 					pTm = gmtime(&t);
-					memcpy(&m_TMUTC, pTm, sizeof(tm));                
+					memcpy(&m_TMUTC, pTm, sizeof(tm));
                 }
             }
             /*if the zone is not represented in the date*/
@@ -498,13 +507,13 @@ void AxisTime::mkCTime()
 
             break;
         default:;
-    }    
+    }
 }
 
 
 long AxisTime::getDuration()
 {
-    return m_Duration;  
+    return m_Duration;
 }
 
 struct tm AxisTime::getDateTime()

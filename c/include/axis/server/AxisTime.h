@@ -68,7 +68,7 @@
 
 using namespace std;
 
-typedef union uDuration
+typedef struct uDuration
 {
     int years;
     int months;
@@ -76,7 +76,7 @@ typedef union uDuration
     int hours;
     int mins;
     double secs;
-} uDuration;
+};
 
 class AxisTime
 {
