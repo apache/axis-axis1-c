@@ -252,6 +252,7 @@ int HandlerPool::GetHandlerChain(string& sSessionId, HandlerChain** ppChain, con
 		pWSDDH = (*it);
 		if ((Status = GetHandler(&pBH, sSessionId, pWSDDH->GetScope(),pWSDDH->GetLibId())) == AXIS_SUCCESS)
 		{
+			/*
 			if (NORMAL_HANDLER == pBH->_functions->GetType(pBH->_object))
 			{                
 				((Handler*)(pBH->_object))->SetOptionList(pWSDDH->GetParameterList());                
@@ -261,6 +262,25 @@ int HandlerPool::GetHandlerChain(string& sSessionId, HandlerChain** ppChain, con
 			{
 				Status = WRONG_HANDLER_TYPE;
 				break;
+			}
+			*/
+
+			if (0 != pBH->_functions) 
+			{
+				/* C Handler */
+			} 
+			else if (0 != pBH->_object) 
+			{
+				if (NORMAL_HANDLER == ((Handler*)(pBH->_object))->GetType())
+				{                
+					((Handler*)(pBH->_object))->SetOptionList(pWSDDH->GetParameterList());                
+					pChain->AddHandler(pBH, pWSDDH->GetScope(), pWSDDH->GetLibId());                
+				}
+				else
+				{
+					Status = WRONG_HANDLER_TYPE;
+					break;
+				}
 			}
 		}
 		else

@@ -210,3 +210,30 @@ int SoapHeader::setPrefix(const char* pcPrefix)
 
 	return AXIS_SUCCESS;
 }
+
+IHeaderBlock* SoapHeader::getHeaderBlock(const AxisChar *pName, const AxisChar *pNamespace)
+{
+	HeaderBlock* tmpHeaderBlock = NULL;
+
+	list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
+	bool blnFoundStatus = false;
+
+	while (itCurrHeaderBlock != m_headerBlocks.end()) {			
+		tmpHeaderBlock = (*itCurrHeaderBlock);
+
+		if ((strcmp((tmpHeaderBlock->m_localname).c_str(), pName) == 0) && 
+				(strcmp((tmpHeaderBlock->m_uri).c_str(), pNamespace) == 0)) {
+			blnFoundStatus = true;
+			m_headerBlocks.remove(tmpHeaderBlock);
+			break;
+		}
+
+		itCurrHeaderBlock++;
+	}
+
+	if (blnFoundStatus) {
+		return tmpHeaderBlock;
+	} else {
+		return NULL;
+	}
+}

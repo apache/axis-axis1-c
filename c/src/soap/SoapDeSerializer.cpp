@@ -173,8 +173,8 @@ SoapEnvelope* SoapDeSerializer::GetEnvelope()
 IHeaderBlock* SoapDeSerializer::GetHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace)
 {
 	if (!m_pHeader) return NULL; /* there has been no <Header> element so there can be no Header blocks */
-	/*TODO*/
-	return NULL;
+	
+	return (HeaderBlock*)m_pHeader->getHeaderBlock(pName, pNamespace);
 }
 											   
 int SoapDeSerializer::GetHeader()
@@ -212,7 +212,7 @@ int SoapDeSerializer::GetHeader()
 						pHeaderBlock->setUri(m_pNode->m_pchNamespace);
 						pHeaderBlock->setLocalName(m_pNode->m_pchNameOrValue);
 
-						if ((m_pNode->m_pchAttributes) != NULL) {
+						if ((m_pNode->m_pchAttributes[0]) != NULL) {
 							int iAttributeArrayIndex = 0;
 							while (true) {
 								Attribute* pAttribute = new Attribute();
@@ -251,7 +251,11 @@ int SoapDeSerializer::GetHeader()
 				} else if (CHARACTER_ELEMENT == m_pNode->m_type) {
 					pCharacterElement = new CharacterElement(m_pNode->m_pchNameOrValue);
 
-					pComplexElement->addChild(pCharacterElement);
+					if (iLevel == HEADER_BLOCK_LEVEL) {
+						pHeaderBlock->addChild(pCharacterElement);
+					} else {
+						pComplexElement->addChild(pCharacterElement);
+					}
 				}
 			}
 		}

@@ -120,7 +120,9 @@ void HeaderBlock::addAttribute(Attribute* attr)
 
 void HeaderBlock::setValue(const AxisChar* value)
 {
-	m_value= value;
+	//m_value= value;
+
+	/* I think that now this method is not needed, roshan */
 }
 
 int HeaderBlock::serialize(SoapSerializer& pSZ)

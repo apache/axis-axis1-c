@@ -100,6 +100,7 @@ private:
 	//string m_strHeaderSerialized;
 	const char* m_pcPrefix;
 public:
+	IHeaderBlock* getHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace);
 	int setPrefix(const char* pcPrefix);
 	/**
 	 * Removes the next HeaderBlock from the list and returns it. But will not delete it.
