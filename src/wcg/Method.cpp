@@ -63,6 +63,7 @@
 // Method.cpp: implementation of the Method class.
 //
 //////////////////////////////////////////////////////////////////////
+#pragma warning (disable : 4786)
 
 #include "Method.h"
 
@@ -104,4 +105,83 @@ void Method::SetMethodName(string &sName)
 void Method::SetQualification(unsigned char sQualifier)
 {
 	m_Qualifier|=sQualifier;
+}
+
+//generates wrapper method declaration 
+int Method::GenerateMethodDef(File &file)
+{
+	try 
+	{
+		file << "\tint" << " " << m_Name << "(IMessageData* mc);" << endl; 
+	}
+	catch(...) //any exception
+	{
+		return 1;
+	}
+	return 0; //success
+}
+
+string& Method::GetName()
+{
+	return m_Name;
+}
+
+int Method::GenerateMethodImpl(string& sClassName, File &file)
+{
+	file << "int " << sClassName << "::" << m_Name << "(IMessageData* mc)" << endl; 	
+	file << "{" << endl;
+	file << "\tSetResponseMethod(mc, " << m_Name << "\");" << endl;
+	int nParam = 0;
+	for (list<Variable*>::iterator it = m_Params.begin(); it != m_Params.end(); it++)
+	{
+		file << "\tParam *param" << nParam << " = mc->getSoapDeserializer()->GetParam();" << endl;
+		if ((*it)->IsComplexType())
+		{
+			
+		}
+		else if ((*it)->IsArrayType())
+		{
+			
+		}
+		else //basic types
+		{
+			file << "\t" << (*it)->GetTypeName() << " v" << nParam << " = " << "param" << nParam << "->" << GetParamGetMethod((*it)->GetType()) << "();" << endl;
+		}
+		nParam++;
+	}
+	file << "\t//Call actual web service method with appropriate parameters" << endl;
+	file << "\tParam ret(pWs->" << m_Name << "(";
+	for (int n=0; n<nParam;)
+	{
+		file << "v" << n++;
+		if (n<nParam) file << ", ";
+	}
+	file << "));" << endl;
+	file << "\tret.m_sName = \"" << m_Name << "Return\";" << endl;
+	file << "\tmc->getSoapSerializer()->setResponseParam(&ret);" << endl;
+	file << "\treturn SUCCESS;" << endl; 
+	file << "}" << endl;
+	file << endl;
+	return 0;
+}
+
+string& Method::GetParamGetMethod(int nType)
+{
+	//All get methods of Param class should be listed here
+	switch(nType)
+	{
+		case VAR_INT: m_AuxStr = "GetInt"; break;
+		case VAR_FLOAT: m_AuxStr = "GetFloat"; break;
+		case VAR_STRING: m_AuxStr = "GetString"; break;
+		case VAR_LONG: m_AuxStr = "GetLong"; break;
+		case VAR_SHORT: m_AuxStr = "GetShort"; break;
+		case VAR_CHAR: m_AuxStr = "GetChar"; break;
+		case VAR_DOUBLE: m_AuxStr = "GetDouble"; break;
+		case VAR_BOOL: m_AuxStr = "GetBool"; break;
+		case VAR_UNSIGNEDLONG: m_AuxStr = "GetUnsignedLong"; break;
+		case VAR_UNSIGNEDINT: m_AuxStr = "GetUnsignedInt"; break;
+		case VAR_UNSIGNEDSHORT: m_AuxStr = "GetUnsignedShort"; break;
+		case VAR_UNSIGNED_CHAR: m_AuxStr = "GetUnsignedChar"; break;
+	}
+	return m_AuxStr;
 }

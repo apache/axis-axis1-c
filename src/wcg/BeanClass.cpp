@@ -64,6 +64,7 @@
 // BeanClass.cpp: implementation of the BeanClass class.
 //
 //////////////////////////////////////////////////////////////////////
+#pragma warning (disable : 4786)
 
 #include "BeanClass.h"
 
@@ -87,4 +88,9 @@ BeanClass::~BeanClass()
 void BeanClass::AddVariable(Variable *pVar)
 {
 	m_Variables.push_back(pVar);
+}
+
+void BeanClass::SetClassName(string &sName)
+{
+	m_Name = sName;
 }
