@@ -21,7 +21,6 @@
 
 package org.apache.axis.wsdl.wsdl2ws.cpp;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -37,8 +36,7 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class ServiceHeaderWriter extends HeaderFileWriter
 {
-    private WebServiceContext wscontext;
-    private ArrayList methods;
+    protected ArrayList methods;
     public ServiceHeaderWriter(WebServiceContext wscontext) throws WrapperFault
     {
         super(
@@ -46,45 +44,6 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                 wscontext.getSerInfo().getQualifiedServiceName()));
         this.wscontext = wscontext;
         this.methods = wscontext.getSerInfo().getMethods();
-    }
-
-    protected File getFilePath() throws WrapperFault
-    {
-        return this.getFilePath(false);
-    }
-
-    protected File getFilePath(boolean useServiceName) throws WrapperFault
-    {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-        {
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
-        }
-        new File(targetOutputLocation).mkdirs();
-
-        String fileName = targetOutputLocation + "/" + classname + ".h";
-
-        if (useServiceName)
-        {
-            fileName =
-                targetOutputLocation
-                    + "/"
-                    + this.wscontext.getSerInfo().getServicename()
-                    + "_"
-                    + classname
-                    + ".h";
-        }
-
-        return new File(fileName);
-    }
-
-    protected String getServiceName() throws WrapperFault
-    {
-        return wscontext.getSerInfo().getServicename();
     }
 
     /* (non-Javadoc)

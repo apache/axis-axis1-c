@@ -14,7 +14,6 @@
  *   limitations under the License.
  */
 
- 
 /**
  * @author Srinath Perera(hemapani@openource.lk)
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
@@ -31,53 +30,123 @@ import java.io.IOException;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.BasicFileWriter;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
+import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
-public abstract class HeaderFileWriter extends BasicFileWriter {
-	public HeaderFileWriter(String classname)throws WrapperFault{
-		super(classname);
-	}
-	public void writeSource()throws WrapperFault{
-	   try{
-		String filename = getFilePath().getName();
-	   	
-	   this.writer = new BufferedWriter(new FileWriter(getFilePath( filename.startsWith( "AxisClientException")), false));
+public abstract class HeaderFileWriter extends BasicFileWriter
+{
+    protected WebServiceContext wscontext;
+    public HeaderFileWriter(String classname) throws WrapperFault
+    {
+        super(classname);
+    }
+    public void writeSource() throws WrapperFault
+    {
+        try
+        {
+            String filename = getFilePath().getName();
 
-	   writeClassComment();
-	   // if this headerfile not defined define it 
-	   this.writer.write("#if !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)\n");
-	   this.writer.write("#define __"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_\n\n");
-	   //includes
-	   writePreprocessorStatements();
-		//class
-		
-		if( "AxisClientException".equals( classname))
-		{
-			this.writer.write("class "+getServiceName()+"_"+classname+getExtendsPart()+"\n{\n");
-		}
-		else
-		{
-			this.writer.write("class "+classname+getExtendsPart()+"\n{\n");
-		}
-	   writeAttributes();
-	   writeConstructors();
-	   writeDestructors();
-	   writeMethods();
-	   this.writer.write("};\n\n");
-	   this.writer.write("#endif /* !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)*/\n");
-	   //cleanup
-	   writer.flush();
-	   writer.close();
-	   if (WSDL2Ws.verbose)
-	       System.out.println(getFilePath().getAbsolutePath() + " created.....");
+            this.writer =
+                new BufferedWriter(
+                    new FileWriter(
+                        getFilePath(filename.startsWith("AxisClientException")),
+                        false));
 
-	   } catch (IOException e) {
-			e.printStackTrace();
-			throw new WrapperFault(e);
-		}
+            writeClassComment();
+            // if this headerfile not defined define it 
+            this.writer.write(
+                "#if !defined(__"
+                    + classname.toUpperCase()
+                    + "_"
+                    + getFileType().toUpperCase()
+                    + "_H__INCLUDED_)\n");
+            this.writer.write(
+                "#define __"
+                    + classname.toUpperCase()
+                    + "_"
+                    + getFileType().toUpperCase()
+                    + "_H__INCLUDED_\n\n");
+            //includes
+            writePreprocessorStatements();
+            //class
 
-	}
-	protected abstract String getExtendsPart();//{return " ";}
-	protected abstract File getFilePath()throws WrapperFault;
-	protected abstract String getFileType(); //will return "Param", "Server" or "Client"
-	protected abstract String getServiceName()throws WrapperFault;
+            if ("AxisClientException".equals(classname))
+            {
+                this.writer.write(
+                    "class "
+                        + getServiceName()
+                        + "_"
+                        + classname
+                        + getExtendsPart()
+                        + "\n{\n");
+            }
+            else
+            {
+                this.writer.write(
+                    "class " + classname + getExtendsPart() + "\n{\n");
+            }
+            writeAttributes();
+            writeConstructors();
+            writeDestructors();
+            writeMethods();
+            this.writer.write("};\n\n");
+            this.writer.write(
+                "#endif /* !defined(__"
+                    + classname.toUpperCase()
+                    + "_"
+                    + getFileType().toUpperCase()
+                    + "_H__INCLUDED_)*/\n");
+            //cleanup
+            writer.flush();
+            writer.close();
+            if (WSDL2Ws.verbose)
+                System.out.println(
+                    getFilePath().getAbsolutePath() + " created.....");
+
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            throw new WrapperFault(e);
+        }
+
+    }
+    protected abstract String getExtendsPart(); //{return " ";}
+    protected abstract String getFileType();
+
+    protected File getFilePath() throws WrapperFault
+    {
+        return this.getFilePath(false);
+    }
+    protected File getFilePath(boolean useServiceName) throws WrapperFault
+    {
+        String targetOutputLocation =
+            this.wscontext.getWrapInfo().getTargetOutputLocation();
+        if (targetOutputLocation.endsWith("/"))
+        {
+            targetOutputLocation =
+                targetOutputLocation.substring(
+                    0,
+                    targetOutputLocation.length() - 1);
+        }
+        new File(targetOutputLocation).mkdirs();
+
+        String fileName = targetOutputLocation + "/" + classname + ".h";
+
+        if (useServiceName)
+        {
+            fileName =
+                targetOutputLocation
+                    + "/"
+                    + this.getServiceName()
+                    + "_"
+                    + classname
+                    + ".h";
+        }
+
+        return new File(fileName);
+    }
+    protected String getServiceName() throws WrapperFault
+    {
+        return wscontext.getSerInfo().getServicename();
+    }
 }

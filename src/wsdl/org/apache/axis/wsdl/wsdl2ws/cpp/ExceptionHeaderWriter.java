@@ -33,7 +33,6 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class ExceptionHeaderWriter extends HeaderFileWriter
 {
-    private WebServiceContext wscontext;
     private ArrayList methods;
     String faultInfoName;
 
@@ -83,11 +82,6 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
         }
 
         return new File(fileName);
-    }
-
-    protected String getServiceName() throws WrapperFault
-    {
-        return wscontext.getSerInfo().getServicename();
     }
 
     /* (non-Javadoc)

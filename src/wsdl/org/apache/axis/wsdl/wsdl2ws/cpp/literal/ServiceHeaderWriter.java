@@ -21,64 +21,20 @@
 
 package org.apache.axis.wsdl.wsdl2ws.cpp.literal;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
-import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
-import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
-import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
-import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
-public class ServiceHeaderWriter extends HeaderFileWriter
+public class ServiceHeaderWriter
+    extends org.apache.axis.wsdl.wsdl2ws.cpp.ServiceHeaderWriter
 {
-    private WebServiceContext wscontext;
-    private ArrayList methods;
     public ServiceHeaderWriter(WebServiceContext wscontext) throws WrapperFault
     {
-        super(
-            WrapperUtils.getClassNameFromFullyQualifiedName(
-                wscontext.getSerInfo().getQualifiedServiceName()));
-        this.wscontext = wscontext;
-        this.methods = wscontext.getSerInfo().getMethods();
-    }
-
-    protected File getFilePath() throws WrapperFault
-    {
-        return this.getFilePath(false);
-    }
-    protected File getFilePath(boolean useServiceName) throws WrapperFault
-    {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-        {
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
-        }
-        new File(targetOutputLocation).mkdirs();
-
-        String fileName = targetOutputLocation + "/" + classname + ".h";
-
-        if (useServiceName)
-        {
-            fileName =
-                targetOutputLocation
-                    + "/"
-                    + this.wscontext.getSerInfo().getServicename()
-                    + "_"
-                    + classname
-                    + ".h";
-        }
-
-        return new File(fileName);
+        super(wscontext);
     }
 
     /* (non-Javadoc)
@@ -103,135 +59,6 @@ public class ServiceHeaderWriter extends HeaderFileWriter
         }
         catch (IOException e)
         {
-            throw new WrapperFault(e);
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeConstructors()
-     */
-    protected void writeConstructors() throws WrapperFault
-    {
-        try
-        {
-            writer.write("\tpublic:\n\t\t" + classname + "();\n");
-        }
-        catch (IOException e)
-        {
-            throw new WrapperFault(e);
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeDistructors()
-     */
-    protected void writeDestructors() throws WrapperFault
-    {
-        try
-        {
-            writer.write("\tpublic:\n\t\tvirtual ~" + classname + "();\n");
-        }
-        catch (IOException e)
-        {
-            throw new WrapperFault(e);
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeMethods()
-     */
-    protected void writeMethods() throws WrapperFault
-    {
-        MethodInfo minfo;
-        try
-        {
-            writer.write("\tpublic: \n");
-            writer.write("\t\tvoid onFault();\n");
-            writer.write("\t\tvoid init();\n");
-            writer.write("\t\tvoid fini();\n");
-            for (int i = 0; i < methods.size(); i++)
-            {
-                minfo = (MethodInfo) this.methods.get(i);
-                boolean isAllTreatedAsOutParams = false;
-                ParameterInfo returntype = null;
-                int noOfOutParams = minfo.getOutputParameterTypes().size();
-                if (0 == noOfOutParams)
-                {
-                    returntype = null;
-                    writer.write("\t\tvoid ");
-                }
-                else
-                {
-                    if (1 == noOfOutParams)
-                    {
-                        returntype =
-                            (ParameterInfo) minfo
-                                .getOutputParameterTypes()
-                                .iterator()
-                                .next();
-                        writer.write(
-                            "\t\t"
-                                + WrapperUtils
-                                    .getClassNameFromParamInfoConsideringArrays(
-                                    returntype,
-                                    wscontext)
-                                + " ");
-                    }
-                    else
-                    {
-                        isAllTreatedAsOutParams = true;
-                        writer.write("\t\tvoid ");
-                    }
-                }
-                //write return type
-                writer.write(minfo.getMethodname() + "(");
-                //write parameter names 
-                Iterator params = minfo.getInputParameterTypes().iterator();
-                if (params.hasNext())
-                {
-                    ParameterInfo fparam = (ParameterInfo) params.next();
-                    writer.write(
-                        WrapperUtils
-                            .getClassNameFromParamInfoConsideringArrays(
-                            fparam,
-                            wscontext)
-                            + " Value"
-                            + 0);
-                }
-                for (int j = 1; params.hasNext(); j++)
-                {
-                    ParameterInfo nparam = (ParameterInfo) params.next();
-                    writer.write(
-                        ","
-                            + WrapperUtils
-                                .getClassNameFromParamInfoConsideringArrays(
-                                nparam,
-                                wscontext)
-                            + " Value"
-                            + j);
-                }
-                if (isAllTreatedAsOutParams)
-                {
-                    params = minfo.getOutputParameterTypes().iterator();
-                    for (int j = 0; params.hasNext(); j++)
-                    {
-                        ParameterInfo nparam = (ParameterInfo) params.next();
-                        writer.write(
-                            ", AXIS_OUT_PARAM "
-                                + WrapperUtils
-                                    .getClassNameFromParamInfoConsideringArrays(
-                                    nparam,
-                                    wscontext)
-                                + "* OutValue"
-                                + j);
-                    }
-                }
-                writer.write(");\n");
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
             throw new WrapperFault(e);
         }
     }
@@ -271,47 +98,5 @@ public class ServiceHeaderWriter extends HeaderFileWriter
             e.printStackTrace();
             throw new WrapperFault(e);
         }
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeMethods()
-     */
-    protected void writeFaultHeaders() throws WrapperFault
-    {
-        try
-        {
-
-            MethodInfo minfo;
-            for (int i = 0; i < methods.size(); i++)
-            {
-                minfo = (MethodInfo) methods.get(i);
-                Iterator fault = minfo.getFaultType().iterator();
-                String faultInfoName = null;
-                while (fault.hasNext())
-                {
-                    FaultInfo info = (FaultInfo) fault.next();
-                    faultInfoName = info.getFaultInfo();
-                    writer.write(
-                        "#include \"Axis"
-                            + faultInfoName.toString()
-                            + "Exception.h\"\n");
-                }
-            }
-            writer.write("\n");
-        }
-        catch (IOException e)
-        {
-            throw new WrapperFault(e);
-        }
-    }
-
-    protected String getFileType()
-    {
-        return "ServerSkeleton";
-    }
-
-    protected String getExtendsPart()
-    {
-        return " ";
     }
 }

@@ -21,21 +21,20 @@
 
 package org.apache.axis.wsdl.wsdl2ws.cpp.literal;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
-import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
+import org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter;
 import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
+import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
-import org.apache.axis.wsdl.wsdl2ws.CUtils;
 
 public class WrapHeaderWriter extends HeaderFileWriter
 {
-    private WebServiceContext wscontext;
     private ArrayList methods;
     public WrapHeaderWriter(WebServiceContext wscontext) throws WrapperFault
     {
@@ -45,37 +44,6 @@ public class WrapHeaderWriter extends HeaderFileWriter
                     + CUtils.WRAPPER_NAME_APPENDER));
         this.wscontext = wscontext;
         this.methods = wscontext.getSerInfo().getMethods();
-    }
-    protected File getFilePath() throws WrapperFault
-    {
-        return this.getFilePath(false);
-    }
-
-    protected File getFilePath(boolean useServiceName) throws WrapperFault
-    {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
-        new File(targetOutputLocation).mkdirs();
-
-        String fileName = targetOutputLocation + "/" + classname + ".h";
-
-        if (useServiceName)
-        {
-            fileName =
-                targetOutputLocation
-                    + "/"
-                    + this.wscontext.getSerInfo().getServicename()
-                    + "_"
-                    + classname
-                    + ".h";
-        }
-
-        return new File(fileName);
     }
 
     protected void writeClassComment() throws WrapperFault
