@@ -347,21 +347,22 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 
 					if( nillable)
 					{
-					    String attributeParamName=attribs[i].getParamName();
-						writer.write("\t"+attribs[i].getTypeName()+" **	pp"+i+" = param->"+attributeParamName+".m_Array;\n\n");
+						String attributeParamName = attribs[i].getParamName();
+						String attributeTypeName = attribs[i].getTypeName();
+						writer.write("\t"+attributeTypeName+" **	pp"+i+" = param->"+attributeParamName+".m_Array;\n\n");
 						writer.write("\tparam->"+attributeParamName+".m_Size = array.m_Size;\n\n");
 						writer.write("\tif( param->"+attributeParamName+".m_Array == NULL)\n");
 						writer.write("\t{\n");
-						writer.write("\t\tpp"+i+" = new "+attribs[i].getTypeName()+"*[array.m_Size];\n");
+						writer.write("\t\tpp"+i+" = new "+attributeTypeName+"*[array.m_Size];\n");
 						writer.write("\t\tparam->"+attributeParamName+".m_Array = pp"+i+";\n");
 						writer.write("\t}\n\n");
-						writer.write("\t"+attribs[i].getTypeName()+" *	p"+i+" = ("+attribs[i].getTypeName()+" *) array.m_Array;\n\n");
+						writer.write("\t"+attributeTypeName+" *	p"+i+" = ("+attributeTypeName+" *) array.m_Array;\n\n");
 						writer.write("\tfor( int iCount"+i+" = 0; iCount"+i+" < array.m_Size; iCount"+i+"++)\n");
 						writer.write("\t{\n");
-						writer.write("\t\t*pp"+i+" = p"+i+";\n\n");
-						writer.write("\t\tpp"+i+"++;\n");
-						writer.write("\t\tp"+i+"++;\n");
+						writer.write("\t\tpp"+i+"[iCount"+i+"] = new "+attributeTypeName+"();\n");
+						writer.write("\t\t*(pp"+i+"[iCount"+i+"]) = p"+i+"[iCount"+i+"];\n");						writer.write("\t\t*pp"+i+" = p"+i+";\n\n");
 						writer.write("\t}\n");
+						writer.write("\tdelete [] p"+i+";\n");
 					}
 					else
 					{
