@@ -41,7 +41,7 @@ MessageData* ClientAxisEngine::getMessageData ()
     return m_pMsgData;
 }
 
-int ClientAxisEngine::process (Ax_soapstream* pSoap)
+int ClientAxisEngine::process (SOAPTransport* pSoap)
 {
     int Status;
     const WSDDService* pService = NULL;
@@ -49,32 +49,22 @@ int ClientAxisEngine::process (Ax_soapstream* pSoap)
     AXISC_TRY
     if (!pSoap)
     {
-        AXISTRACE1 ("Ax_soapstream is null", CRITICAL);
+        AXISTRACE1 ("Transport is null", CRITICAL);
         return AXIS_FAIL;
     }
     m_pSoap = pSoap;
 
-    string sSessionId = m_pSoap->sessionid;
-
-    if (!(m_pSoap->transport.pSendFunct && m_pSoap->transport.pGetFunct &&
-        m_pSoap->transport.pSetTrtFunct && m_pSoap->transport.pGetTrtFunct))
-    {
-        AXISTRACE1 ("transport is not set properly", CRITICAL);
-        AXISC_THROW(AXISC_TRANSPORT_CONF_ERROR);
-        return AXIS_FAIL;
-    }
+    string sSessionId = m_pSoap->getSessionId();
 
     do
     {
-        // const char* cService = get_header(soap, SOAPACTIONHEADER);
-
-        const char* pchService = get_service_name (pSoap->so.http->uri_path);
+        const char* pchService = pSoap->getServiceName();
         /* get service description object from the WSDD Deployment object */
         pService = g_pWSDDDeployment->getService (pchService);
 
         //Get Global and Transport Handlers
         if (AXIS_SUCCESS !=
-            (Status = initializeHandlers (sSessionId, pSoap->trtype)))
+            (Status = initializeHandlers (sSessionId, pSoap->getProtocol())))
         {
             AXISC_THROW(HANDLER_INIT_FAIL);
             break;          //do .. while(0)
@@ -243,27 +233,3 @@ void ClientAxisEngine::onFault (MessageData* pMsg)
 {
 
 }
-
-char* ClientAxisEngine::get_service_name (const char* pch_uri_path)
-{
-    // return "InteropBaseDL";
-
-    char* pachTmp = strrchr (pch_uri_path, '/');
-
-    if (pachTmp != NULL)
-    {
-        int iTmp = strlen (pachTmp);
-
-        if (iTmp <= 1)
-        {
-            return NULL;
-        }
-        else
-        {
-            pachTmp = pachTmp + 1;
-        }
-    }
-
-    return pachTmp;
-}
-

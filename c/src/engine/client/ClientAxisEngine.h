@@ -32,13 +32,12 @@ class ClientAxisEngine:public AxisEngine
         MessageData* getMessageData ();
         ClientAxisEngine ();
         virtual ~ ClientAxisEngine ();
-        virtual int process (Ax_soapstream* pSoap);
+        virtual int process (SOAPTransport* pSoap);
     protected:
         virtual int invoke (MessageData* pMsg);
         virtual void onFault (MessageData* pMsg);
     private:
-        Ax_soapstream* m_pSoap;
-        char* get_service_name (const char* pch_uri_path);
+        SOAPTransport* m_pSoap;
 };
 
 #endif 

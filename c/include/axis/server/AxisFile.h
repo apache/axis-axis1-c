@@ -83,16 +83,18 @@ public:
      */
     int filePuts (const char* pcWrite)
     {
-        fputs(pcWrite, pFILEFile);
-        return AXIS_SUCCESS;
+        if (-1 < fputs(pcWrite, pFILEFile))
+			return AXIS_SUCCESS;
+		return AXIS_FAIL;
     }
 
     /**   Use this flush the buffer 
      */
     int fileFlush ()
     {
-        fflush(pFILEFile);
-        return AXIS_SUCCESS;
+        if (0 == fflush(pFILEFile))
+			return AXIS_SUCCESS;
+		return AXIS_FAIL;
     }
     
     ~AxisFile()

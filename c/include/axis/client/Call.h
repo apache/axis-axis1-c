@@ -35,7 +35,7 @@
 #include <list>
 using namespace std;
 class ClientAxisEngine;
-class AxisTransport;
+class SOAPTransport;
 #else
 #include "../server/Packet.h"
 #endif
@@ -778,11 +778,13 @@ private:
 	   m_Soap contains transport related information and function pointers 
 	   to manipulate transport layer.
 	 */
-	Ax_soapstream m_Soap;
+	//Ax_soapstream m_Soap;
+	const char* m_pcEndPointUri;
+	AXIS_PROTOCOL_TYPE m_nTransportType;
 	/*
 	   Transport object
 	 */
-	AxisTransport* m_pTransport;
+	SOAPTransport* m_pTransport;
 	
 	/* Minimal error check */
 	int m_nStatus;

@@ -206,10 +206,6 @@ SOURCE=..\src\common\MessageData.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\common\Packet.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\common\Param.cpp
 # End Source File
 # Begin Source File
@@ -275,6 +271,10 @@ SOURCE=..\src\soap\SoapParserExpat.cpp
 # Begin Source File
 
 SOURCE=..\src\soap\SoapSerializer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\transport\SOAPTransportFactory.cpp
 # End Source File
 # Begin Source File
 

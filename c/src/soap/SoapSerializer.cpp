@@ -62,12 +62,11 @@ SoapSerializer::SoapSerializer()
 SoapSerializer::~SoapSerializer()
 {
     if (m_pSoapEnvelope) delete m_pSoapEnvelope;
-  
-       for (int x=0; x<m_nMaxBuffersToCreate; x++)
-          {
-              delete [] m_pSZBuffers[x].buffer;
-           }
-       delete [] m_pSZBuffers;		    
+   for (int x=0; x<m_nMaxBuffersToCreate; x++)
+   {
+       delete [] (char*)m_pSZBuffers[x].buffer;
+   }
+   delete [] (SerializeBuffers*)m_pSZBuffers;		    
 }
 
 int SoapSerializer::setSoapEnvelope(SoapEnvelope *pSoapEnvelope)
@@ -216,9 +215,10 @@ int SoapSerializer::setSoapFault(SoapFault *pSoapFault)
     return intStatus;
 }
 
-int SoapSerializer::setOutputStream(const Ax_soapstream* pStream)
+int SoapSerializer::setOutputStream(SOAPTransport* pStream)
 {
     m_pOutputStream = pStream;
+	m_pOutputStream->registerReleaseBufferCallback(releaseBufferCallBack);
     int iStatus= AXIS_SUCCESS;
 
     if(m_pSoapEnvelope)
@@ -237,7 +237,7 @@ int SoapSerializer::setOutputStream(const Ax_soapstream* pStream)
  */
 void SoapSerializer::markEndOfStream()
 {
-    m_pOutputStream->transport.pSendFunct((char*)NULL, NULL, m_pOutputStream);
+    m_pOutputStream->flushOutput();
 }
 
 /*
@@ -354,25 +354,18 @@ IWrapperSoapSerializer& SoapSerializer::operator <<(const AxisChar*
 int SoapSerializer::sendSerializedBuffer()
 {
     int nStatus;
-    if (NULL != m_pOutputStream->transport.pSendFunct)
+    nStatus = m_pOutputStream->sendBytes((char*)
+    m_pSZBuffers[m_nCurrentBufferIndex].buffer, (void*)(&(m_pSZBuffers
+    [m_nCurrentBufferIndex].inuse)));
+    if (TRANSPORT_FINISHED == nStatus) 
+    /* transport layer has done with the buffer.So same buffer 
+     * can be re-used
+     */
     {
-        nStatus = m_pOutputStream->transport.pSendFunct((char*)
-        m_pSZBuffers[m_nCurrentBufferIndex].buffer, (void*)(&(m_pSZBuffers
-        [m_nCurrentBufferIndex].inuse)), m_pOutputStream);
-        if (TRANSPORT_FINISHED == nStatus) 
-        /* transport layer has done with the buffer.So same buffer 
-         * can be re-used
-         */
-        {
-            m_pSZBuffers[m_nCurrentBufferIndex].buffer[0] = '\0'; /* put nul */
-            m_pSZBuffers[m_nCurrentBufferIndex].inuse = 0; /* not in use */
-        }
-        else if (TRANSPORT_FAILED == nStatus) 
-        {
-            return AXIS_FAIL;
-        }
+        m_pSZBuffers[m_nCurrentBufferIndex].buffer[0] = '\0'; /* put nul */
+        m_pSZBuffers[m_nCurrentBufferIndex].inuse = 0; /* not in use */
     }
-    else
+    else if (TRANSPORT_FAILED == nStatus) 
     {
         return AXIS_FAIL;
     }
@@ -571,7 +564,7 @@ int SoapSerializer::serializeBasicArray(const Axis_Array* pArray,
     return AXIS_SUCCESS;
 }
 
-int SoapSerializer::setOutputStreamForTesting(const Ax_soapstream* pStream)
+int SoapSerializer::setOutputStreamForTesting(SOAPTransport* pStream)
 {
     m_pOutputStream = pStream;
 
@@ -784,8 +777,7 @@ void SoapSerializer::serializeEndElementOfType(const AxisChar* pName)
  */
  
 #ifndef USER_SERIALIZER 
-void axis_buffer_release(const char* buffer, const void* bufferid, 
-                         const void* stream)
+void SoapSerializer::releaseBufferCallBack(const char* buffer, const void* bufferid)
 {
     int* pInt = (int*)bufferid;
     *pInt = 0; /* set that the buffer is not in use */

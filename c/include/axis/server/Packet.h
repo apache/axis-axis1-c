@@ -39,12 +39,12 @@ typedef enum
  * This structure is supposed to keep the streaming objects of the transport
  * such as iostream in c++, request_rec in apache module etc
  */
-typedef struct 
+/*typedef struct 
 {
     const void* ip_stream;
     const void* op_stream;
 } Ax_iostream;
-
+*/
 typedef enum
 {
     AXIS_HTTP_GET,
@@ -63,6 +63,7 @@ typedef struct
     char* headervalue;
 } Ax_header;
 
+/*
 typedef struct
 {
     char* uri_path;
@@ -85,9 +86,8 @@ typedef union
     Ax_stream_https* https;
     Ax_stream_smtp* smtp;
     void* other; 
-    /*transport specific other protocols can have its own structs here*/
 } Ax_soapcontent;
-
+*/
 typedef enum
 {
     TRANSPORT_FINISHED=0,
@@ -200,19 +200,20 @@ typedef const char* (AXISCALL * AXIS_MODULE_CALLBACK_GET_TRANSPORT_INFORMATION)
  *        3rd - Ax_soapstream object which act like a thread id
  */
 typedef void (AXISCALL * AXIS_ENGINE_CALLBACK_RELEASE_SEND_BUFFER)
-(const char*, const void*, const void*);
+(const char*, const void*);
 
 /*
  * Each transport module on the server side should populate following struct with 
  * their transport function pointers in order for the Axis Engine to work properly.
  */
-typedef struct
+/*typedef struct
 {
-    AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES pSendFunct;
-    AXIS_MODULE_CALLBACK_GET_MESSAGE_BYTES pGetFunct;
-    AXIS_MODULE_CALLBACK_RELEASE_RECEIVE_BUFFER pRelBufFunct;
-    AXIS_MODULE_CALLBACK_SET_TRANSPORT_INFORMATION pSetTrtFunct;
-    AXIS_MODULE_CALLBACK_GET_TRANSPORT_INFORMATION pGetTrtFunct;
+	AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES pSendFunct;
+	AXIS_MODULE_CALLBACK_GET_MESSAGE_BYTES pGetFunct;
+	AXIS_MODULE_CALLBACK_RELEASE_RECEIVE_BUFFER pRelBufFunct;
+	AXIS_MODULE_CALLBACK_SET_TRANSPORT_INFORMATION pSetTrtFunct;
+	AXIS_MODULE_CALLBACK_GET_TRANSPORT_INFORMATION pGetTrtFunct;
+	AXIS_ENGINE_CALLBACK_RELEASE_SEND_BUFFER pRelSendBufFunct;
 } Ax_transport;
 
 typedef struct
@@ -222,15 +223,15 @@ typedef struct
     char* sessionid;
     AXIS_PROTOCOL_TYPE trtype;
     Ax_transport transport;
-    void* reserved1; /* usage depend on the tranport module */
-    void* reserved2; /* usage depend on the tranport module */
+    void* reserved1; 
+    void* reserved2; 
 } Ax_soapstream;
-
+*/
 typedef struct
 {
-    const void* bufferid ;
-    const char* buffer;
-} sendbuffers;
+    const void* pBufferId;
+    const char* pcBuffer;
+} BufferInfo;
 
 /* NO_OF_SERIALIZE_BUFFERS should be equal to the corresponding 
  * value in the axis configuration file 
@@ -251,12 +252,13 @@ extern "C"
  * Functions to manipulate Ax_soapstream object. Implemented in Packet.cpp
  *
  */
+/*
 STORAGE_CLASS_INFO int set_property(Ax_soapstream* stream, char * pchkey, 
                                     char * pchvalue);
 STORAGE_CLASS_INFO const char* get_property(const Ax_soapstream* stream,
                                             const char* pchkey);
 STORAGE_CLASS_INFO void remove_all_properties(Ax_soapstream* stream);
-
+*/
 /*
  * This function is implemented in axis and should be called ONCE to 
  * uninitialize Axis Engine when the 
@@ -279,7 +281,7 @@ STORAGE_CLASS_INFO int initialize_module(int bServer);
  *          and the message. This also should be populated with the 
  *          transport module.
  */
-STORAGE_CLASS_INFO int process_request(Ax_soapstream* stream);
+STORAGE_CLASS_INFO int process_request(void* stream);
 
 /*
  * This callback function is implemented in axis and should be called by 

@@ -24,6 +24,7 @@
 #include "ISoapSerializer.h"
 #include "WSDDDefines.h"
 #include "Packet.h"
+#include <axis/SOAPTransport.h>
 
 #endif
 
@@ -128,7 +129,7 @@ public:
     virtual void AXISCALL serializeEndElementOfType(const AxisChar* pName)=0;
 
     /* Externalization of serializer API */
-    virtual int setOutputStream(const Ax_soapstream* pStream)=0;
+    virtual int setOutputStream(SOAPTransport* pStream)=0;
     virtual void markEndOfStream()=0;    
     virtual    int init()=0;    
     virtual PROVIDERTYPE getCurrentProviderType()=0;

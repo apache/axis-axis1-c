@@ -56,6 +56,8 @@
 #include <axis/server/AxisConfig.h>
 #include "../wsdd/WSDDKeywords.h"
 #include <axis/server/AxisTrace.h>
+#include "../transport/SOAPTransportFactory.h"
+
 #ifdef USE_XERCES_PARSER
 #include <xercesc/util/PlatformUtils.hpp>
 #endif
@@ -88,7 +90,7 @@ AxisTrace* g_pAT;
 
 #ifndef AXIS_CLIENT_LIB
 
-extern "C" int process_request (Ax_soapstream* stream)
+STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
 {
     int Status = AXIS_FAIL;
     FILE* WsddFile;
@@ -99,26 +101,30 @@ extern "C" int process_request (Ax_soapstream* stream)
     WSDDServiceMap::const_iterator iter;
     WSDDService* pService = NULL;
 
-    /* If there is no send function given in the Ax_soapstream struct */
-    if (!stream->transport.pSendFunct)
+    /* If there is no transport object provided */
+    if (!pStream)
         return AXIS_FAIL;
 
-    switch (stream->trtype)
+    switch (pStream->getProtocol())
     {
         case APTHTTP:
             // Handle the POST method
-            if (stream->so.http->ip_method == AXIS_HTTP_POST)
+            if (AXIS_HTTP_POST == pStream->getSubProtocol())
             {
                 AxisEngine *engine = new ServerAxisEngine ();
                 if (engine)
                 {
                     if (AXIS_SUCCESS == engine->initialize ())
                     {
-                        Status = engine->process (stream);
-                        if(AXIS_SUCCESS != Status)
+                        Status = engine->process(pStream);
+						if (AXIS_SUCCESS == Status)
+						{
+							pStream->flushOutput();
+						}
+						else
                         {
                             ServerAxisEngine* objTempServer = (ServerAxisEngine*) engine;
-                            objTempServer->setFaultOutputStream(Status, stream);
+                            objTempServer->setFaultOutputStream(Status, pStream);
                             objTempServer = NULL;
                             Status = AXIS_SUCCESS;
                         }
@@ -127,12 +133,11 @@ extern "C" int process_request (Ax_soapstream* stream)
                 }
             }
           // Handle the GET method
-            else if (stream->so.http->ip_method == AXIS_HTTP_GET)
+            else if (AXIS_HTTP_GET == pStream->getSubProtocol())
             {
                 // get the uri path
                 // i.e "/abc/xyz/" part of http://somehost/abc/xyz/
-                string sUriWOAxis =
-                    stream->transport.pGetTrtFunct (SERVICE_URI, stream);
+                string sUriWOAxis = pStream->getTransportProperty(SERVICE_URI);
                 string sServiceName;
                 bool bNoExt = true;
                 if (sUriWOAxis == "/")
@@ -146,51 +151,47 @@ extern "C" int process_request (Ax_soapstream* stream)
                     pSrvMap = g_pWSDDDeployment->getWSDDServiceMap ();
                     if (!pSrvMap)
                     {
-                        stream->transport.pSendFunct ("<html><body>\
+                        pStream->sendBytes("<html><body>\
                             <h1 align=\"center\">Welcome to Axis C++</h1>\
                             <br>\
                             <h2>Deployment Descripter Not Found</h2>\
                             <br>\
-                            </body></html>", NULL, stream);
+                            </body></html>", NULL);
                         return AXIS_FAIL;
                     }
-                    stream->transport.pSendFunct ("<html><body>\
+                    pStream->sendBytes("<html><body>\
                         <h1 align=\"center\">Welcome to Axis C++</h1>\
                         <br>\
                         <h2 align=\"center\">List of Deployed Web services<br></h2>\
-                        <table width=\"100%\" border=1 align=\"center\"><tbody>", NULL, stream);
+                        <table width=\"100%\" border=1 align=\"center\"><tbody>", NULL);
 
-                    stream->transport.pSendFunct
+                    pStream->sendBytes
                         ("<tr><td width=\"20%\"><b>Web Service</b></td>\
                         <td width=\"10%\" align=\"left\"><b>WSDL</b></td>\
-                        <td width=\"70%\"><b>Description</b></td></tr>", NULL, stream);
+                        <td width=\"70%\"><b>Description</b></td></tr>", NULL);
                     for (iter = pSrvMap->begin (); iter != pSrvMap->end ();
                         iter++)
                     {
                         pService = (*iter).second;
-                        stream->transport.
-                            pSendFunct ("<tr><td width=\"20%\">", NULL,
-                                            stream);
-                        stream->transport.pSendFunct ((char*) pService->
-                            getServiceName (), NULL, stream);
-                        stream->transport.pSendFunct
+                        pStream->sendBytes("<tr><td width=\"20%\">", NULL);
+                        pStream->sendBytes((char*) pService->
+                            getServiceName (), NULL);
+                        pStream->sendBytes
                             ("</td><td width=\"10%\" align=\"left\"><a href=\"./",
-                            NULL, stream);
-                        if (bNoExt) stream->transport.pSendFunct ("axis/", NULL,
-                            stream);
-                        stream->transport.pSendFunct ((char*) pService->
-                            getServiceName (), NULL, stream);
-                        stream->transport.pSendFunct ("?wsdl", NULL, stream);
-                        stream->transport.pSendFunct
-                            ("\">wsdl</a></td><td width=\"70%\">", NULL, stream);
-                        stream->transport.pSendFunct ((char*) pService->
-                            getDescription (), NULL, stream);
-                        stream->transport.pSendFunct ("</td></tr>", NULL, stream);
+                            NULL);
+                        if (bNoExt) pStream->sendBytes("axis/", NULL);
+                        pStream->sendBytes((char*) pService->
+                            getServiceName (), NULL);
+                        pStream->sendBytes("?wsdl", NULL);
+                        pStream->sendBytes
+                            ("\">wsdl</a></td><td width=\"70%\">", NULL);
+                        pStream->sendBytes((char*) pService->
+                            getDescription (), NULL);
+                        pStream->sendBytes("</td></tr>", NULL);
                     }
-                    stream->transport.pSendFunct ("</tbody></table>", NULL,
-                        stream);
-                    stream->transport.pSendFunct
-                        ("<br><p align=\"center\">Copyright © 2001-2003 The Apache Software Foundation<br></p></body></html>", NULL, stream);
+                    pStream->sendBytes("</tbody></table>", NULL);
+                    pStream->sendBytes
+                        ("<br><p align=\"center\">Copyright © 2001-2003 The Apache Software Foundation<br></p></body></html>", NULL);
                         Status = AXIS_SUCCESS;
                 }
                 else
@@ -200,8 +201,8 @@ extern "C" int process_request (Ax_soapstream* stream)
                     // Check whether wsdl file is available
                     if ((WsddFile = fopen (sServiceName.c_str (), "r")) == NULL)
                     {
-                        stream->transport.pSendFunct ("<h3>Url not available</h3>",
-                            NULL, stream);
+                        pStream->sendBytes("<h3>Url not available</h3>",
+                            NULL);
                         Status = AXIS_SUCCESS;
                         // Handle the error
                     }
@@ -212,8 +213,8 @@ extern "C" int process_request (Ax_soapstream* stream)
                             BYTESTOREAD - 1, WsddFile)) != 0)
                         {
                             *(ReadBuffer + charcount) = '\0';
-                            stream->transport.pSendFunct (ReadBuffer,
-                                NULL, stream);
+                            pStream->sendBytes(ReadBuffer,
+                                NULL);
                         }
                         Status = AXIS_SUCCESS;
                         fclose (WsddFile);
@@ -224,7 +225,7 @@ extern "C" int process_request (Ax_soapstream* stream)
 	    break;
 
         default:
-            stream->transport.pSendFunct ("Unknown Protocol", NULL, stream);
+            pStream->sendBytes("Unknown Protocol", NULL);
             break;
     }
 
@@ -247,6 +248,7 @@ extern "C" int initialize_module (int bServer)
     TypeMapping::initialize ();
     URIMapping::initialize ();
     SoapFault::initialize ();
+	SOAPTransportFactory::initialize();
 #ifdef AXIS_CLIENT_LIB
     CallBase::s_Initialize ();
 #endif
@@ -303,7 +305,13 @@ extern "C" int initialize_module (int bServer)
         }
         else
         {
-            return AXIS_FAIL;
+            AXISTRACE3("Reading from the configuration file failed. \
+                Check for error in the configuration file. \n\
+				Handlers and logging are not working");
+            /* TODO:Improve the AxisTrace so that it will log these kind of 
+	     * messages into a log file according to the critical level 
+	     * specified.
+             */
         }
     }
     return AXIS_SUCCESS;
@@ -311,6 +319,7 @@ extern "C" int initialize_module (int bServer)
 
 extern "C" int uninitialize_module ()
 {
+	SOAPTransportFactory::uninitialize();
 #ifdef USE_XERCES_PARSER
     XMLPlatformUtils::Terminate ();
 #endif

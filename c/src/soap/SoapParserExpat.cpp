@@ -29,11 +29,14 @@
 
 #include "SoapParserExpat.h"
 
+#define EXPAT_BUFFER_SIZE 1024
+
 SoapParserExpat::SoapParserExpat()
 {
     m_pLastEvent = NULL;
     m_Parser = XML_ParserCreateNS(NULL, NAMESPACESEPARATOR);
     m_nTransportStatus = TRANSPORT_IN_PROGRESS;
+	m_pCurrentBuffer = 0;
 }
 
 SoapParserExpat::~SoapParserExpat()
@@ -234,19 +237,18 @@ const AnyElement* SoapParserExpat::next(bool isCharData)
 
 int SoapParserExpat::parseNext()
 {
-    int nChars = 0;
-    m_nTransportStatus = m_pInputStream->transport.pGetFunct(&m_pCurrentBuffer,
-        &nChars, m_pInputStream);
-    if ((nChars > 0) && m_pCurrentBuffer) /* there can be a buffer or not */
-    {
-        if (XML_STATUS_ERROR == XML_Parse(m_Parser, m_pCurrentBuffer, nChars,
-            false))
-            m_nStatus = AXIS_FAIL;
-        m_pInputStream->transport.pRelBufFunct(m_pCurrentBuffer, 
-            m_pInputStream);
-    }
-    if (TRANSPORT_FAILED == m_nTransportStatus) XML_Parse(m_Parser, NULL, 0,
-        true);
+    int nChars = EXPAT_BUFFER_SIZE;
+	m_pCurrentBuffer = (char*) XML_GetBuffer(m_Parser, EXPAT_BUFFER_SIZE);
+	if (m_pCurrentBuffer)
+	{
+		m_nTransportStatus = m_pInputStream->getBytes(m_pCurrentBuffer, &nChars);
+		if (nChars > 0)
+		{
+			if (XML_STATUS_ERROR == XML_ParseBuffer(m_Parser, nChars, false))
+				m_nStatus = AXIS_FAIL;
+		}
+		if (TRANSPORT_FAILED == m_nTransportStatus) XML_ParseBuffer(m_Parser, 0, true);
+	}
     /* end of parsing */
     return m_nTransportStatus;
 }
@@ -282,7 +284,7 @@ int SoapParserExpat::init()
     return m_nStatus;
 }
 
-int SoapParserExpat::setInputStream(const Ax_soapstream* pInputStream)
+int SoapParserExpat::setInputStream(SOAPTransport* pInputStream)
 {
     m_pInputStream = pInputStream;
     return AXIS_SUCCESS;

@@ -43,8 +43,8 @@ class SoapParserExpat: public XMLParser
 {
 private:
     XML_Parser m_Parser;
-    const Ax_soapstream* m_pInputStream;
-    const char* m_pCurrentBuffer;
+    SOAPTransport* m_pInputStream;
+    char* m_pCurrentBuffer;
     Event* m_pLastEvent;
     AnyElement m_Element;
     queue<Event*> m_Events;
@@ -78,8 +78,8 @@ private:
     {((SoapParserExpat*)p)->endPrefixMapping(prefix);};
 
 public:
-    int setInputStream(const Ax_soapstream* pInputStream);
-    const Ax_soapstream* getInputStream(){return m_pInputStream;};
+    int setInputStream(SOAPTransport* pInputStream);
+    SOAPTransport* getInputStream(){return m_pInputStream;};
     int init();
     const XML_Ch* getNS4Prefix(const XML_Ch* prefix);
     int getStatus();

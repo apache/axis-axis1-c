@@ -162,9 +162,9 @@ public:
     int openFileByClient();
   
 private:
-    char strLine[4];
-    char* pcLevel;
-    AxisFile fileTrace;
+    char m_acLine[4];
+    char* m_pcLevel;
+    AxisFile m_fileTrace;
 
     int setFilePerm(const char* pcFileName);
     int logthis(const char* pcLog, int level, char* arg2, int arg3);

@@ -28,13 +28,16 @@
 #include "TransportFactory.hpp"
 #include <stdio.h>
 
-AxisTransport::AxisTransport(Ax_soapstream* pSoap)
+AxisTransport::AxisTransport()
 {
-    m_pSoap = pSoap;
     m_pSender = NULL;
     m_pReceiver = NULL;
     m_pHttpTransport = NULL;
-    memset(&m_SendBuffers, 0, sizeof(sendbuffers)*NO_OF_SERIALIZE_BUFFERS);
+	m_pcEndpointUri = 0;
+	m_pReleaseBufferCallback = 0;
+    memset(&m_SendBuffers, 0, sizeof(BufferInfo)*NO_OF_SERIALIZE_BUFFERS);
+	m_iBytesLeft = 0;
+	m_pcReceived = 0;
 }
 
 AxisTransport::~AxisTransport()
@@ -47,14 +50,15 @@ AxisTransport::~AxisTransport()
         delete m_pHttpTransport;
 }
 
-int AxisTransport::openConnection(int secure)
+int AxisTransport::openConnection()
 {
+	int secure = 0;
     /* Step 1 - Open Transport layer connection taking into account protocol
      * and endpoint URI in m_Soap
      */
-    Url objUrl(m_pSoap->so.http->uri_path);
+    Url objUrl(m_pcEndpointUri);
     m_pHttpTransport = TransportFactory::GetTransport(objUrl, secure);
-    memset(&m_SendBuffers, 0, sizeof(sendbuffers)*NO_OF_SERIALIZE_BUFFERS); 
+    memset(&m_SendBuffers, 0, sizeof(BufferInfo)*NO_OF_SERIALIZE_BUFFERS); 
     if(m_pHttpTransport->Init())
     {
        m_pSender = new Sender(m_pHttpTransport);
@@ -62,15 +66,17 @@ int AxisTransport::openConnection(int secure)
        /* Step 2 - Set Created streams to m_pSoap->str.ip_stream 
         * and m_pSoap->str.op_stream 
         */
+/*
        m_pSoap->str.op_stream = this;
        m_pSoap->str.ip_stream = this;
        
-       /* Step 3 - Add function pointers to the m_Soap structure */
+       // Step 3 - Add function pointers to the m_Soap structure 
        m_pSoap->transport.pGetFunct = s_Get_bytes;
        m_pSoap->transport.pSendFunct = s_Send_bytes;
        m_pSoap->transport.pGetTrtFunct = s_ReceiveTransportInformation;
        m_pSoap->transport.pSetTrtFunct = s_SetTransportInformation; 
        m_pSoap->transport.pRelBufFunct = s_ReleaseReceiveBuffer;
+*/
        return AXIS_SUCCESS;
     }
     else
@@ -88,17 +94,20 @@ void AxisTransport::closeConnection()
     m_pSender = NULL;
     delete m_pReceiver;
     m_pReceiver = NULL;
-    m_pSoap->str.op_stream = NULL;
-    m_pSoap->str.ip_stream = NULL;
-    /* Step 3 - Set function pointers in the m_Soap structure to NULL; */
     delete m_pHttpTransport;
     m_pHttpTransport = NULL;
+/*
+    m_pSoap->str.op_stream = NULL;
+    m_pSoap->str.ip_stream = NULL;
+    // Step 3 - Set function pointers in the m_Soap structure to NULL; 
     m_pSoap->transport.pGetFunct = NULL;
     m_pSoap->transport.pSendFunct = NULL;
     m_pSoap->transport.pGetTrtFunct = NULL;
     m_pSoap->transport.pSetTrtFunct = NULL;
+*/
 }
 
+/*
 AXIS_TRANSPORT_STATUS AXISCALL AxisTransport::s_Send_bytes(const char* 
                                                            pSendBuffer, const 
                                                            void* bufferid, 
@@ -109,6 +118,49 @@ AXIS_TRANSPORT_STATUS AXISCALL AxisTransport::s_Send_bytes(const char*
     AxisTransport* pTransport = (AxisTransport*)(pStream->str.op_stream);
     return pTransport->sendBytes(pSendBuffer, bufferid, pSStream);
 }
+*/
+
+AXIS_TRANSPORT_STATUS AxisTransport::flushOutput()
+{
+    int index;
+    /* calculate content length */
+    int nContentLength = 0;
+    for (index=0;index < NO_OF_SERIALIZE_BUFFERS; index++)
+    {
+        if(!m_SendBuffers[index].pcBuffer) break;
+        else
+        {
+            nContentLength += strlen(m_SendBuffers[index].pcBuffer);
+        }
+    }
+    char buff[8];
+    sprintf(buff, "%d", nContentLength); 
+    m_pSender->SetProperty("Content-Length" , buff);
+    for (index=0;index < NO_OF_SERIALIZE_BUFFERS; index++)
+    {
+        if(!m_SendBuffers[index].pcBuffer) break;
+        else
+        {    
+            if(!m_pSender->Send(m_SendBuffers[index].pcBuffer))
+            /* some error occured in the transport */
+            {
+                /* release all the buffers */
+                for (int x=index; x<NO_OF_SERIALIZE_BUFFERS; x++)
+                {
+                    if(!m_SendBuffers[x].pcBuffer) break;
+                    m_pReleaseBufferCallback(m_SendBuffers[x].pcBuffer, 
+                        m_SendBuffers[x].pBufferId);
+                }
+                return TRANSPORT_FAILED;
+            }
+            /* release buffer */
+			if (m_pReleaseBufferCallback)
+				m_pReleaseBufferCallback(m_SendBuffers[index].pcBuffer, 
+				m_SendBuffers[index].pBufferId);
+        }
+    }
+    return TRANSPORT_FINISHED;
+}
 
 /**
  * This method accumulates all buffers until this is called with 
@@ -116,65 +168,23 @@ AXIS_TRANSPORT_STATUS AXISCALL AxisTransport::s_Send_bytes(const char*
  * sends all the accumulated buffers through the transport. Note that the 
  * buffers provided should be NULL terminated (no length parameter is passed.
  */
-AXIS_TRANSPORT_STATUS AxisTransport::sendBytes(const char* pSendBuffer, 
-                                                const void* bufferid, 
-                                                const void* pSStream)
+
+AXIS_TRANSPORT_STATUS AxisTransport::sendBytes(const char* pcSendBuffer, 
+                                                const void* pBufferId)
 {
-    int index;
-    if (NULL == pSendBuffer) /* end of the buffers */
+    for (int index=0;index < NO_OF_SERIALIZE_BUFFERS; index++)
     {
-        /* calculate content length */
-        int nContentLength = 0;
-        for (index=0;index < NO_OF_SERIALIZE_BUFFERS; index++)
+        if(!m_SendBuffers[index].pcBuffer)
         {
-            if(!m_SendBuffers[index].buffer) break;
-            else
-            {
-                nContentLength += strlen(m_SendBuffers[index].buffer);
-            }
+            m_SendBuffers[index].pcBuffer = pcSendBuffer;
+            m_SendBuffers[index].pBufferId = pBufferId;
+            break;
         }
-        char buff[8];
-        sprintf(buff, "%d", nContentLength); 
-        m_pSender->SetProperty("Content-Length" , buff);
-        for (index=0;index < NO_OF_SERIALIZE_BUFFERS; index++)
-        {
-            if(!m_SendBuffers[index].buffer) break;
-            else
-            {    
-                if(!m_pSender->Send(m_SendBuffers[index].buffer))
-                /* some error occured in the transport */
-                {
-                    /* release all the buffers */
-                    for (int x=index; x<NO_OF_SERIALIZE_BUFFERS; x++)
-                    {
-                        if(!m_SendBuffers[x].buffer) break;
-                        axis_buffer_release(m_SendBuffers[x].buffer, 
-                            m_SendBuffers[x].bufferid, m_pSoap);
-                    }
-                    return TRANSPORT_FAILED;
-                }
-                /* release buffer */
-                axis_buffer_release(m_SendBuffers[index].buffer, 
-                    m_SendBuffers[index].bufferid, m_pSoap);
-            }
-        }
-        return TRANSPORT_FINISHED;
     }
-    else
-    {
-        for (index=0;index < NO_OF_SERIALIZE_BUFFERS; index++)
-        {
-            if(!m_SendBuffers[index].buffer)
-            {
-                m_SendBuffers[index].buffer = pSendBuffer;
-                m_SendBuffers[index].bufferid = bufferid;
-                break;
-            }
-        }
-        return TRANSPORT_IN_PROGRESS;
-    }
+    return TRANSPORT_IN_PROGRESS;
 }
 
+/*
 AXIS_TRANSPORT_STATUS AXISCALL AxisTransport::s_Get_bytes(const char** res, 
                                                           int* retsize, 
                                                           const void* pSStream)
@@ -183,33 +193,31 @@ AXIS_TRANSPORT_STATUS AXISCALL AxisTransport::s_Get_bytes(const char** res,
     AxisTransport* pTransport = (AxisTransport*)(pStream->str.ip_stream);
     return pTransport->getBytes(res, retsize, pSStream);
 }
+*/
 
-AXIS_TRANSPORT_STATUS AxisTransport::getBytes(const char** res, int* retsize, 
-                                               const void* pSStream)
+AXIS_TRANSPORT_STATUS AxisTransport::getBytes(char* pcBuffer, int* pSize)
 {
-    const char* strReceive =  m_pReceiver->Recv();
-    if (strReceive)
+	if (0 <= m_iBytesLeft)
+	{
+		m_pcReceived = m_pReceiver->Recv();
+		m_iBytesLeft = strlen(m_pcReceived);
+	}
+    if (m_pcReceived)
     {
-#ifdef USE_XERCES_PARSER
-        char* pBuffer = const_cast<char*>(*res);
-        strcpy(pBuffer, strReceive);
-#else
-        *res = strReceive;
-#endif
-        *retsize = strlen(strReceive);
+		int iToCopy = (*pSize < m_iBytesLeft) ? *pSize : m_iBytesLeft;
+        strncpy(pcBuffer, m_pcReceived, iToCopy);
+		m_iBytesLeft -= iToCopy;
+		m_pcReceived += iToCopy;
+        *pSize = iToCopy;
         return TRANSPORT_IN_PROGRESS;
     }
     else
     {
-#ifdef USE_XERCES_PARSER
-#else
-        *res = NULL;
-#endif
-        *retsize = 0;
         return TRANSPORT_FINISHED;
     }
 }
 
+/*
 void AXISCALL AxisTransport::s_SetTransportInformation
     (AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value, 
     const void* pSStream)
@@ -218,10 +226,10 @@ void AXISCALL AxisTransport::s_SetTransportInformation
     AxisTransport* pTransport = (AxisTransport*)(pStream->str.op_stream);
     pTransport->setTransportInformation(type, value, pSStream);
 }
+*/
 
-void AxisTransport::setTransportInformation
-    (AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value, 
-    const void* pSStream)
+void AxisTransport::setTransportProperty
+    (AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)
 {
     const char* key = NULL;
     switch(type)
@@ -242,6 +250,13 @@ void AxisTransport::setTransportInformation
     m_pSender->SetProperty(key, value);
 }
 
+const char* AxisTransport::getTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE eType)
+{
+	//TODO
+	return 0;
+}
+
+/*
 const char* AXISCALL AxisTransport::s_ReceiveTransportInformation
     (AXIS_TRANSPORT_INFORMATION_TYPE type, const void* pSStream)
 {
@@ -252,4 +267,70 @@ void AXISCALL AxisTransport::s_ReleaseReceiveBuffer(const char* buffer,
                                                     const void* pSStream)
 {
 
+}
+*/
+
+const char* AxisTransport::getServiceName()
+{
+   char* pachTmp = strrchr (m_pcEndpointUri, '/');
+
+    if (pachTmp != NULL)
+    {
+        int iTmp = strlen (pachTmp);
+
+        if (iTmp <= 1)
+        {
+            return NULL;
+        }
+        else
+        {
+            pachTmp = pachTmp + 1;
+        }
+    }
+
+    return pachTmp;
+}
+
+AXIS_PROTOCOL_TYPE AxisTransport::getProtocol()
+{
+	return APTHTTP;
+}
+
+
+/**
+ * This method is supposed to return whether it is http GET or POST
+ */
+int AxisTransport::getSubProtocol()
+{
+	//TODO
+	return 0;
+}
+
+#ifdef WIN32
+#define STORAGE_CLASS_INFO __declspec(dllexport)
+#else
+#define STORAGE_CLASS_INFO 
+#endif
+
+extern "C" {
+STORAGE_CLASS_INFO
+int CreateInstance(SOAPTransport **inst)
+{
+	*inst = new AxisTransport();
+	if (*inst)
+	{
+		return AXIS_SUCCESS;
+	}
+	return AXIS_FAIL;
+}
+STORAGE_CLASS_INFO 
+int DestroyInstance(SOAPTransport *inst)
+{
+	if (inst)
+	{
+		delete inst;
+		return AXIS_SUCCESS;
+	}
+	return AXIS_FAIL;
+}
 }

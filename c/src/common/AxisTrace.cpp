@@ -43,13 +43,13 @@ AxisTrace::~AxisTrace ()
 int AxisTrace::openFile ()
 {
     char* sFileName = g_pConfig->getAxisLogPath ();
-    //if ((fileTrace = fopen (sFileName, "a")) == NULL)
+    //if ((m_fileTrace = fopen (sFileName, "a")) == NULL)
     //    return AXIS_FAIL;
-    //fclose (fileTrace);
+    //fclose (m_fileTrace);
     setFilePerm(sFileName);
-    //if ((fileTrace = fopen (sFileName, "a")) == NULL)
+    //if ((m_fileTrace = fopen (sFileName, "a")) == NULL)
     //    return AXIS_FAIL;
-    if(AXIS_FAIL == fileTrace.fileOpen(sFileName, "a"))
+    if(AXIS_FAIL == m_fileTrace.fileOpen(sFileName, "a"))
         return AXIS_FAIL;                                                                                                    
     return AXIS_SUCCESS;
 }
@@ -57,15 +57,14 @@ int AxisTrace::openFile ()
 int AxisTrace::openFileByClient ()
 {
     char* sFileName = g_pConfig->getAxisClientLogPath ();
-    //if ((fileTrace = fopen (sFileName, "a")) == NULL)
+    //if ((m_fileTrace = fopen (sFileName, "a")) == NULL)
     //    return AXIS_FAIL;
-    //fclose (fileTrace);
+    //fclose (m_fileTrace);
     setFilePerm(sFileName);
-    //if ((fileTrace = fopen (sFileName, "a")) == NULL)
+    //if ((m_fileTrace = fopen (sFileName, "a")) == NULL)
     //    return AXIS_FAIL; 
-    if(AXIS_FAIL == fileTrace.fileOpen(sFileName, "a"))
+    if(AXIS_FAIL == m_fileTrace.fileOpen(sFileName, "a"))
         return AXIS_FAIL;
-
     return AXIS_SUCCESS;
 }
 
@@ -84,9 +83,8 @@ int AxisTrace::setFilePerm(const char* sFileName)
 #ifdef __GNUC__
     system (setPerm);
 #endif
-                                                                                                                             
-    free(setPerm);
-
+    if (AXIS_SUCCESS != (m_fileTrace.fileOpen(sFileName, "a")))
+        return AXIS_FAIL;
     return AXIS_SUCCESS;
 }
 
@@ -95,56 +93,56 @@ int AxisTrace::logthis (const char* sLog, int level, char* arg2, int arg3)
     time_t ltime;
     time (&ltime);
 
-    //fputs ("Severity Level : ", fileTrace);
-    fileTrace.filePuts("Severity Level : ");
+    //fputs ("Severity Level : ", m_fileTrace);
+    m_fileTrace.filePuts("Severity Level : ");
 
     switch (level)
     {
         case 1:
-            pcLevel = "CRITICAL";
+            m_pcLevel = "CRITICAL";
             break;
         case 2:
-            pcLevel = "WARN";
+            m_pcLevel = "WARN";
             break;
         case 3:
-            pcLevel = "INFO";
+            m_pcLevel = "INFO";
             break;
         case 4:
-            pcLevel = "TRIVIAL";
+            m_pcLevel = "TRIVIAL";
             break;
     }
 
-    fileTrace.filePuts(pcLevel);
-    /*fputs ("\n", fileTrace);
+    m_fileTrace.filePuts(m_pcLevel);
+    /*fputs ("\n", m_fileTrace);
 
-    fputs ("time : ", fileTrace);
-    fputs (ctime (&ltime), fileTrace);
-    fputs ("file : ", fileTrace);
-    fputs (arg2, fileTrace);
-    fputs ("\n", fileTrace);
-    fputs ("line : ", fileTrace);
-    sprintf (strLine, "%d", arg3);
-    fputs (strLine, fileTrace);
-    fputs ("\n", fileTrace);
-    fputs (sLog, fileTrace);
-    fputs (":", fileTrace);
+    fputs ("time : ", m_fileTrace);
+    fputs (ctime (&ltime), m_fileTrace);
+    fputs ("file : ", m_fileTrace);
+    fputs (arg2, m_fileTrace);
+    fputs ("\n", m_fileTrace);
+    fputs ("line : ", m_fileTrace);
+    sprintf (m_acLine, "%d", arg3);
+    fputs (m_acLine, m_fileTrace);
+    fputs ("\n", m_fileTrace);
+    fputs (sLog, m_fileTrace);
+    fputs (":", m_fileTrace);
 */
 
 
 
-    fileTrace.filePuts ("\n");
+    m_fileTrace.filePuts ("\n");
 
-    fileTrace.filePuts ("time : ");
-    fileTrace.filePuts (ctime (&ltime));
-    fileTrace.filePuts ("file : ");
-    fileTrace.filePuts (arg2);
-    fileTrace.filePuts ("\n");
-    fileTrace.filePuts ("line : ");
-    sprintf (strLine, "%d", arg3);
-    fileTrace.filePuts (strLine);
-    fileTrace.filePuts ("\n");
-    fileTrace.filePuts (sLog);
-    fileTrace.filePuts (":");
+    m_fileTrace.filePuts ("time : ");
+    m_fileTrace.filePuts (ctime (&ltime));
+    m_fileTrace.filePuts ("file : ");
+    m_fileTrace.filePuts (arg2);
+    m_fileTrace.filePuts ("\n");
+    m_fileTrace.filePuts ("line : ");
+    sprintf (m_acLine, "%d", arg3);
+    m_fileTrace.filePuts (m_acLine);
+    m_fileTrace.filePuts ("\n");
+    m_fileTrace.filePuts (sLog);
+    m_fileTrace.filePuts (":");
 
 
     return AXIS_SUCCESS;
@@ -152,18 +150,17 @@ int AxisTrace::logthis (const char* sLog, int level, char* arg2, int arg3)
 }
 int AxisTrace::logaxis (const char* sLog, int level, char* arg2, int arg3)
 {
-    
     int intResult = logthis(sLog, level, arg2, arg3);
-   /* fputs ("\n", fileTrace);
-    fputs ("-------------------------------------------------", fileTrace);
-    fputs ("\n", fileTrace);
+   /* fputs ("\n", m_fileTrace);
+    fputs ("-------------------------------------------------", m_fileTrace);
+    fputs ("\n", m_fileTrace);
 
-    fflush (fileTrace);*/
-    fileTrace.filePuts ("\n");
-    fileTrace.filePuts ("-------------------------------------------------");
-    fileTrace.filePuts ("\n");
+    fflush (m_fileTrace);*/
+    m_fileTrace.filePuts ("\n");
+    m_fileTrace.filePuts ("-------------------------------------------------");
+    m_fileTrace.filePuts ("\n");
 
-    fileTrace.fileFlush ();
+    m_fileTrace.fileFlush ();
 
     return AXIS_SUCCESS;
 }
@@ -174,18 +171,18 @@ int AxisTrace::logaxis (const char* sLog1, const char* sLog2, int level,
     int intResult = logthis(sLog1, level, arg3, arg4);
     if(AXIS_SUCCESS == intResult)
     {
-        /*fputs (sLog2, fileTrace);
-        fputs ("\n", fileTrace);
-        fputs ("-------------------------------------------------", fileTrace);
-        fputs ("\n", fileTrace);
+        /*fputs (sLog2, m_fileTrace);
+        fputs ("\n", m_fileTrace);
+        fputs ("-------------------------------------------------", m_fileTrace);
+        fputs ("\n", m_fileTrace);
 
-        fflush (fileTrace);*/
-        fileTrace.filePuts (sLog2);
-        fileTrace.filePuts ("\n");
-        fileTrace.filePuts ("-------------------------------------------------");
-        fileTrace.filePuts ("\n");
+        fflush (m_fileTrace);*/
+        m_fileTrace.filePuts (sLog2);
+        m_fileTrace.filePuts ("\n");
+        m_fileTrace.filePuts ("-------------------------------------------------");
+        m_fileTrace.filePuts ("\n");
 
-        fileTrace.fileFlush ();
+        m_fileTrace.fileFlush ();
 
         return AXIS_SUCCESS;
     }
@@ -201,18 +198,18 @@ int AxisTrace::logaxis (const char* sLog1, const long nLog2, int level,
     if(AXIS_SUCCESS == intResult)
     {
 	sprintf(convToLong, "%d", nLog2);
-        /*fputs (convToLong, fileTrace);
-        fputs ("\n", fileTrace);
-        fputs ("-------------------------------------------------", fileTrace);
-        fputs ("\n", fileTrace);
+        /*fputs (convToLong, m_fileTrace);
+        fputs ("\n", m_fileTrace);
+        fputs ("-------------------------------------------------", m_fileTrace);
+        fputs ("\n", m_fileTrace);
 
-        fflush (fileTrace);*/
-        fileTrace.filePuts (convToLong);
-        fileTrace.filePuts ("\n");
-        fileTrace.filePuts ("-------------------------------------------------");
-        fileTrace.filePuts ("\n");
+        fflush (m_fileTrace);*/
+        m_fileTrace.filePuts (convToLong);
+        m_fileTrace.filePuts ("\n");
+        m_fileTrace.filePuts ("-------------------------------------------------");
+        m_fileTrace.filePuts ("\n");
 
-        fileTrace.fileFlush ();
+        m_fileTrace.fileFlush ();
 
         return AXIS_SUCCESS;
     }
@@ -228,18 +225,18 @@ int AxisTrace::logaxis (const char* sLog1, const double dLog2, int level,
     if(AXIS_SUCCESS == intResult)
     {
 	sprintf(convToDouble, "%f", dLog2);
-        /*fputs (convToDouble, fileTrace);
-        fputs ("\n", fileTrace);
-        fputs ("-------------------------------------------------", fileTrace);
-        fputs ("\n", fileTrace);
+        /*fputs (convToDouble, m_fileTrace);
+        fputs ("\n", m_fileTrace);
+        fputs ("-------------------------------------------------", m_fileTrace);
+        fputs ("\n", m_fileTrace);
 
-        fflush (fileTrace);*/
-        fileTrace.filePuts (convToDouble);
-        fileTrace.filePuts ("\n");
-        fileTrace.filePuts ("-------------------------------------------------");
-        fileTrace.filePuts ("\n");
+        fflush (m_fileTrace);*/
+        m_fileTrace.filePuts (convToDouble);
+        m_fileTrace.filePuts ("\n");
+        m_fileTrace.filePuts ("-------------------------------------------------");
+        m_fileTrace.filePuts ("\n");
 
-        fileTrace.fileFlush ();
+        m_fileTrace.fileFlush ();
 
         return AXIS_SUCCESS;
     }
@@ -250,7 +247,6 @@ int AxisTrace::logaxis (const char* sLog1, const double dLog2, int level,
 int AxisTrace::trace (const char *pchLog)
 {
     printf ("DEBUG LINE :\n%s\n", pchLog);
-
     return AXIS_SUCCESS;
 }
 

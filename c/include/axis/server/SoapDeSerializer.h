@@ -23,6 +23,7 @@
 #include "WSDDDefines.h"
 #include "XMLParser.h"
 #include "AnyElement.h"
+#include <axis/SOAPTransport.h>
 
 class SoapFault;
 class SoapMethod;
@@ -85,7 +86,7 @@ public:
     /* to get a named header blcok from the Deserializer */
     IHeaderBlock* getHeaderBlock(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    int setInputStream(const Ax_soapstream* pInputStream);
+    int setInputStream(SOAPTransport* pInputStream);
     SoapDeSerializer();
     virtual ~SoapDeSerializer();
     /* Method used by wrappers to get a deserialized Array of complex types */

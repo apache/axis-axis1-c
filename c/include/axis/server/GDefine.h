@@ -69,6 +69,12 @@ extern void Ax_Sleep(int);
 extern void ModuleInitialize();
 extern void ModuleUnInitialize();
 
+#if defined(WIN32) 
+#define STORAGE_CLASS_INFO __declspec(dllexport)
+#else
+#define STORAGE_CLASS_INFO 
+#endif
+
 #if defined(__GNUC__)
 #define AXISCALL __attribute__((stdcall))
 #else

@@ -23,6 +23,7 @@
 #include "TypeMapping.h"
 #include "WSDDDefines.h"
 #include "Packet.h"
+#include <axis/SOAPTransport.h>
 
 #ifdef __cplusplus
 
@@ -273,7 +274,7 @@ public:
     virtual int AXISCALL getStatus()=0;
     
     /* Externalization of deserializer API */
-    virtual int setInputStream(const Ax_soapstream* pInputStream)=0;
+    virtual int setInputStream(SOAPTransport* pInputStream)=0;
     virtual    int init()=0;
     virtual PROVIDERTYPE getCurrentProviderType()=0;
     virtual void setCurrentProviderType(PROVIDERTYPE nType)=0;    
