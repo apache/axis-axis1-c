@@ -45,10 +45,21 @@ AXISC_STORAGE_CLASS_INFO int axiscCreateSoapFault(AXISCHANDLE wrapperSoapSeriali
 	return sz->createSoapFault(sLocalName,sURI,sFaultCode,sFaultString);
 }
 
+//AXISC_STORAGE_CLASS_INFO const AxiscChar * axiscGetNamespacePrefixIWrapperSoapSerializer(
+//	AXISCHANDLE wrapperSoapSerializer, const AxiscChar * pNamespace) {
+//	IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+//	return sz->getNamespacePrefix(pNamespace);
+//}
+
 AXISC_STORAGE_CLASS_INFO const AxiscChar * axiscGetNamespacePrefixIWrapperSoapSerializer(
-	AXISCHANDLE wrapperSoapSerializer, const AxiscChar * pNamespace) {
-	IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
-	return sz->getNamespacePrefix(pNamespace);
+    AXISCHANDLE wrapperSoapSerializer, const AxiscChar * pNamespace,
+    AxiscBool * blnIsNewPrefix) {
+    IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    
+    bool isNewPrefix = false;
+    const AxiscChar * returnValue = sz->getNamespacePrefix(pNamespace, isNewPrefix);
+    *(blnIsNewPrefix) = (AxiscBool) isNewPrefix;
+    return returnValue;
 }
 
 AXISC_STORAGE_CLASS_INFO void axiscRemoveNamespacePrefix(AXISCHANDLE wrapperSoapSerializer, const AxiscChar * pNamespace) {

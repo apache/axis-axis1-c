@@ -181,19 +181,33 @@ public class BeanParamWriter extends ParamCPPFileWriter
         writer.write("\t}\n");
         writer.write("\telse\n");
         writer.write("\t{\n");
+        writer.write("\t\tbool blnIsNewPrefix = false;\n");
+        writer.write("\t\tconst AxisChar* sPrefix = pSZ->getNamespacePrefix(Axis_URI_"
+                    + classname
+                    + ", blnIsNewPrefix);\n");
+        writer.write("\t\tif (!blnIsNewPrefix)\n");
+        writer.write("\t\t{\n");
         writer.write(
-            "\t\tconst AxisChar* sPrefix = pSZ->getNamespacePrefix(Axis_URI_"
-                + classname
-                + ");\n");
+                "\t\t\tpSZ->serialize(\"<\", Axis_TypeName_"
+                    + classname
+                    + ", \" xsi:type=\\\"\", sPrefix, \":\",\n");
+            writer.write(
+                "\t\t\t\tAxis_TypeName_"
+                    + classname
+                    + ", \"\\\">\", NULL);\n");
+        writer.write("\t\t}\n");
+        writer.write("\t\telse\n");
+        writer.write("\t\t{\n");
         writer.write(
-            "\t\tpSZ->serialize(\"<\", Axis_TypeName_"
+            "\t\t\tpSZ->serialize(\"<\", Axis_TypeName_"
                 + classname
                 + ", \" xsi:type=\\\"\", sPrefix, \":\",\n");
         writer.write(
-            "\t\t\tAxis_TypeName_"
+            "\t\t\t\tAxis_TypeName_"
                 + classname
                 + ", \"\\\" xmlns:\", sPrefix, \"=\\\"\",\n");
-        writer.write("\t\t\tAxis_URI_" + classname + ", \"\\\">\", NULL);\n");
+        writer.write("\t\t\t\tAxis_URI_" + classname + ", \"\\\">\", NULL);\n");
+        writer.write("\t\t}\n");
         writer.write("\t}\n\n");
 
         String arrayType;

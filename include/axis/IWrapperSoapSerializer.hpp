@@ -58,9 +58,24 @@ public:
     virtual int AXISCALL createSoapFault(const AxisChar* sLocalName, 
         const AxisChar* sURI, const AxisChar* sFaultCode,
 	const AxisChar* sFaultString)=0;
-
+    /**
+     * Returns the corrosponding namespace prefix.
+     * @param pNamespace The namespace.
+     * @return The corrosponding prefix.
+     */
     virtual const AxisChar* AXISCALL getNamespacePrefix
         (const AxisChar* pNamespace)=0;
+    /**
+     * Returns the corrosponding namespace prefix. This method is 
+     * called when the caller also wants to know whether this is a new 
+     * namespace or not as appose to its overloaded other member.
+     * @param pNamespace The namespace.
+     * @param blnIsNewPrefix The boolean which behaves as 
+     * an out parameter to indicate whether this is a new namespace or not.
+     * @return The corrosponding prefix.
+     */
+    virtual const AxisChar* AXISCALL getNamespacePrefix(const AxisChar* pNamespace,
+        bool& blnIsNewPrefix)=0;
 
     virtual void AXISCALL removeNamespacePrefix(const AxisChar* pNamespace)=0;
 
