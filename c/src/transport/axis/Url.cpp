@@ -133,12 +133,16 @@ void Url::ParseURL(std::string& url)
                             m_Host = url.substr(0, pos);
                         pos++;
                         begpos = pos;
+                        /*
                         key = "?";
                         continue;
 
-                    case '?':
-                        /* not correctly supported */
-                        m_Query = url.substr(pos);
+                      case '?':
+                        //not correctly supported
+                        m_Query = url.substr(pos);                        
+                        */
+                        /* no need to find other ? */
+                        m_Path = url.substr(begpos - 1);
                         break;
                 }    
                 break;
