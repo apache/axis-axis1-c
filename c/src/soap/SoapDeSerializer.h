@@ -75,6 +75,8 @@
 #include "../common/IHandlerSoapDeSerializer.h"
 #include "XMLStreamHandler.h"
 
+#define HUGE_BUFFER_SIZE 1000
+
 class SoapEnvelope;
 class SoapHeader;
 class SoapMethod;
@@ -87,6 +89,7 @@ private:
 	XMLStreamHandler* m_pHandler;
 	SAX2XMLReader* m_pParser;
 	void* m_pInputStream;
+	char m_hugebuffer[HUGE_BUFFER_SIZE];
 public:
 	int GetVersion();
 	string& GetMethodName();

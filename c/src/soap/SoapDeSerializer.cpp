@@ -100,16 +100,14 @@ int SoapDeSerializer::SetInputStream(void* InputStream)
 	//Deserialize
 	//---------START XERCES SAX2 SPCIFIC CODE---------//
 	//a huge buffer to store the whole soap request stream
-	char hugebuffer[10000];
 	//to store the number of chars returned by get_request_bytes
 	int nChars = 0;
 	//request a huge number of bytes to get the whole soap request
 	//when pull parsing is used this should change
-	get_request_bytes(hugebuffer, 10000, &nChars, m_pInputStream);
+	get_request_bytes(m_hugebuffer, HUGE_BUFFER_SIZE, &nChars, m_pInputStream);
 	//if no soap then quit
 	if (nChars <= 0) return FAIL;
-	pSoapInput = new MemBufInputSource((const unsigned char*)hugebuffer, nChars ,"bufferid",false);
-
+	pSoapInput = new MemBufInputSource((const unsigned char*)m_hugebuffer, nChars ,"bufferid",false);
 	m_pParser->parse(*pSoapInput);
 	return SUCCESS;
 }
@@ -178,6 +176,7 @@ IParam* SoapDeSerializer::GetParam()
 
 int SoapDeSerializer::Init()
 {
+	m_hugebuffer[0] = '\0';
 	m_pHandler->Init();
 	return SUCCESS;
 }
