@@ -21,6 +21,7 @@
 //#define _WIN32_WINNT 0x0400
 #define _WINSOCKAPI_ /* Prevent inclusion of winsock.h in windows.h */
 #include <windows.h>
+#include <string>
 
 // =============================================================
 // Default paths to shared library/DLLs and files
@@ -69,6 +70,24 @@
 // Miscellaneous
 // =============================================================
 #define PLATFORM_SLEEP(x) Sleep(0);
+
+/**
+ * Get the last error code from the system.
+ * Please ensure that this is a thread safe implementation
+ * and that it returns a long
+ * @return long the lsat error message for this thread
+ */
+#define GETLASTERROR() GetLastError();
+
+/**
+ * From the last error number get a sensible std::string representing it
+ * @param errorNumber the error Number you are trying to get a message for
+ * @return the error message. NOTE: The caller is responsible for deleting the returned string
+ */
+#define PLATFORM_GET_ERROR_MESSAGE(errorNumber) getPlatformErrorMessage(errorNumber);
+
+std::string* getPlatformErrorMessage(long errorNumber);
+
 
 #endif
 

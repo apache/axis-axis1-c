@@ -75,6 +75,27 @@
 #include <unistd.h>
 #define PLATFORM_SLEEP(x) sleep(0);
 
+
+
+/**
+ * Get the last error code from the system.
+ * Please ensure that this is a thread safe implementation
+ * and that it returns a long
+ * @return long the lsat error message for this thread
+ */
+#define GETLASTERROR errno;
+
+
+/**
+ * From the last error number get a sensible std::string representing it
+ * @param errorNumber the error Number you are trying to get a message for
+ * @return the error message. NOTE: The caller is responsible for deleting the returned string
+ */
+#include <string>
+#define PLATFORM_GET_ERROR_MESSAGE(errorNumber) new string(strerror(errorNumber));
+
+
+
 #endif
 
 

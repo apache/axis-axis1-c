@@ -22,8 +22,10 @@
 
 #include "Platform.h"
 #include "Channel.h"
+#include "../../platforms/PlatformAutoSense.hpp"
 #include <iostream>
 #include <stdio.h>
+
 
 using namespace std;
 /**
@@ -174,43 +176,26 @@ throw (AxisTransportException&)
 		{
 			// Cannot open a channel to the remote end, shutting down the
 			// channel and then throw an exception.
-#ifdef WIN32
+
 			// Before we do anything else get the last error message;
-			// I'd like to put the getting of the error message into platform specifics but not sure how !
-			// I think it would be nicer to make the platform specifics a class and not just macros.
-			// That way we could have e.g. char* Windows#getLastErrorMessage()
-			long dw = GetLastError();
-#endif
+			long dw = GETLASTERROR()
+
 			closeChannel();
+			
+			string* message = PLATFORM_GET_ERROR_MESSAGE(dw);
 
-#ifdef WIN32
-			TCHAR szBuf[200]; 
-		    LPVOID lpMsgBuf;
-
-			FormatMessage(
-			FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-			FORMAT_MESSAGE_FROM_SYSTEM,
-			NULL,
-			dw,
-			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-			(LPTSTR) &lpMsgBuf,
-			0, NULL );
-
-			sprintf(szBuf, 
-				"failed to open connection to server:\n \
+			char fullMessage[600];
+			sprintf(fullMessage,
+				"Failed to open connection to server: \n \
 				hostname='%s'\n\
 				port='%d'\n\
 				Error Message='%s'\
-				Error Code='%d'\n",                     \
-				m_URL.getHostName(), m_URL.getPort(), lpMsgBuf, dw); 
- 
+				Error Code='%d'\n",
+				m_URL.getHostName(), m_URL.getPort(), message->c_str(), dw);
+				
+			delete(message);
 
-		    LocalFree(lpMsgBuf);
-
-			throw AxisTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR, szBuf);
-#endif
-			// else we don't know how to do this for non-windows platforms
-			throw AxisTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR);
+			throw AxisTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED, fullMessage);
 		}
 
     }
