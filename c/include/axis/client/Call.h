@@ -208,7 +208,10 @@ typedef struct {
         const AxisChar* pNamespace);
 	
 	/* Minimal error check */
-	 int (AXISCALL* getStatus)(void *pObj);
+	int (AXISCALL* getStatus)(void *pObj);
+	AnyType* (AXISCALL* getAnyObject)(void *pObj);
+	int (AXISCALL* serializeAnyObject)(void *pObj, AnyType* pAnyObject);
+
 } CallFunctions;
 
 #ifdef __cplusplus
@@ -359,6 +362,9 @@ public:
 	/* Minimal error check */
 	virtual int AXISCALL getStatus()=0;
 		
+	virtual AnyType* AXISCALL getAnyObject()=0;
+	virtual int AXISCALL serializeAnyObject(AnyType* pAnyObject)=0;
+
 	/* following stuff is needed to provide the interface for C web services */
 public:
 	static CallFunctions ms_VFtable;
@@ -568,6 +574,11 @@ public:
 	static int AXISCALL s_GetStatus(void *pObj)
 	{return ((CallBase*)pObj)->getStatus();};
 
+	static AnyType* AXISCALL s_GetAnyObject(void *pObj)
+	{return ((CallBase*)pObj)->getAnyObject();};
+	static int AXISCALL s_SerializeAnyObject(void *pObj, AnyType* pAnyObject)
+	{return ((CallBase*)pObj)->serializeAnyObject(pAnyObject);};
+
 	/* and populate ms_VFtable with corresponding entry */
 	static void s_Initialize()
 	{	
@@ -635,6 +646,8 @@ public:
 		ms_VFtable.checkMessage = s_CheckMessage;
 		ms_VFtable.checkFault = s_CheckFault;
 		ms_VFtable.getStatus = s_GetStatus;
+		ms_VFtable.getAnyObject = s_GetAnyObject;
+		ms_VFtable.serializeAnyObject = s_SerializeAnyObject;
 	}
 };
 
@@ -642,6 +655,7 @@ public:
 class STORAGE_CLASS_INFO Call : public CallBase
 {
 public:
+	Call();
 	virtual ~Call();
 	void AXISCALL setSOAPVersion(SOAP_VERSION version);
 	int AXISCALL setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type,
@@ -669,7 +683,6 @@ public:
 	void AXISCALL setOperation(const char* pchOperation, 
         const char* pchNamespace);
 	int AXISCALL setEndpointURI(const char* pchEndpointURI);
-	Call();
 public:
 	IHeaderBlock* createHeaderBlock(AxisChar *pachLocalName, 
         AxisChar *pachPrefix, AxisChar *pachUri);
@@ -802,6 +815,8 @@ public:
     */
     void setProxy(const char* pcProxyHost, unsigned int uiProxyPort); 
 
+	AnyType* AXISCALL getAnyObject();
+	int AXISCALL serializeAnyObject(AnyType* pAnyObject);
 		
 private:
 	int openConnection(int secure);
