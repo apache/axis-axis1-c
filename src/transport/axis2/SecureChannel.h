@@ -9,7 +9,7 @@ public:
 	SecureChannel();
 	~SecureChannel();
 
-	bool			open() throw (AxisTransportException);
+	bool			open() throw (AxisTransportException&);
 	void			close();
 
 	const			Channel& operator >> (std::string&) throw (AxisTransportException);
