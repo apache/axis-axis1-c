@@ -31,14 +31,14 @@ class ServerAxisEngine:public AxisEngine
     private:
         BasicHandler* m_pWebService;
     public:
-        ServerAxisEngine ();
-        virtual ~ ServerAxisEngine ();
+        ServerAxisEngine();
+        virtual ~ ServerAxisEngine();
     public:
-        int process (Ax_soapstream* soap);
-        int setFaultOutputStream(int iFaultCode, Ax_soapstream* soap);
+        int process(SOAPTransport* pSoap);
+        int setFaultOutputStream(int iFaultCode, SOAPTransport* pSoap);
     protected:
-        virtual int invoke (MessageData* pMsg);
-        virtual void onFault (MessageData* pMsg);
+        virtual int invoke(MessageData* pMsg);
+        virtual void onFault(MessageData* pMsg);
 };
 
 #endif 

@@ -57,7 +57,7 @@ public:
     virtual ~AxisEngine();
     virtual int initialize();
     virtual void unInitialize();
-    virtual int process(Ax_soapstream* soap)=0;
+    virtual int process(SOAPTransport* pSoap)=0;
 protected:
     virtual int invoke(MessageData* pMsg)=0;
     virtual void onFault(MessageData* pMsg)=0;

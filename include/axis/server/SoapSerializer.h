@@ -82,7 +82,7 @@ private:
     PROVIDERTYPE m_ProviderType;
 public:
 
-    int setOutputStreamForTesting(const Ax_soapstream* pStream);
+    int setOutputStreamForTesting(SOAPTransport* pStream);
 
     int AXISCALL createSoapMethod(const AxisChar* sLocalName, 
         const AxisChar* sURI);    
@@ -109,7 +109,7 @@ public:
     void AXISCALL removeNamespacePrefix(const AxisChar* pNamespace);
     int setSoapVersion(SOAP_VERSION);
     int init();
-    int setOutputStream(const Ax_soapstream* pStream);
+    int setOutputStream(SOAPTransport* pStream);
     void markEndOfStream();
     int setSoapFault(SoapFault* pSoapFault);
     int setSoapMethod(SoapMethod* pSoapMethod);
@@ -156,7 +156,7 @@ public: /* Basic Type Serializing methods */
     
 private:
     BasicTypeSerializer m_BTSZ;
-    const Ax_soapstream* m_pOutputStream;
+    SOAPTransport* m_pOutputStream;
 public:
     IHeaderBlock* createHeaderBlock(AxisChar *pachLocalName, 
         AxisChar *pachPrefix, AxisChar *pachUri);
@@ -175,6 +175,7 @@ public:
     int AXISCALL setBodyAsHexBinary(xsd__hexBinary body);
     int AXISCALL setBodyAsBase64Binary(xsd__base64Binary body);
     const AxisChar* AXISCALL getBodyAsString();
+	static void AXISCALL releaseBufferCallBack(const char* buffer, const void* bufferid);
 };
 
 #endif 

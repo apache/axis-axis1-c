@@ -146,6 +146,14 @@ SOURCE=..\..\..\src\engine\AppScopeHandlerPool.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\include\axis\server\AxisEngine.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\axis\client\Call.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\engine\client\ClientAxisEngine.h
 # End Source File
 # Begin Source File
