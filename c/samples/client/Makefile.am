@@ -1,1 +1,1 @@
-SUBDIRS = ssl_client
+SUBDIRS = ssl_client interoptests
