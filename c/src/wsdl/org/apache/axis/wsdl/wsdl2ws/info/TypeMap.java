@@ -78,6 +78,7 @@ import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 public class TypeMap {
     public static final int SIMPLE_PARAM_GEN = 0;
     public static final int BEAN_PARAM_GEN = 1;
+    private static String language = WrapperConstants.LANGUAGE_JAVA; 
 
     /* this map maps the classname -> QName */
     private static Hashtable basicTypeClass2QNamemap = new Hashtable();
@@ -164,7 +165,8 @@ public class TypeMap {
 
 	
 	}
-    public TypeMap() {
+    public TypeMap(String language) {
+		TypeMap.language = language;
         this.typeInfo = new Hashtable();
     }
 
@@ -187,6 +189,8 @@ public class TypeMap {
     }
 
     public Type getType(QName name) {
+    	if(isSimpleType(name))
+    		return new Type(name,null,false,TypeMap.language);
         return (Type) this.typeInfo.get(name);
     }
 

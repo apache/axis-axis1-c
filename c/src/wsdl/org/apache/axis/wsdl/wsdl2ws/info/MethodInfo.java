@@ -62,20 +62,18 @@ package org.apache.axis.wsdl.wsdl2ws.info;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class MethodInfo {
     private String methodname;
     private ArrayList parameters;
     private ParameterInfo returnType;
-	private ArrayList inputParameters;
-	private ArrayList returnParameters;
-	private ArrayList faults;
-	private boolean isRequestBodyLiteral;
-	private boolean isResponseBodyLiteral;
-	private boolean isFaultBodyLiteral;
-    
     private String soapAction;
-	
+    private List inputEncoding;
+    private List outputEncoding;
+    private String inputUse;
+    private String outputUse;
+
     public MethodInfo() {
         this.returnType = null;
         this.methodname = null;
@@ -123,4 +121,73 @@ public class MethodInfo {
         return null;
     }
 */
+    /**
+     * @return
+     */
+    public List getInputEncoding() {
+        return inputEncoding;
+    }
+
+    /**
+     * @return
+     */
+    public List getOutputEncoding() {
+        return outputEncoding;
+    }
+
+    /**
+     * @return
+     */
+    public String getSoapAction() {
+        return soapAction;
+    }
+
+    /**
+     * @param string
+     */
+    public void setInputEncoding(List string) {
+        inputEncoding = string;
+    }
+
+    /**
+     * @param string
+     */
+    public void setOutputEncoding(List string) {
+        outputEncoding = string;
+    }
+
+    /**
+     * @param string
+     */
+    public void setSoapAction(String string) {
+        soapAction = string;
+    }
+
+    /**
+     * @return
+     */
+    public String getInputUse() {
+        return inputUse;
+}
+    /**
+     * @return
+     */
+    public String getOutputUse() {
+        return outputUse;
+    }
+
+    /**
+     * @param string
+     */
+    public void setInputUse(String string) {
+        inputUse = string;
+    }
+
+    /**
+     * @param string
+     */
+    public void setOutputUse(String string) {
+        outputUse = string;
+    }
+
 }
