@@ -5,5 +5,5 @@ doclitmathops_SOURCES = MathOps.cpp \
                   MathOpsClient.cpp \
                   DivByZeroStruct.cpp \
                   AxisClientException.cpp
-doclitmathops_LDADD   =  $(LDFLAGS)
+doclitmathops_LDADD   =  @LINKCLIENTLIB@
 INCLUDES = -I$(AXISCPP_HOME)/include

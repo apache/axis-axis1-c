@@ -3,5 +3,5 @@ SUBDIRS =
 AM_CFLAGS = $(CFLAGS)
 cbase_SOURCES = InteropBaseClient.c InteropTestPortType.c  SOAPStruct.c
 
-cbase_LDADD   =  $(LDFLAGS)
+cbase_LDADD   =  @LINKCLIENTLIB@
 INCLUDES = -I$(AXISCPP_HOME)/include

@@ -116,7 +116,7 @@ processXmlDecl(SPPParser* ct, int isGeneralTextEntity,
         /* printf("versionend:%s\n", versionend); */
         *(protocolEncodingName + (ct->m_currentTokPoint - protocolEncodingName) - 3) = '\0';
     
-        printf("encodingName:%s\n", protocolEncodingName);
+        /*printf("encodingName:%s\n", protocolEncodingName);*/
         /* if(standalone) */
         /* printf("standalone:%s\n", standalone); */
         initializeEncoding(ct);
@@ -272,7 +272,7 @@ int getBlock(char *buff, int toBeFilledSize, int* numchars)
     int done;
     *numchars = 0;
     len = fread(buff, 1, toBeFilledSize, stdin);
-    printf("len:%d\n", len);
+    /*printf("len:%d\n", len);*/
     *numchars += len;
         if (ferror(stdin))
         {
@@ -282,7 +282,6 @@ int getBlock(char *buff, int toBeFilledSize, int* numchars)
         done = feof(stdin);
     if(done) 
         isDone = 1;
-    printf("came3\n");
     return SPP_ERROR_NONE;
 }
 

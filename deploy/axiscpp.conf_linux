@@ -12,8 +12,8 @@
 #NodeName:Node name
 #ListenPort:Listening port
 
-LogPath:/usr/local/Axis/logs/AxisLog
-WSDDFilePath:/usr/local/Axis/conf/server.wsdd
-ClientLogPath:/usr/local/Axis/logs/AxisClientLog
-XMLParser:/usr/local/Axis/libs/libaxis_xmlparser.so
-Transport_http:/usr/local/Axis/libs/libaxis_transport.so
+LogPath:/usr/local/axiscpp_deploy/log/AxisLog
+WSDDFilePath:/usr/local/axiscpp_deploy/conf/server.wsdd
+ClientLogPath:/usr/local/axiscpp_deploy/log/AxisClientLog
+XMLParser:/usr/local/axiscpp_deploy/lib/libaxis_xmlparser.so
+Transport_http:/usr/local/axiscpp_deploy/lib/libaxis_transport.so

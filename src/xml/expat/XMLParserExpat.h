@@ -24,8 +24,11 @@
 
 #if !defined(__XMLPARSEREXPAT_H_OF_AXIS_INCLUDED__)
 #define __XMLPARSEREXPAT_H_OF_AXIS_INCLUDED__
-
+#ifdef WIN32
 #include <expat/expat.h>
+#else
+#include <expat.h>
+#endif
 #include <axis/server/Packet.h>
 
 #include "../QName.h"

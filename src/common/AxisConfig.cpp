@@ -36,7 +36,7 @@ AxisConfig::AxisConfig ()
 	m_pcKeyArray[AXCONF_CLIENTLOGPATH] = "ClientLogPath";
 	m_pcKeyArray[AXCONF_CLIENTWSDDFILEPATH] = "ClientWSDDFilePath";
 	/*
-	The value for this is taken from the environment variable "AXIS_HOME".
+	The value for this is taken from the environment variable "AXISCPP_DEPLOY".
 	So no need for a key for AXCONF_AXISHOME
 	*/
 	m_pcKeyArray[AXCONF_AXISHOME] = "\0";
@@ -96,10 +96,10 @@ int AxisConfig::readConfFile ()
 	const char pcComment = '#';
 
 
-    sConfPath = getenv ("AXIS_HOME");
+    sConfPath = getenv ("AXISCPP_DEPLOY");
 	m_pcValueArray[AXCONF_AXISHOME] = sConfPath;
 	/*
-	Even if the AXIS_HOME environment variable is not set default values 
+	Even if the AXISCPP_DEPLOY environment variable is not set default values 
 	will be used. Therefore return AXIS_SUCCESS
 	*/
     if (!sConfPath || (sConfPath == '\0') )
@@ -110,7 +110,7 @@ int AxisConfig::readConfFile ()
     strcpy (sNewConfPath, sConfPath);
     strcat (sNewConfPath, "/axiscpp.conf");
 	/*
-	Even if axiscpp.conf does not exist in AXIS_HOME default values 
+	Even if axiscpp.conf does not exist in AXISCPP_DEPLOY default values 
 	will be used. Therefore return AXIS_SUCCESS
 	*/
     if (AXIS_SUCCESS != fileConfig.fileOpen(sNewConfPath, "r"))
