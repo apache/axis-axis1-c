@@ -2,4 +2,4 @@ sh autogen.sh
 sh runconfig
 make
 make install
-strip -g sslclient cbase
+strip -g sslclient cbase base
