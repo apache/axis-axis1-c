@@ -21,6 +21,9 @@
 	  -->
 	<target name="addTrace" depends="buildTools"
 	  description="Run the trace tool">
+		<!--  Ensure that the  directories are clean -->
+		<delete dir="${dir.src.instrumented}"/>
+
 		<path id ="tracecp">
 			<fileset dir="${dir.classes}" includes="buildtools.jar"/>
 		</path>
@@ -47,6 +50,9 @@
 
 	<target name="generateCHeaders" depends="buildTools"
 	  description="Run the C binding generator tool">
+		<!--  make sure we've got a clean output directory structure -->
+		<delete dir="${dir.obj}/include"/>
+
 		<path id ="cbindcp">
 			<fileset dir="${dir.classes}" includes="buildtools.jar"/>
 		</path>
