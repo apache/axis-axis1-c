@@ -752,7 +752,7 @@ int SoapDeSerializer::GetElementForAttributes(const AxisChar* pName, const AxisC
 		m_nStatus = AXIS_FAIL;\
 		return ret;\
 	}\
-	if (START_ELEMENT == m_pNode->m_type)\
+	if (START_ELEMENT == m_pCurrNode->m_type)\
 	{\
 		for (int i=0; m_pCurrNode->m_pchAttributes[i]; i+=3)\
 		{\
@@ -782,7 +782,7 @@ int SoapDeSerializer::GetAttributeAsInt(const AxisChar* pName, const AxisChar* p
 		m_nStatus = AXIS_FAIL;
 		return ret;
 	}
-	if (START_ELEMENT == m_pNode->m_type)
+	if (START_ELEMENT == m_pCurrNode->m_type)
 	{
 		for (int i=0; m_pCurrNode->m_pchAttributes[i]; i+=3) 
 			/* browse through the attributes list */
@@ -809,7 +809,7 @@ xsd__boolean SoapDeSerializer::GetAttributeAsBoolean(const AxisChar* pName, cons
 		m_nStatus = AXIS_FAIL;
 		return ret;
 	}
-	if (START_ELEMENT == m_pNode->m_type)
+	if (START_ELEMENT == m_pCurrNode->m_type)
 	{
 		for (int i=0; m_pCurrNode->m_pchAttributes[i]; i+=3) 
 			/* browse through the attributes list */
