@@ -55,12 +55,8 @@
  * <http://www.apache.org/>.
  *
  *
- *
- *
- * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
- *
  */
-// SoapDeSerializer.h: interface for the SoapDeSerializer class.
+// SoapDeSerializer.h:
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -91,7 +87,13 @@ class SoapBody;
 class SoapEnvelope;
 class SoapHeader;
 class IHeaderBlock;
+/**
+    @class SoapDeSerializer
+    @brief interface for the SoapDeSerializer class.
 
+
+    @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
+*/
 class SoapDeSerializer : public IHandlerSoapDeSerializer
 {
 private:
@@ -126,20 +128,20 @@ public:
 	bool IsAnyMustUnderstandHeadersLeft();
 	SoapFault* GetFault();
 	int AXISCALL CheckMessageBody(const AxisChar* pName, const AxisChar* pNamespace);
-	/* to get any header blocks left in the Deserializer */
+	/** to get any header blocks left in the Deserializer */
 	HeaderBlock* GetHeaderBlock();
-	/* to add a header block to the Deserializer. Probably a handler */
+	/** to add a header block to the Deserializer. Probably a handler */
 	int AXISCALL AddHeaderBlock(IHeaderBlock* pBlk);
-	/* to get a named header blcok from the Deserializer */
+	/** to get a named header blcok from the Deserializer */
 	IHeaderBlock* GetHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace);
 	int SetInputStream(const Ax_soapstream* pInputStream);
 	SoapDeSerializer();
 	virtual ~SoapDeSerializer();
-	/* Method used by wrappers to get a deserialized Array of complex types */
+	/** Method used by wrappers to get a deserialized Array of complex types */
 	Axis_Array AXISCALL GetCmplxArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace);
-	/* Method used by wrappers to get a deserialized Array of basic types */
+	/** Method used by wrappers to get a deserialized Array of basic types */
 	Axis_Array AXISCALL GetBasicArray(XSDTYPE nType, const AxisChar* pName, const AxisChar* pNamespace);
-	/* Method used by wrappers to get a deserialized single object of complex type */
+	/** Method used by wrappers to get a deserialized single object of complex type */
 	void* AXISCALL GetCmplxObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
 	
 	/* Methods used by wrappers to get a deserialized value of basic types */

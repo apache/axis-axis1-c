@@ -55,13 +55,9 @@
  * <http://www.apache.org/>.
  *
  *
- *
- *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- *
  */
 
-// HeaderBlock.h: interface for the HeaderBlock class.
+// HeaderBlock.h:
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -78,6 +74,9 @@ class BasicNode;
 #include "../common/IHeaderBlock.h"
 
 /**
+    @class BasicNode
+    @brief	The Header block of a SOAP Header according to SOAP 1.2 specification.
+    
  *	The Header block of a SOAP Header according to SOAP 1.2 specification.
  *
  *	Each child element information item of the SOAP Header is called a SOAP header block.
@@ -98,7 +97,8 @@ class BasicNode;
  *			- relay attribute information item 
  *
  *	
- *	@brief	The Header block of a SOAP Header according to SOAP 1.2 specification.
+ *	
+ *  @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  */
 
 class HeaderBlock : public IHeaderBlock
