@@ -67,12 +67,12 @@
 #include <string>
 #include <stdio.h>
 
-/*#define AXISTRACE*/
-#if defined(AXISTRACE)
+#define __AXISTRACE__
+#if defined(__AXISTRACE__)
   #define AXISTRACE1(X) tracer.trace(X,__FILE__,__LINE__);
   #define AXISTRACE2(X,Y) tracer.trace(X,Y,__FILE__,__LINE__);
 #endif
-#if !defined(AXISTRACE)
+#if !defined(__AXISTRACE__)
   #define AXISTRACE1(X) "";
   #define AXISTRACE2(X,Y) "";
 #endif
