@@ -24,7 +24,7 @@
 		<path id ="tracecp">
 			<fileset dir="${dir.classes}" includes="buildtools.jar"/>
 		</path>
-		<java classname="org.apache.axis.tools.trace.TraceInstrumentor" fork="true">
+		<java classname="org.apache.axis.tools.trace.TraceInstrumentor" fork="true" failonerror="true">
                   <classpath refid="tracecp"/>
 			<arg value="-config"/>
 			<arg value="${dir.tools}/org/apache/axis/tools/trace/tracetool.conf"/>
@@ -50,7 +50,7 @@
 		<path id ="cbindcp">
 			<fileset dir="${dir.classes}" includes="buildtools.jar"/>
 		</path>
-		<java classname="org.apache.axis.tools.cbindings.CBindingGenerator" fork="true">
+		<java classname="org.apache.axis.tools.cbindings.CBindingGenerator" fork="true" failonerror="true">
                   <classpath refid="cbindcp"/>
 			<arg value="-config"/>
 			<arg value="${dir.tools}/org/apache/axis/tools/cbindings/cbindinggenerator.conf"/>

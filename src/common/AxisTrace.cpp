@@ -190,20 +190,27 @@ void AxisTrace::traceHeader()
 	traceLine("-------------- Config File settings START ----------------");
 	string confLine="";
 
-	// Note these must be kept up to date if the config enum changes - I couldn't work out how to do it automagically :-(
-    char *confProps[]={"AXCONF_WSDDFILEPATH",
-					 "AXCONF_LOGPATH",
-					 "AXCONF_CLIENTLOGPATH",
-					 "AXCONF_CLIENTWSDDFILEPATH",
-					 "AXCONF_AXISHOME",
-					 "AXCONF_TRANSPORTHTTP",
-					 "AXCONF_TRANSPORTSMTP",
-					 "AXCONF_XMLPARSER",
-					 "AXCONF_NODENAME",
-					 "AXCONF_LISTENPORT",
-					 "AXCONF_SSLCHANNEL"};
+    char *confProps[]={
+		"AXCONF_WSDDFILEPATH",		//1
+		"AXCONF_LOGPATH",			//2
+		"AXCONF_CLIENTLOGPATH",		//3
+		"AXCONF_CLIENTWSDDFILEPATH",	//4
+		"AXCONF_AXISHOME",		//5
+		"AXCONF_TRANSPORTHTTP",		//6
+		"AXCONF_TRANSPORTSMTP",		//7
+		"AXCONF_XMLPARSER",		//8
+		"AXCONF_NODENAME",		//9
+		"AXCONF_LISTENPORT",		//10
+		"AXCONF_SSLCHANNEL_HTTP",	//11
+		"AXCONF_CHANNEL_HTTP",		//12
+		"AXCONF_SECUREINFO"};		//13 Please use this number in the #if below
 
-    for (unsigned j=0; j<sizeof(confProps)/4; j++) 
+// Check at build time whether the lists of properties are in sync
+#if AXCONF_LAST > 13
+#error "The list of configuration properties in AxisConfig.h and AxisTrace.cpp are different. Please keep them in sync."
+#endif
+
+    for (unsigned j=0; j<sizeof(confProps)/sizeof(char*); j++) 
 	{
         confLine ="";
 		confLine += confProps[j];
