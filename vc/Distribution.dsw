@@ -75,18 +75,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "AxisTransportLibwww"=".\transport\libwww\AxisTransportLibwww.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "AxisXMLParserTspp"=".\xml\tspp\AxisXMLParserTspp.dsp" - Package Owner=<4>
 
 Package=<5>
