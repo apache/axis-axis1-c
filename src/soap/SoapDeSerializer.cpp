@@ -63,6 +63,7 @@
 #include <axis/AxisGenException.h>
 
 #include <list>
+#include <iostream>
 
 extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
 
@@ -544,10 +545,11 @@ Axis_Array SoapDeSerializer::getCmplxArray(void* pDZFunct, void* pCreFunct,
             ptrval = reinterpret_cast<unsigned long>(Array.m_Array);
             for (; nIndex < Array.m_Size; nIndex++)
             {
-                if (!m_pNode) /* if there is an unprocessed node that may be
+                if (!m_pNode)  { /* if there is an unprocessed node that may be
                                * one left from last array deserialization 
                                */ 
                     m_pNode = m_pParser->next();
+                 }
                     /* wrapper node without type info  Ex: <phonenumbers> */
                 if (!m_pNode) 
                 {
@@ -581,8 +583,11 @@ Axis_Array SoapDeSerializer::getCmplxArray(void* pDZFunct, void* pCreFunct,
                     }
                     if (AXIS_SUCCESS == m_nStatus)
                     {
-                        m_pParser->next();
                         /* skip end element of the array item */
+                        m_pParser->next();
+                        //Jira AXISCPP-145
+                        //point to next element (can be next array elemnt or different object)
+                        m_pNode = m_pParser->next();
                         continue;
                     }
                 }
