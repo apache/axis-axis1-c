@@ -582,7 +582,7 @@ char *yytext;
   
   using namespace std;
 
-  #include <axis/wcg/cppyacc.hpp>
+  #include "cppyacc.hpp"
 
   static int check_keyword(const char* name);
   int yyerror(char * msg);

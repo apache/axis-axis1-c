@@ -20,10 +20,10 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include <axis/wcg/WCGenerator.h>
+#include "WCGenerator.h"
 
-#include <axis/wcg/WSClass.h>
-#include <axis/wcg/TranslationUnit.h>
+#include "WSClass.h"
+#include "TranslationUnit.h"
 
 WCGenerator::WCGenerator()
 {
