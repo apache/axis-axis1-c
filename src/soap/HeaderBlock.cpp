@@ -560,6 +560,17 @@ IAttribute* HeaderBlock::createAttribute(const AxisChar *localname,
     {
         //Attribute* pAttribute = new Attribute(localname, prefix, value); 
         pAttribute = new Attribute(localname, prefix, value); // Samisa - possible bug in line above 
+        
+       
+        list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+        while(itCurrAttribute != m_attributes.end())
+        {        
+            if ((strcmp((*itCurrAttribute)->getLocalName(), localname) ==0) && (strcmp((*itCurrAttribute)->getPrefix(), prefix) ==0))
+                return NULL;                 
+            else
+                itCurrAttribute++;        
+        }    
+        
         m_attributes.push_back(pAttribute);
     }
 
