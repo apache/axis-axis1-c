@@ -1,0 +1,16 @@
+<test>
+    <name>INamespaceTest1</name>
+    <description>INamespaceTest1</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>INamespaceTest1Client.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            INamespaceTest1.expected
+        </output>
+	<request> 
+		INamespaceTest1Request.out 
+	</request>
+    </expected>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>

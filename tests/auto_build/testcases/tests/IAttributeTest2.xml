@@ -1,0 +1,16 @@
+<test>
+    <name>IAttributeTest2</name>
+    <description>IAttributeTest2</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>IAttributeTest2Client.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            IAttributeTest2.expected
+        </output>
+	<request> 
+		IAttributeTest2Request.out 
+	</request>
+    </expected>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>

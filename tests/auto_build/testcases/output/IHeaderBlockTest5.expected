@@ -1,0 +1,9 @@
+
+Project Type=Open Source
+No Of Children=5
+First Node Name = Name
+Second Node Name = Location Value =Sri Lanka
+Last Child Value=message
+NULL is returned for non existing node
+5
+---------------------- TEST COMPLETE -----------------------------
