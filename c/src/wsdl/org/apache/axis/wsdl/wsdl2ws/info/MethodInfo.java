@@ -1,9 +1,8 @@
-/* -*- C++ -*- */
 /*
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,7 +24,7 @@
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "SOAP" and "Apache Software Foundation" must
+ * 4. The names "Axis" and "Apache Software Foundation" must
  *    not be used to endorse or promote products derived from this
  *    software without prior written permission. For written
  *    permission, please contact apache@apache.org.
@@ -52,35 +51,68 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- *
- *
- *
- *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- *
  */
 
-// IWrapperSoapDeSerializer.h: interface for the IWrapperSoapDeSerializer class.
-//
-//////////////////////////////////////////////////////////////////////
+/**
+ * This Class represents a method (operation is wsdl) in a web service 
+ * class.
+ * @author Srinath Perera(hemapani@opensource.lk)
+ */
+package org.apache.axis.wsdl.wsdl2ws.info;
 
-#if !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)
-#define AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
-#include "ISoapDeSerializer.h"
-#include "GDefine.h"
-#include <string>
-using namespace std;
-class IParam;
+public class MethodInfo {
+    private String methodname;
+    private Hashtable parameters;
+    private ParameterInfo returnType;
 
-class IWrapperSoapDeSerializer : public virtual ISoapDeSerializer
-{
-public:
-	virtual const AxisChar* GetMethodName()=0;
-	virtual IParam* GetParam()=0;
-	virtual int Deserialize(IParam* pIParam, int bHref)=0;
-	virtual ~IWrapperSoapDeSerializer() {};
+    public MethodInfo() {
+        this.returnType = null;
+        this.methodname = null;
+        parameters = new Hashtable(101);
+    }
 
-};
+    public MethodInfo(ParameterInfo returnType, String methodname) {
+        this.returnType = returnType;
+        this.methodname = methodname;
+        parameters = new Hashtable(101);
+    }
 
-#endif // !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)
+    public String getMethodname() {
+        return methodname;
+    }
+
+    public void setMethodname(String methodname) {
+        this.methodname = methodname;
+    }
+
+    public ParameterInfo getReturnType() {
+        return returnType;
+    }
+
+    public void setReturnType(ParameterInfo returnType) {
+        this.returnType = returnType;
+    }
+
+    public Enumeration getParameters() {
+        return this.parameters.keys();
+    }
+
+    public Collection getParameterTypess() {
+        return this.parameters.values();
+    }
+
+    public void addParameter(String paramName, ParameterInfo type) {
+        this.parameters.put(paramName, type);
+    }
+
+    public ParameterInfo getParameter(String paramName) {
+        Object obj = this.parameters.get(paramName);
+        if (obj != null)
+            return (ParameterInfo) obj;
+        return null;
+    }
+}

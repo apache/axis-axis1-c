@@ -1,9 +1,8 @@
-/* -*- C++ -*- */
 /*
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,7 +24,7 @@
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "SOAP" and "Apache Software Foundation" must
+ * 4. The names "Axis" and "Apache Software Foundation" must
  *    not be used to endorse or promote products derived from this
  *    software without prior written permission. For written
  *    permission, please contact apache@apache.org.
@@ -52,35 +51,31 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- *
- *
- *
- *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- *
  */
 
-// IWrapperSoapDeSerializer.h: interface for the IWrapperSoapDeSerializer class.
-//
-//////////////////////////////////////////////////////////////////////
+package org.apache.axis.wsdl.wsdl2ws;
 
-#if !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)
-#define AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_
+/**
+ *  Most of the Constants are taken from the Axis constants class ... Here are few adittional ones 
+ * @author Srianth Perera (hemapani@opensource.lk)
+ */
+public class Constants {
+    /* This constants are regarding scope */
+    public static final String PARAMETER_SCOPE = "scope";
+    public static final String SCOPE_REQUEST = "request";
+    public static final String SCOPE_SESSION = "session";
+    public static final String SCOPE_APPLICATION = "application";
 
-#include "ISoapDeSerializer.h"
-#include "GDefine.h"
-#include <string>
-using namespace std;
-class IParam;
-
-class IWrapperSoapDeSerializer : public virtual ISoapDeSerializer
-{
-public:
-	virtual const AxisChar* GetMethodName()=0;
-	virtual IParam* GetParam()=0;
-	virtual int Deserialize(IParam* pIParam, int bHref)=0;
-	virtual ~IWrapperSoapDeSerializer() {};
-
-};
-
-#endif // !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)
+    public static int HTTP = 0;
+    public static String DEFAULT_SIMPLETYPE_ENCODING_URI = "http://www.w3.org/2001/XMLSchema";
+	
+	/* Constants for the wrapper */
+    public static final String WRAPPER_NAME_APPENDER = "Service";
+    public static final String PARAM_NAME_APPENDER = "Param";
+    public static final String PATH_TO_WRAPPERS = "lk.opensource.service.wrappers.";
+    public static final String ADMIN_SERVICE_URI = "AdminService";
+	public static final String NODE_NAME_PARAMETER = "nodename";
+	public static final String SERVER_ROLE = "http://www.w3.org/2002/12/soap-envelope/role/server";
+	public static final String CLIENT_ROLE = "http://www.w3.org/2002/12/soap-envelope/role/client";
+	public static final String PROVIDER_ROLE = "http://www.w3.org/2002/12/soap-envelope/role/provider";
+}
