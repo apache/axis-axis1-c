@@ -170,7 +170,7 @@ class Axis2Transport:public SOAPTransport
   /**
     * Payload lenght
     */
-    int m_iContentLength;
+    unsigned int m_iContentLength;
 
   /**
     * Is the message chunked
