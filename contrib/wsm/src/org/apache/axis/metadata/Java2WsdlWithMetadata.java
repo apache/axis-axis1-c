@@ -92,12 +92,9 @@ public class Java2WsdlWithMetadata extends org.apache.axis.wsdl.Java2WSDL {
 			// Find the class using the name
 			emitter.setCls(className);
 			
-			Class serviceEndpointInterface = emitter.getCls();
+			Class<?> serviceEndpointInterface = emitter.getCls();
 			
-			String targetNamespace = 
-			(
-			(TargetNamespace) serviceEndpointInterface.getAnnotation(TargetNamespace.class)
-			).value();
+			String targetNamespace = serviceEndpointInterface.getAnnotation(TargetNamespace.class).value();
 			if (targetNamespace != null) {
                 Package javaPackage = serviceEndpointInterface.getPackage();
                 java.lang.String javaPackageName = null;
@@ -109,26 +106,17 @@ public class Java2WsdlWithMetadata extends org.apache.axis.wsdl.Java2WSDL {
                 namespaceMap.put(javaPackageName, targetNamespace);
 			}
 			
-			String wsdlFile =  
-				(
-						(WsdlFile) serviceEndpointInterface.getAnnotation(WsdlFile.class)
-				).value();
+			String wsdlFile =  serviceEndpointInterface.getAnnotation(WsdlFile.class).value();
 			if (wsdlFile != null) {
 				wsdlFilename = wsdlFile;
 			}
 
-			String serviceLocation = 
-			(
-					(ServiceLocation) serviceEndpointInterface.getAnnotation(ServiceLocation.class)
-			).value();
+			String serviceLocation = serviceEndpointInterface.getAnnotation(ServiceLocation.class).value();
 			if (serviceLocation != null) {
 				emitter.setLocationUrl(serviceLocation);
 				locationSet = true;
 			}
-			EncodingType style = 
-			(
-					(Protocol) serviceEndpointInterface.getAnnotation(Protocol.class)
-			).soapStyle();
+			EncodingType style = serviceEndpointInterface.getAnnotation(Protocol.class).soapStyle();
 			
 			// Currently the following commented-out block doesn't work.
 			// This block works from Tiger beta 2 b38.
@@ -151,13 +139,13 @@ public class Java2WsdlWithMetadata extends org.apache.axis.wsdl.Java2WSDL {
 			}
 			*/
 			
-			if (style == EncodingType.documentLiteral) {
+			if (style == EncodingType.DOCUMENT_LITERAL) {
 				emitter.setStyle("document");
 				emitter.setUse("literal");
-			} else if (style == EncodingType.rpcLiteral) {
+			} else if (style == EncodingType.RPC_LITERAL) {
 				emitter.setStyle("rpc");
 				emitter.setUse("literal");
-			} else if (style == EncodingType.soapEncoded) {
+			} else if (style == EncodingType.RPC_ENCODED) {
 				emitter.setStyle("rpc");
 				emitter.setUse("encoded");
 			}
