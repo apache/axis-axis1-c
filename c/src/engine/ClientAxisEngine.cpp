@@ -135,6 +135,7 @@ int ClientAxisEngine::Invoke(MessageData* pMsg)
 	do 
 	{
 		if (AXIS_SUCCESS != (Status = m_pSZ->SetOutputStream(m_pSoap))) break;
+		m_pSZ->MarkEndOfStream();
 		pMsg->setPastPivotState(true);
 		if (AXIS_SUCCESS != (Status = m_pDZ->SetInputStream(m_pSoap))) break;
 	}

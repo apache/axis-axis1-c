@@ -142,31 +142,46 @@ public class ServiceHeaderWriter extends HeaderFileWriter{
 	protected void writeMethods() throws WrapperFault {
 		MethodInfo minfo;
 		boolean isSimpleType;
-		 try{
-		  writer.write("\tpublic: \n");	
-		  for(int i = 0; i < methods.size(); i++){
-			  minfo = (MethodInfo)this.methods.get(i);
-			  //write return type
-			  if(minfo.getReturnType()==null)
-				  writer.write("\t\tvoid ");
-			  else {
-			  	  String outparam = minfo.getReturnType().getLangName();
-				  writer.write("\t\t"+WrapperUtils.getClassNameFromParamInfoConsideringArrays(minfo.getReturnType(),wscontext));
-			  }
-			  writer.write(" "+minfo.getMethodname()+"(");
+		try{
+		  	writer.write("\tpublic: \n");	
+		  	for(int i = 0; i < methods.size(); i++){
+			  	minfo = (MethodInfo)this.methods.get(i);
+				boolean isAllTreatedAsOutParams = false;
+				minfo = (MethodInfo)this.methods.get(i);
+				int noOfOutParams = minfo.getOutputParameterTypes().size();
+				//write return type
+				if(0==noOfOutParams)
+				writer.write("\t\tvoid ");
+				else if(1==noOfOutParams){
+					ParameterInfo returnParam = (ParameterInfo)minfo.getOutputParameterTypes().iterator().next();
+					String outparam = returnParam.getLangName();
+					writer.write("\t\t"+WrapperUtils.getClassNameFromParamInfoConsideringArrays(returnParam,wscontext)+" ");
+				}
+				else{
+					isAllTreatedAsOutParams = true;
+					writer.write("\t\tvoid ");
+				}
+			  	writer.write(minfo.getMethodname()+"(");
             
-			  //write parameter names 
-			  Iterator params = minfo.getParameterTypes().iterator();
-			  if(params.hasNext()){
-			  	  ParameterInfo fparam = (ParameterInfo)params.next();
-				  writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
-			  }
-			  for(int j =1; params.hasNext();j++){
-				  ParameterInfo nparam = (ParameterInfo)params.next();
-				  writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
-			  }
-			  writer.write(");\n");
-		  }
+			  	//write parameter names 
+			  	Iterator params = minfo.getInputParameterTypes().iterator();
+			  	if(params.hasNext()){
+			  	  	ParameterInfo fparam = (ParameterInfo)params.next();
+				  	writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
+			  	}
+			  	for(int j =1; params.hasNext();j++){
+				  	ParameterInfo nparam = (ParameterInfo)params.next();
+				  	writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
+			  	}
+				if (isAllTreatedAsOutParams){
+					params = minfo.getOutputParameterTypes().iterator();
+					for(int j =0; params.hasNext();j++){
+						ParameterInfo nparam = (ParameterInfo)params.next();
+						writer.write(", AXIS_OUT_PARAM"+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" *OutValue"+j);
+					}
+				}			  	
+			  	writer.write(");\n");
+		  	}
 		}catch (Exception e) {
 			  e.printStackTrace();
 			  throw new WrapperFault(e);

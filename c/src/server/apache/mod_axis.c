@@ -9,8 +9,6 @@
 #include <malloc.h>
 
 #define AXIS_URI_EXTENSION "/axis"
-/* NO_OF_SERIALIZE_BUFFERS should be equal to the corresponding value in the axis configuration file */
-#define NO_OF_SERIALIZE_BUFFERS 10
 
 /* Following is the character that should be used to separate the method name in the 
  * SOAPAction header value. Ex: "http://localhost:80/axis/Calculator#Add"
@@ -30,12 +28,6 @@ extern int process_request(Ax_soapstream* str);
 extern unsigned char chEBuf[1024];
 
 #define SIZEOFMODULEBUFFER 100
-
-typedef struct
-{
-	const void* bufferid ;
-	const char* buffer;
-} sendbuffers;
 
 char g_buffer[SIZEOFMODULEBUFFER];
 

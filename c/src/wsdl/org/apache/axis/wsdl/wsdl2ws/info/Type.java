@@ -62,10 +62,7 @@
  */
 package org.apache.axis.wsdl.wsdl2ws.info;
 
-import java.util.Collection;
-import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Set;
 import java.util.Vector;
 import java.util.Iterator;
 
@@ -74,8 +71,7 @@ import javax.xml.namespace.QName;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
-import org.apache.axis.wsdl.wsdl2ws.c.CUtils;
-import org.apache.axis.wsdl.wsdl2ws.cpp.CPPUtils;
+import org.apache.axis.wsdl.wsdl2ws.c.literal.CUtils;
 
 public class Type {
     /* max no of attribs expected in a type */
@@ -135,7 +131,7 @@ public class Type {
         // if the language specific name does not specified try weather is it a simple type  	 
         if(languageSpecificName == null){
         	if(WrapperConstants.LANGUAGE_CPP.equalsIgnoreCase(this.language))
-				this.languageSpecificName = CPPUtils.getclass4qname(name);
+				this.languageSpecificName = CUtils.getclass4qname(name);
 			else if(WrapperConstants.LANGUAGE_C.equalsIgnoreCase(this.language))
 					this.languageSpecificName = CUtils.getclass4qname(name);
 			else

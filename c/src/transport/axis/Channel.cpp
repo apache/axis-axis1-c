@@ -206,7 +206,7 @@ bool Channel::Init()
  *
  * @param	Message to be written to the open channel
  */
-const Channel& Channel::operator << (const std::string& msg)
+const Channel& Channel::operator << (const char* msg)
 {
 	if(INVALID_SOCKET == m_Sock) 
 	{
@@ -214,9 +214,9 @@ const Channel& Channel::operator << (const std::string& msg)
 		throw ChannelException("Output streaming error on undefined channel; please open the channel first");
 	}
 
-	int size = msg.size(), nByteSent;
+	int size = strlen(msg), nByteSent;
     
-	if((nByteSent = send(m_Sock, (char *)msg.c_str(), size, MSG_DONTROUTE )) == SOCKET_ERROR)
+	if((nByteSent = send(m_Sock, msg, size, MSG_DONTROUTE )) == SOCKET_ERROR)
 	{
 		Error("Output streaming error while writing data.");
 		CloseChannel();
