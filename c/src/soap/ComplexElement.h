@@ -61,38 +61,41 @@
  *
  */
 
-// SoapBody.h: interface for the SoapBody class.
+// ComplexElement.h: interface for the ComplexElement class.
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_SOAPBODY_H__D1A60F04_287F_4688_A8F0_10BE0EA25775__INCLUDED_)
-#define AFX_SOAPBODY_H__D1A60F04_287F_4688_A8F0_10BE0EA25775__INCLUDED_
+#if !defined(AFX_COMPLEXELEMENT_H__558543B0_B076_404C_A7FE_830E13C1785A__INCLUDED_)
+#define AFX_COMPLEXELEMENT_H__558543B0_B076_404C_A7FE_830E13C1785A__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "SoapMethod.h"
-#include "SoapFault.h"
-#include "SoapEnvVersions.h"
+#include <string>
+#include <list>
+#include "BasicNode.h"
 
-class SoapBody  
+using namespace std;
+
+class ComplexElement : public BasicNode
 {
-friend class SoapSerializer;
+public:
+	int setURI(const string& sURI);
+	int serialize(string& sSerialized);
+	int addChild(BasicNode* pBasicNode);
+	int setLocalName(const string& sLocalName);
+	int setPrefix(const string& sPrefix);
+	ComplexElement();
+	virtual ~ComplexElement();
 
 private:
-	SoapMethod *m_pSoapMethod;
-	SoapFault *m_pSoapFault;
-	//string m_strBodySerialized;
-
-public:
-	//string& serialize();
-	int serialize(string&, SOAP_VERSION eSoapVersion);
-	void setSoapFault(SoapFault* ptrSoapFault);
-	void setSoapMethod(SoapMethod* ptrSoapMethod);
-	SoapBody();
-	virtual ~SoapBody();
-
+	int serializeChildren(string& sSerialized);
+	bool isSerializable();
+	list<BasicNode*> m_children;
+	string m_sPrefix;
+	string m_sLocalName;
+	string m_sURI;
 };
 
-#endif // !defined(AFX_SOAPBODY_H__D1A60F04_287F_4688_A8F0_10BE0EA25775__INCLUDED_)
+#endif // !defined(AFX_COMPLEXELEMENT_H__558543B0_B076_404C_A7FE_830E13C1785A__INCLUDED_)
