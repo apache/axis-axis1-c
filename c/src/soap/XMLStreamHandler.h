@@ -126,6 +126,7 @@ private:
 	AxisXMLString m_sLastElement;
 	HeaderBlock* m_pHeaderBlock;
 private:
+	const AxisChar* __XTRC(const XMLCh* pChar);
 	void createHeaderBlock(const XMLCh *const uri,const XMLCh *const localname,const XMLCh *const qname,const Attributes &attrs);
 	int m_nParamNestingLevel;
 	int SetArrayDimensions(AxisXMLString& sDimensions);

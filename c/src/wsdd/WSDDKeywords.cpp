@@ -12,7 +12,7 @@ volatile bool WSDDKeywords::m_bInit = false;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-#define AX_DELETE(X) delete const_cast<unsigned short*>(X)
+#define AX_DELETE(X) delete const_cast<AxisXMLCh*>(X)
 
 const AxisXMLCh* kw_depl;
 const AxisXMLCh* kw_srv;
