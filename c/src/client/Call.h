@@ -95,8 +95,10 @@ public:
 
 	/* Method for adding complex parameters */
 	void AddParameter(void* pObject, void* pSZFunct, void* pDelFunct, const char* pchName);
-	/* Method for adding array parameters */
+	/* Method for adding complex type array parameters */
 	void AddParameter(Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName);
+	/* Method for adding basic type array parameters */
+	void AddParameter(Axis_Array* pArray, XSDTYPE nType);
 
 	/* Methods for adding parameters of basic types */
 	void AddParameter(int nValue,const char* pchName);
