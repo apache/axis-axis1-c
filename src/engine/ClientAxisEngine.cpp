@@ -39,7 +39,7 @@ int ClientAxisEngine::Process(Ax_soapstream* soap)
 		//populate MessageData with transport information
 		send_transport_information(soap);
 		const char* cService = get_header(soap, SOAPACTIONHEADER);
-		if(SUCCESS != m_pSZ->SetOutputStream(soap->str.op_stream))
+		if(SUCCESS != m_pSZ->SetOutputStream(soap))
 		{
 			break;
 		}

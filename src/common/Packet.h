@@ -115,12 +115,33 @@ typedef union
 	Ax_stream_smtp smtp;
 } Ax_soapcontent;
 
+/**
+ *Function pointer definitions for trasport layer
+ */
+typedef int (*AXIS_SEND_SEND_BYTES)(const char*, const void*);
+typedef int (*AXIS_GET_BYTES)(char*, int, int*, const void*);
+typedef int (*AXIS_SEND_TRANSPORT_INFORMATION)(void*); //Ax_soapstream
+typedef int (*AXIS_GET_TRANSPORT_INFORMATION)(void*);//Ax_soapstream
+
+/**
+ *Each transport module on the server side should populate following struct with 
+ *their transport function pointers in order for the Axis Engine to work properly.
+ */
+typedef struct
+{
+	AXIS_SEND_SEND_BYTES pSendFunct;
+	AXIS_GET_BYTES pGetFunct;
+	AXIS_SEND_TRANSPORT_INFORMATION pSendTrtFunct;
+	AXIS_GET_TRANSPORT_INFORMATION pGetTrtFunct;
+} Ax_transport;
+
 typedef struct
 {
 	Ax_soapcontent so;
 	Ax_iostream str;
 	char* sessionid;
 	AXIS_PROTOCOL_TYPE trtype;
+	Ax_transport transport;
 } Ax_soapstream;
 
 int set_header(Ax_soapstream* soap, char * pchkey, char * pchvalue);

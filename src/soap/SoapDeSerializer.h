@@ -84,7 +84,7 @@ class SoapDeSerializer : public IWrapperSoapDeSerializer, public IHandlerSoapDeS
 private:
 	XMLStreamHandler* m_pHandler;
 	SAX2XMLReader* m_pParser;
-	const void* m_pInputStream;
+	const Ax_soapstream* m_pInputStream;
 	char m_hugebuffer[HUGE_BUFFER_SIZE];
 public:
 	int GetVersion();
@@ -97,7 +97,7 @@ public:
 	SoapBody* GetBody();
 	ISoapHeader* GetHeader();
 	SoapEnvelope* GetEnvelope();
-	int SetInputStream(const void* InputStream);
+	int SetInputStream(const Ax_soapstream* pInputStream);
 	SoapDeSerializer();
 	virtual ~SoapDeSerializer();
 

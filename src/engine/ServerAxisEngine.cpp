@@ -41,7 +41,7 @@ int ServerAxisEngine::Process(Ax_soapstream* soap)
 			//populate MessageData with transport information
 			m_pMsgData->m_Protocol = soap->trtype;
     
-			if (SUCCESS != m_pDZ->SetInputStream(soap->str.ip_stream))
+			if (SUCCESS != m_pDZ->SetInputStream(soap))
 			{
 				nSoapVersion = m_pDZ->GetVersion();
 				nSoapVersion = (nSoapVersion == VERSION_LAST) ? SOAP_VER_1_2 : nSoapVersion;
@@ -162,7 +162,7 @@ int ServerAxisEngine::Process(Ax_soapstream* soap)
 		//send any transoport information like http headers first
 		send_transport_information(soap);
 		//Serialize
-		m_pSZ->SetOutputStream(soap->str.op_stream);
+		m_pSZ->SetOutputStream(soap);
 
 		//Pool back the Service specific handlers
 		if (m_pSReqFChain) g_pHandlerPool->PoolHandlerChain(m_pSReqFChain, sSessionId);
