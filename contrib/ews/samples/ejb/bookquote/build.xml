@@ -21,13 +21,18 @@
 		<mkdir dir="${jar.dir}"/>
  		<jar jarfile="${jar.dir}/bookquote.jar" basedir="${build.classes}" >
 		<include name="**" />
-		<manifest>
-			<section name="org/apache/ws4j2ee">
-			<attribute name="Implementation-Title" value="Apache jsr109 impl"/>
-			<attribute name="Implementation-Vendor" value="Apache Web Services"/>
-			</section>
-		</manifest>
 		</jar>
+
+		<copy file ="${basedir}/META-INF/webservice.xml" todir="${build.classes}/META-INF"/>
+		<copy file ="${basedir}/META-INF/application.xml" todir="${build.classes}/META-INF"/>
+		<copy file ="${jar.dir}/bookquote.jar" todir="${build.classes}"/>
+		<jar jarfile="${jar.dir}/bookquote.ear" basedir="${build.classes}">
+			<include name="**/webservice.xml" />
+			<include name="**/application.xml" />
+			<include name="**/*.jar" />
+			<include name="**/*.war" />
+		</jar>
+		 
 		<delete dir="${build}"/>
 	</target>
 </project>

@@ -80,6 +80,7 @@
 		<ant:ant antfile="build.xml" inheritall="true" inheritrefs="true" dir="samples/ejb/google"/>
 		<ant:ant antfile="build.xml" inheritall="true" inheritrefs="true" dir="samples/ejb/time"/>
 		<ant:ant antfile="build.xml" inheritall="true" inheritrefs="true" dir="samples/ejb/zip"/>
+		<ant:ant antfile="build.xml" inheritall="true" inheritrefs="true" dir="samples/servlet/war2"/>
         </j:jelly>
     </preGoal> 
     
