@@ -147,8 +147,7 @@ public class ParmHeaderFileWriter extends ParamWriter{
 		{
 			writer.write("#include \""+itr.next().toString()+".h\"\n");
 		}		
-		
-				
+			
 		//Local name and the URI for the type
 		writer.write("//Local name and the URI for the type\n");
 		writer.write("static const char* Axis_URI_"+classname+" = \""+type.getName().getNamespaceURI()+"\";\n");
