@@ -52,7 +52,8 @@ run(void *arg)
 
 
     InteropTestPortType *ws;
-
+    try
+    {
     if (arg == NULL)
 	ws = new InteropTestPortType(endpoint);
     else
@@ -188,6 +189,19 @@ run(void *arg)
 	printf("echoBoolean failed\n");
 
     printf( "%ld Done\n", pthread_self() );
+    }
+    catch(AxisException& e)
+    {
+        printf("Exception : %s\n", e.what());
+    }
+    catch(exception& e)
+    {
+        printf("Unknown exception has occured\n");
+    }
+    catch(...)
+    {
+        printf("Unknown exception has occured\n");
+    }
     return 0;
 }
 
