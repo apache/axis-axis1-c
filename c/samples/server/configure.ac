@@ -6,4 +6,4 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
-AC_OUTPUT(Makefile interoptests/Makefile interoptests/cbase/Makefile)
+AC_OUTPUT(Makefile interoptests/Makefile interoptests/cbase/Makefile interoptests/base/Makefile)
