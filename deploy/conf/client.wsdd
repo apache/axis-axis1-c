@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:C="http://xml.apache.org/axis/wsdd/providers/c">  
-<service name="Calculator" provider="CPP:DOCUMENT" description="Simple Calculator">
+<service name="baseDL" provider="CPP:DOCUMENT" description="Simple Calculator">
 <requestFlow name="test-handler-req">        
-<handler name="TestHandler" type="/usr/local/axiscpp_deploy/handlers/client2/test_handler/libtest_client_handler.so">/>        
+<handler name="TestHandler" type="/home/samisa/autoCVS/cvsAutoBuild/deploy/lib/libtest_client_handler.so">/>        
 </handler>  
 </requestFlow>
 </service>
