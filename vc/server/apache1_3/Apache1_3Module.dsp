@@ -58,7 +58,7 @@ LINK32=link.exe
 # SUBTRACT LINK32 /profile
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
-PostBuild_Cmds=copy ..\..\..\bin\mod_axis.dll "%AXIS_HOME%\..\modules\."
+PostBuild_Cmds=copy ..\..\..\bin\mod_axis.dll "%AXISCPP_DEPLOY%\..\modules\."
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "Apache1_3Module - Win32 Debug"
