@@ -19,12 +19,13 @@
 <br>
 <a href="#client">Coding the client</a>
 
-
-
 <br>
 <a href="#sample">Running your sample</a><br>
 
+<a href="#transport">Axis Transport and Parser Library</a><br>
+
 <a href="#handlers">Handlers</a><br><br>
+
 <b>Before you follow this guide, make sure that you have followed the</b> <a
 href="wininstall-guide.html">
 
@@ -250,6 +251,10 @@ AXIS_EXTRACT/lib/axis/
 Axisclient.lib
 <br>
 AxisServer.lib
+<br>
+AxisTransport.lib
+<br>
+AxisXMLParser.lib
 
 <br>
 6) Create a file with the main method which looks similar to the following
@@ -280,10 +285,15 @@ int main()
 <br>
 <p>SUCCESS ! If you get the result, you are done.</p>
 
+<p><a name="transport"></a></p>
+
+<h2>Transport Library and Parser Library</h2>
+<p>AxisTransport.dll should be placed in the path that's specified by axiscpp.conf (AXIS_FOLDER/axiscpp.conf).Or with the client.exe.</p> 
+<p>AxisXMLParser.dll should be placed in the path that's specified by axiscpp.conf.Or with the client.exe.</p>
+
 <p><a name="handlers"></a></p>
 
 <h2>Handlers</h2>
-
 <p>Handlers are pluggable components in Axis C++. We have included a set of sample handlers for your reference. You could write your own handlers by following the instructions  given for the sample Handlers.</p>
 <p><b>Note: If you are using Client side Handlers you need to enter the following entry in the AXIS_FOLDER/axiscpp.conf configuration file.</b></p>
 <p>CLIENTWSDDFILEPATH:Axis\conf\client.wsdd</p>
