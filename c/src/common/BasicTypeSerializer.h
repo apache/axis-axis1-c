@@ -76,7 +76,7 @@
 
 using namespace std;
 
-class BasicTypeSerializer  
+class BasicTypeSerializer
 {
 public:
 	static string& serialize(const string& sName, string& sValue, XSDTYPE type=XSD_STRING);
