@@ -1,8 +1,10 @@
+/* -*- C++ -*- */
+
 /*
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2003 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,7 +26,7 @@
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Axis" and "Apache Software Foundation" must
+ * 4. The names "SOAP" and "Apache Software Foundation" must
  *    not be used to endorse or promote products derived from this
  *    software without prior written permission. For written
  *    permission, please contact apache@apache.org.
@@ -51,63 +53,35 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
+ *
+ *
  */
- 
-/**
- * @author Srinath Perera(hemapani@openource.lk)
- * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
- */
-package org.apache.axis.wsdl.wsdl2ws.c.literal;
-import java.util.Iterator;
 
-import org.apache.axis.wsdl.wsdl2ws.SourceWriter;
-import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
-import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
-import org.apache.axis.wsdl.wsdl2ws.info.Type;
-import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
+#include "AnyElement.h"
+#include <axis/common/Packet.h>
+
+#if !defined(__XMLPARSER_H_INCLUDED__)
+#define __XMLPARSER_H_INCLUDED__
 
 /**
- * Parameter genarator.. genarate all necessary param classes
- * @author hemapani
- */
-public class AllParamWriter implements SourceWriter{
-	private WebServiceContext wscontext;
-	
-	public AllParamWriter(WebServiceContext wscontext){
-		this.wscontext =wscontext;
-	}
+    @class XMLParser
+    @brief Interface that any parser wrapper should implement in order to be use 
+		   in Axis as a SOAP parser.
+    @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
+*/
+class XMLParser
+{
+public:
+	virtual ~XMLParser(){};
+	virtual int SetInputStream(const Ax_soapstream* pInputStream)=0;
+	virtual const Ax_soapstream* GetInputStream()=0;
+	virtual int Init()=0;
+	virtual const XMLCh* GetNS4Prefix(const XMLCh* prefix)=0;
+	virtual int GetStatus()=0;
+	virtual const AnyElement* Next()=0;
+	virtual AXIS_TRANSPORT_STATUS GetTransportStatus()=0;
+	virtual void SetTransportStatus(AXIS_TRANSPORT_STATUS nStatus)=0;
 
-	/**
-	 * genarate all the wrappets for custom complex types.
-	 * @see org.apache.axis.wsdl.wsdl2ws.SourceWriter#writeSource()
-	 */
-	public void writeSource() throws WrapperFault {
-		Iterator enu = wscontext.getTypemap().getTypes().iterator();
-		String generator = wscontext.getWrapInfo().getImplStyle();
-		Type type;
-		while(enu.hasNext()){	
-			try{	
-				type = (Type)enu.next();
-				if(wscontext.getWrapInfo().getImplStyle().equals(WrapperConstants.IMPL_STYLE_STRUCT)){
-					if(type.isArray()){
-						System.out.println("Array writer called ......");
-						(new ArrayParamWriter(wscontext,type)).writeSource();	
-					}	
-					else{
-						if (type.getLanguageSpecificName().startsWith(">")){
-							System.out.println("ignoring anonymous type "+ type.getLanguageSpecificName()+"\n");	
-						}
-						else{
-							System.out.println("struct writer called ......");
-							(new BeanParamWriter(wscontext,type)).writeSource();
-							(new ParmHeaderFileWriter(wscontext,type)).writeSource();	
-						}
-					}	
-				}	
-			}catch(Exception e){
-				System.out.println("Error occured yet we continue to genarate other classes ... you should check the error");
-				e.printStackTrace();
-			}	
-		}
-	}
-}
+};
+
+#endif

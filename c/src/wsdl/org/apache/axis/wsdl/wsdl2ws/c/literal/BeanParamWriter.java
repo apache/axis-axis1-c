@@ -64,10 +64,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import javax.xml.namespace.QName;
-
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
-import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
@@ -151,11 +148,11 @@ public class BeanParamWriter extends ParamCFileWriter{
 		for(int i = attributeParamCount; i< attribs.length;i++){
 			if(attribs[i].isArray()){
 				//if Array
+				arrayType = attribs[i].getTypeName();
 				if (attribs[i].isSimpleType()){
 					writer.write("\tpSZX->SerializeBasicArray(pSZ, (Axis_Array*)(&param->"+attribs[i].getParamName()+"),"+CUtils.getXSDTypeForBasicType(arrayType)+", \""+attribs[i].getParamName()+"\");\n"); 
 				}
 				else{
-					arrayType = attribs[i].getTypeName();
 					writer.write("\tpSZX->SerializeCmplxArray(pSZ, (Axis_Array*)(&param->"+attribs[i].getParamName()+"),\n"); 
 					writer.write("\t\t(void*) Axis_Serialize_"+arrayType+", (void*) Axis_Delete_"+arrayType+", (void*) Axis_GetSize_"+arrayType+",\n"); 
 					writer.write("\t\t\""+attribs[i].getParamName()+"\", Axis_URI_"+arrayType+");\n");
@@ -165,7 +162,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 				writer.write("\tpSZX->SerializeAsElement(pSZ, \""+attribs[i].getParamName()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 			}else{
 				//if complex type
-				writer.write("\tpSZX->Serialize(pSZ, \"<"+attribs[i].getParamName()+">\");\n");
+				writer.write("\tpSZX->Serialize(pSZ, \"<"+attribs[i].getParamName()+"\");\n");
 				writer.write("\tAxis_Serialize_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+", pSZ, false);\n");
 				writer.write("\tpSZX->Serialize(pSZ, \"</"+attribs[i].getParamName()+">\");\n");
 			}			
@@ -230,7 +227,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 					"\n\t\t, \""+attribs[i].getParamName()+"\", Axis_URI_"+attribs[i].getTypeName()+");\n");
 			}		
 		}
-		writer.write("\treturn AXIS_SUCCESS;\n");
+		writer.write("\treturn pDZX->GetStatus(pDZ);\n");
 		writer.write("}\n");
 	}
 	
