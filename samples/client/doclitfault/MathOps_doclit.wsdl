@@ -71,7 +71,7 @@
 			</fault>
 			</operation>
 		</binding>
-	<service name="MathOpsService">
+	<service name="MathOpsDLService">
 		<port name="MathOpsPort" binding="tns:MathOpsBinding">
 			<soap:address location="http://localhost/axis/MathOpsPort"/>
 		</port>

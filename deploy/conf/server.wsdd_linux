@@ -10,6 +10,14 @@
                 <parameter name="allowedMethods" value="add sub mul div "/>
                 <parameter name="className" value="/usr/local/Axis/webservices/libcalculator.so" />
         </service>
+	<service name="MathOps" provider="CPP:RPC" description="Simple sample to demonstrate fault mapping and exception handling">
+                <parameter name="allowedMethods" value="div "/>
+                <parameter name="className" value="/usr/local/Axis/webservices/libmathops.so" />
+        </service>
+	<service name="MathOpsDL" provider="CPP:DOCUMENT" description="Simple sample to demonstrate fault mapping and exception handling">
+                <parameter name="allowedMethods" value="div "/>
+                <parameter name="className" value="/usr/local/Axis/webservices/libdoclitmathops.so" />
+        </service>
 
 	<service name="baseDL" provider="CPP:DOCUMENT" description="SOAPBuilders Interoperability Lab Round 2 base test suite described at http://www.whitemesa.com/interop/proposal2.html ">
 		<parameter name="allowedMethods" value="echoString EchoInt echoStringArray echoInteger echoIntegerArray echoFloat echoFloatArray echoStruct echoStructArray echoVoid echoBase64 echoDate echoHexBinary echoDecimal echoBoolean "/>

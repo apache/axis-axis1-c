@@ -56,10 +56,11 @@ int MathOpsWrapper::invoke(void *pMsg)
 /*
  * This method wrap the service method 
  */
-int MathOpsWrapper::div(void* pMsg)
+int MathOpsWrapper::div(void* pMsg) throw(AxisDivByZeroException)
 {
 	IMessageData* mc = (IMessageData*)pMsg;
 	int nStatus;
+        int ret;
 	IWrapperSoapSerializer *pIWSSZ = NULL;
 	mc->getSoapSerializer(&pIWSSZ);
 	if (!pIWSSZ) return AXIS_FAIL;
@@ -72,7 +73,25 @@ int MathOpsWrapper::div(void* pMsg)
 	int v0 = pIWSDZ->getElementAsInt("int0",0);
 	int v1 = pIWSDZ->getElementAsInt("int1",0);
 	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
-	int ret = pWs->div(v0,v1);
+        try
+        {
+	    ret = pWs->div(v0,v1);
+        }
+        catch(AxisDivByZeroException& e)
+        {
+            pIWSSZ->createSoapFault("DivByZeroFault", "http://soapinterop.org/");
+            DivByZeroFault* pObjFault = new DivByZeroFault();
+            pObjFault->varString = "Division by zero exception";
+            pObjFault->varInt = 1;
+            pObjFault->varFloat = 10.52;
+
+            if(pObjFault)
+                pIWSSZ->addFaultDetail(pObjFault, (void*)Axis_Serialize_DivByZeroFault,
+                    (void*)Axis_Delete_DivByZeroFault, "DivByZeroException",
+                    Axis_URI_DivByZeroFault);
+
+            throw;
+        }
 	return pIWSSZ->addOutputParam("divReturn", (void*)&ret, XSD_INT);
 }
 
