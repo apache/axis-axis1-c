@@ -61,6 +61,9 @@
 
 #include "AxisException.h"
 
+#include <exception>
+using namespace std;
+
 AxisException::AxisException(int exceptionCode)
 {
   processException(exceptionCode);
@@ -94,14 +97,14 @@ void AxisException::processException(int exceptionCode)
 string AxisException::getMessage(exception* e)
 {
   string sMessage;
-  exception *objType = static_cast<bad_alloc*> (e);
+  exception *objType = static_cast<std::bad_alloc*> (e);
   if(objType != NULL)
   {
     //cout << "bad_alloc" << endl;
     sMessage = "thrown by new";
   }
 
-  objType = static_cast<bad_cast*> (e);
+  objType = static_cast<std::bad_cast*> (e);
   if(objType != NULL)
   {
     //cout << "bad_cast" << endl;

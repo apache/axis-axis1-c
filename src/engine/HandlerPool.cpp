@@ -73,7 +73,7 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-#include "../common/AxisTrace.h"
+//#include "../common/AxisTrace.h"
 
 extern AppScopeHandlerPool* g_pAppScopeHandlerPool;
 extern RequestScopeHandlerPool* g_pRequestScopeHandlerPool;

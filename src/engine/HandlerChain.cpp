@@ -66,7 +66,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "HandlerChain.h"
-#include "../common/AxisTrace.h"
+//#include "../common/AxisTrace.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -84,7 +84,7 @@ HandlerChain::~HandlerChain()
 
 int HandlerChain::Invoke(IMessageData* pMsg)
 {
-	AXISTRACE1("HandlerChain::Invoke(IMessageData* pMsg)");
+//	AXISTRACE1("HandlerChain::Invoke(IMessageData* pMsg)");
 	m_itCurrHandler = m_HandlerList.begin();
 	while (m_itCurrHandler != m_HandlerList.end())
 	{
@@ -98,7 +98,7 @@ int HandlerChain::Invoke(IMessageData* pMsg)
 			return FAIL;
 		}
 	}
-	AXISTRACE1("HandlerChain::Invoke end");
+//	AXISTRACE1("HandlerChain::Invoke end");
 	return SUCCESS;
 }
 

@@ -69,7 +69,7 @@
 #include "ArrayBean.h"
 #include "BasicTypeSerializer.h"
 #include <stdlib.h>
-
+#include <stdio.h>
 #include "AxisUtils.h"
 
 //////////////////////////////////////////////////////////////////////
@@ -78,27 +78,27 @@
 
 Param::Param(const Param& param)
 {
-	m_sName = param.m_sName;
-	m_sValue = param.m_sValue;
+	m_sName = param.m_sName.c_str();
+	m_sValue = param.m_sValue.c_str();
 	m_Type = param.m_Type;	
 	if (m_Type == USER_TYPE) 
 	{
-		m_Value.pCplxObj = new ComplexObjectHandler;
-		m_Value.pCplxObj->m_TypeName = param.m_Value.pCplxObj->m_TypeName;
-		m_Value.pCplxObj->m_URI = param.m_Value.pCplxObj->m_URI;
+		m_Value.pCplxObj = new ComplexObjectHandler();
+		m_Value.pCplxObj->m_TypeName = param.m_Value.pCplxObj->m_TypeName.c_str();
+		m_Value.pCplxObj->m_URI = param.m_Value.pCplxObj->m_URI.c_str();
 	}
 	else if(m_Type == XSD_ARRAY)
 	{
 		m_Value.pArray = new ArrayBean();
-		m_Value.pArray->m_TypeName = param.m_Value.pArray->m_TypeName;
-		m_Value.pArray->m_URI = param.m_Value.pArray->m_URI;
+		m_Value.pArray->m_TypeName = param.m_Value.pArray->m_TypeName.c_str();
+		m_Value.pArray->m_URI = param.m_Value.pArray->m_URI.c_str();
 		m_Value.pArray->m_type = param.m_Value.pArray->m_type;
 		m_Value.pArray->m_size = param.m_Value.pArray->m_size;
-		m_Value.pArray->m_ItemName = param.m_Value.pArray->m_ItemName;
+		m_Value.pArray->m_ItemName = param.m_Value.pArray->m_ItemName.c_str();
 		//copy constructor is not intended to use to copy the array in
 		//union v
 	}
-    if (m_Type == XSD_DURATION || m_Type == XSD_DATETIME)
+    else if (m_Type == XSD_DURATION || m_Type == XSD_DATETIME)
 	{
         m_uAxisTime.setType(m_Type);
 	}	
@@ -234,7 +234,6 @@ Param::~Param()
 		if (m_Value.pArray) delete m_Value.pArray;
 		break;
 	case USER_TYPE:
-		if (m_Value.pCplxObj->pObject) m_Value.pCplxObj->pDelFunct(m_Value.pCplxObj->pObject);
 		delete m_Value.pCplxObj;
 		break;
 	default:;
@@ -954,6 +953,11 @@ void Param::SetName(const AxisChar* sName)
 ComplexObjectHandler::ComplexObjectHandler()
 {
 	Init();
+}
+
+ComplexObjectHandler::~ComplexObjectHandler()
+{
+	if (pObject && pDelFunct) pDelFunct(pObject);
 }
 
 void ComplexObjectHandler::Init()

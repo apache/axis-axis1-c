@@ -86,7 +86,7 @@ WSDDTransport::~WSDDTransport()
 	{
 		for(iter = m_RequestHandlers->begin(); iter != m_RequestHandlers->end(); iter++)
 		{
-			for(iter2 = iter->second.begin(); iter2 != iter->second.end(); iter2++)
+			for(iter2 = (*iter).second.begin(); iter2 != (*iter).second.end(); iter2++)
 			{
 				delete (*iter2);
 			}
@@ -97,7 +97,7 @@ WSDDTransport::~WSDDTransport()
 	{
 		for(iter = m_ResponseHandlers->begin(); iter != m_ResponseHandlers->end(); iter++)
 		{
-			for(iter2 = iter->second.begin(); iter2 != iter->second.end();iter2++)
+			for(iter2 = (*iter).second.begin(); iter2 != (*iter).second.end();iter2++)
 			{
 				delete (*iter2);
 			}

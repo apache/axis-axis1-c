@@ -65,7 +65,7 @@
 #include "WSDDDocument.h"
 #include "WSDDKeywords.h"
 #include <string>
-#include "../common/AxisTrace.h"
+//#include "../common/AxisTrace.h"
 
 #define __XTRC(X) (true == XMLString::transcode(X, m_Buffer, TRANSCODE_BUFFER_SIZE-1))? m_Buffer : ""
 
@@ -94,13 +94,13 @@ int WSDDDocument::GetDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployme
 
 int WSDDDocument::ParseDocument(const AxisChar* sWSDD)
 {
-	AXISTRACE1("inside ParseDocument\n");
+//	AXISTRACE1("inside ParseDocument\n");
 	try
 	{
 		SAX2XMLReader* parser = XMLReaderFactory::createXMLReader();
 		parser->setContentHandler(this);
 		parser->setErrorHandler(this);     
-		AXISTRACE1("BEFORE parser->parse(sWSDD);");
+//		AXISTRACE1("BEFORE parser->parse(sWSDD);");
 		parser->parse(sWSDD);   
 		delete parser;
 	}
@@ -518,7 +518,7 @@ void WSDDDocument::startPrefixMapping(const XMLCh* const prefix, const XMLCh* co
 void WSDDDocument::endPrefixMapping(const XMLCh* const prefix)
 {
 //	string sPrifix = prefix;
-	m_NsStack.erase((wchar_t*) prefix); //I think the same prifix cannot repeat ???
+	m_NsStack.erase(prefix); //I think the same prifix cannot repeat ???
 }
 
 void  WSDDDocument::characters (const XMLCh *const chars, const unsigned int length)

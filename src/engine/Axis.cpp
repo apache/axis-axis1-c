@@ -68,7 +68,7 @@
 #endif
 
 #include "AxisEngine.h"
-#include "../common/AxisTrace.h"
+//#include "../common/AxisTrace.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
@@ -123,9 +123,11 @@ HandlerPool* g_pHandlerPool;
 //un synchronized read-only global variables.
 WSDDDeployment* g_pWSDDDeployment;
 
+#define AXISTRACE1 
+
 extern "C" int process_request(Ax_soapstream *str)
 {
-	AXISTRACE1("in axis.cpp");	
+//	AXISTRACE1("in axis.cpp");	
 	int Status = FAIL;
 	FILE * WsddFile;
 	char ReadBuffer[BYTESTOREAD];
@@ -141,13 +143,13 @@ extern "C" int process_request(Ax_soapstream *str)
 			//Handle the POST method
 			if (str->so.http.ip_method == AXIS_HTTP_POST)
 			{
-				AXISTRACE1("method is POST");
+//				AXISTRACE1("method is POST");
 				AxisEngine* engine = new AxisEngine();	
 				if (engine)
 				{
 					Status = engine->Process(str);
-					AXISTRACE1("Status = engine->Process(str);");
-				    AXISTRACE1("are we successful?");            
+//					AXISTRACE1("Status = engine->Process(str);");
+//				    AXISTRACE1("are we successful?");            
 					Status = SUCCESS;
 					delete engine;
 				}
@@ -184,7 +186,7 @@ extern "C" int process_request(Ax_soapstream *str)
 
 					for (iter = pSrvMap->begin();iter != pSrvMap->end();iter++)
 					{
-						pService = iter->second;
+						pService = (*iter).second;
 						send_response_bytes("<tr><td width=\"200\">", str->str.op_stream);
 						send_response_bytes((char *)pService->GetServiceName(), str->str.op_stream);
 						send_response_bytes("</td><td width=\"200\"><a href=\"./", str->str.op_stream);
@@ -232,7 +234,7 @@ extern "C" int process_request(Ax_soapstream *str)
 extern "C" int initialize_module()
 {
 	//order of these initialization method invocation should not be changed
-	AXISTRACE1("inside initialize_module\n");
+//	AXISTRACE1("inside initialize_module\n");
 	XMLPlatformUtils::Initialize();
 	AxisUtils::Initialize();
 	WSDDKeywords::Initialize();
