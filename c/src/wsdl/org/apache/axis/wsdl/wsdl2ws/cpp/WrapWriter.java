@@ -369,7 +369,8 @@ public class WrapWriter extends CPPClassWriter{
                                 writeExceptions(faultType,faultInfoName,paramName,langName);
                         }
                  }
-		writer.write("\tcatch(...)\n"); //nithya
+		writer.write("\tcatch(...){\n"); //nithya
+		writer.write("\t}\n"); //nithya
 		//write end of method
 		writer.write("}\n");
 	}
