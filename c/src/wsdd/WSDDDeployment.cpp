@@ -77,6 +77,10 @@ extern unsigned char chEBuf[1024];
 
 WSDDDeployment::WSDDDeployment()
 {
+	m_DeployedServices = NULL;
+	m_sAux = "";
+	m_pTransportHandlers = NULL;
+
 	m_GlobalResponseHandlers = NULL;
 	m_GlobalRequestHandlers = NULL;
 }
@@ -119,36 +123,18 @@ WSDDDeployment::~WSDDDeployment()
 
 }
 
-int WSDDDeployment::SetTransport(WSDDTransport * trans)
+void WSDDDeployment::SetLibIdMap(map<string, int>* pLibNameIdMap)
 {
-	m_pTransportHandlers = trans;
-	return SUCCESS;
-}
-
-WSDDTransport* WSDDDeployment::GetTransport()
-{
-	return m_pTransportHandlers;
-}
-
-int WSDDDeployment::SetGlobalRequestFlowHandlers(WSDDHandlerList * greqflow)
-{
-	m_GlobalRequestHandlers = greqflow;
-	return SUCCESS;
+	m_pLibNameIdMap = pLibNameIdMap;
 }
 
 
-WSDDHandlerList* WSDDDeployment::GetGlobalRequestFlowHandlers()
+const WSDDHandlerList* WSDDDeployment::GetGlobalRequestFlowHandlers()
 {
 	return m_GlobalRequestHandlers;
 }
 
-int WSDDDeployment::SetGlobalResponseFlowHandlers(WSDDHandlerList * gresflow)
-{
-	m_GlobalResponseHandlers = gresflow;
-	return SUCCESS;
-}
-
-WSDDHandlerList* WSDDDeployment::GetGlobalResponseFlowHandlers()
+const WSDDHandlerList* WSDDDeployment::GetGlobalResponseFlowHandlers()
 {
 	return m_GlobalResponseHandlers;
 }
@@ -163,18 +149,19 @@ int WSDDDeployment::LoadWSDD(string &sWSDD)
 	return SUCCESS;
 }
 
-int WSDDDeployment::SetServices(WSDDServiceMap * svs)
+int WSDDDeployment::UpdateWSDD(string& sWSDDNew)
 {
-	m_DeployedServices = svs;
+	//TODO
 	return SUCCESS;
 }
 
-WSDDService* WSDDDeployment::GetService(string &sServiceName)
+
+const WSDDService* WSDDDeployment::GetService(const string &sServiceName)
 {
 	WSDDServiceMap::iterator iter;
 
 	iter = m_DeployedServices->find(sServiceName);
-	if(iter!=m_DeployedServices->end())
+	if (iter != m_DeployedServices->end())
 	{
 		return (*iter).second;
 	}
@@ -189,11 +176,64 @@ const WSDDServiceMap* WSDDDeployment::GetWSDDServiceMap()
 	return m_DeployedServices;
 }
 
-
-
-
-string& WSDDDeployment::GetLibName(int nLibId)
+const string& WSDDDeployment::GetLibName(int nLibId)
 {
-	string xx;
-	return xx;
+	for (map<string, int>::iterator it = m_pLibNameIdMap->begin(); it != m_pLibNameIdMap->end(); it++)
+	{
+		if ((*it).second == nLibId)
+			return (*it).first;
+	}
+	return m_sAux;
+}
+
+int WSDDDeployment::AddService(WSDDService* pService)
+{
+	if (!m_DeployedServices) m_DeployedServices = new WSDDServiceMap;
+	(*m_DeployedServices)[pService->GetServiceName().c_str()] = pService;
+	return SUCCESS;
+}		
+
+int WSDDDeployment::AddHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL_TYPE protocol)
+{
+	if (bGlobal)
+	{
+		if (bRequestFlow)
+		{
+			if(!m_GlobalRequestHandlers) m_GlobalRequestHandlers = new WSDDHandlerList;
+			m_GlobalRequestHandlers->push_back(pHandler);
+		}
+		else
+		{
+			if(!m_GlobalResponseHandlers) m_GlobalResponseHandlers = new WSDDHandlerList;
+			m_GlobalResponseHandlers->push_back(pHandler);
+		}
+	}
+	else //transport
+	{
+		if (!m_pTransportHandlers) m_pTransportHandlers = new WSDDTransport();
+		m_pTransportHandlers->AddHandler(bRequestFlow, protocol, pHandler);
+	}
+	return SUCCESS;
+}
+
+const WSDDHandlerList* WSDDDeployment::GetTransportRequestFlowHandlers(AXIS_PROTOCOL_TYPE protocol)
+{
+	if (!m_pTransportHandlers) return NULL;
+	return m_pTransportHandlers->GetRequestFlowHandlers(protocol);
+}
+
+const WSDDHandlerList* WSDDDeployment::GetTransportResponseFlowHandlers(AXIS_PROTOCOL_TYPE protocol)
+{
+	if (!m_pTransportHandlers) return NULL;
+	return m_pTransportHandlers->GetResponseFlowHandlers(protocol);
+}
+
+int WSDDDeployment::RemoveService(WSDDService* pService)
+{
+	return SUCCESS;
+}
+
+int WSDDDeployment::RemoveHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL_TYPE protocol)
+{
+	return SUCCESS;	
 }

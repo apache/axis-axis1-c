@@ -73,68 +73,64 @@
 
 WSDDTransport::WSDDTransport()
 {
-	m_RequestHandlers = new map<AXIS_PROTOCOL_TYPE, WSDDHandlerList*>;
-	m_ResponseHandlers = new map<AXIS_PROTOCOL_TYPE, WSDDHandlerList*>;
+	m_RequestHandlers = NULL;
+	m_ResponseHandlers = NULL;
 }
 
 WSDDTransport::~WSDDTransport()
 {
-	map<AXIS_PROTOCOL_TYPE, WSDDHandlerList*>::iterator iter;
+	map<AXIS_PROTOCOL_TYPE, WSDDHandlerList>::iterator iter;
 	WSDDHandlerList * hl = NULL;
 	WSDDHandlerList::iterator iter2;
 	if(m_RequestHandlers)
 	{
-		for(iter=m_RequestHandlers->begin()
-				;iter!=m_RequestHandlers->end();iter++)
+		for(iter = m_RequestHandlers->begin(); iter != m_RequestHandlers->end(); iter++)
 		{
-			hl = iter->second;
-			if(hl)
+			for(iter2 = iter->second.begin(); iter2 != iter->second.end(); iter2++)
 			{
-				for(iter2=hl->begin();iter2!=hl->end();iter2++)
-				{
-					delete (*iter2);
-				}
-				delete hl;
+				delete (*iter2);
 			}
 		}
 	}
 
 	if(m_ResponseHandlers)
 	{
-		for(iter=m_ResponseHandlers->begin()
-				;iter!=m_ResponseHandlers->end();iter++)
+		for(iter = m_ResponseHandlers->begin(); iter != m_ResponseHandlers->end(); iter++)
 		{
-			hl = iter->second;
-			if(hl)
+			for(iter2 = iter->second.begin(); iter2 != iter->second.end();iter2++)
 			{
-				for(iter2=hl->begin();iter2!=hl->end();iter2++)
-				{
-					delete (*iter2);
-				}
-				delete hl;
+				delete (*iter2);
 			}
 		}
 	}
 
 }
 
-void WSDDTransport::SetRequestFlowHandlers(AXIS_PROTOCOL_TYPE protocolType, WSDDHandlerList * TrReqHList)
+const WSDDHandlerList* WSDDTransport::GetRequestFlowHandlers(AXIS_PROTOCOL_TYPE Protocol)
 {
-	(*m_RequestHandlers)[protocolType] = TrReqHList;
-}
-
-WSDDHandlerList* WSDDTransport::GetRequestFlowHandlers(AXIS_PROTOCOL_TYPE Protocol)
-{
-	return (*m_RequestHandlers)[Protocol];
-}
-
-void WSDDTransport::SetResponseFlowHandlers(AXIS_PROTOCOL_TYPE protocolType, WSDDHandlerList * TrResHList)
-{
-	(*m_ResponseHandlers)[protocolType] = TrResHList;
+	if (m_RequestHandlers && m_RequestHandlers->find(Protocol) != m_RequestHandlers->end())
+		return &(*m_RequestHandlers)[Protocol];
+	return NULL;
 }
 
 
-WSDDHandlerList* WSDDTransport::GetResponseFlowHandlers(AXIS_PROTOCOL_TYPE Protocol)
+const WSDDHandlerList* WSDDTransport::GetResponseFlowHandlers(AXIS_PROTOCOL_TYPE Protocol)
 {
-	return (*m_ResponseHandlers)[Protocol];
+	if (m_ResponseHandlers && m_ResponseHandlers->find(Protocol) != m_ResponseHandlers->end())
+		return &(*m_ResponseHandlers)[Protocol];
+	return NULL;
+}
+
+void WSDDTransport::AddHandler(bool bRequestFlow, AXIS_PROTOCOL_TYPE protocol, WSDDHandler* pHandler)
+{
+	if (bRequestFlow)
+	{
+		if (!m_RequestHandlers) m_RequestHandlers = new map<AXIS_PROTOCOL_TYPE, WSDDHandlerList>;
+		(*m_RequestHandlers)[protocol].push_back(pHandler);
+	}
+	else
+	{
+		if (!m_ResponseHandlers) m_ResponseHandlers = new map<AXIS_PROTOCOL_TYPE, WSDDHandlerList>;
+		(*m_ResponseHandlers)[protocol].push_back(pHandler);
+	}
 }
