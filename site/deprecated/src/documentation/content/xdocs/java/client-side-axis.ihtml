@@ -1,0 +1,383 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE>Client Side Axis</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.0  (Win32)">
+	<META NAME="CREATED" CONTENT="20031218;22214696">
+	<META NAME="CHANGEDBY" CONTENT="Steve Loughran">
+	<META NAME="CHANGED" CONTENT="20031218;23391077">
+	<STYLE>
+	<!--
+		TD P { margin-left: 0.42in; color: #000000; font-family: "Verdana", "Arial", "Helvetica", sans-serif }
+		H1 { color: #000000 }
+		P { margin-left: 0.42in; color: #000000; font-family: "Verdana", "Arial", "Helvetica", sans-serif }
+		H2 { color: #000000; text-decoration: underline }
+		H3 { color: #000000 }
+		BLOCKQUOTE { color: #000000; font-family: "Verdana", "Arial", "Helvetica", sans-serif }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-GB" TEXT="#000000" BGCOLOR="#ffffff" DIR="LTR">
+<H1>Client-Side Axis</H1>
+<H2>Introduction</H2>
+<P>This document looks at the issues related to developing the client
+side of a Web Service using Axis. 
+</P>
+<H2>Core HTTP Concepts 
+</H2>
+<P>HTTP is at its heart, a very simple protocol. The client opens a
+TCP connection to a port on the remote system, usually port number
+80. It then issues an HTTP request &ndash; a verb such as GET, POST,
+PUT or other standard request, a URL relative to the server and an
+HTTP version string. The client then sends zero or more headers &ndash;
+name:value pairs on individual lines, and then a blank line marking
+the end of headers. Those requests which involve data upload -such as
+POST- then continue with the upload of the data. Then the client
+waits for the server to respond.</P>
+<P>The server can respond with an HTTP error code: a number, some
+headers of its own, and then usually the body of the request. Usually
+the headers include a MIME type declaration, and some others that are
+useful, such as &quot;content-length&quot; and &quot;expires&quot;. 
+</P>
+<P>To get through firewalls, many organisations run a proxy server.
+This is a machine that has access to the outside network, while the
+rest of the Intranet does not. The clients must send a request to a
+proxy server, which then forward the request to the real server. A
+caching proxy server may cache request/response pairs, so popular
+requests do not consume bandwidth. This is very useful, but only
+works on requests that can be cached -historically only GET requests.
+</P>
+<P>SOAP over HTTP works above this underlying protocol. A SOAP
+request is a POST with an XML body; the response is an HTTP status
+code and ideally an XML message. As with normal HTTP, the 200 status
+code means all is well. The error code 500 may mean an internal
+server error, or it can indicate that the SOAP stack and/or service
+threw a SOAPFault. A SOAPFault is a standardised XML message that
+contains information the recipients can parse. Although other HTTP
+response codes may be sent back in some circumstances, the WS-I
+organisation sets down the rules as to when and how these are
+allowed. 
+</P>
+<P>Because SOAP usually runs on top of HTTP, all the classic HTTP
+techniques for authentication and session management (i.e. cookies)
+apply. Note that at some point in the future alternate transports may
+become more popular, in which case the HTTP techniques will cease to
+work. This is why so many people are writing SOAP-based replacements,
+usually built using SOAP headers. 
+</P>
+<H2>JAX-RPC</H2>
+<P>The JAX-RPC specification is the base specification that
+client-side Axis is built upon. If you are writing a client, read it.
+</P>
+<P>There are essentially two ways to use JAX-RPC. First, you can use
+the javax.xml classes to build a SOAP call by hand, and invoke a
+remote server. This is ugly but gives you an idea of what is going on
+behind the scenes: an XML message is being built up that is then sent
+to the remote server, whose response is parsed and deconstructed.
+Client code written at this level should run against any JAX-RPC
+implementation. 
+</P>
+<P>The other way is to have Axis hide the details of the call and
+generate a wrapper class for a web service. This is done by taking
+the WSDL description of the service and generating Java classes that
+make the low level calls appropriate to building the SOAP requests
+for each operation, then post-processing the results into the
+declared return values. Axis also takes note of any URL of the
+service included in the WSDL and compiles this in to the classes.
+Thus the client will automatically bind to the URL that the WSDL
+talks about -which is often the URL of the (development) server that
+the WSDL was retrieved from. 
+</P>
+<P>This automatic generation of <I>proxy classes</I><SPAN STYLE="font-style: normal">
+is convenient, as it makes calling a remote Web Service look almost
+like calling a local object. However, it has some disadvantages that
+developers need to be aware of:</SPAN></P>
+<UL>
+	<LI><P STYLE="font-style: normal">These generated classes are only
+	compatible with Axis. This is allowed by the JAX-RPC specification,
+	which has a notion of compile time compatiblity but not run-time
+	compatibility. If you want stub classes that work with Sun's or
+	BEA's SOAP implementation, you would need to generate stub classes
+	from the WSDL using their platform's tools. The stub classes should
+	all have the same names and methods, so the rest of the code should
+	not change.</P>
+	<LI><P STYLE="font-style: normal">The JAX-RPC standard defines the
+	translation of the service's operation and parameter names into
+	valid Java method and variable names -the result may not be what you
+	expect.</P>
+	<LI><P STYLE="font-style: normal">Compile time is too early to bind
+	to a Web Service URL -you need to add some configuration or dynamic
+	binding routine.</P>
+	<LI><P STYLE="font-style: normal">Remote Web Services are not the
+	same as local objects. Pretending that they are is going to lead you
+	astray. In particular, a method call to a local object often takes a
+	few microseconds, while a call to a remote service can take tens of
+	seconds, and fail with an obscure network error in the process,
+	leaving the caller unsure if the call was successful or not. Making
+	blocking calls to a Web Service from a web service will lead to a
+	very unhappy end user experience.</P>
+	<LI><P STYLE="font-style: normal">You have a more complex build
+	process, as you need the WSDL before compiling the client, which may
+	involve deploying the service.</P>
+</UL>
+<P STYLE="font-style: normal">Based on personal experience,
+dynamically generating stub classes is very useful, as it simplifes
+client side code and helps the client source recognise when a service
+has changed is operations' signatures a way that is incompatible. If
+the parameters of an operation changes, the Java method's parameters
+change, and hence the application no longer builds. 
+</P>
+<H2><BR><BR>
+</H2>
+<H2>Testing</H2>
+<P>If you want to test an Axis service, Wsdl2Java can be told to
+create a stub JUnit test class, containing a test case for every
+single operation that the remote service implements. These stub test
+cases need to be filled in with valid test data, followed by the
+relevant assertions to validate the results. 
+</P>
+<P>The generated test cases can then be run from the IDE or from an
+Ant- or Maven-based build process. 
+</P>
+<P>When testing the client -or the test cases- experiment with the
+special failure modes that distributed applications can experience.
+Unplug the network connector at different points in the program. Set
+the service up to connect to an invalid URL on the same host, or to a
+host that doesn't exist. Try going through a proxy server. Try using
+a slow connection -the TCP Monitor program can simulate this for you.
+</P>
+<H2>Configuring Client-side handlers</H2>
+<P><I>TODO</I></P>
+<H2>Redistribution</H2>
+<P><I>TODO</I></P>
+<H2>Implementing Dynamic Binding</H2>
+<P><I>TODO</I></P>
+<H2>Proxy Servers and other configuration tricks</H2>
+<P><I>TODO. Cover IP address caching, timeout config</I></P>
+<P><BR><BR>
+</P>
+<H2>Troubleshooting Network Problems</H2>
+<P>The classic definition of a distributed system: 
+</P>
+<P STYLE="margin-left: 0.79in">&ldquo;<I>You know you have one when
+the crash of a computer you&rsquo;ve never heard of stops you from
+getting any work done.&rdquo;  Leslie Lamport</I></P>
+<P STYLE="margin-left: 0.79in; margin-bottom: 0in"><BR>
+</P>
+<P>This may seem humourous, but it is a depressingly accurate model
+of the state of distributed systems. Everyone knows that web sites
+are sometimes off-line, pages sometimes get served up incomplete or
+with some error trace instead of the results.</P>
+<P>Web Services are similar, except instead of a human reading a
+web-browser-displayed error page, the client software receives the
+error and has to handle it or report it.</P>
+<P>When the Axis client code receives an error, it throws an
+exception, specifically a subclass of java.rmi.RemoteException. This
+can be an AxisFault, or it can be something else. Either way, it
+means trouble.  Usually the fault string of the exception provides
+some error text which is meaningful to the experienced application
+developer -though less meaningful to either the end user or the
+support team.</P>
+<P>Here is a list of network-related error responses that can be
+received by a client application. As Axis' adminclient application is
+a SOAP client, it can see these responses too. The Sitefinder 
+comments are specific only if VeriSign SiteFinder or a successor is
+subverting the normal behaviour of DNS for their own goals, an action
+which complicates the normal failure modes of web services. 
+</P>
+<P STYLE="margin-left: 0in; margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<TABLE WIDTH=100% BORDER=1 CELLPADDING=4 CELLSPACING=3>
+	<COL WIDTH=70*>
+	<COL WIDTH=186*>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P>Connection refused</P>
+		</TD>
+		<TD WIDTH=73%>
+			<P>The host exists, nothing is listening for connections on that
+			port.<BR><I>Site Finder: the URL is using a port other than 80,
+			and the .com or .net address is invalid</I></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P>Unknown host</P>
+		</TD>
+		<TD WIDTH=73%>
+			<P>The hostname component of the URL is invalid, or the client is
+			off-line.</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P>404: Not Found</P>
+		</TD>
+		<TD WIDTH=73%>
+			<P>There is a web server there, but nothing at the exact URL.
+			Proxy servers can also generate 404 pages for unknown hosts.</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P>302: Moved</P>
+		</TD>
+		<TD WIDTH=73%>
+			<P>The content at the end of the URL has moved, and the client
+			application does not follow the links.</P>
+			<P><I>Site Finder: the .com or .net address is invalid, the port
+			is explicitly -or defaulting to- port 80</I></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P>Other 3xx response</P>
+		</TD>
+		<TD WIDTH=73%>
+			<P>The content at the end of the URL has moved, and the client
+			application does not follow the links.</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P>Wrong content type/MIME type 
+			</P>
+		</TD>
+		<TD WIDTH=73%>
+			<P>The URL may be incorrect, or the server application is not
+			returning XML.<BR><I>Site Finder: a 302 response is being returned
+			as the host is unknown</I></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P>XML parser error</P>
+		</TD>
+		<TD WIDTH=73%>
+			<P>This can be caused when the content is not XML, but the client
+			application assumes it is.<BR><I>Site Finder: this may be the body
+			of a 302 response due to an unknown host, the client application
+			should check return codes and the Content-Type header</I></P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P>500: Internal Error</P>
+		</TD>
+		<TD WIDTH=73%>
+			<P>SOAP uses this as a cue that a SOAPFault has been returned, but
+			it can also mean 'the server is not working through some internal
+			fault'</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P>Connection Timed out/ NoRouteToHost</P>
+		</TD>
+		<TD WIDTH=73%>
+			<P>The hostname can be resolved, but not reached. Either the host
+			is missing (potentially a transient fault), or network/firewall
+			issues are preventing access. The client may need to be configured
+			for its proxy server. This can also crop up if the caller is
+			completely off-line.</P>
+		</TD>
+	</TR>
+	<TR VALIGN=TOP>
+		<TD WIDTH=27%>
+			<P>GUI hangs/ long pauses</P>
+		</TD>
+		<TD WIDTH=73%>
+			<P>Client application may be timing out on lookups/connects</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+<P>The support line's initial response to such messages should all be
+the same:</P>
+<BLOCKQUOTE><I>When a connectivity problem is suspected, get the URL
+that is at fault; the caller to view it in their web browser and see
+if you can view it yourself.</I></BLOCKQUOTE>
+<P>This is where you can take advantage of the fact that Web Service
+protocols -REST, XML-RPC and SOAP, are all built on top of HTTP, and
+use the common underlying notion of URLs defining services. Provided
+those same URLs generate some human-readable content -even if that is
+an XML message- then the end user and support contact can both bring
+it up in their web browser. This action is the core technique for
+diagnosing connectivity problems, primarily because the HTTP
+infrastructure -servers, proxies and clients- is designed to support
+this diagnosis process.</P>
+<P>Web Service providers can simplify the process by:</P>
+<UL>
+	<LI><P>Having human readable content at every URL used in the
+	Service. Specifically, you should support GET requests, even if it
+	is only to return a message such as &quot;There is a SOAP endpoint
+	here&quot;.</P>
+	<LI><P>Using URLs that are human readable -short and describable
+	over the telephone being the ideal.</P>
+	<LI><P>Having support-accessible logging to provide an escalation
+	path should the problem turn out to be server side.</P>
+	<LI><P>Always setting the content type to text/xml or a MIME type
+	specific to the XML returned by the service. (xml+svg)</P>
+</UL>
+<P>Another useful technique is for the service to implement the
+&quot;Ping&quot; design pattern. The service needs to support a
+simple &quot;ping&quot; operation, that immediately returns. This
+operation can be used by clients to probe for the presence of the
+service, without any other side effects or even placing much load on
+the server. Client applications should initiate communications with a
+server -uploads, complex requests, etc- by pinging it first. This
+detects failure early on, hopefully at a lower cost. 
+</P>
+<H3>What can the developer of a Web Service client application do?</H3>
+<P>Developers of web service client applications are in the front
+line here. Even if they use a WSDL-based code generation process that
+hides underlying URLs, or discover services using UDDI, Rendezvous or
+some other mechanism, their program will still encounter connectivity
+problems. Networks are fundamentally unreliable; laptops move around
+and go offline, services get switched off. 
+</P>
+<P>They need to handle the connectivity problems and fail in a way
+that allows the problem to be diagnosed and corrected.</P>
+<OL>
+	<LI><P>It is good to translate framework errors/exceptions into
+	error messages that are comprehensible by end users. XML parser
+	errors, HTTP error codes and complaints about MIME types are not
+	suitable for average end users, though the support organization may
+	need these. 
+	</P>
+	<LI><P>The target URL that failed needs to be disclosed to the end
+	user, so that they can test it by hand.</P>
+	<LI><P>For any error, the response body needs to be preserved for
+	the benefit of support.</P>
+	<LI><P>The fault diagnosis matrix listed above needs to be adapted
+	to the client, and included in the documentation. 
+	</P>
+	<LI><P>If the service implements a Ping operation, use it to probe
+	for service existence, preferably in a background thread or
+	asynchronous call, so that the GUI does not block. 
+	</P>
+	<LI><P>Clients need to be tested over slow and unreliable networks.
+	The Axis tcpmon SOAP monitor/HTTP proxy can be used to simulate slow
+	HTTP connections. 
+	</P>
+	<LI><P>Always verify that the MIME type of received content is
+	exactly that documented. 
+	</P>
+	<LI><P>Test the client's handling of HTTP response codes, and of
+	HTML responses when XML is expected.</P>
+	<LI><P>Look in the Java documents at &quot;Address Caching&quot;
+	under java.io.InetAddress. Applications need to be configured to
+	only cache DNS lookups, successful and unsuccessful, for a short
+	period of time. 
+	</P>
+</OL>
+<P><BR><BR>
+</P>
+<H2><BR><BR>
+</H2>
+</BODY>
+</HTML>
