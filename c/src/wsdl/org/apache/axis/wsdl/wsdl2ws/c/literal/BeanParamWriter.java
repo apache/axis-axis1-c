@@ -147,6 +147,12 @@ public class BeanParamWriter extends ParamCFileWriter{
 			writer.write("}\n\n");				 
 			return;
 		 }
+		writer.write("\tif ( param == NULL ) {\n");
+		writer.write("\t/* TODO : may need to check nillable value*/\n"); 
+		writer.write("\tpSZ->_functions->SerializeAsAttribute(pSZ->_object,\"xsi:nil\", 0, (void*)&(xsd_boolean_true), XSD_BOOLEAN);\n");
+		writer.write("\tpSZ->_functions->Serialize(pSZ->_object, \">\");\n");
+		writer.write("\treturn AXIS_SUCCESS;\n");
+		writer.write("\t}\n");		
 		String arrayType = null;
 		writer.write("\t/* first serialize attributes if any*/\n");
 		for(int i = 0; i< attributeParamCount;i++){
@@ -181,7 +187,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 			}else{
 				//if complex type
 				writer.write("\tpSZ->_functions->Serialize(pSZ->_object, \"<"+attribs[i].getParamName()+"\");\n");
-				writer.write("\tAxis_Serialize_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+", pSZ->_object, false);\n");
+				writer.write("\tAxis_Serialize_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+", pSZ, false);\n");
 				writer.write("\tpSZ->_functions->Serialize(pSZ->_object, \"</"+attribs[i].getParamName()+">\");\n");
 			}			
 		}
@@ -269,7 +275,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 				writer.write("\t\tpTemp->"+attribs[i].getParamName()+".m_Size = 0;\n");
 			}
 			else if (!attribs[i].isSimpleType()){
-				writer.write("\t\t"+attribs[i].getParamName()+"=0;\n");
+				writer.write("\t\tpTemp->"+attribs[i].getParamName()+"=0;\n");
 			}	
 		}
 		writer.write("\t}\n\treturn pObj;\n}\n");
