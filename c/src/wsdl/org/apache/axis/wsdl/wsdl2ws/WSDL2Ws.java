@@ -370,10 +370,10 @@ public class WSDL2Ws {
         String security)
         throws WrapperFault {
         	
-		this.language = targetLanguage;
 		if (targetLanguage == null) targetLanguage = "c++";
 		if (targetEngine == null) targetEngine = "server";
 		if (targetoutputLocation == null) targetoutputLocation = "./";
+		this.language = targetLanguage;
 		
 		perprocess();
 		

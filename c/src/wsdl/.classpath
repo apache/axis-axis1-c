@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
     <classpathentry kind="src" path=""/>
+    <classpathentry exported="true" kind="lib" path="C:/Axis/lib/axis.jar"/>
+    <classpathentry exported="true" kind="lib" path="C:/Axis/lib/commons-discovery.jar"/>
+    <classpathentry exported="true" kind="lib" path="C:/Axis/lib/commons-logging.jar"/>
+    <classpathentry exported="true" kind="lib" path="C:/Axis/lib/jaxrpc.jar"/>
+    <classpathentry exported="true" kind="lib" path="C:/Axis/lib/saaj.jar"/>
+    <classpathentry exported="true" kind="lib" path="C:/Axis/lib/wsdl4j.jar"/>
     <classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JRE1.4"/>
-    <classpathentry kind="lib" path="C:/Axis/lib/axis.jar"/>
-    <classpathentry kind="lib" path="C:/Axis/lib/commons-discovery.jar"/>
-    <classpathentry kind="lib" path="C:/Axis/lib/commons-logging.jar"/>
-    <classpathentry kind="lib" path="C:/Axis/lib/jaxrpc.jar"/>
-    <classpathentry kind="lib" path="C:/Axis/lib/saaj.jar"/>
-    <classpathentry kind="lib" path="C:/Axis/lib/wsdl4j.jar"/>
     <classpathentry kind="output" path="bin"/>
 </classpath>

@@ -112,7 +112,7 @@ public class ClassLoader implements SourceWriter{
 	  writer.write("{\n");
 	  writer.write("\tif (inst)\n"); 
 	  writer.write("\t{\n");
-	  writer.write("\t\tWrapperClassHandler* pWCH = static_cast<WrapperClassHandler*>(inst);\n");
+	  writer.write("\t\tWrapperClassHandler* pWCH = reinterpret_cast<WrapperClassHandler*>(inst);\n");
 	  writer.write("\t\tpWCH->Fini();\n");
 	  writer.write("\t\tdelete pWCH;\n");
 	  writer.write("\t\tdelete inst;\n");
