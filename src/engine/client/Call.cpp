@@ -51,7 +51,6 @@ Call::Call ()
 :m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false), m_bModuleInitialized(false)
 {
     m_pAxisEngine = NULL;
-    m_pMsgData = NULL;
     m_pIWSSZ = NULL;
     m_pIWSDZ = NULL;
     if (!g_bModuleInitialize)
@@ -69,12 +68,14 @@ Call::~Call ()
 {
     if (m_bModuleInitialized)
         uninitialize_module();
-    free(m_pcEndPointUri);
+	if (m_pcEndPointUri)
+        delete [] m_pcEndPointUri;
 }
 
 int Call::setEndpointURI (const char* pchEndpointURI)
 {
-    m_pcEndPointUri = strdup(pchEndpointURI);
+    m_pcEndPointUri = new char[strlen(pchEndpointURI)+1];
+	strcpy(m_pcEndPointUri, pchEndpointURI);
     return AXIS_SUCCESS;
 }
 
@@ -155,22 +156,22 @@ int Call::initialize (PROVIDERTYPE nStyle, int secure)
         }
         if (AXIS_SUCCESS == m_pAxisEngine->initialize ())
         {
-            m_pMsgData = m_pAxisEngine->getMessageData ();
-            if (m_pMsgData)
+            MessageData *msgData = m_pAxisEngine->getMessageData ();
+            if (msgData)
             {
 				list<void*>::iterator it = m_handlerProperties.begin();
 				while (it != m_handlerProperties.end())
 				{
 					HandlerProperty *pHp = (HandlerProperty*)(*it);
-					m_pMsgData->setProperty(pHp->name, pHp->value, pHp->len);
+					msgData->setProperty(pHp->name, pHp->value, pHp->len);
 					delete pHp;
 					it++;
 				}
 				m_handlerProperties.clear();
 
-                m_pMsgData->getSoapSerializer ((IWrapperSoapSerializer**) 
+                msgData->getSoapSerializer ((IWrapperSoapSerializer**) 
                     (&m_pIWSSZ));
-                m_pMsgData->getSoapDeSerializer ((IWrapperSoapDeSerializer**) 
+                msgData->getSoapDeSerializer ((IWrapperSoapDeSerializer**) 
                     (&m_pIWSDZ));
                 if (m_pIWSSZ && m_pIWSDZ)
                 {
@@ -309,8 +310,11 @@ int Call::openConnection(int secure)
  */
 void Call::closeConnection()
 {
-    m_pTransport->closeConnection();
-	if (m_pTransport) SOAPTransportFactory::destroyTransportObject(m_pTransport);
+	if (m_pTransport) {
+        m_pTransport->closeConnection();
+	    SOAPTransportFactory::destroyTransportObject(m_pTransport);
+		m_pTransport = NULL;
+	}
 }
 
 void Call::setSOAPVersion (SOAP_VERSION version)
