@@ -301,7 +301,7 @@ private:
     static int logthis(const char* pcLog, int level, char* arg2, int arg3);
 	static void addParameter(std::string& line, int type, unsigned len, void *value);
 	static void addDataParameter(std::string& line, unsigned len, void *value);
-    static void traceHeader();
+    static void traceHeader(enum AxisTraceState newState);
     static void traceLine2(const char *data);
 	static int initialise(const char *filename, enum AxisTraceState newState);
 };

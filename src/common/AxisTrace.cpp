@@ -82,6 +82,10 @@ int AxisTrace::initialise(const char *filename, AxisTraceState newState)
 				traceLineInternal(text.c_str());
 			}
 		}
+		else 
+		{
+			traceLineInternal("Closing the startup trace file");
+		}
 		delete m_fileTrace;
 	}
 	m_bLoggingOn = STATE_OFF;
@@ -94,14 +98,16 @@ int AxisTrace::initialise(const char *filename, AxisTraceState newState)
 
 	m_fileTrace = newFile;
 	m_bLoggingOn = newState;
-    traceHeader();
+    traceHeader(newState);
 	return AXIS_SUCCESS;
 }
 
 void AxisTrace::terminate() 
 { 
     m_bLoggingOn = STATE_STOPPED;
-    delete m_fileTrace; 
+	// Deleting m_fileTrace closes the trace file
+	if (NULL != m_fileTrace)
+	    delete m_fileTrace; 
     m_fileTrace = NULL; 
 }
 
@@ -152,7 +158,7 @@ int AxisTrace::trace (const char *pchLog)
     return AXIS_SUCCESS;
 }
 
-void AxisTrace::traceHeader()
+void AxisTrace::traceHeader(enum AxisTraceState newState)
 {
     traceLine2("************ Start Display Current Environment ************");
     string text = "Axis C++ libraries built on ";
@@ -163,7 +169,10 @@ void AxisTrace::traceHeader()
 
     time_t ltime;
     time (&ltime);
-    text = "Trace produced on ";
+	if (STATE_ON==newState)
+	    text = "Runtime trace produced on ";
+	else
+	    text = "Startup trace produced on ";
     text += ctime (&ltime);
     traceLine2(text.c_str());
 
@@ -182,6 +191,8 @@ void AxisTrace::traceHeader()
         }
     }
     traceLine2("************* End Display Current Environment *************");
+
+	if (STATE_STARTUP==newState) return;
 
 	// Write out the config settings
 	traceLine("-------------- Config File settings START ----------------");
