@@ -64,6 +64,7 @@
 #include "Param.h"
 #include "ArrayBean.h"
 #include "BasicTypeSerializer.h"
+#include "../engine/AxisEngine.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -78,45 +79,47 @@ ArrayBean::ArrayBean()
 
 ArrayBean::~ArrayBean()
 {
-	switch (m_type)
+	if (USER_TYPE == m_type)
 	{
-	case XSD_INT:
+		if (m_value.cta)
 		{
-			int* a = (int*)m_value.sta;
-			delete [] a;
-		}
-		break;
-	case XSD_FLOAT:
-		{
-			float* a = (float*)m_value.sta;
-			delete [] a;
-		}
-		break;
-	case XSD_STRING:
-		{
-			string* a = (string*)m_value.sta;
-			delete [] a;
-		}
-		break;
-		//continue this for all basic types
-	case USER_TYPE: //array of user types
-		{
-			if (m_value.cta)
+			list<int>::iterator it = m_size.begin();
+			int blocksize = GetArrayBlockSize(it);
+			if (m_value.cta->pObject)
 			{
-				list<int>::iterator it = m_size.begin();
-				int blocksize = GetArrayBlockSize(it);
-				if (m_value.cta->pObject)
-				{
-					m_value.cta->pDelFunct(m_value.cta->pObject, true, blocksize);
-					/* make sure that the ComplexObjectHandler's destructor does not try to delete the objects again */
-					m_value.cta->pObject = NULL;
-				}
-				delete m_value.cta;
+				m_value.cta->pDelFunct(m_value.cta->pObject, true, blocksize);
+				/* make sure that the ComplexObjectHandler's destructor does not try to delete the objects again */
+				m_value.cta->pObject = NULL;
 			}
+			delete m_value.cta;
 		}
-		break;
-	default:;
-	}	
+	}
+	else if (AxisEngine::m_bServer)
+	{
+		switch (m_type)
+		{
+		case XSD_INT:
+			{
+				int* a = (int*)m_value.sta;
+				delete [] a;
+			}
+			break;
+		case XSD_FLOAT:
+			{
+				float* a = (float*)m_value.sta;
+				delete [] a;
+			}
+			break;
+		case XSD_STRING:
+			{
+				string* a = (string*)m_value.sta;
+				delete [] a;
+			}
+			break;
+			//continue this for all basic types
+		default:;
+		}	
+	}
 }
 
 int ArrayBean::GetArraySize()
