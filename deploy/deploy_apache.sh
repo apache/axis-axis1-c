@@ -1,3 +1,5 @@
+#!/bin/bash
+
 rm /usr/local/apache/libexec/libaxiscpp_mod.so
 rm webservices/libAdminService.so
 rm libs/libserver_engine.so
