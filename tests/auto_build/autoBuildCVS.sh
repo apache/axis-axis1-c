@@ -43,7 +43,11 @@ cd ${HOME_DIR}
 
 if [ ${GET_CVS} = "true" ]
 then
-	cvs -d ${CVSROOT} checkout -d ${CHECKOUT_DIR} ws-axis/c
+    if test -d ./cvsautobuild; then
+        cvs -d ${CVSROOT} update -dC ${CHECKOUT_DIR}
+    else
+        cvs -d ${CVSROOT} checkout -d ${CHECKOUT_DIR} ws-axis/c
+    fi
 fi
 
 #if [ $? = 0 ]
@@ -138,5 +142,5 @@ sh runAllTests.sh
 #folder. This file has no meaning except this purpose
 if test -f mailto; then
 cd testcases/build
-cat runTestCase.log | mutt -s "Please ignore: this is a test" -a "buildTestCase.log" -x damitha@opensource.lk
+cat runTestCase.log | mutt -s "Please ignore: this is a test" -a "buildTestCase.log" -x axis-c-dev@ws.apache.org
 fi
