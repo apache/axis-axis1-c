@@ -98,16 +98,12 @@ public:
   void SetUserName(string m_sUserName);
 	string GetUserName();
   void SetService(WSDDService* argService);
-	WSDDService* GetService();
-  void SetIsServiceAllowed(int m_IsServiceAllowed);
-	int GetIsServiceAllowed();
+	WSDDService* GetService();  
 	AXIS_PROTOCOL_TYPE m_Protocol;
 protected:
   string m_sUserName;
   WSDDService* m_Service;
 
-private:
-  int m_IsServiceAllowed;
 };
 
 #endif // !defined(AFX_MESSAGEDATA_H__8B839E07_3D23_46C6_8743_543B4917D202__INCLUDED_)
