@@ -1,0 +1,17 @@
+<test>
+    <name>TestSoapHeaderBlock</name>
+    <description>TestSoapHeaderBlock</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>TestSoapHeaderBlockClient.cpp</clientCode>
+    <wsdl>MathOpsDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            TestSoapHeaderBlock.expected
+        </output>
+        <request>
+            TestSoapHeaderBlockRequest.out
+        </request>
+    </expected>
+        <endpoint>http://localhost:80/MathOps/services/MathOps</endpoint>
+</test>
+

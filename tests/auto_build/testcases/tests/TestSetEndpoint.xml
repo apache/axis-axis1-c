@@ -1,0 +1,13 @@
+<test>
+    <name>TestSetEndpoint</name>
+    <description>TestSetEndpoint</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>TestSetEndpointClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            TestSetEndpoint.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>

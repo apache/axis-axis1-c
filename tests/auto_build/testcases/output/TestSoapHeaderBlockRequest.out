@@ -1,0 +1,33 @@
+POST /MathOps/services/MathOps HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: ""
+Content-Length: 594
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Header><th1:TestHeader xmlns:th1="http://ws.apache.org/axisCppTest/"><Credentials><username>Test User</username><password>Test Password</password></Credentials></th1:TestHeader></SOAP-ENV:Header>
+<SOAP-ENV:Body>
+<ns1:div xmlns:ns1="http://soapinterop.org">
+<ns1:arg_0_0>15</ns1:arg_0_0>
+<ns1:arg_1_0>5</ns1:arg_1_0>
+</ns1:div>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+POST /MathOps/services/MathOps HTTP/1.1
+Host: localhost:13260
+Content-Type: text/xml; charset=UTF-8
+SOAPAction: ""
+Content-Length: 388
+
+<?xml version='1.0' encoding='utf-8' ?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<SOAP-ENV:Body>
+<ns1:div xmlns:ns1="http://soapinterop.org">
+<ns1:arg_0_0>15</ns1:arg_0_0>
+<ns1:arg_1_0>5</ns1:arg_1_0>
+</ns1:div>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
