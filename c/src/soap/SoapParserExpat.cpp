@@ -82,7 +82,7 @@ SoapParserExpat::~SoapParserExpat()
 	XML_ParserFree(m_Parser);
 }
 
-void SoapParserExpat::startElement(const XMLCh *qname,const XMLCh **attrs)
+void SoapParserExpat::startElement(const XML_Ch *qname,const XML_Ch **attrs)
 {
 	QName qn;
 	qn.SplitQNameString(qname, NAMESPACESEPARATOR);
@@ -104,7 +104,7 @@ void SoapParserExpat::startElement(const XMLCh *qname,const XMLCh **attrs)
 	m_Events.push(pSE);
 }
 
-void SoapParserExpat::endElement(const XMLCh *qname)
+void SoapParserExpat::endElement(const XML_Ch *qname)
 {
 	QName qn;
 	qn.SplitQNameString(qname, NAMESPACESEPARATOR);
@@ -115,11 +115,11 @@ void SoapParserExpat::endElement(const XMLCh *qname)
 	qn.MergeQNameString(NAMESPACESEPARATOR);
 }
 
-void  SoapParserExpat::characters(const XMLCh *chars, int length)
+void  SoapParserExpat::characters(const XML_Ch *chars, int length)
 {
 
-	XMLCh* pTemp = const_cast<XMLCh*>(chars);
-	XMLCh replacedchar = pTemp[length]; //copy and keep existing char at length position
+	XML_Ch* pTemp = const_cast<XML_Ch*>(chars);
+	XML_Ch replacedchar = pTemp[length]; //copy and keep existing char at length position
 	pTemp[length] = '\0'; //putting nul charactor so that chars can be used safely
 	Event* pLastEvent;
 	if (!m_Events.empty()) 
@@ -138,7 +138,7 @@ void  SoapParserExpat::characters(const XMLCh *chars, int length)
 	pTemp[length] = replacedchar; //put back the character that was there before putting nul charactor
 }
 
-void SoapParserExpat::startPrefixMapping(const XMLCh *prefix, const XMLCh *uri)
+void SoapParserExpat::startPrefixMapping(const XML_Ch *prefix, const XML_Ch *uri)
 {
 	if (prefix && uri)
 	{
@@ -149,7 +149,7 @@ void SoapParserExpat::startPrefixMapping(const XMLCh *prefix, const XMLCh *uri)
 	}
 }
 
-void SoapParserExpat::endPrefixMapping(const XMLCh *prefix)
+void SoapParserExpat::endPrefixMapping(const XML_Ch *prefix)
 {
 	if (!prefix) return;
 	EndPrefix* pEvent = new EndPrefix();
@@ -157,7 +157,7 @@ void SoapParserExpat::endPrefixMapping(const XMLCh *prefix)
 	m_Events.push(pEvent);
 }
 
-const XMLCh* SoapParserExpat::GetNS4Prefix(const XMLCh* prefix)
+const XML_Ch* SoapParserExpat::GetNS4Prefix(const XML_Ch* prefix)
 {
 	if (m_NsStack.find(prefix) != m_NsStack.end())
 	{
