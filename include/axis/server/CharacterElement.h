@@ -12,7 +12,15 @@
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ *
  */
+
+/*
+ * Revision 1.1  2004/05/25 samisa
+ * Added copy constructure and clone for copy constructing derived classes
+ */
+
 
 
 #if !defined(_CHARACTERELEMENT_H____OF_AXIS_INCLUDED_)
@@ -114,6 +122,8 @@ public:
     NODE_TYPE getNodeType() const;
     CharacterElement(const AxisChar* sValue);
     CharacterElement();
+    CharacterElement(const CharacterElement& rCopy); 
+    BasicNode* clone();   
     virtual ~CharacterElement();
 };
 

@@ -204,6 +204,7 @@ public:
     HeaderBlock(AxisChar* pachLocalName, AxisChar* pachPrefix, 
         AxisChar* pachUri);
     HeaderBlock();
+    HeaderBlock(const HeaderBlock& rCopy);
     virtual ~HeaderBlock();
 
     bool operator ==( const HeaderBlock &objHeaderBlock);
