@@ -58,9 +58,10 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
             m_sSZ += m_Buf;
             break;
         case XSD_BOOLEAN:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%s",
-                       (*((int*)(pValue)) == false_) ? "false" : "true");
-            m_sSZ += m_Buf;
+        	{
+        		Boolean booleanSerializer;
+           		m_sSZ += booleanSerializer.serialize(pValue);
+        	}
             break;
         case XSD_UNSIGNEDINT:
             AxisSprintf (m_Buf, BTS_BUFFSIZE, "%u", *((unsigned int*)(pValue)));
@@ -99,26 +100,84 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
             m_sSZ += m_Buf;
             break;
         case XSD_DURATION:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%s", m_AxisTime.serialize(
-                *((long*)(pValue)), type).c_str ());
-            m_sSZ += m_Buf;
+        	{
+        		Duration durationSerializer;
+        		m_sSZ += durationSerializer.serialize(pValue);
+        	}
             break;
         case XSD_UNSIGNEDLONG:
             AxisSprintf (m_Buf, BTS_BUFFSIZE, "%lu", *((unsigned long*)(pValue)));
             m_sSZ += m_Buf;
             break;
         case XSD_FLOAT:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%g", *((float*)(pValue)));
-            m_sSZ += m_Buf;
+        	{
+        		Float floatSerializer;
+        		m_sSZ += floatSerializer.serialize(pValue);
+        	}
             break;
         case XSD_DOUBLE:
+        	{
+        		Double doubleSerializer;
+        		m_sSZ += doubleSerializer.serialize(pValue);
+        	}
+        	break;
         case XSD_DECIMAL:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%g", *((double*)(pValue)));
-            m_sSZ += m_Buf;
+        	{
+        		Decimal decimalSerializer;
+        		m_sSZ += decimalSerializer.serialize(pValue);
+        	}
             break;
         case XSD_STRING:
+	        pStr = *((char**)(pValue));
+            if (!pStr)
+            {
+                /*
+                 * It is a null value not an empty value.
+                 */
+                m_sSZ = "<";
+                m_sSZ += pName;
+                m_sSZ += " xsi:nil=\"true\"/>\n";
+                return m_sSZ.c_str ();
+            }
+            {
+            	String stringSerializer;
+            	m_sSZ += stringSerializer.serialize(pStr);
+            }
+            break;
         case XSD_ANYURI:
+            pStr = *((char**)(pValue));
+            if (!pStr)
+            {
+                /*
+                 * It is a null value not an empty value.
+                 */
+                m_sSZ = "<";
+                m_sSZ += pName;
+                m_sSZ += " xsi:nil=\"true\"/>\n";
+                return m_sSZ.c_str ();
+            }
+            {
+            	AnyURI anyURISerializer;
+            	m_sSZ += anyURISerializer.serialize(pStr);
+            }
+            break;
         case XSD_QNAME:
+	        pStr = *((char**)(pValue));
+            if (!pStr)
+            {
+                /*
+                 * It is a null value not an empty value.
+                 */
+                m_sSZ = "<";
+                m_sSZ += pName;
+                m_sSZ += " xsi:nil=\"true\"/>\n";
+                return m_sSZ.c_str ();
+            }
+            {
+            	XSD_QName QNameSerializer;
+            	m_sSZ += QNameSerializer.serialize(pStr);
+            }
+            break;
         case XSD_NOTATION:
             pStr = *((char**)(pValue));
             if (!pStr)
@@ -131,21 +190,40 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
                 m_sSZ += " xsi:nil=\"true\"/>\n";
                 return m_sSZ.c_str ();
             }
-            m_AuxStr = pStr;
-            m_sSZ += getEntityReferenced (m_AuxStr).c_str ();
+            {
+            	NOTATION notationSerializer;
+            	m_sSZ += notationSerializer.serialize(pStr);
+            }
             break;
         case XSD_HEXBINARY:
-            m_sSZ += encodeToHexBinary ((xsd__hexBinary*) (pValue));
+        	{
+        		HexBinary hexBinarySerializer;
+        		m_sSZ += hexBinarySerializer.serialize(pValue);
+        	}
             break;
         case XSD_BASE64BINARY:
-            m_sSZ += encodeToBase64Binary ((xsd__base64Binary*) (pValue));
+        	{
+        		Base64Binary base64BinarySerializer;
+        		m_sSZ += base64BinarySerializer.serialize(pValue);
+        	}
             break;
         case XSD_DATETIME:
+        	{
+        		DateTime dateTimeSerializer;
+        		m_sSZ += dateTimeSerializer.serialize(pValue);
+        	}
+        	break;
         case XSD_DATE:
+        	{
+        		Date dateSerializer;
+        		m_sSZ += dateSerializer.serialize(pValue);
+        	}
+        	break;
         case XSD_TIME:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%s", m_AxisTime.serialize(
-                *((struct tm*)(pValue)), type).c_str ());
-            m_sSZ += m_Buf;
+        	{
+        		Time timeSerializer;
+        		m_sSZ += timeSerializer.serialize(pValue);
+        	}
             break;
         default:
             return NULL;
@@ -199,9 +277,10 @@ const AxisChar* BasicTypeSerializer::serializeAsAttribute
             m_sSZ += m_Buf;
             break;
         case XSD_BOOLEAN:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%s",
-                (*((int *) (pValue)) == 0) ? "false" : "true");
-            m_sSZ += m_Buf;
+        	{
+            	Boolean booleanSerializer;
+            	m_sSZ += booleanSerializer.serialize(pValue);
+        	}
             break;
         case XSD_UNSIGNEDINT:
             AxisSprintf (m_Buf, BTS_BUFFSIZE, "%u", *((unsigned int*)(pValue)));
@@ -240,10 +319,10 @@ const AxisChar* BasicTypeSerializer::serializeAsAttribute
             m_sSZ += m_Buf;
             break;
         case XSD_DURATION:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%s",
-                m_AxisTime.serialize (*((long*)(pValue)),
-                type).c_str ());
-            m_sSZ += m_Buf;
+        	{
+        		Duration durationSerializer;
+        		m_sSZ += durationSerializer.serialize(pValue);
+        	}
             break;
         case XSD_UNSIGNEDLONG:
             AxisSprintf (m_Buf, BTS_BUFFSIZE, "%lu",
@@ -251,35 +330,85 @@ const AxisChar* BasicTypeSerializer::serializeAsAttribute
             m_sSZ += m_Buf;
             break;
         case XSD_FLOAT:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%f", *((float*)(pValue)));
-            m_sSZ += m_Buf;
+        	{
+        		Float floatSerializer;
+        		m_sSZ += floatSerializer.serialize(pValue);
+        	}
             break;
         case XSD_DOUBLE:
+        	{
+        		Double doubleSerializer;
+        		m_sSZ += doubleSerializer.serialize(pValue);
+        	}
+        	break;
         case XSD_DECIMAL:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%f", *((double*)(pValue)));
-            m_sSZ += m_Buf;
+        	{
+        		Decimal decimalSerializer;
+        		m_sSZ += decimalSerializer.serialize(pValue);
+        	}
             break;
-        case XSD_STRING:
         case XSD_ANYURI:
+            {
+            	const AxisChar* pStr;
+            	pStr = *((char**)(pValue));
+           		AnyURI anyURISerializer;
+           		m_sSZ += anyURISerializer.serialize(pStr);
+            }
+        	break;
+        case XSD_STRING:
+        	{
+        		const AxisChar* pStr;
+            	pStr = *((char**)(pValue));
+        		String stringSerializer;
+        		m_sSZ += stringSerializer.serialize(pStr);
+        	}
+        	break;
         case XSD_QNAME:
+	        {
+        		const AxisChar* pStr;
+            	pStr = *((char**)(pValue));
+        		XSD_QName QNameSerializer;
+        		m_sSZ += QNameSerializer.serialize(pStr);
+        	}
+        	break;
         case XSD_NOTATION:
-            m_AuxStr = *((char**)(pValue));
-            m_sSZ += getEntityReferenced (m_AuxStr).c_str ();
+        	{
+        		const AxisChar* pStr;
+        		pStr = *((char**)(pValue));
+        		NOTATION notationSerializer;
+            	m_sSZ += notationSerializer.serialize(pStr);
+        	}
             break;
         case XSD_HEXBINARY:
-            m_sSZ += encodeToHexBinary ((xsd__hexBinary*)(pValue));
+        	{
+        		HexBinary hexBinarySerializer;
+        		m_sSZ += hexBinarySerializer.serialize(pValue);
+        	}
             break;
         case XSD_BASE64BINARY:
-            m_sSZ += encodeToBase64Binary ((xsd__base64Binary*)(pValue));
+        	{
+        		Base64Binary base64BinarySerializer;
+        		m_sSZ += base64BinarySerializer.serialize(pValue);
+        	}
             break;
         case XSD_DATETIME:
+        	{
+        		DateTime dateTimeSerializer;
+        		m_sSZ += dateTimeSerializer.serialize(pValue);
+        	}
+        	break;
         case XSD_DATE:
+	        {
+	        	Date dateSerializer;
+	        	m_sSZ += dateSerializer.serialize(pValue);
+	        }
+	        break;
         case XSD_TIME:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%s",
-                m_AxisTime.serialize (*((struct tm *) (pValue)),
-                type).c_str ());
-            m_sSZ += m_Buf;
-            break;
+        	{
+        		Time timeSerializer;
+        		m_sSZ += timeSerializer.serialize(pValue);
+        	}
+        	break;
         default:
             return NULL;
     }

@@ -880,12 +880,98 @@ SoapDeSerializer::getArraySize (const AnyElement * pElement)
 /* Following macros are used just to shorten the coding */
 #define CONV_STRTOL(str) strtol(str, &m_pEndptr, 10)
 #define CONV_STRTOUL(str) strtoul(str, &m_pEndptr, 10)
-#define CONV_STRTOD(str) strtod(str,  &m_pEndptr)
-#define CONV_STRTODATETIME(str) AxisTime::deserialize(str, nType)
-#define CONV_STRTODURATION(str) AxisTime::deserializeDuration(str, nType)
+#define CONV_STRTODECIMAL(str) AxisSoapDeSerializerStringToDecimal(str)
+#define CONV_STRTOFLOAT(str) AxisSoapDeSerializerStringToFloat(str)
+#define CONV_STRTODOUBLE(str) AxisSoapDeSerializerStringToDouble(str)
+#define CONV_STRTODATETIME(str) AxisSoapDeSerializerStringToDateTime(str)
+#define CONV_STRTODATE(str) AxisSoapDeSerializerStringToDate(str)
+#define CONV_STRTOTIME(str) AxisSoapDeSerializerStringToTime(str)
+#define CONV_STRTODURATION(str) AxisSoapDeSerializerStringToDuration(str)
 #define CONV_STRINGCOPY(str) AxisSoapDeSerializerStringCopy(str)
-#define CONV_STRTOBASE64BINARY(str) decodeFromBase64Binary(str)
-#define CONV_STRTOHEXBINARY(str) decodeFromHexBinary(str)
+#define CONV_STRTOBASE64BINARY(str) AxisSoapDeSerializerStringToBase64Binary(str)
+#define CONV_STRTOHEXBINARY(str) AxisSoapDeSerializerStringToHexBinary(str)
+#define CONV_STRTOANYURI(str) AxisSoapDeSerializerStringToAnyURI(str)
+#define CONV_STRTOSTRING(str) AxisSoapDeSerializerStringToString(str)
+#define CONV_STRTOQNAME(str) AxisSoapDeSerializerStringToQName(str)
+#define CONV_STRTONOTATION(str) AxisSoapDeSerializerStringToNotation(str)
+
+double AxisSoapDeSerializerStringToDecimal(const char *valueAsChar)
+{
+	Decimal decimalDeserializer;
+	return *( decimalDeserializer.deserializeDecimal(valueAsChar));
+}
+
+double AxisSoapDeSerializerStringToDouble(const char *valueAsChar)
+{
+	Double doubleDeserializer;
+	return *( doubleDeserializer.deserializeDouble(valueAsChar));
+}
+
+float AxisSoapDeSerializerStringToFloat(const char *valueAsChar)
+{
+	Float floatDeserializer;
+	return *( floatDeserializer.deserializeFloat(valueAsChar));
+}
+
+struct tm AxisSoapDeSerializerStringToTime(const char *valueAsChar)
+{
+	Time timeDeserializer;
+	return *(timeDeserializer.deserializeTime(valueAsChar));
+}
+
+struct tm AxisSoapDeSerializerStringToDate(const char *valueAsChar)
+{
+	Date dateDeserializer;
+	return *(dateDeserializer.deserializeDate(valueAsChar));
+}
+
+struct tm AxisSoapDeSerializerStringToDateTime(const char *valueAsChar)
+{
+	DateTime dateTimeDeserializer;
+	return *(dateTimeDeserializer.deserializeDateTime(valueAsChar));
+}
+
+long AxisSoapDeSerializerStringToDuration(const char *valueAsChar)
+{
+	Duration durationDeserializer;
+	return *(durationDeserializer.deserializeDuration(valueAsChar));
+}
+
+xsd__hexBinary AxisSoapDeSerializerStringToHexBinary(const char *valueAsChar)
+{
+	HexBinary hexBinaryDeserializer;
+	return *( hexBinaryDeserializer.deserializeHexBinary(valueAsChar) );
+}
+
+xsd__base64Binary AxisSoapDeSerializerStringToBase64Binary(const char *valueAsChar)
+{
+	Base64Binary base64BinaryDeserializer;
+	return *( base64BinaryDeserializer.deserializeBase64Binary(valueAsChar) );
+}
+
+AxisChar* AxisSoapDeSerializerStringToAnyURI(const char *valueAsChar)
+{
+	AnyURI anyURIDeserializer;
+	return anyURIDeserializer.deserializeAnyURI(valueAsChar);
+}
+
+AxisChar* AxisSoapDeSerializerStringToString(const char *valueAsChar)
+{
+	String stringDeserializer;
+	return stringDeserializer.deserializeString(valueAsChar);
+}
+
+AxisChar* AxisSoapDeSerializerStringToQName(const char *valueAsChar)
+{
+	XSD_QName qnameDeserializer;
+	return qnameDeserializer.deserializeQName(valueAsChar);
+}
+
+AxisChar* AxisSoapDeSerializerStringToNotation(const char *valueAsChar)
+{
+	NOTATION notationDeserializer;
+	return notationDeserializer.deserializeNOTATION(valueAsChar);
+}
 
 char *
 AxisSoapDeSerializerStringCopy (const char *s1)
@@ -1020,599 +1106,579 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 
     /* if anything has gone wrong earlier just do nothing */
     if (RPC_ENCODED == m_nStyle)
-    {
-	m_pNode = m_pParser->next ();
-
-	/* just skip wrapper node with type info  Ex: <tns:ArrayOfPhoneNumbers
-	 * xmlns:tns="http://www.getquote.org/test">
-	 */
-	if (!m_pNode)
-	{
-	    return Array;
-	}
-
-	Array.m_Size = getArraySize (m_pNode);
-
-	if (Array.m_Size > 0)
-	{
-	    switch (nType)
 	    {
-	    case XSD_INT:
-		Array.m_Array = new int[Array.m_Size];
-
-		if (!Array.m_Array)
-		{
-		    Array.m_Size = 0;
-		    m_nStatus = AXIS_FAIL;
-
-		    return Array;
-		}
-
-		for (; nIndex < Array.m_Size; nIndex++)
-		{
-		    m_pNode = m_pParser->next ();
-		    /* wrapper node without type info  Ex: <item> */
-		    m_pNode = m_pParser->next (true);	/* charactor node */
-
-		    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
-		    {
-			((int *) Array.m_Array)[nIndex] =
-			    strtol (m_pNode->m_pchNameOrValue, &m_pEndptr,
-				    10);
-			m_pNode = m_pParser->next ();
-			/* skip end element node too */
-			continue;
-		    }
-
-		    /* error : unexpected element type or end of stream */
-		    m_nStatus = AXIS_FAIL;
-		    delete[](int *) Array.m_Array;
-		    Array.m_Array = 0;
-		    Array.m_Size = 0;
-
-		    return Array;
-		}
-
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		return Array;
-
-	    case XSD_UNSIGNEDINT:
-		DESERIALIZE_ENCODED_ARRAY_BLOCK (unsigned int, CONV_STRTOUL)
-		    case XSD_SHORT:DESERIALIZE_ENCODED_ARRAY_BLOCK (short,
-								    CONV_STRTOL)
-		    case
-		    XSD_UNSIGNEDSHORT:DESERIALIZE_ENCODED_ARRAY_BLOCK
-		    (unsigned short,
-		     CONV_STRTOUL) case
-		    XSD_BYTE:DESERIALIZE_ENCODED_ARRAY_BLOCK (char,
-							      CONV_STRTOL)
-		    case
-		    XSD_UNSIGNEDBYTE:DESERIALIZE_ENCODED_ARRAY_BLOCK (unsigned
-								      char,
-								      CONV_STRTOUL)
-		    case XSD_LONG:DESERIALIZE_ENCODED_ARRAY_BLOCK (LONGLONG,
-								   CONV_STRTOUL)
-		    case XSD_INTEGER:DESERIALIZE_ENCODED_ARRAY_BLOCK (long,
-								      CONV_STRTOL)
-		    case
-		    XSD_UNSIGNEDLONG:DESERIALIZE_ENCODED_ARRAY_BLOCK (unsigned
-								      long,
-								      CONV_STRTOUL)
-		    case XSD_FLOAT:DESERIALIZE_ENCODED_ARRAY_BLOCK (float,
-								    CONV_STRTOD)
-		    case XSD_DOUBLE:case
-		    XSD_DECIMAL:DESERIALIZE_ENCODED_ARRAY_BLOCK (double,
-								 CONV_STRTOD)
-		    case XSD_STRING:case XSD_HEXBINARY:case
-		    XSD_BASE64BINARY:case XSD_ANYURI:case XSD_QNAME:case
-		    XSD_NOTATION:DESERIALIZE_ENCODED_ARRAY_BLOCK (char *,
-								  CONV_STRINGCOPY)
-		    case XSD_DATETIME:case XSD_DATE:case
-		    XSD_TIME:DESERIALIZE_ENCODED_ARRAY_BLOCK (struct tm,
-							      CONV_STRTODATETIME)
-		    case XSD_DURATION:DESERIALIZE_ENCODED_ARRAY_BLOCK (long,
-								       CONV_STRTODURATION)
-		    case XSD_BOOLEAN:
-//                                      DESERIALIZE_ENCODED_ARRAY_BLOCK(long, CONV_STRTOL)
-		  Array.m_Array = new long[Array.m_Size];
-
-		if (!Array.m_Array)
-		{
-		    Array.m_Size = 0;
-		    m_nStatus = AXIS_FAIL;
-		    return Array;
-		}
-
-		for (; nIndex < Array.m_Size; nIndex++)
-		{
-		    /* wrapper node without type info  Ex: <item> */
-		    m_pNode = m_pParser->next ();
-		    m_pNode = m_pParser->next (true);	/* charactor node */
-
-		    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
-		    {
-			if (!strcmp ("false", m_pNode->m_pchNameOrValue)
-			    || !strcmp ("FALSE", m_pNode->m_pchNameOrValue))
-			{
-			    ((long *) Array.m_Array)[nIndex] = 0;
-			}
-			else if (!strcmp ("true", m_pNode->m_pchNameOrValue)
-				 || !strcmp ("TRUE",
-					     m_pNode->m_pchNameOrValue))
-			{
-			    ((long *) Array.m_Array)[nIndex] = 1;
-			}
-			else
-			{
-			    ((long *) Array.m_Array)[nIndex] =
-				(long) (strtol
-					(m_pNode->m_pchNameOrValue,
-					 &m_pEndptr, 10) & 1);
-			}
-
-			m_pNode = m_pParser->next ();	/* skip end element node too */
-
-			continue;
-		    }
-		    /* error : unexpected element type or end of stream */
-		    m_nStatus = AXIS_FAIL;
-		    delete[](long *) Array.m_Array;
-		    Array.m_Array = 0;
-		    Array.m_Size = 0;
-		}
-
-		return Array;
-
-	    default:;
-	    }
-	}
-    }
-    else
-    {
-	switch (nType)
-	{
-	case XSD_INT:
-	    Array.m_Array = new int[INITIAL_ARRAY_SIZE];
-
-	    if (!Array.m_Array)
-	    {
-		return Array;
-	    }
-
-	    Array.m_Size = INITIAL_ARRAY_SIZE;
-
-	    while (true)
-	    {
-		for (; nIndex < Array.m_Size; nIndex++)
-		{
-		    if (!m_pNode)
-		    {
-			/* if there is an unprocessed node that may be one 
-			 * left from last array deserialization
-			 */
-			m_pNode = m_pParser->next ();
-		    }
-
-		    /* wrapper node without type info  Ex: <phonenumbers> */
-		    if (!m_pNode)
-		    {
-			m_nStatus = AXIS_FAIL;
-			delete[](int *) Array.m_Array;
-			Array.m_Array = 0;
-			Array.m_Size = 0;
-
-			return Array;
-		    }
-
-		    if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
-		    {
-			m_pNode = m_pParser->next (true);	/* charactor node */
-
-			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
-			{
-			    ((int *) Array.m_Array)[nIndex] =
-				strtol (m_pNode->m_pchNameOrValue, &m_pEndptr,
-					10);
-			    m_pNode = m_pParser->next ();
-			    /* skip end element node too */
-			    m_pNode = NULL;	/* this is important in doc/lit 
-						 * style when deserializing arrays
-						 */
-			    continue;
-			}
-			/* error : unexpected element type or end of the stream */
-		    }
-		    else
-		    {
-			if (nIndex > 0)
-			{
-			    Array.m_Size = nIndex;
-			    /* put the actual deserialized item size
-			     * note we do not make m_pNode = NULL because this
-			     * node doesnot belong to this array
-			     */
-			    return Array;
-			}
-			/* error : no elements deserialized */
-		    }
-
-		    /* if we come here it is an error situation */
-		    m_nStatus = AXIS_FAIL;
-		    m_pNode = NULL;
-		    delete[](int *) Array.m_Array;
-		    Array.m_Array = 0;
-		    Array.m_Size = 0;
-		    return Array;
-		}
-		/* if we come here that means the array allocated is not enough
-		 * So double it
+		m_pNode = m_pParser->next ();
+	
+		/* just skip wrapper node with type info  Ex: <tns:ArrayOfPhoneNumbers
+		 * xmlns:tns="http://www.getquote.org/test">
 		 */
-		void *tmp = Array.m_Array;
-		Array.m_Array = new int[Array.m_Size * 2];
-
-		if (!Array.m_Array)
+		if (!m_pNode)
 		{
-		    Array.m_Size = 0;
 		    return Array;
 		}
-
-		memcpy (Array.m_Array, tmp, Array.m_Size * sizeof (int));
-		delete[](int *) tmp;
-		Array.m_Size *= 2;
-		/* Array.m_RealSize = Array.m_Size; */
-	    }
-
-	    return Array;
-	    break;
-
-	case XSD_UNSIGNEDINT:
-	    DESERIALIZE_LITERAL_ARRAY_BLOCK (unsigned int, CONV_STRTOUL)
-		case XSD_SHORT:DESERIALIZE_LITERAL_ARRAY_BLOCK (short,
-								CONV_STRTOL)
-		case
-		XSD_UNSIGNEDSHORT:DESERIALIZE_LITERAL_ARRAY_BLOCK (unsigned
-								   short,
-								   CONV_STRTOUL)
-		case XSD_BYTE:DESERIALIZE_LITERAL_ARRAY_BLOCK (char,
-							       CONV_STRTOL)
-		case
-		XSD_UNSIGNEDBYTE:DESERIALIZE_LITERAL_ARRAY_BLOCK (unsigned
-								  char,
-								  CONV_STRTOUL)
-		case XSD_LONG:
-//                              DESERIALIZE_ENCODED_ARRAY_BLOCK (LONGLONG, CONV_STRTOUL)
-// > FJP
-	      Array.m_Array = new LONGLONG[INITIAL_ARRAY_SIZE];
-
-	    if (!Array.m_Array)
-	    {
-		return Array;
-	    }
-
-	    Array.m_Size = INITIAL_ARRAY_SIZE;
-
-	    while (true)
-	    {
-		for (; nIndex < Array.m_Size; nIndex++)
+	
+		Array.m_Size = getArraySize (m_pNode);
+	
+		if (Array.m_Size > 0)
 		{
-		    if (!m_pNode)
+		    switch (nType)
 		    {
-// if there is an unprocessed node that may be one left from last array deserialization
-			m_pNode = m_pParser->next ();
-		    }
-
-// wrapper node without type info  Ex: <phonenumbers>
-		    if (!m_pNode)
-		    {
-			m_nStatus = AXIS_FAIL;
-
-			delete[](LONGLONG *) Array.m_Array;
-
-			Array.m_Array = 0;
-			Array.m_Size = 0;
-
-			return Array;
-		    }
-
-		    if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
-		    {
-			m_pNode = m_pParser->next (true);	// charactor node
-
-			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+		    case XSD_INT:
+			Array.m_Array = new int[Array.m_Size];
+	
+			if (!Array.m_Array)
 			{
-			    ((LONGLONG *) Array.m_Array)[nIndex] =
-				SoapDeSerializer::strtoll (m_pNode->
-							   m_pchNameOrValue);
-			    m_pNode = m_pParser->next ();
-
-// skip end element node too
-			    m_pNode = NULL;	// this is important in doc/lit style when deserializing arrays
-			    continue;
-			}
-
-// error : unexpected element type or end of the stream
-		    }
-		    else
-		    {
-			if (nIndex > 0)
-			{
-			    Array.m_Size = nIndex;
-
-// put the actual deserialized item size note we do not make m_pNode = NULL
-// because this node doesnot belong to this array
+			    Array.m_Size = 0;
+			    m_nStatus = AXIS_FAIL;
+	
 			    return Array;
 			}
-// error : no elements deserialized
-		    }
-
-// if we come here it is an error situation
-		    m_nStatus = AXIS_FAIL;
-		    m_pNode = NULL;
-
-		    delete[](LONGLONG *) Array.m_Array;
-
-		    Array.m_Array = 0;
-		    Array.m_Size = 0;
-
-		    return Array;
-		}
-
-// if we come here that means the array allocated is not enough, so double it
-		void *tmp = Array.m_Array;
-
-		Array.m_Array = new LONGLONG[Array.m_Size * 2];
-
-		if (!Array.m_Array)
-		{
-		    Array.m_Size = 0;
-
-		    return Array;
-		}
-
-		memcpy (Array.m_Array, tmp, Array.m_Size * sizeof (LONGLONG));
-
-		delete[](LONGLONG *) tmp;
-
-		Array.m_Size *= 2;
-	    }
-
-	    return Array;
-	    break;
-
-// < FJP
-	case XSD_INTEGER:
-	    DESERIALIZE_LITERAL_ARRAY_BLOCK (long, CONV_STRTOL)
-		case
-		XSD_UNSIGNEDLONG:DESERIALIZE_LITERAL_ARRAY_BLOCK (unsigned
-								  long,
-								  CONV_STRTOUL)
-		case XSD_FLOAT:DESERIALIZE_LITERAL_ARRAY_BLOCK (float,
-								CONV_STRTOD)
-		case XSD_DOUBLE:case
-		XSD_DECIMAL:DESERIALIZE_LITERAL_ARRAY_BLOCK (double,
-							     CONV_STRTOD) case
-		XSD_STRING:case XSD_HEXBINARY:case XSD_BASE64BINARY:case
-		XSD_ANYURI:case XSD_QNAME:case
-		XSD_NOTATION:DESERIALIZE_LITERAL_ARRAY_BLOCK (char *,
-							      CONV_STRINGCOPY)
-/*
-// > FJP
-			Array.m_Array = new char *[INITIAL_ARRAY_SIZE];
-
-			if( !Array.m_Array)
+	
+			for (; nIndex < Array.m_Size; nIndex++)
 			{
-				return Array;
-			}
-
-			Array.m_Size = INITIAL_ARRAY_SIZE;
-
-			while (true)
-			{
-				for( ; nIndex < Array.m_Size; nIndex++)
-				{
-					if( !m_pNode)
-					{
-// if there is an unprocessed node that may be one left from last array deserialization
-						m_pNode = m_pParser->next ();
-					}
-
-// wrapper node without type info  Ex: <phonenumbers>
-					if( !m_pNode)
-					{
-						m_nStatus = AXIS_FAIL;
-
-						delete[](LONGLONG *) Array.m_Array;
-
-						Array.m_Array = 0;
-						Array.m_Size = 0;
-
-						return Array;
-					}
-
-					if( 0 == strcmp( pName, m_pNode->m_pchNameOrValue))
-					{
-						m_pNode = m_pParser->next (true);	// charactor node
-
-						if( m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
-						{
-							((char*) Array.m_Array)[nIndex] = SoapDeSerializer::strtoll( m_pNode->m_pchNameOrValue);
-							m_pNode = m_pParser->next ();
-
-// skip end element node too
-								m_pNode = NULL;	// this is important in doc/lit style when deserializing arrays
-								continue;
-							}
-
-// error : unexpected element type or end of the stream
-						}
-						else
-						{
-							if( nIndex > 0)
-							{
-								Array.m_Size = nIndex;
-
-// put the actual deserialized item size note we do not make m_pNode = NULL
-// because this node doesnot belong to this array
-								return Array;
-							}
-// error : no elements deserialized
-						}
-
-// if we come here it is an error situation
-						m_nStatus = AXIS_FAIL;
-						m_pNode = NULL;
-
-						delete [] (LONGLONG *) Array.m_Array;
-
-						Array.m_Array = 0;
-						Array.m_Size = 0;
-
-						return Array;
-					}
-
-// if we come here that means the array allocated is not enough, so double it
-					void *	tmp = Array.m_Array;
-
-					Array.m_Array = new int[Array.m_Size * 2];
-
-					if( !Array.m_Array)
-					{
-						Array.m_Size = 0;
-
-						return Array;
-					}
-
-					memcpy( Array.m_Array, tmp, Array.m_Size * sizeof( LONGLONG));
-
-					delete[](LONGLONG *) tmp;
-
-					Array.m_Size *= 2;
-				}
-
-			return Array;
-			break;
-
-// < FJP
-*/
-	    case XSD_DATETIME:case XSD_DATE:case
-		XSD_TIME:DESERIALIZE_LITERAL_ARRAY_BLOCK (struct tm,
-							  CONV_STRTODATETIME)
-		case XSD_DURATION:DESERIALIZE_LITERAL_ARRAY_BLOCK (long,
-								   CONV_STRTODURATION)
-		case XSD_BOOLEAN:
-//          DESERIALIZE_LITERAL_ARRAY_BLOCK(long, CONV_STRTOL)
-// Originally, The above macro was all that was required, but because boolean
-// can have any of the following values '0', '1', 'false' or 'true', special,
-// non-standard processing is required.  Thus the standard macro has had to be
-// expanded and extended to cover the additional tests, unique to this type.
-	      Array.m_Array = new long[INITIAL_ARRAY_SIZE];
-
-	    if (!Array.m_Array)
-	    {
-		return Array;
-	    }
-
-	    Array.m_Size = INITIAL_ARRAY_SIZE;
-
-	    while (true)
-	    {
-		for (; nIndex < Array.m_Size; nIndex++)
-		{
-		    if (!m_pNode)
-		    {
-			/* if there is an unprocessed node that may be one left */
-			/* from last array deserialization */
-			m_pNode = m_pParser->next ();
-		    }
-
-		    /* wrapper node without type info Ex: <phonenumbers> */
-		    if (!m_pNode)
-		    {
-			m_nStatus = AXIS_FAIL;
-			delete[](long *) Array.m_Array;
-			Array.m_Array = 0;
-			Array.m_Size = 0;
-			return Array;
-		    }
-
-		    if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
-		    {
-			m_pNode = m_pParser->next (true);	/* charactor node */
-
-			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
-			{
-			    if (!strcmp ("false", m_pNode->m_pchNameOrValue)
-				|| !strcmp ("FALSE",
-					    m_pNode->m_pchNameOrValue))
+			    m_pNode = m_pParser->next ();
+			    /* wrapper node without type info  Ex: <item> */
+			    m_pNode = m_pParser->next (true);	/* charactor node */
+	
+			    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 			    {
-				((long *) Array.m_Array)[nIndex] = 0;
+				((int *) Array.m_Array)[nIndex] =
+				    strtol (m_pNode->m_pchNameOrValue, &m_pEndptr,
+					    10);
+				m_pNode = m_pParser->next ();
+				/* skip end element node too */
+				continue;
 			    }
-			    else if (!strcmp
-				     ("true", m_pNode->m_pchNameOrValue)
-				     || !strcmp ("TRUE",
-						 m_pNode->m_pchNameOrValue))
+	
+			    /* error : unexpected element type or end of stream */
+			    m_nStatus = AXIS_FAIL;
+			    delete[](int *) Array.m_Array;
+			    Array.m_Array = 0;
+			    Array.m_Size = 0;
+	
+			    return Array;
+			}
+	
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			return Array;
+	
+		    case XSD_UNSIGNEDINT:
+				DESERIALIZE_ENCODED_ARRAY_BLOCK (unsigned int, CONV_STRTOUL)
+		    case XSD_SHORT:
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (short,CONV_STRTOL)
+		    case XSD_UNSIGNEDSHORT:
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK(unsigned short, CONV_STRTOUL)
+		    case XSD_BYTE:
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (char, CONV_STRTOL)
+		    case XSD_UNSIGNEDBYTE:
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (unsigned char, CONV_STRTOUL)
+		    case XSD_LONG:
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (LONGLONG, CONV_STRTOUL)
+		    case XSD_INTEGER:
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (long, CONV_STRTOL)
+		    case XSD_UNSIGNEDLONG:
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (unsigned long, CONV_STRTOUL)
+		    case XSD_FLOAT:
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (float, CONV_STRTOFLOAT)
+		    case XSD_DOUBLE:
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (double, CONV_STRTODOUBLE)
+		    case XSD_DECIMAL:
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (double, CONV_STRTODECIMAL)
+		    case XSD_ANYURI:
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (AxisChar *, CONV_STRTOANYURI)
+		    case XSD_STRING:
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (AxisChar *, CONV_STRTOSTRING)
+		    case XSD_QNAME:
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (AxisChar *, CONV_STRTOQNAME)
+		    case XSD_NOTATION:
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (AxisChar *, CONV_STRTONOTATION)
+		    case XSD_BASE64BINARY:
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (xsd__base64Binary, CONV_STRTOBASE64BINARY)
+		    case XSD_HEXBINARY:
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (xsd__hexBinary, CONV_STRTOHEXBINARY)
+		    case XSD_DATETIME:
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (struct tm, CONV_STRTODATETIME)
+		    case XSD_DATE:
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (struct tm, CONV_STRTODATE)
+		    case XSD_TIME:
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (struct tm, CONV_STRTOTIME)
+		    case XSD_DURATION:
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (long, CONV_STRTODURATION)
+		    case XSD_BOOLEAN:
+				// DESERIALIZE_ENCODED_ARRAY_BLOCK(long, CONV_STRTOL)
+				Array.m_Array = new long[Array.m_Size];
+		
+				if (!Array.m_Array)
+				{
+				    Array.m_Size = 0;
+				    m_nStatus = AXIS_FAIL;
+				    return Array;
+				}
+	
+				for (; nIndex < Array.m_Size; nIndex++)
+				{
+				    /* wrapper node without type info  Ex: <item> */
+				    m_pNode = m_pParser->next ();
+				    m_pNode = m_pParser->next (true);	/* charactor node */
+		
+				    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+				    {
+				    	Boolean booleanDeserializer;
+				    	((long *) Array.m_Array)[nIndex] =
+				    		booleanDeserializer.deserializeBoolean(m_pNode->m_pchNameOrValue);
+						m_pNode = m_pParser->next ();	/* skip end element node too */
+			
+						continue;
+				    }
+				    /* error : unexpected element type or end of stream */
+				    m_nStatus = AXIS_FAIL;
+				    delete[](long *) Array.m_Array;
+				    Array.m_Array = 0;
+				    Array.m_Size = 0;
+				}
+		
+				return Array;
+		    default:
+		    	;
+		    }
+		}
+	    }
+    else
+	    {
+		switch (nType)
+		{
+		case XSD_INT:
+		    Array.m_Array = new int[INITIAL_ARRAY_SIZE];
+	
+		    if (!Array.m_Array)
+		    {
+			return Array;
+		    }
+	
+		    Array.m_Size = INITIAL_ARRAY_SIZE;
+	
+		    while (true)
+		    {
+			for (; nIndex < Array.m_Size; nIndex++)
+			{
+			    if (!m_pNode)
 			    {
-				((long *) Array.m_Array)[nIndex] = 1;
+				/* if there is an unprocessed node that may be one 
+				 * left from last array deserialization
+				 */
+				m_pNode = m_pParser->next ();
+			    }
+	
+			    /* wrapper node without type info  Ex: <phonenumbers> */
+			    if (!m_pNode)
+			    {
+				m_nStatus = AXIS_FAIL;
+				delete[](int *) Array.m_Array;
+				Array.m_Array = 0;
+				Array.m_Size = 0;
+	
+				return Array;
+			    }
+	
+			    if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
+			    {
+				m_pNode = m_pParser->next (true);	/* charactor node */
+	
+				if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+				{
+				    ((int *) Array.m_Array)[nIndex] =
+					strtol (m_pNode->m_pchNameOrValue, &m_pEndptr,
+						10);
+				    m_pNode = m_pParser->next ();
+				    /* skip end element node too */
+				    m_pNode = NULL;	/* this is important in doc/lit 
+							 * style when deserializing arrays
+							 */
+				    continue;
+				}
+				/* error : unexpected element type or end of the stream */
 			    }
 			    else
 			    {
-				((long *) Array.m_Array)[nIndex] =
-				    (long) (strtol
-					    (m_pNode->m_pchNameOrValue,
-					     &m_pEndptr, 10) & 1);
+				if (nIndex > 0)
+				{
+				    Array.m_Size = nIndex;
+				    /* put the actual deserialized item size
+				     * note we do not make m_pNode = NULL because this
+				     * node doesnot belong to this array
+				     */
+				    return Array;
+				}
+				/* error : no elements deserialized */
 			    }
-
-			    m_pNode = m_pParser->next ();
-			    /* skip end element node too */
+	
+			    /* if we come here it is an error situation */
+			    m_nStatus = AXIS_FAIL;
 			    m_pNode = NULL;
-			    /* this is important in doc/lit style when */
-			    /* deserializing arrays */
-			    continue;
-			}
-			/* error : unexpected element type or */
-			/* end of the stream */
-		    }
-		    else
-		    {
-			if (nIndex > 0)
-			{
-			    Array.m_Size = nIndex;
-			    /* put the actual deserialized item size */
-			    /* note we do not make m_pNode = NULL because */
-			    /* this node doesnot belong to this array */
+			    delete[](int *) Array.m_Array;
+			    Array.m_Array = 0;
+			    Array.m_Size = 0;
 			    return Array;
 			}
-			/* error : no elements deserialized */
+			/* if we come here that means the array allocated is not enough
+			 * So double it
+			 */
+			void *tmp = Array.m_Array;
+			Array.m_Array = new int[Array.m_Size * 2];
+	
+			if (!Array.m_Array)
+			{
+			    Array.m_Size = 0;
+			    return Array;
+			}
+	
+			memcpy (Array.m_Array, tmp, Array.m_Size * sizeof (int));
+			delete[](int *) tmp;
+			Array.m_Size *= 2;
+			/* Array.m_RealSize = Array.m_Size; */
 		    }
-		    /* if we come here it is an error situation */
-		    m_nStatus = AXIS_FAIL;
-		    m_pNode = NULL;
-		    delete[](long *) Array.m_Array;
-		    Array.m_Array = 0;
-		    Array.m_Size = 0;
+	
 		    return Array;
-		}
-		/* if we come here that means the array allocated is */
-		/* not enough. So double it */
-		void *tmp = Array.m_Array;
-		Array.m_Array = new long[Array.m_Size * 2];
-
-		if (!Array.m_Array)
-		{
-		    Array.m_Size = 0;
+		    break;
+	
+		case XSD_UNSIGNEDINT:
+		    DESERIALIZE_LITERAL_ARRAY_BLOCK (unsigned int, CONV_STRTOUL)
+		case XSD_SHORT:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (short, CONV_STRTOL)
+		case XSD_UNSIGNEDSHORT:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (unsigned short, CONV_STRTOUL)
+		case XSD_BYTE:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (char, CONV_STRTOL)
+		case XSD_UNSIGNEDBYTE:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (unsigned char, CONV_STRTOUL)
+		case XSD_LONG:
+			// DESERIALIZE_ENCODED_ARRAY_BLOCK (LONGLONG, CONV_STRTOUL)
+			// > FJP
+		    Array.m_Array = new LONGLONG[INITIAL_ARRAY_SIZE];
+	
+		    if (!Array.m_Array)
+		    {
+			return Array;
+		    }
+	
+		    Array.m_Size = INITIAL_ARRAY_SIZE;
+	
+		    while (true)
+		    {
+			for (; nIndex < Array.m_Size; nIndex++)
+			{
+			    if (!m_pNode)
+			    {
+				// if there is an unprocessed node that may be one left from last array deserialization
+				m_pNode = m_pParser->next ();
+			    }
+	
+				// wrapper node without type info  Ex: <phonenumbers>
+			    if (!m_pNode)
+			    {
+				m_nStatus = AXIS_FAIL;
+	
+				delete[](LONGLONG *) Array.m_Array;
+	
+				Array.m_Array = 0;
+				Array.m_Size = 0;
+	
+				return Array;
+			    }
+	
+			    if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
+			    {
+					m_pNode = m_pParser->next (true);	// charactor node
+		
+					if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+					{
+					    ((LONGLONG *) Array.m_Array)[nIndex] =
+						SoapDeSerializer::strtoll (m_pNode->
+									   m_pchNameOrValue);
+					    m_pNode = m_pParser->next ();
+		
+					// skip end element node too
+					    m_pNode = NULL;	// this is important in doc/lit style when deserializing arrays
+					    continue;
+					}
+		
+					// error : unexpected element type or end of the stream
+			    }
+			    else
+			    {
+					if (nIndex > 0)
+					{
+					    Array.m_Size = nIndex;
+		
+						// put the actual deserialized item size note we do not make m_pNode = NULL
+						// because this node doesnot belong to this array
+					    return Array;
+					}
+					// error : no elements deserialized
+			    }
+	
+				// if we come here it is an error situation
+			    m_nStatus = AXIS_FAIL;
+			    m_pNode = NULL;
+	
+			    delete[](LONGLONG *) Array.m_Array;
+	
+			    Array.m_Array = 0;
+			    Array.m_Size = 0;
+	
+			    return Array;
+			}
+	
+			// if we come here that means the array allocated is not enough, so double it
+			void *tmp = Array.m_Array;
+	
+			Array.m_Array = new LONGLONG[Array.m_Size * 2];
+	
+			if (!Array.m_Array)
+			{
+			    Array.m_Size = 0;
+	
+			    return Array;
+			}
+	
+			memcpy (Array.m_Array, tmp, Array.m_Size * sizeof (LONGLONG));
+	
+			delete[](LONGLONG *) tmp;
+	
+			Array.m_Size *= 2;
+		    }
+	
 		    return Array;
-		}
+		    break;
+	
+		// < FJP
+		case XSD_INTEGER:
+		    DESERIALIZE_LITERAL_ARRAY_BLOCK (long, CONV_STRTOL)
+		case XSD_UNSIGNEDLONG:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (unsigned long, CONV_STRTOUL)
+		case XSD_FLOAT:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (float, CONV_STRTOFLOAT)
+		case XSD_DOUBLE:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (double, CONV_STRTODOUBLE)
+		case XSD_DECIMAL:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (double, CONV_STRTODECIMAL)
+		case XSD_ANYURI:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (AxisChar *, CONV_STRTOANYURI)
+		case XSD_STRING:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (AxisChar *, CONV_STRTOSTRING)
+		case XSD_QNAME:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (AxisChar *, CONV_STRTOQNAME)
+		case XSD_NOTATION:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (AxisChar *, CONV_STRTONOTATION)
+		case XSD_HEXBINARY:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (xsd__hexBinary, CONV_STRTOHEXBINARY)
+		case XSD_BASE64BINARY:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (xsd__base64Binary, CONV_STRTOBASE64BINARY)
 
-		memcpy (Array.m_Array, tmp, Array.m_Size * sizeof (long));
-		delete[](long *) tmp;
-		Array.m_Size *= 2;
-		/*Array.m_RealSize = Array.m_Size; */
+	/*
+	// > FJP
+				Array.m_Array = new char *[INITIAL_ARRAY_SIZE];
+	
+				if( !Array.m_Array)
+				{
+					return Array;
+				}
+	
+				Array.m_Size = INITIAL_ARRAY_SIZE;
+	
+				while (true)
+				{
+					for( ; nIndex < Array.m_Size; nIndex++)
+					{
+						if( !m_pNode)
+						{
+	// if there is an unprocessed node that may be one left from last array deserialization
+							m_pNode = m_pParser->next ();
+						}
+	
+	// wrapper node without type info  Ex: <phonenumbers>
+						if( !m_pNode)
+						{
+							m_nStatus = AXIS_FAIL;
+	
+							delete[](LONGLONG *) Array.m_Array;
+	
+							Array.m_Array = 0;
+							Array.m_Size = 0;
+	
+							return Array;
+						}
+	
+						if( 0 == strcmp( pName, m_pNode->m_pchNameOrValue))
+						{
+							m_pNode = m_pParser->next (true);	// charactor node
+	
+							if( m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+							{
+								((char*) Array.m_Array)[nIndex] = SoapDeSerializer::strtoll( m_pNode->m_pchNameOrValue);
+								m_pNode = m_pParser->next ();
+	
+	// skip end element node too
+									m_pNode = NULL;	// this is important in doc/lit style when deserializing arrays
+									continue;
+								}
+	
+	// error : unexpected element type or end of the stream
+							}
+							else
+							{
+								if( nIndex > 0)
+								{
+									Array.m_Size = nIndex;
+	
+	// put the actual deserialized item size note we do not make m_pNode = NULL
+	// because this node doesnot belong to this array
+									return Array;
+								}
+	// error : no elements deserialized
+							}
+	
+	// if we come here it is an error situation
+							m_nStatus = AXIS_FAIL;
+							m_pNode = NULL;
+	
+							delete [] (LONGLONG *) Array.m_Array;
+	
+							Array.m_Array = 0;
+							Array.m_Size = 0;
+	
+							return Array;
+						}
+	
+	// if we come here that means the array allocated is not enough, so double it
+						void *	tmp = Array.m_Array;
+	
+						Array.m_Array = new int[Array.m_Size * 2];
+	
+						if( !Array.m_Array)
+						{
+							Array.m_Size = 0;
+	
+							return Array;
+						}
+	
+						memcpy( Array.m_Array, tmp, Array.m_Size * sizeof( LONGLONG));
+	
+						delete[](LONGLONG *) tmp;
+	
+						Array.m_Size *= 2;
+					}
+	
+				return Array;
+				break;
+	
+	// < FJP
+	*/
+	    case XSD_DATETIME:
+	    	DESERIALIZE_LITERAL_ARRAY_BLOCK (struct tm, CONV_STRTODATETIME)
+	    case XSD_DATE:
+	    	DESERIALIZE_LITERAL_ARRAY_BLOCK (struct tm, CONV_STRTODATE)
+	    case XSD_TIME:
+	    	DESERIALIZE_LITERAL_ARRAY_BLOCK (struct tm, CONV_STRTOTIME)
+		case XSD_DURATION:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (long, CONV_STRTODURATION)
+		case XSD_BOOLEAN:
+	//          DESERIALIZE_LITERAL_ARRAY_BLOCK(long, CONV_STRTOL)
+	// Originally, The above macro was all that was required, but because boolean
+	// can have any of the following values '0', '1', 'false' or 'true', special,
+	// non-standard processing is required.  Thus the standard macro has had to be
+	// expanded and extended to cover the additional tests, unique to this type.
+		      Array.m_Array = new long[INITIAL_ARRAY_SIZE];
+	
+		    if (!Array.m_Array)
+		    {
+			return Array;
+		    }
+	
+		    Array.m_Size = INITIAL_ARRAY_SIZE;
+	
+		    while (true)
+		    {
+			for (; nIndex < Array.m_Size; nIndex++)
+			{
+			    if (!m_pNode)
+			    {
+				/* if there is an unprocessed node that may be one left */
+				/* from last array deserialization */
+				m_pNode = m_pParser->next ();
+			    }
+	
+			    /* wrapper node without type info Ex: <phonenumbers> */
+			    if (!m_pNode)
+			    {
+				m_nStatus = AXIS_FAIL;
+				delete[](long *) Array.m_Array;
+				Array.m_Array = 0;
+				Array.m_Size = 0;
+				return Array;
+			    }
+	
+			    if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
+			    {
+				m_pNode = m_pParser->next (true);	/* charactor node */
+	
+				if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+				{
+				    Boolean booleanDeserializer;
+				    ((long *) Array.m_Array)[nIndex] =
+				   		booleanDeserializer.deserializeBoolean(m_pNode->m_pchNameOrValue);
+	
+				    m_pNode = m_pParser->next ();
+				    /* skip end element node too */
+				    m_pNode = NULL;
+				    /* this is important in doc/lit style when */
+				    /* deserializing arrays */
+				    continue;
+				}
+				/* error : unexpected element type or */
+				/* end of the stream */
+			    }
+			    else
+			    {
+				if (nIndex > 0)
+				{
+				    Array.m_Size = nIndex;
+				    /* put the actual deserialized item size */
+				    /* note we do not make m_pNode = NULL because */
+				    /* this node doesnot belong to this array */
+				    return Array;
+				}
+				/* error : no elements deserialized */
+			    }
+			    /* if we come here it is an error situation */
+			    m_nStatus = AXIS_FAIL;
+			    m_pNode = NULL;
+			    delete[](long *) Array.m_Array;
+			    Array.m_Array = 0;
+			    Array.m_Size = 0;
+			    return Array;
+			}
+			/* if we come here that means the array allocated is */
+			/* not enough. So double it */
+			void *tmp = Array.m_Array;
+			Array.m_Array = new long[Array.m_Size * 2];
+	
+			if (!Array.m_Array)
+			{
+			    Array.m_Size = 0;
+			    return Array;
+			}
+	
+			memcpy (Array.m_Array, tmp, Array.m_Size * sizeof (long));
+			delete[](long *) tmp;
+			Array.m_Size *= 2;
+			/*Array.m_RealSize = Array.m_Size; */
+		    }
+		    break;
+	
+		default:;
+		}
 	    }
-	    break;
-
-	default:;
-	}
-    }
     m_nStatus = AXIS_FAIL;
     m_pNode = NULL;
 
@@ -2003,11 +2069,8 @@ xsd__boolean
 	{
 	    if (0 == strcmp (m_pCurrNode->m_pchAttributes[i], pName))
 	    {
-		ret =
-		    (0 ==
-		     strcmp (m_pCurrNode->m_pchAttributes[i + 2],
-			     "true")) ? true_ : false_;
-		return ret;
+	    	Boolean booleanDeserializer;
+			return booleanDeserializer.deserializeBoolean(m_pCurrNode->m_pchAttributes[i + 2]);
 	    }
 	}
     }
@@ -2070,34 +2133,34 @@ float
 SoapDeSerializer::getAttributeAsFloat (const AxisChar * pName, const
 				       AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (float, CONV_STRTOD, INIT_VALUE_NUMBER)}
+DESERIALIZE_GET_ATTRIBUTE_AS (float, CONV_STRTOFLOAT, INIT_VALUE_NUMBER)}
 double
 SoapDeSerializer::getAttributeAsDouble (const AxisChar * pName, const
 					AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (double, CONV_STRTOD, INIT_VALUE_NUMBER)}
+DESERIALIZE_GET_ATTRIBUTE_AS (double, CONV_STRTODOUBLE, INIT_VALUE_NUMBER)}
 double
 SoapDeSerializer::getAttributeAsDecimal (const AxisChar * pName, const
 					 AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (double, CONV_STRTOD, INIT_VALUE_NUMBER)}
+DESERIALIZE_GET_ATTRIBUTE_AS (double, CONV_STRTODECIMAL, INIT_VALUE_NUMBER)}
 AxisChar *
 SoapDeSerializer::getAttributeAsString (const AxisChar * pName, const
 					AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (AxisChar *, CONV_STRINGCOPY,
+DESERIALIZE_GET_ATTRIBUTE_AS (AxisChar *, CONV_STRTOSTRING,
 				  INIT_VALUE_NUMBER)}
 AxisChar *
 SoapDeSerializer::getAttributeAsAnyURI (const AxisChar * pName, const
 					AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (AxisChar *, CONV_STRINGCOPY,
+DESERIALIZE_GET_ATTRIBUTE_AS (AxisChar *, CONV_STRTOANYURI,
 				  INIT_VALUE_NUMBER)}
 AxisChar *
 SoapDeSerializer::getAttributeAsQName (const AxisChar * pName, const
 				       AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (AxisChar *, CONV_STRINGCOPY,
+DESERIALIZE_GET_ATTRIBUTE_AS (AxisChar *, CONV_STRTOQNAME,
 				  INIT_VALUE_NUMBER)}
 xsd__hexBinary
     SoapDeSerializer::getAttributeAsHexBinary (const AxisChar * pName,
@@ -2116,28 +2179,24 @@ struct tm
 SoapDeSerializer::getAttributeAsDateTime (const AxisChar * pName,
 					  const AxisChar * pNamespace)
 {
-    XSDTYPE nType = XSD_DATETIME;
 DESERIALIZE_GET_ATTRIBUTE_AS (struct tm, CONV_STRTODATETIME,
 				  INIT_VALUE_DATETIME)}
 struct tm
 SoapDeSerializer::getAttributeAsDate (const AxisChar * pName, const
 				      AxisChar * pNamespace)
 {
-    XSDTYPE nType = XSD_DATE;
-DESERIALIZE_GET_ATTRIBUTE_AS (struct tm, CONV_STRTODATETIME,
+DESERIALIZE_GET_ATTRIBUTE_AS (struct tm, CONV_STRTODATE,
 				  INIT_VALUE_DATETIME)}
 struct tm
 SoapDeSerializer::getAttributeAsTime (const AxisChar * pName, const
 				      AxisChar * pNamespace)
 {
-    XSDTYPE nType = XSD_DATE;
-DESERIALIZE_GET_ATTRIBUTE_AS (struct tm, CONV_STRTODATETIME,
+DESERIALIZE_GET_ATTRIBUTE_AS (struct tm, CONV_STRTOTIME,
 				  INIT_VALUE_DATETIME)}
 long
 SoapDeSerializer::getAttributeAsDuration (const AxisChar * pName, const
 					  AxisChar * pNamespace)
 {
-    XSDTYPE nType = XSD_DURATION;
 DESERIALIZE_GET_ATTRIBUTE_AS (long, CONV_STRTODURATION, INIT_VALUE_NUMBER)}
 
 /*
@@ -2161,10 +2220,10 @@ SoapDeSerializer::getElementAsBoolean (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = (0 == strcmp (m_pNode->m_pchNameOrValue, "true"))
-		    ? true_ : false_;
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		return ret;
+	    	Boolean booleanDeserializer;
+	    	ret = booleanDeserializer.deserializeBoolean(m_pNode->m_pchNameOrValue);
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			return ret;
 	    }
 	}
 	else
@@ -2187,16 +2246,14 @@ SoapDeSerializer::getElementAsBoolean (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		/* Some web services server returns 1 */
-		ret = (0 == strcmp (m_pNode->m_pchNameOrValue, "false") ||
-		       0 == strcmp (m_pNode->m_pchNameOrValue, "0"))
-		    ? false_ : true_;
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		m_pNode = NULL;
-		/* this is important in doc/lit style when deserializing 
-		 * arrays
-		 */
-		return ret;
+	    	Boolean booleanDeserializer;
+	    	ret = booleanDeserializer.deserializeBoolean(m_pNode->m_pchNameOrValue);
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			m_pNode = NULL;
+			/* this is important in doc/lit style when deserializing 
+			 * arrays
+			 */
+			return ret;
 	    }
 	    else
 	    {
@@ -2893,9 +2950,10 @@ SoapDeSerializer::getElementAsFloat (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = strtod (m_pNode->m_pchNameOrValue, &m_pEndptr);
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		return ret;
+	    	Float floatDeserializer;
+			ret = *(floatDeserializer.deserializeFloat(m_pNode->m_pchNameOrValue));
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			return ret;
 	    }
 	}
 	else
@@ -2918,13 +2976,14 @@ SoapDeSerializer::getElementAsFloat (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = strtod (m_pNode->m_pchNameOrValue, &m_pEndptr);
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		m_pNode = NULL;
-		/* this is important in doc/lit style when deserializing 
-		 * arrays 
-		 */
-		return ret;
+	    	Float floatDeserializer;
+			ret = *(floatDeserializer.deserializeFloat(m_pNode->m_pchNameOrValue));
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			m_pNode = NULL;
+			/* this is important in doc/lit style when deserializing 
+			 * arrays 
+			 */
+			return ret;
 	    }
 	    else
 	    {
@@ -2965,9 +3024,10 @@ SoapDeSerializer::getElementAsDouble (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = strtod (m_pNode->m_pchNameOrValue, &m_pEndptr);
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		return ret;
+	    	Double doubleDeserializer;
+			ret = *( doubleDeserializer.deserializeDouble(m_pNode->m_pchNameOrValue) );
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			return ret;
 	    }
 	}
 	else
@@ -2990,13 +3050,14 @@ SoapDeSerializer::getElementAsDouble (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = strtod (m_pNode->m_pchNameOrValue, &m_pEndptr);
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		m_pNode = NULL;
-		/* this is important in doc/lit style when deserializing 
-		 * arrays 
-		 */
-		return ret;
+	    	Double doubleDeserializer;
+			ret = *( doubleDeserializer.deserializeDouble(m_pNode->m_pchNameOrValue) );
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			m_pNode = NULL;
+			/* this is important in doc/lit style when deserializing 
+			 * arrays 
+			 */
+			return ret;
 	    }
 	    else
 	    {
@@ -3037,9 +3098,11 @@ SoapDeSerializer::getElementAsDecimal (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = strtod (m_pNode->m_pchNameOrValue, &m_pEndptr);
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		return ret;
+	    	Decimal decimalDeserializer;
+	    	ret = *( decimalDeserializer.deserializeDecimal(m_pNode->m_pchNameOrValue));
+
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			return ret;
 	    }
 	}
 	else
@@ -3062,13 +3125,14 @@ SoapDeSerializer::getElementAsDecimal (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = strtod (m_pNode->m_pchNameOrValue, &m_pEndptr);
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		m_pNode = NULL;
-		/* this is important in doc/lit style when deserializing 
-		 * arrays 
-		 */
-		return ret;
+			Decimal decimalDeserializer;
+	    	ret = *( decimalDeserializer.deserializeDecimal(m_pNode->m_pchNameOrValue));
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			m_pNode = NULL;
+			/* this is important in doc/lit style when deserializing 
+			 * arrays 
+			 */
+			return ret;
 	    }
 	    else
 	    {
@@ -3111,8 +3175,9 @@ SoapDeSerializer::getElementAsString (const AxisChar * pName,
 	    {
 		if ((CHARACTER_ELEMENT == m_pNode->m_type))
 		{
-		    ret = new char[strlen (m_pNode->m_pchNameOrValue) + 1];
-		    strcpy (ret, m_pNode->m_pchNameOrValue);
+			String stringDeserializer;
+			ret = stringDeserializer.deserializeString(m_pNode->m_pchNameOrValue);
+
 		    /* this is because the string may not be available later */
 		    m_pNode = m_pParser->next ();	/* skip end element node too */
 		    return ret;
@@ -3145,9 +3210,8 @@ SoapDeSerializer::getElementAsString (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = new char[strlen (m_pNode->m_pchNameOrValue) + 1];
-		strcpy (ret, m_pNode->m_pchNameOrValue);
-		/* this is because the string may not be available later */
+	    	String stringDeserializer;
+	    	ret = stringDeserializer.deserializeString(m_pNode->m_pchNameOrValue);
 
 		// FJP Added this code for fault finding.  If detail is
 		//     followed by CR/LF or CR/LF then CR/LF then assume that
@@ -3231,11 +3295,10 @@ SoapDeSerializer::getElementAsAnyURI (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = new char[strlen (m_pNode->m_pchNameOrValue) + 1];
-		strcpy (ret, m_pNode->m_pchNameOrValue);
-		/* this is because the string may not be available later */
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		return ret;
+	    	AnyURI anyURIDeserializer;
+	    	ret = anyURIDeserializer.deserializeAnyURI(m_pNode->m_pchNameOrValue);
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			return ret;
 	    }
 	}
 	else
@@ -3258,15 +3321,15 @@ SoapDeSerializer::getElementAsAnyURI (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = new char[strlen (m_pNode->m_pchNameOrValue) + 1];
-		strcpy (ret, m_pNode->m_pchNameOrValue);
-		/* this is because the string may not be available later */
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		m_pNode = NULL;
-		/* this is important in doc/lit style when deserializing 
-		 * arrays 
-		 */
-		return ret;
+			AnyURI anyURIDeserializer;
+	    	ret = anyURIDeserializer.deserializeAnyURI(m_pNode->m_pchNameOrValue);
+			/* this is because the string may not be available later */
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			m_pNode = NULL;
+			/* this is important in doc/lit style when deserializing 
+			 * arrays 
+			 */
+			return ret;
 	    }
 	}
 	else
@@ -3298,11 +3361,11 @@ SoapDeSerializer::getElementAsQName (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = new char[strlen (m_pNode->m_pchNameOrValue) + 1];
-		strcpy (ret, m_pNode->m_pchNameOrValue);
-		/* this is because the string may not be available later */
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		return ret;
+	    	XSD_QName qnameDeserializer;
+	    	ret = qnameDeserializer.deserializeQName(m_pNode->m_pchNameOrValue);
+			/* this is because the string may not be available later */
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			return ret;
 	    }
 	}
 	else
@@ -3325,15 +3388,15 @@ SoapDeSerializer::getElementAsQName (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = new char[strlen (m_pNode->m_pchNameOrValue) + 1];
-		strcpy (ret, m_pNode->m_pchNameOrValue);
-		/* this is because the string may not be available later */
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		m_pNode = NULL;
-		/* this is important in doc/lit style when deserializing 
-		 * arrays 
-		 */
-		return ret;
+	    	XSD_QName qnameDeserializer;
+	    	ret = qnameDeserializer.deserializeQName(m_pNode->m_pchNameOrValue);
+
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			m_pNode = NULL;
+			/* this is important in doc/lit style when deserializing 
+			 * arrays 
+			 */
+			return ret;
 	    }
 	}
 	else
@@ -3365,10 +3428,11 @@ xsd__hexBinary
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = decodeFromHexBinary (m_pNode->m_pchNameOrValue);
-		/* this is because the string may not be available later */
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		return ret;
+	    	HexBinary hexBinaryDeserializer;
+	    	ret = *( hexBinaryDeserializer.deserializeHexBinary(m_pNode->m_pchNameOrValue) );
+
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			return ret;
 	    }
 	}
 	else
@@ -3391,14 +3455,15 @@ xsd__hexBinary
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = decodeFromHexBinary (m_pNode->m_pchNameOrValue);
-		/* this is because the string may not be available later */
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		m_pNode = NULL;
-		/* this is important in doc/lit style when deserializing 
-		 * arrays 
-		 */
-		return ret;
+			HexBinary hexBinaryDeserializer;
+	    	ret = *( hexBinaryDeserializer.deserializeHexBinary(m_pNode->m_pchNameOrValue) );
+
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			m_pNode = NULL;
+			/* this is important in doc/lit style when deserializing 
+			 * arrays 
+			 */
+			return ret;
 	    }
 	}
 	else
@@ -3459,10 +3524,10 @@ xsd__base64Binary
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = decodeFromBase64Binary (m_pNode->m_pchNameOrValue);
-		/* this is because the string may not be available later */
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		return ret;
+	    	Base64Binary base64BinaryDeserializer;
+	    	ret = *(base64BinaryDeserializer.deserializeBase64Binary(m_pNode->m_pchNameOrValue));
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			return ret;
 	    }
 	}
 	else
@@ -3485,14 +3550,15 @@ xsd__base64Binary
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = decodeFromBase64Binary (m_pNode->m_pchNameOrValue);
-		/* this is because the string may not be available later */
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		m_pNode = NULL;
-		/* this is important in doc/lit style when deserializing 
-		 * arrays 
-		 */
-		return ret;
+			Base64Binary base64BinaryDeserializer;
+	    	ret = *(base64BinaryDeserializer.deserializeBase64Binary(m_pNode->m_pchNameOrValue));
+
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			m_pNode = NULL;
+			/* this is important in doc/lit style when deserializing 
+			 * arrays 
+			 */
+			return ret;
 	    }
 	}
 	else
@@ -3524,11 +3590,11 @@ SoapDeSerializer::getElementAsDateTime (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret =
-		    AxisTime::deserialize (m_pNode->m_pchNameOrValue,
-					   XSD_DATETIME);
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		return ret;
+	    	DateTime dateTimeDeSerializer;
+			ret = *(dateTimeDeSerializer.deserializeDateTime (m_pNode->m_pchNameOrValue));
+
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			return ret;
 	    }
 	}
 	else
@@ -3564,14 +3630,15 @@ SoapDeSerializer::getElementAsDateTime (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = AxisTime::deserialize (m_pNode->m_pchNameOrValue,
-					     XSD_DATETIME);
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		m_pNode = NULL;
-		/* this is important in doc/lit style when deserializing 
-		 * arrays 
-		 */
-		return ret;
+	    	DateTime dateTimeDeserializer;
+	    	ret = *(dateTimeDeserializer.deserializeDateTime(m_pNode->m_pchNameOrValue));
+    
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			m_pNode = NULL;
+			/* this is important in doc/lit style when deserializing 
+			 * arrays 
+			 */
+			return ret;
 	    }
 	}
 	else
@@ -3603,10 +3670,10 @@ SoapDeSerializer::getElementAsDate (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = AxisTime::deserialize (m_pNode->m_pchNameOrValue,
-					     XSD_DATE);
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		return ret;
+	    	Date dateDeserializer;
+	    	ret = *(dateDeserializer.deserializeDate (m_pNode->m_pchNameOrValue));
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			return ret;
 	    }
 	}
 	else
@@ -3642,14 +3709,14 @@ SoapDeSerializer::getElementAsDate (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = AxisTime::deserialize (m_pNode->m_pchNameOrValue,
-					     XSD_DATE);
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		m_pNode = NULL;
-		/* this is important in doc/lit style when deserializing
-		 * arrays 
-		 */
-		return ret;
+	    	Date dateDeserializer;
+	    	ret = *(dateDeserializer.deserializeDate (m_pNode->m_pchNameOrValue));
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			m_pNode = NULL;
+			/* this is important in doc/lit style when deserializing
+			 * arrays 
+			 */
+			return ret;
 	    }
 	}
 	else
@@ -3681,10 +3748,11 @@ SoapDeSerializer::getElementAsTime (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = AxisTime::deserialize (m_pNode->m_pchNameOrValue,
-					     XSD_TIME);
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		return ret;
+	    	Time timeDeserializer;
+	    	ret = *( timeDeserializer.deserializeTime(m_pNode->m_pchNameOrValue) );
+	    	
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			return ret;
 	    }
 	}
 	else
@@ -3720,14 +3788,15 @@ SoapDeSerializer::getElementAsTime (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret = AxisTime::deserialize (m_pNode->m_pchNameOrValue,
-					     XSD_TIME);
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		m_pNode = NULL;
-		/* this is important in doc/lit style when deserializing 
-		 * arrays 
-		 */
-		return ret;
+	    	Time timeDeserializer;
+			ret = *( timeDeserializer.deserializeTime(m_pNode->m_pchNameOrValue) );
+	
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			m_pNode = NULL;
+			/* this is important in doc/lit style when deserializing 
+			 * arrays 
+			 */
+			return ret;
 	    }
 	}
 	else
@@ -3759,11 +3828,11 @@ SoapDeSerializer::getElementAsDuration (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret =
-		    AxisTime::deserializeDuration (m_pNode->m_pchNameOrValue,
-						   XSD_DURATION);
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		return ret;
+			Duration durationDeserializer;
+	    	ret = *(durationDeserializer.deserializeDuration(m_pNode->m_pchNameOrValue));
+
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			return ret;
 	    }
 	}
 	else
@@ -3786,15 +3855,15 @@ SoapDeSerializer::getElementAsDuration (const AxisChar * pName,
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
-		ret =
-		    AxisTime::deserializeDuration (m_pNode->m_pchNameOrValue,
-						   XSD_DURATION);
-		m_pNode = m_pParser->next ();	/* skip end element node too */
-		m_pNode = NULL;
-		/* this is important in doc/lit style when deserializing 
-		 * arrays 
-		 */
-		return ret;
+	    	Duration durationDeserializer;
+	    	ret = *(durationDeserializer.deserializeDuration(m_pNode->m_pchNameOrValue));
+
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			m_pNode = NULL;
+			/* this is important in doc/lit style when deserializing 
+			 * arrays 
+			 */
+			return ret;
 	    }
 	}
 	else
@@ -4266,9 +4335,10 @@ SoapDeSerializer::getChardataAs (void *pValue, XSDTYPE type)
 		(int) strtod (m_pNode->m_pchNameOrValue, &m_pEndptr);
 	    break;
 	case XSD_BOOLEAN:
-	    *((int *) (pValue)) =
-		(strcmp (m_pNode->m_pchNameOrValue, "true") ==
-		 0) ? false_ : true_;
+		{
+			Boolean booleanDeserializer;
+			pValue = booleanDeserializer.deserialize(m_pNode->m_pchNameOrValue);
+		}
 	    break;
 	case XSD_UNSIGNEDINT:
 	    *((unsigned int *) (pValue)) =
@@ -4299,44 +4369,86 @@ SoapDeSerializer::getChardataAs (void *pValue, XSDTYPE type)
 		strtol (m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
 	    break;
 	case XSD_DURATION:
-	    *((long *) (pValue)) =
-		AxisTime::deserializeDuration (m_pNode->m_pchNameOrValue,
-					       XSD_DURATION);
+		{
+			Duration durationDeserializer;
+			pValue = durationDeserializer.deserialize(m_pNode->m_pchNameOrValue);
+		}
 	    break;
 	case XSD_UNSIGNEDLONG:
 	    *((unsigned long *) (pValue)) =
 		strtoul (m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
 	    break;
 	case XSD_FLOAT:
-	    *((float *) (pValue)) =
-		strtod (m_pNode->m_pchNameOrValue, &m_pEndptr);
+		{
+			Float floatDeserializer;
+			pValue = floatDeserializer.deserialize(m_pNode->m_pchNameOrValue);
+		}
 	    break;
 	case XSD_DOUBLE:
+		{
+			Double doubleDeserializer;
+			pValue = doubleDeserializer.deserialize(m_pNode->m_pchNameOrValue);
+		}
+		break;
 	case XSD_DECIMAL:
-	    *((double *) (pValue)) =
-		strtod (m_pNode->m_pchNameOrValue, &m_pEndptr);
+		{
+			Decimal decimalDeserializer;
+	    	pValue = decimalDeserializer.deserializeDecimal(m_pNode->m_pchNameOrValue);
+		}
 	    break;
 	case XSD_STRING:
+		{
+			String stringDeserializer;
+			pValue = stringDeserializer.deserialize(m_pNode->m_pchNameOrValue);
+		}
+		break;
 	case XSD_ANYURI:
+		{
+			AnyURI anyURIDeserializer;
+			pValue = anyURIDeserializer.deserialize(m_pNode->m_pchNameOrValue);
+		}
+		break;
 	case XSD_QNAME:
+		{
+			XSD_QName qnameDeserializer;
+			pValue = qnameDeserializer.deserialize(m_pNode->m_pchNameOrValue);
+		}
+		break;
 	case XSD_NOTATION:
-	    *((char **) (pValue)) =
-		new char[strlen (m_pNode->m_pchNameOrValue) + 1];
-	    strcpy (*((char **) (pValue)), m_pNode->m_pchNameOrValue);
-	    break;
+		{
+			NOTATION notationDeserializer;
+			pValue = notationDeserializer.deserialize(m_pNode->m_pchNameOrValue);
+		}
+		break;
 	case XSD_HEXBINARY:
-	    *(xsd__hexBinary *) (pValue) =
-		decodeFromHexBinary (m_pNode->m_pchNameOrValue);
+		{
+			HexBinary hexBinaryDeserializer;
+			pValue = hexBinaryDeserializer.deserialize(m_pNode->m_pchNameOrValue);
+		}
 	    break;
 	case XSD_BASE64BINARY:
-	    *(xsd__base64Binary *) (pValue) =
-		decodeFromBase64Binary (m_pNode->m_pchNameOrValue);
+		{
+			Base64Binary base64BinaryDeserializer;
+			pValue = base64BinaryDeserializer.deserialize(m_pNode->m_pchNameOrValue);
+		}
 	    break;
 	case XSD_DATETIME:
+		{
+			DateTime dateTimeDeserializer;
+			pValue = dateTimeDeserializer.deserialize(m_pNode->m_pchNameOrValue);
+		}
+		break;
 	case XSD_DATE:
+		{
+			Date dateDeserializer;
+			pValue = dateDeserializer.deserialize(m_pNode->m_pchNameOrValue);
+		}
+		break;
 	case XSD_TIME:
-	    *((struct tm *) (pValue)) =
-		AxisTime::deserialize (m_pNode->m_pchNameOrValue, type);
+		{
+			Time timeDeserializer;
+			pValue = timeDeserializer.deserialize(m_pNode->m_pchNameOrValue);
+		}
 	    break;
 	default:;
 	}

@@ -29,6 +29,21 @@
 #include <axis/TypeMapping.hpp>
 #include "AxisTime.h"
 #include <string>
+#include "../soap/xsd/Boolean.hpp"
+#include "../soap/xsd/AnyURI.hpp"
+#include "../soap/xsd/String.hpp"
+#include "../soap/xsd/XSD_QName.hpp"
+#include "../soap/xsd/NOTATION.hpp"
+#include "../soap/xsd/Base64Binary.hpp"
+#include "../soap/xsd/HexBinary.hpp"
+#include "../soap/xsd/Duration.hpp"
+#include "../soap/xsd/DateTime.hpp"
+#include "../soap/xsd/Date.hpp"
+#include "../soap/xsd/Time.hpp"
+#include "../soap/xsd/Float.hpp"
+#include "../soap/xsd/Double.hpp"
+#include "../soap/xsd/Decimal.hpp"
+
 using namespace std;
 
 #define BTS_BUFFSIZE 32

@@ -20,6 +20,20 @@
 #include <axis/IHandlerSoapDeSerializer.hpp>
 #include "HeaderBlock.h"
 #include "../xml/XMLParser.h"
+#include "xsd/Boolean.hpp"
+#include "xsd/AnyURI.hpp"
+#include "xsd/String.hpp"
+#include "xsd/XSD_QName.hpp"
+#include "xsd/NOTATION.hpp"
+#include "xsd/Base64Binary.hpp"
+#include "xsd/HexBinary.hpp"
+#include "xsd/Duration.hpp"
+#include "xsd/DateTime.hpp"
+#include "xsd/Date.hpp"
+#include "xsd/Time.hpp"
+#include "xsd/Float.hpp"
+#include "xsd/Double.hpp"
+#include "xsd/Decimal.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
