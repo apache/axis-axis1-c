@@ -66,13 +66,15 @@ WSDL2C++
 ---------
 ! <team> 	Coding C++ generation part of WSDL2WS tool being written in Java.
 
-AXISDEPLOY
+Deployment
 ----------
 X <susantha>	WrapperClassGenerator 		
 		1. writing a set of classes that can store information that parser obtains by 		   
 		   parsing the user web service's include files.		
 		2. writing c++ parser that reads and parses the web service's include files
 ! <team>	Improving the WCG to remove the web service writing C++ restrictions one by one
+! <team> 	Writing a webservice and the client for the Administration of Axis. Similar to the AdminClient in Axis Java.
+! <team> 	Improving WSDD module so that dynamic deployment/undeployment can be done.
 
 GENERAL / UNCATEGORIZED
 -----------------------
