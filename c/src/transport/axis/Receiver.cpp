@@ -72,16 +72,17 @@ Receiver::~Receiver()
 
 }
 
-const std::string& Receiver::Recv() throw (AxisException)
+const char* Receiver::Recv() throw (AxisException)
 {
+	if (m_pMsg) return NULL; //this has been read earlier.
 	try
 	{
-		*m_pTrChannel >> repMsg;
+		*m_pTrChannel >> (&m_pMsg);
 	}
 	catch(AxisException& ex)
 	{
 		// Get the fault message.
-		*m_pTrChannel >> repMsg;
+		*m_pTrChannel >> (&m_pMsg);
 		#ifdef _DEBUG
 		//	std::cerr << ex.GetErrorMsg() << std::endl;
 		#endif
@@ -90,7 +91,6 @@ const std::string& Receiver::Recv() throw (AxisException)
 	{
 		throw AxisException(RECEPTION_ERROR);
 	}
-
-	return repMsg;
+	return m_pMsg;
 }
 

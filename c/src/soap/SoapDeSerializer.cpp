@@ -95,16 +95,17 @@ SoapDeSerializer::~SoapDeSerializer()
 
 int SoapDeSerializer::SetInputStream(const Ax_soapstream* pInputStream)
 {
+	int nStatus;
 	m_pInputStream = pInputStream;
 	int nChars = 0;
 	if (NULL != m_pInputStream->transport.pGetFunct)
 	{
 		do {
-			m_pInputStream->transport.pGetFunct(&m_pCurrentBuffer, &nChars, m_pInputStream);
+			nStatus = m_pInputStream->transport.pGetFunct(&m_pCurrentBuffer, &nChars, m_pInputStream);
 			if ((nChars > 0) && m_pCurrentBuffer)
 				m_pParser->Parse(m_pCurrentBuffer, nChars);
 			m_pInputStream->transport.pRelBufFunct(m_pCurrentBuffer, m_pInputStream);
-		} while (nChars > 0);
+		} while (TRANSPORT_IN_PROGRESS == nStatus);
 		m_pParser->ParseEnd();
 	}
 	return AXIS_SUCCESS;

@@ -179,7 +179,7 @@ void Call::AddParameter(const AxisString& sStrValue,const char* pchName, XSDTYPE
  */
 void Call::AddBasicArrayParameter(Axis_Array* pArray, XSDTYPE nType, const char* pchName)
 {
-	m_pIWSSZ->AddOutputParam(pchName, pArray, nType);
+	m_pIWSSZ->AddOutputBasicArrayParam(pchName, pArray, nType);
 }
 
 void Call::AddCmplxArrayParameter(Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName, const char* pchURI, const char* pchName)

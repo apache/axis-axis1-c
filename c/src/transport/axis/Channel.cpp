@@ -234,6 +234,7 @@ const Channel& Channel::operator << (const std::string& msg)
 
 const Channel& Channel::operator >> (std::string& msg)
 {
+	msg = "";
 	if(INVALID_SOCKET == m_Sock) 
 	{
 		Error("Reading cannot be done without having a open socket.");
