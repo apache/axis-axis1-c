@@ -737,6 +737,9 @@ void
 Axis2Transport::setTransportProperty (const char *pcKey, const char *pcValue)
 throw (AxisTransportException)
 {
+    if ( !pcKey || !pcValue ) // Samisa - fix for AXISCPP-295. We must check for valid values here.
+        return;
+
     bool b_KeyFound = false;
 
     if (strcmp (pcKey, "SOAPAction") == 0
@@ -1177,7 +1180,7 @@ Axis2Transport::processRootMimeBody ()
         m_strReceived =
             m_strReceived.substr (m_strReceived.find ("\r\n\r\n") +
                                           4);
-        int intMimeTemp = m_strReceived.find(m_strMimeBoundary);
+        unsigned int intMimeTemp = m_strReceived.find(m_strMimeBoundary);
         if (intMimeTemp != std::string::npos)
         {
              m_strReceived = m_strReceived.substr(0, intMimeTemp); 
@@ -1190,7 +1193,7 @@ Axis2Transport::processRootMimeBody ()
     }
     else
     {
-        int intMimeTemp = m_strReceived.find(m_strMimeBoundary);
+        unsigned int intMimeTemp = m_strReceived.find(m_strMimeBoundary);
         if (intMimeTemp != std::string::npos)
         {
              m_strReceived = m_strReceived.substr(0, intMimeTemp); 
