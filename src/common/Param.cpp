@@ -57,7 +57,7 @@ Param::~Param ()
                 delete [] const_cast<char*>(m_Value.pStrValue);
             }
             break;
-        case XSD_BASE64BINARY:
+        /*case XSD_BASE64BINARY:
             if (AxisEngine::m_bServer)
             {
                 delete [] m_Value.b64bValue->__ptr;
@@ -69,6 +69,7 @@ Param::~Param ()
                 delete [] m_Value.hbValue->__ptr;
             }
             break;
+            */
         case XSD_ANY:
             pAny = (AnyType*)m_Value.pAnyObject;
             for (i=0; i<pAny->_size; i++)
@@ -77,6 +78,74 @@ Param::~Param ()
                 if (pStr) delete [] pStr;
             }
             delete [] pAny;
+            break;
+
+        case XSD_INT:
+        case XSD_BOOLEAN:
+            m_Value.nValue;
+            break; 
+
+        case XSD_UNSIGNEDINT:
+            delete m_Value.unValue;
+            break;
+
+        case XSD_SHORT:
+            delete m_Value.sValue;
+            break; 
+
+        case XSD_UNSIGNEDSHORT:
+            delete m_Value.usValue;
+            break;         
+
+        case XSD_BYTE:
+            delete m_Value.cValue;
+            break; 
+
+        case XSD_UNSIGNEDBYTE:
+            delete m_Value.ucValue;
+            break;
+
+        case XSD_LONG:
+            delete m_Value.llValue;
+            break;
+
+        case XSD_INTEGER:
+            delete m_Value.lValue;
+            break;        
+
+        case XSD_DURATION:
+            delete m_Value.lDuration;
+            break;        
+
+        case XSD_UNSIGNEDLONG:
+            delete m_Value.ulValue;
+            break;
+
+        case XSD_FLOAT:
+            delete m_Value.fValue;
+            break;
+
+        case XSD_DOUBLE:
+        case XSD_DECIMAL:
+            delete m_Value.dValue;
+            break;              
+
+        case XSD_HEXBINARY:
+            //delete [] m_Value.hbValue->__ptr;
+            //delete m_Value.hbValue;
+            break;
+
+        case XSD_BASE64BINARY:
+            //delete [] m_Value.b64bValue->__ptr;
+            //delete m_Value.b64bValue;
+            break;
+
+        case XSD_DATETIME:
+        case XSD_DATE:
+        case XSD_TIME:
+            delete m_Value.tValue;
+            break;
+
         default:;
     }
 }
