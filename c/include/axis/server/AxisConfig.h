@@ -13,7 +13,13 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
+ */
+
+ /**
+ * @file AxisConfig.h
+ *
  * @author Sanjaya Singharage (sanjayas@opensource.lk, sanjayas@jkcsworld.com)
+ *
  */
  
 #if !defined(__AXIS_AXISCONFIG_H_OF_AXIS_INCLUDED__)

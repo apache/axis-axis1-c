@@ -13,8 +13,12 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
+ */
+
+/**
+ * @file AxisMessage.h
  *
- *   @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
+ * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  *
  */
  

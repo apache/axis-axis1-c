@@ -14,6 +14,15 @@
  *   limitations under the License.
  */
 
+/**
+ * @file BasicTypeSerializer.h
+ *
+ * This file contains the BasicTypeSerializer class which has the functions
+ * that the Serializer uses to serialize all xsd basic types.
+ *
+ * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
+ */
+  
 #if !defined(_BASICTYPESERIALIZER_H____OF_AXIS_INCLUDED_)
 #define _BASICTYPESERIALIZER_H____OF_AXIS_INCLUDED_
 
