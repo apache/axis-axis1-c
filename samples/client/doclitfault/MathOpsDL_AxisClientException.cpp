@@ -57,7 +57,7 @@ void MathOpsDL_AxisClientException:: processException(exception* e, int iExcepti
 
 void MathOpsDL_AxisClientException::processException (ISoapFault* pFault)
 {
-	/*User can do something like deserializing the struct into a string*/
+
         /*User can do something like deserializing the struct into a string*/
         const char* pcCmplxFaultName;
 	const char* pcDetail;
