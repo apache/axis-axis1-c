@@ -296,6 +296,8 @@ AC_OUTPUT(Makefile \
     tests/client/httpHeader/test7/rpc/Makefile \
     tests/client/httpHeader/test8/Makefile \
     tests/client/httpHeader/test8/rpc/Makefile \
+    tests/client/uddi_inquire/Makefile \
+    tests/client/uddi_inquire/gen_src/Makefile \
     tests/server/Makefile \
     tests/server/exceptionTest/Makefile \
     tests/server/exceptionTest/gen_src/Makefile \
