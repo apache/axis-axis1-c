@@ -409,10 +409,15 @@ void WSDDDocument::startElement(const XMLCh *const uri,	const XMLCh *const local
 		switch(m_lev0)
 		{
 		case WSDD_UNKNOWN:
-			if((XMLString::equals(lname, kw_depl)) || (XMLString::equals(lname, kw_undepl)))
+			if(XMLString::equals(lname, kw_depl))
 			{  
 				m_lev0 = WSDD_DEPLOYMENT;
-				//nothing to get
+				m_pDeployment->SetDeploymentType(DT_DEPLOYMENT);
+			}
+			else if(XMLString::equals(lname, kw_undepl))
+			{  
+				m_lev0 = WSDD_DEPLOYMENT;
+				m_pDeployment->SetDeploymentType(DT_UNDEPLOYMENT);
 			}
 			break;
 		case WSDD_DEPLOYMENT:
@@ -556,3 +561,14 @@ const AxisChar* WSDDDocument::__XTRC(const XMLCh *pChar)
 	else 
 		return ""; 
 }
+
+void WSDDDocument::warning(const SAXParseException& exception)
+{
+}
+void WSDDDocument::error(const SAXParseException& exception)
+{
+}
+void WSDDDocument::fatalError(const SAXParseException& exception)
+{
+}
+

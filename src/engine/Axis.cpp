@@ -252,8 +252,11 @@ extern "C" int initialize_module(int bServer, const char * wsddPath)
 	URIMapping::Initialize();
 	SoapFault::initialize();
 	ModuleInitialize();
-    char* pWsddPath = g_pConfig->GetWsddFilePath();
-	if (SUCCESS != g_pWSDDDeployment->LoadWSDD(pWsddPath)) return FAIL;
+	if (bServer) //no client side wsdd processing at the moment
+	{
+		char* pWsddPath = g_pConfig->GetWsddFilePath();
+		if (SUCCESS != g_pWSDDDeployment->LoadWSDD(pWsddPath)) return FAIL;
+	}
 	return SUCCESS;
 }
 
