@@ -95,6 +95,8 @@
 #include <axis/server/AxisConfig.h>
 #include "../wsdd/WSDDKeywords.h"
 #include <axis/server/AxisTrace.h>
+#include <xercesc/util/PlatformUtils.hpp>
+
 
 #define BYTESTOREAD 64
 //the relative location of the wsdl files hardcoded
@@ -104,6 +106,8 @@
 #ifdef _AXISTRACE
 unsigned char chEBuf[1024];
 #endif
+
+XERCES_CPP_NAMESPACE_USE
 
 //synchronized global variables.
 HandlerLoader* g_pHandlerLoader;
@@ -245,7 +249,9 @@ extern "C" int initialize_module(int bServer)
 {
     int status = 0;
 	//order of these initialization method invocation should not be changed
-	//XMLPlatformUtils::Initialize();
+#ifdef USE_XERCES_PARSER
+	XMLPlatformUtils::Initialize();
+#endif
 	AxisEngine::m_bServer = bServer;
 	AxisUtils::Initialize();
 	WSDDKeywords::Initialize();
