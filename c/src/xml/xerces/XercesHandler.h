@@ -77,6 +77,7 @@ private:
     void fatalError(const SAXParseException& exception);
 
     int m_nStatus;
+	bool m_bEndElementFollows;
     AnyElement * Nelement;
     AnyElement * m_pCurrElement;
 

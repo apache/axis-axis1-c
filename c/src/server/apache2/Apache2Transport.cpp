@@ -18,16 +18,16 @@
  *
  */
 
-#include "ApacheTransport.h"
+#include "Apache2Transport.h"
 
 #define AXIS_URI_EXTENSION "/axis"
 
 /* Following is the character that should be used to separate the method name in
- * the SOAPAction header value. Ex: "Calculator#Add"
+ * the SOAPAction header value. Ex: "http://localhost:80/axis/Calculator#Add"
  */
 #define SOAPACTION_METHODNAME_SEPARATOR "#"
 
-ApacheTransport::ApacheTransport(void* pContext)
+Apache2Transport::Apache2Transport(void* pContext)
 {
 	m_pContext = pContext;
 #ifndef CHUNCKED_DATA_SUPPORTED
@@ -36,12 +36,12 @@ ApacheTransport::ApacheTransport(void* pContext)
 #endif
 }
 
-ApacheTransport::~ApacheTransport()
+Apache2Transport::~Apache2Transport()
 {
 
 }
 
-AXIS_TRANSPORT_STATUS ApacheTransport::sendBytes(const char* pcSendBuffer, const void* pBufferId)
+AXIS_TRANSPORT_STATUS Apache2Transport::sendBytes(const char* pcSendBuffer, const void* pBufferId)
 {
 #ifndef CHUNCKED_DATA_SUPPORTED
     int index;
@@ -74,7 +74,7 @@ AXIS_TRANSPORT_STATUS ApacheTransport::sendBytes(const char* pcSendBuffer, const
 #endif	
 }
 
-void ApacheTransport::setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)
+void Apache2Transport::setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)
 {
     const char* key = NULL;
     switch (type)
@@ -93,15 +93,15 @@ void ApacheTransport::setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type,
     }
     if (key)
     {
-		ap_table_set (((request_rec*)m_pContext)->headers_out, key, value);
+		ap_table_set(((request_rec*)m_pContext)->headers_out, key, value);
 #ifdef CHUNCKED_DATA_SUPPORTED
-		ap_send_http_header ((request_rec*)m_pContext);
+		ap_send_http_header((request_rec*)m_pContext);
 		/* Should we remove the sent headers ? */
 #endif
 	}
 }
 
-AXIS_TRANSPORT_STATUS ApacheTransport::flushOutput()
+AXIS_TRANSPORT_STATUS Apache2Transport::flushOutput()
 {
 #ifndef CHUNCKED_DATA_SUPPORTED
     int contentLength = 0;
@@ -124,7 +124,7 @@ AXIS_TRANSPORT_STATUS ApacheTransport::flushOutput()
     }
     if (contentLength != 0)     /* do only if the http body is not empty. */
     {
-        sprintf (strtonum, "%d", contentLength);
+        sprintf(strtonum, "%d", contentLength);
         setTransportProperty(SOAP_MESSAGE_LENGTH, strtonum);
         ap_send_http_header((request_rec*)m_pContext);
         /* Send all buffers */
@@ -142,13 +142,11 @@ AXIS_TRANSPORT_STATUS ApacheTransport::flushOutput()
 	return TRANSPORT_FINISHED;
 }
 
-AXIS_TRANSPORT_STATUS ApacheTransport::getBytes(char* pBuffer, int* piSize)
+AXIS_TRANSPORT_STATUS Apache2Transport::getBytes(char* pBuffer, int* piSize)
 {
     int nBufSize = *piSize;
     int len_read;
-    ap_hard_timeout ("util_read", (request_rec*) m_pContext);
-    len_read = ap_get_client_block ((request_rec*) m_pContext, pBuffer, *piSize);
-    ap_reset_timeout ((request_rec*) m_pContext);
+    len_read = ap_get_client_block((request_rec*) m_pContext, pBuffer, *piSize);
     *piSize = len_read;
     if (len_read < nBufSize)
     {
@@ -159,7 +157,7 @@ AXIS_TRANSPORT_STATUS ApacheTransport::getBytes(char* pBuffer, int* piSize)
         return TRANSPORT_IN_PROGRESS;
 }
 
-const char* ApacheTransport::getTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE eType)
+const char* Apache2Transport::getTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE eType)
 {
     const char* pcValue;
 	/* the member, "path" of "parsed_uri" contains the uri of the
@@ -174,7 +172,7 @@ const char* ApacheTransport::getTransportProperty(AXIS_TRANSPORT_INFORMATION_TYP
             if (strstr(pcUriPath, AXIS_URI_EXTENSION))
             {
                 return strstr(pcUriPath, AXIS_URI_EXTENSION) +
-                    strlen (AXIS_URI_EXTENSION) + 1;
+                    strlen(AXIS_URI_EXTENSION) + 1;
             }
             else
             {
@@ -202,19 +200,19 @@ const char* ApacheTransport::getTransportProperty(AXIS_TRANSPORT_INFORMATION_TYP
     return NULL;
 }
 
-void ApacheTransport::setTransportProperty(const char* pcKey, const char* pcValue)
+void Apache2Transport::setTransportProperty(const char* pcKey, const char* pcValue)
 {
 
 }
 
-const char* ApacheTransport::getTransportProperty(const char* pcKey)
+const char* Apache2Transport::getTransportProperty(const char* pcKey)
 {
     /* ap_table_elts returns an array_header struct. The nelts element of that 
      * struct contains the number of input header elements. Finally assigns that
      * to the axis soap data structure. */
-    array_header* arr;
+    const apr_array_header_t* arr;
 	int headercount = ap_table_elts(((request_rec*)m_pContext)->headers_in)->nelts;
-	Ax_header* pHeaders = 0;
+	apr_table_entry_t* pHeaders = 0;
     /* casting req_rec->headers_in to axis header struct and assigning that to 
      * the axis soap structure. Hope this is ok 
      */
@@ -223,36 +221,36 @@ const char* ApacheTransport::getTransportProperty(const char* pcKey)
      * axis soap structure 
      */
     arr = ap_table_elts(((request_rec*)m_pContext)->headers_in);
-	pHeaders = (Ax_header*) arr->elts;
+	pHeaders = (apr_table_entry_t*)arr->elts;
 	for (int ix=0; ix<headercount; ix++)
 	{
-		if (!strcmp(pHeaders->headername, pcKey))
-			return pHeaders->headervalue;
+		if (!strcmp(pHeaders->key, pcKey))
+			return pHeaders->val;
 		pHeaders++;
 	}
 	return 0;
 }
 
-void ApacheTransport::setSessionId(const char* pcSessionId)
+void Apache2Transport::setSessionId(const char* pcSessionId)
 {
 }
 
-const char* ApacheTransport::getSessionId()
+const char* Apache2Transport::getSessionId()
 {
 	return "this is temporary session id"; //TODO
 }
 
-const char* ApacheTransport::getServiceName()
+const char* Apache2Transport::getServiceName()
 {
 	return 0; //TODO
 }
 
-AXIS_PROTOCOL_TYPE ApacheTransport::getProtocol()
+AXIS_PROTOCOL_TYPE Apache2Transport::getProtocol()
 {
 	return APTHTTP;
 }
 
-int ApacheTransport::getSubProtocol()
+int Apache2Transport::getSubProtocol()
 {
     /*Determine the http method and assign it to the axis soap structure */
     switch (((request_rec*)m_pContext)->method_number)
