@@ -4166,6 +4166,17 @@ SoapDeSerializer::getAnyObject ()
 	}
 
 	m_pNode = m_pParser->anyNext ();
+
+        if (!m_pNode) // Samisa: there is something wrong in the XSD Any XML strean
+        {	      // Store whatever we have by now and break
+            if (!xmlStr.empty ())
+            {
+                lstXML.push_back (xmlStr);
+                xmlStr = "";
+            }
+            break;
+        }
+
 	if (END_ELEMENT == m_pNode->m_type)
 	{
 	    tagCount--;
