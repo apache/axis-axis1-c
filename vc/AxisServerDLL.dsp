@@ -450,6 +450,10 @@ SOURCE=..\src\soap\xsd\Time.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\Token.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\common\TypeMapping.cpp
 # End Source File
 # Begin Source File
