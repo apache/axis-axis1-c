@@ -151,7 +151,244 @@ int WSDDDeployment::LoadWSDD(const AxisChar* sWSDD)
 
 int WSDDDeployment::UpdateWSDD(const AxisChar* sWSDDNew, string sServiceName, string sDllPath, Axis_ArrayTag inAllowedMethodsArray)
 {
-	printf("entered again to UpdateWSDD \n");
+	/* Do we need this method ? */
+
+	return SUCCESS;
+}
+
+
+const WSDDService* WSDDDeployment::GetService(const AxisChar* sServiceName)
+{
+	WSDDServiceMap::iterator iter;
+
+	iter = m_DeployedServices->find(sServiceName);
+	if (iter != m_DeployedServices->end())
+	{
+		return (*iter).second;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+const WSDDServiceMap* WSDDDeployment::GetWSDDServiceMap() const
+{
+	return m_DeployedServices;
+}
+
+const AxisChar* WSDDDeployment::GetLibName(int nLibId)
+{
+	for (map<AxisString, int>::iterator it = m_pLibNameIdMap->begin(); it != m_pLibNameIdMap->end(); it++)
+	{
+		if ((*it).second == nLibId)
+		{
+			return (*it).first.c_str();
+		}
+	}
+	return NULL;
+}
+
+int WSDDDeployment::AddService(WSDDService* pService)
+{
+	if (!m_DeployedServices) m_DeployedServices = new WSDDServiceMap;
+	(*m_DeployedServices)[pService->GetServiceName()] = pService;
+	return SUCCESS;
+}		
+
+int WSDDDeployment::AddHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL_TYPE protocol)
+{
+	if (bGlobal)
+	{
+		if (bRequestFlow)
+		{
+			if(!m_GlobalRequestHandlers) m_GlobalRequestHandlers = new WSDDHandlerList;
+			m_GlobalRequestHandlers->push_back(pHandler);
+		}
+		else
+		{
+			if(!m_GlobalResponseHandlers) m_GlobalResponseHandlers = new WSDDHandlerList;
+			m_GlobalResponseHandlers->push_back(pHandler);
+		}
+	}
+	else //transport
+	{
+		if (!m_pTransportHandlers) m_pTransportHandlers = new WSDDTransport();
+		m_pTransportHandlers->AddHandler(bRequestFlow, protocol, pHandler);
+	}
+	return SUCCESS;
+}
+
+const WSDDHandlerList* WSDDDeployment::GetTransportRequestFlowHandlers(AXIS_PROTOCOL_TYPE protocol)
+{
+	if (!m_pTransportHandlers) return NULL;
+	return m_pTransportHandlers->GetRequestFlowHandlers(protocol);
+}
+
+const WSDDHandlerList* WSDDDeployment::GetTransportResponseFlowHandlers(AXIS_PROTOCOL_TYPE protocol)
+{
+	if (!m_pTransportHandlers) return NULL;
+	return m_pTransportHandlers->GetResponseFlowHandlers(protocol);
+}
+
+int WSDDDeployment::RemoveService(string sServiceName)
+{
+	int iStatus = FAIL;
+
+	if (m_DeployedServices) {
+		WSDDServiceMap::iterator it = (*m_DeployedServices).find(sServiceName);
+		if (it != (*m_DeployedServices).end()) {
+			WSDDService* pService = (*m_DeployedServices)[sServiceName];
+			
+			(*m_DeployedServices).erase(it);
+
+			delete pService;
+			pService = NULL;
+
+			iStatus = SUCCESS;			
+		}
+	}
+
+	return iStatus;
+}
+
+int WSDDDeployment::RemoveHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL_TYPE protocol)
+{
+	return SUCCESS;	
+}
+
+/**
+ * Performs the undeployment.
+ */
+int WSDDDeployment::unDeploy(const AxisChar *sWSDDNew, string sServiceName)
+{
+	printf("entered to WSDDDeployment::unDeploy \n");
+
+	int iStatus = FAIL;
+
+	if (RemoveService(sServiceName) == SUCCESS) {
+		/*
+		 Write to the server WSDD file
+		 CODE comes here
+		 */
+
+		const AxisChar* pAchServiceName;
+		const AxisChar* pAchLibName;
+		list<AxisString> lstAllowedMethods;
+
+		WSDDServiceMap::iterator itCurrService;
+
+		FILE* file;
+		int iWriteStatus = SUCCESS;
+
+		do {
+			file = fopen("C:/Axis/conf/server.wsdd", "w");
+			if(file) {
+				printf("opened the file successfully\n");
+			} else {
+				printf("FAILED: couldn't open the file successfully\n\n");
+				iWriteStatus = FAIL;
+				break;
+			}
+
+			int iWriteResult = 0;
+			
+			iWriteResult = fputs("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", file);
+			if (iWriteResult<0) {
+				printf("writing to the file is UNSUCCESSFULL\n");
+				iWriteStatus = FAIL;
+				break;
+			} else {
+				printf("writing to the file is SUCCESSFULL\n");
+			}
+
+			iWriteResult = fputs("<deployment xmlns=\"http://xml.apache.org/axis/wsdd/\" xmlns:java=\"http://xml.apache.org/axis/wsdd/providers/java\">\n", file);
+			if (iWriteResult<0) {
+				printf("writing to the file is UNSUCCESSFULL\n");
+				iWriteStatus = FAIL;
+				break;
+			} else {
+				printf("writing to the file is SUCCESSFULL\n");
+			}
+
+			if(m_DeployedServices)
+			{
+				for(itCurrService=m_DeployedServices->begin()
+						;itCurrService!=m_DeployedServices->end();itCurrService++)
+				{
+					const WSDDService* pWSDDService = (*itCurrService).second;
+					AxisChar achTmpChar[1000] = {0};
+					pAchServiceName = pWSDDService->GetServiceName();
+					pAchLibName = pWSDDService->GetLibName();
+					lstAllowedMethods = pWSDDService->getAllowedMethods();				
+									
+					printf("pAchServiceName = %s\n", pAchServiceName);
+					printf("pAchLibName = %s\n", pAchLibName);
+					
+					strcat(achTmpChar, " <service name=\"");
+					strcat(achTmpChar, pAchServiceName);
+					strcat(achTmpChar, "\" provider=\"java:RPC\">\n");
+					strcat(achTmpChar, "  <parameter name=\"className\" value=\"");
+					strcat(achTmpChar, pAchLibName);
+					strcat(achTmpChar, "\"/>\n");
+					strcat(achTmpChar, "  <parameter name=\"allowedMethods\" value=\"");	
+					
+					list<AxisString>::iterator iteAllowedMethods = lstAllowedMethods.begin();
+					while (iteAllowedMethods != lstAllowedMethods.end()) {	
+						
+						printf("sAllowedMethod = %s\n", (*iteAllowedMethods).c_str());					
+						const AxisChar* tmpChar = (*iteAllowedMethods).c_str();
+						strcat(achTmpChar, tmpChar);
+						if(iteAllowedMethods != lstAllowedMethods.end()) {
+							strcat(achTmpChar, " ");
+						}
+											
+						iteAllowedMethods++;
+					}
+
+					strcat(achTmpChar, "\"/>\n </service>\n");
+
+					iWriteResult = fputs(achTmpChar, file);
+					if (iWriteResult<0) {
+						printf("writing to the file is UNSUCCESSFULL\n");
+						iWriteStatus = FAIL;
+						break;
+					} else {
+						printf("writing to the file is SUCCESSFULL\n");
+					}				
+				}
+			}
+
+			iWriteResult = fputs("</deployment>", file);
+			if (iWriteResult<0) {
+				printf("writing to the file is UNSUCCESSFULL\n");
+				iWriteStatus = FAIL;
+				break;
+			} else {
+				printf("writing to the file is SUCCESSFULL\n");
+			}
+			
+			
+		} while (0);
+
+		fclose(file);
+
+		LoadWSDD("C:/Axis/conf/server.wsdd");
+
+		if (iWriteStatus == SUCCESS) {
+			iStatus = SUCCESS;
+		}
+	} 
+
+	return iStatus;
+}
+
+/**
+ * Performs the deployment.
+ */
+int WSDDDeployment::deploy(const AxisChar* sWSDDNew, string sServiceName, string sDllPath, Axis_ArrayTag inAllowedMethodsArray)
+{
+	printf("entered to WSDDDeployment::deploy \n");
 	printf("sServiceName = %s \n", sServiceName.c_str());
 	printf("sDllPath = %s \n", sDllPath.c_str());	
 
@@ -296,89 +533,4 @@ int WSDDDeployment::UpdateWSDD(const AxisChar* sWSDDNew, string sServiceName, st
 	LoadWSDD("C:/Axis/conf/server.wsdd");
 
 	return SUCCESS;
-}
-
-
-const WSDDService* WSDDDeployment::GetService(const AxisChar* sServiceName)
-{
-	WSDDServiceMap::iterator iter;
-
-	iter = m_DeployedServices->find(sServiceName);
-	if (iter != m_DeployedServices->end())
-	{
-		return (*iter).second;
-	}
-	else
-	{
-		return NULL;
-	}
-}
-
-const WSDDServiceMap* WSDDDeployment::GetWSDDServiceMap() const
-{
-	return m_DeployedServices;
-}
-
-const AxisChar* WSDDDeployment::GetLibName(int nLibId)
-{
-	for (map<AxisString, int>::iterator it = m_pLibNameIdMap->begin(); it != m_pLibNameIdMap->end(); it++)
-	{
-		if ((*it).second == nLibId)
-		{
-			return (*it).first.c_str();
-		}
-	}
-	return NULL;
-}
-
-int WSDDDeployment::AddService(WSDDService* pService)
-{
-	if (!m_DeployedServices) m_DeployedServices = new WSDDServiceMap;
-	(*m_DeployedServices)[pService->GetServiceName()] = pService;
-	return SUCCESS;
-}		
-
-int WSDDDeployment::AddHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL_TYPE protocol)
-{
-	if (bGlobal)
-	{
-		if (bRequestFlow)
-		{
-			if(!m_GlobalRequestHandlers) m_GlobalRequestHandlers = new WSDDHandlerList;
-			m_GlobalRequestHandlers->push_back(pHandler);
-		}
-		else
-		{
-			if(!m_GlobalResponseHandlers) m_GlobalResponseHandlers = new WSDDHandlerList;
-			m_GlobalResponseHandlers->push_back(pHandler);
-		}
-	}
-	else //transport
-	{
-		if (!m_pTransportHandlers) m_pTransportHandlers = new WSDDTransport();
-		m_pTransportHandlers->AddHandler(bRequestFlow, protocol, pHandler);
-	}
-	return SUCCESS;
-}
-
-const WSDDHandlerList* WSDDDeployment::GetTransportRequestFlowHandlers(AXIS_PROTOCOL_TYPE protocol)
-{
-	if (!m_pTransportHandlers) return NULL;
-	return m_pTransportHandlers->GetRequestFlowHandlers(protocol);
-}
-
-const WSDDHandlerList* WSDDDeployment::GetTransportResponseFlowHandlers(AXIS_PROTOCOL_TYPE protocol)
-{
-	if (!m_pTransportHandlers) return NULL;
-	return m_pTransportHandlers->GetResponseFlowHandlers(protocol);
-}
-
-int WSDDDeployment::RemoveService(WSDDService* pService)
-{
-	return SUCCESS;
-}
-
-int WSDDDeployment::RemoveHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL_TYPE protocol)
-{
-	return SUCCESS;	
 }
