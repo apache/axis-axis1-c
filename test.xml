@@ -7,6 +7,7 @@
 	<import file="${basedir}/build/buildHandler.xml"/>
 	<import file="${basedir}/build/executeTest.xml"/>
 	<import file="${basedir}/build/buildMonitor.xml"/>
+	<import file="${basedir}/build/buildLibrary.xml"/>
 
 
 	<!--

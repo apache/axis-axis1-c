@@ -1,0 +1,55 @@
+<project name="buildLibrary" default="compileLibrary" basedir="..">
+
+	<target name="compileLibrary">
+
+		<if>
+		<not>
+			<isset property="aix"/>
+		</not>
+		<then>
+			<cc outfile="${test.directory}/${libraryName}" objdir="${test.directory}"
+				exceptions="true" outtype="shared" multithreaded="true">
+				<!-- Compilers -->
+				<compiler refid="SolarisCC"/>
+				<compiler refid="Linuxgcc"/>
+				<compiler extends="VisualC++"/>
+				<defineset>
+					<define name="ENABLE_AXISTRACE" if="trace"/>
+					<define name="AXISTRACE_LIBRARY"/>
+				</defineset>
+				<compiler refid="OS400icc"/>
+				<!-- Linkers -->
+				<linker refid="SolarisLinker"/>
+				<linker refid="LinuxLinker"/>
+				<linker refid="VisualC++Linker"/>
+				<linker refid="OS400Linker"/>
+
+				<!-- Files to compile -->
+				<fileset dir="${test.directory}">
+					<include name="*.cpp"/>
+				</fileset>
+			</cc>
+		</then>
+		<else>
+			<cc outfile="${test.directory}/${libraryPrefix}${libraryName}${librarySuffix}" objdir="${test.directory}"
+				exceptions="true" multithreaded="true">
+				<!-- Compilers -->
+				<compiler refid="AIXxlc"/>
+				<defineset>
+					<define name="ENABLE_AXISTRACE" if="trace"/>
+					<define name="AXISTRACE_LIBRARY"/>
+				</defineset>
+
+				<!-- Linkers -->
+				<linker refid="AIXLinker"/>
+				<!-- Files to compile -->
+				<fileset dir="${test.directory}">
+					<include name="*.cpp"/>
+				</fileset>
+			</cc>
+		</else>
+		</if>
+	</target>
+
+</project>
+

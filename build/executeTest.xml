@@ -73,7 +73,7 @@
 	<target name="startMonitor" unless="test.nomonitor">
 		<echo message="Starting monitor forwarding to ${testHost}:${testPort}"/>
 		<!-- Run Monitor utility to allow validation of message across the wire -->
-		<java classname="org.apache.test.TCPMonitor" fork="true">
+		<java classname="org.apache.test.TCPMonitor" fork="true" outputproperty="mon.out">
 			<arg line="-l ${monitorPort}"/>
 			<arg line="-p ${testPort}"/>
 			<arg line="-h ${testHost}"/>
@@ -83,6 +83,7 @@
 				<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
 			</classpath>
 		</java>
+		<echo message="MONITOR OUTPUT=${mon.out}"/>
 	</target>
 	<target name="stopMonitor" unless="test.nomonitor">
 		<java classname="org.apache.test.StopTCPMonitor">
@@ -116,9 +117,9 @@
 						 output="${results.stdout}" error="${results.stderr}"
 						 failifexecutionfails="false" vmlauncher="false">
 							<arg line="${clientArgs}"/>
-							<env key="PATH" path="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.eay.dir}"/>
-							<env key="LD_LIBRARY_PATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib"/>
-							<env key="LIBPATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib"/>
+							<env key="PATH" path="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.eay.dir}${path.separator}${test.directory}"/>
+							<env key="LD_LIBRARY_PATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib${path.separator}${test.directory}"/>
+							<env key="LIBPATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${HTTP.SSLChannel.dir}/lib${path.separator}${test.directory}"/>
 							<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}"/>
 						</exec>
 

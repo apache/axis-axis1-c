@@ -68,7 +68,6 @@ public class TestClientThread extends Thread {
 				dos = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 				dis = new BufferedReader(new InputStreamReader(serviceSocket.getInputStream()));
 			}
-
 			int readReturn = 0;
 			while( (readReturn = dis.read(buffer, 0, 4096)) != -1 ){
 				String inputLine = new String(buffer, 0 , readReturn);
@@ -90,7 +89,7 @@ public class TestClientThread extends Thread {
 				dos.flush();
 			}
 
-		} catch (EOFException e) {
+		} catch (EOFException eof) {
 		} catch (IOException e) {
 		} finally {
 			try {

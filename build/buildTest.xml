@@ -43,7 +43,9 @@
 	  -->
 	<target name="getClient" depends="copyStubClient, copyDynamicClient"/>
 
-	<target name="copyStubClient" depends="generateStubs" unless="test.dynamicCode">
+	<target name="copyStubClient" depends="generateStubs, copyClientCode" unless="test.dynamicCode"/>
+
+	<target name="copyClientCode" unless="test.dynamicCode">
 		<copy file="${client.code}" todir="${test.directory}"/>
 	</target>
 
@@ -59,7 +61,17 @@
 	<!--
 	  Compile test client
 	  -->
-	<target name="compileClient" depends="getClient">
+	<target name="compileClient" depends="callCompileStaticClient, callCompileLinkedClient"/>
+
+	<target name="callCompileStaticClient" unless="test.stubAsLibrary">
+		<antcall target="compileStaticClient" inheritall="true"/>
+	</target>
+	<target name="callCompileLinkedClient" if="test.stubAsLibrary">
+		<property name="libraryName" value="${testName}"/>
+		<antcall target="compileLinkedClient" inheritall="true"/>
+	</target>
+
+	<target name="compileStaticClient" depends="getClient">
 		<cc failonerror="false" incremental="false" outfile="${test.directory}/${testName}"
 		 objdir="${test.directory}" exceptions="true"
 		 outtype="executable" subsystem="console">
@@ -77,6 +89,30 @@
 			<includepath path="${dir.include}"/>
 			<fileset dir="${test.directory}">
 				<include name="*.${client.lang}"/>
+			</fileset>
+		</cc>
+	</target>
+
+	<target name="compileLinkedClient" depends="generateStubs, compileLibrary, copyClientCode">
+		<basename file="${client.code}" property="client.source"/>
+		<cc failonerror="false" incremental="false" outfile="${test.directory}/${testName}"
+		 objdir="${test.directory}" exceptions="true"
+		 outtype="executable" subsystem="console">
+		 	<!-- Compilers -->
+			<compiler refid="VisualC++"/>
+			<compiler refid="Linuxgcc"/>
+			<compiler refid="AIXxlc"/>
+			<!-- Linkers -->
+			<linker refid="VisualC++Linker"/>
+			<linker refid="LinuxLinker"/>
+			<linker refid="AIXExecutableLinker"/>
+			<!-- Axis Client .lib file location, or UNIX shared object -->
+			<libset dir="${dir.lib}" libs="${clientLibraryName}"/>
+			<libset dir="${test.directory}" libs="${libraryName}"/>
+			<!-- Files to be compiled -->
+			<includepath path="${dir.include}"/>
+			<fileset dir="${test.directory}">
+				<include name="${client.source}"/>
 			</fileset>
 		</cc>
 	</target>

@@ -69,8 +69,9 @@ public class TestClientListener implements Runnable {
 			TestClientThread requestReader = null;
 			TestClientThread responseReader = null;
 			while (stayAlive == true) {
-				server.setSoTimeout(500);
+				//server.setSoTimeout(500);
 				try {
+					clientSocket = server.accept();
 					try {
 						serviceSocket = new Socket(serviceHost, servicePort);
 					} catch (Exception se) {
@@ -78,7 +79,6 @@ public class TestClientListener implements Runnable {
 						stayAlive = false;
 						continue;
 					}
-					clientSocket = server.accept();
 					requestReader = new TestClientThread(clientSocket, serviceSocket, CAPTURE_REQUEST);
 					responseReader = new TestClientThread(clientSocket, serviceSocket, CAPTURE_RESPONSE);
 					requestReader.start();
@@ -122,7 +122,7 @@ public class TestClientListener implements Runnable {
 				serviceSocket.close();
 			server.close();
 		} catch (IOException ioe) {
-			ioe.printStackTrace(System.err);
+			//ioe.printStackTrace(System.err);
 		}
 		server = null;
 		stayAlive = false;
