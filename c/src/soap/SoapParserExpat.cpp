@@ -141,14 +141,18 @@ void  SoapParserExpat::characters(const XMLCh *chars, int length)
 
 void SoapParserExpat::startPrefixMapping(const XMLCh *prefix, const XMLCh *uri)
 {
-	StartPrefix* pEvent = new StartPrefix();
-	pEvent->m_NameOrValue = prefix;
-	pEvent->m_Namespace = uri;
-	m_Events.push(pEvent);
+	if (prefix && uri)
+	{
+		StartPrefix* pEvent = new StartPrefix();
+		pEvent->m_NameOrValue = prefix;
+		pEvent->m_Namespace = uri;
+		m_Events.push(pEvent);
+	}
 }
 
 void SoapParserExpat::endPrefixMapping(const XMLCh *prefix)
 {
+	if (!prefix) return;
 	EndPrefix* pEvent = new EndPrefix();
 	pEvent->m_NameOrValue = prefix;
 	m_Events.push(pEvent);
