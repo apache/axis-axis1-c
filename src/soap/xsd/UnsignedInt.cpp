@@ -24,7 +24,7 @@ void* UnsignedInt::deserializer(const AxisChar* valueAsChar) throw (AxisSoapExce
 
 AxisChar* UnsignedInt::serialize(const unsigned int* value) throw (AxisSoapException)
 {
-    unsigned LONGLONG valueAsLong = static_cast<unsigned long>(*value);
+    unsigned long valueAsLong = static_cast<unsigned long>(*value);
     return UnsignedLong::serialize(&valueAsLong);
 }
 

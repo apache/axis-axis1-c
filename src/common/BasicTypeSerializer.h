@@ -51,6 +51,7 @@
 #include "../soap/xsd/NonNegativeInteger.hpp"
 #include "../soap/xsd/UnsignedLong.hpp"
 #include "../soap/xsd/UnsignedInt.hpp"
+#include "../soap/xsd/UnsignedShort.hpp"
 
 using namespace std;
 

@@ -446,6 +446,10 @@ SOURCE=..\src\soap\xsd\UnsignedLong.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\UnsignedShort.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\URIMapping.cpp
 # End Source File
 # Begin Source File

@@ -42,6 +42,7 @@
 #include "xsd/NonNegativeInteger.hpp"
 #include "xsd/UnsignedLong.hpp"
 #include "xsd/UnsignedInt.hpp"
+#include "xsd/UnsignedShort.hpp"
 #include "../platforms/PlatformAutoSense.hpp"
 
 AXIS_CPP_NAMESPACE_START
