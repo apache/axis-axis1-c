@@ -90,10 +90,16 @@ const AxisChar* CharacterElement::getValue() const
 
 int CharacterElement::setValue(const AxisChar* pachValue)
 {
+   if (pachValue !=NULL){
     m_pachValue = new AxisChar[strlen(pachValue)+1];
     strcpy(m_pachValue, pachValue);
 
     return AXIS_SUCCESS;
+   }
+   else
+   {
+	   return AXIS_FAIL;
+   }
 }
 
 bool CharacterElement::operator == ( const CharacterElement &objChEle) 
