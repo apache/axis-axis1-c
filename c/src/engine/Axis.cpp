@@ -101,7 +101,7 @@
 #ifdef AXIS_APACHE1_3
 #define WSDDFILEPATH "./Axis/conf/server.wsdd"
 #else
-#define WSDDFILEPATH "/usr/local/axiscpp/axis/server.wsdd"
+#define WSDDFILEPATH "/usr/local/axiscpp/samples/server.wsdd"
 #endif
 #endif
 

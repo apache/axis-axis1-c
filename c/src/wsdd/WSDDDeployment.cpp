@@ -181,7 +181,11 @@ const AxisString& WSDDDeployment::GetLibName(int nLibId)
 	for (map<AxisString, int>::iterator it = m_pLibNameIdMap->begin(); it != m_pLibNameIdMap->end(); it++)
 	{
 		if ((*it).second == nLibId)
-			return (*it).first;
+		{
+			AxisString strReturn = (*it).first;
+			return strReturn;
+			//return (*it).first;
+		}
 	}
 	return m_sAux;
 }

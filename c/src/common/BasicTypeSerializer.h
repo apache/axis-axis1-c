@@ -85,8 +85,17 @@ public:
 	const AxisString& GetEntityReferenced(const AxisString& str);
 	const AxisChar* serialize(const AxisChar* sName, const AxisChar* sValue, XSDTYPE type=XSD_STRING);
 	const AxisChar* serialize(const AxisChar* sName, float fValue);
+    const AxisChar* serialize(const AxisChar* sName, double dValue, XSDTYPE type=XSD_DOUBLE);    
 	const AxisChar* serialize(const AxisChar* sName, int nValue);
+    const AxisChar* serialize(const AxisChar* sName, unsigned int unValue);
+    const AxisChar* serialize(const AxisChar* sName, short sValue);
+    const AxisChar* serialize(const AxisChar* sName, unsigned short usValue);
+    const AxisChar* serialize(const AxisChar* sName, char cValue);
+    const AxisChar* serialize(const AxisChar* sName, unsigned char ucValue);
+    const AxisChar* serialize(const AxisChar* sName, long lValue, XSDTYPE type=XSD_LONG);
+    const AxisChar* serialize(const AxisChar* sName, unsigned long ulValue);
 	const AxisChar* BasicTypeStr(XSDTYPE type);
+
 	BasicTypeSerializer();
 	virtual ~BasicTypeSerializer();
 

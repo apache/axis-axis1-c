@@ -71,7 +71,9 @@
 #include "../common/IWrapperSoapSerializer.h"
 #include "../common/IHandlerSoapSerializer.h"
 #include "../common/BasicTypeSerializer.h"
+#include "../common/AxisTime.h"
 #include "SoapEnvVersions.h"
+
 
 #define SERIALIZE_BUFFER_SIZE 1024
 
@@ -117,12 +119,24 @@ public: //Basic Type Serializing methods
 	int removeSoapHeader();
 	int setHeaderBlock(HeaderBlock* pHeaderBlock);
 	IHeaderBlock* createHeaderBlock();
+
 	const AxisChar* SerializeBasicType(const AxisChar* sName, const AxisChar* sValue, XSDTYPE type=XSD_STRING);
-	const AxisChar* SerializeBasicType(const AxisChar* sName, float fValue);
 	const AxisChar* SerializeBasicType(const AxisChar* sName, int nValue);
+    const AxisChar* SerializeBasicType(const AxisChar* sName, struct tm tValue);
+    const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned int unValue);
+    const AxisChar* SerializeBasicType(const AxisChar* sName, short sValue);
+    const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned short usValue);
+    const AxisChar* SerializeBasicType(const AxisChar* sName, char cValue);
+    const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned char ucValue);
+    const AxisChar* SerializeBasicType(const AxisChar* sName, long lValue, XSDTYPE type=XSD_LONG);
+    const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned long ulValue);
+    const AxisChar* SerializeBasicType(const AxisChar* sName, float fValue);
+    const AxisChar* SerializeBasicType(const AxisChar* sName, double dValue, XSDTYPE type=XSD_DOUBLE);
+    
 private:
 	BasicTypeSerializer m_BTSZ;
 	const void* m_pOutputStream;
+    AxisTime m_uAxisTime;
 };
 
 #endif // !defined(AFX_SOAPSERIALIZER_H__C37229AD_BD54_430D_9619_E4574CF95334__INCLUDED_)

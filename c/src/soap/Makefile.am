@@ -1,4 +1,6 @@
 noinst_LTLIBRARIES = libsoap.la
+
+
 libsoap_la_SOURCES = Attribute.cpp \
         BasicNode.cpp \
         CharacterElement.cpp \
@@ -12,7 +14,8 @@ libsoap_la_SOURCES = Attribute.cpp \
         SoapMethod.cpp \
         SoapSerializer.cpp \
         URIMapping.cpp \
-        XMLStreamHandler.cpp
+        XMLStreamHandler.cpp \
+	SoapKeywordMapping.cpp
 
-libsoap_la_LIBADD = -L$(XERCES_HOME)/lib -lxerces-c
-INCLUDES = -I$(XERCES_HOME)/include
+libsoap_la_LIBADD = -L$(AXISCPP_HOME)/lib/xerces-c -lxerces-c
+INCLUDES = -I$(AXISCPP_HOME)/include
