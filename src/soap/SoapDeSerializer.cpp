@@ -732,14 +732,6 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 			/* skip end element of the array item */
 			m_pNode = m_pParser->next ();
 
-			//Jira AXISCPP-145
-			//point to next element (can be next array elemnt or different object)
-			if (m_pNode->m_type != END_ELEMENT)
-			{
-				m_pNode = m_pParser->next ();
-			}
-// > FJP
-
 			if (m_pNode->m_type == END_ELEMENT)
 			{
 //Skip past end of item
