@@ -28,7 +28,7 @@
 		  change the destination host in the expected request file to match the monitor we are 
 		  actually using
 		  -->
-		<replaceregexp file="${r_expected.file}" match="Host: localhost:13260" replace="Host: localhost:${monitorPort}" byline="true"/>
+		<replaceregexp file="${r_expected.file}" match="Host: localhost:[0-9]*" replace="Host: localhost:${monitorPort}" byline="true"/>
 	</target>
 
 	<target name="setTestArgs" depends="setEndpoint, setForMonitor"/>
