@@ -117,7 +117,7 @@ void BasicTypeSerializer::HelpSerialize(const string &sName, const string &sValu
 	switch (m_Type)
 	{
 	case XSD_STRING:
-		m_sSZ = sValue.c_str();	
+		m_sSZ = GetEntityReferenced(sValue);	
 		break;
 	default:
 		m_sSZ += m_Buf;
@@ -138,4 +138,9 @@ const char* BasicTypeSerializer::BasicTypeStr(XSDTYPE type)
 	case XSD_BASE64BINARY: return "base64Binary";
 	default: return " ";
 	}
+}
+
+string& BasicTypeSerializer::GetEntityReferenced(string &str)
+{
+	return str;
 }
