@@ -69,7 +69,7 @@ Transport* TransportFactory::GetTransport(Url& url, bool secure)
 	}
 	else if(url.GetProtocol() == Url::https)
 	{
-		return NULL; // currently not supported
+		return new HttpTransport(url, secure); // currently not supported
 	}
 	else if(url.GetProtocol() == Url::ftp)
 	{
