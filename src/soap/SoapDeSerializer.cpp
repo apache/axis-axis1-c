@@ -2954,7 +2954,9 @@ SoapDeSerializer::getElementAsString (const AxisChar * pName,
 		/* Should be an empty string or simpleType with xsi:nil="true" */
 		//ret = new char[1]; ret[0]='\0';
 		/* this is because the string may not be available later */
-		//m_pNode = NULL;
+// FJP - Put back in because when previous element is nill, need to skip to
+//		 next object.
+			m_pNode = NULL;
 		/* this is important in doc/lit style when deserializing arrays */
 		return ret;
 	    }
