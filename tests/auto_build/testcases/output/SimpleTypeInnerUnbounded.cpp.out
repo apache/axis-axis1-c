@@ -1,0 +1,6 @@
+Result
+att_enum_int 1
+att_enum_string one
+enum_int 1
+enum_string one
+enum_kind CHEQUE
