@@ -1,4 +1,3 @@
-/* -*- C++ -*- */
 /*
  *   Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -15,16 +14,14 @@
  *   limitations under the License.
  */
 
-// SoapBinInputStream.h: interface for the SoapBinInputStream class.
-//
-//////////////////////////////////////////////////////////////////////
+/* SoapBinInputStream.h: interface for the SoapBinInputStream class. */
 
-#if !defined(AFX_SOAPBININPUTSTREAM_H__E578FB79_0694_4FAA_B2A4_446751A793EA__INCLUDED_)
-#define AFX_SOAPBININPUTSTREAM_H__E578FB79_0694_4FAA_B2A4_446751A793EA__INCLUDED_
+#if !defined(AXIS_SOAPBININPUTSTREAM_H__INCLUDED_)
+#define AXIS_SOAPBININPUTSTREAM_H__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif /* _MSC_VER > 1000 */
 
 #include <xercesc/util/BinInputStream.hpp>
 #include <axis/server/Packet.h>
@@ -34,14 +31,14 @@ XERCES_CPP_NAMESPACE_USE
 class SoapBinInputStream : public BinInputStream
 {
 private:
-	AXIS_MODULE_CALLBACK_GET_MESSAGE_BYTES m_pReadFunct;
-	unsigned int m_nByteCount;
-	const void* m_pContext;
+    AXIS_MODULE_CALLBACK_GET_MESSAGE_BYTES m_pReadFunct;
+    unsigned int m_nByteCount;
+    const void* m_pContext;
 public:
-	SoapBinInputStream(AXIS_MODULE_CALLBACK_GET_MESSAGE_BYTES pReadFunct, const void* pContext);
-	virtual ~SoapBinInputStream();
-	unsigned int curPos() const;
-	unsigned int readBytes(XMLByte* const toFill, const unsigned int maxToRead);
+    SoapBinInputStream(AXIS_MODULE_CALLBACK_GET_MESSAGE_BYTES pReadFunct, const void* pContext);
+    virtual ~SoapBinInputStream();
+    unsigned int curPos() const;
+    unsigned int readBytes(XMLByte* const toFill, const unsigned int maxToRead);
 };
 
-#endif // !defined(AFX_SOAPBININPUTSTREAM_H__E578FB79_0694_4FAA_B2A4_446751A793EA__INCLUDED_)
+#endif

@@ -1,54 +1,20 @@
-/* -*- C++ -*- */
+/*
+ *   Copyright 2003-2004 The Apache Software Foundation.
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
 
 /*
- * The Apache Software License, Version 1.1
- *
- *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
- * reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *
- * 3. The end-user documentation included with the redistribution,
- *    if any, must include the following acknowledgment:
- *       "This product includes software developed by the
- *        Apache Software Foundation (http://www.apache.org/)."
- *    Alternately, this acknowledgment may appear in the software itself,
- *    if and wherever such third-party acknowledgments normally appear.
- *
- * 4. The names "SOAP" and "Apache Software Foundation" must
- *    not be used to endorse or promote products derived from this
- *    software without prior written permission. For written
- *    permission, please contact apache@apache.org.
- *
- * 5. Products derived from this software may not be called "Apache",
- *    nor may "Apache" appear in their name, without prior written
- *    permission of the Apache Software Foundation.
- *
- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
- * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
- * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- * ====================================================================
- *
  * This software consists of voluntary contributions made by many
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
@@ -61,9 +27,7 @@
  *
  */
 
-// HeaderBlock.cpp: implementation of the HeaderBlock class.
-//
-//////////////////////////////////////////////////////////////////////
+/* HeaderBlock.cpp: implementation of the HeaderBlock class. */
 
 #ifdef WIN32
 #pragma warning (disable : 4786)
@@ -76,466 +40,565 @@
 #include "ComplexElement.h"
 #include <axis/server/CharacterElement.h>
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-
 HeaderBlock::HeaderBlock()
 {
-	iNoOFChildren = 0;
+    iNoOFChildren = 0;
 }
 
-HeaderBlock::HeaderBlock(AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri)
+HeaderBlock::HeaderBlock(AxisChar *pachLocalName, AxisChar *pachPrefix,
+                         AxisChar *pachUri)
 {
-	iNoOFChildren = 0;
+    iNoOFChildren = 0;
 
-	m_localname = pachLocalName;
-	m_prefix = pachPrefix;
-	m_uri = pachUri;
+    m_localname = pachLocalName;
+    m_prefix = pachPrefix;
+    m_uri = pachUri;
 }
 
 HeaderBlock::~HeaderBlock()
 {
-	/*
-	 *Clear the Attributes
-	 */
-	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
-	while(itCurrAttribute != m_attributes.end()) {		
-		delete (*itCurrAttribute);
-		itCurrAttribute++;		
-	}
-	m_attributes.clear();
+    /*
+     *Clear the Attributes
+     */
+    list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+    while(itCurrAttribute != m_attributes.end())
+    {        
+        delete (*itCurrAttribute);
+        itCurrAttribute++;        
+    }
+    m_attributes.clear();
 
-	/*
-	 *Clear the Namespaces
-	 */
-	list<Attribute*>::iterator itCurrNamespace= m_namespaceDecls.begin();
-	while(itCurrNamespace != m_namespaceDecls.end()) {		
-		delete (*itCurrNamespace);
-		itCurrNamespace++;		
-	}
-	m_namespaceDecls.clear();
+    /*
+     *Clear the Namespaces
+     */
+    list<Attribute*>::iterator itCurrNamespace= m_namespaceDecls.begin();
+    while(itCurrNamespace != m_namespaceDecls.end())
+    {        
+        delete (*itCurrNamespace);
+        itCurrNamespace++;        
+    }
+    m_namespaceDecls.clear();
 
-	/*
-	 *Clear the children
-	 */
-	list<BasicNode*>::iterator itCurrChild= m_children.begin();
-	while(itCurrChild != m_children.end()) {		
-		delete (*itCurrChild);
-		itCurrChild++;		
-	}
-	m_children.clear();
+    /*
+     *Clear the children
+     */
+    list<BasicNode*>::iterator itCurrChild= m_children.begin();
+    while(itCurrChild != m_children.end())
+    {        
+        delete (*itCurrChild);
+        itCurrChild++;        
+    }
+    m_children.clear();
 }
 
 void HeaderBlock::setLocalName(const AxisChar* localname)
 {
-	m_localname= localname;
+    m_localname= localname;
 }
 
 void HeaderBlock::setPrefix(const AxisChar* prefix)
 {
-	m_prefix= prefix;
+    m_prefix= prefix;
 }
 
 void HeaderBlock::setUri(const AxisChar* uri)
 {
-	m_uri= uri;
+    m_uri= uri;
 }
 
 void HeaderBlock::addAttribute(Attribute* attr)
 {
-	m_attributes.push_back(attr);
+    m_attributes.push_back(attr);
 }
 
 int HeaderBlock::serialize(SoapSerializer& pSZ)
 {
-	/*
-	 *In the code we don't look whether the m_prefix is available or
-	 *	not. Instead directly insert it. The reason is that the SOAP
-	 *  1.1 spec says that "All immediate child elements of the SOAP 
-	 *  Header element MUST be namespace-qualified".
-	 */
+    /*
+     *In the code we don't look whether the m_prefix is available or
+     *    not. Instead directly insert it. The reason is that the SOAP
+     *  1.1 spec says that "All immediate child elements of the SOAP 
+     *  Header element MUST be namespace-qualified".
+     */
 
-	int iStatus= AXIS_SUCCESS;
+    int iStatus= AXIS_SUCCESS;
 
-	list<AxisChar*> lstTmpNameSpaceStack;
-	bool blnIsNewNamespace = false;
+    list<AxisChar*> lstTmpNameSpaceStack;
+    bool blnIsNewNamespace = false;
 
-	do {
-		/*
-		TO DO: ReWrite the following logic to deal with name spaces
-		*/
+    do
+    {
+        /*
+         * TO DO: ReWrite the following logic to deal with name spaces
+         */
 
-		pSZ.Serialize("<", NULL);
+        pSZ.Serialize("<", NULL);
 
-		if(m_prefix.length() == 0) {
-			m_prefix = pSZ.GetNamespacePrefix(m_uri.c_str(), blnIsNewNamespace);
-			if (blnIsNewNamespace) {
-				lstTmpNameSpaceStack.push_back((AxisChar*)m_uri.c_str());
-			}
-		}
+        if(m_prefix.length() == 0)
+        {
+            m_prefix = pSZ.GetNamespacePrefix(m_uri.c_str(),
+                blnIsNewNamespace);
+            if (blnIsNewNamespace)
+            {
+                lstTmpNameSpaceStack.push_back((AxisChar*)m_uri.c_str());
+            }
+        }
 
-		pSZ.Serialize(m_prefix.c_str(), ":", m_localname.c_str(),
-			" xmlns:", m_prefix.c_str(), "=\"", m_uri.c_str(), "\"", NULL);
+        pSZ.Serialize(m_prefix.c_str(), ":", m_localname.c_str(),
+            " xmlns:", m_prefix.c_str(), "=\"", m_uri.c_str(), "\"", NULL);
 
-		iStatus= attrSerialize(pSZ, lstTmpNameSpaceStack);
-		if(iStatus==AXIS_FAIL) {
-			break;
-		}
+        iStatus= attrSerialize(pSZ, lstTmpNameSpaceStack);
+        if(iStatus==AXIS_FAIL)
+        {
+            break;
+        }
 
-		iStatus= serializeNamespaceDecl(pSZ);
-		if(iStatus==AXIS_FAIL) {
-			break;
-		}
-		
-		pSZ.Serialize(">", NULL);
+        iStatus= serializeNamespaceDecl(pSZ);
+        if(iStatus==AXIS_FAIL)
+        {
+            break;
+        }
+        
+        pSZ.Serialize(">", NULL);
 
-		iStatus= serializeChildren(pSZ, lstTmpNameSpaceStack);
-		if(iStatus==AXIS_FAIL) {
-			break;
-		}
+        iStatus= serializeChildren(pSZ, lstTmpNameSpaceStack);
+        if(iStatus==AXIS_FAIL)
+        {
+            break;
+        }
 
-		pSZ.Serialize("</", m_prefix.c_str(), ":", m_localname.c_str(), ">", NULL);
+        pSZ.Serialize("</", m_prefix.c_str(), ":", m_localname.c_str(), ">",
+            NULL);
 
-		/*
-		 *Removing the namespace list of this headerblock from the stack.
-		 */
-		list<AxisChar*>::iterator itCurrentNamespace = lstTmpNameSpaceStack.begin();
-		while (itCurrentNamespace != lstTmpNameSpaceStack.end()) {
-			pSZ.RemoveNamespacePrefix(*itCurrentNamespace);
-			itCurrentNamespace++;
-		}
-			
-	} while(0);
+        /*
+         * Removing the namespace list of this headerblock from the stack.
+         */
+        list<AxisChar*>::iterator itCurrentNamespace = 
+            lstTmpNameSpaceStack.begin();
+        while (itCurrentNamespace != lstTmpNameSpaceStack.end())
+        {
+            pSZ.RemoveNamespacePrefix(*itCurrentNamespace);
+            itCurrentNamespace++;
+        }
+            
+    } while(0);
 
-	return iStatus;
+    return iStatus;
 }
 
-int HeaderBlock::attrSerialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack)
+int HeaderBlock::attrSerialize(SoapSerializer& pSZ,
+                               list<AxisChar*>& lstTmpNameSpaceStack)
 {
-	int iStatus= AXIS_SUCCESS;
+    int iStatus= AXIS_SUCCESS;
 
-	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+    list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
-	while(itCurrAttribute != m_attributes.end()) {		
+    while(itCurrAttribute != m_attributes.end())
+    {        
+        iStatus= (*itCurrAttribute)->serialize(pSZ, lstTmpNameSpaceStack);
+        if(iStatus==AXIS_FAIL)
+        {
+            break;
+        }
+        itCurrAttribute++;
+    }
 
-		iStatus= (*itCurrAttribute)->serialize(pSZ, lstTmpNameSpaceStack);
-		if(iStatus==AXIS_FAIL) {
-			break;
-		}
-		itCurrAttribute++;
-	}
-
-	return iStatus;
+    return iStatus;
 }
 
 bool HeaderBlock::isSerializable()
 {
-	bool bStatus= true;	
+    bool bStatus= true;    
 
-	if(m_localname.length() == 0) {
-		bStatus= false;
-	} else {
-		if(m_prefix.length() == 0) {
-			if(m_uri.length() != 0) {
-				bStatus= false;
-			}
-		} else {
-			if(m_uri.length() == 0) {
-				bStatus= false;
-			}
-		}
-	}
+    if(m_localname.length() == 0)
+    {
+        bStatus= false;
+    }
+    else
+    {
+        if(m_prefix.length() == 0)
+        {
+            if(m_uri.length() != 0)
+            {
+                bStatus= false;
+            }
+        }
+        else
+        {
+            if(m_uri.length() == 0)
+            {
+                bStatus= false;
+            }
+        }
+    }
 
-	return bStatus;
+    return bStatus;
 }
 
 int HeaderBlock::addChild(BasicNode *pBasicNode)
 {
-	m_children.push_back(pBasicNode);
-	iNoOFChildren++;
+    m_children.push_back(pBasicNode);
+    iNoOFChildren++;
 
-	return AXIS_SUCCESS;
+    return AXIS_SUCCESS;
 }
 
-int HeaderBlock::serializeChildren(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack)
+int HeaderBlock::serializeChildren(SoapSerializer& pSZ,
+                                   list<AxisChar*>& lstTmpNameSpaceStack)
 {
-	list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
+    list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
 
-	while(itCurrBasicNode != m_children.end()) {
-		if ((*itCurrBasicNode)->getNodeType() == ELEMENT_NODE) {
-			(*itCurrBasicNode)->serialize(pSZ, lstTmpNameSpaceStack);
-		} else {
-			/* for CHARACTER_NODE types */
-			(*itCurrBasicNode)->serialize(pSZ);
-		}
-		itCurrBasicNode++;
-	}
+    while(itCurrBasicNode != m_children.end())
+    {
+        if ((*itCurrBasicNode)->getNodeType() == ELEMENT_NODE)
+        {
+            (*itCurrBasicNode)->serialize(pSZ, lstTmpNameSpaceStack);
+        }
+        else
+        {
+            /* for CHARACTER_NODE types */
+            (*itCurrBasicNode)->serialize(pSZ);
+        }
+        itCurrBasicNode++;
+    }
 
-	return AXIS_SUCCESS;
+    return AXIS_SUCCESS;
 }
 
 int HeaderBlock::addNamespaceDecl(Attribute *pAttribute)
 {
-	m_namespaceDecls.push_back(pAttribute);
+    m_namespaceDecls.push_back(pAttribute);
 
-	return AXIS_SUCCESS;
+    return AXIS_SUCCESS;
 }
 
 int HeaderBlock::serializeNamespaceDecl(SoapSerializer &pSZ)
 {
-	list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
+    list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
 
-	while(itCurrNamespaceDecl != m_namespaceDecls.end()) {		
-		(*itCurrNamespaceDecl)->serialize(pSZ);
-		itCurrNamespaceDecl++;		
-	}	
+    while(itCurrNamespaceDecl != m_namespaceDecls.end())
+    {        
+        (*itCurrNamespaceDecl)->serialize(pSZ);
+        itCurrNamespaceDecl++;        
+    }    
 
-	return AXIS_SUCCESS;
+    return AXIS_SUCCESS;
 }
 
 const BasicNode* HeaderBlock::getLastChild()
 {
-	list<BasicNode*>::reverse_iterator ritCurrBasicNode= m_children.rbegin();
+    list<BasicNode*>::reverse_iterator ritCurrBasicNode= m_children.rbegin();
 
-	if (ritCurrBasicNode != m_children.rend()) {		
-		return (*ritCurrBasicNode);
-	}	
+    if (ritCurrBasicNode != m_children.rend())
+    {        
+        return (*ritCurrBasicNode);
+    }    
 
-	return NULL;
+    return NULL;
 }
 
 const BasicNode* HeaderBlock::getChild(int iChildPosition)
 {
-	if (iChildPosition > iNoOFChildren) {
-		return NULL;
-	} else {
-		list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
-		/*The following is done since the previous line already takes the iterator one step forward */
-		iChildPosition--;
+    if (iChildPosition > iNoOFChildren)
+    {
+        return NULL;
+    }
+    else
+    {
+        list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
+        /* The following is done since the previous line already takes the
+         * iterator one step forward
+         */
+        iChildPosition--;
 
-		/*Takes the iterator to the relavent positon*/
-		for (int i=0; i<iChildPosition; i++) {
-			itCurrBasicNode++;
-		}
+        /* Takes the iterator to the relavent positon */
+        for (int i=0; i<iChildPosition; i++)
+        {
+            itCurrBasicNode++;
+        }
 
-		if (itCurrBasicNode != m_children.end()) {
-			return *itCurrBasicNode;
-		} else {
-			return NULL;
-		}
-	}
+        if (itCurrBasicNode != m_children.end())
+        {
+            return *itCurrBasicNode;
+        }
+        else
+        {
+            return NULL;
+        }
+    }
 }
 
 BasicNode* HeaderBlock::createChild(NODE_TYPE eNODE_TYPE)
 {
-	BasicNode* pBasicNode = NULL;
+    BasicNode* pBasicNode = NULL;
 
-	if(eNODE_TYPE==CHARACTER_NODE) {
-		pBasicNode = new CharacterElement();
-	} else if (eNODE_TYPE==ELEMENT_NODE) {
-		pBasicNode = new ComplexElement();
-	}
+    if(eNODE_TYPE==CHARACTER_NODE)
+    {
+        pBasicNode = new CharacterElement();
+    }
+    else if (eNODE_TYPE==ELEMENT_NODE)
+    {
+        pBasicNode = new ComplexElement();
+    }
 
-	return pBasicNode;
+    return pBasicNode;
 }
 
 int HeaderBlock::initializeForTesting()
 {
-	setPrefix("m");
-	setLocalName("reservation");
-	setUri("http://travelcompany.example.org/reservation");
+    setPrefix("m");
+    setLocalName("reservation");
+    setUri("http://travelcompany.example.org/reservation");
 
-	Attribute* pAttribute2 = new Attribute();
-	pAttribute2->setPrefix("SOAP-ENV");
-	pAttribute2->setLocalName("role");
-	pAttribute2->setValue("http://www.w3.org/2003/05/soap-envelope/role/next");
+    Attribute* pAttribute2 = new Attribute();
+    pAttribute2->setPrefix("SOAP-ENV");
+    pAttribute2->setLocalName("role");
+    pAttribute2->setValue("http://www.w3.org/2003/05/soap-envelope/role/next");
 
-	Attribute* pAttribute3 = new Attribute();
-	pAttribute3->setPrefix("SOAP-ENV");
-	pAttribute3->setLocalName("mustUnderstand");
-	pAttribute3->setValue("true");
+    Attribute* pAttribute3 = new Attribute();
+    pAttribute3->setPrefix("SOAP-ENV");
+    pAttribute3->setLocalName("mustUnderstand");
+    pAttribute3->setValue("true");
 
-	addAttribute(pAttribute2);
-	addAttribute(pAttribute3);
+    addAttribute(pAttribute2);
+    addAttribute(pAttribute3);
 
-	ComplexElement* pComplexElement = new ComplexElement();
-	pComplexElement->setPrefix("m");
-	pComplexElement->setLocalName("reference");
-	pComplexElement->addChild(new CharacterElement("abcdefgh"));
+    ComplexElement* pComplexElement = new ComplexElement();
+    pComplexElement->setPrefix("m");
+    pComplexElement->setLocalName("reference");
+    pComplexElement->addChild(new CharacterElement("abcdefgh"));
 
-	ComplexElement* pComplexElement2 = new ComplexElement();
-	pComplexElement2->setPrefix("m");
-	pComplexElement2->setLocalName("dateAndTime");
-	pComplexElement2->addChild(new CharacterElement("2001-11-29T13:20:00.000-05:00"));
+    ComplexElement* pComplexElement2 = new ComplexElement();
+    pComplexElement2->setPrefix("m");
+    pComplexElement2->setLocalName("dateAndTime");
+    pComplexElement2->addChild(new 
+        CharacterElement("2001-11-29T13:20:00.000-05:00"));
 
-	addChild(pComplexElement);
-	addChild(pComplexElement2);
+    addChild(pComplexElement);
+    addChild(pComplexElement2);
 
-	return AXIS_SUCCESS;	
+    return AXIS_SUCCESS;    
 }
 
 bool HeaderBlock::operator ==( const HeaderBlock &objHeaderBlock)
 {
-	/*
-	 *TODO : the logic
-	 */
-	return true;
+    /*
+     * TODO : the logic
+     */
+    return true;
 }
 
 BasicNode* HeaderBlock::createImmediateChild(NODE_TYPE eNODE_TYPE)
 {
-	BasicNode* pBasicNode = NULL;
+    BasicNode* pBasicNode = NULL;
 
-	do {
+    do
+    {
+        if(eNODE_TYPE==CHARACTER_NODE)
+        {
+            pBasicNode = new CharacterElement();
+        }
+        else if (eNODE_TYPE==ELEMENT_NODE)
+        {
+            pBasicNode = new ComplexElement();
+        }
+        else
+        {
+            break;
+        }
 
-		if(eNODE_TYPE==CHARACTER_NODE) {
-			pBasicNode = new CharacterElement();
-		} else if (eNODE_TYPE==ELEMENT_NODE) {
-			pBasicNode = new ComplexElement();
-		} else {
-			break;
-		}
+        m_children.push_back(pBasicNode);
+        iNoOFChildren++;
+    } while (0);
 
-		m_children.push_back(pBasicNode);
-		iNoOFChildren++;
-	} while (0);
-
-	return pBasicNode;
+    return pBasicNode;
 }
 
-Attribute* HeaderBlock::createAttribute(const AxisChar *localname, const AxisChar *prefix, const AxisChar *value)
+Attribute* HeaderBlock::createAttribute(const AxisChar *localname,
+                                        const AxisChar *prefix,
+                                        const AxisChar *value)
 {
-	Attribute* pAttribute = new Attribute(localname, prefix, value);
-	m_attributes.push_back(pAttribute);
+    Attribute* pAttribute = new Attribute(localname, prefix, value);
+    m_attributes.push_back(pAttribute);
 
-	return pAttribute;
+    return pAttribute;
 }
 
-Attribute* HeaderBlock::createAttribute(const AxisChar *localname, const AxisChar *prefix, const AxisChar *uri, const AxisChar *value)
+Attribute* HeaderBlock::createAttribute(const AxisChar *localname,
+                                        const AxisChar *prefix,
+                                        const AxisChar *uri,
+                                        const AxisChar *value)
 {
-	Attribute* pAttribute = new Attribute(localname, prefix, uri, value);
-	m_attributes.push_back(pAttribute);
+    Attribute* pAttribute = new Attribute(localname, prefix, uri, value);
+    m_attributes.push_back(pAttribute);
 
-	return pAttribute;
+    return pAttribute;
 }
 
-Attribute* HeaderBlock::createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE eStdAttrType, SOAP_VERSION eSOAP_VERSION)
+Attribute* HeaderBlock::createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE 
+                                           eStdAttrType, 
+                                           SOAP_VERSION eSOAP_VERSION)
 {
-	Attribute* pAttribute = NULL;
-	bool blnStatus = true;
+    Attribute* pAttribute = NULL;
+    bool blnStatus = true;
 
-	do {
-		switch(eSOAP_VERSION) {
-			case VERSION_LAST:
-				blnStatus = false;
-				break;
-			case SOAP_VER_1_1:
-				switch(eStdAttrType) {
-					case ACTOR:
-						pAttribute = new Attribute("actor",gs_SoapEnvVersionsStruct[SOAP_VER_1_1].pchPrefix,"","http://schemas.xmlsoap.org/soap/actor/next");
-						break;
-					case MUST_UNDERSTAND_TRUE:
-						pAttribute = new Attribute("mustUnderstand",gs_SoapEnvVersionsStruct[SOAP_VER_1_1].pchPrefix,"","1");
-						break;
-					case MUST_UNDERSTAND_FALSE:
-						pAttribute = new Attribute("mustUnderstand",gs_SoapEnvVersionsStruct[SOAP_VER_1_1].pchPrefix,"","0");
-						break;
-					default:
-						blnStatus = false;
-						break;
-				}
-				break;
+    do
+    {
+        switch(eSOAP_VERSION)
+        {
+            case VERSION_LAST:
+                blnStatus = false;
+                break;
+            case SOAP_VER_1_1:
+                switch(eStdAttrType)
+                {
+                    case ACTOR:
+                        pAttribute = new Attribute("actor",
+                            gs_SoapEnvVersionsStruct[SOAP_VER_1_1].pchPrefix,
+                            "","http://schemas.xmlsoap.org/soap/actor/next");
+                        break;
+                    case MUST_UNDERSTAND_TRUE:
+                        pAttribute = new Attribute("mustUnderstand",
+                            gs_SoapEnvVersionsStruct
+                            [SOAP_VER_1_1].pchPrefix,"","1");
+                        break;
+                    case MUST_UNDERSTAND_FALSE:
+                        pAttribute = new Attribute("mustUnderstand",
+                            gs_SoapEnvVersionsStruct
+                            [SOAP_VER_1_1].pchPrefix,"","0");
+                        break;
+                    default:
+                        blnStatus = false;
+                        break;
+                }
+                break;
 
-			case SOAP_VER_1_2:
-				switch(eStdAttrType) {
-					case ROLE_NEXT:
-						pAttribute = new Attribute("role",gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,"","http://www.w3.org/2003/05/soap-envelope/role/next");
-						break;
-					case ROLE_NONE:
-						pAttribute = new Attribute("role",gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,"","http://www.w3.org/2003/05/soap-envelope/role/none");
-						break;
-					case ROLE_ULTIMATE_RECEIVER:
-						pAttribute = new Attribute("role",gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,"","http://www.w3.org/2003/05/soap-envelope/role/ultimateReceiver");
-						break;
-					case MUST_UNDERSTAND_TRUE:
-						pAttribute = new Attribute("mustUnderstand",gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,"","true");
-						break;
-					case MUST_UNDERSTAND_FALSE:
-						pAttribute = new Attribute("mustUnderstand",gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,"","false");
-						break;
-					default:
-						blnStatus = false;
-						break;
-				}
-				break;
+            case SOAP_VER_1_2:
+                switch(eStdAttrType)
+                {
+                    case ROLE_NEXT:
+                        pAttribute = new Attribute("role",
+                            gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,
+                            "","http://www.w3.org/2003/05/soap-envelope \
+                            /role/next");
+                        break;
+                    case ROLE_NONE:
+                        pAttribute = new Attribute("role",
+                            gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,
+                            "","http://www.w3.org/2003/05/soap-envelope\
+                            /role/none");
+                        break;
+                    case ROLE_ULTIMATE_RECEIVER:
+                        pAttribute = new Attribute("role",
+                            gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,
+                            "","http://www.w3.org/2003/05/soap-envelope/role\
+                            /ultimateReceiver");
+                        break;
+                    case MUST_UNDERSTAND_TRUE:
+                        pAttribute = new Attribute("mustUnderstand",
+                            gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,
+                            "","true");
+                        break;
+                    case MUST_UNDERSTAND_FALSE:
+                        pAttribute = new Attribute("mustUnderstand",
+                            gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,
+                            "","false");
+                        break;
+                    default:
+                        blnStatus = false;
+                        break;
+                }
+                break;
 
-			default:
-				blnStatus = false;
-				break;
-		}
-	} while (0);
-	
+            default:
+                blnStatus = false;
+                break;
+        }
+    } while (0);
+    
 
-	if (blnStatus) {
-		m_attributes.push_back(pAttribute);
-		return pAttribute;
-	} else {
-		return NULL;
-	}
+    if (blnStatus)
+    {
+        m_attributes.push_back(pAttribute);
+        return pAttribute;
+    }
+    else
+    {
+        return NULL;
+    }
 }
 
-BasicNode* HeaderBlock::createImmediateChild(NODE_TYPE eNODE_TYPE, AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri, AxisChar* pachValue)
+BasicNode* HeaderBlock::createImmediateChild(NODE_TYPE eNODE_TYPE,
+                                             AxisChar *pachLocalName,
+                                             AxisChar *pachPrefix,
+                                             AxisChar *pachUri,
+                                             AxisChar* pachValue)
 {
-	BasicNode* pBasicNode = NULL;
+    BasicNode* pBasicNode = NULL;
 
-	do {
+    do
+    {
 
-		if(eNODE_TYPE==CHARACTER_NODE) {
-			pBasicNode = new CharacterElement(pachValue);
-		} else if (eNODE_TYPE==ELEMENT_NODE) {
-			pBasicNode = new ComplexElement(pachLocalName, pachPrefix, pachUri);
-		} else {
-			break;
-		}
+        if(eNODE_TYPE==CHARACTER_NODE)
+        {
+            pBasicNode = new CharacterElement(pachValue);
+        }
+        else if (eNODE_TYPE==ELEMENT_NODE)
+        {
+            pBasicNode = new ComplexElement(pachLocalName, pachPrefix,
+                pachUri);
+        }
+        else
+        {
+            break;
+        }
 
-		m_children.push_back(pBasicNode);
-		iNoOFChildren++;
-	} while (0);
+        m_children.push_back(pBasicNode);
+        iNoOFChildren++;
+    } while (0);
 
-	return pBasicNode;
+    return pBasicNode;
 }
 
-BasicNode* HeaderBlock::createChild(NODE_TYPE eNODE_TYPE, AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri, AxisChar *pachValue)
+BasicNode* HeaderBlock::createChild(NODE_TYPE eNODE_TYPE,
+                                    AxisChar *pachLocalName,
+                                    AxisChar *pachPrefix, AxisChar *pachUri,
+                                    AxisChar *pachValue)
 {
-	BasicNode* pBasicNode = NULL;
+    BasicNode* pBasicNode = NULL;
 
-	do {
+    do
+    {
+        if(eNODE_TYPE==CHARACTER_NODE)
+        {
+            pBasicNode = new CharacterElement(pachValue);
+        }
+        else if (eNODE_TYPE==ELEMENT_NODE)
+        {
+            pBasicNode = new ComplexElement(pachLocalName, pachPrefix,
+                pachUri);
+        }
+        else
+        {
+            break;
+        }
+    } while (0);
 
-		if(eNODE_TYPE==CHARACTER_NODE) {
-			pBasicNode = new CharacterElement(pachValue);
-		} else if (eNODE_TYPE==ELEMENT_NODE) {
-			pBasicNode = new ComplexElement(pachLocalName, pachPrefix, pachUri);
-		} else {
-			break;
-		}
-	} while (0);
-
-	return pBasicNode;
+    return pBasicNode;
 }
 
 int HeaderBlock::getNoOfChildren()
 {
-	return iNoOFChildren;
+    return iNoOFChildren;
 }
 
 const BasicNode* HeaderBlock::getFirstChild()
 {
-	list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
-	
-	if (itCurrBasicNode != m_children.end()) {		
-		return (*itCurrBasicNode);
-	}
+    list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
+    
+    if (itCurrBasicNode != m_children.end())
+    {        
+        return (*itCurrBasicNode);
+    }
 
-	return NULL;
+    return NULL;
 }

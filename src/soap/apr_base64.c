@@ -1,59 +1,17 @@
-/* ====================================================================
- * The Apache Software License, Version 1.1
+/*
+ *   Copyright 2003-2004 The Apache Software Foundation.
  *
- * Copyright (c) 2000-2003 The Apache Software Foundation.  All rights
- * reserved.
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *
- * 3. The end-user documentation included with the redistribution,
- *    if any, must include the following acknowledgment:
- *       "This product includes software developed by the
- *        Apache Software Foundation (http://www.apache.org/)."
- *    Alternately, this acknowledgment may appear in the software itself,
- *    if and wherever such third-party acknowledgments normally appear.
- *
- * 4. The names "Apache" and "Apache Software Foundation" must
- *    not be used to endorse or promote products derived from this
- *    software without prior written permission. For written
- *    permission, please contact apache@apache.org.
- *
- * 5. Products derived from this software may not be called "Apache",
- *    nor may "Apache" appear in their name, without prior written
- *    permission of the Apache Software Foundation.
- *
- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
- * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
- * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- * ====================================================================
- *
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- * Portions of this software are based upon public domain software
- * originally written at the National Center for Supercomputing Applications,
- * University of Illinois, Urbana-Champaign.
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
  */
 
 /* base64 encoder/decoder. Originally part of main/util.c
@@ -65,48 +23,48 @@
 #include "apr_base64.h"
 #if APR_CHARSET_EBCDIC
 #include "apr_xlate.h"
-#endif				/* APR_CHARSET_EBCDIC */
+#endif                /* APR_CHARSET_EBCDIC */
 
 /* aaaack but it's fast and const should make it shared text page. */
 static const unsigned char pr2six[256] =
 {
-#if !APR_CHARSET_EBCDIC
-    /* ASCII table */
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 62, 64, 64, 64, 63,
-    52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 64, 64, 64, 64, 64, 64,
-    64,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
-    15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 64, 64, 64, 64, 64,
-    64, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-    41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 64, 64, 64, 64, 64,
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64
-#else /*APR_CHARSET_EBCDIC*/
-    /* EBCDIC table */
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 62, 64,
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    64, 63, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    64, 26, 27, 28, 29, 30, 31, 32, 33, 34, 64, 64, 64, 64, 64, 64,
-    64, 35, 36, 37, 38, 39, 40, 41, 42, 43, 64, 64, 64, 64, 64, 64,
-    64, 64, 44, 45, 46, 47, 48, 49, 50, 51, 64, 64, 64, 64, 64, 64,
-    64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
-    64,  0,  1,  2,  3,  4,  5,  6,  7,  8, 64, 64, 64, 64, 64, 64,
-    64,  9, 10, 11, 12, 13, 14, 15, 16, 17, 64, 64, 64, 64, 64, 64,
-    64, 64, 18, 19, 20, 21, 22, 23, 24, 25, 64, 64, 64, 64, 64, 64,
-    52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 64, 64, 64, 64, 64, 64
-#endif /*APR_CHARSET_EBCDIC*/
+    #if !APR_CHARSET_EBCDIC
+        /* ASCII table */
+        64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+        64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+        64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 62, 64, 64, 64, 63,
+        52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 64, 64, 64, 64, 64, 64,
+        64,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
+        15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 64, 64, 64, 64, 64,
+        64, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+        41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 64, 64, 64, 64, 64,
+        64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+        64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+        64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+        64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+        64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+        64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+        64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+        64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64
+    #else /* APR_CHARSET_EBCDIC */
+        /* EBCDIC table */
+        64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+        64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+        64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+        64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+        64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 62, 64,
+        64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+        64, 63, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+        64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+        64, 26, 27, 28, 29, 30, 31, 32, 33, 34, 64, 64, 64, 64, 64, 64,
+        64, 35, 36, 37, 38, 39, 40, 41, 42, 43, 64, 64, 64, 64, 64, 64,
+        64, 64, 44, 45, 46, 47, 48, 49, 50, 51, 64, 64, 64, 64, 64, 64,
+        64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64,
+        64,  0,  1,  2,  3,  4,  5,  6,  7,  8, 64, 64, 64, 64, 64, 64,
+        64,  9, 10, 11, 12, 13, 14, 15, 16, 17, 64, 64, 64, 64, 64, 64,
+        64, 64, 18, 19, 20, 21, 22, 23, 24, 25, 64, 64, 64, 64, 64, 64,
+        52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 64, 64, 64, 64, 64, 64
+    #endif /* APR_CHARSET_EBCDIC */
 };
 
 #if APR_CHARSET_EBCDIC
@@ -121,24 +79,28 @@ APU_DECLARE(apr_status_t) apr_base64init_ebcdic(apr_xlate_t *to_ascii,
     apr_status_t rv;
     int onoff;
     
-    /* Only single-byte conversion is supported.
-     */
+    /* Only single-byte conversion is supported. */
     rv = apr_xlate_get_sb(to_ascii, &onoff);
-    if (rv) {
+    if (rv)
+    {
         return rv;
     }
-    if (!onoff) { /* If conversion is not single-byte-only */
+    if (!onoff)
+    { /* If conversion is not single-byte-only */
         return APR_EINVAL;
     }
     rv = apr_xlate_get_sb(to_ebcdic, &onoff);
-    if (rv) {
+    if (rv)
+    {
         return rv;
     }
-    if (!onoff) { /* If conversion is not single-byte-only */
+    if (!onoff)
+    { /* If conversion is not single-byte-only */
         return APR_EINVAL;
     }
     xlate_to_ebcdic = to_ebcdic;
-    for (i = 0; i < sizeof(os_toascii); i++) {
+    for (i = 0; i < sizeof(os_toascii); i++)
+    {
         os_toascii[i] = i;
     }
     inbytes_left = outbytes_left = sizeof(os_toascii);
@@ -147,7 +109,7 @@ APU_DECLARE(apr_status_t) apr_base64init_ebcdic(apr_xlate_t *to_ascii,
 
     return APR_SUCCESS;
 }
-#endif /*APR_CHARSET_EBCDIC*/
+#endif /* APR_CHARSET_EBCDIC */
 
 APU_DECLARE(int) apr_base64_decode_len(const char *bufcoded)
 {
@@ -168,7 +130,7 @@ APU_DECLARE(int) apr_base64_decode(char *bufplain, const char *bufcoded)
 {
 #if APR_CHARSET_EBCDIC
     apr_size_t inbytes_left, outbytes_left;
-#endif				/* APR_CHARSET_EBCDIC */
+#endif                /* APR_CHARSET_EBCDIC */
     int len;
     
     len = apr_base64_decode_binary((unsigned char *) bufplain, bufcoded);
@@ -176,7 +138,7 @@ APU_DECLARE(int) apr_base64_decode(char *bufplain, const char *bufcoded)
     inbytes_left = outbytes_left = len;
     apr_xlate_conv_buffer(xlate_to_ebcdic, bufplain, &inbytes_left,
                           bufplain, &outbytes_left);
-#endif				/* APR_CHARSET_EBCDIC */
+#endif                /* APR_CHARSET_EBCDIC */
     bufplain[len] = '\0';
     return len;
 }
@@ -184,8 +146,9 @@ APU_DECLARE(int) apr_base64_decode(char *bufplain, const char *bufcoded)
 /* This is the same as apr_base64_decode() except on EBCDIC machines, where
  * the conversion of the output to ebcdic is left out.
  */
+
 APU_DECLARE(int) apr_base64_decode_binary(unsigned char *bufplain,
-				   const char *bufcoded)
+                   const char *bufcoded)
 {
     int nbytesdecoded;
     register const unsigned char *bufin;
@@ -200,29 +163,33 @@ APU_DECLARE(int) apr_base64_decode_binary(unsigned char *bufplain,
     bufout = (unsigned char *) bufplain;
     bufin = (const unsigned char *) bufcoded;
 
-    while (nprbytes > 4) {
-	*(bufout++) =
-	    (unsigned char) (pr2six[*bufin] << 2 | pr2six[bufin[1]] >> 4);
-	*(bufout++) =
-	    (unsigned char) (pr2six[bufin[1]] << 4 | pr2six[bufin[2]] >> 2);
-	*(bufout++) =
-	    (unsigned char) (pr2six[bufin[2]] << 6 | pr2six[bufin[3]]);
-	bufin += 4;
-	nprbytes -= 4;
+    while (nprbytes > 4)
+    {
+        *(bufout++) =
+            (unsigned char) (pr2six[*bufin] << 2 | pr2six[bufin[1]] >> 4);
+        *(bufout++) =
+            (unsigned char) (pr2six[bufin[1]] << 4 | pr2six[bufin[2]] >> 2);
+        *(bufout++) =
+            (unsigned char) (pr2six[bufin[2]] << 6 | pr2six[bufin[3]]);
+        bufin += 4;
+        nprbytes -= 4;
     }
 
     /* Note: (nprbytes == 1) would be an error, so just ingore that case */
-    if (nprbytes > 1) {
-	*(bufout++) =
-	    (unsigned char) (pr2six[*bufin] << 2 | pr2six[bufin[1]] >> 4);
+    if (nprbytes > 1)
+    {
+        *(bufout++) =
+            (unsigned char) (pr2six[*bufin] << 2 | pr2six[bufin[1]] >> 4);
     }
-    if (nprbytes > 2) {
-	*(bufout++) =
-	    (unsigned char) (pr2six[bufin[1]] << 4 | pr2six[bufin[2]] >> 2);
+    if (nprbytes > 2)
+    {
+        *(bufout++) =
+            (unsigned char) (pr2six[bufin[1]] << 4 | pr2six[bufin[2]] >> 2);
     }
-    if (nprbytes > 3) {
-	*(bufout++) =
-	    (unsigned char) (pr2six[bufin[2]] << 6 | pr2six[bufin[3]]);
+    if (nprbytes > 3)
+    {
+        *(bufout++) =
+            (unsigned char) (pr2six[bufin[2]] << 6 | pr2six[bufin[3]]);
     }
 
     nbytesdecoded -= (4 - nprbytes) & 3;
@@ -240,37 +207,42 @@ APU_DECLARE(int) apr_base64_encode_len(int len)
 APU_DECLARE(int) apr_base64_encode(char *encoded, const char *string, int len)
 {
 #if !APR_CHARSET_EBCDIC
-    return apr_base64_encode_binary(encoded, (const unsigned char *) string, len);
+    return apr_base64_encode_binary(encoded, (const unsigned char *) string, 
+        len);
 #else /* APR_CHARSET_EBCDIC */
     int i;
     char *p;
 
     p = encoded;
-    for (i = 0; i < len - 2; i += 3) {
-	*p++ = basis_64[(os_toascii[string[i]] >> 2) & 0x3F];
-	*p++ = basis_64[((os_toascii[string[i]] & 0x3) << 4) |
-	                ((int) (os_toascii[string[i + 1]] & 0xF0) >> 4)];
-	*p++ = basis_64[((os_toascii[string[i + 1]] & 0xF) << 2) |
-	                ((int) (os_toascii[string[i + 2]] & 0xC0) >> 6)];
-	*p++ = basis_64[os_toascii[string[i + 2]] & 0x3F];
+    for (i = 0; i < len - 2; i += 3)
+    {
+        *p++ = basis_64[(os_toascii[string[i]] >> 2) & 0x3F];
+        *p++ = basis_64[((os_toascii[string[i]] & 0x3) << 4) |
+                        ((int) (os_toascii[string[i + 1]] & 0xF0) >> 4)];
+        *p++ = basis_64[((os_toascii[string[i + 1]] & 0xF) << 2) |
+                        ((int) (os_toascii[string[i + 2]] & 0xC0) >> 6)];
+        *p++ = basis_64[os_toascii[string[i + 2]] & 0x3F];
     }
-    if (i < len) {
-	*p++ = basis_64[(os_toascii[string[i]] >> 2) & 0x3F];
-	if (i == (len - 1)) {
-	    *p++ = basis_64[((os_toascii[string[i]] & 0x3) << 4)];
-	    *p++ = '=';
-	}
-	else {
-	    *p++ = basis_64[((os_toascii[string[i]] & 0x3) << 4) |
-	                    ((int) (os_toascii[string[i + 1]] & 0xF0) >> 4)];
-	    *p++ = basis_64[((os_toascii[string[i + 1]] & 0xF) << 2)];
-	}
-	*p++ = '=';
+    if (i < len)
+    {
+        *p++ = basis_64[(os_toascii[string[i]] >> 2) & 0x3F];
+        if (i == (len - 1))
+        {
+            *p++ = basis_64[((os_toascii[string[i]] & 0x3) << 4)];
+            *p++ = '=';
+        }
+        else
+        {
+            *p++ = basis_64[((os_toascii[string[i]] & 0x3) << 4) |
+                            ((int) (os_toascii[string[i + 1]] & 0xF0) >> 4)];
+            *p++ = basis_64[((os_toascii[string[i + 1]] & 0xF) << 2)];
+        }
+        *p++ = '=';
     }
 
     *p++ = '\0';
     return p - encoded;
-#endif				/* APR_CHARSET_EBCDIC */
+#endif                /* APR_CHARSET_EBCDIC */
 }
 
 /* This is the same as apr_base64_encode() except on EBCDIC machines, where
@@ -283,26 +255,30 @@ APU_DECLARE(int) apr_base64_encode_binary(char *encoded,
     char *p;
 
     p = encoded;
-    for (i = 0; i < len - 2; i += 3) {
-	*p++ = basis_64[(string[i] >> 2) & 0x3F];
-	*p++ = basis_64[((string[i] & 0x3) << 4) |
-	                ((int) (string[i + 1] & 0xF0) >> 4)];
-	*p++ = basis_64[((string[i + 1] & 0xF) << 2) |
-	                ((int) (string[i + 2] & 0xC0) >> 6)];
-	*p++ = basis_64[string[i + 2] & 0x3F];
+    for (i = 0; i < len - 2; i += 3)
+    {
+        *p++ = basis_64[(string[i] >> 2) & 0x3F];
+        *p++ = basis_64[((string[i] & 0x3) << 4) |
+                        ((int) (string[i + 1] & 0xF0) >> 4)];
+        *p++ = basis_64[((string[i + 1] & 0xF) << 2) |
+                        ((int) (string[i + 2] & 0xC0) >> 6)];
+        *p++ = basis_64[string[i + 2] & 0x3F];
     }
-    if (i < len) {
-	*p++ = basis_64[(string[i] >> 2) & 0x3F];
-	if (i == (len - 1)) {
-	    *p++ = basis_64[((string[i] & 0x3) << 4)];
-	    *p++ = '=';
-	}
-	else {
-	    *p++ = basis_64[((string[i] & 0x3) << 4) |
-	                    ((int) (string[i + 1] & 0xF0) >> 4)];
-	    *p++ = basis_64[((string[i + 1] & 0xF) << 2)];
-	}
-	*p++ = '=';
+    if (i < len)
+    {
+        *p++ = basis_64[(string[i] >> 2) & 0x3F];
+        if (i == (len - 1))
+        {
+            *p++ = basis_64[((string[i] & 0x3) << 4)];
+            *p++ = '=';
+        }
+        else
+        {
+            *p++ = basis_64[((string[i] & 0x3) << 4) |
+                            ((int) (string[i + 1] & 0xF0) >> 4)];
+            *p++ = basis_64[((string[i + 1] & 0xF) << 2)];
+        }
+        *p++ = '=';
     }
 
     *p++ = '\0';
