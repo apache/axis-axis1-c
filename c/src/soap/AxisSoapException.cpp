@@ -94,28 +94,28 @@ const string AxisSoapException::getMessage (const int iExceptionCode)
     {
 
         case SOAP_VERSION_MISMATCH :
-            m_sMessage = "Soap Version mismatch fault occured";
+            m_sMessage = "AxisSoapException:Soap Version mismatch fault occured";
             break;
         case SOAP_MUST_UNDERSTAND:
-            m_sMessage = "Soap Must understand fault occured";
+            m_sMessage = "AxisSoapException:Soap Must understand fault occured";
             break;
         case CLIENT_SOAP_MESSAGE_INCOMPLETE:
-            m_sMessage = "Received message is incomplete";
+            m_sMessage = "AxisSoapException:Received message is incomplete";
             break;
         case CLIENT_SOAP_SOAP_ACTION_EMTPY:
-            m_sMessage = "Soap action is empty";
+            m_sMessage = "AxisSoapException:Soap action is empty";
             break;
         case CLIENT_SOAP_SOAP_CONTENT_ERROR:
-            m_sMessage = "Received content is faulty";
+            m_sMessage = "AxisSoapException:Received content is faulty";
             break;
         case CLIENT_SOAP_NO_SOAP_METHOD:
-            m_sMessage = "Request method is not a soap method";
+            m_sMessage = "AxisSoapException:Request method is not a soap method";
             break;
         case CLIENT_SOAP_CONTENT_NOT_SOAP:
-            m_sMessage = "Content is not a valid soap message";
+            m_sMessage = "AxisSoapException:Content is not a valid soap message";
             break;
         default:
-            m_sMessage = "Unknown Soap Exception";
+            m_sMessage = "AxisSoapException:Unknown Soap Exception";
     }
     return m_sMessage;
 }

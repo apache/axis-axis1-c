@@ -170,7 +170,8 @@ void SoapFault::initialize()
             {"Server", "Channel error connection timeout before receving", "", ""},
             {"Server", "Transport buffer is empty", "", ""},
             {"Server", "Buffer received from the parser is empty", "", ""},
-            {"Server", "Parser failed", "", ""},
+            {"Server", "XML_STATUS_ERROR thrown from parser", "", ""},
+            {"Server", "Error when getting the byte stream from the transport", "", ""},
             {"Server", "Test exception", "", ""},
             {"Server", "Unknown exception", "", ""}
             

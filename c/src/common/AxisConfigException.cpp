@@ -95,13 +95,16 @@ const string AxisConfigException::getMessage (const int iExceptionCode)
     switch(iExceptionCode)
     {
         case SERVER_CONFIG_TRANSPORT_CONF_FAILED:
-            m_sMessage = "Transport layer is not configured properly";
+            m_sMessage = "AxisConfigException:Transport layer is not" \
+                " configured properly";
             break;
         case SERVER_CONFIG_LIBRARY_PATH_EMPTY:
-            m_sMessage = "Library path is empty(Not in server.wsdd file)";
+            m_sMessage = "AxisConfigException:Library path is empty(Not in" \
+                " server.wsdd file)";
             break;
         default:
-            m_sMessage = "Unknown Axis C++ Configuration Exception";
+            m_sMessage = "AxisConfigException:Unknown Axis C++" \
+                " Configuration Exception";
     }
     return m_sMessage;
 }
