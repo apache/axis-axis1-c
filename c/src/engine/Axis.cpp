@@ -95,8 +95,9 @@
 #include <axis/server/AxisConfig.h>
 #include "../wsdd/WSDDKeywords.h"
 #include <axis/server/AxisTrace.h>
+#ifdef USE_XERCES_PARSER
 #include <xercesc/util/PlatformUtils.hpp>
-
+#endif
 
 #define BYTESTOREAD 64
 //the relative location of the wsdl files hardcoded
@@ -107,8 +108,9 @@
 unsigned char chEBuf[1024];
 #endif
 
+#ifdef USE_XERCES_PARSER
 XERCES_CPP_NAMESPACE_USE
-
+#endif
 //synchronized global variables.
 HandlerLoader* g_pHandlerLoader;
 AppScopeHandlerPool* g_pAppScopeHandlerPool;
