@@ -63,9 +63,9 @@
  */
 
 
-#include "Platform.hpp"
-#include "TransportFactory.hpp"
-#include "HttpTransport.hpp"
+#include <axis/client/transport/axis/Platform.hpp>
+#include <axis/client/transport/axis/TransportFactory.hpp>
+#include <axis/client/transport/axis/HttpTransport.hpp>
 
 
 
