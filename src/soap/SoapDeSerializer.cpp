@@ -19,6 +19,7 @@
  * @author Susantha Kumara (skumara@virtusa.com)
  * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  *
  */
 
@@ -90,7 +91,11 @@ SoapDeSerializer::~SoapDeSerializer()
 	 delete m_pEnv;
     if(m_pHeader)
       delete m_pHeader;    
-    if (m_pParser) delete m_pParser;
+    if (m_pParser)
+    {
+        XMLParserFactory::destroyParserObject(m_pParser);
+        //delete m_pParser;
+    }
     free(m_pcFaultDetail);
 }
 
