@@ -20,6 +20,21 @@ XERCESC_HOME="/usr/local/xerces-c"
 LD_LIBRARY_PATH="$XERCESC_HOME/lib:$EXPAT_HOME/lib:$AXISCPP_HOME/bin:$AXIS_HOME/libs:$LD_LIBRARY_PATH"
 export AXISCPP_HOME AXIS_HOME XERCESC_HOME EXPAT_HOME LD_LIBRARY_PATH
 
+A note about AXIS_HOME
+Copy $AXISCPP_HOME/deploy folder to a place of your choice and define AXIS_HOME pointing to it.
+#cp -rf $AXISCPP_HOME/deploy /usr/local/
+#mv /usr/local/deploy /usr/local/Axis
+
+In $AXIS_HOME/axiscpp.conf file you can give paths to
+your log files, configuration files libraries etc.
+-------------------------------------------------------------
+AXISLOGPATH:/usr/local/Axis/logs/AxisLog
+WSDDFILEPATH:/usr/local/Axis/conf/server.wsdd
+AXISCLIENTLOGPATH:/usr/local/Axis/logs/AxisClientLog
+AXISXMLPARSER:/usr/local/Axis/libs/libaxis_xmlparser.so
+AXISTRANSPORT_HTTP:/usr/local/Axis/libs/libaxis_transport.so
+------------------------------------------------------------
+
 Axis C++ core is independant of the parser layer and transport layer.
 You can write your own transport or parser library according to the APIs provided. Currently Axis C++
 provides API implementations for Xerces-c and Expat. It also provides it's own client side transport
