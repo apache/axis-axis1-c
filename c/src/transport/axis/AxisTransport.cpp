@@ -138,20 +138,18 @@ int AxisTransport::Send_bytes(const char* pSendBuffer, const void* pStream)
     
 }
 
-int AxisTransport::Get_bytes(char* pRecvBuffer, int nBuffSize, int* pRecvSize, const void* pStream)
+int AxisTransport::Get_bytes(const char** res, int* retsize, const void* pStream)
 {
     Receiver* pReceiver = (Receiver*) pStream;
     const string& strReceive =  pReceiver->Recv();
-    int nLen = strlen(strReceive.c_str());
-    if(nLen < nBuffSize)
+	*res = strReceive.c_str();
+	*retsize = strReceive.length();
+    if(!res || *retsize == 0)
     {
-        strcpy(pRecvBuffer, strReceive.c_str());
-        *pRecvSize = nLen;
-        return AXIS_SUCCESS;
+		return AXIS_FAIL;
     }
     else
-        return AXIS_FAIL;
-    
+        return AXIS_SUCCESS;   
 }
 
 int AxisTransport::Send_transport_information(void* pSoapStream)
