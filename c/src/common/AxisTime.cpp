@@ -187,7 +187,7 @@ AxisString& AxisTime::serialize(const AxisChar* sName, struct tm tValue, XSDTYPE
             //AxisUtils::convert(strXSDDate, buf1);
             break;
         case XSD_TIME:
-            strftime(buf1, TIMEBUFFSIZE, "T%H:%M:%SZ", &tValue);
+            strftime(buf1, TIMEBUFFSIZE, "%H:%M:%SZ", &tValue);
             strXSDDate = buf1;
             //AxisUtils::convert(strXSDDate, buf1);
             break;
@@ -435,7 +435,7 @@ int AxisTime::mkCTime()
                 hh:mm:ss.ss...Z OR
                 hh:mm:ss.ss...+/-<UTC TIME DIFFERENCE>
             */
-            if(sscanf(m_sValue.c_str(), "T%d:%d:%d",
+            if(sscanf(m_sValue.c_str(), "%d:%d:%d",
                 &m_TM.tm_hour,
                 &m_TM.tm_min,
                 &m_TM.tm_sec) != 3) return AXIS_FAIL;/*invalid data format*/
@@ -448,12 +448,15 @@ int AxisTime::mkCTime()
             m_TM.tm_zone = NULL;
             m_TM.tm_gmtoff = -1;
 #endif
-            printf("m_sValue:%s\n", m_sValue.c_str());
+            //printf("m_sValue:%s\n", m_sValue.c_str());
 
-            cTemp2 = strpbrk(m_sValue.c_str(), "T");
-            printf("cTemp2:%s\n", cTemp2);
+            //cTemp2 = strpbrk(m_sValue.c_str(), "T");
+           // strcpy ( cTemp2,m_sValue.c_str());
+			cTemp2 = (char *)m_sValue.c_str();
+            //printf("cTemp2:%s\n", cTemp2);
+            
             cTemp3 = strrchr(cTemp2, ':');
-            printf("cTemp3:%s\n", cTemp3);
+            //printf("cTemp3:%s\n", cTemp3);
             cTemp3[0] = '\0';
             intLen = strlen(cTemp2);
             cTemp3[0] = ':';
