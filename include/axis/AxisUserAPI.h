@@ -25,6 +25,9 @@
   * @file AxisUserAPI.h
   * This file contains types defined in Axis C++. The mapping of basic xsd types
   * to the C language types.
+  * 
+  * The following xsd basic types are supported:
+  * - <tt> anyURI, base64Binary, boolean, byte, date, dateTime, decimal, double, duration, float, hexBinary, int, integer, long, NMTOKEN, notation, QName, short, string, time, unsignedByte, unsignedInt, unsignedLong</tt> and \c unsignedShort.
   */
 
 /**
