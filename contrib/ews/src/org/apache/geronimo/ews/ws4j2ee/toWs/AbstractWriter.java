@@ -60,8 +60,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import org.apache.axis.components.logger.LogFactory;
+
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 
 /**

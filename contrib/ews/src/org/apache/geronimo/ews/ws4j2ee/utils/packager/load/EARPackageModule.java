@@ -29,20 +29,25 @@ import org.apache.geronimo.ews.ws4j2ee.utils.UncompressingJarClassLoader;
 public class EARPackageModule extends AbstractPackageModule {
     private UncompressingJarClassLoader cl;
 	private Vector classPathElements;
+	private ClassLoader parentCL;
     /**
      * @param jarFile
      * @throws GenerationFault
      */
-    public EARPackageModule(String jarFile, boolean firstmodule)
+    public EARPackageModule(String jarFile,ClassLoader parentCL, boolean firstmodule)
         throws GenerationFault {
-        super(jarFile);
+        super(jarFile,parentCL);
         if (firstmodule) {
+            if(parentCL == null){
+                parentCL = Thread.currentThread().getContextClassLoader();
+            }
             cl =
                 new UncompressingJarClassLoader(
                     GenerationConstants.CONFIG_STORE,
                     new File(zip.getName()),
                     null,
-                    "");
+                    "",
+					parentCL);
         }
         wscfFile =
             getInputStreamForJarEntry(jarFile, "META-INF/webservice.xml");
@@ -58,7 +63,8 @@ public class EARPackageModule extends AbstractPackageModule {
 					module =
 						PackageModuleFactory.createPackageModule(
 						cl.getDir() + files[i],
-							false);
+						parentCL,
+						false);
 					ejbJarfile = module.getEjbJarfile();		
 					break;
 				}
@@ -69,6 +75,7 @@ public class EARPackageModule extends AbstractPackageModule {
                     module =
                         PackageModuleFactory.createPackageModule(
 							cl.getDir() + files[i],
+							parentCL,
                             false);
                     webddfile = module.getWebddfile();
                     break;

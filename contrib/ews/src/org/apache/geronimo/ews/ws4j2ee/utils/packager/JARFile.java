@@ -69,8 +69,8 @@ import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 
-import org.apache.axis.components.logger.LogFactory;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 
 /**

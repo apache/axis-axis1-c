@@ -61,9 +61,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.axis.components.logger.LogFactory;
+
 import org.apache.axis.wsdl.fromJava.Emitter;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.j2eeDD.EJBContext;
 import org.apache.geronimo.ews.ws4j2ee.context.j2eeDD.WebContext;
@@ -143,11 +144,11 @@ public class Ws4J2ee implements Generator {
     private void parseCLargs()throws GenerationFault{
 		module = clparser.getModule();
 		classloader = module.getClassLoaderWithPackageLoaded();
-
 		wscontext.getMiscInfo().setClassloader(classloader);
 		wscontext.getMiscInfo().setOutputPath(clparser.getOutPutLocation());
 		wscontext.getMiscInfo().setImplStyle(clparser.getImplStyle());
 		wscontext.getMiscInfo().setTargetJ2EEContainer(clparser.getContanier());
+        wscontext.getMiscInfo().setCompile(clparser.isCompile());
 
 		wsdlImplFilename = clparser.getWsdlImplFilename();
 		this.wscffile = module.getWscfFile();

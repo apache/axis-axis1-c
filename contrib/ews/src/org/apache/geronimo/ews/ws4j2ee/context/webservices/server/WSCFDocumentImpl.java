@@ -60,6 +60,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFConstants;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFDocument;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebservices;
@@ -81,6 +82,7 @@ public class WSCFDocumentImpl implements WSCFConstants, WSCFDocument{
 	 */
 	private WSCFWebservices webservices;
 
+
 /////////////////////////////////The jaxb delegation block////////////////////////////////////////////////
 
 	//This is kept basically to meet the future demands of the serialising.
@@ -88,8 +90,9 @@ public class WSCFDocumentImpl implements WSCFConstants, WSCFDocument{
 
 	public WSCFDocumentImpl(InputStream in)throws WSCFException{
 		try{
-			
-			JAXBContext jc = JAXBContext.newInstance( "org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb" );
+			JAXBContext jc    
+                = JAXBContext.newInstance(
+                        "org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb");
 			// create an Unmarshaller
 			Unmarshaller unmarshaller = jc.createUnmarshaller();
 	

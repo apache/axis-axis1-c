@@ -54,12 +54,11 @@
  */
 package org.apache.geronimo.ews.ws4j2ee.toWs.wrapperWs.geronimo;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.apache.axis.components.logger.LogFactory;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.SEIOperation;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;

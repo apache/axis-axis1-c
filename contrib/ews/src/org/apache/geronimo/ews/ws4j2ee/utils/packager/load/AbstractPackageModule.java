@@ -35,9 +35,11 @@ public abstract class AbstractPackageModule implements PackageModule {
     protected InputStream wsdlfile;
     protected InputStream jaxrpcfile;
     protected ZipFile zip;
+    protected ClassLoader parentCL;
 
-    public AbstractPackageModule(String jarFile) throws GenerationFault {
+    public AbstractPackageModule(String jarFile,ClassLoader parentCL) throws GenerationFault {
         try {
+			this.parentCL = parentCL;
             zip = new JarFile(jarFile);
         } catch (IOException e) {
             e.printStackTrace();

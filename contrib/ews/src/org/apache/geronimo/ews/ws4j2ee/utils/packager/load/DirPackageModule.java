@@ -35,14 +35,16 @@ public class DirPackageModule implements PackageModule{
 	protected InputStream webddfile;
 	protected InputStream ejbJarfile;
 	private String location;
+	private ClassLoader parentCL;
 
     /**
      * @param jarFile
      * @throws GenerationFault
      */
-    public DirPackageModule(String location)
+    public DirPackageModule(String location,ClassLoader parentCL)
         throws GenerationFault {
         File file = null;
+        this.parentCL = parentCL;
         this.location = location; 
         try {
             file = new File(location+ "/WEB-INF/webservice.xml");
@@ -117,7 +119,7 @@ public class DirPackageModule implements PackageModule{
     public ClassLoader getClassLoaderWithPackageLoaded() throws GenerationFault {
         try {
             File file = new File(location);
-            return new URLClassLoader(new URL[]{file.toURL()});
+            return new URLClassLoader(new URL[]{file.toURL()},parentCL);
         } catch (MalformedURLException e) {
 			throw GenerationFault.createGenerationFault(e);
         }

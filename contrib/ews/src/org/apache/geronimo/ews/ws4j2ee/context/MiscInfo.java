@@ -187,4 +187,8 @@ public interface MiscInfo {
     
 	public ClassLoader getClassloader();
 	public void setClassloader(ClassLoader loader);
+    
+    public boolean isCompile();
+    public void setCompile(boolean compile);
+    
 }

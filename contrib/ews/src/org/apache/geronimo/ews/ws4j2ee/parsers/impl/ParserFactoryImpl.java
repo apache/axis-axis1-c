@@ -82,7 +82,7 @@ public class ParserFactoryImpl implements ParserFactory {
         InputStream inputStream)
         throws GenerationFault {
 			try {
-                return new WSCFContextImpl(inputStream);
+                return new WSCFContextImpl(inputStream,context);
             } catch (WSCFException e) {
                 throw GenerationFault.createGenerationFault(e);
             }

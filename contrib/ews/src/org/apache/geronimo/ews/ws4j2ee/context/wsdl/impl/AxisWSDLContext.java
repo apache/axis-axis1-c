@@ -66,7 +66,6 @@ import javax.wsdl.PortType;
 import javax.wsdl.Service;
 import javax.xml.namespace.QName;
 
-import org.apache.axis.components.logger.LogFactory;
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.Element;
 import org.apache.axis.wsdl.symbolTable.PortEntry;
@@ -76,6 +75,7 @@ import org.apache.axis.wsdl.symbolTable.SymTabEntry;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.type.SchemaType;
 

@@ -32,19 +32,30 @@ public class PackageModuleFactory {
      * @return
      * @throws GenerationFault
      */
+    
+	public static PackageModule createPackageModule(
+			String path,boolean firstmodule)throws UnrecoverableGenerationFault{
+		return createPackageModule(path,Thread.currentThread().getContextClassLoader(),firstmodule);
+	}
+			
+			
     public static PackageModule createPackageModule(
-        String path,boolean firstmodule)throws UnrecoverableGenerationFault{
+        String path,
+    	ClassLoader parentCL,
+        boolean firstmodule)throws UnrecoverableGenerationFault{
         try {
             if (path != null) {
             	File file = new File(path);
+                if(!file.exists())
+                    throw new UnrecoverableGenerationFault("file not found "+file.getAbsolutePath());
             	if(file.isDirectory()){
-            		return new DirPackageModule(path);
+            		return new DirPackageModule(path,parentCL);
             	}else if (path.endsWith(".jar") || path.endsWith(".JAR"))
-                    return new JarPackageModule(path, firstmodule);
+                    return new JarPackageModule(path,parentCL,firstmodule);
                 else if (path.endsWith(".war") || path.endsWith(".WAR"))
-                    return new WARPackageModule(path, firstmodule);
+                    return new WARPackageModule(path, parentCL, firstmodule);
                 else if (path.endsWith(".ear") || path.endsWith(".EAR"))
-                    return new EARPackageModule(path, firstmodule);
+                    return new EARPackageModule(path, parentCL, firstmodule);
                 else if(path.endsWith(".xml"))
 					return new DirPackageModule(new File(path));
                 else

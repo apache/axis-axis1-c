@@ -18,8 +18,8 @@ package org.apache.geronimo.ews.ws4j2ee.toWs;
 
 import java.io.File;
 
-import org.apache.axis.components.logger.LogFactory;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.ContextValidator;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 
@@ -94,9 +94,11 @@ public class Ws4J2eeEmitter {
 	}
 	
 	public void executeAnt()throws GenerationFault{
-		org.apache.geronimo.ews.ws4j2ee.utils.AntExecuter executer 
-			= new org.apache.geronimo.ews.ws4j2ee.utils.AntExecuter();
-		executer.execute(wscontext.getMiscInfo().getOutPutPath() + "/build.xml");
+        if(wscontext.getMiscInfo().isCompile()){
+            org.apache.geronimo.ews.ws4j2ee.utils.AntExecuter executer 
+                = new org.apache.geronimo.ews.ws4j2ee.utils.AntExecuter();
+            executer.execute(wscontext.getMiscInfo().getOutPutPath() + "/build.xml");
+        }
 	}
 	
 	public void emmit()throws GenerationFault{

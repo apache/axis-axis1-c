@@ -55,11 +55,11 @@
 
 package org.apache.geronimo.ews.ws4j2ee.toWs.wsdl;
 
-import org.apache.axis.components.logger.LogFactory;
 import org.apache.axis.utils.ClassUtils;
 import org.apache.axis.wsdl.Java2WSDL;
 import org.apache.axis.wsdl.fromJava.Emitter;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.ContextValidator;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.impl.AxisEmitterBasedJaxRpcMapperContext;

@@ -778,5 +778,9 @@ public class Ws4J2eeServerCLOptionParser implements Ws4J2eeDeployContext{
     public void setImplStyle(String string) {
         implStyle = string;
     }
+    
+    public boolean isCompile(){
+        return true;
+    }
 
 }

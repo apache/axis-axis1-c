@@ -54,14 +54,13 @@
  */
 
 package org.apache.geronimo.ews.ws4j2ee.toWs.dd;
-
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
-import org.apache.axis.components.logger.LogFactory;
 import org.apache.axis.wsdl.Java2WSDL;
 import org.apache.axis.wsdl.fromJava.Emitter;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.InputOutputFile;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;

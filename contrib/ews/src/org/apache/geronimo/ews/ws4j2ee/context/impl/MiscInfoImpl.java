@@ -99,6 +99,7 @@ public class MiscInfoImpl implements MiscInfo {
     private String implStyle = GenerationConstants.USE_LOCAL_AND_REMOTE;
     private boolean seiExists = false;
     private Vector classpathelements;
+    private boolean compile = true;
 
     private WSCFHandler[] handlers;
     public MiscInfoImpl() {
@@ -343,6 +344,20 @@ public class MiscInfoImpl implements MiscInfo {
      */
     public void setClassloader(ClassLoader loader) {
         classloader = loader;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isCompile() {
+        return compile;
+    }
+
+    /**
+     * @param b
+     */
+    public void setCompile(boolean b) {
+        compile = b;
     }
 
 }

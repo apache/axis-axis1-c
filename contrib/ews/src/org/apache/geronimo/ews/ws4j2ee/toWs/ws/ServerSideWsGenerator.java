@@ -54,9 +54,9 @@
  */
 package org.apache.geronimo.ews.ws4j2ee.toWs.ws;
 
-import org.apache.axis.components.logger.LogFactory;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.geronimo.ews.jaxrpcmapping.J2eeEmitter;
 import org.apache.geronimo.ews.jaxrpcmapping.JaxRpcMapper;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;

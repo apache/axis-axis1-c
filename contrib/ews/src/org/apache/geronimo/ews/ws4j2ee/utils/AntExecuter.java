@@ -34,8 +34,8 @@ public class AntExecuter{
         try{
 			Class.forName("com.sun.tools.javac.Main");
 			Project project = new Project();
+            project.setCoreLoader(Thread.currentThread().getContextClassLoader());
 			project.init();
-			project.setCoreLoader(null);
 			Ant ant = new Ant();
 			ant.setProject(project);
 			ant.init();

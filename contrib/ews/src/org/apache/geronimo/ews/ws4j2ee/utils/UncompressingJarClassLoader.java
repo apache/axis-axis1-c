@@ -38,13 +38,16 @@ public class UncompressingJarClassLoader {
     private byte[] data = new byte[10 * 1024];
     private Vector urls = new Vector();
     private String dir;
+    private ClassLoader parentCL;
 
     public UncompressingJarClassLoader(
         String dir,
         File jarFile,
         String classpath,
-        String jarpath) {
+        String jarpath,
+		ClassLoader parentCL) {
         try {
+        	this.parentCL = parentCL;
         	dir = dir + "/config"+configCount+"/";
         	this.dir = dir;
 			configCount++;
@@ -62,7 +65,7 @@ public class UncompressingJarClassLoader {
 	            aurls[i] = ((File) urls.get(i)).toURL();
 	            System.out.println(aurls[i]);
 	        }
-	        return new URLClassLoader(aurls,ClassLoader.getSystemClassLoader());
+	        return new URLClassLoader(aurls,parentCL);
 		} catch (Exception e) {
 			throw GenerationFault.createGenerationFault(e);
 		}

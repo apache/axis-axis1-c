@@ -60,8 +60,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.apache.axis.components.logger.LogFactory;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 
 public class Packager {

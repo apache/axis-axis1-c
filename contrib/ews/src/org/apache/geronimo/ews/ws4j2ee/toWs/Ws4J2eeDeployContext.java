@@ -29,4 +29,5 @@ public interface Ws4J2eeDeployContext {
 	public String getContanier();
 	public String getImplStyle();
 	public String getOutPutLocation();
+    public boolean isCompile();
 }

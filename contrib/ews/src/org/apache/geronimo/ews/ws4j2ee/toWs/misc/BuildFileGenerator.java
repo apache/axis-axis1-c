@@ -65,8 +65,8 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import org.apache.axis.components.logger.LogFactory;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.InputOutputFile;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
@@ -164,6 +164,8 @@ public class BuildFileGenerator implements Generator {
 				out.write("			<include name=\"dom4j/**/*.jar\"/>\n");
 				out.write("			<include name=\"jaxb-ri/**/*.jar\"/>\n");
 				out.write("			<include name=\"xerces/**/*.jar\"/>\n");
+                out.write("         <include name=\"ews/**/*.jar\"/>\n");
+                out.write("         <include name=\"openejb/**/*.jar\"/>\n");
 				out.write("		</fileset>\n");
 			}
 			StringTokenizer tok = getClasspathComponets();

@@ -53,8 +53,8 @@
  * <http://www.apache.org/>.
  */package org.apache.geronimo.ews.ws4j2ee.toWs.dd;
 
-import org.apache.axis.components.logger.LogFactory;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;

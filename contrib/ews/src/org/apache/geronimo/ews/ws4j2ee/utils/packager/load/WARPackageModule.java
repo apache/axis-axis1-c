@@ -28,20 +28,26 @@ import org.apache.geronimo.ews.ws4j2ee.utils.UncompressingJarClassLoader;
  */
 public class WARPackageModule extends AbstractPackageModule {
     private UncompressingJarClassLoader cl;
+    private ClassLoader parentCL;
     /**
      * @param jarFile
      * @throws GenerationFault
      */
-    public WARPackageModule(String jarFile, boolean firstmodule)
+    public WARPackageModule(String jarFile,  ClassLoader parentCL,boolean firstmodule)
         throws GenerationFault {
-        super(jarFile);
+        super(jarFile,parentCL);
+        
         if (firstmodule) {
+            if(parentCL == null){
+                parentCL = Thread.currentThread().getContextClassLoader();
+            }
             cl =
                 new UncompressingJarClassLoader(
 					GenerationConstants.CONFIG_STORE,
                     new File(zip.getName()),
                     "WEB-INF/classes",
-                    "WEB-INF/lib");
+                    "WEB-INF/lib",
+					parentCL);
         }
         wscfFile = getInputStreamForJarEntry(jarFile, "WEB-INF/webservice.xml");
         if (wscfFile == null) {
