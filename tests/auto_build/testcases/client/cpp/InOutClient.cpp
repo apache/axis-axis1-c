@@ -39,10 +39,51 @@ int main(int argc, char* argv[])
 		ws.multiParametersNoReturn("Hey dude", 69, (xsd__double)17.19);
 		cout << "multiParametersNoReturn returned" << endl;
 
+		xsd__int_Array intArray;
+		intArray.m_Array = new xsd__int[3];
+		intArray.m_Size = 3;
+		intArray.m_Array[0]=37;
+		intArray.m_Array[1]=0;
+		intArray.m_Array[2]=43;
+
+		xsd__string_Array stringArray;
+		stringArray.m_Array = new xsd__string[3];
+		stringArray.m_Size = 3;
+		stringArray.m_Array[0]="One";
+		stringArray.m_Array[1]="Two";
+		stringArray.m_Array[2]="Three";
+
+		ComplexType1 ct;
+		ct.ctLong = (xsd__long)87654321;
+		ct.ctString = "World";
+		ct.ctIntArray = intArray;
+
+		cout << "multiComplexParametersIntReturn" << endl;
+		int mcpir = ws.multiComplexParametersIntReturn("Hello", &ct, 27, 13.31, stringArray);
+		cout << "multiComplexParametersIntReturn returned " << mcpir << endl;
+
+		stringArray.m_Array[0]="Four";
+		stringArray.m_Array[1]=NULL;
+		stringArray.m_Array[2]="Six";
+
+		ComplexNilType1 cnt;
+		cnt.ctLong = (xsd__long)87654321;
+		cnt.ctString = NULL;
+		cnt.ctIntArray = intArray;
+
+		cout << "multiComplexParametersNilIntReturn" << endl;
+		mcpir = ws.multiComplexParametersNilIntReturn(NULL, &cnt, NULL, NULL, stringArray);
+		cout << "multiComplexParametersNilIntReturn returned " << mcpir << endl;
+
+		/* Commented out as there is a bug in WSDL2Ws.
+		 * AXISCPP-565 is the Jira against this problem.
+         *
 		cout << "noParametersMultiReturn" << endl;
 		ws.noParametersMultiReturn(&moDouble, &moInt, &moString);
 		cout << "noParametersMultiReturn returned " << *moDouble << " " << *moInt << " " << moString << endl;
-
+		 *
+		 * Removed from WSDL for time being.
+		 */
 
         int_in.m_Array = new xsd__int[ARRAYSIZE];
         int_in.m_Size = ARRAYSIZE;
