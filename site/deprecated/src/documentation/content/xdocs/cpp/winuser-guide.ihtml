@@ -118,9 +118,10 @@ project. <br> <br>
 above. <br>
 <br>
 To use WSDL2Ws java tool you have to set the CLASSPATH Environment Variable to
-point to the following jar files in AXIS_EXTRACT\lib\axisjava.
+point to the following latest jar files.<br> <br>
 
-<br>
+<b>Note:</b> The latest jar files are in <a href="http://apache.towardex.com/ws/axis/1_2beta/">http://apache.towardex.com/ws/axis/1_2beta/</a>
+<br> <br>
 
 <br>
 axis.jar
