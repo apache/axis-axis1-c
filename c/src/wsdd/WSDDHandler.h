@@ -89,11 +89,12 @@ public:
 	virtual ~WSDDHandler();
   string GetOption(string sArg);
   void SetOption(string sOption, string Value);
+  virtual map<string, string>* GetOptionList(); 
 
 protected:
 	string m_sName;
 	string m_sLibName;
-	map<string, string> m_Option;
+	map<string, string>* m_Option;
 };
 
 typedef list<WSDDHandler*> WSDDHandlerList;

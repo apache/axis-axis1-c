@@ -64,6 +64,7 @@
 #include "WSDDDocument.h"
 #include <iostream>
 #include <string>
+#include "../common/Debug.h"
 
 #define toString(X) XMLString::transcode(X)
 #define toXMLCh(X) XMLString::transcode(X)
@@ -82,7 +83,11 @@ WSDDDocument::WSDDDocument()
 	tempTr = new WSDDTransport();
 	protocol = APTOTHER;
 	ch = NULL;
-	xch = NULL;
+	//xch = NULL;
+	xchName = NULL;
+	xchValue = NULL;
+	xchType = NULL;
+	svsch = NULL;
 }
 
 WSDDDocument::~WSDDDocument()
@@ -92,7 +97,8 @@ WSDDDocument::~WSDDDocument()
 
 int WSDDDocument::GetDeployment(string& sWSDD, WSDDDeployment * dep)
 {
-	if (SUCCESS != ParseDocument(sWSDD)) return FAIL;
+	if (SUCCESS != ParseDocument(sWSDD)) return FAIL;    
+
 	dep->SetGlobalRequestFlowHandlers(globReqFlowHanList);
 	dep->SetGlobalResponseFlowHandlers(globResFlowHanList);
 	dep->SetServices(svsMap);
@@ -103,12 +109,14 @@ int WSDDDocument::GetDeployment(string& sWSDD, WSDDDeployment * dep)
 
 int WSDDDocument::ParseDocument(string& sWSDD)
 {
-	try 
+	try
 	{
 		SAX2XMLReader * parser = XMLReaderFactory::createXMLReader();
 		parser->setContentHandler(this);
-		parser->setErrorHandler(this);
-		parser->parse(sWSDD.c_str());
+		parser->setErrorHandler(this);     
+    DEBUG1("BEFORE parser->parse(sWSDD.c_str());");
+		parser->parse(sWSDD.c_str());      
+
 	}
 	catch (...)
 	{
@@ -118,11 +126,12 @@ int WSDDDocument::ParseDocument(string& sWSDD)
 }
 
 
-void WSDDDocument::startElement(const XMLCh *const uri, 
-							const XMLCh *const localname, 
-							const XMLCh *const qname, 
+void WSDDDocument::startElement(const XMLCh *const uri,
+							const XMLCh *const localname,
+							const XMLCh *const qname,
 							const Attributes &attrs)
 {
+
 	ch = XMLString::transcode(localname);
 	xchName = toXMLCh("name");
 	xchValue = toXMLCh("value");
@@ -134,15 +143,18 @@ void WSDDDocument::startElement(const XMLCh *const uri,
 		case WSDD_UNKNOWN:
 
 			if(strcmp(ch, "globalConfiguration")==0)
-			{
+			{  
+
 				lev0=WSDD_GLOBCONF;
 			}
 			if(strcmp(ch, "service")==0)
-			{
+			{  
+
 				lev0=WSDD_SERVICE;
 			}
 			if(strcmp(ch, "transport")==0)
-			{
+			{  
+
 				lev0=WSDD_TRANSPORT;
 			}
 			if(lev0==WSDD_UNKNOWN)
@@ -152,83 +164,97 @@ void WSDDDocument::startElement(const XMLCh *const uri,
 		break;
 	}
 
-	
+
 	switch(lev0)
-	{
+	{  
+
 		case WSDD_GLOBCONF:
-			//cout<<"we are in glob conf"<<endl;
+			//cout<<"we are in glob conf"<<endl;  
+
 			if(strcmp(ch, "requestFlow")==0)
 			{
 				globReqFlowHanList = new WSDDHandlerList();
 				lev1=WSDD_REQFLOW;
-			}
+			}  
+
 			if(strcmp(ch, "responseFlow")==0)
 			{
 				globResFlowHanList = new WSDDHandlerList();
 				lev1=WSDD_RESFLOW;
-			}
+			}  
 
-			xch = toXMLCh("type");			
+			//xch = toXMLCh("type");
 			switch(lev1)
 			{
 				case WSDD_REQFLOW:
-					//cout<<"we are in glob conf>requestflow"<<endl;
+					//cout<<"we are in glob conf>requestflow"<<endl;  
+
 					if(strcmp(ch, "handler")==0)
 					{
 						tempHandler = new WSDDHandler();
-						string sLibName = toString(attrs.getValue(xch));
+						string sLibName = toString(attrs.getValue(xchType));
 						tempHandler->SetLibName(sLibName);
 						globReqFlowHanList->push_back(tempHandler);
 						tempHandler = NULL;
-					}
+					}  
+
 				break;
 				case WSDD_RESFLOW:
 					if(strcmp(ch, "handler")==0)
 					{
 						tempHandler = new WSDDHandler();
-						string sLibName = toString(attrs.getValue(xch));
+						string sLibName = toString(attrs.getValue(xchType));
 						tempHandler->SetLibName(sLibName);
 						globResFlowHanList->push_back(tempHandler);
 						tempHandler = NULL;
-					}
+					}  
 
 				break;
 			}
-			REL(&xch);
+
+			//REL(&xch);
 		break;
 
 
-		case WSDD_SERVICE:
+		case WSDD_SERVICE:      
 			if(strcmp(ch, "service")==0)
 			{
+
 				tempService = new WSDDService();
 				string sSrvName = toString(attrs.getValue(xchName));
 				tempService->SetServiceName(sSrvName);
 				(*svsMap)[toString(attrs.getValue(xchName))]=tempService;
 
 				cout<<toString(attrs.getValue(toXMLCh("name")))<<endl;
-			}
+			}  
+
 			//The check for lev1==WSDD_UNKNOWN is necessary because
 			//parameter elements can occur inside handler elements
 			if(strcmp(ch, "parameter")==0 && (lev1==WSDD_UNKNOWN))
 			{
 				lev1=WSDD_PARAM;
-			}
-			if(strcmp(ch, "requestFlow")==0)
+			} 
+
+
+      if(strcmp(ch, "requestFlow")==0)
 			{
 				lev1=WSDD_REQFLOW;
 				tempHandlerList = new WSDDHandlerList();
-			}
-			if(strcmp(ch, "responseFlow")==0)
+			}  
+
+      if(strcmp(ch, "responseFlow")==0)
 			{
 				lev1=WSDD_RESFLOW;
 				tempHandlerList = new WSDDHandlerList();
 			}
-			switch(lev1)
+
+
+      switch(lev1)
 			{
 				case WSDD_PARAM:
 					if(strcmp(svsch, "className")==0)
-					{
+					{ 
+
 						string sLibName = toString(attrs.getValue(xchValue));
 						tempService->SetLibName(sLibName);
 						//cout<<toString(attrs.getValue(toXMLCh("value")))<<" The class name"<<endl;
@@ -237,7 +263,7 @@ void WSDDDocument::startElement(const XMLCh *const uri,
 					{
 						string sLibName = toString(attrs.getValue(xchValue));
 						//cout<<toString(attrs.getValue(toXMLCh("value")))<<" The class name"<<endl;
-						
+
 						char * x = toString(attrs.getValue(xchValue));
 						char * y;
 						if(x)
@@ -248,11 +274,11 @@ void WSDDDocument::startElement(const XMLCh *const uri,
 								string sY = y;
 								tempService->SetAllowedMethod(sY);
 								y=strtok(NULL," ");
-							} 
+							}
 						}
 						REL(&x);
 						delete y;
-						
+
 						x=NULL;
 						y=NULL;
 					}
@@ -274,6 +300,9 @@ void WSDDDocument::startElement(const XMLCh *const uri,
 							{
 								tempHandler->SetOption(toString(attrs.getValue(xchName)),
 														toString(attrs.getValue(xchValue)));
+
+                  DEBUG1("After tempHandler->SetOption");
+
 							}
 						break;
 					}
@@ -287,7 +316,7 @@ void WSDDDocument::startElement(const XMLCh *const uri,
 						string sLibName = toString(attrs.getValue(xchType));
 						tempHandler->SetLibName(sLibName);
 						tempHandlerList->push_back(tempHandler);
-						//tempHandler = NULL;					
+						//tempHandler = NULL;
 					}
 					switch(lev2)
 					{
@@ -302,7 +331,7 @@ void WSDDDocument::startElement(const XMLCh *const uri,
 				break;
 			}
 
-		break;
+		break;  
 
 		case WSDD_TRANSPORT:
 			if(strcmp(ch, "transport")==0)
@@ -356,7 +385,7 @@ void WSDDDocument::startElement(const XMLCh *const uri,
 						tempHandlerList->push_back(tempHandler);
 						tempHandler = NULL;
 					}
-				break;				
+				break;
 
 			}
 
@@ -368,15 +397,16 @@ void WSDDDocument::startElement(const XMLCh *const uri,
 	REL(&xchType);
 	REL(&svsch);
 
-}	
+}
 
-void  WSDDDocument::endElement (const XMLCh *const uri, 
-				  const XMLCh *const localname, 
+void  WSDDDocument::endElement (const XMLCh *const uri,
+				  const XMLCh *const localname,
 				  const XMLCh *const qname)
 {
 	ch = XMLString::transcode(localname);
 	switch (lev0)
-	{
+	{  
+
 		case WSDD_GLOBCONF:
 			if(strcmp(ch, "globalConfiguration")==0)
 			{
@@ -398,7 +428,7 @@ void  WSDDDocument::endElement (const XMLCh *const uri,
 							}
 						break;
 					}
-					
+
 				break;
 				case WSDD_RESFLOW:
 					if(strcmp(ch, "responseFlow")==0)
@@ -423,7 +453,7 @@ void  WSDDDocument::endElement (const XMLCh *const uri,
 			{
 				lev0=WSDD_UNKNOWN;
 			}
-		break;
+		break; 
 
 		case WSDD_SERVICE:
 			if(strcmp(ch, "service")==0)
@@ -462,7 +492,7 @@ void  WSDDDocument::endElement (const XMLCh *const uri,
 								lev2=WSDD_UNKNOWN;
 								tempHandler = NULL;
 							}
-							
+
 						break;
 					}
 				break;
@@ -489,12 +519,12 @@ void  WSDDDocument::endElement (const XMLCh *const uri,
 								lev2=WSDD_UNKNOWN;
 								tempHandler = NULL;
 							}
-							
+
 						break;
 					}
 				break;
 			}
-		break;
+		break;  
 
 		case WSDD_TRANSPORT:
 			if(strcmp(ch, "transport")==0)
@@ -515,22 +545,23 @@ void  WSDDDocument::endElement (const XMLCh *const uri,
 				break;
 
 				case WSDD_RESFLOW:
-					
+
 					if(strcmp(ch, "responseFlow")==0)
 					{
 						tempTr->SetResponseFlowHandlers(protocol, tempHandlerList);
 						tempHandlerList = NULL;
 						lev1=WSDD_UNKNOWN;
 					}
-					
+
 				break;
 			}
 		break;
 	}
 	REL(&ch);
+
 }
 
-void  WSDDDocument::characters (const XMLCh *const chars, 
+void  WSDDDocument::characters (const XMLCh *const chars,
 				  const unsigned int length)
 {
 	//cout<<"==="<<XMLString::transcode(chars)<<"==="<<endl;
