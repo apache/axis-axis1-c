@@ -86,6 +86,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write("static const AxisChar* Axis_TypeName_"+classname+" = \""+type.getName().getLocalPart()+"\";\n\n");
 		writeSerializeGlobalMethod();
 		writeDeSerializeGlobalMethod();
+		writeCreateGlobalMethod();
 		writeDeleteGlobalMethod();
 		writeGetSizeGlobalMethod();
 		}catch(IOException e){
@@ -176,6 +177,12 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		}
 		writer.write("\treturn SUCCESS;\n");
 		writer.write("}\n");
+	}
+	
+	private void writeCreateGlobalMethod()throws IOException{
+		writer.write("void* Axis_Create_"+classname+"(bool bArray = false, int nSize=0)\n{\n");
+		writer.write("\tif (bArray && (nSize > 0))\n\t\treturn new "+classname+"[nSize];\n");
+		writer.write("\telse\n\t\treturn new "+classname+";\n}\n\n");	
 	}
 	
 	private void writeDeleteGlobalMethod()throws IOException{

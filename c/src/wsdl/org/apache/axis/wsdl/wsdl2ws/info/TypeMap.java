@@ -198,8 +198,7 @@ public class TypeMap {
     /* get all the custom types in the typeMap */
     public Collection getTypes() {
         return this.typeInfo.values();
-    }
-	
+    } 
 	
    /**
      * The wsdl support the attributes names that are not allowed by the program langage.
