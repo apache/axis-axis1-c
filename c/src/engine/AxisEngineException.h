@@ -18,23 +18,23 @@
  *
  */
  
-#ifndef __AXISCONFIGEXCEPTION_H_OF_AXIS_INCLUDED_
-#define __AXISCONFIGEXCEPTION_H_OF_AXIS_INCLUDED_
+#ifndef __AXISENGINEEXCEPTION_H_OF_AXIS_INCLUDED_
+#define __AXISENGINEEXCEPTION_H_OF_AXIS_INCLUDED_
 
 #include <string>
 #include <exception>
 #include <axis/server/AxisException.h>
 using namespace std;
 
-class AxisConfigException :public AxisException
+class AxisEngineException :public AxisException
 {
 
 public:
-    AxisConfigException();
-    AxisConfigException(int iExceptionCode);
-    AxisConfigException(exception* e);
-    AxisConfigException(exception* e, int iExceptionCode);
-    virtual ~AxisConfigException() throw();
+    AxisEngineException();
+    AxisEngineException(int iExceptionCode);
+    AxisEngineException(exception* e);
+    AxisEngineException(exception* e, int iExceptionCode);
+    virtual ~AxisEngineException() throw();
     const char* what() throw();
     const int getExceptionCode();
     const string getMessage(exception* e);
@@ -43,7 +43,7 @@ public:
 private:
     void processException(exception* e);
     void processException(exception* e, int iExceptionCode);
-    void processException(int iExceptionCode);
+    void processException(int e);
     string m_sMessage;
     int m_iExceptionCode;
 };

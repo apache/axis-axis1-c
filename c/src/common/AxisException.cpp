@@ -49,12 +49,12 @@ void AxisException::processException (exception* e)
     m_sMessage = getMessage (e);
 }
 
-void AxisException::processException (int iExceptionCode)
+void AxisException::processException(int iExceptionCode)
 {
     m_sMessage = getMessage (iExceptionCode);
 }
 
-string AxisException::getMessage (exception* objException)
+const string AxisException::getMessage (exception* objException)
 {
     string sMessage = objException->what();
     /* to do */
@@ -86,7 +86,7 @@ string AxisException::getMessage (exception* objException)
     return sMessage;
 }
 
-string AxisException::getMessage (int iExceptionCode)
+const string AxisException::getMessage (int iExceptionCode)
 {
     string sMessage;
     switch(iExceptionCode)
@@ -189,7 +189,7 @@ AxisException::~AxisException() throw ()
 
 }
 
-const char* AxisException::what() const throw ()
+const char* AxisException::what() throw ()
 {
     return m_sMessage.c_str ();
 }

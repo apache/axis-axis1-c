@@ -29,12 +29,23 @@ using namespace std;
 class AxisWsddException :public AxisException
 {
 
-  public:
-  AxisWsddException();
-  AxisWsddException(int exceptionCode);
-  AxisWsddException(exception* e);
-  AxisWsddException(exception* e, int exceptionCode);
-  virtual ~AxisWsddException() throw();
+public:
+    AxisWsddException();
+    AxisWsddException(int iExceptionCode);
+    AxisWsddException(exception* e);
+    AxisWsddException(exception* e, int iExceptionCode);
+    virtual ~AxisWsddException() throw();
+    const char* what() throw();
+    const int getExceptionCode();
+    const string getMessage(exception* e);
+    const string getMessage(int iExceptionCode);
+                                                                                                                             
+private:
+    void processException(exception* e);
+    void processException(exception* e, int iExceptionCode);
+    void processException(int iExceptionCode);
+    string m_sMessage;
+    int m_iExceptionCode;
 };
 
 #endif
