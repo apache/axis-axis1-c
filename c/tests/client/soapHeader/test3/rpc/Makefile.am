@@ -3,5 +3,5 @@ SUBDIRS =
 AM_CPPFLAGS = $(CPPFLAGS)
 soapHeaderTest3RPC_SOURCES = TestClient.cpp  ../../gen_src/rpc/InteropTestPortType.cpp ../../gen_src/rpc/SOAPStruct.cpp ../../gen_src/rpc/AxisClientException.cpp
 
-soapHeaderTest3RPC_LDADD   =  $(LDFLAGS) -laxiscpp_client
+soapHeaderTest3RPC_LDADD   =  @LINKCLIENTLIB@
 INCLUDES = -I$(AXISCPP_HOME)/include
