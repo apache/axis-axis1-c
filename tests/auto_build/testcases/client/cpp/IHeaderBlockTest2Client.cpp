@@ -27,8 +27,10 @@ int main(int argc, char* argv[])
 		const AxisChar *prefix="np";
 		const AxisChar *uri="http://axis.apache.com";
 		IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader","http://apache.org/");
-		phb->setPrefix(prefix);
-		phb->setURI(uri);		
+		cout<<phb->setPrefix(NULL)<<endl;
+		cout<<phb->setPrefix(prefix)<<endl;
+		cout<<phb->setURI(NULL)<<endl;
+		cout<<phb->setURI(uri)<<endl;		
 		if (strcmp(op, "add") == 0)
 		{
 			iResult=ws.add(i1, i2);	

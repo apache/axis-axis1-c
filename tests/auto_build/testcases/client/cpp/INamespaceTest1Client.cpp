@@ -25,12 +25,14 @@ int main(int argc, char* argv[])
 		const AxisChar *uri="http://axis.apache.org";
 		IHeaderBlock *phb=ws.createSOAPHeaderBlock("TestHeader","http://apache.org","ns");
 		INamespace *nsp=phb->createNamespaceDecl("ns1","http://axis.org");
-		nsp->setURI(uri);
-		nsp->setPrefix(pf);
+		cout <<nsp->setURI(NULL)<<endl;
+		cout <<nsp->setURI(uri)<<endl;
+		cout <<nsp->setPrefix(NULL)<<endl;
+		cout <<nsp->setPrefix(pf)<<endl;
 		const AxisChar *p=nsp->getPrefix();
 		const AxisChar *u=nsp->getURI();
-		cout << "Prefix = " << p;
-		cout << endl << "Uri    = " << u;
+		cout << "Prefix = " << p << endl;
+		cout << "Uri    = " << u << endl;
 		op = "add";
 		i1 = 2;
 		i2 = 3;
@@ -38,7 +40,7 @@ int main(int argc, char* argv[])
 		if (strcmp(op, "add") == 0)
 		{
 			iResult = ws.add(i1, i2);
-			cout << endl << iResult << endl;
+			cout << iResult << endl;
 		}
 	}
 	catch(AxisException& e)

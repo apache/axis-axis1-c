@@ -26,21 +26,27 @@ int main(int argc, char* argv[])
 		i2 = 3; 
 		IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader","http://ws.apache.org/");
 		IAttribute *attr = phb->createStdAttribute(ACTOR,SOAP_VER_1_1);
+		cout << attr->getLocalName() << " = " << attr->getValue()<<endl;
 		iResult=ws.add(i1, i2);	
 		cout << iResult << endl;
 		Calculator ws1(endpoint);
 		IHeaderBlock *phb1 = ws1.createSOAPHeaderBlock("TestHeader","http://ws.apache.org/");
 		IAttribute *attr1 = phb1->createStdAttribute(MUST_UNDERSTAND_TRUE,SOAP_VER_1_1);
+		IAttribute *attr1a= phb1->createStdAttribute(MUST_UNDERSTAND_TRUE,SOAP_VER_1_1);
+		cout << attr1->getLocalName() << " = " << attr1->getValue()<<endl;
 		iResult=ws1.add(i1, i2);	
 		cout << iResult << endl;
 		Calculator ws2(endpoint);
 		IHeaderBlock *phb2 = ws2.createSOAPHeaderBlock("TestHeader","http://ws.apache.org/");
 		IAttribute *attr2 = phb2->createStdAttribute(MUST_UNDERSTAND_FALSE,SOAP_VER_1_1);
+		cout << attr2->getLocalName() << " = " << attr2->getValue()<<endl;
 		iResult=ws2.add(i1, i2);	
 		cout << iResult << endl;
 		Calculator ws3(endpoint);
 		IHeaderBlock *phb3 = ws3.createSOAPHeaderBlock("TestHeader","http://ws.apache.org/");
 		IAttribute *attr3 = phb3->createStdAttribute(ROLE_NEXT,SOAP_VER_1_1);
+		if(attr3==NULL)
+		  cout << "Null returned for non supporting standard attribute " << endl;
 		iResult=ws3.add(i1, i2);	
 		cout << iResult << endl;
 	}

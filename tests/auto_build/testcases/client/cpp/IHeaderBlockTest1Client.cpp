@@ -24,15 +24,17 @@ int main(int argc, char* argv[])
 		op = "add";
 		i1 = 2;
 		i2 = 3; 
-		IHeaderBlock *phb = ws.createSOAPHeaderBlock("Test","http://ws.apache.org/axisCppTest/");		
-		phb->setLocalName(localname);		
+		IHeaderBlock *phb = ws.createSOAPHeaderBlock("Test","http://ws.apache.org/axisCppTest/");
+		cout<<phb->setLocalName(NULL)<<endl;
+		cout<<phb->getLocalName()<<endl;
+		cout<<phb->setLocalName(localname)<<endl;		
 		IHeaderBlock *fhb=ws.getFirstSOAPHeaderBlock();	
 		localname=fhb->getLocalName();
-		cout << endl << "Local Name is " << localname;
+		cout << "Local Name is " << localname << endl;
 		if (strcmp(op, "add") == 0)
 		{
 			iResult=ws.add(i1, i2);			
-			cout << endl << iResult << endl;
+			cout << iResult << endl;
 		}
 		
 	}

@@ -25,19 +25,20 @@ int main(int argc, char* argv[])
 		IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader","http://ws.apache.org/","ns");
 		INamespace *nsp=phb->createNamespaceDecl("nsp","http://apache.com");
 		IAttribute *attr1=phb->createAttribute("Name","nsp","axis");
-		attr1->setURI(uri);
+		cout<<attr1->setURI(NULL)<<endl;
+		cout<<attr1->setURI(uri)<<endl;
 		BasicNode *bn=phb->createImmediateChild(ELEMENT_NODE,"Project","","","");
 		IAttribute *attr2=bn->createAttribute("TYPE","OPEN SOURCE");
 		attr2->setURI(uri);
-		cout << endl << "Header Attribute Uri = " << attr1->getURI();
-		cout << endl << "Child Node Attribute Uri = " << attr2->getURI();
+		cout << "Header Attribute Uri = " << attr1->getURI()<<endl;
+		cout << "Child Node Attribute Uri = " << attr2->getURI()<<endl;
 		op = "add";
 		i1 = 2;
 		i2 = 3;
 		if (strcmp(op, "add") == 0)
 		{
 			iResult = ws.add(i1, i2);
-			cout << endl << iResult << endl;
+			cout << iResult << endl;
 
 		}
 

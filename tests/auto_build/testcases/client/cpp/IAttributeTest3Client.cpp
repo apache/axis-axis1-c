@@ -24,19 +24,21 @@ int main(int argc, char* argv[])
 		const char *Value="AXIS";
 		IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader","http://ws.apache.org/","ns");
 		IAttribute *attr1=phb->createAttribute("Name","ns","axis");
-		attr1->setValue(Value);
+		/*Tests for NULL Value */
+		cout << attr1->setValue(NULL) << endl;
+		cout << attr1->setValue(Value)<< endl;
 		BasicNode *bn=phb->createImmediateChild(ELEMENT_NODE,"Project","","","");
 		IAttribute *attr2=bn->createAttribute("TYPE","OPEN SOURCE");
 		attr2->setValue("Open Source");
-		cout << endl << "Header Attribute Value = " << attr1->getValue();
-		cout << endl << "Child Node Attribute Value = " << attr2->getValue();
+		cout << "Header Attribute Value = " << attr1->getValue()<< endl;
+		cout << "Child Node Attribute Value = " << attr2->getValue()<<endl;
 		op = "add";
 		i1 = 2;
 		i2 = 3;
 		if (strcmp(op, "add") == 0)
 		{
 			iResult = ws.add(i1, i2);
-			cout << endl << iResult << endl;
+			cout << iResult << endl;
 		}
 
 	}

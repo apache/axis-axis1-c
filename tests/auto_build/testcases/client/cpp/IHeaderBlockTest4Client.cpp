@@ -29,7 +29,12 @@ int main(int argc, char* argv[])
 		AxisChar *prefix="np";
 		AxisChar *uri="http://ws.apache.org/";
 		IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader","http://ws.apache.org/");		
-		BasicNode * Bnode1=phb->createChild(ELEMENT_NODE,localname,prefix,uri, NULL);		
+		BasicNode * Bnode1=phb->createChild(ELEMENT_NODE,localname,prefix,uri, NULL);
+		/*Passing NULL as argument*/
+		if(phb->createChild(ELEMENT_NODE,NULL,NULL,NULL, NULL))
+			cout<<"NULL Returned for Element_node"<<endl;
+		if(phb->createChild(CHARACTER_NODE,NULL,NULL,NULL, NULL))
+			cout<<"NULL Returned for Character_node"<<endl;
 		BasicNode * Bnode2=phb->createChild(CHARACTER_NODE,NULL,NULL,NULL,"APACHE");
 		BasicNode * Bnode3=phb->createChild(ELEMENT_NODE,"FirstPart","np1","http://ws.apache.org/", NULL);
 		BasicNode * Bnode4=phb->createChild(ELEMENT_NODE,"LastPart","","http://ws.apache.org/", NULL);
@@ -37,7 +42,7 @@ int main(int argc, char* argv[])
 		BasicNode * Bnode6=phb->createChild(ELEMENT_NODE);
 		Bnode6->setLocalName("Project");
 		IAttribute *a=Bnode6->createAttribute("Type","Open Source");
-			cout << "Project Type=" << a->getValue();
+			cout << "Project Type=" << a->getValue() << endl;
 		BasicNode * Bnode7=phb->createChild(CHARACTER_NODE);
 		Bnode7->setValue("AXISCPP");
         BasicNode * Bnode4a=phb->createChild(ELEMENT_NODE,"LastPartChild","","http://ws.apache.org/", NULL);
@@ -49,20 +54,23 @@ int main(int argc, char* argv[])
 		Bnode1->addChild(Bnode4);
 		phb->addChild(Bnode1);
 		phb->addChild(Bnode6);
-		BasicNode * Bnode8=phb->createChild(CHARACTER_NODE,"","","","This is a test message");
-		phb->addChild(Bnode8);
-		cout << endl << "No Of Children = " << phb->getNoOfChildren();
+		BasicNode * Bnode8=phb->createChild(CHARACTER_NODE,"","","","This is a test message ");
+		cout << phb->addChild(Bnode8)<<endl;
+		cout<<"AddChild returned "<< phb->addChild(NULL) << " For NULL Value "<< endl;
+		cout << "No Of Children = " << phb->getNoOfChildren()<<endl;
 	    BasicNode * firstnode=phb->getFirstChild();
-		cout << endl << "First Node Name = " << firstnode->getLocalName();
+		cout << "First Node Name = " << firstnode->getLocalName() << endl;
 		BasicNode * secondnode=phb->getChild(2);
 		BasicNode *childnode=secondnode->getFirstChild();
-		cout << endl << "Second Node Name=" << secondnode->getLocalName() << " Value = " << childnode->getValue();
+		cout << "Second Node Name=" << secondnode->getLocalName() << " Value = " << childnode->getValue()<< endl ;
+		cout << "Second Node Type = " << secondnode->getNodeType() << endl;
 		BasicNode * lastnode=phb->getLastChild();
-		cout << endl << "Last Node Value = " << lastnode->getValue();
+		cout  << "Last Node Value = " << lastnode->getValue() << endl;
+		cout  << "Last Node Type = " << lastnode->getNodeType() << endl;
         if (strcmp(op, "add") == 0)
 		{
 			iResult=ws.add(i1, i2);			
-			cout << endl << iResult << endl;
+			cout  << iResult << endl;
 		}
 	    
 	}

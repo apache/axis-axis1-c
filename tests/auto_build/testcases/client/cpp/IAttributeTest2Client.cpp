@@ -23,19 +23,22 @@ int main(int argc, char* argv[])
 		const char *prefix="nsp";
 		IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader","http://ws.apache.org/","nsp");
 		IAttribute *attr1=phb->createAttribute("Name","ns","AXIS");
-		attr1->setPrefix(prefix);
+		/* Tests for NULL Value */
+		cout<<attr1->setPrefix(NULL)<<endl;
+		cout<<attr1->setPrefix(prefix)<<endl;
 		BasicNode *bn=phb->createImmediateChild(ELEMENT_NODE,"Project","","","");
 		IAttribute *attr2=bn->createAttribute("TYPE","Open Source");
-		attr2->setPrefix(prefix);
-		cout << endl << "Header Attribute Prefix = " << attr1->getPrefix();
-		cout << endl << "Child Node Attribute Prefix = " << attr2->getPrefix();
+		/* Tests for non declared namespace prefix */
+		cout<<attr2->setPrefix("nd")<<endl;
+		cout << "Header Attribute Prefix = " << attr1->getPrefix()<<endl;
+		cout << "Child Node Attribute Prefix = " << attr2->getPrefix()<<endl;
 		op = "add";
 		i1 = 2;
 		i2 = 3;
 		if (strcmp(op, "add") == 0)
 		{
 			iResult = ws.add(i1, i2);
-			cout << endl << iResult << endl;
+			cout  << iResult << endl;
 		}
 	}
 	catch(AxisException& e)
