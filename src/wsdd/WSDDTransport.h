@@ -81,6 +81,7 @@ public:
 	const WSDDHandlerList* GetRequestFlowHandlers(AXIS_PROTOCOL_TYPE Protocol);
 	WSDDTransport();
 	virtual ~WSDDTransport();
+	int UpdateWSDD(FILE* wsddfile, int tabcount);
 private:
 	map<AXIS_PROTOCOL_TYPE, WSDDHandlerList>* m_RequestHandlers;
 	map<AXIS_PROTOCOL_TYPE, WSDDHandlerList>* m_ResponseHandlers;
