@@ -126,6 +126,7 @@ extern "C" int process_request(Ax_soapstream *str)
 						send_response_bytes("</tr>", str->str.op_stream);
 					}
 					send_response_bytes("</table></body></html>", str->str.op_stream);
+					Status = SUCCESS;
 				}
 				else 
 				{
@@ -134,6 +135,7 @@ extern "C" int process_request(Ax_soapstream *str)
 					if((WsddFile = fopen(sServiceName.c_str(),"r"))==NULL)
 					{
 						send_response_bytes("<h3>Url not available</h3>", str->str.op_stream);
+						Status = SUCCESS;
 						//handle the error
 					}
 					else
@@ -160,10 +162,12 @@ extern "C" int process_request(Ax_soapstream *str)
 
 extern "C" int initialize_module()
 {
+	DEBUG1("inside initialize_module\n");
 	TypeMapping::Initialize();
 	URIMapping::Initialize();
 	SoapFault::initialize();
 	XMLPlatformUtils::Initialize();
+	ModuleInitialize();
 	string ConfFile = WSDDFILEPATH;
 	if (SUCCESS != g_WSDDDeployment.LoadWSDD(ConfFile)) return FAIL;
 	return SUCCESS;

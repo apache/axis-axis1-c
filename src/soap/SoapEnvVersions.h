@@ -68,6 +68,8 @@
 #ifndef __SOAPENVVERSIONS_H_INCLUDED___
 #define __SOAPENVVERSIONS_H_INCLUDED___
 
+#include "Attribute.h"
+
 /*
  *Here SKW stands for SoapKeyWord. This is a internal naming convension
  * for Axis C++.
@@ -100,6 +102,9 @@ struct SoapEnvVersionsStruct {
 	char* pchEnvelopeNamespaceUri;
 	char* pchEnvelopePrefix;
 	char* pcharWords[SOAP_WORDS_LAST];
+	const Attribute* pEnv;
+	const Attribute* pXsi;
+	const Attribute* pXsd;
 };
 
 static SoapEnvVersionsStruct g_sObjSoapEnvVersionsStruct[VERSION_LAST]=
@@ -121,7 +126,11 @@ static SoapEnvVersionsStruct g_sObjSoapEnvVersionsStruct[VERSION_LAST]=
 /*SKW_FAULT_ACTOR*/		"faultactor",
 /*SKW_DETAIL*/			"detail",
 /*SKW_MULTIREF*/		"multiRef"
-			} 
+			},
+			//attributes for soap 1.1 envelope
+			new Attribute("SOAP-ENV","xmlns","","http://schemas.xmlsoap.org/soap/envelope/"),
+			new Attribute("xsi","xmlns","","http://www.w3.org/2001/XMLSchema-instance"),
+			new Attribute("xsd","xmlns","","http://www.w3.org/2001/XMLSchema"),
 		},
 
 		//SOAP_VER_1_2
@@ -141,8 +150,11 @@ static SoapEnvVersionsStruct g_sObjSoapEnvVersionsStruct[VERSION_LAST]=
 /*SKW_FAULT_ACTOR*/		"Role",
 /*SKW_DETAIL*/			"Detail",
 /*SKW_MULTIREF*/		"multiRef"
-			} 
+			},
+			//attributes for soap 1.2 envelope
+			new Attribute("env","xmlns","","http://www.w3.org/2003/05/soap-envelope"),
+			new Attribute("xsi","xmlns","","http://www.w3.org/2001/XMLSchema-instance"),
+			new Attribute("xsd","xmlns","","http://www.w3.org/2001/XMLSchema"),
 		}
 	};	
-
 #endif //__SOAPENVVERSIONS_H_INCLUDED___

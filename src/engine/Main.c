@@ -197,20 +197,20 @@ int main()
 	printf("soap request :\n %s\n", ip);
 
 	initialize_module();
-	for (xx =0; xx < 100 ; xx++)
+	for (xx =0; xx < 1000 ; xx++)
 		process_request(str);	
 
 	return 0;
 }
 
-int send_response_bytes(char * res, void* pOutputStream) {
-
+int send_response_bytes(const char * res, void* pOutputStream) 
+{
 //	printf("sending SOAP response : \n%s\n", res);
 	return 0;
 }
 
-int get_request_bytes(char * req, int reqsize, int* retsize) {
-
+int get_request_bytes(char * req, int reqsize, int* retsize) 
+{
 	req[0]= '\0';
 	strcat(req, ip);
 //	printf("strlen(ip)%d", strlen(ip));
@@ -218,7 +218,7 @@ int get_request_bytes(char * req, int reqsize, int* retsize) {
 	return 0;
 }
 
-int send_transport_information(Ax_soapstream* sSoapstream) {
-
+int send_transport_information(Ax_soapstream* sSoapstream) 
+{
 	return 0;
 }

@@ -77,6 +77,8 @@
 #include "../common/BasicTypeSerializer.h"
 #include "SoapEnvVersions.h"
 
+#define SERIALIZE_BUFFER_SIZE 1024
+
 class SoapEnvelope;
 class SoapHeader;
 class SoapMethod;
@@ -91,7 +93,7 @@ private:
 	char cCounter[64];
 	SoapEnvelope* m_pSoapEnvelope;	
 	int m_iSoapVersion;
-	char m_cSerializedBuffer[1024];
+	char m_cSerializedBuffer[SERIALIZE_BUFFER_SIZE];
 	int m_iCurrentSerBufferSize;
 public:
 	ISoapMethod* createSoapMethod();	
