@@ -93,6 +93,7 @@ public:
 	int AXISCALL GetType(){return CHAIN_HANDLER;};
 	int AXISCALL Init();
 	int AXISCALL Fini();
+	AXIS_BINDING_STYLE AXISCALL GetBindingStyle(){ return RPC_ENCODED;}; /* this is never called */
 
 private:
 	list<ChainItem> m_HandlerList;

@@ -78,8 +78,9 @@
 #include <string>
 #include <map>
 
-#include <axis/soap/SoapFaults.h>
+#include <axis/soap/SoapFault.h>
 #include <axis/soap/URIMapping.h>
+#include <axis/soap/SoapKeywordMapping.h>
 #include <axis/engine/HandlerLoader.h>
 #include <axis/engine/AppScopeHandlerPool.h>
 #include <axis/engine/RequestScopeHandlerPool.h>

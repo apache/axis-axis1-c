@@ -74,7 +74,7 @@ public:
 	IArrayBean(){};
 	virtual ~IArrayBean(){};
 	//API needed for the Wrapper class to manipulate ArrayBeans
-	virtual void AddDimension(int nDim)=0;
+	virtual void SetDimension(int nDim)=0;
 	virtual void SetItemName(const AxisChar* sName)=0;
 	virtual void SetTypeName(const AxisChar* sName)=0;
 	virtual void SetUri(const AxisChar* sURI)=0;

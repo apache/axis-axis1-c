@@ -76,39 +76,26 @@ class IDeployerUtils;
 #include "IWrapperSoapDeSerializer.h"
 #include "IWrapperSoapSerializer.h"
 
-#ifdef __cplusplus
+typedef struct {
+	const AxisChar* (AXISCALL* GetOperationName)(void* pObj);
+	void (AXISCALL* GetSoapSerializer)(void* pObj, IWrapperSoapSerializer** pIWSS);
+	void (AXISCALL* GetSoapDeSerializer)(void* pObj, IWrapperSoapDeSerializer** pIWSDS);
+} IMessageDataFunctions;
 
-class IMessageDataBase
-{
-public:
-    virtual ~IMessageDataBase(){};
-#else
+#ifndef __cplusplus
 
-typedef struct IMessageDataTag
-{
-	void* __vfptr;
+typedef struct { 
+	void* unused; /* this corresponds to C++ virtual function pointer which is ignored in C */ 
+	IMessageDataFunctions* __vfptr;
 } IMessageData;
 
-typedef struct IMessageDataXTag
-{
-	AXISDESTRUCTOR
-
-#endif
-	
-	virtual void AXISAPI(getSoapSerializer,(APIHASPARAMS IWrapperSoapSerializer** pIWSS))
-	virtual void AXISAPI(getSoapDeSerializer,(APIHASPARAMS IWrapperSoapDeSerializer** pIWSDS))
-
-#ifdef __cplusplus
-};
 #else
-} IMessageDataX;
-#endif
 
-#ifdef __cplusplus
-
-class IMessageData : public IMessageDataBase
+class IMessageData
 {
 	friend class CPP_DeploymentWrapper;
+protected:
+	void* __vfptr;
 public:
     virtual ~IMessageData(){};
 private:
@@ -116,8 +103,9 @@ private:
 public:
 	virtual int setProperty(string& sName, string& sValue)=0;
 	virtual string& getProperty(string& sName)=0;
-	virtual void AXISCALL getSoapSerializer(IWrapperSoapSerializer** pIWSS)=0;
-	virtual void AXISCALL getSoapDeSerializer(IWrapperSoapDeSerializer** pIWSDS)=0;
+	virtual const AxisChar* AXISCALL GetOperationName()=0;
+	virtual void AXISCALL GetSoapSerializer(IWrapperSoapSerializer** pIWSS)=0;
+	virtual void AXISCALL GetSoapDeSerializer(IWrapperSoapDeSerializer** pIWSDS)=0;
 	virtual void getSoapSerializer(IHandlerSoapSerializer** pIHandlerSoapSerializer)=0;
 	virtual void getSoapDeSerializer(IHandlerSoapDeSerializer** pIHandlerSoapDeSerializer)=0;
 	virtual void SetUserName(string& m_sUserName)=0;
@@ -126,10 +114,26 @@ public:
 	virtual const WSDDService* GetService() = 0; 
 	virtual bool isPastPivot()=0;
 	virtual int setPastPivotState(bool bState)=0;
-protected:
-  string m_sUserName;  
+
+	/* following stuff is needed to provide the interface for C web services */
+public:
+	static IMessageDataFunctions ms_VFtable;
+	static const AxisChar* AXISCALL s_GetOperationName(void* pObj) 
+	{ return ((IMessageData*)pObj)->GetOperationName();};
+	static void AXISCALL s_GetSoapSerializer(void* pObj, IWrapperSoapSerializer** pIWSS)
+	{ ((IMessageData*)pObj)->GetSoapSerializer(pIWSS);};
+	static void AXISCALL s_GetSoapDeSerializer(void* pObj, IWrapperSoapDeSerializer** pIWSDS)
+	{ ((IMessageData*)pObj)->GetSoapDeSerializer(pIWSDS);};
+	static void s_Initialize()
+	{
+		ms_VFtable.GetOperationName = s_GetOperationName;
+		ms_VFtable.GetSoapSerializer = s_GetSoapSerializer;
+		ms_VFtable.GetSoapDeSerializer = s_GetSoapDeSerializer;
+	}
 };
+
 #endif
+
 #endif /* !defined(AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_) */
 
 

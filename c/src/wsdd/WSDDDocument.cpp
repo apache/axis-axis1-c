@@ -139,7 +139,7 @@ int WSDDDocument::ParseDocument(const AxisChar* sWSDD)
 void  WSDDDocument::endElement (const XMLCh *qname)
 {
 	QName qn;
-	qn.SplitQNameString(qname);
+	qn.SplitQNameString(qname,NAMESPACESEPARATOR);
 	if (0 != strcmp(qn.localname, kw_param)) //just neglect endElement of parameter
 	{
 		if (m_lev1 == WSDD_UNKNOWN) //not inside a requestFlow or responseFlow elements
@@ -219,7 +219,7 @@ void  WSDDDocument::endElement (const XMLCh *qname)
 			}						
 		}
 	}
-	qn.MergeQNameString();
+	qn.MergeQNameString(NAMESPACESEPARATOR);
 }
 
 void WSDDDocument::ProcessAttributes(WSDDLevels ElementType, const XMLCh **attrs)
@@ -228,7 +228,7 @@ void WSDDDocument::ProcessAttributes(WSDDLevels ElementType, const XMLCh **attrs
 	const XMLCh* value;
 	for (int i = 0; attrs[i]; i += 2) 
 	{
-		qn.SplitQNameString(attrs[i]);
+		qn.SplitQNameString(attrs[i],NAMESPACESEPARATOR);
 		value = attrs[i+1];
 		switch(ElementType)
 		{
@@ -309,7 +309,7 @@ void WSDDDocument::ProcessAttributes(WSDDLevels ElementType, const XMLCh **attrs
 			break;
         default:;
 		}
-		qn.MergeQNameString();
+		qn.MergeQNameString(NAMESPACESEPARATOR);
 	}
 }
 
@@ -321,7 +321,7 @@ void WSDDDocument::GetParameters(WSDDLevels ElementType, const XMLCh **attrs)
 	const XMLCh* name;
 	for (int i = 0; attrs[i]; i += 2) 
 	{
-		qn.SplitQNameString(attrs[i]);
+		qn.SplitQNameString(attrs[i],NAMESPACESEPARATOR);
 		value = attrs[i+1];
 		if (0 == strcmp(qn.localname, kw_name))
 		{
@@ -335,7 +335,7 @@ void WSDDDocument::GetParameters(WSDDLevels ElementType, const XMLCh **attrs)
 		{
 			type = value;
 		}
-		qn.MergeQNameString();
+		qn.MergeQNameString(NAMESPACESEPARATOR);
 	}
 
 	switch(ElementType)
@@ -425,7 +425,7 @@ void WSDDDocument::AddAllowedMethodsToService(const AxisXMLCh* value)
 void WSDDDocument::startElement(const XMLCh *qname,const XMLCh **attrs)
 {
 	QName qn;
-	qn.SplitQNameString(qname);
+	qn.SplitQNameString(qname,NAMESPACESEPARATOR);
 	if (m_lev1 == WSDD_UNKNOWN) //not inside a requestFlow or responseFlow elements
 	{
 		switch(m_lev0)
@@ -557,7 +557,7 @@ void WSDDDocument::startElement(const XMLCh *qname,const XMLCh **attrs)
 			//error : unknown element type in wsdd file
 		}
 	}
-	qn.MergeQNameString();
+	qn.MergeQNameString(NAMESPACESEPARATOR);
 }
 
 void WSDDDocument::startPrefixMapping(const XMLCh *prefix, const XMLCh *uri)

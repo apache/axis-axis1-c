@@ -64,27 +64,32 @@
 // SoapDeSerializer.cpp: implementation of the SoapDeSerializer class.
 //
 //////////////////////////////////////////////////////////////////////
+#include <axis/soap/SoapDeSerializer.h>
 #include <axis/soap/SoapEnvelope.h>
+#include <axis/soap/SoapKeywordMapping.h>
+#include <axis/soap/URIMapping.h>
 #include <axis/soap/SoapHeader.h>
 #include <axis/soap/SoapMethod.h>
 #include <axis/soap/SoapBody.h>
 #include <axis/soap/SoapFault.h>
-#include <axis/soap/SoapDeSerializer.h>
 #include <axis/common/GDefine.h>
 #include <axis/common/Packet.h>
 
 #include <axis/common/AxisTrace.h>
 
+#define INITIAL_ARRAY_SIZE 4
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
+IWrapperSoapDeSerializerFunctions SoapDeSerializer::ms_VFtable;
 
 SoapDeSerializer::SoapDeSerializer()
 {
-	m_pInputStream = NULL;
-	m_pLastArrayParam = NULL;
-	m_pParser = new SoapParser();
+	__vfptr = &ms_VFtable;
+	m_pParser = new SoapParserExpat();
+	m_pEnv = NULL;
+	m_pHeader = NULL;
 }
 
 SoapDeSerializer::~SoapDeSerializer()
@@ -95,372 +100,1628 @@ SoapDeSerializer::~SoapDeSerializer()
 
 int SoapDeSerializer::SetInputStream(const Ax_soapstream* pInputStream)
 {
-	int nStatus;
-	m_pInputStream = pInputStream;
-	int nChars = 0;
-	if (NULL != m_pInputStream->transport.pGetFunct)
-	{
-		do {
-			nStatus = m_pInputStream->transport.pGetFunct(&m_pCurrentBuffer, &nChars, m_pInputStream);
-			if ((nChars > 0) && m_pCurrentBuffer)
-				m_pParser->Parse(m_pCurrentBuffer, nChars);
-			m_pInputStream->transport.pRelBufFunct(m_pCurrentBuffer, m_pInputStream);
-		} while (TRANSPORT_IN_PROGRESS == nStatus);
-		m_pParser->ParseEnd();
-	}
-	return AXIS_SUCCESS;
+	if ((NULL == pInputStream->transport.pGetFunct) ||
+		(NULL == pInputStream->transport.pRelBufFunct))
+		return AXIS_FAIL;
+	return m_pParser->SetInputStream(pInputStream);
 }
 
 SoapEnvelope* SoapDeSerializer::GetEnvelope()
 {
+	Attribute *pAttr = NULL;
     AXISTRACE1("SoapDeSerializer::GetEnvelope");
-	return m_pParser->m_pEnv;
-}
-
-ISoapHeader* SoapDeSerializer::GetHeader()
-{
-	//actually here a dynamic cast is not needed. But it is
-	// done for safe side, incase SoapHeader derives from 
-	// more that one interface and the deriving order changes.
-	return static_cast<ISoapHeader*>(m_pParser->m_pHead);
-}
-
-SoapBody* SoapDeSerializer::GetBody()
-{
-    AXISTRACE1("SoapDeSerializer::GetBody");
-	return m_pParser->m_pBody;
-}
-
-SoapMethod* SoapDeSerializer::GetMethod()
-{
-    AXISTRACE1("SoapDeSerializer::GetMethod");
-	return m_pParser->m_pMethod;
-}
-
-SoapFault* SoapDeSerializer::GetFault()
-{
-	return m_pParser->m_pFault;
-}
-
-//this function is more usefull with XMLpull parser
-int SoapDeSerializer::Deserialize(IParam* pIParam, int bHref)
-{
-	Param* pParam = (Param*)pIParam;
-	//if multiref add to m_Multirefs map
-	//else call its deserializer
-	switch (pParam->m_Type)
+	if (!m_pNode) m_pNode = m_pParser->Next();
+	if (!m_pNode || (START_ELEMENT != m_pNode->m_type)) return NULL;
+	if (0 == strcmp(m_pNode->m_pchNameOrValue, SoapKeywordMapping::Map(SOAP_VER_1_2).pchWords[SKW_ENVELOPE]))
 	{
-	case XSD_ARRAY:
-		if (pParam->m_Value.pArray && pParam->m_Value.pArray->m_value.sta)
+		SoapEnvelope* m_pEnv = new SoapEnvelope();
+		//set all attributes of SoapEnvelope
+		pAttr = new Attribute();
+
+		pAttr->setValue(m_pNode->m_pchNamespace);
+		m_pEnv->addNamespaceDecl(pAttr);
+
+		if (0 == strcmp(m_pNode->m_pchNamespace, SoapKeywordMapping::Map(SOAP_VER_1_1).pchNamespaceUri))
 		{
-			pParam->m_Value.pArray->DeSerialize(this);
-			//After deserializing the array is handed over to the Application or web service
-			//So dont keep it here any longer.
-			pParam->m_Value.pArray->m_value.sta = NULL;
+			m_nSoapVersion = SOAP_VER_1_1;
+		}
+		else if (0 == strcmp(m_pNode->m_pchNamespace, SoapKeywordMapping::Map(SOAP_VER_1_2).pchNamespaceUri))
+		{
+			m_nSoapVersion = SOAP_VER_1_2;
 		}
 		else
-			return AXIS_FAIL;
-		break;
-	case USER_TYPE:
-		if (pParam->m_Value.pCplxObj)
 		{
-			if (pParam->m_Value.pCplxObj->pObject && pParam->m_Value.pCplxObj->pDZFunct)
-				pParam->m_Value.pCplxObj->pDZFunct(pParam->m_Value.pCplxObj->pObject, this);
-			//After deserializing the complex object is handed over to the Application or web service
-			//So dont keep it here any longer.
-			pParam->m_Value.pCplxObj->pObject = NULL;
+			m_nSoapVersion = VERSION_LAST;
 		}
-		else
-			return AXIS_FAIL;
-		break;
-	default:; //no need of calling this function for basic types - error condition
-	}
-	return AXIS_SUCCESS;
-}
 
-IParam* SoapDeSerializer::GetParam()
-{
-    AXISTRACE1("SoapDeSerializer::GetParam");
-	return m_pParser->GetParam();
-}
-
-int SoapDeSerializer::Init()
-{
-	m_pParser->Init();	
-	m_pLastArrayParam = NULL;
-	return AXIS_SUCCESS;
-}
-
-
-
-const AxisChar* SoapDeSerializer::GetMethodName()
-{
-	if (m_pParser->m_pMethod)
-	{
-        AXISTRACE1("SoapDeSerializer::GetMethodName");
-		return m_pParser->m_pMethod->getMethodName();
+		//Set Attributes
+		for (int i = 0; m_pNode->m_pchAttributes[i]; i += 3) 
+		{
+			pAttr = new Attribute();
+			pAttr->setLocalName(m_pNode->m_pchAttributes[i]);
+			pAttr->setUri(m_pNode->m_pchAttributes[i+1]);
+			pAttr->setValue(m_pNode->m_pchAttributes[i+2]);
+			m_pEnv->addAttribute(pAttr);
+		}
+		m_pNode = NULL; /*This is to indicate that node is identified and used */
+		return m_pEnv;
 	}
 	return NULL;
 }
 
-int SoapDeSerializer::GetVersion()
+/**
+ * Header block parsing should be done differently for different SOAP versions.
+ * Since the Header blocks may be requested in a different order than it is in the SOAP stream
+ * there must be a mechanism to manage the situation. Possibly to re-parse the stream part
+ * which has unused header blocks.
+ */
+IHeaderBlock* SoapDeSerializer::GetHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	return m_pParser->m_nSoapVersion;	
+	if (!m_pHeader) return NULL; /* there has been no <Header> element so there can be no Header blocks */
+	/*TODO*/
+	return NULL;
+}
+											   
+ISoapHeader* SoapDeSerializer::GetHeader()
+{
+	if (m_pHeader) return m_pHeader;
+	m_pNode = m_pParser->Next();
+	if (!m_pNode) {
+		m_nStatus = AXIS_FAIL;
+		return NULL;
+	}
+	if ((START_ELEMENT != m_pNode->m_type) && (0 == strcmp(m_pNode->m_pchNameOrValue, SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_HEADER])))
+	{
+		m_pHeader = new SoapHeader();
+		/* Set any attributes/namspaces to the SoapHeader object */
+		m_pNode = NULL; /*This is to indicate that node is identified and used */
+		return m_pHeader;
+	}
+	return NULL;
 }
 
-Axis_Array SoapDeSerializer::GetCmplxArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)
+int SoapDeSerializer::GetBody()
 {
-	Axis_Array Array = {NULL, 0};
-	Param *param = (Param*)GetParam();
-	if (!param) return Array;
-	if (XSD_ARRAY != param->GetType()) return Array; //UNEXPECTED_PARAM_TYPE
-	/* Check whether the array is of expected type */
-//	if (param->GetTypeName() == pchTypeName) return Array; //UNEXPECTED_PARAM_TYPE
-//	if (param->GetURI() == pchURI) return Array; //UNEXPECTED_PARAM_TYPE
-	
-	Array.m_Size = param->GetArraySize();
-	if (Array.m_Size > 0)
+    AXISTRACE1("SoapDeSerializer::GetBody");
+	while (true)
 	{
-		Array.m_Array = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)(true, Array.m_Size);
-		if (!Array.m_Array) 
+		if (!m_pNode) m_pNode = m_pParser->Next(); /* previous header searching may have left a node unidentified */
+		if (!m_pNode) {
+			m_nStatus = AXIS_FAIL;
+			return AXIS_FAIL;
+		}
+		if ((START_ELEMENT == m_pNode->m_type) && (0 == strcmp(m_pNode->m_pchNameOrValue, SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_BODY])))
 		{
-			Array.m_Size = 0;
-			return Array;
+			/* Set any attributes/namspaces to the SoapBody object */
+			m_pNode = NULL; /*This is to indicate that node is identified and used */
+			return AXIS_SUCCESS;
+		}
+		else /* probably there are un-processed soap headers. So check for "mustUnderstand" attribute in those headers */
+		{
+			/*TODO: parse until <Body> tag is found. If a "mustUnderstand" attribute found
+			{
+				m_nStatus = AXIS_MUSTUNDERSTAND_IGNORED;
+				return NULL;
+			}
+			else
+			{
+				leave the <Body> element un-identified state
+			}
+			*/
+			m_pNode = NULL;
 		}
 	}
-	else 
-		return Array; //CF_ZERO_ARRAY_SIZE_ERROR
-	if (AXIS_SUCCESS != param->SetArrayElements((void*)(Array.m_Array), (AXIS_DESERIALIZE_FUNCT)pDZFunct, 
-		(AXIS_OBJECT_DELETE_FUNCT)pDelFunct, (AXIS_OBJECT_SIZE_FUNCT)pSizeFunct))
-	{
-		((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(Array.m_Array, true, Array.m_Size);
-		Array.m_Array = NULL;
-		Array.m_Size = 0;
-		return Array;
-	}
-	if (AXIS_SUCCESS != Deserialize(param,0))
-	{
-		((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(Array.m_Array, true, Array.m_Size);
-		Array.m_Array = NULL;
-		Array.m_Size = 0;
-		return Array;
-	}
-	return Array;
+	return AXIS_FAIL;
 }
 
-int SoapDeSerializer::GetArraySize()
+int SoapDeSerializer::CheckMessageBody(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	m_pLastArrayParam = (Param*)GetParam();
-	if (m_pLastArrayParam)
-		return m_pLastArrayParam->GetArraySize();
-	else
-		return 0;
-}
-
-int SoapDeSerializer::GetArray(Axis_Array* pArray, XSDTYPE nType)
-{
-	if (!m_pLastArrayParam) 
-	{ //This cannot happen unless there is something wrong with wrapper
-		DeleteArray(pArray, nType);
-		return AXIS_FAIL;
-	}
-	if (XSD_ARRAY != m_pLastArrayParam->GetType())//UNEXPECTED_PARAM_TYPE
-	{ //This cannot happen unless there is something wrong with wrapper
-		DeleteArray(pArray, nType);
-		return AXIS_FAIL;
-	}
-	
-	if (AXIS_SUCCESS != m_pLastArrayParam->SetArrayElements((void*)(pArray->m_Array)))
-	{
-		DeleteArray(pArray, nType);
-		return AXIS_FAIL;
-	}
-	if (AXIS_SUCCESS != Deserialize(m_pLastArrayParam,0))
-	{
-		DeleteArray(pArray, nType);
-		return AXIS_FAIL;
-	}
+	/* check and skip the soap body tag */
+	if (AXIS_SUCCESS != GetBody()) return AXIS_FAIL;
+    AXISTRACE1("SoapDeSerializer::CheckMessageBody");
+	if (!m_pNode) m_pNode = m_pParser->Next();
+	if (!m_pNode || (START_ELEMENT != m_pNode->m_type)) return AXIS_FAIL;
+	if (0 != strcmp(m_pNode->m_pchNameOrValue, pName)) return AXIS_FAIL;
+	/* we can check the namespace uri too here. Should we ?*/
+	m_pNode = NULL; /*This is to indicate that node is identified and used */
 	return AXIS_SUCCESS;
 }
 
-Axis_Array SoapDeSerializer::GetBasicArray(XSDTYPE nType)
+SoapFault* SoapDeSerializer::GetFault()
+{
+	/* TODO : */
+	return NULL;
+}
+
+int SoapDeSerializer::Init()
+{
+	m_pNode = 0;
+	m_nStatus = m_pParser->Init();
+	if (m_pEnv) 
+	{
+		delete m_pEnv;
+		m_pEnv = NULL;
+	}
+	if (m_pHeader)
+	{
+		delete m_pHeader;
+		m_pHeader = NULL;
+	}
+	m_nSoapVersion = VERSION_LAST;
+	return m_nStatus;
+}
+
+int SoapDeSerializer::GetVersion()
+{
+	if (VERSION_LAST == m_nSoapVersion)
+	{
+		GetEnvelope();
+	}
+	return m_nSoapVersion;	
+}
+
+/**
+ * In rpc/encoded style the stream is as follows,
+ * <abc:ArrayOfPoints xmlns:abc="http://www.opensource.lk/Points"
+ *	xmlns:enc="http://www.w3.org/2001/06/soap-encoding"
+ *	enc:arrayType="xsd:Point[2]">
+ *	<abc:Point><x>5</x><y>6</y></abc:Point>
+ *	<abc:Point><x>7</x><y>8</y></abc:Point>
+ * </abc:ArrayOfPoints>
+ * But in doc/literal style it is,
+ *	<points><x>5</x><y>6</y></points>
+ *	<points><x>7</x><y>8</y></points>
+ *
+ */
+Axis_Array SoapDeSerializer::GetCmplxArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)
 {
 	Axis_Array Array = {NULL, 0};
-	Param *param = (Param*)GetParam();
-	if (!param) return Array;
-	if (XSD_ARRAY != param->GetType()) return Array; //UNEXPECTED_PARAM_TYPE
-	
-	Array.m_Size = param->GetArraySize();
-	if (Array.m_Size > 0)
+	int nIndex = 0;
+	void* pItem;
+	int itemsize;
+	unsigned long ptrval;
+	if (AXIS_SUCCESS != m_nStatus) return Array; /* if anything has gone wrong earlier just do nothing */
+	if (RPC_ENCODED == m_nStyle)
 	{
-		Array.m_Array = CreateArray(nType, Array.m_Size);
-		if (!Array.m_Array) 
+		m_pNode = m_pParser->Next(); /* just skip wrapper node with type info  Ex: <tns:QuoteInfoTypeArray xmlns:tns="http://www.getquote.org/test">*/ 
+		Array.m_Size = GetArraySize(m_pNode);
+		if (Array.m_Size > 0)
 		{
-			Array.m_Size = 0;
+			Array.m_Array = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)(Array.m_Array, true, Array.m_Size);
+			if (!Array.m_Array)
+			{
+				Array.m_Size = 0;
+				m_nStatus = AXIS_FAIL;
+				return Array;
+			}
+			itemsize = ((AXIS_OBJECT_SIZE_FUNCT)pSizeFunct)();
+			ptrval = reinterpret_cast<unsigned long>(Array.m_Array);
+			for (; nIndex < Array.m_Size; nIndex++)
+			{
+				m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <item>*/
+				pItem = reinterpret_cast<void*>(ptrval+nIndex*itemsize);
+				((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pItem, this);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+			}
 			return Array;
 		}
 	}
-	else 
-		return Array; //CF_ZERO_ARRAY_SIZE_ERROR
-	if (AXIS_SUCCESS != param->SetArrayElements((void*)(Array.m_Array)))
+	else
 	{
-		DeleteArray(&Array, nType);
-		return Array;
+		Array.m_Array = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)(Array.m_Array, true, INITIAL_ARRAY_SIZE);
+		if (!Array.m_Array) return Array;
+		Array.m_Size = INITIAL_ARRAY_SIZE;
+		itemsize = ((AXIS_OBJECT_SIZE_FUNCT)pSizeFunct)();
+		while(true)
+		{
+			ptrval = reinterpret_cast<unsigned long>(Array.m_Array);
+			for (; nIndex < Array.m_Size; nIndex++)
+			{
+				if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+					m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <phonenumbers>*/
+				if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+				{
+					pItem = reinterpret_cast<void*>(ptrval+nIndex*itemsize);
+					if (AXIS_SUCCESS == ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pItem, this))
+						continue;
+				}
+				else
+				{
+					if (nIndex > 0)
+					{
+						Array.m_Size = nIndex; /* put the actual deserialized item size */
+						/* note we do not make m_pNode = NULL because this node doesnot belong to this array */
+						return Array;
+					}
+					/* error : no elements deserialized */
+				}
+				/* if we come here it is an error situation */
+				m_nStatus = AXIS_FAIL;
+				m_pNode = NULL;
+				((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(Array.m_Array, true, Array.m_Size);
+				Array.m_Array = 0;
+				Array.m_Size = 0;
+				return Array;
+			}
+			/* if we come here that means the array allocated is not enough. So double it */
+			Array.m_Array = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)(Array.m_Array, true, Array.m_Size*2);
+			if (!Array.m_Array) 
+			{
+				Array.m_Size = 0;
+				return Array;
+			}
+			Array.m_Size *= 2;
+		}
 	}
-	if (AXIS_SUCCESS != Deserialize(param,0))
-	{
-		DeleteArray(&Array, nType);
-		return Array;
-	}
+	m_nStatus = AXIS_FAIL;
+	m_pNode = NULL;
 	return Array;
 }
-void* SoapDeSerializer::GetObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)
+
+/**
+ * Get Size of the single dimension array from arrayType attribute
+ * Ex : enc:arrayType="xs:string[6]"
+ */
+int SoapDeSerializer::GetArraySize(const AnyElement* pElement)
 {
-	Param *param = (Param*)GetParam();
-	if (!param) return NULL;
-	if (USER_TYPE != param->GetType()) return NULL; //UNEXPECTED_PARAM_TYPE
-	/* Check whether the object is of expected type */
-//	if (param->GetTypeName() == pchTypeName) return NULL; //UNEXPECTED_PARAM_TYPE
-//	if (param->GetURI() == pchURI) return NULL; //UNEXPECTED_PARAM_TYPE
-
-	void* pObject = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)(false,0);
-	if (!pObject) return NULL;
-
-	if (AXIS_SUCCESS != param->SetUserType(pObject, (AXIS_DESERIALIZE_FUNCT)pDZFunct, (AXIS_OBJECT_DELETE_FUNCT)pDelFunct))
+	int nSize = 0;
+	/* first check whether this is a start element node */
+	if (START_ELEMENT != pElement->m_type) return nSize;
+	for (int i=0; pElement->m_pchAttributes[i]; i+=3)
 	{
-		((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(pObject, false, 0);
-		return NULL;
+		if (URI_ENC == URIMapping::Map(pElement->m_pchAttributes[i+1]) &&
+			(0 == strcmp(pElement->m_pchAttributes[i], SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_ARRAYTYPE])))
+		{
+			QName qn;
+			qn.SplitQNameString(pElement->m_pchAttributes[i+2], '[');
+			nSize = strtol(qn.localname, &m_pEndptr, 10);
+			qn.MergeQNameString('[');
+			return nSize;
+		}
 	}
-	if (AXIS_SUCCESS != Deserialize(param,0))
-	{
-		((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(pObject, false, 0);
-		return NULL;
-	}
-	return pObject;
+	return nSize;
 }
 
-int SoapDeSerializer::GetInt()
+/**
+ * In rpc/encoded style the stream is as follows,
+ * <abc:ArrayOfPhoneNumbers xmlns:abc="http://example.org/2001/06/numbers"
+ *	xmlns:enc="http://www.w3.org/2001/06/soap-encoding"
+ *	enc:arrayType="xsd:string[2]">
+ *	<item>+94-112-500500</item>
+ *	<item>+94-112-500500</item>
+ * </abc:ArrayOfPhoneNumbers>
+ * But in doc/literal style it is,
+ *	<phonenumbers>+94-112-500500</phonenumbers>
+ *	<phonenumbers>+94-112-500500</phonenumbers> 
+ *
+ *
+ */
+
+/* Following macros are used just to shorten the coding */
+#define CONV_STRTOL(str) strtol(str, &m_pEndptr, 10)
+#define CONV_STRTOUL(str) strtoul(str, &m_pEndptr, 10)
+#define CONV_STRTOD(str) strtod(str,  &m_pEndptr)
+#define CONV_STRTODATETIME(str) AxisTime::Deserialize(str, nType)
+#define CONV_STRTODURATION(str) AxisTime::DeserializeDuration(str, nType)
+#define CONV_STRDUP(str) strdup(str);
+
+#define DESERIALIZE_ENCODED_ARRAY_BLOCK(cpp_type, conv_func) \
+			Array.m_Array = malloc(sizeof(cpp_type)*Array.m_Size);\
+			if (!Array.m_Array)\
+			{\
+				Array.m_Size = 0;\
+				m_nStatus = AXIS_FAIL;\
+				return Array;\
+			}\
+			for (; nIndex < Array.m_Size; nIndex++)\
+			{\
+				m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <item>*/\
+				m_pNode = m_pParser->Next(); /* charactor node */\
+				if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))\
+				{\
+					((cpp_type*)Array.m_Array)[nIndex] = conv_func(m_pNode->m_pchNameOrValue);\
+					m_pNode = m_pParser->Next(); /* skip end element node too */\
+					continue;\
+				}\
+				/* error : unexpected element type or end of stream */\
+				m_nStatus = AXIS_FAIL;\
+				free(Array.m_Array);\
+				Array.m_Array = 0;\
+				Array.m_Size = 0;\
+				return Array;\
+			}\
+			return Array;
+
+#define DESERIALIZE_LITERAL_ARRAY_BLOCK(cpp_type, conv_func) \
+			Array.m_Array = malloc(sizeof(cpp_type)*INITIAL_ARRAY_SIZE);\
+			if (!Array.m_Array) return Array;\
+			Array.m_Size = INITIAL_ARRAY_SIZE;\
+			while(true)\
+			{\
+				for (; nIndex < Array.m_Size; nIndex++)\
+				{\
+					if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ \
+						m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <phonenumbers>*/\
+					if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))\
+					{\
+						m_pNode = m_pParser->Next(); /* charactor node */\
+						if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))\
+						{\
+							((cpp_type*)Array.m_Array)[nIndex] = conv_func(m_pNode->m_pchNameOrValue);\
+							m_pNode = m_pParser->Next(); /* skip end element node too */\
+							m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */\
+							continue;\
+						}\
+						/* error : unexpected element type or end of the stream */\
+					}\
+					else\
+					{\
+						if (nIndex > 0)\
+						{\
+							Array.m_Size = nIndex; /* put the actual deserialized item size */\
+							/* note we do not make m_pNode = NULL because this node doesnot belong to this array */\
+							return Array;\
+						}\
+						/* error : no elements deserialized */\
+					}\
+					/* if we come here it is an error situation */\
+					m_nStatus = AXIS_FAIL;\
+					m_pNode = NULL;\
+					free(Array.m_Array);\
+					Array.m_Array = 0;\
+					Array.m_Size = 0;\
+					return Array;\
+				}\
+				/* if we come here that means the array allocated is not enough. So double it */\
+				Array.m_Array = realloc(Array.m_Array, sizeof(cpp_type)*(Array.m_Size*2));\
+				if (!Array.m_Array) \
+				{\
+					Array.m_Size = 0;\
+					return Array;\
+				}\
+				Array.m_Size *= 2;\
+			}\
+			break;
+
+Axis_Array SoapDeSerializer::GetBasicArray(XSDTYPE nType, const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	if (!param) return 0; //TODO this is an error situation. Should be handled.
-	return param->GetInt();
+	Axis_Array Array = {NULL, 0};
+	int nIndex = 0;
+	if (AXIS_SUCCESS != m_nStatus) return Array; /* if anything has gone wrong earlier just do nothing */
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* just skip wrapper node with type info  Ex: <tns:ArrayOfPhoneNumbers xmlns:tns="http://www.getquote.org/test">*/ 
+		Array.m_Size = GetArraySize(m_pNode);
+		if (Array.m_Size > 0)
+		{
+			switch(nType)
+			{
+			case XSD_INT:
+				Array.m_Array = malloc(sizeof(int)*Array.m_Size);
+				if (!Array.m_Array)
+				{
+					Array.m_Size = 0;
+					m_nStatus = AXIS_FAIL;
+					return Array;
+				}
+				for (; nIndex < Array.m_Size; nIndex++)
+				{
+					m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <item>*/
+					m_pNode = m_pParser->Next(); /* charactor node */
+					if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+					{
+						((int*)Array.m_Array)[nIndex] = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+						m_pNode = m_pParser->Next(); /* skip end element node too */
+						continue;
+					}
+					/* error : unexpected element type or end of stream */
+					m_nStatus = AXIS_FAIL;
+					free(Array.m_Array);
+					Array.m_Array = 0;
+					Array.m_Size = 0;
+					return Array;
+				}
+				return Array;
+			case XSD_UNSIGNEDINT:
+				DESERIALIZE_ENCODED_ARRAY_BLOCK(unsigned int, CONV_STRTOUL)
+			case XSD_SHORT:
+				DESERIALIZE_ENCODED_ARRAY_BLOCK(short, CONV_STRTOL)
+			case XSD_UNSIGNEDSHORT:
+				DESERIALIZE_ENCODED_ARRAY_BLOCK(unsigned short, CONV_STRTOUL)
+			case XSD_BYTE:
+				DESERIALIZE_ENCODED_ARRAY_BLOCK(char, CONV_STRTOL)
+			case XSD_UNSIGNEDBYTE:
+				DESERIALIZE_ENCODED_ARRAY_BLOCK(unsigned char, CONV_STRTOUL)
+			case XSD_LONG:
+			case XSD_INTEGER:
+				DESERIALIZE_ENCODED_ARRAY_BLOCK(long, CONV_STRTOL)
+			case XSD_UNSIGNEDLONG:
+				DESERIALIZE_ENCODED_ARRAY_BLOCK(unsigned long, CONV_STRTOUL)
+			case XSD_FLOAT:
+				DESERIALIZE_ENCODED_ARRAY_BLOCK(float, CONV_STRTOD)
+			case XSD_DOUBLE:
+			case XSD_DECIMAL:
+				DESERIALIZE_ENCODED_ARRAY_BLOCK(double, CONV_STRTOD)
+			case XSD_STRING:
+			case XSD_HEXBINARY:
+			case XSD_BASE64BINARY:
+			case XSD_ANYURI:
+			case XSD_QNAME:
+			case XSD_NOTATION:			
+				DESERIALIZE_ENCODED_ARRAY_BLOCK(char*, CONV_STRDUP)
+			case XSD_DATETIME:
+			case XSD_DATE:
+			case XSD_TIME:
+				DESERIALIZE_ENCODED_ARRAY_BLOCK(struct tm, CONV_STRTODATETIME)     
+			case XSD_DURATION:
+				DESERIALIZE_ENCODED_ARRAY_BLOCK(long, CONV_STRTODURATION)
+			}
+		}
+	}
+	else
+	{
+		switch(nType)
+		{
+		case XSD_INT:
+			Array.m_Array = malloc(sizeof(int)*INITIAL_ARRAY_SIZE);
+			if (!Array.m_Array) return Array;
+			Array.m_Size = INITIAL_ARRAY_SIZE;
+			while(true)
+			{
+				for (; nIndex < Array.m_Size; nIndex++)
+				{
+					if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+						m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <phonenumbers>*/
+					if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+					{
+						m_pNode = m_pParser->Next(); /* charactor node */
+						if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+						{
+							((int*)Array.m_Array)[nIndex] = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+							m_pNode = m_pParser->Next(); /* skip end element node too */
+							m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+							continue;
+						}
+						/* error : unexpected element type or end of the stream */
+					}
+					else
+					{
+						if (nIndex > 0)
+						{
+							Array.m_Size = nIndex; /* put the actual deserialized item size */
+							/* note we do not make m_pNode = NULL because this node doesnot belong to this array */
+							return Array;
+						}
+						/* error : no elements deserialized */
+					}
+					/* if we come here it is an error situation */
+					m_nStatus = AXIS_FAIL;
+					m_pNode = NULL;
+					free(Array.m_Array);
+					Array.m_Array = 0;
+					Array.m_Size = 0;
+					return Array;
+				}
+				/* if we come here that means the array allocated is not enough. So double it */
+				Array.m_Array = realloc(Array.m_Array, sizeof(int)*(Array.m_Size*2));
+				if (!Array.m_Array) 
+				{
+					Array.m_Size = 0;
+					return Array;
+				}
+				Array.m_Size *= 2;
+			}
+			break;
+		case XSD_UNSIGNEDINT:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK(unsigned int, CONV_STRTOUL)
+		case XSD_SHORT:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK(short, CONV_STRTOL)
+		case XSD_UNSIGNEDSHORT:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK(unsigned short, CONV_STRTOUL)
+		case XSD_BYTE:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK(char, CONV_STRTOL)
+		case XSD_UNSIGNEDBYTE:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK(unsigned char, CONV_STRTOUL)
+		case XSD_LONG:
+		case XSD_INTEGER:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK(long, CONV_STRTOL)
+		case XSD_UNSIGNEDLONG:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK(unsigned long, CONV_STRTOUL)
+		case XSD_FLOAT:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK(float, CONV_STRTOD)
+		case XSD_DOUBLE:
+		case XSD_DECIMAL:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK(double, CONV_STRTOD)
+		case XSD_STRING:
+		case XSD_HEXBINARY:
+		case XSD_BASE64BINARY:
+		case XSD_ANYURI:
+		case XSD_QNAME:
+		case XSD_NOTATION:			
+			DESERIALIZE_LITERAL_ARRAY_BLOCK(char*, CONV_STRDUP)
+		case XSD_DATETIME:
+		case XSD_DATE:
+		case XSD_TIME:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK(struct tm, CONV_STRTODATETIME)     
+	    case XSD_DURATION:
+			DESERIALIZE_LITERAL_ARRAY_BLOCK(long, CONV_STRTODURATION)
+		}
+	}
+	m_nStatus = AXIS_FAIL;
+	m_pNode = NULL;
+	return Array;
 }
-unsigned int SoapDeSerializer::GetUnsignedInt()
+
+/**
+ * In doc/lit style pName is the name of the type instance "result"
+ *  <result>
+ *		<name>Widgets Inc.</name> 
+ *		<symbol>WID</symbol> 
+ *		<public>true</public> 
+ *  </result>
+ * But in rpc/encoded style pName is the name of the type "QuoteInfoType"
+ *  <tns:QuoteInfoType xmlns:tns="http://www.getquote.org/test">
+ *		<name xsi:type="xsd:string">Widgets Inc.</name> 
+ *		<symbol xsi:type="xsd:string">WID</symbol> 
+ *		<public xsi:type="xsd:boolean">true</public> 
+ *  </tns:QuoteInfoType>
+ *
+ */
+void* SoapDeSerializer::GetCmplxObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	if (!param) return 0; //TODO this is an error situation. Should be handled.
-	return param->GetUnsignedInt();
+	if (AXIS_SUCCESS != m_nStatus) return NULL; /* if anything has gone wrong earlier just do nothing */
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* just skip wrapper node with type info  Ex: <tns:QuoteInfoType xmlns:tns="http://www.getquote.org/test">*/ 
+		/* type  can be checked here */
+		void* pObject = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)(NULL, false, 0);
+		if (pObject)
+		{
+			if (pDZFunct && (AXIS_SUCCESS == ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pObject, this)))
+			{
+				m_pParser->Next(); /* skip end node too */
+				return pObject;
+			}
+			else
+			{
+				((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(pObject, false, 0);
+			}
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <result>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			void* pObject = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)(NULL, false, 0);
+			if (pObject)
+			{
+				if (pDZFunct && (AXIS_SUCCESS == ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pObject, this)))
+				{
+					m_pParser->Next(); /* skip end node too */
+					return pObject;
+				}
+			}
+			else
+			{
+				((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(pObject, false, 0);
+			}
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+	return NULL;
 }
-short SoapDeSerializer::GetShort()
+
+int SoapDeSerializer::GetElementForAttributes(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	if (!param) return 0; //TODO this is an error situation. Should be handled.
-	return param->GetShort();
+	if (!m_pNode)
+	{
+		m_pNode = m_pParser->Next();
+		m_pCurrNode = m_pParser->Next();
+	}
+	else /* previous node not processed. So consider it */
+	{
+		m_pCurrNode = m_pNode;
+	}
+	if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+	{
+		m_pNode = NULL;
+	}
+	else /* error : current element is not the expected one */
+	{
+		m_nStatus = AXIS_FAIL;
+		m_pCurrNode = NULL;
+		return m_nStatus;
+	}
 }
-unsigned short SoapDeSerializer::GetUnsignedShort()
+
+/**
+ * Before calling any of GetAttributeAs... API functions the user should move current Element
+ * to the right Element by calling GetElementForAttributes(..)
+ */
+int SoapDeSerializer::GetAttributeAsInt(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	if (!param) return 0; //TODO this is an error situation. Should be handled.
-	return param->GetUnsignedShort();
+	int ret = 0;
+	if(!m_pCurrNode) 
+	{
+		m_nStatus = AXIS_FAIL;
+		return ret;
+	}
+	if (START_ELEMENT == m_pNode->m_type)
+	{
+		/*TODO : browse attribute list for named attribute and do type conversion appropriately*/
+	}
+	else
+	{
+		m_nStatus = AXIS_FAIL;
+		return ret;		
+	}
 }
-char SoapDeSerializer::GetByte()
+
+/**
+ * 
+ * 
+ */
+int SoapDeSerializer::GetElementAsInt(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	if (!param) return 0; //TODO this is an error situation. Should be handled.
-	return param->GetByte();
+	int ret = 0;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_INT == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 }
-unsigned char SoapDeSerializer::GetUnsignedByte()
+
+unsigned int SoapDeSerializer::GetElementAsUnsignedInt(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	if (!param) return 0; //TODO this is an error situation. Should be handled.
-	return param->GetUnsignedByte();
+	unsigned int ret = 0;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_UNSIGNEDINT == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtoul(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtoul(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 }
-long SoapDeSerializer::GetLong()
+
+short SoapDeSerializer::GetElementAsShort(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	if (!param) return 0; //TODO this is an error situation. Should be handled.
-	return param->GetLong();
+	short ret = 0;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_SHORT == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 }
-long SoapDeSerializer::GetInteger()
+unsigned short SoapDeSerializer::GetElementAsUnsignedShort(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	if (!param) return 0; //TODO this is an error situation. Should be handled.
-	return param->GetInteger();
+	unsigned short ret = 0;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_UNSIGNEDSHORT == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtoul(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtoul(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 }
-unsigned long SoapDeSerializer::GetUnsignedLong()
+char SoapDeSerializer::GetElementAsByte(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	if (!param) return 0; //TODO this is an error situation. Should be handled.
-	return param->GetUnsignedLong();
+	char ret = 0;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_BYTE == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 }
-float SoapDeSerializer::GetFloat()
+unsigned char SoapDeSerializer::GetElementAsUnsignedByte(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	if (!param) return 0; //TODO this is an error situation. Should be handled.
-	return param->GetFloat();
+	unsigned char ret = 0;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_UNSIGNEDBYTE == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtoul(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtoul(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 }
-double SoapDeSerializer::GetDouble()
+long SoapDeSerializer::GetElementAsLong(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	if (!param) return 0; //TODO this is an error situation. Should be handled.
-	return param->GetDouble();
+	long ret = 0;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_LONG == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 }
-double SoapDeSerializer::GetDecimal()
+long SoapDeSerializer::GetElementAsInteger(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	if (!param) return 0; //TODO this is an error situation. Should be handled.
-	return param->GetDecimal();
+	long ret = 0;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_INTEGER == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 }
-const AxisChar* SoapDeSerializer::GetString()
+unsigned long SoapDeSerializer::GetElementAsUnsignedLong(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	if (!param) return NULL; //TODO this is an error situation. Should be handled.
-	return param->GetString();
+	unsigned long ret = 0;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_UNSIGNEDLONG == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtoul(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtoul(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 }
-const AxisChar* SoapDeSerializer::GetAnyURI()
+float SoapDeSerializer::GetElementAsFloat(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	if (!param) return NULL; //TODO this is an error situation. Should be handled.
-	return param->GetAnyURI();
+	float ret = 0;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_FLOAT == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtod(m_pNode->m_pchNameOrValue, &m_pEndptr);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtod(m_pNode->m_pchNameOrValue, &m_pEndptr);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 }
-const AxisChar* SoapDeSerializer::GetQName()
+double SoapDeSerializer::GetElementAsDouble(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	if (!param) return NULL; //TODO this is an error situation. Should be handled.
-	return param->GetQName();
+	double ret = 0;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_DOUBLE == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtod(m_pNode->m_pchNameOrValue, &m_pEndptr);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtod(m_pNode->m_pchNameOrValue, &m_pEndptr);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 }
-const AxisChar* SoapDeSerializer::GetHexString()
+double SoapDeSerializer::GetElementAsDecimal(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	if (!param) return NULL; //TODO this is an error situation. Should be handled.
-	return param->GetHexString();
+	double ret = 0;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_DECIMAL == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtod(m_pNode->m_pchNameOrValue, &m_pEndptr);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strtod(m_pNode->m_pchNameOrValue, &m_pEndptr);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 }
-const AxisChar* SoapDeSerializer::GetBase64String()
+AxisChar* SoapDeSerializer::GetElementAsString(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	if (!param) return NULL; //TODO this is an error situation. Should be handled.
-	return param->GetBase64String();
+	AxisChar* ret = 0;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_STRING == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strdup(m_pNode->m_pchNameOrValue); /* this is because the string may not be available later */
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strdup(m_pNode->m_pchNameOrValue); /* this is because the string may not be available later */
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 }
-struct tm SoapDeSerializer::GetDateTime()
+AxisChar* SoapDeSerializer::GetElementAsAnyURI(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	return param->GetDateTime();
+	AxisChar* ret = 0;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_ANYURI == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strdup(m_pNode->m_pchNameOrValue); /* this is because the string may not be available later */
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strdup(m_pNode->m_pchNameOrValue); /* this is because the string may not be available later */
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 }
-struct tm SoapDeSerializer::GetDate()
+AxisChar* SoapDeSerializer::GetElementAsQName(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	return param->GetDate();
+	AxisChar* ret = 0;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_QNAME == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strdup(m_pNode->m_pchNameOrValue); /* this is because the string may not be available later */
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strdup(m_pNode->m_pchNameOrValue); /* this is because the string may not be available later */
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 }
-struct tm SoapDeSerializer::GetTime()
+AxisChar* SoapDeSerializer::GetElementAsHexString(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	return param->GetTime();
+	AxisChar* ret = 0;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_HEXBINARY == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strdup(m_pNode->m_pchNameOrValue); /* this is because the string may not be available later */
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strdup(m_pNode->m_pchNameOrValue); /* this is because the string may not be available later */
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 }
-long SoapDeSerializer::GetDuration()
+AxisChar* SoapDeSerializer::GetElementAsBase64String(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	Param *param = (Param*)GetParam();
-	if (!param) return 0; //TODO this is an error situation. Should be handled.
-	return param->GetDuration();
+	AxisChar* ret = 0;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_BASE64BINARY == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strdup(m_pNode->m_pchNameOrValue); /* this is because the string may not be available later */
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = strdup(m_pNode->m_pchNameOrValue); /* this is because the string may not be available later */
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+}
+struct tm SoapDeSerializer::GetElementAsDateTime(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	struct tm ret;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_DATETIME == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = AxisTime::Deserialize(m_pNode->m_pchNameOrValue, XSD_DATETIME);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = AxisTime::Deserialize(m_pNode->m_pchNameOrValue, XSD_DATETIME);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+}
+struct tm SoapDeSerializer::GetElementAsDate(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	struct tm ret;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_DATE == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = AxisTime::Deserialize(m_pNode->m_pchNameOrValue, XSD_DATE);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = AxisTime::Deserialize(m_pNode->m_pchNameOrValue, XSD_DATE);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+}
+struct tm SoapDeSerializer::GetElementAsTime(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	struct tm ret;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_TIME == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = AxisTime::Deserialize(m_pNode->m_pchNameOrValue, XSD_TIME);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = AxisTime::Deserialize(m_pNode->m_pchNameOrValue, XSD_TIME);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+}
+long SoapDeSerializer::GetElementAsDuration(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	long ret = 0;
+	if (AXIS_SUCCESS != m_nStatus) return ret;
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
+		if (XSD_DURATION == GetXSDType(m_pNode))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = AxisTime::DeserializeDuration(m_pNode->m_pchNameOrValue, XSD_DURATION);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				return ret;
+			}
+		}
+		else
+		{
+			/* it is an error if type is different or not present */
+		}
+	}
+	else
+	{
+		if (!m_pNode) /* if there is an unprocessed node that may be one left from last array deserialization */ 
+			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <i>*/
+		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+		{
+			m_pNode = m_pParser->Next(); /* charactor node */
+			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+			{
+				ret = AxisTime::DeserializeDuration(m_pNode->m_pchNameOrValue, XSD_DURATION);
+				m_pNode = m_pParser->Next(); /* skip end element node too */
+				m_pNode = NULL; /* this is important in doc/lit style when deserializing arrays */
+				return ret;
+			}			
+		}
+		else
+		{
+			/* error: unexpected element */
+		}
+	}
+	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+}
+
+/**
+ * This method checks the attribute list of pElement node for the xsi:type attribute.
+ * if it is found then finds what the type is. Otherwise returns XSD_UNKNOWN.
+ */
+XSDTYPE SoapDeSerializer::GetXSDType(const AnyElement* pElement)
+{
+	/* first check whether this is a start element node */
+	if (START_ELEMENT != pElement->m_type) return XSD_UNKNOWN;
+	for (int i=0; pElement->m_pchAttributes[i]; i+=3)
+	{
+		if (URI_XSI == URIMapping::Map(pElement->m_pchAttributes[i+1]))
+		{
+			QName qn;
+			XSDTYPE type = XSD_UNKNOWN;
+			qn.SplitQNameString(pElement->m_pchAttributes[i+2], ':');
+			const char* pNS = m_pParser->GetNS4Prefix(qn.uri);
+			if (pNS)
+			{
+				if (URI_XSD == URIMapping::Map(pNS))
+				{
+					type = TypeMapping::Map(qn.localname);
+				}
+			}
+			qn.MergeQNameString(':');
+			return type;
+		}
+	}
+	return XSD_UNKNOWN;
 }
 
 void* SoapDeSerializer::CreateArray(XSDTYPE nType, int nSize)

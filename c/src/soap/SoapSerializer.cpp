@@ -88,8 +88,11 @@
 #define INITIAL_SERIALIZE_BUFFER_SIZE 4096
 #define NO_OF_SERIALIZE_BUFFERS 10
 
+IWrapperSoapSerializerBaseFunctions SoapSerializer::ms_VFtable;
+
 SoapSerializer::SoapSerializer()
 {
+	__vfptr = &ms_VFtable;
 	m_pSoapEnvelope = NULL;
 	m_iSoapVersion = SOAP_VER_1_1;
 	m_pOutputStream = NULL;
@@ -260,41 +263,58 @@ int SoapSerializer::AddOutputParam(const AxisChar* pchName, const string& sStrVa
 	return AddOutputParamHelper(pchName, type, uValue);
 }
 
-int SoapSerializer::AddOutputBasicArrayParam(const AxisChar* pchName, const Axis_Array* pArray, XSDTYPE nType)
+int SoapSerializer::AddOutputBasicArrayParam(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName)
 {
 	IArrayBean* pAb = makeArrayBean(nType, (void*)(pArray->m_Array));
-	pAb->AddDimension(pArray->m_Size);
-	pAb->SetItemName("item");
+	pAb->SetDimension(pArray->m_Size);
 	Param* pParam = new Param();
+	if (RPC_ENCODED == m_nStyle)
+	{
+		pAb->SetItemName("item");
+		pParam->SetName(pName);
+	}
+	else
+	{
+		pAb->SetItemName(pName);
+		pParam->SetName("array");		
+	}
 	pParam->m_Value.pIArray = pAb;
 	pParam->m_Type = XSD_ARRAY;
 	if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
 	{
 		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->AddOutputParam(pParam);
 	}
-	pParam->SetName(pchName);
-	return AXIS_SUCCESS;	
-}
-
-int SoapSerializer::AddOutputCmplxArrayParam(const AxisChar* pchName, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)
-{
-	IArrayBean* pAb = makeArrayBean((void*)(pArray->m_Array), pSZFunct, pDelFunct, pSizeFunct);
-	pAb->AddDimension(pArray->m_Size);
-	pAb->SetItemName("item");
-	pAb->SetTypeName(pchTypeName);
-	pAb->SetUri(pchURI);
-	Param* pParam = new Param();
-	pParam->m_Value.pIArray = pAb;
-	pParam->m_Type = XSD_ARRAY;
-	if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
-	{
-		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->AddOutputParam(pParam);
-	}
-	pParam->SetName(pchName);
 	return AXIS_SUCCESS;
 }
 
-int SoapSerializer::AddOutputCmplxParam(const AxisChar* pchName, void* pObject, void* pSZFunct, void* pDelFunct)
+int SoapSerializer::AddOutputCmplxArrayParam(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)
+{
+	IArrayBean* pAb = makeArrayBean((void*)(pArray->m_Array), pSZFunct, pDelFunct, pSizeFunct);
+	pAb->SetDimension(pArray->m_Size);
+	Param* pParam = new Param();
+	if (RPC_ENCODED == m_nStyle)
+	{
+		pAb->SetItemName("item");
+		pAb->SetTypeName(pName);
+		pAb->SetUri(pNamespace);
+		pParam->SetName(pName);
+	}
+	else
+	{
+		pAb->SetItemName(pName);
+		pParam->SetName("array");		
+	}
+	pParam->m_Value.pIArray = pAb;
+	pParam->m_Type = XSD_ARRAY;
+	if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
+	{
+		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->AddOutputParam(pParam);
+	}
+	pParam->SetName(pName);
+	return AXIS_SUCCESS;
+}
+
+int SoapSerializer::AddOutputCmplxParam(void* pObject, void* pSZFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace )
 { 
 	Param* pParam = new Param();
 	pParam->m_Value.pCplxObj = new ComplexObjectHandler;
@@ -305,7 +325,7 @@ int SoapSerializer::AddOutputCmplxParam(const AxisChar* pchName, void* pObject, 
 	{
 		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->AddOutputParam(pParam);
 	}
-	pParam->SetName(pchName);
+	pParam->SetName(pName);
 	return AXIS_SUCCESS;
 }
 
@@ -614,17 +634,25 @@ int SoapSerializer::removeSoapHeader()
  * Used to Serialize an array of complex types inside a complex type. Called from within the Serialize wrapper
  * method of the complex type.
  */
-int SoapSerializer::SerializeCmplxArray(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI, const AxisChar* pchArrayName)
+int SoapSerializer::SerializeCmplxArray(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)
 {
 	ArrayBean* pAb = (ArrayBean*)makeArrayBean((void*)(pArray->m_Array), pSZFunct, pDelFunct, pSizeFunct);
-	pAb->AddDimension(pArray->m_Size);
-	pAb->SetItemName("item");
-	pAb->SetTypeName(pchTypeName);
-	pAb->SetUri(pchURI);
+	pAb->SetDimension(pArray->m_Size);
 	Param* pParam = new Param();
+	if (RPC_ENCODED == m_nStyle)
+	{
+		pAb->SetItemName("item");
+		pAb->SetTypeName(pName);
+		pAb->SetUri(pNamespace);
+		pParam->SetName(pName);
+	}
+	else
+	{
+		pAb->SetItemName(pName);
+		pParam->SetName("array");		
+	}
 	pParam->m_Value.pIArray = pAb;
 	pParam->m_Type = XSD_ARRAY;
-	pParam->SetName(pchArrayName);
 	pParam->serialize(*this);
 	/* Remove pointer to the array from the ArrayBean to avoid deleting the array when ArrayBean is deleted 
 	   Array will be deleted when the complex type that contains this array is deleted */
@@ -637,15 +665,23 @@ int SoapSerializer::SerializeCmplxArray(const Axis_Array* pArray, void* pSZFunct
  * Used to Serialize an array of basic types inside a complex type. Called from within the Serialize wrapper
  * method of the complex type.
  */
-int SoapSerializer::SerializeBasicArray(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pchArrayName)
+int SoapSerializer::SerializeBasicArray(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName)
 {
 	ArrayBean* pAb = (ArrayBean*)makeArrayBean(nType, (void*)(pArray->m_Array));
-	pAb->AddDimension(pArray->m_Size);
-	pAb->SetItemName("item");
+	pAb->SetDimension(pArray->m_Size);
 	Param* pParam = new Param();
+	if (RPC_ENCODED == m_nStyle)
+	{
+		pAb->SetItemName("item");
+		pParam->SetName(pName);
+	}
+	else
+	{
+		pAb->SetItemName(pName);
+		pParam->SetName("array");		
+	}
 	pParam->m_Value.pIArray = pAb;
 	pParam->m_Type = XSD_ARRAY;
-	pParam->SetName(pchArrayName);
 	pParam->serialize(*this);
 	/* Remove pointer to the array from the ArrayBean to avoid deleting the array when ArrayBean is deleted 
 	   Array will be deleted when the complex type that contains this array is deleted */

@@ -76,7 +76,7 @@ typedef int (* AXIS_DESERIALIZE_FUNCT)(void*, IWrapperSoapDeSerializer*);
  * Function used to create a custom type. bArray is true if array of objects to be
  * created. Then nSize is the size of that array.
  */
-typedef void* (* AXIS_OBJECT_CREATE_FUNCT)(bool bArray, int nSize);
+typedef void* (* AXIS_OBJECT_CREATE_FUNCT)(void*, bool bArray, int nSize);
 /**
  * Function used to delete a custom type. bArray is true if void* is a pointer to an array. 
  * Then nSize is the size of that array.
