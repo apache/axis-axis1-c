@@ -59,6 +59,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -73,6 +74,7 @@ import javax.wsdl.Service;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.Constants;
+import org.apache.axis.AxisProperties;
 import org.apache.axis.wsdl.fromJava.Emitter;
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.PortEntry;
@@ -98,11 +100,20 @@ public class ContextValidator {
 	
 	public  ContextValidator(J2EEWebServiceContext context)throws GenerationFault{
         try {
-            this.context = context; 
+            this.context = context;
+            String configFile = AxisProperties.getProperty(GenerationConstants.OPTION_WS4J2EE_PROPERTY_FILE,
+                    GenerationConstants.WS4J2EE_PROPERTY_FILE);
+
+            System.out.println(">>>> configFile:" + configFile);
             Properties prperties = new Properties();
-            prperties.load(new FileInputStream(GenerationConstants.WS4J2EE_PROPERTY_FILE));
+            try {
+                prperties.load(new FileInputStream(configFile));
+            } catch (Exception e) {
+                InputStream istream = ContextValidator.class.getClassLoader().getResourceAsStream(configFile);
+                prperties.load(istream);
+            }
             String containerDD = prperties.getProperty(GenerationConstants.J2EE_CONTAINER_DD);
-            System.out.println("$$$$$$$$"+containerDD);
+            System.out.println("$$$$$$$$" + containerDD);
             context.getMiscInfo().setJ2eeContainerDDName(containerDD);
         } catch (Exception e) {
 			throw GenerationFault.createGenerationFault(e);

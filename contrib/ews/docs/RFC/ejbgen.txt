@@ -1,0 +1,8 @@
+the name of the ejb should taken from the webservice.xml file
+sei = (sei name of webservice.xml) + EJB
+home = (sei name of webservice.xml)+Home
+bean = (bean ejb link name of webservice.xml)
+[DONE]
+
+genaration of the ejb-jar.xml file
+[TODO]
