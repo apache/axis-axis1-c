@@ -436,6 +436,7 @@ void* SoapDeSerializer::CreateArray(XSDTYPE nType, int nSize)
 	{
 	case XSD_INT:
 	case XSD_UNSIGNEDINT:
+	case XSD_BOOLEAN:
 		return new int[nSize];
 	case XSD_FLOAT:
 		return new float[nSize];
@@ -480,6 +481,7 @@ void SoapDeSerializer::DeleteArray(void* pArray, XSDTYPE nType)
 	{
 	case XSD_INT:
 	case XSD_UNSIGNEDINT:
+	case XSD_BOOLEAN:
 		delete [] ((int*)pArray); return;
 	case XSD_FLOAT:
 		delete [] ((float*)pArray); return;
