@@ -33,7 +33,11 @@ SoapHeader::SoapHeader()
 
 SoapHeader::~SoapHeader()
 {
-    /* deletion of Header Entries */
+    /* 
+     * header blocks are not deleted here any more. Its the responsibility of
+     * either a handler or stub etc to delete any header block created by them
+     */
+    /*
     list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
 
     while(itCurrHeaderBlock != m_headerBlocks.end())
@@ -41,7 +45,7 @@ SoapHeader::~SoapHeader()
         delete *itCurrHeaderBlock;
         itCurrHeaderBlock++;
     }
-
+    */
     m_headerBlocks.clear();
 
     /* deletion of attributes */

@@ -21,6 +21,7 @@
 
 #ifdef WIN32
 #pragma warning (disable : 4786)
+#pragma warning (disable : 4101)
 #endif
 
 #include "XMLParserXerces.h"

@@ -238,12 +238,6 @@ typedef struct
  */
 #define NO_OF_SERIALIZE_BUFFERS 20
 
-#if defined(WIN32) 
-#define STORAGE_CLASS_INFO __declspec(dllexport)
-#else
-#define STORAGE_CLASS_INFO 
-#endif
-
 #ifdef __cplusplus
 extern "C"
 {

@@ -21,12 +21,6 @@
 
 #include "XMLParserExpat.h"
 
-#ifdef WIN32
-#define STORAGE_CLASS_INFO __declspec(dllexport)
-#else
-#define STORAGE_CLASS_INFO 
-#endif
-
 extern "C" {
 STORAGE_CLASS_INFO
 int CreateInstance(XMLParser **inst)

@@ -79,8 +79,9 @@ public:
      * (AXIS_FAIL).
      */
 
+#ifdef UNIT_TESTING_ON
     int initializeForTesting();
-
+#endif
     int reset();
     int addAttribute(Attribute* pAttribute);
     const AxisChar* getMethodName();

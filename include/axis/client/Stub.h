@@ -28,7 +28,7 @@
  *
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
-
+ * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  */
 
 /*
@@ -61,11 +61,57 @@
  * Added doxygen comments to help autobuild API docs
  */
 
+/*
+ * Revision 1.13  2004/06/13 susantha
+ * Added support for writing C web services and handlers
+ */
+
 #if !defined(_STUB_H____OF_AXIS_INCLUDED_)
 #define _STUB_H____OF_AXIS_INCLUDED_
 
 #include <axis/client/Call.h>
+
+#ifdef __cplusplus
 #include <vector>
+#endif
+
+typedef struct {
+	void (AXISCALL* setEndpoint)(void* pObj, const char* pchEndpoint);
+	void (AXISCALL* setTransportProperty)(void* pObj, 
+        const char *pcKey, const char *pcValue);
+    char* (AXISCALL* getFirstTrasportPropertyKey)(void* pObj);
+    char* (AXISCALL* getNextTrasportPropertyKey)(void* pObj);
+    char* (AXISCALL* getCurrentTrasportPropertyKey)(void* pObj);
+    char* (AXISCALL* getCurrentTrasportPropertyValue)(void* pObj);
+    void (AXISCALL* deleteCurrentTrasportProperty)(void* pObj);
+    void (AXISCALL* deleteTrasportProperty)(void* pObj, char* pcKey, 
+        unsigned int uiOccurance);
+    HeaderBlock_C (AXISCALL* createSOAPHeaderBlock)(void* pObj, 
+        AxisChar * pachLocalName, AxisChar * pachUri);
+    HeaderBlock_C (AXISCALL* getFirstSOAPHeaderBlock)(void* pObj);
+    HeaderBlock_C (AXISCALL* getNextSOAPHeaderBlock)(void* pObj);
+    HeaderBlock_C (AXISCALL* getCurrentSOAPHeaderBlock)(void* pObj);
+    void (AXISCALL* deleteCurrentSOAPHeaderBlock)(void* pObj);
+    void (AXISCALL* deleteSOAPHeaderBlock)(void* pObj,
+        HeaderBlock_C hdrBlk);
+    void (AXISCALL* setProxy)(void* pObj, const char* pcProxyHost,
+        unsigned int uiProxyPort);
+    void (AXISCALL* setSOAPMethodAttribute)(void* pObj,
+        const AxisChar *pLocalname, const AxisChar *pPrefix,
+        const AxisChar* pUri, const AxisChar *pValue);
+    Attribute_C (AXISCALL* getFirstSOAPMethodAttribute)(void* pObj);
+    Attribute_C (AXISCALL* getNextSOAPMethodAttribute)(void* pObj);
+    Attribute_C (AXISCALL* getCurrentSOAPMethodAttribute)(void* pObj);
+    void (AXISCALL* deleteCurrentSOAPMethodAttribute)(void* pObj);
+    void (AXISCALL* deleteSOAPMethodAttribute)(void* pObj,
+        Attribute_C Attr);
+    void (AXISCALL* setTransportTimeout)(void* pObj, const long lSeconds);
+   	int (AXISCALL* getStatus)(void* pObj);
+    const AxisChar* (AXISCALL* getNamespacePrefix)(void* pObj,
+        const AxisChar* pNamespace);
+} StubFunctions;
+
+#ifdef __cplusplus
 
 class STORAGE_CLASS_INFO Stub
 {
@@ -76,12 +122,12 @@ class STORAGE_CLASS_INFO Stub
     * @param pcEndPointURI End point URI of the service to connect to. 
     *                       e.g. http://localhost:8080/axis/services/echo
     */
-    Stub (const char *pcEndPointURI);
+    Stub(const char *pcEndPointURI, AXIS_PROTOCOL_TYPE eProtocol);
    
   /**
     * Destructor.
     */
-    virtual ~Stub ();
+    virtual ~Stub();
 
   /**
     * Set end point of service to connect to.
@@ -90,7 +136,7 @@ class STORAGE_CLASS_INFO Stub
     *                       e.g. http://localhost:8080/axis/services/echo
     */
 
-    void AXISCALL setEndPoint(char *pcEndPointURI);
+    void AXISCALL setEndPoint(const char *pcEndPointURI);
 
   /**
     * Set transport property.
@@ -114,7 +160,7 @@ class STORAGE_CLASS_INFO Stub
     *              seperate properties.
     * @param pcValue Header value e.g. "da, en-gb;q=0.8, en;q=0.7"
     */
-    void AXISCALL setTransportProperty (const char *pcKey, const char *pcValue);
+    void AXISCALL setTransportProperty(const char *pcKey, const char *pcValue);
 
   /**
     * Iterator initiatior for trasport property keys
@@ -229,32 +275,32 @@ class STORAGE_CLASS_INFO Stub
     * </PRE>
     * the following code segment coule be used
     * <PRE>
-    *  IHeaderBlock *phb = ws.createSOAPHeaderBlock ("TestHeader", "th",
+    *  IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader", "th",
     *                                   "http://ws.apache.org/axisCppTest/");
     *  //create parent node
-    *  BasicNode *parentNode = phb->createChild (ELEMENT_NODE);
-    *  parentNode->setLocalName ("Credentials");
+    *  BasicNode *parentNode = phb->createChild(ELEMENT_NODE);
+    *  parentNode->setLocalName("Credentials");
     *  //create child node
-    *  BasicNode *childNode = phb->createChild (ELEMENT_NODE);
-    *  childNode->setLocalName ("username");
+    *  BasicNode *childNode = phb->createChild(ELEMENT_NODE);
+    *  childNode->setLocalName("username");
     *  //create char node for value
-    *  BasicNode *valueNode = phb->createChild (CHARACTER_NODE);
-    *  valueNode->setValue ("Test User");
+    *  BasicNode *valueNode = phb->createChild(CHARACTER_NODE);
+    *  valueNode->setValue("Test User");
     *  //buld node tree
-    *  childNode->addChild (valueNode);
-    *  parentNode->addChild (childNode);
+    *  childNode->addChild(valueNode);
+    *  parentNode->addChild(childNode);
     *
     *  //add another node set
-    *  childNode = phb->createChild (ELEMENT_NODE);
-    *  childNode->setLocalName ("password");
+    *  childNode = phb->createChild(ELEMENT_NODE);
+    *  childNode->setLocalName("password");
     *
-    *  valueNode = phb->createChild (CHARACTER_NODE);
-    *  valueNode->setValue ("Test Password");
+    *  valueNode = phb->createChild(CHARACTER_NODE);
+    *  valueNode->setValue("Test Password");
     *
-    *  childNode->addChild (valueNode);
-    *  parentNode->addChild (childNode);
+    *  childNode->addChild(valueNode);
+    *  parentNode->addChild(childNode);
     *
-    *  phb->addChild (parentNode);
+    *  phb->addChild(parentNode);
     * </PRE>
     *
     * @param pachLocalName Local tag name of the SOAP header. e.g. TestHeader
@@ -265,8 +311,7 @@ class STORAGE_CLASS_INFO Stub
     *
     * @return Pointer to the creater SOAP header block.
     */
-    IHeaderBlock * AXISCALL createSOAPHeaderBlock (AxisChar * pachLocalName,
-				     AxisChar * pachPrefix,
+    IHeaderBlock * AXISCALL createSOAPHeaderBlock(AxisChar * pachLocalName,
 				     AxisChar * pachUri);
 
   /**
@@ -451,6 +496,69 @@ class STORAGE_CLASS_INFO Stub
     * Get the status of the stub to see any error situation
     */
    	int getStatus();
+  /**
+    * Get a namespace prefix for a given namespace URI
+    */
+    const AxisChar* AXISCALL getNamespacePrefix(const AxisChar* pNamespace);
+
+  public:
+	static StubFunctions ms_VFtable;
+	static bool bInitialized;
+	/* add static functions for all interface functions here */
+    static void AXISCALL s_setEndpoint(void* pObj, const char* pchEndpoint)
+	{((Stub*)pObj)->setEndPoint(pchEndpoint);};
+	static void AXISCALL s_setTransportProperty(void* pObj, 
+        const char *pcKey, const char *pcValue)
+	{((Stub*)pObj)->setTransportProperty(pcKey, pcValue);};
+    static char* AXISCALL s_getFirstTrasportPropertyKey(void* pObj)
+	{return ((Stub*)pObj)->getFirstTrasportPropertyKey();};
+    static char* AXISCALL s_getNextTrasportPropertyKey(void* pObj)
+	{return ((Stub*)pObj)->getNextTrasportPropertyKey();};
+    static char* AXISCALL s_getCurrentTrasportPropertyKey(void* pObj)
+	{return ((Stub*)pObj)->getCurrentTrasportPropertyKey();};
+    static char* AXISCALL s_getCurrentTrasportPropertyValue(void* pObj)
+	{return ((Stub*)pObj)->getCurrentTrasportPropertyValue();};
+    static void AXISCALL s_deleteCurrentTrasportProperty(void* pObj)
+	{((Stub*)pObj)->deleteCurrentTrasportProperty();};
+    static void AXISCALL s_deleteTrasportProperty(void* pObj, char* pcKey, 
+        unsigned int uiOccurance)
+	{((Stub*)pObj)->deleteTrasportProperty(pcKey, uiOccurance);};
+    static HeaderBlock_C AXISCALL s_createSOAPHeaderBlock(void* pObj, 
+        AxisChar * pachLocalName, AxisChar * pachUri);
+    static HeaderBlock_C AXISCALL s_getFirstSOAPHeaderBlock(void* pObj);
+    static HeaderBlock_C AXISCALL s_getNextSOAPHeaderBlock(void* pObj);
+    static HeaderBlock_C AXISCALL s_getCurrentSOAPHeaderBlock(void* pObj);
+    static void AXISCALL s_deleteCurrentSOAPHeaderBlock(void* pObj)
+	{((Stub*)pObj)->deleteCurrentSOAPHeaderBlock();};
+    static void AXISCALL s_deleteSOAPHeaderBlock(void* pObj,
+        HeaderBlock_C hdrBlk)
+	{((Stub*)pObj)->deleteSOAPHeaderBlock((IHeaderBlock*)hdrBlk._object);};
+    static void AXISCALL s_setProxy(void* pObj, const char* pcProxyHost,
+        unsigned int uiProxyPort)
+	{((Stub*)pObj)->setProxy(pcProxyHost, uiProxyPort);};
+    static void AXISCALL s_setSOAPMethodAttribute(void* pObj,
+        const AxisChar *pLocalname, const AxisChar *pPrefix,
+        const AxisChar* pUri, const AxisChar *pValue)
+	{((Stub*)pObj)->setSOAPMethodAttribute(pLocalname, pPrefix, pUri,
+                                            pValue);};
+    static Attribute_C AXISCALL s_getFirstSOAPMethodAttribute(void* pObj);
+    static Attribute_C AXISCALL s_getNextSOAPMethodAttribute(void* pObj);
+    static Attribute_C AXISCALL s_getCurrentSOAPMethodAttribute(void* pObj);
+    static void AXISCALL s_deleteCurrentSOAPMethodAttribute(void* pObj)
+	{((Stub*)pObj)->deleteCurrentSOAPMethodAttribute();};
+    static void AXISCALL s_deleteSOAPMethodAttribute(void* pObj,
+        Attribute_C Attr)
+	{((Stub*)pObj)->deleteSOAPMethodAttribute((Attribute*)Attr._object);};
+    static void AXISCALL s_setTransportTimeout(void* pObj,
+        const long lSeconds)
+	{((Stub*)pObj)->setTransportTimeout(lSeconds);};
+   	static int AXISCALL s_getStatus(void* pObj)
+	{return ((Stub*)pObj)->getStatus();};
+    static const AxisChar* AXISCALL s_getNamespacePrefix(void* pObj,
+        const AxisChar* pNamespace)
+	{return ((Stub*)pObj)->getNamespacePrefix(pNamespace);};
+	static void s_Initialize();
+
   protected:
   /**
     * Apply user set preferences to each call made on the Stub object.
@@ -536,5 +644,18 @@ class STORAGE_CLASS_INFO Stub
     long m_lTimeoutSeconds;
 
 };
+
+#endif
+
+typedef struct { 
+	void* _object; /* this will be C++ Call Object */
+	CallFunctions* _functions; /* this is the static function table */
+    void* _stub_object; /* the stub object */
+    StubFunctions* _stub_functions; /* this is the static function table */
+} Call_C;
+
+#ifndef __cplusplus
+typedef Call_C Call; 
+#endif
 
 #endif /* !defined(_STUB_H____OF_AXIS_INCLUDED_) */
