@@ -393,6 +393,8 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 {
     if (0 <= m_iBytesLeft)
     {
+		int	iIterationCountdown;
+
 		try
 		{
 			m_pszRxBuffer [0] = '\0';
@@ -402,13 +404,15 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 		    if( !m_bReadPastHTTPHeaders)
 		    {
 				unsigned int	start = std::string::npos;
+
+				iIterationCountdown = 100;
+				
 // getBytes needs to be able to exit any of the following loops if the expected
 // character sequence is never detected.  This is done using a simple counter.
 // If the loop has not exited on its own accord after say 100 tries, it is safe
 // to assume that it never will...  To make the test less likely to cause
 // problems with very long messages, the countdown is only decremented when no
 // data has been received.
-				int				iIterationCountdown = 100;
 
 				do
 				{
@@ -433,10 +437,16 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 						}
 					} while( m_strReceived.find( "\r\n\r\n") == std::string::npos && iIterationCountdown > 0);
 
-					iIterationCountdown = 100;
+					if( iIterationCountdown == 0)
+					{
+						throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
+													  "Timed out waiting for HTTP header message (1).");
+					}
 
 					if( m_strReceived.find ("HTTP") == std::string::npos)
 					{
+						iIterationCountdown = 100;
+
 			// Most probably what we read was left overs from earlier reads
 			// Skip this \r\n\r\n
 						m_strReceived = m_strReceived.substr( m_strReceived.find( "\r\n\r\n") + 4);
@@ -461,6 +471,13 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 								}
 							}
 						} while( m_strReceived.find( "\r\n\r\n") == std::string::npos && iIterationCountdown > 0);
+
+						if( iIterationCountdown == 0)
+						{
+							throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
+														  "Timed out waiting for HTTP header message (2).");
+						}
+
 			// now this must contain HTTP. Else there is a conent error.
 					}
 
@@ -512,6 +529,12 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 						m_strReceived = m_pszRxBuffer;
 					}
 				} while( m_iResponseHTTPStatusCode == 100 && iIterationCountdown > 0);
+
+				if( iIterationCountdown == 0)
+				{
+					throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
+												  "Timed out waiting for HTTP header message (3).");
+				}
 
                 if ( m_iResponseHTTPStatusCode != 500 &&
                     ( m_iResponseHTTPStatusCode < 200 || m_iResponseHTTPStatusCode >= 300 ))
@@ -566,13 +589,31 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 		// make sure we have read at least some part of the message
 				if( endOfChunkData == std::string::npos)
 				{
+					iIterationCountdown = 100;
+
 					do
 					{
 						m_pszRxBuffer [0] = '\0';
 						*m_pActiveChannel >> m_pszRxBuffer;
+
+						if( strlen( m_pszRxBuffer) == 0)
+						{
+							iIterationCountdown--;
+						}
+						else
+						{
+							iIterationCountdown = 100;
+						}
+
 						m_strReceived = m_pszRxBuffer;
 						endOfChunkData = m_strReceived.find( "\r\n");
-					} while( endOfChunkData == std::string::npos);
+					} while( endOfChunkData == std::string::npos && iIterationCountdown > 0);
+				}
+
+				if( iIterationCountdown == 0)
+				{
+					throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
+												  "Timed out waiting for SOAP message (1).");
 				}
 
 				int endOfChunkSize = endOfChunkData;
@@ -631,28 +672,64 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 		    // The format we are expecting here is:
 		    // <previous chunk>\r\n<chunk size>\r\n<next chunk>
 
-					unsigned int endOfChunkData = m_strReceived.find( "\r\n");
+					unsigned int	endOfChunkData = m_strReceived.find( "\r\n");
+					
+					iIterationCountdown = 100;
 
 		    // Make sure that we have the found the end of previous chunk
-					while( endOfChunkData == std::string::npos)
+					while( endOfChunkData == std::string::npos && iIterationCountdown > 0)
 					{
 						m_pszRxBuffer [0] = '\0';
 						*m_pActiveChannel >> m_pszRxBuffer;
+
+						if( strlen( m_pszRxBuffer) > 0)
+						{
+							iIterationCountdown = 100;
+						}
+						else
+						{
+							iIterationCountdown--;
+						}
+
 						m_strReceived += m_pszRxBuffer;
 						endOfChunkData = m_strReceived.find( "\r\n");
+					}
+
+					if( iIterationCountdown == 0)
+					{
+						throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
+													  "Timed out waiting for SOAP message (2).");
 					}
 
 				    m_strReceived = m_strReceived.substr( endOfChunkData + 2);	// Skip end of previous chunk
 
 				    endOfChunkData = m_strReceived.find( "\r\n");	// Locate the start of next chunk
 
+					iIterationCountdown = 100;
+
 		    // Make sure that we have the starting line of next chunk
-					while( endOfChunkData == std::string::npos)
+					while( endOfChunkData == std::string::npos && iIterationCountdown > 0)
 					{
 						m_pszRxBuffer [0] = '\0';
 						*m_pActiveChannel >> m_pszRxBuffer;
+
+						if( strlen( m_pszRxBuffer) > 0)
+						{
+							iIterationCountdown = 100;
+						}
+						else
+						{
+							iIterationCountdown--;
+						}
+
 						m_strReceived += m_pszRxBuffer;
 						endOfChunkData = m_strReceived.find( "\r\n");
+					}
+
+					if( iIterationCountdown == 0)
+					{
+						throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
+													  "Timed out waiting for SOAP message (3).");
 					}
 
 				    int endOfChunkSize = endOfChunkData;
