@@ -1,0 +1,70 @@
+/* -*- C++ -*- */
+/*
+ *   Copyright 2003-2004 The Apache Software Foundation.
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
+ *
+ * @author Adrian Dick (adrian.dick@uk.ibm.com)
+ *
+ */
+
+#if !defined(_TIME_HPP____OF_AXIS_INCLUDED_)
+#define _TIME_HPP____OF_AXIS_INCLUDED_
+
+#include "IAnySimpleType.hpp"
+#include <ctime>
+
+AXIS_CPP_NAMESPACE_START
+
+using namespace std;
+
+class Time : public IAnySimpleType {
+public:
+
+	/**
+	 * Serialize value to it's on-the-wire string form.
+	 * @param value The value to be serialized.
+	 * @return Serialized form of value.
+	 */
+    AxisChar* serialize(const void* value) throw (AxisSoapException);
+	
+	/**
+	 * Deserialize value from it's on-the-wire string form.
+	 * @param valueAsChar Serialized form of value.
+	 * @return Deserialized value.
+	 */
+    void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
+	
+	/**
+	 * Serialize Time value to it's on-the-wire string form.
+	 * @param value The Time value to be serialized.
+	 * @return Serialized form of Time value.
+	 */
+    AxisChar* serialize(const struct tm* value) throw (AxisSoapException);
+	
+	/**
+	 * Deserialized Time value from it's on-the-wire string form.
+	 * @param valueAsChar Serialized form of Time value.
+	 * @return Deserialized Time value.
+	 */
+    struct tm* deserializeTime(const AxisChar* valueAsChar) throw (AxisSoapException);
+
+private:
+	AxisChar* m_Buf;
+	struct tm* m_Time;
+};
+
+AXIS_CPP_NAMESPACE_END
+
+#endif
