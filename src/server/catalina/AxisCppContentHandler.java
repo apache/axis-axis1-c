@@ -81,12 +81,16 @@ public class AxisCppContentHandler
         }
      }
 
-	public static native void processContent(byte [] body, int bodySize, Vector headers, int headerCount);
+	public static native void processContent(InputStream in, 
+											 Vector headers, 
+											 OutputStream out,
+											 int contentLength);
 
 	public static void main(String [] args)
 	{
 		byte [] str = new String("Hello World").getBytes();
-		
+		ByteArrayInputStream input = new ByteArrayInputStream(str);
+		int contentLength = "Hello World".length();
 		Vector v = new Vector();
 		v.add("Name1");
 		v.add("Value1");
@@ -95,10 +99,7 @@ public class AxisCppContentHandler
 		try{
 			System.in.read();
 		
-			AxisCppContentHandler.processContent(str, str.length, v, 2);
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			out.write(str);
-			System.out.println(out.toString());
+			AxisCppContentHandler.processContent(input, v, System.out, contentLength);
 		}catch(IOException ex){
 			ex.printStackTrace();
 		}

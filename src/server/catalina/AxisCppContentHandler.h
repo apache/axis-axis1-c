@@ -11,10 +11,10 @@ extern "C" {
 /*
  * Class:     AxisCppContentHandler
  * Method:    processContent
- * Signature: (Ljava/lang/StringBuffer;ILjava/util/Vector;I)V
+ * Signature: (Ljava/io/InputStream;Ljava/util/Vector;Ljava/io/OutputStream;)V
  */
 JNIEXPORT void JNICALL Java_AxisCppContentHandler_processContent
-  (JNIEnv *, jclass, jbyteArray, jint, jobject, jint);
+  (JNIEnv *, jclass, jobject, jobject, jobject,jint);
 
 JNIEXPORT jint JNICALL Java_OnLoad ( JavaVM *jvm, void *reserved);
 JNIEXPORT void JNICALL Java_OnUnload ( JavaVM *jvm, void *reserved);
