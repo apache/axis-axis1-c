@@ -8,6 +8,6 @@ libaxis_tspp_la_SOURCES = AxisInputStream.cpp \
 			   XmlPullParserException.cpp \
 			   ../AxisParseException.cpp
 
-libaxis_tspp_la_LIBADD =  @XERCESCLIB@ -lstdc++
-INCLUDES = @XERCESCINC@ -I../../../include
+libaxis_tspp_la_LIBADD =  -lstdc++
+INCLUDES = -I../../../include
 
