@@ -58,7 +58,7 @@ public:
     virtual void SetProperty(const char* p_Property, const char* p_Value)=0;
 
 
-    virtual const Transport& operator >> (const char** pMsg){*pMsg=NULL;return *this;}
+    virtual const Transport& operator >> (const char** pMsg) {*pMsg=NULL;return *this;}
     virtual const Transport& operator << (const char* msg)=0;
     virtual void ClearAdditionalHeaders(){};
     virtual int getBodyLength() = 0;
