@@ -1,0 +1,287 @@
+/* -*- C++ -*- */
+
+/*
+ * The Apache Software License, Version 1.1
+ *
+ *
+ * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ *
+ * 3. The end-user documentation included with the redistribution,
+ *    if any, must include the following acknowledgment:
+ *       "This product includes software developed by the
+ *        Apache Software Foundation (http://www.apache.org/)."
+ *    Alternately, this acknowledgment may appear in the software itself,
+ *    if and wherever such third-party acknowledgments normally appear.
+ *
+ * 4. The names "SOAP" and "Apache Software Foundation" must
+ *    not be used to endorse or promote products derived from this
+ *    software without prior written permission. For written
+ *    permission, please contact apache@apache.org.
+ *
+ * 5. Products derived from this software may not be called "Apache",
+ *    nor may "Apache" appear in their name, without prior written
+ *    permission of the Apache Software Foundation.
+ *
+ * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
+ * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+ * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ * ====================================================================
+ *
+ * This software consists of voluntary contributions made by many
+ * individuals on behalf of the Apache Software Foundation.  For more
+ * information on the Apache Software Foundation, please see
+ * <http://www.apache.org/>.
+ *
+ *
+ *
+ *
+ * @author Roshan
+ *
+ */
+
+// SoapEnvelope.cpp: implementation of the SoapEnvelope class.
+//
+//////////////////////////////////////////////////////////////////////
+
+#include "SoapEnvelope.h"
+#include "../common/GDefine.h"
+
+#include <stdio.h>
+
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
+
+SoapEnvelope::SoapEnvelope()
+{
+	m_pSoapHeader= NULL;
+	m_pSoapBody= NULL;
+}
+
+SoapEnvelope::~SoapEnvelope()
+{
+	//deletion of attributes
+	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+
+	while(itCurrAttribute != m_attributes.end()) {		
+		delete *itCurrAttribute;
+		itCurrAttribute++;
+	}
+
+	m_attributes.clear();
+
+	//deletion of namespace declerations
+	list<Attribute*>::iterator itCurrNamespaceDecls= m_namespaceDecls.begin();
+
+	while(itCurrNamespaceDecls != m_namespaceDecls.end()) {		
+		delete *itCurrNamespaceDecls;
+		itCurrNamespaceDecls++;
+	}
+
+	m_namespaceDecls.clear();
+
+	//deletion of soap header
+	if(m_pSoapHeader) {
+		delete m_pSoapHeader;
+	}
+
+	//deletion of soap body
+	if(m_pSoapBody) {
+		delete m_pSoapBody;
+	}
+}
+
+void SoapEnvelope::setSoapHeader(SoapHeader* soapHeader)
+{
+	m_pSoapHeader= soapHeader;
+}
+
+void SoapEnvelope::setSoapBody(SoapBody* soapBody)
+{
+	m_pSoapBody= soapBody;
+}
+
+int SoapEnvelope::serialize(string& sSerialized, SOAP_VERSION eSoapVersion)
+{	
+	
+	int iStatus= SUCCESS;
+
+	do {
+		sSerialized= "<"+ string(g_sObjSoapEnvVersionsStruct[eSoapVersion].pchEnvelopePrefix) + ":"+ g_sObjSoapEnvVersionsStruct[eSoapVersion].pcharWords[SKW_ENVELOPE];
+
+		serializeNamespaceDecl(sSerialized);
+		serializeAttributes(sSerialized);
+
+		sSerialized= sSerialized + ">"+ "\n";
+
+		if(m_pSoapHeader!=NULL) {
+			iStatus= m_pSoapHeader->serialize(sSerialized, eSoapVersion);
+			if(iStatus == FAIL) {
+				break;
+			}
+		}
+
+		if(m_pSoapBody!=NULL) {
+			iStatus= m_pSoapBody->serialize(sSerialized, eSoapVersion);
+			if(iStatus == FAIL) {
+				break;
+			}
+		} else {
+			//throw exception
+			//iStatus = FAIL;
+		}
+		
+		sSerialized+= "</"+ string(g_sObjSoapEnvVersionsStruct[eSoapVersion].pchEnvelopePrefix) + ":"+ g_sObjSoapEnvVersionsStruct[eSoapVersion].pcharWords[SKW_ENVELOPE]+ ">";	
+	} while(0);
+
+	return iStatus;
+}
+
+/*string& SoapEnvelope::serialize()
+{		
+	m_strEnvelopSerialized= "<"+ m_sPrefix+ ":"+ m_sLocalname;
+
+	string sNamespaceDeclSerialized= serializeNamespaceDecl();
+	string sAttributeSerialized= serializeAttributes();
+
+	if(!sNamespaceDeclSerialized.empty()) {
+		m_strEnvelopSerialized+= " "+ sNamespaceDeclSerialized;
+	}
+
+	if(!sAttributeSerialized.empty()) {
+		m_strEnvelopSerialized+= " "+ sAttributeSerialized;
+	}
+
+	m_strEnvelopSerialized+= ">";
+
+	if(m_pSoapHeader!=NULL) {
+		m_strEnvelopSerialized= m_strEnvelopSerialized+ m_pSoapHeader->serialize();
+	}
+
+	if(m_pSoapBody!=NULL) {
+		m_strEnvelopSerialized= m_strEnvelopSerialized+ m_pSoapBody->serialize();
+	} else {
+		//throw exception
+	}
+
+	m_strEnvelopSerialized+= "</"+ m_sPrefix+ ":"+ m_sLocalname+ ">";
+
+	return m_strEnvelopSerialized;
+}*/
+
+/*
+ *The added attrubute will be deleted by the destructor of this 
+ * SoapEnvelope.
+ */
+int SoapEnvelope::addAttribute(Attribute *pAttribute)
+{
+	m_attributes.push_back(pAttribute);
+
+	return SUCCESS;
+}
+
+/*
+ *The added NamespaceDecl will be deleted by the destructor of this 
+ * SoapEnvelope.
+ */
+int SoapEnvelope::addNamespaceDecl(Attribute *pAttribute)
+{
+	m_namespaceDecls.push_back(pAttribute);
+
+	return SUCCESS;
+}
+
+int SoapEnvelope::serializeAttributes(string& sSerialized)
+{	
+	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+
+	while(itCurrAttribute != m_attributes.end()) {		
+		(*itCurrAttribute)->serialize(sSerialized);
+		itCurrAttribute++;		
+	}	
+
+	return SUCCESS;	
+}
+
+/*
+string SoapEnvelope::serializeAttributes()
+{
+	string strAttrSerialized="";
+
+	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+
+	while(itCurrAttribute != m_attributes.end()) {		
+
+		strAttrSerialized= strAttrSerialized+ (*itCurrAttribute)->serialize();
+		itCurrAttribute++;
+
+		if(itCurrAttribute != m_attributes.end()) {
+			strAttrSerialized= strAttrSerialized+ " ";
+		}
+	}	
+
+	return strAttrSerialized;	
+}
+*/
+
+int SoapEnvelope::serializeNamespaceDecl(string& sSerialized)
+{	
+
+	list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
+
+	while(itCurrNamespaceDecl != m_namespaceDecls.end()) {			
+
+		(*itCurrNamespaceDecl)->serialize(sSerialized);
+		itCurrNamespaceDecl++;		
+	}	
+
+	return SUCCESS;
+}
+
+/*string SoapEnvelope::serializeNamespaceDecl()
+{
+	string strNamespaceDeclSerialized="";
+
+	list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
+
+	while(itCurrNamespaceDecl != m_namespaceDecls.end()) {		
+
+		strNamespaceDeclSerialized= strNamespaceDeclSerialized+ (*itCurrNamespaceDecl)->serialize();
+		itCurrNamespaceDecl++;
+
+		if(itCurrNamespaceDecl != m_namespaceDecls.end()) {
+			strNamespaceDeclSerialized= strNamespaceDeclSerialized+ " ";
+		}
+	}	
+
+	return strNamespaceDeclSerialized;
+}*/
+
+int SoapEnvelope::setPrefix(const string &prefix)
+{
+	m_sPrefix= prefix;
+
+	return SUCCESS;
+}
