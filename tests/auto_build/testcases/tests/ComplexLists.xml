@@ -1,0 +1,13 @@
+<test>
+    <name>ComplexLists</name>
+    <description>ComplexLists</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>ComplexListsClient.cpp</clientCode>
+    <wsdl>ComplexLists.wsdl</wsdl>
+    <expected>
+        <output>
+            ComplexLists.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost/ComplexLists/services/ComplexLists</endpoint>
+</test>
