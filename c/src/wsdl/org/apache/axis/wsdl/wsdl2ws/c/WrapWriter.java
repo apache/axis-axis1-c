@@ -285,7 +285,7 @@ public class WrapWriter extends CFileWriter{
 				//for simple types	
 				writer.write("\tv"+i+" = pDZX->"+CUtils.getParameterGetValueMethodName(paraTypeName)+"(pDZ);\n");
 			}else if((type = this.wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName())) != null && type.isArray()){
-				QName qname = type.getTypNameForAttribName("item");
+				QName qname = WrapperUtils.getArrayType(type).getName();
 				String containedType = null;
 				if (CUtils.isSimpleType(qname)){
 					containedType = CUtils.getclass4qname(qname);
@@ -322,7 +322,7 @@ public class WrapWriter extends CFileWriter{
 			if (returntypeissimple){
 				writer.write("\treturn pSZX->AddOutputParam(pSZ, \""+methodName+"Return\", (void*)&ret, "+CUtils.getXSDTypeForBasicType(outparamType)+");\n");
 			}else if(returntypeisarray){
-				QName qname = retType.getTypNameForAttribName("item");
+				QName qname = WrapperUtils.getArrayType(retType).getName();
 				String containedType = null;
 				if (CUtils.isSimpleType(qname)){
 					containedType = CUtils.getclass4qname(qname);

@@ -69,6 +69,7 @@ import java.io.IOException;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
+import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.cpp.CPPUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
@@ -89,7 +90,7 @@ public class ArrayParamWriter extends ParamWriter{
 				throw new WrapperFault("Array type "+classname+" contain unexpected no of types");
 			}
 			//include header file for the contained type
-			QName qname = type.getTypNameForAttribName("item");
+			QName qname = WrapperUtils.getArrayType(type).getName(); 
 			if (!CPPUtils.isSimpleType(qname)){
 				writer.write("#include \""+attribs[0][1]+".h\"\n\n");
 			}
