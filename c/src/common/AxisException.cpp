@@ -67,9 +67,9 @@ string AxisException::getMessage(exception* e)
 string AxisException::getMessage(int e)
 {
   string sMessage;
-  if(e == 11)
-  sMessage = "AXIS_CUSTOM_ERROR";
-  //cout <<  "AXIS_CUSTOM_ERROR" << endl;
+  if(e == 1)
+  sMessage = "AXIS_TEST_ERROR";
+  //cout <<  "AXIS_TEST_ERROR" << endl;
 
   return sMessage;
 

@@ -3,6 +3,8 @@
 #include <exception>
 using namespace std;
 
+#define AXIS_TEST_ERROR 1
+
 class AxisException :public exception
 {
 
@@ -18,6 +20,6 @@ class AxisException :public exception
     void processException(exception* e, int e);
     void processException(int e);
     string getMessage(exception* e);
-    string getMessage(int e);
+    string getMessage(int e);    
     string m_sMessage;
 };
