@@ -75,11 +75,11 @@ public class ClientStubWriter extends CPPClassWriter{
 	 */
 	protected void writeConstructors() throws WrapperFault {
 		try{
-		writer.write(classname+"::"+classname+"()\n{\n");
-		writer.write("\tm_pCall = new Call();\n");
+		writer.write(classname+"::"+classname+"(const char* pchEndpointUri)\n:Stub(pchEndpointUri)\n{\n");
+		/*writer.write("\tm_pCall = new Call();\n");
 		//TODO get TransportURI from WrapInfo and check what the transport is and do the following line accordingly
 		writer.write("\tm_pCall->setProtocol(APTHTTP);\n");
-		writer.write("\tm_pCall->setEndpointURI(\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\");\n");
+		writer.write("\tm_pCall->setEndpointURI(\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\");\n");*/
 		writer.write("}\n\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
@@ -91,7 +91,7 @@ public class ClientStubWriter extends CPPClassWriter{
 	 */
 	protected void writeDistructors() throws WrapperFault {
 		try{
-		writer.write(classname+"::~"+classname+"()\n{\n\tdelete m_pCall;\n}\n\n");
+		writer.write(classname+"::~"+classname+"()\n{\n}\n\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}

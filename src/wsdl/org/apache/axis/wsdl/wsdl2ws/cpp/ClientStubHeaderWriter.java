@@ -57,11 +57,12 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeAttributes()
 	 */
 	protected void writeAttributes() throws WrapperFault {
-		try {
+/*		try {
 			writer.write("private:\n\tCall* m_pCall;\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}
+*/
 	}
 
 	/* (non-Javadoc)
@@ -84,7 +85,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 	 */
 	protected void writeConstructors() throws WrapperFault {
 		try{
-		writer.write("public:\n\t"+classname+"();\n");
+		writer.write("public:\n\t"+classname+"(const char* pchEndpointUri);\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}
@@ -159,7 +160,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 	 */
 	protected void writePreprocssorStatements() throws WrapperFault {
 		try{
-			writer.write("#include <axis/client/Call.h>\n");
+			writer.write("#include <axis/client/Stub.h>\n");
 			writer.write("/*include Exception header files here*/\n");//damitha
 			Type atype;
 			Iterator types = this.wscontext.getTypemap().getTypes().iterator();
@@ -186,5 +187,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 	{
 		return "ClientStub";	
 	}
+	
+	protected String getExtendsPart(){return " :public Stub";}
 }
 
