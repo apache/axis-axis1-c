@@ -23,6 +23,8 @@
   #include "windows/PlatformSpecificWindows.hpp"
 #elif defined ( __OS400__  )
   #include "os400/PlatformSpecificOS400.hpp"
+#elif defined ( AIX )
+  #include "aix/PlatformSpecificAIX.hpp"
 #else
   #include "unix/PlatformSpecificUnix.hpp"
 #endif

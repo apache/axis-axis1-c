@@ -22,8 +22,8 @@
 // =============================================================
 // Default paths to shared library/DLLs and files
 // =============================================================
-#define PLATFORM_XMLPARSER_PATH      "/usr/local/axiscpp_deploy/lib/libaxis_xmlparser.so"
-#define PLATFORM_TRANSPORTHTTP_PATH  "/usr/local/axiscpp_deploy/lib/libaxis_transport.so"
+#define PLATFORM_XMLPARSER_PATH      "libaxis_xmlparser.so"
+#define PLATFORM_TRANSPORTHTTP_PATH  "libaxis_transport.so"
 
 #define PLATFORM_LOG_PATH            "/usr/local/axiscpp_deploy/log/AxisLog"
 #define PLATFORM_CLIENTLOG_PATH      "/usr/local/axiscpp_deploy/log/AxisClientLog"

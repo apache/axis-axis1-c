@@ -15,15 +15,15 @@
  */
 
 
-#if !defined(_PLATFORM_SPECIFIC_OS400_HPP)
-#define _PLATFORM_SPECIFIC_OS400_HPP
+#if !defined(_PLATFORM_SPECIFIC_AIX_HPP)
+#define _PLATFORM_SPECIFIC_AIX_HPP
 
 
 // =============================================================
 // Default paths to shared library/DLLs and files
 // =============================================================
-#define PLATFORM_XMLPARSER_PATH      "libaxis_xmlparser.so"
-#define PLATFORM_TRANSPORTHTTP_PATH  "libaxis_transport.so"
+#define PLATFORM_XMLPARSER_PATH      "libaxis_xmlparser.a"
+#define PLATFORM_TRANSPORTHTTP_PATH  "libaxis_transport.a"
 
 #define PLATFORM_LOG_PATH            "/usr/local/axiscpp_deploy/log/AxisLog"
 #define PLATFORM_CLIENTLOG_PATH      "/usr/local/axiscpp_deploy/log/AxisClientLog"
@@ -32,31 +32,38 @@
 // =============================================================
 // Library loading and procedure resolution
 // =============================================================
-#define DLHandler void*
-#define RTLD_LAZY 0    // not sure this is needed?
+#ifdef USE_LTDL
+ #include <ltdl.h>
+ #define DLHandler lt_dlhandle
 
-#define PLATFORM_LOADLIBINIT()
-#define PLATFORM_LOADLIB(_lib)     os400_dlopen(_lib)
-#define PLATFORM_UNLOADLIB         os400_dlclose
-#define PLATFORM_GETPROCADDR       os400_dlsym
-#define PLATFORM_LOADLIBEXIT()
-#define PLATFORM_LOADLIB_ERROR     ""
+ #define PLATFORM_LOADLIBINIT       lt_dlinit
+ #define PLATFORM_LOADLIB(_lib)     lt_dlopen(_lib)
+ #define PLATFORM_UNLOADLIB         lt_dlclose
+ #define PLATFORM_GETPROCADDR       lt_dlsym
+ #define PLATFORM_LOADLIBEXIT       lt_dlexit
+ #define PLATFORM_LOADLIB_ERROR     lt_dlerror()
+#else
+ #include <dlfcn.h>
+ #define DLHandler void*
 
-extern void	*os400_dlopen(const char *);
-extern void	*os400_dlsym(void *, const char *);
-extern int   os400_dlclose(void *);
+ #define PLATFORM_LOADLIBINIT()
+ #define PLATFORM_LOADLIB(_lib)     dlopen(_lib, RTLD_LAZY)
+ #define PLATFORM_UNLOADLIB         dlclose
+ #define PLATFORM_GETPROCADDR       dlsym
+ #define PLATFORM_LOADLIBEXIT()
+ #define PLATFORM_LOADLIB_ERROR     dlerror()
+
+#endif
 
 // =============================================================
 // National Language Support
 // =============================================================
 
 // STRTOASC is to translate single byte 'native' character representation to ASCII
-// ASCTOSTR is to translate single byte ascii representation to 'native' character (EBCDIC)
+// ASCTOSTR is to translate single byte ascii representation to 'native' character
 // CANNOT be used with constants
-extern char*      cvtSingleByteEbcdicToAsciiStr( char* );
-extern char*      cvtSingleByteAsciiToEbcdicStr( char* );
-#define PLATFORM_STRTOASC( x ) cvtSingleByteEbcdicToAsciiStr( (char*)(x) )
-#define PLATFORM_ASCTOSTR( x ) cvtSingleByteAsciiToEbcdicStr( (char*)(x) )
+#define PLATFORM_STRTOASC( x ) ( x )
+#define PLATFORM_ASCTOSTR( x ) ( x )
 
 #endif
 
