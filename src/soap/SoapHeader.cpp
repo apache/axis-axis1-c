@@ -33,7 +33,7 @@
 #include "SoapHeader.h"
 #include "SoapSerializer.h"
 #include <axis/server/GDefine.hpp>
-#include <axis/server/Attribute.hpp>
+#include "Attribute.h"
 #include "HeaderBlock.h"
 
 AXIS_CPP_NAMESPACE_START

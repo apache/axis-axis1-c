@@ -62,12 +62,6 @@ typedef enum SOAP_VERSIONTag
     VERSION_LAST
 } SOAP_VERSION;
 
-AXIS_CPP_NAMESPACE_START
-
-class Attribute;
-
-AXIS_CPP_NAMESPACE_END
-
 struct SoapEnvVersionsStruct 
 {    
     const AxisChar* pchNamespaceUri;

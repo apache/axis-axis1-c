@@ -32,6 +32,7 @@ class SoapBody;
 class SoapFault;
 class HeaderBlock;
 class IArrayBean;
+class Attribute;
 
 /**
  *  @class SoapSerializer

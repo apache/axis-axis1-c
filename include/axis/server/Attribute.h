@@ -13,4 +13,4 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-#error "Please include Attribute.hpp instead"
+#error "Please include IAttribute.hpp instead"

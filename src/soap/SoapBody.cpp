@@ -39,7 +39,7 @@
 #include "SoapBody.h"
 #include "SoapSerializer.h"
 #include <axis/server/GDefine.hpp>
-#include <axis/server/Attribute.hpp>
+#include "Attribute.h"
 #include "../common/AxisTrace.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;

@@ -59,7 +59,6 @@
 #include "../engine/XMLParserFactory.h"
 #include "../xml/XMLParser.h"
 #include "../xml/QName.h"
-#include <axis/server/Attribute.hpp>
 #include "AxisSoapException.h"
 #include <axis/AxisGenException.hpp>
 

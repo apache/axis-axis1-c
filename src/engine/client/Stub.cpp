@@ -42,6 +42,7 @@
 #include "../../transport/SOAPTransport.h"
 #include <axis/server/AxisWrapperAPI.hpp>
 #include "../../soap/SoapSerializer.h"
+#include "../../soap/Attribute.h"
 
 AXIS_CPP_NAMESPACE_USE
 
@@ -284,7 +285,7 @@ void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pP
 {
     //Samisa
     //Check if there is an attribute with the same local name is already set
-    Attribute* pAttribute = this->getFirstSOAPMethodAttribute();
+    IAttribute* pAttribute = this->getFirstSOAPMethodAttribute();
     while( pAttribute )
     {
         if( strcmp(pAttribute->getLocalName(), pLocalname) == 0 )
@@ -304,7 +305,7 @@ void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pP
     m_viCurrentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin();
 }
 
-Attribute* Stub::getFirstSOAPMethodAttribute()
+IAttribute* Stub::getFirstSOAPMethodAttribute()
 {
     m_viCurrentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin();
     if (m_viCurrentSOAPMethodAttribute == m_vSOAPMethodAttributes.end())
@@ -313,7 +314,7 @@ Attribute* Stub::getFirstSOAPMethodAttribute()
         return (*m_viCurrentSOAPMethodAttribute);
 }
 
-Attribute* Stub::getNextSOAPMethodAttribute()
+IAttribute* Stub::getNextSOAPMethodAttribute()
 {
     //already at the end?
     if (m_viCurrentSOAPMethodAttribute == m_vSOAPMethodAttributes.end())
@@ -327,7 +328,7 @@ Attribute* Stub::getNextSOAPMethodAttribute()
         return (*m_viCurrentSOAPMethodAttribute);
 }
 
-Attribute* Stub::getCurrentSOAPMethodAttribute()
+IAttribute* Stub::getCurrentSOAPMethodAttribute()
 {
     if (m_viCurrentSOAPMethodAttribute == m_vSOAPMethodAttributes.end())
         return NULL;
@@ -345,7 +346,7 @@ void Stub::setSOAPMethodAttributes()
     {
        for (unsigned int i = 0; i < m_vSOAPMethodAttributes.size(); i++)
 	   {
-           pSerializer->setSOAPMethodAttribute(m_vSOAPMethodAttributes[i]->clone());
+           pSerializer->setSOAPMethodAttribute(((Attribute*)m_vSOAPMethodAttributes[i])->clone());
 	   }
     }	
 }
@@ -360,9 +361,9 @@ void Stub::deleteCurrentSOAPMethodAttribute()
     }
 }
 
-void Stub::deleteSOAPMethodAttribute(Attribute* pAttribute)
+void Stub::deleteSOAPMethodAttribute(IAttribute* pAttribute)
 {
-    vector <Attribute*>::iterator currentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin();
+    vector <IAttribute*>::iterator currentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin();
     bool bDone = false;
     while( !bDone && currentSOAPMethodAttribute != m_vSOAPMethodAttributes.end())
     {
@@ -378,9 +379,10 @@ void Stub::deleteSOAPMethodAttribute(Attribute* pAttribute)
 }
 
 
-void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pUri, const AxisChar *pValue)
+void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, 
+                                  const AxisChar *pUri, const AxisChar *pValue)
 {
-    Attribute* pAttribute = new Attribute(pLocalname, pPrefix, pUri, pValue);
+    IAttribute* pAttribute = new Attribute(pLocalname, pPrefix, pUri, pValue);
 	m_vSOAPMethodAttributes.push_back(pAttribute);
     m_viCurrentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin();
 }

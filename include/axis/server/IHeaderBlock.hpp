@@ -21,12 +21,6 @@
 #include "SoapEnvVersions.hpp"
 #include <axis/IAttribute.hpp>
 
-AXIS_CPP_NAMESPACE_START
-
-class Attribute;
-
-AXIS_CPP_NAMESPACE_END
-
 enum HEADER_BLOCK_STD_ATTR_TYPE 
 {   ROLE_NEXT=1, ROLE_NONE=2, 
     ROLE_ULTIMATE_RECEIVER=3, 
@@ -178,7 +172,7 @@ public:
      *
      * @return A pointer to the created standard Attribute will be returned.
      */
-    virtual Attribute* createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE 
+    virtual IAttribute* createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE 
         eStdAttrType, SOAP_VERSION eSOAP_VERSION) =0;
 
     /**
@@ -191,7 +185,7 @@ public:
       *
       * @return A pointer to the created Attribute will be returned.
       */
-    virtual Attribute* createAttribute(const AxisChar* localname, 
+    virtual IAttribute* createAttribute(const AxisChar* localname, 
         const AxisChar* prefix, 
         const AxisChar* uri, const AxisChar* value) = 0;
 
@@ -204,7 +198,7 @@ public:
       *
       * @return A pointer to the created Attribute will be returned.
       */
-    virtual Attribute* createAttribute(const AxisChar *localname, 
+    virtual IAttribute* createAttribute(const AxisChar *localname, 
         const AxisChar *prefix, const AxisChar *value) = 0;
      /**
       * Gets an Attribute from the HeaderBlock.

@@ -25,6 +25,7 @@ AXIS_CPP_NAMESPACE_START
 
 using namespace std;
 class BasicNode;
+class Attribute;
 
 /*
  *  @class BasicNode
@@ -223,7 +224,7 @@ public:
      *
      * @return A pointer to the created standard Attribute will be returned.
      */
-    Attribute* createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE eStdAttrType, 
+    IAttribute* createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE eStdAttrType, 
         SOAP_VERSION eSOAP_VERSION);
 
     /**
@@ -239,7 +240,7 @@ public:
       * @return A pointer to the created Attribute will be returned. If the
       *  operation is unsuccessfull it will return NULL.
       */
-    Attribute* createAttribute(const AxisChar* localname, 
+    IAttribute* createAttribute(const AxisChar* localname, 
         const AxisChar* prefix, const AxisChar* uri, const AxisChar* value);
 
     /**
@@ -251,7 +252,7 @@ public:
       *
       * @return A pointer to the created Attribute will be returned.
       */
-    Attribute* createAttribute(const AxisChar* localname, 
+    IAttribute* createAttribute(const AxisChar* localname, 
         const AxisChar* prefix, const AxisChar* value);
 
 		

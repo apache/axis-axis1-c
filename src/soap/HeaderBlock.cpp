@@ -58,7 +58,6 @@
 #include <axis/server/BasicNode.hpp>
 #include "ComplexElement.h"
 #include "CharacterElement.h"
-#include <axis/server/Attribute.hpp>
 
 AXIS_CPP_NAMESPACE_START
 
@@ -501,7 +500,7 @@ BasicNode* HeaderBlock::createImmediateChild(NODE_TYPE eNODE_TYPE)
     return pBasicNode;
 }
 
-Attribute* HeaderBlock::createAttribute(const AxisChar *localname,
+IAttribute* HeaderBlock::createAttribute(const AxisChar *localname,
                                         const AxisChar *prefix,
                                         const AxisChar *value)
 {
@@ -517,7 +516,7 @@ Attribute* HeaderBlock::createAttribute(const AxisChar *localname,
     return pAttribute;
 }
 
-Attribute* HeaderBlock::createAttribute(const AxisChar *localname,
+IAttribute* HeaderBlock::createAttribute(const AxisChar *localname,
                                         const AxisChar *prefix,
                                         const AxisChar *uri,
                                         const AxisChar *value)
@@ -528,7 +527,7 @@ Attribute* HeaderBlock::createAttribute(const AxisChar *localname,
     return pAttribute;
 }
 
-Attribute* HeaderBlock::createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE 
+IAttribute* HeaderBlock::createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE 
                                            eStdAttrType, 
                                            SOAP_VERSION eSOAP_VERSION)
 {

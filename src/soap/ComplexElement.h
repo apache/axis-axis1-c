@@ -50,7 +50,7 @@
 
 #include <list>
 #include <axis/server/BasicNode.hpp>
-#include <axis/server/Attribute.hpp>
+#include "Attribute.h"
 
 AXIS_CPP_NAMESPACE_START
 

@@ -19,6 +19,7 @@
 
 #include "../common/AxisUtils.h"
 #include <axis/server/SoapEnvVersions.hpp>
+#include "Attribute.h"
 #include <map>
 
 using namespace std;

@@ -25,10 +25,9 @@
 #include "SoapEnvelope.h"
 #include <axis/server/GDefine.hpp>
 #include "SoapSerializer.h"
-#include <axis/server/Attribute.hpp>
-
 #include <stdio.h>
 #include "../common/AxisTrace.h"
+#include "Attribute.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
 

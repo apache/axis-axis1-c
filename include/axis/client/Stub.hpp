@@ -62,7 +62,7 @@
 #define _STUB_H____OF_AXIS_INCLUDED_
 
 #include <axis/client/Call.hpp>
-#include <axis/server/Attribute.hpp>
+#include <axis/IAttribute.hpp>
 #include <vector>
 
 using namespace std;
@@ -409,7 +409,7 @@ class STORAGE_CLASS_INFO Stub
     * @return First SOAP method attribute pointer. If there are no SOAP method 
     * attributes set, returns NULL.
     */
-    Attribute* getFirstSOAPMethodAttribute();
+    IAttribute* getFirstSOAPMethodAttribute();
 
   /**
     * Iterator for SOAP method attributes
@@ -423,7 +423,7 @@ class STORAGE_CLASS_INFO Stub
     * @return Next SOAP method attribute pointer. If there are no SOAP method 
     * attributes set or if iterator is at the end of the list, returns NULL.
     */
-    Attribute* getNextSOAPMethodAttribute();
+    IAttribute* getNextSOAPMethodAttribute();
 
   /**
     * Accessor for SOAP method attributes
@@ -442,7 +442,7 @@ class STORAGE_CLASS_INFO Stub
     * @return Current SOAP method attribute pointer. If there are no SOAP method 
     * attribute set or if iterator is at the end of the list, returns NULL.
     */
-    Attribute* getCurrentSOAPMethodAttribute();
+    IAttribute* getCurrentSOAPMethodAttribute();
     
   /**
     * Deletes the SOAP method attribute currently pointed to by 
@@ -469,7 +469,7 @@ class STORAGE_CLASS_INFO Stub
     *
     * @param pAttribute Pointer of Attribute to be deleted
     */
-    void deleteSOAPMethodAttribute(Attribute* pAttribute);
+    void deleteSOAPMethodAttribute(IAttribute* pAttribute);
 
   /**
     * Set transport timeout.
@@ -561,12 +561,12 @@ class STORAGE_CLASS_INFO Stub
   /**
     * List of SOAPMethod Attributes
     */
-    vector <Attribute*> m_vSOAPMethodAttributes;
+    vector <IAttribute*> m_vSOAPMethodAttributes;
 
   /**
     * Trasport keys iterator
     */
-    vector <Attribute*>::iterator m_viCurrentSOAPMethodAttribute;
+    vector <IAttribute*>::iterator m_viCurrentSOAPMethodAttribute;
 
   /**
     * Timeout in seconds

@@ -28,28 +28,25 @@ class Tracer extends BufferedWriter {
 	private Signature signature = null;
 	private final static String SIGNATURE = "  /* AUTOINSERTED TRACE */";
 
-      // Escape ?'s here to avoid trigraphs which map ??) to ]
-	private final static String UNKNOWN_FORMAT = "\\?\\?\\?\\?";
-
-	private static Hashtable primitives = new Hashtable();
+	private static Hashtable typetable = new Hashtable();
 	static {
-		primitives.put("int", "%i");
-		primitives.put("unsigned int", "%u");
-		primitives.put("unsigned", "%u");
-		primitives.put("short", "%hi");
-		primitives.put("short int", "%hi");
-		primitives.put("unsigned short int", "%hu");
-		primitives.put("unsigned short", "%hu");
-		primitives.put("long", "%li");
-		primitives.put("long int", "%li");
-		primitives.put("unsigned long int", "%lu");
-		primitives.put("unsigned long", "%lu");
-		primitives.put("double", "%f");
-		primitives.put("float", "%f");
-		primitives.put("char", "%c");
-		primitives.put("unsigned char", "%c");
-		primitives.put("bool", "%s");
-		// TODO: More primitives go in here
+		typetable.put("char", "CHAR");
+		typetable.put("unsigned char", "CHAR");
+		typetable.put("unsigned short", "USHORT");
+		typetable.put("short", "SHORT");
+		typetable.put("signed short", "SHORT");
+		typetable.put("unsigned", "UINT");
+		typetable.put("unsigned int", "UINT");
+		typetable.put("int", "INT");
+		typetable.put("signed int", "INT");
+		typetable.put("signed", "INT");
+		typetable.put("unsigned long", "ULONG");
+		typetable.put("long", "LONG");
+		typetable.put("signed long", "LONG");
+		typetable.put("unsigned double", "UDOUBLE");
+		typetable.put("double", "DOUBLE");
+		typetable.put("float", "FLOAT");
+		typetable.put("bool", "BOOL");
 	}
 
 	/**
@@ -75,48 +72,34 @@ class Tracer extends BufferedWriter {
 	}
 
 	/**
-	 * @param signature the signature of this method 
+	 * @param signature the signature of this method
+	 * TODO: Can't tell the difference between static and non-static 
+	 * methods so can't tell whether to pass this or not. If we pass
+	 * this in a static method it won't compile. 
 	 */
 	void traceEntry(Signature signature) throws IOException {
 		this.signature = signature;
 		if (!signature.traceable())
 			return;
 
+		Parameter[] parms = signature.getParameters();
+		int len = 0;
+		if (null != parms)
+			len = parms.length;
 		String line =
 			"\n"
-				+ "    #ifdef ENABLE_AXISTRACE\n"
-				+ "    if (g_pAT && g_pAT->isTraceOn()) try {\n"
-				+ "        char traceLine[256];\n"
-				+ "        sprintf(traceLine,\"> ";
-		if (null != signature.getClassName())
-			line += signature.getClassName();
-		line += signature.getMethodName();
-		line += "(";
-
-		Parameter[] parms = signature.getParameters();
-		for (int i = 0; null != parms && i < parms.length; i++) {
-			String f = getFormat(parms[i]);
-			if (0 != i)
-				line += ",";
-			if (null == f)
-				line += UNKNOWN_FORMAT;
-			else
-				line += f;
-		}
-		line += ")\"";
-
-		for (int i = 0; null != parms && i < parms.length; i++) {
-			if (null == getFormat(parms[i]))
-				continue;
-			line += "," + getName(parms[i]);
-		}
-
-		line += ");\n";
-		line += "        g_pAT->traceLine(traceLine);" + SIGNATURE + "\n";
-		line += "    } catch (...) {\n";
-            line += "        g_pAT->traceLine(\"Unknown exception caught during trace entry\");\n";
-            line += "    }\n";
-		line += "    #endif\n";
+				+ "\t#ifdef ENABLE_AXISTRACE\n"
+				+ "\t\tif (g_pAT && g_pAT->isTraceOn())\n"
+				+ "\t\t\tg_pAT->traceEntry("
+				+ getClassName()
+				+ ", \""
+				+ signature.getMethodName()
+				+ "\", NULL, "
+				+ len;
+		for (int i = 0; null != parms && i < parms.length; i++)
+			line += getTypeParms(parms[i]);
+		line += ");\t" + SIGNATURE + "\n";
+		line += "\t#endif\n";
 		write(line);
 		flush();
 	}
@@ -125,24 +108,29 @@ class Tracer extends BufferedWriter {
 		if (!signature.traceable())
 			return;
 
-        // Check this method really should return void
+		// Check this method really should return void
 		if (null != signature.getReturnType().getType())
 			Utils.rude(
 				"Expecting to return void from a method that returns a value: "
 					+ signature.toString());
 
 		// Enclose the printf/return in {} in case if/then doesn't have {}
-		write("{");
-		write(
-			"\n    #ifdef ENABLE_AXISTRACE\n"
-				+ "    if (g_pAT && g_pAT->isTraceOn()) g_pAT->traceLine(\"<  "
-				+ signature.getMethodName()
-				+ "\");"
-				+ SIGNATURE
-				+ "\n    #endif\n");
+		String line = "\t{\n";
+		line += "\t\t#ifdef ENABLE_AXISTRACE\n";
+		line += "\t\t\tif (g_pAT && g_pAT->isTraceOn())\n";
+		line += "\t\t\t\tg_pAT->traceExit("
+			+ getClassName()
+			+ ", \""
+			+ signature.getMethodName()
+			+ "\");\t"
+			+ SIGNATURE
+			+ "\n";
+		line += "\t\t#endif\n";
 
 		// now print out the return line itself
-		write("    return;\n    }\n");
+		line += "\t\treturn;\n";
+		line += "\t}\n";
+		write(line);
 		flush();
 	}
 
@@ -155,27 +143,11 @@ class Tracer extends BufferedWriter {
 		if (!signature.traceable())
 			return;
 
-        // Check this method doesn't return void
+		// Check this method doesn't return void
 		if (null == signature.getReturnType().getType())
 			Utils.rude(
 				"Expecting to return a value from a method that returns void: "
 					+ signature.toString());
-
-        // Figure out the method name
-		String methodName = "";
-		if (null != signature.getClassName())
-			methodName = signature.getClassName();
-		methodName += signature.getMethodName();
-		
-		// We can't trace all kinds of C types unfortunately
-		Parameter retType = signature.getReturnType();
-		String format = getFormat(retType);
-		String retValue;
-		if (null == format) {
-			format = UNKNOWN_FORMAT;
-			retValue = "";
-		} else
-			retValue = ", " + getName(retType);
 
 		// Enclose the printf/return in {} in case if/then doesn't have {}
 		// Copy the return value into a local called traceRet in case the
@@ -183,33 +155,30 @@ class Tracer extends BufferedWriter {
 		// This makes sure that we don't execute the return value twice.
 		// Unfortunately if the return value is a class we will invoke 
 		// a copy constructor. When initialising traceRet with value, put value
-            // in brackets in case it contains an operator that might be invoked
-            // after the assignment, like another assignment.
-		String line = "    {\n";
-		line += "        #ifdef ENABLE_AXISTRACE\n";
-		line += "            "
-			+ retType.getType()
+		// in brackets in case it contains an operator that might be invoked
+		// after the assignment, like another assignment.
+		String line = "\t{\n";
+		line += "\t\t#ifdef ENABLE_AXISTRACE\n";
+		line += "\t\t\t"
+			+ signature.getReturnType().getType()
 			+ " traceRet = ("
 			+ value
 			+ ");\n";
-		line += "            if (g_pAT && g_pAT->isTraceOn()) try {\n";
-		line += "                char traceLine[256];\n";
-		line += "                sprintf(traceLine,\"< "
-			+ methodName
-			+ "("
-			+ format
-			+ ")\""
-			+ retValue
-			+ ");\n";
-		line += "                g_pAT->traceLine(traceLine);" + SIGNATURE + "\n";
-		line += "            } catch (...) {\n";
-            line += "                g_pAT->traceLine(\"Unknown exception caught during trace exit\");\n";
-		line += "            }\n";
-		line += "            return traceRet;\n";
-		line += "        #else\n";
-		line += "            return " + value + ";\n";
-		line += "        #endif\n";
-		line += "    }\n";
+		line += "\t\t\tif (g_pAT && g_pAT->isTraceOn())\n";
+		line += "\t\t\t\tg_pAT->traceExit("
+			+ getClassName()
+			+ ", \""
+			+ signature.getMethodName()
+			+ "\""
+			+ getTypeParms(signature.getReturnType())
+			+ ");\t"
+			+ SIGNATURE
+			+ "\n";
+		line += "\t\t\treturn traceRet;\n";
+		line += "\t\t#else\n";
+		line += "\t\t\treturn " + value + ";\n";
+		line += "\t\t#endif\n";
+		line += "\t}\n";
 		write(line);
 		flush();
 	}
@@ -220,30 +189,48 @@ class Tracer extends BufferedWriter {
 			System.out.print(s);
 	}
 
-	private String getFormat(Parameter p) {
-		String format = null;
-		String type = p.getTypeWithoutConst();
-		if (null == type || 0 == type.length())
-			format = null;
-		else if (type.endsWith("*"))
-			// TODO print out contents of pointers where possible
-			format = "%p";
-		else if (primitives.keySet().contains(type))
-			format = (String) primitives.get(type);
-		// else System.err.println("Unknown format type "+type);
-		// TODO: more elses should go in here
-		return format;
-	}
-
-	private String getName(Parameter p) {
+	// TODO cope with STL strings
+	// TODO cope with pointers to primitives
+	// TODO cope with references
+	private String getTypeParms(Parameter p) {
+		String parms = ",\n\t\t\t\t\tAXIS_CPP_NAMESPACE_PREFIX TRACETYPE_";
 		String name = p.getName();
 		if (null == name)
 			name = "traceRet";
+            name = "((void*)&"+name+")";
 
-		if ("bool".equals(p.getTypeWithoutConst())) {
-			return "(" + name + "?\"true\":\"false\")";
+		String type = p.getTypeWithoutConst();
+		if (null == type || 0 == type.length())
+			parms += "UNKNOWN, 0, NULL";
+		else if (type.endsWith("*")) {
+			String contents = type.substring(0, type.length() - 1);
+			if ("char".equals(contents))
+				parms += "STRING, 0, " + name;
+			else if ("void".equals(contents))
+				// We just don't know what this void* is pointing at 
+				// so that best we can do is to print out the first byte.
+				parms += "POINTER, 1, " + name;
+			else
+				parms += "POINTER, sizeof(" + contents + "), " + name;
+		} else if (typetable.keySet().contains(type))
+			parms += (String) typetable.get(type) + ", 0, " + name;
+		else if (-1 != type.indexOf("&")) {
+			// TODO: cope with references
+			parms += "UNKNOWN, 0, " + name;
 		} else
-			return name;
+			parms += "DATA, sizeof(" + type + "), " + name;
+
+		return parms;
 	}
-	
+
+	private String getClassName() {
+		String name;
+		if (null != signature.getClassName()) {
+			name = signature.getClassName();
+			name = name.substring(0, name.indexOf("::"));
+			name = "\"" + name + "\"";
+		} else
+			name = "NULL";
+		return name;
+	}
 }

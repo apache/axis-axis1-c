@@ -56,6 +56,7 @@ typedef enum
 } HEADER_LEVELS;
 
 AXIS_CPP_NAMESPACE_START
+class Attribute;
 
 class SoapHeader : public ISoapHeader
 {

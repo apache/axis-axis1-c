@@ -294,10 +294,13 @@ void AxisTrace::traceEntry(const char *className, const char *methodName, void *
         traceLine("Unknown exception caught during trace entry");
     }
 
-	string name = className;
-	name += "::";
-	name += methodName;
-	m_stack.push(name);
+    string name;
+    if (NULL!=className) {
+        name = className;
+	  name += "::";
+	  name += methodName;
+    } else name = methodName;
+    m_stack.push(name);
 }
 
 void AxisTrace::traceExit(const char *className, const char *methodName, 
@@ -307,9 +310,12 @@ void AxisTrace::traceExit(const char *className, const char *methodName,
 
 	try {
 		// Careful here in case entries and exits don't match
-		string name = className;
-		name += "::";
-		name += methodName;
+		string name;
+            if (NULL!=className) {
+                name = className;
+		    name += "::";
+		    name += methodName;
+            } else name = methodName;
 		while (m_stack.size()>0 && name!=m_stack.top()) m_stack.pop();
 		if (m_stack.size()>0) m_stack.pop();
 
@@ -394,6 +400,7 @@ void AxisTrace::addParameter(string& line, AxisTraceType type, unsigned len, voi
             pcValue = *((char**)pcValue);
 		sprintf(prim,"%p ",pcValue);	
 		line += prim;	
+            if (NULL==pcValue) return;
 		// no break!
 	
 	case TRACETYPE_DATA:	
@@ -421,7 +428,7 @@ void AxisTrace::addParameter(string& line, AxisTraceType type, unsigned len, voi
 		try {
                   pcValue = *((char**)pcValue);
 			line += "\"";	
-			line += pcValue;	
+			line += ((NULL==pcValue)?"<null>":pcValue);	
 			line += "\"";	
 		} catch (...) {
 			line += "<BADPOINTER>";
