@@ -87,6 +87,8 @@ public:
 	virtual Axis_Array GetArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)=0;
 	/* Method used by wrappers to get a deserialized Array of basic types */
 	virtual Axis_Array GetArray(XSDTYPE nType)=0;
+	virtual int GetArraySize()=0;
+	virtual int GetArray(Axis_Array* pArray, XSDTYPE nType)=0;
 	/* Method used by wrappers to get a deserialized single object of complex type */
 	virtual void* GetObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)=0;
 	
@@ -116,9 +118,6 @@ public:
     /*return a tm struct which contain years-months-dates-hours-
       minutes-seconds which represents a duration*/
     virtual long GetDuration() = 0;
-	virtual void* CreateArray(XSDTYPE nType, int nSize)=0;
-	virtual void DeleteArray(void* pArray, XSDTYPE nType)=0;
-
 };
 
 #endif // !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)

@@ -79,21 +79,20 @@ union uParamValue;
 class IWrapperSoapSerializer  : public virtual ISoapSerializer
 {
 public:	
-	virtual int AddOutputParam(const AxisChar* pchName, XSDTYPE nType, long lValue)=0;
 	//for basic types
-	virtual int AddOutputParam(const AxisChar* pchName, int nValue)=0;
-	virtual int AddOutputParam(const AxisChar* pchName, unsigned int unValue)=0;
-	virtual int AddOutputParam(const AxisChar* pchName, short sValue)=0;
-	virtual int AddOutputParam(const AxisChar* pchName, unsigned short usValue)=0;
-	virtual int AddOutputParam(const AxisChar* pchName, long lValue)=0;
-	virtual int AddOutputParam(const AxisChar* pchName, unsigned long ulValue)=0;
-	virtual int AddOutputParam(const AxisChar* pchName, char cValue)=0;
-	virtual int AddOutputParam(const AxisChar* pchName, unsigned char ucValue)=0;
-	virtual int AddOutputParam(const AxisChar* pchName, float fValue)=0;
-	virtual int AddOutputParam(const AxisChar* pchName, double dValue)=0;
-	virtual int AddOutputParam(const AxisChar* pchName, struct tm tValue)=0;
-	virtual int AddOutputParam(const AxisChar* pchName, const AxisChar* pStrValue)=0;
-	virtual int AddOutputParam(const AxisChar* pchName, const string& sStrValue)=0;
+	virtual int AddOutputParam(const AxisChar* pchName, int nValue, XSDTYPE type)=0;
+	virtual int AddOutputParam(const AxisChar* pchName, unsigned int unValue, XSDTYPE type)=0;
+	virtual int AddOutputParam(const AxisChar* pchName, short sValue, XSDTYPE type)=0;
+	virtual int AddOutputParam(const AxisChar* pchName, unsigned short usValue, XSDTYPE type)=0;
+	virtual int AddOutputParam(const AxisChar* pchName, long lValue, XSDTYPE type)=0;
+	virtual int AddOutputParam(const AxisChar* pchName, unsigned long ulValue, XSDTYPE type)=0;
+	virtual int AddOutputParam(const AxisChar* pchName, char cValue, XSDTYPE type)=0;
+	virtual int AddOutputParam(const AxisChar* pchName, unsigned char ucValue, XSDTYPE type)=0;
+	virtual int AddOutputParam(const AxisChar* pchName, float fValue, XSDTYPE type)=0;
+	virtual int AddOutputParam(const AxisChar* pchName, double dValue, XSDTYPE type)=0;
+	virtual int AddOutputParam(const AxisChar* pchName, struct tm tValue, XSDTYPE type)=0;
+	virtual int AddOutputParam(const AxisChar* pchName, const AxisChar* pStrValue, XSDTYPE type)=0;
+	virtual int AddOutputParam(const AxisChar* pchName, const string& sStrValue, XSDTYPE type)=0;
 	//for arrays
 	virtual int AddOutputParam(const AxisChar* pchName, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)=0;
 	virtual int AddOutputParam(const AxisChar* pchName, const Axis_Array* pArray, XSDTYPE nType)=0;
@@ -108,19 +107,19 @@ public:
 	virtual int SerializeArray(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pchArrayName)=0;
 
 public: //Basic Type Serializing methods
-	virtual const AxisChar* SerializeBasicType(const AxisChar* sName, const AxisChar* sValue, XSDTYPE type=XSD_STRING)=0;
-	virtual const AxisChar* SerializeBasicType(const AxisChar* sName, const string sValue, XSDTYPE type=XSD_STRING)=0;
-    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, struct tm tValue)=0;
-    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, int nValue)=0;
-    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned int unValue)=0;
-    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, short sValue)=0;
-    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned short usValue)=0;
-    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, char cValue)=0;
-    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned char ucValue)=0;
-    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, long lValue, XSDTYPE type=XSD_LONG)=0;
-    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned long ulValue)=0;
-    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, float fValue)=0;
-    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, double dValue, XSDTYPE type=XSD_DOUBLE)=0;
+	virtual const AxisChar* SerializeBasicType(const AxisChar* sName, const AxisChar* sValue, XSDTYPE type)=0;
+	virtual const AxisChar* SerializeBasicType(const AxisChar* sName, const string sValue, XSDTYPE type)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, struct tm tValue, XSDTYPE type)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, int nValue, XSDTYPE type)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned int unValue, XSDTYPE type)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, short sValue, XSDTYPE type)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned short usValue, XSDTYPE type)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, char cValue, XSDTYPE type)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned char ucValue, XSDTYPE type)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, long lValue, XSDTYPE type)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned long ulValue, XSDTYPE type)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, float fValue, XSDTYPE type)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, double dValue, XSDTYPE type)=0;
 };
 
 #endif // !defined(AFX_IWRAPPERSOAPSERIALIZER_H__D3E794EC_8A67_4E0E_BE28_583DCDCE1C42__INCLUDED_)
