@@ -2,7 +2,6 @@ lib_LTLIBRARIES = libaxiscpp_client.la
 AM_CPPFLAGS = -Wall -DUSE_EXPAT_PARSER -DUSE_LTDL -DAXIS_CLIENT_LIB
 libaxiscpp_client_la_SOURCES = ../Axis.cpp \
 		ClientAxisEngine.cpp \
-		../server/ServerAxisEngine.cpp \
 		../AxisEngine.cpp \
                 ../HandlerChain.cpp \
                 ../HandlerLoader.cpp \
