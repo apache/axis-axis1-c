@@ -309,7 +309,7 @@
 </PRE>
 
   <P>(You'll find this file in <A href=
-  "../samples/userguide/example1/TestClient.java">samples/userguide/example1/TestClient.java</A>)</P>
+  "http://cvs.apache.org/viewcvs.cgi/*checkout*/ws-axis/java/samples/userguide/example1/TestClient.java">samples/userguide/example1/TestClient.java</A>)</P>
 
   <P>Assuming you have a network connection active, this program
   can be run as follows:</P>
@@ -486,7 +486,7 @@ public class Calculator {
 </PRE>
 
   <P>(You'll find this very class in <A href=
-  "../samples/userguide/example2/Calculator.java">samples/userguide/example2/Calculator.java</A>.)</P>
+  "http://cvs.apache.org/viewcvs.cgi/*checkout*/ws-axis/java/samples/userguide/example2/Calculator.java">samples/userguide/example2/Calculator.java</A>.)</P>
 
   <P>How do we go about making this class available via SOAP? There
   are a couple of answers to that question, but we'll start with
@@ -555,7 +555,7 @@ Got result : 1
   available to the Axis engine. The most common thing to deploy is
   a Web Service, so let's start by taking a look at a deployment
   descriptor for a basic service (this file is <A href=
-  "../samples/userguide/example3/deploy.wsdd">samples/userguide/example3/deploy.wsdd</A>):</P>
+  "http://cvs.apache.org/viewcvs.cgi/*checkout*/ws-axis/java/samples/userguide/example3/deploy.wsdd">samples/userguide/example3/deploy.wsdd</A>):</P>
   <PRE class="example">
 &lt;deployment xmlns="http://xml.apache.org/axis/wsdd/"
             xmlns:java="http://xml.apache.org/axis/wsdd/providers/java"&gt;
@@ -857,7 +857,7 @@ You typed : test me!
   <P><B>Message Example</B></P>
 
   <P>A sample message service can be found in <A href=
-  "../samples/message/MessageService.java">samples/message/MessageService.java</A>.
+  "http://cvs.apache.org/viewcvs.cgi/*checkout*/ws-axis/java/samples/message/MessageService.java">samples/message/MessageService.java</A>.
   The service class, <CODE>MessageService</CODE>, has one public
   method, <CODE>echoElements</CODE>, which matches the first of the
   three method signatures above:</P>
@@ -1142,7 +1142,7 @@ public Element[] echoElements(Element [] elems)
 
   <P>Let's take a look at how this works in practice. Go look at
   <A href=
-  "../samples/userguide/example5/BeanService.java">samples/userguide/example5/BeanService.java</A>.
+  "http://cvs.apache.org/viewcvs.cgi/*checkout*/ws-axis/java/samples/userguide/example5/BeanService.java">samples/userguide/example5/BeanService.java</A>.
   The key thing to notice is that the argument to the service
   method is an Order object. Since Order is not a basic type which
   Axis understands by default, trying to run this service without a
@@ -1354,7 +1354,7 @@ If this had been a real order processing system, we'd probably have charged you 
   the WSDL type.  This class will typically, though not always, be
   a bean.  For example, given the WSDL (the WSDL used throughout
   the WSDL2Java discussion is from the <A href=
-  "../samples/addr/AddressBook.wsdl">Address Book sample</A>):</P>
+  "http://cvs.apache.org/viewcvs.cgi/*checkout*/ws-axis/java/samples/addr/AddressBook.wsdl">Address Book sample</A>):</P>
   <PRE class="example">
 &lt;xsd:complexType name="phone"&gt;
   &lt;xsd:all&gt;
@@ -1779,7 +1779,7 @@ public class AddressBookSOAPBindingImpl implements AddressBook {
   the web service interface.  Here is an example interface that
   describes a web services that can be used to set/query the price
   of widgets (<A href=
-  "../samples/userguide/example6/WidgetPrice.java">samples/userguide/example6/WidgetPrice.java</A>):</P>
+  "http://cvs.apache.org/viewcvs.cgi/*checkout*/ws-axis/java/samples/userguide/example6/WidgetPrice.java">samples/userguide/example6/WidgetPrice.java</A>):</P>
   <PRE class="example">
 package samples.userguide.example6;
 <BR>
@@ -1860,8 +1860,8 @@ public interface WidgetPrice {
     <LI style="list-style: none"><BR>
     You will need to modify the *SoapBindingImpl file to add your
     implementation (see  <A href=
-    "../samples/userguide/example6/WidgetPriceSoapBindingImpl.java">
-    ../samples/userguide/example6/WidgetPriceSoapBindingImpl.java</A>
+    "http://cvs.apache.org/viewcvs.cgi/*checkout*/ws-axis/java//samples/userguide/example6/WidgetPriceSoapBindingImpl.java">
+    samples/userguide/example6/WidgetPriceSoapBindingImpl.java</A>
     ).</LI>
 
     <LI><B><TT>WidgetPrice.java</TT></B>:  New interface file that
@@ -2133,7 +2133,7 @@ public interface WidgetPrice {
   <P>Here are the big categories.</P>
 
   <UL>
-    <LI><A href="../samples/"><B>The samples.</B></A> These
+    <LI><A href="http://cvs.apache.org/viewcvs.cgi/*checkout*/ws-axis/java/samples/"><B>The samples.</B></A> These
     examples are complete with deployment descriptors and often
     contain both client and server code.</LI>
 
