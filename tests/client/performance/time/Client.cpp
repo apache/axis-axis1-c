@@ -42,12 +42,14 @@ static void
 usage (char *programName, char *defaultURL)
 {
     cout << "\nUsage:\n"
-	<< programName << " [-? | service_url] " << endl
+	<< programName << " [-? | message_size [service_url]] " << endl
 	<< "    -?             Show this help.\n"
+	<< "    message_size   Size of the message sent in chars / 10\n"
+        << "                   (i.e. If you say 5, then 50 chars would be sent).\n"
+        << "                   Default is 10*10.\n"
 	<< "    service_url    URL of the service.\n"
-	<< "    Default service URL is assumed to be " << defaultURL
-	<<
-	"\n    Could use http://localhost:8080/axis/services/echo to test with Axis Java."
+	<< "                   Default service URL is assumed to be " << defaultURL
+	<< "\n                   Could use http://localhost:8080/axis/services/echo to test with Axis Java."
 	<< endl;
 }
 
