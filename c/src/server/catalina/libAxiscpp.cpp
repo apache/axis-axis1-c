@@ -65,14 +65,110 @@
 #include "libAxiscpp.h"
 #include "AxisCppContentHandler.h"
 #include "../../common/Packet.h"
+#include <new>
 
 
+static void
+jni_throw(JNIEnv* env, const char* exception, const char* msg)
+{
+    if (env->ExceptionOccurred())
+        return;
+    jclass jexception = env->FindClass(exception);
+    if (env->ExceptionOccurred())
+      return;
+    if (jexception == NULL)
+        env->FatalError(exception);
+    env->ThrowNew(jexception, msg);
+}
+
+
+#define JNI_ASSERT(assert, name, msg) \
+    do \
+    { \
+        if (p_Env->ExceptionOccurred()) \
+            return; \
+        if (! assert) \
+        { \
+            jni_throw(p_Env, name, msg); \
+            return; \
+        } \
+    } while (0)
+
+
+class JNIVector
+{
+public:
+    JNIVector(JNIEnv* p_Env, jobject p_jVector)
+        : m_pEnv(p_Env), m_jVector(p_jVector)
+    {
+		jclass clazz = p_Env->FindClass("java/util/Vector");
+		JNI_ASSERT(clazz != NULL, "java/lang/NoClassDefFoundError", "java.util.Vector");
+    
+		JNI_ASSERT(p_Env->IsInstanceOf(p_jVector, clazz),
+						 "java/lang/IllegalArgumentException",
+						 "p_jVector not a java.util.Vector object!");
+
+		m_jmGet = p_Env->GetMethodID(clazz, "get", "(I)Ljava/lang/Object");
+
+		JNI_ASSERT(m_jmGet != NULL,
+                     "java/lang/NoSuchMethodError",
+                     "method 'public Object get(int index)' not found!");
+    }
+	///Destructor
+    ~JNIVector()
+    {
+
+    }
+
+    char* operator [] (int i) const
+    {
+		jboolean isCopy;
+		jobject obj = m_pEnv->CallObjectMethod(m_jVector, m_jmGet, i);
+		jstring str = (jstring) obj;
+		const char *pch = m_pEnv->GetStringUTFChars(str, &isCopy);
+		if (m_pEnv->ExceptionOccurred())
+            throw std::bad_alloc();
+        return (char*)pch;
+    }
+
+	void push_back(const char* str) 
+	{
+	
+	}
+
+private:
+
+    JNIEnv* m_pEnv;
+    jobject m_jVector;
+	jmethodID m_jmGet;
+};
 
 JNIEXPORT void JNICALL Java_AxisCppContentHandler_Delegate
-  (JNIEnv *, jclass, jcharArray p_jBody, jint p_nBodySize, jobject p_jvHeaders, jint p_nHeaderCount)
+  (JNIEnv *p_Env, jclass, jcharArray p_jBody, jint p_nBodySize, jobject p_jvHeaders, 
+  jint p_nHeaderCount)
 {
 	//TODO: populate soapstream with the headers & the body;
 	// invoke to process the contents
+	soapstream* str = new soapstream;
+	str->trtype = APTHTTP;
+	str->so.http.ip_soap = new char[p_nBodySize*sizeof(jchar)];
+	p_Env->GetCharArrayRegion(p_jBody, 0, p_nBodySize, (jchar*)str->so.http.ip_soap);
+	str->so.http.ip_soapcount = p_nBodySize;
+	//set method name as a http header.
+	str->so.http.ip_headers = new header[p_nHeaderCount*2];
+
+	JNIVector jvHeader(p_Env, p_jvHeaders);
+	for(int i=0;i < p_nHeaderCount; i++)
+	{
+		str->so.http.ip_headers[i].headername  = jvHeader[i];
+		str->so.http.ip_headers[i].headervalue = jvHeader[i+1];
+	}
+	str->so.http.ip_headercount = p_nHeaderCount;
+
+
+	delete [] str->so.http.ip_headers;
+	delete str;
 }
+
 
 

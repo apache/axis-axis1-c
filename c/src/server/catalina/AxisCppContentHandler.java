@@ -80,7 +80,22 @@ public class AxisCppContentHandler
      }
 
 	public static native void Delegate(char [] body, int bodySize, Vector headers, int headerCount);
-	
+
+	public static void main(String [] args)
+	{
+		String str = "Hello World";
+		char [] pch = str.toCharArray();
+		Vector v = new Vector();
+		v.add("Name1");
+		v.add("Value1");
+		v.add("Name2");
+		v.add("Value2");
+		try{
+		System.in.read();
+		}catch(IOException ex){
+		}
+		AxisCppContentHandler.Delegate(pch, pch.length, v, 2);
+	}
 }
 
 
