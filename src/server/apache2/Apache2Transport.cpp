@@ -92,9 +92,9 @@ void Apache2Transport::setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type
 		/* This is apache module and transport is http so the key */ 
             key = "Content-Length"; 
             break;
-	case CONTENT_TYPE:
+/*	case CONTENT_TYPE:
 	    ((request_rec*)m_pContext)->content_type = value;
-	    break;
+	    break; */
         default:;
     }
     if (key)
@@ -223,7 +223,7 @@ const char* Apache2Transport::getTransportProperty(AXIS_TRANSPORT_INFORMATION_TY
 
 void Apache2Transport::setTransportProperty(const char* pcKey, const char* pcValue)
 {
-	ap_table_set(((request_rec*)m_pContext)->headers_out, pcKey, pcValue);
+	/*ap_table_set(((request_rec*)m_pContext)->headers_out, pcKey, pcValue);*/
 	//ap_send_http_header((request_rec*)m_pContext);
 
 }
