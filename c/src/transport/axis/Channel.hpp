@@ -17,7 +17,13 @@
 /*
  * @author Lilantha Darshana (lilantha@virtusa.com)
  * @author Damitha Kumarage (damitha@jkcsworld.com, damitha@opensource.lk)
- *
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ */
+
+/*
+ * Revision 1.1  2004/05/21 samisa
+ * Added readNonBlocking 
+ * by Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
 
 #if !defined(_AXIS_CHANNEL_HPP)
@@ -110,6 +116,9 @@ public:
     /* Read from a open socket and store read message in msg */
     virtual const Channel& operator >> (std::string& msg);
     
+    /* Read from socket in non bloking more in msg */
+    virtual const Channel& readNonBlocking(std::string& msg);
+
     /* Write a given message (msg) to the end-point using the open socket */
     virtual const Channel& operator << (const char* msg);
     
