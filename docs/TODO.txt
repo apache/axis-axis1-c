@@ -4,9 +4,10 @@
 Please help to maintain this file, as accuracy is critical.  Major topic
 areas are headed by section headings, and individual items are prefixed
 with "!" (needs doing) "*" (in progress) or "X" (done), followed by the
-owner (if any) in "<>" brackets.  Example:
+owner (if any) in "<>" brackets. Also the priority order is postfixed with
+a number where 0 - least priority. Example:
 
-                 * <Glen> Write TO DO list
+                 *2 <Glen> Write TO DO list //2 is the priority
 
 ! <team> Update the TO DO list to be current!
 
@@ -46,6 +47,9 @@ DOCUMENTATION
 SAMPLES
 -------
 ! <team> 	WSDL documents for sample web services
+! <team>	Writing 2 web services for SOAPBuilders interop tests 
+		1. Round 2 base and
+		2. Round 2 Group B
 
 WSDL2C++
 ---------
@@ -78,3 +82,6 @@ FUTURE ENHANCEMENTS
 		   
 ! <team> 	The current code supports only int, float, string out of simple types. This code
 		has to be improved to support other simplet types as well.
+
+! <team>	Implementing C++ types for xml types (datetime, date, time, HexBinary, Base64Binary etc)
+		and improve Param class to support them.
