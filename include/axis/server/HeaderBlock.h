@@ -212,7 +212,7 @@ public:
         AxisChar* pachUri);
     HeaderBlock();
     HeaderBlock(const HeaderBlock& rCopy);
-    HeaderBlock* clone();
+    IHeaderBlock* clone();
     virtual ~HeaderBlock();
 
     bool operator ==( const HeaderBlock &objHeaderBlock);
