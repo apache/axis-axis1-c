@@ -370,9 +370,9 @@ public:
     *
     * Setting the proxy is useful for users who are behind proxies.
     *
-    * For some trasports this method may not make sense.
+    * For some transports this method may not make sense.
     * Hence this method is not pure virtual.
-    * Those trasports that implement this interface, that wish to use proxy, must provide an implementation.
+    * Those transports that implement this interface, that wish to use proxy, must provide an implementation.
     * Also, the hadling of the proxy is the responsibility of the deriving classes
     *
     * @param pcProxyHost Host name of proxy server
@@ -388,86 +388,98 @@ public:
     virtual void setTimeout(const long lSeconds) = 0;
     
     /**
-    * Iterator initiatior for trasport property keys
+    * @deprecated To fix spelling mistake. 
+    *
+    * Iterator initiatior for transport property keys
     *
     * This method must be called first to initiate access to the list of 
     * transport property keys.
     *
-    * @return First transport property key. If there are no trasport 
+    * @return First transport property key. If there are no transport 
     * properties set, returns NULL.
     */
     virtual const char* getFirstTrasportPropertyKey() { return 0; };
 
   /**
-    * Iterator for trasport property keys
+    * @deprecated To fix spelling mistake. 
     *
-    * getFirstTrasportPropertyKey() method must have been called at least once
+    * Iterator for transport property keys
+    *
+    * getFirstTransportPropertyKey() method must have been called at least once
     * before this method is called. If not behaviour is undefined.
     *
     * This method advances the iterator by one position.
     * Repeated calls always retuen the next value.
     *
-    * @return Next transport property key. If there are no trasport 
+    * @return Next transport property key. If there are no transport 
     * properties set or if iterator is at the end of the list, returns NULL.
     */
     virtual const char* getNextTrasportPropertyKey() { return 0; };
 
   /**
-    * Accessor for trasport property keys.
+    * @deprecated To fix spelling mistake. 
     *
-    * This method gives access to the key corresponding to the trasport key
-    * currently being pointed by trasport property key iterator.
+    * Accessor for transport property keys.
     *
-    * getFirstTrasportPropertyKey() method must have been called at least once
+    * This method gives access to the key corresponding to the transport key
+    * currently being pointed by transport property key iterator.
+    *
+    * getFirstTransportPropertyKey() method must have been called at least once
     * before this method is called. If not behaviour is undefined.
     *
     * This method does not advance the iterator.
     * Repeated calls always retuen the same key unless 
-    * getNextTrasportPropertyKey() is called in between.
+    * getNextTransportPropertyKey() is called in between.
     *
-    * @return Current transport property key. If there are no trasport 
+    * @return Current transport property key. If there are no transport 
     * properties set or if iterator is at the end of the list, returns NULL.
     */
     virtual const char* getCurrentTrasportPropertyKey() { return 0; };
     
   /**
-    * Accessor for trasport property values.
+    * @deprecated To fix spelling mistake. 
     *
-    * This method gives access to the value corresponding to the trasport key
-    * currently being pointed by trasport property key iterator.
+    * Accessor for transport property values.
+    *
+    * This method gives access to the value corresponding to the transport key
+    * currently being pointed by transport property key iterator.
     * As keys and values are treated as paires, access to the value field is 
     * based on the access to the key field.
     *
-    * getFirstTrasportPropertyKey() method must have been called at least once
+    * getFirstTransportPropertyKey() method must have been called at least once
     * before this method is called. If not behaviour is undefined.
     *
     * This method does not advance the iterator.
     * Repeated calls always retuen the same value unless 
-    * getNextTrasportPropertyKey() is called in between.
+    * getNextTransportPropertyKey() is called in between.
     *
-    * @return Current transport property value. If there are no trasport 
+    * @return Current transport property value. If there are no transport 
     * properties set or if iterator is at the end of the list, returns NULL.
     */
     virtual const char* getCurrentTrasportPropertyValue() { return 0; };
 
   /**
-    * Deletes the trasport property key:value pair currently pointed to by 
+    * @deprecated To fix spelling mistake.
+    *
+    * Deletes the transport property key:value pair currently pointed to by 
     * the iterator.
     */
     virtual void deleteCurrentTrasportProperty() {};
 
   /**
-    * Deletes the given occerance of the trasport property key:value pair
+    * @deprecated To fix spelling mistake. 
+    *
+    * Deletes the given occerance of the transport property key:value pair
     * corresponding to the given key.
     *
     * This method does not advance the iterator in line with the deletes done.
-    * In case you want to access the trasport properties after using this
+    * In case you want to access the transport properties after using this
     * method, it is advisable to reinitialize the iterator using
-    * getFirstTrasportPropertyKey();
+    * getFirstTransportPropertyKey();
     * However you can use this method despite where the iterator is 
     * pointing currently.
     *
-    * @param pcKey Key of the trasport property key:value pair to be deleted
+    * @param pcKey Key of the transport property key:value pair to be deleted
     *              If the given key is not set currently, nothing will happen.
     * @param uiOccurance Which occerance of the key to be deleted, because 
     *                    there can be multiple values for the same key. 
@@ -476,6 +488,95 @@ public:
     */
     virtual void deleteTrasportProperty(char* pcKey, unsigned int uiOccurance = 1) {};
     
+  /**    
+    * Iterator initiatior for transport property keys
+    *
+    * This method must be called first to initiate access to the list of 
+    * transport property keys.
+    *
+    * @return First transport property key. If there are no transport 
+    * properties set, returns NULL.
+    */
+    virtual const char* getFirstTransportPropertyKey() { return 0; };
+
+  /**
+    * Iterator for transport property keys
+    *
+    * getFirstTransportPropertyKey() method must have been called at least once
+    * before this method is called. If not behaviour is undefined.
+    *
+    * This method advances the iterator by one position.
+    * Repeated calls always retuen the next value.
+    *
+    * @return Next transport property key. If there are no transport 
+    * properties set or if iterator is at the end of the list, returns NULL.
+    */
+    virtual const char* getNextTransportPropertyKey() { return 0; };
+
+  /**
+    * Accessor for transport property keys.
+    *
+    * This method gives access to the key corresponding to the transport key
+    * currently being pointed by transport property key iterator.
+    *
+    * getFirstTransportPropertyKey() method must have been called at least once
+    * before this method is called. If not behaviour is undefined.
+    *
+    * This method does not advance the iterator.
+    * Repeated calls always retuen the same key unless 
+    * getNextTransportPropertyKey() is called in between.
+    *
+    * @return Current transport property key. If there are no transport 
+    * properties set or if iterator is at the end of the list, returns NULL.
+    */
+    virtual const char* getCurrentTransportPropertyKey() { return 0; };
+    
+  /**
+    * Accessor for transport property values.
+    *
+    * This method gives access to the value corresponding to the transport key
+    * currently being pointed by transport property key iterator.
+    * As keys and values are treated as paires, access to the value field is 
+    * based on the access to the key field.
+    *
+    * getFirstTransportPropertyKey() method must have been called at least once
+    * before this method is called. If not behaviour is undefined.
+    *
+    * This method does not advance the iterator.
+    * Repeated calls always retuen the same value unless 
+    * getNextTransportPropertyKey() is called in between.
+    *
+    * @return Current transport property value. If there are no transport 
+    * properties set or if iterator is at the end of the list, returns NULL.
+    */
+    virtual const char* getCurrentTransportPropertyValue() { return 0; };
+
+  /**
+    * Deletes the transport property key:value pair currently pointed to by 
+    * the iterator.
+    */
+    virtual void deleteCurrentTransportProperty() {};
+
+  /**
+    * Deletes the given occerance of the transport property key:value pair
+    * corresponding to the given key.
+    *
+    * This method does not advance the iterator in line with the deletes done.
+    * In case you want to access the transport properties after using this
+    * method, it is advisable to reinitialize the iterator using
+    * getFirstTransportPropertyKey();
+    * However you can use this method despite where the iterator is 
+    * pointing currently.
+    *
+    * @param pcKey Key of the transport property key:value pair to be deleted
+    *              If the given key is not set currently, nothing will happen.
+    * @param uiOccurance Which occerance of the key to be deleted, because 
+    *                    there can be multiple values for the same key. 
+    *                    Default is to delete the first occurance.
+    *                    Count starts from 1.
+    */
+    virtual void deleteTransportProperty(char* pcKey, unsigned int uiOccurance = 1) {};
+        
   /**
     * Set whether to Maitain session with service ot not.
     * @param bSession - true is session should be maintained. False otherwise.

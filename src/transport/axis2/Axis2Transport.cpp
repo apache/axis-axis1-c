@@ -156,7 +156,7 @@ int
 Axis2Transport::openConnection ()
 {
     //Samisa: I wonder whether this should be a SOAPTransport API call.
-    //It should not be the job of the upper layers to tell the trasport
+    //It should not be the job of the upper layers to tell the transport
     //to open and close connections. Rather the transport should determine
     //when to do that, when sendBytes is called.
 
@@ -1358,7 +1358,7 @@ throw (AxisTransportException)
     return NULL;
 }
 
-const char* Axis2Transport::getFirstTrasportPropertyKey()
+const char* Axis2Transport::getFirstTransportPropertyKey()
 {
     m_viCurrentHeader = m_vHTTPHeaders.begin();
 
@@ -1368,7 +1368,7 @@ const char* Axis2Transport::getFirstTrasportPropertyKey()
         return (*m_viCurrentHeader).first.c_str();
 }
 
-const char* Axis2Transport::getNextTrasportPropertyKey()
+const char* Axis2Transport::getNextTransportPropertyKey()
 {
     //already at the end?
     if (m_viCurrentHeader == m_vHTTPHeaders.end())
@@ -1383,7 +1383,7 @@ const char* Axis2Transport::getNextTrasportPropertyKey()
 
 }
 
-const char* Axis2Transport::getCurrentTrasportPropertyKey()
+const char* Axis2Transport::getCurrentTransportPropertyKey()
 {
     if (m_viCurrentHeader == m_vHTTPHeaders.end())
         return NULL;
@@ -1391,7 +1391,7 @@ const char* Axis2Transport::getCurrentTrasportPropertyKey()
         return (*m_viCurrentHeader).first.c_str();
 }
 
-const char* Axis2Transport::getCurrentTrasportPropertyValue()
+const char* Axis2Transport::getCurrentTransportPropertyValue()
 {
     if (m_viCurrentHeader == m_vHTTPHeaders.end())
         return NULL;
@@ -1399,7 +1399,7 @@ const char* Axis2Transport::getCurrentTrasportPropertyValue()
         return (*m_viCurrentHeader).second.c_str();
 }
 
-void Axis2Transport::deleteCurrentTrasportProperty()
+void Axis2Transport::deleteCurrentTransportProperty()
 {
     if (m_viCurrentHeader != m_vHTTPHeaders.end())
     {
@@ -1407,7 +1407,7 @@ void Axis2Transport::deleteCurrentTrasportProperty()
     }
 }
 
-void Axis2Transport::deleteTrasportProperty(char* pcKey, unsigned int uiOccurance)
+void Axis2Transport::deleteTransportProperty(char* pcKey, unsigned int uiOccurance)
 {
     vector <std::pair < std::string, std::string > >::iterator currentHeader = m_vHTTPHeaders.begin();
     unsigned int uiCount = 1;
