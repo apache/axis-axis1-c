@@ -1,6 +1,7 @@
 #include "MathOps.hpp"
 #include <axis/server/AxisException.hpp>
 #include <ctype.h>
+#include <iostream>
 
 void PrintUsage();
 bool IsNumber(const char* p);
@@ -39,24 +40,42 @@ int main(int argc, char* argv[])
 			}
 			try
 			{
+				cout << "Trying to " << op << " " << i1 << " by " << i2 << endl;
 				iResult = ws.div(i1, i2);		
-				printf("Result is:%d\n", iResult);
+				cout << "Result is " << iResult << endl;
 			}
-			catch(MathOpsService_AxisClientException& e)
+			catch(MathOpsService_AxisClientException &me)
 			{
-				printf("MathOpsService Exception: %s\n", e.what());
+				cout << "MathOpsService_AxisClientException: ";
+				ISoapFault *fault = (ISoapFault *)me.getFault();
+				const char* pcCmplxFaultName = fault->getCmplxFaultObjectName().c_str();
+				if(0 == strcmp("DivByZeroStruct", pcCmplxFaultName))
+				{
+					DivByZeroStruct* p = (DivByZeroStruct *)fault->getCmplxFaultObject();
+					cout << "DivByZeroStruct Fault: \"" << p->varString << "\", " << p->varInt << ", " << p->varFloat << endl;
+            	}
+				else if(0 == strcmp("SpecialDetailStruct", pcCmplxFaultName))
+				{
+					SpecialDetailStruct* p = (SpecialDetailStruct *)fault->getCmplxFaultObject();
+					cout << "SpecialDetailStruct Fault: \"" << p->varString << "\"" << endl;
+				}
+				else if(0 == strcmp("OutOfBoundStruct", pcCmplxFaultName))
+				{
+					OutOfBoundStruct* p = (OutOfBoundStruct *)fault->getCmplxFaultObject();
+					cout << "OutOfBoundStruct Fault: \"" << p->varString << "\", " << p->varInt << ", \"" << p->specialDetail->varString << "\"" << endl;
+				}
 			}
 			catch(AxisException& e)
 			{
-				printf("AxisException : %s\n", e.what());
+				printf("AxisException: %s\n", e.what());
 			}
 			catch(exception& e)
 			{
-				printf("Unknown Exception : \n");
+				printf("Unknown Exception: \n");
 			}
 			catch(...)
 			{
-				printf("Unspecified Exception : \n");
+				printf("Unspecified Exception: \n");
 			}
 	    }
 	}
