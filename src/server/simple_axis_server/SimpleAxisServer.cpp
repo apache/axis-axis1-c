@@ -77,6 +77,7 @@
 //#include <stdio.h>
 #include "../../common/Packet.h"
 #include "../../common/AxisConfig.h"
+#include "../../common/AxisSocketUtils.h"
 #include "ServerHelper.h"
 
 #define MAXPENDING 5    /* Maximum outstanding connection requests */
@@ -141,8 +142,8 @@ int executeWork() {
 	//str->so.http.ip_headers->headername = SOAPACTIONHEADER;
 	//str->so.http.ip_headers->headervalue = "\"Calculator\"";	
 	str->so.http.ip_headercount = 0;
-	str->so.http.uri_path = "http://someurl/axis/Calculator";
-	//str->so.http.uri_path = "http://someurl/axis/Deployment";
+	//str->so.http.uri_path = "http://someurl/axis/Calculator";
+	str->so.http.uri_path = "http://someurl/axis/Deployment";
 
 	//set transport
 	str->transport.pSendFunct = send_response_bytes;
@@ -160,7 +161,8 @@ int executeWork() {
 	return 0;
 }
 
-void printError() {
+/*
+void printSocketErrorDescription() {
 
 	#ifdef WIN32
 		int iError = WSAGetLastError();		
@@ -191,6 +193,7 @@ void printError() {
 	#else //Linux
 	#endif
 }
+*/
 
 int createTCPServerSocket(unsigned short port)
 {
@@ -234,7 +237,8 @@ int acceptTCPConnection(int servSock)
     /* Wait for a client to connect */
     if ((clntSock = accept(servSock, (struct sockaddr *) &echoClntAddr, &clntLen)) < 0) {
         printf("%s\n","accept() failed");		
-		printError();
+		//printSocketErrorDescription();
+		AxisSocketUtils::printSocketErrorDescription();
 	}
     
     /* clntSock is connected to a client! */
