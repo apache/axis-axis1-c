@@ -83,7 +83,7 @@ enum HEADER_BLOCK_STD_ATTR_TYPE { ROLE_NEXT=1, ROLE_NONE=2,
 class IHeaderBlock
 {
 public:
-	virtual BasicNode* getFirstChild() =0;
+	virtual const BasicNode* getFirstChild() =0;
 	/**
 	 * Returns the number of child elements of this HeaderBlock.
 	 * @return The number of child elements of this HeaderBlock.
@@ -104,7 +104,7 @@ public:
 	 * @return The last child element is returned if it exists. If the child element 
 	 *  doesn't exsist this method returns NULL.
 	 */
-	virtual BasicNode* getLastChild() = 0;
+	virtual const BasicNode* getLastChild() = 0;
 
 	/**
 	 * Returns the child element at the given postion. The user has to check whether the
@@ -113,7 +113,7 @@ public:
 	 * @return The required child element is returned if it exists. If the child element 
 	 *  doesn't exsist this method returns NULL.
 	 */
-	virtual BasicNode* getChild(int iChildPosition) = 0;
+	virtual const BasicNode* getChild(int iChildPosition) = 0;
 
 	virtual int addChild(BasicNode* pBasicNode)=0;
 	virtual void setLocalName(const AxisChar* localname)=0;

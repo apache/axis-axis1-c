@@ -125,7 +125,7 @@ private:
 	list<Attribute*> m_namespaceDecls;
 
 public:
-	BasicNode* getFirstChild();
+	const BasicNode* getFirstChild();
 	int getNoOfChildren();
 	BasicNode* createChild(NODE_TYPE eNODE_TYPE,  AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri, AxisChar* pachValue);
 
@@ -216,7 +216,7 @@ public:
 	 * @return The last child element is returned if it exists. If the child element 
 	 *  doesn't exsist this method returns NULL.
 	 */
-	BasicNode* getLastChild();
+	const BasicNode* getLastChild();
 
 	/**
 	 * Returns the child element at the given postion. The user has to check whether the
@@ -225,7 +225,7 @@ public:
 	 * @return The required child element is returned if it exists. If the child element 
 	 *  doesn't exsist this method returns NULL.
 	 */
-	BasicNode* getChild(int iChildPosition);
+	const BasicNode* getChild(int iChildPosition);
 	int addChild(BasicNode* pBasicNode);
 
 	void setLocalName(const AxisChar* localname);
