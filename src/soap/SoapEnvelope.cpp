@@ -67,6 +67,7 @@
 
 #include "SoapEnvelope.h"
 #include "../common/GDefine.h"
+#include "SoapSerializer.h"
 
 #include <stdio.h>
 
@@ -123,7 +124,49 @@ void SoapEnvelope::setSoapBody(SoapBody* soapBody)
 	m_pSoapBody= soapBody;
 }
 
-int SoapEnvelope::serialize(string& sSerialized, SOAP_VERSION eSoapVersion)
+int SoapEnvelope::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
+{	
+	
+	int iStatus= SUCCESS;
+
+	do {
+						
+		pSZ << "<" << g_sObjSoapEnvVersionsStruct[eSoapVersion].pchEnvelopePrefix << ":" << g_sObjSoapEnvVersionsStruct[eSoapVersion].pcharWords[SKW_ENVELOPE];		
+				
+
+		serializeNamespaceDecl(pSZ);
+		serializeAttributes(pSZ);
+		
+		pSZ << ">";
+
+		if(m_pSoapHeader!=NULL) {
+			iStatus= m_pSoapHeader->serialize(pSZ, eSoapVersion);
+			if(iStatus == FAIL) {
+				break;
+			}
+		}
+
+		if(m_pSoapBody!=NULL) {
+			iStatus= m_pSoapBody->serialize(pSZ, eSoapVersion);
+			if(iStatus == FAIL) {
+				break;
+			}
+		} else {
+			//throw exception
+			//iStatus = FAIL;
+		}
+				
+		pSZ << "</" << g_sObjSoapEnvVersionsStruct[eSoapVersion].pchEnvelopePrefix << ":" << g_sObjSoapEnvVersionsStruct[eSoapVersion].pcharWords[SKW_ENVELOPE] << ">";
+
+		pSZ.flushSerializedBuffer();
+	} while(0);
+
+	return iStatus;
+}
+
+/*
+commented on 10Jul2003
+int SoapEnvelope::serialize(string &sSerialized, SOAP_VERSION eSoapVersion)
 {	
 	
 	int iStatus= SUCCESS;
@@ -157,38 +200,6 @@ int SoapEnvelope::serialize(string& sSerialized, SOAP_VERSION eSoapVersion)
 	} while(0);
 
 	return iStatus;
-}
-
-/*string& SoapEnvelope::serialize()
-{		
-	m_strEnvelopSerialized= "<"+ m_sPrefix+ ":"+ m_sLocalname;
-
-	string sNamespaceDeclSerialized= serializeNamespaceDecl();
-	string sAttributeSerialized= serializeAttributes();
-
-	if(!sNamespaceDeclSerialized.empty()) {
-		m_strEnvelopSerialized+= " "+ sNamespaceDeclSerialized;
-	}
-
-	if(!sAttributeSerialized.empty()) {
-		m_strEnvelopSerialized+= " "+ sAttributeSerialized;
-	}
-
-	m_strEnvelopSerialized+= ">";
-
-	if(m_pSoapHeader!=NULL) {
-		m_strEnvelopSerialized= m_strEnvelopSerialized+ m_pSoapHeader->serialize();
-	}
-
-	if(m_pSoapBody!=NULL) {
-		m_strEnvelopSerialized= m_strEnvelopSerialized+ m_pSoapBody->serialize();
-	} else {
-		//throw exception
-	}
-
-	m_strEnvelopSerialized+= "</"+ m_sPrefix+ ":"+ m_sLocalname+ ">";
-
-	return m_strEnvelopSerialized;
 }*/
 
 /*
@@ -213,6 +224,20 @@ int SoapEnvelope::addNamespaceDecl(Attribute *pAttribute)
 	return SUCCESS;
 }
 
+int SoapEnvelope::serializeAttributes(SoapSerializer& pSZ)
+{	
+	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+
+	while(itCurrAttribute != m_attributes.end()) {		
+		(*itCurrAttribute)->serialize(pSZ);
+		itCurrAttribute++;		
+	}	
+
+	return SUCCESS;	
+}
+
+/*
+commented on 10Jul2003 3.30 pm
 int SoapEnvelope::serializeAttributes(string& sSerialized)
 {	
 	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
@@ -224,28 +249,24 @@ int SoapEnvelope::serializeAttributes(string& sSerialized)
 
 	return SUCCESS;	
 }
-
-/*
-string SoapEnvelope::serializeAttributes()
-{
-	string strAttrSerialized="";
-
-	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
-
-	while(itCurrAttribute != m_attributes.end()) {		
-
-		strAttrSerialized= strAttrSerialized+ (*itCurrAttribute)->serialize();
-		itCurrAttribute++;
-
-		if(itCurrAttribute != m_attributes.end()) {
-			strAttrSerialized= strAttrSerialized+ " ";
-		}
-	}	
-
-	return strAttrSerialized;	
-}
 */
 
+int SoapEnvelope::serializeNamespaceDecl(SoapSerializer& pSZ)
+{	
+
+	list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
+
+	while(itCurrNamespaceDecl != m_namespaceDecls.end()) {			
+
+		(*itCurrNamespaceDecl)->serialize(pSZ);
+		itCurrNamespaceDecl++;		
+	}	
+
+	return SUCCESS;
+}
+
+/*
+commented on 10Jul2003 3.30 pm
 int SoapEnvelope::serializeNamespaceDecl(string& sSerialized)
 {	
 
@@ -259,25 +280,7 @@ int SoapEnvelope::serializeNamespaceDecl(string& sSerialized)
 
 	return SUCCESS;
 }
-
-/*string SoapEnvelope::serializeNamespaceDecl()
-{
-	string strNamespaceDeclSerialized="";
-
-	list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
-
-	while(itCurrNamespaceDecl != m_namespaceDecls.end()) {		
-
-		strNamespaceDeclSerialized= strNamespaceDeclSerialized+ (*itCurrNamespaceDecl)->serialize();
-		itCurrNamespaceDecl++;
-
-		if(itCurrNamespaceDecl != m_namespaceDecls.end()) {
-			strNamespaceDeclSerialized= strNamespaceDeclSerialized+ " ";
-		}
-	}	
-
-	return strNamespaceDeclSerialized;
-}*/
+*/
 
 /*
  * This method is needed in the situation where we create and fill a 

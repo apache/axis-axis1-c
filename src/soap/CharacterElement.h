@@ -77,7 +77,7 @@
 class CharacterElement : public BasicNode
 {
 public:
-	int serialize(string& sSerialized);
+	int serialize(SoapSerializer& pSZ);
 	NODE_TYPE getNodeType();
 	CharacterElement(const string& sValue);
 	virtual ~CharacterElement();

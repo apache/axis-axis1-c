@@ -78,8 +78,9 @@
 #include "SoapBody.h"
 #include "SoapFault.h"
 #include "../common/Param.h"
+#include "../common/ISoapDeSerializer.h"
 
-class SoapDeSerializer  
+class SoapDeSerializer : public ISoapDeSerializer
 {
 private:
 	XMLStreamHandler* m_pHandler;

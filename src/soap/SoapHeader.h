@@ -92,9 +92,11 @@
 
 class SoapHeader  
 {
-private:
-	int serializeNamespaceDecl(string&);
-	int serializeAttributes(string&);
+private:	
+	int serializeNamespaceDecl(SoapSerializer& pSZ);
+	//int serializeNamespaceDecl(string&);	
+	int serializeAttributes(SoapSerializer& pSZ);
+	//int serializeAttributes(string&);
 	list<Attribute*> m_attributes;
 	list<Attribute*> m_namespaceDecls;
 	list<HeaderBlock*> m_headerBlocks;
@@ -103,7 +105,8 @@ public:
 	int addNamespaceDecl(Attribute* pAttribute);
 	int addAttribute(Attribute* pAttribute);
 	//string& serialize();
-	int serialize(string&, SOAP_VERSION eSoapVersion);
+	int serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion);
+	//int serialize(string&, SOAP_VERSION eSoapVersion);	
 	void addHeaderBlock(HeaderBlock* headerBlock);
 	SoapHeader();
 	virtual ~SoapHeader();
