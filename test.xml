@@ -49,7 +49,6 @@ Notes:
 	  -->
 	<property name="dir.src" value="${basedir}/tests/auto_build/testcases"/>
 	<property name="test.list" value="${dir.src}/wsdls/test.properties"/>
-	<property name="dir.include" value="${dir.package.include}"/>
 
 	<!--
 	  Compiler definitions
@@ -366,7 +365,7 @@ Notes:
 # Transport_smtp:	 The SMTP transport library
 # XMLParser:		  The xml parser library
 #
-#ClientLogPath:${dir.test.generated}/${client.lang}/${testName}/ClientLog
+ClientLogPath:${dir.test.generated}/${client.lang}/${testName}/ClientLog
 Transport_http:${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
 XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}
 </echo>
@@ -496,8 +495,8 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 						 failifexecutionfails="false" vmlauncher="false">
 							<arg line="-p ${monitorPort}"/>
 							<arg line="-s localhost"/>
-							<env key="PATH" value="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}/bin"/>
-							<env key="LD_LIBRARY_PATH" value="${dir.libraries}${path.separator}${dir.xmlParser}/lib"/>
+							<env key="PATH" value="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}/bin${path.separator}${dir.xmlParser}"/>
+							<env key="LD_LIBRARY_PATH" value="${dir.libraries}${path.separator}${dir.xmlParser}/lib${path.separator}${dir.xmlParser}"/>
 							<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}"/>
 						</exec>
 
