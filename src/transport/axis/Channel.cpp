@@ -67,14 +67,13 @@ Channel::~Channel ()
 
 bool
 Channel::Open (std::string & p_RemoteNode, unsigned short p_RemoteEnd)
-throw (ChannelException)
+throw (AxisTransportException)
 {
     m_RemoteNode = p_RemoteNode;
     m_RemoteEnd = p_RemoteEnd;
 
     if (!Init ())
-	throw ChannelException ("Cannot initialize a channel to the remote \
-        end");
+	throw AxisTransportException(SERVER_TRANSPORT_CHANNEL_INIT_ERROR);
 
     sockaddr_in clAddr, svAddr;
 
@@ -87,11 +86,11 @@ throw (ChannelException)
 	if (bind (m_Sock, (struct sockaddr *) &clAddr, sizeof (clAddr)) ==
 	    SOCKET_ERROR)
 	{
-	    Error ("Error - Binding");
+	    /* Error - Binding. Cannot open a channel to the remote end, 
+               shutting down the channel
+            */
 	    CloseChannel ();
-	    throw
-		ChannelException ("Cannot open a channel to the remote end, \
-                shutting down the channel");
+	    throw AxisTransportException(SERVER_TRANSPORT_SOCKET_CONNECT_ERROR);
 	}
 
 	/* Although the above fragment makes use of the bind() API, it would be
@@ -123,18 +122,16 @@ throw (ChannelException)
 	if (connect (m_Sock, (struct sockaddr *) &svAddr,
 		     sizeof (svAddr)) == SOCKET_ERROR)
 	{
-	    Error ("Sockets error Couldn't connect socket.");
 	    CloseChannel ();
-	    throw
-		ChannelException ("Cannot open a channel to the remote end, \
-                shutting down the channel");
+            /*Cannot open a channel to the remote end, shutting down the channel*/
+	    throw AxisTransportException(SERVER_TRANSPORT_SOCKET_CONNECT_ERROR);
 	}
     }
     else
     {
-	Error ("Sockets error Couldn't create socket.");
 	CloseChannel ();
-	throw ChannelException ("Cannot open a channel");
+        /* Sockets error Couldn't create socket*/
+	throw AxisTransportException(SERVER_TRANSPORT_SOCKET_CREATE_ERROR);
     }
 
     return true;
@@ -159,7 +156,7 @@ Channel::Init ()
 	/* Filled by Windows Sockets DLLs */
     {
 	m_LastErr = "WinSock DLL not responding.";
-	Error ((char *) m_LastErr.c_str ());
+	//Error ((char *) m_LastErr.c_str ());
 	return false;
     }
     else
@@ -198,22 +195,18 @@ Channel::operator << (const char *msg)
 {
     if (INVALID_SOCKET == m_Sock)
     {
-	Error
-	    ("Writing cannot be done without having a open socket to remote \
-            end.");
-	throw
-	    ChannelException ("Output streaming error on undefined channel; \
-            please open the channel first");
+	
+	/*Writing cannot be done without having a open socket to remote end*/
+	throw AxisTransportException(SERVER_TRANSPORT_INVALID_SOCKET);
     }
 
     int size = strlen (msg), nByteSent;
 
     if ((nByteSent = send (m_Sock, msg, size, MSG_DONTROUTE)) == SOCKET_ERROR)
     {
-	Error ("Output streaming error while writing data.");
+	/*Output streaming error while writing data*/
 	CloseChannel ();
-	throw ChannelException ("Output streaming error on Channel while \
-            writing data");
+	throw AxisTransportException(SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR);
     }
 
     return *this;
@@ -231,9 +224,10 @@ Channel::operator >> (std::string & msg)
     msg = "";
     if (INVALID_SOCKET == m_Sock)
     {
-	Error ("Reading cannot be done without having a open socket.");
-	throw ChannelException ("Input streaming error on "
-				"undefined channel; please open the channel first");
+	/* Reading cannot be done without having a open socket
+           Input streaming error on undefined channel; please open the channel first
+         */
+	throw AxisTransportException (SERVER_TRANSPORT_INVALID_SOCKET);
     }
 
     int nByteRecv = 0;
@@ -250,15 +244,15 @@ Channel::operator >> (std::string & msg)
     //handle timeout outcome
     if(iTimeoutStatus < 0)//error
     {
-        perror ("select SOCKET_ERROR");
-        Error ("Channel error while waiting for timeout.");
+        /*select SOCKET_ERROR. Channel error while waiting for timeout*/
         return *this;
     }
 
     if(iTimeoutStatus == 0)//timeout expired
     {
-        perror ("select timeout expired");
-        Error ("Channel error connection timeout before receving.");
+        /*"select timeout expired.
+         *Channel error connection timeout before receving
+        */
         return *this;
     }
 
@@ -267,12 +261,10 @@ Channel::operator >> (std::string & msg)
     if ((nByteRecv = recv (m_Sock, (char *) &buf, BUF_SIZE - 1, 0))
 	== SOCKET_ERROR)
     {
-	perror ("recv SOCKET_ERROR");
-	Error ("Channel error while getting data.");
+	/*recv SOCKET_ERROR, Channel error while getting data*/
 	/* CloseChannel(); */
 	return *this;
-	/* throw ChannelException("Input streaming error on Channel " \
-	 * "while getting data"); 
+	/* throw AxisTransportException(SERVER_TRANSPORT_INPUT_STREAMING_ERROR); 
 	 */
     }
     if (nByteRecv)
@@ -285,7 +277,7 @@ Channel::operator >> (std::string & msg)
     }
     else
 	printf ("execution break\n");
-
+    
     return *this;
 }
 
@@ -295,9 +287,8 @@ Channel::readNonBlocking (std::string & msg)
     msg = "";
     if (INVALID_SOCKET == m_Sock)
     {
-	Error ("Reading cannot be done without having a open socket.");
-	throw ChannelException ("Input streaming error on "
-				"undefined channel; please open the channel first");
+	/*Reading cannot be done without having a open socket*/
+	throw AxisTransportException(SERVER_TRANSPORT_INVALID_SOCKET);
     }
 
     int nByteRecv = 0;
@@ -323,7 +314,7 @@ Channel::readNonBlocking (std::string & msg)
     if ((nByteRecv = recv (m_Sock, (char *) &buf, BUF_SIZE - 1, flags))
 	== SOCKET_ERROR)
     {
-	Error ("Channel error while getting data.");
+	/*Channel error while getting data*/
 	return *this;
     }
     if (nByteRecv)

@@ -19,7 +19,7 @@
  *
  */
 
-#include "AxisWsddException.h"
+#include <axis/AxisWsddException.h>
 #include <exception>
 using namespace std;
 
@@ -71,32 +71,31 @@ void AxisWsddException::processException(int iExceptionCode)
 
 const string AxisWsddException::getMessage (exception* objException)
 {
-    string sMessage = objException->what();
+    m_sMessage = objException->what();
 
-    return sMessage;
+    return m_sMessage;
 }
 
 const string AxisWsddException::getMessage (int iExceptionCode)
 {
-    string sMessage;
     switch(iExceptionCode)
     {
         case CLIENT_WSDD_SERVICE_NOT_FOUND:
-            sMessage = "Requested service not found";
+            m_sMessage = "Requested service not found";
             break;
         case CLIENT_WSDD_METHOD_NOT_ALLOWED:
-            sMessage = "Requested method is not allowed";
+            m_sMessage = "Requested method is not allowed";
             break;
         case CLIENT_WSDD_PARA_TYPE_MISMATCH:
-            sMessage = "Parameter type mismatch";
+            m_sMessage = "Parameter type mismatch";
             break; 
         case SERVER_WSDD_NO_HANDLERS_CONFIGURED:
-            sMessage = "No handlers configured in server.wsdd";
+            m_sMessage = "No handlers configured in server.wsdd";
             break;
         default:
-            sMessage = "Unknown Wsdd Exception";
+            m_sMessage = "Unknown Wsdd Exception";
     }
-    return sMessage;
+    return m_sMessage;
 }
 
 const char* AxisWsddException::what() throw ()

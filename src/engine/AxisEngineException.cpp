@@ -19,7 +19,7 @@
  *
  */
 
-#include "AxisEngineException.h"
+#include <axis/AxisEngineException.h>
 #include <exception>
 using namespace std;
 
@@ -71,53 +71,52 @@ void AxisEngineException::processException(int iExceptionCode)
 
 const string AxisEngineException::getMessage (exception* objException)
 {
-    string sMessage = objException->what();
+    m_sMessage = objException->what();
 
-    return sMessage;
+    return m_sMessage;
 }
 
 const string AxisEngineException::getMessage (int iExceptionCode)
 {
-    string sMessage;
     switch(iExceptionCode)
     {
         case SERVER_ENGINE_COULD_NOT_LOAD_SRV:
-            sMessage = "Could not load service";
+            m_sMessage = "Could not load service";
             break;
         case SERVER_ENGINE_COULD_NOT_LOAD_HDL:
-            sMessage = "Could not load handler";
+            m_sMessage = "Could not load handler";
             break;
         case SERVER_ENGINE_HANDLER_FAILED:
-            sMessage = "Handler failed";
+            m_sMessage = "Handler failed";
             break;
         case SERVER_ENGINE_WEBSERVICE_FAILED:
-            sMessage = "Web Service failed";
+            m_sMessage = "Web Service failed";
             break;
         case SERVER_ENGINE_HANDLER_INIT_FAILED:
-            sMessage = "Handler initialization failed";
+            m_sMessage = "Handler initialization failed";
             break;
         case SERVER_ENGINE_HANDLER_CREATION_FAILED:
-            sMessage = "Handler creation failed";
+            m_sMessage = "Handler creation failed";
             break;
         case SERVER_ENGINE_LIBRARY_LOADING_FAILED:
-            sMessage = "Library loading failed";
+            m_sMessage = "Library loading failed";
             break;
         case SERVER_ENGINE_HANDLER_NOT_LOADED:
-            sMessage = "Handler is not loaded";
+            m_sMessage = "Handler is not loaded";
             break;
         case SERVER_ENGINE_HANDLER_BEING_USED:
-            sMessage = "Handler is being used";
+            m_sMessage = "Handler is being used";
             break;
         case SERVER_ENGINE_GET_HANDLER_FAILED:
-            sMessage = "Get handler failed";
+            m_sMessage = "Get handler failed";
             break;
         case SERVER_ENGINE_WRONG_HANDLER_TYPE:
-            sMessage = "Wrong handler type";
+            m_sMessage = "Wrong handler type";
             break;
         default:
-            sMessage = "Unknown Axis C++ Engine Exception";
+            m_sMessage = "Unknown Axis C++ Engine Exception";
     }
-    return sMessage;
+    return m_sMessage;
 }
 
 const char* AxisEngineException::what() throw ()

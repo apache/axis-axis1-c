@@ -57,6 +57,9 @@ const string AxisMessage::getMessage(int iExceptionCode)
         case CLIENT_SOAP_NO_SOAP_METHOD:
             m_sMessage = "Request method is not a soap method";
             break; 
+        case CLIENT_SOAP_CONTENT_NOT_SOAP:
+            m_sMessage = "Content is not a valid soap message";
+            break;
         case CLIENT_WSDD_SERVICE_NOT_FOUND:
             m_sMessage = "Requested service not found";
             break;
@@ -117,7 +120,42 @@ const string AxisMessage::getMessage(int iExceptionCode)
         case SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE:
             m_sMessage = "Unknow HTTP response, cannot process response message";
             break;
-
+        case SERVER_TRANSPORT_UNEXPECTED_STRING:
+            m_sMessage = "Unexpected string";
+            break;
+        case SERVER_TRANSPORT_CHANNEL_INIT_ERROR:
+            m_sMessage = "Cannot initialize a channel to the remote end";
+            break;
+        case SERVER_TRANSPORT_SOCKET_CREATE_ERROR:
+            m_sMessage = "Sockets error Couldn't create socket"; 
+            break;
+        case SERVER_TRANSPORT_SOCKET_CONNECT_ERROR:
+            m_sMessage = "Cannot open a channel to the remote end, shutting down the channel";
+            break;
+        case SERVER_TRANSPORT_INVALID_SOCKET:
+            m_sMessage = "Invalid socket. Socket may not be open";
+            break;
+        case SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR:
+            m_sMessage = "Output streaming error on Channel while writing data";
+            break;
+        case SERVER_TRANSPORT_INPUT_STREAMING_ERROR:
+            m_sMessage = "Input streaming error while getting data";
+            break;
+        case SERVER_TRANSPORT_TIMEOUT_EXCEPTION:
+            m_sMessage = "Channel error while waiting for timeout";
+            break;
+        case SERVER_TRANSPORT_TIMEOUT_EXPIRED:
+            m_sMessage = "Channel error connection timeout before receving";
+            break;
+        case SERVER_TRANSPORT_BUFFER_EMPTY:
+            m_sMessage = "Transport buffer is empty";
+            break;
+        case SERVER_PARSE_BUFFER_EMPTY:
+            m_sMessage = "Buffer received from the parser is empty";
+            break;
+        case SERVER_PARSE_PARSER_FAILED:
+            m_sMessage = "Parser failed";
+            break;
         default:
             m_sMessage = "Unknown Exception has occured";
 
