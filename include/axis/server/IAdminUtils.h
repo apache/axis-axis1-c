@@ -14,10 +14,10 @@
  *   limitations under the License.
  */
 
-/**
+/*
  * @class WSDDDocument
- * @brief This Interface contains the Server side administration functionality like
- * deploying and undeploying services/handlers dynamically.
+ * @brief This Interface contains the Server side administration 
+ * functionality like deploying and undeploying services/handlers dynamically.
  * @author Suasntha Kumara (skumara@virtusa.com, susantha@opensource.lk)
  */
 
@@ -29,8 +29,9 @@
 class IAdminUtils  
 {
 public:
-	virtual ~IAdminUtils(){};
-	virtual int updateWSDD(AxisChar* wsdd)=0;
+    virtual ~IAdminUtils(){};
+    virtual int updateWSDD(AxisChar* wsdd)=0;
 };
 
-#endif /*_IADMINUTILS_H____OF_AXIS_INCLUDED_*/
+#endif 
+

@@ -46,26 +46,26 @@ typedef unsigned int xsd__unsignedInt;
 typedef unsigned long xsd__unsignedLong;
 typedef unsigned short xsd__unsignedShort;
 typedef struct {
-	xsd__unsignedByte * __ptr;
+    xsd__unsignedByte * __ptr;
     xsd__int __size;
 } xsd__base64Binary;
 typedef struct{
-	xsd__unsignedByte * __ptr;
+    xsd__unsignedByte * __ptr;
     xsd__int __size;
 } xsd__hexBinary;
 typedef AxisChar * xsd__anyURI;
 
 typedef enum {
-	RPC_ENCODED, /*default*/
-	DOC_LITERAL,
-	RPC_LITERAL
+    RPC_ENCODED, /*default*/
+    DOC_LITERAL,
+    RPC_LITERAL
 } AXIS_BINDING_STYLE;
 
 #define AXIS_DEFINED_ARRAY(type) \
-	struct {\
-		type * m_Array;\
-		int m_Size;\
-	}
+    struct {\
+        type * m_Array;\
+        int m_Size;\
+    }
 
 typedef AXIS_DEFINED_ARRAY(void) Axis_Array;
 typedef AXIS_DEFINED_ARRAY(xsd__string) xsd__string_Array;
@@ -93,8 +93,8 @@ static const int xsd_boolean_true = 1;
 static const int xsd_boolean_false = 0;
 
 typedef enum {
-	NORMAL_CHANNEL=0,
-	SSL_CHANNEL
+    NORMAL_CHANNEL=0,
+    SSL_CHANNEL
 } AXIS_CHANNEL_TYPE;
 
-#endif /* !defined(_AXISUSERAPI_H____OF_AXIS_INCLUDED_) */
+#endif
