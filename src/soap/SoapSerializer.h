@@ -199,7 +199,7 @@ public:
 		const AxisChar* pNamespace, void* pValue, XSDTYPE type);
     int AXISCALL serializeAsAttribute(const AxisChar* pName, 
         const AxisChar* pNamespace, void* pValue, XSDTYPE type);
-    void AXISCALL serializeVargs(const char* pFirst, va_list vargs);
+    void AXISCALL serializeVargs(int count, const char** args);
     void AXISCALL serialize(const char* pFirst, ...);
     void setStyle(AXIS_BINDING_STYLE nStyle)
     { m_nStyle = nStyle; m_BTSZ.setStyle(nStyle);};

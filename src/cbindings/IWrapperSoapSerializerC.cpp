@@ -176,12 +176,16 @@ AXISC_STORAGE_CLASS_INFO AXISCHANDLE axiscCreateSoapAttachementSoapAttachment(AX
 	return (AXISCHANDLE)(sz->createSoapAttachement());
 }
 
-AXISC_STORAGE_CLASS_INFO void axiscSerializeIWrapperSoapSerializer(AXISCHANDLE wrapperSoapSerializer, const char *pFirst, ...) {
+AXISC_STORAGE_CLASS_INFO void axiscSerializeIWrapperSoapSerializer(
+	AXISCHANDLE wrapperSoapSerializer, const char *pFirst, ...) {
 	SoapSerializer *sz = (SoapSerializer*)wrapperSoapSerializer;
-	va_list vList;
-	va_start( vList, pFirst );
-	sz->serializeVargs(pFirst,vList);
-	va_end( vList);
+	// TODO: There were problems getting the ... to work properly, so serializeVargs was
+	// introduced. Also wsdl2ws only ever calls this method with one parameter so
+	// ignore the extra parameters here for the moment. This should be fixed properly
+	// later. I think SoapSerializer::serialize is wrong to assume that the variable
+	// list of parameters will be terminated by a null pointer. I think we should always
+	// pass in an explicit parameter count here.
+	sz->serializeVargs(1,&pFirst);
 }
 
 }
