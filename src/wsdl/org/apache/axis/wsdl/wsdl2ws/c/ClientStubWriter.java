@@ -156,8 +156,6 @@ public class ClientStubWriter extends CFileWriter{
 		}
 		else{
 			isAllTreatedAsOutParams = true;
-			//TODO make all outparams when there are more than one return params
-			throw new WrapperFault("WSDL2Ws does not still handle more than one return parameters");
 		}
 		Collection params = minfo.getInputParameterTypes();
 		String methodName = minfo.getMethodname();
@@ -199,6 +197,18 @@ public class ClientStubWriter extends CFileWriter{
 				aretherearrayparams = true;
 			}
 		}
+		// Multiples parameters so fill the methods prototype
+		ArrayList paramsC = (ArrayList)minfo.getOutputParameterTypes();
+		if ( isAllTreatedAsOutParams ) {
+			String currentParaTypeName;
+			for (int i = 0; i < paramsC.size(); i++) {
+				type = wscontext.getTypemap().getType(((ParameterInfo)paramsC.get(i)).getSchemaName());
+				writer.write(", AXIS_OUT_PARAM  "+WrapperUtils.getClassNameFromParamInfoConsideringArrays((ParameterInfo)paramsC.get(i),wscontext)+" *OutValue"+i);
+				if((type = wscontext.getTypemap().getType(((ParameterInfo)paramsC.get(i)).getSchemaName())) != null && type.isArray()){
+					aretherearrayparams = true;
+				}
+			}
+		}
 		writer.write(")\n{\n");
 		writer.write("\tCall* pCall = (Call*)pStub;\n");
 		if (returntype != null){
@@ -215,7 +225,7 @@ public class ClientStubWriter extends CFileWriter{
 				//TODO initialize return parameter appropriately.
 			}
 		}
-		if (aretherearrayparams){
+		if (aretherearrayparams || returntypeisarray){
 			writer.write("\tAxis_Array array;\n");
 		}
 		writer.write("\t/* Following will establish the connections with the server too */\n");
@@ -267,7 +277,51 @@ public class ClientStubWriter extends CFileWriter{
 		}
 		writer.write("\tif (AXIS_SUCCESS == pCall->_functions->Invoke(pCall->_object))\n\t{\n");
 		writer.write("\t\tif(AXIS_SUCCESS == pCall->_functions->CheckMessage(pCall->_object, \""+methodName+"Response\", \"\"))\n\t\t{\n");
-		if (returntype == null){
+		if ( isAllTreatedAsOutParams) {
+			String currentParamName;
+			String currentParaType;
+			for (int i = 0; i < paramsC.size(); i++) {
+				ParameterInfo currentType = (ParameterInfo)paramsC.get(i);
+				type = wscontext.getTypemap().getType(currentType.getSchemaName());
+				if (type != null){
+					currentParaType = type.getLanguageSpecificName();
+					typeisarray = type.isArray();
+				}
+				else {
+					currentParaType = ((ParameterInfo)paramsC.get(i)).getLangName();
+					typeisarray = false;
+				}
+				typeissimple = CUtils.isSimpleType(currentParaType);
+								
+				currentParamName = "*OutValue"+i;
+				// Some code need to be merged as we have some duplicated in coding here.
+				if (typeisarray){
+					QName qname = WrapperUtils.getArrayType(type).getName();
+					String containedType = null;
+					if (CUtils.isSimpleType(qname)){
+						containedType = CUtils.getclass4qname(qname);
+						writer.write("\t\t\tarray = pCall->_functions->GetBasicArray(pCall->_object, "+CUtils.getXSDTypeForBasicType(containedType)+", \""+currentType.getParamName()+"\", 0);\n");
+						writer.write("\t\t\tmemcpy(OutValue"+ i +", &array, sizeof(Axis_Array));\n");
+
+					}
+					else{
+						containedType = qname.getLocalPart();
+						writer.write("\t\t\tarray = pCall->_functions->GetCmplxArray(pCall->_object, (void*) Axis_DeSerialize_"+containedType);
+						writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+currentType.getParamName()+"\", Axis_URI_"+containedType+");\n");
+						writer.write("\t\t\tmemcpy(OutValue"+ i +", &array, sizeof(Axis_Array));\n");
+					}
+				}
+				else if(typeissimple){
+				   writer.write("\t\t\t" + currentParamName + " = pCall->_functions->"+ CUtils.getParameterGetValueMethodName(currentParaType, false)+"(pCall->_object, \""+currentType.getParamName()+"\", 0);\n");
+				}
+				else{
+				   writer.write("\t\t\t" + currentParamName + " = ("+currentParaType+"*)pCall->_functions->GetCmplxObject(pCall->_object, (void*) Axis_DeSerialize_"+currentParaType+", (void*) Axis_Create_"+currentParaType+", (void*) Axis_Delete_"+currentParaType+",\""+currentType.getParamName()+"\", 0);\n"); 
+				}				
+			}	
+			writer.write("\t\t}\n");
+			writer.write("\t}\n\tpCall->_functions->UnInitialize(pCall->_object);\n");
+		}
+		else if (returntype == null){
 			writer.write("\t\t\t/*not successful*/\n\t\t}\n");
 			writer.write("\t}\n\tpCall->_functions->UnInitialize(pCall->_object);\n");
 		}
