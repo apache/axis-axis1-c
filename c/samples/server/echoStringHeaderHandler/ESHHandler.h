@@ -81,11 +81,13 @@ public:
 	int Init();
 	void OnFault(IMessageData* pIMsg);
 	int Invoke(IMessageData* pIMsg);
-	void SetOptionList(map<string, string>* OptionList);
-	void SetOption(string sOption, string Value);
-	string GetOption(string sArg);
+	void SetOptionList(const map<string, string>* OptionList);
+	const string& GetOption(const string& sArg);
 	ESHHandler();
 	virtual ~ESHHandler();
+
+protected:
+    string m_sEmpty;    
 
 };
 
