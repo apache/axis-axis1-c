@@ -200,7 +200,7 @@ int ArrayBean::Serialize(IWrapperSoapSerializer& pSZ)
 			int blocksize = GetArrayBlockSize(it);
 			for (int ix=0;ix<blocksize;ix++)
 			{
-				pSZ << BasicTypeSerializer::serialize(m_ItemName, *pInt).c_str();
+				pSZ << m_BTSZ.serialize(m_ItemName, *pInt).c_str();
 				pInt++;
 			}
 		}
@@ -212,7 +212,7 @@ int ArrayBean::Serialize(IWrapperSoapSerializer& pSZ)
 			int blocksize = GetArrayBlockSize(it);
 			for (int ix=0;ix<blocksize;ix++)
 			{
-				pSZ << BasicTypeSerializer::serialize(m_ItemName, *pFloat).c_str();
+				pSZ << m_BTSZ.serialize(m_ItemName, *pFloat).c_str();
 				pFloat++;
 			}
 		}
@@ -224,7 +224,7 @@ int ArrayBean::Serialize(IWrapperSoapSerializer& pSZ)
 			int blocksize = GetArrayBlockSize(it);
 			for (int ix=0;ix<blocksize;ix++)
 			{
-				pSZ << BasicTypeSerializer::serialize(m_ItemName, *pStr).c_str();
+				pSZ << m_BTSZ.serialize(m_ItemName, *pStr).c_str();
 				pStr++;
 			}
 		}

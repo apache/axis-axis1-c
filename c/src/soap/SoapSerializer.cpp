@@ -270,17 +270,17 @@ IArrayBean* SoapSerializer::makeArrayBean(XSDTYPE nType, void* pArray)
 
 string& SoapSerializer::SerializeBasicType(const string& sName, string& sValue, XSDTYPE type)
 {
-	return BasicTypeSerializer::serialize(sName, sValue, type);
+	return m_BTSZ.serialize(sName, sValue, type);
 }
 
 string& SoapSerializer::SerializeBasicType(const string& sName, float fValue)
 {
-	return BasicTypeSerializer::serialize(sName, fValue);	
+	return m_BTSZ.serialize(sName, fValue);	
 }
 
 string& SoapSerializer::SerializeBasicType(const string& sName, int nValue)
 {
-	return BasicTypeSerializer::serialize(sName, nValue);		
+	return m_BTSZ.serialize(sName, nValue);		
 }
 
 IHeaderBlock* SoapSerializer::createHeaderBlock()

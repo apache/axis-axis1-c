@@ -10,6 +10,7 @@
 #endif // _MSC_VER > 1000
 
 #include "IArrayBean.h"
+#include "BasicTypeSerializer.h"
 
 #include <list>
 using namespace std;
@@ -44,6 +45,8 @@ public:
 public: //IArrayBean Interface
 	void AddDimension(int nDim);
 	void SetItemName(char* sName);
+private:
+	BasicTypeSerializer m_BTSZ;
 };
 
 #endif // !defined(AFX_ARRAYBEAN_H__374BEDCF_E850_4907_9CF0_F2EBC61E54CF__INCLUDED_)

@@ -238,19 +238,19 @@ int Param::serialize(IWrapperSoapSerializer& pSZ)
 	string ATprefix;
 	switch (m_Type){
 	case XSD_INT:
-		pSZ << BasicTypeSerializer::serialize(m_sName, m_Value.nValue).c_str();
+		pSZ << m_BTSZ.serialize(m_sName, m_Value.nValue).c_str();
 		break;
 	case XSD_FLOAT:
-		pSZ << BasicTypeSerializer::serialize(m_sName, m_Value.fValue).c_str();
+		pSZ << m_BTSZ.serialize(m_sName, m_Value.fValue).c_str();
 		break;
 	case XSD_STRING:
-		pSZ << BasicTypeSerializer::serialize(m_sName, m_sValue).c_str();
+		pSZ << m_BTSZ.serialize(m_sName, m_sValue).c_str();
 		break;
 	case XSD_HEXBINARY:
-		pSZ << BasicTypeSerializer::serialize(m_sName, m_sValue, XSD_HEXBINARY).c_str();
+		pSZ << m_BTSZ.serialize(m_sName, m_sValue, XSD_HEXBINARY).c_str();
 		break;
 	case XSD_BASE64BINARY:
-		pSZ << BasicTypeSerializer::serialize(m_sName, m_sValue, XSD_BASE64BINARY).c_str();
+		pSZ << m_BTSZ.serialize(m_sName, m_sValue, XSD_BASE64BINARY).c_str();
 		break;
 	case XSD_ARRAY:
 		//pSZ << "<abc:ArrayOfPhoneNumbers xmlns:abc="http://example.org/2001/06/numbers"
@@ -283,7 +283,7 @@ int Param::serialize(IWrapperSoapSerializer& pSZ)
 		else //basic type array
 		{
 			pSZ << "xsd:";
-			pSZ << BasicTypeSerializer::BasicTypeStr(m_Value.pArray->m_type);
+			pSZ << m_BTSZ.BasicTypeStr(m_Value.pArray->m_type);
 		}
 		{
 			for (list<int>::iterator it=m_Value.pArray->m_size.begin(); it!=m_Value.pArray->m_size.end(); it++)

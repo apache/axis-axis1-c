@@ -74,7 +74,7 @@
 
 #include "../common/IWrapperSoapSerializer.h"
 #include "../common/IHandlerSoapSerializer.h"
-//#include "../common/ISoapSerializer.h"
+#include "../common/BasicTypeSerializer.h"
 #include "SoapEnvVersions.h"
 
 class SoapEnvelope;
@@ -118,6 +118,8 @@ public: //Basic Type Serializing methods
 	string& SerializeBasicType(const string& sName, string& sValue, XSDTYPE type=XSD_STRING);
 	string& SerializeBasicType(const string& sName, float fValue);
 	string& SerializeBasicType(const string& sName, int nValue);
+private:
+	BasicTypeSerializer m_BTSZ;
 };
 
 #endif // !defined(AFX_SOAPSERIALIZER_H__C37229AD_BD54_430D_9619_E4574CF95334__INCLUDED_)

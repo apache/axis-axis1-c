@@ -139,20 +139,20 @@ int MessageData::setPastPivotState(bool bState)
 
 void MessageData::getSoapSerializer(IHandlerSoapSerializer **pIHandlerSoapSerializer)
 {
-	*pIHandlerSoapSerializer = dynamic_cast<IHandlerSoapSerializer*>(m_pSZ);
+	*pIHandlerSoapSerializer = static_cast<IHandlerSoapSerializer*>(m_pSZ);
 }
 
 void MessageData::getSoapSerializer(IWrapperSoapSerializer **pIWrapperSoapSerializer)
 {
-	*pIWrapperSoapSerializer = dynamic_cast<IWrapperSoapSerializer*>(m_pSZ);
+	*pIWrapperSoapSerializer = static_cast<IWrapperSoapSerializer*>(m_pSZ);
 }
 
 void MessageData::getSoapDeSerializer(IWrapperSoapDeSerializer **pIWrapperSoapDeSerializer)
 {
-	*pIWrapperSoapDeSerializer= dynamic_cast<IWrapperSoapDeSerializer*>(m_pDZ);
+	*pIWrapperSoapDeSerializer= static_cast<IWrapperSoapDeSerializer*>(m_pDZ);
 }
 
 void MessageData::getSoapDeSerializer(IHandlerSoapDeSerializer **pIHandlerSoapDeSerializer)
 {
-	*pIHandlerSoapDeSerializer= dynamic_cast<IHandlerSoapDeSerializer*>(m_pDZ);
+	*pIHandlerSoapDeSerializer= static_cast<IHandlerSoapDeSerializer*>(m_pDZ);
 }
