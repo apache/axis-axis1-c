@@ -7,6 +7,10 @@
 #include "../../common/Packet.h"
 #include <string.h>
 #include <malloc.h>
+/*
+AxisConfig.h contains definitions for the wsdd file path
+*/
+#include "../../common/AxisConfig.h"
 
 #define xxx ap_log_rerror(APLOG_MARK,APLOG_ERR, globr,"logged here");
 #define yyy ap_log_rerror(APLOG_MARK, APLOG_ERR, globr,"logged here");
@@ -28,7 +32,10 @@ int send_transport_information(Ax_soapstream* hdr)
 /*Call initialize_module() [of Packet.h] from within this method*/
 void module_init(server_rec *svr_rec, pool* p)
 {
-	initialize_module(1);
+	/*
+	WSDDFILEPATH Defined in common/AxisConfig.h
+	*/
+	initialize_module(1, WSDDFILEPATH);
 }
 
 int send_response_bytes(const char* res, const void* opstream)
@@ -69,7 +76,7 @@ static int axis_handler(request_rec *req_rec)
 	sstr->transport.pSendFunct = send_response_bytes;
 	sstr->transport.pGetFunct = get_request_bytes;
 	sstr->transport.pSendTrtFunct = send_transport_information;
-	sstr->transport.pGetTrtFunct = NULL; /*isn't there a get transport information function for apache module ?*/
+	sstr->transport.pGetTrtFunct = send_transport_information; /*isn't there a get transport information function for apache module ?*/
 	sstr->trtype = APTHTTP;
 	/*req_rec is used as both input and output streams*/
 	sstr->str.ip_stream = req_rec;
@@ -117,7 +124,7 @@ static int axis_handler(request_rec *req_rec)
 
 	if(0 != process_request(sstr))
 	{
-		ap_rputs("SOAP Engine failed to response",req_rec);
+		//ap_rputs("SOAP Engine failed to response",req_rec);
 		return OK;
 	}
 
