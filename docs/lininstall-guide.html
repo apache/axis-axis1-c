@@ -19,7 +19,7 @@
 <a href="#What">What You Need</a>
 </li>
 <li>
-<a href="Install">Installing Axis C++</a>
+<a href="#Install">Installing Axis C++</a>
 </li>
 <br>
 
@@ -44,24 +44,24 @@ common pitfalls.</p>
 <h3>What You Need</h3>
 </div>
 
-<p>You need few helper libraries for parsing XML, WSDL processing and
+<p>You need a few helper libraries for parsing XML, WSDL processing and
 introspection. You need to have the following in order to run Axis C++
 engine.</p>
 
-&nbsp; &nbsp; &nbsp; <a href="http://httpd.apache.org/download.cgi">Apache web server </a> (2.0.x or 1.3.x)&nbsp; - You
+<p>&nbsp; &nbsp; &nbsp; <a href="http://httpd.apache.org/download.cgi">Apache web server </a> (2.0.x or 1.3.x)&nbsp; - You
 need to have Apache built with module so support, hence you need to
-have source of Apache web server.<br>
+have the source of Apache web server.<br> 
 
-Axis C++ uses Apache web server to host services.<br>
+Axis C++ uses Apache web server to host services.<br> </p>
 
-<br>
+<br> 
 
-&nbsp; &nbsp; &nbsp; <a href="http://sourceforge.net/projects/expat/">Expat (1.95.7) </a> and/or 
-<a href="http://archive.apache.org/dist/xml/xerces-c/Xerces-C_2_2_0/">Xerces C++ (2.2.0)</a> XML parser(s)<br>
+<p>&nbsp; &nbsp; &nbsp; <a href="http://sourceforge.net/projects/expat/">Expat (1.95.7) </a> and/or 
+<a href="http://archive.apache.org/dist/xml/xerces-c/Xerces-C_2_2_0/">Xerces C++ (2.2.0)</a> XML parser(s)<br> <br>
 
 Axis C++ needs an XML parser to parse SOAP messages and WSDD files. It
-has a parser abstraction layer that help users select/switch between
-parsers. However only once parser library could be used at a time. Currently Expat and Xerces parsers are supported by Axis C++.<br>
+has a parser abstraction layer that helps  users to select/switch between
+parsers. However only one parser library could be used at a time. Currently Expat and Xerces parsers are supported by Axis  C++.<br></p>
 
 <br>
 
@@ -73,33 +73,33 @@ parsers. However only once parser library could be used at a time. Currently Exp
 </div>
 
 
-1. Install Apache web server. In case you already have an Apache
-installation, make sure that 'so modules' are enabled. This is because
-Axis C++ server engine is implemented as an 'so module'. (For Apache
+<p>1. Install Apache web server. In case you have already installed Apache
+, make sure that 'so modules' are enabled. <br> This is because
+Axis C++ server engine is implemented as a 'so module'. (For Apache
 1.3.x use --enable-module=so; for Apache 2.0.x use --enable-so when
-configuring. See Apache web server documentation for more details)<br>
+configuring. See Apache web server documentation for more details)</p> <br>
 
 <br>
 
-2. Install Expat (1.95.7) and/or Xerces C++ (2.2.0) depending on your
+<p>2. Install Expat (1.95.7) and/or Xerces C++ (2.2.0) depending on your
 parser preferences. See the respective parser's documentation for
-installation instructions. <br>
+installation instructions.</p> <br>
 
 <br>
 
-3. <a href="http://ws.apache.org/axis/cpp/download.html">Download Axis C++</a> source or binary distribution and extract the package.<br>
+<p>3. <a href="http://ws.apache.org/axis/cpp/download.html">Download Axis C++</a> source or binary distribution and extract the  package.</p><br>
 
 <br>
 
-4. Define the following environment variables.<br><b>
+<p>4. Define the following environment variables.<br>  <br>
 
-AXISCPP_HOME="Path to Axis C++ source or binary extracted folder"</b><br>
+<b>AXISCPP_HOME="Path to Axis C++ source or binary extracted folder"</b><br>
 
 e.g. <i><b>AXISCPP_HOME="/my/home/axiscpp"</b></i><br>
 
 <br><b>
 
-AXISCPP_DEPLOY="Path to folder where you want to install Axis C++"</b><br>
+AXISCPP_DEPLOY="Path to the folder where you want to install Axis C++"</b><br>
 
 e.g. <i><b>AXISCPP_DEPLOY="/usr/local/axiscpp_deploy"<br>
 </b></i>
@@ -111,24 +111,24 @@ LD_LIBRARY_PATH="&lt;path to parser library you use&gt;/lib:$AXISCPP_DEPLOY/lib:
 
 <br><b>
 
-export AXISCPP_HOME AXISCPP_DEPLOY LD_LIBRARY_PATH</b><br>
+export AXISCPP_HOME AXISCPP_DEPLOY LD_LIBRARY_PATH</b> </p> <br>
 
  
 
 <br>
 
-5. Build Axis C++ (If you downloaded Axis C++ binaries, you can skip this step)<br><b>
+<p>5. Build Axis C++ (If you have downloaded Axis C++ binaries, you can skip this step)<br> <br> <b>
 
-cd $AXISCPP_HOME<br>
-
-
-./configure --prefix=$AXISCPP_DEPLOY --with-apache2=/path/to/Apache2 --with-xercesc=/path/to/xerces-c<br>
+cd $AXISCPP_HOME </b> <br> <br>
 
 
-make <br>
+<b>./configure --prefix=$AXISCPP_DEPLOY --with-apache2=/path/to/Apache2 --with-xercesc=/path/to/xerces-c </b> <br> <br>
 
 
-make install</b><br>
+<b> make </b> <br> <br>
+
+
+<b> make install</b><br> <br>
 
 <br>
 
@@ -143,132 +143,132 @@ $AXISCPP_DEPLOY/lib. (Provided that you used $AXISCPP_DEPLOY as
 specified directory given in prefix option<br>
 
 &nbsp;<br>
-You need global access rights to Axis C++ deploy folder to make sure Axis C++ work properly.<br>
+You need global access rights to the Axis C++ deploy folder to make sure that Axis C++ works properly.<br> <br>
 
-<i><b>chmod -R 777 $AXISCPP_DEPLOY</b></i><br>
+<i><b>chmod -R 777 $AXISCPP_DEPLOY</b></i> </p> <br>
 
 <br>
 
 
-6. Configure Apache module<br>
-Note: to execute the following steps, you may need to have super user rights on your machine.<br>
+<p>6. Configure Apache module<br> <br>
+<b>Note:</b> to execute the following steps, you may need to have super user rights on your machine.<br>
 
-Now you need to add to edit
+Now you need to  edit
 <b>httpd.conf</b> file in &lt;path to Apache web server installation&gt;/conf
-and add the following lines at the bottom of that file (assuming you
+by adding the following lines at the bottom of that file (assuming you
 are using Apache 2.0.x):<br>
 
 <br>
 
 <b>LoadModule axis_module modules/libaxiscpp_mod2.so</b><br>
 
-<b>&lt;Location /axis&gt;<br>
-</b><b>SetHandler axis<br>
-</b><b>&lt;/Location&gt;<br>
+<b>&lt;Location /axis&gt;</b><br>
+<b>SetHandler axis </b> <br>
+<b>&lt;/Location&gt;</b><br>
 <br>
-</b>For Apache1.3.x LoadModule line should read as:<br>
+For Apache1.3.x LoadModule line should read as:<br>
 
-<b>LoadModule axis_module libexec/libaxiscpp_mod.so</b><br>
+<b>LoadModule axis_module libexec/libaxiscpp_mod.so</b> </p> <br>
 
 <br>
 
-7. Configure server deployment descriptor file<br>
+<p>7. Configure server deployment descriptor file<br> <br>
 
 Now you need the server deployment descriptor (server.wsdd) to deploy server samples you built.<br>
 
-There is a sample deployment descriptor called server.wsdd_linux in $AXISCPP_DEPLOY/etc to help deploy samples.<br>
+There is a sample deployment descriptor called server.wsdd_linux in $AXISCPP_DEPLOY/etc to help to deploy samples.<br>
 
 If you edit this file to your requirements then when you run step 9 it will be turned into server.wsdd. If you don't
-use scripts as described in step 9 then just rename server.wsdd_linux into server.wsdd after your changes.
+use scripts as described in step 9 then just rename server.wsdd_linux to server.wsdd after doing your changes.
 
-server.wsdd file is an XML file, and the contents are self descriptive.<br>
+server.wsdd file is an XML file, and the contents are self descriptive. </p> <br>
 
 <br>
 
-8. Set engine wide settings in configuration file<br>
+<p>8. Set engine wide settings in configuration file<br> <br>
 
 Axis C++ uses a configuration file to let the user specify preferences
 such as log file locations, transport and parser libs to be used and
-location of deployment descriptor files. A sample configuration file 
+location of deployment descriptor files. <br> A sample configuration file 
 named axiscpp.conf_linux is installed in $AXISCPP_DEPLOY/etc folder. Edit this
-file to your reqirements.When you execute step 9 this file will be turned
+file to your requirements.<br> When you execute step 9 this file will be turned
 into axiscpp.conf. If you don't use scripts as described in step 9 then just rename
-axiscpp.conf_linux into axiscpp.conf after your changes<br>
+axiscpp.conf_linux to axiscpp.conf after your changes<br>
 
 <br>
 
-Configuration file has the following <b>Syntax:</b><br>
+Configuration file has the following <b>Syntax:</b> </p> <br>
 
-<b>The comment character is '#'<br>
+<p> <b>The comment character is '#'</b><br> <br>
 
-WSDDFilePath: The path to the server wsdd file<br>
-ClientWSDDFilePath:The path to the client wsdd<br>
-LogPath: The path to the Axis C++ server log<br>
+<b>WSDDFilePath: The path to the server wsdd file</b><br> <br>
+<b>ClientWSDDFilePath:The path to the client wsdd</b><br> <br>
+<b>LogPath: The path to the Axis C++ server log</b><br> <br>
 
-ClientLogPath: The path to the Axis C++ client log<br>
+<b>ClientLogPath: The path to the Axis C++ client log</b><br> <br>
 
-Transport_http: The HTTP transport library<br>
+<b>Transport_http: The HTTP transport library</b><br> <br>
 
-XMLParser: The XML parser library</b>
-
-
-<b><br>
-<br>
-</b>A sample <b>axiscpp.conf</b> file:<br>
-
-
-
-<p><b>LogPath:/usr/local/axiscpp_deploy/log/AxisLog<br>
-
-WSDDFilePath:/usr/local/axiscpp_deploy/etc/server.wsdd<br>
-
-ClientLogPath:/usr/local/axiscpp_deploy/log/AxisClientLog<br>
-
-XMLParser:/usr/local/axiscpp_deploy/lib/libaxis_xercesc.so<br>
-
-Transport_http:/usr/local/axiscpp_deploy/lib/libaxis2_transport.so</b></p>
+<b>XMLParser: The XML parser library</b>
 
 
 <br>
+<br>
+A sample <b>axiscpp.conf</b> file: </p> <br>
 
-9. deploying in apache
 
-<p>Now we need to copy apache module(libaxiscpp_mod2.so for apache2 and 
+
+<p><b>LogPath:/usr/local/axiscpp_deploy/log/AxisLog</b> <br> <br>
+
+<b>WSDDFilePath:/usr/local/axiscpp_deploy/etc/server.wsdd </b> <br> <br>
+
+<b>ClientLogPath:/usr/local/axiscpp_deploy/log/AxisClientLog</b> <br> <br>
+
+<b>XMLParser:/usr/local/axiscpp_deploy/lib/libaxis_xercesc.so</b> <br> <br>
+
+<b>Transport_http:/usr/local/axiscpp_deploy/lib/libaxis2_transport.so</b></p>
+
+
+<br>
+
+<p>9. Deploying in apache </p>
+
+<p>Now we need to copy apache module (libaxiscpp_mod2.so for apache2 and 
 libaxiscpp_mod.so for apache) to the correct places and start apache. To
 do that you can find scripts written in $AXISCPP_DEPLOY/bin.<p> <br>
 
-<b>cd $AXISCPP_DEPLOY/bin </b> <br>
+<b>cd $AXISCPP_DEPLOY/bin </b> <br> <br>
                                                                                                                              
-To deploy on apache2 </br>
-<b>sh deploy_apache2.sh </b> <br>
+To deploy on apache2 <br>
+<b>sh deploy_apache2.sh </b> <br> <br>
                                                                                                                              
 To deploy on apache <br>
 <b>sh deploy_apache.sh </b> </br>
 
-<p> Note that if you need to use different parser you need to edit the script.
+<p> Note that if you need to use a different parser you need to edit the script.
 For example if you use expat <br>
-instead of <br>
-<b><i> cp -f ${AXISCPP_DEPLOY}/lib/libaxis_xercesc.so ${AXISCPP_DEPLOY}/lib/libaxis_xmlparser.so </i></b> </br>
+instead of <br> <br>
+<b><i> cp -f ${AXISCPP_DEPLOY}/lib/libaxis_xercesc.so ${AXISCPP_DEPLOY}/lib/libaxis_xmlparser.so </i></b> </br> <br>
 you need <br>
 <b><i> cp -f ${AXISCPP_DEPLOY}/lib/libaxis_expat.so ${AXISCPP_DEPLOY}/lib/libaxis_xmlparser.so </i></b> </br>
 <br>
-Basically what is done in the script are, <br>
+Basically what is done in the script are, <br> <br>
 &nbsp; 1. libaxiscpp_mod2.so is copied to <your apache home>/modules 
-    (the corresponding folder in apache is libexec) <br>
+    (the corresponding folder in apache is libexec) <br> <br>
 
-&nbsp; 2. libaxis_xercesc.so or libaxis_expat.so (the parser you use) is renamed to libaxis_xmlparser.so. <br>
+&nbsp; 2. libaxis_xercesc.so or libaxis_expat.so (the parser you use) is renamed to libaxis_xmlparser.so. <br> <br>
 
-&nbsp; 3. Restart Apache is restarted <br>
+&nbsp; 3. Apache is restarted <br> <br>
 
 So if you don't use the scripts you need to do the above three steps yourself.
 </p>
 
-10. See Axis C++ in action<br>
+<p>10. See Axis C++ in action<br> <br>
 
-Now the installation is complete. You can verify that the server side is working by accessing the URL http<a href="http://localhost/axis">://localhost/axis</a>/
+Now the installation is complete. You can verify that the server side is working by accessing the URL http<a  href="http://localhost/axis">://localhost/axis</a>/
 using your web browser. You should get the Axis C++ welcome page and
 this page will show you a list of deployed services as specified by the
-$AXISCPP_DEPLOY/conf/server.wsdd file.<br>
+$AXISCPP_DEPLOY/conf/server.wsdd file. </p> <br>
 
 <p>Now you can run a client sample and see if it works.<br><i><b>
 cd $AXISCPP_DEPLOY/bin  <br>
@@ -287,6 +287,4 @@ that as well.<br>
 <div id="pdf" align="right">
 <a href="lininstall-guide.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
           PDF</a>
-</div>
-
 </body></html>
