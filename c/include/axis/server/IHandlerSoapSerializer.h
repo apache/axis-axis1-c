@@ -98,13 +98,19 @@ public:
     virtual int setSoapVersion(SOAP_VERSION eSOAP_VERSION)=0;
 
 	/**
-	  * Gets the Header Block
+	  * Gets the Header Block. After returning the Header Block pointer, it 
+	  * will not be removed from the available Header Block list of the 
+	  * Serializer.The caller of this method should not delete the returned 
+	  * pointer object.
 	  */
 	virtual IHeaderBlock* getHeaderBlock() = 0;
 
 	/**
 	  * Gets and returns the Header Block of the given local name and 
-	  * namespace uri.
+	  * namespace uri.After returning the Header Block pointer, it will not be
+	  * removed from the available Header Block list of the Serializer.
+	  * The caller of this method should not delete the returned pointer 
+	  * object.
 	  */
 	virtual IHeaderBlock* getHeaderBlock(const AxisChar *pcName, 
 											 const AxisChar *pcNamespace) = 0;
