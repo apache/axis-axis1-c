@@ -99,7 +99,7 @@ private:
         list<AxisChar*>& lstTmpNameSpaceStack);
 
     AxisString m_localname;
-    AxisString m_prefix;
+    AxisString m_sPrefix;
     AxisString m_uri;
     list<Attribute*> m_attributes;
     list<Attribute*> m_namespaceDecls;
@@ -309,13 +309,16 @@ public:
       */
     void setUri(const AxisChar* uri);
 
-    /**
+    /*
       * Sets the prefix of this Header Block.
       *
       * @param prefix The prefix to set in.
       */
+	/* Commented by Susantha - 21/06/2004
+	 * The prefix should be decided by the Serializer at runtime
+	 *
     void setPrefix(const AxisChar* prefix);
-
+	*/
     /**
       * Sets the namespace declaration of the Header Block.
       *
@@ -332,8 +335,7 @@ public:
       * @param pachPrefix The prefix of this Header Block.
       * @param pachUri The namespace uri of this Header Block.
       */
-    HeaderBlock(const AxisChar* pachLocalName, const AxisChar* pachPrefix, 
-        const AxisChar* pachUri);
+    HeaderBlock(const AxisChar* pachLocalName, const AxisChar* pachUri);
 
     /**
       * The Constructor.

@@ -46,21 +46,20 @@ bool IHeaderBlock::bInitialized = false;
 HeaderBlock::HeaderBlock()
 {
     iNoOFChildren = 0;
+	m_sPrefix = "";
 }
 
-HeaderBlock::HeaderBlock(const AxisChar *pachLocalName, const AxisChar *pachPrefix,
-                         const AxisChar *pachUri)
+HeaderBlock::HeaderBlock(const AxisChar *pachLocalName, const AxisChar *pachUri)
 {
     iNoOFChildren = 0;
-
     m_localname = pachLocalName;
-    m_prefix = pachPrefix;
     m_uri = pachUri;
+	m_sPrefix = "";
 }
 
 HeaderBlock::HeaderBlock(const HeaderBlock& rCopy):
 IHeaderBlock(rCopy), iNoOFChildren(rCopy.iNoOFChildren), m_localname(rCopy.m_localname),
-m_prefix(rCopy.m_prefix), m_uri(rCopy.m_uri)  
+m_sPrefix(rCopy.m_sPrefix), m_uri(rCopy.m_uri)  
 {
 
     list<BasicNode*>::const_iterator itCurrChild= rCopy.m_children.begin();
@@ -131,11 +130,14 @@ void HeaderBlock::setLocalName(const AxisChar* localname)
     m_localname= localname;
 }
 
+/* Commented by Susantha - 21/06/2004
+ * The prefix should be decided by the Serializer at runtime
+ *
 void HeaderBlock::setPrefix(const AxisChar* prefix)
 {
-    m_prefix= prefix;
+    m_sPrefix= prefix;
 }
-
+*/
 void HeaderBlock::setUri(const AxisChar* uri)
 {
     m_uri= uri;
@@ -149,7 +151,7 @@ void HeaderBlock::addAttribute(Attribute* attr)
 int HeaderBlock::serialize(SoapSerializer& pSZ)
 {
     /*
-     *In the code we don't look whether the m_prefix is available or
+     *In the code we don't look whether the m_sPrefix is available or
      *    not. Instead directly insert it. The reason is that the SOAP
      *  1.1 spec says that "All immediate child elements of the SOAP 
      *  Header element MUST be namespace-qualified".
@@ -168,9 +170,9 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
 
         pSZ.serialize("<", NULL);
 
-        if(m_prefix.length() == 0)
+        if(m_sPrefix.length() == 0)
         {
-            m_prefix = pSZ.getNamespacePrefix(m_uri.c_str(),
+            m_sPrefix = pSZ.getNamespacePrefix(m_uri.c_str(),
                 blnIsNewNamespace);
             if (blnIsNewNamespace)
             {
@@ -178,8 +180,8 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
             }
         }
 
-        pSZ.serialize(m_prefix.c_str(), ":", m_localname.c_str(),
-            " xmlns:", m_prefix.c_str(), "=\"", m_uri.c_str(), "\"", NULL);
+        pSZ.serialize(m_sPrefix.c_str(), ":", m_localname.c_str(),
+            " xmlns:", m_sPrefix.c_str(), "=\"", m_uri.c_str(), "\"", NULL);
 
         iStatus= attrSerialize(pSZ, lstTmpNameSpaceStack);
         if(iStatus==AXIS_FAIL)
@@ -201,7 +203,7 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
             break;
         }
 
-        pSZ.serialize("</", m_prefix.c_str(), ":", m_localname.c_str(), ">",
+        pSZ.serialize("</", m_sPrefix.c_str(), ":", m_localname.c_str(), ">",
             NULL);
 
         /*
@@ -216,7 +218,7 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
         }
             
     } while(0);
-
+	m_sPrefix = "";
     return iStatus;
 }
 
@@ -250,7 +252,7 @@ bool HeaderBlock::isSerializable()
     }
     else
     {
-        if(m_prefix.length() == 0)
+        if(m_sPrefix.length() == 0)
         {
             if(m_uri.length() != 0)
             {
