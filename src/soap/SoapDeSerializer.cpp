@@ -589,7 +589,12 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 
 	Array.m_Size = getArraySize (m_pNode);
 
-	if (Array.m_Size > 0)
+	if (Array.m_Size == 0)
+	{
+		m_pNode = m_pParser->next ();	/* skip end element node too */
+		return Array;
+	}
+	else if (Array.m_Size > 0)
 	{
 	    Array.m_Array =
 		((AXIS_OBJECT_CREATE_FUNCT) pCreFunct) (Array.m_Array, true,
@@ -818,7 +823,7 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 int
 SoapDeSerializer::getArraySize (const AnyElement * pElement)
 {
-    int nSize = 0;
+    int nSize = -1;
     /* first check whether this is a start element node */
 
     if (START_ELEMENT != pElement->m_type)
@@ -1275,7 +1280,12 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 	
 		Array.m_Size = getArraySize (m_pNode);
 	
-		if (Array.m_Size > 0)
+		if (Array.m_Size == 0)
+		{
+			m_pNode = m_pParser->next ();	/* skip end element node too */
+			return Array;
+		}
+		else if (Array.m_Size > 0)
 		{
 		    switch (nType)
 		    {
