@@ -5,7 +5,7 @@
              xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
              http://www.ibm.com/webservices/xsd/j2ee_web_services_1_1.xsd"
              version="1.1">
-  <display-name>Google Serach</display-name>
+  <display-name>French Zip</display-name>
   <webservice-description>
     <webservice-description-name>Google Serach WebService</webservice-description-name>
     <wsdl-file>GoogleSearch.wsdl</wsdl-file>

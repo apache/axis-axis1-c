@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<java-wsdl-mapping version="1.0" xmlns="http://java.sun.com/xml/ns/j2ee">
+    <package-mapping>
+        <package-type>testData.math</package-type>
+        <namespaceURI>http://math.testData</namespaceURI>
+    </package-mapping>
+    <service-interface-mapping>
+        <service-interface>testData.math.MathFaceService</service-interface>
+        <ns1:wsdl-service-name xmlns:ns1="http://java.sun.com/xml/ns/j2ee" xmlns="http://math.testData">MathFaceService</ns1:wsdl-service-name>
+        <port-mapping>
+            <port-name>math</port-name>
+            <java-port-name>math</java-port-name>
+        </port-mapping>
+    </service-interface-mapping>
+    <service-endpoint-interface-mapping>
+        <service-endpoint-interface>testData.math.MathFace</service-endpoint-interface>
+        <ns2:wsdl-port-type xmlns:ns2="http://java.sun.com/xml/ns/j2ee" xmlns="http://math.testData">MathFace</ns2:wsdl-port-type>
+        <ns3:wsdl-binding xmlns:ns3="http://java.sun.com/xml/ns/j2ee" xmlns="http://math.testData">mathSoapBinding</ns3:wsdl-binding>
+        <service-endpoint-method-mapping>
+            <java-method-name>add</java-method-name>
+            <wsdl-operation>add</wsdl-operation>
+            <method-param-parts-mapping>
+                <param-position>0</param-position>
+                <param-type>int</param-type>
+                <wsdl-message-mapping>
+                    <ns4:wsdl-message xmlns:ns4="http://java.sun.com/xml/ns/j2ee" xmlns="http://math.testData">addRequest</ns4:wsdl-message>
+                    <wsdl-message-part-name>in0</wsdl-message-part-name>
+                    <parameter-mode>IN</parameter-mode>
+                </wsdl-message-mapping>
+            </method-param-parts-mapping>
+            <method-param-parts-mapping>
+                <param-position>0</param-position>
+                <param-type>int</param-type>
+                <wsdl-message-mapping>
+                    <ns5:wsdl-message xmlns:ns5="http://java.sun.com/xml/ns/j2ee" xmlns="http://math.testData">addRequest</ns5:wsdl-message>
+                    <wsdl-message-part-name>in1</wsdl-message-part-name>
+                    <parameter-mode>IN</parameter-mode>
+                </wsdl-message-mapping>
+            </method-param-parts-mapping>
+            <wsdl-return-value-mapping>
+                <method-return-value>int</method-return-value>
+                <ns6:wsdl-message xmlns:ns6="http://java.sun.com/xml/ns/j2ee" xmlns="http://math.testData">addResponse</ns6:wsdl-message>
+                <wsdl-message-part-name>addReturn</wsdl-message-part-name>
+            </wsdl-return-value-mapping>
+        </service-endpoint-method-mapping>
+    </service-endpoint-interface-mapping>
+</java-wsdl-mapping>
+

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar>
+<display-name>null</display-name>
+	<enterprise-beans>
+		<session>
+			<ejb-name>timebean</ejb-name>
+			<home>org.objectweb.jonas.jtests.beans.time.TimeBeanHome</home>
+			<remote>org.objectweb.jonas.jtests.beans.time.TimeBeanEJB</remote>
+			<ejb-class>org.objectweb.jonas.jtests.beans.time.TimeBeanBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Bean</transaction-type>
+		</session>
+	</enterprise-beans>
+</ejb-jar>

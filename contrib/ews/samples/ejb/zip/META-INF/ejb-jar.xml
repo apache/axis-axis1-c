@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar>
+<display-name>null</display-name>
+	<enterprise-beans>
+		<session>
+			<display-name>null</display-name>
+			<ejb-name>iodcodespostaux</ejb-name>
+			<home>org.objectweb.jonas.zip.ZipHome</home>
+			<remote>org.objectweb.jonas.zip.ZipEJB</remote>
+			<ejb-class>org.objectweb.jonas.zip.ZipBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Bean</transaction-type>
+		</session>
+	</enterprise-beans>
+</ejb-jar>
