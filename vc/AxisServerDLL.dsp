@@ -88,7 +88,7 @@ LINK32=link.exe
 # ADD LINK32 /nologo /dll /pdb:none /debug /machine:I386 /out:"../bin/AxisServer_D.dll"
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
-PostBuild_Cmds=copy ..\bin\AxisServer_D.dll "%AXIS_HOME%\libs\."
+PostBuild_Cmds=copy ..\bin\AxisServer_D.dll "%AXISCPP_DEPLOY%\lib\."
 # End Special Build Tool
 
 !ENDIF 
