@@ -7,6 +7,6 @@ libaxis_xercesc_la_SOURCES = SoapBinInputStream.cpp \
                            XercesHandler.cpp \
 			   ../AxisParseException.cpp
 
-libaxis_xercesc_la_LIBADD =  @XERCESCLIB@ -lxerces-c -lstdc++
+libaxis_xercesc_la_LIBADD =  @XERCESCLIB@ -lstdc++
 INCLUDES = @XERCESCINC@ -I$(AXISCPP_HOME)/include
 

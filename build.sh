@@ -3,28 +3,18 @@
 echo "----------------------------------"
 echo "build server, client and samples"
 echo "----------------------------------"
-echo "clean previous build"
-echo "run libtoolize."          && 
-libtoolize --force              && 
-echo "run aclocal."             && 
-aclocal                         && 
-echo "run autoconf."            && 
-autoconf                        && 
-echo "run autoheader."          && 
-autoheader                      && 
-echo "run automake."            && 
-automake --add-missing --gnu    &&
 
 echo "run configure"
-./configure --prefix=$AXISCPP_DEPLOY \
-    --libdir=$AXISCPP_DEPLOY/lib \
-    --bindir=$AXISCPP_DEPLOY/bin \
-    --enable-apache2=yes \
-    --enable-apache=no \
-    --enable-expat=yes \
-    --enable-xercesc=no \
+./configure --prefix=/usr/local/axiscpp_deploy \
+    --libdir=/usr/local/axiscpp_deploy/lib \
+    --bindir=/usr/local/axiscpp_deploy/bin \
+    --with-apache2=/usr/local/apache2 \
+    --with-apache=no \
+    --with-expat=/usr/local/expat1957 \
+    --with-xercesc=no \
     --enable-samples=yes \
-    --enable-testcases=yes
+    --enable-testcases=yes \
+    --sysconfdir=/usr/local/axiscpp_deploy/conf
 echo "make"
 make 2> build_errors
 echo "make install"
