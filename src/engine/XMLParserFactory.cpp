@@ -73,7 +73,7 @@ int XMLParserFactory::initialize()
         if (!m_Create || !m_Delete)
         {
             unloadLib();
-            printf("Transport library loading failed");
+            printf("Parser library loading failed");
         }
         else
         {
@@ -109,7 +109,7 @@ int XMLParserFactory::loadLib()
     m_LibHandler = lt_dlopen(m_pcLibraryPath);
     if (!m_LibHandler)
     {
-        printf("DLOPEN FAILED in loading transport library: %s\n", lt_dlerror ());
+        printf("DLOPEN FAILED in loading parser library: %s\n", lt_dlerror ());
     }
 #elif defined(WIN32)
     m_LibHandler = LoadLibrary(m_pcLibraryPath);
@@ -117,7 +117,7 @@ int XMLParserFactory::loadLib()
     m_LibHandler = dlopen(m_pcLibraryPath, RTLD_LAZY);
     if (!m_LibHandler)
     {
-        printf("DLOPEN FAILED in loading transport library: %s\n", dlerror());
+        printf("DLOPEN FAILED in loading parser library: %s\n", dlerror());
     }
 #endif
     return (m_LibHandler != 0) ? AXIS_SUCCESS : AXIS_FAIL;

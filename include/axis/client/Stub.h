@@ -57,7 +57,7 @@ class STORAGE_CLASS_INFO Stub
     int AXISCALL initilizeCall ();
     void AXISCALL setEndPoint (char *pcEndPoint);
     void AXISCALL setTransportProperty (const char *pcKey, const char *pcValue);
-    IHeaderBlock * AXISCALL createHeaderBlock (AxisChar * pachLocalName,
+    IHeaderBlock * AXISCALL createSOAPHeaderBlock (AxisChar * pachLocalName,
 				     AxisChar * pachPrefix,
 				     AxisChar * pachUri);
   /**

@@ -114,7 +114,7 @@ Stub::setTransportProperties ()
 }
 
 IHeaderBlock *
-Stub::createHeaderBlock (AxisChar * pachLocalName,
+Stub::createSOAPHeaderBlock (AxisChar * pachLocalName,
 			 AxisChar * pachPrefix, AxisChar * pachUri)
 {
     if (pachLocalName && pachPrefix && pachUri)
