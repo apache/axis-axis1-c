@@ -27,6 +27,8 @@
 using namespace std;
 
 #include "../../gen_src/rpc/InteropTestPortType.h"
+#include <axis/server/IHeaderBlock.h>
+#include <axis/server/AxisException.h>
 
 #define ARRAYSIZE 2
 
@@ -120,10 +122,22 @@ main(int argc, char *argv[])
     printf("Sending Requests to end point %s \n\n", endpoint);
     printf("invoking echoString...\n");
     //testing echoString 
+    try
+    {
     if (0 == strcmp(ws.echoString("hello world"), "hello world"))
 	printf("successful\n");
     else
 	printf("failed\n");
+    }
+    catch(AxisException& e)
+    {
+        printf("%s\n", e.what());
+    }
+    catch(...)
+    {
+        printf("unknown exception\n");
+    }
+
 
     //test removing SOAP header block using pointer
     IHeaderBlock *header = NULL;
@@ -135,11 +149,22 @@ main(int argc, char *argv[])
     ws.deleteSOAPHeaderBlock(header);
 
     //now the request should have no SOAP headers
-
+    try
+    {
     if (0 == strcmp(ws.echoString("hello world"), "hello world"))
         printf("successful\n");
     else
         printf("failed\n");
+    }
+    catch(AxisException& e)
+    {
+        printf("%s\n", e.what());
+    }
+    catch(...)
+    {
+        printf("unknown exception\n");
+    }
+
 
 
     printf("Soap Header test end\n");
