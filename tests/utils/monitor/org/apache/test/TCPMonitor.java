@@ -94,6 +94,27 @@ public class TCPMonitor {
 		
 		// spin off the thread to listen for a client request
 		responseReader.start();
+		try {
+			// Wait for the request reader to finish
+			requestReader.join(25000);
+
+			// If the response reader is still running then
+			// ask it to stop and wait for it.
+			if(responseReader.isAlive()) {
+				responseReader.cease();
+				responseReader.join(2000);
+			}
+		} catch (Exception me) {
+			;
+		} finally {
+			try {
+				outputSocket.close();
+				clientSocket.close();
+				serverSocket.close();
+			} catch (IOException mie) {
+				;
+			}
+		}
 	}
 
 	public static void main(String[] args) {
@@ -136,7 +157,9 @@ public class TCPMonitor {
 			}
 			TCPMonitor monitor =
 				new TCPMonitor(listener_port, forward_host, forward_port, response_file);
+			long now = System.currentTimeMillis();
 			monitor.listen(new MyRequestHandler(output_file));
+			System.err.println("**** Listened for " + (System.currentTimeMillis() - now) + " ms" );
 		} catch (IOException exception) {
 			exception.printStackTrace();
 		}

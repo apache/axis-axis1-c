@@ -25,6 +25,7 @@ public class RequestForwarder extends Thread {
 	private BufferedReader reader;
 	private BufferedWriter writer;
 	private RequestHandler requestHandler;
+	private boolean continueToRun = true;
 
 	/**
 	 * @param bufferedReader
@@ -40,11 +41,15 @@ public class RequestForwarder extends Thread {
 		this.requestHandler = requestHandler;
 	}
 
+	public void cease() {
+		continueToRun = false;
+	}
+
 	public void run() {
 		char[] buffer = new char[1024];
 		try {
 			int ret = 0;
-			while ((ret = reader.read(buffer, 0, 1023)) != -1) {
+			while ((ret = reader.read(buffer, 0, 1023)) != -1 && continueToRun) {
 				String line = new String(buffer, 0, ret);
 				if(line.equalsIgnoreCase("STOPTCPM")) {
 					System.err.println("*** RECEIVED STOP COMMAND. Stopping ***");
@@ -58,8 +63,6 @@ public class RequestForwarder extends Thread {
 				writer.write(line);
 				writer.flush();
 			}
-			writer.close();
-			reader.close();
 		} catch (SocketException socketException) {
 			//System.out.println("socketException: " + socketException);
 		} catch (IOException exception) {
@@ -68,7 +71,14 @@ public class RequestForwarder extends Thread {
 			System.out.println("runtimeException: " + runtimeException);
 		} catch (Throwable exception) {
 			requestHandler.handleReadingException(exception);
+		} finally {
+			try {
+				writer.close();
+				reader.close();
+			} catch (IOException ioe) {
+				;
+			}
+			requestHandler.close();
 		}
-		requestHandler.close();
 	}
 }
