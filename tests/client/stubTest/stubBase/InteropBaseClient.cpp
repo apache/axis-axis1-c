@@ -74,7 +74,7 @@ main (int argc, char *argv[])
 
   //create parent node
   BasicNode *parentNode = phb->createChild (ELEMENT_NODE);
-  parentNode->setLocalName ("TestHeader");
+  parentNode->setLocalName ("Credentials");
   //create child node     
   BasicNode *childNode = phb->createChild (ELEMENT_NODE);
   childNode->setLocalName ("username");
