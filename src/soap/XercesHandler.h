@@ -34,6 +34,8 @@ using namespace std;
 class XercesHandler : public XERCES_CPP_NAMESPACE::DefaultHandler
 {
 public :
+	void freeElement();
+	int GetStatus(){return m_nStatus;};
     // -----------------------------------------------------------------------
     //  Constructors
     // -----------------------------------------------------------------------
@@ -41,6 +43,15 @@ public :
     ~XercesHandler();
 
 
+
+	const XML_Ch* XercesHandler::NS4Prefix(const XML_Ch* prefix);
+
+	AnyElement* getAnyElement()
+	{
+		return m_pCurrElement;
+	}
+
+private:
     // -----------------------------------------------------------------------
     //  Handlers for the SAX DocumentHandler interface
     // -----------------------------------------------------------------------
@@ -60,21 +71,10 @@ public :
     void error(const SAXParseException& exception);
     void fatalError(const SAXParseException& exception);
 
-	const XML_Ch* XercesHandler::NS4Prefix(const XML_Ch* prefix);
-
-	int getTest()
-	{
-		return test;
-	}
-
-	AnyElement* getAnyElement()
-	{
-		return Nelement;
-	}
-
-private:
-	int test;
+	int m_nStatus;
 	AnyElement * Nelement;
+	AnyElement * m_pCurrElement;
+
 	map<AxisXMLString, AxisXMLString> m_NsStack;
 	void initAnyElement()
 	{
