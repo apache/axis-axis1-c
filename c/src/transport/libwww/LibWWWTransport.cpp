@@ -44,6 +44,24 @@ int terminate_handler (HTRequest * request, HTResponse * response,
     return status;
 }
 
+PUBLIC HTChunk * HTPostAnchorToChunk (HTParentAnchor *  source,
+                         HTAnchor *             destination,
+                         HTRequest *            request)
+{
+    if (source && destination && request) {
+        HTChunk * chunk = NULL;
+        HTStream * target = HTStreamToChunk(request, &chunk, 0);
+        HTRequest_setOutputStream(request, target);
+        if (HTPostAnchor(source, destination, request) == YES)
+            return chunk;
+        else {
+            HTChunk_delete(chunk);
+            return NULL;
+        }
+    }
+    return NULL;
+}
+
 
 LibWWWTransport::LibWWWTransport()
 :m_pRequest(NULL), m_pResult(NULL), m_pcData(NULL), m_pcProxy(NULL), m_iBytesLeft(0), m_pcReceived(NULL)
@@ -232,7 +250,7 @@ void LibWWWTransport::setSessionId(const char* pcSessionId)
 
 const char* LibWWWTransport::getSessionId()
 {
-    //TODO
+    return "TODO";
 }
      
 const char* LibWWWTransport::getServiceName()
@@ -272,11 +290,11 @@ int LibWWWTransport::getSubProtocol()
      
 AXIS_TRANSPORT_STATUS LibWWWTransport::flushOutput()
 {
-    //HTRequest * request = NULL;
-    //HTParentAnchor* src = NULL;
-    //HTAnchor * dst = NULL;
 
-//#ifdef HT_EXT
+
+#ifdef HT_EXT_CONTINUE    //this block sends the message immediately after HTTP headers
+                 //without using 100-continue
+    
     HTRequest_setOutputFormat(m_pRequest, WWW_SOURCE);
     HTRequest_setOutputFormat(m_pRequest, HTAtom_for ("text/xml"));
     HTRequest_setMethod(m_pRequest, METHOD_EXT_0);
@@ -308,8 +326,41 @@ AXIS_TRANSPORT_STATUS LibWWWTransport::flushOutput()
     }
     else
         return TRANSPORT_FAILED;
-//#endif //HT_EXT
-    
+//#endif //ifdef HT_EXT
+#else    
+//#if !defined(HT_EXT)
+
+    HTParentAnchor* src = NULL;
+    HTAnchor * dst = NULL;
+
+    dst = HTAnchor_findAddress(m_pcEndpointUri);
+    src = HTTmpAnchor(NULL);
+    HTAnchor_setDocument(src, m_pcData);
+    HTAnchor_setFormat(src, WWW_SOURCE);
+    HTRequest_setOutputFormat(m_pRequest, HTAtom_for ("text/xml"));
+    HTAnchor_setLength(src, strlen(m_pcData));
+
+    if (m_pResult)
+        HTChunk_delete(m_pResult);
+
+    m_pResult = HTPostAnchorToChunk(src, dst, m_pRequest);
+    HTEventList_loop(m_pRequest);
+
+    if(m_pResult)
+    {
+        m_pcReceived = HTChunk_data(m_pResult);
+        if(m_pcReceived)
+        {
+            m_iBytesLeft = strlen(m_pcReceived);
+            return TRANSPORT_FINISHED;
+        }
+        else
+            return TRANSPORT_FAILED;
+    }
+    else
+        return TRANSPORT_FAILED;
+
+#endif //!defined(HT_EXT)
 }
      
 void LibWWWTransport::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
