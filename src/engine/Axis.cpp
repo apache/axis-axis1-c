@@ -170,6 +170,17 @@ extern "C" int process_request(Ax_soapstream *str)
 				if (sUriWOAxis.empty())
 				{
 					pSrvMap = g_pWSDDDeployment->GetWSDDServiceMap();
+					if (!pSrvMap) 
+					{
+						str->transport.pSendFunct("<html><body>\
+						<h1 align=\"center\">Welcome to Axis C++</h1>\
+						<br>\
+						<h2>Deployment Descripter Not Found</h2>\
+						<br>\
+						</body></html>", str->str.op_stream);
+
+						return FAIL;
+					}
 					str->transport.pSendFunct("<html><body>\
 						<h1 align=\"center\">Welcome to Axis C++</h1>\
 						<br>\

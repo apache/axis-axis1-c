@@ -139,29 +139,18 @@ public abstract class ParamWriter extends BasicFileWriter{
         return attribs;
     }
     
- 	protected String getCrroectParmNameConsideringArrays(QName name,String classname)throws WrapperFault{
-		System.out.println(name);
+ 	protected String getCorrectParmNameConsideringArraysAndComplexTypes(QName name,String classname)throws WrapperFault{
+		//System.out.println(name);
 		Type t = wscontext.getTypemap().getType(name);
-		if(t !=null && t.isArray()){
-		Enumeration e = t.getAttribNames();
-		String contentTypeName;
-		if(e.hasMoreElements()){	
-			QName elementQname = t.getTypNameForAttribName((String)e.nextElement());
-			Type type = this.wscontext.getTypemap().getType(elementQname);
-			
-			
-			if(type != null)
-				contentTypeName = type.getLanguageSpecificName();
-			else{
-				contentTypeName = CPPUtils.getclass4qname(elementQname);
-				if(contentTypeName == null)
-				throw new WrapperFault("if not inbuild or not in type map what is this type "+elementQname);
+		if(t !=null){ //array or complex types
+			if (t.isArray()){
+				return t.getLanguageSpecificName();
 			}
-	    }else
-			throw new WrapperFault("Array with no type ????");	
-		return contentTypeName+"[]";
+			else{
+				return classname+"*"; //All complex types will be pointers	
+			}
 		}else
-		return classname;
+			return classname;
 	}
 	
 }

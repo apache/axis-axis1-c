@@ -61,6 +61,68 @@
 
 package org.apache.axis.wsdl.wsdl2ws.cpp;
 
-public class ArrayParamWriter {
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
+import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
+import org.apache.axis.wsdl.wsdl2ws.info.Type;
+import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
+
+public class ArrayParamWriter extends ParamWriter{
+	public ArrayParamWriter(WebServiceContext wscontext,Type type)throws WrapperFault{
+		super(wscontext,type);
+	}
+	public void writeSource()throws WrapperFault{
+	   try{
+			this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+			writeClassComment();
+			// if this headerfile not defined define it 
+			this.writer.write("#if !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)\n");
+			this.writer.write("#define __"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_\n\n");
+			if (attribs.length != 1){
+				System.out.println("Array "+classname+" contains unexpected no of variables");
+				throw new WrapperFault("Array type "+classname+" contain unexpected no of types");
+			}
+			//include header file for the contained type
+			writer.write("#include \""+attribs[0][1]+".h\"\n\n");
+			writeArrayStruct();
+			this.writer.write("#endif // !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)\n");
+			writer.flush();
+			writer.close();
+			System.out.println(getFilePath().getAbsolutePath() + " created.....");
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new WrapperFault(e);
+		}
+	}
+	protected File getFilePath() throws WrapperFault {
+		String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
+		if(targetOutputLocation.endsWith("/"))
+			targetOutputLocation = targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
+		new File(targetOutputLocation).mkdirs();
+		String fileName = targetOutputLocation + "/" + this.classname + ".h";
+		return new File(fileName);
+	}
+	
+	protected void writeArrayStruct()throws WrapperFault{
+		try{			
+			writer.write("typedef struct "+classname+"Tag\n{\n");
+			writer.write("\t"+attribs[0][1]+"* m_Array;\n\tint m_Size;\n} "+classname+";\n\n");
+		} catch (IOException e) {
+			 throw new WrapperFault(e);
+		}
+	}
+		
+	protected void writeConstructors()throws WrapperFault{}
+	   
+	protected void writeDistructors() throws WrapperFault {}
+	
+	protected void writeMethods()throws WrapperFault{}
+	
+	protected String getFileType()
+	{
+		return "Array";	
+	}
 }

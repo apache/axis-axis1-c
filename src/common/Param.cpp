@@ -243,7 +243,7 @@ Param::~Param()
 	}
 }
 
-const AxisString& Param::GetString()
+const AxisChar* Param::GetString()
 {
 	if (m_Type == XSD_STRING){}
 	else if (m_Type == XSD_UNKNOWN) //see GetInt() to see why we do this
@@ -254,10 +254,10 @@ const AxisString& Param::GetString()
 	{
 		//exception
 	}
-	return m_sValue;
+	return m_sValue.c_str();
 }
 
-const AxisString& Param::GetAnyURI()
+const AxisChar* Param::GetAnyURI()
 {
 	if (m_Type == XSD_ANYURI){}
 	else if (m_Type == XSD_UNKNOWN) //see GetInt() to see why we do this
@@ -268,10 +268,10 @@ const AxisString& Param::GetAnyURI()
 	{
 		//exception
 	}
-	return m_sValue;
+	return m_sValue.c_str();
 }
 
-const AxisString& Param::GetQName()
+const AxisChar* Param::GetQName()
 {
 	if (m_Type == XSD_QNAME){}
 	else if (m_Type == XSD_UNKNOWN) //see GetInt() to see why we do this
@@ -282,10 +282,10 @@ const AxisString& Param::GetQName()
 	{
 		//exception
 	}
-	return m_sValue;
+	return m_sValue.c_str();
 }
 
-const AxisString& Param::GetHexString()
+const AxisChar* Param::GetHexString()
 
 {
 	if (m_Type == XSD_HEXBINARY){}
@@ -297,10 +297,10 @@ const AxisString& Param::GetHexString()
 	{
 		//exception
 	}
-	return m_sValue;
+	return m_sValue.c_str();
 }
 
-const AxisString& Param::GetBase64String()
+const AxisChar* Param::GetBase64String()
 {
 	if (m_Type == XSD_BASE64BINARY){}
 	else if (m_Type == XSD_UNKNOWN) //see GetInt() to see why we do this
@@ -311,7 +311,7 @@ const AxisString& Param::GetBase64String()
 	{
 		//exception
 	}
-	return m_sValue;
+	return m_sValue.c_str();
 }
 
 int Param::GetInt()
@@ -685,9 +685,9 @@ int Param::serialize(IWrapperSoapSerializer& pSZ)
 		pSZ << "=\"http://www.w3.org/2001/06/soap-encoding\" ";
 		if (m_Value.pArray->m_type == USER_TYPE)
 		{
-			pSZ << "xmlns:" << ATprefix.c_str() << "=" << m_Value.pArray->m_URI.c_str() << " "; 
+			pSZ << "xmlns:" << ATprefix.c_str() << "=\"" << m_Value.pArray->m_URI.c_str() << "\" "; 
 		}
-		pSZ << "enc:arrayType=";
+		pSZ << "enc:arrayType=\"";
 		if (m_Value.pArray->m_type == USER_TYPE)
 		{
 			pSZ << ATprefix.c_str() << ":" << m_Value.pArray->m_TypeName.c_str(); 
@@ -705,7 +705,7 @@ int Param::serialize(IWrapperSoapSerializer& pSZ)
 				pSZ << Buf;
 			}
 		}
-		pSZ << ">";
+		pSZ << "\">";
 		m_Value.pArray->Serialize(pSZ); //Only serializes the inner items
 		pSZ << "</";
 		if (!m_strPrefix.empty())

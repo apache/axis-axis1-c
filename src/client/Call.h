@@ -87,7 +87,7 @@ public:
 	/* Method to set that the return type is complex type */
 	void SetReturnType(void* pDZFunct, void* pCreFunct, void* pDelFunct, const char* pchTypeName, const char* pchUri);
 	/* Method to set that the return type is an array of complex types */
-	void SetReturnType(Axis_Array* pArray, void* pDZFunct, void* pCreFunct, void* pDelFunct, const char* pchTypeName, const char* pchUri);
+	void SetReturnType(Axis_Array* pArray, void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName, const char* pchUri);
 	/* Method to set that the return type is an array of basic types */
 	void SetReturnType(Axis_Array* pArray, XSDTYPE nType);
 	/* Method to set that the return type is basic type */
@@ -96,7 +96,7 @@ public:
 	/* Method for adding complex parameters */
 	void AddParameter(void* pObject, void* pSZFunct, void* pDelFunct, const char* pchName);
 	/* Method for adding complex type array parameters */
-	void AddParameter(Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName);
+	void AddParameter(Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName, const char* pchURI, const char* pchName);
 	/* Method for adding basic type array parameters */
 	void AddParameter(Axis_Array* pArray, XSDTYPE nType, const char* pchTypeName);
 

@@ -70,10 +70,6 @@
 
 XERCES_CPP_NAMESPACE_USE
 
-const AxisXMLCh* AxisUtils::m_strEmpty = NULL;
-const AxisXMLCh* AxisUtils::m_strLeftSqBracket = NULL;
-const AxisXMLCh* AxisUtils::m_strRightSqBracket = NULL;
-const AxisXMLCh* AxisUtils::m_strColon = NULL;
 AxisXMLCh AxisUtils::m_Buffer[CONVERT_BUFFER_SIZE]; 
 
 //////////////////////////////////////////////////////////////////////
@@ -98,10 +94,6 @@ const AxisXMLCh* AxisUtils::ToAxisXMLCh(const AxisChar* pch)
 
 void AxisUtils::Initialize()
 {
-	m_strEmpty = ToAxisXMLCh("");
-	m_strLeftSqBracket = ToAxisXMLCh("[");
-	m_strRightSqBracket = ToAxisXMLCh("]");
-	m_strColon = ToAxisXMLCh(":");
 }
 
 //following functions is not thread safe and should only be used 

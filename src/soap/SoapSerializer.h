@@ -76,7 +76,7 @@
 #include "SoapEnvVersions.h"
 
 
-#define SERIALIZE_BUFFER_SIZE 1024
+#define SERIALIZE_BUFFER_SIZE 8192
 
 class SoapEnvelope;
 class SoapHeader;
@@ -95,8 +95,7 @@ private:
 	char m_cSerializedBuffer[SERIALIZE_BUFFER_SIZE];
 	int m_iCurrentSerBufferSize;
 public:
-	ISoapMethod* createSoapMethod();	
-	int flushSerializedBuffer();
+	int createSoapMethod(const AxisChar* sLocalName, const AxisChar* sPrefix, const AxisChar* sURI);	
 //	IWrapperSoapSerializer& operator<<(const char* cSerialized);
 	IWrapperSoapSerializer& operator<<(const AxisChar* cSerialized);
 	const AxisChar* getNewNamespacePrefix();
@@ -110,33 +109,42 @@ public:
 	int setSoapEnvelope(SoapEnvelope* pSoapEnvelope);
 	SoapSerializer();
 	virtual ~SoapSerializer();
-	IParam* AddOutputParam(XSDTYPE nType, long lValue);
-	IParam* AddOutputParamHelper(XSDTYPE nType, uParamValue Value);
+	int AddOutputParam(const AxisChar* pchName, XSDTYPE nType, long lValue);
 	//for basic types
-	IParam* AddOutputParam(int nValue);
-	IParam* AddOutputParam(unsigned int unValue);
-	IParam* AddOutputParam(short sValue);
-	IParam* AddOutputParam(unsigned short usValue);
-	IParam* AddOutputParam(long lValue);
-	IParam* AddOutputParam(unsigned long ulValue);
-	IParam* AddOutputParam(char cValue);
-	IParam* AddOutputParam(unsigned char ucValue);
-	IParam* AddOutputParam(float fValue);
-	IParam* AddOutputParam(double dValue);
-	IParam* AddOutputParam(struct tm tValue);
-	IParam* AddOutputParam(const AxisChar* pStrValue);
-	//for arrays
-	IParam* AddOutputParam(IArrayBean* pArrayBean);
+	int AddOutputParam(const AxisChar* pchName, int nValue);
+	int AddOutputParam(const AxisChar* pchName, unsigned int unValue);
+	int AddOutputParam(const AxisChar* pchName, short sValue);
+	int AddOutputParam(const AxisChar* pchName, unsigned short usValue);
+	int AddOutputParam(const AxisChar* pchName, long lValue);
+	int AddOutputParam(const AxisChar* pchName, unsigned long ulValue);
+	int AddOutputParam(const AxisChar* pchName, char cValue);
+	int AddOutputParam(const AxisChar* pchName, unsigned char ucValue);
+	int AddOutputParam(const AxisChar* pchName, float fValue);
+	int AddOutputParam(const AxisChar* pchName, double dValue);
+	int AddOutputParam(const AxisChar* pchName, struct tm tValue);
+	int AddOutputParam(const AxisChar* pchName, const AxisChar* pStrValue);
+	//for arrays of basic types
+	int AddOutputParam(const AxisChar* pchName, const Axis_Array* pArray, XSDTYPE nType);
+	//for arrays of complex types
+	int AddOutputParam(const AxisChar* pchName, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI);
 	//for complex types
-	IParam* AddOutputParam(void* pObject, void* pDZFunct, void* pDelFunct);
+	int AddOutputParam(const AxisChar* pchName, void* pObject, void* pDZFunct, void* pDelFunct);
+	int SerializeArray(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI, const AxisChar* pchArrayName);
+	int SerializeArray(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pchArrayName);
+
+private:
+	int AddOutputParamHelper(const AxisChar* pchName, XSDTYPE nType, uParamValue Value);
+	int flushSerializedBuffer();
 	IArrayBean* makeArrayBean(XSDTYPE nType, void* pArray);
 	IArrayBean* makeArrayBean(void* pObject, void* pSZFunct, void* pDelFunct, void* pSizeFunct);
+
 public: //Basic Type Serializing methods
 	int removeSoapHeader();
 	int setHeaderBlock(HeaderBlock* pHeaderBlock);
 	IHeaderBlock* createHeaderBlock();
 
 	const AxisChar* SerializeBasicType(const AxisChar* sName, const AxisChar* sValue, XSDTYPE type=XSD_STRING);
+	const AxisChar* SerializeBasicType(const AxisChar* sName, const string sValue, XSDTYPE type=XSD_STRING);
 	const AxisChar* SerializeBasicType(const AxisChar* sName, int nValue);
     const AxisChar* SerializeBasicType(const AxisChar* sName, struct tm tValue);
     const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned int unValue);

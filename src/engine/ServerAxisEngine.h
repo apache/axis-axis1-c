@@ -5,10 +5,6 @@
 #if !defined(AFX_SERVERAXISENGINE_H__8E421346_17A9_47EF_9003_6DC9C6F7787A__INCLUDED_)
 #define AFX_SERVERAXISENGINE_H__8E421346_17A9_47EF_9003_6DC9C6F7787A__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include "AxisEngine.h"
 
 class ServerAxisEngine : public AxisEngine  

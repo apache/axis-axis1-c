@@ -32,7 +32,6 @@ int ClientAxisEngine::Process(Ax_soapstream* pSoap)
 {
 	int Status;
 	const WSDDService* pService = NULL;
-	int nSoapVersion;
 
 	if (!pSoap) return FAIL;
 	m_pSoap = pSoap;
