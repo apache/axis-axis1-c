@@ -38,17 +38,21 @@ public class MethodInfo {
     private String outputUse;
     private QName inputMessage;
     private QName outputMessage;
+	private QName faultMessage;
+	private ArrayList faultType;
 
     public MethodInfo() {
         this.methodname = null;
         inputParameters = new ArrayList(101);
 		outputParameters = new ArrayList(101);
+		faultType=new ArrayList(102);
     }
 
     public MethodInfo(String methodname) {
         this.methodname = methodname;
         inputParameters = new ArrayList(101);
 		outputParameters = new ArrayList(101);
+		faultType=new ArrayList(102);
     }
 
     public String getMethodname() {
@@ -66,15 +70,20 @@ public class MethodInfo {
     public Collection getInputParameterTypes() {
         return this.inputParameters;
     }
-
+     //	added by nithya
+	 public Collection getFaultType() {
+			 return this.faultType;
+	 }
+     // added by nithya
+	 public void addFaultType(FaultInfo faultType) {
+	 		 this.faultType.add(faultType);
+	}
     public void addInputParameter(ParameterInfo type) {
         this.inputParameters.add(type);
     }
-
 	public Collection getOutputParameterTypes() {
 		return this.outputParameters;
 	}
-
 	public void addOutputParameter(ParameterInfo type) {
 		this.outputParameters.add(type);
 	}
@@ -181,8 +190,24 @@ public class MethodInfo {
 	 * Sets the ouputMessage.
 	 * @param ouputMessage The ouputMessage to set
 	 */
-	public void setOutputMessage(QName ouputMessage) {
+	public void setOutputMessage(QName ouputMessage) {		
 		this.outputMessage = ouputMessage;
 	}
 
+	//added by nithya
+	/**
+	 * @return QName
+	 */
+	public QName getFaultMessage() {		
+		return faultMessage;
+	}	
+	/**
+	 * Sets the faultMessage.
+	 * @param faultMessage The faultMessage to set
+	 */
+	public void setFaultMessage(QName faultMessage) {
+		System.out.print(faultMessage);
+		this.faultMessage = faultMessage;
+	}
+	//end of nithya
 }

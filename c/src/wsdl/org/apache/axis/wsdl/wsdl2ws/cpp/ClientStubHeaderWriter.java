@@ -18,14 +18,7 @@
 /**
  * @author Srinath Perera(hemapani@openource.lk)
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
- * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
-
-/*
- * Revision 1.1  2004/05/26 samisa
- * Added Stub base class into code generation
- */
-
 
 package org.apache.axis.wsdl.wsdl2ws.cpp;
 
@@ -64,11 +57,11 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeAttributes()
 	 */
 	protected void writeAttributes() throws WrapperFault {
-		/*try {
+		try {
 			writer.write("private:\n\tCall* m_pCall;\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
-		}*/
+		}
 	}
 
 	/* (non-Javadoc)
@@ -91,7 +84,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 	 */
 	protected void writeConstructors() throws WrapperFault {
 		try{
-		writer.write("public:\n\t"+classname+"(const char* pcEndpointUri);\n");
+		writer.write("public:\n\t"+classname+"();\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}
@@ -155,7 +148,8 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 			  writer.write(");\n");
 		  }
 		  writer.write("\tint getStatus();\n");		  
-		}catch (Exception e) {
+		  writer.write("\tint getFaultDetail(char** ppcDetail);\n");//damitha
+                  }catch (Exception e) {
 			  e.printStackTrace();
 			  throw new WrapperFault(e);
 		}	}
@@ -165,8 +159,8 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 	 */
 	protected void writePreprocssorStatements() throws WrapperFault {
 		try{
-			//writer.write("#include <axis/client/Call.h>\n");
-			writer.write("#include <axis/client/Stub.h>\n");
+			writer.write("#include <axis/client/Call.h>\n");
+			writer.write("/*include Exception header files here*/\n");//damitha
 			Type atype;
 			Iterator types = this.wscontext.getTypemap().getTypes().iterator();
 			HashSet typeSet = new HashSet();
@@ -192,7 +186,5 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 	{
 		return "ClientStub";	
 	}
-	
-	protected String getExtendsPart(){return " :public Stub";}
 }
 
