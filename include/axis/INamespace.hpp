@@ -40,10 +40,35 @@ AXIS_CPP_NAMESPACE_START
 class INamespace  
 {
 public:
+    /**
+     * Gets the prefix of this Namespace.
+     * 
+     * @return prefix of this namespace.
+     */
 	virtual const AxisChar* getPrefix()=0;
+   
+   /**
+    * Gets the namespace uri of this Namespace.
+    * 
+    * @return namespace uri of this Namespace
+    */
 	virtual const AxisChar* getURI()=0;
-	virtual void setURI(const AxisChar* achURI)=0;
-	virtual void setPrefix(const AxisChar* achPrefix)=0;
+
+    /**
+      * Sets the namespace uri of this Namespace.
+      *
+      * @param uri The namespace uri to set in.
+      * @return AXIS_SUCCESS if successful AXIS_FAIL otherwise. NOTE: Passing NULL will result in a AXIS_FAIL
+      * 
+      */
+	virtual int setURI(const AxisChar* achURI)=0;
+    /**
+     * Sets the prefix of this Namespace.
+     *
+     * @param prefix The prefix to set in.
+     * @return AXIS_SUCCESS if successful AXIS_FAIL otherwise. NOTE: Passing NULL will result in a AXIS_FAIL
+     */
+	virtual int setPrefix(const AxisChar* achPrefix)=0;
 	virtual ~INamespace() {};
 
 };

@@ -43,14 +43,24 @@ Namespace::Namespace(const AxisChar* achPrefix, const AxisChar* achURI)
 	m_asURI = achURI;
 }
 
-void Namespace::setPrefix(const AxisChar* achPrefix)
+int Namespace::setPrefix(const AxisChar* achPrefix)
 {
-	m_asPrefix = achPrefix;
+    if (achPrefix)
+    {
+	   m_asPrefix = achPrefix;
+       return AXIS_SUCCESS;
+    }
+    return AXIS_FAIL;
 }
 
-void Namespace::setURI(const AxisChar* achURI)
+int Namespace::setURI(const AxisChar* achURI)
 {
-	m_asURI = achURI;
+    if (achURI)
+    {
+        m_asURI = achURI;
+        return AXIS_SUCCESS;
+    }
+    return AXIS_FAIL;
 }
 
 const AxisChar* Namespace::getURI()

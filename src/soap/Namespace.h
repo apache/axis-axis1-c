@@ -46,8 +46,8 @@ public:
 	int serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack);
 	const AxisChar* getPrefix();
 	const AxisChar* getURI();
-	void setURI(const AxisChar* achURI);
-	void setPrefix(const AxisChar* achPrefix);
+	int setURI(const AxisChar* achURI);
+	int setPrefix(const AxisChar* achPrefix);
 	Namespace(const AxisChar* achPrefix, const AxisChar* achURI);
 	Namespace();
 	virtual ~Namespace();
