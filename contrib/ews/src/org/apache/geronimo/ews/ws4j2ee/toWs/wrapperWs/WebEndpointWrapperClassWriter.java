@@ -65,7 +65,7 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.JavaClassWriter;
 
 /**
- * @author hemapani
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class WebEndpointWrapperClassWriter extends JavaClassWriter {
 	protected static Log log =

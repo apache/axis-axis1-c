@@ -425,7 +425,7 @@ public class AxisEmitterBasedJaxRpcMapperContext implements JaxRpcMapperContext 
             jaxrpcmap.getServiceInterfaceMappingAndServiceEndpointInterfaceMapping().add(seimapping);
                   
 //axis do not support XML type mapping or Exception
-//maping to be specifed so I do not brpther tp print them out. 
+//maping to be specifed so I do not brother tp print them out. 
 //jaxrpcmap.getExceptionMapping();
 //jaxrpcmap.getJavaXmlTypeMapping();
             

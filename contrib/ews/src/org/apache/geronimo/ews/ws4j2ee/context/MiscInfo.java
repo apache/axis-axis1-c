@@ -62,6 +62,7 @@ import javax.wsdl.Port;
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
 import org.apache.axis.wsdl.symbolTable.ServiceEntry;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFHandler;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
 
@@ -76,97 +77,155 @@ import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSC
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public interface MiscInfo {
+	/**
+	 * the root diretory for the output  
+	 * @param outputpath
+	 */
     public void setOutputPath(String outputpath);
-
     public String getOutPutPath();
-
+    
+    /**
+     * WSDL artifacts correponds to the current WSCF port.
+     * If one element is in the wsdl theu are used. How to select them 
+     * if there is more than one is still to do.   
+     * @return
+     */
     public ServiceEntry gettargetService();
+	public void settargetService(ServiceEntry service);
 
     public BindingEntry gettargetBinding();
+	public void settargetBinding(BindingEntry binding);
 
     public PortTypeEntry getTargetPortType();
+	public void setTargetPortType(PortTypeEntry port);
 
-    public void settargetService(ServiceEntry service);
+	public void setTargetPort(Port port);
+	public Port getTargetPort();
+    
+	/**
+	 * @return ArrayList of SEIOperations
+	 */
+	public ArrayList getSEIOperations();
+	public void setSEIOperations(SEIOperation operation);
 
-    public void settargetBinding(BindingEntry binding);
+	/**
+	 * Names of the classes corresponding to SEI, Implementation bean and the 
+	 * web service and the sessionless EJB. 
+	 * @return
+	 */    
+	public String getEjbName();
+	public void setEjbName(String string);
 
-    public void setTargetPortType(PortTypeEntry port);
+	public String getJaxrpcSEI();
+	public void setJaxrpcSEI(String string);
+    
+	public String getEjblocalhome();
+	public void setEjblocalhome(String string);
 
-    public String getEjbsei();
+	public String getEjblocalsei();
+	public void setEjblocalsei(String string);
+	
+	public String getEjbsei();
+	public void setEjbsei(String string);
 
-    public void setEndpointImplbean(String string);
+	public void setEndpointImplbean(String string);
+	public String getEndpointImplbean();
 
-    public String getEndpointImplbean();
+	public String getEjbhome();
+	public void setEjbhome(String string);
 
-    public void setEjbsei(String string);
 
-    public String getEjbhome();
-
-    public void setEjbhome(String string);
-
+	/**
+	 * WSCF artifacts correponds to the current WSCF file.
+	 * If one element is in the wsdl theu are used. How to select them 
+	 * if there is more than one is still to do.   
+	 * @return
+	 */
     public WSCFWebserviceDescription getWscfdWsDesxription();
+	public void setWscfdWsDescription(WSCFWebserviceDescription description);
 
     public WSCFPortComponent getWscfport();
-
-    public void setWscfdWsDescription(WSCFWebserviceDescription description);
-
     public void setWscfport(WSCFPortComponent component);
 
-    /**
-     * @return ArrayList of SEIOperations
-     */
-    public ArrayList getSEIOperations();
-
-    public void setSEIOperations(SEIOperation operation);
-
+	/**
+	 * Validate the Content of the Misc Info
+	 */
     public void validate();
 
     public boolean isVerbose();
-
+	public void setVerbose(boolean b);
+	
+	/**
+	 * the root directory of the webservice.xml file.
+	 * @return
+	 */
     public String getWsConfFileLocation();
-
-    public void setVerbose(boolean b);
-
     public void setWsConfFileLocation(String string);
-
-    public String getEjbName();
-
-    public void setEjbName(String string);
-
+    
+	/**
+	 * The jaxrpc-file specifies a location of the WSDL description of
+	 * a set of Web services. The location is relative to the root of the module
+	 * and must be specified by the developer.
+	 */
     public String getJaxrpcfile();
-
+	public void setJaxrpcfile(String string);
+	/**
+	 * The wsdl-file specifies a location of the WSDL description of
+	 * a set of Web services. The location is relative to the root of the module
+	 * and must be specified by the developer.
+	 */
     public String getWsdlFile();
-
-    public void setJaxrpcfile(String string);
-
     public void setWsdlFile(String string);
 
-    public void setTargetPort(Port port);
-
-    public Port getTargetPort();
-
-    public String getJaxrpcSEI();
-
-    public void setJaxrpcSEI(String string);
-
-   
-    
-    
+	/**
+	 * <p>One of the following values and specify how the ejb based web service 
+	 * Obtain the referance to the sessionless web service</p> 
+	 * public static final String USE_REMOTE ="use-remote";
+	 * public static final String USE_LOCAL =  "use-local";
+	 * public static final String USE_INTERNALS = "use-internals";
+	 * public static final String USE_LOCAL_AND_REMOTE = "use-local-remote";
+	 */
 	public String getImplStyle();
-
-	public String getTargetJ2EEContainer();
-
 	public void setImplStyle(String string);
 
+	/**
+	 * <p>One of the following values and specify what is the j2ee container the 
+	 * implementation is based on.</p>
+	 * public static final String JBOSS_CONTAINER = "jboss";
+	 * public static final String JONAS_CONTAINER = "jonas";
+	 * public static final String GERONIMO_CONTAINER = "geronimo";
+	 */ 
+	public String getTargetJ2EEContainer();
 	public void setTargetJ2EEContainer(String string);
-	public String getEjblocalhome();
-	public String getEjblocalsei();
-	public void setEjblocalhome(String string);
-	public void setEjblocalsei(String string);
+
+	/**
+	 * Say the implementation of the webservice is based on the sessionless web service 
+	 * or a java class. 
+	 * @return
+	 */
 	public boolean isImplwithEJB();
 	public void setImplwithEJB(boolean b);
+
+	/**
+	 * Say wheather the Implementation bean is avalible when gererating without wsdl.
+	 * For other cases it does not make sense.   
+	 * @return
+	 */
 	public boolean isImplAvalible();
 	public void setImplAvalible(boolean b);
+
+	/**
+	 * The webservice.xml specifies a location of the WSDL description of
+	 * a set of Web services. The location is relative to the root of the module
+	 * and must be specified by the developer.
+	 */
 	public String getWsconffile(); 
 	public void setWsconffile(String string);
-	}
+
+	/**
+	 * Handlers. A developer may optionally specify handlers associated with the 
+	 * service-ref using the handler element.
+	 */
+	public WSCFHandler[] getHandlers();
+	public void setHandlers(WSCFHandler[] handlers);
+}

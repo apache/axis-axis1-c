@@ -62,7 +62,8 @@ import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSC
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 
 /**
- * @author hemapani
+ * @see org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class AxisEmitterBasedWSCFContext implements WSCFContext {
     private Emitter emitter;

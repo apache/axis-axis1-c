@@ -74,24 +74,40 @@ import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
  * <li>do not have WSDL</li>
  * </ol>
  * if some method is not requried please throw java.lang.UnsupportedOperationException</p>
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
 
 public interface J2EEWebServiceContext {
+	/**
+	 * Information about the WSDL file
+	 * @return
+	 */
     public WSDLContext getWSDLContext();
-
     public void setWSDLContext(WSDLContext wsdlcontext);
 
+	/**
+	 * Information about the webservice.xml file
+	 * @return
+	 */
     public WSCFContext getWSCFContext();
-
     public void setWSCFContext(WSCFContext wscfcontext);
 
+	/**
+	 * Information about the jaxrpcmapping.xml file  
+	 * @return
+	 */
     public JaxRpcMapperContext getJAXRPCMappingContext();
-
     public void setJAXRPCMappingContext(JaxRpcMapperContext context);
 
+	/**
+	 * Have the mislaneous infomation about the web service.
+	 * @return
+	 */
     public MiscInfo getMiscInfo();
-
     public void setMiscInfo(MiscInfo info);
 
+	/**
+	 * validate the context
+	 */
     public void validate();
 }

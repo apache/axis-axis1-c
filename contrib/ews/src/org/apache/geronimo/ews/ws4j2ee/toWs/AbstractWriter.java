@@ -66,6 +66,7 @@ import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 
 /**
  * <p>This is a conveniance class to wite the Writers</p>
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
 
 public abstract class AbstractWriter implements Writer {

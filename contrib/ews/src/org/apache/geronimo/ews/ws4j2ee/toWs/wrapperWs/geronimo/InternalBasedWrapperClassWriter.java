@@ -67,7 +67,7 @@ import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 
 
 /**
- * @author hemapani
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class InternalBasedWrapperClassWriter extends JavaClassWriter {
 	protected static Log log =

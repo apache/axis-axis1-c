@@ -64,13 +64,15 @@ import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
 import org.apache.axis.wsdl.symbolTable.ServiceEntry;
 import org.apache.geronimo.ews.ws4j2ee.context.MiscInfo;
 import org.apache.geronimo.ews.ws4j2ee.context.SEIOperation;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFHandler;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
 import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenarationFault;
 
 /**
- * @author hemapani
+ * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class MiscInfoImpl implements MiscInfo {
     private WSCFWebserviceDescription wscfdWsDesxription;
@@ -92,10 +94,6 @@ public class MiscInfoImpl implements MiscInfo {
 	private String ejblocalsei = null;
 	//private String ejblocalbean = null;
 	private String ejblocalhome = null;
-
-    
-    
-    
     private String ejbName = null;
     private String axisSEI;
     private ArrayList operations;
@@ -106,10 +104,7 @@ public class MiscInfoImpl implements MiscInfo {
     private String wsconffile;
     private String targetJ2EEContainer = GenerationConstants.JBOSS_CONTAINER;
     private String implStyle = GenerationConstants.USE_LOCAL_AND_REMOTE;
-
-    /**
-     * 
-     */
+    private WSCFHandler[] handlers;
     public MiscInfoImpl() {
         operations = new ArrayList();
         targetJ2EEContainer = GenerationConstants.JBOSS_CONTAINER;
@@ -435,5 +430,19 @@ public class MiscInfoImpl implements MiscInfo {
 	public void setWsconffile(String string) {
 		wsconffile = string;
 	}
+
+    /* (non-Javadoc)
+     * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#getHandlers()
+     */
+    public WSCFHandler[] getHandlers() {
+        return handlers;
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#setHandlers(org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFHandler[])
+     */
+    public void setHandlers(WSCFHandler[] handlers) {
+		this.handlers = handlers;        
+    }
 
 }

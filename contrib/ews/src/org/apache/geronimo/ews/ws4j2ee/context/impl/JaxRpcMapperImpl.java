@@ -78,8 +78,8 @@ import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 /**
  * This class wrap the JAXRPCMapper and only expose a interface to
  * the rest of the WS4j2ee.
- * 
- * @author hemapani
+ * @see org.apache.geronimo.ews.ws4j2ee.context.JaxRpcMapperContext
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class JaxRpcMapperImpl implements JaxRpcMapperContext {
     private JaxRpcMapper jaxrpcmapper;

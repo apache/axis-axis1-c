@@ -74,6 +74,8 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenarationFault;
  * </li>
  * </ol>
  * </p>
+ * @see org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext
+ * @author Srinath Perera(hemapani@opensorce.lk)
  */
 public class J2EEWebServiceContextImpl implements J2EEWebServiceContext {
     private boolean hasWSDL = true;

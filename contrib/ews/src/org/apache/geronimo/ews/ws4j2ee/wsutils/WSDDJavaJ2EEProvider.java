@@ -1,4 +1,4 @@
-package org.apache.geronimo.ews.ws4j2ee.wsutils;
+
 
 /*
  * The Apache Software License, Version 1.1
@@ -55,7 +55,7 @@ package org.apache.geronimo.ews.ws4j2ee.wsutils;
  * <http://www.apache.org/>.
  */
 
-
+package org.apache.geronimo.ews.ws4j2ee.wsutils;
 import org.apache.axis.EngineConfiguration;
 import org.apache.axis.Handler;
 import org.apache.axis.deployment.wsdd.WSDDProvider;

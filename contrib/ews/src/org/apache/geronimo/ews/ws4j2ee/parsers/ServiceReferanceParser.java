@@ -52,15 +52,16 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
-
-package org.apache.geronimo.ews.ws4j2ee.parsers;
+ 
+ package org.apache.geronimo.ews.ws4j2ee.parsers;
 
 import java.io.InputStream;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.crimson.tree.TextNode;
-import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.client.ServiceReferanceImpl;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.ServiceReferance;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -68,46 +69,87 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * &lt;web-app&gt; .....
- *  &lt;servlet&gt;
- *   &lt;servlet-name&gt;AxisServlet&lt;/servlet-name&gt;
- *   &lt;display-name&gt;Apache-Axis Servlet&lt;/display-name&gt;
- *   &lt;servlet-class&gt;
- *       org.apache.axis.transport.http.AxisServlet
- *   &lt;/servlet-class&gt;
- * &lt;/servlet&gt;
- * 
- * ...
- * &lt;/web-app&gt;
- * Parse the web,xl file and get the servlet class corresponds to the given servlet
- * @author hemapani
+ * <service-ref>
+ *     <service-ref-name>service/Joe</service-ref-name>
+ *     <service-interface>javax.xml.rpc.Service</service-interface>
+ *     <wsdl-file>WEB-INF/joe.wsdl</wsdl-file>
+ *     <jaxrpc-mapping-file>WEB-INF/joe.xml</jaxrpc-mapping-file>
+ *     <service-qname></service-qname>
+ *     <port-component-ref>
+ *         <service-endpoint-interface>sample.Joe</service-endpoint-interface>
+ *         <port-component-link>JoePort</port-component-link>
+ *     </port-component-ref>
+ *     <handler>
+ *         <handler-name></handler-name>
+ *         <handler-class></handler-class>
+ *     </handler>
+ * </service-ref>
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
-public class WebDDParser {
-	private J2EEWebServiceContext j2eewscontext;
-	private String servletClass = null;
-	private String servletName = null;
-
-	public WebDDParser(J2EEWebServiceContext j2eewscontext) {
-		this.j2eewscontext = j2eewscontext;
-	}
-
-	public void parse(InputStream inputStream) throws GenerationFault {
+public class ServiceReferanceParser {
+	private ServiceReferance ref; 
+	
+	public ServiceReferanceParser(InputStream inputStream) throws GenerationFault{
 		try {
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			dbf.setNamespaceAware(true);
-			Document doc = dbf.newDocumentBuilder().parse(inputStream);
-			Element root =  doc.getDocumentElement();
-			NodeList sevlele = root.getElementsByTagName("servlet");
-			if(sevlele.getLength()>0){
-				Element serv = (Element)sevlele.item(0);
-				NodeList servName = serv.getElementsByTagName("servlet-class");
-				servletClass = getElementValue(servName.item(0));
-				
-				servName = serv.getElementsByTagName("servlet-name");
-				servletName = getElementValue(servName.item(0));
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            dbf.setNamespaceAware(true);
+            Document doc = dbf.newDocumentBuilder().parse(inputStream);
+            Element root =  doc.getDocumentElement();
+			Element serviceref = findServiceReferance(root);
+			if(serviceref != null)
+            	parse(serviceref);
+            else
+				throw new GenerationFault("No service Referance in the file");	
+        } catch (Exception e) {
+			throw new GenerationFault(e);
+        }
+	}
+	/**
+	 * find the service-ref element from the xml file. 
+	 * @param ele
+	 * @return
+	 */
+	public Element findServiceReferance(Element ele){
+		if("service-ref".equals((ele).getLocalName())){
+			//System.out.println((ele).getLocalName());
+			return ele;
+		}else{
+			NodeList nodes = ele.getChildNodes();
+			for(int i=0;i<nodes.getLength();i++){
+				Node node = nodes.item(i);
+				if(node instanceof Element){ 
+						return findServiceReferance((Element)node);
+				}
 			}
-		} catch (Exception e) {
-			throw GenerationFault.createGenerationFault(e);
+			return null;
+		}
+	} 
+	public ServiceReferanceParser(Element refEle){
+		parse(refEle);
+	}	
+		
+	public void parse(Element refEle){	
+		ref = new ServiceReferanceImpl();
+		Element root = refEle; 
+
+		NodeList sevlele = root.getElementsByTagName("service-ref-name");
+		if(sevlele.getLength()>0){
+			ref.setServicerefName(getElementValue(sevlele.item(0)));
+		}
+		
+		sevlele = root.getElementsByTagName("service-interface");
+		if(sevlele.getLength()>0){
+			ref.setServiceInterface(getElementValue(sevlele.item(0)));
+		}
+		
+		sevlele = root.getElementsByTagName("wsdl-file");
+		if(sevlele.getLength()>0){
+			ref.setWsdlFile(getElementValue(sevlele.item(0)));
+		}
+
+		sevlele = root.getElementsByTagName("jaxrpc-mapping-file");
+		if(sevlele.getLength()>0){
+			ref.setJaxrpcmappingFile(getElementValue(sevlele.item(0)));
 		}
 	}
 	
@@ -121,18 +163,11 @@ public class WebDDParser {
 		}
 		return null;
 	}
-	/**
-	 * @return
-	 */
-	public String getServletClass() {
-		return servletClass;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setServletClass(String string) {
-		servletClass = string;
-	}
+    /**
+     * @return
+     */
+    public ServiceReferance getRef() {
+        return ref;
+    }
 
 }

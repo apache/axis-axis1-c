@@ -57,7 +57,6 @@ package org.apache.geronimo.ews.ws4j2ee.toWs.handlers;
 
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFHandler;
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Writer;
@@ -73,14 +72,14 @@ public class HandlerGenarator implements Generator {
 
     public HandlerGenarator(J2EEWebServiceContext j2eewscontext) throws GenerationFault {
         this.j2eewscontext = j2eewscontext;
-        WSCFPortComponent port = this.j2eewscontext.getMiscInfo().getWscfport();
-        WSCFHandler[] handlers = port.getHandlers();
-        writers = new Writer[handlers.length];
-
-        for (int i = 0; i < handlers.length; i++) {
-            writers[i] = new HandlerWriter(j2eewscontext, handlers[i]);
-        }
-
+			WSCFHandler[] handlers = j2eewscontext.getMiscInfo().getHandlers();
+			if(handlers!= null){
+				writers = new Writer[handlers.length];
+				for (int i = 0; i < handlers.length; i++) {
+					writers[i] = new HandlerWriter(j2eewscontext, handlers[i]);
+				}
+			}else
+				writers = new Writer[0];
     }
 
     /**

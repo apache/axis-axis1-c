@@ -53,51 +53,94 @@
  * <http://www.apache.org/>.
  */
 
-package org.apache.geronimo.ews.ws4j2ee.context;
+package org.apache.geronimo.ews.ws4j2ee.toWs;
 
-import java.io.FileInputStream;
+import java.io.File;
 
-import org.apache.axis.wsdl.symbolTable.SymbolTable;
-import org.apache.geronimo.ews.jaxrpcmapping.J2eeEmitter;
-import org.apache.geronimo.ews.jaxrpcmapping.JaxRpcMapper;
-import org.apache.geronimo.ews.ws4j2ee.context.impl.JaxRpcMapperImpl;
-import org.apache.geronimo.ews.ws4j2ee.context.impl.MiscInfoImpl;
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.WSCFContextImpl;
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.WSCFException;
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext;
-import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
-import org.apache.geronimo.ews.ws4j2ee.context.wsdl.impl.AxisWSDLContext;
-import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
-import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenarationFault;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
+import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
+
+
 
 /**
- * <p>This class decouple the concreate implementations of the
- * class from the rest of the code</p>
- * @author Srinath Perera(hemapani@opensource.lk)
+ * @author hemapani
  */
-public class ContextFactory {
-    public static WSDLContext createWSDLContext(Object info) {
-        if (info instanceof SymbolTable)
-            return new AxisWSDLContext((SymbolTable) info);
-        throw new UnrecoverableGenarationFault("unknown context type");
+public class Ws4J2eeWtihoutWSDLCLOptionParser {
+	private String wscfFileLocation;
+	private String wjbConfFileLocation;
+	private String webConfFileLocation;
+	private String outPutLocation;
+	private WSCFWebserviceDescription[] wscfwsdis;
+	private String[] args;
+	private int indexToChange = -1;
+	
+	public  Ws4J2eeWtihoutWSDLCLOptionParser(String[] args){
+		this.args = args;
+		wscfFileLocation = args[0];
+		outPutLocation = Utils.getRootDirOfFile(wscfFileLocation);
+		
+		File file = new File(outPutLocation+"/META-INF");
+		if (!file.exists())
+			file.mkdirs();
+			boolean found = false;		
+			for(int i = 0;i<args.length;i++){
+				if(args[i].startsWith("-o")){
+					String output = args[i].substring(2);
+					file = new File(output+"/META-INF");
+					if (!file.exists())
+						file.mkdirs();
+					outPutLocation = output;
+					//wsdlFile = Utils.getAbsolutePath(wscfwsdis.getWsdlFile(),output);
+					//args[i] = "-o"+wsdlFile;
+					indexToChange = i;
+					found = true;
+				}
+			}
+			if(!found){
+				//wscontext.getMiscInfo().setOutputPath(wscontext.getMiscInfo().getWsConfFileLocation());
+				//wsdlFile = Utils.getAbsolutePath(wscfwsdis.getWsdlFile(),wscontext.getMiscInfo().getWsConfFileLocation());
+				String[] newArgs =  new String[args.length+1];
+				for(int i = 0;i<args.length;i++){
+					newArgs[i] = args[i];
+				}
+				//newArgs[args.length] = "-o"+wsdlFile;
+				indexToChange = args.length;
+				this.args = newArgs;
+			}
+		//the other two files are considered to be at the same directory as the 
+		 //wscf file	
+		wjbConfFileLocation = Utils.getRootDirOfFile(wscfFileLocation)+"/ejb-jar.xml";
+		webConfFileLocation = Utils.getRootDirOfFile(wscfFileLocation)+"/web.xml";
+	
+	}
+	 
+	public String getWSCFFileLocation(){
+		return wscfFileLocation;
+	}
+	public String getEjbConfFileLocation(){
+		return wjbConfFileLocation;
+	}
+	public String getWebConfFileLocation(){
+		return webConfFileLocation;
+	}
+	public String[] getArgsforJava2WSDLEmitter(String seiName,String wsdlfile){
+		args[0] = seiName;
+		if(indexToChange>0)
+			args[indexToChange] = "-o"+wsdlfile;
+		return args;
+	}
+    /**
+     * @return
+     */
+    public String getOutPutLocation() {
+        return outPutLocation;
     }
 
-    public static JaxRpcMapperContext createJaxRpcMapperContext(Object[] info) {
-        if (info.length == 2 && info[0] instanceof JaxRpcMapper && info[1] instanceof J2eeEmitter)
-            return new JaxRpcMapperImpl((JaxRpcMapper) info[0],(J2eeEmitter)info[1]);
-        throw new UnrecoverableGenarationFault("unknown mapper type");
+    /**
+     * @param string
+     */
+    public void setOutPutLocation(String string) {
+        outPutLocation = string;
     }
 
-    public static WSCFContext createWSCFContext(FileInputStream in) throws GenerationFault {
-        try {
-            return new WSCFContextImpl(in);
-        } catch (WSCFException e) {
-            e.printStackTrace();
-            throw new GenerationFault(e.getMessage());
-        }
-    }
-
-    public static MiscInfo createMiscInfo() {
-        return new MiscInfoImpl();
-    }
 }
