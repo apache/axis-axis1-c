@@ -69,6 +69,7 @@
 #include "WSDDDocument.h"
 #include "../common/GDefine.h"
 #include <iostream>
+
 extern unsigned char chEBuf[1024];
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
