@@ -263,11 +263,11 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 						|| attribs[i].getTypeName().equals("xsd__QName")
 						|| attribs[i].getTypeName().equals("xsd__notation"))
  				{
- 					writer.write("\tpSZ->serializeAsElement(\""+attribs[i].getSOAPElementNameAsString()+"\", Axis_URI_" + classname + ", (void*)(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");	
+ 					writer.write("\tpSZ->serializeAsElement(\""+attribs[i].getSOAPElementNameAsString()+"\", Axis_URI_" + classname + ", (void*)(param->"+attribs[i].getParamNameWithoutSymbols()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");	
  				}
  				else
  				{
- 					writer.write("\tpSZ->serializeAsElement(\""+attribs[i].getSOAPElementNameAsString()+"\", Axis_URI_" + classname + ", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+ 					writer.write("\tpSZ->serializeAsElement(\""+attribs[i].getSOAPElementNameAsString()+"\", Axis_URI_" + classname + ", (void*)&(param->"+attribs[i].getParamNameWithoutSymbols()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
  				}
  
 			}else{

@@ -129,7 +129,7 @@ public class AttributeInfo extends ParameterInfo
 
     public String getParamNameAsMember()
     {
-        this.attribNameAsMember = super.getParamName();
+        this.attribNameAsMember = super.getParamNameWithoutSymbols();
         // need to deal with _Ref stuff :(
         if (this.className != null
             && this.className.equals(attribNameAsMember))

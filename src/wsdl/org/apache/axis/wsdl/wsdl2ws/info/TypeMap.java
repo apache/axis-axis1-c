@@ -51,6 +51,13 @@ public class TypeMap
 
     private static Hashtable javakeywords = new Hashtable();
     private static Hashtable cppkeywords = new Hashtable();
+    
+    //  29/3/05. To keep symbols
+    private static char[] symbolArray =
+				{	
+					'-',
+					'@'
+				};
 
     static {
         // c -> xml type mapping
@@ -512,4 +519,11 @@ public class TypeMap
 
         return name;
     }
+    
+    //  29/3/05. To access the symbols
+    public static char[] getSymbols()
+        {
+            return symbolArray;
+        }
+    
 }

@@ -103,6 +103,20 @@ public class ParameterInfo
         }
         return result;
     }
+    //  29/3/05.To avoid the '-' in attribute name.
+	public String getParamNameWithoutSymbols() {
+		//    	 TODO: design review needed
+		// 		- If type and name are equals add "_Ref" ie : ref="..."
+		String result = this.getParamName();
+	
+		char[] symbols = TypeMap.getSymbols();
+
+		for (int j = 0; j < symbols.length; j++) {
+			result = result.replace(symbols[j], '_');
+		}
+
+		return result;
+	}
 
     public String getParamNameAsSOAPElement()
     {

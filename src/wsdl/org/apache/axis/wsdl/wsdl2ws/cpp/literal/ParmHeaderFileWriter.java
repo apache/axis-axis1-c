@@ -312,7 +312,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                     "\t"
                         + getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
                         + " "
-                        + attribs[i].getParamName()
+                        + attribs[i].getParamNameWithoutSymbols()
                         + ";\n");
             }
             if (extensionBaseAttrib != null
@@ -323,7 +323,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                     "\t"
                         + getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib)
                         + " "
-                        + extensionBaseAttrib.getParamName()
+                        + extensionBaseAttrib.getParamNameWithoutSymbols()
                         + ";\n");
             }
         }
