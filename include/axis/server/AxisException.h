@@ -21,6 +21,8 @@
 #ifndef __AXISEXCEPTION_H_OF_AXIS_INCLUDED_
 #define __AXISEXCEPTION_H_OF_AXIS_INCLUDED_
 
+#include <axis/server/GDefine.h>
+
 #include <string>
 #include <exception>
 #include <new>
@@ -186,7 +188,7 @@ enum AXISC_EXCEPTIONS
  *
  *   @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  */
-class AxisException :public exception
+class STORAGE_CLASS_INFO AxisException :public exception
 {
 
 public:
