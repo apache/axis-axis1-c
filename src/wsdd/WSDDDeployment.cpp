@@ -140,7 +140,7 @@ int WSDDDeployment::SaveWSDD()
         if (fputs("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", file) < 0) 
             break;
         if (fputs("<deployment xmlns=\"http://xml.apache.org/axis/wsdd/\
-            \"xmlns:C=\"http://xml.apache.org/axis/wsdd/providers/C\" xmlns:\
+            \" xmlns:C=\"http://xml.apache.org/axis/wsdd/providers/C\" xmlns:\
             CPP=\"http://xml.apache.org/axis/wsdd/providers/CPP\">\n",
             file) < 0) break;
         if (fputs("\t<globalConfiguration>\n", file) < 0) break;
