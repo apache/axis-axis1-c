@@ -42,7 +42,12 @@ Notes:
 	<import file="${basedir}/buildSimpleAxisServer.xml"/>
 	<import file="${basedir}/buildWSDL2Ws.xml"/>
 
-	<target name="compileServer">
+	<target name="compileClient" depends="initialize">
+		<antcall target="compileAxisClient" inheritall="true"/>
+	</target>
+
+
+	<target name="compileServer" depends="initialize">
 		<antcall target="compileAxisServerEngine" inheritall="true"/>
 		<if>
 			<equals arg1="${server.apache13}" arg2="true"/>
@@ -64,7 +69,7 @@ Notes:
 		</if>
 	</target>
 
-	<target name="compileTransport">
+	<target name="compileTransport" depends="initialize">
 		<!-- Determine which flavour of transport to use -->
 		<!-- Ideally extend this to produce multiple flavours -->
 		<if>
@@ -96,7 +101,7 @@ Notes:
 		</if>
 	</target>
 
-	<target name="compileXMLParser">
+	<target name="compileXMLParser" depends="initialize">
 		<!-- Determine which flavour of xmlParser to use -->
 		<!-- Ideally extend this to produce multiple flavours -->
 		<if>
@@ -135,8 +140,8 @@ Notes:
 		</if>
 	</target>
 
-	<target name="compile">
-		<antcall target="compileAxisClient" inheritall="true"/>
+	<target name="compile" depends="initialize">
+		<antcall target="compileClient" inheritall="true"/>
 		<antcall target="compileTransport" inheritall="true"/>
 		<antcall target="compileXMLParser" inheritall="true"/>
 		<antcall target="compileServer" inheritall="true"/>

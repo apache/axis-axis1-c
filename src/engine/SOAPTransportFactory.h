@@ -25,6 +25,8 @@
 #if !defined(AXIS_SOAPTRANSPORTFACTORY_H__OF_AXIS_INCLUDED_)
 #define AXIS_SOAPTRANSPORTFACTORY_H__OF_AXIS_INCLUDED_
 
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include <axis/server/GDefine.hpp>
 
 #define CREATE_FUNCTION1 "CreateInstance"
@@ -41,18 +43,6 @@
 //function to stop event loop for transport (libWWW)
 #define STOP_EVENT_LOOP_FUNCTION "stopEventLoop"
 */
-
-#if defined(USE_LTDL)
-#include <ltdl.h>
-#define DLHandler lt_dlhandle
-#elif defined(WIN32)
-#include <windows.h>
-#define DLHandler HINSTANCE
-#define RTLD_LAZY 0
-#else /* Linux */
-#include <dlfcn.h>
-#define DLHandler void*
-#endif
 
 AXIS_CPP_NAMESPACE_START
 

@@ -19,6 +19,8 @@
 #if !defined(__HANDLERLOADER_H_OF_AXIS_INCLUDED__)
 #define __HANDLERLOADER_H_OF_AXIS_INCLUDED__
 
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include "../common/MessageData.h"
 #include <axis/server/GDefine.hpp>
 #include <axis/server/WrapperClassHandler.hpp>
@@ -41,17 +43,6 @@ typedef int (* DELETE_OBJECT) (BasicHandler* inst);
 
 AXIS_CPP_NAMESPACE_END
 
-#if defined(USE_LTDL)
-#include <ltdl.h>
-#define DLHandler lt_dlhandle
-#elif defined(WIN32)
-#include <windows.h>
-#define DLHandler HINSTANCE
-#define RTLD_LAZY 0
-#else //Linux
-#include <dlfcn.h>
-#define DLHandler void*
-#endif
 
 //status codes
 /*#define HANDLER_INIT_FAIL	1

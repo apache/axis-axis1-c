@@ -21,6 +21,8 @@
  *
  */
 
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include "SOAPTransportFactory.h"
 #include "../transport/SOAPTransport.h"
 #include <stdio.h>
@@ -56,74 +58,45 @@ int SOAPTransportFactory::initialize()
 
 	if (!loadLib())
 	{
-#if defined(USE_LTDL)
-        m_Create = (CREATE_OBJECT1) lt_dlsym(m_LibHandler, CREATE_FUNCTION1);
-        m_Delete = (DELETE_OBJECT1) lt_dlsym(m_LibHandler, DELETE_FUNCTION1);
-#elif defined(WIN32)
-        m_Create = (CREATE_OBJECT1) GetProcAddress(m_LibHandler, CREATE_FUNCTION1);
-        m_Delete = (DELETE_OBJECT1) GetProcAddress(m_LibHandler, DELETE_FUNCTION1);
-#else
-        m_Create = (CREATE_OBJECT1) dlsym(m_LibHandler, CREATE_FUNCTION1);
-        m_Delete = (DELETE_OBJECT1) dlsym(m_LibHandler, DELETE_FUNCTION1);
-#endif
+        m_Create = (CREATE_OBJECT1) PLATFORM_GETPROCADDR(m_LibHandler, CREATE_FUNCTION1);
+        m_Delete = (DELETE_OBJECT1) PLATFORM_GETPROCADDR(m_LibHandler, DELETE_FUNCTION1);
+
         if (!m_Create || !m_Delete)
         {
             unloadLib();
-                        AXISTRACE1("SERVER_ENGINE_LOADING_TRANSPORT_FAILED", CRITICAL);
-                        throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED,  strdup(m_pcLibraryPath));
-			//throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED, strdup(m_pcLibraryPath));
+            AXISTRACE1("SERVER_ENGINE_LOADING_TRANSPORT_FAILED", CRITICAL);
+            throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED,  strdup(m_pcLibraryPath));
         }
         else
         {
             // Load function to do lib level inits
             void (*initializeLibrary) (void);
-#if defined(USE_LTDL)
-            initializeLibrary = (void (*)(void))lt_dlsym(m_LibHandler, INIT_FUNCTION);
-#elif defined(WIN32)
-            initializeLibrary = (void (*)(void))GetProcAddress(m_LibHandler, INIT_FUNCTION);
-#else
-            initializeLibrary = (void (*)(void))dlsym(m_LibHandler, INIT_FUNCTION);
-#endif
+            initializeLibrary = (void (*)(void))PLATFORM_GETPROCADDR(m_LibHandler, INIT_FUNCTION);
+
             if (initializeLibrary)
                  (*initializeLibrary)();
 
 /*
             // Load functions that does start and stop of event loop
-#if defined(USE_LTDL)
-            m_startEventLoop = (void (*)(void))lt_dlsym(m_LibHandler, START_EVENT_LOOP_FUNCTION);
-            m_stopEventLoop = (void (*)(void))lt_dlsym(m_LibHandler, STOP_EVENT_LOOP_FUNCTION);
-#elif defined(WIN32)
-            m_startEventLoop = (void (*)(void))GetProcAddress(m_LibHandler, START_EVENT_LOOP_FUNCTION);
-            m_stopEventLoop = (void (*)(void))GetProcAddress(m_LibHandler, STOP_EVENT_LOOP_FUNCTION);
-#else
-            m_startEventLoop = (void (*)(void))dlsym(m_LibHandler, START_EVENT_LOOP_FUNCTION);
-            m_stopEventLoop = (void (*)(void))dlsym(m_LibHandler, STOP_EVENT_LOOP_FUNCTION);
-#endif
-*/             
-            return AXIS_SUCCESS;
+            m_startEventLoop = (void (*)(void))PLATFORM_GETPROCADDR(m_LibHandler, START_EVENT_LOOP_FUNCTION);
+            m_stopEventLoop = (void (*)(void))PLATFORM_GETPROCADDR(m_LibHandler, STOP_EVENT_LOOP_FUNCTION);
+*/
         }		
 	}
 	else
 	{
-                AXISTRACE1("SERVER_ENGINE_LOADING_TRANSPORT_FAILED", CRITICAL);
-                throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED,  strdup(m_pcLibraryPath));
-		//throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED, strdup(m_pcLibraryPath));
+        AXISTRACE1("SERVER_ENGINE_LOADING_TRANSPORT_FAILED", CRITICAL);
+        throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED,  strdup(m_pcLibraryPath));
 	}
-	return AXIS_FAIL;
+	return AXIS_SUCCESS;
 }
 
 int SOAPTransportFactory::uninitialize()
 {
-            void (*uninitializeLibrary) (void);
-#if defined(USE_LTDL)
-            uninitializeLibrary = (void (*)(void))lt_dlsym(m_LibHandler, UNINIT_FUNCTION);
-#elif defined(WIN32)
-            uninitializeLibrary = (void (*)(void))GetProcAddress(m_LibHandler, UNINIT_FUNCTION);
-#else
-            uninitializeLibrary = (void (*)(void))dlsym(m_LibHandler, UNINIT_FUNCTION);
-#endif
-            if (uninitializeLibrary)
-                 (*uninitializeLibrary)();
+   void (*uninitializeLibrary) (void);
+   uninitializeLibrary = (void (*)(void))PLATFORM_GETPROCADDR(m_LibHandler, UNINIT_FUNCTION);
+   if (uninitializeLibrary)
+        (*uninitializeLibrary)();
 	return unloadLib();
 }
 
@@ -144,37 +117,20 @@ void SOAPTransportFactory::destroyTransportObject(SOAPTransport* pObject)
 
 int SOAPTransportFactory::loadLib()
 {
-#if defined(USE_LTDL)
-    m_LibHandler = lt_dlopen(m_pcLibraryPath);
+    m_LibHandler = PLATFORM_LOADLIB(m_pcLibraryPath);
+
     if (!m_LibHandler)
     {
         AXISTRACE1("SERVER_ENGINE_LOADING_TRANSPORT_FAILED", CRITICAL);
-        //printf("DLOPEN FAILED in loading transport library: %s\n", lt_dlerror ());
         throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED);
     }
-#elif defined(WIN32)
-    m_LibHandler = LoadLibrary(m_pcLibraryPath);
-#else 
-    m_LibHandler = dlopen(m_pcLibraryPath, RTLD_LAZY);
-#endif
-    if (!m_LibHandler)
-    {
-        AXISTRACE1("SERVER_ENGINE_LOADING_TRANSPORT_FAILED", CRITICAL);
-        //printf("DLOPEN FAILED in loading transport library: %s\n", dlerror());
-        throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED);
-    }
-    return (m_LibHandler != 0) ? AXIS_SUCCESS : AXIS_FAIL;
+    return AXIS_SUCCESS;
 }
 
 int SOAPTransportFactory::unloadLib()
 {
-#if defined(USE_LTDL)
-    lt_dlclose(m_LibHandler);
-#elif defined(WIN32)
-    FreeLibrary(m_LibHandler);
-#else 
-    dlclose(m_LibHandler);
-#endif
+    PLATFORM_UNLOADLIB(m_LibHandler);
+
     return AXIS_SUCCESS;
 }
 

@@ -23,6 +23,8 @@
 #pragma warning (disable : 4390)        // empty controlled statement found;
 #endif
 
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include "HandlerLoader.h"
 #include <stdio.h>
 #include "../common/AxisUtils.h"
@@ -36,9 +38,7 @@ AXIS_CPP_NAMESPACE_START
 
 HandlerLoader::HandlerLoader ()
 {
-#if defined(USE_LTDL)
-    lt_dlinit ();
-#endif
+    PLATFORM_LOADLIBINIT();
 }
 
 HandlerLoader::~HandlerLoader ()
@@ -49,17 +49,15 @@ HandlerLoader::~HandlerLoader ()
          m_HandlerInfoList.begin (); it != m_HandlerInfoList.end (); it++)
     {
         pHandlerInfo = (*it).second;
-        if (pHandlerInfo->m_nObjCount != 0);  /* It seems that some objects 
-                                               * created have not been deleted 
-					       * - unexpected
-					       */ 
+        if (pHandlerInfo->m_nObjCount != 0);  /* It seems that some objects
+                                               * created have not been deleted
+					                           * - unexpected
+					                           */
             unloadLib (pHandlerInfo);
         delete pHandlerInfo;
     }
     unlock ();
-#if defined(US_LTDL)
-    lt_dlexit ();
-#endif
+    PLATFORM_LOADLIBEXIT()
 }
 
 int HandlerLoader::deleteHandler (BasicHandler* pHandler, int nLibId)
@@ -72,52 +70,32 @@ int HandlerLoader::deleteHandler (BasicHandler* pHandler, int nLibId)
         pHandlerInfo->m_Delete (pHandler);
         if (pHandlerInfo->m_nObjCount == 0);  //time to unload the DLL
             unlock ();
-        return AXIS_SUCCESS;
     }
     else
     {
         unlock ();
         throw AxisEngineException(SERVER_ENGINE_HANDLER_NOT_LOADED);
     }
+    return AXIS_SUCCESS;
 }
 
 int HandlerLoader::loadLib (HandlerInformation* pHandlerInfo)
 {
-//#ifdef WIN32
-#if defined(USE_LTDL)
-    pHandlerInfo->m_Handler = lt_dlopen (pHandlerInfo->m_sLib.c_str ());
+    pHandlerInfo->m_Handler = PLATFORM_LOADLIB(pHandlerInfo->m_sLib.c_str());
+
     if (!pHandlerInfo->m_Handler)
     {
         AXISTRACE1("SERVER_ENGINE_LIBRARY_LOADING_FAILED", CRITICAL);
         throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED);
     }
-#elif defined(WIN32)
-    pHandlerInfo->m_Handler = LoadLibrary (pHandlerInfo->m_sLib.c_str ());
-#else //Linux
-    pHandlerInfo->m_nLoadOptions = RTLD_LAZY;
-    pHandlerInfo->m_Handler =
-        dlopen (pHandlerInfo->m_sLib.c_str (), pHandlerInfo->m_nLoadOptions);
-    if (!pHandlerInfo->m_Handler)
-    {
-        AXISTRACE1("DLOPEN FAILED", CRITICAL);
-        throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED);
-        //printf ("DLOPEN FAILED: %s\n", dlerror ());
-        //exit (1);
-    }
-#endif
-    return (pHandlerInfo->m_Handler != 0) ? AXIS_SUCCESS : AXIS_FAIL;
+
+    return AXIS_SUCCESS;
 }
 
 int HandlerLoader::unloadLib (HandlerInformation* pHandlerInfo)
 {
-//#ifdef WIN32
-#if defined(USE_LTDL)
-    lt_dlclose (pHandlerInfo->m_Handler);
-#elif defined(WIN32)
-    FreeLibrary (pHandlerInfo->m_Handler);
-#else //Linux
-    dlclose (pHandlerInfo->m_Handler);
-#endif
+    PLATFORM_UNLOADLIB(pHandlerInfo->m_Handler);
+
     return AXIS_SUCCESS;
 }
 
@@ -136,34 +114,17 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
             unlock ();
             AXISTRACE1("SERVER_CONFIG_LIBRARY_PATH_EMPTY", CRITICAL);
             throw AxisConfigException(SERVER_CONFIG_LIBRARY_PATH_EMPTY);
-            //return SERVER_CONFIG_LIBRARYPATHEMPTY;
         }
-        // pHandlerInfo->m_nLoadOptions = RTLD_LAZY;
+
         if (AXIS_SUCCESS == loadLib (pHandlerInfo))
         {
-            //#ifdef WIN32
-#if defined(USE_LTDL)
             pHandlerInfo->m_Create =
-                (CREATE_OBJECT) lt_dlsym (pHandlerInfo->m_Handler,
+                (CREATE_OBJECT) PLATFORM_GETPROCADDR(pHandlerInfo->m_Handler,
                 CREATE_FUNCTION);
             pHandlerInfo->m_Delete =
-                (DELETE_OBJECT) lt_dlsym (pHandlerInfo->m_Handler,
+                (DELETE_OBJECT) PLATFORM_GETPROCADDR(pHandlerInfo->m_Handler,
                 DELETE_FUNCTION);
-#elif defined(WIN32)
-            pHandlerInfo->m_Create =
-                (CREATE_OBJECT) GetProcAddress (pHandlerInfo->m_Handler,
-                CREATE_FUNCTION);
-            pHandlerInfo->m_Delete =
-                (DELETE_OBJECT) GetProcAddress (pHandlerInfo->m_Handler,
-                DELETE_FUNCTION);
-#else //Linux
-            pHandlerInfo->m_Create =
-                (CREATE_OBJECT) dlsym (pHandlerInfo->m_Handler,
-                CREATE_FUNCTION);
-            pHandlerInfo->m_Delete =
-                (DELETE_OBJECT) dlsym (pHandlerInfo->m_Handler, 
-                DELETE_FUNCTION);
-#endif
+
             if (!pHandlerInfo->m_Create || !pHandlerInfo->m_Delete)
             {
                 unloadLib (pHandlerInfo);
@@ -171,7 +132,6 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
                 unlock ();
                 AXISTRACE1 ("Library loading failed", CRITICAL);
                 throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED);
-                //return SERVER_ENGINE_LIBRARYLOADINGFAILED;
             }
             else // success
             {
@@ -183,7 +143,6 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
             unlock ();
             AXISTRACE1 ("Library loading failed", CRITICAL);
             throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED);
-            //return SERVER_ENGINE_LIBRARYLOADINGFAILED;
         }
     }
 
@@ -199,8 +158,6 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
             {
                 pHandlerInfo->m_nObjCount++;
                 *pHandler = pBH;
-                unlock ();
-                return AXIS_SUCCESS;
             }
             else
             {
@@ -209,14 +166,12 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
                 unlock ();
                 AXISTRACE1("SERVER_ENGINE_HANDLER_INIT_FAILED", CRITICAL);
                 throw AxisEngineException(SERVER_ENGINE_HANDLER_INIT_FAILED);
-                //return SERVER_ENGINE_HANDLERINITFAILED;
             }
         }
         else if (0 == pBH->_object)
         {
             AXISTRACE1("SERVER_ENGINE_HANDLER_CREATION_FAILED", CRITICAL);
             throw AxisEngineException(SERVER_ENGINE_HANDLER_CREATION_FAILED);
-            //return SERVER_ENGINE_HANDLERCREATIONFAILED;
         }
         else
         /* C++ service or handler */
@@ -225,8 +180,6 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
             {
                 pHandlerInfo->m_nObjCount++;
                 *pHandler = pBH;
-                unlock ();
-                return AXIS_SUCCESS;
             }
             else
             {
@@ -235,7 +188,6 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
                 unlock ();
                 AXISTRACE1("SERVER_ENGINE_HANDLER_INIT_FAILED", CRITICAL);
                 throw AxisEngineException(SERVER_ENGINE_HANDLER_INIT_FAILED);
-                //return SERVER_ENGINE_HANDLERINITFAILED;
             }
         }
     }
@@ -244,8 +196,10 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
         unlock ();
         AXISTRACE1("SERVER_ENGINE_HANDLER_CREATION_FAILED", CRITICAL);
         throw AxisEngineException(SERVER_ENGINE_HANDLER_CREATION_FAILED);
-        //return SERVER_ENGINE_HANDLERCREATIONFAILED;
     }
+
+    unlock ();
+    return AXIS_SUCCESS;
 }
 
 AXIS_CPP_NAMESPACE_END

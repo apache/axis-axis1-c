@@ -24,6 +24,7 @@
 							<define name="APACHE2_0_EXPORTS"/>
 						</defineset>
 					</compiler>
+			            <compiler refid="OS400icc"/>
 					<includepath path="${apache20.dir.server}/include" unless="windows"/>
 					<!-- Additional compiler flag for Client library on all platforms -->
 					<defineset>
@@ -33,8 +34,16 @@
 					<linker refid="SolarisLinker"/>
 					<linker refid="LinuxLinker"/>
 					<linker refid="VisualC++Linker"/>
+			            <linker extends="OS400Linker">
+                                 <linkerarg value="-qDUPPROC"/>
+                                 <linkerarg value="-qDUPVAR"/>
+                                 <linkerarg location="end" value="${dir.bin}/lib${serverEngineLibraryName}.so"/>
+                                 <linkerarg location="end" value="${apache20.dir.server}/lib/libapr.so"/>
+                                 <linkerarg location="end" value="${apache20.dir.server}/lib/libhttpd.so"/>
+                              </linker>
+
 					<libset dir="${apache20.dir.server}/lib" libs="libapr, libhttpd" if="windows"/>
-					<libset dir="${dir.bin}" libs="${serverEngineLibraryName}"/>
+					<libset dir="${dir.bin}" libs="${serverEngineLibraryName}" unless="os400"/>
 					<!-- Files to be compiled -->
 					<fileset dir="${dir.src}">
 						<include name="server/apache2/*.cpp"/>

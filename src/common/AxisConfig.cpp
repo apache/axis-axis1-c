@@ -21,6 +21,8 @@
  *
  */
 
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include "AxisConfig.h"
 #include <axis/server/GDefine.hpp>
 #include "../common/AxisFile.h"
@@ -48,40 +50,12 @@ AxisConfig::AxisConfig ()
     m_pcKeyArray[AXCONF_NODENAME] = "NodeName";
     m_pcKeyArray[AXCONF_LISTENPORT] = "ListenPort";
 
-#ifdef _DEBUG
-#ifdef WIN32
-    m_pcValueArray[AXCONF_XMLPARSER] = "AxisXMLParser_D.dll";
-    m_pcValueArray[AXCONF_TRANSPORTHTTP] = "AxisTransport_D.dll";
-    m_pcValueArray[AXCONF_NODENAME] = "server name";
-    m_pcValueArray[AXCONF_LISTENPORT] = "listen port";
-#else
-    m_pcValueArray[AXCONF_XMLPARSER] = 
-		"/usr/local/axiscpp_deploy/lib/libaxis_xmlparser.so";
-    m_pcValueArray[AXCONF_TRANSPORTHTTP] =
-		"/usr/local/axiscpp_deploy/lib/libaxis_transport.so";
-    m_pcValueArray[AXCONF_NODENAME] = "server name";
-    m_pcValueArray[AXCONF_LISTENPORT] = "listen port";
-#endif
-#else
-#ifdef WIN32
-    m_pcValueArray[AXCONF_XMLPARSER] = "AxisXMLParser.dll";
-    m_pcValueArray[AXCONF_TRANSPORTHTTP] = "AxisTransport.dll";
-    m_pcValueArray[AXCONF_NODENAME] = "server name";
-    m_pcValueArray[AXCONF_LISTENPORT] = "listen port";
-#else
-    m_pcValueArray[AXCONF_XMLPARSER] =
-		"/usr/local/axiscpp_deploy/lib/libaxis_xmlparser.so";
-    m_pcValueArray[AXCONF_TRANSPORTHTTP] =
-		"/usr/local/axiscpp_deploy/lib/libaxis_transport.so";
-    m_pcValueArray[AXCONF_LOGPATH] =
-		"/usr/local/axiscpp_deploy/log/AxisLog";
-    m_pcValueArray[AXCONF_CLIENTLOGPATH] =
-		"/usr/local/axiscpp_deploy/log/AxisClientLog";
-    m_pcValueArray[AXCONF_NODENAME] = "server name";
-    m_pcValueArray[AXCONF_LISTENPORT] = "listen port";
-#endif
-#endif
-
+    m_pcValueArray[AXCONF_NODENAME]      = "server name";
+    m_pcValueArray[AXCONF_LISTENPORT]    = "listen port";
+    m_pcValueArray[AXCONF_XMLPARSER]     = PLATFORM_XMLPARSER_PATH;
+    m_pcValueArray[AXCONF_TRANSPORTHTTP] = PLATFORM_TRANSPORTHTTP_PATH;
+    m_pcValueArray[AXCONF_LOGPATH]       = PLATFORM_LOG_PATH;
+    m_pcValueArray[AXCONF_CLIENTLOGPATH] = PLATFORM_CLIENTLOG_PATH;
 }
 
 int AxisConfig::readConfFile ()
@@ -110,11 +84,7 @@ int AxisConfig::readConfFile ()
     }
 
     strcpy (sNewConfPath, sConfPath);
-#ifdef WIN32
-    strcat (sNewConfPath, "/axiscpp.conf");
-#else
-    strcat (sNewConfPath, "/etc/axiscpp.conf");
-#endif
+    strcat (sNewConfPath, PLATFORM_CONFIG_PATH);
     /*
        Even if axiscpp.conf does not exist in AXISCPP_DEPLOY default values 
        will be used. Therefore return AXIS_SUCCESS

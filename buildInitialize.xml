@@ -102,6 +102,24 @@
 			<includepath path="${dir.include}"/>
 		</compiler>
 
+		<!--
+		  Definition of icc compile for OS400
+	      -->
+		<compiler id="OS400icc" name="icc" if="os400">
+			<compilerarg value="-qLOCALETYPE=*LOCALEUCS2"/>
+			<compilerarg value="-qENUM=*INT"/>
+			<compilerarg value="-g" if="debug"/>
+			<defineset>
+				<define name="ENABLE_AXIS_EXCEPTION"/>
+				<define name="HAVE_CONFIG_H"/>
+				<define name="OS400"/>
+				<define name="AS400"/>
+				<define name="_XOPEN_SOURCE" value="520"/>
+				<define name="_MULTI_THREADED"/>
+			</defineset>
+			<includepath path="${dir.include}"/>
+		</compiler>
+
 	<!--
 	  Linker Definitions
 	  -->
@@ -147,6 +165,10 @@
 			<linkerarg value="-lc"/>
 		</linker>
 
+		<!-- Definition of OS/400 linker -->
+		<linker id="OS400Linker" name="ld" libtool="false" if="os400">
+		</linker>
+
 	<!--
 	  Determine platform
 	  -->
@@ -162,6 +184,9 @@
         </condition>
         <condition property="linux">
             <os name="Linux"/>
+        </condition>
+        <condition property="os400">
+            <os name="OS/400"/>
         </condition>
 	</target>
 	
@@ -180,6 +205,9 @@
 		</condition>
 		<condition property="platform" value="AIX">
 			<isset property="aix"/>
+		</condition>
+		<condition property="platform" value="OS400">
+			<isset property="os400"/>
 		</condition>
 		
 		<!-- Load properties from file -->

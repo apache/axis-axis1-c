@@ -22,6 +22,7 @@
 							<define name="AXISXMLPARSERXERCES_EXPORTS"/>
 						</defineset>
 					</compiler>
+                              <compiler refid="OS400icc"/>
 					<!-- Additional include directory for XML Parser -->
 					<includepath path="${dir.xmlParser}/include"/>
 					<includepath path="${dir.xmlParser}/lib"/>
@@ -30,8 +31,14 @@
 					<linker refid="VisualC++Linker"/>
 					<linker refid="LinuxLinker"/>
 					<linker refid="AIXLinker"/>
+			            <linker extends="OS400Linker">
+                                 <linkerarg value="-qDUPPROC"/>
+                                 <linkerarg value="-qDUPVAR"/>
+                                 <linkerarg location="end" value="${dir.xmlParser}/lib/${xmlParserLibrary}.so"/>
+                              </linker>
+
 					<!-- Additional library of XMLParser -->
-					<libset dir="${dir.xmlParser}/lib" libs="${xmlParserLibrary}"/>
+					<libset dir="${dir.xmlParser}/lib" libs="${xmlParserLibrary}" unless="os400"/>
 					<!-- Files to be compiled -->
 					<fileset dir="${dir.src}">
 						<include name="xml/${xmlParser}/*.cpp"/>

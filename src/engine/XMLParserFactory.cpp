@@ -21,6 +21,8 @@
  *
  */
 
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include "XMLParserFactory.h"
 #include "../xml/XMLParser.h"
 #include <stdio.h>
@@ -54,35 +56,21 @@ int XMLParserFactory::initialize()
 
 	if (!loadLib())
 	{
-#if defined(USE_LTDL)
-        m_Create = (CREATE_OBJECT2) lt_dlsym(m_LibHandler, CREATE_FUNCTION2);
-        m_Delete = (DELETE_OBJECT2) lt_dlsym(m_LibHandler, DELETE_FUNCTION2);
-#elif defined(WIN32)
-        m_Create = (CREATE_OBJECT2) GetProcAddress(m_LibHandler, CREATE_FUNCTION2);
-        m_Delete = (DELETE_OBJECT2) GetProcAddress(m_LibHandler, DELETE_FUNCTION2);
-#else
-        m_Create = (CREATE_OBJECT2) dlsym(m_LibHandler, CREATE_FUNCTION2);
-        m_Delete = (DELETE_OBJECT2) dlsym(m_LibHandler, DELETE_FUNCTION2);
-#endif
+        m_Create = (CREATE_OBJECT2) PLATFORM_GETPROCADDR(m_LibHandler, CREATE_FUNCTION2);
+        m_Delete = (DELETE_OBJECT2) PLATFORM_GETPROCADDR(m_LibHandler, DELETE_FUNCTION2);
         if (!m_Create || !m_Delete)
         {
             unloadLib();
-                        AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
-                        throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, strdup(m_pcLibraryPath));
-			//throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED, strdup(m_pcLibraryPath));
+            AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
+            throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, strdup(m_pcLibraryPath));
         }
-        else
-        {
-            return AXIS_SUCCESS;
-        }		
 	}
 	else
 	{
-                AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
-                throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, strdup(m_pcLibraryPath));
-		//throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED, strdup(m_pcLibraryPath));
+        AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
+        throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, strdup(m_pcLibraryPath));
 	}
-	return AXIS_FAIL;
+   return AXIS_SUCCESS;
 }
 
 int XMLParserFactory::uninitialize()
@@ -107,37 +95,21 @@ void XMLParserFactory::destroyParserObject(XMLParser* pObject)
 
 int XMLParserFactory::loadLib()
 {
-#if defined(USE_LTDL)
-    m_LibHandler = lt_dlopen(m_pcLibraryPath);
+    m_LibHandler = PLATFORM_LOADLIB(m_pcLibraryPath);
+
     if (!m_LibHandler)
     {
         AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
         throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED);
-        //printf("DLOPEN FAILED in loading parser library: %s\n", lt_dlerror ());
     }
-#elif defined(WIN32)
-    m_LibHandler = LoadLibrary(m_pcLibraryPath);
-#else 
-    m_LibHandler = dlopen(m_pcLibraryPath, RTLD_LAZY);
-    if (!m_LibHandler)
-    {
-        AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
-        throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED);
-        //printf("DLOPEN FAILED in loading parser library: %s\n", dlerror());
-    }
-#endif
-    return (m_LibHandler != 0) ? AXIS_SUCCESS : AXIS_FAIL;
+
+    return AXIS_SUCCESS;
 }
 
 int XMLParserFactory::unloadLib()
 {
-#if defined(USE_LTDL)
-    lt_dlclose(m_LibHandler);
-#elif defined(WIN32)
-    FreeLibrary(m_LibHandler);
-#else 
-    dlclose(m_LibHandler);
-#endif
+    PLATFORM_UNLOADLIB(m_LibHandler);
+
     return AXIS_SUCCESS;
 }
 

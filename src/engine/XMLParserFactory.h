@@ -25,23 +25,13 @@
 #if !defined(AXIS_XMLPARSERFACTORY_H__OF_AXIS_INCLUDED_)
 #define AXIS_XMLPARSERFACTORY_H__OF_AXIS_INCLUDED_
 
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include <axis/server/GDefine.hpp>
 #include "../xml/XMLParser.h"
 
 #define CREATE_FUNCTION2 "CreateInstance"
 #define DELETE_FUNCTION2 "DestroyInstance"
-
-#if defined(USE_LTDL)
-#include <ltdl.h>
-#define DLHandler lt_dlhandle
-#elif defined(WIN32)
-#include <windows.h>
-#define DLHandler HINSTANCE
-#define RTLD_LAZY 0
-#else /* Linux */
-#include <dlfcn.h>
-#define DLHandler void*
-#endif
 
 typedef int (* CREATE_OBJECT2) (XMLParser** inst);
 typedef int (* DELETE_OBJECT2) (XMLParser* inst);
