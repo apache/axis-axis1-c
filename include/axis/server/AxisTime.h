@@ -53,11 +53,8 @@
  * <http://www.apache.org/>.
  *
  *
- *
- *
- * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
- *
  */
+ 
 #ifndef __AXISTIME_H_INCLUDED_
 #define __AXISTIME_H_INCLUDED_
 
@@ -70,14 +67,22 @@ using namespace std;
 
 typedef struct
 {
-    long years;
-    int months;
-    int days;
-    int hours;
-    int mins;
+    time_t years;
+    time_t months;
+    time_t days;
+    time_t hours;
+    time_t mins;
     double secs;
 } uDuration;
 
+
+/**
+    @class AxisTime
+    @brief time manipulating helper class
+
+    
+    @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)    
+*/
 class AxisTime
 {
     public:
@@ -95,7 +100,7 @@ class AxisTime
         struct tm getDateTime();
         struct tm getDate();
         struct tm getTime();
-        void mkCTime();
+        int mkCTime();
 		static struct tm Deserialize(const AxisChar* strValue, XSDTYPE type);
 		static long DeserializeDuration(const AxisChar* strValue, XSDTYPE type);
 
@@ -112,16 +117,16 @@ class AxisTime
         AxisString strHours;
         AxisString strMins;
         AxisString strSecs;
-        int m_intYears;
-        int m_intMonths;
-        int m_intDays;
-        int m_intHours;
-        int m_intMins;
-        int m_intSecs;
+        time_t m_intYears;
+        time_t m_intMonths;
+        time_t m_intDays;
+        time_t m_intHours;
+        time_t m_intMins;
+        time_t m_intSecs;
         AxisString strZone;
         uDuration duration;
-        long m_longYears;
-        long m_Duration;
+        time_t m_longYears;
+        time_t m_Duration;
         //string strXSDDuration;
         AxisString strXSDDuration;
         AxisString strXSDDate;
