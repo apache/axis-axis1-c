@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+ <globalConfiguration>
+  <parameter name="adminPassword" value="admin"/>
+  <parameter name="attachments.Directory" value="E:\installations\tomcat4.1.24\bin\..\webapps\axis\WEB-INF\attachments"/>
+  <parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
+  <parameter name="sendXsiTypes" value="true"/>
+  <parameter name="sendMultiRefs" value="true"/>
+  <parameter name="sendXMLDeclaration" value="true"/>
+  <parameter name="axis.sendMinimizedElements" value="true"/>
+ </globalConfiguration>
+ <service name="MyService" provider="java:RPC">
+  <parameter name="allowedMethods" value="*"/>
+  <parameter name="className" value="samples.userguide.example3.MyService"/>
+ </service>
+ <service name="AdminService" provider="java:MSG">
+  <parameter name="allowedMethods" value="AdminService"/>
+  <parameter name="enableRemoteAdmin" value="false"/>
+  <parameter name="className" value="org.apache.axis.utils.Admin"/>
+  <namespace>http://xml.apache.org/axis/wsdd/</namespace>
+ </service>
+ <service name="Calculator" provider="java:RPC">
+  <parameter name="className" value="samples.userguide.example2.Calculator"/>
+  <parameter name="allowedMethods" value="*"/>
+ </service>
+ <service name="Maths" provider="java:RPC">
+  <requestFlow name="count">
+  <handler name="LogAccessCount" type="/usr/local/axiscpp/axis/handlers/custom/libcount.so">
+  <parameter name="logAccessCountFile" value="/usr/local/axiscpp/axis/handlers/custom/LogAccessCountFile"/>
+  <parameter name="className" value="/usr/local/axiscpp/axis/webservices/libwebservice.so"/>
+  </handler>
+  </requestFlow>
+  <parameter name="className" value="/usr/local/axiscpp/axis/webservices/libwebservice.so"/>
+  <parameter name="allowedMethods" value="add Echo"/>
+ </service>
+ <service name="urn:cominfo" provider="java:RPC">
+  <parameter name="allowedRoles" value="user3"/>
+  <parameter name="allowedMethods" value="getInfo"/>
+  <parameter name="className" value="samples.stock.ComInfoService"/>
+ </service>
+ <service name="Version" provider="java:RPC">
+  <parameter name="allowedMethods" value="getVersion"/>
+  <parameter name="className" value="org.apache.axis.Version"/>
+ </service>
+</deployment>
