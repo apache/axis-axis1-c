@@ -75,12 +75,12 @@
 
 #include <string>
 #include "../soap/TypeMapping.h"
+#include "ISoapSerializer.h"
 
 using namespace std;
 
 class AccessBean;
 class ArrayBean;
-class SoapSerializer;
 
 class Param  
 {
@@ -109,7 +109,7 @@ public:
 	string m_sName; //Name of the parameter
 	XSDTYPE m_Type; //Type of the parameter
 
-	static string m_sSZ; //Used for serialization
+//	static string m_sSZ; //Used for serialization
 	static char m_Buf[64]; //Used for conversions using sprintf
 
 private:
@@ -119,8 +119,7 @@ private:
 public: //Conversion functions
 	int SetValue(string& sValue);
 	XSDTYPE GetType() const;	
-	int serialize(string& sSerialized, SoapSerializer& pSZ);
-	int serialize(string& sSerialized);
+	int serialize(ISoapSerializer& pSZ);
 
 	//Following functions are used by wrapper class methods making sure of the valid type.
 	int GetInt();
