@@ -1,296 +1,320 @@
-    
-<html>
-<head>
-  <meta http-equiv="Content-Language" content="en-us">
-  <title>Axis-admin
- Task</title>
-</head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
-<body bgcolor="#ffffff" text="#000000" link="#525D76"
-      alink="#525D76" vlink="#525D76">
+<HTML>
+<HEAD>
+  <META name="generator" content=
+  "HTML Tidy for Windows (vers 1st October 2003), see www.w3.org">
+  <META http-equiv="Content-Language" content="en-us">
 
-<table border="0" width="100%" cellspacing="4">
+  <TITLE>Axis-admin Task</TITLE>
+</HEAD>
 
-  <!-- PAGE HEADER -->
-  <tr>
-    <td>
-      <table border="0" width="100%"><tr>
-          <td valign="bottom">
-            <font size="+3" face="arial,helvetica,sanserif"><strong>Axis-admin
- Task</strong></font>
-            <br><font face="arial,helvetica,sanserif">Task to administer a local or remote Axis server.</font>
-          </td>
-          <td>
-            <!-- PROJECT LOGO -->
-            <a href="http://jakarta.apache.org/ant/">
-              <img src="../images/ant_logo_large.gif" align="right" alt="Apache Ant" border="0"/>
-            </a>
-          </td>
-      </tr></table>
-    </td>
-  </tr>
+<BODY bgcolor="#FFFFFF" text="#000000" link="#525D76" alink=
+"#525D76" vlink="#525D76">
+  <TABLE border="0" width="100%" cellspacing="4">
+    <!-- PAGE HEADER -->
 
-  <!-- START RIGHT SIDE MAIN BODY -->
-  <tr>
-    <td  valign="top" align="left">
+    <TR>
+      <TD>
+        <TABLE border="0" width="100%">
+          <TR>
+            <TD valign="bottom"><FONT size="+3" face=
+            "arial,helvetica,sanserif"><STRONG>Axis-admin
+            Task</STRONG></FONT><BR>
+            <FONT face="arial,helvetica,sanserif">Task to
+            administer a local or remote Axis server.</FONT></TD>
 
-          <!-- Applying task/long-description -->
-    <!-- Start Description -->
-    <table border="0" cellspacing="0" cellpadding="2" width="100%">
-      <tr><td>&nbsp;</td></tr>
+            <TD><!-- PROJECT LOGO -->
+             <A href="http://jakarta.apache.org/ant/"><IMG src=
+            "../images/ant_logo_large.gif" align="right" alt=
+            "Apache Ant" border="0"></A></TD>
+          </TR>
+        </TABLE>
+      </TD>
+    </TR><!-- START RIGHT SIDE MAIN BODY -->
 
-      <tr><td bgcolor="#525D76">
-        <font color="#ffffff" face="arial,helvetica.sanserif">
-          <a name="description">
-          <strong>Description</strong></a></font>
-      </td></tr>
+    <TR>
+      <TD valign="top" align="left">
+        <!-- Applying task/long-description -->
+        <!-- Start Description -->
 
-      <tr><td><blockquote>
-        Task to administer a local or remote Axis server. Remember, for remote admin,
- the server has to be accept remote management calls.
-      </blockquote></td></tr>
+        <TABLE border="0" cellspacing="0" cellpadding="2" width=
+        "100%">
+          <TR>
+            <TD>&nbsp;</TD>
+          </TR>
 
-    </table>
-    <!-- End Description -->
+          <TR>
+            <TD bgcolor="#525D76"><FONT color="#FFFFFF" face=
+            "arial,helvetica.sanserif"><A name=
+            "description"><STRONG>Description</STRONG></A></FONT></TD>
+          </TR>
 
-    <!-- Start Attributes -->
-    <table border="0" cellspacing="0" cellpadding="2" width="100%">
-      <tr><td>&nbsp;</td></tr>
+          <TR>
+            <TD>
+              <BLOCKQUOTE>
+                Task to administer a local or remote Axis server.
+                Remember, for remote admin, the server has to be
+                accept remote management calls.
+              </BLOCKQUOTE>
+            </TD>
+          </TR>
+        </TABLE><!-- End Description -->
+        <!-- Start Attributes -->
 
-      <tr><td bgcolor="#525D76">
-        <font color="#ffffff" face="arial,helvetica.sanserif">
-          <a name="attributes">
-          <strong>Parameters</strong></a></font>
-      </td></tr>
+        <TABLE border="0" cellspacing="0" cellpadding="2" width=
+        "100%">
+          <TR>
+            <TD>&nbsp;</TD>
+          </TR>
 
-      <tr><td><blockquote>
-        <table>
-          <tr>
-        <td bgcolor="#cccccc" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif"><b>Attribute</b></font>
-        </td>
-        <td bgcolor="#cccccc" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif"><b>Description</b></font>
-        </td>
-        <td bgcolor="#cccccc" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif"><b>Type</b></font>
-        </td>
-          </tr>
-    <!-- Attribute -->
-    <tr>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">debug</font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-          set a debug flag
-        </font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">boolean</font>
-        </td>
-    </tr>
-    <!-- Attribute -->
-    <tr>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">failonerror</font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-          Whether or not the build should halt if this task fails.
- Defaults to <code>true</code>.
-        </font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">boolean</font>
-        </td>
-    </tr>
-    <!-- Attribute -->
-    <tr>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">fileprotocol</font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-          specifies that a simple file protocol be used
-        </font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">java.lang.String</font>
-        </td>
-    </tr>
-    <!-- Attribute -->
-    <tr>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">hostname</font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-          name the host to admin
-        </font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">java.lang.String</font>
-        </td>
-    </tr>
-    <!-- Attribute -->
-    <tr>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">newpassword</font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-          set a new password; only valid if action=passwd
-        </font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">java.lang.String</font>
-        </td>
-    </tr>
-    <!-- Attribute -->
-    <tr>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">password</font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-          the admin password
-        </font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">java.lang.String</font>
-        </td>
-    </tr>
-    <!-- Attribute -->
-    <tr>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">port</font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-          the port to connect to
-        </font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">int</font>
-        </td>
-    </tr>
-    <!-- Attribute -->
-    <tr>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">servletpath</font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-          the path to the AxisAdmin servlet
-        </font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">java.lang.String</font>
-        </td>
-    </tr>
-    <!-- Attribute -->
-    <tr>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">transportchain</font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-          set the transport chain to use
-        </font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">java.lang.String</font>
-        </td>
-    </tr>
-    <!-- Attribute -->
-    <tr>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">url</font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-          full url to the admin endpoint
-        </font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">java.lang.String</font>
-        </td>
-    </tr>
-    <!-- Attribute -->
-    <tr>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">username</font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-          username to log in as
-        </font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">java.lang.String</font>
-        </td>
-    </tr>
-    <!-- Attribute -->
-    <tr>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">xmlfile</font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">
-          the name of the XML file containing deployment information
-        </font>
-        </td>
-        <td bgcolor="#eeeeee" valign="top" align="left">
-          <font color="#000000" size="-1" face="arial,helvetica,sanserif">java.io.File</font>
-        </td>
-    </tr>
+          <TR>
+            <TD bgcolor="#525D76"><FONT color="#FFFFFF" face=
+            "arial,helvetica.sanserif"><A name=
+            "attributes"><STRONG>Parameters</STRONG></A></FONT></TD>
+          </TR>
 
-        </table>
-      </blockquote></td></tr>
+          <TR>
+            <TD>
+              <BLOCKQUOTE>
+                <TABLE>
+                  <TR>
+                    <TD bgcolor="#CCCCCC" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif"><B>Attribute</B></FONT></TD>
 
-    </table>
-    <!-- End Attributes -->
+                    <TD bgcolor="#CCCCCC" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif"><B>Description</B></FONT></TD>
 
-    <!-- Start Elements -->
-    <table border="0" cellspacing="0" cellpadding="2" width="100%">
-      <tr><td>&nbsp;</td></tr>
+                    <TD bgcolor="#CCCCCC" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif"><B>Type</B></FONT></TD>
+                  </TR><!-- Attribute -->
 
-      <tr><td bgcolor="#525D76">
-        <font color="#ffffff" face="arial,helvetica.sanserif">
-          <a name="elements">
-          <strong>Parameters as nested elements</strong></a></font>
-      </td></tr>
+                  <TR>
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">debug</FONT></TD>
 
-      <tr><td><blockquote>
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">set a debug
+                    flag</FONT></TD>
 
-      </blockquote></td></tr>
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">boolean</FONT></TD>
+                  </TR><!-- Attribute -->
 
-    </table>
-    <!-- End Elements -->
+                  <TR>
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">failonerror</FONT></TD>
 
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">Whether or not the
+                    build should halt if this task fails. Defaults
+                    to <CODE>true</CODE>.</FONT></TD>
 
-    </td>
-  </tr>
-  <!-- END RIGHT SIDE MAIN BODY -->
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">boolean</FONT></TD>
+                  </TR><!-- Attribute -->
 
-  <!-- FOOTER SEPARATOR -->
-  <tr>
-    <td>
-      <hr noshade="" size="1"/>
-    </td>
-  </tr>
+                  <TR>
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">fileprotocol</FONT></TD>
 
-  <!-- PAGE FOOTER -->
-  <tr>
-    <td>
-      <div align="center"><font color="#525D76" size="-1"><em>
-        Copyright &#169; 2000-2003, Apache Software Foundation
-      </em></font></div>
-    </td>
-  </tr>
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">specifies that a
+                    simple file protocol be used</FONT></TD>
 
-</table>
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">java.lang.String</FONT></TD>
+                  </TR><!-- Attribute -->
 
-</body>
-</html>
+                  <TR>
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">hostname</FONT></TD>
+
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">name the host to
+                    admin</FONT></TD>
+
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">java.lang.String</FONT></TD>
+                  </TR><!-- Attribute -->
+
+                  <TR>
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">newpassword</FONT></TD>
+
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">set a new password;
+                    only valid if action=passwd</FONT></TD>
+
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">java.lang.String</FONT></TD>
+                  </TR><!-- Attribute -->
+
+                  <TR>
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">password</FONT></TD>
+
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">the admin
+                    password</FONT></TD>
+
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">java.lang.String</FONT></TD>
+                  </TR><!-- Attribute -->
+
+                  <TR>
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">port</FONT></TD>
+
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">the port to connect
+                    to</FONT></TD>
+
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">int</FONT></TD>
+                  </TR><!-- Attribute -->
+
+                  <TR>
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">servletpath</FONT></TD>
+
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">the path to the
+                    AxisAdmin servlet</FONT></TD>
+
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">java.lang.String</FONT></TD>
+                  </TR><!-- Attribute -->
+
+                  <TR>
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">transportchain</FONT></TD>
+
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">set the transport
+                    chain to use</FONT></TD>
+
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">java.lang.String</FONT></TD>
+                  </TR><!-- Attribute -->
+
+                  <TR>
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">url</FONT></TD>
+
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">full url to the
+                    admin endpoint</FONT></TD>
+
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">java.lang.String</FONT></TD>
+                  </TR><!-- Attribute -->
+
+                  <TR>
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">username</FONT></TD>
+
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">username to log in
+                    as</FONT></TD>
+
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">java.lang.String</FONT></TD>
+                  </TR><!-- Attribute -->
+
+                  <TR>
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">xmlfile</FONT></TD>
+
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">the name of the XML
+                    file containing deployment
+                    information</FONT></TD>
+
+                    <TD bgcolor="#EEEEEE" valign="top" align=
+                    "left"><FONT color="#000000" size="-1" face=
+                    "arial,helvetica,sanserif">java.io.File</FONT></TD>
+                  </TR>
+                </TABLE>
+              </BLOCKQUOTE>
+            </TD>
+          </TR>
+        </TABLE><!-- End Attributes -->
+        <!-- Start Elements -->
+
+        <TABLE border="0" cellspacing="0" cellpadding="2" width=
+        "100%">
+          <TR>
+            <TD>&nbsp;</TD>
+          </TR>
+
+          <TR>
+            <TD bgcolor="#525D76"><FONT color="#FFFFFF" face=
+            "arial,helvetica.sanserif"><A name=
+            "elements"><STRONG>Parameters as nested
+            elements</STRONG></A></FONT></TD>
+          </TR>
+
+          <TR>
+            <TD></TD>
+          </TR>
+        </TABLE><!-- End Elements -->
+      </TD>
+    </TR><!-- END RIGHT SIDE MAIN BODY -->
+    <!-- FOOTER SEPARATOR -->
+
+    <TR>
+      <TD>
+        <HR noshade size="1">
+      </TD>
+    </TR><!-- PAGE FOOTER -->
+
+    <TR>
+      <TD>
+        <DIV align="center">
+          <FONT color="#525D76" size="-1"><EM>Copyright &copy;
+          2000-2003, Apache Software Foundation</EM></FONT>
+        </DIV>
+      </TD>
+    </TR>
+  </TABLE>
+</BODY>
+</HTML>

@@ -1,68 +1,64 @@
-<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
-<html>
-<head>
-   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-   <meta name="GENERATOR" content="Microsoft FrontPage 4.0">
-   <title>Axis Documentation</title>
-   <link href="axis.css" rel=stylesheet type=text/css>
-</head>
-<body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
-<center>
-<h1>
-<img SRC="images/axis.jpg" height=96 width=176></h1></center>
+<HTML>
+<HEAD>
+  <META name="generator" content=
+  "HTML Tidy for Windows (vers 1st October 2003), see www.w3.org">
+  <META http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii">
+  <META name="GENERATOR" content="Microsoft FrontPage 4.0">
 
-<h1>Documentation</h1>
+  <TITLE>Axis Documentation</TITLE>
+  <LINK href="axis.css" rel="stylesheet" type="text/css">
+</HEAD>
 
-This is the documentation for <a href="http://ws.apache.org/axis/">Apache Axis 1.1</a>
-If the version of Axis you are using is older or newer than this version, then this
-is the wrong documentation to be using. Read the version that came with your copy of Axis.  
+<BODY>
+  <CENTER>
+    <H1><IMG src="images/axis.jpg" height="96" width="176"></H1>
+  </CENTER>
 
-<h2>Documentation for Axis Users</h2>
+  <H1>Documentation</H1>
 
-<ul>
-<li>
-<a href="install.html">Installation Instructions</a></li>
+  <P>This is the documentation for <A href=
+  "http://ws.apache.org/axis/">Apache Axis 1.1</A> If the version
+  of Axis you are using is older or newer than this version, then
+  this is the wrong documentation to be using. Read the version
+  that came with your copy of Axis.</P>
 
-<li>
-<a href="user-guide.html">User's Guide</a></li>
+  <H2>Documentation for Axis Users</H2>
 
-<li>
-<a href="security.html">Securing an Axis-based Web Service</a></li>
+  <UL>
+    <LI><A href="install.html">Installation Instructions</A></LI>
 
-<li>
-<a href="ant/ant.html">Axis Ant Tasks</a></li>
+    <LI><A href="user-guide.html">User's Guide</A></LI>
 
-<li>
-<a href="reference.html">Reference Material</a></li>
+    <LI><A href="security.html">Securing an Axis-based Web
+    Service</A></LI>
 
-<li>
-<a href="reading.html">Further Reading</a></li>
+    <LI><A href="ant/ant.html">Axis Ant Tasks</A></LI>
 
-</ul>
+    <LI><A href="reference.html">Reference Material</A></LI>
 
-<h2>Documentation for Axis Developers</h2>
+    <LI><A href="reading.html">Further Reading</A></LI>
+  </UL>
 
-<ul>
-<li>
-<a href="apiDocs/index.html">API Documentation</a></li>
-<li>
-<a href="building-axis.html">Building Axis</a> - Guidelines for building Axis
-with/without optional components.</li>
+  <H2>Documentation for Axis Developers</H2>
 
+  <UL>
+    <LI><A href="apiDocs/index.html">API Documentation</A></LI>
 
-<li>
-<a href="developers-guide.html">Developer's Guide</a> - Collection of guidelines
-for developing code in Axis.</li>
+    <LI><A href="building-axis.html">Building Axis</A> - Guidelines
+    for building Axis with/without optional components.</LI>
 
-<li>
-<a href="integration-guide.html">Integration Guide</a> - Description of
-APIs and development direction to allow integration into an existing web
-application server.</li>
+    <LI><A href="developers-guide.html">Developer's Guide</A> -
+    Collection of guidelines for developing code in Axis.</LI>
 
-<li>
-<a href="architecture-guide.html">Architecture Guide</a> - Axis design concepts and rationale.</li>
-</ul>
+    <LI><A href="integration-guide.html">Integration Guide</A> -
+    Description of APIs and development direction to allow
+    integration into an existing web application server.</LI>
 
-</body>
-</html>
+    <LI><A href="architecture-guide.html">Architecture Guide</A> -
+    Axis design concepts and rationale.</LI>
+  </UL>
+</BODY>
+</HTML>
