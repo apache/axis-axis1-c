@@ -18,23 +18,24 @@
  *
  */
 
-#if !defined(AXIS_APACHETRANSPORT_H__OF_AXIS_INCLUDED_)
-#define AXIS_APACHETRANSPORT_H__OF_AXIS_INCLUDED_
+#if !defined(AXIS_APACHE2TRANSPORT_H__OF_AXIS_INCLUDED_)
+#define AXIS_APACHE2TRANSPORT_H__OF_AXIS_INCLUDED_
 
-#include <apache1_3/httpd.h>
-#include <apache1_3/http_config.h>
-#include <apache1_3/http_core.h>
-#include <apache1_3/http_log.h>
-#include <apache1_3/http_protocol.h>
-#include <apache1_3/http_main.h>
+#include <apache2_0/httpd.h>
+#include <apache2_0/http_config.h>
+#include <apache2_0/http_core.h>
+#include <apache2_0/http_protocol.h>
+#include <apache2_0/http_log.h>
+#include <apache2_0/ap_compat.h>
+#include <apache2_0/apr_tables.h>
 #include <axis/SOAPTransport.h>
 #include <string.h>
 
-class ApacheTransport : public SOAPTransport  
+class Apache2Transport : public SOAPTransport  
 {
 public:
-	ApacheTransport(void* pContext);
-	virtual ~ApacheTransport();
+	Apache2Transport(void* pContext);
+	virtual ~Apache2Transport();
     int openConnection(){return AXIS_SUCCESS;};
     void closeConnection(){};
     AXIS_TRANSPORT_STATUS sendBytes(const char* pcSendBuffer, const void* pBufferId);
