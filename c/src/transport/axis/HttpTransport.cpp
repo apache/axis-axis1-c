@@ -264,9 +264,16 @@ void HttpTransport::HTTPBind()
 	m_OutHttpHeaders = "";
 	if(m_Typ == POST)				// only POST is supported for now, wish-list: M-POST??
 		m_OutHttpHeaders = "POST ";
-
+#ifdef HTTP_1_0
+  /* As some servers require HTTP 1.0 we temporary define the
+   * directive. 
+   * TODO: can be a WSDL2Ws argument
+   */     
+	m_OutHttpHeaders += m_Url.GetResource() + " HTTP/1.0\r\n"; // no support for proxy server yet
+#else  
 	// Use HTTP 1.1; if HTTP 1.0 is required we have to manage with setting the properties
 	m_OutHttpHeaders += m_Url.GetResource() + " HTTP/1.1\r\n"; // no support for proxy server yet
+#endif  
 	m_OutHttpHeaders += "Host: " + m_Url.GetHostName();
 
 	unsigned short port = m_Url.GetPort();
@@ -287,7 +294,13 @@ void HttpTransport::HTTPBind()
 	}
 
 	m_OutHttpHeaders += "\r\n";
-	m_OutHttpHeaders += "Content-Type: text/xml; charset=\"UTF-8\"\r\n";	// We have to support other charsets
+  /**
+   * Special notice: as express in the RFC1700, it seems that charset token shouldn't be
+   * enclosed by quotes. It is confirmed by RFC 2616 :
+   *   See http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.4.
+   * As some server can't deal with quotes "UTF-8" we explicitly remove then
+   */
+	m_OutHttpHeaders += "Content-Type: text/xml; charset=UTF-8\r\n";	// We have to support other charsets
 	
 	//Set header values for additional prefixes, such as SOAPAction
 	for(int i=0; i < m_AdditionalHeader.size(); i++)
