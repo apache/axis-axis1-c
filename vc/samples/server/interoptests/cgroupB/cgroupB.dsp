@@ -90,10 +90,54 @@ LINK32=link.exe
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# Begin Source File
+
+SOURCE=..\..\..\..\..\samples\server\interoptests\cgroupB\InteropTestPortTypeB.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\..\samples\server\interoptests\cgroupB\InteropTestPortTypeBService.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\..\samples\server\interoptests\cgroupB\InteropTestPortTypeBWrapper.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\..\samples\server\interoptests\cgroupB\SOAPArrayStruct.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\..\samples\server\interoptests\cgroupB\SOAPStruct.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\..\samples\server\interoptests\cgroupB\SOAPStructStruct.c
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=..\..\..\..\..\samples\server\interoptests\cgroupB\InteropTestPortTypeB.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\..\samples\server\interoptests\cgroupB\InteropTestPortTypeBWrapper.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\..\samples\server\interoptests\cgroupB\SOAPArrayStruct.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\..\samples\server\interoptests\cgroupB\SOAPStruct.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\..\samples\server\interoptests\cgroupB\SOAPStructStruct.h
+# End Source File
 # End Group
 # Begin Group "Resource Files"
 
