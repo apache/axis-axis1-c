@@ -86,23 +86,27 @@ SoapMethod::~SoapMethod()
 		delete *itCurrInputParam;
 		itCurrInputParam++;
 	}
-
 	m_inputParams.clear();
+	for (list<Attribute*>::iterator it = m_attributes.begin(); it != m_attributes.end(); it++)
+	{
+		delete (*it);
+	}
+	if (m_pOutputParam) delete m_pOutputParam;
 }
 
 void SoapMethod::setPrefix(const string &prefix)
 {
-	m_strPrefix= prefix;
+	m_strPrefix = prefix.c_str();
 }
 
 void SoapMethod::setLocalName(const string &localname)
 {
-	m_strLocalname= localname;
+	m_strLocalname = localname.c_str();
 }
 
 void SoapMethod::setUri(const string &uri)
 {
-	m_strUri= uri;
+	m_strUri = uri.c_str();
 }
 
 void SoapMethod::addInputParam(Param *param)
