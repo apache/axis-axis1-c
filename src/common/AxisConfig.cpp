@@ -67,7 +67,7 @@ AxisConfig::AxisConfig ()
 int AxisConfig::readConfFile ()
 {
     char carrLine[CONFBUFFSIZE];
-    char *pcValue;
+    char *pcValue = NULL;
     AxisFile fileConfig;	/*AxisFile is AxisC++ resource for file manipulation */
     char *sConfPath = NULL;
     char sNewConfPath[CONFBUFFSIZE];
