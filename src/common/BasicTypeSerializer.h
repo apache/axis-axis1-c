@@ -76,39 +76,39 @@
 #include <string>
 using namespace std;
 
-const char XML_ENTITY_REFERENCE_CAHRS[]	= "<>&\"\'";// Entity reference characters
-const char ENCODED_LESSER_STR[]			= "&lt;";	// Encoded string for less than character
-const char ENCODED_GREATOR_STR[]		= "&gt;";	// Encoded string for greator than character
-const char ENCODED_AMPERSAND_STR[]		= "&amp;";	// Encoded string for ampersand character
-const char ENCODED_DBL_QUOTE_STR[]		= "&quot;";	// Encoded string for single quote character
-const char ENCODED_SGL_QUOTE_STR[]		= "&apos;";	// Encoded string for double quote character
+const AxisChar XML_ENTITY_REFERENCE_CAHRS[]	= L"<>&\"\'";// Entity reference characters
+const AxisChar ENCODED_LESSER_STR[]			= L"&lt;";	// Encoded string for less than character
+const AxisChar ENCODED_GREATOR_STR[]			= L"&gt;";	// Encoded string for greator than character
+const AxisChar ENCODED_AMPERSAND_STR[]		= L"&amp;";	// Encoded string for ampersand character
+const AxisChar ENCODED_DBL_QUOTE_STR[]		= L"&quot;";	// Encoded string for single quote character
+const AxisChar ENCODED_SGL_QUOTE_STR[]		= L"&apos;";	// Encoded string for double quote character
 
 class BasicTypeSerializer
 {
 public:
-	string GetEntityReferenced(const string& str);
-	string& serialize(const string& sName, string& sValue, XSDTYPE type=XSD_STRING);
-	string& serialize(const string& sName, float fValue);
-	string& serialize(const string& sName, int nValue);
-	const char* BasicTypeStr(XSDTYPE type);
+	const AxisString& GetEntityReferenced(const AxisString& str);
+	const AxisChar* serialize(const AxisChar* sName, const AxisChar* sValue, XSDTYPE type=XSD_STRING);
+	const AxisChar* serialize(const AxisChar* sName, float fValue);
+	const AxisChar* serialize(const AxisChar* sName, int nValue);
+	const AxisChar* BasicTypeStr(XSDTYPE type);
 	BasicTypeSerializer();
 	virtual ~BasicTypeSerializer();
 
 private:
 	enum
 	{
-		GREATOR_THAN_CHAR	=		   '>',		// Greator than character
-		LESSER_THAN_CHAR	=		   '<',		// Less than character
-		SINGLE_QUOTE_CHAR	=		  '\'',		// Single quotation character
-		DOUBLE_QUOTE_CHAR	=		  '\"',		// Double quotation character
-		AMPERSAND_CHAR		=		   '&',		// Ampersand character
+		GREATOR_THAN_CHAR	=	L'>',	// Greator than character
+		LESSER_THAN_CHAR	=	L'<',	// Less than character
+		SINGLE_QUOTE_CHAR	=	L'\'',	// Single quotation character
+		DOUBLE_QUOTE_CHAR	=	L'\"',	// Double quotation character
+		AMPERSAND_CHAR		=	L'&'	// Ampersand character
 	};
 private:
-
-	void HelpSerialize(const string &sName, const string &sValue);
-	string m_sSZ;
-	string m_AuxStr;
-	char m_Buf[32]; //used for numeric to string conversions with sprintf
+	void HelpSerialize(const AxisChar* sName, const AxisChar* sValue);
+	AxisString m_sSZ;
+	AxisString m_AuxStr;
+	AxisString m_strReturnVal;
+	AxisChar m_Buf[32]; //used for numeric to string conversions with sprintf
 	XSDTYPE m_Type; //used to temporarily set the type of item being serialized.
 };
 

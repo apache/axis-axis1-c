@@ -85,12 +85,13 @@ public:
 	virtual IParam* setResponseParam(XSDTYPE nType, uParamValue Value)=0;
 	virtual ISoapMethod* createSoapMethod()=0;
 	virtual IWrapperSoapSerializer& operator<<(const char *cSerialized)=0;
+	virtual IWrapperSoapSerializer& operator<<(const AxisChar* cSerialized)=0;
 	virtual const char* getNewNamespacePrefix()=0;
 	virtual IArrayBean* makeArrayBean(XSDTYPE nType, void* pArray)=0;
 public: //Basic Type Serializing methods
-	virtual string& SerializeBasicType(const string& sName, string& sValue, XSDTYPE type=XSD_STRING)=0;
-	virtual string& SerializeBasicType(const string& sName, float fValue)=0;
-	virtual string& SerializeBasicType(const string& sName, int nValue)=0;
+	virtual const AxisChar* SerializeBasicType(const AxisChar* sName, const AxisChar* sValue, XSDTYPE type=XSD_STRING)=0;
+	virtual const AxisChar* SerializeBasicType(const AxisChar* sName, float fValue)=0;
+	virtual const AxisChar* SerializeBasicType(const AxisChar* sName, int nValue)=0;
 };
 
 #endif // !defined(AFX_IWRAPPERSOAPSERIALIZER_H__D3E794EC_8A67_4E0E_BE28_583DCDCE1C42__INCLUDED_)

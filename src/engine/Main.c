@@ -80,6 +80,7 @@ extern int process_request(Ax_soapstream *str);
 			<soapenv:Body><add soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:int\">3</op1><op2 xsi:type=\"xsd:int\">4</op2></add></soapenv:Body></soapenv:Envelope>";
 
 char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><add soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:int\">3</op1><op2 xsi:type=\"xsd:int\">4</op2></add></soapenv:Body></soapenv:Envelope>";
+//AxisChar* ip = L"<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><add soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:int\">3</op1><op2 xsi:type=\"xsd:int\">4</op2></add></soapenv:Body></soapenv:Envelope>";
 
 //	char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><echo soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:string\">Hello World!</op1></echo></soapenv:Body></soapenv:Envelope>";
 
@@ -195,11 +196,17 @@ int main()
 	str->so.http.ip_headers->headervalue = "\"Calculator\"";	
 	str->so.http.ip_headercount = 1;
 
-	printf("soap request :\n %s\n", ip);
+//	printf("soap request :\n %s\n", ip);
+//	wprintf(L"soap request :\n %s\n", ip);
 
 	initialize_module();
-	for (xx =0; xx < 100 ; xx++)
-		process_request(str);	
+	for (xx =0; xx < 1000 ; xx++)
+	{
+	//	printf("Sending Soap Response :\n");
+		process_request(str);
+	//	printf("\n");
+	}
+	uninitialize_module();
 	free(str->so.http.ip_headers);
 	free(str);
 	return 0;
@@ -207,7 +214,7 @@ int main()
 
 int send_response_bytes(const char * res, const void* opstream) 
 {
-	printf("sending SOAP response : \n%s\n", res);
+	printf("%s", res);
 	return 0;
 }
 
@@ -215,8 +222,9 @@ int get_request_bytes(char * req, int reqsize, int* retsize, const void* ipstrea
 {
 	req[0]= '\0';
 	strcat(req, ip);
-//	printf("strlen(ip)%d", strlen(ip));
 	*retsize= strlen(ip);
+//	*retsize = wcslen(ip)*2;
+//	memcpy(req, ip, *retsize);
 	return 0;
 }
 

@@ -93,10 +93,10 @@ private:
 	list<Attribute*> m_attributes;
 	list<Attribute*> m_namespaceDecls;
 	list<const Attribute*> m_StandardNamespaceDecls;
-	string m_sPrefix;	
+	AxisString m_sPrefix;	
 
 public:	
-	int setPrefix(const string& prefix);
+	int setPrefix(const AxisChar* prefix);
 	int addNamespaceDecl(Attribute* pAttribute);
 	int addAttribute(Attribute* pAttribute);	
 	int serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion);

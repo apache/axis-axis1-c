@@ -78,7 +78,7 @@ extern unsigned char chEBuf[1024];
 WSDDDeployment::WSDDDeployment()
 {
 	m_DeployedServices = NULL;
-	m_sAux = "";
+	m_sAux = L"";
 	m_pTransportHandlers = NULL;
 
 	m_GlobalResponseHandlers = NULL;
@@ -123,7 +123,7 @@ WSDDDeployment::~WSDDDeployment()
 
 }
 
-void WSDDDeployment::SetLibIdMap(map<string, int>* pLibNameIdMap)
+void WSDDDeployment::SetLibIdMap(map<AxisString, int>* pLibNameIdMap)
 {
 	m_pLibNameIdMap = pLibNameIdMap;
 }
@@ -156,7 +156,7 @@ int WSDDDeployment::UpdateWSDD(string& sWSDDNew)
 }
 
 
-const WSDDService* WSDDDeployment::GetService(const string &sServiceName)
+const WSDDService* WSDDDeployment::GetService(const AxisString &sServiceName)
 {
 	WSDDServiceMap::iterator iter;
 
@@ -176,9 +176,9 @@ const WSDDServiceMap* WSDDDeployment::GetWSDDServiceMap()
 	return m_DeployedServices;
 }
 
-const string& WSDDDeployment::GetLibName(int nLibId)
+const AxisString& WSDDDeployment::GetLibName(int nLibId)
 {
-	for (map<string, int>::iterator it = m_pLibNameIdMap->begin(); it != m_pLibNameIdMap->end(); it++)
+	for (map<AxisString, int>::iterator it = m_pLibNameIdMap->begin(); it != m_pLibNameIdMap->end(); it++)
 	{
 		if ((*it).second == nLibId)
 			return (*it).first;

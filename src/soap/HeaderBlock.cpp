@@ -93,17 +93,17 @@ HeaderBlock::~HeaderBlock()
 	m_attributes.clear();
 }
 
-void HeaderBlock::setLocalName(const string &localname)
+void HeaderBlock::setLocalName(const AxisChar* localname)
 {
 	m_localname= localname;
 }
 
-void HeaderBlock::setPrefix(const string &prefix)
+void HeaderBlock::setPrefix(const AxisChar* prefix)
 {
 	m_prefix= prefix;
 }
 
-void HeaderBlock::setUri(const string &uri)
+void HeaderBlock::setUri(const AxisChar* uri)
 {
 	m_uri= uri;
 }
@@ -113,7 +113,7 @@ void HeaderBlock::addAttribute(Attribute* attr)
 	m_attributes.push_back(attr);
 }
 
-void HeaderBlock::setValue(const string &value)
+void HeaderBlock::setValue(const AxisChar* value)
 {
 	m_value= value;
 }

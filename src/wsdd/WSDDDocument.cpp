@@ -67,10 +67,6 @@
 #include <string>
 #include "../common/Debug.h"
 
-#define __TRC(X) XMLString::transcode(X)
-#define __REL(X) XMLString::release(X)
-
-
 WSDDDocument::WSDDDocument()
 {
 	m_lev0 = WSDD_UNKNOWN;
@@ -78,7 +74,7 @@ WSDDDocument::WSDDDocument()
 	m_lev2 = WSDD_UNKNOWN;
 	m_CurTrType = APTHTTP;//default is HTTP
 	m_nLibId = 0;
-	m_pLibNameIdMap = new map<string, int>;
+	m_pLibNameIdMap = new map<AxisString, int>;
 }
 
 WSDDDocument::~WSDDDocument()
@@ -115,101 +111,91 @@ int WSDDDocument::ParseDocument(const string& sWSDD)
 
 void  WSDDDocument::endElement (const XMLCh *const uri, const XMLCh *const localname, const XMLCh *const qname)
 {
-	char *pcLocalName = __TRC(localname);
-	if (pcLocalName)
+	if (0 != wcscmp(localname, kw_param)) //just neglect endElement of parameter
 	{
-		if (0 != strcmp(pcLocalName, kw_param)) //just neglect endElement of parameter
+		if (m_lev1 == WSDD_UNKNOWN) //not inside a requestFlow or responseFlow elements
 		{
-			if (m_lev1 == WSDD_UNKNOWN) //not inside a requestFlow or responseFlow elements
+			switch(m_lev0)
 			{
-				switch(m_lev0)
-				{
-				case WSDD_DEPLOYMENT:
-					m_lev0 = WSDD_UNKNOWN;
-					break;
-				case WSDD_GLOBCONF:
-					m_lev0 = WSDD_DEPLOYMENT;
-					break;
-				case WSDD_SERVICE:
-					if (0 == strcmp(pcLocalName, kw_srv))
-					{
-						//add service object to Deployment object
-						m_pDeployment->AddService(m_pService);
-						m_pService = NULL;
-						m_lev0 = WSDD_DEPLOYMENT;
-					}
-					else
-					{
-
-					}
-					break;
-				case WSDD_HANDLER:
-					//just ignore the handlers defined outside ??? //TODO
-					delete m_pHandler;
-					m_pHandler = NULL;
-					m_lev0 = WSDD_DEPLOYMENT;
-					break;
-				case WSDD_TRANSPORT:
-					m_CurTrType = APTHTTP;//default is HTTP
-					m_lev0 = WSDD_DEPLOYMENT;
-					break;
+			case WSDD_DEPLOYMENT:
+				m_lev0 = WSDD_UNKNOWN;
 				break;
-				}
-			}
-			else // inside a requestFlow or responseFlow elements
-			{
-				if(0 == strcmp(pcLocalName, kw_hdl))
+			case WSDD_GLOBCONF:
+				m_lev0 = WSDD_DEPLOYMENT;
+				break;
+			case WSDD_SERVICE:
+				if (0 == wcscmp(localname, kw_srv))
 				{
-					m_lev2 = WSDD_UNKNOWN;
-					//add handler in m_pHandler to the corresponding container.
-					switch (m_lev0)
-					{
-						case WSDD_GLOBCONF:
-							{
-								m_pDeployment->AddHandler(true,(m_lev1 == WSDD_REQFLOW) , m_pHandler);
-								m_pHandler = NULL;
-							}
-							break;
-						case WSDD_TRANSPORT:
-							{
-								m_pDeployment->AddHandler(false,(m_lev1 == WSDD_REQFLOW) , m_pHandler, m_CurTrType);
-								m_pHandler = NULL;
-							}
-							break;
-						case WSDD_SERVICE:
-							{
-								m_pService->AddHandler((m_lev1 == WSDD_REQFLOW) , m_pHandler);
-								m_pHandler = NULL;
-							}
-							break;
-						default: ; //this cannot happen ?? 
-					}
+					//add service object to Deployment object
+					m_pDeployment->AddService(m_pService);
+					m_pService = NULL;
+					m_lev0 = WSDD_DEPLOYMENT;
 				}
-				else if(0 == strcmp(pcLocalName, kw_rqf))
-				{  
-					m_lev1 = WSDD_UNKNOWN;
+				else
+				{
+
 				}
-				else if(0 == strcmp(pcLocalName, kw_rsf))
-				{  
-					m_lev1 = WSDD_UNKNOWN;
-				}						
+				break;
+			case WSDD_HANDLER:
+				//just ignore the handlers defined outside ??? //TODO
+				delete m_pHandler;
+				m_pHandler = NULL;
+				m_lev0 = WSDD_DEPLOYMENT;
+				break;
+			case WSDD_TRANSPORT:
+				m_CurTrType = APTHTTP;//default is HTTP
+				m_lev0 = WSDD_DEPLOYMENT;
+				break;
+			break;
 			}
 		}
-		__REL(&pcLocalName);
+		else // inside a requestFlow or responseFlow elements
+		{
+			if(0 == wcscmp(localname, kw_hdl))
+			{
+				m_lev2 = WSDD_UNKNOWN;
+				//add handler in m_pHandler to the corresponding container.
+				switch (m_lev0)
+				{
+					case WSDD_GLOBCONF:
+						{
+							m_pDeployment->AddHandler(true,(m_lev1 == WSDD_REQFLOW) , m_pHandler);
+							m_pHandler = NULL;
+						}
+						break;
+					case WSDD_TRANSPORT:
+						{
+							m_pDeployment->AddHandler(false,(m_lev1 == WSDD_REQFLOW) , m_pHandler, m_CurTrType);
+							m_pHandler = NULL;
+						}
+						break;
+					case WSDD_SERVICE:
+						{
+							m_pService->AddHandler((m_lev1 == WSDD_REQFLOW) , m_pHandler);
+							m_pHandler = NULL;
+						}
+						break;
+					default: ; //this cannot happen ?? 
+				}
+			}
+			else if(0 == wcscmp(localname, kw_rqf))
+			{  
+				m_lev1 = WSDD_UNKNOWN;
+			}
+			else if(0 == wcscmp(localname, kw_rsf))
+			{  
+				m_lev1 = WSDD_UNKNOWN;
+			}						
+		}
 	}
 }
 
 void WSDDDocument::ProcessAttributes(WSDDLevels ElementType, const Attributes &attrs)
 {
-	char* pc; 
 	for (int i = 0; i < attrs.getLength(); i++) 
 	{
-		pc = __TRC(attrs.getLocalName(i));
-		string local = pc;
-		__REL(&pc);
-		pc = __TRC(attrs.getValue(i));
-		string value = pc;
-		__REL(&pc);
+		AxisString local = attrs.getLocalName(i);
+		AxisString value = attrs.getValue(i);
 		switch(ElementType)
 		{
 		case WSDD_SERVICE: //add this attribute to current service object
@@ -285,18 +271,13 @@ void WSDDDocument::ProcessAttributes(WSDDLevels ElementType, const Attributes &a
 
 void WSDDDocument::GetParameters(WSDDLevels ElementType, const Attributes &attrs)
 {
-	char* pc; 
-	string name, value, type;
+	AxisString name, value, type;
 	bool locked;
-	string Localname, Value;
+	AxisString Localname, Value;
 	for (int i = 0; i < attrs.getLength(); i++) 
 	{
-		pc = __TRC(attrs.getLocalName(i));
-		Localname = pc;
-		__REL(&pc);
-		pc = __TRC(attrs.getValue(i));
-		Value = pc;
-		__REL(&pc);
+		Localname = attrs.getLocalName(i);
+		Value = attrs.getValue(i);
 		if (Localname == kw_name)
 		{
 			name = Value;
@@ -359,10 +340,10 @@ void WSDDDocument::GetParameters(WSDDLevels ElementType, const Attributes &attrs
 	}
 }
 
-void WSDDDocument::AddAllowedRolesToService(string& value)
+void WSDDDocument::AddAllowedRolesToService(AxisString& value)
 {
 	int prepos = 0, pos = 0;
-	if (value.find('*') == string::npos)
+	if (value.find('*') == AxisString::npos)
 	{
 		do 
 		{
@@ -370,14 +351,14 @@ void WSDDDocument::AddAllowedRolesToService(string& value)
 //			cout << value.substr(prepos, pos) << endl;
 			m_pService->AddAllowedRole(value.substr(prepos, pos));
 			prepos = pos + 1;
-		} while(string::npos != pos);
+		} while (AxisString::npos != pos);
 	}
 }
 
-void WSDDDocument::AddAllowedMethodsToService(string& value)
+void WSDDDocument::AddAllowedMethodsToService(AxisString& value)
 {
 	int prepos = 0, pos = 0;
-	if (value.find('*') == string::npos)
+	if (value.find('*') == AxisString::npos)
 	{
 		do 
 		{
@@ -385,164 +366,151 @@ void WSDDDocument::AddAllowedMethodsToService(string& value)
 //			cout << value.substr(prepos, pos) << endl;
 			m_pService->AddAllowedMethod(value.substr(prepos, pos));
 			prepos = pos + 1;
-		} while(string::npos != pos);
+		} while (AxisString::npos != pos);
 	}
 }
 
 void WSDDDocument::startElement(const XMLCh *const uri,	const XMLCh *const localname, const XMLCh *const qname,	const Attributes &attrs)
 {
-	char *pcLocalName = __TRC(localname);
-	if (pcLocalName)
+	if (m_lev1 == WSDD_UNKNOWN) //not inside a requestFlow or responseFlow elements
 	{
-		if (m_lev1 == WSDD_UNKNOWN) //not inside a requestFlow or responseFlow elements
+		switch(m_lev0)
 		{
-			switch(m_lev0)
-			{
-			case WSDD_UNKNOWN:
-				if(0 == strcmp(pcLocalName, kw_depl))
-				{  
-					m_lev0 = WSDD_DEPLOYMENT;
-					//nothing to get
-				}
-				break;
-			case WSDD_DEPLOYMENT:
-				if(0 == strcmp(pcLocalName, kw_glconf))
-				{  
-					m_lev0 = WSDD_GLOBCONF;
-					//nothing to get
-				}
-				else if(0 == strcmp(pcLocalName, kw_srv))
-				{  
-					m_lev0 = WSDD_SERVICE;
-					m_pService = new WSDDService();
-					//get service name and proider if any
-					ProcessAttributes(WSDD_SERVICE, attrs);
-				}
-				else if(0 == strcmp(pcLocalName, kw_hdl))
-				{  
-					m_lev0 = WSDD_HANDLER;
-					m_pHandler = new WSDDHandler();
-					ProcessAttributes(WSDD_HANDLER, attrs);
-					//get handler name and type if any
-				}
-				else if(0 == strcmp(pcLocalName, kw_tr))
-				{  
-					m_lev0 = WSDD_TRANSPORT;
-					ProcessAttributes(WSDD_TRANSPORT, attrs);
-				}
-				else
-				{
-					//error : unknown element type in wsdd file
-				}
-				break;
-			case WSDD_GLOBCONF:
-				if(0 == strcmp(pcLocalName, kw_param))
-				{  
-					GetParameters(WSDD_GLOBCONF, attrs);
-				}
-				else if(0 == strcmp(pcLocalName, kw_rqf))
-				{  
-					m_lev1 = WSDD_REQFLOW;
-					ProcessAttributes(WSDD_REQFLOW, attrs);
-				}
-				else if(0 == strcmp(pcLocalName, kw_rsf))
-				{  
-					m_lev1 = WSDD_RESFLOW;
-					ProcessAttributes(WSDD_RESFLOW, attrs);
-				}
-				else
-				{
-					//yet unhandled element type
-				}
-			break; 
-			case WSDD_SERVICE:
-				if(0 == strcmp(pcLocalName, kw_param))
-				{  
-					GetParameters(WSDD_SERVICE, attrs);
-				}
-				else if(0 == strcmp(pcLocalName, kw_rqf))
-				{  
-					m_lev1 = WSDD_REQFLOW;
-					ProcessAttributes(WSDD_REQFLOW, attrs);
-				}
-				else if(0 == strcmp(pcLocalName, kw_rsf))
-				{  
-					m_lev1 = WSDD_RESFLOW;
-					ProcessAttributes(WSDD_RESFLOW, attrs);
-				}
-				else
-				{
-					//yet unhandled element type like namespace
-				}
-			break;
-			case WSDD_HANDLER:
-				if(0 == strcmp(pcLocalName, kw_param))
-				{  
-					GetParameters(WSDD_HANDLER, attrs);
-				}
-
-			break;
-			case WSDD_TRANSPORT:
-				if(0 == strcmp(pcLocalName, kw_rqf))
-				{  
-					m_lev1 = WSDD_REQFLOW;
-					ProcessAttributes(WSDD_REQFLOW, attrs);
-				}
-				else if(0 == strcmp(pcLocalName, kw_rsf))
-				{  
-					m_lev1 = WSDD_RESFLOW;
-					ProcessAttributes(WSDD_RESFLOW, attrs);
-				}
-			break;
-			}
-		}
-		else // inside a requestFlow or responseFlow elements
-		{
-			if(0 == strcmp(pcLocalName, kw_param))
+		case WSDD_UNKNOWN:
+			if(0 == wcscmp(localname, kw_depl))
 			{  
-				GetParameters(m_lev2, attrs); //must be parameters of a handler or a chain
+				m_lev0 = WSDD_DEPLOYMENT;
+				//nothing to get
 			}
-
-			else if(0 == strcmp(pcLocalName, kw_hdl))
+			break;
+		case WSDD_DEPLOYMENT:
+			if(0 == wcscmp(localname, kw_glconf))
 			{  
-				m_lev2 = WSDD_HANDLER;
+				m_lev0 = WSDD_GLOBCONF;
+				//nothing to get
+			}
+			else if(0 == wcscmp(localname, kw_srv))
+			{  
+				m_lev0 = WSDD_SERVICE;
+				m_pService = new WSDDService();
+				//get service name and proider if any
+				ProcessAttributes(WSDD_SERVICE, attrs);
+			}
+			else if(0 == wcscmp(localname, kw_hdl))
+			{  
+				m_lev0 = WSDD_HANDLER;
 				m_pHandler = new WSDDHandler();
 				ProcessAttributes(WSDD_HANDLER, attrs);
 				//get handler name and type if any
 			}
-			else if(0 == strcmp(pcLocalName, kw_chain))
-			{
-
+			else if(0 == wcscmp(localname, kw_tr))
+			{  
+				m_lev0 = WSDD_TRANSPORT;
+				ProcessAttributes(WSDD_TRANSPORT, attrs);
 			}
 			else
 			{
 				//error : unknown element type in wsdd file
 			}
+			break;
+		case WSDD_GLOBCONF:
+			if(0 == wcscmp(localname, kw_param))
+			{  
+				GetParameters(WSDD_GLOBCONF, attrs);
+			}
+			else if(0 == wcscmp(localname, kw_rqf))
+			{  
+				m_lev1 = WSDD_REQFLOW;
+				ProcessAttributes(WSDD_REQFLOW, attrs);
+			}
+			else if(0 == wcscmp(localname, kw_rsf))
+			{  
+				m_lev1 = WSDD_RESFLOW;
+				ProcessAttributes(WSDD_RESFLOW, attrs);
+			}
+			else
+			{
+				//yet unhandled element type
+			}
+		break; 
+		case WSDD_SERVICE:
+			if(0 == wcscmp(localname, kw_param))
+			{  
+				GetParameters(WSDD_SERVICE, attrs);
+			}
+			else if(0 == wcscmp(localname, kw_rqf))
+			{  
+				m_lev1 = WSDD_REQFLOW;
+				ProcessAttributes(WSDD_REQFLOW, attrs);
+			}
+			else if(0 == wcscmp(localname, kw_rsf))
+			{  
+				m_lev1 = WSDD_RESFLOW;
+				ProcessAttributes(WSDD_RESFLOW, attrs);
+			}
+			else
+			{
+				//yet unhandled element type like namespace
+			}
+		break;
+		case WSDD_HANDLER:
+			if(0 == wcscmp(localname, kw_param))
+			{  
+				GetParameters(WSDD_HANDLER, attrs);
+			}
+
+		break;
+		case WSDD_TRANSPORT:
+			if(0 == wcscmp(localname, kw_rqf))
+			{  
+				m_lev1 = WSDD_REQFLOW;
+				ProcessAttributes(WSDD_REQFLOW, attrs);
+			}
+			else if(0 == wcscmp(localname, kw_rsf))
+			{  
+				m_lev1 = WSDD_RESFLOW;
+				ProcessAttributes(WSDD_RESFLOW, attrs);
+			}
+		break;
+		}
+	}
+	else // inside a requestFlow or responseFlow elements
+	{
+		if(0 == wcscmp(localname, kw_param))
+		{  
+			GetParameters(m_lev2, attrs); //must be parameters of a handler or a chain
+		}
+
+		else if(0 == wcscmp(localname, kw_hdl))
+		{  
+			m_lev2 = WSDD_HANDLER;
+			m_pHandler = new WSDDHandler();
+			ProcessAttributes(WSDD_HANDLER, attrs);
+			//get handler name and type if any
+		}
+		else if(0 == wcscmp(localname, kw_chain))
+		{
 
 		}
-		__REL(&pcLocalName);
+		else
+		{
+			//error : unknown element type in wsdd file
+		}
+
 	}
 }
 
 void WSDDDocument::startPrefixMapping(const XMLCh* const prefix, const XMLCh* const uri)
 {
-	char* pc; 
-	pc = __TRC(prefix);
-	string sPrifix = pc;
-	__REL(&pc);
-	pc = __TRC(uri);
-	string sUri = pc;
-	__REL(&pc);
-	m_NsStack[sPrifix] = sUri; //I think the same prifix cannot repeat ???
+//	AxisString sPrifix = prefix;
+	AxisString sUri = uri;
+	m_NsStack[prefix] = uri; //I think the same prifix cannot repeat ???
 }
 
 void WSDDDocument::endPrefixMapping(const XMLCh* const prefix)
 {
-	char* pc; 
-	pc = __TRC(prefix);
-	string sPrifix = pc;
-	__REL(&pc);
-	m_NsStack.erase(sPrifix); //I think the same prifix cannot repeat ???
+//	string sPrifix = prefix;
+	m_NsStack.erase(prefix); //I think the same prifix cannot repeat ???
 }
 
 void  WSDDDocument::characters (const XMLCh *const chars, const unsigned int length)

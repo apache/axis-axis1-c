@@ -83,67 +83,55 @@ ComplexElement::~ComplexElement()
 
 }
 
-int ComplexElement::setPrefix(const string &sPrefix)
+int ComplexElement::setPrefix(const AxisChar* sPrefix)
 {
 	m_sPrefix= sPrefix;
-
 	return SUCCESS;
 }
 
-int ComplexElement::setLocalName(const string &sLocalName)
+int ComplexElement::setLocalName(const AxisChar* sLocalName)
 {
 	m_sLocalName= sLocalName;
-
 	return SUCCESS;
 }
 
 int ComplexElement::addChild(BasicNode *pBasicNode)
 {
 	m_children.push_back(pBasicNode);
-
 	return SUCCESS;
 }
 
 int ComplexElement::serialize(SoapSerializer& pSZ)
 {
 	int iStatus= SUCCESS;
-
 	do {
-		if(isSerializable()) {
-			
-			pSZ << "<";
-			
+		if(isSerializable()) 
+		{	
+			pSZ << "<";	
 			if(m_sPrefix.length() != 0) {				
 				pSZ<< m_sPrefix.c_str() << ":";
 			}
-			
 			pSZ<< m_sLocalName.c_str();
-
 			if((m_sPrefix.length() != 0) && (m_sURI.length() != 0)) {
 				pSZ<< " xmlns:" << m_sPrefix.c_str() << "=\"" << m_sURI.c_str() << "\"";
 			}
-			
 			pSZ<< ">";
-
 			iStatus= serializeChildren(pSZ);
 			if(iStatus==FAIL) {
 				break;
 			}
-			
 			pSZ<< "</";
-
 			if(m_sPrefix.length() != 0) {				
 				pSZ<< m_sPrefix.c_str() << ":";
 			}
-			
 			pSZ<< m_sLocalName.c_str() << ">";
-
 			iStatus= SUCCESS;
-		} else {
+		} 
+		else
+		{
 			iStatus= FAIL;
 		}
-	} while(0);
-			
+	} while(0);	
 	return iStatus;
 }
 
@@ -214,10 +202,9 @@ bool ComplexElement::isSerializable()
 	return bStatus;
 }
 
-int ComplexElement::setURI(const string &sURI)
+int ComplexElement::setURI(const AxisChar* sURI)
 {
 	m_sURI= sURI;
-
 	return SUCCESS;
 }
 
@@ -262,7 +249,7 @@ NODE_TYPE ComplexElement::getNodeType()
  * has to traverse through the childrean in a appropriate manner
  * in order to get there values.
  */
-string& ComplexElement::getValue()
+const AxisString& ComplexElement::getValue()
 {
 	return m_sValue;
 }
@@ -274,7 +261,7 @@ string& ComplexElement::getValue()
  * has to traverse through the childrean in a appropriate manner
  * in order to set there values.
  */
-int ComplexElement::setValue(string &sValue)
+int ComplexElement::setValue(const AxisChar* sValue)
 {
 	return SUCCESS;
 }

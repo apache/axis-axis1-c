@@ -78,7 +78,7 @@
 //string ArrayBean::m_sSZ = "";
 char Param::m_Buf[64];
 
-Param::Param(Param& param)
+Param::Param(const Param& param)
 {
 	m_sName = param.m_sName;
 	m_sValue = param.m_sValue;
@@ -106,35 +106,35 @@ Param::Param(Param& param)
 	}
 }
 
-Param::Param(string &str, XSDTYPE type)
+Param::Param(const AxisChar* str, XSDTYPE type)
 {
 	m_sValue = str;
 	m_Type = type;
 	switch (type)
 	{
-	case XSD_STRING: m_sName = "String"; break;
-	case XSD_BASE64BINARY: m_sName = "Base64BinaryString"; break;
-	case XSD_HEXBINARY: m_sName = "HexBinaryString"; break;
+	case XSD_STRING: m_sName = L"String"; break;
+	case XSD_BASE64BINARY: m_sName = L"Base64BinaryString"; break;
+	case XSD_HEXBINARY: m_sName = L"HexBinaryString"; break;
 	}
 }
 
 Param::Param(int nValue)
 {
-	m_sName = "Int";
+	m_sName = L"Int";
 	m_Value.nValue = nValue;
 	m_Type = XSD_INT;
 }
 
 Param::Param(float fValue)
 {
-	m_sName = "Float";
+	m_sName = L"Float";
 	m_Value.fValue = fValue;
 	m_Type = XSD_FLOAT;
 }
 
 Param::Param(double dValue)
 {
-	m_sName = "Double";
+	m_sName = L"Double";
 	m_Value.dValue = dValue;
 	m_Type = XSD_DOUBLE;
 }
@@ -152,7 +152,7 @@ Param::~Param()
 	}
 }
 
-const string& Param::GetString()
+const AxisString& Param::GetString()
 {
 	if (m_Type == XSD_STRING){}
 	else if (m_Type == XSD_UNKNOWN) //see GetInt() to see why we do this
@@ -166,7 +166,7 @@ const string& Param::GetString()
 	return m_sValue;
 }
 
-const string& Param::GetHexString()
+const AxisString& Param::GetHexString()
 {
 	if (m_Type == XSD_HEXBINARY){}
 	else if (m_Type == XSD_UNKNOWN) //see GetInt() to see why we do this
@@ -180,7 +180,7 @@ const string& Param::GetHexString()
 	return m_sValue;
 }
 
-const string& Param::GetBase64String()
+const AxisString& Param::GetBase64String()
 {
 	if (m_Type == XSD_BASE64BINARY){}
 	else if (m_Type == XSD_UNKNOWN) //see GetInt() to see why we do this
@@ -204,7 +204,7 @@ int Param::GetInt()
 		//then the deserializer must have put the value as a string and type as XSD_UNKNOWN.
 		//so convert the m_sValue in to an int and change the types etc
 		m_Type = XSD_INT;
-		SetValue(m_sValue);
+		SetValue(m_sValue.c_str());
 	}
 	else 
 	{
@@ -219,7 +219,7 @@ float Param::GetFloat()
 	else if (m_Type == XSD_UNKNOWN)
 	{
 		m_Type = XSD_FLOAT;
-		SetValue(m_sValue);
+		SetValue(m_sValue.c_str());
 	}
 	else
 	{
@@ -238,19 +238,19 @@ int Param::serialize(IWrapperSoapSerializer& pSZ)
 	string ATprefix;
 	switch (m_Type){
 	case XSD_INT:
-		pSZ << m_BTSZ.serialize(m_sName, m_Value.nValue).c_str();
+		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.nValue);
 		break;
 	case XSD_FLOAT:
-		pSZ << m_BTSZ.serialize(m_sName, m_Value.fValue).c_str();
+		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.fValue);
 		break;
 	case XSD_STRING:
-		pSZ << m_BTSZ.serialize(m_sName, m_sValue).c_str();
+		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_sValue.c_str());
 		break;
 	case XSD_HEXBINARY:
-		pSZ << m_BTSZ.serialize(m_sName, m_sValue, XSD_HEXBINARY).c_str();
+		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_sValue.c_str(), XSD_HEXBINARY);
 		break;
 	case XSD_BASE64BINARY:
-		pSZ << m_BTSZ.serialize(m_sName, m_sValue, XSD_BASE64BINARY).c_str();
+		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_sValue.c_str(), XSD_BASE64BINARY);
 		break;
 	case XSD_ARRAY:
 		//pSZ << "<abc:ArrayOfPhoneNumbers xmlns:abc="http://example.org/2001/06/numbers"
@@ -273,12 +273,12 @@ int Param::serialize(IWrapperSoapSerializer& pSZ)
 		pSZ << "=\"http://www.w3.org/2001/06/soap-encoding\"";
 		if (m_Value.pArray->m_type == USER_TYPE)
 		{
-			pSZ << " xmlns:" << ATprefix.c_str() << "=" << m_Value.pArray->m_URI.c_str(); //this prefix should be dynamically taken from serializer.
+			pSZ << " xmlns:" << ATprefix.c_str() << "=" << m_Value.pArray->m_URI.c_str(); 
 		}
 		pSZ << "enc:arrayType=";
 		if (m_Value.pArray->m_type == USER_TYPE)
 		{
-			pSZ << ATprefix.c_str() << ":" << m_Value.pArray->m_TypeName.c_str(); //this prefix should be dynamically taken from serializer.
+			pSZ << ATprefix.c_str() << ":" << m_Value.pArray->m_TypeName.c_str(); 
 		}
 		else //basic type array
 		{
@@ -314,18 +314,19 @@ int Param::serialize(IWrapperSoapSerializer& pSZ)
 }
 
 ////////////////////////////////////////////////////////////////////////
-//This method is used by the deserializer to set the value after setting the type
-//Also this method assumes that the type is already set and it is a basic type
-int Param::SetValue(string &sValue)
+//This method is used by the deserializer to set the value after setting the type.
+//Also this method assumes that the type is already set and it is a basic type.
+int Param::SetValue(const AxisChar* sValue)
 {
+	AxisChar* endptr;
 	m_sValue = sValue; //Whatever the type we put the string representation of the value
 	switch (m_Type)
 	{
 	case XSD_INT:
-		m_Value.nValue = atoi(sValue.c_str());
+		m_Value.nValue = wcstol(sValue, &endptr, 10);
 		break;
 	case XSD_FLOAT:
-		m_Value.fValue = atof(sValue.c_str());
+		m_Value.fValue = wcstod(sValue, &endptr);
 		break;
 	case XSD_STRING:
 	case XSD_HEXBINARY:
@@ -372,17 +373,17 @@ int Param::SetValue(XSDTYPE nType, uParamValue Value)
 	return SUCCESS;
 }
 
-void Param::setPrefix(const string &prefix)
+void Param::setPrefix(const AxisChar* prefix)
 {
 	m_strPrefix = prefix;
 }
 
-void Param::setUri(const string &uri)
+void Param::setUri(const AxisChar* uri)
 {
 	m_strUri = uri;
 }
 
-void Param::operator=(Param &param)
+void Param::operator=(const Param &param)
 {
 	m_sName = param.m_sName;
 	m_sValue = param.m_sValue;
@@ -425,7 +426,7 @@ int Param::SetArrayElements(void* pElements)
 	return FAIL;
 }
 
-void Param::SetName(char* sName)
+void Param::SetName(const AxisChar* sName)
 {
 	m_sName = sName;
 }

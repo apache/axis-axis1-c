@@ -73,6 +73,8 @@
 #endif // _MSC_VER > 1000
 
 #include <string>
+#include "../common/GDefine.h"
+
 using namespace std;
 
 class SoapSerializer;
@@ -81,22 +83,22 @@ class Attribute
 {
 private:	
 	bool isSerializable() const;
-	string m_localname;
-	string m_prefix;
-	string m_uri;
-	string m_value;
+	AxisString m_localname;
+	AxisString m_prefix;
+	AxisString m_uri;
+	AxisString m_value;
 	//string m_strAttrSerialized;
 public:		
 	int serialize(SoapSerializer& pSZ) const;
 	//int serialize(string&);
 	Attribute();	
-	Attribute(const string &localname, const string &prefix, const string &uri, const string &value);
+	Attribute(const AxisChar* localname, const AxisChar* prefix, const AxisChar* uri, const AxisChar* value);
 	virtual ~Attribute();
 
-	void setValue(const string &value);
-	void setUri(const string &uri);
-	void setPrefix(const string &prefix);
-	void setLocalName(const string &localname);	
+	void setValue(const AxisChar* value);
+	void setUri(const AxisChar* uri);
+	void setPrefix(const AxisChar* prefix);
+	void setLocalName(const AxisChar* localname);	
 };
 
 #endif // !defined(AFX_ATTRIBUTE_H__10ABD25E_AF15_4DE7_AA27_6AB96102087C__INCLUDED_)

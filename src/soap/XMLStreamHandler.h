@@ -81,6 +81,7 @@
 #include "SoapBody.h"
 #include "SoapFault.h"
 #include "../common/GDefine.h"
+#include "SoapKeywordMapping.h"
 
 #include <map>
 #include <list>
@@ -108,8 +109,8 @@ private:
 	//After parsing all params will be in this flat list(even nested params and arrays)
 	list<Param*> m_Params;
 	list<Param*>::iterator m_it;
-	map<string, string> m_NsStack;
-	int m_nSoapVersion;
+	map<AxisString, AxisString> m_NsStack;
+	SOAP_VERSION m_nSoapVersion;
 
 private:
 	Param* GetParam();
@@ -121,13 +122,13 @@ private:
 	SOAP_PARSE_LEVEL m_PL0;
 	SOAP_PARSE_LEVEL m_PL1;
 	SOAP_PARSE_LEVEL m_PL2;
-	string m_sLastElement;
+	AxisString m_sLastElement;
 
 	HeaderBlock* pHeaderBlock;
 private:
 	void createHeaderBlock(const XMLCh *const uri,const XMLCh *const localname,const XMLCh *const qname,const Attributes &attrs);
 	int m_nParamNestingLevel;
-	int SetArrayDimensions(string& sDimensions);
+	int SetArrayDimensions(AxisString& sDimensions);
 	void FillMethod(const XMLCh *const uri,const XMLCh *const localname,const XMLCh *const qname,const Attributes &attrs);
 	void FillFault(const XMLCh *const uri,const XMLCh *const localname,const XMLCh *const qname,const Attributes &attrs);
 	void FillHeader(const XMLCh *const uri,const XMLCh *const localname,const XMLCh *const qname,const Attributes &attrs);
