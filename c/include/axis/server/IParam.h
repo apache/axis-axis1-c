@@ -66,7 +66,8 @@ typedef union uParamValue
     class ArrayBean* pArray; /* this is used to hold arrays */
     class IArrayBean* pIArray; /* used by wrapper classes */
     ComplexObjectHandler* pCplxObj;
-    const AxisChar* pStrValue; 
+    const AxisChar* pStrValue;
+    struct AnyType* pAnyObject; /* used to hold AnyType struct for xsd:any */
 } uParamValue;
 
 class IParam  
