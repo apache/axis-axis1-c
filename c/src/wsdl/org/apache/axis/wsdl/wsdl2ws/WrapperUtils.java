@@ -161,6 +161,9 @@ public class WrapperUtils {
 	}
 	
 	public static String getClassNameFromParamInfoConsideringArrays(ParameterInfo param,WebServiceContext wscontext)throws WrapperFault{
+		if(param.getType().getName().equals(CUtils.anyTypeQname)){ //anyType
+			return "AnyType*";
+		}
 		Type type = wscontext.getTypemap().getType(param.getSchemaName());
 		if(type.isSimpleType()){
 			return param.getLangName();			

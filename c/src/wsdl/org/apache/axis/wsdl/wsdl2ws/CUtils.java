@@ -39,6 +39,8 @@ public class CUtils {
 	public static final String WRAPPER_NAME_APPENDER = "Wrapper";
 	public static final String CLASS_LODER_APPENDER = "Service";
 	public static final String WRAPPER_METHOD_APPENDER = "Wrapped";
+	public static final QName anyTypeQname = new QName("http://ws.apache.org/axisc/types","AnyType");
+
 	/* This type mapping only maps simple types the mapping for
 	   complex types are done with in the type class */
 	private static Hashtable class2QNamemap = new Hashtable();
@@ -204,7 +206,9 @@ public class CUtils {
 			return true;
 		return false;	
 	} 
-
+	public static boolean isAnyType(QName name){
+			return name.equals(anyTypeQname);
+	}
 	public static boolean isSimpleType(QName name){
 		if(qname2classmap.containsKey(name)){
 			return true;

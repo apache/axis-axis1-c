@@ -26,6 +26,7 @@ public class ParameterInfo {
     protected Type type;
     protected String attribName;
 	protected QName elementName;
+	private boolean isAnyType = false;
 	
     public String getParamName() {
 		// TODO: design review needed
@@ -92,4 +93,18 @@ public class ParameterInfo {
 		this.type = type;
 	}
 
+	/**
+	 * @return
+	 */
+	public boolean isAnyType() {
+		return isAnyType;
+	}
+
+	/**
+	 * @param b
+	 */
+	public void setAnyType(boolean b) {
+		isAnyType = b;
+	}
+	
 }
