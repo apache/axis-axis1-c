@@ -8,28 +8,25 @@
 
 #include <axis/client/Call.h>
 #include <axis/common/AxisWrapperAPI.h>
+#include "SOAPStruct_Array.h"
 #include "SOAPStruct.h"
-#include "ArrayOffloat.h"
-#include "ArrayOfSOAPStruct.h"
-#include "ArrayOfint.h"
-#include "ArrayOfstring.h"
 
 
 Call* g_pInteropTestPortType;
-extern char* echoString(char* Value0);
-extern ArrayOfstring echoStringArray(ArrayOfstring Value0);
+extern xsd__string echoString(xsd__string Value0);
+extern xsd__string_Array echoStringArray(xsd__string_Array Value0);
 extern int echoInteger(int Value0);
-extern ArrayOfint echoIntegerArray(ArrayOfint Value0);
+extern xsd__int_Array echoIntegerArray(xsd__int_Array Value0);
 extern float echoFloat(float Value0);
-extern ArrayOffloat echoFloatArray(ArrayOffloat Value0);
+extern xsd__float_Array echoFloatArray(xsd__float_Array Value0);
 extern SOAPStruct* echoStruct(SOAPStruct* Value0);
-extern ArrayOfSOAPStruct echoStructArray(ArrayOfSOAPStruct Value0);
+extern SOAPStruct_Array echoStructArray(SOAPStruct_Array Value0);
 extern void echoVoid();
-extern Axis_Base64Binary echoBase64(Axis_Base64Binary Value0);
-extern Axis_DateTime echoDate(Axis_DateTime Value0);
-extern Axis_HexBinary echoHexBinary(Axis_HexBinary Value0);
-extern Axis_Decimal echoDecimal(Axis_Decimal Value0);
-extern Axis_Boolean echoBoolean(Axis_Boolean Value0);
+extern xsd__base64Binary echoBase64(xsd__base64Binary Value0);
+extern xsd__dateTime echoDate(xsd__dateTime Value0);
+extern xsd__hexBinary echoHexBinary(xsd__hexBinary Value0);
+extern xsd__decimal echoDecimal(xsd__decimal Value0);
+extern xsd__boolean echoBoolean(xsd__boolean Value0);
 
 
 #endif // !defined(__INTEROPTESTPORTTYPE_H__INCLUDED_)
