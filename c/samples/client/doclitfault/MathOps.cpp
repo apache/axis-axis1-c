@@ -123,6 +123,7 @@ int MathOps::div(int Value0, int Value1)
 int MathOps::getFaultDetail(char** ppcDetail)
 {
     m_pCall->getFaultDetail(ppcDetail);
+    return 0;
 }
 
 //int MathOps::getStatus(){if ( m_pCall==NULL ) return AXIS_SUCCESS; else return m_pCall->getStatus();}
