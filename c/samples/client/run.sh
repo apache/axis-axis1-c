@@ -21,3 +21,16 @@ echo "running groupb..."
 echo "-----------------------------"
 ./groupb
 
+echo "-----------------------------"
+
+
+echo "running doclitbase..."
+echo "-----------------------------"
+./doclitbase
+
+echo "-----------------------------"
+
+
+echo "running doclitgroupb..."
+echo "-----------------------------"
+./doclitgroupb
