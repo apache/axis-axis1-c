@@ -64,7 +64,8 @@ int main(int argc, char* argv[])
 	arrstr.m_Size = ARRAYSIZE;
 	for (x=0;x<ARRAYSIZE;x++)
 	{
-		sprintf(buffer1, "%dth element <@#$%^&*()~`'\"?/><.,-_=+ ][}{|of string array", x);
+		//sprintf(buffer1, "%dth element <@#$%^&*()~`'\"?/><.,-_=+ ][}{|of string array", x);
+		sprintf(buffer1, "%dth element of string array", x);
 		arrstr.m_Array[x] = strdup(buffer1);
 	}
 	printf("invoking echoStringArray...\n");
