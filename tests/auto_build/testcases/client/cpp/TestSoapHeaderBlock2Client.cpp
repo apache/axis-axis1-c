@@ -3,7 +3,7 @@
  */
 
 #include "MathOps.hpp"
-
+#include <iostream>
 
 int main(int argc, char *argv[])
 {
@@ -84,19 +84,19 @@ int main(int argc, char *argv[])
 
     phb->addChild(parentNode);
 
-	printf("invoking MathOps div...\n");
+	cout << "invoking MathOps div..." << endl;
 	try
 		{
                 iResult = ws.div(15,5);
-                printf("%d\n", iResult);		
+                cout << iResult << endl;		
         }
         catch (AxisException& e)
         {
-                printf("%s\n", e.what());
+                cout << e.what() << endl;
         }
         catch(...)
         {
-                printf("Unknown exception\n");
+                cout << "Unknown exception" << endl;
         }
 	
    
@@ -108,15 +108,15 @@ int main(int argc, char *argv[])
     try
     {
                 iResult = ws.div(15,5);
-                printf("%d\n", iResult);
+                cout << iResult << endl;
     }
     catch (AxisException& e)
     {
-        printf("%s\n", e.what());
+        cout << e.what() << endl;
     }
     catch(...)
     {
-        printf("Unknown exception\n");
+        cout << "Unknown exception" << endl;
     }
 
 	
