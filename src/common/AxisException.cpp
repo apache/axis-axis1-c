@@ -70,10 +70,10 @@ const string AxisException::getMessage (int iExceptionCode)
         case AXISC_SERVICE_THROWN_EXCEPTION:
             sMessage = "A service has thrown an exception. see detail";
             break;
-        case SERVER_TESTEXCEPTION:
+        case SERVER_TEST_EXCEPTION:
             sMessage = "This is a testing error";
             break;
-        case AXISC_NODEVALUE_MISMATCH_EXCEPTION:
+        case AXISC_NODE_VALUE_MISMATCH_EXCEPTION:
             sMessage = "Cannot deserialize the requested element";
             break;
         default:

@@ -81,16 +81,16 @@ const string AxisWsddException::getMessage (int iExceptionCode)
     string sMessage;
     switch(iExceptionCode)
     {
-        case CLIENT_WSDD_SERVICENOTFOUND:
+        case CLIENT_WSDD_SERVICE_NOT_FOUND:
             sMessage = "Requested service not found";
             break;
-        case CLIENT_WSDD_METHODNOTALLOWED:
+        case CLIENT_WSDD_METHOD_NOT_ALLOWED:
             sMessage = "Requested method is not allowed";
             break;
-        case CLIENT_WSDD_PARATYPEMISMATCH:
+        case CLIENT_WSDD_PARA_TYPE_MISMATCH:
             sMessage = "Parameter type mismatch";
             break; 
-        case SERVER_WSDD_NOHANDLERSCONFIGURED:
+        case SERVER_WSDD_NO_HANDLERS_CONFIGURED:
             sMessage = "No handlers configured in server.wsdd";
             break;
         default:

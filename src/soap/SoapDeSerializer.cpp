@@ -299,7 +299,8 @@ int SoapDeSerializer::checkMessageBody(const AxisChar* pName,
     //if (0 != strcmp(m_pNode->m_pchNameOrValue, pName)) return AXIS_FAIL;
     if (0 != strcmp(m_pNode->m_pchNameOrValue, pName))
     {
-        THROW_AXIS_EXCEPTION(AXISC_NODEVALUE_MISMATCH_EXCEPTION);    
+        AXISTRACE1("AXISC_NODE_VALUE_MISMATCH_EXCEPTION", CRITICAL);
+        THROW_AXIS_EXCEPTION(AXISC_NODE_VALUE_MISMATCH_EXCEPTION);    
     }
     /* we can check the namespace uri too here. Should we ?*/
     m_pNode = NULL; /*This is to indicate that node is identified and used */
@@ -317,7 +318,8 @@ int SoapDeSerializer::checkForFault(const AxisChar* pName,
         {
             m_nStatus = AXIS_SUCCESS;
             m_pNode = NULL;
-            THROW_AXIS_EXCEPTION(AXISC_NODEVALUE_MISMATCH_EXCEPTION);
+            AXISTRACE1("AXISC_NODE_VALUE_MISMATCH_EXCEPTION", CRITICAL);
+            THROW_AXIS_EXCEPTION(AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
         }
         /* we can check the namespace uri too here. Should we ?*/
         m_nStatus = AXIS_SUCCESS;

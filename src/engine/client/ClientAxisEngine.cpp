@@ -67,7 +67,7 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
         Status = initializeHandlers (sSessionId, pSoap->getProtocol());
         if (AXIS_SUCCESS != Status)
         {
-            THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_HANDLERINITFAILED);
+            THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_HANDLER_INIT_FAILED);
             break;          //do .. while(0)
         }
         //Get Service specific Handlers from the pool if configured any
