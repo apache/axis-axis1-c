@@ -14,16 +14,17 @@
  *   limitations under the License.
  */
 
-//include <axis/Axis.h>
 #include <axis/Axis.hpp>
-
 AXIS_CPP_NAMESPACE_USE
 
-extern "C" STORAGE_CLASS_INFO void axiscInitializeAxis(bool bIsServer) {
-  Axis::initialize(bIsServer);
-}
+extern "C" {
+#include <axis/Axis.h>
 
-extern "C" STORAGE_CLASS_INFO void axiscTerminate() {
-  Axis::terminate();
-}
+STORAGE_CLASS_INFO void axiscInitializeAxis(AxiscBool bIsServer) {
+	Axis::initialize(0==bIsServer);
+} 
 
+STORAGE_CLASS_INFO void axiscTerminate() {
+	Axis::terminate();
+}
+}

@@ -268,9 +268,9 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 		}
 
 		if (sign.isConstructor()) {
-			text += "AXISCHANDLE axiscCreate" + classname + "(";
+			text += "AXISCHANDLE AXISC_STORAGE_CLASS_INFO axiscCreate" + classname + "(";
 		} else if (sign.isDestructor()) {
-			text += "void axiscDestroy" + classname + "(AXISCHANDLE ";
+			text += "void AXISC_STORAGE_CLASS_INFO axiscDestroy" + classname + "(AXISCHANDLE ";
 			String prettyClass = classNamePretty(classname);
 			text += Character.toLowerCase(prettyClass.charAt(0));
 			text += prettyClass.substring(1);
@@ -278,7 +278,7 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 				text += ", ";
 		} else {
 			String retType = toCType(sign.getReturnType());
-			text += retType + " ";
+			text += retType + " AXISC_STORAGE_CLASS_INFO ";
 			text += "axisc";
 			text += Character.toUpperCase(method.charAt(0));
 			text += method.substring(1);
