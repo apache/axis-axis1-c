@@ -102,9 +102,9 @@ public:
 	//HttpTransport(std::string& strUrl) : m_Typ(POST) {m_Url = Url(strUrl); m_IsHttpHeader = 0;m_strUrl = strUrl; m_HttpBindDone = false;}
 	~HttpTransport();
 
-    HttpTransport(std::string& strUrl, bool secure);
+    HttpTransport(std::string& strUrl, int secure);
     
-    HttpTransport(Url url, bool secure);
+    HttpTransport(Url url, int secure);
 
 	/// Initialize HTTP transport by establishing a channel to the remote end.
 	bool  Init();
