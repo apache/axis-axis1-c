@@ -1,3 +1,7 @@
+package org.apache.axismora.util;
+
+import javax.xml.namespace.QName;
+
 /*
  * The Apache Software License, Version 1.1
  *
@@ -53,18 +57,40 @@
  * <http://www.apache.org/>.
  */
 
-package org.apache.axismora.encoding;
-
-import org.apache.axis.encoding.SerializationContext;
-
-
 /**
- *  This class represent anything that is serilizable.
- *  it uses Parameter to serialize
- * @see org.apache.axismora.encoding.Parameter
- * @see org.apache.axismora.soap.BasicMessageData
- * @author Srinath Perera (hemapani@opensource.lk)
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
-public interface Serializable {
-    public void serialize(SerializationContext sc)throws java.io.IOException;
+public class QNameList {
+	private final int INITIAL_SIZE = 20;
+	private final int INCERMENT = 20; 
+	private QName[] list;
+	private int index; 
+	
+	public QNameList(){
+		list = new QName[INITIAL_SIZE];
+		index = 0;
+	}
+	
+	public void add(QName val){
+		list[index] = val;
+		index++;
+		if(index == INITIAL_SIZE){
+			QName[] listT = list;
+			list = new QName[list.length + INCERMENT];
+			for(int i = 0;i<index;i++){
+				list[i]  = listT[i];
+			}
+		}
+	}
+	
+	public QName get(int index){
+		if(index < this.index){
+			return list[index];
+		}else
+			throw new ArrayIndexOutOfBoundsException();			
+	}
+	
+	public int size(){
+		return index;
+	} 
 }

@@ -57,10 +57,9 @@ package org.apache.axismora.wsdl2ws.msg;
 
 import java.io.IOException;
 
+import org.apache.axis.AxisFault;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.util.Parser2Element;
-
-import org.apache.axis.AxisFault;
 import org.w3c.dom.Element;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;

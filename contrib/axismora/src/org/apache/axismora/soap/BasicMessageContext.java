@@ -58,7 +58,6 @@ package org.apache.axismora.soap;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -69,26 +68,11 @@ import java.util.Vector;
 
 import javax.xml.namespace.QName;
 
-import org.apache.axismora.MessageContext;
-import org.apache.axismora.ServicePool;
-import org.apache.axismora.client.ClientRequestContext;
-import org.apache.axismora.client.InputParameterInfo;
-import org.apache.axismora.client.RequestBodyContent;
-import org.apache.axismora.deployment.AxisDeployment;
-import org.apache.axismora.encoding.AxisPullParser;
-import org.apache.axismora.encoding.DesirializationContext;
-import org.apache.axismora.encoding.OutParameter;
-import org.apache.axismora.encoding.Serializable;
-import org.apache.axismora.provider.result.DocLiteralSerializer;
-import org.apache.axismora.provider.result.HandlerResetResult;
-import org.apache.axismora.provider.result.MSGResult;
-import org.apache.axismora.provider.result.RPCResult;
-import org.apache.axismora.util.AxisUtils;
-
 import org.apache.axis.AxisFault;
 import org.apache.axis.Constants;
 import org.apache.axis.components.logger.LogFactory;
 import org.apache.axis.deployment.wsdd.WSDDService;
+//import org.apache.axis.encoding.SerializationContext;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axis.encoding.SerializationContextImpl;
 import org.apache.axis.enum.Style;
@@ -100,6 +84,27 @@ import org.apache.axis.message.SOAPFault;
 import org.apache.axis.message.SOAPHeaderElement;
 import org.apache.axis.session.Session;
 import org.apache.axis.soap.SOAPConstants;
+import org.apache.axismora.MessageContext;
+import org.apache.axismora.ServicePool;
+import org.apache.axismora.client.ClientRequestContext;
+import org.apache.axismora.client.InputParameterInfo;
+import org.apache.axismora.client.RequestBodyContent;
+import org.apache.axismora.deployment.AxisDeployment;
+import org.apache.axismora.encoding.AxisPullParser;
+import org.apache.axismora.encoding.DesirializationContext;
+import org.apache.axismora.encoding.OutParameter;
+import org.apache.axismora.encoding.Serializable;
+import org.apache.axismora.encoding.ser.EnhancedWriter;
+import org.apache.axismora.encoding.ser.FaultSerializer;
+import org.apache.axismora.encoding.ser.SOAPHeaderSerializer;
+import org.apache.axismora.encoding.ser.SOAPMessageContext;
+import org.apache.axismora.provider.result.DocLiteralSerializer;
+import org.apache.axismora.provider.result.HandlerResetResult;
+import org.apache.axismora.provider.result.MSGResult;
+import org.apache.axismora.provider.result.RPCResult;
+import org.apache.axismora.util.AxisUtils;
+import org.apache.axismora.util.PerfLog;
+import org.apache.axismora.util.UtilityPool;
 import org.apache.commons.logging.Log;
 import org.w3c.dom.Element;
 import org.xmlpull.v1.XmlPullParser;
@@ -182,7 +187,11 @@ public class BasicMessageContext implements MessageContext {
 	/**
 	 * this Constructor is for the sake of testing only
 	 */
-	public BasicMessageContext(){}	
+	public BasicMessageContext(){
+		this.propertyMap = new Hashtable(PROPERTY_MAP_SIZE);
+		this.soapHeaderElements = UtilityPool.getVector();
+		this.createdSoapHeaders = UtilityPool.getVector();
+	}	
 
     public BasicMessageContext(
         InputStream inStream,
@@ -193,15 +202,13 @@ public class BasicMessageContext implements MessageContext {
         Session currentSession,
         String streamEncoding)
         throws AxisFault {
-
+		this();
         this.servicepool = servicepool;
         this.currentSession = currentSession;
-        this.propertyMap = new Hashtable(PROPERTY_MAP_SIZE);
+        
         this.nodeinfo = nodeinfo;
         this.service = service;
-        this.outStream = outStream;
-        this.soapHeaderElements = new Vector(ELEMENT_MAP_SIZE);
-        this.createdSoapHeaders = new Vector(ELEMENT_MAP_SIZE);
+  //      this.outStream = outStream;
         this.streamEncoding = streamEncoding;
        // this.methodName = service.getQName();
         this.style = service.getStyle();
@@ -211,15 +218,19 @@ public class BasicMessageContext implements MessageContext {
                 this,
                 inStream,
                 (service != null ? this.service.getStyle() : null));
-
-        w = new OutputStreamWriter(this.outStream);
+//		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outStream));
+//        w = new PrintWriter(bw);
+       w = new EnhancedWriter(outStream);
         /*
           initializing the serialization context
           This is comlpletly borrowed from existing Apache Axis. this drives all the serialization.
           The implementation  uses on the Envelope,Header and the Body of the org.apache.axis.message
           serializzation of these naturally followed the existing model.
         */
-        serializer = new SerializationContextImpl(w);
+		if(!org.apache.axismora.Constants.USE_MORA_SERIALIZER)
+			 serializer = new SerializationContextImpl(w);
+		else		
+			 serializer = new org.apache.axismora.encoding.ser.SerializationContext((EnhancedWriter)w);
 
         log.info("MessageContext created.......");
 
@@ -231,10 +242,7 @@ public class BasicMessageContext implements MessageContext {
         ServicePool servicepool,
         ClientRequestContext requestContext)
         throws AxisFault {
-        this.propertyMap = new Hashtable(PROPERTY_MAP_SIZE);
-        this.soapHeaderElements = new Vector(ELEMENT_MAP_SIZE);
-        this.createdSoapHeaders = new Vector(ELEMENT_MAP_SIZE);
-
+		this();
         this.servicepool = servicepool;
         this.currentSession = null;
 
@@ -249,14 +257,19 @@ public class BasicMessageContext implements MessageContext {
                 requestContext.getSender().getIn(),
                 requestContext.getStyle());
 
-        w = new OutputStreamWriter(this.outStream);
+//		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outStream));
+//		w = new PrintWriter(bw);
+		w = new EnhancedWriter(outStream);
         /*
           initializing the serialization context
           This is comlpletly borrowed from existing Apache Axis. this drives all the serialization.
           The implementation  uses on the Envelope,Header and the Body of the org.apache.axis.message
           serializzation of these naturally followed the existing model.
         */
-        serializer = new SerializationContextImpl(w);
+       if(!org.apache.axismora.Constants.USE_MORA_SERIALIZER)
+       		serializer = new SerializationContextImpl(w);
+       else		
+	   		serializer = new org.apache.axismora.encoding.ser.SerializationContext((EnhancedWriter)w);
         
         this.style=requestContext.getStyle();
         this.use = requestContext.getUse();
@@ -445,7 +458,7 @@ public class BasicMessageContext implements MessageContext {
         this.soapEnvelope = pSoapEnvelope;
     }
 
-    public SerializationContext getSerializationContext() {
+    public org.apache.axis.encoding.SerializationContext getSerializationContext() {
         return this.serializer;
     }
     public void startParseSOAPBody() throws AxisFault {
@@ -469,80 +482,41 @@ public class BasicMessageContext implements MessageContext {
      * headers - content(objvalue) are as org.w3c.Element array inside <code>SOAPHeaderElementContent</code>
      * body - content(objvalue) as Result object
      */
-    public void serialize() throws AxisFault {
+    public void serializeSL() throws AxisFault {
         try {
             //if soap Envelope not set create a default one 
             if(this.soapEnvelope == null)
             	this.soapEnvelope = new SOAPEnvelope(); 
+            SOAPMessageContext soapmsgcontext = new SOAPMessageContext(soapEnvelope);
             
             //add the headers to the soap envelope
             Iterator headers = this.soapHeaderElements.iterator();
             SOAPHeaderElement header;
-            
-            if(this.use.equals(Use.LITERAL)){
-            	 log.info("I am literal delete me");
-                 serializer.setDoMultiRefs(false);
-                 serializer.setShouldSendXSIType(true);
-            }
-            /**
-             *  recived headers are added if they are relay = true or not meant to
-             *  This node.
-            */
             for (; headers.hasNext();) {
                 header = (SOAPHeaderElement) headers.next();
                 if (header.getRelay()
                     || !nodeinfo.getAllRoles().contains(header.getActor()))
-                    this.soapEnvelope.addHeader(header);
+					soapmsgcontext.addHeader(new SOAPHeaderSerializer(header));
             }
             /* Add all the headers created at this node */
             Iterator newheaders = this.soapHeaderElements.iterator();
             for (; newheaders.hasNext();)
-                this.soapEnvelope.addHeader((SOAPHeaderElement) newheaders.next());
+				soapmsgcontext.addHeader(new SOAPHeaderSerializer(
+						(SOAPHeaderElement) newheaders.next()));
 
-            //add the soap body
-            SOAPBodyElement bo = new SOAPBodyElement();
 
             if (!this.hasSoapFault)
-                bo.setObjectValue(this.resultValue);
+				soapmsgcontext.addBodyPart(this.resultValue);
             else {
                 //this works the testCase - Serialization Test testFault()
-                this.soapEnvelope.getBody().addChildElement(this.soapFault);
+				soapmsgcontext.addBodyPart(new FaultSerializer(this.soapFault,SOAP_CONSTANTS));
             }
 
-            this.soapEnvelope.addBodyElement(bo);
-
-			//needed specific to rpc
-            if (this.style ==  Style.RPC){
-                bo.setName(this.methodName.getLocalPart() + "Response");
-                bo.setNamespaceURI(this.methodName.getNamespaceURI());
-            }
-
-            /*
-               ** registor our Serializer **
-               Add the Seralizer which can serialize a instance of result.
-               The serializer added to the default type mapping
-               1) used value is enable adding to default type mapping  edit the DefaultTypeMappingImpl ** used here **
-               2) Add the Serializer as a default type mapping
-               3) add dymnamically Still DONOT WORKING (Serialier not found exception) we might able to find a way !!!
-                       TypeMappingRegistry reg = new TypeMappingRegistryImpl();
-                       javax.xml.rpc.encoding.TypeMapping t = reg.getOrMakeTypeMapping("www.opensurce.lk/axis/encoding");
-                       sc.getTypeMapping().register(Result.class , Constants.SOAP_RESULT,  new ResultSerializerFactory(),null);
-                       t.register(Parameter.class , Constants.SOAP_RESULT,  new ResultSerializerFactory(),null);
-             */
-
-            /*	serializer.getTypeMapping().register(
-            		Result.class,
-            		Constants.SOAP_RESULT,
-            		new ResultSerializerFactory(),
-            		null);
-            	serializer.getTypeMapping().register(
-            		SOAPHeaderElementContent.class,
-            		Constants.SOAP_BODY_ELEMENT_CONTENT,
-            		new SOAPHeaderElementContentSerializerFactory(),
-            		null); */
-
-            //print the message to the output
-            this.soapEnvelope.output(serializer);
+			soapmsgcontext.serialize(serializer);
+			if(PerfLog.LOG_PERF){
+				PerfLog.recored(System.currentTimeMillis(),"END");
+				PerfLog.print();
+			}
             this.w.flush();
 
         } catch (Exception e) {
@@ -551,6 +525,111 @@ public class BasicMessageContext implements MessageContext {
         }
 
     }
+
+	/**
+	 * The serialization is done by the means adding the headers(they are kept separate up to the point)
+	 * and body to the envelope and calling the the <code>output(SerializationContext)</code> on the <code>SOAPEnvelope.</code>
+	 * We are Simply reusing the exisiting Aixs <code>SerializationContext</code>.
+	 * Note:- But you have to make sure the object value of the <code>SOAPHeaderElement</code> and <code>SOAPBodyElement</code>
+	 * should be such that the <code>SerializationContext</code> can find serializers for the values at the type mapping.
+	 * We achive this by adding two custom Serializers to the <code>Typemapping</code>
+	 * (change <code>DefaultTypeMappingImpl</code> add new registry entry as default or enable change the code dynamically)
+	 *
+	 * headers - content(objvalue) are as org.w3c.Element array inside <code>SOAPHeaderElementContent</code>
+	 * body - content(objvalue) as Result object
+	 */
+	public void serialize() throws AxisFault {
+		if(org.apache.axismora.Constants.USE_MORA_SERIALIZER){
+			serializeSL();
+			return;		
+		}
+		
+		try {
+			//if soap Envelope not set create a default one 
+			if(this.soapEnvelope == null)
+				this.soapEnvelope = new SOAPEnvelope(); 
+            
+			//add the headers to the soap envelope
+			Iterator headers = this.soapHeaderElements.iterator();
+			SOAPHeaderElement header;
+            
+			if(this.use.equals(Use.LITERAL)){
+				 log.info("I am literal delete me");
+				 serializer.setDoMultiRefs(false);
+				 serializer.setShouldSendXSIType(true);
+			}
+			/**
+			 *  recived headers are added if they are relay = true or not meant to
+			 *  This node.
+			*/
+			for (; headers.hasNext();) {
+				header = (SOAPHeaderElement) headers.next();
+				if (header.getRelay()
+					|| !nodeinfo.getAllRoles().contains(header.getActor()))
+					this.soapEnvelope.addHeader(header);
+			}
+			/* Add all the headers created at this node */
+			Iterator newheaders = this.soapHeaderElements.iterator();
+			for (; newheaders.hasNext();)
+				this.soapEnvelope.addHeader((SOAPHeaderElement) newheaders.next());
+
+			//add the soap body
+			SOAPBodyElement bo = new SOAPBodyElement();
+
+			if (!this.hasSoapFault)
+				bo.setObjectValue(this.resultValue);
+			else {
+				//this works the testCase - Serialization Test testFault()
+				this.soapEnvelope.getBody().addChildElement(this.soapFault);
+			}
+
+			this.soapEnvelope.addBodyElement(bo);
+
+//			//needed specific to rpc
+//			if (this.style ==  Style.RPC){
+//				bo.setName(this.methodName.getLocalPart() + "Response");
+//				bo.setNamespaceURI(this.methodName.getNamespaceURI());
+//			}
+
+			/*
+			   ** registor our Serializer **
+			   Add the Seralizer which can serialize a instance of result.
+			   The serializer added to the default type mapping
+			   1) used value is enable adding to default type mapping  edit the DefaultTypeMappingImpl ** used here **
+			   2) Add the Serializer as a default type mapping
+			   3) add dymnamically Still DONOT WORKING (Serialier not found exception) we might able to find a way !!!
+					   TypeMappingRegistry reg = new TypeMappingRegistryImpl();
+					   javax.xml.rpc.encoding.TypeMapping t = reg.getOrMakeTypeMapping("www.opensurce.lk/axis/encoding");
+					   sc.getTypeMapping().register(Result.class , Constants.SOAP_RESULT,  new ResultSerializerFactory(),null);
+					   t.register(Parameter.class , Constants.SOAP_RESULT,  new ResultSerializerFactory(),null);
+			 */
+
+			/*	serializer.getTypeMapping().register(
+					Result.class,
+					Constants.SOAP_RESULT,
+					new ResultSerializerFactory(),
+					null);
+				serializer.getTypeMapping().register(
+					SOAPHeaderElementContent.class,
+					Constants.SOAP_BODY_ELEMENT_CONTENT,
+					new SOAPHeaderElementContentSerializerFactory(),
+					null); */
+
+			//print the message to the output
+			this.soapEnvelope.output(serializer);
+			if(PerfLog.LOG_PERF){
+				PerfLog.recored(System.currentTimeMillis(),"END");
+				PerfLog.print();
+			}
+			this.w.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new AxisFault("error at serialization", e);
+		}
+
+	}
+
 
     public void resetBlindLevel() {
         this.deserializer.resetBlindLevel();
@@ -843,4 +922,12 @@ public class BasicMessageContext implements MessageContext {
 		return deserializer.getAxisPullParser();
 	}
 
+	public void finish(){
+		deserializer.finish();
+		UtilityPool.returnVectors(soapHeaderElements);
+		UtilityPool.returnVectors(createdSoapHeaders);
+		nodeinfo.finish();
+		//serializer.finish();
+
+	}
 }

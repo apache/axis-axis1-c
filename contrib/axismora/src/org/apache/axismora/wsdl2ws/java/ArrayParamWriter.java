@@ -174,56 +174,19 @@ public class ArrayParamWriter extends ParmWriter {
 
     public void writeSerialieCode() throws WrapperFault {
         try {
-//			if (this.isDirectReturn) {
-//            	writer.write(
-//                	"\t\tString m_URI =\"" + type.getName().getNamespaceURI() + "\";\n");
-//            	writer.write(
-//                	"\t\tString type_name = \""
-//                    + type.getName().getLocalPart()
-//                    + "\";\n");
-//
-//            
-//                SerializationContext context;
-//                writer.write(
-//                    "\t\tboolean writeOutTag = !org.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten;\n");
-//                writer.write("\t\tif(writeOutTag){\n");
-//                writer.write(
-//                    "\t\t\tcontext.writeString(\"<prf:\");\n" 
-//                    +"\t\t\tcontext.writeString(type_name);\n"
-//                    +"\t\t\tcontext.writeString(\" xmlns:prf =\\\"\");\n"
-//                    +"\t\t\tcontext.writeString(m_URI);\n"
-//                    +"\t\t\tcontext.writeString(\"\\\" >\");\n");
-//				writer.write("\t\t}\n");   
-//            }
-//            writer.write(
-//                "\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten = false;\n");
-
             writer.write("\t\tfor (int i = 0; i < param.length; i++) {\n");
             writer.write(
-                "\t\t\tcontext.writeString(\"<item\"+i+ \" "
+                "\t\t\tcontext.startTag(\"item\"+i,\""
                     + org.apache.axismora.wsdl2ws.WrapperUtils.getParamTypeString(qname)
-                    + ">\");\n");
+                    + "\");\n");
             writer.write(
                 JavaUtils.isJavaSimpleType(arrtype) ? "" : "\t\t\tif(param[i]!=null){\n");
             if (!org.apache.axismora.wsdl2ws.info.TypeMap.isSimpleType(arrtype)) {
-//                writer.write(
-//                    "\t\t\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten = true;\n");
                 writer.write("\t\t\t\tparam[i].serialize(context);\n");
             } else
                 writer.write("\t\t\t\tcontext.writeSafeString(java.lang.String.valueOf(param[i]));\n");
             writer.write(JavaUtils.isJavaSimpleType(arrtype) ? "" : "\t\t\t}\n");
-            writer.write("\t\t\tcontext.writeString(\"</item\"+i+ \">\");\n\t\t}\n");
-//            writer.write("\t\t//name of parameter will be written by upper level\n");
-//            if (this.isDirectReturn) {
-//                writer.write("\t\t//write the end tag\n");
-//                writer.write("\t\tif(writeOutTag){\n");
-//                writer.write(
-//                    "\t\t\tcontext.writeString(\"</prf:\");\n"
-//                    +"\t\t\tcontext.writeString(type_name);\n"
-//                    +"\t\t\tcontext.writeString(\">\");\n");
-//				writer.write("\t\t}\n");    
-//            }
-
+            writer.write("\t\t\tcontext.endTag();\n\t\t}\n");
         } catch (IOException e) {
             e.printStackTrace();
             throw new WrapperFault(e);

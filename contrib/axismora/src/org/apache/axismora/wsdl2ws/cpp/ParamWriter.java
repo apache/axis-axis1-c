@@ -3,7 +3,6 @@ package org.apache.axismora.wsdl2ws.cpp;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 

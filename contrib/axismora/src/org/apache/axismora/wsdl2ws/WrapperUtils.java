@@ -56,19 +56,17 @@
 package org.apache.axismora.wsdl2ws;
 
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
 import javax.xml.namespace.QName;
 
+import org.apache.axismora.Constants;
 import org.apache.axismora.wsdl2ws.cpp.CPPUtils;
-import org.apache.axismora.wsdl2ws.info.ElementInfo;
 import org.apache.axismora.wsdl2ws.info.ParameterInfo;
 import org.apache.axismora.wsdl2ws.info.Type;
 import org.apache.axismora.wsdl2ws.info.TypeMap;
 import org.apache.axismora.wsdl2ws.info.WebServiceContext;
-import org.apache.axismora.Constants;
 
 /**
  * Utility Classes

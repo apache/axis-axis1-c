@@ -301,8 +301,9 @@ public class AxisUtils {
 
     public static Document getCommonDomDocument() throws ParserConfigurationException {
         if (commonDoc == null) {
-            commonDoc =
-                DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			dbf.setNamespaceAware(true);
+			commonDoc = dbf.newDocumentBuilder().newDocument();
         }
         return commonDoc;
     }

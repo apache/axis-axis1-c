@@ -67,6 +67,7 @@ import org.apache.axis.soap.SOAPConstants;
  * @author Srianth Perera (hemapani@opensource.lk)
  */
 public class Constants {
+	public static final boolean USE_MORA_SERIALIZER = true;
     public static final String SERVER_CONFIG_FILE = "mora-server.wsdd";
     public static final String CLIENT_CONFIG_FILE = "mora-client.wsdd";
 

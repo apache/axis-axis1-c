@@ -62,9 +62,6 @@ import javax.xml.rpc.ParameterMode;
 
 import org.apache.axismora.encoding.OutParameter;
 import org.apache.axismora.encoding.Serializable;
-import org.apache.axismora.wsdl2ws.c.ParamWriter;
-
-import org.apache.axis.encoding.SerializationContext;
 
 /**
  * @author Srinath Perera(hemapani@opensource.lk)
@@ -91,7 +88,7 @@ public class InputParameterInfo implements Serializable {
     /**
      * @see org.apache.axismora.encoding.Serializable#serialize(org.apache.axis.encoding.SerializationContext)
      */
-    public void serialize(SerializationContext sc) throws IOException {
+    public void serialize(org.apache.axis.encoding.SerializationContext sc) throws IOException {
  //       ParamWriter.tagWritten = true;
         sc.writeString("<" + parameterName + ">\n");
 //		org.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten = true;

@@ -90,7 +90,8 @@ public abstract class ParmWriter extends JavaClassWriter {
     protected static final int COMMAN_PARM = 2;
 
     /* array of parameter types and parameter names of the this param */
-    protected String[][] attribs;
+    //protected String[][] attribs;
+    protected Attrib[] attribs;
 
     protected WebServiceContext wscontext;
 
@@ -150,9 +151,9 @@ public abstract class ParmWriter extends JavaClassWriter {
                 //if((t = wscontext.getTypemap().getType(new QName(attribs[i][2],attribs[i][3])))!= null && t.isArray()) continue;
                 writer.write(
                     "\tprivate "
-                        + attribs[i][1]
+                        + attribs[i].javaType
                         + " "
-                        + attribs[i][0]
+                        + attribs[i].javaNm
                         + ";\n");
             }
 			writer.write("\n");
@@ -242,27 +243,9 @@ public abstract class ParmWriter extends JavaClassWriter {
      * get the path to the file.
      * @return
      */
-//    protected File getJavaFilePath() {
-//    
-//    	
-//        new File(
-//            wscontext.getWrapInfo().getTargetOutputLocation()
-//                + "/"
-//                + WrapperUtils.getPackegeName4QualifiedName(
-//                    type.getLanguageSpecificName()).replace(
-//                    '.',
-//                    '/'))
-//            .mkdirs();
-//        String fileName =
-//            wscontext.getWrapInfo().getTargetOutputLocation()
-//                + "/"
-//                + type.getLanguageSpecificName().replace('.', '/')
-//                + ".java";
-//        return new File(fileName);
-//    }
     /* genarate the arrtibs array */
-    public String[][] getAttribList(String Qualifiedname) throws WrapperFault {
-        String[][] attribs;
+    public Attrib[] getAttribList(String Qualifiedname) throws WrapperFault {
+		Attrib[] attribs;
         ArrayList attribfeilds = new ArrayList();
 		ArrayList elementfeilds = new ArrayList();
 
@@ -280,53 +263,45 @@ public abstract class ParmWriter extends JavaClassWriter {
         
         //get all the fields
 
-        attribs = new String[attribfeilds.size()+elementfeilds.size()][];
+        attribs = new Attrib[attribfeilds.size()+elementfeilds.size()];
         for (int i = 0; i < attribfeilds.size(); i++) {
-            attribs[i] = new String[7];
-            attribs[i][0] = ((String) attribfeilds.get(i));
+            attribs[i] = new Attrib();
+			attribs[i].xmlNm = ((String) attribfeilds.get(i));
+            attribs[i].javaNm = attribs[i].xmlNm;
 
-			Type t = type.getTypForAttribName(attribs[i][0]);
-            attribs[i][1] = t.getLanguageSpecificName();
-            QName name = t.getName();
+			Type t = type.getTypForAttribName(attribs[i].xmlNm);
+            attribs[i].javaType = t.getLanguageSpecificName();
+			attribs[i].xmlType = t.getName();
 
-            attribs[i][2] = name.getNamespaceURI();
-            attribs[i][3] = name.getLocalPart();
-			attribs[i][4] = attribs[i][1];
-			attribs[i][5] = null;
-			attribs[i][6] = null;
+			attribs[i].wrapName = attribs[i].javaType;
+			attribs[i].arryXmlType = null;
         }
         
 		for (int i = attribfeilds.size(); i < attribfeilds.size()+elementfeilds.size(); i++) {
-			attribs[i] = new String[7];
-			attribs[i][0] = ((String) elementfeilds.get(i - attribfeilds.size()));
+			attribs[i] = new Attrib();
+			attribs[i].xmlNm = ((String) elementfeilds.get(i - attribfeilds.size()));
+			attribs[i].javaNm = attribs[i].xmlNm;
 			
-			ElementInfo element = type.getElementForElementName(attribs[i][0]);
+			ElementInfo element = type.getElementForElementName(attribs[i].xmlNm);
 			Type t = element.getType();
-			attribs[i][1] = t.getLanguageSpecificName();
-			QName name = t.getName();
+			attribs[i].javaType = t.getLanguageSpecificName();
+			attribs[i].xmlType = t.getName();
 
-			attribs[i][2] = name.getNamespaceURI();
-			attribs[i][3] = name.getLocalPart();
 			
-			attribs[i][4] = attribs[i][1];
+			attribs[i].wrapName = attribs[i].javaType;
 			
 			if(t.isArray()){
-				attribs[i][4] = attribs[i][1];
 				Type arrayType = WrapperUtils.getArrayType(t);
-				attribs[i][1] = arrayType.getLanguageSpecificName()+"[]";
-				attribs[i][5] = arrayType.getName().getNamespaceURI();
-				attribs[i][6] = arrayType.getName().getLocalPart();
- 
+				attribs[i].javaType = arrayType.getLanguageSpecificName()+"[]";
+				attribs[i].arryXmlType = arrayType.getName();
 			}else if(element.getMaxOccurs() > 1){
-				attribs[i][1] = attribs[i][1] + "[]";
-				Type typedata = new Type(new QName(name.getNamespaceURI(),name.getLocalPart()+"Array")
+				attribs[i].javaType = attribs[i].javaType + "[]";
+				Type typedata = new Type(new QName(attribs[i].xmlType.getNamespaceURI(),attribs[i].xmlType.getLocalPart()+"Array")
 					,null,false,WrapperConstants.LANGUAGE_JAVA);
 				typedata.setTypeNameForElementName(new ElementInfo(new QName("item"),t));
 				typedata.setArray(true);
-				attribs[i][4] = TypeMap.regestorArrayTypeToCreate(typedata);
-				attribs[i][5] = t.getName().getNamespaceURI();
-				attribs[i][6] = t.getName().getLocalPart();
-
+				attribs[i].wrapName = TypeMap.regestorArrayTypeToCreate(typedata);
+				attribs[i].arryXmlType = t.getName();
 			}
 		}
 
@@ -339,23 +314,23 @@ public abstract class ParmWriter extends JavaClassWriter {
         for (int i = 0; i < this.attribs.length; i++) {
             writer.write(
                 "\tpublic void set"
-                    + WrapperUtils.capitalizeFirstCaractor(attribs[i][0])
+                    + WrapperUtils.capitalizeFirstCaractor(attribs[i].javaNm)
                     + "("
-                    + attribs[i][1]
+                    + attribs[i].javaType
                     + " "
-                    + attribs[i][0]
+                    + attribs[i].javaNm
                     + "){\n\t\tthis."
-                    + attribs[i][0]
+                    + attribs[i].javaNm
                     + " = "
-                    + attribs[i][0]
+                    + attribs[i].javaNm
                     + ";\n\t}\n");
             writer.write(
                 "\tpublic "
-                    + attribs[i][1]
+                    + attribs[i].javaType
                     + " get"
-                    + WrapperUtils.capitalizeFirstCaractor(attribs[i][0])
+                    + WrapperUtils.capitalizeFirstCaractor(attribs[i].javaNm)
                     + "(){\n\t\treturn "
-                    + attribs[i][0]
+                    + attribs[i].javaNm
                     + ";\n\t}\n");
         }
     }
@@ -366,17 +341,17 @@ public abstract class ParmWriter extends JavaClassWriter {
             writer.write(
                 "\tpublic "+ super.classname + "(");
             if (attribs.length > 0) {
-                writer.write(attribs[0][1]
+                writer.write(attribs[0].javaType
                         + " "
-                        + attribs[0][0]);
+                        + attribs[0].javaNm);
                 for (int i = 1; i < this.attribs.length; i++)
-                    writer.write(","+attribs[i][1]
+                    writer.write(","+attribs[i].javaType
                             + " "
-                            + attribs[i][0]);
+                            + attribs[i].javaNm);
             }
             writer.write("){\n");
             for (int i = 0; i < this.attribs.length; i++)
-                writer.write("\t\tthis." + attribs[i][0] + " = " + attribs[i][0] + ";\n");
+                writer.write("\t\tthis." + attribs[i].javaNm + " = " + attribs[i].javaNm + ";\n");
             writer.write("\t}\n");
         } catch (IOException e) {
             throw new WrapperFault(e);
@@ -410,8 +385,8 @@ public abstract class ParmWriter extends JavaClassWriter {
 		writer.write("\tpublic void init(){\n");
 
 		for (int i = 0; i < attribs.length; i++) {    
-		if(attribs[i][1].endsWith("[]") && !attribs[i][0].equals("byte[]")){
-			String arrayType = attribs[i][1];
+		if(attribs[i].javaType.endsWith("[]") && !attribs[i].javaType.equals("byte[]")){
+			String arrayType = attribs[i].javaType;
 						
 			int length = TestUtils.getRandomInt(20);
 			String arrstr = "";
@@ -436,20 +411,20 @@ public abstract class ParmWriter extends JavaClassWriter {
 				var++;
 			}
 						
-			writer.write("\t\t"+attribs[i][0]+" = new "+arrayType+"{");
+			writer.write("\t\t"+attribs[i].javaNm+" = new "+arrayType+"{");
 			writer.write(arrstr);
 			writer.write("};\n");
 						
 		}else{
-			String javaType = attribs[i][1];
+			String javaType = attribs[i].javaType;
 			String wrappername = TypeMap.getWrapperCalssNameForJavaClass(javaType);
 			if(javaType.equals(wrappername)){
-				writer.write("\t\t"+attribs[i][0]+" = new "+ javaType + "();\n");
-				writer.write("\t\t"+attribs[i][0]+".init();\n");
+				writer.write("\t\t"+attribs[i].javaNm+" = new "+ javaType + "();\n");
+				writer.write("\t\t"+attribs[i].javaNm+".init();\n");
 			}else{
 				writer.write("\t\t"+wrappername + " tparam"+i+" = new "+ wrappername + "();\n");
 				writer.write("\t\ttparam"+i+".init();\n");
-				writer.write("\t\t"+attribs[i][0]+" = tparam"+i+".getParam();\n");
+				writer.write("\t\t"+attribs[i].javaNm+" = tparam"+i+".getParam();\n");
 			}	
 		}
 		}
@@ -508,16 +483,16 @@ public abstract class ParmWriter extends JavaClassWriter {
                 + ")obj;\n");
 
         for (int i = 0; i < attribs.length; i++) {
-            String name = attribs[i][1];
+            String name = attribs[i].javaType;
 
             //if array		
             if (name.endsWith("[]")) {
                 String tname = name.substring(0, name.length() - 2);
                 writer.write(
                     "\t\tif("
-                        + attribs[i][0]
+                        + attribs[i].javaNm
                         + "!=null && "
-                        + attribs[i][0]
+                        + attribs[i].javaNm
                         + ".length !=0){\n");
                 if ("int".equals(tname)
                     || "long".equals(tname)
@@ -529,43 +504,43 @@ public abstract class ParmWriter extends JavaClassWriter {
                     || "boolean".equals(tname)) {
                     writer.write(
                         "\t\tif("
-                            + attribs[i][0]
+                            + attribs[i].javaNm
                             + "[0] != value.get"
-                            + WrapperUtils.capitalizeFirstCaractor(attribs[i][0])
+                            + WrapperUtils.capitalizeFirstCaractor(attribs[i].javaNm)
                             + "()[0])\n\t\t\treturn false;\n");
                 } else {
                     //else
                     writer.write(
                         "\t\tif(!"
-                            + attribs[i][0]
+                            + attribs[i].javaNm
                             + "[0].equals(value.get"
-                            + WrapperUtils.capitalizeFirstCaractor(attribs[i][0])
+                            + WrapperUtils.capitalizeFirstCaractor(attribs[i].javaNm)
                             + "()[0]))\n\t\t\treturn false;\n");
                 }
                 writer.write("\t\t}\n");
                 //if simple type	
             } else if (
-                "int".equals(attribs[i][1])
-                    || "long".equals(attribs[i][1])
-                    || "float".equals(attribs[i][1])
-                    || "double".equals(attribs[i][1])
-                    || "short".equals(attribs[i][1])
-                    || "byte".equals(attribs[i][1])
-                    || "char".equals(attribs[i][1])
-                    || "boolean".equals(attribs[i][1])) {
+                "int".equals(attribs[i].javaType)
+                    || "long".equals(attribs[i].javaType)
+                    || "float".equals(attribs[i].javaType)
+                    || "double".equals(attribs[i].javaType)
+                    || "short".equals(attribs[i].javaType)
+                    || "byte".equals(attribs[i].javaType)
+                    || "char".equals(attribs[i].javaType)
+                    || "boolean".equals(attribs[i].javaType)) {
                 writer.write(
                     "\t\tif("
-                        + attribs[i][0]
+                        + attribs[i].javaNm
                         + " != value.get"
-                        + WrapperUtils.capitalizeFirstCaractor(attribs[i][0])
+                        + WrapperUtils.capitalizeFirstCaractor(attribs[i].javaNm)
                         + "())\n\t\t\treturn false;\n");
             } else {
                 //else
                 writer.write(
                     "\t\tif(!"
-                        + attribs[i][0]
+                        + attribs[i].javaNm
                         + ".equals(value.get"
-                        + WrapperUtils.capitalizeFirstCaractor(attribs[i][0])
+                        + WrapperUtils.capitalizeFirstCaractor(attribs[i].javaNm)
                         + "()))\n\t\t\treturn false;\n");
             }
 

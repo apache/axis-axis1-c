@@ -82,6 +82,7 @@ import org.apache.axismora.provider.ProviderFactory;
 import org.apache.axismora.soap.BasicMessageContext;
 import org.apache.axismora.soap.SOAPNodeInfo;
 import org.apache.axismora.util.AxisUtils;
+import org.apache.axismora.util.PerfLog;
 
 import org.apache.axis.AxisFault;
 import org.apache.axis.components.logger.LogFactory;
@@ -120,6 +121,8 @@ public class AxisEngine extends BasicHandler {
     public AxisEngine(String filename,ServletContext servletcontext) throws Exception {
 		this.servletcontext = servletcontext;
         log.info("Axis Engine initializing");
+
+        	
 		File file = null;
 		
 		// the logic is borrowed from 
@@ -221,33 +224,31 @@ public class AxisEngine extends BasicHandler {
         char[] passwd,
         String encoding) {
        
-    log.info("start processing service " + SOAPAction);
-    // supporting both method name - Dimuthu.
-	String methodName="";
-	String serviceName="";   
+    	log.info("start processing service " + SOAPAction);
+    
+		if(PerfLog.LOG_PERF){
+			PerfLog.recored(System.currentTimeMillis(),"START");
+		}
+	
+    	// supporting both method name - Dimuthu.
+		String methodName = "";
+		String serviceName = "";   
    
-	int index = SOAPAction.indexOf('$');
-	  
-		 if(index==-1){
-		  serviceName=SOAPAction.trim();
-		 }else{
-		   serviceName=SOAPAction.substring(0,index).trim();
-		   methodName=SOAPAction.substring(index+1).trim();
+		int index = SOAPAction.indexOf('$');
+        if(index==-1){
+			serviceName=SOAPAction.trim();
+		}else{
+			serviceName=SOAPAction.substring(0,index).trim();
+		   	methodName=SOAPAction.substring(index+1).trim();
 		 }
    
         MessageContext data = null;
         try {
-            //create MessageData
-            //*** this part should changed acording to actual implementation ****
-            // to change here and message data
-
             WSDDService service = deployment.getService(new QName(serviceName));
-
             handlers = new Handler[7];
             /**
              * Load the Handlers to the engine
              */
-            //finalize about protocol
             handlers[0] = pool.getTransportRequestFlowHandlers(Constants.HTTP);
             handlers[1] = pool.getGlobelRequestFlowHandlers();
             handlers[2] = pool.getServiceRequestFlowhandlers(service);
@@ -264,18 +265,28 @@ public class AxisEngine extends BasicHandler {
             SOAPNodeInfo nodeinfo = new SOAPNodeInfo(deployment);
             ArrayList roles = new ArrayList();
             ArrayList headers = new ArrayList();
+
             for (int i = 0;(i < handlers.length); i++) {
                 if (i != 3) {
                     roles.addAll(((HandlerChain) handlers[i]).getAllRoles());
                     headers.addAll(((HandlerChain) handlers[i]).getAllUnderStandQNames());
                 }
             }
-            for (int i = 0; i < roles.size(); i++) {
+
+            int rolesSize = roles.size();
+            for (int i = 0; i < rolesSize; i++) {
                 nodeinfo.addRole((String) roles.get(i));
             }
-            for (int i = 0; i < headers.size(); i++) {
+
+            int headerSize = headers.size();
+            for (int i = 0; i < headerSize ; i++) {
                 nodeinfo.addUnderstandHeader((QName) headers.get(i));
             }
+            
+			if(PerfLog.LOG_PERF){
+				PerfLog.recored(System.currentTimeMillis(),"START_INIT_DONE");
+			}
+
             /**
              * Initalize the MessageData
              */
@@ -287,10 +298,15 @@ public class AxisEngine extends BasicHandler {
                 data.setMethodName(new QName(serviceName,methodName));
             }
             
+            
             //load the provider
             org.apache.axismora.provider.Provider provider 
             				= ProviderFactory.getProvider(data);
             handlers[3] = provider;
+            
+			if(PerfLog.LOG_PERF){
+				PerfLog.recored(System.currentTimeMillis(),"START_PARSING");
+			}
 
             data.parseAndValidateKnownTags();
             //set http user detail
@@ -338,7 +354,6 @@ public class AxisEngine extends BasicHandler {
 
             pool.returnGlobelResponseFlowHandlers((HandlerChain) handlers[5]);
             pool.returnTransportResponseFlowHandlers(Constants.HTTP, (HandlerChain) handlers[6]);
-
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             QName faultCode = org.apache.axis.Constants.FAULT_SOAP12_RECEIVER;

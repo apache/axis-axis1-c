@@ -60,7 +60,6 @@ package org.apache.axismora.wsdl2ws.doclit;
  * Created on Oct 31, 2002
  */
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;

@@ -1,24 +1,17 @@
 
 package org.apache.axismora.wsdl2ws.doclit;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.xml.namespace.QName;
 
-
-
 import org.apache.axismora.Constants;
-
-
 import org.apache.axismora.wsdl2ws.WrapperFault;
 import org.apache.axismora.wsdl2ws.WrapperUtils;
 import org.apache.axismora.wsdl2ws.info.MethodInfo;
 import org.apache.axismora.wsdl2ws.info.ParameterInfo;
-
-
 import org.apache.axismora.wsdl2ws.info.WebServiceContext;
 import org.apache.axismora.wsdl2ws.java.JavaClassWriter;
 import org.apache.axismora.wsdl2ws.java.JavaUtils;
