@@ -81,7 +81,7 @@ class CharacterElement : public BasicNode
 public:
 	bool operator ==( const CharacterElement &objChEle);
 	int setValue(const AxisChar* pachValue);
-	const AxisChar* getValue();
+	const AxisChar* getValue() const;
 
 	/**
 	 * This method is overridden to return 0 always because this 
@@ -97,7 +97,7 @@ public:
 	 *  A user of a CharacterElement should not use this method.
 	 * @return Always return NULL to indicate unsuccessfull operation.
 	 */
-	BasicNode* getFirstChild() {return NULL;}
+ 	const BasicNode* getFirstChild() const {return NULL;}
 
 	/**
 	 * This method is overridden to return NULL always because this 
@@ -105,7 +105,7 @@ public:
 	 *  A user of a CharacterElement should not use this method.
 	 * @return Always return NULL to indicate unsuccessfull operation.
 	 */
-	BasicNode* getLastChild() {return NULL;}
+	const BasicNode* getLastChild() const {return NULL;}
 
 	/**
 	 * This method is overridden to return NULL always because this 
@@ -113,7 +113,7 @@ public:
 	 *  A user of a CharacterElement should not use this method.
 	 * @return Always return NULL to indicate unsuccessfull operation.
 	 */
-	BasicNode* getChild(int iChildPosition) {return NULL;}
+	const BasicNode* getChild(int iChildPosition) const {return NULL;}
 
 	/**
 	 * This method is overridden to return fail(AXIS_FAIL) always because this 
@@ -153,7 +153,7 @@ public:
 	 * included to adhere its interface.
 	 */
 	int serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack) {return AXIS_SUCCESS;}
-	NODE_TYPE getNodeType();
+	NODE_TYPE getNodeType() const;
 	CharacterElement(const AxisChar* sValue);
 	CharacterElement();
 	virtual ~CharacterElement();

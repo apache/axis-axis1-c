@@ -91,7 +91,7 @@ CharacterElement::~CharacterElement()
 	free(m_pachValue);
 }
 
-NODE_TYPE CharacterElement::getNodeType()
+NODE_TYPE CharacterElement::getNodeType() const
 {
 	return m_iNodeType;
 }
@@ -106,7 +106,7 @@ int CharacterElement::serialize(SoapSerializer& pSZ)
 	}
 }
 
-const AxisChar* CharacterElement::getValue()
+const AxisChar* CharacterElement::getValue() const
 {
 	return m_pachValue;
 }

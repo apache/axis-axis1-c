@@ -294,7 +294,7 @@ int HeaderBlock::serializeNamespaceDecl(SoapSerializer &pSZ)
 	return AXIS_SUCCESS;
 }
 
-BasicNode* HeaderBlock::getLastChild()
+const BasicNode* HeaderBlock::getLastChild()
 {
 	list<BasicNode*>::reverse_iterator ritCurrBasicNode= m_children.rbegin();
 
@@ -305,7 +305,7 @@ BasicNode* HeaderBlock::getLastChild()
 	return NULL;
 }
 
-BasicNode* HeaderBlock::getChild(int iChildPosition)
+const BasicNode* HeaderBlock::getChild(int iChildPosition)
 {
 	if (iChildPosition > iNoOFChildren) {
 		return NULL;
@@ -529,7 +529,7 @@ int HeaderBlock::getNoOfChildren()
 	return iNoOFChildren;
 }
 
-BasicNode* HeaderBlock::getFirstChild()
+const BasicNode* HeaderBlock::getFirstChild()
 {
 	list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
 	
