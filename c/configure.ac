@@ -17,6 +17,9 @@ AC_ARG_ENABLE(apache2, [  --enable-apache2        use apache2 as server transpor
     dnl else find it in the APACHE2_HOME env variable
     elif test -d ${APACHE2_HOME}; then
         apache2inc="-I${APACHE2_HOME}/include"
+    else
+        echo "could not find apache2. stop"
+	exit
     fi
     APACHE2BUILD="apache2"
     ;;
@@ -39,6 +42,9 @@ AC_ARG_ENABLE(apache, [  --enable-apache        use apache as server transport.]
     dnl else find it in the APACHE_HOME env variable
     elif test -d ${APACHE_HOME}; then
         apacheinc="-I${APACHE_HOME}/include"
+    else
+        echo "could not find apache. stop"
+        exit
     fi
     APACHEBUILD="apache"
     ;;
@@ -59,6 +65,9 @@ AC_ARG_ENABLE(xercesc, [  --enable-xercesc    build xercesc parser library.],
     if test -d ${XERCESC_HOME}; then
         xercescinc="-I${XERCESC_HOME}/include"
         xercesclib="-L${XERCESC_HOME}/lib"
+    else
+        echo "could not find xercesc. stop"
+	exit
     fi
     XERCESCBUILD="xerces"
     
@@ -80,6 +89,9 @@ AC_ARG_ENABLE(expat, [  --enable-expat        build expat parser library.],
     if test -d ${EXPAT_HOME}; then
         expatinc="-I${EXPAT_HOME}/include"
         expatlib="-I${EXPAT_HOME}/lib"
+    else
+        echo "could not find expat. stop"
+	exit
     fi
     EXPATBUILD="expat"
     
