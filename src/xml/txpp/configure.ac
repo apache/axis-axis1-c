@@ -22,7 +22,7 @@ AC_ARG_ENABLE(tests, [  --enable-tests    build tests.],
   AC_MSG_RESULT(no)
   TESTS="tests"
 )
-LINKTXPPLIB="-L$prefix/lib -ltxpp"
+LINKTXPPLIB="-L${TXPP_HOME}/src -ltxpp"
 AC_SUBST(TESTS)
 AC_SUBST(LINKTXPPLIB)
 AC_OUTPUT(Makefile \
