@@ -85,6 +85,8 @@
     @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
 */ 
 
+typedef enum { HEADER_LEVEL=0, HEADER_BLOCK_LEVEL, HEADER_BLOCK_INSIDE_LEVEL} HEADER_LEVELS;
+
 class SoapHeader : public ISoapHeader
 {
 private:	
@@ -96,7 +98,13 @@ private:
 	list<Attribute*> m_namespaceDecls;
 	list<HeaderBlock*> m_headerBlocks;
 	//string m_strHeaderSerialized;
+	const char* m_pcPrefix;
 public:
+	int setPrefix(const char* pcPrefix);
+	/**
+	 * Removes the next HeaderBlock from the list and returns it. But will not delete it.
+	 * @return The removed HeaderBlock of the list.
+	 */
 	IHeaderBlock* getHeaderBlock();
 	int addNamespaceDecl(Attribute* pAttribute);
 	int addAttribute(Attribute* pAttribute);

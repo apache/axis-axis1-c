@@ -69,6 +69,7 @@
 #define AFX_BASICNODE_H__623900B8_2737_4E36_8F26_97898C5BD47D__INCLUDED_
 
 #include <string>
+#include <list>
 #include "../common/GDefine.h"
 
 using namespace std;
@@ -86,14 +87,17 @@ enum NODE_TYPE { ELEMENT_NODE=1, CHARACTER_NODE};
 class BasicNode
 {
 public:
+	//virtual bool operator ==( const BasicNode &objChEle)=0;
 	virtual const AxisString& getValue()=0;
 	virtual int setValue(const AxisChar* sValue)=0;
 	virtual NODE_TYPE getNodeType()=0;
 	virtual int serialize(SoapSerializer& pSZ) =0;
+	virtual int serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack) =0;
 	virtual ~BasicNode() {};
 
 protected:
 	NODE_TYPE m_iNodeType;
+	string m_sPrefix;
 	AxisString m_sValue;
 };
 
