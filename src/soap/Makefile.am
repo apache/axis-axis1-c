@@ -15,12 +15,27 @@ libsoap_la_SOURCES = Attribute.cpp \
         SoapMethod.cpp \
         SoapSerializer.cpp \
         URIMapping.cpp \
-	SoapKeywordMapping.cpp \
-	apr_base64.c \
-	HexCoder.cpp \
+        SoapKeywordMapping.cpp \
+        apr_base64.c \
+        HexCoder.cpp \
         AxisSoapException.cpp \
-	SoapAttachment.cpp \
-	SoapAttachementHeaders.cpp
+        SoapAttachment.cpp \
+        SoapAttachementHeaders.cpp \
+        xsd/AnyURI.cpp \
+        xsd/Base64Binary.cpp \
+        xsd/Boolean.cpp \
+        xsd/Date.cpp \
+        xsd/DateTime.cpp \
+        xsd/Decimal.cpp \
+        xsd/Double.cpp \
+        xsd/Duration.cpp \
+        xsd/Float.cpp \
+        xsd/HexBinary.cpp \
+        xsd/IAnySimpleType.cpp \
+        xsd/NOTATION.cpp \
+        xsd/String.cpp \
+        xsd/Time.cpp \
+        xsd/XSD_QName.cpp
 
 libsoap_la_LIBADD = $(LDFLAGS)
 INCLUDES = -I../../include
