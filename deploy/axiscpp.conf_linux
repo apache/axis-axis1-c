@@ -1,0 +1,3 @@
+AXISLOGPATH:/usr/local/apache/Axis/logs/AxisLog
+WSDDFILEPATH:/usr/local/apache/Axis/conf/server.wsdd
+
