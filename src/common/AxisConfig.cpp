@@ -49,11 +49,21 @@ AxisConfig::AxisConfig ()
 	}
 
 #ifdef _DEBUG
+#ifdef WIN32
 	m_pcValueArray[AXCONF_XMLPARSER] = "AxisXMLParser_D.dll";
 	m_pcValueArray[AXCONF_TRANSPORTHTTP] = "AxisTransport_D.dll";
 #else
+	m_pcValueArray[AXCONF_XMLPARSER] = "/usr/local/Axis/libs/libaxis_xmlparser.so";
+	m_pcValueArray[AXCONF_TRANSPORTHTTP] = "/usr/local/Axis/libs/libaxis_transport.so";
+#endif
+#else
+#ifdef WIN32
     m_pcValueArray[AXCONF_XMLPARSER] = "AxisXMLParser.dll";
 	m_pcValueArray[AXCONF_TRANSPORTHTTP] = "AxisTransport.dll";
+#else
+	m_pcValueArray[AXCONF_XMLPARSER] = "/usr/local/Axis/libs/libaxis_xmlparser.so";
+	m_pcValueArray[AXCONF_TRANSPORTHTTP] = "/usr/local/Axis/libs/libaxis_transport.so";
+#endif
 #endif
 
 }
