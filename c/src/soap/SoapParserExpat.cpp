@@ -137,8 +137,9 @@ const XML_Ch* SoapParserExpat::GetNS4Prefix(const XML_Ch* prefix)
 /**
  * This method returning NULL means that there is something wrong with the
  * stream and hence parsing should be finished or aborted.
+ * @param isCharData - say that Deserializer is expecting a character data event.
  */
-const AnyElement* SoapParserExpat::Next()
+const AnyElement* SoapParserExpat::Next(bool isCharData)
 {
     int nStatus = TRANSPORT_IN_PROGRESS;
     if (m_pLastEvent)
@@ -204,6 +205,12 @@ const AnyElement* SoapParserExpat::Next()
                     m_Element.m_pchNameOrValue = m_pLastEvent->
                         m_NameOrValue.c_str();
                     m_Element.m_type = type;
+					if (!isCharData && (CHARACTER_ELEMENT == type))
+					{ /* ignorable white space */
+						delete m_pLastEvent;
+						m_pLastEvent = NULL;
+						break;						
+					}
                     return &m_Element;
                 case START_PREFIX:
                     m_NsStack[m_pLastEvent->m_NameOrValue] = 

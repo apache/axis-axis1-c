@@ -45,6 +45,7 @@ void URIMapping::Initialize()
         m_sURIMap[__TRC("http://www.w3.org/2001/XMLSchema-instance")] = 
             URI_XSI;
         m_sURIMap[__TRC("http://www.w3.org/2001/06/soap-encoding")] = URI_ENC;
+		m_sURIMap[__TRC("http://schemas.xmlsoap.org/soap/encoding/")] = URI_ENC;
         m_sURIMap[__TRC("http://schemas.xmlsoap.org/soap/envelope/")] = 
             URI_ENVELOPE;
         m_bInit = true;
