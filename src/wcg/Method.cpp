@@ -139,17 +139,23 @@ int Method::GenerateMethodImpl(string& sClassName, File &file)
 {
 	file << "int " << sClassName << "::" << m_Name << "(IMessageData* mc)" << endl; 	
 	file << "{" << endl;
+	file << "\tIWrapperSoapSerializer* pIWSSZ = NULL;" << endl;
+	file << "\tmc->getSoapSerializer(&pIWSSZ);" << endl;
+	file << "\tif (!pIWSSZ) return FAIL;" << endl;
+	file << "\tIWrapperSoapDeSerializer* pIWSDZ = NULL;" << endl;
+	file << "\tmc->getSoapDeSerializer(&pIWSDZ);" << endl;
+	file << "\tif (!pIWSDZ) return FAIL;" << endl;
 	file << "\tSetResponseMethod(mc, \"" << m_Name << "\");" << endl;
 	int nParam = 0;
 	for (list<Variable*>::iterator it = m_Params.begin(); it != m_Params.end(); it++)
 	{
 		file << endl;
-		file << "\tIParam *param" << nParam << " = mc->getSoapDeserializer()->GetParam();" << endl;
+		file << "\tIParam *param" << nParam << " = pIWSDZ->GetParam();" << endl;
 		if ((*it)->IsComplexType())
 		{
 			file << "\t" << (*it)->GetTypeName() << "* v" << nParam << " = new " << (*it)->GetTypeName() << "();" << endl;
 			file << "\tparam" << nParam << "->" << "SetUserType(" << "v" << nParam << ");" << endl; 
-			file <<	"\tmc->getSoapDeserializer()->Deserialize(param" << nParam << ",0);" << endl; // 0 should be changed to 1 if multiref to be used			
+			file <<	"\tpIWSDZ->Deserialize(param" << nParam << ",0);" << endl; // 0 should be changed to 1 if multiref to be used			
 		}
 		else if ((*it)->IsArrayType())
 		{
@@ -183,7 +189,7 @@ int Method::GenerateMethodImpl(string& sClassName, File &file)
 		file << ".c_str()";
 	}
 	file <<	";" << endl;
-	file << "\tIParam* pRetParam = mc->getSoapSerializer()->setResponseParam(" << m_pReturnType->GetTypeEnumStr() << ", value);" << endl;
+	file << "\tIParam* pRetParam = pIWSSZ->setResponseParam(" << m_pReturnType->GetTypeEnumStr() << ", value);" << endl;
 	file << "\tpRetParam->SetName(\"" << m_Name << "Return\");" << endl;
 	file << "\treturn SUCCESS;" << endl; 
 	file << "}" << endl;
