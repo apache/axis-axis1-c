@@ -39,6 +39,12 @@ int main(int argc, char* argv[])
         try
         {
 	sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
+	
+	
+	if (argc > 1)
+		strcpy(endpoint, argv[1]);
+	
+
 	MathOps ws(endpoint);
 
 	op = "div";/*Operation name*/

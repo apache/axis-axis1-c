@@ -30,7 +30,13 @@ int main(int argc, char* argv[])
 	const char* server="localhost";
 	const char* port="80";
 	sprintf(endpoint, "http://%s:%s/axis/base", server, port);
-		bool bSuccess = false;
+	
+	// Set the endpoint from command line argument if set
+	if (argc > 1)
+		strcpy(endpoint, argv[1]);
+
+	
+	    bool bSuccess = false;
 		int	iRetryIterationCount = 3;
 
 		do

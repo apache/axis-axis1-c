@@ -40,10 +40,17 @@ main(int argc, char *argv[])
     char endpoint[256];
     const char *server = "localhost";
     const char *port = "80";
-    //sprintf(endpoint, "http://%s:%s/axis/base", server, port);
-    //endpoint for Axis CPP sample
+    
+	//endpoint for Axis CPP sample
     sprintf(endpoint, "http://%s:%s/axis/base", server, port);
-    /*Set for HTTP transport */
+    
+	// Set the endpoint from command line argument if set
+	if (argc > 1)
+		strcpy(endpoint, argv[1]);
+
+	
+	
+	/*Set for HTTP transport */
     InteropTestPortType ws(endpoint, APTHTTP1_1);
 
     //set HTTP headers

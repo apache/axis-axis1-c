@@ -42,7 +42,14 @@ main(int argc, char *argv[])
     const char *port = "80";
     //endpoint for Axis CPP sample
     sprintf(endpoint, "http://%s:%s/axis/base", server, port);
-    InteropTestPortType ws(endpoint, APTHTTP1_1);
+    
+	// Set the endpoint from command line argument if set
+	if (argc > 1)
+		strcpy(endpoint, argv[1]);
+
+
+	
+	InteropTestPortType ws(endpoint, APTHTTP1_1);
 
     /*create a header of the form:
        <SOAP-ENV:Header>
