@@ -28,7 +28,7 @@ then
 	esac
 fi
 
-. platform/linux/setAxis.sh 
+. testcases/platform/linux/setAxis.sh 
 
 rm -rf $OUTPUT_DIR
 
@@ -37,78 +37,78 @@ num_tests=21
 
 # inserted Adrian Dick by
 #test1 
-runTestCase.sh wsdls/RpcHttpHeaderTest1.wsdl c++
+runTestCase.sh testcases/wsdls/RpcHttpHeaderTest1.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test2
-runTestCase.sh wsdls/RpcHttpHeaderTest2.wsdl c++
+runTestCase.sh testcases/wsdls/RpcHttpHeaderTest2.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test3 
-runTestCase.sh wsdls/RpcHttpHeaderTest3.wsdl c++
+runTestCase.sh testcases/wsdls/RpcHttpHeaderTest3.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test4 
-runTestCase.sh wsdls/RpcHttpHeaderTest4.wsdl c++
+runTestCase.sh testcases/wsdls/RpcHttpHeaderTest4.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test5 
-runTestCase.sh wsdls/RpcHttpHeaderTest5.wsdl c++
+runTestCase.sh testcases/wsdls/RpcHttpHeaderTest5.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test6 
-runTestCase.sh wsdls/RpcHttpHeaderTest7.wsdl c++
+runTestCase.sh testcases/wsdls/RpcHttpHeaderTest7.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test7 
-runTestCase.sh wsdls/RpcHttpHeaderTest8.wsdl c++
+runTestCase.sh testcases/wsdls/RpcHttpHeaderTest8.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test8 
-runTestCase.sh wsdls/RpcSoapHeaderTest1.wsdl c++
+runTestCase.sh testcases/wsdls/RpcSoapHeaderTest1.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test9 
-runTestCase.sh wsdls/RpcSoapHeaderTest2.wsdl c++
+runTestCase.sh testcases/wsdls/RpcSoapHeaderTest2.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test10 
-runTestCase.sh wsdls/RpcSoapHeaderTest3.wsdl c++
+runTestCase.sh testcases/wsdls/RpcSoapHeaderTest3.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test11
-runTestCase.sh wsdls/RpcSoapHeaderTest4.wsdl c++
+runTestCase.sh testcases/wsdls/RpcSoapHeaderTest4.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test12
-runTestCase.sh wsdls/RpcSoapHeaderTest6.wsdl c++
+runTestCase.sh testcases/wsdls/RpcSoapHeaderTest6.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test13 
-runTestCase.sh wsdls/RpcSoapHeaderTest8.wsdl c++
+runTestCase.sh testcases/wsdls/RpcSoapHeaderTest8.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test14 
-runTestCase.sh wsdls/RpcSoapHeaderTest9.wsdl c++
+runTestCase.sh testcases/wsdls/RpcSoapHeaderTest9.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test15 
-runTestCase.sh wsdls/RpcSoapHeaderTest10.wsdl c++
+runTestCase.sh testcases/wsdls/RpcSoapHeaderTest10.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test16 
-runTestCase.sh wsdls/MathOps.wsdl c++
+runTestCase.sh testcases/wsdls/MathOps.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test17 
-runTestCase.sh wsdls/ExceptionTest.wsdl c++
+runTestCase.sh testcases/wsdls/ExceptionTest.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test18 
-runTestCase.sh wsdls/FaultMapping.wsdl c++
+runTestCase.sh testcases/wsdls/FaultMapping.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test19 
-runTestCase.sh wsdls/InteropTestRound1.wsdl c++
+runTestCase.sh testcases/wsdls/InteropTestRound1.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test20
-runTestCase.sh wsdls/ExtensibilityQuery.wsdl c++
+runTestCase.sh testcases/wsdls/ExtensibilityQuery.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 #test21
-runTestCase.sh wsdls/Calculator.wsdl c++
+runTestCase.sh testcases/wsdls/Calculator.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 
-#runTestCase.sh wsdls/SimpleTypeArray.wsdl c++
+#runTestCase.sh testcases/wsdls/SimpleTypeArray.wsdl c++
 #[[ $? -eq 0 ]] && passed=$(($passed + 1))
-#runTestCase.sh wsdls/SimpleTypeInnerUnbounded.wsdl c++
+#runTestCase.sh testcases/wsdls/SimpleTypeInnerUnbounded.wsdl c++
 #[[ $? -eq 0 ]] && passed=$(($passed + 1))
-#runTestCase.sh wsdls/SimpleTypeInnerUnboundedInOutput.wsdl c++
+#runTestCase.sh testcases/wsdls/SimpleTypeInnerUnboundedInOutput.wsdl c++
 #[[ $? -eq 0 ]] && passed=$(($passed + 1))
-# runTestCase.sh wsdls/SOAPHeaderStockService.wsdl c++
+# runTestCase.sh testcases/wsdls/SOAPHeaderStockService.wsdl c++
 #[[ $? -eq 0 ]] && passed=$(($passed + 1))
-# runTestCase.sh wsdls/TradeServices.wsdl c++
+# runTestCase.sh testcases/wsdls/TradeServices.wsdl c++
 #[[ $? -eq 0 ]] && passed=$(($passed + 1))
 
 echo -n "${passed}/${num_tests} tests passed."
@@ -118,5 +118,5 @@ exit 0
 
 for file in $(find client -name "*.c" -o -name "*.cpp")
 do
- runTestCase.sh $(echo wsdls/$(basename $file) | sed "s/Client\./.wsdl /" | sed "s/pp/++/")
+ runTestCase.sh $(echo testcases/wsdls/$(basename $file) | sed "s/Client\./.wsdl /" | sed "s/pp/++/")
 done
