@@ -18,7 +18,8 @@ int main(int argc, char* argv[])
 	printf("Usage :\n %s <server> <port>\n\n", argv[0]);
 	printf("Sending Requests to Server http://%s:%s ........\n\n", server, port);
 	sprintf(endpoint, "http://%s:%s/axis/groupB", server, port);	
-
+        try
+	{
 	InteropTestPortTypeB ws(endpoint);
 	/*we do not support multi-dimensional arrays.*/
 	/*ws.echo2DStringArray*/
@@ -78,5 +79,18 @@ int main(int argc, char* argv[])
 	else
 		printf("failed\n");	
 	getchar();
+        }
+        catch(AxisException& e)
+        {
+            printf("Exception : %s\n", e.what());
+        }
+        catch(exception& e)
+        {
+            printf("Unknown exception has occured\n");
+        }
+        catch(...)
+        {
+            printf("Unknown exception has occured\n");
+        }
 	return 0;
 }
