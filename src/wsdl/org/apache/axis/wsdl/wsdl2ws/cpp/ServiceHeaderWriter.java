@@ -63,6 +63,7 @@ package org.apache.axis.wsdl.wsdl2ws.cpp;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
@@ -150,7 +151,6 @@ public class ServiceHeaderWriter extends HeaderFileWriter{
 				  writer.write("\t\tvoid ");
 			  else {
 			  	  String outparam = minfo.getReturnType().getLangName();
-				  isSimpleType = CPPUtils.isSimpleType(outparam);
 				  writer.write("\t\t"+WrapperUtils.getClassNameFromParamInfoConsideringArrays(minfo.getReturnType(),wscontext));
 			  }
 			  writer.write(" "+minfo.getMethodname()+"(");
@@ -159,12 +159,10 @@ public class ServiceHeaderWriter extends HeaderFileWriter{
 			  Iterator params = minfo.getParameterTypes().iterator();
 			  if(params.hasNext()){
 			  	  ParameterInfo fparam = (ParameterInfo)params.next();
-				  isSimpleType = CPPUtils.isSimpleType(fparam.getLangName());
 				  writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
 			  }
 			  for(int j =1; params.hasNext();j++){
 				  ParameterInfo nparam = (ParameterInfo)params.next();
-				  isSimpleType = CPPUtils.isSimpleType(nparam.getLangName());
 				  writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
 			  }
 			  writer.write(");\n");
@@ -181,10 +179,16 @@ public class ServiceHeaderWriter extends HeaderFileWriter{
 		try{
 			Type atype;
 			Iterator types = this.wscontext.getTypemap().getTypes().iterator();
+			HashSet typeSet = new HashSet();
 			while(types.hasNext()){
 				atype = (Type)types.next();
-				writer.write("#include \""+atype.getLanguageSpecificName()+".h\"\n");
-			}
+				typeSet.add(atype.getLanguageSpecificName());
+			}		
+			Iterator itr = typeSet.iterator();
+			while(itr.hasNext())
+			{
+				writer.write("#include \""+itr.next().toString()+".h\"\n");
+			}		
 			writer.write("\n");
 		}catch (IOException e) {
 			e.printStackTrace();

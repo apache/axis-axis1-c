@@ -63,6 +63,7 @@ package org.apache.axis.wsdl.wsdl2ws.c;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
@@ -103,16 +104,6 @@ public class ServiceWriter extends CFileWriter{
 	}
 
 	/* (non-Javadoc)
-	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeConstructors()
-	 */
-	protected void writeConstructors() throws WrapperFault {}
-
-	/* (non-Javadoc)
-	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeDistructors()
-	 */
-	protected void writeDistructors() throws WrapperFault {}
-
-	/* (non-Javadoc)
 	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeMethods()
 	 */
 	protected void writeMethods() throws WrapperFault {
@@ -127,8 +118,7 @@ public class ServiceWriter extends CFileWriter{
 				  writer.write("void ");
 			  else {
 				String outparam = minfo.getReturnType().getLangName();
-				isSimpleType = CUtils.isSimpleType(outparam);
-				writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(minfo.getReturnType(),wscontext)+(isSimpleType?" ":" *"));
+				writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(minfo.getReturnType(),wscontext)+" ");
 			  }
 			  writer.write(minfo.getMethodname()+"(");
 			  //write parameter names 
@@ -136,13 +126,11 @@ public class ServiceWriter extends CFileWriter{
 			Iterator params = minfo.getParameterTypes().iterator();
 			if(params.hasNext()){
 				ParameterInfo fparam = (ParameterInfo)params.next();
-				isSimpleType = CUtils.isSimpleType(fparam.getLangName());
-				writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+(isSimpleType?" Value":" *pValue")+0);
+				writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
 			}
 			for(int j =1; params.hasNext();j++){
 				ParameterInfo nparam = (ParameterInfo)params.next();
-				isSimpleType = CUtils.isSimpleType(nparam.getLangName());
-				writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+(isSimpleType?" Value":" *pValue")+j);
+				writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
 			}
 			writer.write(")\n{\n}\n");
 		  }
@@ -158,10 +146,16 @@ public class ServiceWriter extends CFileWriter{
 		try{
 			Type atype;
 			Iterator types = this.wscontext.getTypemap().getTypes().iterator();
+			HashSet typeSet = new HashSet();
 			while(types.hasNext()){
 				atype = (Type)types.next();
-				writer.write("#include \""+atype.getLanguageSpecificName()+".h\"\n");
-			}
+				typeSet.add(atype.getLanguageSpecificName());
+			}		
+			Iterator itr = typeSet.iterator();
+			while(itr.hasNext())
+			{
+				writer.write("#include \""+itr.next().toString()+".h\"\n");
+			}		
 			writer.write("\n");
 		}catch (IOException e) {
 			e.printStackTrace();
