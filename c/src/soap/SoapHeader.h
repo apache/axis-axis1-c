@@ -75,6 +75,21 @@
 #include "HeaderBlock.h"
 #include "SoapEnvVersions.h"
 
+/**
+ *	The Header element information item according to SOAP 1.2 specification.
+ *
+ *	The Header element information item has:
+ *   1) A [local name] of Header. 
+ *   2) A [namespace name] of "http://www.w3.org/2003/05/soap-envelope".
+ *   3) Zero or more namespace qualified attribute information items in its [attributes] property.
+ *   4) Zero or more namespace qualified element information items in its [children] property.
+ *
+ *	Each child element information item of the SOAP Header is called a SOAP header block.
+ *
+ *
+ *	@brief	The Header element information item according to SOAP 1.2 specification
+ */
+
 class SoapHeader  
 {
 private:
@@ -82,7 +97,7 @@ private:
 	int serializeAttributes(string&);
 	list<Attribute*> m_attributes;
 	list<Attribute*> m_namespaceDecls;
-	list<HeaderBlock*> m_headerEntries;
+	list<HeaderBlock*> m_headerBlocks;
 	//string m_strHeaderSerialized;
 public:
 	int addNamespaceDecl(Attribute* pAttribute);
