@@ -1,4 +1,4 @@
-For the moment the serverside framework will work for windows only. I will add the linux specific stuff very soon.
+Now the serverside framework supports windows and Linux.
 
 How to run
 -You can use any one of the supported servers. i.e. Apache1 Apache2 or simpleaxisserver.
@@ -6,7 +6,7 @@ choose your preferred server by changing the server properties in c/build/build.
 
 -for apache servers you must copy the apache module to apache_home/modules and make the necessary changes in httpd.conf
 
--set APACHE1_HOME, APACHE2_HOME environment variables as necessary
+-set APACHE_HOME, APACHE2_HOME environment variables as necessary
 
 Run the ant service deployment framework
 ========================================
