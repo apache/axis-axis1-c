@@ -41,6 +41,7 @@
 #include <axis/server/Packet.h>
 #include <string>
 #include <map>
+#include <iostream>
 
 #include "../soap/SoapFault.h"
 #include "../soap/URIMapping.h"
@@ -268,8 +269,19 @@ extern "C" int initialize_module (int bServer)
                 return AXIS_FAIL;
             }
 #endif
-            if (AXIS_SUCCESS != g_pWSDDDeployment->loadWSDD (pWsddPath))
+            try
+            {            
+                if (AXIS_SUCCESS != g_pWSDDDeployment->loadWSDD (pWsddPath))
                     return AXIS_FAIL;
+            }
+            catch (exception& e)
+            {
+                cout<< e.what();
+                cout<< "\n";
+                cout<< "Axis c++: An exception occured while loading the wsdd\n";
+                exit(1);
+            }
+
         }
         else
         {
