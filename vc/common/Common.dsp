@@ -99,6 +99,10 @@ SOURCE=..\..\src\common\AxisException.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\AxisSocketUtils.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\AxisTime.cpp
 # End Source File
 # Begin Source File
@@ -144,6 +148,10 @@ SOURCE=..\..\src\common\AxisConfig.h
 # Begin Source File
 
 SOURCE=..\..\src\common\AxisException.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\AxisSocketUtils.h
 # End Source File
 # Begin Source File
 
