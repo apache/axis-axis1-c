@@ -71,7 +71,7 @@
 #ifdef AXIS_CLIENT_LIB
 #include <axis/client/Call.h>
 #else
-#include "ServerAxisEngine.h"
+#include "server/ServerAxisEngine.h"
 #endif
 #include <stdio.h>
 #include <stdlib.h>
@@ -119,7 +119,7 @@ AxisConfig* g_pConfig;
 AxisTrace* g_pAT;
 
 
-#ifdef AXIS_CLIENT_LIB
+#ifndef AXIS_CLIENT_LIB
 
 extern "C" int process_request(Ax_soapstream *stream)
 {
