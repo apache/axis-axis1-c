@@ -17,7 +17,12 @@
 /*
  * @author Damitha Kumarage (damitha@opensource.lk)
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
- *
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ */
+
+/*
+ * Revision 1.1  2004/05/31 samisa
+ * Added setProxy
  */
 
 #if !defined(_AXIS_AXIS_TRANSPORT_HPP)
@@ -52,6 +57,15 @@ public:
 	AXIS_PROTOCOL_TYPE getProtocol();
 	int getSubProtocol();
 	AXIS_TRANSPORT_STATUS flushOutput();
+	
+	  /**
+    * Set proxy server and port for transport.
+    *
+    * @param pcProxyHost Host name of proxy server
+    * @param uiProxyPort Port of proxy server
+    */
+    void setProxy(const char* pcProxyHost, unsigned int uiProxyPort); 
+
 /*
     static AXIS_TRANSPORT_STATUS AXISCALL s_Send_bytes(const char* pSendBuffer,
         const void* bufferid, const void* pSStream);
@@ -73,6 +87,19 @@ private:
     /* Accumulates the serialized buffers to be transported */
 	int m_iBytesLeft;
 	const char* m_pcReceived;
+  /**
+    * Proxy server name.
+    */
+    std::string m_strProxyHost;
+  /**
+    * Proxy server port.
+    */
+    unsigned int m_uiProxyPort;
+  /**
+    * Use Proxy or not?
+    */
+    bool m_bUseProxy;
+
 };
 
 #endif

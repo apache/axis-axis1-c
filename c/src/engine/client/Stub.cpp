@@ -21,6 +21,11 @@
  * Stub.cpp: implemtation for the Stub.
  */
 
+/*
+ * Revision 1.1  2004/05/31 samisa
+ * Added setProxy
+ */
+
 #include <axis/client/Stub.h>
 #include <stdio.h>
 
@@ -28,6 +33,7 @@
 
 
 Stub::Stub (const char *pcEndPointUri)
+:m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false)
 {
     m_pCall = new Call ();
     m_pCall->setProtocol (APTHTTP);
@@ -131,4 +137,26 @@ Stub::applyUserPreferences ()
 {
     setSOAPHeaders ();
     setTransportProperties ();
+}
+
+void Stub::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
+{
+    /*m_strProxyHost = pcProxyHost;
+    m_uiProxyPort = uiProxyPort;
+    m_bUseProxy = true;    */
+    m_pCall->setProxy(pcProxyHost, uiProxyPort);
+}
+
+void Stub::setProxy()
+{
+    /*if(m_bUseProxy)
+    {
+        SOAPTransport *pTrasport = NULL;
+        if (m_pCall)
+            pTrasport = m_pCall->getTransport ();
+        if (pTrasport)
+        {
+            pTrasport->setProxy(m_strProxyHost, m_uiProxyPort);
+        }
+    }*/
 }
