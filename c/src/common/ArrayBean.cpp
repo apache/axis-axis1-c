@@ -95,7 +95,7 @@ ArrayBean::~ArrayBean()
 			delete m_value.cta;
 		}
 	}
-	else if (AxisEngine::m_bServer)
+	else if (AxisEngine::m_bServer && m_value.sta)
 	{
 		switch (m_type)
 		{

@@ -82,7 +82,7 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-IWrapperSoapDeSerializerFunctions SoapDeSerializer::ms_VFtable;
+IWrapperSoapDeSerializerFunctions IWrapperSoapDeSerializer::ms_VFtable;
 
 SoapDeSerializer::SoapDeSerializer()
 {
@@ -544,6 +544,7 @@ Axis_Array SoapDeSerializer::GetBasicArray(XSDTYPE nType, const AxisChar* pName,
 				DESERIALIZE_ENCODED_ARRAY_BLOCK(struct tm, CONV_STRTODATETIME)     
 			case XSD_DURATION:
 				DESERIALIZE_ENCODED_ARRAY_BLOCK(long, CONV_STRTODURATION)
+			default:;
 			}
 		}
 	}
@@ -634,6 +635,7 @@ Axis_Array SoapDeSerializer::GetBasicArray(XSDTYPE nType, const AxisChar* pName,
 			DESERIALIZE_LITERAL_ARRAY_BLOCK(struct tm, CONV_STRTODATETIME)     
 	    case XSD_DURATION:
 			DESERIALIZE_LITERAL_ARRAY_BLOCK(long, CONV_STRTODURATION)
+		default:;
 		}
 	}
 	m_nStatus = AXIS_FAIL;
