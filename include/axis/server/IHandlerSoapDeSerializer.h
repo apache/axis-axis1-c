@@ -26,15 +26,23 @@
  *  @brief interface for the IHandlerSoapDeSerializer class.
  *
  *
- *  @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ *  @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */
+
+/*
+ * Revision 1.1  2004/06/14 roshan
+ * Removed virtual int AXISCALL addHeaderBlock(IHeaderBlock* pBlk)=0; method
+ * from this interface, because a user should not be able to add any thing
+ * to the DeSerialzer.
+ */
+
 #ifdef __cplusplus
 
 class IHandlerSoapDeSerializer : public IWrapperSoapDeSerializer
 {
 public:
     virtual ~IHandlerSoapDeSerializer() {};
-    virtual int AXISCALL addHeaderBlock(IHeaderBlock* pBlk)=0;
+    
     /*
      * The soap body may be encrypted/compressed and a 
      * handler in the request message 

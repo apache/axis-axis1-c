@@ -76,7 +76,7 @@ public:
       * list of Header Blocks of this Soap Header, before returning a pointer.
       */
     IHeaderBlock* getHeaderBlock(const AxisChar* pName, 
-        const AxisChar* pNamespace);
+        const AxisChar* pNamespace, bool bRemoveOrNot);
 
     /**
       * Sets the Prefix of the Header Block.
@@ -90,7 +90,7 @@ public:
      * But will not delete it.
      * @return The removed HeaderBlock of the list.
      */
-    IHeaderBlock* getHeaderBlock();
+    IHeaderBlock* getHeaderBlock(bool bRemoveOrNot);
 
     /**
       * Sets the namespace declaration of the Soap Header.

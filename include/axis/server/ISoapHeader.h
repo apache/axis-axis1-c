@@ -26,7 +26,10 @@
 class ISoapHeader  
 {
 public:
-    virtual IHeaderBlock* getHeaderBlock()=0;
+	virtual IHeaderBlock* getHeaderBlock(const AxisChar *pName,
+                                         const AxisChar *pNamespace, 
+										 bool bRemoveOrNot) = 0;
+    virtual IHeaderBlock* getHeaderBlock(bool bRemoveOrNot)=0;
     virtual ~ISoapHeader() {};
 };
 

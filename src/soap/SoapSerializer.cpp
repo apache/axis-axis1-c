@@ -906,3 +906,20 @@ int SoapSerializer::addOutputAnyObject(AnyType* pAnyObject)
     return AXIS_SUCCESS;
 }
 
+
+IHeaderBlock* SoapSerializer::getHeaderBlock()
+{
+    if ((!m_pSoapEnvelope) || (!m_pSoapEnvelope->m_pSoapHeader)) return NULL;
+
+    return (HeaderBlock*)m_pSoapEnvelope->m_pSoapHeader->getHeaderBlock(false);	
+}
+
+IHeaderBlock* SoapSerializer::getHeaderBlock(const AxisChar *pcName, 
+											 const AxisChar *pcNamespace)
+{
+    if ((!m_pSoapEnvelope) || (!m_pSoapEnvelope->m_pSoapHeader)) return NULL; 
+	/* there has been no <Header> element so there
+                                  can be no Header blocks */
+
+    return m_pSoapEnvelope->m_pSoapHeader->getHeaderBlock(pcName, pcNamespace, false);
+}

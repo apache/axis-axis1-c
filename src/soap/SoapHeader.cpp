@@ -155,7 +155,7 @@ int SoapHeader::serializeNamespaceDecl(SoapSerializer& pSZ)
     return AXIS_SUCCESS;
 }
 
-IHeaderBlock* SoapHeader::getHeaderBlock()
+IHeaderBlock* SoapHeader::getHeaderBlock(bool bRemoveOrNot)
 {
     HeaderBlock* tmpHeaderBlock = NULL;
 
@@ -164,7 +164,9 @@ IHeaderBlock* SoapHeader::getHeaderBlock()
     if(itCurrHeaderBlock != m_headerBlocks.end())
     {
         tmpHeaderBlock = (*itCurrHeaderBlock);
-        m_headerBlocks.pop_front();
+		if (bRemoveOrNot == true) {
+			m_headerBlocks.pop_front();
+		}
     }
 
     return tmpHeaderBlock;
@@ -179,7 +181,8 @@ int SoapHeader::setPrefix(const char* pcPrefix)
 }
 
 IHeaderBlock* SoapHeader::getHeaderBlock(const AxisChar *pName,
-                                         const AxisChar *pNamespace)
+                                         const AxisChar *pNamespace, 
+										 bool bRemoveOrNot)
 {
     HeaderBlock* tmpHeaderBlock = NULL;
 
@@ -194,7 +197,9 @@ IHeaderBlock* SoapHeader::getHeaderBlock(const AxisChar *pName,
                 (strcmp(((tmpHeaderBlock)->m_uri).c_str(), pNamespace) == 0))
         {
             blnFoundStatus = true;
-            m_headerBlocks.remove(tmpHeaderBlock);
+			if (bRemoveOrNot == true) {
+				m_headerBlocks.remove(tmpHeaderBlock);
+			}
             break;
         }
         else
