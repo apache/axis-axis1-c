@@ -3,6 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Call.h"
+#include <iostream>
 //#include "../../../common/IMessageData.h"
 //#include "../../../common/ISoapMethod.h"
 
@@ -123,12 +124,14 @@ void Call::SetReturnType(XSDTYPE nType)
 	m_Param->SetValue(m_nReturnType, m_uReturnValue);
 }
 
-void Call::SetReturnType(void *pObject, void *pDZFunct, void *pDelFunct)
+void Call::SetReturnType(void *pObject, void *pDZFunct, void *pDelFunct, const char* theType, const char * uri)
 {
 	m_nReturnType = USER_TYPE;
 	m_ReturnCplxObj.pObject = pObject;
 	m_ReturnCplxObj.pDZFunct = (AXIS_DESERIALIZE_FUNCT)pDZFunct;
 	m_ReturnCplxObj.pDelFunct = (AXIS_OBJECT_DELETE_FUNCT)pDelFunct;
+	m_ReturnCplxObj.m_TypeName = theType;
+	m_ReturnCplxObj.m_URI = uri;
 }
 
 int Call::Invoke()
@@ -138,7 +141,23 @@ int Call::Invoke()
 	{
 		if (m_nReturnType == USER_TYPE)
 		{
-			m_ReturnCplxObj.pDZFunct(m_ReturnCplxObj.pObject, m_pMsgData->m_pDZ);
+			/*
+			The first element of the soap message (after the soap			
+			body element) is taken as a parameter itself so that
+			the return type can be checked. So need to call GetParam
+			on the deserializer before getting the actual params
+			*/
+			m_Param = (Param*)m_pIWSDZ->GetParam();
+
+			if(m_ReturnCplxObj.m_TypeName == m_Param->GetTypeName())
+			{
+				m_ReturnCplxObj.pDZFunct(m_ReturnCplxObj.pObject, m_pMsgData->m_pDZ);
+			}
+			else
+			{
+				return FAIL;
+			}
+
 		}
 		else if (m_nReturnType == XSD_ARRAY)
 		{
@@ -161,7 +180,6 @@ int Call::Initialize()
 {
 	initialize_module();
 	m_Soap.sessionid = "somesessionid1234";
-	this->SetProtocol(APTHTTP);
 	if (m_pAxisEngine) delete m_pAxisEngine;
 	m_pAxisEngine = new ClientAxisEngine();
 	if (!m_pAxisEngine) return FAIL;
