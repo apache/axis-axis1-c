@@ -57,13 +57,11 @@ package org.apache.axismora.wrappers.simpleType;
 
 import java.io.IOException;
 
-import org.apache.axismora.Constants;
-import org.apache.axismora.MessageContext;
-import org.apache.axismora.encoding.InOutParameter;
-
 import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.Base64;
 import org.apache.axis.encoding.SerializationContext;
+import org.apache.axismora.MessageContext;
+import org.apache.axismora.encoding.InOutParameter;
 
 /**
  * TODO the encoding of base 64 gives trouble yet ... FIXIT 
@@ -101,16 +99,16 @@ public class Base64ByteArrayParam implements InOutParameter {
     }
 
     public void serialize(SerializationContext context) {
-        String type_name = "base64Binary";
-        StringBuffer buf = new StringBuffer();
-
-        buf.append("<base64Binary xsi:type=\"ns1:").append(
-            type_name + "\" xmlns:ns1 =\"").append(
-            Constants.DEFAULT_SIMPLETYPE_ENCODING_URI + "\">");
-        buf.append(param);
-        buf.append("</base64Binary>\n");
+//        String type_name = "base64Binary";
+//        StringBuffer buf = new StringBuffer();
+//
+//        buf.append("<base64Binary xsi:type=\"ns1:").append(
+//            type_name + "\" xmlns:ns1 =\"").append(
+//            Constants.DEFAULT_SIMPLETYPE_ENCODING_URI + "\">");
+//        buf.append(param);
+//      buf.append("</base64Binary>\n");
         try {
-            context.writeString(buf.toString());
+            context.writeString(new String(param));
         } catch (IOException e) {
             e.printStackTrace(); //ioexception
         }
@@ -120,8 +118,8 @@ public class Base64ByteArrayParam implements InOutParameter {
     /**
      * @return
      */
-    public byte[] getParam() {
-        return this.param;
+    public Base64ByteArrayParam getParam() {
+        return this;
     }
 
     public org.apache.axismora.encoding.InParameter desierialize(MessageContext msgdata)
@@ -130,4 +128,11 @@ public class Base64ByteArrayParam implements InOutParameter {
         this.param = (value == null) ? new byte[0] : value.getBytes();
         return this;
     }
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return new String(param);
+	}
+
 }

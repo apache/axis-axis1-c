@@ -66,58 +66,58 @@ import org.apache.axis.encoding.SerializationContext;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
 
-public class ByteParam implements InOutParameter {
-    public byte param;
+public class WrapByteParam implements InOutParameter {
+	public Byte param;
 
-    public ByteParam() {
-    }
+	public WrapByteParam() {
+	}
 
-    public ByteParam(MessageContext msgdata) throws AxisFault {
-        desierialize(msgdata);
-    }
+	public WrapByteParam(MessageContext msgdata) throws AxisFault {
+		desierialize(msgdata);
+	}
 
-    public ByteParam(byte param) {
-        this.param = param;
-    }
+	public WrapByteParam(Byte param) {
+		this.param = param;
+	}
 
-    public void serialize(SerializationContext context) {
-//        String type_name = "byte";
-//        StringBuffer buf = new StringBuffer();
-//        buf
-//            .append("<Byte xsi:type=\"ns1:")
-//            .append(type_name)
-//            .append("\" xmlns:ns1 =\"")
-//            .append(Constants.DEFAULT_SIMPLETYPE_ENCODING_URI)
-//            .append("\">");
-//        buf.append(Byte.toString(param));
-//        buf.append("</Byte>\n");
-        try {
-            context.writeString(Byte.toString(param));
-        } catch (IOException e) {
-            e.printStackTrace(); //ioexception
-        }
+	public void serialize(SerializationContext context) {
+//		  String type_name = "byte";
+//		  StringBuffer buf = new StringBuffer();
+//		  buf
+//			  .append("<Byte xsi:type=\"ns1:")
+//			  .append(type_name)
+//			  .append("\" xmlns:ns1 =\"")
+//			  .append(Constants.DEFAULT_SIMPLETYPE_ENCODING_URI)
+//			  .append("\">");
+//		  buf.append(Byte.toString(param));
+//		  buf.append("</Byte>\n");
+		try {
+			context.writeString(Byte.toString(param.byteValue()));
+		} catch (IOException e) {
+			e.printStackTrace(); //ioexception
+		}
 
-    }
+	}
 
-    /**
-     * @return
-     */
-    public byte getParam() {
-        return param;
-    }
+	/**
+	 * @return
+	 */
+	public Byte getParam() {
+		return param;
+	}
 
-    public org.apache.axismora.encoding.InParameter desierialize(MessageContext msgdata)
-        throws AxisFault {
-        String value = msgdata.nextText();
-        if (value != null)
-            this.param = Byte.parseByte(value);
-        return this;
-    }
+	public org.apache.axismora.encoding.InParameter desierialize(MessageContext msgdata)
+		throws AxisFault {
+		String value = msgdata.nextText();
+		if (value != null)
+			this.param = new Byte(Byte.parseByte(value));
+		return this;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return Byte.toString(param);
+		return Byte.toString(param.byteValue());
 	}
 
 }

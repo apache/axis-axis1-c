@@ -60,10 +60,8 @@ import java.math.BigDecimal;
 
 import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
-
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
-import org.apache.axismora.wsdl2ws.WrapperConstants;
 
 /**
  * @author Srinath Perera(hemapani@opensource.lk)
@@ -83,15 +81,15 @@ public class BigDecimalParam implements InOutParameter{
 	 }
 
 	 public void serialize(SerializationContext context) {
-		 String type_name = "decimal";
-		 StringBuffer buf = new StringBuffer();
-		 buf.append("<decimal xsi:type=\"ns1:").append(type_name)
-		 .append("\" xmlns:ns1 =\"")
-		 .append(WrapperConstants.SCHEMA_NAMESPACE).append("\">");
-		 buf.append(param.toString());
-		 buf.append("</decimal>\n");
+//		 String type_name = "decimal";
+//		 StringBuffer buf = new StringBuffer();
+//		 buf.append("<decimal xsi:type=\"ns1:").append(type_name)
+//		 .append("\" xmlns:ns1 =\"")
+//		 .append(WrapperConstants.SCHEMA_NAMESPACE).append("\">");
+//		 buf.append(param.toString());
+//		 buf.append("</decimal>\n");
 		 try {
-			 context.writeString(buf.toString());
+			 context.writeString(param.toString());
 		 } catch (IOException e) {
 			 e.printStackTrace();	//ioexception
 		 }
@@ -112,5 +110,12 @@ public class BigDecimalParam implements InOutParameter{
 				 this.param = new BigDecimal(value);
 			 return this;
 	 }
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return param.toString();
+	}
 
 }

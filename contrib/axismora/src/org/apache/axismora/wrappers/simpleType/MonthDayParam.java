@@ -61,7 +61,6 @@ import java.text.NumberFormat;
 import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axis.message.SOAPFault;
-
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
 import org.apache.axismora.encoding.InParameter;
@@ -132,14 +131,14 @@ public class MonthDayParam implements InOutParameter {
     	 * @see org.apache.axismora.encoding.OutParameter#serialize(org.apache.axis.encoding.SerializationContext)
     	 */
     public void serialize(SerializationContext context) throws IOException {
-        String type_name = "MonthDay";
-        StringBuffer buf = new StringBuffer();
-        buf.append("<MonthDay xsi:type=\"ns1:").append(type_name + "\" xmlns:ns1 =\"");
-        buf.append(org.apache.axis.Constants.URI_2001_SCHEMA_XSD + "/#gMonthDay\">");
-        buf.append(param);
-        buf.append("</MonthDay>\n");
+//        String type_name = "MonthDay";
+//        StringBuffer buf = new StringBuffer();
+//        buf.append("<MonthDay xsi:type=\"ns1:").append(type_name + "\" xmlns:ns1 =\"");
+//        buf.append(org.apache.axis.Constants.URI_2001_SCHEMA_XSD + "/#gMonthDay\">");
+//        buf.append(param);
+//        buf.append("</MonthDay>\n");
         try {
-            context.writeString(buf.toString());
+            context.writeString(param);
         } catch (IOException e) {
             e.printStackTrace(); //ioexception
         }
@@ -230,8 +229,8 @@ public class MonthDayParam implements InOutParameter {
         return s;
     }
 
-    public String getParam() {
-        return this.param;
+    public MonthDayParam getParam() {
+        return this;
     }
 
 }

@@ -77,7 +77,7 @@ public class MSGServiceWriter extends JavaClassWriter {
             WrapperUtils.getPackegeName4QualifiedName(
                 wscontext.getSerInfo().getQualifiedServiceName()),
             WrapperUtils.getClassNameFromFullyQualifiedName(
-                wscontext.getSerInfo().getQualifiedServiceName()));
+                wscontext.getSerInfo().getQualifiedServiceName()),wscontext.getWrapInfo().getTargetOutputLocation());
         this.wscontext = wscontext;
         this.methods = wscontext.getSerInfo().getMethods();
     }
@@ -116,26 +116,26 @@ public class MSGServiceWriter extends JavaClassWriter {
         }
     }
 
-    protected File getJavaFilePath() {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-            targetOutputLocation =
-                targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
-        new File(
-            targetOutputLocation
-                + "/"
-                + WrapperUtils
-                    .getPackegeName4QualifiedName(
-                        this.wscontext.getSerInfo().getQualifiedServiceName())
-                    .replace('.', '/'))
-            .mkdirs();
-        String fileName =
-            targetOutputLocation
-                + "/"
-                + this.wscontext.getSerInfo().getQualifiedServiceName().replace('.', '/')
-                + ".java";
-        return new File(fileName);
-    }
+//    protected File getJavaFilePath() {
+//        String targetOutputLocation =
+//            this.wscontext.getWrapInfo().getTargetOutputLocation();
+//        if (targetOutputLocation.endsWith("/"))
+//            targetOutputLocation =
+//                targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
+//        new File(
+//            targetOutputLocation
+//                + "/"
+//                + WrapperUtils
+//                    .getPackegeName4QualifiedName(
+//                        this.wscontext.getSerInfo().getQualifiedServiceName())
+//                    .replace('.', '/'))
+//            .mkdirs();
+//        String fileName =
+//            targetOutputLocation
+//                + "/"
+//                + this.wscontext.getSerInfo().getQualifiedServiceName().replace('.', '/')
+//                + ".java";
+//        return new File(fileName);
+//    }
 
 }

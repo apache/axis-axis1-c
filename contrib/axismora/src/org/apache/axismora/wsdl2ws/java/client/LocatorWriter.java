@@ -55,7 +55,6 @@
 
 package org.apache.axismora.wsdl2ws.java.client;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.apache.axismora.wsdl2ws.WrapperFault;
@@ -77,7 +76,7 @@ public class LocatorWriter extends JavaClassWriter {
                 wscontext.getSerInfo().getQualifiedServiceName()),
             WrapperUtils.getClassNameFromFullyQualifiedName(
                 wscontext.getSerInfo().getQualifiedServiceName())
-                + "Locator");
+                + "Locator",wscontext.getWrapInfo().getTargetOutputLocation());
         classname =
             WrapperUtils.getClassNameFromFullyQualifiedName(
                 wscontext.getSerInfo().getQualifiedServiceName())
@@ -85,38 +84,38 @@ public class LocatorWriter extends JavaClassWriter {
         this.wscontext = wscontext;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.axismora.wsdl2ws.SourceWriter#writeSource()
-     */
-
-    /* (non-Javadoc)
-     * @see org.apache.axismora.wsdl2ws.java.JavaClassWriter#getJavaFilePath()
-     */
-    protected File getJavaFilePath() throws WrapperFault {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-            targetOutputLocation =
-                targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
-        new File(
-            targetOutputLocation
-                + "/"
-                + WrapperUtils
-                    .getPackegeName4QualifiedName(
-                        this.wscontext.getSerInfo().getQualifiedServiceName())
-                    .replace('.', '/'))
-            .mkdirs();
-        String fileName =
-            targetOutputLocation
-                + "/"
-                + (
-                    this.wscontext.getSerInfo().getQualifiedServiceName()
-                        + "Locator").replace(
-                    '.',
-                    '/')
-                + ".java";
-        return new File(fileName);
-    }
+//    /* (non-Javadoc)
+//     * @see org.apache.axismora.wsdl2ws.SourceWriter#writeSource()
+//     */
+//
+//    /* (non-Javadoc)
+//     * @see org.apache.axismora.wsdl2ws.java.JavaClassWriter#getJavaFilePath()
+//     */
+//    protected File getJavaFilePath() throws WrapperFault {
+//        String targetOutputLocation =
+//            this.wscontext.getWrapInfo().getTargetOutputLocation();
+//        if (targetOutputLocation.endsWith("/"))
+//            targetOutputLocation =
+//                targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
+//        new File(
+//            targetOutputLocation
+//                + "/"
+//                + WrapperUtils
+//                    .getPackegeName4QualifiedName(
+//                        this.wscontext.getSerInfo().getQualifiedServiceName())
+//                    .replace('.', '/'))
+//            .mkdirs();
+//        String fileName =
+//            targetOutputLocation
+//                + "/"
+//                + (
+//                    this.wscontext.getSerInfo().getQualifiedServiceName()
+//                        + "Locator").replace(
+//                    '.',
+//                    '/')
+//                + ".java";
+//        return new File(fileName);
+//    }
 
     /* (non-Javadoc)
      * @see org.apache.axismora.wsdl2ws.java.JavaClassWriter#writeAttributes()

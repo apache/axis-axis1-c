@@ -62,12 +62,10 @@
  */
 package org.apache.axismora.wsdl2ws.info;
 
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Set;
-import java.util.Vector;
 import java.util.Iterator;
+import java.util.Vector;
 
 import javax.xml.namespace.QName;
 
@@ -111,8 +109,8 @@ public class Type {
     
     private String language;
 
-    public Type(QName name, String languageSpecificName, boolean hasOrder,String language) {
-        this.languageSpecificName = languageSpecificName;
+    public Type(QName name, String languageSpecificNamein, boolean hasOrder,String language) {
+        this.languageSpecificName = languageSpecificNamein;
         this.hasOrder = hasOrder;
         this.name = name;
 		elements = new Hashtable();
@@ -123,7 +121,7 @@ public class Type {
         	this.language = language;
         	
         // if the language specific name does not specified try weather is it a simple type  	 
-        if(languageSpecificName == null){
+        if(languageSpecificNamein == null){
         	if(WrapperConstants.LANGUAGE_CPP.equalsIgnoreCase(this.language))
 				this.languageSpecificName = CPPUtils.getclass4qname(name);
 			else if(WrapperConstants.LANGUAGE_C.equalsIgnoreCase(this.language))
@@ -137,12 +135,10 @@ public class Type {
         //if it is not a simple type genarate the name using usual QName -> language specific name mapping
         if(this.languageSpecificName == null)
             	this.languageSpecificName = qname2LSN();
-        else{
-        	//remove any funny Charactors
-			this.languageSpecificName.replaceAll("/","_");  
-			this.languageSpecificName.replaceAll(":","_");   
-			
-        }    
+		this.languageSpecificName = this.languageSpecificName.replaceAll("/","_");  
+		this.languageSpecificName = this.languageSpecificName.replaceAll(":","_");
+		this.languageSpecificName = this.languageSpecificName.replaceAll(">","_");
+		
        	this.attribOrder = new Vector();
     }
 

@@ -61,12 +61,10 @@ package org.apache.axismora.wrappers.simpleType;
 
 import java.io.IOException;
 
-import org.apache.axismora.Constants;
-import org.apache.axismora.MessageContext;
-import org.apache.axismora.encoding.InOutParameter;
-
 import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
+import org.apache.axismora.MessageContext;
+import org.apache.axismora.encoding.InOutParameter;
 
 public class BooleanParam implements InOutParameter {
     public boolean param;
@@ -89,21 +87,24 @@ public class BooleanParam implements InOutParameter {
     public BooleanParam(boolean param) {
         this.param = param;
     }
+    
+	public BooleanParam(Boolean param) {
+		this.param = param.booleanValue();
+	}
 
     public void serialize(SerializationContext context) {
-        String type_name = "boolean";
-        StringBuffer buf = new StringBuffer();
-
-        buf
-            .append("<Boolean xsi:type=\"ns1:")
-            .append(type_name)
-            .append("\" xmlns:ns1 =\"")
-            .append(Constants.DEFAULT_SIMPLETYPE_ENCODING_URI)
-            .append("\">");
-        buf.append(String.valueOf(param));
-        buf.append("</Boolean>\n");
+//        String type_name = "boolean";
+//        StringBuffer buf = new StringBuffer();
+//        buf
+//            .append("<Boolean xsi:type=\"ns1:")
+//            .append(type_name)
+//            .append("\" xmlns:ns1 =\"")
+//            .append(Constants.DEFAULT_SIMPLETYPE_ENCODING_URI)
+//            .append("\">");
+//        buf.append(String.valueOf(param));
+//        buf.append("</Boolean>\n");
         try {
-            context.writeString(buf.toString());
+            context.writeString(String.valueOf(param));
         } catch (IOException e) {
             e.printStackTrace(); //ioexception
         }
@@ -116,5 +117,12 @@ public class BooleanParam implements InOutParameter {
     public boolean getParam() {
         return param;
     }
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return String.valueOf(param);
+	}
 
 }

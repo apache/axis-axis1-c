@@ -61,7 +61,6 @@ import java.io.IOException;
 import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axis.message.SOAPFault;
-
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
 import org.apache.axismora.encoding.InParameter;
@@ -113,14 +112,14 @@ public class HexBinaryParam implements InOutParameter{
 	 * @see org.apache.axismora.encoding.Parameter#serialize(org.apache.axis.encoding.SerializationContext)
 	 */
 	public void serialize(SerializationContext context) {
-		String type_name = "HexBinary";
-		StringBuffer buf = new StringBuffer();
-		buf.append("<HexBinary xsi:type=\"ns1:").append(type_name + "\" xmlns:ns1 =\"");
-		buf.append(org.apache.axis.Constants.URI_DEFAULT_SCHEMA_XSD + "/#HexBinary\">");
-		buf.append(encode(param));
-		buf.append("</HexBinary>\n");
+//		String type_name = "HexBinary";
+//		StringBuffer buf = new StringBuffer();
+//		buf.append("<HexBinary xsi:type=\"ns1:").append(type_name + "\" xmlns:ns1 =\"");
+//		buf.append(org.apache.axis.Constants.URI_DEFAULT_SCHEMA_XSD + "/#HexBinary\">");
+//		buf.append(encode(param));
+//		buf.append("</HexBinary>\n");
 		try {
-			context.writeString(buf.toString());
+			context.writeString(encode(param));
 		} catch (IOException e) {
 			e.printStackTrace();	//ioexception
 		}
@@ -270,11 +269,20 @@ public class HexBinaryParam implements InOutParameter{
 				return ((char) (value + '0'));
 
 		}
-		public byte[] getParam(){
-			return param;
+		public HexBinaryParam getParam(){
+			return this;
 		}
 		public int getIntParam(){
 			return convert2Int(param);
 		}
 		
+		
+		
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return encode(param);
+	}
+
 }

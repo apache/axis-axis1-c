@@ -55,7 +55,6 @@
 
 package org.apache.axismora.wsdl2ws.java.client;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -95,7 +94,7 @@ public class StubWriter extends JavaClassWriter {
                 wscontext.getSerInfo().getQualifiedServiceName()),
             WrapperUtils.getClassNameFromFullyQualifiedName(
                 wscontext.getSerInfo().getQualifiedServiceName())
-                + "Stub");
+                + "Stub",wscontext.getWrapInfo().getTargetOutputLocation());
         this.classname =
             WrapperUtils.getClassNameFromFullyQualifiedName(
                 wscontext.getSerInfo().getQualifiedServiceName())
@@ -128,7 +127,11 @@ public class StubWriter extends JavaClassWriter {
             writer.write("\n\tpublic " + classname + "(java.lang.String enduri){");
             writer.write("\n\t\ttry{\n");
             writer.write("\t\t\tthis.enduri = enduri;\n");
-             writer.write(
+            writer.write(
+                "\t\t\tthis.SOAPAction = new javax.xml.namespace.QName(\""
+                    + wscontext.getSerInfo().getServicename()
+                    + "\");\n");
+            writer.write(
                 "\t\t\tthis.service = new org.apache.axismora.client.Service();");
             writer.write("\n\t\t}catch(Exception e){");
             writer.write("\n\t\t\te.printStackTrace();\n\t\t}\n\t}\n");
@@ -189,10 +192,6 @@ public class StubWriter extends JavaClassWriter {
                         + minfo.getMethodname()
                         + "\");");
                 String ops = "";
-				writer.write(
-								"\t\t\tthis.SOAPAction = new javax.xml.namespace.QName(\""
-									+ wscontext.getSerInfo().getServicename()
-									+ "\");\n");
                 writer.write(
                     "\n\t\torg.apache.axismora.client.Call call = (org.apache.axismora.client.Call)service.createCall();");
                 writer.write("\n\t\tcall.setOperationName(methodName);");
@@ -202,7 +201,7 @@ public class StubWriter extends JavaClassWriter {
                     obj = params1.next();
                     paramType = ((ParameterInfo) obj).getType();
                     paramQName = paramType.getName();
-                    if (TypeMap.isSimpleType(paramQName)) {
+                    if (TypeMap.isSimpleType(paramQName)&& !JavaUtils.isUnwrapperdSimpleType(paramType.getLanguageSpecificName())) {
                         String paramName =
                             WrapperUtils.getWrapperName4FullyQualifiedName(
                                 ((ParameterInfo) obj).getType().getLanguageSpecificName());
@@ -256,7 +255,7 @@ public class StubWriter extends JavaClassWriter {
                     paramType = ((ParameterInfo) obj).getType();
 					paramQName = paramType.getName();
 					
-                    if (TypeMap.isSimpleType(paramQName)) {
+                    if (TypeMap.isSimpleType(paramQName) && !JavaUtils.isUnwrapperdSimpleType(paramType.getLanguageSpecificName())) {
                         String paramName =
                             WrapperUtils.getWrapperName4FullyQualifiedName(
 								paramType.getLanguageSpecificName());
@@ -335,18 +334,21 @@ public class StubWriter extends JavaClassWriter {
                             + ops
                             + "});");
                     if (TypeMap.isSimpleType(paramQName)) {
-                        String paramName =
-                            WrapperUtils.getWrapperName4FullyQualifiedName(
-                                minfo.getReturnType().getType().getLanguageSpecificName());
+                    	String paramName = minfo.getReturnType().getType().getLanguageSpecificName();
+                        String wrappedparamName = WrapperUtils.getWrapperName4FullyQualifiedName(paramName);
                         writer.write(
-                            "\n\t\t" + paramName + " res = new " + paramName + "(mx);");
+                            "\n\t\t" + wrappedparamName + " res = new " + wrappedparamName + "(mx);");
                         //TODO prob here now fixed I think
                         //writer.write("\n\t\torg.apache.axismora.wrappers.simpleType."+WrapperUtils.capitalizeFirstCaractor(paramQName.getLocalPart())+"Param res = (org.apache.axismora.wrappers.simpleType."+WrapperUtils.capitalizeFirstCaractor(paramQName.getLocalPart())+"Param)(new org.apache.axismora.wrappers.simpleType."+WrapperUtils.capitalizeFirstCaractor(paramQName.getLocalPart())+"Param(mx));");
-                        writer.write(
-                            "\n\t\treturn res"
-                                + (!JavaUtils.isUnwrapperdSimpleType(paramName)
-                                    ? ".getParam();"
-                                    : ";"));
+                        
+                        if(!JavaUtils.isUnwrapperdSimpleType(paramName))
+                        	if(paramName.startsWith("java.lang"))
+								writer.write("\n\t\treturn new "+paramName+"(res.getParam());\n");
+                        	else	
+                        		writer.write("\n\t\treturn res.getParam();\n");
+                        	
+                        else    
+							writer.write("\n\t\treturn res;");
                     } else if (paramType != null && paramType.isArray()) {
                         writer.write(
                             "\n\t\t"
@@ -371,6 +373,7 @@ public class StubWriter extends JavaClassWriter {
                                 + ")(new "
                                 + paramType.getLanguageSpecificName()
                                 + "()).desierialize(mx);");
+                                
                         writer.write("\n\t\t return res;\n");
                     }
                 } else {
@@ -388,32 +391,32 @@ public class StubWriter extends JavaClassWriter {
 
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.axismora.wsdl2ws.java.JavaClassWriter#getJavaFilePath()
-     */
-    protected File getJavaFilePath() throws WrapperFault {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-            targetOutputLocation =
-                targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
-        new File(
-            targetOutputLocation
-                + "/"
-                + WrapperUtils
-                    .getPackegeName4QualifiedName(
-                        this.wscontext.getSerInfo().getQualifiedServiceName())
-                    .replace('.', '/'))
-            .mkdirs();
-        String fileName =
-            targetOutputLocation
-                + "/"
-                + (this.wscontext.getSerInfo().getQualifiedServiceName() + "Stub").replace(
-                    '.',
-                    '/')
-                + ".java";
-        return new File(fileName);
-    }
+//    /* (non-Javadoc)
+//     * @see org.apache.axismora.wsdl2ws.java.JavaClassWriter#getJavaFilePath()
+//     */
+//    protected File getJavaFilePath() throws WrapperFault {
+//        String targetOutputLocation =
+//            this.wscontext.getWrapInfo().getTargetOutputLocation();
+//        if (targetOutputLocation.endsWith("/"))
+//            targetOutputLocation =
+//                targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
+//        new File(
+//            targetOutputLocation
+//                + "/"
+//                + WrapperUtils
+//                    .getPackegeName4QualifiedName(
+//                        this.wscontext.getSerInfo().getQualifiedServiceName())
+//                    .replace('.', '/'))
+//            .mkdirs();
+//        String fileName =
+//            targetOutputLocation
+//                + "/"
+//                + (this.wscontext.getSerInfo().getQualifiedServiceName() + "Stub").replace(
+//                    '.',
+//                    '/')
+//                + ".java";
+//        return new File(fileName);
+//    }
     /* (non-Javadoc)
     * @see org.apache.axismora.wsdl2ws.java.JavaClassWriter#getExtendsPart()
     */

@@ -68,7 +68,6 @@
 package org.apache.axismora.wsdl2ws.info;
 
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -76,9 +75,9 @@ import java.util.Vector;
 
 import javax.xml.namespace.QName;
 
+import org.apache.axismora.wrappers.simpleType.HexBinaryParam;
 import org.apache.axismora.wsdl2ws.WrapperConstants;
 import org.apache.axismora.wsdl2ws.WrapperFault;
-import org.apache.axismora.wsdl2ws.WrapperUtils;
 
 
 
@@ -91,6 +90,8 @@ public class TypeMap {
     private static Hashtable basicTypeClass2QNamemap = new Hashtable();
     /* this map maps QName -> classname */
     private static Hashtable basicTypeQname2classmap = new Hashtable();
+    
+    private static Hashtable basicTypeClassName2WrapperClassmap = new Hashtable();
     /* this map stores Types keyed by the parameter name */
     private Hashtable typeInfo;
 	/* 
@@ -114,15 +115,27 @@ public class TypeMap {
 		basicTypeClass2QNamemap.put("boolean", new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
 		basicTypeClass2QNamemap.put("char", new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"));
 		basicTypeClass2QNamemap.put("short", new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"));
+		basicTypeClass2QNamemap.put("byte[]", new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
+		
 		basicTypeClass2QNamemap.put("java.lang.String", new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"));
 		basicTypeClass2QNamemap.put("java.math.BigDecimal", new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
 		basicTypeClass2QNamemap.put("java.math.BigInteger", new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"));
-		basicTypeClass2QNamemap.put("java.utils.Calendar", new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
-		basicTypeClass2QNamemap.put("java.utils.Date", new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
+		basicTypeClass2QNamemap.put("org.apache.axismora.wrappers.simpleType.DayParam", new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
+		basicTypeClass2QNamemap.put("org.apache.axismora.wrappers.simpleType.DateParam", new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
+		basicTypeClass2QNamemap.put("java.lang.Integer",new QName(WrapperConstants.SOAPENC_NAMESPACE, "int"));
+		basicTypeClass2QNamemap.put("java.lang.Double",new QName(WrapperConstants.SOAPENC_NAMESPACE, "double"));
+		basicTypeClass2QNamemap.put("java.lang.Long",new QName(WrapperConstants.SOAPENC_NAMESPACE, "long"));
+		basicTypeClass2QNamemap.put("java.lang.Byte",new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"));
+		basicTypeClass2QNamemap.put("java.lang.Character",new QName(WrapperConstants.SOAPENC_NAMESPACE, "char"));
+		basicTypeClass2QNamemap.put("java.lang.Short",new QName(WrapperConstants.SOAPENC_NAMESPACE, "short"));
+		basicTypeClass2QNamemap.put("java.lang.Boolean",new QName(WrapperConstants.SOAPENC_NAMESPACE, "boolean"));
+		basicTypeClass2QNamemap.put("java.lang.Float",new QName(WrapperConstants.SOAPENC_NAMESPACE, "float"));
+		
 		
 		// xml -> java type mapping 
 	
 		basicTypeQname2classmap.put("int", "int");
+		basicTypeQname2classmap.put("integer", "int");
 		basicTypeQname2classmap.put("byte", "byte");
 		basicTypeQname2classmap.put("float", "float");
 		basicTypeQname2classmap.put("long", "long");
@@ -132,10 +145,30 @@ public class TypeMap {
 		basicTypeQname2classmap.put("short", "short");
 		basicTypeQname2classmap.put("string", "java.lang.String");
 		basicTypeQname2classmap.put("decimal", "java.math.BigDecimal");
+		
 		basicTypeQname2classmap.put("Qname", "javax.xml.namespace.QName");
-		basicTypeQname2classmap.put("dateTime", "java.utils.Date");
-		basicTypeQname2classmap.put("base64Binary", "byte[]");
-		basicTypeQname2classmap.put("hexBinary", "byte[]");
+		basicTypeQname2classmap.put("dateTime", "org.apache.axismora.wrappers.simpleType.DayParam");
+		basicTypeQname2classmap.put("base64Binary", "org.apache.axismora.wrappers.simpleType.Base64ByteArrayParam");
+		basicTypeQname2classmap.put("base64", "org.apache.axismora.wrappers.simpleType.Base64ByteArrayParam");
+		basicTypeQname2classmap.put("hexBinary", "org.apache.axismora.wrappers.simpleType.HexBinaryParam");
+		basicTypeQname2classmap.put("gMonth", "org.apache.axismora.wrappers.simpleType.MonthParam");
+		basicTypeQname2classmap.put("gMonthDay", "org.apache.axismora.wrappers.simpleType.MonthDayParam");
+		basicTypeQname2classmap.put("gDay", "org.apache.axismora.wrappers.simpleType.DayParam");
+		basicTypeQname2classmap.put("gYear", "org.apache.axismora.wrappers.simpleType.YearParam");
+		basicTypeQname2classmap.put("gYearMonth", "org.apache.axismora.wrappers.simpleType.YearMonthParam");
+		basicTypeQname2classmap.put("unsignedByte", "byte");
+		basicTypeQname2classmap.put("negativeInteger", "int");
+		basicTypeQname2classmap.put("nonNegativeInteger", "int");
+		basicTypeQname2classmap.put("positiveInteger", "int");
+		basicTypeQname2classmap.put("nonPositiveInteger", "int");
+		basicTypeQname2classmap.put("time", "org.apache.axismora.wrappers.simpleType.TimeParam");
+		basicTypeQname2classmap.put("unsignedLong", "org.apache.axismora.wrappers.simpleType.TimeParam");
+		basicTypeQname2classmap.put("unsignedShort", "short");
+		basicTypeQname2classmap.put("unsignedInt", "int");
+		basicTypeQname2classmap.put("any", "org.apache.axismora.wrappers.simpleType.AnyParam");
+		basicTypeQname2classmap.put("anyType", "org.apache.axismora.wrappers.simpleType.AnyParam");
+		basicTypeQname2classmap.put("NMTOKEN", "java.lang.String");
+		
 		
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "int"), "java.lang.Integer");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"), "java.lang.Byte");
@@ -146,8 +179,46 @@ public class TypeMap {
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "char"), "java.lang.Charcter");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "short"), "java.lang.Short");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "string"), "java.lang.String");
-		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"), "java.math.BigDecimal");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "decimal"), "java.math.BigDecimal");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64"), "org.apache.axismora.wrappers.simpleType.Base64ByteArrayParam");
+		
+		
+		
+		basicTypeClassName2WrapperClassmap.put("int", "org.apache.axismora.wrappers.simpleType.IntParam");
+		basicTypeClassName2WrapperClassmap.put("byte", "org.apache.axismora.wrappers.simpleType.ByteParam");
+		basicTypeClassName2WrapperClassmap.put("float", "org.apache.axismora.wrappers.simpleType.FloatParam");
+		basicTypeClassName2WrapperClassmap.put("long", "org.apache.axismora.wrappers.simpleType.LongParam");
+		basicTypeClassName2WrapperClassmap.put("double", "org.apache.axismora.wrappers.simpleType.DoubleParam");
+		basicTypeClassName2WrapperClassmap.put("boolean", "org.apache.axismora.wrappers.simpleType.BooleanParam");
+		basicTypeClassName2WrapperClassmap.put("char", "org.apache.axismora.wrappers.simpleType.CharParam");
+		basicTypeClassName2WrapperClassmap.put("short", "org.apache.axismora.wrappers.simpleType.ShortParam");
+		basicTypeClassName2WrapperClassmap.put("java.lang.String","org.apache.axismora.wrappers.simpleType.StringParam");
+		basicTypeClassName2WrapperClassmap.put("javax.xml.namespace.QName","org.apache.axismora.wrappers.simpleType.QNameParam");
+		basicTypeClassName2WrapperClassmap.put("org.apache.axismora.wrappers.simpleType.DayParam","org.apache.axismora.wrappers.simpleType.DayParam");
+		basicTypeClassName2WrapperClassmap.put("org.apache.axismora.wrappers.simpleType.MonthParam","org.apache.axismora.wrappers.simpleType.MonthParam");
+		basicTypeClassName2WrapperClassmap.put("org.apache.axismora.wrappers.simpleType.MonthDayParam", "org.apache.axismora.wrappers.simpleType.MonthDayParam");
+		basicTypeClassName2WrapperClassmap.put("org.apache.axismora.wrappers.simpleType.DayParam", "org.apache.axismora.wrappers.simpleType.DayParam");
+		basicTypeClassName2WrapperClassmap.put("org.apache.axismora.wrappers.simpleType.YearParam", "org.apache.axismora.wrappers.simpleType.YearParam");
+		basicTypeClassName2WrapperClassmap.put("org.apache.axismora.wrappers.simpleType.YearMonthParam", "org.apache.axismora.wrappers.simpleType.YearMonthParam");
+		basicTypeClassName2WrapperClassmap.put("org.apache.axismora.wrappers.simpleType.TimeParam", "org.apache.axismora.wrappers.simpleType.TimeParam");
+		basicTypeClassName2WrapperClassmap.put("org.apache.axismora.wrappers.simpleType.TimeParam", "org.apache.axismora.wrappers.simpleType.TimeParam");
+		basicTypeClassName2WrapperClassmap.put("org.apache.axismora.wrappers.simpleType.AnyParam", "org.apache.axismora.wrappers.simpleType.AnyParam");
+		
+		basicTypeClassName2WrapperClassmap.put("org.apache.axismora.wrappers.simpleType.Base64ByteArrayParam", "org.apache.axismora.wrappers.simpleType.Base64ByteArrayParam");
+		basicTypeClassName2WrapperClassmap.put("org.apache.axismora.wrappers.simpleType.HexBinaryParam", "org.apache.axismora.wrappers.simpleType.HexBinaryParam");
+		
+		basicTypeClassName2WrapperClassmap.put("java.lang.Integer","org.apache.axismora.wrappers.simpleType.WrapIntParam");
+		basicTypeClassName2WrapperClassmap.put("java.lang.Byte","org.apache.axismora.wrappers.simpleType.WrapByteParam");
+		basicTypeClassName2WrapperClassmap.put("java.lang.Float","org.apache.axismora.wrappers.simpleType.WrapFloatParam");
+		basicTypeClassName2WrapperClassmap.put("java.lang.Long","org.apache.axismora.wrappers.simpleType.WrapLongParam");
+		basicTypeClassName2WrapperClassmap.put("java.lang.Double","org.apache.axismora.wrappers.simpleType.WrapDoubleParam");
+		basicTypeClassName2WrapperClassmap.put("java.lang.Boolean","org.apache.axismora.wrappers.simpleType.WrapBooleanParam");
+		basicTypeClassName2WrapperClassmap.put("java.lang.Charcter","org.apache.axismora.wrappers.simpleType.WrapCharParam");
+		basicTypeClassName2WrapperClassmap.put("java.lang.Short","org.apache.axismora.wrappers.simpleType.WrapShortParam");
+		basicTypeClassName2WrapperClassmap.put("java.math.BigDecimal","org.apache.axismora.wrappers.simpleType.BigDecimalParam");
+		basicTypeClassName2WrapperClassmap.put("byte[]","org.apache.axismora.wrappers.simpleType.Base64ByteArrayParam");
 
+		
 		String[] words1 ={"abstract","default","if","private","this","boolean","do","implements",
 			"protected","throw","break","double","import","public","throws","byte","else","instanceof",
 			"return","transient","case","extends","int","short","try","catch","final","interface",
@@ -196,8 +267,9 @@ public class TypeMap {
 	
     public static boolean isSimpleType(String type) {
         return (
-            type.startsWith("org.apache.axismora.wrappers.simpleType")
-                || basicTypeClass2QNamemap.containsKey(type));
+            //type.startsWith("org.apache.axismora.wrappers.simpleType")
+              //  || 
+              basicTypeClassName2WrapperClassmap.containsKey(type));
     }
 
      public static boolean isSimpleType(QName type) {
@@ -268,5 +340,10 @@ public class TypeMap {
     
     public static Iterator getUnregisterdArrayTypes(){
 		return unregisterdArrayTypes.iterator();
+    }
+    
+    public static String getWrapperCalssNameForJavaClass(String javaclass){
+    	String wrapperClass = (String)basicTypeClassName2WrapperClassmap.get(javaclass);
+    	return (wrapperClass!=null)?wrapperClass:javaclass;
     }
 }

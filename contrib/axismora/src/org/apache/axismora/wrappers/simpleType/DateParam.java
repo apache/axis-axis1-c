@@ -61,7 +61,6 @@ import java.sql.Date;
 import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axis.message.SOAPFault;
-
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
 import org.apache.axismora.encoding.InParameter;
@@ -90,14 +89,14 @@ public class DateParam implements InOutParameter {
      * @see org.apache.axismora.encoding.OutParameter#serialize(org.apache.axis.encoding.SerializationContext)
      */
     public void serialize(SerializationContext context) throws IOException {
-        String type_name = "Date";
-        StringBuffer buf = new StringBuffer();
-        buf.append("<Date xsi:type=\"ns1:").append(type_name + "\" xmlns:ns1 =\"");
-        buf.append(org.apache.axis.Constants.URI_DEFAULT_SCHEMA_XSD + "/#Date\">");
-        buf.append(this.toString());
-        buf.append("</Date>");
+//        String type_name = "Date";
+//        StringBuffer buf = new StringBuffer();
+//        buf.append("<Date xsi:type=\"ns1:").append(type_name + "\" xmlns:ns1 =\"");
+//        buf.append(org.apache.axis.Constants.URI_DEFAULT_SCHEMA_XSD + "/#Date\">");
+//        buf.append(this.toString());
+//        buf.append("</Date>");
         try {
-            context.writeString(buf.toString());
+            context.writeString(toString());
         } catch (IOException e) {
             e.printStackTrace(); //ioexception
         }

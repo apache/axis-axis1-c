@@ -61,19 +61,23 @@ package org.apache.axismora.wrappers.simpleType;
 
 import java.io.IOException;
 
-import org.apache.axismora.Constants;
+import org.apache.axis.AxisFault;
+import org.apache.axis.encoding.SerializationContext;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
 
-import org.apache.axis.AxisFault;
-import org.apache.axis.encoding.SerializationContext;
-
 public class ShortParam implements InOutParameter {
     public short param;
+	public ShortParam(){}
 
     public ShortParam(short param) {
         this.param = param;
     }
+
+	public ShortParam(Short param) {
+		this.param = param.shortValue();
+	}
+
 
     public ShortParam(MessageContext msgdata) throws AxisFault {
         desierialize(msgdata);
@@ -88,20 +92,20 @@ public class ShortParam implements InOutParameter {
     }
 
     public void serialize(SerializationContext context) {
-
-        String type_name = "short";
-
-        StringBuffer buf = new StringBuffer();
-        buf
-            .append("<Short xsi:type=\"ns1:")
-            .append(type_name)
-            .append("\" xmlns:ns1 =\"")
-            .append(Constants.DEFAULT_SIMPLETYPE_ENCODING_URI)
-            .append("\">");
-        buf.append(Short.toString(param));
-        buf.append("</Short>\n");
+//
+//        String type_name = "short";
+//
+//        StringBuffer buf = new StringBuffer();
+//        buf
+//            .append("<Short xsi:type=\"ns1:")
+//            .append(type_name)
+//            .append("\" xmlns:ns1 =\"")
+//            .append(Constants.DEFAULT_SIMPLETYPE_ENCODING_URI)
+//            .append("\">");
+//        buf.append(Short.toString(param));
+//        buf.append("</Short>\n");
         try {
-            context.writeString(buf.toString());
+            context.writeString(Short.toString(param));
         } catch (IOException e) {
             e.printStackTrace(); //ioexception
         }
@@ -114,5 +118,12 @@ public class ShortParam implements InOutParameter {
     public short getParam() {
         return param;
     }
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return Short.toString(param);
+	}
 
 }

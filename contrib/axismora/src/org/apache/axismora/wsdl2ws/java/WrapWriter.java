@@ -55,7 +55,6 @@
 
 package org.apache.axismora.wsdl2ws.java;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -85,7 +84,7 @@ public class WrapWriter extends JavaClassWriter {
                 wscontext.getSerInfo().getQualifiedServiceName()),
             WrapperUtils.getClassNameFromFullyQualifiedName(
                 wscontext.getSerInfo().getQualifiedServiceName())
-                + Constants.WRAPPER_NAME_APPENDER);
+                + Constants.WRAPPER_NAME_APPENDER,wscontext.getWrapInfo().getTargetOutputLocation());
         this.wscontext = wscontext;
         methods = this.wscontext.getSerInfo().getMethods();
     }
@@ -125,7 +124,7 @@ public class WrapWriter extends JavaClassWriter {
         try {
             writer.write(
                 "\tpublic "
-                    + servicename
+                    + classname
                     + "(){\n\t\t\tservice = new "
                     + wscontext.getSerInfo().getQualifiedServiceName()
                     + "Impl();\n\t}\n\n");
@@ -213,11 +212,7 @@ public class WrapWriter extends JavaClassWriter {
         ParameterInfo returntype)
         throws WrapperFault, IOException {
         String outparam;
-        if (returntype == null)
-            outparam = "void";
-        else
-            outparam = returntype.getType().getLanguageSpecificName();
-
+ 
         //method signature
         writer.write(
             "\tpublic void "
@@ -226,16 +221,35 @@ public class WrapWriter extends JavaClassWriter {
 
         //create the param classes for each parameter
         String paramUsualName; /// this is usaual java name 
-        String paraTypeName; // this is wrapper name use by the engine  
+        String wrapper; // this is wrapper name use by the engine  
+		String ArrayType = null;
 
         ArrayList paramsB = new ArrayList(params);
         Iterator p = params.iterator();
+        ArrayList paramList = new ArrayList();
+        
         for (int i = 0; i < paramsB.size(); i++) {
-            writer.write(
-                JavaUtils.getSimpleTypeParameterCreationCode(
-                    (ParameterInfo) paramsB.get(i),
-                    wscontext,
-                    i));
+			ParameterInfo param = (ParameterInfo) paramsB.get(i);
+        	Type t = param.getType();
+        	
+			paramUsualName = t.getLanguageSpecificName();
+			ArrayType = paramUsualName;
+			
+			if(t.isArray()){
+				paramUsualName = WrapperUtils.getArrayType(t).getLanguageSpecificName()+"[]";
+			}
+			
+			paramList.add(param.getParamName());
+			wrapper = TypeMap.getWrapperCalssNameForJavaClass(paramUsualName);	
+			writer.write("\t\t" + paramUsualName +" "+ param.getParamName() +";\n");  
+			JavaUtils.writeDeserializeCodeLine(param.getParamName(),paramUsualName,ArrayType,"\t\t",writer);
+        	
+//            writer.write(
+//                JavaUtils.getSimpleTypeParameterCreationCode(
+//                    (ParameterInfo) paramsB.get(i),
+//                    wscontext,
+//                    i));
+                    
             /*paramUsualName = ((ParameterInfo)paramsB.get(i)).getLangName();
             paraTypeName = WrapperUtils.getWrapperName4FullyQualifiedName(paramUsualName);
             
@@ -260,66 +274,123 @@ public class WrapWriter extends JavaClassWriter {
 
         //TODO it is better to do the service call independently .....
         //Wait till the CPP side is checked  
+		Type t = null;
+		if(returntype == null)        
+			outparam = "void";
+		else{	
+			t = returntype.getType();
+			outparam = t.getLanguageSpecificName();
+			ArrayType = outparam;
+			
+			if(t.isArray()){
+				outparam = WrapperUtils.getArrayType(t).getLanguageSpecificName()+"[]";
+			}
+		}
+			
+        
 
         if (!(outparam == null || outparam.equals("void"))) {
-            boolean isSimpleType = TypeMap.isSimpleType(outparam);
-            boolean isArray = false;
-            Type type;
-            if ((type = this.wscontext.getTypemap().getType(returntype.getType().getName()))
-                != null)
-                isArray = type.isArray();
+		
+			writer.write("\t\t"+outparam+" result = service."+ methodName + "(");
+		
+			if (paramsB.size() > 0) {
+				  int i = 0;
+				  for (i = 0; i < paramList.size() - 1; i++)
+					  writer.write(paramList.get(i) + ",");
+				  writer.write((String)paramList.get(i));
+			}
+			writer.write(");\n");
+			String wrappername = TypeMap.getWrapperCalssNameForJavaClass(outparam);
 
-            //invoke the method on the result and ser the result to message data
-            if (isSimpleType) {
-                writer.write(
-                    "\t\tmsgdata.setSoapBodyContent(new "
-                        + WrapperUtils.getWrapperName4FullyQualifiedName(outparam)
-                        + "(service."
-                        + methodName
-                        + "(");
-                if (paramsB.size() > 0) {
-                    int i = 0;
-                    for (i = 0; i < paramsB.size() - 1; i++)
-                        writer.write("paramIn" + i + ",");
-                    writer.write("paramIn" + i);
-                }
-                writer.write(")));\n");
+			if(t.isArray()){
+				writer.write(
+					   "\t\t"
+						   +ArrayType
+						   + " ar = new "
+						   + ArrayType
+						   + "();");
+				   writer.write("\t\tar.setParam(result);\n");
+					writer.write("\t\tmsgdata.setSoapBodyContent(ar);\n");
+			}else if(outparam.equals(wrappername)){
+				writer.write("\t\tmsgdata.setSoapBodyContent(result);\n");
+			}else{
+				writer.write("\t\tmsgdata.setSoapBodyContent(new "+wrappername+"(result));\n");			
+			}
 
-            } else if (isArray) {
-                writer.write(
-                    "\t\t"
-                        + returntype.getType().getLanguageSpecificName()
-                        + " ar = new "
-                        + returntype.getType().getLanguageSpecificName()
-                        + "();");
-                writer.write("\t\tar.setParam(service." + methodName + "(");
-                if (paramsB.size() > 0) {
-                    int i = 0;
-                    for (i = 0; i < paramsB.size() - 1; i++)
-                        writer.write("paramIn" + i + ",");
-                    writer.write("paramIn" + i);
-                }
-                writer.write("));\n");
-                writer.write("\t\tmsgdata.setSoapBodyContent(ar);");
-            } else {
-                writer.write(
-                    "\t\tmsgdata.setSoapBodyContent(service." + methodName + "(");
-                if (paramsB.size() > 0) {
-                    int i = 0;
-                    for (i = 0; i < paramsB.size() - 1; i++)
-                        writer.write("paramIn" + i + ",");
-                    writer.write("paramIn" + i);
-                }
-                writer.write("));\n");
-            }
+//		
+//		
+//		
+//			
+//        	
+//        	
+//        	
+//            boolean isSimpleType = TypeMap.isSimpleType(outparam);
+//            boolean isArray = false;
+//            Type type;
+//            if (returntype != null &&  returntype.getType()!= null)
+//                isArray = returntype.getType().isArray();
+//
+//            //invoke the method on the result and ser the result to message data
+//            if (isSimpleType) {
+//            	if(JavaUtils.isUnwrapperdSimpleType(outparam)){
+//					writer.write("\t\tmsgdata.setSoapBodyContent(service."
+//										+ methodName + "(");
+//            	}else{
+//                	writer.write(
+//                    	"\t\tmsgdata.setSoapBodyContent(new "
+//                        + WrapperUtils.getWrapperName4FullyQualifiedName(outparam)
+//                        + "(service."
+//                        + methodName
+//                        + "(");
+//            	}        
+//                if (paramsB.size() > 0) {
+//                    int i = 0;
+//                    for (i = 0; i < paramsB.size() - 1; i++)
+//                        writer.write("paramIn" + i + ",");
+//                    writer.write("paramIn" + i);
+//                }
+//				if(JavaUtils.isUnwrapperdSimpleType(outparam))
+//					writer.write("));\n");
+//				else
+//                	writer.write(")));\n");
+//                
+//
+//            } else if (isArray) {
+//                writer.write(
+//                    "\t\t"
+//                        + returntype.getType().getLanguageSpecificName()
+//                        + " ar = new "
+//                        + returntype.getType().getLanguageSpecificName()
+//                        + "();");
+//                writer.write("\t\tar.setParam(service." + methodName + "(");
+//                if (paramsB.size() > 0) {
+//                    int i = 0;
+//                    for (i = 0; i < paramsB.size() - 1; i++)
+//                        writer.write("paramIn" + i + ",");
+//                    writer.write("paramIn" + i);
+//                }
+//                writer.write("));\n");
+//                writer.write("\t\tmsgdata.setSoapBodyContent(ar);");
+//            } else {
+//                writer.write(
+//                    "\t\tmsgdata.setSoapBodyContent(service." + methodName + "(");
+//                if (paramsB.size() > 0) {
+//                    int i = 0;
+//                    for (i = 0; i < paramsB.size() - 1; i++)
+//                        writer.write("paramIn" + i + ",");
+//                    writer.write("paramIn" + i);
+//                }
+//                writer.write("));\n");
+//            }
         } else {
             writer.write("\t\t service." + methodName + "(");
+            
             if (paramsB.size() > 0) {
-                int i = 0;
-                for (i = 0; i < paramsB.size() - 1; i++) {
-                    writer.write("paramIn" + i + ",");
+            	int i;
+                for (i = 0; i < paramList.size() - 1; i++) {
+                    writer.write((String)paramList.get(i)+",");
                 }
-                writer.write("paramIn" + i);
+                writer.write((String)paramList.get(i));
             }
             writer.write(");\n");
         }
@@ -329,28 +400,28 @@ public class WrapWriter extends JavaClassWriter {
 
     }
 
-    /**
-     * get the name of the output file
-     * @return
-     */
-    public File getJavaFilePath() {
-        String dirpath;
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-            targetOutputLocation =
-                targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
-        if (targetOutputLocation.equals(""))
-            dirpath = targetOutputLocation;
-        else{
-            dirpath =
-                targetOutputLocation
-                    + "/"
-                    + WrapperUtils.getPackegeName4QualifiedName(
-                            this.wscontext.getSerInfo().getQualifiedServiceName())
-                        .replace('.', '/');
-        }                
-        new File(dirpath).mkdirs();
-        return new File(dirpath + "/" + servicename + ".java");
-    }
+//    /**
+//     * get the name of the output file
+//     * @return
+//     */
+//    public File getJavaFilePath() {
+//        String dirpath;
+//        String targetOutputLocation =
+//            this.wscontext.getWrapInfo().getTargetOutputLocation();
+//        if (targetOutputLocation.endsWith("/"))
+//            targetOutputLocation =
+//                targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
+//        if (targetOutputLocation.equals(""))
+//            dirpath = targetOutputLocation;
+//        else{
+//            dirpath =
+//                targetOutputLocation
+//                    + "/"
+//                    + WrapperUtils.getPackegeName4QualifiedName(
+//                            this.wscontext.getSerInfo().getQualifiedServiceName())
+//                        .replace('.', '/');
+//        }                
+//        new File(dirpath).mkdirs();
+//        return new File(dirpath + "/" + classname + ".java");
+//    }
 }

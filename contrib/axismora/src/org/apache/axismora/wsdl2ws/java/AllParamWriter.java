@@ -95,7 +95,7 @@ public class AllParamWriter implements SourceWriter {
                     .getImplStyle()
                     .equals(WrapperConstants.IMPL_STYLE_STRUCT)) {
                     if(type.getEnumerationdata() != null){
-                    
+                    	(new EnumerationWriter(type,wscontext)).writeSource();
                     }else if (type.isArray()) {
   //                      (new ArrayParamWriter(wscontext, type)).writeSource();
   						TypeMap.regestorArrayTypeToCreate(type);

@@ -238,6 +238,7 @@ public class DesirializationContext {
             //If RPC I should read the method as well
             if (this.style.equals("rpc")) {
                 log.info("It's rpc.... Parsing body");
+				this.state = this.xpp.next();
                 //this two lines are to make sure we are dealing with the start tag
                 while (!(state == XmlPullParser.START_TAG || state == XmlPullParser.END_DOCUMENT))
                     this.state = this.xpp.next();

@@ -55,15 +55,12 @@
 
 package org.apache.axismora.wsdl2ws.java;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
-import org.apache.axismora.soap.XMLTextData;
 import org.apache.axismora.wsdl2ws.WrapperConstants;
 import org.apache.axismora.wsdl2ws.WrapperFault;
 import org.apache.axismora.wsdl2ws.WrapperUtils;
@@ -104,7 +101,7 @@ public abstract class ParmWriter extends JavaClassWriter {
         super(
             WrapperUtils.getPackegeName4QualifiedName(type.getLanguageSpecificName()),
             WrapperUtils.getClassNameFromFullyQualifiedName(
-                type.getLanguageSpecificName()));
+                type.getLanguageSpecificName()),wscontext.getWrapInfo().getTargetOutputLocation());
         this.wscontext = wscontext;
         this.type = type;
         this.attribs =
@@ -166,10 +163,7 @@ public abstract class ParmWriter extends JavaClassWriter {
         try {
         	if(attribs.length>0){
             	writer.write(
-                	"\tpublic "
-                    	+ WrapperUtils.getClassNameFromFullyQualifiedName(
-                        	type.getLanguageSpecificName())
-                    	+ "(){\n");
+                	"\tpublic " + super.classname+ "(){\n");
              	//this.writeInitializer();
             	writer.write("\t}\n");
         	}	
@@ -246,22 +240,24 @@ public abstract class ParmWriter extends JavaClassWriter {
      * get the path to the file.
      * @return
      */
-    protected File getJavaFilePath() {
-        new File(
-            wscontext.getWrapInfo().getTargetOutputLocation()
-                + "/"
-                + WrapperUtils.getPackegeName4QualifiedName(
-                    type.getLanguageSpecificName()).replace(
-                    '.',
-                    '/'))
-            .mkdirs();
-        String fileName =
-            wscontext.getWrapInfo().getTargetOutputLocation()
-                + "/"
-                + type.getLanguageSpecificName().replace('.', '/')
-                + ".java";
-        return new File(fileName);
-    }
+//    protected File getJavaFilePath() {
+//    
+//    	
+//        new File(
+//            wscontext.getWrapInfo().getTargetOutputLocation()
+//                + "/"
+//                + WrapperUtils.getPackegeName4QualifiedName(
+//                    type.getLanguageSpecificName()).replace(
+//                    '.',
+//                    '/'))
+//            .mkdirs();
+//        String fileName =
+//            wscontext.getWrapInfo().getTargetOutputLocation()
+//                + "/"
+//                + type.getLanguageSpecificName().replace('.', '/')
+//                + ".java";
+//        return new File(fileName);
+//    }
     /* genarate the arrtibs array */
     public String[][] getAttribList(String Qualifiedname) throws WrapperFault {
         String[][] attribs;
@@ -366,10 +362,7 @@ public abstract class ParmWriter extends JavaClassWriter {
             return;
         try {
             writer.write(
-                "\tpublic "
-                    + WrapperUtils.getClassNameFromFullyQualifiedName(
-                        type.getLanguageSpecificName())
-                    + "(");
+                "\tpublic "+ super.classname + "(");
             if (attribs.length > 0) {
                 writer.write(attribs[0][1]
                         + " "

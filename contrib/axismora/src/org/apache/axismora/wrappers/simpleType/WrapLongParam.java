@@ -55,10 +55,6 @@
 
 package org.apache.axismora.wrappers.simpleType;
 
-/**
- * @author vtpavan
- */
-
 import java.io.IOException;
 
 import org.apache.axis.AxisFault;
@@ -66,58 +62,58 @@ import org.apache.axis.encoding.SerializationContext;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
 
-public class ByteParam implements InOutParameter {
-    public byte param;
+/**
+ * @author Srinath Perera(hemapani@opensource.lk)
+ */
+public class WrapLongParam implements InOutParameter {
+	private Long param;
+	public WrapLongParam(){}
+	public WrapLongParam(MessageContext msgdata) throws AxisFault {
+		desierialize(msgdata);
+	}
 
-    public ByteParam() {
-    }
+	public org.apache.axismora.encoding.InParameter desierialize(MessageContext msgdata)
+		throws AxisFault {
+		String value = msgdata.nextText();
+		if (value != null)
+			this.param = new Long(Long.parseLong(value));
+		return this;
+	}
 
-    public ByteParam(MessageContext msgdata) throws AxisFault {
-        desierialize(msgdata);
-    }
+	public WrapLongParam(Long param) {
+		this.param = param;
+	}
+    
 
-    public ByteParam(byte param) {
-        this.param = param;
-    }
+	public void serialize(SerializationContext context) {
+//		  String type_name = "long";
+//		  StringBuffer buf = new StringBuffer();
+//
+//		  buf.append("<Long xsi:type=\"ns1:").append(type_name).append(
+//			  "\" xmlns:ns1 =\"").append(
+//			  Constants.DEFAULT_SIMPLETYPE_ENCODING_URI + "\">");
+//		  buf.append(String.valueOf(param));
+//		  buf.append("</Long>\n");
+		try {
+			context.writeString(String.valueOf(param));
+		} catch (IOException e) {
+			e.printStackTrace(); //ioexception
+		}
 
-    public void serialize(SerializationContext context) {
-//        String type_name = "byte";
-//        StringBuffer buf = new StringBuffer();
-//        buf
-//            .append("<Byte xsi:type=\"ns1:")
-//            .append(type_name)
-//            .append("\" xmlns:ns1 =\"")
-//            .append(Constants.DEFAULT_SIMPLETYPE_ENCODING_URI)
-//            .append("\">");
-//        buf.append(Byte.toString(param));
-//        buf.append("</Byte>\n");
-        try {
-            context.writeString(Byte.toString(param));
-        } catch (IOException e) {
-            e.printStackTrace(); //ioexception
-        }
+	}
 
-    }
+	/**
+	 * @return
+	 */
+	public Long getParam() {
+		return param;
+	}
 
-    /**
-     * @return
-     */
-    public byte getParam() {
-        return param;
-    }
-
-    public org.apache.axismora.encoding.InParameter desierialize(MessageContext msgdata)
-        throws AxisFault {
-        String value = msgdata.nextText();
-        if (value != null)
-            this.param = Byte.parseByte(value);
-        return this;
-    }
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return Byte.toString(param);
+		return String.valueOf(param);
 	}
 
 }

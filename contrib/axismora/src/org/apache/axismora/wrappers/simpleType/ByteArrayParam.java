@@ -59,8 +59,6 @@ import java.io.IOException;
 
 import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
-
-import org.apache.axismora.Constants;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
 
@@ -82,18 +80,18 @@ public class ByteArrayParam implements InOutParameter {
     }
 
     public void serialize(SerializationContext context) {
-        String type_name = org.apache.axis.Constants.XSD_BYTE.getLocalPart();
-        StringBuffer buf = new StringBuffer();
-        buf
-            .append("<byteArray xsi:type=\"ns1:")
-            .append(type_name)
-            .append("\" xmlns:ns1 =\"")
-            .append(Constants.DEFAULT_SIMPLETYPE_ENCODING_URI)
-            .append("\">");
-        buf.append(param);
-        buf.append("</byteArray>\n");
+//        String type_name = org.apache.axis.Constants.XSD_BYTE.getLocalPart();
+//        StringBuffer buf = new StringBuffer();
+//        buf
+//            .append("<byteArray xsi:type=\"ns1:")
+//            .append(type_name)
+//            .append("\" xmlns:ns1 =\"")
+//            .append(Constants.DEFAULT_SIMPLETYPE_ENCODING_URI)
+//            .append("\">");
+//        buf.append(param);
+//        buf.append("</byteArray>\n");
         try {
-            context.writeString(buf.toString());
+            context.writeString(new String(param));
         } catch (IOException e) {
             e.printStackTrace(); //ioexception
         }
@@ -104,7 +102,7 @@ public class ByteArrayParam implements InOutParameter {
      * @return
      */
     public byte[] getParam() {
-        return param;
+        return this.param;
     }
 
     public org.apache.axismora.encoding.InParameter desierialize(MessageContext msgdata)
@@ -114,4 +112,11 @@ public class ByteArrayParam implements InOutParameter {
         };
         return this;
     }
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return new String(param);
+	}
+
 }

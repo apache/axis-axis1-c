@@ -34,7 +34,7 @@ public class DocLitBeanWriter extends JavaClassWriter {
   	public DocLitBeanWriter(WebServiceContext wscontext, Type type) throws WrapperFault {
 		super(WrapperUtils.getPackegeName4QualifiedName(type.getLanguageSpecificName()),
             WrapperUtils.getClassNameFromFullyQualifiedName(
-                type.getLanguageSpecificName()));
+                type.getLanguageSpecificName()),wscontext.getWrapInfo().getTargetOutputLocation());
         this.wscontext = wscontext;
         this.type = type;
         if (type.isArray())
@@ -383,26 +383,26 @@ public class DocLitBeanWriter extends JavaClassWriter {
         }
     }
 
-    /**
-     * get the path to the file.
-     * @return
-     */
-    protected File getJavaFilePath() {
-        new File(
-            wscontext.getWrapInfo().getTargetOutputLocation()
-                + "/"
-				  + WrapperUtils.getPackegeName4QualifiedName(
-					  type.getLanguageSpecificName()).replace(
-					  '.',
-					  '/'))
-            .mkdirs();
-        String fileName =
-            wscontext.getWrapInfo().getTargetOutputLocation()
-                + "/"
-                + type.getLanguageSpecificName().replace('.', '/')
-                + ".java";
-        return new File(fileName);
-    }
+//    /**
+//     * get the path to the file.
+//     * @return
+//     */
+//    protected File getJavaFilePath() {
+//        new File(
+//            wscontext.getWrapInfo().getTargetOutputLocation()
+//                + "/"
+//				  + WrapperUtils.getPackegeName4QualifiedName(
+//					  type.getLanguageSpecificName()).replace(
+//					  '.',
+//					  '/'))
+//            .mkdirs();
+//        String fileName =
+//            wscontext.getWrapInfo().getTargetOutputLocation()
+//                + "/"
+//                + type.getLanguageSpecificName().replace('.', '/')
+//                + ".java";
+//        return new File(fileName);
+//    }
 
     /** genarate the arrtibs into an array 
      * Odd numbers for names.

@@ -58,13 +58,12 @@ package org.apache.axismora.wrappers.simpleType;
 import java.io.IOException;
 import java.text.NumberFormat;
 
-import org.apache.axismora.MessageContext;
-import org.apache.axismora.encoding.InOutParameter;
-import org.apache.axismora.encoding.InParameter;
-
 import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axis.message.SOAPFault;
+import org.apache.axismora.MessageContext;
+import org.apache.axismora.encoding.InOutParameter;
+import org.apache.axismora.encoding.InParameter;
 
 /**
  * @author vtpavan(vtpavan@opensource.lk)
@@ -119,14 +118,14 @@ public class DayParam implements InOutParameter {
      *@see <a href="http://www.w3.org/TR/xmlschema-2/#gDay">XML Schema 3.2.13</a>
      */
     public void serialize(SerializationContext context) {
-        String type_name = "Day";
-        StringBuffer buf = new StringBuffer();
-        buf.append("<Day xsi:type=\"ns1:").append(type_name + "\" xmlns:ns1 =\"");
-        buf.append(org.apache.axis.Constants.URI_2001_SCHEMA_XSD + "/#gDay\">");
-        buf.append(param);
-        buf.append("</Day>\n");
+//        String type_name = "Day";
+//        StringBuffer buf = new StringBuffer();
+//        buf.append("<Day xsi:type=\"ns1:").append(type_name + "\" xmlns:ns1 =\"");
+//        buf.append(org.apache.axis.Constants.URI_2001_SCHEMA_XSD + "/#gDay\">");
+//        buf.append(param);
+//        buf.append("</Day>\n");
         try {
-            context.writeString(buf.toString());
+            context.writeString(param);
         } catch (IOException e) {
             e.printStackTrace(); //ioexception
         }
@@ -182,8 +181,8 @@ public class DayParam implements InOutParameter {
         return s;
     }
 
-    public String getParam() {
-        return this.param;
+    public DayParam getParam() {
+        return this;
 
     }
 }

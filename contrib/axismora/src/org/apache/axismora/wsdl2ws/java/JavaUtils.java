@@ -55,6 +55,9 @@
 
 package org.apache.axismora.wsdl2ws.java;
 
+import java.io.IOException;
+import java.io.Writer;
+
 import org.apache.axismora.wsdl2ws.WrapperFault;
 import org.apache.axismora.wsdl2ws.WrapperUtils;
 import org.apache.axismora.wsdl2ws.info.ParameterInfo;
@@ -70,13 +73,18 @@ public class JavaUtils {
     private static String[] unwrappedSimpleTypes =
         new String[] {
             "org.apache.axismora.wrappers.simpleType.Base64ByteArrayParam",
-            "org.apache.axismora.wrappers.simpleType.HexBinaryParam" };
+            "org.apache.axismora.wrappers.simpleType.HexBinaryParam",
+			"org.apache.axismora.wrappers.simpleType.MonthParam",
+			"org.apache.axismora.wrappers.simpleType.TimeParam",
+			"org.apache.axismora.wrappers.simpleType.DayParam" };
 
     public static boolean isUnwrapperdSimpleType(String type) {
-        for (int i = 0; i < unwrappedSimpleTypes.length; i++) {
-            if (unwrappedSimpleTypes[i].equals(type))
-                return true;
-        }
+//        for (int i = 0; i < unwrappedSimpleTypes.length; i++) {
+//            if (unwrappedSimpleTypes[i].equals(type))
+//                return true;
+//        }
+		if(type.startsWith("org.apache.axismora.wrappers.simpleType."))
+			return true;
         return false;
     }
 
@@ -104,16 +112,24 @@ public class JavaUtils {
         StringBuffer code = new StringBuffer();
 
         Type type;
-        if ((TypeMap.isSimpleType(inparam.getType().getLanguageSpecificName()))) {
+        if ((TypeMap.isSimpleType(inparam.getType().getName()))) {
             if (isUnwrapperdSimpleType(paramUsualName))
                 code.append(
                     "\t\t" + paramUsualName + " paramIn" + i 
-                    + " =  new  "+ paraTypeName + "(msgdata);");
-            else
+                    + " =  new  "+ paraTypeName + "(msgdata);\n");
+            else{
                 //if it is unwrapped simple type we should not print ".getParam() 
-                code.append(
-                    "\t\t" + paramUsualName + " paramIn" + i
+             	if(!paramUsualName.startsWith("java.lang"))
+                	code.append(
+                    	"\t\t" + paramUsualName + " paramIn" + i
                         + " =  (new  " + paraTypeName  + "(msgdata)).getParam();\n");
+                else
+				code.append(
+					"\t\t" + paramUsualName + " paramIn" + i
+					+ " =  new "+paramUsualName+"((new  " + paraTypeName  + "(msgdata)).getParam());\n");
+ 
+                        
+            }            
         } else if (
             (type = inparam.getType())
                 != null
@@ -138,4 +154,56 @@ public class JavaUtils {
         }
         return code.toString();
     }
+    
+    public static void writeDeserializeCodeLine(String target,String javatype,String ArrayTypeWrapper,String INDENT,Writer writer)throws IOException{
+
+		String wrapper = TypeMap.getWrapperCalssNameForJavaClass(javatype);
+		
+		if (TypeMap.isSimpleType(javatype)) {
+			
+			writer.write(INDENT+target+" = (new "+wrapper+"(msgdata)).getParam();\n");
+//			 
+//			if (JavaUtils.isUnwrapperdSimpleType(attribs[0][1]))
+//				
+//				writer.write(
+//					"\t\t\t\t\tthis."
+//						+ attribs[0][0]
+//						+ "= new "
+//						+ WrapperUtils.getWrapperName4FullyQualifiedName(attribs[0][1])
+//						+ "(msgdata);\n");
+//			else {
+//				if(!attribs[0][1].startsWith("java.lang"))
+//				writer.write(
+//					"\t\t\t\t\tthis."
+//						+ attribs[0][0]
+//						+ "= new "
+//						+ WrapperUtils.getWrapperName4FullyQualifiedName(attribs[0][1])
+//						+ "(msgdata).getParam();\n");
+//				else
+//					writer.write(
+//					"\t\t\t\t\tthis."
+//						+ attribs[0][0]
+//						+ "= new "+attribs[0][1]+"(new "
+//						+ WrapperUtils.getWrapperName4FullyQualifiedName(attribs[0][1])
+//						+ "(msgdata).getParam());\n");
+//			}
+		} else if (javatype.endsWith("[]") && !"byte[]".equals(javatype)) {
+			
+			writer.write(INDENT
+					+ ArrayTypeWrapper
+					+ " arrayT0 = (new "
+					+ ArrayTypeWrapper
+					+ "());\n");
+					
+			writer.write(INDENT+"arrayT0.desierialize(msgdata);\n");
+			writer.write(INDENT+ target + " = arrayT0.getParam();\n");
+		} else {
+			writer.write(INDENT+target
+					+ "= (new "
+					+ wrapper
+					+ "());\n");
+			
+			writer.write(INDENT+ target + ".desierialize(msgdata);\n");
+		}
+   }
 }
