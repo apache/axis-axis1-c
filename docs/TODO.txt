@@ -12,12 +12,13 @@ Also the priority order is postfixed with a number where 0-least priority.
 MESSAGE PARSING / ENCODING
 --------------------------
 ! <team> 	Improving the SoapDeserializer to parse SOAP headers
-! <team> 	Changing SAX2 parser to use progressive parsing and then adopt XMLpull parsing
+! <team> 	Research on XML pull C++ API any applying that to Axis C++ if possible.
 X <susantha> 	Improving Deserializer/Serializer and related area to support multi-dimensional arrays 
 * <team> 	Improving Deserializer/Serializer and related area to support partially transmitted arrays 
 
 CLIENT API
 ----------
+! <team> 	Discussion and documentation on client side of Axis C++.
 
 SCHEMA SUPPORT
 --------------
@@ -35,11 +36,13 @@ PERFORMANCE
 -----------
 X <roshan>	Improving Serializer code so that it avoids string operations(+= operator etc)		
 		Directly calling Transport's function (eg: ap_rputs(..))
-* <susantha> 	With the current method of writing a web service wrapper class every web service
+X <susantha> 	With the current method of writing a web service wrapper class every web service
 		DLL (or .so) will have its own copy of Serializer/Deserializer code (statically bound).
 		Result is that the web service DLL is too large with unnecessarily linked code (more memory).
 		So we have to make Serializer/Deserializer code to a DLL and then every web service and the
 		Axis engine uses the same DLL.
+! <team> 	going through the Axis C++ code and minimize the usage of STL as much as possible (specially std::string)
+* <susantha> 	Improving the code in XMLStreamHandler.cpp to avoid XMLString::transcode
 
 DOCUMENTATION
 -------------
@@ -47,6 +50,10 @@ DOCUMENTATION
 ! <team> 	writing user-guide
 ! <team> 	writing handler API
 X <susantha>    improving developer-guide with Transport Module writing API
+! <team>    	updating developer-guide to reflect new Transport Module writing API
+! <team> 	Writing a documentation (5000 letters) on Axis C++ to be published in any news letter.
+! <team> 	Developing the web site for Axis C++.
+! <team>	Writing coding standard document for Axis C++ project.
 
 SAMPLES
 -------
@@ -57,13 +64,15 @@ SAMPLES
 
 WSDL2C++
 ---------
+! <team> 	Coding C++ generation part of WSDL2WS tool being written in Java.
 
 AXISDEPLOY
 ----------
-* <susantha>	WrapperClassGenerator 		
+X <susantha>	WrapperClassGenerator 		
 		1. writing a set of classes that can store information that parser obtains by 		   
 		   parsing the user web service's include files.		
 		2. writing c++ parser that reads and parses the web service's include files
+! <team>	Improving the WCG to remove the web service writing C++ restrictions one by one
 
 GENERAL / UNCATEGORIZED
 -----------------------
@@ -75,14 +84,14 @@ GENERAL / UNCATEGORIZED
 		plug in different XML parsing mechanisms.
 ! <team> 	Better if we can introduce namespaces to avoid collisions between names when the 
 		server/client side is link with user code. Hence, better to focus it now rather than later.		
-! <team> 	Avoid using any global variables to make the server thread safe.	
+X <Susantha> 	Avoid using any global variables to make the server thread safe.	
 ! <team>	Pluggable provider APIs to support RPC/Document styles.
 		
 X <sanjaya>	In the WSDDDocument.cpp for each and every XMLString::transcode() you have to 
 		use a corrosponding XMLString::release() to relase the allocated memeory
 
 X <sanjaya>	In the WSDDDocument.cpp write the code to handle the end element for wsdd_resflow
-* <sanjaya> 	Improve AxisEngine to send back the WSDL upon http GET request. Ex. http://url/service?wsdl
+X <sanjaya> 	Improve AxisEngine to send back the WSDL upon http GET request. Ex. http://url/service?wsdl
 ! <team> 	Support SOAP messages with attachments: defines a binding for a SOAP message to be carried 
 		within a MIME multipart/related message.
 ! <lilantha>	Servlet support for server side which helps to deploy server in a servlet containers or in
@@ -92,13 +101,19 @@ Session
 -------
 ! <team> 	SOAP session support
 ! <team> 	A sample for a SOAP session handler
+X <susantha> 	Transport session support (Ex: HTTP)
 
 Transport
 ---------
 ! <team> 	Pluggable transport API for server & client, seperate interfaces between Transport & 
 		other stuff.
 ! <team> 	Support for "SOAP messages with attachments"
-
+! <team>
+		Development of following transport modules and testing them
+			1. Apache 1.3 for linux
+			2. IIS
+			3. Apache 2.0 for windows and Linux
+			4. globus XIO
 Security
 --------
 ! <team> 	Support transport-level security
@@ -108,18 +123,27 @@ Security
 
 Service Description and Discovery (WSDL)
 ----------------------------------------
-! <team> 	Support a basic html page describing the service (via an HTTP GET)
+X <sanjaya> 	Support a basic html page describing the service (via an HTTP GET)
 * <nadika> 	Tools and/or run-time support for stub generation from WSDL
 
 FUTURE ENHANCEMENTS
 -------------------
-! <team> 	Currently the keywords which are namespace specific are hard coded. We have to		
+X <susantha> 	Currently the keywords which are namespace specific are hard coded. We have to		
 		put these keywords in to a list/map and pickup them when ever needed from it.		
 		eg: 		
 			a) enc		   http://www.w3.org/2003/05/soap-encoding		   
 			   		   
-! <team> 	The current code supports only int, float, string out of simple types. This code		
+* <damitha> 	The current code supports only int, float, string out of simple types. This code		
 		has to be improved to support other simplet types as well. float, double, .... etc
 
-* <susantha>	Implementing C++ types for xml types (datetime, date, time, HexBinary, Base64Binary etc)
+* <damitha>	Implementing C++ types for xml types (datetime, date, time, HexBinary, Base64Binary etc)
 		and improve Param class to support them.
+
+
+CODE IMPROVEMENTS
+-----------------
+! <team>	Applying coding standards to the existing code base
+
+C/C++ to Web Service Tool
+-------------------------
+! <team> 	Improving the WCG to remove the web service writing C++ restrictions one by one 
