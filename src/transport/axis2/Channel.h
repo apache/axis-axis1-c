@@ -55,12 +55,13 @@ inline WS_VERSION_MINOR() {return LOBYTE(WS_VERSION_REQD);}
 
 const unsigned int INVALID_SOCKET =  0;
 const int           SOCKET_ERROR   = -1;
-const int BUF_SIZE = 1024 * 8;
 /* ther OS specific stuff goes here */
 
 
 
 #endif
+
+const int BUF_SIZE = 1024 * 8;
 
 /*
  * 
