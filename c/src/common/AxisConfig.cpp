@@ -131,10 +131,10 @@ int AxisConfig::readConfFile ()
 
 void AxisConfig::setValue(int valuelength, g_axconfig valueindex, char* value)
 {
-    m_pcValueArray[valueindex] =  (char*) malloc (valuelength);
+    m_pcValueArray[valueindex] =  (char*) malloc (valuelength+1);
     strncpy (m_pcValueArray[valueindex], value, valuelength);
-	*(m_pcValueArray[valueindex]+valuelength)
-        = '\0';
+	//*(m_pcValueArray[valueindex]+valuelength)
+        //= '\0';
 }
 
 
