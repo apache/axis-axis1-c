@@ -136,6 +136,10 @@ SOURCE=..\..\..\src\engine\SessionScopeHandlerPool.cpp
 
 SOURCE=..\..\..\src\engine\SharedObject.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\engine\client\Stub.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -183,6 +187,10 @@ SOURCE=..\..\..\src\engine\SessionScopeHandlerPool.h
 # Begin Source File
 
 SOURCE=..\..\..\src\engine\SharedObject.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\include\axis\client\Stub.h
 # End Source File
 # End Group
 # End Target
