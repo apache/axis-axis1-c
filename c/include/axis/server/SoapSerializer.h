@@ -162,7 +162,7 @@ private:
 	const Ax_soapstream* m_pOutputStream;
 public:
 	int AXISCALL AddOutputParam(const AxisChar* pchName, void* pValue, XSDTYPE type);
-	const AxisChar* AXISCALL SerializeBasicType(const AxisChar* pchName, void* pValue, XSDTYPE type);
+	int AXISCALL SerializeBasicType(const AxisChar* pchName, void* pValue, XSDTYPE type);
 	void AXISCALL Serialize(const char* pFirst, ...);
 };
 

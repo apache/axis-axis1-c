@@ -127,10 +127,10 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 	protected void writeMethods() throws WrapperFault {
 		try{
 			writer.write("public:/*implementation of WrapperClassHandler interface*/\n");
-			writer.write("\tint Invoke(IMessageData* mc);\n");
-			writer.write("\tvoid OnFault(IMessageData* pMsg);\n");
-			writer.write("\tint Init();\n");
-			writer.write("\tint Fini();\n");
+			writer.write("\tint AXISCALL Invoke(IMessageData* mc);\n");
+			writer.write("\tvoid AXISCALL OnFault(IMessageData* pMsg);\n");
+			writer.write("\tint AXISCALL Init();\n");
+			writer.write("\tint AXISCALL Fini();\n");
 			writer.write("private:/*Methods corresponding to the web service methods*/\n");
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
