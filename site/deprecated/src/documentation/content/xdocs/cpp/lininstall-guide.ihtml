@@ -55,32 +55,31 @@ introspection. You need to have following in order to run Axis C++ engine.</p>
 
 <p>We tested with the following</p>
 <ul>
-  <li>Redhat Linux 8.0(2.4.18-14) RedhatLinux9.0(2.4.20-8)</li>
-  <li>Apache 1.3 [apache_1.3.27.tar .gz, apache_1.3.28.tar.gz)] (Source)</li>
+  <li>Redhat Linux 8.0(2.4.18-14) RedhatLinux9.0(2.4.20-8), Mandrake8.0(2.4.8-26)</li>
+  <li>Apache 1.3 [apache_1.3.27.tar .gz, apache_1.3.28.tar.gz)] (Source), Apache2.0 (source)</li>
   <li>Xerces C++ [xerces-c-src2_2_0.tar.gz](Source) &gt;(Source)</li>
 </ul>
 
 <p></p>
 
-<p><b>Getting the source or binary from the mirror site and setting the
+<p><b>Downloading the source or binary from the mirror site and setting the
 environment variables</b></p>
 
-<p>User can download the Axis C++ source or binary from one of the apache
-mirror sites</p>
+<p>You can download the Axis C++ source or binary from one of the apache
+mirror sites<a href="http://ws.apache.org/axis/cpp/download.html">http://ws.apache.org/axis/cpp/download.html</a></p>
 
 <p></p>
 
-<p>Your downloaded distribution is axis-c-src-alpha-linux.tar.gz. After you
+<p>Your downloaded distribution is axis-c-src-1_0-linux.tar.gz. After you
 extracting it for example as,
-<strong>/home/axisuser/projects/axis-c-src-alpha-linux</strong> you can
+<strong>/home/axisuser/projects/axis-c-src-1_0-linux</strong> you can
 rename it as <strong>axis_c</strong></p>
 
 <p></p>
 
-<p>The directory where you extracted the tar ball will be called
-&lt;axiscpphome&gt; from now on. We further assume that the user dose the
+<p>You have to set the environment variable $AXISCPP_HOME to the directory where you extracted the tar ball.. We further assume that the user dose the
 installation and has the linux user account axisuser. For example I have my
-&lt;axiscpphome&gt; as following.</p>
+&lt;AXISCPP_HOME&gt; as following.</p>
 
 <p>/home/axisuser/projects</p>
 <p><a name="Installing"></a></p>
@@ -104,7 +103,7 @@ apache_1.3.27.tar.gz). Build it with sharable module support.</p>
 
 <p><strong>$ ./configure --enable-module=so</strong></p>
 
-<p>Note:- Here "so" are simple letters</p>
+<p>Note:- Here "so" is simple letters</p>
 
 <p></p>
 
@@ -195,11 +194,45 @@ $AXISCPP_HOME/include/apache1_3/</strong></p>
 <p><strong>$ make</strong></p>
 
 <p><strong>$ make install</strong></p>
+<p>
+<p>
+-----------------------------------------------------------------------
+</p>
+<strong>NOTE: </strong>If you use apache2.0 following two small changes has to be done in $AXISCPP_HOME/configure.ac and $AXISCPP_HOME/src/server/Makefile.am)
+</p>
+<p>
+in $AXISCPP_HOME/configure.ac
+</p>
+<p>
+comment
+</p>
+<p>
+<strong>
+AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/engine/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile src/server/Makefile src/server/apache/Makefile)
+</strong>
+</p>
+<p>
+and uncomment
+</p>
+<p>
+<strong>
+#AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/engine/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile src/server/Makefile src/server/apache2/Makefile)
+</strong>
+</p>
+<p>
+in $AXISCPP_HOME/src/server/Makefile.am
+</p>
+<p>
+change
+SUBDIRS = apache
+to
+SUBDIRS = apache2
+</p>
+<p>
+-----------------------------------------------------------------
+</p>
 
-<p class="command"><span class="command"></span></p>
-
-<p>Now libaxiscpp_mod.so should have been created in $AXISCPP_HOME/bin
-directory. Note:- you can give the install path inside the runconfigure
+<p>Now libaxiscpp_mod.so (If you built for apache2 this is libaxiscpp_mod2.so) should have been created in $AXISCPP_HOME/bin directory. Note:- you can give the install path inside the runconfigure
 script.There will be link errors if you don't use correct version of
 xerces-c.</p>
 
@@ -216,7 +249,7 @@ it.</p>
 
 <p></p>
 
-<p><strong>LoadModule axis_module libexec/libaxiscpp_mod.so</strong></p>
+<p><strong>LoadModule axis_module libexec/libaxiscpp_mod.so (in apache2 replace libexec with modules and libaxiscpp_mod.so with libaxiscpp_mod2.so)</strong></p>
 
 <p><strong>&lt;Location /axis&gt;</strong></p>
 
@@ -226,11 +259,12 @@ it.</p>
 
 <p class="command"><span class="command"></span></p>
 
-<p>Copy /home/axisuser/projects/axis_c/bin/libaxiscpp_mod.so into
-/usr/local/Apache/libexec/</p>
+<p>Copy $AXISCPP_HOME/bin/libaxiscpp_mod.so into
+/usr/local/Apache/libexec/ (in apache2 replace libexec with modules and libaxiscpp_mod.so with libaxiscpp_mod2.so)</p>
 
-<p><strong>$cp -f /home/axisuser/projects/axis_c/bin/libaxiscpp_mod.so
-/usr/local/apache/libexec</strong></p>
+<p><strong>$cp -f $AXISCPP_HOME/bin/libaxiscpp_mod.so
+/usr/local/apache/libexec (in apache2 replace
+libexec with modules and libaxiscpp_mod.so with libaxiscpp_mod2.so)</strong></p>
 
 <p class="command"><span class="command"></span></p>
 
