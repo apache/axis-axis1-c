@@ -128,6 +128,7 @@ int main(int argc, char* argv[])
         cout << "Failed" << endl;
     else 
     {
+   	  char dateTime[50];
       int i = 0;
       if ( argc > 1 )
           i = output->count -1;
@@ -141,9 +142,12 @@ int main(int argc, char* argv[])
           cout << " IntegerType " << output->infos.m_Array[i].IntegerType << endl;
           cout << " DoubleType " << output->infos.m_Array[i].DoubleType << endl;
           cout << " BooleanType " << output->infos.m_Array[i].BooleanType << endl;
-          cout << " DateTimeType " << asctime(&output->infos.m_Array[i].DateTimeType);
-          cout << " DateType " << asctime(&output->infos.m_Array[i].DateType);
-          cout << " TimeType " << asctime(&output->infos.m_Array[i].TimeType);
+  		  strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &output->infos.m_Array[i].DateTimeType);
+          cout << " DateTimeType " << dateTime << endl;
+  		  strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &output->infos.m_Array[i].DateType);
+          cout << " DateType " << dateTime << endl;
+  		  strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &output->infos.m_Array[i].TimeType);
+          cout << " TimeType " << dateTime << endl;
           cout << " ByteType " << output->infos.m_Array[i].ByteType << endl;
           cout << " DecimalType " << output->infos.m_Array[i].DecimalType << endl;
           cout << " FloatType " << output->infos.m_Array[i].FloatType << endl;
