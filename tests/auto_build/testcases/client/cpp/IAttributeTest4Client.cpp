@@ -26,7 +26,9 @@ int main(int argc, char* argv[])
 		INamespace *nsp=phb->createNamespaceDecl("nsp","http://apache.com");
 		IAttribute *attr1=phb->createAttribute("Name","nsp","axis");
 		cout<<attr1->setURI(NULL)<<endl;
-		cout<<attr1->setURI(uri)<<endl;
+
+		/* Changing the URI associated with the attribute. Here the prefix should also will change. */
+		cout<<attr1->setURI("http://axis.apache.com")<<endl;
 		BasicNode *bn=phb->createImmediateChild(ELEMENT_NODE,"Project","","","");
 		IAttribute *attr2=bn->createAttribute("TYPE","OPEN SOURCE");
 		attr2->setURI(uri);
