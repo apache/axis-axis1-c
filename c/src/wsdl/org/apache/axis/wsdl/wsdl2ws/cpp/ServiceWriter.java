@@ -91,11 +91,11 @@ public class ServiceWriter extends CPPClassWriter{
 
 	protected void writeClassComment() throws WrapperFault {
 		try{
-			writer.write("///////////////////////////////////////////////////////////////////////\n");	
-			writer.write("//This is the Service implementation CPP file genarated by theWSDL2Ws.\n");
-			writer.write("//		"+classname+".cpp: implemtation for the "+classname+".\n");
-			writer.write("//\n");
-			writer.write("//////////////////////////////////////////////////////////////////////\n");
+			writer.write("/*\n");	
+			writer.write(" *This is the Service implementation CPP file genarated by theWSDL2Ws.\n");
+			writer.write(" *		"+classname+".cpp: implemtation for the "+classname+".\n");
+			writer.write(" *\n");
+			writer.write(" */\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}

@@ -63,37 +63,75 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
  */
 public class SourceWriterFactory {
 	public static SourceWriter createSourceWriter(int genaratorType,WebServiceContext wscontext)throws WrapperFault{
-		//C++
-		if(genaratorType == WrapperConstants.GENERATOR_PARAM_CPP_ALL)
-			return new org.apache.axis.wsdl.wsdl2ws.cpp.AllParamWriter(wscontext);
-		else if(genaratorType == WrapperConstants.GENERATOR_WRAPPER_CPP)
-			return new org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter(wscontext);
-		else if(genaratorType == WrapperConstants.GENERATOR_WRAPPER_HPP)
-			return new org.apache.axis.wsdl.wsdl2ws.cpp.WrapHeaderWriter(wscontext);
-		else if(genaratorType == WrapperConstants.GENERATOR_SERVICE_CPP)
-			return new org.apache.axis.wsdl.wsdl2ws.cpp.ServiceWriter(wscontext);
-		else if(genaratorType == WrapperConstants.GENERATOR_SERVICE_HPP)
-			return new org.apache.axis.wsdl.wsdl2ws.cpp.ServiceHeaderWriter(wscontext);
-		//C
-		else if(genaratorType == WrapperConstants.GENERATOR_PARAM_C_ALL)
-			return new org.apache.axis.wsdl.wsdl2ws.c.AllParamWriter(wscontext);
-		else if(genaratorType == WrapperConstants.GENERATOR_WRAPPER_C)
-			return new org.apache.axis.wsdl.wsdl2ws.c.WrapWriter(wscontext);
-		else if(genaratorType == WrapperConstants.GENERATOR_WRAPPER_H)
-			return new org.apache.axis.wsdl.wsdl2ws.c.WrapHeaderWriter(wscontext);
-		else if(genaratorType == WrapperConstants.GENERATOR_SERVICE_C)
-			return new org.apache.axis.wsdl.wsdl2ws.c.ServiceWriter(wscontext);
-		else if(genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_C_WRAPPER)
-			return new org.apache.axis.wsdl.wsdl2ws.c.ClientStubWrapperWriter(wscontext);
-		//Common to C & C++
-		else if((genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_HPP)||
-				(genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_H))
-			return new org.apache.axis.wsdl.wsdl2ws.cpp.ClientStubHeaderWriter(wscontext);
-		else if((genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_CPP)||
-				(genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_C))
-			return new org.apache.axis.wsdl.wsdl2ws.cpp.ClientStubWriter(wscontext);	
-		else if(genaratorType == WrapperConstants.GENERATOR_CLASSLOADER_CPP)
-			return new org.apache.axis.wsdl.wsdl2ws.cpp.ClassLoader(wscontext);
+		if("rpc".equals(wscontext.getWrapInfo().getWrapperStyle())){
+			//C++
+			if(genaratorType == WrapperConstants.GENERATOR_PARAM_CPP_ALL)
+				return new org.apache.axis.wsdl.wsdl2ws.cpp.AllParamWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_WRAPPER_CPP)
+				return new org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_WRAPPER_HPP)
+				return new org.apache.axis.wsdl.wsdl2ws.cpp.WrapHeaderWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_SERVICE_CPP)
+				return new org.apache.axis.wsdl.wsdl2ws.cpp.ServiceWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_SERVICE_HPP)
+				return new org.apache.axis.wsdl.wsdl2ws.cpp.ServiceHeaderWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_CLASSLOADER_CPP)
+				return new org.apache.axis.wsdl.wsdl2ws.cpp.ClassLoader(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_HPP)
+				return new org.apache.axis.wsdl.wsdl2ws.cpp.ClientStubHeaderWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_CPP)
+				return new org.apache.axis.wsdl.wsdl2ws.cpp.ClientStubWriter(wscontext);	
+			//C
+			else if(genaratorType == WrapperConstants.GENERATOR_PARAM_C_ALL)
+				return new org.apache.axis.wsdl.wsdl2ws.c.AllParamWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_WRAPPER_C)
+				return new org.apache.axis.wsdl.wsdl2ws.c.WrapWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_WRAPPER_H)
+				return new org.apache.axis.wsdl.wsdl2ws.c.WrapHeaderWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_SERVICE_C)
+				return new org.apache.axis.wsdl.wsdl2ws.c.ServiceWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_CLASSLOADER_C)
+				return new org.apache.axis.wsdl.wsdl2ws.c.ClassLoader(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_H)
+				return new org.apache.axis.wsdl.wsdl2ws.c.ClientStubHeaderWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_C)
+				return new org.apache.axis.wsdl.wsdl2ws.c.ClientStubWriter(wscontext);	
+			throw new WrapperFault("Source writer type not found");		
+		}		
+		else if ("document".equals(wscontext.getWrapInfo().getWrapperStyle())){
+			if(genaratorType == WrapperConstants.GENERATOR_PARAM_CPP_ALL)
+				return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.AllParamWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_WRAPPER_CPP)
+				return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.WrapWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_WRAPPER_HPP)
+				return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.WrapHeaderWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_SERVICE_CPP)
+				return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.ServiceWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_SERVICE_HPP)
+				return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.ServiceHeaderWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_CLASSLOADER_CPP)
+				return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.ClassLoader(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_HPP)
+				return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.ClientStubHeaderWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_CPP)
+				return new org.apache.axis.wsdl.wsdl2ws.cpp.literal.ClientStubWriter(wscontext);	
+			//C
+			else if(genaratorType == WrapperConstants.GENERATOR_PARAM_C_ALL)
+				return new org.apache.axis.wsdl.wsdl2ws.c.literal.AllParamWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_WRAPPER_C)
+				return new org.apache.axis.wsdl.wsdl2ws.c.literal.WrapWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_WRAPPER_H)
+				return new org.apache.axis.wsdl.wsdl2ws.c.literal.WrapHeaderWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_SERVICE_C)
+				return new org.apache.axis.wsdl.wsdl2ws.c.literal.ServiceWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_CLASSLOADER_C)
+				return new org.apache.axis.wsdl.wsdl2ws.c.literal.ClassLoader(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_H)
+				return new org.apache.axis.wsdl.wsdl2ws.c.literal.ClientStubHeaderWriter(wscontext);
+			else if(genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_C)
+				return new org.apache.axis.wsdl.wsdl2ws.c.literal.ClientStubWriter(wscontext);	
+			throw new WrapperFault("Source writer type not found");				
+		}
 		throw new WrapperFault("Source writer type not found");				
 	}
 }

@@ -104,16 +104,4 @@ public class ServiceInfo {
     public String getServicename() {
         return servicename;
     }
-
-    /**
-     * return true if qualifiedname is a direct return type in the
-     * service
-     * @param qualifiedname
-     * @return weather gvien qu. name is a direct return type ...
-     */
-    public boolean isDirectReturn(String qualifiedname) {
-        for (int i = 0; i < this.methods.size(); i++)
-            if (((MethodInfo) this.methods.get(i)).getReturnType().getLangName().equals(qualifiedname)) return true;
-        return false;
-    }
 }

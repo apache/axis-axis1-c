@@ -104,11 +104,11 @@ public class ServiceHeaderWriter extends HeaderFileWriter{
 	 */
 	protected void writeClassComment() throws WrapperFault {
 		try{
-			writer.write("/////////////////////////////////////////////////////////////////////////////\n");
-			writer.write("// This is the Service Class genarated by the tool WSDL2Ws\n");
-			writer.write("//		"+classname+".h: interface for the "+classname+"class.\n");
-			writer.write("//\n");
-			writer.write("//////////////////////////////////////////////////////////////////////\n");
+			writer.write("/*\n");
+			writer.write(" * This is the Service Class genarated by the tool WSDL2Ws\n");
+			writer.write(" * "+classname+".h: interface for the "+classname+"class.\n");
+			writer.write(" *\n");
+			writer.write(" */\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}

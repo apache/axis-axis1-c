@@ -62,13 +62,16 @@
  */
 package org.apache.axis.wsdl.wsdl2ws.info;
 
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Set;
 import java.util.Vector;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
+import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.c.CUtils;
@@ -79,10 +82,29 @@ public class Type {
     private static final int MAXIMUM_NO_ATTRIBS = 101;
     private QName name;
 
+	/**
+	  * If the specified node represents a supported JAX-RPC enumeration,
+	  * a Vector is returned which contains the base type and the enumeration values.
+	  * The first element in the vector is the base type (an TypeEntry).
+	  * Subsequent elements are values (Strings).
+	  * If this is not an enumeration, null is value.
+	  */
+    private Vector enumerationdata;
+
     /* This can be null */
     private String languageSpecificName;
-    /* attribute names and the type of the attributes */
-    private Hashtable types;
+	/* element names and the type of the elements (QName,ElementInfo)*/
+    private Hashtable elements;
+	/* This vector was added to preserve the order of types parsed from the wsdl. 
+	 * This may be a hack. Should be improved if necessary
+	 */
+    private Vector vElements;
+	/* attribute names and the type of the attributes (QName,QName)*/
+    private Hashtable attributes;
+    /* This vector was added to preserve the order of types parsed from the wsdl. 
+     * This may be a hack. Should be improved if necessary
+     */
+    private Vector vAttributes;
     /* has the attributes are specified with order <sequence> in the schema */
     private boolean hasOrder;
     /*if order presents the order is set in the vector */
@@ -90,13 +112,21 @@ public class Type {
     /* weather the type is Array */
     private boolean isArray;
     
+    private boolean canThisOccuredmoreThanOnceAllTheTime = false;
+    //to handle <xsd:element name="three" type="typens:enum" maxOccurs="unbounded" />
+    //types at the top level. But this is not allowed in the Schema spec. 
+    
+    
     private String language;
 
     public Type(QName name, String languageSpecificName, boolean hasOrder,String language) {
         this.languageSpecificName = languageSpecificName;
         this.hasOrder = hasOrder;
         this.name = name;
-        types = new Hashtable();
+		elements = new Hashtable();
+		attributes = new Hashtable();
+		vElements = new Vector();
+		vAttributes = new Vector();
         if(language == null)
 			this.language = WrapperConstants.LANGUAGE_JAVA;
         else
@@ -141,40 +171,53 @@ public class Type {
         this.name = name;
     }
 
-    public Enumeration getAttribNames() {
-    	if (hasOrder){
-    		return attribOrder.elements();	
-    	}
-    	else{
-        	return this.types.keys();
-    	}
+    public Iterator getAttributeNames()
+    {
+    	return this.vAttributes.iterator();
     }
 
-/*    public void setTypeNameForAttribName(String attribName, String typeName) {
-        if (hasOrder)
-            this.attribOrder.add(typeName);
-        this.types.put(attribName, typeName);
-    }*/
 
 /**
  * The Type take the attributes name to lowercase when add, If there is two names like "Name" and "name"
  * they will convert to "name"  Is that acceptable ....  
  */
-    public void setTypeNameForAttribName(String attribName, QName typeName) {
+    public void setTypeForAttributeName(String attribName, Type type) {
 		attribName = TypeMap.resoleveWSDL2LanguageNameClashes(attribName,this.language);
         if (hasOrder)
             this.attribOrder.add(attribName);
-        this.types.put(attribName, typeName);
+        this.attributes.put(attribName, type);
+        this.vAttributes.add(attribName);
     }
+
+	public Type getTypForAttribName(String attribName) {
+		return (Type) this.attributes.get(attribName);
+	}
+
+	public Iterator getElementnames()
+	{
+		return this.vElements.iterator();
+	}
+
+
+/**
+ * The Type take the attributes name to lowercase when add, If there is two names like "Name" and "name"
+ * they will convert to "name"  Is that acceptable ....  
+ */
+	public void setTypeNameForElementName(ElementInfo element) {
+		String attribName = TypeMap.resoleveWSDL2LanguageNameClashes(element.getName().getLocalPart(),this.language);
+		if (hasOrder)
+			this.attribOrder.add(attribName);
+		this.elements.put(attribName, element);
+		this.vElements.add(attribName);
+	}
+
+	public ElementInfo getElementForElementName(String attribName) {
+		return (ElementInfo) this.elements.get(attribName);
+	}
+
 
     public void setAttribOrder(Vector order) {
         this.attribOrder = order;
-    }
-
-
-
-    public QName getTypNameForAttribName(String attribName) {
-        return (QName) this.types.get(attribName);
     }
 
     public boolean hasOrder() {
@@ -219,14 +262,89 @@ public class Type {
 	}
 
 	public boolean isContainedType(Type containedType){
-		Iterator ntype = this.types.values().iterator();
+		Iterator ntype = this.attributes.values().iterator();
 		QName typeName;
 		while(ntype.hasNext()){
-			typeName = (QName)ntype.next();
+			typeName = ((Type)ntype.next()).getName();
+			if(typeName.equals(containedType.name)){
+				return true;
+			}
+		}	
+		Iterator nelements = this.elements.values().iterator();
+		while(nelements.hasNext()){
+			typeName = ((ElementInfo)nelements.next()).getType().getName();
 			if(typeName.equals(containedType.name)){
 				return true;
 			}
 		}		
 		return false;
 	}
+    /**
+     * @return
+     */
+    public boolean isCanThisOccuredmoreThanOnceAllTheTime() {
+        return canThisOccuredmoreThanOnceAllTheTime;
+    }
+
+    /**
+     * @param b
+     */
+    public void setCanThisOccuredmoreThanOnceAllTheTime(boolean b) {
+        canThisOccuredmoreThanOnceAllTheTime = b;
+    }
+    
+
+    /**
+	  * If the specified node represents a supported JAX-RPC enumeration,
+	  * a Vector is returned which contains the base type and the enumeration values.
+	  * The first element in the vector is the base type (an TypeEntry).
+	  * Subsequent elements are values (Strings).
+	  * If this is not an enumeration, null is value.
+      * @return
+      */
+    public Vector getEnumerationdata() {
+        return enumerationdata;
+    }
+
+    /**
+     * @param vector
+     */
+    public void setEnumerationdata(Vector vector) {
+        enumerationdata = vector;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    public String toString() {
+       String str = "---------"+this.name+"------------\n" +
+       	"languageSpecificName = " + this.languageSpecificName +"\n";
+       	if(enumerationdata != null){
+			str = str + "enumerationType = "+((TypeEntry)enumerationdata.get(0)).getQName()+"\n(";
+			for(int i = 1;i<enumerationdata.size();i++)	
+				str = str +","+ enumerationdata.get(i);
+			str = str + ")\n";
+       	}else{
+	       	str =str +"isArray ="+isArray+"\n";
+	       	str = str + "Elements[\n";
+	       	Iterator c = elements.values().iterator();
+			while(c.hasNext())	
+					str = str +","+ c.next()+"\n";
+	       	str = str + "]\n";
+	       	
+			c = attributes.keySet().iterator();
+			str = str + "Attributes[\n";
+
+			while(c.hasNext()){	
+				String name = (String)c.next();
+					str = str +",("+ name+","+attributes.get(name)+")";
+			}		
+			str = str + "]\n";
+	       	
+        }
+		str = str + "------------------------------------------------------\n";
+       
+        return str;
+    }
+
 }
