@@ -20,6 +20,7 @@
 #include "BasicNode.hpp"
 #include "SoapEnvVersions.hpp"
 #include <axis/IAttribute.hpp>
+#include <axis/INamespace.hpp>
 
 AXIS_CPP_NAMESPACE_START
 
@@ -52,7 +53,10 @@ public:
       * namespace declartion Attribute. 
       * @return AXIS_SUCCESS to indicate successfull operation. 
       */ 
-    virtual int addNamespaceDecl(IAttribute *pAttribute)=0;
+	/* TO DO: We need to remove this completely
+	*
+	virtual int addNamespaceDecl(INamespace *pAttribute)=0;
+	*/
 
     /** 
       * Creates a Attribute and adds it to this Header Block as a namespace. 
@@ -62,7 +66,7 @@ public:
       * 
       * @return A pointer to the created Attribute will be returned. 
       */ 
-    virtual IAttribute* createNamespaceDecl(const AxisChar *prefix, 
+    virtual INamespace* createNamespaceDecl(const AxisChar *prefix, 
             const AxisChar *uri)=0; 
 
     virtual BasicNode* getFirstChild() =0;

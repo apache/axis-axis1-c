@@ -26,6 +26,7 @@ AXIS_CPP_NAMESPACE_START
 using namespace std;
 class BasicNode;
 class Attribute;
+class Namespace;
 
 
 /*
@@ -71,7 +72,8 @@ private:
     /**
       * Serializes the namespace decl.
       */
-    int serializeNamespaceDecl(SoapSerializer& pSZ);
+    int serializeNamespaceDecl(SoapSerializer& pSZ,
+			std::list<AxisChar*>& lstTmpNameSpaceStack);
 
     int serializeChildren(SoapSerializer& pSZ, 
         std::list<AxisChar*>& lstTmpNameSpaceStack);
@@ -89,8 +91,8 @@ private:
     AxisString m_localname;
     AxisString m_sPrefix;
     AxisString m_uri;
-    std::list<Attribute*> m_attributes;
-    std::list<Attribute*> m_namespaceDecls;
+    std::list<Attribute*> m_attributes;    
+	std::list<Namespace*> m_namespaceDecls;	
 
 public:	
 
@@ -102,7 +104,7 @@ public:
       * 
       * @return A pointer to the created Attribute will be returned. 
       */
-    IAttribute* createNamespaceDecl(const AxisChar *prefix, 
+    INamespace* createNamespaceDecl(const AxisChar *prefix, 
             const AxisChar *uri); 
 
     BasicNode* getFirstChild();
@@ -350,7 +352,10 @@ public:
       * @return AXIS_SUCCESS to indicate successfull operation. AXIS_FAIL to
       *  to indicate unsuccessfull operation.
       */
-    int addNamespaceDecl(IAttribute *pAttribute);
+	/* TO DO: We need to remove this completely
+	*
+	int addNamespaceDecl(INamespace *pAttribute);
+	*/
 
 	/**
       * The Constructor.

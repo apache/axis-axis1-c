@@ -58,6 +58,7 @@
 #include <axis/BasicNode.hpp>
 #include "ComplexElement.h"
 #include "CharacterElement.h"
+#include "Namespace.h"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -95,13 +96,16 @@ m_sPrefix(rCopy.m_sPrefix), m_uri(rCopy.m_uri)
         this->m_attributes.push_back( (*itCurrAttribute)->clone() );
         itCurrAttribute++;        
     }
-    
-    list<Attribute*>::const_iterator itCurrNamespace= rCopy.m_namespaceDecls.begin();
+
+	/* TO DO: check whether we have to do this 
+	*
+	list<Namespace*>::const_iterator itCurrNamespace= rCopy.m_namespaceDecls.begin();
     while(itCurrNamespace != rCopy.m_namespaceDecls.end())
     {        
         this->m_namespaceDecls.push_back( (*itCurrNamespace)->clone() );
         itCurrNamespace++;        
     }
+	*/
 }
 
 IHeaderBlock* HeaderBlock::clone()
@@ -125,7 +129,7 @@ HeaderBlock::~HeaderBlock()
     /*
      *Clear the Namespaces
      */
-    list<Attribute*>::iterator itCurrNamespace= m_namespaceDecls.begin();
+    list<Namespace*>::iterator itCurrNamespace= m_namespaceDecls.begin();
     while(itCurrNamespace != m_namespaceDecls.end())
     {        
         delete (*itCurrNamespace);
@@ -240,7 +244,7 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
             break;
         }
 
-        iStatus= serializeNamespaceDecl(pSZ);
+        iStatus= serializeNamespaceDecl(pSZ, lstTmpNameSpaceStack);
         if(iStatus==AXIS_FAIL)
         {
             break;
@@ -359,20 +363,22 @@ int HeaderBlock::serializeChildren(SoapSerializer& pSZ,
     return AXIS_SUCCESS;
 }
 
-IAttribute* HeaderBlock::createNamespaceDecl(const AxisChar *prefix,
+INamespace* HeaderBlock::createNamespaceDecl(const AxisChar *prefix,
         const AxisChar *uri) 
 {
-    Attribute* pAttribute = new Attribute(prefix, "xmlns", uri);
-    m_namespaceDecls.push_back(pAttribute);
+    Namespace* pNamespace = new Namespace(prefix, uri);
+    m_namespaceDecls.push_back(pNamespace);
 
-    return (IAttribute*)pAttribute; 
+    return (INamespace*)pNamespace; 
 }
 
-int HeaderBlock::addNamespaceDecl(IAttribute *pAttribute)
+/* TO DO: We need to remove this completely
+*
+int HeaderBlock::addNamespaceDecl(INamespace *pNamespace)
 {
-    if (pAttribute)
+    if (pNamespace)
     {
-        m_namespaceDecls.push_back((Attribute*)pAttribute);
+        m_namespaceDecls.push_back((Namespace*)pNamespace);
         return AXIS_SUCCESS;
     }
     else
@@ -380,14 +386,15 @@ int HeaderBlock::addNamespaceDecl(IAttribute *pAttribute)
         return AXIS_FAIL;
     }
 }
+*/
 
-int HeaderBlock::serializeNamespaceDecl(SoapSerializer &pSZ)
+int HeaderBlock::serializeNamespaceDecl(SoapSerializer &pSZ, std::list<AxisChar*>& lstTmpNameSpaceStack)
 {
-    list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
+    list<Namespace*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
 
     while(itCurrNamespaceDecl != m_namespaceDecls.end())
     {        
-        (*itCurrNamespaceDecl)->serialize(pSZ);
+        (*itCurrNamespaceDecl)->serialize(pSZ, lstTmpNameSpaceStack);
         itCurrNamespaceDecl++;        
     }    
 

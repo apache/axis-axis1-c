@@ -154,13 +154,19 @@ int Attribute::serialize(SoapSerializer& pSZ,
         pSZ.serialize(" ", NULL);
 
         /*
-         * Following code figures out the prefix to be serialized and 
-         * serialize it.
+         * User has provided the prefix. So we just have to serialilze. We will
+		 *  not worry to declare the namespace at all. Because it is the users
+		 *  responsibiltiy to add his/her namespace declaration seperately.
          */
         if(!m_prefix.empty())
         {            
             pSZ.serialize(m_prefix.c_str(), ":", NULL);
         }
+		/*
+         * User hasn't provided the prefix. So we have to do the following.
+		 *  - get the prefix from the Serializer
+		 *  - if this is a new namespace, then also declare the namespace.
+         */
         else if (!m_uri.empty())
         {
             bool blnIsNewNamespace = false;
