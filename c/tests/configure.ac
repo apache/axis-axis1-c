@@ -8,4 +8,4 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
-AC_OUTPUT(Makefile client/Makefile client/stubTest/Makefile client/stubTest/stubBase/Makefile client/interop/Makefile client/interop/round1/Makefile client/threadSafe/Makefile client/exceptionTest/Makefile)
+AC_OUTPUT(Makefile client/Makefile client/stubTest/Makefile client/stubTest/stubBase/Makefile client/interop/Makefile client/interop/round1/Makefile client/threadSafe/Makefile client/fault_mapping/Makefile client/fault_mapping/gen_src/Makefile client/exceptionTest/Makefile client/exceptionTest/gen_src/Makefile)
