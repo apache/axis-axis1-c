@@ -47,12 +47,29 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
 const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
     const AxisChar* pPrefix, const void* pValue, XSDTYPE type)
 {
+    return serializeAsElement(pName, pPrefix, NULL, pValue, type);
+}
+
+const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
+    const AxisChar* pPrefix, const AxisChar* pNamespace, const void* pValue, XSDTYPE type)
+{
     m_sSZ = "<";
 	if (NULL != pPrefix) { 
 		m_sSZ += pPrefix;
 		m_sSZ += ":";
 	}
+    
     m_sSZ += pName;
+
+    if (NULL != pNamespace)
+    {
+        m_sSZ += " xmlns:";
+        m_sSZ += pPrefix;
+        m_sSZ += "=\"";
+        m_sSZ += pNamespace;
+        m_sSZ += "\"";
+    }
+
     if (RPC_ENCODED == m_nStyle)
     {
         m_sSZ += " xsi:type=\"xsd:";
@@ -73,6 +90,15 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
             m_sSZ += ":";
         }
         m_sSZ += pName;
+        
+        if (NULL != pNamespace)
+        {
+            m_sSZ += " xmlns:";
+            m_sSZ += pPrefix;
+            m_sSZ += "\"";
+            m_sSZ += pNamespace;
+            m_sSZ += "\"";
+        }
         m_sSZ += " xsi:nil=\"true\">";
     }
     else

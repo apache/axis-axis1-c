@@ -86,10 +86,46 @@ public:
     BasicTypeSerializer();
     virtual ~BasicTypeSerializer();
     const AxisString& getEntityReferenced(const AxisString& str);
+
+    /**
+     * Serializes a SOAP Element.
+     * 
+     * This is essentially serializeAsElement(const AxisChar* pName, const AxisChar* pPrefix, const void* pValue, XSDTYPE type)
+     * with pPrefix = NULL;
+     * 
+     * @param pName the name gives for this element.
+     * @param pValue the value for this element.
+     * @param type the xsd type of the value.
+     */
     const AxisChar* serializeAsElement(const AxisChar* pName, 
         const void* pValue, XSDTYPE type);
+    /**
+     * Serializes a SOAP Element.
+     * 
+     * This is essentially serializeAsElement(const AxisChar* pName, const AxisChar* pPrefix, const AxisChar* pNamespace, const void* pValue, XSDTYPE type)
+     * with pNamespace = NULL;
+     * 
+     * @param pName the name gives for this element.
+     * @param pPrefix the optional prefix for this element.
+     * @param pValue the value for this element.
+     * @param type the xsd type of the value.
+     */
 	const AxisChar* serializeAsElement(const AxisChar* pName, 
         const AxisChar* pPrefix, const void* pValue, XSDTYPE type);
+    /**
+     * Serializes a SOAP Element.
+     * If a namespace is provided, it will be declared, so ensure appropriate
+     * checks have taken place before providing a namespace.
+     * 
+     * @param pName the name gives for this element.
+     * @param pPrefix the optional prefix for this element.
+     * @param pNamespace the namespace uri to be used for this element and prefix.
+     * @param pValue the value for this element.
+     * @param type the xsd type of the value.
+     */
+    const AxisChar* serializeAsElement(const AxisChar* pName, 
+        const AxisChar* pPrefix, const AxisChar* pNamespace, const void* pValue,
+        XSDTYPE type);
     const AxisChar* serializeAsAttribute(const AxisChar* pName, 
         const AxisChar* pPrefix, const void* pValue, XSDTYPE type);
     const AxisChar* encodeToHexBinary(const xsd__hexBinary* pBinary);

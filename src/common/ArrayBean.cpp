@@ -188,12 +188,19 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
 				// serializer prefix
             	const AxisChar* pNamespace = pSZ.getNamespace();
 				const AxisChar* pPrefix = NULL;
+                bool blnIsNewPrefix = false;
 				if (NULL != pNamespace)
 					if (strlen(pNamespace) > 0)
-            	        pPrefix = pSZ.getNamespacePrefix(pNamespace);
+            	        pPrefix = pSZ.getNamespacePrefix(pNamespace, blnIsNewPrefix);
 
             	if (pPrefix != NULL)
+                {
 	                pSZ.serialize("<", pPrefix, ":", m_ItemName.c_str(), NULL); 
+                    if (blnIsNewPrefix)
+                    {
+                        pSZ.serialize(" xmlns:", pPrefix, "=\"", pNamespace, "\"", NULL);
+                    }
+                }
 	            else
 	                pSZ.serialize("<", m_ItemName.c_str(), NULL); 
 				
@@ -206,7 +213,11 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
                 	pSZ.serialize("</", pPrefix, ":", m_ItemName.c_str(), ">", NULL);
 	            else
                 	pSZ.serialize("</", m_ItemName.c_str(), ">", NULL);
-
+                  
+                if (blnIsNewPrefix)
+                {
+                    pSZ.removeNamespacePrefix(pNamespace);
+                }
             }
         }
         else 

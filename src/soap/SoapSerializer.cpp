@@ -569,7 +569,12 @@ int SoapSerializer::serializeCmplxArray(const Axis_Array* pArray,
     pParam->m_Type = XSD_ARRAY;
 	if (pNamespace != NULL)
     {
-        const AxisChar* np = getNamespacePrefix(pNamespace);
+        bool blnIsNewNamespacePrefix = false;
+        const AxisChar* np = getNamespacePrefix(pNamespace, blnIsNewNamespacePrefix);
+        if (blnIsNewNamespacePrefix)
+        {
+            removeNamespacePrefix(pNamespace);
+        }
         const AxisChar* originalNamespace = getNamespace(); // Store original namespace
         pParam->setPrefix(np);
         setNamespace(pNamespace);
@@ -623,12 +628,27 @@ int SoapSerializer::serializeBasicArray(const Axis_Array* pArray,
     }
     pParam->m_Value.pIArray = pAb;
     pParam->m_Type = XSD_ARRAY;
-	if (pNamespace != NULL) {
-		const AxisChar* np = getNamespacePrefix(pNamespace);
-		pParam->setPrefix(np);
-		setNamespace(pNamespace);
+    
+    
+    if (pNamespace != NULL)
+    {
+        bool blnIsNewNamespacePrefix = false;
+        const AxisChar* np = getNamespacePrefix(pNamespace, blnIsNewNamespacePrefix);
+        if (blnIsNewNamespacePrefix)
+        {
+            removeNamespacePrefix(pNamespace);
+        }
+        const AxisChar* originalNamespace = getNamespace(); // Store original namespace
+        pParam->setPrefix(np);
+        setNamespace(pNamespace);
+        pParam->serialize(*this);
+        setNamespace(originalNamespace); // Revert back original namespace
     }
-    pParam->serialize(*this);
+    else
+    {
+        pParam->serialize(*this);
+    }
+
     /* Remove pointer to the array from the ArrayBean to avoid deleting the
      * array when ArrayBean is deleted. Array will be deleted when the complex
      * type that contains this array is deleted
@@ -743,12 +763,24 @@ int SoapSerializer::serializeAsElement(const AxisChar* pName,
                                        XSDTYPE type) 
 {
     const AxisChar* pPrefix = NULL;
+    bool blnIsNewPrefix = false;
     if (pNamespace)
 	{
-        pPrefix = getNamespacePrefix(pNamespace);
+        pPrefix = getNamespacePrefix(pNamespace, blnIsNewPrefix);
     }
-    const AxisChar* pSerialized = m_BTSZ.serializeAsElement(pName, pPrefix, pValue, 
-        type);
+    
+    const AxisChar* pSerialized = NULL;
+    if (blnIsNewPrefix)
+    {
+        pSerialized = m_BTSZ.serializeAsElement(pName, pPrefix, 
+            pNamespace, pValue, type);
+        removeNamespacePrefix(pNamespace);
+    }
+    else
+    {
+        pSerialized = m_BTSZ.serializeAsElement(pName, pPrefix,
+            pValue, type);
+    }
     if (pSerialized)
     {
         *this << pSerialized;
