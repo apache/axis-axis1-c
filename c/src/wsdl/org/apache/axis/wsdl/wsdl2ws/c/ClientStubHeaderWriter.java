@@ -124,33 +124,46 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 	protected void writeMethods() throws WrapperFault {
 		MethodInfo minfo;
 		boolean isSimpleType;
-		 try{
-		  for(int i = 0; i < methods.size(); i++){
-			  minfo = (MethodInfo)this.methods.get(i);
-			  //write return type
-			  if(minfo.getReturnType()==null)
-				  writer.write("extern void ");
-			  else {
-			  	  String outparam = minfo.getReturnType().getLangName();
-				  isSimpleType = CPPUtils.isSimpleType(outparam);
-				  writer.write("extern "+WrapperUtils.getClassNameFromParamInfoConsideringArrays(minfo.getReturnType(),wscontext)+" ");
-			  }
-			  writer.write(minfo.getMethodname()+"(");
+		try{
+		  	for(int i = 0; i < methods.size(); i++){
+			  	minfo = (MethodInfo)this.methods.get(i);
+				boolean isAllTreatedAsOutParams = false;
+				ParameterInfo returntype = null;
+				int noOfOutParams = minfo.getOutputParameterTypes().size();
+				if (0==noOfOutParams){
+					returntype = null;
+					writer.write("extern void ");
+				}
+				else if (1==noOfOutParams){
+					returntype = (ParameterInfo)minfo.getOutputParameterTypes().iterator().next();
+					String outparam = returntype.getLangName();
+					writer.write("extern "+WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype,wscontext)+" ");
+				}
+				else{
+					isAllTreatedAsOutParams = true;
+					writer.write("extern void ");
+				}
+			  	writer.write(minfo.getMethodname()+"(");
             
-			  //write parameter names 
-			  Iterator params = minfo.getParameterTypes().iterator();
-			  if(params.hasNext()){
-			  	  ParameterInfo fparam = (ParameterInfo)params.next();
-				  isSimpleType = CPPUtils.isSimpleType(fparam.getLangName());
-				  writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
-			  }
-			  for(int j =1; params.hasNext();j++){
-				  ParameterInfo nparam = (ParameterInfo)params.next();
-				  isSimpleType = CPPUtils.isSimpleType(nparam.getLangName());
-				  writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
-			  }
-			  writer.write(");\n");
-		  }
+			  	//write parameter names 
+			  	Iterator params = minfo.getInputParameterTypes().iterator();
+			  	if(params.hasNext()){
+			  	  	ParameterInfo fparam = (ParameterInfo)params.next();
+				  	writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
+			  	}
+			  	for(int j =1; params.hasNext();j++){
+				  	ParameterInfo nparam = (ParameterInfo)params.next();
+				  	writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
+			  	}
+			  	if(isAllTreatedAsOutParams){
+					params = minfo.getOutputParameterTypes().iterator();
+					for(int j =0; params.hasNext();j++){
+						ParameterInfo nparam = (ParameterInfo)params.next();
+						writer.write(", AXIS_OUT_PARAM"+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" *OutValue"+j);
+					}
+			  	}
+			  	writer.write(");\n");
+		  	}
 		}catch (Exception e) {
 			  e.printStackTrace();
 			  throw new WrapperFault(e);

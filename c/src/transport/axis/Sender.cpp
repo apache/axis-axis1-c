@@ -82,12 +82,10 @@ void Sender::ClearAdditionalHeaders()
     m_pTrChannel->ClearAdditionalHeaders();
 }
 
-bool Sender::Send(const std::string& what) throw (AxisException)
+bool Sender::Send(const char* what) throw (AxisException)
 {
 	try
 	{
-//		m_pTrChannel->Init();
-
 		*m_pTrChannel << what;
 	}
 	catch(...)
@@ -98,7 +96,7 @@ bool Sender::Send(const std::string& what) throw (AxisException)
 	return true;
 }
 
-void Sender::SetProperty(const string& sProperty, const string& sValue)
+void Sender::SetProperty(const char* sProperty, const char* sValue)
 {
 	m_pTrChannel->SetProperty(sProperty, sValue);
 }

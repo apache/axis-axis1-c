@@ -67,15 +67,28 @@
 #if !defined(AFX_IHANDLERSOAPDESERIALIZER_H__EAD744F9_FEB3_4885_9510_D7BAD8C5AD1C__INCLUDED_)
 #define AFX_IHANDLERSOAPDESERIALIZER_H__EAD744F9_FEB3_4885_9510_D7BAD8C5AD1C__INCLUDED_
 
-#include "ISoapDeSerializer.h"
-class ISoapHeader;
+#include "../common/IWrapperSoapDeSerializer.h"
+#include "../common/IHeaderBlock.h"
+#include "../common/AxisUserAPI.h"
 
-class IHandlerSoapDeSerializer : public virtual ISoapDeSerializer
+class IHandlerSoapDeSerializer : public IWrapperSoapDeSerializer
 {
 public:
-	virtual ISoapHeader* GetHeader()=0;
 	virtual ~IHandlerSoapDeSerializer() {};
-
+	virtual int AXISCALL AddHeaderBlock(IHeaderBlock* pBlk)=0;
+	/**
+	 * The soap body may be encrypted/compressed and a handler in the request message 
+	 * path may decode and then decrypt and/or decompress whole soap body and set the
+	 * XML to the Deserializer. In such a case a handler will use following functions 
+	 * to get soap body and set back the XML. If this process goes throgh several
+	 * handlers the intermediate binary data (unencrypted/uncompressed body) may be kept 
+	 * in the IMessageData until it is converted to XML. A handler usually converts it 
+	 * to XML and use SetNewSoapBody(..) function to set the new SoapBody back to the 
+	 * Deserializer.
+	 */
+	virtual xsd__hexBinary AXISCALL GetBodyAsHexBinary()=0;
+	virtual xsd__base64Binary AXISCALL GetBodyAsBase64Binary()=0;
+	virtual int AXISCALL SetNewSoapBody(AxisChar* pNewSoapBody)=0;
 };
 
 #endif // !defined(AFX_IHANDLERSOAPDESERIALIZER_H__EAD744F9_FEB3_4885_9510_D7BAD8C5AD1C__INCLUDED_)

@@ -62,9 +62,9 @@ import javax.xml.namespace.QName;
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class ParameterInfo {
-    private Type type;
-    private String attribName;
-	private QName elementName;
+    protected Type type;
+    protected String attribName;
+	protected QName elementName;
 	
     public String getParamName() {
         return attribName;
@@ -81,7 +81,12 @@ public class ParameterInfo {
     public Type getType() {
         return type;
     }
-    
+
+	/**
+	 * 
+	 */
+	public ParameterInfo() {}
+
     /**
      * @return
      */
