@@ -233,7 +233,7 @@ int main(int argc, char* argv[])
   delete input;
   if (output)
   {
-    for (i = 0; i < output->infos.m_Size; i++)
+    for (int i = 0; i < output->infos.m_Size; i++)
       delete (BenchBasicDataType*)(output->infos.m_Array[i]);
     delete output;
   }
