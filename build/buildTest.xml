@@ -29,7 +29,9 @@
 			<fileset dir="${dir.axisJARs}" includes="*.jar"/>
 		</path>
 		<!-- Run WSDL2Ws -->
-		<java jar="${dir.wsdl2ws}/wsdl2ws.jar" fork="true">
+		<!-- use the following java task if client stub generation fails -->
+		<!-- <java classname="org.apache.axis.wsdl.wsdl2ws.WSDL2Ws" fork="true"> -->
+		 <java jar="${dir.wsdl2ws}/wsdl2ws.jar" fork="true">
 			<classpath refid="cp"/>
 			<arg value="${wsdl.test}"/>
 			<arg value="-o${test.directory}"/>
@@ -49,6 +51,8 @@
 		<copy file="${client.code}" todir="${test.directory}"/>
 	</target>
 
+	<!-- use the following when client stub generation fails -->
+	<!-- <java classname="org.apache.axis.wsdl.wsdl2ws.WSDL2Ws" fork="true"> -->
 	<target name="copyDynamicClient" if="test.dynamicCode">
 		<copy todir="${test.directory}">
 			<fileset dir="${dir.autotests}/dynamic/${test.dynamicCodeDirectory}">
