@@ -21,7 +21,7 @@
 
 #define AXISTRACE_LIBRARY
 #define AXISTRACE_LIBRARY_MAINENTRYPOINT
-#include "../../common/AxisTrace.h"
+#include "../../../common/AxisTrace.h"
 
 #ifdef WIN32
 #pragma warning( disable : 4786)
