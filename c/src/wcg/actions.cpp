@@ -20,9 +20,8 @@ int g_currentclasstype;
 WSClass* g_pCurrentWSClass;
 BeanClass* g_pCurrentBeanClass;
 bool g_bdestructor_seen;
-bool g_baccessbeanmacrofound;
 int g_currentaccessspecifier;
-
+extern string g_sWebServiceClass;
 //forward declarations of function in this file
 int map_var_type(int parsertype);
 int get_var_type(const char* vartypename);
@@ -44,22 +43,17 @@ void translation_unit_start()
 	g_pTranslationUnit = new TranslationUnit();
 }
 
-bool is_bean_class(base_specifier_list* baselist)
+bool is_webservice_class(const char* classname)
 {
-	if (!baselist) return false;
-	for (base_specifier_list::iterator it = baselist->begin(); it != baselist->end(); it++)
-	{
-		if ((*(*it)->class_name) == "IAccessBean")
-		{
-			return true;
-		}
-	}
-	return false;	
-}
-
-bool is_accessbean_macro(string& str)
-{
-	return (str == "ACCESSBEAN_SERIALIZABLE");
+//	if (!baselist) return false;
+//	for (base_specifier_list::iterator it = baselist->begin(); it != baselist->end(); it++)
+//	{
+//		if ((*(*it)->class_name) == "IAccessBean")
+//		{
+//			return true;
+//		}
+//	}
+	return (g_sWebServiceClass == classname);
 }
 
 void add_member_declaration(string_list* decl_specs, member_declarator_list* member_decl_list)

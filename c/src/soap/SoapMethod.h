@@ -117,14 +117,14 @@ private:
 
 public:			
 	int addAttribute(Attribute* pAttribute);
-	const AxisString& getMethodName();	
+	const AxisChar* getMethodName();	
 	int serialize(SoapSerializer& pSZ);
 	//int serialize(string&);
 	void setOutputParam(Param *param);
 	void addInputParam(Param* param);
-	void setUri(const AxisString &uri);
-	void setLocalName(const AxisString &localname);
-	void setPrefix(const AxisString &prefix);
+	void setUri(const AxisChar* uri);
+	void setLocalName(const AxisChar* localname);
+	void setPrefix(const AxisChar* prefix);
 	SoapMethod();
 	virtual ~SoapMethod();	
 };

@@ -234,11 +234,11 @@ int Variable::GenerateSerializerImpl(File &file)
 	file << "\t"; 
 	if (IsComplexType())
 	{
-		file << m_VarName << "->" << "Serialize(pSZ);";		
+		file << "Axis_Serialize_" << m_TypeName << "(p->" << m_VarName << ", pSZ);";		
 	}
 	else
 	{
-		file << "pSZ << " << "pSZ.SerializeBasicType(\"" << m_VarName << "\", " << m_VarName << ").c_str();";
+		file << "pSZ << " << "pSZ.SerializeBasicType(L\"" << m_VarName << "\", p->" << m_VarName << ");";
 	}
 	file << endl;
 	return 0;
@@ -246,14 +246,15 @@ int Variable::GenerateSerializerImpl(File &file)
 
 int Variable::GenerateDeserializerImpl(File &file)
 {
-	file << "\t";
 	if (IsComplexType())
 	{
-		file << m_VarName << "->" << "DeSerialize(pDZ);"; 	
+		file << "\tpDZ->GetParam(); //get head param describing the complex type and do anything with it" << endl;
+		file << "\tp->" << m_VarName << "= new " << m_TypeName << ";" << endl;
+		file << "\tAxis_DeSerialize_" << m_TypeName << "(p->" << m_VarName << ", pDZ);" << endl;
 	}
 	else
 	{
-		file << m_VarName << " = pDZ->GetParam()->" << GetParamGetMethod(m_Type).c_str() << "();";
+		file << "\t" << "p->" << m_VarName << " = pDZ->GetParam()->" << GetParamGetMethod(m_Type).c_str() << "();";
 	}
 	file << endl;
 	return 0;

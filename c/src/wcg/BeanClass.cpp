@@ -98,10 +98,12 @@ void BeanClass::SetClassName(string &sName)
 int BeanClass::GenerateSerializerAndDeSerializerImpl(File &file)
 {
 	list<Variable*>::iterator it;
-
-	file << "int " << m_Name << "::DeSerialize(IWrapperSoapDeSerializer *pDZ)" << endl;
+	file << "//Parameters and wrapper methos to manipulate Point" << endl;
+	file << "static const AxisChar* Axis_URI_" << m_Name << " = L\"http://www.opensource.lk/" << m_Name << "\";" << endl;
+	file << "static const AxisChar* Axis_TypeName_" << m_Name << " = L\"" << m_Name << "\";" << endl;
+	file << endl;
+	file << "int Axis_DeSerialize_" << m_Name << "(" << m_Name << "* p, IWrapperSoapDeSerializer *pDZ)" << endl;
 	file << "{" << endl;
-	file << "\tIParam* pHeadParam = pDZ->GetParam(); //do any type validation here if necessary" << endl;
 	for (it = m_Variables.begin(); it != m_Variables.end(); it++)
 	{
 		(*it)->GenerateDeserializerImpl(file);
@@ -110,25 +112,38 @@ int BeanClass::GenerateSerializerAndDeSerializerImpl(File &file)
 	file << "}" << endl;
 	file << endl;
 
-	file << "int " << m_Name << "::Serialize(IWrapperSoapSerializer& pSZ)" << endl;
+	file << "int Axis_Serialize_" << m_Name <<  "(" << m_Name << "* p, IWrapperSoapSerializer& pSZ, bool bArray = false)" << endl;
 	file << "{" << endl;
-	file << "\tm_URI = \"" << g_ClassNamespaces[m_Name] << "\";" << endl;
-	file << "\tstring sPrefix = pSZ.getNewNamespacePrefix();" << endl;
-	file << "\tm_TypeName = \"" << m_Name << "\";" << endl;
-	file << "\tpSZ << \"<\" << m_TypeName.c_str() << \" xsi:type=\\\"\" << sPrefix.c_str() <<\":\" << m_TypeName.c_str() << \" xmlns:\" << sPrefix.c_str() << \"=\\\"\" << m_URI.c_str() << \"\\\">\";" << endl;
+	file << "\tif (bArray)" << endl;
+	file << "\t{" << endl;
+	file << "\tpSZ << \"<\" << Axis_TypeName_" << m_Name << " << \">\";" << endl;
+	file << "\t}" << endl;
+	file << "\telse" << endl;
+	file << "\t{" << endl;
+	file << "\t\tconst AxisChar* sPrefix = pSZ.getNewNamespacePrefix();" << endl;
+//	file << "\tm_URI = L\"" << g_ClassNamespaces[m_Name] << "\";" << endl;
+	file << "\t\tpSZ << \"<\" << Axis_TypeName_" << m_Name << "<< \" xsi:type=\\\"\" << sPrefix <<\":\" << Axis_TypeName_" << m_Name << " << \" xmlns:\" << sPrefix << \"=\\\"\" << Axis_URI_" << m_Name << " << \"\\\">\";" << endl;
+	file << "\t}" << endl;
 	for (it = m_Variables.begin(); it != m_Variables.end(); it++)
 	{
 		(*it)->GenerateSerializerImpl(file);
 	}	
-	file << "\tpSZ << \"</\" << m_TypeName.c_str() << \">\";" << endl;
+	file << "\tpSZ << \"</\" << Axis_TypeName_" << m_Name << " << \">\";" << endl;
 	file << "\treturn SUCCESS;" << endl;
 	file << "}" << endl;
 	file << endl;
-	file << "int " << m_Name << "::GetSize()" << endl;
+	file << "int Axis_GetSize_" << m_Name << "(" << m_Name << "* p)" << endl;
 	file << "{" << endl;
 	file << "\treturn sizeof(" << m_Name <<");" << endl;
 	file << "}" << endl;
 	file << endl;
+	file << "void Axis_Delete_" << m_Name << "(" << m_Name << "* p, bool bArray = false, int nSize=0)" << endl;
+	file << "{" << endl;
+	file << "\tif (bArray)" << endl;
+	file << "\t\tdelete [] p;" << endl;
+	file << "else" << endl;
+	file << "delete p;" << endl;
+	file << "}" << endl;
 	return 0;
 }
 
