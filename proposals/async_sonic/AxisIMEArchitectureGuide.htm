@@ -15,10 +15,71 @@
     </table>
     
     <h1>Contents</h1>
+
+    1 Introduction <br />
+    1.1 Disclaimer <br />
+    1.2 Purpose <br />
+    1.3 Scope <br />
+    1.4 Feature Overview <br />
+    2 Phased Delivery <br />
+    3 Functional Description <br />
+    3.1 Message Exchange <br />
+    3.2 Message Correlation <br />
+    3.3 Message Exchange Events <br />
+    3.4 Message Exchange Lifecycle <br />
+    3.5 Interface Specifications <br />
+    4 Development Model <br />
+    4.1 Base Implementation <br />
+    4.2 Creating MessageExchange implementations using MessageExchangeProvider <br />
+    4.3 Creating Custom MessageExchange implementations <br />
+    4.4 Using HandlerMessageExchange to wrap legacy Axis handlers <br />
+    4.5 Creating custom ReceivedMessageDispatchPolicy implementations <br />
+    4.6 Creating custom MessageExchangeCorrelator implementations <br />
+    4.7 Creating custom MessageExchangeCorrelatorService implementations <br />
+    4.8 Implementing custom MessageExchange events <br />
+    5 Understanding how Axis uses the IME interfaces <br />
+    5.1 Breakdown of the Axis IME architecture <br />
+    5.2 Transports and Providers <br />
+    5.3 AxisEngine, AxisClient and AxisServer <br />
+    5.4 Deployment and configuration <br />
+    7 Outstanding issues <br />
+
     <h1>1 Introduction</h1>
     <h2>1.1 Disclaimer</h2>
+    
+    <p>This document is a work in progress.</p>
+    
     <h2>1.2 Purpose</h2>
+    
+    <p>Apache Axis provides robust support for synchronous style communications with RPC 
+    and document-oriented web services.  Support for asynchronous invocation, however, is 
+    a feature that is not available in the current release of Axis.  Goals of this proposal 
+    are documented in the list below.</p>
+
+    <ul>
+      <li>Ability to receive unsolicited messages asynchronously from the client thus 
+      enabling Notification and Solicit/Response operation styles</li>
+      <li>Ability to perform work while the web service interaction is being processed </li>
+      <li>Ability to have multiple invocations outstanding from the same client thread </li>
+      <li>Ability to use different transports for inbound and outbound communications </li>
+    </ul>
+    
     <h2>1.3 Scope</h2>
+    
+    <p>The definition and implementation of an asynchronous message exchange subsystem
+    for Axis that must resolve the following issues:</p>
+    
+    <ul>
+      <li>Axis 1.0's current reliance on the org.apache.axis.Handler interface for communication
+      through each layered subsystem does not account properly for asynchronous request/response,
+      notification, and solicit/response operations.</li>
+      <li>Axis 1.0's current implementation does not allow for additional work to be performed
+      while the web service interaction is being processed, nor does it allow multiple outstanding
+      invocations from the same client thread.</li>
+      <li>Axis 1.0's current implementation requires the use of the same transport for inbound
+      and outbound communications.</li>
+    </ul>
+    
     <h2>1.4 Feature Overview </h2>
     <h1>2 Phased Delivery</h1>
     <h1>3 Functional Description</h1>
