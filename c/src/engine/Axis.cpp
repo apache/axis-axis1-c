@@ -267,12 +267,6 @@ extern "C" int initialize_module (int bServer)
         }
         else
         {
-            AXISTRACE1 ("Reading from the configuration file failed. " \
-                "Check for error in the configuration file", CRITICAL);
-            /* TODO:Improve the AxisTrace so that it will log
-	     * these kind of messages into a log file according to the
-	     * critical level specified.
-	     */
             return AXIS_FAIL;
         }
 
@@ -302,12 +296,6 @@ extern "C" int initialize_module (int bServer)
         }
         else
         {
-            AXISTRACE1 ("Reading from the configuration file failed. " \
-                "Check for error in the configuration file", CRITICAL);
-            /* TODO:Improve the AxisTrace so that it will log these kind of 
-	     * messages into a log file according to the critical level 
-	     * specified.
-             */
             return AXIS_FAIL;
         }
     }
