@@ -61,7 +61,7 @@
   <!-- build information for the project -->
   <build>
     <nagEmailAddress>geronimo-dev@jakarta.apache.org</nagEmailAddress>
-    <sourceDirectory>${basedir}/target/src</sourceDirectory>
+    <sourceDirectory>src/java</sourceDirectory>
     <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
 
     <unitTest>
