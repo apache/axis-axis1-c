@@ -31,7 +31,6 @@
 using namespace std;
 
 #include "Inquire.hpp"
-#include "InquireService_AxisClientException.hpp"
 
 #define ARRAYSIZE 1 
 
@@ -145,11 +144,6 @@ main(int argc, char *argv[])
         printf("tModel info size = %d\n", tModels->tModelInfo_Ref.m_Size);
         */
     } 
-    catch(InquireService_AxisClientException& e)
-    {
-        printf("Exception caught : %s\n", e.what());
-        printf("Exception caught : %d\n", e.getExceptionCode());
-    }
     catch(AxisException& e)
     {
         printf("Exception caught : %s\n", e.what());
