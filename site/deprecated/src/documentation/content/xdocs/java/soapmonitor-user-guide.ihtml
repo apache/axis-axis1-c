@@ -60,7 +60,7 @@ It's a good opportunity for using this utility that you hope to monitor the SOAP
   <b>step 1:</B> Create an account for the administrator
   <dl><dd>
        Please open and edit the "webapps/axis/WEB-INF/users.lst".<br>
-       The defalut account for administrator is "admin", so please set a password anything you want.<p>
+       The default account for administrator is "admin", so please set a password to anything you want.<p>
        ex.) Like as follows;</a> -  i.e. "admin password".<p>
        <dl><dd>
               user1 pass1<br>
