@@ -18,7 +18,7 @@
  * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
  */
 
-#include <axis/server/SoapFault.h>
+#include "SoapFault.h"
 #include <axis/server/SoapSerializer.h>
 #include <axis/server/SoapEnvVersions.h>
 #include <axis/server/GDefine.h>
@@ -36,34 +36,6 @@ SoapFault::~SoapFault()
 {
 
 }
-
-/*int SoapFault::setFaultcode(const string& sFaultcode)
-{
-    m_sFaultcode= sFaultcode;
-
-    return AXIS_SUCCESS;
-}*/
-
-/*int SoapFault::setFaultstring(const string& sFaultstring)
-{
-    m_sFaultstring= sFaultstring;
-
-    return AXIS_SUCCESS;
-}*/
-
-/*int SoapFault::setFaultactor(const string& sFaultactor)
-{
-    m_sFaultactor= sFaultactor;
-
-    return AXIS_SUCCESS;
-}*/
-
-/*int SoapFault::setDetail(const string& sDetail)
-{
-    m_sDetail= sDetail;
-
-    return AXIS_SUCCESS;
-}*/
 
 int SoapFault::serialize(SoapSerializer& pSZ)
 {
@@ -84,37 +56,17 @@ int SoapFault::serialize(SoapSerializer& pSZ)
     {        
         pSZ.serialize("<detail>", m_sFaultDetail.c_str(), "</detail>", NULL);
     }
+
+    if(m_pFaultDetail)
+    {
+        pSZ.serialize("<detail>", m_pFaultDetail->serialize(pSZ), "</detail>", NULL);
+    }
     
     pSZ.serialize("</SOAP-ENV:Fault>", NULL);
 
     return iStatus;
 }
 
-/*
-comm on 11/7/2003 at 9.30am
-int SoapFault::serialize(string& sSerialized)
-{
-    // written according to SOAP Version 1.1
-
-    int iStatus= AXIS_SUCCESS;
-    
-    sSerialized= sSerialized+ "<SOAP-ENV:Fault>" + "\n";
-    sSerialized= sSerialized+ "<faultcode>"+ m_sFaultcode+ "</faultcode>"+ "\n";
-    sSerialized= sSerialized+ "<faultstring>"+m_sFaultstring+"</faultstring>"+ "\n";
-
-    if(!m_sFaultactor.empty()) {
-        sSerialized= sSerialized+ "<faultactor>"+ m_sFaultactor +"</faultactor>"+ "\n";
-    }
-
-    if(!m_sDetail.empty()) {
-        sSerialized= sSerialized+ "<detail>"+ m_sDetail +"</detail>"+ "\n";
-    }
-
-    sSerialized= sSerialized+ "</SOAP-ENV:Fault>" + "\n";
-
-    return iStatus;
-}
-*/
 
 void SoapFault::initialize()
 {
@@ -129,39 +81,43 @@ void SoapFault::initialize()
             /*Client faults */
             {"Client", "Soap message is incorrect or incomplete", "", ""},
             {"Client", "Soap Action header empty", "", ""},
-            {"Client", "Requested service is not registerd at the server", "", ""},
             {"Client", "Soap content is not valid", "", ""},
             {"Client", "No method to invoke", "", ""},
+            {"Client", "Requested service is not registerd at the server", "", ""},
             {"Client", "Soap method is not allowed to invoke", "", ""},
             {"Client", "Parameter type mismatch", "", ""},
             {"Client", "A client handler failed", "", ""},
 
             /*Server faults */
+            {"Server", "Unknown Engine Exception", "", ""},
             {"Server", "Cannot load web service", "", ""},
             {"Server", "Cannot load service handlers", "", ""},
             {"Server", "A service handler failed", "", ""},
             {"Server", "Webservice failed", "", ""},
-            {"Server", "Transport configuration error", "", ""},
             {"Server", "Handler initialization failed", "", ""},
             {"Server", "Handler creation failed", "", ""},
             {"Server", "Library loading failed", "", ""},
-            {"Server", "Library path is empty", "", ""},
             {"Server", "Handler not loaded", "", ""},
             {"Server", "Handler is being used", "", ""},
             {"Server", "Get hander failed", "", ""},
             {"Server", "Wrong handler type", "", ""},
+            {"Server", "Unknown Axis Configuration Exception", "", ""},
+            {"Server", "Transport configuration error", "", ""},
+            {"Server", "Library path is empty", "", ""},
+            {"Server", "Unknown Wsdd Exception", "", ""},
             {"Server", "No handlers configured", "", ""},
-            {"Server", "Unknown error", "", ""}
+            {"Server", "Unknown Soap Exception", "", ""},
+            {"Server", "Unknown Transport Exception", "", ""},
+            {"Server", "Receive from transport failed", "", ""},
+            {"Server", "Send to transport failed", "", ""},
+            {"Server", "Http transport exception", "", ""},
+            {"Server", "Test exception", "", ""},
+            {"Server", "Unknown exception", "", ""}
+            
         };
         s_parrSoapFaultStruct = s_arrLocalFaultStruct;
         m_bInit = true;
     }
-}
-
-
-const char* SoapFault::getSoapString()
-{
-    return m_sFaultstring.c_str(); 
 }
 
 /*the caller of the SoapFault::getSoapFault(int) has to delete the 
@@ -196,14 +152,58 @@ SoapFault::SoapFault(string sFaultcode, string sFaultstring, string sFaultactor,
     m_sFaultDetail= sDetail;    
 }
 
-void SoapFault::setFaultactor(const string& sFaultactor)
+int SoapFault::setFaultcode(const string& sFaultcode)
 {
-    m_sFaultactor = sFaultactor;
+    m_sFaultcode= sFaultcode;
+
+    return AXIS_SUCCESS;
 }
 
-void SoapFault::setFaultDetail(const string& sFaultDetail)
+int SoapFault::setFaultstring(const string& sFaultstring)
+{
+    m_sFaultstring= sFaultstring;
+
+    return AXIS_SUCCESS;
+}
+int SoapFault::setFaultactor(const string& sFaultactor)
+{
+    m_sFaultactor = sFaultactor;
+    
+    return AXIS_SUCCESS;
+}
+
+int SoapFault::setFaultDetail(const string& sFaultDetail)
 {
     m_sFaultDetail = sFaultDetail;
+
+    return AXIS_SUCCESS;
+}
+
+int SoapFault::setFaultDetail(const Param* pFaultDetail)
+{
+    m_pFaultDetail = (Param*) pFaultDetail;
+
+    return AXIS_SUCCESS;
+}
+
+void SoapFault::setPrefix(const AxisChar* prefix)
+{
+    m_strPrefix = prefix;
+}
+
+void SoapFault::setLocalName(const AxisChar* localname)
+{
+    m_strLocalname = localname;
+}
+
+void SoapFault::setUri(const AxisChar* uri)
+{
+    m_strUri = uri;
+}
+
+const char* SoapFault::getSoapString()
+{
+    return m_sFaultstring.c_str(); 
 }
 
 string SoapFault::getFaultcode()

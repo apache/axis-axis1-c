@@ -24,6 +24,7 @@
 #include "XMLParser.h"
 #include "AnyElement.h"
 #include <axis/SOAPTransport.h>
+#include <axis/server/AxisException.h>
 
 class SoapFault;
 class SoapMethod;

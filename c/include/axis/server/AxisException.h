@@ -30,20 +30,18 @@
 using namespace std;
 
 
-#ifdef __ENABLE_AXIS_EXCEPTION__
+#ifdef ENABLE_AXIS_EXCEPTION
 #define AXISC_TRY try {
 #define AXISC_CATCH(X) } catch (X) { 
 #define AXISC_ENDCATCH }
 
-#define AXISC_THROW(X) throw AxisException(X)
-#define THROW_AXIS_EXCEPTION() throw AxisException()
 #define THROW_AXIS_EXCEPTION(X) throw AxisException(X)
-#define THROW_AXIS_CONFIG_EXCEPTION() throw AxisConfigException()
 #define THROW_AXIS_CONFIG_EXCEPTION(X) throw AxisConfigException(X)
-#define THROW_AXIS_SOAP_EXCEPTION() throw AxisSoapException()
 #define THROW_AXIS_SOAP_EXCEPTION(X) throw AxisSoapException(X)
-#define THROW_AXIS_WSDD_EXCEPTION() throw AxisWsddException()
 #define THROW_AXIS_WSDD_EXCEPTION(X) throw AxisWsddException(X)
+#define THROW_AXIS_ENGINE_EXCEPTION(X) throw AxisEngineException(X)
+#define THROW_AXIS_TRANSPORT_EXCEPTION(X) throw AxisTransportException(X)
+
 #define THROW_AXIS_BAD_ALLOC() throw std::bad_alloc
 #define THROW_AXIS_BAD_CAST() throw std::bad_cast
 #define THROW_AXIS_BAD_TYPEID() throw std::bad_typeid
@@ -52,7 +50,6 @@ using namespace std;
 #define THROW_AXIS_INVALID_ARGUMENT(X) throw std::invalid_argument
 #define THROW_AXIS_OVERFLOW_ERROR(X) throw std::overflow_error
 #define THROW_AXIS_IOS_BASE_FAILURE(X) throw std::ios_base::failure
-
 
 #define AXISC_THROW_SAME throw;
 #else
@@ -65,70 +62,88 @@ using namespace std;
 
 /*
  * The following enumeration is used to serve the Axis C++ codes for 
- * soap faults.
+ * faults.
  */
 enum AXISC_EXCEPTIONS 
 {
     /* VersionMismatch faults */
-    SF_VERSION_MISMATCH,
+    SOAP_VERSIONMISMATCH,
     
     /* MustUnderstand faults */
-    SF_MUST_UNDERSTAND,
+    SOAP_MUSTUNDERSTAND,
 
+    /*The notation used for naming these exceptions is as follows
+     *CLIENT at the beginning means when this interpreted as a soap fault
+     *    it's fault code is CLIENT
+     *SERVER at the beginning means when this interpreted as a soap fault
+     *    it's fault code is SERVER
+     *SOAP that comes next to CLIENT/SERVER means this is a soap releated
+     *    exception
+     *ENGINE that comes next to CLIENT/SERVER means this is a axisc++ engine
+     *    related exception
+     *WSDD that comes next to CLIENT/SERVER means this is a wsdd releated
+     *    exception
+     *TRANSPORT that comes next to CLIENT/SERVER means this is a transport releated
+     *    exception
+     *CONFIG that comes next to CLIENT/SERVER means this is a axisc++ configuration
+     *    related exception
+     */
+     
     /* Client faults */
-    SF_MESSAGEINCOMPLETE,
-    SF_SOAPACTIONEMPTY,
-    SF_SERVICENOTFOUND,
-    SF_SOAPCONTENTERROR,
-    SF_NOSOAPMETHOD,
-    SF_METHODNOTALLOWED,
-    SF_PARATYPEMISMATCH,
-    SF_CLIENTHANDLERFAILED,
+    CLIENT_SOAP_MESSAGEINCOMPLETE,
+    CLIENT_SOAP_SOAPACTIONEMTPY,
+    CLIENT_SOAP_SOAPCONTENTERROR,
+    CLIENT_SOAP_NOSOAPMETHOD,
+    CLIENT_WSDD_SERVICENOTFOUND,
+    CLIENT_WSDD_METHODNOTALLOWED,
+    CLIENT_WSDD_PARATYPEMISMATCH,
+    CLIENT_ENGINE_CLIENTHANDLERFAILED,
 
     /* Server faults */
-    SF_COULDNOTLOADSRV,
-    SF_COULDNOTLOADHDL,
-    SF_HANDLERFAILED,
-    SF_WEBSERVICEFAILED,
-    AXISC_TRANSPORT_CONF_ERROR,
-    HANDLER_INIT_FAIL,
-    HANDLER_CREATION_FAILED,
-    LOADLIBRARY_FAILED,
-    LIBRARY_PATH_EMPTY,
-    HANDLER_NOT_LOADED,
-    HANDLER_BEING_USED,
-    GET_HANDLER_FAILED,
-    WRONG_HANDLER_TYPE,
-    NO_HANDLERS_CONFIGURED,
-    AXISC_UNKNOWN_ERROR,
+    SERVER_ENGINE_EXCEPTION,
+    SERVER_ENGINE_COULDNOTLOADSRV,
+    SERVER_ENGINE_COULDNOTLOADHDL,
+    SERVER_ENGINE_HANDLERFAILED,
+    SERVER_ENGINE_WEBSERVICEFAILED,
+    SERVER_ENGINE_HANDLERINITFAILED,
+    SERVER_ENGINE_HANDLERCREATIONFAILED,
+    SERVER_ENGINE_LIBRARYLOADINGFAILED,
+    SERVER_ENGINE_HANDLERNOTLOADED,
+    SERVER_ENGINE_HANDLERBEINGUSED,
+    SERVER_ENGINE_GETHANDLERFAILED,
+    SERVER_ENGINE_WRONGHANDLERTYPE,
+    SERVER_CONFIG_EXCEPTION,
+    SERVER_CONFIG_TRANSPORTCONFFAILED,
+    SERVER_CONFIG_LIBRARYPATHEMPTY,
+    SERVER_WSDD_EXCEPTION,
+    SERVER_WSDD_NOHANDLERSCONFIGURED,
+    SERVER_SOAP_EXCEPTION,
+    SERVER_TRANSPORT_EXCEPTION,
+    SERVER_TRANSPORT_RECEPTIONEXCEPTION,
+    SERVER_TRANSPORT_SENDINGEXCEPTION,
+    SERVER_TRANSPORT_HTTP_EXCEPTION,
+ 
+    SERVER_TESTEXCEPTION,
+    SERVER_UNKNOWN_ERROR,
+    /*Following exceptions are not releated to soap faults
+     */
+    AXISC_UNKNOWN_ELEMENT_EXCEPTION,
+    AXISC_SOAP_FAULT_EXCEPTION,
 
     /*
      * This FAULT_LAST is not used as a fault code, but instead is used 
      * internaly in the code. Developers should not use this as a fault 
      * code.
      */
-    FAULT_LAST,
-
-   /*
-    * Exceptions that appear afterwords are not related to Soap faults
-    */
-    AXISC_SOAP_EXCEPTION,
-    AXISC_WSDD_EXCEPTION,
-    AXISC_CONFIG_EXCEPTION,
-    AXISC_ENGINE_EXCEPTION,
-    AXISC_ERROR_NONE,
-    AXISC_TEST_EXCEPTION,
-    AXISC_RECEPTION_ERROR,
-    AXISC_SENDING_ERROR,
-    AXISC_HTTP_ERROR,
-    AXISC_TEST_ERROR
-    
+    FAULT_LAST 
 };
 
 class AxisException :public exception
 {
 
 public:
+    AxisException(){};
+    AxisException(void* pMsg);
     AxisException(int iExceptionCode);
     AxisException(exception* e);
     AxisException(exception* e, int iExceptionCode);

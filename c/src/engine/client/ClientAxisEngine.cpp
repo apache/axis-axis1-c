@@ -66,7 +66,7 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
         if (AXIS_SUCCESS !=
             (Status = initializeHandlers (sSessionId, pSoap->getProtocol())))
         {
-            AXISC_THROW(HANDLER_INIT_FAIL);
+            THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_HANDLERINITFAILED);
             break;          //do .. while(0)
         }
         //Get Service specific Handlers from the pool if configured any
@@ -115,7 +115,7 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
          
      AXISC_CATCH(...)
 #ifdef __ENABLE_AXIS_EXCEPTION__
-         return AXISC_UNKNOWN_ERROR;
+         return SERVER_UNKNOWN_ERROR;
 #endif
      AXISC_ENDCATCH 
     return Status;
@@ -135,7 +135,7 @@ int ClientAxisEngine::invoke (MessageData* pMsg)
         {
             if (AXIS_SUCCESS != (Status = m_pSReqFChain->invoke (pMsg)))
             {
-                // m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_CLIENTHANDLERFAILED));
+                // m_pSZ->setSoapFault(SoapFault::getSoapFault(CLIENT_ENGINE_CLIENTHANDLERFAILED));
                 break;    //do .. while (0)
             }
         }
@@ -147,7 +147,7 @@ int ClientAxisEngine::invoke (MessageData* pMsg)
         {
             if (AXIS_SUCCESS != (Status = m_pGReqFChain->invoke (pMsg)))
             {
-                // m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_CLIENTHANDLERFAILED));
+                // m_pSZ->setSoapFault(SoapFault::getSoapFault(CLIENT_ENGINE_CLIENTHANDLERFAILED));
                 break;    //do .. while (0)
             }
         }
@@ -159,7 +159,7 @@ int ClientAxisEngine::invoke (MessageData* pMsg)
         {
             if (AXIS_SUCCESS != (Status = m_pTReqFChain->invoke (pMsg)))
             {
-                // m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_CLIENTHANDLERFAILED));
+                // m_pSZ->setSoapFault(SoapFault::getSoapFault(CLIENT_ENGINE_CLIENTHANDLERFAILED));
                 break;    //do .. while (0)
             }
         }

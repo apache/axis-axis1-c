@@ -1,26 +1,12 @@
-noinst_LTLIBRARIES = libsoap.la
-
+noinst_LTLIBRARIES = libwsdd.la
 AM_CPPFLAGS = $(CPPFLAGS)
-libsoap_la_SOURCES = Attribute.cpp \
-        BasicNode.cpp \
-        CharacterElement.cpp \
-        ComplexElement.cpp \
-        HeaderBlock.cpp \
-        SoapBody.cpp \
-        SoapDeSerializer.cpp \
-        SoapEnvelope.cpp \
-        SoapFault.cpp \
-        SoapHeader.cpp \
-        SoapMethod.cpp \
-        SoapSerializer.cpp \
-        URIMapping.cpp \
-	SoapKeywordMapping.cpp \
-	apr_base64.c \
-	HexCoder.cpp \
-	SoapBinInputStream.cpp \
-	SoapInputSource.cpp \
-	SoapParserXerces.cpp \
-	XercesHandler.cpp
+libwsdd_la_SOURCES = WSDDDeployment.cpp \
+                WSDDHandler.cpp \
+                WSDDService.cpp \
+                WSDDTransport.cpp \
+		WSDDKeywords.cpp \
+		WSDDDocumentXerces.cpp \
+                AxisWsddException.cpp
 
-libsoap_la_LIBADD = $(LDFLAGS)
+libwsdd_la_LIBADD = $(LDFLAGS)
 INCLUDES = -I$(AXISCPP_HOME)/include

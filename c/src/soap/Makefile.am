@@ -17,7 +17,8 @@ libsoap_la_SOURCES = Attribute.cpp \
 	SoapKeywordMapping.cpp \
 	SoapParserExpat.cpp \
 	apr_base64.c \
-	HexCoder.cpp 	
+	HexCoder.cpp \
+        AxisSoapException.cpp
 
 libsoap_la_LIBADD = $(LDFLAGS)
 INCLUDES = -I$(AXISCPP_HOME)/include

@@ -58,9 +58,9 @@ void SoapBody::setSoapMethod(SoapMethod* ptrSoapMethod)
     m_pSoapMethod= ptrSoapMethod;
 }
 
-void SoapBody::setSoapFault(SoapFault *ptrSoapFault)
+void SoapBody::setSoapFault(SoapFault *pSoapFault)
 {
-    m_pSoapFault= ptrSoapFault;
+    m_pSoapFault= pSoapFault;
 }
 
 int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
@@ -98,7 +98,7 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         }
         else
         {
-            m_pSoapFault = SoapFault::getSoapFault(SF_WEBSERVICEFAILED);
+            m_pSoapFault = SoapFault::getSoapFault(SERVER_ENGINE_WEBSERVICEFAILED);
             if(m_pSoapFault!=NULL) 
             {        
                 iStatus= m_pSoapFault->serialize(pSZ);

@@ -85,7 +85,10 @@ public:
     int setOutputStreamForTesting(SOAPTransport* pStream);
 
     int AXISCALL createSoapMethod(const AxisChar* sLocalName, 
-        const AxisChar* sURI);    
+        const AxisChar* sURI);
+
+    int AXISCALL createSoapFault(const AxisChar* sLocalName, 
+        const AxisChar* sURI);
 
 /*    IWrapperSoapSerializer& operator<<(const char* cSerialized); */
     IWrapperSoapSerializer& operator<<(const AxisChar* cSerialized);
@@ -111,26 +114,34 @@ public:
     int init();
     int setOutputStream(SOAPTransport* pStream);
     void markEndOfStream();
-    int setSoapFault(SoapFault* pSoapFault);
     int setSoapMethod(SoapMethod* pSoapMethod);
+    int setSoapFault(SoapFault* pSoapFault);
     int setSoapBody(SoapBody* pSoapBody);
     int setSoapHeader(SoapHeader* pSoapHeader);
     int setSoapEnvelope(SoapEnvelope* pSoapEnvelope);
     SoapSerializer();
     virtual ~SoapSerializer();
+
     /* for arrays of basic types */
     int AXISCALL addOutputBasicArrayParam(const Axis_Array* pArray, 
         XSDTYPE nType, const AxisChar* pName);
+
     /* for arrays of complex types */
     int AXISCALL addOutputCmplxArrayParam(const Axis_Array* pArray, 
         void* pSZFunct, void* pDelFunct, void* pSizeFunct, 
         const AxisChar* pName, const AxisChar* pNamespace);
+
     /* for complex types */
     int AXISCALL addOutputCmplxParam(void* pObject, void* pSZFunct, 
         void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
+
+    int AXISCALL addFaultDetail(void* pObject, void* pSZFunct,
+        void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace );
+
     int AXISCALL serializeCmplxArray(const Axis_Array* pArray, void* pSZFunct,
         void* pDelFunct, void* pSizeFunct, const AxisChar* pName, 
         const AxisChar* pNamespace);
+
     int AXISCALL serializeBasicArray(const Axis_Array* pArray, XSDTYPE nType, 
         const AxisChar* pName);
     /* following two functions are needed by serializer functions of complex 

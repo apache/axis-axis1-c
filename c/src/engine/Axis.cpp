@@ -41,7 +41,7 @@
 #include <string>
 #include <map>
 
-#include <axis/server/SoapFault.h>
+#include "../soap/SoapFault.h"
 #include "../soap/URIMapping.h"
 #include "../soap/SoapKeywordMapping.h"
 #include "HandlerLoader.h"

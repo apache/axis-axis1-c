@@ -57,31 +57,6 @@ void AxisException::processException(int iExceptionCode)
 const string AxisException::getMessage (exception* objException)
 {
     string sMessage = objException->what();
-    /* to do */
-/*  exception *objType = static_cast<std::bad_alloc*> (e);
-  if(objType != NULL)
-  {
-    sMessage = "thrown by new";
-  }
-
-  objType = static_cast<std::bad_cast*> (e);
-  if(objType != NULL)
-  {
-    sMessage = "thrown by dynamic_cast when fails with a referenced type";
-  }
-
-  objType = static_cast<bad_exception*> (e);
-  if(objType != NULL)
-  {
-    sMessage = "thrown when an exception doesn't match any catch";
-  }
-
-  objType = static_cast<bad_typeid*> (e);
-  if(objType != NULL)
-  {
-    sMessage = "thrown by typeid";
-  }
-*/
 
     return sMessage;
 }
@@ -91,92 +66,17 @@ const string AxisException::getMessage (int iExceptionCode)
     string sMessage;
     switch(iExceptionCode)
     {
-        case SF_VERSION_MISMATCH:
+        case SOAP_VERSIONMISMATCH :
             sMessage = "Soap Version mismatch fault occured";
             break;
-        case SF_MUST_UNDERSTAND:
+        case SOAP_MUSTUNDERSTAND:
             sMessage = "Soap Must understand fault occured";
             break;
-        case SF_MESSAGEINCOMPLETE:
-            sMessage = "Received message is incomplete";
-            break;
-        case SF_SOAPACTIONEMPTY:
-            sMessage = "Soap action is empty";
-            break;
-        case SF_SERVICENOTFOUND:
-            sMessage = "Requested service not found";
-            break;
-        case SF_SOAPCONTENTERROR:
-            sMessage = "Received content is faulty";
-            break;
-        case SF_NOSOAPMETHOD:
-            sMessage = "Request method is not a soap method";
-            break;
-        case SF_METHODNOTALLOWED:
-            sMessage = "Requested method is not allowed";
-            break;
-        case SF_PARATYPEMISMATCH:
-            sMessage = "Parameter type mismatch";
-            break;
-        case SF_CLIENTHANDLERFAILED:
-            sMessage = "Client handler failed";
-	case SF_COULDNOTLOADSRV:
-	    sMessage = "Could not load service";
-	    break;
-        case SF_COULDNOTLOADHDL:
-            sMessage = "Could not load handler";
-            break;
-            break;
-        case SF_HANDLERFAILED:
-            sMessage = "Handler failed";
-            break;
-        case SF_WEBSERVICEFAILED:
-            sMessage = "Web Service failed";
-            break;
-        case AXISC_RECEPTION_ERROR:
-            sMessage = "Problem occured when receiving the stream";
-            break;
-        case AXISC_SENDING_ERROR:
-            sMessage = "Problem occured when sending the stream";
-            break;
-        case AXISC_HTTP_ERROR:
-            sMessage = "HTTP transport error";
-            break;
-        case AXISC_TRANSPORT_CONF_ERROR:
-            sMessage = "Transport layer is not configured properly";
-            break;
-        case HANDLER_INIT_FAIL:
-            sMessage = "Handler initialization failed";
-            break;
-        case HANDLER_CREATION_FAILED:
-            sMessage = "Handler creation failed";
-            break;
-        case LOADLIBRARY_FAILED:
-            sMessage = "Library loading failed";
-            break;
-        case LIBRARY_PATH_EMPTY:
-            sMessage = "Library path is empty(Not in server.wsdd file)";
-            break;
-        case HANDLER_NOT_LOADED:
-            sMessage = "Handler is not loaded";
-            break;
-        case HANDLER_BEING_USED:
-            sMessage = "Handler is being used";
-            break;
-        case GET_HANDLER_FAILED:
-            sMessage = "Get handler failed";
-            break;
-        case WRONG_HANDLER_TYPE:
-            sMessage = "Wrong handler type";
-            break;
-        case NO_HANDLERS_CONFIGURED:
-            sMessage = "No handlers configured in server.wsdd";
-            break;
-        case AXISC_TEST_ERROR:
+        case SERVER_TESTEXCEPTION:
             sMessage = "This is a testing error";
             break;
         default:
-            sMessage = "Unknown error has occured";
+            sMessage = "Unknown Exception has occured";
 
     } 
 

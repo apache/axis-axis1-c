@@ -6,6 +6,20 @@
 
 #include "MathOpsWrapper.h"
 
+extern int Axis_DeSerialize_SOAPStructFault(SOAPStructFault* param, 
+    IWrapperSoapDeSerializer *pDZ);
+
+extern void* Axis_Create_SOAPStructFault(SOAPStructFault *Obj, bool bArray = false, 
+    int nSize=0);
+
+extern void Axis_Delete_SOAPStructFault(SOAPStructFault* param, bool bArray = false, 
+    int nSize=0);
+
+extern int Axis_Serialize_SOAPStructFault(SOAPStructFault* param, IWrapperSoapSerializer* pSZ, 
+    bool bArray = false);
+
+extern int Axis_GetSize_SOAPStructFault();
+
 MathOpsWrapper::MathOpsWrapper()
 {
 	pWs = new MathOps();
@@ -39,13 +53,7 @@ int MathOpsWrapper::invoke(void *pMsg)
 {
 	IMessageData* mc = (IMessageData*)pMsg;
 	const AxisChar *method = mc->getOperationName();
-	if (0 == strcmp(method, "add"))
-		return add(mc);
-	else if (0 == strcmp(method, "sub"))
-		return sub(mc);
-	else if (0 == strcmp(method, "mul"))
-		return mul(mc);
-	else if (0 == strcmp(method, "div"))
+	if (0 == strcmp(method, "div"))
 		return div(mc);
 	else return AXIS_FAIL;
 }
@@ -56,10 +64,11 @@ int MathOpsWrapper::invoke(void *pMsg)
 /*
  * This method wrap the service method 
  */
-int MathOpsWrapper::div(void* pMsg)
+int MathOpsWrapper::div(void* pMsg) throw(AxisDivByZeroException)
 {
 	IMessageData* mc = (IMessageData*)pMsg;
 	int nStatus;
+        int ret;
 	IWrapperSoapSerializer *pIWSSZ = NULL;
 	mc->getSoapSerializer(&pIWSSZ);
 	if (!pIWSSZ) return AXIS_FAIL;
@@ -72,7 +81,14 @@ int MathOpsWrapper::div(void* pMsg)
 	int v0 = pIWSDZ->getElementAsInt("in0",0);
 	int v1 = pIWSDZ->getElementAsInt("in1",0);
 	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
-	int ret = pWs->div(v0,v1);
+        try
+        {
+	    ret = pWs->div(v0,v1);
+        }
+        catch(AxisDivByZeroException& e)
+        {
+            throw AxisDivByZeroException(pMsg);
+        }
 	return pIWSSZ->addOutputParam("divReturn", (void*)&ret, XSD_INT);
 }
 

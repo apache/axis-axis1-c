@@ -23,7 +23,8 @@
 
 #include <string>
 #include <map>
-#include "AxisException.h"
+#include <axis/server/AxisException.h>
+#include <axis/server/Param.h>
 
 class SoapSerializer;
 
@@ -60,33 +61,59 @@ class SoapFault
 friend class SoapFaultsTestCase;
 
 public:
+    SoapFault();
+
     SoapFault(string m_sFaultcode, string m_sFaultstring, 
         string m_sFaultactor, string m_sDetail);
+
     bool operator ==(const SoapFault &objSoapFault);
+
     static SoapFault* getSoapFault(int);
+
     static void initialize();
-    const char* getSoapString();    
-    int serialize(SoapSerializer& pSZ);    
-    //void setSoapFaultactor(string sFaultactor);
-    //void setSoapDetail(string sFaultDetail);
+
+    const char* getSoapString();
+
+    int serialize(SoapSerializer& pSZ);
+
     /* int serialize(string&); */
+
     virtual ~SoapFault();
-    void setFaultDetail(const string& sDetail);
-    void setFaultactor(const string& sFaultactor);
+
+    int setFaultDetail(const string& sDetail);
+
+    int setFaultDetail(const Param* pFaultDetail);
+
+    int setFaultactor(const string& sFaultactor);
+
+    int setFaultstring(const string& sFaultstring);
+
+    int setFaultcode(const string& sFaultcode);
+
     string getFaultcode();
+
     string getFaultstring();
+
     string getFaultactor();
+
     string getFaultDetail();
-    /*void setFaultstring(const string& sFaultstring);*/
-    /*void setFaultcode(const string& sFaultcode);*/ 
+
+    void setUri(const AxisChar* uri);
+
+    void setLocalName(const AxisChar* localname);
+
+    void setPrefix(const AxisChar* prefix);
 
 private:
-    SoapFault();
     /* string m_sFaultSerialized; */
     string m_sFaultDetail;
     string m_sFaultactor;
     string m_sFaultstring;
     string m_sFaultcode;
+    Param* m_pFaultDetail;
+    AxisString m_strPrefix;
+    AxisString m_strLocalname;
+    AxisString m_strUri;
     static volatile bool m_bInit;
 };
 
