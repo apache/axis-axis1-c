@@ -248,17 +248,11 @@ public class ClientStubWriter
                     //TODO initialize return parameter appropriately.
                 }
         }
-        String channelSecurityType =
-            (WrapperConstants
-                .CHANNEL_SECURITY_SSL
-                .equals(wscontext.getWrapInfo().getChannelSecurity()))
-                ? "SSL_CHANNEL"
-                : "NORMAL_CHANNEL";
         writer.write(
             "\t/* Following will establish the connections with the server too */\n");
         writer.write(
             "\tif (AXIS_SUCCESS != pCall->_functions->initialize(pCall->_object, C_DOC_PROVIDER, "
-                + channelSecurityType
+                + "NORMAL_CHANNEL"
                 + ")) return ");
         if (returntype != null)
         {

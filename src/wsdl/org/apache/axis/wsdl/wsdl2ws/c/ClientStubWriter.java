@@ -286,12 +286,6 @@ public class ClientStubWriter extends CFileWriter
         {
             writer.write("\tAxis_Array array;\n");
         }
-        String channelSecurityType =
-            (WrapperConstants
-                .CHANNEL_SECURITY_SSL
-                .equals(wscontext.getWrapInfo().getChannelSecurity()))
-                ? "SSL_CHANNEL"
-                : "NORMAL_CHANNEL";
         String provider =
             minfo.getInputUse().equals("literal")
                 ? "C_RPC_LITERAL_PROVIDER"
@@ -302,7 +296,7 @@ public class ClientStubWriter extends CFileWriter
             "\tif (AXIS_SUCCESS != pCall->_functions->initialize(pCall->_object,"
                 + provider
                 + ", "
-                + channelSecurityType
+                + WrapperConstants.CHANNEL_SECURITY_NONE
                 + ")) return ");
         if (returntype != null)
         {

@@ -42,8 +42,6 @@ public class WrapperInfo
     private String targetEndpointURI;
     //private target name space of the wsdl file 
     private String targetNameSpaceOfWSDL;
-    //channel security type
-    private String channelSecurity;
 
     public WrapperInfo(String wrapperStyle, String wrapperLanguage,
     //    					String encodingStyle, 
@@ -52,8 +50,7 @@ public class WrapperInfo
         String targetEngine,
         String trasportUri,
         String targetEndpointURI,
-        String targetNameSpaceOfWSDL,
-        String channelSecurity)
+        String targetNameSpaceOfWSDL)
     {
         this.wrapperStyle = wrapperStyle;
         this.wrapperLanguage = wrapperLanguage;
@@ -130,15 +127,6 @@ public class WrapperInfo
         }
         this.targetNameSpaceOfWSDL =
             (targetNameSpaceOfWSDL == null) ? "" : targetNameSpaceOfWSDL;
-        if (channelSecurity == null)
-        {
-            this.channelSecurity = WrapperConstants.CHANNEL_SECURITY_NONE;
-        }
-        else
-        {
-            this.channelSecurity = channelSecurity;
-        }
-
     }
 
     /**
@@ -232,11 +220,4 @@ public class WrapperInfo
         return trasportUri;
     }
 
-    /**
-     * @return String
-     */
-    public String getChannelSecurity()
-    {
-        return channelSecurity;
-    }
 }

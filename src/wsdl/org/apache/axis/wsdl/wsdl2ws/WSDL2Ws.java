@@ -618,7 +618,6 @@ public class WSDL2Ws
         String targetLanguage,
         String targetImplementationStyle,
         String targetEngine,
-        String security,
         String wsdlWrapStyle)
         throws WrapperFault
     {
@@ -664,8 +663,7 @@ public class WSDL2Ws
                         targetEngine,
                         transportURI,
                         targetEndpointURI,
-                        targetNameSpaceOfWSDL,
-                        security),
+                        targetNameSpaceOfWSDL),
                     new ServiceInfo(servicename, qualifiedServiceName, methods),
                     typeMap));
         if (wsg == null)
@@ -1078,8 +1076,7 @@ public class WSDL2Ws
                 + "-help, -h              print this message\n"
                 + "-o<folder>             target output folder - default is current folder\n"
                 + "-l<c++|c>              target language (c++|c) - default is c++\n"
-                + "-s<server|client>      target side (serve|client) - default is server\n"
-                + "-c<none|ssl>           channel security (ssl|none) - default is none\n"
+                + "-s<server|client>      target side (server|client) - default is server\n"
                 + "-w<wrapped|nonwrapped> wrapping style of the WSDL (wrapped|nonwrapped) - default is wrapped\n"
                 + "-verbose, -v           be verbose\n"
                 + "-m<none|gnu>           generate make files (none|gnu) - default is none\n");
@@ -1145,7 +1142,6 @@ public class WSDL2Ws
                     "c++",
                     data.getOptionBykey("i"),
                     data.getOptionBykey("s"),
-                    data.getOptionBykey("c"),
                     data.getOptionBykey("w"));
 
                 System.out.println("\nCode generation completed.\n");

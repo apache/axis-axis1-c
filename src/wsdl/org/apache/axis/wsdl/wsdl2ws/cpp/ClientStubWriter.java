@@ -345,12 +345,6 @@ public class ClientStubWriter extends CPPClassWriter
                 }
             }
         }
-        String channelSecurityType =
-            (WrapperConstants
-                .CHANNEL_SECURITY_SSL
-                .equals(wscontext.getWrapInfo().getChannelSecurity()))
-                ? "SSL_CHANNEL"
-                : "NORMAL_CHANNEL";
 
         //writer.write("\tchar* cFaultcode;\n");
         //writer.write("\tchar* cFaultstring;\n");
@@ -359,7 +353,7 @@ public class ClientStubWriter extends CPPClassWriter
         writer.write("\ttry\n\t{");
         writer.write(
             "\n\t\tif (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, "
-                + channelSecurityType
+                + "NORMAL_CHANNEL"
                 + ")) \n\t\t\treturn ");
         //damitha
         if (returntype != null)

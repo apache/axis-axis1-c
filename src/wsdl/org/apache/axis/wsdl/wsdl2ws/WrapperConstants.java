@@ -95,6 +95,6 @@ public interface WrapperConstants {
 	public static final String SOAPENC_ARRAY = "Array";
 	
 	//channel security types
+	// Temporarily putting this in until 1.4 release is finished
 	public static final String CHANNEL_SECURITY_NONE = "none";
-	public static final String CHANNEL_SECURITY_SSL = "ssl";
 }
