@@ -12,27 +12,33 @@ httpd-2.0.48
 apache_1.3.27
 
 You must define some environment variables in order to build.
-#AXISCPP_HOME is where you checkout Axis C++
+AXISCPP_HOME is where you checkout Axis C++
+
+------------------------------------------------------------
 AXISCPP_HOME="/home/damitha/projects/cvshead"
 AXIS_HOME="/home/damitha/Axis"
 EXPAT_HOME="/usr/local/expat1957"
 XERCESC_HOME="/usr/local/xerces-c"
 LD_LIBRARY_PATH="$XERCESC_HOME/lib:$EXPAT_HOME/lib:$AXISCPP_HOME/bin:$AXIS_HOME/libs:$LD_LIBRARY_PATH"
 export AXISCPP_HOME AXIS_HOME XERCESC_HOME EXPAT_HOME LD_LIBRARY_PATH
+------------------------------------------------------------
 
 A note about AXIS_HOME
 Copy $AXISCPP_HOME/deploy folder to a place of your choice and define AXIS_HOME pointing to it.
-#cp -rf $AXISCPP_HOME/deploy /usr/local/
-#mv /usr/local/deploy /usr/local/Axis
+cp -rf $AXISCPP_HOME/deploy /usr/local/
+mv /usr/local/deploy /usr/local/Axis
+
+EXPAT_HOME points to where you installed expat
+XERCESC_HOME points to where you installed xereces-c
 
 In $AXIS_HOME/axiscpp.conf file you can give paths to
 your log files, configuration files libraries etc.
 -------------------------------------------------------------
-AXISLOGPATH:/usr/local/Axis/logs/AxisLog
-WSDDFILEPATH:/usr/local/Axis/conf/server.wsdd
-AXISCLIENTLOGPATH:/usr/local/Axis/logs/AxisClientLog
-AXISXMLPARSER:/usr/local/Axis/libs/libaxis_xmlparser.so
-AXISTRANSPORT_HTTP:/usr/local/Axis/libs/libaxis_transport.so
+AXISLOGPATH:/usr/local/Axis/logs/AxisLog    #Server side log file
+WSDDFILEPATH:/usr/local/Axis/conf/server.wsdd    #Server side service deployment descriptor
+AXISCLIENTLOGPATH:/usr/local/Axis/logs/AxisClientLog    #Client log file
+AXISXMLPARSER:/usr/local/Axis/libs/libaxis_xmlparser.so    #Path to xml parser library
+AXISTRANSPORT_HTTP:/usr/local/Axis/libs/libaxis_transport.so    #Path to transport library
 ------------------------------------------------------------
 
 Axis C++ core is independant of the parser layer and transport layer.
@@ -111,13 +117,25 @@ SUBDIRS = apache2 adminservice #Here I build for Apache2
 #SUBDIRS = apache adminservice
 ---------------------------------------------------------
 
-Now
-#cd $AXISCPP_HOME
-#sh build.sh
+Now you need to copy header files from apache and parser you use
+I have installed xercesc at /usr/local/xerces-c and
+expat at /usr/local/expat1957 and
+apache2 at /usr/local/apache2 and
+apache1.3 at /usr/local/apache
 
-It will build Axis C++ server, Client and samples
+I'm going to build Axis C++ for apache2 and for both xercesc and expat(But I'm going to
+use only one parser. But anyway I can give instructions to build both as you've seen earlier)
 
-#ls $AXISCPP_HOME/bin
+cp -rf /usr/local/xerces-c/include/xercesc/* $AXISCPP_HOME/include/xercesc/
+cp -f /usr/local/expat1957/include/expat.h $AXISCPP_HOME/include/expat/
+cp -f /usr/local/apache2/include/* $AXISCPP_HOME/include/apache2_0/
+
+Then I can build Axis C++ server, client,parser libraries, transport library and server/client samples
+by,
+cd $AXISCPP_HOME
+sh build.sh
+
+ls $AXISCPP_HOME/bin
 adminclient               libaxiscpp_client.so.0.0.0  libaxis_expat.a             libaxis_xercesc.la
 CVS                       libaxiscpp_mod2.a           libaxis_expat.la            libaxis_xercesc.so
 libAdminService.a         libaxiscpp_mod2.la          libaxis_expat.so            libaxis_xercesc.so.0
@@ -140,7 +158,7 @@ libaxis_xercesc.so is the xercesc parser library implmentation for Axis C++
 
 Also $AXISCPP_HOME/sampels/server samples are built and installed in
 $AXIS_HOME/web_services
-#ls $AXIS_HOME/
+ls $AXIS_HOME/
 
 libcalculator.so        libcgroupB.so           libdoclitgroupB.so         libgroupB.so
 libAdminService.so    libcalculator.so.0      libcgroupB.so.0         libdoclitgroupB.so.0       libgroupB.so.0
@@ -182,5 +200,5 @@ If we use xerces we need to change
 libaxis_xercesc.so to libaxis_xmlparser.so.
 
 To run interop samples
-#cd $AXISCPP_HOME/samples/client
-#sh run_interoptests.sh
+cd $AXISCPP_HOME/samples/client
+sh run_interoptests.sh
