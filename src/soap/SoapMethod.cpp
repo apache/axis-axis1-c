@@ -1,77 +1,29 @@
-/* -*- C++ -*- */
+/*
+ *   Copyright 2003-2004 The Apache Software Foundation.
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
 
 /*
- * The Apache Software License, Version 1.1
- *
- *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
- * reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *
- * 3. The end-user documentation included with the redistribution,
- *    if any, must include the following acknowledgment:
- *       "This product includes software developed by the
- *        Apache Software Foundation (http://www.apache.org/)."
- *    Alternately, this acknowledgment may appear in the software itself,
- *    if and wherever such third-party acknowledgments normally appear.
- *
- * 4. The names "SOAP" and "Apache Software Foundation" must
- *    not be used to endorse or promote products derived from this
- *    software without prior written permission. For written
- *    permission, please contact apache@apache.org.
- *
- * 5. Products derived from this software may not be called "Apache",
- *    nor may "Apache" appear in their name, without prior written
- *    permission of the Apache Software Foundation.
- *
- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
- * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
- * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- * ====================================================================
- *
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- *
- *
- *
  * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
  *
  */
 
-// SoapMethod.cpp: implementation of the SoapMethod class.
-//
-//////////////////////////////////////////////////////////////////////
 
 #include "SoapMethod.h"
 #include <axis/server/Attribute.h>
 #include <axis/server/GDefine.h>
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
 SoapMethod::SoapMethod()
 {
@@ -79,243 +31,259 @@ SoapMethod::SoapMethod()
 
 SoapMethod::~SoapMethod()
 {
-	list<Param*>::iterator itParam;
-	for (list<Attribute*>::iterator it = m_attributes.begin(); it != m_attributes.end(); it++)
-	{
-		delete (*it);
-	}
-	for (itParam = m_OutputParams.begin(); itParam != m_OutputParams.end(); itParam++)
-	{
-		delete (*itParam);
-	}
-	m_OutputParams.clear();
+    list<Param*>::iterator itParam;
+    for (list<Attribute*>::iterator it = m_attributes.begin();
+    it != m_attributes.end(); it++)
+    {
+        delete (*it);
+    }
+    for (itParam = m_OutputParams.begin(); 
+    itParam != m_OutputParams.end(); itParam++)
+    {
+        delete (*itParam);
+    }
+    m_OutputParams.clear();
 }
 
 void SoapMethod::setPrefix(const AxisChar* prefix)
 {
-	m_strPrefix = prefix;
+    m_strPrefix = prefix;
 }
 
 void SoapMethod::setLocalName(const AxisChar* localname)
 {
-	m_strLocalname = localname;
+    m_strLocalname = localname;
 }
 
 void SoapMethod::setUri(const AxisChar* uri)
 {
-	m_strUri = uri;
+    m_strUri = uri;
 }
 
 void SoapMethod::AddOutputParam(Param *param)
 {
-	if (param)
-	{
-		m_OutputParams.push_back(param);
-	}
+    if (param)
+    {
+        m_OutputParams.push_back(param);
+    }
 }
 
 /*
- *This method return AXIS_SUCCESS if it serialize the SoapMethod successfully.
+ * This method return AXIS_SUCCESS if it serialize the SoapMethod successfully.
  * If not it returns AXIS_FAIL. The caller of this method has to deal in a 
  * appropriate manner after calling this method.
  */
 int SoapMethod::serialize(SoapSerializer& pSZ)
-{	
-	int iStatus= AXIS_SUCCESS;
+{    
+    int iStatus= AXIS_SUCCESS;
 
-	do {
-		if(isSerializable()) {
-					
-			pSZ.Serialize("<", m_strPrefix.c_str(), ":", m_strLocalname.c_str(), " xmlns:", m_strPrefix.c_str(),
-				"=\"", m_strUri.c_str(), "\"", NULL);
+    do
+    {
+        if(isSerializable())
+        {
+                    
+            pSZ.Serialize("<", m_strPrefix.c_str(), ":", m_strLocalname.c_str(),
+                " xmlns:", m_strPrefix.c_str(),
+                "=\"", m_strUri.c_str(), "\"", NULL);
 
-			iStatus= serializeAttributes(pSZ);
-			if(iStatus==AXIS_FAIL) {
-				break;
-			}
-			
-			pSZ.Serialize(">", NULL);
+            iStatus= serializeAttributes(pSZ);
+            if(iStatus==AXIS_FAIL)
+            {
+                break;
+            }
+            
+            pSZ.Serialize(">", NULL);
 
-			iStatus= serializeOutputParam(pSZ);
-			if(iStatus==AXIS_FAIL) {
-				break;
-			}
-			
-			pSZ.Serialize("</", NULL);
+            iStatus= serializeOutputParam(pSZ);
+            if(iStatus==AXIS_FAIL)
+            {
+                break;
+            }
+            
+            pSZ.Serialize("</", NULL);
 
-			if(m_strPrefix.length() != 0) {					
-				pSZ.Serialize(m_strPrefix.c_str(), ":", NULL);
-			}
-			
-			pSZ.Serialize(m_strLocalname.c_str(), ">", NULL);
+            if(m_strPrefix.length() != 0)
+            {                    
+                pSZ.Serialize(m_strPrefix.c_str(), ":", NULL);
+            }
+            
+            pSZ.Serialize(m_strLocalname.c_str(), ">", NULL);
 
-			iStatus= AXIS_SUCCESS;
-		} else {
-			iStatus= AXIS_FAIL;
-		}
-	} while(0);
-			
-	return iStatus;
+            iStatus= AXIS_SUCCESS;
+        }
+        else
+        {
+            iStatus= AXIS_FAIL;
+        }
+    } while(0);
+            
+    return iStatus;
 }
 
 /*
 comm on 11/7/2003 9.10am
 int SoapMethod::serialize(string& sSerialized)
-{	
-	
-	int iStatus= AXIS_SUCCESS;
+{    
+    
+    int iStatus= AXIS_SUCCESS;
 
-	do {
-		if(isSerializable()) {
+    do {
+        if(isSerializable()) {
 
-			sSerialized+= "<" + m_strPrefix+ ":"+ m_strLocalname+ " xmlns:"+ m_strPrefix+ 
-				"=\""+ m_strUri+ "\"";
-			
-//			if(m_strPrefix.length() != 0) {
-//				sSerialized+= m_strPrefix+ ":";
-//			}
+            sSerialized+= "<" + m_strPrefix+ ":"+ m_strLocalname+ " xmlns:"
+            + m_strPrefix+ "=\""+ m_strUri+ "\"";
+            
+//            if(m_strPrefix.length() != 0) {
+//                sSerialized+= m_strPrefix+ ":";
+//            }
 
-//			sSerialized+= m_strLocalname;
+//            sSerialized+= m_strLocalname;
 
-//			if(m_strPrefix.length() != 0) {
-//				sSerialized+= " xmlns:"+ m_strPrefix+ "=\""+ m_strUri+ "\"";
-//			}
+//            if(m_strPrefix.length() != 0) {
+//                sSerialized+= " xmlns:"+ m_strPrefix+ "=\""+ m_strUri+ "\"";
+//            }
 
-			iStatus= serializeAttributes(sSerialized);
-			if(iStatus==AXIS_FAIL) {
-				break;
-			}
+            iStatus= serializeAttributes(sSerialized);
+            if(iStatus==AXIS_FAIL) {
+                break;
+            }
 
-			sSerialized+= ">";
+            sSerialized+= ">";
 
-			iStatus= serializeOutputParam(sSerialized);
-			if(iStatus==AXIS_FAIL) {
-				break;
-			}
+            iStatus= serializeOutputParam(sSerialized);
+            if(iStatus==AXIS_FAIL) {
+                break;
+            }
 
-			sSerialized+= "</";
+            sSerialized+= "</";
 
-			if(m_strPrefix.length() != 0) {
-				sSerialized+= m_strPrefix+ ":";			
-			}
+            if(m_strPrefix.length() != 0) {
+                sSerialized+= m_strPrefix+ ":";            
+            }
 
-			sSerialized+= m_strLocalname+ ">"+ "\n";
+            sSerialized+= m_strLocalname+ ">"+ "\n";
 
-			iStatus= AXIS_SUCCESS;
-		} else {
-			iStatus= AXIS_FAIL;
-		}
-	} while(0);
-			
-	return iStatus;
+            iStatus= AXIS_SUCCESS;
+        } else {
+            iStatus= AXIS_FAIL;
+        }
+    } while(0);
+            
+    return iStatus;
 }
 */
 
 int SoapMethod::serializeOutputParam(SoapSerializer& pSZ)
-{	
-	int nStatus;
-	for (list<Param*>::iterator it = m_OutputParams.begin(); it != m_OutputParams.end(); it++)
-	{
-		if (AXIS_SUCCESS != (nStatus = (*it)->serialize(pSZ)))
-		{
-			return nStatus;
-		}
-	}
-	return AXIS_SUCCESS;
+{    
+    int nStatus;
+    for (list<Param*>::iterator it = m_OutputParams.begin();
+    it != m_OutputParams.end(); it++)
+    {
+        if (AXIS_SUCCESS != (nStatus = (*it)->serialize(pSZ)))
+        {
+            return nStatus;
+        }
+    }
+    return AXIS_SUCCESS;
 }
 
 /*
 comm on 11/7/2003 9.10am
 int SoapMethod::serializeOutputParam(string& sSerialized)
-{	
-	return m_pOutputParam->serialize(sSerialized);
+{    
+    return m_pOutputParam->serialize(sSerialized);
 }
 */
 
 const AxisChar* SoapMethod::getMethodName()
 {
-	return m_strLocalname.c_str();
+    return m_strLocalname.c_str();
 }
 
 bool SoapMethod::isSerializable()
 {
-	bool bStatus= true;	
+    bool bStatus= true;    
 
-	//checking whether namespace qualified, if not return AXIS_FAIL
-	do {
-		if(m_strPrefix.length() == 0) {			
-			bStatus= false;		
-			break;
-		} else if(m_strUri.length() == 0) {
-			bStatus= false;
-			break;
-		}
-	} while(0);
+    /* checking whether namespace qualified, if not return AXIS_FAIL */
+    do
+    {
+        if(m_strPrefix.length() == 0)
+        {            
+            bStatus= false;        
+            break;
+        }
+        else if(m_strUri.length() == 0)
+        {
+            bStatus= false;
+            break;
+        }
+    } while(0);
 
-	return bStatus;
+    return bStatus;
 }
 
 int SoapMethod::addAttribute(Attribute *pAttribute)
 {
-	m_attributes.push_back(pAttribute);
+    m_attributes.push_back(pAttribute);
 
-	return AXIS_SUCCESS;
+    return AXIS_SUCCESS;
 }
 
 int SoapMethod::serializeAttributes(SoapSerializer& pSZ)
 {
-	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+    list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
-	while(itCurrAttribute != m_attributes.end()) {		
-		(*itCurrAttribute)->serialize(pSZ);
-		itCurrAttribute++;		
-	}	
+    while(itCurrAttribute != m_attributes.end())
+    {        
+        (*itCurrAttribute)->serialize(pSZ);
+        itCurrAttribute++;        
+    }    
 
-	return AXIS_SUCCESS;	
+    return AXIS_SUCCESS;    
 }
 
 /*
 comm on 11/7/2003 9.10am
 int SoapMethod::serializeAttributes(string &sSerialized)
 {
-	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+    list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
-	while(itCurrAttribute != m_attributes.end()) {		
-		(*itCurrAttribute)->serialize(sSerialized);
-		itCurrAttribute++;		
-	}	
+    while(itCurrAttribute != m_attributes.end()) {        
+        (*itCurrAttribute)->serialize(sSerialized);
+        itCurrAttribute++;        
+    }    
 
-	return AXIS_SUCCESS;	
+    return AXIS_SUCCESS;    
 }
 */
 
 int SoapMethod::reset()
 {
-	m_strUri = "";
-	m_strLocalname = "";
-	m_strPrefix = "";
-	m_OutputParams.clear();
-	m_attributes.clear();
+    m_strUri = "";
+    m_strLocalname = "";
+    m_strPrefix = "";
+    m_OutputParams.clear();
+    m_attributes.clear();
 
-	return AXIS_SUCCESS;
+    return AXIS_SUCCESS;
 }
 
 int SoapMethod::initializeForTesting()
 {
-	m_strPrefix = "mn";
-	m_strLocalname = "add";
-	m_strUri = "http://myurl.com";
+    m_strPrefix = "mn";
+    m_strLocalname = "add";
+    m_strUri = "http://myurl.com";
 
-	Attribute* pAttribute = new Attribute();
-	pAttribute->initializeForTesting();
-	addAttribute(pAttribute);
+    Attribute* pAttribute = new Attribute();
+    pAttribute->initializeForTesting();
+    addAttribute(pAttribute);
 
-	/*
-	Param* pParam = new Param(100);
-	AddOutputParam(pParam);
-	*/
+    /*
+     * Param* pParam = new Param(100);
+     * AddOutputParam(pParam);
+     */
 
-	return AXIS_SUCCESS;
+    return AXIS_SUCCESS;
 }
 
 
