@@ -7,7 +7,9 @@
 <body>
 <h1>Axis c++ Documentation</h1>
 <br>
-<p>For the latest documentation refer the documentation in the CVS repository</p>
+<p>Documentation for building and running the latest source on  windows can be found in the "Windows Developers Guide" in the  CVS</p>
+
+<p>Documentation for building and running the latest source on Linux  can be found in the "Linux Installation Guide " and "Linux User Guide in the CVS</p>
 
 <h2>Linux Documentation</h2>
 
