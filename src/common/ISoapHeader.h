@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
 
@@ -75,7 +75,7 @@
 class ISoapHeader  
 {
 public:
-	virtual void addHeaderBlock(IHeaderBlock* pIHeaderBlock)=0;
+	virtual IHeaderBlock* getHeaderBlock()=0;
 	virtual ~ISoapHeader() {};
 };
 

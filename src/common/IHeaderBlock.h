@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
 
@@ -72,13 +72,18 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "BasicNode.h"
+
 class IHeaderBlock
 {
 public:
+	virtual BasicNode* createChild(NODE_TYPE eNODE_TYPE)=0;
+	virtual BasicNode* getFirstChild()=0;
+	virtual int addChild(BasicNode* pBasicNode)=0;
 	virtual void setLocalName(const string &localname)=0;
 	virtual void setUri(const string &uri)=0;
 	virtual void setPrefix(const string &prefix)=0;
-	virtual void setValue(const string &value)=0;
+	virtual void setValue(const string &value)=0;	
 	virtual ~IHeaderBlock() {};
 };
 

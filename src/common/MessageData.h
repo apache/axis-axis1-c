@@ -94,6 +94,8 @@ public:
 	SoapSerializer* m_pSZ;
 	SoapDeSerializer* m_pDZ;
 public:
+	string& getProperty(string& sName);
+	int setProperty(string& sName, string& sValue);
 	void getSoapDeSerializer(IHandlerSoapDeSerializer** pIHandlerSoapDeSerializer);
 	void getSoapDeSerializer(IWrapperSoapDeSerializer** pIWrapperSoapDeSerializer);
 	void getSoapSerializer(IHandlerSoapSerializer** pIHandlerSoapSerializer);
@@ -119,6 +121,8 @@ protected:
 
 private:
 	bool m_bPastPivotState;
+	map <string, string> m_Properties;
+	static string m_sBlankPropertyValue;
 };
 
 #endif // !defined(AFX_MESSAGEDATA_H__8B839E07_3D23_46C6_8743_543B4917D202__INCLUDED_)

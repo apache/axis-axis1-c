@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
 
@@ -72,7 +72,6 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-class ISoapSerializer;
 class ISoapMethod;
 class IArrayBean;
 class IParam;
@@ -80,9 +79,8 @@ union uParamValue;
 #include "TypeMapping.h"
 #include "ISoapSerializer.h"
 
-class IWrapperSoapSerializer  : virtual public ISoapSerializer
+class IWrapperSoapSerializer  : public virtual ISoapSerializer
 {
-
 public:	
 	virtual IParam* setResponseParam(XSDTYPE nType, uParamValue Value)=0;
 	virtual ISoapMethod* createSoapMethod()=0;

@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
 
@@ -72,6 +72,11 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
+
+CharacterElement::CharacterElement()
+{	
+	m_iNodeType= CHARACTER_NODE;
+}
 
 CharacterElement::CharacterElement(const string& sValue)
 {
@@ -109,3 +114,15 @@ int CharacterElement::serialize(string &sSerialized)
 	return SUCCESS;
 }
 */
+
+string& CharacterElement::getValue()
+{
+	return m_sValue;
+}
+
+int CharacterElement::setValue(string &sValue)
+{
+	m_sValue= sValue;
+
+	return SUCCESS;
+}

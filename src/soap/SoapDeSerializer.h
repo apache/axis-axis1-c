@@ -95,7 +95,7 @@ public:
 	SoapFault* GetFault();
 	SoapMethod* GetMethod();
 	SoapBody* GetBody();
-	SoapHeader* GetHeader();
+	ISoapHeader* GetHeader();
 	SoapEnvelope* GetEnvelope();
 	int SetStream(InputSource* sStream);
 	SoapDeSerializer();
