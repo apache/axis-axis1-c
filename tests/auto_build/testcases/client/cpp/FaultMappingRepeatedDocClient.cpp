@@ -20,6 +20,7 @@
 #include <iostream>
 
 void sig_handler(int);
+using namespace std;
 
 int main(int argc, char* argv[])
 {

@@ -16,10 +16,12 @@
 // FourLevelTestDocClient.cpp : Defines the entry point for the console application.i
 //
 #include <string>
-using namespace std;
+#include <iostream>
 
 #include "FourLevelTestDocInterface.hpp"
 #include <axis/AxisException.hpp>
+
+using namespace std;
 
 int main(int argc, char* argv[])
 {
