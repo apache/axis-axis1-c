@@ -259,9 +259,9 @@ int TranslationUnit::GenerateServiceFile(string& sServiceFile)
 		file << "\t{" << endl;
 		file << "\t\tpWCH->Init();" << endl;
 		file << "\t\t*inst = pWCH;" << endl;
-		file << "\t\treturn SUCCESS;" << endl;
+		file << "\t\treturn AXIS_SUCCESS;" << endl;
 		file << "\t}" << endl;
-		file << "\treturn FAIL;" << endl;
+		file << "\treturn AXIS_FAIL;" << endl;
 		file << "}" << endl;
 		file << "STORAGE_CLASS_INFO " << endl;
 		file << "int DestroyInstance(BasicHandler *inst)" << endl;
@@ -271,9 +271,9 @@ int TranslationUnit::GenerateServiceFile(string& sServiceFile)
 		file << "\t\tWrapperClassHandler* pWCH = static_cast<WrapperClassHandler*>(inst);" << endl;
 		file << "\t\tpWCH->Fini();" << endl;
 		file << "\t\tdelete pWCH;" << endl;
-		file << "\t\treturn SUCCESS;" << endl;
+		file << "\t\treturn AXIS_SUCCESS;" << endl;
 		file << "\t}" << endl;
-		file << "\treturn FAIL;" << endl;
+		file << "\treturn AXIS_FAIL;" << endl;
 		file << "}" << endl;
 		file << "}" << endl;
 	}

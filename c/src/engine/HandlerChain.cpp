@@ -89,7 +89,7 @@ int HandlerChain::Invoke(IMessageData* pMsg)
 	while (m_itCurrHandler != m_HandlerList.end())
 	{
         AXISTRACE1("before handler invoke");
-		if (SUCCESS == (*m_itCurrHandler).m_pHandler->Invoke(pMsg))
+		if (AXIS_SUCCESS == (*m_itCurrHandler).m_pHandler->Invoke(pMsg))
 		{
             AXISTRACE1("handler invoked");
 			m_itCurrHandler++;
@@ -98,11 +98,11 @@ int HandlerChain::Invoke(IMessageData* pMsg)
 		{
             AXISTRACE1("handler invoke not successful");
 			OnFault(pMsg);
-			return FAIL;
+			return AXIS_FAIL;
 		}
 	}
 	AXISTRACE1("HandlerChain::Invoke end");
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 void HandlerChain::OnFault(IMessageData* pMsg)
@@ -121,18 +121,18 @@ int HandlerChain::AddHandler(Handler* pHandler, int nScope, int nLibId)
 	item.m_nScope = nScope;
 	item.m_nLibId = nLibId;
 	m_HandlerList.push_back(item);
-    AXISTRACE1("andlerChain::AddHandler SUCCESS");
-	return SUCCESS;
+    AXISTRACE1("andlerChain::AddHandler AXIS_SUCCESS");
+	return AXIS_SUCCESS;
 }
 
 int HandlerChain::Init()
 {
 	m_HandlerList.clear();
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int HandlerChain::Fini()
 {
 	m_HandlerList.clear();
-	return SUCCESS;	
+	return AXIS_SUCCESS;	
 }
