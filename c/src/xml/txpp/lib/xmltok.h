@@ -124,13 +124,15 @@ extern "C" {
 /* The size of the buffer passed to XmlUtf16Encode must be at least this. */
 #define XML_UTF16_ENCODE_MAX 2
 
-typedef struct position {
+typedef struct position 
+{
   /* first line and first column are 0 not 1 */
   unsigned long lineNumber;
   unsigned long columnNumber;
 } POSITION;
 
-typedef struct {
+typedef struct 
+{
   const char *name;
   const char *valuePtr;
   const char *valueEnd;
@@ -151,7 +153,8 @@ typedef int (PTRCALL *SCANNER)(int *, data_t *, const ENCODING *,
                                const char **);
 
 
-struct encoding {
+struct encoding 
+{
   SCANNER scanners[XML_N_STATES];
   SCANNER literalScanners[XML_N_LITERAL_TYPES];
   int (PTRCALL *sameName)(const ENCODING *,
@@ -281,7 +284,8 @@ struct encoding {
 #define XmlUtf16Convert(enc, fromP, fromLim, toP, toLim) \
   (((enc)->utf16Convert)(enc, fromP, fromLim, toP, toLim))
 
-typedef struct {
+typedef struct 
+{
   ENCODING initEnc;
   const ENCODING **encPtr;
 } INIT_ENCODING;

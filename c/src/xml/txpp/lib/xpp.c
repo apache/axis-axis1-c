@@ -343,7 +343,8 @@ static int initialize_encoding(xpp_context_t* ct)
     /* printf("protocolEncodingName:%s\n", protocolEncodingName); */
         s = protocolEncodingName;
 #endif
-        if ((ns ? XmlInitEncodingNS : XmlInitEncoding)(&initEncoding, &encoding, s))
+        if ((ns ? XmlInitEncodingNS : XmlInitEncoding)(&initEncoding,
+            &encoding, s))
         return XML_ERROR_NONE;
         /* return handleUnknownEncoding(parser, protocolEncodingName); */
 }
@@ -369,14 +370,16 @@ data_t* next(xpp_context_t* ct)
 static int add_utf8_ptr(char *ptr, data_t *data)
 {
         if (data->num_ptrs_utf8 == data->ptrs_sz
-                || !data->utf8ptrs) {
+                || !data->utf8ptrs) 
+        {
                 int sz = data->ptrs_sz << 1;
                 char **ptrs = (char **)malloc(sz << 2);
                 if (!ptrs)
                         return XML_TEST_ERROR;
-                if (data->utf8ptrs) {
-                        memmove(ptrs, data->utf8ptrs, data->num_ptrs_utf8 << 2);
-                        free(data->utf8ptrs);
+                if (data->utf8ptrs) 
+                {
+                       memmove(ptrs, data->utf8ptrs, data->num_ptrs_utf8 << 2);
+                       free(data->utf8ptrs);
                 }
                 data->utf8ptrs = ptrs;
                 data->ptrs_sz = sz;
@@ -474,7 +477,8 @@ int get_next_attribute_as_int(xpp_context_t* ct, int* parse_error)
         temp = ct->data.ptrs[data_counter + 1][1];
         ct->data.utf8ptrs[data_counter+1][1] = '\0';
         /* printf("ct->data.ptrs[data_counter]:%s\n", 
-           ct->data.ptrs[data_counter]); */
+         * ct->data.ptrs[data_counter]); 
+         */
         sscanf(ct->data.utf8ptrs[data_counter], "%d", &intTemp);
         ct->data.utf8ptrs[data_counter+1][1] = temp;
                         
