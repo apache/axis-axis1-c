@@ -28,7 +28,7 @@ Calculator::~Calculator()
 /*
  * This method wrap the service methodadd
  */
-int Calculator::add(int Value0, int Value1, int& iResult)
+int Calculator::add(int Value0, int Value1)
 {
 	int Ret;
 	if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
@@ -41,8 +41,7 @@ int Calculator::add(int Value0, int Value1, int& iResult)
 	{
 		if(AXIS_SUCCESS == m_pCall->checkMessage("addResponse", "http://localhost/axis/Calculator"))
 		{
-                        printf("success\n");
-			Ret = m_pCall->getElementAsInt("addReturn", 0, iResult);
+			Ret = m_pCall->getElementAsInt("addReturn", 0);
                         printf("Ret:%d\n", Ret);
 		}
 	}
@@ -54,7 +53,7 @@ int Calculator::add(int Value0, int Value1, int& iResult)
 /*
  * This method wrap the service methodsub
  */
-int Calculator::sub(int Value0, int Value1, int& iResult)
+int Calculator::sub(int Value0, int Value1)
 {
 	int Ret;
 	if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
@@ -67,7 +66,7 @@ int Calculator::sub(int Value0, int Value1, int& iResult)
 	{
 		if(AXIS_SUCCESS == m_pCall->checkMessage("subResponse", "http://localhost/axis/Calculator"))
 		{
-			Ret = m_pCall->getElementAsInt("subReturn", 0, iResult);
+			Ret = m_pCall->getElementAsInt("subReturn", 0);
 		}
 	}
 	m_pCall->unInitialize();
@@ -78,7 +77,7 @@ int Calculator::sub(int Value0, int Value1, int& iResult)
 /*
  * This method wrap the service methodmul
  */
-int Calculator::mul(int Value0, int Value1, int& iResult)
+int Calculator::mul(int Value0, int Value1)
 {
 	int Ret;
 	if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
@@ -91,7 +90,7 @@ int Calculator::mul(int Value0, int Value1, int& iResult)
 	{
 		if(AXIS_SUCCESS == m_pCall->checkMessage("mulResponse", "http://localhost/axis/Calculator"))
 		{
-			Ret = m_pCall->getElementAsInt("addReturn", 0, iResult);
+			Ret = m_pCall->getElementAsInt("addReturn", 0);
 		}
 	}
 	m_pCall->unInitialize();
@@ -102,7 +101,7 @@ int Calculator::mul(int Value0, int Value1, int& iResult)
 /*
  * This method wrap the service methoddiv
  */
-int Calculator::div(int Value0, int Value1, int& iResult)
+int Calculator::div(int Value0, int Value1)
 {
 	int Ret;
 	if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
@@ -115,7 +114,7 @@ int Calculator::div(int Value0, int Value1, int& iResult)
 	{
 		if(AXIS_SUCCESS == m_pCall->checkMessage("divResponse", "http://localhost/axis/Calculator"))
 		{
-			Ret = m_pCall->getElementAsInt("addReturn", 0, iResult);
+			Ret = m_pCall->getElementAsInt("addReturn", 0);
 		}
 	}
 	m_pCall->unInitialize();
