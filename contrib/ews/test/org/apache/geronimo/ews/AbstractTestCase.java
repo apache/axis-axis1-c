@@ -3,7 +3,6 @@ package org.apache.geronimo.ews;
 import java.io.File;
 
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 /**
  * Abstract base class for test cases.

@@ -1,10 +1,9 @@
 package org.apache.geronimo.ews.jaxrpcmapper;
 
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
 import org.apache.geronimo.ews.AbstractTestCase;
-import org.apache.geronimo.ews.AppTest;
 import org.apache.geronimo.ews.jaxrpcmapping.WsdlToJ2ee;
 
 /**
