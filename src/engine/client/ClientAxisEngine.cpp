@@ -63,8 +63,9 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
         pService = g_pWSDDDeployment->getService (pchService);
 
         //Get Global and Transport Handlers
-        if (AXIS_SUCCESS !=
-            (Status = initializeHandlers (sSessionId, pSoap->getProtocol())))
+        
+        Status = initializeHandlers (sSessionId, pSoap->getProtocol());
+        if (AXIS_SUCCESS != Status)
         {
             THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_HANDLERINITFAILED);
             break;          //do .. while(0)
@@ -72,17 +73,16 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
         //Get Service specific Handlers from the pool if configured any
         if (pService != NULL)
         {
-            if (AXIS_SUCCESS != (Status = 
-                g_pHandlerPool-> getRequestFlowHandlerChain (&m_pSReqFChain, 
-                sSessionId, pService)))
+            Status = g_pHandlerPool-> getRequestFlowHandlerChain (&m_pSReqFChain, 
+                sSessionId, pService);
+            if (AXIS_SUCCESS != Status)
             {
                 break;    //do .. while(0)
             }
-            if (AXIS_SUCCESS !=
-                (Status =
-                g_pHandlerPool->
+            Status = g_pHandlerPool->
                 getResponseFlowHandlerChain (&m_pSResFChain, sSessionId,
-                                                  pService)))
+                pService);
+            if (AXIS_SUCCESS != Status)
             {
                 break;    //do .. while(0)
             }

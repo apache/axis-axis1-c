@@ -243,7 +243,7 @@ const AnyElement* SoapParserExpat::next(bool isCharData)
 int SoapParserExpat::parseNext()
 {
     int nChars = EXPAT_BUFFER_SIZE;
-    AXIS_TRANSPORT_STATUS iTransportStatus;
+    AXIS_TRANSPORT_STATUS iTransportStatus = TRANSPORT_FAILED;
 	m_pCurrentBuffer = (char*) XML_GetBuffer(m_Parser, EXPAT_BUFFER_SIZE);
 	if (m_pCurrentBuffer)
 	{
