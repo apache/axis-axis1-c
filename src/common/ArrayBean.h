@@ -22,7 +22,7 @@ public:
 	ArrayBean();
 	virtual ~ArrayBean();
 	virtual int DeSerialize(ISoapDeSerializer *pDZ);
-	virtual int Serialize(ISoapSerializer& pSZ);
+	virtual int Serialize(IWrapperSoapSerializer& pSZ);
 	int GetArraySize();
 private:
 	int GetArrayBlockSize(list<int>::iterator it);
