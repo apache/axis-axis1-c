@@ -1,5 +1,5 @@
 lib_LTLIBRARIES = libserver_engine.la
-AM_CPPFLAGS = $(CPPFLAGS) -DUSE_LTDL
+AM_CPPFLAGS = $(CPPFLAGS)
 libserver_engine_la_SOURCES = ../Axis.cpp \
 		ServerAxisEngine.cpp \
 		../AxisEngine.cpp \
