@@ -6,10 +6,8 @@ request successful
 7
 namepair return
 attrlist->m_list-item[0] was NULL
-
-0
-
-
+ale->errortext is NULL
+ale->errorcode is NULL
 request successful
 7
 namepair return

@@ -12,9 +12,65 @@
 
 #include "ComplexLists.hpp"
 #include <axis/AxisException.hpp>
-#include <iostream>
+#include <iostream.h>
 
 #define ARRAYSIZE 2
+
+void printResponse(attrlisterr* ale)
+{
+    if(ale)
+    {
+        if (ale->errortext)
+        {
+            cout << ale->errortext << endl;
+        }
+        else
+        {
+            cout << "ale->errortext is NULL" << endl;
+        }
+        
+        if (ale->errorcode)
+        {
+            cout << ale->errorcode << endl;
+        }
+        else
+        {
+            cout << "ale->errorcode is NULL" << endl;
+        }
+        
+		if (ale->attrlist_Ref != NULL)
+		{
+			if (ale->attrlist_Ref->item.m_Array[0] != NULL)
+			{
+				if (ale->attrlist_Ref->item.m_Array[0]->name != NULL)
+				{
+					cout << ale->attrlist_Ref->item.m_Array[0]->name << endl;
+				}
+				else
+				{
+					cout << "ale->attrlist_Ref->item.m_Array[0]->name is NULL" << endl;
+				}
+
+				if (ale->attrlist_Ref->item.m_Array[0]->m_list_Ref != NULL)
+				{
+					if (ale->attrlist_Ref->item.m_Array[0]->m_list_Ref->item.m_Array[0]
+						&& *(ale->attrlist_Ref->item.m_Array[0]->m_list_Ref->item.m_Array[0]))
+					{
+						cout << ale->attrlist_Ref->item.m_Array[0]->m_list_Ref->item.m_Array[0] << endl;
+					}
+					else
+					{
+						cout << "ale->attrlist_Ref->item.m_Array[0]->m_list_Ref->item.m_Array[0]" << endl;
+					}
+				}
+			}
+		}
+    }
+    else
+    {
+        cout << "Deserialized response is NULL" << endl;
+    }
+}
 
 int main(int argc, char* argv[])
 {
@@ -72,49 +128,17 @@ int main(int argc, char* argv[])
 		al.item = npArr;
 
 		attrlisterr* ale = ws->multilist(&ml, &al);
-		if(ale) {
-			// Should have an errortext string, an errorcode int and a m_list object returned
-        	cout << ale->errortext << endl; // should be 'request successful'
-			cout << ale->errorcode << endl; // should be 7
-			cout << ale->attrlist_Ref->item.m_Array[0]->name << endl; // 'namepair return'
-			cout << ale->attrlist_Ref->item.m_Array[0]->m_list_Ref->item.m_Array[0] << endl; // 'never odd or even'
-		} else {
-			cout << "Deserialized response is NULL" << endl;
-		}
+        printResponse(ale);
 
 		ale = ws->multilist((m_list*)NULL, &al);
-		if(ale) {
-			// Should have an errortext string, an errorcode int and a m_list object returned
-        	cout << ale->errortext << endl; // 'request successful'
-			cout << ale->errorcode << endl; // 007
-			cout << ale->attrlist_Ref->item.m_Array[0]->name << endl; // 'namepair return'
-			cout << ale->attrlist_Ref->item.m_Array[0]->m_list_Ref->item.m_Array[0] << endl; // 'attrlist->m_list-item[0] was NULL'
-		} else {
-			cout << "Deserialized response is NULL" << endl;
-		}
+        printResponse(ale);
 
 		// Have nil elements in response
 		ale = ws->multilistnil((m_list*)NULL, &al);
-		if(ale) {
-			// Should have an errortext string, an errorcode int and a m_list object returned
-        	cout << ale->errortext << endl; // empty
-			cout << ale->errorcode << endl; // 0
-			cout << ale->attrlist_Ref->item.m_Array[0]->name << endl; // empty
-			cout << ale->attrlist_Ref->item.m_Array[0]->m_list_Ref->item.m_Array[0] << endl;  // empty
-		} else {
-			cout << "Deserialized response is NULL" << endl;
-		}
+        printResponse(ale);
 
 		ale = ws->complexlist(&al, "hoohah!", &al);
-		if(ale) {
-			// Should have an errortext string, an errorcode int and a m_list object returned
-        	cout << ale->errortext << endl;
-			cout << ale->errorcode << endl;
-			cout << ale->attrlist_Ref->item.m_Array[0]->name << endl;
-			cout << ale->attrlist_Ref->item.m_Array[0]->m_list_Ref->item.m_Array[0] << endl;
-		} else {
-			cout << "Deserialized response is NULL" << endl;
-		}
+        printResponse(ale);
 
 		delete ws;
 	}
