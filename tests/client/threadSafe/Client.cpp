@@ -28,7 +28,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include <axis/Axis.h>
+#include <axis/Axis.hpp>
 
 using namespace std;
 
