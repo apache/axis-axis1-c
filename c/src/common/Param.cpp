@@ -233,7 +233,7 @@ XSDTYPE Param::GetType() const
 	return m_Type;
 }
 
-int Param::serialize(ISoapSerializer& pSZ)
+int Param::serialize(IWrapperSoapSerializer& pSZ)
 {
 	string ATprefix;
 	switch (m_Type){
