@@ -64,12 +64,14 @@ SoapDeSerializer::SoapDeSerializer()
     #endif
     m_pEnv = NULL;
     m_pHeader = NULL;
+    m_pcFaultDetail = (char*) malloc(sizeof(char) * 100);
 }
 
 SoapDeSerializer::~SoapDeSerializer()
 {
     m_pParser->init();
     if (m_pParser) delete m_pParser;
+    free(m_pcFaultDetail);
 }
 
 int SoapDeSerializer::setInputStream(const Ax_soapstream* pInputStream)
@@ -268,21 +270,26 @@ int SoapDeSerializer::getHeader()
 }
 
 int SoapDeSerializer::getBody()
-{    
+{   
+    AXISTRACE1("came1", INFO); 
     if (!m_pNode) m_pNode = m_pParser->next();
+    AXISTRACE1("came2", INFO); 
     /* previous header searching may have left a node unidentified */
     if (m_pNode) 
     {
+    AXISTRACE1("came3", INFO); 
         if ((START_ELEMENT == m_pNode->m_type) && 
             (0 == strcmp(m_pNode->m_pchNameOrValue, 
             SoapKeywordMapping::map(m_nSoapVersion).pchWords[SKW_BODY])))
         {
+    AXISTRACE1("came4", INFO); 
             /* Set any attributes/namspaces to the SoapBody object */
             m_pNode = NULL; /* This is to indicate that node is identified 
                              * and used */
             return AXIS_SUCCESS;
         }
     }
+    AXISTRACE1("came5", INFO); 
     m_nStatus = AXIS_FAIL;
     return AXIS_FAIL;
 }
@@ -290,20 +297,48 @@ int SoapDeSerializer::getBody()
 int SoapDeSerializer::checkMessageBody(const AxisChar* pName, 
                                        const AxisChar* pNamespace)
 {
+    int iResult;
     /* check and skip the soap body tag */
     if (AXIS_SUCCESS != getBody()) return AXIS_FAIL;    
     if (!m_pNode) m_pNode = m_pParser->next();
     if (!m_pNode || (START_ELEMENT != m_pNode->m_type)) return AXIS_FAIL;
-    if (0 != strcmp(m_pNode->m_pchNameOrValue, pName)) return AXIS_FAIL;
+    AXISTRACE2("pName", pName, INFO);
+    AXISTRACE2("m_pChNameOrValue", m_pNode->m_pchNameOrValue, INFO);
+    //if (0 != strcmp(m_pNode->m_pchNameOrValue, pName)) return AXIS_FAIL;
+    if (0 != strcmp(m_pNode->m_pchNameOrValue, pName))
+    {
+        if(0 != strcmp(m_pNode->m_pchNameOrValue, "Fault"))
+        {
+            m_nStatus = AXIS_FAIL;
+            return AXIS_FAIL;
+        }
+        else//Body contains soap fault
+            iResult = getFault();
+           
+    }
     /* we can check the namespace uri too here. Should we ?*/
     m_pNode = NULL; /*This is to indicate that node is identified and used */
     return AXIS_SUCCESS;
 }
 
-SoapFault* SoapDeSerializer::getFault()
+int SoapDeSerializer::getFault()
 {
     /* TODO : */
-    return NULL;
+    //if (!m_pNode) m_pNode = m_pParser->next();
+    //if (m_pNode)
+    //{
+        AXISTRACE1("SOAP FAULT", INFO);
+        m_pcFaultDetail = "This is a hard coded test error";
+
+        return AXIS_SUCCESS;
+    //}
+
+}
+
+int SoapDeSerializer::getFaultDetail(char** ppcDetail)
+{
+    *ppcDetail = m_pcFaultDetail;
+    //*ppcDetail = "hard coded test message";
 }
 
 int SoapDeSerializer::init()
@@ -1297,23 +1332,23 @@ xsd__boolean SoapDeSerializer::getElementAsBoolean(const AxisChar* pName,
 }
 
 int SoapDeSerializer::getElementAsInt(const AxisChar* pName, 
-                                      const AxisChar* pNamespace)
+                                      const AxisChar* pNamespace, int& iResult)
 {
     int ret = 0;
-    if (AXIS_SUCCESS != m_nStatus) return ret;
+    if (AXIS_SUCCESS != m_nStatus) return AXIS_FAIL;
     if (RPC_ENCODED == m_nStyle)
     {
         m_pNode = m_pParser->next();
         /* wrapper node with type info  Ex: <i xsi:type="xsd:int"> */
-        if (!m_pNode) return ret;
+        if (!m_pNode) return AXIS_FAIL;
         if (XSD_INT == getXSDType(m_pNode))
         {
             m_pNode = m_pParser->next(true); /* charactor node */
             if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
             {
-                ret = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+                iResult = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
                 m_pNode = m_pParser->next(); /* skip end element node too */
-                return ret;
+                return AXIS_SUCCESS;
             }
         }
         else
@@ -1329,20 +1364,20 @@ int SoapDeSerializer::getElementAsInt(const AxisChar* pName,
              */
             m_pNode = m_pParser->next();
             /* wrapper node without type info  Ex: <i> */
-        if (!m_pNode) return ret;
+        if (!m_pNode) return AXIS_FAIL;
         if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
         {
             m_pNode = m_pParser->next(true); /* charactor node */
             if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
             {
-                ret = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
+                iResult = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
                 m_pNode = m_pParser->next(); /* skip end element node too */
                 m_pNode = NULL;
                 /*
                  * this is important in doc/lit style when deserializing 
                  * arrays
                  */
-                return ret;
+                return AXIS_SUCCESS;
             }
             else
             {
@@ -1361,8 +1396,9 @@ int SoapDeSerializer::getElementAsInt(const AxisChar* pName,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    return ret;
+    return AXIS_FAIL;
 }
+
 
 unsigned int SoapDeSerializer::getElementAsUnsignedInt(const AxisChar* pName,
                                                        const AxisChar* 

@@ -18,10 +18,11 @@ public:
 public:
 	virtual ~Calculator();
 public: 
-	int add(int Value0,int Value1);
-	int sub(int Value0,int Value1);
-	int mul(int Value0,int Value1);
-	int div(int Value0,int Value1);
+	int add(int Value0,int Value1, int& iResult);
+	int sub(int Value0,int Value1, int& iResult);
+	int mul(int Value0,int Value1, int& iResult);
+	int div(int Value0,int Value1, int& iResult);
+        int getFaultDetail(char** ppcDetail);
 };
 
 #endif /* !defined(__CALCULATOR_CLIENTSTUB_H__OF_AXIS_INCLUDED_)*/
