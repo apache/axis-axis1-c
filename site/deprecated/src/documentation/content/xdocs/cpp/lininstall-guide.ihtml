@@ -1,287 +1,465 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+                                           
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <title>Axis C++ Linux Installation Guide</title>
+                                                                        
+   
   <style type="text/css">
 
 .command {color: #B20000;
 text-indent: 60pt;
 font-family: helvetica;
-font-weight: bold}</style>
+font-weight: bold}</style>                                  
   <meta name="generator" content="amaya 8.1b, see http://www.w3.org/Amaya/">
 </head>
-
-<body>
+  <body>
+                     
 <h1>Installing and deploying web applications using xml-AxisC++</h1>
-
+                      
 <p></p>
-
+                      
 <h1>Contents</h1>
+                     
 <ul>
-  <li><a href="#Introducti">Introduction</a></li>
-  <li><a href="#What">What You Need</a></li>
-  <li><a href="#Installati">Installing On Linux</a></li>
-  <li><a href="#Installing">Installing expat</a></li>
-  <li><a href="#Installing1">Installing Apache</a></li>
-  <li><a href="#Installing2">Installing AxisC++</a></li>
-  <li><a href="#Validating">Validating The Installation</a></li>
+             <li><a href="#Introducti">Introduction</a>
+          </li>
+             <li><a href="#What">What You Need</a>
+          </li>
+             <li><a href="#Installati">Installing On Linux</a>
+          </li>
+             <li><a href="#Installing">Installing expat</a>
+          </li>
+          <li><a href="#Xercesc">Installing Xerces-c</a>
+            <br>
+          </li>
+             <li><a href="#Installing1">Installing Apache</a>
+          </li>
+             <li><a href="#Installing2">Installing AxisC++</a>
+          </li>
+             <li><a href="#Validating">Validating The Installation</a>
+          </li>
+                     
 </ul>
-<p><a name="Introducti"></a></p>
+                     
+<p><a name="Introducti"></a>
+        </p>
+                     
 <h1>Introduction</h1>
-
-<p>This document describes how to install Apache Axis C++. It assumes you
-already know how to write and run C++/C code and not scared away by XML. You
-should also have familiarity with Web servers. This version of Axis C++ is
-tested on Apache web server.</p>
-
-<p>For more details on using Axis C++, please see the <a
-href="linuser-guide.html">user guide</a>.This will instruct you how to
-install Axis C++ on Linux and Windows</p>
-
-<p></p>
-<p><a name="What"></a></p>
+                      
+<p>This document describes how to install Apache Axis C++. It assumes you 
+     already know how to write and run C++/C code and not scared away by XML.
+    You should also have familiarity with Web servers. This version of Axis
+  C++  is tested on Apache web server.</p>
+                      
+<p><a name="What"></a>
+        </p>
+                     
 <h1>What You need</h1>
-
-<p>It needs a few helper libraries, for logging, WSDL processing and
-introspection. You need to have following in order to run Axis C++ engine.</p>
+                      
+<p>It needs a few helper libraries, for logging, WSDL processing and introspection.
+     You need to have following in order to run Axis C++ engine.</p>
+                     
 <ul>
-  <li>expat parser</li>
-  <li>Apache</li>
+                         <li>Apache &nbsp; &nbsp; &nbsp;1.3 or 2</li>
+   <li>expat (if use expat parser)</li>
+         <li>Xerces-c (if use xerces parser)</li>
+                             
 </ul>
-
+                      
 <p></p>
-<p><a name="Installati"></a></p>
+                     
+<p><a name="Installati"></a>
+        </p>
+                     
 <h1>Installation On Linux</h1>
-
+                      
 <p>We tested with the following</p>
+                     
 <ul>
-  <li>Redhat Linux 8.0(2.4.18-14) RedhatLinux9.0(2.4.20-8), Mandrake8.0(2.4.8-26)</li>
-  <li>Apache 1.3 [apache_1.3.27.tar .gz, apache_1.3.28.tar.gz)] (Source), Apache2.0 (source)</li>
-  <li>expat [expat-1.95.7.tar.gz](Source) &gt;(Source)</li>
+             <li>Redhat Linux 8.0(2.4.18-14) RedhatLinux9.0(2.4.20-8), Dabian(2.6.3-1-686)(unstable)</li>
+             <li>Apache 1.3 [apache_1.3.27.tar .gz, apache_1.3.28.tar.gz)]
+ (Source),     Apache2.0 (source)</li>
+             <li>expat [expat-1.95.7.tar.gz](Source)&nbsp;</li>
+                     
 </ul>
-
+ &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<b> Note</b> : To test on debian you 
+had to update followings with the mentioned versions. 
+<ul>
+   <li>autoconf &nbsp; &nbsp;2.57, automake &nbsp;1.6.3, libtool 1.4.3</li>
+ 
+</ul>
+  <br>
+                      
 <p></p>
-
-<p><b>Downloading the source or binary from the mirror site and setting the
-environment variables</b></p>
-
-<p>You can download the Axis C++ source or binary from one of the apache
-mirror sites<a href="http://ws.apache.org/axis/cpp/download.html">http://ws.apache.org/axis/cpp/download.html</a></p>
-
+                      
+<p><b>Downloading the source or binary from the mirror site and setting the 
+     environment variables</b></p>
+                      
+<p>You can download the Axis C++ source or binary from one of the apache mirror
+sites<a href="http://ws.apache.org/axis/cpp/download.html"> http://ws.apache.org/axis/cpp/download.html</a>
+        </p>
+                      
 <p></p>
-
-<p>Your downloaded distribution is axis-c-src-1_0-linux.tar.gz. After you
-extracting it for example as,
-<strong>/home/axisuser/projects/axis-c-src-1_0-linux</strong> you can
-rename it as <strong>axis_c</strong></p>
-
+                      
+<p>Your downloaded distribution is axis-c-src-1_1-linux.tar.gz. After you 
+     extracting it for example as, <strong>/home/axisuser/projects/axis-c-src-1_1-linux</strong>
+          you can rename it as <strong>axis_c</strong></p>
+                      
 <p></p>
-
-<p>You have to set the environment variable $AXISCPP_HOME to the directory where you extracted the tar ball.. We further assume that the user dose the
-installation and has the linux user account axisuser. For example I have my
-&lt;AXISCPP_HOME&gt; as following.</p>
-
+                      
+<p>You have to set the environment variable $AXISCPP_HOME to the directory
+     where you extracted the tar ball.. We further assume that the user dose
+   the  installation and has the linux user account axisuser. For example
+I  have  my &lt;AXISCPP_HOME&gt; as following.</p>
+                      
 <p>/home/axisuser/projects</p>
-<p><a name="Installing"></a></p>
+                     
+<p><a name="Installing"></a>
+        </p>
+                     
 <h1>Installing expat</h1>
-
-<p>You can get expat from
-the uri <a href="http://sourceforge.net/projects/expat/">http://sourceforge.net/projects/expat/</a></p>
-
+                      
+<p>You can get expat from the uri <a href="http://sourceforge.net/projects/expat/">
+        http://sourceforge.net/projects/expat/</a>
+        </p>
+                      
 <p></p>
-
-<p>You have to follow the expat installation guide to install it </p>
-
-<p></p>
-<p><a name="Installing1"></a></p>
+                      
+<p>You have to follow the expat installation guide to install it</p>
+               
+<p><a name="Xercesc"></a></p>
+               
+<h1><b>Installing Xerces-c</b></h1>
+        <p>You can get expat from the uri <a href="http://www.xml.apache.org/xerces-c/download.cgi">
+        http://www.xml.apache.org/xerces-c/download.cgi</a>
+        <br>
+        <br>
+        You have to follow the the expat installation giude to install it.<br>
+        <br>
+</p>               
+<p><a name="Installing1"></a>
+        </p>
+                     
 <h1>Installing Apache</h1>
-
-<p>Get the apache downloadable software. (We used the source
-apache_1.3.27.tar.gz). Build it with sharable module support.</p>
-
+                      
+<p>Get the apache downloadable software. (We used the source apache_1.3.27.tar.gz).
+     Build it with sharable module support.</p>
+                      
 <p><strong>$ ./configure --enable-module=so</strong></p>
-
+                      
 <p>Note:- Here "so" is simple letters</p>
-
+                      
 <p></p>
-
+                      
 <p><strong>$ make</strong></p>
-
+                      
 <p><strong>$ make install</strong></p>
-
+                      
 <p></p>
-
+                      
 <p>Starting the Apache server</p>
-
+                      
 <p></p>
-
+                      
 <p><strong>$ usr/local/apache/bin/apachectl start</strong></p>
-
+                      
 <p class="command"><span class="command"></span></p>
-
+                      
 <p>Stopping the Apache Server</p>
-
+                      
 <p></p>
-
+                      
 <p><strong>$ usr/local/apache/bin/apachectl stop</strong></p>
-<p><a name="Installing2"></a></p>
+                     
+<p><a name="Installing2"></a>
+        </p>
+                     
 <h1>Installing Axis C++</h1>
-
+<br>
+<b>If you downloaded the source distribution</b><br>
+                      
 <p>Create an environment variable called AXISCPP_HOME.</p>
-
+                      
 <p><strong>$ cd /home/axisuser</strong></p>
-
+                      
 <p class="command"><span class="command"></span></p>
-
+                      
 <p><strong>[axisuser@localhost axisuser]$ vi ./.bash_profile</strong></p>
-
+                      
 <p></p>
-
+                      
 <p><strong>AXISCPP_HOME="/home/axisuser/projects/axis_c"</strong></p>
-
+                      
 <p></p>
-
+                      
 <p><strong>export AXISCPP_HOME</strong></p>
-
+                      
 <p class="command"><span class="command"></span></p>
-
+                      
 <p>Save it and back in the terminal window.</p>
-
+                      
 <p><strong>$ source ~/.bash_profile</strong></p>
-
+                      
 <p class="command"><span class="command"></span></p>
-
+                      
 <p>Verify the above change had been correctly effected by typing</p>
-
+                      
 <p></p>
-
+                      
 <p><strong>$ echo $AXISCPP_HOME</strong></p>
-
+                      
 <p class="command"><span class="command"></span></p>
-
-<p>Copy expat.h include file</p>
-
-<p><strong>$ cp -f &lt;expat  instdirectory&gt;/include/expat.h/*
-$AXISCPP_HOME /include/expat/</strong></p>
-
-<p>Copy the expat libraries</p>
-
-<p><strong>$ cp -f &lt;expatinstdirectory&gt;/lib/* /usr/lib/</strong></p>
-
+                      
+<p><strong></strong></p>
+                      
 <p class="command"><span class="command"></span></p>
-
+                      
 <p>Copy apache include files</p>
-
-<p><strong>$ cp -f &lt;apacheinstdirectory&gt;/include/*
-$AXISCPP_HOME/include/apache1_3/</strong></p>
-
+                      
+<p><strong>$ cp -f &lt;apacheinstdirectory&gt;/include/* $AXISCPP_HOME/include/apache1_3/</strong></p>
+    <p>Copy the expat include files</p>
+<p><strong>$ cp -f &lt;expatinstdirectory&gt;/include/expat.h $AXISCPP_HOME/include/expat/</strong></p>
+                      
 <p class="command"><span class="command"></span></p>
-
+                      
 <p><strong>$ cd $AXISCPP_HOME</strong></p>
+               
+<p>The Folder called deploy in the $AXISCPP_HOME/ should be copied to apache
+   root folder .Rename the deploy folder as "Axis" . Give all permissions
+to   this folder.<br>
+      <br>
+      <br>
+      <b>$ cp -rf $AXISCPP_HOME/deploy&nbsp; /usr/local/apache</b><br>
+      <br>
+      <b>$ cd /usr/local/apache</b><br>
+      <br>
+      <b>$ mv deploy Axis</b><br>
+      <br>
+      <b>$ chmod -R 777 Axis</b><br>
+      <br>
+      <br>
+      Now set the environment variable <b>AXIS_HOME </b>pointing to this
+directory.<br>
+      <br>
+      <b>AXIS_HOME="/usr/local/apache/Axis"</b>
+      <br></p>
+      <p>If you are using expat parser do the following<br></p>
+                
+<p>set<b> EXPAT_HOME</b>="&lt;Your expat installation root folder&gt;"</p>
+        <p>set<b> LD_LIBRARY_PATH="$EXPAT_HOME/lib:AXISCPP_HOME/bin"</b> (do 
+this   in your .bash_profile)<br>
+        <br>
+        <br>
+        <b>cd $AXISCPP_HOME/src/soap </b><br>
+        <br>
+         <b>cp -f Makefile.am_expat Makefile.am<br></b><br>
+	<b>cd $AXISCPP_HOME/src/wsdd<br></b>
+        <br>
+         <b>cp -f Makefile.am_expat Makefile.am</b>    
+	</p>
 
-<p class="command"><span class="command"></span></p>
-
+        <p>If you are using Xerces-c parser do the following</p>
+        
+<p>set<b> XERCES_HOME</b>="&lt;Your xercesc installation root folder&gt;"</p>
+               
+<p>set<b> LD_LIBRARY_PATH="$XERCESC_HOME/lib"</b> (do this in your .bash_profile)<br>
+        <br>
+        <b>cp -rf $XERCESC_HOME/include/xercesc/* $AXISCPP_HOME/include/xercesc/</b><br>
+        <br>
+        <b>cd $AXISCPP_HOME/src/soap</b><br>
+        <b>cp -f Makefile.am_xercesc Makefile.am</b><br><br>
+        <b>cd $AXISCPP_HOME/src/wsdd</b><br>
+        <b>cp -f Makefile.am_xercesc Makefile.am</b></p>
+     
+<p>     in $AXISCPP_HOME/configure.ac comment expat related things and uncomment xercesc related 
+        things as described in it.
+        <br><br>
+      <b>for samples</b>
+         <br><br> 
+</p>
+<p>       in $AXISCPP_HOME/samples/client/configure.ac            
+  comment expat related things and uncomment xercesc related<br>
+        things as described in it.<br>
+        <br>
+        </p>
+                      
 <p>To Build from the Axis C++ source execute these.</p>
-
-<p></p>
-
+ 
+<p><b>$cd $AXISCPP_HOME/</b><br>
+ </p>
+                      
+                      
 <p><strong>$ sh autogen.sh</strong></p>
-
+                      
 <p><strong>$ sh runconfig</strong></p>
-
+                      
 <p><strong>$ make</strong></p>
-
-<p><strong>$ make install</strong></p>
-<p>
-<p>
------------------------------------------------------------------------
-</p>
-<strong>NOTE: </strong>If you use apache2.0 following two small changes has to be done in $AXISCPP_HOME/configure.ac and $AXISCPP_HOME/src/server/Makefile.am)
-</p>
-<p>
-in $AXISCPP_HOME/configure.ac
-</p>
-<p>
-comment
-</p>
-<p>
-<strong>
-AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/engine/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile src/server/Makefile src/server/apache/Makefile)
-</strong>
-</p>
-<p>
-and uncomment
-</p>
-<p>
-<strong>
-#AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/engine/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile src/server/Makefile src/server/apache2/Makefile)
-</strong>
-</p>
-<p>
-in $AXISCPP_HOME/src/server/Makefile.am
-</p>
-<p>
-change
-SUBDIRS = apache
-to
-SUBDIRS = apache2
-</p>
-<p>
------------------------------------------------------------------
-</p>
-
-<p>Now libaxiscpp_mod.so (If you built for apache2 this is libaxiscpp_mod2.so) should have been created in $AXISCPP_HOME/bin directory. Note:- you can give the install path inside the runconfigure
-script.</p>
-
-<p></p>
-
-<p>Now you need to edit /usr/local/apache/conf/httpd.conf</p>
-
+                      
+<p><strong>$ make install<br>
+          </strong></p>
+                   
+<p><b>OR</b>
+          Run the build.sh as follows<br>
+          <br>
+          <b>sh build.sh</b><br>
+   <br></p>
+<p>libaxiscpp_mod.so (If you built for apache2 this is libaxiscpp_mod2.so)
+     should have been created in $AXISCPP_HOME/bin directory. Note:- you
+can    give  the install path inside the runconfigure script.</p>
+<p>         Now there is no need to seperately build client side and server
+  side.   When execute build.sh it will lookafter everything.<br>
+  ----------------------------------------------------------------------- 
+     </p>
+<p> <strong>NOTE: </strong>If you use apache2.0 following two small changes
+    has to be done in $AXISCPP_HOME/configure.ac and $AXISCPP_HOME/src/server/Makefile.am) </p>
+              
+<p> in $AXISCPP_HOME/configure.ac </p>
+ 
+<p> comment </p>
+ 
+<p><strong> AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/engine/Makefile
+     src/soap/Makefile src/wsdd/Makefile src/xml/Makefile src/server/Makefile
+    src/server/apache/Makefile) </strong></p>
+ 
+<p> and uncomment </p>
+ 
+<p><strong> #AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/engine/Makefile
+     src/soap/Makefile src/wsdd/Makefile src/xml/Makefile src/server/Makefile
+    src/server/apache2/Makefile) </strong></p>
+ 
+<p> in $AXISCPP_HOME/src/server/Makefile.am </p>
+<p>  change SUBDIRS = apache to SUBDIRS = apache2<br>
+ ------------------------------------------------------------------------------<br>
+ <br>
+   <br>
+   Then to deploy it on apache<br>
+<br> </p>
+<p>First you need to edit /usr/local/apache/conf/httpd.conf</p>
 <p><strong>$ vi /usr/local/apache/conf/httpd.conf</strong></p>
-
-<p class="command"><span class="command"></span></p>
-
-<p>At the bottom of the file you have to include following lines and save
-it.</p>
-
-<p></p>
-
-<p><strong>LoadModule axis_module libexec/libaxiscpp_mod.so (in apache2 replace libexec with modules and libaxiscpp_mod.so with libaxiscpp_mod2.so)</strong></p>
-
+<p>At the bottom of the file you have to include following lines and save 
+     it.</p>
+<p><strong>LoadModule axis_module libexec/libaxiscpp_mod.so (in apache2 replace
+     libexec with modules and libaxiscpp_mod.so with libaxiscpp_mod2.so)</strong></p>
 <p><strong>&lt;Location /axis&gt;</strong></p>
-
 <p><strong>SetHandler axis</strong></p>
-
 <p><strong>&lt;/Location&gt;</strong></p>
-
+<br>
+   
+<p><b>cd /usr/local/apache/libexec (If apache2 /usr/local/apache2/modules)</b></p>
+ 
+<p><b>cp -f $AXIS_HOME/deploy.sh_apache &nbsp;./deploy.sh<br>
+ </b></p>
+   
+<p><b>sh deploy.sh</b></p>
+<p></p>
+<br>
+<p>deploy.sh is a script which copies files to neccessary places and start apache.<br></p>
+                                                         
+<p> -----------------------------------------------------------------</p>
+<p><br>
+<b>If you downloaded the binary distribution</b><br>
+</p>
+<p>Create an environment variable called AXISCPP_HOME.</p>
+<p><strong>$ cd /home/axisuser</strong></p>
+<p><strong>[axisuser@localhost axisuser]$ vi ./.bash_profile</strong></p>
+<p><strong>AXISCPP_HOME="/home/axisuser/projects/axis_c"</strong></p>
+<p><strong>export AXISCPP_HOME</strong></p>
+<p>Save it and back in the terminal window.</p>
+<p><strong>$ source ~/.bash_profile</strong></p>
+<p>Verify the above change had been correctly effected by typing</p>
+<p><strong>$ echo $AXISCPP_HOME</strong></p>
+<p><strong>$ cd $AXISCPP_HOME</strong></p>
+<p>The Folder called deploy in the $AXISCPP_HOME/ should be copied to apache
+   root folder .Rename the deploy folder as "Axis" . Give all permissions
+to   this folder.<br>
+<br>
+<br>
+<b>$ cp -rf $AXISCPP_HOME/deploy&nbsp; /usr/local/apache</b><br>
+<br>
+<b>$ cd /usr/local/apache</b><br>
+<br>
+<b>$ mv deploy Axis</b><br>
+<br>
+<b>$ chmod -R 777 Axis</b><br>
+<br>
+<br>
+      Now set the environment variable <b>AXIS_HOME </b>pointing to this
+directory.<br>
+<br>
+<b>AXIS_HOME="/usr/local/apache/Axis"</b></p>
+<p><br>
+----------------------------------------------------------------------- 
+    </p>
+<p><b>NOTE:&nbsp;</b> Binary distribution is built to work with expat
+parser. If you need xerces parser you need to build<br>
+from the source.               <br>
+ ------------------------------------------------------------------------------<br>
+<br>
+<br>
+   Then to deploy it on apache<br>
+<br> </p>
+<p>First you need to edit /usr/local/apache/conf/httpd.conf</p>
+<p><strong>$ vi /usr/local/apache/conf/httpd.conf</strong></p>
+<p>At the bottom of the file you have to include following lines and save 
+     it.</p>
+<p><strong>LoadModule axis_module libexec/libaxiscpp_mod.so (in apache2 replace
+     libexec with modules and libaxiscpp_mod.so with libaxiscpp_mod2.so)</strong></p>
+<p><strong>&lt;Location /axis&gt;</strong></p>
+<p><strong>SetHandler axis</strong></p>
+<p><strong>&lt;/Location&gt;</strong></p>
+<br>
+<p><b>cd /usr/local/apache/libexec (If apache2 /usr/local/apache2/modules)</b></p>
+<p><b>cp -f $AXIS_HOME/deploy.sh_apache &nbsp;./deploy.sh<br>
+</b></p>
+<p><b>sh deploy.sh</b></p>
+<br>
+<p> deploy.sh is a script which copies files to neccessary places and start
+apache.<br>
+<br><p>
+<p><br>
+ </p>
+                      
+<p></p>
+                      
+<p></p>
+                      
+<p><strong></strong></p>
+                      
 <p class="command"><span class="command"></span></p>
-
-<p>Copy $AXISCPP_HOME/bin/libaxiscpp_mod.so into
-/usr/local/Apache/libexec/ (in apache2 replace libexec with modules and libaxiscpp_mod.so with libaxiscpp_mod2.so)</p>
-
-<p><strong>$cp -f $AXISCPP_HOME/bin/libaxiscpp_mod.so
-/usr/local/apache/libexec (in apache2 replace
-libexec with modules and libaxiscpp_mod.so with libaxiscpp_mod2.so)</strong></p>
-
+                      
+<p><strong></strong></p>
+                      
 <p class="command"><span class="command"></span></p>
-
-<p>Restart apache</p>
-<p><a name="Validating"></a></p>
+                      
+<p></p>
+                     
+<p><a name="Validating"></a>
+        </p>
+                     
 <h1>Validating The Installation</h1>
-
-<p>If you have done installation successfully it will display the Axis C++
-welcome page when you point to URI <a
-href="http://localhost/axis">http://localhost/axis</a>.</p>
-
+                      
+<p>If you have done installation successfully it will display the Axis C++ 
+     welcome page when you point to URI <a href="http://localhost/axis">http://localhost/axis</a>
+        .<br>
+Note: In the axis welcome page all the services in $AXIS_HOME/conf/server.wsdd
+are listed. This does not mean<br>
+that the libraries corresponding to these services are deployed yet. It merely
+list whatever in the server.wsdd.<br>
+</p>
+                      
 <p></p>
-
-<p><b>Deploying a Web Service Using InteropBase.wsdl</b></p>
-
-<p>You can deploy your own web service or the sample webservices with the
-guidance in the <a href="linuser-guide.html">userguide</a></p>
-
+                      
+<p><b>Deploying a Web Service</b></p>
+                      
+<p>You can deploy your own web service or the sample webservices with the 
+     guidance in the <a href="linuser-guide.html">userguide</a>
+        </p>
+                      
 <p></p>
-
-<p>WSDL2Ws tool must run on a jvm.</p>
+                             <br>
+          <br>
+                 
 </body>
 </html>
