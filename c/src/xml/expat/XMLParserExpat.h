@@ -32,6 +32,7 @@
 #include <axis/server/AnyElement.h>
 #include "../Event.h"
 #include <axis/server/XMLParser.h>
+#include <axis/AxisParseException.h>
 
 #include <queue>
 #include <map>

@@ -23,6 +23,7 @@
 #include "Packet.h"
 #include "WSDDDefines.h"
 #include "SoapEnvVersions.h"
+#include <axis/AxisSoapException.h>
 
 class SoapEnvelope;
 class SoapHeader;

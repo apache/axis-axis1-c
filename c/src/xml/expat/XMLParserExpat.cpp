@@ -155,6 +155,8 @@ const AnyElement* XMLParserExpat::next(bool isCharData)
         delete m_pLastEvent;
         m_pLastEvent = NULL;
     }
+    try
+    {
     do
     {
         if (m_Events.empty())
@@ -238,12 +240,27 @@ const AnyElement* XMLParserExpat::next(bool isCharData)
         }
     } while (TRANSPORT_FAILED != nStatus);
     return NULL;
+    }
+    catch(AxisParseException& e)
+    {
+        throw;
+    }
+    catch(AxisException& e)
+    {
+        throw;
+    }
+    catch(...)
+    {
+        throw;
+    }
 }
 
 int XMLParserExpat::parseNext()
 {
     int nChars = EXPAT_BUFFER_SIZE;
     AXIS_TRANSPORT_STATUS iTransportStatus;
+    try
+    {
 	m_pCurrentBuffer = (char*) XML_GetBuffer(m_Parser, EXPAT_BUFFER_SIZE);
 	if (m_pCurrentBuffer)
 	{
@@ -255,7 +272,21 @@ int XMLParserExpat::parseNext()
 		}
 		if (TRANSPORT_FAILED == iTransportStatus) XML_ParseBuffer(m_Parser, 0, true);
 	}
+        else throw AxisParseException(SERVER_PARSE_BUFFER_EMPTY);
     /* end of parsing */
+    }
+    catch(AxisParseException& e)
+    {
+        throw;
+    }
+    catch(AxisException& e)
+    {
+        throw;
+    }
+    catch(...)
+    {
+        throw;
+    }
     return iTransportStatus;
 }
 
