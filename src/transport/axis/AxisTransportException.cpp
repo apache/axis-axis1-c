@@ -32,18 +32,24 @@ AxisTransportException::AxisTransportException()
     processException(SERVER_TRANSPORT_EXCEPTION);
 }
 
-AxisTransportException::AxisTransportException (int iExceptionCode)
+AxisTransportException::AxisTransportException (const int iExceptionCode)
 {
     m_iExceptionCode = iExceptionCode;
     processException (iExceptionCode);
 }
 
-AxisTransportException::AxisTransportException (exception* e)
+AxisTransportException::AxisTransportException(const int iExceptionCode, const char* pcMessage)
+{
+    m_iExceptionCode = iExceptionCode;
+    processException(iExceptionCode, pcMessage);
+}
+
+AxisTransportException::AxisTransportException (const exception* e)
 {
     processException (e);
 }
 
-AxisTransportException::AxisTransportException (exception* e, int iExceptionCode)
+AxisTransportException::AxisTransportException (const exception* e, const int iExceptionCode)
 {
     processException (e, iExceptionCode);
 }
@@ -53,29 +59,35 @@ AxisTransportException::~AxisTransportException() throw ()
 
 }
 
-void AxisTransportException::processException (exception* e, int iExceptionCode)
+void AxisTransportException::processException (const exception* e, const int iExceptionCode)
 {
-    m_sMessage = getMessage (e) + getMessage (iExceptionCode);
+    m_sMessage = getMessage (e) + " " + getMessage (iExceptionCode);
 }
 
-void AxisTransportException::processException (exception* e)
+void AxisTransportException::processException (const exception* e)
 {
     m_sMessage = getMessage (e);
 }
 
-void AxisTransportException::processException(int iExceptionCode)
+void AxisTransportException::processException(const int iExceptionCode)
 {
     m_sMessage = getMessage (iExceptionCode);
 }
 
-const string AxisTransportException::getMessage (exception* objException)
+void AxisTransportException::processException(const int iExceptionCode, const char* pcMessage)
+{
+    AxisString sMessage = strdup(pcMessage);
+    m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
+    delete pcMessage;
+}
+const string AxisTransportException::getMessage (const exception* objException)
 {
     m_sMessage = objException->what();
 
     return m_sMessage;
 }
 
-const string AxisTransportException::getMessage (int iExceptionCode)
+const string AxisTransportException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {
