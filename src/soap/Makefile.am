@@ -2,6 +2,7 @@ noinst_LTLIBRARIES = libsoap.la
 
 AM_CPPFLAGS = $(CPPFLAGS)
 libsoap_la_SOURCES = Attribute.cpp \
+        Namespace.cpp \
         BasicNode.cpp \
         CharacterElement.cpp \
         ComplexElement.cpp \
