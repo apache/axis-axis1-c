@@ -346,7 +346,7 @@ public class WrapWriter extends CFileWriter{
 			else{
 				//complex type
 				outparamTypeName = returntype.getLangName();//need to have complex type name without *
-				writer.write("\treturn SZ._functions->AddOutputCmplxParam(SZ._object, ret, (void*)Axis_Serialize_"+outparamTypeName+", (void*)Axis_Delete_"+outparamTypeName+", \""+methodName+"Return\", 0);\n");
+				writer.write("\treturn SZ._functions->AddOutputCmplxParam(SZ._object, ret, (void*)Axis_Serialize_"+outparamTypeName+", (void*)Axis_Delete_"+outparamTypeName+", \""+methodName+"Return\", Axis_URI_"+outparamTypeName+");\n");
 			}
 		}else if (isAllTreatedAsOutParams){
 			writer.write("\t" + methodName + "(");
