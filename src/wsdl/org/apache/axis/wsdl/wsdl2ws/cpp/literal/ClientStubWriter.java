@@ -927,7 +927,7 @@ public class ClientStubWriter
             "\t\tif(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)\n");
         writer.write("\t\t{\n");
         writer.write("\t\t\tm_pCall->unInitialize();\n");
-        writer.write("\t\t\tthrow SoapFaultException(e);\n");
+        writer.write("\t\t\tthrow;\n");
         writer.write("\t\t}\n");
         writer.write(
             "\t\tISoapFault* pSoapFault = (ISoapFault*)\n");

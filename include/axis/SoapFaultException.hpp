@@ -44,7 +44,7 @@ public:
 	SoapFaultException();
 	SoapFaultException(AxisChar *code, AxisChar *string, AxisChar *actor, int exceptionCode);
 	SoapFaultException(AxisException& ae);
-	virtual ~SoapFaultException();
+	virtual ~SoapFaultException() throw();
 
 	virtual const AxisChar *getFaultCode() const;
 	virtual const AxisChar *getFaultString() const;

@@ -57,7 +57,7 @@ SoapFaultException::SoapFaultException(AxisException& ae)
 	m_actor = NULL;
 }
 
-SoapFaultException::~SoapFaultException()
+SoapFaultException::~SoapFaultException() throw()
 {
 	if (NULL != m_code) delete [] m_code;
 	if (NULL != m_string) delete [] m_string;
