@@ -69,9 +69,9 @@ public class ParameterInfo {
                 // is made to make sure after replacinf ANON_TOKEN it is still not a keyword
                 attribName = TypeMap.resolveWSDL2LanguageNameClashes(attribName, WrapperConstants.LANGUAGE_CPP);
 
-		if (isReference())
+		/*if (isReference())
 			result = attribName + "_Ref";
-		else
+		else*/
 			result = attribName;
 		return result;	        
     }
