@@ -158,9 +158,8 @@ wrappers.
 
 <br>
 <br>
-Java -classpath %classpath%;.\wsdl2ws.jar
-org.apache.axis.wsdl.wsdl2ws.WSDL2Ws Calculator.wsdl -o./ServerOut -lc++
--sserver
+java -classpath .\wsdl2ws.jar;.;%CLASSPATH% org.apache.axis.wsdl.wsdl2ws.WSDL2Ws
+Calculator.wsdl -o./ServerOut -lc++ -sserver 
 
 <br>
 <br>
@@ -171,12 +170,12 @@ generated. The skeletons and wrappers will be generated in
 Run the following command to generate the client stubs.
 <br>
 <br>
-Java -classpath %classpath%;.\wsdl2ws.jar
-org.apache.axis.wsdl.wsdl2ws.WSDL2Ws Calculator.wsdl -o./ClientOut -lc++
--sclient
+java -classpath .\wsdl2ws.jar;.;%CLASSPATH% org.apache.axis.wsdl.wsdl2ws.WSDL2Ws
+Calculator.wsdl -o./ClientOut -lc++ -sclient <br>
 <br>
-<br>
-The generated client stubs will be in [WSDL2WS_FOLDER]\ClientOut</p>
+The generated client stubs will be in [WSDL2WS_FOLDER]\ClientOut <br> <br>
+<b>Note:</b>More details on WSDL2Ws Tool can be found by clicking on the following link <a href="arch/WSDL2Ws.html">WSDL2Ws Tool</a>
+</p>
 
 
 <p><a name="deploy"></a></p>
