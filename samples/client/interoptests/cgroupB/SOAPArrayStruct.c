@@ -23,10 +23,10 @@ int Axis_Serialize_SOAPArrayStruct(SOAPArrayStruct* param, IWrapperSoapSerialize
 		pSZ->_functions->serializeStartElementOfType(pSZ->_object, Axis_TypeName_SOAPArrayStruct, Axis_URI_SOAPArrayStruct, sPrefix);
 	}
 
-	pSZ->_functions->serializeAsElement(pSZ->_object, "SOAPArrayStruct_varString", (void*)&(param->SOAPArrayStruct_varString), XSD_STRING);
-	pSZ->_functions->serializeAsElement(pSZ->_object, "SOAPArrayStruct_varInt", (void*)&(param->SOAPArrayStruct_varInt), XSD_INT);
-	pSZ->_functions->serializeAsElement(pSZ->_object, "SOAPArrayStruct_varFloat", (void*)&(param->SOAPArrayStruct_varFloat), XSD_FLOAT);
-	pSZ->_functions->serializeBasicArray(pSZ->_object, (Axis_Array*)(&param->SOAPArrayStruct_varArray),XSD_STRING, "SOAPArrayStruct_varArray");
+	pSZ->_functions->serializeAsElement(pSZ->_object, "varString", (void*)&(param->varString), XSD_STRING);
+	pSZ->_functions->serializeAsElement(pSZ->_object, "varInt", (void*)&(param->varInt), XSD_INT);
+	pSZ->_functions->serializeAsElement(pSZ->_object, "varFloat", (void*)&(param->varFloat), XSD_FLOAT);
+	pSZ->_functions->serializeBasicArray(pSZ->_object, (Axis_Array*)(&param->varArray),XSD_STRING, "varArray");
 
 	pSZ->_functions->serializeEndElementOfType(pSZ->_object, Axis_TypeName_SOAPArrayStruct);
 	return AXIS_SUCCESS;
@@ -38,11 +38,11 @@ int Axis_Serialize_SOAPArrayStruct(SOAPArrayStruct* param, IWrapperSoapSerialize
 int Axis_DeSerialize_SOAPArrayStruct(SOAPArrayStruct* param, IWrapperSoapDeSerializer* pDZ)
 {
 	Axis_Array array;
-	param->SOAPArrayStruct_varString = pDZ->_functions->getElementAsString(pDZ->_object,0,0);
-	param->SOAPArrayStruct_varInt = pDZ->_functions->getElementAsInt(pDZ->_object,0,0);
-	param->SOAPArrayStruct_varFloat = pDZ->_functions->getElementAsFloat(pDZ->_object,0,0);
+	param->varString = pDZ->_functions->getElementAsString(pDZ->_object,0,0);
+	param->varInt = pDZ->_functions->getElementAsInt(pDZ->_object,0,0);
+	param->varFloat = pDZ->_functions->getElementAsFloat(pDZ->_object,0,0);
 	array = pDZ->_functions->getBasicArray(pDZ->_object, XSD_STRING,0,0);
-	memcpy(&(param->SOAPArrayStruct_varArray), &array, sizeof(Axis_Array));
+	memcpy(&(param->varArray), &array, sizeof(Axis_Array));
 	return pDZ->_functions->getStatus(pDZ->_object);
 }
 void* Axis_Create_SOAPArrayStruct(SOAPArrayStruct* pObj, bool bArray, int nSize)
@@ -61,8 +61,8 @@ void* Axis_Create_SOAPArrayStruct(SOAPArrayStruct* pObj, bool bArray, int nSize)
 		memset(pObj, 0, sizeof(SOAPArrayStruct));
 
 		pTemp = pObj;
-		pTemp->SOAPArrayStruct_varArray.m_Array = 0;
-		pTemp->SOAPArrayStruct_varArray.m_Size = 0;
+		pTemp->varArray.m_Array = 0;
+		pTemp->varArray.m_Size = 0;
 	}
 	return pObj;
 }
@@ -79,8 +79,8 @@ void Axis_Delete_SOAPArrayStruct(SOAPArrayStruct* param, bool bArray, int nSize)
 		pTemp = param;
 		for (x=0; x<nSize; x++)
 		{
-			if(pTemp->SOAPArrayStruct_varString) free(pTemp->SOAPArrayStruct_varString);
-			if (pTemp->SOAPArrayStruct_varArray.m_Array) free(pTemp->SOAPArrayStruct_varArray.m_Array);
+			if(pTemp->varString) free(pTemp->varString);
+			if (pTemp->varArray.m_Array) free(pTemp->varArray.m_Array);
 			pTemp++;
 		}
 		free(param);
@@ -88,8 +88,8 @@ void Axis_Delete_SOAPArrayStruct(SOAPArrayStruct* param, bool bArray, int nSize)
 	else
 	{
 		/*delete any pointer members or array members of this struct here*/
-		if(param->SOAPArrayStruct_varString) free(param->SOAPArrayStruct_varString);
-		if (param->SOAPArrayStruct_varArray.m_Array) free(param->SOAPArrayStruct_varArray.m_Array);
+		if(param->varString) free(param->varString);
+		if (param->varArray.m_Array) free(param->varArray.m_Array);
 		free(param);
 	}
 }

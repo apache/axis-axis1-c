@@ -30,10 +30,10 @@ int Axis_Serialize_SOAPStructStruct(SOAPStructStruct* param, IWrapperSoapSeriali
 			Axis_URI_SOAPStructStruct, "\">", NULL);
 	}
 
-	pSZ->serializeAsElement("SOAPStructStruct_varString", (void*)&(param->SOAPStructStruct_varString), XSD_STRING);
-	pSZ->serializeAsElement("SOAPStructStruct_varInt", (void*)&(param->SOAPStructStruct_varInt), XSD_INT);
-	pSZ->serializeAsElement("SOAPStructStruct_varFloat", (void*)&(param->SOAPStructStruct_varFloat), XSD_FLOAT);
-	Axis_Serialize_SOAPStruct(param->SOAPStructStruct_varStruct, pSZ);
+	pSZ->serializeAsElement("varString", (void*)&(param->varString), XSD_STRING);
+	pSZ->serializeAsElement("varInt", (void*)&(param->varInt), XSD_INT);
+	pSZ->serializeAsElement("varFloat", (void*)&(param->varFloat), XSD_FLOAT);
+	Axis_Serialize_SOAPStruct(param->varStruct, pSZ);
 
 	pSZ->serialize("</", Axis_TypeName_SOAPStructStruct, ">", NULL);
 	return AXIS_SUCCESS;
@@ -44,10 +44,10 @@ int Axis_Serialize_SOAPStructStruct(SOAPStructStruct* param, IWrapperSoapSeriali
  */
 int Axis_DeSerialize_SOAPStructStruct(SOAPStructStruct* param, IWrapperSoapDeSerializer* pIWSDZ)
 {
-	param->SOAPStructStruct_varString = pIWSDZ->getElementAsString("SOAPStructStruct_varString",0);
-	param->SOAPStructStruct_varInt = pIWSDZ->getElementAsInt("SOAPStructStruct_varInt",0);
-	param->SOAPStructStruct_varFloat = pIWSDZ->getElementAsFloat("SOAPStructStruct_varFloat",0);
-	param->SOAPStructStruct_varStruct = (SOAPStruct*)pIWSDZ->getCmplxObject((void*)Axis_DeSerialize_SOAPStruct
+	param->varString = pIWSDZ->getElementAsString("varString",0);
+	param->varInt = pIWSDZ->getElementAsInt("varInt",0);
+	param->varFloat = pIWSDZ->getElementAsFloat("varFloat",0);
+	param->varStruct = (SOAPStruct*)pIWSDZ->getCmplxObject((void*)Axis_DeSerialize_SOAPStruct
 		, (void*)Axis_Create_SOAPStruct, (void*)Axis_Delete_SOAPStruct
 		, "SOAPStruct", Axis_URI_SOAPStruct);
 	return pIWSDZ->getStatus();
@@ -99,11 +99,11 @@ SOAPStructStruct::SOAPStructStruct()
 {
 	/*do not allocate memory to any pointer members here
 	 because deserializer will allocate memory anyway. */
-	SOAPStructStruct_varStruct=0;
+	varStruct=0;
 }
 
 SOAPStructStruct::~SOAPStructStruct()
 {
 	/*delete any pointer and array members here*/
-	delete SOAPStructStruct_varStruct;
+	delete varStruct;
 }

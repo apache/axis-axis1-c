@@ -23,9 +23,9 @@ int Axis_Serialize_SOAPStruct(SOAPStruct* param, IWrapperSoapSerializer* pSZ, bo
 		pSZ->_functions->serializeStartElementOfType(pSZ->_object, Axis_TypeName_SOAPStruct, Axis_URI_SOAPStruct, sPrefix);
 	}
 
-	pSZ->_functions->serializeAsElement(pSZ->_object, "SOAPStruct_varString", (void*)&(param->SOAPStruct_varString), XSD_STRING);
-	pSZ->_functions->serializeAsElement(pSZ->_object, "SOAPStruct_varInt", (void*)&(param->SOAPStruct_varInt), XSD_INT);
-	pSZ->_functions->serializeAsElement(pSZ->_object, "SOAPStruct_varFloat", (void*)&(param->SOAPStruct_varFloat), XSD_FLOAT);
+	pSZ->_functions->serializeAsElement(pSZ->_object, "varString", (void*)&(param->varString), XSD_STRING);
+	pSZ->_functions->serializeAsElement(pSZ->_object, "varInt", (void*)&(param->varInt), XSD_INT);
+	pSZ->_functions->serializeAsElement(pSZ->_object, "varFloat", (void*)&(param->varFloat), XSD_FLOAT);
 
 	pSZ->_functions->serializeEndElementOfType(pSZ->_object, Axis_TypeName_SOAPStruct);
 	return AXIS_SUCCESS;
@@ -36,9 +36,9 @@ int Axis_Serialize_SOAPStruct(SOAPStruct* param, IWrapperSoapSerializer* pSZ, bo
  */
 int Axis_DeSerialize_SOAPStruct(SOAPStruct* param, IWrapperSoapDeSerializer* pDZ)
 {
-	param->SOAPStruct_varString = pDZ->_functions->getElementAsString(pDZ->_object,0,0);
-	param->SOAPStruct_varInt = pDZ->_functions->getElementAsInt(pDZ->_object,0,0);
-	param->SOAPStruct_varFloat = pDZ->_functions->getElementAsFloat(pDZ->_object,0,0);
+	param->varString = pDZ->_functions->getElementAsString(pDZ->_object,0,0);
+	param->varInt = pDZ->_functions->getElementAsInt(pDZ->_object,0,0);
+	param->varFloat = pDZ->_functions->getElementAsFloat(pDZ->_object,0,0);
 	return pDZ->_functions->getStatus(pDZ->_object);
 }
 void* Axis_Create_SOAPStruct(SOAPStruct* pObj, bool bArray, int nSize)
@@ -73,7 +73,7 @@ void Axis_Delete_SOAPStruct(SOAPStruct* param, bool bArray, int nSize)
 		pTemp = param;
 		for (x=0; x<nSize; x++)
 		{
-			if(pTemp->SOAPStruct_varString) free(pTemp->SOAPStruct_varString);
+			if(pTemp->varString) free(pTemp->varString);
 			pTemp++;
 		}
 		free(param);
@@ -81,7 +81,7 @@ void Axis_Delete_SOAPStruct(SOAPStruct* param, bool bArray, int nSize)
 	else
 	{
 		/*delete any pointer members or array members of this struct here*/
-		if(param->SOAPStruct_varString) free(param->SOAPStruct_varString);
+		if(param->varString) free(param->varString);
 		free(param);
 	}
 }

@@ -18,10 +18,10 @@ class SOAPStruct;
 class SOAPStructStruct
 {
 public:
-	xsd__string SOAPStructStruct_varString;
-	int SOAPStructStruct_varInt;
-	float SOAPStructStruct_varFloat;
-	SOAPStruct* SOAPStructStruct_varStruct;
+	xsd__string varString;
+	int varInt;
+	float varFloat;
+	SOAPStruct* varStruct;
 	SOAPStructStruct();
 	virtual ~SOAPStructStruct();
 };

@@ -10,15 +10,15 @@
 
 
 void echoStructAsSimpleTypes(SOAPStruct* Value0, AXIS_OUT_PARAM xsd__string *OutValue0, AXIS_OUT_PARAM int *OutValue1, AXIS_OUT_PARAM float *OutValue2)
-{	*OutValue0 = Value0->SOAPStruct_varString;
-	*OutValue1 = Value0->SOAPStruct_varInt;
-	*OutValue2 = Value0->SOAPStruct_varFloat;
+{	*OutValue0 = Value0->varString;
+	*OutValue1 = Value0->varInt;
+	*OutValue2 = Value0->varFloat;
 }
 SOAPStruct* echoSimpleTypesAsStruct(xsd__string Value0,int Value1,float Value2)
 {	SOAPStruct* pRet = (SOAPStruct*) malloc(sizeof(SOAPStruct));
-	pRet->SOAPStruct_varString = Value0;
-	pRet->SOAPStruct_varInt = Value1;
-	pRet->SOAPStruct_varFloat = Value2;
+	pRet->varString = Value0;
+	pRet->varInt = Value1;
+	pRet->varFloat = Value2;
 	return pRet;
 }
 SOAPStructStruct* echoNestedStruct(SOAPStructStruct* Value0)

@@ -13,10 +13,10 @@ static const char* Axis_URI_SOAPArrayStruct = "http://soapinterop.org/xsd";
 static const char* Axis_TypeName_SOAPArrayStruct = "SOAPArrayStruct";
 
 typedef struct SOAPArrayStructTag {
-	xsd__string SOAPArrayStruct_varString;
-	int SOAPArrayStruct_varInt;
-	float SOAPArrayStruct_varFloat;
-	xsd__string_Array SOAPArrayStruct_varArray;
+	xsd__string varString;
+	int varInt;
+	float varFloat;
+	xsd__string_Array varArray;
 } SOAPArrayStruct;
 
 #endif /* !defined(__SOAPARRAYSTRUCT_H__INCLUDED_)*/

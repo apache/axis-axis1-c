@@ -16,9 +16,9 @@ static const char* Axis_TypeName_SOAPStruct = "SOAPStruct";
 class SOAPStruct
 {
 public:
-	xsd__string SOAPStruct_varString;
-	int SOAPStruct_varInt;
-	float SOAPStruct_varFloat;
+	xsd__string varString;
+	int varInt;
+	float varFloat;
 	SOAPStruct();
 	virtual ~SOAPStruct();
 };

@@ -16,10 +16,10 @@ static const char* Axis_TypeName_SOAPArrayStruct = "SOAPArrayStruct";
 class SOAPArrayStruct
 {
 public:
-	xsd__string SOAPArrayStruct_varString;
-	int SOAPArrayStruct_varInt;
-	float SOAPArrayStruct_varFloat;
-	xsd__string_Array SOAPArrayStruct_varArray;
+	xsd__string varString;
+	int varInt;
+	float varFloat;
+	xsd__string_Array varArray;
 	SOAPArrayStruct();
 	virtual ~SOAPArrayStruct();
 };
