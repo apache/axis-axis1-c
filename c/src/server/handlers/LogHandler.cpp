@@ -1,10 +1,11 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "LogHandler.h"
-#include "../soap/SoapDeSerializer.h"
-#include "../soap/SoapSerializer.h"
+#include "../../soap/SoapDeSerializer.h"
+#include "../../soap/SoapSerializer.h"
 #include <fstream>
 #include <string>
+#include "../../common/Debug.h"
 
 using namespace std;
 
@@ -14,52 +15,64 @@ using namespace std;
 
 LogHandler::LogHandler()
 {
+  m_Option = new map<string, string>;
 
 }
 
 LogHandler::~LogHandler()
 {
+  delete(m_Option);
+  m_Option = NULL;
 
 }
 // Implementation of BasicHandler interface.
 int LogHandler::Invoke(MessageData* md)
 {
-  int iNumAccess = 0;
-  WSDDService* oService =  md->GetService();
-  if(oService)
-  {
-    string sFileName = oService->GetOption("logAccessCountFile");
+#if defined( DEBUG)
+  debugger.debug("LogHandler::Invoke(MessageData* md)");
+#endif
+    m_iNumAccess = 0;
+    string sNumAccess = "";
+    string s = "logAccessCountFile";
+    string sFileName = GetOption(s);
+
     if(!sFileName.empty())
-    {   
-      string sNumAccess = oService->GetOption("num_access");      
+    {
+#if defined( DEBUG)
+  debugger.debug("if(!sFileName.empty())");
+#endif
+
+      ifstream fin(sFileName.c_str());    // open for reading
+       char ch;
+
+       while (fin.get(ch))
+       {
+         sNumAccess += ch;
+
+       }
+
       if(sNumAccess.empty())
       {
-        iNumAccess = 0;
+        m_iNumAccess = 0;
       }
       else
       {
-        iNumAccess = atoi(sNumAccess.c_str());
+        m_iNumAccess = atoi(sNumAccess.c_str());
       }
-      
-      iNumAccess++;
-      sNumAccess = iNumAccess;
-    
+
+      m_iNumAccess++;
+      sNumAccess = m_iNumAccess;
+
       const char * FileName = sFileName.c_str();
       ofstream fout(FileName);  // open for writing
-      fout << "service accessed " << iNumAccess << "times";
-  
-      oService->SetOption("num_access", sNumAccess);
+      fout << m_iNumAccess;
+
       return SUCCESS;
     }
     else
     {
       return FAIL;
     }
-  }
-  else
-  {
-    return FAIL;
-  }
 }
 
 void LogHandler::OnFault(MessageData* mc)
@@ -68,3 +81,17 @@ void LogHandler::OnFault(MessageData* mc)
 }
 
 
+string LogHandler::GetOption(string sArg)
+{
+  return (*m_Option)[sArg];
+}
+
+void LogHandler::SetOption(string sOption, string sValue)
+{
+  (*m_Option)[sOption] = sValue;
+}
+
+void LogHandler::SetOptionList(map<string, string>* OptionList)
+{
+   m_Option = OptionList;
+}
