@@ -7,13 +7,18 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+/* Inaccessible static: DEBUG */
 /*
  * Class:     AxisCppContentHandler
- * Method:    Delegate
- * Signature: ([CILjava/util/Vector;I)V
+ * Method:    processContent
+ * Signature: (Ljava/lang/StringBuffer;ILjava/util/Vector;I)V
  */
-JNIEXPORT void JNICALL Java_AxisCppContentHandler_Delegate
-  (JNIEnv *, jclass, jcharArray, jint, jobject, jint);
+JNIEXPORT void JNICALL Java_AxisCppContentHandler_processContent
+  (JNIEnv *, jclass, jbyteArray, jint, jobject, jint);
+
+JNIEXPORT jint JNICALL Java_OnLoad ( JavaVM *jvm, void *reserved);
+JNIEXPORT void JNICALL Java_OnUnload ( JavaVM *jvm, void *reserved);
+
 
 #ifdef __cplusplus
 }
