@@ -62,12 +62,12 @@ int main(int argc, char* argv[])
     input->count = 100;
       
 //    input->infos.m_Array = new BenchBasicDataType[input->count];
-#ifdef WIN32
 	BenchBasicDataType **	ppBBDT = (BenchBasicDataType **) new BenchBasicDataType *[input->count];
-	__int64					ll = 0;
+
+#ifdef WIN32
+	__int64					ll = 10000;
 #else
-    BenchBasicDataType **	ppBBDT = (BenchBasicDataType **) new BenchBasicDataType *[input->count];
-	long long				ll = 0;
+	long long				ll = 10000;
 #endif
 
 	input->infos.m_Array = ppBBDT;
@@ -124,7 +124,7 @@ int main(int argc, char* argv[])
 		}
 		else
 		{
-			ll += ll;
+			ll += 10000;
 		}
 
         strcat ( (char *)buffer, "A");
