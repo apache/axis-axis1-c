@@ -342,6 +342,10 @@ SOURCE=..\src\soap\xsd\NonPositiveInteger.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\NormalizedString.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\xsd\NOTATION.cpp
 # End Source File
 # Begin Source File

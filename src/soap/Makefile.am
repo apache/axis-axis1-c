@@ -37,6 +37,7 @@ libsoap_la_SOURCES = Attribute.cpp \
         xsd/IAnySimpleType.cpp \
         xsd/NOTATION.cpp \
         xsd/String.cpp \
+        xsd/NormalizedString.cpp \
         xsd/Time.cpp \
         xsd/XSD_QName.cpp \
         xsd/Short.cpp \
