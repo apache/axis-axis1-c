@@ -64,7 +64,7 @@
 #endif
 
 #include "../xml/Event.h"
-#include <axis/xml/Attribute.h>
+#include "..//xml/Attribute.h"
 #include "../xml/StartElement.h"
 using namespace axisxml;
 
