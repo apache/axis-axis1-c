@@ -15,6 +15,12 @@
  *   limitations under the License.
  */
 
+/*
+ * Revision 1.1  2004/08/26 roshan
+ * Added the method "releaseHandlers(string sSessionId)" in order to release the
+ *  Handlers once they are used.
+ */
+
 #if !defined(AXIS_CLIENTAXISENGINE_H__OF_AXIS_INCLUDED_)
 #define AXIS_CLIENTAXISENGINE_H__OF_AXIS_INCLUDED_
 
@@ -38,6 +44,7 @@ class ClientAxisEngine:public AxisEngine
         virtual int invoke (MessageData* pMsg);
         virtual void onFault (MessageData* pMsg);
     private:
+	void releaseHandlers(string sSessionId);
         SOAPTransport* m_pSoap;
 };
 AXIS_CPP_NAMESPACE_END

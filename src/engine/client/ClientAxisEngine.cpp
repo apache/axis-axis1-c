@@ -15,6 +15,13 @@
  *   limitations under the License.
  */
 
+/*
+ * Revision 1.1  2004/08/26 roshan
+ * Added the method "releaseHandlers(string sSessionId)" in order to release the
+ *  Handlers once they are used.
+ */
+
+
 #include "ClientAxisEngine.h"
 #include "../../wsdd/WSDDDeployment.h"
 #include "../HandlerPool.h"
@@ -97,20 +104,26 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
     }
     while (0);
 
-    /* // Pool back the Service specific handlers
-     * if (m_pSReqFChain) g_pHandlerPool->PoolHandlerChain(m_pSReqFChain, 
-     *     sSessionId);
-     * if (m_pSResFChain) g_pHandlerPool->PoolHandlerChain(m_pSResFChain, 
-     *     sSessionId);
-     * // Pool back the Global and Transport handlers
-     * UnInitializeHandlers(sSessionId, soap->trtype);
-     */
+    //release the handlers
+    releaseHandlers(sSessionId);	     
     }
     catch(AxisException& e)
     {
         throw;
     }
     return Status;
+}
+
+void ClientAxisEngine::releaseHandlers(string sSessionId)
+{
+    // Pool back the Service specific handlers
+    if (m_pSReqFChain) 
+	g_pHandlerPool->poolHandlerChain(m_pSReqFChain, sSessionId);
+    if (m_pSResFChain) 
+	g_pHandlerPool->poolHandlerChain(m_pSResFChain, sSessionId);
+
+     // Pool back the Global and Transport handlers
+     //UnInitializeHandlers(sSessionId, soap->trtype);	
 }
 
 int ClientAxisEngine::invoke (MessageData* pMsg)

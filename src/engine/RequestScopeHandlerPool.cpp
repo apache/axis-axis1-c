@@ -19,6 +19,11 @@
  *
  */
 
+/*
+ * Revision 1.1  2004/08/26 roshan
+ * Added code to the putInstance method, so that it calls the "fini" method of
+ *  a Handler when the handler is released
+ */
 
 #include "RequestScopeHandlerPool.h"
 #include "HandlerLoader.h"
@@ -92,6 +97,16 @@ int RequestScopeHandlerPool::getInstance (BasicHandler** pHandler, int nLibId)
 int RequestScopeHandlerPool::putInstance (BasicHandler* pHandler, int nLibId)
 {
     lock ();
+
+    if (0 != pHandler->_functions)
+    {
+        /* C Handler */
+    }
+    else if (0 != pHandler->_object)
+    {
+         ((HandlerBase *)(pHandler->_object))->fini();
+    }
+
     m_Handlers[nLibId].push_back (pHandler);
     unlock ();
     return AXIS_SUCCESS;
