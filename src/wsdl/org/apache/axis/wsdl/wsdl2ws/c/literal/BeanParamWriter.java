@@ -126,7 +126,6 @@ public class BeanParamWriter extends ParamCFileWriter{
 			 System.out.println("possible error class with no attributes....................");
 			 return;
 		 }
-		writer.write("\tIWrapperSoapSerializerFunctions* pSZX = pSZ->__vfptr;\n");
 		String arrayType = null;
 		writer.write("\t/* first serialize attributes if any*/\n");
 		for(int i = 0; i< attributeParamCount;i++){
@@ -136,35 +135,35 @@ public class BeanParamWriter extends ParamCFileWriter{
 			else{
 				if (attribs[i].isOptional()){
 					writer.write("\tif (0 != param->"+attribs[i].getParamName()+")\n");
-					writer.write("\tpSZX->SerializeAsAttribute(pSZ, \""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+					writer.write("\tpSZ->_functions->SerializeAsAttribute(SZ._object, \""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 				}
 				else{
-					writer.write("\tpSZX->SerializeAsAttribute(pSZ, \""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+					writer.write("\tpSZ->_functions->SerializeAsAttribute(SZ._object, \""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 				}
 			}
 		}
-		writer.write("\tpSZX->Serialize(pSZ, \">\");\n");
+		writer.write("\tpSZ->_functions->Serialize(SZ._object, \">\");\n");
 		writer.write("\t/* then serialize elements if any*/\n");
 		for(int i = attributeParamCount; i< attribs.length;i++){
 			if(attribs[i].isArray()){
 				//if Array
 				arrayType = attribs[i].getTypeName();
 				if (attribs[i].isSimpleType()){
-					writer.write("\tpSZX->SerializeBasicArray(pSZ, (Axis_Array*)(&param->"+attribs[i].getParamName()+"),"+CUtils.getXSDTypeForBasicType(arrayType)+", \""+attribs[i].getParamName()+"\");\n"); 
+					writer.write("\tpSZ->_functions->SerializeBasicArray(SZ._object, (Axis_Array*)(&param->"+attribs[i].getParamName()+"),"+CUtils.getXSDTypeForBasicType(arrayType)+", \""+attribs[i].getParamName()+"\");\n"); 
 				}
 				else{
-					writer.write("\tpSZX->SerializeCmplxArray(pSZ, (Axis_Array*)(&param->"+attribs[i].getParamName()+"),\n"); 
+					writer.write("\tpSZ->_functions->SerializeCmplxArray(SZ._object, (Axis_Array*)(&param->"+attribs[i].getParamName()+"),\n"); 
 					writer.write("\t\t(void*) Axis_Serialize_"+arrayType+", (void*) Axis_Delete_"+arrayType+", (void*) Axis_GetSize_"+arrayType+",\n"); 
 					writer.write("\t\t\""+attribs[i].getParamName()+"\", Axis_URI_"+arrayType+");\n");
 				}
 			}
 			else if (attribs[i].isSimpleType()){
-				writer.write("\tpSZX->SerializeAsElement(pSZ, \""+attribs[i].getParamName()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+				writer.write("\tpSZ->_functions->SerializeAsElement(SZ._object, \""+attribs[i].getParamName()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 			}else{
 				//if complex type
-				writer.write("\tpSZX->Serialize(pSZ, \"<"+attribs[i].getParamName()+"\");\n");
-				writer.write("\tAxis_Serialize_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+", pSZ, false);\n");
-				writer.write("\tpSZX->Serialize(pSZ, \"</"+attribs[i].getParamName()+">\");\n");
+				writer.write("\tpSZ->_functions->Serialize(SZ._object, \"<"+attribs[i].getParamName()+"\");\n");
+				writer.write("\tAxis_Serialize_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+", SZ._object, false);\n");
+				writer.write("\tpSZ->_functions->Serialize(SZ._object, \"</"+attribs[i].getParamName()+">\");\n");
 			}			
 		}
 		writer.write("\treturn AXIS_SUCCESS;\n");
@@ -182,7 +181,6 @@ public class BeanParamWriter extends ParamCFileWriter{
 			 System.out.println("possible error calss with no attributes....................");
 			 return;
 		}
-		writer.write("\tIWrapperSoapDeSerializerFunctions* pDZX = pDZ->__vfptr;\n");
 		boolean aretherearrayparams = false;
 		for(int i = 0; i< attribs.length;i++){
 			if(attribs[i].isArray()){
@@ -199,11 +197,11 @@ public class BeanParamWriter extends ParamCFileWriter{
 				//if Array
 				String containedType = attribs[i].getTypeName();
 				if (attribs[i].isSimpleType()){
-					writer.write("\tarray = pDZX->GetBasicArray(pDZ, "+CUtils.getXSDTypeForBasicType(containedType)+ ", \""+attribs[i].getParamName()+"\",0);\n");
+					writer.write("\tarray = DZ._functions->GetBasicArray(DZ._object, "+CUtils.getXSDTypeForBasicType(containedType)+ ", \""+attribs[i].getParamName()+"\",0);\n");
 					writer.write("\tmemcpy(&(param->"+attribs[i].getParamName()+"), &array, sizeof(Axis_Array));\n");
 				}
 				else{
-					writer.write("\tarray = pDZX->GetCmplxArray(pDZ, (void*)Axis_DeSerialize_"+containedType+ 
+					writer.write("\tarray = DZ._functions->GetCmplxArray(DZ._object, (void*)Axis_DeSerialize_"+containedType+ 
 						"\n\t\t, (void*)Axis_Create_"+containedType+", (void*)Axis_Delete_"+containedType+
 						"\n\t\t, (void*)Axis_GetSize_"+containedType+", \""+attribs[i].getParamName()+"\", Axis_URI_"+containedType+");\n");
 					writer.write("\tmemcpy(&(param->"+attribs[i].getParamName()+"), &array, sizeof(Axis_Array));\n");
@@ -214,20 +212,20 @@ public class BeanParamWriter extends ParamCFileWriter{
 					if (attribs[i].isOptional()){
 						//TODO
 					}else{
-						writer.write("\tparam->"+attribs[i].getParamName()+" = pDZX->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), true)+"(pDZ, \""+attribs[i].getParamName()+"\", 0);\n");
+						writer.write("\tparam->"+attribs[i].getParamName()+" = DZ._functions->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), true)+"(DZ._object, \""+attribs[i].getParamName()+"\", 0);\n");
 					}
 				}
 				else{
-					writer.write("\tparam->"+attribs[i].getParamName()+" = pDZX->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), false)+"(pDZ, \""+attribs[i].getParamName()+"\", 0);\n");
+					writer.write("\tparam->"+attribs[i].getParamName()+" = DZ._functions->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), false)+"(DZ._object, \""+attribs[i].getParamName()+"\", 0);\n");
 				}
 			}else{
 				//if complex type
-				writer.write("\tparam->"+attribs[i].getParamName()+" = ("+attribs[i].getTypeName()+"*)pDZX->GetCmplxObject(pDZ, (void*)Axis_DeSerialize_"+attribs[i].getTypeName()+
+				writer.write("\tparam->"+attribs[i].getParamName()+" = ("+attribs[i].getTypeName()+"*)DZ._functions->GetCmplxObject(DZ._object, (void*)Axis_DeSerialize_"+attribs[i].getTypeName()+
 					"\n\t\t, (void*)Axis_Create_"+attribs[i].getTypeName()+", (void*)Axis_Delete_"+attribs[i].getTypeName()+
 					"\n\t\t, \""+attribs[i].getParamName()+"\", Axis_URI_"+attribs[i].getTypeName()+");\n");
 			}		
 		}
-		writer.write("\treturn pDZX->GetStatus(pDZ);\n");
+		writer.write("\treturn DZ._functions->GetStatus(DZ._object);\n");
 		writer.write("}\n");
 	}
 	

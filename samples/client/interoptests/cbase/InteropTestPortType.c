@@ -23,7 +23,7 @@ xsd__string echoString(xsd__string Value0)
 	int nStatus;
 	CallFunctions* pCall;
 	xsd__string Ret;
-	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost:80/axis/InteropBase");
+	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost/axis/InteropBase");
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return Ret;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
@@ -53,7 +53,7 @@ xsd__string_Array echoStringArray(xsd__string_Array Value0)
 	CallFunctions* pCall;
 	xsd__string_Array RetArray = {NULL, 0};
 	Axis_Array array;
-	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost:5555/axis/InteropBase");
+	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost/axis/InteropBase");
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return RetArray;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
@@ -83,7 +83,7 @@ int echoInteger(int Value0)
 	int nStatus;
 	CallFunctions* pCall;
 	int Ret;
-	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost:5555/axis/InteropBase");
+	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost/axis/InteropBase");
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return Ret;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
@@ -113,7 +113,7 @@ xsd__int_Array echoIntegerArray(xsd__int_Array Value0)
 	CallFunctions* pCall;
 	xsd__int_Array RetArray = {NULL, 0};
 	Axis_Array array;
-	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost:5555/axis/InteropBase");
+	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost/axis/InteropBase");
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return RetArray;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
@@ -143,7 +143,7 @@ float echoFloat(float Value0)
 	int nStatus;
 	CallFunctions* pCall;
 	float Ret;
-	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost:5555/axis/InteropBase");
+	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost/axis/InteropBase");
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return Ret;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
@@ -173,7 +173,7 @@ xsd__float_Array echoFloatArray(xsd__float_Array Value0)
 	CallFunctions* pCall;
 	xsd__float_Array RetArray = {NULL, 0};
 	Axis_Array array;
-	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost:5555/axis/InteropBase");
+	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost/axis/InteropBase");
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return RetArray;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
@@ -203,7 +203,7 @@ SOAPStruct* echoStruct(SOAPStruct* Value0)
 	int nStatus;
 	CallFunctions* pCall;
 	SOAPStruct* pReturn = NULL;
-	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost:5555/axis/InteropBase");
+	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost/axis/InteropBase");
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return pReturn;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
@@ -233,7 +233,7 @@ SOAPStruct_Array echoStructArray(SOAPStruct_Array Value0)
 	CallFunctions* pCall;
 	SOAPStruct_Array RetArray = {NULL, 0};
 	Axis_Array array;
-	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost:5555/axis/InteropBase");
+	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost/axis/InteropBase");
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return RetArray;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
@@ -262,7 +262,7 @@ void echoVoid()
 {
 	int nStatus;
 	CallFunctions* pCall;
-	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost:5555/axis/InteropBase");
+	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost/axis/InteropBase");
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
 	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, C_RPC_PROVIDER)) return ;
@@ -288,7 +288,7 @@ xsd__base64Binary echoBase64(xsd__base64Binary Value0)
 	int nStatus;
 	CallFunctions* pCall;
 	xsd__base64Binary Ret;
-	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost:5555/axis/InteropBase");
+	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost/axis/InteropBase");
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return Ret;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
@@ -317,7 +317,7 @@ xsd__dateTime echoDate(xsd__dateTime Value0)
 	int nStatus;
 	CallFunctions* pCall;
 	xsd__dateTime Ret;
-	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost:5555/axis/InteropBase");
+	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost/axis/InteropBase");
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return Ret;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
@@ -346,7 +346,7 @@ xsd__hexBinary echoHexBinary(xsd__hexBinary Value0)
 	int nStatus;
 	CallFunctions* pCall;
 	xsd__hexBinary Ret;
-	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost:5555/axis/InteropBase");
+	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost/axis/InteropBase");
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return Ret;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
@@ -375,7 +375,7 @@ xsd__decimal echoDecimal(xsd__decimal Value0)
 	int nStatus;
 	CallFunctions* pCall;
 	xsd__decimal Ret;
-	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost:5555/axis/InteropBase");
+	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost/axis/InteropBase");
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return Ret;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
@@ -404,7 +404,7 @@ xsd__boolean echoBoolean(xsd__boolean Value0)
 	int nStatus;
 	CallFunctions* pCall;
 	xsd__boolean Ret;
-	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost:5555/axis/InteropBase");
+	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost/axis/InteropBase");
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return Ret;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
