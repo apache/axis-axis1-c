@@ -58,19 +58,20 @@ void SoapKeywordMapping::initialize()
                     __TRC(gs_SoapEnvVersionsStruct[sv].pchWords[sw]);
             }
         }
+        std::list<Attribute*> attributeList;
         /* soap 1.1 envelop attributes */
-        m_Map[SOAP_VER_1_1].pEnv = new Attribute( (std::list<Attribute*>)NULL, "SOAP-ENV","xmlns","",
+        m_Map[SOAP_VER_1_1].pEnv = new Attribute( attributeList, "SOAP-ENV","xmlns","",
             "http://schemas.xmlsoap.org/soap/envelope/");
-        m_Map[SOAP_VER_1_1].pXsi = new Attribute( (std::list<Attribute*>)NULL, "xsi","xmlns","",
+        m_Map[SOAP_VER_1_1].pXsi = new Attribute( attributeList, "xsi","xmlns","",
             "http://www.w3.org/2001/XMLSchema-instance");
-        m_Map[SOAP_VER_1_1].pXsd = new Attribute( (std::list<Attribute*>)NULL, "xsd","xmlns","",
+        m_Map[SOAP_VER_1_1].pXsd = new Attribute( attributeList, "xsd","xmlns","",
             "http://www.w3.org/2001/XMLSchema");
         /* soap 1.2 envelop attributes */
-        m_Map[SOAP_VER_1_2].pEnv = new Attribute( (std::list<Attribute*>)NULL, "env","xmlns","",
+        m_Map[SOAP_VER_1_2].pEnv = new Attribute( attributeList, "env","xmlns","",
             "http://www.w3.org/2003/05/soap-envelope");
-        m_Map[SOAP_VER_1_2].pXsi = new Attribute( (std::list<Attribute*>)NULL, "xsi","xmlns","",
+        m_Map[SOAP_VER_1_2].pXsi = new Attribute( attributeList, "xsi","xmlns","",
             "http://www.w3.org/2001/XMLSchema-instance");
-        m_Map[SOAP_VER_1_2].pXsd = new Attribute( (std::list<Attribute*>)NULL, "xsd","xmlns","",
+        m_Map[SOAP_VER_1_2].pXsd = new Attribute( attributeList, "xsd","xmlns","",
             "http://www.w3.org/2001/XMLSchema");
         m_bInit = true;
     }

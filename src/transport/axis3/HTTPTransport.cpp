@@ -944,6 +944,7 @@ const char * HTTPTransport::getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYP
 
 	case CHANNEL_HTTP_SSL_DLL_NAME:
 	case CHANNEL_HTTP_DLL_NAME:
+    case CONTENT_TYPE:
 		{
 			break;
 		}

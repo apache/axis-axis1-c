@@ -39,7 +39,7 @@ const Channel &SecureChannel::operator >> (std::string & msg) throw (AxisTranspo
 
 void SecureChannel::setSecureProperties( const char * psSSLArgs)
 {
-	string * ps = (string *) psSSLArgs;
+	//string * ps = (string *) psSSLArgs;
 }
 
 const char * SecureChannel::getSecureProperties()

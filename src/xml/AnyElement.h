@@ -117,6 +117,10 @@ class AnyElemntUtils
 				case START_ELEMENT:
 					//TODO.
 					break;
+                case START_PREFIX:
+                    break;
+                case END_PREFIX:
+                    break;
         		}
 
 			return sTmpVal;

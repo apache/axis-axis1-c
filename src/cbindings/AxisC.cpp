@@ -30,3 +30,5 @@ STORAGE_CLASS_INFO void axiscTerminate() {
 	Axis::terminate();
 }
 }
+
+

@@ -36,3 +36,5 @@ AXISC_STORAGE_CLASS_INFO const int axiscGetExceptionCode(AXISCHANDLE axisExcepti
 	return ae->getExceptionCode();
 }
 }
+
+

@@ -828,11 +828,13 @@ void Call::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pP
     IAttribute* pAttribute;
     if (NULL!=pUri)
     {
-        pAttribute = new Attribute((std::list<Attribute*>)NULL, pLocalname, pPrefix, pUri, pValue);
+        std::list<Attribute*> attributeList;
+        pAttribute = new Attribute(attributeList, pLocalname, pPrefix, pUri, pValue);
     }
     else
     {
-        pAttribute = new Attribute((std::list<Attribute*>)NULL, pLocalname, pPrefix, pValue);
+        std::list<Attribute*> attributeList;
+        pAttribute = new Attribute(attributeList, pLocalname, pPrefix, pValue);
     }
     m_pIWSSZ->setSOAPMethodAttribute(((Attribute*)pAttribute)->clone());
 }

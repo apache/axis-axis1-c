@@ -415,6 +415,10 @@ IWrapperSoapSerializer& SoapSerializer::operator <<(const AxisChar*
       /* send everything to transport layer, it should handle bufferization itself */
       int nStatus = m_pOutputStream->sendBytes(cSerialized, 0);
       // FIXME: should we process nStatus somehow?
+      if (AXIS_SUCCESS != nStatus)
+      {
+        //something gone wrong; what should we do?
+      }
     }
     catch(AxisSoapException& e)
     {
@@ -1175,7 +1179,8 @@ void SoapSerializer::addAttachmentBody(const AxisChar* achId, xsd__base64Binary 
 
 void SoapSerializer::addNamespaceToEnvelope(AxisChar *pachNamespaceURI, AxisChar* pachPrefix)
 {
-	Attribute *pNameSpace = new Attribute((std::list<Attribute*>)NULL, pachPrefix, "xmlns", pachNamespaceURI);
+    std::list<Attribute*> attributeList;
+	Attribute *pNameSpace = new Attribute(attributeList, pachPrefix, "xmlns", pachNamespaceURI);
 
 	m_pSoapEnvelope->addNamespaceDecl(pNameSpace);
 
