@@ -13,23 +13,13 @@
  */
 int Axis_Serialize_DivByZeroFault(DivByZeroFault* param, IWrapperSoapSerializer* pSZ, bool bArray = false)
 {
-	if (bArray)
-	{
-		pSZ->serialize("<", Axis_TypeName_DivByZeroFault, ">", NULL);
-	}
-	else
-	{
-		const AxisChar* sPrefix = pSZ->getNamespacePrefix(Axis_URI_DivByZeroFault);
-		pSZ->serialize("<", Axis_TypeName_DivByZeroFault, " xsi:type=\"", sPrefix, ":",
-			Axis_TypeName_DivByZeroFault, "\" xmlns:", sPrefix, "=\"",
-			Axis_URI_DivByZeroFault, "\">", NULL);
-	}
-
+        /* first serialize attributes if any*/
+        pSZ->serialize(">", 0);
+        /* then serialize elements if any*/
 	pSZ->serializeAsElement("varString", (void*)&(param->varString), XSD_STRING);
 	pSZ->serializeAsElement("varInt", (void*)&(param->varInt), XSD_INT);
 	pSZ->serializeAsElement("varFloat", (void*)&(param->varFloat), XSD_FLOAT);
 
-	pSZ->serialize("</", Axis_TypeName_DivByZeroFault, ">", NULL);
 	return AXIS_SUCCESS;
 }
 
