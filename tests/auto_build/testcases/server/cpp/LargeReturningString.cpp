@@ -34,11 +34,11 @@ void LargeReturningString::fini()
 }
 xsd__string LargeReturningString::getLargeString(xsd__int Value0)  
 {
-	xsd__string ret= new char[Value0];
+	xsd__string ret= new char[Value0 +1];
 	char c = 'A';
-	memset(ret, c, Value0 - 1);
+	memset(ret, c, Value0);
 	
-	ret[Value0 -1] = '\0';
+	ret[Value0] = '\0';
 
 	return ret;
 }
