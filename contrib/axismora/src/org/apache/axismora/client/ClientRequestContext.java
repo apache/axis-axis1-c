@@ -62,6 +62,7 @@ import org.apache.axismora.transport.HTTPSender;
 
 import org.apache.axis.AxisFault;
 import org.apache.axis.enum.Style;
+import org.apache.axis.enum.Use;
 
 /**
  * @author hemapani
@@ -73,17 +74,22 @@ public class ClientRequestContext {
     /* name of the method the client invokes */
     private QName methodName;
 
-    private Serializable[] inparams;
+    private InputParameterInfo[] inparams;
+    
+    /*This object would serialize the body, specific to different modes.*/
+    private Serializable bodySerializer;
+    
     private Style style;
     private String encoding;
-
+    private Use use;
+    
     public ClientRequestContext(
         HTTPSender sender,
         QName soapAction,
         QName methodName,
-        Serializable[] inparams,
+	    InputParameterInfo[] inparams,
         Style style,
-        String encoding)
+        String encoding, Use use)
         throws AxisFault {
         if (soapAction == null)
             throw new AxisFault("the soap action must be specified");
@@ -94,6 +100,7 @@ public class ClientRequestContext {
         this.methodName = methodName;
         this.style = (style == null ? Style.RPC : style);
         this.encoding = encoding;
+        this.use = use;
     }
 
     /**
@@ -114,6 +121,7 @@ public class ClientRequestContext {
      * @return
      */
     public Style getStyle() {
+        this.style= Style.DOCUMENT;
         return style;
     }
 
@@ -134,8 +142,15 @@ public class ClientRequestContext {
     /**
      * @return
      */
-    public Serializable[] getInparams() {
+    public InputParameterInfo[] getInparams() {
         return inparams;
+    }
+   
+    /**
+     * @return
+     */
+    public Use getUse() {
+        return use;
     }
 
 }
