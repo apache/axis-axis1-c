@@ -5,10 +5,24 @@
 you need the webservice.xml file, jaxrpcmapper.xml file, x.wsdl file
 <p>look at the org.apache.geronimo.ews.ws4j2ee.GenerateTest</p>
 <h2>using without WSDL</h2>
-you need to have the 
-webservice.xml file AND
-(SEI,Implemntation class,ejb-jar.xml file) OR (
-SEI, J2SE class and web.xml file (not yet supported))
+
+	<p>you need to have the 
+	webservice.xml file AND SEI (optional Implemntation bean and ejb-jar.xml/web.xml file) 
+	</p>
+	<p>args is String array s.t.</p>
+	<ol>
+		<li>first argument is webservice.xml file</li> 
+	 	<li>Other arguments are any option that can given to Java2WSDL</li> 
+		 <li>the SEI and the service Implementation bean should be avalible on the class path</li> 
+		<li>the ws4j2ee will search for the web.xml or ejb-jar.xml</li>  
+			<ul>
+				<li>same directory as the webservice.xml file</li>  
+				<li>file should be in the class path s.t META-INF/web.xml or META-INF/ejb-jar.xml</li> 
+			</ul>
+		<li>if no file found at the #4 the ws4j2ee continue assuming the Impl bean and the DD is not avalible. This is additional to spec.</li>
+	</ol>	
+
+
 <p>look at the org.apache.geronimo.ews.ws4j2ee.GenerateWithoutWSDLTest</p>
 </body>
 </html>
