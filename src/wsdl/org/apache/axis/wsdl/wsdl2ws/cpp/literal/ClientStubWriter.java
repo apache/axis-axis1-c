@@ -360,6 +360,13 @@ public class ClientStubWriter extends CPPClassWriter{
 					String parameterName = ((ParameterInfo)paramsB.get(i)).getElementNameAsString();
 					//Samisa
 					String namespace = ((ParameterInfo)paramsB.get(i)).getElementName().getNamespaceURI();
+					// If namespace is empty then getNamespacePrefix will create a new prefix
+					// with no namespace which causes the server to send a fault message.
+					// If no namespace for current tag, then use WSDL default namespace
+					if(namespace.length() == 0)
+					{
+						namespace = minfo.getInputMessage().getNamespaceURI();
+					}
 					int	stringLength = 8 + 1 + parameterName.length() + 1; 
 					 
 					writer.write("\tchar cPrefixAndParamName" + i + "[" + stringLength + "];\n");
