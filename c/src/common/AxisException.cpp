@@ -128,8 +128,15 @@ string AxisException::getMessage(exception* e)
 
 string AxisException::getMessage(int e)
 {
+	const char* sMessage = NULL;
     SoapFault* objSoap = SoapFault::getSoapFault(e);
-    const char* sMessage = objSoap->getSoapString();
+	//following is not the proper thing to do. but a temporary solution
+	if (objSoap)
+	{
+		sMessage = objSoap->getSoapString();
+		delete objSoap;
+	}
+   
     if (sMessage == NULL)
     {
         switch(e)

@@ -77,6 +77,8 @@ typedef struct tm Axis_DateTime;
 typedef double Axis_Decimal;
 typedef int Axis_Boolean;
 
+#define AXIS_OUT_PARAM //nothing
+
 #ifdef __cplusplus
 
 #include <string>
