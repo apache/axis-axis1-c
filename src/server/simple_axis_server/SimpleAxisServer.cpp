@@ -31,7 +31,6 @@
 #endif
 
 //#include <axis/server/GDefine.hpp>
-//#include <axis/server/Packet.hpp>
 //#include <axis/Axis.hpp>
 //#include "../../common/AxisConfig.h"
 //#include "../../common/AxisSocketUtils.h"

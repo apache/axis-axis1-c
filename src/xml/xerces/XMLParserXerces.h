@@ -26,7 +26,6 @@
 #if !defined(__XMLPARSERXERCES_H_OF_AXIS_INCLUDED__)
 #define __XMLPARSERXERCES_H_OF_AXIS_INCLUDED__
 
-#include <axis/server/Packet.hpp>
 #include "../QName.h"
 #include "../Event.h"
 #include "../XMLParser.h"

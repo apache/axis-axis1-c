@@ -49,7 +49,6 @@
 #define _CALL_H____OF_AXIS_INCLUDED_
 
 #include "../server/GDefine.hpp"
-#include "../server/Packet.hpp"
 #include "../server/TypeMapping.hpp"
 #include "../server/AxisUserAPI.hpp"
 #include "../server/WSDDDefines.hpp"

@@ -55,24 +55,25 @@ typedef enum
 
 AXIS_CPP_NAMESPACE_START
 
-typedef enum {
-	TRACETYPE_UNKNOWN=0,
-	TRACETYPE_CHAR,
-	TRACETYPE_USHORT,
-	TRACETYPE_SHORT,
-	TRACETYPE_UINT,
-	TRACETYPE_INT,
-	TRACETYPE_ULONG,
-	TRACETYPE_LONG,
-	TRACETYPE_UDOUBLE,
-	TRACETYPE_DOUBLE,
-	TRACETYPE_FLOAT,
-	TRACETYPE_BOOL,
-	TRACETYPE_POINTER,
-	TRACETYPE_DATA,
-	TRACETYPE_STRING,
-	TRACETYPE_STLSTRING
-} AxisTraceType;
+// Unfortunately the trace type has to be an int with #defines, not an enum because
+// it is used with '...' and va_args, and ints can be used with '...' but enums 
+// cannot.
+#define TRACETYPE_UNKNOWN	0
+#define TRACETYPE_CHAR		1
+#define TRACETYPE_USHORT	2
+#define TRACETYPE_SHORT		3
+#define TRACETYPE_UINT		4
+#define TRACETYPE_INT		5
+#define TRACETYPE_ULONG		6
+#define TRACETYPE_LONG		7
+#define TRACETYPE_UDOUBLE	8
+#define TRACETYPE_DOUBLE	9
+#define TRACETYPE_FLOAT		10
+#define TRACETYPE_BOOL		11
+#define TRACETYPE_POINTER	12
+#define TRACETYPE_DATA		13
+#define TRACETYPE_STRING	14
+#define TRACETYPE_STLSTRING	15
 
 class AxisTrace
 {
@@ -115,44 +116,6 @@ public:
      */
     static int logaxis(const char* sLog1, const char* sLog2, int level, char* arg3, 
         int arg4);
-
-    /**
-     * This is called in writing to the log file whose path is specified in 
-     * $AXIS_HOME/axiscpp.c     * onf file.
-     * This method is used when the caller has two string messages 
-     * as arguments. One may be his      *own message.
-     * The other may be to print a trace value. User can also specify the 
-     * severity of the messag     *e by
-     * assigning level argument to one of CRITICAL, WARN, INFO or TRIVIAL.
-     * @param sLog1 string message one
-     * @param sLog2 string message two  
-     * @param level severity level
-     * @param arg3 file name
-     * @param arg4 line number
-     * @return The status which indicates whether the operation is success 
-     * (AXIS_SUCCESS) or not     * (AXIS_FAIL).
-     */
-    //static int logaxis(const char* sLog1, const int nLog2, int level, char* arg3, 
-    //    int arg4);
-
-    /**
-     * This is called in writing to the log file whose path is specified in 
-     * $AXIS_HOME/axiscpp.c     * onf file.
-     * This method is used when the caller pass first argument as string 
-     * and the second argument     * as double. First is his own message.
-     * The other may be to print a trace value. User can also specify the 
-     * severity of the messag     * e by
-     * assigning level argument to one of CRITICAL, WARN, INFO or TRIVIAL.
-     * @param sLog1 string message one
-     * @param sLog2 string message two  
-     * @param level severity level
-     * @param arg3 file name
-     * @param arg4 line number
-     * @return The status which indicates whether the operation is success
-     * (AXIS_SUCCESS) or not (AXIS_FAIL).
-     */
-    //static int logaxis(const char* sLog1, const double dLog2, int level, 
-    //    char* arg3, int arg4);
 
     /**
      * Writes the given string to the standard console. 
@@ -205,13 +168,13 @@ public:
 	 * Traces the exit to a method.
 	 */
 	static void traceExit(const char *className, const char *methodName, int returnIndex,
-		AxisTraceType type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0);
+		int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0);
 
 	/**
 	 * Traces something that has been caught
 	 */
 	static void traceCatch(const char *className, const char *methodName, int catchIndex,
-		AxisTraceType type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0);
+		int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0);
 
       /**
        * Closes the trace file
@@ -224,7 +187,7 @@ private:
 	static std::stack<std::string> m_stack;
 
     static int logthis(const char* pcLog, int level, char* arg2, int arg3);
-	static void addParameter(std::string& line, AxisTraceType type, unsigned len, void *value);
+	static void addParameter(std::string& line, int type, unsigned len, void *value);
     static void traceHeader();
 };
 

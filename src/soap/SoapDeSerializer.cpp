@@ -52,7 +52,6 @@
 #include "ComplexElement.h"
 #include "CharacterElement.h"
 #include <axis/server/GDefine.hpp>
-#include <axis/server/Packet.hpp>
 #include "../common/AxisTrace.h"
 #include "apr_base64.h"
 #include "HexCoder.h"

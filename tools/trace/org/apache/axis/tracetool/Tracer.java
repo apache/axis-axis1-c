@@ -226,7 +226,7 @@ class Tracer extends BufferedWriter {
             // copes with catch (...)
             if ("...".equals(p.getType())) return " ";
 
-		String parms = ",\n\t\t\t\t\tAXIS_CPP_NAMESPACE_PREFIX TRACETYPE_";
+		String parms = ",\n\t\t\t\t\tTRACETYPE_";
 		String name = p.getName();
 		if (null == name)
 			name = "traceRet";

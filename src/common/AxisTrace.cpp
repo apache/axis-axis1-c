@@ -158,8 +158,8 @@ void AxisTrace::traceHeader()
     char *envVars[]={"PATH","LIBPATH","LD_LIBRARY_PATH","AXISCPP_DEPLOY","PWD",
         "CLASSPATH","INCLUDE","LIB","NLSPATH","OS","COMPUTERNAME","USERNAME",
         "HOSTNAME","LANG","LOGIN","LOGNAME","MACHTYPE","OSTYPE","UID","USER"};
-    for (int i=0; i<sizeof(envVars)/4; i++) {
-        string text = envVars[i];
+    for (unsigned i=0; i<sizeof(envVars)/4; i++) {
+        text = envVars[i];
         const char *value = getenv(envVars[i]);
         if (NULL==value) text += " was not set";
         else {
@@ -185,7 +185,7 @@ void AxisTrace::traceEntry(const char *className, const char *methodName, void *
 
 	try {
 		string line;
-		for (int is=0; is<m_stack.size(); is++) line += " ";
+		for (unsigned is=0; is<m_stack.size(); is++) line += " ";
 		line += "{ ";
 		if (NULL!=className) {
 			line += className;
@@ -206,7 +206,7 @@ void AxisTrace::traceEntry(const char *className, const char *methodName, void *
 		va_list args;
 		va_start(args, nParms);
 		for (int i=0; i<nParms; i++) {
-			AxisTraceType type = va_arg(args, AxisTraceType);
+			int type = va_arg(args, int);
 			unsigned len = va_arg(args, unsigned);
 			void *value = va_arg(args, void*);
 			if (0!=i) line += ", ";
@@ -230,7 +230,7 @@ void AxisTrace::traceEntry(const char *className, const char *methodName, void *
 }
 
 void AxisTrace::traceExit(const char *className, const char *methodName, int returnIndex,
-						  AxisTraceType type, unsigned len, void *value)
+						  int type, unsigned len, void *value)
 {
     if (!isTraceOn()) return;
 
@@ -246,7 +246,7 @@ void AxisTrace::traceExit(const char *className, const char *methodName, int ret
 		if (m_stack.size()>0) m_stack.pop();
 
 		string line;
-		for (int is=0; is<m_stack.size(); is++) line += " ";
+		for (unsigned is=0; is<m_stack.size(); is++) line += " ";
 		line += "} ";
 		if (NULL!=className) {
 			line += className;
@@ -271,7 +271,7 @@ void AxisTrace::traceExit(const char *className, const char *methodName, int ret
 }
 
 void AxisTrace::traceCatch(const char *className, const char *methodName, int catchIndex,
-						   AxisTraceType type, unsigned len, void *value)
+						   int type, unsigned len, void *value)
 {
     if (!isTraceOn()) return;
 
@@ -283,7 +283,7 @@ void AxisTrace::traceCatch(const char *className, const char *methodName, int ca
 		while (m_stack.size()>0 && name!=m_stack.top()) m_stack.pop();
 
 		string line;
-		for (int is=0; is<m_stack.size(); is++) line += " ";
+		for (unsigned is=0; is<m_stack.size(); is++) line += " ";
 		line += "! ";
 		if (NULL!=className) {
 			line += className;
@@ -308,7 +308,7 @@ void AxisTrace::traceCatch(const char *className, const char *methodName, int ca
     }
 }
 
-void AxisTrace::addParameter(string& line, AxisTraceType type, unsigned len, void *value)
+void AxisTrace::addParameter(string& line, int type, unsigned len, void *value)
 {
 	char prim[32]; // Plenty big enough to hold a primitive
       char *pcValue = (char*)value;
@@ -346,13 +346,13 @@ void AxisTrace::addParameter(string& line, AxisTraceType type, unsigned len, voi
 	case TRACETYPE_DATA:	
 		try {
 			line += "[";
-			for (int i=0; i<len && i<32; i++) {
+			for (unsigned i=0; i<len && i<32; i++) {
 				int x = (int)(pcValue[i]);
 				sprintf(prim,"%2.2X",x);
 				line += prim;
 			}
 			line += "] <";
-			for (int j=0; j<len && j<32; j++) {
+			for (unsigned j=0; j<len && j<32; j++) {
 				char c = pcValue[j];
 				if (!isprint(c)) c='.';
 				sprintf(prim,"%c",c);

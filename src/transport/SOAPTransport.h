@@ -31,7 +31,7 @@
 #if !defined(AXIS_SOAPTRANSPORT_H__OF_AXIS_INCLUDED_)
 #define AXIS_SOAPTRANSPORT_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/Packet.hpp>
+#include <axis/server/GDefine.hpp>
 
 /**
  * @file SOAPTransport.h
@@ -56,6 +56,36 @@
 
 AXIS_CPP_NAMESPACE_START
 
+typedef enum
+{
+    TRANSPORT_FINISHED=0,
+    TRANSPORT_IN_PROGRESS,
+    TRANSPORT_FAILED
+} AXIS_TRANSPORT_STATUS;
+
+typedef enum
+{
+    AXIS_HTTP_GET,
+    AXIS_HTTP_POST,
+    AXIS_HTTP_UNSUPPORTED
+} AXIS_HTTP_METHOD;
+
+/*
+ * This function is provided by the Axis Engine. 
+ * Called by transport module when it needs to say that
+ * a message buffer passed to it is no longer being used by the transport 
+ * and can be re-used by the 
+ * Axis engine.This function should be called for each buffer 
+ * if AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES
+ * returned TRANSPORT_IN_PROGRESS.
+ * @param 
+ *        1st - buffer that Axis gave to the transport layer
+ *        2nd - buffer id    which uniquely identifies the buffer
+ *        3rd - Ax_soapstream object which act like a thread id
+ */
+typedef void (AXISCALL * AXIS_ENGINE_CALLBACK_RELEASE_SEND_BUFFER)
+(const char*, const void*);
+ 
 class AxisIOStream
 {
 public:
@@ -172,7 +202,7 @@ public:
      * message.
      *
      * @brief Sets a predefined transport property for outgoing message.
-     * @param eType Predefined transport property to be set. See Packet.h
+     * @param eType Predefined transport property to be set.
      *        for predefined transport property types.
      * @param pcValue Transport property value to be set.
      */
@@ -181,7 +211,7 @@ public:
     /**
      * @brief Gets a predefined transport property in the arrived message
      *
-     * @param eType Predefined transport property to get. See Packet.h
+     * @param eType Predefined transport property to get.
      *        for predefined transport property types.
      * @return Value of the transport property if available. Returns null
      *         if unavailable.
@@ -282,7 +312,7 @@ public:
      * should use the transport accordingly.
      *
      * @brief Gets the protocol type of the transport library.
-     * @return The type of the transport. See AXIS_PROTOCOL_TYPE in Packet.h
+     * @return The type of the transport. See AXIS_PROTOCOL_TYPE
      */
     virtual AXIS_PROTOCOL_TYPE getProtocol()=0;
 
@@ -299,7 +329,7 @@ public:
      * Gets the sub protocol. The usefulness of this method and the return
      * values depend on the particular implementation. For example HTTP
      * transports should return one of the values defined in enumeration
-     * AXIS_HTTP_METHOD. See Packet.h
+     * AXIS_HTTP_METHOD.
      *
      * @brief Gets the sub protocol. 
      * @return Type of the sub protocol (Ex: GET, POST, UNSUPPORTED for HTTP).
