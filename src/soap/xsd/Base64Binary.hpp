@@ -38,6 +38,11 @@ public:
      */    
     Base64Binary();
     
+    /**
+     * Destructor
+     */    
+    ~Base64Binary();
+    
 	/**
 	 * Serialize value to it's on-the-wire string form.
 	 * @param value The value to be serialized.

@@ -6,6 +6,15 @@ AXIS_CPP_NAMESPACE_START
     {
     }
     
+    Base64Binary::~Base64Binary()
+    {
+        if (m_Base64Binary)
+        {
+            delete  m_Base64Binary;
+            m_Base64Binary = NULL;
+        }
+    }
+
     AxisChar* Base64Binary::serialize(const void* value) throw (AxisSoapException)
     {
     	return serialize((xsd__base64Binary*) value);
@@ -38,7 +47,7 @@ AXIS_CPP_NAMESPACE_START
     {
         if (m_Base64Binary)
         {
-            delete [] m_Base64Binary;
+            delete  m_Base64Binary;
             m_Base64Binary = NULL;
         }
     	m_Base64Binary = new xsd__base64Binary();
