@@ -1,4 +1,5 @@
 #include "MathOps.h"
+#include <axis/server/AxisException.h>
 
 void PrintUsage();
 bool IsNumber(const char* p);
@@ -52,7 +53,7 @@ int main(int argc, char* argv[])
             {
 		iResult = ws.div(i1, i2);		
             }
-            catch(AxisDivByZeroException& e)
+            catch(AxisException& e)
             {
             }
             catch(exception& e)
