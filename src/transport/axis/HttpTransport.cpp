@@ -75,7 +75,7 @@ using namespace std;
  *	Create HTTP transport with provided URL as remote address,
  *  set HTTP category default to POST
  */
-HttpTransport::HttpTransport(Url url, bool secure) : m_Typ(POST)
+HttpTransport::HttpTransport(Url url, int secure) : m_Typ(POST)
 {
     m_Url = url;
     m_IsHttpHeader = 0;
@@ -95,7 +95,7 @@ HttpTransport::HttpTransport(Url url, bool secure) : m_Typ(POST)
  *	Create HTTP transport with provided remote address as URL-string,
  *  set HTTP category default to POST
  */
-HttpTransport::HttpTransport(std::string& strUrl, bool secure) : m_Typ(POST)
+HttpTransport::HttpTransport(std::string& strUrl, int secure) : m_Typ(POST)
 {
     m_Url = Url(strUrl);
     m_strUrl = strUrl;

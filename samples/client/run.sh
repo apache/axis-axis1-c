@@ -1,6 +1,6 @@
-echo "running interoptests/cbase..."
+echo "running sslclient..."
 echo "-----------------------------"
-./cbase
+./sslclient
 
 echo "-----------------------------"
 

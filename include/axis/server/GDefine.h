@@ -68,7 +68,7 @@
 /* This file contains all global definitions that are valid across whole Axis C++ project.*/
 
 typedef enum { AXIS_SUCCESS=0, AXIS_FAIL = -1, AXIS_OBJECT_ALREADY_EXISTS=1} AXIS_GLOBAL_ERROR;
-typedef enum { APTHTTP=1, APTFTP, APTSMTP, APTOTHER } AXIS_PROTOCOL_TYPE;
+typedef enum { APTHTTP=1, APTFTP, APTSMTP, APTHTTPS, APTOTHER } AXIS_PROTOCOL_TYPE;
 typedef enum { CRITICAL=1, WARN, INFO, TRIVIAL} AXIS_SEVERITY_LEVEL;
 
 #define SOAPACTIONHEADER "SOAPAction"
