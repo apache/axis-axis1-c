@@ -1,0 +1,256 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <title>Axis C++ Linux Installation Guide</title>
+  <style type="text/css">
+
+.command {color: #B20000;
+text-indent: 60pt;
+font-family: helvetica;
+font-weight: bold}</style>
+  <meta name="generator" content="amaya 8.1b, see http://www.w3.org/Amaya/">
+</head>
+
+<body>
+<h1>Installing and deploying web applications using xml-AxisC++</h1>
+
+<p></p>
+
+<h1>Contents</h1>
+<ul>
+  <li><a href="#Introducti">Introduction</a></li>
+  <li><a href="#What">What You Need</a></li>
+  <li><a href="#Installati">Installing On Linux</a></li>
+  <li><a href="#Installing">Installing Xercesc</a></li>
+  <li><a href="#Installing1">Installing Apache</a></li>
+  <li><a href="#Installing2">Installing AxisC++</a></li>
+  <li><a href="#Validating">Validating The Installation</a></li>
+</ul>
+<p><a name="Introducti"></a></p>
+<h1>Introduction</h1>
+
+<p>This document describes how to install Apache Axis C++. It assumes you
+already know how to write and run C++/C code and not scared away by XML. You
+should also have familiarity with Web servers. This version of Axis C++ is
+tested on Apache web server.</p>
+
+<p>For more details on using Axis C++, please see the <a
+href="linuser-guide.html">user guide</a>.This will instruct you how to
+install Axis C++ on Linux and Windows</p>
+
+<p></p>
+<p><a name="What"></a></p>
+<h1>What You need</h1>
+
+<p>It needs a few helper libraries, for logging, WSDL processing and
+introspection. You need to have following in order to run Axis C++ engine.</p>
+<ul>
+  <li>XercesC</li>
+  <li>Apache</li>
+</ul>
+
+<p></p>
+<p><a name="Installati"></a></p>
+<h1>Installation On Linux</h1>
+
+<p>We tested with the following</p>
+<ul>
+  <li>Redhat Linux 8.0(2.4.18-14) RedhatLinux9.0(2.4.20-8)</li>
+  <li>Apache 1.3 [apache_1.3.27.tar .gz, apache_1.3.28.tar.gz)] (Source)</li>
+  <li>Xerces C++ [xerces-c-src2_2_0.tar.gz](Source) &gt;(Source)</li>
+</ul>
+
+<p></p>
+
+<p><b>Getting the source or binary from the mirror site and setting the
+environment variables</b></p>
+
+<p>User can download the Axis C++ source or binary from one of the apache
+mirror sites</p>
+
+<p></p>
+
+<p>Your downloaded distribution is axis-c-src-alpha-linux.tar.gz. After you
+extracting it for example as,
+<strong>/home/axisuser/projects/axis-c-src-alpha-linux</strong> you can
+rename it as <strong>axis_c</strong></p>
+
+<p></p>
+
+<p>The directory where you extracted the tar ball will be called
+&lt;axiscpphome&gt; from now on. We further assume that the user dose the
+installation and has the linux user account axisuser. For example I have my
+&lt;axiscpphome&gt; as following.</p>
+
+<p>/home/axisuser/projects</p>
+<p><a name="Installing"></a></p>
+<h1>Installing Xercesc</h1>
+
+<p>You can get the Binary Version and the Source Version of xercesc2_2_0 from
+the uri <a href="http://www.xerces.org/">www.xerces.org</a></p>
+
+<p></p>
+
+<p>If it is source you need to follow the xerces_c Installation guide
+documentation.(warning: This must be strictly followed. Otherwise if you type
+usual configure,make, make install, it may not work.)</p>
+
+<p></p>
+<p><a name="Installing1"></a></p>
+<h1>Installing Apache</h1>
+
+<p>Get the apache downloadable software. (We used the source
+apache_1.3.27.tar.gz). Build it with sharable module support.</p>
+
+<p><strong>$ ./configure --enable-module=so</strong></p>
+
+<p>Note:- Here "so" are simple letters</p>
+
+<p></p>
+
+<p><strong>$ make</strong></p>
+
+<p><strong>$ make install</strong></p>
+
+<p></p>
+
+<p>Starting the Apache server</p>
+
+<p></p>
+
+<p><strong>$ usr/local/apache/bin/apachectl start</strong></p>
+
+<p class="command"><span class="command"></span></p>
+
+<p>Stopping the Apache Server</p>
+
+<p></p>
+
+<p><strong>$ usr/local/apache/bin/apachectl stop</strong></p>
+<p><a name="Installing2"></a></p>
+<h1>Installing Axis C++</h1>
+
+<p>Create an environment variable called AXISCPP_HOME.</p>
+
+<p><strong>$ cd /home/axisuser</strong></p>
+
+<p class="command"><span class="command"></span></p>
+
+<p><strong>[axisuser@localhost axisuser]$ vi ./.bash_profile</strong></p>
+
+<p></p>
+
+<p><strong>AXISCPP_HOME="/home/axisuser/projects/axis_c"</strong></p>
+
+<p></p>
+
+<p><strong>export AXISCPP_HOME</strong></p>
+
+<p class="command"><span class="command"></span></p>
+
+<p>Save it and back in the terminal window.</p>
+
+<p><strong>$ source ~/.bash_profile</strong></p>
+
+<p class="command"><span class="command"></span></p>
+
+<p>Verify the above change had been correctly effected by typing</p>
+
+<p></p>
+
+<p><strong>$ echo $AXISCPP_HOME</strong></p>
+
+<p class="command"><span class="command"></span></p>
+
+<p>Copy xerces_c include files</p>
+
+<p><strong>$ cp -f &lt;xercesinstdirectory&gt;/include/xercesc/*
+$AXISCPP_HOME /include/xercesc/</strong></p>
+
+<p>Copy the xercesc libraries</p>
+
+<p><strong>$ cp -f &lt;xercesinstdirectory&gt;/lib/* /usr/lib/</strong></p>
+
+<p class="command"><span class="command"></span></p>
+
+<p>Copy apache include files</p>
+
+<p><strong>$ cp -f &lt;apacheinstdirectory&gt;/include/*
+$AXISCPP_HOME/include/apache1_3/</strong></p>
+
+<p class="command"><span class="command"></span></p>
+
+<p><strong>$ cd $AXISCPP_HOME</strong></p>
+
+<p class="command"><span class="command"></span></p>
+
+<p>To Build from the Axis C++ source execute these.</p>
+
+<p></p>
+
+<p><strong>$ sh autogen.sh</strong></p>
+
+<p><strong>$ sh runconfig</strong></p>
+
+<p><strong>$ make</strong></p>
+
+<p><strong>$ make install</strong></p>
+
+<p class="command"><span class="command"></span></p>
+
+<p>Now libaxiscpp_mod.so should have been created in $AXISCPP_HOME/bin
+directory. Note:- you can give the install path inside the runconfigure
+script.There will be link errors if you don't use correct version of
+xerces-c.</p>
+
+<p></p>
+
+<p>Now you need to edit /usr/local/apache/conf/httpd.conf</p>
+
+<p><strong>$ vi /usr/local/apache/conf/httpd.conf</strong></p>
+
+<p class="command"><span class="command"></span></p>
+
+<p>At the bottom of the file you have to include following lines and save
+it.</p>
+
+<p></p>
+
+<p><strong>LoadModule axis_module libexec/libaxiscpp_mod.so</strong></p>
+
+<p><strong>&lt;Location /axis&gt;</strong></p>
+
+<p><strong>SetHandler axis</strong></p>
+
+<p><strong>&lt;/Location&gt;</strong></p>
+
+<p class="command"><span class="command"></span></p>
+
+<p>Copy /home/axisuser/projects/axis_c/bin/libaxiscpp_mod.so into
+/usr/local/Apache/libexec/</p>
+
+<p><strong>$cp -f /home/axisuser/projects/axis_c/bin/libaxiscpp_mod.so
+/usr/local/apache/libexec</strong></p>
+
+<p class="command"><span class="command"></span></p>
+
+<p>Restart apache</p>
+<p><a name="Validating"></a></p>
+<h1>Validating The Installation</h1>
+
+<p>If you have done installation successfully it will display the Axis C++
+welcome page when you point to URI <a
+href="http://localhost/axis">http://localhost/axis</a>.</p>
+
+<p></p>
+
+<p><b>Deploying a Web Service Using InteropBase.wsdl</b></p>
+
+<p>You can deploy your own web service or the sample webservices with the
+guidance in the <a href="linuser-guide.html">userguide</a></p>
+
+<p></p>
+
+<p>WSDL2Ws tool must run on a jvm.</p>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html">
+  <title>Axis C++ alpha Released!</title>
+</head>
+
+<body>
+<h1>Axis C++ is released (Alpha)!</h1>
+
+<p><br>
+</p>
+
+<h2>What is Axis C++?</h2>
+
+<p>Axis C++ is a SOAP implementation done in C++ which can be used as a SOAP
+messaging server or client.</p>
+
+<p>While Axis C++ has adopted the general architecture of Axis java, it
+introduces several core architectural features that is meant for increased
+performance.</p>
+
+<h2>Developer Base</h2>
+
+<p>Axis C++ was initiated and developed by a group of developers from
+<strong>Sri Lanka</strong> and is the first effort of it's kind in the
+country.</p>
+
+<p>The team consists of four active developers and other contributors
+sponsored by Sri Lankan software companies. Development is done at the <a
+href="http://www.opensource.lk/">LSF (Lanka Software Foundation)</a> which,
+launched the Axis C++ effort.</p>
+
+<p>The Axis C++ team hopes to attract a large user base and welcomes the
+participation of other developers to make Axis C++ a success.</p>
+
+<p></p>
+
+<p><a href="download.html">Try out Axis C++!</a></p>
+
+<p><br>
+</p>
+</body>
+</html>
