@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:C="http://xml.apache.org/axis/wsdd/providers/c">
+<service name="base" provider="CPP:DOCUMENT" description="Interop Base web service">
+<requestFlow name="InteropBaseHandlers">
+<handler name="TestHandler" type="d:/axiscppdev/ws-axis/c/bin/testHandler.dll">
+<parameter name="logAccessCountFile" value="LogAccessCountFile"/>
+</handler>
+</requestFlow>
+</service>
+<service name="Test" provider="CPP:DOCUMENT" description="Test web service">
+<requestFlow name="TestHandler1Handlers">
+<handler name="TestHandler1" type="d:/axiscppdev/ws-axis/c/bin/testHandler.dll">
+<parameter name="logAccessCountFile" value="LogAccessCountFile"/>
+</handler>
+</requestFlow>
+</service>
+</deployment>
+
