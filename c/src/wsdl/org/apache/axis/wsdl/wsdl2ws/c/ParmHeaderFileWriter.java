@@ -87,7 +87,7 @@ public class ParmHeaderFileWriter extends ParamWriter{
 			this.writer.write("typedef struct {\n");
 			writeAttributes();
 			this.writer.write("} "+classname+";\n\n");
-			this.writer.write("#endif // !defined(__"+classname.toUpperCase()+"_H__INCLUDED_)\n");
+			this.writer.write("#endif /* !defined(__"+classname.toUpperCase()+"_H__INCLUDED_)*/\n");
 			writer.flush();
 			writer.close();
 			System.out.println(getFilePath().getAbsolutePath() + " created.....");

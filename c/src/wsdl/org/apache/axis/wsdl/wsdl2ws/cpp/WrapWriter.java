@@ -94,11 +94,11 @@ public class WrapWriter extends CPPClassWriter{
 
 	protected void writeClassComment() throws WrapperFault {
 			try{
-				writer.write("///////////////////////////////////////////////////////////////////////\n");	
-				writer.write("//This is the Service implementation CPP file genarated by theWSDL2Ws.\n");
-				writer.write("//		"+classname+".cpp: implemtation for the "+classname+".\n");
-				writer.write("//\n");
-				writer.write("//////////////////////////////////////////////////////////////////////\n\n");
+				writer.write("/*\n");	
+				writer.write(" * This is the Service implementation CPP file genarated by theWSDL2Ws.\n");
+				writer.write(" * "+classname+".cpp: implemtation for the "+classname+".\n");
+				writer.write(" * \n");
+				writer.write(" */\n\n");
 			}catch(IOException e){
 				throw new WrapperFault(e);
 			}
@@ -133,13 +133,13 @@ public class WrapWriter extends CPPClassWriter{
 	 */
 	protected void writeMethods() throws WrapperFault {
 		try{
-			writer.write("//implementation of WrapperClassHandler interface\n");
+			writer.write("/*implementation of WrapperClassHandler interface*/\n");
 			
 			writer.write("void "+classname+"::OnFault(IMessageData *pMsg)\n{\n}\n\n");
 			writer.write("int "+classname+"::Init()\n{\n\treturn SUCCESS;\n}\n\n");
 			writer.write("int "+classname+"::Fini()\n{\n\treturn SUCCESS;\n}\n\n");
 			writeInvoke();
-			writer.write("\n//Methods corresponding to the web service methods\n");
+			writer.write("\n/*Methods corresponding to the web service methods*/\n");
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
 				 minfo = (MethodInfo)methods.get(i);
@@ -168,9 +168,9 @@ public class WrapWriter extends CPPClassWriter{
 	 * @throws IOException
 	 */
 	private void writeInvoke() throws IOException {
-		writer.write("\n/////////////////////////////////////////////////////////////////\n");
-		writer.write("// This method invokes the right service method \n");
-		writer.write("//////////////////////////////////////////////////////////////////\n");
+		writer.write("\n/*\n");
+		writer.write(" * This method invokes the right service method \n");
+		writer.write(" */\n");
 		writer.write("int "+classname+"::Invoke(IMessageData *mc)\n{\n");
 		//msgdata.setSoapFault(new SOAPFault(new AxisFault()))
 		writer.write("\tIWrapperSoapDeSerializer *pIWSDZ = NULL;\n");
@@ -224,9 +224,9 @@ public class WrapWriter extends CPPClassWriter{
 			}
 			returntypeissimple = CPPUtils.isSimpleType(outparamType);
 		}
-		writer.write("\n/////////////////////////////////////////////////////////////////\n");
-		writer.write("// This method wrap the service method \n");
-		writer.write("//////////////////////////////////////////////////////////////////\n");
+		writer.write("\n/*\n");
+		writer.write(" * This method wrap the service method \n");
+		writer.write(" */\n");
 		//method signature
 		writer.write("int "+classname+"::" + methodName + "(IMessageData* mc)\n{\n");
 		writer.write("\tIWrapperSoapSerializer *pIWSSZ = NULL;\n");
