@@ -61,27 +61,46 @@
  *
  */
 
-// BasicHandler.h: interface for the BasicHandler class.
+// TypeMapping.cpp: implementation of the TypeMapping class.
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_)
-#define AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_
+#include "TypeMapping.h"
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
+map<string, XSDTYPE> TypeMapping::m_sTypeMap;
+bool TypeMapping::m_bInit = false;
+//map<string, XSDTYPE> TypeMapping::m_sTypeMap["xsd:int"] = XSD_INT;
+//map<string, XSDTYPE> TypeMapping::m_sTypeMap["xsd:string"] = XSD_STRING;
 
-#include "IMessageData.h"
 
-class BasicHandler  
+TypeMapping::TypeMapping()
 {
-public:
-	BasicHandler(){};
-	virtual ~BasicHandler(){};
 
-	virtual int Invoke(IMessageData* pMsg) = 0;
-	virtual void OnFault(IMessageData* pMsg) = 0;
-};
+}
 
-#endif // !defined(AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_)
+TypeMapping::~TypeMapping()
+{
+
+}
+
+void TypeMapping::Initialize()
+{
+	if (!m_bInit)
+	{
+		m_sTypeMap["int"] = XSD_INT;
+		m_sTypeMap["string"] = XSD_STRING;
+		m_bInit = true;
+	}
+}
+
+XSDTYPE TypeMapping::Map(string &sType)
+{
+	if (m_sTypeMap.find(sType) != m_sTypeMap.end())
+	{
+		return m_sTypeMap[sType];
+	}
+	return XSD_UNKNOWN;
+}
