@@ -93,6 +93,8 @@ public:
 	WSDDHandlerList* GetRequestFlowHandlers();
   void SetAllowedRoles(string& sRole);
   list<string> GetAllowedRoles();
+  void SetIsServiceAllowed(int m_IsServiceAllowed);
+	int GetIsServiceAllowed();
 
 	WSDDService();
 	virtual ~WSDDService();
@@ -102,6 +104,7 @@ private:
 	WSDDHandlerList * m_RequestHandlers;
 	WSDDHandlerList * m_ResponseHandlers;
   list<string> m_AllowedRoles;
+  int m_IsServiceAllowed;
 };
 
 typedef map<string, WSDDService*> WSDDServiceMap;

@@ -90,6 +90,7 @@ int HandlerChain::Invoke(MessageData* pMsg)
 	m_itCurrHandler = m_HandlerList.begin();
 	while (m_itCurrHandler != m_HandlerList.end())
 	{
+    DEBUG1("while (m_itCurrHandler != m_HandlerList.end())");
 		if (SUCCESS == (*m_itCurrHandler)->Invoke(pMsg))
 		{
 			m_itCurrHandler++;
@@ -101,6 +102,7 @@ int HandlerChain::Invoke(MessageData* pMsg)
 			return FAIL;
 		}
 	}
+  DEBUG1("HandlerChain::Invoke end");
 	return SUCCESS;
 }
 
