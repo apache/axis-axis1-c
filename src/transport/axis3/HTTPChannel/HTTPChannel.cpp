@@ -275,7 +275,7 @@ bool HTTPChannel::OpenChannel()
             // Before we do anything else get the last error message;
 			long dw = GETLASTERROR
 
-			closeChannel();
+			CloseChannel();
             free( paiAddrInfo0);
 			
 			string* message = PLATFORM_GET_ERROR_MESSAGE(dw);
@@ -287,7 +287,7 @@ bool HTTPChannel::OpenChannel()
 				port='%d'\n\
 				Error Message='%s'\
 				Error Code='%d'\n",
-				m_URL.getHostName(), m_URL.getPort(), message->c_str(), dw);
+				m_URL.getHostName(), m_URL.getPort(), message->c_str(), (int)dw);
 				
 			delete(message);
 
