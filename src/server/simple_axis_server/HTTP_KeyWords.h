@@ -61,34 +61,31 @@
  *
  */
 
-#if !defined(AFX_SERVERHELPER_H__INCLUDED_)
-#define AFX_SERVERHELPER_H__INCLUDED_
+#if !defined(AFX_HTTPKEYWORDS_H__INCLUDED_)
+#define AFX_HTTPKEYWORDS_H__INCLUDED_
 
 #include <string>
-#include <map>
-
-#include "HTTP_KeyWords.h"
 
 using namespace std;
 
-enum CONTENT_TYPE {
-	HTTP_KEYWORD_TYPE,
-	STRING_TYPE
+enum HTTP_MAP_KEYWORDS {
+	HMK_URI, /*For HTTP URI*/
+	HMK_METHOD, /*For HTTP method (eg: GET, POST etc)*/
+	HMK_VERSION, /*For HTTP Version*/
+	HMK_HOST, /*For Host name*/
+	HMK_CONTENT_TYPE, /*For Content Type*/
+	HMK_CONTENT_LENGTH, /*For Content Length*/
+
+	HMK_LAST /*For Representing the last item of the enumeration*/
 };
 
-union uHttpMapContent /*this is used to store both the HTTP_KEYWORDS enumerated contents and strings*/
-{
-	HTTP_KEYWORDS eHTTP_KEYWORD; //for HTTP_KEYWORDS enumerated contents
-	const char* msValue; //for string content
-};	
+enum HTTP_KEYWORDS {
+	HK_POST, /*For HTTP POST*/
+	HK_GET, /*For HTTP GET*/
+	HK_HTTP_1_1, /*For HTTP 1.1*/
+	HK_HTTP_UNKNOWN_VERSION, /*For unknown versions of HTTP*/
 
-struct HTTP_MAP_TYPE {
-	CONTENT_TYPE eCONTENT_TYPE;
-	uHttpMapContent* objuHttpMapContent;
+	HK_LAST /*For Representing the last item of the enumeration*/
 };
 
-int getSeperatedHTTPParts(string sClientReqStream, string& sHTTPHeaders, string& sHTTPBody, map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> *map_HTTP_Headers);
-int	initializeHeaderMap(const string &HeaderLine, map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> *map_HTTP_Headers);
-int getHttpHeader(HTTP_MAP_KEYWORDS eKeyWord, map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> *map_HTTP_Headers, HTTP_MAP_TYPE *objMapContent);
-
-#endif // !defined(AFX_SERVERHELPER_H__INCLUDED_)
+#endif // !defined(AFX_HTTPKEYWORDS_H__INCLUDED_)
