@@ -292,11 +292,23 @@ const char * HTTPTransport::getHTTPHeaders()
     char			buff[8];
 
     m_strHeaderBytesToSend = m_strHTTPMethod + " ";
-    m_strHeaderBytesToSend += std::string (url.getResource ()) + " ";
+    if (m_bUseProxy)
+        m_strHeaderBytesToSend += std::string (url.getURL ()) + " ";
+    else
+		m_strHeaderBytesToSend += std::string (url.getResource ()) + " ";
     m_strHeaderBytesToSend += m_strHTTPProtocol + "\r\n";
-    m_strHeaderBytesToSend += std::string ("Host: ") + url.getHostName ();
 
-    sprintf (buff, "%u", uiPort);
+	if (m_bUseProxy)
+        m_strHeaderBytesToSend += std::string ("Host: ") + m_strProxyHost;
+    else
+		m_strHeaderBytesToSend += std::string ("Host: ") + url.getHostName ();
+
+    	
+    if (m_bUseProxy)
+        uiPort = m_uiProxyPort;
+       
+
+	sprintf (buff, "%u", uiPort);
 
     m_strHeaderBytesToSend += ":";
     m_strHeaderBytesToSend += buff;
@@ -994,7 +1006,8 @@ int HTTPTransport::getSubProtocol()
  */
 void HTTPTransport::setProxy( const char *pcProxyHost, unsigned int uiProxyPort)
 {
-    m_strProxyHost = pcProxyHost;
+    m_pActiveChannel->setProxy(pcProxyHost,uiProxyPort);
+	m_strProxyHost = pcProxyHost;
     m_uiProxyPort = uiProxyPort;
     m_bUseProxy = true;
 }
@@ -1159,6 +1172,10 @@ void HTTPTransport::processResponseHTTPHeaders() throw (HTTPTransportException)
 			{
 				m_bReopenConnection = true;
 			}
+
+            // We need to close the connection and open a new one if we have 'Proxy-Connection: close'
+            if (key == "Proxy-Connection" && value == " close")
+                m_bReopenConnection = true;
 
 	    // For both HTTP/1.0 and HTTP/1.1,
 	    // We need to keep the connection if we have 'Connection: Keep-Alive'
@@ -1500,4 +1517,3 @@ const char * HTTPTransport::getLastChannelError()
 
 	return NULL;
 }
-
