@@ -115,17 +115,6 @@ typedef struct
 
 typedef struct
 {
-	const char* uri_path;
-	Ax_header* ip_headers;
-	int ip_headercount;
-	Ax_header* op_headers;
-	int op_headercount;
-	AXIS_HTTP_METHOD ip_method;
-	AXIS_HTTP_METHOD op_method;
-} Ax_stream_https;
-
-typedef struct
-{
 	int dummy;  
 } Ax_stream_smtp;
 
@@ -133,7 +122,6 @@ typedef union
 {
 	Ax_stream_http* http;
 	Ax_stream_smtp* smtp;
-	Ax_stream_https* https;
 	void* other; /*transport specific other protocols can have its own structs here*/
 } Ax_soapcontent;
 
@@ -258,6 +246,12 @@ typedef struct
 /* NO_OF_SERIALIZE_BUFFERS should be equal to the corresponding value in the axis configuration file */
 #define NO_OF_SERIALIZE_BUFFERS 20
 
+#if defined(WIN32) 
+#define STORAGE_CLASS_INFO __declspec(dllexport)
+#else
+#define STORAGE_CLASS_INFO 
+#endif
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -266,20 +260,20 @@ extern "C"
  * Functions to manipulate Ax_soapstream object. Implemented in Packet.cpp
  *
  */
-int set_property(Ax_soapstream* stream, char * pchkey, char * pchvalue);
-const char* get_property(const Ax_soapstream* stream,const char* pchkey);
-void remove_all_properties(Ax_soapstream* stream);
+STORAGE_CLASS_INFO int set_property(Ax_soapstream* stream, char * pchkey, char * pchvalue);
+STORAGE_CLASS_INFO const char* get_property(const Ax_soapstream* stream,const char* pchkey);
+STORAGE_CLASS_INFO void remove_all_properties(Ax_soapstream* stream);
 
 /**
  * This function is implemented in axis and should be called ONCE to uninitialize Axis Engine when the 
  * Axis SOAP processor shuts down.
  */
-int uninitialize_module();
+STORAGE_CLASS_INFO int uninitialize_module();
 
 /**
  * This function is implemented in axis and should be called ONCE to initialize Axis Engine.
  */
-int initialize_module(int bServer);
+STORAGE_CLASS_INFO int initialize_module(int bServer);
 
 /**
  * This callback function is implemented in axis and should be called by the transport module in order to
@@ -288,7 +282,7 @@ int initialize_module(int bServer);
  *		stream - Ax_soapstream object contains information about the SOAP stream and the message. This also 
  *				 should be populated with the transport module.
  */
-int process_request(Ax_soapstream* stream);
+STORAGE_CLASS_INFO int process_request(Ax_soapstream* stream);
 
 /**
  * This callback function is implemented in axis and should be called by the transport module. 
@@ -300,7 +294,7 @@ int process_request(Ax_soapstream* stream);
  *		stream - Ax_soapstream object passed to transport by calling transport's AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES 
  *				 callback
  */
-void axis_buffer_release(const char* buffer, const void* bufferid, const void* stream);
+STORAGE_CLASS_INFO void axis_buffer_release(const char* buffer, const void* bufferid, const void* stream);
 
 #ifdef __cplusplus
 }
