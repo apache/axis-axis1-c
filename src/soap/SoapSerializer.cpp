@@ -185,7 +185,7 @@ int SoapSerializer::getStream()
 		//	sSerialized="";
 		//}
 	}
-	flushSerializedBuffer();
+	//flushSerializedBuffer();
 	return iStatus;
 }
 
