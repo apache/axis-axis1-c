@@ -37,6 +37,7 @@
 #include <xercesc/parsers/SAXParser.hpp>
 #include <xercesc/framework/XMLPScanToken.hpp>
 #include "SoapInputSource.h"
+#include <axis/AxisParseException.h>
 
 XERCES_CPP_NAMESPACE_USE
 
