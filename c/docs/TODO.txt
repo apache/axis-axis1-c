@@ -32,6 +32,11 @@ PERFORMANCE
 -----------
 ! <team>	Improving Serializer code so that it avoids string operations(+= operator etc)		
 		Directly calling Transport's function (eg: ap_rputs(..))
+! <team> 	With the current method of writing a web service wrapper class every web service
+		DLL (or .so) will have its own copy of Serializer/Deserializer code (statically bound).
+		Result is that the web service DLL is too large with unnecessarily linked code (more memory).
+		So we have to make Serializer/Deserializer code to a DLL and then every web service and the
+		Axis engine uses the same DLL.
 
 DOCUMENTATION
 -------------
