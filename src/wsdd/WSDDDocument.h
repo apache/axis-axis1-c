@@ -46,14 +46,14 @@ protected:
     WSDDLevels m_lev1;   /* gets values WSDD_REQFLOW or WSDD_RESFLOW */
     WSDDLevels m_lev2;   /* gets values WSDD_HANDLER or WSDD_CHAIN */
     map<AxisXMLString, AxisXMLString> m_NsStack;
-    WSDDService* m_pService;   /* Place holder for currently created Service 
-        object */
-    WSDDHandler* m_pHandler;   /* Place holder for currently created Handler
-        object */
-    AXIS_PROTOCOL_TYPE m_CurTrType;   /* Current transport type of transport
-        handlers */
-    AxisChar m_Buffer[TRANSCODE_BUFFER_SIZE];   /* used to transcode 'XMLCh'
-        to AxisChar */
+    WSDDService* m_pService;   
+    /* Place holder for currently created Service object */
+    WSDDHandler* m_pHandler;   
+    /* Place holder for currently created Handler object */
+    AXIS_PROTOCOL_TYPE m_CurTrType;   
+    /* Current transport type of transport handlers */
+    AxisChar m_Buffer[TRANSCODE_BUFFER_SIZE];   
+    /* used to transcode 'XMLCh' to AxisChar */
 public:
     virtual ~WSDDDocument(){};
     virtual int GetDeployment(const AxisChar* sWSDD,

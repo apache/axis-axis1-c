@@ -78,8 +78,8 @@ void WSDDKeywords::Initialize()
         kw_tr = __TRC("transport");
         kw_name = __TRC("name");
         kw_value = __TRC("value");
-        kw_type = __TRC("type"); /* what about this ? change to 
-        libname ? */
+        kw_type = __TRC("type"); 
+        /* what about this ? change to libname ? */
         kw_scope = __TRC("scope");
         kw_http = __TRC("http");
         kw_smtp = __TRC("smtp");

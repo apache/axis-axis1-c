@@ -13,9 +13,9 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- * @author Sanjaya Singharage
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- * @author Susantha Kumara (skumara@virtusa.com, susantha@opensource.lk)
+ *   @author Sanjaya Singharage
+ *   @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ *   @author Susantha Kumara (skumara@virtusa.com, susantha@opensource.lk)
  *
  */
 
@@ -137,8 +137,12 @@ int WSDDDeployment::SaveWSDD()
     if(!file) return AXIS_FAIL;
     do
     {
-        if (fputs("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", file) < 0) break;
-        if (fputs("<deployment xmlns=\"http://xml.apache.org/axis/wsdd/\"xmlns:C=\"http://xml.apache.org/axis/wsdd/providers/C\" xmlns:CPP=\"http://xml.apache.org/axis/wsdd/providers/CPP\">\n", file) < 0) break;
+        if (fputs("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", file) < 0) 
+            break;
+        if (fputs("<deployment xmlns=\"http://xml.apache.org/axis/wsdd/\
+            \"xmlns:C=\"http://xml.apache.org/axis/wsdd/providers/C\" xmlns:\
+            CPP=\"http://xml.apache.org/axis/wsdd/providers/CPP\">\n",
+            file) < 0) break;
         if (fputs("\t<globalConfiguration>\n", file) < 0) break;
         WSDDHandlerList::iterator iter;
         if(m_GlobalRequestHandlers)

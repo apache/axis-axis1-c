@@ -134,7 +134,7 @@ void  WSDDService::AddHandler(bool bRequestFlow, WSDDHandler* pHandler)
 {
     if (bRequestFlow)
     {
-        //AXISTRACE1("WSDDService::AddHandler");
+        /* AXISTRACE1("WSDDService::AddHandler"); */
         if (!m_RequestHandlers) m_RequestHandlers = new WSDDHandlerList;
         m_RequestHandlers->push_back(pHandler);
     }
@@ -214,7 +214,7 @@ int WSDDService::UpdateWSDD(FILE* wsddfile, int tabcount)
     }
     PrintTabs(tabcount+1); *this <<
         "<parameter name=\"allowedMethods\" value=\"";
-    //for looop
+    /* for looop */
     for (list<AxisString>::iterator itrs = m_AllowedMethods.begin();
     itrs != m_AllowedMethods.end(); itrs++)
     {

@@ -13,8 +13,8 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- * @author Sanjaya Singharage
- * @author Suasntha Kumara (skumara@virtusa.com, susantha@opensource.lk)
+ *   @author Sanjaya Singharage
+ *   @author Suasntha Kumara (skumara@virtusa.com, susantha@opensource.lk)
  *
  */
 
@@ -53,8 +53,8 @@ WSDDDocumentExpat::~WSDDDocumentExpat()
 int WSDDDocumentExpat::GetDeployment(const AxisChar* sWSDD,
                                      WSDDDeployment* pDeployment)
 {
-    m_pDeployment = pDeployment;    /* this enables the access to Deployment
-    object while parsing */
+    m_pDeployment = pDeployment;    
+    /* this enables the access to Deployment object while parsing */
     if (AXIS_SUCCESS != ParseDocument(sWSDD))
     {
         AXISTRACE1("Deployment descripter loading failed", CRITICAL);
@@ -108,8 +108,8 @@ int WSDDDocumentExpat::ParseDocument(const AxisChar* sWSDD)
 int WSDDDocumentExpat::UpdateDeployment(const AxisChar* sWSDD,
                                         WSDDDeployment* pDeployment)
 {
-    m_pDeployment = pDeployment;    /* this enables the access to Deployment
-    object while parsing */
+    m_pDeployment = pDeployment;    
+    /* this enables the access to Deployment object while parsing */
     XML_Parser Parser = XML_ParserCreateNS(NULL, NAMESPACESEPARATOR);
     XML_SetUserData(Parser, this);
     XML_SetNamespaceDeclHandler(Parser, s_startPrefixMapping,
@@ -130,11 +130,11 @@ void  WSDDDocumentExpat::endElement (const XML_Ch *qname)
 {
     QName qn;
     qn.SplitQNameString(qname,NAMESPACESEPARATOR);
-    if (0 != strcmp(qn.localname, kw_param))    /* just neglect endElement 
-        of parameter */
+    if (0 != strcmp(qn.localname, kw_param))   
+    /* just neglect endElement of parameter */
     {
-        if (m_lev1 == WSDD_UNKNOWN)    /* not inside a requestFlow or 
-            responseFlow elements */
+        if (m_lev1 == WSDD_UNKNOWN)    
+        /* not inside a requestFlow or responseFlow elements */
         {
             switch(m_lev0)
             {
@@ -462,8 +462,8 @@ void WSDDDocumentExpat::startElement(const XML_Ch *qname,const XML_Ch **attrs)
 {
     QName qn;
     qn.SplitQNameString(qname,NAMESPACESEPARATOR);
-    if (m_lev1 == WSDD_UNKNOWN)    /* not inside a requestFlow or 
-        responseFlow elements */
+    if (m_lev1 == WSDD_UNKNOWN)    
+    /* not inside a requestFlow or responseFlow elements */
     {
         switch(m_lev0)
         {
@@ -575,8 +575,8 @@ void WSDDDocumentExpat::startElement(const XML_Ch *qname,const XML_Ch **attrs)
     {
         if(0 == strcmp(qn.localname, kw_param))
         {  
-            GetParameters(m_lev2, attrs);    /* must be parameters of 
-            a handler or a chain */
+            GetParameters(m_lev2, attrs);    
+            /* must be parameters of a handler or a chain */
         }
 
         else if(0 == strcmp(qn.localname, kw_hdl))
