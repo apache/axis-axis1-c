@@ -55,33 +55,54 @@
  * <http://www.apache.org/>.
  *
  *
+ *
+ *
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ *
  */
 
-#include "AnyElement.h"
-#include <axis/common/Packet.h>
+// QName.h: interface for the QName class.
+//
+//////////////////////////////////////////////////////////////////////
 
-#if !defined(__XMLPARSER_H_INCLUDED__)
-#define __XMLPARSER_H_INCLUDED__
+#if !defined(AFX_QNAME_H__7E4E7E7B_F051_4989_89A6_F0248109C410__INCLUDED_)
+#define AFX_QNAME_H__7E4E7E7B_F051_4989_89A6_F0248109C410__INCLUDED_
+
+#include <axis/common/GDefine.h>
 
 /**
-    @class XMLParser
-    @brief Interface that any parser wrapper should implement in order to be use 
-		   in Axis as a SOAP parser.
-    @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
-*/
-class XMLParser
+ *	Qualified name according to "Namespaces in XML" specification.
+ *	
+ *	QName	  ::=  (Prefix ':')? LocalPart										<br>
+ *	Prefix	  ::=  NCName														<br>
+ *	LocalPart ::=  NCName														<br>
+ *	NCName	  ::=  (Letter | '_') (NCNameChar)*  ;  An XML Name, minus the ":"	<br>
+ *	NCNameChar ::=  Letter | Digit | '.' | '-' | '_' etc.						<br>
+ *
+ *	The Prefix provides the namespace prefix part of the qualified name, and must 
+ *	be associated with a namespace URI reference in a namespace declaration. 
+ *	The LocalPart provides the local part of the qualified name. 
+ *	Note that the prefix functions only as a placeholder for a namespace name. 
+ *	Applications should use the namespace name, not the prefix, in constructing 
+ *	names whose scope extends beyond the containing document.
+ *
+ *	
+ *	@brief	Qualified name according to "Namespaces in XML" specification
+ */
+
+#define NAMESPACESEPARATOR 0x03 /*Heart*/
+
+class QName  
 {
 public:
-	virtual ~XMLParser(){};
-	virtual int SetInputStream(const Ax_soapstream* pInputStream)=0;
-	virtual const Ax_soapstream* GetInputStream()=0;
-	virtual int Init()=0;
-	virtual const XMLCh* GetNS4Prefix(const XMLCh* prefix)=0;
-	virtual int GetStatus()=0;
-	virtual const AnyElement* Next()=0;
-	virtual AXIS_TRANSPORT_STATUS GetTransportStatus()=0;
-	virtual void SetTransportStatus(AXIS_TRANSPORT_STATUS nStatus)=0;
+	const XMLCh* uri;
+	const XMLCh* localname;
 
+public:
+	QName();
+	virtual ~QName();
+	void SplitQNameString(const XMLCh* qname, XMLCh sep);
+	void MergeQNameString(XMLCh sep);
 };
 
-#endif
+#endif // !defined(AFX_QNAME_H__7E4E7E7B_F051_4989_89A6_F0248109C410__INCLUDED_)
