@@ -65,6 +65,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+#include "../engine/AxisEngine.h"
 #include "Param.h"
 #include "ArrayBean.h"
 #include "BasicTypeSerializer.h"
@@ -75,6 +76,8 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
+
+bool AxisEngine::m_bServer;
 
 Param::Param(const Param& param)
 {
@@ -957,7 +960,11 @@ ComplexObjectHandler::ComplexObjectHandler()
 
 ComplexObjectHandler::~ComplexObjectHandler()
 {
-	if (pObject && pDelFunct) pDelFunct(pObject);
+	/* At client side we do not delete either output or return objects */
+	if (AxisEngine::m_bServer) 
+	{
+		if (pObject && pDelFunct) pDelFunct(pObject);
+	}
 }
 
 void ComplexObjectHandler::Init()

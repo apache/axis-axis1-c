@@ -79,13 +79,7 @@ SoapMethod::SoapMethod()
 
 SoapMethod::~SoapMethod()
 {
-	list<Param*>::iterator itParam= m_InputParams.begin();
-
-	while(itParam != m_InputParams.end()) {		
-		delete *itParam;
-		itParam++;
-	}
-	m_InputParams.clear();
+	list<Param*>::iterator itParam;
 	for (list<Attribute*>::iterator it = m_attributes.begin(); it != m_attributes.end(); it++)
 	{
 		delete (*it);
@@ -110,11 +104,6 @@ void SoapMethod::setLocalName(const AxisChar* localname)
 void SoapMethod::setUri(const AxisChar* uri)
 {
 	m_strUri = uri;
-}
-
-void SoapMethod::addInputParam(Param *param)
-{
-	m_InputParams.push_back(param);
 }
 
 void SoapMethod::AddOutputParam(Param *param)

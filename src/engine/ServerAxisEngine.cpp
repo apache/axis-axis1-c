@@ -37,6 +37,10 @@ int ServerAxisEngine::Process(Ax_soapstream* soap)
         AXISTRACE2("ServerAxisEngine::Process", sSessionId.c_str());
 		int nSoapVersion;
 
+		if (!(soap->transport.pSendFunct && soap->transport.pGetFunct &&
+			soap->transport.pSendTrtFunct && soap->transport.pGetTrtFunct))
+			return FAIL;
+
 		do {
 			//populate MessageData with transport information
 			m_pMsgData->m_Protocol = soap->trtype;
@@ -160,7 +164,7 @@ int ServerAxisEngine::Process(Ax_soapstream* soap)
 		}
 		while(0);
 		//send any transoport information like http headers first
-		send_transport_information(soap);
+		soap->transport.pSendTrtFunct(soap);
 		//Serialize
 		m_pSZ->SetOutputStream(soap);
 

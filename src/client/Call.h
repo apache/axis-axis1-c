@@ -8,6 +8,7 @@
 #include "../common/IParam.h"
 #include "../engine/ClientAxisEngine.h"
 
+/* A separate call class object should be used by each thread */
 class Call  
 {
 public:
@@ -16,7 +17,7 @@ public:
 	int SetProtocol(AXIS_PROTOCOL_TYPE protocol);
 	int UnInitialize();
 	int Initialize();
-	Param * GetResult();
+	uParamValue GetResult();
 	int Invoke();
 	void SetReturnType(void* pObject, void* pDZFunct, void* pDelFunct, const char * theType, const char * uri);
 	void SetReturnType(XSDTYPE nType);
@@ -43,6 +44,9 @@ public:
 	Call();
 	virtual ~Call();
 private:
+	int OpenConnection();
+	void CloseConnection();
+private:
 	ClientAxisEngine* m_pAxisEngine;
 	uParamValue m_uReturnValue;
 	MessageData* m_pMsgData;
@@ -51,7 +55,6 @@ private:
 	XSDTYPE m_nReturnType;
 	ComplexObjectHandler m_ReturnCplxObj;
 	Ax_soapstream m_Soap;
-	Param * m_Param;
 };
 
 #endif // !defined(AFX_CALL_H__D13E5626_0A9B_43EA_B606_364B98CEDAA8__INCLUDED_)

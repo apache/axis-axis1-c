@@ -97,10 +97,6 @@ public:
 	void getSoapSerializer(IHandlerSoapSerializer** pIHandlerSoapSerializer);
 	void getSoapSerializer(IWrapperSoapSerializer** pIWrapperSoapSerializer);	
 	IWrapperSoapDeSerializer* getSoapDeserializer();
-	/*
-	comm on 25Jul2003 at 10.00am
-	ISoapSerializer* getSoapSerializer();
-	*/
 	int setPastPivotState(bool bState);
 	bool isPastPivot();
 	void SetDeSerializer(SoapDeSerializer* pDZ);

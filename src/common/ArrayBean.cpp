@@ -104,18 +104,10 @@ ArrayBean::~ArrayBean()
 			if (m_value.cta)
 			{
 				list<int>::iterator it = m_size.begin();
-				int blocksize = GetArrayBlockSize(it);
-/*
-				void* pItem;
-				int itemsize = m_value.cta->pSizeFunct();
-				unsigned long ptrval = reinterpret_cast<unsigned long>(m_value.cta->pObject);
-				for (int x=0; x<blocksize; x++)
-				{
-					pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
-					m_value.cta->pDelFunct(pItem);
-				}
-*/			
+				int blocksize = GetArrayBlockSize(it);		
 				m_value.cta->pDelFunct(m_value.cta->pObject, true, blocksize);
+				/* make sure that the ComplexObjectHandler's destructor does not try to delete the objects again */
+				m_value.cta->pObject = NULL; 
 				delete m_value.cta;
 			}
 		}

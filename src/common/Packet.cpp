@@ -67,13 +67,13 @@
 
 int set_header(Ax_soapstream* soap, char * pchkey, char * pchvalue)
 {
-	int y = soap->so.http.ip_headercount;
+	int count = soap->so.http.ip_headercount;
 	Ax_header * temp = soap->so.http.ip_headers;
 	soap->so.http.ip_headers = (Ax_header*)realloc(temp, 
-										(sizeof(Ax_header)*(y+1)));
-	soap->so.http.ip_headers[y].headername = pchkey;
-	soap->so.http.ip_headers[y].headervalue = pchvalue;
-	soap->so.http.ip_headercount = y+1;
+										(sizeof(Ax_header)*(count+1)));
+	soap->so.http.ip_headers[count].headername = pchkey;
+	soap->so.http.ip_headers[count].headervalue = pchvalue;
+	soap->so.http.ip_headercount = count+1;
 
 	return 0;
 }

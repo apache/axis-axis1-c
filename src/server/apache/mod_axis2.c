@@ -81,7 +81,7 @@ extern unsigned char chEBuf[1024];
 //Call initialize_module() [of Packet.h] from within this method
 void module_init(server_rec *svr_rec, apr_pool_t* p)
 {
-	initialize_module();
+	initialize_module(1);
 }
 
 

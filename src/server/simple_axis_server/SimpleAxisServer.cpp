@@ -45,7 +45,7 @@ int executeWork() {
 	//printf("soap request :\n %s\n", echoBuffer);
 //	wprintf(L"soap request :\n %s\n", ip);
 
-	initialize_module();
+	initialize_module(1);
 	
 	process_request(str);	
 	
