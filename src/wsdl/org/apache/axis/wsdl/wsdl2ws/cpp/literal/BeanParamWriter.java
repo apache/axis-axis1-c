@@ -183,36 +183,51 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 					if( nillable)
 					{
 						writer.write("\tAxis_Array\tsAA;\n\n");
+						writer.write("\tsAA.m_Size = 1;\n\n");
 						
 						if( moreThanOne)
 						{
-							writer.write("\tsAA.m_Size = 1;\n\n");
 							writer.write("\tfor( int iCount = 0; iCount < param->count; iCount++)\n");
-							writer.write("\t{\n");
-							writer.write("\t\tsAA.m_Array = (void **)param->"+attribs[i].getElementNameAsString()+".m_Array[iCount];\n\n");
-							writer.write("\t\tpSZ->serializeCmplxArray( &sAA,\n");
-							writer.write("\t\t\t\t\t\t\t (void*) Axis_Serialize_"+arrayType+",\n");
-							writer.write("\t\t\t\t\t\t\t (void*) Axis_Delete_"+arrayType+",\n");
-							writer.write("\t\t\t\t\t\t\t (void*) Axis_GetSize_"+arrayType+",\n");
-							writer.write("\t\t\t\t\t\t\t \""+attribs[i].getElementNameAsString()+"\", Axis_URI_"+arrayType+");\n");
-							writer.write("\t}\n");
 						}
 						else
 						{
-							writer.write("\tsAA.m_Size = param->Item.m_Size;\n\n");
-							writer.write("\t" + arrayType + " * ps" + arrayType + " = new " + arrayType + "[param->Item.m_Size];\n\n");
-							writer.write("\tsAA.m_Array = ps" + arrayType + ";\n\n");
-							writer.write("\tfor( int iCount = 0; iCount < sAA.m_Size; iCount++)\n");
-							writer.write("\t{\n");
-							writer.write("\t\t*ps" + arrayType + " = *param->Item.m_Array[iCount];\n\n");
-							writer.write("\t\tps" + arrayType + "++;\n");
-							writer.write("\t}\n\n");
-							writer.write("\tpSZ->serializeCmplxArray( &sAA,\n");
-							writer.write("\t\t\t\t\t\t (void*) Axis_Serialize_"+arrayType+",\n");
-							writer.write("\t\t\t\t\t\t (void*) Axis_Delete_"+arrayType+",\n");
-							writer.write("\t\t\t\t\t\t (void*) Axis_GetSize_"+arrayType+",\n");
-							writer.write("\t\t\t\t\t\t \""+attribs[i].getElementNameAsString()+"\", Axis_URI_"+arrayType+");\n");
+							writer.write("\tfor( int iCount = 0; iCount < param->" + attribs[i].getElementNameAsString() + ".m_Size; iCount++)\n");
 						}
+
+						writer.write("\t{\n");
+						
+						if( moreThanOne)
+						{
+							writer.write("\t\tif( param->infos.m_Array[iCount] == NULL)\n");
+						}
+						else
+						{
+							writer.write("\t\tif( param->" + attribs[i].getElementNameAsString() + ".m_Array[iCount] == NULL)\n");
+						}
+						
+						writer.write("\t\t{\n");
+						writer.write("\t\t\tpSZ->serializeAsAttribute( \"<" + attribs[i].getElementNameAsString() +" xsi:nil\", 0, (void*)&(xsd_boolean_true), XSD_BOOLEAN);\n");
+						writer.write("\t\t\tpSZ->serialize( \"/>\", NULL);\n");
+						writer.write("\t\t}\n");
+						writer.write("\t\telse\n");
+						writer.write("\t\t{\n");
+
+						if( moreThanOne)
+						{
+							writer.write("\t\t\tsAA.m_Array = (void **)param->infos.m_Array[iCount];\n");
+						}
+						else
+						{
+							writer.write("\t\t\tsAA.m_Array = param->" + attribs[i].getElementNameAsString() + ".m_Array[iCount];\n\n");
+						}
+
+						writer.write("\t\t\tpSZ->serializeCmplxArray( &sAA,\n");
+						writer.write("\t\t\t\t\t\t\t\t\t (void*) Axis_Serialize_"+arrayType+",\n");
+						writer.write("\t\t\t\t\t\t\t\t\t (void*) Axis_Delete_"+arrayType+",\n");
+						writer.write("\t\t\t\t\t\t\t\t\t (void*) Axis_GetSize_"+arrayType+",\n");
+						writer.write("\t\t\t\t\t\t\t\t\t \""+attribs[i].getElementNameAsString()+"\", Axis_URI_"+arrayType+");\n");
+						writer.write("\t\t}\n");
+						writer.write("\t}\n");
 					}
 					else
 					{
