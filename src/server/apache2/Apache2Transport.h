@@ -47,7 +47,7 @@
 #include <string.h>
 #endif
 
-#include "AttachmentHelper.h"
+//#include "AttachmentHelper.h"
 #include <axis/ISoapAttachment.hpp>
 
 AXIS_CPP_NAMESPACE_USE
@@ -89,7 +89,7 @@ public:
     void setTimeout(const long lSeconds) {};
 
 private:
-	AttachmentHelper* pAttachmentHelper;
+//	AttachmentHelper* pAttachmentHelper;
 	void* m_pContext;
 #ifndef CHUNCKED_DATA_SUPPORTED
     BufferInfo* m_pBuffers;

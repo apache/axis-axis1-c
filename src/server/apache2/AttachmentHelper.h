@@ -35,7 +35,7 @@ class AttachmentHelper
 {
 private:
 	map<const string, ISoapAttachment*> mymap;
-	map<const string, ISoapAttachment*>::iterator iter;
+//	map<const string, ISoapAttachment*>::iterator iter;
 	char* pMime;
 public:
 	char* getIncomingSOAPMimeHeaders();
