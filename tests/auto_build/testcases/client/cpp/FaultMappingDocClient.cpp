@@ -53,7 +53,8 @@ int main(int argc, char* argv[])
 			try
 			{
 				MathOps ws(endpoint);
-				cout << "Trying to " << op << " " << i1 << " by " << i2 << endl;
+				if( iRetryIterationCount == 3)
+					cout << "Trying to " << op << " " << i1 << " by " << i2 << endl;
 				iResult = ws.div(i1, i2);		
 				cout << "Result is " << iResult << endl;
 				bSuccess = true;
