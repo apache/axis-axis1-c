@@ -5,7 +5,7 @@ AccessBean::AccessBean()
 }
 
 //this is never called. just default method
-int AccessBean::DeSerialize(ISoapDeSerializer *pDZ)
+int AccessBean::DeSerialize(IWrapperSoapDeSerializer *pDZ)
 {
 	return SUCCESS;
 }

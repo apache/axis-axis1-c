@@ -70,7 +70,8 @@
 #include <string>
 using namespace std;
 
-class ISoapDeSerializer;
+class IWrapperSoapDeSerializer;
+class IHandlerSoapDeSerializer;
 //class ISoapSerializer;
 class IHandlerSoapSerializer;
 class IWrapperSoapSerializer;
@@ -84,7 +85,11 @@ public:
 	comm on 26Jul2003 2.50pm
 	virtual ISoapSerializer* getSoapSerializer()=0;
 	*/
-	virtual ISoapDeSerializer* getSoapDeserializer()=0;
+	virtual IWrapperSoapDeSerializer* getSoapDeserializer()=0;
+
+	virtual void getSoapDeSerializer(IWrapperSoapDeSerializer** pIWrapperSoapDeSerializer)=0;
+	virtual void getSoapDeSerializer(IHandlerSoapDeSerializer** pIHandlerSoapDeSerializer)=0;
+
 	virtual void SetUserName(string& m_sUserName)=0;
 	virtual string& GetUserName()=0;
 	virtual bool isPastPivot()=0;
