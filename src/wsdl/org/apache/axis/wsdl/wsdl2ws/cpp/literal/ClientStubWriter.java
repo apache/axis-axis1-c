@@ -288,13 +288,13 @@ public class ClientStubWriter
                 }
                 else
                 {
-                    //paraTypeName = type.getLanguageSpecificName();
-                    paraTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(
+                    paraTypeName = type.getLanguageSpecificName();
+                    /*paraTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(
                     returntype,
-                    wscontext);
-//type.getLanguageSpecificName();
+                    wscontext);*/
                 //typeisarray = true;
-            typeisarray= (outparamType.lastIndexOf("Array") > 0);
+            //typeisarray= (outparamType.lastIndexOf("Array") > 0);
+            typeisarray= (paraTypeName.lastIndexOf("Array") > 0);
                 }
                 typeisarray |= type.isArray();
             }
@@ -336,11 +336,11 @@ public class ClientStubWriter
                     }
                     else
                     {
-                        ///paraTypeName = type.getLanguageSpecificName();
-                    paraTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(
+                        paraTypeName = type.getLanguageSpecificName();
+                    /*paraTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(
                     returntype,
-                    wscontext);
-            typeisarray= (outparamType.lastIndexOf("Array") > 0);
+                    wscontext);*/
+            typeisarray= (paraTypeName.lastIndexOf("Array") > 0);
                     }
                     typeisarray |= type.isArray();
                 }
@@ -555,7 +555,7 @@ public class ClientStubWriter
                     else
                     {
                         paraTypeName = type.getLanguageSpecificName();
-            typeisarray= (outparamType.lastIndexOf("Array") > 0);
+            typeisarray= (paraTypeName.lastIndexOf("Array") > 0);
                     }
                     typeisarray |= type.isArray();
                 }
@@ -639,7 +639,7 @@ public class ClientStubWriter
                         }
                         else
                         {
-                            if (arrayType.isSimpleType())
+                            if (arrayType!= null && arrayType.isSimpleType())
                             {
                                 // Simple type in the schema
                                 String containedType =
