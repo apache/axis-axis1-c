@@ -76,7 +76,7 @@ static int PTRCALL
 PREFIX(doHomeWork)(TokDataStruct* data, int* parserState, char** ptr, int* numOfChars)
 {
     numOfChars -= MINBPC(enc);
-        *ptr += MINBPC(enc);    
+    *ptr += MINBPC(enc);    
     data->numOfPtrs = 0;
     *parserState = S_0;
     return SPP_ERROR_NONE;
@@ -85,20 +85,7 @@ PREFIX(doHomeWork)(TokDataStruct* data, int* parserState, char** ptr, int* numOf
 static int PTRCALL
 PREFIX(tokenizeProlog)(int* parserState, TokDataStruct* data, const ENCODING *enc,
                        int *numOfChars, char* end, const char **ptr)
-{
-/*
- *   int byteType;
- *   printf("MINBPC(enc):%d\n", MINBPC(enc));
- *   while(*numOfChars)
- *   {
- *       printf("*ptr:%s\n", *ptr);
- *       byteType = BYTE_TYPE(enc, *ptr);
- *       printf("BYTE_TYPE:%d\n", BYTE_TYPE(enc, *ptr));    
- *       (*ptr) += MINBPC(enc);
- *       *numOfChars -= MINBPC(enc);
- *   }
- */
-    
+{ 
     /* printf("*numOfChars:%d\n", *numOfChars); */
     int byteType;
     while(*numOfChars >= MINBPC(enc))
@@ -293,20 +280,7 @@ PREFIX(tokenizeProlog)(int* parserState, TokDataStruct* data, const ENCODING *en
 static int PTRCALL
 PREFIX(tokenizeContent)(int* parserState, TokDataStruct* data, const ENCODING *enc,
                         int *numOfChars, char* end, const char **ptr)
-{
-/*
- *   int byteType;
- *   printf("MINBPC(enc):%d\n", MINBPC(enc));
- *   while(*numOfChars)
- *   {
- *       printf("*ptr:%s\n", *ptr);
- *       byteType = BYTE_TYPE(enc, *ptr);
- *       printf("BYTE_TYPE:%d\n", BYTE_TYPE(enc, *ptr));    
- *       (*ptr) += MINBPC(enc);
- *       *numOfChars -= MINBPC(enc);
- *   }
- */
-    
+{ 
     /* printf("*numOfChars:%d\n", *numOfChars); */
     int byteType;
     while(*numOfChars >= MINBPC(enc))
