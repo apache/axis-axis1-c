@@ -1,0 +1,25 @@
+<test>
+    <name>HandlerTest16</name>
+    <description>CalculatorDoc with Handler Chain. Test chile node attributes and retrieval</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>CalculatorDocClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            HandlerTest16.expected
+        </output>
+        <request>
+            HandlerTest16Request.out
+        </request>
+    </expected>
+    <handler>
+        <directory>
+            handler_test16
+        </directory>
+       <service>
+           Calculator
+       </service>
+    </handler>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>
+

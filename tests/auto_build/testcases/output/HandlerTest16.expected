@@ -1,0 +1,22 @@
+Number of children in header block = 1
+Number of children in node = 2
+getFirstAttribute() attr1=one
+getNextAttribute() attr2=two
+getNextAttribute() attr3=three
+getNextAttribute() attr4=four
+getNextAttribute() attr5=five
+getAttribute() attr3=three
+getLastAttribute() attr5=five
+getFirstAttribute() attr1=one
+getCurrentAttribute() attr1=one
+BasicNode first child type = 1
+BasicNode child of child type = 2
+BasicNode child of child value = sub node value1
+BasicNode last child type = 1
+BasicNode child of child type = 2
+BasicNode child of child value = sub node value2
+BasicNode child(1) child type = 1
+BasicNode child of child type = 2
+BasicNode child of child value = sub node value1
+5
+---------------------- TEST COMPLETE -----------------------------
