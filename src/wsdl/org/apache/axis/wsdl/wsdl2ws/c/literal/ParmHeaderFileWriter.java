@@ -23,7 +23,6 @@
 package org.apache.axis.wsdl.wsdl2ws.c.literal;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
@@ -33,20 +32,29 @@ import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
-import org.apache.axis.wsdl.wsdl2ws.ParamWriter;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
-public class ParmHeaderFileWriter extends ParamWriter
+public class ParmHeaderFileWriter
+    extends org.apache.axis.wsdl.wsdl2ws.c.ParmHeaderFileWriter
 {
+    /**
+     * @param wscontext
+     * @param type
+     * @throws WrapperFault
+     */
     public ParmHeaderFileWriter(WebServiceContext wscontext, Type type)
         throws WrapperFault
     {
         super(wscontext, type);
     }
+
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.SourceWriter#writeSource()
+     */
     public void writeSource() throws WrapperFault
     {
         try
@@ -89,6 +97,9 @@ public class ParmHeaderFileWriter extends ParamWriter
         }
     }
 
+    /**
+     * @throws WrapperFault
+     */
     protected void writeSimpleTypeWithEnumerations() throws WrapperFault
     {
         try
@@ -243,77 +254,8 @@ public class ParmHeaderFileWriter extends ParamWriter
         }
     }
 
-    protected void writeAttributes() throws WrapperFault
-    {
-        if (type.isArray())
-            return;
-        try
-        {
-            if (attribs.length == 0)
-            {
-                /* TODO : needed for Aix xlc */
-                writer.write("\t int emptyStruct;\n");
-            }
-            for (int i = 0; i < attribs.length; i++)
-            {
-                writer.write(
-                    "\t"
-                        + getCHeaderFileCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])
-                        + " "
-                        + attribs[i].getParamName()
-                        + ";\n");
-            }
-        }
-        catch (IOException e)
-        {
-            throw new WrapperFault(e);
-        }
-    }
-
-    protected void writeConstructors() throws WrapperFault
-    {}
-
-    protected void writeDestructors() throws WrapperFault
-    {}
-
-    protected void writeMethods() throws WrapperFault
-    {}
-
-    protected File getFilePath() throws WrapperFault
-    {
-        return this.getFilePath(false);
-    }
-
-    protected File getFilePath(boolean useServiceName) throws WrapperFault
-    {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-        {
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
-        }
-        new File(targetOutputLocation).mkdirs();
-
-        String fileName = targetOutputLocation + "/" + classname + ".h";
-
-        if (useServiceName)
-        {
-            fileName =
-                targetOutputLocation
-                    + "/"
-                    + this.wscontext.getSerInfo().getServicename()
-                    + "_"
-                    + classname
-                    + ".h";
-        }
-
-        return new File(fileName);
-    }
     /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.BasicFileWriter#writePreprocssorStatements()
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writePreprocessorStatements()
      */
     protected void writePreprocessorStatements() throws WrapperFault
     {

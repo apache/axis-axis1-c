@@ -40,8 +40,16 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class WrapWriter extends CFileWriter
 {
-    private WebServiceContext wscontext;
-    private ArrayList methods;
+    protected WebServiceContext wscontext;
+
+    protected ArrayList methods;
+
+    protected String bindingStyle;
+
+    /**
+     * @param wscontext
+     * @throws WrapperFault
+     */
     public WrapWriter(WebServiceContext wscontext) throws WrapperFault
     {
         super(
@@ -50,13 +58,20 @@ public class WrapWriter extends CFileWriter
                     + CUtils.WRAPPER_NAME_APPENDER));
         this.wscontext = wscontext;
         this.methods = wscontext.getSerInfo().getMethods();
+        this.bindingStyle = "RPC_ENCODED";
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath()
+     */
     protected File getFilePath() throws WrapperFault
     {
         return this.getFilePath(false);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath(boolean)
+     */
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
         String targetOutputLocation =
@@ -91,6 +106,9 @@ public class WrapWriter extends CFileWriter
         return new File(fileName);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeClassComment()
+     */
     protected void writeClassComment() throws WrapperFault
     {
         try
@@ -109,7 +127,7 @@ public class WrapWriter extends CFileWriter
     }
 
     /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeMethods()
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeMethods()
      */
     protected void writeMethods() throws WrapperFault
     {
@@ -135,7 +153,9 @@ public class WrapWriter extends CFileWriter
             writer.write(
                 "AXIS_BINDING_STYLE AXISCALL "
                     + classname
-                    + "_GetBindingStyle(void*p){\n\treturn RPC_ENCODED;\n}\n\n");
+                    + "_GetBindingStyle(void*p){\n\treturn "
+                    + bindingStyle
+                    + ";\n}\n\n");
             writeInvoke();
             writer.write(
                 "\n/*Methods corresponding to the web service methods*/\n");
@@ -155,7 +175,7 @@ public class WrapWriter extends CFileWriter
     }
 
     /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writePreprocssorStatements()
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writePreprocessorStatements()
      */
     protected void writePreprocessorStatements() throws WrapperFault
     {
@@ -248,7 +268,6 @@ public class WrapWriter extends CFileWriter
      * @param outparam
      * @throws IOException
      */
-
     public void writeMethodInWrapper(MethodInfo minfo)
         throws WrapperFault, IOException
     {
@@ -689,7 +708,7 @@ public class WrapWriter extends CFileWriter
     }
 
     /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.CPPClassWriter#writeGlobalCodes()
+     * @see org.apache.axis.wsdl.wsdl2ws.c.CFileWriter#writeGlobalCodes()
      */
     protected void writeGlobalCodes() throws WrapperFault
     {

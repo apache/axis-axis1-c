@@ -38,11 +38,20 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class ParmHeaderFileWriter extends ParamWriter
 {
+    /**
+     * @param wscontext
+     * @param type
+     * @throws WrapperFault
+     */
     public ParmHeaderFileWriter(WebServiceContext wscontext, Type type)
         throws WrapperFault
     {
         super(wscontext, type);
     }
+
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.SourceWriter#writeSource()
+     */
     public void writeSource() throws WrapperFault
     {
         try
@@ -78,6 +87,9 @@ public class ParmHeaderFileWriter extends ParamWriter
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeAttributes()
+     */
     protected void writeAttributes() throws WrapperFault
     {
         if (type.isArray())
@@ -107,20 +119,35 @@ public class ParmHeaderFileWriter extends ParamWriter
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeConstructors()
+     */
     protected void writeConstructors() throws WrapperFault
     {}
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeDestructors()
+     */
     protected void writeDestructors() throws WrapperFault
     {}
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeMethods()
+     */
     protected void writeMethods() throws WrapperFault
     {}
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath()
+     */
     protected File getFilePath() throws WrapperFault
     {
         return this.getFilePath(false);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath(boolean)
+     */
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
         String targetOutputLocation =
@@ -149,7 +176,7 @@ public class ParmHeaderFileWriter extends ParamWriter
     }
 
     /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.BasicFileWriter#writePreprocssorStatements()
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writePreprocessorStatements()
      */
     protected void writePreprocessorStatements() throws WrapperFault
     {

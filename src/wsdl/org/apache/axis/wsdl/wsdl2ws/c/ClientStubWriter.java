@@ -41,8 +41,14 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class ClientStubWriter extends CFileWriter
 {
-    private WebServiceContext wscontext;
-    private ArrayList methods;
+    protected WebServiceContext wscontext;
+
+    protected ArrayList methods;
+
+    /**
+     * @param wscontext
+     * @throws WrapperFault
+     */
     public ClientStubWriter(WebServiceContext wscontext) throws WrapperFault
     {
         super(
@@ -52,11 +58,17 @@ public class ClientStubWriter extends CFileWriter
         this.methods = wscontext.getSerInfo().getMethods();
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath()
+     */
     protected File getFilePath() throws WrapperFault
     {
         return this.getFilePath(false);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath(boolean)
+     */
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
         String targetOutputLocation =
@@ -91,6 +103,9 @@ public class ClientStubWriter extends CFileWriter
         return new File(fileName);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeClassComment()
+     */
     protected void writeClassComment() throws WrapperFault
     {
         try
@@ -110,7 +125,7 @@ public class ClientStubWriter extends CFileWriter
     }
 
     /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeMethods()
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeMethods()
      */
     protected void writeMethods() throws WrapperFault
     {
@@ -160,7 +175,7 @@ public class ClientStubWriter extends CFileWriter
     }
 
     /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writePreprocssorStatements()
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writePreprocessorStatements()
      */
     protected void writePreprocessorStatements() throws WrapperFault
     {
@@ -647,6 +662,7 @@ public class ClientStubWriter extends CFileWriter
         //write end of method
         writer.write("}\n");
     }
+
     /* (non-Javadoc)
      * @see org.apache.axis.wsdl.wsdl2ws.cpp.CPPClassWriter#writeGlobalCodes()
      */

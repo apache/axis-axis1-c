@@ -36,8 +36,14 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class ServiceWriter extends CFileWriter
 {
-    private WebServiceContext wscontext;
-    private ArrayList methods;
+    protected WebServiceContext wscontext;
+
+    protected ArrayList methods;
+
+    /**
+     * @param wscontext
+     * @throws WrapperFault
+     */
     public ServiceWriter(WebServiceContext wscontext) throws WrapperFault
     {
         super(
@@ -47,11 +53,17 @@ public class ServiceWriter extends CFileWriter
         this.methods = wscontext.getSerInfo().getMethods();
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath()
+     */
     protected File getFilePath() throws WrapperFault
     {
         return this.getFilePath(false);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath(boolean)
+     */
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
         String targetOutputLocation =
@@ -88,6 +100,9 @@ public class ServiceWriter extends CFileWriter
         return new File(fileName);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeClassComment()
+     */
     protected void writeClassComment() throws WrapperFault
     {
         try
@@ -106,7 +121,7 @@ public class ServiceWriter extends CFileWriter
     }
 
     /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeMethods()
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeMethods()
      */
     protected void writeMethods() throws WrapperFault
     {
@@ -198,7 +213,7 @@ public class ServiceWriter extends CFileWriter
     }
 
     /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writePreprocssorStatements()
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writePreprocessorStatements()
      */
     protected void writePreprocessorStatements() throws WrapperFault
     {

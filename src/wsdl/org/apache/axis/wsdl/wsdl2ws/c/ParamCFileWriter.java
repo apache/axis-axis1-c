@@ -14,7 +14,6 @@
  *   limitations under the License.
  */
 
- 
 /**
  * @author Srinath Perera(hemapani@openource.lk)
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
@@ -28,56 +27,99 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.apache.axis.wsdl.wsdl2ws.ParamWriter;
+import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
-import org.apache.axis.wsdl.wsdl2ws.ParamWriter;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
-import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 
-public abstract class ParamCFileWriter extends ParamWriter{
-	public ParamCFileWriter(WebServiceContext wscontext,Type type)throws WrapperFault{
-		super(wscontext,type);
-	}
-	   
-	public void writeSource()throws WrapperFault{
-	   try{
-	  		this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
-			writeClassComment();
-	   		writePreprocessorStatements();
-	   		writeGlobalCodes();
-	   		writeAttributes();
-	   		writeMethods();
-	   		//cleanup
-	   		writer.flush();
-	   		writer.close();
-		    if (WSDL2Ws.verbose)
-		        System.out.println(getFilePath().getAbsolutePath() + " created.....");
-	    } catch (IOException e) {
-			e.printStackTrace();
-			throw new WrapperFault(e);
-		}
-	}
-	   
-   	protected void writeMethods()throws WrapperFault{}
-   	protected  abstract void writeGlobalCodes()throws WrapperFault; 
-   	protected File getFilePath() throws WrapperFault {
-	   String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
-	   if(targetOutputLocation.endsWith("/"))
-		   targetOutputLocation = targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
-	   new File(targetOutputLocation).mkdirs();
-	   String fileName = targetOutputLocation + "/" + this.classname + ".c";
-	   this.wscontext.addGeneratedFile(classname + ".c");
-	   return new File(fileName);
-   	}
-   
-   	protected void writePreprocessorStatements()throws WrapperFault{
-		try {
-			writer.write("#include <malloc.h>\n");
-			writer.write("#include \""+this.classname + ".h\"\n");
-			writer.write("#include <axis/server/AxisWrapperAPI.h>\n\n");
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new WrapperFault(e);
-		}
-   }
+public abstract class ParamCFileWriter extends ParamWriter
+{
+    /**
+     * @param wscontext
+     * @param type
+     * @throws WrapperFault
+     */
+    public ParamCFileWriter(WebServiceContext wscontext, Type type)
+        throws WrapperFault
+    {
+        super(wscontext, type);
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.SourceWriter#writeSource()
+     */
+    public void writeSource() throws WrapperFault
+    {
+        try
+        {
+            this.writer =
+                new BufferedWriter(new FileWriter(getFilePath(), false));
+            writeClassComment();
+            writePreprocessorStatements();
+            writeGlobalCodes();
+            writeAttributes();
+            writeMethods();
+            //cleanup
+            writer.flush();
+            writer.close();
+            if (WSDL2Ws.verbose)
+                System.out.println(
+                    getFilePath().getAbsolutePath() + " created.....");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            throw new WrapperFault(e);
+        }
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writeMethods()
+     */
+    protected void writeMethods() throws WrapperFault
+    {}
+
+    /**
+     * @throws WrapperFault
+     */
+    protected abstract void writeGlobalCodes() throws WrapperFault;
+
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath()
+     */
+    protected File getFilePath() throws WrapperFault
+    {
+        String targetOutputLocation =
+            this.wscontext.getWrapInfo().getTargetOutputLocation();
+        if (targetOutputLocation.endsWith("/"))
+        {
+            targetOutputLocation =
+                targetOutputLocation.substring(
+                    0,
+                    targetOutputLocation.length() - 1);
+        }
+        new File(targetOutputLocation).mkdirs();
+        String fileName = targetOutputLocation + "/" + this.classname + ".c";
+        this.wscontext.addGeneratedFile(classname + ".c");
+        return new File(fileName);
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#writePreprocessorStatements()
+     */
+    protected void writePreprocessorStatements() throws WrapperFault
+    {
+        try
+        {
+            writer.write("#include <malloc.h>\n");
+            writer.write("#include \"" + this.classname + ".h\"\n");
+            writer.write("#include <axis/server/AxisWrapperAPI.h>\n\n");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            throw new WrapperFault(e);
+        }
+    }
 }
