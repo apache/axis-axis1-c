@@ -31,17 +31,18 @@ class SoapSerializer;
  *   @brief interface for the Attribute class.
  *
  *   @author Roshan Weerasuriya (roshan@opensource.lk, roshan@jkcs.slt.lk)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ *
  */
+
+/*
+ * Revision 1.1  2004/05/25 samisa
+ * Added copy constructor
+ */
+
 
 class Attribute  
 {
-private:    
-    bool isSerializable() const;
-    AxisString m_localname;
-    AxisString m_prefix;
-    AxisString m_uri;
-    AxisString m_value;
-    
 public:        
     int initializeForTesting();
     int serialize(SoapSerializer& pSZ) const;
@@ -52,12 +53,21 @@ public:
         const AxisChar* uri, const AxisChar* value);
     Attribute(const AxisChar* localname, const AxisChar* prefix, 
         const AxisChar* value);
+    Attribute(const Attribute& rCopy);    
     virtual ~Attribute();
 
     void setValue(const AxisChar* value);
     void setUri(const AxisChar* uri);
     void setPrefix(const AxisChar* prefix);
     void setLocalName(const AxisChar* localname);    
+
+private:    
+    bool isSerializable() const;
+    AxisString m_localname;
+    AxisString m_prefix;
+    AxisString m_uri;
+    AxisString m_value;
+
 };
 
 #endif
