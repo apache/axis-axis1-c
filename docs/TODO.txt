@@ -67,11 +67,18 @@ AXISDEPLOY
 
 GENERAL / UNCATEGORIZED
 -----------------------
+! <team> 	Refactor AxisEngine to make it suitable for Server side & Client side seperatly
+		so that we can derive AxisServer & AxisClient from that and no duplication result in.
+		
 X <sanjaya>	In the WSDDDocument.cpp for each and every XMLString::transcode() you have to 
 		use a corrosponding XMLString::release() to relase the allocated memeory
 
 X <sanjaya>	In the WSDDDocument.cpp write the code to handle the end element for wsdd_resflow
 * <sanjaya> 	Improve AxisEngine to send back the WSDL upon http GET request. Ex. http://url/service?wsdl
+! <team> 	Support SOAP messages with attachments: defines a binding for a SOAP message to be carried 
+		within a MIME multipart/related message.
+!<lilantha>	Servlet support for server side which helps to deploy server in a servlet containers or in
+		J2EE servers & ISAPI extention for server to deploy in IIS.
 
 Session
 -------
@@ -80,7 +87,8 @@ Session
 
 Transport
 ---------
-! <team> 	Pluggable transport API for client
+! <team> 	Pluggable transport API for server & client, seperate interfaces between Transport & 
+		other stuff.
 ! <team> 	Support for "SOAP messages with attachments"
 
 Security
