@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The Entity, wspath in the following internal subset allows setting a path for the webservices location -->
+<!DOCTYPE vars [ <!ENTITY wspath "/home/sanjaya/Axis/webservices/"> ]>
+
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:C="http://xml.apache.org/axis/wsdd/providers/C" xmlns:CPP="http://xml.apache.org/axis/wsdd/providers/CPP">
+	<globalConfiguration>
+	</globalConfiguration>
+
+	<service name="AxisBenchSoapSvc" provider="CPP:DOCUMENT" description="Axis C++ web service">
+		<parameter name="className" value="&wspath;/libAxisBench.so"/>
+		<parameter name="allowedMethods" value="doBenchRequest "/>
+	</service>
+	<service name="Calculator" provider="CPP:RPC" description="Axis C++ web service">
+		<parameter name="className" value="&wspath;/libCalculator.so"/>
+		<parameter name="allowedMethods" value="add sub mul div "/>
+	</service>
+
+	<service name="EnumerationWSService" provider="CPP:DOCUMENT" description="Axis C++ web service">
+		<parameter name="className" value="&wspath;/libEnumeration.so"/>
+		<parameter name="allowedMethods" value="getInput "/>
+	</service>
+	<service name="ExtensibilityQuery" provider="CPP:DOCUMENT" description="Axis C++ web service">
+		<parameter name="className" value="&wspath;/libExtensibilityQuery.so"/>
+		<parameter name="allowedMethods" value="query "/>
+	</service>
+	<service name="FourLevelTestDocService" provider="CPP:DOCUMENT" description="Axis C++ web service">
+		<parameter name="className" value="&wspath;/libFourLevelTestDoc.so"/>
+		<parameter name="allowedMethods" value="RetrieveTestDoc "/>
+	</service>
+	<service name="LargeReturningStringService" provider="CPP:DOCUMENT" description="Axis C++ web service">
+		<parameter name="className" value="&wspath;/libLargeReturningString.so"/>
+		<parameter name="allowedMethods" value="getLargeString "/>
+	</service>
+	<service name="ManyTypeRefRootService" provider="CPP:DOCUMENT" description="Axis C++ web service">
+		<parameter name="className" value="&wspath;/libManyTypeRefRoot.so"/>
+		<parameter name="allowedMethods" value="getInput "/>
+	</service>
+	<service name="MathOpsService" provider="CPP:RPC" description="Axis C++ web service">
+		<parameter name="className" value="&wspath;/libMathOps.so"/>
+		<parameter name="allowedMethods" value="div "/>
+	</service>
+	<service name="RecurseTypesWSService" provider="CPP:DOCUMENT" description="Axis C++ web service">
+		<parameter name="className" value="&wspath;/libRecurseTypes.so"/>
+		<parameter name="allowedMethods" value="getInput "/>
+	</service>
+	<service name="ref" provider="CPP:RPC" description="Axis C++ web service">
+		<parameter name="className" value="&wspath;/libSimpleRef.so"/>
+		<parameter name="allowedMethods" value="echoInt "/>
+	</service>
+	<service name="SimpleTypeArrayWSService" provider="CPP:DOCUMENT" description="Axis C++ web service">
+		<parameter name="className" value="&wspath;/libSimpleTypeArray.so"/>
+		<parameter name="allowedMethods" value="getInput "/>
+	</service>
+	<service name="SimpleTypeInnerUnboundedWSService" provider="CPP:DOCUMENT" description="Axis C++ web service">
+		<parameter name="className" value="&wspath;/libSimpleTypeInnerUnbounded.so"/>
+		<parameter name="allowedMethods" value="getInput "/>
+	</service>
+	<service name="SimpleTypeInnerUnboundedInOutputWSService" provider="CPP:DOCUMENT" description="Axis C++ web service">
+		<parameter name="className" value="&wspath;/libSimpleTypeInnerUnboundedInOutput.so"/>
+		<parameter name="allowedMethods" value="getInput "/>
+	</service>
+	<service name="XSDAttributeService" provider="CPP:DOCUMENT" description="Axis C++ web service">
+		<parameter name="className" value="&wspath;/libXSDAttribute.so"/>
+		<parameter name="allowedMethods" value="getDataBoolean getDataByte getDataUnsignedByte getDataShort getDataUnsignedShort getDataInt getDataUnsignedInt getDataLong getDataUnsignedLong getDataFloat getDataDouble getDataString getDataDate getDataDateTime getDataTime getDataBase64Binary getDataHexBinary getDataInteger getDataDecimal getDataQName getDataAnyURI "/>
+	<service name="FirstLevelElemType" provider="CPP:DOCUMENT" description="Axis C++ web service">
+		<parameter name="className" value="&wspath;/libFirstLevelElemType.so"/>
+		<parameter name="allowedMethods" value="RetrieveTestDoc "/>
+	</service>
+</deployment>
