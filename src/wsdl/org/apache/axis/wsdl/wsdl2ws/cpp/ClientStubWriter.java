@@ -738,7 +738,7 @@ public class ClientStubWriter extends CPPClassWriter
                 + "\" );\n");
         writer.write("\t\tif(pSoapFault)\n");
         writer.write("\t\t{\n");
-        //writer.write("\t\t\tpcCmplxFaultName = pSoapFault->getCmplxFaultObjectName().c_str();\n");
+        //writer.write("\t\t\tpcCmplxFaultName = pSoapFault->getCmplxFaultObjectName();\n");
         //to get fault info  		    
         Iterator paramsFault = minfo.getFaultType().iterator();
         String faultInfoName = null;
@@ -756,7 +756,7 @@ public class ClientStubWriter extends CPPClassWriter
         {
             flag = true;
             writer.write(
-                "\t\t\tpcCmplxFaultName = pSoapFault->getCmplxFaultObjectName().c_str();\n");
+                "\t\t\tpcCmplxFaultName = pSoapFault->getCmplxFaultObjectName();\n");
         }
         while (paramsFault.hasNext())
         {

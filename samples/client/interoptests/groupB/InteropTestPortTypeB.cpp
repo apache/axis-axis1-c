@@ -35,7 +35,7 @@ InteropTestPortTypeB::InteropTestPortTypeB(const char* pchEndpointUri, AXIS_PROT
 InteropTestPortTypeB::InteropTestPortTypeB()
 :Stub(" ", APTHTTP1_1)
 {
-	m_pCall->setEndpointURI("http://localhost/axis/groupB");
+	m_pCall->setEndpointURI("http://localhost/axis/InteropGroupB");
 }
 
 InteropTestPortTypeB::~InteropTestPortTypeB()
@@ -55,7 +55,7 @@ void InteropTestPortTypeB::echoStructAsSimpleTypes(SOAPStruct* Value0, AXIS_OUT_
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return ;
-		m_pCall->setTransportProperty(SOAPACTION_HEADER , "groupB#echoStructAsSimpleTypes");
+		m_pCall->setTransportProperty(SOAPACTION_HEADER , "InteropGroupB#echoStructAsSimpleTypes");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
 		m_pCall->setOperation("echoStructAsSimpleTypes", "http://soapinterop.org/");
 		applyUserPreferences();
@@ -69,7 +69,6 @@ void InteropTestPortTypeB::echoStructAsSimpleTypes(SOAPStruct* Value0, AXIS_OUT_
 				*OutValue2 = m_pCall->getElementAsFloat("outputFloat", 0);
 			}
 		}
-	
 	m_pCall->unInitialize();
 	}
 	catch(AxisException& e)
@@ -77,16 +76,14 @@ void InteropTestPortTypeB::echoStructAsSimpleTypes(SOAPStruct* Value0, AXIS_OUT_
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	
-	m_pCall->unInitialize();
-			throw groupB_AxisClientException(e.what());
+			throw SoapFaultException(e);
 		}
-		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/groupB" );
+		ISoapFault* pSoapFault = (ISoapFault*)
+			m_pCall->checkFault("Fault","http://localhost/axis/InteropGroupB" );
 		if(pSoapFault)
 		{
-	
-	m_pCall->unInitialize();
-			throw groupB_AxisClientException(pSoapFault);
+			m_pCall->unInitialize();
+			throw SoapFaultException(e);
 		}
 		else throw;
 	}
@@ -104,7 +101,7 @@ SOAPStruct* InteropTestPortTypeB::echoSimpleTypesAsStruct(xsd__string Value0, xs
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return pReturn;
-		m_pCall->setTransportProperty(SOAPACTION_HEADER , "groupB#echoSimpleTypesAsStruct");
+		m_pCall->setTransportProperty(SOAPACTION_HEADER , "InteropGroupB#echoSimpleTypesAsStruct");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
 		m_pCall->setOperation("echoSimpleTypesAsStruct", "http://soapinterop.org/");
 		applyUserPreferences();
@@ -118,7 +115,6 @@ SOAPStruct* InteropTestPortTypeB::echoSimpleTypesAsStruct(xsd__string Value0, xs
 				pReturn = (SOAPStruct*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_SOAPStruct, (void*) Axis_Create_SOAPStruct, (void*) Axis_Delete_SOAPStruct,"_return", 0);
 		}
 		}
-	
 	m_pCall->unInitialize();
 		return pReturn;
 	}
@@ -127,16 +123,14 @@ SOAPStruct* InteropTestPortTypeB::echoSimpleTypesAsStruct(xsd__string Value0, xs
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	
-	m_pCall->unInitialize();
-			throw groupB_AxisClientException(e.what());
+			throw SoapFaultException(e);
 		}
-		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/groupB" );
+		ISoapFault* pSoapFault = (ISoapFault*)
+			m_pCall->checkFault("Fault","http://localhost/axis/InteropGroupB" );
 		if(pSoapFault)
 		{
-	
-	m_pCall->unInitialize();
-			throw groupB_AxisClientException(pSoapFault);
+			m_pCall->unInitialize();
+			throw SoapFaultException(e);
 		}
 		else throw;
 	}
@@ -154,7 +148,7 @@ SOAPStructStruct* InteropTestPortTypeB::echoNestedStruct(SOAPStructStruct* Value
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return pReturn;
-		m_pCall->setTransportProperty(SOAPACTION_HEADER , "groupB#echoNestedStruct");
+		m_pCall->setTransportProperty(SOAPACTION_HEADER , "InteropGroupB#echoNestedStruct");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
 		m_pCall->setOperation("echoNestedStruct", "http://soapinterop.org/");
 		applyUserPreferences();
@@ -166,7 +160,6 @@ SOAPStructStruct* InteropTestPortTypeB::echoNestedStruct(SOAPStructStruct* Value
 				pReturn = (SOAPStructStruct*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_SOAPStructStruct, (void*) Axis_Create_SOAPStructStruct, (void*) Axis_Delete_SOAPStructStruct,"_return", 0);
 		}
 		}
-	
 	m_pCall->unInitialize();
 		return pReturn;
 	}
@@ -175,16 +168,14 @@ SOAPStructStruct* InteropTestPortTypeB::echoNestedStruct(SOAPStructStruct* Value
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	
-	m_pCall->unInitialize();
-			throw groupB_AxisClientException(e.what());
+			throw SoapFaultException(e);
 		}
-		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/groupB" );
+		ISoapFault* pSoapFault = (ISoapFault*)
+			m_pCall->checkFault("Fault","http://localhost/axis/InteropGroupB" );
 		if(pSoapFault)
 		{
-	
-	m_pCall->unInitialize();
-			throw groupB_AxisClientException(pSoapFault);
+			m_pCall->unInitialize();
+			throw SoapFaultException(e);
 		}
 		else throw;
 	}
@@ -202,7 +193,7 @@ SOAPArrayStruct* InteropTestPortTypeB::echoNestedArray(SOAPArrayStruct* Value0)
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return pReturn;
-		m_pCall->setTransportProperty(SOAPACTION_HEADER , "groupB#echoNestedArray");
+		m_pCall->setTransportProperty(SOAPACTION_HEADER , "InteropGroupB#echoNestedArray");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
 		m_pCall->setOperation("echoNestedArray", "http://soapinterop.org/");
 		applyUserPreferences();
@@ -214,7 +205,6 @@ SOAPArrayStruct* InteropTestPortTypeB::echoNestedArray(SOAPArrayStruct* Value0)
 				pReturn = (SOAPArrayStruct*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_SOAPArrayStruct, (void*) Axis_Create_SOAPArrayStruct, (void*) Axis_Delete_SOAPArrayStruct,"_return", 0);
 		}
 		}
-	
 	m_pCall->unInitialize();
 		return pReturn;
 	}
@@ -223,23 +213,16 @@ SOAPArrayStruct* InteropTestPortTypeB::echoNestedArray(SOAPArrayStruct* Value0)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	
-	m_pCall->unInitialize();
-			throw groupB_AxisClientException(e.what());
+			throw SoapFaultException(e);
 		}
-		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/groupB" );
+		ISoapFault* pSoapFault = (ISoapFault*)
+			m_pCall->checkFault("Fault","http://localhost/axis/InteropGroupB" );
 		if(pSoapFault)
 		{
-	
-	m_pCall->unInitialize();
-			throw groupB_AxisClientException(pSoapFault);
+			m_pCall->unInitialize();
+			throw SoapFaultException(e);
 		}
 		else throw;
 	}
-}
-
-int InteropTestPortTypeB::getFaultDetail(char** ppcDetail)
-{
-	return m_pCall->getFaultDetail(ppcDetail);
 }
 

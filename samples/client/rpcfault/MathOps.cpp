@@ -71,7 +71,7 @@ xsd__int MathOps::div(xsd__int Value0, xsd__int Value1)
 			m_pCall->checkFault("Fault","http://localhost/axis/MathOps" );
 		if(pSoapFault)
 		{
-			pcCmplxFaultName = pSoapFault->getCmplxFaultObjectName().c_str();
+			pcCmplxFaultName = pSoapFault->getCmplxFaultObjectName();
 			if(0 == strcmp("DivByZero", pcCmplxFaultName))
 			{
 				DivByZeroStruct* pFaultDetail = 

@@ -38,51 +38,97 @@ extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 AXIS_CPP_NAMESPACE_START
 using namespace std;
 
-bool AxisTrace::m_bLoggingOn = false;
+enum AxisTraceState AxisTrace::m_bLoggingOn = STATE_UNINITIALISED;
 AxisFile *AxisTrace::m_fileTrace = NULL;
 
 int AxisTrace::openFile ()
 {
-    m_fileTrace = new AxisFile();
-    //char* sFileName = g_pConfig->getAxisLogPath ();
-    char* sFileName = g_pConfig->getAxisConfProperty(AXCONF_LOGPATH);
-    if (!sFileName) return AXIS_FAIL;
-    if(AXIS_FAIL == m_fileTrace->fileOpen(sFileName, "a"))
-        return AXIS_FAIL;
-	m_bLoggingOn = true;
-      traceHeader();
-	return AXIS_SUCCESS;
+    return initialise(g_pConfig->getAxisConfProperty(AXCONF_LOGPATH), STATE_ON);
 }
 
 int AxisTrace::openFileByClient ()
 {
-    m_fileTrace = new AxisFile();
-    //char* sFileName = g_pConfig->getAxisClientLogPath ();
-    char* sFileName = g_pConfig->getAxisConfProperty(AXCONF_CLIENTLOGPATH);
-    if (!sFileName) return AXIS_FAIL;
-    if(AXIS_FAIL == m_fileTrace->fileOpen(sFileName, "a"))
-        return AXIS_FAIL;
-	m_bLoggingOn = true;
+    return initialise(g_pConfig->getAxisConfProperty(AXCONF_CLIENTLOGPATH), STATE_ON);
+}
+
+int AxisTrace::initialise(const char *filename, AxisTraceState newState) 
+{
+	AxisFile *newFile = NULL;
+	int result = AXIS_SUCCESS;
+	if (NULL != filename) 
+	{
+		newFile = new AxisFile();
+		if (NULL == newFile || 
+			AXIS_FAIL == newFile->fileOpen(filename, "a"))
+			result = AXIS_FAIL;
+	}
+
+	if (NULL != m_fileTrace) 
+	{
+		if (AXIS_FAIL == result) 
+		{
+			/*
+			 * If we have failed to open the trace file specified in axiscpp.conf and the
+			 * startup trace file is open then write a sensible error message out to the 
+			 * startup trace file before we close it.
+			 */
+			if (NULL == newFile)
+				traceLineInternal("Failed to open trace file in axiscpp.conf because of no storage");
+			else 
+			{
+				string text = "Failed to open trace file ";
+				text += filename;
+				text += " that was specified by ClientLogPath in axiscpp.conf";
+				traceLineInternal(text.c_str());
+			}
+		}
+		delete m_fileTrace;
+	}
+	m_bLoggingOn = STATE_OFF;
+
+	if (NULL == filename || AXIS_FAIL == result)
+	{
+		if (NULL != newFile) delete newFile;
+		return AXIS_FAIL;
+	}
+
+	m_fileTrace = newFile;
+	m_bLoggingOn = newState;
     traceHeader();
-    return AXIS_SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 void AxisTrace::terminate() 
 { 
-    m_bLoggingOn = false; 
+    m_bLoggingOn = STATE_STOPPED;
     delete m_fileTrace; 
     m_fileTrace = NULL; 
 }
 
 bool AxisTrace::isTraceOn()
 { 
-    return m_bLoggingOn; 
+	switch (m_bLoggingOn)
+	{
+	case STATE_OFF:
+	case STATE_STOPPED:
+		return false;
+
+	case STATE_ON:
+	case STATE_STARTUP:
+		return true;
+	
+	case STATE_UNINITIALISED:
+		return AXIS_SUCCESS==initialise(getenv("AXISCPP_STARTUP_TRACE"),STATE_STARTUP);
+	
+	default:
+		return false;
+	}
 }
 
 int AxisTrace::logaxis (const char* sLog1, const char* sLog2, const char *type,
     char* file, int line)
 {
-    if (!m_bLoggingOn) return AXIS_FAIL;
+    if (isTraceOn()) return AXIS_FAIL;
 
     string name = file;
 	name += "@";
@@ -189,6 +235,8 @@ void AxisTrace::traceLineInternal(const char *type, const char *classname,
 								  const char *methodname, const void *that, 
 								  const char *parms) 
 {
+	if (!isTraceOn()) return;
+
     time_t current = time(NULL);
 	struct tm *tm = localtime(&current);
 
@@ -244,7 +292,6 @@ void AxisTrace::traceLineInternal(const char *data)
 
 void AxisTrace::traceLine2(const char *data) 
 {
-    if (!isTraceOn()) return;
     m_fileTrace->filePuts(data);
     m_fileTrace->filePuts("\n");
     m_fileTrace->fileFlush();
@@ -459,13 +506,5 @@ void AxisTrace::addDataParameter(string& line, unsigned len, void *value) {
 		line += "<BADPOINTER>";
 	}
 }
-
-/*
-int main(int argc, char* argv[])
-{
-  tracer.trace("test");
-  return 0;
-}
-*/
 
 AXIS_CPP_NAMESPACE_END

@@ -91,10 +91,6 @@ SOURCE=..\..\..\..\..\..\samples\client\session\headers\sessionclient\gen_src\Co
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\..\..\samples\client\session\headers\sessionclient\gen_src\Counter_AxisClientException.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\..\..\..\samples\client\session\headers\sessionclient\CounterClient.cpp
 # End Source File
 # End Group
@@ -104,10 +100,6 @@ SOURCE=..\..\..\..\..\..\samples\client\session\headers\sessionclient\CounterCli
 # Begin Source File
 
 SOURCE=..\..\..\..\..\..\samples\client\session\headers\sessionclient\gen_src\Counter.hpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\..\..\samples\client\session\headers\sessionclient\gen_src\Counter_AxisClientException.hpp
 # End Source File
 # End Group
 # Begin Group "Resource Files"

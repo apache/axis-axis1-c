@@ -85,6 +85,25 @@ AXIS_CPP_NAMESPACE_START
 #define TRACE_WARN   "W"
 #define TRACE_EXCEPT "X"
 
+/*
+ * enum AxisTraceState gives the states that trace can be in. This is primarily
+ * to support startup trace. So initially trace is uninitialised. Then at the 
+ * first trace call isTraceOn decides whether startup trace should be on and
+ * either initialises startup trace or switches trace off. Then when axiscpp.conf
+ * is read in openFile() or openFileByClient() is called which switches trace off
+ * or on depending on how ClientLogPath or LogPath is set. Either way startup 
+ * trace is switched off when axiscpp.conf is read in. When trace is terminated,
+ * trace is set to stopped.
+ */
+enum AxisTraceState
+{
+	STATE_UNINITIALISED=0,
+	STATE_OFF,
+	STATE_ON,
+	STATE_STOPPED,
+	STATE_STARTUP
+};
+
 class AxisTraceEntrypoints {
 public:
     void (*m_traceLine)(const char *data);
@@ -275,7 +294,8 @@ public:
 #endif
 
 private:
-	static bool m_bLoggingOn;
+
+	static enum AxisTraceState m_bLoggingOn;
     static AxisFile *m_fileTrace;
 
     static int logthis(const char* pcLog, int level, char* arg2, int arg3);
@@ -283,6 +303,7 @@ private:
 	static void addDataParameter(std::string& line, unsigned len, void *value);
     static void traceHeader();
     static void traceLine2(const char *data);
+	static int initialise(const char *filename, enum AxisTraceState newState);
 };
 
 AXIS_CPP_NAMESPACE_END

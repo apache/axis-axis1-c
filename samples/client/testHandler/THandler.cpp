@@ -72,7 +72,7 @@ int THandler::invoke(void *pvIMsg)
 		//pIHeaderBlock->setUri("http://opensource.lk/testClientHandlerHeader/");
 
 		pIHeaderBlock->setLocalName("echoMeString");
-                pIHeaderBlock->setUri("http://soapinterop.org/echoheader/");
+                pIHeaderBlock->setURI("http://soapinterop.org/echoheader/");
 
        		const AxisChar* pachHeaderVal = "test Header Val";
 

@@ -88,10 +88,6 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\..\..\..\..\samples\client\interoptests\base\base_AxisClientException.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\..\..\samples\client\interoptests\base\InteropBaseClient.cpp
 # End Source File
 # Begin Source File

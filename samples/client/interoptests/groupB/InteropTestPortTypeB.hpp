@@ -7,8 +7,9 @@
 #define __INTEROPTESTPORTTYPEB_CLIENTSTUB_H__INCLUDED_
 
 #include <axis/client/Stub.hpp>
-#include "groupB_AxisClientException.hpp"
+#include <axis/SoapFaultException.hpp>
 #include <axis/ISoapFault.hpp>
+AXIS_CPP_NAMESPACE_USE
 #include "SOAPArrayStruct.hpp"
 #include "SOAPStruct.hpp"
 #include "SOAPStructStruct.hpp"
@@ -25,7 +26,6 @@ public:
 	STORAGE_CLASS_INFO SOAPStruct* echoSimpleTypesAsStruct(xsd__string Value0,xsd__int Value1,xsd__float Value2);
 	STORAGE_CLASS_INFO SOAPStructStruct* echoNestedStruct(SOAPStructStruct* Value0);
 	STORAGE_CLASS_INFO SOAPArrayStruct* echoNestedArray(SOAPArrayStruct* Value0);
-	int getFaultDetail(char** ppcDetail);
 };
 
 #endif /* !defined(__INTEROPTESTPORTTYPEB_CLIENTSTUB_H__INCLUDED_)*/

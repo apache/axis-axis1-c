@@ -93,10 +93,6 @@ SOURCE=..\..\..\..\..\samples\client\session\cookie\Client.cpp
 
 SOURCE=..\..\..\..\..\samples\client\session\cookie\gen_src\Total.cpp
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\..\samples\client\session\cookie\gen_src\TotalService_AxisClientException.cpp
-# End Source File
 # End Group
 # Begin Group "Header Files"
 

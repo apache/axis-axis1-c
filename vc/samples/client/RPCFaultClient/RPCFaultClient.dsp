@@ -96,10 +96,6 @@ SOURCE=..\..\..\..\samples\client\rpcfault\MathOps.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\samples\client\rpcfault\MathOps_AxisClientException.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\..\samples\client\rpcfault\MathOpsClient.cpp
 # End Source File
 # End Group
@@ -113,10 +109,6 @@ SOURCE=..\..\..\..\samples\client\rpcfault\DivByZeroStruct.hpp
 # Begin Source File
 
 SOURCE=..\..\..\..\samples\client\rpcfault\MathOps.hpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\samples\client\rpcfault\MathOps_AxisClientException.hpp
 # End Source File
 # End Group
 # Begin Group "Resource Files"
