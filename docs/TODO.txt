@@ -13,8 +13,8 @@ MESSAGE PARSING / ENCODING
 --------------------------
 ! <team> 	Improving the SoapDeserializer to parse SOAP headers
 ! <team> 	Changing SAX2 parser to use progressive parsing and then adopt XMLpull parsing
-* <susantha> 	Improving Deserializer/Serializer and related area to support multi-dimensional arrays 
-* <susantha> 	Improving Deserializer/Serializer and related area to support partially transmitted arrays 
+X <susantha> 	Improving Deserializer/Serializer and related area to support multi-dimensional arrays 
+* <team> 	Improving Deserializer/Serializer and related area to support partially transmitted arrays 
 
 CLIENT API
 ----------
@@ -33,9 +33,9 @@ SOAP 1.2 SUPPORT
 
 PERFORMANCE
 -----------
-! <team>	Improving Serializer code so that it avoids string operations(+= operator etc)		
+X <roshan>	Improving Serializer code so that it avoids string operations(+= operator etc)		
 		Directly calling Transport's function (eg: ap_rputs(..))
-! <team> 	With the current method of writing a web service wrapper class every web service
+* <susantha> 	With the current method of writing a web service wrapper class every web service
 		DLL (or .so) will have its own copy of Serializer/Deserializer code (statically bound).
 		Result is that the web service DLL is too large with unnecessarily linked code (more memory).
 		So we have to make Serializer/Deserializer code to a DLL and then every web service and the
@@ -46,6 +46,7 @@ DOCUMENTATION
 * <damitha> 	writing Integration-guide
 ! <team> 	writing user-guide
 ! <team> 	writing handler API
+X <susantha>    improving developer-guide with Transport Module writing API
 
 SAMPLES
 -------
@@ -59,7 +60,7 @@ WSDL2C++
 
 AXISDEPLOY
 ----------
-! <team>	WrapperClassGenerator 		
+* <susantha>	WrapperClassGenerator 		
 		1. writing a set of classes that can store information that parser obtains by 		   
 		   parsing the user web service's include files.		
 		2. writing c++ parser that reads and parses the web service's include files
