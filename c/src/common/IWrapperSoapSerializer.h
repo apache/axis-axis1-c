@@ -93,7 +93,7 @@ public:
 	virtual int AddOutputParam(const AxisChar* pchName, double dValue)=0;
 	virtual int AddOutputParam(const AxisChar* pchName, struct tm tValue)=0;
 	virtual int AddOutputParam(const AxisChar* pchName, const AxisChar* pStrValue)=0;
-	virtual int AddOutputParam(const AxisChar* pchName, const string& sStrValue);
+	virtual int AddOutputParam(const AxisChar* pchName, const string& sStrValue)=0;
 	//for arrays
 	virtual int AddOutputParam(const AxisChar* pchName, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)=0;
 	virtual int AddOutputParam(const AxisChar* pchName, const Axis_Array* pArray, XSDTYPE nType)=0;
