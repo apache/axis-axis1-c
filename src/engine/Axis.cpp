@@ -41,7 +41,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <malloc.h>
 #include <axis/server/Packet.h>
 #include <string>
 #include <map>

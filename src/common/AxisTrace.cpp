@@ -203,26 +203,18 @@ int AxisTrace::logaxis (const char* sLog1, const int nLog2, int level,
     char* arg3, int arg4)
 {
     int iResult = logthis(sLog1, level, arg3, arg4);
-    char* convToInt = (char*) malloc(4 * sizeof(char));
+    char convToInt[5];
     if(AXIS_SUCCESS == iResult)
     {
-	sprintf(convToInt, "%d", nLog2);
-        /*fputs (convToLong, m_fileTrace);
-        fputs ("\n", m_fileTrace);
-        fputs ("-------------------------------------------------", m_fileTrace);
-        fputs ("\n", m_fileTrace);
-
-        fflush (m_fileTrace);*/
+        sprintf(convToInt, "%d", nLog2);
         m_fileTrace.filePuts (convToInt);
         m_fileTrace.filePuts ("\n");
         m_fileTrace.filePuts ("-------------------------------------------------");
         m_fileTrace.filePuts ("\n");
-
         m_fileTrace.fileFlush ();
 
         return AXIS_SUCCESS;
     }
-    free(convToInt);
     return AXIS_FAIL;
 }
 
@@ -230,26 +222,18 @@ int AxisTrace::logaxis (const char* sLog1, const double dLog2, int level,
     char* arg3, int arg4)
 {
     int iResult = logthis(sLog1, level, arg3, arg4);
-    char* convToDouble = (char*) malloc(4 * sizeof(char));
+    char convToDouble[5];
     if(AXIS_SUCCESS == iResult)
     {
-	sprintf(convToDouble, "%f", dLog2);
-        /*fputs (convToDouble, m_fileTrace);
-        fputs ("\n", m_fileTrace);
-        fputs ("-------------------------------------------------", m_fileTrace);
-        fputs ("\n", m_fileTrace);
-
-        fflush (m_fileTrace);*/
+        sprintf(convToDouble, "%f", dLog2);
         m_fileTrace.filePuts (convToDouble);
         m_fileTrace.filePuts ("\n");
         m_fileTrace.filePuts ("-------------------------------------------------");
         m_fileTrace.filePuts ("\n");
-
         m_fileTrace.fileFlush ();
 
         return AXIS_SUCCESS;
     }
-    free(convToDouble);
     return AXIS_FAIL;
 }
 
