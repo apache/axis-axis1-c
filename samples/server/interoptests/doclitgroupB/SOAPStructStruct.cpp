@@ -24,7 +24,7 @@ int Axis_Serialize_SOAPStructStruct(SOAPStructStruct* param, IWrapperSoapSeriali
 	pSZ->serializeAsElement("varString", (void*)&(param->varString), XSD_STRING);
 	pSZ->serializeAsElement("varInt", (void*)&(param->varInt), XSD_INT);
 	pSZ->serializeAsElement("varFloat", (void*)&(param->varFloat), XSD_FLOAT);
-	pSZ->serialize("<varStruct>", 0);
+	pSZ->serialize("<varStruct", 0);
 	Axis_Serialize_SOAPStruct(param->varStruct, pSZ);
 	pSZ->serialize("</varStruct>", 0);
 	return AXIS_SUCCESS;
