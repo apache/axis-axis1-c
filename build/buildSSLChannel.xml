@@ -18,6 +18,13 @@
 			<property name="HTTP.SSLChannel.libs" value="crypto,ssl"/>
 		</else>
       </if>
+
+<if>
+	<equals arg1="transport.HTTP.ipv6" arg2="true" casesensitive="false"/>
+	<then>
+		<property name="IPV6"/>
+	</then>
+</if>
 		
       <if>
          <not>
@@ -48,6 +55,7 @@
                   <define name="HTTPSSLCHANNEL_EXPORTS"/>
                   <define name="OPENSSL_NO_KRB5"/>
                   <define name="HEADER_DES_H"/>
+			<define name="IPV6" if="IPV6"/>
                </defineset>
                               <compiler refid="OS400icc"/>
                <!-- Linkers -->
@@ -77,6 +85,10 @@
                <defineset>
                   <define name="ENABLE_AXISTRACE" if="trace"/>
                   <define name="AXISTRACE_LIBRARY"/>
+                  <define name="HTTPSSLCHANNEL_EXPORTS"/>
+                  <define name="OPENSSL_NO_KRB5"/>
+                  <define name="HEADER_DES_H"/>
+			<define name="IPV6" if="IPV6"/>
                </defineset>
 				<!-- required libraries -->
 				<syslibset libs="${HTTP.SSLChannel.libs}" dir="${HTTP.SSLChannel.dir}/lib"/>

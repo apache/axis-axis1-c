@@ -6,6 +6,12 @@
 	 <target name="compileAxisHTTPTransportChannel">
       <mkdir dir="${dir.objects}"/>
       <mkdir dir="${dir.bin}"/>
+<if>
+	<equals arg1="transport.HTTP.ipv6" arg2="true" casesensitive="false"/>
+	<then>
+		<property name="IPV6"/>
+	</then>
+</if>
       <if>
          <not>
             <isset property="aix"/>
@@ -28,6 +34,7 @@
                <defineset>
                   <define name="ENABLE_AXISTRACE" if="trace"/>
                   <define name="AXISTRACE_LIBRARY"/>
+			<define name="IPV6" if="IPV6"/>
                </defineset>
                               <compiler refid="OS400icc"/>
                <!-- Linkers -->
@@ -55,6 +62,7 @@
                <defineset>
                   <define name="ENABLE_AXISTRACE" if="trace"/>
                   <define name="AXISTRACE_LIBRARY"/>
+			<define name="IPV6" if="IPV6"/>
                </defineset>
 
                <!-- Linkers -->
