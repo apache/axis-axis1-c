@@ -27,7 +27,7 @@
 #include "SSLChannelFactory.hpp"
 #include "../SSLChannel.hpp"
 #include <stdio.h>
-#include "../../engine/AxisEngineException.h"
+#include "AxisTransportException.h"
 //#include "../../common/AxisTrace.h"
                                                                                                                              
 //extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
@@ -64,14 +64,14 @@ int SSLChannelFactory::initialize(const char* pcLibraryName)
             unloadLib();
             char *s = new char[strlen(m_pcLibraryName)+1];
             strcpy(s,m_pcLibraryName);
-            throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, s);
+            throw AxisTransportException(SERVER_TRANSPORT_LOADING_SSLCHANNEL_FAILED, s);
         }
 	}
 	else
 	{
         char *s = new char[strlen(m_pcLibraryName)+1];
         strcpy(s,m_pcLibraryName);
-        throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, s);
+        throw AxisTransportException(SERVER_TRANSPORT_LOADING_SSLCHANNEL_FAILED, s);
 	}
    return AXIS_SUCCESS;
 }
@@ -101,7 +101,7 @@ int SSLChannelFactory::loadLib()
     m_LibHandler = PLATFORM_LOADLIB(m_pcLibraryName);
     if (!m_LibHandler)
     {
-        throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED);
+        throw AxisTransportException(SERVER_TRANSPORT_LOADING_SSLCHANNEL_FAILED);
     }
 
     return AXIS_SUCCESS;
