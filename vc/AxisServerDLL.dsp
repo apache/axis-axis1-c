@@ -54,7 +54,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 libexpat.lib /nologo /dll /pdb:none /machine:I386 /out:"../bin/AxisServer.dll" /libpath:"../lib/expat"
+# ADD LINK32 /nologo /dll /pdb:none /machine:I386 /out:"../bin/AxisServer.dll"
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 PostBuild_Cmds=copy ..\bin\AxisServer.dll "%AXISCPP_DEPLOY%\lib\."
