@@ -50,6 +50,11 @@ Notes:
 	<property name="dir.include" value="${basedir}/include"/>
 	<property name="dir.tools" value="${basedir}/tools"/>
 
+	<!--
+	  Load versioning information from version.properties
+	  -->
+	<property file="${basedir}/version.properties"/>
+
       <!-- 
         Uncomment the trace property (or put it in your favourite properties file) to 
         instrument the Axis C++ source code with entry/exit trace. This is off by default.
@@ -509,17 +514,17 @@ Notes:
 		<mkdir dir="${dir.package.lib}"/>
 		<copy todir="${dir.package.lib}">
 			<fileset dir="${dir.bin}" includes="*.so"/>
-			<mapper type="glob" from="*.so" to="*.so.0.0.0"/>
+			<mapper type="glob" from="*.so" to="*.so.${version}"/>
 		</copy>
 		<!-- Create symbolic links to Client library -->
-		<symlink link="${dir.package.lib}/lib${clientLibraryName}.so.0"
-		 resource="lib${clientLibraryName}.so.0.0.0" overwrite="true"/>
+		<symlink link="${dir.package.lib}/lib${clientLibraryName}.so.${majorVersion}"
+		 resource="lib${clientLibraryName}.so.${version}" overwrite="true"/>
 		<!-- Create symbolic links to Transport library -->
-		<symlink link="${dir.package.lib}/lib${transportLibraryName}.so.0"
-		 resource="lib${transportLibraryName}.so.0.0.0" overwrite="true"/>
+		<symlink link="${dir.package.lib}/lib${transportLibraryName}.so.${majorVersion}"
+		 resource="lib${transportLibraryName}.so.${version}" overwrite="true"/>
 		<!-- Create symbolic links to XML Parser library -->
-		<symlink link="${dir.package.lib}/lib${xmlParserLibraryName}.so.0"
-		 resource="lib${xmlParserLibraryName}.so.0.0.0" overwrite="true"/>
+		<symlink link="${dir.package.lib}/lib${xmlParserLibraryName}.so.${majorVersion}"
+		 resource="lib${xmlParserLibraryName}.so.${version}" overwrite="true"/>
 	</target>
 
 	<!--
@@ -528,13 +533,13 @@ Notes:
 	<target name="packageBinsAIX" if="aix" depends="packageBinsUnix">
 		<!-- Create symbolic link to Client library -->
 		<symlink link="${dir.package.lib}/lib${clientLibraryName}.a"
-		 resource="lib${clientLibraryName}.so.0.0.0" overwrite="true"/>
+		 resource="lib${clientLibraryName}.so.${version}" overwrite="true"/>
 		<!-- Create symbolic link to Transport library -->
 		<symlink link="${dir.package.lib}/lib${transportLibraryName}.a"
-		 resource="lib${transportLibraryName}.so.0.0.0" overwrite="true"/>
+		 resource="lib${transportLibraryName}.so.${version}" overwrite="true"/>
 		<!-- Create symbolic link to XML Parser library -->
 		<symlink link="${dir.package.lib}/lib${xmlParserLibraryName}.a"
-		 resource="lib${xmlParserLibraryName}.so.0.0.0" overwrite="true"/>
+		 resource="lib${xmlParserLibraryName}.so.${version}" overwrite="true"/>
 	</target>
 
 	<!--
@@ -611,12 +616,12 @@ Notes:
 			<not>
 				<and>
 					<!-- Shared Libraries -->
-					<available file="${dir.package.lib}/lib${clientLibraryName}.so.0"/>
-					<available file="${dir.package.lib}/lib${clientLibraryName}.so.0.0.0"/>
-					<available file="${dir.package.lib}/lib${transportLibraryName}.so.0"/>
-					<available file="${dir.package.lib}/lib${transportLibraryName}.so.0.0.0"/>
-					<available file="${dir.package.lib}/lib${xmlParserLibraryName}.so.0"/>
-					<available file="${dir.package.lib}/lib${xmlParserLibraryName}.so.0.0.0"/>
+					<available file="${dir.package.lib}/lib${clientLibraryName}.so.${majorVersion}"/>
+					<available file="${dir.package.lib}/lib${clientLibraryName}.so.${version}"/>
+					<available file="${dir.package.lib}/lib${transportLibraryName}.so.${majorVersion}"/>
+					<available file="${dir.package.lib}/lib${transportLibraryName}.so.${version}"/>
+					<available file="${dir.package.lib}/lib${xmlParserLibraryName}.so.${majorVersion}"/>
+					<available file="${dir.package.lib}/lib${xmlParserLibraryName}.so.${version}"/>
 				</and>
 			</not>
 		</condition>
