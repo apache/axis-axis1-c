@@ -1,8 +1,6 @@
 #include <iostream>
 #include <stdio.h>
-#include <string>
-
-using namespace std;
+#include "ServerHelper.h"
 
 int getSeperatedHTTPParts(string sClientReqStream, string& sHTTPHeaders, string& sHTTPBody) {
 			
