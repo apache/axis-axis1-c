@@ -76,29 +76,31 @@ Receiver::~Receiver()
 
 const char* Receiver::Recv() throw (AxisException)
 {
-  int bodyLength;
-  int isHttpHeader;
+  	int bodyLength;
+  	int isHttpHeader;
 	const char* pToReturn = NULL;
-  isHttpHeader = m_pTrChannel->getIsHttpHeader();
-  bodyLength = m_pTrChannel->getBodyLength();
-  //printf("bodyLength:%d\n", bodyLength);
-  //printf("isHttpHeader:%d\n", isHttpHeader);
-  if(isHttpHeader == 1 && bodyLength == 0)
-    return NULL;
+  	isHttpHeader = m_pTrChannel->getIsHttpHeader();
+  	bodyLength = m_pTrChannel->getBodyLength();
+  	//printf("bodyLength:%d\n", bodyLength);
+  	//printf("isHttpHeader:%d\n", isHttpHeader);
+  	if(isHttpHeader == 1 && bodyLength == 0)
+    		return NULL;
 	if (0 == m_BytesRead)
 	{
 		try
 		{
-            //printf("try\n");
+            		printf("try\n");
 			*m_pTrChannel >> (&m_pMsg);
-            if(m_pMsg == NULL)
-                return NULL;
-            
+            		if(m_pMsg == NULL)
+			{
+				printf("m_pMsg==NULL\n");
+                		return NULL;
+			}
 			m_MsgSize = strlen(m_pMsg);        
 		}
 		catch(AxisException& ex)
 		{
-      printf("catch\n");
+      			printf("catch\n");
 			// Get the fault message.
 			*m_pTrChannel >> (&m_pMsg);
 			m_MsgSize = strlen(m_pMsg);
@@ -108,30 +110,30 @@ const char* Receiver::Recv() throw (AxisException)
 		}
 		catch(...)
 		{
-      printf("catch(...)\n");
+      			printf("catch(...)\n");
 			throw AxisException(RECEPTION_ERROR);
 		}
 	}
-    //printf("m_MsgSize:%d\n", m_MsgSize);
+    	//printf("m_MsgSize:%d\n", m_MsgSize);
 	if (m_MsgSize > 0)
 	{
-    bodyLength = m_pTrChannel->getBodyLength();
-    //printf("m_MsgSize:%d\n", m_MsgSize);
-    //printf("bodyLength:%d\n", bodyLength);
-    bodyLength -= m_MsgSize;
-    m_pTrChannel->setBodyLength(bodyLength);    
+    		bodyLength = m_pTrChannel->getBodyLength();
+    		printf("m_MsgSize:%d\n", m_MsgSize);
+    		printf("bodyLength:%d\n", bodyLength);
+    		bodyLength -= m_MsgSize;
+    		m_pTrChannel->setBodyLength(bodyLength);    
 		pToReturn = m_pMsg;
 		m_BytesRead = m_MsgSize;
-        //printf("m_BytesRead:%d\n", m_BytesRead);
+        	printf("m_BytesRead:%d\n", m_BytesRead);
 		m_MsgSize -= m_BytesRead;
 		m_pMsg += m_BytesRead;
-    m_BytesRead = 0;
+    		m_BytesRead = 0;
     
 		return pToReturn;		
 	}
 	else
 	{
-        printf("m_MsgSize == 0, so return NULL\n");
+        	printf("m_MsgSize == 0, so return NULL\n");
 		return NULL;
 	}
 }
