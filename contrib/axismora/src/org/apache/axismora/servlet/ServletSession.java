@@ -67,14 +67,18 @@ import org.apache.axis.session.Session;
 public class ServletSession implements Session {
     private HttpSession session;
 
+
     public ServletSession(HttpSession session) {
         this.session = session;
     }
 
+
     public Object get(String key) {
         return this.session.getAttribute(key);
     }
-
+	
+	public void invalidate(){}
+	
     public void set(String key, Object value) {
         this.session.setAttribute(key, value);
     }

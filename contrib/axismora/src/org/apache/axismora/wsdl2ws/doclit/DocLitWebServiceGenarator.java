@@ -64,28 +64,32 @@ import org.apache.axismora.wsdl2ws.info.WebServiceContext;
 /**
  * @author Dimuthu Leelarathne.
  */
-public class DocLitWebServiceGenarator implements WebServiceGenarator{
+public class DocLitWebServiceGenarator implements WebServiceGenarator {
 	private WebServiceContext wscontext;
-	public DocLitWebServiceGenarator(WebServiceContext wscontext){						  
-		this.wscontext =wscontext;
+	public DocLitWebServiceGenarator(WebServiceContext wscontext) {
+		this.wscontext = wscontext;
 	}
-	
-	
+
 	/**
 	 * Genarate the wrapper genarator, Serivce genatator,Param Genarator and called
 	 * Genarate on it. This is the way for the RPC.   
 	 * @see org.apache.axismora.wsdl2ws.WebServiceGenarator#genarate()
 	 */
-	public void genarate()throws WrapperFault {
+	public void genarate() throws WrapperFault {
 		String language = wscontext.getWrapInfo().getWrapperLanguage();
-	
-		if(WrapperConstants.LANGUAGE_JAVA.equalsIgnoreCase(language)){
-			(new Genarator(WrapperConstants.GENERATOR_PARAM_JAVA, wscontext)).genarate();
-				(new Genarator(WrapperConstants.GENERATOR_DOCLIT_WRAPPER_JAVA, wscontext)).genarate();
-				(new Genarator(WrapperConstants.GENERATOR_DOCLIT_SERVICE_JAVA, wscontext)).genarate();
-	
-		}else{
-			throw new WrapperFault("Unsupported Language"+language);
+
+		if (WrapperConstants.LANGUAGE_JAVA.equalsIgnoreCase(language)) {
+			(new Genarator(WrapperConstants.GENERATOR_PARAM_JAVA, wscontext))
+				.genarate();
+			(new Genarator(WrapperConstants.GENERATOR_DOCLIT_WRAPPER_JAVA,
+				wscontext))
+				.genarate();
+			(new Genarator(WrapperConstants.GENERATOR_DOCLIT_SERVICE_JAVA,
+				wscontext))
+				.genarate();
+
+		} else {
+			throw new WrapperFault("Unsupported Language" + language);
 		}
 	}
 }

@@ -53,8 +53,6 @@
  * <http://www.apache.org/>.
  */
 
-
-
 package org.apache.axismora.wsdl2ws.doclit;
 
 /**
@@ -82,7 +80,8 @@ public class DocLitServiceWriter extends JavaClassWriter {
 	private ArrayList methods;
 	private WebServiceContext wscontext;
 
-	public DocLitServiceWriter(WebServiceContext wscontext) throws WrapperFault {
+	public DocLitServiceWriter(WebServiceContext wscontext)
+		throws WrapperFault {
 		super(
 			WrapperUtils.getPackegeName4QualifiedName(
 				wscontext.getSerInfo().getQualifiedServiceName()),
@@ -122,7 +121,8 @@ public class DocLitServiceWriter extends JavaClassWriter {
 					writer.write("void ");
 				else
 					writer.write(
-						WrapperUtils.getClassNameFromParamInfoConsideringArrays(
+						WrapperUtils
+							.getClassNameFromParamInfoConsideringArrays(
 							minfo.getReturnType(),
 							wscontext)
 							+ " ");
@@ -132,7 +132,8 @@ public class DocLitServiceWriter extends JavaClassWriter {
 				Iterator params = minfo.getParameterTypess().iterator();
 				if (params.hasNext())
 					writer.write(
-						WrapperUtils.getClassNameFromParamInfoConsideringArrays(
+						WrapperUtils
+							.getClassNameFromParamInfoConsideringArrays(
 							(ParameterInfo) params.next(),
 							wscontext)
 							+ " param"
@@ -141,7 +142,8 @@ public class DocLitServiceWriter extends JavaClassWriter {
 				for (int j = 1; params.hasNext(); j++) {
 					writer.write(
 						","
-							+ WrapperUtils.getClassNameFromParamInfoConsideringArrays(
+							+ WrapperUtils
+								.getClassNameFromParamInfoConsideringArrays(
 								(ParameterInfo) params.next(),
 								wscontext)
 							+ " param"
@@ -161,7 +163,9 @@ public class DocLitServiceWriter extends JavaClassWriter {
 			this.wscontext.getWrapInfo().getTargetOutputLocation();
 		if (targetOutputLocation.endsWith("/"))
 			targetOutputLocation =
-				targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
+				targetOutputLocation.substring(
+					0,
+					targetOutputLocation.length() - 1);
 		new File(
 			targetOutputLocation
 				+ "/"
@@ -173,7 +177,9 @@ public class DocLitServiceWriter extends JavaClassWriter {
 		String fileName =
 			targetOutputLocation
 				+ "/"
-				+ this.wscontext.getSerInfo().getQualifiedServiceName().replace('.', '/')
+				+ this.wscontext.getSerInfo().getQualifiedServiceName().replace(
+					'.',
+					'/')
 				+ "Impl.java";
 		return new File(fileName);
 	}
