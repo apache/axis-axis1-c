@@ -158,6 +158,10 @@ SOURCE=..\src\transport\axis2\AxisTransportException.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\common\AxisUserAPI.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\common\AxisUtils.cpp
 # End Source File
 # Begin Source File
