@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<service-ref xmlns="http://java.sun.com/xml/ns/j2ee">
-     <service-ref-name>service/FrenchZip</service-ref-name>
-     <service-interface>javax.xml.rpc.Service</service-interface>
-     <wsdl-file>FrenchZip.wsdl</wsdl-file>
-    <jaxrpc-mapping-file>FrenchZipMapping.xml</jaxrpc-mapping-file>
-</service-ref>
-
