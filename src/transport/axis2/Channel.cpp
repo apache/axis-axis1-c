@@ -178,7 +178,7 @@ throw (AxisTransportException&)
 			// channel and then throw an exception.
 
 			// Before we do anything else get the last error message;
-			long dw = GETLASTERROR()
+			long dw = GETLASTERROR
 
 			closeChannel();
 			

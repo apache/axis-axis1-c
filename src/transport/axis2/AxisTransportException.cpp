@@ -110,7 +110,7 @@ const string AxisTransportException::getMessage (const int iExceptionCode)
                 " response message";
             break;
         case SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE:
-            m_sMessage = "AxisTransportException:Unknow HTTP response," \
+            m_sMessage = "AxisTransportException:Unknown HTTP response," \
                 " cannot process response message";
             break;
         case SERVER_TRANSPORT_UNEXPECTED_STRING:

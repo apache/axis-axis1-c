@@ -77,7 +77,7 @@
  * and that it returns a long
  * @return long the lsat error message for this thread
  */
-#define GETLASTERROR() GetLastError();
+#define GETLASTERROR GetLastError();
 
 /**
  * From the last error number get a sensible std::string representing it

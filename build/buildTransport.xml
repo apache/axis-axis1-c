@@ -41,6 +41,7 @@
                <fileset dir="${dir.src}">
                   <include name="transport/${transport}/*.cpp"/>
                   <include name="platforms/os400/PlatformSpecificOS400.cpp" if="os400"/>
+                  <include name="platforms/windows/PlatformSpecificWindows.cpp" if="windows"/>
                </fileset>
             </cc>
          </then>
