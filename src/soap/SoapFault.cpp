@@ -72,9 +72,10 @@ int SoapFault::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
     /* written according to SOAP Version 1.1 */
 
     int iStatus= AXIS_SUCCESS;
-	
-	pSZ.serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":",
-		gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">", NULL); 
+    /*Soap Faults are always serialized as doc literal*/
+    pSZ.setStyle(DOC_LITERAL);	
+    pSZ.serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":",
+        gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">", NULL); 
 	
     m_pFaultcodeParam->serialize(pSZ);
     //pSZ.serialize("<faultcode>", m_sFaultcode.c_str(), "</faultcode>", NULL);

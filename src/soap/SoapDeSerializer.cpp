@@ -351,6 +351,11 @@ int SoapDeSerializer::checkMessageBody(const AxisChar* pName,
     //if (0 != strcmp(m_pNode->m_pchNameOrValue, pName)) return AXIS_FAIL;
     if (0 != strcmp(m_pNode->m_pchNameOrValue, pName))
     {
+	/* A soap fault has occured. we will deserialize it as doc literal
+	 * So we set the style as doc literal. This way of doing things
+	 * is not so nice. I'll rectify this asap
+	 * /
+	setStyle(DOC_LITERAL);
         AXISTRACE1("AXISC_NODE_VALUE_MISMATCH_EXCEPTION", CRITICAL);
         throw AxisGenException(AXISC_NODE_VALUE_MISMATCH_EXCEPTION);    
     }
@@ -1027,6 +1032,7 @@ void* SoapDeSerializer::getCmplxObject(void* pDZFunct, void* pCreFunct,
     /* if anything has gone wrong earlier just do nothing */
     if (RPC_ENCODED == m_nStyle)
     {
+
         m_pNode = m_pParser->next();
         /* just skip wrapper node with type info
          * Ex: <tns:QuoteInfoType xmlns:tns="http://www.getquote.org/test"> */ 
