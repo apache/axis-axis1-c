@@ -38,7 +38,7 @@ public:
         m_pTrChannel(pTr){}
     ~Receiver();
 
-    const char* Recv() throw (AxisException);
+    const char* Recv();
     int getBytesRead();
 
 private:

@@ -66,7 +66,7 @@ const char* Receiver::Recv()
             #endif
         AXISC_CATCH(...)
             AXISTRACE1("SERVER_TRANSPORT_RECEPTION_EXCEPTION", CRITICAL);
-            throw THROW_AXIS_TRANSPORT_EXCEPTION(SERVER_TRANSPORT_RECEPTION_EXCEPTION);
+            THROW_AXIS_TRANSPORT_EXCEPTION(SERVER_TRANSPORT_RECEPTION_EXCEPTION);
         AXISC_ENDCATCH
     }
         /* printf("m_MsgSize:%d\n", m_MsgSize); */
