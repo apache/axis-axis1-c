@@ -1,3 +1,19 @@
+/*
+ *   Copyright 2003-2004 The Apache Software Foundation.
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+
 #include <stdlib.h>
 
 #ifndef XPP_H_INCLUDED
@@ -58,49 +74,53 @@ typedef char ICHAR;
 
 
 
-enum {
-	S_0, S_1, S_2, S_3, S_4, S_5, S_6, S_7,
-	S_8, S_9, S_10, S_11, S_12, S_13, S_14
-};		
+enum 
+{
+    S_0, S_1, S_2, S_3, S_4, S_5, S_6, S_7,
+    S_8, S_9, S_10, S_11, S_12, S_13, S_14
+};        
 
-enum {
-	START_TAG, END_TAG, EMPTY_ELEMENT_TAG, PCDATA
+enum 
+{
+    START_TAG, END_TAG, EMPTY_ELEMENT_TAG, PCDATA
 };
 
 
-enum XML_Error {
-        XML_ERROR_NONE,
-        XML_ERROR_NO_MEMORY,
-        XML_ERROR_SYNTAX,
-        XML_ERROR_NO_ELEMENTS,
-        XML_ERROR_INVALID_TOKEN,
-        XML_ERROR_UNCLOSED_TOKEN,
-        XML_ERROR_PARTIAL_CHAR,
-        XML_ERROR_TAG_MISMATCH,
-        XML_ERROR_DUPLICATE_ATTRIBUTE,
-        XML_ERROR_JUNK_AFTER_DOC_ELEMENT,
-        XML_ERROR_PARAM_ENTITY_REF,
-        XML_ERROR_UNDEFINED_ENTITY,
-        XML_ERROR_RECURSIVE_ENTITY_REF,
-        XML_ERROR_ASYNC_ENTITY,
-        XML_ERROR_BAD_CHAR_REF,
-        XML_ERROR_BINARY_ENTITY_REF,
-        XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF,
-        XML_ERROR_MISPLACED_XML_PI,
-        XML_ERROR_UNKNOWN_ENCODING,
-        XML_ERROR_INCORRECT_ENCODING,
-        XML_ERROR_UNCLOSED_CDATA_SECTION,
-        XML_ERROR_EXTERNAL_ENTITY_HANDLING,
-        XML_ERROR_NOT_STANDALONE,
-        XML_ERROR_UNEXPECTED_STATE,
-        XML_ERROR_ENTITY_DECLARED_IN_PE,
-        XML_ERROR_FEATURE_REQUIRES_XML_DTD,
-        XML_ERROR_CANT_CHANGE_FEATURE_ONCE_PARSING,
-        XML_ERROR_UNBOUND_PREFIX,
-	XML_TEST_ERROR
+enum XML_Error 
+{
+    XML_ERROR_NONE,
+    XML_ERROR_NO_MEMORY,
+    XML_ERROR_SYNTAX,
+    XML_ERROR_NO_ELEMENTS,
+    XML_ERROR_INVALID_TOKEN,
+    XML_ERROR_UNCLOSED_TOKEN,
+    XML_ERROR_PARTIAL_CHAR,
+    XML_ERROR_TAG_MISMATCH,
+    XML_ERROR_DUPLICATE_ATTRIBUTE,
+    XML_ERROR_JUNK_AFTER_DOC_ELEMENT,
+    XML_ERROR_PARAM_ENTITY_REF,
+    XML_ERROR_UNDEFINED_ENTITY,
+    XML_ERROR_RECURSIVE_ENTITY_REF,
+    XML_ERROR_ASYNC_ENTITY,
+    XML_ERROR_BAD_CHAR_REF,
+    XML_ERROR_BINARY_ENTITY_REF,
+    XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF,
+    XML_ERROR_MISPLACED_XML_PI,
+    XML_ERROR_UNKNOWN_ENCODING,
+    XML_ERROR_INCORRECT_ENCODING,
+    XML_ERROR_UNCLOSED_CDATA_SECTION,
+    XML_ERROR_EXTERNAL_ENTITY_HANDLING,
+    XML_ERROR_NOT_STANDALONE,
+    XML_ERROR_UNEXPECTED_STATE,
+    XML_ERROR_ENTITY_DECLARED_IN_PE,
+    XML_ERROR_FEATURE_REQUIRES_XML_DTD,
+    XML_ERROR_CANT_CHANGE_FEATURE_ONCE_PARSING,
+    XML_ERROR_UNBOUND_PREFIX,
+    XML_TEST_ERROR
 };
 
-typedef struct mm {
+typedef struct mm 
+{
   void *( *malloc_fcn)(size_t size);
   void *( *memmove_fcn)(void *ptrto, void *ptrfrom, size_t size);
   void *( *realloc_fcn)(void *ptr, size_t size);
@@ -112,12 +132,12 @@ typedef struct data
         int type;
         int ptrs_sz;
         int num_ptrs;
-	int num_ptrs_utf8;
+    int num_ptrs_utf8;
         char **ptrs;
-	char **utf8ptrs;
+    char **utf8ptrs;
 } data_t;
 
-//char *tn[] = {"START_TAG", "END_TAG", "EMPTY_ELEMENT_TAG", "PCDATA"};
+/* char *tn[] = {"START_TAG", "END_TAG", "EMPTY_ELEMENT_TAG", "PCDATA"}; */
 
 struct xpp_context;
 
@@ -127,7 +147,9 @@ xpp_context_t* parser_create(const XML_Char *encodingName);
 
 xpp_context_t* parser_create_ns(const XML_Char *encodingName, XML_Char nsSep);
 
-xpp_context_t* parser_create_mh(const XML_Char *encodingName, const XML_Memory_Handling_Suite *memsuite, XML_Char nsSep);
+xpp_context_t* parser_create_mh(const XML_Char *encodingName, 
+                                const XML_Memory_Handling_Suite *memsuite,
+                                XML_Char nsSep);
 
 void* parser_free(xpp_context_t* ct);
 
@@ -138,3 +160,4 @@ int get_next_element_as_int(xpp_context_t* ct, int* parse_error);
 int get_next_attribute_as_int(xpp_context_t* ct, int* parse_error);
 
 #endif
+

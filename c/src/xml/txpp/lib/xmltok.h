@@ -1,3 +1,18 @@
+/*
+ *   Copyright 2003-2004 The Apache Software Foundation.
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
 
 #include "xpp.h"
 #ifndef XmlTok_INCLUDED
@@ -9,10 +24,11 @@ extern "C" {
 
 /* The following token may be returned by XmlContentTok */
 #define XML_TOK_TRAILING_RSQB -5 /* ] or ]] at the end of the scan; might be
-                                    start of illegal ]]> sequence */
+                                  *  start of illegal ]]> sequence 
+                                  */
 /* The following tokens may be returned by both XmlPrologTok and
-   XmlContentTok.
-*/
+ * XmlContentTok.
+ */
 #define XML_TOK_NONE -4          /* The string to be scanned is empty */
 #define XML_TOK_TRAILING_CR -3   /* A CR at the end of the scan;
                                     might be part of CRLF sequence */
@@ -21,8 +37,8 @@ extern "C" {
 #define XML_TOK_INVALID 0
 
 /* The following tokens are returned by XmlContentTok; some are also
-   returned by XmlAttributeValueTok, XmlEntityTok, XmlCdataSectionTok.
-*/
+ * returned by XmlAttributeValueTok, XmlEntityTok, XmlCdataSectionTok.
+ */
 #define XML_TOK_START_TAG_WITH_ATTS 1
 #define XML_TOK_START_TAG_NO_ATTS 2
 #define XML_TOK_EMPTY_ELEMENT_WITH_ATTS 3 /* empty element tag <e/> */
@@ -35,8 +51,8 @@ extern "C" {
 #define XML_TOK_CHAR_REF 10               /* numeric character reference */
 
 /* The following tokens may be returned by both XmlPrologTok and
-   XmlContentTok.
-*/
+ * XmlContentTok.
+ */
 #define XML_TOK_PI 11                     /* processing instruction */
 #define XML_TOK_XML_DECL 12               /* XML decl or text decl */
 #define XML_TOK_COMMENT 13
@@ -77,8 +93,9 @@ extern "C" {
 #define XML_TOK_CDATA_SECT_CLOSE 40
 
 /* With namespace processing this is returned by XmlPrologTok for a
-   name with a colon.
-*/
+ * name with a colon.
+ */
+
 #define XML_TOK_PREFIXED_NAME 41
 
 #ifdef XML_DTD
@@ -123,13 +140,14 @@ typedef struct {
 struct encoding;
 typedef struct encoding ENCODING;
 
-/*typedef int (PTRCALL *SCANNER)(int *, data_t *, const ENCODING *,
-                               const char *,
-                               const char *,
-                               const char **);*/
+/* typedef int (PTRCALL *SCANNER)(int *, data_t *, const ENCODING *,
+ *                              const char *,
+ *                              const char *,
+ *                              const char **);
+ */
 typedef int (PTRCALL *SCANNER)(int *, data_t *, const ENCODING *,
                                int *,
-			       char*,
+                   char*,
                                const char **);
 
 
@@ -177,26 +195,26 @@ struct encoding {
 };
 
 
-/* Scan the string starting at ptr until the end of the next complete
-   token, but do not scan past eptr.  Return an integer giving the
-   type of token.
-
-   Return XML_TOK_NONE when ptr == eptr; nextTokPtr will not be set.
-
-   Return XML_TOK_PARTIAL when the string does not contain a complete
-   token; nextTokPtr will not be set.
-
-   Return XML_TOK_INVALID when the string does not start a valid
-   token; nextTokPtr will be set to point to the character which made
-   the token invalid.
-
-   Otherwise the string starts with a valid token; nextTokPtr will be
-   set to point to the character following the end of that token.
-
-   Each data character counts as a single token, but adjacent data
-   characters may be returned together.  Similarly for characters in
-   the prolog outside literals, comments and processing instructions.
-*/
+/*  Scan the string starting at ptr until the end of the next complete
+ *  token, but do not scan past eptr.  Return an integer giving the
+ *  type of token.
+ *
+ *  Return XML_TOK_NONE when ptr == eptr; nextTokPtr will not be set.
+ *
+ *   Return XML_TOK_PARTIAL when the string does not contain a complete
+ *   token; nextTokPtr will not be set.
+ *
+ *  Return XML_TOK_INVALID when the string does not start a valid
+ *  token; nextTokPtr will be set to point to the character which made
+ *  the token invalid.
+ *
+ *  Otherwise the string starts with a valid token; nextTokPtr will be
+ *  set to point to the character following the end of that token.
+ *
+ *  Each data character counts as a single token, but adjacent data
+ *  characters may be returned together.  Similarly for characters in
+ *  the prolog outside literals, comments and processing instructions.
+ */
 
 
 #define XmlTok(parser_state, data, enc, state, num_chars, end, ptr) \
@@ -214,13 +232,14 @@ struct encoding {
 #ifdef XML_DTD
 
 #define XmlIgnoreSectionTok(enc, ptr, end, nextTokPtr) \
-   XmlTok(parser_state, data, enc, XML_IGNORE_SECTION_STATE, num_chars, end, ptr)
+   XmlTok(parser_state,data,enc, XML_IGNORE_SECTION_STATE,num_chars, end, ptr)
 
 #endif /* XML_DTD */
 
 /* This is used for performing a 2nd-level tokenization on the content
-   of a literal that has already been returned by XmlTok.
-*/
+ * of a literal that has already been returned by XmlTok.
+ */
+
 #define XmlLiteralTok(enc, literalType,  end, ptr) \
   (((enc)->literalScanners[literalType])(enc,  end, ptr))
 
@@ -279,7 +298,7 @@ int XmlParseXmlDecl(int isGeneralTextEntity,
                     int *standalonePtr);
 
 int XmlDamConvert(const ENCODING *, const char **, const char *,
-	const char **, const char *);
+    const char **, const char *);
 int XmlInitEncoding(INIT_ENCODING *, const ENCODING **, const char *name);
 const ENCODING *XmlGetUtf8InternalEncoding(void);
 const ENCODING *XmlGetUtf16InternalEncoding(void);
@@ -319,4 +338,5 @@ XmlInitUnknownEncodingNS(void *mem,
 #endif
 
 #endif /* not XmlTok_INCLUDED */
+
 
