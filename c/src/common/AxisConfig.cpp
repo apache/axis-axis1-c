@@ -30,18 +30,18 @@
 AxisConfig::AxisConfig ()
 {
     m_pcAxisHome = 0;
-	m_pcKeyArray[AXCONF_WSDDFILEPATH] = "WSDDFILEPATH";
-	m_pcKeyArray[AXCONF_LOGPATH] = "AXISLOGPATH";
-	m_pcKeyArray[AXCONF_CLIENTLOGPATH] = "AXISCLIENTLOGPATH";
-	m_pcKeyArray[AXCONF_CLIENTWSDDFILEPATH] = "CLIENTWSDDFILEPATH";
+	m_pcKeyArray[AXCONF_WSDDFILEPATH] = "WSDDFilePath";
+	m_pcKeyArray[AXCONF_LOGPATH] = "LogPath";
+	m_pcKeyArray[AXCONF_CLIENTLOGPATH] = "ClientLogPath";
+	m_pcKeyArray[AXCONF_CLIENTWSDDFILEPATH] = "ClientWSDDFilePath";
 	/*
 	The value for this is taken from the environment variable "AXIS_HOME".
 	So no need for a key for AXCONF_AXISHOME
 	*/
 	m_pcKeyArray[AXCONF_AXISHOME] = "\0";
-	m_pcKeyArray[AXCONF_TRANSPORTHTTP]="AXISTRANSPORT_HTTP";
-	m_pcKeyArray[AXCONF_TRANSPORTSMTP]="AXISTRANSPORT_SMTP";
-	m_pcKeyArray[AXCONF_XMLPARSER] = "AXISXMLPARSER";
+	m_pcKeyArray[AXCONF_TRANSPORTHTTP]="Transport_http";
+	m_pcKeyArray[AXCONF_TRANSPORTSMTP]="Transport_smtp";
+	m_pcKeyArray[AXCONF_XMLPARSER] = "XMLParser";
 
     for(int i=0;i<AXCONF_LAST;i++)
 	{
