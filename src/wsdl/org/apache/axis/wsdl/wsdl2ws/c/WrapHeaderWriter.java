@@ -108,8 +108,8 @@ public class WrapHeaderWriter extends HeaderFileWriter
     {
         try
         {
-            writer.write("#include <axis/server/IMessageData.h>\n");
-            writer.write("#include <axis/server/AxisWrapperAPI.h>\n\n");
+            writer.write("#include <axis/IMessageData.h>\n");
+            writer.write("#include <axis/AxisWrapperAPI.h>\n\n");
         }
         catch (IOException e)
         {

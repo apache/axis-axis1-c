@@ -224,8 +224,8 @@ AXISC_DEFINED_ARRAY2(xsdc__hexBinary)
 AXISC_DEFINED_ARRAY(xsdc__anyURI)
 AXISC_DEFINED_ARRAY(xsdc__NMTOKEN)
  
-static const int xsd_boolean_true = 1;
-static const int xsd_boolean_false = 0;
+static const int xsdc_boolean_true = 1;
+static const int xsdc_boolean_false = 0;
 
 typedef enum {
     AXISC_NORMAL_CHANNEL=0,

@@ -192,7 +192,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
         try
         {
             writer.write("#include <axis/client/Stub.h>\n");
-            writer.write("#include <axis/server/AxisWrapperAPI.h>\n");
+            writer.write("#include <axis/AxisWrapperAPI.h>\n");
             Type atype;
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
             HashSet typeSet = new HashSet();

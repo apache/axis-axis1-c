@@ -87,25 +87,25 @@ public class BeanParamWriter
                             + typeName
                             + "("
                             + typeName
-                            + "* param, IWrapperSoapDeSerializer* pDZ);\n");
+                            + "* param, AXISCHANDLE pDZ);\n");
                     writer.write(
                         "extern void* Axis_Create_"
                             + typeName
                             + "("
                             + typeName
-                            + "* pObj, bool bArray, int nSize);\n");
+                            + "* pObj, AxiscBool bArray, int nSize);\n");
                     writer.write(
                         "extern void Axis_Delete_"
                             + typeName
                             + "("
                             + typeName
-                            + "* param, bool bArray, int nSize);\n");
+                            + "* param, AxiscBool bArray, int nSize);\n");
                     writer.write(
                         "extern int Axis_Serialize_"
                             + typeName
                             + "("
                             + typeName
-                            + "* param, IWrapperSoapSerializer* pSZ, bool bArray);\n");
+                            + "* param, AXISCHANDLE pSZ, AxiscBool bArray);\n");
                     writer.write(
                         "extern int Axis_GetSize_" + typeName + "();\n\n");
                 }
@@ -116,23 +116,23 @@ public class BeanParamWriter
                             + typeName
                             + "("
                             + typeName
-                            + "* param, IWrapperSoapDeSerializer* pDZ);\n");
+                            + "* param, AXISCHANDLE pDZ);\n");
                     writer.write(
                         "void* Axis_Create_"
                             + typeName
-                            + "(void* pObj, bool bArray, int nSize);\n");
+                            + "(void* pObj, AxiscBool bArray, int nSize);\n");
                     writer.write(
                         "void Axis_Delete_"
                             + typeName
                             + "("
                             + typeName
-                            + "* param, bool bArray, int nSize);\n");
+                            + "* param, AxiscBool bArray, int nSize);\n");
                     writer.write(
                         "int Axis_Serialize_"
                             + typeName
                             + "("
                             + typeName
-                            + "* param, IWrapperSoapSerializer* pSZ, bool bArray);\n");
+                            + "* param, AXISCHANDLE pSZ, AxiscBool bArray);\n");
                     writer.write("int Axis_GetSize_" + typeName + "();\n\n");
                 }
             }
@@ -166,7 +166,7 @@ public class BeanParamWriter
                 + classname
                 + "("
                 + classname
-                + "* param, IWrapperSoapSerializer* pSZ, bool bArray)\n{\n");
+                + "* param, AXISCHANDLE pSZ, AxiscBool bArray)\n{\n");
         if (attribs.length == 0)
         {
             System.out.println(
@@ -174,17 +174,17 @@ public class BeanParamWriter
                     + classname
                     + ": class with no attributes....................");
             writer.write(
-                "\tpSZ->_functions->serialize(pSZ->_object, \">\");\n");
-            writer.write("\treturn AXIS_SUCCESS;\n");
+                "\taxiscSerializeIWrapperSoapSerializer(pSZ, \">\");\n");
+            writer.write("\treturn AXISC_SUCCESS;\n");
             writer.write("}\n\n");
             return;
         }
         writer.write("\tif ( param == NULL ) {\n");
         writer.write("\t\t/* TODO : may need to check nillable value*/\n");
         writer.write(
-            "\t\tpSZ->_functions->serializeAsAttribute(pSZ->_object,\"xsi:nil\", 0, (void*)&(xsd_boolean_true), XSD_BOOLEAN);\n");
-        writer.write("\t\tpSZ->_functions->serialize(pSZ->_object, \">\");\n");
-        writer.write("\t\treturn AXIS_SUCCESS;\n");
+            "\t\taxiscSerializeAsAttribute(pSZ,\"xsi:nil\", 0, (void*)&(xsdc_boolean_true), XSD_BOOLEAN);\n");
+        writer.write("\t\taxiscSerializeIWrapperSoapSerializer(pSZ, \">\");\n");
+        writer.write("\t\treturn AXISC_SUCCESS;\n");
         writer.write("\t}\n");
         String arrayType = null;
         writer.write("\t/* first serialize attributes if any*/\n");
@@ -199,7 +199,7 @@ public class BeanParamWriter
                 writer.write(
                     "\tif (0 != param->" + attribs[i].getParamName() + ")\n");
                 writer.write(
-                    "\t\tpSZ->_functions->serializeAsAttribute(pSZ->_object, \""
+                    "\t\taxiscSerializeAsAttribute(pSZ, \""
                         + attribs[i].getParamName()
                         + "\", 0, (void*)&(param->"
                         + attribs[i].getParamName()
@@ -212,14 +212,14 @@ public class BeanParamWriter
                 }
             }
         }
-        writer.write("\tpSZ->_functions->serialize(pSZ->_object, \">\");\n");
+        writer.write("\taxiscSerializeIWrapperSoapSerializer(pSZ, \">\");\n");
         writer.write("\t/* then serialize elements if any*/\n");
         for (int i = attributeParamCount; i < attribs.length; i++)
         {
             if (attribs[i].isAnyType())
             {
                 writer.write(
-                    "\tpSZ->_functions->serializeAnyObject(pSZ->_object, param->any);\n");
+                    "\taxiscSerializeAnyObject(pSZ, param->any);\n");
             }
             else
                 if (attribs[i].isArray())
@@ -229,7 +229,7 @@ public class BeanParamWriter
                     if (attribs[i].isSimpleType())
                     {
                         writer.write(
-                            "\tpSZ->_functions->serializeBasicArray(pSZ->_object, (Axis_Array*)(&param->"
+                            "\taxiscSerializeBasicArray(pSZ, (Axisc_Array*)(&param->"
                                 + attribs[i].getParamName()
                                 + "),"
                                 + CUtils.getXSDTypeForBasicType(arrayType)
@@ -240,7 +240,7 @@ public class BeanParamWriter
                     else
                     {
                         writer.write(
-                            "\tpSZ->_functions->serializeCmplxArray(pSZ->_object, (Axis_Array*)(&param->"
+                            "\taxiscSerializeCmplxArray(pSZ, (Axisc_Array*)(&param->"
                                 + attribs[i].getParamName()
                                 + "),\n");
                         writer.write(
@@ -264,9 +264,9 @@ public class BeanParamWriter
                     {
                         //Samisa 22/08/2004
                         writer.write(
-                            "\tpSZ->_functions->serializeAsElement(pSZ->_object, \""
+                            "\taxiscSerializeAsElement(pSZ, \""
                                 + attribs[i].getElementNameAsString()
-                                + "\", (void*)&(param->"
+                                + "\", NULL, (void*)&(param->"
                                 + attribs[i].getParamName()
                                 + "), "
                                 + CUtils.getXSDTypeForBasicType(
@@ -281,7 +281,7 @@ public class BeanParamWriter
                         if (attribs[i].isReference())
                             elm = attribs[i].getTypeName();
                         writer.write(
-                            "\tpSZ->_functions->serialize(pSZ->_object, \"<"
+                            "\taxiscSerializeIWrapperSoapSerializer(pSZ, \"<"
                                 + elm
                                 + "\");\n");
                         writer.write(
@@ -291,12 +291,12 @@ public class BeanParamWriter
                                 + attribs[i].getParamName()
                                 + ", pSZ, false);\n");
                         writer.write(
-                            "\tpSZ->_functions->serialize(pSZ->_object, \"</"
+                            "\taxiscSerializeIWrapperSoapSerializer(pSZ, \"</"
                                 + elm
                                 + ">\");\n");
                     }
         }
-        writer.write("\treturn AXIS_SUCCESS;\n");
+        writer.write("\treturn AXISC_SUCCESS;\n");
         writer.write("}\n\n");
 
     }
@@ -320,7 +320,7 @@ public class BeanParamWriter
                 + classname
                 + "("
                 + classname
-                + "* param, IWrapperSoapDeSerializer* pDZ)\n{\n");
+                + "* param, AXISCHANDLE pDZ)\n{\n");
         if (attribs.length == 0)
         {
             //nothing to print if this is simple type we have inbuild types
@@ -329,7 +329,7 @@ public class BeanParamWriter
                     + classname
                     + ": class with no attributes....................");
             // compilation issue;
-            writer.write("\treturn AXIS_SUCCESS;\n");
+            writer.write("\treturn AXISC_SUCCESS;\n");
             writer.write("}\n\n");
             return;
         }
@@ -344,7 +344,7 @@ public class BeanParamWriter
         }
         if (aretherearrayparams)
         {
-            writer.write("\tAxis_Array array;\n");
+            writer.write("\tAxisc_Array array;\n");
         }
         writer.write("\t/* first deserialize attributes if any*/\n");
         for (int i = 0; i < attribs.length; i++)
@@ -354,7 +354,7 @@ public class BeanParamWriter
             if (attribs[i].isAnyType())
             {
                 writer.write(
-                    "\tparam->any = pDZ->_functions->getAnyObject(pDZ->_object);\n");
+                    "\tparam->any = axiscGetAnyObject(pDZ);\n");
             }
             else
                 if (attribs[i].isArray())
@@ -364,7 +364,7 @@ public class BeanParamWriter
                     if (attribs[i].isSimpleType())
                     {
                         writer.write(
-                            "\tarray = pDZ->_functions->getBasicArray(pDZ->_object, "
+                            "\tarray = axiscGetBasicArray(pDZ, "
                                 + CUtils.getXSDTypeForBasicType(containedType)
                                 + ", \""
                                 + attribs[i].getElementName().getLocalPart()
@@ -372,12 +372,12 @@ public class BeanParamWriter
                         writer.write(
                             "\tmemcpy(&(param->"
                                 + attribs[i].getParamName()
-                                + "), &array, sizeof(Axis_Array));\n");
+                                + "), &array, sizeof(Axisc_Array));\n");
                     }
                     else
                     {
                         writer.write(
-                            "\tarray = pDZ->_functions->getCmplxArray(pDZ->_object, (void*)Axis_DeSerialize_"
+                            "\tarray = axiscGetCmplxArray(pDZ, (void*)Axis_DeSerialize_"
                                 + containedType
                                 + "\n\t\t, (void*)Axis_Create_"
                                 + containedType
@@ -393,7 +393,7 @@ public class BeanParamWriter
                         writer.write(
                             "\tmemcpy(&(param->"
                                 + attribs[i].getParamName()
-                                + "), &array, sizeof(Axis_Array));\n");
+                                + "), &array, sizeof(Axisc_Array));\n");
                     }
                 }
                 else
@@ -411,11 +411,11 @@ public class BeanParamWriter
                                 writer.write(
                                     "\tparam->"
                                         + attribs[i].getParamName()
-                                        + " = pDZ->_functions->"
+                                        + " = "
                                         + CUtils.getParameterGetValueMethodName(
                                             attribs[i].getTypeName(),
                                             true)
-                                        + "(pDZ->_object, \""
+                                        + "(pDZ, \""
                                         + attribs[i].getParamName()
                                         + "\", 0);\n");
                             }
@@ -425,11 +425,11 @@ public class BeanParamWriter
                             writer.write(
                                 "\tparam->"
                                     + attribs[i].getParamName()
-                                    + " = pDZ->_functions->"
+                                    + " = "
                                     + CUtils.getParameterGetValueMethodName(
                                         attribs[i].getTypeName(),
                                         false)
-                                    + "(pDZ->_object, \""
+                                    + "(pDZ, \""
                                     + attribs[i].getElementName().getLocalPart()
                                     + "\", 0);\n");
                         }
@@ -442,7 +442,7 @@ public class BeanParamWriter
                                 + attribs[i].getParamName()
                                 + " = ("
                                 + attribs[i].getTypeName()
-                                + "*)pDZ->_functions->getCmplxObject(pDZ->_object, (void*)Axis_DeSerialize_"
+                                + "*)axiscGetCmplxObject(pDZ, (void*)Axis_DeSerialize_"
                                 + attribs[i].getTypeName()
                                 + "\n\t\t, (void*)Axis_Create_"
                                 + attribs[i].getTypeName()
@@ -455,7 +455,7 @@ public class BeanParamWriter
                                 + ");\n");
                     }
         }
-        writer.write("\treturn pDZ->_functions->getStatus(pDZ->_object);\n");
+        writer.write("\treturn axiscGetStatusIWrapperSoapDeSerializer(pDZ);\n");
         writer.write("}\n");
     }
 
@@ -467,7 +467,7 @@ public class BeanParamWriter
         writer.write(
             "void* Axis_Create_"
                 + classname
-                + "(void* pObj, bool bArray, int nSize)\n{\n");
+                + "(void* pObj, AxiscBool bArray, int nSize)\n{\n");
         writer.write("\t" + classname + "* pTemp;\n");
         writer.write("\tif (bArray && (nSize > 0))\n\t{\n");
         writer.write("\t\tif (pObj)\n\t\t{\n");
@@ -532,7 +532,7 @@ public class BeanParamWriter
                 + classname
                 + "("
                 + classname
-                + "* param, bool bArray, int nSize)\n");
+                + "* param, AxiscBool bArray, int nSize)\n");
         writer.write("{\n");
         boolean hasComplexTypeOrArray = false;
         for (int i = 0; i < attribs.length; i++)
@@ -543,19 +543,19 @@ public class BeanParamWriter
                 break;
             }
             else
-                if ("xsd__string".equals(attribs[i].getTypeName()))
+                if ("xsdc__string".equals(attribs[i].getTypeName()))
                 {
                     hasComplexTypeOrArray = true;
                     break;
                 }
                 else
-                    if ("xsd__base64Binary".equals(attribs[i].getTypeName()))
+                    if ("xsdc__base64Binary".equals(attribs[i].getTypeName()))
                     {
                         hasComplexTypeOrArray = true;
                         break;
                     }
                     else
-                        if ("xsd__hexBinary".equals(attribs[i].getTypeName()))
+                        if ("xsdc__hexBinary".equals(attribs[i].getTypeName()))
                         {
                             hasComplexTypeOrArray = true;
                             break;
@@ -639,7 +639,7 @@ public class BeanParamWriter
                                     + ", false, 0);\n");
                         }
                         else
-                            if ("xsd__string".equals(attribs[i].getTypeName()))
+                            if ("xsdc__string".equals(attribs[i].getTypeName()))
                             {
                                 writer.write(
                                     "\t\t\tif(pTemp->"
@@ -649,7 +649,7 @@ public class BeanParamWriter
                                         + ");\n");
                             }
                             else
-                                if ("xsd__base64Binary"
+                                if ("xsdc__base64Binary"
                                     .equals(attribs[i].getTypeName()))
                                 {
                                     writer.write(
@@ -660,7 +660,7 @@ public class BeanParamWriter
                                             + ".__ptr);\n");
                                 }
                                 else
-                                    if ("xsd__hexBinary"
+                                    if ("xsdc__hexBinary"
                                         .equals(attribs[i].getTypeName()))
                                     {
                                         writer.write(
@@ -749,7 +749,7 @@ public class BeanParamWriter
                                 + ", false, 0);\n");
                     }
                     else
-                        if ("xsd__string".equals(attribs[i].getTypeName()))
+                        if ("xsdc__string".equals(attribs[i].getTypeName()))
                         {
                             writer.write(
                                 "\t\tif(param->"
@@ -759,7 +759,7 @@ public class BeanParamWriter
                                     + ");\n");
                         }
                         else
-                            if ("xsd__base64Binary"
+                            if ("xsdc__base64Binary"
                                 .equals(attribs[i].getTypeName()))
                             {
                                 writer.write(
@@ -770,7 +770,7 @@ public class BeanParamWriter
                                         + ".__ptr);\n");
                             }
                             else
-                                if ("xsd__hexBinary"
+                                if ("xsdc__hexBinary"
                                     .equals(attribs[i].getTypeName()))
                                 {
                                     writer.write(

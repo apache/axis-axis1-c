@@ -654,19 +654,19 @@ public class ClientStubWriter
                         + typeName
                         + "("
                         + typeName
-                        + " *Obj, bool bArray, int nSize);\n");
+                        + " *Obj, AxiscBool bArray, int nSize);\n");
                 writer.write(
                     "extern void Axis_Delete_"
                         + typeName
                         + "("
                         + typeName
-                        + "* param, bool bArray, int nSize);\n");
+                        + "* param, AxiscBool bArray, int nSize);\n");
                 writer.write(
                     "extern int Axis_Serialize_"
                         + typeName
                         + "("
                         + typeName
-                        + "* param, AXISCHANDLE pSZ, bool bArray);\n");
+                        + "* param, AXISCHANDLE pSZ, AxiscBool bArray);\n");
                 writer.write("extern int Axis_GetSize_" + typeName + "();\n\n");
             }
         }

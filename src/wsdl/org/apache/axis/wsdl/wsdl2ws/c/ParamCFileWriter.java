@@ -120,7 +120,16 @@ public abstract class ParamCFileWriter extends ParamWriter
                     + this.classname
                     + CUtils.C_HEADER_SUFFIX
                     + "\"\n");
-            writer.write("#include <axis/server/AxisWrapperAPI.h>\n\n");
+		writer.write("#include <axis/GDefine.h>\n");
+		writer.write("#include <axis/AxisUserAPI.h>\n");
+		writer.write("#include <axis/SoapEnvVersions.h>\n");
+		writer.write("#include <axis/WSDDDefines.h>\n");
+		writer.write("#include <axis/TypeMapping.h>\n");
+		writer.write("#include <axis/client/Stub.h>\n");
+		writer.write("#include <axis/client/Call.h>\n");
+            writer.write("#include <axis/AxisWrapperAPI.h>\n\n");
+		writer.write("#include <axis/IWrapperSoapSerializer.h>\n");
+		writer.write("#include <axis/IWrapperSoapDeSerializer.h>\n");
         }
         catch (IOException e)
         {

@@ -194,7 +194,12 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 				text = replaceInString(text,".hpp",".h",null);
 			}
 			//outputFile.write(text); Remove all #include's
-			//outputFile.newLine();
+			//outputFile.newLine();   TODO put these back in
+
+			if (-1 != text.indexOf("stdarg")) {
+				outputFile.write(text);
+				outputFile.newLine();
+			}
 		} else if (
 		    // In AxisUserAPI.h we must keep a #ifdef WIN32/#else/#endif
 			keepIfdef
@@ -214,14 +219,29 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 		BufferedWriter outputFile)
 		throws Exception {
 
-		String text = changeAxisToAxisc(fp.toString().trim());
+		// Look to see if this is a typedef of a function pointer
+		// or a typedef of a datatype. Function pointer typedefs
+		// end with a ) before the last semicolon and do not have 
+		// their typedef name at the end so don't attempt to prefix
+		// the last token with AXISC_
+		String text = fp.toString().trim();
+		String lasttok = null;
+		for (int i=0; i<text.length(); i++) {
+			String s = "" + text.charAt(i);
+			if (!";".equals(s) && -1 == Utils.whitespace.indexOf(s))
+				lasttok = s;
+		}
+
+		text = changeAxisToAxisc(text);
 		text = replaceInString(text,"bool","AxiscBool",null);
 
-            // Put AXISC_ on to the front of the typedef name which is always at the end.
-		StringTokenizer st = new StringTokenizer(text);
-		String tok = null;
-		while (st.hasMoreTokens()) tok = st.nextToken();
-		text = replaceInString(text,tok,"AXISC_"+tok,null);
+		if (!")".equals(lasttok)) {
+	            // Put AXISC_ on to the front of the typedef name which is always at the end.
+			StringTokenizer st = new StringTokenizer(text);
+			String tok = null;
+			while (st.hasMoreTokens()) tok = st.nextToken();
+			text = replaceInString(text,tok,"AXISC_"+tok,null);
+		}
 
 		outputFile.write(text);
 		outputFile.newLine();

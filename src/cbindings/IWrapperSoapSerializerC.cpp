@@ -105,6 +105,8 @@ AXISC_STORAGE_CLASS_INFO int axiscSerializeBasicArray(AXISCHANDLE wrapperSoapSer
 AXISC_STORAGE_CLASS_INFO int axiscSerializeAsElement(AXISCHANDLE wrapperSoapSerializer, const AxiscChar * sName, 
 	const AxiscChar * pNamespace, void * pValue, AXISC_XSDTYPE type) {
 	IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+	if (pNamespace)
+		return sz->serializeAsElement(sName,pNamespace,pValue,(XSDTYPE)type);
 	return sz->serializeAsElement(sName,pValue,(XSDTYPE)type);
 }
 
@@ -174,7 +176,7 @@ AXISC_STORAGE_CLASS_INFO AXISCHANDLE axiscCreateSoapAttachementSoapAttachment(AX
 	return (AXISCHANDLE)(sz->createSoapAttachement());
 }
 
-AXISC_STORAGE_CLASS_INFO void axiscSerialize(AXISCHANDLE wrapperSoapSerializer, const char *pFirst, ...) {
+AXISC_STORAGE_CLASS_INFO void axiscSerializeIWrapperSoapSerializer(AXISCHANDLE wrapperSoapSerializer, const char *pFirst, ...) {
 	SoapSerializer *sz = (SoapSerializer*)wrapperSoapSerializer;
 	va_list vList;
 	va_start( vList, pFirst );
