@@ -53,26 +53,37 @@ int main(int argc, char* argv[])
 				iResult = ws.div(i1, i2);		
 				cout << "Result is " << iResult << endl;
 			}
-			catch(MathOpsService_AxisClientException &me)
+			catch(DivByZeroStruct& dbzs)
 			{
-				cout << "MathOpsService_AxisClientException: ";
-				ISoapFault *fault = (ISoapFault *)me.getFault();
-				const char* pcCmplxFaultName = fault->getCmplxFaultObjectName().c_str();
-				if(0 == strcmp("DivByZeroStruct", pcCmplxFaultName))
-				{
-					DivByZeroStruct* p = (DivByZeroStruct *)fault->getCmplxFaultObject();
-					cout << "DivByZeroStruct Fault: \"" << p->varString << "\", " << p->varInt << ", " << p->varFloat << endl;
-            	}
-				else if(0 == strcmp("SpecialDetailStruct", pcCmplxFaultName))
-				{
-					SpecialDetailStruct* p = (SpecialDetailStruct *)fault->getCmplxFaultObject();
-					cout << "SpecialDetailStruct Fault: \"" << p->varString << "\"" << endl;
-				}
-				else if(0 == strcmp("OutOfBoundStruct", pcCmplxFaultName))
-				{
-					OutOfBoundStruct* p = (OutOfBoundStruct *)fault->getCmplxFaultObject();
-					cout << "OutOfBoundStruct Fault: \"" << p->varString << "\", " << p->varInt << ", \"" << p->specialDetail->varString << "\"" << endl;
-				}
+				cout << "DivByZeroStruct Fault: \"" 
+					<< dbzs.varString 
+					<< "\", " 
+					<< dbzs.varInt 
+					<< ", " 
+					<< dbzs.varFloat 
+					<< endl; 
+			}
+			catch(SpecialDetailStruct& sds)
+			{
+				cout << "SpecialDetailStruct Fault: \"" 
+					<< sds.varString 
+					<< "\"" 
+					<< endl;
+			}
+			catch(OutOfBoundStruct& oobs)
+			{
+				cout << "OutOfBoundStruct Fault: \"" 
+					<< oobs.varString 
+					<< "\", " 
+					<< oobs.varInt 
+					<< ", \"" 
+					<< oobs.specialDetail->varString 
+					<< "\"" 
+					<< endl;
+			}
+			catch(SoapFaultException& sfe)
+			{
+				cout << "SoapFaultException: " << sfe.what() << endl;
 			}
 			catch(AxisException& e)
 			{

@@ -3,11 +3,11 @@ Trying to div 10 by 5
 Result is 2
 1
 Trying to div 10 by 0
-MathOpsService_AxisClientException: DivByZeroStruct Fault: "Division by zero exception", 1, 10.52
+DivByZeroStruct Fault: "Division by zero exception", 1, 10.52
 2
 Trying to div 1000 by 5
-MathOpsService_AxisClientException: SpecialDetailStruct Fault: "You have entered 1000 for the first parameter. 1000 is reserved. Please do not use it"
+SpecialDetailStruct Fault: "You have entered 1000 for the first parameter. 1000 is reserved. Please do not use it"
 3
 Trying to div 10 by -5
-MathOpsService_AxisClientException: OutOfBoundStruct Fault: "Out of bounds exception", 2, "This bounds exception is a forced exception"
+OutOfBoundStruct Fault: "Out of bounds exception", 2, "This bounds exception is a forced exception"
 ---------------------- TEST COMPLETE -----------------------------
