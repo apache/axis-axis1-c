@@ -19,8 +19,12 @@
  * @class Stub
  *
  * @brief This is the client Stub base class to be inherited by all stub 
- *        classes genarated by WSDL2WS tool.
- * Stub.h: interface for the Stubclass.
+ *        classes genarated by WSDL2WS tool. This class acts as the interface 
+ *        between the users and the Axis C++ engine (client side). Programmer 
+ *        can use the API defined here to enrich the client application 
+ *        functionality. Setting transport properties, setting SOAP headers, 
+ *        setting connection timeout and specifying a proxy on the client stub
+ *        is facilitated with this interface.
  *
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
