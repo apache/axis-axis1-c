@@ -6,14 +6,17 @@
 #if !defined(__INTEROPTESTPORTTYPE_CLIENTSTUB_H__OF_AXIS_INCLUDED_)
 #define __INTEROPTESTPORTTYPE_CLIENTSTUB_H__OF_AXIS_INCLUDED_
 
-#include <Stub.h>
+#include <axis/client/Call.h>
 #include "SOAPStruct_Array.h"
 #include "SOAPStruct.h"
 
-class InteropTestPortType :public Stub 
+class InteropTestPortType 
 {
+private:
+	Call* m_pCall;
 public:
 	InteropTestPortType(const char* pchEndpointUri);
+public:
 	virtual ~InteropTestPortType();
 public: 
 	xsd__string echoString(xsd__string Value0);

@@ -8,8 +8,8 @@
 
 #include <axis/server/AxisWrapperAPI.h>
 
-//bool CallBase::bInitialized;
-//CallFunctions CallBase::ms_VFtable;
+bool CallBase::bInitialized;
+CallFunctions CallBase::ms_VFtable;
 extern int Axis_DeSerialize_SOAPStruct(SOAPStruct* param, IWrapperSoapDeSerializer *pDZ);
 extern void* Axis_Create_SOAPStruct(SOAPStruct *Obj, bool bArray = false, int nSize=0);
 extern void Axis_Delete_SOAPStruct(SOAPStruct* param, bool bArray = false, int nSize=0);
@@ -17,12 +17,15 @@ extern int Axis_Serialize_SOAPStruct(SOAPStruct* param, IWrapperSoapSerializer* 
 extern int Axis_GetSize_SOAPStruct();
 
 InteropTestPortType::InteropTestPortType(const char* pchEndpointUri)
-:Stub(pchEndpointUri)
 {
+	m_pCall = new Call();
+	m_pCall->setProtocol(APTHTTP);
+	m_pCall->setEndpointURI(pchEndpointUri);
 }
 
 InteropTestPortType::~InteropTestPortType()
 {
+	delete m_pCall;
 }
 
 
@@ -38,8 +41,6 @@ xsd__string InteropTestPortType::echoString(xsd__string Value0)
 	m_pCall->setTransportProperty(SOAPACTION_HEADER , "base#echoString");
 	m_pCall->setSOAPVersion(SOAP_VER_1_1);
 	m_pCall->setOperation("echoString", "http://soapinterop.org/");
-	setTransportProperties();
-	setSOAPHeaders();
 	m_pCall->addParameter((void*)&Value0, "inputString", XSD_STRING);
 	if (AXIS_SUCCESS == m_pCall->invoke())
 	{
@@ -63,8 +64,6 @@ xsd__string_Array InteropTestPortType::echoStringArray(xsd__string_Array Value0)
 	m_pCall->setTransportProperty(SOAPACTION_HEADER , "base#echoStringArray");
 	m_pCall->setSOAPVersion(SOAP_VER_1_1);
 	m_pCall->setOperation("echoStringArray", "http://soapinterop.org/");
-	setTransportProperties();
-	setSOAPHeaders();
 	m_pCall->addBasicArrayParameter((Axis_Array*)(&Value0), XSD_STRING, "inputStringArray");
 	if (AXIS_SUCCESS == m_pCall->invoke())
 	{
