@@ -15,7 +15,7 @@
             xmlns:tns="http://localhost/axis/MathOps/types"
             targetNamespace="http://localhost/axis/MathOps/types">
             <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
-            <complexType name="DivByZeroFault">
+            <complexType name="DivByZeroStruct">
                 <sequence>
                     <element name="varString" type="xsd:string"/>
                     <element name="varInt" type="xsd:int"/>
@@ -30,12 +30,12 @@
             xmlns="http://www.w3.org/2001/XMLSchema"
             xmlns:tns="http://localhost/axis/MathOps/types/part"
             targetNamespace="http://localhost/axis/MathOps/types/part">
-            <element name="DivByZeroFaultPart" type="ns2:DivByZeroFault"/>
+            <element name="DivByZeroStructPart" type="ns2:DivByZeroFault"/>
         </schema>
                 
     </types>
 	<message name="DivByZeroFault">
-		<part name="faultstruct" element="ns3:DivByZeroFaultPart"/>
+		<part name="faultstruct1" element="ns3:DivByZeroStructPart"/>
 	</message>
 	<message name="divRequest">
 		<part name="int0" element="ns2:intParam1"/>
@@ -48,26 +48,23 @@
 		<operation name="div" parameterOrder ="int0 int1">
 			<input message="tns:divRequest"/>
 			<output message="tns:divResponse"/>
-			<fault name="DivByZeroFault" message="tns:DivByZeroFault"/>
+			<fault name="DivByZero" message="tns:DivByZeroFault"/>
 		 </operation>
 	</portType>
 	<binding name="MathOpsBinding" type="tns:MathOps">
-		<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 		<operation name="div">
 			  <soap:operation soapAction="MathOps#div"/>
                 <input name="divRequest">
-                    <soap:body 
-                        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" 
-                        namespace="http://localhost/axis/MathOps" 
-                        use="encoded"/>
+                    <soap:body
+                        use="literal"/>
                 </input>
                 <output name="divResponse">
-                    <soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" 
-                        namespace="http://localhost/axis/MathOps" 
-                        use="encoded"/>
+                    <soap:body
+                        use="literal"/>
                 </output>
-			<fault name="DivByZeroFault">
-				<soap:fault name="DivByZeroFault" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://soapinterop.org/wsdl"/>
+			<fault name="DivByZero">
+				<soap:fault name="DivByZero" use="literal"/>
 			</fault>
 			</operation>
 		</binding>
