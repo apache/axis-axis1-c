@@ -154,7 +154,7 @@ bool ChannelFactory::UnLoadChannelLibrary( g_ChannelType eChannelType, IChannel 
 // Delete library name from the library name list.
 	if( m_pLibName[iLibIndex] != NULL)
 	{
-		delete m_pLibName[iLibIndex];
+		delete [] m_pLibName[iLibIndex];
 
 		m_pLibName[iLibIndex] = NULL;
 	}
