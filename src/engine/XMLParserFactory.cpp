@@ -49,7 +49,7 @@ int XMLParserFactory::initialize()
 	m_pcLibraryPath = "AxisXMLParser.dll"; //this will be taken from configuration file
 #endif
 #else
-	m_pcLibraryPath = "libAxisXMLParser.so"; //this will be taken from configuration file
+	m_pcLibraryPath = "lib_axis_xmlparser.so"; //this will be taken from configuration file
 #endif
 	if (!loadLib())
 	{
