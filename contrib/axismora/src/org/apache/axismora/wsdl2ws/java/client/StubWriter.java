@@ -128,11 +128,7 @@ public class StubWriter extends JavaClassWriter {
             writer.write("\n\tpublic " + classname + "(java.lang.String enduri){");
             writer.write("\n\t\ttry{\n");
             writer.write("\t\t\tthis.enduri = enduri;\n");
-            writer.write(
-                "\t\t\tthis.SOAPAction = new javax.xml.namespace.QName(\""
-                    + wscontext.getSerInfo().getServicename()
-                    + "\");\n");
-            writer.write(
+             writer.write(
                 "\t\t\tthis.service = new org.apache.axismora.client.Service();");
             writer.write("\n\t\t}catch(Exception e){");
             writer.write("\n\t\t\te.printStackTrace();\n\t\t}\n\t}\n");
@@ -193,6 +189,10 @@ public class StubWriter extends JavaClassWriter {
                         + minfo.getMethodname()
                         + "\");");
                 String ops = "";
+				writer.write(
+								"\t\t\tthis.SOAPAction = new javax.xml.namespace.QName(\""
+									+ wscontext.getSerInfo().getServicename()
+									+ "\");\n");
                 writer.write(
                     "\n\t\torg.apache.axismora.client.Call call = (org.apache.axismora.client.Call)service.createCall();");
                 writer.write("\n\t\tcall.setOperationName(methodName);");

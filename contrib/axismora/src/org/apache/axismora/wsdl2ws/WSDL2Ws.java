@@ -290,7 +290,7 @@ public class WSDL2Ws {
         throws WrapperFault {
         	
 		this.language = targetLanguage;
-		if (targetLanguage == null) targetLanguage = "c++";
+		if (targetLanguage == null) targetLanguage = "java";
 		if (targetEngine == null) targetEngine = "server";
 		if (targetoutputLocation == null) targetoutputLocation = "./";
 		
