@@ -245,7 +245,9 @@ int Call::unInitialize ()
 
 int Call::setProtocol (AXIS_PROTOCOL_TYPE protocol)
 {
-	m_nTransportType = protocol;
+    m_nTransportType = protocol;
+    if (m_pTransport)
+        m_pTransport->setProtocol(m_nTransportType);
     return AXIS_SUCCESS;
 }
 
