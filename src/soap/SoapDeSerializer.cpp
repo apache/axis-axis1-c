@@ -3192,17 +3192,16 @@ SoapDeSerializer::getElementAsString (const AxisChar * pName,
 		 */
 		return ret;
 	    }
-		else if (m_pNode && (END_ELEMENT == m_pNode->m_type))
+		else if (m_pNode && (END_ELEMENT == m_pNode->m_type) && bNillFound ) //xsi:nil="true"
 		{
-			if( bNillFound)
-			{
-			    m_pNode = m_pParser->next();
-
-//				m_pNode = NULL;
-			}
-
-			return ret;
+	            m_pNode = m_pParser->next();
+	            return ret;
 		}
+                else if (m_pNode && (END_ELEMENT == m_pNode->m_type) ) // empty tag case <tag/>
+                {
+                    m_pNode = m_pParser->next();
+                    return ret;
+                }
 	    else
 	    {
 		/* Should be an empty string or simpleType with xsi:nil="true" */
