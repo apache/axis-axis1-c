@@ -4,5 +4,5 @@ AM_CFLAGS = $(CFLAGS)
 #sslclient_SOURCES = InteropBaseClient.c InteropTestPortType.c  SOAPStruct.c
 sslclient_SOURCES = InteropBaseClient.c InteropTestPortType.c
 
-sslclient_LDADD   =  $(LDFLAGS) -lssl
+sslclient_LDADD   =  $(LDFLAGS) -L$(AXISCPP_HOME)/bin -laxiscpp_client -lssl
 INCLUDES = -I$(AXISCPP_HOME)/include
