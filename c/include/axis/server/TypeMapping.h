@@ -56,9 +56,8 @@
  *
  *
  */
-// TypeMapping.h:
-//
-//////////////////////////////////////////////////////////////////////
+/* TypeMapping.h:*/
+
 
 #ifdef WIN32
 #pragma warning (disable : 4786)
