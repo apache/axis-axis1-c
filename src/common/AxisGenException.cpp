@@ -19,64 +19,69 @@
  *
  */
 
-#include <axis/server/AxisException.h>
+#include <axis/AxisGenException.h>
 #include <exception>
 using namespace std;
 
-AxisException::AxisException (const int iExceptionCode)
+AxisGenException::AxisGenException (const int iExceptionCode)
 {
     m_iExceptionCode = iExceptionCode;
     processException (iExceptionCode);
 }
 
-AxisException::AxisException(const int iExceptionCode, char* pcMessage)
+AxisGenException::AxisGenException(const int iExceptionCode, char* pcMessage)
 {
     m_iExceptionCode = iExceptionCode;
     processException(iExceptionCode, pcMessage);
 }
 
-AxisException::AxisException (const exception* e)
+AxisGenException::AxisGenException (const exception* e)
 {
     m_iExceptionCode = -1;
     processException (e);
 }
 
-AxisException::AxisException (const exception* e, const int iExceptionCode)
+AxisGenException::AxisGenException (const exception* e, const int iExceptionCode)
 {
     m_iExceptionCode = iExceptionCode;
     processException (e, iExceptionCode);
 }
 
-void AxisException::processException (const exception* e, const int iExceptionCode)
+AxisGenException::AxisGenException(const char* pcMessage)
+{
+    m_sMessage = strdup(pcMessage);
+}
+
+void AxisGenException::processException (const exception* e, const int iExceptionCode)
 {
     m_sMessage = getMessage (e) + " " + getMessage (iExceptionCode);
 }
 
-void AxisException::processException (const exception* e)
+void AxisGenException::processException (const exception* e)
 {
     m_sMessage = getMessage (e);
 }
 
-void AxisException::processException(const int iExceptionCode)
+void AxisGenException::processException(const int iExceptionCode)
 {
     m_sMessage = getMessage (iExceptionCode);
 }
 
-void AxisException::processException(const int iExceptionCode, char* pcMessage)
+void AxisGenException::processException(const int iExceptionCode, char* pcMessage)
 {
     AxisString sMessage = strdup(pcMessage);
     m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
     delete pcMessage;
 }
 
-const string AxisException::getMessage (const exception* objException)
+const string AxisGenException::getMessage (const exception* objException)
 {
     m_sMessage = objException->what();
 
     return m_sMessage;
 }
 
-const string AxisException::getMessage (const int iExceptionCode)
+const string AxisGenException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {
@@ -98,17 +103,17 @@ const string AxisException::getMessage (const int iExceptionCode)
 
 }
 
-AxisException::~AxisException() throw ()
+AxisGenException::~AxisGenException() throw ()
 {
 
 }
 
-const char* AxisException::what() throw ()
+const char* AxisGenException::what() throw ()
 {
     return m_sMessage.c_str ();
 }
 
-const int AxisException::getExceptionCode()
+const int AxisGenException::getExceptionCode()
 {
     return m_iExceptionCode; 
 }
