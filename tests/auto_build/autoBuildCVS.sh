@@ -114,7 +114,7 @@ sh ${AXISCPP_DEPLOY}/bin/deploy_apache2_auto.sh
 if [ $? = 0 ]
 then
         echo Apache2 Start  Sucessfull
-        echo `date` Apache Start  Sucessfull >> ${LOG}
+        echo `date` Apache2 Start  Sucessfull >> ${LOG}
 else
         echo Apache2 Start Failed
         echo `date` Apache Start Failed >> ${LOG}
@@ -144,11 +144,11 @@ else
 fi
 
 echo "running the tests"
-sh runAllTests.sh
+sh ./runAllTests.sh
 
 #Only if there is a file called mailto in the current folder, do the step.
 #If you need to mail results create a file called mailto in the current
 #folder. This file has no meaning except this purpose
 if test -f $HOME_DIR/mailto; then
-    cat  $HOME_DIR/runTestCase.log | mutt -s "[test-results]Axis C++ Autobuild and regression test" -a "$HOME_DIR/buildTestCase.log" -x axis-c-dev@ws.apache.org
+    cat  $HOME_DIR/testcases/build/runTestCase.log | mutt -s "[test-results]Axis C++ Autobuild and regression test" -a "$HOME_DIR/testcases/build/buildTestCase.log" -x axis-c-dev@ws.apache.org
 fi
