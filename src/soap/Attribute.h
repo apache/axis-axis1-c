@@ -74,6 +74,8 @@
 
 #include <string>
 
+class SoapSerializer;
+
 using namespace std;
 
 class Attribute  
@@ -85,9 +87,9 @@ private:
 	string m_uri;
 	string m_value;
 	//string m_strAttrSerialized;
-public:	
-	//string& serialize();
-	int serialize(string&);
+public:		
+	int serialize(SoapSerializer& pSZ);
+	//int serialize(string&);
 	Attribute();	
 	Attribute(const string &localname, const string &prefix, const string &uri, const string &value);
 	virtual ~Attribute();

@@ -67,6 +67,7 @@
 
 #include "Attribute.h"
 #include "../common/GDefine.h"
+#include "../soap/SoapSerializer.h"
 #include <iostream>
 
 //////////////////////////////////////////////////////////////////////
@@ -114,6 +115,27 @@ Attribute::Attribute(const string &localname, const string &prefix, const string
 /*
  *
  */
+int Attribute::serialize(SoapSerializer& pSZ)
+{	
+	int intStatus= FAIL;
+
+	if (isSerializable()) {		
+		pSZ<< " ";
+
+		if(!m_prefix.empty()) {			
+			pSZ << m_prefix.c_str() << ":";
+		}
+
+		pSZ<< m_localname.c_str() << "=\"" << m_value.c_str() << "\"";
+
+		intStatus= SUCCESS;
+	}
+
+	return intStatus;	
+}
+
+/*
+commented on 10Jul2003 3.30 pm
 int Attribute::serialize(string& sSerialized)
 {	
 	int intStatus= FAIL;
@@ -133,22 +155,7 @@ int Attribute::serialize(string& sSerialized)
 
 	return intStatus;	
 }
-
-/*string& Attribute::serialize()
-{	
-	m_strAttrSerialized="";
-
-	if (isSerializable()) {
-		if(!m_prefix.empty()) {
-			m_strAttrSerialized= m_prefix+ ":";
-		}
-
-		m_strAttrSerialized= m_strAttrSerialized + m_localname +
-			"=\""+ m_value+ "\"";
-	}
-
-	return m_strAttrSerialized;	
-}*/
+*/
 
 bool Attribute::isSerializable()
 {
