@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
 
@@ -69,6 +69,7 @@
 #include "SoapSerializer.h"
 #include "../common/GDefine.h"
 #include "BasicNode.h"
+#include "CharacterElement.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -135,6 +136,11 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
 				<< " xmlns:"<< m_prefix.c_str() << "=\"" << m_uri.c_str() << "\"";
 
 			iStatus= attrSerialize(pSZ);
+			if(iStatus==FAIL) {
+				break;
+			}
+
+			iStatus= serializeNamespaceDecl(pSZ);
 			if(iStatus==FAIL) {
 				break;
 			}
@@ -297,3 +303,46 @@ int HeaderBlock::serializeChildren(string &sSerialized)
 	return SUCCESS;
 }
 */
+
+int HeaderBlock::addNamespaceDecl(Attribute *pAttribute)
+{
+	m_namespaceDecls.push_back(pAttribute);
+
+	return SUCCESS;
+}
+
+int HeaderBlock::serializeNamespaceDecl(SoapSerializer &pSZ)
+{
+	list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
+
+	while(itCurrNamespaceDecl != m_namespaceDecls.end()) {		
+		(*itCurrNamespaceDecl)->serialize(pSZ);
+		itCurrNamespaceDecl++;		
+	}	
+
+	return SUCCESS;
+}
+
+BasicNode* HeaderBlock::getFirstChild()
+{
+	list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
+
+	if (itCurrBasicNode != m_children.end()) {		
+		return (*itCurrBasicNode);
+	}	
+
+	return NULL;
+}
+
+BasicNode* HeaderBlock::createChild(NODE_TYPE eNODE_TYPE)
+{
+	BasicNode* pBasicNode;
+
+	if(eNODE_TYPE==CHARACTER_NODE) {
+		pBasicNode = new CharacterElement();
+	} else if (eNODE_TYPE==ELEMENT_NODE) {
+		//do some thing appropriate
+	}
+
+	return pBasicNode;
+}

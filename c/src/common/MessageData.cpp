@@ -70,6 +70,8 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
+string MessageData::m_sBlankPropertyValue="";
+
 MessageData::MessageData()
 {
 	m_pSZ = NULL;
@@ -155,4 +157,27 @@ void MessageData::getSoapDeSerializer(IWrapperSoapDeSerializer **pIWrapperSoapDe
 void MessageData::getSoapDeSerializer(IHandlerSoapDeSerializer **pIHandlerSoapDeSerializer)
 {
 	*pIHandlerSoapDeSerializer= static_cast<IHandlerSoapDeSerializer*>(m_pDZ);
+}
+
+int MessageData::setProperty(string &sName, string &sValue)
+{
+	m_Properties[sName.c_str()]= sValue;
+	return SUCCESS;
+}
+
+/*
+ *The method caller has to check whether the returned string is empty or
+ * not. If it is empty then the idea is that the property is not 
+ * available.
+ */
+string& MessageData::getProperty(string &sName)
+{
+	
+	if (m_Properties.find(sName) != m_Properties.end())
+	{
+		return m_Properties[sName];
+	}
+	
+
+	return m_sBlankPropertyValue;
 }

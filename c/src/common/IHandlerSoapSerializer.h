@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
 
@@ -73,10 +73,10 @@
 #endif // _MSC_VER > 1000
 
 #include "ISoapSerializer.h"
-class ISoapHeader;
 class IHeaderBlock;
 
-class IHandlerSoapSerializer : virtual public ISoapSerializer
+class IHandlerSoapSerializer : public virtual ISoapSerializer
+
 {
 public:		
 	virtual IHeaderBlock* createHeaderBlock()=0;

@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
 
@@ -75,7 +75,7 @@
 
 ComplexElement::ComplexElement()
 {
-
+	m_iNodeType= ELEMENT_NODE;
 }
 
 ComplexElement::~ComplexElement()
@@ -249,3 +249,32 @@ int ComplexElement::serializeChildren(string &sSerialized)
 	return SUCCESS;
 }
 */
+
+NODE_TYPE ComplexElement::getNodeType()
+{
+	return m_iNodeType;
+}
+
+/*
+ *This method is overridden to return a blank string always because this is 
+ * a Complex Element. Instead of using this method, a user of a 
+ * ComplexElement must get the childeren of this ComplexElement and
+ * has to traverse through the childrean in a appropriate manner
+ * in order to get there values.
+ */
+string& ComplexElement::getValue()
+{
+	return m_sValue;
+}
+
+/*
+ *This method is overridden to do nothing always because this is 
+ * a Complex Element. Instead of using this method, a user of a 
+ * ComplexElement must get the childeren of this ComplexElement and
+ * has to traverse through the childrean in a appropriate manner
+ * in order to set there values.
+ */
+int ComplexElement::setValue(string &sValue)
+{
+	return SUCCESS;
+}

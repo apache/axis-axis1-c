@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
 
@@ -257,3 +257,20 @@ int SoapHeader::serializeNamespaceDecl(string& sSerialized)
 	return SUCCESS;
 }
 */
+
+IHeaderBlock* SoapHeader::getHeaderBlock()
+{
+	list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
+
+	if(itCurrHeaderBlock != m_headerBlocks.end()) {			
+
+		/*
+		 *Actually a dynamic cast is not needed here. But it
+		 * is done for safe side.
+		 */
+		return dynamic_cast<IHeaderBlock*>(*itCurrHeaderBlock);
+	}
+
+	return NULL;
+
+}

@@ -71,10 +71,13 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-class IHandlerSoapDeSerializer : public ISoapDeSerializer
+#include "ISoapDeSerializer.h"
+class ISoapHeader;
+
+class IHandlerSoapDeSerializer : public virtual ISoapDeSerializer
 {
 public:
-
+	virtual ISoapHeader* GetHeader()=0;
 	virtual ~IHandlerSoapDeSerializer() {};
 
 };
