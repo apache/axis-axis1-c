@@ -261,7 +261,11 @@ public class CUtils {
 	public static String getCmplxArrayNameforType(QName qname){
 		String arrayName = null;
 		if(!qname2classmap.containsKey(qname)){
-			arrayName = qname.getLocalPart()+"_Array";
+			/* arrayName = qname.getLocalPart()+"_Array";
+			* This avoid compilation issue for wsdl SimpleTypeInnerUnboundedInOutput.wsdl
+			* See : malling list.
+			*/
+			arrayName = qname.getLocalPart().replace('>','_')+"_Array";			
 		}
 		return arrayName;		
 	}
