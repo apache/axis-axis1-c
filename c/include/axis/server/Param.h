@@ -66,8 +66,8 @@
 #if !defined(AFX_PARAM_H__351B13BB_5D03_40C5_93F5_56D17295A8BD__INCLUDED_)
 #define AFX_PARAM_H__351B13BB_5D03_40C5_93F5_56D17295A8BD__INCLUDED_
 
-#include <axis/common/IParam.h>
-#include <axis/common/BasicTypeSerializer.h>
+#include "IParam.h"
+#include "BasicTypeSerializer.h"
 #include "AxisTime.h"
 
 #include <string>

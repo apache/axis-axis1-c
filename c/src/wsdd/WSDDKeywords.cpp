@@ -2,7 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <axis/wsdd/WSDDKeywords.h>
+#include "WSDDKeywords.h"
 #include "../common/AxisUtils.h"
 
 #define __TRC(X) AxisUtils::ToAxisXMLCh(X)

@@ -62,8 +62,8 @@
  *
  */
 
-#include <axis/wsdd/WSDDDocument.h>
-#include <axis/wsdd/WSDDKeywords.h>
+#include "WSDDDocument.h"
+#include "WSDDKeywords.h"
 #include <string>
 #include <axis/common/AxisTrace.h>
 
