@@ -77,12 +77,16 @@ int AxisTrace::setFilePerm(const char* sFileName)
         strcpy (setPerm, "chmod 766 ");
         strcat (setPerm, sFileName);
     }
+    else
+        return AXIS_FAIL;
                                                                                                                              
 #ifdef __GNUC__
     system (setPerm);
 #endif
                                                                                                                              
     free(setPerm);
+
+    return AXIS_SUCCESS;
 }
 
 int AxisTrace::logthis (const char* sLog, int level, char* arg2, int arg3)
