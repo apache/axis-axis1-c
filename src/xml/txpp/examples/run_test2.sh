@@ -1,1 +1,1 @@
-./test2 < file_xml
+./test2 < test2_xml

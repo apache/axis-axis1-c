@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dataTypes xmlns="http://a/b/" xmlns:C="http://c/d/">
+
+<int>2312</int>
+<long>20040101</long>
+<float>1.414e03</float>
+<double>3.532e11</double>
+<BigDecimal>1.23456789</BigDecimal>
+<BigInteger>100000000000</BigInteger>
+<AnyURI>www.cse.mrt.ac.lk/~priyanga/index.html</AnyURI>
+<QName>www.opensource.lk/TypedXMLPullParser</QName>
+<base64>Axy5F/eFtdYhui5M1Tc=</base64>
+
+</dataTypes>
+
+
+
