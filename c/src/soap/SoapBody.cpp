@@ -166,3 +166,13 @@ int SoapBody::serializeAttributes(SoapSerializer& pSZ)
 
 	return iStatus;
 }
+
+int SoapBody::initializeForTesting()
+{
+	SoapMethod* pSoapMethod = new SoapMethod();
+	pSoapMethod->initializeForTesting();
+
+	setSoapMethod(pSoapMethod);
+
+	return AXIS_SUCCESS;
+}
