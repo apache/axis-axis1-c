@@ -101,7 +101,7 @@ acceptTCPConnection (int servSock)
 			    &clntLen)) < 0)
     {
 	printf ("%s\n", "accept() failed");
-	AxisSocketUtils::printSocketErrorDescription ();
+	//AxisSocketUtils::printSocketErrorDescription ();
     }
 
     /* clntSock is connected to a client! */
