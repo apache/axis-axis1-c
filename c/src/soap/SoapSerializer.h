@@ -72,6 +72,7 @@
 #include "../common/IHandlerSoapSerializer.h"
 #include "../common/BasicTypeSerializer.h"
 #include "../common/AxisTime.h"
+#include "../common/Packet.h"
 #include "SoapEnvVersions.h"
 
 
@@ -101,7 +102,7 @@ public:
 	const AxisChar* getNewNamespacePrefix();
 	int setSoapVersion(SOAP_VERSION);
 	int Init();
-	int SetOutputStream(const void* pStream);
+	int SetOutputStream(const Ax_soapstream* pStream);
 	int setSoapFault(SoapFault* pSoapFault);
 	int setSoapMethod(SoapMethod* pSoapMethod);
 	int setSoapBody(SoapBody* pSoapBody);
@@ -150,7 +151,7 @@ public: //Basic Type Serializing methods
     
 private:
 	BasicTypeSerializer m_BTSZ;
-	const void* m_pOutputStream;
+	const Ax_soapstream* m_pOutputStream;
     AxisTime m_uAxisTime;
 };
 

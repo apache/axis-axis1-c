@@ -88,6 +88,9 @@ XMLStreamHandler::~XMLStreamHandler()
 	if (m_pFault) delete m_pFault;
 	if (m_pMethod) delete m_pMethod;
 	if (m_pHeaderBlock) delete m_pHeaderBlock;
+	//following is to avoid Param destructor deleting its complex member which object
+	//belongs to this class - see //Destructor Notice in this file.
+	m_Param.m_Type = XSD_INT;
 }
 /*
  * Please do a bench test with following parameter inside soap method
@@ -347,7 +350,7 @@ void XMLStreamHandler::SetParamType(const Attributes &attrs)
 						{
 							//custom data type
 							m_Param.m_Type = USER_TYPE;
-							m_Param.m_Value.pCplxObj = &m_CplxObj; //ArrayBean can be used as an AccessBean;
+							m_Param.m_Value.pCplxObj = &m_CplxObj; //Destructor Notice1
 							m_Param.m_Value.pCplxObj->m_TypeName = sType.c_str();
 							m_Param.m_Value.pCplxObj->m_URI = m_NsStack[sPrefix].c_str();
 						}
