@@ -9,9 +9,11 @@ AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
 
-AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile src/transport/Makefile src/transport/axis/Makefile src/engine/Makefile src/engine/server/Makefile src/engine/client/Makefile  src/server/Makefile src/server/apache/Makefile)
+#if you use apache1.2
+
+#AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile src/transport/Makefile src/transport/axis/Makefile src/engine/Makefile src/engine/server/Makefile src/engine/client/Makefile  src/server/Makefile src/server/apache/Makefile)
 
 #if you use apache2
 
-#AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile src/transport/Makefile src/transport/axis/Makefile src/engine/Makefile src/engine/server/Makefile src/engine/client/Makefile  src/server/Makefile src/server/apache2/Makefile)
+AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile src/transport/Makefile src/transport/axis/Makefile src/engine/Makefile src/engine/server/Makefile src/engine/client/Makefile  src/server/Makefile src/server/apache2/Makefile)
 
