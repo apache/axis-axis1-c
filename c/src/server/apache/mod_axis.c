@@ -36,7 +36,7 @@ void module_init(server_rec *svr_rec, pool* p)
 	WSDDFILEPATH Defined in common/AxisConfig.h
 	*/
     
-	initialize_module(1, "");
+	initialize_module(1);
 }
 
 int send_response_bytes(const char* res, const void* opstream)

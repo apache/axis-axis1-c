@@ -171,7 +171,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			}
 		}
 		writer.write("\n\tpSZ->Serialize(\"</\", Axis_TypeName_"+classname+", \">\", NULL);\n");
-		writer.write("\treturn SUCCESS;\n");
+		writer.write("\treturn AXIS_SUCCESS;\n");
 		writer.write("}\n\n");
 	
 	}
@@ -198,9 +198,9 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				if (CPPUtils.isSimpleType(qname)){
 					arrayType = CPPUtils.getclass4qname(qname);
 					writer.write("\tparam->"+attribs[i][0]+".m_Size = pIWSDZ->GetArraySize();\n");
-					writer.write("\tif (param->"+attribs[i][0]+".m_Size < 1) return FAIL;\n");
+					writer.write("\tif (param->"+attribs[i][0]+".m_Size < 1) return AXIS_FAIL;\n");
 					writer.write("\tparam->"+attribs[i][0]+".m_Array = new "+arrayType+"[param->"+attribs[i][0]+".m_Size];\n");
-					writer.write("\tif (SUCCESS != pIWSDZ->GetArray((Axis_Array*)(&param->"+attribs[i][0]+"), "+CPPUtils.getXSDTypeForBasicType(arrayType)+")) return FAIL;\n");
+					writer.write("\tif (AXIS_SUCCESS != pIWSDZ->GetArray((Axis_Array*)(&param->"+attribs[i][0]+"), "+CPPUtils.getXSDTypeForBasicType(arrayType)+")) return AXIS_FAIL;\n");
 				}
 				else{
 					arrayType = qname.getLocalPart();
@@ -215,7 +215,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 					"\n\t\t, Axis_TypeName_"+attribs[i][1]+", Axis_URI_"+attribs[i][1]+");\n");				
 			}		
 		}
-		writer.write("\treturn SUCCESS;\n");
+		writer.write("\treturn AXIS_SUCCESS;\n");
 		writer.write("}\n");
 	}
 	

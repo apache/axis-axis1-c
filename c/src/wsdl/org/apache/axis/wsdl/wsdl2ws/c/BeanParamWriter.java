@@ -174,7 +174,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 			}
 		}
 		writer.write("\n\tpSZX->Serialize(pSZ, \"</\", Axis_TypeName_"+classname+", \">\", NULL);\n");
-		writer.write("\treturn SUCCESS;\n");
+		writer.write("\treturn AXIS_SUCCESS;\n");
 		writer.write("}\n\n");
 	
 	}
@@ -212,7 +212,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 					containedType = CPPUtils.getclass4qname(qname);
 					writer.write("\tarray = pDZX->GetBasicArray(pDZ, "+CPPUtils.getXSDTypeForBasicType(containedType)+");\n");
 					writer.write("\tmemcpy(&(param->"+attribs[i][0]+"), &array, sizeof(Axis_Array));\n");
-					writer.write("\tif (param->"+attribs[i][0]+".m_Size < 1) return FAIL;\n");
+					writer.write("\tif (param->"+attribs[i][0]+".m_Size < 1) return AXIS_FAIL;\n");
 				}
 				else{
 					containedType = qname.getLocalPart();
@@ -220,7 +220,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 						"\n\t\t, (void*)Axis_Create_"+containedType+", (void*)Axis_Delete_"+containedType+
 						"\n\t\t, (void*)Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+");\n");
 					writer.write("\tmemcpy(&(param->"+attribs[i][0]+"), &array, sizeof(Axis_Array));\n");
-					writer.write("\tif (param->"+attribs[i][0]+".m_Size < 1) return FAIL;\n");
+					writer.write("\tif (param->"+attribs[i][0]+".m_Size < 1) return AXIS_FAIL;\n");
 				}
 			}else{
 				//if complex type
@@ -229,7 +229,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 					"\n\t\t, Axis_TypeName_"+attribs[i][1]+", Axis_URI_"+attribs[i][1]+");\n");				
 			}		
 		}
-		writer.write("\treturn SUCCESS;\n");
+		writer.write("\treturn AXIS_SUCCESS;\n");
 		writer.write("}\n");
 	}
 	

@@ -234,7 +234,7 @@ public class ClientStubWriter extends CFileWriter{
 		}
 		writer.write("\tpCall = "+globalobjectname+"->__vfptr;\n");
 		writer.write("/* Following will establish the connections with the server too */\n");
-		writer.write("\tif (SUCCESS != pCall->Initialize("+globalobjectname+")) return ");
+		writer.write("\tif (AXIS_SUCCESS != pCall->Initialize("+globalobjectname+")) return ");
 		if (returntype != null){
 			writer.write((returntypeisarray?"RetArray":returntypeissimple?"Ret":"pReturn")+";\n");
 		}
@@ -282,7 +282,7 @@ public class ClientStubWriter extends CFileWriter{
 		}
 		if (returntype == null){
 			writer.write("\tnStatus = pCall->Invoke("+globalobjectname+");\n");
-			writer.write("\tif (SUCCESS != nStatus)\n\t{\n");
+			writer.write("\tif (AXIS_SUCCESS != nStatus)\n\t{\n");
 			writer.write("\t\t//What to do ? . Throw an exception ??? \n\t}\n");
 			writer.write("\tpCall->UnInitialize("+globalobjectname+");\n");
 		}
@@ -299,7 +299,7 @@ public class ClientStubWriter extends CFileWriter{
 				writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+");\n");
 			}
 			writer.write("\tnStatus = pCall->Invoke("+globalobjectname+");\n");
-			writer.write("\tif (SUCCESS != nStatus)\n\t{\n");
+			writer.write("\tif (AXIS_SUCCESS != nStatus)\n\t{\n");
 			writer.write("\t\tfree(RetArray.m_Array);\n");
 			writer.write("\t\tRetArray.m_Array = NULL;\n");
 			writer.write("\t\tRetArray.m_Size = 0;\n\t}\n");
@@ -309,7 +309,7 @@ public class ClientStubWriter extends CFileWriter{
 		else if(returntypeissimple){
 			writer.write("\tpCall->SetReturnType("+globalobjectname+", "+CUtils.getXSDTypeForBasicType(outparamType)+");\n");
 			writer.write("\tnStatus = pCall->Invoke("+globalobjectname+");\n");
-			writer.write("\tif (SUCCESS == nStatus)\n\t{\n");
+			writer.write("\tif (AXIS_SUCCESS == nStatus)\n\t{\n");
 			writer.write("\t\tRet = pCall->"+CUtils.getParameterGetValueMethodName(outparamType)+"("+globalobjectname+");\n\t}\n");
 			writer.write("\tpCall->UnInitialize("+globalobjectname+");\n");
 			writer.write("\treturn Ret;\n");
@@ -317,7 +317,7 @@ public class ClientStubWriter extends CFileWriter{
 		else{
 			writer.write("\tpCall->SetCmplxReturnType("+globalobjectname+", (void*) Axis_DeSerialize_"+outparamType+", (void*) Axis_Create_"+outparamType+", (void*) Axis_Delete_"+outparamType+", Axis_TypeName_"+outparamType+", Axis_URI_"+outparamType+");\n");
 			writer.write("\tnStatus = pCall->Invoke("+globalobjectname+");\n");
-			writer.write("\tif (SUCCESS == nStatus)\n\t{\n");
+			writer.write("\tif (AXIS_SUCCESS == nStatus)\n\t{\n");
 			writer.write("\t\tpCall->GetCmplxResult("+globalobjectname+", (void**)&pReturn);\n\t}\n");
 			writer.write("\tpCall->UnInitialize("+globalobjectname+");\n");
 			writer.write("\treturn pReturn;\n");						

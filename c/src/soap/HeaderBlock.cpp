@@ -127,7 +127,7 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
 	 *  Header element MUST be namespace-qualified".
 	 */
 
-	int iStatus= SUCCESS;
+	int iStatus= AXIS_SUCCESS;
 
 	do {
 		if(isSerializable()) {
@@ -136,26 +136,26 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
 				" xmlns:", m_prefix.c_str(), "=\"", m_uri.c_str(), "\"", NULL);
 
 			iStatus= attrSerialize(pSZ);
-			if(iStatus==FAIL) {
+			if(iStatus==AXIS_FAIL) {
 				break;
 			}
 
 			iStatus= serializeNamespaceDecl(pSZ);
-			if(iStatus==FAIL) {
+			if(iStatus==AXIS_FAIL) {
 				break;
 			}
 			
 			pSZ.Serialize(">", NULL);
 
 			iStatus= serializeChildren(pSZ);
-			if(iStatus==FAIL) {
+			if(iStatus==AXIS_FAIL) {
 				break;
 			}
 
 			pSZ.Serialize("</", m_prefix.c_str(), ":", m_localname.c_str(), ">", NULL);
 			
 		} else {
-			iStatus= FAIL;
+			iStatus= AXIS_FAIL;
 		}
 	} while(0);
 
@@ -164,14 +164,14 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
 
 int HeaderBlock::attrSerialize(SoapSerializer& pSZ)
 {
-	int iStatus= SUCCESS;
+	int iStatus= AXIS_SUCCESS;
 
 	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
 	while(itCurrAttribute != m_attributes.end()) {		
 
 		iStatus= (*itCurrAttribute)->serialize(pSZ);
-		if(iStatus==FAIL) {
+		if(iStatus==AXIS_FAIL) {
 			break;
 		}
 		itCurrAttribute++;		
@@ -184,14 +184,14 @@ int HeaderBlock::attrSerialize(SoapSerializer& pSZ)
 comm on 10/7/2003 6.00pm
 int HeaderBlock::attrSerialize(string& sSerialized)
 {
-	int iStatus= SUCCESS;
+	int iStatus= AXIS_SUCCESS;
 
 	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
 	while(itCurrAttribute != m_attributes.end()) {		
 
 		iStatus= (*itCurrAttribute)->serialize(sSerialized);
-		if(iStatus==FAIL) {
+		if(iStatus==AXIS_FAIL) {
 			break;
 		}
 		itCurrAttribute++;		
@@ -230,7 +230,7 @@ int HeaderBlock::addChild(BasicNode *pBasicNode)
 {
 	m_children.push_back(pBasicNode);
 
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int HeaderBlock::serializeChildren(SoapSerializer& pSZ)
@@ -242,7 +242,7 @@ int HeaderBlock::serializeChildren(SoapSerializer& pSZ)
 		itCurrBasicNode++;		
 	}	
 
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 /*
@@ -256,7 +256,7 @@ int HeaderBlock::serializeChildren(string &sSerialized)
 		itCurrBasicNode++;		
 	}	
 
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 */
 
@@ -264,7 +264,7 @@ int HeaderBlock::addNamespaceDecl(Attribute *pAttribute)
 {
 	m_namespaceDecls.push_back(pAttribute);
 
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int HeaderBlock::serializeNamespaceDecl(SoapSerializer &pSZ)
@@ -276,7 +276,7 @@ int HeaderBlock::serializeNamespaceDecl(SoapSerializer &pSZ)
 		itCurrNamespaceDecl++;		
 	}	
 
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 BasicNode* HeaderBlock::getFirstChild()

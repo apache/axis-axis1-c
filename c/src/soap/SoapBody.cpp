@@ -103,12 +103,12 @@ void SoapBody::setSoapFault(SoapFault *ptrSoapFault)
 
 int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 {
-	int iStatus= SUCCESS;
+	int iStatus= AXIS_SUCCESS;
 
 	do {		
 		pSZ.Serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_BODY], NULL);
 		iStatus= serializeAttributes(pSZ);
-		if(iStatus==FAIL) {
+		if(iStatus==AXIS_FAIL) {
 			break;
 		}
 		
@@ -116,14 +116,14 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 
 		if(m_pSoapMethod!=NULL) {
 			iStatus= m_pSoapMethod->serialize(pSZ);
-			if(iStatus==FAIL) {
+			if(iStatus==AXIS_FAIL) {
 				break;
 			}
 		} 
 		else if(m_pSoapFault!=NULL) 
 		{		
 			iStatus= m_pSoapFault->serialize(pSZ);
-			if(iStatus==FAIL) {
+			if(iStatus==AXIS_FAIL) {
 				break;
 			}
 		}
@@ -133,7 +133,7 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 			if(m_pSoapFault!=NULL) 
 			{		
 				iStatus= m_pSoapFault->serialize(pSZ);
-				if(iStatus==FAIL) 
+				if(iStatus==AXIS_FAIL) 
 					break;
 			}
 		}
@@ -151,14 +151,14 @@ void SoapBody::addAttribute(Attribute *attr)
 
 int SoapBody::serializeAttributes(SoapSerializer& pSZ)
 {
-	int iStatus= SUCCESS;
+	int iStatus= AXIS_SUCCESS;
 
 	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
 	while(itCurrAttribute != m_attributes.end()) {		
 
 		iStatus= (*itCurrAttribute)->serialize(pSZ);
-		if(iStatus==FAIL) {
+		if(iStatus==AXIS_FAIL) {
 			break;
 		}
 		itCurrAttribute++;		
