@@ -86,7 +86,7 @@ main (int argc, char *argv[])
 
         // Clean memory 
         if (echoStringResult)
-            free(echoStringResult);
+            delete [] echoStringResult;
 
 	// testing echoStringArray 
 	xsd__string_Array arrstr;
@@ -104,8 +104,8 @@ main (int argc, char *argv[])
 	    printf ("successful\n");
             // Do stuff and clean memory
             for( int i = 0; i < arrstrResult.m_Size; i++ )
-                free (arrstrResult.m_Array[i]);
-            free(arrstrResult.m_Array);
+                delete[] arrstrResult.m_Array[i];
+            delete [] arrstrResult.m_Array;
         }
 	else
 	    printf ("failed\n");
@@ -135,7 +135,7 @@ main (int argc, char *argv[])
         {
 	    printf ("successful\n");
             // Do stuff and clean memory
-            free(arrintResult.m_Array);
+            delete [] arrintResult.m_Array;
 	}
         else
 	    printf ("failed\n");
@@ -166,7 +166,7 @@ main (int argc, char *argv[])
 	    printf ("successful\n");
             // Do stuff & clean memory
             // It is our responsibility to deallocate deserializer allocated memory
-            free(arrfloatResult.m_Array);
+            delete [] arrfloatResult.m_Array;
         }
 	else
 	    printf ("failed\n");
@@ -185,7 +185,7 @@ main (int argc, char *argv[])
         {
 	    printf ("successful\n");
             // Do stuff and clean memory
-            free(stctResult->varString);
+            delete [] stctResult->varString;
             delete stctResult;
         }
 	else
@@ -214,7 +214,7 @@ main (int argc, char *argv[])
 	    printf ("successful\n");
             // Do stuff and clean memory
             for( int i = 0; i < arrstctResult.m_Size; i++ )
-               free (arrstctResult.m_Array[i].varString);
+               delete [] arrstctResult.m_Array[i].varString;
             delete [] arrstctResult.m_Array;
         }
 	else
@@ -244,7 +244,7 @@ main (int argc, char *argv[])
             // Do stuff
 	    printf ("Returned String :\n%s\n", bbResult.__ptr);
             // Clean memory
-            free(bbResult.__ptr);
+            delete [] bbResult.__ptr;
 	}
 	else
 	    printf ("failed\n");
@@ -274,7 +274,7 @@ main (int argc, char *argv[])
             // Do stuff
 	    printf ("Returned String :\n%s\n", hbResult.__ptr);
             // Clean memory
-            free(hbResult.__ptr);
+            delete [] hbResult.__ptr;
 	}
 	else
 	    printf ("failed\n");
@@ -290,12 +290,12 @@ main (int argc, char *argv[])
 	    printf ("failed\n");
 
 	//testing echo boolean
-	/*printf ("invoking echoBoolean...\n");
+	printf ("invoking echoBoolean...\n");
 	if (ws.echoBoolean (true_) == true_)
 	    printf ("successful\n");
 	else
 	    printf ("failed\n");
-*/
+/**/
     }
     catch (AxisException & e)
     {
