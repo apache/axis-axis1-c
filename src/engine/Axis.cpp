@@ -279,7 +279,7 @@ extern "C" int initialize_module (int bServer)
 						  */
         if (status == AXIS_SUCCESS)
         {
-#if defined(__AXISTRACE__)
+#if defined(ENABLE_AXISTRACE)
             status = g_pAT->openFileByClient ();
             if (status == AXIS_FAIL)
             {

@@ -194,22 +194,22 @@ int AxisTrace::logaxis (const char* sLog1, const char* sLog2, int level,
 
 }
 
-int AxisTrace::logaxis (const char* sLog1, const long nLog2, int level,
+int AxisTrace::logaxis (const char* sLog1, const int nLog2, int level,
     char* arg3, int arg4)
 {
     if (!m_bLoggingOn) return AXIS_FAIL;
-    char* convToLong = (char*) malloc(4 * sizeof(char));
+    char* convToInt = (char*) malloc(4 * sizeof(char));
     int iResult = logthis(sLog1, level, arg3, arg4);
     if(AXIS_SUCCESS == iResult)
     {
-	sprintf(convToLong, "%d", nLog2);
+	sprintf(convToInt, "%d", nLog2);
         /*fputs (convToLong, m_fileTrace);
         fputs ("\n", m_fileTrace);
         fputs ("-------------------------------------------------", m_fileTrace);
         fputs ("\n", m_fileTrace);
 
         fflush (m_fileTrace);*/
-        m_fileTrace.filePuts (convToLong);
+        m_fileTrace.filePuts (convToInt);
         m_fileTrace.filePuts ("\n");
         m_fileTrace.filePuts ("-------------------------------------------------");
         m_fileTrace.filePuts ("\n");
@@ -218,7 +218,7 @@ int AxisTrace::logaxis (const char* sLog1, const long nLog2, int level,
 
         return AXIS_SUCCESS;
     }
-    free(convToLong);
+    free(convToInt);
     return AXIS_FAIL;
 }
 
