@@ -107,7 +107,6 @@ int SoapEnvelope::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         if (m_pSoapBody!=NULL)
         {
             iStatus= m_pSoapBody->serialize(pSZ, eSoapVersion);
-            AXISTRACE2("iStatus", iStatus, INFO);
             if (iStatus == AXIS_FAIL)
             {
                 break;
