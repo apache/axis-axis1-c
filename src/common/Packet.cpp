@@ -1,6 +1,8 @@
 #include "Packet.h"
 #include <string.h>
 
+#include <stdio.h>
+
 char* getheader(soapstream* soap, char* pchkey)
 {
 	header* hdrs = NULL;
@@ -20,13 +22,19 @@ char* getheader(soapstream* soap, char* pchkey)
 	default:; //some error condition
 	}
 
+	if(count==0 || hdrs==NULL)
+	{
+		return NULL;
+	}
+
 	for (int ix=0; ix<count; ix++)
 	{
-		header* hdr = hdrs + ix;
-		if (strcmp(hdr->headername, SOAPACTIONHEADER) == 0)
+		//header* hdr = hdrs + ix;
+		if (strcmp((hdrs+ix)->headername, SOAPACTIONHEADER) == 0)
 		{
-			return hdr->headervalue;
+			return (hdrs+ix)->headervalue;
 		}
+
 	}
 	return NULL;
 }
