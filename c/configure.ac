@@ -1,7 +1,7 @@
 AC_INIT(FULL-PACKAGE-NAME, VERSION, BUG-REPORT-ADDRESS)
 AM_INIT_AUTOMAKE(0.3)
 AM_CONFIG_HEADER(config.h)
-
+PACKAGE=apache_axisc++
 AC_MSG_CHECKING(whether to use apache2 as server transport)
 AC_ARG_WITH(apache2,
 [  --with-apache2[=PATH]      use apache2 as server transport.],
@@ -66,7 +66,7 @@ AC_ARG_WITH(expat,
     dnl test for  expat directory
     if test -d $withval; then
         expatinc="-I$withval/include"
-        expatlib="-L$withval/lib -lexpat"
+        expatlib="-L$withval/lib -lexpat -ldl"
     else
         AC_MSG_ERROR(could not find expat. stop)
     fi
@@ -90,7 +90,7 @@ AC_ARG_WITH(xercesc,
     dnl test for  xercesc directory
     if test -d $withval; then
         xercescinc="-I$withval/include"
-        xercesclib="-L$withval/lib -lxerces-c"
+        xercesclib="-L$withval/lib -lxerces-c -ldl"
     else
         AC_MSG_ERROR(could not find xercesc. stop)
     fi
@@ -115,6 +115,7 @@ AC_ARG_ENABLE(testcases, [  --enable-testcases    build test cases.],
     ;;
   esac ],
   AC_MSG_RESULT(no)
+  TESTCASESBUILD="tests"
 )
 
 AC_MSG_CHECKING(whether to build samples)
@@ -131,6 +132,7 @@ AC_ARG_ENABLE(samples, [  --enable-samples    build samples.],
     ;;
   esac ],
   AC_MSG_RESULT(no)
+  SAMPLESBUILD="samples"
 )
 
 APACHE2INC=$apache2inc
@@ -139,7 +141,7 @@ XERCESCINC=$xercescinc
 XERCESCLIB=$xercesclib
 EXPATINC=$expatinc
 EXPATLIB=$expatlib
-LINKCLIENTLIB="-L${AXISCPP_DEPLOY}/lib -laxiscpp_client -ldl"
+LINKCLIENTLIB="-L${AXISCPP_HOME}/src/engine/client -laxiscpp_client -ldl"
 AC_SUBST(APACHE2INC)
 AC_SUBST(APACHEINC)
 AC_SUBST(XERCESCINC)

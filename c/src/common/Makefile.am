@@ -16,4 +16,4 @@ libcommon_la_SOURCES = Param.cpp \
                        AxisMessage.cpp
 
 libcommon_la_LIBADD = $(LDFLAGS)
-INCLUDES = -I$(AXISCPP_HOME)/include
+INCLUDES = -I../../include

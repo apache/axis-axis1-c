@@ -111,7 +111,7 @@ int AxisConfig::readConfFile ()
 #ifdef WIN32
     strcat (sNewConfPath, "/axiscpp.conf");
 #else
-    strcat (sNewConfPath, "/conf/axiscpp.conf");
+    strcat (sNewConfPath, "/etc/axiscpp.conf");
 #endif
 	/*
 	Even if axiscpp.conf does not exist in AXISCPP_DEPLOY default values 

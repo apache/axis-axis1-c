@@ -19,4 +19,4 @@ libaxiscpp_client_la_SOURCES = ../Axis.cpp \
                 ../XMLParserFactory.cpp 
 		
 libaxiscpp_client_la_LIBADD = $(LDFLAGS) ../../common/libcommon.la ../../soap/libsoap.la ../../wsdd/libwsdd.la ../../xml/libxml.la
-INCLUDES = -I$(AXISCPP_HOME)/include
+INCLUDES = -I../../../include

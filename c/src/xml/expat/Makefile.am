@@ -3,5 +3,5 @@ AM_CPPFLAGS = $(CPPFLAGS)
 libaxis_expat_la_SOURCES = XMLParserExpat.cpp ParserLoader.cpp ../AxisParseException.cpp
 
 libaxis_expat_la_LIBADD = @EXPATLIB@ -lstdc++
-INCLUDES = @EXPATINC@ -I$(AXISCPP_HOME)/include
+INCLUDES = @EXPATINC@ -I../../../include
 
