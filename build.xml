@@ -230,6 +230,8 @@ Notes:
 		<!-- Delete compiled C/C++ code -->
 		<delete dir="${dir.bin}"/>
 		<delete dir="${dir.objects}"/>
+		<delete dir="${dir.obj}/include"/>
+		<delete dir="${dir.obj}/src"/>
 		<!-- Delete compiled WSDL2Ws java classes -->
 		<delete dir="${dir.classes}"/>
 		<!-- Delete generated Documentation -->

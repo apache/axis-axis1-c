@@ -11,6 +11,7 @@
 		<isset property="windows"/>
 		<then>
 			<property name="HTTP.SSLChannel.inc.dir" value="inc32"/>
+			<property name="HTTP.SSLChannel.libs" value="ssleay32,libeay32"/>
 		</then>
 		<else>
 			<property name="HTTP.SSLChannel.inc.dir" value="include"/>
@@ -38,6 +39,8 @@
                      <define name="AXISTRANSPORTCHANNELDLL_EXPORTS"/>
                   </defineset>
                </compiler>
+		<!-- required libraries -->
+		<syslibset libs="${HTTP.SSLChannel.libs}" dir="${HTTP.SSLChannel.dir}/lib" unless="os400"/>
                <defineset>
                   <define name="ENABLE_AXISTRACE" if="trace"/>
                   <define name="AXISTRACE_LIBRARY"/>
@@ -51,7 +54,6 @@
                <linker refid="LinuxLinker"/>
                <linker extends="VisualC++Linker">
                   <syslibset libs="wsock32"/>
-                  <syslibset libs="ssleay32,libeay32" dir="${HTTP.SSLChannel.dir}/lib"/>
                </linker>
 
                <linker refid="OS400Linker"/>
