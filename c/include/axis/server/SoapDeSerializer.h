@@ -114,7 +114,7 @@ public:
 	SoapFault* GetFault();
 	int AXISCALL CheckMessageBody(const AxisChar* pName, const AxisChar* pNamespace);
 	int GetBody();
-	ISoapHeader* GetHeader();
+	int GetHeader();
 	IHeaderBlock* GetHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace);
 	SoapEnvelope* GetEnvelope();
 	int SetInputStream(const Ax_soapstream* pInputStream);
