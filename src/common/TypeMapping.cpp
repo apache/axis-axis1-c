@@ -91,7 +91,23 @@ void TypeMapping::Initialize()
 	if (!m_bInit)
 	{
 		m_sTypeMap[L"int"] = XSD_INT;
+        m_sTypeMap[L"unsignedInt"] = XSD_UNSIGNEDINT;
+        m_sTypeMap[L"short"] = XSD_SHORT;
+        m_sTypeMap[L"unsignedShort"] = XSD_UNSIGNEDSHORT;
+        m_sTypeMap[L"byte"] = XSD_BYTE;
+        m_sTypeMap[L"unsignedByte"] = XSD_UNSIGNEDBYTE;
+        m_sTypeMap[L"long"] = XSD_LONG;
+        m_sTypeMap[L"integer"] = XSD_INTEGER;
+        m_sTypeMap[L"unsignedLong"] = XSD_UNSIGNEDLONG;
+        m_sTypeMap[L"float"] = XSD_FLOAT;
+        m_sTypeMap[L"double"] = XSD_DOUBLE;
+        m_sTypeMap[L"decimal"] = XSD_DECIMAL;
 		m_sTypeMap[L"string"] = XSD_STRING;
+        m_sTypeMap[L"duration"] = XSD_DURATION;
+        m_sTypeMap[L"dateTime"] = XSD_DATETIME;
+        m_sTypeMap[L"date"] = XSD_DATE;
+        m_sTypeMap[L"time"] = XSD_TIME;
+        
 		m_bInit = true;
 	}
 }

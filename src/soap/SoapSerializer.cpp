@@ -265,7 +265,8 @@ int SoapSerializer::setSoapVersion(SOAP_VERSION nSoapVersion)
 const AxisChar* SoapSerializer::getNewNamespacePrefix()
 {
 	iCounter++;
-	swprintf(cCounter, L"ns%d", iCounter);
+	//swprintf(cCounter, L"ns%d", iCounter);
+    AxisSprintf(cCounter, 64, L"%d", iCounter);
 	return cCounter;
 }
 
@@ -337,15 +338,62 @@ const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, const 
 	return m_BTSZ.serialize(sName, sValue, type);
 }
 
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, float fValue)
-{
-	return m_BTSZ.serialize(sName, fValue);	
-}
-
 const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, int nValue)
 {
 	return m_BTSZ.serialize(sName, nValue);		
 }
+
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, struct tm tValue)
+{
+    return m_uAxisTime.serialize(sName, tValue).c_str();
+    //return NULL;
+}
+
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, unsigned int unValue)
+{
+    return m_BTSZ.serialize(sName, unValue);
+}
+
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, short sValue)
+{
+    return m_BTSZ.serialize(sName, sValue);
+}
+
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, unsigned short usValue)
+{
+    return m_BTSZ.serialize(sName, usValue);
+}
+
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, char cValue)
+{
+    return m_BTSZ.serialize(sName, cValue);
+}
+
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, unsigned char ucValue)
+{
+    return m_BTSZ.serialize(sName, ucValue);
+}
+
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, long lValue, XSDTYPE type)
+{
+    return m_BTSZ.serialize(sName, lValue, type);
+}
+
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, unsigned long ulValue)
+{
+    return m_BTSZ.serialize(sName, ulValue);
+}
+
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, float fValue)
+{
+    return m_BTSZ.serialize(sName, fValue);
+}
+
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, double dValue, XSDTYPE type)
+{
+    return m_BTSZ.serialize(sName, dValue, type);
+}
+
 
 IHeaderBlock* SoapSerializer::createHeaderBlock()
 {
