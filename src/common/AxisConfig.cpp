@@ -106,8 +106,11 @@ int AxisConfig::readConfFile ()
 	Even if the AXISCPP_DEPLOY environment variable is not set default values 
 	will be used. Therefore return AXIS_SUCCESS
 	*/
-    if (!sConfPath || (sConfPath == '\0') )
-		return AXIS_SUCCESS;
+    if (!sConfPath || (sConfPath == '\0') ) 
+    {
+        free(sNewConfPath);
+        return AXIS_SUCCESS;
+    }
     m_pcAxisHome = (char*) malloc (CONFBUFFSIZE);
     strcpy (m_pcAxisHome, sConfPath);
 
@@ -122,7 +125,10 @@ int AxisConfig::readConfFile ()
 	will be used. Therefore return AXIS_SUCCESS
 	*/
     if (AXIS_SUCCESS != fileConfig.fileOpen(sNewConfPath, "r"))
-		return AXIS_SUCCESS;
+    {
+        free(sNewConfPath);
+        return AXIS_SUCCESS;
+    }
 
     while (AXIS_SUCCESS == fileConfig.fileGet(carrLine, CONFBUFFSIZE)) 
     {
@@ -152,6 +158,7 @@ int AxisConfig::readConfFile ()
 		free(key);
     }
 
+    free(sNewConfPath);
     return AXIS_SUCCESS;
 }
 
