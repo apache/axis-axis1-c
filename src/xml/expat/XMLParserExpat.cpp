@@ -199,7 +199,10 @@ const AnyElement* XMLParserExpat::next(bool isCharData)
                         {
                             m_Element.m_pchAttributes[i+0] = 
                                 (*it)->m_Name.c_str();
-                            m_Element.m_pchAttributes[i+1] = 
+                            if ((*it)->m_Namespace.empty())
+								m_Element.m_pchAttributes[i+1] = 0;
+							else
+								m_Element.m_pchAttributes[i+1] = 
                                 (*it)->m_Namespace.c_str();
                             m_Element.m_pchAttributes[i+2] = 
                                 (*it)->m_Value.c_str();
@@ -211,8 +214,12 @@ const AnyElement* XMLParserExpat::next(bool isCharData)
                     }
                     /* no break */
                 case END_ELEMENT:
-                    m_Element.m_pchNamespace = ((StartElement*)m_pLastEvent)->
-                        m_Namespace.c_str();
+					if (((StartElement*)m_pLastEvent)->
+                        m_Namespace.empty())
+						m_Element.m_pchNamespace = 0;
+					else 
+						m_Element.m_pchNamespace =
+						((StartElement*)m_pLastEvent)->m_Namespace.c_str();
                     /* no break */
                 case CHARACTER_ELEMENT:
                     m_Element.m_pchNameOrValue = m_pLastEvent->
@@ -327,4 +334,129 @@ int XMLParserExpat::setInputStream(AxisIOStream* pInputStream)
     m_pLastEvent = NULL;
     return m_nStatus;
 }
+
+const AnyElement* XMLParserExpat::anyNext()
+{
+    int nStatus = TRANSPORT_IN_PROGRESS;
+    if (m_pLastEvent)
+    {
+        delete m_pLastEvent;
+        m_pLastEvent = NULL;
+    }
+    try
+    {
+    do
+    {
+        if (m_Events.empty())
+        {
+            nStatus = parseNext();
+            if (TRANSPORT_FAILED == nStatus) return NULL;
+            if ((TRANSPORT_FINISHED == nStatus) && m_Events.empty())
+                return NULL;
+            if (AXIS_FAIL == m_nStatus) return NULL;
+        }
+
+        if (!m_Events.empty())
+        {
+            m_pLastEvent = m_Events.front();
+            XML_NODE_TYPE type = m_pLastEvent->getType();
+            m_Events.pop();
+            if ((CHARACTER_ELEMENT == type) && m_Events.empty())
+            /* current character element may not be parsed completly */
+            {
+                m_Events.push(m_pLastEvent);
+                nStatus = parseNext();
+                if (TRANSPORT_FAILED == nStatus) return NULL;
+                if ((TRANSPORT_FINISHED == nStatus) && m_Events.empty()) 
+                    return NULL;
+            }
+            else
+            {
+                int i = 0;
+                switch(type)
+                {
+                case START_ELEMENT:
+                    {
+                        for (list<SimpleAttribute*>::iterator it = 
+                            ((StartElement*)m_pLastEvent)->m_Attributes.begin()
+                            ; it != ((StartElement*)m_pLastEvent)->
+                            m_Attributes.end(); it++)
+                        {
+                            m_Element.m_pchAttributes[i+0] = 
+                                (*it)->m_Name.c_str();
+                            if ((*it)->m_Namespace.empty())
+								m_Element.m_pchAttributes[i+1] = 0;
+							else
+								m_Element.m_pchAttributes[i+1] = 
+                                (*it)->m_Namespace.c_str();
+                            m_Element.m_pchAttributes[i+2] = 
+                                (*it)->m_Value.c_str();
+                            i+=3;
+                        }
+                        m_Element.m_pchAttributes[i+0] = NULL;
+                        m_Element.m_pchAttributes[i+1] = NULL;
+                        m_Element.m_pchAttributes[i+2] = NULL;
+                    }
+                    /* no break */
+                case END_ELEMENT:
+					if (((StartElement*)m_pLastEvent)->
+                        m_Namespace.empty())
+						m_Element.m_pchNamespace = 0;
+					else 
+						m_Element.m_pchNamespace =
+						((StartElement*)m_pLastEvent)->m_Namespace.c_str();
+                    /* no break */
+                case CHARACTER_ELEMENT:
+                    m_Element.m_pchNameOrValue = m_pLastEvent->
+                        m_NameOrValue.c_str();
+                    m_Element.m_type = type;
+                    return &m_Element;
+                case START_PREFIX:
+                    m_NsStack[m_pLastEvent->m_NameOrValue] = 
+                        ((StartPrefix*)m_pLastEvent)->m_Namespace;
+                    m_Element.m_pchNamespace = ((StartElement*)m_pLastEvent)->
+                        m_Namespace.c_str();
+                    m_Element.m_pchNameOrValue = ((StartElement*)m_pLastEvent)
+						->m_NameOrValue.c_str();
+                    m_Element.m_type = type;
+                    return &m_Element;
+                case END_PREFIX:
+                    m_NsStack.erase(m_pLastEvent->m_NameOrValue);
+                    m_Element.m_pchNameOrValue = ((StartElement*)m_pLastEvent)
+						->m_NameOrValue.c_str();
+                    m_Element.m_type = type;
+                    return &m_Element;
+                }
+            }
+        }
+    } while (TRANSPORT_FAILED != nStatus);
+    return NULL;
+    }
+    catch(AxisParseException& e)
+    {
+        throw;
+    }
+    catch(AxisException& e)
+    {
+        throw;
+    }
+    catch(...)
+    {
+        throw;
+    }
+}
+
+const XML_Ch* XMLParserExpat::getPrefix4NS(const XML_Ch* pcNS)
+{
+	for (map<AxisXMLString, AxisXMLString>::iterator it;
+		 it!=m_NsStack.end(); it++)
+	{
+		if ((*it).second == pcNS)
+		{
+			return (*it).first.c_str();
+		}
+	}
+	return 0;
+}
+
 

@@ -120,3 +120,14 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
         throw;
     }
 }
+
+const AnyElement* XMLParserXerces::anyNext()
+{
+	return 0;
+}
+
+const XML_Ch* XMLParserXerces::getPrefix4NS(const XML_Ch* pcNS)
+{
+	return 0;
+}
+
