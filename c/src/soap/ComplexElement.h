@@ -67,6 +67,32 @@ class ComplexElement : public BasicNode
 public:
     ComplexElement(AxisChar* pachLocalName, AxisChar* pachPrefix, AxisChar* pachUri);
 
+    /**
+      * Returns the first Attribute of this node. NOTE: When traversing the 
+      *  attributes this has to be called first, before calling the 
+      *  getNextAttribute() mthod.
+      */
+    IAttribute* getFirstAttribute();
+                                                                                                                                                                            
+    /**
+      * Returns the last Attribute of this node.
+      */
+    IAttribute* getLastAttribute();
+                                                                                                                                                                            
+    /**
+      * Returns the next Attribute of this node. NOTE: When traversing the
+      *  attributes getFirstAttribute() has to be called first, before calling this
+      *  mthod, otherwise the behavior is undefined.
+      */
+    IAttribute* getNextAttribute();
+
+    /**
+      * Returns the current Attribute of this node. NOTE: When traversing the
+      *  attributes getFirstAttribute() has to be called first, before calling this
+      *  mthod, otherwise the behavior is undefined.
+      */
+    IAttribute* getCurrentAttribute();
+
     /** 
       * Creates an Attribute and adds it to this Complex Element. 
       * 
@@ -223,6 +249,12 @@ private:
     AxisChar* m_pachPrefix;
     AxisChar* m_pachLocalName;
     AxisChar* m_pachURI;
+
+    /**
+      * Attributes iterator
+      */
+    list <Attribute *>::iterator m_viCurrentAttribute;
+
 };
 
 #endif
