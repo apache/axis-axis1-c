@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
  *
  */
 
@@ -79,19 +79,30 @@ SoapHeader::SoapHeader()
 
 SoapHeader::~SoapHeader()
 {
-	list<HeaderEntry*>::iterator itCurrHeaderEntry= m_headerEntries.begin();
+	//deletion of Header Entries
+	list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerEntries.begin();
 
-	while(itCurrHeaderEntry != m_headerEntries.end()) {		
-		delete *itCurrHeaderEntry;
-		itCurrHeaderEntry++;
+	while(itCurrHeaderBlock != m_headerEntries.end()) {		
+		delete *itCurrHeaderBlock;
+		itCurrHeaderBlock++;
 	}
 
 	m_headerEntries.clear();
+
+	//deletion of attributes
+	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+
+	while(itCurrAttribute != m_attributes.end()) {		
+		delete *itCurrAttribute;
+		itCurrAttribute++;
+	}
+
+	m_attributes.clear();
 }
 
-void SoapHeader::addHeaderEntry(HeaderEntry* headerEntry)
+void SoapHeader::addHeaderBlock(HeaderBlock* headerBlock)
 {
-	m_headerEntries.push_back(headerEntry);
+	m_headerEntries.push_back(headerBlock);
 }
 
 int SoapHeader::serialize(string& sSerialized, SOAP_VERSION eSoapVersion)
@@ -99,16 +110,25 @@ int SoapHeader::serialize(string& sSerialized, SOAP_VERSION eSoapVersion)
 	int iStatus= SUCCESS;
 
 	do {
-		sSerialized= sSerialized+ "<"+ g_sObjSoapEnvVersionsStruct[eSoapVersion].pchEnvelopePrefix+ ":" + g_sObjSoapEnvVersionsStruct[eSoapVersion].pcharWords[SKW_HEADER] + ">"+ "\n";	
+		sSerialized= sSerialized+ "<"+ g_sObjSoapEnvVersionsStruct[eSoapVersion].pchEnvelopePrefix+ ":" + g_sObjSoapEnvVersionsStruct[eSoapVersion].pcharWords[SKW_HEADER];	
 
-		list<HeaderEntry*>::iterator itCurrHeaderEntry= m_headerEntries.begin();
+		iStatus= serializeNamespaceDecl(sSerialized);
+		iStatus= serializeAttributes(sSerialized);
 
-		while(itCurrHeaderEntry != m_headerEntries.end()) {
-			iStatus= (*itCurrHeaderEntry)->serialize(sSerialized);
+		if(iStatus==FAIL) {
+			break;
+		}
+
+		sSerialized= sSerialized+ ">"+ "\n";
+
+		list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerEntries.begin();
+
+		while(itCurrHeaderBlock != m_headerEntries.end()) {
+			iStatus= (*itCurrHeaderBlock)->serialize(sSerialized);
 			if(iStatus==FAIL) {
 				break;
 			}
-			itCurrHeaderEntry++;
+			itCurrHeaderBlock++;
 			sSerialized+="\n";
 		}
 
@@ -131,11 +151,11 @@ int SoapHeader::serialize(string& sSerialized, SOAP_VERSION eSoapVersion)
 
 	m_strHeaderSerialized= "<SOAP-ENV:Header>";
 
-	list<HeaderEntry*>::iterator itCurrHeaderEntry= m_headerEntries.begin();
+	list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerEntries.begin();
 
-	while(itCurrHeaderEntry != m_headerEntries.end()) {
-		m_strHeaderSerialized= m_strHeaderSerialized + (*itCurrHeaderEntry)->serialize();
-		itCurrHeaderEntry++;
+	while(itCurrHeaderBlock != m_headerEntries.end()) {
+		m_strHeaderSerialized= m_strHeaderSerialized + (*itCurrHeaderBlock)->serialize();
+		itCurrHeaderBlock++;
 	}
 
 	m_strHeaderSerialized= m_strHeaderSerialized + "</SOAP-ENV:Header>";
@@ -143,3 +163,42 @@ int SoapHeader::serialize(string& sSerialized, SOAP_VERSION eSoapVersion)
 	return m_strHeaderSerialized;
 
 }*/
+
+int SoapHeader::addAttribute(Attribute *pAttribute)
+{
+	m_attributes.push_back(pAttribute);
+
+	return SUCCESS;
+}
+
+int SoapHeader::serializeAttributes(string& sSerialized)
+{
+	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+
+	while(itCurrAttribute != m_attributes.end()) {		
+		(*itCurrAttribute)->serialize(sSerialized);
+		itCurrAttribute++;		
+	}	
+
+	return SUCCESS;	
+}
+
+int SoapHeader::addNamespaceDecl(Attribute *pAttribute)
+{
+	m_namespaceDecls.push_back(pAttribute);
+
+	return SUCCESS;
+}
+
+int SoapHeader::serializeNamespaceDecl(string& sSerialized)
+{
+	list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
+
+	while(itCurrNamespaceDecl != m_namespaceDecls.end()) {			
+
+		(*itCurrNamespaceDecl)->serialize(sSerialized);
+		itCurrNamespaceDecl++;		
+	}	
+
+	return SUCCESS;
+}
