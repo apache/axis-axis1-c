@@ -107,6 +107,12 @@ IChannel * ChannelFactory::LoadChannelLibrary( g_ChannelType eChannelType, const
 // Additional code added to that when the user wants to load a different
 // library from that which is already loaded, it will now allow the change.
 			UnLoadChannelLibrary( eChannelType, m_pChannel[iLibCount]);
+                        
+                        if (m_pLibName[iLibCount])
+                        {
+                            delete [] m_pLibName[iLibCount];
+                            m_pLibName[iLibCount] = NULL;
+                        }
 
 			m_pLibName[iLibCount] = new char[ strlen( pcLibraryName) + 1];
 
