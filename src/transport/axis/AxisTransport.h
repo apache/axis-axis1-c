@@ -25,6 +25,11 @@
  * Added setProxy
  */
 
+/*
+ * Revision 1.2  2004/06/08 samisa
+ * Added setTimeout
+ */
+
 #if !defined(_AXIS_AXIS_TRANSPORT_HPP)
 #define _AXIS_AXIS_TRANSPORT_HPP
 
@@ -58,13 +63,20 @@ public:
 	int getSubProtocol();
 	AXIS_TRANSPORT_STATUS flushOutput();
 	
-	  /**
+  /**
     * Set proxy server and port for transport.
     *
     * @param pcProxyHost Host name of proxy server
     * @param uiProxyPort Port of proxy server
     */
     void setProxy(const char* pcProxyHost, unsigned int uiProxyPort); 
+
+  /**
+    * Set transport timeout.
+    *
+    * @param lSeconds Timeout in seconds
+    */
+    void setTimeout(const long lSeconds);
 
 /*
     static AXIS_TRANSPORT_STATUS AXISCALL s_Send_bytes(const char* pSendBuffer,
@@ -99,6 +111,7 @@ private:
     * Use Proxy or not?
     */
     bool m_bUseProxy;
+
 
 };
 

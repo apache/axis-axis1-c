@@ -32,6 +32,12 @@
  * Added proxy support
  */
 
+/*
+ * Revision 1.3  2004/06/08 samisa
+ * Added setTimeout
+ */
+
+
 #include "Platform.hpp"
 #include "HttpTransport.hpp"
 #include <iostream>
@@ -46,7 +52,7 @@ using namespace std;
  *  set HTTP category default to POST
  */
 HttpTransport::HttpTransport (Url url, int secure):
-m_Typ (POST), m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false)
+m_Typ (POST), m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false), m_lTimeoutSeconds(0)
 {
     m_Url = url;
     m_IsHttpHeader = 0;
@@ -70,7 +76,7 @@ m_Typ (POST), m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false)
  *  set HTTP category default to POST
  */
 HttpTransport::HttpTransport (std::string & strUrl, int secure):
-m_Typ (POST), m_bUseProxy(false)
+m_Typ (POST), m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false), m_lTimeoutSeconds(0)
 {
     m_Url = Url (strUrl);
     m_strUrl = strUrl;
@@ -122,6 +128,8 @@ bool HttpTransport::Init ()
             port = m_uiProxyPort;
         }
 	m_Channel->Open (host, port);
+	
+        m_Channel->setTimeout(m_lTimeoutSeconds);
 	m_Channel->SetTransportHandler (this);
 #ifdef _DEBUG
 	cout << "Transport:init() successfull" << endl;
@@ -736,3 +744,10 @@ HttpTransport::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
     m_uiProxyPort = uiProxyPort;
     m_bUseProxy = true;    
 }
+
+void HttpTransport::setTimeout(const long lSeconds)
+{
+    m_lTimeoutSeconds = lSeconds;
+    m_Channel->setTimeout(lSeconds);
+}
+

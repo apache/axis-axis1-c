@@ -39,6 +39,10 @@
  * Added setSOAPMethodAttribute
  */
 
+/*
+ * Revision 1.4  2004/06/08 samisa
+ * Added setTransportTimeout
+ */
 #if !defined(_STUB_H____OF_AXIS_INCLUDED_)
 #define _STUB_H____OF_AXIS_INCLUDED_
 
@@ -64,22 +68,29 @@ class STORAGE_CLASS_INFO Stub
     */
     void setProxy(const char* pcProxyHost, unsigned int uiProxyPort);
 
-	/**
-	 * Sets a Attribute to the SOAPMethod, using the given Attribute data.
-	 */
-	void setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue);
+  /**
+    * Sets a Attribute to the SOAPMethod, using the given Attribute data.
+    */
+    void setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue);
 
-	/**
-	 * Sets a Attribute to the SOAPMethod, using the given Attribute data.
-	 */
-	void setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar* pUri, const AxisChar *pValue);
+  /**
+    * Sets a Attribute to the SOAPMethod, using the given Attribute data.
+    */
+    void setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar* pUri, const AxisChar *pValue);
+
+  /**
+    * Set transport timeout.
+    *
+    * @param lSeconds Timeout in seconds. If lSeconds is 0, then the transport will assume no timeout.
+    */
+    void setTransportTimeout(const long lSeconds);
 
   protected:
-	void setSOAPMethodAttributes();
     void applyUserPreferences();
     void setTransportProperties();
     void setSOAPHeaders();
-    void setProxy();
+    void setSOAPMethodAttributes();
+    void setTransportTimeout();
 
     Call *m_pCall;
     vector < char *>m_vKeys;
@@ -87,23 +98,14 @@ class STORAGE_CLASS_INFO Stub
     vector < IHeaderBlock * >m_vSOAPHeaderBlocks;
 
   /**
-    * Proxy server name.
+    * List of SOAPMethod Attributes
     */
-    std::string m_strProxyHost;
-  /**
-    * Proxy server port.
-    */
-    unsigned int m_uiProxyPort;
-  /**
-    * Use Proxy or not?
-    */
-    bool m_bUseProxy;
-
-  private:
-	/**
-	 * List of SOAPMethod Attributes
-	 */
     vector <Attribute*> m_vSOAPMethodAttributes;
+
+  /**
+    * Timeout in seconds
+    */
+    long m_lTimeoutSeconds;
 
 };
 

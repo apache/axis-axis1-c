@@ -23,6 +23,11 @@
  * Added setProxy
  */
 
+/*
+ * Revision 1.2  2004/06/08 samisa
+ * Added setTimeout
+ */
+
 #if !defined(AXIS_SOAPTRANSPORT_H__OF_AXIS_INCLUDED_)
 #define AXIS_SOAPTRANSPORT_H__OF_AXIS_INCLUDED_
 
@@ -96,6 +101,13 @@ public:
     * @param uiProxyPort Port of proxy server
     */
     virtual void setProxy(const char* pcProxyHost, unsigned int uiProxyPort) {}
+
+  /**
+    * Set transport timeout. 
+    *
+    * @param lSeconds Timeout in seconds
+    */
+    virtual void setTimeout(const long lSeconds) = 0; 
 
 protected:
 	char* m_pcEndpointUri; /* Outgoing endpoint URI */

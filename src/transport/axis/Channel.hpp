@@ -26,6 +26,11 @@
  * by Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
 
+/*
+ * Revision 1.2  2004/06/08 samisa
+ * Added setTimeout
+ */
+
 #if !defined(_AXIS_CHANNEL_HPP)
 #define _AXIS_CHANNEL_HPP
 
@@ -129,6 +134,13 @@ public:
     virtual void SetTransportHandler(Transport* transport)
     {m_pTransportHandler = transport;}
 
+  /**
+    * Set transport timeout.
+    *
+    * @param lSeconds Timeout in seconds
+    */
+    void setTimeout(const long lSeconds);
+
 protected:
     /* OS specific initilization */
     virtual bool Init();
@@ -139,6 +151,11 @@ protected:
     /* Close & clean-up the open socket/system resources */
     virtual void CloseChannel();
 
+  /**
+    * @return 0 if timeout, 1 if input available, -1 if error.
+    */
+    int applyTimeout();
+
     unsigned int   m_Sock;        /* Socket descriptor */
     std::string    m_RemoteNode;  /* Remote address could be IP/host-name */
     unsigned short m_RemoteEnd;   /* Remote port number */
@@ -146,6 +163,12 @@ protected:
 
     Transport    * m_pTransportHandler;    /* Transport handler for 
                                             * validation purpose */
+
+  /**
+    * Timeout in seconds
+    */
+    long m_lTimeoutSeconds;
+
 };
 
 
