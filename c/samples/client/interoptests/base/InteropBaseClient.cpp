@@ -22,13 +22,13 @@ int main(int argc, char* argv[])
 	{
 		bigstring += "hello world ";
 	}
-	printf(ws.echoString(bigstring.c_str()));
+	printf(ws.echoString(bigstring.begin()));
 	if (0 == strcmp(ws.echoString("hello world"), "hello world"))
 		printf("successful\n");
 	else
 		printf("failed\n");
 	// testing echoStringArray 
-	ArrayOfstring arrstr;
+	xsd__string_Array arrstr;
 	arrstr.m_Array = new char*[ARRAYSIZE];
 	arrstr.m_Size = ARRAYSIZE;
 	sprintf(buffer1, "%dth element of string array", 0);
@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
 	else
 		printf("failed\n");
 	// testing echoIntegerArray 
-	ArrayOfint arrint;
+	xsd__int_Array arrint;
 	arrint.m_Array = new int[ARRAYSIZE];
 	arrint.m_Size = ARRAYSIZE;
 	for (x=0;x<ARRAYSIZE;x++)
@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 	else
 		printf("failed\n");
 	// testing echoFloat 
-	ArrayOffloat arrfloat;
+	xsd__float_Array arrfloat;
 	arrfloat.m_Array = new float[ARRAYSIZE];
 	arrfloat.m_Size = ARRAYSIZE;
 	for (x=0;x<ARRAYSIZE;x++)
@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
 	else
 		printf("failed\n");
 	//testing echo Array of Struct
-	ArrayOfSOAPStruct arrstct;
+	SOAPStruct_Array arrstct;
 	arrstct.m_Array = new SOAPStruct[ARRAYSIZE];
 	arrstct.m_Size = ARRAYSIZE;
 	for (x=0;x<ARRAYSIZE;x++)

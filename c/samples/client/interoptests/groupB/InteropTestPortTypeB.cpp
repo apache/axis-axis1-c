@@ -1,8 +1,8 @@
-///////////////////////////////////////////////////////////////////////
-// This is the Client Stub implementation file genarated by WSDL2Ws tool.
-// InteropTestPortTypeB.cpp: implemtation for the InteropTestPortTypeB.
-//
-//////////////////////////////////////////////////////////////////////
+/*
+ * This is the Client Stub implementation file genarated by WSDL2Ws tool.
+ * InteropTestPortTypeB.cpp: implemtation for the InteropTestPortTypeB.
+ *
+ */
 
 #include "InteropTestPortTypeB.h"
 
@@ -10,21 +10,20 @@
 
 bool CallBase::bInitialized;
 CallFunctions CallBase::ms_VFtable;
-
-extern int Axis_DeSerialize_SOAPStruct(SOAPStruct* param, IWrapperSoapDeSerializer *pDZ);
-extern void* Axis_Create_SOAPStruct(void* pObj, bool bArray = false, int nSize=0);
-extern void Axis_Delete_SOAPStruct(SOAPStruct* param, bool bArray = false, int nSize=0);
-extern int Axis_Serialize_SOAPStruct(SOAPStruct* param, IWrapperSoapSerializer* pSZ, bool bArray = false);
-extern int Axis_GetSize_SOAPStruct();
-
 extern int Axis_DeSerialize_SOAPArrayStruct(SOAPArrayStruct* param, IWrapperSoapDeSerializer *pDZ);
-extern void* Axis_Create_SOAPArrayStruct(void* pObj, bool bArray = false, int nSize=0);
+extern void* Axis_Create_SOAPArrayStruct(SOAPArrayStruct *Obj, bool bArray = false, int nSize=0);
 extern void Axis_Delete_SOAPArrayStruct(SOAPArrayStruct* param, bool bArray = false, int nSize=0);
 extern int Axis_Serialize_SOAPArrayStruct(SOAPArrayStruct* param, IWrapperSoapSerializer* pSZ, bool bArray = false);
 extern int Axis_GetSize_SOAPArrayStruct();
 
+extern int Axis_DeSerialize_SOAPStruct(SOAPStruct* param, IWrapperSoapDeSerializer *pDZ);
+extern void* Axis_Create_SOAPStruct(SOAPStruct *Obj, bool bArray = false, int nSize=0);
+extern void Axis_Delete_SOAPStruct(SOAPStruct* param, bool bArray = false, int nSize=0);
+extern int Axis_Serialize_SOAPStruct(SOAPStruct* param, IWrapperSoapSerializer* pSZ, bool bArray = false);
+extern int Axis_GetSize_SOAPStruct();
+
 extern int Axis_DeSerialize_SOAPStructStruct(SOAPStructStruct* param, IWrapperSoapDeSerializer *pDZ);
-extern void* Axis_Create_SOAPStructStruct(void* pObj, bool bArray = false, int nSize=0);
+extern void* Axis_Create_SOAPStructStruct(SOAPStructStruct *Obj, bool bArray = false, int nSize=0);
 extern void Axis_Delete_SOAPStructStruct(SOAPStructStruct* param, bool bArray = false, int nSize=0);
 extern int Axis_Serialize_SOAPStructStruct(SOAPStructStruct* param, IWrapperSoapSerializer* pSZ, bool bArray = false);
 extern int Axis_GetSize_SOAPStructStruct();
@@ -42,53 +41,49 @@ InteropTestPortTypeB::~InteropTestPortTypeB()
 }
 
 
-//Methods corresponding to the web service methods
+/*Methods corresponding to the web service methods*/
 
-/////////////////////////////////////////////////////////////////
-// This method wrap the service methodechoStructAsSimpleTypes
-//////////////////////////////////////////////////////////////////
-void InteropTestPortTypeB::echoStructAsSimpleTypes(SOAPStruct* Value0, AXIS_OUT_PARAM AxisChar** outValue0, AXIS_OUT_PARAM int* outValue1, AXIS_OUT_PARAM float* outValue2)
+/*
+ * This method wrap the service methodechoStructAsSimpleTypes
+ */
+void InteropTestPortTypeB::echoStructAsSimpleTypes(SOAPStruct* Value0, AXIS_OUT_PARAM  float *OutValue0, AXIS_OUT_PARAM  int *OutValue1, AXIS_OUT_PARAM  xsd__string *OutValue2)
 {
-	int nStatus;
-	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER, 0)) return;
-	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropGroupB#echoStructAsSimpleTypes");
+	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) return ;
+	m_pCall->SetTransportProperty(SOAPACTION_HEADER , "InteropGroupB#echoStructAsSimpleTypes");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
-	m_pCall->SetOperation("echoStructAsSimpleTypes", "http://soapinterop.org/");
-	m_pCall->AddCmplxParameter(Value0, (void*) Axis_Serialize_SOAPStruct, (void*) Axis_Delete_SOAPStruct, "inputStruct", "");
-	nStatus = m_pCall->Invoke();
-	if (AXIS_SUCCESS == nStatus)
+	m_pCall->SetOperation("echoStructAsSimpleTypes", "");
+	m_pCall->AddCmplxParameter(Value0, (void*)Axis_Serialize_SOAPStruct, (void*)Axis_Delete_SOAPStruct, "inputStruct", Axis_URI_SOAPStruct);
+	if (AXIS_SUCCESS == m_pCall->Invoke())
 	{
-		if (AXIS_SUCCESS == m_pCall->CheckMessage("echoStructAsSimpleTypesResponse", "http://soapinterop.org/"))
+		if(AXIS_SUCCESS == m_pCall->CheckMessage("echoStructAsSimpleTypesResponse", ""))
 		{
-			*outValue0 = m_pCall->GetElementAsString(0,0);
-			*outValue1 = m_pCall->GetElementAsInt(0,0);
-			*outValue2 = m_pCall->GetElementAsFloat(0,0);
+			*OutValue0 = m_pCall->GetElementAsFloat("outputFloat", 0);
+			*OutValue1 = m_pCall->GetElementAsInt("outputInteger", 0);
+			*OutValue2 = m_pCall->GetElementAsString("outputString", 0);
 		}
 	}
 	m_pCall->UnInitialize();
 }
 
 
-/////////////////////////////////////////////////////////////////
-// This method wrap the service methodechoSimpleTypesAsStruct
-//////////////////////////////////////////////////////////////////
-SOAPStruct* InteropTestPortTypeB::echoSimpleTypesAsStruct(float Value0, int Value1, AxisChar* Value2)
+/*
+ * This method wrap the service methodechoSimpleTypesAsStruct
+ */
+SOAPStruct* InteropTestPortTypeB::echoSimpleTypesAsStruct(float Value0, int Value1, xsd__string Value2)
 {
-	int nStatus;
 	SOAPStruct* pReturn = NULL;
-	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER, 0)) return pReturn;
-	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropGroupB#echoSimpleTypesAsStruct");
+	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) return pReturn;
+	m_pCall->SetTransportProperty(SOAPACTION_HEADER , "InteropGroupB#echoSimpleTypesAsStruct");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
-	m_pCall->SetOperation("echoSimpleTypesAsStruct", "http://soapinterop.org/");
+	m_pCall->SetOperation("echoSimpleTypesAsStruct", "");
 	m_pCall->AddParameter((void*)&Value0, "inputFloat", XSD_FLOAT);
 	m_pCall->AddParameter((void*)&Value1, "inputInteger", XSD_INT);
 	m_pCall->AddParameter((void*)&Value2, "inputString", XSD_STRING);
-	nStatus = m_pCall->Invoke();
-	if (AXIS_SUCCESS == nStatus)
+	if (AXIS_SUCCESS == m_pCall->Invoke())
 	{
-		if (AXIS_SUCCESS == m_pCall->CheckMessage("echoSimpleTypesAsStructResponse", "http://soapinterop.org/"))
+		if(AXIS_SUCCESS == m_pCall->CheckMessage("echoSimpleTypesAsStructResponse", ""))
 		{
-			pReturn = (SOAPStruct*)m_pCall->GetCmplxObject((void*) Axis_DeSerialize_SOAPStruct, (void*) Axis_Create_SOAPStruct, (void*) Axis_Delete_SOAPStruct, Axis_TypeName_SOAPStruct, Axis_URI_SOAPStruct);
+			pReturn = (SOAPStruct*)m_pCall->GetCmplxObject((void*) Axis_DeSerialize_SOAPStruct, (void*) Axis_Create_SOAPStruct, (void*) Axis_Delete_SOAPStruct,"return", 0);
 		}
 	}
 	m_pCall->UnInitialize();
@@ -96,49 +91,22 @@ SOAPStruct* InteropTestPortTypeB::echoSimpleTypesAsStruct(float Value0, int Valu
 }
 
 
-/////////////////////////////////////////////////////////////////
-// This method wrap the service methodecho2DStringArray
-//////////////////////////////////////////////////////////////////
-ArrayOfString2D InteropTestPortTypeB::echo2DStringArray(ArrayOfString2D Value0)
-{
-	int nStatus;
-	ArrayOfString2D RetArray = {NULL, 0};
-	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER, 0)) return RetArray;
-	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropGroupB#echo2DStringArray");
-	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
-	m_pCall->SetOperation("echo2DStringArray", "http://soapinterop.org/");
-	m_pCall->AddBasicArrayParameter((Axis_Array*)(&Value0), XSD_STRING, "input2DStringArray");
-	nStatus = m_pCall->Invoke();
-	if (AXIS_SUCCESS != nStatus)
-	{
-		if (AXIS_SUCCESS == m_pCall->CheckMessage("echo2DStringArrayResponse", "http://soapinterop.org/"))
-		{
-			RetArray = (ArrayOfString2D&) m_pCall->GetBasicArray(XSD_STRING,0,0);
-		}
-	}
-	m_pCall->UnInitialize();
-	return RetArray;
-}
-
-
-/////////////////////////////////////////////////////////////////
-// This method wrap the service methodechoNestedStruct
-//////////////////////////////////////////////////////////////////
+/*
+ * This method wrap the service methodechoNestedStruct
+ */
 SOAPStructStruct* InteropTestPortTypeB::echoNestedStruct(SOAPStructStruct* Value0)
 {
-	int nStatus;
 	SOAPStructStruct* pReturn = NULL;
-	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER, 0)) return pReturn;
-	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropGroupB#echoNestedStruct");
+	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) return pReturn;
+	m_pCall->SetTransportProperty(SOAPACTION_HEADER , "InteropGroupB#echoNestedStruct");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
-	m_pCall->SetOperation("echoNestedStruct", "http://soapinterop.org/");
-	m_pCall->AddCmplxParameter(Value0, (void*) Axis_Serialize_SOAPStructStruct, (void*) Axis_Delete_SOAPStructStruct, "inputStruct", "");
-	nStatus = m_pCall->Invoke();
-	if (AXIS_SUCCESS == nStatus)
+	m_pCall->SetOperation("echoNestedStruct", "");
+	m_pCall->AddCmplxParameter(Value0, (void*)Axis_Serialize_SOAPStructStruct, (void*)Axis_Delete_SOAPStructStruct, "inputStruct", Axis_URI_SOAPStructStruct);
+	if (AXIS_SUCCESS == m_pCall->Invoke())
 	{
-		if (AXIS_SUCCESS == m_pCall->CheckMessage("echoNestedStructResponse", "http://soapinterop.org/"))
+		if(AXIS_SUCCESS == m_pCall->CheckMessage("echoNestedStructResponse", ""))
 		{
-			pReturn = (SOAPStructStruct*)m_pCall->GetCmplxObject((void*) Axis_DeSerialize_SOAPStructStruct, (void*) Axis_Create_SOAPStructStruct, (void*) Axis_Delete_SOAPStructStruct, Axis_TypeName_SOAPStructStruct, Axis_URI_SOAPStructStruct);
+			pReturn = (SOAPStructStruct*)m_pCall->GetCmplxObject((void*) Axis_DeSerialize_SOAPStructStruct, (void*) Axis_Create_SOAPStructStruct, (void*) Axis_Delete_SOAPStructStruct,"return", 0);
 		}
 	}
 	m_pCall->UnInitialize();
@@ -146,24 +114,22 @@ SOAPStructStruct* InteropTestPortTypeB::echoNestedStruct(SOAPStructStruct* Value
 }
 
 
-/////////////////////////////////////////////////////////////////
-// This method wrap the service methodechoNestedArray
-//////////////////////////////////////////////////////////////////
+/*
+ * This method wrap the service methodechoNestedArray
+ */
 SOAPArrayStruct* InteropTestPortTypeB::echoNestedArray(SOAPArrayStruct* Value0)
 {
-	int nStatus;
 	SOAPArrayStruct* pReturn = NULL;
-	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER, 0)) return pReturn;
-	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropGroupB#echoNestedArray");
+	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) return pReturn;
+	m_pCall->SetTransportProperty(SOAPACTION_HEADER , "InteropGroupB#echoNestedArray");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
-	m_pCall->SetOperation("echoNestedArray", "http://soapinterop.org/");
-	m_pCall->AddCmplxParameter(Value0, (void*) Axis_Serialize_SOAPArrayStruct, (void*)Axis_Delete_SOAPArrayStruct, "inputStruct", "");
-	nStatus = m_pCall->Invoke();
-	if (AXIS_SUCCESS == nStatus)
+	m_pCall->SetOperation("echoNestedArray", "");
+	m_pCall->AddCmplxParameter(Value0, (void*)Axis_Serialize_SOAPArrayStruct, (void*)Axis_Delete_SOAPArrayStruct, "inputStruct", Axis_URI_SOAPArrayStruct);
+	if (AXIS_SUCCESS == m_pCall->Invoke())
 	{
-		if (AXIS_SUCCESS == m_pCall->CheckMessage("echoNestedArrayResponse", "http://soapinterop.org/"))
+		if(AXIS_SUCCESS == m_pCall->CheckMessage("echoNestedArrayResponse", ""))
 		{
-			pReturn = (SOAPArrayStruct*)m_pCall->GetCmplxObject((void*) Axis_DeSerialize_SOAPArrayStruct, (void*) Axis_Create_SOAPArrayStruct, (void*) Axis_Delete_SOAPArrayStruct, Axis_TypeName_SOAPArrayStruct, Axis_URI_SOAPArrayStruct);
+			pReturn = (SOAPArrayStruct*)m_pCall->GetCmplxObject((void*) Axis_DeSerialize_SOAPArrayStruct, (void*) Axis_Create_SOAPArrayStruct, (void*) Axis_Delete_SOAPArrayStruct,"return", 0);
 		}
 	}
 	m_pCall->UnInitialize();

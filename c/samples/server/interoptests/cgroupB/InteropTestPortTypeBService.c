@@ -7,21 +7,21 @@
 #endif
 
 #include <malloc.h>
-#include "InteropTestPortTypeWrapper.h"
+#include "InteropTestPortTypeBWrapper.h"
 
-static BasicHandlerFunctions InteropTestPortTypeWrapper_functions = {
-	InteropTestPortTypeWrapper_Invoke,
-	InteropTestPortTypeWrapper_OnFault,
-	InteropTestPortTypeWrapper_Init,
-	InteropTestPortTypeWrapper_Fini,
-	InteropTestPortTypeWrapper_GetType,
-	InteropTestPortTypeWrapper_GetBindingStyle
+static BasicHandlerFunctions InteropTestPortTypeBWrapper_functions = {
+	InteropTestPortTypeBWrapper_Invoke,
+	InteropTestPortTypeBWrapper_OnFault,
+	InteropTestPortTypeBWrapper_Init,
+	InteropTestPortTypeBWrapper_Fini,
+	InteropTestPortTypeBWrapper_GetType,
+	InteropTestPortTypeBWrapper_GetBindingStyle
 };
 STORAGE_CLASS_INFO
 int GetClassInstance(BasicHandler **inst){
 	*inst = malloc(sizeof(BasicHandler));
 	(*inst)->_object = 0;	/* instantiate and provide the context object if needed */
-	(*inst)->_functions = &InteropTestPortTypeWrapper_functions;
+	(*inst)->_functions = &InteropTestPortTypeBWrapper_functions;
 	return (*inst)->_functions->Init((*inst)->_object);
 }
 

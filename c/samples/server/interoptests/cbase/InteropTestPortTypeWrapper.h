@@ -9,8 +9,8 @@
 #include <axis/server/AxisWrapperAPI.h>
 
 /*implementation of BasicHandler interface*/
-int AXISCALL InteropTestPortTypeWrapper_Invoke(void*p, void* mc);
-void AXISCALL InteropTestPortTypeWrapper_OnFault(void*p, void* mc);
+int AXISCALL InteropTestPortTypeWrapper_Invoke(void*p, void* pMsg);
+void AXISCALL InteropTestPortTypeWrapper_OnFault(void*p, void* pMsg);
 int AXISCALL InteropTestPortTypeWrapper_Init(void*p);
 int AXISCALL InteropTestPortTypeWrapper_Fini(void*p);
 int AXISCALL InteropTestPortTypeWrapper_GetType(void*p);

@@ -29,7 +29,7 @@ xsd__string echoString(void* pStub, xsd__string Value0)
 	Call* pCall = (Call*)pStub;
 	xsd__string Ret;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, 0)) return Ret;
+	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
 	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "InteropBase#echoString");
 	pCall->_functions->SetSOAPVersion(pCall->_object, SOAP_VER_1_1);
 	pCall->_functions->SetOperation(pCall->_object, "echoString", "http://soapinterop.org/");
@@ -55,7 +55,7 @@ xsd__string_Array echoStringArray(void* pStub, xsd__string_Array Value0)
 	xsd__string_Array RetArray = {NULL, 0};
 	Axis_Array array;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, 0)) return RetArray;
+	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, NORMAL_CHANNEL)) return RetArray;
 	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "InteropBase#echoStringArray");
 	pCall->_functions->SetSOAPVersion(pCall->_object, SOAP_VER_1_1);
 	pCall->_functions->SetOperation(pCall->_object, "echoStringArray", "http://soapinterop.org/");
@@ -81,7 +81,7 @@ int echoInteger(void* pStub, int Value0)
 	Call* pCall = (Call*)pStub;
 	int Ret;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, 0)) return Ret;
+	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
 	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "InteropBase#echoInteger");
 	pCall->_functions->SetSOAPVersion(pCall->_object, SOAP_VER_1_1);
 	pCall->_functions->SetOperation(pCall->_object, "echoInteger", "http://soapinterop.org/");
@@ -107,7 +107,7 @@ xsd__int_Array echoIntegerArray(void* pStub, xsd__int_Array Value0)
 	xsd__int_Array RetArray = {NULL, 0};
 	Axis_Array array;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, 0)) return RetArray;
+	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, NORMAL_CHANNEL)) return RetArray;
 	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "InteropBase#echoIntegerArray");
 	pCall->_functions->SetSOAPVersion(pCall->_object, SOAP_VER_1_1);
 	pCall->_functions->SetOperation(pCall->_object, "echoIntegerArray", "http://soapinterop.org/");
@@ -133,7 +133,7 @@ float echoFloat(void* pStub, float Value0)
 	Call* pCall = (Call*)pStub;
 	float Ret;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, 0)) return Ret;
+	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
 	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "InteropBase#echoFloat");
 	pCall->_functions->SetSOAPVersion(pCall->_object, SOAP_VER_1_1);
 	pCall->_functions->SetOperation(pCall->_object, "echoFloat", "http://soapinterop.org/");
@@ -159,7 +159,7 @@ xsd__float_Array echoFloatArray(void* pStub, xsd__float_Array Value0)
 	xsd__float_Array RetArray = {NULL, 0};
 	Axis_Array array;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, 0)) return RetArray;
+	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, NORMAL_CHANNEL)) return RetArray;
 	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "InteropBase#echoFloatArray");
 	pCall->_functions->SetSOAPVersion(pCall->_object, SOAP_VER_1_1);
 	pCall->_functions->SetOperation(pCall->_object, "echoFloatArray", "http://soapinterop.org/");
@@ -185,7 +185,7 @@ SOAPStruct* echoStruct(void* pStub, SOAPStruct* Value0)
 	Call* pCall = (Call*)pStub;
 	SOAPStruct* pReturn = NULL;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, 0)) return pReturn;
+	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, NORMAL_CHANNEL)) return pReturn;
 	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "InteropBase#echoStruct");
 	pCall->_functions->SetSOAPVersion(pCall->_object, SOAP_VER_1_1);
 	pCall->_functions->SetOperation(pCall->_object, "echoStruct", "http://soapinterop.org/");
@@ -211,7 +211,7 @@ SOAPStruct_Array echoStructArray(void* pStub, SOAPStruct_Array Value0)
 	SOAPStruct_Array RetArray = {NULL, 0};
 	Axis_Array array;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, 0)) return RetArray;
+	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, NORMAL_CHANNEL)) return RetArray;
 	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "InteropBase#echoStructArray");
 	pCall->_functions->SetSOAPVersion(pCall->_object, SOAP_VER_1_1);
 	pCall->_functions->SetOperation(pCall->_object, "echoStructArray", "http://soapinterop.org/");
@@ -236,7 +236,7 @@ void echoVoid(void* pStub)
 {
 	Call* pCall = (Call*)pStub;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, 0)) return ;
+	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, NORMAL_CHANNEL)) return ;
 	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "InteropBase#echoVoid");
 	pCall->_functions->SetSOAPVersion(pCall->_object, SOAP_VER_1_1);
 	pCall->_functions->SetOperation(pCall->_object, "echoVoid", "http://soapinterop.org/");
@@ -259,7 +259,7 @@ xsd__base64Binary echoBase64(void* pStub, xsd__base64Binary Value0)
 	Call* pCall = (Call*)pStub;
 	xsd__base64Binary Ret;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, 0)) return Ret;
+	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
 	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "InteropBase#echoBase64");
 	pCall->_functions->SetSOAPVersion(pCall->_object, SOAP_VER_1_1);
 	pCall->_functions->SetOperation(pCall->_object, "echoBase64", "http://soapinterop.org/");
@@ -284,7 +284,7 @@ xsd__dateTime echoDate(void* pStub, xsd__dateTime Value0)
 	Call* pCall = (Call*)pStub;
 	xsd__dateTime Ret;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, 0)) return Ret;
+	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
 	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "InteropBase#echoDate");
 	pCall->_functions->SetSOAPVersion(pCall->_object, SOAP_VER_1_1);
 	pCall->_functions->SetOperation(pCall->_object, "echoDate", "http://soapinterop.org/");
@@ -309,7 +309,7 @@ xsd__hexBinary echoHexBinary(void* pStub, xsd__hexBinary Value0)
 	Call* pCall = (Call*)pStub;
 	xsd__hexBinary Ret;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, 0)) return Ret;
+	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
 	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "InteropBase#echoHexBinary");
 	pCall->_functions->SetSOAPVersion(pCall->_object, SOAP_VER_1_1);
 	pCall->_functions->SetOperation(pCall->_object, "echoHexBinary", "http://soapinterop.org/");
@@ -334,7 +334,7 @@ xsd__decimal echoDecimal(void* pStub, xsd__decimal Value0)
 	Call* pCall = (Call*)pStub;
 	xsd__decimal Ret;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, 0)) return Ret;
+	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
 	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "InteropBase#echoDecimal");
 	pCall->_functions->SetSOAPVersion(pCall->_object, SOAP_VER_1_1);
 	pCall->_functions->SetOperation(pCall->_object, "echoDecimal", "http://soapinterop.org/");
@@ -359,7 +359,7 @@ xsd__boolean echoBoolean(void* pStub, xsd__boolean Value0)
 	Call* pCall = (Call*)pStub;
 	xsd__boolean Ret;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, 0)) return Ret;
+	if (AXIS_SUCCESS != pCall->_functions->Initialize(pCall->_object, C_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
 	pCall->_functions->SetTransportProperty(pCall->_object,SOAPACTION_HEADER , "InteropBase#echoBoolean");
 	pCall->_functions->SetSOAPVersion(pCall->_object, SOAP_VER_1_1);
 	pCall->_functions->SetOperation(pCall->_object, "echoBoolean", "http://soapinterop.org/");

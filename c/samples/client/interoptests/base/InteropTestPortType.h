@@ -1,18 +1,14 @@
-/////////////////////////////////////////////////////////////////////////////
-// This is the Client Stub Class genarated by the tool WSDL2Ws
-// InteropTestPortType.h: interface for the InteropTestPortTypeclass.
-//
-//////////////////////////////////////////////////////////////////////
+/*
+ * This is the Client Stub Class genarated by the tool WSDL2Ws
+ * InteropTestPortType.h: interface for the InteropTestPortTypeclass.
+ *
+ */
 #if !defined(__INTEROPTESTPORTTYPE_CLIENTSTUB_H__INCLUDED_)
 #define __INTEROPTESTPORTTYPE_CLIENTSTUB_H__INCLUDED_
 
 #include <axis/client/Call.h>
+#include "SOAPStruct_Array.h"
 #include "SOAPStruct.h"
-#include "ArrayOffloat.h"
-#include "ArrayOfSOAPStruct.h"
-#include "ArrayOfint.h"
-#include "ArrayOfstring.h"
-
 
 class InteropTestPortType 
 {
@@ -23,14 +19,14 @@ public:
 public:
 	virtual ~InteropTestPortType();
 public: 
-	AxisChar* echoString(const AxisChar* Value0);
-	ArrayOfstring echoStringArray(ArrayOfstring Value0);
+	xsd__string echoString(xsd__string Value0);
+	xsd__string_Array echoStringArray(xsd__string_Array Value0);
 	int echoInteger(int Value0);
-	ArrayOfint echoIntegerArray(ArrayOfint Value0);
+	xsd__int_Array echoIntegerArray(xsd__int_Array Value0);
 	float echoFloat(float Value0);
-	ArrayOffloat echoFloatArray(ArrayOffloat Value0);
+	xsd__float_Array echoFloatArray(xsd__float_Array Value0);
 	SOAPStruct* echoStruct(SOAPStruct* Value0);
-	ArrayOfSOAPStruct echoStructArray(ArrayOfSOAPStruct Value0);
+	SOAPStruct_Array echoStructArray(SOAPStruct_Array Value0);
 	void echoVoid();
 	xsd__base64Binary echoBase64(xsd__base64Binary Value0);
 	xsd__dateTime echoDate(xsd__dateTime Value0);
@@ -39,4 +35,4 @@ public:
 	xsd__boolean echoBoolean(xsd__boolean Value0);
 };
 
-#endif // !defined(__INTEROPTESTPORTTYPE_CLIENTSTUB_H__INCLUDED_)
+#endif /* !defined(__INTEROPTESTPORTTYPE_CLIENTSTUB_H__INCLUDED_)*/
