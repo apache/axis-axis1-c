@@ -849,8 +849,8 @@ void SoapSerializer::serializeEndElementOfType(const AxisChar* pName)
 }
 
 
-IHeaderBlock* SoapSerializer::createHeaderBlock(AxisChar *pachLocalName, 
-                                                AxisChar *pachUri)
+IHeaderBlock* SoapSerializer::createHeaderBlock(const AxisChar *pachLocalName, 
+                                                const AxisChar *pachUri)
 {
     HeaderBlock* pHeaderBlock= new HeaderBlock(pachLocalName, pachUri);
     setHeaderBlock(pHeaderBlock);

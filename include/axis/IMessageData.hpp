@@ -43,11 +43,11 @@ public:
 private:
     virtual void getAdminUtils(IAdminUtils** pIAdminUtils)=0;
 public:      
-    virtual int setProperty(AxisChar* pachName, const AxisChar* pachValue)=0;
-    virtual int setProperty(AxisChar* pachName, const void* pachValue, int len)=0;
-    virtual void setComplexProperty(AxisChar* pachName, void* pachValue, int iObjectSize)=0;
-    virtual const void* getProperty(AxisChar* sName)=0;
-    virtual void* getComplexProperty(AxisChar* pachName)=0;
+    virtual int setProperty(const AxisChar* pachName, const AxisChar* pachValue)=0;
+    virtual int setProperty(const AxisChar* pachName, const void* pachValue, int len)=0;
+    virtual void setComplexProperty(const AxisChar* pachName, void* pachValue, int iObjectSize)=0;
+    virtual const void* getProperty(const AxisChar* sName)=0;
+    virtual void* getComplexProperty(const AxisChar* pachName)=0;
     virtual const AxisChar* AXISCALL getOperationName()=0;
     virtual void AXISCALL getSoapSerializer(IWrapperSoapSerializer** pIWSS)=0;
     virtual void AXISCALL getSoapDeSerializer

@@ -187,8 +187,8 @@ public:
 
 	int setSOAPMethodAttribute(Attribute* pAttribute);
 	SoapMethod* getSOAPMethod();
-    IHeaderBlock* createHeaderBlock(AxisChar *pachLocalName,
-        AxisChar *pachUri);
+    IHeaderBlock* createHeaderBlock(const AxisChar *pachLocalName,
+        const AxisChar *pachUri);
     /* to add a header block to the Serializer. Probably by a handler */
     int AXISCALL addHeaderBlock(IHeaderBlock* pBlk);
     int AXISCALL addOutputParam(const AxisChar* pchName, 

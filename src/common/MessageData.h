@@ -50,11 +50,11 @@ public:
 private:
     void getAdminUtils(IAdminUtils** pIAdminUtils);
 public:
-    const void* getProperty(AxisChar* pachName);
-    void* getComplexProperty(AxisChar* pachName);
-    int setProperty(AxisChar* pachName, const AxisChar* pachValue);
-    int setProperty(AxisChar* pachName, const void* pachValue, int len);
-    void setComplexProperty(AxisChar* pachName, void* pachValue, int iObjectSize);
+    const void* getProperty(const AxisChar* pachName);
+    void* getComplexProperty(const AxisChar* pachName);
+    int setProperty(const AxisChar* pachName, const AxisChar* pachValue);
+    int setProperty(const AxisChar* pachName, const void* pachValue, int len);
+    void setComplexProperty(const AxisChar* pachName, void* pachValue, int iObjectSize);
     const AxisChar* AXISCALL getOperationName();
     void setOperationName(const AxisChar* pchOperation);
     void getSoapDeSerializer(IHandlerSoapDeSerializer** pIHandlerSoapDeSerializer);
@@ -80,9 +80,9 @@ protected:
 private:
     static AdminUtils m_AdminUtil;
     bool m_bPastPivotState;
-    map <AxisChar*, AxisChar*, ltstr> m_Properties;
+    map <const AxisChar*, const AxisChar*, ltstr> m_Properties;
     static const AxisChar* m_pachBlankPropertyValue;
-    map <AxisChar*, void*, ltstr> m_ComplexProperties;
+    map <const AxisChar*, void*, ltstr> m_ComplexProperties;
 };
 
 AXIS_CPP_NAMESPACE_END

@@ -69,8 +69,8 @@ public:
 	  * @return The created Header Block pointer will be returned, which the
 	  * user can manipulate on it.
 	  */
-    virtual IHeaderBlock*  createHeaderBlock(AxisChar *pachLocalName, 
-		AxisChar *pachUri)=0;    
+    virtual IHeaderBlock*  createHeaderBlock(const AxisChar *pachLocalName, 
+		const AxisChar *pachUri)=0;    
 
 	/**
 	  * Adds the given Header Block to the Serialzer.

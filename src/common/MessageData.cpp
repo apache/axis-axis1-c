@@ -40,13 +40,13 @@ MessageData::MessageData ()
 
 MessageData::~MessageData ()
 {
-    map < AxisChar*, AxisChar*, ltstr >::iterator itCurrentItem =
+    map < const AxisChar*, const AxisChar*, ltstr >::const_iterator itCurrentItem =
         m_Properties.begin ();
 
     while (itCurrentItem != m_Properties.end ())
     {
-        delete [] (*itCurrentItem).first;
-        delete [] (*itCurrentItem).second;
+        delete [] (char*)(*itCurrentItem).first;
+		delete [] (char*)(*itCurrentItem).second;
 
         itCurrentItem++;
     }
@@ -147,7 +147,7 @@ void MessageData::getSoapDeSerializer (IHandlerSoapDeSerializer**
 
 
 
-int MessageData::setProperty (AxisChar* pachName, const AxisChar* pachValue)
+int MessageData::setProperty (const AxisChar* pachName, const AxisChar* pachValue)
 {
     AxisChar* pachTmpName = new AxisChar[strlen (pachName) + 1];
     strcpy (pachTmpName, pachName);
@@ -159,7 +159,7 @@ int MessageData::setProperty (AxisChar* pachName, const AxisChar* pachValue)
     return AXIS_SUCCESS;
 }
 
-int MessageData::setProperty (AxisChar* pachName, const void* pachValue, int len)
+int MessageData::setProperty (const AxisChar* pachName, const void* pachValue, int len)
 {
      AxisChar* pachTmpName = new AxisChar[strlen (pachName) + 1];
      strcpy (pachTmpName, pachName);
@@ -171,7 +171,7 @@ int MessageData::setProperty (AxisChar* pachName, const void* pachValue, int len
      return AXIS_SUCCESS;
 }
 
-void MessageData::setComplexProperty(AxisChar* pachName, void* pValue, int iObjectSize)
+void MessageData::setComplexProperty(const AxisChar* pachName, void* pValue, int iObjectSize)
 {
     AxisChar* pachTmpName = new AxisChar[strlen (pachName) + 1];
     strcpy (pachTmpName, pachName);
@@ -186,7 +186,7 @@ void MessageData::setComplexProperty(AxisChar* pachName, void* pValue, int iObje
  *    not. If it is empty then the idea is that the property is not 
  *    available.
  */
-const void* MessageData::getProperty (AxisChar* pachName)
+const void* MessageData::getProperty (const AxisChar* pachName)
 {
     if (m_Properties.find (pachName) != m_Properties.end ())
     {
@@ -196,7 +196,7 @@ const void* MessageData::getProperty (AxisChar* pachName)
     return m_pachBlankPropertyValue;
 }
 
-void* MessageData::getComplexProperty(AxisChar* pachName)
+void* MessageData::getComplexProperty(const AxisChar* pachName)
 {
     if (m_ComplexProperties.find (pachName) != m_ComplexProperties.end ())
     {
