@@ -813,8 +813,11 @@ public class ClientStubWriter
 			    containedType =
 				CUtils.getclass4qname (arrayType.
 						       getBaseType ());
-			    writer.write ("\t\t\t" + currentParamName + " = (" + currentParaType + "&)m_pCall->getBasicArray(" + CUtils.getXSDTypeForBasicType (containedType) + ", \"" + currentType.getParamName ()	//getElementName().getLocalPart()
-					  + "\", 0);\n");
+			    writer.write ("\t\t\t" + currentParamName 
+					+ " = (" + currentParaType + "&)m_pCall->getBasicArray(" 
+					+ CUtils.getXSDTypeForBasicType (containedType) 
+					+ ", \"" + currentType.getParamName ()	//getElementName().getLocalPart()
+					+ "\", 0);\n");
 			}
 			else
 			{
@@ -943,18 +946,16 @@ public class ClientStubWriter
 		    if (CUtils.isSimpleType (qname))
 		    {
 			containedType = CUtils.getclass4qname (qname);
-			writer.write ("\tRetArray = (" + outparamType + "&)m_pCall->getBasicArray(" + CUtils.getXSDTypeForBasicType (containedType) + ", \"" + returntype.getParamName ()	//getElementName().getLocalPart()
-				      + "\", 0);\n\t\t}\n");
+			writer.write ("\t\t\tAxis_Array RetAxisArray = m_pCall->getBasicArray(" 
+					+ CUtils.getXSDTypeForBasicType (containedType) 
+					+ ", \"" + returntype.getParamName () + "\", 0);\n");
 		    }
 		    else
 		    {
 			containedType = qname.getLocalPart ();
-			writer.
-			    write
-			    ("\tAxis_Array arr2 = m_pCall->getCmplxArray((void*) Axis_DeSerialize_"
-			     + containedType);
-			//writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+returntype.getElementName().getLocalPart()+"\", Axis_URI_"+containedType+");\n\t\t}\n");
-			writer.write (", (void*) Axis_Create_"
+			writer.write("\t\t\tAxis_Array RetAxisArray = m_pCall->getCmplxArray((void*) Axis_DeSerialize_"
+					+ containedType 
+					+ ", (void*) Axis_Create_"
 				      + containedType
 				      + ", (void*) Axis_Delete_"
 				      + containedType
@@ -964,9 +965,10 @@ public class ClientStubWriter
 				      + returntype.getElementNameAsString ()
 				      + "\", Axis_URI_"
 				      + containedType
-				      + ");\n\t\t\tRetArray = ("
-				      + outparamType + "&)arr2;\n\t\t}\n");
+				      + ");\n");
 		    }
+		    writer.write ("\t\t\tmemcpy(&RetArray,&RetAxisArray,sizeof(Axis_Array));\n");
+		    writer.write ("\t\t}\n");
 		    writer.write ("\t}\n");
 		    writer.write ("\tm_pCall->unInitialize();\n");
 		    //        writer.write("\t}\n\tm_pCall->unInitialize();\n");
