@@ -609,42 +609,81 @@ IAttribute* HeaderBlock::createAttribute(const AxisChar *localname,
 /**
  * The localname must be specified, but all other input parameters are optional.
  */
-IAttribute* HeaderBlock::createAttribute(const AxisChar *localname,
-                                        const AxisChar *prefix,
-                                        const AxisChar *uri,
-                                        const AxisChar *value)
+IAttribute* HeaderBlock::createAttribute(const AxisChar * pLocalName,
+                                         const AxisChar * pPrefix,
+                                         const AxisChar * pURI,
+                                         const AxisChar * pValue)
 {
-	Attribute* pAttribute=NULL;
-	if(!localname)
+// Check that the contents of the passed parameters are valid.
+	if( pLocalName == NULL || pPrefix == NULL)
 	{
 		return NULL;
 	}
-	if(!prefix)
+	else if( strlen( pLocalName) == 0 || strlen( pPrefix) == 0)
 	{
-		prefix="";
+		return NULL;
 	}
-	if(!uri)
+
+	if( !pURI)
 	{
-		uri="";
+		pURI = "";
 	}
-	if(!value)
+
+	if( !pValue)
 	{
-		value = "";
+		pValue = "";
 	}
-   
-	
-	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
-	while(itCurrAttribute != m_attributes.end())
+
+// Check that the local name and prefix have not already been defined.  If
+// they have, then return NULL indicating that the prefix/localname pair have
+// already been defined.
+	list<Attribute*>::iterator	itCurrAttribute= m_attributes.begin();
+
+	while( itCurrAttribute != m_attributes.end())
 	{        
-		if ((strcmp((*itCurrAttribute)->getLocalName(), localname) ==0) && 
-			(strcmp((*itCurrAttribute)->getPrefix(), prefix) ==0))
+		if( (strcmp( (*itCurrAttribute)->getLocalName(), pLocalName) == 0) && 
+			(strcmp( (*itCurrAttribute)->getPrefix(), pPrefix) == 0))
+		{
 			return NULL;
+		}
 		else
-			itCurrAttribute++;        
+		{
+			itCurrAttribute++;
+		}
 	}    
-        
-	pAttribute = new Attribute(localname, prefix, uri, value);
-	m_attributes.push_back(pAttribute);
+
+// Check that the prefix has not already been defined in the namespace
+// declarations.  If it has, then return NULL indicating that the
+// prefix/localname pair has already been defined and 'copy down' the
+// namespace decl into the attribute list as this will help in the
+// serialisation.
+	list<Namespace*>::iterator	itCurrNamespaceDecls = m_namespaceDecls.begin();
+
+	while( itCurrNamespaceDecls != m_namespaceDecls.end())
+	{        
+		if( !strcmp( (*itCurrNamespaceDecls)->getPrefix(), pPrefix))
+		{
+			Attribute *	pAttribute = new Attribute( pLocalName,
+													pPrefix,
+													(*itCurrNamespaceDecls)->getURI(),
+													pValue);
+
+			m_attributes.push_back( pAttribute);
+
+			return NULL;
+		}
+		else
+		{
+			itCurrNamespaceDecls++;
+		}
+	}    
+
+// If the prefix/localname pair have not previously been defined, then create
+// and return the attribute.
+	Attribute *	pAttribute = new Attribute( pLocalName, pPrefix, pURI, pValue);
+
+	m_attributes.push_back( pAttribute);
+
 	return pAttribute;
 }
 
