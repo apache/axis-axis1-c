@@ -107,6 +107,8 @@ private:
 	int m_nFilledSize;
 	/* Currently selected buffer index*/
 	int m_nCurrentBufferIndex;
+	/* Overall status of Serializer. If anything goes wrong this is not AXIS_SUCCESS */
+	int m_nStatus;
 public:
 	int AXISCALL createSoapMethod(const AxisChar* sLocalName, const AxisChar* sPrefix, const AxisChar* sURI);	
 //	IWrapperSoapSerializer& operator<<(const char* cSerialized);
@@ -147,7 +149,7 @@ public:
 
 private:
 	int AddOutputParamHelper(const AxisChar* pchName, XSDTYPE nType, uParamValue Value);
-	int flushSerializedBuffer();
+	int SendSerializedBuffer();
 	int SetNextSerilizeBuffer();
 	IArrayBean* makeArrayBean(XSDTYPE nType, void* pArray);
 	IArrayBean* makeArrayBean(void* pObject, void* pSZFunct, void* pDelFunct, void* pSizeFunct);

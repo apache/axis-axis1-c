@@ -100,7 +100,7 @@ Call::~Call()
 
 int Call::SetEndpointURI(const char *pchEndpointURI)
 {
-	m_Soap.so->http.uri_path = pchEndpointURI;
+	m_Soap.so.http->uri_path = pchEndpointURI;
 	return AXIS_SUCCESS;
 }
 
@@ -480,7 +480,7 @@ int Call::SetProtocol(AXIS_PROTOCOL_TYPE protocol)
 
 int Call::SetHeader(char *key, char *value)
 {
-	set_header(&m_Soap, key, value);
+	set_property(&m_Soap, key, value);
 	return 0;
 }
 

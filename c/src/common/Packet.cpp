@@ -64,6 +64,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+extern "C"
+{
+
 /**
  * This method is used to add a transport specific property to a stream object for Axis supported protocols
  * such as http. For an example "Content-Length" for http. For other protocols there should be a way to
@@ -158,3 +161,4 @@ const char* get_property(const Ax_soapstream* stream,const char* pchkey)
 	return NULL;
 }
 
+}

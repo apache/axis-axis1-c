@@ -237,6 +237,10 @@ typedef struct
 	void* reserved2; /* usage depend on the tranport module */
 } Ax_soapstream;
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 /**
  * Functions to manipulate Ax_soapstream object. Implemented in Packet.cpp
  *
@@ -244,11 +248,6 @@ typedef struct
 int set_property(Ax_soapstream* stream, char * pchkey, char * pchvalue);
 const char* get_property(const Ax_soapstream* stream,const char* pchkey);
 void remove_all_properties(Ax_soapstream* stream);
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
 /**
  * This function is implemented in axis and should be called ONCE to uninitialize Axis Engine when the 
