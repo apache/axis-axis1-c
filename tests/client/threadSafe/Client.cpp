@@ -38,6 +38,7 @@ using namespace std;
 int NUM_THREADS = MACRO_NUM_THREADS;
 
 
+extern "C" STORAGE_CLASS_INFO void initializeLibrary(void);
 const char *server = "localhost";
 const char *port = "8080";
 char endpoint[256];
@@ -198,14 +199,14 @@ run(void *arg)
     }
     catch(exception& e)
     {
-        printf("Unknown exception has occured\n");
+        printf("Unknown exception has occured: %s\n", e.what());
     }
     catch(...)
     {
         printf("Unknown exception has occured\n");
     }
     
-    delete ws;
+    //delete ws;
     return 0;
 }
 
@@ -233,7 +234,9 @@ main(int argc, char *argv[])
 	sprintf(endpoint, "http://%s:%s/axis/services/echo", server, port);
 	ws = new InteropTestPortType(endpoint);
     }*/
-
+    sprintf(endpoint, "http://%s:%s/axis/services/echo", server, port);
+    ws = new InteropTestPortType(endpoint); //Samisa: this is an ugly hack to init the LibWWW lib
+    ws = NULL; 
     pthread_t thread[NUM_THREADS];
     pthread_attr_t attr;
     int rc, t, status = 0;
