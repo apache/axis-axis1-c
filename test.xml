@@ -485,7 +485,7 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 				<parallel timeout="40000" failonany="false">
 					<echo message="RUNNING TEST ${testName} ${clientArgs}"/>
 					<!-- Run Monitor utility to allow validation of message across the wire -->
-					<java classname="org.apache.test.TCPMonitor">
+					<java classname="org.apache.test.TCPMonitor" fork="true">
 						<arg line="-l ${monitorPort}"/>
 						<arg line="-p ${testPort}"/>
 						<arg line="-h ${testHost}"/>
@@ -513,6 +513,16 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 							<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}"/>
 						</exec>
 						<echo message="EXEC FINISHED"/>
+						<echo message="TELLING MONITOR TO STOP"/>
+						<java classname="org.apache.test.StopTCPMonitor">
+							<arg line="-p ${monitorPort}"/>
+							<arg line="-h localhost"/>
+							<classpath>
+								<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
+							</classpath>
+						</java>
+						<sleep seconds="3"/>
+						<echo message="MONITOR STOPPED"/>
 					</sequential>
 				</parallel>
 			</try>
@@ -520,8 +530,6 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 				<echo message="IN CATCH"/>
 			</catch>
 			<finally>
-				<echo message="TELLING MONITOR TO STOP"/>
-				<sleep seconds="3"/>
 				<java classname="org.apache.test.StopTCPMonitor">
 					<arg line="-p ${monitorPort}"/>
 					<arg line="-h localhost"/>
@@ -529,7 +537,7 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 						<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
 					</classpath>
 				</java>
-				<echo message="MONITOR STOPPED"/>
+				<sleep seconds="3"/>
 			</finally>
 		</trycatch>
 	</target>
