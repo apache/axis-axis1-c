@@ -31,8 +31,7 @@ int main(int argc, char* argv[])
 		cout << iResult << endl;
 		Calculator ws1(endpoint);
 		IHeaderBlock *phb1 = ws1.createSOAPHeaderBlock("TestHeader","http://ws.apache.org/");
-		IAttribute *attr1 = phb1->createStdAttribute(MUST_UNDERSTAND_TRUE,SOAP_VER_1_1);
-		IAttribute *attr1a= phb1->createStdAttribute(MUST_UNDERSTAND_TRUE,SOAP_VER_1_1);
+		IAttribute *attr1 = phb1->createStdAttribute(MUST_UNDERSTAND_TRUE,SOAP_VER_1_1);		
 		cout << attr1->getLocalName() << " = " << attr1->getValue()<<endl;
 		iResult=ws1.add(i1, i2);	
 		cout << iResult << endl;
