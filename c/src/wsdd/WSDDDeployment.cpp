@@ -183,3 +183,11 @@ WSDDService* WSDDDeployment::GetService(string &sServiceName)
 		return NULL;
 	}
 }
+
+const WSDDServiceMap* WSDDDeployment::GetWSDDServiceMap()
+{
+	return m_DeployedServices;
+}
+
+
+
