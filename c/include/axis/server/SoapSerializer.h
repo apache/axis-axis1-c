@@ -67,7 +67,7 @@
 #include "../common/BasicTypeSerializer.h"
 #include "../common/AxisTime.h"
 #include "../common/Packet.h"
-#include <axis/wsdd/WSDDDefines.h>
+#include "../wsdd/WSDDDefines.h"
 #include "SoapEnvVersions.h"
 
 class SoapEnvelope;
