@@ -43,7 +43,6 @@ main(int argc, char *argv[])
 	port = argv[2];
     }
     printf("Usage :\n %s <server> <port>\n\n", argv[0]);
-    //sprintf(endpoint, "http://%s:%s/axis/base", server, port);
     //endpoint for Axis CPP sample
     sprintf(endpoint, "http://%s:%s/axis/base", server, port);
     InteropTestPortType ws(endpoint, APTHTTP);
@@ -51,10 +50,6 @@ main(int argc, char *argv[])
     /*create a header of the form:
        <SOAP-ENV:Header>
        <th:newName xmlns:th="http://ws.apache.org/axisCppTest/">
-       <TestAuthHeader>
-       <username>Test User</username>
-       <password>Test Password</password>
-       </TestAuthHeader>
        </th:newName>
        </SOAP-ENV:Header>
      */
@@ -69,9 +64,7 @@ main(int argc, char *argv[])
     //set second SOAP headers
     phb = ws.createSOAPHeaderBlock("TestHeader2",
                                    "http://ws.apache.org/axisCppTest/");
-                                                                                                                                                                           
     phb->addChild(NULL);
-
 
     printf("Sending Requests to end point %s \n\n", endpoint);
     printf("invoking echoString...\n");
@@ -91,7 +84,6 @@ main(int argc, char *argv[])
         printf("successful\n");
     else
         printf("failed\n");
-
 
     printf("Soap Header test end\n");
     return 0;
