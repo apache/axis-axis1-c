@@ -411,7 +411,7 @@ bool HTTPSSLChannel::OpenChannel()
 
 			CloseChannel();
 
-            free( paiAddrInfo0);
+            freeaddrinfo( paiAddrInfo0);
 			
 			string *	message = PLATFORM_GET_ERROR_MESSAGE( dw);
 			char		fullMessage[600];

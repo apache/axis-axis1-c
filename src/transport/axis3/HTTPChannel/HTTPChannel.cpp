@@ -18,7 +18,7 @@ HTTPChannel::HTTPChannel()
     m_uiProxyPort = 0;
 
 #ifdef WIN32
-	m_lTimeoutSeconds = 10;
+	m_lTimeoutSeconds = 100;
 #else
 	m_lTimeoutSeconds = 0;
 #endif
@@ -447,7 +447,7 @@ bool HTTPChannel::OpenChannel()
 			long dw = GETLASTERROR
 
 			CloseChannel();
-            free( paiAddrInfo0);
+            freeaddrinfo( paiAddrInfo0);
 			
 			string* message = PLATFORM_GET_ERROR_MESSAGE(dw);
 
