@@ -182,7 +182,7 @@ int main(int argc, char* argv[])
 			  cout << " ByteType " << output->infos.m_Array[i]->ByteType << endl;
 			  cout << " DecimalType " << output->infos.m_Array[i]->DecimalType << endl;
 			  cout << " FloatType " << output->infos.m_Array[i]->FloatType << endl;
-			  printf( " LongType %I64d\n", output->infos.m_Array[i]->LongType);
+			  cout << " LongType " << output->infos.m_Array[i]->LongType << endl;
 			  cout << " QNameType " << output->infos.m_Array[i]->QNameType << endl;
 			  cout << " ShortType " << output->infos.m_Array[i]->ShortType << endl;
 
