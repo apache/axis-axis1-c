@@ -155,9 +155,9 @@ apache    root folder .Rename the deploy folder as "Axis" . Give all
 permissions to   this folder.<br>
 <br>
 <br>
-<b>$ cp -rf $AXISCPP_HOME/deploy&nbsp; /usr/local/apache</b><br>
+<b>$ cp -rf $AXISCPP_HOME/deploy&nbsp; /usr/local</b><br>
 <br>
-<b>$ cd /usr/local/apache</b><br>
+<b>$ cd /usr/local</b><br>
 <br>
 <b>$ mv deploy Axis</b><br>
 <br>
@@ -167,7 +167,7 @@ permissions to   this folder.<br>
 Now set the environment variable <b>AXIS_HOME </b>pointing to this
 directory.<br>
 <br>
-<b>AXIS_HOME="/usr/local/apache/Axis"</b> <br>
+<b>AXIS_HOME="/usr/local/Axis"</b> <br>
 </p>
 <p>You also need to rename the following files
 <br><b>mv $AXIS_HOME/axiscpp.conf_linux $AXIS_HOME/axiscpp.conf</b>
@@ -293,9 +293,9 @@ apache    root folder .Rename the deploy folder as "Axis" . Give all
 permissions to   this folder.<br>
 <br>
 <br>
-<b>$ cp -rf $AXISCPP_HOME/deploy&nbsp; /usr/local/apache</b><br>
+<b>$ cp -rf $AXISCPP_HOME/deploy&nbsp; /usr/local</b><br>
 <br>
-<b>$ cd /usr/local/apache</b><br>
+<b>$ cd /usr/local</b><br>
 <br>
 <b>$ mv deploy Axis</b><br>
 <br>
@@ -305,7 +305,7 @@ permissions to   this folder.<br>
 Now set the environment variable <b>AXIS_HOME </b>pointing to this
 directory.<br>
 <br>
-<b>AXIS_HOME="/usr/local/apache/Axis"</b></p>
+<b>AXIS_HOME="/usr/local/Axis"</b></p>
 <p>You also need to rename the following files
 <br><b>mv $AXIS_HOME/axiscpp.conf_linux $AXIS_HOME/axiscpp.conf</b>
 <br><b>mv $AXIS_HOME/conf/server.wsdd_linux $AXIS_HOME/conf/server.wsdd</b>
