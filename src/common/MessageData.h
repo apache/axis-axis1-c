@@ -74,17 +74,20 @@
 
 #include "GDefine.h"
 #include "Param.h"
+#include "ISoapDeserializer.h"
+#include "ISoapSerializer.h"
+#include "IMessageData.h"
 #include "../wsdd/WSDDService.h"
+#include "../soap/SoapSerializer.h"
+#include "../soap/SoapDeSerializer.h"
+
 #include <string>
 #include <list>
 #include <map>
 
 using namespace std;
 
-class SoapSerializer;
-class SoapDeSerializer;
-
-class MessageData  
+class MessageData : public IMessageData
 {
 public:
 	MessageData();
@@ -95,11 +98,13 @@ public:
 public:
 	void SetDeSerializer(SoapDeSerializer* pDZ);
 	void SetSerializer(SoapSerializer* pSZ);
-  void SetUserName(string m_sUserName);
+	void SetUserName(string m_sUserName);
 	string GetUserName();
-  void SetService(WSDDService* argService);
+	void SetService(WSDDService* argService);
 	WSDDService* GetService();  
 	AXIS_PROTOCOL_TYPE m_Protocol;
+	ISoapDeSerializer* getSoapDeserializer();
+	ISoapSerializer* getSoapSerializer();
 protected:
   string m_sUserName;
   WSDDService* m_Service;

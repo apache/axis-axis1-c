@@ -72,23 +72,26 @@
 #endif // _MSC_VER > 1000
 
 //this is a trick :-)
-#define ACCESSBEAN_SERIALIZABLE int DeSerialize(SoapDeSerializer *pDZ);string& Serialize();
 
 #include <string>
-#include "../common/GDefine.h"
-#include "../soap/TypeMapping.h"
-
 using namespace std;
 
-class SoapDeSerializer;
-class SoapSerializer;
+#include "../common/GDefine.h"
+#include "../soap/TypeMapping.h"
+#include "ISoapSerializer.h"
+#include "ISoapDeSerializer.h"
+//#include "../soap/SoapSerializer.h"
+//#include "../soap/SoapDeSerializer.h"
+
+
+#define ACCESSBEAN_SERIALIZABLE int DeSerialize(ISoapDeSerializer *pDZ);string& Serialize();
 
 class AccessBean  
 {
 public:
 	AccessBean();
 	virtual ~AccessBean(){};
-	virtual int DeSerialize(SoapDeSerializer *pDZ);
+	virtual int DeSerialize(ISoapDeSerializer *pDZ);
 	virtual string& Serialize();
 public:
 	string m_TypeName;//array type name in case of complex type arrays 
@@ -102,7 +105,7 @@ class ArrayBean : public AccessBean
 public:
 	ArrayBean();
 	virtual ~ArrayBean();
-	virtual int DeSerialize(SoapDeSerializer *pDZ);
+	virtual int DeSerialize(ISoapDeSerializer *pDZ);
 	virtual string& Serialize();
 public:
 	XSDTYPE t; //array element type

@@ -66,7 +66,6 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "MessageData.h"
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -106,8 +105,19 @@ void MessageData::SetService(WSDDService* argService)
 {
   m_Service = argService;
 }
+
 WSDDService* MessageData::GetService()
 {
   return m_Service;
 
+}
+
+ISoapSerializer* MessageData::getSoapSerializer()
+{
+	return m_pSZ;
+}
+
+ISoapDeSerializer* MessageData::getSoapDeserializer()
+{
+	return m_pDZ;
 }
