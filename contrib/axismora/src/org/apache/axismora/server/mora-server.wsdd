@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+	<globalConfiguration>
+		<parameter name="adminPassword" value="admin"/>
+		<parameter name="nodename" value="http//lk.opensorce.axis2/designNode"/>
+		<parameter name="sendMultiRefs" value="false"/>
+		<parameter name="sendXsiTypes" value="true"/>
+		<parameter name="sendXMLDeclaration" value="true"/>
+	</globalConfiguration>
+	<service name="AdminService" provider="java:DOC">
+		<parameter name="allowedMethods" value="*"/>
+		<parameter name="accesses" value="2"/>
+		<parameter name="className" value="lk.opensource.axis2.services.AdminService"/>
+	</service>
+	<transport name="http">
+		<requestFlow>
+			<handler type="testData.SimpleTransportRequestHandler"/>
+		</requestFlow>
+	</transport>
+</deployment>

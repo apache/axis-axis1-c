@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+	<SOAP-ENV:Body>
+		<m:addPoint xmlns:m="Some-URI">
+			<Point>
+				<x>8</x>
+				<y>2</y>
+			</Point>
+			<Point>
+				<x>3</x>
+				<y>3</y>
+			</Point>
+		</m:addPoint>
+	</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

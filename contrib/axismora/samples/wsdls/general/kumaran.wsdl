@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="urn:Example6" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns1="urn:parchase" xmlns:intf="urn:Example6" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:impl="urn:Example6" xmlns="http://schemas.xmlsoap.org/wsdl/">
+ <wsdl:types>
+  <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:parchase">
+   <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+   <complexType name="PurchaseOrder">
+    <sequence>
+     <element name="amount" type="xsd:int" maxOccurs="1"/>
+     <element name="itemcode" nillable="true" type="xsd:string"/>
+     <element name="prize" type="xsd:double"/>
+    </sequence>
+   </complexType>
+   <element name="PurchaseOrder" nillable="true" type="tns1:PurchaseOrder"/>
+   <complexType name="Invoice">
+    <sequence>
+     <element name="amountSent" type="xsd:int"/>
+     <element name="itemcode" nillable="true" type="xsd:string"/>
+     <element name="pize" type="xsd:double"/>
+     <element name="totel" type="xsd:double"/>
+    </sequence>
+   </complexType>
+   <element name="Invoice" nillable="true" type="tns1:Invoice"/>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="supplyResponse">
+
+      <wsdl:part name="supplyReturn" type="tns1:Invoice"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="supplyRequest">
+
+      <wsdl:part name="po" type="tns1:PurchaseOrder"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="Broker">
+
+      <wsdl:operation name="supply" parameterOrder="po">
+
+         <wsdl:input name="supplyRequest" message="intf:supplyRequest"/>
+
+         <wsdl:output name="supplyResponse" message="intf:supplyResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="WidgetPriceSoapBinding" type="intf:Broker">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="supply">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="supplyRequest">
+
+            <wsdlsoap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:Example6"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="supplyResponse">
+
+            <wsdlsoap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:Example6"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="BrokerService">
+
+      <wsdl:port name="WidgetPrice" binding="intf:WidgetPriceSoapBinding">
+
+         <wsdlsoap:address location="http://localhost:8080/axis/services/WidgetPrice"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

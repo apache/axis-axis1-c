@@ -1,0 +1,192 @@
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://performence.heavytest" xmlns:intf="http://performence.heavytest" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://performence.heavytest">
+	<wsdl:types>
+		<schema targetNamespace="http://performence.heavytest" xmlns="http://www.w3.org/2001/XMLSchema">
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+			<complexType name="KeyPhrase">
+				<sequence>
+					<element maxOccurs="1" minOccurs="0" name="KeyPhrase" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="Type" nillable="true" type="xsd:string"/>
+				</sequence>
+			</complexType>
+			<complexType name="ArrayOfKeyPhrase">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="impl:KeyPhrase[]"/>
+					</restriction>
+				</complexContent>
+			</complexType>
+			<complexType name="ArrayOf_xsd_string">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:string[]"/>
+					</restriction>
+				</complexContent>
+			</complexType>
+			<complexType name="ThirdPartyProductDetails">
+				<sequence>
+					<element maxOccurs="1" minOccurs="0" name="OfferingType" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="SellerId" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="SellerNickname" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="ExchangeId" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="OfferingPrice" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="Condition" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="ConditionType" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="ExchangeAvailability" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="SellerCountry" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="SellerState" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="ShipComments" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="SellerRating" nillable="true" type="xsd:string"/>
+				</sequence>
+			</complexType>
+			<complexType name="ArrayOfThirdPartyProductDetails">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="impl:ThirdPartyProductDetails[]"/>
+					</restriction>
+				</complexContent>
+			</complexType>
+			<complexType name="ThirdPartyProductInfo">
+				<sequence>
+					<element name="ThirdPartyProductDetails" nillable="true" type="impl:ArrayOfThirdPartyProductDetails"/>
+				</sequence>
+			</complexType>
+			<complexType name="BrowseNode">
+				<sequence>
+					<element maxOccurs="1" minOccurs="0" name="BrowseId" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="BrowseName" nillable="true" type="xsd:string"/>
+				</sequence>
+			</complexType>
+			<complexType name="ArrayOfBrowseNode">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="impl:BrowseNode[]"/>
+					</restriction>
+				</complexContent>
+			</complexType>
+			<complexType name="Track">
+				<sequence>
+					<element maxOccurs="1" minOccurs="0" name="TrackName" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="ByArtist" nillable="true" type="xsd:string"/>
+				</sequence>
+			</complexType>
+			<complexType name="ArrayOfTrack">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="impl:Track[]"/>
+					</restriction>
+				</complexContent>
+			</complexType>
+			<complexType name="CustomerReview">
+				<sequence>
+					<element maxOccurs="1" minOccurs="0" name="Rating" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="Summary" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="Comment" nillable="true" type="xsd:string"/>
+				</sequence>
+			</complexType>
+			<complexType name="ArrayOfCustomerReview">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="impl:CustomerReview[]"/>
+					</restriction>
+				</complexContent>
+			</complexType>
+			<complexType name="Reviews">
+				<sequence>
+					<element maxOccurs="1" minOccurs="0" name="AvgCustomerRating" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="TotalCustomerReviews" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="CustomerReviews" nillable="true" type="impl:ArrayOfCustomerReview"/>
+				</sequence>
+			</complexType>
+			<complexType name="Details">
+				<sequence>
+					<element maxOccurs="1" minOccurs="0" name="Url" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="Asin" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="ProductName" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="Catalog" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="KeyPhrases" nillable="true" type="impl:ArrayOfKeyPhrase"/>
+					<element maxOccurs="1" minOccurs="0" name="Artists" nillable="true" type="impl:ArrayOf_xsd_string"/>
+					<element maxOccurs="1" minOccurs="0" name="Authors" nillable="true" type="impl:ArrayOf_xsd_string"/>
+					<element maxOccurs="1" minOccurs="0" name="Mpn" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="Starring" nillable="true" type="impl:ArrayOf_xsd_string"/>
+					<element maxOccurs="1" minOccurs="0" name="Directors" nillable="true" type="impl:ArrayOf_xsd_string"/>
+					<element maxOccurs="1" minOccurs="0" name="TheatricalReleaseDate" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="ReleaseDate" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="Manufacturer" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="Distributor" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="ImageUrlSmall" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="ImageUrlMedium" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="ImageUrlLarge" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="ListPrice" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="OurPrice" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="UsedPrice" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="RefurbishedPrice" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="CollectiblePrice" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="ThirdPartyNewPrice" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="NumberOfOfferings" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="ThirdPartyNewCount" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="UsedCount" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="CollectibleCount" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="RefurbishedCount" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="ThirdPartyProductInfo" nillable="true" type="impl:ThirdPartyProductInfo"/>
+					<element maxOccurs="1" minOccurs="0" name="SalesRank" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="BrowseList" nillable="true" type="impl:ArrayOfBrowseNode"/>
+					<element maxOccurs="1" minOccurs="0" name="Media" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="ReadingLevel" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="Publisher" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="NumMedia" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="Isbn" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="Features" nillable="true" type="impl:ArrayOf_xsd_string"/>
+					<element maxOccurs="1" minOccurs="0" name="MpaaRating" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="EsrbRating" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="AgeGroup" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="Availability" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="Upc" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="Tracks" nillable="true" type="impl:ArrayOfTrack"/>
+					<element maxOccurs="1" minOccurs="0" name="Accessories" nillable="true" type="impl:ArrayOf_xsd_string"/>
+					<element maxOccurs="1" minOccurs="0" name="Platforms" nillable="true" type="impl:ArrayOf_xsd_string"/>
+					<element maxOccurs="1" minOccurs="0" name="Encoding" nillable="true" type="xsd:string"/>
+					<element maxOccurs="1" minOccurs="0" name="Reviews" nillable="true" type="impl:Reviews"/>
+					<element maxOccurs="1" minOccurs="0" name="SimilarProducts" nillable="true" type="impl:ArrayOf_xsd_string"/>
+					<element maxOccurs="1" minOccurs="0" name="Lists" nillable="true" type="impl:ArrayOf_xsd_string"/>
+					<element maxOccurs="1" minOccurs="0" name="Status" nillable="true" type="xsd:string"/>
+				</sequence>
+			</complexType>
+			<complexType name="DetailsArray">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="impl:Details[]"/>
+					</restriction>
+				</complexContent>
+			</complexType>
+		</schema>
+	</wsdl:types>
+	<wsdl:message name="testRequest">
+		<wsdl:part name="in" type="impl:DetailsArray"/>
+	</wsdl:message>
+	<wsdl:message name="testResponse">
+		<wsdl:part name="testReturn" type="impl:DetailsArray"/>
+	</wsdl:message>
+	<wsdl:portType name="HeavyTest">
+		<wsdl:operation name="test" parameterOrder="in">
+			<wsdl:input name="testRequest" message="impl:testRequest"/>
+			<wsdl:output name="testResponse" message="impl:testResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="HeavySoapBinding" type="impl:HeavyTest">
+		<wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="test">
+			<wsdlsoap:operation soapAction="HeavyTest" /> 
+			<wsdl:input>
+				<wsdlsoap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://performence.heavytest"/>
+			</wsdl:input>
+			<wsdl:output>
+				<wsdlsoap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://performence.heavytest"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="HeavyTestService">
+		<wsdl:port name="Heavy" binding="impl:HeavySoapBinding">
+			<wsdlsoap:address location="http://localhost:8080/axis/services/Heavy"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+	<globalConfiguration>
+		<parameter name="adminPassword" value="admin"/>
+		<parameter name="nodename" value="http//lk.opensorce.axis2/designNode"/>
+		<parameter name="attachments.Directory" value="/usr/work/xml-axis-10/webapps/axis/WEB-INF/attachments"/>
+		<parameter name="sendMultiRefs" value="false"/>
+		<parameter name="sendXsiTypes" value="true"/>
+		<parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
+		<parameter name="sendXMLDeclaration" value="true"/>
+	</globalConfiguration>
+	
+	<service name="Echo" provider="java:RPC">
+		<parameter name="allowedMethods" value="*"/>
+		<parameter name="className" value="services.calculator.CalculatorService"/>
+	</service>
+	
+	<service name="Calculator" provider="java:RPC">
+		<parameter name="allowedMethods" value="*"/>
+		<parameter name="className" value="services.calculator.CalculatorService"/>
+	</service>
+	<service name="CalculatorB" provider="java:RPC">
+		<requestFlow>
+			<handler type="org.apache.axismora.handlers.BodyReader"/>
+		</requestFlow>
+		<parameter name="allowedMethods" value="*"/>
+		<parameter name="className" value="services.calculator.CalculatorService"/>
+	</service>
+	<service name="CalculatorC" provider="java:RPC">
+		<requestFlow>
+			<handler type="org.apache.axismora.handlers.EchoHandler"/>
+		</requestFlow>
+		<parameter name="allowedMethods" value="*"/>
+		<parameter name="className" value="services.calculator.CalculatorService"/>
+	</service>
+
+	<service name="AdminService" provider="java:DOC">
+		<parameter name="allowedMethods" value="*"/>
+		<parameter name="accesses" value="2"/>
+		<parameter name="className" value="org.apache.axismora.services.AdminService"/>
+	</service>
+	<service name="Point" provider="java:RPC">
+		<parameter name="allowedMethods" value="*"/>
+		<parameter name="className" value="services.point.PointService"/>
+	</service>
+	<service name="LogTestService" provider="java:RPC">
+		<requestFlow>
+			<handler type="testData.SimpleServiceRequestHandler"/>
+		</requestFlow>
+		<responseFlow>
+			<handler type="testData.SimpleServiceResponseHandler"/>
+		</responseFlow>
+		<parameter name="allowedMethods" value="*"/>
+		<parameter name="className" value="services.logtest.Service"/>
+	</service>
+	<service name="Bill" provider="java:RPC">
+		<parameter name="allowedMethods" value="*"/>
+		<parameter name="className" value="services.bill.BillService"/>
+	</service>
+	<service name="ServiceSCOPETest" provider="java:RPC">
+		<parameter name="allowedMethods" value="*"/>
+		<parameter name="scope" value="request"/>
+		<parameter name="className" value="org.apache.axismora.engine.scope.ScopeServiceWsService"/>
+	</service>
+	<service name="Broker" provider="java:RPC">
+		<parameter name="allowedMethods" value="*"/>
+		<parameter name="className" value="services.parchase.BrokerService"/>
+	</service>
+	 <service name="BookShop" provider="java:RPC">
+                <parameter name="allowedMethods" value="*"/>
+                <parameter name="className" value="com.bookshop.soap.AmazonSearchPortService"/>
+     </service>
+	 <service name="HeavyTest" provider="java:RPC">
+                <parameter name="allowedMethods" value="*"/>
+                <parameter name="className" value="soap.bookshop.com.HeavyTestService"/>
+     </service>
+     <service name="Google" provider="java:RPC">
+                <parameter name="allowedMethods" value="*"/>
+                <parameter name="className" value="googleSearch.GoogleSearchPortService"/>
+     </service>
+     <service name="InteropTests" provider="java:RPC">
+                <parameter name="allowedMethods" value="*"/>
+                <parameter name="className" value="org.soapinterop.InteropTestPortTypeService"/>
+     </service>
+     
+     
+      <service name="UsageTest" provider="java:RPC">
+                <parameter name="allowedMethods" value="*"/>
+                <parameter name="className" value="types.usageTests.SupportedTypesTestService"/>
+     </service>
+     
+	<transport name="http">
+		<requestFlow>
+		</requestFlow>
+	</transport>
+</deployment>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+	<service name="CalculatorC" provider="java:RPC">
+		<requestFlow>
+			<handler type="lk.opensource.axis2.handlers.EchoHandler"/>
+		</requestFlow>
+		<parameter name="allowedMethods" value="*"/>
+		<parameter name="accesses" value="2"/>
+		<parameter name="className" value="lk.opensource.axis2.handlers.CalculatorService"/>
+	</service>
+</deployment>

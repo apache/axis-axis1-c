@@ -1,0 +1,159 @@
+
+==============
+Listen Port: 5555
+Target Host: 127.0.0.1
+Target Port: 4444
+==== Request ====
+POST /service/servlet/AxisServlet HTTP/1.0
+Content-Type: text/xml; charset=utf-8
+Accept: application/soap+xml, application/dime, multipart/related, text/*
+User-Agent: Axis/#axisVersion#
+Host: 127.0.0.1
+Cache-Control: no-cache
+Pragma: no-cache
+SOAPAction: "CalculatorC"
+Content-Length: 3617
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <soapenv:Header>
+  <ns2:bigHeader soapenv:actor="http://www.w3.org/2002/12/soap-envelope/role/echoHandler" soapenv:mustUnderstand="0" xsi:type="ns1:Element" xmlns:ns1="http://xml.apache.org/xml-soap" xmlns:ns2="opensource.lk">
+   <wsdl:definitions targetNamespace="urn:Example6" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="urn:Example6" xmlns:intf="urn:Example6" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="urn:parchase" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <wsdl:types>
+     <schema targetNamespace="urn:parchase" xmlns="http://www.w3.org/2001/XMLSchema">
+      <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+
+      <complexType name="PurchaseOrder">
+       <sequence>
+        <element name="amount" type="xsd:int"/>
+
+        <element name="itemcode" nillable="true" type="xsd:string"/>
+
+        <element name="prize" type="xsd:double"/>
+
+    </sequence>
+
+   </complexType>
+
+      <element name="PurchaseOrder" nillable="true" type="tns1:PurchaseOrder"/>
+
+      <complexType name="Invoice">
+       <sequence>
+        <element name="amountSent" type="xsd:int"/>
+
+        <element name="itemcode" nillable="true" type="xsd:string"/>
+
+        <element name="pize" type="xsd:double"/>
+
+        <element name="totel" type="xsd:double"/>
+
+    </sequence>
+
+   </complexType>
+
+      <element name="Invoice" nillable="true" type="tns1:Invoice"/>
+
+  </schema>
+
+ </wsdl:types>
+
+
+      <wsdl:message name="supplyResponse">
+
+         <wsdl:part name="supplyReturn" type="tns1:Invoice"/>
+
+
+   </wsdl:message>
+
+
+      <wsdl:message name="supplyRequest">
+
+         <wsdl:part name="po" type="tns1:PurchaseOrder"/>
+
+
+   </wsdl:message>
+
+
+      <wsdl:portType name="Broker">
+
+         <wsdl:operation name="supply" parameterOrder="po">
+
+            <wsdl:input message="intf:supplyRequest" name="supplyRequest"/>
+
+
+            <wsdl:output message="intf:supplyResponse" name="supplyResponse"/>
+
+
+      </wsdl:operation>
+
+
+   </wsdl:portType>
+
+
+      <wsdl:binding name="WidgetPriceSoapBinding" type="intf:Broker">
+
+         <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+
+         <wsdl:operation name="supply">
+
+            <wsdlsoap:operation soapAction=""/>
+
+
+            <wsdl:input name="supplyRequest">
+
+               <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:Example6" use="encoded"/>
+
+
+         </wsdl:input>
+
+
+            <wsdl:output name="supplyResponse">
+
+               <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="urn:Example6" use="encoded"/>
+
+
+         </wsdl:output>
+
+
+      </wsdl:operation>
+
+
+   </wsdl:binding>
+
+
+      <wsdl:service name="BrokerService">
+
+         <wsdl:port binding="intf:WidgetPriceSoapBinding" name="WidgetPrice">
+
+            <wsdlsoap:address location="http://localhost:8080/axis/services/WidgetPrice"/>
+
+
+      </wsdl:port>
+
+
+   </wsdl:service>
+
+
+</wsdl:definitions>
+  </ns2:bigHeader>
+ </soapenv:Header>
+ <soapenv:Body>
+  <ns3:add soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns3="someuri">
+   <op1 xsi:type="xsd:int">9</op1>
+   <op2 xsi:type="xsd:int">2</op2>
+  </ns3:add>
+ </soapenv:Body>
+</soapenv:Envelope>==== Response ====
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset="utf-8"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <soapenv:Body><pre:addResponse xmlns:pre="someuri">
+<Int xsi:type="ns1:int" xmlns:ns1 ="http://www.w3.org/2001/XMLSchema">11</Int>
+</pre:addResponse>
+</soapenv:Body>
+</soapenv:Envelope>
+
+==============

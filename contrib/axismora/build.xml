@@ -1,0 +1,215 @@
+ <project name="axis-mora" default="build-all" basedir=".">
+	<description>
+   Build file for Axis
+
+Notes:
+   This is a build file for use with the Jakarta Ant build tool.
+   For more information on using the build refer to building-axis.html under docs
+   
+
+Prerequisites:
+   jakarta-ant        from http://jakarta.apache.org/ant/
+   wsdl4j             from http://www-124.ibm.com/developerworks/projects/wsdl4j/
+   commons-logging    from http://jakarta.apache.org/commons/logging.html
+   commons-discovery  from http://jakarta.apache.org/commons/discovery.html
+   log4j              from http://jakarta.apache.org/log4j
+   activation         from http://java.sun.com/products/javabeans/glasgow/jaf.html
+   xpp3-1.1.3.2.jar   from http://www.extreme.indiana.edu/xpp/
+   servlet.jar. 	  from http://java.sun.com/products/servlet/
+   axis.jar (axis1.1) from http://ws.apache.org/axis/releases.html
+   axis-ant.jar 	  from http://ws.apache.org/axis/releases.html	
+   xercesImpl.jar , xmlApis.jar and xmlParserAPIs.jar from http://xml.apache.org/xerces-j/.
+
+Build Instructions:
+   To build, run
+
+     ant "target"
+     
+    ATTENTION
+	-----------------
+	this build file should called on the directory where this file is located with the target you want.
+
+Most useful targets:
+	compile - compile the source
+	build-all - build everything
+	functional-tests - run all functional tests 
+	doc - genarate java doc 
+	
+Authors:
+  Srianth Perera  hemapani@opensource.lk
+  
+Copyright:
+  Copyright (c) 2001-2003 Apache Software Foundation.
+</description>
+	
+	<property name ="src" value="src"/>
+	<property name ="lib" value="lib"/>
+	<property name ="test" value="test"/>
+	<property name ="javadocs" value="docs/api"/>
+	<property name ="web-inf" value="build/webapps/axismora/WEB-INF"/>
+	<property name ="build-classes" value="${web-inf}/classes"/>
+	<property name ="samples" value="samples"/>
+	<property name ="usageTest" value="usageTest"/>
+	<property name ="deprecation" value="false"/>
+	<property name ="debug" value="false"/>
+	<property name ="config-file" value="docs/conf-bak"/>
+	
+	<property name ="activationJar" value="activation.jar"/>
+	<property name ="axis-antJar" value="axis-ant.jar"/>
+	<property name ="junitJar" value="junit3.8.1.jar"/>
+	<property name ="xppJar" value="xpp3-1.1.3.2.jar"/>
+	<property name ="log4jJar" value="log4j-1.2.4.jar"/>
+	<property name ="saajJar" value="saaj.jar"/>
+	<property name ="wsdl4jJar" value="wsdl4j.jar"/>
+	<property name ="jaxrpcJar" value="jaxrpc.jar"/>
+	<property name ="discoveryJar" value="commons-discovery.jar"/>	
+	<property name ="loggingJar" value="commons-logging.jar"/>	
+	<property name ="axisJar" value="axis.jar"/>	
+
+	<property name="packages" value="org.apache.axis.*" />
+	<path id ="cp">
+		<fileset dir="${lib}" includes="*.jar"/>
+	</path>
+
+	<path id ="cpjunit">
+		<fileset dir="${web-inf}/lib" includes="*.jar"/>
+	</path>
+
+
+	<target name="init">
+		<mkdir dir="${build-classes}"/>
+		<tstamp>
+	      		<format property="build.time" pattern="MMM dd, yyyy (hh:mm:ss z)"/>
+    		</tstamp>
+	</target>
+	
+ <!-- =================================================================== -->
+  <!-- Compiles the source directory                                       -->
+  <!-- =================================================================== -->
+  <target name="compile"  depends="init">
+     <javac  srcdir="${src}" destdir="${build-classes}" debug="${debug}"
+      deprecation="${deprecation}" listfiles="true">
+      <classpath refid="cp"/>
+    </javac>
+    <copy file="${src}/log4j.properties" todir="${build-classes}"/>
+    <copy file="${src}/simplelog.properties" todir="${build-classes}"/>
+    <copy file="${src}/org/apache/axismora/server/mora-server.wsdd" todir="${build-classes}/org/apache/axismora/server"/>
+    <copy file="${src}/org/apache/axismora/client/mora-client.wsdd" todir="${build-classes}/org/apache/axismora/client"/>   
+    <copy file="mora-server.wsdd" todir="${web-inf}"/>
+    <copy file="users.lst" todir="${web-inf}"/>
+    <copy file="${config-file}/web.xml" todir="${web-inf}"/>
+    
+    <mkdir dir="${web-inf}/lib"/>
+    <copy file ="${lib}/${activationJar}" todir="${web-inf}/lib"/>
+	<copy file ="${lib}/${axis-antJar}" todir="${web-inf}/lib"/>
+	<copy file ="${lib}/${junitJar}" todir="${web-inf}/lib"/>
+	<copy file ="${lib}/${xppJar}" todir="${web-inf}/lib"/>
+	<copy file ="${lib}/${log4jJar}" todir="${web-inf}/lib"/>
+	<copy file ="${lib}/${saajJar}" todir="${web-inf}/lib"/>
+	<copy file ="${lib}/${wsdl4jJar}" todir="${web-inf}/lib"/>
+	<copy file ="${lib}/${jaxrpcJar}" todir="${web-inf}/lib"/>
+	<copy file ="${lib}/${discoveryJar}" todir="${web-inf}/lib"/>	
+	<copy file ="${lib}/${loggingJar}" todir="${web-inf}/lib"/>	
+	<copy file ="${lib}/${axisJar}" todir="${web-inf}/lib"/>	
+    
+    </target>     
+    
+  <!-- =================================================================== -->
+  <!-- compile tests                                       -->
+  <!-- =================================================================== -->
+ <target name="compile-tests"  depends="init,compile-usage,compile-samples">
+     <javac  srcdir="${test}" destdir="${build-classes}" debug="${debug}"
+      deprecation="${deprecation}" listfiles="true">
+      <classpath refid="cp"/>
+    </javac>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- compile samples                            -->
+  <!-- =================================================================== -->
+ <target name="compile-samples" depends="init,compile-usage">
+     <javac  srcdir="${samples}" destdir="${build-classes}" debug="${debug}"
+      deprecation="${deprecation}" listfiles="true">
+      <classpath refid="cp"/>
+    </javac>
+  </target>
+  
+  <!-- =================================================================== -->
+  <!-- compile usage tests                           -->
+  <!-- =================================================================== -->
+ <target name="compile-usage" depends="init">
+     <javac  srcdir="${usageTest}" destdir="${build-classes}" debug="${debug}"
+      deprecation="${deprecation}" listfiles="true">
+      <classpath refid="cp"/>
+    </javac>
+  </target>
+  
+
+  <!-- =================================================================== -->
+  <!-- functional tests                                      -->
+  <!-- =================================================================== -->
+  <target name ="functional-tests" depends="compile-usage,compile-samples,compile-tests">  
+    <mkdir dir="testresults"/>
+    <junit printsummary="yes" haltonfailure="yes" >
+    	<test name="AllTests" todir="testresults"> 
+    		 <formatter type="xml"/> 
+    	</test>
+    	 <classpath>
+		    <pathelement location="${build-classes}"/>
+    	    <path refid="cpjunit"/>
+		 </classpath>
+    </junit>
+  </target>
+  
+  
+  <!-- =================================================================== -->
+  <!-- clear output directory     -->
+  <!-- =================================================================== -->
+  <target name="clear">
+  		<delete dir="${build-classes}"></delete>
+  </target>
+  
+  <!-- =================================================================== -->
+  <!-- build all     -->
+  <!-- =================================================================== -->
+  <target name="build-all" depends="compile,compile-usage,compile-samples,compile-tests"></target>
+  <!-- =================================================================== -->
+  <!-- rebuild all     -->
+  <!-- =================================================================== -->
+   <target name="rebuild-all" depends="clear,build-all"></target>
+  
+  <!-- =================================================================== -->
+  <!-- java doc cretation     -->
+  <!-- =================================================================== -->
+    
+    <target name = "doc">
+    	<mkdir dir="${javadocs}"/>
+	   		<javadoc 
+            	failonerror = "false"
+	             classpathref="cp"
+    	         destdir="${javadocs}"
+        	     author="true"
+            	 version="true"
+             	use="true"
+             	windowtitle="AxisMora API"
+             	doctitle="AxisMora API"
+             	bottom="Copyright 2003 Apache Web Services Project. All Rights Reserved."
+    		>
+    		   <fileset dir="src" defaultexcludes="yes">
+			      <include name="org/**/*.java" />
+			  <!--    <exclude name="org.apache.axismora.wsdl2ws.java"/> -->
+			    </fileset>
+			</javadoc>
+    </target>
+    
+    
+    <!--
+    TODO followings 
+    1) task to run the tests when server is ready 
+    2) task to create jar file 
+    3) task to run all usage tests
+    
+    The work is straight foward from the axis build.xml yet I try to keep the ant file 
+    for time been.
+    -->
+ </project>

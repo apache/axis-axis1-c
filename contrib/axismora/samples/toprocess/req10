@@ -1,0 +1,36 @@
+
+==============
+Listen Port: 5555
+Target Host: 127.0.0.1
+Target Port: 4444
+==== Request ====
+POST / HTTP/1.0
+Content-Type: text/xml; charset=utf-8
+Accept: application/soap+xml, application/dime, multipart/related, text/*
+User-Agent: Axis/1.1
+Host: 127.0.0.1
+Cache-Control: no-cache
+Pragma: no-cache
+SOAPAction: "InteropTests"
+Content-Length: 505
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <soapenv:Body>
+  <ns1:echoString soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns1="http://soapinterop.org/">
+   <inputString xsi:type="xsd:string">we are testing soap message interoperability</inputString>
+  </ns1:echoString>
+ </soapenv:Body>
+</soapenv:Envelope>==== Response ====
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset="utf-8"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <soapenv:Body><pre:echoStringResponse xmlns:pre="http://soapinterop.org/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+<String xsi:type="ns1:string" xmlns:ns1 ="http://www.w3.org/2001/XMLSchema">we are testing soap message interoperability</String>
+</pre:echoStringResponse>
+</soapenv:Body>
+</soapenv:Envelope>
+
+==============

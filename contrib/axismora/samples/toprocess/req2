@@ -1,0 +1,75 @@
+Listen Port: 5555
+Target Host: 127.0.0.1
+Target Port: 4444
+==== Request ====
+POST /axis/services/AmazonSearchPort HTTP/1.0
+Content-Type: text/xml; charset=utf-8
+Accept: application/soap+xml, application/dime, multipart/related, text/*
+User-Agent: Axis/1.1
+Host: 127.0.0.1
+Cache-Control: no-cache
+Pragma: no-cache
+SOAPAction: "BookShop"
+Content-Length: 1028
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <soapenv:Body>
+  <ns1:SellerSearchRequest soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns1="http://soap.bookshop.com">
+   <SellerSearchRequest xsi:type="ns1:SellerRequest">
+    <seller_id xsi:type="xsd:string" xsi:nil="true"/>
+    <tag xsi:type="xsd:string" xsi:nil="true"/>
+    <type xsi:type="xsd:string" xsi:nil="true"/>
+    <devtag xsi:type="xsd:string" xsi:nil="true"/>
+    <offerstatus xsi:type="xsd:string" xsi:nil="true"/>
+    <page xsi:type="xsd:string" xsi:nil="true"/>
+    <seller_browse_id xsi:type="xsd:string" xsi:nil="true"/>
+    <keyword xsi:type="xsd:string" xsi:nil="true"/>
+    <locale xsi:type="xsd:string" xsi:nil="true"/>
+    <index xsi:type="xsd:string" xsi:nil="true"/>
+   </SellerSearchRequest>
+  </ns1:SellerSearchRequest>
+ </soapenv:Body>
+</soapenv:Envelope>==== Response ====
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset="utf-8"
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <soapenv:Body><pre:SellerSearchRequestResponse xmlns:pre="http://soap.bookshop.com" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+<prf:SellerSearch  xmlns:prf ="http://soap.bookshop.com">
+<SellerSearchDetails xsi:type="soapenc:Array" soapenc:arrayType="ns2:SellerSearchDetails[]" xmlns:ns2 = "http://soap.bookshop.com">
+<item0  xsi:type="ns23:SellerSearchDetails"  xmlns:ns23 = "http://soap.bookshop.com"><SellerNickname>string0</SellerNickname>
+<StoreId>string1</StoreId>
+<StoreName>string2</StoreName>
+<NumberOfOpenListings>string3</NumberOfOpenListings>
+<ListingProductInfo><ListingProductDetails xsi:type="soapenc:Array" soapenc:arrayType="ns2:ListingProductDetails[]" xmlns:ns2 = "http://soap.bookshop.com">
+<item0  xsi:type="ns10:ListingProductDetails"  xmlns:ns10 = "http://soap.bookshop.com"><ExchangeId>string0</ExchangeId>
+<ListingId>string1</ListingId>
+<ExchangeTitle>string2</ExchangeTitle>
+<ExchangePrice>string3</ExchangePrice>
+<ExchangeAsin>string4</ExchangeAsin>
+<ExchangeEndDate>string5</ExchangeEndDate>
+<ExchangeTinyImage>string6</ExchangeTinyImage>
+<ExchangeSellerId>string7</ExchangeSellerId>
+<ExchangeSellerNickname>string8</ExchangeSellerNickname>
+<ExchangeStartDate>string9</ExchangeStartDate>
+<ExchangeStatus>string10</ExchangeStatus>
+<ExchangeQuantity>string11</ExchangeQuantity>
+<ExchangeQuantityAllocated>string12</ExchangeQuantityAllocated>
+<ExchangeFeaturedCategory>string13</ExchangeFeaturedCategory>
+<ExchangeCondition>string14</ExchangeCondition>
+<ExchangeConditionType>string15</ExchangeConditionType>
+<ExchangeAvailability>string16</ExchangeAvailability>
+<ExchangeOfferingType>string17</ExchangeOfferingType>
+<ExchangeSellerState>string18</ExchangeSellerState>
+<ExchangeSellerCountry>string19</ExchangeSellerCountry>
+<ExchangeSellerRating>string20</ExchangeSellerRating>
+</item0></ListingProductDetails>
+</ListingProductInfo>
+</item0></SellerSearchDetails>
+</prf:SellerSearch>
+
+</pre:SellerSearchRequestResponse>
+</soapenv:Body>
+</soapenv:Envelope>
