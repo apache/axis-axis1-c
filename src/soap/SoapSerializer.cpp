@@ -21,6 +21,10 @@
  *
  */
 
+/*
+ * Revision 1.1  2005/01/09 Roshan
+ * Added cleanup of SoapAttachments to the Destructor.
+ */
 
 #ifdef WIN32
 #pragma warning (disable : 4786)
@@ -54,6 +58,15 @@ SoapSerializer::SoapSerializer()
 SoapSerializer::~SoapSerializer()
 {
     if (m_pSoapEnvelope) delete m_pSoapEnvelope;
+
+	/* Cleaning the memory allocated to the SoapAttachments */       
+	map<AxisXMLString, ISoapAttachment*>::iterator itCurrAttach= m_SoapAttachments.begin();
+	while(itCurrAttach != m_SoapAttachments.end())
+    {        
+        delete ((SoapAttachment*)((*itCurrAttach).second));		
+
+        itCurrAttach++;
+    }
 }
 
 int SoapSerializer::setSoapEnvelope(SoapEnvelope *pSoapEnvelope)
