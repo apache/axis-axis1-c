@@ -69,6 +69,9 @@ public class ParmHeaderFileWriter extends ParamWriter{
 		  try{
 			writer.write("public:\n");
 			  for(int i=0;i<attribs.length;i++){
+                                  //chek if attrib name is same as class name and if so change
+                                  if (classname.equals(attribs[i].getParamName()))
+                                      attribs[i].setParamName("m_" + attribs[i].getParamName());
 				  writer.write("\t"+getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])+" "+attribs[i].getParamName()+";\n");
 			  }    
 		  } catch (IOException e) {
@@ -132,8 +135,10 @@ public class ParmHeaderFileWriter extends ParamWriter{
 		{
 			if ((attribs[i].isArray()) && (!attribs[i].isSimpleType()))
 				typeSet.add(attribs[i].getTypeName()+"_Array");
-			if (!attribs[i].isSimpleType())
+			//if (!attribs[i].isSimpleType())
+                        if (!(attribs[i].isSimpleType() || attribs[i].isAnyType()))
 				typeSet.add(attribs[i].getTypeName());
+
 		}
 		Iterator itr = typeSet.iterator();
 		while(itr.hasNext())
@@ -150,7 +155,8 @@ public class ParmHeaderFileWriter extends ParamWriter{
 		typeSet =  new HashSet();
 		for (int i=0;i<attribs.length; i++)
 		{
-			if (!attribs[i].isArray() && !attribs[i].isSimpleType())
+			//if (!attribs[i].isArray() && !attribs[i].isSimpleType())
+			if (!attribs[i].isArray() && !attribs[i].isSimpleType() && !attribs[i].isAnyType())
 				typeSet.add(attribs[i].getTypeName());
 		}		
 		itr = typeSet.iterator();

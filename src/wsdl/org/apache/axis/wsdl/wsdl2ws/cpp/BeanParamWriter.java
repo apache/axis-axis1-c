@@ -109,7 +109,10 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 
 		String arrayType;
 		for(int i = 0; i< attribs.length;i++){
-			if(attribs[i].isArray()){
+			if(attribs[i].isAnyType()){
+				writer.write("\tpSZ->serializeAnyObject(param->any);\n");
+			}
+			else if(attribs[i].isArray()){
 				//if Array
 				if (attribs[i].isSimpleType()){
 					writer.write("\tpSZ->serializeBasicArray((Axis_Array*)(&param->"+attribs[i].getParamName()+"),"+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+", \""+attribs[i].getParamName()+"\");\n"); 
@@ -158,7 +161,10 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		 }
 		String arrayType = null;
 		for(int i = 0; i< attribs.length;i++){
-			if(attribs[i].isArray()){
+			if(attribs[i].isAnyType()){
+                                writer.write("\tparam->any = pIWSDZ->getAnyObject();\n");
+                        }
+                        else if(attribs[i].isArray()){
 				//if Array
 				if (attribs[i].isSimpleType()){
 					writer.write("\tparam->"+attribs[i].getParamName()+" = ("+CUtils.getBasicArrayNameforType(attribs[i].getTypeName())+"&)pIWSDZ->getBasicArray("+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+ ", \""+attribs[i].getParamName()+"\",0);\n");
