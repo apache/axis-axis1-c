@@ -143,7 +143,6 @@ class AxisException :public exception
 
 public:
     AxisException(){};
-    AxisException(void* pMsg);
     AxisException(int iExceptionCode);
     AxisException(exception* e);
     AxisException(exception* e, int iExceptionCode);
