@@ -198,7 +198,7 @@ public class WSDL2Ws {
             //add operation to operation List
             Operation op = (Operation) oplist.next();
             minfo.setMethodname(op.getName());
-            System.out.println(op.getName()+"operation name .......................&&&&&&&&&&&");
+            
             //setting the faults
             Map faults = op.getFaults();
 			addFaultInfo(faults,minfo);
@@ -220,7 +220,7 @@ public class WSDL2Ws {
 				}
 				if (qname != null){
 					minfo.setInputMessage(minfoqname);
-					System.out.println(minfoqname.getLocalPart()+"setInputMessage.............?????????????");
+					
 					type = this.typeMap.getType(qname);
 					//boolean wrapped = true; //TODO take this from a commandline argument
 					//boolean wrapped = false; //just for testing the non-wrapped style wsdl
@@ -545,7 +545,7 @@ public class WSDL2Ws {
 			//type is a inbild type or a already created type
 			return typedata;  
 		}
-		System.out.println("############## the type found =" + type.getQName());
+
 		if (-1 != type.getQName().getLocalPart().indexOf('[')) {/* it seems that this is an array */
 			if (null == type.getRefType())throw new WrapperFault("Array type found without a Ref type");
 			QName qn = type.getRefType().getQName();
@@ -646,7 +646,7 @@ public class WSDL2Ws {
 							ElementInfo eleinfo = null;
 							ElementDecl elem = (ElementDecl)elements.get(j);
 							if (elem.getAnyElement()){
-								System.out.println("Any Type found inside "+ type.getQName().toString());
+							
 								Type anyType = new Type(CUtils.anyTypeQname, CUtils.anyTypeQname.getLocalPart(), true, targetLanguage);
 								eleinfo = new ElementInfo(elem.getName(),anyType);							
 							}
@@ -684,11 +684,11 @@ public class WSDL2Ws {
 		while(faultIt.hasNext()){
 			Fault fault = (Fault)faultIt.next();
 			FaultInfo faultinfo = new FaultInfo(fault.getName());
-			System.out.println(fault.getName()+"Fault NAME   @@@@@@@@@@@@@@@@@");
+			
 			Map parts = fault.getMessage().getParts();
 			Iterator partIt = parts.values().iterator();
 			while(partIt.hasNext()){
-				System.out.println(" fault part name *********"+partIt.toString()  );
+				
 				faultinfo.addParam(createParameterInfo((Part)partIt.next()));
 			}	
 			//add by nithya
