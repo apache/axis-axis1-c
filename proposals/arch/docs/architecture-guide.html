@@ -127,6 +127,17 @@ messages in terms of a Message marker interface.
 The alternative of an abstract Marker class extending the
 javax.xml.soap.SOAPMessage abstract class would limit Axis to SOAP
 messages and bias the flow subsystem towards the SAAJ interface style.
-
+<p>
+<b>Note:</b>The Axis Architecture Guide used to argue that if we were to
+factor out an
+abstract Message Context interface, we would then be then faced with a
+problem. Some Handlers, most likely
+in the global layer, would need to accept a Message Context with a particular
+concete type (e.g. for a HTTP transport) and produce a Message Context
+of a different concrete type (e.g. for a SOAP service) and so Handler.invoke
+would need a more complex signature.
+However, this argument seems flawed as it would clearly be possible to make
+the existing MessageContext class inherit a more abstract Message Context
+interface without the need to change the signature of invoke.
 </body>
 </html>
