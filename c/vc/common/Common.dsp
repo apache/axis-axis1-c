@@ -91,6 +91,10 @@ SOURCE=..\..\src\common\AccessBean.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\AxisException.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\BasicTypeSerializer.cpp
 # End Source File
 # Begin Source File
@@ -119,6 +123,10 @@ SOURCE=..\..\src\common\AccessBean.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\AxisException.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\AxisLog.h
 # End Source File
 # Begin Source File
@@ -136,6 +144,22 @@ SOURCE=..\..\src\common\Debug.h
 # Begin Source File
 
 SOURCE=..\..\src\common\GDefine.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\IMessageData.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\ISoapDeserializer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\ISoapMethod.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\ISoapSerializer.h
 # End Source File
 # Begin Source File
 
