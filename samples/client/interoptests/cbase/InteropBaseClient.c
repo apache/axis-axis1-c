@@ -19,10 +19,10 @@ int main(int argc, char* argv[])
 	SOAPStruct stct;
 	time_t tim;
 	struct tm* lt;
-
+	void* pstub = get_InteropBase_stub();
 	printf("invoking echoString...\n");
 	/*testing echoString */
-	if (0 == strcmp(echoString("hello world"), "hello world"))
+	if (0 == strcmp(echoString(pstub, "hello world"), "hello world"))
 		printf("successful\n");
 	else
 		printf("failed\n");
@@ -36,13 +36,13 @@ int main(int argc, char* argv[])
 	}
 	/*arrstr.m_Array[1] = buffer2;*/
 	printf("invoking echoStringArray...\n");
-	if (echoStringArray(arrstr).m_Array != NULL)
+	if (echoStringArray(pstub, arrstr).m_Array != NULL)
 		printf("successful\n");
 	else
 		printf("failed\n");
 	/* testing echoInteger */
 	printf("invoking echoInteger...\n");
-	if (echoInteger(56) == 56)
+	if (echoInteger(pstub, 56) == 56)
 		printf("successful\n");
 	else
 		printf("failed\n");
@@ -54,13 +54,13 @@ int main(int argc, char* argv[])
 		arrint.m_Array[x] = x;
 	}
 	printf("invoking echoIntegerArray...\n");
-	if (echoIntegerArray(arrint).m_Array != NULL)
+	if (echoIntegerArray(pstub, arrint).m_Array != NULL)
 		printf("successful\n");
 	else
 		printf("failed\n");
 	/* testing echoFloat */
 	printf("invoking echoFloat...\n");
-	if (echoFloat(1.4214) > 1.42)
+	if (echoFloat(pstub, 1.4214) > 1.42)
 		printf("successful\n");
 	else
 		printf("failed\n");
@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
 		arrfloat.m_Array[x] = 1.1111*x;
 	}
 	printf("invoking echoFloatArray...\n");
-	if (echoFloatArray(arrfloat).m_Array != NULL)
+	if (echoFloatArray(pstub, arrfloat).m_Array != NULL)
 		printf("successful\n");
 	else
 		printf("failed\n");
@@ -81,7 +81,7 @@ int main(int argc, char* argv[])
 	stct.varInt = 5000;
 	stct.varString = strdup("This is string in SOAPStruct");
 	printf("invoking echoStruct...\n");
-	if (echoStruct(&stct) != NULL)
+	if (echoStruct(pstub, &stct) != NULL)
 		printf("successful\n");
 	else
 		printf("failed\n");
@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
 */	
 	/*testing echo Struct Array*/
 /*	printf("invoking echoStructArray...\n");
-	if (echoStructArray(arrstct).m_Array != NULL)
+	if (echoStructArray(pstub, arrstct).m_Array != NULL)
 		printf("successful\n");
 	else
 		printf("failed\n");
@@ -106,12 +106,12 @@ int main(int argc, char* argv[])
 	/*testing echo void*/
 /*	
 	printf("invoking echoVoid...\n");
-	echoVoid();
+	echoVoid(pstub);
 	printf("successful\n");
 */	
 	/*testing echo base 64 binary*/
 /*	printf("invoking echoBase64...\n");
-	if (0 == strcmp(ws.echoBase64("BCDF675E234242WHRTKMJDGKGUEJ898636JFJFHEJDGWTDHFJRURYGBCDHTWRSG"),
+	if (0 == strcmp(ws.echoBase64(pstub, "BCDF675E234242WHRTKMJDGKGUEJ898636JFJFHEJDGWTDHFJRURYGBCDHTWRSG"),
 		"BCDF675E234242WHRTKMJDGKGUEJ898636JFJFHEJDGWTDHFJRURYGBCDHTWRSG"))
 		printf("successful\n");
 	else
@@ -119,27 +119,27 @@ int main(int argc, char* argv[])
 	time(&tim);
 	lt = gmtime(&tim);
 	printf("invoking echoDate...\n");
-	if (memcmp(&(echoDate(*lt)), lt, sizeof(tm)) == 0)
+	if (memcmp(&(echoDate(pstub, *lt)), lt, sizeof(tm)) == 0)
 		printf("successful\n");
 	else
 		printf("failed\n");
 	//testing echo hex binary
 	printf("invoking echoHexBinary...\n");
-	if (0 == strcmp(echoHexBinary("CCCFFA46552BC7D5A09BC5F23DE9E0FE7862AD45BC87D02FEE"),
+	if (0 == strcmp(echoHexBinary(pstub, "CCCFFA46552BC7D5A09BC5F23DE9E0FE7862AD45BC87D02FEE"),
 		"CCCFFA46552BC7D5A09BC5F23DE9E0FE7862AD45BC87D02FEE"))
 		printf("successful\n");
 	else
 		printf("failed\n");
 */	/*testing echo decimal*/
 /*	printf("invoking echoDecimal...\n");
-	if (echoDecimal(1234.567890) > 1234.56)
+	if (echoDecimal(pstub, 1234.567890) > 1234.56)
 		printf("successful\n");
 	else
 		printf("failed\n");
 */		
 	/*testing echo boolean*/
 /*	printf("invoking echoBoolean...\n");
-	if (echoBoolean(true_) == true_)
+	if (echoBoolean(pstub, true_) == true_)
 		printf("successful\n");
 	else
 		printf("failed\n");
@@ -147,4 +147,5 @@ int main(int argc, char* argv[])
 	getchar();
 	return 0;
 */	
+	destroy_InteropBase_stub(pstub);
 }
