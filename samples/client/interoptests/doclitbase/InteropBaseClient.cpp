@@ -13,6 +13,8 @@ int main(int argc, char* argv[])
 	char endpoint[256];
 	const char* server="localhost";
 	const char* port="80";
+	try
+	{
 	if (argc == 3)
 	{
 		server = argv[1];
@@ -199,5 +201,18 @@ int main(int argc, char* argv[])
 		printf("failed\n");
 		
 	getchar();
+        }
+        catch(AxisException& e)
+        {
+            printf("Exception : %s\n", e.what());
+        }
+        catch(exception& e)
+        {
+            printf("Unknown exception has occured\n");
+        }
+        catch(...)
+        {
+            printf("Unknown exception has occured\n");
+        }
 	return 0;
 }
