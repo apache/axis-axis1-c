@@ -98,16 +98,18 @@ public class HandlerWriter extends AbstractWriter {
         if(out == null)
         	return;
         out.write("package " + packageName + ";\n");
+		out.write("import org.apache.axis.AxisFault;\n");
+		out.write("import org.apache.axis.MessageContext;\n");
         out.write("public class " + className + " extends org.apache.axis.handlers.BasicHandler{\n");
 
-        out.write("\tpublic class " + className + "(){\n");
+        out.write("\tpublic " + className + "(){\n");
         out.write("\t\tsetName(\"" + handler.getHandlerName() + "\");\n");
         out.write("\t}\n");
 
         out.write("\tpublic void init(){}\n");
         out.write("\tpublic void cleanup(){}\n");
         out.write("\tpublic void onFault(MessageContext msgContext){}\n");
-        out.write("\tpublic abstract void invoke(MessageContext msgContext) throws AxisFault{\n");
+        out.write("\tpublic void invoke(MessageContext msgContext) throws AxisFault{\n");
         out.write("\t\t//write your implementation here\n");
         out.write("\t}\n");
 

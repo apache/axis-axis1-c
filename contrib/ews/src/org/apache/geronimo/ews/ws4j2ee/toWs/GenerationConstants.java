@@ -104,9 +104,9 @@ public class GenerationConstants {
 	public static final String EJB_DEPLOY_DIR =  "ejb-deploy";
 	
 	
-	private static Properties properties;
-	public static Properties getProperties(){
-		return properties;
+	private static Ws4J2eeProperties properties = new Ws4J2eeProperties();
+	public static String getProperty(String key){
+		return properties.getProperty(key);
 	}
 
 	/** j2ee Container DDs */
@@ -126,26 +126,6 @@ public class GenerationConstants {
 	public static final String USE_INTERNALS = "use-internals"; 
 	public static final String USE_LOCAL_AND_REMOTE = "use-local-remote"; 
 	
-	static{
-		InputStream proIn = null;
-		try{
-			properties = new Properties();
-			proIn = GenerationConstants.class.getResourceAsStream(WS4J2EE_PROPERTY_FILE);
-			if(proIn == null){
-				proIn = GenerationConstants.class.getResourceAsStream("META-INF/"+WS4J2EE_PROPERTY_FILE);
-			}
-			if(proIn == null){
-				proIn = new FileInputStream("conf/"+WS4J2EE_PROPERTY_FILE);
-			}
-			if(proIn == null){
-				proIn = new FileInputStream(WS4J2EE_PROPERTY_FILE);
-			}
-			if(proIn != null){
-				properties.load(proIn);
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-	}
- 
+	public static final String CONFIG_STORE = "target/configStore";
+	public static final String MAVEN_LOCAL_REPOSITARY = "maven.repo.local";
 }

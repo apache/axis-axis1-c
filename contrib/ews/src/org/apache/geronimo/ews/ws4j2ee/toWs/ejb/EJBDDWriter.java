@@ -101,8 +101,7 @@ public class EJBDDWriter extends AbstractWriter {
 		  ejbname = ejbname.substring(index+1);
 		} 
 		String version = GenerationConstants.J2EE_VERSION_1_4; 
-		version = GenerationConstants.getProperties()
-			.getProperty(GenerationConstants.WS4J2EE_PROVIDER); 
+		version = GenerationConstants.getProperty(GenerationConstants.WS4J2EE_PROVIDER); 
 
 
 		out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");

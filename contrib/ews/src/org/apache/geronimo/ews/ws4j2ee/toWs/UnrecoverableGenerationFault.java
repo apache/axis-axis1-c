@@ -66,6 +66,23 @@ public class UnrecoverableGenerationFault extends RuntimeException {
 		super();
 	}
 
+    /**
+     * @param message
+     * @param cause
+     */
+    public UnrecoverableGenerationFault(String message, Throwable cause) {
+        super(message, cause);
+        // TODO Auto-generated constructor stub
+    }
+
+    /**
+     * @param cause
+     */
+    public UnrecoverableGenerationFault(Throwable cause) {
+        super(cause);
+        // TODO Auto-generated constructor stub
+    }
+
 	/**
 	 * @param message 
 	 */

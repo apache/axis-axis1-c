@@ -16,8 +16,11 @@
 
 package org.apache.geronimo.ews.ws4j2ee.utils;
 
+import java.io.File;
 
-
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.taskdefs.Ant;
 
 /**
  * <p>To call this Class and execute a ant task the $JAVA_HOME/lib/tool.jar need
@@ -29,15 +32,27 @@ public class AntExecuter{
     public void execute(String buildFile) throws Exception {
         //wait till the ant jar added
         try{
-//			Class.forName("com.sun.tools.javac.Main");
-//			org.apache.tools.ant.Main.start(
-//				new String[] { "-f", buildFile },
-//				null,
-//				cl);
-        }catch(ClassCastException e){
+			Class.forName("com.sun.tools.javac.Main");
+			Project project = new Project();
+			project.init();
+			project.setCoreLoader(null);
+			Ant ant = new Ant();
+			ant.setProject(project);
+			ant.init();
+			ant.setInheritAll(true);
+			ant.setInheritRefs(true);
+			File file = new File(buildFile);
+			ant.setAntfile(file.getAbsolutePath());
+			ant.setDir(file.getParentFile());
+			ant.execute();        
+		}catch(ClassCastException e){
 			System.out.println("Ant file will not be run programatcally as the " +
 				"$JAVA_HOME/lib/tool.jar is not in the class path. To run the ant " +
 				"prgramatically add that jar to classpath");
+        }catch(BuildException e){
+			System.out.println(e.getMessage() +
+			"if it is a compile error you may not have set the mavem reposiroty " +
+			"directory in the conf/ws4j2ee.propertites Build fill ignore the faliure");
         }
     }
 }

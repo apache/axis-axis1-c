@@ -93,6 +93,7 @@ public class WebEndpointWrapperClassWriter extends JavaClassWriter {
 	protected static Log log =
 		LogFactory.getLog(WrapperWsGenerator.class.getName());
 	protected String seiName = null;
+	private String implBean = null;
 	/**
 	 * @param j2eewscontext
 	 * @param qulifiedName
@@ -102,6 +103,7 @@ public class WebEndpointWrapperClassWriter extends JavaClassWriter {
 		throws GenerationFault {
 		super(j2eewscontext, getName(j2eewscontext) + "Impl");
 		seiName = j2eewscontext.getMiscInfo().getJaxrpcSEI();
+		implBean = j2eewscontext.getMiscInfo().getEndpointImplbean();
 
 	}
 
@@ -119,13 +121,13 @@ public class WebEndpointWrapperClassWriter extends JavaClassWriter {
 	}
 
 	protected void writeAttributes() throws GenerationFault {
-		out.write("private " + seiName + " bean = null;\n");
+		out.write("private " + implBean + " bean = null;\n");
 	}
 
 	protected void writeConstructors() throws GenerationFault {
 		out.write("\tpublic " + classname + "()throws org.apache.geronimo.ews.ws4j2ee.wsutils.J2EEFault{\n");
-		out.write("\t\tbean = ("+j2eewscontext.getMiscInfo().getEndpointImplbean()+")org.apache.geronimo.ews.ws4j2ee.wsutils.ImplBeanPool.getImplBean(\""
-			+j2eewscontext.getMiscInfo().getEndpointImplbean()+"\");\n");
+		out.write("\t\tbean = ("+implBean+")org.apache.geronimo.ews.ws4j2ee.wsutils.ImplBeanPool.getImplBean(\""
+			+implBean+"\");\n");
 		out.write("\t}\n");
 	}
 

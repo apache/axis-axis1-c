@@ -33,9 +33,11 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class UncompressingJarClassLoader {
+	private static int configCount = 0; 
     private JarFile ajar;
     private byte[] data = new byte[10 * 1024];
     private Vector urls = new Vector();
+    private String dir;
 
     public UncompressingJarClassLoader(
         String dir,
@@ -43,6 +45,9 @@ public class UncompressingJarClassLoader {
         String classpath,
         String jarpath) {
         try {
+        	dir = dir + "/config"+configCount+"/";
+        	this.dir = dir;
+			configCount++;
             ajar = new JarFile(jarFile);
             uncompress(dir, jarFile.getAbsoluteFile(), classpath, jarpath);
         } catch (Exception e) {
@@ -125,4 +130,32 @@ public class UncompressingJarClassLoader {
     public Vector getURLs(){
     	return urls;
     }
+    /**
+     * @return
+     */
+    public static int getConfigCount() {
+        return configCount;
+    }
+
+    /**
+     * @return
+     */
+    public String getDir() {
+        return dir;
+    }
+
+    /**
+     * @param i
+     */
+    public static void setConfigCount(int i) {
+        configCount = i;
+    }
+
+    /**
+     * @param string
+     */
+    public void setDir(String string) {
+        dir = string;
+    }
+
 }
