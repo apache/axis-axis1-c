@@ -86,10 +86,13 @@ public class TypeMap
             new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
         basicTypeClass2QNamemap.put(
             "xsd__dateTime",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
+            new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));     
         basicTypeClass2QNamemap.put(
             "xsd__time",
             new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"));
+        basicTypeClass2QNamemap.put(
+            "xsd__duration",
+            new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"));
         basicTypeClass2QNamemap.put(
             "xsd__QName",
             new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"));
@@ -152,6 +155,9 @@ public class TypeMap
         basicTypeQname2classmap.put(
             new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"),
             "xsd__time");
+        basicTypeQname2classmap.put(
+                new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"),
+                "xsd__duration");
         basicTypeQname2classmap.put(
             new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"),
             "xsd__base64Binary");
@@ -227,6 +233,9 @@ public class TypeMap
         basicTypeQname2classmap.put(
             new QName(WrapperConstants.SOAPENC_NAMESPACE, "time"),
             "xsd__time");
+        basicTypeQname2classmap.put(
+                new QName(WrapperConstants.SOAPENC_NAMESPACE, "duration"),
+                "xsd__duration");
         basicTypeQname2classmap.put(
             new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64Binary"),
             "xsd__base64Binary");

@@ -80,6 +80,7 @@ public class CUtils {
 		class2QNamemapCpp.put("xsd__dateTime", new QName(WrapperConstants.SCHEMA_NAMESPACE,		"dateTime"));
 		class2QNamemapCpp.put("xsd__date", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"date"));
 		class2QNamemapCpp.put("xsd__time", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"time"));
+		class2QNamemapCpp.put("xsd__duration", new QName(WrapperConstants.SCHEMA_NAMESPACE,		"duration"));
 		class2QNamemapCpp.put("xsd__base64Binary", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"base64Binary"));
 		class2QNamemapCpp.put("xsd__hexBinary", new QName(WrapperConstants.SCHEMA_NAMESPACE,		"hexBinary"));
 		class2QNamemapCpp.put("xsd__decimal", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"decimal"));
@@ -132,6 +133,7 @@ public class CUtils {
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"),		"xsd__dateTime");
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"),			"xsd__date");
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"),			"xsd__time");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "duration"),		"xsd__duration");
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"),	"xsd__base64Binary");
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"),		"xsd__hexBinary");
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"),			"xsd__decimal");
@@ -186,6 +188,7 @@ public class CUtils {
 		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "dateTime"),		"xsd__dateTime");
 		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "date"),			"xsd__date");
 		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "time"),			"xsd__time");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "duration"),		"xsd__duration");
 		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64Binary"),	"xsd__base64Binary");
 		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "hexBinary"),		"xsd__hexBinary");
 		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "decimal"),		"xsd__decimal");
@@ -253,6 +256,7 @@ public class CUtils {
 		type2getValueMethodNameCpp.put("xsd__dateTime",		"DateTime");
 		type2getValueMethodNameCpp.put("xsd__date",			"Date");
 		type2getValueMethodNameCpp.put("xsd__time",			"Time");
+		type2getValueMethodNameCpp.put("xsd__duration",		"Duration");
 		type2getValueMethodNameCpp.put("xsd__base64Binary",	"Base64Binary");
 		type2getValueMethodNameCpp.put("xsd__hexBinary",		"HexBinary");
 		type2getValueMethodNameCpp.put("xsd__decimal",			"Decimal");
@@ -300,6 +304,7 @@ public class CUtils {
 		type2BasicArrayNameCpp.put("xsd__dateTime",			"xsd__dateTime_Array");
 		type2BasicArrayNameCpp.put("xsd__date",				"xsd__date_Array");
 		type2BasicArrayNameCpp.put("xsd__time",				"xsd__time_Array");
+		type2BasicArrayNameCpp.put("xsd__duration",			"xsd__duration_Array");
 		type2BasicArrayNameCpp.put("xsd__base64Binary",		"xsd__base64Binary_Array");
 		type2BasicArrayNameCpp.put("xsd__hexBinary",			"xsd__hexBinary_Array");
 		type2BasicArrayNameCpp.put("xsd__decimal",				"xsd__decimal_Array");
@@ -346,6 +351,7 @@ public class CUtils {
 		basicType2EnumMapCpp.put("xsd__dateTime",				"XSD_DATETIME");
 		basicType2EnumMapCpp.put("xsd__date",					"XSD_DATE");
 		basicType2EnumMapCpp.put("xsd__time",					"XSD_TIME");
+		basicType2EnumMapCpp.put("xsd__duration",				"XSD_DURATION");
 		basicType2EnumMapCpp.put("xsd__base64Binary",			"XSD_BASE64BINARY");
 		basicType2EnumMapCpp.put("xsd__hexBinary",				"XSD_HEXBINARY");
 		basicType2EnumMapCpp.put("xsd__decimal",				"XSD_DECIMAL");
@@ -389,7 +395,8 @@ public class CUtils {
 		initValuesCpp.put("xsd__string",			"NULL"); 
 		//initValuesCpp.put("xsd__dateTime",		"0"); 
 		//initValuesCpp.put("xsd__date",			"0"); 
-		//initValuesCpp.put("xsd__time",			"0"); 
+		//initValuesCpp.put("xsd__time",			"0");
+		initValuesCpp.put("xsd__duration",			"0"); 
 		//initValuesCpp.put("xsd__base64Binary",	"0"); 
 		//initValuesCpp.put("xsd__hexBinary",		"0"); 
 		initValuesCpp.put("xsd__decimal",			"0.0"); 
