@@ -69,15 +69,12 @@ xsd__string InteropTestPortType::echoString(xsd__string Value0)
                         cFaultactor = m_pCall->getElementAsString("faultactor", 0);
                    
                                   cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-                                  throw AxisException(cFaultdetail);
+                                  throw AxisGenException(cFaultdetail);
                       
                 }
                 else throw;
         }
-        catch(...)
-        {
-            throw;
-        }     
+             
 	m_pCall->unInitialize();
 	return Ret;
 }

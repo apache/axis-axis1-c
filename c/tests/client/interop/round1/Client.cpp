@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
 	//endpoint for Axis Java sample
 	//sprintf(endpoint, "http://%s:%s/axis/services/echo", server, port);
 
-	SimpleTestSoap ws(endpoint);
+	SimpleTestSoap ws(endpoint, APTHTTP);
 
 	//set end point (optional)
         //ws.setEndPoint( "http://localhost:8080/axis/services/echo" );
