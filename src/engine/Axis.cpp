@@ -397,6 +397,7 @@ void ModuleUnInitialize ()
     delete g_pWSDDDeployment;
     delete g_pConfig;
     delete g_pAT;
+    g_pAT=0;
 }
 
 // Axis class method implementations
