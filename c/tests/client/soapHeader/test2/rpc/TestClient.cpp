@@ -99,14 +99,14 @@ main(int argc, char *argv[])
     childNode = phb->createChild(ELEMENT_NODE);
     childNode->setLocalName("username");
     valueNode = phb->createChild(CHARACTER_NODE);
-    valueNode->setValue("Test User");
+    valueNode->setValue("Test User2");
     childNode->addChild(valueNode);
     parentNode->addChild(childNode);
     //add another node set
     childNode = phb->createChild(ELEMENT_NODE);
     childNode->setLocalName("password");
     valueNode = phb->createChild(CHARACTER_NODE);
-    valueNode->setValue("Test Password");
+    valueNode->setValue("Test Password2");
     childNode->addChild(valueNode);
     parentNode->addChild(childNode);
 
