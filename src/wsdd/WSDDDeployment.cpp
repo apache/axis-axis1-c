@@ -261,7 +261,6 @@ int WSDDDeployment::UpdateWSDD(const AxisChar* sWSDDNew, string sServiceName, st
 			if(i != ((inAllowedMethodsArray.m_Size)-1)) {
 				strcat(achTmpChar, " ");
 			}
-			i++;
 		}
 
 		strcat(achTmpChar, "\"/>\n </service>\n");
