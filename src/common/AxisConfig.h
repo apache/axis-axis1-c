@@ -88,6 +88,9 @@ class AxisConfig
 		char* m_pcValueArray [AXCONF_LAST];
 
 		void setValue(int valuelength, g_axconfig valueindex, char* value);
+
+		void OutputConfigInfo();
+
 };
 
 AXIS_CPP_NAMESPACE_END

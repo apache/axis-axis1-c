@@ -99,7 +99,6 @@ int AxisConfig::readConfFile ()
 	const char* pcSeparator = ":";
 	const char pcComment = '#';
 
-
     sConfPath = getenv ("AXISCPP_DEPLOY");
 	m_pcValueArray[AXCONF_AXISHOME] = sConfPath;
 	/*
@@ -127,6 +126,14 @@ int AxisConfig::readConfFile ()
     if (AXIS_SUCCESS != fileConfig.fileOpen(sNewConfPath, "r"))
     {
         free(sNewConfPath);
+
+#ifdef _DEBUG
+		printf( "Warning - The configuration file was not found (%s).\n          Using the following default file paths.\n", sNewConfPath);
+
+		OutputConfigInfo();
+#else
+		printf( "Warning - The configuration file was not found (%s).\n", sNewConfPath);
+#endif
         return AXIS_SUCCESS;
     }
 
@@ -146,19 +153,51 @@ int AxisConfig::readConfFile ()
         sscanf (carrLine, "%s", key);
 		iValueLength = linesize - strlen (key) - 1;
 
+		bool bKeyFound = false;
+
         for(int i=0;i<AXCONF_LAST;i++)
 		{
 			if(strcmp(key, m_pcKeyArray[i]) == 0)
 			{
 				setValue(iValueLength, (g_axconfig)i, pcValue+1);
+
+// If the name/value pair is a reference to a WSDD file, then the file must exist.
+// If the WSDD file does not exist, then echo a warning to the console.
+				if( strcmp( "WSDDFilePath", key) == NULL ||
+				    strcmp( "ClientWSDDFilePath", key) == NULL)
+				{
+					FILE *	fp = fopen( pcValue + 1, "r");
+
+					if( fp == NULL)
+					{
+						printf( "Warning - The %s file (%s) in the AXISCPP.CONF file does not exist.\n", key, pcValue + 1);
+					}
+					else
+					{
+						fclose( fp);
+					}
+				}
+
+				bKeyFound = true;
 				break;
 			}
+		}
+
+		if( !bKeyFound)
+		{
+			printf( "Warning - Unknown key (%s) in config file.\n", key);
 		}
 
 		free(key);
     }
 
     free(sNewConfPath);
+
+#ifdef _DEBUG
+	printf( "The AXIS configuration has now been set to:-\n");
+
+	OutputConfigInfo();
+#endif
     return AXIS_SUCCESS;
 }
 
@@ -191,5 +230,89 @@ int main(void)
 }
 
 */
+
+void AxisConfig::OutputConfigInfo()
+{
+	if( m_pcValueArray[AXCONF_WSDDFILEPATH] == NULL)
+	{
+		printf( "WSDD           (null)\n");
+	}
+	else
+	{
+		printf( "WSDD           %s\n", m_pcValueArray[AXCONF_WSDDFILEPATH]);
+	}
+	if( m_pcValueArray[AXCONF_LOGPATH] == NULL)
+	{
+		printf( "Log            (null)\n");
+	}
+	else
+	{
+		printf( "Log            %s\n", m_pcValueArray[AXCONF_LOGPATH]);
+	}
+	if( m_pcValueArray[AXCONF_CLIENTLOGPATH] == NULL)
+	{
+		printf( "Client Log     (null)\n");
+	}
+	else
+	{
+		printf( "Client Log     %s\n", m_pcValueArray[AXCONF_CLIENTLOGPATH]);
+	}
+	if( m_pcValueArray[AXCONF_CLIENTWSDDFILEPATH] == NULL)
+	{
+		printf( "ClientWSDD     (null)\n");
+	}
+	else
+	{
+		printf( "ClientWSDD     %s\n", m_pcValueArray[AXCONF_CLIENTWSDDFILEPATH]);
+	}
+	if( m_pcValueArray[AXCONF_AXISHOME] == NULL)
+	{
+		printf( "AXIS HOME      (null)\n");
+	}
+	else
+	{
+		printf( "AXIS HOME      %s\n", m_pcValueArray[AXCONF_AXISHOME]);
+	}
+	if( m_pcValueArray[AXCONF_TRANSPORTHTTP] == NULL)
+	{
+		printf( "Transport HTTP (null)\n");
+	}
+	else
+	{
+		printf( "Transport HTTP %s\n", m_pcValueArray[AXCONF_TRANSPORTHTTP]);
+	}
+	if( m_pcValueArray[AXCONF_TRANSPORTSMTP] == NULL)
+	{
+		printf( "Transport SMTP (null)\n");
+	}
+	else
+	{
+		printf( "Transport SMTP %s\n", m_pcValueArray[AXCONF_TRANSPORTSMTP]);
+	}
+	if( m_pcValueArray[AXCONF_XMLPARSER] == NULL)
+	{
+		printf( "XML Parser     (null)\n");
+	}
+	else
+	{
+		printf( "XML Parser     %s\n", m_pcValueArray[AXCONF_XMLPARSER]);
+	}
+	if( m_pcValueArray[AXCONF_NODENAME] == NULL)
+	{
+		printf( "Node Name      (null)\n");
+	}
+	else
+	{
+		printf( "Node Name      %s\n", m_pcValueArray[AXCONF_NODENAME]);
+	}
+	if( m_pcValueArray[AXCONF_LISTENPORT] == NULL)
+	{
+		printf( "Listen Port    (null)\n");
+	}
+	else
+	{
+		printf( "Listen Port    %s\n", m_pcValueArray[AXCONF_LISTENPORT]);
+	}
+}
 
 AXIS_CPP_NAMESPACE_END
