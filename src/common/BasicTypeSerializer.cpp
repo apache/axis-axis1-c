@@ -118,7 +118,7 @@ void BasicTypeSerializer::HelpSerialize(const string &sName, const string &sValu
 	switch (m_Type)
 	{
 	case XSD_STRING:
-		m_sSZ = GetEntityReferenced(sValue);	
+		m_sSZ += GetEntityReferenced(sValue);	
 		break;
 	default:
 		m_sSZ += m_Buf;
