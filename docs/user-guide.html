@@ -1,0 +1,274 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Axis User</title>
+<style>
+<!--
+		H1 { color: #000000 }
+		H3 { color: #000000 }
+		P { margin-left: 0.98cm; color: #000000; font-family: "Verdana", "Arial", "Helvetica", sans-serif }
+		H2 { color: #000000; text-decoration: underline }
+		H4 { margin-left: 0.98cm; color: #000000 }
+		PRE { margin-left: 0.98cm; color: #000000 }
+		H5 { margin-left: 0.98cm; color: #000000 }
+		P.example { font-family: "Verdana", "Arial", "Helvetica", sans-serif }
+		TD P { margin-left: 0.98cm; color: #000000; font-family: "Verdana", "Arial", "Helvetica", sans-serif }
+-->
+</style>
+</head>
+
+<body>
+
+<h1 ALIGN="CENTER">
+<img SRC="images/axis.jpg" NAME="Graphic1" ALIGN="bottom" WIDTH="176" HEIGHT="96" BORDER="0"></h1>
+<h1>Axis C++ User's Guide</h1>
+<h3>Table of Contents</h3>
+<ul>
+  <li>
+  <p STYLE="margin-bottom: 0cm"><a HREF="#Introduction">Introduction</a> </li>
+  <li>
+  <p STYLE="margin-bottom: 0cm"><a HREF="#ConsumingServices">Consuming Web 
+  Services with Axis</a> </li>
+  <li>
+  <p STYLE="margin-bottom: 0cm"><a HREF="#PublishingServices">Publishing Web 
+  Services with Axis</a> </li>
+  <li>
+  <p STYLE="margin-bottom: 0cm"><a HREF="#DataMapping">XML &lt;-&gt; C++ Data Mapping 
+  in Axis</a> </li>
+  <li>
+  <p STYLE="margin-bottom: 0cm"><a HREF="#WSDL">Using WSDL with Axis</a>
+  <ul>
+    <li>
+    <p STYLE="margin-bottom: 0cm">&nbsp;<a HREF="#WSDL: Obtaining WSDL for deployed services">?WSDL: 
+    Obtaining WSDL for deployed services</a> </li>
+    <li>
+    <p STYLE="margin-bottom: 0cm">&nbsp;<a HREF="#WSDL2Java: Building stubs, skeletons, and data">WSDL2C++: 
+    Building stubs, skeletons, and data</a> </li>
+    <li>
+    <p STYLE="margin-bottom: 0cm">&nbsp;<a href="#Java2WSDL: Building WSDL from Java">C++2WSDL: 
+    Building WSDL from C++</a> </li>
+  </ul>
+  </li>
+  <li>
+  <p STYLE="margin-bottom: 0cm"><a HREF="#published interfaces">Published 
+  Interfaces</a> </li>
+  <li>
+  <p STYLE="margin-bottom: 0cm"><a HREF="#newbie">Newbie Tips: Finding Your Way 
+  Around</a> </li>
+  <li>
+  <p STYLE="margin-bottom: 0cm"><a HREF="#tcpmon">Appendix : Using TCPMon</a>
+  </li>
+  <li>
+  <p STYLE="margin-bottom: 0cm"><a HREF="#soapmon">Appendix : Using SOAP Monitor</a>
+  </li>
+  <li><a HREF="#Glossary">Glossary</a> </li>
+</ul>
+<h2><a NAME="Introduction"></a>Introduction</h2>
+<p>Welcome to Axis C++, a c++ implementation of SOAP ! </p>
+<h3>What is SOAP?</h3>
+<p>SOAP is an XML<i>-</i>based communication protocol and encoding format for 
+inter-application communication. Originally conceived by Microsoft and Userland 
+software, it has evolved through several generations and the current spec,
+<a HREF="http://w3.org/TR/soap">SOAP 1.1</a>, is fast growing in popularity and 
+usage. The W3C's <a HREF="http://www.w3.org/2000/xp/Group/">XML Protocol working 
+group</a> is in the process of turning SOAP into a true open standard, and as of 
+this writing has released a working draft of SOAP 1.2, which cleans up some of 
+the more confusing areas of the 1.1 spec. </p>
+<p>SOAP is widely viewed as the backbone to a new generation of cross-platform 
+cross-language distributed computing applications, termed Web Services. </p>
+<h3>What is Axis c++?</h3>
+<p>Axis is essentially a <i>SOAP engine</i>. The more complete version of axis 
+is written in java.This version is written in c++ and will continue to be 
+developed. </p>
+<p>Axis c++ includes</p>
+<ul>
+  <li>
+  <p STYLE="margin-bottom: 0cm">an apache module that can be plugged in to the 
+  apache webserver on linux,</li>
+  <li>
+  <p STYLE="margin-bottom: 0cm">A set of sample web service classes and their 
+  handwritten wrapper classes.</li>
+</ul>
+<p>We hope you enjoy using Axis c++. Please note that this is an open-source effort 
+- if you feel the code could use some new features or fixes, please get involved 
+and lend a hand! The Axis developer community welcomes your participation. </p>
+<h4><b>Let us know what you think!</b></h4>
+<p>Please send feedback about the package to &quot;<a HREF="mailto:axis-user@xml.apache.org">axis-user@xml.apache.org</a>&quot;. </p>
+<h3>What's in Axis c++ at this moment?</h3>
+<p>Axis c++ includes the following features: </p>
+<ul>
+  <li>
+  <p STYLE="margin-bottom: 0cm">Partial SOAP 1.1 compliant engine</li>
+  <li>
+  <p STYLE="margin-bottom: 0cm">Support for all basic types</li>
+  <li>
+  <p STYLE="margin-bottom: 0cm">Automatic serialization/deserialization of Java 
+  Beans, including customizable mapping of fields to XML elements/attributes
+  </li>
+  <li>
+  <p STYLE="margin-bottom: 0cm">Provider for RPC and based SOAP 
+  services </li>
+</ul>
+<h2><a NAME="ConsumingServices"></a>Consuming Web Services with Axis C++</h2>
+<h2><a NAME="PublishingServices"></a>Publishing Web Services with Axis C++</h2>
+<p>This chapter explains how to deploy the sample web services included with 
+Axis C++.</p>
+<p>Hopefully by now you have installed Axis C++.<br>
+<br>
+If you haven't already done so download the binary version of Axis C++ and 
+follow the instructions in the integration-guide to install it.<br>
+&nbsp;</p>
+<p>From here onwards the folder in which Axis C++ is installed by being 
+extracted from the Axis C++ installation package will be referred to as <br>
+&lt;axiscpp_home&gt;.<br>
+<br>
+sample webservice modules are included in &lt;axiscpp_home&gt;/src/server/samples/<br>
+<br>
+in this folder you will find two subfolders called webservice and 
+webservicewrapper and <br>
+service.wsdd file written by the service provider for his service.</p>
+<p>In &lt;axiscpp_home&gt;/src/server/samples/ there are two subfolders called 
+webservice and webservicewrapper.</p>
+<p>In the webservice folder, the header files and cpp files written in c++, for 
+each of the webservice can be found. In the webservicewrapper folder the 
+corresponding the wrapper classes for each of the webservices can be found. The 
+wrapper classes are supposed to be generated by a tool which, is not implemented 
+yet. When the wrapper generator is implemented you should be able to generate 
+the files in webservicewrapper, using the header files for any given webservice 
+provider class.</p>
+<p>Now change directory to the webservice/&lt;sample name&gt; folder and type the 
+following</p>
+<p>make clean<br>
+make<br>
+<br>
+Now go into the webservicewrapper&lt;sample name&gt; folder and type the following </p>
+<p>make clean<br>
+make<br>
+<br>
+You will find the corresponding web service module generated in &lt;axiscpp_home&gt;/axis/webservice 
+folder.<br>
+&nbsp;</p>
+<p>Restart apache web server and test the web service using the java webservice 
+client. For infromation on how to use the java web service client refer to the 
+Axis java user guide which can be found at http://ws.apache.org/axis/.<br>
+<br>
+If you want to test handlers go into the &lt;axiscpp_home&gt;/src/servcer/handlers 
+folder where example handlers are included. Change to a particular example 
+directory of your choice and type the following</p>
+<p>make clean<br>
+make</p>
+<p>You will find the corresponding handler generated in &lt;axiscpp_home&gt;axis/handlers 
+directory.<br>
+Restart the apache web server and test your handler using the web service client 
+in Axis java.For infromation on how to use the java web service client refer to 
+the Axis java user guide which can be found at http://ws.apache.org/axis/.<br>
+<br>
+Happy Axiscpp!!!<br>
+<br>
+<br>
+&nbsp;</p>
+<p>&nbsp;</p>
+<h2><a NAME="DataMapping"></a>XML &lt;-&gt; C++ Data Mapping in Axis C++</h2>
+<h3>How your&nbsp; C++ types map to SOAP/XML types</h3>
+<h4>Standard mappings from WSDL to C++</h4>
+<table CELLPADDING="2" CELLSPACING="2">
+  <tr>
+    <td>xsd:base64Binary </td>
+    <td>Not implemented yet</td>
+  </tr>
+  <tr>
+    <td>xsd:boolean </td>
+    <td>int</td>
+  </tr>
+  <tr>
+    <td>xsd:byte </td>
+    <td>unsigned char</td>
+  </tr>
+  <tr>
+    <td>xsd:dateTime </td>
+    <td>Not implemented yet</td>
+  </tr>
+  <tr>
+    <td>xsd:decimal </td>
+    <td>Not implemented yet</td>
+  </tr>
+  <tr>
+    <td>xsd:double </td>
+    <td><tt>double</tt></td>
+  </tr>
+  <tr>
+    <td>xsd:float </td>
+    <td><tt>float</tt></td>
+  </tr>
+  <tr>
+    <td>xsd:hexBinary </td>
+    <td>Not implemented yet</td>
+  </tr>
+  <tr>
+    <td>xsd:int</td>
+    <td><tt>int</tt></td>
+  </tr>
+  <tr>
+    <td>xsd:integer</td>
+    <td>int</td>
+  </tr>
+  <tr>
+    <td>xsd:long </td>
+    <td><tt>long</tt></td>
+  </tr>
+  <tr>
+    <td>xsd:QName </td>
+    <td>Not implemented yet</td>
+  </tr>
+  <tr>
+    <td>xsd:short </td>
+    <td><tt>short</tt></td>
+  </tr>
+  <tr>
+    <td>xsd:string</td>
+    <td>stl::string</td>
+  </tr>
+</table>
+<h2><a NAME="WSDL"></a>Using WSDL with Axis</h2>
+<h2><a NAME="published interfaces"></a>Published Axis Interfaces</h2>
+<h2><a NAME="newbie"></a>Newbie Tips: Finding Your Way Around</h2>
+<h2><a NAME="tcpmon"></a>Appendix : Using the Axis TCP Monitor (tcpmon)</h2>
+<p>This section describe a java tool that is included with Axis java that can be 
+used to view what goes on the wire when a soap transaction is taking place. 
+Please visit <a href="http://ws.apache.org/axis/">http://ws.apache.org/axis/</a> 
+and get Axis java, to obtain tcpmon.</p>
+<p>The &quot;tcpmon&quot; utility can be found in the org.apache.axis.utils 
+package. To run it from the command line: </p>
+<pre STYLE="color: #000000; margin-left: 0.98cm; margin-bottom: 0.5cm">% java org.apache.axis.utils.tcpmon [listenPort targetHost targetPort]</pre>
+<p>Without any of the optional arguments, you will get a gui which looks like 
+this: </p>
+<p ALIGN="CENTER">
+<img SRC="images/tcpmon1.jpg" NAME="Graphic2" ALIGN="bottom" WIDTH="599" HEIGHT="599" BORDER="0"></p>
+<p>To use the program, you should select a local port which tcpmon will monitor 
+for incoming connections, a target host where it will forward such connections, 
+and the port number on the target machine which should be &quot;tunneled&quot; to. Then 
+click &quot;add&quot;. You should then notice another tab appearing in the window for your 
+new tunneled connection. Looking at that panel, you'll see something like this:
+</p>
+<p ALIGN="CENTER">
+<img SRC="images/tcpmon2.jpg" NAME="Graphic3" ALIGN="bottom" WIDTH="599" HEIGHT="600" BORDER="0"></p>
+<p>Now each time a SOAP connection is made to the local port, you will see the 
+request appear in the &quot;Request&quot; panel, and the response from the server in the 
+&quot;Response&quot; panel. Tcpmon keeps a log of all request/response pairs, and allows 
+you to view any particular pair by selecting an entry in the top panel. You may 
+also remove selected entries, or all of them, or choose to save to a file for 
+later viewing. </p>
+<p>The &quot;resend&quot; button will resend the request you are currently viewing, and 
+record a new response. This is particularly handy in that you can edit the XML 
+in the request window before resending - so you can use this as a great tool for 
+testing the effects of different XML on SOAP servers. Note that you may need to 
+change the content-length HTTP header value before resending an edited request.
+</p>
+
+</body>
+
+</html>
