@@ -17,7 +17,13 @@
 /*
  * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  *
+ */
+
+/*
+ * Revision 1.1  2004/05/24 samisa
+ * Filled in the empty body of setTransportProperty
  */
 
 #ifdef WIN32
@@ -248,6 +254,13 @@ void AxisTransport::setTransportProperty
     }
     if (!key) return;
     m_pSender->SetProperty(key, value);
+}
+
+void AxisTransport::setTransportProperty(const char* pcKey, const char* pcValue)
+{
+	if (pcKey && pcValue) 
+	    m_pSender->SetProperty(pcKey, pcValue);
+
 }
 
 const char* AxisTransport::getTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE eType)
