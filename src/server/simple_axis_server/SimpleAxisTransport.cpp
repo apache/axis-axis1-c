@@ -92,6 +92,7 @@ setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type, const char *value)
     {
 	setTransportProperty (key, value);
     }
+    return 0;
 }
 
 AXIS_TRANSPORT_STATUS
@@ -267,6 +268,7 @@ SimpleAxisTransport::setTransportProperty (const char *pcKey,
     m_strHTTPHeaders +=
 	std::string (pcKey) + std::string (": ") + std::string (pcValue) +
 	std::string ("\r\n");
+    return 0;
 }
 
 const char *
