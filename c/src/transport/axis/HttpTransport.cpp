@@ -322,7 +322,7 @@ HttpTransport::HTTPBind ()
     /* We have to support other charsets */
 
     /* Set header values for additional prefixes, such as SOAPAction */
-    for (int i = 0; i < m_AdditionalHeader.size (); i++)
+    for (unsigned int i = 0; i < m_AdditionalHeader.size (); i++)
     {
 	if (m_AdditionalHeader[i].first == "Content-Length")
 	{
