@@ -193,7 +193,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 						}
 						else
 						{
-							writer.write("\tfor( int iCount"+i+" = 0; iCount"+i+" < param->" + attribs[i].getElementNameAsString() + ".m_Size; iCount"+i+"++)\n");
+							writer.write("\tfor( int iCount"+i+" = 0; iCount"+i+" < param->" + attribs[i].getParamName() + ".m_Size; iCount"+i+"++)\n");
 						}
 
 						writer.write("\t{\n");
@@ -204,11 +204,11 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 						}
 						else
 						{
-							writer.write("\t\tif( param->" + attribs[i].getElementNameAsString() + ".m_Array[iCount"+i+"] == NULL)\n");
+							writer.write("\t\tif( param->" + attribs[i].getParamName() + ".m_Array[iCount"+i+"] == NULL)\n");
 						}
 						
 						writer.write("\t\t{\n");
-						writer.write("\t\t\tpSZ->serializeAsAttribute( \"<" + attribs[i].getElementNameAsString() +" xsi:nil\", 0, (void*)&(xsd_boolean_true), XSD_BOOLEAN);\n");
+						writer.write("\t\t\tpSZ->serializeAsAttribute( \"<" + attribs[i].getParamName() +" xsi:nil\", 0, (void*)&(xsd_boolean_true), XSD_BOOLEAN);\n");
 						writer.write("\t\t\tpSZ->serialize( \"/>\", NULL);\n");
 						writer.write("\t\t}\n");
 						writer.write("\t\telse\n");
@@ -220,14 +220,14 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 						}
 						else
 						{
-							writer.write("\t\t\tsAA"+i+".m_Array = param->" + attribs[i].getElementNameAsString() + ".m_Array[iCount"+i+"];\n\n");
+							writer.write("\t\t\tsAA"+i+".m_Array = param->" + attribs[i].getParamName() + ".m_Array[iCount"+i+"];\n\n");
 						}
 
 						writer.write("\t\t\tpSZ->serializeCmplxArray( &sAA"+i+",\n");
 						writer.write("\t\t\t\t\t\t\t\t\t (void*) Axis_Serialize_"+arrayType+",\n");
 						writer.write("\t\t\t\t\t\t\t\t\t (void*) Axis_Delete_"+arrayType+",\n");
 						writer.write("\t\t\t\t\t\t\t\t\t (void*) Axis_GetSize_"+arrayType+",\n");
-						writer.write("\t\t\t\t\t\t\t\t\t \""+attribs[i].getElementNameAsString()+"\", Axis_URI_"+arrayType+");\n");
+						writer.write("\t\t\t\t\t\t\t\t\t \""+attribs[i].getParamName()+"\", Axis_URI_"+arrayType+");\n");
 						writer.write("\t\t}\n");
 						writer.write("\t}\n");
 					}
@@ -237,7 +237,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 						writer.write("\t\t\t\t\t\t (void*) Axis_Serialize_"+arrayType+",\n");
 						writer.write("\t\t\t\t\t\t (void*) Axis_Delete_"+arrayType+",\n");
 						writer.write("\t\t\t\t\t\t (void*) Axis_GetSize_"+arrayType+",\n");
-						writer.write("\t\t\t\t\t\t \""+attribs[i].getElementNameAsString()+"\", Axis_URI_"+arrayType+");\n");
+						writer.write("\t\t\t\t\t\t \""+attribs[i].getParamName()+"\", Axis_URI_"+arrayType+");\n");
 					}
 					
 					writer.write("\t// End\n");
@@ -326,20 +326,21 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 
 					if( nillable)
 					{
-						writer.write("\t"+attribs[i].getTypeName()+" **	pp"+i+" = param->"+attribs[i].getElementNameAsString()+".m_Array;\n\n");
-						writer.write("\tparam->"+attribs[i].getElementNameAsString()+".m_Size = array.m_Size;\n\n");
-						writer.write("\tif( param->"+attribs[i].getElementNameAsString()+".m_Array == NULL)\n");
+					    String attributeParamName=attribs[i].getParamName();
+						writer.write("\t"+attribs[i].getTypeName()+" **	pp"+i+" = param->"+attributeParamName+".m_Array;\n\n");
+						writer.write("\tparam->"+attributeParamName+".m_Size = array.m_Size;\n\n");
+						writer.write("\tif( param->"+attributeParamName+".m_Array == NULL)\n");
 						writer.write("\t{\n");
 						writer.write("\t\tpp"+i+" = new "+attribs[i].getTypeName()+"*[array.m_Size];\n");
-						writer.write("\t\tparam->"+attribs[i].getElementNameAsString()+".m_Array = pp"+i+";\n");
+						writer.write("\t\tparam->"+attributeParamName+".m_Array = pp"+i+";\n");
 						writer.write("\t}\n\n");
 						writer.write("\t"+attribs[i].getTypeName()+" *	p"+i+" = ("+attribs[i].getTypeName()+" *) array.m_Array;\n\n");
 						writer.write("\tfor( int iCount"+i+" = 0; iCount"+i+" < array.m_Size; iCount"+i+"++)\n");
 						writer.write("\t{\n");
-						writer.write("\t\tpp"+i+"[iCount"+i+"] = new "+attribs[i].getTypeName()+"();\n");
-						writer.write("\t\t*(pp"+i+"[iCount"+i+"]) = p"+i+"[iCount"+i+"];\n");
+						writer.write("\t\t*pp"+i+" = p"+i+";\n\n");
+						writer.write("\t\tpp"+i+"++;\n");
+						writer.write("\t\tp"+i+"++;\n");
 						writer.write("\t}\n");
-						writer.write("\tdelete [] p"+i+";\n");
 					}
 					else
 					{
