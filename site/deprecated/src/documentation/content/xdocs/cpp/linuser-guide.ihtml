@@ -150,7 +150,7 @@ described in Installation guide. That is you need</p>
 
 <p>- Apache1.3 (or Apache2.0)</p>
 
-<p>- xerces-C</p>
+<p>- expat</p>
 
 <p>- j2SDK1.4</p>
 
@@ -589,9 +589,9 @@ makefiles instead of the following commands to build.)</p>
 <p></p>
 
 <p><strong>$ g++ -shared -Wl,--whole-archive -Wl,--no-whole-archive -I. -I..
--L$AXISCPP_HOME/lib/xerces-c</strong></p>
+-L$AXISCPP_HOME/lib/expat</strong></p>
 
-<p><strong>-lxerces-c -Wl,-soname -Wl,libinteropbase.so.0 -o
+<p><strong>-lexpat -Wl,-soname -Wl,libinteropbase.so.0 -o
 libinteropbase.so ./*.o</strong></p>
 
 <p></p>
@@ -986,7 +986,7 @@ runconfig script)</p>
 
 <p></p>
 <p>
-<strong>$ g++ -g -O2 -o interopbase InteropBaseClient.o SOAPStruct.o InteropTestPortType.o $AXISCPP_HOME/lib/axis/libaxiscpp_client.a $AXISCPP_HOME/bin/libaxiscpp_mod.a -L$AXISCPP_HOME/lib/xerces-c -lxerces-c -ldl</strong><br>
+<strong>$ g++ -g -O2 -o interopbase InteropBaseClient.o SOAPStruct.o InteropTestPortType.o $AXISCPP_HOME/lib/axis/libaxiscpp_client.a $AXISCPP_HOME/bin/libaxiscpp_mod.a -L$AXISCPP_HOME/lib/expat -lexpat -ldl</strong><br>
 
 </p>
 
@@ -1447,7 +1447,7 @@ makefiles instead of the following commands to build.)</p>
 <p></p>
 
 <p><strong>$ g++ -shared -Wl,--whole-archive -Wl,--no-whole-archive -I. -I..
--L$AXISCPP_HOME/lib/xerces-c -lxerces-c -Wl,-soname -Wl,libinteropbase.so.0 -o
+-L$AXISCPP_HOME/lib/expat -lexpat -Wl,-soname -Wl,libinteropbase.so.0 -o
 libinteropbase.so ./*.o</strong></p>
 
 <p></p>
@@ -1830,8 +1830,8 @@ installed in <strong>$AXISCPP_HOME/lib/axis</strong></p>
 
 <p><strong>$ g++ -g -O2 -o interopbase InteropBaseClient.o SOAPStruct.o
 InteropTestPortType.o $AXISCPP_HOME/lib/axis/libaxiscpp_client.a
-$AXISCPP_HOME/lib/axis/libaxiscpp_mod.a -L$AXISCPP_HOME/lib/xerces-c -lxerces-c -ldl $AXISCPP_HOME/lib/axis/libaxiscpp_client.a $AXISCPP_HOME/lib/axis/libaxiscpp_mod.a
--L$AXISCPP_HOME/lib/xerces-c -lxerces-c -ldl</strong></p>
+$AXISCPP_HOME/lib/axis/libaxiscpp_mod.a -L$AXISCPP_HOME/lib/expat -lexpat -ldl $AXISCPP_HOME/lib/axis/libaxiscpp_client.a $AXISCPP_HOME/lib/axis/libaxiscpp_mod.a
+-L$AXISCPP_HOME/lib/expat -lexpat -ldl</strong></p>
 
 <p></p>
 
