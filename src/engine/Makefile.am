@@ -10,7 +10,8 @@ libengine_la_SOURCES = Axis.cpp \
 		RequestScopeHandlerPool.cpp \
 		SerializerPool.cpp \
 		SessionScopeHandlerPool.cpp \
+		ServerAxisEngine.cpp \
 		SharedObject.cpp
 
-libengine_la_LIBADD = -L$(AXISCPP_HOME)/lib/xerces-c -lxerces-c
+libengine_la_LIBADD = -L$(AXISCPP_HOME)/lib/xerces-c -lxerces-c -lstdc++
 INCLUDES = -I$(AXISCPP_HOME)/include
