@@ -89,7 +89,9 @@ const char* Receiver::Recv() throw (AxisException)
 	{
 		try
 		{
+#ifdef _DEBUG
             		printf("try\n");
+#endif
 			*m_pTrChannel >> (&m_pMsg);
             		if(m_pMsg == NULL)
 			{
