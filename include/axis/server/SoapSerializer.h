@@ -67,6 +67,7 @@
 #include "../common/BasicTypeSerializer.h"
 #include "../common/AxisTime.h"
 #include "../common/Packet.h"
+#include <axis/wsdd/WSDDDefines.h>
 #include "SoapEnvVersions.h"
 
 class SoapEnvelope;
@@ -117,9 +118,12 @@ private:
 	int m_nStatus;
 	/* Map that contains pairs of currently available namespaces and prefixes */ 
 	map<AxisXMLString, AxisXMLString> m_NsStack;
-
+	/* Provider type of current service that uses this Serializer object */
+	PROVIDERTYPE m_ProviderType;
 public:
+#ifdef UNIT_TESTING_BUILD
 	int setOutputStreamForTesting(const Ax_soapstream* pStream);
+#endif
 	int AXISCALL CreateSoapMethod(const AxisChar* sLocalName, const AxisChar* sURI);	
 
 //	IWrapperSoapSerializer& operator<<(const char* cSerialized);
@@ -163,6 +167,8 @@ public:
 	/* following two functions are needed by serializer functions of complex types for RPC style web services */
 	void AXISCALL SerializeStartElementOfType(const AxisChar* pName, const AxisChar* pNamespace, const AxisChar* pPrefix);
 	void AXISCALL SerializeEndElementOfType(const AxisChar* pName);
+	PROVIDERTYPE GetCurrentProviderType() { return m_ProviderType;};
+	void SetCurrentProviderType(PROVIDERTYPE nType) { m_ProviderType = nType;};
 
 private:
 	int SendSerializedBuffer();

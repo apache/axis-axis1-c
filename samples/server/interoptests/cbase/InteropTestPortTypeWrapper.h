@@ -9,26 +9,27 @@
 #include <axis/common/AxisWrapperAPI.h>
 
 /*implementation of BasicHandler interface*/
-int AXISCALL Invoke(void*p, IMessageData* mc);
-void AXISCALL OnFault(void*p, IMessageData* mc);
-int AXISCALL Init(void*p);
-int AXISCALL Fini(void*p);
-AXIS_BINDING_STYLE AXISCALL GetBindingStyle(void*p);
+int AXISCALL InteropTestPortTypeWrapper_Invoke(void*p, void* mc);
+void AXISCALL InteropTestPortTypeWrapper_OnFault(void*p, void* mc);
+int AXISCALL InteropTestPortTypeWrapper_Init(void*p);
+int AXISCALL InteropTestPortTypeWrapper_Fini(void*p);
+int AXISCALL InteropTestPortTypeWrapper_GetType(void*p);
+AXIS_BINDING_STYLE AXISCALL InteropTestPortTypeWrapper_GetBindingStyle(void*p);
 /*Methods corresponding to the web service methods*/
-int echoStringWrapped(IMessageData* mc);
-int echoStringArrayWrapped(IMessageData* mc);
-int echoIntegerWrapped(IMessageData* mc);
-int echoIntegerArrayWrapped(IMessageData* mc);
-int echoFloatWrapped(IMessageData* mc);
-int echoFloatArrayWrapped(IMessageData* mc);
-int echoStructWrapped(IMessageData* mc);
-int echoStructArrayWrapped(IMessageData* mc);
-int echoVoidWrapped(IMessageData* mc);
-int echoBase64Wrapped(IMessageData* mc);
-int echoDateWrapped(IMessageData* mc);
-int echoHexBinaryWrapped(IMessageData* mc);
-int echoDecimalWrapped(IMessageData* mc);
-int echoBooleanWrapped(IMessageData* mc);
+int echoStringWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ);
+int echoStringArrayWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ);
+int echoIntegerWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ);
+int echoIntegerArrayWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ);
+int echoFloatWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ);
+int echoFloatArrayWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ);
+int echoStructWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ);
+int echoStructArrayWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ);
+int echoVoidWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ);
+int echoBase64Wrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ);
+int echoDateWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ);
+int echoHexBinaryWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ);
+int echoDecimalWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ);
+int echoBooleanWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ);
 
 
 #endif // !defined(__INTEROPTESTPORTTYPEWRAPPER_H__INCLUDED_)

@@ -159,8 +159,10 @@ public abstract class ParamWriter extends BasicFileWriter{
 		   	if(elementType.isArray()){ //soap encoding arrays.
 				Type arrayType = WrapperUtils.getArrayType(elementType); //get contained type
 				this.attribs[i].setArray(true);
-				if(CUtils.isSimpleType(arrayType.getName()))
+				if(CUtils.isSimpleType(arrayType.getName())){
 					this.attribs[i].setTypeName(CUtils.getclass4qname(arrayType.getName()));
+					this.attribs[i].setSimpleType(true);
+				}
 				else{
 					this.attribs[i].setTypeName(arrayType.getLanguageSpecificName());
 					this.attribs[i].setSimpleType(false);

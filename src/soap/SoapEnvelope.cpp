@@ -65,6 +65,10 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+#ifdef WIN32
+#pragma warning (disable : 4786)
+#endif
+
 #include <axis/soap/SoapEnvelope.h>
 #include <axis/common/GDefine.h>
 #include <axis/soap/SoapSerializer.h>
@@ -304,6 +308,7 @@ int SoapEnvelope::serializeStandardNamespaceDecl(SoapSerializer &pSZ)
 	return AXIS_SUCCESS;
 }
 
+#ifdef UNIT_TESTING_BUILD
 int SoapEnvelope::initializeForTesting(SOAP_VERSION eSoapVersion)
 {
 	if(eSoapVersion == SOAP_VER_1_2) {
@@ -323,3 +328,5 @@ int SoapEnvelope::initializeForTesting(SOAP_VERSION eSoapVersion)
 
 	return AXIS_SUCCESS;
 }
+#endif
+

@@ -72,20 +72,16 @@ using namespace std;
 /**
     @class Handler
     @brief interface for handlers
-
-
     @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
 */
-class Handler : public BasicHandler
+class Handler : public HandlerBase
 {
 public:
-  Handler(){};
-  virtual ~Handler(){};
-
-  virtual const string& GetOption(const string& sArg)=0;
-  virtual void SetOptionList(const map<string, string>* OptionList)=0;
-  int AXISCALL GetType(){return NORMAL_HANDLER;};
-
+	Handler(){};
+	virtual ~Handler(){};
+	virtual const string& GetOption(const string& sArg)=0;
+	virtual void SetOptionList(const map<string, string>* OptionList)=0;
+	int AXISCALL GetType(){return NORMAL_HANDLER;};
 
 protected:
   const map<string, string>* m_pOption;

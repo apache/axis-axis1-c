@@ -222,6 +222,9 @@ public class ClientStubWriter extends CFileWriter{
 		if (returntype != null){
 			writer.write((returntypeisarray?"RetArray":returntypeissimple?"Ret":"pReturn")+";\n");
 		}
+		else{
+			writer.write(";\n");
+		}
 		writer.write("\tpCall = "+globalobjectname+"->__vfptr;\n");
 		writer.write("\t/* Following will establish the connections with the server too */\n");
 		writer.write("\tif (AXIS_SUCCESS != pCall->Initialize("+globalobjectname+", RPC_ENCODED)) return ");

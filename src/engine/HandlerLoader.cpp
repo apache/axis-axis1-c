@@ -182,19 +182,45 @@ int HandlerLoader::CreateHandler(BasicHandler** pHandler, int nLibId)
 	pHandlerInfo->m_Create(&pBH);    
 	if (pBH)
 	{
-		if (AXIS_SUCCESS == pBH->Init())
+		if (0 != pBH->_functions)
+		/* this is a C service or handler */
 		{
-			pHandlerInfo->m_nObjCount++;
-			*pHandler = pBH;            
-			unlock();
-			return AXIS_SUCCESS;
+			if (AXIS_SUCCESS == pBH->_functions->Init(pBH->_object))
+			{
+				pHandlerInfo->m_nObjCount++;
+				*pHandler = pBH;            
+				unlock();
+				return AXIS_SUCCESS;
+			}
+			else
+			{
+				pBH->_functions->Fini(pBH->_object);
+				pHandlerInfo->m_Delete(pBH);
+				unlock();
+				return HANDLER_INIT_FAIL;
+			}
+		}
+		else if (0 == pBH->_object)
+		{
+			return CREATION_FAILED; 
 		}
 		else
+		/* C++ service or handler */
 		{
-			pBH->Fini();
-			delete pBH;
-			unlock();
-			return HANDLER_INIT_FAIL;
+			if (AXIS_SUCCESS == ((HandlerBase*)pBH->_object)->Init())
+			{
+				pHandlerInfo->m_nObjCount++;
+				*pHandler = pBH;            
+				unlock();
+				return AXIS_SUCCESS;
+			}
+			else
+			{
+				((HandlerBase*)pBH->_object)->Fini();
+				pHandlerInfo->m_Delete(pBH);
+				unlock();
+				return HANDLER_INIT_FAIL;
+			}
 		}
 	}
 	else

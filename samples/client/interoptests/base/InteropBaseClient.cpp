@@ -12,6 +12,7 @@ int main(int argc, char* argv[])
 	char buffer2[100];
 
 	InteropTestPortType ws;
+
 	printf("invoking echoString...\n");
 	//testing echoString 
 	if (0 == strcmp(ws.echoString("hello world"), "hello world"))
@@ -73,7 +74,7 @@ int main(int argc, char* argv[])
 	else
 		printf("failed\n");
 	// testing echo Struct
-	SOAPStruct stct;
+/*	SOAPStruct stct;
 	stct.varFloat = 12345.7346345;
 	stct.varInt = 5000;
 	stct.varString = strdup("This is string in SOAPStruct");
@@ -104,14 +105,14 @@ int main(int argc, char* argv[])
 	ws.echoVoid();
 	printf("successful\n");
 	//testing echo base 64 binary
-
+*/
 /*	printf("invoking echoBase64...\n");
 	if (0 == strcmp(ws.echoBase64("BCDF675E234242WHRTKMJDGKGUEJ898636JFJFHEJDGWTDHFJRURYGBCDHTWRSG"),
 		"BCDF675E234242WHRTKMJDGKGUEJ898636JFJFHEJDGWTDHFJRURYGBCDHTWRSG"))
 		printf("successful\n");
 	else
 		printf("failed\n");
-*/	time_t tim;
+	time_t tim;
 	time(&tim);
 	tm* lt = gmtime(&tim);
 	printf("invoking echoDate...\n");
@@ -121,7 +122,7 @@ int main(int argc, char* argv[])
 		printf("failed\n");
 	//testing echo hex binary
 
-/*	printf("invoking echoHexBinary...\n");
+	printf("invoking echoHexBinary...\n");
 	if (0 == strcmp(ws.echoHexBinary("CCCFFA46552BC7D5A09BC5F23DE9E0FE7862AD45BC87D02FEE"),
 		"CCCFFA46552BC7D5A09BC5F23DE9E0FE7862AD45BC87D02FEE"))
 		printf("successful\n");

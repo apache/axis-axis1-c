@@ -69,26 +69,24 @@ using namespace std;
 /**
     @class HandlerChain
     @brief interface for the HandlerChain class.
-
-
     @author Susantha Kumara (skumara@virtusa.com)
 */
-class HandlerChain : public BasicHandler  
+class HandlerChain : public HandlerBase  
 {
 	friend class HandlerPool;
 private:
 	typedef struct ChainItem
 	{
-		Handler* m_pHandler;
+		BasicHandler* m_pHandler;
 		int m_nScope;
 		int m_nLibId;
 	} ChainItem;
 public:
-	int AddHandler(Handler* pHandler, int nScope, int nLibId);
+	int AddHandler(BasicHandler* pHandler, int nScope, int nLibId);
 	HandlerChain();
 	virtual ~HandlerChain();
-	int AXISCALL Invoke(IMessageData* pMsg);
-	void AXISCALL OnFault(IMessageData* pMsg);
+	int AXISCALL Invoke(void* pMsg);
+	void AXISCALL OnFault(void* pMsg);
 	int AXISCALL GetType(){return CHAIN_HANDLER;};
 	int AXISCALL Init();
 	int AXISCALL Fini();

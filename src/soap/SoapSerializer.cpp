@@ -96,7 +96,6 @@ IWrapperSoapSerializerFunctions IWrapperSoapSerializer::ms_VFtable;
 
 SoapSerializer::SoapSerializer()
 {
-	__vfptr = &ms_VFtable;
 	m_pSoapEnvelope = NULL;
 	m_iSoapVersion = SOAP_VER_1_1;
 	m_pOutputStream = NULL;
@@ -561,13 +560,14 @@ int SoapSerializer::SerializeBasicArray(const Axis_Array* pArray, XSDTYPE nType,
 	return AXIS_SUCCESS;
 }
 
+#ifdef UNIT_TESTING_BUILD
 int SoapSerializer::setOutputStreamForTesting(const Ax_soapstream* pStream)
 {
 	m_pOutputStream = pStream;
 
 	return AXIS_SUCCESS;
 }
-
+#endif
 /**
  * Basic output parameter going to be serialized as an Element later
  */

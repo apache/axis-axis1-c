@@ -66,6 +66,7 @@
 #include <axis/common/IHandlerSoapDeSerializer.h>
 #include <axis/soap/SoapEnvVersions.h>
 #include <axis/soap/HeaderBlock.h>
+#include <axis/wsdd/WSDDDefines.h>
 #include <axis/xml/XMLParser.h>
 #include <axis/xml/AnyElement.h>
 
@@ -95,6 +96,8 @@ private:
 	SOAP_VERSION m_nSoapVersion;
 	AxisChar* m_pEndptr; /* used as a parameter to strtoXX conversion functionss */
 	int m_nStatus;
+	/* Provider type of current service that uses this DeSerializer object */
+	PROVIDERTYPE m_ProviderType;
 
 private:
 	int AXISCALL GetArraySize(const AnyElement* pElement);
@@ -105,6 +108,8 @@ public:
 	SoapEnvelope* GetEnvelope();
 	int GetHeader();
 	int FlushInputStream();
+	PROVIDERTYPE GetCurrentProviderType() { return m_ProviderType;};
+	void SetCurrentProviderType(PROVIDERTYPE nType) { m_ProviderType = nType;};
 	/*
 	 * Methods to manipulate entire body when the body is compressed or encrypted 
 	 * These functions are provided for handlers to manipulate entire soap body.
