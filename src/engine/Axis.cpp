@@ -56,11 +56,8 @@
 #include <axis/server/AxisConfig.h>
 #include "../wsdd/WSDDKeywords.h"
 #include <axis/server/AxisTrace.h>
-#include "../transport/SOAPTransportFactory.h"
-
-#ifdef USE_XERCES_PARSER
-#include <xercesc/util/PlatformUtils.hpp>
-#endif
+#include "SOAPTransportFactory.h"
+#include "XMLParserFactory.h"
 
 #define BYTESTOREAD 64
 // The relative location of the wsdl files hardcoded
@@ -71,9 +68,6 @@
 unsigned char chEBuf[1024];
 #endif
 
-#ifdef USE_XERCES_PARSER
-XERCES_CPP_NAMESPACE_USE
-#endif
 // Synchronized global variables.
 HandlerLoader* g_pHandlerLoader;
 AppScopeHandlerPool* g_pAppScopeHandlerPool;
@@ -238,9 +232,6 @@ extern "C" int initialize_module (int bServer)
 {
     int status = 0;
     // order of these initialization method invocation should not be changed
-#ifdef USE_XERCES_PARSER
-    XMLPlatformUtils::Initialize ();
-#endif
     AxisEngine::m_bServer = bServer;
     AxisUtils::initialize ();
     WSDDKeywords::initialize ();
@@ -249,6 +240,7 @@ extern "C" int initialize_module (int bServer)
     URIMapping::initialize ();
     SoapFault::initialize ();
 	SOAPTransportFactory::initialize();
+	XMLParserFactory::initialize();
 #ifdef AXIS_CLIENT_LIB
     CallBase::s_Initialize ();
 #endif
@@ -320,9 +312,6 @@ extern "C" int initialize_module (int bServer)
 extern "C" int uninitialize_module ()
 {
 	SOAPTransportFactory::uninitialize();
-#ifdef USE_XERCES_PARSER
-    XMLPlatformUtils::Terminate ();
-#endif
     ModuleUnInitialize ();
     SoapKeywordMapping::uninitialize ();
     return AXIS_SUCCESS;
