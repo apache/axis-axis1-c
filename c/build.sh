@@ -15,7 +15,7 @@ autoheader                      &&
 echo "run automake."            && 
 automake --add-missing --gnu    &&
 
-echo "configure --prefix=$AXISCPP_DEPLOY --libdir=$AXISCPP_DEPLOY/lib --bindir=$AXISCPP_DEPLOY/bin"
+echo "run configure"
 ./configure --prefix=$AXISCPP_DEPLOY \
     --libdir=$AXISCPP_DEPLOY/lib \
     --bindir=$AXISCPP_DEPLOY/bin \

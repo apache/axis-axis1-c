@@ -142,10 +142,10 @@ cp deploy/deploy_apache.sh $prefix
 fi
 
 if test -d "$prefix/log"; then
-chmod -R 777 $prefix/log
+chmod 777 $prefix/log
 else
 mkdir $prefix/log
-chmod -R 777 $prefix/log
+chmod 777 $prefix/log
 fi
 
 APACHE2INC=$apache2inc
