@@ -130,7 +130,9 @@ AXIS_TRANSPORT_STATUS LibWWWTransport::sendBytes(const char* pcSendBuffer,
             free(temp);
         }
         strcat(m_pcData, pcSendBuffer);
-        m_pReleaseBufferCallback(pcSendBuffer, pBufferid);
+        //Samisa: Callback to free memeory has been removed
+        //Q: who should relese memory in this case?
+//        m_pReleaseBufferCallback(pcSendBuffer, pBufferid);
     }
      
     return TRANSPORT_IN_PROGRESS;
