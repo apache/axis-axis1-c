@@ -88,6 +88,8 @@ public:
     const AxisString& getEntityReferenced(const AxisString& str);
     const AxisChar* serializeAsElement(const AxisChar* pName, 
         const void* pValue, XSDTYPE type);
+	const AxisChar* serializeAsElement(const AxisChar* pName, 
+        const AxisChar* pPrefix, const void* pValue, XSDTYPE type);
     const AxisChar* serializeAsAttribute(const AxisChar* pName, 
         const AxisChar* pPrefix, const void* pValue, XSDTYPE type);
     const AxisChar* encodeToHexBinary(const xsd__hexBinary* pBinary);

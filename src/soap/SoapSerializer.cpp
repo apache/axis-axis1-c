@@ -53,6 +53,7 @@ SoapSerializer::SoapSerializer()
     m_pSoapEnvelope = NULL;
     m_iSoapVersion = SOAP_VER_1_1;
     m_pOutputStream = NULL;
+	m_pNamespace = NULL;
 }
 
 SoapSerializer::~SoapSerializer()
@@ -174,6 +175,9 @@ int SoapSerializer::addOutputCmplxArrayParam(const Axis_Array* pArray,
     else
     {
         pAb->SetItemName(pName);
+	    if (NULL != pNamespace) {
+		    pParam->setUri(pNamespace);
+		}
         pParam->setName("array");        
     }
     pParam->m_Value.pIArray = pAb;
@@ -196,6 +200,7 @@ int SoapSerializer::addOutputCmplxParam(void* pObject, void* pSZFunct,
     pParam->m_Value.pCplxObj->pObject = pObject;
     pParam->m_Value.pCplxObj->pSZFunct = (AXIS_SERIALIZE_FUNCT)pSZFunct;
     pParam->m_Value.pCplxObj->pDelFunct = (AXIS_OBJECT_DELETE_FUNCT)pDelFunct;
+	
     if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->
         m_pSoapBody->m_pSoapMethod)) 
     {
@@ -529,7 +534,15 @@ int SoapSerializer::serializeCmplxArray(const Axis_Array* pArray,
     }
     pParam->m_Value.pIArray = pAb;
     pParam->m_Type = XSD_ARRAY;
+	    if (pNamespace != NULL) {
+		const AxisChar* np = getNamespacePrefix(pNamespace);
+		pParam->setPrefix(np);
+		setNamespace(pNamespace);
+    }
     pParam->serialize(*this);
+	if (pNamespace != NULL) {
+		setNamespace(NULL);
+    }
     /* Remove pointer to the array from the ArrayBean to avoid deleting the 
      * array when ArrayBean is deleted. Array will be deleted when the complex
      * type that contains this array is deleted */
@@ -545,8 +558,20 @@ int SoapSerializer::serializeCmplxArray(const Axis_Array* pArray,
 int SoapSerializer::serializeBasicArray(const Axis_Array* pArray, 
                                         XSDTYPE nType, const AxisChar* pName)
 {
-    ArrayBean* pAb = (ArrayBean*)makeArrayBean(nType, 
-        (void*)(pArray->m_Array));
+	return serializeBasicArray(pArray, NULL, nType, pName);
+}
+
+/*
+ * Used to Serialize an array of basic types inside a complex type. Contains 
+ * the namespace so that it can be serialized. Called from within the Serialize
+ * wrapper method of the complex type.
+ */
+int SoapSerializer::serializeBasicArray(const Axis_Array* pArray, 
+										const AxisChar* pNamespace, 
+                                        XSDTYPE nType, const AxisChar* pName)
+{
+	ArrayBean* pAb = (ArrayBean*)makeArrayBean(nType, 
+    (void*)(pArray->m_Array));
     pAb->SetDimension(pArray->m_Size);
     Param* pParam = new Param();
     if (RPC_ENCODED == m_nStyle)
@@ -561,6 +586,11 @@ int SoapSerializer::serializeBasicArray(const Axis_Array* pArray,
     }
     pParam->m_Value.pIArray = pAb;
     pParam->m_Type = XSD_ARRAY;
+	if (pNamespace != NULL) {
+		const AxisChar* np = getNamespacePrefix(pNamespace);
+		pParam->setPrefix(np);
+		setNamespace(pNamespace);
+    }
     pParam->serialize(*this);
     /* Remove pointer to the array from the ArrayBean to avoid deleting the
      * array when ArrayBean is deleted. Array will be deleted when the complex
@@ -667,7 +697,20 @@ int SoapSerializer::addOutputParam(const AxisChar* pchName, void* pValue,
 int SoapSerializer::serializeAsElement(const AxisChar* pName, void* pValue, 
                                        XSDTYPE type)
 {
-    const AxisChar* pSerialized = m_BTSZ.serializeAsElement(pName, pValue, 
+	return serializeAsElement(pName, NULL, pValue, type);
+}
+
+int SoapSerializer::serializeAsElement(const AxisChar* pName, 
+									   const AxisChar* pNamespace,
+									   void* pValue, 
+                                       XSDTYPE type) 
+{
+    const AxisChar* pPrefix = NULL;
+    if (pNamespace)
+	{
+        pPrefix = getNamespacePrefix(pNamespace);
+    }
+    const AxisChar* pSerialized = m_BTSZ.serializeAsElement(pName, pPrefix, pValue, 
         type);
     if (pSerialized)
     {
@@ -678,7 +721,7 @@ int SoapSerializer::serializeAsElement(const AxisChar* pName, void* pValue,
     {
         return AXIS_FAIL;
     }
-}
+} 
 
 int SoapSerializer::serializeAsAttribute(const AxisChar* pName, 
                                          const AxisChar* pNamespace, 

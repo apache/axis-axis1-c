@@ -68,7 +68,12 @@ private:
     map<AxisXMLString, AxisXMLString> m_NsStack;
     /* Provider type of current service that uses this Serializer object */
     PROVIDERTYPE m_ProviderType;
+	/* the local namespace for this serializer */
+    AxisChar* m_pNamespace;
+
 public:
+	inline const AxisChar* AXISCALL getNamespace() const {return m_pNamespace;}; 
+	inline void AXISCALL setNamespace(const AxisChar* pNamespace) {m_pNamespace = (const_cast<AxisChar*>(pNamespace));}; 
 
 #ifdef UNIT_TESTING_ON
     int setOutputStreamForTesting(SOAPTransport* pStream);
@@ -133,6 +138,11 @@ public:
 
     int AXISCALL serializeBasicArray(const Axis_Array* pArray, XSDTYPE nType, 
         const AxisChar* pName);
+	
+    int AXISCALL serializeBasicArray(const Axis_Array* pArray, const AxisChar* pNamespace,
+		XSDTYPE nType, const AxisChar* pName);
+
+
     /* following two functions are needed by serializer functions of complex 
      * types for RPC style web services 
      */
@@ -185,6 +195,8 @@ public:
         void* pValue, XSDTYPE type);
     int AXISCALL serializeAsElement(const AxisChar* pchName, 
         void* pValue, XSDTYPE type);
+	int AXISCALL serializeAsElement(const AxisChar* pchName, 
+		const AxisChar* pNamespace, void* pValue, XSDTYPE type);
     int AXISCALL serializeAsAttribute(const AxisChar* pName, 
         const AxisChar* pNamespace, void* pValue, XSDTYPE type);
     void AXISCALL serializeVargs(const char* pFirst, va_list vargs);

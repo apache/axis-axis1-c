@@ -155,9 +155,15 @@ int Param::serialize (SoapSerializer &pSZ)
 		  * So directly call Array Serializer 
 		  */
             {
+				if (!m_strUri.empty())
+					pSZ.setNamespace(m_strUri.c_str());
+
                 m_Value.pArray->Serialize (pSZ); /* Only serializes the inner 
 						  * items
 						  */ 
+				if (!m_strUri.empty())
+					pSZ.setNamespace(NULL);
+
             }
             break;
         

@@ -41,8 +41,18 @@ BasicTypeSerializer::~BasicTypeSerializer ()
 const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
     const void* pValue, XSDTYPE type)
 {
+	return serializeAsElement(pName, NULL, pValue, type);
+}
+
+const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
+    const AxisChar* pPrefix, const void* pValue, XSDTYPE type)
+{
     const AxisChar* pStr;
     m_sSZ = "<";
+	if (NULL != pPrefix) { 
+		m_sSZ += pPrefix;
+		m_sSZ += ":";
+	}
     m_sSZ += pName;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -146,8 +156,10 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
                  */
                 m_sSZ = "<";
                 m_sSZ += pName;
-                m_sSZ += " xsi:nil=\"true\"/>\n";
-                return m_sSZ.c_str ();
+           // direct return not good for maintainability 
+           //     m_sSZ += " xsi:nil=\"true\"/>\n";
+           //     return m_sSZ.c_str ();
+				m_sSZ += " xsi:nil=\"true\" ";
             }
             {
             	String stringSerializer;
@@ -163,8 +175,10 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
                  */
                 m_sSZ = "<";
                 m_sSZ += pName;
-                m_sSZ += " xsi:nil=\"true\"/>\n";
-                return m_sSZ.c_str ();
+           // direct return not good for maintainability 
+           //     m_sSZ += " xsi:nil=\"true\"/>\n";
+           //     return m_sSZ.c_str ();
+				m_sSZ += " xsi:nil=\"true\" ";
             }
             {
             	AnyURI anyURISerializer;
@@ -180,8 +194,10 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
                  */
                 m_sSZ = "<";
                 m_sSZ += pName;
-                m_sSZ += " xsi:nil=\"true\"/>\n";
-                return m_sSZ.c_str ();
+           // direct return not good for maintainability 
+           //     m_sSZ += " xsi:nil=\"true\"/>\n";
+           //     return m_sSZ.c_str ();
+				m_sSZ += " xsi:nil=\"true\" ";
             }
             {
             	XSD_QName QNameSerializer;
@@ -197,8 +213,10 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
                  */
                 m_sSZ = "<";
                 m_sSZ += pName;
-                m_sSZ += " xsi:nil=\"true\"/>\n";
-                return m_sSZ.c_str ();
+           // direct return not good for maintainability 
+           //     m_sSZ += " xsi:nil=\"true\"/>\n";
+           //     return m_sSZ.c_str ();
+				m_sSZ += " xsi:nil=\"true\" ";
             }
             {
             	NOTATION notationSerializer;
@@ -240,6 +258,10 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
     }
 
     m_sSZ += "</";
+	if (NULL != pPrefix) {
+		m_sSZ += pPrefix;
+		m_sSZ += ":";
+	}
     m_sSZ += pName;
     m_sSZ += ">\n";
     return m_sSZ.c_str ();

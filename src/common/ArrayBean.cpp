@@ -183,13 +183,30 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
             for (int x=0; x<m_nSize; x++)
             {
                 pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
-                pSZ.serialize("<", m_ItemName.c_str(), NULL); 
+
+				// try to find the prefix - array prefix overrides the
+				// serializer prefix
+            	const AxisChar* pNamespace = pSZ.getNamespace();
+				const AxisChar* pPrefix = NULL;
+				if (NULL != pNamespace)
+					if (strlen(pNamespace) > 0)
+            	        pPrefix = pSZ.getNamespacePrefix(pNamespace);
+
+            	if (pPrefix != NULL)
+	                pSZ.serialize("<", pPrefix, ":", m_ItemName.c_str(), NULL); 
+	            else
+	                pSZ.serialize("<", m_ItemName.c_str(), NULL); 
+				
                 /* note : ">" is not serialized to enable the type's serializer
                  * to add attributes 
                  */
                 m_value.cta->pSZFunct(pItem, &pSZ, true); 
                 /* no matter true or false is passed */
-                pSZ.serialize("</", m_ItemName.c_str(), ">", NULL);
+            	if (pPrefix != NULL)
+                	pSZ.serialize("</", pPrefix, ":", m_ItemName.c_str(), ">", NULL);
+	            else
+                	pSZ.serialize("</", m_ItemName.c_str(), ">", NULL);
+
             }
         }
         else 

@@ -97,7 +97,14 @@ int SoapMethod::serialize(SoapSerializer& pSZ)
             
             pSZ.serialize(">\n", NULL);
 
+            // push the current NS to the NS stack
+            pSZ.getNamespacePrefix(m_strUri.c_str());
+
             iStatus= serializeOutputParam(pSZ);
+
+            // remove the current NS from the NS stack
+            pSZ.removeNamespacePrefix(m_strUri.c_str());
+
             if(iStatus==AXIS_FAIL)
             {
                 break;
