@@ -12,7 +12,8 @@ libaxiscpp_client_la_SOURCES = ../Axis.cpp \
                 ../SerializerPool.cpp \
                 ../SessionScopeHandlerPool.cpp \
                 ../SharedObject.cpp \
+                ../../transport/SOAPTransportFactory.cpp \
 		Call.cpp
 		
-libaxiscpp_client_la_LIBADD = $(LDFLAGS) ../../common/libcommon.la ../../soap/libsoap.la ../../wsdd/libwsdd.la ../../xml/libxml.la ../../transport/axis/libtransport.la
+libaxiscpp_client_la_LIBADD = $(LDFLAGS) ../../common/libcommon.la ../../soap/libsoap.la ../../wsdd/libwsdd.la ../../xml/libxml.la
 INCLUDES = -I$(AXISCPP_HOME)/include
