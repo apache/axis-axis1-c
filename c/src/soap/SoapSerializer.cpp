@@ -887,7 +887,7 @@ int SoapSerializer::serializeAnyObject(AnyType* pAnyObject)
     int i;
     for (i=0; i<pAnyObject->_size; i++)
     {
-        serialize(pAnyObject->_array[i]);
+        serialize(pAnyObject->_array[i], 0);
     }
 	return AXIS_SUCCESS;
 }

@@ -114,6 +114,14 @@ SOURCE=..\..\src\soap\HexCoder.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\xml\expat\ParserLoader.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xml\xerces\ParserLoader.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\xml\xerces\SoapBinInputStream.cpp
 # End Source File
 # Begin Source File
@@ -179,6 +187,14 @@ SOURCE=..\..\src\soap\XercesHandler.cpp
 # Begin Source File
 
 SOURCE=..\..\src\xml\xerces\XercesHandler.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xml\expat\XMLParserExpat.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xml\xerces\XMLParserXerces.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -275,6 +291,14 @@ SOURCE=..\..\src\soap\XercesHandler.h
 # Begin Source File
 
 SOURCE=..\..\src\xml\xerces\XercesHandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xml\expat\XMLParserExpat.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xml\xerces\XMLParserXerces.h
 # End Source File
 # End Group
 # End Target

@@ -3401,18 +3401,18 @@ AnyType* SoapDeSerializer::getAnyObject()
     AxisString xmlStr = "";
     list<AxisString> lstXML;
     
-    if (!m_pNode) m_pNode = m_pParser->next();
+    if (!m_pNode) m_pNode = m_pParser->anyNext();
     tagCount++;
 
     while ((END_ELEMENT != m_pNode->m_type) || (tagCount >= 0))
     {
         if (CHARACTER_ELEMENT != m_pNode->m_type)
         {
-            xmlStr = xmlStr + serializeTag(m_pNode);
+            serializeTag(xmlStr, m_pNode);
         }
         else
         {
-            xmlStr = xmlStr + m_pNode->m_pchNameOrValue;
+            xmlStr += m_pNode->m_pchNameOrValue;
         }
 
         if (tagCount == 0) /* copying the First level element into the list */
@@ -3421,7 +3421,7 @@ AnyType* SoapDeSerializer::getAnyObject()
             xmlStr = "";
         }
 
-        m_pNode = m_pParser->next();
+        m_pNode = m_pParser->anyNext();
         if (END_ELEMENT == m_pNode->m_type)
         {
             tagCount--;
@@ -3430,35 +3430,49 @@ AnyType* SoapDeSerializer::getAnyObject()
         {
             tagCount++;
         }
+    }
 
-        lstSize = lstXML.size();
-        pAny->_array = new char*[lstSize];
-        pAny->_size = 0;
+    lstSize = lstXML.size();
+    pAny->_array = new char*[lstSize];
+    pAny->_size = 0;
 
-        list<AxisString>::iterator i;  /* Iterator for traversing the list */
+    list<AxisString>::iterator i;  /* Iterator for traversing the list */
 
-        for (i=lstXML.begin(); i != lstXML.end(); i++)
-        {
-            pAny->_array[pAny->_size] = strdup((*i).c_str());
-        }
+    for (i=lstXML.begin(); i != lstXML.end(); i++)
+    {
+        pAny->_array[pAny->_size++] = strdup((*i).c_str());
     }
 
     return pAny;
 }
 
 
-AxisString SoapDeSerializer::serializeTag(const AnyElement* node)
+void SoapDeSerializer::serializeTag(AxisString& xmlStr, const AnyElement* node)
 {
     /*
        Note that if this is an end tag and since m_pchNameOrValue doesn't give
        the "/" sign. So we have to add that sign as well in to the end tag
     */
-
-    AxisString tmpString;
+	const XML_Ch* pchPrefix = 0;
 
     if (START_ELEMENT == node->m_type)
     {
-        tmpString = "<" + AxisString(node->m_pchNameOrValue);
+        xmlStr += "<";
+        /* if (node->m_pchNamespace) why dont parser set null if there is no
+         * namespace
+         */
+        if (node->m_pchNamespace)
+        {
+			pchPrefix = m_pParser->getPrefix4NS(node->m_pchNamespace);
+			if (pchPrefix)
+			{
+				xmlStr += pchPrefix;
+				xmlStr += ":";
+			}
+        }
+        
+        xmlStr += node->m_pchNameOrValue;
+
         if (node->m_pchAttributes)
         {
             int j;
@@ -3467,27 +3481,46 @@ AxisString SoapDeSerializer::serializeTag(const AnyElement* node)
              * sequence of (local_name, namespace_uri, value)
             */
             
-            for (j=0; j<300; j=j+3) /* MAX_NO_OF_ATTRIBUTES = 100 */
+            for (j=0; j<300; j+=3) /* MAX_NO_OF_ATTRIBUTES = 100 */
             {
                 if (node->m_pchAttributes[j])
                 {
-                    tmpString = tmpString + " " + node->m_pchAttributes[j+1];
-                    tmpString = tmpString + ":" + node->m_pchAttributes[j];
-                    tmpString = tmpString + "=\"" + node->m_pchAttributes[j+2] + "\"";
+					pchPrefix = m_pParser->getPrefix4NS(node->m_pchAttributes[j+1]);
+					if (pchPrefix)
+					{
+						xmlStr += " "; 
+						xmlStr += node->m_pchAttributes[j+1];
+						xmlStr += ":";
+						xmlStr += node->m_pchAttributes[j];
+					}
+                    xmlStr += "=\"";
+					xmlStr += node->m_pchAttributes[j+2];
+					xmlStr += "\"";
                 }
+                else break;
             }
         }
-        if (node->m_pchNamespace)
-        {
-            tmpString = tmpString + AxisString(" ") 
-                + AxisString(node->m_pchNamespace);
-        }
-        
-        tmpString = tmpString + AxisString(">");
+
+        xmlStr += ">";
     }
     else if (END_ELEMENT == node->m_type)
     {
-        tmpString = "</" + AxisString(node->m_pchNameOrValue) + ">";
+        xmlStr += "</";
+        /* if (node->m_pchNamespace) why dont parser set null if there is no
+         * namespace
+         */
+        if (node->m_pchNamespace && (strcmp(node->m_pchNamespace, "") != 0))
+        {
+			pchPrefix = m_pParser->getPrefix4NS(node->m_pchNamespace);
+			if (pchPrefix)
+			{
+				xmlStr += pchPrefix;
+				xmlStr += ":";
+			}
+        }
+        
+        xmlStr += node->m_pchNameOrValue;
+        xmlStr += ">";
     }
-    return tmpString;
 }
+

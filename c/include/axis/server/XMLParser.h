@@ -81,18 +81,18 @@ public:
      */
     virtual int getStatus()=0;
     /**
-     * Used to get the next XML event. The valid events are start element, end
-     * element and character data. If we think of SAX events the processing 
-     * instruction events, namespace prefix mapping events are not considered
-     * valid. If the implementation of this interface is wrapping up a SAX 
-     * parser it should follow the above rules.
+     * Used to get the next XML data event. The valid events are start element, 
+	 * end element and character data. If we think of SAX events the processing 
+     * instruction events, namespace prefix mapping events are not returned by
+     * this method. If the implementation of this interface is wrapping up a 
+     * SAX parser it should follow the above rules.
      *
      * As the function signature suggests the returned AnyElement is const and
      * the caller should not deallocate any member of it. Its the sole
      * responsibility of the Parser wrapper implementation to manage any memory
      * allocated by it.
      *
-     * @brief Used to get the next XML event.
+     * @brief  Used to get the next XML event.
      * @param  bIsCharData Indicates whether Axis is expecting a character data 
      *         event or not. If Axis is NOT expecting a character data event 
      *         (bIsCharData is false) the parser should NOT return a character 
@@ -101,10 +101,40 @@ public:
      *         behaviour is needed to ignore unexpected white space of the
      *         stream.
      * @return Returns a filled AnyElement structure that contains all the data
-     *         of the current XML element. See @link AnyElement.h for the
+     *         of the current XML element. See AnyElement.h for the
      *         structure of AnyElement.
      */
     virtual const AnyElement* next(bool bIsCharData=false)=0;
+    /**
+     * Used to get the any next XML event. The valid events are start element,
+     * end element, character data and prefix mappings. If we think of SAX  
+     * events only processing instruction events are not returned by this
+     * method. If the implementation of this interface is wrapping up a SAX 
+     * parser it should follow the above rules.
+     *
+     * As the function signature suggests the returned AnyElement is const and
+     * the caller should not deallocate any member of it. Its the sole
+     * responsibility of the Parser wrapper implementation to manage any memory
+     * allocated by it.
+     *
+     * @brief  Used to get the next XML event.
+     * @return Returns a filled AnyElement structure that contains all the data
+     *         of the current XML element. See AnyElement.h for the structure
+     *         of AnyElement.
+     */
+    virtual const AnyElement* anyNext()=0;
+    /**
+     * Gets the corresponding prefix string for a given namespace. The
+     * Parser should store the prefix/namespace pairs that it finds and
+     * valid at the current cursor position of the stream. This method
+     * provides a way to get the corresponding prefix for any valid
+     * namespace at the current cursor position of the pull parser.
+     *
+     * @brief  Gets the corresponding namespace string for a given prefix.
+     * @param  pcNS Namespace for which the prefix string is requested
+     * @return The prefix if a match is found. NULL otherwise. 
+     */
+    virtual const XML_Ch* getPrefix4NS(const XML_Ch* pcNS)=0;
 protected:
     AxisIOStream* m_pInputStream;
 

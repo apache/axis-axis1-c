@@ -134,7 +134,7 @@ SOURCE=..\src\engine\AxisEngineException.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\common\AxisException.cpp
+SOURCE=..\src\common\AxisGenException.cpp
 # End Source File
 # Begin Source File
 

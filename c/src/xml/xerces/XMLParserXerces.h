@@ -52,6 +52,9 @@ public:
     const XML_Ch* getNS4Prefix(const XML_Ch* pcPrefix);
     int getStatus();
     const AnyElement* next(bool bIsCharData=false);
+    const AnyElement* anyNext();
+    const XML_Ch* getPrefix4NS(const XML_Ch* pcNS);
+
 private:
     SAX2XMLReader* m_pParser;
     XMLPScanToken m_ScanToken;

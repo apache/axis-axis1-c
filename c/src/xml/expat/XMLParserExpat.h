@@ -49,6 +49,8 @@ public:
     const XML_Ch* getNS4Prefix(const XML_Ch* prefix);
     int getStatus();
     const AnyElement* next(bool isCharData=false);
+    const AnyElement* anyNext();
+    const XML_Ch* getPrefix4NS(const XML_Ch* pcNS);
 
 private:
     XML_Parser m_Parser;
