@@ -1121,17 +1121,7 @@ public class WSDL2Ws
                 return;
             }
 
-            String lang = data.getOptionBykey("l");
-            if ("c".equals(lang))
-            {
-                System.err.println(
-                    "Generation of C stubs is not currently supported");
-                usage();
-                return;
-            }
-
             WSDL2Ws.makeSystem = data.getOptionBykey("m");
-
             try
             {
 
@@ -1139,7 +1129,7 @@ public class WSDL2Ws
                 gen.generateWrappers(
                     null,
                     data.getOptionBykey("o"),
-                    "c++",
+                    data.getOptionBykey("l"),
                     data.getOptionBykey("i"),
                     data.getOptionBykey("s"),
                     data.getOptionBykey("w"));

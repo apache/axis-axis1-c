@@ -735,6 +735,7 @@ class STORAGE_CLASS_INFO Stub
     * Call object of the Stub. This is the point of access to the internals
     * of the Axis engine.
     */
+    Call *getCall() { return m_pCall; }
     Call *m_pCall;
 
   /**

@@ -15,6 +15,20 @@
  */
 
 #include <axis/client/Stub.hpp>
+
+AXIS_CPP_NAMESPACE_START
+class StubC : Stub
+{
+public :
+	StubC(const char *ep, AXIS_PROTOCOL_TYPE pt):Stub(ep,pt) {}
+	virtual ~StubC() {}
+	Call* getCallStubC() { return getCall(); }
+	void applyUserPreferencesStubC() { applyUserPreferences(); }
+	void setSOAPHeadersStubC() { setSOAPHeaders(); }
+	void setSOAPMethodAttributesStubC() { setSOAPMethodAttributes(); }
+};
+AXIS_CPP_NAMESPACE_END
+
 AXIS_CPP_NAMESPACE_USE
 
 extern "C" {
@@ -24,12 +38,12 @@ extern "C" {
 
 AXISC_STORAGE_CLASS_INFO AXISCHANDLE axiscCreateStub(const char * pcEndPointURI, 
 	AXISC_PROTOCOL_TYPE eProtocol) {
-	Stub *stub = new Stub(pcEndPointURI, static_cast<AXIS_PROTOCOL_TYPE>(eProtocol));
+	StubC *stub = new StubC(pcEndPointURI, static_cast<AXIS_PROTOCOL_TYPE>(eProtocol));
 	return (AXISCHANDLE)stub;
 }
 
 AXISC_STORAGE_CLASS_INFO void axiscDestroyStub(AXISCHANDLE stub) {
-	Stub *s = (Stub*)stub;
+	StubC *s = (StubC*)stub;
 	delete s;
 }
 
@@ -178,6 +192,26 @@ AXISC_STORAGE_CLASS_INFO void axiscSetTransportProtocol(AXISCHANDLE stub, AXISC_
 AXISC_STORAGE_CLASS_INFO AXISC_PROTOCOL_TYPE axiscGetTransportProtocol(AXISCHANDLE stub) {
 	Stub *s = (Stub*)stub;
 	return (AXISC_PROTOCOL_TYPE)(s->getTransportProtocol());
+}
+
+AXISC_STORAGE_CLASS_INFO AXISCHANDLE getCall(AXISCHANDLE stub) { 
+	StubC *s = (StubC*)stub;
+	return s->getCallStubC();
+}
+
+AXISC_STORAGE_CLASS_INFO void applyUserPreferences(AXISCHANDLE stub) { 
+	StubC *s = (StubC*)stub;
+	s->applyUserPreferencesStubC(); 
+}
+
+AXISC_STORAGE_CLASS_INFO void setSOAPHeadersStubC(AXISCHANDLE stub) { 
+	StubC *s = (StubC*)stub;
+	s->setSOAPHeadersStubC(); 
+}
+
+AXISC_STORAGE_CLASS_INFO void setSOAPMethodAttributesStubC(AXISCHANDLE stub) { 
+	StubC *s = (StubC*)stub;
+	s->setSOAPMethodAttributesStubC(); 
 }
 
 }

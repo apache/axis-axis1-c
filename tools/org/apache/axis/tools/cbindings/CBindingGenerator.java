@@ -241,8 +241,9 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 			sign = mp.getSignature();
 		}
 		
-		// Ignore private and protected methods.
-		if (!sign.getScope().equals("public"))
+		// Ignore private methods.
+		if (!sign.getScope().equals("public") &&
+		    !sign.getScope().equals("protected"))
 			return;
         
 		String classname = sign.getClassName();
@@ -385,6 +386,7 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 				type += changeAxisToAxisc(tok);
 			} else if (!Utils.cTypeQualifiers.contains(tok) && 
 				!Utils.cPrimitives.contains(tok) && 
+				!tok.equals("tm") && 		// Leave struct tm alone
 				!tok.startsWith("xsd")) {
 				type += "AXISC_"+tok;
 			} else {

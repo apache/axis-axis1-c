@@ -27,7 +27,8 @@ public final class Utils {
 	// All the C primitive data types
 	public final static Set cPrimitives = 
 		new HashSet( Arrays.asList( new Object[] { 
-			"void", "byte", "char", "unsigned", "signed", "int", "short", "long","double","float" }));
+			"void", "byte", "char", "unsigned", "signed", "int", "short", 
+			"long", "double", "float", "struct", "class", "enum", "union" }));
 
  	// All the qualifiers that can affect C types
 	public final static Set cTypeQualifiers = 

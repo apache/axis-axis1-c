@@ -65,6 +65,9 @@ STORAGE_CLASS_INFO void initializeLibrary (AxisTraceEntrypoints& ep)
 STORAGE_CLASS_INFO void uninitializeLibrary (void)
 {
       // Do uninit actions
+#ifdef ENABLE_AXISTRACE
+      AxisTrace::deleteTraceEntrypoints();
+#endif
 }
 
 }

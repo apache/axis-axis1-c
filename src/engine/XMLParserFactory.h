@@ -32,9 +32,14 @@
 
 #define CREATE_FUNCTION2 "CreateInstance"
 #define DELETE_FUNCTION2 "DestroyInstance"
+#define INIT_FUNCTION2   "initializeLibrary"
+#define UNINIT_FUNCTION2 "uninitializeLibrary"
 
 typedef int (* CREATE_OBJECT2) (XMLParser** inst);
 typedef int (* DELETE_OBJECT2) (XMLParser* inst);
+typedef void (* INIT_OBJECT2) (AxisTraceEntrypoints& ep);
+typedef void (* UNINIT_OBJECT2) ();
+
 AXIS_CPP_NAMESPACE_START
 class XMLParserFactory  
 {

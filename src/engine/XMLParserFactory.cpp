@@ -69,8 +69,8 @@ int XMLParserFactory::initialize()
 	  {
 #ifdef ENABLE_AXISTRACE
             // Load function to do lib level inits
-            void (*initializeLibrary) (AxisTraceEntrypoints&);
-            initializeLibrary = (void (*)(AxisTraceEntrypoints&))PLATFORM_GETPROCADDR(m_LibHandler, "initializeLibrary");
+            INIT_OBJECT2 initializeLibrary;
+            initializeLibrary = (INIT_OBJECT2) PLATFORM_GETPROCADDR(m_LibHandler, INIT_FUNCTION2);
 
             AxisTraceEntrypoints ep;
             AxisTrace::getTraceEntrypoints(ep);
@@ -91,6 +91,13 @@ int XMLParserFactory::initialize()
 
 int XMLParserFactory::uninitialize()
 {
+#ifdef ENABLE_AXISTRACE
+      UNINIT_OBJECT2 uninitializeLibrary;
+      uninitializeLibrary = (UNINIT_OBJECT2) PLATFORM_GETPROCADDR(m_LibHandler, UNINIT_FUNCTION2);
+
+      if (uninitializeLibrary)
+          (*uninitializeLibrary)();
+#endif
 	return unloadLib();
 }
 

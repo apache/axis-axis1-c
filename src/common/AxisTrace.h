@@ -276,6 +276,11 @@ public:
           g_traceEntrypoints = new AxisTraceEntrypoints;
           *g_traceEntrypoints = entrypoints;
       }
+
+      static void deleteTraceEntrypoints() {
+          if (NULL!=g_traceEntrypoints)
+              delete g_traceEntrypoints;
+      }
 #endif
 
 private:
