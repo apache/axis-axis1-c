@@ -131,6 +131,7 @@ public class ExceptionWriter extends CPPExceptionClassWriter{
 		writer.write(faultName+"::"+faultName+"(ISoapFault* pFault)\n");
 		writer.write("{\n");
 		writer.write("\tm_iExceptionCode = AXISC_SERVICE_THROWN_EXCEPTION;\n");
+		writer.write("\tm_pISoapFault = pFault;\n"); // Fred Preston
 		writer.write("\tprocessException(pFault);");
 		writer.write("}\n\n");
 		
@@ -228,6 +229,11 @@ public class ExceptionWriter extends CPPExceptionClassWriter{
 	  	   writer.write("{\n");
 		   writer.write("\treturn m_iExceptionCode;\n");
 		   writer.write("}\n\n");
+
+		writer.write("const ISoapFault* "+faultName+"::getFault()");//Fred Preston
+		writer.write("{\n");
+		writer.write("\treturn m_pISoapFault;\n");
+		writer.write("}\n\n");
 			  	     
 	 }catch(IOException e){
 					 throw new WrapperFault(e);

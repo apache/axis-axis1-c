@@ -157,11 +157,14 @@ public class ExceptionHeaderWriter extends HeaderFileWriter{
 				writer.write("\t const int getExceptionCode();\n");
 				writer.write("\t const string getMessage(exception* e);\n");
 				writer.write("\t const string getMessage(int iExceptionCode);\n");
+				writer.write("\t const ISoapFault* getFault();\n\n");
 				writer.write("private:\n\t void processException(exception* e);\n");
 				writer.write("\t void processException(ISoapFault* pFault);\n");
 				writer.write("\t void processException(exception* e, int iExceptionCode);\n");
 				writer.write("\t void processException(int iExceptionCode);\n");
-				writer.write("\t string m_sMessage;\n");				writer.write("\t int m_iExceptionCode;\n\n");								
+				writer.write("\t string m_sMessage;\n");
+				writer.write("\t int m_iExceptionCode;\n");								
+				writer.write("\t ISoapFault* m_pISoapFault;\n\n");								
 			}catch (Exception e) {
 			  e.printStackTrace();
 			  throw new WrapperFault(e);
