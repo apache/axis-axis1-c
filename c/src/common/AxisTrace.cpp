@@ -67,59 +67,81 @@ using namespace std;
 
 AxisTrace::AxisTrace()
 {
-  //sFileName = "E:\\Program Files\\Apache Group\\Apache\\Axis\\logs\\Debug.txt";
   sFileName = TRACE_PATH;
-  if(!sFileName.empty())
-  {
-    FileName = sFileName.c_str();
-    fout = new ofstream(FileName,ios::app);  // open for writing
-  }
 }
 
 AxisTrace::~AxisTrace()
 {
-  fout->close();
-  delete fout;
 }
 
-int AxisTrace::trace(const string &sLog,string arg2, int arg3)
+int AxisTrace::trace(const char* sLog,char* arg2, int arg3)
 {
-  if(fout)
-  {
-    time_t ltime;
-    time(&ltime);
-    //*fout << "time:" << ctime(&ltime) << ":" << sLog.c_str() << endl;
-    *fout << "time:" << ctime(&ltime)
-    << " :file:"<< arg2 << " :line:" << arg3 << ":" << endl
-    << sLog.c_str() << endl
-    << "-------------------------------------------------" << endl;
-    //sprintf((char*)chEBuf,sLog.c_str());
-    return SUCCESS;
-  }
+    if ((fileTrace = fopen(sFileName, "a")) == NULL)
+        return FAIL;
+    else
+    {
+        time_t ltime;
+        time(&ltime);
+        
+        fputs("time : ", fileTrace);
+        fputs(ctime(&ltime), fileTrace);
+        fputs("file : ", fileTrace);
+        fputs(arg2, fileTrace);
+        fputs("\n", fileTrace);
+        fputs("line : ", fileTrace);
+        sprintf(strLine,"%d", arg3);
+        fputs(strLine, fileTrace);
+        fputs("\n", fileTrace);        
+        fputs(sLog, fileTrace);        
+        fputs("\n", fileTrace);
+        fputs("-------------------------------------------------", fileTrace);
+        fputs("\n", fileTrace);
+        
+        fclose(fileTrace);    
+    /*
+        *fout << "time:" << ctime(&ltime)
+        << " :file:"<< arg2 << " :line:" << arg3 << ":" << endl
+        << sLog.c_str() << endl
+        << "-------------------------------------------------" << endl;
+    */
+        return SUCCESS;
+    }
+}
+
+int AxisTrace::trace(const char* sLog1, const char* sLog2,char* arg3, int arg4)
+{
+  if ((fileTrace = fopen(sFileName, "a")) == NULL)
+        return FAIL;
   else
   {
-    return FAIL;
-  }
-}
+      time_t ltime;
+      time(&ltime);
 
-int AxisTrace::trace(const string &sLog1, const string &sLog2,string arg3, int arg4)
-{
-  if(fout)
-  {
-    time_t ltime;
-    time(&ltime);
-    //*fout << "time:" << ctime(&ltime) << ":" << sLog1.c_str() << " " << sLog2.c_str() << endl;
-    *fout << "time:" << ctime(&ltime)
+      fputs("time : ", fileTrace);
+      fputs(ctime(&ltime), fileTrace);
+      fputs("file : ", fileTrace);
+      fputs(arg3, fileTrace);
+      fputs("\n", fileTrace);
+      fputs("line : ", fileTrace);
+      sprintf(strLine,"%d", arg4);
+      fputs(strLine, fileTrace);
+      fputs("\n", fileTrace);
+      fputs(sLog1, fileTrace);
+      fputs(" ", fileTrace);
+      fputs(sLog2, fileTrace);
+      fputs("\n", fileTrace);
+      fputs("-------------------------------------------------", fileTrace);
+      fputs("\n", fileTrace);
+      fclose(fileTrace);
+        
+    /**fout << "time:" << ctime(&ltime)
     << " :file:"<< arg3 << " :line:" << arg4 << endl
     << sLog1.c_str() << " " << sLog2.c_str() << endl
     << "-------------------------------------------------" << endl;
-    //sprintf((char*)chEBuf,sLog1.c_str(), sLog2.c_str());
-    return SUCCESS;
-  }
-  else
-  {
-    return FAIL;
-  }
+    */
+
+        return SUCCESS;
+    }
 }
 
 /*
