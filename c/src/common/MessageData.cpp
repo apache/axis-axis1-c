@@ -52,12 +52,12 @@ MessageData::~MessageData ()
     m_Properties.clear ();
 }
 
-void MessageData::SetSerializer (SoapSerializer* pSZ)
+void MessageData::SetSerializer (IWrapperSoapSerializer* pSZ)
 {
     m_pSZ = pSZ;
 }
 
-void MessageData::SetDeSerializer (SoapDeSerializer* pDZ)
+void MessageData::SetDeSerializer (IWrapperSoapDeSerializer* pDZ)
 {
     m_pDZ = pDZ;
 }
