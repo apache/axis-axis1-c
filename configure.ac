@@ -100,6 +100,38 @@ AC_ARG_ENABLE(expat, [  --enable-expat        build expat parser library.],
   AC_MSG_RESULT(no)
 )
 
+AC_MSG_CHECKING(whether to build test cases)
+AC_ARG_ENABLE(testcases, [  --enable-testcases    build test cases.],
+[ case "${enableval}" in
+  no)
+    AC_MSG_RESULT(no)
+    TESTCASESBUILD=""
+    ;;
+  *)
+    AC_MSG_RESULT(yes)
+    TESTCASESBUILD="tests"
+    
+    ;;
+  esac ],
+  AC_MSG_RESULT(no)
+)
+
+AC_MSG_CHECKING(whether to build samples)
+AC_ARG_ENABLE(samples, [  --enable-samples    build samples.],
+[ case "${enableval}" in
+  no)
+    AC_MSG_RESULT(no)
+    SAMPLESBUILD=""
+    ;;
+  *)
+    AC_MSG_RESULT(yes)
+    SAMPLESBUILD="samples"
+    
+    ;;
+  esac ],
+  AC_MSG_RESULT(no)
+)
+
 APACHE2INC=$apache2inc
 APACHEINC=$apacheinc
 XERCESCINC=$xercescinc
@@ -118,6 +150,8 @@ AC_SUBST(EXPATBUILD)
 AC_SUBST(APACHE2BUILD)
 AC_SUBST(APACHEBUILD)
 AC_SUBST(LINKCLIENTLIB)
+AC_SUBST(TESTCASESBUILD)
+AC_SUBST(SAMPLESBUILD)
 
 CFLAGS="-Wall -Wshadow -DENABLE_AXISTRACE"
 CPPFLAGS="-Wall -Wshadow -DENABLE_AXISTRACE"
@@ -171,4 +205,52 @@ AC_OUTPUT(Makefile \
     samples/client/simple/Makefile \
     samples/client/rpcfault/Makefile \
     samples/client/doclitfault/Makefile \
-    samples/client/testHandler/Makefile)
+    samples/client/testHandler/Makefile \
+    tests/Makefile \
+    tests/client/Makefile \
+    tests/client/stubTest/Makefile \
+    tests/client/stubTest/stubBase/Makefile \
+    tests/client/interop/Makefile \
+    tests/client/interop/round1/Makefile \
+    tests/client/interop/round1/gen_src/Makefile \
+    tests/client/threadSafe/Makefile \
+    tests/client/threadSafe/gen_src/Makefile
+    tests/client/fault_mapping/Makefile \
+    tests/client/fault_mapping/gen_src/Makefile \
+    tests/client/exceptionTest/Makefile \
+    tests/client/exceptionTest/gen_src/Makefile \
+    tests/client/soapHeader/Makefile \
+    tests/client/soapHeader/test1/Makefile \
+    tests/client/soapHeader/test1/rpc/Makefile \
+    tests/client/soapHeader/test2/Makefile \
+    tests/client/soapHeader/test2/rpc/Makefile \
+    tests/client/soapHeader/test3/Makefile \
+    tests/client/soapHeader/test3/rpc/Makefile \
+    tests/client/soapHeader/test4/Makefile \
+    tests/client/soapHeader/test4/rpc/Makefile \
+    tests/client/soapHeader/test6/Makefile \
+    tests/client/soapHeader/test6/rpc/Makefile \
+    tests/client/soapHeader/test8/Makefile \
+    tests/client/soapHeader/test8/rpc/Makefile \
+    tests/client/xsdAnyTest1/Makefile \
+    tests/client/xsdAnyTest1/gen_src/Makefile \
+    tests/client/httpHeader/Makefile \
+    tests/client/httpHeader/test1/Makefile \
+    tests/client/httpHeader/test1/rpc/Makefile \
+    tests/client/httpHeader/test2/Makefile \
+    tests/client/httpHeader/test2/rpc/Makefile \
+    tests/client/httpHeader/test3/Makefile \
+    tests/client/httpHeader/test3/rpc/Makefile \
+    tests/client/httpHeader/test4/Makefile \
+    tests/client/httpHeader/test4/rpc/Makefile \
+    tests/client/httpHeader/test5/Makefile \
+    tests/client/httpHeader/test5/rpc/Makefile \
+    tests/client/httpHeader/test7/Makefile \
+    tests/client/httpHeader/test7/rpc/Makefile \
+    tests/client/httpHeader/test8/Makefile \
+    tests/client/httpHeader/test8/rpc/Makefile \
+    tests/server/Makefile \
+    tests/server/exceptionTest/Makefile \
+    tests/server/exceptionTest/gen_src/Makefile \
+    tests/server/xsdAnyTest1/Makefile \
+    tests/server/xsdAnyTest1/gen_src/Makefile)
