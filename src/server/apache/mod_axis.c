@@ -229,7 +229,8 @@ static int axis_handler(request_rec *req_rec)
 	sstr->reserved2 = NULL;
 #else
 	sstr->reserved1 = calloc(NO_OF_SERIALIZE_BUFFERS, sizeof(sendbuffers));
-#ifdef USE_EXPAT_PARSER
+#ifdef USE_XERCES_PARSER
+#else
 	sstr->reserved2 = malloc(SIZEOFMODULEBUFFER);
 #endif
 #endif
@@ -238,7 +239,8 @@ static int axis_handler(request_rec *req_rec)
 	if ((rc = ap_setup_client_block(req_rec, REQUEST_CHUNKED_ERROR)) != OK)
 	{
 		if (sstr->reserved1) free(sstr->reserved1);
-#ifdef USE_EXPAT_PARSER
+#ifdef USE_XERCES_PARSER
+#else
 		if (sstr->reserved2) free(sstr->reserved2);
 #endif
 		free(sstr->so.http);
@@ -280,7 +282,8 @@ static int axis_handler(request_rec *req_rec)
 	if(0 != process_request(sstr))
 	{
 		if (sstr->reserved1) free(sstr->reserved1);
-#ifdef USE_EXPAT_PARSER
+#ifdef USE_XERCES_PARSER
+#else
 		if (sstr->reserved2) free(sstr->reserved2);
 #endif
 		free(sstr->so.http);
@@ -316,7 +319,8 @@ static int axis_handler(request_rec *req_rec)
 	}
 	/*Free the array */
 	if (sstr->reserved1) free(sstr->reserved1);
-#ifdef USE_EXPAT_PARSER
+#ifdef USE_XERCES_PARSER
+#else
 	if (sstr->reserved2) free(sstr->reserved2);
 #endif
 
