@@ -25,7 +25,6 @@
 #include <axis/server/AxisTrace.h>
 extern AxisTrace* g_pAT;
 
-map<int, SoapFaultStruct> SoapFault::m_sFaultMap;
 volatile bool SoapFault::m_bInit = false;
 
 SoapFault::SoapFault()
@@ -121,65 +120,44 @@ void SoapFault::initialize()
 {
     if (!m_bInit)
     {
-        /*VersionMismatch faults */
-        s_arrSoapFaultStruct[SF_VERSION_MISMATCH] = (SoapFaultStruct) 
-            {"VersionMismatch", "Soap Version Mismatch error", "", ""};
-        /*MustUnderstand faults */
-        s_arrSoapFaultStruct[SF_MUST_UNDERSTAND] = (SoapFaultStruct) 
-            {"MustUnderstand", "Soap Must Understand  error", "", ""};
-        /*Client faults */
-        s_arrSoapFaultStruct[SF_MESSAGEINCOMPLETE] = (SoapFaultStruct) 
-            {"Client", "Soap message is incorrect or incomplete", "", ""};
-        s_arrSoapFaultStruct[SF_SOAPACTIONEMPTY] = (SoapFaultStruct)
-            {"Client", "Soap Action header empty", "", ""};
-        s_arrSoapFaultStruct[SF_SERVICENOTFOUND] = (SoapFaultStruct)
-            {"Client", "Requested service is not registerd at the server", "", ""};
-        s_arrSoapFaultStruct[SF_SOAPCONTENTERROR] = (SoapFaultStruct)
-            {"Client", "Soap content is not valid", "", ""};
-        s_arrSoapFaultStruct[SF_NOSOAPMETHOD] = (SoapFaultStruct)
-            {"Client", "No method to invoke", "", ""};
-        s_arrSoapFaultStruct[SF_METHODNOTALLOWED] = (SoapFaultStruct)
-            {"Client", "Soap method is not allowed to invoke", "", ""};
-        s_arrSoapFaultStruct[SF_PARATYPEMISMATCH] = (SoapFaultStruct)
-            {"Client", "Parameter type mismatch", "", ""};
-        s_arrSoapFaultStruct[SF_CLIENTHANDLERFAILED] = (SoapFaultStruct)
-            {"Client", "A client handler failed", "", ""};
+        static SoapFaultStruct s_arrLocalFaultStruct[FAULT_LAST] = 
+        {
+            /*VersionMismatch faults */
+            {"VersionMismatch", "Soap Version Mismatch error", "", ""},
+            /*MustUnderstand faults */ 
+            {"MustUnderstand", "Soap Must Understand  error", "", ""},
+            /*Client faults */
+            {"Client", "Soap message is incorrect or incomplete", "", ""},
+            {"Client", "Soap Action header empty", "", ""},
+            {"Client", "Requested service is not registerd at the server", "", ""},
+            {"Client", "Soap content is not valid", "", ""},
+            {"Client", "No method to invoke", "", ""},
+            {"Client", "Soap method is not allowed to invoke", "", ""},
+            {"Client", "Parameter type mismatch", "", ""},
+            {"Client", "A client handler failed", "", ""},
 
-        /*Server faults */
-        s_arrSoapFaultStruct[SF_COULDNOTLOADSRV] = (SoapFaultStruct)
-            {"Server", "Cannot load web service", "", ""};
-        s_arrSoapFaultStruct[SF_COULDNOTLOADHDL] = (SoapFaultStruct)
-            {"Server", "Cannot load service handlers", "", ""};
-        s_arrSoapFaultStruct[SF_HANDLERFAILED] = (SoapFaultStruct)
-            {"Server", "A service handler failed", "", ""};
-        s_arrSoapFaultStruct[SF_WEBSERVICEFAILED] = (SoapFaultStruct)
-            {"Server", "Webservice failed", "", ""};
-        s_arrSoapFaultStruct[AXISC_TRANSPORT_CONF_ERROR] = (SoapFaultStruct)
-            {"Server", "Transport configuration error", "", ""};
-        s_arrSoapFaultStruct[HANDLER_INIT_FAIL] = (SoapFaultStruct)
-            {"Server", "Handler initialization failed", "", ""};
-        s_arrSoapFaultStruct[HANDLER_CREATION_FAILED] = (SoapFaultStruct)
-            {"Server", "Handler creation failed", "", ""};
-        s_arrSoapFaultStruct[LOADLIBRARY_FAILED] = (SoapFaultStruct)
-            {"Server", "Library loading failed", "", ""};
-        s_arrSoapFaultStruct[LIBRARY_PATH_EMPTY] = (SoapFaultStruct)
-            {"Server", "Library path is empty", "", ""};
-        s_arrSoapFaultStruct[HANDLER_NOT_LOADED] = (SoapFaultStruct)
-            {"Server", "Handler not loaded", "", ""};
-        s_arrSoapFaultStruct[HANDLER_BEING_USED] = (SoapFaultStruct)
-            {"Server", "Handler is being used", "", ""};
-        s_arrSoapFaultStruct[GET_HANDLER_FAILED] = (SoapFaultStruct)
-            {"Server", "Get hander failed", "", ""};
-        s_arrSoapFaultStruct[WRONG_HANDLER_TYPE] = (SoapFaultStruct)
-            {"Server", "Wrong handler type", "", ""};
-        s_arrSoapFaultStruct[NO_HANDLERS_CONFIGURED] = (SoapFaultStruct)
-            {"Server", "No handlers configured", "", ""};
-        s_arrSoapFaultStruct[AXISC_UNKNOWN_ERROR] = (SoapFaultStruct)
-            {"Server", "Unknown error", "", ""};
-
+            /*Server faults */
+            {"Server", "Cannot load web service", "", ""},
+            {"Server", "Cannot load service handlers", "", ""},
+            {"Server", "A service handler failed", "", ""},
+            {"Server", "Webservice failed", "", ""},
+            {"Server", "Transport configuration error", "", ""},
+            {"Server", "Handler initialization failed", "", ""},
+            {"Server", "Handler creation failed", "", ""},
+            {"Server", "Library loading failed", "", ""},
+            {"Server", "Library path is empty", "", ""},
+            {"Server", "Handler not loaded", "", ""},
+            {"Server", "Handler is being used", "", ""},
+            {"Server", "Get hander failed", "", ""},
+            {"Server", "Wrong handler type", "", ""},
+            {"Server", "No handlers configured", "", ""},
+            {"Server", "Unknown error", "", ""}
+        };
+        s_parrSoapFaultStruct = s_arrLocalFaultStruct;
         m_bInit = true;
     }
 }
+
 
 const char* SoapFault::getSoapString()
 {
@@ -190,8 +168,8 @@ const char* SoapFault::getSoapString()
  * returned SoapFault pointer
  */
 SoapFault* SoapFault::getSoapFault(int iFaultCode)
-{    
-    SoapFaultStruct objFaultStruct = s_arrSoapFaultStruct[iFaultCode];
+{   
+    const char* temp; 
     SoapFault* pSoapFault= NULL;
 
     /* fill the soap fault object */
@@ -202,10 +180,10 @@ SoapFault* SoapFault::getSoapFault(int iFaultCode)
      * gs_SoapEnvVersionsStruct should depend on the relevant SOAP VERSION
      */
      pSoapFault->m_sFaultcode= string(gs_SoapEnvVersionsStruct[SOAP_VER_1_1].pchPrefix) + 
-         ":" + objFaultStruct.pcFaultcode;
-     pSoapFault->m_sFaultstring= objFaultStruct.pcFaultstring;
-     pSoapFault->m_sFaultactor= objFaultStruct.pcFaultactor;
-     pSoapFault->m_sFaultDetail= objFaultStruct.pcFaultDetail;        
+         ":" + s_parrSoapFaultStruct[iFaultCode].pcFaultcode;
+     pSoapFault->m_sFaultstring= s_parrSoapFaultStruct[iFaultCode].pcFaultstring;
+     pSoapFault->m_sFaultactor= s_parrSoapFaultStruct[iFaultCode].pcFaultactor;
+     pSoapFault->m_sFaultDetail= s_parrSoapFaultStruct[iFaultCode].pcFaultDetail;        
     
     return pSoapFault;
 }
