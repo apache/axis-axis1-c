@@ -93,8 +93,7 @@ class AxisTrace
 {
 public:
     AxisTrace();
-	virtual ~AxisTrace();
-    int logthis(const char* sLog, int level, char* arg2, int arg3);
+    virtual ~AxisTrace();
     /**
 	 * This is called in writing to the log file whose path is specified in $AXIS_HOME/axiscpp.conf file.
      * This method is used when the caller has only one string message as argument. User
@@ -176,6 +175,9 @@ private:
     char* strLevel;
     FILE* fileTrace;
     FILE* ConfFile;
+
+    int setFilePerm(const char* sFileName);
+    int logthis(const char* sLog, int level, char* arg2, int arg3);
 
 };
 

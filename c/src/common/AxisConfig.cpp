@@ -30,6 +30,7 @@ AxisConfig::AxisConfig ()
 {
     m_sWsddFilePath = 0;
     m_sAxisLogPath = 0;
+    m_sAxisClientLogPath = 0;
     m_sClientWsddFilePath = 0;
     m_sAxisHome = 0;
     m_sValue = NULL;
@@ -41,6 +42,8 @@ AxisConfig::~AxisConfig ()
         free(m_sWsddFilePath);
     if (m_sAxisLogPath)
         free(m_sAxisLogPath);
+    if (m_sAxisClientLogPath)
+        free(m_sAxisClientLogPath);
     if (m_sClientWsddFilePath)
         free(m_sClientWsddFilePath);
     if (m_sAxisHome)
@@ -93,6 +96,12 @@ int AxisConfig::readConfFile ()
             strncpy (m_sAxisLogPath, m_sValue + 1, linesize - strlen (key) - 2);
             m_sAxisLogPath[linesize - strlen (key) - 2] = '\0';
         }
+        if (strcmp (key, "AXISCLIENTLOGPATH") == 0)
+        {
+            m_sAxisClientLogPath = (char*) malloc (CONFBUFFSIZE);
+            strncpy (m_sAxisClientLogPath, m_sValue + 1, linesize - strlen (key) - 2);
+            m_sAxisClientLogPath[linesize - strlen (key) - 2] = '\0';
+        }
         if (strcmp (key, "CLIENTWSDDFILEPATH") == 0)
         {
             m_sClientWsddFilePath = (char*) malloc (CONFBUFFSIZE);
@@ -116,6 +125,10 @@ char* AxisConfig::getAxisLogPath ()
     return m_sAxisLogPath;
 }
 
+char* AxisConfig::getAxisClientLogPath ()
+{
+    return m_sAxisClientLogPath;
+}
 
 char* AxisConfig::getClientWsddFilePath ()
 {
@@ -134,6 +147,8 @@ char* AxisConfig::getAxisHomePath ()
     char* pWsddPath = objConfig->GetWsddFilePath();
     printf("pWsddPath:%s\n", pWsddPath);
     char* LogPath = objConfig->GetAxisLogPath();
+    //to build
+    //gcc AxisConfig.cpp -o temp -I$AXISCPP_HOME/include -L$AXISCPP_HOME/bin -lserver_engine -ldl
 
 }
 */

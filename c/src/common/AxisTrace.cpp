@@ -47,6 +47,29 @@ int AxisTrace::openFile ()
     if ((fileTrace = fopen (sFileName, "a")) == NULL)
         return AXIS_FAIL;
     fclose (fileTrace);
+    setFilePerm(sFileName);
+    if ((fileTrace = fopen (sFileName, "a")) == NULL)
+        return AXIS_FAIL;
+                                                                                                                             
+    return AXIS_SUCCESS;
+}
+
+int AxisTrace::openFileByClient ()
+{
+    char* sFileName = g_pConfig->getAxisClientLogPath ();
+    if ((fileTrace = fopen (sFileName, "a")) == NULL)
+        return AXIS_FAIL;
+    fclose (fileTrace);
+    setFilePerm(sFileName);
+                                                                                                                             
+    if ((fileTrace = fopen (sFileName, "a")) == NULL)
+        return AXIS_FAIL;
+                                                                                                                             
+    return AXIS_SUCCESS;
+}
+
+int AxisTrace::setFilePerm(const char* sFileName)
+{
     int length = strlen (sFileName) + 12;
     char* setPerm = (char *) malloc (length);
     if (setPerm)
@@ -54,27 +77,13 @@ int AxisTrace::openFile ()
         strcpy (setPerm, "chmod 766 ");
         strcat (setPerm, sFileName);
     }
-
+                                                                                                                             
 #ifdef __GNUC__
     system (setPerm);
 #endif
-    if ((fileTrace = fopen (sFileName, "a")) == NULL)
-        return AXIS_FAIL;
-
+                                                                                                                             
     free(setPerm);
-    return AXIS_SUCCESS;
 }
-
-int AxisTrace::openFileByClient ()
-{
-    char* sFileName = "./ClientAxisLog";
-
-    if ((fileTrace = fopen (sFileName, "a")) == NULL)
-        return AXIS_FAIL;
-
-    return AXIS_SUCCESS;
-}
-
 
 int AxisTrace::logthis (const char* sLog, int level, char* arg2, int arg3)
 {
