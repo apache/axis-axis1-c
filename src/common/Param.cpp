@@ -30,11 +30,12 @@
 
 int AxisEngine::m_bServer;
 
+
 Param::~Param ()
 {
-	int i;
+    int i;
     XML_String pStr = 0;
-	AnyType* pAny = 0;
+    AnyType* pAny = 0;
     switch (m_Type)
     {
         case XSD_ARRAY:
@@ -67,10 +68,11 @@ Param::~Param ()
                 pStr = pAny->_array[i];
                 if (pStr) free(pStr);
             }
-            free(pAny);   
+            free(pAny);
         default:;
     }
 }
+
 
 int Param::serialize (SoapSerializer &pSZ)
 {
