@@ -82,5 +82,28 @@ extern "C"
     {
         // Do uninit actions
     }
-}
 
+    STORAGE_CLASS_INFO const char * WhatAmI()
+	{
+		char			szInfo[64];
+		char			szWhatAmI[256];
+		const char *	pszWhatAmI = szWhatAmI;
+
+		memset( szInfo, 0, sizeof( szInfo));
+		memset( szWhatAmI, 0, sizeof( szWhatAmI));
+
+		strcpy( szWhatAmI, "LibraryName: HTTPChannel\n");
+
+		sprintf( szInfo, "Built: %s\n", __TIMESTAMP__);
+		strcat( szWhatAmI, szInfo);
+
+#ifdef IPV6
+		sprintf( szInfo, "TCPIP: Built with IPV6\n");
+#else
+		sprintf( szInfo, "TCPIP: Built with IPV4\n");
+#endif
+		strcat( szWhatAmI, szInfo);
+
+		return pszWhatAmI;
+	}
+}
