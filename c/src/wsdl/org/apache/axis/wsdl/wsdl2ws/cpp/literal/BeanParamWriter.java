@@ -121,11 +121,22 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write(" */\n");
 		writer.write("int Axis_Serialize_"+classname+"("+classname+"* param, IWrapperSoapSerializer* pSZ, bool bArray = false)\n{\n");
 		if (attribs.length == 0) {
-			 //nothing to print if this is simple type we have inbuild types
-			 System.out.println("possible error class with no attributes....................");
-			 return;
+			System.out.println("possible error class with no attributes....................");
+			writer.write("\tpSZ->Serialize(\">\", NULL);\n");
+			writer.write("\treturn AXIS_SUCCESS;\n");
+			writer.write("}\n\n");				 
+			return;
 		}
 		String arrayType;
+		/* A type does not know whether it is used as a nillable parameter 
+		 * So this may not be the appropriate place to do this
+		 */
+		writer.write("\tif ( param == NULL ) {\n");
+		writer.write("\t /* TODO : may need to check nillable value*/\n"); 
+		writer.write("\t pSZ->SerializeAsAttribute(\"nil\", \"http://www.w3.org/2001/XMLSchema-instance\", (void*)&(xsd_boolean_true), XSD_BOOLEAN);\n");
+		writer.write("\t pSZ->Serialize(\">\", NULL);\n");
+		writer.write("\treturn AXIS_SUCCESS;\n");
+		writer.write("\t}\n");
 		writer.write("\t/* first serialize attributes if any*/\n");
 		for(int i = 0; i< attributeParamCount;i++){
 			if(attribs[i].isArray() || !(attribs[i].isSimpleType())){
@@ -134,14 +145,14 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			else{
 				if (attribs[i].isOptional()){
 					writer.write("\tif (0 != param->"+attribs[i].getParamName()+")\n");
-					writer.write("\t\tpSZ->SerializeAsAttribute(\""+attribs[i].getElementName().getLocalPart()+"\", 0, (void*)(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+					writer.write("\t\tpSZ->SerializeAsAttribute(\""+attribs[i].getParamName()+"\", 0, (void*)(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 				}
 				else{
-					writer.write("\tpSZ->SerializeAsAttribute(\""+attribs[i].getElementName().getLocalPart()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");				
+					writer.write("\tpSZ->SerializeAsAttribute(\""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");				
 				}
 			}
 		}
-		writer.write("\tpSZ->Serialize(\">\", NULL);\n");
+		writer.write("\tpSZ->Serialize(\">\", 0);\n");
 		writer.write("\t/* then serialize elements if any*/\n");
 		for(int i = attributeParamCount; i< attribs.length;i++){
 			if(attribs[i].isArray()){
@@ -160,14 +171,16 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				writer.write("\tpSZ->SerializeAsElement(\""+attribs[i].getElementName().getLocalPart()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");				
 			}else{
 				//if complex type
-				writer.write("\tpSZ->Serialize(\"<"+attribs[i].getParamName()+"\", 0);\n");
+				String elm = attribs[i].getParamName();
+				if ( attribs[i].isReference() )
+					elm = attribs[i].getTypeName();
+				writer.write("\tpSZ->Serialize(\"<"+elm+"\", 0);\n");
 				writer.write("\tAxis_Serialize_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+", pSZ);\n");
-				writer.write("\tpSZ->Serialize(\"<"+attribs[i].getParamName()+">\", 0);\n");
+				writer.write("\tpSZ->Serialize(\"</"+elm+">\", 0);\n");
 			}
 		}
 		writer.write("\treturn AXIS_SUCCESS;\n");
 		writer.write("}\n\n");
-	
 	}
 	private void writeDeSerializeGlobalMethod()throws IOException,WrapperFault{	
 		writer.write("/*\n");
@@ -175,9 +188,10 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write(" */\n");		
 		writer.write("int Axis_DeSerialize_"+classname+"("+classname+"* param, IWrapperSoapDeSerializer *pIWSDZ)\n{\n");
 		if (attribs.length == 0) {
-			 //nothing to print if this is simple type we have inbuild types
-			 System.out.println("possible error class with no attributes....................");
-			 return;
+			System.out.println("possible error class with no attributes....................");
+			writer.write("\treturn AXIS_SUCCESS;\n");
+			writer.write("}\n\n");
+			return;
 		 }
 		String arrayType = null;
 		for(int i = 0; i< attribs.length;i++){
@@ -194,7 +208,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				}
 			}else if(attribs[i].isSimpleType()){
 				//TODO handle optional attributes
-				writer.write("\tparam->"+attribs[i].getParamName()+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute())+"(\""+attribs[i].getElementName().getLocalPart()+"\",0);\n");
+				writer.write("\tparam->"+attribs[i].getParamName()+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute())+"(\""+(attribs[i].isAttribute() ? attribs[i].getParamName():attribs[i].getElementName().getLocalPart())+"\",0);\n");
 			} else{
 				//if complex type
 				writer.write("\tparam->"+attribs[i].getParamName()+" = ("+attribs[i].getTypeName()+"*)pIWSDZ->GetCmplxObject((void*)Axis_DeSerialize_"+attribs[i].getTypeName()+
