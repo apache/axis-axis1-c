@@ -6,7 +6,7 @@
 #   arg 2 : language (c/c++)
 
 #Build the wsdl2ws tool from the source
-ant -buildfile ${AXISCPP_HOME}/src/wsdl/build.xml
+ant -lib ${AXIS_JARS_HOME} -buildfile ${AXISCPP_HOME}/src/wsdl/build.xml
 #javac -classpath $AXIS_JARS -d temp ./org/apache/axis/wsdl/wsdl2ws/*.java
 #jar cmf mainClass $WSDL2WS_HOME/wsdl2ws.jar ./org
 #javac -d temp -sourcepath /home/damitha/projects/cvshead/src/wsdl/org/apache/axis/wsdl/wsdl2ws/*.java

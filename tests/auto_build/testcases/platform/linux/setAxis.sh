@@ -39,7 +39,7 @@ OUTPUT_DIR=$AXISTEST_HOME/testcases/build         # where the tests are built
 SERVICE_CONFIG=$AXISCPP_TEST_BIN/test.config
 
 WSDL2WS_HOME="${AXISCPP_HOME}/lib/axis"    # location of WSDL2Ws.jar
-AXIS_JARS_HOME="${AXISCPP_HOME}/lib/axisjava"  # location of axis.jar and others
+#AXIS_JARS_HOME=${AXIS_JARS_HOME:-{AXISCPP_HOME}/lib/axisjava}  # location of axis.jar and others
 
 # List of all the pre-req jar files needed for WSDL2Ws. Used to set CLASSPATH
 AXIS_JARS="$AXIS_JARS_HOME/axis.jar:$AXIS_JARS_HOME/commons-discovery.jar:$AXIS_JARS_HOME/commons-logging.jar:$AXIS_JARS_HOME/jaxrpc.jar:$AXIS_JARS_HOME/saaj.jar:$AXIS_JARS_HOME/wsdl4j.jar:$AXIS_JARS_HOME/xml-apis.jar"
