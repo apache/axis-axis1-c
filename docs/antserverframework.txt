@@ -1,0 +1,38 @@
+For the moment the serverside framework will work for windows only. I will add the linux specific stuff very soon.
+
+How to run
+-You can use any one of the supported servers. i.e. Apache1 Apache2 or simpleaxisserver.
+choose your preferred server by changing the server properties in c/build/build.Win32.properties
+
+-for apache servers you must copy the apache module to apache_home/modules and make the necessary changes in httpd.conf
+
+-set APACHE1_HOME, APACHE2_HOME environment variables as necessary
+
+Run the ant service deployment framework
+========================================
+
+-change the file /c/build/server.wsdd.services to conform to your system. What is needed is the correct value for the 
+classname parameter. The services will be deployed in a folder named "Axis" on the same level as the obj folder which is 
+created when the binaries are built using ant. Therefore change the path for the .dlls to point to the webservices 
+folder inside this "Axis" folder.
+
+-follow the ant build guide and set the relevant environment variables for that and build the executables and then 
+package it.
+
+-The services to be deployed are described in .xml files in the folder c\tests\auto_build\testcases\tests\server. Two 
+xml files for the services AxisBench and Calculator have been committed.
+
+- now you can run ant in the following fashion from /c ... 
+ant -f services.xml -Ddir.release="D:\san\works\checkouts\obj\package\axis-c-1.5.0-Win32-bin"
+(please change the dir.release property according to your system)
+
+- the services will be built and deployed in the selected server and the server started. (on windows it is not possible to "stop" apache2 and simpleaxisserver once they are started from ant. so if you want to redeploy the services you will 
+need to stop these servers manually before you re-run the serverside framework)
+
+
+Run the ant client test framework
+=================================
+
+-now you can run the ant testframework against the deployed services using the anttestguide
+
+-When running the client side framework you will have to change the executeTest.xml file where the axiscpp.conf file is being written to have the correct path and no mixed / and \ characters
