@@ -16,7 +16,7 @@ class MathOps
 private:
 	Call* m_pCall;
 public:
-	MathOps();
+	MathOps(const char* pchEndpointUri);
 public:
 	virtual ~MathOps();
 public: 
