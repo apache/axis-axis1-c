@@ -5,7 +5,8 @@ libwsdd_la_SOURCES = WSDDDeployment.cpp \
                 WSDDService.cpp \
                 WSDDTransport.cpp \
 		WSDDKeywords.cpp \
-                AxisWsddException.cpp
+                AxisWsddException.cpp \
+                WSDDDocument.cpp
 
 libwsdd_la_LIBADD = $(LDFLAGS)
 INCLUDES = -I$(AXISCPP_HOME)/include
