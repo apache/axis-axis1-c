@@ -59,6 +59,27 @@ package org.apache.geronimo.ews.jaxrpcmapping;
  *
  */
 
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
+
+import javax.wsdl.Binding;
+import javax.wsdl.Definition;
+import javax.wsdl.Fault;
+import javax.wsdl.Message;
+import javax.wsdl.Operation;
+import javax.wsdl.OperationType;
+import javax.wsdl.Port;
+import javax.wsdl.PortType;
+import javax.wsdl.Service;
+import javax.xml.namespace.QName;
+import javax.xml.rpc.holders.BooleanHolder;
+
 import org.apache.axis.encoding.DefaultTypeMappingImpl;
 import org.apache.axis.encoding.TypeMapping;
 import org.apache.axis.utils.JavaUtils;
@@ -83,32 +104,11 @@ import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.toJava.Emitter;
 import org.apache.axis.wsdl.toJava.JavaBindingWriter;
 import org.apache.axis.wsdl.toJava.JavaDefinitionWriter;
-import org.apache.axis.wsdl.toJava.JavaDeployWriter;
 import org.apache.axis.wsdl.toJava.JavaGeneratorFactory;
 import org.apache.axis.wsdl.toJava.JavaServiceWriter;
 import org.apache.axis.wsdl.toJava.JavaTypeWriter;
 import org.apache.axis.wsdl.toJava.JavaUndeployWriter;
 import org.apache.axis.wsdl.toJava.Utils;
-
-import javax.wsdl.Binding;
-import javax.wsdl.Definition;
-import javax.wsdl.Fault;
-import javax.wsdl.Message;
-import javax.wsdl.Operation;
-import javax.wsdl.OperationType;
-import javax.wsdl.Port;
-import javax.wsdl.PortType;
-import javax.wsdl.Service;
-import javax.xml.namespace.QName;
-import javax.xml.rpc.holders.BooleanHolder;
-import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Vector;
 
 /**
  * This is WsdlToJ2ee's implementation of the GeneratorFactory
@@ -177,7 +177,8 @@ public class J2eeGeneratorFactory implements GeneratorFactory {
 
     protected void addDefinitionGenerators() {
         addGenerator(Definition.class, JavaDefinitionWriter.class); // for faults
-        addGenerator(Definition.class, JavaDeployWriter.class); // for deploy.wsdd
+        //addGenerator(Definition.class, JavaDeployWriter.class); // for deploy.wsdd
+		addGenerator(Definition.class, J2eeDeployWriter.class); // for deploy.wsdd
         addGenerator(Definition.class, JavaUndeployWriter.class); // for undeploy.wsdd
     } // addDefinitionGenerators
 
