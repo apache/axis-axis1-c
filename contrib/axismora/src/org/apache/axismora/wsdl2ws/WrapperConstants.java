@@ -121,6 +121,9 @@ public interface WrapperConstants {
     public static final int GENERATOR_DEPLOYMENT_DISCRIPTOR = 33;
     public static final int GENERATOR_UNDEPLOYMENT_DISCRIPTOR = 34;
 
+	public static final int GENERATOR_DOCLIT_WRAPPER_JAVA = 35;
+	public static final int GENERATOR_DOCLIT_SERVICE_JAVA = 36;
+
     //implementation type
     public static final String IMPL_STYLE_STRUCT = "struct";
     public static final String IMPL_STYLE_VALUEORDER = "order";

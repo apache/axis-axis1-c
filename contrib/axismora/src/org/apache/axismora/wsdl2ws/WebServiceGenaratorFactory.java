@@ -55,6 +55,7 @@
 
 package org.apache.axismora.wsdl2ws;
 
+import org.apache.axismora.wsdl2ws.doclit.DocLitWebServiceGenarator;
 import org.apache.axismora.wsdl2ws.info.WebServiceContext;
 import org.apache.axismora.wsdl2ws.rpc.RPCWebServiceGenarator;
 
@@ -67,6 +68,8 @@ public class WebServiceGenaratorFactory {
     public static WebServiceGenarator createWebServiceGenarator(WebServiceContext wscontext) {
         if (wscontext.getWrapInfo().getWrapperStyle() == WrapperConstants.STYLE_RPC)
             return new RPCWebServiceGenarator(wscontext);
+        if (wscontext.getWrapInfo().getWrapperStyle() == WrapperConstants.STYLE_DOCUMENT)
+		    return new DocLitWebServiceGenarator(wscontext);
         return null;
     }
 }
