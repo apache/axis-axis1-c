@@ -35,12 +35,13 @@
 #include <axis/server/BasicTypeSerializer.h>
 #include "../soap/SoapKeywordMapping.h"
 #include <axis/AxisSoapException.h>
-
+#include <axis/server/AxisConfig.h>
 #include <stdio.h>
 #include <stdarg.h>
 
 #include <axis/server/AxisTrace.h>
 extern AxisTrace* g_pAT;
+extern AxisConfig* g_pConfig;
 
 /* Following values should come from axis configuration files. */
 #define INITIAL_SERIALIZE_BUFFER_SIZE 1024
@@ -481,16 +482,23 @@ int SoapSerializer::createSoapMethod(const AxisChar* sLocalName,
 }
 
 int SoapSerializer::createSoapFault(const AxisChar* sLocalName, 
-                                     const AxisChar* sURI)
+                                     const AxisChar* sURI,
+				     const AxisChar* sFaultCode,
+				     const AxisChar* sFaultString)
 {
     SoapFault* pSoapFault = new SoapFault();
     setSoapFault(pSoapFault);
     pSoapFault->setLocalName(sLocalName);
     pSoapFault->setPrefix(getNamespacePrefix(sURI));
     pSoapFault->setUri(sURI);
-    pSoapFault->setFaultcode("Server");
-    pSoapFault->setFaultstring(sLocalName);
-    pSoapFault->setFaultactor("http://endpoint/url");
+    pSoapFault->setFaultcode(sFaultCode);
+    pSoapFault->setFaultstring(sFaultString);
+    char* pcNodeName = g_pConfig->getAxisConfProperty(AXCONF_NODENAME);
+    char* pcPort = g_pConfig->getAxisConfProperty(AXCONF_LISTENPORT);
+    string strUrl = pcNodeName;
+    strUrl += ":";
+    strUrl += string(pcPort);
+    pSoapFault->setFaultactor(strUrl);
     
     return AXIS_SUCCESS;
 }

@@ -28,8 +28,8 @@
 
 #include <axis/server/AxisUserAPI.h>
 
-#include "DivByZeroFault.h"
-#include "AxisDivByZeroException.h"
+#include "DivByZeroStruct.h"
+#include "AxisServiceException.h"
 
 class MathOps 
 {
@@ -38,7 +38,7 @@ class MathOps
 	public:
 		virtual ~MathOps();
 	public: 
-		int div(int Value0,int Value1) throw(AxisDivByZeroException);
+		int div(int Value0,int Value1);
 };
 
 #endif /* !defined(__MATHOPS_SERVERSKELETON_H__INCLUDED_)*/

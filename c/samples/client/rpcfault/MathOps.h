@@ -23,8 +23,8 @@
 
 #include <axis/client/Stub.h>
 /*include Exception header files here*/
-#include "AxisDivByZeroException.h"
-#include <axis/AxisGenException.h>
+#include "AxisClientException.h"
+#include <axis/ISoapFault.h>
 #include "DivByZeroStruct.h"
 
 class MathOps 

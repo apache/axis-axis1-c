@@ -20,6 +20,8 @@
  */
 
 #include <axis/AxisWsddException.h>
+#include <exception>
+using namespace std;
 
 /**
  *    Default when no parameter passed. When thrown with no parameter
@@ -60,12 +62,17 @@ AxisWsddException::~AxisWsddException() throw ()
 
 void AxisWsddException::processException (const exception* e, const int iExceptionCode)
 {
-    m_sMessage = getMessage (e) + " " + getMessage (iExceptionCode);
+    m_sMessage = getMessage(iExceptionCode) + ":" + getMessage (e);
+}
+
+void AxisWsddException::processException (const exception* e, char* pcMessage)
+{
+    m_sMessage += "AxisWsddException:" + string(pcMessage) + ":" + getMessage (e);
 }
 
 void AxisWsddException::processException (const exception* e)
 {
-    m_sMessage = getMessage (e);
+    m_sMessage += "AxisWsddException:" + getMessage (e);
 }
 
 void AxisWsddException::processException(const int iExceptionCode)
@@ -75,19 +82,17 @@ void AxisWsddException::processException(const int iExceptionCode)
 
 void AxisWsddException::processException(const int iExceptionCode, char* pcMessage)
 {
-    AxisString sMessage = strdup(pcMessage);
+    AxisString sMessage = pcMessage;
     m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
     if(pcMessage)
         delete pcMessage;
 }
-const string& AxisWsddException::getMessage (const exception* objException)
+const string AxisWsddException::getMessage (const exception* objException)
 {
-    m_sMessage = objException->what();
-
-    return m_sMessage;
+    return objException->what();
 }
 
-const string& AxisWsddException::getMessage (const int iExceptionCode)
+const string AxisWsddException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {
@@ -102,6 +107,9 @@ const string& AxisWsddException::getMessage (const int iExceptionCode)
             break; 
         case SERVER_WSDD_NO_HANDLERS_CONFIGURED:
             m_sMessage = "AxisWsddException:No handlers configured in server.wsdd";
+            break;
+        case SERVER_WSDD_EXCEPTION:
+            m_sMessage = "AxisWsddException:Unknown wsdd exception";
             break;
         default:
             m_sMessage = "AxisWsddException:Unknown Wsdd Exception";

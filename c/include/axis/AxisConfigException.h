@@ -22,6 +22,7 @@
 #define __AXISCONFIGEXCEPTION_H_OF_AXIS_INCLUDED_
 
 #include <string>
+#include <exception>
 #include <axis/server/AxisException.h>
 using namespace std;
 
@@ -37,11 +38,12 @@ public:
     virtual ~AxisConfigException() throw();
     const char* what() throw();
     const int getExceptionCode();
-    const string& getMessage(const exception* e);
-    const string& getMessage(const int iExceptionCode);
+    const string getMessage(const exception* e);
+    const string getMessage(const int iExceptionCode);
 private:
     void processException(const exception* e);
     void processException(const exception* e, const int iExceptionCode);
+    void processException (const exception* e, char* pcMessage);
     void processException(const int iExceptionCode);
     void processException(const int iExceptionCode, char* pcMessage); 
     string m_sMessage;

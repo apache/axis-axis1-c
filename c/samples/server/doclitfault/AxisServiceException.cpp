@@ -3,11 +3,10 @@
  * This file contains implementations of an Exception class of the web service.
  */
 
-#include "AxisOutOfBoundException.h"
+#include "AxisServiceException.h"
 
-#include <axis/server/AxisWrapperAPI.h>
 
-AxisOutOfBoundException::AxisOutOfBoundException()
+AxisServiceException::AxisServiceException()
 {
 /* This only serves the pupose of indicating that the 
  * service has thrown an excpetion 
@@ -16,60 +15,60 @@ AxisOutOfBoundException::AxisOutOfBoundException()
 	processException(m_iExceptionCode); 
 }
 
-AxisOutOfBoundException::AxisOutOfBoundException(OutOfBoundStruct*pFault)
+AxisServiceException::AxisServiceException(ISoapFault* pFault)
 {
 	m_iExceptionCode = AXISC_SERVICE_THROWN_EXCEPTION;
 	processException(pFault);}
 
-AxisOutOfBoundException::AxisOutOfBoundException(int iExceptionCode)
+AxisServiceException::AxisServiceException(int iExceptionCode)
 {
 
 	m_iExceptionCode = iExceptionCode;
 	processException (iExceptionCode);
 }
 
-AxisOutOfBoundException::AxisOutOfBoundException(exception* e)
+AxisServiceException::AxisServiceException(exception* e)
 {
 	processException (e);
 }
 
-AxisOutOfBoundException::AxisOutOfBoundException(exception* e,int iExceptionCode)
+AxisServiceException::AxisServiceException(exception* e,int iExceptionCode)
 {
 
 	processException (e, iExceptionCode);
 }
 
-AxisOutOfBoundException::~AxisOutOfBoundException() throw () 
+AxisServiceException::~AxisServiceException() throw () 
 {
 	m_sMessage ="";
 }
 
-void AxisOutOfBoundException:: processException(exception* e, int iExceptionCode)
+void AxisServiceException:: processException(exception* e, int iExceptionCode)
 {
 	m_sMessage = getMessage (e) + getMessage (iExceptionCode);
 }
 
-void AxisOutOfBoundException::processException (OutOfBoundStruct* pFault)
-{
-	/*User can do something like deserializing the struct into a string*/}
+void AxisServiceException::processException (ISoapFault* pFault)
+{	
+}
 
-void AxisOutOfBoundException::processException(exception* e)
+void AxisServiceException::processException(exception* e)
 {
 	m_sMessage = getMessage (e);
 }
 
-void AxisOutOfBoundException::processException(int iExceptionCode)
+void AxisServiceException::processException(int iExceptionCode)
 {
 	m_sMessage = getMessage (iExceptionCode);
 }
 
-const string& AxisOutOfBoundException::getMessage (exception* objException)
+const string AxisServiceException::getMessage (exception* objException)
 {
 	string sMessage = objException->what();
 	return sMessage;
 }
 
-const string& AxisOutOfBoundException::getMessage (int iExceptionCode)
+const string AxisServiceException::getMessage (int iExceptionCode)
 {
 	string sMessage;
 	switch(iExceptionCode)
@@ -83,12 +82,12 @@ const string& AxisOutOfBoundException::getMessage (int iExceptionCode)
 return sMessage;
 }
 
-const char* AxisOutOfBoundException::what() throw ()
+const char* AxisServiceException::what() throw ()
 {
 	return m_sMessage.c_str ();
 }
 
-const int AxisOutOfBoundException::getExceptionCode(){
+const int AxisServiceException::getExceptionCode(){
 	return m_iExceptionCode;
 }
 

@@ -29,7 +29,7 @@
 #include "AnyElement.h"
 #include <axis/SOAPTransport.h>
 
-#include "Gdefine.h"
+#include "GDefine.h"
 
 /**
  * @class XMLParser

@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
             }
             catch(AxisException& e)
             {
-                printf("Exception : %s\n", e.what());
+                printf("%s\n", e.what());
             }
             catch(exception& e)
             {

@@ -25,8 +25,11 @@
 #include <map>
 #include <axis/server/AxisException.h>
 #include <axis/server/Param.h>
-#include <axis/server/SoapEnvVersions.h>
+#include <axis/server/SoapDeSerializer.h>
+#include <axis/ISoapFault.h>
+
 class SoapSerializer;
+//class SoapDeSerializer;
 
 using namespace std;
     
@@ -64,7 +67,7 @@ static SoapFaultStruct* s_parrSoapFaultStruct;
  *  "SOAP_VERSION eSoapVersion" to the "serialize" method.
  */
 
-class SoapFault  
+class SoapFault : public ISoapFault  
 {
 friend class SoapFaultsTestCase;
 
@@ -83,6 +86,8 @@ public:
     const char* getSoapString();
 
     int serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion);
+
+    void setDeSerializer(SoapDeSerializer* pDZ);
 
     /* int serialize(string&); */
 
@@ -104,7 +109,18 @@ public:
 
     string getFaultactor();
 
-    string getFaultDetail();
+    string getSimpleFaultDetail();
+    
+    string getCmplxFaultObjectName();
+ 
+    void* getCmplxFaultObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, 
+        const AxisChar* pName, const AxisChar* pNamespace);
+
+    const void* getCmplxFaultObject();
+
+    int setCmplxFaultObjectName(const string& sCmplxFaultObjectName);
+
+    int setCmplxFaultObject(const void* pCmplxFaultObject);
 
     void setUri(const AxisChar* uri);
 
@@ -120,6 +136,8 @@ private:
     string m_sFaultactor;
     string m_sFaultstring;
     string m_sFaultcode;
+    string m_sCmplxFaultObjectName;
+    const void* m_pCmplxFaultObject;
     Param* m_pFaultcodeParam;
     Param* m_pFaultstringParam;
     Param* m_pFaultactorParam;
@@ -127,6 +145,7 @@ private:
     AxisString m_strPrefix;
     AxisString m_strLocalname;
     AxisString m_strUri;
+    SoapDeSerializer* m_pDZ;
     bool m_bIsSimpleDetail;
     static volatile bool m_bInit;
 };

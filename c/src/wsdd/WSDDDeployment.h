@@ -23,6 +23,7 @@
 
 #include <axis/server/WSDDService.h>
 #include <axis/server/WSDDHandler.h>
+#include <axis/AxisWsddException.h>
 #include "WSDDTransport.h"
 
 #include <list>

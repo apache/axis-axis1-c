@@ -86,7 +86,8 @@ public:
         const AxisChar* sURI);
 
     int AXISCALL createSoapFault(const AxisChar* sLocalName, 
-        const AxisChar* sURI);
+        const AxisChar* sURI, const AxisChar* sFaultCode,
+	const AxisChar* sFaultString);
 
 /*    IWrapperSoapSerializer& operator<<(const char* cSerialized); */
     IWrapperSoapSerializer& operator<<(const AxisChar* cSerialized);

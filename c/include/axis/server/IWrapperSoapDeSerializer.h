@@ -31,8 +31,8 @@
 typedef struct {
     int (AXISCALL* checkMessageBody)(void* pObj, const AxisChar* pName, 
         const AxisChar* pNamespace);
-    int (AXISCALL* checkForFault)(void* pObj, const AxisChar* pName, 
-        const AxisChar* pNamespace);
+    void* (AXISCALL* checkForFault)(void* pObj, const AxisChar* pName,
+		            const AxisChar* pNamespace);
     /* Method used by wrappers to get a deserialized Array of complex types */
     Axis_Array (AXISCALL* getCmplxArray)(void* pObj, void* pDZFunct, 
         void* pCreFunct, void* pDelFunct, void* pSizeFunct, 
@@ -166,7 +166,7 @@ public:
 
     virtual int AXISCALL checkMessageBody(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual int AXISCALL checkForFault(const AxisChar* pName, 
+    virtual void* AXISCALL checkForFault(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
     /* Method used by wrappers to get a deserialized Array of complex types */
     virtual Axis_Array AXISCALL getCmplxArray(void* pDZFunct, void* pCreFunct, 
@@ -292,9 +292,9 @@ public:
         const AxisChar* pNamespace)
     {return ((IWrapperSoapDeSerializer*)pObj)->checkMessageBody(pName, 
     pNamespace);};
-    static int AXISCALL s_CheckForFault(void* pObj, const AxisChar* pName, 
+    static void* AXISCALL s_CheckForFault(void* pObj, const AxisChar* pName, 
         const AxisChar* pNamespace)
-    {return ((IWrapperSoapDeSerializer*)pObj)->checkMessageBody(pName, 
+    {return ((IWrapperSoapDeSerializer*)pObj)->checkForFault(pName, 
     pNamespace);};
     static Axis_Array AXISCALL s_GetCmplxArray(void* pObj, void* pDZFunct, 
         void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* 

@@ -33,9 +33,6 @@ MathOps::~MathOps()
 int MathOps::div(int Value0, int Value1)
 {
 	int Ret;
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
 	char* cFaultdetail;
 	try
 	{
@@ -62,18 +59,15 @@ int MathOps::div(int Value0, int Value1)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
+		        m_pCall->unInitialize();
 			throw;
 		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://localhost/axis/MathOps" ))//Exception handling code goes here
-		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-		        cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-                        if(cFaultdetail)
-		            throw AxisGenException(cFaultdetail);
-                        else
-                            throw AxisGenException(SERVER_UNKNOWN_ERROR);
+                ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault",
+		    "http://localhost/axis/MathOps");
+                if(pSoapFault)
+                {
+		    m_pCall->unInitialize();
+                    throw AxisClientException(pSoapFault);
 		}
 		else throw;
 	}

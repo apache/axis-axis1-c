@@ -23,13 +23,14 @@
 
 #include <axis/server/AxisWrapperAPI.h>
 
+extern int Axis_DeSerialize_DivByZeroStruct(DivByZeroStruct* param, IWrapperSoapDeSerializer* pDZ);
+extern void* Axis_Create_DivByZeroStruct(DivByZeroStruct *Obj, bool bArray = false, int nSize=0);
+extern void Axis_Delete_DivByZeroStruct(DivByZeroStruct* param, bool bArray = false, int nSize=0);
+extern int Axis_Serialize_DivByZeroStruct(DivByZeroStruct* param, IWrapperSoapSerializer* pSZ, bool bArray = false);
+extern int Axis_GetSize_DivByZeroStruct();
+
 bool CallBase::bInitialized;
 CallFunctions CallBase::ms_VFtable;
-extern int Axis_DeSerialize_DivByZeroFault(DivByZeroFault* param, IWrapperSoapDeSerializer *pDZ);
-extern void* Axis_Create_DivByZeroFault(DivByZeroFault *Obj, bool bArray = false, int nSize=0);
-extern void Axis_Delete_DivByZeroFault(DivByZeroFault* param, bool bArray = false, int nSize=0);
-extern int Axis_Serialize_DivByZeroFault(DivByZeroFault* param, IWrapperSoapSerializer* pSZ, bool bArray = false);
-extern int Axis_GetSize_DivByZeroFault();
 
 MathOps::MathOps(const char* pchEndpointUri)
 {
@@ -52,10 +53,7 @@ MathOps::~MathOps()
 int MathOps::div(int Value0, int Value1)
 {
     int Ret;
-    char* cFaultcode;
-    char* cFaultstring;
-    char* cFaultactor;
-    char* cFaultdetail;
+    const char* pcCmplxFaultName;
     try
     {
 	if (AXIS_SUCCESS != m_pCall->initialize(CPP_DOC_PROVIDER, NORMAL_CHANNEL)) return Ret;
@@ -81,43 +79,32 @@ int MathOps::div(int Value0, int Value1)
         {
             throw;
         }
-        if(AXIS_SUCCESS == m_pCall->checkFault("Fault",
-            "http://localhost/axis/MathOps/types")) //Exception handling code goes here
+
+        ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault", "http://localhost/axis/MathOps/types");
+        if(pSoapFault)
         {
-            cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-            cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-            cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-            if(0 == strcmp("DivByZeroFault", cFaultstring))
+            pcCmplxFaultName = pSoapFault->getCmplxFaultObjectName().c_str();
+            //printf("pcCmplxFaultName:%s\n", pcCmplxFaultName);
+            if(0 == strcmp("DivByZero", pcCmplxFaultName))
             {
-                if(AXIS_SUCCESS == m_pCall->checkFault("faultdetail",
-                    "http://localhost/axis/MathOps/types"))
-                {
-                    DivByZeroFault* pFaultDetail = NULL;
-                    pFaultDetail = (DivByZeroFault*)m_pCall->
-                        getCmplxObject((void*) Axis_DeSerialize_DivByZeroFault,
-                        (void*) Axis_Create_DivByZeroFault,
-                        (void*) Axis_Delete_DivByZeroFault,"DivByZeroException", 0);
-                                                                                                                                             
-                    char* temp = pFaultDetail->varString;
-                    printf("%s\n", temp);
-                    /*start user code*/
-                    printf("faultcode:%s\n", cFaultcode);
-                    printf("faultstring:%s\n", cFaultstring);
-                    printf("faultactor:%s\n", cFaultactor);
-                    /*end user code*/
-                    m_pCall->unInitialize();
-                    throw AxisDivByZeroException(pFaultDetail);
-                }
-            }
-            else
+                DivByZeroStruct* pFaultDetail = NULL;
+                pFaultDetail = (DivByZeroStruct*)pSoapFault->
+                    getCmplxFaultObject((void*) Axis_DeSerialize_DivByZeroStruct,
+                    (void*) Axis_Create_DivByZeroStruct,
+                    (void*) Axis_Delete_DivByZeroStruct,"DivByZero", 0);
+
+	      pSoapFault->setCmplxFaultObject(pFaultDetail);
+              m_pCall->unInitialize();
+              throw AxisClientException(pSoapFault);
+	    }
+	    else
             {
-                cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-                throw AxisGenException(cFaultdetail);
+                m_pCall->unInitialize();
+                throw AxisClientException(pSoapFault);
             }
         }
         else throw;
     }
-
 }
 
 int MathOps::getFaultDetail(char** ppcDetail)

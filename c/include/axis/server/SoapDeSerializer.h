@@ -76,7 +76,7 @@ public:
     int getFault();
     int AXISCALL checkMessageBody(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    int AXISCALL checkForFault(const AxisChar* pName, 
+    void* AXISCALL checkForFault(const AxisChar* pName, 
         const AxisChar* pNamespace);
     /* to get any header blocks left in the Deserializer */
     HeaderBlock* getHeaderBlock();
@@ -99,6 +99,10 @@ public:
      * object of complex type 
      */
     void* AXISCALL getCmplxObject(void* pDZFunct, void* pCreFunct, 
+        void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
+
+    const char* AXISCALL getCmplxFaultObjectName();
+    void* AXISCALL getCmplxFaultObject(void* pDZFunct, void* pCreFunct,
         void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
     
     /* Methods used by wrappers to get a deserialized value of basic types */

@@ -51,25 +51,8 @@ int main(int argc, char* argv[])
 
 	if (strcmp(op, "div") == 0)
 	{
-            try
-            {
-		iResult = ws.div(i1, i2);		
-                printf("Result is:%d\n", iResult);
-            }
-            catch(AxisDivByZeroException& e)
-            {
-                printf("Exception : %s\n", e.what());
-            }
-            catch(AxisException& e)
-            {
-                printf("Exception : %s\n", e.what());
-            }
-            catch(exception& e)
-            {
-            }
-            catch(...)
-            {
-            }
+	    iResult = ws.div(i1, i2);		
+            printf("Result is:%d\n", iResult);
 	}
 	else 
 	{
@@ -79,7 +62,7 @@ int main(int argc, char* argv[])
         }
         catch(AxisException& e)
         {
-            printf("Exception : %s\n", e.what());
+            printf("%s\n", e.what());
         }
         catch(exception& e)
         {

@@ -55,17 +55,9 @@ int main(int argc, char* argv[])
 		iResult = ws.div(i1, i2);		
                 printf("Result is:%d\n", iResult);
             }
-            catch(AxisDivByZeroException& e)
+            catch(AxisClientException& e)
             {
-                printf("Exception : %s\n", e.what());
-            }
-            catch(AxisOutOfBoundException& e)
-            {
-                printf("Exception : %s\n", e.what());
-            }
-            catch(AxisNormalDetailException& e)
-            {
-                printf("Exception : %s\n", e.what());
+                printf("%s\n", e.what());
             }
             catch(AxisException& e)
             {
