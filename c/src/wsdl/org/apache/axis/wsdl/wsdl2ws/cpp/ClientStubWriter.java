@@ -109,9 +109,10 @@ public class ClientStubWriter extends CPPClassWriter{
 		try{
 		writer.write(classname+"::"+classname+"()\n{\n");
 		writer.write("\tm_pCall = new Call();\n");
+		//TODO get TransportURI from WrapInfo and check what the transport is and do the following line accordingly
 		writer.write("\tm_pCall->SetProtocol(APTHTTP);\n");
 		writer.write("\tm_pCall->SetHeader(\"SOAPAction\", \""+classname+"\");\n");
-		writer.write("\tm_pCall->SetEndpointURI(\"http://the end point should be here\");\n");
+		writer.write("\tm_pCall->SetEndpointURI(\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\");\n");
 		writer.write("}\n\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
@@ -193,7 +194,7 @@ public class ClientStubWriter extends CPPClassWriter{
 		writer.write("\tif (SUCCESS != m_pCall->Initialize())\n\t");
 		writer.write("\treturn "+ (CPPUtils.isSimpleType(outparam)?"0":"NULL") +";\n");
 		//TODO handle returning appropriate type in case of string, char* and struct tm.
-		writer.write("\tm_pCall->SetOperation(\""+methodName+"\", \""+"http://namespace of the method\");\n");
+		writer.write("\tm_pCall->SetOperation(\""+methodName+"\", \""+ wscontext.getWrapInfo().getTargetNameSpaceOfWSDL() +"\");\n");
 		for (int i = 0; i < paramsB.size(); i++) {
 			paraTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();
 			writer.write("\tm_pCall->AddParameter(");			
@@ -212,7 +213,7 @@ public class ClientStubWriter extends CPPClassWriter{
 			writer.write(");\n");
 		}
 		if (CPPUtils.isSimpleType(outparam)){
-			writer.write(outparam+" RetValue;\n");
+			writer.write("\t"+outparam+" RetValue;\n");
 			writer.write("\tm_pCall->SetReturnType(XSD_UNKNOWN);\n");
 			writer.write("\tnStatus = m_pCall->Invoke();\n");
 			writer.write("\tif (SUCCESS == nStatus)\n\t{\n");
