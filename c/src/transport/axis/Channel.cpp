@@ -260,7 +260,7 @@ const Channel& Channel::operator >> (std::string& msg)
 	}
         if(nByteRecv)
         {
-		printf("nByteRecv:%d\n", nByteRecv);
+		//printf("nByteRecv:%d\n", nByteRecv);
                 buf[nByteRecv] = '\0';  // got a part of the message, so add " \		"to form
             	msg = buf;
             	//printf("buf:%s\n", buf);
