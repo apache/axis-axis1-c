@@ -157,6 +157,8 @@ public:
    *  NODE_TYPE and value (pachValue) parameters will be usefull.If the type
    *  is ELEMENT_NODE the parameters NODE_TYPE, pachLocalName, pachPrefix, 
    *  pachUri will be usefull.
+   * The caller of this method has to check the return value and if it is NULL
+   *  then the operation is not successfull.
    *
    * @param eNODE_TYPE The type of the child to be created, it should be either 
    *  CHARACTER_NODE for CharacterElements or ELEMENT_NODE for 
@@ -213,14 +215,17 @@ public:
         SOAP_VERSION eSOAP_VERSION);
 
     /**
-      * Creates a Attribute and adds it to this Header Block.
+      * Creates a Attribute and adds it to this Header Block. This method might
+      *  null to indicate unsuccessfull operation. The caller of this method 
+      *  should check for the return NULL value.
       *
       * @param localname The local name of the attribute.
       * @param prefix The prefix of the attribute.
       * @param uri The namespace uri of the attribute.
       * @param value The value of the attribute.
       *
-      * @return A pointer to the created Attribute will be returned.
+      * @return A pointer to the created Attribute will be returned. If the
+      *  operation is unsuccessfull it will return NULL.
       */
     Attribute* createAttribute(const AxisChar* localname, 
         const AxisChar* prefix, const AxisChar* uri, const AxisChar* value);
@@ -324,7 +329,8 @@ public:
       *
       * @param pAttribute The Attribute pointer which points to a valid 
       * namespace declartion Attribute.
-      * @return AXIS_SUCCESS to indicate successfull operation.
+      * @return AXIS_SUCCESS to indicate successfull operation. AXIS_FAIL to
+      *  to indicate unsuccessfull operation.
       */
     int addNamespaceDecl(Attribute *pAttribute);
 

@@ -23,11 +23,30 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ * @author Roshan Weerasuriya (roshanw@jkcsworld.com, roshan@opensource.lk)
  *
  */
 
 /* HeaderBlock.cpp: implementation of the HeaderBlock class. */
+
+/*
+ * Revision 1.1  2004/07/01 roshan
+ * Added code to "addChild" method to deal with a null child.
+ * Added code to createImmediateChild(NODE_TYPE eNODE_TYPE,
+ *                                            AxisChar *pachLocalName,
+ *                                            AxisChar *pachPrefix,
+ *                                            AxisChar *pachUri,
+ *                                            AxisChar* pachValue)
+ *  to deal with null localname and namespace uri.
+ * Added code to addAttribute(Attribute* pAttr) to deal with null values.
+ * Added code to createAttribute(const AxisChar *localname,
+ *                                        const AxisChar *prefix,
+ *                                       const AxisChar *value)
+ *  to deal with null values.
+ * Added code to addNamespaceDecl(Attribute *pAttribute) to deal with NULL
+ *  null values.
+ */
+
 
 #ifdef WIN32
 #pragma warning (disable : 4786)
@@ -54,7 +73,7 @@ HeaderBlock::HeaderBlock(const AxisChar *pachLocalName, const AxisChar *pachUri)
     iNoOFChildren = 0;
     m_localname = pachLocalName;
     m_uri = pachUri;
-	m_sPrefix = "";
+    m_sPrefix = "";
 }
 
 HeaderBlock::HeaderBlock(const HeaderBlock& rCopy):
@@ -143,9 +162,12 @@ void HeaderBlock::setUri(const AxisChar* uri)
     m_uri= uri;
 }
 
-void HeaderBlock::addAttribute(Attribute* attr)
+void HeaderBlock::addAttribute(Attribute* pAttr)
 {
-    m_attributes.push_back(attr);
+    if (pAttr)
+    {
+        m_attributes.push_back(pAttr);
+    }
 }
 
 int HeaderBlock::serialize(SoapSerializer& pSZ)
@@ -273,10 +295,17 @@ bool HeaderBlock::isSerializable()
 
 int HeaderBlock::addChild(BasicNode *pBasicNode)
 {
-    m_children.push_back(pBasicNode);
-    iNoOFChildren++;
+    if (pBasicNode)
+    {
+        m_children.push_back(pBasicNode);
+        iNoOFChildren++;
 
-    return AXIS_SUCCESS;
+        return AXIS_SUCCESS;
+    }
+    else
+    {
+        return AXIS_FAIL;
+    }
 }
 
 int HeaderBlock::serializeChildren(SoapSerializer& pSZ,
@@ -303,9 +332,15 @@ int HeaderBlock::serializeChildren(SoapSerializer& pSZ,
 
 int HeaderBlock::addNamespaceDecl(Attribute *pAttribute)
 {
-    m_namespaceDecls.push_back(pAttribute);
-
-    return AXIS_SUCCESS;
+    if (pAttribute)
+    {
+        m_namespaceDecls.push_back(pAttribute);
+        return AXIS_SUCCESS;
+    }
+    else
+    {
+        return AXIS_FAIL;
+    }
 }
 
 int HeaderBlock::serializeNamespaceDecl(SoapSerializer &pSZ)
@@ -456,8 +491,13 @@ Attribute* HeaderBlock::createAttribute(const AxisChar *localname,
                                         const AxisChar *prefix,
                                         const AxisChar *value)
 {
-    Attribute* pAttribute = new Attribute(localname, prefix, value);
-    m_attributes.push_back(pAttribute);
+    Attribute* pAttribute = 0;
+
+    if (localname)
+    {
+        Attribute* pAttribute = new Attribute(localname, prefix, value);
+        m_attributes.push_back(pAttribute);
+    }
 
     return pAttribute;
 }
@@ -583,16 +623,26 @@ BasicNode* HeaderBlock::createImmediateChild(NODE_TYPE eNODE_TYPE,
         }
         else if (eNODE_TYPE==ELEMENT_NODE)
         {
-            pBasicNode = new ComplexElement(pachLocalName, pachPrefix,
-                pachUri);
+            if ( (pachLocalName) && (pachUri) )
+            {
+                pBasicNode = new ComplexElement(pachLocalName, pachPrefix,
+                    pachUri);
+            }
+            else
+            {
+                break;
+            }
         }
         else
         {
             break;
         }
 
-        m_children.push_back(pBasicNode);
-        iNoOFChildren++;
+        if (pBasicNode)
+        {
+            m_children.push_back(pBasicNode);
+            iNoOFChildren++;
+        }
     } while (0);
 
     return pBasicNode;

@@ -93,7 +93,8 @@ public:
       * Adds the given child node to this Complex Element.
       *
       * @param pBasicNode the child node to be added to this Complex Element.
-      * @return AXIS_SUCCESS to indicate successfull operation.
+      * @return AXIS_SUCCESS to indicate successfull operation. Return 
+      *  AXIS_FAIL to indicate unsuccessfull operation.
       */
     int addChild(BasicNode* pBasicNode);
 
