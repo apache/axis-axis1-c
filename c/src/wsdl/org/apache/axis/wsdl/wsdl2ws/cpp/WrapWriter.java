@@ -36,6 +36,7 @@ import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
+import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 
 public class WrapWriter extends CPPClassWriter{
@@ -348,9 +349,64 @@ public class WrapWriter extends CPPClassWriter{
 			writer.write(");\n");
 			writer.write("\treturn AXIS_SUCCESS;\n");
 		}
+                //--------
+                Iterator paramsFault = minfo.getFaultType().iterator();
+                String faultInfoName =null;
+                String faultType =null;
+                String langName =null;
+                String paramName =null;
+                if (paramsFault.hasNext()){
+                        FaultInfo info = (FaultInfo)paramsFault.next();
+                        faultInfoName =info.getFaultInfo();
+                        System.out.println("came1");
+                        ArrayList paramInfo =info.getParams();
+                        for (int i= 0; i < paramInfo.size(); i++) {
+                                System.out.println("came2");
+                                ParameterInfo par =(ParameterInfo)paramInfo.get(i);
+                                paramName  = par.getParamName();
+                                langName =par.getLangName();
+                                System.out.println(par.getLangName()+"get Language name +++++++++++ ");
+                                System.out.println(par.getParamName()+"to get the parameter name ^^^^^^^^^^^");
+                                faultType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(par,wscontext);
+                                System.out.println(faultType+" Fault type  ..............   ");
+                                writer.write("\t}\n");//damitha
+                                writeExceptions(faultType,faultInfoName,paramName,langName);
+                        }
+                 }
+                                                                                                                             
+                                                                                                                             
+                                                                                                                             
+//--------
 		//write end of method
 		writer.write("}\n");
 	}
+
+        private void writeExceptions(String faulttype,String faultInfoName,String paramName,String langName) throws WrapperFault{
+                try{
+                                                                                                                             
+                        writer.write("\tcatch(Axis"+langName+"Exception& e)\n");
+                        writer.write("\t{\n");
+                        //writer.write("\t\tif(0 == strcmp(\""+langName+"\", cFaultstring))\n");//damitha
+                        writer.write("\t\tpIWSSZ->createSoapFault(\""+langName+"\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\");\n");
+                                                                                                                             
+                        //writer.write("\t\t{\n");//damitha
+                        //writer.write("\t\t\tif (AXIS_SUCCESS == m_pCall->checkFault(\"faultdetail\",\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\"))\n");//damitha
+                        //writer.write("\t\t\t{\n");//damitha added
+                        writer.write("\t\t"+faulttype+" pObjFault = new "+langName+"();\n");//damitha
+                        writer.write("\t\t/*User may write code here to fill the struct*/\n");
+                        writer.write("\t\tif (pObjFault)\n");
+                                                                                                                             
+                        writer.write("\t\t\tpIWSSZ->addFaultDetail(pObjFault, (void*) Axis_Serialize_"+langName+",\n");//damitha
+                        writer.write("\t\t\t(void*) Axis_Delete_"+langName+",\""+langName+"\", 0);\n");//damitha
+                        writer.write("\t\tthrow;\n");//damitha
+                        writer.write("\t}\n");
+                        writer.write("\n");
+                }
+                catch (IOException e) {
+                                        throw new WrapperFault(e);
+                                }
+        }
+
 	/* (non-Javadoc)
 	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.CPPClassWriter#writeGlobalCodes()
 	 */
