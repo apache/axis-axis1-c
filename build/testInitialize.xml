@@ -17,16 +17,6 @@
 			</not>
 		</condition>
 
-		<!-- set the built lib for the selected client partser -->
-		<condition property="selectedClientParserLib" value="${libraryPrefix}${xml4c.xmlParserLibraryName}${librarySuffix}">
-			<istrue value="${testconf.client.parser.xml4c}"/>
-		</condition>
-		<condition property="selectedClientParserLib" value="${libraryPrefix}${xerces.xmlParserLibraryName}${librarySuffix}">
-			<istrue value="${testconf.client.parser.xerces}"/>
-		</condition>
-		<!-- make a copy of the parser specfic library with the general parser library name -->
-		<copy failonerror="false" file="${dir.bin}/${selectedClientParserLib}" tofile="${dir.bin}/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}"/>
-
 </target>
 
 
