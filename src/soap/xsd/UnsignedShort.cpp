@@ -12,7 +12,7 @@ UnsignedShort::~UnsignedShort()
 
 AxisChar* UnsignedShort::serialize(const void* value) throw (AxisSoapException)
 {
-    return serialize((unsigned int*) value);
+    return serialize((xsd__unsignedShort *) value);
 }
 
 void* UnsignedShort::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
@@ -20,13 +20,13 @@ void* UnsignedShort::deserialize(const AxisChar* valueAsChar) throw (AxisSoapExc
     return (void*) deserializeUnsignedShort(valueAsChar);
 }
 
-AxisChar* UnsignedShort::serialize(const unsigned short* value) throw (AxisSoapException)
+AxisChar* UnsignedShort::serialize(xsd__unsignedShort * value) throw (AxisSoapException)
 {
     unsigned int valueAsInt = static_cast<unsigned int>(*value);
     return UnsignedInt::serialize(&valueAsInt);
 }
 
-unsigned short* UnsignedShort::deserializeUnsignedShort(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__unsignedShort* UnsignedShort::deserializeUnsignedShort(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
     unsigned int* returnValue = UnsignedInt::deserializeUnsignedInt(valueAsChar);
  
@@ -35,8 +35,8 @@ unsigned short* UnsignedShort::deserializeUnsignedShort(const AxisChar* valueAsC
         delete m_UnsignedShort;
         m_UnsignedShort = NULL;
     }
-    m_UnsignedShort = new unsigned short;
-    *m_UnsignedShort = static_cast<unsigned short> (*returnValue);
+    m_UnsignedShort = new xsd__unsignedShort;
+    *m_UnsignedShort = static_cast<xsd__unsignedShort> (*returnValue);
     return m_UnsignedShort;
 }
 

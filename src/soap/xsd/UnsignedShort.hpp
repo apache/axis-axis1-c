@@ -23,6 +23,7 @@
 #define _UNSIGNEDSHORT_HPP____OF_AXIS_INCLUDED_
 
 #include "UnsignedInt.hpp"
+#include <axis/AxisUserAPI.hpp>
 
 AXIS_CPP_NAMESPACE_START
 
@@ -60,14 +61,14 @@ public:
      * @param value The UnsignedShort value to be serialized.
      * @return Serialized form of UnsignedShort value.
      */  
-    AxisChar* serialize(const unsigned short* value) throw (AxisSoapException);
+    AxisChar* serialize(xsd__unsignedShort* value) throw (AxisSoapException);
   
   /**
    * Deserialized UnsignedShort value from it's on-the-wire string form.
    * @param valueAsChar Serialized form of UnsignedShort value.
    * @return Deserialized UnsignedShort value.
    */
-    unsigned short* deserializeUnsignedShort(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__unsignedShort* deserializeUnsignedShort(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 
@@ -79,7 +80,7 @@ protected:
     virtual MaxInclusive* getMaxInclusive();
     
 private:
-    unsigned short *m_UnsignedShort;
+    xsd__unsignedShort *m_UnsignedShort;
 };
 
 AXIS_CPP_NAMESPACE_END
