@@ -94,6 +94,8 @@ public class HandlerWriter extends AbstractWriter {
      */
     public void writeCode() throws GenerationFault {
         super.writeCode();
+        if(out == null)
+        	return;
         out.write("package " + packageName + ";\n");
         out.write("public class " + className + " extends org.apache.axis.handlers.BasicHandler{\n");
 

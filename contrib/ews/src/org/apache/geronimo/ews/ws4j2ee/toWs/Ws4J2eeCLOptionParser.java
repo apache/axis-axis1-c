@@ -80,12 +80,14 @@ public class Ws4J2eeCLOptionParser {
     protected static final int HELPER_CLASS_OPT = 'H';
     protected static final int USERNAME_OPT = 'U';
     protected static final int PASSWORD_OPT = 'P';
+	protected static final int REMOTE_OPT = 'R';
 
     private String wscffile;
     private String outputDirectory = ".";
     private boolean isServerSide = false;
     private String userName;
     private String password;
+    private boolean useRemoteInterface = false;
 
     protected static final CLOptionDescriptor[] options = new CLOptionDescriptor[]{
         new CLOptionDescriptor("server-side",
@@ -104,6 +106,10 @@ public class Ws4J2eeCLOptionParser {
                 CLOptionDescriptor.ARGUMENT_REQUIRED,
                 PASSWORD_OPT,
                 "password"),
+		new CLOptionDescriptor("useRemote",
+					   CLOptionDescriptor.ARGUMENT_DISALLOWED,
+					   REMOTE_OPT,
+					   "use the Remote interface")        
     };
 
     public Ws4J2eeCLOptionParser(String[] args) {
@@ -167,6 +173,9 @@ public class Ws4J2eeCLOptionParser {
                 }
                 wscffile = option.getArgument();
                 break;
+            case REMOTE_OPT:    
+				useRemoteInterface = true;  
+				break;	  
             default:
                 throw new UnrecoverableGenarationFault("unknown option");
         }
@@ -241,5 +250,19 @@ public class Ws4J2eeCLOptionParser {
     public void setUserName(String string) {
         userName = string;
     }
+
+	/**
+	 * @return
+	 */
+	public boolean isUseRemoteInterface() {
+		return useRemoteInterface;
+	}
+
+	/**
+	 * @param b
+	 */
+	public void setUseRemoteInterface(boolean b) {
+		useRemoteInterface = b;
+	}
 
 }

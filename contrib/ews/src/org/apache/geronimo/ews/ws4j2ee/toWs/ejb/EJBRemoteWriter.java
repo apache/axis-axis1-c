@@ -39,7 +39,7 @@ public class EJBRemoteWriter extends JavaInterfaceWriter {
 		if (!outdir.endsWith("/"))
 			outdir = outdir + "/";
 
-		return outdir + "ejb/" + name.replace('.', '/') + ".java";
+		return outdir + name.replace('.', '/') + ".java";
 	}
 
 	protected String getExtendsPart() {
@@ -77,10 +77,11 @@ public class EJBRemoteWriter extends JavaInterfaceWriter {
 			}
 
 			out.write(") throws java.rmi.RemoteException");
-			ArrayList faults = op.getFaults();
-			for (int j = 0; j < faults.size(); j++) {
-				out.write("," + (String) faults.get(i));
-			}
+//ejb giving problems deploying check this            
+//			  ArrayList faults = op.getFaults();
+//			  for (int j = 0; j < faults.size(); j++) {
+//				  out.write("," + (String) faults.get(i));
+//			  }
 			out.write(";\n");
 		}
 	}

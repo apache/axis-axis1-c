@@ -36,9 +36,7 @@ public class BuildFileGenerator implements Generator {
 			out.write("<?xml version=\"1.0\"?>\n");
 
 			out.write("<project basedir=\".\" default=\"dist\">\n");
-			out.write("	<property name=\"all.src\" location=\".\"/>\n");
-			out.write("	<property name=\"ejb.src\" location=\"${all.src}/ejb\"/>\n");
-			out.write("	<property name=\"jaxrpc.src\" location=\"${all.src}/jaxrpc\"/>\n");
+			out.write("	<property name=\"src\" location=\".\"/>\n");
 			out.write("	<property name=\"build\" location=\"build\"/>\n");
 			out.write("	<property name=\"build.classes\" location=\"${build}/classes\"/>\n");
 			out.write("	<property name=\"build.lib\" location=\"${build}/lib\"/>\n");
@@ -56,18 +54,23 @@ public class BuildFileGenerator implements Generator {
 			out.write("	   <mkdir dir=\"${build.lib}\"/>\n");
 			out.write("		<javac destdir=\"${build.classes}\" debug=\"on\">\n");
 			out.write("			<classpath refid=\"classpath\" />\n");
-			out.write("			<src path=\"${ejb.src}\"/>\n");
-			out.write("			<src path=\"${jaxrpc.src}\"/>\n");
+			out.write("			<src path=\"${src}\"/>\n");
 			out.write("		</javac>\n");
 			out.write("	</target>\n");
 
-			out.write("	<target name=\"ejbJar\" depends=\"compile\">\n");
+			out.write("	<target name=\"jar\" depends=\"compile\">\n");
 			out.write("		<mkdir dir=\"${build.classes}/META-INF/\"/>\n");
-			out.write("		<copy file =\"${ejb.src}/META-INF/ejb-jar.xml\" todir=\"${build.classes}/META-INF\"/>\n");
-			out.write("		<copy file =\"${ejb.src}/META-INF/jboss.xml\" todir=\"${build.classes}/META-INF\"/>\n");
+			out.write("		<copy file =\"${src}/META-INF/ejb-jar.xml\" todir=\"${build.classes}/META-INF\"/>\n");
+			out.write("		<copy file =\"${src}/META-INF/jboss.xml\" todir=\"${build.classes}/META-INF\"/>\n ");
 
+			String jarName = j2eewscontext.getMiscInfo().getTargetPortType().getName().toLowerCase();
+			int index = jarName.lastIndexOf(".");
+			if(index>0){
+				jarName = jarName.substring(index+1);
+			} 
+            
 			out.write("		<jar jarfile=\"${build}/lib/"
-					+ j2eewscontext.getMiscInfo().getEjbName().toLowerCase() + "-ejb.jar\" basedir=\"${build.classes}\" >\n");
+					+ jarName + ".jar\" basedir=\"${build.classes}\" >\n");
 			out.write("		<include name=\"**\" />\n");
 			out.write("		<manifest>\n");
 			out.write("			<section name=\"org/apache/ws4j2ee\">\n");
@@ -79,24 +82,8 @@ public class BuildFileGenerator implements Generator {
 			out.write("		<delete dir=\"${build.classes}/META-INF/\"/>\n");
 			out.write("	</target>\n");
 
-			out.write("   <target name=\"jaxrpcJar\" depends=\"compile\">\n");
-			out.write("		<mkdir dir=\"${build.classes}/META-INF/\"/> \n");
-			out.write("	<!--	<copy file =\"${jaxrpc.src}/META-INF/*\" todir=\"${build.classes}/META-INF\"/> -->\n");
 
-			out.write("		<jar jarfile=\"${build}/lib/"
-					+ j2eewscontext.getMiscInfo().getEjbName().toLowerCase() + "-jaxrpc.jar\" basedir=\"${build.classes}\" >\n");
-			out.write("		<include name=\"**\" />\n");
-			out.write("		<manifest>\n");
-			out.write("			<section name=\"org/apache/ws4j2ee\">\n");
-			out.write("			<attribute name=\"Implementation-Title\" value=\"Apache jsr109 impl\"/>\n");
-			out.write("			<attribute name=\"Implementation-Vendor\" value=\"Apache Web Services\"/>\n");
-			out.write("			</section>\n");
-			out.write("		</manifest>\n");
-			out.write("		</jar>\n");
-			out.write("		<delete dir=\"${build.classes}/META-INF/\"/>\n");
-			out.write("	</target>\n");
-
-			out.write("	<target name=\"dist\" depends=\"ejbJar,jaxrpcJar\"/>\n  ");
+			out.write("	<target name=\"dist\" depends=\"jar\"/>\n  ");
 
 			out.write("	<target name=\"clean\">\n");
 			out.write("		<delete dir=\"${build}\"/>\n");

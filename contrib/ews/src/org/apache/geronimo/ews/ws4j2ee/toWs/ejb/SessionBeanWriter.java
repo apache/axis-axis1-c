@@ -39,7 +39,7 @@ public class SessionBeanWriter extends JavaClassWriter {
 		if (!outdir.endsWith("/"))
 			outdir = outdir + "/";
 
-		return outdir + "ejb/" + name.replace('.', '/') + ".java";
+		return outdir +  name.replace('.', '/') + ".java";
 	}
 
 	protected void writeAttributes() throws GenerationFault {
@@ -76,10 +76,11 @@ public class SessionBeanWriter extends JavaClassWriter {
 			}
 
 			out.write(") throws java.rmi.RemoteException");
-			ArrayList faults = op.getFaults();
-			for (int j = 0; j < faults.size(); j++) {
-				out.write("," + (String) faults.get(i));
-			}
+//			ejb giving problems deploying check this            
+//			  ArrayList faults = op.getFaults();
+//			  for (int j = 0; j < faults.size(); j++) {
+//				  out.write("," + (String) faults.get(i));
+//			  }
 			out.write("{\n");
 			out.write("\t}\n");
 		}
@@ -104,6 +105,13 @@ public class SessionBeanWriter extends JavaClassWriter {
 	 */
 	protected String getimplementsPart() {
 		return " implements javax.ejb.SessionBean";
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.geronimo.ews.ws4j2ee.toWs.AbstractWriter#isOverWrite()
+	 */
+	protected boolean isOverWrite() {
+		return false;
 	}
 
 }

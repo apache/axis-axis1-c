@@ -76,6 +76,8 @@ public abstract class JavaInterfaceWriter extends AbstractWriter {
     }
 
     public void writeCode() throws GenerationFault {
+		if(out == null)
+			return;
         out.write((packageName != null) ? ("package " + packageName + ";\n") : "");
         writeImportStatements();
         writeClassComment();

@@ -152,4 +152,8 @@ public interface MiscInfo {
     public String getJ2eeContainerDDName();
 
     public void setJ2eeContainerDDName(String string);
+    
+    public void setUseRemoteInterface(boolean useRemoteInterface);
+    
+	public boolean isUseRemoteInterface();
 }

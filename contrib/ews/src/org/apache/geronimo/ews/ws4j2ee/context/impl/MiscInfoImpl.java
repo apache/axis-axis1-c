@@ -82,6 +82,7 @@ public class MiscInfoImpl implements MiscInfo {
     private BindingEntry binding;
     private PortTypeEntry portType;
     private Port port;
+    private boolean useRemoteInterface;
 
     private String ejbsei = null;
     private String ejbbean = null;
@@ -335,5 +336,19 @@ public class MiscInfoImpl implements MiscInfo {
     public void setJ2eeContainerDDName(String string) {
         j2eeContainerDDName = string;
     }
+
+	/* (non-Javadoc)
+	 * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#isUseRemoteInterface()
+	 */
+	public boolean isUseRemoteInterface() {
+		return useRemoteInterface;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#setUseRemoteInterface(boolean)
+	 */
+	public void setUseRemoteInterface(boolean useRemoteInterface) {
+		this.useRemoteInterface = useRemoteInterface;
+	}
 
 }
