@@ -121,7 +121,8 @@ from Axis. We hope you enjoy using Axis c++ 1.0. Please note that this is an
 open-source effort - if you feel the code could use some new features or
 fixes, please get involved and lend a hand! The Axis developer community
 welcomes your participation. Let us know what you think! Please send feedback
-about the package to <a href="mailto:axis-user@xml.apache.org">axis-user@xml.apache.org</a></p>
+about the package to <a
+href="mailto:axis-user@xml.apache.org">axis-user@xml.apache.org</a></p>
 
 <p><a name="What1"></a></p>
 
@@ -561,6 +562,13 @@ this directory.</p>
 <p></p>
 
 <p><strong>AXIS_HOME="/usr/local/apache/Axis"</strong></p>
+
+<p></p>
+
+<p>Note that inside $AXIS_HOME directory there is a file called axiscpp.conf.
+Make sure that it has read permissions. This file contains key, value pairs
+of paths used by the Axis Soap Engine. You can change the WSDDFILEPATH and
+AXISLOGPATH inside this file according to your choice.</p>
 
 <p></p>
 
@@ -1838,8 +1846,8 @@ InteropTestPortType.o<br>
 </strong><strong>$AXISCPP_HOME/lib/axis/libaxiscpp_client.a
 $AXISCPP_HOME/lib/axis/libaxiscpp_mod.a <br>
 -</strong><strong>L$AXISCPP_HOME/lib/xerces-c -lxerces-c -ldl <br>
-</strong><strong>$AXISCPP_HOME/src/client/lib/libaxiscpp_client.a <br>
-</strong><strong>$AXISCPP_HOME/release/libaxiscpp_mod.a
+</strong><strong>$AXISCPP_HOME/lib/axis/libaxiscpp_client.a <br>
+</strong><strong>$AXISCPP_HOME/lib/axis/libaxiscpp_mod.a
 -L$AXISCPP_HOME/lib/xerces-c -lxerces-c -ldl</strong></p>
 
 <p></p>
@@ -1934,11 +1942,11 @@ documented below.</p>
 <h1>Getting a CVS checkout</h1>
 
 <p>Visit <a href="http://ws.apache.org/">http://ws.apache.org/</a> click on
-"axis" and then on <strong>"CVS Repository"</strong> to find details on accessing the CVS Repository.
-It will have instructions similar to the following."Anyone can
-checkout source code from our anonymous CVS server. To do so, simply use the
-following commands (if you are using a GUI CVS client, configure it
-appropriately):</p>
+"axis" and then on <strong>"CVS Repository"</strong> to find details on
+accessing the CVS Repository. It will have instructions similar to the
+following."Anyone can checkout source code from our anonymous CVS server. To
+do so, simply use the following commands (if you are using a GUI CVS client,
+configure it appropriately):</p>
 
 <p></p>
 
@@ -1959,10 +1967,9 @@ ws-axis"</strong></p>
 <p>To use the command line cvs client go to <a
 href="http://www.cvshome.org">http://www.cvshome.org</a> and download the cvs
 binaries for windows. Extract the cvs binaries from the downloaded zip file.
-There will be a <strong>"cvs.exe"</strong> file when this is
-extracted. Set the PATH environment variable to where "cvs.exe"
-is. You would have to do the following to get a checkout from the command
-line cvs client.</p>
+There will be a <strong>"cvs.exe"</strong> file when this is extracted. Set
+the PATH environment variable to where "cvs.exe" is. You would have to do the
+following to get a checkout from the command line cvs client.</p>
 
 <p></p>
 
@@ -1983,7 +1990,6 @@ login</strong></p>
 
 <p><strong>cvs -d :pserver:anoncvs@cvs.apache.org:/home/cvspublic checkout
 ws-axis</strong></p>
-
 
 <p>The checkout of the repository will be created in the current directory in
 a folder named &#x201c;ws-axis&#x201d;</p>
