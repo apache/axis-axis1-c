@@ -353,7 +353,6 @@ int main(int argc, char *argv[ ])
 	///////////////
 
 	//initializing Axis
-	//initialize_module();
 
 	initialize_module(1, "");
 	

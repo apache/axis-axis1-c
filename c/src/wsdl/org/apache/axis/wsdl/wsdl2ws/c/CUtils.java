@@ -81,22 +81,22 @@ public class CUtils {
 		  * This type mapping is not complete. Susantha Ayya Can u please fill it 
 		  */		
 		 class2QNamemap.put("int", new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"));
-		 class2QNamemap.put("byte", new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"));
+		 class2QNamemap.put("unsigned char", new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"));
 		 class2QNamemap.put("float", new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"));
 		 class2QNamemap.put("long", new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"));
 		 class2QNamemap.put("double", new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"));
-		 class2QNamemap.put("boolean", new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
+		 class2QNamemap.put("int", new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
 		 class2QNamemap.put("char", new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"));
 		 class2QNamemap.put("short", new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"));
 		 class2QNamemap.put("char*", new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"));
 		 class2QNamemap.put("struct tm", new QName(WrapperConstants.SCHEMA_NAMESPACE, "datetime"));
 
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"), "int");
-		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"), "byte");
+		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"), "unsigned char");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"), "float");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"), "long");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"), "double");
-		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"), "boolean");
+		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"), "int");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"), "char");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"), "short");
 		 qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"), "char*");

@@ -67,7 +67,6 @@
 #include <string.h>
 #include <malloc.h>
 #include "../common/Packet.h"
-//#include "../common/AxisConfig.h"
 
 extern int process_request(Ax_soapstream *str);
 
@@ -243,6 +242,10 @@ int send_transport_information(Ax_soapstream* sSoapstream)
 		</Perimeter> \
 		</soapenv:Body> \
 		</soapenv:Envelope>";
+
+extern int send_response_bytes(const char* res, const void* opstream);
+extern int get_request_bytes(char* req, int reqsize, int* retsize, const void* ipstream);
+extern int send_transport_information(Ax_soapstream *str);
 
 int main() 
 {		

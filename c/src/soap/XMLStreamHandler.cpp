@@ -334,7 +334,7 @@ void XMLStreamHandler::SetParamType(const Attributes &attrs)
 		case URI_XSI: //xsi:type="xsd:int"
 			if (XMLString::equals(local, SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_TYPE]))
 			{
-				int colonindex = sValue.find(AxisUtils::m_strColon); 
+				int colonindex = sValue.find(':'); 
 				if (colonindex != AxisXMLString::npos) 
 				{
 					sPrefix = sValue.substr(0, colonindex);
@@ -376,11 +376,11 @@ void XMLStreamHandler::SetParamType(const Attributes &attrs)
 				m_Param.m_Type = XSD_ARRAY;
 				m_Param.m_Value.pArray = &m_ArrayBean;
 
-				int colonindex = sValue.find(AxisUtils::m_strColon); 
+				int colonindex = sValue.find(':'); 
 				if (colonindex != AxisXMLString::npos) 
 				{
 					sPrefix = sValue.substr(0, colonindex);
-					int bracketindex = sValue.find(AxisUtils::m_strLeftSqBracket);
+					int bracketindex = sValue.find('[');
 					if (bracketindex == AxisXMLString::npos)
 					{
 						//no [] - this is an error condition
@@ -445,12 +445,15 @@ int XMLStreamHandler::SetArrayDimensions(AxisXMLString &sDimensions)
 {
 	int si=0;
 	int ei=0;
+	si = sDimensions.find('[', ei);
 	do
 	{
-		si = sDimensions.find(AxisUtils::m_strLeftSqBracket, ei);
-		ei = sDimensions.find(AxisUtils::m_strLeftSqBracket, si);
-		m_Param.m_Value.pArray->m_size.push_back(atoi(sDimensions.substr(si+1,ei).c_str()));
-	} while (sDimensions.find(AxisUtils::m_strLeftSqBracket, ei) != string::npos);
+		ei = sDimensions.find(',', si+1);
+		if (ei == string::npos)
+			ei = sDimensions.find(']', si+1);
+		m_Param.m_Value.pArray->m_size.push_back(atoi(sDimensions.substr(si+1,(ei-si-1)).c_str()));
+		si = ei;
+	} while (sDimensions.find(',', si+1) != string::npos);
 	return SUCCESS;
 }
 
@@ -481,7 +484,7 @@ void XMLStreamHandler::Init()
 	if (m_pMethod) delete m_pMethod;
 	m_ArrayBean.m_size.clear();
 	m_CplxObj.Init();
-	m_sLastElement = AxisUtils::m_strEmpty;
+	m_sLastElement = ' ';
 	m_pEnv = NULL;
 	m_pHead = NULL;
 	m_pBody = NULL;
@@ -509,9 +512,9 @@ void XMLStreamHandler::FillEnvelope(const XMLCh *const uri, const XMLCh *const l
 	Attribute* pAttr;
 	str = __XTRC(qname);
 	pAttr = new Attribute();
-	if (str.find(AxisUtils::m_strColon) != AxisXMLString::npos) 
+	if (str.find(':') != AxisXMLString::npos) 
 	{
-		str = str.substr(0, str.find(AxisUtils::m_strColon));
+		str = str.substr(0, str.find(':'));
 		m_pEnv->setPrefix(str.c_str());
 		pAttr->setPrefix(str.c_str());
 	}
@@ -566,9 +569,9 @@ void XMLStreamHandler::FillFault(const XMLCh *const uri, const XMLCh *const loca
 void XMLStreamHandler::FillMethod(const XMLCh *const uri, const XMLCh *const localname, const XMLCh *const qname, const Attributes &attrs)
 {
 	AxisXMLString str = __XTRC(qname);
-	if (str.find(AxisUtils::m_strColon) != AxisXMLString::npos) 
+	if (str.find(':') != AxisXMLString::npos) 
 	{
-		str = str.substr(0, str.find(AxisUtils::m_strColon));
+		str = str.substr(0, str.find(':'));
 		m_pMethod->setPrefix(str.c_str());
 		str = __XTRC(uri);
 		m_pMethod->setUri(str.c_str());
@@ -580,9 +583,9 @@ void XMLStreamHandler::createHeaderBlock(const XMLCh *const uri, const XMLCh *co
 {
 	m_pHeaderBlock= new HeaderBlock();
 	AxisXMLString str = __XTRC(qname);	
-	if (str.find(AxisUtils::m_strColon) != AxisXMLString::npos) 
+	if (str.find(':') != AxisXMLString::npos) 
 	{
-		str = str.substr(0, str.find(AxisUtils::m_strColon));
+		str = str.substr(0, str.find(':'));
 		m_pHeaderBlock->setPrefix(str.c_str());		
 	}
 	m_pHeaderBlock->setLocalName(__XTRC(localname));

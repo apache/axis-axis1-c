@@ -88,11 +88,11 @@ public class AllParamWriter implements SourceWriter{
 			type = (Type)enu.next();
 			if(wscontext.getWrapInfo().getImplStyle().equals(WrapperConstants.IMPL_STYLE_STRUCT)){
 					if(type.isArray()){
-						System.out.println("Array writer called ......not yet suuported");
-						//(new ArrayParamWriter(wscontext,type)).writeSource();
+						System.out.println("Array writer called ......");
+						(new ArrayParamWriter(wscontext,type)).writeSource();	
 					}	
 					else{	
-						System.out.println("struct writer called ......");
+						System.out.println("complex type writer called ......");
 						(new BeanParamWriter(wscontext,type)).writeSource();
 						(new ParmHeaderFileWriter(wscontext,type)).writeSource();	
 					}	

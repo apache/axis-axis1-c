@@ -100,82 +100,67 @@ int Call::SetEndpointURI(const char *pchEndpointURI)
 
 void Call::SetOperation(const char *pchOperation, const char* pchNamespace)
 {
-	ISoapMethod* pMethod= m_pIWSSZ->createSoapMethod();
-	pMethod->setLocalName(pchOperation);
-	pMethod->setPrefix(m_pIWSSZ->getNewNamespacePrefix());
-	pMethod->setUri(pchNamespace);
+	m_pIWSSZ->createSoapMethod(pchOperation, m_pIWSSZ->getNewNamespacePrefix(), pchNamespace);
 }
 
 void Call::AddParameter(int nValue,const char* pchName)
 {
-	IParam* pRetParam = m_pIWSSZ->AddOutputParam(nValue);
-	pRetParam->SetName(pchName);
+	m_pIWSSZ->AddOutputParam(pchName, nValue);
 }
 
 void Call::AddParameter(unsigned int unValue,const char* pchName)
 {
-	IParam* pRetParam = m_pIWSSZ->AddOutputParam(unValue);
-	pRetParam->SetName(pchName);
+	m_pIWSSZ->AddOutputParam(pchName, unValue);
 }
 
 void Call::AddParameter(short sValue,const char* pchName)
 {
-	IParam* pRetParam = m_pIWSSZ->AddOutputParam(sValue);
-	pRetParam->SetName(pchName);
+	m_pIWSSZ->AddOutputParam(pchName, sValue);
 }
 
 void Call::AddParameter(unsigned short usValue,const char* pchName)
 {
-	IParam* pRetParam = m_pIWSSZ->AddOutputParam(usValue);
-	pRetParam->SetName(pchName);
+	m_pIWSSZ->AddOutputParam(pchName, usValue);
 }
 
 void Call::AddParameter(long lValue,const char* pchName)
 {
-	IParam* pRetParam = m_pIWSSZ->AddOutputParam(lValue);
-	pRetParam->SetName(pchName);
+	m_pIWSSZ->AddOutputParam(pchName, lValue);
 }
 
 void Call::AddParameter(unsigned long ulValue,const char* pchName)
 {
-	IParam* pRetParam = m_pIWSSZ->AddOutputParam(ulValue);
-	pRetParam->SetName(pchName);
+	m_pIWSSZ->AddOutputParam(pchName, ulValue);
 }
 
 void Call::AddParameter(char cValue,const char* pchName)
 {
-	IParam* pRetParam = m_pIWSSZ->AddOutputParam(cValue);
-	pRetParam->SetName(pchName);
+	m_pIWSSZ->AddOutputParam(pchName, cValue);
 }
 
 void Call::AddParameter(unsigned char ucValue,const char* pchName)
 {
-	IParam* pRetParam = m_pIWSSZ->AddOutputParam(ucValue);
-	pRetParam->SetName(pchName);
+	m_pIWSSZ->AddOutputParam(pchName, ucValue);
 }
 
 void Call::AddParameter(float fValue,const char* pchName)
 {
-	IParam* pRetParam = m_pIWSSZ->AddOutputParam(fValue);
-	pRetParam->SetName(pchName);
+	m_pIWSSZ->AddOutputParam(pchName, fValue);
 }
 
 void Call::AddParameter(double dValue,const char* pchName)
 {
-	IParam* pRetParam = m_pIWSSZ->AddOutputParam(dValue);
-	pRetParam->SetName(pchName);
+	m_pIWSSZ->AddOutputParam(pchName, dValue);
 }
 
 void Call::AddParameter(struct tm tValue,const char* pchName)
 {
-	IParam* pRetParam = m_pIWSSZ->AddOutputParam(tValue);
-	pRetParam->SetName(pchName);
+	m_pIWSSZ->AddOutputParam(pchName, tValue);
 }
 
 void Call::AddParameter(const AxisChar* pStrValue,const char* pchName)
 {
-	IParam* pRetParam = m_pIWSSZ->AddOutputParam(pStrValue);
-	pRetParam->SetName(pchName);
+	m_pIWSSZ->AddOutputParam(pchName, pStrValue);
 }
 
 /**
@@ -202,8 +187,7 @@ void Call::AddParameter(Axis_Array* pArray, void* pSZFunct, void* pDelFunct, voi
 
 void Call::AddParameter(void *pObject, void *pSZFunct, void *pDelFunct, const char* pchName)
 {
-	IParam* pRetParam = m_pIWSSZ->AddOutputParam(pObject, pSZFunct, pDelFunct);
-	pRetParam->SetName(pchName);
+	m_pIWSSZ->AddOutputParam(pchName, pObject, pSZFunct, pDelFunct);
 }
 
 void Call::SetReturnType(XSDTYPE nType)
@@ -225,7 +209,7 @@ void Call::SetReturnType(void *pDZFunct, void* pCreFunct, void *pDelFunct, const
 /**
  * This function is used to set that the return type is an array of complex types
  */
-void Call::SetReturnType(Axis_Array* pArray, void* pDZFunct, void* pCreFunct, void* pDelFunct, const char* pchTypeName, const char* pchUri)
+void Call::SetReturnType(Axis_Array* pArray, void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName, const char* pchUri)
 {
 	m_pArray = pArray;
 	m_nReturnType = XSD_ARRAY;
@@ -233,6 +217,7 @@ void Call::SetReturnType(Axis_Array* pArray, void* pDZFunct, void* pCreFunct, vo
 	m_ReturnCplxObj.pDZFunct = (AXIS_DESERIALIZE_FUNCT)pDZFunct;
 	m_ReturnCplxObj.pCreFunct = (AXIS_OBJECT_CREATE_FUNCT)pCreFunct;
 	m_ReturnCplxObj.pDelFunct = (AXIS_OBJECT_DELETE_FUNCT)pDelFunct;
+	m_ReturnCplxObj.pSizeFunct = (AXIS_OBJECT_SIZE_FUNCT)pSizeFunct;
 	m_ReturnCplxObj.m_TypeName = pchTypeName;
 	m_ReturnCplxObj.m_URI = pchUri;
 }
