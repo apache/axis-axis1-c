@@ -7,6 +7,17 @@
   #include "sys/time.h"
 #else
   #include "sys/timeb.h"
+
+  // Bug in MS Visual C++ 6.0. Fixed in Visual C++ .Net version.
+  // Cannot print an __int64 number with cout without this overloading
+  std::ostream& operator<<(std::ostream& os, __int64 i )
+  {
+    char buf[20];
+    sprintf(buf,"%I64d", i );
+    os << buf;
+    return os;
+  }
+
 #endif
 
 static bool verbose = false;
