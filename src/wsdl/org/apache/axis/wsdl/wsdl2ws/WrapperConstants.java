@@ -112,6 +112,7 @@ public interface WrapperConstants {
 	public static final int GENERATOR_WRAPPER_H = 25;
 	public static final int GENERATOR_CLIENT_STUB_H = 26;
 	public static final int GENERATOR_PARAM_C_ALL = 27 ;
+	public static final int GENERATOR_CLIENT_STUB_C_WRAPPER = 28;
 
 
 
