@@ -11,7 +11,8 @@ import org.apache.axis.utils.CLArgsParser;
 import org.apache.axis.utils.CLOption;
 import org.apache.axis.utils.Messages;
 import org.apache.axis.wsdl.fromJava.Emitter;
-import org.apache.axis.metadata.annotation.*;
+import javax.jws.*;
+import javax.jws.soap.*;
 import java.lang.reflect.*;
 
 /**
@@ -19,42 +20,6 @@ import java.lang.reflect.*;
  *
  */
 public class Java2WsdlWithMetadata extends org.apache.axis.wsdl.Java2WSDL {
-
-	protected boolean locationSet;
-	
-	/**
-	 * validateOptions
-	 * This method is invoked after the options are set to validate
-	 * the option settings.
-	 * 
-	 * @return 
-	 */
-	protected boolean validateOptions() {
-
-		// Can't proceed without a class name
-		if ((className == null)) {
-			System.out.println(Messages.getMessage("j2wMissingClass00"));
-			printUsage();
-
-			return false;
-		}
-		if (!locationSet
-				&& ((mode == Emitter.MODE_ALL)
-				|| (mode == Emitter.MODE_IMPLEMENTATION))) {
-			System.out.println(Messages.getMessage("j2wMissingLocation00"));
-			printUsage();
-
-			return false;
-		}
-		
-		// Default to SOAP 1.2 JAX-RPC mapping
-		if (emitter.getDefaultTypeMapping() == null) {
-			emitter.setDefaultTypeMapping(
-					DefaultTypeMappingImpl.getSingleton());
-		}
-
-		return true;    // a-OK
-	}
 
 	public static void main(String args[]) {
 
@@ -94,8 +59,8 @@ public class Java2WsdlWithMetadata extends org.apache.axis.wsdl.Java2WSDL {
 			
 			Class<?> serviceEndpointInterface = emitter.getCls();
 			
-            TargetNamespace targetNamespaceAnnotation = serviceEndpointInterface.getAnnotation(TargetNamespace.class); 
-			String targetNamespace = targetNamespaceAnnotation.value();
+            WebService webServiceAnnotation = serviceEndpointInterface.getAnnotation(WebService.class); 
+			String targetNamespace = webServiceAnnotation.targetNamespace();
 			if (targetNamespace != null) {
                 Package javaPackage = serviceEndpointInterface.getPackage();
                 java.lang.String javaPackageName = null;
@@ -107,54 +72,42 @@ public class Java2WsdlWithMetadata extends org.apache.axis.wsdl.Java2WSDL {
                 namespaceMap.put(javaPackageName, targetNamespace);
 			}
 			
-			String wsdlFile =  serviceEndpointInterface.getAnnotation(WsdlFile.class).value();
-			if (wsdlFile != null) {
-				wsdlFilename = wsdlFile;
-			}
-
-			String serviceLocation = serviceEndpointInterface.getAnnotation(ServiceLocation.class).value();
-			if (serviceLocation != null) {
-				emitter.setLocationUrl(serviceLocation);
-				locationSet = true;
-			}
-			EncodingType style = serviceEndpointInterface.getAnnotation(Protocol.class).soapStyle();
+			SOAPBinding soapBindingAnnotation = serviceEndpointInterface.getAnnotation(SOAPBinding.class);
 			
-			// Currently the following commented-out block doesn't work.
-			// This block works from Tiger beta 2 b38.
-			
-			/*
+            SOAPBinding.Style style = soapBindingAnnotation.style();
 			switch (style) {
-				case documentLiteral:
+				case DOCUMENT:
 					emitter.setStyle("document");
-					emitter.setUse("literal");
 					break;
-				case rpcLiteral:
+				case RPC:
 					emitter.setStyle("rpc");
-					emitter.setUse("literal");
 					break;
-				case soapEncoded:
-					emitter.setStyle("rpc");
-					emitter.setUse("encoded");
+				case DEFAULT:
+					emitter.setStyle("document");
 					break;
 				default:
-			}
-			*/
-			
-			if (style == EncodingType.DOCUMENT_LITERAL) {
-				emitter.setStyle("document");
-				emitter.setUse("literal");
-			} else if (style == EncodingType.RPC_LITERAL) {
-				emitter.setStyle("rpc");
-				emitter.setUse("literal");
-			} else if (style == EncodingType.RPC_ENCODED) {
-				emitter.setStyle("rpc");
-				emitter.setUse("encoded");
+                    emitter.setStyle("document");
 			}
  			
-			Vector allowedMethods = new Vector();
+            SOAPBinding.Use use = soapBindingAnnotation.use();
+            switch (use) {
+                case LITERAL:
+                    emitter.setUse("literal");
+                    break;
+                case ENCODED:
+                    emitter.setUse("encoded");
+                    break;
+                case DEFAULT:
+                    emitter.setUse("literal");
+                    break;
+                default:
+                    emitter.setUse("literal");
+            }
+
+            Vector allowedMethods = new Vector();
 			Method[] methods = serviceEndpointInterface.getMethods();
 			for (Method method : methods) {
-				if (method.isAnnotationPresent(Operation.class)) {
+				if (method.isAnnotationPresent(WebMethod.class)) {
 					allowedMethods.add(method.getName());
 				}
 			}
