@@ -1,50 +1,88 @@
 #include "Calculator.h"
 #include <axis/AxisGenException.h>
+#include <iostream>
 
-void PrintUsage();
 bool IsNumber(const char* p);
+
+static void
+usage (char *programName, char *defaultURL)
+{
+    cout << "\nUsage:\n"
+	<< programName << " [-? | div number1 number2 [service_url]] " << endl
+	<< "    -?             Show this help.\n"
+	<< "    service_url    URL of the service.\n"
+	<< "    Default service URL is assumed to be " << defaultURL
+	<<
+	"\n    Could use http://localhost:8080/axis/services/echo to test with Axis Java."
+	<< endl;
+}
 
 int main(int argc, char* argv[])
 {
 	char endpoint[256];
+    char original[256];
 	const char* server="localhost";
 	const char* port="80";
 	const char* op = 0;
 	const char* p1 = 0;
 	const char* p2 = 0;
 	int i1=0, i2=0;
-        int iResult;
-        char* pcDetail;
-        pcDetail = 0;
+    int iResult;
+    char* pcDetail;
+    pcDetail = 0;
 
-	if (argc < 6)
-	{
-		PrintUsage();
-	}
-	else
-	{
-		server = argv[1];
-		port = argv[2];
-	}
+    // Set default service URL
+    sprintf (endpoint, "http://localhost/axis/Calculator");
+    sprintf(original, "http://localhost/axis/Calculator");
+
 	try
+    {
+    if( argc ==1 )
+    {
+        usage(argv[0], endpoint);
+        return 2;
+    }
+
+    if (argc > 1)
+    {
+        if(!strncmp (argv[1], "-", 1))
+	    {
+            // Check for - only so that it works for 
+            //-?, -h or --help; -anything 
+
+            usage(argv[0], endpoint);
+            return 2;
+	    }
+        //less than minimum number of args OR greater than maximum number of args
+       	else if (argc < 4 || argc > 5)
+    	{
+		    usage(argv[0], endpoint);
+            return 2;
+    	}
+        else if (argc == 5)
         {
-	printf("Sending Requests to Server http://%s:%s ........\n\n", server, port);
-	sprintf(endpoint, "http://%s:%s/axis/Calculator", server, port);
+            sprintf(endpoint, argv[4]);      
+        }
+    }
+
+	cout << endl << " Using service at " << endpoint << endl << endl;
 	Calculator ws(endpoint);
 
-	op = argv[3];
-	p1 = argv[4];
-	p2 = argv[5];
+	op = argv[1];
+	p1 = argv[2];
+	p2 = argv[3];
 
 	if (!IsNumber(p1))
 	{
 		printf("Invalid value for first <parameter>\n\n");
-		PrintUsage();
+		usage(original, argv[4]);
+        return 2;
 	}
 	if (!IsNumber(p2))
 	{
 		printf("Invalid value for second <parameter>\n\n");
-		PrintUsage();
+		usage(original, argv[4]);
+        return 2;
 	}
 	
 	i1 = atoi(p1);
@@ -81,7 +119,8 @@ int main(int argc, char* argv[])
 	else 
 	{
 		printf("Invalid operation %s\n\n", op);
-		PrintUsage();
+		usage(original, argv[4]);
+        return 2;
 	}
         }
         catch(AxisException& e)
@@ -97,12 +136,6 @@ int main(int argc, char* argv[])
             printf("Unknown exception has occured\n" );
         }
 	return 0;
-}
-
-void PrintUsage()
-{
-	printf("Usage :\n Calculator <server> <port> <operation> <parameter> <parameter>\n\n");
-	exit(1);
 }
 
 bool IsNumber(const char* p)
