@@ -84,7 +84,7 @@ class Param : public IParam
 {
 	friend class SoapDeSerializer;
 	friend class SoapSerializer;
-	friend class XMLStreamHandler;
+	friend class SoapParser;
 public:
 	Param(){ m_Type = USER_TYPE;}; //if there is no attribute that says the type
 

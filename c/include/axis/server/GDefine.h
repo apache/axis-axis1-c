@@ -74,6 +74,7 @@ typedef enum { APTHTTP=1, APTFTP, APTSMTP, APTOTHER } AXIS_PROTOCOL_TYPE;
 
 #define AxisChar char
 #define AxisXMLCh char
+#define XMLCh AxisChar
 
 #ifdef __cplusplus
 #define AxisString basic_string<char>
