@@ -57,7 +57,8 @@ then
   echo "${TIME}: Regression test on $TARGET: BUILD FAILED" |tee -a $OUTPUT_DIR/runTestCase.log
 
 else
-
+  TIME=$(date "+%d/%m/%Y %H:%M:%S")
+  echo "${TIME}: Regression test on $TARGET: BUILD SUCCESS" |tee -a $OUTPUT_DIR/buildTestCase.log
   export LD_LIBRARY_PATH=$AXISCPP_HOME_BIN:$LIB_XERCES_BIN
 
   # Pass in the URI if it has been set.
@@ -68,15 +69,15 @@ else
     if [ $? -eq 0 ]
     then
       TIME=$(date "+%d/%m/%Y %H:%M:%S")
-      echo "${TIME}: Regression test on $TARGET: SUCCESS" |tee -a $OUTPUT_DIR/runTestCase.log
+      echo "${TIME}: Regression test on $TARGET: RUN SUCCESS" |tee -a $OUTPUT_DIR/runTestCase.log
       status=0
     else
       TIME=$(date "+%d/%m/%Y %H:%M:%S")
-      echo "${TIME}: Regression test on $TARGET: FAILED" |tee -a $OUTPUT_DIR/runTestCase.log
+      echo "${TIME}: Regression test on $TARGET: RUN FAILED" |tee -a $OUTPUT_DIR/runTestCase.log
     fi
   else
     TIME=$(date "+%d/%m/%Y %H:%M:%S")
-    echo "${TIME}: Regression test on $TARGET: FAILED" |tee -a $OUTPUT_DIR/runTestCase.log
+    echo "${TIME}: Regression test on $TARGET: RUN FAILED" |tee -a $OUTPUT_DIR/runTestCase.log
   fi
 
 fi
