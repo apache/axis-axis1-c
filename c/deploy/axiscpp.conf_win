@@ -1,0 +1,3 @@
+AXISLOGPATH:Axis\logs\AxisLog.txt
+WSDDFILEPATH:Axis\conf\server.wsdd
+
