@@ -88,7 +88,7 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\..\..\..\..\samples\client\interoptests\base\AxisClientException.cpp
+SOURCE=..\..\..\..\..\samples\client\interoptests\base\base_AxisClientException.cpp
 # End Source File
 # Begin Source File
 
@@ -108,15 +108,15 @@ SOURCE=..\..\..\..\..\samples\client\interoptests\base\SOAPStruct.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\..\..\..\samples\client\interoptests\base\AxisClientException.h
+SOURCE=..\..\..\..\..\samples\client\interoptests\base\base_AxisClientException.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\..\samples\client\interoptests\base\InteropTestPortType.h
+SOURCE=..\..\..\..\..\samples\client\interoptests\base\InteropTestPortType.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\..\samples\client\interoptests\base\SOAPStruct.h
+SOURCE=..\..\..\..\..\samples\client\interoptests\base\SOAPStruct.hpp
 # End Source File
 # End Group
 # Begin Group "Resource Files"

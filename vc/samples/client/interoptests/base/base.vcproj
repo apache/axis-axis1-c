@@ -205,10 +205,10 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
 			<File
-				RelativePath="..\..\..\..\..\samples\client\interoptests\base\InteropTestPortType.h">
+				RelativePath="..\..\..\..\..\samples\client\interoptests\base\InteropTestPortType.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\samples\client\interoptests\base\SOAPStruct.h">
+				RelativePath="..\..\..\..\..\samples\client\interoptests\base\SOAPStruct.hpp">
 			</File>
 		</Filter>
 		<Filter
