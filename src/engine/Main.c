@@ -67,6 +67,7 @@
 #include <string.h>
 #include <malloc.h>
 #include "../common/Packet.h"
+#include "../common/AxisConfig.h"
 
 extern int process_request(Ax_soapstream *str);
 
@@ -79,7 +80,7 @@ extern int process_request(Ax_soapstream *str);
 			soapenv:mustUnderstand=\"true\" >Hello Req Header Val</t:Transaction></soapenv:Header> \
 			<soapenv:Body><add soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:int\">3</op1><op2 xsi:type=\"xsd:int\">4</op2></add></soapenv:Body></soapenv:Envelope>";
 
-	char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><Add soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:int\">3</op1><op2 xsi:type=\"xsd:int\">4</op2></Add></soapenv:Body></soapenv:Envelope>";
+	char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><Add soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:int\">6</op1><op2 xsi:type=\"xsd:int\">11</op2></Add></soapenv:Body></soapenv:Envelope>";
 
 //	char* ip = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Body><Echo soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><op1 xsi:type=\"xsd:string\">Hello World!</op1></Echo></soapenv:Body></soapenv:Envelope>";
 
@@ -264,8 +265,8 @@ int main()
 
 	printf("soap request :\n %s\n", ip);
 
-	initialize_module(1);
-	for (xx =0; xx < 10 ; xx++)
+	initialize_module(1, WSDDFILEPATH);
+	for (xx =0; xx < 1 ; xx++)
 	{
 		printf("Sending Soap Response :\n");
 		process_request(str);
