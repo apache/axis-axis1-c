@@ -1,29 +1,29 @@
 ##############################################################################
 
-This folder contains basic regression test cases for the C/C++
-Client Web Services Stack (CWSS).
+This folder contains auto build script for Axis C++ and basic regression test cases for the C/C++
+Client Web Services Stack (CWSS). 
 
 ##############################################################################
 
 DIRECTORY STRUCTURE
 -------------------
 
-platform/
+testcases/platform/
  Contains the scripts for test framework.
 
-wsdls/
+testcases/wsdls/
  Contains the WSDL for the test cases.
 
-client/
+testcases/client/
  Contains the C and C++ invocation clients.
  NOTES: Each client must have the same basename as the WSDL file
         plus Client.
         Example: SimpleTypeArray.wsdl -> SimpleTypeArrayClient.c[pp] 
 
-output/
+testcases/output/
  Contains the output of the client invocation expected result.
 
-server/
+testcases/server/
  Contains the server implementation of the binding (WAS 5.0.2). And
  the ear file. 
 
@@ -41,15 +41,21 @@ Variable          | Description
 AXISCPP_HOME      | Axis C++ build directory
 ------------------------------------------------------------------------------
 AXISTEST_HOME     | This specifies the location of the testcase framework with
-                  | the directory structure specified above.
+                  | the directory structure specified above. Path is
+                  | upto(including) testcases folder
 ------------------------------------------------------------------------------
 JAVA_HOME         | Path to the java installation
 ------------------------------------------------------------------------------
 ANT_HOME          | Path to the ant installation
+------------------------------------------------------------------------------
+AXIS_JARS_HOME    | Path to the axis jars
 ##############################################################################
 
 SCRIPTS
 -------
+autoBuildCVS.sh
+
+ Checkout Axis C++ from cvs and build it and run all the test cases.
 
 runAllTests.[sh|bat] [lang]
 
@@ -74,7 +80,7 @@ Linux
 
 Snippet from a script
 -----------------------
-  runTest.sh wsdls/MathOps.wsdl c++
+  runTest.sh testcases/wsdls/MathOps.wsdl c++
 -----------------------
 
   Should result in:
