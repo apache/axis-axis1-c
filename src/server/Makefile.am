@@ -1,1 +1,1 @@
-SUBDIRS = apache
+SUBDIRS = apache2
