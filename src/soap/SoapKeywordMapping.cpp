@@ -62,9 +62,9 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "SoapKeywordMapping.h"
-#include "Attribute.h"
-#include "../common/AxisUtils.h"
+#include <axis/soap/SoapKeywordMapping.h>
+#include <axis/soap/Attribute.h>
+#include <axis/common/AxisUtils.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

@@ -62,10 +62,10 @@
  *
  */
 
-#include "WSDDDocument.h"
-#include "WSDDKeywords.h"
+#include <axis/wsdd/WSDDDocument.h>
+#include <axis/wsdd/WSDDKeywords.h>
 #include <string>
-#include "../common/AxisTrace.h"
+#include <axis/common/AxisTrace.h>
 
 WSDDDocument::WSDDDocument()
 {

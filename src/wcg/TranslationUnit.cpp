@@ -68,8 +68,8 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include "TranslationUnit.h"
-#include "File.h"
+#include <axis/wcg/TranslationUnit.h>
+#include <axis/wcg/File.h>
 #include <iostream>
 #include <string>
 using namespace std;
@@ -153,13 +153,13 @@ int TranslationUnit::GenerateWrapperClassDef()
 		file << endl;
 		//add includes
 		file << "#include \"" << m_sWsFileName.c_str() << "\"" << endl;
-		file << "#include <WrapperClassHandler.h>" << endl;
-		file << "#include <IMessageData.h>" << endl;
-		file << "#include <GDefine.h>" << endl;
-		file << "#include <IWrapperSoapDeSerializer.h>" << endl;
-		file << "#include <IWrapperSoapSerializer.h>" << endl;
-		file << "#include <ISoapMethod.h>" << endl;
-		file << "#include <IParam.h>" << endl;
+		file << "#include <axis/common/WrapperClassHandler.h>" << endl;
+		file << "#include <axis/common/IMessageData.h>" << endl;
+		file << "#include <axis/common/GDefine.h>" << endl;
+		file << "#include <axis/common/IWrapperSoapDeSerializer.h>" << endl;
+		file << "#include <axis/common/IWrapperSoapSerializer.h>" << endl;
+		file << "#include <axis/common/ISoapMethod.h>" << endl;
+		file << "#include <axis/common/IParam.h>" << endl;
 		file << endl;
 		//generate wrapper class declaration
 		m_pWSClass->GenerateClassDef(file);

@@ -68,28 +68,28 @@
 #include <unistd.h>
 #endif
 
-#include "ServerAxisEngine.h"
-#include "../common/AxisTrace.h"
+#include <axis/engine/ServerAxisEngine.h>
+#include <axis/common/AxisTrace.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
-#include "../common/Packet.h"
+#include <axis/common/Packet.h>
 #include <string>
 #include <map>
 
-#include "../soap/SoapFaults.h"
-#include "../soap/URIMapping.h"
-#include "HandlerLoader.h"
-#include "AppScopeHandlerPool.h"
-#include "RequestScopeHandlerPool.h"
-#include "SessionScopeHandlerPool.h"
-#include "HandlerPool.h"
-#include "SerializerPool.h"
-#include "DeserializerPool.h"
-#include "../wsdd/WSDDDeployment.h"
-#include "../common/AxisUtils.h"
-#include "../common/AxisConfig.h"
-#include "../wsdd/WSDDKeywords.h"
+#include <axis/soap/SoapFaults.h>
+#include <axis/soap/URIMapping.h>
+#include <axis/engine/HandlerLoader.h>
+#include <axis/engine/AppScopeHandlerPool.h>
+#include <axis/engine/RequestScopeHandlerPool.h>
+#include <axis/engine/SessionScopeHandlerPool.h>
+#include <axis/engine/HandlerPool.h>
+#include <axis/engine/SerializerPool.h>
+#include <axis/engine/DeserializerPool.h>
+#include <axis/wsdd/WSDDDeployment.h>
+#include <axis/common/AxisUtils.h>
+#include <axis/common/AxisConfig.h>
+#include <axis/wsdd/WSDDKeywords.h>
 
 
 #define BYTESTOREAD 64

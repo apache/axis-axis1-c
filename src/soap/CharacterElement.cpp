@@ -65,9 +65,9 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "CharacterElement.h"
-#include "SoapSerializer.h"
-#include "../common/GDefine.h"
+#include <axis/soap/CharacterElement.h>
+#include <axis/soap/SoapSerializer.h>
+#include <axis/common/GDefine.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

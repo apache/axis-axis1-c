@@ -5,7 +5,7 @@
   
   using namespace std;
 
-  #include "cppyacc.hpp"
+  #include <axis/wcg/cppyacc.hpp>
 
   static int check_keyword(const char* name);
   int yyerror(char * msg);

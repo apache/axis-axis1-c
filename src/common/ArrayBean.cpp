@@ -61,10 +61,10 @@
 // ArrayBean.cpp: implementation of the ArrayBean class.
 //
 //////////////////////////////////////////////////////////////////////
-#include "Param.h"
-#include "ArrayBean.h"
-#include "BasicTypeSerializer.h"
-#include "../engine/AxisEngine.h"
+#include <axis/common/Param.h>
+#include <axis/common/ArrayBean.h>
+#include <axis/common/BasicTypeSerializer.h>
+#include <axis/engine/AxisEngine.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -410,15 +410,15 @@ int ArrayBean::Serialize(IWrapperSoapSerializer& pSZ)
 	case XSD_DAY:
 	case XSD_MONTH:
 		{
-/*			tm* p = (tm*)m_value.sta;
+			tm* p = (tm*)m_value.sta;
 			list<int>::iterator it = m_size.begin();
 			int blocksize = GetArrayBlockSize(it);
 			for (int ix=0;ix<blocksize;ix++)
 			{
-				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), *p);
+				pSZ << m_BTSZ.serialize(m_ItemName.c_str(), *p, m_type);
 				p++;
 			}
-*/		}
+		}
 		break;
 	case XSD_INT:
 	case XSD_UNSIGNEDINT:

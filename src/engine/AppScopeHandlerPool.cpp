@@ -63,9 +63,9 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "AppScopeHandlerPool.h"
-#include "HandlerLoader.h"
-#include "../common/AxisTrace.h"
+#include <axis/engine/AppScopeHandlerPool.h>
+#include <axis/engine/HandlerLoader.h>
+#include <axis/common/AxisTrace.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

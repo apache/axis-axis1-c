@@ -7,10 +7,10 @@
 #include <map>
 
 using namespace std;
-#include "actions.h"
-#include "cppyacc.hpp"
-#include "Variable.h"
-#include "Method.h"
+#include <axis/wcg/actions.h>
+#include <axis/wcg/cppyacc.hpp>
+#include <axis/wcg/Variable.h>
+#include <axis/wcg/Method.h>
 
 //global variables used by the parser
 map<string,int> lexer_keys; //keyword map in the lexical analyzer.
