@@ -27,6 +27,10 @@
  * Added setProxy
  */
 
+/*
+ * Revision 1.2  2004/06/08 samisa
+ * Added setTimeout
+ */
 
 #if !defined(_AXIS_HTTPTRANSPORT_HPP)
 #define _AXIS_HTTPTRANSPORT_HPP
@@ -118,6 +122,7 @@ private:
     void Error(const char * err);
 
     void ClearAdditionalHeaders();
+
   /**
     * Set proxy server and port for transport.
     *
@@ -125,6 +130,13 @@ private:
     * @param uiProxyPort Port of proxy server
     */
     void setProxy(const char* pcProxyHost, unsigned int uiProxyPort); 
+
+  /**
+    * Set transport timeout.
+    *
+    * @param lSeconds Timeout in seconds
+    */
+    void setTimeout(const long lSeconds);
 
 
 private:
@@ -159,6 +171,12 @@ private:
     * Use Proxy or not?
     */
     bool m_bUseProxy;
+
+  /**
+    * Timeout in seconds
+    */
+    long m_lTimeoutSeconds;
+
 };
 
 #endif
