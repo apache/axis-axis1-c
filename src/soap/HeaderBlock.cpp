@@ -423,33 +423,33 @@ INamespace* HeaderBlock::createNamespaceDecl( const AxisChar * pPrefix, const Ax
 
 // Iterate through the namespaces checking that the prefix does not already
 // exist.
-	bool						bNameFound = false;
-    list<Namespace*>::iterator	itCurrNamespaceDecl = m_namespaceDecls.begin();
+		bool						bNameFound = false;
+		list<Namespace*>::iterator	itCurrNamespaceDecl = m_namespaceDecls.begin();
 
-	while( itCurrNamespaceDecl != m_namespaceDecls.end() && !bNameFound)
-	{
-		if( !(bNameFound = !strcmp( (*itCurrNamespaceDecl)->getPrefix(), pPrefix)))
+		while( itCurrNamespaceDecl != m_namespaceDecls.end() && !bNameFound)
 		{
-			itCurrNamespaceDecl++;
-		}
-	}    
+			if( !(bNameFound = !strcmp( (*itCurrNamespaceDecl)->getPrefix(), pPrefix)))
+			{
+				itCurrNamespaceDecl++;
+			}
+		}    
 
 // If the prefix is found in the declared namespace list, then update the uri
 // for the prefix and return a pointer to that namespace.
-	if( bNameFound)
-	{
-		(*itCurrNamespaceDecl)->setURI( pURI);
+		if( bNameFound)
+		{
+			(*itCurrNamespaceDecl)->setURI( pURI);
 
-		return (INamespace *) *itCurrNamespaceDecl;
-	}
+			return (INamespace *) *itCurrNamespaceDecl;
+		}
 
 // If the prefix was not found, then create a new namespace for the prefix/uri
 // pair and return the pointer to the new namespace.
-	Namespace *	pNamespace = new Namespace( pPrefix, pURI);
+		Namespace *	pNamespace = new Namespace( pPrefix, pURI);
 
-	m_namespaceDecls.push_back( pNamespace);
+		m_namespaceDecls.push_back( pNamespace);
 
-    return (INamespace *) pNamespace; 
+		return (INamespace *) pNamespace; 
 	}
 	else
 	{
