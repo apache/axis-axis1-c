@@ -98,7 +98,7 @@ SOURCE=.\libAxiscpp.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=.\AxisCppHandler.h
+SOURCE=.\AxisCppContentHandler.h
 # End Source File
 # Begin Source File
 
