@@ -82,10 +82,10 @@ HandlerChain::~HandlerChain()
 	//Handler pool;
 }
 
-int HandlerChain::Invoke(MessageData* pMsg)
+int HandlerChain::Invoke(IMessageData* pMsg)
 {
   
-  DEBUG1("HandlerChain::Invoke(MessageData* pMsg)");
+  DEBUG1("HandlerChain::Invoke(IMessageData* pMsg)");
   
 	m_itCurrHandler = m_HandlerList.begin();
 	while (m_itCurrHandler != m_HandlerList.end())
@@ -106,7 +106,7 @@ int HandlerChain::Invoke(MessageData* pMsg)
 	return SUCCESS;
 }
 
-void HandlerChain::OnFault(MessageData* pMsg)
+void HandlerChain::OnFault(IMessageData* pMsg)
 {
 	while (m_itCurrHandler != m_HandlerList.begin())
 	{
