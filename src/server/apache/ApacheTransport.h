@@ -26,12 +26,22 @@
 #if !defined(AXIS_APACHETRANSPORT_H__OF_AXIS_INCLUDED_)
 #define AXIS_APACHETRANSPORT_H__OF_AXIS_INCLUDED_
 
+#ifdef WIN32
 #include <apache1_3/httpd.h>
 #include <apache1_3/http_config.h>
 #include <apache1_3/http_core.h>
 #include <apache1_3/http_log.h>
 #include <apache1_3/http_protocol.h>
 #include <apache1_3/http_main.h>
+#else
+#include <httpd.h>
+#include <http_config.h>
+#include <http_core.h>
+#include <http_log.h>
+#include <http_protocol.h>
+#include <http_main.h>
+#endif
+
 #include "../../transport/SOAPTransport.h"
 #include <string.h>
 
