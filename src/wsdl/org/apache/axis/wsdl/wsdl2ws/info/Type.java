@@ -171,9 +171,9 @@ public class Type {
 	// Nithya:
 	// To resolve fault soap message issue
 	
-	if (attribName.lastIndexOf('>') > 1 )
+	if (attribName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1 )
 	{
-	    attribName =attribName.substring(attribName.lastIndexOf('>')+1,attribName.length());
+	    attribName =attribName.substring(attribName.lastIndexOf(SymbolTable.ANON_TOKEN)+1,attribName.length());
         }        
         attribName = TypeMap.resoleveWSDL2LanguageNameClashes(attribName,this.language);
 
@@ -217,9 +217,9 @@ public class Type {
 		//Nithya:
 		//to resolve fault soap message
 		
-		if (attribName.lastIndexOf('>') > 1 )
+		if (attribName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1 )
 		{
-		    attribName =attribName.substring(attribName.lastIndexOf('>')+1,attribName.length());
+		    attribName =attribName.substring(attribName.lastIndexOf(SymbolTable.ANON_TOKEN)+1,attribName.length());
 		}		
 		// Samisa: This second call to TypeMap.resoleveWSDL2LanguageNameClashes
 		// is made to make sure after replacinf ANON_TOKEN it is still not a keyword
