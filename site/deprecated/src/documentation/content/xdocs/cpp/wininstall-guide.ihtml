@@ -261,7 +261,12 @@ XXXX and YYYY as follows.</p>
 
 <p>Where WSDDFILE is [APACHE_HOME]\Axis\conf\server.wsdd for Apache 1.3 and
  Apache 2. (There will be three wsdd files in the [APACHE_HOME]\Axis\conf\ rename
-the relevant wsdd file for your platform to server.wsdd)</p>
+the relevant wsdd file for your platform to server.wsdd).<br><br>
+Also in order to run the samples provided do the following.<br>
+Open server.wsdd for editing.
+For each service element, locate the element "parameter", having the value "classname" for the "name" attribute.<br>
+Change the value of the "value" attribute, to have the absolute path to the indicated webservice dll in that value.<br>
+</p>
 
 <p>Rename AXIS_FOLDER/axiscpp.conf_win to AXIS_FOLDER/axiscpp.conf</p>
 
