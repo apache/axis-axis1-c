@@ -132,7 +132,6 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 			writer.write("\tint Init();\n");
 			writer.write("\tint Fini();\n");
 			writer.write("private://Methods corresponding to the web service methods\n");
-			writer.write("\tint SetResponseMethod(IMessageData* mc, const AxisChar* name);\n");
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
 					 minfo = (MethodInfo)methods.get(i);
