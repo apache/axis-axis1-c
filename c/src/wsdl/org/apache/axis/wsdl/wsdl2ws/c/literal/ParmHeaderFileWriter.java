@@ -161,7 +161,10 @@ public class ParmHeaderFileWriter extends ParamWriter{
 		  if(type.isArray()) return;
 		  try{
 			  for(int i=0;i<attribs.length;i++){
-				  writer.write("\t"+getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])+" "+attribs[i].getParamName()+";\n");
+			  	 if (  attribs[i].isArray() && !attribs[i].isSimpleType() )
+			  	 	writer.write("\tstruct "+getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])+"Tag "+attribs[i].getParamName()+";\n");
+			  	 else
+			  	 	writer.write("\t"+getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])+" "+attribs[i].getParamName()+";\n");
 			  }    
 		  } catch (IOException e) {
 			   throw new WrapperFault(e);
