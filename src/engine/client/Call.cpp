@@ -246,8 +246,22 @@ int Call::unInitialize ()
 		MessageData *msgData = m_pAxisEngine->getMessageData();	
         AxisChar * pachTemp = (AxisChar *)msgData->getProperty("sessionid");
         int len = strlen(pachTemp);
-        m_pchSessionID = new char[len];
-        strcpy(m_pchSessionID, pachTemp);
+        if ( len > 0 ) // Samisa: check if there is a session key
+        {
+            if (m_pchSessionID) // Samisa: deallocate before allocation
+            {
+                delete [] m_pchSessionID;
+                m_pchSessionID = NULL;
+            }
+            m_pchSessionID = new char[len + 1];  // Samisa: should have space for terminating car
+            strcpy(m_pchSessionID, pachTemp);
+        }
+        else //Samisa: there is no session key
+        {
+            if (m_pchSessionID) 
+                delete [] m_pchSessionID;
+            m_pchSessionID = NULL;
+        }
         m_pAxisEngine->unInitialize ();
         delete m_pAxisEngine;
         m_pAxisEngine = NULL;
