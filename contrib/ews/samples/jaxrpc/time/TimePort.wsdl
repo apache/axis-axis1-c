@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="jonas:Time" 
+                  xmlns="http://schemas.xmlsoap.org/wsdl/" 
+                  xmlns:apachesoap="http://xml.apache.org/xml-soap" 
+                  xmlns:impl="jonas:Time" 
+                  xmlns:intf="jonas:Time" 
+                  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+                  xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" 
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+   <wsdl:message name="getDateRequest">
+   </wsdl:message>
+
+   <wsdl:message name="getDateAsLongResponse">
+      <wsdl:part name="getDateAsLongReturn" type="xsd:long"/>
+   </wsdl:message>
+
+   <wsdl:message name="getDateAsLongRequest">
+   </wsdl:message>
+
+   <wsdl:message name="getDateResponse">
+      <wsdl:part name="getDateReturn" type="xsd:dateTime"/>
+   </wsdl:message>
+
+   <wsdl:portType name="TimeBean">
+
+      <wsdl:operation name="getDate">
+         <wsdl:input message="impl:getDateRequest" name="getDateRequest"/>
+         <wsdl:output message="impl:getDateResponse" name="getDateResponse"/>
+      </wsdl:operation>
+
+      <wsdl:operation name="getDateAsLong">
+         <wsdl:input message="impl:getDateAsLongRequest" name="getDateAsLongRequest"/>
+         <wsdl:output message="impl:getDateAsLongResponse" name="getDateAsLongResponse"/>
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="TimePortSoapBinding" type="impl:TimeBean">
+
+      <wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="getDate">
+         <wsdlsoap:operation soapAction=""/>
+         <wsdl:input name="getDateRequest">
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="jonas:Time" use="encoded"/>
+         </wsdl:input>
+         <wsdl:output name="getDateResponse">
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="jonas:Time" use="encoded"/>
+         </wsdl:output>
+      </wsdl:operation>
+
+      <wsdl:operation name="getDateAsLong">
+         <wsdlsoap:operation soapAction=""/>
+         <wsdl:input name="getDateAsLongRequest">
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="jonas:Time" use="encoded"/>
+         </wsdl:input>
+         <wsdl:output name="getDateAsLongResponse">
+            <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="jonas:Time" use="encoded"/>
+         </wsdl:output>
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="TimeBeanService">
+      <wsdl:port binding="impl:TimePortSoapBinding" name="TimePort">
+         <wsdlsoap:address location="http://www.objectweb.org/dummy"/>
+      </wsdl:port>
+   </wsdl:service>
+
+</wsdl:definitions>
