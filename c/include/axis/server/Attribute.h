@@ -88,6 +88,11 @@ public:
     void setPrefix(const AxisChar* prefix);
     void setLocalName(const AxisChar* localname);    
 
+    const AxisChar* getValue();
+    const AxisChar* getUri();
+    const AxisChar* getPrefix();
+    const AxisChar* getLocalName();
+
 private:    
     bool isSerializable() const;
     AxisString m_localname;

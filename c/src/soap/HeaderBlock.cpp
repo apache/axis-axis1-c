@@ -607,6 +607,24 @@ Attribute* HeaderBlock::createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE
     }
 }
 
+const AxisChar* HeaderBlock::getAttributeValue(const AxisChar *localname,
+                                         const AxisChar *prefix)
+{
+     list<Attribute*>::iterator itAttr = m_attributes.begin();
+ 	while (itAttr != m_attributes.end()) 
+ 	{
+ 		Attribute* pAttribute = *itAttr;
+ 		if (!strcmp(pAttribute->getLocalName(),localname) &&
+ 			!strcmp(pAttribute->getPrefix(),prefix)) 
+ 			return pAttribute->getValue();
+ 		itAttr++;
+ 	}
+ 
+     return NULL;
+}
+ 
+
+
 BasicNode* HeaderBlock::createImmediateChild(NODE_TYPE eNODE_TYPE,
                                              AxisChar *pachLocalName,
                                              AxisChar *pachPrefix,

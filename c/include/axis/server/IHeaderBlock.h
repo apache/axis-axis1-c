@@ -189,6 +189,17 @@ public:
       */
     virtual Attribute* createAttribute(const AxisChar *localname, 
         const AxisChar *prefix, const AxisChar *value) = 0;
+     /**
+      * Gets an Attribute from the HeaderBlock.
+      *
+      * @param localname The local name of the attribute.
+      * @param prefix The prefix of the attribute.
+      *
+      * @return the value of the attribute is returned.
+      */
+     virtual const AxisChar* getAttributeValue(const AxisChar* localname,
+         const AxisChar* prefix) = 0;
+ 
 
     /**
      * Creates a child node depending on the given type. If the type is 
