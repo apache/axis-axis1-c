@@ -1,2 +1,2 @@
 #!/bin/bash
-./configure --libdir=$AXISCPP_HOME/release
+./configure --libdir=$AXISCPP_HOME/bin
