@@ -8,10 +8,10 @@ int main(int argc, char* argv[])
 {
 	int x;
 	InteropTestPortTypeB ws;
-	//we do not support multi-dimensional arrays.
-	//ws.echo2DStringArray
+	/*we do not support multi-dimensional arrays.*/
+	/*ws.echo2DStringArray*/
 
-	//testing Nested Arrays
+	/*testing Nested Arrays*/
 	SOAPArrayStruct sas;
 	sas.varFloat = 12345.67890;
 	sas.varInt = 5000;
@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 	else
 		printf("failed\n");
 
-	//testing Nested Structs
+	/*testing Nested Structs*/
 	SOAPStructStruct sss;
 	sss.varFloat = 12345.67890;
 	sss.varInt = 5000;
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 	else
 		printf("failed\n");
 
-	//testing echo Simple types as struct
+	/*testing echo Simple types as struct*/
 	char* str = strdup("content of string passed");
 	printf("invoking echoSimpleTypesAsStruct...\n");
 	if (ws.echoSimpleTypesAsStruct(12345.67890, 5000, str) != NULL)
@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 	else
 		printf("failed\n");
 
-	//testing echo Struct as simple types.
+	/*testing echo Struct as simple types.*/
 	SOAPStruct ss;
 	ss.varFloat = 12345.67890;
 	ss.varInt = 5000;

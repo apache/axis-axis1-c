@@ -1,1 +1,1 @@
-SUBDIRS = base cbase groupB doclitbase doclitgroupB 
+SUBDIRS = base cbase groupB cgroupB doclitbase doclitgroupB 
