@@ -80,7 +80,7 @@ import org.apache.axis.wsdl.symbolTable.ServiceEntry;
 import org.apache.axis.wsdl.symbolTable.SymTabEntry;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
-import org.apache.axis.wsdl.toJava.Utils;
+
 import org.apache.axis.wsdl.wsdl2ws.info.ElementInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
@@ -435,7 +435,6 @@ public class WSDL2Ws {
 			if(type == null){
 				throw new WrapperFault("["+typename+"]unexpected condition occured " +
 					".. please inform the axis-dev@apache.org mailing list ASAP");
-				
 			}
 			type.getRefType();
 		}
@@ -459,7 +458,16 @@ public class WSDL2Ws {
 		}
 		System.out.println(
 			"############## the type found =" + type.getQName());
-		typedata = new Type(type.getQName(), type.getName(), true, targetLanguage);
+		if (-1 != type.getQName().getLocalPart().indexOf('[')) {/* it seems that this is an array */
+			if (null == type.getRefType())throw new WrapperFault("Array type found without a Ref type");
+			QName qn = type.getRefType().getQName();
+			if (null == qn)throw new WrapperFault("Array type found without a Ref type");
+			if (CUtils.isSimpleType(qn)) return null;
+			QName newqn = new QName(type.getQName().getNamespaceURI(), qn.getLocalPart()+"_Array");
+			typedata = new Type(newqn, newqn.getLocalPart(), true, targetLanguage);
+		}else {
+			typedata = new Type(type.getQName(), type.getName(), true, targetLanguage);
+		}
 		typeMap.addType(type.getQName(), typedata);
 			
 		Node node = type.getNode();
