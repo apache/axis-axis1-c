@@ -142,21 +142,22 @@ typedef enum
 /*65*/    SERVER_PARSE_TRANSPORT_FAILED,
 /*66*/    SERVER_TEST_EXCEPTION,
 /*67*/    SERVER_UNKNOWN_ERROR,
+/*68*/    SERVER_CLIENT_ENGINE_MISMATCH,
 
     /* AXIS C faults */
     /*Following exceptions are not releated to soap faults
      */
-/*68*/    AXISC_SERVICE_THROWN_EXCEPTION,
-/*69*/    AXISC_UNKNOWN_ELEMENT_EXCEPTION,
-/*70*/    AXISC_NODE_VALUE_MISMATCH_EXCEPTION,
-/*71*/    AXISC_READ_CONF_EXCEPTION,
+/*60*/    AXISC_SERVICE_THROWN_EXCEPTION,
+/*70*/    AXISC_UNKNOWN_ELEMENT_EXCEPTION,
+/*71*/    AXISC_NODE_VALUE_MISMATCH_EXCEPTION,
+/*72*/    AXISC_READ_CONF_EXCEPTION,
 
     /*
      * This FAULT_LAST is not used as a fault code, but instead is used 
      * internaly in the code. Developers should not use this as a fault 
      * code.
      */
-/*72*/    FAULT_LAST 
+/*73*/    FAULT_LAST 
 } AXISC_EXCEPTIONS;
 
 /**

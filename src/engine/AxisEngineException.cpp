@@ -138,6 +138,9 @@ const string AxisEngineException::getMessage (const int iExceptionCode)
         case SERVER_ENGINE_WRONG_HANDLER_TYPE:
             m_sMessage = "AxisEngineException:Wrong handler type";
             break;
+        case SERVER_CLIENT_ENGINE_MISMATCH:
+            m_sMessage = "AxisEngineException:Engine cannot be initialized as both client and server";
+            break;
         default:
             m_sMessage = "AxisEngineException:Unknown Axis C++ Engine Exception";
     }

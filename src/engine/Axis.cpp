@@ -86,8 +86,9 @@ HandlerPool* g_pHandlerPool;
 WSDDDeployment* g_pWSDDDeployment;
 AxisConfig* g_pConfig;
 
-//Keeps track of whether initialize_module/uninitialize_module was called
-bool g_bModuleInitialize = false;
+//Keeps track of how many times initialize_module/uninitialize_module was called
+static volatile long g_uModuleInitialize = 0;
+
 
 void ModuleInitialize ()
 {    
@@ -290,120 +291,198 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
 
 #endif
 
+#ifdef WIN32
+
+static volatile long g_uModuleInitializing = 0;
+static void start_initializing()
+{
+    long exchange = 1;
+    long comperand = 0;
+    while (InterlockedCompareExchange(((void **)&g_uModuleInitializing), (void *)&exchange, (void *) &comperand));
+}
+static void done_initializing()
+{
+    g_uModuleInitializing = 0;
+}
+
+#else
+
+#include <pthread.h>
+static pthread_mutex_t initializingMutex = PTHREAD_MUTEX_INITIALIZER;
+
+static void start_initializing()
+{
+    pthread_mutex_lock(&initializingMutex);
+}
+
+static void done_initializing()
+{
+    pthread_mutex_unlock(&initializingMutex);
+}
+
+#endif
+ 
+
+
 extern "C" {
 STORAGE_CLASS_INFO
 int initialize_module (int bServer)
 {
-    g_bModuleInitialize = true;
-    int status = 0;
-    // order of these initialization method invocation should not be changed
-    AxisEngine::m_bServer = bServer;
-    AxisUtils::initialize ();
-    WSDDKeywords::initialize ();
-    SoapKeywordMapping::initialize ();
-    TypeMapping::initialize ();
-    URIMapping::initialize ();
-    SoapFault::initialize ();
-    ModuleInitialize ();
-    if (bServer) // no client side wsdd processing at the moment
+    start_initializing();
+    
+    int status = AXIS_SUCCESS;
+
+    try
     {
-		/* Read from the configuration file */
-        status = g_pConfig->readConfFile (); 
-        if (status == AXIS_SUCCESS)
+        if (g_uModuleInitialize == 0)
         {
-			XMLParserFactory::initialize();
-            SOAPTransportFactory::initialize();
-			char *pWsddPath = g_pConfig->getAxisConfProperty(AXCONF_WSDDFILEPATH);
-
+            // order of these initialization method invocation should not be changed
+            AxisEngine::m_bServer = bServer;
+            AxisUtils::initialize ();
+            WSDDKeywords::initialize ();
+            SoapKeywordMapping::initialize ();
+            TypeMapping::initialize ();
+            URIMapping::initialize ();
+            SoapFault::initialize ();
+            ModuleInitialize ();
+            if (bServer) // no client side wsdd processing at the moment
+            {
+    		    /* Read from the configuration file */
+                status = g_pConfig->readConfFile (); 
+                if (status == AXIS_SUCCESS)
+                {
+                    XMLParserFactory::initialize();
+                    SOAPTransportFactory::initialize();
+                    char *pWsddPath = g_pConfig->getAxisConfProperty(AXCONF_WSDDFILEPATH);
 #if defined(ENABLE_AXISTRACE)
-
-            status = AxisTrace::openFile ();
-            if (status == AXIS_FAIL)
-            {
-                // Samisa - make sure that we start service, even if we cannot open log file
-                //return AXIS_FAIL;
-            }
+                    status = AxisTrace::openFile ();
+                    if (status == AXIS_FAIL)
+                    {
+                        // Samisa - make sure that we start service, even if we cannot open log file
+                        //return AXIS_FAIL;
+                    }
 #endif
-            try
-            {            
-                if (AXIS_SUCCESS != g_pWSDDDeployment->loadWSDD (pWsddPath))
-                    return AXIS_FAIL;
-            }
-            catch (exception& e)
-            {
-                cout<< e.what();
-                cout<< "\n";
-                cout<< "Axis c++: An exception occured while loading the wsdd\n";
-                exit(1);
-            }
-
-        }
-        else
-        {
-            return AXIS_FAIL;
-        }
-
+                    try
+                    {            
+                        if (AXIS_SUCCESS != g_pWSDDDeployment->loadWSDD (pWsddPath))
+                        {
+                            status = AXIS_FAIL;
+                        }
+                    }
+                    catch (exception& e)
+                    {
+                        throw AxisEngineException(&e);
+                    }
+    
+                }
+                else
+                {
+                    status = AXIS_FAIL;
+                }
+           }
+           else if (bServer == 0)      // client side module initialization
+           {
+                status = g_pConfig->readConfFile (); /* Read from the configuration
+                               * file 
+                                 */
+                if (status == AXIS_SUCCESS)
+                {
+#if defined(ENABLE_AXISTRACE)
+                    status = AxisTrace::openFileByClient ();
+                    /*  //Samisa: 01/09/2004
+                        //Fix for AXISCPP-127
+                        //Do not stop here merely because log file location ClientLogPath is incorrect
+                        if (status == AXIS_FAIL)
+                        {
+                            return AXIS_FAIL;
+                        }
+                   */
+#endif
+                   XMLParserFactory::initialize();
+                   SOAPTransportFactory::initialize();
+                   char *pClientWsddPath =
+                   g_pConfig->getAxisConfProperty(AXCONF_CLIENTWSDDFILEPATH);
+    
+                   /* May be there is no client side handlers configured. So may not 
+                    * have CLIENTWSDDFILEPATH entry in axiscpp.conf 
+                    */
+                   if (pClientWsddPath)
+                   {
+                       if (AXIS_SUCCESS != g_pWSDDDeployment->loadWSDD (pClientWsddPath))
+                       {
+                           status = AXIS_FAIL;
+                       }
+                   }
+                }
+                else
+                {
+                    AXISTRACE3("Reading from the configuration file failed. \
+                    Check for error in the configuration file. \n\
+                 Handlers and logging are not working");
+                    /* TODO:Improve the AxisTrace so that it will log these kind of 
+                     * messages into a log file according to the critical level 
+                     * specified.
+                     */
+                }
+           }
+           else
+           {
+               /* Ok if we can't read config file */
+               status = AXIS_SUCCESS;
+           }
+       }
+       else if (AxisEngine::m_bServer != bServer)
+       {
+           throw AxisEngineException(SERVER_ENGINE_EXCEPTION);
+       }
     }
-    else if (bServer == 0)      // client side module initialization
+    catch (...)
     {
-        status = g_pConfig->readConfFile (); /* Read from the configuration
-						  * file 
-						  */
-        if (status == AXIS_SUCCESS)
-        {
-#if defined(ENABLE_AXISTRACE)
-            status = AxisTrace::openFileByClient ();
-            /* //Samisa: 01/09/2004
-               //Fix for AXISCPP-127
-               //Do not stop here merely because log file location ClientLogPath is incorrect
-            if (status == AXIS_FAIL)
-            {
-                return AXIS_FAIL;
-            }
-            */
-#endif
-		XMLParserFactory::initialize();
-            SOAPTransportFactory::initialize();
-		char *pClientWsddPath = 
-		g_pConfig->getAxisConfProperty(AXCONF_CLIENTWSDDFILEPATH);
-
-            /* May be there is no client side handlers configured. So may not 
-	     * have CLIENTWSDDFILEPATH entry in axiscpp.conf 
-	     */
-            if (!pClientWsddPath)
-                return status;
-            if (AXIS_SUCCESS != g_pWSDDDeployment->loadWSDD (pClientWsddPath))
-                return AXIS_FAIL;
-        }
-        else
-        {
-            AXISTRACE3("Reading from the configuration file failed. \
-                Check for error in the configuration file. \n\
-				Handlers and logging are not working");
-            /* TODO:Improve the AxisTrace so that it will log these kind of 
-	     * messages into a log file according to the critical level 
-	     * specified.
-             */
-        }
+        done_initializing();
+        throw;
     }
-    return AXIS_SUCCESS;
+
+    ++g_uModuleInitialize;
+    done_initializing();
+
+    return status;
 }
 }
+
 
 extern "C" {
 STORAGE_CLASS_INFO
 int uninitialize_module ()
 {
-    g_bModuleInitialize = false;
-	TypeMapping::uninitialize();
-	URIMapping::uninitialize();
-    SOAPTransportFactory::uninitialize();
-    ModuleUnInitialize();
-    SoapKeywordMapping::uninitialize();
-    XMLParserFactory::uninitialize();
+    start_initializing();
+
+    try
+    {
+        if (g_uModuleInitialize > 0)
+        {
+            if (--g_uModuleInitialize == 0)
+            {
+                TypeMapping::uninitialize();
+                URIMapping::uninitialize();
+                SOAPTransportFactory::uninitialize();
+                ModuleUnInitialize();
+                SoapKeywordMapping::uninitialize();
+                XMLParserFactory::uninitialize();
+            }
+        }
+    }
+    catch (...)
+    {
+        done_initializing();
+        throw;
+    }
+
+    done_initializing();
+
     return AXIS_SUCCESS;
 }
 }
+
 
 void Ax_Sleep (int nTime)
 {

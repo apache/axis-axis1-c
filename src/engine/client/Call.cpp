@@ -49,24 +49,18 @@ extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 extern "C" int initialize_module (int bServer);
 extern "C" int uninitialize_module ();
 
-extern bool g_bModuleInitialize;
-
 AXIS_CPP_NAMESPACE_USE
 
 bool CallBase::bInitialized = false;
 
 Call::Call ()
-:m_pcEndPointUri(NULL), m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false), m_bModuleInitialized(false),
+:m_pcEndPointUri(NULL), m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false),
 m_bCallInitialized(false)
 {
     m_pAxisEngine = NULL;
     m_pIWSSZ = NULL;
     m_pIWSDZ = NULL;
-    if (!g_bModuleInitialize)
-    {
-        initialize_module (0);
-        m_bModuleInitialized = true;
-    }
+    initialize_module (0);
     
     m_pTransport = NULL;
     m_nTransportType = APTHTTP1_1;
@@ -86,10 +80,9 @@ Call::~Call ()
     // in generated code
      if (m_bCallInitialized) 
         unInitialize();
-	 SOAPTransportFactory::destroyTransportObject(m_pTransport);
-		m_pTransport = NULL;
-    if (m_bModuleInitialized)
-        uninitialize_module();
+	SOAPTransportFactory::destroyTransportObject(m_pTransport);
+	m_pTransport = NULL;
+    uninitialize_module();
     if (m_pcEndPointUri)
         delete [] m_pcEndPointUri;  
 	m_pcEndPointUri = NULL;

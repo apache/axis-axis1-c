@@ -489,13 +489,6 @@ private:
     * Use Proxy or not?
     */
     bool m_bUseProxy;
-    
-  /**
-    * If this object calls initialize_module, this will be set to true.
-    * Helps keep track of whether to call uninitialize_module in destructor.
-    * It is possible that initialize_module could have been called already.
-    */
-    bool m_bModuleInitialized;
 
   /**
     * To track if the initialize was called/matched with an uninitialize
