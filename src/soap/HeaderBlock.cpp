@@ -59,7 +59,7 @@
 #include "ComplexElement.h"
 #include "CharacterElement.h"
 #include "Namespace.h"
-
+#include <iostream>
 AXIS_CPP_NAMESPACE_START
 
 extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];
@@ -173,13 +173,27 @@ const AxisChar * HeaderBlock::getLocalName()
  */
 int HeaderBlock::setPrefix(const AxisChar* prefix)
 {
-    m_sPrefix= prefix;
+	if(prefix)
+	{
+	    m_sPrefix= prefix;
+	}
+	else
+	{
+		m_sPrefix="";
+	}
     return AXIS_SUCCESS;
 }
 
 int HeaderBlock::setURI(const AxisChar* uri)
 {
-    m_uri= uri;
+	if(uri)
+	{
+	    m_uri= uri;
+	}
+	else
+	{
+		m_uri="";
+	}
     return AXIS_SUCCESS;
 }
 

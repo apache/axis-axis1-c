@@ -47,25 +47,25 @@ class IHeaderBlock
 {
 public:
     /** 
-      * Sets the namespace declaration of the Header Block. 
-      * 
-      * @param pAttribute The Attribute pointer which points to a valid 
-      * namespace declartion Attribute. 
-      * @return AXIS_SUCCESS to indicate successfull operation. 
-      */ 
+    * Sets the namespace declaration of the Header Block. 
+    *
+    * @param pAttribute The Attribute pointer which points to a valid 
+    * namespace declartion Attribute. 
+    * @return AXIS_SUCCESS to indicate successfull operation. 
+    */ 
 	/* TO DO: We need to remove this completely
 	*
 	virtual int addNamespaceDecl(INamespace *pAttribute)=0;
 	*/
 
     /** 
-      * Creates a Attribute and adds it to this Header Block as a namespace. 
-      * 
-      * @param prefix The prefix of the attribute. 
-      * @param uri The namespace uri of the attribute. 
-      * 
-      * @return A pointer to the created Attribute will be returned. 
-      */ 
+    * Creates a Attribute and adds it to this Header Block as a namespace. 
+    * 
+    * @param prefix The prefix of the attribute. 
+    * @param uri The namespace uri of the attribute. 
+    * 
+    * @return A pointer to the created Attribute will be returned. 
+    */ 
     virtual INamespace* createNamespaceDecl(const AxisChar *prefix, 
             const AxisChar *uri)=0; 
 
@@ -277,7 +277,7 @@ public:
     /**
       * Sets the namespace uri of this Header Block.
       *
-      * @param uri The namespace uri to set in.
+      * @param uri The namespace uri to set in. IF NULL is passed in then URI is set to ""
       * @return AXIS_SUCCESS if successful AXIS_FAIL otherwise
       * 
       */
@@ -295,7 +295,7 @@ public:
     /**
       * Sets the prefix of this Header Block.
       *
-      * @param prefix The prefix to set in.
+      * @param prefix The prefix to set in.IF NULL is passed in the prefix is set to ""
       * @return AXIS_SUCCESS if successful AXIS_FAIL otherwise
       */
     virtual int setPrefix(const AxisChar* prefix)=0;
