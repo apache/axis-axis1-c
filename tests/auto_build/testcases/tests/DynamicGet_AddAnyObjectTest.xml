@@ -1,0 +1,14 @@
+<test>
+    <name>DynamicGet_AddAnyObjectTest</name>
+    <description>DynamicGet_AddAnyObjectTest</description>
+	<dynamicCode>true</dynamicCode>
+	<dynamicCodeDirectory>DynamicGet_AddAnyObjectTest</dynamicCodeDirectory>
+    <clientLang>cpp</clientLang>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            DynamicGet_AddAnyObjectTest.expected
+        </output>        	
+    </expected>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>
