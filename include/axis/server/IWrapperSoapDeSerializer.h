@@ -215,7 +215,7 @@ public:
 	virtual	int Init()=0;
 	virtual PROVIDERTYPE GetCurrentProviderType()=0;
 	virtual void SetCurrentProviderType(PROVIDERTYPE nType)=0;	
-	virtual AXIS_BINDING_STYLE AXISCALL GetStyle()=0;	
+	virtual AXIS_BINDING_STYLE GetStyle()=0;	
 	virtual void SetStyle(AXIS_BINDING_STYLE nStyle)=0;
 	virtual int GetVersion()=0;
 	virtual int GetHeader()=0;	
