@@ -60,7 +60,7 @@ class Tracer extends BufferedWriter {
 		typetable.put("string", "STLSTRING");
 		typetable.put("AxisString", "STLSTRING");
 		typetable.put("AxisXMLString", "STLSTRING");
-		typetable.put("xsd__string", "STLSTRING");
+		typetable.put("xsd__string", "STRING");
 	}
 
 	private final static Set charSet =
