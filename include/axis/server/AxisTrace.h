@@ -14,6 +14,13 @@
  *   limitations under the License.
  */ 
 
+/**
+ * @file AxisTrace.h
+ *
+ * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
+ *
+ */
+  
 #ifndef __AXISLOG_H_INCLUDED_
 #define __AXISLOG_H_INCLUDED_
 

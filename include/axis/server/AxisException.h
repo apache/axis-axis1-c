@@ -14,7 +14,13 @@
  *   limitations under the License.
  *
  *
- *   @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
+ *
+ */
+
+/**
+ * @file AxisException.h
+ *
+ * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  *
  */
  

@@ -13,7 +13,14 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
- 
+
+/**
+ * @file AxisTime.h
+ *
+ * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
+ *
+ */
+  
 #ifndef __AXISTIME_H_OF_AXIS_INCLUDED_
 #define __AXISTIME_H_OF_AXIS_INCLUDED_
 

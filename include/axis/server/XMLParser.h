@@ -14,6 +14,15 @@
  *   limitations under the License.
  */
 
+/**
+ * @file XMLParser.h
+ *
+ * This file contains the API that any XML parser library for Axis should
+ * implement.
+ *
+ * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
+ */
+ 
 #include "AnyElement.h"
 #include "Packet.h"
 #include <axis/SOAPTransport.h>
