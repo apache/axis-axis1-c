@@ -38,6 +38,7 @@
 
 #ifdef WIN32
 #pragma warning (disable : 4786)
+#pragma warning (disable : 4101)
 #endif
 
 #include "AxisTransport.h"
@@ -379,12 +380,6 @@ void AxisTransport::setTimeout(const long lSeconds)
 {
     m_pHttpTransport->setTimeout(lSeconds);
 }
-
-#ifdef WIN32
-#define STORAGE_CLASS_INFO __declspec(dllexport)
-#else
-#define STORAGE_CLASS_INFO 
-#endif
 
 extern "C" {
 STORAGE_CLASS_INFO

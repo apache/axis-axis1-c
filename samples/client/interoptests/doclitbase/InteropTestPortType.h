@@ -6,7 +6,7 @@
 #if !defined(__INTEROPTESTPORTTYPE_CLIENTSTUB_H__OF_AXIS_INCLUDED_)
 #define __INTEROPTESTPORTTYPE_CLIENTSTUB_H__OF_AXIS_INCLUDED_
 
-#include <axis/client/Call.h>
+#include <axis/client/Stub.h>
 #include "SOAPStruct.h"
 #include "ArrayOffloat.h"
 #include "ArrayOfSOAPStruct.h"

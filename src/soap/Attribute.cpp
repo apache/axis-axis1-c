@@ -41,6 +41,9 @@
 #include <axis/server/GDefine.h>
 #include <axis/server/SoapSerializer.h>
 
+AttributeFunctions Attribute::ms_VFtable;
+bool Attribute::bInitialized = false;
+
 Attribute::Attribute()
 {
     
@@ -169,6 +172,7 @@ bool Attribute::isSerializable() const
     return bStatus;
 }
 
+#ifdef UNIT_TESTING_ON
 int Attribute::initializeForTesting()
 {
     m_prefix = "pr";
@@ -178,7 +182,7 @@ int Attribute::initializeForTesting()
 
     return AXIS_SUCCESS;
 }
-
+#endif
 
 Attribute::Attribute(const AxisChar *localname, const AxisChar *prefix, 
                      const AxisChar *value)

@@ -71,8 +71,8 @@ main(int argc, char *argv[])
      */
 
     //set SOAP headers
-    IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader", "th",
-						 "http://ws.apache.org/axisCppTest/");
+    IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader", 
+		"http://ws.apache.org/axisCppTest/");
 
     //create parent node
     BasicNode *parentNode = phb->createChild(ELEMENT_NODE);
@@ -100,7 +100,7 @@ main(int argc, char *argv[])
     phb->addChild(parentNode);
 
     //set second SOAP headers
-    phb = ws.createSOAPHeaderBlock("TestHeader2", "th",
+    phb = ws.createSOAPHeaderBlock("TestHeader2",
 				   "http://ws.apache.org/axisCppTest/");
 
     //create parent node

@@ -83,8 +83,9 @@ private:
     PROVIDERTYPE m_ProviderType;
 public:
 
+#ifdef UNIT_TESTING_ON
     int setOutputStreamForTesting(SOAPTransport* pStream);
-
+#endif
     int AXISCALL createSoapMethod(const AxisChar* sLocalName, 
         const AxisChar* sURI);
 
@@ -172,8 +173,8 @@ private:
 public:
 	int setSOAPMethodAttribute(Attribute* pAttribute);
 	SoapMethod* getSOAPMethod();
-    IHeaderBlock* createHeaderBlock(AxisChar *pachLocalName, 
-        AxisChar *pachPrefix, AxisChar *pachUri);
+    IHeaderBlock* createHeaderBlock(AxisChar *pachLocalName,
+        AxisChar *pachUri);
     /* to add a header block to the Serializer. Probably by a handler */
     int AXISCALL addHeaderBlock(IHeaderBlock* pBlk);
     int AXISCALL addOutputParam(const AxisChar* pchName, 
@@ -189,7 +190,8 @@ public:
     int AXISCALL setBodyAsHexBinary(xsd__hexBinary body);
     int AXISCALL setBodyAsBase64Binary(xsd__base64Binary body);
     const AxisChar* AXISCALL getBodyAsString();
-	static void AXISCALL releaseBufferCallBack(const char* buffer, const void* bufferid);
+	static void AXISCALL releaseBufferCallBack(const char* buffer,
+        const void* bufferid);
 	int addOutputAnyObject(AnyType* pAnyObject);
 	int serializeAnyObject(AnyType* pAnyObject);
 };

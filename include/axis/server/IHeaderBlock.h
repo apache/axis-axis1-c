@@ -29,13 +29,14 @@ enum HEADER_BLOCK_STD_ATTR_TYPE
 };
 
 
-/*
+/**
  *  @class IHeaderBlock
  *  @brief interface for the IHeaderBlock class.
  *
  *
  *  @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  *  @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ *  @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  *
  */
 
@@ -48,6 +49,18 @@ enum HEADER_BLOCK_STD_ATTR_TYPE
  * Revision 1.2  2004/06/13 roshan
  * Added doxygen comments to help autobuild API docs
  */
+
+/*
+ * Revision 1.12  2004/06/13 susantha
+ * Added support for writing C web services and handlers
+ */
+
+typedef struct {
+	const BasicNode* (AXISCALL* getFirstChild)(void* pObj);
+	//add all other API functions here
+} HeaderBlockFunctions;
+
+#ifdef __cplusplus
 
 class IHeaderBlock
 {
@@ -251,6 +264,12 @@ public:
       * @param prefix The prefix to set in.
       */
     virtual void setPrefix(const AxisChar* prefix)=0;
+#ifdef UNIT_TESTING_ON
+    /**
+      * Initialized the Header Block for testing.
+      */
+    virtual int initializeForTesting() = 0;
+#endif
     
     IHeaderBlock(){/*empty body as there are no member variable*/};
 
@@ -268,11 +287,20 @@ public:
       */
     virtual ~IHeaderBlock() {};
 
-    /**
-      * Initialized the Header Block for testing.
-      */
-    virtual int initializeForTesting() = 0;
+	static HeaderBlockFunctions ms_VFtable;
+	static bool bInitialized;
 };
+
+#endif
+
+typedef struct { 
+	void* _object; /* this will be C++ Call Object */
+	HeaderBlockFunctions* _functions; /* this is the static function table */
+} HeaderBlock_C;
+
+#ifndef __cplusplus
+typedef HeaderBlock_C HeaderBlock; 
+#endif
 
 #endif 
 
