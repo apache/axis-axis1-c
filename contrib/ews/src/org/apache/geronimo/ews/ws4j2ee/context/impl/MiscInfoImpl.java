@@ -66,6 +66,7 @@ import org.apache.geronimo.ews.ws4j2ee.context.MiscInfo;
 import org.apache.geronimo.ews.ws4j2ee.context.SEIOperation;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
+import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
 import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenarationFault;
 
 /**
@@ -74,7 +75,7 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenarationFault;
 public class MiscInfoImpl implements MiscInfo {
     private WSCFWebserviceDescription wscfdWsDesxription;
     private WSCFPortComponent wscfport;
-    private String j2eeContainerDDName;
+    private boolean implwithEJB = true;
 
     private String outputPath = ".";
 
@@ -83,10 +84,19 @@ public class MiscInfoImpl implements MiscInfo {
     private PortTypeEntry portType;
     private Port port;
     private boolean useRemoteInterface;
+    /* if Impl is avalible the class need not to be created agaien*/
+    private boolean implAvalible = false;
 
     private String ejbsei = null;
     private String ejbbean = null;
     private String ejbhome = null;
+	private String ejblocalsei = null;
+	//private String ejblocalbean = null;
+	private String ejblocalhome = null;
+	private boolean supportLocalAndRemote = true;
+    
+    
+    
     private String ejbName = null;
     private String axisSEI;
     private ArrayList operations;
@@ -94,12 +104,16 @@ public class MiscInfoImpl implements MiscInfo {
     private String wsConfFileLocation;
     private String wsdlFile;
     private String jaxrpcfile;
+    private String targetJ2EEContainer;
+    private String implStyle;
 
     /**
      * 
      */
     public MiscInfoImpl() {
         operations = new ArrayList();
+        targetJ2EEContainer = GenerationConstants.JBOSS_CONTAINER;
+        implStyle = GenerationConstants.USE_REMOTE;
     }
 
     public String getOutPutPath() {
@@ -326,16 +340,6 @@ public class MiscInfoImpl implements MiscInfo {
     /**
      * @return 
      */
-    public String getJ2eeContainerDDName() {
-        return j2eeContainerDDName;
-    }
-
-    /**
-     * @param string 
-     */
-    public void setJ2eeContainerDDName(String string) {
-        j2eeContainerDDName = string;
-    }
 
 	/* (non-Javadoc)
 	 * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#isUseRemoteInterface()
@@ -350,5 +354,103 @@ public class MiscInfoImpl implements MiscInfo {
 	public void setUseRemoteInterface(boolean useRemoteInterface) {
 		this.useRemoteInterface = useRemoteInterface;
 	}
+
+    /**
+     * @return
+     */
+    public String getImplStyle() {
+        return implStyle;
+    }
+
+    /**
+     * @return
+     */
+    public String getTargetJ2EEContainer() {
+        return targetJ2EEContainer;
+    }
+
+    /**
+     * @param string
+     */
+    public void setImplStyle(String string) {
+        implStyle = string;
+    }
+
+    /**
+     * @param string
+     */
+    public void setTargetJ2EEContainer(String string) {
+        targetJ2EEContainer = string;
+    }
+
+    /**
+     * @return
+     */
+    public String getEjblocalhome() {
+        return ejblocalhome;
+    }
+
+    /**
+     * @return
+     */
+    public String getEjblocalsei() {
+        return ejblocalsei;
+    }
+
+    /**
+     * @param string
+     */
+    public void setEjblocalhome(String string) {
+        ejblocalhome = string;
+    }
+
+    /**
+     * @param string
+     */
+    public void setEjblocalsei(String string) {
+        ejblocalsei = string;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isSupportLocalAndRemote() {
+        return supportLocalAndRemote;
+    }
+
+    /**
+     * @param b
+     */
+    public void setSupportLocalAndRemote(boolean b) {
+        supportLocalAndRemote = b;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isImplwithEJB() {
+        return implwithEJB;
+    }
+
+    /**
+     * @param b
+     */
+    public void setImplwithEJB(boolean b) {
+        implwithEJB = b;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isImplAvalible() {
+        return implAvalible;
+    }
+
+    /**
+     * @param b
+     */
+    public void setImplAvalible(boolean b) {
+        this.implAvalible = b;
+    }
 
 }

@@ -1,8 +1,7 @@
 /*
  * The Apache Software License, Version 1.1
  *
- *
- * Copyright (c) 2001-2004 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -17,20 +16,20 @@
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
- * 3. The end-user documentation included with the redistribution,
- *    if any, must include the following acknowledgment:
+ * 3. The end-user documentation included with the redistribution, if
+ *    any, must include the following acknowledgment:
  *       "This product includes software developed by the
  *        Apache Software Foundation (http://www.apache.org/)."
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Axis" and "Apache Software Foundation" must
- *    not be used to endorse or promote products derived from this
- *    software without prior written permission. For written
+ * 4. The names "The Jakarta Project", "Commons", and "Apache Software
+ *    Foundation" must not be used to endorse or promote products derived
+ *    from this software without prior written permission. For written
  *    permission, please contact apache@apache.org.
  *
- * 5. Products derived from this software may not be called "Apache",
- *    nor may "Apache" appear in their name, without prior written
+ * 5. Products derived from this software may not be called "Apache"
+ *    nor may "Apache" appear in their names without prior written
  *    permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -51,34 +50,34 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
+ *
  */
+package org.apache.geronimo.ews.ws4j2ee.toWs.wrapperWs.jboss;
 
-package org.apache.geronimo.ews.ws4j2ee.toWs.wrapperWs;
-
-import org.apache.axis.components.logger.LogFactory;
-import org.apache.commons.logging.Log;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
-import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
-import org.apache.geronimo.ews.ws4j2ee.toWs.Writer;
+import org.apache.geronimo.ews.ws4j2ee.toWs.wrapperWs.SimpleRemoteInterfaceBasedWrapperClassWriter;
 
 /**
- * <p>This genarated theWrapper WS required in the 
- * Axis.</p> 
- * @author Srinath Perera(hemapani@opensource.lk)
+ * @author hemapani
  */
-public class WrapperWsGenarator implements Generator {
-    private J2EEWebServiceContext j2eewscontext;
-    private Writer writer;
-	protected static Log log =
-					LogFactory.getLog(WrapperWsGenarator.class.getName());
-    
-    public WrapperWsGenarator(J2EEWebServiceContext j2eewscontext) throws GenerationFault {
-        this.j2eewscontext = j2eewscontext;
-		writer = WrapperClassGeneratorFactory.createInstance(j2eewscontext);
+public class RemoteInterfacedBasedWrapperClassWriter4JBoss extends SimpleRemoteInterfaceBasedWrapperClassWriter{
+
+    /**
+     * @param j2eewscontext
+     * @throws GenerationFault
+     */
+    public RemoteInterfacedBasedWrapperClassWriter4JBoss(J2EEWebServiceContext j2eewscontext)
+        throws GenerationFault {
+        super(j2eewscontext);
     }
-    
-    public void genarate() throws GenerationFault {
-		writer.writeCode();
+
+    protected String getJNDIHostAndPort() {
+        return "127.0.0.1:1099";
     }
+
+    protected String getJNDIInitialContextFactory() {
+        return "org.jnp.interfaces.NamingContextFactory";
+    }
+
 }

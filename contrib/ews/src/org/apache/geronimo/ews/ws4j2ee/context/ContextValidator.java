@@ -55,13 +55,10 @@
 
 package org.apache.geronimo.ews.ws4j2ee.context;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.wsdl.Fault;
 import javax.wsdl.Operation;
@@ -74,11 +71,11 @@ import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.Parameter;
 import org.apache.axis.wsdl.symbolTable.Parameters;
 import org.apache.axis.wsdl.symbolTable.PortEntry;
+import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
 import org.apache.axis.wsdl.symbolTable.ServiceEntry;
 import org.apache.geronimo.ews.ws4j2ee.context.impl.SEIOperationImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
-import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenarationFault;
 
@@ -96,18 +93,6 @@ public class ContextValidator {
     public ContextValidator(J2EEWebServiceContext context) throws GenerationFault {
         try {
             this.context = context;
-			// String configFile = AxisProperties.getProperty(GenerationConstants.OPTION_WS4J2EE_PROPERTY_FILE,
-					 //       GenerationConstants.WS4J2EE_PROPERTY_FILE);
-			String configFile = "src/conf/ws4j2ee.properties";
-            Properties prperties = new Properties();
-            try {
-                prperties.load(new FileInputStream(configFile));
-            } catch (Exception e) {
-                InputStream istream = ContextValidator.class.getClassLoader().getResourceAsStream(configFile);
-                prperties.load(istream);
-            }
-            String containerDD = prperties.getProperty(GenerationConstants.J2EE_CONTAINER_DD);
-            context.getMiscInfo().setJ2eeContainerDDName(containerDD);
         } catch (Exception e) {
             throw GenerationFault.createGenerationFault(e);
         }
@@ -132,16 +117,29 @@ public class ContextValidator {
                 context.getMiscInfo().settargetService(new ServiceEntry(service));
             }
             
-//get the service ports 
+			//get the service ports 
             Collection portCollecton = service.getPorts().values();
-//just as before if there are more than one servie just let
-//it failed
+			//just as before if there are more than one servie just let
+			//it failed
             if (servicesCollection.size() > 1)
                 throw new UnrecoverableGenarationFault("we are supporting one port yet");
             Iterator portList = portCollecton.iterator();
+            Port wsdlport = null;
             while (portList.hasNext()) {
-                context.getMiscInfo().setTargetPort((Port) portList.next());
+				wsdlport = (Port) portList.next();
+                context.getMiscInfo().setTargetPort(wsdlport);
             }
+
+		  if (wsdlport == null)
+			  throw new UnrecoverableGenarationFault("no port discription not match with the wsdl file");
+		  QName bindingName = wsdlport.getBinding().getQName();
+		  BindingEntry wsdlbinding = context.getWSDLContext().getBinding(bindingName);
+		  context.getMiscInfo().settargetBinding(wsdlbinding);
+		  QName portTypename = wsdlbinding.getBinding().getPortType().getQName();
+		  PortTypeEntry port = context.getWSDLContext().getPortType(portTypename);
+		  if(port == null)
+		  		throw new UnrecoverableGenarationFault("port type must exits");
+		  context.getMiscInfo().setTargetPortType(port);
         } catch (Exception e) {
             throw GenerationFault.createGenerationFault(e);
         }
@@ -155,12 +153,18 @@ public class ContextValidator {
                     "webservice.xml file");
         WSCFPortComponent port = ports[0];
         context.getMiscInfo().setWscfport(port);
-       // context.getMiscInfo().setJaxrpcSEI(port.getServiceEndpointInterface());
-        context.getMiscInfo().setEjbbean(port.getServiceEndpointInterface() + "Bean");
-        context.getMiscInfo().setEjbhome(port.getServiceEndpointInterface() + "Home");
-        context.getMiscInfo().setEjbsei(port.getServiceEndpointInterface() + "EJB");
-        context.getMiscInfo().setEjbName(port.getServiceImplBean().getEjblink());
-
+		String ejbLink = port.getServiceImplBean().getEjblink();
+        // context.getMiscInfo().setJaxrpcSEI(port.getServiceEndpointInterface());
+        if(ejbLink != null){
+	        context.getMiscInfo().setEjbbean(port.getServiceEndpointInterface() + "Bean");
+	        context.getMiscInfo().setEjbhome(port.getServiceEndpointInterface() + "Home");
+	        context.getMiscInfo().setEjbsei(port.getServiceEndpointInterface() + "EJB");
+			context.getMiscInfo().setEjblocalhome(port.getServiceEndpointInterface() + "LocalHome");
+			context.getMiscInfo().setEjblocalsei(port.getServiceEndpointInterface() + "LocalEJB");
+	        context.getMiscInfo().setEjbName(port.getServiceImplBean().getEjblink());
+	    }else{
+			context.getMiscInfo().setImplwithEJB(false);
+	    }
         QName portName = new QName(port.getWsdlPort().getNamespaceURI(), port.getWsdlPort().getLocalpart());
 
         PortEntry wsdlport = context.getWSDLContext().getPort(portName);

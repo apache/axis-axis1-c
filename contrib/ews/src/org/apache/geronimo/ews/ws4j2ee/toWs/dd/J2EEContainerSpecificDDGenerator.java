@@ -21,13 +21,12 @@ public class J2EEContainerSpecificDDGenerator implements Generator {
 
     public J2EEContainerSpecificDDGenerator(J2EEWebServiceContext j2eewscontext) throws GenerationFault {
         this.j2eewscontext = j2eewscontext;
-        String ddName = j2eewscontext.getMiscInfo().getJ2eeContainerDDName();
-        if (GenerationConstants.JBOSS_DD.equals(ddName))
+        if (GenerationConstants.JBOSS_CONTAINER.equals(j2eewscontext.getMiscInfo().getTargetJ2EEContainer()))
             writer = new JBossDDWriter(j2eewscontext);
-        else if (GenerationConstants.JONAS_DD.equals(ddName)) 
+        else if (GenerationConstants.JONAS_CONTAINER.equals(j2eewscontext.getMiscInfo().getTargetJ2EEContainer())) 
             writer = new JOnASDDWriter(j2eewscontext);
         else
-            new GenerationFault("unsupported j2ee container DD " + ddName);
+            new GenerationFault("unsupported j2ee container " + j2eewscontext.getMiscInfo().getTargetJ2EEContainer());
     }
 
     public void genarate() throws GenerationFault {

@@ -1,14 +1,15 @@
 package org.apache.geronimo.ews.ws4j2ee.parsers;
 
+import java.io.InputStream;
+import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd.EjbJar;
 import org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd.EjbJarType.EnterpriseBeansType.Session;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-import java.io.InputStream;
-import java.util.List;
 
 /**
  * @author hemapani
@@ -24,9 +25,9 @@ public class EJBDDParser {
 	public void parse(InputStream inputStream) throws GenerationFault {
 		try {
 			JAXBContext jc = JAXBContext.newInstance("org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd");
-                
 			// create an Unmarshaller
 			Unmarshaller u = jc.createUnmarshaller();
+			u.setValidating(false);
 			EjbJar ejbJar =
 					(EjbJar) u.unmarshal(inputStream);
 			List sessions = ejbJar.getEnterpriseBeans().getSessionOrEntity();
@@ -35,6 +36,9 @@ public class EJBDDParser {
 			Session session = (Session) sessions.get(0);
 			ejbName = session.getEjbName().getValue();
 			j2eewscontext.getMiscInfo().setEjbName(ejbName);
+			j2eewscontext.getMiscInfo().setEjbbean(session.getEjbClass().getValue());
+			j2eewscontext.getMiscInfo().setEjbhome(session.getHome().getValue());
+			j2eewscontext.getMiscInfo().setEjbsei(session.getRemote().getValue());
 		} catch (Exception e) {
 			throw GenerationFault.createGenerationFault(e);
 		}

@@ -65,6 +65,7 @@ import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.MiscInfo;
 import org.apache.geronimo.ews.ws4j2ee.context.impl.J2EEWebServiceContextImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
 import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 
@@ -131,20 +132,27 @@ public class Ws4J2EEwithWSDL implements Generator {
                         GenerationConstants.SEI_AND_TYPES_GENERATOR).genarate();
                 (new ContextValidator(wscontext)).validateWithWSDL();
                 //get and populate the symbol table 
-                if (verbose)
-                    log.info("genarating ejb >>");
-                GeneratorFactory.createGenerator(wscontext,
-                        GenerationConstants.EJB_GENERATOR).genarate();
-                if (verbose)
-                    log.info("genarating web service wrapper >>");
-
-                GeneratorFactory.createGenerator(wscontext,
-                        GenerationConstants.AXIS_WEBSERVICE_WRAPPER_GENERATOR).genarate();
-                if (verbose)
-                    log.info("genarating j2ee dd >>");
-                GeneratorFactory.createGenerator(wscontext, GenerationConstants.J2EE_CONTAINER_DD_GENERATOR).genarate();
-                GeneratorFactory.createGenerator(wscontext, GenerationConstants.BUILD_FILE_GENERATOR).genarate();
-
+                
+				WSCFPortComponent port = wscontext.getMiscInfo().getWscfport();
+                String ejbLink = port.getServiceImplBean().getEjblink();
+                if(wscontext.getMiscInfo().isImplwithEJB()){
+					if (verbose)
+						log.info("genarating ejb >>");
+						GeneratorFactory.createGenerator(wscontext,
+							GenerationConstants.EJB_GENERATOR).genarate();
+					if (verbose)
+						log.info("genarating web service wrapper >>");
+					GeneratorFactory.createGenerator(wscontext,
+							GenerationConstants.AXIS_WEBSERVICE_WRAPPER_GENERATOR).genarate();
+					if (verbose)
+						log.info("genarating j2ee dd >>");
+					GeneratorFactory.createGenerator(wscontext, GenerationConstants.J2EE_CONTAINER_DD_GENERATOR).genarate();
+					GeneratorFactory.createGenerator(wscontext, GenerationConstants.BUILD_FILE_GENERATOR).genarate();
+                }else{
+                	//in this case user should fill the implementation 
+                	//in the *BindingImpl class 
+                
+                }
             } else {
                 //JAX-RPC mapper calling
                 if (verbose)
@@ -165,12 +173,6 @@ public class Ws4J2EEwithWSDL implements Generator {
         }
     }
 
-    private String getAbsolutePath(String path, String confFileLocation) {
-        if (path.indexOf(":/") > -1 || path.indexOf(":\\") > -1)
-            return path;
-        return confFileLocation + "/" + path;
-
-    }
 
     public static void main(String[] args) throws Exception {
         Ws4J2EEwithWSDL gen = new Ws4J2EEwithWSDL(args);

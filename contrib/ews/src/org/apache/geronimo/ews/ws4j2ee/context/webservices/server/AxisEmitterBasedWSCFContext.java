@@ -111,8 +111,11 @@ public class AxisEmitterBasedWSCFContext implements WSCFContext {
     public void serialize(java.io.Writer out) throws GenerationFault {
         try {
             out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-            out.write("<!DOCTYPE webservices PUBLIC \"-//IBM Corporation, Inc.//DTD J2EE Web services 1.0//EN\" \"http://www.ibm.com/webservices/dtd/j2ee_web_services_1_0.dtd\">\n");
-            out.write("<webservices>\n");
+            out.write("<webservices xmlns=\"http://java.sun.com/xml/ns/j2ee\"\n"); 
+			out.write("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\n"); 
+			out.write("xmlns:ns1=\"http://www.Monson-Haefel.com/jwsbook/BookQuote\n");
+			out.write("xsi:schemaLocation=\"http://java.sun.com/xml/ns/j2ee\n");
+			out.write("http://www.ibm.com/standards/xml/webservices/j2ee/j2ee_web_services_1_1.xsd\" version=\"1.1\">\n");
             out.write("<webservice-description>\n");
             out.write("<webservice-description-name>" + emitter.getServiceElementName() + "</webservice-description-name>\n");
             out.write("<wsdl-file>" + j2eeweserviceContext.getMiscInfo().getWsdlFile() + "</wsdl-file>\n");
@@ -134,7 +137,6 @@ public class AxisEmitterBasedWSCFContext implements WSCFContext {
 
             out.write("</service-impl-bean>\n");
             out.write("</port-component>\n");
-            out.write("<port-component>\n");
             out.write("</webservice-description>\n");
             out.write("</webservices>\n");
         } catch (Exception e) {

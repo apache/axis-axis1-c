@@ -149,11 +149,27 @@ public interface MiscInfo {
 
     public void setJaxrpcSEI(String string);
 
-    public String getJ2eeContainerDDName();
-
-    public void setJ2eeContainerDDName(String string);
+   
     
     public void setUseRemoteInterface(boolean useRemoteInterface);
     
 	public boolean isUseRemoteInterface();
+
+	public String getImplStyle();
+
+	public String getTargetJ2EEContainer();
+
+	public void setImplStyle(String string);
+
+	public void setTargetJ2EEContainer(String string);
+	public String getEjblocalhome();
+	public String getEjblocalsei();
+	public void setEjblocalhome(String string);
+	public void setEjblocalsei(String string);
+	public boolean isSupportLocalAndRemote(); 
+	public void setSupportLocalAndRemote(boolean b);
+	public boolean isImplwithEJB();
+	public void setImplwithEJB(boolean b);
+	public boolean isImplAvalible();
+	public void setImplAvalible(boolean b);
 }
