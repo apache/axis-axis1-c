@@ -65,8 +65,9 @@
 
 #include <axis/client/Call.h>
 #include <axis/server/AxisConfig.h>
-#include "transport/axis/AxisTransport.h"
-#include "transport/axis/Channel.hpp"
+#include "../../transport/axis/AxisTransport.h"
+#include "../../transport/axis/Channel.hpp"
+#include "ClientAxisEngine.h"
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////

@@ -111,7 +111,7 @@ typedef struct
 	int op_headercount;
 	AXIS_HTTP_METHOD ip_method;
 	AXIS_HTTP_METHOD op_method;
-} Ax_stream_http;
+} Ax_stream_http, Ax_stream_https;
 
 typedef struct
 {
@@ -121,6 +121,7 @@ typedef struct
 typedef union
 {
 	Ax_stream_http* http;
+	Ax_stream_https* https;
 	Ax_stream_smtp* smtp;
 	void* other; /*transport specific other protocols can have its own structs here*/
 } Ax_soapcontent;
