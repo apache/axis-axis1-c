@@ -38,7 +38,7 @@ AxisEngineException::AxisEngineException (const int iExceptionCode)
     processException (iExceptionCode);
 }
 
-AxisEngineException::AxisEngineException(const int iExceptionCode, const char* pcMessage)
+AxisEngineException::AxisEngineException(const int iExceptionCode, char* pcMessage)
 {
     m_iExceptionCode = iExceptionCode;
     processException(iExceptionCode, pcMessage);
@@ -75,7 +75,7 @@ void AxisEngineException::processException(const int iExceptionCode)
     m_sMessage = getMessage (iExceptionCode);
 }
 
-void AxisEngineException::processException(const int iExceptionCode, const char* pcMessage)
+void AxisEngineException::processException(const int iExceptionCode, char* pcMessage)
 {
     AxisString sMessage = strdup(pcMessage);
     m_sMessage = getMessage(iExceptionCode) + " " + sMessage;

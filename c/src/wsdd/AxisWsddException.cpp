@@ -38,7 +38,7 @@ AxisWsddException::AxisWsddException (const int iExceptionCode)
     processException (iExceptionCode);
 }
 
-AxisWsddException::AxisWsddException(const int iExceptionCode, const char* pcMessage)
+AxisWsddException::AxisWsddException(const int iExceptionCode, char* pcMessage)
 {
     m_iExceptionCode = iExceptionCode;
     processException(iExceptionCode, pcMessage);
@@ -75,7 +75,7 @@ void AxisWsddException::processException(const int iExceptionCode)
     m_sMessage = getMessage (iExceptionCode);
 }
 
-void AxisWsddException::processException(const int iExceptionCode, const char* pcMessage)
+void AxisWsddException::processException(const int iExceptionCode, char* pcMessage)
 {
     AxisString sMessage = strdup(pcMessage);
     m_sMessage = getMessage(iExceptionCode) + " " + sMessage;

@@ -38,6 +38,12 @@ AxisParseException::AxisParseException (const int iExceptionCode)
     processException (iExceptionCode);
 }
 
+AxisParseException::AxisParseException(const int iExceptionCode, char* pcMessage)
+{
+    m_iExceptionCode = iExceptionCode;
+    processException(iExceptionCode, pcMessage);
+}
+
 AxisParseException::AxisParseException (const exception* e)
 {
     processException (e);
@@ -68,7 +74,7 @@ void AxisParseException::processException(const int iExceptionCode)
     m_sMessage = getMessage (iExceptionCode);
 }
 
-void AxisParseException::processException(const int iExceptionCode, const char* pcMessage)
+void AxisParseException::processException(const int iExceptionCode, char* pcMessage)
 {
     AxisString sMessage = strdup(pcMessage);
     m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
