@@ -1,1 +1,1 @@
-SUBDIRS = exceptionTest
+SUBDIRS = exceptionTest xsdAnyTest1

@@ -22,7 +22,7 @@ ExtensibilityQueryPortType::ExtensibilityQueryPortType(const char* pcEndpointUri
 ExtensibilityQueryPortType::ExtensibilityQueryPortType()
 :Stub(" ", APTHTTP)
 {
-	m_pCall->setEndpointURI("http://localhost:8080/axis/testXSDANY");
+	m_pCall->setEndpointURI("http://localhost:80/axis/testXSDANY");
 }
 
 ExtensibilityQueryPortType::~ExtensibilityQueryPortType()
@@ -72,7 +72,10 @@ AnyType* ExtensibilityQueryPortType::query(AnyType* Value0)
 			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
 			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
 			cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-			throw AxisGenException(cFaultdetail);
+			if(cFaultdetail)
+			    throw AxisGenException(cFaultdetail);
+			else
+			    throw AxisGenException(SERVER_UNKNOWN_ERROR);
 		}
 		else throw;
 	}
