@@ -1,0 +1,69 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AxisTransportLibrary", "client\transport\axis\AxisTransportLibrary.vcproj", "{F829C816-A37E-4BD5-8A53-97EE7E4F372D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ClientEngineLibrary", "client\engine\ClientEngineLibrary.vcproj", "{72B61F12-BD0C-4DC7-8398-DF6B3CC90390}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CommonLibrary", "common\CommonLibrary.vcproj", "{FB698532-3C1D-4314-B4F2-C54191ACB9B5}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ServerEngineLibrary", "server\engine\ServerEngineLibrary.vcproj", "{B9C6D9F4-0F1C-4C1A-A326-B59D6E33FCCD}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SoapLibrary", "soap\SoapLibrary.vcproj", "{3E272488-B40A-4CAC-BC20-A419515ABCC9}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WsddLibrary", "wsdd\WSDDLibrary.vcproj", "{C9AFECF2-03F7-4B89-9850-B49C3842D3BE}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XmlLibrary", "xml\XMLLibrary.vcproj", "{6C7D19BE-6189-4C2E-BE09-DEB2A85E70F7}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{F829C816-A37E-4BD5-8A53-97EE7E4F372D}.Debug.ActiveCfg = Debug|Win32
+		{F829C816-A37E-4BD5-8A53-97EE7E4F372D}.Debug.Build.0 = Debug|Win32
+		{F829C816-A37E-4BD5-8A53-97EE7E4F372D}.Release.ActiveCfg = Release|Win32
+		{F829C816-A37E-4BD5-8A53-97EE7E4F372D}.Release.Build.0 = Release|Win32
+		{72B61F12-BD0C-4DC7-8398-DF6B3CC90390}.Debug.ActiveCfg = Debug|Win32
+		{72B61F12-BD0C-4DC7-8398-DF6B3CC90390}.Debug.Build.0 = Debug|Win32
+		{72B61F12-BD0C-4DC7-8398-DF6B3CC90390}.Release.ActiveCfg = Release|Win32
+		{72B61F12-BD0C-4DC7-8398-DF6B3CC90390}.Release.Build.0 = Release|Win32
+		{FB698532-3C1D-4314-B4F2-C54191ACB9B5}.Debug.ActiveCfg = Debug|Win32
+		{FB698532-3C1D-4314-B4F2-C54191ACB9B5}.Debug.Build.0 = Debug|Win32
+		{FB698532-3C1D-4314-B4F2-C54191ACB9B5}.Release.ActiveCfg = Release|Win32
+		{FB698532-3C1D-4314-B4F2-C54191ACB9B5}.Release.Build.0 = Release|Win32
+		{B9C6D9F4-0F1C-4C1A-A326-B59D6E33FCCD}.Debug.ActiveCfg = Debug|Win32
+		{B9C6D9F4-0F1C-4C1A-A326-B59D6E33FCCD}.Debug.Build.0 = Debug|Win32
+		{B9C6D9F4-0F1C-4C1A-A326-B59D6E33FCCD}.Release.ActiveCfg = Release|Win32
+		{B9C6D9F4-0F1C-4C1A-A326-B59D6E33FCCD}.Release.Build.0 = Release|Win32
+		{3E272488-B40A-4CAC-BC20-A419515ABCC9}.Debug.ActiveCfg = Debug|Win32
+		{3E272488-B40A-4CAC-BC20-A419515ABCC9}.Debug.Build.0 = Debug|Win32
+		{3E272488-B40A-4CAC-BC20-A419515ABCC9}.Release.ActiveCfg = Release|Win32
+		{3E272488-B40A-4CAC-BC20-A419515ABCC9}.Release.Build.0 = Release|Win32
+		{C9AFECF2-03F7-4B89-9850-B49C3842D3BE}.Debug.ActiveCfg = Debug|Win32
+		{C9AFECF2-03F7-4B89-9850-B49C3842D3BE}.Debug.Build.0 = Debug|Win32
+		{C9AFECF2-03F7-4B89-9850-B49C3842D3BE}.Release.ActiveCfg = Release|Win32
+		{C9AFECF2-03F7-4B89-9850-B49C3842D3BE}.Release.Build.0 = Release|Win32
+		{6C7D19BE-6189-4C2E-BE09-DEB2A85E70F7}.Debug.ActiveCfg = Debug|Win32
+		{6C7D19BE-6189-4C2E-BE09-DEB2A85E70F7}.Debug.Build.0 = Debug|Win32
+		{6C7D19BE-6189-4C2E-BE09-DEB2A85E70F7}.Release.ActiveCfg = Release|Win32
+		{6C7D19BE-6189-4C2E-BE09-DEB2A85E70F7}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
