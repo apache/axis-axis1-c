@@ -99,7 +99,7 @@
 <a name="What"></a>
 </p>
 <div class="h3">
-<h3>What's in this release?</h3>
+<h3>What's you can find in axis c++</h3>
 </div>
 <p>- Soap engine with both client and server support</p>
 <p>- Support for both SOAP 1.1 and SOAP 1.2</p>
@@ -131,7 +131,7 @@
 <p>- Stability , Component oriented Deployment</p>
 <p>- Transport Framework</p>
 <p>- WSDL support</p>
-<p>AxisC++ 1.1 supports the Web Service Description Language, version 1.1, which allows you to easily build stubs to access remote services, and also to automatically export machine-readable descriptions of your deployed services from Axis. We hope you enjoy using Axis c++ 1.1. Please note that this is an open-source effort - if you feel the code could use some new features or fixes, please get involved and lend a hand! The Axis developer community welcomes your participation. Let us know what you think! Please send feedback about the package to <a href="mailto:axis-user@xml.apache.org">axis-user@xml.apache.org</a>
+<p>AxisC++ supports the Web Service Description Language, version 1.1, which allows you to easily build stubs to access remote services, and also to automatically export machine-readable descriptions of your deployed services from Axis. We hope you enjoy using Axis c++. Please note that this is an open-source effort - if you feel the code could use some new features or fixes, please get involved and lend a hand! The Axis developer community welcomes your participation. Let us know what you think! Please send feedback about the package to <a href="mailto:axis-user@xml.apache.org">axis-user@xml.apache.org</a>
 </p>
 <p>
 <a name="What1"></a>
@@ -141,10 +141,7 @@
 <h3>Installing Axis and Using this Guide</h3>
 </div>
 <p>See the Axis Installation Guide for instructions on installing Axis C++</p>
-<p>Before running the examples in this guide, you'll need to make sure that your environment variables and other configurations are set correctly as described in Installation guide. That is you need</p>
-<p>- Axis C++</p>
-<p>- Apache1.3 (or Apache2.0)</p>
-<p>- expat</p>
+<p>Before running the examples in this guide, you'll need to make sure that your environment variables and other configurations are set correctly as described in Installation guide. In addition you need</p>
 <p>- j2SDK1.4</p>
 <p>installed and configured.</p>
 <p>
@@ -197,8 +194,8 @@
 <p> There are two options to create the wsdl2ws.jar tool<br> <br>
 <b> 1st Option is using ANT (This is more reliable) </b> <br> <br>
 In your PATH environment variable add path to &lt;antinstall dir&gt/bin. <br> 
-<strong>$ cd $AXISCPP_HOME/src/wsdl/</strong> 
-$ ant 
+<strong>$ cd $AXISCPP_HOME/src/wsdl/</strong> <br>
+<strong> $ ant </strong> 
 </p>
 <p> <b>2nd Option (Some users have experienced difficulties in using this option)</b> </p>
 <p><strong>$ cd $AXISCPP_HOME/src/wsdl/</strong>
@@ -218,7 +215,7 @@ $ ant
 <p>
 <strong>$cp -f wsdl2ws.jar $AXISCPP_HOME/lib/axis</strong>
 </p>
-<p>add this jar as the first entry into the classpath as well.(In the binary distribution you don't need to create this jar. It is already in $AXISCPP_HOME/lib/axis)</p>
+<p>add this jar as the first entry into the classpath as well. It is very important to put this before the entries to axis jars in your class path.(In the binary distribution you don't need to create this jar. It is already in $AXISCPP_DEPLOY/lib/axis)</p>
 <p>
 <a name="Server"></a>
 </p>
@@ -249,38 +246,19 @@ $ ant
 </p>
 <p>Note: If you give <strong>-o. /GenClassesServer</strong> then the server create a folder named GenClassServer and put the source there. Otherwise the source is put in the current folder where the tool is run.</p>
 <p>
-<a name="Deploying"></a>
+
+<a name="Building and deploying"></a>
 </p>
 <div class="h3">
-<h3>Deploying the Service</h3>
+<h3>Building and deploying the service</h3>
 </div>
-<p>The Folder called deploy in the <strong>$AXISCPP_HOME/</strong> should be copied to a folder of your choice .Rename the deploy folder as <strong>"Axis"</strong> . Give all permissions to this folder.</p>
-<p>
-<strong>$ cp &ndash;rf $AXISCPP_HOME/deploy /usr/local</strong>
-</p>
-<p>
-<strong>$ cd /usr/local</strong>
-</p>
-<p>
-<strong>$ mv deploy Axis</strong>
-</p>
-<p>
-<strong>$ chmod -R 777 Axis</strong>
-</p>
-<p>Now set the environment variable <strong>AXIS_HOME</strong> pointing to this directory.</p>
-<p>
-<strong>AXIS_HOME="/usr/local/Axis"</strong>
-</p>
-<p>Note that inside $AXIS_HOME directory there are files called axiscpp.conf_linux and axiscpp.conf_win. Rename axiscpp.conf_linux to axiscpp.conf.&nbsp; Make sure that it has read permissions. This file contains key, value pairs of paths used by the Axis Soap Engine. You can change the WSDDFILEPATH and AXISLOGPATH inside this file according to your choice.</p>
-<p>$ <strong>cd</strong> <strong>$AXISCPP_HOME/samples/server<br>$ sh build.sh<br>
-</strong>
-<br>
-<br>By typing above in&nbsp; the command line the dynamic library ( <strong>libcalculator.so</strong> for example) is created and installed<br>in<br>
-</p>
-<p>
-<strong>$AXIS_HOME/webservices where $AXIS_HOME = /usr/local/apache/Axis</strong>
-</p>
-<p>Modify the <strong>$AXIS_HOME/conf/</strong><strong>server.wsdd</strong> .&nbsp; (You have a sample server.wsdd file entry given below appropriately filled for this service).</p>
+<p>To build the service library</p> <br>
+<strong> g++ -shared -I$AXISCPP_HOME/include -olibmyservice.so *.cpp </strong><br>
+<p> libmyservice.so is the name you give to your service library. You can give any name you wish.
+But remeber to prefix with lib and suffix with .so</p>
+Copy this service library int $AXICPP_DEPLOY/lib
+
+<p>Modify the <strong>$AXISCPP_DEPLOY/etc/</strong><strong>server.wsdd</strong> .&nbsp; (You have a sample server.wsdd file entry given below appropriately filled for this service).</p>
 <p>
 <strong>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</strong>
 <br> 
@@ -297,7 +275,7 @@ $ ant
 <p>
 <strong>&lt;/deployment&gt;</strong>
 </p>
-<p>Start the Apache server</p>
+<p>Restart the Apache server</p>
 <p>
 <strong>$ /usr/local/apache/bin/apachectl start</strong>
 </p>
@@ -338,9 +316,7 @@ $ ant
 <br> 
 <strong>&nbsp;&nbsp;Calculator c;</strong>
 <br> 
-<strong>&nbsp;&nbsp;int intOut;</strong>
-<br> 
-<strong>&nbsp;&nbsp;c.add(20, 40, intOut);</strong>
+<strong>&nbsp;&nbsp;intOut = c.add(20, 40);</strong>
 <br> 
 <strong>&nbsp;&nbsp;printf("result is = %d\n", intOut);</strong>
 <br> 
@@ -349,15 +325,12 @@ $ ant
 <strong>&nbsp;}</strong>
 </p>
 <p>Then build by<br> 
-<strong>cd $AXISCPP_HOME/samples/client</strong>
+<strong>cd $AXISCPP_HOME/samples/client/simple</strong>
 <br>
 </p>
 <p>
-<strong>sh build.sh</strong>
+<strong>g++ -I$AXISCPP_HOME/include -L$AXISCPP_DEPLOY/lib -laxiscpp_client -ldl -oclient *.cpp</strong>
 <br>Then to run the calculator sample</p>
-<p>
-<strong>$ cd AXISCPP_HOME/samples/simple</strong>
-</p>
 <p>
 <strong>./calculator &lt;server&gt; &lt;port&gt; &nbsp;&lt;command&gt; &nbsp;&lt;param1&gt; &nbsp;&lt;param2&gt;</strong>
 <br>
@@ -374,81 +347,6 @@ $ ant
 <br>
 </p>
 <div class="h3">
-<h3>Building Serverside of &nbsp;provided Samples</h3>
-</div>
-<p>Basically this will include all the Interoptest Samples and calculator sample.</p>
-<br>
-<p>
-<strong>cd $AXISCPP_HOME/samples/server</strong>
-</p>
-<p>
-<strong>$ sh autogen.sh</strong>
-</p>
-<p>
-<strong>$ sh runconfig</strong>
-</p>
-<p>
-<strong>$ make</strong>
-</p>
-<p>
-<strong>$ make install<br>
-</strong>
-</p>
-<p>
-<strong>OR<br>
-</strong>
-</p>
-<p>
-<strong>$ sh build.sh&nbsp;<br>
-</strong>
-</p>
-<p>Once you type the above command all the samples will be deployed in $AXIS_HOME/webservices folder.<br>you also have sample $AXIS_HOME/conf/server.wsdd_linux file which you should rename to server.wsdd,<br>which contain all the neccessary entries for these sevices.<br>
-<br>
-</p>
-<strong>Restart Apache</strong>
-<br>
-<p>
-<a name="scls"></a>
-</p>
-<br>
-<div class="h3">
-<h3>Building Client Side of the provided samples</h3>
-</div>
-<p>
-<strong>cd $AXISCPP_HOME/samples/client</strong>
-</p>
-<p>
-<strong>$ sh autogen.sh</strong>
-</p>
-<p>
-<strong>$ sh runconfig</strong>
-</p>
-<p>
-<strong>$ make</strong>
-</p>
-<p>
-<strong>$ make install<br>
-</strong>
-</p>
-<p>
-<strong>OR<br>
-</strong>
-</p>
-<strong>$ sh build.sh</strong>
-<br>
-<br>
-<p>sample executables will be created in your current folder.<br>to run samples one by one</p>
-<p>
-<strong><strong>$ ./base localhost 80 &nbsp;</strong></strong>
-</p>
-<p>
-<strong><strong>
-<br>
-</strong></strong>
-</p>
-<p>to run all the samples at once<br>sh run_interoptests.sh (Note: local host and port 80 is assumed)</p>
-<p>
-<strong></strong>
 </p>
 <br>
 <p>
