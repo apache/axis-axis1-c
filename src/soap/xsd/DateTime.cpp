@@ -175,22 +175,28 @@ AXIS_CPP_NAMESPACE_START
 	    AxisChar *cTemp2;
 	    AxisChar *cTemp3;
 
-	    time_t now;
-	    time (&now);
-	    pTm = gmtime (&now);
+        // Calculate local timezone offset
+        time_t now = 0;
+        struct tm *temp = gmtime(&now);
+        struct tm utcTime;
+        memcpy(&utcTime, temp, sizeof(struct tm));
+        temp = localtime(&now);
+        struct tm localTime;
+        memcpy(&localTime, temp, sizeof(struct tm));
 
-	    struct tm result1;
-	    memcpy (&result1, pTm, sizeof (tm));
-	    pTm = localtime (&now);
+        long utcTimeInSeconds = (utcTime.tm_year * 60 * 60 * 24 * 365)
+            + (utcTime.tm_yday * 60 * 60 * 24)
+            + (utcTime.tm_hour * 60 * 60)
+            + (utcTime.tm_min * 60);
 
-	    struct tm result2;
-	    memcpy (&result2, pTm, sizeof (tm));
+        long localTimeInSeconds = (localTime.tm_year * 60 * 60 * 24 * 365)
+            + (localTime.tm_yday * 60 * 60 * 24)
+            + (localTime.tm_hour * 60 * 60)
+            + (localTime.tm_min * 60);
 
-	    time_t d = mktime (&result1) - mktime (&result2);
-	    if (d == -1)
-	    {
-	        throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR);
-	    }
+        time_t d = utcTimeInSeconds - localTimeInSeconds;
+
+
 	
         /* dismantle valueAsChar to get tm value;
          * XSD_DATETIME format is
