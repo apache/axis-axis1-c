@@ -1,0 +1,8 @@
+<service>
+    <name>FourLevelTestDoc</name>
+    <description>FourLevelTestDoc Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>FourLevelTestDocInterface.cpp</serviceCode>
+    <wsdl>FourLevelTestDoc.wsdl</wsdl>
+	<servicename></servicename>
+</service>
