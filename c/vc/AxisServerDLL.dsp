@@ -38,7 +38,7 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "../release/win32/"
+# PROP Output_Dir "../bin"
 # PROP Intermediate_Dir "SRelease"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
@@ -54,7 +54,11 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 libexpat.lib /nologo /dll /pdb:none /machine:I386 /out:"../release/win32/AxisServer.dll" /libpath:"../lib/expat"
+# ADD LINK32 libexpat.lib /nologo /dll /pdb:none /machine:I386 /out:"../bin/AxisServer.dll" /libpath:"../lib/expat"
+# Begin Special Build Tool
+SOURCE="$(InputPath)"
+PostBuild_Cmds=copy ..\bin\AxisServer.dll "%AXIS_HOME%\libs\."
+# End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "AxisServer - Win32 Debug"
 
@@ -65,7 +69,7 @@ LINK32=link.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "../release/win32/"
+# PROP Output_Dir "../bin"
 # PROP Intermediate_Dir "SDebug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
@@ -81,7 +85,11 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 libexpat.lib /nologo /dll /pdb:none /debug /machine:I386 /out:"../release/win32/AxisServer.dll" /libpath:"../lib/expat"
+# ADD LINK32 libexpat.lib /nologo /dll /pdb:none /debug /machine:I386 /out:"../bin/AxisServer_D.dll" /libpath:"../lib/expat"
+# Begin Special Build Tool
+SOURCE="$(InputPath)"
+PostBuild_Cmds=copy ..\bin\AxisServer_D.dll "%AXIS_HOME%\libs\."
+# End Special Build Tool
 
 !ENDIF 
 

@@ -38,7 +38,7 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "../../../release/win32"
+# PROP Output_Dir "../../../bin"
 # PROP Intermediate_Dir "Release"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
@@ -54,11 +54,11 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 AxisServer.lib ApacheCore.lib /nologo /dll /pdb:none /machine:I386 /out:"../../../release/win32/mod_axis.dll" /libpath:"../../../release/win32" /libpath:"../../../lib/apache1_3"
+# ADD LINK32 AxisServer.lib ApacheCore.lib /nologo /dll /pdb:none /machine:I386 /out:"../../../bin/mod_axis.dll" /libpath:"../../../release/win32" /libpath:"../../../lib/apache1_3"
 # SUBTRACT LINK32 /profile
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
-PostBuild_Cmds=copy ..\..\..\release\win32\mod_axis.dll "%AXIS_HOME%\..\modules\."
+PostBuild_Cmds=copy ..\..\..\bin\mod_axis.dll "%AXIS_HOME%\..\modules\."
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "Apache1_3Module - Win32 Debug"
@@ -70,7 +70,7 @@ PostBuild_Cmds=copy ..\..\..\release\win32\mod_axis.dll "%AXIS_HOME%\..\modules\
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "../../../release/win32"
+# PROP Output_Dir "../../../bin"
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
@@ -85,11 +85,11 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 AxisServer.lib ApacheCore.lib /nologo /dll /debug /machine:I386 /out:"../../../release/win32/mod_axis.dll" /pdbtype:sept /libpath:"../../../release/win32" /libpath:"../../../lib/apache1_3"
+# ADD LINK32 AxisServer_D.lib ApacheCore.lib /nologo /dll /debug /machine:I386 /out:"../../../bin/mod_axis.dll" /pdbtype:sept /libpath:"../../../release/win32" /libpath:"../../../lib/apache1_3"
 # SUBTRACT LINK32 /profile
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
-PostBuild_Cmds=copy ..\..\..\release\win32\mod_axis.dll "%AXIS_HOME%\..\modules\."
+PostBuild_Cmds=copy ..\..\..\bin\mod_axis.dll "%AXIS_HOME%\..\modules\."
 # End Special Build Tool
 
 !ENDIF 
