@@ -64,7 +64,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -212,7 +211,7 @@ public class ParmHeaderFileWriter extends ParamWriter{
 		Type atype;
 		Iterator types = this.wscontext.getTypemap().getTypes().iterator();
 		writer.write("#include <axis/server/AxisUserAPI.h>\n\n");
-		HashSet typeSet = new HashSet();
+		Vector typeSet = new Vector();
 		String typeName = null;
 		while(types.hasNext()){
 			atype = (Type)types.next();
@@ -220,7 +219,12 @@ public class ParmHeaderFileWriter extends ParamWriter{
 				if (this.type.isContainedType(atype)){ 
 					typeName = WrapperUtils.getLanguageTypeName4Type(atype);
 					/* TODO : second test if for inner attributes declaration */
-					if (null != typeName && ! (typeName.charAt(0) == '>')) typeSet.add(typeName);
+					if (null != typeName && ! (typeName.charAt(0) == '>'))  {
+						if ( ! atype.isArray() ) 
+							typeSet.insertElementAt(typeName,0);
+						else
+							typeSet.add(typeName);
+					}
 				}
 			}
 		}	
