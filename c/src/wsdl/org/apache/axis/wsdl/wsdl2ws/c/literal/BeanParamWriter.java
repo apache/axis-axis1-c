@@ -154,12 +154,10 @@ public class BeanParamWriter extends ParamCFileWriter{
 				throw new WrapperFault("Error : an attribute is not basic type");
 			}
 			else{
-				if (attribs[i].isOptional()){
-					writer.write("\tif (0 != param->"+attribs[i].getParamName()+")\n");
-					writer.write("\tpSZ->_functions->SerializeAsAttribute(pSZ->_object, \""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
-				}
-				else{
-					writer.write("\tpSZ->_functions->SerializeAsAttribute(pSZ->_object, \""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+				writer.write("\tif (0 != param->"+attribs[i].getParamName()+")\n");
+				writer.write("\t\tpSZ->_functions->SerializeAsAttribute(pSZ->_object, \""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+				if (!attribs[i].isOptional()){
+					/* TODO : AxisTrace need to be adpated for used in C */
 				}
 			}
 		}
