@@ -633,10 +633,19 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 		    if (AXIS_SUCCESS == m_nStatus)
 		    {
 			/* skip end element of the array item */
-			m_pParser->next ();
+			m_pNode = m_pParser->next ();
 			//Jira AXISCPP-145
 			//point to next element (can be next array elemnt or different object)
-			m_pNode = m_pParser->next ();
+			m_pParser->next ();
+			//Skip past end of item
+		    m_pNode = m_pParser->next ();
+// > FJP
+
+			if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
+			{
+				m_pNode = NULL;
+			}
+// < FJP
 			continue;
 		    }
 		}
@@ -1096,8 +1105,103 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 		XSD_UNSIGNEDBYTE:DESERIALIZE_LITERAL_ARRAY_BLOCK (unsigned
 								  char,
 								  CONV_STRTOUL)
-		case XSD_LONG:DESERIALIZE_ENCODED_ARRAY_BLOCK (LONGLONG,
-							       CONV_STRTOUL)
+		case XSD_LONG:
+//			DESERIALIZE_ENCODED_ARRAY_BLOCK (LONGLONG, CONV_STRTOUL)
+// > FJP
+	    Array.m_Array = new int[INITIAL_ARRAY_SIZE];
+
+	    if( !Array.m_Array)
+		{
+			return Array;
+		}
+
+	    Array.m_Size = INITIAL_ARRAY_SIZE;
+
+	    while (true)
+	    {
+			for( ; nIndex < Array.m_Size; nIndex++)
+			{
+			    if( !m_pNode)
+				{
+// if there is an unprocessed node that may be one left from last array deserialization
+					m_pNode = m_pParser->next ();
+				}
+
+// wrapper node without type info  Ex: <phonenumbers>
+			    if( !m_pNode)
+			    {
+					m_nStatus = AXIS_FAIL;
+
+					delete[](LONGLONG *) Array.m_Array;
+
+					Array.m_Array = 0;
+					Array.m_Size = 0;
+
+					return Array;
+				}
+
+			    if( 0 == strcmp( pName, m_pNode->m_pchNameOrValue))
+			    {
+					m_pNode = m_pParser->next (true);	// charactor node
+
+					if( m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+					{
+				        ((LONGLONG*) Array.m_Array)[nIndex] = SoapDeSerializer::strtoll( m_pNode->m_pchNameOrValue);
+					    m_pNode = m_pParser->next ();
+
+// skip end element node too
+						m_pNode = NULL;	// this is important in doc/lit style when deserializing arrays
+					    continue;
+					}
+
+// error : unexpected element type or end of the stream
+			    }
+			    else
+			    {
+					if( nIndex > 0)
+					{
+						Array.m_Size = nIndex;
+
+// put the actual deserialized item size note we do not make m_pNode = NULL
+// because this node doesnot belong to this array
+					    return Array;
+					}
+// error : no elements deserialized
+				}
+
+// if we come here it is an error situation
+			    m_nStatus = AXIS_FAIL;
+			    m_pNode = NULL;
+
+			    delete [] (LONGLONG *) Array.m_Array;
+
+				Array.m_Array = 0;
+			    Array.m_Size = 0;
+
+			    return Array;
+			}
+
+// if we come here that means the array allocated is not enough, so double it
+			void *	tmp = Array.m_Array;
+
+			Array.m_Array = new int[Array.m_Size * 2];
+
+			if( !Array.m_Array)
+			{
+			    Array.m_Size = 0;
+
+			    return Array;
+			}
+
+			memcpy( Array.m_Array, tmp, Array.m_Size * sizeof( LONGLONG));
+
+			delete[](LONGLONG *) tmp;
+
+			Array.m_Size *= 2;
+		}
+    break;
+
+// < FJP
 		case XSD_INTEGER:DESERIALIZE_LITERAL_ARRAY_BLOCK (long,
 								  CONV_STRTOL)
 		case
@@ -2309,7 +2413,7 @@ SoapDeSerializer::getElementAsLong (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
 //                ret = strtol(m_pNode->m_pchNameOrValue, &m_pEndptr, 10);
-		ret = strtoll (m_pNode->m_pchNameOrValue);
+		ret = strtoll( m_pNode->m_pchNameOrValue);
 		m_pNode = m_pParser->next ();	/* skip end element node too */
 		m_pNode = NULL;
 		/* this is important in doc/lit style when deserializing 
@@ -3895,35 +3999,34 @@ SoapDeSerializer::getChardataAs (void *pValue, XSDTYPE type)
     }
 }
 
-LONGLONG
-SoapDeSerializer::strtoll (const char *pValue)
+LONGLONG SoapDeSerializer::strtoll( const char *pValue)
 {
-    LONGLONG llRetVal = 0;
-    LONGLONG llPowerOf10 = 1;
-    int iLength = strlen (pValue);
-    int iCountDownTo = 0;
-    bool bMinus = false;
+    LONGLONG	llRetVal = 0;
+    LONGLONG	llPowerOf10 = 1;
+    int			iLength = strlen( pValue);
+    int			iCountDownTo = 0;
+    bool		bMinus = false;
 
-    if (*pValue == '-')
+    if( *pValue == '-')
     {
-	bMinus = true;
-	iCountDownTo = 1;
+		bMinus = true;
+		iCountDownTo = 1;
     }
 
-    if (iLength > 0)
+    if( iLength > 0)
     {
-	iLength--;
+		iLength--;
     }
 
-    for (int iCount = iLength; iCount >= iCountDownTo; iCount--)
+    for( int iCount = iLength; iCount >= iCountDownTo; iCount--)
     {
-	llRetVal += (LONGLONG) (pValue[iCount] - '0') * llPowerOf10;
-	llPowerOf10 *= (LONGLONG) 10;
+		llRetVal += (LONGLONG) (pValue[iCount] - '0') * llPowerOf10;
+		llPowerOf10 *= (LONGLONG) 10;
     }
 
-    if (bMinus)
+    if( bMinus)
     {
-	llRetVal = -llRetVal;
+		llRetVal = -llRetVal;
     }
 
     return llRetVal;
