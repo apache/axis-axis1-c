@@ -77,7 +77,7 @@ typedef int (* CREATE_OBJECT)(BasicHandler **inst);
 typedef int (* DELETE_OBJECT)(BasicHandler *inst);
 
 #if defined(USE_LTDL)
-#include "ltdl.h"
+#include <ltdl.h>
 #define DLHandler lt_dlhandle
 #elif defined(WIN32)
 #include <windows.h>
