@@ -190,7 +190,7 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
                 }
                 else
                 {
-                    sServiceName = g_pConfig->getAxisHomePath ();
+					sServiceName = g_pConfig->getAxConfProperty(AXCONF_AXISHOME);
                     sServiceName += WSDLDIRECTORY + sUriWOAxis + ".wsdl";
                     // Check whether wsdl file is available
                     if ((WsddFile = fopen (sServiceName.c_str (), "r")) == NULL)
@@ -250,12 +250,11 @@ extern "C" int initialize_module (int bServer)
     ModuleInitialize ();
     if (bServer) // no client side wsdd processing at the moment
     {
-        int status = g_pConfig->readConfFile (); /* Read from the configuration
-						  * file 
-						  */
+		/* Read from the configuration file */
+        int status = g_pConfig->readConfFile (); 
         if (status == AXIS_SUCCESS)
         {
-            char *pWsddPath = g_pConfig->getWsddFilePath ();
+			char *pWsddPath = g_pConfig->getAxConfProperty(AXCONF_WSDDFILEPATH);
 #if defined(__AXISTRACE__)
             status = g_pAT->openFile ();
             if (status == AXIS_FAIL)
@@ -286,7 +285,9 @@ extern "C" int initialize_module (int bServer)
                 return AXIS_FAIL;
             }
 #endif
-            char *pClientWsddPath = g_pConfig->getClientWsddFilePath ();
+			char *pClientWsddPath = 
+			g_pConfig->getAxConfProperty(AXCONF_CLIENTWSDDFILEPATH);
+
             /* May be there is no client side handlers configured. So may not 
 	     * have CLIENTWSDDFILEPATH entry in axiscpp.conf 
 	     */
