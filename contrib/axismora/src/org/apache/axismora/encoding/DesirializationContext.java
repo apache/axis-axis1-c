@@ -234,13 +234,14 @@ public class DesirializationContext {
                 throw new AxisFault("Invalied Axis format Body tag missing");
 
             //If RPC I should read the method as well
-            if (this.style.equals("rpc")) {
+            if (this.style.getName().equals("rpc")) {
                 //this two lines are to make sure we are dealing with the start tag
                 while (!(state == XmlPullParser.START_TAG || state == XmlPullParser.END_DOCUMENT))
                     this.state = this.xpp.next();
                 if (this.state == XmlPullParser.END_DOCUMENT)
                     throw new AxisFault("parsing error Illegal format - method not specified ");
                 this.method = new QName(this.xpp.getNamespace(), this.xpp.getName());
+                System.out.println("\n r u correct"+this.method);
                 this.messageData.setMethodName(this.method);
                 //TODO removethis.state = this.xpp.next();
                 ParmWriter.tag = getTag();
