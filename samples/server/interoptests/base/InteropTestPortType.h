@@ -13,7 +13,7 @@
 
 class InteropTestPortType 
 {
-	public:
+    public:
 		InteropTestPortType();
 	public:
 		virtual ~InteropTestPortType();
