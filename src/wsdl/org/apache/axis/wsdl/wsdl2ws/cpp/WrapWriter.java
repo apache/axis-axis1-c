@@ -343,7 +343,17 @@ public class WrapWriter extends CPPClassWriter
             	}
             	else
             	{
-            		writer.write("\t"
+            		if (param.getLangName().equals("xsd__string"))
+				writer.write("\t"
+                                                        + paraTypeName
+                                                        + " v"
+                                                        + i
+                                                        + " = pIWSDZ->"
+                                                        + CUtils.getParameterGetValueMethodName(paraTypeName, false)
+                                                        + "(\""
+                                                        + parameterName + "\",0);\n");
+			else
+	            		writer.write("\t"
 							+ paraTypeName
 							+ " v"
 							+ i

@@ -431,7 +431,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     if (attribs[i].isSimpleType())
                     {
                     	if (attribs[i].isNillable()
-                    			|| attribs[i].getTypeName().equals("xsd__string")
 								|| attribs[i].getTypeName().equals("xsd__anyURI")
 								|| attribs[i].getTypeName().equals("xsd__QName")
 								|| attribs[i].getTypeName().equals("xsd__notation"))
@@ -448,19 +447,32 @@ public class BeanParamWriter extends ParamCPPFileWriter
 	                                + attribs[i].getParamName()
 	                                + "\",0));\n");
                     	}
+                    	else if(attribs[i].getTypeName().equals("xsd__string"))
+			{
+				writer.write(
+                                    "\tparam->"
+                                        + attribs[i].getParamNameAsMember()
+                                        + " = pIWSDZ->"
+                                        + CUtils.getParameterGetValueMethodName(
+                                            attribs[i].getTypeName(),
+                                            attribs[i].isAttribute())
+                                        + "(\""
+                                        + attribs[i].getParamName()
+                                        + "\",0);\n");
+			}
                     	else
                     	{
 	                        //TODO handle optional attributes
 	                        writer.write(
 	                            "\tparam->"
 	                                + attribs[i].getParamNameAsMember()
-	                                + " = pIWSDZ->"
+	                                + " = *(pIWSDZ->"
 	                                + CUtils.getParameterGetValueMethodName(
 	                                    attribs[i].getTypeName(),
 	                                    attribs[i].isAttribute())
 	                                + "(\""
 	                                + attribs[i].getParamName()
-	                                + "\",0);\n");
+	                                + "\",0));\n");
                     	}
                     }
                     else

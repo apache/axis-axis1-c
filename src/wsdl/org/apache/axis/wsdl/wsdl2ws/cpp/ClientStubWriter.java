@@ -349,27 +349,31 @@ public class ClientStubWriter extends CPPClassWriter
                 	{
                 		writer.write(outparamTypeName + "* Ret = NULL;\n");
                 	}
+			else if (outparamTypeName.equals("xsd__string"))
+			{
+                		writer.write(outparamTypeName + " Ret;\n");
+			}
                 	else
                 	{
 	                    String initValue = CUtils.getInitValue(outparamTypeName);
 	                    if (initValue != null)
 	                    {
 	                        writer.write(
-	                            outparamTypeName + " Ret = " + initValue + ";\n");
+	                            outparamTypeName + "* Ret = NULL;\n");//" + initValue + ";\n");
 	                    }
 	                    else
 	                    {
 	                        if (outparamTypeName.equals("xsd__base64Binary")
 	                            || outparamTypeName.equals("xsd__hexBinary"))
 	                        {
-	                            writer.write(outparamTypeName + " Ret;\n");
-	                            writer.write("\tRet.__ptr = NULL;\n");
-	                            writer.write("\tRet.__size = 0;\n");
+	                            writer.write(outparamTypeName + "* Ret;\n");
+	                            //writer.write("\tRet->__ptr = NULL;\n");
+	                            //writer.write("\tRet->__size = 0;\n");
 	                        }
 	
 	                        else
 	                        {
-	                            writer.write(outparamTypeName + " Ret;\n");
+	                            writer.write(outparamTypeName + "* Ret;\n");
 	                        }
 	                    }
 	                    //TODO initialize return parameter appropriately.
@@ -389,11 +393,14 @@ public class ClientStubWriter extends CPPClassWriter
         //damitha
         if (returntype != null)
         {
-            writer.write(
+            if (outparamTypeName.equals("xsd__string") && returntypeissimple) 
+		writer.write("Ret;\n");
+	    else
+	        writer.write(
                 (returntypeisarray
                     ? "RetArray"
                     : returntypeissimple
-                    ? "Ret"
+                    ? "*Ret"
                     : "pReturn")
                     + ";\n");
         }
@@ -696,7 +703,10 @@ public class ClientStubWriter extends CPPClassWriter
                         writer.write("\t\t}\n");
                         writer.write("\tm_pCall->unInitialize();\n");
                         //            writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");
-                        writer.write("\t\treturn Ret;\n");
+			if (outparamTypeName.equals("xsd__string") ) 
+                        	writer.write("\t\treturn Ret;\n");
+			else 
+	                        writer.write("\t\treturn *Ret;\n");
                     }
                     else
                     {
