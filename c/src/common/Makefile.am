@@ -1,5 +1,5 @@
 noinst_LTLIBRARIES = libcommon.la
-AM_CPPFLAGS = -Wall
+AM_CPPFLAGS = -Wall -DUSE_EXPAT_PARSER
 libcommon_la_SOURCES = Param.cpp TypeMapping.cpp Packet.cpp MessageData.cpp \
  BasicTypeSerializer.cpp ArrayBean.cpp AxisTime.cpp \
  GDefine.cpp AxisUtils.cpp AxisTrace.cpp AxisException.cpp AxisConfig.cpp \

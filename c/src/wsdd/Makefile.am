@@ -1,5 +1,5 @@
 noinst_LTLIBRARIES = libwsdd.la
-AM_CPPFLAGS = -Wall
+AM_CPPFLAGS = -Wall -DUSE_EXPAT_PARSER
 libwsdd_la_SOURCES = WSDDDeployment.cpp \
                 WSDDHandler.cpp \
                 WSDDService.cpp \

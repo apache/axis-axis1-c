@@ -1,5 +1,5 @@
 noinst_LTLIBRARIES = libengine.la
-AM_CPPFLAGS = -Wall
+AM_CPPFLAGS = -Wall -DUSE_EXPAT_PARSER
 libengine_la_SOURCES = Axis.cpp \
 		AxisEngine.cpp \
                 ServerAxisEngine.cpp \

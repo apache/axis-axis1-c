@@ -234,42 +234,38 @@ const Channel& Channel::operator << (const char* msg)
 
 const Channel& Channel::operator >> (std::string& msg)
 {
-	msg = "";
-	if(INVALID_SOCKET == m_Sock) 
-	{
-		Error("Reading cannot be done without having a open socket.");
-		throw ChannelException("Input streaming error on undefined channel; please open the channel first");
-	}
+        msg = "";
+        if(INVALID_SOCKET == m_Sock)
+        {
+                Error("Reading cannot be done without having a open socket.");
+                throw ChannelException("Input streaming error on undefined channel; please open the channel first");
+        }
 
-	int nByteRecv = 0;
-	const int BUF_SIZE = 4096;
-	char buf[BUF_SIZE];
-	
-	do	// Manage multiple chuncks of the message
-	{
-		if ((nByteRecv = recv(m_Sock, (char *) &buf, BUF_SIZE - 1, 0)) == SOCKET_ERROR)
-		{
-			Error("Channel error while getting data.");
-			CloseChannel();
-			throw ChannelException("Input streaming error on Channel while getting data");
-		}
+        int nByteRecv = 0;
+        const int BUF_SIZE = 512;
+        char buf[BUF_SIZE];
 
-		if(nByteRecv)
-		{
-			buf[nByteRecv + 1] = '\0';	// got a part of the message, so add it to form 
-			msg += buf;					// the whole message
+                if ((nByteRecv = recv(m_Sock, (char *) &buf, BUF_SIZE - 1, 0)) == SOCKET_ERROR)
+                {
+            perror("recv SOCKET_ERROR");
+                        Error("Channel error while getting data.");
+                        //CloseChannel();
+            return *this;
+                        //throw ChannelException("Input streaming error on Channel while getting data");
+                }
+                if(nByteRecv)
+                {
+            //printf("if(nByteRecv)\n");
+                        buf[nByteRecv] = '\0';  // got a part of the message, so add it to form
+            msg = buf;
+            //printf("buf:%s\n", buf);
+                }
+                else
+            printf("execution break\n");
 
-			//Validate according to the transport; check whether we are in a position to return.
-			if (!m_pTransportHandler->GetStatus(msg)) 
-				break;
-		}
-		else
-			break; // we have the whole message or an error has occured
-	 }
-	 while (true);
-
-	 return *this;
+         return *this;
 }
+                
 
 /**
  *	Close, and clean-up any OS specific stuff
