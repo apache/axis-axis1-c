@@ -1,27 +1,27 @@
-<project name="Apache Axis C Trace Tool" default="" basedir="..">
+<project name="Apache Axis C Build Tools" default="" basedir="..">
 	<!--
-	  Compile the Trace tool
+	  Compile the build tools
 	  -->
-	<target name="compileTraceTool" depends="initialize">
+	<target name="compileBuildTools" depends="initialize">
 		<mkdir dir="${dir.classes}"/>
 		<javac srcdir="${dir.tools}" destdir="${dir.classes}"/>
 	</target>
 	
 	<!--
-	  Package Trace tool code into tracetool.jar
+	  Package build tools code into buildtools.jar
 	  -->
-	<target name="buildTraceTool" depends="compileTraceTool">
-		<jar jarfile="${dir.classes}/tracetool.jar" basedir="${dir.classes}">
+	<target name="buildTools" depends="compileBuildTools">
+		<jar jarfile="${dir.classes}/buildtools.jar" basedir="${dir.classes}">
 			<include name="org/apache/axis/tools/**"/>
-			<manifest>
-				<attribute name="Main-Class"
-				 value="org.apache.axis.tools.trace.TraceInstrumentor"/>
-			</manifest>
 		</jar>
 	</target>
 	
 	<target name="runTraceTool">
-		<java jar="${dir.classes}/tracetool.jar" fork="true">
+		<path id ="cp">
+			<fileset dir="${dir.classes}" includes="buildtools.jar"/>
+		</path>
+		<java classname="org.apache.axis.tools.trace.TraceInstrumentor" fork="true">
+                  <classpath refid="cp"/>
 			<arg value="-config"/>
 			<arg value="${dir.tools}/org/apache/axis/tools/trace/tracetool.conf"/>
 			<arg value="-include"/>
@@ -38,7 +38,7 @@
 	<!--
 	  Compile, package and run the trace tool
 	  -->
-	<target name="addTrace" depends="buildTraceTool, runTraceTool"
+	<target name="addTrace" depends="buildTools, runTraceTool"
 	  description="Compile, jar and run the trace tool"/>
 
 </project>

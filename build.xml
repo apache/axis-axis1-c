@@ -35,7 +35,7 @@ Notes:
 	</description>
 
 	<import file="${basedir}/build/buildInitialize.xml"/>
-	<import file="${basedir}/build/buildTraceTool.xml"/>
+	<import file="${basedir}/build/buildTools.xml"/>
 	<import file="${basedir}/build/buildClient.xml"/>
 	<import file="${basedir}/build/buildTransport.xml"/>
 	<import file="${basedir}/build/buildTransportIPV6.xml"/>
