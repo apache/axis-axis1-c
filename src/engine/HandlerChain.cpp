@@ -89,6 +89,7 @@ int HandlerChain::Invoke(void* pMsg)
 	while (m_itCurrHandler != m_HandlerList.end())
 	{        
 		BasicHandler* pHandler = (*m_itCurrHandler).m_pHandler; 
+		/*
 		if (AXIS_SUCCESS == pHandler->_functions->Invoke(pHandler->_object, pMsg))
 		{            
 			m_itCurrHandler++;
@@ -98,6 +99,24 @@ int HandlerChain::Invoke(void* pMsg)
             AXISTRACE1("Handler invoke not successful", WARN);            
 			OnFault(pMsg);
 			return AXIS_FAIL;
+		}
+		*/
+		//----------change by roshan on 12Feb2004-------------
+		if (0 != pHandler->_functions)
+		{
+			/* This is a C Handler */
+		} else if (0 != pHandler->_object)
+		{
+			if (AXIS_SUCCESS == ((Handler*)(pHandler->_object))->Invoke(pMsg))
+			{            
+				m_itCurrHandler++;
+			}
+			else
+			{
+				AXISTRACE1("Handler invoke not successful", WARN);            
+				OnFault(pMsg);
+				return AXIS_FAIL;
+			}
 		}
 	}
 	
