@@ -1,15 +1,14 @@
-/////////////////////////////////////////////////////////////////////////////
-// This is the Service Class genarated by the tool WSDL2Ws
-//		MathOps.h: interface for the MathOpsclass.
-//
-//////////////////////////////////////////////////////////////////////
+/*
+ * This is the Service Class genarated by the tool WSDL2Ws
+ * MathOps.h: interface for the MathOpsclass.
+ *
+ */
 #if !defined(__MATHOPS_SERVERSKELETON_H__INCLUDED_)
 #define __MATHOPS_SERVERSKELETON_H__INCLUDED_
 
 #include <axis/server/AxisUserAPI.h>
 
 #include "DivByZeroFault.h"
-#include "AxisDivByZeroException.h"
 
 class MathOps 
 {
@@ -18,7 +17,7 @@ class MathOps
 	public:
 		virtual ~MathOps();
 	public: 
-		int  div(int value0, int value1) throw(AxisDivByZeroException);
+		int div(int Value0,int Value1);
 };
 
-#endif // !defined(__MATHOPS_SERVERSKELETON_H__INCLUDED_)
+#endif /* !defined(__MATHOPS_SERVERSKELETON_H__INCLUDED_)*/
