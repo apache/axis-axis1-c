@@ -66,7 +66,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Vector;
 
+import javax.xml.namespace.QName;
+
+import org.apache.axis.wsdl.symbolTable.TypeEntry;
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.ParamWriter;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
@@ -84,20 +89,74 @@ public class ParmHeaderFileWriter extends ParamWriter{
 			// if this headerfile not defined define it 
 			this.writer.write("#if !defined(__"+classname.toUpperCase()+"_H__INCLUDED_)\n");
 			this.writer.write("#define __"+classname.toUpperCase()+"_H__INCLUDED_\n\n");
-			writePreprocssorStatements();
-			this.writer.write("typedef struct {\n");
-			writeAttributes();
-			this.writer.write("} "+classname+";\n\n");
+			if (type.isSimpleType()){
+				writeSimpleTypeWithEnumerations();
+			}
+			else{
+				writePreprocssorStatements();
+				this.writer.write("typedef struct {\n");
+				writeAttributes();
+				this.writer.write("} "+classname+";\n\n");
+			}
 			this.writer.write("#endif /* !defined(__"+classname.toUpperCase()+"_H__INCLUDED_)*/\n");
 			writer.flush();
 			writer.close();
 			System.out.println(getFilePath().getAbsolutePath() + " created.....");
-		} catch (IOException e) {
+		} catch (IOException e){
 			e.printStackTrace();
 			throw new WrapperFault(e);
 		}
 	}
 
+	protected void writeSimpleTypeWithEnumerations() throws WrapperFault{
+		try{
+			Vector restrictionData = type.getEnumerationdata();
+			if ( restrictionData == null) return;
+			TypeEntry baseEType = (TypeEntry)restrictionData.firstElement();
+			QName baseType = baseEType.getQName();
+			if (!CUtils.isSimpleType(baseType)) return;
+			String langTypeName = CUtils.getclass4qname(baseType);
+			writer.write("typedef ");
+			if ("string".equals(baseType.getLocalPart())){
+				writer.write(langTypeName + " " + classname + ";\n");
+				for(int i=1; i<restrictionData.size();i++){
+					QName value = (QName)restrictionData.elementAt(i);
+					if ("enumeration".equals(value.getLocalPart())){
+						writer.write("const "+classname+" "+classname+"_"+value.getNamespaceURI()+" = \""+ value.getNamespaceURI()+"\";\n");
+					}else if("maxLength".equals(value.getLocalPart())){
+						writer.write("const "+classname+"_MaxLength = "+value.getNamespaceURI()+";\n");
+					}else if("minLength".equals(value.getLocalPart())){
+						writer.write("const "+classname+"_MinLength = "+value.getNamespaceURI()+";\n");
+					}
+				}
+			}
+			else if ("int".equals(baseType.getLocalPart())){
+				if (restrictionData.size()>1){ //there are enumerations
+					writer.write("enum { ");
+					for(int i=1; i<restrictionData.size();i++){
+						QName value = (QName)restrictionData.elementAt(i);
+						if ("enumeration".equals(value.getLocalPart())){
+							if (i>1) writer.write(", ");
+							writer.write("ENUM"+classname.toUpperCase()+"="+value.getNamespaceURI());		
+						}
+					}
+					writer.write("} "+classname+";\n");
+				}
+			}
+			else{
+				writer.write(langTypeName + " " + classname + ";\n");
+				for(int i=1; i<restrictionData.size();i++){
+					QName value = (QName)restrictionData.elementAt(i);
+					if ("enumeration".equals(value.getLocalPart())){
+						writer.write("const "+classname+" "+classname+"_"+value.getNamespaceURI()+" = "+ value.getNamespaceURI()+";\n");
+					}
+				}
+			}	
+		} catch (IOException e) {
+			 throw new WrapperFault(e);
+		}
+	}
+	
 	protected void writeAttributes()throws WrapperFault{
 		  if(type.isArray()) return;
 		  try{
