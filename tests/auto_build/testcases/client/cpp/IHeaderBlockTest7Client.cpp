@@ -28,7 +28,8 @@ int main(int argc, char* argv[])
 		IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader","http://ws.apache.org/");		
 		BasicNode * Bnode1=phb->createChild(CHARACTER_NODE,NULL,NULL,NULL,"APACHE ");
 		phb->addChild(Bnode1);
-		phb->addChild(Bnode1);
+		BasicNode * Bnode2=phb->createChild(CHARACTER_NODE,NULL,NULL,NULL,"is cool");
+		phb->addChild(Bnode2);
 		iResult=ws.add(i1, i2);			
 		cout << endl << iResult << endl;
 	}

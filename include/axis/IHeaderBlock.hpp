@@ -254,7 +254,8 @@ public:
     /**
       * Adds a child node to the Header Block.
       *
-      * @param pBasicNode The child node pointer which is to be added.
+      * @param pBasicNode The child node pointer which is to be added
+      * NOTE: This cannot be a pointer to a child that has already been added> If you want to add the same data twice then create a new basic node.
       * @return AXIS_SUCCESS to indicate successfull operation.AXIS_FAIL otherwise
       */
     virtual int addChild(BasicNode* pBasicNode)=0;
