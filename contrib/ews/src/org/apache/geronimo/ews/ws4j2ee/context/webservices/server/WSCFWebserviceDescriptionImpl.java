@@ -119,43 +119,43 @@ public class WSCFWebserviceDescriptionImpl extends WSCFElement implements WSCFWe
         //extract the description
         Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DESCRIPTION);
         if (null != element) {
-            this.description = element.getChildNodes().item(0).toString();
+            this.description = element.getChildNodes().item(0).getNodeValue();
         }
 		
         //extract the display name
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DISPLAY_NAME);
         if (null != element) {
-            this.displayName = element.getChildNodes().item(0).toString();
+            this.displayName = element.getChildNodes().item(0).getNodeValue();
         }
 		
         //extract the small icon.
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_SMALL_ICON);
         if (null != element) {
-            this.smallIcon = element.getChildNodes().item(0).toString();
+            this.smallIcon = element.getChildNodes().item(0).getNodeValue();
         }
 		
         //extract the large icon
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_LARGE_ICON);
         if (null != element) {
-            this.largeIcon = element.getChildNodes().item(0).toString();
+            this.largeIcon = element.getChildNodes().item(0).getNodeValue();
         }
 		
         //extract the webservice description name.
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_WEBSERVICES_DESCRIPTION_NAME);
         if (null != element) {
-            this.webserviceDescriptionName = element.getChildNodes().item(0).toString();
+            this.webserviceDescriptionName = element.getChildNodes().item(0).getNodeValue();
         }
 		
         //extract the wsdl file
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_WSDLFILE);
         if (null != element) {
-            this.wsdlFile = element.getChildNodes().item(0).toString();
+            this.wsdlFile = element.getChildNodes().item(0).getNodeValue();
         }
 		
         //extract the jax rpc mapping file
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_JAXRPC_MAPPING_FILE);
         if (null != element) {
-            this.jaxrpcMappingFile = element.getChildNodes().item(0).toString();
+            this.jaxrpcMappingFile = element.getChildNodes().item(0).getNodeValue();
         }
 		
         //extract the port component

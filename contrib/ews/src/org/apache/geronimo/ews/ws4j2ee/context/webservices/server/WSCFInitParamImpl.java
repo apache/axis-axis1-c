@@ -91,19 +91,19 @@ public class WSCFInitParamImpl extends WSCFElement implements WSCFInitParam {
         //extract param name
         Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_PARAM_NAME);
         if (null != element) {
-            this.paramName = element.getChildNodes().item(0).toString();
+            this.paramName = element.getChildNodes().item(0).getNodeValue();
         }
 		
         //extract param value
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_PARAM_VLAUE);
         if (null != element) {
-            this.paramValue = element.getChildNodes().item(0).toString();
+            this.paramValue = element.getChildNodes().item(0).getNodeValue();
         }
 		
         // extract the description
         element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DESCRIPTION);
         if (null != element) {
-            this.description = element.getChildNodes().item(0).toString();
+            this.description = element.getChildNodes().item(0).getNodeValue();
         }
 
     }
