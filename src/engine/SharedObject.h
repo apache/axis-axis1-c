@@ -79,7 +79,10 @@ protected:
 	int lock();
 private:
 	bool m_bLocked;
-    pthread_mutex_t* mut;
+    #ifdef WIN32
+    #else //Linux
+        pthread_mutex_t* mut;
+    #endif
 };
 
 static pthread_mutex_t mut = PTHREAD_MUTEX_INITIALIZER;
