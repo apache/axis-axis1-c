@@ -18,6 +18,7 @@
 #define __AXIS_AXISCONFIG_H_OF_AXIS_INCLUDED__
 
 #define CONFBUFFSIZE 256
+#define NOOFPROPERTIES 7
 
 /**
  *   @class AxisConfig
@@ -33,39 +34,15 @@
  *   @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  */
 
+enum g_axconfig {AXCONF_WSDDFILEPATH, AXCONF_LOGPATH, AXCONF_CLIENTLOGPATH, 
+				 AXCONF_CLIENTWSDDFILEPATH, AXCONF_AXISHOME, 
+				 AXCONF_TRANSPORTHTTP, AXCONF_TRANSPORTSMTP, AXCONF_XMLPARSER};
+
 class AxisConfig
 {
     public:
     AxisConfig();
     ~AxisConfig();
-
-    /**
-     * This is called to get the server.wsdd file path.
-     * 
-     * @return the server.wsdd file path 
-     */
-    char* getWsddFilePath();
-
-    /**
-     * This is called to get the AxisLog file path.
-     *
-     * @return the AxisLog file path.
-     */
-    char* getAxisLogPath();
-
-    /**
-     * This is called to get the AxisClientLog file path.
-     *
-     * @return the AxisClientLog file path.
-     */
-    char* AxisConfig::getAxisClientLogPath ();    
-
-    /**
-     * This is called to get the client.wsdd file path.
-     * 
-     * @return the client.wsdd file path 
-     */
-    char* getClientWsddFilePath();
 
     /**
      * This method will read from the configuration file called axiscpp.conf
@@ -77,18 +54,18 @@ class AxisConfig
     int readConfFile();
 
     /**
-     * This is called to get the value of $AXIS_HOME env variable.
+     * This is called to get the value of a property as defined by the g_axconfig
+	 * enumeration.
      * 
      * @return the $AXIS_HOME value
      */
-    char* getAxisHomePath();
+
+	char* getAxConfProperty(g_axconfig property);
         
     private:         
         char* m_pcAxisHome;
-        char* m_pcWsddFilePath;
-        char* m_pcAxisLogPath;
-        char* m_pcAxisClientLogPath;
-        char* m_pcClientWsddFilePath;
+		char* m_pcKeyArray [NOOFPROPERTIES];
+		char* m_pcValueArray [NOOFPROPERTIES];
 };
 #endif
 
