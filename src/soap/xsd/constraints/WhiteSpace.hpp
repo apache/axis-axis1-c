@@ -47,6 +47,8 @@ public:
 
     WhiteSpace();
     
+    ~WhiteSpace();
+    
     WhiteSpace(whiteSpaceValue whiteSpace);
     
     bool isSet();

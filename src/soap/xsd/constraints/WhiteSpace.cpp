@@ -7,6 +7,11 @@ AXIS_CPP_NAMESPACE_START
         m_isSet = true;
     }
 
+    WhiteSpace::~WhiteSpace()
+    {
+        delete [] m_Buf;
+    }
+
     WhiteSpace::WhiteSpace(whiteSpaceValue whiteSpace):m_Buf(NULL)
     {
         m_isSet = true;
@@ -41,7 +46,6 @@ AXIS_CPP_NAMESPACE_START
         }
         m_Buf = new char[strlen (returnValue) + 1];
         strcpy (m_Buf, returnValue);
-        delete returnValue;
         return m_Buf;
     }
     
