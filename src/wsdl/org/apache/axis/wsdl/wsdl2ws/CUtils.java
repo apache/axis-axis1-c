@@ -385,7 +385,7 @@ public class CUtils {
 				if (baseEType != null) {
 					String javaName = TypeMap.getBasicTypeClass4qname(baseEType.getQName());
 					//String javaName = baseEType.getName();
-					if (javaName.equals("boolean") ||
+					if (javaName == null || javaName.equals("boolean") ||
 						! SchemaUtils.isSimpleSchemaType(baseEType.getQName())) {
 						baseEType = null;
 					}

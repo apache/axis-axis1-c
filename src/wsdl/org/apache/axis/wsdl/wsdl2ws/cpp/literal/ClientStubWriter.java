@@ -871,7 +871,9 @@ public class ClientStubWriter extends CPPClassWriter
                 }
             }
             writer.write("\t\t}\n");
-            writer.write("\t}\n\tm_pCall->unInitialize();\n");
+            writer.write("\t}\n");
+            writer.write("\tupdateStateAfterResponse();\n");
+            writer.write("\tm_pCall->unInitialize();\n");
         }
         else
         {
@@ -881,7 +883,10 @@ public class ClientStubWriter extends CPPClassWriter
                 {
                     writer.write("\t\t\t/*not successful*/\n\t\t}\n");
                 }
-                writer.write("\t}\n\tm_pCall->unInitialize();\n");
+            writer.write("\t}\n");
+            writer.write("\tupdateStateAfterResponse();\n");
+            writer.write("\tm_pCall->unInitialize();\n");
+                //writer.write("\t}\n\tm_pCall->unInitialize();\n");
             }
             else
             {
@@ -924,7 +929,10 @@ public class ClientStubWriter extends CPPClassWriter
                                 + containedType
                                 + ");\n\t\t}\n");
                     }
-                    writer.write("\t}\n\tm_pCall->unInitialize();\n");
+            writer.write("\t}\n");
+            writer.write("\tupdateStateAfterResponse();\n");
+            writer.write("\tm_pCall->unInitialize();\n");
+            //        writer.write("\t}\n\tm_pCall->unInitialize();\n");
                     writer.write("\treturn RetArray;\n");
                 }
                 else
@@ -940,7 +948,10 @@ public class ClientStubWriter extends CPPClassWriter
                                 + "(\""
                                 + returntype.getParamName()
                                 + "\", 0);\n\t\t}\n");
-                        writer.write("\t}\n\tm_pCall->unInitialize();\n");
+            writer.write("\t}\n");
+            writer.write("\tupdateStateAfterResponse();\n");
+            writer.write("\tm_pCall->unInitialize();\n");
+            //            writer.write("\t}\n\tm_pCall->unInitialize();\n");
                         writer.write("\treturn Ret;\n");
                     }
                     else
@@ -953,7 +964,10 @@ public class ClientStubWriter extends CPPClassWriter
                                 "\t\t\tpReturn = ("
                                     + outparamType
                                     + "*)m_pCall->getAnyObject();\n\t\t}\n");
-                            writer.write("\t}\n\tm_pCall->unInitialize();\n");
+            writer.write("\t}\n");
+            writer.write("\tupdateStateAfterResponse();\n");
+            writer.write("\tm_pCall->unInitialize();\n");
+            //                writer.write("\t}\n\tm_pCall->unInitialize();\n");
                             writer.write("\treturn pReturn;\n");
                         }
                         else
@@ -973,7 +987,10 @@ public class ClientStubWriter extends CPPClassWriter
                                     + returntype.getElementNameAsString()
                                     + "\", 0);\n\t\t}\n");
                             //Samisa
-                            writer.write("\t}\n\tm_pCall->unInitialize();\n");
+            writer.write("\t}\n");
+            writer.write("\tupdateStateAfterResponse();\n");
+            writer.write("\tm_pCall->unInitialize();\n");
+            //                writer.write("\t}\n\tm_pCall->unInitialize();\n");
                             writer.write("\treturn pReturn;\n");
                         }
                     }
@@ -1010,7 +1027,9 @@ public class ClientStubWriter extends CPPClassWriter
         int j = 0;
         if (!paramsFault.hasNext())
         {
-            writer.write("\t\t\tm_pCall->unInitialize();\n");
+            writer.write("\tupdateStateAfterResponse();\n");
+            writer.write("\tm_pCall->unInitialize();\n");
+            //writer.write("\t\t\tm_pCall->unInitialize();\n");
             writer.write(
                 "\t\t\tthrow "
                     + wscontext.getSerInfo().getServicename()
@@ -1085,7 +1104,9 @@ public class ClientStubWriter extends CPPClassWriter
         if (flag == true)
         {
             writer.write("\t\t\telse\n\t\t\t{\n");
-            writer.write("\t\t\t\t  m_pCall->unInitialize();\n");
+            writer.write("\tupdateStateAfterResponse();\n");
+            writer.write("\tm_pCall->unInitialize();\n");
+            //writer.write("\t\t\t\t  m_pCall->unInitialize();\n");
             writer.write(
                 "\t\t\t\t  throw "
                     + wscontext.getSerInfo().getServicename()
@@ -1126,7 +1147,9 @@ public class ClientStubWriter extends CPPClassWriter
                     + "\", 0);\n");
             writer.write(
                 "\t\t\t\tpSoapFault->setCmplxFaultObject(pFaultDetail);\n");
-            writer.write("\t\t\t\tm_pCall->unInitialize();\n");
+            writer.write("\tupdateStateAfterResponse();\n");
+            writer.write("\tm_pCall->unInitialize();\n");
+            //writer.write("\t\t\t\tm_pCall->unInitialize();\n");
             writer.write(
                 "\t\t\t\tthrow "
                     + wscontext.getSerInfo().getServicename()
