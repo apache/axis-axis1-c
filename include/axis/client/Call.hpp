@@ -427,6 +427,11 @@ public:
     AnyType* AXISCALL getAnyObject();
     int AXISCALL addAnyObject(AnyType* pAnyObject);
     const AxisChar* AXISCALL getNamespacePrefix(const AxisChar* pNamespace);
+	
+	/**
+	 * Returns a complex fault as an XML string 
+	 */
+	const xsd__string getFaultAsXMLString();
 
 private:
     int openConnection();

@@ -245,6 +245,12 @@ public:
       *Returns the attachemtn object for the given id.
       */
     ISoapAttachment* getAttachment(const char* pcAttachmentid);
+
+	/**
+	 * Returns a complex fault as an XML string 
+	 */
+	const xsd__string getFaultAsXMLString();
+
     /*
      *This class is used by the DeSerializer to set the input stream back to 
      * the parser in following situations:

@@ -1046,9 +1046,23 @@ public class ClientStubWriter
         int j = 0;
         if (!paramsFault.hasNext())
         {
-            writer.write("\t\t\tthrow OtherFaultException(pSoapFault->getFaultcode(),\n");
-            writer.write("\t\t\t\tpSoapFault->getFaultstring(), pSoapFault->getFaultactor(),\n");
-		writer.write("\t\t\t\tpSoapFault->getSimpleFaultDetail(), iExceptionCode);\n");
+            writer.write("\t\t\t\tconst char *detail = pSoapFault->getSimpleFaultDetail();\n");
+            writer.write("\t\t\t\tbool deleteDetail=false;\n");
+            writer.write("\t\t\t\tif (NULL==detail || 0==strlen(detail))\n");
+            writer.write("\t\t\t\t{\n");
+            writer.write("\t\t\t\t\tdetail=m_pCall->getFaultAsXMLString();\n");
+            writer.write("\t\t\t\t\tif (NULL==detail)\n");
+            writer.write("\t\t\t\t\t\tdetail=\"\";\n");
+            writer.write("\t\t\t\t\telse\n");
+            writer.write("\t\t\t\t\t\tdeleteDetail=true;\n");
+            writer.write("\t\t\t\t}\n");
+            writer.write("\t\t\t\tOtherFaultException ofe(pSoapFault->getFaultcode(),\n");
+            writer.write("\t\t\t\t\tpSoapFault->getFaultstring(), pSoapFault->getFaultactor(),\n");
+		writer.write("\t\t\t\t\tdetail, iExceptionCode);\n");
+            writer.write("\t\t\t\tif (deleteDetail && NULL!=detail)\n");
+            writer.write("\t\t\t\t\tdelete [] const_cast<char*>(detail);\n");
+            writer.write("\t\t\t\tm_pCall->unInitialize();\n");
+            writer.write("\t\t\t\tthrow ofe;\n");
         }
         else
         {
@@ -1120,10 +1134,23 @@ public class ClientStubWriter
         {
             writer.write("\t\t\telse\n");
             writer.write("\t\t\t{\n");
+            writer.write("\t\t\t\tconst char *detail = pSoapFault->getSimpleFaultDetail();\n");
+            writer.write("\t\t\t\tbool deleteDetail=false;\n");
+            writer.write("\t\t\t\tif (NULL==detail || 0==strlen(detail))\n");
+            writer.write("\t\t\t\t{\n");
+            writer.write("\t\t\t\t\tdetail=m_pCall->getFaultAsXMLString();\n");
+            writer.write("\t\t\t\t\tif (NULL==detail)\n");
+            writer.write("\t\t\t\t\t\tdetail=\"\";\n");
+            writer.write("\t\t\t\t\telse\n");
+            writer.write("\t\t\t\t\t\tdeleteDetail=true;\n");
+            writer.write("\t\t\t\t}\n");
+            writer.write("\t\t\t\tOtherFaultException ofe(pSoapFault->getFaultcode(),\n");
+            writer.write("\t\t\t\t\tpSoapFault->getFaultstring(), pSoapFault->getFaultactor(),\n");
+		writer.write("\t\t\t\t\tdetail, iExceptionCode);\n");
+            writer.write("\t\t\t\tif (deleteDetail && NULL!=detail)\n");
+            writer.write("\t\t\t\t\tdelete [] const_cast<char*>(detail);\n");
             writer.write("\t\t\t\tm_pCall->unInitialize();\n");
-            writer.write("\t\t\tthrow OtherFaultException(pSoapFault->getFaultcode(),\n");
-            writer.write("\t\t\t\tpSoapFault->getFaultstring(), pSoapFault->getFaultactor(),\n");
-		writer.write("\t\t\t\tpSoapFault->getSimpleFaultDetail(), iExceptionCode);\n");
+            writer.write("\t\t\t\tthrow ofe;\n");
             writer.write("\t\t\t}\n");
         }
         writer.write("\t\t}\n");

@@ -3239,6 +3239,74 @@ SoapDeSerializer::getElementAsString (const AxisChar * pName,
     return ret;
 }
 
+const xsd__string
+SoapDeSerializer::getFaultAsXMLString()
+{
+    if (AXIS_SUCCESS != m_nStatus || RPC_ENCODED == m_nStyle) return NULL;
+	if (!m_pNode) m_pNode = m_pParser->anyNext ();
+	if (NULL==m_pNode) return NULL;
+
+	string xml;
+	while (NULL!=m_pNode && !(0==strcmp("detail",m_pNode->m_pchNameOrValue) && END_ELEMENT==m_pNode->m_type))
+	{
+		string attrs;
+		for (int i=0; i<MAX_NO_OF_ATTRIBUTES; i+=3)
+		{
+			const char *name = m_pNode->m_pchAttributes[i];
+			const char *pfx = m_pNode->m_pchAttributes[i+1];
+			const char *val = m_pNode->m_pchAttributes[i+2];
+			if (NULL==name) break;
+			if (0==i) attrs += " ";
+
+			if (NULL!=pfx)
+			{
+				attrs += pfx;
+				attrs += ":";
+			}
+
+			attrs += name;
+			attrs += "=";
+			if (NULL!=val) attrs += val;
+			attrs += " ";
+		}
+
+		switch (m_pNode->m_type)
+		{
+		case START_ELEMENT:
+			xml += "<";
+			xml += m_pNode->m_pchNameOrValue;
+			if (attrs.size()>0) xml += attrs;
+			if (END_ELEMENT==m_pNode->m_type2) xml += "/";
+			xml += ">";
+			break;
+
+		case END_ELEMENT:
+			xml += "</";
+			xml += m_pNode->m_pchNameOrValue;
+			if (attrs.size()>0) xml += attrs;
+			xml += ">";
+			break;
+
+		case CHARACTER_ELEMENT:
+			if (attrs.size()>0) xml += attrs;
+			xml += m_pNode->m_pchNameOrValue;
+			break;
+
+		case START_PREFIX:
+		case END_PREFIX:
+		default:
+			break;
+		}
+
+	    m_pNode = m_pParser->anyNext ();
+	} // end while
+
+	if (0==xml.size()) return NULL;
+	xsd__string ret = new char[xml.size()+1];
+	strcpy(ret,xml.c_str());
+	return ret;
+}
+
 xsd__anyURI
 SoapDeSerializer::getElementAsAnyURI (const AxisChar * pName,
 				      const AxisChar * pNamespace)
