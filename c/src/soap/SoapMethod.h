@@ -52,14 +52,14 @@ using namespace std;
 
 
 
-    @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+    @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
 */
 
 class SoapMethod : public ISoapMethod
 {
 
 private:
-    int serializeAttributes(SoapSerializer& pSZ);
+    int serializeAttributes(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack);
     /* int serializeAttributes(string& sSerialized); */
     list<Attribute*> m_attributes;
     bool isSerializable();    
