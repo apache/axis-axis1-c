@@ -85,16 +85,16 @@ AxisUtils::~AxisUtils()
 
 bool AxisUtils::convert(AxisString &wstr, const char *str)
 {
-	AxisChar* pWchar = XMLString::transcode(str);
+	AxisChar* pWchar = (wchar_t*) XMLString::transcode(str);
 	if (!pWchar) return false;
 	wstr = pWchar;
-	XMLString::release(&pWchar);
+	XMLString::release((XMLCh**) &pWchar);
 	return true;
 }
 
 bool AxisUtils::convert(string &str, const AxisChar *wstr)
 {
-	char* pChar = XMLString::transcode(wstr);
+	char* pChar = XMLString::transcode((const XMLCh*) wstr);
 	if (!pChar) return false;
 	str = pChar;
 	XMLString::release(&pChar);

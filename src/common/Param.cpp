@@ -95,6 +95,10 @@ Param::Param(const Param& param)
 		m_Value.pArray->m_ItemName = param.m_Value.pArray->m_ItemName;
 		//copy constructor is not intended to use to copy the array in
 		//union v
+	}
+    if (m_Type == XSD_DURATION || m_Type == XSD_DATETIME)
+	{
+        m_uAxisTime.setType(m_Type);
 	}	
 	else 
 	{
@@ -108,10 +112,31 @@ Param::Param(const AxisChar* str, XSDTYPE type)
 	m_Type = type;
 	switch (type)
 	{
+    case XSD_DURATION: m_sName = L"Duration"; break;
+    case XSD_DATETIME: m_sName = L"DateTime"; break;
+    case XSD_TIME: m_sName = L"Time"; break;
+    case XSD_DATE: m_sName = L"Date"; break;
+    case XSD_YEARMONTH: m_sName = L"YearMonth"; break;
+    case XSD_YEAR: m_sName = L"Year"; break;
+    case XSD_MONTHDAY: m_sName = L"MonthDay"; break;
+    case XSD_DAY: m_sName = L"Day"; break;
+    case XSD_MONTH: m_sName = L"Month"; break;
+    case XSD_ANYURI: m_sName = L"AnyURIString"; break;
+    case XSD_QNAME: m_sName = L"QNameString"; break;
 	case XSD_STRING: m_sName = L"String"; break;
 	case XSD_BASE64BINARY: m_sName = L"Base64BinaryString"; break;
 	case XSD_HEXBINARY: m_sName = L"HexBinaryString"; break;
 	}
+}
+
+Param::Param(time_t time)
+{
+    m_uAxisTime = AxisTime(time);
+}
+
+Param::Param(struct tm timeStruct)
+{
+    m_uAxisTime = AxisTime(timeStruct);
 }
 
 Param::Param(int nValue)
@@ -121,6 +146,60 @@ Param::Param(int nValue)
 	m_Type = XSD_INT;
 }
 
+Param::Param(unsigned int unValue)
+{
+	m_sName = L"Unsigned Int";
+	m_Value.unValue = unValue;
+	m_Type = XSD_UNSIGNEDINT;
+}
+
+Param::Param(short sValue)
+{
+    m_sName = L"Short";
+	m_Value.sValue = sValue;
+	m_Type = XSD_SHORT;	
+}
+
+Param::Param(unsigned short usValue)
+{
+    m_sName = L"Unsigned Short";
+	m_Value.usValue = usValue;
+	m_Type = XSD_UNSIGNEDSHORT;
+}
+
+Param::Param(char cValue)
+{
+    m_sName = L"Byte";
+	m_Value.cValue = cValue;
+	m_Type = XSD_BYTE;
+}
+
+Param::Param(unsigned char ucValue)
+{
+    m_sName = L"Unsigned Byte";
+	m_Value.ucValue = ucValue;
+	m_Type = XSD_UNSIGNEDBYTE;
+}
+
+Param::Param(long lValue, XSDTYPE type)
+{
+    m_Type = type;
+	switch (type)
+	{
+        case XSD_LONG:m_sName = L"Long";
+        case XSD_INTEGER: m_sName = L"Integer";
+            m_Value.lValue = lValue;
+            break;
+	}
+}
+
+Param::Param(unsigned long ulValue)
+{
+	m_sName = L"Unsigned Long";
+	m_Value.ulValue = ulValue;
+	m_Type = XSD_UNSIGNEDLONG;
+}
+
 Param::Param(float fValue)
 {
 	m_sName = L"Float";
@@ -128,12 +207,23 @@ Param::Param(float fValue)
 	m_Type = XSD_FLOAT;
 }
 
-Param::Param(double dValue)
+Param::Param(double dValue, XSDTYPE type)
 {
-	m_sName = L"Double";
+	m_Type = type;
+	switch (type)
+	{
+        case XSD_DOUBLE: m_sName = L"Double";
+        case XSD_DECIMAL: m_sName = L"Decimal";
+            m_Value.dValue = dValue;
+            break;
+	}
+	/*m_sName = L"Double";
 	m_Value.dValue = dValue;
-	m_Type = XSD_DOUBLE;
+	m_Type = XSD_DOUBLE;*/
+
 }
+
+
 
 Param::~Param()
 {
@@ -163,7 +253,36 @@ const AxisString& Param::GetString()
 	return m_sValue;
 }
 
+const AxisString& Param::GetAnyURI()
+{
+	if (m_Type == XSD_ANYURI){}
+	else if (m_Type == XSD_UNKNOWN) //see GetInt() to see why we do this
+	{
+		m_Type = XSD_ANYURI;
+	}
+	else
+	{
+		//exception
+	}
+	return m_sValue;
+}
+
+const AxisString& Param::GetQName()
+{
+	if (m_Type == XSD_QNAME){}
+	else if (m_Type == XSD_UNKNOWN) //see GetInt() to see why we do this
+	{
+		m_Type = XSD_QNAME;
+	}
+	else
+	{
+		//exception
+	}
+	return m_sValue;
+}
+
 const AxisString& Param::GetHexString()
+
 {
 	if (m_Type == XSD_HEXBINARY){}
 	else if (m_Type == XSD_UNKNOWN) //see GetInt() to see why we do this
@@ -210,6 +329,234 @@ int Param::GetInt()
 	return m_Value.nValue;
 }
 
+struct tm Param::GetDateTime()
+{
+	if (m_Type == XSD_DATETIME){}
+	else if (m_Type == XSD_UNKNOWN)
+	{
+		//this situation comes when the soap does not contain the type of a parameter
+		//but the wrapper class method knows exactly what the type of this parameter is.
+		//then the deserializer must have put the value as a string and type as XSD_UNKNOWN.
+		//so convert the m_sValue in to an int and change the types etc
+		m_Type = XSD_DATETIME;
+		SetValue(m_sValue.c_str());
+	}
+	else
+	{
+		//exception
+	}
+	return m_uAxisTime.getDateTime();
+}
+
+struct tm Param::GetDate()
+{
+	if (m_Type == XSD_DATE){}
+	else if (m_Type == XSD_UNKNOWN)
+	{
+		//this situation comes when the soap does not contain the type of a parameter
+		//but the wrapper class method knows exactly what the type of this parameter is.
+		//then the deserializer must have put the value as a string and type as XSD_UNKNOWN.
+		//so convert the m_sValue in to an int and change the types etc
+		m_Type = XSD_DATE;
+		SetValue(m_sValue.c_str());
+	}
+	else
+	{
+		//exception
+	}
+	return m_uAxisTime.getDate();
+}
+
+struct tm Param::GetTime()
+{
+	if (m_Type == XSD_TIME){}
+	else if (m_Type == XSD_UNKNOWN)
+	{
+		//this situation comes when the soap does not contain the type of a parameter
+		//but the wrapper class method knows exactly what the type of this parameter is.
+		//then the deserializer must have put the value as a string and type as XSD_UNKNOWN.
+		//so convert the m_sValue in to an int and change the types etc
+		m_Type = XSD_TIME;
+		SetValue(m_sValue.c_str());
+	}
+	else
+	{
+		//exception
+	}
+	return m_uAxisTime.getTime();
+}
+
+long Param::GetDuration()
+{
+	if (m_Type == XSD_DURATION){}
+	else if (m_Type == XSD_UNKNOWN)
+	{
+		//this situation comes when the soap does not contain the type of a parameter
+		//but the wrapper class method knows exactly what the type of this parameter is.
+		//then the deserializer must have put the value as a string and type as XSD_UNKNOWN.
+		//so convert the m_sValue in to an int and change the types etc
+		m_Type = XSD_DATETIME;
+		SetValue(m_sValue.c_str());
+	}
+	else
+	{
+		//exception
+	}
+	return m_uAxisTime.getDuration();
+}
+
+unsigned int Param::GetUnsignedInt()
+{
+	if (m_Type == XSD_UNSIGNEDINT){}
+	else if (m_Type == XSD_UNKNOWN)
+	{
+		//this situation comes when the soap does not contain the type of a parameter
+		//but the wrapper class method knows exactly what the type of this parameter is.
+		//then the deserializer must have put the value as a string and type as XSD_UNKNOWN.
+		//so convert the m_sValue in to an int and change the types etc
+		m_Type = XSD_UNSIGNEDINT;
+		SetValue(m_sValue.c_str());
+	}
+	else
+	{
+		//exception
+	}
+	return m_Value.unValue;
+}
+
+short Param::GetShort()
+{
+	if (m_Type == XSD_SHORT){}
+	else if (m_Type == XSD_UNKNOWN)
+	{
+		//this situation comes when the soap does not contain the type of a parameter
+		//but the wrapper class method knows exactly what the type of this parameter is.
+		//then the deserializer must have put the value as a string and type as XSD_UNKNOWN.
+		//so convert the m_sValue in to an int and change the types etc
+		m_Type = XSD_SHORT;
+		SetValue(m_sValue.c_str());
+	}
+	else
+	{
+		//exception
+	}
+	return m_Value.sValue;
+}
+
+unsigned short Param::GetUnsignedShort()
+{
+	if (m_Type == XSD_UNSIGNEDSHORT){}
+	else if (m_Type == XSD_UNKNOWN)
+	{
+		//this situation comes when the soap does not contain the type of a parameter
+		//but the wrapper class method knows exactly what the type of this parameter is.
+		//then the deserializer must have put the value as a string and type as XSD_UNKNOWN.
+		//so convert the m_sValue in to an int and change the types etc
+		m_Type = XSD_UNSIGNEDSHORT;
+		SetValue(m_sValue.c_str());
+	}
+	else
+	{
+		//exception
+	}
+	return m_Value.usValue;
+}
+
+char Param::GetByte()
+{
+	if (m_Type == XSD_BYTE){}
+	else if (m_Type == XSD_UNKNOWN)
+	{
+		//this situation comes when the soap does not contain the type of a parameter
+		//but the wrapper class method knows exactly what the type of this parameter is.
+		//then the deserializer must have put the value as a string and type as XSD_UNKNOWN.
+		//so convert the m_sValue in to an int and change the types etc
+		m_Type = XSD_BYTE;
+		SetValue(m_sValue.c_str());
+	}
+	else
+	{
+		//exception
+	}
+	return m_Value.cValue;
+}
+
+unsigned char Param::GetUnsignedByte()
+{
+	if (m_Type == XSD_UNSIGNEDBYTE){}
+	else if (m_Type == XSD_UNKNOWN)
+	{
+		//this situation comes when the soap does not contain the type of a parameter
+		//but the wrapper class method knows exactly what the type of this parameter is.
+		//then the deserializer must have put the value as a string and type as XSD_UNKNOWN.
+		//so convert the m_sValue in to an int and change the types etc
+		m_Type = XSD_UNSIGNEDBYTE;
+		SetValue(m_sValue.c_str());
+	}
+	else
+	{
+		//exception
+	}
+	return m_Value.ucValue;
+}
+
+long Param::GetLong()
+{
+	if (m_Type == XSD_LONG){}
+	else if (m_Type == XSD_UNKNOWN)
+	{
+		//this situation comes when the soap does not contain the type of a parameter
+		//but the wrapper class method knows exactly what the type of this parameter is.
+		//then the deserializer must have put the value as a string and type as XSD_UNKNOWN.
+		//so convert the m_sValue in to an int and change the types etc
+		m_Type = XSD_LONG;
+		SetValue(m_sValue.c_str());
+	}
+	else
+	{
+		//exception
+	}
+	return m_Value.lValue;
+}
+
+long Param::GetInteger()
+{
+	if (m_Type == XSD_INTEGER){}
+	else if (m_Type == XSD_UNKNOWN)
+	{
+		//this situation comes when the soap does not contain the type of a parameter
+		//but the wrapper class method knows exactly what the type of this parameter is.
+		//then the deserializer must have put the value as a string and type as XSD_UNKNOWN.
+		//so convert the m_sValue in to an int and change the types etc
+		m_Type = XSD_INTEGER;
+		SetValue(m_sValue.c_str());
+	}
+	else
+	{
+		//exception
+	}
+	return m_Value.lValue;
+}
+
+unsigned long Param::GetUnsignedLong()
+{
+	if (m_Type == XSD_UNSIGNEDLONG){}
+	else if (m_Type == XSD_UNKNOWN)
+	{
+		//this situation comes when the soap does not contain the type of a parameter
+		//but the wrapper class method knows exactly what the type of this parameter is.
+		//then the deserializer must have put the value as a string and type as XSD_UNKNOWN.
+		//so convert the m_sValue in to an int and change the types etc
+		m_Type = XSD_UNSIGNEDLONG;
+		SetValue(m_sValue.c_str());
+	}
+	else
+	{
+		//exception
+	}
+	return m_Value.ulValue;
+}
+
 float Param::GetFloat()
 {
 	if (m_Type == XSD_FLOAT){}
@@ -225,6 +572,36 @@ float Param::GetFloat()
 	return m_Value.fValue;
 }
 
+double Param::GetDouble()
+{
+	if (m_Type == XSD_DOUBLE){}
+	else if (m_Type == XSD_UNKNOWN)
+	{
+		m_Type = XSD_DOUBLE;
+		SetValue(m_sValue.c_str());
+	}
+	else
+	{
+		//exception
+	}
+	return m_Value.dValue;
+}
+
+double Param::GetDecimal()
+{
+	if (m_Type == XSD_DECIMAL){}
+	else if (m_Type == XSD_UNKNOWN)
+	{
+		m_Type = XSD_DECIMAL;
+		SetValue(m_sValue.c_str());
+	}
+	else
+	{
+		//exception
+	}
+	return m_Value.dValue;
+}
+
 XSDTYPE Param::GetType() const
 {
 	return m_Type;
@@ -235,11 +612,38 @@ int Param::serialize(IWrapperSoapSerializer& pSZ)
 	AxisString ATprefix;
 	switch (m_Type){
 	case XSD_INT:
-		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.nValue);
+        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.nValue);
+		break; 
+    case XSD_UNSIGNEDINT:
+        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.unValue);
+		break;           
+    case XSD_SHORT:
+        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.sValue);
+		break; 
+    case XSD_UNSIGNEDSHORT:
+        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.usValue);
+		break;         
+    case XSD_BYTE:
+        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.cValue);
+		break; 
+    case XSD_UNSIGNEDBYTE:
+        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.ucValue);
+		break;
+    case XSD_LONG:
+    case XSD_INTEGER:
+        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.lValue);
+		break;        
+    case XSD_UNSIGNEDLONG:
+        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.ulValue);
+
 		break;
 	case XSD_FLOAT:
 		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.fValue);
 		break;
+    case XSD_DOUBLE:
+    case XSD_DECIMAL:
+		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.dValue);
+		break;              
 	case XSD_STRING:
 		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_sValue.c_str());
 		break;
@@ -249,6 +653,14 @@ int Param::serialize(IWrapperSoapSerializer& pSZ)
 	case XSD_BASE64BINARY:
 		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_sValue.c_str(), XSD_BASE64BINARY);
 		break;
+	case XSD_DURATION:
+        pSZ << m_uAxisTime.serialize(m_sName, m_Value.lDuration).c_str();
+        break;
+    case XSD_DATETIME:
+    case XSD_DATE:
+    case XSD_TIME:
+            pSZ << m_uAxisTime.serialize(m_sName, m_Value.tValue).c_str();            
+        break;        
 	case XSD_ARRAY:
 		//pSZ << "<abc:ArrayOfPhoneNumbers xmlns:abc="http://example.org/2001/06/numbers"
 		//				xmlns:enc="http://www.w3.org/2001/06/soap-encoding" 
@@ -321,16 +733,48 @@ int Param::SetValue(const AxisChar* sValue)
 	switch (m_Type)
 	{
 	case XSD_INT:
-		m_Value.nValue = wcstol(sValue, &endptr, 10);
+        m_Value.nValue = wcstol(sValue, &endptr, 10);
 		break;
+    case XSD_UNSIGNEDINT:
+        m_Value.nValue = wcstol(sValue, &endptr, 10);
+		break;
+    case XSD_SHORT:
+        m_Value.sValue = wcstol(sValue, &endptr, 10);
+		break;
+    case XSD_UNSIGNEDSHORT:
+        m_Value.usValue = wcstol(sValue, &endptr, 10);
+		break;
+    case XSD_BYTE:
+        m_Value.cValue = wcstol(sValue, &endptr, 10);
+		break;
+    case XSD_UNSIGNEDBYTE:
+		m_Value.ucValue = wcstol(sValue, &endptr, 10);
+		break;              
+    case XSD_LONG:
+    case XSD_INTEGER:
+        m_Value.lValue = wcstol(sValue, &endptr, 10);
+		break;                
+    case XSD_UNSIGNEDLONG:
+		m_Value.ulValue = wcstol(sValue, &endptr, 10);
+		break;        
 	case XSD_FLOAT:
 		m_Value.fValue = wcstod(sValue, &endptr);
 		break;
+    case XSD_DOUBLE:
+    case XSD_DECIMAL:
+		m_Value.dValue = wcstod(sValue, &endptr);
+		break;        
 	case XSD_STRING:
 	case XSD_HEXBINARY:
 	case XSD_BASE64BINARY:
 		m_sValue = sValue;
 		break;
+    case XSD_DURATION:
+    case XSD_DATETIME:
+    case XSD_DATE:
+    case XSD_TIME:
+		m_uAxisTime.setValue(sValue);
+		break;        
 	//Continue this for all basic types
 	case XSD_ARRAY:
 	case USER_TYPE:
@@ -348,16 +792,49 @@ int Param::SetValue(XSDTYPE nType, uParamValue Value)
 	switch (m_Type)
 	{
 	case XSD_INT:
-		m_Value.nValue = Value.nValue;
+        m_Value.nValue = Value.nValue;
+		break;
+	case XSD_UNSIGNEDINT:
+        m_Value.unValue = Value.unValue;
+		break;
+    case XSD_SHORT:
+        m_Value.sValue = Value.sValue;
+		break;
+	case XSD_UNSIGNEDSHORT:
+        m_Value.usValue = Value.usValue;
+		break;
+    case XSD_BYTE:
+        m_Value.cValue = Value.cValue;
+		break;
+	case XSD_UNSIGNEDBYTE:
+        m_Value.ucValue = Value.ucValue;
+		break;
+    case XSD_LONG:
+    case XSD_INTEGER:
+        m_Value.lValue = Value.lValue;
+		break;
+	case XSD_UNSIGNEDLONG:
+        m_Value.ulValue = Value.ulValue;
 		break;
 	case XSD_FLOAT:
-		m_Value.fValue = Value.fValue;
+        m_Value.fValue = Value.fValue;
 		break;
+    case XSD_DOUBLE:
+    case XSD_DECIMAL:
+		m_Value.dValue = Value.dValue;
+		break;        
 	case XSD_STRING:
 	case XSD_HEXBINARY:
 	case XSD_BASE64BINARY:
 		m_sValue = Value.pStrValue;
 		break;
+  case XSD_DURATION:
+        m_Value.lDuration = Value.lDuration;
+    case XSD_DATETIME:
+    case XSD_DATE:
+    case XSD_TIME:
+        m_Value.tValue = Value.tValue;
+        m_uAxisTime.setValue(nType, m_Value);
 	//Continue this for all basic types
 	case XSD_ARRAY:
 		m_Value.pArray = Value.pArray;

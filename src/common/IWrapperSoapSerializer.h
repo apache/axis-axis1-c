@@ -89,8 +89,17 @@ public:
 	virtual IArrayBean* makeArrayBean(void* pObject, void* pSZFunct, void* pDelFunct, void* pSizeFunct)=0;
 public: //Basic Type Serializing methods
 	virtual const AxisChar* SerializeBasicType(const AxisChar* sName, const AxisChar* sValue, XSDTYPE type=XSD_STRING)=0;
-	virtual const AxisChar* SerializeBasicType(const AxisChar* sName, float fValue)=0;
-	virtual const AxisChar* SerializeBasicType(const AxisChar* sName, int nValue)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, struct tm tValue)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, int nValue)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned int unValue)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, short sValue)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned short usValue)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, char cValue)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned char ucValue)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, long lValue, XSDTYPE type=XSD_LONG)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned long ulValue)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, float fValue)=0;
+    virtual const AxisChar* SerializeBasicType(const AxisChar* sName, double dValue, XSDTYPE type=XSD_DOUBLE)=0;
 };
 
 #endif // !defined(AFX_IWRAPPERSOAPSERIALIZER_H__D3E794EC_8A67_4E0E_BE28_583DCDCE1C42__INCLUDED_)

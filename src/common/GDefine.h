@@ -72,7 +72,13 @@ typedef enum { APTHTTP=1, APTFTP, APTSMTP, APTOTHER } AXIS_PROTOCOL_TYPE;
 
 #define SOAPACTIONHEADER "SOAPAction"
 #define AxisChar wchar_t //Wide charactor used in Axis
-#define AxisString wstring //Wide string used in Axis 
+#define AxisString wstring //Wide string used in Axis
+
+#ifdef WIN32
+    #define AxisSprintf(X, Y, Z, W) swprintf(X, Z, W)        
+#else //linux
+    #define AxisSprintf(X, Y, Z, W) swprintf(X, Y, Z, W) 
+#endif
 
 extern void Ax_Sleep(int);
 extern void ModuleInitialize();

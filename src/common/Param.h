@@ -71,6 +71,7 @@
 
 #include "IParam.h"
 #include "BasicTypeSerializer.h"
+#include "AxisTime.h"
 
 #include <string>
 using namespace std;
@@ -84,11 +85,21 @@ class Param : public IParam
 	friend class XMLStreamHandler;
 public:
 	Param(){ m_Type = USER_TYPE;}; //if there is no attribute that says the type
+
+    Param(time_t time);
+    Param(struct tm timeStruct);
 	Param(const Param& param);
 	Param(const AxisChar* str, XSDTYPE type = XSD_STRING);
 	Param(int nValue);
+    Param(unsigned int unValue);   
+    Param(short sValue);
+    Param(unsigned short usValue);
+    Param(char cValue);
+    Param(unsigned char ucValue);
+    Param(long lValue, XSDTYPE type=XSD_LONG);
+    Param(unsigned long ulValue);
 	Param(float fValue);
-	Param(double dValue);
+	Param(double dValue, XSDTYPE type=XSD_DOUBLE);
 	virtual ~Param();
 	void operator=(const Param &param);
 
@@ -110,7 +121,23 @@ public: //Conversion functions
 
 	//Following functions are used by wrapper class methods making sure of the valid type.
 	int GetInt();
+    unsigned int GetUnsignedInt();    
+    short GetShort();
+    unsigned short GetUnsignedShort();
+    char GetByte();
+    unsigned char GetUnsignedByte();
+    long GetLong();
+    long GetInteger();
+    unsigned long GetUnsignedLong();
 	float GetFloat();
+    double GetDouble();
+    double GetDecimal();
+    const AxisString& GetAnyURI();
+    const AxisString& GetQName();
+    struct tm GetDateTime();
+    struct tm GetDate();
+    struct tm GetTime();
+    long GetDuration();
 	const AxisString& GetString();
 	const AxisString& GetHexString();
 	const AxisString& GetBase64String();
@@ -124,6 +151,8 @@ public: //Conversion functions
 	void SetName(const AxisChar* sName);
 private:
 	BasicTypeSerializer m_BTSZ;
+    AxisTime m_uAxisTime;
+    //uDuration duration;
 };
 
 #endif // !defined(AFX_PARAM_H__351B13BB_5D03_40C5_93F5_56D17295A8BD__INCLUDED_)
