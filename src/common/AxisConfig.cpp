@@ -64,6 +64,10 @@ AxisConfig::AxisConfig ()
 #else
 	m_pcValueArray[AXCONF_XMLPARSER] = "/usr/local/Axis/libs/libaxis_xmlparser.so";
 	m_pcValueArray[AXCONF_TRANSPORTHTTP] = "/usr/local/Axis/libs/libaxis_transport.so";
+        m_pcValueArray[AXCONF_LOGPATH] = "/usr/local/Axis/logs/AxisLog";
+        m_pcValueArray[AXCONF_CLIENTLOGPATH] = "/usr/local/Axis/logs/AxisClientLog";
+        m_pcValueArray[AXCONF_WSDDFILEPATH] = "/usr/local/Axis/conf/server.wsdd";
+        m_pcValueArray[AXCONF_CLIENTWSDDFILEPATH] = "/usr/local/Axis/conf/client.wsdd";
 #endif
 #endif
 
