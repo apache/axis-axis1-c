@@ -38,33 +38,34 @@ AxisTrace::AxisTrace ()
 
 AxisTrace::~AxisTrace ()
 {
-    fclose (fileTrace);
 }
 
 int AxisTrace::openFile ()
 {
     char* sFileName = g_pConfig->getAxisLogPath ();
-    if ((fileTrace = fopen (sFileName, "a")) == NULL)
-        return AXIS_FAIL;
-    fclose (fileTrace);
+    //if ((fileTrace = fopen (sFileName, "a")) == NULL)
+    //    return AXIS_FAIL;
+    //fclose (fileTrace);
     setFilePerm(sFileName);
-    if ((fileTrace = fopen (sFileName, "a")) == NULL)
-        return AXIS_FAIL;
-                                                                                                                             
+    //if ((fileTrace = fopen (sFileName, "a")) == NULL)
+    //    return AXIS_FAIL;
+    if(AXIS_FAIL == fileTrace.fileOpen(sFileName, "a"))
+        return AXIS_FAIL;                                                                                                    
     return AXIS_SUCCESS;
 }
 
 int AxisTrace::openFileByClient ()
 {
     char* sFileName = g_pConfig->getAxisClientLogPath ();
-    if ((fileTrace = fopen (sFileName, "a")) == NULL)
-        return AXIS_FAIL;
-    fclose (fileTrace);
+    //if ((fileTrace = fopen (sFileName, "a")) == NULL)
+    //    return AXIS_FAIL;
+    //fclose (fileTrace);
     setFilePerm(sFileName);
-                                                                                                                             
-    if ((fileTrace = fopen (sFileName, "a")) == NULL)
+    //if ((fileTrace = fopen (sFileName, "a")) == NULL)
+    //    return AXIS_FAIL; 
+    if(AXIS_FAIL == fileTrace.fileOpen(sFileName, "a"))
         return AXIS_FAIL;
-                                                                                                                             
+
     return AXIS_SUCCESS;
 }
 
@@ -94,26 +95,27 @@ int AxisTrace::logthis (const char* sLog, int level, char* arg2, int arg3)
     time_t ltime;
     time (&ltime);
 
-    fputs ("Severity Level : ", fileTrace);
+    //fputs ("Severity Level : ", fileTrace);
+    fileTrace.filePuts("Severity Level : ");
 
     switch (level)
     {
         case 1:
-            strLevel = "CRITICAL";
+            pcLevel = "CRITICAL";
             break;
         case 2:
-            strLevel = "WARN";
+            pcLevel = "WARN";
             break;
         case 3:
-            strLevel = "INFO";
+            pcLevel = "INFO";
             break;
         case 4:
-            strLevel = "TRIVIAL";
+            pcLevel = "TRIVIAL";
             break;
     }
 
-    fputs (strLevel, fileTrace);
-    fputs ("\n", fileTrace);
+    fileTrace.filePuts(pcLevel);
+    /*fputs ("\n", fileTrace);
 
     fputs ("time : ", fileTrace);
     fputs (ctime (&ltime), fileTrace);
@@ -126,6 +128,24 @@ int AxisTrace::logthis (const char* sLog, int level, char* arg2, int arg3)
     fputs ("\n", fileTrace);
     fputs (sLog, fileTrace);
     fputs (":", fileTrace);
+*/
+
+
+
+    fileTrace.filePuts ("\n");
+
+    fileTrace.filePuts ("time : ");
+    fileTrace.filePuts (ctime (&ltime));
+    fileTrace.filePuts ("file : ");
+    fileTrace.filePuts (arg2);
+    fileTrace.filePuts ("\n");
+    fileTrace.filePuts ("line : ");
+    sprintf (strLine, "%d", arg3);
+    fileTrace.filePuts (strLine);
+    fileTrace.filePuts ("\n");
+    fileTrace.filePuts (sLog);
+    fileTrace.filePuts (":");
+
 
     return AXIS_SUCCESS;
 
@@ -134,11 +154,16 @@ int AxisTrace::logaxis (const char* sLog, int level, char* arg2, int arg3)
 {
     
     int intResult = logthis(sLog, level, arg2, arg3);
-    fputs ("\n", fileTrace);
+   /* fputs ("\n", fileTrace);
     fputs ("-------------------------------------------------", fileTrace);
     fputs ("\n", fileTrace);
 
-    fflush (fileTrace);
+    fflush (fileTrace);*/
+    fileTrace.filePuts ("\n");
+    fileTrace.filePuts ("-------------------------------------------------");
+    fileTrace.filePuts ("\n");
+
+    fileTrace.fileFlush ();
 
     return AXIS_SUCCESS;
 }
@@ -149,12 +174,18 @@ int AxisTrace::logaxis (const char* sLog1, const char* sLog2, int level,
     int intResult = logthis(sLog1, level, arg3, arg4);
     if(AXIS_SUCCESS == intResult)
     {
-        fputs (sLog2, fileTrace);
+        /*fputs (sLog2, fileTrace);
         fputs ("\n", fileTrace);
         fputs ("-------------------------------------------------", fileTrace);
         fputs ("\n", fileTrace);
 
-        fflush (fileTrace);
+        fflush (fileTrace);*/
+        fileTrace.filePuts (sLog2);
+        fileTrace.filePuts ("\n");
+        fileTrace.filePuts ("-------------------------------------------------");
+        fileTrace.filePuts ("\n");
+
+        fileTrace.fileFlush ();
 
         return AXIS_SUCCESS;
     }
@@ -170,12 +201,18 @@ int AxisTrace::logaxis (const char* sLog1, const long nLog2, int level,
     if(AXIS_SUCCESS == intResult)
     {
 	sprintf(convToLong, "%d", nLog2);
-        fputs (convToLong, fileTrace);
+        /*fputs (convToLong, fileTrace);
         fputs ("\n", fileTrace);
         fputs ("-------------------------------------------------", fileTrace);
         fputs ("\n", fileTrace);
 
-        fflush (fileTrace);
+        fflush (fileTrace);*/
+        fileTrace.filePuts (convToLong);
+        fileTrace.filePuts ("\n");
+        fileTrace.filePuts ("-------------------------------------------------");
+        fileTrace.filePuts ("\n");
+
+        fileTrace.fileFlush ();
 
         return AXIS_SUCCESS;
     }
@@ -191,12 +228,18 @@ int AxisTrace::logaxis (const char* sLog1, const double dLog2, int level,
     if(AXIS_SUCCESS == intResult)
     {
 	sprintf(convToDouble, "%f", dLog2);
-        fputs (convToDouble, fileTrace);
+        /*fputs (convToDouble, fileTrace);
         fputs ("\n", fileTrace);
         fputs ("-------------------------------------------------", fileTrace);
         fputs ("\n", fileTrace);
 
-        fflush (fileTrace);
+        fflush (fileTrace);*/
+        fileTrace.filePuts (convToDouble);
+        fileTrace.filePuts ("\n");
+        fileTrace.filePuts ("-------------------------------------------------");
+        fileTrace.filePuts ("\n");
+
+        fileTrace.fileFlush ();
 
         return AXIS_SUCCESS;
     }

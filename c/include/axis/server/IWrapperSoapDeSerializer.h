@@ -50,7 +50,8 @@ typedef struct {
     
     /* Methods used by wrappers to get a deserialized value of basic types */
     int (AXISCALL* getElementAsInt)(void* pObj, const AxisChar* pName, 
-        const AxisChar* pNamespace);
+        const AxisChar* pNamespace, int& iResult);
+    int (AXISCALL* getFaultDetail)(void* pObj, char** ppcDetail);
     xsd__boolean (AXISCALL* getElementAsBoolean)(void* pObj, 
         const AxisChar* pName, const AxisChar* pNamespace);
     unsigned int (AXISCALL* getElementAsUnsignedInt)(void* pObj, 
@@ -180,7 +181,8 @@ public:
     
     /* Methods used by wrappers to get a deserialized value of basic types */
     virtual int AXISCALL getElementAsInt(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+        const AxisChar* pNamespace, int& iResult)=0;
+    virtual int AXISCALL getFaultDetail(char** ppcDetail) = 0;
     virtual xsd__boolean AXISCALL getElementAsBoolean(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
     virtual unsigned int AXISCALL getElementAsUnsignedInt(const AxisChar* 
@@ -303,9 +305,11 @@ public:
     {return ((IWrapperSoapDeSerializer*)pObj)->getCmplxObject(pDZFunct, 
     pCreFunct, pDelFunct, pName, pNamespace);};
     static int AXISCALL s_GetElementAsInt(void* pObj, const AxisChar* pName, 
-        const AxisChar* pNamespace)
+        const AxisChar* pNamespace, int& iResult)
     { return ((IWrapperSoapDeSerializer*)pObj)->getElementAsInt(pName, 
-    pNamespace);};
+    pNamespace, iResult);};
+    static int AXISCALL s_GetFaultDetail(void* pObj, char** ppcDetail)
+    { return ((IWrapperSoapDeSerializer*)pObj)->getFaultDetail(ppcDetail);};
     static xsd__boolean AXISCALL s_GetElementAsBoolean(void* pObj, const 
         AxisChar* pName, const AxisChar* pNamespace)
     { return ((IWrapperSoapDeSerializer*)pObj)->getElementAsBoolean(pName, 
@@ -487,6 +491,7 @@ public:
         ms_VFtable.getBasicArray = s_GetBasicArray;
         ms_VFtable.getCmplxObject = s_GetCmplxObject;
         ms_VFtable.getElementAsInt = s_GetElementAsInt;
+        ms_VFtable.getFaultDetail = s_GetFaultDetail;
         ms_VFtable.getElementAsBoolean = s_GetElementAsBoolean;
         ms_VFtable.getElementAsUnsignedInt = s_GetElementAsUnsignedInt;
         ms_VFtable.getElementAsShort = s_GetElementAsShort;

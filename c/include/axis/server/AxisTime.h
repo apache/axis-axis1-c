@@ -35,7 +35,7 @@ typedef struct
 } uDuration;
 
 
-/*
+/**
  *  @class AxisTime
  *  @brief time manipulating helper class
  *

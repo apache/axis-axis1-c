@@ -115,6 +115,13 @@ extern "C" int process_request (Ax_soapstream* stream)
                     if (AXIS_SUCCESS == engine->initialize ())
                     {
                         Status = engine->process (stream);
+                        if(AXIS_SUCCESS != Status)
+                        {
+                            ServerAxisEngine* objTempServer = (ServerAxisEngine*) engine;
+                            objTempServer->setFaultOutputStream(Status, stream);
+                            objTempServer = NULL;
+                            Status = AXIS_SUCCESS;
+                        }
                     }
                     delete engine;
                 }

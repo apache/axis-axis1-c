@@ -23,11 +23,30 @@
 
 #include <string>
 #include <map>
-#include "SoapFaults.h"
+#include "AxisException.h"
 
 class SoapSerializer;
 
 using namespace std;
+    
+/**
+ *    The structure which is used as a container for soap faults.
+ */
+typedef struct
+{
+    const char* pcFaultcode;
+    const char* pcFaultstring;    
+    const char* pcFaultactor;
+    const char* pcFaultDetail;
+} SoapFaultStruct;
+
+/*
+ * This array of structure is used to store all the soap faults
+ * which are used in Axis C++. Each time a fault object is needed it is
+ * created using this array, in SoapFault class.
+ */
+static SoapFaultStruct s_arrSoapFaultStruct[FAULT_LAST];
+
 /*
  *  @class SoapFault
  *  @brief interface for the SoapFault class.
@@ -41,29 +60,35 @@ friend class SoapFaultsTestCase;
 
 public:
     SoapFault(string m_sFaultcode, string m_sFaultstring, 
-        string m_sFaultactor, string m_sDetail);
+    string m_sFaultactor, string m_sDetail);
     bool operator ==(const SoapFault &objSoapFault);
     static SoapFault* getSoapFault(int);
     static void initialize();
     const char* getSoapString();    
     int serialize(SoapSerializer& pSZ);    
+    //void setSoapFaultactor(string sFaultactor);
+    //void setSoapDetail(string sFaultDetail);
     /* int serialize(string&); */
     virtual ~SoapFault();
+    void setFaultDetail(const string& sDetail);
+    void setFaultactor(const string& sFaultactor);
+    string getFaultcode();
+    string getFaultstring();
+    string getFaultactor();
+    string getFaultDetail();
+    /*void setFaultstring(const string& sFaultstring);*/
+    /*void setFaultcode(const string& sFaultcode);*/ 
+
 private:
     SoapFault();
     /* string m_sFaultSerialized; */
-    string m_sDetail;
+    string m_sFaultDetail;
     string m_sFaultactor;
     string m_sFaultstring;
     string m_sFaultcode;
     static map<int, SoapFaultStruct> m_sFaultMap;
     static volatile bool m_bInit;
-    /* int setDetail(const string& sDetail); */
-    /* int setFaultactor(const string& sFaultactor); */
-    /* int setFaultstring(const string& sFaultstring); */
-    /* int setFaultcode(const string& sFaultcode); */
 };
 
 #endif 
-
 

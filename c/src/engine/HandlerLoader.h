@@ -48,7 +48,7 @@ typedef int (* DELETE_OBJECT) (BasicHandler* inst);
 #endif
 
 //status codes
-#define HANDLER_INIT_FAIL	1
+/*#define HANDLER_INIT_FAIL	1
 #define CREATION_FAILED		2
 #define LOADLIBRARY_FAILED	3
 #define LIBRARY_PATH_EMPTY	4
@@ -57,6 +57,7 @@ typedef int (* DELETE_OBJECT) (BasicHandler* inst);
 #define GET_HANDLER_FAILED	7
 #define WRONG_HANDLER_TYPE	8
 #define NO_HANDLERS_CONFIGURED	9
+*/
 /*
  *   @class HandlerLoader
  *   @brief
