@@ -108,6 +108,7 @@ void AxisClientException::processException (ISoapFault* pFault)
                 m_sMessage += "\n";
 
                 m_sMessage += pFaultDetail->varString;
+                delete [] carrTempBuff;
             }
         }
 }
