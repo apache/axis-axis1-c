@@ -238,6 +238,14 @@ SOURCE=..\src\xml\Element.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\ENTITIES.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\ENTITY.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\xml\Event.cpp
 # End Source File
 # Begin Source File
@@ -282,11 +290,27 @@ SOURCE=..\src\soap\xsd\constraints\IConstrainingFacet.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\ID.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\IDREF.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\IDREFS.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\xsd\Int.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\soap\xsd\Integer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\Language.cpp
 # End Source File
 # Begin Source File
 
@@ -326,11 +350,27 @@ SOURCE=..\src\soap\xsd\constraints\MinLength.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\Name.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\Namespace.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\NCName.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\xsd\NegativeInteger.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\NMTOKEN.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\NMTOKENS.cpp
 # End Source File
 # Begin Source File
 

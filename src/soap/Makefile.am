@@ -39,6 +39,16 @@ libsoap_la_SOURCES = Attribute.cpp \
         xsd/String.cpp \
         xsd/NormalizedString.cpp \
         xsd/Token.cpp \
+        xsd/Language.cpp \
+        xsd/Name.cpp \
+        xsd/NCName.cpp \
+        xsd/ID.cpp \
+        xsd/IDREF.cpp \
+        xsd/IDREFS.cpp \
+        xsd/ENTITY.cpp \
+        xsd/ENTITIES.cpp \
+        xsd/NMTOKEN.cpp \
+        xsd/NMTOKENS.cpp \
         xsd/Time.cpp \
         xsd/XSD_QName.cpp \
         xsd/Short.cpp \
