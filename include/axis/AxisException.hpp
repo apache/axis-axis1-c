@@ -50,7 +50,7 @@ using namespace std;
 #define CONFIG_FAULT_OFFSET		0x6000
 #define AXISC_FAULT_OFFSET		0x7000
 
-enum AXISC_EXCEPTIONS 
+typedef enum 
 {
     /*The notation used for naming these exceptions is as follows
      *CLIENT at the beginning means when this interpreted as a soap fault
@@ -157,7 +157,7 @@ enum AXISC_EXCEPTIONS
      * code.
      */
 /*72*/    FAULT_LAST 
-};
+} AXISC_EXCEPTIONS;
 
 /**
  *   @class AxisException

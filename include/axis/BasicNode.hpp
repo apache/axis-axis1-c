@@ -32,7 +32,7 @@ AXIS_CPP_NAMESPACE_START
 
 class SoapSerializer;
 
-enum NODE_TYPE { ELEMENT_NODE=1, CHARACTER_NODE};
+typedef enum { ELEMENT_NODE=1, CHARACTER_NODE} NODE_TYPE;
 
 /*
  * @class BasicNode

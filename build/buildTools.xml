@@ -16,12 +16,16 @@
 		</jar>
 	</target>
 	
-	<target name="runTraceTool">
-		<path id ="cp">
+	<!--
+	  Compile, package and run the trace tool
+	  -->
+	<target name="addTrace" depends="buildTools"
+	  description="Run the trace tool">
+		<path id ="tracecp">
 			<fileset dir="${dir.classes}" includes="buildtools.jar"/>
 		</path>
 		<java classname="org.apache.axis.tools.trace.TraceInstrumentor" fork="true">
-                  <classpath refid="cp"/>
+                  <classpath refid="tracecp"/>
 			<arg value="-config"/>
 			<arg value="${dir.tools}/org/apache/axis/tools/trace/tracetool.conf"/>
 			<arg value="-include"/>
@@ -36,9 +40,22 @@
       </target>
 
 	<!--
-	  Compile, package and run the trace tool
+	  Compile, package and run the C binding generator
 	  -->
-	<target name="addTrace" depends="buildTools, runTraceTool"
-	  description="Compile, jar and run the trace tool"/>
+	<target name="generateCBindings" depends="buildTools"
+	  description="Run the C binding generator tool">
+		<path id ="cbindcp">
+			<fileset dir="${dir.classes}" includes="buildtools.jar"/>
+		</path>
+		<java classname="org.apache.axis.tools.cbindings.CBindingGenerator" fork="true">
+                  <classpath refid="cbindcp"/>
+			<arg value="-config"/>
+			<arg value="${dir.tools}/org/apache/axis/tools/cbindings/cbindinggenerator.conf"/>
+			<arg value="-source"/>
+			<arg value="${dir.include}"/>
+			<arg value="-target"/>
+			<arg value="${dir.obj}/include"/>
+		</java>
+      </target>
 
 </project>
