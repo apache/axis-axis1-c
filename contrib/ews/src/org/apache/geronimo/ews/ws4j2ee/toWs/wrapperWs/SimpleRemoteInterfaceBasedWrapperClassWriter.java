@@ -77,6 +77,9 @@ public abstract class SimpleRemoteInterfaceBasedWrapperClassWriter extends Wrapp
     
 	protected abstract String getJNDIInitialContextFactory();
 	protected abstract String getJNDIHostAndPort();
+	protected String getimplementsPart() {
+			return " implements org.apache.geronimo.ews.ws4j2ee.wsutils.ContextAccssible";
+		}
 	
 	protected void writeMethods() throws GenerationFault {
 		
@@ -115,7 +118,7 @@ public abstract class SimpleRemoteInterfaceBasedWrapperClassWriter extends Wrapp
 			 out.write(") throws java.rmi.RemoteException");
 			 ArrayList faults = op.getFaults();
 			 for(int j = 0;j<faults.size();j++){
-				 out.write(","+(String)faults.get(i));
+				 out.write(","+(String)faults.get(j));
 			 }
 			 out.write("{\n");
 			 out.write("\t\tif(ejb ==  null)\n");
