@@ -68,7 +68,7 @@ extern "C"
     STORAGE_CLASS_INFO void initializeLibrary (AxisTraceEntrypoints& ep)
     {
         // Do init actions
-        AxisTrace::setTraceEntrypoints(ep);
+        //AxisTrace::setTraceEntrypoints(ep);
     }
 
     /*  uninitializeLibrary() Is a C interface.

@@ -30,7 +30,6 @@
 #include "HTTPTransport.hpp"
 
 // Instanciate functions for HTTPTransport instances.
-
 extern "C"
 {
     // CreateInstance() Is a C interface.
@@ -59,7 +58,7 @@ extern "C"
     STORAGE_CLASS_INFO void initializeLibrary (AxisTraceEntrypoints& ep)
     {
         // Do init actions
-        AxisTrace::setTraceEntrypoints(ep);
+        //AxisTrace::setTraceEntrypoints(ep);
     }
 
     //  uninitializeLibrary() Is a C interface.
