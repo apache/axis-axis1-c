@@ -67,6 +67,10 @@ import javax.xml.messaging.URLEndpoint;
 import javax.xml.namespace.QName;
 import javax.xml.rpc.ParameterMode;
 
+import org.apache.axis.AxisFault;
+import org.apache.axis.enum.Style;
+import org.apache.axis.enum.Use;
+import org.apache.axis.soap.SOAPConstants;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InParameter;
 import org.apache.axismora.encoding.OutParameter;
@@ -79,10 +83,6 @@ import org.apache.axismora.wrappers.simpleType.FloatParam;
 import org.apache.axismora.wrappers.simpleType.IntParam;
 import org.apache.axismora.wrappers.simpleType.ShortParam;
 import org.apache.axismora.wrappers.simpleType.StringParam;
-
-import org.apache.axis.AxisFault;
-import org.apache.axis.enum.Style;
-import org.apache.axis.soap.SOAPConstants;
 
 /**
  * This calss implements the JAX-RPC  call interace. There are few methods we do 
@@ -110,9 +110,11 @@ public class Call implements javax.xml.rpc.Call {
     private String username;
     /* if authentication used the passwd */
     private char[] passwd;
-
+    /*style of the web service*/ 
     private Style style;
-
+    /*specifies whether literal or encoded*/
+    private Use use;
+     
     private SOAPConstants constants = SOAPConstants.SOAP12_CONSTANTS;
 
     private String encoding;
@@ -308,9 +310,11 @@ public class Call implements javax.xml.rpc.Call {
                     this.soapAction,
                     constants);
 
+
             ClientRequestContext reqContext =
                 new ClientRequestContext(sender, soapAction, 
                 			methodName, inInfo, style, encoding);
+                			
             return this.engine.processClient(reqContext);
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -422,4 +426,20 @@ public class Call implements javax.xml.rpc.Call {
      */
     public void setStyle(Style st) {
         style=st;
-    }}
+    }    
+    
+    /**
+     * @return
+     */
+    public Use getUse() {
+        return use;
+    }
+
+    /**
+     * @param use
+     */
+    public void setUse(Use use) {
+        this.use = use;
+    }
+
+}
