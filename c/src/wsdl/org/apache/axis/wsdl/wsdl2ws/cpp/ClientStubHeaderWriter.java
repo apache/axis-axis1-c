@@ -192,5 +192,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 	{
 		return "ClientStub";	
 	}
+	
+	protected String getExtendsPart(){return " :public Stub";}
 }
 
