@@ -22,9 +22,11 @@
 #include "AxisTrace.h"
 #include <time.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include "AxisUtils.h"
 #include <axis/server/GDefine.h>
 #include "AxisConfig.h"
+#include <string>
 
 
 extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
@@ -249,6 +251,157 @@ void AxisTrace::traceLine(const char *data)
     m_fileTrace.filePuts(data);
     m_fileTrace.filePuts("\n");
     return;
+}
+
+void AxisTrace::traceEntry(const char *className, const char *methodName, void *that, int nParms, ...)
+{
+    if (!isTraceOn()) return;
+
+	try 
+	{
+		string line = "{ ";
+		if (NULL!=className) {
+			line += className;
+			if (NULL!=that) {
+				line += "(";
+				char prim[32];
+				sprintf(prim,"%p",that);
+				line += prim;
+				line += ")";
+			}
+			line += "::";
+		}
+
+		if (NULL!=methodName)
+			line += methodName;
+		line += "(";
+
+		va_list args;
+		va_start(args, nParms);
+		for (int i=0; i<nParms; i++) 
+		{
+			AxisTraceType type = va_arg(args, AxisTraceType);
+			unsigned len = va_arg(args, unsigned);
+			void *value = va_arg(args, void*);
+			if (0!=i) line += ", ";
+			addParameter(line,type,len,value);
+		}
+
+		line += ")";
+		traceLine(line.c_str());
+    } catch (...) {
+        traceLine("Unknown exception caught during trace entry");
+    }
+}
+
+void AxisTrace::traceExit(const char *className, const char *methodName, 
+						  AxisTraceType type, unsigned len, void *value)
+{
+    if (!isTraceOn()) return;
+
+	try 
+	{
+		string line = "} ";
+		if (NULL!=className) {
+			line += className;
+			line += "::";
+		}
+		if (NULL!=methodName) 
+			line += methodName;
+		line += "(";
+		if (TRACETYPE_UNKNOWN != type)
+			addParameter(line,type,len,value);
+		line += ")";
+		traceLine(line.c_str());
+    } catch (...) {
+        traceLine("Unknown exception caught during trace exit");
+    }
+}
+
+void AxisTrace::traceCatch(const char *className, const char *methodName, 
+						   AxisTraceType type, unsigned len, void *value)
+{
+    if (!isTraceOn()) return;
+
+	try 
+	{
+		string line;
+		if (NULL!=className) {
+			line += className;
+			line += "::";
+		}
+		if (NULL!=methodName) 
+			line += methodName;
+		line += " caught ";
+		if (TRACETYPE_UNKNOWN != type)
+			addParameter(line,type,len,value);
+		traceLine(line.c_str());
+    } catch (...) {
+        traceLine("Unknown exception caught during trace catch");
+    }
+}
+
+void AxisTrace::addParameter(string& line, AxisTraceType type, unsigned len, void *value)
+{
+	char prim[32]; // Plenty big enough to hold a primitive
+	switch (type) 
+	{
+	case TRACETYPE_CHAR:	sprintf(prim,"%c" ,*((char  *)value));	line += prim;	break;
+	case TRACETYPE_USHORT:	sprintf(prim,"%hu",*((short *)value));	line += prim;	break;
+	case TRACETYPE_SHORT:	sprintf(prim,"%hd",*((short *)value));	line += prim;	break;
+	case TRACETYPE_UINT:	sprintf(prim,"%u" ,*((int   *)value));	line += prim;	break;
+	case TRACETYPE_INT:		sprintf(prim,"%d" ,*((int   *)value));	line += prim;	break;
+	case TRACETYPE_ULONG:	sprintf(prim,"%lu",*((long  *)value));	line += prim;	break;
+	case TRACETYPE_LONG:	sprintf(prim,"%ld",*((long  *)value));	line += prim;	break;
+	case TRACETYPE_UDOUBLE:	sprintf(prim,"%Lu",*((double*)value));	line += prim;	break;
+	case TRACETYPE_DOUBLE:	sprintf(prim,"%Ld",*((double*)value));	line += prim;	break;
+	case TRACETYPE_FLOAT:	sprintf(prim,"%f" ,*((float *)value));	line += prim;	break;
+
+	/*
+	 * This code only prints out the first 32 bytes of storage pointed at by a 
+	 * pointer. This is to prevent huge blocks of atorage repeatedly being output
+	 * to the trace file. 32 bytes seems quite a low limit. Maybe this limit 
+	 * could be increased in the future. Large blocks of storage could be output
+	 * in a more human-friendly format.
+	 */
+	case TRACETYPE_POINTER:	
+		sprintf(prim,"%p ",value);	
+		line += prim;	
+		try {
+			char *pcValue = (char*)value;
+			line += "[";
+			for (int i=0; i<len && i<32; i++) {
+				int x = (int)(pcValue[i]);
+				sprintf(prim,"%2.2X",x);
+				line += prim;
+			}
+			line += "] <";
+			for (int j=0; j<len && j<32; j++) {
+				sprintf(prim,"%c",pcValue[j]);
+				line += prim;
+			}
+			line += ">";
+		} catch (...) {
+			line += "<BADPOINTER>";
+		}
+		break;
+
+	case TRACETYPE_STRING:	
+		try {
+			line += "\"";	
+			line += (char*)value;	
+			line += "\"";	
+		} catch (...) {
+			line += "<BADPOINTER>";
+		}
+		break;
+
+	default:
+		line += "<UNKNOWN TYPE";				
+		line += type;
+		line += ">";
+		break;
+	}
 }
 
 /*

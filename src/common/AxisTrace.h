@@ -25,6 +25,7 @@
 #define __AXISLOG_H_INCLUDED_
 
 #include "AxisFile.h"
+#include <string>
 
 #if defined(ENABLE_AXISTRACE)  
   #define AXISTRACE1(X, Y) g_pAT->logaxis(X,Y,__FILE__,__LINE__);
@@ -56,6 +57,22 @@ typedef enum
  */
 
 AXIS_CPP_NAMESPACE_START
+
+typedef enum {
+	TRACETYPE_UNKNOWN=0,
+	TRACETYPE_CHAR,
+	TRACETYPE_USHORT,
+	TRACETYPE_SHORT,
+	TRACETYPE_UINT,
+	TRACETYPE_INT,
+	TRACETYPE_ULONG,
+	TRACETYPE_LONG,
+	TRACETYPE_UDOUBLE,
+	TRACETYPE_DOUBLE,
+	TRACETYPE_FLOAT,
+	TRACETYPE_POINTER,
+	TRACETYPE_STRING
+} AxisTraceType;
 
 class AxisTrace
 {
@@ -179,6 +196,23 @@ public:
      */  
     void traceLine(const char *data);
 
+	/**
+	 * Traces the entry to a method.
+	 */
+	void traceEntry(const char *className, const char *methodName, void* that, int nParms, ...);
+
+	/**
+	 * Traces the exit to a method.
+	 */
+	void traceExit(const char *className, const char *methodName, 
+		AxisTraceType type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0);
+
+	/**
+	 * Traces something that has been caught
+	 */
+	void traceCatch(const char *className, const char *methodName, 
+		AxisTraceType type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0);
+
 private:
 	bool m_bLoggingOn;
     char m_acLine[4];
@@ -187,7 +221,7 @@ private:
 
     int setFilePerm(const char* pcFileName);
     int logthis(const char* pcLog, int level, char* arg2, int arg3);
-
+	void addParameter(std::string& line, AxisTraceType type, unsigned len, void *value);
 };
 
 /* static AxisTrace tracer; */
