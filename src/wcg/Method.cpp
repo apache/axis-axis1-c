@@ -186,7 +186,7 @@ int Method::GenerateMethodImpl(string& sClassName, File &file)
 	file << endl;
 	if (m_pReturnType->IsComplexType()) 
 	{
-		file << "\tIParam* pRetParam = pIWSSZ->setResponseParam(ret, (AXIS_SERIALIZE_FUNCT)Axis_Serialize_" <<
+		file << "\tIParam* pRetParam = pIWSSZ->AddOutputParam(ret, (AXIS_SERIALIZE_FUNCT)Axis_Serialize_" <<
 		m_pReturnType->GetTypeName() << ", (AXIS_OBJECT_DELETE_FUNCT)Axis_Delete_" << m_pReturnType->GetTypeName() << ");" << endl;		
 	}
 	else
@@ -198,7 +198,7 @@ int Method::GenerateMethodImpl(string& sClassName, File &file)
 			file << ".c_str()";
 		}
 		file <<	";" << endl;
-		file << "\tIParam* pRetParam = pIWSSZ->setResponseParam(" << m_pReturnType->GetTypeEnumStr() << ", value);" << endl;
+		file << "\tIParam* pRetParam = pIWSSZ->AddOutputParam(" << m_pReturnType->GetTypeEnumStr() << ", value);" << endl;
 	}
 	file << "\tpRetParam->SetName(\"" << m_Name << "Return\");" << endl;
 	file << "\treturn SUCCESS;" << endl; 

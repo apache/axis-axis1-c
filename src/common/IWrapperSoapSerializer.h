@@ -78,9 +78,9 @@ union uParamValue;
 class IWrapperSoapSerializer  : public virtual ISoapSerializer
 {
 public:	
-	virtual IParam* setResponseParam(XSDTYPE nType, uParamValue Value)=0;
-	virtual IParam* setResponseParam(IArrayBean* pArrayBean)=0;
-	virtual IParam* setResponseParam(void* pObject, void* pDZFunct, void* pDelFunct)=0;
+	virtual IParam* AddOutputParam(XSDTYPE nType, uParamValue Value)=0;
+	virtual IParam* AddOutputParam(IArrayBean* pArrayBean)=0;
+	virtual IParam* AddOutputParam(void* pObject, void* pDZFunct, void* pDelFunct)=0;
 	virtual ISoapMethod* createSoapMethod()=0;
 //	virtual IWrapperSoapSerializer& operator<<(const char *cSerialized)=0;
 	virtual IWrapperSoapSerializer& operator<<(const AxisChar* cSerialized)=0;
