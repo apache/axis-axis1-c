@@ -72,12 +72,49 @@
 using namespace std;
 
 /**
+ *	Create HTTP transport with provided URL as remote address,
+ *  set HTTP category default to POST
+ */
+HttpTransport::HttpTransport(Url url, bool secure) : m_Typ(POST)
+{
+    m_Url = url;
+    m_IsHttpHeader = 0;
+    m_HttpBindDone = false;
+    m_Secure = secure;
+
+    if(secure) {
+        m_Channel = new SecureChannel();
+    } else {
+        m_Channel = new Channel();
+    }
+}
+
+/**
+ *	Create HTTP transport with provided remote address as URL-string,
+ *  set HTTP category default to POST
+ */
+HttpTransport::HttpTransport(std::string& strUrl, bool secure) : m_Typ(POST)
+{
+    m_Url = Url(strUrl);
+    m_strUrl = strUrl;
+    m_IsHttpHeader = 0;
+    m_HttpBindDone = false;
+
+    if(secure) {
+        m_Channel = new SecureChannel();
+    } else {
+        m_Channel = new Channel();
+    }
+}
+
+/**
  *	Shutdown any established channel
  */
 
 HttpTransport::~HttpTransport()
 {
-	m_Channel.Close();
+	m_Channel->Close();
+    delete m_Channel;
 }
 
 /**
@@ -95,8 +132,8 @@ bool HttpTransport::Init()
 	{
 		m_bStatus = true;
 		std::string host = m_Url.GetHostName();
-		m_Channel.Open(host, m_Url.GetPort());
-		m_Channel.SetTransportHandler(this);
+		m_Channel->Open(host, m_Url.GetPort());
+		m_Channel->SetTransportHandler(this);
 #ifdef _DEBUG
         cout << "Transport:init() successfull" << endl;
 #endif
@@ -111,7 +148,7 @@ bool HttpTransport::Init()
 
 void HttpTransport::Fini()
 {
-	m_Channel.Close();
+	m_Channel->Close();
 }
 
 /**
@@ -149,19 +186,20 @@ const Transport& HttpTransport::operator >> (const char** pPayLoad)
   if(m_IsHttpHeader == 1)
   {
       //printf("m_IsHttpHeader == 1\n");
-      m_Channel >> m_PayLoad;
+      *m_Channel >> m_PayLoad;
       *pPayLoad = m_PayLoad.c_str();
       return *this;
   }
-  //printf("tmpPacket:%s\n", tmpPacket.c_str());
+  //printf("tmpPacket:%s\n", tmpPacket.c_str());  
+	//*m_Channel >> tmpPacket;
 
-#ifdef _DEBUG
-        std::cout << "\n\n\nGot the message:\r\n\r\n" << tmpPacket << "\n\n";
-#endif
+//#ifdef _DEBUG
+        //std::cout << "\n\n\nGot the message:\r\n\r\n" << tmpPacket << "\n\n";
+//#endif
     do //process will step into this only if http validation is not done. That is, until the stream
       //contain the httpd header.
     {
-        m_Channel >> tmpPacket;
+        *m_Channel >> tmpPacket;
 
         // Validate the HTTP packet
         if(m_IsHttpHeader == 1) //if header is validated but payload has zero length, process will steop into this.
@@ -202,7 +240,8 @@ const Transport& HttpTransport::operator << (const char* p_Payload)
 {
 	HTTPBind();	// Bind the SOAP-Envelop with HTTP headers
 	// Write to the established channel
-	m_Channel << p_Payload;
+	*m_Channel << p_Payload;
+    //*m_Channel << m_OutMsg.str();
 	return *this;
 }
 
@@ -228,8 +267,15 @@ void HttpTransport::HTTPBind()
 
 	unsigned short port = m_Url.GetPort();
 
-	if(port != HTTP_PORT)
+	if(!m_Secure && port != HTTP_PORT)
 	{
+		char buff[8];
+		sprintf(buff, "%u", port);
+		m_OutHttpHeaders += ":";
+		m_OutHttpHeaders += buff;
+	}
+    else if(m_Secure && port != HTTPS_PORT)
+    {
 		char buff[8];
 		sprintf(buff, "%u", port);
 		m_OutHttpHeaders += ":";
@@ -259,7 +305,7 @@ void HttpTransport::HTTPBind()
 	}
 
 	m_OutHttpHeaders += "\r\n";
-	m_Channel << m_OutHttpHeaders.c_str();
+	*m_Channel << m_OutHttpHeaders.c_str();
 	m_HttpBindDone = true;
 }
 

@@ -61,11 +61,11 @@
 #include <axis/client/transport/axis/HttpTransport.hpp>
 
 
-Transport* TransportFactory::GetTransport(Url& url)
+Transport* TransportFactory::GetTransport(Url& url, bool secure)
 {
 	if(url.GetProtocol() == Url::http)
 	{
-		return new HttpTransport(url);
+		return new HttpTransport(url, secure);
 	}
 	else if(url.GetProtocol() == Url::https)
 	{

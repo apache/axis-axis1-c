@@ -153,6 +153,7 @@ bool Channel::Open(std::string& p_RemoteNode, unsigned short p_RemoteEnd) throw 
 		CloseChannel();
 		throw ChannelException("Cannot open a channel");
 	}
+    
 	return true;
 }
 
@@ -195,6 +196,7 @@ bool Channel::Init()
     //cout << "no need for linux" << endl;
 	// other OS specific Intitialization goes here
 #endif
+
 	return true;
 }
 
