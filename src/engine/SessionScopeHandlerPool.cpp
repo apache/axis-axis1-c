@@ -61,7 +61,9 @@
 // SessionScopeHandlerPool.cpp: implementation of the SessionScopeHandlerPool class.
 //
 //////////////////////////////////////////////////////////////////////
+#ifdef WIN32
 #pragma warning (disable : 4503)
+#endif
 
 #include "SessionScopeHandlerPool.h"
 #include "HandlerLoader.h"

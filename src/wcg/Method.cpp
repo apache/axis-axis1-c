@@ -63,7 +63,9 @@
 // Method.cpp: implementation of the Method class.
 //
 //////////////////////////////////////////////////////////////////////
+#ifdef WIN32
 #pragma warning (disable : 4786)
+#endif
 
 #include "Method.h"
 

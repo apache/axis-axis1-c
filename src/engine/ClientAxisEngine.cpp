@@ -31,7 +31,7 @@ MessageData* ClientAxisEngine::GetMessageData()
 int ClientAxisEngine::Process(Ax_soapstream* pSoap)
 {
 	int Status;
-	const WSDDService* pService = NULL;
+	//const WSDDService* pService = NULL;
 
 	if (!pSoap) return FAIL;
 	m_pSoap = pSoap;
@@ -78,7 +78,7 @@ int ClientAxisEngine::Invoke(MessageData* pMsg)
 {
 	enum AE_LEVEL {AE_START=1, AE_TRH, AE_GLH, AE_SERH, AE_SERV};
 	int Status = FAIL;
-	int level = AE_START;
+	//int level = AE_START;
 	/*
 	No Client side handlers for now. Therefore returns SUCCESS
 	*/

@@ -59,8 +59,9 @@
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  *
  */
-
+#ifdef WIN32
 #pragma warning (disable : 4786)
+#endif
 
 #if !defined(__PACKET_H_INCLUDED__)
 #define __PACKET_H_INCLUDED__

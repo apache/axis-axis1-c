@@ -61,8 +61,9 @@
  * @author Suasntha Kumara (skumara@virtusa.com, susantha@opensource.lk)
  *
  */
-
+#ifdef WIN32
 #pragma warning(disable : 4786)
+#endif
 
 #if !defined(__WSDDDOCUMENTS_H_INCLUDED__)
 #define __WSDDDOCUMENTS_H_INCLUDED__

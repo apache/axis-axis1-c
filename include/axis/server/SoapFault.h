@@ -64,7 +64,9 @@
 // SoapFault.h: interface for the SoapFault class.
 //
 //////////////////////////////////////////////////////////////////////
+#ifdef WIN32
 #pragma warning (disable : 4786)
+#endif
 
 #if !defined(AFX_SOAPFAULT_H__1E4329DF_59B2_4C55_971D_4B84B0FED7FF__INCLUDED_)
 #define AFX_SOAPFAULT_H__1E4329DF_59B2_4C55_971D_4B84B0FED7FF__INCLUDED_
