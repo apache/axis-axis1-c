@@ -71,7 +71,6 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 
     do
     {        
-        AXISTRACE1("came5", INFO);
         pSZ.serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
             ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_BODY],
             NULL);
@@ -85,17 +84,14 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 
         if(NULL != m_pSoapFault) 
         {        
-            AXISTRACE1("came6", INFO);
             iStatus= m_pSoapFault->serialize(pSZ);
             if(iStatus==AXIS_FAIL)
             {
-                AXISTRACE1("came7", INFO);
                 break;
             }
         }
         else if(NULL != m_pSoapMethod)
         {
-            AXISTRACE1("came8", INFO);
             iStatus= m_pSoapMethod->serialize(pSZ);
             if(iStatus==AXIS_FAIL)
             {
@@ -112,7 +108,6 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
                     break;
             }
         }
-        AXISTRACE1("came9", INFO);
         
         pSZ.serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
             ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_BODY],

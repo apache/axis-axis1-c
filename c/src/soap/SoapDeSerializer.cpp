@@ -291,8 +291,6 @@ int SoapDeSerializer::checkMessageBody(const AxisChar* pName,
     if (AXIS_SUCCESS != getBody()) return AXIS_FAIL;    
     if (!m_pNode) m_pNode = m_pParser->next();
     if (!m_pNode || (START_ELEMENT != m_pNode->m_type)) return AXIS_FAIL;
-    AXISTRACE2("pName", pName, INFO);
-    AXISTRACE2("m_pChNameOrValue", m_pNode->m_pchNameOrValue, INFO);
     //if (0 != strcmp(m_pNode->m_pchNameOrValue, pName)) return AXIS_FAIL;
     if (0 != strcmp(m_pNode->m_pchNameOrValue, pName))
     {
@@ -310,8 +308,6 @@ int SoapDeSerializer::checkForFault(const AxisChar* pName,
         //if (!m_pNode || (START_ELEMENT != m_pNode->m_type)) return AXIS_FAIL;
     if(0 == strcmp("Fault", pName))
     {
-        AXISTRACE2("pName", pName, INFO);
-        AXISTRACE2("m_pChNameOrValue", m_pNode->m_pchNameOrValue, INFO);
         if (0 != strcmp(m_pNode->m_pchNameOrValue, pName))
         {
             m_nStatus = AXIS_SUCCESS;
@@ -325,22 +321,6 @@ int SoapDeSerializer::checkForFault(const AxisChar* pName,
      }
      else
      {
-         AXISTRACE1("came50", INFO);
-         /*m_pNode = m_pParser->next();
-         AXISTRACE2("came50,Node type:", m_pNode->m_type, INFO);
-         if (!m_pNode || (START_ELEMENT != m_pNode->m_type)) return AXIS_FAIL;
-         AXISTRACE2("pName", pName, INFO);
-         AXISTRACE2("m_pChNameOrValue", m_pNode->m_pchNameOrValue, INFO);
-         if (0 != strcmp(m_pNode->m_pchNameOrValue, pName))
-         {
-             m_nStatus = AXIS_SUCCESS;
-             m_pNode = NULL;
-             THROW_AXIS_EXCEPTION(AXISC_NODEVALUE_MISMATCH_EXCEPTION);    
-         }
-         m_nStatus = AXIS_SUCCESS;
-         m_pNode = NULL;
-         return AXIS_SUCCESS;
-         */
          char* tempChar = getElementAsString("faultdetail", 0);
          if(0 == tempChar)
          {
@@ -363,7 +343,6 @@ int SoapDeSerializer::getFault()
     //if (!m_pNode) m_pNode = m_pParser->next();
     //if (m_pNode)
     //{
-        AXISTRACE1("SOAP FAULT", INFO);
         m_pcFaultDetail = "This is a hard coded test error";
 
         return AXIS_SUCCESS;
@@ -967,7 +946,6 @@ void* SoapDeSerializer::getCmplxObject(void* pDZFunct, void* pCreFunct,
                                        void* pDelFunct, const AxisChar* pName,
                                        const AxisChar* pNamespace)
 {
-    AXISTRACE1("came20", INFO);
     if (AXIS_SUCCESS != m_nStatus) return NULL;
     /* if anything has gone wrong earlier just do nothing */
     if (RPC_ENCODED == m_nStyle)
@@ -978,10 +956,9 @@ void* SoapDeSerializer::getCmplxObject(void* pDZFunct, void* pCreFunct,
         if (!m_pNode) return NULL;
         /* type  can be checked here */
         void* pObject = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)(NULL, false, 0);
-        AXISTRACE1("came21", INFO);
         if (pObject && pDZFunct)
         {
-            AXISTRACE1("came22", INFO);
+            AXISTRACE1("came1", INFO);
             if (C_RPC_PROVIDER == getCurrentProviderType())
             {
                 IWrapperSoapDeSerializer_C cWSD;
@@ -991,13 +968,12 @@ void* SoapDeSerializer::getCmplxObject(void* pDZFunct, void* pCreFunct,
             }
             else
             {
-                AXISTRACE1("came23", INFO);
+                AXISTRACE1("came2", INFO);
                 m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pObject, this);
-                AXISTRACE1("came24", INFO);
             }
             if (AXIS_SUCCESS == m_nStatus)
             {
-                AXISTRACE1("came25", INFO);
+                AXISTRACE1("came3", INFO);
                 m_pParser->next(); /* skip end node too */
                 return pObject;
             }
@@ -1006,7 +982,6 @@ void* SoapDeSerializer::getCmplxObject(void* pDZFunct, void* pCreFunct,
                 ((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(pObject, false, 0);
             }
         }
-        AXISTRACE1("came26", INFO);
     }
     else
     {
@@ -2195,25 +2170,18 @@ double SoapDeSerializer::getElementAsDecimal(const AxisChar* pName,
 AxisChar* SoapDeSerializer::getElementAsString(const AxisChar* pName, 
                                                const AxisChar* pNamespace)
 {
-    AXISTRACE2("pName:", pName, INFO);
     AxisChar* ret = 0;
     if (AXIS_SUCCESS != m_nStatus) return ret;
-    AXISTRACE1("came30", INFO);
     if (RPC_ENCODED == m_nStyle)
     {
-        AXISTRACE1("came31", INFO);
         m_pNode = m_pParser->next();
         /* wrapper node with type info  Ex: <i xsi:type="xsd:int"> */
         if (!m_pNode) return ret;
-        AXISTRACE1("came32", INFO);
         if (XSD_STRING == getXSDType(m_pNode))
         {
-            AXISTRACE1("came33", INFO);
             m_pNode = m_pParser->next(true); /* charactor node */
-            AXISTRACE1("came34", INFO);
             if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
             {
-                AXISTRACE1("came35", INFO);
                 ret = strdup(m_pNode->m_pchNameOrValue);
                 /* this is because the string may not be available later */
                 m_pNode = m_pParser->next(); /* skip end element node too */
