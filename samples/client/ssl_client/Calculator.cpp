@@ -33,7 +33,7 @@ Calculator::~Calculator()
 int Calculator::add(int Value0, int Value1)
 {
 	int Ret;
-	if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
+	if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) return Ret;
 	m_pCall->setTransportProperty(SOAPACTION_HEADER , "Calculator#add");
 	m_pCall->setSOAPVersion(SOAP_VER_1_1);
 	m_pCall->setOperation("add", "http://localhost/axis/Calculator");
@@ -58,7 +58,7 @@ int Calculator::add(int Value0, int Value1)
 int Calculator::sub(int Value0, int Value1)
 {
 	int Ret;
-	if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
+	if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) return Ret;
 	m_pCall->setTransportProperty(SOAPACTION_HEADER , "Calculator#sub");
 	m_pCall->setSOAPVersion(SOAP_VER_1_1);
 	m_pCall->setOperation("sub", "http://localhost/axis/Calculator");
@@ -83,7 +83,7 @@ int Calculator::sub(int Value0, int Value1)
 int Calculator::mul(int Value0, int Value1)
 {
 	int Ret;
-	if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
+	if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) return Ret;
 	m_pCall->setTransportProperty(SOAPACTION_HEADER , "Calculator#mul");
 	m_pCall->setSOAPVersion(SOAP_VER_1_1);
 	m_pCall->setOperation("mul", "http://localhost/axis/Calculator");
@@ -108,7 +108,7 @@ int Calculator::mul(int Value0, int Value1)
 int Calculator::div(int Value0, int Value1)
 {
 	int Ret;
-	if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
+	if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) return Ret;
 	m_pCall->setTransportProperty(SOAPACTION_HEADER , "Calculator#div");
 	m_pCall->setSOAPVersion(SOAP_VER_1_1);
 	m_pCall->setOperation("div", "http://localhost/axis/Calculator");

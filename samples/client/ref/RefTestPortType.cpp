@@ -3,7 +3,7 @@
  * This file contains Client Stub implementation for remote web service.
  */
 
-#include "RefTestPortType.h"
+#include "RefTestPortType.hpp"
 
 #include <axis/AxisWrapperAPI.hpp>
 
@@ -42,7 +42,7 @@ intType* RefTestPortType::echoInt(intType* Value0)
 	const char* pcCmplxFaultName;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return pReturn;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "ref#echoInt");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -53,10 +53,11 @@ intType* RefTestPortType::echoInt(intType* Value0)
 		{
 			if(AXIS_SUCCESS == m_pCall->checkMessage("echoIntResponse", "http://soapinterop.org/"))
 			{
-				pReturn = (intType*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_intType, (void*) Axis_Create_intType, (void*) Axis_Delete_intType,"return", 0);
+				pReturn = (intType*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_intType, (void*) Axis_Create_intType, (void*) Axis_Delete_intType,"_return", 0);
 		}
 		}
-		m_pCall->unInitialize();
+	updateStateAfterResponse();
+	m_pCall->unInitialize();
 		return pReturn;
 	}
 	catch(AxisException& e)
@@ -64,13 +65,15 @@ intType* RefTestPortType::echoInt(intType* Value0)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-			m_pCall->unInitialize();
-			throw;
+	updateStateAfterResponse();
+	m_pCall->unInitialize();
+			throw ref_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/ref" );
 		if(pSoapFault)
 		{
-			m_pCall->unInitialize();
+	updateStateAfterResponse();
+	m_pCall->unInitialize();
 			throw ref_AxisClientException(pSoapFault);
 		}
 		else throw;

@@ -38,7 +38,7 @@ xsd__int MathOps::div(xsd__int Value0, xsd__int Value1)
 	xsd__int Ret = 0;
 	const char* pcCmplxFaultName;
 	try
-	{	if (AXIS_SUCCESS != m_pCall->initialize(CPP_DOC_PROVIDER, NORMAL_CHANNEL)) return Ret;
+	{	if (AXIS_SUCCESS != m_pCall->initialize(CPP_DOC_PROVIDER)) return Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "MathOpsDL#div");
 	m_pCall->setSOAPVersion(SOAP_VER_1_1);
 	m_pCall->setOperation("divRequest", "http://localhost/axis/MathOps/types");

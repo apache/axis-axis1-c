@@ -3,7 +3,7 @@
  * This file contains implementations of the array Exception class of the web service.
  */
 
-#include "array_AxisClientException.h"
+#include "array_AxisClientException.hpp"
 
 #include <axis/AxisWrapperAPI.hpp>
 
@@ -19,6 +19,7 @@ array_AxisClientException::array_AxisClientException()
 array_AxisClientException::array_AxisClientException(ISoapFault* pFault)
 {
 	m_iExceptionCode = AXISC_SERVICE_THROWN_EXCEPTION;
+	m_pISoapFault = pFault;
 	processException(pFault);}
 
 array_AxisClientException::array_AxisClientException(int iExceptionCode)
@@ -37,6 +38,11 @@ array_AxisClientException::array_AxisClientException(exception* e,int iException
 {
 
 	processException (e, iExceptionCode);
+}
+
+array_AxisClientException::array_AxisClientException(string sMessage)
+{
+	 m_sMessage =sMessage;
 }
 
 array_AxisClientException::~array_AxisClientException() throw () 
@@ -91,5 +97,9 @@ const char* array_AxisClientException::what() throw ()
 
 const int array_AxisClientException::getExceptionCode(){
 	return m_iExceptionCode;
+}
+
+const ISoapFault* array_AxisClientException::getFault(){
+	return m_pISoapFault;
 }
 

@@ -3,8 +3,7 @@
  * This file contains functions to manipulate complex type intArrayType
  */
 
-#include <malloc.h>
-#include "intArrayType.h"
+#include "intArrayType.hpp"
 #include <axis/AxisWrapperAPI.hpp>
 
 /*
@@ -92,5 +91,5 @@ intArrayType::intArrayType()
 intArrayType::~intArrayType()
 {
 	/*delete any pointer and array members here*/
-	delete [] ((int*)intItem.m_Array);
+	delete [] ((xsd__int*)intItem.m_Array);
 }

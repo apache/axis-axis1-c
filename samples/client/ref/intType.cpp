@@ -3,8 +3,7 @@
  * This file contains functions to manipulate complex type intType
  */
 
-#include <malloc.h>
-#include "intType.h"
+#include "intType.hpp"
 #include <axis/AxisWrapperAPI.hpp>
 
 /*
@@ -85,6 +84,7 @@ intType::intType()
 {
 	/*do not allocate memory to any pointer members here
 	 because deserializer will allocate memory anyway. */
+	memset( &intItem, 0, sizeof( xsd__int));
 }
 
 intType::~intType()

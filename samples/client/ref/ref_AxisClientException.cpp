@@ -3,7 +3,7 @@
  * This file contains implementations of the ref Exception class of the web service.
  */
 
-#include "ref_AxisClientException.h"
+#include "ref_AxisClientException.hpp"
 
 #include <axis/AxisWrapperAPI.hpp>
 
@@ -19,6 +19,7 @@ ref_AxisClientException::ref_AxisClientException()
 ref_AxisClientException::ref_AxisClientException(ISoapFault* pFault)
 {
 	m_iExceptionCode = AXISC_SERVICE_THROWN_EXCEPTION;
+	m_pISoapFault = pFault;
 	processException(pFault);}
 
 ref_AxisClientException::ref_AxisClientException(int iExceptionCode)
@@ -37,6 +38,11 @@ ref_AxisClientException::ref_AxisClientException(exception* e,int iExceptionCode
 {
 
 	processException (e, iExceptionCode);
+}
+
+ref_AxisClientException::ref_AxisClientException(string sMessage)
+{
+	 m_sMessage =sMessage;
 }
 
 ref_AxisClientException::~ref_AxisClientException() throw () 
@@ -91,5 +97,9 @@ const char* ref_AxisClientException::what() throw ()
 
 const int ref_AxisClientException::getExceptionCode(){
 	return m_iExceptionCode;
+}
+
+const ISoapFault* ref_AxisClientException::getFault(){
+	return m_pISoapFault;
 }
 

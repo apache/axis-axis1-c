@@ -3,7 +3,7 @@
  * This file contains Client Stub implementation for remote web service.
  */
 
-#include "ArrayTestPortType.h"
+#include "ArrayTestPortType.hpp"
 
 #include <axis/AxisWrapperAPI.hpp>
 
@@ -42,7 +42,7 @@ intArrayType* ArrayTestPortType::echoIntArray(intArrayType* Value0)
 	const char* pcCmplxFaultName;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return pReturn;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "array#echoIntArray");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -53,10 +53,11 @@ intArrayType* ArrayTestPortType::echoIntArray(intArrayType* Value0)
 		{
 			if(AXIS_SUCCESS == m_pCall->checkMessage("echoIntArrayResponse", "http://soapinterop.org/"))
 			{
-				pReturn = (intArrayType*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_intArrayType, (void*) Axis_Create_intArrayType, (void*) Axis_Delete_intArrayType,"return", 0);
+				pReturn = (intArrayType*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_intArrayType, (void*) Axis_Create_intArrayType, (void*) Axis_Delete_intArrayType,"_return", 0);
 		}
 		}
-		m_pCall->unInitialize();
+	updateStateAfterResponse();
+	m_pCall->unInitialize();
 		return pReturn;
 	}
 	catch(AxisException& e)
@@ -64,13 +65,15 @@ intArrayType* ArrayTestPortType::echoIntArray(intArrayType* Value0)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-			m_pCall->unInitialize();
-			throw;
+	updateStateAfterResponse();
+	m_pCall->unInitialize();
+			throw array_AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/array" );
 		if(pSoapFault)
 		{
-			m_pCall->unInitialize();
+	updateStateAfterResponse();
+	m_pCall->unInitialize();
 			throw array_AxisClientException(pSoapFault);
 		}
 		else throw;
