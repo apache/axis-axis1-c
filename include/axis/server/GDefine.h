@@ -67,6 +67,8 @@
 #define __GDEFINE_INCLUDED__
 /* This file contains all global definitions that are valid across whole Axis C++ project.*/
 
+typedef enum {SECURE, UNSECURE} AXIS_SECURE_PROTOCOL;
+
 typedef enum 
 { 
 	AXIS_SUCCESS=0, 
