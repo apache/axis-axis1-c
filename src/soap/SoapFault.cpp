@@ -15,7 +15,25 @@
  */
  
 /*
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
+ */
+
+/*
+ * Revision 1.1  2004/June/02 roshan
+ * The following changes were done during correcting a Runtime error in the
+ *  windows platform.
+ * Added deletion of pointers to the Destrutor
+ * Added "pParam->m_Value.pStrValue = strdup((char*)(pValue));" to the setParam
+ *  method and removed the line
+ *   "pParam->m_Value.pStrValue = *((char**)(pValue));".
+ * Changed setFaultcode, setFaultstring, setFaultactor, setFaultDetail methods
+ *  to send a char pointer to the setParam method.
+ *  eg: In the setFaultcode method, changed passing of &sFaultcode to 
+ *  sFaultcode.c_str()
+ *  i.e Before change:
+ *      setParam(m_pFaultcodeParam, "faultcode", &sFaultcode, XSD_STRING); 
+ *      After change:
+ *      setParam(m_pFaultcodeParam, "faultcode", sFaultcode.c_str(), XSD_STRING); 
  */
 
 #include "SoapFault.h"
@@ -34,7 +52,15 @@ SoapFault::SoapFault()
 
 SoapFault::~SoapFault()
 {
+	delete m_pFaultcodeParam;
+	delete m_pFaultstringParam;
+    delete m_pFaultactorParam;
+    delete m_pFaultDetail;
 
+	m_pFaultcodeParam = NULL;
+	m_pFaultstringParam = NULL;
+    m_pFaultactorParam = NULL;
+    m_pFaultDetail = NULL;
 }
 
 int SoapFault::serialize(SoapSerializer& pSZ)
@@ -172,14 +198,16 @@ int SoapFault::setParam(Param* pParam, const AxisChar* pchName, const void* pVal
     if (!pParam) return AXIS_FAIL;
     pParam->m_Type = type;
     pParam->m_sName = pchName;
-    pParam->m_Value.pStrValue = *((char**)(pValue));
+    //pParam->m_Value.pStrValue = *((char**)(pValue));
+	pParam->m_Value.pStrValue = strdup((char*)(pValue));
     return AXIS_SUCCESS;
 }
 
 int SoapFault::setFaultcode(const string& sFaultcode)
 {
     m_pFaultcodeParam = new Param();
-    setParam(m_pFaultcodeParam, "faultcode", &sFaultcode, XSD_STRING); 
+    //setParam(m_pFaultcodeParam, "faultcode", &sFaultcode, XSD_STRING); 
+	setParam(m_pFaultcodeParam, "faultcode", sFaultcode.c_str(), XSD_STRING); 
     m_sFaultcode= sFaultcode;
 
     return AXIS_SUCCESS;
@@ -188,7 +216,7 @@ int SoapFault::setFaultcode(const string& sFaultcode)
 int SoapFault::setFaultstring(const string& sFaultstring)
 {
     m_pFaultstringParam = new Param();
-    setParam(m_pFaultstringParam, "faultstring", &sFaultstring, XSD_STRING); 
+    setParam(m_pFaultstringParam, "faultstring", sFaultstring.c_str(), XSD_STRING); 
     m_sFaultstring= sFaultstring;
 
     return AXIS_SUCCESS;
@@ -196,7 +224,7 @@ int SoapFault::setFaultstring(const string& sFaultstring)
 int SoapFault::setFaultactor(const string& sFaultactor)
 {
     m_pFaultactorParam = new Param();
-    setParam(m_pFaultactorParam, "faultactor", &sFaultactor, XSD_STRING); 
+    setParam(m_pFaultactorParam, "faultactor", sFaultactor.c_str(), XSD_STRING); 
     m_sFaultactor = sFaultactor;
     
     return AXIS_SUCCESS;
@@ -205,7 +233,7 @@ int SoapFault::setFaultactor(const string& sFaultactor)
 int SoapFault::setFaultDetail(const string& sFaultDetail)
 {
     m_pFaultDetail = new Param();
-    setParam(m_pFaultDetail, "faultdetail", &sFaultDetail, XSD_STRING);
+    setParam(m_pFaultDetail, "faultdetail", sFaultDetail.c_str(), XSD_STRING);
     m_sFaultDetail = sFaultDetail;
     m_bIsSimpleDetail = true;
 
