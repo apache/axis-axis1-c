@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #get command line options
-GET_URL="localhost"
-GET_PORT="80"
+GET_URL=""
+GET_PORT=""
 while getopts u:p:h o
 do      case "$o" in
         u)      GET_URL=$OPTARG;;
