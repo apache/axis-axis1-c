@@ -30,12 +30,10 @@
 #include <unistd.h>
 #endif
 
-//#include <axis/server/GDefine.hpp>
-//#include <axis/Axis.hpp>
-//#include "../../common/AxisConfig.h"
-//#include "../../common/AxisSocketUtils.h"
 #include "SimpleAxisTransport.h"
 
+extern "C" int initialize_module (int bServer);
+extern "C" int uninitialize_module ();
 extern int process_request (SOAPTransport * str);
 
 

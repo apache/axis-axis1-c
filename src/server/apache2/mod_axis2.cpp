@@ -26,6 +26,8 @@
 /* file: mod_axis2.cpp */
 /* here's the content handler */
 
+extern "C" int initialize_module (int bServer);
+extern "C" int uninitialize_module ();
 extern int process_request(SOAPTransport* str);
 extern unsigned char chEBuf[1024];
 
@@ -66,7 +68,6 @@ int axis_handler_helper(request_rec* req_rec)
     return OK;	
 }
 
-/* Call initialize_module() [of Packet.h] from within this method */
 extern "C"
 { 
 static void module_init(apr_pool_t* p, server_rec* svr_rec)

@@ -26,6 +26,8 @@
 /* file: mod_axis.cpp */
 /* here's the content handler */
 
+extern "C" int initialize_module (int bServer);
+extern "C" int uninitialize_module ();
 extern int process_request (SOAPTransport* str);
 extern unsigned char chEBuf[1024];
 

@@ -70,6 +70,29 @@ typedef enum
     AXIS_HTTP_UNSUPPORTED
 } AXIS_HTTP_METHOD;
 
+// Samisa: This was in the removed include/axis/server/Packet.hpp
+// This is required by Apache transports in src/server/apache*
+// I added this here as I felt this is the most suitable place for it.
+typedef struct
+{
+    const void* pBufferId;
+    const char* pcBuffer;
+} BufferInfo;
+
+// Samisa : This too was defined in include/axis/server/Packet.hpp
+// and used by Apache transports in src/server/apache*
+typedef struct
+{
+    char* headername;
+    char* headervalue;
+} Ax_header;
+
+
+// Samisa: NO_OF_SERIALIZE_BUFFERS too was defined in include/axis/server/Packet.hpp
+// As that header has been removed I put it here.
+// This is used by Apache transport classes in ser/srver/apache*
+#define NO_OF_SERIALIZE_BUFFERS 20
+
 /*
  * This function is provided by the Axis Engine. 
  * Called by transport module when it needs to say that
