@@ -152,14 +152,19 @@ void HeaderBlock::setLocalName(const AxisChar* localname)
     m_localname= localname;
 }
 
-/* Commented by Susantha - 21/06/2004
+/*
+ *  Commented by Susantha - 21/06/2004
  * The prefix should be decided by the Serializer at runtime
  *
+ * Uncommented by Mark Whitlock - 24/8/04 after discussion 
+ * on the mailing list agreed to add back in this method.
+ * Jira issue AXISCPP-135
+ */
 void HeaderBlock::setPrefix(const AxisChar* prefix)
 {
     m_sPrefix= prefix;
 }
-*/
+
 void HeaderBlock::setUri(const AxisChar* uri)
 {
     m_uri= uri;
