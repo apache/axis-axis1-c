@@ -172,6 +172,7 @@ AC_OUTPUT(Makefile \
     src/xml/Makefile \
     src/transport/Makefile \
     src/transport/axis/Makefile \
+    src/transport/libwww/Makefile \
     src/engine/Makefile \
     src/engine/server/Makefile \
     src/engine/client/Makefile  \
