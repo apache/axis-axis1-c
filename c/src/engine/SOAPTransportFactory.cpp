@@ -54,7 +54,9 @@ int SOAPTransportFactory::initialize()
 	//m_pcLibraryPath = "AxisTransport.dll"; //this will be taken from configuration file
 #endif
 #else
-	m_pcLibraryPath = "/usr/local/Axis/libs/libaxis_transport.so"; //this will be taken from configuration file
+	//m_pcLibraryPath = "/home/damitha/Axis/libs/libaxis_transport.so"; //this will be taken from configuration file
+	//m_pcLibraryPath = "/usr/local/Axis/libs/libaxis_transport.so"; //this will be taken from configuration file
+	m_pcLibraryPath = g_pConfig->getAxConfProperty(AXCONF_TRANSPORTHTTP);
 #endif
 	if (!loadLib())
 	{
