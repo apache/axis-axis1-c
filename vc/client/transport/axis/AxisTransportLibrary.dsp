@@ -101,6 +101,10 @@ SOURCE=..\..\..\..\src\transport\axis\Receiver.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\src\transport\axis\SecureChannel.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\src\transport\axis\Sender.cpp
 # End Source File
 # Begin Source File
