@@ -486,8 +486,6 @@ Axis_Array SoapDeSerializer::getCmplxArray(void* pDZFunct, void* pCreFunct,
     void* pItem;
     int itemsize;
     unsigned long ptrval;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return Array; /* if anything has gone wrong
                                                   * earlier just do nothing */
     if (RPC_ENCODED == m_nStyle)
@@ -644,15 +642,6 @@ Axis_Array SoapDeSerializer::getCmplxArray(void* pDZFunct, void* pCreFunct,
     }
     m_nStatus = AXIS_FAIL;
     m_pNode = NULL;
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
     return Array;
 }
 
@@ -817,8 +806,6 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
 {
     Axis_Array Array = {NULL, 0};
     int nIndex = 0;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return Array;
     /* if anything has gone wrong earlier just do nothing */
     if (RPC_ENCODED == m_nStyle)
@@ -1016,15 +1003,6 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
     m_pNode = NULL;
 
     return Array;
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 }
 
 /*
@@ -1046,8 +1024,6 @@ void* SoapDeSerializer::getCmplxObject(void* pDZFunct, void* pCreFunct,
                                        void* pDelFunct, const AxisChar* pName,
                                        const AxisChar* pNamespace)
 {
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return NULL;
     /* if anything has gone wrong earlier just do nothing */
     if (RPC_ENCODED == m_nStyle)
@@ -1147,15 +1123,6 @@ void* SoapDeSerializer::getCmplxObject(void* pDZFunct, void* pCreFunct,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return NULL;
 }
@@ -1163,8 +1130,6 @@ void* SoapDeSerializer::getCmplxObject(void* pDZFunct, void* pCreFunct,
 int SoapDeSerializer::getElementForAttributes(const AxisChar* pName,
                                               const AxisChar* pNamespace)
 {
-    try
-    {
     if (m_pCurrNode) 
     {
         if (0 == strcmp(pName, m_pCurrNode->m_pchNameOrValue))
@@ -1187,15 +1152,6 @@ int SoapDeSerializer::getElementForAttributes(const AxisChar* pName,
     {
         m_nStatus = AXIS_FAIL;
         m_pCurrNode = NULL;
-    }
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
     }
 
     return m_nStatus;
@@ -1236,8 +1192,6 @@ int SoapDeSerializer::getAttributeAsInt(const AxisChar* pName,
                                         const AxisChar* pNamespace)
 {
     int ret = 0;
-    try
-    {
     if(!m_pCurrNode) 
     {
         /* Optional attributes :  _ m_nStatus = AXIS_FAIL; */
@@ -1260,15 +1214,6 @@ int SoapDeSerializer::getAttributeAsInt(const AxisChar* pName,
     {
         m_nStatus = AXIS_FAIL;
     }
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;        
 }
@@ -1277,8 +1222,6 @@ xsd__boolean SoapDeSerializer::getAttributeAsBoolean(const AxisChar* pName,
                                                      const AxisChar* pNamespace)
 {
     xsd__boolean ret = false_;
-    try
-    {
     if(!m_pCurrNode) 
     {
         /* Optional attributes :  _ m_nStatus = AXIS_FAIL; */
@@ -1300,15 +1243,6 @@ xsd__boolean SoapDeSerializer::getAttributeAsBoolean(const AxisChar* pName,
     else
     {
         m_nStatus = AXIS_FAIL;
-    }
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
     }
 
     return ret;        
@@ -1434,8 +1368,6 @@ xsd__boolean SoapDeSerializer::getElementAsBoolean(const AxisChar* pName,
                                                    const AxisChar* pNamespace)
 {
     xsd__boolean ret = false_;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -1500,15 +1432,6 @@ xsd__boolean SoapDeSerializer::getElementAsBoolean(const AxisChar* pName,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -1517,8 +1440,6 @@ int SoapDeSerializer::getElementAsInt(const AxisChar* pName,
                                       const AxisChar* pNamespace)
 {
     int ret = 0;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -1582,15 +1503,6 @@ int SoapDeSerializer::getElementAsInt(const AxisChar* pName,
         }
     }
     m_nStatus = ret; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -1601,8 +1513,6 @@ unsigned int SoapDeSerializer::getElementAsUnsignedInt(const AxisChar* pName,
                                                        pNamespace)
 {
     unsigned int ret = 0;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -1663,15 +1573,6 @@ unsigned int SoapDeSerializer::getElementAsUnsignedInt(const AxisChar* pName,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -1680,8 +1581,6 @@ short SoapDeSerializer::getElementAsShort(const AxisChar* pName,
                                           const AxisChar* pNamespace)
 {
     short ret = 0;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -1744,15 +1643,6 @@ short SoapDeSerializer::getElementAsShort(const AxisChar* pName,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -1762,8 +1652,6 @@ unsigned short SoapDeSerializer::getElementAsUnsignedShort(const AxisChar*
                                                            AxisChar* pNamespace)
 {
     unsigned short ret = 0;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -1824,15 +1712,6 @@ unsigned short SoapDeSerializer::getElementAsUnsignedShort(const AxisChar*
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -1841,8 +1720,6 @@ char SoapDeSerializer::getElementAsByte(const AxisChar* pName,
                                         const AxisChar* pNamespace)
 {
     char ret = 0;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -1903,15 +1780,6 @@ char SoapDeSerializer::getElementAsByte(const AxisChar* pName,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -1920,8 +1788,6 @@ unsigned char SoapDeSerializer::getElementAsUnsignedByte(const AxisChar* pName,
                                                          const AxisChar* pNamespace)
 {
     unsigned char ret = 0;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -1982,15 +1848,6 @@ unsigned char SoapDeSerializer::getElementAsUnsignedByte(const AxisChar* pName,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -1999,8 +1856,6 @@ long SoapDeSerializer::getElementAsLong(const AxisChar* pName,
                                         const AxisChar* pNamespace)
 {
     long ret = 0;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -2061,15 +1916,6 @@ long SoapDeSerializer::getElementAsLong(const AxisChar* pName,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -2078,8 +1924,6 @@ long SoapDeSerializer::getElementAsInteger(const AxisChar* pName,
                                            const AxisChar* pNamespace)
 {
     long ret = 0;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -2140,15 +1984,6 @@ long SoapDeSerializer::getElementAsInteger(const AxisChar* pName,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -2158,8 +1993,6 @@ unsigned long SoapDeSerializer::getElementAsUnsignedLong(const AxisChar* pName,
                                                          pNamespace)
 {
     unsigned long ret = 0;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -2220,15 +2053,6 @@ unsigned long SoapDeSerializer::getElementAsUnsignedLong(const AxisChar* pName,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -2237,8 +2061,6 @@ float SoapDeSerializer::getElementAsFloat(const AxisChar* pName,
                                           const AxisChar* pNamespace)
 {
     float ret = 0;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -2299,15 +2121,6 @@ float SoapDeSerializer::getElementAsFloat(const AxisChar* pName,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -2316,8 +2129,6 @@ double SoapDeSerializer::getElementAsDouble(const AxisChar* pName,
                                             const AxisChar* pNamespace)
 {
     double ret = 0;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -2378,15 +2189,6 @@ double SoapDeSerializer::getElementAsDouble(const AxisChar* pName,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -2395,8 +2197,6 @@ double SoapDeSerializer::getElementAsDecimal(const AxisChar* pName,
                                              const AxisChar* pNamespace)
 {
     double ret = 0;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -2457,15 +2257,6 @@ double SoapDeSerializer::getElementAsDecimal(const AxisChar* pName,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -2474,8 +2265,6 @@ AxisChar* SoapDeSerializer::getElementAsString(const AxisChar* pName,
                                                const AxisChar* pNamespace)
 {
     AxisChar* ret = 0;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -2538,15 +2327,6 @@ AxisChar* SoapDeSerializer::getElementAsString(const AxisChar* pName,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -2555,8 +2335,6 @@ AxisChar* SoapDeSerializer::getElementAsAnyURI(const AxisChar* pName,
                                                const AxisChar* pNamespace)
 {
     AxisChar* ret = 0;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -2610,15 +2388,6 @@ AxisChar* SoapDeSerializer::getElementAsAnyURI(const AxisChar* pName,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -2627,8 +2396,6 @@ AxisChar* SoapDeSerializer::getElementAsQName(const AxisChar* pName,
                                               const AxisChar* pNamespace)
 {
     AxisChar* ret = 0;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -2682,15 +2449,6 @@ AxisChar* SoapDeSerializer::getElementAsQName(const AxisChar* pName,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -2700,8 +2458,6 @@ xsd__hexBinary SoapDeSerializer::getElementAsHexBinary(const AxisChar* pName,
                                                        pNamespace)
 {
     xsd__hexBinary ret = {0,0};
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -2755,15 +2511,6 @@ xsd__hexBinary SoapDeSerializer::getElementAsHexBinary(const AxisChar* pName,
         }
     }
     m_pNode = NULL;/*m_nStatus = AXIS_FAIL;*/ /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -2801,8 +2548,6 @@ xsd__base64Binary SoapDeSerializer::getElementAsBase64Binary(const AxisChar* pNa
                                                              pNamespace)
 {
     xsd__base64Binary ret = {0,0};
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -2856,15 +2601,6 @@ xsd__base64Binary SoapDeSerializer::getElementAsBase64Binary(const AxisChar* pNa
         }
     }
     m_pNode = NULL;/*    m_nStatus = AXIS_FAIL;*/ /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -2873,8 +2609,6 @@ struct tm SoapDeSerializer::getElementAsDateTime(const AxisChar* pName,
                                                  const AxisChar* pNamespace)
 {
     struct tm ret = INIT_VALUE_DATETIME;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -2940,15 +2674,6 @@ struct tm SoapDeSerializer::getElementAsDateTime(const AxisChar* pName,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -2957,8 +2682,6 @@ struct tm SoapDeSerializer::getElementAsDate(const AxisChar* pName,
                                              const AxisChar* pNamespace)
 {
     struct tm ret = INIT_VALUE_DATETIME;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -3025,15 +2748,6 @@ struct tm SoapDeSerializer::getElementAsDate(const AxisChar* pName,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -3042,8 +2756,6 @@ struct tm SoapDeSerializer::getElementAsTime(const AxisChar* pName,
                                              const AxisChar* pNamespace)
 {
     struct tm ret = INIT_VALUE_DATETIME;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -3110,15 +2822,6 @@ struct tm SoapDeSerializer::getElementAsTime(const AxisChar* pName,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -3127,8 +2830,6 @@ long SoapDeSerializer::getElementAsDuration(const AxisChar* pName,
                                             const AxisChar* pNamespace)
 {
     long ret = 0;
-    try
-    {
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -3182,15 +2883,6 @@ long SoapDeSerializer::getElementAsDuration(const AxisChar* pName,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return ret;
 }
@@ -3203,8 +2895,6 @@ long SoapDeSerializer::getElementAsDuration(const AxisChar* pName,
 XSDTYPE SoapDeSerializer::getXSDType(const AnyElement* pElement)
 {
     /* first check whether this is a start element node */
-    try
-    {
     if (START_ELEMENT != pElement->m_type) return XSD_UNKNOWN;
     for (int i=0; pElement->m_pchAttributes[i]; i+=3)
     {
@@ -3224,15 +2914,6 @@ XSDTYPE SoapDeSerializer::getXSDType(const AnyElement* pElement)
             qn.mergeQNameString(':');
             return type;
         }
-    }
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
     }
 
     return XSD_UNKNOWN;
