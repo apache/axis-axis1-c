@@ -135,8 +135,8 @@ int AxisEngine::Process(Ax_soapstream* soap)
 			{
 				cService = get_service_from_uri(soap);
 			}
-			AxisString service;
-			AxisUtils::convert(service, (cService == NULL)? "" : cService);
+			AxisString service = (cService == NULL)? "" : cService;
+			//AxisUtils::convert(service, (cService == NULL)? "" : cService);
 		  
 			AXISTRACE2("string service = ",service.c_str());
      
@@ -154,7 +154,7 @@ int AxisEngine::Process(Ax_soapstream* soap)
 			}
 
 			//get service description object from the WSDD
-			pService = g_pWSDDDeployment->GetService(service);
+			pService = g_pWSDDDeployment->GetService(service.c_str());
 			if (!pService) 
 			{
 				nSoapVersion = pMsg->m_pDZ->GetVersion();
@@ -187,11 +187,11 @@ int AxisEngine::Process(Ax_soapstream* soap)
 			SoapMethod* pSm = m_pDZ->GetMethod();
 			if (pSm) 
 			{
-				AxisString method = pSm->getMethodName();
-				AXISTRACE2("pSm->getMethodName(); :", method.c_str());
-				if (!method.empty())
+				const AxisChar* pMethod = pSm->getMethodName();
+				AXISTRACE2("pSm->getMethodName(); :", pMethod);
+				if (pMethod)
 				{
-					if (pService->IsAllowedMethod(method))
+					if (pService->IsAllowedMethod(pMethod))
 					{          
 						//load actual web service handler
 						if (SUCCESS != g_pHandlerPool->GetWebService(&m_pWebService, sSessionId, pService))

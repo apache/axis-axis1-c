@@ -72,7 +72,7 @@
 ArrayBean::ArrayBean()
 {
 	m_type = XSD_UNKNOWN;
-	m_ItemName = L"";
+	m_ItemName = "";
 	m_value.sta = NULL;
 }
 

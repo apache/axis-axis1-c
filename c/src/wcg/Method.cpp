@@ -145,7 +145,7 @@ int Method::GenerateMethodImpl(string& sClassName, File &file)
 	file << "\tIWrapperSoapDeSerializer* pIWSDZ = NULL;" << endl;
 	file << "\tmc->getSoapDeSerializer(&pIWSDZ);" << endl;
 	file << "\tif (!pIWSDZ) return FAIL;" << endl;
-	file << "\tSetResponseMethod(mc, L\"" << m_Name << "Response\");" << endl;
+	file << "\tSetResponseMethod(mc, \"" << m_Name << "Response\");" << endl;
 	int nParam = 0;
 	for (list<Variable*>::iterator it = m_Params.begin(); it != m_Params.end(); it++)
 	{
@@ -200,7 +200,7 @@ int Method::GenerateMethodImpl(string& sClassName, File &file)
 		file <<	";" << endl;
 		file << "\tIParam* pRetParam = pIWSSZ->setResponseParam(" << m_pReturnType->GetTypeEnumStr() << ", value);" << endl;
 	}
-	file << "\tpRetParam->SetName(L\"" << m_Name << "Return\");" << endl;
+	file << "\tpRetParam->SetName(\"" << m_Name << "Return\");" << endl;
 	file << "\treturn SUCCESS;" << endl; 
 	file << "}" << endl;
 	file << endl;

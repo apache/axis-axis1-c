@@ -70,17 +70,27 @@
 
 using namespace std;
 
+struct SoapKeywordStruct 
+{	
+	const AxisXMLCh* pchNamespaceUri;
+	const AxisXMLCh* pchPrefix;
+	const AxisXMLCh* pchWords[SOAP_WORDS_LAST];
+	const Attribute* pEnv;
+	const Attribute* pXsi;
+	const Attribute* pXsd;
+};
+
 class SoapKeywordMapping  
 {
 public:
 	SoapKeywordMapping();
 	virtual ~SoapKeywordMapping();
 private:
-	static map<SOAP_VERSION, SoapEnvVersionsStruct> m_Map;
+	static map<int, SoapKeywordStruct> m_Map;
 	static volatile bool m_bInit;
 public:
 	static void Initialize();
-	static const SoapEnvVersionsStruct& Map(SOAP_VERSION nVersion);
+	static const SoapKeywordStruct& Map(int nVersion);
 };
 
 #endif // !defined(AFX_SOAPKEYWORDMAPPING_H__7ED17E2B_F729_4256_985A_0D8F70D55D2A__INCLUDED_)

@@ -68,7 +68,6 @@
 #include "WSDDDeployment.h"
 #include "WSDDDocument.h"
 #include "../common/GDefine.h"
-#include <iostream>
 
 extern unsigned char chEBuf[1024];
 //////////////////////////////////////////////////////////////////////
@@ -78,9 +77,8 @@ extern unsigned char chEBuf[1024];
 WSDDDeployment::WSDDDeployment()
 {
 	m_DeployedServices = NULL;
-	m_sAux = L"";
+	m_sAux = "";
 	m_pTransportHandlers = NULL;
-
 	m_GlobalResponseHandlers = NULL;
 	m_GlobalRequestHandlers = NULL;
 }
@@ -139,7 +137,7 @@ const WSDDHandlerList* WSDDDeployment::GetGlobalResponseFlowHandlers()
 	return m_GlobalResponseHandlers;
 }
 
-int WSDDDeployment::LoadWSDD(string &sWSDD)
+int WSDDDeployment::LoadWSDD(const AxisChar* sWSDD)
 {
 	WSDDDocument doc;
 	if (SUCCESS != doc.GetDeployment(sWSDD, this))
@@ -149,14 +147,14 @@ int WSDDDeployment::LoadWSDD(string &sWSDD)
 	return SUCCESS;
 }
 
-int WSDDDeployment::UpdateWSDD(string& sWSDDNew)
+int WSDDDeployment::UpdateWSDD(const AxisChar* sWSDDNew)
 {
 	//TODO
 	return SUCCESS;
 }
 
 
-const WSDDService* WSDDDeployment::GetService(const AxisString &sServiceName)
+const WSDDService* WSDDDeployment::GetService(const AxisChar* sServiceName)
 {
 	WSDDServiceMap::iterator iter;
 
@@ -176,22 +174,22 @@ const WSDDServiceMap* WSDDDeployment::GetWSDDServiceMap()
 	return m_DeployedServices;
 }
 
-const AxisString& WSDDDeployment::GetLibName(int nLibId)
+const AxisChar* WSDDDeployment::GetLibName(int nLibId)
 {
 	for (map<AxisString, int>::iterator it = m_pLibNameIdMap->begin(); it != m_pLibNameIdMap->end(); it++)
 	{
 		if ((*it).second == nLibId)
 		{
-			return (*it).first;
+			return (*it).first.c_str();
 		}
 	}
-	return m_sAux;
+	return NULL;
 }
 
 int WSDDDeployment::AddService(WSDDService* pService)
 {
 	if (!m_DeployedServices) m_DeployedServices = new WSDDServiceMap;
-	(*m_DeployedServices)[pService->GetServiceName().c_str()] = pService;
+	(*m_DeployedServices)[pService->GetServiceName()] = pService;
 	return SUCCESS;
 }		
 

@@ -73,11 +73,15 @@ using namespace std;
 class AxisUtils  
 {
 public:
-	static bool convert(string& str, const AxisChar* wstr);
-	static bool convert(AxisString& wstr, const char* str);
+	static void Initialize();
+	static AxisXMLCh* ToAxisXMLCh(const AxisChar* pch);
 	AxisUtils();
 	virtual ~AxisUtils();
-
+	// any usefull static const AxisXMLCh strings. 
+	static const AxisXMLCh* m_strEmpty;
+	static const AxisXMLCh* m_strLeftSqBracket;
+	static const AxisXMLCh* m_strRightSqBracket;
+	static const AxisXMLCh* m_strColon;
 };
 
 #endif // !defined(AFX_AXISUTILS_H__B5175A8C_0210_417D_BA43_6AAAF7E03551__INCLUDED_)

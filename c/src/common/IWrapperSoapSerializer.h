@@ -82,7 +82,7 @@ public:
 	virtual IParam* setResponseParam(IArrayBean* pArrayBean)=0;
 	virtual IParam* setResponseParam(void* pObject, void* pDZFunct, void* pDelFunct)=0;
 	virtual ISoapMethod* createSoapMethod()=0;
-	virtual IWrapperSoapSerializer& operator<<(const char *cSerialized)=0;
+//	virtual IWrapperSoapSerializer& operator<<(const char *cSerialized)=0;
 	virtual IWrapperSoapSerializer& operator<<(const AxisChar* cSerialized)=0;
 	virtual const AxisChar* getNewNamespacePrefix()=0;
 	virtual IArrayBean* makeArrayBean(XSDTYPE nType, void* pArray)=0;

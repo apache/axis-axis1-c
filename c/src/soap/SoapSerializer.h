@@ -96,9 +96,8 @@ private:
 public:
 	ISoapMethod* createSoapMethod();	
 	int flushSerializedBuffer();
-	IWrapperSoapSerializer& operator<<(const char* cSerialized);
+//	IWrapperSoapSerializer& operator<<(const char* cSerialized);
 	IWrapperSoapSerializer& operator<<(const AxisChar* cSerialized);
-	//ISoapSerializer& operator<<(const char *cSerialized);
 	const AxisChar* getNewNamespacePrefix();
 	int setSoapVersion(SOAP_VERSION);
 	int Init();

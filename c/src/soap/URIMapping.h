@@ -79,12 +79,12 @@ class URIMapping
 {
 public:
 	static void Initialize();
-	static map<AxisString, URITYPE> m_sURIMap;
+	static map<AxisXMLString, URITYPE> m_sURIMap;
 	static volatile bool m_bInit;
 	URIMapping();
 	virtual ~URIMapping();
-	static URITYPE Map(const AxisString &uri);
-	static URITYPE Map(const AxisChar* uri);
+	static URITYPE Map(const AxisXMLString &uri);
+	static URITYPE Map(const AxisXMLCh* uri);
 };
 
 #endif // !defined(AFX_URIMAPPING_H__D5B347DD_E7B0_4C76_BCB2_A7C73CFE367D__INCLUDED_)

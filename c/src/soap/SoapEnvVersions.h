@@ -79,7 +79,7 @@ class Attribute;
  * for Axis C++.
  */
 enum SOAP_WORDS {
-	SKW_ENVELOPE,
+	SKW_ENVELOPE=0, //this should always be 0 - Susantha
 	SKW_HEADER,
 	SKW_BODY,
 	SKW_MUSTUNDERSTAND,
@@ -91,8 +91,13 @@ enum SOAP_WORDS {
 	SKW_FAULT_ACTOR,
 	SKW_DETAIL,
 	SKW_MULTIREF,
+	
+	SKW_TYPE,
+	SKW_ARRAYTYPE,
+	SKW_HREF,
+	SKW_ID,
 
-	SOAP_WORDS_LAST
+	SOAP_WORDS_LAST //this should be the number of entries in this enum - Susantha
 };
 
 enum SOAP_VERSION {
@@ -107,70 +112,9 @@ struct SoapEnvVersionsStruct
 	const AxisChar* pchNamespaceUri;
 	const AxisChar* pchPrefix;
 	const AxisChar* pchWords[SOAP_WORDS_LAST];
-	const Attribute* pEnv;
-	const Attribute* pXsi;
-	const Attribute* pXsd;
 };
 
-static SoapEnvVersionsStruct ObjSoapEnvVersionsStruct[VERSION_LAST]=
-{
-	//SOAP_VER_1_1
-	{ 
-		L"http://schemas.xmlsoap.org/soap/envelope/",
-		L"SOAP-ENV",
-		{
-/*SKW_ENVELOPE*/		L"Envelope",
-/*SKW_HEADER*/			L"Header",
-/*SKW_BODY*/			L"Body",
-/*SKW_MUSTUNDERSTAND*/	L"mustUnderstand",
-/*SKW_ACTOR*/			L"actor",
-/*SKW_ENCODING_STYLE*/	L"encodingStyle",
-/*SKW_FAULT*/			L"Fault",
-/*SKW_FAULT_CODE*/		L"faultcode",
-/*SKW_FAULT_STRING*/	L"faultstring",
-/*SKW_FAULT_ACTOR*/		L"faultactor",
-/*SKW_DETAIL*/			L"detail",
-/*SKW_MULTIREF*/		L"multiRef"
-		},
-		//attributes for soap 1.1 envelope
-		NULL,
-		NULL,
-		NULL
-	},
-
-	//SOAP_VER_1_2
-	{ 
-		L"http://www.w3.org/2003/05/soap-envelope",
-		L"env",
-		{
-/*SKW_ENVELOPE*/		L"Envelope",
-/*SKW_HEADER*/			L"Header",
-/*SKW_BODY*/			L"Body",
-/*SKW_MUSTUNDERSTAND*/	L"mustUnderstand",
-/*SKW_ACTOR*/			L"actor",
-/*SKW_ENCODING_STYLE*/	L"encodingStyle",
-/*SKW_FAULT*/			L"Fault",
-/*SKW_FAULT_CODE*/		L"Code",
-/*SKW_FAULT_STRING*/	L"Reason",
-/*SKW_FAULT_ACTOR*/		L"Role",
-/*SKW_DETAIL*/			L"Detail",
-/*SKW_MULTIREF*/		L"multiRef"
-		},
-		//attributes for soap 1.2 envelope
-		NULL,
-		NULL,
-		NULL
-	}
-};
-
-struct SoapEnvVersionsStructTemp 
-{	
-	const char* pchNamespaceUri;
-	const char* pchPrefix;
-	const char* pchWords[SOAP_WORDS_LAST];
-};
-
-static SoapEnvVersionsStructTemp ObjSoapEnvVersionsStructTemp[VERSION_LAST]=
+static SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST]=
 {
 	//SOAP_VER_1_1
 	{ 
@@ -188,7 +132,12 @@ static SoapEnvVersionsStructTemp ObjSoapEnvVersionsStructTemp[VERSION_LAST]=
 /*SKW_FAULT_STRING*/	"faultstring",
 /*SKW_FAULT_ACTOR*/		"faultactor",
 /*SKW_DETAIL*/			"detail",
-/*SKW_MULTIREF*/		"multiRef"
+/*SKW_MULTIREF*/		"multiRef",
+
+/*SKW_TYPE*/			"type",
+/*SKW_ARRAYTYPE*/		"arrayType",
+/*SKW_HREF*/			"href",
+/*SKW_ID*/				"id"
 		},
 	},
 
@@ -208,7 +157,12 @@ static SoapEnvVersionsStructTemp ObjSoapEnvVersionsStructTemp[VERSION_LAST]=
 /*SKW_FAULT_STRING*/	"Reason",
 /*SKW_FAULT_ACTOR*/		"Role",
 /*SKW_DETAIL*/			"Detail",
-/*SKW_MULTIREF*/		"multiRef"
+/*SKW_MULTIREF*/		"multiRef",
+
+/*SKW_TYPE*/			"type",
+/*SKW_ARRAYTYPE*/		"arrayType",
+/*SKW_HREF*/			"href",
+/*SKW_ID*/				"id"
 		},
 	}
 };

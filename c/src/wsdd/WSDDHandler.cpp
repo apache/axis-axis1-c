@@ -75,7 +75,6 @@ WSDDHandler::WSDDHandler()
 {
 	m_nLibId = 0;
 	m_nScope = AH_REQUEST; //default
-	m_sAux = L"";
 	m_Params = NULL;
 }
 
@@ -84,7 +83,7 @@ WSDDHandler::~WSDDHandler()
 	if (m_Params) delete m_Params;
 }
 
-void WSDDHandler::SetLibName(const AxisString& sLibName)
+void WSDDHandler::SetLibName(const AxisChar* sLibName)
 {
 	m_sLibName = sLibName;
 }
@@ -99,9 +98,9 @@ int WSDDHandler::GetLibId() const
 	return m_nLibId;
 }
 
-const AxisString& WSDDHandler::GetLibName() const
+const AxisChar* WSDDHandler::GetLibName() const
 {
-	return m_sLibName;
+	return m_sLibName.c_str();
 }
 
 int WSDDHandler::GetScope() const
@@ -109,24 +108,24 @@ int WSDDHandler::GetScope() const
 	return m_nScope;
 }
 
-void WSDDHandler::SetScope(const AxisString& sScope)
+void WSDDHandler::SetScope(const AxisChar* sScope)
 {
-	if (sScope == kw_scope_app)
+	if (0 == strcmp(sScope, kw_scope_app))
 		m_nScope = AH_APPLICATION;	
-	else if (sScope == kw_scope_ses)
+	else if (0 == strcmp(sScope,kw_scope_ses))
 		m_nScope = AH_SESSION;	
 	else
 		m_nScope = AH_REQUEST;	
 }
 
-const AxisString& WSDDHandler::GetParameter(const AxisString& sKey) const
+const AxisChar* WSDDHandler::GetParameter(const AxisChar* sKey) const
 {
 	if (m_Params->find(sKey) != m_Params->end())
-		return (*m_Params)[sKey];
-	return m_sAux;
+		return (*m_Params)[sKey].c_str();
+	return NULL;
 }
 
-void WSDDHandler::AddParameter(const AxisString& sKey, const AxisString& sValue)
+void WSDDHandler::AddParameter(const AxisChar* sKey, const AxisChar* sValue)
 {
 	if (!m_Params) m_Params = new map<AxisString, AxisString>;
 	(*m_Params)[sKey] = sValue; 
