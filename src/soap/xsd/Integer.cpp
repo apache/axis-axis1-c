@@ -112,10 +112,26 @@ AxisChar* Integer::serialize(const LONGLONG* value) throw (AxisSoapException)
         }
     }
     delete maxExclusive;
+
+    AxisString formatSpecifier = "%";
     
-    AxisChar* serializedValue = new char[80];
-    AxisSprintf (serializedValue, 80, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
-  
+    int valueSize = 80;
+    TotalDigits* totalDigits = getTotalDigits();
+    if (totalDigits->isSet())
+    {
+        valueSize = totalDigits->getTotalDigits() + 1;
+        AxisChar* digits = new char[10];
+        AxisSprintf (digits, 10, "%i", totalDigits->getTotalDigits());
+        formatSpecifier += digits;
+        delete [] digits;
+    }
+    delete totalDigits;
+    
+    formatSpecifier += PRINTF_LONGLONG_FORMAT_SPECIFIER_CHARS;
+
+    AxisChar* serializedValue = new char[valueSize];
+    AxisSprintf (serializedValue, valueSize, formatSpecifier.c_str(), *value);
+    
     IAnySimpleType::serialize(serializedValue);
     delete [] serializedValue;        
     return m_Buf;
@@ -134,6 +150,11 @@ LONGLONG* Integer::deserializeInteger(const AxisChar* valueAsChar) throw (AxisSo
     *m_Integer = strtol (valueAsChar, &end, 10);
   
     return m_Integer;
+}
+
+FractionDigits* Integer::getFractionDigits()
+{
+    return new FractionDigits(0);
 }
 
 AXIS_CPP_NAMESPACE_END

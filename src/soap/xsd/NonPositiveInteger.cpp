@@ -112,10 +112,25 @@ AxisChar* NonPositiveInteger::serialize(const unsigned LONGLONG* value) throw (A
         }
     }
     delete maxExclusive;
-    
 
-    AxisChar* serializedValue = new char[80];
-    AxisSprintf (serializedValue, 80, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
+    AxisString formatSpecifier = "%";
+    
+    int valueSize = 80;
+    TotalDigits* totalDigits = getTotalDigits();
+    if (totalDigits->isSet())
+    {
+        valueSize = totalDigits->getTotalDigits() + 1;
+        AxisChar* digits = new char[10];
+        AxisSprintf (digits, 10, "%i", totalDigits->getTotalDigits());
+        formatSpecifier += digits;
+        delete [] digits;
+    }
+    delete totalDigits;
+    
+    formatSpecifier += PRINTF_LONGLONG_FORMAT_SPECIFIER_CHARS;
+
+    AxisChar* serializedValue = new char[valueSize];
+    AxisSprintf (serializedValue, valueSize, formatSpecifier.c_str(), *value);    
 
     if(*value != 0)
     {

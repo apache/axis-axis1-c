@@ -75,7 +75,9 @@ libsoap_la_SOURCES = Attribute.cpp \
         xsd/constraints/MinInclusive.cpp \
         xsd/constraints/MinExclusive.cpp \
         xsd/constraints/MaxInclusive.cpp \
-        xsd/constraints/MaxExclusive.cpp
+        xsd/constraints/MaxExclusive.cpp \
+        xsd/constraints/TotalDigits.cpp \
+        xsd/constraints/FractionDigits.cpp
 
 libsoap_la_LIBADD = $(LDFLAGS)
 INCLUDES = -I../../include

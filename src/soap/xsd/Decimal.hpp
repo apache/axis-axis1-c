@@ -27,6 +27,8 @@
 #include "constraints/MinExclusive.hpp"
 #include "constraints/MaxInclusive.hpp"
 #include "constraints/MaxExclusive.hpp"
+#include "constraints/TotalDigits.hpp"
+#include "constraints/FractionDigits.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -108,6 +110,20 @@ protected:
      * @return WhiteSpace object set to collapse whitespace
      */
     WhiteSpace* getWhiteSpace();
+
+    /**
+     * Creates a TotalDigits object.  For the Decimal type this is undefined,
+     * so an unset TotalDigits object is created.
+     * @return TotalDigits object
+     */
+    TotalDigits* getTotalDigits();
+
+    /**
+     * Creates a FractionDigits object.  For the Decimal type this is undefined,
+     * so an unset FractionDigits object is created.
+     * @return FractionDigits object
+     */
+    FractionDigits* getFractionDigits();
 
 private:
 	double* m_Decimal;

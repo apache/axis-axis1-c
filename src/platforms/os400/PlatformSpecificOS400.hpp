@@ -94,6 +94,7 @@ extern char*      cvtSingleByteAsciiToEbcdicStr( char* );
  * Format string to be used in printf for 64bit integers
  */
 #define PRINTF_LONGLONG_FORMAT_SPECIFIER "%lld"
+#define PRINTF_LONGLONG_FORMAT_SPECIFIER_CHARS "lld"
 
 #endif
 

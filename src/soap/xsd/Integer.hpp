@@ -23,7 +23,6 @@
 #define _INTEGER_HPP____OF_AXIS_INCLUDED_
 
 #include "Decimal.hpp"
-#include "constraints/MinInclusive.hpp"
 #include "../../platforms/PlatformAutoSense.hpp"
 
 AXIS_CPP_NAMESPACE_START
@@ -70,6 +69,14 @@ public:
      * @return Deserialized Integer value.
      */
     LONGLONG* deserializeInteger(const AxisChar* valueAsChar) throw (AxisSoapException);
+
+protected:
+
+    /**
+     * Creates a FractionDigits object.  For the Integer type this is defined as 0.
+     * @return FractionDigits object
+     */
+    FractionDigits* getFractionDigits();
 
 private:
    LONGLONG* m_Integer;

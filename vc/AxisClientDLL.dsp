@@ -254,6 +254,10 @@ SOURCE=..\src\soap\xsd\Float.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\constraints\FractionDigits.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\xsd\GDay.cpp
 # End Source File
 # Begin Source File
@@ -515,6 +519,10 @@ SOURCE=..\src\soap\xsd\Time.cpp
 # Begin Source File
 
 SOURCE=..\src\soap\xsd\Token.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\constraints\TotalDigits.cpp
 # End Source File
 # Begin Source File
 

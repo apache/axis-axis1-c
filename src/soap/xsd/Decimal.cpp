@@ -118,8 +118,36 @@ AxisChar* Decimal::serialize(const double* value) throw (AxisSoapException)
     delete maxExclusive;
 
 
-    AxisChar* serializedValue = new char[80];
-	AxisSprintf (serializedValue, 80, "%f", *value);
+    AxisString formatSpecifier = "%";
+    
+    int valueSize = 80;
+    TotalDigits* totalDigits = getTotalDigits();
+    if (totalDigits->isSet())
+    {
+        valueSize = totalDigits->getTotalDigits() + 1;
+        AxisChar* digits = new char[10];
+        AxisSprintf (digits, 10, "%i", totalDigits->getTotalDigits());
+        formatSpecifier += digits;
+        delete [] digits;
+    }
+    delete totalDigits;
+    
+    FractionDigits* fractionDigits = getFractionDigits();
+    if (fractionDigits->isSet())
+    {
+        formatSpecifier += ".";
+        AxisChar* digits = new char[10];
+        AxisSprintf (digits, 10, "%i", fractionDigits->getFractionDigits());
+        formatSpecifier += digits;
+        delete [] digits;
+    }
+    delete fractionDigits;
+    
+    formatSpecifier += "f";
+
+    AxisChar* serializedValue = new char[valueSize];
+    AxisSprintf (serializedValue, valueSize, formatSpecifier.c_str(), *value);
+    
 	
     IAnySimpleType::serialize(serializedValue);
     delete [] serializedValue;        
@@ -164,6 +192,16 @@ MaxInclusive* Decimal::getMaxInclusive()
 MaxExclusive* Decimal::getMaxExclusive()
 {
     return new MaxExclusive();
+}
+
+TotalDigits* Decimal::getTotalDigits()
+{
+    return new TotalDigits();
+}
+
+FractionDigits* Decimal::getFractionDigits()
+{
+    return new FractionDigits();
 }
 
 AXIS_CPP_NAMESPACE_END
