@@ -1,6 +1,6 @@
-lib_LTLIBRARIES = libclient_engine.la
+lib_LTLIBRARIES = libaxiscpp_client.la
 AM_CPPFLAGS = -Wall -DUSE_EXPAT_PARSER -DUSE_LTDL -DAXIS_CLIENT_LIB
-libclient_engine_la_SOURCES = ../Axis.cpp \
+libaxiscpp_client_la_SOURCES = ../Axis.cpp \
 		ClientAxisEngine.cpp \
 		../server/ServerAxisEngine.cpp \
 		../AxisEngine.cpp \
@@ -14,5 +14,5 @@ libclient_engine_la_SOURCES = ../Axis.cpp \
                 ../SessionScopeHandlerPool.cpp \
                 ../SharedObject.cpp
 		
-libclient_engine_la_LIBADD = ../../common/libcommon.la ../../soap/libsoap.la ../../wsdd/libwsdd.la ../../xml/libxml.la -L$(AXISCPP_HOME)/lib/expat -lexpat -lstdc++
+libaxiscpp_client_la_LIBADD = ../../common/libcommon.la ../../soap/libsoap.la ../../wsdd/libwsdd.la ../../xml/libxml.la -L$(AXISCPP_HOME)/lib/expat -lexpat -lstdc++
 INCLUDES = -I$(AXISCPP_HOME)/include
