@@ -67,6 +67,9 @@
 
 #include "SoapSerializer.h"
 #include "../common/GDefine.h"
+#include <iostream>
+
+extern "C" int sendSoapResponse(char *cSerializedStream);
 
 int SoapSerializer::iCounter=0;
 
@@ -162,18 +165,21 @@ int SoapSerializer::setSoapFault(SoapFault *pSoapFault)
 	return m_sSerializedStream;
 }*/
 
-int SoapSerializer::getStream(string& sSerialized)
+int SoapSerializer::getStream()
 {
 	int iStatus= SUCCESS;
 
 	if(m_pSoapEnvelope) {
-		iStatus= m_pSoapEnvelope->serialize(sSerialized, (SOAP_VERSION)m_iSoapVersion);
+		iStatus= m_pSoapEnvelope->serialize(*this, (SOAP_VERSION)m_iSoapVersion);
+		//cout<<endl<<"after getStream"<<endl;
+		//SoapSerializer tmp_sz;
+		//iStatus= m_pSoapEnvelope->serialize(sSerialized, tmp_sz, (SOAP_VERSION)m_iSoapVersion);
 		//does this need to be handled here or at the top level. Discuss this.
 		//if(iStatus==FAIL) {
 		//	sSerialized="";
 		//}
 	}
-
+	flushSerializedBuffer();
 	return iStatus;
 }
 
@@ -189,6 +195,8 @@ void SoapSerializer::init()
 	}
 
 	iCounter=0;
+	m_iCurrentSerBufferSize=0;
+	m_cSerializedBuffer[0]='\0'; //make buffer to empty content (as a char*)
 }
 
 int SoapSerializer::setSoapVersion(SOAP_VERSION eSOAP_VERSION)
@@ -201,8 +209,48 @@ string SoapSerializer::getNewNamespacePrefix()
 {
 	iCounter++;
 	
-	char cCounter[64];	
+	char cCounter[64];
 	sprintf(cCounter, "%d", iCounter);
 	
 	return string("ns")+ cCounter;
 }
+
+SoapSerializer& SoapSerializer::operator <<(const char *cSerialized)
+{
+	int iTmpSerBufferSize= strlen(cSerialized);
+	if((m_iCurrentSerBufferSize+iTmpSerBufferSize)>1023) {
+		flushSerializedBuffer();		
+	}
+	cout<<cSerialized;
+	strcat(m_cSerializedBuffer, cSerialized);
+	//cout<<m_cSerializedBuffer<<"END@@";
+
+	m_iCurrentSerBufferSize+= iTmpSerBufferSize;
+
+	return *this;
+	//call the ruputs to send this soap response
+	//ruputs(m_cSerializedBuffer);
+}
+
+int SoapSerializer::flushSerializedBuffer()
+{
+	//cout<<"++++++++++++++++"<<"flushed"<<endl;
+	//cout<<"++++++++++++++++"<<m_cSerializedBuffer<<endl;
+	sendSoapResponse(m_cSerializedBuffer);
+	m_cSerializedBuffer[0]= '\0';
+	m_iCurrentSerBufferSize=0;
+
+	return SUCCESS;
+}
+
+ISoapMethod* SoapSerializer::createSoapMethod()
+{
+	SoapMethod* pMethod = new SoapMethod();
+	setSoapMethod(pMethod);
+	return pMethod;
+}
+
+/*SoapMethodBase* SoapSerializer::createSoapMethodInstance()
+{
+
+}*/
