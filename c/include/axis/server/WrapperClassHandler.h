@@ -18,12 +18,14 @@
 #define __WRAPPERCLASSHANDLER_OF_AXIS_INCLUDED__
 
 #include <axis/server/BasicHandler.h>
-/*
+
+/**
  * @class WrapperClassHandler
  * @brief
  * @author Susantha Kumara (skumara@virtusa.com)
  *
  */
+
 class WrapperClassHandler : public HandlerBase 
 {
 public:
