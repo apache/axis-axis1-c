@@ -29,9 +29,9 @@ echo "-----------------------------"
 
 echo "-----------------------------"
 
-echo "running cgroupB..."
-echo "-----------------------------"
-./cgroupB ${GET_URL} ${GET_PORT}
+#echo "running cgroupB..."
+#echo "-----------------------------"
+#./cgroupB ${GET_URL} ${GET_PORT}
 
 echo "-----------------------------"
 
