@@ -8,8 +8,8 @@
 
 #define DEBUG
 #if defined(DEBUG)
-  #define DEBUG1(X) debugger.debug(X);
-  #define DEBUG2(X,Y) debugger.debug(X,Y);
+  #define DEBUG1(X) debugger.debug(X,__FILE__,__LINE__);  
+  #define DEBUG2(X,Y) debugger.debug(X,Y,__FILE__,__LINE__);
 #endif
 #if !defined(DEBUG)
   #define DEBUG1(X) "";
@@ -27,8 +27,8 @@ public:
   const char * FileName;
   ofstream* fout;
 
-  int debug(const string &sLog);
-  int debug(const string &sLog1, const string &sLog2);
+  int debug(const string &sLog, string arg2, int arg3);
+  int debug(const string &sLog1, const string &sLog2, string arg3, int arg4);
 
 };
 
