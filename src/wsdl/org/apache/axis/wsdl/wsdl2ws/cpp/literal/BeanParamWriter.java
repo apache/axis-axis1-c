@@ -390,6 +390,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 						|| attribs[i].getTypeName().equals("xsd__string")
 						|| attribs[i].getTypeName().equals("xsd__anyURI")
 						|| attribs[i].getTypeName().equals("xsd__QName")
+						|| attribs[i].getTypeName().equals("xsd__NMTOKEN")
 						|| attribs[i].getTypeName().equals("xsd__notation"))				{
 					writer.write("\tparam->"+attribs[i].getParamNameAsMember()+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute())+"( \""+ soapTagName +"\",0);\n");
 					//Samisa
