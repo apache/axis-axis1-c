@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:C="http://xml.apache.org/axis/wsdd/providers/C" xmlns:CPP="http://xml.apache.org/axis/wsdd/providers/CPP">
+    <globalConfiguration>
+    </globalConfiguration>
+    <service name="AxisAdmin" provider="CPP:DOCUMENT" description="Axis C++ Administration web service">
+	<parameter name="allowedMethods" value="updateWSDD "/>
+	<parameter name="className" value="/usr/local/Axis/webservices/libAdminService.so" />
+    </service>
+    <service name="Calculator" provider="CPP:RPC" description="Simple Calculator Axis C++ Service ">
+        <requestFlow name="test-handler-req">
+            <handler name="StringHeaderHandler/" type="/usr/local/Axis/handlers/custom/echoStringHeaderHandler/libeshhandler.so">/>
+            </handler>
+        </requestFlow>
+        <parameter name="allowedMethods" value="add sub mul div "/>
+        <parameter name="className" value="/usr/local/Axis/webservices/libcalculator.so" />
+    </service>
+</deployment>
