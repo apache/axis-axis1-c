@@ -92,16 +92,15 @@ Call::~Call()
 	switch(m_Soap.trtype)
 	{
 	case APTHTTP:
-		delete m_Soap.so.http;
-		/* do for other protocols too */
 	case APTHTTPS:
+		free(m_Soap.so.http->uri_path);
 		delete m_Soap.so.http;
 	}
 }
 
 int Call::SetEndpointURI(const char *pchEndpointURI)
 {
-	m_Soap.so.http->uri_path = pchEndpointURI;
+	m_Soap.so.http->uri_path = strdup(pchEndpointURI);
 	return AXIS_SUCCESS;
 }
 
