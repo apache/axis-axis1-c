@@ -37,7 +37,8 @@ apache_1.3.27(source)
 Note: In my environment I have
 autoconf 2.57, automake 1.6.3, libtool 1.4.3,  gcc 3.2.2 
 
-I assume that you install as root user
+If you use the generated configure script
+
 
 You can download the Axis C++ source or binary from one of the apache mirror sites 
     http://ws.apache.org/axis/cpp/download.html
@@ -52,27 +53,9 @@ AXISCPP_HOME is where you checkout Axis C++
 ------------------------------------------------------------
 AXISCPP_HOME="/usr/local/axiscpp"
 AXISCPP_DEPLOY="/usr/local/axiscpp_deploy"
-#apche2 home is only needed if you build for apache2 
-APACHE2_HOME="/usr/local/apache2"
-#apache home is only needed if you build for apache
-APACHE_HOME="/usr/local/apache"
-#expat home is needed if you use expat parser
-EXPAT_HOME="/usr/local/expat1957"
-#xercesc home is needed if you use xercesc parser
-XERCESC_HOME="/usr/local/xerces-c"
-LD_LIBRARY_PATH="$XERCESC_HOME/lib:$EXPAT_HOME/lib:$AXISCPP_DEPLOY/bin:$AXISCPP_DEPLOY/lib:$LD_LIBRARY_PATH"
-export AXISCPP_HOME AXISCPP_DEPLOY XERCESC_HOME EXPAT_HOME APACHE2_HOME APACHE_HOME LD_LIBRARY_PATH
+LD_LIBRARY_PATH="$AXISCPP_DEPLOY/lib:$LD_LIBRARY_PATH"
+export AXISCPP_HOME AXISCPP_DEPLOY LD_LIBRARY_PATH
 ------------------------------------------------------------
-
-A note about AXISCPP_DEPLOY
-When you buid you can give the configure option 'prefix' to point to the place
-where you need axis c++ installed as,
-    configure --prefix=$AXISCPP_DEPLOY
-
-Give read write permissions to /usr/local/axiscpp_deploy
-
-EXPAT_HOME points to where you installed expat
-XERCESC_HOME points to where you installed xereces-c
 
 Axis C++ core is independant of the parser layer and transport layer.
 You can write your own transport or parser library according to the APIs provided. Currently Axis C++
@@ -84,8 +67,6 @@ You can deploy Axis C++ server
     on Apache2 with xercesc parser or expat parser(Only one parser at a time)
     on Apache1.3 with xercesc parer or expat parser
 
-So if you use only Expat no need to define XERCESC_HOME vice versa.
-
 When you build Axis C++ you can give options
 1) Build for Apache2
    with Expat parser support only
@@ -96,40 +77,41 @@ When you build Axis C++ you can give options
    with Xerces parser support only
    with both parser support
 
-You can choose these selections on when you configure as,
+You can choose these selections on when you configure
 
-./configure --prefix=$AXISCPP_DEPLOY \
-    --libdir=$AXISCPP_DEPLOY/lib \
-    --bindir=$AXISCPP_DEPLOY/bin \
-    --enable-apache2=yes \
-    --enable-apache=no \
-    --enable-expat=yes \
-    --enable-xercesc=no \
+The build process
+
+cd $AXISCPP_HOME
+================
+
+sh autogen.sh
+
+./configure --prefix=<Where you need to deploy axis c++> \
+    --with-apache2=<path to apache2> \
+    --with-expat=/usr/local/expat1957 \
     --enable-samples=yes \
     --enable-testcases=yes
 
-Following are the explanation of these options
+make
 
---libdir : Where libraries are installed. All Axis C++ libraries, sample libraries and testcase service
-           libraries are installed here
---bindir : All the client sample binaries are installed here
+make install
 
---enable-apache2 : To use apache2 as server transport library
+This will deploy Axis C++ into your folder of choice.
 
---enable-apache : To use apache as server transport library
+Following are some of the options availble with configure
 
---enable-expat : To build expat parser library
+--with-apache2 : To use apache2 as server transport library
 
---enable-xercesc : To build xercesc parser library
+--with-apache : To use apache as server transport library
+
+--with-expat : To build expat parser library
+
+--with-xercesc : To build xercesc parser library
 
 --enable-samples : Whether you need to build samples(server and client)
 
 --enable-testcases : Wthether you need to build testcases
 
-Then I can build Axis C++ server, client,parser libraries, transport library and server/client samples
-by,
-cd $AXISCPP_HOME
-sh build.sh
 
 Once you finished, have a look at $AXISCPP_HOME/build_errors. Most probably you will see many warnings.
 Just ignore them. But if you see any errors it means that build was 
@@ -185,7 +167,7 @@ your log files, configuration files libraries etc.
 #XMLParser:The xml parser library
 
 LogPath:/usr/local/axiscpp_deploy/log/AxisLog
-WSDDFilePath:/usr/local/axiscpp_deploy/conf/server.wsdd
+WSDDFilePath:/usr/local/axiscpp_deploy/etc/server.wsdd
 ClientLogPath:/usr/local/axiscpp_deploy/log/AxisClientLog
 XMLParser:/usr/local/axiscpp_deploy/lib/libaxis_xmlparser.so
 Transport_http:/usr/local/axiscpp_deploy/lib/libaxis_transport.so
@@ -193,7 +175,7 @@ Transport_http:/usr/local/axiscpp_deploy/lib/libaxis_transport.so
 -----------------------------------------------------------------------------------------
 Now we need to copy apache module(libaxiscpp_mod2.so for apache2 and libaxiscpp_mod.so for apache)
 to the correct places and start apache. To
-do that you can find scripts written in $AXISCPP_DEPLOY.
+do that you can find scripts written in $AXISCPP_DEPLOY/bin.
 cd $AXISCPP_DEPLOY
 
 To deploy on apache2
@@ -223,29 +205,20 @@ To run interop samples
 cd $AXISCPP_DEPLOY/bin
 ./base localhost 80 etc.
 
+(Check whether there is a script run_interoptests.sh in that folder which 
+ can be used to run all the interop tests)
+
 If you don't get it right check with the following list
 
 * Check whether AXISCPP_HOME is set where you build axis c++ by
   echo $AXISCPP_HOME
-
-* Check whether APACHE2_HOME is set if you use apache2 as the server transport by
-  echo $APACHE2_HOME
-
-* Check whether APACHE_HOME is set if you use apache as the server transport
-  echo $APACHE_HOME
-
-* Check whether XERCESC_HOME(not XERCES_HOME) is set if you use xercesc as the parser
-  echo $XERCESC_HOME
-
-* Check whether EXPAT_HOME is set if you user expat as the parser
-  echo $EXPAT_HOME
 
 * Check whether AXISCPP_DEPLOY and LD_LIBRARY_PATH is set where you start apache
   build axis c++ and run clients by
   echo $AXISCPP_DEPLOY
   echo $LD_LIBRARY_PATH
 
-* Check whether you have necessary permissions to create the install folder which
+* Check whether you have necessary permissions to create the deploy folder which
   you give in configure option prefix.
   eg: configure --prefix=/usr/local/axiscpp_deploy you need permission to write in
   /usr/local/
