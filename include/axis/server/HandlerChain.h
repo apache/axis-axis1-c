@@ -18,11 +18,8 @@
 #if !defined(_HANDLERCHAIN_H____OF_AXIS_INCLUDED_)
 #define _HANDLERCHAIN_H____OF_AXIS_INCLUDED_
 
-#include "BasicHandler.h"
 #include "Handler.h"
-#include <list>
 
-using namespace std;
 /*
  *  @class HandlerChain
  *  @brief interface for the HandlerChain class.

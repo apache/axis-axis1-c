@@ -26,7 +26,7 @@
 #if !defined(_BASICHANDLER_H__OF_AXIS_INCLUDED_)
 #define _BASICHANDLER_H__OF_AXIS_INCLUDED_
 
-#include "IMessageData.h"
+#include <axis/server/IMessageData.h>
 #include "GDefine.h"
 
 enum HANDLER_TYPE { NORMAL_HANDLER, WEBSERVICE_HANDLER, CHAIN_HANDLER };

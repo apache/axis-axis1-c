@@ -19,8 +19,6 @@
 #if !defined(_AXISWRAPPERAPI_H____OF_AXIS_INCLUDED_)
 #define _AXISWRAPPERAPI_H____OF_AXIS_INCLUDED_
 
-#include "GDefine.h"
-#include "AxisUserAPI.h"
 #include "IWrapperSoapDeSerializer.h"
 #include "IWrapperSoapSerializer.h"
 #include "BasicHandler.h"

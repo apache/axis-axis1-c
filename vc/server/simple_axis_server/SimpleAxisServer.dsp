@@ -103,6 +103,10 @@ SOURCE=..\..\..\src\server\simple_axis_server\ServerHelper.cpp
 
 SOURCE=..\..\..\src\server\simple_axis_server\SimpleAxisServer.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\server\simple_axis_server\SimpleAxisServerTransport.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -114,6 +118,10 @@ SOURCE=..\..\..\src\server\simple_axis_server\HTTP_KeyWords.h
 # Begin Source File
 
 SOURCE=..\..\..\src\server\simple_axis_server\ServerHelper.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\server\simple_axis_server\SimpleAxisServerTransport.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

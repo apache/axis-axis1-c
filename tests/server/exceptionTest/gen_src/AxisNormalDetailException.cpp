@@ -63,13 +63,13 @@ void AxisNormalDetailException::processException(int iExceptionCode)
 	m_sMessage = getMessage (iExceptionCode);
 }
 
-const string AxisNormalDetailException::getMessage (exception* objException)
+const string& AxisNormalDetailException::getMessage (exception* objException)
 {
 	string sMessage = objException->what();
 	return sMessage;
 }
 
-const string AxisNormalDetailException::getMessage (int iExceptionCode)
+const string& AxisNormalDetailException::getMessage (int iExceptionCode)
 {
 	string sMessage;
 	switch(iExceptionCode)

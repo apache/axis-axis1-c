@@ -29,7 +29,6 @@
 #include <axis/server/Packet.h>
 #include "../QName.h"
 #include "../Event.h"
-#include <axis/server/AnyElement.h>
 #include <axis/server/XMLParser.h>
 #include "XercesHandler.h"
 

@@ -39,8 +39,9 @@
 
 #include <axis/client/Stub.h>
 #include <stdio.h>
-
+#include <axis/SOAPTransport.h>
 #include <axis/server/AxisWrapperAPI.h>
+#include <axis/server/SoapSerializer.h>
 
 StubFunctions Stub::ms_VFtable;
 bool Stub::bInitialized = false;
@@ -249,10 +250,10 @@ void Stub::setSOAPHeaders()
 	pSerializer = m_pCall->getSOAPSerializer();
     if (pSerializer)
     {
-	for (unsigned int i = 0; i < m_vSOAPHeaderBlocks.size(); i++)
-	{
-	    pSerializer->addHeaderBlock(m_vSOAPHeaderBlocks[i]);
-	}
+		for (unsigned int i = 0; i < m_vSOAPHeaderBlocks.size(); i++)
+		{
+			pSerializer->addHeaderBlock(m_vSOAPHeaderBlocks[i]);
+		}
     }
 }
 

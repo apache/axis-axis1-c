@@ -62,9 +62,11 @@
 #define _STUB_H____OF_AXIS_INCLUDED_
 
 #include <axis/client/Call.h>
+#include <axis/server/Attribute.h>
 
 #ifdef __cplusplus
 #include <vector>
+using namespace std;
 #endif
 
 /**

@@ -51,6 +51,10 @@
 #include "../engine/XMLParserFactory.h"
 #include <axis/server/XMLParser.h>
 #include "../xml/QName.h"
+#include <axis/server/Attribute.h>
+#include <axis/AxisSoapException.h>
+#include <axis/AxisGenException.h>
+
 #include <list>
 
 extern AxisTrace* g_pAT;
@@ -90,8 +94,6 @@ int SoapDeSerializer::setInputStream(SOAPTransport* pInputStream)
 SoapEnvelope* SoapDeSerializer::getEnvelope()
 {
     Attribute *pAttr = NULL;    
-    try
-    {
     if (!m_pNode) m_pNode = m_pParser->next();
     if (!m_pNode || (START_ELEMENT != m_pNode->m_type)) return NULL;
     if (0 == strcmp(m_pNode->m_pchNameOrValue, 
@@ -132,15 +134,6 @@ SoapEnvelope* SoapDeSerializer::getEnvelope()
                          * and used */
         return m_pEnvl;
     }
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
 
     return NULL;
 }
@@ -162,8 +155,6 @@ IHeaderBlock* SoapDeSerializer::getHeaderBlock(const AxisChar* pName,
                                                
 int SoapDeSerializer::getHeader()
 {
-    try
-    {
     if (m_pHeader) return m_nStatus;
     m_pNode = m_pParser->next();
     if (!m_pNode)  /* this means a SOAP error */
@@ -285,24 +276,12 @@ int SoapDeSerializer::getHeader()
             }
         }
     }
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
-
 
     return m_nStatus;
 }
 
 int SoapDeSerializer::getBody()
 {  
-    try
-    { 
     if (!m_pNode) m_pNode = m_pParser->next();
     /* previous header searching may have left a node unidentified */
     if (m_pNode) 
@@ -318,27 +297,12 @@ int SoapDeSerializer::getBody()
         }
     }
     m_nStatus = AXIS_FAIL;
-    }
-    catch(AxisSoapException& e)
-    {
-        throw;
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
     return AXIS_FAIL;
 }
 
 int SoapDeSerializer::checkMessageBody(const AxisChar* pName, 
                                        const AxisChar* pNamespace)
 {
-    try
-    {
     /* check and skip the soap body tag */
     if (AXIS_SUCCESS != getBody()) 
         //return AXIS_FAIL;    
@@ -354,36 +318,19 @@ int SoapDeSerializer::checkMessageBody(const AxisChar* pName,
 	/* A soap fault has occured. we will deserialize it as doc literal
 	 * So we set the style as doc literal. This way of doing things
 	 * is not so nice. I'll rectify this asap
-	 * /
+	 */
 	setStyle(DOC_LITERAL);
         AXISTRACE1("AXISC_NODE_VALUE_MISMATCH_EXCEPTION", CRITICAL);
         throw AxisGenException(AXISC_NODE_VALUE_MISMATCH_EXCEPTION);    
     }
     /* we can check the namespace uri too here. Should we ?*/
     m_pNode = NULL; /*This is to indicate that node is identified and used */
-    }
-    catch(AxisSoapException& e)
-    {
-        throw;
-    }
-    catch(AxisException& e)
-    {
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
     return AXIS_SUCCESS;
 }
 
 int SoapDeSerializer::checkForFault(const AxisChar* pName, 
                                     const AxisChar* pNamespace)
 {
-        //if (!m_pNode) m_pNode = m_pParser->next();
-        //if (!m_pNode || (START_ELEMENT != m_pNode->m_type)) return AXIS_FAIL;
-    try
-    {
     if(0 == strcmp("Fault", pName))
     {
         if (0 != strcmp(m_pNode->m_pchNameOrValue, pName))
@@ -405,17 +352,7 @@ int SoapDeSerializer::checkForFault(const AxisChar* pName,
          m_nStatus = AXIS_SUCCESS;
          return AXIS_SUCCESS;
         
-     }
-     }
-     catch(AxisException& e)
-     {
-         throw;
-     }
-     catch(...)
-     {
-         throw;
-     }
- 
+     } 
 }
 
 int SoapDeSerializer::getFault()

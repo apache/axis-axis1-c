@@ -17,8 +17,6 @@
 #if !defined(_SOAPHEADER_H____OF_AXIS_INCLUDED_)
 #define _SOAPHEADER_H____OF_AXIS_INCLUDED_
 
-#include "HeaderBlock.h"
-#include "SoapEnvVersions.h"
 #include "ISoapHeader.h"
 
 /**
@@ -66,7 +64,7 @@ private:
     
     list<Attribute*> m_attributes;
     list<Attribute*> m_namespaceDecls;
-    list<HeaderBlock*> m_headerBlocks;
+    list<IHeaderBlock*> m_headerBlocks;
     
     const char* m_pcPrefix;
 public:
@@ -123,7 +121,7 @@ public:
       *
       * @param headerBlock The Header Block to be added.
       */
-    void addHeaderBlock(HeaderBlock* headerBlock);
+    void addHeaderBlock(IHeaderBlock* headerBlock);
 
     /**
       * The Constructor.

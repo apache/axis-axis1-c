@@ -80,13 +80,13 @@ void AxisOutOfBoundException::processException(int iExceptionCode)
 	m_sMessage = getMessage (iExceptionCode);
 }
 
-const string AxisOutOfBoundException::getMessage (exception* objException)
+const string& AxisOutOfBoundException::getMessage (exception* objException)
 {
 	string sMessage = objException->what();
 	return sMessage;
 }
 
-const string AxisOutOfBoundException::getMessage (int iExceptionCode)
+const string& AxisOutOfBoundException::getMessage (int iExceptionCode)
 {
 	string sMessage;
 	switch(iExceptionCode)

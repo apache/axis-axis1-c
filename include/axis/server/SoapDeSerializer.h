@@ -18,14 +18,8 @@
 #define _SOAPDESERIALIZER_H____OF_AXIS_INCLUDED_
 
 #include "IHandlerSoapDeSerializer.h"
-#include "SoapEnvVersions.h"
 #include "HeaderBlock.h"
-#include "WSDDDefines.h"
 #include "XMLParser.h"
-#include "AnyElement.h"
-#include <axis/SOAPTransport.h>
-#include <axis/AxisSoapException.h>
-#include <axis/AxisGenException.h>
 
 class SoapFault;
 class SoapMethod;

@@ -20,10 +20,6 @@
 #include "WSDDHandler.h"
 #include "WSDDDefines.h"
 
-#include <string>
-#include <map>
-
-using namespace std;
 /**
  *  @class WSDDService
  *  @brief interface for the WSDDService class.

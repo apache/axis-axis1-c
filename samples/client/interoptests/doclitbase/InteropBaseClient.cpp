@@ -2,6 +2,7 @@
 //
 
 #include "InteropTestPortType.h" 
+#include <axis/AxisGenException.h>
 
 #define ARRAYSIZE 2
 #define LOOPFOR 2

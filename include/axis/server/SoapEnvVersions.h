@@ -27,9 +27,6 @@
 #ifndef __SOAPENVVERSIONS_H_OF_AXIS_INCLUDED___
 #define __SOAPENVVERSIONS_H_OF_AXIS_INCLUDED___
 
-#include <stdlib.h>
-#include "GDefine.h"
-
 /*
  * Here SKW stands for SoapKeyWord. This is a internal naming convension
  * for Axis C++.
