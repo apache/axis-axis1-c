@@ -19,7 +19,7 @@
 
 #include <iostream>
 #include <axis/AxisGenException.hpp>
-#include "./gen_src/Total.h"
+#include "./gen_src/Total.hpp"
 
 using namespace std;
 
@@ -65,7 +65,7 @@ main (int argc, char *argv[])
 
 	cout << endl << " Using service at " << endpoint << endl << endl;
 
-	Total ws (endpoint);
+	Total ws (endpoint, APTHTTP1_1);
 
         ws.setTransportTimeout(2);
 
