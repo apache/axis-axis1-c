@@ -223,3 +223,35 @@ To run interop samples
 cd $AXISCPP_DEPLOY/bin
 ./base localhost 80 etc.
 
+If you don't get it right check with the following list
+
+* Check whether AXISCPP_HOME is set where you build axis c++ by
+  echo $AXISCPP_HOME
+
+* Check whether APACHE2_HOME is set if you use apache2 as the server transport by
+  echo $APACHE2_HOME
+
+* Check whether APACHE_HOME is set if you use apache as the server transport
+  echo $APACHE_HOME
+
+* Check whether XERCESC_HOME(not XERCES_HOME) is set if you use xercesc as the parser
+  echo $XERCESC_HOME
+
+* Check whether EXPAT_HOME is set if you user expat as the parser
+  echo $EXPAT_HOME
+
+* Check whether AXISCPP_DEPLOY and LD_LIBRARY_PATH is set where you start apache
+  build axis c++ and run clients by
+  echo $AXISCPP_DEPLOY
+  echo $LD_LIBRARY_PATH
+
+* Check whether you have necessary permissions to create the install folder which
+  you give in configure option prefix.
+  eg: configure --prefix=/usr/local/axiscpp_deploy you need permission to write in
+  /usr/local/
+
+* Check whether  paths in server.wsdd are pointing correctly to service or hanlder libraries
+
+* Check whether axiscpp.conf is containing correct entries
+
+* Check whether Axis C++  can write to log folder($AXISCPP_DEPLOY/log)
