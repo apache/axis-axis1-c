@@ -123,6 +123,7 @@ typedef struct
 	AXIS_PROTOCOL_TYPE trtype;
 } Ax_soapstream;
 
+int set_header(Ax_soapstream* soap, char * pchkey, char * pchvalue);
 const char* get_header(const Ax_soapstream* soap, const char* pchkey);
 const char* get_service_from_uri(const Ax_soapstream* soap);
 
