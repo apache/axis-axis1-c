@@ -1,0 +1,18 @@
+<test>
+    <name>TestTransportProxy</name>
+    <description>TestTransportProxy</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>TestTransportProxyClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            TestTransportProxy.expected
+        </output>
+        <request>
+            TestTransportPropertiesRequest.out
+                </request>
+    </expected>
+        <endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+	<nomonitor>true</nomonitor>
+</test>
+
