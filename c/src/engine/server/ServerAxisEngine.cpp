@@ -234,7 +234,7 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 
 		if (AXIS_SUCCESS != m_pDZ->FlushInputStream())
 		{
-			AXISTRACE1("SF_SOAPCONTENTERROR", CRITICAL);
+			/*AXISTRACE1("SF_SOAPCONTENTERROR", CRITICAL);*/
 		}
 		/**
 		 * Get any header blocks unprocessed (left) in the Deserializer and add them to the Serializer
