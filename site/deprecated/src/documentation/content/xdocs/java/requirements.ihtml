@@ -9,7 +9,7 @@
     small.red { color: red }
   </STYLE>
 
-  <TITLE>Axis requirements &amp; status</TITLE>
+  <TITLE>Axis requirements & status</TITLE>
 </HEAD>
 
 <BODY>
@@ -1484,7 +1484,7 @@
         <TD><BR>
         <BR></TD>
 
-        <TD valign="top"><B>NYI</B> - Lance &amp; HP
+        <TD valign="top"><B>NYI</B> - Lance & HP
         contribution?<BR></TD>
 
         <TD><BR></TD>
@@ -1525,7 +1525,7 @@
         <TD><BR>
         <BR></TD>
 
-        <TD valign="top"><B>NYI</B> - Lance &amp; HP?<BR></TD>
+        <TD valign="top"><B>NYI</B> - Lance & HP?<BR></TD>
 
         <TD><BR></TD>
 
@@ -1929,7 +1929,7 @@
 
         <TD><BR></TD>
 
-        <TD valign="top">getting there, with functional &amp; unit
+        <TD valign="top">getting there, with functional & unit
         tests<BR></TD>
 
         <TD><BR></TD>

@@ -315,7 +315,7 @@ urn\:AddressFetcher2=samples.addr
 
   <P>A note about what it means to be referenced.  We cannot simply
   say:  start with the services, generate all bindings referenced
-  by the service, generated all portTypes referenced by the
+  by the service, generate all portTypes referenced by the
   referenced bindings, etc.  What if we're generating code from a
   WSDL file that only contains portTypes, messages, and types?  If
   WSDL2Java used service as an anchor, and there's no service in
@@ -438,8 +438,8 @@ Options:
   -u, --use &lt;argument&gt;
     The use of items in the binding, either LITERAL or ENCODED
   -e, --extraClasses &lt;argument&gt;
-    A space or comma separated list of class names to be added tO
-    The type section.
+    A space or comma separated list of class names to be added to
+    the type section.
 Details:
    portType element name= &lt;--portTypeName value&gt; OR &lt;class-of-portType name&gt;
    binding  element name= &lt;--bindingName value&gt; OR &lt;--servicePortName value&gt;Soap
@@ -475,11 +475,11 @@ Service
   location attribute is assigned the specified value.</P>
 
   <P><B>-P, --portTypeName &lt;name&gt;</B><BR>
-  Indicates the name to use use for the portType element. If not
+  Indicates the name to use for the portType element. If not
   specified, the class-of-portType name is used.</P>
 
   <P><B>-b, --bindingName &lt;name&gt;</B><BR>
-  Indicates the name to use use for the binding element. If not
+  Indicates the name to use for the binding element. If not
   specified, the value of the --servicePortName + "SoapBinding" is
   used.</P>
 
@@ -516,7 +516,7 @@ Service
   Indicates the kind of WSDL to generate.  Accepted values are:</P>
 
   <UL>
- <LI>All --- (default) Generates wsld containing both interface
+ <LI>All --- (default) Generates wsdl containing both interface
  and implementation WSDL constructs.</LI>
 
  <LI>Interface --- Generates a WSDL containing the interface
@@ -582,7 +582,7 @@ Service
   document. This is useful in the case where your service interface
   references a base class and you would like your WSDL to contain
   XML Schema type defintions for these other classes. The
-  -extraClasses option can be specified duplicate times. Each
+  --extraClasses option can be specified duplicate times. Each
   specification results in the additional classes being added to
   the list.</P>
 </TT>

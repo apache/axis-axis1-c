@@ -534,7 +534,7 @@
    <CODE>EngineConfigurationFactoryFinder(someContext)</CODE>
    and ensuring that the results are handed to Axis.&nbsp;
    <CODE>someContext</CODE> is key to how the factory finder
-   locates the appropariate implementation of
+   locates the appropriate implementation of
    EngineConfigurationFactory to be used, if any.
 
    <P>EngineConfigurationFactoryFinder works as follows:<BR>
@@ -1246,7 +1246,7 @@
     javax.xml.PortType, etc); a generator for schema types;
     and a generator for the WSDL Definition itself.&nbsp;
     This last generator is used to generate anything that
-    doesn't fit into the previous categories</P>
+    doesn't fit into the previous categories.</P>
 
     <P>In addition to the getGeneratorMethods, the
     GeneratorFactory defines a generatorPass method which
@@ -1636,7 +1636,7 @@
   option is "-g", rather an odd abbreviation, but "-s" is the
   abbreviation for --serverSide and "-S" is the abbreviation
   for --skeletonDeploy.&nbsp; Bummer.&nbsp; I just picked
-  some other letter.</LI>
+  some other letter.)</LI>
 
   <LI>createParser - we've got to provide a means by which
   the parent class can get our Parser extension.</LI>

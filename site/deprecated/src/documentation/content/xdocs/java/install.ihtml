@@ -233,7 +233,7 @@
 
   <H3>Tomcat 4.x and Java 1.4</H3>
 
-  <P>Java 1.4 changed the rules as to to how packages beginning in
+  <P>Java 1.4 changed the rules as to how packages beginning in
   java.* and javax.* get loaded. Specifically, they only get loaded
   from <I>endorsed</I> directories. jaxrpc.jar and saaj.jar contain
   javax packages, so they may not get picked up. If happyaxis.jsp
@@ -289,7 +289,7 @@
 
   <P>From the start page, select <I>View the list of deployed Web
   services</I>. This will list all registered Web Services, unless
-  the servlet is configured not to do so. On this page, You should
+  the servlet is configured not to do so. On this page, you should
   be able to click on <I>(wsdl)</I> for each deployed Web service
   to make sure that your web service is up and running.</P>
 
@@ -389,7 +389,7 @@
   via the Admin web service, which is usually done with the
   AdminClient program or the &lt;axis-admin&gt; Ant task. Both of
   these do the same thing: they run the Axis SOAP client to talk to
-  the Axis adminstration service, which is a SOAP service in its
+  the Axis administration service, which is a SOAP service in its
   own right. It's also a special SOAP service in one regard--it is
   restricted to local callers only (not remote access) and is
   password protected to stop random people from administrating your
@@ -414,7 +414,7 @@
   application server, or by using a server-specific mechanism to
   restart a specific webapp.</P>
 
-  <P><SPAN class="note">Note:</SPAN> If your web service uses the
+  <P>Note: If your web service uses the
   simple authorization handlers provided with xml-axis (this is
   actually <U>not</U> recommended as these are merely illustrations
   of how to write a handler than intended for production use), then
@@ -468,7 +468,7 @@
   <P>Unix users have to do something similar. Below we have
   installed AXIS into /usr/axis and are using the bash shell. See
   your shell's documentation for differences. To make variables
-  permenate you will need to add them to your shell's startup (dot)
+  permeate you will need to add them to your shell's startup (dot)
   files. Again, see your shell's documentation.</P>
   <PRE class="xml">
  set AXIS_HOME=/usr/axis<BR>
@@ -547,7 +547,7 @@ java -cp "$AXISCLASSPATH" ...
   problems are foundational Java development skills--if you don't
   know how to do these things, learn them now!</P>
 
-  <P><SPAN class="note">Note:</SPAN> You may need to replace
+  <P>Note: You may need to replace
   localhost with your host name, and 8080 with the port number used
   by your web server. If you have renamed the web application to
   something other than "axis" change the URL appropriately.</P>
@@ -596,7 +596,7 @@ java -cp "$AXISCLASSPATH" ...
  <LI>You should get back "55.25" as a result.</LI>
   </UL>
 
-  <P><SPAN class="note">Note:</SPAN> Again, you may need to replace
+  <P>Note: Again, you may need to replace
   localhost with your host name, and 8080 with the port number used
   by your web server. If you have renamed the web application to
   something other than "axis" change the URL appropriately.</P>
@@ -709,12 +709,12 @@ java -cp "$AXISCLASSPATH" ...
 
  <LI>Consult the <A href=
  "http://nagoya.apache.org/wiki/apachewiki.cgi?AxisProjectPages">
- Axis Wiki</A> For its Frequently Asked Questions (FAQ),
+ Axis Wiki</A> for its Frequently Asked Questions (FAQ),
  installation notes, interoperability issues lists, and other
  useful information.</LI>
 
  <LI>Don't email people for help directly, unless you know them.
- It's rude and presumptious. Messages sent over the mail list
+ It's rude and presumptuous. Messages sent over the mail list
  benefit the whole community--both the original posters and
  people who search the list. Personal messages just take up the
  recipients time, and are unwelcome. Usually, if not ignored

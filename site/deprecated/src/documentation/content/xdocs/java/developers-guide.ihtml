@@ -271,7 +271,7 @@ G:\\xml-axis\\java\\build\\classes
     <LI style="list-style: none"><BR>
     &nbsp;</LI>
 
-    <LI>warn - Use of deprecated APIs, poor use of API, Almost
+    <LI>warn - Use of deprecated APIs, poor use of API, almost
     errors, other runtime situations that are undesirable or
     unexpected, but not necessarily "wrong". Expect these to be
     immediately visible on a console, and MUST be
@@ -592,7 +592,7 @@ public class QSClockHandler implements QSHandler {
     reason. Code reviewers are invited to put on their vulture
     beaks and peck away...
 
-      <P>There are a few corrollaries to this rule.</P>
+      <P>There are a few corollaries to this rule.</P>
 
       <UL>
         <LI>
@@ -1108,7 +1108,7 @@ public class QSClockHandler implements QSHandler {
 
   <P><BR>
   <FONT color="#000000">One way to build a test is to "cut and
-  paste" and existing tests, and then modify the test to suit your
+  paste" the existing tests, and then modify the test to suit your
   needs.  This approach is becoming more complicated as the
   different kinds of tests grow.</FONT></P>
 
@@ -1147,7 +1147,7 @@ public class QSClockHandler implements QSHandler {
         harness. This file is operational without any additional
         changes.  Copy the *TestCase.java file into the same
         directory as your wsdl file.  (Ideally only the Java files
-        that are changed need to be in your directory.  So this
+        that are changed need to be in your directory.) So this
         file is not needed, but please make sure to modify your
         &lt;wsdl2java ...&gt; clause (described below) to emit a
         testcase.</FONT></LI>
@@ -1439,7 +1439,7 @@ at org.apache.axis.encoding.DeserializerImpl.valueComplete
     <TT>http://localhost:&lt;port&gt;/axis/SOAPMonitor</TT>
   </BLOCKQUOTE>
 
-  <P>. As you run your tests, the SOAP messages should appear in
+  <P>As you run your tests, the SOAP messages should appear in
   the SOAP monitor window.</P>
 
   <P><CODE>SOAP Monitor</CODE> is described in more detail in the
