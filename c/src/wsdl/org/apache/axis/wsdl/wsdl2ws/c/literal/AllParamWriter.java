@@ -53,24 +53,56 @@
  * <http://www.apache.org/>.
  */
  
-
-package org.apache.axis.wsdl.wsdl2ws;
-
-import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
-import org.apache.axis.wsdl.wsdl2ws.rpc.RPCWebServiceGenarator;
-import org.apache.axis.wsdl.wsdl2ws.doclit.DocLitWebServiceGenarator;
 /**
- * Create the concreate WebService Genarator depends on the options.
- * @author Srinath Perera (hemapani@opensource.lk)
- * @author Dimuthu Leelarathne (muthulee@opensource.lk)
+ * @author Srinath Perera(hemapani@openource.lk)
+ * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
  */
-public class WebServiceGenaratorFactory {
-	public static WebServiceGenarator createWebServiceGenarator(WebServiceContext wscontext){
-		if(wscontext.getWrapInfo().getWrapperStyle() == WrapperConstants.STYLE_RPC)
-			return new 	RPCWebServiceGenarator(wscontext);	
-		else if(wscontext.getWrapInfo().getWrapperStyle() == WrapperConstants.STYLE_DOCUMENT)										
-			return new 	DocLitWebServiceGenarator(wscontext);
-		else	
-			return null;
+package org.apache.axis.wsdl.wsdl2ws.c.literal;
+import java.util.Iterator;
+
+import org.apache.axis.wsdl.wsdl2ws.SourceWriter;
+import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
+import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
+import org.apache.axis.wsdl.wsdl2ws.info.Type;
+import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
+
+/**
+ * Parameter genarator.. genarate all necessary param classes
+ * @author hemapani
+ */
+public class AllParamWriter implements SourceWriter{
+	private WebServiceContext wscontext;
+	
+	public AllParamWriter(WebServiceContext wscontext){
+		this.wscontext =wscontext;
+	}
+
+	/**
+	 * genarate all the wrappets for custom complex types.
+	 * @see org.apache.axis.wsdl.wsdl2ws.SourceWriter#writeSource()
+	 */
+	public void writeSource() throws WrapperFault {
+		Iterator enu = wscontext.getTypemap().getTypes().iterator();
+		String generator = wscontext.getWrapInfo().getImplStyle();
+		Type type;
+		while(enu.hasNext()){	
+		try{	
+			type = (Type)enu.next();
+			if(wscontext.getWrapInfo().getImplStyle().equals(WrapperConstants.IMPL_STYLE_STRUCT)){
+					if(type.isArray()){
+						System.out.println("Array writer called ......");
+						(new org.apache.axis.wsdl.wsdl2ws.c.ArrayParamWriter(wscontext,type)).writeSource();	
+					}	
+					else{	
+						System.out.println("struct writer called ......");
+						(new org.apache.axis.wsdl.wsdl2ws.c.BeanParamWriter(wscontext,type)).writeSource();
+						(new ParmHeaderFileWriter(wscontext,type)).writeSource();	
+					}	
+				}	
+			}catch(Exception e){
+				System.out.println("Error occured yet we continue to genarate other classes ... you should check the error");
+				e.printStackTrace();
+			}	
+		}
 	}
 }

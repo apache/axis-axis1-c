@@ -103,7 +103,7 @@ typedef struct {
 	AxisChar* (AXISCALL* GetElementAsString)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
     AxisChar* (AXISCALL* GetElementAsAnyURI)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
     AxisChar* (AXISCALL* GetElementAsQName)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-	xsd__base64Binary (AXISCALL* GetElementAsHexBinary)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+	xsd__hexBinary (AXISCALL* GetElementAsHexBinary)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
 	xsd__base64Binary (AXISCALL* GetElementAsBase64Binary)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
     struct tm (AXISCALL* GetElementAsDateTime)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
     struct tm (AXISCALL* GetElementAsDate)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
@@ -151,7 +151,6 @@ public:
 	virtual ~IWrapperSoapDeSerializer(){};
 
 	virtual int AXISCALL CheckMessageBody(const AxisChar* pName, const AxisChar* pNamespace)=0;
-
 	/* Method used by wrappers to get a deserialized Array of complex types */
 	virtual Axis_Array AXISCALL GetCmplxArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
 	/* Method used by wrappers to get a deserialized Array of basic types */
@@ -208,17 +207,152 @@ public:
 	/* following stuff is needed to provide the interface for C web services */
 public:
 	static IWrapperSoapDeSerializerFunctions ms_VFtable;
+	static int AXISCALL s_CheckMessageBody(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{return ((IWrapperSoapDeSerializer*)pObj)->CheckMessageBody(pName, pNamespace);};
+	static Axis_Array AXISCALL s_GetCmplxArray(void* pObj, void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)
+	{return ((IWrapperSoapDeSerializer*)pObj)->GetCmplxArray(pDZFunct, pCreFunct, pDelFunct, pSizeFunct, pName, pNamespace);};
+	static Axis_Array AXISCALL s_GetBasicArray(void* pObj, XSDTYPE nType, const AxisChar* pName, const AxisChar* pNamespace)
+	{return ((IWrapperSoapDeSerializer*)pObj)->GetBasicArray(nType, pName, pNamespace);};
+	static void* AXISCALL s_GetCmplxObject(void* pObj, void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace)
+	{return ((IWrapperSoapDeSerializer*)pObj)->GetCmplxObject(pDZFunct, pCreFunct, pDelFunct, pName, pNamespace);};
 	static int AXISCALL s_GetElementAsInt(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsInt(pName, pNamespace);};
-	static unsigned int AXISCALL s_GetElementAsUnsignedInt(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	static xsd__boolean AXISCALL s_GetElementAsBoolean(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsBoolean(pName, pNamespace);};
+    static unsigned int AXISCALL s_GetElementAsUnsignedInt(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsUnsignedInt(pName, pNamespace);};
-	static short AXISCALL s_GetElementAsShort(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static short AXISCALL s_GetElementAsShort(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsShort(pName, pNamespace);};
+    static unsigned short AXISCALL s_GetElementAsUnsignedShort(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsUnsignedShort(pName, pNamespace);};
+    static char AXISCALL s_GetElementAsByte(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsByte(pName, pNamespace);};
+    static unsigned char AXISCALL s_GetElementAsUnsignedByte(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsUnsignedByte(pName, pNamespace);};
+    static long AXISCALL s_GetElementAsLong(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsLong(pName, pNamespace);};
+    static long AXISCALL s_GetElementAsInteger(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsInteger(pName, pNamespace);};
+    static unsigned long AXISCALL s_GetElementAsUnsignedLong(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsUnsignedLong(pName, pNamespace);};
+	static float AXISCALL s_GetElementAsFloat(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsFloat(pName, pNamespace);};
+    static double AXISCALL s_GetElementAsDouble(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsDouble(pName, pNamespace);};
+    static double AXISCALL s_GetElementAsDecimal(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsDouble(pName, pNamespace);};
+	static AxisChar* AXISCALL s_GetElementAsString(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsString(pName, pNamespace);};
+    static AxisChar* AXISCALL s_GetElementAsAnyURI(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsAnyURI(pName, pNamespace);};
+    static AxisChar* AXISCALL s_GetElementAsQName(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsQName(pName, pNamespace);};
+	static xsd__hexBinary AXISCALL s_GetElementAsHexBinary(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsHexBinary(pName, pNamespace);};
+	static xsd__base64Binary AXISCALL s_GetElementAsBase64Binary(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsBase64Binary(pName, pNamespace);};
+    static struct tm AXISCALL s_GetElementAsDateTime(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsDateTime(pName, pNamespace);};
+    static struct tm AXISCALL s_GetElementAsDate(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsDate(pName, pNamespace);};
+    static struct tm AXISCALL s_GetElementAsTime(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsTime(pName, pNamespace);};
+    static long AXISCALL s_GetElementAsDuration(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsDuration(pName, pNamespace);};
+	static int AXISCALL s_GetAttributeAsInt(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsInt(pName, pNamespace);};
+	static xsd__boolean AXISCALL s_GetAttributeAsBoolean(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsBoolean(pName, pNamespace);};
+    static unsigned int AXISCALL s_GetAttributeAsUnsignedInt(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsUnsignedInt(pName, pNamespace);};
+    static short AXISCALL s_GetAttributeAsShort(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsShort(pName, pNamespace);};
+    static unsigned short AXISCALL s_GetAttributeAsUnsignedShort(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsUnsignedShort(pName, pNamespace);};
+    static char AXISCALL s_GetAttributeAsByte(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsByte(pName, pNamespace);};
+    static unsigned char AXISCALL s_GetAttributeAsUnsignedByte(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsUnsignedByte(pName, pNamespace);};
+    static long AXISCALL s_GetAttributeAsLong(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsLong(pName, pNamespace);};
+    static long AXISCALL s_GetAttributeAsInteger(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsInteger(pName, pNamespace);};
+    static unsigned long AXISCALL s_GetAttributeAsUnsignedLong(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsUnsignedLong(pName, pNamespace);};
+	static float AXISCALL s_GetAttributeAsFloat(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsFloat(pName, pNamespace);};
+    static double AXISCALL s_GetAttributeAsDouble(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsDouble(pName, pNamespace);};
+    static double AXISCALL s_GetAttributeAsDecimal(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsDecimal(pName, pNamespace);};
+	static AxisChar* AXISCALL s_GetAttributeAsString(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsString(pName, pNamespace);};
+    static AxisChar* AXISCALL s_GetAttributeAsAnyURI(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsAnyURI(pName, pNamespace);};
+    static AxisChar* AXISCALL s_GetAttributeAsQName(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsQName(pName, pNamespace);};
+	static xsd__hexBinary AXISCALL s_GetAttributeAsHexBinary(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsHexBinary(pName, pNamespace);};
+	static xsd__base64Binary AXISCALL s_GetAttributeAsBase64Binary(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsBase64Binary(pName, pNamespace);};
+    static struct tm AXISCALL s_GetAttributeAsDateTime(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsDateTime(pName, pNamespace);};
+    static struct tm AXISCALL s_GetAttributeAsDate(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsDate(pName, pNamespace);};
+    static struct tm AXISCALL s_GetAttributeAsTime(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsTime(pName, pNamespace);};
+    static long AXISCALL s_GetAttributeAsDuration(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetAttributeAsDuration(pName, pNamespace);};
 	static void s_Initialize()
 	{
+		ms_VFtable.CheckMessageBody = s_CheckMessageBody;
+		ms_VFtable.GetCmplxArray = s_GetCmplxArray;
+		ms_VFtable.GetBasicArray = s_GetBasicArray;
+		ms_VFtable.GetCmplxObject = s_GetCmplxObject;
 		ms_VFtable.GetElementAsInt = s_GetElementAsInt;
+		ms_VFtable.GetElementAsBoolean = s_GetElementAsBoolean;
 		ms_VFtable.GetElementAsUnsignedInt = s_GetElementAsUnsignedInt;
 		ms_VFtable.GetElementAsShort = s_GetElementAsShort;
+		ms_VFtable.GetElementAsUnsignedShort = s_GetElementAsUnsignedShort;
+		ms_VFtable.GetElementAsByte = s_GetElementAsByte;
+		ms_VFtable.GetElementAsUnsignedByte = s_GetElementAsUnsignedByte;
+		ms_VFtable.GetElementAsLong = s_GetElementAsLong;
+		ms_VFtable.GetElementAsInteger = s_GetElementAsInteger;
+		ms_VFtable.GetElementAsUnsignedLong = s_GetElementAsUnsignedLong;
+		ms_VFtable.GetElementAsFloat = s_GetElementAsFloat;
+		ms_VFtable.GetElementAsDouble = s_GetElementAsDouble;
+		ms_VFtable.GetElementAsDecimal = s_GetElementAsDecimal;
+		ms_VFtable.GetElementAsString = s_GetElementAsString;
+		ms_VFtable.GetElementAsAnyURI = s_GetElementAsAnyURI;
+		ms_VFtable.GetElementAsQName = s_GetElementAsQName;
+		ms_VFtable.GetElementAsHexBinary = s_GetElementAsHexBinary;
+		ms_VFtable.GetElementAsBase64Binary = s_GetElementAsBase64Binary;
+		ms_VFtable.GetElementAsDateTime = s_GetElementAsDateTime;
+		ms_VFtable.GetElementAsDate = s_GetElementAsDate;
+		ms_VFtable.GetElementAsTime = s_GetElementAsTime;
+		ms_VFtable.GetElementAsDuration = s_GetElementAsDuration;
+		ms_VFtable.GetAttributeAsInt = s_GetAttributeAsInt;
+		ms_VFtable.GetAttributeAsBoolean = s_GetAttributeAsBoolean;
+		ms_VFtable.GetAttributeAsUnsignedInt = s_GetAttributeAsUnsignedInt;
+		ms_VFtable.GetAttributeAsShort = s_GetAttributeAsShort;
+		ms_VFtable.GetAttributeAsUnsignedShort = s_GetAttributeAsUnsignedShort;
+		ms_VFtable.GetAttributeAsByte = s_GetAttributeAsByte;
+		ms_VFtable.GetAttributeAsUnsignedByte = s_GetAttributeAsUnsignedByte;
+		ms_VFtable.GetAttributeAsLong = s_GetAttributeAsLong;
+		ms_VFtable.GetAttributeAsInteger = s_GetAttributeAsInteger;
+		ms_VFtable.GetAttributeAsUnsignedLong = s_GetAttributeAsUnsignedLong;
+		ms_VFtable.GetAttributeAsFloat = s_GetAttributeAsFloat;
+		ms_VFtable.GetAttributeAsDouble = s_GetAttributeAsDouble;
+		ms_VFtable.GetAttributeAsDecimal = s_GetAttributeAsDecimal;
+		ms_VFtable.GetAttributeAsString = s_GetAttributeAsString;
+		ms_VFtable.GetAttributeAsAnyURI = s_GetAttributeAsAnyURI;
+		ms_VFtable.GetAttributeAsQName = s_GetAttributeAsQName;
+		ms_VFtable.GetAttributeAsHexBinary = s_GetAttributeAsHexBinary;
+		ms_VFtable.GetAttributeAsBase64Binary = s_GetAttributeAsBase64Binary;
+		ms_VFtable.GetAttributeAsDateTime = s_GetAttributeAsDateTime;
+		ms_VFtable.GetAttributeAsDate = s_GetAttributeAsDate;
+		ms_VFtable.GetAttributeAsTime = s_GetAttributeAsTime;
+		ms_VFtable.GetAttributeAsDuration = s_GetAttributeAsDuration;
 	}
 };
 #endif

@@ -182,14 +182,39 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 			  m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADHDL));
 			  break; //do .. while(0)
 			}
-
-			//and handlers may add headers to the Serializer.
-			//Invoke all handlers including the webservice
-			//in case of failure coresponding stream fault message will be set
+			/**
+			 * Let Deserializer parse the header section so that handlers can use them. 
+			 * Each handler should remove the header block targetted to it
+			 * and handlers may add header blocks to the DeSerializer and Serializer
+			 * irrespective of whether it is request message path or response path.
+			 * A header may be added to the Deserializer ONLY IF there is a CAN BE
+			 * a handler in this soap processor to handle it.
+			 */
+			if (AXIS_SUCCESS != m_pDZ->GetHeader())
+			{
+				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
+				break; //do .. while(0)				
+			}
+			/**
+			 * Invoke all handlers including the webservice
+			 * in case of failure coresponding stream fault message will be set
+			 */
 			Status = Invoke(m_pMsgData); //we generate response in the same way even if this has failed
 		}
 		while(0);
-		//Serialize
+		/**
+		 * Get any header blocks unprocessed (left) in the Deserializer and add them to the Serializer
+		 * They may be headers targetted to next soap processors
+		 */
+		HeaderBlock* pHderBlk = NULL;
+		while(true)
+		{
+			/* following function gets a header block from Deserializer irrespective of any thing */
+			pHderBlk = m_pDZ->GetHeaderBlock();
+			/* add it to the Serializer */
+			if (pHderBlk) m_pSZ->AddHeaderBlock(pHderBlk);
+			else break;
+		}
 		m_pSZ->SetOutputStream(stream);
 
 		//Pool back the Service specific handlers
@@ -266,6 +291,16 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 		}
 		AXISTRACE1("AFTER invoke service specific request handlers");
 		level++; //AE_SERH
+		/*
+		 * Before processing the soap body check whether there is any header blocks
+		 * with mustUnderstand attribute left unprocessed in the Deserializer. If so
+		 * return a soap fault.
+		 */
+		if (m_pDZ->IsAnyMustUnderstandHeadersLeft())
+		{
+			m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_MUST_UNDERSTAND));
+			break; //do .. while (0)
+		}
 		//call actual web service handler
 		if (m_pWebService)
 		{

@@ -661,6 +661,41 @@ void SoapSerializer::Serialize(const char* pFirst, ...)
 }
 
 /**
+ * Used probably by a handler to add a header block to the Serializer. 
+ */
+int SoapSerializer::AddHeaderBlock(IHeaderBlock* pBlk)
+{
+	if (m_pSoapEnvelope)
+	{
+		if(!m_pSoapEnvelope->m_pSoapHeader) m_pSoapEnvelope->m_pSoapHeader = new SoapHeader();
+	}
+	else /* error : by this time there should be an envelope */
+	{
+		return AXIS_FAIL;
+	}
+	m_pSoapEnvelope->m_pSoapHeader->addHeaderBlock((HeaderBlock*)pBlk);
+	return AXIS_SUCCESS;
+}
+
+int SoapSerializer::SetBodyAsHexBinary(xsd__hexBinary body)
+{
+	/*TODO*/
+	return AXIS_SUCCESS;
+}
+
+int SoapSerializer::SetBodyAsBase64Binary(xsd__base64Binary body)
+{
+	/*TODO*/	
+	return AXIS_SUCCESS;
+}
+
+const AxisChar* SoapSerializer::GetBodyAsString()
+{
+	/*TODO*/	
+	return NULL;
+}
+
+/**
  * Callback function that should be called by the transport module to release a buffer passed to it by a Serializer. 
  * @param 
  *		buffer - Same buffer passed to transport by calling transport's AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES 
@@ -677,6 +712,5 @@ void axis_buffer_release(const char* buffer, const void* bufferid, const void* s
 	char *pChar = const_cast<char*>(buffer);
 	pChar[0] = '\0'; /* set nul */ 
 }
-
 
 

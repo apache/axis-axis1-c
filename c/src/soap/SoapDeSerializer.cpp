@@ -77,7 +77,7 @@
 
 #include <axis/common/AxisTrace.h>
 
-#define INITIAL_ARRAY_SIZE 4
+#define INITIAL_ARRAY_SIZE 1
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -166,7 +166,7 @@ int SoapDeSerializer::GetHeader()
 {
 	if (m_pHeader) return m_nStatus;
 	m_pNode = m_pParser->Next();
-	if (!m_pNode) {
+	if (!m_pNode) { /* this means a SOAP error */
 		m_nStatus = AXIS_FAIL;
 		return m_nStatus;
 	}
@@ -183,34 +183,17 @@ int SoapDeSerializer::GetHeader()
 int SoapDeSerializer::GetBody()
 {
     AXISTRACE1("SoapDeSerializer::GetBody");
-	while (true)
+	if (!m_pNode) m_pNode = m_pParser->Next(); /* previous header searching may have left a node unidentified */
+	if (m_pNode) 
 	{
-		if (!m_pNode) m_pNode = m_pParser->Next(); /* previous header searching may have left a node unidentified */
-		if (!m_pNode) {
-			m_nStatus = AXIS_FAIL;
-			return AXIS_FAIL;
-		}
 		if ((START_ELEMENT == m_pNode->m_type) && (0 == strcmp(m_pNode->m_pchNameOrValue, SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_BODY])))
 		{
 			/* Set any attributes/namspaces to the SoapBody object */
 			m_pNode = NULL; /*This is to indicate that node is identified and used */
 			return AXIS_SUCCESS;
 		}
-		else /* probably there are un-processed soap headers. So check for "mustUnderstand" attribute in those headers */
-		{
-			/*TODO: parse until <Body> tag is found. If a "mustUnderstand" attribute found
-			{
-				m_nStatus = AXIS_MUSTUNDERSTAND_IGNORED;
-				return NULL;
-			}
-			else
-			{
-				leave the <Body> element un-identified state
-			}
-			*/
-			m_pNode = NULL;
-		}
 	}
+	m_nStatus = AXIS_FAIL;
 	return AXIS_FAIL;
 }
 
@@ -321,9 +304,13 @@ Axis_Array SoapDeSerializer::GetCmplxArray(void* pDZFunct, void* pCreFunct, void
 					m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <phonenumbers>*/
 				if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
 				{
+					m_pNode = NULL; /* recognized and used the node */
 					pItem = reinterpret_cast<void*>(ptrval+nIndex*itemsize);
 					if (AXIS_SUCCESS == ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pItem, this))
+					{
+						m_pParser->Next(); /* skip end element of the array item */
 						continue;
+					}
 				}
 				else
 				{
@@ -713,7 +700,7 @@ void* SoapDeSerializer::GetCmplxObject(void* pDZFunct, void* pCreFunct, void* pD
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -954,7 +941,7 @@ xsd__boolean SoapDeSerializer::GetElementAsBoolean(const AxisChar* pName, const 
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1000,7 +987,7 @@ int SoapDeSerializer::GetElementAsInt(const AxisChar* pName, const AxisChar* pNa
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1046,7 +1033,7 @@ unsigned int SoapDeSerializer::GetElementAsUnsignedInt(const AxisChar* pName, co
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1092,7 +1079,7 @@ short SoapDeSerializer::GetElementAsShort(const AxisChar* pName, const AxisChar*
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1138,7 +1125,7 @@ unsigned short SoapDeSerializer::GetElementAsUnsignedShort(const AxisChar* pName
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1184,7 +1171,7 @@ char SoapDeSerializer::GetElementAsByte(const AxisChar* pName, const AxisChar* p
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1230,7 +1217,7 @@ unsigned char SoapDeSerializer::GetElementAsUnsignedByte(const AxisChar* pName, 
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1276,7 +1263,7 @@ long SoapDeSerializer::GetElementAsLong(const AxisChar* pName, const AxisChar* p
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1322,7 +1309,7 @@ long SoapDeSerializer::GetElementAsInteger(const AxisChar* pName, const AxisChar
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1368,7 +1355,7 @@ unsigned long SoapDeSerializer::GetElementAsUnsignedLong(const AxisChar* pName, 
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1414,7 +1401,7 @@ float SoapDeSerializer::GetElementAsFloat(const AxisChar* pName, const AxisChar*
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1460,7 +1447,7 @@ double SoapDeSerializer::GetElementAsDouble(const AxisChar* pName, const AxisCha
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1506,7 +1493,7 @@ double SoapDeSerializer::GetElementAsDecimal(const AxisChar* pName, const AxisCh
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1552,7 +1539,7 @@ AxisChar* SoapDeSerializer::GetElementAsString(const AxisChar* pName, const Axis
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1598,7 +1585,7 @@ AxisChar* SoapDeSerializer::GetElementAsAnyURI(const AxisChar* pName, const Axis
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1644,7 +1631,7 @@ AxisChar* SoapDeSerializer::GetElementAsQName(const AxisChar* pName, const AxisC
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1690,7 +1677,7 @@ xsd__hexBinary SoapDeSerializer::GetElementAsHexBinary(const AxisChar* pName, co
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1752,7 +1739,7 @@ xsd__base64Binary SoapDeSerializer::GetElementAsBase64Binary(const AxisChar* pNa
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1798,7 +1785,7 @@ struct tm SoapDeSerializer::GetElementAsDateTime(const AxisChar* pName, const Ax
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1844,7 +1831,7 @@ struct tm SoapDeSerializer::GetElementAsDate(const AxisChar* pName, const AxisCh
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1890,7 +1877,7 @@ struct tm SoapDeSerializer::GetElementAsTime(const AxisChar* pName, const AxisCh
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -1936,7 +1923,7 @@ long SoapDeSerializer::GetElementAsDuration(const AxisChar* pName, const AxisCha
 		}
 		else
 		{
-			/* error: unexpected element */
+			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 		}
 	}
 	m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -2063,4 +2050,52 @@ void SoapDeSerializer::DeleteArray(Axis_Array* pArray , XSDTYPE nType)
 	}
 	pArray->m_Array = NULL;
 	pArray->m_Size = 0;
+}
+
+/**
+ * Used by the Axis Engine to get any left header blocks in the deserializer even after
+ * the completion of message path. Then those headers will be added to the serializer
+ * because they are probably headers targetted to nex soap processors.
+ */
+HeaderBlock* SoapDeSerializer::GetHeaderBlock()
+{
+	if (!m_pHeader) return NULL;
+	/*TODO : get a header block left in the m_pHeader (remove it from there) and return */
+	return NULL;
+}
+/**
+ * Used probably by a handler to add a header block to the Deserializer. Probably to be 
+ * used by a subsequent handler in the request message path 
+ */
+int AXISCALL SoapDeSerializer::AddHeaderBlock(IHeaderBlock* pBlk)
+{
+	if (!m_pHeader) m_pHeader = new SoapHeader();
+	m_pHeader->addHeaderBlock((HeaderBlock*)pBlk);
+	return AXIS_SUCCESS;
+}
+
+xsd__hexBinary SoapDeSerializer::GetBodyAsHexBinary()
+{
+	/*TODO*/
+	xsd__hexBinary hb;
+	return hb;
+}
+
+xsd__base64Binary SoapDeSerializer::GetBodyAsBase64Binary()
+{
+	/*TODO*/
+	xsd__base64Binary bb;
+	return bb;
+}
+
+int SoapDeSerializer::SetNewSoapBody(AxisChar* pNewSoapBody)
+{
+	/*TODO*/
+	return 0;
+}
+
+bool SoapDeSerializer::IsAnyMustUnderstandHeadersLeft()
+{
+	/*TODO*/
+	return false;
 }

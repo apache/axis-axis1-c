@@ -69,6 +69,7 @@
 
 #include <axis/common/IHandlerSoapDeSerializer.h>
 #include <axis/soap/SoapEnvVersions.h>
+#include <axis/soap/HeaderBlock.h>
 
 #ifdef USE_EXPAT_PARSER
 #include "SoapParserExpat.h"
@@ -108,15 +109,28 @@ private:
 
 private:
 	int AXISCALL GetArraySize(const AnyElement* pElement);
+	int GetBody();
 public:
-	int GetVersion();
 	int Init();
+	int GetVersion();
+	SoapEnvelope* GetEnvelope();
+	int GetHeader();
+	/*
+	 * Methods to manipulate entire body when the body is compressed or encrypted 
+	 * These functions are provided for handlers to manipulate entire soap body.
+	 */
+	xsd__hexBinary AXISCALL GetBodyAsHexBinary();
+	xsd__base64Binary AXISCALL GetBodyAsBase64Binary();
+	int AXISCALL SetNewSoapBody(AxisChar* pNewSoapBody);
+	bool IsAnyMustUnderstandHeadersLeft();
 	SoapFault* GetFault();
 	int AXISCALL CheckMessageBody(const AxisChar* pName, const AxisChar* pNamespace);
-	int GetBody();
-	int GetHeader();
+	/* to get any header blocks left in the Deserializer */
+	HeaderBlock* GetHeaderBlock();
+	/* to add a header block to the Deserializer. Probably a handler */
+	int AXISCALL AddHeaderBlock(IHeaderBlock* pBlk);
+	/* to get a named header blcok from the Deserializer */
 	IHeaderBlock* GetHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace);
-	SoapEnvelope* GetEnvelope();
 	int SetInputStream(const Ax_soapstream* pInputStream);
 	SoapDeSerializer();
 	virtual ~SoapDeSerializer();

@@ -156,12 +156,17 @@ private:
 	BasicTypeSerializer m_BTSZ;
 	const Ax_soapstream* m_pOutputStream;
 public:
+	/* to add a header block to the Serializer. Probably by a handler */
+	int AXISCALL AddHeaderBlock(IHeaderBlock* pBlk);
 	int AXISCALL AddOutputParam(const AxisChar* pchName, void* pValue, XSDTYPE type);
 	int AXISCALL SerializeAsElement(const AxisChar* pchName, void* pValue, XSDTYPE type);
 	int AXISCALL SerializeAsAttribute(const AxisChar* pName, const AxisChar* pNamespace, void* pValue, XSDTYPE type);
 	void AXISCALL Serialize(const char* pFirst, ...);
 	void SetStyle(AXIS_BINDING_STYLE nStyle){ m_nStyle = nStyle; m_BTSZ.SetStyle(nStyle);};
 	AXIS_BINDING_STYLE GetStyle(){return m_nStyle;};
+	int AXISCALL SetBodyAsHexBinary(xsd__hexBinary body);
+	int AXISCALL SetBodyAsBase64Binary(xsd__base64Binary body);
+	const AxisChar* AXISCALL GetBodyAsString();
 };
 
 #endif // !defined(AFX_SOAPSERIALIZER_H__C37229AD_BD54_430D_9619_E4574CF95334__INCLUDED_)
