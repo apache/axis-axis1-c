@@ -21,11 +21,11 @@
 		<mkdir dir="${dir.test.generated}/${client.lang}/${testName}"/>
 		<!-- Setup classpath for WSDL2Ws -->
 		<path id ="cp">
-			<fileset dir="${dir.package.WSDL2Ws}" includes="wsdl2ws.jar"/>
+			<fileset dir="${dir.wsdl2ws}" includes="wsdl2ws.jar"/>
 			<fileset dir="${dir.axisJARs}" includes="*.jar"/>
 		</path>
 		<!-- Run WSDL2Ws -->
-		<java jar="${dir.package.WSDL2Ws}/wsdl2ws.jar" fork="true">
+		<java jar="${dir.wsdl2ws}/wsdl2ws.jar" fork="true">
 			<classpath refid="cp"/>
 			<arg value="${wsdl.test}"/>
 			<!--
@@ -67,10 +67,10 @@
 			<linker refid="VisualC++Linker"/>
 			<linker refid="LinuxLinker"/>
 			<linker refid="AIXLinker"/>
-			<!-- Additional library of Axis Client -->
-			<libset dir="${dir.package.lib}" libs="${clientLibraryName}"/>
+			<!-- Axis Client .lib file location, or UNIX shared object -->
+			<libset dir="${dir.lib}" libs="${clientLibraryName}"/>
 			<!-- Files to be compiled -->
-			<includepath path="${dir.package.include}"/>
+			<includepath path="${dir.include}"/>
 			<!--
 			<fileset dir="${dir.test.generated}/${client.lang}/${testName}">
 			-->

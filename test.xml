@@ -83,7 +83,6 @@
 	<target name="runTest" depends="setPropertiesForTest,cleanTest,buildTest,executeTestRun,validateTest"/>
 
 	<target name="cleanTest">
-<echo message="Deleting ${dir.test.generated}/${client.lang}/${testName}"/>
 		<delete dir="${dir.test.generated}/${client.lang}/${testName}"/>
 	</target>
 
