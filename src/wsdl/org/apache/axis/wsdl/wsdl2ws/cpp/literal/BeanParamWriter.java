@@ -150,12 +150,12 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			else if(attribs[i].isArray()){
 				//if Array
 				if (attribs[i].isSimpleType()){
-					writer.write("\tpSZ->serializeBasicArray((Axis_Array*)(&param->"+attribs[i].getParamName()+"),"+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+", \""+attribs[i].getElementName().getLocalPart()+"\");\n"); 
+					writer.write("\tpSZ->serializeBasicArray((Axis_Array*)(&param->"+attribs[i].getParamName()+"),"+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+", \""+attribs[i].getParamName()+"\");\n"); 
 				}
 				else{
 					arrayType = attribs[i].getTypeName();
 					writer.write("\tpSZ->serializeCmplxArray((Axis_Array*)(&param->"+attribs[i].getParamName()+"),\n"); 
-					writer.write("\t\t(void*) Axis_Serialize_"+arrayType+", (void*) Axis_Delete_"+arrayType+", (void*) Axis_GetSize_"+arrayType+",\n"); 
+					writer.write("\t\t(void*) Axis_Serialize_"+arrayType+", (void*) Axis_Delete_"+arrayType+", (void*) Axis_GetSize_"+arrayType+",\n");
 					//writer.write("\t\t\""+attribs[i].getElementName().getLocalPart()+"\", Axis_URI_"+arrayType+");\n");
 					writer.write("\t\t\""+attribs[i].getElementNameAsString()+"\", Axis_URI_"+arrayType+");\n");
 				}
@@ -204,7 +204,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			else if(attribs[i].isArray()){
 				//if Array
 				if (attribs[i].isSimpleType()){
-					writer.write("\tarray = pIWSDZ->getBasicArray("+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+ ", \""+attribs[i].getElementName().getLocalPart()+"\",0);\n");
+					writer.write("\tarray = pIWSDZ->getBasicArray("+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+ ", \""+attribs[i].getParamName()+"\",0);\n");
 					writer.write("\tparam->"+attribs[i].getParamName()+" = ("+CUtils.getBasicArrayNameforType(attribs[i].getTypeName())+"&)array;\n");					
 				}
 				else{
