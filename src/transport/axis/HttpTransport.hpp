@@ -181,6 +181,9 @@ private:
     */
     long m_lTimeoutSeconds;
 
+    /** Keep track of 100 HTTP code*/
+    bool m_mustReadAgainHTTP;
+
 };
 
 #endif

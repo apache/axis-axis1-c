@@ -49,7 +49,7 @@
 #ifdef WIN32
 #pragma warning (disable : 4101)
 #endif
-
+#include <iostream>
 #include "Platform.hpp"
 #include "HttpTransport.hpp"
 #include <iostream>
@@ -69,6 +69,7 @@ m_Typ (POST), m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false), m_lTimeo
     m_IsHttpHeader = 0;
     m_HttpBindDone = false;
     m_Secure = (secure == 0 ? false : true);
+    m_mustReadAgainHTTP = false;
 
     if (SECURE == secure)
     {
@@ -93,6 +94,7 @@ m_Typ (POST), m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false), m_lTimeo
     m_strUrl = strUrl;
     m_IsHttpHeader = 0;
     m_HttpBindDone = false;
+    m_mustReadAgainHTTP = false;
 
     if (secure)
     {
@@ -131,6 +133,7 @@ bool HttpTransport::Init ()
     try
     {
 	m_bStatus = true;
+        m_mustReadAgainHTTP = false;
 	std::string host = m_Url.GetHostName();
         unsigned int port = m_Url.GetPort();
         if(m_bUseProxy)
@@ -212,14 +215,14 @@ HttpTransport::operator >> (const char **pPayLoad)
     std::string tmpPacket;	/* use temporary, need to workout for this */
     try
     {
-    if (!m_bStatus)
-    {
-	/* We have the payload; this is due to Fault request made in */
-	/* earlier call to this method */
-	*pPayLoad = m_PayLoad.c_str ();
+        if (!m_bStatus)
+        {
+	    /* We have the payload; this is due to Fault request made in */
+	    /* earlier call to this method */
+	    *pPayLoad = m_PayLoad.c_str ();
 	
-	return *this;
-    }
+	    return *this;
+        }
         /* Http header is processed and validated. We now receive the payload */
         /* from the channel */
         if (m_IsHttpHeader == 1)
@@ -302,11 +305,26 @@ HttpTransport::operator >> (const char **pPayLoad)
              */
             {
                 /* printf("while,m_IsHttpHeader == 1\n"); */
-                *pPayLoad = tmpPacket.c_str ();
+                //*pPayLoad = tmpPacket.c_str ();
+                m_PayLoad = tmpPacket;
+                *pPayLoad = m_PayLoad.c_str();
                 break;
+            //}
+            //if (m_bStatus)
+            //HTTPValidate (tmpPacket);	/* Validate the header */
+            } 
+            else 
+            {
+                HTTPValidate (tmpPacket);       /* Validate the header */
+                // HTTP found HTTP 100 code which means we need to try again
+                if(m_mustReadAgainHTTP) 
+                {
+                    m_mustReadAgainHTTP = false;
+                    m_IsHttpHeader=0;
+                    m_sHeader="";
+                    continue;
+                }
             }
-            if (m_bStatus)
-            HTTPValidate (tmpPacket);	/* Validate the header */
             int j = strlen (tmpPacket.c_str ());
             if (j == 0)
             break;
@@ -689,6 +707,10 @@ HttpTransport::HTTPValidate (const std::string & p_HttpPacket)
 	/* Status code is 2xx; so valid packet. hence go ahead and extract
 	 * the payload. 
 	 */
+        if (nHttpStatus == 1) 
+        {
+            m_mustReadAgainHTTP = true;
+        }
 	if (nHttpStatus == 2)
 	{
 	    GetPayLoad (m_sHeader, offset);
