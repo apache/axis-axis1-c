@@ -152,7 +152,15 @@ const AxisChar* BasicTypeSerializer::SerializeAsElement(const AxisChar* pName, c
 	case XSD_QNAME:
 	case XSD_NOTATION:
 		pStr = *((char**)(pValue));
-		if (!pStr) break;
+	    if (!pStr) {
+       /**
+       * It is a null value not an empty value.
+       */ 
+ 	 	    m_sSZ = "<";
+	  	    m_sSZ +=  pName;
+	  	    m_sSZ += " xsi:nil=\"true\"/>";
+  	    	return m_sSZ.c_str();
+  		}
 		m_AuxStr = pStr;
 		m_sSZ += GetEntityReferenced(m_AuxStr).c_str();	
 		break;
