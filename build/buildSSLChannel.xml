@@ -1,0 +1,78 @@
+<project name="Axis C HTTP Transport SSL Channel" default="compileAxisHTTPSSLChannel" basedir="..">
+
+   <!--
+    Compile the Axis HTTP Transport Channel Library
+    -->
+	 <target name="compileAxisHTTPTransportSSLChannel">
+      <mkdir dir="${dir.objects}"/>
+      <mkdir dir="${dir.bin}"/>
+      <if>
+         <not>
+            <isset property="aix"/>
+         </not>
+         <then>
+				<!--
+				  Library name may have been change if windows debug build. Changed
+				  in buildInitialize.xml
+				  -->
+            <cc outfile="${dir.bin}/${channelLibraryName}" objdir="${dir.objects}" 
+             exceptions="true" outtype="shared" multithreaded="true">
+               <!-- Compilers -->
+               <includepath path="${SSLChannel.HTTP.dir.openSSL}"/>
+               <compiler refid="SolarisCC"/>
+               <compiler refid="Linuxgcc"/>
+               <compiler extends="VisualC++">
+                  <defineset>
+                     <define name="AXISTRANSPORTCHANNELDLL_EXPORTS"/>
+                  </defineset>
+               </compiler>
+               <defineset>
+                  <define name="ENABLE_AXISTRACE" if="trace"/>
+                  <define name="AXISTRACE_LIBRARY"/>
+                  <define name="HTTPSSLCHANNEL_EXPORTS"/>
+                  <define name="OPENSSL_NO_KRB5"/>
+                  <define name="HEADER_DES_H"/>
+               </defineset>
+                              <compiler refid="OS400icc"/>
+               <!-- Linkers -->
+               <linker refid="SolarisLinker"/>
+               <linker refid="LinuxLinker"/>
+               <linker extends="VisualC++Linker">
+                  <syslibset libs="wsock32"/>
+                  <syslibset libs="ssleay32,libeay32" dir="${SSLChannel.HTTP.dir.openSSL}/lib"/>
+               </linker>
+
+               <linker refid="OS400Linker"/>
+               <!-- Files to compile -->
+               <fileset dir="${dir.src}">
+                  <include name="transport/${transport}/${channel}/*.cpp"/>
+                  <include name="platforms/os400/PlatformSpecificOS400.cpp" if="os400"/>
+                  <include name="platforms/windows/PlatformSpecificWindows.cpp" if="windows"/>
+		  <include name="transport/${transport}/HTTPTransportException.cpp"/>
+		  <include name="transport/${transport}/URL.cpp"/>
+               </fileset>
+            </cc>
+         </then>
+         <else>
+            <cc outfile="${dir.bin}/${libraryPrefix}${channelLibraryName}${librarySuffix}" objdir="${dir.objects}"
+             exceptions="true" multithreaded="true">
+               <!-- Compilers -->
+               <compiler refid="AIXxlc"/>
+               <defineset>
+                  <define name="ENABLE_AXISTRACE" if="trace"/>
+                  <define name="AXISTRACE_LIBRARY"/>
+               </defineset>
+
+               <!-- Linkers -->
+               <linker refid="AIXLinker"/>
+               <!-- Files to compile -->
+               <fileset dir="${dir.src}">
+                  <include name="transport/${transport}/${channel}/*.cpp"/>
+		  <include name="transport/${transport}/HTTPTransportException.cpp"/>
+		  <include name="transport/${transport}/URL.cpp"/>
+               </fileset>
+            </cc>
+         </else>
+      </if>
+   </target>
+</project>

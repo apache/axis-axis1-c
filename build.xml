@@ -39,6 +39,8 @@ Notes:
 	<import file="${basedir}/build/buildClient.xml"/>
 	<import file="${basedir}/build/buildTransport.xml"/>
 	<import file="${basedir}/build/buildTransportIPV6.xml"/>
+	<import file="${basedir}/build/buildChannel.xml"/>
+	<import file="${basedir}/build/buildSSLChannel.xml"/>
 	<import file="${basedir}/build/buildXMLParser.xml"/>
 	<import file="${basedir}/build/buildServerEngine.xml"/>
 	<import file="${basedir}/build/buildApache13Module.xml"/>
@@ -104,6 +106,38 @@ Notes:
 				</antcall>
 			</then>
 		</if>
+
+		<if>
+			<equals arg1="${transport.HTTP}" arg2="true"/>
+			<then>
+				<antcall target="compileAxisTransport" inheritall="true">
+					<param name="transport" value="axis3"/>
+					<param name="transportLibraryName" value="${HTTP.transportLibraryName}"/>
+				</antcall>
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${channel.HTTP}" arg2="true"/>
+			<then>
+				<antcall target="compileAxisHTTPTransportChannel" inheritall="true">
+					<param name="transport" value="axis3"/>
+					<param name="channel" value="HTTPChannel"/>
+					<param name="channelLibraryName" value="${HTTP.channelLibraryName}"/>
+				</antcall>
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${SSLchannel.HTTP}" arg2="true"/>
+			<then>
+				<antcall target="compileAxisHTTPTransportSSLChannel" inheritall="true">
+					<param name="transport" value="axis3"/>
+					<param name="channel" value="HTTPSSLChannel"/>
+					<param name="channelLibraryName" value="${HTTP.secureChannelLibraryName}"/>
+				</antcall>
+			</then>
+		</if>
 	</target>
 
         <target name="compileTransportIPV6">
@@ -118,7 +152,6 @@ Notes:
                         </then>
                 </if>
         </target>
-
 
 	<target name="compileXMLParser">
 		<!-- Determine which flavour of xmlParser to use -->
