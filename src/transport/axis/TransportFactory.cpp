@@ -59,17 +59,18 @@
 #include "Platform.hpp"
 #include "TransportFactory.hpp"
 #include "HttpTransport.hpp"
+#include <axis/server/GDefine.h>
 
 
 Transport* TransportFactory::GetTransport(Url& url, bool secure)
 {
 	if(url.GetProtocol() == Url::http)
 	{
-		return new HttpTransport(url, secure);
+		return new HttpTransport(url, UNSECURE);
 	}
 	else if(url.GetProtocol() == Url::https)
 	{
-		return new HttpTransport(url, secure); // currently not supported
+		return new HttpTransport(url, SECURE); // currently not supported
 	}
 	else if(url.GetProtocol() == Url::ftp)
 	{
