@@ -1,4 +1,4 @@
-<project name="Axis C Transport" default="compileAxisTransport" basedir=".">
+<project name="Axis C Transport" default="compileAxisTransport" basedir="..">
 
 	<!--
 	  Compile the Axis Transport Library
@@ -12,7 +12,7 @@
 			</not>
 			<then>
 				<cc outfile="${dir.bin}/${transportLibraryName}" objdir="${dir.objects}"
-				 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
+				 exceptions="true" outtype="shared" multithreaded="true">
 					<!-- Compilers -->
 					<compiler refid="SolarisCC"/>
 					<compiler refid="Linuxgcc"/>
@@ -39,7 +39,7 @@
 			</then>
 			<else>
 				<cc outfile="${dir.bin}/${libraryPrefix}${transportLibraryName}${librarySuffix}" objdir="${dir.objects}"
-				 exceptions="true" failonerror="false" multithreaded="true">
+				 exceptions="true" multithreaded="true">
 					<!-- Compilers -->
 					<compiler refid="AIXxlc"/>
 					<!-- Linkers -->

@@ -14,12 +14,15 @@ These are available from: http://ant-contrib.sourceforge.net/
 It is intended that the default target be used, which compiles and links all code
 and generates documentation.
 
+Within the build/ directory are a number of supporting scripts and property files.
+
 Associated with this build script are property files for each platform, the script
 will automatically determine the correct one to be used;
 	- build.Win32.properties
 	- build.Linux.properties
 	- build.AIX.properties
 	- build.SunOS.properties
+	- build.OS400.properties
 Please use these to configure directories to suit the needs of your system.
 
 Notes:
@@ -31,45 +34,64 @@ Notes:
 	- AIX     = Visual Age
 	</description>
 
-	<import file="${basedir}/buildInitialize.xml"/>
-	<import file="${basedir}/buildTraceTool.xml"/>
-	<import file="${basedir}/buildClient.xml"/>
-	<import file="${basedir}/buildTransport.xml"/>
-	<import file="${basedir}/buildXMLParser.xml"/>
-	<import file="${basedir}/buildServerEngine.xml"/>
-	<import file="${basedir}/buildApache13Module.xml"/>
-	<import file="${basedir}/buildApache20Module.xml"/>
-	<import file="${basedir}/buildSimpleAxisServer.xml"/>
-	<import file="${basedir}/buildWSDL2Ws.xml"/>
+	<import file="${basedir}/build/buildInitialize.xml"/>
+	<import file="${basedir}/build/buildTraceTool.xml"/>
+	<import file="${basedir}/build/buildClient.xml"/>
+	<import file="${basedir}/build/buildTransport.xml"/>
+	<import file="${basedir}/build/buildXMLParser.xml"/>
+	<import file="${basedir}/build/buildServerEngine.xml"/>
+	<import file="${basedir}/build/buildApache13Module.xml"/>
+	<import file="${basedir}/build/buildApache20Module.xml"/>
+	<import file="${basedir}/build/buildSimpleAxisServer.xml"/>
+	<import file="${basedir}/build/buildWSDL2Ws.xml"/>
+	<import file="${basedir}/build/buildDocumentation.xml"/>
 
-	<target name="compileClient" depends="initialize">
-		<antcall target="compileAxisClient" inheritall="true"/>
-	</target>
-
-
-	<target name="compileServer" depends="initialize">
-		<antcall target="compileAxisServerEngine" inheritall="true"/>
+	<target name="compileClient">
 		<if>
-			<equals arg1="${server.apache13}" arg2="true"/>
+			<equals arg1="${client}" arg2="true"/>
 			<then>
-				<antcall target="compileApache13Module" inheritall="true"/>
-			</then>
-		</if>
-		<if>
-			<equals arg1="${server.apache20}" arg2="true"/>
-			<then>
-				<antcall target="compileApache20Module" inheritall="true"/>
-			</then>
-		</if>
-		<if>
-			<equals arg1="${server.simpleAxisServer}" arg2="true"/>
-			<then>
-				<antcall target="compileSimpleAxisServer" inheritall="true"/>
+				<antcall target="compileAxisClient" inheritall="true"/>
 			</then>
 		</if>
 	</target>
 
-	<target name="compileTransport" depends="initialize">
+	<target name="buildDocumentation">
+		<if>
+			<equals arg1="${documentation}" arg2="true"/>
+			<then>
+				<antcall target="documentation" inheritall="true"/>
+			</then>
+		</if>
+	</target>
+
+	<target name="compileServer">
+		<if>
+			<equals arg1="${server}" arg2="true"/>
+			<then>
+				<antcall target="compileAxisServerEngine" inheritall="true"/>
+				<if>
+					<equals arg1="${server.apache13}" arg2="true"/>
+					<then>
+						<antcall target="compileApache13Module" inheritall="true"/>
+					</then>
+				</if>
+				<if>
+					<equals arg1="${server.apache20}" arg2="true"/>
+					<then>
+						<antcall target="compileApache20Module" inheritall="true"/>
+					</then>
+				</if>
+				<if>
+					<equals arg1="${server.simpleAxisServer}" arg2="true"/>
+					<then>
+						<antcall target="compileSimpleAxisServer" inheritall="true"/>
+					</then>
+				</if>
+			</then>
+		</if>
+	</target>
+
+	<target name="compileTransport">
 		<!-- Determine which flavour of transport to use -->
 		<!-- Ideally extend this to produce multiple flavours -->
 		<if>
@@ -101,7 +123,7 @@ Notes:
 		</if>
 	</target>
 
-	<target name="compileXMLParser" depends="initialize">
+	<target name="compileXMLParser">
 		<!-- Determine which flavour of xmlParser to use -->
 		<!-- Ideally extend this to produce multiple flavours -->
 		<if>
@@ -140,16 +162,14 @@ Notes:
 		</if>
 	</target>
 
-	<target name="compile" depends="initialize">
+	<target name="compile">
 		<antcall target="compileClient" inheritall="true"/>
 		<antcall target="compileTransport" inheritall="true"/>
 		<antcall target="compileXMLParser" inheritall="true"/>
 		<antcall target="compileServer" inheritall="true"/>
 	</target>
 
-	<import file="${basedir}/buildDocumentation.xml"/>
-
-	<target name="buildAll" depends="compile, compileWSDL2Ws, buildWSDL2WsJARFile, documentation"/>
+	<target name="buildAll" depends="compile, compileWSDL2Ws, buildWSDL2WsJARFile, buildDocumentation"/>
 
 
 	<target name="build" depends="initialize"

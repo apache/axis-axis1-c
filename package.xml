@@ -13,15 +13,18 @@ These are available from: http://ant-contrib.sourceforge.net/
 It is intended that the default target be used, produces the complete source and
 binary deliverables.
 
+Within the build/ directory are a number of supporting scripts and property files.
+
 Associated with this build script are property files for each platform, the script
 will automatically determine the correct one to be used;
 	- build.Win32.properties
 	- build.Linux.properties
 	- build.AIX.properties
 	- build.SunOS.properties
+	- build.OS400.properties
 Please use these to configure directories to suit the needs of your system.
 	</description>
-	<import file="${basedir}/buildInitialize.xml"/>
+	<import file="${basedir}/build/buildInitialize.xml"/>
 
 	<target name="copySource">
 		<mkdir dir="${dir.release}"/>

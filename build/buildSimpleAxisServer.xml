@@ -1,4 +1,4 @@
-<project name="Axis C Simple Axis Server" default="compileSimpleAxisServer" basedir=".">
+<project name="Axis C Simple Axis Server" default="compileSimpleAxisServer" basedir="..">
 
 	<!--
 	  Compile the Simple Axis Server
@@ -7,7 +7,7 @@
 		<mkdir dir="${dir.objects}"/>
 		<mkdir dir="${dir.bin}"/>
 		<cc outfile="${dir.bin}/${simpleAxisServerExecutableName}" objdir="${dir.objects}"
-		 exceptions="true" failonerror="false" outtype="executable" multithreaded="true">
+		 exceptions="true" outtype="executable" multithreaded="true">
 		  	<!-- Compilers -->
 			<compiler refid="SolarisCC"/>
 			<compiler refid="Linuxgcc"/>
@@ -17,7 +17,9 @@
 			<!-- Linkers -->
 			<linker refid="SolarisLinker"/>
 			<linker refid="LinuxLinker"/>
-			<linker refid="VisualC++Linker"/>
+			<linker extends="VisualC++Linker">
+				<syslibset libs="wsock32"/>
+			</linker>
 			<linker refid="AIXExecutableLinker"/>
 			<linker refid="OS400Linker"/>
 			<libset dir="${dir.bin}" libs="${serverEngineLibraryName}"/>

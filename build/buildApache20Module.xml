@@ -1,4 +1,4 @@
-<project name="Axis C Apache 2.0 Server Module" default="compileApache20Module" basedir=".">
+<project name="Axis C Apache 2.0 Server Module" default="compileApache20Module" basedir="..">
 
 	<!--
 	  Compile the Apache 2.0 Axis Server Module
@@ -15,7 +15,7 @@
 			</not>
 			<then>
 				<cc outfile="${dir.bin}/${apache20.serverLibraryName}" objdir="${dir.objects}"
-				 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
+				 exceptions="true" outtype="shared" multithreaded="true">
 				  	<!-- Compilers -->
 					<compiler refid="SolarisCC"/>
 					<compiler refid="Linuxgcc"/>
@@ -34,13 +34,13 @@
 					<linker refid="SolarisLinker"/>
 					<linker refid="LinuxLinker"/>
 					<linker refid="VisualC++Linker"/>
-			            <linker extends="OS400Linker">
-                                 <linkerarg value="-qDUPPROC"/>
-                                 <linkerarg value="-qDUPVAR"/>
-                                 <linkerarg location="end" value="${dir.bin}/lib${serverEngineLibraryName}.so"/>
-                                 <linkerarg location="end" value="${apache20.dir.server}/lib/libapr.so"/>
-                                 <linkerarg location="end" value="${apache20.dir.server}/lib/libhttpd.so"/>
-                              </linker>
+			        <linker extends="OS400Linker">
+						<linkerarg value="-qDUPPROC"/>
+						<linkerarg value="-qDUPVAR"/>
+						<linkerarg location="end" value="${dir.bin}/lib${serverEngineLibraryName}.so"/>
+						<linkerarg location="end" value="${apache20.dir.server}/lib/libapr.so"/>
+						<linkerarg location="end" value="${apache20.dir.server}/lib/libhttpd.so"/>
+					</linker>
 
 					<libset dir="${apache20.dir.server}/lib" libs="libapr, libhttpd" if="windows"/>
 					<libset dir="${dir.bin}" libs="${serverEngineLibraryName}" unless="os400"/>
@@ -52,7 +52,7 @@
 			</then>
 			<else>
 				<cc outfile="${dir.bin}/${libraryPrefix}${apache20.serverLibraryName}${librarySuffix}" objdir="${dir.objects}"
-				 exceptions="true" failonerror="false" multithreaded="true">
+				 exceptions="true" multithreaded="true">
 				  	<!-- Compilers -->
 					<compiler refid="AIXxlc"/>
 					<includepath path="${apache20.dir.server}/include"/>

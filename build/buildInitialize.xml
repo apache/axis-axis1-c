@@ -1,4 +1,4 @@
-<project name="Initialize Apache Axis C Build" default="initialize" basedir=".">
+<project name="Initialize Apache Axis C Build" default="initialize" basedir="..">
 	<!--
 	  Load definition of C/C++ Tasks and Types
 	  To allow the compilation and linking of C/C++ code
@@ -21,10 +21,7 @@
 
 	<property environment="env"/>
 
-	<!--
-	  Load versioning information from version.properties
-	  -->
-	<property file="${basedir}/version.properties"/>
+
 
 
 	<!--
@@ -209,8 +206,17 @@
 		<condition property="platform" value="OS400">
 			<isset property="os400"/>
 		</condition>
+
+		<tstamp >
+			<format property="revision" pattern="yyyy_MM_dd"/>
+		</tstamp>
+		
+		<!--
+		  Load versioning information from version.properties
+		  -->
+		<property file="${basedir}/build/version.properties"/>
 		
 		<!-- Load properties from file -->
-		<property file="${basedir}/build.${platform}.properties"/>
+		<property file="${basedir}/build/build.${platform}.properties"/>
 	</target>
 </project>

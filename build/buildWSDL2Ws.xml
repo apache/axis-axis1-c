@@ -1,4 +1,4 @@
-<project name="Axis C WSDL2Ws" default="compileWSDL2Ws" basedir=".">
+<project name="Axis C WSDL2Ws" default="compileWSDL2Ws" basedir="..">
 
 	<target name="compileWSDL2Ws">
 		<mkdir dir="${dir.classes}"/>

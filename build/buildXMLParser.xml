@@ -1,4 +1,4 @@
-<project name="Axis C XML Parser" default="compileAxisXMLParser" basedir=".">
+<project name="Axis C XML Parser" default="compileAxisXMLParser" basedir="..">
 
 	<!--
 	  Compile the Axis XML Parser Library
@@ -12,7 +12,7 @@
 			</not>
 			<then>
 				<cc outfile="${dir.bin}/${xmlParserLibraryName}" objdir="${dir.objects}"
-				 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
+				 exceptions="true" outtype="shared" multithreaded="true">
 				 	<!-- Compilers -->
 					<compiler refid="SolarisCC"/>
 					<compiler refid="Linuxgcc"/>
@@ -48,7 +48,7 @@
 			</then>
 			<else>
 				<cc outfile="${dir.bin}/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}" objdir="${dir.objects}"
-				 exceptions="true" failonerror="false" multithreaded="true">
+				 exceptions="true" multithreaded="true">
 				 	<!-- Compilers -->
 					<compiler refid="AIXxlc"/>
 					<!-- Additional include directory for XML Parser -->

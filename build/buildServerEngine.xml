@@ -1,4 +1,4 @@
-<project name="Axis C Server Engine" default="compileAxisServerEngine" basedir=".">
+<project name="Axis C Server Engine" default="compileAxisServerEngine" basedir="..">
 
 	<!--
 	  Compile the Axis Server Library
@@ -12,7 +12,7 @@
 			</not>
 			<then>
 				<cc outfile="${dir.bin}/${serverEngineLibraryName}" objdir="${dir.objects}"
-				 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
+				 exceptions="true" outtype="shared" multithreaded="true">
 				  	<!-- Compilers -->
 					<compiler refid="SolarisCC"/>
 					<compiler refid="Linuxgcc"/>
@@ -49,7 +49,7 @@
 			</then>
 			<else>
 				<cc outfile="${dir.bin}/${libraryPrefix}${serverEngineLibraryName}${librarySuffix}" objdir="${dir.objects}"
-				 exceptions="true" failonerror="false" multithreaded="true">
+				 exceptions="true" multithreaded="true">
 				  	<!-- Compilers -->
 					<compiler refid="AIXxlc"/>
 					<!-- Additional compiler flag for Client library on all platforms -->

@@ -175,7 +175,7 @@ Notes:
 		</condition>
 		
 		<!-- Load properties from file -->
-		<property file="${basedir}/build.${platform}.properties"/>
+		<property file="${basedir}/build/build.${platform}.properties"/>
 		
 		<!-- Get directory to contain log file -->
 		<dirname file="${results.log}" property="dir.results"/>

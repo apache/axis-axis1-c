@@ -1,4 +1,4 @@
-<project name="Axis C Apache 1.3 Server Module" default="compileApache13Module" basedir=".">
+<project name="Axis C Apache 1.3 Server Module" default="compileApache13Module" basedir="..">
 
 	<!--
 	  Compile the Axis Server Library
@@ -15,7 +15,7 @@
 			</not>
 			<then>
 				<cc outfile="${dir.bin}/${apache13.serverLibraryName}" objdir="${dir.objects}"
-				 exceptions="true" failonerror="false" outtype="shared" multithreaded="true">
+				 exceptions="true" outtype="shared" multithreaded="true">
 				  	<!-- Compilers -->
 					<compiler refid="SolarisCC"/>
 					<compiler refid="Linuxgcc"/>
@@ -43,7 +43,7 @@
 			</then>
 			<else>
 				<cc outfile="${dir.bin}/${libraryPrefix}${apache13.serverLibraryName}${librarySuffix}" objdir="${dir.objects}"
-				 exceptions="true" failonerror="false" multithreaded="true">
+				 exceptions="true" multithreaded="true">
 				  	<!-- Compilers -->
 					<compiler refid="AIXxlc"/>
 					<includepath path="${apache13.dir.server}/include"/>

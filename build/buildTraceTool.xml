@@ -1,4 +1,4 @@
-<project name="Apache Axis C Trace Tool" default="" basedir=".">
+<project name="Apache Axis C Trace Tool" default="" basedir="..">
 	<!--
 	  Compile the Trace tool
 	  -->
