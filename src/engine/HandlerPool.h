@@ -64,6 +64,7 @@
 // HandlerPool.h: interface for the HandlerPool class.
 //
 //////////////////////////////////////////////////////////////////////
+#pragma warning (disable : 4503)
 
 #if !defined(AFX_HANDLERPOOL_H__6C2A4C96_7115_43C6_9EFA_CDAC9247D109__INCLUDED_)
 #define AFX_HANDLERPOOL_H__6C2A4C96_7115_43C6_9EFA_CDAC9247D109__INCLUDED_
@@ -77,8 +78,9 @@
 #include "../common/BasicHandler.h"
 #include "HandlerLoader.h"
 #include "HandlerChain.h"
+#include "SharedObject.h"
 
-#include <map>
+#include <list>
 #include <string>
 
 using namespace std;
@@ -87,52 +89,28 @@ using namespace std;
  *
  *
  */
-class HandlerPool  
+class HandlerPool : protected SharedObject
 {
 private:
-	class LoadedHandler {
-	public:
-		HandlerLoader* m_DL;
-		BasicHandler* m_Handler;
-		LoadedHandler(string &sFile, int nOptions=0);
-		~LoadedHandler();
-	};
+	int GetHandler(BasicHandler** ppHandler, string& sSessionId, int nScope, int nLibId);
+	int PoolHandler(string& sSessionId, BasicHandler* pHandler, int nScope, int nLibId);
+	int GetHandlerChain(string& sSessionId, HandlerChain** pChain, const WSDDHandlerList* pHandlerList);
 public:
-	void UnloadWebService(WSDDService* pService);
-	BasicHandler* LoadWebService(WSDDService* pService);
-	void UnLoadServiceRequestFlowHandlers(WSDDHandlerList *pHandlerList);
-	void UnLoadServiceResponseFlowHandlers(WSDDHandlerList *pHandlerList);
-	int LoadServiceResponseFlowHandlers(WSDDHandlerList* pHandlerList);
-	int LoadServiceRequestFlowHandlers(WSDDHandlerList* pHandlerList);
-	HandlerChain* GetTransportRequestFlowHandlerChain(AXIS_PROTOCOL_TYPE Protocol);
-	HandlerChain* GetTransportResponseFlowHandlerChain(AXIS_PROTOCOL_TYPE Protocol);
-	HandlerChain* GetGlobalResponseFlowHandlerChain();
-	HandlerChain* GetGlobalRequestFlowHandlerChain();
-	HandlerChain* GetServiceRequestFlowHandlerChain();
-	HandlerChain* GetServiceResponseFlowHandlerChain();
-	//Following will load handlers and keep them in private members.
-	int LoadTransportRequestFlowHandlers(AXIS_PROTOCOL_TYPE Protocol, WSDDHandlerList* pHandlerList);
-	int LoadTransportResponseFlowHandlers(AXIS_PROTOCOL_TYPE Protocol, WSDDHandlerList* pHandlerList);
-	int LoadGlobalResponseFlowHandlers(WSDDHandlerList* pHandlerList);
-	int LoadGlobalRequestFlowHandlers(WSDDHandlerList* pHandlerList);
+	int GetGlobalRequestFlowHandlerChain(HandlerChain** ppChain, string& sSessionId);
+	int GetGlobalResponseFlowHandlerChain(HandlerChain** ppChain, string& sSessionId);
+	int GetTransportRequestFlowHandlerChain(HandlerChain** ppChain, string& sSessionId, AXIS_PROTOCOL_TYPE Protocol);
+	int GetTransportResponseFlowHandlerChain(HandlerChain** ppChain, string& sSessionId, AXIS_PROTOCOL_TYPE Protocol);
+	int GetRequestFlowHandlerChain(HandlerChain** ppChain, string& sSessionId, const WSDDService* pService);
+	int GetResponseFlowHandlerChain(HandlerChain** ppChain, string& sSessionId, const WSDDService* pService);
+	void PoolHandlerChain(HandlerChain* pChain, string& sSessionId);
+
+	int GetWebService(BasicHandler** ppHandler, string& sSessionId, const WSDDHandler* pService);
+	void PoolWebService(string& sSessionId, BasicHandler* pHandler, const WSDDHandler* pHandlerInfo);
 
 	HandlerPool();
 	virtual ~HandlerPool();
 private:
-	BasicHandler* GetHandler(WSDDHandler* pHandlerInfo);
-	int UnLoadHandler(WSDDHandler* pHandlerInfo);
-	BasicHandler* LoadHandler(WSDDHandler* pHandlerInfo);
-
-private:
-	void UnloadHandlerList(WSDDHandlerList *pHandlerList);
-	HandlerChain* LoadHandlerChain(WSDDHandlerList* pHandlerList);
-	map<string, LoadedHandler*> m_Handlers; //all handlers will be retained here
-	HandlerChain* m_pGReqFChain; //Global Handler chain(Request)
-	HandlerChain* m_pGResFChain; //Global Handler chain(Response)
-	HandlerChain* m_pServiceReqFChain; //Service specific Handler chain(Request)
-	HandlerChain* m_pServiceResFChain; //Service specific Handler chain(Response)
-	map<AXIS_PROTOCOL_TYPE, HandlerChain*> m_TReqFChains; //Transport Handler chains (Request)
-	map<AXIS_PROTOCOL_TYPE, HandlerChain*> m_TResFChains; //Transport Handler chains (Response)
+	list<HandlerChain*> m_ChainStore;
 };
 
 #endif // !defined(AFX_HANDLERPOOL_H__6C2A4C96_7115_43C6_9EFA_CDAC9247D109__INCLUDED_)

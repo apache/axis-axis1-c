@@ -103,12 +103,12 @@ string& MessageData::GetUserName()
  // return "damitha kumarage"; 
 }
 
-void MessageData::SetService(WSDDService* argService)
+void MessageData::SetService(const WSDDService* argService)
 {
   m_Service = argService;
 }
 
-WSDDService* MessageData::GetService()
+const WSDDService* MessageData::GetService()
 {
   return m_Service;
 

@@ -90,7 +90,7 @@ public:
 	static XSDTYPE Map(string& sType);
 	static void Initialize();
 	static map<string, XSDTYPE> m_sTypeMap;
-	static bool m_bInit;
+	static volatile bool m_bInit;
 	TypeMapping();
 	virtual ~TypeMapping();
 

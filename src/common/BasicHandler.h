@@ -73,6 +73,7 @@
 #endif // _MSC_VER > 1000
 
 #include "IMessageData.h"
+#include "GDefine.h"
 
 enum HANDLER_TYPE { NORMAL_HANDLER, WEBSERVICE_HANDLER, CHAIN_HANDLER };
 
@@ -84,6 +85,8 @@ public:
 	virtual int Invoke(IMessageData* pMsg) = 0;
 	virtual void OnFault(IMessageData* pMsg) = 0;
 	virtual int GetType() = 0;
+	virtual int Init() = 0;
+	virtual int Fini() = 0;	
 };
 
 #endif // !defined(AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_)
