@@ -71,7 +71,7 @@ import javax.xml.namespace.QName;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
-import org.apache.axis.wsdl.wsdl2ws.c.literal.CUtils;
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 
 public class Type {
     /* max no of attribs expected in a type */

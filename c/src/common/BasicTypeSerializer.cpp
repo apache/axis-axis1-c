@@ -256,7 +256,7 @@ const AxisChar* BasicTypeSerializer::SerializeAsAttribute(const AxisChar* pName,
 	case XSD_ANYURI:
 	case XSD_QNAME:
 	case XSD_NOTATION:			
-		m_AuxStr = ((char*)(pValue));
+		m_AuxStr = *((char**)(pValue));
 		m_sSZ += GetEntityReferenced(m_AuxStr).c_str();	
 		break;
 	case XSD_HEXBINARY:
@@ -274,7 +274,6 @@ const AxisChar* BasicTypeSerializer::SerializeAsAttribute(const AxisChar* pName,
 	default:
 		return NULL;
 	}
-	m_sSZ += m_Buf;
 	m_sSZ += '"';
 	return m_sSZ.c_str();
 }

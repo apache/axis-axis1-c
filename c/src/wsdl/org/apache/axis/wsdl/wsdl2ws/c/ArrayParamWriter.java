@@ -70,7 +70,8 @@ import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
-import org.apache.axis.wsdl.wsdl2ws.cpp.CPPUtils;
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
+import org.apache.axis.wsdl.wsdl2ws.ParamWriter;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
@@ -91,8 +92,8 @@ public class ArrayParamWriter extends ParamWriter{
 			}
 			//include header file for the contained type
 			QName qname = WrapperUtils.getArrayType(type).getName(); 
-			if (!CPPUtils.isSimpleType(qname)){
-				writer.write("#include \""+attribs[0][1]+".h\"\n\n");
+			if (!CUtils.isSimpleType(qname)){
+				writer.write("#include \""+attribs[0].getTypeName()+".h\"\n\n");
 			}
 			else{
 				writer.write("#include <axis/common/AxisUserAPI.h>\n\n");
@@ -119,11 +120,10 @@ public class ArrayParamWriter extends ParamWriter{
 	protected void writeArrayStruct()throws WrapperFault{
 		try{			
 			writer.write("typedef struct "+classname+"Tag\n{\n");
-			QName qname = new QName(attribs[0][2],attribs[0][3]);
-			if(CUtils.isSimpleType(qname)){
-				writer.write("\t"+CUtils.getclass4qname(qname)+"* m_Array;\n\tint m_Size;\n} "+classname+";\n\n");				
+			if(attribs[0].isSimpleType()){
+				throw new WrapperFault("Error : no need to synthesis arrays for simple types");				
 			}else{
-				writer.write("\t"+attribs[0][1]+"* m_Array;\n\tint m_Size;\n} "+classname+";\n\n");
+				writer.write("\t"+attribs[0].getTypeName()+"* m_Array;\n\tint m_Size;\n} "+classname+";\n\n");
 			}
 		} catch (IOException e) {
 			 throw new WrapperFault(e);

@@ -65,16 +65,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-
 import javax.xml.namespace.QName;
-
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
-	//import org.apache.axis.wsdl.wsdl2ws.info.WrapperInfo;
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 	
 public class ClientStubWriter extends CFileWriter{
 	private WebServiceContext wscontext;
@@ -249,8 +247,8 @@ public class ClientStubWriter extends CFileWriter{
 			writer.write((returntypeisarray?"RetArray":returntypeissimple?"Ret":"pReturn")+";\n");
 		}
 		writer.write("\tpCall = "+globalobjectname+"->__vfptr;\n");
-		writer.write("/* Following will establish the connections with the server too */\n");
-		writer.write("\tif (AXIS_SUCCESS != pCall->Initialize("+globalobjectname+")) return ");
+		writer.write("\t/* Following will establish the connections with the server too */\n");
+		writer.write("\tif (AXIS_SUCCESS != pCall->Initialize("+globalobjectname+", RPC_ENCODED)) return ");
 		if (returntype != null){
 			writer.write((returntypeisarray?"RetArray":returntypeissimple?"Ret":"pReturn")+";\n");
 		}
@@ -326,7 +324,7 @@ public class ClientStubWriter extends CFileWriter{
 			writer.write("\tpCall->SetReturnType("+globalobjectname+", "+CUtils.getXSDTypeForBasicType(outparamType)+");\n");
 			writer.write("\tnStatus = pCall->Invoke("+globalobjectname+");\n");
 			writer.write("\tif (AXIS_SUCCESS == nStatus)\n\t{\n");
-			writer.write("\t\tRet = pCall->"+CUtils.getParameterGetValueMethodName(outparamType)+"("+globalobjectname+");\n\t}\n");
+			writer.write("\t\tRet = pCall->"+CUtils.getParameterGetValueMethodName(outparamType, false)+"("+globalobjectname+");\n\t}\n");
 			writer.write("\tpCall->UnInitialize("+globalobjectname+");\n");
 			writer.write("\treturn Ret;\n");
 		}
