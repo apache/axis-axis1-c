@@ -1,4 +1,4 @@
-The implementation of SOAPTransport interface using LibWWW.
+﻿The implementation of SOAPTransport interface using LibWWW.
 
 The Axis C++ server side fails to work with 100-continue. 
 Axis Java is capable of managing 100-continue. 
@@ -31,3 +31,18 @@ Bit of research is needed to figure out how to make this implementation
 thread safe. It remains a TODO as of now.
 
 - Samisa...
+
+
+For Windows 
+
+1.Install libwww.
+2.Copy the source header files in libwww which are in library/src to the c/src/transport/libwww.
+3.copy the external header files in libwww which are in library/external to c/include/libwww. 
+4.copy the library files which are created while building the libwww to    c/lib/libwww
+5.Copy the gnu_regx.dll to path from libwww.
+6.Build the AxisTransportLibwww VC project.
+7.Copy the generated AxisTransport.dll to path
+8.then run the samples.
+
+Lahiru
+
