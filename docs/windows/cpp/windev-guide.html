@@ -102,7 +102,7 @@ cvs -d :pserver:anoncvs@cvs.apache.org:/home/cvspublic checkout ws-axis <br>
 The checkout of the repository will be created in the current directory in a
 folder named “ws-axis”<br>
 <br>
-The checked out folder ws-axis will be referred as [CHECKOUT_HOME] from
+The checked out folder ws-axis will be referred to as [CHECKOUT_HOME] from
 this point on.<br></p>
 
 <p><a name="getapacheexpat"></a></p>
@@ -137,7 +137,7 @@ Apache 2.0.44.</p>
 <br>
 <p>Run the file
 xerces-c2_2_0-win32.The folder to which Xerces is unzipped will be
-referred as [XERCES_EXTRACT] from this point onwards.</p>
+referred to as [XERCES_EXTRACT] from this point onwards.</p>
 
 <br>
 
@@ -145,14 +145,14 @@ referred as [XERCES_EXTRACT] from this point onwards.</p>
 <br>
 <p>Run the file
 expat_win32bin_1_95_7.exe . The folder to which Expat is unzipped will be
-referred as [EXPAT_EXTRACT] from this point onwards.</p>
+referred to as [EXPAT_EXTRACT] from this point onwards.</p>
 
 <br>
 <p><b>Apache</b></p>
 <br>
 <p>Install the Apache web server. By default Apache 1.3.X is installed in
 "C:\Program Files\Apache Group\Apache" and Apache 2.X in "C:\Program
-Files\Apache Group\Apache2". These locations will be referred  as [APACHE_HOME]
+Files\Apache Group\Apache2". These locations will be referred to as [APACHE_HOME]
 from this point onwards.</p>
 
 
@@ -256,7 +256,7 @@ Axis<br>
 |__ logs (log files are located here)<br>
 |__ conf (server.wsdd file is located here)<br>
 |__ webservices (The place to put webservice dlls)<br>
-|__ wsdls (The directory for the wsdl files of the deployed web services)<br>
+|__ wsdls (wsdl files of the deployed web services are located here)<br>
 
 <br>
 2) Set an environment variable named AXIS_HOME and give [APACHE_HOME]\Axis as
@@ -308,8 +308,8 @@ Transport_http:ZZZZ (Not necessary)<br>
 XMLParser:WWWW<br>
 
 <br>
-Where XXXX will be the path to a file named AxisLog (The log file)and YYYY
-will be the path to the server.wsdd file.ZZZZ will be the path to AxisTransport.dll if it's a HTTP(if the selected transport is SMTP then should give that path.WWWW will be the path to AxisXMLParser.dll<br>
+XXXX is the path to a file named AxisLog (The log file)and YYYY 
+is the path to the server.wsdd file.ZZZZ is the path to AxisTransport.dll if it's a HTTP(if the selected transport is SMTP then should give that path.)WWWW is the path to AxisXMLParser.dll<br>
 <br>
 i.e.<br>
 LogPath:[APACHE_HOME]\Axis\logs\AxisLog.log  
@@ -382,7 +382,7 @@ In the "New" dialog that appears give a project Name (e.g. test). In the "New
 dialog" keep the "use default" Tick Box checked.
 <br>
 Note down the path in the "Directory" Text Box. This location will be
-referred as [SKELSTUB_HOME] from this point onwards. Click "Next".<br>
+referred to as [SKELSTUB_HOME] from this point onwards. Click "Next".<br>
 
 
 <br>
@@ -487,7 +487,7 @@ The generated Stubs will be created in a folder named
 
 <h3>Building and running WSDL2Ws on the command line</h3>
 
-<p>For building WSDL2Ws java tool on the command line you require jdk1.4 or
+<p>To build the WSDL2Ws java tool on the command line you require jdk1.4 or
 above.<br>
 <br>
 To build WSDL2Ws java tool set the CLASSPATH Environment Variable
@@ -533,7 +533,7 @@ Java -classpath .;%classpath% org.apache.axis.wsdl.wsdl2ws.WSDL2Ws Calculator.ws
 <br>
 Give the class path exactly the same order as given above. 
 <br><br>
-If the tool is successful the tool will display the files it has
+If the tool is successful it will display the files it has
 generated. The skeletons and stubs will be generated in
 [SKELSTUB_HOME]\ServerOut.<br>
 <br>
@@ -621,14 +621,14 @@ apache 1.3.x and "C:\Program Files\Apache Group\Apache2" for apache 2.x)<br>
 The service element specifies the service name.<br>
 &lt;service name="Calculator"&gt;<br>
 <br>
-In this parameter element we specify the parameter className and it’s value,
+In this parameter element we specify the parameter className and for it’s value we specify 
 the location of the webservice dll.<br>
 &lt;parameter name="className" value="C:\Program Files\Apache
 Group\Apache\Axis\webservices\ws1.dll"/&gt;<br>
 <br>
-In this parameter element we specify the parameter allowedMethods and its
-value, the methods exposed by the web service (i.e. subtract and add).<br> <br>
-<b>Note: A trailing space should be put after every allowed method.</b><br>
+In this parameter element we specify the parameter allowedMethods and for its
+value we specify the methods exposed by the web service (i.e. subtract and add).<br> <br>
+<b>Note: A trailing space should be inserted after every allowed method.</b><br>
 &lt;parameter name="allowedMethods" value="subtract add "/&gt;<br>
 <br>
 16) Now start the Apache web server by typing “apache -k start”. If the Apache server is
@@ -750,7 +750,7 @@ the relevant web service dll given above in [APACHE_HOME]\Axis\webservices.
 <p>
 <br>1) Open the Visual C++ workspace (interoptests.dsw) at [CHECKOUT_HOME]\c\vc\samples\client\interoptests\ and do a batch build of all projects.<br>
 <br>2) You need to build the AxisClient project in the "Distribution" workspace at [CHECKOUT_HOME]\c\vc\, because you need the AxisClient.lib to compile client applications and AxisClient.dll to run them.<br>
-<br>3) You will find the built console applications and AxisClient.dll at [CHECKOUT_HOME]\c\bin directory. Following are the built .exe files.
+<br>3) You will find the built console applications and AxisClient.dll at [CHECKOUT_HOME]\c\bin directory. Following are the built .exe files. <br> <br>
 	base.exe <br>
 	cbase.exe<br>
 	cgroupB.exe<br>
