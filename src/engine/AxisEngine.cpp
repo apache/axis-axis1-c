@@ -66,15 +66,16 @@
 #include "../common/AxisException.h"
 #include "../common/Debug.h"
 #include "../common/Packet.h"
+#include "../common/AxisUtils.h"
 #include "../wsdd/WSDDDeployment.h"
 #include "HandlerPool.h"
 #include "DeserializerPool.h"
 #include "SerializerPool.h"
 
-extern DeserializerPool g_DeserializerPool;
-extern SerializerPool g_SerializerPool;
-extern HandlerPool g_HandlerPool;
-extern WSDDDeployment g_WSDDDeployment;
+extern DeserializerPool* g_pDeserializerPool;
+extern SerializerPool* g_pSerializerPool;
+extern HandlerPool* g_pHandlerPool;
+extern WSDDDeployment* g_pWSDDDeployment;
 
 AxisEngine::AxisEngine()
 {
@@ -91,8 +92,8 @@ AxisEngine::AxisEngine()
 
 AxisEngine::~AxisEngine()
 {
-	if (m_pSZ) g_SerializerPool.PutInstance(m_pSZ);
-	if (m_pDZ) g_DeserializerPool.PutInstance(m_pDZ);
+	if (m_pSZ) g_pSerializerPool->PutInstance(m_pSZ);
+	if (m_pDZ) g_pDeserializerPool->PutInstance(m_pDZ);
 }
 
 int AxisEngine::Process(Ax_soapstream* soap) 
@@ -130,7 +131,8 @@ int AxisEngine::Process(Ax_soapstream* soap)
 			}
 
 			char* cService= getheader(soap, SOAPACTIONHEADER);
-			string service = (cService == NULL)? "" : cService;
+			AxisString service;
+			AxisUtils::convert(service, (cService == NULL)? "" : cService);
 		  
 			DEBUG2("string service = ",service.c_str());
      
@@ -148,7 +150,7 @@ int AxisEngine::Process(Ax_soapstream* soap)
 			}
 
 			//get service description object from the WSDD
-			pService = g_WSDDDeployment.GetService(service);
+			pService = g_pWSDDDeployment->GetService(service);
 			if (!pService) 
 			{
 				nSoapVersion = pMsg->m_pDZ->GetVersion();
@@ -181,14 +183,14 @@ int AxisEngine::Process(Ax_soapstream* soap)
 			SoapMethod* pSm = m_pDZ->GetMethod();
 			if (pSm) 
 			{
-				string method = pSm->getMethodName();
+				AxisString method = pSm->getMethodName();
 				DEBUG2("pSm->getMethodName(); :", method.c_str());
 				if (!method.empty())
 				{
 					if (pService->IsAllowedMethod(method))
 					{          
 						//load actual web service handler
-						if (SUCCESS != g_HandlerPool.GetWebService(&m_pWebService, sSessionId, pService))
+						if (SUCCESS != g_pHandlerPool->GetWebService(&m_pWebService, sSessionId, pService))
 						{
             				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADSRV));
 							//Error couldnot load web service
@@ -216,12 +218,12 @@ int AxisEngine::Process(Ax_soapstream* soap)
 			  break; //do .. while(0)
 			}
     		//Get Service specific Handlers from the pool if configured any
-			if(SUCCESS != (Status = g_HandlerPool.GetRequestFlowHandlerChain(&m_pSReqFChain, sSessionId, pService)))
+			if(SUCCESS != (Status = g_pHandlerPool->GetRequestFlowHandlerChain(&m_pSReqFChain, sSessionId, pService)))
 			{        
 			  m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADHDL));
 			  break; //do .. while(0)
 			}
-			if(SUCCESS != (Status = g_HandlerPool.GetResponseFlowHandlerChain(&m_pSResFChain, sSessionId, pService)))
+			if(SUCCESS != (Status = g_pHandlerPool->GetResponseFlowHandlerChain(&m_pSResFChain, sSessionId, pService)))
 			{        
 			  m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADHDL));
 			  break; //do .. while(0)
@@ -240,10 +242,10 @@ int AxisEngine::Process(Ax_soapstream* soap)
 		m_pSZ->SetOutputStream(soap->str.op_stream);
 
 		//Pool back the Service specific handlers
-		if (m_pSReqFChain) g_HandlerPool.PoolHandlerChain(m_pSReqFChain, sSessionId);
-		if (m_pSResFChain) g_HandlerPool.PoolHandlerChain(m_pSResFChain, sSessionId);
+		if (m_pSReqFChain) g_pHandlerPool->PoolHandlerChain(m_pSReqFChain, sSessionId);
+		if (m_pSResFChain) g_pHandlerPool->PoolHandlerChain(m_pSResFChain, sSessionId);
 		//Pool back the webservice
-		if (m_pWebService) g_HandlerPool.PoolWebService(sSessionId, m_pWebService, pService); 
+		if (m_pWebService) g_pHandlerPool->PoolWebService(sSessionId, m_pWebService, pService); 
 		return Status;
 	AXIS_CATCH(exception* e)
 		//todo
@@ -366,8 +368,8 @@ int AxisEngine::Initialize()
 {
 	int Status;
 	//Create and initialize Serializer and Deserializer objects
-	if (SUCCESS != (Status = g_SerializerPool.GetInstance(&m_pSZ))) return Status;
-	if (SUCCESS != (Status = g_DeserializerPool.GetInstance(&m_pDZ))) return Status;
+	if (SUCCESS != (Status = g_pSerializerPool->GetInstance(&m_pSZ))) return Status;
+	if (SUCCESS != (Status = g_pDeserializerPool->GetInstance(&m_pDZ))) return Status;
 	return SUCCESS;
 }
 
@@ -381,15 +383,15 @@ int AxisEngine::InitializeHandlers(string &sSessionId, AXIS_PROTOCOL_TYPE protoc
 {
 	int Status = SUCCESS;  
 	//Get Global Handlers from the pool if configured any
-	if(SUCCESS != (Status = g_HandlerPool.GetGlobalRequestFlowHandlerChain(&m_pGReqFChain, sSessionId)))
+	if(SUCCESS != (Status = g_pHandlerPool->GetGlobalRequestFlowHandlerChain(&m_pGReqFChain, sSessionId)))
 		return Status;
-	if(SUCCESS != (Status = g_HandlerPool.GetGlobalResponseFlowHandlerChain(&m_pGResFChain, sSessionId)))
+	if(SUCCESS != (Status = g_pHandlerPool->GetGlobalResponseFlowHandlerChain(&m_pGResFChain, sSessionId)))
 		return Status;
 
 	//Get Transport Handlers from the pool if configured any
-	if(SUCCESS != (Status = g_HandlerPool.GetTransportRequestFlowHandlerChain(&m_pTReqFChain, sSessionId, protocol)))
+	if(SUCCESS != (Status = g_pHandlerPool->GetTransportRequestFlowHandlerChain(&m_pTReqFChain, sSessionId, protocol)))
 		return Status;
-	if(SUCCESS != (Status = g_HandlerPool.GetTransportResponseFlowHandlerChain(&m_pTResFChain, sSessionId, protocol)))
+	if(SUCCESS != (Status = g_pHandlerPool->GetTransportResponseFlowHandlerChain(&m_pTResFChain, sSessionId, protocol)))
 		return Status;
 	return Status;
 }

@@ -69,7 +69,7 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-map<string, URITYPE> URIMapping::m_sURIMap;
+map<AxisString, URITYPE> URIMapping::m_sURIMap;
 volatile bool URIMapping::m_bInit = false;
 
 URIMapping::URIMapping()
@@ -86,15 +86,24 @@ void URIMapping::Initialize()
 {
 	if (!m_bInit)
 	{
-		m_sURIMap["http://www.w3.org/2001/XMLSchema"] = URI_XSD;
-		m_sURIMap["http://www.w3.org/2001/XMLSchema-instance"] = URI_XSI;
-		m_sURIMap["http://www.w3.org/2001/06/soap-encoding"] = URI_ENC;
-		m_sURIMap["http://schemas.xmlsoap.org/soap/envelope/"] = URI_ENVELOPE;
+		m_sURIMap[L"http://www.w3.org/2001/XMLSchema"] = URI_XSD;
+		m_sURIMap[L"http://www.w3.org/2001/XMLSchema-instance"] = URI_XSI;
+		m_sURIMap[L"http://www.w3.org/2001/06/soap-encoding"] = URI_ENC;
+		m_sURIMap[L"http://schemas.xmlsoap.org/soap/envelope/"] = URI_ENVELOPE;
 		m_bInit = true;
 	}
 }
 
-URITYPE URIMapping::Map(string &uri)
+URITYPE URIMapping::Map(const AxisString &uri)
+{
+	if (m_sURIMap.find(uri) != m_sURIMap.end())
+	{
+		return m_sURIMap[uri];
+	}
+	return URI_UNKNOWN;
+}
+
+URITYPE URIMapping::Map(const AxisChar* uri)
 {
 	if (m_sURIMap.find(uri) != m_sURIMap.end())
 	{

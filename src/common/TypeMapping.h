@@ -74,6 +74,7 @@
 
 #include <map>
 #include <string>
+#include "GDefine.h"
 
 using namespace std;
 
@@ -87,9 +88,9 @@ enum XSDTYPE { XSD_UNKNOWN=1, XSD_INT, XSD_FLOAT, XSD_STRING, XSD_LONG, XSD_SHOR
 class TypeMapping  
 {
 public:
-	static XSDTYPE Map(string& sType);
+	static XSDTYPE Map(AxisString& sType);
 	static void Initialize();
-	static map<string, XSDTYPE> m_sTypeMap;
+	static map<AxisString, XSDTYPE> m_sTypeMap;
 	static volatile bool m_bInit;
 	TypeMapping();
 	virtual ~TypeMapping();

@@ -75,6 +75,7 @@
 enum URITYPE { URI_XSI, URI_XSD, URI_ENC, URI_ENVELOPE, URI_UNKNOWN};
 #include <map>
 #include <string>
+#include "../common/GDefine.h"
 
 using namespace std;
 
@@ -82,12 +83,12 @@ class URIMapping
 {
 public:
 	static void Initialize();
-	static map<string, URITYPE> m_sURIMap;
+	static map<AxisString, URITYPE> m_sURIMap;
 	static volatile bool m_bInit;
 	URIMapping();
 	virtual ~URIMapping();
-	static URITYPE Map(string &uri);
-
+	static URITYPE Map(const AxisString &uri);
+	static URITYPE Map(const AxisChar* uri);
 };
 
 #endif // !defined(AFX_URIMAPPING_H__D5B347DD_E7B0_4C76_BCB2_A7C73CFE367D__INCLUDED_)

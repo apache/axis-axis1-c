@@ -103,15 +103,22 @@ typedef int (* DELETE_OBJECT)(BasicHandler *inst);
 class HandlerLoader : protected SharedObject
 {
 private:
-	typedef struct HandlerInformation
+	class HandlerInformation
 	{
+	public:
 		string m_sLib;
 		int m_nLoadOptions;
 		DLHandler m_Handler;
 		CREATE_OBJECT m_Create;
 		DELETE_OBJECT m_Delete;
 		int m_nObjCount;
-	} HandlerInformation;
+	public:
+		HandlerInformation()
+		{
+			m_sLib = "";
+			m_nObjCount = 0;
+		}
+	};
 
 	map<int, HandlerInformation*> m_HandlerInfoList;
 

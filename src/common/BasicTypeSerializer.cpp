@@ -73,8 +73,8 @@
 
 BasicTypeSerializer::BasicTypeSerializer()
 {
-	m_sSZ = "";
-	m_AuxStr = "";
+	m_sSZ = L"";
+	m_AuxStr = L"";
 }
 
 BasicTypeSerializer::~BasicTypeSerializer()
@@ -82,64 +82,65 @@ BasicTypeSerializer::~BasicTypeSerializer()
 
 }
 
-string& BasicTypeSerializer::serialize(const string &sName, int nValue)
+const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, int nValue)
 {
 	m_Type = XSD_INT;
-	sprintf(m_Buf, "%d", nValue);
+	swprintf(m_Buf, L"%d", nValue);
 	HelpSerialize(sName, sName);
-	return m_sSZ;
+	return m_sSZ.c_str();
 }
 
-string& BasicTypeSerializer::serialize(const string &sName, float fValue)
+const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, float fValue)
 {
 	m_Type = XSD_FLOAT;
-	sprintf(m_Buf, "%f", fValue);
+	swprintf(m_Buf, L"%f", fValue);
 	HelpSerialize(sName, sName);
-	return m_sSZ;
+	return m_sSZ.c_str();
 }
 
-string& BasicTypeSerializer::serialize(const string &sName, string &sValue, XSDTYPE type)
+const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, const AxisChar* sValue, XSDTYPE type)
 {
 	m_Type = type;
 	HelpSerialize(sName, sValue);
-	return m_sSZ;
+	return m_sSZ.c_str();
 }
 
-void BasicTypeSerializer::HelpSerialize(const string &sName, const string &sValue)
+void BasicTypeSerializer::HelpSerialize(const AxisChar* sName, const AxisChar* sValue)
 {
-	m_sSZ = "<";
-	m_sSZ += sName.c_str();
-	m_sSZ +=" xsi:type=\"xsd:";
+	m_sSZ = L"<";
+	m_sSZ += sName;
+	m_sSZ += L" xsi:type=\"xsd:";
 	m_sSZ += BasicTypeStr(m_Type);
-	m_sSZ += "\">";
+	m_sSZ += L"\">";
 	switch (m_Type)
 	{
 	case XSD_STRING:
-		m_sSZ += GetEntityReferenced(sValue);	
+		m_AuxStr = sValue;
+		m_sSZ += GetEntityReferenced(m_AuxStr).c_str();	
 		break;
 	default:
 		m_sSZ += m_Buf;
 	}
-	m_sSZ += "</";
-	m_sSZ += sName.c_str();
-	m_sSZ +=">";
+	m_sSZ += L"</";
+	m_sSZ += sName;
+	m_sSZ += L">";
 }
 
-const char* BasicTypeSerializer::BasicTypeStr(XSDTYPE type)
+const AxisChar* BasicTypeSerializer::BasicTypeStr(XSDTYPE type)
 {
 	switch (type)
 	{
-	case XSD_INT: return "int";
-	case XSD_FLOAT: return "float";
-	case XSD_STRING: return "string";
-	case XSD_HEXBINARY: return "hexBinary";
-	case XSD_BASE64BINARY: return "base64Binary";
-	default: return " ";
+	case XSD_INT: return L"int";
+	case XSD_FLOAT: return L"float";
+	case XSD_STRING: return L"string";
+	case XSD_HEXBINARY: return L"hexBinary";
+	case XSD_BASE64BINARY: return L"base64Binary";
+	default: return L" ";
 	}
 }
 
 /// Encode XML entities if any found in user data.
-string BasicTypeSerializer::GetEntityReferenced(const string &strVal)
+const AxisString& BasicTypeSerializer::GetEntityReferenced(const AxisString& strVal)
 {
 	if (strVal.empty())
 		return strVal;
@@ -148,35 +149,33 @@ string BasicTypeSerializer::GetEntityReferenced(const string &strVal)
     int nPos = strVal.find_first_of(XML_ENTITY_REFERENCE_CAHRS);	
 
 	// Check for position validity
-	if (std::string::npos == nPos)
+	if (std::AxisString::npos == nPos)
 		return strVal;
 
-	std::string strReturnVal;
-
 	int nOldIdx = 0;	// Counter value
-	while(std::string::npos != nPos)
+	while(std::AxisString::npos != nPos)
 	{	// Get pointered character
 		switch(strVal.at(nPos))
 		{	
 			case LESSER_THAN_CHAR  : // Process < character
-				strReturnVal.append(strVal.substr(nOldIdx, nPos - nOldIdx));
-				strReturnVal.append(ENCODED_LESSER_STR);
+				m_strReturnVal.append(strVal.substr(nOldIdx, nPos - nOldIdx));
+				m_strReturnVal.append(ENCODED_LESSER_STR);
 				break;
 			case GREATOR_THAN_CHAR  : // Process > character
-				strReturnVal.append(strVal.substr(nOldIdx, nPos - nOldIdx));
-				strReturnVal.append(ENCODED_GREATOR_STR);
+				m_strReturnVal.append(strVal.substr(nOldIdx, nPos - nOldIdx));
+				m_strReturnVal.append(ENCODED_GREATOR_STR);
 				break;
 			case AMPERSAND_CHAR  : // Process & character
-				strReturnVal.append(strVal.substr(nOldIdx, nPos - nOldIdx));
-				strReturnVal.append(ENCODED_AMPERSAND_STR);
+				m_strReturnVal.append(strVal.substr(nOldIdx, nPos - nOldIdx));
+				m_strReturnVal.append(ENCODED_AMPERSAND_STR);
 				break;
 			case DOUBLE_QUOTE_CHAR : // Process " character
-				strReturnVal.append(strVal.substr(nOldIdx, nPos - nOldIdx));
-				strReturnVal.append(ENCODED_DBL_QUOTE_STR);
+				m_strReturnVal.append(strVal.substr(nOldIdx, nPos - nOldIdx));
+				m_strReturnVal.append(ENCODED_DBL_QUOTE_STR);
 				break;
 			case SINGLE_QUOTE_CHAR : // Process ' character
-				strReturnVal.append(strVal.substr(nOldIdx, nPos - nOldIdx));
-				strReturnVal.append(ENCODED_SGL_QUOTE_STR);
+				m_strReturnVal.append(strVal.substr(nOldIdx, nPos - nOldIdx));
+				m_strReturnVal.append(ENCODED_SGL_QUOTE_STR);
 				break;
 		}
 		nOldIdx = ++nPos; // Get old position
@@ -187,7 +186,7 @@ string BasicTypeSerializer::GetEntityReferenced(const string &strVal)
 	int nDataLen = strVal.length();		// Get the length of the field value
 	int nLen =  nDataLen - nOldIdx;		// Get remaining number of characters	
 	if (nLen > 0)
-		strReturnVal += strVal.substr(nOldIdx, nLen);// Apend the remaining data		
+		m_strReturnVal += strVal.substr(nOldIdx, nLen);// Apend the remaining data		
 
-	return strReturnVal;
+	return m_strReturnVal;
 }

@@ -73,6 +73,8 @@
 #endif // _MSC_VER > 1000
 
 #include <string>
+#include "../common/GDefine.h"
+
 using namespace std;
 
 class SoapSerializer;
@@ -82,15 +84,15 @@ enum NODE_TYPE { ELEMENT_NODE=1, CHARACTER_NODE};
 class BasicNode
 {
 public:
-	virtual string& getValue()=0;
-	virtual int setValue(string& sValue)=0;
+	virtual const AxisString& getValue()=0;
+	virtual int setValue(const AxisChar* sValue)=0;
 	virtual NODE_TYPE getNodeType()=0;
 	virtual int serialize(SoapSerializer& pSZ) =0;
 	virtual ~BasicNode() {};
 
 protected:
 	NODE_TYPE m_iNodeType;
-	string m_sValue;
+	AxisString m_sValue;
 };
 
 #endif // !defined(AFX_BASICNODE_H__623900B8_2737_4E36_8F26_97898C5BD47D__INCLUDED_)

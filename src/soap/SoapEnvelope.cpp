@@ -128,7 +128,7 @@ int SoapEnvelope::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 {	
 	int iStatus= SUCCESS;
 	do {			
-		pSZ << "<" << g_sObjSoapEnvVersionsStruct[eSoapVersion].pchEnvelopePrefix << ":" << g_sObjSoapEnvVersionsStruct[eSoapVersion].pcharWords[SKW_ENVELOPE];			
+		pSZ << "<" << ObjSoapEnvVersionsStructTemp[eSoapVersion].pchPrefix << ":" << ObjSoapEnvVersionsStructTemp[eSoapVersion].pchWords[SKW_ENVELOPE];			
 		serializeStandardNamespaceDecl(pSZ);
 		serializeNamespaceDecl(pSZ);
 		serializeAttributes(pSZ);
@@ -149,7 +149,7 @@ int SoapEnvelope::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 			//iStatus = FAIL;
 		}
 				
-		pSZ << "</" << g_sObjSoapEnvVersionsStruct[eSoapVersion].pchEnvelopePrefix << ":" << g_sObjSoapEnvVersionsStruct[eSoapVersion].pcharWords[SKW_ENVELOPE] << ">";
+		pSZ << "</" << ObjSoapEnvVersionsStructTemp[eSoapVersion].pchPrefix << ":" << ObjSoapEnvVersionsStructTemp[eSoapVersion].pchWords[SKW_ENVELOPE] << ">";
 		pSZ.flushSerializedBuffer();
 	} while(0);
 
@@ -164,7 +164,7 @@ int SoapEnvelope::serialize(string &sSerialized, SOAP_VERSION eSoapVersion)
 	int iStatus= SUCCESS;
 
 	do {
-		sSerialized= "<"+ string(g_sObjSoapEnvVersionsStruct[eSoapVersion].pchEnvelopePrefix) + ":"+ g_sObjSoapEnvVersionsStruct[eSoapVersion].pcharWords[SKW_ENVELOPE];
+		sSerialized= "<"+ string(ObjSoapEnvVersionsStructTemp[eSoapVersion].pchPrefix) + ":"+ ObjSoapEnvVersionsStructTemp[eSoapVersion].pchWords[SKW_ENVELOPE];
 
 		serializeNamespaceDecl(sSerialized);
 		serializeAttributes(sSerialized);
@@ -188,7 +188,7 @@ int SoapEnvelope::serialize(string &sSerialized, SOAP_VERSION eSoapVersion)
 			//iStatus = FAIL;
 		}
 		
-		sSerialized+= "</"+ string(g_sObjSoapEnvVersionsStruct[eSoapVersion].pchEnvelopePrefix) + ":"+ g_sObjSoapEnvVersionsStruct[eSoapVersion].pcharWords[SKW_ENVELOPE]+ ">";	
+		sSerialized+= "</"+ string(ObjSoapEnvVersionsStructTemp[eSoapVersion].pchPrefix) + ":"+ ObjSoapEnvVersionsStructTemp[eSoapVersion].pchWords[SKW_ENVELOPE]+ ">";	
 	} while(0);
 
 	return iStatus;
@@ -281,7 +281,7 @@ int SoapEnvelope::serializeNamespaceDecl(string& sSerialized)
  * the version specific prefix is taken from the SoapEnvVersions.h at 
  * that time.
  */
-int SoapEnvelope::setPrefix(const string &prefix)
+int SoapEnvelope::setPrefix(const AxisChar* prefix)
 {
 	m_sPrefix= prefix;
 
