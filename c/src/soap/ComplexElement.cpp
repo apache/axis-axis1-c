@@ -366,3 +366,7 @@ int ComplexElement::getNoOfChildren()
 {
     return iNoOfChildren;
 }
+
+const AxisChar* ComplexElement::getLocalName() {
+    return m_pachLocalName; 
+}

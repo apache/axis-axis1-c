@@ -57,6 +57,12 @@ enum NODE_TYPE { ELEMENT_NODE=1, CHARACTER_NODE};
  * Added doxygen comments to help autobuild API docs
  */
 
+/*
+ * Revision 1.3  2004/07/28 roshan
+ * Added the method getLocalName()
+ */
+
+
 typedef struct {
 	int (AXISCALL* getNoOfChildren)(void* pObj);
 	/*add akk itger aou fybctuibs gere.*/
@@ -67,10 +73,19 @@ typedef struct {
 class BasicNode
 {
 public:
+
+    /**
+      * Returns the local name of this node. The operation
+      * behavior depends on the TYPE of the node.
+      * 
+      * @return The localname of this element.
+      */
+    virtual const AxisChar* getLocalName() = 0; 
+
     /**
       * Returns the number of child elements of this element. The operation
       * behavior depends on the TYPE of the node.
-	  *
+      *
       * @return The number of child elements of this element. The return value
       * behavior depends on the TYPE of the node.
       */

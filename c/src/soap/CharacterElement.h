@@ -25,6 +25,10 @@
  * Added doxygen comments to help autobuild API docs
  */
 
+/*
+ * Revision 1.3  2004/07/28 roshan
+ * Added the method getLocalName().
+ */
 
 #if !defined(_CHARACTERELEMENT_H____OF_AXIS_INCLUDED_)
 #define _CHARACTERELEMENT_H____OF_AXIS_INCLUDED_
@@ -160,6 +164,14 @@ public:
       * CHARACTER_NODE
       */
     NODE_TYPE getNodeType() const;
+
+    /**
+      * This method is overridden to return NULL always. A user of a 
+      *  CharacterElement should not use this method.
+      *
+      * @return Returns NULL.
+      */
+    const AxisChar* getLocalName() {return NULL;}
 
     /**
       * The Constructor.
