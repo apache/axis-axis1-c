@@ -56,7 +56,7 @@
  */
 
 /*
- * Axis C++ JNI delegator.
+ * Axis C++ JNI Content Handler.
  *
  * @author Lilantha Darshana (lilantha@virtusa.com)
  *
@@ -68,33 +68,43 @@ import java.util.Vector;
 
 public class AxisCppContentHandler
 {
+	private static final boolean DEBUG = Boolean.getBoolean("debug");
 	static {
         try {
 			System.loadLibrary("libAxiscpp");
          
-            System.out.println("* Native library loaded");
-        }
-        catch (Throwable e) {
+		 if(DEBUG)
+            System.out.println("* Native library 'libAxiscpp' loaded");
+
+        } catch (Throwable e) {
             e.printStackTrace();
         }
      }
 
-	public static native void Delegate(char [] body, int bodySize, Vector headers, int headerCount);
+	public static native void processContent(byte [] body, int bodySize, Vector headers, int headerCount);
 
 	public static void main(String [] args)
 	{
-		String str = "Hello World";
-		char [] pch = str.toCharArray();
+		byte [] str = new String("Hello World").getBytes();
+		
 		Vector v = new Vector();
 		v.add("Name1");
 		v.add("Value1");
 		v.add("Name2");
 		v.add("Value2");
 		try{
-		System.in.read();
+			System.in.read();
+		
+			AxisCppContentHandler.processContent(str, str.length, v, 2);
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			out.write(str);
+			System.out.println(out.toString());
 		}catch(IOException ex){
+			ex.printStackTrace();
 		}
-		AxisCppContentHandler.Delegate(pch, pch.length, v, 2);
+		
+		for(int i=0;i<v.size()/2;i++)
+			System.out.println(v.elementAt(i*2) + " : " + v.elementAt(i*2+1));
 	}
 }
 

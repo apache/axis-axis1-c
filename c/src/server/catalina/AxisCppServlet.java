@@ -77,29 +77,48 @@ public class AxisCppServlet extends HttpServlet {
         throws IOException, ServletException
     {
 		int bodySize = request.getContentLength();
-		char [] body = new char[bodySize+1];
-		BufferedReader bodyReader = request.getReader();
-		bodyReader.read(body, 0, bodySize); 
-		body[bodySize] = '\0';
-		
-		//String contentType = request.getContentType();
-		int headerCount = 0;
-		Vector headers = new Vector();
-		Enumeration names = request.getHeaderNames();
-		while(names.hasMoreElements())
+		PrintWriter pw = new PrintWriter(response.getWriter());
+		response.setContentType("text/xml"); //change this according to the SOAP 1.2
+			
+		if(0 != bodySize)
 		{
-			headerCount++;
-			String headerName = (String) names.nextElement();
-			headers.addElement(headerName);//Add the name
-			headers.addElement(request.getHeader(headerName)); //add the value
+			byte [] bodyContent = new byte[bodySize+1];
+			ServletInputStream bodyReader = request.getInputStream();
+			try{
+				bodyReader.read(bodyContent, 0, bodySize); 
+			}
+			catch(IOException ex)
+			{
+				pw.write("<error>");
+				pw.write("bdy size: "+bodySize+" \nContent : "+ex.getMessage());
+				pw.write("</error>");
+				return;
+			}
+						
+			//String contentType = request.getContentType();
+			int headerCount = 0;
+			Vector headers = new Vector();
+			Enumeration names = request.getHeaderNames();
+			while(names.hasMoreElements())
+			{
+				headerCount++;
+				String headerName = (String) names.nextElement();
+				headers.addElement(headerName);//Add the name
+				headers.addElement(request.getHeader(headerName)); //add the value
+			}
+
+			if(bodySize > 0)
+				AxisCppContentHandler.processContent(bodyContent, bodyContent.length, 
+												 headers, headerCount);
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			out.write(bodyContent);
+			pw.write(out.toString());
 		}
-		        
-		if(bodySize > 0)
-			AxisCppContentHandler.Delegate(body, bodySize, headers, headerCount);
 		
 		//setup the response
-		response.setContentType("text/xml"); //change this according to the SOAP 1.2
-		
+		pw.write("<error>");
+		pw.write("Error - body content empty");
+		pw.write("</error>");
     }
 	public void doPost(HttpServletRequest request,
                       HttpServletResponse response)
