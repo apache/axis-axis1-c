@@ -3,7 +3,7 @@
  * This file contains definitions of the web service
  */
 
-#include "MathOps.h"
+#include "MathOps.hpp"
 
 
 MathOps::MathOps()
@@ -14,47 +14,25 @@ MathOps::~MathOps()
 {
 }
 
-int MathOps::div(int Value0, int Value1)  
+/* This function is called by the AxisEngine when something went wrong
+ with the current web service request processing. Appropriate actions should
+ be taken here.*/
+void MathOps::onFault()
 {
-     if (Value1 == 0) 
-     {
-         DivByZeroStruct* pObjFault = new DivByZeroStruct();
-         if(pObjFault)
-         {
-             pObjFault->varString = "Division by zero exception";
-             pObjFault->varInt = 1;
-             pObjFault->varFloat = 10.52;
-             throw pObjFault;
-         }
-         //throw AxisDivByZeroException();
-     }
-
-     if(Value0 < 0 || Value1 < 0) 
-     {
-         OutOfBoundStruct* pObjFault = new OutOfBoundStruct();
-         SpecialDetailStruct* pObjSpecialDetailFault = new SpecialDetailStruct();
-         if(pObjSpecialDetailFault)
-             pObjSpecialDetailFault->varString = "This bound exception is a forced limitation";
-         if (pObjFault)
-         {
-             pObjFault->varString = "Value out of bound exception";
-             pObjFault->varInt = 2;
-             pObjFault->specialDetail = pObjSpecialDetailFault;
-             throw pObjFault;
-         }
-     }
-
-     if(Value0 == 1000)
-     {
-         SpecialDetailStruct* pObjFault = new SpecialDetailStruct();
-         if(pObjFault)
-         {
-             pObjFault->varString = strdup("You have entered 1000 for the 1st paramter. 1000 is reserved. Please do not use it");
-         throw pObjFault;
-         }
-         //throw AxisNormalDetailException();
-     }
-
-     return Value0/Value1;
-        
+}
+/* This function is called by the AxisEngine when this web service
+ library is first loaded. So here we can initialize any global/static
+ data structures of this web service or open database connections */
+void MathOps::init()
+{
+}
+/* This function is called by the AxisEngine when this web service
+ library is unloaded. So we can deallocate any global/static data structures
+ and close database connections etc here. */
+void MathOps::fini()
+{
+}
+xsd__int MathOps::div(xsd__int Value0, xsd__int Value1)  
+{
+	return (Value0/Value1);
 }
