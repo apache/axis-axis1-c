@@ -418,7 +418,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                 + ", (void*)Axis_Delete_"
                                 + attribs[i].getTypeName()
                                 + "\n\t\t, \""
-                                + attribs[i].getParamName()
+                                + attribs[i].getParamNameAsSOAPElement()
                                 + "\", Axis_URI_"
                                 + attribs[i].getTypeName()
                                 + ");\n");
