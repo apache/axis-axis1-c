@@ -12,7 +12,7 @@ extern int yyparse();
 extern void init_keyword_map();
 int parse_header_file(const char *filename);
 extern FILE *yyin;
-
+extern list<string> g_classesfound;
 //this map is populated with the type mapping and the services informaiion
 //by the WSDD parser
 map<string, string> g_ClassNamespaces; 
@@ -20,6 +20,8 @@ map<string, string> g_ClassNamespaces;
 int main(int argc, char* argv[])
 {
 	init_keyword_map();
+	//add predefined classes to the list so that parser recognizes them
+	g_classesfound.push_back("IAccessBean");
 	//parse wsdd files
 	g_ClassNamespaces["webservice"] = "http://www.opensource.lk/webservice";
 	g_ClassNamespaces["root"] = "http://www.opensource.lk/root";
