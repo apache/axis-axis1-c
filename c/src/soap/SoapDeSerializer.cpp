@@ -64,7 +64,11 @@
 // SoapDeSerializer.cpp: implementation of the SoapDeSerializer class.
 //
 //////////////////////////////////////////////////////////////////////
-
+#include "SoapEnvelope.h"
+#include "SoapHeader.h"
+#include "SoapMethod.h"
+#include "SoapBody.h"
+#include "SoapFault.h"
 #include "SoapDeSerializer.h"
 #include "../common/GDefine.h"
 
@@ -126,7 +130,7 @@ int SoapDeSerializer::Deserialize(Param* pParam, int bHref)
 	switch (pParam->m_Type)
 	{
 	case XSD_ARRAY:
-		if (pParam->m_Value.a && pParam->m_Value.a->v.so)
+		if (pParam->m_Value.a && pParam->m_Value.a->m_value.sta)
 		{
 			pParam->m_Value.a->DeSerialize(this);
 		}
