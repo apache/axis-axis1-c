@@ -77,10 +77,10 @@
 class ESHHandler : public Handler
 {
 public:
-	int Fini();
-	int Init();
-	void OnFault(IMessageData* pIMsg);
-	int Invoke(IMessageData* pIMsg);
+	int AXISCALL Fini();
+	int AXISCALL Init();
+	void AXISCALL OnFault(void* pvIMsg);
+	int AXISCALL Invoke(void* pvIMsg);
 	void SetOptionList(const map<string, string>* OptionList);
 	const string& GetOption(const string& sArg);
 	ESHHandler();

@@ -72,7 +72,10 @@
 #include <axis/soap/HeaderBlock.h>
 #include <axis/soap/SoapHeader.h>
 #include <axis/soap/BasicNode.h>
+#include <axis/common/AxisTrace.h>
 #include <iostream>
+
+#include <axis/soap/CharacterElement.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -105,12 +108,13 @@ void ESHHandler::SetOptionList(const map<string, string>* OptionList)
    m_pOption = OptionList;
 }
 
-int ESHHandler::Invoke(IMessageData *pIMsg)
+int ESHHandler::Invoke(void *pvIMsg)
 {
-    string strTemp;
-    AxisChar* sHeaderVal;
+	IMessageData *pIMsg = (IMessageData*) pvIMsg;
+    AxisChar* pachTemp;
 	if(pIMsg->isPastPivot()) {
-		//this is a response
+		/*this is a response*/
+
 		IHandlerSoapSerializer* pISZ;
 		pIMsg->getSoapSerializer(&pISZ);
 
@@ -118,46 +122,66 @@ int ESHHandler::Invoke(IMessageData *pIMsg)
 
 		pIHeaderBlock->setLocalName("echoMeStringResponse");
 		pIHeaderBlock->setUri("http://soapinterop.org/echoheader/");
-		pIHeaderBlock->setPrefix("m");
 
-        strTemp = "EchoStringHeaderHandlerPr1.id";
-        size_t nSize = strlen(pIMsg->getProperty(strTemp).c_str()) + 30;
-        sHeaderVal = (char*) malloc(nSize);
-		strcpy(sHeaderVal, pIMsg->getProperty(strTemp).c_str());
-        realloc(sHeaderVal, 30);
-		strcpy(sHeaderVal," After Append by Handler");
-		pIHeaderBlock->setValue(sHeaderVal);
+        pachTemp = "EchoStringHeaderHandlerPr1.id";
+        
+		const AxisChar* pachHeaderVal = pIMsg->getProperty(pachTemp);
+		printf("in the ESHHandler::Invoke : %s\n",pachHeaderVal);
 
 		BasicNode* pBasicNode = pIHeaderBlock->createChild(CHARACTER_NODE);
-		pBasicNode->setValue(sHeaderVal);
+		pBasicNode->setValue(pachHeaderVal);
+		
 		pIHeaderBlock->addChild(pBasicNode);
-
-		cout<<"in the header invoke"<<endl;
 		
 	} else {
-		//this is a request
+		/*this is a request*/
+		
 		IHandlerSoapDeSerializer* pIHandlerSoapDeSerializer;
 		pIMsg->getSoapDeSerializer(&pIHandlerSoapDeSerializer);
 
-		ISoapHeader* pISoapHeader= pIHandlerSoapDeSerializer->GetHeader();
-		IHeaderBlock* pIHeaderBlock= pISoapHeader->getHeaderBlock();
-		BasicNode* pBasicNode= pIHeaderBlock->getFirstChild();
+		IHeaderBlock* pIHeaderBlock= pIHandlerSoapDeSerializer->GetHeaderBlock("reservation", "http://travelcompany.example.org/reservation");
 		
-		string sHeaderValue;
-		if((pBasicNode->getNodeType()) == CHARACTER_NODE) {
-			sHeaderValue= pBasicNode->getValue();
-		}
+		if (pIHeaderBlock != NULL) {
 
-        strTemp = "EchoStringHeaderHandlerPr1.id";
-		pIMsg->setProperty(strTemp, sHeaderValue);
-		//pIMsg->setProperty(string("EchoSt"), sHeaderValue);
+			BasicNode* pBasicNode= pIHeaderBlock->getFirstChild();
+			BasicNode* pBasicNode2= pBasicNode->getFirstChild();
+						
+			const AxisChar* pachHeaderValue;
+			const AxisChar* pachHeaderValue2;
+			if((pBasicNode2->getNodeType()) == CHARACTER_NODE) {
+				pachHeaderValue= pBasicNode2->getValue();
+			} else {
+				pachHeaderValue = "This was not the expected value Ros";
+			}
+
+			BasicNode* pBasicNode3= pIHeaderBlock->getLastChild();
+			BasicNode* pBasicNode4 =pBasicNode3->getFirstChild();
+			if((pBasicNode4->getNodeType()) == CHARACTER_NODE) {
+				pachHeaderValue2= pBasicNode4->getValue();
+			} else {
+				pachHeaderValue2= "This was not the expected value2 Ros";
+			}
+
+			AxisChar* pachTmpValue = (AxisChar*) malloc(strlen(pachHeaderValue)+ strlen(pachHeaderValue2) +4);
+			strcpy(pachTmpValue, pachHeaderValue);
+			strcat(pachTmpValue, " : ");
+			strcat(pachTmpValue, pachHeaderValue2);
+
+			pachTemp = "EchoStringHeaderHandlerPr1.id";
+			pIMsg->setProperty(pachTemp, pachTmpValue);
+
+			free(pachTmpValue);
+			
+		} else {
+			//do some thing
+		}
 		
 	}
 
 	return AXIS_SUCCESS;
 }
 
-void ESHHandler::OnFault(IMessageData *pIMsg)
+void ESHHandler::OnFault(void *pvIMsg)
 {
 
 }
