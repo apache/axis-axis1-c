@@ -3,7 +3,7 @@
  * This file contains Web Service Wrapper implementations
  */
 
-#include "InteropTestPortTypeWrapper.h"
+#include "InteropTestPortTypeWrapper.hpp"
 
 extern int Axis_DeSerialize_SOAPStruct(SOAPStruct* param, IWrapperSoapDeSerializer* pDZ);
 extern void* Axis_Create_SOAPStruct(SOAPStruct *Obj, bool bArray = false, int nSize=0);
@@ -153,11 +153,11 @@ int InteropTestPortTypeWrapper::echoInteger(void* pMsg)
 	/* check whether we have got correct message */
 	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoInteger", "http://soapinterop.org/")) return AXIS_FAIL;
 	pIWSSZ->createSoapMethod("echoIntegerResponse", "http://soapinterop.org/");
-	int v0 = pIWSDZ->getElementAsInt("inputInteger",0);
+	xsd__int v0 = *(pIWSDZ->getElementAsInt("inputInteger",0));
 	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
 	try
 	{
-		int ret = pWs->echoInteger(v0);
+		xsd__int ret = pWs->echoInteger(v0);
 		return pIWSSZ->addOutputParam("echoIntegerReturn", (void*)&ret, XSD_INT);
 	}
 	catch(...){
@@ -209,11 +209,11 @@ int InteropTestPortTypeWrapper::echoFloat(void* pMsg)
 	/* check whether we have got correct message */
 	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoFloat", "http://soapinterop.org/")) return AXIS_FAIL;
 	pIWSSZ->createSoapMethod("echoFloatResponse", "http://soapinterop.org/");
-	float v0 = pIWSDZ->getElementAsFloat("inputFloat",0);
+	xsd__float v0 = *(pIWSDZ->getElementAsFloat("inputFloat",0));
 	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
 	try
 	{
-		float ret = pWs->echoFloat(v0);
+		xsd__float ret = pWs->echoFloat(v0);
 		return pIWSSZ->addOutputParam("echoFloatReturn", (void*)&ret, XSD_FLOAT);
 	}
 	catch(...){
@@ -352,7 +352,7 @@ int InteropTestPortTypeWrapper::echoBase64(void* pMsg)
 	/* check whether we have got correct message */
 	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoBase64", "http://soapinterop.org/")) return AXIS_FAIL;
 	pIWSSZ->createSoapMethod("echoBase64Response", "http://soapinterop.org/");
-	xsd__base64Binary v0 = pIWSDZ->getElementAsBase64Binary("inputBase64",0);
+	xsd__base64Binary v0 = *(pIWSDZ->getElementAsBase64Binary("inputBase64",0));
 	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
 	try
 	{
@@ -380,7 +380,7 @@ int InteropTestPortTypeWrapper::echoDate(void* pMsg)
 	/* check whether we have got correct message */
 	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoDate", "http://soapinterop.org/")) return AXIS_FAIL;
 	pIWSSZ->createSoapMethod("echoDateResponse", "http://soapinterop.org/");
-	xsd__dateTime v0 = pIWSDZ->getElementAsDateTime("inputDate",0);
+	xsd__dateTime v0 = *(pIWSDZ->getElementAsDateTime("inputDate",0));
 	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
 	try
 	{
@@ -408,7 +408,7 @@ int InteropTestPortTypeWrapper::echoHexBinary(void* pMsg)
 	/* check whether we have got correct message */
 	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoHexBinary", "http://soapinterop.org/")) return AXIS_FAIL;
 	pIWSSZ->createSoapMethod("echoHexBinaryResponse", "http://soapinterop.org/");
-	xsd__hexBinary v0 = pIWSDZ->getElementAsHexBinary("inputHexBinary",0);
+	xsd__hexBinary v0 = *(pIWSDZ->getElementAsHexBinary("inputHexBinary",0));
 	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
 	try
 	{
@@ -436,7 +436,7 @@ int InteropTestPortTypeWrapper::echoDecimal(void* pMsg)
 	/* check whether we have got correct message */
 	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoDecimal", "http://soapinterop.org/")) return AXIS_FAIL;
 	pIWSSZ->createSoapMethod("echoDecimalResponse", "http://soapinterop.org/");
-	xsd__decimal v0 = pIWSDZ->getElementAsDecimal("inputDecimal",0);
+	xsd__decimal v0 = *(pIWSDZ->getElementAsDecimal("inputDecimal",0));
 	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
 	try
 	{
@@ -464,7 +464,7 @@ int InteropTestPortTypeWrapper::echoBoolean(void* pMsg)
 	/* check whether we have got correct message */
 	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoBoolean", "http://soapinterop.org/")) return AXIS_FAIL;
 	pIWSSZ->createSoapMethod("echoBooleanResponse", "http://soapinterop.org/");
-	xsd__boolean v0 = pIWSDZ->getElementAsBoolean("inputBoolean",0);
+	xsd__boolean v0 = *(pIWSDZ->getElementAsBoolean("inputBoolean",0));
 	if (AXIS_SUCCESS != (nStatus = pIWSDZ->getStatus())) return nStatus;
 	try
 	{

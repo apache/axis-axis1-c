@@ -3,7 +3,7 @@
  * This file contains the two export functions of the Web service Dynamic Library 
  */
 
-#include "InteropTestPortTypeWrapper.h" 
+#include "InteropTestPortTypeWrapper.hpp" 
 extern "C" {
 STORAGE_CLASS_INFO
 int GetClassInstance(BasicHandler **inst)
