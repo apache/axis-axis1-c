@@ -81,6 +81,7 @@ public:
 
 private:
 	void* m_pContext;
+    bool m_bHeadersSent;
 #ifndef CHUNCKED_DATA_SUPPORTED
     BufferInfo* m_pBuffers;
 #endif

@@ -36,6 +36,7 @@
 
 ApacheTransport::ApacheTransport(void* pContext)
 {
+    m_bHeadersSent = false;
 	m_pContext = pContext;
 #ifndef CHUNCKED_DATA_SUPPORTED
     m_pBuffers = new BufferInfo[NO_OF_SERIALIZE_BUFFERS];
@@ -50,6 +51,12 @@ ApacheTransport::~ApacheTransport()
 
 AXIS_TRANSPORT_STATUS ApacheTransport::sendBytes(const char* pcSendBuffer, const void* pBufferId)
 {
+    if (!m_bHeadersSent)
+    {
+        ap_send_http_header ((request_rec*)m_pContext);
+        m_bHeadersSent = true;
+    }
+
 #ifndef CHUNCKED_DATA_SUPPORTED
     int index;
 #endif
