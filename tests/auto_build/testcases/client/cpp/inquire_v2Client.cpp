@@ -23,10 +23,8 @@
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
 #include <string>
-#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <axis/AxisException.hpp>
 using namespace std;
 
@@ -58,7 +56,8 @@ main(int argc, char *argv[])
         tModelKey_Array arrtModelKeys;
         arrtModelKeys.m_Array = new char *[ARRAYSIZE];
         arrtModelKeys.m_Size = ARRAYSIZE;
-        for (int i = 0; i < ARRAYSIZE; i++)
+        int i = 0;
+        for (i = 0; i < ARRAYSIZE; i++)
         {
             arrtModelKeys.m_Array[i] = buffer;
         }
@@ -67,7 +66,7 @@ main(int argc, char *argv[])
         printf("invoking get_tModelDetail...\n");
         tModel_Array result = ws->get_tModelDetail(arrtModelKeys, cpname);
         printf("tModel_Array size = %d\n", result.m_Size);
-        for( int i = 0; i < result.m_Size; i++ ) 
+        for( i = 0; i < result.m_Size; i++ ) 
         {
             printf("tModel %d...\n", i + 1 );
             printf("\t tModel Key Ref = %s\n", result.m_Array[i].tModelKey_Ref);
@@ -88,7 +87,7 @@ main(int argc, char *argv[])
         businessKey_Array arrBusinessKeys;
         arrBusinessKeys.m_Array = new char *[ARRAYSIZE];
         arrBusinessKeys.m_Size = ARRAYSIZE;
-        for (int i = 0; i < ARRAYSIZE; i++)
+        for (i = 0; i < ARRAYSIZE; i++)
         {
             arrBusinessKeys.m_Array[i] = buffer;
         }
@@ -98,7 +97,7 @@ main(int argc, char *argv[])
         businessEntity_Array businessEntities = ws->get_businessDetail(arrBusinessKeys, cpname);
         //businessEntity_Array get_businessDetail(businessKey_Array Value0,xsd__string Value1);
         printf("businessEntity_Array size = %d\n", businessEntities.m_Size);
-        for( int i = 0; i < businessEntities.m_Size; i++ ) 
+        for( i = 0; i < businessEntities.m_Size; i++ ) 
         {
             printf( "Business Entity %d\n", i + 1 );
             printf("\t Business Key Ref = %s\n", businessEntities.m_Array[i].businessKey_Ref);
@@ -148,4 +147,6 @@ main(int argc, char *argv[])
     {
         printf("Exception caught : %s\n", e.what());
     }
+
+    return 0;
 }
