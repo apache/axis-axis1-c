@@ -924,7 +924,7 @@ public class CSchemaUtils extends SchemaUtils
                     elem.setMaxOccurs(ElementInfo.UNBOUNDED);
                 else
                     elem.setMaxOccurs(Integer.parseInt(maxOccurs));
-            String nillable = Utils.getAttribute(elementNode, "nilable");
+            String nillable = Utils.getAttribute(elementNode, "nillable");
             if (nillable != null && "true".equals(nillable))
                 elem.setNillable(true);
 

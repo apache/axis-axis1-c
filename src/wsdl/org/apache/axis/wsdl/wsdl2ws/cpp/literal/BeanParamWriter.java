@@ -97,33 +97,41 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write(" */\n");
 		writer.write("int Axis_GetSize_"+classname+"()\n{\n\treturn sizeof("+classname+");\n}\n");
 	}
-	private void writeSerializeGlobalMethod()throws IOException,WrapperFault{
+	private void writeSerializeGlobalMethod()throws IOException, WrapperFault
+	{
 		writer.write("/*\n");
 		writer.write(" * This static method serialize a "+classname+" type of object\n");
 		writer.write(" */\n");
 		writer.write("int Axis_Serialize_"+classname+"("+classname+"* param, IWrapperSoapSerializer* pSZ, bool bArray = false)\n{\n");
-		if (attribs.length == 0) {
+		
+		if (attribs.length == 0)
+		{
 			writer.write("\tpSZ->serialize(\">\", NULL);\n");
-			if (extensionBaseAttrib != null){
+			
+			if (extensionBaseAttrib != null)
+			{
 				writer.write("\tpSZ->serializeAsChardata((void*)&(param->"+extensionBaseAttrib.getParamNameAsMember()+"), "+CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName())+");\n");
-			}else{
+			}
+			else
+			{
 				System.out.println("Possible error in class "  + classname + ": class with no attributes....................");
 			}
 			writer.write("\treturn AXIS_SUCCESS;\n");
 			writer.write("}\n\n");				 
 			return;
 		}
+		
 		String arrayType;
 		/* A type does not know whether it is used as a nillable parameter 
 		 * So this may not be the appropriate place to do this
 		 */
-		writer.write("\tif ( param == NULL ) {\n");
-		writer.write("\t /* TODO : may need to check nillable value*/\n"); 
-		//writer.write("\t pSZ->serializeAsAttribute(\"nil\", \"http://www.w3.org/2001/XMLSchema-instance\", (void*)&(xsd_boolean_true), XSD_BOOLEAN);\n");
-		writer.write("\tpSZ->serializeAsAttribute(\"xsi:nil\", 0, (void*)&(xsd_boolean_true), XSD_BOOLEAN);\n");
-		writer.write("\t pSZ->serialize(\">\", NULL);\n");
-		writer.write("\treturn AXIS_SUCCESS;\n");
-		writer.write("\t}\n");
+		writer.write("\tif ( param == NULL )\n\t{\n");
+		writer.write("\t /* TODO : may need to check nillable value - Now done*/\n"); 
+		writer.write("\t\tpSZ->serializeAsAttribute( \"xsi:nil\", 0, (void*)&(xsd_boolean_true), XSD_BOOLEAN);\n");
+		writer.write("\t\tpSZ->serialize( \">\", NULL);\n");
+		writer.write("\t\treturn AXIS_SUCCESS;\n");
+		writer.write("\t}\n\n");
+		
 		writer.write("\t/* first serialize attributes if any*/\n");
 		for(int i = 0; i< attributeParamCount;i++){
 			if(attribs[i].isArray() || !(attribs[i].isSimpleType())){
@@ -148,11 +156,12 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				}
 			}
 		}
-		writer.write("\tpSZ->serialize(\">\", 0);\n");
+		writer.write("\tpSZ->serialize( \">\", 0);\n");
 		if (extensionBaseAttrib != null && extensionBaseAttrib.getTypeName() != null){
 			writer.write("\tpSZ->serializeAsChardata((void*)&(param->"+extensionBaseAttrib.getParamNameAsMember()+"), "+CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName())+");\n");
 		}
-		writer.write("\t/* then serialize elements if any*/\n");
+		
+		writer.write("\n\t/* then serialize elements if any*/\n");
 		for(int i = attributeParamCount; i< attribs.length;i++){
 			if(attribs[i].isAnyType()){
 				writer.write("\tpSZ->serializeAnyObject(param->any);\n");
@@ -162,18 +171,48 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				if (attribs[i].isSimpleType()){
 					writer.write("\tpSZ->serializeBasicArray((Axis_Array*)(&param->"+attribs[i].getParamNameAsMember()+"),"+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+", \""+attribs[i].getParamName()+"\");\n"); 
 				}
-				else{
+				else
+				{
 					arrayType = attribs[i].getTypeName();
-					writer.write("\tpSZ->serializeCmplxArray((Axis_Array*)(&param->"+attribs[i].getParamNameAsMember()+"),\n"); 
-					writer.write("\t\t(void*) Axis_Serialize_"+arrayType+", (void*) Axis_Delete_"+arrayType+", (void*) Axis_GetSize_"+arrayType+",\n");
-					//writer.write("\t\t\""+attribs[i].getElementName().getLocalPart()+"\", Axis_URI_"+arrayType+");\n");
-					writer.write("\t\t\""+attribs[i].getElementNameAsString()+"\", Axis_URI_"+arrayType+");\n");
+					writer.write("\t// >FJP Additional code to find is reference is pointer or pointer to a pointer\n");
+					writer.write("\tint\t\tiStarCount = 0;\n");
+					writer.write("\tchar\tszParam[256];\n");
+					writer.write("\tchar *\tpStar = szParam;\n\n");
+					writer.write("\tstrcpy( szParam, typeid( param->" + attribs[i].getParamNameAsMember() + ".m_Array).name());\n\n");
+					writer.write("\twhile( (pStar = strchr( pStar, '*')) != NULL)\n");
+					writer.write("\t{\n");
+					writer.write("\t\tiStarCount++;\n");
+					writer.write("\t\tpStar++;\n");
+					writer.write("\t}\n\n");
+					writer.write("\tif( iStarCount == 1)\n");
+					writer.write("\t{\n");
+					writer.write("\t\tpSZ->serializeCmplxArray((Axis_Array*)(&param->"+attribs[i].getParamNameAsMember()+"),\n"); 
+					writer.write("\t\t\t\t\t\t\t (void*) Axis_Serialize_"+arrayType+",\n");
+					writer.write("\t\t\t\t\t\t\t (void*) Axis_Delete_"+arrayType+",\n");
+					writer.write("\t\t\t\t\t\t\t (void*) Axis_GetSize_"+arrayType+",\n");
+					writer.write("\t\t\t\t\t\t\t \""+attribs[i].getElementNameAsString()+"\", Axis_URI_"+arrayType+");\n");
+					writer.write("\t}\n");
+					writer.write("\telse\n");
+					writer.write("\t{\n");
+					writer.write("\t\tAxis_Array\tsAA;\n\n");
+					writer.write("\t\tsAA.m_Size = 1;\n\n");
+					writer.write("\t\tfor( int iCount = 0; iCount < param->count; iCount++)\n");
+					writer.write("\t\t{\n");
+					writer.write("\t\t\tsAA.m_Array = (void **)param->"+attribs[i].getElementNameAsString()+".m_Array[iCount];\n\n");
+					writer.write("\t\tpSZ->serializeCmplxArray( &sAA,\n");
+					writer.write("\t\t\t\t\t\t\t (void*) Axis_Serialize_"+arrayType+",\n");
+					writer.write("\t\t\t\t\t\t\t (void*) Axis_Delete_"+arrayType+",\n");
+					writer.write("\t\t\t\t\t\t\t (void*) Axis_GetSize_"+arrayType+",\n");
+					writer.write("\t\t\t\t\t\t\t \""+attribs[i].getElementNameAsString()+"\", Axis_URI_"+arrayType+");\n");
+					writer.write("\t\t}\n");
+					writer.write("\t}\n");
+					writer.write("\t// <FJP\n");
 				}
 			}
 			else if (attribs[i].isSimpleType()){
 				//writer.write("\tpSZ->serializeAsElement(\""+attribs[i].getElementName().getLocalPart()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 				//Samisa 22/08/2004
-				writer.write("\tpSZ->serializeAsElement(\""+attribs[i].getElementNameAsString()+"\", (void*)&(param->"+attribs[i].getParamNameAsMember()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+				writer.write("\tpSZ->serializeAsElement( \""+attribs[i].getElementNameAsString()+"\", (void*)&(param->"+attribs[i].getParamNameAsMember()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 				//Samisa
 			}else{
 				//if complex type
@@ -193,6 +232,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write(" * This static method deserialize a "+classname+" type of object\n");
 		writer.write(" */\n");		
 		writer.write("int Axis_DeSerialize_"+classname+"("+classname+"* param, IWrapperSoapDeSerializer* pIWSDZ)\n{\n");
+		
 		if (attribs.length == 0) {
 			if (extensionBaseAttrib != null){
 				writer.write("\tpIWSDZ->getChardataAs((void*)&(param->"+extensionBaseAttrib.getParamNameAsMember()+"), "+CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName())+");\n");
@@ -204,61 +244,122 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			return;
 		 }
 		 String arrayType = null;
+		 
 		/* Needed for Aix xlc */
 		for(int i = 0; i< attribs.length;i++){
 			if(attribs[i].isArray()) {
-				writer.write("\tAxis_Array array;\n");
+				writer.write("\tAxis_Array array;\n\n");
 				break;
 			}
 		}			
-		for(int i = 0; i< attribs.length;i++){
-			if(attribs[i].isAnyType()){
+		
+		for( int i = 0; i < attribs.length; i++)
+		{
+			if( attribs[i].isAnyType())
+			{
 				writer.write("\tparam->any = pIWSDZ->getAnyObject();\n");
 			}
-			else if(attribs[i].isArray()){
+			else if( attribs[i].isArray())
+			{
 				//if Array
-				if (attribs[i].isSimpleType()){
+				if ( attribs[i].isSimpleType())
+				{
 					writer.write("\tarray = pIWSDZ->getBasicArray("+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+ ", \""+attribs[i].getParamName()+"\",0);\n");
 					writer.write("\tparam->"+attribs[i].getParamNameAsMember()+" = ("+CUtils.getBasicArrayNameforType(attribs[i].getTypeName())+"&)array;\n");					
 				}
-				else{
+				else
+				{
 					arrayType = attribs[i].getTypeName();
-					writer.write("\tarray = pIWSDZ->getCmplxArray((void*)Axis_DeSerialize_"+arrayType+ 
-						"\n\t\t, (void*)Axis_Create_"+arrayType+", (void*)Axis_Delete_"+arrayType+
-					//	"\n\t\t, (void*)Axis_GetSize_"+arrayType+", \""+attribs[i].getElementName().getLocalPart()+"\", Axis_URI_"+arrayType+");\n");
-						"\n\t\t, (void*)Axis_GetSize_"+arrayType+", \""+attribs[i].getElementNameAsString()+"\", Axis_URI_"+arrayType+");\n");
+					writer.write("\tarray = pIWSDZ->getCmplxArray((void*)Axis_DeSerialize_"+arrayType+",\n"+ 
+								 "\t\t\t\t\t\t\t\t  (void*)Axis_Create_"+arrayType+",\n"+
+								 "\t\t\t\t\t\t\t\t  (void*)Axis_Delete_"+arrayType+",\n"+
+								 "\t\t\t\t\t\t\t\t  (void*)Axis_GetSize_"+arrayType+",\n"+
+								 "\t\t\t\t\t\t\t\t  \""+attribs[i].getElementNameAsString()+"\", Axis_URI_"+arrayType+");\n\n");
+					writer.write("\t// >FJP Additional code to find is reference is pointer or pointer to a pointer\n");
+					writer.write("\tint\t\tiStarCount = 0;\n");
+					writer.write("\tchar\tszParam[256];\n");
+					writer.write("\tchar *\tpStar = szParam;\n\n");
+					writer.write("\tstrcpy( szParam, typeid( param->"+attribs[i].getElementNameAsString()+".m_Array).name());\n\n");
+					writer.write("\twhile( (pStar = strchr( pStar, '*')) != NULL)\n");
+					writer.write("\t{\n");
+					writer.write("\t\tiStarCount++;\n");
+					writer.write("\t\tpStar++;\n");
+					writer.write("\t}\n\n");
+					writer.write("\tif( iStarCount == 1)\n");
+					writer.write("\t{\n\n");
 					writer.write("\tparam->"+attribs[i].getParamNameAsMember()+" = ("+attribs[i].getTypeName()+"_Array&)array;\n");	
+					writer.write("\t}\n");
+					writer.write("\telse\n");
+					writer.write("\t{\n");
+					writer.write("\t\t"+attribs[i].getTypeName()+" **	ppBBDT = param->"+attribs[i].getElementNameAsString()+".m_Array;\n\n");
+					writer.write("\t\tparam->"+attribs[i].getElementNameAsString()+".m_Size = array.m_Size;\n\n");
+					writer.write("\t\tif( param->"+attribs[i].getElementNameAsString()+".m_Array == NULL)\n");
+					writer.write("\t\t{\n");
+					writer.write("#ifdef WIN32\n");
+					writer.write("\t\t\tppBBDT = ("+attribs[i].getTypeName()+" **) new __int64[array.m_Size];\n");
+					writer.write("#else\n");
+					writer.write("\t\t\tppBBDT = ("+attribs[i].getTypeName()+" **) long long[array.m_Size];\n");
+					writer.write("#endif\n");
+					writer.write("\t\t\tparam->"+attribs[i].getElementNameAsString()+".m_Array = ppBBDT;\n");
+					writer.write("\t\t}\n\n");
+					writer.write("\t"+attribs[i].getTypeName()+" *	pBBDT = ("+attribs[i].getTypeName()+" *) array.m_Array;\n\n");
+					writer.write("\tfor( int iCount = 0; iCount < array.m_Size; iCount++)\n");
+					writer.write("\t{\n");
+					writer.write("\t\t*ppBBDT = pBBDT;\n\n");
+					writer.write("\t\tppBBDT++;\n");
+					writer.write("\t\tpBBDT++;\n");
+					writer.write("\t}\n");
+					writer.write("\t}\n");
+					writer.write("\t// <FJP\n");
 				}
-			}else if(attribs[i].isSimpleType()){
+			}
+			else if(attribs[i].isSimpleType())
+			{
 				//TODO handle optional attributes
 				//Samisa
 				//remove _Ref sufix and _ prefix in SOAP tag name
 				String soapTagName = (attribs[i].isAttribute() ? attribs[i].getParamName():attribs[i].getElementNameAsString());
 				if( soapTagName.lastIndexOf("_Ref") > -1 )
+				{
 					soapTagName = soapTagName.substring(0, soapTagName.lastIndexOf("_Ref") );
+				}
+				
 				if( soapTagName.charAt(0) == '_' )
+				{
 					soapTagName = soapTagName.substring(1, soapTagName.length() );
+				}
 				//end remove _Ref sufix and _ prefix in SOAP tag name
-				writer.write("\tparam->"+attribs[i].getParamNameAsMember()+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute())+"(\""+ soapTagName +"\",0);\n");
+				writer.write("\tparam->"+attribs[i].getParamNameAsMember()+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute())+"( \""+ soapTagName +"\",0);\n");
 				//Samisa
-			} else{
+			}
+			else
+			{
 				//if complex type
 				//Samisa
 				//remove _Ref sufix and _ prefix in SOAP tag name
 				String soapTagName = attribs[i].getParamName();
+				
 				if( soapTagName.lastIndexOf("_Ref") > -1 )
+				{
 					soapTagName = soapTagName.substring(0, soapTagName.lastIndexOf("_Ref") );
+				}
+				
 				if( soapTagName.charAt(0) == '_' )
+				{
 					soapTagName = soapTagName.substring(1, soapTagName.length() );
+				}
+				
 				//end remove _Ref sufix and _ prefix in SOAP tag name
 				writer.write("\tparam->"+attribs[i].getParamNameAsMember()+" = ("+attribs[i].getTypeName()+"*)pIWSDZ->getCmplxObject((void*)Axis_DeSerialize_"+attribs[i].getTypeName()+
 					"\n\t\t, (void*)Axis_Create_"+attribs[i].getTypeName()+", (void*)Axis_Delete_"+attribs[i].getTypeName()+
 					"\n\t\t, \""+ soapTagName +"\", Axis_URI_"+attribs[i].getTypeName()+");\n");				
 			}		
 		}
-		if (extensionBaseAttrib != null && extensionBaseAttrib.getTypeName() != null){
+		if (extensionBaseAttrib != null && extensionBaseAttrib.getTypeName() != null)
+		{
 			writer.write("\tpIWSDZ->getChardataAs((void*)&(param->"+extensionBaseAttrib.getParamNameAsMember()+"), "+CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName())+");\n");
 		}
+		
 		writer.write("\treturn pIWSDZ->getStatus();\n");
 		writer.write("}\n");
 	}

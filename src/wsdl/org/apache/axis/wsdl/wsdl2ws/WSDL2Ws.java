@@ -1011,6 +1011,7 @@ public class WSDL2Ws
                                 }
                                 eleinfo.setMinOccurs(elem.getMinOccurs());
                                 eleinfo.setMaxOccurs(elem.getMaxOccurs());
+                                eleinfo.setNillable( elem.isNillable());
                                 typedata.setTypeNameForElementName(eleinfo);
                             }
                         }

@@ -28,6 +28,7 @@ public class ElementInfo
     private Type type;
     private int maxOccurs = 1;
     private int minOccurs = 1;
+    private boolean nillable = false;
 
     public ElementInfo(QName name, Type type)
     {
@@ -45,7 +46,7 @@ public class ElementInfo
      */
     public int getMaxOccurs()
     {
-        return maxOccurs;
+        return this.maxOccurs;
     }
 
     /**
@@ -53,7 +54,7 @@ public class ElementInfo
      */
     public int getMinOccurs()
     {
-        return minOccurs;
+        return this.minOccurs;
     }
 
     /**
@@ -61,7 +62,7 @@ public class ElementInfo
      */
     public QName getName()
     {
-        return name;
+        return this.name;
     }
 
     /**
@@ -69,7 +70,7 @@ public class ElementInfo
      */
     public Type getType()
     {
-        return type;
+        return this.type;
     }
 
     /**
@@ -107,6 +108,22 @@ public class ElementInfo
     {
         this.type = type;
     }
+
+	/**
+	 * @return boolean
+	 */
+	public boolean getNillable()
+	{
+		return this.nillable;
+	}
+
+	/**
+	 * @param boolean
+	 */
+	public void setNillable( boolean newNillable)
+	{
+		this.nillable = newNillable;
+	}
 
     /* (non-Javadoc)
      * @see java.lang.Object#toString()

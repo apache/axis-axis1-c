@@ -26,7 +26,7 @@ import javax.xml.namespace.QName;
  * @author Glen Daniels (gdaniels@apache.org)
  * @author Tom Jordahl (tomj@apache.org)
  */
-public class CElementDecl extends ElementDecl
+public class CElementDecl //extends ElementDecl
 {
     private QName name;
     private TypeEntry type;
@@ -60,7 +60,7 @@ public class CElementDecl extends ElementDecl
 
     public TypeEntry getType()
     {
-        return type;
+        return this.type;
     }
 
     public void setType(TypeEntry type)
@@ -70,7 +70,7 @@ public class CElementDecl extends ElementDecl
 
     public QName getName()
     {
-        return name;
+        return this.name;
     }
 
     public void setName(QName name)
@@ -80,7 +80,7 @@ public class CElementDecl extends ElementDecl
 
     public boolean getMinOccursIs0()
     {
-        return minOccursIs0;
+        return this.minOccursIs0;
     }
 
     public void setMinOccursIs0(boolean minOccursIs0)
@@ -90,7 +90,7 @@ public class CElementDecl extends ElementDecl
 
     public boolean getAnyElement()
     {
-        return anyElement;
+        return this.anyElement;
     }
 
     public void setAnyElement(boolean anyElement)
@@ -102,7 +102,7 @@ public class CElementDecl extends ElementDecl
      */
     public int getMaxOccurs()
     {
-        return maxOccurs;
+        return this.maxOccurs;
     }
 
     /**
@@ -110,7 +110,7 @@ public class CElementDecl extends ElementDecl
      */
     public int getMinOccurs()
     {
-        return minOccurs;
+        return this.minOccurs;
     }
 
     /**
@@ -118,7 +118,7 @@ public class CElementDecl extends ElementDecl
      */
     public boolean isNillable()
     {
-        return nillable;
+        return this.nillable;
     }
 
     /**
@@ -142,7 +142,7 @@ public class CElementDecl extends ElementDecl
      */
     public void setNillable(boolean b)
     {
-        nillable = b;
+		this.nillable = b;
     }
 
     /**
@@ -152,7 +152,7 @@ public class CElementDecl extends ElementDecl
 
     public String getDocumentation()
     {
-        return documentation;
+        return this.documentation;
     }
 
     /**
