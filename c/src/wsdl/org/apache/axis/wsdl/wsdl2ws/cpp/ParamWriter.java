@@ -92,6 +92,7 @@ public abstract class ParamWriter extends BasicFileWriter{
 
     public ParamWriter(WebServiceContext wscontext,Type type) throws WrapperFault {
             super(WrapperUtils.getWrapperClassName4QualifiedName(type.getLanguageSpecificName()));
+            //super(CPPUtils.getclass4qname(type.getName()));
             this.wscontext = wscontext;
             this.type = type;
             this.attribs = this.getAttribList(wscontext.getSerInfo().getQualifiedServiceName());

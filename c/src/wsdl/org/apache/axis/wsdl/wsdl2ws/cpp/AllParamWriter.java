@@ -67,6 +67,7 @@ import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
+import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 
 public class AllParamWriter implements SourceWriter{
 	private WebServiceContext wscontext;
@@ -88,8 +89,11 @@ public class AllParamWriter implements SourceWriter{
 			type = (Type)enu.next();
 			if(wscontext.getWrapInfo().getImplStyle().equals(WrapperConstants.IMPL_STYLE_STRUCT)){
 					if(type.isArray()){
-						System.out.println("Array writer called ......");
-						(new ArrayParamWriter(wscontext,type)).writeSource();	
+						if(!CPPUtils.isSimpleType(WrapperUtils.getArrayType(type).getName()))
+						{
+							System.out.println("Array writer called ......");
+							(new ArrayParamWriter(wscontext,type)).writeSource();	
+						}
 					}	
 					else{	
 						System.out.println("complex type writer called ......");

@@ -106,6 +106,8 @@ public class ParmHeaderFileWriter extends ParamWriter{
 				  //if((t = wscontext.getTypemap().getType(new QName(attribs[i][2],attribs[i][3])))!= null && t.isArray()) continue;
 				  writer.write("\t"+getCorrectParmNameConsideringArraysAndComplexTypes(new QName(attribs[i][2],attribs[i][3]),attribs[i][1])+" "+attribs[i][0]+";\n");
 			  }    
+				writer.write("\t"+classname+"(); \n");
+				writer.write("\t ~"+classname+"(); \n");
 		  } catch (IOException e) {
 			   throw new WrapperFault(e);
 		  }

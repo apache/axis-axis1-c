@@ -201,8 +201,12 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 			HashSet typeSet = new HashSet();
 			while(types.hasNext()){
 				atype = (Type)types.next();
-				typeSet.add(atype.getLanguageSpecificName());
-			}
+				
+					if (atype.isArray()&& !CPPUtils.isSimpleType(WrapperUtils.getArrayType(atype).getName()))
+					typeSet.add(atype.getLanguageSpecificName());
+					if(!atype.isArray() && !CPPUtils.isSimpleType(atype.getName()))
+					typeSet.add(atype.getLanguageSpecificName());
+			}		
 			Iterator itr = typeSet.iterator();
 			while(itr.hasNext())
 			{
