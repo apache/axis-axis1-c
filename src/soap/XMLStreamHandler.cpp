@@ -63,7 +63,7 @@
 #include <stdlib.h>
 #include "XMLStreamHandler.h"
 #include <string.h>
-#include "TypeMapping.h"
+#include "../common/TypeMapping.h"
 #include "URIMapping.h"
 #include "Attribute.h"
 #include "SoapEnvVersions.h"
