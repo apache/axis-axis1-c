@@ -150,6 +150,5 @@ sh runAllTests.sh
 #If you need to mail results create a file called mailto in the current
 #folder. This file has no meaning except this purpose
 if test -f $HOME_DIR/mailto; then
-    cd testcases/build
-    cat runTestCase.log | mutt -s "[test-results]Axis C++ Autobuild and regression test" -a "buildTestCase.log" -x axis-c-dev@ws.apache.org
+    cat  $HOME_DIR/runTestCase.log | mutt -s "[test-results]Axis C++ Autobuild and regression test" -a "$HOME_DIR/buildTestCase.log" -x axis-c-dev@ws.apache.org
 fi
