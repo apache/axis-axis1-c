@@ -68,6 +68,7 @@
 #include <unistd.h>
 #endif
 
+
 #include <axis/engine/ServerAxisEngine.h>
 #include <axis/common/AxisTrace.h>
 #include <stdio.h>
@@ -91,6 +92,7 @@
 #include <axis/common/AxisConfig.h>
 #include <axis/wsdd/WSDDKeywords.h>
 
+#include <xercesc/util/TransService.hpp>
 
 #define BYTESTOREAD 64
 //the relative location of the wsdl files hardcoded
@@ -243,7 +245,7 @@ extern "C" int initialize_module(int bServer)
 {
 	//order of these initialization method invocation should not be changed
 //	AXISTRACE1("inside initialize_module\n");
-	XMLPlatformUtils::Initialize();
+	//XMLPlatformUtils::Initialize();
 	AxisEngine::m_bServer = bServer;
 	AxisUtils::Initialize();
 	WSDDKeywords::Initialize();
@@ -262,7 +264,7 @@ extern "C" int initialize_module(int bServer)
 
 extern "C" int uninitialize_module()
 {
-	XMLPlatformUtils::Terminate();
+	//XMLPlatformUtils::Terminate();
 	ModuleUnInitialize();
 	return AXIS_SUCCESS;
 }
