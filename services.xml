@@ -47,7 +47,7 @@ XMLParser:${basedir}${ps}..${ps}..${ps}..${ps}Axis${ps}lib${ps}${libraryPrefix}$
 Channel_HTTP:${basedir}${ps}..${ps}..${ps}..${ps}Axis${ps}lib${ps}${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
 	</echo>
 
-	<copy file="${basedir}/build/server.wsdd.services" 
+	<copy file="${serverwsddfile}" 
 			tofile="${serverwsddpath}"/>
 
 	</target>
