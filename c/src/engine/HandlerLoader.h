@@ -62,7 +62,7 @@
 
 #include <axis/server/MessageData.h>
 #include <axis/server/GDefine.h>
-#include "../common/WrapperClassHandler.h"
+#include <axis/server/WrapperClassHandler.h>
 #include "SharedObject.h"
 
 #include <map>

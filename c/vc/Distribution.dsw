@@ -14,6 +14,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name AxisServerDLL
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AxisServer
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -29,11 +32,14 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name AxisServerDLL
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AxisServer
+    End Project Dependency
 }}}
 
 ###############################################################################
 
-Project: "AxisClientDLL"=".\AxisClientDLL.dsp" - Package Owner=<4>
+Project: "AxisClient"=".\AxisClientDLL.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -45,7 +51,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "AxisServerDLL"=".\AxisServerDLL.dsp" - Package Owner=<4>
+Project: "AxisServer"=".\AxisServerDLL.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -67,6 +73,9 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name AxisServerDLL
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AxisServer
     End Project Dependency
 }}}
 
