@@ -57,8 +57,8 @@
 
 		<trycatch>
 			<try>
-				<parallel timeout="40000" failonany="false">
-					<echo message="RUNNING TEST ${testName} ${clientArgs}"/>
+				<parallel timeout="60000" failonany="false">
+					<echo message="Starting monitor forwarding to ${testHost}:${testPort}"/>
 					<!-- Run Monitor utility to allow validation of message across the wire -->
 					<java classname="org.apache.test.TCPMonitor" fork="true">
 						<arg line="-l ${monitorPort}"/>
@@ -74,6 +74,7 @@
 					<sequential>
 						<!-- Wait for jvm to start monitor program -->
 						<sleep seconds="3"/>
+						<echo message="Running Test ${testName} ${clientArgs}"/>
 						<!-- Run the client test -->
 						<exec dir="${test.directory}"
 						 executable="${test.directory}/${testName}"
