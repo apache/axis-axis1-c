@@ -197,9 +197,11 @@ public class ParmHeaderFileWriter extends ParamWriter
         try
         {
             writer.write("#include <axis/AxisUserAPI.hpp>\n");
-            if (this.type.isFault())
-                writer.write("#include <axis/SoapFaultException.hpp>\n");
-  	    writer.write("using namespace std;\n");
+			if (this.type.isFault())
+			{
+				writer.write("#include <axis/SoapFaultException.hpp>\n");
+				writer.write("using namespace std;\n");
+			}
             writer.write("AXIS_CPP_NAMESPACE_USE \n\n");
             HashSet typeSet = new HashSet();
             for (int i = 0; i < attribs.length; i++)
