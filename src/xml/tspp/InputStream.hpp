@@ -16,7 +16,11 @@
  *                                                                         
  ***************************************************************************/
 
- #if !defined(_INPUTSTREAM_HPP__INCLUDED_)
+/*
+ *    @author Dasarath Weerathunga
+ */
+
+#if !defined(_INPUTSTREAM_HPP__INCLUDED_)
 #define _INPUTSTREAM_HPP__INCLUDED_
 
  class InputStream

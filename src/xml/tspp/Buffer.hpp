@@ -15,6 +15,11 @@
  *   limitations under the License.                                              
  *                                                                         
  ***************************************************************************/
+
+/*
+ *    @author Dasarath Weerathunga
+ */
+
 #if !defined(_BUFFER_HPP__INCLUDED_)
 #define _BUFFER_HPP__INCLUDED_
 
@@ -45,9 +50,9 @@ public:
 };
 
 template <class T>
-Buffer<T>::Buffer(int size)
+Buffer<T>::Buffer(int iSize)
 {
-	this->size= size;
+	size= iSize;
 	buffer= (T *)malloc(sizeof(T)*size);
 	if (!buffer)
 		throw new XmlPullParserException();

@@ -25,13 +25,16 @@
 #endif
 
 #include "XMLParserAxis.hpp"
- #include "AxisInputStream.hpp"
+#include "AxisInputStream.hpp"
  
 XMLParserAxis::XMLParserAxis()
 {
 	m_bEndElementFollows = false;	
-	m_pParser = NULL;
-    m_pInputStream = NULL;
+	m_pParser = 0;
+    m_pInputStream = 0;
+    m_Element.m_pchNamespace = 0;
+    m_Element.m_pchNameOrValue = 0;
+    m_Element.m_pchAttributes[0] = 0;
 }
 
 XMLParserAxis::~XMLParserAxis()
@@ -39,27 +42,42 @@ XMLParserAxis::~XMLParserAxis()
     if (m_pParser)
         delete m_pParser;
 	if (m_pInputStream)
-    	delete m_pParser;
+    	delete m_pInputStream;
 }
 
 int XMLParserAxis::setInputStream(AxisIOStream* pInputStream)
 {
-	m_bEndElementFollows = false;
-    if (m_pInputStream)
-        delete m_pInputStream;
-    m_pInputStream = new AxisInputStream(pInputStream);
-	//TODO : Reusing the same parser object should be possible. Improve the
-	// parser and then remove the following.
-	if (m_pParser)
-		delete m_pParser;
-	m_pParser = new XmlPullParser(m_pInputStream);
-    return AXIS_SUCCESS;
+    try 
+    {
+	    m_bEndElementFollows = false;
+        if (m_pInputStream)
+            delete m_pInputStream;
+        m_pInputStream = new AxisInputStream(pInputStream);
+	    //TODO : Reusing the same parser object should be possible. Improve the
+	    // parser and then remove the following.
+	    if (m_pParser)
+		    delete m_pParser;
+	    m_pParser = new XmlPullParser(m_pInputStream);
+        return AXIS_SUCCESS;
+    }
+    catch(XmlPullParserException* pException)
+    {
+        delete pException;
+        throw new AxisParseException();
+    }
 }
 
 const XML_Ch* XMLParserAxis::getNS4Prefix(const XML_Ch* prefix)
 {
-	//TODO : implement this correctly
-    return NULL;
+    try
+    {
+	    return m_pParser->getNamespace4Prefix(prefix);
+    }
+    catch(XmlPullParserException* pException)
+    {
+        delete pException;
+        throw new AxisParseException();
+    }
 }
 
 int XMLParserAxis::getStatus()
@@ -124,53 +142,61 @@ m_pParser->getAttributeNamespaceUri(ix);
 const AnyElement* XMLParserAxis::next(bool isCharData)
 {
 	int nType;
-	freeElement();
-	if (m_bEndElementFollows)
-	{
-		m_bEndElementFollows = false;
-		return &m_Element;
-	}
-	while (true)
-		{
-			if ((nType= m_pParser->next()) != -1) 
-			{
-				if (!isCharData && (XmlPullParser::Content == nType))
-				{ // ignorable white space
-					continue;
-				}			
-				switch (nType)
-				{
-				case XmlPullParser::STag:
-					m_Element.m_type = START_ELEMENT;
-					m_Element.m_pchNameOrValue = m_pParser->getName();
-					m_Element.m_pchNamespace = m_pParser->getNamespaceUri();
-					setAttributes();
-					break;
-				case XmlPullParser::EmptyElemTag:
-					m_Element.m_type = START_ELEMENT;
-					m_Element.m_pchNameOrValue = m_pParser->getName();
-					m_Element.m_pchNamespace = m_pParser->getNamespaceUri();
-					setAttributes();
-					m_bEndElementFollows = true;
-					break;
-				case XmlPullParser::ETag:
-					m_Element.m_type = END_ELEMENT;
-					m_Element.m_pchNameOrValue = m_pParser->getName();
-					m_Element.m_pchNamespace = m_pParser->getNamespaceUri();
-					break;
-				case XmlPullParser::Content:
-					m_Element.m_type = CHARACTER_ELEMENT;
-					m_Element.m_pchNameOrValue = m_pParser->getCharData();
-					break;
-				default:;
-				}
-				return &m_Element;
-			}
-			else 
-			{
-				return NULL;
-			}
-		}
+    try 
+    {
+	    freeElement();
+	    if (m_bEndElementFollows)
+	    {
+		    m_bEndElementFollows = false;
+		    return &m_Element;
+	    }
+	    while (true)
+	    {
+		    if ((nType= m_pParser->next()) != -1) 
+		    {
+			    if (!isCharData && (XmlPullParser::Content == nType))
+			    { // ignorable white space
+				    continue;
+			    }			
+			    switch (nType)
+			    {
+			    case XmlPullParser::STag:
+				    m_Element.m_type = START_ELEMENT;
+				    m_Element.m_pchNameOrValue = m_pParser->getName();
+				    m_Element.m_pchNamespace = m_pParser->getNamespaceUri();
+				    setAttributes();
+				    break;
+			    case XmlPullParser::EmptyElemTag:
+				    m_Element.m_type = START_ELEMENT;
+				    m_Element.m_pchNameOrValue = m_pParser->getName();
+				    m_Element.m_pchNamespace = m_pParser->getNamespaceUri();
+				    setAttributes();
+				    m_bEndElementFollows = true;
+				    break;
+			    case XmlPullParser::ETag:
+				    m_Element.m_type = END_ELEMENT;
+				    m_Element.m_pchNameOrValue = m_pParser->getName();
+				    m_Element.m_pchNamespace = m_pParser->getNamespaceUri();
+				    break;
+			    case XmlPullParser::Content:
+				    m_Element.m_type = CHARACTER_ELEMENT;
+				    m_Element.m_pchNameOrValue = m_pParser->getCharData();
+				    break;
+			    default:;
+			    }
+			    return &m_Element;
+		    }
+		    else 
+		    {
+			    return NULL;
+		    }
+	    }
+    }
+    catch(XmlPullParserException* pException)
+    {
+        delete pException;
+        throw new AxisParseException();
+    }
 }
 
 const AnyElement* XMLParserAxis::anyNext()
@@ -182,7 +208,14 @@ const AnyElement* XMLParserAxis::anyNext()
 
 const XML_Ch* XMLParserAxis::getPrefix4NS(const XML_Ch* pcNS)
 {
-	//TODO : implement this correctly
-    return NULL;
+    try
+    {
+        return m_pParser->getPrefix4Namespace(pcNS);
+    }
+    catch(XmlPullParserException* pException)
+    {
+        delete pException;
+        throw new AxisParseException();
+    }
 }
 

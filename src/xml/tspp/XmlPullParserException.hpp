@@ -16,6 +16,11 @@
  *                                                                         
  ***************************************************************************/
 
+/*
+ *    @author Susantha Kumara (susantha@opensource.lk)
+ *    @author Dasarath Weerathunga
+ */
+
 #if !defined(_XMLPULLPARSEREXCEPTION_HPP__INCLUDED_)
 #define _XMLPULLPARSEREXCEPTION_HPP__INCLUDED_
 

@@ -15,13 +15,19 @@
  *   limitations under the License.                                              
  *                                                                         
  ***************************************************************************/
+
+/*
+ *    @author Susantha Kumara (susantha@opensource.lk)
+ *    @author Dasarath Weerathunga
+ */
+
 #include "XmlPullParser.hpp"
  
- void XmlPullParser::relocateTokens(int offset)
+void XmlPullParser::relocateTokens(int ioffset)
 {
 	int size= token->count();
 	for (int ii= 0; ii < size; ii++)
-		(*token)[ii].relocate(offset);	
+		(*token)[ii].relocate(ioffset);	
 }
 
 void XmlPullParser::shift()
@@ -107,9 +113,9 @@ void XmlPullParser::endToken(int type)
 }
 
 
-XmlPullParser::XmlPullParser(InputStream *s)
+XmlPullParser::XmlPullParser(InputStream *pStream)
 {
-	this->s= s;
+	this->s= pStream;
 	state= S_1;
 	offset= 0;
 	last= -1;
@@ -388,6 +394,12 @@ int XmlPullParser::next()
 			}
 			_ns= resolve(_ns == -1 ? NULL : token->get());
 		}
+        else if (XMLDecl == event) 
+        {
+            //Do not return this event. Process it for internal use only
+            //Get and return next event.
+            return next();
+        }
 		return event;
 	}
 	return -1;
@@ -437,7 +449,7 @@ char *XmlPullParser::getAttributeNamespaceUri(int ii)
 	ATTR &t= (*attr)[ii];
 	if (t.ns == -1)
 		t.ns= resolve(t.prefix == -1 ? NULL : token->get()+t.prefix);
-	return strdup((*ns)[t.ns].uri);
+    return (t.ns == -1) ? NULL : strdup((*ns)[t.ns].uri);
 }
 
 
@@ -456,7 +468,11 @@ int XmlPullParser::resolve(TOKEN *prefix)
 		ii--;
 		p--;
 	}
-	throw new XmlPullParserException();
+//FIXME : Commented out following line because the parser fails when there are 
+//        unqualified elements in xml which is IMO possible in SOAP - Susantha 
+//        11/11/2004
+//	throw new XmlPullParserException();
+    return -1; //not resolved
 }
 
 
@@ -510,6 +526,30 @@ char *XmlPullParser::getNamespaceUri()
 	else
 		if (_ns == 0xffff)
 			_ns= resolve(token->get());
-	return strdup((*ns)[_ns].uri);
+        return _ns == -1 ? NULL : strdup((*ns)[_ns].uri);
 }
 
+
+char* XmlPullParser::getNamespace4Prefix(const char *pcPrefix)
+{
+    for (int ix=ns->count()-1; ix >= 0; ix--)
+    {
+        if ((*ns)[ix].prefix && (0 == strcmp(pcPrefix, (*ns)[ix].prefix)))
+        {
+            return strdup((*ns)[ix].uri);
+        }
+    }
+    return 0;
+}
+
+char* XmlPullParser::getPrefix4Namespace(const char *pcNs)
+{
+    for (int ix=ns->count()-1; ix >= 0; ix--)
+    {
+        if ((*ns)[ix].uri && (0 == strcmp(pcNs, (*ns)[ix].uri)))
+        {
+            return strdup((*ns)[ix].prefix);
+        }
+    }
+    return 0;
+}

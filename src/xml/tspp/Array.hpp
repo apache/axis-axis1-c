@@ -16,7 +16,11 @@
  *                                                                         
  ***************************************************************************/
 
- #if !defined(_ARRAY_HPP__INCLUDED_)
+/*
+ *    @author Dasarath Weerathunga
+ */
+
+#if !defined(_ARRAY_HPP__INCLUDED_)
 #define _ARRAY_HPP__INCLUDED_
 
  #include "Buffer.hpp"
@@ -28,7 +32,7 @@ class Array: public Buffer<T>
 	int last;
 	
 public:
-	Array(int size): Buffer<T>(size)
+	Array(int iSize): Buffer<T>(iSize)
 	{
 		last= -1;
 	}
@@ -59,12 +63,12 @@ public:
 		return buffer[last];
 	}
 
-	int trunc(int size)
+	int trunc(int iSize)
 	{
-		if ((size > 0 && last < size) || size < 0)
+		if ((iSize > 0 && last < iSize) || iSize < 0)
 			throw new XmlPullParserException();
 		else
-			return last= size-1;
+			return last= iSize-1;
 	}
 
 	int chip()

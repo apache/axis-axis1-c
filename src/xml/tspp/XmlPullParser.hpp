@@ -16,6 +16,11 @@
  *                                                                         
  ***************************************************************************/
 
+/*
+ *    @author Dasarath Weerathunga
+ *    @author Susantha Kumara (susantha@opensource.lk)
+ */
+
 #if !defined(_XMLPULLPARSER_HPP__INCLUDED_)
 #define _XMLPULLPARSER_HPP__INCLUDED_
 
@@ -127,6 +132,8 @@ struct DEPTH
 	int parseCharData();
 
 public:	
+	char* getPrefix4Namespace(const char* pcNs);
+	char* getNamespace4Prefix(const char* pcPrefix);
 	enum {
 		XMLDecl, STag, EmptyElemTag, ETag, Content
 	};

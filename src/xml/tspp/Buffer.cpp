@@ -15,5 +15,10 @@
  *   limitations under the License.                                              
  *                                                                         
  ***************************************************************************/
+/*
+ *    @author Susantha Kumara (susantha@opensource.lk)
+ *    @author Dasarath Weerathunga
+ */
+
 #include "Buffer.hpp"
 

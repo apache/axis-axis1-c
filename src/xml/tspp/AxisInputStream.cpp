@@ -13,7 +13,11 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
- 
+
+/*
+ *    @author Susantha Kumara (susantha@opensource.lk)
+ */
+
 #include "AxisInputStream.hpp"
 
 AxisInputStream::AxisInputStream(AxisIOStream* pInputStream)
