@@ -7,8 +7,9 @@
 #define __CALCULATOR_CLIENTSTUB_H__INCLUDED_
 
 #include <axis/client/Stub.hpp>
-#include "Calculator_AxisClientException.hpp"
+#include <axis/SoapFaultException.hpp>
 #include <axis/ISoapFault.hpp>
+AXIS_CPP_NAMESPACE_USE
 
 class Calculator :public Stub
 {
@@ -22,7 +23,6 @@ public:
 	STORAGE_CLASS_INFO xsd__int sub(xsd__int Value0,xsd__int Value1);
 	STORAGE_CLASS_INFO xsd__int mul(xsd__int Value0,xsd__int Value1);
 	STORAGE_CLASS_INFO xsd__int div(xsd__int Value0,xsd__int Value1);
-	//int getFaultDetail(char** ppcDetail);
 };
 
 #endif /* !defined(__CALCULATOR_CLIENTSTUB_H__INCLUDED_)*/

@@ -23,9 +23,9 @@ int Axis_Serialize_DivByZeroStruct(DivByZeroStruct* param, IWrapperSoapSerialize
 	pSZ->serialize( ">", 0);
 
 	/* then serialize elements if any*/
-	pSZ->serializeAsElement( "varString", (void*)&(param->varString), XSD_STRING);
-	pSZ->serializeAsElement( "varInt", (void*)&(param->varInt), XSD_INT);
-	pSZ->serializeAsElement( "varFloat", (void*)&(param->varFloat), XSD_FLOAT);
+	pSZ->serializeAsElement("varString", Axis_URI_DivByZeroStruct, (void*)&(param->varString), XSD_STRING);
+	pSZ->serializeAsElement("varInt", Axis_URI_DivByZeroStruct, (void*)&(param->varInt), XSD_INT);
+	pSZ->serializeAsElement("varFloat", Axis_URI_DivByZeroStruct, (void*)&(param->varFloat), XSD_FLOAT);
 	return AXIS_SUCCESS;
 }
 

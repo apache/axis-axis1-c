@@ -57,7 +57,6 @@ xsd__int MathOps::div(xsd__int Value0, xsd__int Value1)
 				Ret = m_pCall->getElementAsInt("addReturn", 0);
 			}
 		}
-	
 	m_pCall->unInitialize();
 		return Ret;
 	}
@@ -66,40 +65,37 @@ xsd__int MathOps::div(xsd__int Value0, xsd__int Value1)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	
-	m_pCall->unInitialize();
-			throw MathOps_AxisClientException(e.what());
+			throw SoapFaultException(e);
 		}
-		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/MathOps" );
+		ISoapFault* pSoapFault = (ISoapFault*)
+			m_pCall->checkFault("Fault","http://localhost/axis/MathOps" );
 		if(pSoapFault)
 		{
 			pcCmplxFaultName = pSoapFault->getCmplxFaultObjectName().c_str();
-			if(0 == strcmp("DivByZeroStruct", pcCmplxFaultName))
+			if(0 == strcmp("DivByZero", pcCmplxFaultName))
 			{
-					DivByZeroStruct* pFaultDetail = NULL;
-					pFaultDetail = (DivByZeroStruct*)pSoapFault->
-						getCmplxFaultObject((void*) Axis_DeSerialize_DivByZeroStruct,
+				DivByZeroStruct* pFaultDetail = 
+					(DivByZeroStruct*)pSoapFault->getCmplxFaultObject(
+						(void*) Axis_DeSerialize_DivByZeroStruct,
 						(void*) Axis_Create_DivByZeroStruct,
-						(void*) Axis_Delete_DivByZeroStruct,"DivByZeroStruct", 0);
-					pSoapFault->setCmplxFaultObject(pFaultDetail);
-	
-	m_pCall->unInitialize();
-					throw MathOps_AxisClientException(pSoapFault);
+						(void*) Axis_Delete_DivByZeroStruct,
+						"DivByZero",
+						0);
+
+				pFaultDetail->setFaultCode(pSoapFault->getFaultcode());
+				pFaultDetail->setFaultString(pSoapFault->getFaultstring());
+				pFaultDetail->setFaultActor(pSoapFault->getFaultactor());
+				pFaultDetail->setExceptionCode(e.getExceptionCode());
+				m_pCall->unInitialize();
+				throw *pFaultDetail;
 			}
 			else
 			{
-	
-	m_pCall->unInitialize();
-				  m_pCall->unInitialize();
-				  throw MathOps_AxisClientException(pSoapFault);
+				m_pCall->unInitialize();
+				throw SoapFaultException(e);
 			}
 		}
 		else throw;
 	}
-}
-
-int MathOps::getFaultDetail(char** ppcDetail)
-{
-	return m_pCall->getFaultDetail(ppcDetail);
 }
 

@@ -7,8 +7,9 @@
 #define __ARRAYTESTPORTTYPE_CLIENTSTUB_H__INCLUDED_
 
 #include <axis/client/Stub.hpp>
-#include "array_AxisClientException.hpp"
+#include <axis/SoapFaultException.hpp>
 #include <axis/ISoapFault.hpp>
+AXIS_CPP_NAMESPACE_USE
 #include "intArrayType.hpp"
 
 class ArrayTestPortType :public Stub
@@ -20,7 +21,6 @@ public:
 	STORAGE_CLASS_INFO virtual ~ArrayTestPortType();
 public: 
 	STORAGE_CLASS_INFO intArrayType* echoIntArray(intArrayType* Value0);
-	int getFaultDetail(char** ppcDetail);
 };
 
 #endif /* !defined(__ARRAYTESTPORTTYPE_CLIENTSTUB_H__INCLUDED_)*/

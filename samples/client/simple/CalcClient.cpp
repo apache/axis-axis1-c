@@ -28,8 +28,6 @@ int main(int argc, char* argv[])
 	const char* p2 = 0;
 	int i1=0, i2=0;
     int iResult;
-    char* pcDetail;
-    pcDetail = 0;
 
     // Set default service URL
     sprintf (endpoint, "http://localhost/axis/Calculator");
@@ -91,30 +89,22 @@ int main(int argc, char* argv[])
 	if (strcmp(op, "add") == 0)
 	{
                 iResult = ws.add(i1, i2);
-                //ws.getFaultDetail(&pcDetail);
                 printf("%d\n", iResult);
-                /*printf("pcDetail:%s\n", pcDetail);*/
 	}
 	else 	if (strcmp(op, "sub") == 0)
 	{
 		iResult = ws.sub(i1, i2);
         printf("%d\n", iResult);
-		//ws.getFaultDetail(&pcDetail);
-        /*printf("pcDetail:%s\n", pcDetail);*/
 	}
 	else 	if (strcmp(op, "mul") == 0)
 	{
 	        iResult = ws.mul(i1, i2);
             printf("%d\n", iResult);
-			//ws.getFaultDetail(&pcDetail);
-            /*printf("pcDetail:%s\n", pcDetail);*/
 	}
 	else 	if (strcmp(op, "div") == 0)
 	{
 		iResult = ws.div(i1, i2);
         printf("%d\n", iResult);
-		//ws.getFaultDetail(&pcDetail);
-        /*printf("pcDetail:%s\n", pcDetail);*/
 	}
 	else 
 	{

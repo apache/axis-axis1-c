@@ -56,7 +56,6 @@ intArrayType* ArrayTestPortType::echoIntArray(intArrayType* Value0)
 				pReturn = (intArrayType*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_intArrayType, (void*) Axis_Create_intArrayType, (void*) Axis_Delete_intArrayType,"_return", 0);
 		}
 		}
-	
 	m_pCall->unInitialize();
 		return pReturn;
 	}
@@ -65,23 +64,16 @@ intArrayType* ArrayTestPortType::echoIntArray(intArrayType* Value0)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-	
-	m_pCall->unInitialize();
-			throw array_AxisClientException(e.what());
+			throw SoapFaultException(e);
 		}
-		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/array" );
+		ISoapFault* pSoapFault = (ISoapFault*)
+			m_pCall->checkFault("Fault","http://localhost/axis/array" );
 		if(pSoapFault)
 		{
-	
-	m_pCall->unInitialize();
-			throw array_AxisClientException(pSoapFault);
+			m_pCall->unInitialize();
+			throw SoapFaultException(e);
 		}
 		else throw;
 	}
-}
-
-int ArrayTestPortType::getFaultDetail(char** ppcDetail)
-{
-	return m_pCall->getFaultDetail(ppcDetail);
 }
 

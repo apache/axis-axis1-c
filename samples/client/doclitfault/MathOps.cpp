@@ -44,11 +44,9 @@ xsd__int MathOps::div(xsd__int Value0, xsd__int Value1)
 	m_pCall->setOperation("divRequest", "http://localhost/axis/MathOps/types");
 	includeSecure();
 	applyUserPreferences();
-	char cPrefixAndParamName0[19];
-	sprintf( cPrefixAndParamName0, "%s:intParam1", getNamespacePrefix("http://localhost/axis/MathOps/types"));
+	char cPrefixAndParamName0[] = "intParam1";
 	m_pCall->addParameter((void*)&Value0, cPrefixAndParamName0, XSD_INT);
-	char cPrefixAndParamName1[19];
-	sprintf( cPrefixAndParamName1, "%s:intParam2", getNamespacePrefix("http://localhost/axis/MathOps/types"));
+	char cPrefixAndParamName1[] = "intParam2";
 	m_pCall->addParameter((void*)&Value1, cPrefixAndParamName1, XSD_INT);
 	if (AXIS_SUCCESS == m_pCall->invoke())
 	{
@@ -57,7 +55,6 @@ xsd__int MathOps::div(xsd__int Value0, xsd__int Value1)
 			Ret = m_pCall->getElementAsInt("_return", 0);
 		}
 	}
-	
 	m_pCall->unInitialize();
 	return Ret;
 	}
@@ -66,29 +63,34 @@ xsd__int MathOps::div(xsd__int Value0, xsd__int Value1)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
-			throw MathOpsDL_AxisClientException(e.what());
+			throw SoapFaultException(e);
 		}
-		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/MathOpsDL" );
+		ISoapFault* pSoapFault = (ISoapFault*)
+			m_pCall->checkFault("Fault","http://localhost/axis/MathOpsDL" );
 		if(pSoapFault)
 		{
-			pcCmplxFaultName = pSoapFault->getCmplxFaultObjectName().c_str();
+			pcCmplxFaultName = pSoapFault->getCmplxFaultObjectName();
 			if(0 == strcmp("DivByZero", pcCmplxFaultName))
 			{
-				DivByZeroStruct* pFaultDetail = NULL;
-				pFaultDetail = (DivByZeroStruct*)pSoapFault->
-					getCmplxFaultObject((void*) Axis_DeSerialize_DivByZeroStruct,
-					(void*) Axis_Create_DivByZeroStruct,
-					(void*) Axis_Delete_DivByZeroStruct,"DivByZero", 0);
-				pSoapFault->setCmplxFaultObject(pFaultDetail);
-	
-	m_pCall->unInitialize();
-				throw MathOpsDL_AxisClientException(pSoapFault);
+				DivByZeroStruct* pFaultDetail = 
+					(DivByZeroStruct*)pSoapFault->getCmplxFaultObject(
+						(void*) Axis_DeSerialize_DivByZeroStruct,
+						(void*) Axis_Create_DivByZeroStruct,
+						(void*) Axis_Delete_DivByZeroStruct,
+						"DivByZero",
+						0);
+
+				pFaultDetail->setFaultCode(pSoapFault->getFaultcode());
+				pFaultDetail->setFaultString(pSoapFault->getFaultstring());
+				pFaultDetail->setFaultActor(pSoapFault->getFaultactor());
+				pFaultDetail->setExceptionCode(e.getExceptionCode());
+				m_pCall->unInitialize();
+				throw *pFaultDetail;
 			}
 			else
 			{
-	
-	m_pCall->unInitialize();
-				  throw MathOpsDL_AxisClientException(pSoapFault);
+				m_pCall->unInitialize();
+				throw SoapFaultException(e);
 			}
 		}
 		else throw;

@@ -64,7 +64,12 @@ public class ParmHeaderFileWriter extends ParamWriter
                     + getFileType().toUpperCase()
                     + "_H__INCLUDED_\n\n");
             writePreprocessorStatements();
-            this.writer.write("class " + classname + "\n{\n");
+
+            this.writer.write("class " + classname);
+            if (this.type.isFault())
+           		this.writer.write(" : public SoapFaultException");
+            this.writer.write("\n{\n");
+
             writeAttributes();
             writeConstructors();
             writeDestructors();
@@ -134,7 +139,10 @@ public class ParmHeaderFileWriter extends ParamWriter
     {
         try
         {
-            writer.write("\tvirtual ~" + classname + "();\n");
+            if (this.type.isFault())
+                writer.write("\tvirtual ~" + classname + "() throw();\n");
+            else
+                writer.write("\tvirtual ~" + classname + "();\n");
             //damitha added virtual
         }
         catch (IOException e)
@@ -188,6 +196,8 @@ public class ParmHeaderFileWriter extends ParamWriter
         try
         {
             writer.write("#include <axis/AxisUserAPI.hpp>\n");
+            if (this.type.isFault())
+                writer.write("#include <axis/SoapFaultException.hpp>\n");
             writer.write("AXIS_CPP_NAMESPACE_USE \n\n");
             HashSet typeSet = new HashSet();
             for (int i = 0; i < attribs.length; i++)

@@ -7,8 +7,9 @@
 #define __INTEROPTESTPORTTYPE_CLIENTSTUB_H__INCLUDED_
 
 #include <axis/client/Stub.hpp>
-#include "base_AxisClientException.hpp"
+#include <axis/SoapFaultException.hpp>
 #include <axis/ISoapFault.hpp>
+AXIS_CPP_NAMESPACE_USE
 #include "SOAPStruct_Array.hpp"
 #include "SOAPStruct.hpp"
 
@@ -34,7 +35,6 @@ public:
 	STORAGE_CLASS_INFO xsd__hexBinary echoHexBinary(xsd__hexBinary Value0);
 	STORAGE_CLASS_INFO xsd__decimal echoDecimal(xsd__decimal Value0);
 	STORAGE_CLASS_INFO xsd__boolean echoBoolean(xsd__boolean Value0);
-	//int getFaultDetail(char** ppcDetail);
 };
 
 #endif /* !defined(__INTEROPTESTPORTTYPE_CLIENTSTUB_H__INCLUDED_)*/

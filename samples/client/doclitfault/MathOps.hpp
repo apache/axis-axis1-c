@@ -7,8 +7,9 @@
 #define __MATHOPS_CLIENTSTUB_H__INCLUDED_
 
 #include <axis/client/Stub.hpp>
+#include <axis/SoapFaultException.hpp>
 #include <axis/ISoapFault.hpp>
-#include "MathOpsDL_AxisClientException.hpp"
+AXIS_CPP_NAMESPACE_USE
 #include "DivByZeroStruct.hpp"
 
 class MathOps :public Stub
@@ -26,7 +27,7 @@ private:
 	void includeSecure();
 
 protected:
-	string sArguments[8];
+	std::string sArguments[8];
 };
 
 #endif /* !defined(__MATHOPS_CLIENTSTUB_H__INCLUDED_)*/

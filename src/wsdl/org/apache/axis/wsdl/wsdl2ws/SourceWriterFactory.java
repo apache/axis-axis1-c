@@ -56,8 +56,6 @@ public class SourceWriterFactory
                     return new org.apache.axis.wsdl.wsdl2ws.cpp.ClientStubHeaderWriter(wscontext);
                 case WrapperConstants.GENERATOR_CLIENT_STUB_CPP :
                     return new org.apache.axis.wsdl.wsdl2ws.cpp.ClientStubWriter(wscontext);
-		 case WrapperConstants.GENERATOR_CLIENT_EXCEPTION :
-                    return new org.apache.axis.wsdl.wsdl2ws.cpp.AllExceptionWriter(wscontext, "Client");
                 case WrapperConstants.GENERATOR_SERVER_EXCEPTION :
                     return new org.apache.axis.wsdl.wsdl2ws.cpp.AllExceptionWriter(wscontext, "Server");
                     //C

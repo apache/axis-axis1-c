@@ -7,20 +7,21 @@
 #define __DIVBYZEROSTRUCT_PARAM_H__INCLUDED_
 
 #include <axis/AxisUserAPI.hpp>
+#include <axis/SoapFaultException.hpp>
 AXIS_CPP_NAMESPACE_USE 
 
 /*Local name and the URI for the type*/
 static const char* Axis_URI_DivByZeroStruct = "http://localhost/axis/MathOps/types";
 static const char* Axis_TypeName_DivByZeroStruct = "DivByZeroStruct";
 
-class STORAGE_CLASS_INFO DivByZeroStruct
+class STORAGE_CLASS_INFO DivByZeroStruct : public SoapFaultException
 {
 public:
 	xsd__string varString;
 	xsd__int varInt;
 	xsd__float varFloat;
 	DivByZeroStruct();
-	~DivByZeroStruct();
+	~DivByZeroStruct() throw();
 };
 
 #endif /* !defined(__DIVBYZEROSTRUCT_PARAM_H__INCLUDED_)*/

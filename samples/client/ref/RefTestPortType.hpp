@@ -7,8 +7,9 @@
 #define __REFTESTPORTTYPE_CLIENTSTUB_H__INCLUDED_
 
 #include <axis/client/Stub.hpp>
-#include "ref_AxisClientException.hpp"
+#include <axis/SoapFaultException.hpp>
 #include <axis/ISoapFault.hpp>
+AXIS_CPP_NAMESPACE_USE
 #include "intType.hpp"
 
 class RefTestPortType :public Stub
@@ -20,7 +21,6 @@ public:
 	STORAGE_CLASS_INFO virtual ~RefTestPortType();
 public: 
 	STORAGE_CLASS_INFO intType* echoInt(intType* Value0);
-	int getFaultDetail(char** ppcDetail);
 };
 
 #endif /* !defined(__REFTESTPORTTYPE_CLIENTSTUB_H__INCLUDED_)*/
