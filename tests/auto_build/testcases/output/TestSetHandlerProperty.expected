@@ -1,0 +1,5 @@
+value of prop1 is = value1
+value of prop2 set in handler is = value2
+5
+value of prop2 printed in client is = value2
+---------------- TEST COMPLETE ----------------

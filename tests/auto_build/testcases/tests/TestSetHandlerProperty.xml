@@ -1,0 +1,22 @@
+<test>
+    <name>TestSetHandlerProperty</name>
+    <description>CalculatorDoc with Handler and IMessageData->getProperty() when no property set</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>TestSetHandlerPropertyClient.cpp</clientCode>
+    <wsdl>CalculatorDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            TestSetHandlerProperty.expected
+        </output>
+    </expected>
+    <handler>
+        <directory>
+            TestSetHandlerProperty
+        </directory>
+       <service>
+           Calculator
+       </service>
+    </handler>
+	<endpoint>http://localhost:80/Calculator/services/Calculator</endpoint>
+</test>
+
