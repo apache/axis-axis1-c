@@ -642,8 +642,6 @@ throw (AxisException, AxisTransportException)
         m_iBytesLeft -= iToCopy;
         m_pcReceived += iToCopy;
         *pSize = iToCopy;
-        if(m_iBytesLeft == 0)
-            return TRANSPORT_FINISHED;
 
         return TRANSPORT_IN_PROGRESS;
     }
