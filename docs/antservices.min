@@ -1,0 +1,44 @@
+*. The following environment vars should be set
+
+JAVA_HOME=/usr/local/java
+ANT_HOME=/usr/local/ant
+PATH=/usr/local/java/bin:/usr/local/ant/bin:$PATH
+XERCES_HOME="/usr/local/xerces-c"
+APACHE_HOME=/usr/local/apache
+APACHE2_HOME=/usr/local/apache2
+AXISJAVA_LIB=/usr/local/axisjavajars
+
+*. change any poperties in the appropriate c/build/build.PLATFORM.properties file 
+(eg. 
+HTTP.SSLChannel = false
+testPort = 8080
+WINDOWS: transport.HTTP.ipv6 = false
+)
+
+*. WINDOWS : set vc environment
+
+*. ant 
+
+*. ant -f package.xml
+
+*. configure the servers
+(i.e. 
+apache1 - copy apache module, change the listening port,  change httpd.conf
+apache2 - copy apache2 module, change the listening port, change httpd.conf
+simple_axis_server - nothing to do
+)
+
+*. stop any servers if running
+
+*. you may have to change PARSER.xmlParserLibrary to the appropriate value in the build.PLATFORM.properties file
+
+*. ant -f services.xml -Ddir.release=/home/sanjaya/obj/package/axis-c-1.5.0-Linux-bin/
+
+*. if HTTP.SSLChannel = false make relevant changes in c/build/executeTest.xml (not needed any more)
+
+*. some times may have to change c/build/buildTest.xml to change java task to have fully qualified name rather than .jar
+
+*. ant -f test.xml -Ddir.xmlParser=/usr/local/xerces-c/lib -Ddir.release=/home/sanjaya/obj/package/axis-c-1.5.0-Linux-bin -Dtest.name=SimpleRef (TO RUN THE TEST SimpleRef) 
+
+*. ant -f test.xml -Ddir.xmlParser=/usr/local/xerces-c/lib -Ddir.release=/home/sanjaya/obj/package/axis-c-1.5.0-Linux-bin (TO RUN ALL THE TESTS) 
+
