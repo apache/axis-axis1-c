@@ -252,6 +252,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 	
 	private void writeCreateGlobalMethod()throws IOException{
 		writer.write("void* Axis_Create_"+classname+"(void* pObj, bool bArray, int nSize)\n{\n");
+		writer.write("\t"+classname+"* pTemp;\n");		
 		writer.write("\tif (bArray && (nSize > 0))\n\t{\n");
 		writer.write("\t\tif (pObj)\n\t{\n");
 		writer.write("\t\t\tpObj = (void *)  realloc(pObj, sizeof("+classname+")*nSize);\n");
@@ -262,8 +263,18 @@ public class BeanParamWriter extends ParamCFileWriter{
 		writer.write("\t\treturn pObj;\n");
 		writer.write("\t}\n\telse\n\t{\n");
 		writer.write("\t\tpObj = (void *)  malloc(sizeof("+classname+"));\n");
-		writer.write("\t\tmemset(pObj, 0, sizeof("+classname+"));\n\t}\n");
-		writer.write("\treturn pObj;\n}\n");
+		writer.write("\t\tmemset(pObj, 0, sizeof("+classname+"));\n\n");
+		writer.write("\t\tpTemp = pObj;\n");
+		for(int i = 0; i< attribs.length;i++){
+			if (attribs[i].isArray()){
+				writer.write("\t\tpTemp->"+attribs[i].getParamName()+".m_Array = 0;\n");
+				writer.write("\t\tpTemp->"+attribs[i].getParamName()+".m_Size = 0;\n");
+			}
+			else if (!attribs[i].isSimpleType()){
+				writer.write("\t\t"+attribs[i].getParamName()+"=0;\n");
+			}	
+		}
+		writer.write("\t}\n\treturn pObj;\n}\n");
 	}
 
 	private void writeDeleteGlobalMethod()throws IOException{
