@@ -27,7 +27,7 @@ AXISC_STORAGE_CLASS_INFO void axiscDestroyIAttribute(AXISCHANDLE attribute) {
 }
 
 AXISC_STORAGE_CLASS_INFO int axiscSetValueIAttribute(AXISCHANDLE attribute, const AxiscChar * value) {
-	if(NULL==value)
+	if(!value)
 	{
 		return AXIS_FAIL;
 	}
@@ -38,7 +38,7 @@ AXISC_STORAGE_CLASS_INFO int axiscSetValueIAttribute(AXISCHANDLE attribute, cons
 }
 
 AXISC_STORAGE_CLASS_INFO int axiscSetUriIAttribute(AXISCHANDLE attribute, const AxiscChar * uri) {
-	if(NULL==uri)
+	if(!uri)
 	{
 		return AXIS_FAIL;
 	}
@@ -49,7 +49,7 @@ AXISC_STORAGE_CLASS_INFO int axiscSetUriIAttribute(AXISCHANDLE attribute, const 
 
 
 AXISC_STORAGE_CLASS_INFO int axiscSetPrefixIAttribute(AXISCHANDLE attribute, const AxiscChar * prefix) {
-	if(NULL==prefix)
+	if(!prefix)
 	{
 		return AXIS_FAIL;
 	}
@@ -60,7 +60,7 @@ AXISC_STORAGE_CLASS_INFO int axiscSetPrefixIAttribute(AXISCHANDLE attribute, con
 }
 
 AXISC_STORAGE_CLASS_INFO int axiscSetLocalNameIAttribute(AXISCHANDLE attribute, const AxiscChar * localname) {
-	if(NULL==localname)
+	if(!localname)
 	{
 		return AXIS_FAIL;
 	}
