@@ -301,20 +301,20 @@ extern "C" int initialize_module(int bServer)
 		int status = g_pConfig->ReadConfFile();/*Read from the configuration file*/
         if(status == AXIS_SUCCESS)
         {
-            char* pClientWsddPath = g_pConfig->GetClientWsddFilePath();
-			/* May be there is no client side handlers configured. So may not have 
-			 * CLIENTWSDDFILEPATH entry in axiscpp.conf */
-			if (!pClientWsddPath) return status; 
-            if (AXIS_SUCCESS != g_pWSDDDeployment->LoadWSDD(pClientWsddPath)) return AXIS_FAIL;
-			#if defined(__AXISTRACE__)
+		#if defined(__AXISTRACE__)
 			status = g_pAT->openFileByClient();
 			if(status == AXIS_FAIL)
 			{
 				return AXIS_FAIL;
 			}
-			#endif
-		}
-		else
+		#endif
+		char* pClientWsddPath = g_pConfig->GetClientWsddFilePath();
+	    	/* May be there is no client side handlers configured. So may not have 
+		* CLIENTWSDDFILEPATH entry in axiscpp.conf */
+		if (!pClientWsddPath) return status; 
+            	if (AXIS_SUCCESS != g_pWSDDDeployment->LoadWSDD(pClientWsddPath)) return AXIS_FAIL;
+	}
+	else
         {
             AXISTRACE1("Reading from the configuration file failed. " \
             "Check for error in the configuration file", CRITICAL);
