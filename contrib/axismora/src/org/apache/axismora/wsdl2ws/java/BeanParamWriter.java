@@ -71,181 +71,181 @@ import org.apache.axismora.wsdl2ws.info.WebServiceContext;
  */
 
 public class BeanParamWriter extends ParmWriter {
-    /* weather this is a direct return type of the service */
-    private boolean isdirectReturn;
+	/* weather this is a direct return type of the service */
+	private boolean isdirectReturn;
 
-    public BeanParamWriter(WebServiceContext wscontext, Type type) throws WrapperFault {
-        super(wscontext, type);
-        this.isdirectReturn =
-            this.wscontext.getSerInfo().isDirectReturn(type.getName());
-    }
+	public BeanParamWriter(WebServiceContext wscontext, Type type) throws WrapperFault {
+		super(wscontext, type);
+		this.isdirectReturn =
+			this.wscontext.getSerInfo().isDirectReturn(type.getName());
+	}
 
-    public void writeSerialieCode() throws WrapperFault {
-        try {
-            if (attribs.length == 0) {
-                //nothing to print if this is simple type we have inbuild types
-                System.out.println(
-                    "possible error calss with no attributes....................");
-                return;
-            }
+	public void writeSerialieCode() throws WrapperFault {
+		try {
+			if (attribs.length == 0) {
+				//nothing to print if this is simple type we have inbuild types
+				System.out.println(
+					"possible error calss with no attributes....................");
+				return;
+			}
 
-            writer.write(
-                "\t\tjava.lang.String m_URI =\"" + type.getName().getNamespaceURI() + "\";\n");
-            writer.write(
-                "\t\tjava.lang.String type_name = \"" + type.getName().getLocalPart() + "\";\n");
+			writer.write(
+				"\t\tjava.lang.String m_URI =\"" + type.getName().getNamespaceURI() + "\";\n");
+			writer.write(
+				"\t\tjava.lang.String type_name = \"" + type.getName().getLocalPart() + "\";\n");
 
-//            //otherwise name of parameter written by upper level
-//            if (this.isdirectReturn) {
-//                writer.write("\t\t//write start tag\n");
-//                writer.write(
-//                    "\t\tboolean writeOutTag = !org.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten;\n");
-//                writer.write("\t\tif(writeOutTag){\n");
-//                //write the start tag
-//                writer.write(
+//			  //otherwise name of parameter written by upper level
+//			  if (this.isdirectReturn) {
+//				  writer.write("\t\t//write start tag\n");
+//				  writer.write(
+//					  "\t\tboolean writeOutTag = !org.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten;\n");
+//				  writer.write("\t\tif(writeOutTag){\n");
+//				  //write the start tag
+//				  writer.write(
 //					 "\t\t\t//write the start tag\n" 	
-//                     +"\t\t\tcontext.writeString(\"<prf:\");\n"
-//                     +"\t\t\tcontext.writeString(type_name);\n" 
-//                     + "\t\t\tcontext.writeString(\"  xmlns:prf =\\\"\");\n"
-//                     + "\t\t\tcontext.writeString(m_URI);\n"
-//                     +"\t\t\tcontext.writeString(\"\\\">\\n\");\n\n");
+//					   +"\t\t\tcontext.writeString(\"<prf:\");\n"
+//					   +"\t\t\tcontext.writeString(type_name);\n" 
+//					   + "\t\t\tcontext.writeString(\"  xmlns:prf =\\\"\");\n"
+//					   + "\t\t\tcontext.writeString(m_URI);\n"
+//					   +"\t\t\tcontext.writeString(\"\\\">\\n\");\n\n");
 //				writer.write("\t\t}\n");     
-//            }
-//            writer.write(
-//                "\t\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten = false;\n");
+//			  }
+//			  writer.write(
+//				  "\t\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten = false;\n");
 
-            writer.write("\t\t//write the parameters\n\n");
-            for (int i = 0; i < attribs.length; i++) {
-                /**
-                 * if(WrapperConstants.STYLE_DOCUMENT.equals(this.wscontext.getWrapInfo().getWrapperStyle()));
-                 * write the type=typename code here 
-                 */
+			writer.write("\t\t//write the parameters\n\n");
+			for (int i = 0; i < attribs.length; i++) {
+				/**
+				 * if(WrapperConstants.STYLE_DOCUMENT.equals(this.wscontext.getWrapInfo().getWrapperStyle()));
+				 * write the type=typename code here 
+				 */
 
-                Type t;
-                boolean check4null = !JavaUtils.isJavaSimpleType(attribs[i][1]);
+				Type t;
+				boolean check4null = !JavaUtils.isJavaSimpleType(attribs[i][1]);
 
-                if (TypeMap.isSimpleType(attribs[i][1])) {
-                    //for simple type
-                    writer.write(
-                        "\t\tcontext.writeString(\"<" + attribs[i][0] + ">\");\n");
-                    writer.write(
-                        check4null
-                            ? "\t\tif(this." + attribs[i][0] + "!=null){\n"
-                            : "");
-                    writer.write(
-                        "\t\t\tcontext.writeString(java.lang.String.valueOf("
-                            + attribs[i][0]
-                            + "));\n");
+				if (TypeMap.isSimpleType(attribs[i][1])) {
+					//for simple type
+					writer.write(
+						"\t\tcontext.writeString(\"<" + attribs[i][0] + ">\");\n");
+					writer.write(
+						check4null
+							? "\t\tif(this." + attribs[i][0] + "!=null){\n"
+							: "");
+					writer.write(
+						"\t\t\tcontext.writeSafeString(java.lang.String.valueOf("
+							+ attribs[i][0]
+							+ "));\n");
 
-                } else if (attribs[i][1].endsWith("[]") && !"byte[]".equals(attribs[i][1])){
-                    //for array type
-                    QName arrayType = new QName(attribs[i][5],attribs[i][6]);
-                    String arrTypeAdditionalString =
-                        " xsi:type=\\\"soapenc:Array\\\" soapenc:arrayType=\\\"ns2:"
-                            + arrayType.getLocalPart()
-                            + "[]\\\" xmlns:ns2 = \\\""
-                            + arrayType.getNamespaceURI()
-                            + "\\\"";
-                    writer.write(
-                        "\t\tcontext.writeString(\"<"
-                            + attribs[i][0]
-                            + arrTypeAdditionalString
-                            + ">\");\n");
-                    writer.write(
-                        check4null
-                            ? "\t\tif(this." + attribs[i][0] + "!=null){\n"
-                            : "");
-                    writer.write("\t\t\tcontext.writeString(\"\\n\");\n");
-                    writer.write("\t\t\t"
-                            + attribs[i][4]+ " item" + i
-                            + " = new " + attribs[i][4] + "();\n");
-                    writer.write(
-                        "\t\t\titem" + i + ".setParam(" + attribs[i][0] + ");\n");
-//                    writer.write(
-//                        "\t\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten = true;\n");
-                    writer.write("\t\t\titem" + i + ".serialize(context);\n");
-                } else {
-                    //for complex type 
-                    writer.write(
-                        "\t\tcontext.writeString(\"<" + attribs[i][0] + ">\");\n");
-                    writer.write(
-                        check4null
-                            ? "\t\tif(this." + attribs[i][0] + "!=null){\n"
-                            : "");
-//                    writer.write(
-//                        "\t\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten = true;\n");
-                    writer.write("\t\t\t" + attribs[i][0] + ".serialize(context);\n");
-                }
-                writer.write(check4null ? "\t\t}\n" : "");
-                writer.write(
-                    "\t\tcontext.writeString(\"</" + attribs[i][0] + ">\\n\");\n\n");
-            }
+				} else if (attribs[i][1].endsWith("[]") && !"byte[]".equals(attribs[i][1])){
+					//for array type
+					QName arrayType = new QName(attribs[i][5],attribs[i][6]);
+					String arrTypeAdditionalString =
+						" xsi:type=\\\"soapenc:Array\\\" soapenc:arrayType=\\\"ns2:"
+							+ arrayType.getLocalPart()
+							+ "[]\\\" xmlns:ns2 = \\\""
+							+ arrayType.getNamespaceURI()
+							+ "\\\"";
+					writer.write(
+						"\t\tcontext.writeString(\"<"
+							+ attribs[i][0]
+							+ arrTypeAdditionalString
+							+ ">\");\n");
+					writer.write(
+						check4null
+							? "\t\tif(this." + attribs[i][0] + "!=null){\n"
+							: "");
+					writer.write("\t\t\tcontext.writeString(\"\\n\");\n");
+					writer.write("\t\t\t"
+							+ attribs[i][4]+ " item" + i
+							+ " = new " + attribs[i][4] + "();\n");
+					writer.write(
+						"\t\t\titem" + i + ".setParam(" + attribs[i][0] + ");\n");
+//					  writer.write(
+//						  "\t\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten = true;\n");
+					writer.write("\t\t\titem" + i + ".serialize(context);\n");
+				} else {
+					//for complex type 
+					writer.write(
+						"\t\tcontext.writeString(\"<" + attribs[i][0] + ">\");\n");
+					writer.write(
+						check4null
+							? "\t\tif(this." + attribs[i][0] + "!=null){\n"
+							: "");
+//					  writer.write(
+//						  "\t\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten = true;\n");
+					writer.write("\t\t\t" + attribs[i][0] + ".serialize(context);\n");
+				}
+				writer.write(check4null ? "\t\t}\n" : "");
+				writer.write(
+					"\t\tcontext.writeString(\"</" + attribs[i][0] + ">\\n\");\n\n");
+			}
 
-//            //otherwise name of parameter written by upper level
-//            if (this.isdirectReturn) {
-//                writer.write("\t\t//write the end tag\n");
-//                writer.write("\t\tif(writeOutTag){\n");
-//                writer.write("\t\tcontext.writeString(\"</prf:\");"
-//                    + "\t\tcontext.writeString(type_name);\n"
-//                    +"\t\tcontext.writeString(\">\\n\");\n");
+//			  //otherwise name of parameter written by upper level
+//			  if (this.isdirectReturn) {
+//				  writer.write("\t\t//write the end tag\n");
+//				  writer.write("\t\tif(writeOutTag){\n");
+//				  writer.write("\t\tcontext.writeString(\"</prf:\");"
+//					  + "\t\tcontext.writeString(type_name);\n"
+//					  +"\t\tcontext.writeString(\">\\n\");\n");
 //				writer.write("\t\t}\n");     
-//            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new WrapperFault(e);
-        }
-    }
+//			  }
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new WrapperFault(e);
+		}
+	}
 
-    public String capitalizeFirstCaractor(String value) {
-        char[] chars = value.toCharArray();
-        chars[0] = Character.toUpperCase(value.charAt(0));
-        return new String(chars);
-    }
+	public String capitalizeFirstCaractor(String value) {
+		char[] chars = value.toCharArray();
+		chars[0] = Character.toUpperCase(value.charAt(0));
+		return new String(chars);
+	}
 
-    public void writeDesireializeCode() throws WrapperFault {
-        try {
-            if (attribs.length == 0) {
-                //nothing to print if this is simple type we have inbuild types
-                System.out.println(
-                    "possible error calss with no attributes....................");
-                return;
-            }
+	public void writeDesireializeCode() throws WrapperFault {
+		try {
+			if (attribs.length == 0) {
+				//nothing to print if this is simple type we have inbuild types
+				System.out.println(
+					"possible error calss with no attributes....................");
+				return;
+			}
             
 			writer.write("\t\torg.apache.axismora.encoding.AxisPullParser psr = msgdata.getAxisParser();\n");
-            writer.write("\t\tint count = " + this.attribs.length + ";\n");
-            //start looping
+			writer.write("\t\tint count = " + this.attribs.length + ";\n");
+			//start looping
 
-            writer.write("\t\t//come to first start tag\n");
-            writer.write("\t\twhile(!(psr.getState() == org.xmlpull.v1.XmlPullParser.START_TAG))\n");
-            writer.write("\t\t\tpsr.next();\n");
-            writer.write("\t\t//skip it says the type\n");
+			writer.write("\t\t//come to first start tag\n");
+			writer.write("\t\twhile(!(psr.getState() == org.xmlpull.v1.XmlPullParser.START_TAG))\n");
+			writer.write("\t\t\tpsr.next();\n");
+			writer.write("\t\t//skip it says the type\n");
 			writer.write("\t\tpsr.next();\n");
-            writer.write("\t\t//if the type of the next tag is end tag that means the content of element is null\n");
+			writer.write("\t\t//if the type of the next tag is end tag that means the content of element is null\n");
 
-            writer.write("\t\tif(psr.getState() == org.xmlpull.v1.XmlPullParser.END_TAG)\n");
-            writer.write("\t\t\treturn null;\n\n");
+			writer.write("\t\tif(psr.getState() == org.xmlpull.v1.XmlPullParser.END_TAG)\n");
+			writer.write("\t\t\treturn null;\n\n");
 
-            writer.write("\t\tfor(int i = 0;i<count;i++) {\n");
+			writer.write("\t\tfor(int i = 0;i<count;i++) {\n");
 
-            writer.write("\t\t\twhile(!(psr.getState() == org.xmlpull.v1.XmlPullParser.START_TAG))\n");
+			writer.write("\t\t\twhile(!(psr.getState() == org.xmlpull.v1.XmlPullParser.START_TAG))\n");
 			writer.write("\t\tpsr.next();\n");
 			writer.write("\t\t\t\tjava.lang.String localName = psr.getName();\n");
-            //if part
-            writer.write(
-                "\t\t\t\tif(localName.equalsIgnoreCase(\"" + attribs[0][0] + "\")) {\n");
-            //Type t;
+			//if part
+			writer.write(
+				"\t\t\t\tif(localName.equalsIgnoreCase(\"" + attribs[0][0] + "\")) {\n");
+			//Type t;
 
 			JavaUtils.writeDeserializeCodeLine("this."+attribs[0][0],attribs[0][1],attribs[0][4],"\t\t\t\t\t",writer);
 			
-//            if (TypeMap.isSimpleType(attribs[0][1])) {
-//                if (JavaUtils.isUnwrapperdSimpleType(attribs[0][1]))
-//                    writer.write(
-//                        "\t\t\t\t\tthis."
-//                            + attribs[0][0]
-//                            + "= new "
-//                            + WrapperUtils.getWrapperName4FullyQualifiedName(attribs[0][1])
-//                            + "(msgdata);\n");
-//                else {
-//                	if(!attribs[0][1].startsWith("java.lang"))
+//			  if (TypeMap.isSimpleType(attribs[0][1])) {
+//				  if (JavaUtils.isUnwrapperdSimpleType(attribs[0][1]))
+//					  writer.write(
+//						  "\t\t\t\t\tthis."
+//							  + attribs[0][0]
+//							  + "= new "
+//							  + WrapperUtils.getWrapperName4FullyQualifiedName(attribs[0][1])
+//							  + "(msgdata);\n");
+//				  else {
+//					if(!attribs[0][1].startsWith("java.lang"))
 //					writer.write(
 //						"\t\t\t\t\tthis."
 //							+ attribs[0][0]
@@ -253,51 +253,51 @@ public class BeanParamWriter extends ParmWriter {
 //							+ WrapperUtils.getWrapperName4FullyQualifiedName(attribs[0][1])
 //							+ "(msgdata).getParam();\n");
 //					else
-//                    	writer.write(
-//                        "\t\t\t\t\tthis."
-//                            + attribs[0][0]
-//                            + "= new "+attribs[0][1]+"(new "
-//                            + WrapperUtils.getWrapperName4FullyQualifiedName(attribs[0][1])
-//                            + "(msgdata).getParam());\n");
-//                }
-//            } else if (attribs[0][1].endsWith("[]") && !"byte[]".equals(attribs[0][1])) {
-//                writer.write(
-//                    "\t\t\t\t\t"
-//                        + attribs[0][4]
-//                        + " arrayT0 = (new "
-//                        + attribs[0][4]
-//                        + "());\n");
-//                writer.write("\t\t\t\t\tarrayT0.desierialize(msgdata);\n");
-//                writer.write(
-//                    "\t\t\t\t\tthis." + attribs[0][0] + " = arrayT0.getParam();\n");
-//            } else {
-//                writer.write(
-//                    "\t\t\t\t\tthis."
-//                        + attribs[0][0]
-//                        + "= (new "
-//                        + WrapperUtils.getWrapperName4FullyQualifiedName(attribs[0][1])
-//                        + "());\n");
-//                writer.write(
-//                    "\t\t\t\t\tthis." + attribs[0][0] + ".desierialize(msgdata);\n");
-//            }
+//						writer.write(
+//						  "\t\t\t\t\tthis."
+//							  + attribs[0][0]
+//							  + "= new "+attribs[0][1]+"(new "
+//							  + WrapperUtils.getWrapperName4FullyQualifiedName(attribs[0][1])
+//							  + "(msgdata).getParam());\n");
+//				  }
+//			  } else if (attribs[0][1].endsWith("[]") && !"byte[]".equals(attribs[0][1])) {
+//				  writer.write(
+//					  "\t\t\t\t\t"
+//						  + attribs[0][4]
+//						  + " arrayT0 = (new "
+//						  + attribs[0][4]
+//						  + "());\n");
+//				  writer.write("\t\t\t\t\tarrayT0.desierialize(msgdata);\n");
+//				  writer.write(
+//					  "\t\t\t\t\tthis." + attribs[0][0] + " = arrayT0.getParam();\n");
+//			  } else {
+//				  writer.write(
+//					  "\t\t\t\t\tthis."
+//						  + attribs[0][0]
+//						  + "= (new "
+//						  + WrapperUtils.getWrapperName4FullyQualifiedName(attribs[0][1])
+//						  + "());\n");
+//				  writer.write(
+//					  "\t\t\t\t\tthis." + attribs[0][0] + ".desierialize(msgdata);\n");
+//			  }
 
-            //else if part
-            for (int i = 1; i < attribs.length; i++) {
-                writer.write(
-                    "\t\t\t\t}else if (localName.equalsIgnoreCase(\""
-                        + attribs[i][0]
-                        + "\")) {\n");
+			//else if part
+			for (int i = 1; i < attribs.length; i++) {
+				writer.write(
+					"\t\t\t\t}else if (localName.equalsIgnoreCase(\""
+						+ attribs[i][0]
+						+ "\")) {\n");
 				JavaUtils.writeDeserializeCodeLine("this."+attribs[i][0],attribs[i][1],attribs[i][4],"\t\t\t\t\t",writer);
-//                if (TypeMap.isSimpleType(attribs[i][1])) {
-//                    if (JavaUtils.isUnwrapperdSimpleType(attribs[i][1]))
-//                        writer.write(
-//                            "\t\t\t\t\tthis."
-//                                + attribs[i][0]
-//                                + "= new "
-//                                + WrapperUtils.getWrapperName4FullyQualifiedName(
-//                                    attribs[i][1])
-//                                + "(msgdata);\n");
-//                    else{
+//				  if (TypeMap.isSimpleType(attribs[i][1])) {
+//					  if (JavaUtils.isUnwrapperdSimpleType(attribs[i][1]))
+//						  writer.write(
+//							  "\t\t\t\t\tthis."
+//								  + attribs[i][0]
+//								  + "= new "
+//								  + WrapperUtils.getWrapperName4FullyQualifiedName(
+//									  attribs[i][1])
+//								  + "(msgdata);\n");
+//					  else{
 //						if(!attribs[i][1].startsWith("java.lang"))
 //							writer.write(
 //								"\t\t\t\t\tthis."
@@ -313,48 +313,48 @@ public class BeanParamWriter extends ParmWriter {
 //								+ WrapperUtils.getWrapperName4FullyQualifiedName(attribs[i][1])
 //								+ "(msgdata).getParam());\n");
 //					}
-//                } else if (attribs[i][1].endsWith("[]")&& !"byte[]".equals(attribs[i][1])) {
-//                    writer.write(
-//                        "\t\t\t\t\t"
-//                            + attribs[i][4]
-//                            + " arrayT"
-//                            + i
-//                            + " = (new "
-//                            + attribs[i][4]
-//                            + "());\n");
-//                    writer.write(
-//                        "\t\t\t\t\tarrayT" + i + ".desierialize(msgdata);\n");
-//                    writer.write(
-//                        "\t\t\t\t\tthis."
-//                            + attribs[i][0]
-//                            + " = arrayT"
-//                            + i
-//                            + ".getParam();\n");
-//                } else {
-//                    writer.write(
-//                        "\t\t\t\t\tthis."
-//                            + attribs[i][0]
-//                            + "= (new "
-//                            + WrapperUtils.getWrapperName4FullyQualifiedName(attribs[i][1])
-//                            + "());\n");
-//                    writer.write(
-//                        "\t\t\t\t\tthis."
-//                            + attribs[i][0]
-//                            + ".desierialize(msgdata);\n");
-//                }
-            }
-            //end of conditions
-            writer.write(
-                "\t\t\t\t}else\n\t\t\t\t\tthrow new org.apache.axis.AxisFault(\"unknown tag find \"+ localName);\n");
-            //get next tag
+//				  } else if (attribs[i][1].endsWith("[]")&& !"byte[]".equals(attribs[i][1])) {
+//					  writer.write(
+//						  "\t\t\t\t\t"
+//							  + attribs[i][4]
+//							  + " arrayT"
+//							  + i
+//							  + " = (new "
+//							  + attribs[i][4]
+//							  + "());\n");
+//					  writer.write(
+//						  "\t\t\t\t\tarrayT" + i + ".desierialize(msgdata);\n");
+//					  writer.write(
+//						  "\t\t\t\t\tthis."
+//							  + attribs[i][0]
+//							  + " = arrayT"
+//							  + i
+//							  + ".getParam();\n");
+//				  } else {
+//					  writer.write(
+//						  "\t\t\t\t\tthis."
+//							  + attribs[i][0]
+//							  + "= (new "
+//							  + WrapperUtils.getWrapperName4FullyQualifiedName(attribs[i][1])
+//							  + "());\n");
+//					  writer.write(
+//						  "\t\t\t\t\tthis."
+//							  + attribs[i][0]
+//							  + ".desierialize(msgdata);\n");
+//				  }
+			}
+			//end of conditions
+			writer.write(
+				"\t\t\t\t}else\n\t\t\t\t\tthrow new org.apache.axis.AxisFault(\"unknown tag find \"+ localName);\n");
+			//get next tag
             
 			writer.write("\t\tpsr.next();\n");
 			//end looping
-            writer.write("\t\t}//end of for loop\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new WrapperFault(e);
-        }
-    }
+			writer.write("\t\t}//end of for loop\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new WrapperFault(e);
+		}
+	}
 
 }

@@ -65,6 +65,7 @@ import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
+import org.apache.axismora.wsdl2ws.testing.TestUtils;
 
 public class BooleanParam implements InOutParameter {
     public boolean param;
@@ -123,6 +124,9 @@ public class BooleanParam implements InOutParameter {
 	 */
 	public String toString() {
 		return String.valueOf(param);
+	}
+	public void init(){
+			this.param = TestUtils.getRandomBoolean();
 	}
 
 }

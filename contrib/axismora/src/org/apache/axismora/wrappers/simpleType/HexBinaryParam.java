@@ -64,6 +64,7 @@ import org.apache.axis.message.SOAPFault;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
 import org.apache.axismora.encoding.InParameter;
+import org.apache.axismora.wsdl2ws.testing.TestUtils;
 
 /**
  * Created on Sep 19, 2003
@@ -283,6 +284,9 @@ public class HexBinaryParam implements InOutParameter{
 	 */
 	public String toString() {
 		return encode(param);
+	}
+	public void init(){
+			this.param = TestUtils.getRandomBytes();
 	}
 
 }

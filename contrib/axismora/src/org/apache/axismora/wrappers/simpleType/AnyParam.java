@@ -114,4 +114,8 @@ public class AnyParam implements InOutParameter {
 			this.param = null;//Byte.parseByte(value);
 		return this;
 	}
+	
+	public void init(){
+	
+	}
 }

@@ -318,6 +318,8 @@ public class BasicMessageContext implements MessageContext {
             this.resultValue = (DocLiteralSerializer)result;
         else if (result instanceof InputParameterInfo[])
             this.resultValue = new RequestBodyContent((InputParameterInfo[]) result, this.methodName);
+		else if (result instanceof RequestBodyContent)
+			 this.resultValue = (RequestBodyContent)result;
         else
             throw new AxisFault("unknown result type set to message Context");
         return true;

@@ -111,7 +111,7 @@ public class Call implements javax.xml.rpc.Call {
     /* if authentication used the passwd */
     private char[] passwd;
     /*style of the web service*/ 
-    private Style style;
+    private Style style = Style.RPC;
     /*specifies whether literal or encoded*/
     private Use use = Use.ENCODED;
      

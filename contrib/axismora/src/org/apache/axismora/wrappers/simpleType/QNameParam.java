@@ -65,6 +65,7 @@ import org.apache.axis.message.SOAPFault;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
 import org.apache.axismora.encoding.InParameter;
+import org.apache.axismora.wsdl2ws.testing.TestUtils;
 
 /**
  * Created on Sep 29, 2003
@@ -164,5 +165,7 @@ public class QNameParam implements InOutParameter {
     public QNameParam getParam() {
         return this;
     }
-
+	public void init(){
+			this.param = new QName(TestUtils.getRandomString(),TestUtils.getRandomString());
+	}
 }

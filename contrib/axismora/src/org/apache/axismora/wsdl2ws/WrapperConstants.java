@@ -98,6 +98,7 @@ public interface WrapperConstants {
     public static final int GENERATOR_STUB_LOCATOR_JAVA = 28;
     public static final int GENERATOR_STUB_JAVA = 29;
     public static final int GENERATOR_STUB_SERVICE_INTERFACE_JAVA = 30;
+	public static final int GENERATOR_RPC_TESTCASE = 31;
 
     //cpp constants 
     public static final int GENERATOR_CLASSLOADER_CPP = 13;

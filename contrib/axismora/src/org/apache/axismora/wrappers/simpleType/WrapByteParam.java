@@ -65,6 +65,7 @@ import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
+import org.apache.axismora.wsdl2ws.testing.TestUtils;
 
 public class WrapByteParam implements InOutParameter {
 	public Byte param;
@@ -118,6 +119,9 @@ public class WrapByteParam implements InOutParameter {
 	 */
 	public String toString() {
 		return Byte.toString(param.byteValue());
+	}
+	public void init(){
+		this.param = new Byte(TestUtils.getRandomByte());
 	}
 
 }

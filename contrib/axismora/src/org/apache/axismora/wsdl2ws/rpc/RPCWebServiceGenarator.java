@@ -108,6 +108,7 @@ public class RPCWebServiceGenarator implements WebServiceGenarator{
 			}
 			//all the time genarate param classes		
 			(new Genarator(WrapperConstants.GENERATOR_PARAM_JAVA, wscontext)).genarate();
+			(new Genarator(WrapperConstants.GENERATOR_RPC_TESTCASE, wscontext)).genarate();
 		}else if(WrapperConstants.LANGUAGE_CPP.equalsIgnoreCase(language)){
 			//if(WrapperConstants.SERVER.equals(wscontext.getWrapInfo().getTargetEngine())){
 				 (new Genarator(WrapperConstants.GENERATOR_WRAPPER_CPP, wscontext)).genarate();
