@@ -89,7 +89,7 @@ public interface WrapperConstants {
 	
 	public static final String TRANSPORT_HTTP = "http://schemas.xmlsoap.org/soap/http";
 	
-	public static final String DEFAULT_TARGET_ENDPOINT_URI = "http//127.0.0.1/8080";
+	public static final String DEFAULT_TARGET_ENDPOINT_URI = "http://127.0.0.1:8080/";
 	//wrapper genarator type
 	//java constants
 	public static final int GENERATOR_WRAPPER_JAVA = 9;
