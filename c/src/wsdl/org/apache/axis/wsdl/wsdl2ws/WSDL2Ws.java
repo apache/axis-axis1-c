@@ -491,7 +491,6 @@ public class WSDL2Ws {
 			typedata.setTypeNameForElementName(new ElementInfo(type.getQName(),
 					createTypeInfo(type.getRefType().getQName(),targetLanguage)));
 			typedata.setArray(true);
-			typedata.setCanThisOccuredmoreThanOnceAllTheTime(true);		
 		}else{
 			//is this a SOAPEnc array type	
 			QName arrayType =

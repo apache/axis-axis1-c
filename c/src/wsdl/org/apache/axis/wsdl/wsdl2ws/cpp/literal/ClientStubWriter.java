@@ -300,10 +300,16 @@ public class ClientStubWriter extends CPPClassWriter{
 			typeissimple = CUtils.isSimpleType(paraTypeName);
 			if(typeisarray){
 				//arrays
-				QName qname = WrapperUtils.getArrayType(type).getName();
+				Type arrayType = WrapperUtils.getArrayType(type);
+				QName qname = arrayType.getName();
 				String containedType = null;
 				if (CUtils.isSimpleType(qname)){
 					containedType = CUtils.getclass4qname(qname);
+					writer.write("\tm_pCall->AddBasicArrayParameter(");			
+					writer.write("(Axis_Array*)(&Value"+i+"), "+CUtils.getXSDTypeForBasicType(containedType)+", \""+((ParameterInfo)paramsB.get(i)).getParamName()+"\"");					
+				}
+				else if (arrayType.isSimpleType()){//SimpleType in the schema 
+					containedType = CUtils.getclass4qname(arrayType.getBaseType());
 					writer.write("\tm_pCall->AddBasicArrayParameter(");			
 					writer.write("(Axis_Array*)(&Value"+i+"), "+CUtils.getXSDTypeForBasicType(containedType)+", \""+((ParameterInfo)paramsB.get(i)).getParamName()+"\"");					
 				}
@@ -345,10 +351,15 @@ public class ClientStubWriter extends CPPClassWriter{
 				currentParamName = "*OutValue"+i;
 				// Some code need to be merged as we have some duplicated in coding here.
 				if (typeisarray){
-					QName qname = WrapperUtils.getArrayType(type).getName();
+					Type arrayType = WrapperUtils.getArrayType(type);
+					QName qname = arrayType.getName();
 					String containedType = null;
 					if (CUtils.isSimpleType(qname)){
 						containedType = CUtils.getclass4qname(qname);
+						writer.write("\t\t\t" + currentParamName + " = ("+currentParaType+"&)m_pCall->GetBasicArray("+CUtils.getXSDTypeForBasicType(containedType)+", \""+currentType.getElementName().getLocalPart()+"\", 0);\n");
+					}
+					else if (arrayType.isSimpleType()){//SimpleType in the schema 
+						containedType = CUtils.getclass4qname(arrayType.getBaseType());
 						writer.write("\t\t\t" + currentParamName + " = ("+currentParaType+"&)m_pCall->GetBasicArray("+CUtils.getXSDTypeForBasicType(containedType)+", \""+currentType.getElementName().getLocalPart()+"\", 0);\n");
 					}
 					else{
@@ -412,6 +423,7 @@ public class ClientStubWriter extends CPPClassWriter{
 		try {
 			while(types.hasNext()){
 				type = (Type)types.next();
+				if (type.isSimpleType()) continue;
 				if (type.isArray()) continue;
 				typeName = type.getLanguageSpecificName();
 				if (typeName.startsWith(">")) continue;
