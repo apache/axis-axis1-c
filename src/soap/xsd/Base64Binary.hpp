@@ -32,6 +32,10 @@ using namespace std;
 
 class Base64Binary : public IAnySimpleType {
 public:
+    
+    Base64Binary();
+    
+    ~Base64Binary();
 
 	/**
 	 * Serialize value to it's on-the-wire string form.
