@@ -87,6 +87,7 @@ public class ParmHeaderFileWriter extends ParamWriter{
 			this.writer.write("class "+classname+"\n{\n");
 			writeAttributes();
 			this.writer.write("};\n\n");
+			writeArrayStruct();
 			//writeConstructors();
 			//writeDistructors();
 			//writeMethods();
@@ -101,6 +102,15 @@ public class ParmHeaderFileWriter extends ParamWriter{
 		}
 	}
 
+	protected void writeArrayStruct()throws WrapperFault{
+		try{
+			writer.write("typedef struct Axis_"+classname+"_ArrayTag\n{\n");
+			writer.write("\t"+classname+"* m_Array;\n\tint m_Size;\n} Axis_"+classname+"_Array;\n\n");
+		} catch (IOException e) {
+			 throw new WrapperFault(e);
+		}
+	}
+	
 	protected void writeAttributes()throws WrapperFault{
 		  if(type.isArray()) return;
 		  try{
@@ -114,23 +124,10 @@ public class ParmHeaderFileWriter extends ParamWriter{
 		  }
 	  }
 	  
-	protected void writeConstructors()throws WrapperFault{
-		   try{
-			 writer.write("public:\n\t"+classname+"::" + classname + "();\n");
-		   } catch (IOException e) {
-				throw new WrapperFault(e);
-		   }
-	   }
+	protected void writeConstructors()throws WrapperFault{}
 	   
-	protected void writeDistructors() throws WrapperFault {
-		try{
-		  writer.write("public:\n\t"+classname+"::~" + classname + "();\n");
-		} catch (IOException e) {
-			 throw new WrapperFault(e);
-		}
-	}
+	protected void writeDistructors() throws WrapperFault {}
    
-	   
 	protected void writeMethods()throws WrapperFault{}
 
 	protected File getFilePath() throws WrapperFault {

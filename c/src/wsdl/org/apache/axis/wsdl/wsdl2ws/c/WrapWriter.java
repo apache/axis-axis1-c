@@ -188,7 +188,7 @@ public class WrapWriter extends CFileWriter{
 		if (methods.size() > 1) {
 			for (int i = 1; i < methods.size(); i++) {
 				minfo = (MethodInfo)methods.get(i);
-				writer.write("\telse if (0 == strcmp(method, \""+ minfo.getMethodname() +"\")\n");
+				writer.write("\telse if (0 == strcmp(method, \""+ minfo.getMethodname() +"\"))\n");
 				writer.write("\t\treturn "+minfo.getMethodname()+CUtils.WRAPPER_METHOD_APPENDER+"(mc);\n");
 			}
 		}
@@ -330,6 +330,7 @@ public class WrapWriter extends CFileWriter{
 			while(types.hasNext()){
 				typeName = ((Type)types.next()).getLanguageSpecificName();
 				writer.write("extern int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer *pDZ);\n");
+				writer.write("extern void* Axis_Create_"+typeName+"(bool bArray = false, int nSize=0);\n");
 				writer.write("extern void Axis_Delete_"+typeName+"("+typeName+"* param, bool bArray = false, int nSize=0);\n");
 				writer.write("extern int Axis_Serialize_"+typeName+"("+typeName+"* param, IWrapperSoapSerializer& pSZ, bool bArray = false);\n");
 				writer.write("extern int Axis_GetSize_"+typeName+"("+typeName+"* param);\n\n");
