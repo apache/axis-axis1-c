@@ -32,6 +32,13 @@ AXIS_CPP_NAMESPACE_START
 	} else tgt = NULL;						\
 }
 
+#define STRINGREPLACE(tgt,src)				\
+{											\
+	if (NULL != tgt)						\
+		delete [] tgt;						\
+	STRINGCOPY(tgt,src);					\
+}
+
 OtherFaultException::OtherFaultException() 
 {
 	m_detail = NULL;
@@ -47,6 +54,18 @@ OtherFaultException::OtherFaultException(
 OtherFaultException::OtherFaultException(AxisException& ae) : SoapFaultException(ae)
 {
 	m_detail = NULL;
+}
+
+OtherFaultException::OtherFaultException(const OtherFaultException& copy) : SoapFaultException(copy)
+{
+	STRINGCOPY(m_detail, copy.m_detail);
+}
+
+OtherFaultException& OtherFaultException::operator=(OtherFaultException copy)
+{
+	SoapFaultException::operator=(copy);
+	STRINGREPLACE(m_detail, copy.m_detail);
+	return *this;
 }
 
 OtherFaultException::~OtherFaultException() throw()

@@ -39,6 +39,8 @@ public:
 	OtherFaultException(const AxisChar *code, const AxisChar *string, 
 		const AxisChar *actor, const AxisChar *detail, int exceptionCode);
 	OtherFaultException(AxisException& ae);
+	OtherFaultException(const OtherFaultException& copy);
+	virtual OtherFaultException& operator=(OtherFaultException other);
 	virtual ~OtherFaultException() throw();
 
 	virtual const AxisChar *getFaultDetail() const;
