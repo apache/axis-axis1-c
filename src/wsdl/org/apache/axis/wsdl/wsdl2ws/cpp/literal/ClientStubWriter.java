@@ -567,7 +567,25 @@ public class ClientStubWriter extends CPPClassWriter{
 			while (paramsFault.hasNext()){
 				j =j+1;
 				FaultInfo info = (FaultInfo)paramsFault.next();
-				faultInfoName =info.getFaultInfo();	     
+				faultInfoName =info.getFaultInfo();
+				Iterator infoArrayListIterator = info.getParams().iterator();
+				boolean found = false;
+				
+				while( infoArrayListIterator.hasNext() && !found)
+				{
+					ParameterInfo pi = (ParameterInfo) infoArrayListIterator.next();
+					
+					if( pi != null)
+					{
+						if( "error".equals( pi.getParamName()))
+						{
+							faultInfoName = pi.getElementName().getLocalPart();
+						
+							found = true;
+						}
+					}
+				}
+					     
 				ArrayList paramInfo =info.getParams();
 				for (int i= 0; i < paramInfo.size(); i++) {				
 					ParameterInfo par =(ParameterInfo)paramInfo.get(i);                                                                                                                                                           
