@@ -33,56 +33,6 @@ int main(int argc, char* argv[])
 	p2 = argv[5];
         p3 = atoi(argv[6]);
 
-	printf("Sending Requests to Server http://%s:%s ........\n\n", server, port);
-        switch(p3)
-        {
-            case 0:
-                /* Sends a normal request. the result should be the division of
-                 *  two numbers the user has provided
-                 */
-	        sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
-                break;
-            
-            case 1:
-                /* Service name is missing. The message
-                 *  Exception : AxisSoapException:Soap action is empty
-                 *  should be returned to the user.
-                 */
-	        sprintf(endpoint, "http://%s:%s/axis", server, port);
-                break;
-          
-            case 2: 
-                /* Service name is wrong. The message
-                 * Exception : AxisWsddException:Requested service not found
-                 * should be returned to the user.
-                 */
-	        sprintf(endpoint, "http://%s:%s/axis/Math", server, port);
-                break;
-
-            case 3:
-                 /* Service path is empty. The message  
-                  * The corresponding http fail message
-                  * should be returned to the user.
-                  */
-	        sprintf(endpoint, "http://%s:%s/", server, port);
-                break;
-
-            case 4:
-                 /* Exception : AxisTransportException:Unexpected string
-                  * received. Most probably server returned an empty stream
-                  */
-	        sprintf(endpoint, "", server, port);
-	        //sprintf(endpoint, "http://%s:%s", server, port);
-                break;
-                 
-            default:
-                printf("Invalide option for the last parameter\n\n");
-                return 0;
-        }
-	//sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
-	MathOps ws(endpoint);
-
-
 	if (!IsNumber(p1))
 	{
 		printf("Invalid value for first <parameter>\n\n");
@@ -101,6 +51,54 @@ int main(int argc, char* argv[])
 	{
             try
             {
+	        printf("Sending Requests to Server http://%s:%s ........\n\n", server, port);
+                switch(p3)
+                {
+                    case 0:
+                        /* Sends a normal request. the result should be the division of
+                         *  two numbers the user has provided
+                         */
+	                 sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
+                         break;
+            
+                    case 1:
+                        /* Service name is missing. The message
+                         *  Exception : AxisSoapException:Soap action is empty
+                         *  should be returned to the user.
+                         */
+	                 sprintf(endpoint, "http://%s:%s/axis", server, port);
+                         break;
+          
+                   case 2: 
+                       /* Service name is wrong. The message
+                        * Exception : AxisWsddException:Requested service not found
+                        * should be returned to the user.
+                        */
+	                sprintf(endpoint, "http://%s:%s/axis/Math", server, port);
+                        break;
+
+                   case 3:
+                         /* Service path is empty. The message  
+                          * The corresponding http fail message
+                          * should be returned to the user.
+                          */
+	                sprintf(endpoint, "http://%s:%s/", server, port);
+                        break;
+
+                   case 4:
+                        /* Exception : AxisTransportException:Unexpected string
+                         * received. Most probably server returned an empty stream
+                         */
+	                sprintf(endpoint, "", server, port);
+	                //sprintf(endpoint, "http://%s:%s", server, port);
+                        break;
+                 
+                   default:
+                        printf("Invalide option for the last parameter\n\n");
+                        return 0;
+                }
+	        //sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
+	        MathOps ws(endpoint);
 		iResult = ws.div(i1, i2);		
                 printf("Result is:%d\n", iResult);
             }
