@@ -489,7 +489,14 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 	 */
 	protected void writeDestructors() throws WrapperFault {
 		try{
-		writer.write("\n"+classname+"::~"+classname+"()\n{\n");
+			if (type.isFault())
+			{
+				writer.write("\n"+classname+"::~"+classname+"() throw ()\n{\n");
+			}
+			else
+			{
+				writer.write("\n"+classname+"::~"+classname+"()\n{\n");
+			}
 		writer.write("\t/*delete any pointer and array members here*/\n");
 		for(int i = 0; i< attribs.length;i++){
 			if(attribs[i].isArray()){
