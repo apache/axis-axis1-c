@@ -143,7 +143,7 @@ typedef struct {
     long (AXISCALL* getAttributeAsDuration)(void* pObj, const AxisChar* pName,
         const AxisChar* pNamespace);
     int (AXISCALL* getStatus)(void* pObj);
-	AnyType* (AXISCALL* getAnyObject)(void* pObj);
+  AnyType* (AXISCALL* getAnyObject)(void* pObj);
 } IWrapperSoapDeSerializerFunctions;
 
 typedef struct { 

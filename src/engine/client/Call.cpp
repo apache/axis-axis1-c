@@ -592,8 +592,8 @@ AnyType* Call::getAnyObject()
 	return m_pIWSDZ->getAnyObject();
 }
 
-int Call::serializeAnyObject(AnyType* pAnyObject)
+int Call::addAnyObject(AnyType* pAnyObject)
 {
-	return m_pIWSSZ->serializeAnyObject(pAnyObject);
+	return m_pIWSSZ->addOutputAnyObject(pAnyObject);
 }
 

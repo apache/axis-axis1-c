@@ -35,7 +35,7 @@ typedef enum XSDTYPETag
                 XSD_MONTH, XSD_HEXBINARY, \
                 XSD_BASE64BINARY, XSD_ANYURI, XSD_QNAME, XSD_NOTATION, \
                 XSD_INTEGER, \
-                XSD_ARRAY, USER_TYPE, ACCESSOR 
+                XSD_ARRAY, USER_TYPE, ACCESSOR, XSD_ANY
 } XSDTYPE;
 
 #ifdef __cplusplus

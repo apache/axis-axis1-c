@@ -43,8 +43,7 @@
 #include <axis/server/AxisWrapperAPI.h>
 
 
-Stub::Stub (const char *pcEndPointUri)
-:m_lTimeoutSeconds(0)
+Stub::Stub (const char *pcEndPointUri) : m_lTimeoutSeconds(0)
 {
     m_pCall = new Call ();
     m_pCall->setProtocol (APTHTTP);
@@ -66,30 +65,12 @@ Stub::~Stub ()
     }
 }
 
-/*int
-Stub::initilizeCall ()
-{
-    if (AXIS_SUCCESS !=
-	m_pCall->initialize (CPP_RPC_PROVIDER, NORMAL_CHANNEL))
-	return AXIS_FAIL;
-    m_pCall->setTransportProperty (SOAPACTION_HEADER, "base#echoString");
-    m_pCall->setSOAPVersion (SOAP_VER_1_1);
-    m_pCall->setOperation ("echoString", "http://soapinterop.org/");
-    setTransportProperties ();
-    setSOAPHeaders ();
-    return AXIS_SUCCESS;
-
-}*/
-
-void
-Stub::setEndPoint (char *pcEndPoint)
+void Stub::setEndPoint (char *pcEndPoint)
 {
     m_pCall->setEndpointURI (pcEndPoint);
 }
 
-
-void
-Stub::setTransportProperty (const char *pcKey, const char *pcValue)
+void Stub::setTransportProperty (const char *pcKey, const char *pcValue)
 {
     if (pcKey && pcValue)
     {
@@ -98,8 +79,7 @@ Stub::setTransportProperty (const char *pcKey, const char *pcValue)
     }
 }
 
-void
-Stub::setTransportProperties ()
+void Stub::setTransportProperties ()
 {
     SOAPTransport *pTrasport = NULL;
     if (m_pCall)
@@ -144,8 +124,7 @@ char* Stub::getCurrentTrasportPropertyValue()
 }
 
 
-IHeaderBlock *
-Stub::createSOAPHeaderBlock (AxisChar * pachLocalName,
+IHeaderBlock * Stub::createSOAPHeaderBlock (AxisChar * pachLocalName,
 			 AxisChar * pachPrefix, AxisChar * pachUri)
 {
     if (pachLocalName && pachPrefix && pachUri)
@@ -159,8 +138,7 @@ Stub::createSOAPHeaderBlock (AxisChar * pachLocalName,
 	return NULL;
 }
 
-void
-Stub::setSOAPHeaders ()
+void Stub::setSOAPHeaders ()
 {
     SoapSerializer *pSerializer = NULL;
     if (m_pCall)
@@ -174,8 +152,7 @@ Stub::setSOAPHeaders ()
     }
 }
 
-void
-Stub::applyUserPreferences ()
+void Stub::applyUserPreferences ()
 {
     setSOAPHeaders ();
     setTransportProperties ();
@@ -233,3 +210,10 @@ void Stub::setTransportTimeout()
     }    
 }
 
+int Stub::getStatus()
+{
+    if ( m_pCall==NULL )
+        return AXIS_SUCCESS;
+    else
+        return m_pCall->getStatus();
+}
