@@ -18,8 +18,8 @@
  */
 
 
-#if !defined(AFX_BASICTYPESERIALIZERTEST_H__BF91C8F9_12BA_4495_B176_F6B56CE5957A__OF_AXIS_INCLUDED_)
-#define AFX_BASICTYPESERIALIZERTEST_H__BF91C8F9_12BA_4495_B176_F6B56CE5957A__OF_AXIS_INCLUDED_
+#if !defined(AXIS_BASICTYPESERIALIZERTEST_H__OF_AXIS_INCLUDED_)
+#define AXIS_BASICTYPESERIALIZERTEST_H__OF_AXIS_INCLUDED_
 
 #include "cppunit\TestCase.h"
 #include "cppunit\TestSuite.h"
@@ -34,23 +34,23 @@ using namespace std;
 class BasicTypeSerializerTest :public TestCase
 {
 private:
-	BasicTypeSerializer* pBasicTypeSerializer;
+    BasicTypeSerializer* pBasicTypeSerializer;
 public:
-	void testSerializeAsElement();
-	void testSerializeAsAttribute();
-	void testGetEntityReference();
-	void testEncodeToHexBinary();
-	
-	void testEncodeToBase64Binary();
-	void  testBasicTypeStr();
-		
-	void tearDown();
-	void setUp();
-	
-	BasicTypeSerializerTest();
-	virtual ~BasicTypeSerializerTest();
-	static Test* suite();
+    void testSerializeAsElement();
+    void testSerializeAsAttribute();
+    void testGetEntityReference();
+    void testEncodeToHexBinary();
+    
+    void testEncodeToBase64Binary();
+    void  testBasicTypeStr();
+        
+    void tearDown();
+    void setUp();
+    
+    BasicTypeSerializerTest();
+    virtual ~BasicTypeSerializerTest();
+    static Test* suite();
 
 };
 
-#endif // !defined(AFX_BASICTYPESERIALIZERTEST_H__BF91C8F9_12BA_4495_B176_F6B56CE5957A__OF_AXIS_INCLUDED_)
+#endif

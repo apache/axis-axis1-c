@@ -34,26 +34,26 @@ AxisConfigTestCase::~AxisConfigTestCase()
 
 void AxisConfigTestCase::setUp()
 {
-	pAxisConfig = new AxisConfig();
+    pAxisConfig = new AxisConfig();
 
 }
 
 void AxisConfigTestCase::tearDown()
 {
-	delete pAxisConfig;
-	pAxisConfig = NULL;
+    delete pAxisConfig;
+    pAxisConfig = NULL;
 }
 
 
 void AxisConfigTestCase::testGetAxisLogPath()
 {
-	char* Expectedpath="Axis\\logs\\";
-	char* LogPath;
+    char* Expectedpath="Axis\\logs\\";
+    char* LogPath;
 
-	LogPath = pAxisConfig->GetAxisLogPath();
-	Expectedpath = LogPath;
+    LogPath = pAxisConfig->GetAxisLogPath();
+    Expectedpath = LogPath;
 
-	CPPUNIT_ASSERT_EQUAL(Expectedpath, LogPath);
+    CPPUNIT_ASSERT_EQUAL(Expectedpath, LogPath);
 
 }
 
@@ -61,29 +61,29 @@ void AxisConfigTestCase::testGetAxisLogPath()
 
 Test* AxisConfigTestCase::suite()
 {
-	TestSuite *testSuite = new TestSuite("AxisConfigTestCase");
+    TestSuite *testSuite = new TestSuite("AxisConfigTestCase");
 
-	testSuite->addTest (new TestCaller <AxisConfigTestCase>
+    testSuite->addTest (new TestCaller <AxisConfigTestCase>
       ("testGetAxisLogPath", &AxisConfigTestCase::testGetAxisLogPath));
 
-	testSuite->addTest (new TestCaller <AxisConfigTestCase>
+    testSuite->addTest (new TestCaller <AxisConfigTestCase>
       ("testGetWsddFilePath", &AxisConfigTestCase::testGetWsddFilePath));
 
 
-	return testSuite;
+    return testSuite;
 }
 
 void AxisConfigTestCase::testGetWsddFilePath()
 {
-	char* ExpectedWsddLogPath ="Axis\\conf\\server.wsdd";
-	char* WsddLogPath;
-	WsddLogPath = pAxisConfig->GetWsddFilePath();
+    char* ExpectedWsddLogPath ="Axis\\conf\\server.wsdd";
+    char* WsddLogPath;
+    WsddLogPath = pAxisConfig->GetWsddFilePath();
 
 
-	string sResult = WsddLogPath;
-	string ExpectedResult = ExpectedWsddLogPath;
+    string sResult = WsddLogPath;
+    string ExpectedResult = ExpectedWsddLogPath;
 
-	CPPUNIT_ASSERT_EQUAL(ExpectedResult,sResult);
+    CPPUNIT_ASSERT_EQUAL(ExpectedResult,sResult);
 
 }
 

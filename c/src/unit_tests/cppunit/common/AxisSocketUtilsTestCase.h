@@ -18,8 +18,8 @@
  *
  */
 
-#if !defined(AFX_AXISSOCKETUTILSTESTCASE1_H__2C8D2D1A_CCB5_433F_A2F3_2E3ABE5A1ECB__OF_AXIS_INCLUDED_)
-#define AFX_AXISSOCKETUTILSTESTCASE1_H__2C8D2D1A_CCB5_433F_A2F3_2E3ABE5A1ECB__OF_AXIS_INCLUDED_
+#if !defined(AXIS_AXISSOCKETUTILSTESTCASE1_H__OF_AXIS_INCLUDED_)
+#define AXIS_AXISSOCKETUTILSTESTCASE1_H__OF_AXIS_INCLUDED_
 
 #include "cppunit\TestCase.h"
 #include "cppunit\TestSuite.h"
@@ -36,18 +36,18 @@ class AxisSocketUtilsTestCase : public TestCase
 {
 private:
 
-	AxisSocketUtils* pAxisSocketUtils;
+    AxisSocketUtils* pAxisSocketUtils;
 
 public:
-	
-	static Test* suite();
-	void testprintSocketErrorDescription();
-	void TearDown();
-	void setUp();
-	AxisSocketUtilsTestCase();
-	AxisSocketUtilsTestCase(string sName) : TestCase(sName) {}
-	virtual ~AxisSocketUtilsTestCase();
+    
+    static Test* suite();
+    void testprintSocketErrorDescription();
+    void TearDown();
+    void setUp();
+    AxisSocketUtilsTestCase();
+    AxisSocketUtilsTestCase(string sName) : TestCase(sName) {}
+    virtual ~AxisSocketUtilsTestCase();
 
 };
 
-#endif // !defined(AFX_AXISSOCKETUTILSTESTCASE1_H__2C8D2D1A_CCB5_433F_A2F3_2E3ABE5A1ECB__OF_AXIS_INCLUDED_)
+#endif

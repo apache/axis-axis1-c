@@ -18,18 +18,12 @@
  * @author Thushantha De Alwis (thushantha@beyondm.net  ravi@opensource.lk)
  *
  */
-//////////////////////////////////////////////////////////////////////
 
+/* ArrayBeanTestCase.cpp: implementation of the ArrayBeanTestCase class. */
 
-// ArrayBeanTestCase.cpp: implementation of the ArrayBeanTestCase class.
-
-//////////////////////////////////////////////////////////////////////
 
 #include "axis/test_cases/cppunit/common/ArrayBeanTestCase.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
 ArrayBeanTestCase::ArrayBeanTestCase()
 {
@@ -43,27 +37,27 @@ ArrayBeanTestCase::~ArrayBeanTestCase()
 
 void ArrayBeanTestCase::setUp()
 {
-	pArrayBean = new ArrayBean();
+    pArrayBean = new ArrayBean();
 
 }
 
 void ArrayBeanTestCase::tearDown()
 {
-	delete pArrayBean;
-	pArrayBean = NULL;
+    delete pArrayBean;
+    pArrayBean = NULL;
 }
 
 
 void ArrayBeanTestCase::testGetArraySize()
 {
-	pArrayBean->m_nSize = 10;
+    pArrayBean->m_nSize = 10;
 
-	int ExpectedSize = 10;
-	int iResult;
+    int ExpectedSize = 10;
+    int iResult;
 
-	iResult = pArrayBean->GetArraySize();
+    iResult = pArrayBean->GetArraySize();
 
-	CPPUNIT_ASSERT_EQUAL(ExpectedSize, iResult);
+    CPPUNIT_ASSERT_EQUAL(ExpectedSize, iResult);
 
 
 
@@ -72,11 +66,11 @@ void ArrayBeanTestCase::testGetArraySize()
 
 Test* ArrayBeanTestCase::suite()
 {
-	TestSuite* testSuite = new TestSuite("ArrayBeanTestCase");
+    TestSuite* testSuite = new TestSuite("ArrayBeanTestCase");
 
-	testSuite->addTest (new TestCaller <ArrayBeanTestCase>
+    testSuite->addTest (new TestCaller <ArrayBeanTestCase>
       ("testGetArraySize", &ArrayBeanTestCase::testGetArraySize));
 
-	return testSuite;
+    return testSuite;
 
 }

@@ -18,8 +18,8 @@
  *
  */
 
-#if !defined(AFX_AXISCONFIGTESTCASE_H__599874FA_EF16_454E_B45D_3C74F0280D5C__OF_AXIS_INCLUDED_)
-#define AFX_AXISCONFIGTESTCASE_H__599874FA_EF16_454E_B45D_3C74F0280D5C__OF_AXIS_INCLUDED_
+#if !defined(AXIS_AXISCONFIGTESTCASE_H__OF_AXIS_INCLUDED_)
+#define AXIS_AXISCONFIGTESTCASE_H__OF_AXIS_INCLUDED_
 
 #include "cppunit\TestCase.h"
 #include "cppunit\TestSuite.h"
@@ -36,20 +36,20 @@ using namespace std;
 class AxisConfigTestCase  : public TestCase
 {
 private:
-	AxisConfig* pAxisConfig;
+    AxisConfig* pAxisConfig;
 public:
-	void testGetWsddFilePath();
-	void testGetAxisLogPath();
-	void tearDown();
-	void setUp();
-	
-	AxisConfigTestCase();
+    void testGetWsddFilePath();
+    void testGetAxisLogPath();
+    void tearDown();
+    void setUp();
+    
+    AxisConfigTestCase();
 
-	AxisConfigTestCase(string sName) : TestCase(sName) {}
-	
-	virtual ~AxisConfigTestCase();
-	static Test* suite();
+    AxisConfigTestCase(string sName) : TestCase(sName) {}
+    
+    virtual ~AxisConfigTestCase();
+    static Test* suite();
 };
 
 
-#endif // !defined(AFX_AXISCONFIGTESTCASE_H__599874FA_EF16_454E_B45D_3C74F0280D5C__OF_AXIS_INCLUDED_)
+#endif

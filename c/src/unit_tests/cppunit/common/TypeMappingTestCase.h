@@ -18,8 +18,8 @@
  *
  */
 
-#if !defined(AFX_TYPEMAPPINGTESTCASE_H__4E098375_97E6_46BE_BF71_31FB90DAC241__OF_AXIS_INCLUDED_)
-#define AFX_TYPEMAPPINGTESTCASE_H__4E098375_97E6_46BE_BF71_31FB90DAC241__OF_AXIS_INCLUDED_
+#if !defined(AXIS_TYPEMAPPINGTESTCASE_H__OF_AXIS_INCLUDED_)
+#define AXIS_TYPEMAPPINGTESTCASE_H__OF_AXIS_INCLUDED_
 
 #include "cppunit\TestCase.h"
 #include "cppunit\TestSuite.h"
@@ -33,15 +33,15 @@ using namespace std;
 class TypeMappingTestCase: public TestCase
 {
 private:
-	TypeMapping* pTypeMapping;
+    TypeMapping* pTypeMapping;
 public:
-	void testMap();
-	static Test* suite();
-	void tearDown();
-	void setUp();
-	TypeMappingTestCase();
-	virtual ~TypeMappingTestCase();
+    void testMap();
+    static Test* suite();
+    void tearDown();
+    void setUp();
+    TypeMappingTestCase();
+    virtual ~TypeMappingTestCase();
 
 };
 
-#endif // !defined(AFX_TYPEMAPPINGTESTCASE_H__4E098375_97E6_46BE_BF71_31FB90DAC241__OF_AXIS_INCLUDED_)
+#endif

@@ -17,14 +17,13 @@
  * @author Thushantha De Alwis (thushantha@beyondm.net  ravi@opensource.lk)
  *
  */
-//////////////////////////////////////////////////////////////////////
 
-// ArrayBeanTestCase.h: interface for the ArrayBeanTestCase class.
-//
-//////////////////////////////////////////////////////////////////////
+/* ArrayBeanTestCase.h: interface for the ArrayBeanTestCase class. */
 
-#if !defined(AFX_ARRAYBEANTESTCASE_H__44645C5A_D33B_4194_BB25_4261CA669AF3__OF_AXIS_INCLUDED_)
-#define AFX_ARRAYBEANTESTCASE_H__44645C5A_D33B_4194_BB25_4261CA669AF3__OF_AXIS_INCLUDED_
+
+
+#if !defined(AXIS_ARRAYBEANTESTCASE_H_OF_AXIS_INCLUDED_)
+#define AXIS_ARRAYBEANTESTCASE_H_OF_AXIS_INCLUDED_
 
 #include "cppunit\TestCase.h"
 #include "cppunit\TestSuite.h"
@@ -39,21 +38,21 @@ using namespace std;
 class ArrayBeanTestCase : public TestCase
 {
 private:
-	ArrayBean* pArrayBean;
+    ArrayBean* pArrayBean;
 public:
-	void testAxisConfig();
-	void testSetItemName(const AxisChar* name);
-	
-	
-	void tearDown();
-	void setUp();
-	void testGetArraySize();
-	
-	static Test* suite();
-	ArrayBeanTestCase();
-	ArrayBeanTestCase(string sName) : TestCase(sName) {}
-	virtual ~ArrayBeanTestCase();
+    void testAxisConfig();
+    void testSetItemName(const AxisChar* name);
+    
+    
+    void tearDown();
+    void setUp();
+    void testGetArraySize();
+    
+    static Test* suite();
+    ArrayBeanTestCase();
+    ArrayBeanTestCase(string sName) : TestCase(sName) {}
+    virtual ~ArrayBeanTestCase();
 
 };
 
-#endif // !defined(AFX_ARRAYBEANTESTCASE_H__44645C5A_D33B_4194_BB25_4261CA669AF3__OF_AXIS_INCLUDED_)
+#endif
