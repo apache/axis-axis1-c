@@ -66,10 +66,6 @@
 #if !defined(AFX_ISOAPDESERIALIZER_H__BE214866_1A80_44C4_9AAD_0475B0C5EA1C__INCLUDED_)
 #define AFX_ISOAPDESERIALIZER_H__BE214866_1A80_44C4_9AAD_0475B0C5EA1C__INCLUDED_
 
-#include <string>
-using namespace std;
-class IParam;
-
 class ISoapDeSerializer
 {
 public:

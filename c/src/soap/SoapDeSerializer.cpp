@@ -207,7 +207,7 @@ int SoapDeSerializer::GetVersion()
 	return m_pHandler->m_nSoapVersion;	
 }
 
-Axis_Array SoapDeSerializer::GetArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)
+Axis_Array SoapDeSerializer::GetCmplxArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)
 {
 	Axis_Array Array = {NULL, 0};
 	Param *param = (Param*)GetParam();
@@ -282,7 +282,7 @@ int SoapDeSerializer::GetArray(Axis_Array* pArray, XSDTYPE nType)
 	return SUCCESS;
 }
 
-Axis_Array SoapDeSerializer::GetArray(XSDTYPE nType)
+Axis_Array SoapDeSerializer::GetBasicArray(XSDTYPE nType)
 {
 	Axis_Array Array = {NULL, 0};
 	Param *param = (Param*)GetParam();
@@ -322,17 +322,17 @@ void* SoapDeSerializer::GetObject(void* pDZFunct, void* pCreFunct, void* pDelFun
 //	if (param->GetTypeName() == pchTypeName) return NULL; //UNEXPECTED_PARAM_TYPE
 //	if (param->GetURI() == pchURI) return NULL; //UNEXPECTED_PARAM_TYPE
 
-	void* pObject = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)();
+	void* pObject = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)(false,0);
 	if (!pObject) return NULL;
 
 	if (SUCCESS != param->SetUserType(pObject, (AXIS_DESERIALIZE_FUNCT)pDZFunct, (AXIS_OBJECT_DELETE_FUNCT)pDelFunct))
 	{
-		((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(pObject);
+		((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(pObject, false, 0);
 		return NULL;
 	}
 	if (SUCCESS != Deserialize(param,0))
 	{
-		((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(pObject);
+		((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(pObject, false, 0);
 		return NULL;
 	}
 	return pObject;

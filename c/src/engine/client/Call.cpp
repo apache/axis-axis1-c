@@ -179,12 +179,12 @@ void Call::AddParameter(Axis_Array* pArray, XSDTYPE nType, const char* pchName)
 
 void Call::AddParameter(Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName, const char* pchURI, const char* pchName)
 {
-	m_pIWSSZ->AddOutputParam(pchName, pArray, pSZFunct, pDelFunct, pSizeFunct, pchTypeName, pchURI);
+	m_pIWSSZ->AddOutputCmplxArrayParam(pchName, pArray, pSZFunct, pDelFunct, pSizeFunct, pchTypeName, pchURI);
 }
 
 void Call::AddParameter(void *pObject, void *pSZFunct, void *pDelFunct, const char* pchName)
 {
-	m_pIWSSZ->AddOutputParam(pchName, pObject, pSZFunct, pDelFunct);
+	m_pIWSSZ->AddOutputCmplxParam(pchName, pObject, pSZFunct, pDelFunct);
 }
 
 /**
@@ -269,7 +269,7 @@ int Call::Invoke()
 			*/
 			if (!m_ReturnCplxObj.pCreFunct || !m_ReturnCplxObj.pDZFunct)
 				return FAIL; 
-			m_ReturnCplxObj.pObject = m_ReturnCplxObj.pCreFunct();
+			m_ReturnCplxObj.pObject = m_ReturnCplxObj.pCreFunct(false, 0);
 			if (!m_ReturnCplxObj.pObject)
 				return FAIL;
 			m_ReturnCplxObj.pDZFunct(m_ReturnCplxObj.pObject, m_pMsgData->m_pDZ);
@@ -324,7 +324,7 @@ int Call::Invoke()
 					*/
 					if (!pOutParam->m_OutCplxObj.pCreFunct || !pOutParam->m_OutCplxObj.pDZFunct)
 						return FAIL; 
-					pOutParam->m_OutCplxObj.pObject = pOutParam->m_OutCplxObj.pCreFunct();
+					pOutParam->m_OutCplxObj.pObject = pOutParam->m_OutCplxObj.pCreFunct(false, 0);
 					if (!pOutParam->m_OutCplxObj.pObject)
 						return FAIL;
 					pOutParam->m_OutCplxObj.pDZFunct(pOutParam->m_OutCplxObj.pObject, m_pMsgData->m_pDZ);

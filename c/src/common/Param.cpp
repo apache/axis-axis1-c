@@ -616,7 +616,7 @@ XSDTYPE Param::GetType() const
 	return m_Type;
 }
 
-int Param::serialize(IWrapperSoapSerializer& pSZ)
+int Param::serialize(SoapSerializer& pSZ)
 {
 	AxisString ATprefix;
 	switch (m_Type){
@@ -725,7 +725,7 @@ int Param::serialize(IWrapperSoapSerializer& pSZ)
 		pSZ << ">";
 		break;
 	case USER_TYPE:
-		m_Value.pCplxObj->pSZFunct(m_Value.pCplxObj->pObject, pSZ);
+		m_Value.pCplxObj->pSZFunct(m_Value.pCplxObj->pObject, &pSZ, false);
 		break;
 	default:;
 	}
@@ -974,7 +974,7 @@ ComplexObjectHandler::~ComplexObjectHandler()
 	/* At client side we do not delete either output or return objects */
 	if (AxisEngine::m_bServer) 
 	{
-		if (pObject && pDelFunct) pDelFunct(pObject);
+		if (pObject && pDelFunct) pDelFunct(pObject, false, 0);
 	}
 }
 

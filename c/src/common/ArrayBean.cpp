@@ -192,7 +192,7 @@ int ArrayBean::GetArrayBlockSize(list<int>::iterator it)
 	}
 }
 
-int ArrayBean::DeSerialize(IWrapperSoapDeSerializer *pDZ)
+int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 {
 	Param* p;
 	if ((XSD_UNKNOWN == m_type) ||(0==m_size.size())||(!m_value.sta)) return FAIL;
@@ -343,7 +343,7 @@ int ArrayBean::DeSerialize(IWrapperSoapDeSerializer *pDZ)
 	return SUCCESS;
 }
 
-int ArrayBean::Serialize(IWrapperSoapSerializer& pSZ)
+int ArrayBean::Serialize(SoapSerializer& pSZ)
 {	
 	switch (m_type)
 	{
@@ -473,7 +473,7 @@ int ArrayBean::Serialize(IWrapperSoapSerializer& pSZ)
 			for (int x=0; x<blocksize; x++)
 			{
 				pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
-				m_value.cta->pSZFunct(pItem, pSZ, true);
+				m_value.cta->pSZFunct(pItem, &pSZ, true);
 			}
 		}
 		break;
