@@ -30,35 +30,116 @@
 #include <stdio.h>
 #include <iostream>
 
-Axis2Transport::Axis2Transport()
-        : m_bURIChanged( false ),
-        m_strHTTPProtocol("HTTP/1.1"), m_strHTTPMethod("POST"),
-        m_bChunked(false), m_bReadPastHTTPHeaders(false) ,m_strProxyHost( "" ), m_uiProxyPort( 0 ), m_bUseProxy( false )
+/*
+ * Axis2Transport constuctor
+ */
+Axis2Transport::Axis2Transport():m_bURIChanged( false),
+								 m_strHTTPProtocol( "HTTP/1.1"),
+								 m_strHTTPMethod( "POST"),
+								 m_bChunked( false),
+								 m_bReadPastHTTPHeaders( false),
+								 m_strProxyHost( ""),
+								 m_uiProxyPort( 0),
+								 m_bUseProxy( false)
 {
     m_pcEndpointUri = NULL;
     m_pReleaseBufferCallback = 0;
     m_strBytesToSend = "";
+	m_strHeaderBytesToSend = "";
     m_iBytesLeft = 0;
     m_iContentLength = 0;
     m_pcReceived = 0;
+	m_pChannel = new Channel();
+	m_bChannelSecure = false;
 }
 
+/*
+ * Axis2Transport destuctor
+ */
 Axis2Transport::~Axis2Transport()
 {
-    if ( m_pcEndpointUri )
-        free( m_pcEndpointUri );
+    if( m_pcEndpointUri)
+	{
+        free( m_pcEndpointUri);
+	}
+
+	delete m_pChannel;
 }
 
-void Axis2Transport::setEndpointUri( const char* pcEndpointUri )
+/*
+ * Axis2Transport::setEndpointUri( EndpointURI) sets the URI for the message.
+ * Everytime the endpoint changes then currently connected channel is closed
+ * and a new channel connection is opened.
+ *
+ * @param	EndpointURI - char * to a null terminated string that holds the
+ *			new URI. 
+ */
+void Axis2Transport::setEndpointUri( const char* pcEndpointUri) throw (AxisTransportException)
 {
-    if ( m_Channel.getURL() )
-        if ( strcmp( m_Channel.getURL(), pcEndpointUri ) == 0 )
-            return ; // no change to the current URI; hence do nothing
+	bool	bUpdateURL = false;
 
-    // we have a new URI
-    m_Channel.setURL( pcEndpointUri );
-    m_bURIChanged = true;
+	// Get the current channel URI
+    if( m_pChannel->getURL())
+	{
+		// Does the new URI equal the existing channel URI?
+        if( strcmp( m_pChannel->getURL(), pcEndpointUri) != 0)
+		{
+			// There is a new URI.
+			bUpdateURL = true;
+		}
+	}
+	else
+	{
+		bUpdateURL = true;
+	}
+
+	// If there is a new URI, then this flag will be set.  Depending on whether
+	// GSKit is available, if the new URI is a secure connection, a secure
+	// channel will be opened.  If GSKit is not available and the URL requires
+	// a secure connection then an exeption will be thrown.
+	if( bUpdateURL)
+	{
+		m_pChannel->setURL( pcEndpointUri);
+
+		m_bURIChanged = true;
+
+		// Check if the new URI requires SSL (denoted by the https prefix).
+		if( (m_pChannel->getURLObject()).getProtocol() == URL::https)
+		{
+			m_bChannelSecure = false;
+
+			// URI requires a secure channel.  Delete the existing channel
+			// (as it may not be secure) and create a new secure channel.
+			delete m_pChannel;
+
+			m_pChannel = (Channel *) new SecureChannel();
+
+			m_pChannel->setURL( pcEndpointUri);
+
+			m_bChannelSecure = true;
+
+			if( !m_bChannelSecure)
+			{
+				throw AxisTransportException( CLIENT_TRANSPORT_HAS_NO_SECURE_TRANSPORT_LAYER);
+			}
+		}
+		else
+		{
+			// URI does not require a secure channel.  Delete the existing
+			// channel (as it may be secure) and create a new unsecure
+			// channel.
+			delete m_pChannel;
+
+			m_pChannel = new Channel();
+			m_pChannel->setURL( pcEndpointUri);
+			m_bChannelSecure = false;
+		}
+	}
 }
+
+/*
+ * Axis2Transport::openConnection().
+ */
 
 int Axis2Transport::openConnection()
 {
@@ -71,27 +152,62 @@ int Axis2Transport::openConnection()
 
 }
 
+/*
+ * Axis2Transport::closeConnection().
+ */
 void Axis2Transport::closeConnection()
 {
-    m_bReadPastHTTPHeaders = false; // get ready for a new message
-    m_strReceived = "";    //clear the message buffer in preperation of the next read
+	// get ready for a new message.
+    m_bReadPastHTTPHeaders = false;
+
+	//clear the message buffer in preperation of the next read.
+    m_strReceived = "";    
+
     m_iContentLength = 0;
 }
 
-
-AXIS_TRANSPORT_STATUS Axis2Transport::flushOutput()
+/*
+ * Axis2Transport::flushOutput() Is called when the message construction is
+ * complete.  The message is ready to be 'flushed out' onto the network.  
+ * Check if the URI has changed.  If it has, then need to open a new Channel
+ * instance before transmitting the message.
+ *
+ * @return AXIS_TRANSPORT_STATUS If the method completes successfully, then
+ * this will be set to TRANSPORT_FINISHED.  Otherwise, an exception will have
+ * been thrown.
+ */
+AXIS_TRANSPORT_STATUS Axis2Transport::flushOutput() throw (AxisTransportException)
 {
-    if ( m_bURIChanged )
-        m_Channel.open();
+    if( m_bURIChanged)
+	{
+        if( !m_pChannel->open())
+		{
+			int				iStringLength = m_pChannel->GetLastError().length() + 1;
+			const char *	pszLastError = new char[iStringLength];
 
-    char buff[ 8 ];
-    sprintf( buff, "%d", m_strBytesToSend.length() );
-    this->setTransportProperty( "Content-Length" , buff );
+			memcpy( (void *) pszLastError, m_pChannel->GetLastError().c_str(), iStringLength);;
 
+			throw AxisTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED, (char *) pszLastError);
+		}
+	}
+
+	// In preperation for sending the message, calculate the size of the message
+	// by using the string length method.
+	// NB: This calculation may not necessarily be correct when dealing with SSL
+	//     messages as the length of the encoded message is not necessarily the
+	//	   same as the length of the uncoded message.
+    char buff[8];
+
+    sprintf( buff, "%d", m_strBytesToSend.length());
+
+    this->setTransportProperty( "Content-Length", buff);
+
+	// The header is now complete.  The message header and message can now be
+	// transmitted.
     try
     {
-        m_Channel << this->getHTTPHeaders();
-        m_Channel << this->m_strBytesToSend.c_str();
+        *m_pChannel << this->getHTTPHeaders();
+        *m_pChannel << this->m_strBytesToSend.c_str();
     }
     catch(AxisTransportException& e)
     {
@@ -106,95 +222,138 @@ AXIS_TRANSPORT_STATUS Axis2Transport::flushOutput()
         throw;
     }
 
+	// Empty the bytes to send string.
     m_strBytesToSend = "";
+    m_strHeaderBytesToSend = "";
+
     return TRANSPORT_FINISHED;
 }
 
+/* Axis2Transport::getHTTPHeaders() Called to retreive the current HTTP header
+ * information block that will preceed the SOAP message.
+ *
+ * @return const char* Pointer to a NULL terminated character string containing
+ * the HTTP header block of information.
+ */
 const char* Axis2Transport::getHTTPHeaders()
 {
-    URL& url = m_Channel.getURLObject();
+    URL&	url = m_pChannel->getURLObject();
 
-    m_strHeaderToSend = m_strHTTPMethod + " ";
-    //m_strHeaderToSend += std::string(url.getURL()) + " ";
-    m_strHeaderToSend += std::string(url.getResource()) + " ";
-    m_strHeaderToSend += m_strHTTPProtocol + "\r\n";
+    m_strHeaderBytesToSend = m_strHTTPMethod + " ";
+    m_strHeaderBytesToSend += std::string( url.getResource()) + " ";
+    m_strHeaderBytesToSend += m_strHTTPProtocol + "\r\n";
+    m_strHeaderBytesToSend += std::string( "Host: ") + url.getHostName();
 
-    m_strHeaderToSend += std::string("Host: ") + url.getHostName();
+    unsigned short	uiPort = url.getPort();
+    char			buff[8];
 
-    unsigned short port = url.getPort ();
-    char buff[8];
-    sprintf (buff, "%u", port);
-    m_strHeaderToSend += ":";
-    m_strHeaderToSend += buff;
-    m_strHeaderToSend += "\r\n";
+    sprintf( buff, "%u", uiPort);
 
-    m_strHeaderToSend += "Content-Type: text/xml; charset=UTF-8\r\n";
+    m_strHeaderBytesToSend += ":";
+    m_strHeaderBytesToSend += buff;
+    m_strHeaderBytesToSend += "\r\n";
+    m_strHeaderBytesToSend += "Content-Type: text/xml; charset=UTF-8\r\n";
 
     // Set other HTTP headers
-    for (unsigned int i = 0; i < m_vHTTPHeaders.size (); i++)
+    for( unsigned int i = 0; i < m_vHTTPHeaders.size(); i++)
     {
-
-        m_strHeaderToSend += m_vHTTPHeaders[i].first;
-        m_strHeaderToSend += ": ";
-        m_strHeaderToSend += m_vHTTPHeaders[i].second;
-        m_strHeaderToSend += "\r\n";
+        m_strHeaderBytesToSend += m_vHTTPHeaders[i].first;
+        m_strHeaderBytesToSend += ": ";
+        m_strHeaderBytesToSend += m_vHTTPHeaders[i].second;
+        m_strHeaderBytesToSend += "\r\n";
     }
 
-    m_strHeaderToSend += "\r\n";
-    return m_strHeaderToSend.c_str();
+    m_strHeaderBytesToSend += "\r\n";
+
+    return m_strHeaderBytesToSend.c_str();
 }
 
+/* Axis2Transport::getHTTPMethod() Is a public method that gets the HTTP method
+ * (i.e. GET or POST) that will be part of the HTTP header block.
+ *
+ * @return const char* Pointer to a NULL terminated character string containing
+ * the HTTP method.
+ */
 const char* Axis2Transport::getHTTPMethod()
 {
     return m_strHTTPMethod.c_str();
 }
 
-void Axis2Transport::setHTTPMethod(const char* cpMethod)
+/* Axis2Transport::setHTTPMethod( Method) Is a public method that sets the HTTP
+ * method (i.e. POST or GET) that will be part of the HTTP header block.
+ *
+ * @param const char* Pointer to a NULL terminated character string containing
+ * the new HTTP method.
+ */
+void Axis2Transport::setHTTPMethod( const char* cpMethod)
 {
-    m_strHTTPMethod = std::string(cpMethod);
+    m_strHTTPMethod = std::string( cpMethod);
 }
 
-AXIS_TRANSPORT_STATUS Axis2Transport::sendBytes( const char* pcSendBuffer,
-        const void* pBufferId )
+/* Axis2Transport::sendBytes( SendBuffer, BufferId) Is a public method that
+ * concatinates the new send buffer to the bytes to send string.  This message
+ * will only be sent when a flush buffer is received.
+ *
+ * @param const char* SendBufer - Pointer to a NULL terminated character string
+ * containing all or some of the transmission message.
+ * @param const void* BufferId - Pointer.  This parameter is ignored.
+ *
+ * @return AXIS_TRANSPORT_STATUS Value to a status value (currently it will
+ * always be TRANSPORT_IN_PROGRESS).
+ */
+AXIS_TRANSPORT_STATUS Axis2Transport::sendBytes( const char* pcSendBuffer, const void* pBufferId)
 {
-    m_strBytesToSend += std::string( pcSendBuffer );
+    m_strBytesToSend += std::string( pcSendBuffer);
 
     return TRANSPORT_IN_PROGRESS;
 }
 
-
-AXIS_TRANSPORT_STATUS Axis2Transport::getBytes( char* pcBuffer, int* pSize )
+/* Axis2Transport::getBytes( ReceiveBuffer, Size) Is a public method that will
+ * receive the synchronous reply to the sent message.
+ *
+ * @param const char* ReceiveBuffer - Pointer to a character string that on
+ * return will containing all or part of the received message.
+ * @param int* Size - Pointer to an integer value that on return will contain
+ * the length of the received message.
+ *
+ * @return AXIS_TRANSPORT_STATUS Value to the status o message reception
+ * (TRANSPORT_FINISHED or TRANSPORT_IN_PROGRESS).
+ */
+AXIS_TRANSPORT_STATUS Axis2Transport::getBytes( char * pcBuffer, int * pSize) throw (AxisException, AxisTransportException)
 {
-    if ( 0 <= m_iBytesLeft )
+    if( 0 <= m_iBytesLeft)
     {
         try
         {
-            m_Channel >> m_strReceived;
-            if (!m_bReadPastHTTPHeaders)
+            *m_pChannel >> m_strReceived;
+
+            if( !m_bReadPastHTTPHeaders)
             {
                 do
                 {
-                    if (m_strReceived.find ("\r\n\r\n") == std::string::npos) {
+                    if( m_strReceived.find( "\r\n\r\n") == std::string::npos)
+					{
                         std::string strTempReceived = "";
-                        m_Channel >> strTempReceived;    // Assume non blocking here
+                        *m_pChannel >> strTempReceived;    // Assume non blocking here
                         m_strReceived += strTempReceived;
                     }
                 }
-                while (m_strReceived.find ("\r\n\r\n") == std::string::npos);
+                while( m_strReceived.find( "\r\n\r\n") == std::string::npos);
+
                 //now we have found the end of headers
                 m_bReadPastHTTPHeaders = true;
 
                 unsigned int pos = 0;
 
                 // Look for content lenght
-                if ((pos = m_strReceived.find ("Content-Length: ")) != std::string::npos)
+                if( (pos = m_strReceived.find ("Content-Length: ")) != std::string::npos)
                 {
-                    m_iContentLength = atoi (m_strReceived.substr (pos + strlen ("Content-Length: "),
-                                             m_strReceived.find("\n", pos) ).c_str ());
+                    m_iContentLength = atoi( m_strReceived.substr( pos + strlen( "Content-Length: "),
+                                             m_strReceived.find( "\n", pos)).c_str ());
                 }
 
                 // Check if the message is chunked
-                if ((pos = m_strReceived.find ("Transfer-Encoding: chunked")) != std::string::npos)
+                if( (pos = m_strReceived.find( "Transfer-Encoding: chunked")) != std::string::npos)
                 {
                     m_bChunked = true;
                 }
@@ -204,23 +363,29 @@ AXIS_TRANSPORT_STATUS Axis2Transport::getBytes( char* pcBuffer, int* pSize )
                 }
 
                 // Extract HTTP headers and process them
-                m_strResponseHTTPHeaders = m_strReceived.substr(0 ,m_strReceived.find ("\r\n\r\n") + 2 );
+                m_strResponseHTTPHeaders = m_strReceived.substr( 0,
+																 m_strReceived.find( "\r\n\r\n") + 2);
                 processResponseHTTPHeaders();
 
                 if (m_iResponseHTTPStatusCode != 200)
-                    throw AxisTransportException(SERVER_TRANSPORT_HTTP_EXCEPTION, 
-                        const_cast <char*>(m_strResponseHTTPStatusMessage.c_str()));
+				{
+                    throw AxisTransportException( SERVER_TRANSPORT_HTTP_EXCEPTION, 
+												  const_cast <char*> (m_strResponseHTTPStatusMessage.c_str()));
+				}
+
                 // Done with HTTP headers, get payload
-                m_strReceived = m_strReceived.substr(m_strReceived.find ("\r\n\r\n") + 4 );
+                m_strReceived = m_strReceived.substr( m_strReceived.find( "\r\n\r\n") + 4);
             }
 
             // Read past headers. Deal with payload
 
             // make sure we have a message with some content
-            if (m_strReceived.length() == 0)
-                m_Channel >> m_strReceived;
+            if( m_strReceived.length() == 0)
+			{
+                *m_pChannel >> m_strReceived;
+			}
 
-            if (m_bChunked && m_iContentLength < 1 ) // Read first chunk
+            if( m_bChunked && m_iContentLength < 1) // Read first chunk
             {
                 /*
                  *Chunked data looks like ->
@@ -244,43 +409,45 @@ AXIS_TRANSPORT_STATUS Axis2Transport::getBytes( char* pcBuffer, int* pSize )
                  */
                 // firstly read in the chunk size line.
                 //There might be chunk extensions in there too but we may not need them
-                unsigned int endOfChunkData = m_strReceived.find ("\r\n");
+                unsigned int endOfChunkData = m_strReceived.find( "\r\n");
 
                 // make sure we have read at least some part of the message
-                if (endOfChunkData == std::string::npos)
+                if( endOfChunkData == std::string::npos)
                 {
                     do
                     {
-                        m_Channel >> m_strReceived;
-                        endOfChunkData = m_strReceived.find ("\r\n");
+                        *m_pChannel >> m_strReceived;
+                        endOfChunkData = m_strReceived.find( "\r\n");
                     }
-                    while (endOfChunkData == std::string::npos);
+                    while( endOfChunkData == std::string::npos);
                 }
 
                 int endOfChunkSize = endOfChunkData;
 
                 // now get the size of the chunk from the data
                 // look to see if there are any extensions - these are put in brackets so look for those
-                if (m_strReceived.substr (0, endOfChunkData).find ("(") != string::npos)
+                if( m_strReceived.substr( 0, endOfChunkData).find ("(") != string::npos)
                 {
                     endOfChunkSize = m_strReceived.find ("(");
                 }
 
                 // convert the hex String into the length of the chunk
-                m_iContentLength = axtoi ((char *) m_strReceived.substr (0, endOfChunkSize).c_str ());
+                m_iContentLength = axtoi( (char *) m_strReceived.substr( 0,
+																		 endOfChunkSize).c_str ());
                 // if the chunk size is zero then we have reached the footer
                 // If we have reached the footer then we can throw it away because we don't need it
-                if (m_iContentLength > 0)
+                if( m_iContentLength > 0)
                 {
                     // now get the chunk without the CRLF
                     // check if we have read past chunk length
-                    if (m_strReceived.length() >= (endOfChunkData + 2 + m_iContentLength))
+                    if( m_strReceived.length() >= (endOfChunkData + 2 + m_iContentLength))
                     {
-                        m_strReceived = m_strReceived.substr (endOfChunkData + 2, m_iContentLength);
+                        m_strReceived = m_strReceived.substr( endOfChunkData + 2,
+															  m_iContentLength);
                     }
                     else // we have read lesser than chunk length
                     {
-                        m_strReceived = m_strReceived.substr (endOfChunkData + 2);
+                        m_strReceived = m_strReceived.substr( endOfChunkData + 2);
                     }
                 }
                 else
@@ -288,7 +455,7 @@ AXIS_TRANSPORT_STATUS Axis2Transport::getBytes( char* pcBuffer, int* pSize )
                     m_strReceived = "";
                 }
             }
-            else if (m_bChunked) // read continued portions of a chunk
+            else if( m_bChunked) // read continued portions of a chunk
             {
                 // Samisa - NOTE: It looks as if there is some logic duplication 
                 // in this block, where we read continued chunks and the block 
@@ -296,52 +463,54 @@ AXIS_TRANSPORT_STATUS Axis2Transport::getBytes( char* pcBuffer, int* pSize )
                 // logical differences here, and that is necessary to enable the 
                 // pull model used by the parser - this logic makes pulling more
                 // efficient (30th Sept 2004)
-                if (m_strReceived.length() >= m_iContentLength) // We have reached end of current chunk
+                if( m_strReceived.length() >= m_iContentLength) // We have reached end of current chunk
                 {
                     // Get remainder of current chunk
-                    std::string strTemp = m_strReceived.substr (0, m_iContentLength);
+                    std::string strTemp = m_strReceived.substr( 0, m_iContentLength);
 
                     // Start looking for the next chunk
-                    unsigned int endOfChunkData = m_strReceived.find ("\r\n"); // Skip end of previous chunk
+                    unsigned int endOfChunkData = m_strReceived.find( "\r\n"); // Skip end of previous chunk
                     m_strReceived = m_strReceived.substr( endOfChunkData + 2 );
 
-                    endOfChunkData = m_strReceived.find ("\r\n"); // Locate start of next chunk
+                    endOfChunkData = m_strReceived.find( "\r\n"); // Locate start of next chunk
 
                     // Make sure we have the starting line of next chunk
-                    while (endOfChunkData == std::string::npos)
+                    while( endOfChunkData == std::string::npos)
                     {
                         std::string strTempRecv = "";
-                        m_Channel >> strTempRecv;
+                        *m_pChannel >> strTempRecv;
                         m_strReceived += strTempRecv;
-                        endOfChunkData = m_strReceived.find ("\r\n");
+                        endOfChunkData = m_strReceived.find( "\r\n");
                     }
 
                     int endOfChunkSize = endOfChunkData;
+
                     // look to see if there are any extensions - these are put in brackets so look for those
-                    if (m_strReceived.substr (0, endOfChunkData).find ("(") != string::npos)
+                    if (m_strReceived.substr( 0, endOfChunkData).find( "(") != string::npos)
                     {
-                        endOfChunkSize = m_strReceived.find ("(");
+                        endOfChunkSize = m_strReceived.find( "(");
                     }
 
                     // convert the hex String into the length of the chunk
-                    int iTempContentLength = axtoi ((char *) m_strReceived.substr (0, endOfChunkSize).c_str ());
+                    int iTempContentLength = axtoi( (char *) m_strReceived.substr (0,
+																				   endOfChunkSize).c_str());
 
                     // if the chunk size is zero then we have reached the footer
                     // If we have reached the footer then we can throw it away because we don't need it
-                    if (iTempContentLength > 0)
+                    if( iTempContentLength > 0)
                     {
                         // Update the content lenght to be remainde of previous chunk and lenght of new chunk
                         m_iContentLength += iTempContentLength;
 
                         // now get the chunk without the CRLF
                         // check if we have read past chunk length
-                        if (m_strReceived.length() >= (endOfChunkData + 2 + iTempContentLength))
+                        if( m_strReceived.length() >= (endOfChunkData + 2 + iTempContentLength))
                         {
-                            m_strReceived = m_strReceived.substr (endOfChunkData + 2, iTempContentLength);
+                            m_strReceived = m_strReceived.substr( endOfChunkData + 2, iTempContentLength);
                         }
                         else
                         {
-                            m_strReceived = m_strReceived.substr (endOfChunkData + 2);
+                            m_strReceived = m_strReceived.substr( endOfChunkData + 2);
                         }
                     }
                     else
@@ -362,120 +531,270 @@ AXIS_TRANSPORT_STATUS Axis2Transport::getBytes( char* pcBuffer, int* pSize )
 
             m_pcReceived = m_strReceived.c_str();
 
-            if ( m_pcReceived )
-                m_iBytesLeft = strlen( m_pcReceived );
+            if( m_pcReceived)
+			{
+                m_iBytesLeft = strlen( m_pcReceived);
+			}
             else
-                throw AxisTransportException( SERVER_TRANSPORT_BUFFER_EMPTY, "Reveved null" );
+			{
+                throw AxisTransportException( SERVER_TRANSPORT_BUFFER_EMPTY, "Reveved null");
+			}
 
             m_iContentLength -= m_iBytesLeft;
         }
-        catch ( AxisTransportException & e )
+        catch( AxisTransportException & e)
         {
             throw;
         }
-        catch ( AxisException & e )
+        catch( AxisException & e)
         {
             throw;
         }
-        catch ( ... )
+        catch( ...)
         {
             throw;
         }
     }
-    if ( m_pcReceived )
+    if( m_pcReceived)
     {
-        int iToCopy = ( *pSize < m_iBytesLeft ) ? *pSize : m_iBytesLeft;
-        strncpy( pcBuffer, m_pcReceived, iToCopy );
+        int iToCopy = ( *pSize < m_iBytesLeft) ? *pSize : m_iBytesLeft;
+
+        strncpy( pcBuffer, m_pcReceived, iToCopy);
+
         m_iBytesLeft -= iToCopy;
         m_pcReceived += iToCopy;
         *pSize = iToCopy;
+
         return TRANSPORT_IN_PROGRESS;
     }
     else
     {
         m_bReadPastHTTPHeaders = false; // get ready for a new message
         m_strReceived = "";    //clear the message buffer in preperation of the next read
+
         return TRANSPORT_FINISHED;
     }
 }
 
-
-void Axis2Transport::setTransportProperty
-( AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value )
+/* Axis2Transport::setTransportProperty( Type, Value) Is an overloaded public
+ * method used to set a HTTP transport or GSKit property.
+ *
+ * @param AXIS_TRANSPORT_INFORMATION_TYPE Type is an enumerated type containing
+ * the type of information to be stored in either the HTTP Header or GSKit
+ * settings.
+ * @param const char* Value is a NULL terminated character string containing
+ * the value associated with the type.
+ */
+void Axis2Transport::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value) throw (AxisTransportException)
 {
     const char * key = NULL;
-    switch ( type )
+
+    switch( type)
     {
-    case SOAPACTION_HEADER:
-        key = "SOAPAction";
-        break;
-    case SERVICE_URI:   // need to set ?
-        break;
-    case OPERATION_NAME:   // need to set ?
-        break;
-    case SOAP_MESSAGE_LENGTH:
-        key = "Content-Length"; // this Axis transport handles only HTTP
-        break;
-    default:
-        ;
+	    case SOAPACTION_HEADER:
+		{
+			key = "SOAPAction";
+			break;
+		}
+
+		case SERVICE_URI:   // need to set ?
+		{
+			break;
+		}
+
+		case OPERATION_NAME:   // need to set ?
+		{
+			break;
+		}
+
+		case SOAP_MESSAGE_LENGTH:
+		{
+			key = "Content-Length"; // this Axis transport handles only HTTP
+			break;
+		}
+
+		case SECURE_PROPERTIES:
+		{
+			if( m_bChannelSecure)
+			{
+				((SecureChannel *)m_pChannel)->setSecureProperties( value);
+			}
+			break;
+		}
+
+		default:
+		{
+			break;
+		}
     }
-    if ( !key )
-        return ;
-    setTransportProperty( key, value );
+
+    if( key)
+	{
+	    setTransportProperty( key, value);
+	}
 }
 
-void Axis2Transport::setTransportProperty( const char* pcKey, const char* pcValue )
+/* Axis2Transport::setTransportProperty( Key, Value) Is an overloaded public
+ * method used to set a HTTP transport or GSKit property.
+ *
+ * @param const char* Key is a NULL terminated character string containing
+ * the type of information to be stored in either the HTTP Header or GSKit
+ * settings.
+ * @param const char* Value is a NULL terminated character string containing
+ * the value associated with the type.
+ */
+void Axis2Transport::setTransportProperty( const char* pcKey, const char* pcValue) throw (AxisTransportException)
 {
     bool b_KeyFound = false;
 
-    if ( strcmp( pcKey, "SOAPAction" ) == 0 || strcmp( pcKey, "Content-Length" ) == 0 )
+    if( strcmp( pcKey, "SOAPAction") == 0 || strcmp( pcKey, "Content-Length") == 0)
     {
-        std::string strKeyToFind = std::string(pcKey);
+        std::string strKeyToFind = std::string( pcKey);
 
-        for ( unsigned int i = 0; i < m_vHTTPHeaders.size(); i++ )
+        for( unsigned int i = 0; i < m_vHTTPHeaders.size(); i++)
         {
-            if ( m_vHTTPHeaders[ i ].first == strKeyToFind )
+            if( m_vHTTPHeaders[i].first == strKeyToFind)
             {
-                m_vHTTPHeaders[ i ].second = ( string ) pcValue;
+                m_vHTTPHeaders[i].second = (string) pcValue;
+
                 b_KeyFound = true;
+
                 break;
             }
         }
     }
 
-    if ( !b_KeyFound )
+    if( !b_KeyFound)
     {
-        m_vHTTPHeaders.push_back ( std::make_pair ((string) pcKey, (string) pcValue ) );
+        m_vHTTPHeaders.push_back ( std::make_pair( (string) pcKey, (string) pcValue));
     }
 }
 
-const char* Axis2Transport::getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE eType )
+/* Axis2Transport::getTransportProperty( Type) Is a public method that will
+ * return the HTTP Header/GSKit value associated with type.
+ *
+ * @param AXIS_TRANSPORT_INFORMATION_TYPE Type is an enumerated type containing
+ * the type of information to be retrieved in either the HTTP Header or GSKit
+ * settings.
+ *
+ * @return const char* Value is a NULL terminated character string containing
+ * the value associated with the type.
+ */
+const char* Axis2Transport::getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE eType) throw (AxisTransportException)
 {
-    //TODO
-    return 0;
+	const char *	pszPropValue = NULL;
+
+	switch( eType)
+	{
+		case SOAPACTION_HEADER:
+		{
+			int iIndex = FindTransportPropertyIndex( "SOAPAction");
+
+			if( iIndex > -1)
+			{
+				pszPropValue = m_vHTTPHeaders[iIndex].second.c_str();
+			}
+
+			break;
+		}
+
+		case SERVICE_URI:
+			break;
+
+		case OPERATION_NAME:
+			break;
+
+		case SOAP_MESSAGE_LENGTH:
+		{
+			int iIndex = FindTransportPropertyIndex( "Content-Length");
+
+			if( iIndex > -1)
+			{
+				pszPropValue = m_vHTTPHeaders[iIndex].second.c_str();
+			}
+			break;
+		}
+
+		case SECURE_PROPERTIES:
+		{
+			if( m_bChannelSecure)
+			{
+				pszPropValue = ((SecureChannel *)m_pChannel)->getSecureProperties();
+			}
+			break;
+		}
+	}
+
+    return pszPropValue;
 }
 
+/* Axis2Transport::FindTransportPropertyIndex( Key) Is a private method that will
+ * return the HTTP Header index associated with Key.
+ *
+ * @param AXIS_TRANSPORT_INFORMATION_TYPE Key is an enumerated type containing
+ * the type of information to be retrieved in either the HTTP Header settings.
+ *
+ * @return int Index is an index to the key within the HTTP Header list.  If
+ * the return value is -1, then the key was not found.
+ */
+int Axis2Transport::FindTransportPropertyIndex( string sKey)
+{
+    bool	bKeyFound = false;
+	int		iIndex = 0;
+
+	do
+	{
+		if( !m_vHTTPHeaders[iIndex].first.compare( sKey))
+		{
+			bKeyFound = true;
+		}
+		else
+		{
+			iIndex++;
+		}
+	} while( (unsigned int) iIndex < m_vHTTPHeaders.size() && !bKeyFound);
+
+	if( !bKeyFound)
+	{
+		iIndex = -1;
+	}
+
+	return iIndex;
+}
+
+/* Axis2Transport::getServiceName() Is a public method to return the HTTP
+ * Header service name.
+ *
+ * @return const char* Value is a NULL terminated character string containing
+ * the value associated with the service name.
+ */
 const char* Axis2Transport::getServiceName()
 {
     //Assume SOAPAction header to contain service name
-    for ( unsigned int i = 0; i < m_vHTTPHeaders.size(); i++ )
-    {
-        if ( m_vHTTPHeaders[ i ].first == "SOAPAction" )
-        {
-            return ((string) m_vHTTPHeaders[ i ].second ).c_str();
-        }
-    }
+	int iIndex = FindTransportPropertyIndex( "SOAPAction");
+
+	if( iIndex > -1)
+	{
+		return m_vHTTPHeaders[iIndex].second.c_str();
+	}
 
     return NULL;
 }
 
+/* Axis2Transport::getProtocol() Is a public method to return the HTTP protocol
+ * type.
+ *
+ * @return AXIS_PROTOCOL_TYPE Type is an enumerated type for valid HTTP
+ * protocols (currently this method will always return APTHTTP).
+ */
 AXIS_PROTOCOL_TYPE Axis2Transport::getProtocol()
 {
     return APTHTTP;
 }
 
-
 /**
+ * Axis2Transport::getSubProtocol() is a public method that is supposed to
+ * return the sub protocol (currently this method always return 0).
  * This method is supposed to return whether it is http GET or POST
  */
 int Axis2Transport::getSubProtocol()
@@ -486,86 +805,108 @@ int Axis2Transport::getSubProtocol()
     //return 0;
 }
 
-void
-Axis2Transport::setProxy( const char* pcProxyHost, unsigned int uiProxyPort )
+/* Axis2Transport::setProxy( Host, Port) Is a public method for setting or
+ * updating the proxy for the connection.
+ *
+ * @param const char* Host is a NULL terminated character string containing the new
+ * proxy host.
+ * @param unsigned int Port is the new proxy port number.
+ */
+void Axis2Transport::setProxy( const char* pcProxyHost, unsigned int uiProxyPort)
 {
     m_strProxyHost = pcProxyHost;
     m_uiProxyPort = uiProxyPort;
     m_bUseProxy = true;
 }
 
-void Axis2Transport::setTimeout( const long lSeconds )
+/* Axis2Transport::setTimeout( Timeout) Is a public method for setting the
+ * current maximum timeout period between that can elapse between receiving
+ * message parts.
+ *
+ * @param const long Timeout is a long value in seconds.
+ */
+void Axis2Transport::setTimeout( const long lSeconds)
 {
-    m_Channel.setTimeout( lSeconds );
+    m_pChannel->setTimeout( lSeconds);
 }
 
+/* Axis2Transport::getHTTPProtocol() Is a public method for retrieving the
+ * current HTTP protocol settings.
+ *
+ * @return const char* HTTPProtocol is a NULL terminated character string
+ * containing the HTTP protocol.
+ */
 const char* Axis2Transport::getHTTPProtocol()
 {
     return m_strHTTPProtocol.c_str();
 }
 
-void Axis2Transport::setHTTPProtocol( int iVersion )
+/* Axis2Transport::setHTTPProtocol( Version) Is a public method for setting the
+ * current HTTP protocol.
+ *
+ * @param int Version is an integer value used to select which HTTP protocol
+ * should be used. 0=HTTP v1.0 and 1(or any other value than 0)=HTTP v1.1
+ */
+void Axis2Transport::setHTTPProtocol( int iVersion)
 {
-    switch(iVersion)
+    switch( iVersion)
     {
     case 0:
         m_strHTTPProtocol = "HTTP/1.0";
         break;
+
     case 1:
     default:
         m_strHTTPProtocol = "HTTP/1.1";
+		break;
     }
 }
 
-
 extern "C"
 {
-    STORAGE_CLASS_INFO
-    int CreateInstance( SOAPTransport **inst )
+/* CreateInstance() Is a C interface.
+ */
+    STORAGE_CLASS_INFO int CreateInstance( SOAPTransport **inst)
     {
         *inst = new Axis2Transport();
-        if ( *inst )
+        if( *inst)
         {
             return AXIS_SUCCESS;
         }
         return AXIS_FAIL;
     }
-    STORAGE_CLASS_INFO
-    int DestroyInstance( SOAPTransport * inst )
+
+/* DestroyInstance() Is a C interface.
+ */
+    STORAGE_CLASS_INFO int DestroyInstance( SOAPTransport * inst)
     {
-        if ( inst )
+        if( inst)
         {
             delete inst;
+
             return AXIS_SUCCESS;
         }
         return AXIS_FAIL;
     }
-}
 
-extern "C"
-{
-    STORAGE_CLASS_INFO
-    void initializeLibrary( void )
+/*  initializeLibrary() Is a C interface.
+ */
+    STORAGE_CLASS_INFO void initializeLibrary( void)
     {
         // Do init actions
     }
-}
 
-extern "C"
-{
-    STORAGE_CLASS_INFO
-    void uninitializeLibrary( void )
+/*  uninitializeLibrary() Is a C interface. 
+ */
+    STORAGE_CLASS_INFO void uninitializeLibrary( void)
     {
         // Do uninit actions
     }
 }
 
-
-/*
- * This converts an ascii hex string to int converter.
+/* axtoi( Hex) Is a private method to convert an ascii hex string to an integer.
  */
-int
-axtoi (char *hexStg)
+int axtoi( char *hexStg)
 {
     int
     n = 0;			// position in string
@@ -606,56 +947,82 @@ axtoi (char *hexStg)
     return (intValue);
 }
 
+/* Axis2Transport::processResponseHTTPHeaders() Is a public method used to
+ * parse the HTTP header of the response message.
+ */
 void Axis2Transport::processResponseHTTPHeaders()
 {
     unsigned int iPosition = std::string::npos;
     unsigned int iStartPosition = iPosition;
-    if ( (iPosition = m_strResponseHTTPHeaders.find("HTTP") ) != std::string::npos)
-    {
-        m_strResponseHTTPProtocol = m_strResponseHTTPHeaders.substr( iPosition, strlen ("HTTP/1.x") );
-        iPosition += strlen ("HTTP/1.x");
-        while( m_strResponseHTTPHeaders.substr()[iPosition] == ' ' )
-            iPosition++;
-        iStartPosition = iPosition;
-        while( m_strResponseHTTPHeaders.substr()[iPosition] != ' ' )
-            iPosition++;
 
-        std::string strResponseHTTPStatusCode = m_strResponseHTTPHeaders.substr( iStartPosition, iPosition - iStartPosition );
-        m_iResponseHTTPStatusCode = atoi (strResponseHTTPStatusCode.c_str ());
+    if( (iPosition = m_strResponseHTTPHeaders.find( "HTTP")) != std::string::npos)
+    {
+        m_strResponseHTTPProtocol = m_strResponseHTTPHeaders.substr( iPosition,
+																	 strlen( "HTTP/1.x"));
+        iPosition += strlen( "HTTP/1.x");
+
+        while( m_strResponseHTTPHeaders.substr()[iPosition] == ' ')
+		{
+            iPosition++;
+		}
+
+        iStartPosition = iPosition;
+
+        while( m_strResponseHTTPHeaders.substr()[iPosition] != ' ')
+		{
+            iPosition++;
+		}
+
+        std::string strResponseHTTPStatusCode = m_strResponseHTTPHeaders.substr( iStartPosition,
+																				 iPosition - iStartPosition);
+        m_iResponseHTTPStatusCode = atoi( strResponseHTTPStatusCode.c_str());
    
         iStartPosition = ++iPosition;
-        iPosition = m_strResponseHTTPHeaders.find("\n");
-        m_strResponseHTTPStatusMessage = m_strResponseHTTPHeaders.substr( iStartPosition, iPosition - iStartPosition -1 );
+        iPosition = m_strResponseHTTPHeaders.find( "\n");
+        m_strResponseHTTPStatusMessage = m_strResponseHTTPHeaders.substr( iStartPosition,
+																		  iPosition - iStartPosition - 1);
 
         // reached the end of the first line
-        iStartPosition = m_strResponseHTTPHeaders.find("\n");
+        iStartPosition = m_strResponseHTTPHeaders.find( "\n");
+
         iStartPosition++;
 
         // read header fields and add to vector
         do
         {
-            m_strResponseHTTPHeaders = m_strResponseHTTPHeaders.substr( iStartPosition );
-            iPosition = m_strResponseHTTPHeaders.find("\n");
-            if ( iPosition == std::string::npos )
-                break;
-            std::string strHeaderLine = m_strResponseHTTPHeaders.substr(0, iPosition);
-            unsigned int iSeperator = strHeaderLine.find(":");
-            if (iSeperator == std::string::npos )
-                break;
-            iStartPosition = iPosition + 1;
-            m_vResponseHTTPHeaders.push_back ( std::make_pair (strHeaderLine.substr(0, iSeperator), strHeaderLine.substr(iSeperator + 1, strHeaderLine.length() - iSeperator - 1 - 1 ) ) );
-        }
-        while (iPosition != std::string::npos);
+            m_strResponseHTTPHeaders = m_strResponseHTTPHeaders.substr( iStartPosition);
+            iPosition = m_strResponseHTTPHeaders.find( "\n");
 
+            if ( iPosition == std::string::npos)
+			{
+                break;
+			}
+
+            std::string		strHeaderLine = m_strResponseHTTPHeaders.substr( 0, iPosition);
+			unsigned int	iSeperator = strHeaderLine.find( ":");
+
+            if( iSeperator == std::string::npos)
+			{
+                break;
+			}
+
+            iStartPosition = iPosition + 1;
+
+            m_vResponseHTTPHeaders.push_back( std::make_pair( strHeaderLine.substr( 0,
+																					iSeperator),
+															  strHeaderLine.substr( iSeperator + 1,
+																					strHeaderLine.length() - iSeperator - 1 - 1)));
+        } while( iPosition != std::string::npos);
     }
     else
     {
-        throw AxisTransportException(SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE, "Protocol is not HTTP.");
+        throw AxisTransportException( SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE,
+									  "Protocol is not HTTP.");
     }
 }
 
 // This is used by SimpleAxisServer
 void Axis2Transport::setSocket(unsigned int uiNewSocket)
 {
-    m_Channel.setSocket( uiNewSocket );
+    m_pChannel->setSocket( uiNewSocket);
 }

@@ -1,6 +1,7 @@
 lib_LTLIBRARIES = libaxis2_transport.la
 AM_CPPFLAGS = $(CPPFLAGS)
-libaxis2_transport_la_SOURCES = Channel.cpp \
+libaxis2_transport_la_SOURCES = SecureChannel.cpp \
+					  Channel.cpp \
                                URL.cpp \
                                Axis2Transport.cpp \
                                AxisTransportException.cpp

@@ -31,23 +31,80 @@ using namespace std;
  * 
  */
 
-Channel::Channel ():m_Sock (INVALID_SOCKET), m_lTimeoutSeconds(0)
+/** Channel::Channel() Constructor
+ */
+Channel::Channel ():m_Sock (INVALID_SOCKET), m_lTimeoutSeconds(0), m_iMsgLength( 0)
 {
+#ifdef FJPDebug
+printf( ">Channel::Channel()\n");
+#endif
 
+#ifdef WIN32
+	m_lTimeoutSeconds = 10;
+#endif
+
+#ifdef FJPDebug
+printf( "<Channel::Channel()\n");
+#endif
 }
 
+/** Channel::~Channel() Destructor
+ */
 Channel::~Channel ()
 {
-    closeChannel ();
+#ifdef FJPDebug
+printf( ">Channel::~Channel()\n");
+#endif
+
+	// If the socket value is not invalid, then close the socket before
+	// deleting the Channel object.
+	if( m_Sock != INVALID_SOCKET)
+	{
+		closeChannel();
+	}
+
+#ifdef FJPDebug
+printf( "<Channel::~Channel()\n");
+#endif
 }
 
+/** Channel::setURL( URL) sets the URL for the channel.
+ *
+ * @param const char* URL pointer to a NULL terminated character string that
+ * contains the new URL for the channel.
+ */
 void Channel::setURL(const char* cpURL)
 {
-    m_URL.setURL(cpURL);
+#ifdef FJPDebug
+printf( ">Channel::setURL( const char* cpURL=%s)\n", cpURL);
+#endif
+
+	// Set the Channel URL to the new value.
+	// NB: This will cause problems if the new URL is diferent in type from the
+	//     old URL. e.g. if the new URL is https and the old URL was http, then
+	//     problems will occur because each type operates differently.
+    m_URL.setURL( cpURL);
+
+#ifdef FJPDebug
+printf( "<Channel::setURL()\n");
+#endif
 }
     
+/** Channel::getURL() gets the URL for the channel.
+ *
+ * @return const char* URL pointer to a NULL terminated character string that
+ * contains the URL for the channel.
+ */
 const char* Channel::getURL() 
 {
+#ifdef FJPDebug
+printf( ">Channel::getURL()\n");
+#endif
+#ifdef FJPDebug
+printf( "<Channel::getURL() = %s\n", m_URL.getURL());
+#endif
+
+	// Return the URL currently assicated with the channel object.
     return m_URL.getURL();
 }
 
@@ -67,221 +124,391 @@ bool
 Channel::open () //std::string & p_RemoteNode, unsigned short p_RemoteEnd)
 throw (AxisTransportException&)
 {
-    if (!Init ())
-	throw AxisTransportException(SERVER_TRANSPORT_CHANNEL_INIT_ERROR);
+#ifdef FJPDebug
+printf( ">Channel::open()\n");
+#endif
 
-    sockaddr_in clAddr, svAddr;
+	// If the underlying socket transport has not been initialised properly,
+	// then thrown an exeption.
+    if( !Init())
+	{
+#ifdef FJPDebug
+printf( "<Channel::open()=exception\n");
+#endif
 
-    if ((m_Sock = socket (PF_INET, SOCK_STREAM, 0)) != INVALID_SOCKET)
+		throw AxisTransportException( SERVER_TRANSPORT_CHANNEL_INIT_ERROR);
+	}
+
+	// If the transport was initilised, then create client and server sockets.
+    sockaddr_in clAddr;
+
+	// Create the Client (Rx) side first.
+    if( (m_Sock = socket( PF_INET, SOCK_STREAM, 0)) != INVALID_SOCKET)
     {
-	clAddr.sin_family = AF_INET;	/* AF_INET (address family Internet). */
-	clAddr.sin_port = 0;	/* No Specify Port required */
-	clAddr.sin_addr.s_addr = INADDR_ANY;
+		clAddr.sin_family = AF_INET;	// AF_INET (address family Internet).
+		clAddr.sin_port = 0;			// No Specify Port required.
+		clAddr.sin_addr.s_addr = INADDR_ANY;
 
-	if (bind (m_Sock, (struct sockaddr *) &clAddr, sizeof (clAddr)) ==
-	    SOCKET_ERROR)
-	{
-	    /* Error - Binding. Cannot open a channel to the remote end, 
-               shutting down the channel
-            */
-	    closeChannel ();
-	    throw AxisTransportException(SERVER_TRANSPORT_SOCKET_CONNECT_ERROR);
-	}
+		// Attempt to bind the client to the client socket.
+		if( bind( m_Sock, (struct sockaddr *) &clAddr, sizeof( clAddr)) == SOCKET_ERROR)
+		{
+			// Error whilst binding. Cannot open a channel to the remote end,
+			// shutting down the channel and then throw an exception.
+			closeChannel();
 
-	/* Although the above fragment makes use of the bind() API, it would be
-	 * just as effective to skip over this call as there are no specific
-	 * local port ID requirements for this client. The only advantage that
-	 * bind() offers is the accessibility of the port which the system 
-	 * chose via the .sin_port member of the cli_addr structure which will 
-	 * be set upon success of the bind() call.
-	 */
+#ifdef FJPDebug
+printf( "<Channel::open()=exception\n");
+#endif
 
-	svAddr.sin_family = AF_INET;
-	svAddr.sin_port = htons (m_URL.getPort());
+			throw AxisTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR);
+		}
 
-	struct hostent *pHostEntry = NULL;
+		// Although the above fragment makes use of the bind() API, it would be
+		// just as effective to skip over this call as there are no specific
+		// local port ID requirements for this client. The only advantage that
+		// bind() offers is the accessibility of the port which the system 
+		// chose via the .sin_port member of the cli_addr structure which will 
+		// be set upon success of the bind() call.
 
-	/* probably this is the host-name of the server we are connecting to */
-	if ((pHostEntry = gethostbyname (m_URL.getHostName())))
-	{
-	    svAddr.sin_addr.s_addr =
-		((struct in_addr *) pHostEntry->h_addr)->s_addr;
-	}
-	else
-	{
-	    /* no this is the IP address */
-	    svAddr.sin_addr.s_addr = inet_addr (m_URL.getHostName());
-	}
+		// Create the Server (Tx) side.
 
-	/* connect to the remote server. */
-	if (connect (m_Sock, (struct sockaddr *) &svAddr,
-		     sizeof (svAddr)) == SOCKET_ERROR)
-	{
-	    closeChannel ();
-            /*Cannot open a channel to the remote end, shutting down the channel*/
-	    throw AxisTransportException(SERVER_TRANSPORT_SOCKET_CONNECT_ERROR);
-	}
+		sockaddr_in			svAddr;
+		struct hostent *	pHostEntry = NULL;
+
+		svAddr.sin_family = AF_INET;
+		svAddr.sin_port = htons (m_URL.getPort());
+
+		// Probably this is the host-name of the server we are connecting to...
+		if( (pHostEntry = gethostbyname( m_URL.getHostName())))
+		{
+			svAddr.sin_addr.s_addr = ((struct in_addr *) pHostEntry->h_addr)->s_addr;
+		}
+		else
+		{
+			// No this is the IP address
+			svAddr.sin_addr.s_addr = inet_addr (m_URL.getHostName());
+		}
+
+		// Attempt to connect to the remote server.
+		if( connect( m_Sock, (struct sockaddr *) &svAddr, sizeof (svAddr)) == SOCKET_ERROR)
+		{
+			// Cannot open a channel to the remote end, shutting down the
+			// channel and then throw an exception.
+			closeChannel();
+
+#ifdef FJPDebug
+printf( "<Channel::open()=exception\n");
+#endif
+
+			throw AxisTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR);
+		}
     }
     else
     {
-	closeChannel ();
-        /* Sockets error Couldn't create socket*/
-	throw AxisTransportException(SERVER_TRANSPORT_SOCKET_CREATE_ERROR);
+		// Sockets error Couldn't create socket.  Close the channel and throw
+		// an exception.
+		closeChannel();
+
+#ifdef FJPDebug
+printf( "<Channel::open()=exeption\n");
+#endif
+
+		throw AxisTransportException( SERVER_TRANSPORT_SOCKET_CREATE_ERROR);
     }
+
+#ifdef FJPDebug
+printf( "<Channel::open()=true, m_Sock=%d\n", m_Sock);
+#endif
 
     return true;
 }
 
-/*
- * OS specific initialization should do here
+/**
+ * Channel::Init() Operating System specific initialization for sockets
  *
- * @return  true if successfuly initilaize OS specific stuffs. false o/w
+ * @return  bool True if successfully initialised the OS specifics.
+ *				 False if unsuccessful
  */
 
-bool
-Channel::Init ()
+bool Channel::Init ()
 {
-#ifdef WIN32
+#ifdef FJPDebug
+printf( ">Channel::Init()\n");
+#endif
 
-    WSADATA wsaData;		/* contains vendor-specific information, such as the
-				 * maximum number of sockets available and the maximum
-				 * datagram size.
-				 */
-    if (WSAStartup (WS_VERSION_REQD, &wsaData))
-	/* Filled by Windows Sockets DLLs */
+#ifdef WIN32
+    WSADATA wsaData;	// Contains vendor-specific information, such as the
+						// maximum number of sockets available and the maximum
+						// datagram size.
+
+	// wsaData filled by Windows Sockets DLLs.
+    if( WSAStartup( WS_VERSION_REQD, &wsaData))
     {
-	m_LastErr = "WinSock DLL not responding.";
-	//Error ((char *) m_LastErr.c_str ());
-	return false;
+		// Error - Could not setup underlying Windows socket transport
+		//         mechanism.
+		m_LastErr = "WinSock DLL not responding.";
+
+#ifdef FJPDebug
+printf( "<Channel::Init()=false\n");
+#endif
+
+		return false;
     }
     else
     {
-	/* Query to see whether the available version matches what we need */
-	if ((LOBYTE (wsaData.wVersion) < WS_VERSION_MAJOR ()) ||
-	    (LOBYTE (wsaData.wVersion) == WS_VERSION_MAJOR () &&
-	     HIBYTE (wsaData.wVersion) < WS_VERSION_MINOR ()))
-	{
-	    char buf[100];
-	    sprintf (buf,
-		     "Windows Sockets version %d.%d not supported by winsock2.dll",
-		     LOBYTE (wsaData.wVersion), HIBYTE (wsaData.wVersion));
-	    Error (buf);
-	    closeChannel ();
-	    return false;
-	}
+		// Query to see whether the available version matches what is required
+		if ((LOBYTE( wsaData.wVersion) <  WS_VERSION_MAJOR()) ||
+			(LOBYTE( wsaData.wVersion) == WS_VERSION_MAJOR() &&
+			 HIBYTE( wsaData.wVersion) <  WS_VERSION_MINOR()))
+		{
+			// Error - Underlying Windows socket transport version is not
+			//         compatible with what is required.
+			char buf[100];
+
+			sprintf( buf,
+				 "Windows Sockets version %d.%d not supported by winsock2.dll",
+				 LOBYTE (wsaData.wVersion), HIBYTE (wsaData.wVersion));
+
+			Error( buf);
+
+			closeChannel();
+
+#ifdef FJPDebug
+printf( "<Channel::Init()=false\n");
+#endif
+
+			return false;
+		}
     }
 #else
     /* cout << "no need for linux" << endl; */
     /* other OS specific Intitialization goes here */
 #endif
 
+#ifdef FJPDebug
+printf( "<Channel::Init()=true\n");
+#endif
+
     return true;
 }
 
-/*
- * Write/send a message to the remote server; sending blocks the app.
- * we may need to do this asynchronizely; preferably either non-blocking
+/**
+ * Channel::operator << (Msg) Write (send) a message to the remote server.
+ * Sending a message will block the application (i.e. synchronous communication).
+ * NB: We may need to do this asynchronizely; preferably either non-blocking
  * send or pthread.
  *
- * @param    Message to be written to the open channel
+ * @param    const char * Msg NULL terminated character string containing the
+ * message to be written to the open channel.
+ * NB: For GSKit SSL, the message has been encoded and may contain embedded
+ * null characters.  To overcome this problem, the m_iMsgLength value must be
+ * set to the message length before calling this method.  If m_iMsgLength is
+ * not 0, this method will assume the the value is the message length.
+ * m_iMsgLength is set to 0 in the constructor, so unless it is intentionally
+ * changed, it will not have any effect on this method.
+ *
+ * @return const Channel & is the address of the Channel object (the 'this'
+ * pointer).
  */
-const Channel &
-Channel::operator << (const char *msg)
+const Channel &Channel::operator << (const char *msg)
 {
-    if (INVALID_SOCKET == m_Sock)
+#ifdef FJPDebug
+printf( ">Channel::operator << msg=%s, ", msg);
+#endif
+
+	// Check that the Tx/Rx sockets are valid (this will have been done if the
+	// application has called the open method first.
+    if( INVALID_SOCKET == m_Sock)
     {
-	
-	/*Writing cannot be done without having a open socket to remote end*/
-	throw AxisTransportException(SERVER_TRANSPORT_INVALID_SOCKET);
+		// Error - Writing cannot be done without having a open socket to
+		//         remote end.  Throw an exception.
+#ifdef FJPDebug
+printf( "<Channel::operator << exception\n");
+#endif
+
+		throw AxisTransportException( SERVER_TRANSPORT_INVALID_SOCKET);
     }
 
-    int size = strlen (msg), nByteSent;
+    int size = strlen( msg);
+	int nByteSent;
 
-    if ((nByteSent = send (m_Sock, msg, size, MSG_DONTROUTE)) == SOCKET_ERROR)
+	if( m_iMsgLength)
+	{
+		size = m_iMsgLength;
+	}
+
+#ifdef FJPDebug
+printf( "size=%d, m_Sock=%d\n", size, m_Sock);
+
+hexOutput( (char *) msg, size);
+#endif
+
+    if( (nByteSent = send( m_Sock, msg, size, MSG_DONTROUTE)) == SOCKET_ERROR)
     {
-	/*Output streaming error while writing data*/
-	closeChannel ();
-	throw AxisTransportException(SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR);
+		// Output streaming error while writing data.  Close the channel and
+		// throw an exception.
+		closeChannel();
+
+#ifdef FJPDebug
+printf( "<Channel::operator << exception\n");
+#endif
+
+		throw AxisTransportException(SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR);
     }
+
+#ifdef FJPDebug
+printf( "<Channel::operator <<\n");
+#endif
 
     return *this;
 }
 
-/*
- * Read/receive a message from the remote server; reading may be done in 
- * chunks.
- * @param    string to hold the read Message 
+/**
+ * Channel::operator >> (Msg) Read (receive) a message from the remote server;
+ * Reading may be done in 'chunks'.
+ *
+ * @param    std::string & Msg is string that will receive the message.
+ * NB: For GSKit SSL, the message has been encoded and may contain embedded
+ * null characters.  To overcome this problem, the m_iMsgLength value must be
+ * set to the negative of the message length before calling this method.  If
+ * m_iMsgLength is not negative, this method will assume the BUF_SIZE value is
+ * the message length.  m_iMsgLength is set to 0 in the constructor, so unless
+ * it is intentionally changed, it will not have any effect on this method.
+ *
+ * @return const Channel & is the address of the Channel object (the 'this'
+ * pointer).
  */
-
-const Channel &
-Channel::operator >> (std::string & msg)
+const Channel &Channel::operator >> (std::string & msg)
 {
+#ifdef FJPDebug
+printf( ">Channel::operator >> m_Sock=%d\n", m_Sock);
+#endif
+
     msg = "";
+
     if (INVALID_SOCKET == m_Sock)
     {
-	/* Reading cannot be done without having a open socket
-           Input streaming error on undefined channel; please open the channel first
-         */
-	throw AxisTransportException (SERVER_TRANSPORT_INVALID_SOCKET);
+		// Error - Reading cannot be done without having a open socket Input
+		//         streaming error on undefined channel; please open the
+		//		   channel first
+
+#ifdef FJPDebug
+printf( "<Channel::operator >> exception=SERVER_TRANSPORT_INVALID_SOCKET\n");
+#endif
+
+		throw AxisTransportException( SERVER_TRANSPORT_INVALID_SOCKET);
     }
 
     int nByteRecv = 0;
     const int BUF_SIZE = 1024;
     char buf[BUF_SIZE];
+	int	iBufSize = BUF_SIZE;
+
+	if( m_iMsgLength < 0)
+	{
+		iBufSize = -m_iMsgLength;
+	}
+	else
+	{
+		iBufSize--;
+	}
 
     //assume timeout not set; set default tatus to OK
     int iTimeoutStatus = 1;
 
     //check if timeout set
     if(m_lTimeoutSeconds)
+	{
         iTimeoutStatus = applyTimeout();
+	}
 
-    //handle timeout outcome
-    if(iTimeoutStatus < 0)//error
+    // Handle timeout outcome
+    if( iTimeoutStatus < 0)
     {
-        //select SOCKET_ERROR. Channel error while waiting for timeout
-        throw AxisTransportException(SERVER_TRANSPORT_TIMEOUT_EXCEPTION, 
+		// Error
+
+#ifdef FJPDebug
+printf( "<Channel::operator >> exception=SERVER_TRANSPORT_TIMEOUT_EXCEPTION\n");
+#endif
+
+        // Select SOCKET_ERROR. Channel error while waiting for timeout
+        throw AxisTransportException( SERVER_TRANSPORT_TIMEOUT_EXCEPTION, 
                                      "Channel error while waiting for timeout");        
-        
     }
 
-    if(iTimeoutStatus == 0)//timeout expired
+    if( iTimeoutStatus == 0)
     {
-        /*"select timeout expired.
-         *Channel error connection timeout before receving
-        */
-        throw AxisTransportException(SERVER_TRANSPORT_TIMEOUT_EXPIRED, 
+		// Timeout expired - select timeout expired.
+        // Channel error connection timeout before receving
+
+#ifdef FJPDebug
+printf( "<Channel::operator >> exception=SERVER_TRANSPORT_TIMEOUT_EXPIRED\n");
+#endif
+
+        throw AxisTransportException( SERVER_TRANSPORT_TIMEOUT_EXPIRED, 
                                      "Channel error: connection timed out before receving");
     }
 
-    //either timeout was not set or data available before timeout; so read
+    // Either timeout was not set or data available before timeout; so read
 
-    if ((nByteRecv = recv (m_Sock, (char *) &buf, BUF_SIZE - 1, 0))
-	== SOCKET_ERROR)
+    if( (nByteRecv = recv( m_Sock, (char *) &buf, iBufSize, 0)) == SOCKET_ERROR)
     {
-	/*recv SOCKET_ERROR, Channel error while getting data*/
-	/* closeChannel(); */
-	throw AxisTransportException(SERVER_TRANSPORT_INPUT_STREAMING_ERROR, 
-                                     "Channel error while getting data");
-	/* throw AxisTransportException(SERVER_TRANSPORT_INPUT_STREAMING_ERROR); 
-	 */
+		// Recv SOCKET_ERROR, Channel error while getting data
+		/* closeChannel(); */
+
+#ifdef FJPDebug
+printf( "<Channel::operator >> exception=SERVER_TRANSPORT_INPUT_STREAMING_ERROR\n");
+#endif
+
+		throw AxisTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR, 
+									  "Channel error while getting data");
     }
-    if (nByteRecv)
+
+    if( nByteRecv)
     {
-	/* printf("nByteRecv:%d\n", nByteRecv); */
-	buf[nByteRecv] = '\0';
-	/* got a part of the message, so add " \        "to form */
-	msg = buf;
-	/* printf("buf:%s\n", buf); */
+		/* printf("nByteRecv:%d\n", nByteRecv); */
+		buf[nByteRecv] = '\0';
+		/* got a part of the message, so add " \        "to form */
+		msg = buf;
+
+		if( m_iMsgLength < 0)
+		{
+			m_iMsgLength = nByteRecv;
+
+			m_sMsg = new char[nByteRecv];
+
+			memcpy( m_sMsg, buf, nByteRecv);
+		}
     }
     else
+	{
+		if( m_iMsgLength < 0)
+		{
+			m_iMsgLength = nByteRecv;
+		}
 	;//printf ("execution break\n");
-    
+    }
+
+#ifdef FJPDebug
+hexOutput( m_sMsg, m_iMsgLength);
+
+printf( "m_iMsgLength=%d\n", m_iMsgLength);
+printf( "<Channel::operator >> msg = %s\n", buf);
+#endif
     return *this;
 }
 
-const Channel &
-Channel::readNonBlocking( std::string & msg, bool bBlockingRequired)
+/**
+ * Channel::readNonBlocking( Msg, BlockingRequired) Read (receive) a message
+ * from the remote server; Reading may be done in 'chunks'?
+ *
+ * @param string & Msg
+ * @param bool BlockingRequired
+ *
+ * @return const Channel & is the address of the Channel object (the 'this'
+ * pointer).
+ */
+const Channel &Channel::readNonBlocking( std::string & msg, bool bBlockingRequired)
 {
     msg = "";
     if (INVALID_SOCKET == m_Sock)
@@ -347,71 +574,151 @@ Channel::readNonBlocking( std::string & msg, bool bBlockingRequired)
     return *this;
 }
 
-//samisa
-
-/*
- *    Close, and clean-up any OS specific stuff
- *
+/**
+ * Channel::closeChannel() Close and clean-up using specific Operating System
+ * calls.
  */
-
-void
-Channel::closeChannel ()
+void Channel::closeChannel ()
 {
-    if (INVALID_SOCKET == m_Sock) // Check if socket already closed : AXISCPP-185
-        return;
-#ifdef WIN32
-    closesocket (m_Sock);
+#ifdef FJPDebug
+printf( ">Channel::closeChannel()\n");
+#endif
 
-    /* Check for any possible error conditions from WSACleanup() and report
-     * them before exiting, as this information might indicate a network
-     * layer problem in the system.
-     */
+    if( INVALID_SOCKET == m_Sock) // Check if socket already closed : AXISCPP-185
+	{
+#ifdef FJPDebug
+printf( "<Channel::closeChannel()\n");
+#endif
+        return;
+	}
+
+#ifdef WIN32
+    closesocket( m_Sock);
+
+    // Check for any possible error conditions from WSACleanup() and report
+    // them before exiting, as this information might indicate a network
+    // layer problem in the system.
 
     WSACleanup ();
 #else
-    ::close (m_Sock);
+    ::close( m_Sock);
 
 #endif
     m_Sock = INVALID_SOCKET; // fix for AXISCPP-185
+
+#ifdef FJPDebug
+printf( "<Channel::closeChannel()\n");
+#endif
 }
 
-/*
- * Log any errors that cause on channel usage/initilaization
- *
+/**
+ * Channel::Error( Error) Log any errors that cause on channel usage or
+ * initilaization.
  */
-
-void
-Channel::Error (const char *err)
+void Channel::Error( const char *err)
 {
 #ifdef _DEBUG
     std::cerr << err << std::endl;
 #endif
 }
 
+/**
+ * Channel::setTimeout( Seconds)
+ *
+ * @param const long Seconds
+ */
 void Channel::setTimeout(const long lSeconds)
 {
+#ifdef FJPDebug
+printf( ">Channel::setTimeout(const long lSeconds=%d)\n", lSeconds);
+#endif
+
     m_lTimeoutSeconds = lSeconds;
+
+#ifdef FJPDebug
+printf( "<Channel::setTimeout()\n");
+#endif
 }
 
+/**
+ * Channel::applyTimeout()
+ *
+ * @return int 
+ */
 int Channel::applyTimeout()
 {
+#ifdef FJPDebug
+printf( ">Channel::applyTimeout()\n");
+#endif
+
     fd_set set;
     struct timeval timeout;
 
-    /* Initialize the file descriptor set. */
-    FD_ZERO(&set);
-    FD_SET(m_Sock, &set);
+    // Initialize the file descriptor set.
+    FD_ZERO( &set);
+    FD_SET( m_Sock, &set);
 
     /* Initialize the timeout data structure. */
     timeout.tv_sec = m_lTimeoutSeconds;
     timeout.tv_usec = 0;
 
     /* select returns 0 if timeout, 1 if input available, -1 if error. */
-    return select(FD_SETSIZE, &set, NULL, NULL, &timeout);
+#ifdef FJPDebug
+printf( "<Channel::applyTimeout()\n");
+#endif
+    return select( FD_SETSIZE, &set, NULL, NULL, &timeout);
 }
 
 // This is used by SimpleAxisServer
 void Channel::setSocket(unsigned int uiNewSocket)
 {
     m_Sock = uiNewSocket;
+}
+
+/**
+ * Debug routine will be deleted.
+ */
+void Channel::hexOutput( char * psData, int iDataLength)
+{
+	unsigned char *	pByte = (unsigned char *) psData;
+	string			sLineHex;
+	string			sLineChar;
+	int				iByteCount = 0;
+	int				iLineCount;
+	char			szDigits[6];
+
+	while( iByteCount < iDataLength)
+	{
+		sprintf( szDigits, "%04X ", iByteCount);
+
+		sLineHex = szDigits;
+		sLineChar = "";
+		iLineCount = 0;
+
+		while( iLineCount < 16 && iByteCount < iDataLength)
+		{
+			unsigned char Char = *pByte;
+
+			if( Char < 32 || Char > 127)
+			{
+				Char = '.';
+			}
+
+			sprintf( szDigits, "%02X ", *pByte);
+
+			sLineHex = sLineHex + szDigits;
+			sLineChar = sLineChar + (char) Char;
+
+			pByte++;
+			iByteCount++;
+			iLineCount++;
+		}
+
+		for( int iCount = iLineCount; iCount < 16; iCount++)
+		{
+			sLineHex = sLineHex + "   ";
+		}
+
+		printf( "%s %s\n", sLineHex.c_str(), sLineChar.c_str());
+	}
 }

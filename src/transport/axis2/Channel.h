@@ -78,7 +78,11 @@ public:
     Channel();
     virtual ~Channel();
     
-    void setURL(const char* cpURL);
+    virtual void setURL(const char* cpURL);
+    virtual void setURL(URL sURL)
+	{
+		m_URL = sURL;
+	};
     
     const char* getURL(); 
     
@@ -111,6 +115,18 @@ public:
     
     // This is used by SimpleAxisServer
     void setSocket(unsigned int uiNewSocket);
+	virtual void setMsgLength( int iMsgLength)
+	{
+		m_iMsgLength = iMsgLength;
+	}
+	virtual int getMsgLength()
+	{
+		return m_iMsgLength;
+	}
+	virtual char * getMsg()
+	{
+		return m_sMsg;
+	}
 
 protected:
     /* OS specific initilization */
@@ -122,6 +138,8 @@ protected:
     /* Close & clean-up the open socket/system resources */
     virtual void closeChannel();
 
+	virtual void hexOutput( char * psData, int iDataLength);
+
   /**
     * @return 0 if timeout, 1 if input available, -1 if error.
     */
@@ -130,6 +148,8 @@ protected:
     unsigned int   m_Sock;        /* Socket descriptor */
     URL m_URL;
     std::string    m_LastErr;     /* Last error as a string */
+	int				m_iMsgLength;	// Only used for Secure
+	char *			m_sMsg;			// Only used for Secure
 
   /**
     * Timeout in seconds
