@@ -51,7 +51,6 @@ const char* Receiver::Recv()
             *m_pTrChannel >> (&m_pMsg);
                     if(m_pMsg == NULL)
             {
-                printf("m_pMsg==NULL\n");
                         return NULL;
             }
             m_MsgSize = strlen(m_pMsg);        
@@ -76,8 +75,8 @@ const char* Receiver::Recv()
     {
         bodyLength = m_pTrChannel->getBodyLength();
 #ifdef _DEBUG
-        printf("m_MsgSize:%d\n", m_MsgSize);
-        printf("bodyLength:%d\n", bodyLength);
+        //printf("m_MsgSize:%d\n", m_MsgSize);
+        //printf("bodyLength:%d\n", bodyLength);
 #endif
         bodyLength -= m_MsgSize;
         m_pTrChannel->setBodyLength(bodyLength);    
@@ -91,7 +90,7 @@ const char* Receiver::Recv()
     }
     else
     {
-            printf("m_MsgSize == 0, so return NULL\n");
+            //printf("m_MsgSize == 0, so return NULL\n");
         return NULL;
     }
     }
