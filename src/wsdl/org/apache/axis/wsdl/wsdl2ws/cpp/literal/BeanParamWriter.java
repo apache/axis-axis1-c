@@ -182,27 +182,27 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 					
 					if( nillable)
 					{
-						writer.write("\tAxis_Array\tsAA;\n\n");
-						writer.write("\tsAA.m_Size = 1;\n\n");
+						writer.write("\tAxis_Array\tsAA"+i+";\n\n");
+						writer.write("\tsAA"+i+".m_Size = 1;\n\n");
 						
 						if( moreThanOne)
 						{
-							writer.write("\tfor( int iCount = 0; iCount < param->count; iCount++)\n");
+							writer.write("\tfor( int iCount"+i+" = 0; iCount"+i+" < param->count; iCount"+i+"++)\n");
 						}
 						else
 						{
-							writer.write("\tfor( int iCount = 0; iCount < param->" + attribs[i].getElementNameAsString() + ".m_Size; iCount++)\n");
+							writer.write("\tfor( int iCount"+i+" = 0; iCount"+i+" < param->" + attribs[i].getElementNameAsString() + ".m_Size; iCount"+i+"++)\n");
 						}
 
 						writer.write("\t{\n");
 						
 						if( moreThanOne)
 						{
-							writer.write("\t\tif( param->infos.m_Array[iCount] == NULL)\n");
+							writer.write("\t\tif( param->infos.m_Array[iCount"+i+"] == NULL)\n");
 						}
 						else
 						{
-							writer.write("\t\tif( param->" + attribs[i].getElementNameAsString() + ".m_Array[iCount] == NULL)\n");
+							writer.write("\t\tif( param->" + attribs[i].getElementNameAsString() + ".m_Array[iCount"+i+"] == NULL)\n");
 						}
 						
 						writer.write("\t\t{\n");
@@ -214,14 +214,14 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 
 						if( moreThanOne)
 						{
-							writer.write("\t\t\tsAA.m_Array = (void **)param->infos.m_Array[iCount];\n");
+							writer.write("\t\t\tsAA"+i+".m_Array = (void **)param->infos.m_Array[iCount"+i+"];\n");
 						}
 						else
 						{
-							writer.write("\t\t\tsAA.m_Array = param->" + attribs[i].getElementNameAsString() + ".m_Array[iCount];\n\n");
+							writer.write("\t\t\tsAA"+i+".m_Array = param->" + attribs[i].getElementNameAsString() + ".m_Array[iCount"+i+"];\n\n");
 						}
 
-						writer.write("\t\t\tpSZ->serializeCmplxArray( &sAA,\n");
+						writer.write("\t\t\tpSZ->serializeCmplxArray( &sAA"+i+",\n");
 						writer.write("\t\t\t\t\t\t\t\t\t (void*) Axis_Serialize_"+arrayType+",\n");
 						writer.write("\t\t\t\t\t\t\t\t\t (void*) Axis_Delete_"+arrayType+",\n");
 						writer.write("\t\t\t\t\t\t\t\t\t (void*) Axis_GetSize_"+arrayType+",\n");
@@ -318,19 +318,19 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 
 					if( nillable)
 					{
-						writer.write("\t"+attribs[i].getTypeName()+" **	pp = param->"+attribs[i].getElementNameAsString()+".m_Array;\n\n");
+						writer.write("\t"+attribs[i].getTypeName()+" **	pp"+i+" = param->"+attribs[i].getElementNameAsString()+".m_Array;\n\n");
 						writer.write("\tparam->"+attribs[i].getElementNameAsString()+".m_Size = array.m_Size;\n\n");
 						writer.write("\tif( param->"+attribs[i].getElementNameAsString()+".m_Array == NULL)\n");
 						writer.write("\t{\n");
-						writer.write("\t\tpp = ("+attribs[i].getTypeName()+" **) new "+attribs[i].getTypeName()+"*[array.m_Size];\n");
-						writer.write("\t\tparam->"+attribs[i].getElementNameAsString()+".m_Array = pp;\n");
+						writer.write("\t\tpp"+i+" = ("+attribs[i].getTypeName()+" **) new "+attribs[i].getTypeName()+"*[array.m_Size];\n");
+						writer.write("\t\tparam->"+attribs[i].getElementNameAsString()+".m_Array = pp"+i+";\n");
 						writer.write("\t}\n\n");
-						writer.write("\t"+attribs[i].getTypeName()+" *	p = ("+attribs[i].getTypeName()+" *) array.m_Array;\n\n");
-						writer.write("\tfor( int iCount = 0; iCount < array.m_Size; iCount++)\n");
+						writer.write("\t"+attribs[i].getTypeName()+" *	p"+i+" = ("+attribs[i].getTypeName()+" *) array.m_Array;\n\n");
+						writer.write("\tfor( int iCount"+i+" = 0; iCount"+i+" < array.m_Size; iCount"+i+"++)\n");
 						writer.write("\t{\n");
-						writer.write("\t\t*pp = p;\n\n");
-						writer.write("\t\tpp++;\n");
-						writer.write("\t\tp++;\n");
+						writer.write("\t\t*pp"+i+" = p"+i+";\n\n");
+						writer.write("\t\tpp"+i+"++;\n");
+						writer.write("\t\tp"+i+"++;\n");
 						writer.write("\t}\n");
 					}
 					else
