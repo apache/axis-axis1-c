@@ -239,12 +239,18 @@ int Call::SetHeader(char *key, char *value)
 }
 
 /**
- * This method takes a look at the m_Soap structure
- * and open connection to the server then this adds the 
- * relevant pointers to the m_Soap structure
+ * This method takes a look at the m_Soap structure and open 
+ * transport layer connection to the server. Then this adds the 
+ * relevant function pointers and streams to the m_Soap structure, 
+ * which is given to the AxisEngine. AxisEngine can use those 
+ * functions with those streams at any time it wants to send/receive
+ * bytes to/from the server.
  */
 int Call::OpenConnection()
 {
+	//Step 1 - Open Transport layer connection taking into account protocol and endpoint URI in m_Soap
+	//Step 2 - Set Created streams to m_Soap.str.ip_stream and m_Soap.str.op_stream
+	//Step 3 - Add function pointers to the m_Soap structure
 	m_Soap.transport.pGetFunct = get_request_bytes;
 	m_Soap.transport.pSendFunct = send_response_bytes;
 	m_Soap.transport.pGetTrtFunct = receive_transport_information;
@@ -253,11 +259,13 @@ int Call::OpenConnection()
 }
 
 /**
- * This method closes the connection of this object to
- * the server
+ * This method closes the connection of this object to the server
  */
 void Call::CloseConnection()
 {
+	//Step 1 - Close 2 streams
+	//Step 2 - Possibly delete the streams
+	//Step 3 - Set function pointers in the m_Soap structure to NULL;
 	m_Soap.transport.pGetFunct = NULL;
 	m_Soap.transport.pSendFunct = NULL;
 	m_Soap.transport.pGetTrtFunct = NULL;
