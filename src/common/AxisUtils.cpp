@@ -23,6 +23,7 @@
 
 #include "AxisUtils.h"
 #include <axis/GDefine.hpp>
+#include "../soap/apr_base64.h"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -127,6 +128,20 @@ char* AxisUtils::toLowerCase (const char* pchWord)
     /* Fill the code */
 
     return NULL;
+}
+
+xsd__base64Binary AxisUtils::decodeFromBase64Binary(const AxisChar *pValue)
+{
+    xsd__base64Binary value;
+    value.__size = apr_base64_decode_len (pValue);
+    value.__ptr = new unsigned char[value.__size + 1];
+    value.__size = apr_base64_decode_binary (value.__ptr, pValue);
+    /* put null at the end because it enables the decoded string to be used
+     * as a string 
+     */
+    value.__ptr[value.__size] = 0;
+
+    return value;
 }
 
 AXIS_CPP_NAMESPACE_END
