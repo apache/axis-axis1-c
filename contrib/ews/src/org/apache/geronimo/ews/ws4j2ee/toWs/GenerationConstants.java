@@ -82,11 +82,12 @@ public interface GenerationConstants {
 	public static final int SEI_FILE_WRITER = 12;
 	
 
+    public static final String OPTION_WS4J2EE_PROPERTY_FILE = "ws4j2ee.ConfigFile";
 
     //more to come
     public static final String J2EE_CONTAINER_DD = "j2ee-container-dd";
-	public static final String WS4J2EE_PROPERTY_FILE = "ws4j2ee/conf/ws4j2ee.properties";
+	public static final String WS4J2EE_PROPERTY_FILE = "ws4j2ee.properties";
     
     public static final String JBOSS_DD = "jboss.xml";
-	public static final String GERANIMO_DD = "geranimo.xml";
+	public static final String GERONIMO_DD = "geronimo.xml";
 }
