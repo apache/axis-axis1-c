@@ -67,8 +67,19 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
     do
     {
         const char* pchService = pSoap->getServiceName();
+        char * pchTempService = new char [strlen(pchService)+1];
+        strcpy(pchTempService, pchService);
+        /* 
+        The String returned as the service name has the format "Calculator#add".
+        So null terminate string at #.
+        */
+        *(strchr(pchTempService, '#')) = '\0';
+        /* Skip the starting double quote */
+        strcpy(pchTempService, pchTempService+1);
+
         /* get service description object from the WSDD Deployment object */
-        pService = g_pWSDDDeployment->getService (pchService);
+        pService = g_pWSDDDeployment->getService (pchTempService);
+        delete pchTempService;
 
         //Get Global and Transport Handlers
         
