@@ -191,7 +191,12 @@ public class ClientStubWriter extends CPPClassWriter{
 		if (returntype != null)
 			retType = wscontext.getTypemap().getType(returntype.getSchemaName());
 		if (retType != null){
-			outparamType = retType.getLanguageSpecificName();
+			if (retType.isSimpleType()){
+				outparamType = CUtils.getclass4qname(retType.getBaseType());	
+			}
+			else{
+				outparamType = retType.getLanguageSpecificName();
+			}
 			returntypeisarray = retType.isArray();
 		}
 		else if (returntype != null){
@@ -220,7 +225,12 @@ public class ClientStubWriter extends CPPClassWriter{
 		if (0 < paramsB.size()){
 			type = wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(0)).getSchemaName());
 			if (type != null){
-				paraTypeName = type.getLanguageSpecificName();
+				if (type.isSimpleType()){ //schema defined simpleType
+					paraTypeName = 	CUtils.getclass4qname(type.getBaseType());
+				}
+				else{
+					paraTypeName = type.getLanguageSpecificName();
+				}
 				typeisarray = type.isArray();
 			}
 			else {
@@ -236,7 +246,12 @@ public class ClientStubWriter extends CPPClassWriter{
 			for (int i = 1; i < paramsB.size(); i++) {
 				type = wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName());
 				if (type != null){
-					paraTypeName = type.getLanguageSpecificName();
+					if (type.isSimpleType()){ //schema defined simpleType
+						paraTypeName = 	CUtils.getclass4qname(type.getBaseType());
+					}
+					else{
+						paraTypeName = type.getLanguageSpecificName();
+					}
 					typeisarray = type.isArray();
 				}
 				else {
@@ -290,7 +305,12 @@ public class ClientStubWriter extends CPPClassWriter{
 		for (int i = 0; i < paramsB.size(); i++) {
 			type = wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName());
 			if (type != null){
-				paraTypeName = type.getLanguageSpecificName();
+				if (type.isSimpleType()){//schema defined simpleType possibly with restrictions
+					paraTypeName = CUtils.getclass4qname(type.getBaseType());
+				}
+				else{
+					paraTypeName = type.getLanguageSpecificName();
+				}
 				typeisarray = type.isArray();
 			}
 			else {
@@ -339,7 +359,12 @@ public class ClientStubWriter extends CPPClassWriter{
 				ParameterInfo currentType = (ParameterInfo)paramsC.get(i);
 				type = wscontext.getTypemap().getType(currentType.getSchemaName());
 				if (type != null){
-					currentParaType = type.getLanguageSpecificName();
+					if (type.isSimpleType()){
+						currentParaType = CUtils.getclass4qname(type.getBaseType());
+					}
+					else{
+						currentParaType = type.getLanguageSpecificName();
+					}
 					typeisarray = type.isArray();
 				}
 				else {

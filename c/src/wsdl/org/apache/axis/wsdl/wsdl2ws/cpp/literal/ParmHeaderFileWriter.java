@@ -138,7 +138,7 @@ public class ParmHeaderFileWriter extends ParamWriter{
 						QName value = (QName)restrictionData.elementAt(i);
 						if ("enumeration".equals(value.getLocalPart())){
 							if (i>1) writer.write(", ");
-							writer.write(value.getNamespaceURI());		
+							writer.write("ENUM"+classname.toUpperCase()+"="+value.getNamespaceURI());		
 						}
 					}
 					writer.write("} "+classname+";\n");

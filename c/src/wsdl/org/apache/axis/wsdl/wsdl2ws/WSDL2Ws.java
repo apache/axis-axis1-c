@@ -471,7 +471,7 @@ public class WSDL2Ws {
 			if (null == type.getRefType())throw new WrapperFault("Array type found without a Ref type");
 			QName qn = type.getRefType().getQName();
 			if (null == qn)throw new WrapperFault("Array type found without a Ref type");
-			if (CUtils.isSimpleType(qn)) return null;
+			if (CUtils.isBasicType(qn)) return null;
 			QName newqn = new QName(type.getQName().getNamespaceURI(), qn.getLocalPart()+"_Array");
 			typedata = new Type(newqn, newqn.getLocalPart(), true, targetLanguage);
 			typeMap.addType(newqn, typedata);
