@@ -63,47 +63,54 @@ import org.w3c.dom.Element;
  * Basically this is  a Qname
  */
 public class WSCFSOAPHeaderImpl extends WSCFElement implements WSCFSOAPHeader {
-	
-	/**
-	 * SOAP header namespace
-	 */
-	private String namespaceURI;
-	
-	/**
-	 * Soap Header local part
-	 */
-	private String localpart;
-	
-	/**
-	 * The constructor. This will get the namespace and the localpart of the SOAP header
-	 * @param e SOAP header element
-	 * @throws WSCFException
-	 */
-	public WSCFSOAPHeaderImpl(Element e)throws WSCFException{
-		super(e);
-		//		extract the namespace URI
-  		Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_NAMESPACE_URI);
-  		if(null != element){this.namespaceURI = element.getChildNodes().item(0).toString();}
 
-  		//extract the local part
-  		element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_LOCALPART);
-  		if(null != element){this.localpart = element.getChildNodes().item(0).toString();}
-	}
-	
-	/**
-	 * gets the local part of the soap header
-	 * @return local part
-	 */
-	public String getLocalpart() {
-		return localpart;
-	}
+    /**
+     * SOAP header namespace
+     */
+    private String namespaceURI;
 
-	/**
-	 * Gets teh namespace of the SOAP header
-	 * @return namespace
-	 */
-	public String getNamespaceURI() {
-		return namespaceURI;
-	}
+    /**
+     * Soap Header local part
+     */
+    private String localpart;
+
+    /**
+     * The constructor. This will get the namespace and the localpart of the SOAP header
+     * 
+     * @param e SOAP header element
+     * @throws WSCFException 
+     */
+    public WSCFSOAPHeaderImpl(Element e) throws WSCFException {
+        super(e);
+        //		extract the namespace URI
+        Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_NAMESPACE_URI);
+        if (null != element) {
+            this.namespaceURI = element.getChildNodes().item(0).toString();
+        }
+
+        //extract the local part
+        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_LOCALPART);
+        if (null != element) {
+            this.localpart = element.getChildNodes().item(0).toString();
+        }
+    }
+
+    /**
+     * gets the local part of the soap header
+     * 
+     * @return local part
+     */
+    public String getLocalpart() {
+        return localpart;
+    }
+
+    /**
+     * Gets teh namespace of the SOAP header
+     * 
+     * @return namespace
+     */
+    public String getNamespaceURI() {
+        return namespaceURI;
+    }
 
 }

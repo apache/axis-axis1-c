@@ -55,124 +55,121 @@
 
 package org.apache.geronimo.ews.ws4j2ee.context.impl;
 
-import java.io.InputStream;
-import java.io.Writer;
+import org.apache.axis.wsdl.symbolTable.BindingEntry;
+import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
+import org.apache.axis.wsdl.symbolTable.ServiceEntry;
+import org.apache.geronimo.ews.jaxrpcmapping.JaxRpcMapper;
+import org.apache.geronimo.ews.jaxrpcmapping.descriptor.JavaWsdlMapping;
+import org.apache.geronimo.ews.ws4j2ee.context.JaxRpcMapperContext;
 
 import javax.wsdl.Operation;
 import javax.wsdl.Port;
 import javax.xml.namespace.QName;
-
-import org.apache.geronimo.ews.jaxrpcmapping.JaxRpcMapper;
-import org.apache.geronimo.ews.jaxrpcmapping.descriptor.JavaWsdlMapping;
-import org.apache.axis.wsdl.symbolTable.BindingEntry;
-import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
-import org.apache.axis.wsdl.symbolTable.ServiceEntry;
-import org.apache.geronimo.ews.ws4j2ee.context.JaxRpcMapperContext;
-
+import java.io.InputStream;
+import java.io.Writer;
 
 /**
  * This class wrap the JAXRPCMapper and only expose a interface to
  * the rest of the WS4j2ee.
+ * 
  * @author hemapani
  */
-public class JaxRpcMapperImpl implements JaxRpcMapperContext{
-	private JaxRpcMapper jaxrpcmapper;
-	
-	public JaxRpcMapperImpl(JaxRpcMapper jaxrpcmapper){
-		this.jaxrpcmapper = jaxrpcmapper;
-	}
+public class JaxRpcMapperImpl implements JaxRpcMapperContext {
+    private JaxRpcMapper jaxrpcmapper;
+
+    public JaxRpcMapperImpl(JaxRpcMapper jaxrpcmapper) {
+        this.jaxrpcmapper = jaxrpcmapper;
+    }
+
     /**
-     * @param messageQName
-     * @return
+     * @param messageQName 
+     * @return 
      */
     public String getExceptionType(QName messageQName) {
         return jaxrpcmapper.getExceptionType(messageQName);
     }
 
     /**
-     * @param bEntry
-     * @param operation
-     * @return
+     * @param bEntry    
+     * @param operation 
+     * @return 
      */
     public String getJavaMethodName(BindingEntry bEntry, Operation operation) {
         return jaxrpcmapper.getJavaMethodName(bEntry, operation);
     }
 
     /**
-     * @param bEntry
-     * @param operation
-     * @param position
-     * @return
+     * @param bEntry    
+     * @param operation 
+     * @param position  
+     * @return 
      */
-    public String getJavaMethodParamType(
-        BindingEntry bEntry,
-        Operation operation,
-        int position) {
+    public String getJavaMethodParamType(BindingEntry bEntry,
+                                         Operation operation,
+                                         int position) {
         return jaxrpcmapper.getJavaMethodParamType(bEntry, operation, position);
     }
 
     /**
-     * @param bEntry
-     * @param operation
-     * @return
+     * @param bEntry    
+     * @param operation 
+     * @return 
      */
-    public String getJavaMethodReturnType(
-        BindingEntry bEntry,
-        Operation operation) {
+    public String getJavaMethodReturnType(BindingEntry bEntry,
+                                          Operation operation) {
         return jaxrpcmapper.getJavaMethodReturnType(bEntry, operation);
     }
 
     /**
-     * @param typeQName
-     * @return
+     * @param typeQName 
+     * @return 
      */
     public String getJavaType(QName typeQName) {
         return jaxrpcmapper.getJavaType(typeQName);
     }
 
     /**
-     * @return
+     * @return 
      */
     public JavaWsdlMapping getMapping() {
         return jaxrpcmapper.getMapping();
     }
 
     /**
-     * @param port
-     * @return
+     * @param port 
+     * @return 
      */
     public String getPortName(Port port) {
         return jaxrpcmapper.getPortName(port);
     }
 
     /**
-     * @param ptEntry
-     * @param bEntry
-     * @return
+     * @param ptEntry 
+     * @param bEntry  
+     * @return 
      */
-    public String getServiceEndpointInterfaceName(
-        PortTypeEntry ptEntry,
-        BindingEntry bEntry) {
+    public String getServiceEndpointInterfaceName(PortTypeEntry ptEntry,
+                                                  BindingEntry bEntry) {
         return jaxrpcmapper.getServiceEndpointInterfaceName(ptEntry, bEntry);
     }
 
     /**
-     * @param entry
-     * @return
+     * @param entry 
+     * @return 
      */
     public String getServiceInterfaceName(ServiceEntry entry) {
         return jaxrpcmapper.getServiceInterfaceName(entry);
     }
 
     /**
-     * @param path
+     * @param path 
      */
     public void loadMappingFromDir(String path) {
         jaxrpcmapper.loadMappingFromDir(path);
     }
 
     /**
-     * @param is
+     * @param is 
      */
     public void loadMappingFromInputStream(InputStream is) {
         jaxrpcmapper.loadMappingFromInputStream(is);

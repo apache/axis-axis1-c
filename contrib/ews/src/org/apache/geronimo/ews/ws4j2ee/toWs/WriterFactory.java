@@ -62,23 +62,22 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.ejb.EJBRemoteWriter;
 import org.apache.geronimo.ews.ws4j2ee.toWs.ejb.SessionBeanWriter;
 
 /**
- * <p>This class is for keep the interface and the concreate implementation of the 
+ * <p>This class is for keep the interface and the concreate implementation of the
  * <code>Writer</code> separate. It is go without saying that the only place where
  * the concrete implementation of the Writer class can refernce is this class.</p>
  */
 public class WriterFactory {
-    public static Writer createWriter(
-        J2EEWebServiceContext j2eewscontext,
-        int writerType)throws GenerationFault {
-        	if(GenerationConstants.EJB_DD_WRITER == writerType)
-        		return new EJBDDWriter(j2eewscontext);
-        	else if(GenerationConstants.EJB_HOME_INTERFACE_WRITER == writerType)
-				return new EJBHomeWriter(j2eewscontext); 
-			else if(GenerationConstants.EJB_REMOTE_INTERFACE_WRITER == writerType)	
-				return new EJBRemoteWriter(j2eewscontext);
-			else if(GenerationConstants.EJB_IMPLEMENTATION_BEAN_WRITER == writerType)		 
-				return new SessionBeanWriter(j2eewscontext);	
-        	else 
-        		throw new GenerationFault("the writer not found");	
+    public static Writer createWriter(J2EEWebServiceContext j2eewscontext,
+                                      int writerType) throws GenerationFault {
+        if (GenerationConstants.EJB_DD_WRITER == writerType)
+            return new EJBDDWriter(j2eewscontext);
+        else if (GenerationConstants.EJB_HOME_INTERFACE_WRITER == writerType)
+            return new EJBHomeWriter(j2eewscontext);
+        else if (GenerationConstants.EJB_REMOTE_INTERFACE_WRITER == writerType)
+            return new EJBRemoteWriter(j2eewscontext);
+        else if (GenerationConstants.EJB_IMPLEMENTATION_BEAN_WRITER == writerType)
+            return new SessionBeanWriter(j2eewscontext);
+        else
+            throw new GenerationFault("the writer not found");
     }
 }

@@ -68,35 +68,34 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.ws.ServerSideWsGenarator;
 import org.apache.geronimo.ews.ws4j2ee.toWs.wsdl.WSDLGenarator;
 
 /**
- * <p>This class is for keep the interface and the concreate implementation of the 
+ * <p>This class is for keep the interface and the concreate implementation of the
  * <code>Generator</code> separate. It is go without saying that the only place where
  * the concrete implementation of the Generator class can refernce is this class.</p>
  */
 public class GeneratorFactory {
-    public static Generator createGenerator(
-        J2EEWebServiceContext j2eewscontext,
-        int genaratorType)throws GenerationFault {
-        if(genaratorType == GenerationConstants.EJB_GENERATOR){
-        	return new EJBGenarator(j2eewscontext);
-        }else if(genaratorType == GenerationConstants.AXIS_WEBSERVICE_WRAPPER_GENERATOR){
-			return new WrapperWsGenarator(j2eewscontext);
-	    }else if(genaratorType == GenerationConstants.CLIENT_STUB_GENERATOR){
-			return new ClientSideWsGenarator(j2eewscontext);
-		}else if(genaratorType == GenerationConstants.WSDL_GENERATOR){
-			return new WSDLGenarator(j2eewscontext);
-		}else if(genaratorType == GenerationConstants.SEI_AND_TYPES_GENERATOR){
-			return new ServerSideWsGenarator(j2eewscontext);			
-		}else if(genaratorType == GenerationConstants.HANDLER_GENERATOR){
-			return new HandlerGenarator(j2eewscontext);
-		}else if(genaratorType == GenerationConstants.JAXRPCMAPPER_GENERATOR){
-			return new JaxrpcMapperGenarator(j2eewscontext);
-		}else if(genaratorType == GenerationConstants.WEBSERVICEDD_GENERATOR){
-			return new WebServiceDDGenarator(j2eewscontext);
-		}else if(genaratorType == GenerationConstants.J2EE_CONTAINER_DD_GENERATOR){
-			return new J2EEContainerSpecificDDGenerator(j2eewscontext);
-		}else if(genaratorType == GenerationConstants.BUILD_FILE_GENERATOR){
-			return new BuildFileGenerator(j2eewscontext);
-		}else
-        	throw new IllegalArgumentException("No genarator exists for the genarator type given");
+    public static Generator createGenerator(J2EEWebServiceContext j2eewscontext,
+                                            int genaratorType) throws GenerationFault {
+        if (genaratorType == GenerationConstants.EJB_GENERATOR) {
+            return new EJBGenarator(j2eewscontext);
+        } else if (genaratorType == GenerationConstants.AXIS_WEBSERVICE_WRAPPER_GENERATOR) {
+            return new WrapperWsGenarator(j2eewscontext);
+        } else if (genaratorType == GenerationConstants.CLIENT_STUB_GENERATOR) {
+            return new ClientSideWsGenarator(j2eewscontext);
+        } else if (genaratorType == GenerationConstants.WSDL_GENERATOR) {
+            return new WSDLGenarator(j2eewscontext);
+        } else if (genaratorType == GenerationConstants.SEI_AND_TYPES_GENERATOR) {
+            return new ServerSideWsGenarator(j2eewscontext);
+        } else if (genaratorType == GenerationConstants.HANDLER_GENERATOR) {
+            return new HandlerGenarator(j2eewscontext);
+        } else if (genaratorType == GenerationConstants.JAXRPCMAPPER_GENERATOR) {
+            return new JaxrpcMapperGenarator(j2eewscontext);
+        } else if (genaratorType == GenerationConstants.WEBSERVICEDD_GENERATOR) {
+            return new WebServiceDDGenarator(j2eewscontext);
+        } else if (genaratorType == GenerationConstants.J2EE_CONTAINER_DD_GENERATOR) {
+            return new J2EEContainerSpecificDDGenerator(j2eewscontext);
+        } else if (genaratorType == GenerationConstants.BUILD_FILE_GENERATOR) {
+            return new BuildFileGenerator(j2eewscontext);
+        } else
+            throw new IllegalArgumentException("No genarator exists for the genarator type given");
     }
 }

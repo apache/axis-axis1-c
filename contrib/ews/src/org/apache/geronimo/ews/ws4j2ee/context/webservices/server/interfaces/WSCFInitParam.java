@@ -55,27 +55,29 @@
 package org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces;
 
 /**
- * This interface the layer 4 element :init parameter of the webservices.xml. he interface will publish sufficient information about the 
+ * This interface the layer 4 element :init parameter of the webservices.xml. he interface will publish sufficient information about the
  * element
- *
  */
 public interface WSCFInitParam {
-	
-	/**
-	 * Gets the description of the init parameter element
-	 * @return description
-	 */
-	public String getDescription();
-	
-	/**
-	 * Gets the name of the init parameter element
-	 * @return name
-	 */
-	public String getParamName() ;
-	
-	/**
-	 * Gets the value of the init parameter element
-	 * @return value
-	 */
-	public String getParamValue();
+
+    /**
+     * Gets the description of the init parameter element
+     * 
+     * @return description
+     */
+    public String getDescription();
+
+    /**
+     * Gets the name of the init parameter element
+     * 
+     * @return name
+     */
+    public String getParamName();
+
+    /**
+     * Gets the value of the init parameter element
+     * 
+     * @return value
+     */
+    public String getParamValue();
 }

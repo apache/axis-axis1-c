@@ -55,91 +55,97 @@
 
 package org.apache.geronimo.ews.ws4j2ee.context;
 
-import java.io.InputStream;
-import java.io.Writer;
+import org.apache.axis.wsdl.symbolTable.BindingEntry;
+import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
+import org.apache.axis.wsdl.symbolTable.ServiceEntry;
+import org.apache.geronimo.ews.jaxrpcmapping.descriptor.JavaWsdlMapping;
+import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 
 import javax.wsdl.Operation;
 import javax.wsdl.Port;
 import javax.xml.namespace.QName;
-
-import org.apache.geronimo.ews.jaxrpcmapping.descriptor.JavaWsdlMapping;
-import org.apache.axis.wsdl.symbolTable.BindingEntry;
-import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
-import org.apache.axis.wsdl.symbolTable.ServiceEntry;
-import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
+import java.io.InputStream;
+import java.io.Writer;
 
 /**
- * <p>This is the interface which is shared by the application as the 
+ * <p>This is the interface which is shared by the application as the
  * jaxrpcmapper</p>
+ * 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public interface JaxRpcMapperContext {
     /**
-     * @param messageQName
-     * @return
+     * @param messageQName 
+     * @return 
      */
     public abstract String getExceptionType(QName messageQName);
+
     /**
-     * @param bEntry
-     * @param operation
-     * @return
+     * @param bEntry    
+     * @param operation 
+     * @return 
      */
-    public abstract String getJavaMethodName(
-        BindingEntry bEntry,
-        Operation operation);
+    public abstract String getJavaMethodName(BindingEntry bEntry,
+                                             Operation operation);
+
     /**
-     * @param bEntry
-     * @param operation
-     * @param position
-     * @return
+     * @param bEntry    
+     * @param operation 
+     * @param position  
+     * @return 
      */
-    public abstract String getJavaMethodParamType(
-        BindingEntry bEntry,
-        Operation operation,
-        int position);
+    public abstract String getJavaMethodParamType(BindingEntry bEntry,
+                                                  Operation operation,
+                                                  int position);
+
     /**
-     * @param bEntry
-     * @param operation
-     * @return
+     * @param bEntry    
+     * @param operation 
+     * @return 
      */
-    public abstract String getJavaMethodReturnType(
-        BindingEntry bEntry,
-        Operation operation);
+    public abstract String getJavaMethodReturnType(BindingEntry bEntry,
+                                                   Operation operation);
+
     /**
-     * @param typeQName
-     * @return
+     * @param typeQName 
+     * @return 
      */
     public abstract String getJavaType(QName typeQName);
+
     /**
-     * @return
+     * @return 
      */
     public abstract JavaWsdlMapping getMapping();
+
     /**
-     * @param port
-     * @return
+     * @param port 
+     * @return 
      */
     public abstract String getPortName(Port port);
+
     /**
-     * @param ptEntry
-     * @param bEntry
-     * @return
+     * @param ptEntry 
+     * @param bEntry  
+     * @return 
      */
-    public abstract String getServiceEndpointInterfaceName(
-        PortTypeEntry ptEntry,
-        BindingEntry bEntry);
+    public abstract String getServiceEndpointInterfaceName(PortTypeEntry ptEntry,
+                                                           BindingEntry bEntry);
+
     /**
-     * @param entry
-     * @return
+     * @param entry 
+     * @return 
      */
     public abstract String getServiceInterfaceName(ServiceEntry entry);
+
     /**
-     * @param path
+     * @param path 
      */
     public abstract void loadMappingFromDir(String path);
+
     /**
-     * @param is
+     * @param is 
      */
     public abstract void loadMappingFromInputStream(InputStream is);
-    
-    public void serialize(Writer out)throws GenerationFault;
+
+    public void serialize(Writer out) throws GenerationFault;
 }

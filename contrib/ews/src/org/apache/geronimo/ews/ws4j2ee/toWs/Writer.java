@@ -56,12 +56,12 @@
 package org.apache.geronimo.ews.ws4j2ee.toWs;
 
 /**
- * <p>for each single classs to be written there should be an associated 
+ * <p>for each single classs to be written there should be an associated
  * writer instance. The writer instances of a single module, (e.g. writer
  * instances of the EJB say <code>RemoteInterface Writer,HomeInterfaceWriter,
  * ImplementationBeanWriter</code>) are bundeled by a single Genarator instance.
- * The writer instaces should extend from the AbstractWriter unless it 
- * is required to have it otherwise.</p> 
+ * The writer instaces should extend from the AbstractWriter unless it
+ * is required to have it otherwise.</p>
  */
 public interface Writer {
     /**

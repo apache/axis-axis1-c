@@ -54,42 +54,45 @@
  */
 package org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces;
 
-
 /**
  * This will interface the WebServices element in the webService.xml file
- *
  */
 public interface WSCFWebservices {
-	
-	/**
-	 * Gets websevice description Elements from the webservices element as a n array
-	 * @return webservice-descriptions
-	 */
-	public WSCFWebserviceDescription[] getWebServiceDescriptions() ;
-	
-	/**
-	 * Gets the description element of the webservices Element
-	 * @return Description
-	 */
-	public String getDescription() ;
-	
-	/**
-	 * Gets the display name element of the webservices Element
-	 * @return display-name
-	 */
-	public String getDisplayName();
 
-	/**
-	 * Gets the large icon element of the webservices Element
-	 * @return large-icon
-	 */
-	public String getLargeIcon();
-	
-	/**
-	 * Gets the small icon element of the webservices Element
-	 * @return small-icon
-	 */
-	public String getSmallIcon();
+    /**
+     * Gets websevice description Elements from the webservices element as a n array
+     * 
+     * @return webservice-descriptions
+     */
+    public WSCFWebserviceDescription[] getWebServiceDescriptions();
+
+    /**
+     * Gets the description element of the webservices Element
+     * 
+     * @return Description
+     */
+    public String getDescription();
+
+    /**
+     * Gets the display name element of the webservices Element
+     * 
+     * @return display-name
+     */
+    public String getDisplayName();
+
+    /**
+     * Gets the large icon element of the webservices Element
+     * 
+     * @return large-icon
+     */
+    public String getLargeIcon();
+
+    /**
+     * Gets the small icon element of the webservices Element
+     * 
+     * @return small-icon
+     */
+    public String getSmallIcon();
 	
 	
 //	public WSCFWebserviceDescription getWSDDService(QName qname);

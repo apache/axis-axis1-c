@@ -55,17 +55,6 @@
 
 package org.apache.geronimo.ews.ws4j2ee.context.wsdl.impl;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Vector;
-
-import javax.wsdl.Binding;
-import javax.wsdl.PortType;
-import javax.wsdl.Service;
-import javax.xml.namespace.QName;
-
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.Element;
 import org.apache.axis.wsdl.symbolTable.PortEntry;
@@ -77,77 +66,87 @@ import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.type.SchemaType;
 
+import javax.wsdl.Binding;
+import javax.wsdl.PortType;
+import javax.wsdl.Service;
+import javax.xml.namespace.QName;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
 
 /**
- * <p>This Class is a wrapper fo the Axis SymbolTable. Since SymbolTable is parsed 
- * completly it is not editable so the methods will throw the 
+ * <p>This Class is a wrapper fo the Axis SymbolTable. Since SymbolTable is parsed
+ * completly it is not editable so the methods will throw the
  * UnsupportedOperationException.</p>
+ * 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
-public class AxisWSDLContext implements WSDLContext{
-	private SymbolTable symbolTable;
-	private HashMap services;
-	private HashMap bindings;
-	private HashMap portetypes; 
-	private HashMap ports;
-	
-	public AxisWSDLContext(SymbolTable axisSymbltable){
-		this.symbolTable = axisSymbltable;
-		this.services = new HashMap();
-		this.bindings = new HashMap();
-		this.portetypes = new HashMap();
-		this.ports = new HashMap();
-		
-		Iterator it = symbolTable.getHashMap().values().iterator();
-		 while (it.hasNext()) {
-			Vector v = (Vector) it.next();
-			  for (int i = 0; i < v.size(); ++i) {
-				  SymTabEntry entry = (SymTabEntry) v.elementAt(i);
-   
-			 	 if (entry instanceof ServiceEntry) {
-			 	 	Service service = ((ServiceEntry)entry).getService();
-					this.services.put(service.getQName(),entry);
-				 }else if(entry instanceof BindingEntry){
-					Binding binding = ((BindingEntry)entry).getBinding();
-					this.bindings.put(binding.getQName(),entry);
-				 }else if(entry instanceof PortTypeEntry){
-					PortType portType = ((PortTypeEntry)entry).getPortType();
-					this.portetypes.put(portType.getQName(),entry);
-				 }else if(entry instanceof PortEntry){
-					PortEntry port = ((PortEntry)entry);
-			  		this.ports.put(port.getQName(),entry);
-		   		}
-				 
-			}
-		 }
-	}
+public class AxisWSDLContext implements WSDLContext {
+    private SymbolTable symbolTable;
+    private HashMap services;
+    private HashMap bindings;
+    private HashMap portetypes;
+    private HashMap ports;
+
+    public AxisWSDLContext(SymbolTable axisSymbltable) {
+        this.symbolTable = axisSymbltable;
+        this.services = new HashMap();
+        this.bindings = new HashMap();
+        this.portetypes = new HashMap();
+        this.ports = new HashMap();
+
+        Iterator it = symbolTable.getHashMap().values().iterator();
+        while (it.hasNext()) {
+            Vector v = (Vector) it.next();
+            for (int i = 0; i < v.size(); ++i) {
+                SymTabEntry entry = (SymTabEntry) v.elementAt(i);
+
+                if (entry instanceof ServiceEntry) {
+                    Service service = ((ServiceEntry) entry).getService();
+                    this.services.put(service.getQName(), entry);
+                } else if (entry instanceof BindingEntry) {
+                    Binding binding = ((BindingEntry) entry).getBinding();
+                    this.bindings.put(binding.getQName(), entry);
+                } else if (entry instanceof PortTypeEntry) {
+                    PortType portType = ((PortTypeEntry) entry).getPortType();
+                    this.portetypes.put(portType.getQName(), entry);
+                } else if (entry instanceof PortEntry) {
+                    PortEntry port = ((PortEntry) entry);
+                    this.ports.put(port.getQName(), entry);
+                }
+
+            }
+        }
+    }
 
     /**
      * Symbol table can't be edited
      */
     public void addService(Service service) {
- 		throw new UnsupportedOperationException("Symboltable can't be edited");
+        throw new UnsupportedOperationException("Symboltable can't be edited");
     }
 
-	/**
-	 * Symbol table can't be edited
-	 */
-   public void addType(SchemaType type) {
-		throw new UnsupportedOperationException("Symboltable can't be edited");
+    /**
+     * Symbol table can't be edited
+     */
+    public void addType(SchemaType type) {
+        throw new UnsupportedOperationException("Symboltable can't be edited");
     }
 
-	/**
-	 * 
-	 */
+    /**
+     * 
+     */
     public BindingEntry getBinding(QName bindingname) {
-    	if(bindingname == null){
-    		//if binding not specified the first one will return
-    		Iterator values = this.bindings.values().iterator();
-    		if(values.hasNext())
-    			return (BindingEntry)values.next();
-    	}
-    		
-        return (BindingEntry)this.bindings.get(bindingname);
+        if (bindingname == null) {
+            //if binding not specified the first one will return
+            Iterator values = this.bindings.values().iterator();
+            if (values.hasNext())
+                return (BindingEntry) values.next();
+        }
+
+        return (BindingEntry) this.bindings.get(bindingname);
     }
 
     /* (non-Javadoc)
@@ -161,21 +160,21 @@ public class AxisWSDLContext implements WSDLContext{
      * @see org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext#getPortType(org.apache.xml.utils.QName)
      */
     public PortTypeEntry getPortType(QName portname) {
-        return (PortTypeEntry)this.portetypes.get(portname);
+        return (PortTypeEntry) this.portetypes.get(portname);
     }
 
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext#getPortTypes()
      */
     public Collection getPortTypes() {
-         return this.portetypes.values();
+        return this.portetypes.values();
     }
 
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext#getService(org.apache.xml.utils.QName)
      */
     public ServiceEntry getService(QName servicename) {
-        return (ServiceEntry)this.services.get(servicename);
+        return (ServiceEntry) this.services.get(servicename);
     }
 
     /* (non-Javadoc)
@@ -197,13 +196,13 @@ public class AxisWSDLContext implements WSDLContext{
      * @see org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext#getTypes()
      */
     public Map getTypes() {
-		return symbolTable.getTypeIndex();
+        return symbolTable.getTypeIndex();
     }
 
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext#getElement(javax.xml.namespace.QName)
      */
-    public Element getElement(QName name) {  
+    public Element getElement(QName name) {
         return this.symbolTable.getElement(name);
     }
 
@@ -211,14 +210,14 @@ public class AxisWSDLContext implements WSDLContext{
      * @see org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext#getPort()
      */
     public PortEntry getPort(QName name) {
- 		Object obj = this.ports.get(name);
- 		//when Symbol table populates the URI of the port is given as ""
- 		//so we have to cheat 
- 		if(obj == null){
- 			name = new QName(name.getLocalPart());
- 			obj = this.ports.get(name);
- 		}	  
- 		return (PortEntry)obj;
+        Object obj = this.ports.get(name);
+        //when Symbol table populates the URI of the port is given as ""
+        //so we have to cheat 
+        if (obj == null) {
+            name = new QName(name.getLocalPart());
+            obj = this.ports.get(name);
+        }
+        return (PortEntry) obj;
     }
 
     /* (non-Javadoc)

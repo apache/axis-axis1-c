@@ -5,6 +5,7 @@
 <project default="jar"
     xmlns:j="jelly:core"
     xmlns:maven="jelly:maven"
+    xmlns:deploy="deploy"
     xmlns:ant="jelly:ant">
 
     <goal name="setclasspath">
@@ -24,6 +25,11 @@
 
     </preGoal>
 
+    <postGoal name="jar">
+        <ant:mkdir dir="${basedir}/target/lib"/>
+        <deploy:copy-deps todir="${basedir}/target/lib"/>    
+    </postGoal>
+    
     <goal name="generate:jaxb"
         description="Generates the XML beans using JAXB">
 

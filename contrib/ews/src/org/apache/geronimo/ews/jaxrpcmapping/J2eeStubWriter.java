@@ -54,30 +54,6 @@
  */
 package org.apache.geronimo.ews.jaxrpcmapping;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-
-import javax.wsdl.Binding;
-import javax.wsdl.BindingOperation;
-import javax.wsdl.Fault;
-import javax.wsdl.Message;
-import javax.wsdl.Operation;
-import javax.wsdl.OperationType;
-import javax.wsdl.Part;
-import javax.wsdl.PortType;
-import javax.wsdl.extensions.UnknownExtensibilityElement;
-import javax.wsdl.extensions.soap.SOAPBinding;
-import javax.wsdl.extensions.soap.SOAPOperation;
-import javax.xml.namespace.QName;
-
 import org.apache.axis.Constants;
 import org.apache.axis.enum.Style;
 import org.apache.axis.enum.Use;
@@ -96,9 +72,33 @@ import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.toJava.JavaClassWriter;
 import org.apache.axis.wsdl.toJava.Utils;
 
+import javax.wsdl.Binding;
+import javax.wsdl.BindingOperation;
+import javax.wsdl.Fault;
+import javax.wsdl.Message;
+import javax.wsdl.Operation;
+import javax.wsdl.OperationType;
+import javax.wsdl.Part;
+import javax.wsdl.PortType;
+import javax.wsdl.extensions.UnknownExtensibilityElement;
+import javax.wsdl.extensions.soap.SOAPBinding;
+import javax.wsdl.extensions.soap.SOAPOperation;
+import javax.xml.namespace.QName;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
 /**
  * This is Wsdl2java's stub writer.  It writes the <BindingName>Stub.java
  * file which contains the <bindingName>Stub class.
+ * 
  * @author Ias (iasandcb@tmax.co.kr)
  * @deprecated no more used by J2eeGeneratorFactory
  */
@@ -107,10 +107,10 @@ public class J2eeStubWriter extends JavaClassWriter {
     private Binding binding;
     private SymbolTable symbolTable;
 
-    static String [] modeStrings = new String [] { "",
-                                            "org.apache.axis.description.ParameterDesc.IN",
-                                            "org.apache.axis.description.ParameterDesc.OUT",
-                                            "org.apache.axis.description.ParameterDesc.INOUT" };
+    static String[] modeStrings = new String[]{"",
+                                               "org.apache.axis.description.ParameterDesc.IN",
+                                               "org.apache.axis.description.ParameterDesc.OUT",
+                                               "org.apache.axis.description.ParameterDesc.INOUT"};
     static HashMap styles = new HashMap();
     static HashMap uses = new HashMap();
 
@@ -128,10 +128,9 @@ public class J2eeStubWriter extends JavaClassWriter {
     /**
      * Constructor.
      */
-    protected J2eeStubWriter(
-            J2eeEmitter emitter,
-            BindingEntry bEntry,
-            SymbolTable symbolTable) {
+    protected J2eeStubWriter(J2eeEmitter emitter,
+                             BindingEntry bEntry,
+                             SymbolTable symbolTable) {
         super(emitter, bEntry.getName() + "Stub", "stub");
         this.bEntry = bEntry;
         this.binding = bEntry.getBinding();
@@ -160,7 +159,7 @@ public class J2eeStubWriter extends JavaClassWriter {
 
         HashSet types = getTypesInPortType(portType);
         boolean hasMIME = Utils.hasMIME(bEntry);
-        if (types.size() > 0  || hasMIME) {
+        if (types.size() > 0 || hasMIME) {
             pw.println("    private java.util.Vector cachedSerClasses = new java.util.Vector();");
             pw.println("    private java.util.Vector cachedSerQNames = new java.util.Vector();");
             pw.println("    private java.util.Vector cachedSerFactories = new java.util.Vector();");
@@ -207,10 +206,10 @@ public class J2eeStubWriter extends JavaClassWriter {
                 // 3) Don't register types that are not referenced
                 //    or only referenced in a literal context.
                 if ((type.getBaseType() != null && type.getRefType() == null) ||
-                    type instanceof CollectionTE ||
-                    type instanceof Element ||
-                    !type.isReferenced() ||
-                    type.isOnlyLiteralReferenced()) {
+                        type instanceof CollectionTE ||
+                        type instanceof Element ||
+                        !type.isReferenced() ||
+                        type.isOnlyLiteralReferenced()) {
                     continue;
                 }
 
@@ -289,8 +288,8 @@ public class J2eeStubWriter extends JavaClassWriter {
                         //TODO: After WSDL4J supports soap12, change this code
                         UnknownExtensibilityElement unkElement = (UnknownExtensibilityElement) obj;
                         QName name = unkElement.getElementType();
-                        if(name.getNamespaceURI().equals(Constants.URI_WSDL12_SOAP) && 
-                           name.getLocalPart().equals("binding")){
+                        if (name.getNamespaceURI().equals(Constants.URI_WSDL12_SOAP) &&
+                                name.getLocalPart().equals("binding")) {
                             pw.println("                    _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP12_CONSTANTS);");
                             pw.println("                    _call.setEncodingStyle(org.apache.axis.Constants.URI_SOAP12_ENC);");
                         }
@@ -340,13 +339,13 @@ public class J2eeStubWriter extends JavaClassWriter {
                     //TODO: After WSDL4J supports soap12, change this code
                     UnknownExtensibilityElement unkElement = (UnknownExtensibilityElement) obj;
                     QName name = unkElement.getElementType();
-                    if(name.getNamespaceURI().equals(Constants.URI_WSDL12_SOAP) && 
-                       name.getLocalPart().equals("operation")){
+                    if (name.getNamespaceURI().equals(Constants.URI_WSDL12_SOAP) &&
+                            name.getLocalPart().equals("operation")) {
                         if (unkElement.getElement().getAttribute("soapAction") != null) {
-                            soapAction = unkElement.getElement().getAttribute("soapAction"); 
+                            soapAction = unkElement.getElement().getAttribute("soapAction");
                         }
                         opStyle = unkElement.getElement().getAttribute("style");
-                    }                    
+                    }
                 }
             }
             Operation ptOperation = operation.getOperation();
@@ -358,8 +357,7 @@ public class J2eeStubWriter extends JavaClassWriter {
                     || type == OperationType.SOLICIT_RESPONSE) {
                 pw.println(parameters.signature);
                 pw.println();
-            }
-            else {
+            } else {
                 writeOperation(pw, operation, parameters, soapAction, opStyle,
                         type == OperationType.ONE_WAY, i);
             }
@@ -373,13 +371,13 @@ public class J2eeStubWriter extends JavaClassWriter {
                 operations.size() + "];");
 
         for (int j = 0, k = 0; j < operations.size(); ++j) {
-            if((j%OPERDESC_PER_BLOCK) == 0) {
+            if ((j % OPERDESC_PER_BLOCK) == 0) {
                 k++;
                 pw.println("        _initOperationDesc" + k + "();");
             }
         }
         for (int i = 0, k = 0; i < operations.size(); ++i) {
-            if((i%OPERDESC_PER_BLOCK) == 0) {
+            if ((i % OPERDESC_PER_BLOCK) == 0) {
                 k++;
                 pw.println("    }\n");
                 pw.println("    private static void _initOperationDesc" + k + "(){");
@@ -401,10 +399,10 @@ public class J2eeStubWriter extends JavaClassWriter {
                     //TODO: After WSDL4J supports soap12, change this code
                     UnknownExtensibilityElement unkElement = (UnknownExtensibilityElement) obj;
                     QName name = unkElement.getElementType();
-                    if(name.getNamespaceURI().equals(Constants.URI_WSDL12_SOAP) && 
-                       name.getLocalPart().equals("operation")){
+                    if (name.getNamespaceURI().equals(Constants.URI_WSDL12_SOAP) &&
+                            name.getLocalPart().equals("operation")) {
                         opStyle = unkElement.getElement().getAttribute("style");
-                    }                    
+                    }
                 }
             }
             Operation ptOperation = operation.getOperation();
@@ -435,8 +433,7 @@ public class J2eeStubWriter extends JavaClassWriter {
                 if (p.getMIMEInfo() != null) {
                     MimeInfo mimeInfo = p.getMIMEInfo();
                     javaType = JavaUtils.mimeToJava(mimeInfo.getType()) + mimeInfo.getDimensions() + ".class, ";
-                }
-                else {
+                } else {
                     javaType = p.getType().getName();
                     if (javaType != null) {
                         javaType += ".class, ";
@@ -454,9 +451,9 @@ public class J2eeStubWriter extends JavaClassWriter {
                 boolean isInHeader = p.isInHeader();
                 boolean isOutHeader = p.isOutHeader();
                 pw.println("        oper.addParameter(" + paramNameText
-                           + ", " + paramTypeText + ", "
-                           + javaType + modeStrings[p.getMode()]
-                           + ", " + isInHeader + ", " + isOutHeader + ");");
+                        + ", " + paramTypeText + ", "
+                        + javaType + modeStrings[p.getMode()]
+                        + ", " + isInHeader + ", " + isOutHeader + ");");
             }
             // set output type
             if (parameters.returnParam != null) {
@@ -469,31 +466,28 @@ public class J2eeStubWriter extends JavaClassWriter {
                 if (parameters.returnParam.getMIMEInfo() != null) {
                     MimeInfo mimeInfo = parameters.returnParam.getMIMEInfo();
                     javaType = JavaUtils.mimeToJava(mimeInfo.getType()) + mimeInfo.getDimensions();
-                }
-                else {
+                } else {
                     javaType = parameters.returnParam.getType().getName();
                 }
                 if (javaType == null) {
                     javaType = "";
-                }
-                else {
+                } else {
                     javaType = javaType + ".class";
                 }
                 pw.println("        oper.setReturnType(" +
 
-                          Utils.getNewQName(returnType) + ");");
+                        Utils.getNewQName(returnType) + ");");
                 pw.println("        oper.setReturnClass("
-                           + javaType + ");");
+                        + javaType + ");");
                 QName returnQName = parameters.returnParam.getQName();
                 if (returnQName != null) {
                     pw.println("        oper.setReturnQName(" +
-                               Utils.getNewQName(returnQName) + ");");
+                            Utils.getNewQName(returnQName) + ");");
                 }
                 if (parameters.returnParam.isOutHeader()) {
                     pw.println("        oper.setReturnHeader(true);");
                 }
-            }
-            else {
+            } else {
                 pw.println("        oper.setReturnType(org.apache.axis.encoding.XMLType.AXIS_VOID);");
             }
 
@@ -548,21 +542,21 @@ public class J2eeStubWriter extends JavaClassWriter {
             }
         }
 
-        if(emitter.isAllWanted()) {
+        if (emitter.isAllWanted()) {
             HashMap rawSymbolTable = symbolTable.getHashMap();
-            for(Iterator j = rawSymbolTable.values().iterator(); j.hasNext(); ) {
-                Vector typeVector = (Vector)j.next();
-                for(Iterator k = typeVector.iterator(); k.hasNext(); ) {
+            for (Iterator j = rawSymbolTable.values().iterator(); j.hasNext();) {
+                Vector typeVector = (Vector) j.next();
+                for (Iterator k = typeVector.iterator(); k.hasNext();) {
                     Object symbol = k.next();
-                    if(symbol instanceof DefinedType) {
-                        TypeEntry type = (TypeEntry)symbol;
-                        if(!types.contains(type)) {
+                    if (symbol instanceof DefinedType) {
+                        TypeEntry type = (TypeEntry) symbol;
+                        if (!types.contains(type)) {
                             types.add(type);
                         }
                     }
                 }
             }
-        }        
+        }
         return types;
     } // getTypesInPortType
 
@@ -577,7 +571,7 @@ public class J2eeStubWriter extends JavaClassWriter {
         Parameters params = bEntry.getParameters(operation);
 
         // Loop over parameter types for this operation
-        for (int i=0; i < params.list.size(); i++) {
+        for (int i = 0; i < params.list.size(); i++) {
             Parameter p = (Parameter) params.list.get(i);
             v.add(p.getType());
         }
@@ -668,9 +662,9 @@ public class J2eeStubWriter extends JavaClassWriter {
      */
 
     private void writeSerializationDecls(PrintWriter pw, boolean hasMIME,
-            String namespace) {
-        pw.println("            java.lang.Class cls;" );
-        pw.println("            javax.xml.namespace.QName qName;" );
+                                         String namespace) {
+        pw.println("            java.lang.Class cls;");
+        pw.println("            javax.xml.namespace.QName qName;");
         pw.println("            java.lang.Class beansf = org.apache.axis.encoding.ser.BeanSerializerFactory.class;");
         pw.println("            java.lang.Class beandf = org.apache.axis.encoding.ser.BeanDeserializerFactory.class;");
         pw.println("            java.lang.Class enumsf = org.apache.axis.encoding.ser.EnumSerializerFactory.class;");
@@ -687,8 +681,8 @@ public class J2eeStubWriter extends JavaClassWriter {
             QName qname = new QName(namespace, "DataHandler");
 
             pw.println("            qName = new javax.xml.namespace.QName(\""
-                       + qname.getNamespaceURI() + "\", \"" + qname.getLocalPart()
-                       + "\");");
+                    + qname.getNamespaceURI() + "\", \"" + qname.getLocalPart()
+                    + "\");");
             pw.println("            cachedSerQNames.add(qName);");
             pw.println("            cls = javax.activation.DataHandler.class;");
             pw.println("            cachedSerClasses.add(cls);");
@@ -703,8 +697,8 @@ public class J2eeStubWriter extends JavaClassWriter {
         QName qname = type.getQName();
 
         pw.println("            qName = new javax.xml.namespace.QName(\""
-                   + qname.getNamespaceURI() + "\", \"" + qname.getLocalPart()
-                   + "\");");
+                + qname.getNamespaceURI() + "\", \"" + qname.getLocalPart()
+                + "\");");
         pw.println("            cachedSerQNames.add(qName);");
         pw.println("            cls = " + type.getName() + ".class;");
         pw.println("            cachedSerClasses.add(cls);");
@@ -712,8 +706,7 @@ public class J2eeStubWriter extends JavaClassWriter {
             pw.println("            cachedSerFactories.add(arraysf);");
             pw.println("            cachedDeserFactories.add(arraydf);");
         } else if (type.getNode() != null &&
-                   Utils.getEnumerationBaseAndValues(
-                     type.getNode(), symbolTable) != null) {
+                Utils.getEnumerationBaseAndValues(type.getNode(), symbolTable) != null) {
             pw.println("            cachedSerFactories.add(enumsf);");
             pw.println("            cachedDeserFactories.add(enumdf);");
         } else if (type.isSimpleType()) {
@@ -740,16 +733,15 @@ public class J2eeStubWriter extends JavaClassWriter {
     /**
      * Write the stub code for the given operation.
      */
-    private void writeOperation(
-            PrintWriter pw,
-            BindingOperation operation,
-            Parameters parms,
-            String soapAction,
-            String opStyle,
-            boolean oneway,
-            int opIndex) {
+    private void writeOperation(PrintWriter pw,
+                                BindingOperation operation,
+                                Parameters parms,
+                                String soapAction,
+                                String opStyle,
+                                boolean oneway,
+                                int opIndex) {
 
-        writeComment(pw, operation.getDocumentationElement(),true);
+        writeComment(pw, operation.getDocumentationElement(), true);
 
         pw.println(parms.signature + " {");
         pw.println("        if (super.cachedEndpoint == null) {");
@@ -789,7 +781,6 @@ public class J2eeStubWriter extends JavaClassWriter {
             style = Style.WRAPPED;
         }
 
-        
         Iterator iterator = bEntry.getBinding().getExtensibilityElements().iterator();
         while (iterator.hasNext()) {
             Object obj = iterator.next();
@@ -799,8 +790,8 @@ public class J2eeStubWriter extends JavaClassWriter {
                 //TODO: After WSDL4J supports soap12, change this code
                 UnknownExtensibilityElement unkElement = (UnknownExtensibilityElement) obj;
                 QName name = unkElement.getElementType();
-                if(name.getNamespaceURI().equals(Constants.URI_WSDL12_SOAP) && 
-                   name.getLocalPart().equals("binding")){
+                if (name.getNamespaceURI().equals(Constants.URI_WSDL12_SOAP) &&
+                        name.getLocalPart().equals("binding")) {
                     pw.println("        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP12_CONSTANTS);");
                 }
             }
@@ -812,15 +803,15 @@ public class J2eeStubWriter extends JavaClassWriter {
             // wrap the elements in, matches the Qname of the parameter
             // element.
             Map partsMap = operation.getOperation().getInput().getMessage().getParts();
-            Part p = (Part)partsMap.values().iterator().next();
+            Part p = (Part) partsMap.values().iterator().next();
             QName q = p.getElementName();
-            pw.println("        _call.setOperationName(" + Utils.getNewQName(q) + ");" );
+            pw.println("        _call.setOperationName(" + Utils.getNewQName(q) + ");");
         } else {
             QName elementQName =
-                Utils.getOperationQName(operation, bEntry, symbolTable);
+                    Utils.getOperationQName(operation, bEntry, symbolTable);
             if (elementQName != null) {
                 pw.println("        _call.setOperationName(" +
-                        Utils.getNewQName(elementQName) + ");" );
+                        Utils.getNewQName(elementQName) + ");");
             }
         }
         pw.println();
@@ -832,16 +823,15 @@ public class J2eeStubWriter extends JavaClassWriter {
         pw.println("        setAttachments(_call);");
         
         // Set DIME flag if needed 
-        if(bEntry.isOperationDIME(operation.getOperation().getName())) {
+        if (bEntry.isOperationDIME(operation.getOperation().getName())) {
             pw.println("        _call.setProperty(_call.ATTACHMENT_ENCAPSULATION_FORMAT, _call.ATTACHMENT_ENCAPSULATION_FORMAT_DIME);");
         }
 
         // Invoke the operation
         if (oneway) {
             pw.print("        _call.invokeOneWay(");
-        }
-        else {
-        	pw.print("        java.lang.Object _resp = _call.invoke(");
+        } else {
+            pw.print("        java.lang.Object _resp = _call.invoke(");
         }
         pw.print("new java.lang.Object[] {");
         writeParameters(pw, parms);
@@ -864,8 +854,7 @@ public class J2eeStubWriter extends JavaClassWriter {
             if (p.getMode() != Parameter.OUT) {
                 if (needComma) {
                     pw.print(", ");
-                }
-                else {
+                } else {
                     needComma = true;
                 }
 
@@ -874,8 +863,7 @@ public class J2eeStubWriter extends JavaClassWriter {
                     javifiedName += ".value";
                 }
                 if (p.getMIMEInfo() == null) {
-                    javifiedName = Utils.wrapPrimitiveType(
-                            p.getType(), javifiedName);
+                    javifiedName = Utils.wrapPrimitiveType(p.getType(), javifiedName);
                 }
                 pw.print(javifiedName);
             }
@@ -886,17 +874,16 @@ public class J2eeStubWriter extends JavaClassWriter {
         pw.println("        if (_resp instanceof java.rmi.RemoteException) {");
         pw.println("            throw (java.rmi.RemoteException)_resp;");
         pw.println("        }");
- 
+
         int allOuts = parms.outputs + parms.inouts;
         if (allOuts > 0) {
             pw.println("        else {");
             pw.println("            extractAttachments(_call);");
-        
+
             if (allOuts == 1) {
                 if (parms.returnParam != null) {
-                    writeOutputAssign(pw, "return ", parms.returnParam , "_resp");
-                }
-                else {
+                    writeOutputAssign(pw, "return ", parms.returnParam, "_resp");
+                } else {
                     // The resp object must go into a holder
                     int i = 0;
                     Parameter p = (Parameter) parms.list.get(i);
@@ -910,22 +897,21 @@ public class J2eeStubWriter extends JavaClassWriter {
                     pw.println("            java.util.Map _output;");
                     pw.println("            _output = _call.getOutputParams();");
                     writeOutputAssign(pw, javifiedName + ".value = ",
-                                      p,
-                                      "_output.get(" + qnameName + ")");
+                            p,
+                            "_output.get(" + qnameName + ")");
                 }
-            }
-            else {
+            } else {
                 // There is more than 1 output.  Get the outputs from getOutputParams.
                 pw.println("            java.util.Map _output;");
                 pw.println("            _output = _call.getOutputParams();");
-                for (int i = 0; i < parms.list.size (); ++i) {
-                    Parameter p = (Parameter) parms.list.get (i);
+                for (int i = 0; i < parms.list.size(); ++i) {
+                    Parameter p = (Parameter) parms.list.get(i);
                     String javifiedName = Utils.xmlNameToJava(p.getName());
                     String qnameName = Utils.getNewQName(p.getQName());
                     if (p.getMode() != Parameter.IN) {
                         writeOutputAssign(pw, javifiedName + ".value = ",
-                                          p,
-                                          "_output.get(" + qnameName + ")");
+                                p,
+                                "_output.get(" + qnameName + ")");
                     }
                 }
                 if (parms.returnParam != null) {
@@ -941,17 +927,17 @@ public class J2eeStubWriter extends JavaClassWriter {
 
     /**
      * writeOutputAssign
+     * 
      * @param target (either "return" or "something ="
-     * @param type (source TypeEntry)
+     * @param type   (source TypeEntry)
      * @param source (source String)
-     *
      */
     private void writeOutputAssign(PrintWriter pw, String target,
                                    Parameter param,
                                    String source) {
 
         TypeEntry type = param.getType();
-        
+
         if ((type != null) && (type.getName() != null)) {
             String typeName = type.getName();
             if (param.isOmittable()) {
@@ -963,13 +949,11 @@ public class J2eeStubWriter extends JavaClassWriter {
             pw.println("            try {");
             pw.println("                " + target
                     + Utils.getResponseString(param, source));
-            pw.println(
-            "            } catch (java.lang.Exception _exception) {");
-            pw.println(
-                    "                " + target
+            pw.println("            } catch (java.lang.Exception _exception) {");
+            pw.println("                " + target
                     + Utils.getResponseString(param,
                             "org.apache.axis.utils.JavaUtils.convert(" +
-                            source + ", " + typeName + ".class)"));
+                    source + ", " + typeName + ".class)"));
             pw.println("            }");
         } else {
             pw.println("              " + target

@@ -55,10 +55,10 @@
 package org.apache.geronimo.ews.ws4j2ee.context.webservices.server;
 
 import java.io.IOException;
+
 /**
  * @author Chathura Herath
- *
  */
-public class WSCFException extends IOException{
+public class WSCFException extends IOException {
 
 }

@@ -59,73 +59,80 @@ import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSC
 import org.w3c.dom.Element;
 
 /**
- * This will encapsulate the init parameter element and the information will be able access 
+ * This will encapsulate the init parameter element and the information will be able access
  * using the interface published.
- *
  */
 public class WSCFInitParamImpl extends WSCFElement implements WSCFInitParam {
 
-	/**
-	 * Init parameter name 
-	 */
-	private String paramName;
-	
-	/**
-	 * Init parameter value
-	 */
-	private String paramValue;
-	
-	/**
-	 * Init parameter description
-	 */
-	private String description;
-	
-	/**
-	 * The constructor. this willget the child nodes that provide teh sufficient statistics about the init parameters.
-	 * @param e init parameter Element
-	 * @throws WSCFException
-	 */
-	public WSCFInitParamImpl(Element e) throws WSCFException{
-		super(e);
-		
-		//extract param name
-		Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_PARAM_NAME);
-		if(null != element){this.paramName = element.getChildNodes().item(0).toString();}
-		
-		//extract param value
-		element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_PARAM_VLAUE);
-		if(null != element){this.paramValue = element.getChildNodes().item(0).toString();}
-		
-		// extract the description
-		element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DESCRIPTION);
-		if(null != element){this.description = element.getChildNodes().item(0).toString();}
-		
-	
-	}
-	
-	
-	/**
-	 * Gets the description of the init parameter element
-	 * @return description
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * Init parameter name
+     */
+    private String paramName;
 
-	/**
-	 * Gets the name of the init parameter element
-	 * @return name
-	 */
-	public String getParamName() {
-		return paramName;
-	}
+    /**
+     * Init parameter value
+     */
+    private String paramValue;
 
-	/**
-	 * Gets the value of the init parameter element
-	 * @return value
-	 */
-	public String getParamValue() {
-		return paramValue;
-	}
+    /**
+     * Init parameter description
+     */
+    private String description;
+
+    /**
+     * The constructor. this willget the child nodes that provide teh sufficient statistics about the init parameters.
+     * 
+     * @param e init parameter Element
+     * @throws WSCFException 
+     */
+    public WSCFInitParamImpl(Element e) throws WSCFException {
+        super(e);
+		
+        //extract param name
+        Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_PARAM_NAME);
+        if (null != element) {
+            this.paramName = element.getChildNodes().item(0).toString();
+        }
+		
+        //extract param value
+        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_PARAM_VLAUE);
+        if (null != element) {
+            this.paramValue = element.getChildNodes().item(0).toString();
+        }
+		
+        // extract the description
+        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DESCRIPTION);
+        if (null != element) {
+            this.description = element.getChildNodes().item(0).toString();
+        }
+
+    }
+
+    /**
+     * Gets the description of the init parameter element
+     * 
+     * @return description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Gets the name of the init parameter element
+     * 
+     * @return name
+     */
+    public String getParamName() {
+        return paramName;
+    }
+
+    /**
+     * Gets the value of the init parameter element
+     * 
+     * @return value
+     */
+    public String getParamValue() {
+        return paramValue;
+    }
 
 }

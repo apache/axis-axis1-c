@@ -54,126 +54,138 @@
  */
 package org.apache.geronimo.ews.ws4j2ee.context.webservices.server;
 
-import java.util.HashMap;
-
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFConstants;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebservices;
 import org.w3c.dom.Element;
 
+import java.util.HashMap;
+
 /**
- * This is the class that will represent the webservices element in the runtime. 
- * This is the root element of the webservices.xml file. The parsing of elements will be initiated from here and will be 
+ * This is the class that will represent the webservices element in the runtime.
+ * This is the root element of the webservices.xml file. The parsing of elements will be initiated from here and will be
  * parsed in a depth first manner
  */
-public class WSCFWebservicesImpl extends WSCFElement implements WSCFWebservices{
+public class WSCFWebservicesImpl extends WSCFElement implements WSCFWebservices {
 
-	//TODO figure out how the id should be encapsulated
+    //TODO figure out how the id should be encapsulated
 	
-	/**
-	 * This will refer to the multiple webservice descriptions elements that the
-	 * webservice element can support
-	 */
-	private HashMap webServiceDescriptions = new HashMap();
-	
-	/**
-	 * Webservice description.
-	 */
-	private String description;
-	
-	/**
-	 * Webservice display name
-	 */
-	private String displayName;
-	
-	/**
-	 * Webservice small Icon.
-	 */
-	private String smallIcon;
-	
-	/**
-	 * Webservice large icon.
-	 */
-	private String largeIcon;
+    /**
+     * This will refer to the multiple webservice descriptions elements that the
+     * webservice element can support
+     */
+    private HashMap webServiceDescriptions = new HashMap();
 
+    /**
+     * Webservice description.
+     */
+    private String description;
 
-	/**
-	 * Constructor
-	 * @param e  Webservices element
-	 * @throws WSCFException
-	 */
-	public WSCFWebservicesImpl(Element e) throws WSCFException{
-		super(e);
-		//extracting the description
-		Element element = this.getChildElement(e,WSCFConstants.ELEM_WSCF_DESCRIPTION);
-		if(null != element){this.description = (element.getChildNodes()).item(0).toString();}
+    /**
+     * Webservice display name
+     */
+    private String displayName;
+
+    /**
+     * Webservice small Icon.
+     */
+    private String smallIcon;
+
+    /**
+     * Webservice large icon.
+     */
+    private String largeIcon;
+
+    /**
+     * Constructor
+     * 
+     * @param e Webservices element
+     * @throws WSCFException 
+     */
+    public WSCFWebservicesImpl(Element e) throws WSCFException {
+        super(e);
+        //extracting the description
+        Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DESCRIPTION);
+        if (null != element) {
+            this.description = (element.getChildNodes()).item(0).toString();
+        }
 		
-		//extraction the dispaly-name
-		element = this.getChildElement(e,WSCFConstants.ELEM_WSCF_DISPLAY_NAME);
-		if(null != element){this.displayName = element.getChildNodes().item(0).toString();}
+        //extraction the dispaly-name
+        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DISPLAY_NAME);
+        if (null != element) {
+            this.displayName = element.getChildNodes().item(0).toString();
+        }
 		
-		//extraction the small icon
-		 element = this.getChildElement(e,WSCFConstants.ELEM_WSCF_SMALL_ICON);
-		if(null != element){this.smallIcon = element.getChildNodes().item(0).toString();}
+        //extraction the small icon
+        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_SMALL_ICON);
+        if (null != element) {
+            this.smallIcon = element.getChildNodes().item(0).toString();
+        }
 				
-		//extracting the large icon
-		element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_LARGE_ICON);
-		if(null != element){this.largeIcon = element.getChildNodes().item(0).toString();}
-		//TODO ********whether this is the most appropreate way to do this
-		// getting the webservice description.
-		Element[] elements = this.getChildElements(e, WSCFConstants.ELEM_WSCF_WEBSERVICES_DESCRIPTION);
-		for (int i=0; i< elements.length; i++){
-			WSCFWebserviceDescription webservice = new WSCFWebserviceDescriptionImpl(elements[i]);
-			this.webServiceDescriptions.put(webservice.getWebserviceDescriptionName(), webservice);
-		}
-		
-	}
+        //extracting the large icon
+        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_LARGE_ICON);
+        if (null != element) {
+            this.largeIcon = element.getChildNodes().item(0).toString();
+        }
+        //TODO ********whether this is the most appropreate way to do this
+        // getting the webservice description.
+        Element[] elements = this.getChildElements(e, WSCFConstants.ELEM_WSCF_WEBSERVICES_DESCRIPTION);
+        for (int i = 0; i < elements.length; i++) {
+            WSCFWebserviceDescription webservice = new WSCFWebserviceDescriptionImpl(elements[i]);
+            this.webServiceDescriptions.put(webservice.getWebserviceDescriptionName(), webservice);
+        }
 
+    }
 
-	/**
-	 * Gets all the webservice descriptions as a array of such elements
-	 * @return Webservice description array.
-	 */
-	public WSCFWebserviceDescription[] getWebServiceDescriptions() {
-		WSCFWebserviceDescription[] wsdescArray = new WSCFWebserviceDescription[this.webServiceDescriptions.size()];
-		this.webServiceDescriptions.values().toArray(wsdescArray);
-		return wsdescArray;
-	}	
+    /**
+     * Gets all the webservice descriptions as a array of such elements
+     * 
+     * @return Webservice description array.
+     */
+    public WSCFWebserviceDescription[] getWebServiceDescriptions() {
+        WSCFWebserviceDescription[] wsdescArray = new WSCFWebserviceDescription[this.webServiceDescriptions.size()];
+        this.webServiceDescriptions.values().toArray(wsdescArray);
+        return wsdescArray;
+    }	
 
 
 //TODO *throw an exception appropreately if the value is null
 
-	/**
-	 * Gets the description of the webservices Element
-	 * @return The description
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * Gets the description of the webservices Element
+     * 
+     * @return The description
+     */
+    public String getDescription() {
+        return description;
+    }
 
-	/**
-	 * Gets the displayname of the webservices element
-	 * @return The Display name
-	 */
-	public String getDisplayName() {
-		return displayName;
-	}
+    /**
+     * Gets the displayname of the webservices element
+     * 
+     * @return The Display name
+     */
+    public String getDisplayName() {
+        return displayName;
+    }
 
-	/**
-	 * Gets the description of the large icon Element
-	 * @return The large icon
-	 */
-	public String getLargeIcon() {
-		return largeIcon;
-	}
+    /**
+     * Gets the description of the large icon Element
+     * 
+     * @return The large icon
+     */
+    public String getLargeIcon() {
+        return largeIcon;
+    }
 
-	/**
-	 * Gets the description of the small icon Element
-	 * @return The small icon
-	 */
-	public String getSmallIcon() {
-		return smallIcon;
-	}
+    /**
+     * Gets the description of the small icon Element
+     * 
+     * @return The small icon
+     */
+    public String getSmallIcon() {
+        return smallIcon;
+    }
 
 //	/**
 //	 * @param description - Description of the webservice

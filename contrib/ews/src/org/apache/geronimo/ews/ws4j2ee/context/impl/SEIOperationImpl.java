@@ -55,49 +55,51 @@
 
 package org.apache.geronimo.ews.ws4j2ee.context.impl;
 
+import org.apache.geronimo.ews.ws4j2ee.context.SEIOperation;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.geronimo.ews.ws4j2ee.context.SEIOperation;
 
 /**
  * @author hemapani
  */
 public class SEIOperationImpl implements SEIOperation {
-	private String methodName;
-	private String returnType;
-	private HashMap parameters = new HashMap();
-	private ArrayList faults = new ArrayList();
-	
+    private String methodName;
+    private String returnType;
+    private HashMap parameters = new HashMap();
+    private ArrayList faults = new ArrayList();
+
     public String getMethodName() {
         return methodName;
     }
 
-     public Map getParameters() {
- 		return parameters;
+    public Map getParameters() {
+        return parameters;
     }
 
     public ArrayList getFaults() {
-         return faults;
+        return faults;
     }
 
-     public void setMethodName(String methodName) {
- 		this.methodName = methodName;
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
     }
 
     public void addParameter(String type, String name) {
-  		parameters.put(name,type);
+        parameters.put(name, type);
     }
 
     public void addFault(String name) {
         faults.add(name);
     }
+
     public String getReturnType() {
         return returnType;
     }
-	public void setReturnType(String returnType) {
-		this.returnType = returnType;
-	}
+
+    public void setReturnType(String returnType) {
+        this.returnType = returnType;
+    }
 
 }

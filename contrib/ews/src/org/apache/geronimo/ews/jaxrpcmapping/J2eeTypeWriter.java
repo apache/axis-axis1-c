@@ -51,13 +51,8 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- */ 
+ */
 package org.apache.geronimo.ews.jaxrpcmapping;
-
-import java.io.IOException;
-import java.util.Vector;
-
-import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.gen.Generator;
 import org.apache.axis.wsdl.symbolTable.SchemaUtils;
@@ -69,9 +64,14 @@ import org.apache.axis.wsdl.toJava.JavaWriter;
 import org.apache.axis.wsdl.toJava.Utils;
 import org.w3c.dom.Node;
 
+import javax.xml.namespace.QName;
+import java.io.IOException;
+import java.util.Vector;
+
 /**
  * This is Wsdl2java's Type Writer.  It writes the following files, as appropriate:
  * <typeName>.java, <typeName>Holder.java.
+ * 
  * @author Ias (iasandcb@tmax.co.kr)
  * @deprecated no more used by J2eeGeneratorFactory
  */
@@ -84,10 +84,9 @@ public class J2eeTypeWriter implements Generator {
     /**
      * Constructor.
      */
-    public J2eeTypeWriter(
-            J2eeEmitter emitter,
-            TypeEntry type,
-            SymbolTable symbolTable) {
+    public J2eeTypeWriter(J2eeEmitter emitter,
+                          TypeEntry type,
+                          SymbolTable symbolTable) {
 
         if (type.isReferenced() && !type.isOnlyLiteralReferenced()) {
 
@@ -99,36 +98,28 @@ public class J2eeTypeWriter implements Generator {
             if (!type.getName().endsWith("[]")) {
 
                 // Generate the proper class for either "complex" or "enumeration" types
-                Vector v = Utils.getEnumerationBaseAndValues(
-                        node, symbolTable);
+                Vector v = Utils.getEnumerationBaseAndValues(node, symbolTable);
                 if (v != null) {
                     typeWriter = getEnumTypeWriter(emitter, type, v);
-                }
-                else {
-                    TypeEntry base = SchemaUtils.getComplexElementExtensionBase(
-                       node, symbolTable);
+                } else {
+                    TypeEntry base = SchemaUtils.getComplexElementExtensionBase(node, symbolTable);
                     if (base == null) {
-                        base = SchemaUtils.getComplexElementRestrictionBase(
-                           node, symbolTable);
+                        base = SchemaUtils.getComplexElementRestrictionBase(node, symbolTable);
                     }
                     if (base == null) {
-                        QName baseQName = SchemaUtils.getSimpleTypeBase(
-                           node);
+                        QName baseQName = SchemaUtils.getSimpleTypeBase(node);
                         if (baseQName != null) {
                             base = symbolTable.getType(baseQName);
                         }
                     }
 
-                    typeWriter = getBeanWriter(
-                            emitter, 
-                            type, 
-                            SchemaUtils.getContainedElementDeclarations(
-                                node, 
-                                symbolTable),
+                    typeWriter = getBeanWriter(emitter,
+                            type,
+                            SchemaUtils.getContainedElementDeclarations(node,
+                                    symbolTable),
                             base,
-                            SchemaUtils.getContainedAttributeTypes(
-                                 node, 
-                                 symbolTable));
+                            SchemaUtils.getContainedAttributeTypes(node,
+                                    symbolTable));
                 }
             }
 
@@ -163,48 +154,47 @@ public class J2eeTypeWriter implements Generator {
 
     /**
      * getEnumWriter
-     **/
+     */
     protected JavaWriter getEnumTypeWriter(J2eeEmitter emitter, TypeEntry type, Vector v) {
         return new J2eeEnumTypeWriter(emitter, type, v);
     }
 
     /**
      * getBeanWriter
-     **/
-    protected JavaWriter getBeanWriter(J2eeEmitter emitter, TypeEntry type, 
-                                   Vector elements, TypeEntry base,
-                                   Vector attributes) {
+     */
+    protected JavaWriter getBeanWriter(J2eeEmitter emitter, TypeEntry type,
+                                       Vector elements, TypeEntry base,
+                                       Vector attributes) {
         JavaWriter helperWriter = getBeanHelperWriter(emitter, type, elements, base,
-                                                  attributes);
+                attributes);
         // If this complexType is referenced in a
         // fault context, emit a bean-like exception 
         // class
         Boolean isComplexFault = (Boolean)
-            type.getDynamicVar(
-                    JavaGeneratorFactory.COMPLEX_TYPE_FAULT);
-        if (isComplexFault != null && 
-            isComplexFault.booleanValue()) {
-            return new J2eeBeanFaultWriter(emitter, type, 
-                                           elements, base, attributes, 
-                                           helperWriter);
+                type.getDynamicVar(JavaGeneratorFactory.COMPLEX_TYPE_FAULT);
+        if (isComplexFault != null &&
+                isComplexFault.booleanValue()) {
+            return new J2eeBeanFaultWriter(emitter, type,
+                    elements, base, attributes,
+                    helperWriter);
         }
-        return new J2eeBeanWriter(emitter, type, 
-                                  elements, base, attributes, 
-                                  helperWriter);
+        return new J2eeBeanWriter(emitter, type,
+                elements, base, attributes,
+                helperWriter);
     }
 
     /**
      * getHelperWriter
-     **/
+     */
     protected JavaWriter getBeanHelperWriter(J2eeEmitter emitter, TypeEntry type,
-                                         Vector elements, TypeEntry base, 
-                                         Vector attributes) {
-        return new J2eeBeanHelperWriter(emitter, type, elements, base, attributes); 
+                                             Vector elements, TypeEntry base,
+                                             Vector attributes) {
+        return new J2eeBeanHelperWriter(emitter, type, elements, base, attributes);
     }
 
     /**
      * getHolderWriter
-     **/
+     */
     protected Generator getHolderWriter(J2eeEmitter emitter, TypeEntry type) {
         return new J2eeHolderWriter(emitter, type);
     }

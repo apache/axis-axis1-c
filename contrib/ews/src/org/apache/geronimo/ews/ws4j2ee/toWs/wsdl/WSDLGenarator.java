@@ -55,9 +55,6 @@
 
 package org.apache.geronimo.ews.ws4j2ee.toWs.wsdl;
 
-import java.io.File;
-import java.util.List;
-
 import org.apache.axis.components.logger.LogFactory;
 import org.apache.axis.utils.CLArgsParser;
 import org.apache.axis.utils.CLOption;
@@ -72,119 +69,121 @@ import org.apache.geronimo.ews.ws4j2ee.context.wsdl.impl.AxisEmitterBasedWSDLCon
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
 
+import java.io.File;
+import java.util.List;
+
 /**
- * <p>This genarated theWrapper WS required in the 
- * Axis.</p> 
+ * <p>This genarated theWrapper WS required in the
+ * Axis.</p>
+ * 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class WSDLGenarator extends Java2WSDL implements Generator {
     private J2EEWebServiceContext j2eewscontext;
-    private String[] args; 
-    
-	protected static Log log =
-					LogFactory.getLog(WSDLGenarator.class.getName());
-    
+    private String[] args;
+
+    protected static Log log =
+            LogFactory.getLog(WSDLGenarator.class.getName());
+
     public WSDLGenarator(J2EEWebServiceContext j2eewscontext) {
         this.j2eewscontext = j2eewscontext;
     }
-    
-    public void setArgs(String[] args ){
-    	this.args = args;
+
+    public void setArgs(String[] args) {
+        this.args = args;
     }
-    
-	/**
-	 * run 
-	 * checks the command-line arguments and runs the tool.
-	 * @param args String[] command-line arguments.
-	 */
-	protected int run(String[] args) {
-		// Parse the arguments
-		CLArgsParser argsParser = new CLArgsParser(args, options);
 
-		// Print parser errors, if any
-		if (null != argsParser.getErrorString()) {
-			System.err.println(
-					Messages.getMessage("j2werror00", argsParser.getErrorString()));
-			printUsage();
-			return(1);
-		}
+    /**
+     * run
+     * checks the command-line arguments and runs the tool.
+     * 
+     * @param args String[] command-line arguments.
+     */
+    protected int run(String[] args) {
+        // Parse the arguments
+        CLArgsParser argsParser = new CLArgsParser(args, options);
 
-		// Get a list of parsed options
-		List clOptions = argsParser.getArguments();
-		int size = clOptions.size();
+        // Print parser errors, if any
+        if (null != argsParser.getErrorString()) {
+            System.err.println(Messages.getMessage("j2werror00", argsParser.getErrorString()));
+            printUsage();
+            return (1);
+        }
 
-		try {
-			// Parse the options and configure the emitter as appropriate.
-			for (int i = 0; i < size; i++) {
-				if (parseOption((CLOption)clOptions.get(i)) == false) {
-					return (1);
-				}
-			}
+        // Get a list of parsed options
+        List clOptions = argsParser.getArguments();
+        int size = clOptions.size();
 
-			// validate argument combinations
-			if (validateOptions() == false)
-				return (1);
+        try {
+            // Parse the options and configure the emitter as appropriate.
+            for (int i = 0; i < size; i++) {
+                if (parseOption((CLOption) clOptions.get(i)) == false) {
+                    return (1);
+                }
+            }
 
-			// Set the namespace map
-			if (!namespaceMap.isEmpty()) {
-				emitter.setNamespaceMap(namespaceMap);
-			}
+            // validate argument combinations
+            if (validateOptions() == false)
+                return (1);
+
+            // Set the namespace map
+            if (!namespaceMap.isEmpty()) {
+                emitter.setNamespaceMap(namespaceMap);
+            }
             
-			// Find the class using the name
-			emitter.setCls(className);
+            // Find the class using the name
+            emitter.setCls(className);
 
-			//make sure the output dir exits
-			String outputlocation = wsdlFilename.substring(0,wsdlFilename.lastIndexOf('/'));
-			int index = outputlocation.indexOf("/META-INF");
-            
-			File file = new File(outputlocation);
-			if(!file.exists())
-				file.mkdirs();
-            
-			if(index > 0)
-				outputlocation = outputlocation.substring(0,index);
-            
-			j2eewscontext.getMiscInfo()
-				.setOutputPath(outputlocation);
+            //make sure the output dir exits
+            String outputlocation = wsdlFilename.substring(0, wsdlFilename.lastIndexOf('/'));
+            int index = outputlocation.indexOf("/META-INF");
+
+            File file = new File(outputlocation);
+            if (!file.exists())
+                file.mkdirs();
+
+            if (index > 0)
+                outputlocation = outputlocation.substring(0, index);
+
+            j2eewscontext.getMiscInfo()
+                    .setOutputPath(outputlocation);
 
 
-			// Generate a full wsdl, or interface & implementation wsdls
-			if (wsdlImplFilename == null) {
-				emitter.emit(wsdlFilename, mode);
-			} else {
-				emitter.emit(wsdlFilename, wsdlImplFilename);
-			}
+            // Generate a full wsdl, or interface & implementation wsdls
+            if (wsdlImplFilename == null) {
+                emitter.emit(wsdlFilename, mode);
+            } else {
+                emitter.emit(wsdlFilename, wsdlImplFilename);
+            }
 
-			// everything is good
-			return (0);
-		}
-		catch (Throwable t) {
-			t.printStackTrace();
-			return (1);
-		}
-	} // run
-    
-    
+            // everything is good
+            return (0);
+        } catch (Throwable t) {
+            t.printStackTrace();
+            return (1);
+        }
+    } // run
+
     public void genarate() throws GenerationFault {
         try {
-			//write the WSDLFile
+            //write the WSDLFile
             this.run(args);
             //initiate the wsdlContext
             this.j2eewscontext.setWSDLContext(new AxisEmitterBasedWSDLContext(emitter.getWSDL()));
             //parse the ejb-jar.xml here
-			ContextValidator validator = new ContextValidator(j2eewscontext);
-			//initiate the jaxrpcmapping context 
-            this.j2eewscontext.setJAXRPCMappingContext(new AxisEmitterBasedJaxRpcMapperContext(emitter,j2eewscontext));
+            ContextValidator validator = new ContextValidator(j2eewscontext);
+            //initiate the jaxrpcmapping context 
+            this.j2eewscontext.setJAXRPCMappingContext(new AxisEmitterBasedJaxRpcMapperContext(emitter, j2eewscontext));
             //initiate the wscf context 
-            this.j2eewscontext.setWSCFContext(new AxisEmitterBasedWSCFContext(emitter,j2eewscontext));
-            
-			j2eewscontext.getMiscInfo().setWsdlFile(wsdlFilename);	
-			j2eewscontext.getMiscInfo().setJaxrpcfile(j2eewscontext.getMiscInfo().getOutPutPath()+"/jaxrpc-mapping.xml");
-			j2eewscontext.getMiscInfo().setWsConfFileLocation(j2eewscontext.getMiscInfo().getOutPutPath()+"/webservice.xml");
-			//validate the j2ee context
-			validator.validateWithOutWSDL(emitter);
+            this.j2eewscontext.setWSCFContext(new AxisEmitterBasedWSCFContext(emitter, j2eewscontext));
+
+            j2eewscontext.getMiscInfo().setWsdlFile(wsdlFilename);
+            j2eewscontext.getMiscInfo().setJaxrpcfile(j2eewscontext.getMiscInfo().getOutPutPath() + "/jaxrpc-mapping.xml");
+            j2eewscontext.getMiscInfo().setWsConfFileLocation(j2eewscontext.getMiscInfo().getOutPutPath() + "/webservice.xml");
+            //validate the j2ee context
+            validator.validateWithOutWSDL(emitter);
         } catch (Exception e) {
-			throw GenerationFault.createGenerationFault(e);
-        } 
+            throw GenerationFault.createGenerationFault(e);
+        }
     }
 }

@@ -65,29 +65,28 @@ public interface GenerationConstants {
     public static final int WSDL_GENERATOR = 2;
     public static final int CLIENT_STUB_GENERATOR = 3;
     public static final int SEI_AND_TYPES_GENERATOR = 4;
-	public static final int HANDLER_GENERATOR = 13;
-	public static final int JAXRPCMAPPER_GENERATOR = 14;
-	public static final int WEBSERVICEDD_GENERATOR = 15;
-	public static final int J2EE_CONTAINER_DD_GENERATOR = 16;
-	public static final int BUILD_FILE_GENERATOR = 17;
+    public static final int HANDLER_GENERATOR = 13;
+    public static final int JAXRPCMAPPER_GENERATOR = 14;
+    public static final int WEBSERVICEDD_GENERATOR = 15;
+    public static final int J2EE_CONTAINER_DD_GENERATOR = 16;
+    public static final int BUILD_FILE_GENERATOR = 17;
 
     //writers
     public static final int EJB_REMOTE_INTERFACE_WRITER = 5;
     public static final int EJB_HOME_INTERFACE_WRITER = 6;
     public static final int EJB_IMPLEMENTATION_BEAN_WRITER = 7;
-	public static final int EJB_DD_WRITER = 8;
+    public static final int EJB_DD_WRITER = 8;
     public static final int AXIS_WEBSERVICE_WRAPPER_WRITER = 9;
     public static final int AXIS_WEBSERVICE_WRAPPER_DEPLOYMENT_FILE_WRITER = 10;
     public static final int WSDL_FILE_WRITER = 11;
-	public static final int SEI_FILE_WRITER = 12;
-	
+    public static final int SEI_FILE_WRITER = 12;
 
     public static final String OPTION_WS4J2EE_PROPERTY_FILE = "ws4j2ee.ConfigFile";
 
     //more to come
     public static final String J2EE_CONTAINER_DD = "j2ee-container-dd";
-	public static final String WS4J2EE_PROPERTY_FILE = "ws4j2ee.properties";
-    
+    public static final String WS4J2EE_PROPERTY_FILE = "ws4j2ee.properties";
+
     public static final String JBOSS_DD = "jboss.xml";
-	public static final String GERONIMO_DD = "geronimo.xml";
+    public static final String GERONIMO_DD = "geronimo.xml";
 }

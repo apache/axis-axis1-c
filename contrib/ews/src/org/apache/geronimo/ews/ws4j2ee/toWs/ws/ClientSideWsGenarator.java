@@ -56,10 +56,10 @@
 package org.apache.geronimo.ews.ws4j2ee.toWs.ws;
 
 import org.apache.axis.components.logger.LogFactory;
-import org.apache.geronimo.ews.jaxrpcmapping.J2eeEmitter;
-import org.apache.geronimo.ews.jaxrpcmapping.JaxRpcMapper;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.commons.logging.Log;
+import org.apache.geronimo.ews.jaxrpcmapping.J2eeEmitter;
+import org.apache.geronimo.ews.jaxrpcmapping.JaxRpcMapper;
 import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
@@ -68,40 +68,40 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
 import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 
 /**
- * <p>This genarated the Client side SEI and other classes required in the 
- * Axis.</p> 
+ * <p>This genarated the Client side SEI and other classes required in the
+ * Axis.</p>
+ * 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class ClientSideWsGenarator implements Generator {
     private J2EEWebServiceContext j2eewscontext;
-	protected static Log log =
-					LogFactory.getLog(ServerSideWsGenarator.class.getName());
-    
+    protected static Log log =
+            LogFactory.getLog(ServerSideWsGenarator.class.getName());
+
     public ClientSideWsGenarator(J2EEWebServiceContext j2eewscontext) {
         this.j2eewscontext = j2eewscontext;
     }
+
     public void genarate() throws GenerationFault {
         try {
             String confFileLocation =
-                j2eewscontext.getMiscInfo().getWsConfFileLocation();
+                    j2eewscontext.getMiscInfo().getWsConfFileLocation();
             WSCFWebserviceDescription wscfwsdis =
-                j2eewscontext.getMiscInfo().getWscfdWsDesxription();
+                    j2eewscontext.getMiscInfo().getWscfdWsDesxription();
             String mappingfile =
-                Utils.getAbsolutePath(
-                    wscfwsdis.getJaxrpcMappingFile(),
-                    confFileLocation);
+                    Utils.getAbsolutePath(wscfwsdis.getJaxrpcMappingFile(),
+                            confFileLocation);
             String wsdlfile =
-                Utils.getAbsolutePath(
-                    wscfwsdis.getWsdlFile(),
-                    confFileLocation);
+                    Utils.getAbsolutePath(wscfwsdis.getWsdlFile(),
+                            confFileLocation);
             J2eeEmitter j2ee = new J2eeEmitter();
-            
-			if(j2eewscontext.getMiscInfo().isVerbose()){
-					log.info("wsdl file = "+wsdlfile);
-					log.info("jaxrpc mapping file = "+mappingfile);
-					log.info("calling the jaxrpcmapper >> ");
-			}
-            
+
+            if (j2eewscontext.getMiscInfo().isVerbose()) {
+                log.info("wsdl file = " + wsdlfile);
+                log.info("jaxrpc mapping file = " + mappingfile);
+                log.info("calling the jaxrpcmapper >> ");
+            }
+
             j2ee.setMappingFilePath(mappingfile);
             j2ee.setOutputDir(j2eewscontext.getMiscInfo().getOutPutPath());
             j2ee.setServerSide(false);
@@ -110,11 +110,9 @@ public class ClientSideWsGenarator implements Generator {
             j2ee.setTestCaseWanted(true);
             j2ee.run(wsdlfile);
             SymbolTable axisSymboltable = j2ee.getSymbolTable();
-            j2eewscontext.setWSDLContext(
-                ContextFactory.createWSDLContext(axisSymboltable));
+            j2eewscontext.setWSDLContext(ContextFactory.createWSDLContext(axisSymboltable));
             JaxRpcMapper mapper = j2ee.getJaxRpcMapper();
-            j2eewscontext.setJAXRPCMappingContext(
-                ContextFactory.createJaxRpcMapperContext(mapper));
+            j2eewscontext.setJAXRPCMappingContext(ContextFactory.createJaxRpcMapperContext(mapper));
 
         } catch (Exception e) {
             e.printStackTrace();

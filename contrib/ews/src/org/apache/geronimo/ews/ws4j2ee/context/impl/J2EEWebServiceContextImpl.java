@@ -65,15 +65,15 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenarationFault;
 /**
  * <p>Code should use parsers and create runtime representation
  * of the information taken fom the WSDL and configaration files.</p>
- * 
- * <p>depend on hasWSDL or the not the implementation should 
- * 	<ol>
- * 		<li>parse the WSDL and populate informatio in <code>WSDLContext</code></li>
- * 		<li>parse the SEI or EJB and populate the information in <code>WSDLContext</code>
- * 			with the help of the jaxrpc mapping file information.
- * 		</li>
- *  </ol>
- *  </p>
+ * <p/>
+ * <p>depend on hasWSDL or the not the implementation should
+ * <ol>
+ * <li>parse the WSDL and populate informatio in <code>WSDLContext</code></li>
+ * <li>parse the SEI or EJB and populate the information in <code>WSDLContext</code>
+ * with the help of the jaxrpc mapping file information.
+ * </li>
+ * </ol>
+ * </p>
  */
 public class J2EEWebServiceContextImpl implements J2EEWebServiceContext {
     private boolean hasWSDL = true;
@@ -81,22 +81,25 @@ public class J2EEWebServiceContextImpl implements J2EEWebServiceContext {
     private WSDLContext wsdlcontext;
     private JaxRpcMapperContext jaxrpcmappingcontext;
     private MiscInfo miscInfo;
-    
+
     public J2EEWebServiceContextImpl(boolean hasWSDL) {
         this.hasWSDL = hasWSDL;
     }
+
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext#getWSDLContext()
      */
     public WSDLContext getWSDLContext() {
         return wsdlcontext;
     }
+
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext#setWSDLContext(org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext)
      */
     public void setWSDLContext(WSDLContext wsdlcontext) {
-		this.wsdlcontext = wsdlcontext;
+        this.wsdlcontext = wsdlcontext;
     }
+
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext#getJAXRPCMappingContext()
      */
@@ -108,27 +111,28 @@ public class J2EEWebServiceContextImpl implements J2EEWebServiceContext {
      * @see org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext#setJAXRPCMappingContext(org.apache.geronimo.ews.ws4j2ee.context.JaxRpcMapperContext)
      */
     public void setJAXRPCMappingContext(JaxRpcMapperContext context) {
-		this.jaxrpcmappingcontext = context;
+        this.jaxrpcmappingcontext = context;
 
     }
-	public WSCFContext getWSCFContext() {
-		return wscfcontext;
-	}
 
-	/* (non-Javadoc)
-	 * @see org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext#setWSCFContext(org.apache.geronimo.ews.ws4j2ee.context.webservices.interfaces.WSCFContext)
-	 */
-	public void setWSCFContext(WSCFContext wscfcontext) {
-		this.wscfcontext = wscfcontext;
+    public WSCFContext getWSCFContext() {
+        return wscfcontext;
+    }
 
-	}
-	
-	public MiscInfo getMiscInfo(){
-		return miscInfo;
-	}
+    /* (non-Javadoc)
+     * @see org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext#setWSCFContext(org.apache.geronimo.ews.ws4j2ee.context.webservices.interfaces.WSCFContext)
+     */
+    public void setWSCFContext(WSCFContext wscfcontext) {
+        this.wscfcontext = wscfcontext;
+
+    }
+
+    public MiscInfo getMiscInfo() {
+        return miscInfo;
+    }
 
     /**
-     * @param info
+     * @param info 
      */
     public void setMiscInfo(MiscInfo info) {
         miscInfo = info;
@@ -137,11 +141,11 @@ public class J2EEWebServiceContextImpl implements J2EEWebServiceContext {
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext#validate()
      */
-    public void validate(){
-        if(wscfcontext == null || miscInfo == null || 
-        	(hasWSDL && wsdlcontext == null) || jaxrpcmappingcontext == null)
-				throw new UnrecoverableGenarationFault("valdation of the j2ee context failed");
-		miscInfo.validate();
+    public void validate() {
+        if (wscfcontext == null || miscInfo == null ||
+                (hasWSDL && wsdlcontext == null) || jaxrpcmappingcontext == null)
+            throw new UnrecoverableGenarationFault("valdation of the j2ee context failed");
+        miscInfo.validate();
     }
 
 }

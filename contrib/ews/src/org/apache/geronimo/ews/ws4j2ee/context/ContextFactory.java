@@ -55,8 +55,8 @@
 
 package org.apache.geronimo.ews.ws4j2ee.context;
 
-import org.apache.geronimo.ews.jaxrpcmapping.JaxRpcMapper;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
+import org.apache.geronimo.ews.jaxrpcmapping.JaxRpcMapper;
 import org.apache.geronimo.ews.ws4j2ee.context.impl.JaxRpcMapperImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.impl.MiscInfoImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.WSCFContextImpl;
@@ -69,33 +69,34 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenarationFault;
 import org.w3c.dom.Document;
 
 /**
- * <p>This class decouple the concreate implementations of the 
+ * <p>This class decouple the concreate implementations of the
  * class from the rest of the code</p>
+ * 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class ContextFactory {
-	public static WSDLContext createWSDLContext(Object info){
-		if(info instanceof SymbolTable)
-			return new AxisWSDLContext((SymbolTable)info);
-		throw new UnrecoverableGenarationFault("unknown context type");	
-	}
-	
-	public static JaxRpcMapperContext createJaxRpcMapperContext(Object info){
-		if(info instanceof JaxRpcMapper)
-			return new JaxRpcMapperImpl((JaxRpcMapper)info);
-		throw new UnrecoverableGenarationFault("unknown mapper type");		
-	}
-	
-	public static WSCFContext createWSCFContext(Document doc)throws GenerationFault{
+    public static WSDLContext createWSDLContext(Object info) {
+        if (info instanceof SymbolTable)
+            return new AxisWSDLContext((SymbolTable) info);
+        throw new UnrecoverableGenarationFault("unknown context type");
+    }
+
+    public static JaxRpcMapperContext createJaxRpcMapperContext(Object info) {
+        if (info instanceof JaxRpcMapper)
+            return new JaxRpcMapperImpl((JaxRpcMapper) info);
+        throw new UnrecoverableGenarationFault("unknown mapper type");
+    }
+
+    public static WSCFContext createWSCFContext(Document doc) throws GenerationFault {
         try {
             return new WSCFContextImpl(doc);
         } catch (WSCFException e) {
-        	e.printStackTrace();
-			throw new GenerationFault(e.getMessage());
+            e.printStackTrace();
+            throw new GenerationFault(e.getMessage());
         }
-	}
-	
-	public static MiscInfo createMiscInfo(){
-		return new MiscInfoImpl();
-	}
+    }
+
+    public static MiscInfo createMiscInfo() {
+        return new MiscInfoImpl();
+    }
 }

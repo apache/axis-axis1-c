@@ -55,14 +55,6 @@
 
 package org.apache.geronimo.ews.ws4j2ee.context.wsdl.impl;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.wsdl.Definition;
-import javax.wsdl.Service;
-import javax.xml.namespace.QName;
-
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.Element;
 import org.apache.axis.wsdl.symbolTable.PortEntry;
@@ -72,44 +64,51 @@ import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.type.SchemaType;
 
+import javax.wsdl.Definition;
+import javax.wsdl.Service;
+import javax.xml.namespace.QName;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * <p>This Class is a wrapper fo the Axis SymbolTable. Since SymbolTable is parsed 
- * completly it is not editable so the methods will throw the 
+ * <p>This Class is a wrapper fo the Axis SymbolTable. Since SymbolTable is parsed
+ * completly it is not editable so the methods will throw the
  * UnsupportedOperationException.</p>
+ * 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
-public class AxisEmitterBasedWSDLContext implements WSDLContext{
-	private Definition definition;
-	private HashMap services;
-	private HashMap bindings;
-	private HashMap portetypes; 
-	private HashMap ports;
-	
-	public AxisEmitterBasedWSDLContext(Definition definition){
-		this.definition = definition;
-	}
+public class AxisEmitterBasedWSDLContext implements WSDLContext {
+    private Definition definition;
+    private HashMap services;
+    private HashMap bindings;
+    private HashMap portetypes;
+    private HashMap ports;
+
+    public AxisEmitterBasedWSDLContext(Definition definition) {
+        this.definition = definition;
+    }
 
     /**
      * Symbol table can't be edited
      */
     public void addService(Service service) {
- 		throw new UnsupportedOperationException("Symboltable can't be edited");
+        throw new UnsupportedOperationException("Symboltable can't be edited");
     }
 
-	/**
-	 * Symbol table can't be edited
-	 */
-   public void addType(SchemaType type) {
-		throw new UnsupportedOperationException("Symboltable can't be edited");
+    /**
+     * Symbol table can't be edited
+     */
+    public void addType(SchemaType type) {
+        throw new UnsupportedOperationException("Symboltable can't be edited");
     }
 
-	/**
-	 * 
-	 */
+    /**
+     * 
+     */
     public BindingEntry getBinding(QName bindingname) {
-		return new BindingEntry(definition.getBinding(bindingname));
-   }
+        return new BindingEntry(definition.getBinding(bindingname));
+    }
 
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext#getBindings()
@@ -129,7 +128,7 @@ public class AxisEmitterBasedWSDLContext implements WSDLContext{
      * @see org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext#getPortTypes()
      */
     public Collection getPortTypes() {
-         return definition.getBindings().values();
+        return definition.getBindings().values();
     }
 
     /* (non-Javadoc)
@@ -150,35 +149,35 @@ public class AxisEmitterBasedWSDLContext implements WSDLContext{
      * @see org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext#getType(org.apache.xml.utils.QName)
      */
     public TypeEntry getType(QName typename) {
-		throw new UnsupportedOperationException("Symboltable can't be edited");
-	}
+        throw new UnsupportedOperationException("Symboltable can't be edited");
+    }
 
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext#getTypes()
      */
     public Map getTypes() {
-		throw new UnsupportedOperationException("Symboltable can't be edited");
+        throw new UnsupportedOperationException("Symboltable can't be edited");
     }
 
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext#getElement(javax.xml.namespace.QName)
      */
-    public Element getElement(QName name) {  
-		throw new UnsupportedOperationException("Symboltable can't be edited");
+    public Element getElement(QName name) {
+        throw new UnsupportedOperationException("Symboltable can't be edited");
     }
 
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext#getPort()
      */
     public PortEntry getPort(QName name) {
-		throw new UnsupportedOperationException("Symboltable can't be edited");
+        throw new UnsupportedOperationException("Symboltable can't be edited");
     }
 
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext#getTargetNSURI()
      */
     public String getTargetNSURI() {
- 		return definition.getTargetNamespace();
+        return definition.getTargetNamespace();
     }
 
 }

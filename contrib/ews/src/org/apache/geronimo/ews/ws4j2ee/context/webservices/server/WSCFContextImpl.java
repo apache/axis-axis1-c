@@ -62,68 +62,68 @@ import org.w3c.dom.Document;
 
 /**
  * This is the concrete implementation of the WSCFContext where the whole context of the
- * webservices.xml file will be published. The appropreate factory class will instanciate the class 
- * and in the factory a inputstream to the webservices.xml will be requires. This is not the 
+ * webservices.xml file will be published. The appropreate factory class will instanciate the class
+ * and in the factory a inputstream to the webservices.xml will be requires. This is not the
  * starting point of the element tree, instead this s only giving an inteface
  * to the element tree which is rooted at WSCFDocument.
- *
  */
 public class WSCFContextImpl implements WSCFContext {
-	
-	/**
-	 * This reference will be the pointer to the element tree.
-	 */
-	private WSCFDocument document;
-	
-	/**
-	 * The constructor that will create the element tree starting from the root element as WSCFDocument.
-	 * @param document The document object to the webservices.xml
-	 * @throws WSCFException 
-	 */
-	public WSCFContextImpl(Document document) throws WSCFException{
-		this.document = (WSCFDocument) new WSCFDocumentImpl(document);
-	}
-	
-	/**
-	 * Interface support method. This will get the description element of the webservices.xml
-	 */
-	public String getDescription(){
-		return this.document.getWebservices().getDescription();
-	}
-	
-	/**
-	 * Interface support method. This will get the display name element of the webservices.xml
-	 */
-	public String getDisplayName(){
-		return this.document.getWebservices().getDisplayName();
-	}
-	
-	/**
-	 * Interface support method. This will get the small icon element of the webservices.xml
-	 */
-	public String getSmallIcon(){
-		return this.document.getWebservices().getSmallIcon();
-	}
-	
-	/**
-	 * Interface support method. This will get the large icon element of the webservices.xml
-	 */
-	public String getLargeIcon(){
-		return this.document.getWebservices().getLargeIcon();
-	}
-	
-	/**
-	 * Interface support method. This will get the webservice description elements of the webservices.xml as an array.
-	 */
-	public WSCFWebserviceDescription[] getWebServicesDescription(){
-		return this.document.getWebservices().getWebServiceDescriptions();
-	}
-	
+
+    /**
+     * This reference will be the pointer to the element tree.
+     */
+    private WSCFDocument document;
+
+    /**
+     * The constructor that will create the element tree starting from the root element as WSCFDocument.
+     * 
+     * @param document The document object to the webservices.xml
+     * @throws WSCFException 
+     */
+    public WSCFContextImpl(Document document) throws WSCFException {
+        this.document = (WSCFDocument) new WSCFDocumentImpl(document);
+    }
+
+    /**
+     * Interface support method. This will get the description element of the webservices.xml
+     */
+    public String getDescription() {
+        return this.document.getWebservices().getDescription();
+    }
+
+    /**
+     * Interface support method. This will get the display name element of the webservices.xml
+     */
+    public String getDisplayName() {
+        return this.document.getWebservices().getDisplayName();
+    }
+
+    /**
+     * Interface support method. This will get the small icon element of the webservices.xml
+     */
+    public String getSmallIcon() {
+        return this.document.getWebservices().getSmallIcon();
+    }
+
+    /**
+     * Interface support method. This will get the large icon element of the webservices.xml
+     */
+    public String getLargeIcon() {
+        return this.document.getWebservices().getLargeIcon();
+    }
+
+    /**
+     * Interface support method. This will get the webservice description elements of the webservices.xml as an array.
+     */
+    public WSCFWebserviceDescription[] getWebServicesDescription() {
+        return this.document.getWebservices().getWebServiceDescriptions();
+    }
+
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext#serialize()
      */
     public void serialize(java.io.Writer out) throws GenerationFault {
-		throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException();
     }
 
 }

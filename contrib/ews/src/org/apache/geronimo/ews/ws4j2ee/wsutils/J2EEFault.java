@@ -57,10 +57,11 @@ package org.apache.geronimo.ews.ws4j2ee.wsutils;
 
 /**
  * <p>this error is throwd if the error happen at the ejb side
- * in the wrapper WebService class.</p> 
+ * in the wrapper WebService class.</p>
+ * 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
-public class J2EEFault extends Exception{
+public class J2EEFault extends Exception {
 
     public J2EEFault() {
         super();
@@ -70,11 +71,11 @@ public class J2EEFault extends Exception{
         super(message);
     }
 
-   public J2EEFault(String message, Throwable cause) {
+    public J2EEFault(String message, Throwable cause) {
         super(message, cause);
     }
 
-   public J2EEFault(Throwable cause) {
+    public J2EEFault(Throwable cause) {
         super(cause);
     }
 }

@@ -54,19 +54,6 @@
  */
 package org.apache.geronimo.ews.jaxrpcmapping;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Vector;
-
-import javax.wsdl.Binding;
-import javax.wsdl.Port;
-import javax.wsdl.Service;
-import javax.xml.namespace.QName;
-
 import org.apache.axis.utils.JavaUtils;
 import org.apache.axis.utils.Messages;
 import org.apache.axis.utils.WSDLUtils;
@@ -76,25 +63,37 @@ import org.apache.axis.wsdl.symbolTable.ServiceEntry;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.toJava.Utils;
 
+import javax.wsdl.Binding;
+import javax.wsdl.Port;
+import javax.wsdl.Service;
+import javax.xml.namespace.QName;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
+
 /**
  * This is Wsdl2java's service implementation writer.
  * It writes the <serviceName>Locator.java file.
+ * 
  * @author Ias (iasandcb@tmax.co.kr)
  * @deprecated no more used by J2eeGeneratorFactory
  */
 public class J2eeServiceImplWriter extends J2eeClassWriter {
     private ServiceEntry sEntry;
-    private SymbolTable  symbolTable;
+    private SymbolTable symbolTable;
 
     /**
      * Constructor.
      */
-    protected J2eeServiceImplWriter(
-            J2eeEmitter emitter,
-            ServiceEntry sEntry,
-            SymbolTable symbolTable) {
+    protected J2eeServiceImplWriter(J2eeEmitter emitter,
+                                    ServiceEntry sEntry,
+                                    SymbolTable symbolTable) {
 //        super(emitter, sEntry.getName() + "Locator", "service");
-              super(emitter, sEntry.getName() + "_Impl", "service");
+        super(emitter, sEntry.getName() + "_Impl", "service");
         this.sEntry = sEntry;
         this.symbolTable = symbolTable;
     } // ctor
@@ -119,7 +118,7 @@ public class J2eeServiceImplWriter extends J2eeClassWriter {
     protected void writeFileBody(PrintWriter pw) throws IOException {
         Service service = sEntry.getService();
         // output comments
-        writeComment(pw, service.getDocumentationElement(),false);
+        writeComment(pw, service.getDocumentationElement(), false);
 
         // Used to construct the getPort(Class) method.
         Vector getPortIfaces = new Vector();
@@ -137,21 +136,20 @@ public class J2eeServiceImplWriter extends J2eeClassWriter {
             Binding binding = p.getBinding();
             if (binding == null) {
                 throw new IOException(Messages.getMessage("emitFailNoBinding01",
-                        new String[] {p.getName()}));
+                        new String[]{p.getName()}));
             }
 
             BindingEntry bEntry =
                     symbolTable.getBindingEntry(binding.getQName());
             if (bEntry == null) {
                 throw new IOException(Messages.getMessage("emitFailNoBindingEntry01",
-                        new String[] {binding.getQName().toString()}));
+                        new String[]{binding.getQName().toString()}));
             }
 
-            PortTypeEntry ptEntry = symbolTable.getPortTypeEntry(
-                    binding.getPortType().getQName());
+            PortTypeEntry ptEntry = symbolTable.getPortTypeEntry(binding.getPortType().getQName());
             if (ptEntry == null) {
                 throw new IOException(Messages.getMessage("emitFailNoPortType01",
-                        new String[] {binding.getPortType().getQName().toString()}));
+                        new String[]{binding.getPortType().getQName().toString()}));
             }
 
             // If this isn't an SOAP binding, skip it
@@ -192,10 +190,9 @@ public class J2eeServiceImplWriter extends J2eeClassWriter {
             }
             try {
                 new URL(address);
-            }
-            catch (MalformedURLException e) {
+            } catch (MalformedURLException e) {
                 throw new IOException(Messages.getMessage("emitFail03",
-                        new String[] {portName, className, address}));
+                        new String[]{portName, className, address}));
             }
             writeAddressInfo(pw, portName, address, p);
             String wsddServiceName = portName + "WSDDServiceName";
@@ -215,18 +212,18 @@ public class J2eeServiceImplWriter extends J2eeClassWriter {
      * Write the private address field for this port and the public getter for it.
      */
     protected void writeAddressInfo(PrintWriter pw, String portName,
-            String address, Port p) {
+                                    String address, Port p) {
         // Write the private address field for this port
         pw.println();
         pw.println("    // " + Messages.getMessage("getProxy00", portName));
-        writeComment(pw, p.getDocumentationElement(),true);
+        writeComment(pw, p.getDocumentationElement(), true);
         pw.println("    private final java.lang.String " + portName + "_address = \"" + address + "\";");
 
         // Write the public address getter for this field
         pw.println();
-        pw.println("    public java.lang.String get" + portName + "Address() {" );
-        pw.println("        return " + portName + "_address;" );
-        pw.println("    }" );
+        pw.println("    public java.lang.String get" + portName + "Address() {");
+        pw.println("        return " + portName + "_address;");
+        pw.println("    }");
         pw.println();
 
     } // writeAddressInfo
@@ -235,7 +232,7 @@ public class J2eeServiceImplWriter extends J2eeClassWriter {
      * Write the private WSDD service name field and the public accessors for it.
      */
     protected void writeWSDDServiceNameInfo(PrintWriter pw,
-            String wsddServiceName, String portName) {
+                                            String wsddServiceName, String portName) {
         // Write the private WSDD service name field
         pw.println("    // " + Messages.getMessage("wsddServiceName00"));
         pw.println("    private java.lang.String " + wsddServiceName + " = \"" + portName + "\";");
@@ -256,7 +253,7 @@ public class J2eeServiceImplWriter extends J2eeClassWriter {
      * Write the get<portName>() method.
      */
     protected void writeGetPortName(PrintWriter pw, String bindingType,
-            String portName) {
+                                    String portName) {
         pw.println("    public " + bindingType + " get" + portName + "() throws " + javax.xml.rpc.ServiceException.class.getName() + " {");
         pw.println("       java.net.URL endpoint;");
         pw.println("        try {");
@@ -274,7 +271,7 @@ public class J2eeServiceImplWriter extends J2eeClassWriter {
      * Write the get<portName>(URL) method.
      */
     protected void writeGetPortNameURL(PrintWriter pw, String bindingType,
-            String portName, String stubClass, String wsddServiceName) {
+                                       String portName, String stubClass, String wsddServiceName) {
         pw.println("    public " + bindingType + " get" + portName + "(java.net.URL portAddress) throws " + javax.xml.rpc.ServiceException.class.getName() + " {");
         pw.println("        try {");
         pw.println("            " + stubClass + " _stub = new " + stubClass + "(portAddress, this);");
@@ -292,9 +289,8 @@ public class J2eeServiceImplWriter extends J2eeClassWriter {
      * Write the getPort(Class serviceInterfaceWriter) method.
      */
     protected void writeGetPortClass(PrintWriter pw, Vector getPortIfaces,
-            Vector getPortStubClasses, Vector getPortPortNames,
-            boolean printGetPortNotice)
-    {
+                                     Vector getPortStubClasses, Vector getPortPortNames,
+                                     boolean printGetPortNotice) {
         pw.println("    /**");
         pw.println("     * " + Messages.getMessage("getPortDoc00"));
         pw.println("     * " + Messages.getMessage("getPortDoc01"));
@@ -308,8 +304,7 @@ public class J2eeServiceImplWriter extends J2eeClassWriter {
         if (getPortIfaces.size() == 0) {
             pw.println("        throw new " + javax.xml.rpc.ServiceException.class.getName() + "(\""
                     + Messages.getMessage("noStub") + "  \" + (serviceEndpointInterface == null ? \"null\" : serviceEndpointInterface.getName()));");
-        }
-        else {
+        } else {
             pw.println("        try {");
             for (int i = 0; i < getPortIfaces.size(); ++i) {
                 String iface = (String) getPortIfaces.get(i);
@@ -337,7 +332,7 @@ public class J2eeServiceImplWriter extends J2eeClassWriter {
      * Write the getPort(QName portName, Class serviceInterfaceWriter) method.
      */
     protected void writeGetPortQNameClass(PrintWriter pw,
-             Vector getPortPortNames) {
+                                          Vector getPortPortNames) {
         pw.println("    /**");
         pw.println("     * " + Messages.getMessage("getPortDoc00"));
         pw.println("     * " + Messages.getMessage("getPortDoc01"));
@@ -362,9 +357,9 @@ public class J2eeServiceImplWriter extends J2eeClassWriter {
         pw.println("            ((org.apache.axis.client.Stub) _stub).setPortName(portName);");
         pw.println("            return _stub;");
         */
-		pw.println("        throw new " + javax.xml.rpc.ServiceException.class.getName() + "(\""
-				+ "Invalid QName" + "\");");
-        
+        pw.println("        throw new " + javax.xml.rpc.ServiceException.class.getName() + "(\""
+                + "Invalid QName" + "\");");
+
         pw.println("        }");
         pw.println("    }");
         pw.println();

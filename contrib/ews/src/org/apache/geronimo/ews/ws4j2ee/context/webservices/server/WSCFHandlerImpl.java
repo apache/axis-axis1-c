@@ -54,193 +54,210 @@
  */
 package org.apache.geronimo.ews.ws4j2ee.context.webservices.server;
 
-import java.util.HashMap;
-import java.util.Vector;
-
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFConstants;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFHandler;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFInitParam;
 import org.w3c.dom.Element;
 
+import java.util.HashMap;
+import java.util.Vector;
+
 /**
  * This encapsulates the layer 3 handler element of the webservices.xml. This
  * is also the concrete implementation of the WSCFHandler.
- *
  */
 public class WSCFHandlerImpl extends WSCFElement implements WSCFHandler {
 
-	/**
-	 * handler derscription 
-	 */
-	private String description;
-	
-	/**
-	 * handler display name
-	 */
-	private String displayName;
-	
-	/**
-	 * handler small icon
-	 */
-	private String smallIcon;
-	
-	/**
-	 * handler  large icon
-	 */
-	private String largeIcon;
-	
-	/**
-	 * handler name
-	 */
-	private String handlerName;
-	
-	/**
-	 * handler class
-	 */
-	private String handlerClass;
-	
-	/**
-	 * handler init parameters as a collection
-	 */
-	private HashMap initParam = new HashMap();
-	
-	/**
-	 * handler soap headers as a collection
-	 */
-	private Vector soapHeader = new Vector();
-	
-	/**
-	 * handler soap roles as a collection
-	 */
-	private Vector soapRole = new Vector();
-	
-	/**
-	 * The constructor. This will parse the chaild elementsin a depth first manner.
-	 * @param e handler Element
-	 * @throws WSCFException
-	 */
-	public WSCFHandlerImpl(Element e)throws WSCFException{
-		super(e);
-		
-		//extract description
-		Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DESCRIPTION);
-		if(null != element){this.description = element.getChildNodes().item(0).toString();}
-		
-		//extracting the display name
-		element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DISPLAY_NAME);
-		if(null != element){this.displayName = element.getChildNodes().item(0).toString();}
-		
-		//extract small icon
-		element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_SMALL_ICON);
-		if(null != element){this.smallIcon = element.getChildNodes().item(0).toString();}
-		
-		//extract handler name
-		element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_HANDLER_NAME);
-		if(null != element){this.handlerName = element.getChildNodes().item(0).toString();}
-		
-		// extract handler class
-		element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_HANDLER_CLASS);
-		if(null != element){this.handlerClass = element.getChildNodes().item(0).toString();}
-		
-		//extracting the params
-		Element[] elements = this.getChildElements(e, WSCFConstants.ELEM_WSCF_INIT_PARAM);
-		for(int i=0; i < elements.length; i++){
-			WSCFInitParam initparam = new WSCFInitParamImpl(elements[i]);
-			this.initParam.put(initparam.getParamName(), initparam);
-		}
-		
-		//extracting the soap headers
-		elements = this.getChildElements(e, WSCFConstants.ELEM_WSCF_SOAP_HEADER);
-		for(int i=0; i < elements.length; i++){
-			this.soapHeader.add(new WSCFSOAPHeaderImpl(elements[i]));
-		}
-		
-		//extract the SOAP roles
-		elements = this.getChildElements(e, WSCFConstants.ELEM_WSCF_SOAP_ROLE);
-		for(int i=0; i < elements.length; i++){
-			this.soapRole.add(elements[i].getChildNodes().item(0).toString());			
-		}
-		
-	}
-		
-	
+    /**
+     * handler derscription
+     */
+    private String description;
 
-	/**
-	 * Gets the description of the handler element
-	 * @return description
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * handler display name
+     */
+    private String displayName;
 
-	/**
-	 * Gets the display name of the handler element
-	 * @return display-name
-	 */
-	public String getDisplayName() {
-		return displayName;
-	}
+    /**
+     * handler small icon
+     */
+    private String smallIcon;
 
-	/**
-	 * Gets the class of the handler element
-	 * @return handler-class
-	 */
-	public String getHandlerClass() {
-		return handlerClass;
-	}
+    /**
+     * handler  large icon
+     */
+    private String largeIcon;
 
-	/**
-	 * Gets the name of the handler element
-	 * @return handler-name
-	 */
-	public String getHandlerName() {
-		return handlerName;
-	}
+    /**
+     * handler name
+     */
+    private String handlerName;
 
-	/**
-	 * Gets the init paramaeters of the handler element as a array
-	 * @return init-parameters
-	 */
-	public WSCFInitParam[] getInitParam() {
-		WSCFInitParam[] initparam = new WSCFInitParam[this.initParam.size()];
-		this.initParam.values().toArray(initparam);
-		return initparam;
-	}
+    /**
+     * handler class
+     */
+    private String handlerClass;
 
-	/**
-	 * Gets the large icon of the handler element
-	 * @return large-icon
-	 */
-	public String getLargeIcon() {
-		return largeIcon;
-	}
+    /**
+     * handler init parameters as a collection
+     */
+    private HashMap initParam = new HashMap();
 
-	/**
-	 * Gets the small icon of the handler element
-	 * @return small-icon
-	 */
-	public String getSmallIcon() {
-		return smallIcon;
-	}
+    /**
+     * handler soap headers as a collection
+     */
+    private Vector soapHeader = new Vector();
 
-	/**
-	 * Gets the soap headers of the handler element
-	 * @return soap-headers
-	 */
-	public String[] getSoapHeader() {
-		String[] soapheader = new String[this.soapHeader.size()];
-		this.soapHeader.toArray(soapheader);
-		return soapheader;
-	}
+    /**
+     * handler soap roles as a collection
+     */
+    private Vector soapRole = new Vector();
 
-	/**
-	 * Gets the soap roles of the handler element
-	 * @return soap-roles
-	 */
-	public String[] getSoapRole() {
-		String[] soaprole = new String[this.soapRole.size()];
-		this.soapRole.toArray(soaprole);
-		return soaprole;
-	}
+    /**
+     * The constructor. This will parse the chaild elementsin a depth first manner.
+     * 
+     * @param e handler Element
+     * @throws WSCFException 
+     */
+    public WSCFHandlerImpl(Element e) throws WSCFException {
+        super(e);
+		
+        //extract description
+        Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DESCRIPTION);
+        if (null != element) {
+            this.description = element.getChildNodes().item(0).toString();
+        }
+		
+        //extracting the display name
+        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_DISPLAY_NAME);
+        if (null != element) {
+            this.displayName = element.getChildNodes().item(0).toString();
+        }
+		
+        //extract small icon
+        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_SMALL_ICON);
+        if (null != element) {
+            this.smallIcon = element.getChildNodes().item(0).toString();
+        }
+		
+        //extract handler name
+        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_HANDLER_NAME);
+        if (null != element) {
+            this.handlerName = element.getChildNodes().item(0).toString();
+        }
+		
+        // extract handler class
+        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_HANDLER_CLASS);
+        if (null != element) {
+            this.handlerClass = element.getChildNodes().item(0).toString();
+        }
+		
+        //extracting the params
+        Element[] elements = this.getChildElements(e, WSCFConstants.ELEM_WSCF_INIT_PARAM);
+        for (int i = 0; i < elements.length; i++) {
+            WSCFInitParam initparam = new WSCFInitParamImpl(elements[i]);
+            this.initParam.put(initparam.getParamName(), initparam);
+        }
+		
+        //extracting the soap headers
+        elements = this.getChildElements(e, WSCFConstants.ELEM_WSCF_SOAP_HEADER);
+        for (int i = 0; i < elements.length; i++) {
+            this.soapHeader.add(new WSCFSOAPHeaderImpl(elements[i]));
+        }
+		
+        //extract the SOAP roles
+        elements = this.getChildElements(e, WSCFConstants.ELEM_WSCF_SOAP_ROLE);
+        for (int i = 0; i < elements.length; i++) {
+            this.soapRole.add(elements[i].getChildNodes().item(0).toString());
+        }
+
+    }
+
+    /**
+     * Gets the description of the handler element
+     * 
+     * @return description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Gets the display name of the handler element
+     * 
+     * @return display-name
+     */
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    /**
+     * Gets the class of the handler element
+     * 
+     * @return handler-class
+     */
+    public String getHandlerClass() {
+        return handlerClass;
+    }
+
+    /**
+     * Gets the name of the handler element
+     * 
+     * @return handler-name
+     */
+    public String getHandlerName() {
+        return handlerName;
+    }
+
+    /**
+     * Gets the init paramaeters of the handler element as a array
+     * 
+     * @return init-parameters
+     */
+    public WSCFInitParam[] getInitParam() {
+        WSCFInitParam[] initparam = new WSCFInitParam[this.initParam.size()];
+        this.initParam.values().toArray(initparam);
+        return initparam;
+    }
+
+    /**
+     * Gets the large icon of the handler element
+     * 
+     * @return large-icon
+     */
+    public String getLargeIcon() {
+        return largeIcon;
+    }
+
+    /**
+     * Gets the small icon of the handler element
+     * 
+     * @return small-icon
+     */
+    public String getSmallIcon() {
+        return smallIcon;
+    }
+
+    /**
+     * Gets the soap headers of the handler element
+     * 
+     * @return soap-headers
+     */
+    public String[] getSoapHeader() {
+        String[] soapheader = new String[this.soapHeader.size()];
+        this.soapHeader.toArray(soapheader);
+        return soapheader;
+    }
+
+    /**
+     * Gets the soap roles of the handler element
+     * 
+     * @return soap-roles
+     */
+    public String[] getSoapRole() {
+        String[] soaprole = new String[this.soapRole.size()];
+        this.soapRole.toArray(soaprole);
+        return soaprole;
+    }
 
 }

@@ -54,18 +54,6 @@
  */
 package org.apache.geronimo.ews.jaxrpcmapping;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Vector;
-
-import javax.wsdl.Binding;
-import javax.wsdl.Definition;
-import javax.wsdl.Import;
-import javax.wsdl.Message;
-
 import org.apache.axis.utils.Messages;
 import org.apache.axis.wsdl.gen.Generator;
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
@@ -76,10 +64,22 @@ import org.apache.axis.wsdl.toJava.DuplicateFileException;
 import org.apache.axis.wsdl.toJava.JavaGeneratorFactory;
 import org.apache.axis.wsdl.toJava.Utils;
 
+import javax.wsdl.Binding;
+import javax.wsdl.Definition;
+import javax.wsdl.Import;
+import javax.wsdl.Message;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
+
 /**
- * This is Wsdl2java's Definition Writer.  
+ * This is Wsdl2java's Definition Writer.
  * It currently writes the following files:
  * Faults as needed.
+ * 
  * @author Ias (iasandcb@tmax.co.kr)
  * @deprecated no more used by J2eeGeneratorFactory
  */
@@ -92,7 +92,7 @@ public class J2eeDefinitionWriter implements Generator {
      * Constructor.
      */
     public J2eeDefinitionWriter(J2eeEmitter emitter, Definition definition,
-            SymbolTable symbolTable) {
+                                SymbolTable symbolTable) {
         this.emitter = emitter;
         this.definition = definition;
         this.symbolTable = symbolTable;
@@ -135,23 +135,22 @@ public class J2eeDefinitionWriter implements Generator {
             boolean emitSimpleFault = true;
             if (me != null) {
                 Boolean complexTypeFault = (Boolean)
-                    me.getDynamicVar(JavaGeneratorFactory.COMPLEX_TYPE_FAULT);
+                        me.getDynamicVar(JavaGeneratorFactory.COMPLEX_TYPE_FAULT);
                 if (complexTypeFault != null &&
-                    complexTypeFault.booleanValue()) {
+                        complexTypeFault.booleanValue()) {
                     emitSimpleFault = false;
                 }
             }
             if (emitSimpleFault) {
                 try {
-                    J2eeFaultWriter writer = 
-                            new J2eeFaultWriter(emitter, 
-                                                symbolTable, 
-                                                faultInfo); 
+                    J2eeFaultWriter writer =
+                            new J2eeFaultWriter(emitter,
+                                    symbolTable,
+                                    faultInfo); 
                     // Go write the file
                     writer.generate();
                 } catch (DuplicateFileException dfe) {
-                    System.err.println(
-                            Messages.getMessage("fileExistError00", dfe.getFileName()));
+                    System.err.println(Messages.getMessage("fileExistError00", dfe.getFileName()));
                 }
             }
         }
@@ -161,6 +160,7 @@ public class J2eeDefinitionWriter implements Generator {
      * Collect all of the faults used in this definition.
      */
     private HashSet importedFiles = new HashSet();
+
     private void collectFaults(Definition def, ArrayList faults) throws IOException {
         Map imports = def.getImports();
         Object[] importValues = imports.values().toArray();
@@ -197,5 +197,5 @@ public class J2eeDefinitionWriter implements Generator {
             }
         }
     } // collectFaults
-    
+
 }

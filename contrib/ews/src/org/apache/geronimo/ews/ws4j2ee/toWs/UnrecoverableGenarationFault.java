@@ -58,6 +58,7 @@ package org.apache.geronimo.ews.ws4j2ee.toWs;
 /**
  * <p>this error means that due to the error the programme going fail
  * and can't recoverd.</p>
+ * 
  * @author hemapani
  */
 public class UnrecoverableGenarationFault extends RuntimeException {
@@ -66,7 +67,7 @@ public class UnrecoverableGenarationFault extends RuntimeException {
     }
 
     /**
-     * @param message
+     * @param message 
      */
     public UnrecoverableGenarationFault(String message) {
         super(message);

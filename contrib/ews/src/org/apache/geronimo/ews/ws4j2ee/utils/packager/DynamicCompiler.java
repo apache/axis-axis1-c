@@ -55,51 +55,51 @@
 
 package org.apache.geronimo.ews.ws4j2ee.utils.packager;
 
+import org.apache.axis.components.compiler.CompilerError;
+import org.apache.axis.components.compiler.CompilerFactory;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.axis.components.compiler.CompilerError;
-import org.apache.axis.components.compiler.CompilerFactory;
 
 /**
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class DynamicCompiler {
-	private ArrayList srcFiles = new ArrayList();
-	private String outDir = ".";
-	public DynamicCompiler(String srcDir){
-		FileSerachAgent searcher = new FileSerachAgent(srcDir);
-		searcher.addAcceptedFile(".java");
-		srcFiles = searcher.serach();
-	}
-	
-	public void compile(){
-		org.apache.axis.components.compiler.Compiler comp = CompilerFactory.getCompiler();
-		comp.setClasspath(System.getProperty("java.class.path"));
-		comp.setSource("genCode/withoutWSDL/server/ejb/");
-		
-		comp.setDestination(outDir);
-		
-		
-		for(int i = 0;i<srcFiles.size();i++){
-			String src = (String)srcFiles.get(i);
-			System.out.println(src);
-			comp.addFile(src);
-		}
-		try{
-			if(!comp.compile()){
-				List errors = comp.getErrors();
-				String errorStr = "";
-				for(int i=0;i<errors.size();i++){
-					errorStr = errorStr+ ((CompilerError)errors.get(i)).getMessage()+"\n";
-				}
-				throw new RuntimeException(errorStr);
-			}
-		}catch(IOException e){
-			throw new RuntimeException(e.getMessage() + 
-				"\nif you getting class not found Exception your jar $JAVA_HOME/lib/tools.jar" +
-				"	may be not in the classpath please add it and try agaien");
-		}
-	}
+    private ArrayList srcFiles = new ArrayList();
+    private String outDir = ".";
+
+    public DynamicCompiler(String srcDir) {
+        FileSerachAgent searcher = new FileSerachAgent(srcDir);
+        searcher.addAcceptedFile(".java");
+        srcFiles = searcher.serach();
+    }
+
+    public void compile() {
+        org.apache.axis.components.compiler.Compiler comp = CompilerFactory.getCompiler();
+        comp.setClasspath(System.getProperty("java.class.path"));
+        comp.setSource("genCode/withoutWSDL/server/ejb/");
+
+        comp.setDestination(outDir);
+
+        for (int i = 0; i < srcFiles.size(); i++) {
+            String src = (String) srcFiles.get(i);
+            System.out.println(src);
+            comp.addFile(src);
+        }
+        try {
+            if (!comp.compile()) {
+                List errors = comp.getErrors();
+                String errorStr = "";
+                for (int i = 0; i < errors.size(); i++) {
+                    errorStr = errorStr + ((CompilerError) errors.get(i)).getMessage() + "\n";
+                }
+                throw new RuntimeException(errorStr);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage() +
+                    "\nif you getting class not found Exception your jar $JAVA_HOME/lib/tools.jar" +
+                    "	may be not in the classpath please add it and try agaien");
+        }
+    }
 }

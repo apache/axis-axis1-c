@@ -69,15 +69,22 @@
         <include>**/*Test.java</include>
       </includes>
       <excludes>
-        <exclude>**/NaughtyTest.java</exclude>
+        <exclude>**/GenerateTest.java</exclude>
       </excludes>
     </unitTest>
 
     <resources>
       <resource>
+        <directory>target/src</directory>
+        <includes>
+          <include>**/*.properties</include>
+        </includes>
+      </resource>
+      <resource>
         <directory>src/conf</directory>
         <includes>
-          <include>*.properties</include>
+          <include>**/*Provider</include>
+          <include>**/*.properties</include>
         </includes>
       </resource>
     </resources>

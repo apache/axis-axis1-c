@@ -55,43 +55,41 @@ package org.apache.geronimo.ews.ws4j2ee.wsutils;
  * <http://www.apache.org/>.
  */
 
-
 import org.apache.axis.EngineConfiguration;
 import org.apache.axis.Handler;
 import org.apache.axis.deployment.wsdd.WSDDProvider;
 import org.apache.axis.deployment.wsdd.WSDDService;
 
-
 /**
  * refering to axis comment of pluggable providers
- * 
+ * <p/>
  * Look for file META-INF/services/org.apache.axis.deployment.wsdd.Provider
- * in all the JARS, get the classes listed in those files and add them to 
- * providers list if they are valid providers. 
- *
+ * in all the JARS, get the classes listed in those files and add them to
+ * providers list if they are valid providers.
+ * <p/>
  * Here is how the scheme would work.
- *
+ * <p/>
  * A company providing a new provider will jar up their provider related
- * classes in a JAR file. The following file containing the name of the new 
- * provider class is also made part of this JAR file. 
- *
+ * classes in a JAR file. The following file containing the name of the new
+ * provider class is also made part of this JAR file.
+ * <p/>
  * META-INF/services/org.apache.axis.deployment.wsdd.Provider
- *
- * By making this JAR part of the webapp, the new provider will be 
- * automatically discovered. 
+ * <p/>
+ * By making this JAR part of the webapp, the new provider will be
+ * automatically discovered.
+ * 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
-public class WSDDJavaJ2EEProvider  extends WSDDProvider{
-	public static final String PROVIDER_J2EE = "j2ee";
+public class WSDDJavaJ2EEProvider extends WSDDProvider {
+    public static final String PROVIDER_J2EE = "j2ee";
 
-	public String getName() {
-		return PROVIDER_J2EE;
-	}
+    public String getName() {
+        return PROVIDER_J2EE;
+    }
 
-	public Handler newProviderInstance(WSDDService service,
-									   EngineConfiguration registry)
-		throws Exception
-	{
-		return new org.apache.geronimo.ews.ws4j2ee.wsutils.J2EEProvider();
-	}
+    public Handler newProviderInstance(WSDDService service,
+                                       EngineConfiguration registry)
+            throws Exception {
+        return new org.apache.geronimo.ews.ws4j2ee.wsutils.J2EEProvider();
+    }
 }

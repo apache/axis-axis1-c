@@ -55,10 +55,6 @@
 
 package org.apache.geronimo.ews.ws4j2ee.toWs;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Vector;
-
 import org.apache.axis.components.logger.LogFactory;
 import org.apache.commons.logging.Log;
 import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
@@ -67,12 +63,16 @@ import org.apache.geronimo.ews.ws4j2ee.context.impl.J2EEWebServiceContextImpl;
 import org.apache.geronimo.ews.ws4j2ee.parsers.EJBDDParser;
 import org.apache.geronimo.ews.ws4j2ee.toWs.wsdl.WSDLGenarator;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Vector;
+
 /**
  * <p>this class genarate the code when the WSDL presents.</p>
  */
 public class Ws4J2EEwithoutWSDL implements Generator {
-	protected static Log log =
-			LogFactory.getLog(Ws4J2EEwithWSDL.class.getName());
+    protected static Log log =
+            LogFactory.getLog(Ws4J2EEwithWSDL.class.getName());
 
     private Vector genarators;
     /*
@@ -81,12 +81,12 @@ public class Ws4J2EEwithoutWSDL implements Generator {
      */
     private boolean useSEI = true;
     private String[] args;
-	private J2EEWebServiceContext wscontext;
-	private boolean verbose = true;
+    private J2EEWebServiceContext wscontext;
+    private boolean verbose = true;
 
-    public Ws4J2EEwithoutWSDL(String[] args,boolean useSEI)throws GenerationFault {
+    public Ws4J2EEwithoutWSDL(String[] args, boolean useSEI) throws GenerationFault {
         genarators = new Vector();
-        
+
         this.args = args;
         
         //we may need to pass few parameters to the J2EEWebServiceContextImpl they are TODO
@@ -96,50 +96,47 @@ public class Ws4J2EEwithoutWSDL implements Generator {
         //create the WSDL can be found from SEI and types classes OR
         //ejb and type classes. useSEI show what is used. in each case
         //the EJB or the SEI (which is already exists) need not to be genarated   		
-		this.useSEI = useSEI;
-		this.wscontext.setMiscInfo(ContextFactory.createMiscInfo());
+        this.useSEI = useSEI;
+        this.wscontext.setMiscInfo(ContextFactory.createMiscInfo());
     }
 
     /**
-     * genarate. what is genarated is depend on genarators included. 
+     * genarate. what is genarated is depend on genarators included.
+     * 
      * @see org.apache.geronimo.ews.ws4j2ee.toWs.Generator#genarate()
      */
     public void genarate() throws GenerationFault {
-    	
-    	
-    	try {
-    	if(verbose)
-    		log.info("calling Java2WSDL t genarated wsdl ...........");
-    	
-		WSDLGenarator wsdlgen = (WSDLGenarator)GeneratorFactory.createGenerator(
-			wscontext,GenerationConstants.WSDL_GENERATOR);
-		wsdlgen.setArgs(args);
-		//other than genarating the WSDL file this will initaite all the contxt's
-		//and validate the Context.	
-		wsdlgen.genarate();
-		
-		EJBDDParser ejbDDparser = new EJBDDParser(wscontext);
-		InputStream ejbddin = Ws4J2EEwithoutWSDL.class.getResourceAsStream("META-INF/ejb-jar.xml");
-		if( ejbddin != null){
-			ejbDDparser.parse(ejbddin); 
-			ejbddin.close();	
-		}
-		
-		
-		if(verbose)
-			log.info("genarating jaxrpc-mapper.xml ..............");
-		GeneratorFactory.createGenerator(wscontext,
-			GenerationConstants.JAXRPCMAPPER_GENERATOR).genarate();
-		if(verbose)
-			log.info("genarating webservice.xml .............");	
-		GeneratorFactory.createGenerator(wscontext,
-					GenerationConstants.WEBSERVICEDD_GENERATOR).genarate();	
 
-		GeneratorFactory.createGenerator(
-				wscontext,
-				GenerationConstants.SEI_AND_TYPES_GENERATOR).genarate();
-		} catch (IOException e) {
-			throw GenerationFault.createGenerationFault(e);
+        try {
+            if (verbose)
+                log.info("calling Java2WSDL t genarated wsdl ...........");
+
+            WSDLGenarator wsdlgen = (WSDLGenarator) GeneratorFactory.createGenerator(wscontext, GenerationConstants.WSDL_GENERATOR);
+            wsdlgen.setArgs(args);
+            //other than genarating the WSDL file this will initaite all the contxt's
+            //and validate the Context.	
+            wsdlgen.genarate();
+
+            EJBDDParser ejbDDparser = new EJBDDParser(wscontext);
+            InputStream ejbddin = Ws4J2EEwithoutWSDL.class.getResourceAsStream("META-INF/ejb-jar.xml");
+            if (ejbddin != null) {
+                ejbDDparser.parse(ejbddin);
+                ejbddin.close();
+            }
+
+            if (verbose)
+                log.info("genarating jaxrpc-mapper.xml ..............");
+            GeneratorFactory.createGenerator(wscontext,
+                    GenerationConstants.JAXRPCMAPPER_GENERATOR).genarate();
+            if (verbose)
+                log.info("genarating webservice.xml .............");
+            GeneratorFactory.createGenerator(wscontext,
+                    GenerationConstants.WEBSERVICEDD_GENERATOR).genarate();
+
+            GeneratorFactory.createGenerator(wscontext,
+                    GenerationConstants.SEI_AND_TYPES_GENERATOR).genarate();
+        } catch (IOException e) {
+            throw GenerationFault.createGenerationFault(e);
         }
        
 		
@@ -163,8 +160,9 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 //			   GenerationConstants.AXIS_WEBSERVICE_WRAPPER_GENERATOR).genarate();
 //        }
     }
-    public static void main(String[] args)throws Exception{
-		Ws4J2EEwithoutWSDL gen = new Ws4J2EEwithoutWSDL(args,false);
-		gen.genarate();
+
+    public static void main(String[] args) throws Exception {
+        Ws4J2EEwithoutWSDL gen = new Ws4J2EEwithoutWSDL(args, false);
+        gen.genarate();
     }
 }
