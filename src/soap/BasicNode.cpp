@@ -43,27 +43,30 @@ BasicNode::BasicNode():m_pachValue(NULL)
 
 BasicNode::BasicNode(const AxisChar* pachValue, NODE_TYPE eNodeType):m_iNodeType(eNodeType), m_pachValue(NULL)
 {
-    if(pachValue)
-    	this->m_pachValue = strdup(pachValue);
+    if(pachValue) {
+        m_pachValue = new char[strlen(pachValue)+1];
+        strcpy(m_pachValue,pachValue);
+    }
 
 }
 
 BasicNode::BasicNode(const BasicNode& rCopy):m_iNodeType(rCopy.m_iNodeType), m_pachValue(NULL)
 {
 	if(this->m_pachValue)
-	    free(this->m_pachValue);
+	    delete [] this->m_pachValue;
 	this->m_pachValue = NULL;
 	
 	if( rCopy.m_pachValue)
 	{	
-		this->m_pachValue = strdup(rCopy.m_pachValue);
+          this->m_pachValue = new char[strlen(rCopy.m_pachValue)+1];
+          strcpy(this->m_pachValue,rCopy.m_pachValue);
 	}		
 }
 
 BasicNode::~BasicNode()
 {
 	if(m_pachValue)
-		free(m_pachValue);
+		delete [] m_pachValue;
 }
 
 AXIS_CPP_NAMESPACE_END

@@ -61,11 +61,11 @@ ComplexElement::ComplexElement()
 ComplexElement::ComplexElement(AxisChar *pachLocalName, AxisChar *pachPrefix,
                                AxisChar *pachUri)
 {
-    m_pachLocalName = (AxisChar*) malloc(strlen(pachLocalName)+1);
+    m_pachLocalName = new AxisChar[strlen(pachLocalName)+1];
     strcpy(m_pachLocalName, pachLocalName);
-    m_pachPrefix = (AxisChar*) malloc(strlen(pachPrefix)+1);
+    m_pachPrefix = new AxisChar[strlen(pachPrefix)+1];
     strcpy(m_pachPrefix, pachPrefix);
-    m_pachURI = (AxisChar*) malloc(strlen(pachUri)+1);
+    m_pachURI = new AxisChar[strlen(pachUri)+1];
     strcpy(m_pachURI, pachUri);
 }
 
@@ -82,14 +82,20 @@ ComplexElement::ComplexElement(const ComplexElement& rCopy)
         itCurrBasicNode++;        
     } 
     
-    if(rCopy.m_pachPrefix)
-    	this->m_pachPrefix = strdup(rCopy.m_pachPrefix);
+    if(rCopy.m_pachPrefix) {
+    	  this->m_pachPrefix = new char[strlen(rCopy.m_pachPrefix)+1];
+        strcpy(this->m_pachPrefix,rCopy.m_pachPrefix);
+    }
 
-    if(rCopy.m_pachLocalName)
-    	this->m_pachLocalName = strdup(rCopy.m_pachLocalName);
-	
-    if(rCopy.m_pachURI)
-    	this->m_pachURI = strdup(rCopy.m_pachURI);
+    if(rCopy.m_pachLocalName) {
+    	  this->m_pachLocalName = new char[strlen(rCopy.m_pachLocalName)+1];
+        strcpy(this->m_pachLocalName,rCopy.m_pachLocalName);
+    }
+
+    if(rCopy.m_pachURI) {
+    	  this->m_pachURI = new char[strlen(rCopy.m_pachURI)+1];
+        strcpy(this->m_pachURI,rCopy.m_pachURI);
+    }
 }
 
 BasicNode* ComplexElement::clone()
@@ -100,9 +106,9 @@ BasicNode* ComplexElement::clone()
 
 ComplexElement::~ComplexElement()
 {
-    free(m_pachPrefix);
-    free(m_pachLocalName);
-    free(m_pachURI);
+    delete [] m_pachPrefix;
+    delete [] m_pachLocalName;
+    delete [] m_pachURI;
 
     /* 
      *Clear the Attributes 
@@ -158,14 +164,14 @@ IAttribute* ComplexElement::createAttribute(const AxisChar *localname,
 
 int ComplexElement::setPrefix(const AxisChar* pachPrefix)
 {
-    m_pachPrefix = (AxisChar*) malloc(strlen(pachPrefix)+1);
+    m_pachPrefix = new AxisChar[strlen(pachPrefix)+1];
     strcpy(m_pachPrefix, pachPrefix);
     return AXIS_SUCCESS;
 }
 
 int ComplexElement::setLocalName(const AxisChar* pachLocalName)
 {
-    m_pachLocalName = (AxisChar*) malloc(strlen(pachLocalName)+1);
+    m_pachLocalName = new AxisChar[strlen(pachLocalName)+1];
     strcpy(m_pachLocalName, pachLocalName);
     return AXIS_SUCCESS;
 }
@@ -243,7 +249,7 @@ int ComplexElement::serialize(SoapSerializer& pSZ,
             {
                 const AxisChar* pachTmp = pSZ.getNamespacePrefix(m_pachURI,
                     blnIsNewNamespace);
-                m_pachPrefix = (AxisChar*) malloc(strlen(pachTmp)+1);
+                m_pachPrefix = new AxisChar[strlen(pachTmp)+1];
                 strcpy(m_pachPrefix , pachTmp);
 
                 if (blnIsNewNamespace)
@@ -349,7 +355,7 @@ bool ComplexElement::isSerializable()
 
 int ComplexElement::setURI(const AxisChar* pachURI)
 {
-    m_pachURI = (AxisChar*) malloc(strlen(pachURI)+1);
+    m_pachURI = new AxisChar[strlen(pachURI)+1];
     strcpy(m_pachURI, pachURI);
     return AXIS_SUCCESS;
 }
