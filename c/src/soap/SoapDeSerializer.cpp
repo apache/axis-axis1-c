@@ -103,6 +103,7 @@ int SoapDeSerializer::SetInputStream(const Ax_soapstream* pInputStream)
 			m_pInputStream->transport.pGetFunct(&m_pCurrentBuffer, &nChars, m_pInputStream->str.ip_stream);
 			if ((nChars > 0) && m_pCurrentBuffer)
 				m_pParser->Parse(m_pCurrentBuffer, nChars);
+			m_pInputStream->transport.pRelBufFunct(m_pCurrentBuffer, m_pInputStream->str.ip_stream);
 		} while (nChars > 0);
 		m_pParser->ParseEnd();
 	}
