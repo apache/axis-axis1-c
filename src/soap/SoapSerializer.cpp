@@ -69,6 +69,7 @@
 
 #include "SoapEnvelope.h"
 #include "SoapSerializer.h"
+#include "HeaderBlock.h"
 #include "../common/GDefine.h"
 #include "../common/Packet.h"
 #include "../common/ArrayBean.h"
@@ -104,8 +105,14 @@ int SoapSerializer::setSoapHeader(SoapHeader *pSoapHeader)
 	int intStatus= FAIL;
 
 	if(m_pSoapEnvelope) {
-		m_pSoapEnvelope->setSoapHeader(pSoapHeader);
-		intStatus= SUCCESS;
+
+		if((m_pSoapEnvelope)&& (m_pSoapEnvelope->m_pSoapHeader)) {
+			//no need to create a SOAP Header, it already exists
+			intStatus= OBJECT_ALREADY_EXISTS;
+		} else {
+			m_pSoapEnvelope->setSoapHeader(pSoapHeader);
+			intStatus= SUCCESS;
+		}
 	}
 
 	return intStatus;
@@ -218,7 +225,7 @@ const char* SoapSerializer::getNewNamespacePrefix()
 	return cCounter;
 }
 
-ISoapSerializer& SoapSerializer::operator <<(const char *cSerialized)
+IWrapperSoapSerializer& SoapSerializer::operator <<(const char *cSerialized)
 {
 	int iTmpSerBufferSize= strlen(cSerialized);
 	if((m_iCurrentSerBufferSize+iTmpSerBufferSize)>1023) {
@@ -274,4 +281,42 @@ string& SoapSerializer::SerializeBasicType(const string& sName, float fValue)
 string& SoapSerializer::SerializeBasicType(const string& sName, int nValue)
 {
 	return BasicTypeSerializer::serialize(sName, nValue);		
+}
+
+IHeaderBlock* SoapSerializer::createHeaderBlock()
+{
+	HeaderBlock* pHeaderBlock= new HeaderBlock();
+	setHeaderBlock(pHeaderBlock);
+	return pHeaderBlock;
+}
+
+int SoapSerializer::setHeaderBlock(HeaderBlock *pHeaderBlock)
+{
+	int intStatus= FAIL;
+
+	if((m_pSoapEnvelope)&& (m_pSoapEnvelope->m_pSoapHeader)) {
+		//no need to create a SOAP Header, it already exists
+	} else {
+		SoapHeader* pSoapHeader= new SoapHeader();
+		setSoapHeader(pSoapHeader);
+	}
+
+	m_pSoapEnvelope->m_pSoapHeader->addHeaderBlock(pHeaderBlock);
+	intStatus= SUCCESS;
+
+	return intStatus;
+}
+
+/*
+ *This method not only removes the existing SoapHeader, but also removes
+ * all the existing HeaderBlocks which are associated with this SoapHeader.
+ * Therefore the caller of this method has to be exactly sure whether he wants to
+ * do this.
+ */
+int SoapSerializer::removeSoapHeader()
+{
+	delete m_pSoapEnvelope->m_pSoapHeader;
+	m_pSoapEnvelope->m_pSoapHeader= NULL;
+
+	return SUCCESS;
 }

@@ -79,6 +79,7 @@
 using namespace std;
 
 class BasicNode;
+#include "../common/IHeaderBlock.h"
 
 /**
  *	The Header block of a SOAP Header according to SOAP 1.2 specification.
@@ -104,7 +105,7 @@ class BasicNode;
  *	@brief	The Header block of a SOAP Header according to SOAP 1.2 specification.
  */
 
-class HeaderBlock  
+class HeaderBlock : public IHeaderBlock
 {
 
 private:	

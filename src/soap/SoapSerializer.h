@@ -72,7 +72,9 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "../common/ISoapSerializer.h"
+#include "../common/IWrapperSoapSerializer.h"
+#include "../common/IHandlerSoapSerializer.h"
+//#include "../common/ISoapSerializer.h"
 #include "SoapEnvVersions.h"
 
 class SoapEnvelope;
@@ -80,8 +82,9 @@ class SoapHeader;
 class SoapMethod;
 class SoapBody;
 class SoapFault;
+class HeaderBlock;
 
-class SoapSerializer : public ISoapSerializer							  
+class SoapSerializer : public virtual IWrapperSoapSerializer, public virtual IHandlerSoapSerializer /*: public ISoapSerializer*/
 {
 private:
 	static int iCounter;
@@ -93,7 +96,8 @@ private:
 public:
 	ISoapMethod* createSoapMethod();	
 	int flushSerializedBuffer();
-	ISoapSerializer& operator<<(const char *cSerialized);
+	IWrapperSoapSerializer& operator<<(const char *cSerialized);
+	//ISoapSerializer& operator<<(const char *cSerialized);
 	const char* getNewNamespacePrefix();
 	int setSoapVersion(SOAP_VERSION);
 	void init();
@@ -108,6 +112,9 @@ public:
 	IParam* setResponseParam(XSDTYPE nType, uParamValue Value);
 	IArrayBean* makeArrayBean(XSDTYPE nType, void* pArray);
 public: //Basic Type Serializing methods
+	int removeSoapHeader();
+	int setHeaderBlock(HeaderBlock* pHeaderBlock);
+	IHeaderBlock* createHeaderBlock();
 	string& SerializeBasicType(const string& sName, string& sValue, XSDTYPE type=XSD_STRING);
 	string& SerializeBasicType(const string& sName, float fValue);
 	string& SerializeBasicType(const string& sName, int nValue);
