@@ -38,13 +38,13 @@
    In the MathOps service class I have a div method which accepts two parameters.
    In order to demonstrate the possible exceptions I have the following scenarios.
    
-   If the second parameter is zero div method throw an AxisDivByZeroException
+   If the second parameter is zero div method throw an DivByZeroStruct
    indicating that division by zero is not possible.
 
-   If the first parameter is 1000 div method throw an AxisNormalDetailException.
+   If the first parameter is 1000 div method throw an SpecialDetailStruct.
    Note that this limitation is only for demonstration purposes.
 
-   If any of the parameters are negative div method throw an AxisOutOfBoundException.
+   If any of the parameters are negative div method throw an OutOfBoundStruct.
    Here too the limitation is only for demonstation purposes.
 
    So obviously to test the fault mapping of these generated exceptions you need to
@@ -68,16 +68,6 @@
    SpecialDetailStruct:The type corresponding to the complex type SpecialDetailStruct
        in the MathOps.wsdl
                                                                                                                              
-   AxisDivByZeroException: For each fault in wsdl we generate an exception
-       class which is derived from AxisException base class which is the root
-       class for exceptions in Axis C++. This root class in tern is derived
-       from std::exception. AxisDivByzeroException is the exception type
-       corresponding to DivByZero fault.
-                                                                                                                             
-   AxisOutOfBountException: Exception type corresponding to OutOfBound fault.
-                                                                                                                             
-   AxisNormalDetailException: Exception type corresponding to NormalDetail fault.
-
-   
-   
-
+   AxisServiceException: This is derived from AxisException base class which is the root
+       class for exceptions in Axis C++. This root class in term is derived
+       from std::exception. 
