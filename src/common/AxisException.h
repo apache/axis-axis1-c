@@ -6,6 +6,15 @@ using namespace std;
 
 #define TEST_EXCEPTION FAULT_LAST+1
 
+#ifdef _DEBUG
+#define AXIS_TRY try {
+#define AXIS_CATCH(X) } catch (X) { 
+#define AXIS_ENDCATCH }
+#else
+#define AXIS_TRY 
+#define AXIS_CATCH(X) 
+#define AXIS_ENDCATCH
+#endif
 
 class AxisException :public exception
 {

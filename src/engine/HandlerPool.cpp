@@ -274,37 +274,39 @@ void HandlerPool::UnLoadServiceResponseFlowHandlers(WSDDHandlerList *pHandlerLis
 
 HandlerChain* HandlerPool::LoadHandlerChain(WSDDHandlerList *pHandlerList)
 {
-  DEBUG1("HandlerPool::LoadHandlerChain");
+	DEBUG1("HandlerPool::LoadHandlerChain");
 	int nLoaded = 0;
 	HandlerChain* pHc = NULL;
 	if (pHandlerList && !pHandlerList->empty())
-  {
+	{
 		pHc = new HandlerChain();
 		//BasicHandler* pBh = NULL;;
-    Handler* pH = NULL;
-		for (WSDDHandlerList::iterator it=pHandlerList->begin();
-		it != pHandlerList->end(); it++)
+		Handler* pH = NULL;
+		for (WSDDHandlerList::iterator it=pHandlerList->begin(); it != pHandlerList->end(); it++)
 		{
 			//if ((pBh = LoadHandler(*it)) != NULL)
-      DEBUG1("BEFORE BasicHandler *pBh = LoadHandler(*it);");
-      BasicHandler *pBh = LoadHandler(*it);
-      DEBUG1("AFTER BasicHandler *pBh = LoadHandler(*it);");
-      if (pBh)
+			DEBUG1("BEFORE BasicHandler *pBh = LoadHandler(*it);");
+			BasicHandler *pBh = LoadHandler(*it);
+			DEBUG1("AFTER BasicHandler *pBh = LoadHandler(*it);");
+			if (pBh)
 			{
-        DEBUG1("BEFORE pH = dynamic_cast<Handler*>(pBh);");
-        pH = dynamic_cast<Handler*>(pBh);
-        DEBUG1("AFTER pH = dynamic_cast<Handler*>(pBh);");
-        if (pH)
-			  {          
-          DEBUG1("if (pH)");
-          pH->SetOptionList((*it)->GetOptionList());
-				  nLoaded++;
-				  pHc->AddHandler(pH);
-        }
-        else
-        {
-          return NULL;
-        }
+				DEBUG1("BEFORE pH = dynamic_cast<Handler*>(pBh);");
+				if (pBh->GetType() == NORMAL_HANDLER)
+					pH = static_cast<Handler*>(pBh);
+				else
+					pH = NULL;
+				DEBUG1("AFTER pH = dynamic_cast<Handler*>(pBh);");
+				if (pH)
+				{          
+					DEBUG1("if (pH)");
+					pH->SetOptionList((*it)->GetOptionList());
+					nLoaded++;
+					pHc->AddHandler(pH);
+				}
+				else
+				{
+					return NULL;
+				}
 			}
 		}
 		if (0!=nLoaded) 

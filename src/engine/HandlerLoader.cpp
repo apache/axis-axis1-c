@@ -89,12 +89,12 @@ int HandlerLoader::Initialize()
             
 		if (LoadLib())
 		{      
-			printf("LoadLib success\n");
+//			printf("LoadLib success\n");
 			m_Create = GetCreate();
 			m_Delete = GetDelete();
 			if (!m_Create || !m_Delete)
 			{
-				printf("could not get function pointers\n");
+//				printf("could not get function pointers\n");
 				UnloadLib();
 				m_Handler = 0;
 				return FAIL;
@@ -104,7 +104,7 @@ int HandlerLoader::Initialize()
 		}
 		else 
 		{
-			printf("LoadLib failed\n");
+//			printf("LoadLib failed\n");
 			return FAIL;
 		}
 	}
@@ -146,7 +146,7 @@ int HandlerLoader::LoadLib()
       	if (!m_Handler)
 	{
     
-		printf("Error is :%s\n",dlerror());
+//		printf("Error is :%s\n",dlerror());
 	}
   
 #endif
