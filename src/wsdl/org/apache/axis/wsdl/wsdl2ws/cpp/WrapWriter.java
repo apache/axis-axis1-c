@@ -306,7 +306,7 @@ public class WrapWriter extends CPPClassWriter{
 				}
 				writer.write("v" + ( paramsB.size() - 1));
 			}
-			writer.write(")\n");
+			writer.write(");\n");
 			writer.write("\treturn SUCCESS;\n");
 		}
 		//write end of method
