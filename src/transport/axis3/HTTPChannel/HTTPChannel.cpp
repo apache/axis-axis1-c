@@ -1,4 +1,6 @@
 #include "HTTPChannel.hpp"
+#include "../../../platforms/PlatformAutoSense.hpp"
+
 
 HTTPChannel::HTTPChannel()
 {
@@ -270,11 +272,26 @@ bool HTTPChannel::OpenChannel()
         {
             // Cannot open a channel to the remote end, shutting down the
             // channel and then throw an exception.
-            CloseChannel();
+            // Before we do anything else get the last error message;
+			long dw = GETLASTERROR
 
+			closeChannel();
             free( paiAddrInfo0);
+			
+			string* message = PLATFORM_GET_ERROR_MESSAGE(dw);
 
-            throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR);
+			char fullMessage[600];
+			sprintf(fullMessage,
+				"Failed to open connection to server: \n \
+				hostname='%s'\n\
+				port='%d'\n\
+				Error Message='%s'\
+				Error Code='%d'\n",
+				m_URL.getHostName(), m_URL.getPort(), message->c_str(), dw);
+				
+			delete(message);
+
+			throw AxisTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED, fullMessage);
         }
 
         break;
@@ -361,44 +378,26 @@ bool HTTPChannel::OpenChannel()
 // Cannot open a channel to the remote end, shutting down the
 // channel and then throw an exception.
 
-#ifdef WIN32
 // Before we do anything else get the last error message;
-// I'd like to put the getting of the error message into platform specifics
-// but not sure how!  I think it would be nicer to make the platform
-// specifics a class and not just macros.  That way we could have e.g.
-// char * Windows#getLastErrorMessage().
-		long lLastError = GetLastError();
-#endif // WIN32
+			long dw = GETLASTERROR
+			CloseChannel();
 
-		CloseChannel();
+			
+			string* message = PLATFORM_GET_ERROR_MESSAGE(dw);
 
-#ifdef WIN32
-		char	szErrorBuffer[200]; 
-	    LPVOID	lpErrorBuffer;
+			char fullMessage[600];
+			sprintf(fullMessage,
+				"Failed to open connection to server: \n \
+				hostname='%s'\n\
+				port='%d'\n\
+				Error Message='%s'\
+				Error Code='%d'\n",
+				m_URL.getHostName(), m_URL.getPort(), message->c_str(), dw);
+				
+			delete(message);
 
-		FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM,
-					   NULL,
-					   lLastError,
-					   MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT),
-					   (LPTSTR) &lpErrorBuffer,
-					   0,
-					   NULL);
+		m_LastError = fullMessage;
 
-		sprintf( szErrorBuffer, 
-				 "Failed to open connection to server:\n\
-				 hostname='%s'\n\
-				 port='%d'\n\
-				 Error Message='%s'\
-				 Error Code='%d'\n",                     \
-				 m_URL.getHostName(), m_URL.getPort(), lpErrorBuffer, lLastError); 
- 
-	    LocalFree( lpErrorBuffer);
-
-		m_LastError = szErrorBuffer;
-#else // WIN32 not defined
-		m_LastError = "Cannot open a channel to the remote end.";
-
-#endif // WIN32
 	    return bSuccess;
     }
 	else
