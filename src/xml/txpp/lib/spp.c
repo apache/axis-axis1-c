@@ -111,7 +111,10 @@ processXmlDecl(SPPParser* ct, int isGeneralTextEntity,
     {
         /* printf("version:%s\n", version); */
         /* printf("versionend:%s\n", versionend); */
-        *(protocolEncodingName + (ct->m_currentTokPoint - protocolEncodingName) - 3) = '\0';
+	int kk = ct->m_currentTokPoint - protocolEncodingName -3;
+	char* protEncNameEnd = protocolEncodingName + kk;
+	protEncNameEnd = '\0';
+        /**(protocolEncodingName + (ct->m_currentTokPoint - protocolEncodingName) - 3) = '\0';*/
     
         /*printf("encodingName:%s\n", protocolEncodingName);*/
         /* if(standalone) */
