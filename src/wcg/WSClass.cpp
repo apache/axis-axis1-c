@@ -194,7 +194,7 @@ int WSClass::GenerateClassImpl(File &file)
 		file << "}" << endl;
 		file << endl;
 
-		file << "void" << m_Name << "::OnFault(IMessageData* pMsg)" << endl; 		
+		file << "void " << m_Name << "::OnFault(IMessageData* pMsg)" << endl; 		
 		file << "{" << endl;
 		file << "}" << endl;
 		file << endl;
@@ -216,7 +216,7 @@ int WSClass::GenerateClassImpl(File &file)
 		file << "\tstring method = name;" << endl;
 		file << "\tISoapMethod* pMethod = mc->getSoapSerializer()->createSoapMethod();" << endl;
 		file << "\tpMethod->setLocalName(method + \"Response\");" << endl;
-		file << "\tpMethod->setPrefix(\"" << "amp" << "\");"<< endl; //amp - axis method prefix :)
+		file << "\tpMethod->setPrefix(" << "mc->getSoapSerializer()->getNewNamespacePrefix()" << ");"<< endl; //amp - axis method prefix :)
 		file << "\tpMethod->setUri(\"" << g_ClassNamespaces[m_AWSName] << "\");"<< endl; //http://www.opensource.lk will come from wsdd
 		file << "\treturn SUCCESS;" << endl; 
 		file << "}" << endl;
