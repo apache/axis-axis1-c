@@ -378,7 +378,11 @@ public class ClientStubWriter extends CPPClassWriter{
 		String faultInfoName =null;
 		String faultType =null;	 
 		String langName =null;
-		String paramName =null;
+		String paramName =null;	
+	    if (!paramsFault.hasNext()){
+			writer.write("\t\t\t\t  cFaultdetail = m_pCall->getElementAsString(\"faultdetail\", 0);\n");//damitha
+			writer.write("\t\t\t\t  throw AxisException(cFaultdetail);\n");//damitha		
+	    }
 		while (paramsFault.hasNext()){
 			FaultInfo info = (FaultInfo)paramsFault.next();
 			faultInfoName =info.getFaultInfo();	     
