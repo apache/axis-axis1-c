@@ -154,6 +154,7 @@
 	      -->
 		<linker id="AIXExecutableLinker" name="xlC" libtool="false" if="aix">
 			<linkerarg value="-g" if="debug"/>
+			<syslibset libs="pthread"/>
 		</linker>
 
 		<linker id="AIXLinker" extends="AIXExecutableLinker" name="xlC" libtool="false" if="aix">
