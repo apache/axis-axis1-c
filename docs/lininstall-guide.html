@@ -22,8 +22,7 @@
 </li>
 <br>
 
-<p><b>Note:</b>The Expat XML Parser module is not currently maintained and also contains some bugs. So it is removed from the 1.4 release. Please ignore any references to the Expat parser 
-in the documentation. The documentation will be updated regarding this later.
+<p><b>Note:</b>The Expat XML Parser module is not currently maintained and also contains some bugs. So it is removed from the 1.5 release. 
 </p>
 
 
@@ -58,10 +57,8 @@ Axis C++ uses Apache web server to host services.<br> </p>
 
 <br> 
 
-<p>&nbsp; &nbsp; &nbsp; <a href="http://sourceforge.net/projects/expat/">Expat (1.95.7) </a> (<b>Note:</b>The Expat XML Parser module is not currently maintained and also contains some bugs. For more information refer the contents section.)<br> <br>
-
-and/or <br> <br>
-<a href="http://archive.apache.org/dist/xml/xerces-c/Xerces-C_2_2_0/">Xerces C++ (2.2.0)</a> XML parser(s)<br> <br>
+<p>
+<a href="http://archive.apache.org/dist/xml/xerces-c/Xerces-C_2_2_0/">Xerces C++ (2.2.0)</a> XML parser<br> <br>
 
 Axis C++ needs an XML parser to parse SOAP messages and WSDD files. It
 has a parser abstraction layer that helps  users to select/switch between
@@ -83,11 +80,8 @@ Axis C++ server engine is implemented as a 'so module'. (For Apache
 1.3.x use --enable-module=so; for Apache 2.0.x use --enable-so when
 configuring. See Apache web server documentation for more details)</p> 
 
-<h2>2. Install Expat (1.95.7) and/or Xerces C++ (2.2.0) </h2>
-<p><b>Note:</b>The Expat XML Parser module is not currently maintained and also contains some bugs. For more information refer the contents section.
-</p>
-<p>Select an XML parser depending on your parser preferences. See the respective parser's documentation for
-installation instructions. </p> <br>
+<h2>2. Install Xerces C++ (2.2.0) </h2>
+<p>See the Xerces parser's documentation for installation instructions. </p> <br>
 
 
 <h2>3. Download Axis C++</h2>
@@ -230,9 +224,7 @@ To deploy with Apache 2.0.x </p>
 To deploy with Apache 1.3.x </p>
 <b>sh deploy_apache.sh </b> </br>
 
-<p> <b>Note:</b> please rename libaxis_xercesc.so (the default parser library) to libaxis_xmlparser.so. <br> <br> if you need to use a different parser or want to switch parsers time to time, you need to edit the script and comment out the line:
- <br> <br>
-<p><b>Note:</b>The Expat XML Parser module is not currently maintained and also contains some bugs. For more information refer the contents section.
+<p> <b>Note:</b> please rename libaxis_xercesc.so (the default parser library) to libaxis_xmlparser.so. 
 </p>
 
 

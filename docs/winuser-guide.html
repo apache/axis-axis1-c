@@ -24,19 +24,23 @@
 
 <a href="#transport">Axis Transport and Parser Library</a><br>
 
-<a href="#handlers">Handlers</a><br><br>
-</p>
-<p>
+<a href="#handlers">Handlers</a><br>
+
+<a href="#ssl">SSL Client</a><br> 
+
+<a href="#session">Session Headers</a><br> 
+
+<a href="#IPV6"> IPV6</a> <br> <br> <br>
+
 <b>Before you follow this guide, please make sure that you have followed the</b> <a
-href="wininstall-guide.html"><b>Windows Installation guide</b> </a>
+href="wininstall-guide.html"><b>Windows Installation guide</b>
 </p>
 
-<p><b>Note:</b>The Expat XML Parser module is not currently maintained and also contains some bugs. So it is removed from the 1.4 release. Please ignore any references to the Expat parser 
-in the documentation. The documentation will be updated regarding this later.
-</p>
 
+<p><b>Note:</b>The Expat XML Parser module is not currently maintained and also contains some bugs. So it is removed from the 1.5 release. 
+</p>
 <p>
-
+</a>
 <b>Definitions:</b> <br>
 Axis_Extract -> The folder to which the Axis c++ binary distribution is extracted <br>
 [Axis_Folder] -> The deploy folder of the binary distribution which is copied to the apache installation
@@ -293,15 +297,9 @@ int main()
 
 <h2>Transport Library and Parser Library</h2>
 
-<p><b>Note:</b>The Expat XML Parser module is not currently maintained and also contains some bugs. For more information refer the Note at the top of the page.
-</p>
 <p>AxisTransport.dll (Which can be found at Axis_Extract/bin) should be placed in the path, and should be specified as the value to the key "Transport_http" in axiscpp.conf [Axis_Folder]/axiscpp.conf Or in the same place as the client.exe. </p> 
-<p>Rename either AxisXMLParser_Expat.dll or AxisXMLParser_Xerces.dll to AxisXMLParser.dll (depending on the parser you use), 
- and give the path of the AxisXMLParser.dll as the value of the key XMLParser in axiscpp.conf Or in the  same place as the client.exe. 
-<br>
-If you want to use Expat parser then libexpat.dll should be given in the path.
-<br>
-If you want to use the Xerces parser then xerces-c_2_2_0.dll should be given in the path.
+<p>Rename AxisXMLParser_Xerces.dll to AxisXMLParser.dll  and give the path of the AxisXMLParser.dll as the value of the key XMLParser in axiscpp.conf Or in the  same place as the client.exe. 
+<br> xerces-c_2_2_0.dll should be given in the path.
 <br>
 
 </p>
@@ -410,13 +408,104 @@ Restart the Apache server.</p>
 a.	echoStringHeaderHandler (Axis_Extract/samples/server/echoStringHeaderHandler)
 <br>
 b.	testHandler
-(Axis_Extract/samples/client/testHandler)
+(Axis_Extract/samples/client/testHandler)</p>
+<p>
+<a name="ssl"> </a> </p>
+<h2>SSL Client</h2>
+<p>
+This section describes how to use an Axis C++ SSL secure client to access web services hosted on a secure web service. <br> <br>
+The SSL implementation for the client in Axis C++ uses the openssl opensource library. <br> <br>
+To aid to compile the secure channel dll <br> <br>
+1. Install the openssl 0.9.7e binary distribution. <br>
+2. Copy the include files from the openssl installation to c\include\openssl in your distribution<br>
+3. Copy libs found in \lib\VC of the openssl installation to c\lib\openssl <br> <br>
+
+Now use the vc project in c\vc\transport\Axis2\Axis2SSLChannel to compile the Secure channel dll. <br> <br>
+
+Paste this dll where the Axis C++ client can load it (i.e %PATH%) OR specify the path to it in the axiscpp.conf 
+under the key "Channel_ssl" (e.g Channel_ssl:c:\Axis2SSLChannel.dll) <br> <br>
+
+Now when you run any client using a url of the form https://...... the client will use SSL to connect to the relevant secure service specified by the url. The client request must be directed at a "secure webserver" which has the relevant 
+web service hosted.</p>
+
+<br> <br>
+
+<p><a name="session"> </a></p>
+<h2>Session Headers</h2>
+<p>The following text explains how to deploy and run the SOAP Header based sample client with Axis Java web service <br> <br>
+<b>Deploying the Web Service</b> <br> <br> </p>
+<p>c\samples\server\session\headers folder contains the sources (inside the counters folder, which is the package of these classes)  needed to build the Axis java service needed to run the soap header based session client
+(These server side skeletons were generated from the Counter.wsdl) <br> <br>
 
 
+Compile these java source files and deploy them in Axis java (visit http://ws.apache.org/axis/java/index.html on how to 
+achieve this) <br> <br>
+
+
+Put the following element in the <globalConfiguration> section in the server-config.wsdd to enable SOAP header based 
+session handling for Axis Java <br> <br>
+<b>&lt;handler name="session" type="java:org.apache.axis.handlers.SimpleSessionHandler"/&gt; </b> <br> <br>
+
+The following should be put in the server-config.wsdd of Axis java for this service to behave as having session scope <br> <br>
+
+&lt;service name="CounterService" provider="java:RPC"&gt; <br>
+&lt;parameter name="scope" value="session"/&gt;<br>
+&lt;requestFlow&gt; <br>
+&lt;handler type="session"/&gt;<br> 
+&lt;/requestFlow&gt; <br>
+&lt;responseFlow&gt; <br>
+&lt;handler type="session"/&gt; <br> 
+&lt;/responseFlow&gt; <br>
+  &lt;parameter name="allowedMethods" value="*"/&gt; <br>
+  &lt;parameter name="className" value="counters.CounterSoapBindingImpl"/&gt; <br>
+  &lt;namespace&gt;http://xml.apache.org/axis/wsdd/&lt;/namespace&gt; <br>
+&lt;/service&gt; <br> <br> </p>
+
+<p>
+Since Axis c++ doesn't support multiref yet, Axis java multiref should be disabled by putting the element <br> <br>
+&lt;parameter name="sendMultiRefs" value="false"/&gt; <br> 
+under &lt;globalConfiguration&gt; <br> <br>
+
+Start Axis java (visit http://ws.apache.org/axis/java/index.html on how to achieve this)<br> <br>
+
+Generating the client stubs and building the client and running the client. <br> <br> </p>
+
+<p>Use the vc workspace \c\vc\samples\client\session\Headers\Headers.dsw to compile the client side handler for this sample <br> <br>
+
+Run the command java org.apache.axis.wsdl.wsdl2ws.WSDL2Ws ../Counter.wsdl -o./gen_src -lc++ -sclient 
+from within c\samples\client\session\headers\sessionclient to generate the client stubs <br> <br>
+
+Compile the client application using the vc workspace at <br>
+\c\vc\samples\client\session\Headers\Headers.dsw <br> <br>
+
+Host the service in Axis java (Check c/samples/server/session/headers/readme.txt on how to do this). <br> <br>
+
+Configure the client to use the provided client.wsdd from axiscpp.conf (make appropriate changes if necessary 
+in the client.wsdd to the absolute path of the handler )<br> <br>
+
+Run the tcpMonitor and configure it to check the conversation between the client and server <br> <br>
+
+Run the client in the following fashion <br> <br>
+sessionClient count 1 http://localhost:8080/axis/services/CounterService <br> <br>
+
+
+Inspect the SOAP messages in tcpMonitor to see the values returned by the server incremented by 1 each 
+time (as done throught the client). Counting starts at the value 97, which is set at the server side web service. <br>
+</p>
+
+<br> 
+
+<p><a name="IPV6"> </a></p>
+<h2>IPV6</h2>
+<p>The source is in src/transport/axis2/ipv6/ </p> <br>
+<p>We need the 2 additional headers that comes with the IPv6Kit. <br> <br>
+Can be downloaded from <a href="http://msdn.microsoft.com/downloads/sdks/platform/tpipv6.asp">http://msdn.microsoft.com/downloads/sdks/platform/tpipv6.asp </a> <br> <br>
+Extract the package and copy the tpipv6.h and wspiapi.h headers in inc folder to $AXISCPP_HOME/include. <br> <br>
+ That would compile the axis2ipv6 VC++ project. </p>
+
+<p>
 <div id="pdf" align="right">
 <a href="winuser-guide.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
-          PDF</a>
-
-</p>
+          PDF</a> </p>
 </body>
 </html>

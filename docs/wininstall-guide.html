@@ -25,12 +25,10 @@ Windows XP 2002 Professional<br></p>
 <br>
 6. <a href="#writews">Writing your web services and client applications using
 Axis C++.</a><br>
-7. <a href="#parser1">Installing the Expat Parser</a> <br>
-<p><b>Note:</b>The Expat XML Parser module is not currently maintained and also contains some bugs. So it is removed from the 1.4 release. Please ignore any references to the Expat parser 
-in the documentation. The documentation will be updated regarding this later.
+7. <a href="#parser2">Installing the Xerces Parser</a> <br>
+<p><b>Note:</b>The Expat XML Parser module is not currently maintained and also contains some bugs. So it is removed from the 1.5 release. 
 </p>
 
-8. <a href="#parser2">Installing the Xerces Parser</a> <br>
 
  
 
@@ -70,18 +68,11 @@ in the documentation. The documentation will be updated regarding this later.
 
 6. "samples" folder contains sources of all the server and client samples including interop tests.</p>
 
-<p><a name="#parser1"> </a> </p>
-<h1>Installing the Expat XML parser </h1>
-<p><b>Note:</b>The Expat XML Parser module is not currently maintained and also contains some bugs. For more information refer the contents section.
-</p>
-<p>If you decide to use the Expat parser you need to install the Expat parser. Download the Expat-1.95.7 binary version from <a href="http://sourceforge.net/projects/expat/">http://sourceforge.net/projects/expat/</a> <br> <br>
-Extract the Expat binaries to a folder Called Expat ,we will refer to this folder as [Expat_Folder].</p> <br> <br>
-
 <p><a name="#parser2"> </a> </p>
 
 <h1>Installing the Xerces XML parser</h1>
 <br> 
-<p>If you decide to use the Xerces parser you need to install the Xerces parser. Download the Xerces-C 2.2.0 ( 32 bit binary release) from:
+<p>Download the Xerces-C 2.2.0 ( 32 bit binary release) from:
 <a href="http://xml.apache.org/xerces-c/download.cgi">http://xml.apache.org/xerces-c/download.cgi</a> <br> <br>
 
 Extract the Xerces-C 2.2.0 binary version. We will refer to this folder as [Xerces_Folder].</p>
@@ -125,18 +116,14 @@ SetHandler axis <br>
 9. Copy AxisServer.dll and AxisTransport.dll from Axis_Extract/bin folder  to [Axis_Folder]/lib <br>
 <br>
 
-10.If you want to use the Expat parser with Axis C++, rename AxisXMLParser_Expat.dll (which is located at Axis_Extract/bin ) to AxisXMLParser.dll and copy it to [Axis_Folder]/lib  <br>
-<b>Note:</b>The Expat XML Parser module is not currently maintained and also contains some bugs.For more information refer the contents section.
-<br>  <br>
-
-11.If you want to use the Xerces parser with Axis C++, rename AxisXMLParser_Xerces.dll (which is located at Axis_Extract/bin ) to AxisXMLParser.dll and copy it to [Axis_Folder]/lib </p>
+10.Rename AxisXMLParser_Xerces.dll (which is located at Axis_Extract/bin ) to AxisXMLParser.dll and copy it to [Axis_Folder]/lib </p>
 <br>
-<p><li>Copy libexpat.dll file from [Expat_Folder]\Libs to [Axis_Folder]/lib/ </li> 
+<p>
  <li>Copy xerces-c_2_2_0.dll from [Xerces_Folder]/bin/ to [Axis_Folder]/lib/ </li> 
  </p> <br> <br>
 <p><b>Note:</b> This could also be done by editing the axiscpp.conf. <br>
 
-12. Open the [Axis_Folder]/axiscpp.conf_win for editing. The contents of the file will look as follows.<br> <br>
+11. Open the [Axis_Folder]/axiscpp.conf_win for editing. The contents of the file will look as follows.<br> <br>
 
 LogPath:XXXX <br>
 WSDDFilePath:YYYY <br>
@@ -159,7 +146,7 @@ Open server.wsdd for editing. For each service element, locate the element "para
 Give the absolute path of the indicated webservice.dll  in the "value" attribute <br>  <br>
 Rename axiscpp.conf_win which is in [Axis_Folder] to axiscpp.conf <br> <br>
 
-13. Restart the apache web server. If you have done correctly apache server will start without giving any error.</p> 
+12. Restart the apache web server. If you have done correctly apache server will start without giving any error.</p> 
 <br> 
 
 <p><b>apache 1.3.X : </b> <br> <br>
@@ -178,7 +165,7 @@ this machine. <br> <br>
 It could happen with some other apache 2 versions or in different service packs.
 ) <br> <br>
 
-14. Open an internet browser and check <a href="http://localhost/axis">http://localhost/axis</a> If the module has loaded properly then you will get the axis welcome page with a listing of deployed web services.<br> <br>
+13. Open an internet browser and check <a href="http://localhost/axis">http://localhost/axis</a> If the module has loaded properly then you will get the axis welcome page with a listing of deployed web services.<br> <br>
 
 <p><a name=#simpleaxis"></a></p>
 
@@ -194,16 +181,13 @@ It could happen with some other apache 2 versions or in different service packs.
 6. Add [Axis_Folder]/lib to the PATH environment variable.<br> <br>
 7. Copy the SimpleAxisServer.exe from Axis_Extract/bin to the Simple_Axis_Server_Folder.<br> <br>
 8. Copy AxisServer.dll and AxisTransport.dll from Axis_Extract/bin folder to [Axis_Folder]/lib <br> <br>
-9.If you want to use the Expat parser with Axis C++, rename AxisXMLParser_Expat.dll (which is located at  Axis_Extract/bin) to AxisXMLParser.dll and copy it to [Axis_Folder]/lib
- <br> <b>Note:</b>The Expat XML Parser module is not currently maintained and also contains some bugs.For more information refer the contents section.
- <br>
-10.If you want to use the Xerces parser with Axis C++, rename AxisXMLParser_Xerces.dll (which is located at  Axis_Extract/bin) to AxisXMLParser.dll and copy it to [Axis_Folder]/lib <br> <br>
-11.If you are using Expat parser then copy libexpat.dll from [Expat_Folder]/Libs and paste it in [Axis_Folder]/lib.<br> <br>
-If you are using Xerces parser then copy xerces-c_2_2_0.dll from [Xerces_Folder]/bin and paste it in [Axis_Folder]/lib. <br> <br>  
+
+9.Rename AxisXMLParser_Xerces.dll (which is located at  Axis_Extract/bin) to AxisXMLParser.dll and copy it to [Axis_Folder]/lib <br> <br>
+10.Copy xerces-c_2_2_0.dll from [Xerces_Folder]/bin and paste it in [Axis_Folder]/lib. <br> <br>  
 </p>
 <p><b>Note:</b> This could also be done by editing the axiscpp.conf. <br>
 
-12. Open the [Axis_Folder]/axiscpp.conf_win for editing. The contents of the file will look as follows.<br> <br>
+10. Open the [Axis_Folder]/axiscpp.conf_win for editing. The contents of the file will look as follows.<br> <br>
 
 LogPath:XXXX <br>
 WSDDFilePath:YYYY <br>
@@ -223,7 +207,7 @@ Rename axiscpp.conf_win to axiscpp.conf.
 
 <br> <br>
 
-13. Start the SimpleAxisServer by providing the port to which it operates.(eg: c:\SimpleAxisServer>SimpleAxisServer 80)<br> <br>
+11. Start the SimpleAxisServer by providing the port to which it operates.(eg: c:\SimpleAxisServer>SimpleAxisServer 80)<br> <br>
 <b>Note:</b>If SimpleAxisServer does not start then paste AxisClient.dll to the place where SimpleAxisServer.exe is.
 <br> <br>
 
@@ -231,7 +215,7 @@ Also in order to run the provided samples do the following.<br> <br>
 Open server.wsdd for editing. server.wsdd is located at [Axis_Folder]\conf\ rename the wsdd file of your platform to server.wsdd. For each service element, locate the element "parameter name", which has the value "classname". <br>
 Give the absolute path of the indicated webservice.dll  in the "value" attribute <br>  <br>
 
-14. Restart the SimpleAxisServer.If you have done correctly then SimpleAxisServer will start without giving any error. <br>
+12. Restart the SimpleAxisServer.If you have done correctly then SimpleAxisServer will start without giving any error. <br>
 
 
 </p>
@@ -253,7 +237,7 @@ You will find the built console applications at [Axis_Extract]/bin directory. Fo
 In order to run these samples you should have AxisClient.dll in the PATH environment variable or in the same directory where the client .exe is located.<br> <br>
 
 You can run the provided client programs to confirm whether the Axis cpp server and clients are working fine. <br> <br>
-To run these sample client applications you need to have the path to libexpat.dll in the "PATH" environment variable or libexpat.dll should be placed where the apache.exe is.(libexpat.dll can be found in [Expat_Folder]\libs)<br> <br>
+To run these sample client applications you need to have the path to xerces-c_2_2_0.dll in the "PATH" environment variable or xerces-c_2_2_0.dll should be placed where the apache.exe is.(xerces-c_2_2_0.dll can be found in [Xerces_Folder]\bin)<br> <br>
 <b> Note: These sample clients are compiled with the assumption that server is running at localhost port 80.</b><br>
 <br>
 
@@ -271,13 +255,12 @@ There are seven projects in the workspace.
 
 <h1>Writing your web services and client applications using Axis C++.</h1>
 
-<p>For writing your own web services and client applications see the <a href="winuser-guide.html"><b>Windows User Guide</a></b> 
+<p>For writing your own web services and client applications see the <a href="winuser-guide.html"><b>Windows User Guide</a></b> </p>
 
+<p>
 <div id="pdf" align="right">
 <a href="wininstall-guide.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
-          PDF</a>
-
-</p>
+          PDF</a> </p>
 
 
 
