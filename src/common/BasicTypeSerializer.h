@@ -79,7 +79,7 @@ using namespace std;
 class BasicTypeSerializer
 {
 public:
-	static string& GetEntityReferenced(string& str);
+	static string& GetEntityReferenced(const string& str);
 	static string m_AuxStr;
 	static string& serialize(const string& sName, string& sValue, XSDTYPE type=XSD_STRING);
 	static string& serialize(const string& sName, float fValue);
