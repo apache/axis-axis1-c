@@ -483,11 +483,14 @@ SoapDeSerializer::checkForFault (const AxisChar * pName,
 	if (pcDetail)
 	{
 	    pFault->setFaultDetail (pcDetail);
+            delete [] pcDetail;          
 	}
 	else
 	{
 	    pcCmplxFaultName = getCmplxFaultObjectName ();
-	    pFault->setCmplxFaultObjectName (pcCmplxFaultName);
+	    pFault->setCmplxFaultObjectName (pcCmplxFaultName == NULL ? "" : pcCmplxFaultName);
+            if ( pcCmplxFaultName )
+                delete [] pcCmplxFaultName;
 	}
 
 	setStyle (m_nStyle);

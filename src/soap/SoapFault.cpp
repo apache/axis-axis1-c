@@ -68,6 +68,10 @@ SoapFault::~SoapFault()
     m_pFaultstringParam = NULL;
     m_pFaultactorParam = NULL;
     m_pFaultDetail = NULL;
+
+    // Samisa: may need to have a copy constructor to do deep copies of this member
+    // Asummung there is only once SoapFault object instance here
+    delete m_pCmplxFaultObject;
 }
 
 int SoapFault::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
