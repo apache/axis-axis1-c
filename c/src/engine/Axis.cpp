@@ -296,13 +296,30 @@ extern "C" int initialize_module(int bServer)
 	}
     else if(bServer == 0)//client side module initialization
     {
-        #if defined(__AXISTRACE__)
-        status = g_pAT->openFileByClient();
-        if(status == AXIS_FAIL)
+		int status = g_pConfig->ReadConfFile();/*Read from the configuration file*/
+        if(status == AXIS_SUCCESS)
         {
+            char* pClientWsddPath = g_pConfig->GetClientWsddFilePath();
+            if (AXIS_SUCCESS != g_pWSDDDeployment->LoadWSDD(pClientWsddPath)) return AXIS_FAIL;
+
+			#if defined(__AXISTRACE__)
+			status = g_pAT->openFileByClient();
+			if(status == AXIS_FAIL)
+			{
+				return AXIS_FAIL;
+			}
+			#endif
+		}
+		else
+        {
+            AXISTRACE1("Reading from the configuration file failed. " \
+            "Check for error in the configuration file", CRITICAL);
+            /*TODO:Improve the AxisTrace so that it will log
+            these kind of messages into a log file according to the
+            critical level specified.
+            */
             return AXIS_FAIL;
         }
-        #endif
     }
 
     

@@ -25,6 +25,7 @@ protected:
 	virtual void OnFault(MessageData* pMsg);
 private:
 	Ax_soapstream* m_pSoap;
+	char* get_service_name(const char* pch_uri_path);
 };
 
 #endif // !defined(AFX_CLIENTAXISENGINE_H__4DA1EBC5_C7D8_4747_8069_C3E8B6A2E929__INCLUDED_)

@@ -70,6 +70,7 @@ AxisConfig::AxisConfig()
 {
     m_sWsddFilePath = (char*) malloc(CONFBUFFSIZE);
     m_sAxisLogPath = (char*) malloc(CONFBUFFSIZE);
+	m_sClientWsddFilePath = (char*) malloc(CONFBUFFSIZE);
         m_sAxisHome = (char*) malloc(CONFBUFFSIZE);
     m_sValue = NULL;
 
@@ -77,10 +78,12 @@ AxisConfig::AxisConfig()
     /*#ifdef WIN32
         strcpy(m_sWsddFilePath, "c:/Axis/conf/server.wsdd");
         strcpy(m_sAxisLogPath, "c:/Axis/conf/AxisLog");
+		m_sClientWsddFilePath
 
     #else
         strcpy(m_sWsddFilePath, "/usr/local/apache/Axis/conf/server.wsdd");
         strcpy(m_sAxisLogPath, "/usr/local/apache/Axis/logs/AxisLog");
+		m_sClientWsddFilePath
     #endif
     */
 
@@ -90,6 +93,7 @@ AxisConfig::~AxisConfig()
 {
     if(m_sWsddFilePath) delete m_sWsddFilePath;
     if(m_sAxisLogPath) delete m_sAxisLogPath;
+	if(m_sClientWsddFilePath) delete m_sClientWsddFilePath;
         if(m_sAxisHome) delete m_sAxisHome;
     if(m_sValue) delete m_sValue;
 
@@ -166,6 +170,11 @@ int AxisConfig::ReadConfFile()
             strncpy(m_sAxisLogPath, m_sValue + 1, linesize  - strlen(key) - 2);
             m_sAxisLogPath[linesize  - strlen(key) - 2] = '\0';
         }
+		if(strcmp(key, "CLIENTWSDDFILEPATH") == 0)
+        {
+            strncpy(m_sClientWsddFilePath, m_sValue + 1, linesize  - strlen(key) - 2);
+            m_sClientWsddFilePath[linesize  - strlen(key) - 2] = '\0';
+        }
     }
 
 
@@ -180,6 +189,12 @@ char* AxisConfig::GetWsddFilePath()
 char* AxisConfig::GetAxisLogPath()
 {
     return m_sAxisLogPath;
+}
+
+
+char* AxisConfig::GetClientWsddFilePath()
+{
+    return m_sClientWsddFilePath;
 }
 
 char* AxisConfig::GetAxisHomePath()

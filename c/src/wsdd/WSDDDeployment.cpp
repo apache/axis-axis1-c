@@ -165,13 +165,13 @@ int WSDDDeployment::LoadWSDD(const AxisChar* sWSDD)
 	if (AXIS_SUCCESS != doc->GetDeployment(sWSDD, this))
 	{
 #ifdef _DEBUG
-        printf("server.wsdd loading failed\n");
+        printf("wsdd loading failed\n");
 #endif
 		delete doc;
 		return AXIS_FAIL;
 	}
 #ifdef _DEBUG
-    printf("server.wsdd loading successful\n");
+    printf("wsdd loading successful\n");
 #endif
 	delete doc;
 	return AXIS_SUCCESS;
