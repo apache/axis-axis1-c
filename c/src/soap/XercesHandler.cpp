@@ -47,14 +47,16 @@ void XercesHandler::startElement(const XMLCh *const uri,const XMLCh *const
     
     unsigned int len = attrs.getLength();
     unsigned int index;
+	unsigned int i = 0;
     for (index = 0; index < len*3; index+=3)
     {    
         Nelement->m_pchAttributes[index] = 
-            XMLString::transcode(attrs.getLocalName(index));
+            XMLString::transcode(attrs.getLocalName(i));
         Nelement->m_pchAttributes[index+1] = 
-            XMLString::transcode(attrs.getURI(index));
+            XMLString::transcode(attrs.getURI(i));
         Nelement->m_pchAttributes[index+2] = 
-            XMLString::transcode(attrs.getValue(index));
+            XMLString::transcode(attrs.getValue(i));
+		i++;
     }
     Nelement->m_pchAttributes[len*3]=NULL;
 }
