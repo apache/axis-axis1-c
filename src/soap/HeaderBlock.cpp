@@ -58,7 +58,7 @@
 #include <axis/server/BasicNode.h>
 #include "ComplexElement.h"
 #include <axis/server/CharacterElement.h>
-#include <axis/server/attribute.h>
+#include <axis/server/Attribute.h>
 
 HeaderBlockFunctions IHeaderBlock::ms_VFtable;
 bool IHeaderBlock::bInitialized = false;

@@ -61,12 +61,17 @@ AxisTransportException::~AxisTransportException() throw ()
 
 void AxisTransportException::processException (const exception* e, const int iExceptionCode)
 {
-    m_sMessage = getMessage (e) + " " + getMessage (iExceptionCode);
+    m_sMessage = getMessage (iExceptionCode) + ":" + getMessage(e);
+}
+
+void AxisTransportException::processException (const exception* e, char* pcMessage)
+{
+    m_sMessage += "AxisTransportException:" + string(pcMessage) + ":" + getMessage (e);
 }
 
 void AxisTransportException::processException (const exception* e)
 {
-    m_sMessage = getMessage (e);
+    m_sMessage += "AxisTransportException:" + getMessage (e);
 }
 
 void AxisTransportException::processException(const int iExceptionCode)
@@ -76,20 +81,18 @@ void AxisTransportException::processException(const int iExceptionCode)
 
 void AxisTransportException::processException(const int iExceptionCode, char* pcMessage)
 {
-    AxisString sMessage = strdup(pcMessage);
+    AxisString sMessage = pcMessage;
     m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
-    //m_sMessage = getMessage(iExceptionCode);
     if(pcMessage)
         delete pcMessage;
 }
-const string& AxisTransportException::getMessage (const exception* objException)
+const string AxisTransportException::getMessage (const exception* objException)
 {
-    m_sMessage = objException->what();
+    return objException->what();
 
-    return m_sMessage;
 }
 
-const string& AxisTransportException::getMessage (const int iExceptionCode)
+const string AxisTransportException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {

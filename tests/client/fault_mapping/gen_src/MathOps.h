@@ -11,10 +11,7 @@
 #include "DivByZeroStruct.h"
 #include "SpecialDetailStruct.h"
 #include "OutOfBoundStruct.h"
-#include "AxisOutOfBoundException.h"
-#include "AxisDivByZeroException.h"
-#include "AxisNormalDetailException.h"
-#include <axis/AxisGenException.h>
+#include "AxisClientException.h"
 
 /**
   * @class MathOps.h

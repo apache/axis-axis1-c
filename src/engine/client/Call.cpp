@@ -541,10 +541,9 @@ int Call::checkMessage (const AxisChar* pName, const AxisChar* pNamespace)
     return m_nStatus;
 }
 
-int Call::checkFault (const AxisChar* pName, const AxisChar* pNamespace)
+void* Call::checkFault (const AxisChar* pName, const AxisChar* pNamespace)
 {
-	 m_nStatus = m_pIWSDZ->checkForFault (pName, pNamespace);
-    return m_nStatus;
+	 return m_pIWSDZ->checkForFault (pName, pNamespace);
 }
 
 void* Call::getCmplxObject (void* pDZFunct, void* pCreFunct, void* pDelFunct,

@@ -31,7 +31,8 @@ typedef struct
         const AxisChar* sURI);
 
     int (AXISCALL* createSoapFault)(void* pObj, const AxisChar* sLocalName, 
-        const AxisChar* sURI);
+        const AxisChar* sURI, const AxisChar* sFaultCode,
+	const AxisChar* sFaultString);
 
     const AxisChar* (AXISCALL* getNamespacePrefix)(void* pObj, 
         const AxisChar* pNamespace);
@@ -116,7 +117,8 @@ public:
         const AxisChar* sURI)=0;
 
     virtual int AXISCALL createSoapFault(const AxisChar* sLocalName, 
-        const AxisChar* sURI)=0;
+        const AxisChar* sURI, const AxisChar* sFaultCode,
+	const AxisChar* sFaultString)=0;
 
     virtual const AxisChar* AXISCALL getNamespacePrefix
         (const AxisChar* pNamespace)=0;
@@ -202,9 +204,10 @@ public:
     (sLocalName, sURI);};
 
     static int AXISCALL s_CreateSoapFault(void* pObj, 
-        const AxisChar* sLocalName, const AxisChar* sURI)
+        const AxisChar* sLocalName, const AxisChar* sURI,
+	const AxisChar* sFaultCode, const AxisChar* sFaultString)
     { return ((IWrapperSoapSerializer*)pObj)->createSoapFault
-        (sLocalName, sURI);};
+        (sLocalName, sURI, sFaultCode, sFaultString);};
 
     static const AxisChar* AXISCALL s_GetNamespacePrefix(void* pObj, 
         const AxisChar* pNamespace)

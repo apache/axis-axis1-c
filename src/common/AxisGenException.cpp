@@ -20,8 +20,8 @@
  */
 
 #include <axis/AxisGenException.h>
-//#include <exception>
-//using namespace std;
+#include <exception>
+using namespace std;
 
 AxisGenException::AxisGenException (const int iExceptionCode)
 {
@@ -49,17 +49,24 @@ AxisGenException::AxisGenException (const exception* e, const int iExceptionCode
 
 AxisGenException::AxisGenException(const char* pcMessage)
 {
-    m_sMessage = strdup(pcMessage);
+    m_sMessage = pcMessage;
+    if(pcMessage)
+        delete pcMessage;
 }
 
 void AxisGenException::processException (const exception* e, const int iExceptionCode)
 {
-    m_sMessage = getMessage (e) + " " + getMessage (iExceptionCode);
+    m_sMessage = getMessage(iExceptionCode) + ":" + getMessage (e);
+}
+
+void AxisGenException::processException (const exception* e, char* pcMessage)
+{
+    m_sMessage += "AxisGenException:" + string(pcMessage) + ":" + getMessage (e);
 }
 
 void AxisGenException::processException (const exception* e)
 {
-    m_sMessage = getMessage (e);
+    m_sMessage += "AxisGenException:" + getMessage (e);
 }
 
 void AxisGenException::processException(const int iExceptionCode)
@@ -69,19 +76,18 @@ void AxisGenException::processException(const int iExceptionCode)
 
 void AxisGenException::processException(const int iExceptionCode, char* pcMessage)
 {
-    AxisString sMessage = strdup(pcMessage);
+    AxisString sMessage = pcMessage;
     m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
-    delete pcMessage;
+    if(pcMessage)
+        delete pcMessage;
 }
 
-const string& AxisGenException::getMessage (const exception* objException)
+const string AxisGenException::getMessage (const exception* objException)
 {
-    m_sMessage = objException->what();
-
-    return m_sMessage;
+    return objException->what();
 }
 
-const string& AxisGenException::getMessage (const int iExceptionCode)
+const string AxisGenException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {
@@ -97,10 +103,8 @@ const string& AxisGenException::getMessage (const int iExceptionCode)
         default:
             m_sMessage = "Unknown Exception has occured";
 
-    } 
-
+    }
     return m_sMessage;
-
 }
 
 AxisGenException::~AxisGenException() throw ()

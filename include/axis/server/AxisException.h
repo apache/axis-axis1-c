@@ -29,8 +29,12 @@
 
 #include <axis/server/GDefine.h>
 
+#include <string>
 #include <exception>
-
+#include <new>
+#include <typeinfo>
+#include <stdexcept>
+//#include <ios>
 using namespace std;
 
 
@@ -46,6 +50,14 @@ using namespace std;
 #define THROW_AXIS_ENGINE_EXCEPTION(X) throw AxisEngineException(X)
 #define THROW_AXIS_TRANSPORT_EXCEPTION(X) throw AxisTransportException(X)
 #define THROW_AXIS_PARSE_EXCEPTION(X) throw AxisParseException(X)
+
+#define THROW_AXIS_EXCEPTION_NULL(X) throw AxisGenException(X)
+#define THROW_AXIS_CONFIG_EXCEPTION_NULL(X) throw AxisConfigException(X)
+#define THROW_AXIS_SOAP_EXCEPTION_NULL(X) throw AxisSoapException(X)
+#define THROW_AXIS_WSDD_EXCEPTION_NULL(X) throw AxisWsddException(X)
+#define THROW_AXIS_ENGINE_EXCEPTION_NULL(X) throw AxisEngineException(X)
+#define THROW_AXIS_TRANSPORT_EXCEPTION_NULL(X) throw AxisTransportException(X)
+#define THROW_AXIS_PARSE_EXCEPTION_NULL(X) throw AxisParseException(X)
 
 #define THROW_AXIS_EXCEPTION2(X, Y) throw AxisGenException(X, Y)
 #define THROW_AXIS_CONFIG_EXCEPTION2(X, Y) throw AxisConfigException(X, Y)
@@ -79,6 +91,14 @@ using namespace std;
 #define THROW_AXIS_ENGINE_EXCEPTION(X) return X
 #define THROW_AXIS_TRANSPORT_EXCEPTION(X) return X
 #define THROW_AXIS_PARSE_EXCEPTION(X) return X
+
+#define THROW_AXIS_EXCEPTION_NULL(X) return NULL
+#define THROW_AXIS_CONFIG_EXCEPTION_NULL(X) return NULL
+#define THROW_AXIS_SOAP_EXCEPTION_NULL(X) return NULL
+#define THROW_AXIS_WSDD_EXCEPTION_NULL(X) return NULL
+#define THROW_AXIS_ENGINE_EXCEPTION_NULL(X) return NULL
+#define THROW_AXIS_TRANSPORT_EXCEPTION_NULL(X) return NULL
+#define THROW_AXIS_PARSE_EXCEPTION_NULL(X) return NULL
 
 #define THROW_AXIS_EXCEPTION2(X, Y) return X
 #define THROW_AXIS_CONFIG_EXCEPTION2(X, Y) return X

@@ -4,6 +4,6 @@ AM_CPPFLAGS = $(CPPFLAGS)
 mathops_SOURCES = MathOps.cpp \
                   MathOpsClient.cpp \
                   DivByZeroStruct.cpp \
-                  AxisDivByZeroException.cpp
+                  AxisClientException.cpp
 mathops_LDADD   =  $(LDFLAGS)
 INCLUDES = -I$(AXISCPP_HOME)/include

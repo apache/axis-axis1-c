@@ -3,11 +3,10 @@
  * This file contains implementations of an Exception class of the web service.
  */
 
-#include "AxisDivByZeroException.h"
+#include "AxisServiceException.h"
 
-#include <axis/server/AxisWrapperAPI.h>
 
-AxisDivByZeroException::AxisDivByZeroException()
+AxisServiceException::AxisServiceException()
 {
 /* This only serves the pupose of indicating that the 
  * service has thrown an excpetion 
@@ -16,60 +15,60 @@ AxisDivByZeroException::AxisDivByZeroException()
 	processException(m_iExceptionCode); 
 }
 
-AxisDivByZeroException::AxisDivByZeroException(DivByZeroStruct*pFault)
+AxisServiceException::AxisServiceException(ISoapFault* pFault)
 {
 	m_iExceptionCode = AXISC_SERVICE_THROWN_EXCEPTION;
 	processException(pFault);}
 
-AxisDivByZeroException::AxisDivByZeroException(int iExceptionCode)
+AxisServiceException::AxisServiceException(int iExceptionCode)
 {
 
 	m_iExceptionCode = iExceptionCode;
 	processException (iExceptionCode);
 }
 
-AxisDivByZeroException::AxisDivByZeroException(exception* e)
+AxisServiceException::AxisServiceException(exception* e)
 {
 	processException (e);
 }
 
-AxisDivByZeroException::AxisDivByZeroException(exception* e,int iExceptionCode)
+AxisServiceException::AxisServiceException(exception* e,int iExceptionCode)
 {
 
 	processException (e, iExceptionCode);
 }
 
-AxisDivByZeroException::~AxisDivByZeroException() throw () 
+AxisServiceException::~AxisServiceException() throw () 
 {
 	m_sMessage ="";
 }
 
-void AxisDivByZeroException:: processException(exception* e, int iExceptionCode)
+void AxisServiceException:: processException(exception* e, int iExceptionCode)
 {
 	m_sMessage = getMessage (e) + getMessage (iExceptionCode);
 }
 
-void AxisDivByZeroException::processException (DivByZeroStruct* pFault)
-{
-	/*User can do something like deserializing the struct into a string*/}
+void AxisServiceException::processException (ISoapFault* pFault)
+{	
+}
 
-void AxisDivByZeroException::processException(exception* e)
+void AxisServiceException::processException(exception* e)
 {
 	m_sMessage = getMessage (e);
 }
 
-void AxisDivByZeroException::processException(int iExceptionCode)
+void AxisServiceException::processException(int iExceptionCode)
 {
 	m_sMessage = getMessage (iExceptionCode);
 }
 
-const string& AxisDivByZeroException::getMessage (exception* objException)
+const string AxisServiceException::getMessage (exception* objException)
 {
 	string sMessage = objException->what();
 	return sMessage;
 }
 
-const string& AxisDivByZeroException::getMessage (int iExceptionCode)
+const string AxisServiceException::getMessage (int iExceptionCode)
 {
 	string sMessage;
 	switch(iExceptionCode)
@@ -83,12 +82,12 @@ const string& AxisDivByZeroException::getMessage (int iExceptionCode)
 return sMessage;
 }
 
-const char* AxisDivByZeroException::what() throw ()
+const char* AxisServiceException::what() throw ()
 {
 	return m_sMessage.c_str ();
 }
 
-const int AxisDivByZeroException::getExceptionCode(){
+const int AxisServiceException::getExceptionCode(){
 	return m_iExceptionCode;
 }
 

@@ -23,15 +23,16 @@
 
 #include <axis/server/AxisWrapperAPI.h>
 
-using namespace std;
-
- bool CallBase::bInitialized;
-CallFunctions CallBase::ms_VFtable;
-extern int Axis_DeSerialize_DivByZeroStruct(DivByZeroStruct* param, IWrapperSoapDeSerializer *pDZ);
+extern int Axis_DeSerialize_DivByZeroStruct(DivByZeroStruct* param, IWrapperSoapDeSerializer* pDZ);
 extern void* Axis_Create_DivByZeroStruct(DivByZeroStruct *Obj, bool bArray = false, int nSize=0);
 extern void Axis_Delete_DivByZeroStruct(DivByZeroStruct* param, bool bArray = false, int nSize=0);
 extern int Axis_Serialize_DivByZeroStruct(DivByZeroStruct* param, IWrapperSoapSerializer* pSZ, bool bArray = false);
 extern int Axis_GetSize_DivByZeroStruct();
+
+using namespace std;
+
+ bool CallBase::bInitialized;
+CallFunctions CallBase::ms_VFtable;
 
 MathOps::MathOps(const char* pchEndpointUri)
 {
@@ -54,10 +55,7 @@ MathOps::~MathOps()
 int MathOps::div(int Value0, int Value1)
 {
 	int Ret;
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
+	const char* pcCmplxFaultName;
 	try
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
@@ -84,38 +82,33 @@ int MathOps::div(int Value0, int Value1)
                 {
                     throw;
                 }
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://localhost/axis/MathOps" ))//Exception handling code goes here
-		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-			if(0 == strcmp("DivByZeroStruct", cFaultstring))
-			{
-				if (AXIS_SUCCESS == m_pCall->checkFault("faultdetail","http://localhost/axis/MathOps"))
-				{
-					DivByZeroStruct* pFaultDetail = NULL;
-					pFaultDetail = (DivByZeroStruct*)m_pCall->
-						getCmplxObject((void*) Axis_DeSerialize_DivByZeroStruct,
-						(void*) Axis_Create_DivByZeroStruct,
-						(void*) Axis_Delete_DivByZeroStruct,"faultstruct1", 0);
-					/*User code to handle the struct can be inserted here*/
-                                        char* temp = pFaultDetail->varString;
-                                        printf("%s\n", temp);
-                                        printf("faultcode:%s\n", cFaultcode);
-                                        printf("faultstring:%s\n", cFaultstring);
-                                        printf("faultactor:%s\n", cFaultactor);
-					m_pCall->unInitialize();
-					throw AxisDivByZeroException(pFaultDetail);
-				}
-			}
-			else
-			{
-				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisGenException(cFaultdetail);
-			}
-		}
-		else throw;
-	}
+
+                ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault", "http://localhost/axis/MathOps/types");
+                if(pSoapFault)
+                {
+		    pcCmplxFaultName = pSoapFault->getCmplxFaultObjectName().c_str();
+		    //printf("pcCmplxFaultName:%s\n", pcCmplxFaultName);
+                    if(0 == strcmp("DivByZeroStruct", pcCmplxFaultName))
+                    {
+                        DivByZeroStruct* pFaultDetail = NULL;
+                        pFaultDetail = (DivByZeroStruct*)pSoapFault->
+                            getCmplxFaultObject((void*) Axis_DeSerialize_DivByZeroStruct,
+                            (void*) Axis_Create_DivByZeroStruct,
+                            (void*) Axis_Delete_DivByZeroStruct,"DivByZeroStruct", 0);
+
+			pSoapFault->setCmplxFaultObject(pFaultDetail);
+			
+		        m_pCall->unInitialize();
+                        throw AxisClientException(pSoapFault);
+		    }
+		    else
+		    {
+		        m_pCall->unInitialize();
+                        throw AxisClientException(pSoapFault);
+		    }
+                }
+                else throw;
+        }
 }
 
 int MathOps::getStatus()

@@ -92,18 +92,14 @@ int MathOpsWrapper::div(void* pMsg)
 		int ret = pWs->div(v0,v1);
 		return pIWSSZ->addOutputParam("divReturn", (void*)&ret, XSD_INT);
 	}
-	catch(AxisDivByZeroException& e)
+	catch(DivByZeroStruct* pObjFault)
 	{
-		pIWSSZ->createSoapFault("DivByZeroStruct", "http://soapinterop.org/wsdl");
-		DivByZeroStruct* pObjFault = new DivByZeroStruct();
-		/*User may write code here to fill the struct*/
-                pObjFault->varString = "Division by zero exception";
-                pObjFault->varInt = 1;
-                pObjFault->varFloat = 10.52;
 		if (pObjFault)
+		        pIWSSZ->createSoapFault("DivByZero", "http://soapinterop.org/wsdl",
+			"AxisC++ Faultcode", "Division by zero exception");
 			pIWSSZ->addFaultDetail(pObjFault, (void*) Axis_Serialize_DivByZeroStruct,
 			(void*) Axis_Delete_DivByZeroStruct,"DivByZero", Axis_URI_DivByZeroStruct);
-		throw;
+		throw AxisServiceException();
 	}
         catch(...)
         {

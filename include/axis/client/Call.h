@@ -209,7 +209,7 @@ typedef struct {
     int (AXISCALL* checkMessage)(void *pObj, const AxisChar* pName,
         const AxisChar* pNamespace);
 
-    int (AXISCALL* checkFault)(void *pObj, const AxisChar* pName,
+    void* (AXISCALL* checkFault)(void *pObj, const AxisChar* pName,
         const AxisChar* pNamespace);
 
     /* Minimal error check */
@@ -369,7 +369,7 @@ public:
     virtual int AXISCALL checkMessage(const AxisChar* pName,
         const AxisChar* pNamespace)=0;
 
-    virtual int AXISCALL checkFault(const AxisChar* pName,
+    virtual void* AXISCALL checkFault(const AxisChar* pName,
         const AxisChar* pNamespace)=0;
 
     /* Minimal error check */
@@ -584,7 +584,7 @@ public:
         const AxisChar* pNamespace)
     {return ((CallBase*)pObj)->checkMessage(pName, pNamespace);};
 
-    static int AXISCALL s_CheckFault(void *pObj, const AxisChar* pName,
+    static void* AXISCALL s_CheckFault(void *pObj, const AxisChar* pName,
         const AxisChar* pNamespace)
     {return ((CallBase*)pObj)->checkFault(pName, pNamespace);};
 
@@ -757,7 +757,7 @@ public:
     int AXISCALL checkMessage(const AxisChar* pName,
         const AxisChar* pNamespace);
 
-    int AXISCALL checkFault(const AxisChar* pName,
+    void* AXISCALL checkFault(const AxisChar* pName,
         const AxisChar* pNamespace);
 
     int AXISCALL getStatus();

@@ -643,7 +643,7 @@ HttpTransport::HTTPValidate (const std::string & p_HttpPacket)
             sprintf(pcIntToBuff, "%d", nHttpStatusCode);
             strcpy(pcMessage, "Http error code is : ");
             strcat(pcMessage, pcIntToBuff); 
-	    THROW_AXIS_TRANSPORT_EXCEPTION2(SERVER_TRANSPORT_PROCESS_EXCEPTION, pcMessage);
+	    THROW_AXIS_TRANSPORT_EXCEPTION2(SERVER_TRANSPORT_PROCESS_EXCEPTION, strdup(pcMessage));
 	}
 	else if (nHttpStatus == 4)
 	    /* Status code is 4xx; some error has occurred */
@@ -655,7 +655,7 @@ HttpTransport::HTTPValidate (const std::string & p_HttpPacket)
             sprintf(pcIntToBuff, "%d", nHttpStatusCode);
             strcpy(pcMessage, "Http error code is : ");
             strcat(pcMessage, pcIntToBuff); 
-	    THROW_AXIS_TRANSPORT_EXCEPTION2(SERVER_TRANSPORT_PROCESS_EXCEPTION, pcMessage);
+	    THROW_AXIS_TRANSPORT_EXCEPTION2(SERVER_TRANSPORT_PROCESS_EXCEPTION, strdup(pcMessage));
 	}
 	else if (nHttpStatus == 5)
 	    /* Status code is 5xx; some error has occurred */

@@ -88,46 +88,40 @@ int MathOpsWrapper::div(void* pMsg)
 		int ret = pWs->div(v0,v1);
 		return pIWSSZ->addOutputParam("divReturn", (void*)&ret, XSD_INT);
 	}
-	catch(AxisOutOfBoundException& e)
+	catch(OutOfBoundStruct* pObjFault)
 	{
-		pIWSSZ->createSoapFault("OutOfBoundStruct", "http://soapinterop.org/wsdl");
-		OutOfBoundStruct* pObjFault = new OutOfBoundStruct();
-		/*User may write code here to fill the struct*/
-                SpecialDetailStruct* pObjSpecialDetailFault = new SpecialDetailStruct();
-                pObjSpecialDetailFault->varString = "This bound exception is a forced limitation";
 		if (pObjFault)
-                        pObjFault->varString = "Value out of bound exception";
-                        pObjFault->varInt = 2;
-                        pObjFault->specialDetail = pObjSpecialDetailFault;
+                {
+		        pIWSSZ->createSoapFault("OutOfBoundStruct", "http://soapinterop.org/wsdl",
+			"AxisC++ Faultcode", "Custom Out of bound exception");
 			pIWSSZ->addFaultDetail(pObjFault, (void*) Axis_Serialize_OutOfBoundStruct,
-			(void*) Axis_Delete_OutOfBoundStruct,"OutOfBound", Axis_URI_OutOfBoundStruct);
-		throw;
+			(void*) Axis_Delete_OutOfBoundStruct,"OutOfBoundStruct", Axis_URI_OutOfBoundStruct);
+		        throw AxisServiceException();
+                 }
 	}
 
-	catch(AxisDivByZeroException& e)
+	catch(DivByZeroStruct* pObjFault)
 	{
-		pIWSSZ->createSoapFault("DivByZeroStruct", "http://soapinterop.org/wsdl");
-		DivByZeroStruct* pObjFault = new DivByZeroStruct();
-		/*User may write code here to fill the struct*/
-                pObjFault->varString = "Division by zero exception";
-                pObjFault->varInt = 1;
-                pObjFault->varFloat = 10.52;
 		if (pObjFault)
+                {
+		        pIWSSZ->createSoapFault("DivByZeroStruct", "http://soapinterop.org/wsdl",
+			"AxisC++ Faultcode", "Division by zero exception");
 			pIWSSZ->addFaultDetail(pObjFault, (void*) Axis_Serialize_DivByZeroStruct,
-			(void*) Axis_Delete_DivByZeroStruct,"DivByZero", Axis_URI_DivByZeroStruct);
-		throw;
+			(void*) Axis_Delete_DivByZeroStruct,"DivByZeroStruct", Axis_URI_DivByZeroStruct);
+                        throw AxisServiceException();
+                }
 	}
 
-	catch(AxisNormalDetailException& e)
+	catch(SpecialDetailStruct* pObjFault)
 	{
-		pIWSSZ->createSoapFault("SpecialDetailStruct", "http://soapinterop.org/wsdl");
-		SpecialDetailStruct* pObjFault = new SpecialDetailStruct();
-		/*User may write code here to fill the struct*/
-                pObjFault->varString = "You have entered 1000 for the 1st paramter. 1000 is reserved. Please don't use it";
 		if (pObjFault)
+                {
+		        pIWSSZ->createSoapFault("SpecialDetailStruct", "http://soapinterop.org/wsdl",
+			"AxisC++ Faultcode", "Custom constrain");
 			pIWSSZ->addFaultDetail(pObjFault, (void*) Axis_Serialize_SpecialDetailStruct,
-			(void*) Axis_Delete_SpecialDetailStruct,"NormalDetail", Axis_URI_SpecialDetailStruct);
-		throw;
+			(void*) Axis_Delete_SpecialDetailStruct,"SpecialDetailStruct", Axis_URI_SpecialDetailStruct);
+                        throw AxisServiceException();
+                }
 	}
 
 	catch(...){

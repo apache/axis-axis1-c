@@ -328,9 +328,11 @@ int SoapDeSerializer::checkMessageBody(const AxisChar* pName,
     return AXIS_SUCCESS;
 }
 
-int SoapDeSerializer::checkForFault(const AxisChar* pName, 
+void* SoapDeSerializer::checkForFault(const AxisChar* pName, 
                                     const AxisChar* pNamespace)
 {
+    const char* pcCmplxFaultName;
+    char* pcDetail;
     if(0 == strcmp("Fault", pName))
     {
         if (0 != strcmp(m_pNode->m_pchNameOrValue, pName))
@@ -343,14 +345,33 @@ int SoapDeSerializer::checkForFault(const AxisChar* pName,
         /* we can check the namespace uri too here. Should we ?*/
         m_nStatus = AXIS_SUCCESS;
         m_pNode = NULL; /*This is to indicate that node is identified and used */
-        return AXIS_SUCCESS;
+        SoapFault* pFault = new SoapFault();
+        pFault->setDeSerializer(this);
+	m_nStyle = getStyle();
+
+	/*We deserialize fault code in doc literal.*/
+	setStyle(DOC_LITERAL);
+	pFault->setFaultcode(getElementAsString("faultcode", 0));
+        pFault->setFaultstring(getElementAsString("faultstring", 0));
+	pFault->setFaultactor(getElementAsString("faultactor", 0));
+        pcDetail = getElementAsString("faultdetail", 0);
+	if(pcDetail)
+	{
+	    pFault->setFaultDetail(pcDetail);
+	}
+	else
+	{
+	    pcCmplxFaultName = getCmplxFaultObjectName();
+	    pFault->setCmplxFaultObjectName(pcCmplxFaultName);
+	}
+
+        setStyle(m_nStyle);
+	
+        return pFault;
      }
      else
      {
-         //skip faultdetail
-         m_pParser->next();
-         m_nStatus = AXIS_SUCCESS;
-         return AXIS_SUCCESS;
+         THROW_AXIS_EXCEPTION(AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
         
      } 
 }
@@ -1067,6 +1088,131 @@ void* SoapDeSerializer::getCmplxObject(void* pDZFunct, void* pCreFunct,
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 
     return NULL;
+}
+
+const char* SoapDeSerializer::getCmplxFaultObjectName()
+{
+    /* if there is an unprocessed node that may be one left from
+     * last array deserialization 
+     */
+    if(!m_pNode) // Skip the faultdetail tag
+        m_pParser->next();
+    m_nStatus = AXIS_SUCCESS; 
+
+    if (AXIS_SUCCESS != m_nStatus) return NULL;
+    /* if anything has gone wrong earlier just do nothing */
+    if (RPC_ENCODED == m_nStyle)
+    {
+
+        m_pNode = m_pParser->next();
+        /* just skip wrapper node with type info
+         * Ex: <tns:QuoteInfoType xmlns:tns="http://www.getquote.org/test"> */ 
+        if (!m_pNode) return NULL;
+        return m_pNode->m_pchNameOrValue;
+    }
+    else
+    {
+        if (!m_pNode)
+        /* if there is an unprocessed node that may be one left from 
+         * last array deserialization */ 
+            m_pNode = m_pParser->next();
+        /* wrapper node without type info  Ex: <result> */
+
+        if(!m_pNode) return NULL;
+        return m_pNode->m_pchNameOrValue;
+    }        
+}
+
+void* SoapDeSerializer::getCmplxFaultObject(void* pDZFunct, void* pCreFunct,
+        void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace)
+{
+    if (RPC_ENCODED == m_nStyle)
+    {
+        /* type  can be checked here */
+        void* pObject = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)(NULL, false, 0);
+        if (pObject && pDZFunct)
+        {
+            if (C_RPC_PROVIDER == getCurrentProviderType())
+            {
+                IWrapperSoapDeSerializer_C cWSD;
+                cWSD._object = this;
+                cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
+                m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pObject, &cWSD);
+            }
+            else
+            {
+                m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pObject, this);
+            }
+            if (AXIS_SUCCESS == m_nStatus)
+            {
+                m_pParser->next(); /* skip end node too */
+                return pObject;
+            }
+            else
+            {
+                ((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(pObject, false, 0);
+            }
+        }
+    }
+    else
+    {
+        if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+        {
+            /* if this node contain attributes let them be used by the complex
+             * type's deserializer
+             */
+            if (0 != m_pNode->m_pchAttributes[0])
+            {
+                m_pCurrNode = m_pNode;
+                /*
+                 * Need to verify if the return value is NULL.
+                 */
+                if ( getAttributeAsBoolean("nil",0) == true_ )
+                {
+                    m_pParser->next();
+                    m_pNode = NULL;
+                    return NULL;
+                }
+            }
+            m_pNode = NULL; /* node identified and used */
+            void* pObject = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)
+                (NULL, false, 0);
+            if (pObject && pDZFunct)
+            {
+                if (C_DOC_PROVIDER == getCurrentProviderType())
+                {
+                    IWrapperSoapDeSerializer_C cWSD;
+                    cWSD._object = this;
+                    cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
+                    m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)
+                        (pObject, &cWSD);
+                }
+                else
+                {
+                    m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)
+                        (pObject, this);                }
+                if (AXIS_SUCCESS == m_nStatus)
+                {
+                    m_pParser->next(); /* skip end node too */
+                    return pObject;
+                }
+                else
+                {
+                    ((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(pObject, false, 0);                }
+            }
+        }
+        else
+        {
+          /*
+           * TODO: Need to verify what WS-I 1.0 say
+           * about the mandatory of all the elements in the response in case of
+           * null value or none filled value. Some Web services servers work
+           * like this. This apply for all the rest of the deserializer.
+           */
+            return NULL;
+        }
+    }
+    m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
 }
 
 int SoapDeSerializer::getElementForAttributes(const AxisChar* pName,
@@ -2255,9 +2401,9 @@ AxisChar* SoapDeSerializer::getElementAsString(const AxisChar* pName,
             else 
             {
             /* Should be an empty string or simpleType with xsi:nil="true" */
-            ret = strdup("");
+            //ret = strdup("");
             /* this is because the string may not be available later */
-            m_pNode = NULL;
+            //m_pNode = NULL;
             /* this is important in doc/lit style when deserializing arrays */
             return ret;
             }

@@ -26,11 +26,11 @@
 
 #include "MathOpsWrapper.h"
 
-extern int Axis_DeSerialize_DivByZeroFault(DivByZeroFault* param, IWrapperSoapDeSerializer *pDZ);
-extern void* Axis_Create_DivByZeroFault(DivByZeroFault *Obj, bool bArray = false, int nSize=0);
-extern void Axis_Delete_DivByZeroFault(DivByZeroFault* param, bool bArray = false, int nSize=0);
-extern int Axis_Serialize_DivByZeroFault(DivByZeroFault* param, IWrapperSoapSerializer* pSZ, bool bArray = false);
-extern int Axis_GetSize_DivByZeroFault();
+extern int Axis_DeSerialize_DivByZeroStruct(DivByZeroStruct* param, IWrapperSoapDeSerializer *pDZ);
+extern void* Axis_Create_DivByZeroStruct(DivByZeroStruct *Obj, bool bArray = false, int nSize=0);
+extern void Axis_Delete_DivByZeroStruct(DivByZeroStruct* param, bool bArray = false, int nSize=0);
+extern int Axis_Serialize_DivByZeroStruct(DivByZeroStruct* param, IWrapperSoapSerializer* pSZ, bool bArray = false);
+extern int Axis_GetSize_DivByZeroStruct();
 
 MathOpsWrapper::MathOpsWrapper()
 {
@@ -76,7 +76,7 @@ int MathOpsWrapper::invoke(void *pMsg)
 /*
  * This method wrap the service method 
  */
-int MathOpsWrapper::div(void* pMsg) throw(AxisDivByZeroException)
+int MathOpsWrapper::div(void* pMsg)
 {
 	IMessageData* mc = (IMessageData*)pMsg;
 	int nStatus;
@@ -97,20 +97,20 @@ int MathOpsWrapper::div(void* pMsg) throw(AxisDivByZeroException)
         {
 	    ret = pWs->div(v0,v1);
         }
-        catch(AxisDivByZeroException& e)
+        catch(DivByZeroStruct* pObjFault)
         {
-            pIWSSZ->createSoapFault("DivByZeroFault", "http://soapinterop.org/");
-            DivByZeroFault* pObjFault = new DivByZeroFault();
-            pObjFault->varString = "Division by zero exception";
-            pObjFault->varInt = 1;
-            pObjFault->varFloat = 10.52;
 
             if(pObjFault)
-                pIWSSZ->addFaultDetail(pObjFault, (void*)Axis_Serialize_DivByZeroFault,
-                    (void*)Axis_Delete_DivByZeroFault, "DivByZeroException", "");
+            {
+                pIWSSZ->createSoapFault("DivByZero", "http://soapinterop.org/",
+		    "AxisC++ Service Code", "Division by zero exception");
+                pIWSSZ->addFaultDetail(pObjFault, (void*)Axis_Serialize_DivByZeroStruct,
+                    (void*)Axis_Delete_DivByZeroStruct, "DivByZero", "Axis_URI_DivByZeroStruct");
 
-            throw;
+                throw AxisServiceException();
+            }
         }
+
 	return pIWSSZ->addOutputParam("divReturn", (void*)&ret, XSD_INT);
 }
 

@@ -22,9 +22,8 @@
 #define __MATHOPS_CLIENTSTUB_H__INCLUDED_
 
 #include <axis/client/Stub.h>
-#include "DivByZeroFault.h"
-#include "AxisDivByZeroException.h"
-#include <axis/AxisGenException.h>
+#include "DivByZeroStruct.h"
+#include "AxisClientException.h"
 
 class MathOps 
 {

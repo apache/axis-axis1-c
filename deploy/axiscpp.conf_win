@@ -9,6 +9,8 @@
 #Transport_http:The HTTP transport library
 #Transport_smtp:The SMTP transport library
 #XMLParser:The xml parser library
+#NodeName:Node name
+#ListenPort:Listening port
 
 
 #LogPath:Axis\logs\AxisLog.txt

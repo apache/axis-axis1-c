@@ -20,6 +20,9 @@
 
 class BasicNode;
 #include "IHeaderBlock.h"
+#include <string>
+
+using namespace std;
 
 /*
  *  @class BasicNode

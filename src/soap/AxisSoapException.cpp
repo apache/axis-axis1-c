@@ -20,6 +20,8 @@
  */
 
 #include <axis/AxisSoapException.h>
+#include <exception>
+using namespace std;
 
 /**
  *    Default when no parameter passed. When thrown with no parameter
@@ -60,12 +62,17 @@ AxisSoapException::~AxisSoapException() throw ()
 
 void AxisSoapException::processException (const exception* e, const int iExceptionCode)
 {
-    m_sMessage = getMessage (e) + " " + getMessage (iExceptionCode);
+    m_sMessage = getMessage(iExceptionCode) + ":" + getMessage (e);
+}
+
+void AxisSoapException::processException (const exception* e, char* pcMessage)
+{
+    m_sMessage += "AxisSoapException:" + string(pcMessage) + ":" + getMessage (e);
 }
 
 void AxisSoapException::processException (const exception* e)
 {
-    m_sMessage = getMessage (e);
+    m_sMessage += "AxisSoapException:" + getMessage (e);
 }
 
 void AxisSoapException::processException(const int iExceptionCode)
@@ -75,19 +82,17 @@ void AxisSoapException::processException(const int iExceptionCode)
 
 void AxisSoapException::processException(const int iExceptionCode, char* pcMessage)
 {
-    AxisString sMessage = strdup(pcMessage);
+    AxisString sMessage = pcMessage;
     m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
     if(pcMessage)
         delete pcMessage;
 }
-const string& AxisSoapException::getMessage (const exception* objException)
+const string AxisSoapException::getMessage (const exception* objException)
 {
-    m_sMessage = objException->what();
-
-    return m_sMessage;
+    return objException->what();
 }
 
-const string& AxisSoapException::getMessage (const int iExceptionCode)
+const string AxisSoapException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {

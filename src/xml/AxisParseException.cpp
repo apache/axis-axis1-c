@@ -61,12 +61,17 @@ AxisParseException::~AxisParseException() throw ()
 
 void AxisParseException::processException (const exception* e, const int iExceptionCode)
 {
-    m_sMessage = getMessage (e) + " " + getMessage (iExceptionCode);
+    m_sMessage = getMessage (iExceptionCode) + ":" + getMessage(e);
+}
+
+void AxisParseException::processException (const exception* e, char* pcMessage)
+{
+    m_sMessage += "AxisParseException:" + string(pcMessage) + ":" + getMessage (e);
 }
 
 void AxisParseException::processException (const exception* e)
 {
-    m_sMessage = getMessage (e);
+    m_sMessage = "AxisParseException:" + getMessage (e);
 }
 
 void AxisParseException::processException(const int iExceptionCode)
@@ -76,19 +81,17 @@ void AxisParseException::processException(const int iExceptionCode)
 
 void AxisParseException::processException(const int iExceptionCode, char* pcMessage)
 {
-    AxisString sMessage = strdup(pcMessage);
+    AxisString sMessage = pcMessage;
     m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
     if(pcMessage)
         delete pcMessage;
 }
-const string& AxisParseException::getMessage (const exception* objException)
+const string AxisParseException::getMessage (const exception* objException)
 {
-    m_sMessage = objException->what();
-
-    return m_sMessage;
+    return objException->what();
 }
 
-const string& AxisParseException::getMessage (const int iExceptionCode)
+const string AxisParseException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {
