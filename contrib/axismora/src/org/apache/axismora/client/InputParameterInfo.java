@@ -107,4 +107,21 @@ public class InputParameterInfo implements Serializable {
         outparam = parameter;
     }
 
+	public OutParameter getOutParamter(){
+		   return outparam;
+	}
+    /**
+     * @return
+     */
+    public QName getQname() {
+        return qname;
+    }
+
+    /**
+     * @param name
+     */
+    public void setQname(QName name) {
+        qname = name;
+    }
+
 }

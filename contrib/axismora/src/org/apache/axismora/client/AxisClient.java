@@ -145,11 +145,14 @@ public class AxisClient extends AxisEngine {
              */
             data = new BasicMessageContext(nodeinfo, service, servicepool, requestContext);
             data.setAtServerSide(false);
-            data.setMethodName(requestContext.getMethodName());
-            data.setSoapBodyContent(requestContext.getInparams());
-
+            
+            //TODO:below line should be handled inside SOAPBodyContentFactory.
+            //data.setMethodName(requestContext.getMethodName()); 
+            data.setSoapBodyContent(SOAPBodyContentFactory.getSOAPBodyContent(requestContext));
+            
             //set http user detail
             this.invoke(data);
+           
             return data;
         } catch (Exception e) {
             throw AxisFault.makeFault(e);

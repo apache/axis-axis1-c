@@ -113,7 +113,7 @@ public class Call implements javax.xml.rpc.Call {
     /*style of the web service*/ 
     private Style style;
     /*specifies whether literal or encoded*/
-    private Use use;
+    private Use use = Use.ENCODED;
      
     private SOAPConstants constants = SOAPConstants.SOAP12_CONSTANTS;
 
@@ -313,7 +313,7 @@ public class Call implements javax.xml.rpc.Call {
 
             ClientRequestContext reqContext =
                 new ClientRequestContext(sender, soapAction, 
-                			methodName, inInfo, style, encoding);
+                			methodName, inInfo, style, encoding, use);
                 			
             return this.engine.processClient(reqContext);
         } catch (MalformedURLException e) {
