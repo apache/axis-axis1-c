@@ -94,7 +94,7 @@ public:
       *      (i.e pachPrefix has to be a empty string)).
       * The operation behavior depends on the TYPE of the node.
       */
-//    virtual IAttribute* getAttribute(AxisChar* pachPrefix, AxisChar* pachLocalname, AxisChar* pachLocalname) = 0;
+    virtual IAttribute* getAttribute(AxisChar* pachPrefix, AxisChar* pachURI, AxisChar* pachLocalname) = 0;
 
     /**
       * Returns the first Attribute of this node. The operation
