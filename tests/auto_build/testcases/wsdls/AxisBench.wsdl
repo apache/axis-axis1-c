@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions 
-	targetNamespace="http://axisbench.parislab.ibm.com" 
+	targetNamespace="http://axisbench.test.apache.org" 
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
 	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" 
-	xmlns:intf="http://axisbench.parislab.ibm.com" 
-	xmlns:impl="http://axisbench.parislab.ibm.com"
+	xmlns:intf="http://axisbench.test.apache.org" 
+	xmlns:impl="http://axisbench.test.apache.org"
 	 xmlns:apachesoap="http://xml.apache.org/xml-soap" 
 	 xmlns="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <schema 
     	elementFormDefault="qualified" 
-	    targetNamespace="http://axisbench.parislab.ibm.com" 
+	    targetNamespace="http://axisbench.test.apache.org" 
 	    xmlns="http://www.w3.org/2001/XMLSchema">
    <complexType name="BenchBasicDataType">
     <sequence>

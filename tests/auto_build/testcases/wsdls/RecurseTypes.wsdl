@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions 
-	targetNamespace="http://www.sample.com/RecurseTypes.wsdl"
+	targetNamespace="http://recursetypes.test.apache.org"
 	xmlns:wsi="http://ws-i.org/schemas/conformanceClaim/" 
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	xmlns:tns="http://www.sample.com/RecurseTypes.wsdl" 
+	xmlns:tns="http://recursetypes.test.apache.org" 
 	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
 	xmlns="http://schemas.xmlsoap.org/wsdl/">
 	<types>
 		<xsd:schema elementFormDefault="qualified"  
-				targetNamespace="http://www.sample.com/RecurseTypes.wsdl" 
+				targetNamespace="http://recursetypes.test.apache.org" 
 				xmlns="http://www.w3.org/2001/XMLSchema" 
 				>
 			<xsd:element name="getInput">

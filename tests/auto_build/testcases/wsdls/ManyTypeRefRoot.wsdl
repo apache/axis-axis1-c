@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions 
-	targetNamespace="http://www.sample.com/ManyTypeRefRoot.wsdl" 
+	targetNamespace="http://manytyperefroot.test.apache.org" 
 	xmlns:wsi="http://ws-i.org/schemas/conformanceClaim/" 
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-	xmlns:tns="http://www.sample.com/ManyTypeRefRoot.wsdl" 
+	xmlns:tns="http://manytyperefroot.test.apache.org" 
 	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
 	xmlns="http://schemas.xmlsoap.org/wsdl/">
 	<types>
 		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-			targetNamespace="http://www.sample.com/ManyTypeRefRoot.wsdl" 
-			xmlns:tns="http://www.sample.com/ManyTypeRefRoot.wsdl">
+			targetNamespace="http://manytyperefroot.test.apache.org" 
+			xmlns:tns="http://manytyperefroot.test.apache.org">
 
 			<xsd:element name="getInput">
 				<xsd:complexType>
@@ -46,14 +46,14 @@
 		<part name="parameters" element="tns:getInputResponse" />
 	</message>	
 	
-	<portType name="ManyTypeRefRootWS">
+	<portType name="ManyTypeRefRoot">
 		<operation name="getInput">
 			<input message="tns:input" />
 			<output message="tns:output" />			
 		</operation>
 	</portType>
 	
-	<binding name="ManyTypeRefRootWSBinding" type="tns:ManyTypeRefRootWS">
+	<binding name="ManyTypeRefRootBinding" type="tns:ManyTypeRefRoot">
 		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
 		<operation name="getInput">
 			<soap:operation/>
@@ -66,9 +66,9 @@
 		</operation>
 	</binding>
 	
-	<service name="ManyTypeRefRootWSService">
-		<port name="sampleWS" binding="tns:ManyTypeRefRootWSBinding">
-			<soap:address location="http://localhost:9080/ManyTypeRefRootWS/services/sampleWS" />
+	<service name="ManyTypeRefRootService">
+		<port name="sampleWS" binding="tns:ManyTypeRefRootBinding">
+			<soap:address location="http://localhost:9080/ManyTypeRefRoot/services/sampleWS" />
 		</port>
 	</service>
 </definitions>

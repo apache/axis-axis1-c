@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions targetNamespace="http://www.sample.com/SimpleTypeArray.wsdl" xmlns:wsi="http://ws-i.org/schemas/conformanceClaim/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.sample.com/SimpleTypeArray.wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+<definitions targetNamespace="http://simpletypearray.test.apache.org" xmlns:wsi="http://ws-i.org/schemas/conformanceClaim/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://simpletypearray.test.apache.org" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns="http://schemas.xmlsoap.org/wsdl/">
   <types>
-    <xsd:schema targetNamespace="http://www.sample.com/SimpleTypeArray.wsdl" xmlns:tns="http://www.sample.com/SimpleTypeArray.wsdl" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:schema targetNamespace="http://simpletypearray.test.apache.org" xmlns:tns="http://simpletypearray.test.apache.org" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
 			<xsd:element name="getInput">
 	 				<xsd:complexType>

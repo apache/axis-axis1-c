@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions targetNamespace="http://www.sample.com/Enumeration.wsdl" xmlns:wsi="http://ws-i.org/schemas/conformanceClaim/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.sample.com/Enumeration.wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+<definitions targetNamespace="http://enumeration.test.apache.org" xmlns:wsi="http://ws-i.org/schemas/conformanceClaim/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://enumeration.test.apache.org" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns="http://schemas.xmlsoap.org/wsdl/">
 	<types>
-		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.sample.com/Enumeration.wsdl" xmlns:tns="http://www.sample.com/Enumeration.wsdl">
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://enumeration.test.apache.org" xmlns:tns="http://enumeration.test.apache.org">
 
 			<xsd:element name="getInput">
 			<xsd:complexType>

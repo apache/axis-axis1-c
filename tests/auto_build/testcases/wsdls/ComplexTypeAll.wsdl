@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions name="Service"
-             targetNamespace="http://aws.ibm.com"
-             xmlns:tns="http://aws.ibm.com"
+             targetNamespace="http://complextype.test.apache.org"
+             xmlns:tns="http://complextype.test.apache.org"
              xmlns="http://schemas.xmlsoap.org/wsdl/"
              xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
              xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 	<types>
 		<xsd:schema elementFormDefault="qualified" 
-		            targetNamespace="http://aws.ibm.com"
-		            xmlns:tns="http://aws.ibm.com">
+		            targetNamespace="http://complextype.test.apache.org"
+		            xmlns:tns="http://complextype.test.apache.org">
 			<xsd:element name="myOperation">
   				<xsd:complexType>
 					<xsd:sequence>
@@ -49,7 +49,7 @@
 	<binding name="operationsBinding" type="tns:operations">
 		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
 		<operation name="myOperation">
-			<soap:operation soapAction="http://aws.ibm.com"/>
+			<soap:operation soapAction="http://complextype.test.apache.org"/>
 			<input>
 				<soap:body use="literal"/>
 			</input>
