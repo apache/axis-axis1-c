@@ -66,8 +66,8 @@ LINK32=link.exe
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LIBAXISCPP_EXPORTS" /YX /FD /GZ  /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../../common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LIBAXISCPP_EXPORTS" /YX /FD /GZ  /c
+# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LIBAXISCPP_EXPORTS" /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../../common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LIBAXISCPP_EXPORTS" /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -90,10 +90,6 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\JNIHttpServletHandler.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\libAxiscpp.cpp
 # End Source File
 # End Group
@@ -106,10 +102,6 @@ SOURCE=.\AxisCppHandler.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\JNIHttpServletHandler.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\libAxiscpp.h
 # End Source File
 # End Group
@@ -119,10 +111,46 @@ SOURCE=.\libAxiscpp.h
 # Begin Source File
 
 SOURCE=.\AxisCppContentHandler.java
+
+!IF  "$(CFG)" == "libAxiscpp - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "libAxiscpp - Win32 Debug"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=.\AxisCppContentHandler.java
+InputName=AxisCppContentHandler
+
+"$(ProjDir)/$(InputName).class" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	echo javac -d axiscpp\WEB-INF\classes $(InputPath) 
+	javac -d axiscpp\WEB-INF\classes $(InputPath) 
+	
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\AxisCppServlet.java
+
+!IF  "$(CFG)" == "libAxiscpp - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "libAxiscpp - Win32 Debug"
+
+# Begin Custom Build
+ProjDir=.
+InputPath=.\AxisCppServlet.java
+InputName=AxisCppServlet
+
+"$(ProjDir)/$(InputName).class" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	echo javac -d axiscpp\WEB-INF\classes $(InputPath) 
+	javac -d axiscpp\WEB-INF\classes $(InputPath) 
+	
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # End Group
 # End Target
