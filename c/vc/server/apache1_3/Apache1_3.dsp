@@ -81,7 +81,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 Common_D.lib Soap_D.lib wsdd_D.lib Engine_D.lib ApacheCore.lib wsock32.lib libexpat.lib client_D.lib /nologo /dll /debug /machine:I386 /out:"C:\Program Files\Apache Group\Apache\modules\mod_axis.dll" /pdbtype:sept /libpath:"../../../lib/axis" /libpath:"../../../lib/apache1_3" /libpath:"C:\Expat-1.95.7\Source\lib\Debug"
+# ADD LINK32 Common_D.lib Soap_D.lib wsdd_D.lib Engine_D.lib ApacheCore.lib wsock32.lib libexpat.lib client_D.lib /nologo /dll /debug /machine:I386 /out:"C:\Program Files\Apache Group\Apache\modules\mod_axis.dll" /pdbtype:sept /libpath:"../../../lib/axis" /libpath:"../../../lib/apache1_3" /libpath:"../../../lib/expat"
 # SUBTRACT LINK32 /profile
 
 !ENDIF 
