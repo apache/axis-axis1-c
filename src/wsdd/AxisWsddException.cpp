@@ -93,19 +93,19 @@ const string AxisWsddException::getMessage (const int iExceptionCode)
     switch(iExceptionCode)
     {
         case CLIENT_WSDD_SERVICE_NOT_FOUND:
-            m_sMessage = "Requested service not found";
+            m_sMessage = "AxisWsddException:Requested service not found";
             break;
         case CLIENT_WSDD_METHOD_NOT_ALLOWED:
-            m_sMessage = "Requested method is not allowed";
+            m_sMessage = "AxisWsddException:Requested method is not allowed";
             break;
         case CLIENT_WSDD_PARA_TYPE_MISMATCH:
-            m_sMessage = "Parameter type mismatch";
+            m_sMessage = "AxisWsddException:Parameter type mismatch";
             break; 
         case SERVER_WSDD_NO_HANDLERS_CONFIGURED:
-            m_sMessage = "No handlers configured in server.wsdd";
+            m_sMessage = "AxisWsddException:No handlers configured in server.wsdd";
             break;
         default:
-            m_sMessage = "Unknown Wsdd Exception";
+            m_sMessage = "AxisWsddException:Unknown Wsdd Exception";
     }
     return m_sMessage;
 }

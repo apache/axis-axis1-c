@@ -93,40 +93,40 @@ const string AxisEngineException::getMessage (const int iExceptionCode)
     switch(iExceptionCode)
     {
         case SERVER_ENGINE_COULD_NOT_LOAD_SRV:
-            m_sMessage = "Could not load service";
+            m_sMessage = "AxisEngineException:Could not load service";
             break;
         case SERVER_ENGINE_COULD_NOT_LOAD_HDL:
-            m_sMessage = "Could not load handler";
+            m_sMessage = "AxisEngineException:Could not load handler";
             break;
         case SERVER_ENGINE_HANDLER_FAILED:
-            m_sMessage = "Handler failed";
+            m_sMessage = "AxisEngineException:Handler failed";
             break;
         case SERVER_ENGINE_WEBSERVICE_FAILED:
-            m_sMessage = "Web Service failed";
+            m_sMessage = "AxisEngineException:Web Service failed";
             break;
         case SERVER_ENGINE_HANDLER_INIT_FAILED:
-            m_sMessage = "Handler initialization failed";
+            m_sMessage = "AxisEngineException:Handler initialization failed";
             break;
         case SERVER_ENGINE_HANDLER_CREATION_FAILED:
-            m_sMessage = "Handler creation failed";
+            m_sMessage = "AxisEngineException:Handler creation failed";
             break;
         case SERVER_ENGINE_LIBRARY_LOADING_FAILED:
-            m_sMessage = "Library loading failed";
+            m_sMessage = "AxisEngineException:Library loading failed";
             break;
         case SERVER_ENGINE_HANDLER_NOT_LOADED:
-            m_sMessage = "Handler is not loaded";
+            m_sMessage = "AxisEngineException:Handler is not loaded";
             break;
         case SERVER_ENGINE_HANDLER_BEING_USED:
-            m_sMessage = "Handler is being used";
+            m_sMessage = "AxisEngineException:Handler is being used";
             break;
         case SERVER_ENGINE_GET_HANDLER_FAILED:
-            m_sMessage = "Get handler failed";
+            m_sMessage = "AxisEngineException:Get handler failed";
             break;
         case SERVER_ENGINE_WRONG_HANDLER_TYPE:
-            m_sMessage = "Wrong handler type";
+            m_sMessage = "AxisEngineException:Wrong handler type";
             break;
         default:
-            m_sMessage = "Unknown Axis C++ Engine Exception";
+            m_sMessage = "AxisEngineException:Unknown Axis C++ Engine Exception";
     }
     return m_sMessage;
 }

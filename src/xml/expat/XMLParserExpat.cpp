@@ -272,6 +272,10 @@ int XMLParserExpat::parseNext()
 				m_nStatus = AXIS_FAIL;
 		}
 		if (TRANSPORT_FAILED == iTransportStatus) XML_ParseBuffer(m_Parser, 0, true);
+                if(AXIS_FAIL == m_nStatus)
+                    throw AxisParseException( SERVER_PARSE_PARSER_FAILED);
+                if(TRANSPORT_FAILED == iTransportStatus)
+                    throw AxisParseException(SERVER_PARSE_TRANSPORT_FAILED);
 	}
         else throw AxisParseException(SERVER_PARSE_BUFFER_EMPTY);
     /* end of parsing */
