@@ -54,8 +54,8 @@ int Hex_Decode(unsigned char * plain_dst, const char *coded_src)
     unsigned char* curr = plain_dst;
     while (*coded_src != '\0')
     {
-        *curr = (s_HexToNumTable[*coded_src] << 4) | 
-            s_HexToNumTable[*(coded_src+1)];
+        *curr = (s_HexToNumTable[(int)(*coded_src)] << 4) | 
+            s_HexToNumTable[(int)(*(coded_src+1))];
         curr++;
         coded_src+=2;
     }
