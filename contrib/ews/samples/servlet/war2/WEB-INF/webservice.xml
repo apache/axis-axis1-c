@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webservices xmlns="http://java.sun.com/xml/ns/j2ee" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:ns1="http://www.Monson-Haefel.com/jwsbook/BookQuote"
+xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+http://www.ibm.com/standards/xml/webservices/j2ee/j2ee_web_services_1_1.xsd" version="1.1">
+<webservice-description>
+	<webservice-description-name>BookQuoteService</webservice-description-name>
+	<wsdl-file>math.wsdl</wsdl-file>
+	<jaxrpc-mapping-file>jaxrpc-mapping.xml</jaxrpc-mapping-file>
+	<port-component>
+		<port-component-name>BookQuotePort</port-component-name>
+		<wsdl-port xmlns:ns1="http://jaxrpc.jwsbook.com">ns1:BookQuoteType</wsdl-port>
+		<service-endpoint-interface>com.jwsbook.jaxrpc.BookQuote</service-endpoint-interface>
+		<service-impl-bean>
+			<servlet-link>simple</servlet-link>
+		</service-impl-bean>
+	</port-component>
+	</webservice-description>
+</webservices>
