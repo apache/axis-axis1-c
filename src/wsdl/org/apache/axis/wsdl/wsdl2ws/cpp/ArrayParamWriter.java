@@ -92,6 +92,9 @@ public class ArrayParamWriter extends ParamWriter{
 			if (!CPPUtils.isSimpleType(qname)){
 				writer.write("#include \""+attribs[0][1]+".h\"\n\n");
 			}
+			else{
+				writer.write("#include <AxisUserAPI.h>\n\n");
+			}
 			writeArrayStruct();
 			this.writer.write("#endif // !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)\n");
 			writer.flush();

@@ -180,6 +180,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter{
 			Type atype;
 			Iterator types = this.wscontext.getTypemap().getTypes().iterator();
 			HashSet typeSet = new HashSet();
+			writer.write("#include <AxisUserAPI.h>\n\n");
 			while(types.hasNext()){
 				atype = (Type)types.next();
 				typeSet.add(atype.getLanguageSpecificName());
