@@ -140,13 +140,13 @@ int SOAPTransportFactory::loadLib()
     m_LibHandler = LoadLibrary(m_pcLibraryPath);
 #else 
     m_LibHandler = dlopen(m_pcLibraryPath, RTLD_LAZY);
+#endif
     if (!m_LibHandler)
     {
         AXISTRACE1("SERVER_ENGINE_LOADING_TRANSPORT_FAILED", CRITICAL);
         //printf("DLOPEN FAILED in loading transport library: %s\n", dlerror());
         throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED);
     }
-#endif
     return (m_LibHandler != 0) ? AXIS_SUCCESS : AXIS_FAIL;
 }
 
