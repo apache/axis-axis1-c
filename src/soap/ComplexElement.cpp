@@ -147,6 +147,16 @@ IAttribute* ComplexElement::createAttribute(const AxisChar *localname,
     return (IAttribute*)pAttribute;
 }
 
+IAttribute* ComplexElement::createAttribute(const AxisChar *localname,
+        const AxisChar *value)
+{
+    Attribute* pAttribute = new Attribute(localname, "", value);
+    m_attributes.push_back(pAttribute);
+                                                                                                                                                                            
+    return (IAttribute*)pAttribute;
+}
+
+
 int ComplexElement::setPrefix(const AxisChar* pachPrefix)
 {
     m_pachPrefix = (AxisChar*) malloc(strlen(pachPrefix)+1);

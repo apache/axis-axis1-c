@@ -136,6 +136,17 @@ public:
             const AxisChar* prefix, const AxisChar* value);
 
     /**
+      * Creates an Attribute and adds it to this Complex Element.
+      *
+      * @param localname The local name of the attribute.
+      * @param value The value of the attribute.
+      *
+      * @return A pointer to the created Attribute will be returned.
+      */
+    IAttribute* createAttribute(const AxisChar* localname,
+            const AxisChar* value);
+
+    /**
       * Returns the number of child elements of this ComplexElement.
       *
       * @return The number of child elements of this ComplexElement.

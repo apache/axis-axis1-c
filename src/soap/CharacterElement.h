@@ -118,6 +118,19 @@ public:
     IAttribute* createAttribute(const AxisChar* localname,
             const AxisChar* prefix, const AxisChar* value) { return NULL; }
 
+    /**
+      * This method is overridden to always return NULL because this is a CharacterElement.
+      * A user of a CharacterElement should not use this method
+      *
+      * @param localname The local name of the attribute.
+      * @param value The value of the attribute.
+      *
+      * @return Will always return NULL
+      */
+    IAttribute* createAttribute(const AxisChar* localname,
+            const AxisChar* value) { return NULL; }
+
+
     bool operator ==( const CharacterElement &objChEle);
 
     /**

@@ -148,6 +148,17 @@ public:
         const AxisChar* prefix, const AxisChar* value)=0 ;
 
     /**
+      * Creates an Attribute and adds it to this Basic Node.
+      *
+      * @param localname The local name of the attribute.
+      * @param value The value of the attribute.
+      *
+      * @return A pointer to the created Attribute will be returned.
+      */
+    virtual IAttribute* createAttribute(const AxisChar* localname,
+        const AxisChar* value)=0 ;
+
+    /**
       * Returns the local name of this node. The operation
       * behavior depends on the TYPE of the node.
       * 
