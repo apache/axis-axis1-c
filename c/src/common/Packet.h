@@ -56,6 +56,7 @@
  *
  *
  * @author Sanjaya Singharage (sanjayasing@opensource.lk)
+ * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  *
  */
 
@@ -73,13 +74,7 @@ typedef struct
 	const void* ip_stream;
 	const void* op_stream;
 } Ax_iostream;
-/*
-typedef enum
-{
-	HTTP,
-	SMTP
-} transport_type;
-*/
+
 typedef enum
 {
 	AXIS_HTTP_GET,
@@ -95,7 +90,7 @@ typedef struct
 
 typedef struct
 {
-	char* uri_path;
+	const char* uri_path;
 	Ax_header* ip_headers;
 	int ip_headercount;
 	Ax_header* op_headers;
@@ -163,23 +158,23 @@ extern "C"
 	int uninitialize_module();
 
 	/*This function is implemented in axis*/
-	int initialize_module();
+	int initialize_module(int bServer);
 
 	/*This function is implemented in axis*/
 	int process_request(Ax_soapstream* str);
 
 	/*This function should be implemented by module authors*/
 	/*Allows to send pieces of soap response the transport handler*/
-	int send_response_bytes(const char* res, const void* opstream);
+	//int send_response_bytes(const char* res, const void* opstream);
 
 	/*This function should be implemented by module authors*/
 	/*Allows axis to get pieces of the request as they come to the transport listener*/
-	int get_request_bytes(char* req, int reqsize, int* retsize, const void* ipstream);
+	//int get_request_bytes(char* req, int reqsize, int* retsize, const void* ipstream);
 
 	/*This fucntion should be implemented by module authors*/
-	int send_transport_information(Ax_soapstream *str);
+	//int send_transport_information(Ax_soapstream *str);
 
-	int receive_transport_information(Ax_soapstream *str);
+	//int receive_transport_information(Ax_soapstream *str);
 #ifdef __cplusplus
 }
 #endif

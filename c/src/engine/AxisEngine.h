@@ -87,6 +87,8 @@ protected:
 	HandlerChain* m_pSResFChain;
 	MessageData* m_pMsgData;
 public:
+	static bool m_bServer;
+public:
 	AxisEngine();
 	virtual ~AxisEngine();
 	virtual int Initialize();
