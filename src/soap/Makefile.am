@@ -17,7 +17,9 @@ libsoap_la_SOURCES = Attribute.cpp \
 	SoapKeywordMapping.cpp \
 	apr_base64.c \
 	HexCoder.cpp \
-        AxisSoapException.cpp
+        AxisSoapException.cpp \
+	SoapAttachment.cpp \
+	SoapAttachementHeaders.cpp
 
 libsoap_la_LIBADD = $(LDFLAGS)
 INCLUDES = -I../../include
