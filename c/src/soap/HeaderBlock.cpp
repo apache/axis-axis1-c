@@ -55,9 +55,36 @@ HeaderBlock::HeaderBlock(AxisChar *pachLocalName, AxisChar *pachPrefix,
     m_uri = pachUri;
 }
 
-HeaderBlock::HeaderBlock(const HeaderBlock& rCopy)
+HeaderBlock::HeaderBlock(const HeaderBlock& rCopy):
+IHeaderBlock(rCopy), iNoOFChildren(rCopy.iNoOFChildren), m_localname(rCopy.m_localname),
+m_prefix(rCopy.m_prefix), m_uri(rCopy.m_uri)  
 {
 
+    list<BasicNode*>::const_iterator itCurrChild= rCopy.m_children.begin();
+    while(itCurrChild != rCopy.m_children.end())
+    {        
+        this->m_children.push_back( (*itCurrChild)->clone() );
+        itCurrChild++;        
+    }
+
+    list<Attribute*>::const_iterator itCurrAttribute= rCopy.m_attributes.begin();
+    while(itCurrAttribute != rCopy.m_attributes.end())
+    {        
+        this->m_attributes.push_back( (*itCurrAttribute)->clone() );
+        itCurrAttribute++;        
+    }
+    
+    list<Attribute*>::const_iterator itCurrNamespace= rCopy.m_namespaceDecls.begin();
+    while(itCurrNamespace != rCopy.m_namespaceDecls.end())
+    {        
+        this->m_namespaceDecls.push_back( (*itCurrNamespace)->clone() );
+        itCurrNamespace++;        
+    }
+}
+
+HeaderBlock* HeaderBlock::clone()
+{
+    return new HeaderBlock(*this);
 }
 
 HeaderBlock::~HeaderBlock()
