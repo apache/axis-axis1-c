@@ -56,6 +56,7 @@
  *
  *
  * @author Susantha Kumara (skumara@virtusa.com)
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
 
@@ -114,4 +115,54 @@ int AxisUtils::clearArray(char *arrCh, int iSize)
 	}
 
 	return SUCCESS;
+}
+
+bool AxisUtils::isCharacterAvailable(const string &sString, const char cCharacter)
+{
+	bool bFoundStatus = false;
+
+	if ((sString.find(cCharacter, 0)) != string::npos) {
+		bFoundStatus = true;
+	}
+
+	return bFoundStatus;
+}
+
+bool AxisUtils::isCharacterAvailable(const char *pchStringToSearch, const char cCharacter)
+{
+	bool bFoundStatus = false;
+
+	if ( strchr(pchStringToSearch, cCharacter) ) {
+		bFoundStatus = true;
+	}
+
+	return bFoundStatus;
+}
+
+string AxisUtils::toUpperCase(const string sWord)
+{
+	/*Fill the code*/
+
+	return NULL;
+}
+
+char* AxisUtils::toUpperCase(const char *pchWord)
+{
+	/*Fill the code*/
+
+	return NULL;
+}
+
+string AxisUtils::toLowerCase(const string sWord)
+{
+	/*Fill the code*/
+
+	return NULL;
+}
+
+char* AxisUtils::toLowerCase(const char *pchWord)
+{
+	/*Fill the code*/
+
+	return NULL;
 }
