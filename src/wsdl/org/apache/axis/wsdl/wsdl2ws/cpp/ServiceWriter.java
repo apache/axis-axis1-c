@@ -144,7 +144,7 @@ public class ServiceWriter extends CPPClassWriter{
 			  writer.write(classname+"::"+minfo.getMethodname()+"(");
 			  //write parameter names 
 			//write parameter names 
-			Iterator params = minfo.getParameterTypess().iterator();
+			Iterator params = minfo.getParameterTypes().iterator();
 			if(params.hasNext()){
 				ParameterInfo fparam = (ParameterInfo)params.next();
 				isSimpleType = CPPUtils.isSimpleType(fparam.getLangName());

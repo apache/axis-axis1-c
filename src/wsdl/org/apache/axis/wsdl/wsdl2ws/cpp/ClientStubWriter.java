@@ -139,7 +139,7 @@ public class ClientStubWriter extends CPPClassWriter{
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
 				minfo = (MethodInfo)methods.get(i);
-				this.writeMethodInWrapper(minfo.getMethodname(), minfo.getParameterTypess(),minfo.getReturnType());
+				this.writeMethodInWrapper(minfo.getMethodname(), minfo.getParameterTypes(),minfo.getReturnType());
 				writer.write("\n");
 			}
      
@@ -179,7 +179,7 @@ public class ClientStubWriter extends CPPClassWriter{
 		//method signature
 		String paraTypeName;
 		Type type;
-		ArrayList paramsB = new ArrayList(params);
+		ArrayList paramsB = (ArrayList)params;
 		writer.write(outparam + " "+classname+"::" + methodName + "(");
 		if (0 < paramsB.size()){
 			paraTypeName = ((ParameterInfo)paramsB.get(0)).getLangName();
