@@ -33,29 +33,29 @@ int ClientAxisEngine::Process(Ax_soapstream* pSoap)
 	int Status;
 	//const WSDDService* pService = NULL;
 
-	if (!pSoap) return FAIL;
+	if (!pSoap) return AXIS_FAIL;
 	m_pSoap = pSoap;
 
 	string sSessionId = m_pSoap->sessionid;
 
 	if (!(m_pSoap->transport.pSendFunct && m_pSoap->transport.pGetFunct &&
 		m_pSoap->transport.pSendTrtFunct && m_pSoap->transport.pGetTrtFunct))
-		return FAIL;
+		return AXIS_FAIL;
 
 	do {
 		//const char* cService = get_header(soap, SOAPACTIONHEADER);
 /*
 		//Get Global and Transport Handlers
-		if(SUCCESS != (Status = InitializeHandlers(sSessionId, soap->trtype)))
+		if(AXIS_SUCCESS != (Status = InitializeHandlers(sSessionId, soap->trtype)))
 		{
 		  break; //do .. while(0)
 		}
     	//Get Service specific Handlers from the pool if configured any
-		if(SUCCESS != (Status = g_pHandlerPool->GetRequestFlowHandlerChain(&m_pSReqFChain, sSessionId, pService)))
+		if(AXIS_SUCCESS != (Status = g_pHandlerPool->GetRequestFlowHandlerChain(&m_pSReqFChain, sSessionId, pService)))
 		{        
 		  break; //do .. while(0)
 		}
-		if(SUCCESS != (Status = g_pHandlerPool->GetResponseFlowHandlerChain(&m_pSResFChain, sSessionId, pService)))
+		if(AXIS_SUCCESS != (Status = g_pHandlerPool->GetResponseFlowHandlerChain(&m_pSResFChain, sSessionId, pService)))
 		{        
 		  break; //do .. while(0)
 		}
@@ -77,12 +77,12 @@ int ClientAxisEngine::Process(Ax_soapstream* pSoap)
 int ClientAxisEngine::Invoke(MessageData* pMsg)
 {
 	enum AE_LEVEL {AE_START=1, AE_TRH, AE_GLH, AE_SERH, AE_SERV};
-	int Status = FAIL;
+	int Status = AXIS_FAIL;
 	//int level = AE_START;
 	/*
-	No Client side handlers for now. Therefore returns SUCCESS
+	No Client side handlers for now. Therefore returns AXIS_SUCCESS
 	*/
-	Status = SUCCESS;
+	Status = AXIS_SUCCESS;
 
 	/*
 	do
@@ -90,7 +90,7 @@ int ClientAxisEngine::Invoke(MessageData* pMsg)
 		//invoke client side service specific request handlers
 		if (m_pSReqFChain)
 		{
-			if(SUCCESS != (Status = m_pSReqFChain->Invoke(pMsg)))
+			if(AXIS_SUCCESS != (Status = m_pSReqFChain->Invoke(pMsg)))
 			{
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_CLIENTHANDLERFAILED));
 				break; //do .. while (0)
@@ -101,7 +101,7 @@ int ClientAxisEngine::Invoke(MessageData* pMsg)
 		//invoke global request handlers
 		if (m_pGReqFChain)
 		{
-			if(SUCCESS != (Status = m_pGReqFChain->Invoke(pMsg)))
+			if(AXIS_SUCCESS != (Status = m_pGReqFChain->Invoke(pMsg)))
 			{
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_CLIENTHANDLERFAILED));
 				break; //do .. while (0)
@@ -110,7 +110,7 @@ int ClientAxisEngine::Invoke(MessageData* pMsg)
 //        AXISTRACE1("AFTER invoke global request handlers");
 		level++; //AE_GLH	
 		if (m_pTReqFChain) {
-			if(SUCCESS != (Status = m_pTReqFChain->Invoke(pMsg)))
+			if(AXIS_SUCCESS != (Status = m_pTReqFChain->Invoke(pMsg)))
 			{
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_CLIENTHANDLERFAILED));
 				break; //do .. while (0)
@@ -126,11 +126,11 @@ int ClientAxisEngine::Invoke(MessageData* pMsg)
 	
 	do 
 	{
-		if (SUCCESS != (Status = m_pSoap->transport.pSendTrtFunct(m_pSoap))) break;
-		if (SUCCESS != (Status = m_pSZ->SetOutputStream(m_pSoap))) break;
+		if (AXIS_SUCCESS != (Status = m_pSoap->transport.pSendTrtFunct(m_pSoap))) break;
+		if (AXIS_SUCCESS != (Status = m_pSZ->SetOutputStream(m_pSoap))) break;
 		pMsg->setPastPivotState(true);
-		if (SUCCESS != (Status = m_pSoap->transport.pGetTrtFunct(m_pSoap))) break;
-		if (SUCCESS != (Status = m_pDZ->SetInputStream(m_pSoap))) break;
+		if (AXIS_SUCCESS != (Status = m_pSoap->transport.pGetTrtFunct(m_pSoap))) break;
+		if (AXIS_SUCCESS != (Status = m_pDZ->SetInputStream(m_pSoap))) break;
 	}
 	while(0);
 
@@ -138,7 +138,7 @@ int ClientAxisEngine::Invoke(MessageData* pMsg)
 	switch (level)
 	{
 	case AE_SERV: //everything success
-		Status = SUCCESS;
+		Status = AXIS_SUCCESS;
 		//no break;
 	case AE_SERH: //actual web service handler has failed
 		//invoke web service specific response handlers

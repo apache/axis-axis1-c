@@ -101,11 +101,11 @@ int AxisTransport::OpenConnection()
        m_pSoap->transport.pSendFunct = Send_bytes;
        m_pSoap->transport.pGetTrtFunct = Receive_transport_information;
        m_pSoap->transport.pSendTrtFunct = Send_transport_information; 
-	   return SUCCESS;
+	   return AXIS_SUCCESS;
     }
     else
 	{
-        return FAIL;
+        return AXIS_FAIL;
 	}
 }        
 
@@ -133,8 +133,8 @@ int AxisTransport::Send_bytes(const char* pSendBuffer, const void* pStream)
 {
     Sender* pSender = (Sender*) pStream;
     if(pSender->Send(pSendBuffer))
-        return SUCCESS;
-    return FAIL;
+        return AXIS_SUCCESS;
+    return AXIS_FAIL;
     
 }
 
@@ -147,10 +147,10 @@ int AxisTransport::Get_bytes(char* pRecvBuffer, int nBuffSize, int* pRecvSize, c
     {
         strcpy(pRecvBuffer, strReceive.c_str());
         *pRecvSize = nLen;
-        return SUCCESS;
+        return AXIS_SUCCESS;
     }
     else
-        return FAIL;
+        return AXIS_FAIL;
     
 }
 
@@ -160,7 +160,7 @@ int AxisTransport::Send_transport_information(void* pSoapStream)
 	if (pSStream)
 	{
 		Sender* pSender = (Sender*) pSStream->str.op_stream;
-		if (!pSender) return FAIL;
+		if (!pSender) return AXIS_FAIL;
 		string sName, sValue;
 		for (int x=0; x<pSStream->so.http.ip_headercount;x++)
 		{
@@ -168,12 +168,12 @@ int AxisTransport::Send_transport_information(void* pSoapStream)
 			sValue = pSStream->so.http.ip_headers[x].headervalue;
 			pSender->SetProperty(sName, sValue);
 		}
-		return SUCCESS;
+		return AXIS_SUCCESS;
 	}
-	return FAIL;
+	return AXIS_FAIL;
 }
 
 int AxisTransport::Receive_transport_information(void* pSoapStream)
 {
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }

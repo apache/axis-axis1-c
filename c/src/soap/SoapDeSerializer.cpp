@@ -107,11 +107,11 @@ int SoapDeSerializer::SetInputStream(const Ax_soapstream* pInputStream)
 	if (NULL != m_pInputStream->transport.pGetFunct)
 		m_pInputStream->transport.pGetFunct(m_hugebuffer, HUGE_BUFFER_SIZE, &nChars, m_pInputStream->str.ip_stream);
 	//if no soap then quit
-	if (nChars <= 0) return FAIL;
+	if (nChars <= 0) return AXIS_FAIL;
 	MemBufInputSource Input((const unsigned char*)m_hugebuffer, nChars , "bufferid");
 	//Input.setEncoding("UTF-16");
 	m_pParser->parse(Input);
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 SoapEnvelope* SoapDeSerializer::GetEnvelope()
@@ -159,7 +159,7 @@ int SoapDeSerializer::Deserialize(IParam* pIParam, int bHref)
 			pParam->m_Value.pArray->m_value.sta = NULL;
 		}
 		else
-			return FAIL;
+			return AXIS_FAIL;
 		break;
 	case USER_TYPE:
 		if (pParam->m_Value.pCplxObj)
@@ -171,11 +171,11 @@ int SoapDeSerializer::Deserialize(IParam* pIParam, int bHref)
 			pParam->m_Value.pCplxObj->pObject = NULL;
 		}
 		else
-			return FAIL;
+			return AXIS_FAIL;
 		break;
 	default:; //no need of calling this function for basic types - error condition
 	}
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 IParam* SoapDeSerializer::GetParam()
@@ -188,7 +188,7 @@ int SoapDeSerializer::Init()
 	m_hugebuffer[0] = '\0';
 	m_pLastArrayParam = NULL;
 	m_pHandler->Init();
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 
@@ -229,7 +229,7 @@ Axis_Array SoapDeSerializer::GetArray(void* pDZFunct, void* pCreFunct, void* pDe
 	}
 	else 
 		return Array; //CF_ZERO_ARRAY_SIZE_ERROR
-	if (SUCCESS != param->SetArrayElements((void*)(Array.m_Array), (AXIS_DESERIALIZE_FUNCT)pDZFunct, 
+	if (AXIS_SUCCESS != param->SetArrayElements((void*)(Array.m_Array), (AXIS_DESERIALIZE_FUNCT)pDZFunct, 
 		(AXIS_OBJECT_DELETE_FUNCT)pDelFunct, (AXIS_OBJECT_SIZE_FUNCT)pSizeFunct))
 	{
 		((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(Array.m_Array, true, Array.m_Size);
@@ -237,7 +237,7 @@ Axis_Array SoapDeSerializer::GetArray(void* pDZFunct, void* pCreFunct, void* pDe
 		Array.m_Size = 0;
 		return Array;
 	}
-	if (SUCCESS != Deserialize(param,0))
+	if (AXIS_SUCCESS != Deserialize(param,0))
 	{
 		((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(Array.m_Array, true, Array.m_Size);
 		Array.m_Array = NULL;
@@ -261,25 +261,25 @@ int SoapDeSerializer::GetArray(Axis_Array* pArray, XSDTYPE nType)
 	if (!m_pLastArrayParam) 
 	{ //This cannot happen unless there is something wrong with wrapper
 		DeleteArray(pArray, nType);
-		return FAIL;
+		return AXIS_FAIL;
 	}
 	if (XSD_ARRAY != m_pLastArrayParam->GetType())//UNEXPECTED_PARAM_TYPE
 	{ //This cannot happen unless there is something wrong with wrapper
 		DeleteArray(pArray, nType);
-		return FAIL;
+		return AXIS_FAIL;
 	}
 	
-	if (SUCCESS != m_pLastArrayParam->SetArrayElements((void*)(pArray->m_Array)))
+	if (AXIS_SUCCESS != m_pLastArrayParam->SetArrayElements((void*)(pArray->m_Array)))
 	{
 		DeleteArray(pArray, nType);
-		return FAIL;
+		return AXIS_FAIL;
 	}
-	if (SUCCESS != Deserialize(m_pLastArrayParam,0))
+	if (AXIS_SUCCESS != Deserialize(m_pLastArrayParam,0))
 	{
 		DeleteArray(pArray, nType);
-		return FAIL;
+		return AXIS_FAIL;
 	}
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 Axis_Array SoapDeSerializer::GetArray(XSDTYPE nType)
@@ -301,12 +301,12 @@ Axis_Array SoapDeSerializer::GetArray(XSDTYPE nType)
 	}
 	else 
 		return Array; //CF_ZERO_ARRAY_SIZE_ERROR
-	if (SUCCESS != param->SetArrayElements((void*)(Array.m_Array)))
+	if (AXIS_SUCCESS != param->SetArrayElements((void*)(Array.m_Array)))
 	{
 		DeleteArray(&Array, nType);
 		return Array;
 	}
-	if (SUCCESS != Deserialize(param,0))
+	if (AXIS_SUCCESS != Deserialize(param,0))
 	{
 		DeleteArray(&Array, nType);
 		return Array;
@@ -325,12 +325,12 @@ void* SoapDeSerializer::GetObject(void* pDZFunct, void* pCreFunct, void* pDelFun
 	void* pObject = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)();
 	if (!pObject) return NULL;
 
-	if (SUCCESS != param->SetUserType(pObject, (AXIS_DESERIALIZE_FUNCT)pDZFunct, (AXIS_OBJECT_DELETE_FUNCT)pDelFunct))
+	if (AXIS_SUCCESS != param->SetUserType(pObject, (AXIS_DESERIALIZE_FUNCT)pDZFunct, (AXIS_OBJECT_DELETE_FUNCT)pDelFunct))
 	{
 		((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(pObject);
 		return NULL;
 	}
-	if (SUCCESS != Deserialize(param,0))
+	if (AXIS_SUCCESS != Deserialize(param,0))
 	{
 		((AXIS_OBJECT_DELETE_FUNCT)pDelFunct)(pObject);
 		return NULL;

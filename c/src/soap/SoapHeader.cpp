@@ -108,7 +108,7 @@ void SoapHeader::addHeaderBlock(HeaderBlock* headerBlock)
 
 int SoapHeader::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 {	
-	int iStatus= SUCCESS;
+	int iStatus= AXIS_SUCCESS;
 
 	do {
 		
@@ -117,7 +117,7 @@ int SoapHeader::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 		iStatus= serializeNamespaceDecl(pSZ);
 		iStatus= serializeAttributes(pSZ);
 
-		if(iStatus==FAIL) {
+		if(iStatus==AXIS_FAIL) {
 			break;
 		}
 		
@@ -127,13 +127,13 @@ int SoapHeader::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 
 		while(itCurrHeaderBlock != m_headerBlocks.end()) {
 			iStatus= (*itCurrHeaderBlock)->serialize(pSZ);
-			if(iStatus==FAIL) {
+			if(iStatus==AXIS_FAIL) {
 				break;
 			}
 			itCurrHeaderBlock++;			
 		}
 
-		if(iStatus==FAIL) {
+		if(iStatus==AXIS_FAIL) {
 			break;
 		}
 		
@@ -149,7 +149,7 @@ int SoapHeader::addAttribute(Attribute *pAttribute)
 {
 	m_attributes.push_back(pAttribute);
 
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 
@@ -162,14 +162,14 @@ int SoapHeader::serializeAttributes(SoapSerializer& pSZ)
 		itCurrAttribute++;		
 	}	
 
-	return SUCCESS;	
+	return AXIS_SUCCESS;	
 }
 
 int SoapHeader::addNamespaceDecl(Attribute *pAttribute)
 {
 	m_namespaceDecls.push_back(pAttribute);
 
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int SoapHeader::serializeNamespaceDecl(SoapSerializer& pSZ)
@@ -182,7 +182,7 @@ int SoapHeader::serializeNamespaceDecl(SoapSerializer& pSZ)
 		itCurrNamespaceDecl++;		
 	}	
 
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 IHeaderBlock* SoapHeader::getHeaderBlock()

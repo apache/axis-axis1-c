@@ -98,14 +98,14 @@ int AxisEngine::Initialize()
 {
 	int Status;
 	m_pMsgData = new MessageData();
-	if (!m_pMsgData) return FAIL;
+	if (!m_pMsgData) return AXIS_FAIL;
 	//Create and initialize Serializer and Deserializer objects
-	if (SUCCESS != (Status = g_pSerializerPool->GetInstance(&m_pSZ))) return Status;
-	if (SUCCESS != (Status = g_pDeserializerPool->GetInstance(&m_pDZ))) return Status;
+	if (AXIS_SUCCESS != (Status = g_pSerializerPool->GetInstance(&m_pSZ))) return Status;
+	if (AXIS_SUCCESS != (Status = g_pDeserializerPool->GetInstance(&m_pDZ))) return Status;
 	m_pMsgData->SetSerializer(m_pSZ);
 	m_pMsgData->SetDeSerializer(m_pDZ);   
     
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 void AxisEngine::UnInitialize()
@@ -121,17 +121,17 @@ void AxisEngine::UnInitialize()
 
 int AxisEngine::InitializeHandlers(string &sSessionId, AXIS_PROTOCOL_TYPE protocol)
 {
-	int Status = SUCCESS;  
+	int Status = AXIS_SUCCESS;  
 	//Get Global Handlers from the pool if configured any
-	if(SUCCESS != (Status = g_pHandlerPool->GetGlobalRequestFlowHandlerChain(&m_pGReqFChain, sSessionId)))
+	if(AXIS_SUCCESS != (Status = g_pHandlerPool->GetGlobalRequestFlowHandlerChain(&m_pGReqFChain, sSessionId)))
 		return Status;
-	if(SUCCESS != (Status = g_pHandlerPool->GetGlobalResponseFlowHandlerChain(&m_pGResFChain, sSessionId)))
+	if(AXIS_SUCCESS != (Status = g_pHandlerPool->GetGlobalResponseFlowHandlerChain(&m_pGResFChain, sSessionId)))
 		return Status;
 
 	//Get Transport Handlers from the pool if configured any
-	if(SUCCESS != (Status = g_pHandlerPool->GetTransportRequestFlowHandlerChain(&m_pTReqFChain, sSessionId, protocol)))
+	if(AXIS_SUCCESS != (Status = g_pHandlerPool->GetTransportRequestFlowHandlerChain(&m_pTReqFChain, sSessionId, protocol)))
 		return Status;
-	if(SUCCESS != (Status = g_pHandlerPool->GetTransportResponseFlowHandlerChain(&m_pTResFChain, sSessionId, protocol)))
+	if(AXIS_SUCCESS != (Status = g_pHandlerPool->GetTransportResponseFlowHandlerChain(&m_pTResFChain, sSessionId, protocol)))
 		return Status;
 	return Status;
 }

@@ -154,7 +154,7 @@ int ESHHandler::Invoke(IMessageData *pIMsg)
 		
 	}
 
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 void ESHHandler::OnFault(IMessageData *pIMsg)
@@ -166,12 +166,12 @@ int ESHHandler::Init()
 {
 	//do any initialization, resetting of values
 
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
 
 int ESHHandler::Fini()
 {
 	//do any finalizatoin
 
-	return SUCCESS;
+	return AXIS_SUCCESS;
 }
