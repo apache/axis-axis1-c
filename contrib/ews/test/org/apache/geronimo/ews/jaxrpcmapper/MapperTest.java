@@ -51,4 +51,12 @@ public class MapperTest
                                      "src/samples/mapper/lightweight/BookQuote.wsdl"};
         WsdlToJ2ee.main(args);
     }
+
+    public void testGoogle()
+    {
+        String args[] = new String[]{"-m","src/samples/mapper/google/GoogleSearch.xml",
+                                     "-o", "target/generated/samples/mapper/google",
+                                     "src/samples/mapper/google/GoogleSearch.wsdl"};
+        WsdlToJ2ee.main(args);
+    }
 }
