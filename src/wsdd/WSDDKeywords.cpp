@@ -35,6 +35,7 @@ const AxisXMLCh* kw_type; //what about this ? change to libname ?
 const AxisXMLCh* kw_scope;
 const AxisXMLCh* kw_http;
 const AxisXMLCh* kw_smtp;
+const AxisXMLCh* kw_desc;
 
 WSDDKeywords::WSDDKeywords()
 {
@@ -71,6 +72,7 @@ void WSDDKeywords::Initialize()
 		kw_scope = __TRC("scope");
 		kw_http = __TRC("http");
 		kw_smtp = __TRC("smtp");
+		kw_desc = __TRC("description");
 		m_bInit = true;
 	}
 }
