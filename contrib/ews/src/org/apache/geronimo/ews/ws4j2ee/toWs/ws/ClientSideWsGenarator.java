@@ -71,6 +71,25 @@ import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
  * <p>This genarated the Client side SEI and other classes required in the
  * Axis.</p>
  * 
+ * * <h3>Service Endpoint Interface</h3>
+ *	<p>The JAX-RPC specification requires that a JAX-RPC service endpoint interface must
+ *	follow the following rules:</p>
+ *   <ol>
+ *	    <li>Service endpoint interface must extend java.rmi.Remote either directly or indirectly</li>
+ *	    <li>All methods in the interface must throw java.rmi.RemoteException. Methods may
+ *			throw service specific exceptions in addition to the RemoteException.</li>
+ *		<li>Method parameters and return types must be the JAX-RPC supported Java types
+ *			(refer to the section 5.1, “JAX-RPC Supported Java Types”). At runtime, values of a
+ *			supported Java type must be serializable to and from the corresponding XML
+ *	        representation.
+ *	    </li>
+ *	    <li>Holder classes may be used as method parameters. These Holder classes are either
+ *		generated or those packaged in the standard javax.xml.rpc.holders package.</li>
+ *		<li>Service endpoint interface must not include constant (as public final static)
+ *		declarations. WSDL 1.1 specification does not define any standard representation for
+ *		constants in a wsdl:portType definition.</li>
+ *	</ol>
+ * 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class ClientSideWsGenarator implements Generator {
@@ -119,6 +138,7 @@ public class ClientSideWsGenarator implements Generator {
             e.printStackTrace();
             throw new GenerationFault(e);
         }
+        
     }
 
 }

@@ -246,9 +246,8 @@ public class AxisEmitterBasedJaxRpcMapperContext implements JaxRpcMapperContext 
                     //set the package name
                     FullyQualifiedClassType packagename = objFactory.createFullyQualifiedClassType();
                     String pkg = (String) packages.next();
-                    
                     if(pkg.equals(j2eewscontext.getMiscInfo().getJaxrpcSEI())){
-                   		break;
+                   		continue;
                     }
                     packagename.setValue(pkg);
                     pkgmap.setPackageType(packagename);

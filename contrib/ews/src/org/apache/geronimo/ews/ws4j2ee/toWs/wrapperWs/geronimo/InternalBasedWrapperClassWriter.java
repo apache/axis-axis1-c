@@ -103,6 +103,13 @@ public class InternalBasedWrapperClassWriter extends JavaClassWriter {
 		out.write("\tprivate org.openejb.EJBContainer container;\n");
 	}
 
+//	  String cotnainerIndex = ... // get container index  from request
+//	  ContainerIndex index = ContainerIndex.getInstance();
+//	  EJBContainer container = index.getContainer(containerIndex);
+//	  container.invoke(callMethod, args, primKey);
+//@see  org.openejb.cotnainerIndex#getContainer() and EJBContainer 
+//I can go though all and select the one with right ejbname for the wrost case
+
 	protected void writeConstructors() throws GenerationFault {
 		out.write("\tpublic " + classname + "(){\n");
 		out.write("\t\tString containerID = \""+j2eewscontext.getMiscInfo().getEjbName()+"\";\n"); // get container id (aka deployment id) from request

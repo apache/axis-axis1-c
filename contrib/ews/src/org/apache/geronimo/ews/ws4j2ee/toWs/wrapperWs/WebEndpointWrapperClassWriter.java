@@ -65,6 +65,28 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.JavaClassWriter;
 
 /**
+ * <h4>WebEndpoint Based Serivce Implementation Bean</h4> 
+ *  <p>The Service Implementation Bean must follow the Service Developer requirements outlined in the JAX-RPC specification and are listed below except as noted.</p>
+ * 	<ol>
+ * 	    <li>?The Service Implementation Bean must have a default public constructor.</li>
+ *	    <li>?The Service Implementation Bean may implement the Service Endpoint 
+ *    	    Interface as defined by the JAX-RPC Servlet model. The bean must implement
+ *          all the method signatures of the SEI. In addition, a Service Implementation 
+ *          Bean may be implemented that does not implement the SEI. This additional 
+ *          requirement provides the same SEI implementation flexibility as provided by
+ *          EJB service endpoints. The business methods of the bean must be public and
+ *          must not be static.</li>
+ *	    <li>If the Service Implementation Bean does not implement the SEI, the
+ *           business methods must not be final. The Service Implementation Bean 
+ *           may implement other methods in addition to those defined by the SEI, 
+ *          but only the SEI methods are exposed to the client.  </li>
+ *	    <li>?A Service Implementation must be a stateless object. A Service 
+ *           Implementation Bean must not save client specific state across method 
+ *           calls either within the bean instance’s data members or external to 
+ *           the instance. A container may use any bean instance to service a request.</li>
+ *	    <li>?The class must be public, must not be final and must not be abstract.</li>
+ *	    <li>?The class must not define the finalize() method.</li>
+ *   </ol>
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class WebEndpointWrapperClassWriter extends JavaClassWriter {

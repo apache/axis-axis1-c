@@ -55,10 +55,15 @@
 
 package org.apache.geronimo.ews.ws4j2ee.toWs;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Properties;
+
 /**
  * <p>This interface has constants that are specific to the generators.</p>
  */
-public interface GenerationConstants {
+public class GenerationConstants {
+	
     //generators
     public static final int EJB_GENERATOR = 0;
     public static final int AXIS_WEBSERVICE_WRAPPER_GENERATOR = 1;
@@ -89,6 +94,16 @@ public interface GenerationConstants {
 
     public static final String J2EE_CONTAINER_DD = "j2ee-container-dd";
     public static final String WS4J2EE_PROPERTY_FILE = "ws4j2ee.properties";
+	public static final String WS4J2EE_PROVIDER =  "ws4j2ee-provider";
+	public static final String J2EE_VERSION =  "j2ee-version";
+	public static final String J2EE_VERSION_1_3 =  "1.3";
+	public static final String J2EE_VERSION_1_4 =  "1.4";
+	
+	
+	private static Properties properties;
+	public static Properties getProperties(){
+		return properties;
+	}
 
 	/** j2ee Container DDs */
     public static final String JBOSS_DD = "jboss.xml";
@@ -105,5 +120,27 @@ public interface GenerationConstants {
 	public static final String USE_LOCAL =  "use-local";
 	public static final String USE_INTERNALS = "use-internals"; 
 	public static final String USE_LOCAL_AND_REMOTE = "use-local-remote"; 
+	
+	static{
+		InputStream proIn = null;
+		try{
+			properties = new Properties();
+			proIn = GenerationConstants.class.getResourceAsStream(WS4J2EE_PROPERTY_FILE);
+			if(proIn == null){
+				proIn = GenerationConstants.class.getResourceAsStream("META-INF/"+WS4J2EE_PROPERTY_FILE);
+			}
+			if(proIn == null){
+				proIn = new FileInputStream("src/conf/"+WS4J2EE_PROPERTY_FILE);
+			}
+			if(proIn == null){
+				proIn = new FileInputStream(WS4J2EE_PROPERTY_FILE);
+			}
+			if(proIn != null){
+				properties.load(proIn);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
  
 }

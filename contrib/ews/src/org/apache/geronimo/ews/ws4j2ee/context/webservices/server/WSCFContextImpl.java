@@ -54,7 +54,7 @@
  */
 package org.apache.geronimo.ews.ws4j2ee.context.webservices.server;
 
-import java.io.FileInputStream;
+import java.io.InputStream;
 
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFDocument;
@@ -81,7 +81,7 @@ public class WSCFContextImpl implements WSCFContext {
 	 * @param document The document object to the webservices.xml
 	 * @throws WSCFException 
 	 */
-	public WSCFContextImpl(FileInputStream in) throws WSCFException{
+	public WSCFContextImpl(InputStream in) throws WSCFException{
 		this.document = (WSCFDocument) new WSCFDocumentImpl(in);
 	}
 	
