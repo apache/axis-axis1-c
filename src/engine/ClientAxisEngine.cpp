@@ -72,14 +72,7 @@ int ClientAxisEngine::Process(Ax_soapstream* pSoap)
 
 		//Invoke all handlers and then the remote webservice
 		Status = Invoke(m_pMsgData); //we generate response in the same way even if this has failed
-		if (AXIS_SUCCESS == Status)
-		{
-			int nSoapVersion = m_pDZ->GetVersion();
-			if (nSoapVersion == VERSION_LAST) /* version not supported */
-			{
-				return AXIS_FAIL;
-			}
-		}
+		
 	}
 	while(0);
 
@@ -149,6 +142,15 @@ int ClientAxisEngine::Invoke(MessageData* pMsg)
 		if (AXIS_SUCCESS != (Status = m_pDZ->SetInputStream(m_pSoap))) break;
 	}
 	while(0);
+
+	int nSoapVersion = m_pDZ->GetVersion();
+	if (nSoapVersion == VERSION_LAST) /* version not supported */
+	{
+		Status = AXIS_FAIL;
+		//return AXIS_FAIL;
+	}
+
+	m_pDZ->GetHeader();
 
 	/*
 	switch (level)
