@@ -1,0 +1,21 @@
+This document is intended for the developer who wish to download and test the axiscpp server.
+
+Download the axiscpp.tar.gz from the cvs repository
+tar -zxvf axiscpp.tar.gz into your selected folder.
+ 
+create and export an environment variable called
+XERCES_HOME. This environment variable should contain the path to the xerces home directory.
+
+For example if your xerces is installed in
+
+/usr/local/xerces_c folder then 
+$(XERCES_HOME)/lib should expand to /usr/local/xerces_c/lib and
+$(XERCES_HOME)/include should expand to /usr/local/xerces_c/include
+
+cd axiscpp
+make clean
+make
+
+If the build successful, libaxiscpp.so should have been created in 
+axiscpp/release directory.
+
