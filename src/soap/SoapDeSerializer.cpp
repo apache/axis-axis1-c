@@ -836,6 +836,12 @@ void* SoapDeSerializer::GetCmplxObject(void* pDZFunct, void* pCreFunct, void* pD
 				}
 			}
 		}
+		else if ( GetAttributeAsBoolean("nil",0) == true_ ) 
+		{
+			m_pParser->Next();
+			m_pNode = NULL;
+			return NULL;
+		}
 		else
 		{
 			m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
@@ -886,7 +892,7 @@ int SoapDeSerializer::GetElementForAttributes(const AxisChar* pName, const AxisC
 		{\
 			if (0 == strcmp(m_pCurrNode->m_pchAttributes[i], pName))\
 			{\
-				ret = conv_func(m_pCurrNode->m_pchAttributes[i]);\
+				ret = conv_func(m_pCurrNode->m_pchAttributes[i+2]);\
 				return ret;\
 			}\
 		}\
@@ -917,7 +923,7 @@ int SoapDeSerializer::GetAttributeAsInt(const AxisChar* pName, const AxisChar* p
 		{
 			if (0 == strcmp(m_pCurrNode->m_pchAttributes[i], pName))
 			{
-				ret = strtol(m_pCurrNode->m_pchAttributes[i], &m_pEndptr, 10);
+				ret = strtol(m_pCurrNode->m_pchAttributes[i+2], &m_pEndptr, 10);
 				return ret;
 			}
 		}	
@@ -944,7 +950,7 @@ xsd__boolean SoapDeSerializer::GetAttributeAsBoolean(const AxisChar* pName, cons
 		{
 			if (0 == strcmp(m_pCurrNode->m_pchAttributes[i], pName))
 			{
-				ret = (0 == strcmp(m_pCurrNode->m_pchAttributes[i], "true")) ? true_: false_;
+				ret = (0 == strcmp(m_pCurrNode->m_pchAttributes[i+2], "true")) ? true_: false_;
 				return ret;
 			}
 		}	
