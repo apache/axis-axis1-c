@@ -45,6 +45,7 @@
 #include "ComplexElement.h"
 #include "SoapSerializer.h"
 #include <axis/server/GDefine.h>
+#include <axis/server/Attribute.h>
 
 ComplexElement::ComplexElement()
 {
@@ -102,6 +103,16 @@ ComplexElement::~ComplexElement()
     free(m_pachLocalName);
     free(m_pachURI);
 
+    /* 
+     *Clear the Attributes 
+     */
+    list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+    while(itCurrAttribute != m_attributes.end())
+    {
+        delete (*itCurrAttribute);
+        itCurrAttribute++;
+    }
+    m_attributes.clear();
 
     /* Clear the children */
     list<BasicNode*>::iterator itCurrChild= m_children.begin();
@@ -111,6 +122,27 @@ ComplexElement::~ComplexElement()
         itCurrChild++;        
     }
     m_children.clear();
+}
+
+IAttribute* ComplexElement::createAttribute(const AxisChar *localname,
+        const AxisChar *prefix,
+        const AxisChar *value)
+{
+    Attribute* pAttribute = new Attribute(localname, prefix, value);
+    m_attributes.push_back(pAttribute);
+    
+    return (IAttribute*)pAttribute;
+}
+
+IAttribute* ComplexElement::createAttribute(const AxisChar *localname,
+        const AxisChar *prefix,
+        const AxisChar *uri,
+        const AxisChar *value)
+{
+    Attribute* pAttribute = new Attribute(localname, prefix, uri, value);
+    m_attributes.push_back(pAttribute);
+   
+    return (IAttribute*)pAttribute;
 }
 
 int ComplexElement::setPrefix(const AxisChar* pachPrefix)
@@ -216,9 +248,22 @@ int ComplexElement::serialize(SoapSerializer& pSZ,
                     ( (m_pachURI != NULL) && (strlen(m_pachURI) != 0)) && 
                     (blnIsNewNamespace))
             {
-                pSZ.serialize(" xmlns:", m_pachPrefix, "=\"", m_pachURI, "\"",
+                pSZ.serialize(" xmlns:", m_pachPrefix, "=\"", m_pachURI, "\" ",
                     NULL);
             }
+
+	    iStatus= attrSerialize(pSZ, lstTmpNameSpaceStack);
+   	    if(iStatus==AXIS_FAIL)
+	    {
+		break;
+	    }
+
+       	    iStatus= serializeNamespaceDecl(pSZ);
+ 	    if(iStatus==AXIS_FAIL)
+	    {
+		break;
+	    }
+
             pSZ.serialize(">", NULL);
 
             iStatus= serializeChildren(pSZ, lstTmpNameSpaceStack);
@@ -240,6 +285,39 @@ int ComplexElement::serialize(SoapSerializer& pSZ,
         }
     } while(0);    
     return iStatus;
+}
+
+int ComplexElement::attrSerialize(SoapSerializer& pSZ,
+        list<AxisChar*>& lstTmpNameSpaceStack)
+{
+    int iStatus= AXIS_SUCCESS;
+    
+    list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+
+    while(itCurrAttribute != m_attributes.end())
+    {
+        iStatus= (*itCurrAttribute)->serialize(pSZ, lstTmpNameSpaceStack);
+        if(iStatus==AXIS_FAIL)
+        {
+	    break;
+	}
+        itCurrAttribute++;
+    }
+
+    return iStatus;
+}
+
+int ComplexElement::serializeNamespaceDecl(SoapSerializer &pSZ)
+{
+    list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
+
+    while(itCurrNamespaceDecl != m_namespaceDecls.end())
+    {
+	(*itCurrNamespaceDecl)->serialize(pSZ);
+    	itCurrNamespaceDecl++;
+    }
+
+    return AXIS_SUCCESS;
 }
 
 bool ComplexElement::isSerializable()

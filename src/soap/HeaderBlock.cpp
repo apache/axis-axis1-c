@@ -331,11 +331,20 @@ int HeaderBlock::serializeChildren(SoapSerializer& pSZ,
     return AXIS_SUCCESS;
 }
 
-int HeaderBlock::addNamespaceDecl(Attribute *pAttribute)
+IAttribute* HeaderBlock::createNamespaceDecl(const AxisChar *prefix,
+        const AxisChar *uri) 
+{
+    Attribute* pAttribute = new Attribute(prefix, "xmlns", uri);
+    m_namespaceDecls.push_back(pAttribute);
+
+    return (IAttribute*)pAttribute; 
+}
+
+int HeaderBlock::addNamespaceDecl(IAttribute *pAttribute)
 {
     if (pAttribute)
     {
-        m_namespaceDecls.push_back(pAttribute);
+        m_namespaceDecls.push_back((Attribute*)pAttribute);
         return AXIS_SUCCESS;
     }
     else

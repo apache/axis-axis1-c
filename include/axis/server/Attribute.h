@@ -32,6 +32,7 @@
 using namespace std;
 
 class SoapSerializer;
+#include <axis/IAttribute.h>
 
 #endif
 
@@ -39,7 +40,7 @@ class SoapSerializer;
  *   @class Attribute
  *   @brief interface for the Attribute class.
  *
- *   @author Roshan Weerasuriya (roshan@opensource.lk, roshan@jkcs.slt.lk)
+ *   @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  *   @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  *   @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  *
@@ -62,7 +63,7 @@ typedef struct {
 
 #ifdef __cplusplus
 
-class Attribute  
+class Attribute : public IAttribute
 {
 public:        
 	static AttributeFunctions ms_VFtable;

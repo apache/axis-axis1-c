@@ -18,7 +18,7 @@
 /**
  * @file BasicNode.h
  *
- * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com) *
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */
   
 #if !defined(_BASICNODE_H____OF_AXIS_INCLUDED_)
@@ -35,6 +35,8 @@ using namespace std;
 class SoapSerializer;
 
 #endif
+
+#include <axis/IAttribute.h>
 
 enum NODE_TYPE { ELEMENT_NODE=1, CHARACTER_NODE};
 
@@ -73,6 +75,32 @@ typedef struct {
 class BasicNode
 {
 public:
+
+    /** 
+      * Creates an Attribute and adds it to this Basic Node. 
+      * 
+      * @param localname The local name of the attribute. 
+      * @param prefix The prefix of the attribute. 
+      * @param uri The namespace uri of the attribute. 
+      * @param value The value of the attribute. 
+      * 
+      * @return A pointer to the created Attribute will be returned. 
+      */
+    virtual IAttribute* createAttribute(const AxisChar* localname, 
+            const AxisChar* prefix, const AxisChar* uri, 
+            const AxisChar* value) =0;
+
+    /** 
+      * Creates an Attribute and adds it to this Basic Node. 
+      * 
+      * @param localname The local name of the attribute. 
+      * @param prefix The prefix of the attribute. 
+      * @param value The value of the attribute. 
+      * 
+      * @return A pointer to the created Attribute will be returned. 
+      */
+    virtual IAttribute* createAttribute(const AxisChar* localname,
+        const AxisChar* prefix, const AxisChar* value)=0 ;
 
     /**
       * Returns the local name of this node. The operation
@@ -197,6 +225,7 @@ protected:
       * of the node.
       */
     AxisChar* m_pachValue;
+
 };
 
 #endif
