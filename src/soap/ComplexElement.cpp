@@ -101,29 +101,29 @@ int ComplexElement::serialize(SoapSerializer& pSZ)
     {
         if(isSerializable()) 
         {    
-            pSZ.Serialize("<", NULL);    
+            pSZ.serialize("<", NULL);    
             if(strlen(m_pachPrefix) != 0)
             {                
-                pSZ.Serialize(m_pachPrefix, ":", NULL);
+                pSZ.serialize(m_pachPrefix, ":", NULL);
             }
-            pSZ.Serialize(m_pachLocalName, NULL);
+            pSZ.serialize(m_pachLocalName, NULL);
             if((strlen(m_pachPrefix) != 0) && (strlen(m_pachURI) != 0))
             {
-                pSZ.Serialize(" xmlns:", m_pachPrefix, "=\"", m_pachURI, "\"",
+                pSZ.serialize(" xmlns:", m_pachPrefix, "=\"", m_pachURI, "\"",
                     NULL);
             }
-            pSZ.Serialize(">", NULL);
+            pSZ.serialize(">", NULL);
             iStatus= serializeChildren(pSZ);
             if(iStatus==AXIS_FAIL)
             {
                 break;
             }
-            pSZ.Serialize("</", NULL);
+            pSZ.serialize("</", NULL);
             if(strlen(m_pachPrefix) != 0)
             {
-                pSZ.Serialize(m_pachPrefix, ":", NULL);
+                pSZ.serialize(m_pachPrefix, ":", NULL);
             }
-            pSZ.Serialize(m_pachLocalName, ">", NULL);
+            pSZ.serialize(m_pachLocalName, ">", NULL);
             iStatus= AXIS_SUCCESS;
         } 
         else
@@ -144,14 +144,14 @@ int ComplexElement::serialize(SoapSerializer& pSZ,
         {    
             bool blnIsNewNamespace = false;
 
-            pSZ.Serialize("<", NULL);    
+            pSZ.serialize("<", NULL);    
             if( (m_pachPrefix != NULL) && (strlen(m_pachPrefix) != 0))
             {                
-                pSZ.Serialize(m_pachPrefix, ":", NULL);
+                pSZ.serialize(m_pachPrefix, ":", NULL);
             }
             else if ( (m_pachURI != NULL) && (strlen(m_pachURI) != 0))
             {
-                const AxisChar* pachTmp = pSZ.GetNamespacePrefix(m_pachURI,
+                const AxisChar* pachTmp = pSZ.getNamespacePrefix(m_pachURI,
                     blnIsNewNamespace);
                 m_pachPrefix = (AxisChar*) malloc(strlen(pachTmp)+1);
                 strcpy(m_pachPrefix , pachTmp);
@@ -160,31 +160,31 @@ int ComplexElement::serialize(SoapSerializer& pSZ,
                 {
                     lstTmpNameSpaceStack.push_back(m_pachURI);
                 }
-                pSZ.Serialize(m_pachPrefix, ":", NULL);
+                pSZ.serialize(m_pachPrefix, ":", NULL);
             }
 
-            pSZ.Serialize(m_pachLocalName, NULL);
+            pSZ.serialize(m_pachLocalName, NULL);
 
             if(((m_pachPrefix != NULL) && (strlen(m_pachPrefix) != 0)) && 
                     ( (m_pachURI != NULL) && (strlen(m_pachURI) != 0)) && 
                     (blnIsNewNamespace))
             {
-                pSZ.Serialize(" xmlns:", m_pachPrefix, "=\"", m_pachURI, "\"",
+                pSZ.serialize(" xmlns:", m_pachPrefix, "=\"", m_pachURI, "\"",
                     NULL);
             }
-            pSZ.Serialize(">", NULL);
+            pSZ.serialize(">", NULL);
 
             iStatus= serializeChildren(pSZ, lstTmpNameSpaceStack);
             if(iStatus==AXIS_FAIL)
             {
                 break;
             }
-            pSZ.Serialize("</", NULL);
+            pSZ.serialize("</", NULL);
             if((m_pachPrefix!=NULL) && (strlen(m_pachPrefix) != 0))
             {
-                pSZ.Serialize(m_pachPrefix, ":", NULL);
+                pSZ.serialize(m_pachPrefix, ":", NULL);
             }
-            pSZ.Serialize(m_pachLocalName, ">", NULL);
+            pSZ.serialize(m_pachLocalName, ">", NULL);
             iStatus= AXIS_SUCCESS;
         } 
         else

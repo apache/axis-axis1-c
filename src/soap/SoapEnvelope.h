@@ -14,8 +14,8 @@
  *   limitations under the License.
  */
 
-#if !defined(AXIS_SOAPENVELOPE_H__INCLUDED_)
-#define AXIS_SOAPENVELOPE_H__INCLUDED_
+#if !defined(AXIS_SOAPENVELOPE_H__OF_AXIS_INCLUDED_)
+#define AXIS_SOAPENVELOPE_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/SoapHeader.h>
 #include "SoapBody.h"

@@ -17,8 +17,8 @@
 /* WCGenerator.h: interface for the WCGenerator class. */
 
 
-#if !defined(AXIS_WCGENERATOR_H__INCLUDED_)
-#define AXIS_WCGENERATOR_H__INCLUDED_
+#if !defined(AXIS_WCGENERATOR_H__OF_AXIS_INCLUDED_)
+#define AXIS_WCGENERATOR_H__OF_AXIS_INCLUDED_
 
 #include <string>
 using namespace std;

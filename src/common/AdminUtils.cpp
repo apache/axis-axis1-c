@@ -30,7 +30,7 @@ AdminUtils::~AdminUtils()
 
 }
 
-int AdminUtils::UpdateWSDD(AxisChar* wsdd)
+int AdminUtils::updateWSDD(AxisChar* wsdd)
 {
-    return g_pWSDDDeployment->UpdateWSDD(wsdd);	
+    return g_pWSDDDeployment->updateWSDD(wsdd);	
 }

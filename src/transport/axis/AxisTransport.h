@@ -33,13 +33,13 @@ public:
     AxisTransport(Ax_soapstream* pSoap);
     virtual ~AxisTransport();
 
-    int OpenConnection(int secure);
-    void CloseConnection();
-    AXIS_TRANSPORT_STATUS Send_bytes(const char* pSendBuffer, 
+    int openConnection(int secure);
+    void closeConnection();
+    AXIS_TRANSPORT_STATUS sendBytes(const char* pSendBuffer, 
         const void* bufferid, const void* pSStream);
-    AXIS_TRANSPORT_STATUS Get_bytes(const char** res, int* retsize, 
+    AXIS_TRANSPORT_STATUS getBytes(const char** res, int* retsize, 
         const void* pSStream);
-    void SetTransportInformation(AXIS_TRANSPORT_INFORMATION_TYPE type, 
+    void setTransportInformation(AXIS_TRANSPORT_INFORMATION_TYPE type, 
         const char* value, const void* pSStream);
 
     static AXIS_TRANSPORT_STATUS AXISCALL s_Send_bytes(const char* pSendBuffer,

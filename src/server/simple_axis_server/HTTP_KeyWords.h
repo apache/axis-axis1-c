@@ -20,8 +20,8 @@
  *
  */
 
-#if !defined(AFX_HTTPKEYWORDS_H__INCLUDED_)
-#define AFX_HTTPKEYWORDS_H__INCLUDED_
+#if !defined(_HTTPKEYWORDS_H__OF_AXIS_INCLUDED_)
+#define _HTTPKEYWORDS_H__OF_AXIS_INCLUDED_
 
 #include <string>
 

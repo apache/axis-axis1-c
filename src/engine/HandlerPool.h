@@ -20,8 +20,8 @@
 #pragma warning (disable : 4503)
 #endif
 
-#if !defined(AXIS_HANDLERPOOL_H__INCLUDED_)
-#define AXIS_HANDLERPOOL_H__INCLUDED_
+#if !defined(AXIS_HANDLERPOOL_H__OF_AXIS_INCLUDED_)
+#define AXIS_HANDLERPOOL_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/WSDDHandler.h>
 #include <axis/server/WSDDService.h>
@@ -46,29 +46,29 @@ using namespace std;
 class HandlerPool:protected SharedObject
 {
     private:
-        int GetHandler (BasicHandler** ppHandler, string &sSessionId,
+        int getHandler (BasicHandler** ppHandler, string &sSessionId,
             int nScope, int nLibId);
-        int PoolHandler (string &sSessionId, BasicHandler* pHandler, int nScope,
+        int poolHandler (string &sSessionId, BasicHandler* pHandler, int nScope,
             int nLibId);
-        int GetHandlerChain (string &sSessionId, HandlerChain** pChain,
+        int getHandlerChain (string &sSessionId, HandlerChain** pChain,
             const WSDDHandlerList* pHandlerList);
     public:
-        int GetGlobalRequestFlowHandlerChain (HandlerChain** ppChain,
+        int getGlobalRequestFlowHandlerChain (HandlerChain** ppChain,
             string &sSessionId);
-        int GetGlobalResponseFlowHandlerChain (HandlerChain** ppChain,
+        int getGlobalResponseFlowHandlerChain (HandlerChain** ppChain,
             string &sSessionId);
-        int GetTransportRequestFlowHandlerChain (HandlerChain** ppChain,
+        int getTransportRequestFlowHandlerChain (HandlerChain** ppChain,
             string &sSessionId, AXIS_PROTOCOL_TYPE Protocol);
-        int GetTransportResponseFlowHandlerChain (HandlerChain** ppChain,
+        int getTransportResponseFlowHandlerChain (HandlerChain** ppChain,
             string &sSessionId, AXIS_PROTOCOL_TYPE Protocol);
-        int GetRequestFlowHandlerChain (HandlerChain** ppChain,
+        int getRequestFlowHandlerChain (HandlerChain** ppChain,
             string &sSessionId, const WSDDService* pService);
-        int GetResponseFlowHandlerChain (HandlerChain** ppChain,
+        int getResponseFlowHandlerChain (HandlerChain** ppChain,
             string &sSessionId, const WSDDService* pService);
-        void PoolHandlerChain (HandlerChain* pChain, string &sSessionId);
-        int GetWebService (BasicHandler** ppHandler, string &sSessionId,
+        void poolHandlerChain (HandlerChain* pChain, string &sSessionId);
+        int getWebService (BasicHandler** ppHandler, string &sSessionId,
             const WSDDHandler* pService);
-        void PoolWebService (string &sSessionId, BasicHandler* pHandler,
+        void poolWebService (string &sSessionId, BasicHandler* pHandler,
             const WSDDHandler* pHandlerInfo);
 
         HandlerPool ();

@@ -39,14 +39,14 @@ RequestScopeHandlerPool::~RequestScopeHandlerPool ()
         for (list <BasicHandler*>::iterator itr = (*it).second.begin ();
             itr != (*it).second.end (); itr++)
         {
-            g_pHandlerLoader->DeleteHandler (*itr, (*it).first);
+            g_pHandlerLoader->deleteHandler (*itr, (*it).first);
         }
         (*it).second.clear ();
     }
     m_Handlers.clear ();
 }
 
-int RequestScopeHandlerPool::GetInstance (BasicHandler** pHandler, int nLibId)
+int RequestScopeHandlerPool::getInstance (BasicHandler** pHandler, int nLibId)
 {
     lock ();
     int Status;
@@ -54,7 +54,7 @@ int RequestScopeHandlerPool::GetInstance (BasicHandler** pHandler, int nLibId)
     {
         if (m_Handlers[nLibId].empty ())
         {
-            Status = g_pHandlerLoader->CreateHandler (pHandler, nLibId);
+            Status = g_pHandlerLoader->createHandler (pHandler, nLibId);
             if (AXIS_SUCCESS == Status)
             {
                 /* This just creates the entry in m_Handlers so that next 
@@ -75,7 +75,7 @@ int RequestScopeHandlerPool::GetInstance (BasicHandler** pHandler, int nLibId)
     }
     else // Not even the handler DLL loaded
     {
-        Status = g_pHandlerLoader->CreateHandler (pHandler, nLibId);
+        Status = g_pHandlerLoader->createHandler (pHandler, nLibId);
         if (AXIS_SUCCESS == Status)
         {
             /* This just creates the entry in m_Handlers so that next time we 
@@ -88,7 +88,7 @@ int RequestScopeHandlerPool::GetInstance (BasicHandler** pHandler, int nLibId)
     }
 }
 
-int RequestScopeHandlerPool::PutInstance (BasicHandler* pHandler, int nLibId)
+int RequestScopeHandlerPool::putInstance (BasicHandler* pHandler, int nLibId)
 {
     lock ();
     m_Handlers[nLibId].push_back (pHandler);

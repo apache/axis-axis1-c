@@ -18,8 +18,8 @@
 #pragma warning (disable : 4786)
 #endif
 
-#ifndef __ACTIONS_H_INCLUDED__
-#define __ACTIONS_H_INCLUDED__
+#ifndef __ACTIONS_H_OF_AXIS_INCLUDED__
+#define __ACTIONS_H_OF_AXIS_INCLUDED__
 /* this file contains all auxiliary structures needed to parse web service 
  * declaration files
  */

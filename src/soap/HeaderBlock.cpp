@@ -131,11 +131,11 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
          * TO DO: ReWrite the following logic to deal with name spaces
          */
 
-        pSZ.Serialize("<", NULL);
+        pSZ.serialize("<", NULL);
 
         if(m_prefix.length() == 0)
         {
-            m_prefix = pSZ.GetNamespacePrefix(m_uri.c_str(),
+            m_prefix = pSZ.getNamespacePrefix(m_uri.c_str(),
                 blnIsNewNamespace);
             if (blnIsNewNamespace)
             {
@@ -143,7 +143,7 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
             }
         }
 
-        pSZ.Serialize(m_prefix.c_str(), ":", m_localname.c_str(),
+        pSZ.serialize(m_prefix.c_str(), ":", m_localname.c_str(),
             " xmlns:", m_prefix.c_str(), "=\"", m_uri.c_str(), "\"", NULL);
 
         iStatus= attrSerialize(pSZ, lstTmpNameSpaceStack);
@@ -158,7 +158,7 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
             break;
         }
         
-        pSZ.Serialize(">", NULL);
+        pSZ.serialize(">", NULL);
 
         iStatus= serializeChildren(pSZ, lstTmpNameSpaceStack);
         if(iStatus==AXIS_FAIL)
@@ -166,7 +166,7 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
             break;
         }
 
-        pSZ.Serialize("</", m_prefix.c_str(), ":", m_localname.c_str(), ">",
+        pSZ.serialize("</", m_prefix.c_str(), ":", m_localname.c_str(), ">",
             NULL);
 
         /*
@@ -176,7 +176,7 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
             lstTmpNameSpaceStack.begin();
         while (itCurrentNamespace != lstTmpNameSpaceStack.end())
         {
-            pSZ.RemoveNamespacePrefix(*itCurrentNamespace);
+            pSZ.removeNamespacePrefix(*itCurrentNamespace);
             itCurrentNamespace++;
         }
             

@@ -15,8 +15,8 @@
  */
 
 #include "xpp.h"
-#ifndef XmlTok_INCLUDED
-#define XmlTok_INCLUDED 1
+#ifndef XmlTok_OF_AXIS_INCLUDED
+#define XmlTok_OF_AXIS_INCLUDED 1
 
 #ifdef __cplusplus
 extern "C" {
@@ -341,6 +341,6 @@ XmlInitUnknownEncodingNS(void *mem,
 }
 #endif
 
-#endif /* not XmlTok_INCLUDED */
+#endif /* not XmlTok_OF_AXIS_INCLUDED */
 
 

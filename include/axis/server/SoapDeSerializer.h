@@ -1,67 +1,21 @@
-/* -*- C++ -*- */
-
 /*
- * The Apache Software License, Version 1.1
+ *   Copyright 2003-2004 The Apache Software Foundation.
  *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
- * reserved.
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *
- * 3. The end-user documentation included with the redistribution,
- *    if any, must include the following acknowledgment:
- *       "This product includes software developed by the
- *        Apache Software Foundation (http://www.apache.org/)."
- *    Alternately, this acknowledgment may appear in the software itself,
- *    if and wherever such third-party acknowledgments normally appear.
- *
- * 4. The names "SOAP" and "Apache Software Foundation" must
- *    not be used to endorse or promote products derived from this
- *    software without prior written permission. For written
- *    permission, please contact apache@apache.org.
- *
- * 5. Products derived from this software may not be called "Apache",
- *    nor may "Apache" appear in their name, without prior written
- *    permission of the Apache Software Foundation.
- *
- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
- * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
- * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
- * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- * ====================================================================
- *
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
  */
-// SoapDeSerializer.h:
-//
-//////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_SOAPDESERIALIZER_H__FD0E7C3B_B887_480A_9E2A_20736A88B09B__INCLUDED_)
-#define AFX_SOAPDESERIALIZER_H__FD0E7C3B_B887_480A_9E2A_20736A88B09B__INCLUDED_
+#if !defined(_SOAPDESERIALIZER_H____OF_AXIS_INCLUDED_)
+#define _SOAPDESERIALIZER_H____OF_AXIS_INCLUDED_
 
 #include "IHandlerSoapDeSerializer.h"
 #include "SoapEnvVersions.h"
@@ -100,100 +54,100 @@ private:
 	PROVIDERTYPE m_ProviderType;
 
 private:
-	int AXISCALL GetArraySize(const AnyElement* pElement);
-	int GetBody();
+	int AXISCALL getArraySize(const AnyElement* pElement);
+	int getBody();
 public:
-	int Init();
-	int GetVersion();
-	SoapEnvelope* GetEnvelope();
-	int GetHeader();
-	int FlushInputStream();
-	PROVIDERTYPE GetCurrentProviderType() { return m_ProviderType;};
-	void SetCurrentProviderType(PROVIDERTYPE nType) { m_ProviderType = nType;};
+	int init();
+	int getVersion();
+	SoapEnvelope* getEnvelope();
+	int getHeader();
+	int flushInputStream();
+	PROVIDERTYPE getCurrentProviderType() { return m_ProviderType;};
+	void setCurrentProviderType(PROVIDERTYPE nType) { m_ProviderType = nType;};
 	/*
 	 * Methods to manipulate entire body when the body is compressed or encrypted 
 	 * These functions are provided for handlers to manipulate entire soap body.
 	 */
-	xsd__hexBinary AXISCALL GetBodyAsHexBinary();
-	xsd__base64Binary AXISCALL GetBodyAsBase64Binary();
-	int AXISCALL SetNewSoapBody(AxisChar* pNewSoapBody);
-	bool IsAnyMustUnderstandHeadersLeft();
-	SoapFault* GetFault();
-	int AXISCALL CheckMessageBody(const AxisChar* pName, const AxisChar* pNamespace);
+	xsd__hexBinary AXISCALL getBodyAsHexBinary();
+	xsd__base64Binary AXISCALL getBodyAsBase64Binary();
+	int AXISCALL setNewSoapBody(AxisChar* pNewSoapBody);
+	bool isAnyMustUnderstandHeadersLeft();
+	SoapFault* getFault();
+	int AXISCALL checkMessageBody(const AxisChar* pName, const AxisChar* pNamespace);
 	/** to get any header blocks left in the Deserializer */
-	HeaderBlock* GetHeaderBlock();
+	HeaderBlock* getHeaderBlock();
 	/** to add a header block to the Deserializer. Probably a handler */
-	int AXISCALL AddHeaderBlock(IHeaderBlock* pBlk);
+	int AXISCALL addHeaderBlock(IHeaderBlock* pBlk);
 	/** to get a named header blcok from the Deserializer */
-	IHeaderBlock* GetHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace);
-	int SetInputStream(const Ax_soapstream* pInputStream);
+	IHeaderBlock* getHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace);
+	int setInputStream(const Ax_soapstream* pInputStream);
 	SoapDeSerializer();
 	virtual ~SoapDeSerializer();
 	/** Method used by wrappers to get a deserialized Array of complex types */
-	Axis_Array AXISCALL GetCmplxArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	Axis_Array AXISCALL getCmplxArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace);
 	/** Method used by wrappers to get a deserialized Array of basic types */
-	Axis_Array AXISCALL GetBasicArray(XSDTYPE nType, const AxisChar* pName, const AxisChar* pNamespace);
+	Axis_Array AXISCALL getBasicArray(XSDTYPE nType, const AxisChar* pName, const AxisChar* pNamespace);
 	/** Method used by wrappers to get a deserialized single object of complex type */
-	void* AXISCALL GetCmplxObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	void* AXISCALL getCmplxObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
 	
 	/* Methods used by wrappers to get a deserialized value of basic types */
-	int AXISCALL GetElementAsInt(const AxisChar* pName, const AxisChar* pNamespace);
-	xsd__boolean AXISCALL GetElementAsBoolean(const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned int AXISCALL GetElementAsUnsignedInt(const AxisChar* pName, const AxisChar* pNamespace);
-    short AXISCALL GetElementAsShort(const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned short AXISCALL GetElementAsUnsignedShort(const AxisChar* pName, const AxisChar* pNamespace);
-    char AXISCALL GetElementAsByte(const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned char AXISCALL GetElementAsUnsignedByte(const AxisChar* pName, const AxisChar* pNamespace);
-    long AXISCALL GetElementAsLong(const AxisChar* pName, const AxisChar* pNamespace);
-    long AXISCALL GetElementAsInteger(const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned long AXISCALL GetElementAsUnsignedLong(const AxisChar* pName, const AxisChar* pNamespace);
-	float AXISCALL GetElementAsFloat(const AxisChar* pName, const AxisChar* pNamespace);
-    double AXISCALL GetElementAsDouble(const AxisChar* pName, const AxisChar* pNamespace);
-    double AXISCALL GetElementAsDecimal(const AxisChar* pName, const AxisChar* pNamespace);
-	AxisChar* AXISCALL GetElementAsString(const AxisChar* pName, const AxisChar* pNamespace);
-    AxisChar* AXISCALL GetElementAsAnyURI(const AxisChar* pName, const AxisChar* pNamespace);
-    AxisChar* AXISCALL GetElementAsQName(const AxisChar* pName, const AxisChar* pNamespace);
-	xsd__hexBinary AXISCALL GetElementAsHexBinary(const AxisChar* pName, const AxisChar* pNamespace);
-	xsd__base64Binary AXISCALL GetElementAsBase64Binary(const AxisChar* pName, const AxisChar* pNamespace);
-    struct tm AXISCALL GetElementAsDateTime(const AxisChar* pName, const AxisChar* pNamespace);
-    struct tm AXISCALL GetElementAsDate(const AxisChar* pName, const AxisChar* pNamespace);
-    struct tm AXISCALL GetElementAsTime(const AxisChar* pName, const AxisChar* pNamespace);
-    long AXISCALL GetElementAsDuration(const AxisChar* pName, const AxisChar* pNamespace);
+	int AXISCALL getElementAsInt(const AxisChar* pName, const AxisChar* pNamespace);
+	xsd__boolean AXISCALL getElementAsBoolean(const AxisChar* pName, const AxisChar* pNamespace);
+    unsigned int AXISCALL getElementAsUnsignedInt(const AxisChar* pName, const AxisChar* pNamespace);
+    short AXISCALL getElementAsShort(const AxisChar* pName, const AxisChar* pNamespace);
+    unsigned short AXISCALL getElementAsUnsignedShort(const AxisChar* pName, const AxisChar* pNamespace);
+    char AXISCALL getElementAsByte(const AxisChar* pName, const AxisChar* pNamespace);
+    unsigned char AXISCALL getElementAsUnsignedByte(const AxisChar* pName, const AxisChar* pNamespace);
+    long AXISCALL getElementAsLong(const AxisChar* pName, const AxisChar* pNamespace);
+    long AXISCALL getElementAsInteger(const AxisChar* pName, const AxisChar* pNamespace);
+    unsigned long AXISCALL getElementAsUnsignedLong(const AxisChar* pName, const AxisChar* pNamespace);
+	float AXISCALL getElementAsFloat(const AxisChar* pName, const AxisChar* pNamespace);
+    double AXISCALL getElementAsDouble(const AxisChar* pName, const AxisChar* pNamespace);
+    double AXISCALL getElementAsDecimal(const AxisChar* pName, const AxisChar* pNamespace);
+	AxisChar* AXISCALL getElementAsString(const AxisChar* pName, const AxisChar* pNamespace);
+    AxisChar* AXISCALL getElementAsAnyURI(const AxisChar* pName, const AxisChar* pNamespace);
+    AxisChar* AXISCALL getElementAsQName(const AxisChar* pName, const AxisChar* pNamespace);
+	xsd__hexBinary AXISCALL getElementAsHexBinary(const AxisChar* pName, const AxisChar* pNamespace);
+	xsd__base64Binary AXISCALL getElementAsBase64Binary(const AxisChar* pName, const AxisChar* pNamespace);
+    struct tm AXISCALL getElementAsDateTime(const AxisChar* pName, const AxisChar* pNamespace);
+    struct tm AXISCALL getElementAsDate(const AxisChar* pName, const AxisChar* pNamespace);
+    struct tm AXISCALL getElementAsTime(const AxisChar* pName, const AxisChar* pNamespace);
+    long AXISCALL getElementAsDuration(const AxisChar* pName, const AxisChar* pNamespace);
 
-	int AXISCALL GetAttributeAsInt(const AxisChar* pName, const AxisChar* pNamespace);
-	xsd__boolean AXISCALL GetAttributeAsBoolean(const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned int AXISCALL GetAttributeAsUnsignedInt(const AxisChar* pName, const AxisChar* pNamespace);
-    short AXISCALL GetAttributeAsShort(const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned short AXISCALL GetAttributeAsUnsignedShort(const AxisChar* pName, const AxisChar* pNamespace);
-    char AXISCALL GetAttributeAsByte(const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned char AXISCALL GetAttributeAsUnsignedByte(const AxisChar* pName, const AxisChar* pNamespace);
-    long AXISCALL GetAttributeAsLong(const AxisChar* pName, const AxisChar* pNamespace);
-    long AXISCALL GetAttributeAsInteger(const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned long AXISCALL GetAttributeAsUnsignedLong(const AxisChar* pName, const AxisChar* pNamespace);
-	float AXISCALL GetAttributeAsFloat(const AxisChar* pName, const AxisChar* pNamespace);
-    double AXISCALL GetAttributeAsDouble(const AxisChar* pName, const AxisChar* pNamespace);
-    double AXISCALL GetAttributeAsDecimal(const AxisChar* pName, const AxisChar* pNamespace);
-	AxisChar* AXISCALL GetAttributeAsString(const AxisChar* pName, const AxisChar* pNamespace);
-    AxisChar* AXISCALL GetAttributeAsAnyURI(const AxisChar* pName, const AxisChar* pNamespace);
-    AxisChar* AXISCALL GetAttributeAsQName(const AxisChar* pName, const AxisChar* pNamespace);
-	xsd__hexBinary AXISCALL GetAttributeAsHexBinary(const AxisChar* pName, const AxisChar* pNamespace);
-	xsd__base64Binary AXISCALL GetAttributeAsBase64Binary(const AxisChar* pName, const AxisChar* pNamespace);
-    struct tm AXISCALL GetAttributeAsDateTime(const AxisChar* pName, const AxisChar* pNamespace);
-    struct tm AXISCALL GetAttributeAsDate(const AxisChar* pName, const AxisChar* pNamespace);
-    struct tm AXISCALL GetAttributeAsTime(const AxisChar* pName, const AxisChar* pNamespace);
-    long AXISCALL GetAttributeAsDuration(const AxisChar* pName, const AxisChar* pNamespace);
+	int AXISCALL getAttributeAsInt(const AxisChar* pName, const AxisChar* pNamespace);
+	xsd__boolean AXISCALL getAttributeAsBoolean(const AxisChar* pName, const AxisChar* pNamespace);
+    unsigned int AXISCALL getAttributeAsUnsignedInt(const AxisChar* pName, const AxisChar* pNamespace);
+    short AXISCALL getAttributeAsShort(const AxisChar* pName, const AxisChar* pNamespace);
+    unsigned short AXISCALL getAttributeAsUnsignedShort(const AxisChar* pName, const AxisChar* pNamespace);
+    char AXISCALL getAttributeAsByte(const AxisChar* pName, const AxisChar* pNamespace);
+    unsigned char AXISCALL getAttributeAsUnsignedByte(const AxisChar* pName, const AxisChar* pNamespace);
+    long AXISCALL getAttributeAsLong(const AxisChar* pName, const AxisChar* pNamespace);
+    long AXISCALL getAttributeAsInteger(const AxisChar* pName, const AxisChar* pNamespace);
+    unsigned long AXISCALL getAttributeAsUnsignedLong(const AxisChar* pName, const AxisChar* pNamespace);
+	float AXISCALL getAttributeAsFloat(const AxisChar* pName, const AxisChar* pNamespace);
+    double AXISCALL getAttributeAsDouble(const AxisChar* pName, const AxisChar* pNamespace);
+    double AXISCALL getAttributeAsDecimal(const AxisChar* pName, const AxisChar* pNamespace);
+	AxisChar* AXISCALL getAttributeAsString(const AxisChar* pName, const AxisChar* pNamespace);
+    AxisChar* AXISCALL getAttributeAsAnyURI(const AxisChar* pName, const AxisChar* pNamespace);
+    AxisChar* AXISCALL getAttributeAsQName(const AxisChar* pName, const AxisChar* pNamespace);
+	xsd__hexBinary AXISCALL getAttributeAsHexBinary(const AxisChar* pName, const AxisChar* pNamespace);
+	xsd__base64Binary AXISCALL getAttributeAsBase64Binary(const AxisChar* pName, const AxisChar* pNamespace);
+    struct tm AXISCALL getAttributeAsDateTime(const AxisChar* pName, const AxisChar* pNamespace);
+    struct tm AXISCALL getAttributeAsDate(const AxisChar* pName, const AxisChar* pNamespace);
+    struct tm AXISCALL getAttributeAsTime(const AxisChar* pName, const AxisChar* pNamespace);
+    long AXISCALL getAttributeAsDuration(const AxisChar* pName, const AxisChar* pNamespace);
 	
 //	void* CreateArray(XSDTYPE nType, int nSize);
 //	void DeleteArray(Axis_Array* pArray , XSDTYPE nType);
-	void SetStyle(AXIS_BINDING_STYLE nStyle){ m_nStyle = nStyle;};
-	AXIS_BINDING_STYLE GetStyle(){return m_nStyle;};	
-	XSDTYPE GetXSDType(const AnyElement* pElement);
-	int AXISCALL GetStatus(){return m_nStatus;};
+	void setStyle(AXIS_BINDING_STYLE nStyle){ m_nStyle = nStyle;};
+	AXIS_BINDING_STYLE getStyle(){return m_nStyle;};	
+	XSDTYPE getXSDType(const AnyElement* pElement);
+	int AXISCALL getStatus(){return m_nStatus;};
 
 private:
-	int GetElementForAttributes(const AxisChar* pName, const AxisChar* pNamespace);
-	xsd__base64Binary DecodeFromBase64Binary(const AxisChar* pValue);
-	xsd__hexBinary DecodeFromHexBinary(const AxisChar* pValue);
+	int getElementForAttributes(const AxisChar* pName, const AxisChar* pNamespace);
+	xsd__base64Binary decodeFromBase64Binary(const AxisChar* pValue);
+	xsd__hexBinary decodeFromHexBinary(const AxisChar* pValue);
 };
 
-#endif // !defined(AFX_SOAPDESERIALIZER_H__FD0E7C3B_B887_480A_9E2A_20736A88B09B__INCLUDED_)
+#endif // !defined(_SOAPDESERIALIZER_H____OF_AXIS_INCLUDED_)

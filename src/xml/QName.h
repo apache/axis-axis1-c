@@ -19,8 +19,8 @@
  */
 
 
-#if !defined(AXIS_QNAME_H__INCLUDED_)
-#define AXIS_QNAME_H__INCLUDED_
+#if !defined(AXIS_QNAME_H__OF_AXIS_INCLUDED_)
+#define AXIS_QNAME_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/GDefine.h>
 
@@ -58,8 +58,8 @@ public:
 public:
     QName();
     virtual ~QName();
-    void SplitQNameString(const XML_Ch* qname, XML_Ch sep);
-    void MergeQNameString(XML_Ch sep);
+    void splitQNameString(const XML_Ch* qname, XML_Ch sep);
+    void mergeQNameString(XML_Ch sep);
 };
 
 #endif 
