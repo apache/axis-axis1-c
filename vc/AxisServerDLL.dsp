@@ -250,7 +250,27 @@ SOURCE=..\src\soap\xsd\Float.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\GDay.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\common\GDefine.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\GMonth.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\GMonthDay.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\GYear.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\GYearMonth.cpp
 # End Source File
 # Begin Source File
 

@@ -29,6 +29,11 @@ libsoap_la_SOURCES = Attribute.cpp \
         xsd/Boolean.cpp \
         xsd/Date.cpp \
         xsd/DateTime.cpp \
+        xsd/GYearMonth.cpp \
+        xsd/GYear.cpp \
+        xsd/GMonthDay.cpp \
+        xsd/GDay.cpp \
+        xsd/GMonth.cpp \
         xsd/Decimal.cpp \
         xsd/Double.cpp \
         xsd/Duration.cpp \
