@@ -28,152 +28,152 @@
   */
 
 /**
- * @typedef xsd__string
+ * @typedef xsdc__string
  * Axis C++ defined type for xml basic type string
  */
-typedef AxiscChar * xsd__string;
+typedef AxiscChar * xsdc__string;
 
 /**
- * @typedef xsd__integer
+ * @typedef xsdc__integer
  * Axis C++ defined type for xml basic type integer
  */
-typedef int xsd__integer;
+typedef int xsdc__integer;
 
 /**
- * @typedef xsd__int
+ * @typedef xsdc__int
  * Axis C++ defined type for xml basic type int
  */
-typedef int xsd__int;
+typedef int xsdc__int;
 
 /**
- * @typedef xsd__long
+ * @typedef xsdc__long
  * Axis C++ defined type for xml basic type long
  */
 #ifdef WIN32
-typedef __int64 xsd__long;
+typedef __int64 xsdc__long;
 #else
-typedef long long xsd__long;
+typedef long long xsdc__long;
 #endif
 
 /**
- * @typedef xsd__short
+ * @typedef xsdc__short
  * Axis C++ defined type for xml basic type short
  */
-typedef short xsd__short;
+typedef short xsdc__short;
 
 /**
- * @typedef xsd__decimal
+ * @typedef xsdc__decimal
  * Axis C++ defined type for xml basic type decimal
  */
-typedef double xsd__decimal;
+typedef double xsdc__decimal;
 
 /**
- * @typedef xsd__float
+ * @typedef xsdc__float
  * Axis C++ defined type for xml basic type float
  */
-typedef float xsd__float;
+typedef float xsdc__float;
 
 /**
- * @typedef xsd__double
+ * @typedef xsdc__double
  * Axis C++ defined type for xml basic type double
  */
-typedef double xsd__double;
+typedef double xsdc__double;
 
 /**
- * @typedef xsd__boolean
+ * @typedef xsdc__boolean
  * Axis C++ defined type for xml basic type boolean
  */
-typedef enum { false_=0, true_ } xsd__boolean;
+typedef enum { false_=0, true_ } xsdc__boolean;
 
 /**
- * @typedef xsd__byte
+ * @typedef xsdc__byte
  * Axis C++ defined type for xml basic type byte
  */
-typedef signed char xsd__byte;
+typedef signed char xsdc__byte;
 
 /**
- * @typedef xsd__QName
+ * @typedef xsdc__QName
  * Axis C++ defined type for xml basic type QName
  */
-typedef AxiscChar * xsd__QName;
+typedef AxiscChar * xsdc__QName;
 
 /**
- * @typedef xsd__NCName
+ * @typedef xsdc__NCName
  * Axis C++ defined type for xml basic type NCName
  */
-typedef AxiscChar * xsd__NCName;
+typedef AxiscChar * xsdc__NCName;
 
 /**
- * @typedef xsd__dateTime
+ * @typedef xsdc__dateTime
  * Axis C++ defined type for xml basic type dateTime
  */
-typedef struct tm xsd__dateTime;
+typedef struct tm xsdc__dateTime;
 
 /**
- * @typedef xsd__date
+ * @typedef xsdc__date
  * Axis C++ defined type for xml basic type date
  */
-typedef struct tm xsd__date;
+typedef struct tm xsdc__date;
 
 /**
- * @typedef xsd__time
+ * @typedef xsdc__time
  * Axis C++ defined type for xml basic type time
  */
-typedef struct tm xsd__time;
+typedef struct tm xsdc__time;
 
 /**
- * @typedef xsd__unsignedByte
+ * @typedef xsdc__unsignedByte
  * Axis C++ defined type for xml basic type unsignedByte
  */
-typedef unsigned char xsd__unsignedByte;
+typedef unsigned char xsdc__unsignedByte;
 
 /**
- * @typedef xsd__unsignedInt
+ * @typedef xsdc__unsignedInt
  * Axis C++ defined type for xml basic type unsignedInt
  */
-typedef unsigned int xsd__unsignedInt;
+typedef unsigned int xsdc__unsignedInt;
 
 /**
- * @typedef xsd__unsignedLong
+ * @typedef xsdc__unsignedLong
  * Axis C++ defined type for xml basic type unsignedLong
  */
-typedef unsigned long xsd__unsignedLong;
+typedef unsigned long xsdc__unsignedLong;
 
 /**
- * @typedef xsd__unsignedShort
+ * @typedef xsdc__unsignedShort
  * Axis C++ defined type for xml basic type unsignedShort
  */
-typedef unsigned short xsd__unsignedShort;
+typedef unsigned short xsdc__unsignedShort;
 
 /**
- * @struct xsd__base64Binary
+ * @struct xsdc__base64Binary
  * Axis C++ defined type for xml basic type base64Binary
  */
 typedef struct {
-    xsd__unsignedByte * __ptr;
-    xsd__int __size;
-} xsd__base64Binary;
+    xsdc__unsignedByte * __ptr;
+    xsdc__int __size;
+} xsdc__base64Binary;
 
 /**
- * @struct xsd__hexBinary
+ * @struct xsdc__hexBinary
  * Axis C++ defined type for xml basic type hexBinary
  */
 typedef struct {
-    xsd__unsignedByte * __ptr;
-    xsd__int __size;
-} xsd__hexBinary;
+    xsdc__unsignedByte * __ptr;
+    xsdc__int __size;
+} xsdc__hexBinary;
 
 /**
- * @typedef xsd__anyURI
+ * @typedef xsdc__anyURI
  * Axis C++ defined type for xml basic type anyURI
  */
-typedef AxiscChar * xsd__anyURI;
+typedef AxiscChar * xsdc__anyURI;
 
 /**
- * @typedef xsd__NMTOKEN
+ * @typedef xsdc__NMTOKEN
  * Axis C++ defined type for xml basic type anyURI
  */
-typedef AxiscChar * xsd__NMTOKEN;
+typedef AxiscChar * xsdc__NMTOKEN;
 
 /**
  * @enum AXISC_BINDING_STYLE
@@ -203,26 +203,26 @@ typedef struct {
     int m_Size;
 } Axisc_Array;
 
-AXISC_DEFINED_ARRAY(xsd__string)
-AXISC_DEFINED_ARRAY(xsd__integer)
-AXISC_DEFINED_ARRAY(xsd__int)
-AXISC_DEFINED_ARRAY(xsd__long)
-AXISC_DEFINED_ARRAY(xsd__short)
-AXISC_DEFINED_ARRAY(xsd__decimal)
-AXISC_DEFINED_ARRAY(xsd__float)
-AXISC_DEFINED_ARRAY(xsd__double)
-AXISC_DEFINED_ARRAY(xsd__boolean)
-AXISC_DEFINED_ARRAY(xsd__QName)
-AXISC_DEFINED_ARRAY(xsd__NCName)
-AXISC_DEFINED_ARRAY(xsd__dateTime)
-AXISC_DEFINED_ARRAY(xsd__unsignedByte)
-AXISC_DEFINED_ARRAY(xsd__unsignedInt)
-AXISC_DEFINED_ARRAY(xsd__unsignedLong)
-AXISC_DEFINED_ARRAY(xsd__unsignedShort)
-AXISC_DEFINED_ARRAY2(xsd__base64Binary)
-AXISC_DEFINED_ARRAY2(xsd__hexBinary)
-AXISC_DEFINED_ARRAY(xsd__anyURI)
-AXISC_DEFINED_ARRAY(xsd__NMTOKEN)
+AXISC_DEFINED_ARRAY(xsdc__string)
+AXISC_DEFINED_ARRAY(xsdc__integer)
+AXISC_DEFINED_ARRAY(xsdc__int)
+AXISC_DEFINED_ARRAY(xsdc__long)
+AXISC_DEFINED_ARRAY(xsdc__short)
+AXISC_DEFINED_ARRAY(xsdc__decimal)
+AXISC_DEFINED_ARRAY(xsdc__float)
+AXISC_DEFINED_ARRAY(xsdc__double)
+AXISC_DEFINED_ARRAY(xsdc__boolean)
+AXISC_DEFINED_ARRAY(xsdc__QName)
+AXISC_DEFINED_ARRAY(xsdc__NCName)
+AXISC_DEFINED_ARRAY(xsdc__dateTime)
+AXISC_DEFINED_ARRAY(xsdc__unsignedByte)
+AXISC_DEFINED_ARRAY(xsdc__unsignedInt)
+AXISC_DEFINED_ARRAY(xsdc__unsignedLong)
+AXISC_DEFINED_ARRAY(xsdc__unsignedShort)
+AXISC_DEFINED_ARRAY2(xsdc__base64Binary)
+AXISC_DEFINED_ARRAY2(xsdc__hexBinary)
+AXISC_DEFINED_ARRAY(xsdc__anyURI)
+AXISC_DEFINED_ARRAY(xsdc__NMTOKEN)
  
 static const int xsd_boolean_true = 1;
 static const int xsd_boolean_false = 0;
@@ -233,10 +233,10 @@ typedef enum {
 } AXISC_CHANNEL_TYPE;
 
 /**
- * @typedef XML_String
+ * @typedef AXISC_XML_String
  * Axis C++ defined type for xml encoded string. This is used only in AnyType.
  */
-typedef char* XML_String;
+typedef char* AXISC_XML_String;
 
 /**
  * @struct AxiscAnyType
@@ -247,7 +247,7 @@ typedef struct
     /**
      * @var _array Contains an array of xml encoded strings.
      */
-    XML_String* _array;
+    AXISC_XML_String* _array;
 
     /**
      * @var _size Contains how many xml strings are there in _array

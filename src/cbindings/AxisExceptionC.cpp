@@ -17,6 +17,8 @@
 AXIS_CPP_NAMESPACE_USE
 
 extern "C" {
+#include <axis/GDefine.h>
+#include <axis/AxisUserAPI.h>
 #include <axis/AxisException.h>
 
 AXISC_STORAGE_CLASS_INFO void axiscDestroyAxisException(AXISCHANDLE axisException) {

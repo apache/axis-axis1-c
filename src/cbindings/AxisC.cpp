@@ -18,6 +18,8 @@
 AXIS_CPP_NAMESPACE_USE
 
 extern "C" {
+#include <axis/GDefine.h>
+#include <axis/AxisUserAPI.h>
 #include <axis/Axis.h>
 
 STORAGE_CLASS_INFO void axiscInitializeAxis(AxiscBool bIsServer) {

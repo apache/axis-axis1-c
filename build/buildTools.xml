@@ -102,7 +102,7 @@
 					<libset dir="${dir.bin}" libs="${clientLibraryName}" unless="os400"/>
 					<!-- Files to be compiled -->
 					<fileset dir="${dir.src}">
-						<include name="cbindings/*.cpp"/>
+						<include name="cbindings/**"/>
 					</fileset>
 				</cc>
 			</then>
@@ -123,7 +123,7 @@
 					<libset dir="${dir.bin}" libs="${clientLibraryName}"/>
 					<!-- Files to be compiled -->
 					<fileset dir="${dir.src}">
-						<include name="cbindings/*.cpp"/>
+						<include name="cbindings/**"/>
 					</fileset>
 				</cc>
 			</else>

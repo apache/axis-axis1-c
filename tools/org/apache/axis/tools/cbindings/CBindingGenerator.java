@@ -188,11 +188,13 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 				// Putting #includes of GDefine and AxisUserAPI in <> not "" is needed for the
 				// ant build because those 2 headers aren't generated.
 				text = replaceInString(text,"\"GDefine.hpp\"","<axis/GDefine.hpp>",null);
+				text = replaceInString(text,"\"../GDefine.hpp\"","<axis/GDefine.hpp>",null);
 				text = replaceInString(text,"\"AxisUserAPI.hpp\"","<axis/AxisUserAPI.hpp>",null);
+				text = replaceInString(text,"\"../AxisUserAPI.hpp\"","<axis/AxisUserAPI.hpp>",null);
 				text = replaceInString(text,".hpp",".h",null);
 			}
-			outputFile.write(text);
-			outputFile.newLine();
+			//outputFile.write(text); Remove all #include's
+			//outputFile.newLine();
 		} else if (
 		    // In AxisUserAPI.h we must keep a #ifdef WIN32/#else/#endif
 			keepIfdef
@@ -339,6 +341,9 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 	private static String classNamePretty(String className) {
 		if (className == null)
 			return null;
+		// namespace is a reserved word so make sure we never return namespace
+		if (className.equals("INamespace"))
+			return className;
 		if (className.startsWith("I"))
 			return className.substring(1);
 		return className;
@@ -372,6 +377,10 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 				type += "AxiscAnyType";
 			} else if ("bool".equals(tok)) {
 				type += "AxiscBool";
+			} else if ("XML_String".equals(tok)) {
+				type += "AXISC_XML_String";
+			} else if (tok.startsWith("xsd__")) {
+				type += replaceInString(tok,"xsd__","xsdc__",null);
 			} else if (-1 != tok.toLowerCase().indexOf("axis")) {
 				type += changeAxisToAxisc(tok);
 			} else if (!Utils.cTypeQualifiers.contains(tok) && 
