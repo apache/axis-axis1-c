@@ -23,35 +23,37 @@
 #include <list>
 
 using namespace std;
-/**
-    @class HandlerChain
-    @brief interface for the HandlerChain class.
-    @author Susantha Kumara (skumara@virtusa.com)
-*/
+/*
+ *  @class HandlerChain
+ *  @brief interface for the HandlerChain class.
+ *  @author Susantha Kumara (skumara@virtusa.com)
+ */
 class HandlerChain : public HandlerBase  
 {
-	friend class HandlerPool;
+    friend class HandlerPool;
 private:
-	typedef struct ChainItem
-	{
-		BasicHandler* m_pHandler;
-		int m_nScope;
-		int m_nLibId;
-	} ChainItem;
+    typedef struct ChainItem
+    {
+        BasicHandler* m_pHandler;
+        int m_nScope;
+        int m_nLibId;
+    } ChainItem;
 public:
-	int addHandler(BasicHandler* pHandler, int nScope, int nLibId);
-	HandlerChain();
-	virtual ~HandlerChain();
-	int AXISCALL invoke(void* pMsg);
-	void AXISCALL onFault(void* pMsg);
-	int AXISCALL getType(){return CHAIN_HANDLER;};
-	int AXISCALL init();
-	int AXISCALL fini();
-	AXIS_BINDING_STYLE AXISCALL getBindingStyle(){ return RPC_ENCODED;}; /* this is never called */
+    int addHandler(BasicHandler* pHandler, int nScope, int nLibId);
+    HandlerChain();
+    virtual ~HandlerChain();
+    int AXISCALL invoke(void* pMsg);
+    void AXISCALL onFault(void* pMsg);
+    int AXISCALL getType(){return CHAIN_HANDLER;};
+    int AXISCALL init();
+    int AXISCALL fini();
+    AXIS_BINDING_STYLE AXISCALL getBindingStyle(){ return RPC_ENCODED;}; 
+    /* this is never called */
 
 private:
-	list<ChainItem> m_HandlerList;
-	list<ChainItem>::iterator m_itCurrHandler;
+    list<ChainItem> m_HandlerList;
+    list<ChainItem>::iterator m_itCurrHandler;
 };
 
-#endif // !defined(_HANDLERCHAIN_H____OF_AXIS_INCLUDED_)
+#endif 
+

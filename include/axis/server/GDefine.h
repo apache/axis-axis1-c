@@ -24,20 +24,29 @@
 
 #if !defined(__GDEFINE_OF_AXIS_INCLUDED__)
 #define __GDEFINE_OF_AXIS_INCLUDED__
-/* This file contains all global definitions that are valid across whole Axis C++ project.*/
+
+/* This file contains all global definitions that are valid across whole
+ * Axis C++ project.
+ */
 
 typedef enum {SECURE, UNSECURE} AXIS_SECURE_PROTOCOL;
 
 typedef enum 
 { 
-	AXIS_SUCCESS=0, 
-	AXIS_FAIL = -1, 
-	AXIS_OBJECT_ALREADY_EXISTS=1,
-	AXIS_NO_SUCH_HANDLER,
-	AXIS_NO_SUCH_SERVICE
+    AXIS_SUCCESS=0, 
+    AXIS_FAIL = -1, 
+    AXIS_OBJECT_ALREADY_EXISTS=1,
+    AXIS_NO_SUCH_HANDLER,
+    AXIS_NO_SUCH_SERVICE
 } AXIS_GLOBAL_ERROR;
-typedef enum { APTHTTP=1, APTFTP, APTSMTP, APTHTTPS, APTOTHER } AXIS_PROTOCOL_TYPE;
-typedef enum { CRITICAL=1, WARN, INFO, TRIVIAL} AXIS_SEVERITY_LEVEL;
+typedef enum 
+{ 
+    APTHTTP=1, APTFTP, APTSMTP, APTHTTPS, APTOTHER 
+} AXIS_PROTOCOL_TYPE;
+typedef enum 
+{ 
+    CRITICAL=1, WARN, INFO, TRIVIAL
+} AXIS_SEVERITY_LEVEL;
 
 #define SOAPACTIONHEADER "SOAPAction"
 
@@ -52,7 +61,7 @@ typedef enum { CRITICAL=1, WARN, INFO, TRIVIAL} AXIS_SEVERITY_LEVEL;
 
 #ifdef WIN32
     #define AxisSprintf(X, Y, Z, W) sprintf(X, Z, W)
-#else /*linux*/
+#else /* linux */
     #define AxisSprintf(X, Y, Z, W) sprintf(X, Z, W)
 #endif
 
@@ -77,10 +86,10 @@ extern void ModuleUnInitialize();
 # endif
 #endif
 
-/**
+/*
  * Following macro define an API function of Axis C++
  * Format of the AXISAPI macro is as follows
- *		AXISAPI(<METHOD NAME>, <PARAMETER LIST>)
+ * AXISAPI(<METHOD NAME>, <PARAMETER LIST>)
  */
 
 #ifdef __cplusplus
@@ -106,9 +115,11 @@ extern void ModuleUnInitialize();
 #if __GNUC_VERSION__ > 30000
 #define AXISDESTRUCTOR void* unused; void AXISAPI(destructor,(APINOPARAMS))
 #else
-#define AXISDESTRUCTOR void* unused; void*unused1; void AXISAPI(destructor,(APINOPARAMS))
+#define AXISDESTRUCTOR void* unused; void*unused1; 
+void AXISAPI(destructor,(APINOPARAMS))
 #endif
 #else 
 #define AXISDESTRUCTOR void AXISAPI(destructor,(APINOPARAMS))
 #endif
-#endif /*__GDEFINE_OF_AXIS_INCLUDED__*/
+#endif 
+

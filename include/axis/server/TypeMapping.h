@@ -25,12 +25,17 @@
 #include "GDefine.h"
 
 typedef enum XSDTYPETag 
-{ XSD_UNKNOWN=1, XSD_INT, XSD_FLOAT, XSD_STRING, XSD_LONG, XSD_SHORT, XSD_BYTE, XSD_UNSIGNEDLONG, \
-				XSD_BOOLEAN, XSD_UNSIGNEDINT, XSD_UNSIGNEDSHORT, XSD_UNSIGNEDBYTE, \
-				XSD_DOUBLE, XSD_DECIMAL, XSD_DURATION, XSD_DATETIME, XSD_TIME, XSD_DATE, \
-				XSD_YEARMONTH, XSD_YEAR, XSD_MONTHDAY, XSD_DAY, XSD_MONTH, XSD_HEXBINARY, \
-				XSD_BASE64BINARY, XSD_ANYURI, XSD_QNAME, XSD_NOTATION, XSD_INTEGER, \
-				XSD_ARRAY, USER_TYPE, ACCESSOR 
+{ XSD_UNKNOWN=1, XSD_INT, XSD_FLOAT, XSD_STRING, XSD_LONG, XSD_SHORT, \
+                XSD_BYTE, XSD_UNSIGNEDLONG, \
+                XSD_BOOLEAN, XSD_UNSIGNEDINT, XSD_UNSIGNEDSHORT, \
+                XSD_UNSIGNEDBYTE, \
+                XSD_DOUBLE, XSD_DECIMAL, XSD_DURATION, \
+                XSD_DATETIME, XSD_TIME, XSD_DATE, \
+                XSD_YEARMONTH, XSD_YEAR, XSD_MONTHDAY, XSD_DAY, \
+                XSD_MONTH, XSD_HEXBINARY, \
+                XSD_BASE64BINARY, XSD_ANYURI, XSD_QNAME, XSD_NOTATION, \
+                XSD_INTEGER, \
+                XSD_ARRAY, USER_TYPE, ACCESSOR 
 } XSDTYPE;
 
 #ifdef __cplusplus
@@ -39,29 +44,31 @@ typedef enum XSDTYPETag
 #include <string>
 
 using namespace std;
-/**
-    @class TypeMapping
-    @brief interface for the TypeMapping class.
-
-
-    @author Susantha Kumara (skumara@virtusa.com)
-*/
+/*
+ *  @class TypeMapping
+ *  @brief interface for the TypeMapping class.
+ *
+ *
+ *  @author Susantha Kumara (skumara@virtusa.com)
+ */
 class TypeMapping  
 {
 public:
-	static XSDTYPE map(const AxisXMLCh* sType);
-	static void initialize();
+    static XSDTYPE map(const AxisXMLCh* sType);
+    static void initialize();
 #ifndef AIX
-	static std::map<const AxisXMLString, XSDTYPE> m_sTypeMap;
+    static std::map<const AxisXMLString, XSDTYPE> m_sTypeMap;
 #else
-	static std::map<AxisXMLString, XSDTYPE> TypeMapping::m_sTypeMap;
+    static std::map<AxisXMLString, XSDTYPE> TypeMapping::m_sTypeMap;
 #endif
-	static volatile bool m_bInit;
-	TypeMapping();
-	virtual ~TypeMapping();
+    static volatile bool m_bInit;
+    TypeMapping();
+    virtual ~TypeMapping();
 
 };
 
 #endif
 
-#endif /* !defined(_TYPEMAPPING_H____OF_AXIS_INCLUDED_) */
+#endif 
+
+
