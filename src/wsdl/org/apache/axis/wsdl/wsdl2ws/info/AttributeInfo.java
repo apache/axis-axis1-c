@@ -34,12 +34,15 @@ public class AttributeInfo extends ParameterInfo {
 	private boolean isArray = false;
 	private String typeName;
 	private String typeNamespace;
+        private String className;
+        private String attribNameAsMember;
 	
 	/**
 	 * @param type
 	 * @param attribName
 	 */
-	public AttributeInfo() {
+	public AttributeInfo(String className) {
+            this.className = className;
 	}
 	
 	/**
@@ -130,4 +133,25 @@ public class AttributeInfo extends ParameterInfo {
 		this.isSimpleType = isSimpleType;
 	}
 
+    public String getParamNameAsMember() {
+         attribNameAsMember = super.getParamName();
+         // need to deal with _Ref stuff :(
+         if (this.className != null && this.className.equals(attribNameAsMember))
+            this.attribNameAsMember = "m_" + attribNameAsMember;
+         else
+            this.attribNameAsMember = attribNameAsMember;
+
+         return attribNameAsMember;
+    }
+
+    public void setParamName(String paramName) {
+        super.setParamName(paramName);
+        // make sure attributes does not have the same name as class name
+        
+        if (this.className != null && this.className.equals(attribName))
+            this.attribNameAsMember = "m_" + attribName;
+        else
+            this.attribNameAsMember = attribName;
+    }
 }
+
