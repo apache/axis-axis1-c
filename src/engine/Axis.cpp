@@ -64,7 +64,7 @@
 #define WSDLDIRECTORY "/wsdls/"
 
 // Define all global variables of the axisengine
-#ifdef _AXISTRACE
+#ifdef ENABLE_AXISTRACE
 unsigned char chEBuf[1024];
 #endif
 
@@ -117,9 +117,10 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
 						}
 						else
                         {
-                            ServerAxisEngine* objTempServer = (ServerAxisEngine*) engine;
-                            objTempServer->setFaultOutputStream(Status, pStream);
-                            objTempServer = NULL;
+                            ServerAxisEngine* pObjTempServer = (ServerAxisEngine*) engine;
+                            pObjTempServer->setFaultOutputStream(Status, pStream);
+                            pStream->flushOutput();
+                            pObjTempServer = NULL;
                             Status = AXIS_SUCCESS;
                         }
                     }
@@ -255,7 +256,7 @@ extern "C" int initialize_module (int bServer)
         if (status == AXIS_SUCCESS)
         {
 			char *pWsddPath = g_pConfig->getAxConfProperty(AXCONF_WSDDFILEPATH);
-#if defined(__AXISTRACE__)
+#if defined(ENABLE_AXISTRACE)
             status = g_pAT->openFile ();
             if (status == AXIS_FAIL)
             {

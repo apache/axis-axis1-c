@@ -185,6 +185,9 @@ typedef struct {
 
 	int (AXISCALL* checkMessage)(void *pObj, const AxisChar* pName, 
         const AxisChar* pNamespace);
+
+	int (AXISCALL* checkFault)(void *pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
 	
 	/* Minimal error check */
 	 int (AXISCALL* getStatus)(void *pObj);
@@ -330,6 +333,9 @@ public:
         const AxisChar* pName, const AxisChar* pNamespace)=0;
 
 	virtual int AXISCALL checkMessage(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+
+	virtual int AXISCALL checkFault(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
 
 	/* Minimal error check */
@@ -535,6 +541,10 @@ public:
 	static int AXISCALL s_CheckMessage(void *pObj, const AxisChar* pName, 
         const AxisChar* pNamespace)
 	{return ((CallBase*)pObj)->checkMessage(pName, pNamespace);};
+
+	static int AXISCALL s_CheckFault(void *pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace)
+	{return ((CallBase*)pObj)->checkFault(pName, pNamespace);};
 	
 	/* Minimal error check */
 	static int AXISCALL s_GetStatus(void *pObj)
@@ -605,6 +615,7 @@ public:
 		ms_VFtable.getAttributeAsTime = s_GetAttributeAsTime;
 		ms_VFtable.getAttributeAsDuration = s_GetAttributeAsDuration;
 		ms_VFtable.checkMessage = s_CheckMessage;
+		ms_VFtable.checkFault = s_CheckFault;
 		ms_VFtable.getStatus = s_GetStatus;
 	}
 };
@@ -755,6 +766,9 @@ public:
         const AxisChar* pNamespace);
 
 	int AXISCALL checkMessage(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+  
+	int AXISCALL checkFault(const AxisChar* pName, 
         const AxisChar* pNamespace);
 
 	int AXISCALL getStatus();

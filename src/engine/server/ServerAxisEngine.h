@@ -34,12 +34,24 @@ class ServerAxisEngine:public AxisEngine
 {
     private:
         BasicHandler* m_pWebService;
+        const WSDDService* m_pService;
     public:
         ServerAxisEngine();
         virtual ~ ServerAxisEngine();
     public:
         int process(SOAPTransport* pSoap);
+     
+        /** When fault occures it need to be written to the stream. If fail is 
+         *  returned from the process method of ServerAxisEngine this method is
+         *  called within the process_request method of Axis.cpp
+         */
         int setFaultOutputStream(int iFaultCode, SOAPTransport* pSoap);
+
+        /** When finished with handlers and webservices release them
+         *  back to the pool
+         */
+        int releaseHandlers(SOAPTransport* pSoap);
+
     protected:
         virtual int invoke(MessageData* pMsg);
         virtual void onFault(MessageData* pMsg);

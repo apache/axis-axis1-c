@@ -27,6 +27,8 @@
 #include <axis/server/SoapSerializer.h>
 
 #include <stdio.h>
+#include <axis/server/AxisTrace.h>
+extern AxisTrace* g_pAT;
 
 
 SoapEnvelope::SoapEnvelope()
@@ -105,6 +107,7 @@ int SoapEnvelope::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         if (m_pSoapBody!=NULL)
         {
             iStatus= m_pSoapBody->serialize(pSZ, eSoapVersion);
+            AXISTRACE2("iStatus", iStatus, INFO);
             if (iStatus == AXIS_FAIL)
             {
                 break;
