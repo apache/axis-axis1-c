@@ -34,4 +34,9 @@
 		<parameter name="allowedMethods" value="echoSimpleTypesAsStruct echoNestedStruct echoNestedArray echoStructAsSimpleTypes "/>
 		<parameter name="className" value="C:\susantha\ws-axis\c\bin\GroupB.dll" />
 	</service>
+	<service name="MathOps" provider="CPP:RPC" description="Simple sample to demonstrate fault mapping and exception handling">
+		<parameter name="className" value="C:\susantha\ws-axis\c\bin\RPCFault.dll"/>
+		<parameter name="allowedMethods" value="div "/>
+	</service>
+
 </deployment>
