@@ -1,0 +1,733 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--*** This is a generated file.  Do not edit.  ***-->
+<link rel="stylesheet" href="../skin/tigris.css" type="text/css">
+<link rel="stylesheet" href="../skin/mysite.css" type="text/css">
+<link rel="stylesheet" href="../skin/site.css" type="text/css">
+<link media="print" rel="stylesheet" href="../skin/print.css" type="text/css">
+<title>Axis C++ Linux Installation Guide</title>
+</head>
+<body bgcolor="white" class="composite">
+<!--================= start Banner ==================-->
+<div id="banner">
+<table width="100%" cellpadding="8" cellspacing="0" summary="banner" border="0">
+<tbody>
+<tr>
+<!--================= start Group Logo ==================-->
+<td align="left">
+<div class="groupLogo">
+<a href="http://ws.apache.org/"><img border="0" class="logoImage" alt="The Apache WebServices Project" src="../images/project-logo.jpg"></a>
+</div>
+</td>
+<!--================= end Group Logo ==================-->
+<!--================= start Project Logo ==================--><td align="right">
+<div class="projectLogo">
+<a href="http://ws.apache.org/axis/"><img border="0" class="logoImage" alt="The Apache Axis Project" src="../images/axis.jpg"></a>
+</div>
+</td>
+<!--================= end Project Logo ==================-->
+<!--================= start Search ==================--><td valign="top" rowspan="2" align="right" class="search">
+<form target="_blank" action="http://www.google.com/search" method="get">
+<table summary="search" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td bgcolor="#a5b6c6" colspan="3"><img height="10" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="8" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td nowrap="nowrap"><input value="ws.apache.org" name="sitesearch" type="hidden"><input size="10" name="q" id="query" type="text"><img height="1" width="5" alt="" src="../skin/images/spacer.gif" class="spacer"><input name="Search" value="GO" type="submit">
+<br>
+                          Search WS</td><td><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td colspan="3"><img height="7" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td>
+</tr>
+<tr>
+<td class="bottom-left-thick"></td><td bgcolor="#a5b6c6"><img height="1" width="1" alt="" src="../skin/images/spacer.gif" class="spacer"></td><td class="bottom-right-thick"></td>
+</tr>
+</table>
+</form>
+</td>
+<!--================= end Search ==================-->
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Banner ==================-->
+<!--================= start Main ==================-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" summary="nav" id="breadcrumbs">
+<tbody>
+<!--================= start Status ==================-->
+<tr class="status">
+<td>
+<!--================= start BreadCrumb ==================--><a href="http://www.apache.org/">Apache</a> | <a href="http://ws.apache.org/">WS</a><a href=""></a>
+<!--================= end BreadCrumb ==================--></td><td id="tabs">
+<!--================= start Tabs ==================-->
+<div class="tab">
+<span class="selectedTab"><a class="base-selected" href="../index.html">WebServices-Axis</a></span>
+</div>
+<!--================= end Tabs ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+<!--================= end Status ==================-->
+<table id="main" width="100%" cellpadding="8" cellspacing="0" summary="" border="0">
+<tbody>
+<tr valign="top">
+<!--================= start Menu ==================-->
+<td id="leftcol">
+<div id="navcolumn">
+<div class="menuBar">
+<div class="menu">
+<span class="menuLabel">Axis</span>
+ 
+<div class="menuItem">
+<a href="../index.html">Introduction</a>
+</div>
+ 
+<div class="menuItem">
+<a href="../news.html">News</a>
+</div>
+
+ 
+<div class="menuItem">
+<a href="http://nagoya.apache.org/wiki/apachewiki.cgi?AxisProjectPages">FAQ/Wiki</a>
+</div>
+ 
+<div class="menu">
+<span class="menuLabel">Get Involved</span>
+  
+<div class="menuItem">
+<a href="../overview.html">Overview</a>
+</div>
+  
+<div class="menuItem">
+<a href="../cvs.html">CVS Repository</a>
+</div>
+  
+<div class="menuItem">
+<a href="../mail.html">Mailing Lists</a>
+</div>
+  
+<div class="menuItem">
+<a href="../ref.html">Reference Library</a>
+</div>
+  
+<div class="menuItem">
+<a href="../bugs.html">Bugs</a>
+</div>
+ 
+</div>
+ 
+<div class="menu">
+<span class="menuLabel">Axis (Java)</span>
+  
+<div class="menuItem">
+<a href="../java/index.html">Documentation</a>
+</div>
+  
+<div class="menuItem">
+<a href="../java/install.html">Installation</a>
+</div>
+  
+<div class="menuItem">
+<a href="../java/user-guide.html">User's Guide</a>
+</div>
+  
+<div class="menuItem">
+<a href="../java/developers-guide.html">Developer's Guide</a>
+</div>
+  
+<div class="menuItem">
+<a href="../java/integration-guide.html">Integration Guide</a>
+</div>
+  
+<div class="menuItem">
+<a href="../java/architecture-guide.html">Architecture Guide</a>
+</div>
+  
+<div class="menuItem">
+<a href="../java/reference.html">Reference Guide</a>
+</div>
+  
+<div class="menuItem">
+<a href="../java/reading.html">Reading Guide</a>
+</div>
+  
+<div class="menuItem">
+<a href="../java/requirements.html">Requirements</a>
+</div>
+ 
+</div>
+ 
+<div class="menu">
+<span class="menuLabel">Axis (C++)</span>
+  
+<div class="menuItem">
+<a href="../cpp/index.html">Latest Axis C++ Release!</a>
+</div>
+  
+<div class="menuItem">
+<a href="../cpp/documentation.html">Documenation</a>
+</div>
+  
+<div class="menuItem">
+<a href="../cpp/download.html">Download</a>
+</div>
+  
+<div class="menuItem">
+<a href="../cpp/who.html">Who we are</a>
+</div>
+  
+</div>
+
+<div class="menu">
+<span class="menuLabel">Downloads</span>
+  
+<div class="menuItem">
+<a href="../releases.html">Releases</a>
+</div>
+  
+<div class="menuItem">
+<a href="../interim.html">Interim Drops</a>
+</div>
+  
+<div class="menuItem">
+<a href="http://cvs.apache.org/viewcvs/ws-axis/">Source Code</a>
+</div>
+
+</div>
+
+<div class="menu">
+<span class="menuLabel">Related Projects</span>
+  
+<div class="menuItem">
+<a href="http://ws.apache.org/wsif/">WSIF</a>
+</div>
+  
+<div class="menuItem">
+<a href="http://cvs.apache.org/viewcvs/*checkout*/ws-wsil/java/README.htm">WSIL</a>
+</div>
+  
+<div class="menuItem">
+<a href="http://www-124.ibm.com/developerworks/projects/wsdl4j/">WSDL4J</a>
+</div>
+  
+<div class="menuItem">
+<a href="http://www.uddi4j.org/">UDDI4J</a>
+</div>
+
+</div>
+
+<div class="menu">
+<span class="menuLabel">Misc</span>
+  
+<div class="menuItem">
+<a href="../site.html">Whole Site</a>
+</div>
+  
+<div class="menuItem">
+<a href="../who.html">Who We Are</a>
+</div>
+  
+<div class="menuItem">
+<a href="../contact.html">Contact</a>
+</div>
+  
+<div class="menuItem">
+<a href="../legal.html">Legal</a>
+</div>
+
+  
+<div class="menuItem">
+<a href="../docs.html">Notes/Docs</a>
+</div>
+
+</div>
+
+
+</div>
+</div>
+</div>
+</td>
+<!--================= end Menu ==================-->
+<!--================= start Content ==================--><td>
+<div id="bodycol">
+<div class="app">
+<div align="center">
+<h1>Axis C++ Linux Installation Guide</h1>
+</div>
+<div class="h3">
+<div class="h3">
+<h3>Installing and deploying web applications using xml-AxisC++</h3>
+</div>
+<div class="h3">
+<h3>Contents</h3>
+</div>
+<ul>
+<li>
+<a href="#Introducti">Introduction</a>
+</li>
+<li>
+<a href="#What">What You Need</a>
+</li>
+<li>
+<a href="#Installati">Installing On Linux</a>
+</li>
+<li>
+<a href="#Installing">Installing expat</a>
+</li>
+<li>
+<a href="#Xercesc">Installing Xerces-c</a>
+<br>
+</li>
+<li>
+<a href="#Installing1">Installing Apache</a>
+</li>
+<li>
+<a href="#Installing2">Installing AxisC++</a>
+</li>
+<li>
+<a href="#Validating">Validating The Installation</a>
+</li>
+</ul>
+<p>
+<a name="Introducti"></a>
+</p>
+<div class="h3">
+<h3>Introduction</h3>
+</div>
+<p>This document describes how to install Apache Axis C++. It assumes you already know how to write and run C++/C code and not scared away by XML. You should also have familiarity with Web servers. This version of Axis C++ is tested on Apache web server.</p>
+<p>
+<a name="What"></a>
+</p>
+<div class="h3">
+<h3>What You need</h3>
+</div>
+<p>It needs a few helper libraries, for logging, WSDL processing and introspection. You need to have following in order to run Axis C++ engine.</p>
+<ul>
+<li>Apache &nbsp; &nbsp; &nbsp;1.3 or 2</li>
+<li>expat (if use expat parser)</li>
+<li>Xerces-c (if use xerces parser)</li>
+</ul>
+<p>
+<a name="Installati"></a>
+</p>
+<div class="h3">
+<h3>Installation On Linux</h3>
+</div>
+<p>We tested with the following</p>
+<ul>
+<li>RedhatLinux9.0(2.4.20-8), Dabian(2.6.3-1-686)(unstable), Redhat Linux8.0(2.4.18-14)</li>
+<li>Apache 1.3 [apache_1.3.27.tar .gz, apache_1.3.28.tar.gz)] (Source), Apache2.0 (source)</li>
+<li>expat [expat-1.95.7.tar.gz](Source)&nbsp;</li>
+</ul>
+<strong>Note</strong>
+<ul>
+<li>autoconf &nbsp; &nbsp;2.57, automake &nbsp;1.6.3, libtool 1.4.3</li>
+</ul>
+<br>
+<p>
+<strong>Downloading the source or binary from the mirror site and setting the environment variables</strong>
+</p>
+<p>You can download the Axis C++ source or binary from one of the apache mirror sites<a href="http://ws.apache.org/axis/cpp/download.html">http://ws.apache.org/axis/cpp/download.html</a>
+</p>
+<p>Your downloaded source distribution is <strong>axis-c-src-1-1-linux.tar.gz</strong>.<br> Binary distribution is <strong>axis-c-1-1-linux.tar.gz.</strong>
+<br>After you extracting it as, <strong>/home/axisuser/projects/</strong> <strong>axis-c-src-1-1-linux</strong> or <strong>/home/axisuser/projects/</strong> <strong>axis-c-1-1-linux</strong> you can rename it as <strong>axis_c</strong>
+</p>
+<p>You have to set the environment variable $AXISCPP_HOME to the directory where you extracted the tar ball.. We further assume that the user dose the installation and has the linux user account axisuser. For example I have my &lt;AXISCPP_HOME&gt; as following.</p>
+<p>/home/axisuser/projects/axis_c</p>
+<p>
+<a name="Installing"></a>
+</p>
+<div class="h3">
+<h3>Installing expat</h3>
+</div>
+<p>You can get expat from the uri <a href="http://sourceforge.net/projects/expat/">http://sourceforge.net/projects/expat/</a>
+</p>
+<p>You have to follow the expat installation guide to install it</p>
+<p>
+<a name="Xercesc"></a>
+</p>
+<div class="h3">
+<h3>Installing Xerces-c</h3>
+</div>
+<p>You can get xercesc from the uri <a href="http://www.xml.apache.org/xerces-c/download.cgi">http://www.xml.apache.org/xerces-c/download.cgi</a>
+<br>
+<br> You have to follow the the xercesc installation giude to install it.<br>
+<br>
+</p>
+<p>
+<a name="Installing1"></a>
+</p>
+<div class="h3">
+<h3>Installing Apache</h3>
+</div>
+<p>Get the apache downloadable software. (We used the source apache_1.3.27.tar.gz). Build it with sharable module support.</p>
+<p>
+<strong>$ ./configure --enable-module=so</strong>
+</p>
+<p>Note:- Here "so" is simple letters</p>
+<p>
+<strong>$ make</strong>
+</p>
+<p>
+<strong>$ make install</strong>
+</p>
+<p>Starting the Apache server</p>
+<p>
+<strong>$ usr/local/apache/bin/apachectl start</strong>
+</p>
+<p>Stopping the Apache Server</p>
+<p>
+<strong>$ usr/local/apache/bin/apachectl stop</strong>
+</p>
+<p>
+<a name="Installing2"></a>
+</p>
+<div class="h3">
+<h3>Installing Axis C++</h3>
+</div>
+<br>
+<strong>If you downloaded the source distribution</strong>
+<br>
+<p>Create an environment variable called AXISCPP_HOME.</p>
+<p>
+<strong>$ cd /home/axisuser</strong>
+</p>
+<p>
+<strong>[axisuser@localhost axisuser]$ vi ./.bash_profile</strong>
+</p>
+<p>
+<strong>AXISCPP_HOME="/home/axisuser/projects/axis_c"</strong>
+</p>
+<p>
+<strong>export AXISCPP_HOME</strong>
+</p>
+<p>Save it and back in the terminal window.</p>
+<p>
+<strong>$ source ~/.bash_profile</strong>
+</p>
+<p>Verify the above change had been correctly effected by typing</p>
+<p>
+<strong>$ echo $AXISCPP_HOME</strong>
+</p>
+<p>Copy apache include files</p>
+<p>
+<strong>$ cp -f &lt;apacheinstdirectory&gt;/include/* $AXISCPP_HOME/include/apache1_3/</strong>
+</p>
+<p>If you are using expat parser copy the expat include files</p>
+<p>
+<strong>$ cp -f &lt;expatinstdirectory&gt;/include/expat.h $AXISCPP_HOME/include/expat/</strong>
+</p>
+<p>If you are using xercesc parser copy the xercesc include files</p>
+<p>
+<strong>$ cp -rf &lt;xercescinstdirectory&gt;/include/xercesc/* $AXISCPP_HOME/include/xercesc/</strong>
+</p>
+<p>
+<strong>$ cd $AXISCPP_HOME</strong>
+</p>
+<p>The Folder called deploy in the $AXISCPP_HOME/ should be copied to your place of choice. Rename the deploy folder as "Axis" . Give all permissions to this folder.<br>
+<br>
+<br>
+<strong>$ cp -rf $AXISCPP_HOME/deploy&nbsp; /usr/local</strong>
+<br>
+<br>
+<strong>$ cd /usr/local</strong>
+<br>
+<br>
+<strong>$ mv deploy Axis</strong>
+<br>
+<br>
+<strong>$ chmod -R 777 Axis</strong>
+<br>
+<br>
+<br>Now set the environment variable <strong>AXIS_HOME</strong> pointing to this directory.<br>
+<br>
+<strong>AXIS_HOME="/usr/local/Axis"</strong>
+<br>
+</p>
+<p>You also need to rename the following files<br>
+<strong>mv $AXIS_HOME/axiscpp.conf_linux $AXIS_HOME/axiscpp.conf</strong>
+<br>
+<strong>mv $AXIS_HOME/conf/server.wsdd_linux $AXIS_HOME/conf/server.wsdd</strong>
+<br>
+<strong>mv $AXIS_HOME/conf/client.wsdd_linux $AXIS_HOME/conf/client.wsdd</strong>
+</p>
+<p>If you are using expat parser do the following<br>
+</p>
+<p>set <strong>EXPAT_HOME</strong>="&lt;Your expat installation root folder&gt;"</p>
+<p>set <strong>LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$EXPAT_HOME/lib:$AXISCPP_HOME/bin:$AXIS_HOME"</strong> (do this in your .bash_profile)<br>
+<br>
+<br>
+<strong>cd $AXISCPP_HOME/src/soap</strong>
+<br>
+<br>
+<strong>cp -f Makefile.am_expat Makefile.am</strong>
+<br> 
+<strong>cd $AXISCPP_HOME/src/wsdd</strong>
+<br>
+<strong>cp -f Makefile.am_expat Makefile.am</strong>
+</p>
+<p>If you are using Xerces-c parser do the following</p>
+<p>set <strong>XERCESC_HOME</strong>="&lt;Your xercesc installation root folder&gt;"</p>
+<p>set <strong>LD_LIBRARY_PATH="$XERCESC_HOME/lib:$AXISCPP_HOME/bin:$AXIS_HOME"</strong> (do this in your .bash_profile)<br>
+<br>
+<strong>cd $AXISCPP_HOME/src/soap</strong>
+<br>
+<strong>cp -f Makefile.am_xercesc Makefile.am</strong>
+<br>
+<br>
+<strong>cd $AXISCPP_HOME/src/wsdd</strong>
+<br>
+<strong>cp -f Makefile.am_xercesc Makefile.am</strong>
+</p>
+<p>in $AXISCPP_HOME/configure.ac comment expat related things and uncomment xercesc related things as described in it.<br>
+<br>
+<strong>for samples</strong>
+<br>
+<br>
+</p>
+<p>in $AXISCPP_HOME/samples/client/configure.ac comment expat related things and uncomment xercesc related<br>things as described in it.<br>
+<br>
+</p>
+<p>To Build from the Axis C++ source execute these.</p>
+<p>
+<strong>$cd $AXISCPP_HOME/</strong>
+<br>
+</p>
+<p>
+<strong>$ sh autogen.sh</strong>
+</p>
+<p>
+<strong>$ sh runconfig</strong>
+</p>
+<p>
+<strong>$ make</strong>
+</p>
+<p>
+<strong>$ make install<br>
+</strong>
+</p>
+<p>
+<strong>OR</strong> Run the build.sh as follows<br>
+<br>
+<strong>sh build.sh</strong>
+<br>
+<br>
+</p>
+<p>libaxiscpp_mod.so (If you built for apache2 this is libaxiscpp_mod2.so), libaxiscpp_client.so, libserver_engine.so, libAdminService.so, adminclient, simple-axis_server should have been created in $AXISCPP_HOME/bin directory. Note:- you can give the install path inside the runconfigure script.</p>
+<p>Now there is no need to seperately build client side and server side. When execute build.sh it will lookafter everything.<br>-----------------------------------------------------------------------</p>
+<p>
+<strong>NOTE:</strong> If you use apache1.3 following two small changes have to be done in $AXISCPP_HOME/configure.ac and $AXISCPP_HOME/src/server/Makefile.am)</p>
+<p>in $AXISCPP_HOME/configure.ac</p>
+<p>uncomment</p>
+<p>
+<strong>AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/engine/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile src/server/Makefile src/server/apache/Makefile)</strong>
+</p>
+<p>and comment</p>
+<p>
+<strong>#AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/engine/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile src/server/Makefile src/server/apache2/Makefile)</strong>
+</p>
+<p>in $AXISCPP_HOME/src/server/Makefile.am</p>
+<p>change SUBDIRS = apache2 to SUBDIRS = apache<br> ------------------------------------------------------------------------------<br>
+<br>
+<br>Then to deploy it on apache<br>
+<br>
+</p>
+<p>First you need to edit &lt;apache install directory&gt;/conf/httpd.conf</p>
+<p>
+<strong>$ vi &lt;apache install directory&gt;/conf/httpd.conf</strong>
+</p>
+<p>At the bottom of the file you have to include following lines and save it.</p>
+<p>
+<strong>LoadModule axis_module libexec/libaxiscpp_mod.so (in apache2 replace libexec with modules and libaxiscpp_mod.so with libaxiscpp_mod2.so)</strong>
+</p>
+<p>
+<strong>&lt;Location /axis&gt;</strong>
+</p>
+<p>
+<strong>SetHandler axis</strong>
+</p>
+<p>
+<strong>&lt;/Location&gt;</strong>
+</p>
+<br>
+<p>
+<strong>cd /usr/local/Axis</strong>
+</p>
+<p>
+<strong>cp -f $AXIS_HOME/deploy.sh_apache ./deploy.sh</strong>
+<br>(if apache2) <strong>cp -f $AXIS_HOME/deploy.sh_apache2 ./deploy.sh</strong>
+</p>
+<p>
+<strong>sh deploy.sh</strong>
+</p>
+<br>
+<p>deploy.sh is a script which copies files to neccessary places and start apache.<br>
+</p>
+<p>-----------------------------------------------------------------</p>
+<p>
+<br>
+<strong>If you downloaded the binary distribution</strong>
+<br>
+</p>
+<p>Create an environment variable called AXISCPP_HOME.</p>
+<p>
+<strong>$ cd /home/axisuser</strong>
+</p>
+<p>
+<strong>[axisuser@localhost axisuser]$ vi ./.bash_profile</strong>
+</p>
+<p>
+<strong>AXISCPP_HOME="/home/axisuser/projects/axis_c"</strong>
+</p>
+<p>
+<strong>export AXISCPP_HOME</strong>
+</p>
+<p>Save it and back in the terminal window.</p>
+<p>
+<strong>$ source ~/.bash_profile</strong>
+</p>
+<p>Verify the above change had been correctly effected by typing</p>
+<p>
+<strong>$ echo $AXISCPP_HOME</strong>
+</p>
+<p>
+<strong>$ cd $AXISCPP_HOME</strong>
+</p>
+<p>The Folder called deploy in the $AXISCPP_HOME/ should be copied to a folder of your choice .Rename the deploy folder as "Axis" . Give all permissions to this folder.<br>
+<br>
+<br>
+<strong>$ cp -rf $AXISCPP_HOME/deploy&nbsp; /usr/local</strong>
+<br>
+<br>
+<strong>$ cd /usr/local</strong>
+<br>
+<br>
+<strong>$ mv deploy Axis</strong>
+<br>
+<br>
+<strong>$ chmod -R 777 Axis</strong>
+<br>
+<br>
+<br>Now set the environment variable <strong>AXIS_HOME</strong> pointing to this directory.<br>
+<br>
+<strong>AXIS_HOME="/usr/local/Axis"</strong>
+</p>
+<p>You also need to rename the following files<br>
+<strong>mv $AXIS_HOME/axiscpp.conf_linux $AXIS_HOME/axiscpp.conf</strong>
+<br>
+<strong>mv $AXIS_HOME/conf/server.wsdd_linux $AXIS_HOME/conf/server.wsdd</strong>
+<br>
+<strong>mv $AXIS_HOME/conf/client.wsdd_linux $AXIS_HOME/conf/client.wsdd</strong>
+</p>
+<p>
+<br>-----------------------------------------------------------------------</p>
+<p>
+<strong>NOTE:&nbsp;</strong> Binary distribution is built to work with expat parser. If you need xerces parser you need to build<br>from the source.<br>------------------------------------------------------------------------------<br>
+<br>
+<br>Then to deploy it on apache<br>
+<br>
+</p>
+<p>First you need to edit &lt;apache install directory&gt;/conf/httpd.conf</p>
+<p>
+<strong>$ vi &lt;apache install directory&gt;/conf/httpd.conf</strong>
+</p>
+<p>At the bottom of the file you have to include following lines and save it.</p>
+<p>
+<strong>LoadModule axis_module libexec/libaxiscpp_mod.so (in apache2 replace libexec with modules and libaxiscpp_mod.so with libaxiscpp_mod2.so)</strong>
+</p>
+<p>
+<strong>&lt;Location /axis&gt;</strong>
+</p>
+<p>
+<strong>SetHandler axis</strong>
+</p>
+<p>
+<strong>&lt;/Location&gt;</strong>
+</p>
+<br>
+<p>
+<strong>cd /usr/local/Axis</strong>
+</p>
+<p>
+<strong>cp -f $AXIS_HOME/deploy.sh_apache &nbsp;./deploy.sh</strong>
+<br>
+<strong>(if apache2) cp -f $AXIS_HOME/deploy.sh_apache2 ./deploy.sh</strong>
+</p>
+<p>
+<strong>sh deploy.sh</strong>
+</p>
+<br>
+<p>deploy.sh is a script which copies files to neccessary places and start apache.<br>
+<br>
+</p>
+<p></p>
+<p>
+<br>
+</p>
+<p>
+<a name="Validating"></a>
+</p>
+<div class="h3">
+<h3>Validating The Installation</h3>
+</div>
+<p>If you have done installation successfully it will display the Axis C++ welcome page when you point to URI <a href="http://localhost/axis">http://localhost/axis</a> .<br>Note: In the axis welcome page all the services in $AXIS_HOME/conf/server.wsdd are listed. This does not mean<br>that the libraries corresponding to these services are deployed yet. It merely list whatever in the server.wsdd.<br>
+</p>
+<p>
+<strong>Deploying a Web Service</strong>
+</p>
+<p>You can deploy your own web service or the sample webservices with the guidance in the <a href="linuser-guide.html">userguide</a>
+</p>
+<br>
+<br>
+<div id="pdf" align="right">
+<a href="lininstall-guide.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
+          PDF</a>
+</div>
+</div>
+</div>
+</div>
+</td>
+<!--================= end Content ==================-->
+</tr>
+</tbody>
+</table>
+<!--================= end Main ==================-->
+<!--================= start Footer ==================-->
+<div id="footer">
+<table summary="footer" cellspacing="0" cellpadding="4" width="100%" border="0">
+<tbody>
+<tr>
+<!--================= start Copyright ==================-->
+<td colspan="2">
+<div align="center">
+<div class="copyright">
+              Copyright &copy; 2000-2003&nbsp;The Apache Software Foundation. All rights reserved.
+            </div>
+</div>
+</td>
+<!--================= end Copyright ==================-->
+</tr>
+<tr>
+<td align="left">
+<!--================= start Host ==================-->
+<!--================= end Host ==================--></td><td align="right">
+<!--================= start Credits ==================-->
+<div align="right">
+<div class="credit"></div>
+</div>
+<!--================= end Credits ==================-->
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!--================= end Footer ==================-->
+</body>
+</html>
