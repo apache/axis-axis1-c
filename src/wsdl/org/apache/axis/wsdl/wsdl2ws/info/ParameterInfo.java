@@ -28,6 +28,17 @@ public class ParameterInfo {
 	protected QName elementName;
 	private boolean isAnyType = false;
 	
+	private boolean isAttribute = false;
+	
+	public boolean isAttribute(){
+		return this.isAttribute;
+	}
+	
+	public void setAttribute(boolean isAttribute)
+	{
+		this.isAttribute = isAttribute;
+	}
+	
     public String getParamName() {
 		// TODO: design review needed
 		// 		- If type and name are equals add "_Ref" ie : ref="..."

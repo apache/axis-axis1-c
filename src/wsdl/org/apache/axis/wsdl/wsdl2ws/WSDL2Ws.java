@@ -237,6 +237,7 @@ public class WSDL2Ws {
 							while (names.hasNext()){
 								elementlist.add(names.next());
 							}
+
 							Type innerType;
 							for (int i = 0 ; i < elementlist.size(); i++) {
 								String elementname = (String)elementlist.get(i);
@@ -246,6 +247,20 @@ public class WSDL2Ws {
 								if (innerType.getName().equals(CUtils.anyTypeQname))
 									pinfo.setAnyType(true);
 								minfo.addInputParameter(pinfo);		
+							}
+
+							ArrayList attributeList = new ArrayList();
+							names = type.getAttributeNames();
+							while (names.hasNext()){
+								attributeList.add(names.next());
+							}
+							for (int i = 0; i < attributeList.size();i++){
+								String attributeName = (String) attributeList.get(i);
+								innerType = type.getTypForAttribName(attributeName);
+								pinfo= new ParameterInfo(innerType, attributeName);
+								pinfo.setElementName(type.getTypForAttribName(attributeName).getName());
+								pinfo.setAttribute(true);
+								minfo.addInputParameter(pinfo);
 							}
 							//remove the type that represents the wrapping element so that such type is not created.
 							//following is commented for the moment because the same element can be refered by more

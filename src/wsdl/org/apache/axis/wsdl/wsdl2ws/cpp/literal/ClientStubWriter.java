@@ -278,59 +278,85 @@ public class ClientStubWriter extends CPPClassWriter{
 		writer.write("\tm_pCall->setTransportProperty(SOAPACTION_HEADER , \""+minfo.getSoapAction()+"\");\n");
 		writer.write("\tm_pCall->setSOAPVersion(SOAP_VER_1_1);\n"); //TODO check which version is it really.
 		writer.write("\tm_pCall->setOperation(\""+minfo.getInputMessage().getLocalPart()+"\", \""+ minfo.getInputMessage().getNamespaceURI()+"\");\n");
+		
+		// Add attributes to soap method
+		for (int i = 0 ; i < paramsB.size(); i++){
+			ParameterInfo param = (ParameterInfo)paramsB.get(i);
+			if (param.isAttribute()){
+				String elementType = param.getElementName().getLocalPart();
+				
+				if( "string".equals( elementType)) {
+					writer.write("\tsetSOAPMethodAttribute(\""+ param.getParamName() + "\", \"\", Value"+i+");\n");
+				} else if( "int".equals( elementType)) {
+					writer.write("\t{\n");
+					writer.write("\t\tchar buffer[20];\n");
+					writer.write("\t\titoa( Value"+i+", buffer, 10);\n");
+					writer.write("\t\tsetSOAPMethodAttribute(\""+ param.getParamName() + "\", \"\", buffer);\n");
+					writer.write("\t}\n");
+				} else {
+					int t = 0;
+				}
+			}			
+		}
+		
+		
 		//new calls from stub base
 		writer.write("\tapplyUserPreferences();\n");
 		
 		for (int i = 0; i < paramsB.size(); i++) {
 			ParameterInfo param = (ParameterInfo)paramsB.get(i);
-			type = wscontext.getTypemap().getType(param.getSchemaName());
-			if (type != null){
-				if (type.isSimpleType()){//schema defined simpleType possibly with restrictions
-					paraTypeName = CUtils.getclass4qname(type.getBaseType());
+			
+			// Ignore attributes, while adding elements
+			if (!param.isAttribute()){			
+				type = wscontext.getTypemap().getType(param.getSchemaName());
+				if (type != null){
+					if (type.isSimpleType()){//schema defined simpleType possibly with restrictions
+						paraTypeName = CUtils.getclass4qname(type.getBaseType());
+					}
+					else{
+						paraTypeName = type.getLanguageSpecificName();
+					}
+					typeisarray = type.isArray();
 				}
-				else{
-					paraTypeName = type.getLanguageSpecificName();
+				else {
+					paraTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();
+					typeisarray = false;
 				}
-				typeisarray = type.isArray();
+				typeissimple = CUtils.isSimpleType(paraTypeName);
+				if(typeisarray){
+					//arrays
+					Type arrayType = WrapperUtils.getArrayType(type);
+					QName qname = arrayType.getName();
+					String containedType = null;
+					if (CUtils.isSimpleType(qname)){
+						containedType = CUtils.getclass4qname(qname);
+						writer.write("\tm_pCall->addBasicArrayParameter(");			
+						writer.write("(Axis_Array*)(&Value"+i+"), "+CUtils.getXSDTypeForBasicType(containedType)+", \""+((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart()+"\"");					
+					}
+					else if (arrayType.isSimpleType()){//SimpleType in the schema 
+						containedType = CUtils.getclass4qname(arrayType.getBaseType());
+						writer.write("\tm_pCall->addBasicArrayParameter(");			
+						writer.write("(Axis_Array*)(&Value"+i+"), "+CUtils.getXSDTypeForBasicType(containedType)+", \""+((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart()+"\"");					
+					}
+					else{
+						containedType = qname.getLocalPart();
+						writer.write("\tm_pCall->addCmplxArrayParameter(");			
+						writer.write("(Axis_Array*)(&Value"+i+"), (void*)Axis_Serialize_"+containedType+", (void*)Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart()+"\", Axis_URI_"+containedType);
+					}
+				}else if(typeissimple){
+					//for simple types	
+					writer.write("\tm_pCall->addParameter(");			
+					writer.write("(void*)&Value"+i+", \"" + ((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart()+"\", "+CUtils.getXSDTypeForBasicType(paraTypeName));
+				}else if (param.isAnyType()){
+					//for anyTtype 
+					writer.write("\tm_pCall->addAnyObject(Value"+i);
+				}else{
+					//for complex types 
+					writer.write("\tm_pCall->addCmplxParameter(");			
+					writer.write("Value"+i+", (void*)Axis_Serialize_"+paraTypeName+", (void*)Axis_Delete_"+paraTypeName+", \"" + ((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart()+"\", Axis_URI_"+paraTypeName);
+				}
+				writer.write(");\n");
 			}
-			else {
-				paraTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();
-				typeisarray = false;
-			}
-			typeissimple = CUtils.isSimpleType(paraTypeName);
-			if(typeisarray){
-				//arrays
-				Type arrayType = WrapperUtils.getArrayType(type);
-				QName qname = arrayType.getName();
-				String containedType = null;
-				if (CUtils.isSimpleType(qname)){
-					containedType = CUtils.getclass4qname(qname);
-					writer.write("\tm_pCall->addBasicArrayParameter(");			
-					writer.write("(Axis_Array*)(&Value"+i+"), "+CUtils.getXSDTypeForBasicType(containedType)+", \""+((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart()+"\"");					
-				}
-				else if (arrayType.isSimpleType()){//SimpleType in the schema 
-					containedType = CUtils.getclass4qname(arrayType.getBaseType());
-					writer.write("\tm_pCall->addBasicArrayParameter(");			
-					writer.write("(Axis_Array*)(&Value"+i+"), "+CUtils.getXSDTypeForBasicType(containedType)+", \""+((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart()+"\"");					
-				}
-				else{
-					containedType = qname.getLocalPart();
-					writer.write("\tm_pCall->addCmplxArrayParameter(");			
-					writer.write("(Axis_Array*)(&Value"+i+"), (void*)Axis_Serialize_"+containedType+", (void*)Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart()+"\", Axis_URI_"+containedType);
-				}
-			}else if(typeissimple){
-				//for simple types	
-				writer.write("\tm_pCall->addParameter(");			
-				writer.write("(void*)&Value"+i+", \"" + ((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart()+"\", "+CUtils.getXSDTypeForBasicType(paraTypeName));
-			}else if (param.isAnyType()){
-				//for anyTtype 
-				writer.write("\tm_pCall->addAnyObject(Value"+i);
-			}else{
-				//for complex types 
-				writer.write("\tm_pCall->addCmplxParameter(");			
-				writer.write("Value"+i+", (void*)Axis_Serialize_"+paraTypeName+", (void*)Axis_Delete_"+paraTypeName+", \"" + ((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart()+"\", Axis_URI_"+paraTypeName);
-			}
-			writer.write(");\n");
 		}
 		writer.write("\tif (AXIS_SUCCESS == m_pCall->invoke())\n\t{\n");
 		if(minfo.getOutputMessage()!=null)
