@@ -513,30 +513,178 @@ IAttribute* ComplexElement::getCurrentAttribute()
 }
 
 IAttribute* ComplexElement::getAttribute(AxisChar* pachPrefix,
-	AxisChar* pachURI, AxisChar* pachLocalname)
+										 AxisChar* pachURI,
+										 AxisChar* pachLocalname)
 {
+	// Create local enumeration for valid parameters.
+	typedef enum
+	{
+		eParamHasURI = 1,
+		eParamHasPrefix = 2,
+		eParamHasLocalName = 4
+	} EPARAMS_USED;
+
+	// Keep a list of valid parameters.
+	int	iValidParams = 0;
+
+	// For each parameter, test its validity by checking that the pointer is
+	// not null and then (and only then) that the string pointed to by the
+	// non-null pointer is not empty (string length is greater than zero). Iff
+	// the test remains valid, add the enumerated equivalent of the parameter
+	// to the list of valid parameters.
+	if( (pachURI != NULL) && (strlen( pachURI) > 0))
+	{
+		iValidParams += eParamHasURI;
+	}
+
+	if( (pachPrefix != NULL) && (strlen( pachPrefix) > 0))
+	{
+		iValidParams += eParamHasPrefix;
+	}
+
+	if( (pachLocalname != NULL) && (strlen( pachLocalname) > 0))
+	{
+		iValidParams += eParamHasLocalName;
+	}
+
+	// Get the pointer to the start of the attribute list.
     list<Attribute*>::iterator it_m_attributes = m_attributes.begin();
 
-    if ( (pachPrefix != NULL) && (strlen(pachPrefix) > 0)) {
-	/* Here user has requested to traverse using prefix and localname*/
-    	while (it_m_attributes != m_attributes.end()) {
-	    if ( (strcmp((*it_m_attributes)->getPrefix(), pachPrefix) == 0) &&
-		    (strcmp((*it_m_attributes)->getLocalName(), pachLocalname) == 0))
-	    	return (IAttribute*)(*it_m_attributes);
-	    else
-	    	it_m_attributes++;
-    	}
-    } else {
- 	/* Here user has requested to traverse using namespace URI and 
-	localname*/
-	while (it_m_attributes != m_attributes.end()) {
-            if ( (strcmp((*it_m_attributes)->getUri(), pachURI) == 0) &&
-                    (strcmp((*it_m_attributes)->getLocalName(), pachLocalname) == 0))
-            	return (IAttribute*)(*it_m_attributes);
-            else
-            	it_m_attributes++;
-    	}	
-    }
+	// Depending on the list of valid parameters, choose which case is
+	// appropriate and then perform the search using those valid parameters.
+	// NB: Currently, the first match is returned in all cases.
+	switch( iValidParams)
+	{
+	// Parameter list contains a valid URI
+	case eParamHasURI:
+		{
+    		while( it_m_attributes != m_attributes.end())
+			{
+				if( !strcmp( (*it_m_attributes)->getUri(), pachURI))
+				{
+	    			return (IAttribute*) (*it_m_attributes);
+				}
+				else
+				{
+		    		it_m_attributes++;
+				}
+    		}
+			break;
+		}
+
+	// Parameter list contains a valid Prefix
+	case eParamHasPrefix:
+		{
+    		while( it_m_attributes != m_attributes.end())
+			{
+				if( !strcmp( (*it_m_attributes)->getPrefix(), pachPrefix))
+				{
+	    			return (IAttribute*) (*it_m_attributes);
+				}
+				else
+				{
+		    		it_m_attributes++;
+				}
+    		}
+			break;
+		}
+
+	// Parameter list contains a valid URI and Prefix
+	case eParamHasURI + eParamHasPrefix:
+		{
+    		while( it_m_attributes != m_attributes.end())
+			{
+				if( !strcmp( (*it_m_attributes)->getUri(), pachURI) &&
+					!strcmp( (*it_m_attributes)->getPrefix(), pachPrefix))
+				{
+	    			return (IAttribute*) (*it_m_attributes);
+				}
+				else
+				{
+		    		it_m_attributes++;
+				}
+    		}
+			break;
+		}
+
+	// Parameter list contains a valid LocalName
+		case eParamHasLocalName:
+		{
+    		while( it_m_attributes != m_attributes.end())
+			{
+				if( !strcmp( (*it_m_attributes)->getLocalName(), pachLocalname))
+				{
+	    			return (IAttribute*) (*it_m_attributes);
+				}
+				else
+				{
+		    		it_m_attributes++;
+				}
+    		}
+			break;
+		}
+
+	// Parameter list contains a valid LocalName and URI
+		case eParamHasLocalName + eParamHasURI:
+		{
+    		while( it_m_attributes != m_attributes.end())
+			{
+				if( !strcmp( (*it_m_attributes)->getLocalName(), pachLocalname) &&
+					!strcmp( (*it_m_attributes)->getUri(), pachURI))
+				{
+	    			return (IAttribute*) (*it_m_attributes);
+				}
+				else
+				{
+		    		it_m_attributes++;
+				}
+    		}
+			break;
+		}
+
+	// Parameter list contains a valid LocalName and Prefix
+		case eParamHasLocalName + eParamHasPrefix:
+		{
+    		while( it_m_attributes != m_attributes.end())
+			{
+				if( !strcmp( (*it_m_attributes)->getLocalName(), pachLocalname) &&
+					!strcmp( (*it_m_attributes)->getPrefix(), pachPrefix))
+				{
+	    			return (IAttribute*) (*it_m_attributes);
+				}
+				else
+				{
+		    		it_m_attributes++;
+				}
+    		}
+			break;
+		}
+
+	// Parameter list contains a valid LocalName, URI and Prefix
+		case eParamHasLocalName + eParamHasPrefix + eParamHasURI:
+		{
+    		while( it_m_attributes != m_attributes.end())
+			{
+				if( !strcmp( (*it_m_attributes)->getLocalName(), pachLocalname) &&
+					!strcmp( (*it_m_attributes)->getUri(), pachURI) &&
+					!strcmp( (*it_m_attributes)->getPrefix(), pachPrefix))
+				{
+	    			return (IAttribute*) (*it_m_attributes);
+				}
+				else
+				{
+		    		it_m_attributes++;
+				}
+    		}
+			break;
+		}
+
+	// Parameter list contains no valid parameters
+		default:
+		{
+			break;
+		}
+	}
 
     return NULL;
 }
