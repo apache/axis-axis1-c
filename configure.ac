@@ -231,6 +231,7 @@ AC_OUTPUT(Makefile \
     samples/server/interoptests/doclitgroupB/Makefile \
     samples/server/simple/Makefile \
     samples/server/array/Makefile \
+    samples/server/ref/Makefile \
     samples/server/rpcfault/Makefile \
     samples/server/doclitfault/Makefile \
     samples/server/echoStringHeaderHandler/Makefile \
@@ -244,6 +245,7 @@ AC_OUTPUT(Makefile \
     samples/client/interoptests/doclitgroupB/Makefile \
     samples/client/simple/Makefile \
     samples/client/array/Makefile \
+    samples/client/ref/Makefile \
     samples/client/rpcfault/Makefile \
     samples/client/doclitfault/Makefile \
     samples/client/testHandler/Makefile \
