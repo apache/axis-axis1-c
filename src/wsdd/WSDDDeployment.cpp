@@ -191,3 +191,9 @@ const WSDDServiceMap* WSDDDeployment::GetWSDDServiceMap()
 
 
 
+
+string& WSDDDeployment::GetLibName(int nLibId)
+{
+	string xx;
+	return xx;
+}
