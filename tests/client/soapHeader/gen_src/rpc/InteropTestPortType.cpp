@@ -5,9 +5,9 @@
 
 #include "InteropTestPortType.h"
 
-#include <axis/server/AxisWrapperAPI.h>
-#include <axis/AxisGenException.h>
-#include <axis/ISoapFault.h>
+#include <axis/server/AxisWrapperAPI.hpp>
+#include <axis/AxisGenException.hpp>
+#include <axis/ISoapFault.hpp>
 #include "AxisClientException.h"
 
 using namespace std;
