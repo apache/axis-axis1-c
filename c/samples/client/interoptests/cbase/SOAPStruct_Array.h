@@ -4,8 +4,8 @@
  *Parameters and wrapper methos to manipulate SOAPStruct_Array
  */
 
-#if !defined(__SOAPSTRUCT_ARRAY_ARRAY_H__INCLUDED_)
-#define __SOAPSTRUCT_ARRAY_ARRAY_H__INCLUDED_
+#if !defined(__SOAPSTRUCT_ARRAY_ARRAY_H__OF_AXIS_INCLUDED_)
+#define __SOAPSTRUCT_ARRAY_ARRAY_H__OF_AXIS_INCLUDED_
 
 #include "SOAPStruct.h"
 
@@ -14,4 +14,4 @@ typedef struct {
 	int m_Size;
 } SOAPStruct_Array;
 
-#endif /* !defined(__SOAPSTRUCT_ARRAY_ARRAY_H__INCLUDED_)*/
+#endif /* !defined(__SOAPSTRUCT_ARRAY_ARRAY_H__OF_AXIS_INCLUDED_)*/

@@ -2,8 +2,8 @@
  * This is the C wrapper header file genarated by the WSDL2Ws tool
  *
  */
-#if !defined(__INTEROPTESTPORTTYPEBWRAPPER_H__INCLUDED_)
-#define __INTEROPTESTPORTTYPEBWRAPPER_H__INCLUDED_
+#if !defined(__INTEROPTESTPORTTYPEBWRAPPER_H__OF_AXIS_INCLUDED_)
+#define __INTEROPTESTPORTTYPEBWRAPPER_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/IMessageData.h>
 #include <axis/server/AxisWrapperAPI.h>
@@ -22,4 +22,4 @@ int echoNestedStructWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer 
 int echoNestedArrayWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ);
 
 
-#endif // !defined(__INTEROPTESTPORTTYPEBWRAPPER_H__INCLUDED_)
+#endif // !defined(__INTEROPTESTPORTTYPEBWRAPPER_H__OF_AXIS_INCLUDED_)

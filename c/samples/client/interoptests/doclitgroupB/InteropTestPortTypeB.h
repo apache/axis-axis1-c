@@ -3,8 +3,8 @@
 // InteropTestPortTypeB.h: interface for the InteropTestPortTypeBclass.
 //
 //////////////////////////////////////////////////////////////////////
-#if !defined(__INTEROPTESTPORTTYPEB_CLIENTSTUB_H__INCLUDED_)
-#define __INTEROPTESTPORTTYPEB_CLIENTSTUB_H__INCLUDED_
+#if !defined(__INTEROPTESTPORTTYPEB_CLIENTSTUB_H__OF_AXIS_INCLUDED_)
+#define __INTEROPTESTPORTTYPEB_CLIENTSTUB_H__OF_AXIS_INCLUDED_
 
 #include <axis/client/Call.h>
 #include "SOAPArrayStruct.h"
@@ -32,4 +32,4 @@ public:
 	SOAPArrayStruct* echoNestedArray(SOAPArrayStruct* Value0);
 };
 
-#endif // !defined(__INTEROPTESTPORTTYPEB_CLIENTSTUB_H__INCLUDED_)
+#endif // !defined(__INTEROPTESTPORTTYPEB_CLIENTSTUB_H__OF_AXIS_INCLUDED_)

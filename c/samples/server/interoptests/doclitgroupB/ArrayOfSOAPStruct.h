@@ -4,8 +4,8 @@
 //Parameters and wrapper methos to manipulate ArrayOfSOAPStruct
 ////////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__ARRAYOFSOAPSTRUCT_ARRAY_H__INCLUDED_)
-#define __ARRAYOFSOAPSTRUCT_ARRAY_H__INCLUDED_
+#if !defined(__ARRAYOFSOAPSTRUCT_ARRAY_H__OF_AXIS_INCLUDED_)
+#define __ARRAYOFSOAPSTRUCT_ARRAY_H__OF_AXIS_INCLUDED_
 
 #include "SOAPStruct.h"
 
@@ -15,4 +15,4 @@ typedef struct ArrayOfSOAPStructTag
 	int m_Size;
 } ArrayOfSOAPStruct;
 
-#endif // !defined(__ARRAYOFSOAPSTRUCT_ARRAY_H__INCLUDED_)
+#endif // !defined(__ARRAYOFSOAPSTRUCT_ARRAY_H__OF_AXIS_INCLUDED_)

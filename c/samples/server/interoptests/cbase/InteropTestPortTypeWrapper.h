@@ -2,8 +2,8 @@
  * This is the C wrapper header file genarated by the WSDL2Ws tool
  *
  */
-#if !defined(__INTEROPTESTPORTTYPEWRAPPER_H__INCLUDED_)
-#define __INTEROPTESTPORTTYPEWRAPPER_H__INCLUDED_
+#if !defined(__INTEROPTESTPORTTYPEWRAPPER_H__OF_AXIS_INCLUDED_)
+#define __INTEROPTESTPORTTYPEWRAPPER_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/IMessageData.h>
 #include <axis/server/AxisWrapperAPI.h>
@@ -32,4 +32,4 @@ int echoDecimalWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ);
 int echoBooleanWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ);
 
 
-#endif // !defined(__INTEROPTESTPORTTYPEWRAPPER_H__INCLUDED_)
+#endif // !defined(__INTEROPTESTPORTTYPEWRAPPER_H__OF_AXIS_INCLUDED_)
