@@ -107,6 +107,10 @@ bool HttpTransport::Init()
 	return true;
 }
 
+void HttpTransport::Fini()
+{
+	m_Channel.Close();
+}
 
 /**
  *	Set properties of HTTP transport such as additional Header fields like SOAPAction.

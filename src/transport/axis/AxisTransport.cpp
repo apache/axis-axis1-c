@@ -42,16 +42,28 @@ int AxisTransport::OpenConnection()
        m_pSoap->transport.pSendFunct = Send_bytes;
        m_pSoap->transport.pGetTrtFunct = Receive_transport_information;
        m_pSoap->transport.pSendTrtFunct = Send_transport_information; 
+	   return SUCCESS;
     }
     else
+	{
         return FAIL;
+	}
 }        
 
 void AxisTransport::CloseConnection()
 {
-//Step 1 - Close 2 streams
-	//Step 2 - Possibly delete the streams
+	//Step 1 - Close Transport and 2 streams
+	m_pHttpTransport->Fini();
+	//Step 2 - Delete the streams
+	delete m_pSender;
+	m_pSender = NULL;
+	delete m_pReceiver;
+	m_pReceiver = NULL;
+	m_pSoap->str.op_stream = NULL;
+	m_pSoap->str.ip_stream = NULL;
 	//Step 3 - Set function pointers in the m_Soap structure to NULL;
+	delete m_pHttpTransport;
+	m_pHttpTransport = NULL;
 	m_pSoap->transport.pGetFunct = NULL;
 	m_pSoap->transport.pSendFunct = NULL;
 	m_pSoap->transport.pGetTrtFunct = NULL;

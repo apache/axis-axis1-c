@@ -265,7 +265,7 @@ int main()
 
 	printf("soap request :\n %s\n", ip);
 
-	initialize_module(1, WSDDFILEPATH);
+	if (SUCCESS != initialize_module(1, WSDDFILEPATH)) return 1;
 	for (xx =0; xx < 1 ; xx++)
 	{
 		printf("Sending Soap Response :\n");
