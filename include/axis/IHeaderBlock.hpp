@@ -275,12 +275,19 @@ public:
       * @param localname The localname to set in.
       */
     virtual void setLocalName(const AxisChar* localname)=0;
+    
+    /**
+      * Gets the local name of this Header Block.
+      *
+      */
+    virtual const AxisChar * getLocalName()=0;
 
     /**
       * Sets the namespace uri of this Header Block.
       *
       * @param uri The namespace uri to set in.
       */
+
     virtual void setUri(const AxisChar* uri)=0;
 
 	/* 
