@@ -90,4 +90,9 @@
   for the system being deployed to, so a single build file can
   deploy to different systems with ease.</P>
 </BODY>
+
+  <H2>Foreach Task</H2>
+  <P><A href="foreach.html">&lt;axis-admin&gt;</A></P>
+  <H2>Runaxisfunctionaltests Task</H2>
+  <P><A href="runaxisfunctionaltests.html">&lt;axis-admin&gt;</A></P>
 </HTML>
