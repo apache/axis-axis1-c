@@ -20,24 +20,92 @@
 #include "IWrapperSoapSerializer.h"
 #include "SoapHeader.h"
 class IHeaderBlock;
-/*
- *   @class IHandlerSoapSerializer
- *   @brief interface for the IHandlerSoapSerializer class.
- * 
- *   @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- */
+/**
+  * @class IHandlerSoapSerializer
+  * @brief interface for the IHandlerSoapSerializer class. This interface is
+  *	exposed to a Handler Writer, to let him manipulate on the Serialzer object.
+  * Example usage is given below.
+  * <PRE>
+  * int ESHHandler::invoke(void *pvIMsg)
+  * {
+  *	IMessageData *pIMsg = (IMessageData*) pvIMsg;
+  *  AxisChar* pachTemp;
+  *	if(pIMsg->isPastPivot()) {
+  *		//this is a response
+  *
+  *		IHandlerSoapSerializer* pISZ;
+  *		pIMsg->getSoapSerializer(&pISZ);
+  *
+  *		IHeaderBlock* pIHeaderBlock= pISZ->createHeaderBlock();
+  *
+  *		pIHeaderBlock->setLocalName("echoMeStringResponse");
+  * </PRE>
+  * 
+  * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
+  */
 class IHandlerSoapSerializer : public IWrapperSoapSerializer
 
 {
 public:        
     virtual ~IHandlerSoapSerializer() {};
+
+	/**
+	  * Will create a Header Block and adds it to the Serializer.
+	  *
+	  * @return The created Header Block pointer will be returned, which the
+	  * user can manipulate on it.
+	  */
     virtual IHeaderBlock* createHeaderBlock()=0;
+
+	/**
+	  * Will create a Header Block using the given local name and the namespace
+	  * uri, and adds it to the Serializer.
+	  *
+	  * @param pachLocalName The local name of the Header Block
+	  * @param pachUri The namespace uri of the Header Block.
+	  * @return The created Header Block pointer will be returned, which the
+	  * user can manipulate on it.
+	  */
     virtual IHeaderBlock*  createHeaderBlock(AxisChar *pachLocalName, 
 		AxisChar *pachUri)=0;    
+
+	/**
+	  * Adds the given Header Block to the Serialzer.
+	  *
+	  * @param pBlk The Header Block to be added.
+	  * @return AXIS_SUCCESS or AXIS_FAIL to indicate success or fail.
+	  */
     virtual int AXISCALL addHeaderBlock(IHeaderBlock* pBlk)=0;
+
+	/**
+	  * Sets the given Soap Header to the Serializer. If a Soap Header already
+	  * exists then this method doesn't do anything, but returns a state to
+	  * indicate this situation.
+	  *
+	  * @param pSoapHeader The Soap Header to be set.
+	  * @return Returns the following status:
+	  *		- AXIS_FAIL : to indicate failuer.
+	  *		- AXIS_SUCCESS : to indicate success.
+	  *		- AXIS_OBJECT_ALREADY_EXISTS : if a Soap Header already exists.
+	  */
     virtual int setSoapHeader(SoapHeader* pSoapHeader)=0;
-    virtual    int setSoapVersion(SOAP_VERSION)=0;
+
+	/**
+	  * Sets the SOAP Version.
+	  * @param eSOAP_VERSION The SOAP version to set.
+	  * @return AXIS_SUCCESS to indicate success.
+	  */
+    virtual int setSoapVersion(SOAP_VERSION eSOAP_VERSION)=0;
+
+	/**
+	  * Gets the Header Block
+	  */
 	virtual IHeaderBlock* getHeaderBlock() = 0;
+
+	/**
+	  * Gets and returns the Header Block of the given local name and 
+	  * namespace uri.
+	  */
 	virtual IHeaderBlock* getHeaderBlock(const AxisChar *pcName, 
 											 const AxisChar *pcNamespace) = 0;
         

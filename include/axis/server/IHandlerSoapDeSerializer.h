@@ -63,6 +63,14 @@ public:
     virtual xsd__hexBinary AXISCALL getBodyAsHexBinary()=0;
     virtual xsd__base64Binary AXISCALL getBodyAsBase64Binary()=0;
     virtual int AXISCALL setNewSoapBody(AxisChar* pNewSoapBody)=0;
+
+	/**
+	  * Gets and returns the Header Block of the given local name and 
+	  * namespace uri. After returning the Header Block pointer, it will be
+	  * removed from the available Header Block list of the DeSerializer.
+	  * It is the responsibilty of the caller of this method to delete the
+	  * returned pointer object, to avoid memory leaks.
+	  */
     virtual IHeaderBlock* getHeaderBlock(const AxisChar* pName, 
         const AxisChar* pNamespace) = 0;
 };
