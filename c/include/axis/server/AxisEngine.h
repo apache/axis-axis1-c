@@ -90,6 +90,7 @@ protected:
 	HandlerChain* m_pSReqFChain;
 	HandlerChain* m_pSResFChain;
 	MessageData* m_pMsgData;
+	PROVIDERTYPE m_CurrentProviderType;
 public:
 	static int m_bServer;
 public:

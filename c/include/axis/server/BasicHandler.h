@@ -57,7 +57,6 @@
  *
  */
 
-
 #if !defined(AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_)
 #define AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_
 
@@ -66,81 +65,35 @@
 
 enum HANDLER_TYPE { NORMAL_HANDLER, WEBSERVICE_HANDLER, CHAIN_HANDLER };
 
+typedef struct 
+{
+	int (AXISCALL* Invoke)(void* _object, void* pMsg);
+	void (AXISCALL* OnFault)(void* _object, void* pMsg);
+	int (AXISCALL* Init)(void* _object);
+	int (AXISCALL* Fini)(void* _object);
+	int (AXISCALL* GetType)(void* _object);
+	AXIS_BINDING_STYLE (AXISCALL* GetBindingStyle)(void* _object);
+} BasicHandlerFunctions;
 
-/*
-With following technique we can remove the compiler dependancy of supporting
-C services ???
-
-#ifndef __cplusplus
-typedef struct {
-	void* unused; // present only for interfaces passed from C to C++ (eg:BasicHandler) 
-	BasicHanlerFunctionsX* __vfptr;
+typedef struct 
+{
+	void* _object; // present only for interfaces passed from C to C++ (eg:BasicHandler) 
+	BasicHandlerFunctions* _functions;
 } BasicHandler;
-#endif
-
-typedef struct {
-	int (* Invoke)(BasicHandler* pThis, IMessageData* pMsg);
-} BasicHanlerFunctionsX;
 
 #ifdef __cplusplus
 
-class BasicHandler  
+class HandlerBase  
 {
 public:
-	virtual ~BasicHandler(){};
-	void* __vfptr;
-	virtual int Invoke(IMessageData* pMsg);
-
-
-	static BasicHanlerFunctionsX ms_VFtable;
-	static int s_Invoke(BasicHandler* pThis, IMessageData* pMsg) 
-	{
-		pThis->Invoke(pMsg);
-	}
-	static void s_Initialize()
-	{
-		ms_VFtable.Invoke = s_Invoke;
-		__vfptr = &ms_VFtable;
-	}
-
-#endif
-*/
-
-#ifdef __cplusplus
-/**
-    @class BasicHandler
-    @brief interface for the BasicHandler class.
-
-
-    @author Susantha Kumara (skumara@virtusa.com)
-*/
-class BasicHandler  
-{
-public:
-	virtual ~BasicHandler(){};
-
-#else
-
-typedef struct BasicHandlerTag
-{
-	void* __vfptr;
-} BasicHandler;
-typedef struct BasicHandlerXTag
-{
-	AXISDESTRUCTOR
-
-#endif
-
-	virtual int AXISAPI(Invoke, (APIHASPARAMS IMessageData* pMsg))
-	virtual void AXISAPI(OnFault, (APIHASPARAMS IMessageData* mMsg))
-	virtual int AXISAPI(GetType, (APINOPARAMS))
-	virtual int AXISAPI(Init, (APINOPARAMS))
-	virtual int AXISAPI(Fini, (APINOPARAMS))
-	virtual AXIS_BINDING_STYLE AXISAPI(GetBindingStyle, (APINOPARAMS))
-
-#ifdef __cplusplus
+	HandlerBase(){};
+	~HandlerBase(){};
+	virtual int AXISCALL Invoke(void* pMsg)=0;
+	virtual void AXISCALL OnFault(void* mMsg)=0;
+	virtual int AXISCALL Init()=0;
+	virtual int AXISCALL Fini()=0;
+	virtual int AXISCALL GetType()=0;
 };
-#else
-} BasicHandlerX;
 #endif
+
 #endif /* !defined(AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_) */

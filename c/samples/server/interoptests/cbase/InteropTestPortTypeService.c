@@ -9,34 +9,33 @@
 #include <malloc.h>
 #include "InteropTestPortTypeWrapper.h"
 
+static BasicHandlerFunctions InteropTestPortTypeWrapper_functions =
+{
+	InteropTestPortTypeWrapper_Invoke,
+	InteropTestPortTypeWrapper_OnFault,
+	InteropTestPortTypeWrapper_Init,
+	InteropTestPortTypeWrapper_Fini,
+	InteropTestPortTypeWrapper_GetType,
+	InteropTestPortTypeWrapper_GetBindingStyle
+};
+
 STORAGE_CLASS_INFO
 int GetClassInstance(BasicHandler **inst)
 {
-	BasicHandler* pBH = malloc(sizeof(BasicHandler));
-	BasicHandlerX* pBHX = malloc(sizeof(BasicHandlerX));
-	if (pBHX)
-	{
-		pBHX->Invoke = Invoke;
-		pBHX->OnFault = OnFault;
-		pBHX->Init = Init;
-		pBHX->Fini = Fini;
-		pBHX->GetBindingStyle = GetBindingStyle;
-		pBH->__vfptr = pBHX;
-		*inst = pBH;
-		return AXIS_SUCCESS;
-	}
-	return AXIS_FAIL;
+	*inst = malloc(sizeof(BasicHandler));
+	(*inst)->_object = 0;	/* instantiate and provide the context object if needed */
+	(*inst)->_functions = &InteropTestPortTypeWrapper_functions;
+	return (*inst)->_functions->Init((*inst)->_object);
 }
 
 STORAGE_CLASS_INFO 
 int DestroyInstance(BasicHandler *inst)
 {
-	BasicHandler* pBH;
 	if (inst)
 	{
-		pBH = inst;
-		free(pBH->__vfptr);
-		free(pBH);
+		inst->_functions->Fini(inst->_object);
+		/* destroy the context object set to inst->_object if any here */
+		free(inst);
 		return AXIS_SUCCESS;
 	}
 	return AXIS_FAIL;

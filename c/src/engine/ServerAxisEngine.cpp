@@ -97,13 +97,18 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 
 			m_pMsgData->SetService(pService);
 
-			switch(pService->GetProvider())
+			m_CurrentProviderType = pService->GetProvider();
+			m_pSZ->SetCurrentProviderType(m_CurrentProviderType);
+			m_pDZ->SetCurrentProviderType(m_CurrentProviderType);
+			switch(m_CurrentProviderType)
 			{
-				case RPC_PROVIDER:
+				case C_RPC_PROVIDER:
+				case CPP_RPC_PROVIDER:
 					m_pSZ->SetStyle(RPC_ENCODED);
 					m_pDZ->SetStyle(RPC_ENCODED);
 					break;
-				case DOC_PROVIDER:
+				case C_DOC_PROVIDER:
+				case CPP_DOC_PROVIDER:
 					m_pSZ->SetStyle(DOC_LITERAL);
 					m_pDZ->SetStyle(DOC_LITERAL);
 					break;
@@ -156,7 +161,17 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 					break; //do .. while(0)
 				}
 				/* check whether the provider type in the wsdd matchs the service's binding style */
-				if (m_pSZ->GetStyle() != m_pWebService->GetBindingStyle())
+				AXIS_BINDING_STYLE nBindingStyle;
+				if (0 != m_pWebService->_functions)
+				/* C service */
+				{
+					nBindingStyle = m_pWebService->_functions->GetBindingStyle(m_pWebService->_object);
+				}
+				else if (0 != m_pWebService->_object)
+				{
+					nBindingStyle = ((WrapperClassHandler*)m_pWebService->_object)->GetBindingStyle();
+				}
+				if (m_pSZ->GetStyle() != nBindingStyle)
 				{
 					m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
 					break; //do .. while(0)
@@ -303,7 +318,20 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 		//call actual web service handler
 		if (m_pWebService)
 		{
-			if (AXIS_SUCCESS != (Status = m_pWebService->Invoke(pMsg)))
+			if (0 != m_pWebService->_functions)
+			/* C web service */
+			{
+				IMessageData_C cMC = {0,0};
+				cMC._object = pMsg;
+				cMC._functions = &IMessageData::ms_VFtable;
+				Status = m_pWebService->_functions->Invoke(m_pWebService->_object, &cMC);
+			}
+			else if (0 != m_pWebService->_object)
+			{
+				Status = ((WrapperClassHandler*)m_pWebService->_object)->Invoke(pMsg);
+			}
+			else Status = AXIS_FAIL;
+			if (AXIS_SUCCESS != Status)
 			{                
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_WEBSERVICEFAILED));
 				break;

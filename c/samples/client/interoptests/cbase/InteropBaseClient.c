@@ -18,6 +18,7 @@ int main(int argc, char* argv[])
 	SOAPStruct stct;
 	time_t tim;
 	struct tm* lt;
+
 	printf("invoking echoString...\n");
 	/*testing echoString */
 	if (0 == strcmp(echoString("hello world"), "hello world"))

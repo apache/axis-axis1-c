@@ -22,11 +22,11 @@ public:
 public:
 	virtual ~InteropTestPortTypeWrapper();
 public://implementation of WrapperClassHandler interface
-	int AXISCALL Invoke(IMessageData* mc);
-	void AXISCALL OnFault(IMessageData* pMsg);
+	int AXISCALL Invoke(void* pMsg);
+	void AXISCALL OnFault(void* pMsg);
 	int AXISCALL Init();
 	int AXISCALL Fini();
-	AXIS_BINDING_STYLE AXISCALL GetBindingStyle(){return RPC_ENCODED;};
+	AXIS_BINDING_STYLE AXISCALL GetBindingStyle();
 private://Methods corresponding to the web service methods
 	int echoString(IMessageData* mc);
 	int echoStringArray(IMessageData* mc);

@@ -136,7 +136,9 @@ int Call::Invoke()
 	return m_pAxisEngine->Process(&m_Soap);
 }
 
-int Call::Initialize(AXIS_BINDING_STYLE nStyle)
+int Call::Initialize(PROVIDERTYPE nStyle)
+/* does this mean that the stub that uses this Call object as well as all client side
+ * handlers have the same PROVIDERTYPE ? */
 {
 	/* 
 	   Initialize re-usable objects of this instance (objects may have been populated by
@@ -158,8 +160,26 @@ int Call::Initialize(AXIS_BINDING_STYLE nStyle)
 				m_pMsgData->GetSoapDeSerializer((IWrapperSoapDeSerializer**)(&m_pIWSDZ));
 				if (m_pIWSSZ && m_pIWSDZ)
 				{
-					m_pIWSSZ->SetStyle(nStyle);
-					m_pIWSDZ->SetStyle(nStyle);
+					m_pIWSSZ->SetCurrentProviderType(nStyle);
+					m_pIWSDZ->SetCurrentProviderType(nStyle);
+					switch(nStyle)
+					{
+						case C_RPC_PROVIDER:
+						case CPP_RPC_PROVIDER:
+							m_pIWSSZ->SetStyle(RPC_ENCODED);
+							m_pIWSDZ->SetStyle(RPC_ENCODED);
+							break;
+						case C_DOC_PROVIDER:
+						case CPP_DOC_PROVIDER:
+							m_pIWSSZ->SetStyle(DOC_LITERAL);
+							m_pIWSDZ->SetStyle(DOC_LITERAL);
+							break;
+						case COM_PROVIDER: 
+							//TODO: ??
+							break;
+						default:;
+							//TODO: ??
+					}
 					return AXIS_SUCCESS;
 				}
 			}

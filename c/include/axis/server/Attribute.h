@@ -90,7 +90,9 @@ private:
 	AxisString m_value;
 	//string m_strAttrSerialized;
 public:		
+#ifdef UNIT_TESTING_BUILD
 	int initializeForTesting();
+#endif
 	int serialize(SoapSerializer& pSZ) const;
 	int serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack);
 	//int serialize(string&);

@@ -23,11 +23,11 @@ xsd__string echoString(xsd__string Value0)
 	int nStatus;
 	CallFunctions* pCall;
 	xsd__string Ret;
-	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost/axis/InteropBase");
+	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost:5555/axis/InteropBase");
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return Ret;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, RPC_ENCODED)) return Ret;
+	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, C_RPC_PROVIDER)) return Ret;
 	pCall->SetTransportProperty(g_pInteropTestPortType,SOAPACTION_HEADER , "InteropBase#echoString");
 	pCall->SetSOAPVersion(g_pInteropTestPortType, SOAP_VER_1_1);
 	pCall->SetOperation(g_pInteropTestPortType, "echoString", "http://soapinterop.org/");
@@ -57,7 +57,7 @@ xsd__string_Array echoStringArray(xsd__string_Array Value0)
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return RetArray;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, RPC_ENCODED)) return RetArray;
+	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, C_RPC_PROVIDER)) return RetArray;
 	pCall->SetTransportProperty(g_pInteropTestPortType,SOAPACTION_HEADER , "InteropBase#echoStringArray");
 	pCall->SetSOAPVersion(g_pInteropTestPortType, SOAP_VER_1_1);
 	pCall->SetOperation(g_pInteropTestPortType, "echoStringArray", "http://soapinterop.org/");
@@ -87,7 +87,7 @@ int echoInteger(int Value0)
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return Ret;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, RPC_ENCODED)) return Ret;
+	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, C_RPC_PROVIDER)) return Ret;
 	pCall->SetTransportProperty(g_pInteropTestPortType,SOAPACTION_HEADER , "InteropBase#echoInteger");
 	pCall->SetSOAPVersion(g_pInteropTestPortType, SOAP_VER_1_1);
 	pCall->SetOperation(g_pInteropTestPortType, "echoInteger", "http://soapinterop.org/");
@@ -117,7 +117,7 @@ xsd__int_Array echoIntegerArray(xsd__int_Array Value0)
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return RetArray;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, RPC_ENCODED)) return RetArray;
+	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, C_RPC_PROVIDER)) return RetArray;
 	pCall->SetTransportProperty(g_pInteropTestPortType,SOAPACTION_HEADER , "InteropBase#echoIntegerArray");
 	pCall->SetSOAPVersion(g_pInteropTestPortType, SOAP_VER_1_1);
 	pCall->SetOperation(g_pInteropTestPortType, "echoIntegerArray", "http://soapinterop.org/");
@@ -147,7 +147,7 @@ float echoFloat(float Value0)
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return Ret;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, RPC_ENCODED)) return Ret;
+	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, C_RPC_PROVIDER)) return Ret;
 	pCall->SetTransportProperty(g_pInteropTestPortType,SOAPACTION_HEADER , "InteropBase#echoFloat");
 	pCall->SetSOAPVersion(g_pInteropTestPortType, SOAP_VER_1_1);
 	pCall->SetOperation(g_pInteropTestPortType, "echoFloat", "http://soapinterop.org/");
@@ -177,7 +177,7 @@ xsd__float_Array echoFloatArray(xsd__float_Array Value0)
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return RetArray;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, RPC_ENCODED)) return RetArray;
+	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, C_RPC_PROVIDER)) return RetArray;
 	pCall->SetTransportProperty(g_pInteropTestPortType,SOAPACTION_HEADER , "InteropBase#echoFloatArray");
 	pCall->SetSOAPVersion(g_pInteropTestPortType, SOAP_VER_1_1);
 	pCall->SetOperation(g_pInteropTestPortType, "echoFloatArray", "http://soapinterop.org/");
@@ -207,7 +207,7 @@ SOAPStruct* echoStruct(SOAPStruct* Value0)
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return pReturn;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, RPC_ENCODED)) return pReturn;
+	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, C_RPC_PROVIDER)) return pReturn;
 	pCall->SetTransportProperty(g_pInteropTestPortType,SOAPACTION_HEADER , "InteropBase#echoStruct");
 	pCall->SetSOAPVersion(g_pInteropTestPortType, SOAP_VER_1_1);
 	pCall->SetOperation(g_pInteropTestPortType, "echoStruct", "http://soapinterop.org/");
@@ -237,7 +237,7 @@ SOAPStruct_Array echoStructArray(SOAPStruct_Array Value0)
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return RetArray;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, RPC_ENCODED)) return RetArray;
+	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, C_RPC_PROVIDER)) return RetArray;
 	pCall->SetTransportProperty(g_pInteropTestPortType,SOAPACTION_HEADER , "InteropBase#echoStructArray");
 	pCall->SetSOAPVersion(g_pInteropTestPortType, SOAP_VER_1_1);
 	pCall->SetOperation(g_pInteropTestPortType, "echoStructArray", "http://soapinterop.org/");
@@ -265,7 +265,7 @@ void echoVoid()
 	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost:5555/axis/InteropBase");
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, RPC_ENCODED)) return ;
+	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, C_RPC_PROVIDER)) return ;
 	pCall->SetTransportProperty(g_pInteropTestPortType,SOAPACTION_HEADER , "InteropBase#echoVoid");
 	pCall->SetSOAPVersion(g_pInteropTestPortType, SOAP_VER_1_1);
 	pCall->SetOperation(g_pInteropTestPortType, "echoVoid", "http://soapinterop.org/");
@@ -292,7 +292,7 @@ xsd__base64Binary echoBase64(xsd__base64Binary Value0)
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return Ret;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, RPC_ENCODED)) return Ret;
+	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, C_RPC_PROVIDER)) return Ret;
 	pCall->SetTransportProperty(g_pInteropTestPortType,SOAPACTION_HEADER , "InteropBase#echoBase64");
 	pCall->SetSOAPVersion(g_pInteropTestPortType, SOAP_VER_1_1);
 	pCall->SetOperation(g_pInteropTestPortType, "echoBase64", "http://soapinterop.org/");
@@ -321,7 +321,7 @@ xsd__dateTime echoDate(xsd__dateTime Value0)
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return Ret;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, RPC_ENCODED)) return Ret;
+	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, C_RPC_PROVIDER)) return Ret;
 	pCall->SetTransportProperty(g_pInteropTestPortType,SOAPACTION_HEADER , "InteropBase#echoDate");
 	pCall->SetSOAPVersion(g_pInteropTestPortType, SOAP_VER_1_1);
 	pCall->SetOperation(g_pInteropTestPortType, "echoDate", "http://soapinterop.org/");
@@ -350,7 +350,7 @@ xsd__hexBinary echoHexBinary(xsd__hexBinary Value0)
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return Ret;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, RPC_ENCODED)) return Ret;
+	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, C_RPC_PROVIDER)) return Ret;
 	pCall->SetTransportProperty(g_pInteropTestPortType,SOAPACTION_HEADER , "InteropBase#echoHexBinary");
 	pCall->SetSOAPVersion(g_pInteropTestPortType, SOAP_VER_1_1);
 	pCall->SetOperation(g_pInteropTestPortType, "echoHexBinary", "http://soapinterop.org/");
@@ -379,7 +379,7 @@ xsd__decimal echoDecimal(xsd__decimal Value0)
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return Ret;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, RPC_ENCODED)) return Ret;
+	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, C_RPC_PROVIDER)) return Ret;
 	pCall->SetTransportProperty(g_pInteropTestPortType,SOAPACTION_HEADER , "InteropBase#echoDecimal");
 	pCall->SetSOAPVersion(g_pInteropTestPortType, SOAP_VER_1_1);
 	pCall->SetOperation(g_pInteropTestPortType, "echoDecimal", "http://soapinterop.org/");
@@ -408,7 +408,7 @@ xsd__boolean echoBoolean(xsd__boolean Value0)
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return Ret;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
-	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, RPC_ENCODED)) return Ret;
+	if (AXIS_SUCCESS != pCall->Initialize(g_pInteropTestPortType, C_RPC_PROVIDER)) return Ret;
 	pCall->SetTransportProperty(g_pInteropTestPortType,SOAPACTION_HEADER , "InteropBase#echoBoolean");
 	pCall->SetSOAPVersion(g_pInteropTestPortType, SOAP_VER_1_1);
 	pCall->SetOperation(g_pInteropTestPortType, "echoBoolean", "http://soapinterop.org/");

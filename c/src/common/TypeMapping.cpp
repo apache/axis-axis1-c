@@ -90,6 +90,7 @@ void TypeMapping::Initialize()
 	if (!m_bInit)
 	{
 		m_sTypeMap[__TRC("int")] = XSD_INT;
+		m_sTypeMap[__TRC("boolean")] = XSD_BOOLEAN;
         m_sTypeMap[__TRC("unsignedInt")] = XSD_UNSIGNEDINT;
         m_sTypeMap[__TRC("short")] = XSD_SHORT;
         m_sTypeMap[__TRC("unsignedShort")] = XSD_UNSIGNEDSHORT;

@@ -79,17 +79,18 @@ class IDeployerUtils;
 
 typedef struct {
 	const AxisChar* (AXISCALL* GetOperationName)(void* pObj);
-	void (AXISCALL* GetSoapSerializer)(void* pObj, IWrapperSoapSerializer** pIWSS);
-	void (AXISCALL* GetSoapDeSerializer)(void* pObj, IWrapperSoapDeSerializer** pIWSDS);
+	void (AXISCALL* GetSoapSerializer)(void* pObj, IWrapperSoapSerializer_C* pIWSS);
+	void (AXISCALL* GetSoapDeSerializer)(void* pObj, IWrapperSoapDeSerializer_C* pIWSDS);
 } IMessageDataFunctions;
 
+typedef struct
+{
+	void* _object; /* this will be C++ MessageData Object */
+	IMessageDataFunctions* _functions; /* this is the static function table */
+} IMessageData_C;
+
 #ifndef __cplusplus
-
-typedef struct { 
-	void* unused; /* this corresponds to C++ virtual function pointer which is ignored in C */ 
-	IMessageDataFunctions* __vfptr;
-} IMessageData;
-
+typedef IMessageData_C IMessageData;
 #else
 /**
     @class IMessageData
@@ -101,8 +102,6 @@ typedef struct {
 class IMessageData
 {
 	friend class CPP_DeploymentWrapper;
-protected:
-	void* __vfptr;
 public:
     virtual ~IMessageData(){};
 private:
@@ -127,10 +126,10 @@ public:
 	static IMessageDataFunctions ms_VFtable;
 	static const AxisChar* AXISCALL s_GetOperationName(void* pObj) 
 	{ return ((IMessageData*)pObj)->GetOperationName();};
-	static void AXISCALL s_GetSoapSerializer(void* pObj, IWrapperSoapSerializer** pIWSS)
-	{ ((IMessageData*)pObj)->GetSoapSerializer(pIWSS);};
-	static void AXISCALL s_GetSoapDeSerializer(void* pObj, IWrapperSoapDeSerializer** pIWSDS)
-	{ ((IMessageData*)pObj)->GetSoapDeSerializer(pIWSDS);};
+	static void AXISCALL s_GetSoapSerializer(void* pObj, IWrapperSoapSerializer_C* pIWSS)
+	{ ((IMessageData*)pObj)->GetSoapSerializer((IWrapperSoapSerializer**)&(pIWSS->_object)); pIWSS->_functions = &(IWrapperSoapSerializer::ms_VFtable);};
+	static void AXISCALL s_GetSoapDeSerializer(void* pObj, IWrapperSoapDeSerializer_C* pIWSDS)
+	{ ((IMessageData*)pObj)->GetSoapDeSerializer((IWrapperSoapDeSerializer**)&(pIWSDS->_object)); pIWSDS->_functions = &(IWrapperSoapDeSerializer::ms_VFtable);};
 	static void s_Initialize()
 	{
 		ms_VFtable.GetOperationName = s_GetOperationName;

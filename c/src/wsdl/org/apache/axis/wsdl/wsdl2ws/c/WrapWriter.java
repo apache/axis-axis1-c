@@ -333,7 +333,7 @@ public class WrapWriter extends CFileWriter{
 				else{
 					containedType = qname.getLocalPart();
 					writer.write("\treturn pSZX->AddOutputCmplxArrayParam(pSZ, (Axis_Array*)(&ret),"+ 
-					"(void*) Axis_Serialize_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+methodName+"Return\", 0);\n");
+					"(void*) Axis_Serialize_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+methodName+"Return\", Axis_URI_"+containedType+");\n");
 				}
 			}
 			else{

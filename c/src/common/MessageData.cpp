@@ -78,7 +78,6 @@ IMessageDataFunctions IMessageData::ms_VFtable;
 
 MessageData::MessageData()
 {
-	__vfptr = &ms_VFtable;
 	m_pSZ = NULL;
 	m_pDZ = NULL;
 	m_bPastPivotState= false;

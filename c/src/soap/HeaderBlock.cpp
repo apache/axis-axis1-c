@@ -65,6 +65,10 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+#ifdef WIN32
+#pragma warning (disable : 4786)
+#endif
+
 #include <axis/soap/HeaderBlock.h>
 #include <axis/soap/SoapSerializer.h>
 #include <axis/common/GDefine.h>
@@ -329,6 +333,7 @@ BasicNode* HeaderBlock::createChild(NODE_TYPE eNODE_TYPE)
 	return pBasicNode;
 }
 
+#ifdef UNIT_TESTING_BUILD
 int HeaderBlock::initializeForTesting()
 {
 	setPrefix("m");
@@ -363,6 +368,7 @@ int HeaderBlock::initializeForTesting()
 
 	return AXIS_SUCCESS;	
 }
+#endif
 
 bool HeaderBlock::operator ==( const HeaderBlock &objHeaderBlock)
 {

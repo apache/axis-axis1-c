@@ -97,7 +97,6 @@ IWrapperSoapDeSerializerFunctions IWrapperSoapDeSerializer::ms_VFtable;
 
 SoapDeSerializer::SoapDeSerializer()
 {
-	__vfptr_IWSDZ = &ms_VFtable;
 	#ifdef USE_EXPAT_PARSER
 	m_pParser = new SoapParserExpat();
 	#elif USE_XERCES_PARSER
@@ -362,7 +361,17 @@ Axis_Array SoapDeSerializer::GetCmplxArray(void* pDZFunct, void* pCreFunct, void
 			{
 				m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <item>*/
 				pItem = reinterpret_cast<void*>(ptrval+nIndex*itemsize);
-				((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pItem, this);
+				if (C_RPC_PROVIDER == GetCurrentProviderType())
+				{
+					IWrapperSoapDeSerializer_C cWSD;
+					cWSD._object = this;
+					cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
+					((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pItem, &cWSD);
+				}
+				else
+				{
+					m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pItem, this);
+				}
 				m_pNode = m_pParser->Next(); /* skip end element node too */
 			}
 			return Array;
@@ -390,7 +399,18 @@ Axis_Array SoapDeSerializer::GetCmplxArray(void* pDZFunct, void* pCreFunct, void
 					}
 					m_pNode = NULL; /* recognized and used the node */
 					pItem = reinterpret_cast<void*>(ptrval+nIndex*itemsize);
-					if (AXIS_SUCCESS == ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pItem, this))
+					if (C_DOC_PROVIDER == GetCurrentProviderType())
+					{
+						IWrapperSoapDeSerializer_C cWSD;
+						cWSD._object = this;
+						cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
+						m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pItem, &cWSD);
+					}
+					else
+					{
+						m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pItem, this);
+					}
+					if (AXIS_SUCCESS == m_nStatus)
 					{
 						m_pParser->Next(); /* skip end element of the array item */
 						continue;
@@ -750,9 +770,20 @@ void* SoapDeSerializer::GetCmplxObject(void* pDZFunct, void* pCreFunct, void* pD
 		m_pNode = m_pParser->Next(); /* just skip wrapper node with type info  Ex: <tns:QuoteInfoType xmlns:tns="http://www.getquote.org/test">*/ 
 		/* type  can be checked here */
 		void* pObject = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)(NULL, false, 0);
-		if (pObject)
+		if (pObject && pDZFunct)
 		{
-			if (pDZFunct && (AXIS_SUCCESS == ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pObject, this)))
+			if (C_RPC_PROVIDER == GetCurrentProviderType())
+			{
+				IWrapperSoapDeSerializer_C cWSD;
+				cWSD._object = this;
+				cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
+				m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pObject, &cWSD);
+			}
+			else
+			{
+				m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pObject, this);
+			}
+			if (AXIS_SUCCESS == m_nStatus)
 			{
 				m_pParser->Next(); /* skip end node too */
 				return pObject;
@@ -776,9 +807,20 @@ void* SoapDeSerializer::GetCmplxObject(void* pDZFunct, void* pCreFunct, void* pD
 			}
 			m_pNode = NULL; /* node identified and used */
 			void* pObject = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)(NULL, false, 0);
-			if (pObject)
+			if (pObject && pDZFunct)
 			{
-				if (pDZFunct && (AXIS_SUCCESS == ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pObject, this)))
+				if (C_DOC_PROVIDER == GetCurrentProviderType())
+				{
+					IWrapperSoapDeSerializer_C cWSD;
+					cWSD._object = this;
+					cWSD._functions = &IWrapperSoapDeSerializer::ms_VFtable;
+					m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pObject, &cWSD);
+				}
+				else
+				{
+					m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pObject, this);
+				}
+				if (AXIS_SUCCESS == m_nStatus)
 				{
 					m_pParser->Next(); /* skip end node too */
 					return pObject;
@@ -1005,7 +1047,7 @@ xsd__boolean SoapDeSerializer::GetElementAsBoolean(const AxisChar* pName, const 
 	if (RPC_ENCODED == m_nStyle)
 	{
 		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
-		if (XSD_INT == GetXSDType(m_pNode))
+		if (XSD_BOOLEAN == GetXSDType(m_pNode))
 		{
 			m_pNode = m_pParser->Next(); /* charactor node */
 			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
@@ -1511,7 +1553,7 @@ double SoapDeSerializer::GetElementAsDouble(const AxisChar* pName, const AxisCha
 	if (RPC_ENCODED == m_nStyle)
 	{
 		m_pNode = m_pParser->Next(); /* wrapper node with type info  Ex: <i xsi:type="xsd:int">*/ 
-		if (XSD_DOUBLE == GetXSDType(m_pNode))
+		if (XSD_DECIMAL == GetXSDType(m_pNode))
 		{
 			m_pNode = m_pParser->Next(); /* charactor node */
 			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))

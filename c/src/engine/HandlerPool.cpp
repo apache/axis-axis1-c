@@ -252,10 +252,10 @@ int HandlerPool::GetHandlerChain(string& sSessionId, HandlerChain** ppChain, con
 		pWSDDH = (*it);
 		if ((Status = GetHandler(&pBH, sSessionId, pWSDDH->GetScope(),pWSDDH->GetLibId())) == AXIS_SUCCESS)
 		{
-			if (NORMAL_HANDLER == pBH->GetType())
+			if (NORMAL_HANDLER == pBH->_functions->GetType(pBH->_object))
 			{                
-				((Handler*)pBH)->SetOptionList(pWSDDH->GetParameterList());                
-				pChain->AddHandler(static_cast<Handler*>(pBH), pWSDDH->GetScope(), pWSDDH->GetLibId());                
+				((Handler*)(pBH->_object))->SetOptionList(pWSDDH->GetParameterList());                
+				pChain->AddHandler(pBH, pWSDDH->GetScope(), pWSDDH->GetLibId());                
 			}
 			else
 			{
@@ -312,11 +312,26 @@ int HandlerPool::GetWebService(BasicHandler** ppHandler, string& sSessionId, con
 	int Status;
 	if ((Status = GetHandler(ppHandler, sSessionId, pService->GetScope(), pService->GetLibId())) == AXIS_SUCCESS)
 	{
-		if (AXIS_SUCCESS != (Status = (*ppHandler)->Init()))
+		if (0 != (*ppHandler)->_functions)
+		/* C web service */
 		{
-			(*ppHandler)->Fini();
-			PoolHandler(sSessionId, *ppHandler, pService->GetScope(), pService->GetLibId());
-			*ppHandler = NULL;
+			if (AXIS_SUCCESS != (Status = (*ppHandler)->_functions->Init((*ppHandler)->_object)))
+			{
+				(*ppHandler)->_functions->Fini((*ppHandler)->_object);
+				PoolHandler(sSessionId, *ppHandler, pService->GetScope(), pService->GetLibId());
+				*ppHandler = NULL;
+			}
+		}
+		else if (0 == (*ppHandler)->_object) return AXIS_FAIL;
+		else
+		/* C++ web service */
+		{
+			if (AXIS_SUCCESS != (Status = ((HandlerBase*)(*ppHandler)->_object)->Init()))
+			{
+				((HandlerBase*)(*ppHandler)->_object)->Fini();
+				PoolHandler(sSessionId, *ppHandler, pService->GetScope(), pService->GetLibId());
+				*ppHandler = NULL;
+			}
 		}
 	}
 	return Status;

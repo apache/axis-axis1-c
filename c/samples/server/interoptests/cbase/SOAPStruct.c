@@ -13,23 +13,22 @@
  */
 int Axis_Serialize_SOAPStruct(SOAPStruct* param, IWrapperSoapSerializer* pSZ, bool bArray)
 {
-	IWrapperSoapSerializerFunctions* pSZX = pSZ->__vfptr;
 	const AxisChar* sPrefix;
 	if (bArray)
 	{
-		pSZX->SerializeStartElementOfType(pSZ, Axis_TypeName_SOAPStruct, 0, 0);
+		pSZ->_functions->SerializeStartElementOfType(pSZ->_object, Axis_TypeName_SOAPStruct, 0, 0);
 	}
 	else
 	{
-		sPrefix = pSZX->GetNamespacePrefix(pSZ, Axis_URI_SOAPStruct);
-		pSZX->SerializeStartElementOfType(pSZ, Axis_TypeName_SOAPStruct, Axis_URI_SOAPStruct, sPrefix);
+		sPrefix = pSZ->_functions->GetNamespacePrefix(pSZ->_object, Axis_URI_SOAPStruct);
+		pSZ->_functions->SerializeStartElementOfType(pSZ->_object, Axis_TypeName_SOAPStruct, Axis_URI_SOAPStruct, sPrefix);
 	}
 
-	pSZX->SerializeAsElement(pSZ, "varString", (void*)&(param->varString), XSD_STRING);
-	pSZX->SerializeAsElement(pSZ, "varInt", (void*)&(param->varInt), XSD_INT);
-	pSZX->SerializeAsElement(pSZ, "varFloat", (void*)&(param->varFloat), XSD_FLOAT);
+	pSZ->_functions->SerializeAsElement(pSZ->_object, "varString", (void*)&(param->varString), XSD_STRING);
+	pSZ->_functions->SerializeAsElement(pSZ->_object, "varInt", (void*)&(param->varInt), XSD_INT);
+	pSZ->_functions->SerializeAsElement(pSZ->_object, "varFloat", (void*)&(param->varFloat), XSD_FLOAT);
 
-	pSZX->SerializeEndElementOfType(pSZ, Axis_TypeName_SOAPStruct);
+	pSZ->_functions->SerializeEndElementOfType(pSZ->_object, Axis_TypeName_SOAPStruct);
 	return AXIS_SUCCESS;
 }
 
@@ -38,11 +37,10 @@ int Axis_Serialize_SOAPStruct(SOAPStruct* param, IWrapperSoapSerializer* pSZ, bo
  */
 int Axis_DeSerialize_SOAPStruct(SOAPStruct* param, IWrapperSoapDeSerializer *pDZ)
 {
-	IWrapperSoapDeSerializerFunctions* pDZX = pDZ->__vfptr;
-	param->varString = pDZX->GetElementAsString(pDZ,0,0);
-	param->varInt = pDZX->GetElementAsInt(pDZ,0,0);
-	param->varFloat = pDZX->GetElementAsFloat(pDZ,0,0);
-	return pDZX->GetStatus(pDZ);
+	param->varString = pDZ->_functions->GetElementAsString(pDZ->_object,0,0);
+	param->varInt = pDZ->_functions->GetElementAsInt(pDZ->_object,0,0);
+	param->varFloat = pDZ->_functions->GetElementAsFloat(pDZ->_object,0,0);
+	return pDZ->_functions->GetStatus(pDZ->_object);
 }
 void* Axis_Create_SOAPStruct(SOAPStruct* pObj, bool bArray, int nSize)
 {

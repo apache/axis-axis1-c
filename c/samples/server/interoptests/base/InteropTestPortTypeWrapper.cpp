@@ -23,8 +23,18 @@ InteropTestPortTypeWrapper::~InteropTestPortTypeWrapper()
 }
 
 //implementation of WrapperClassHandler interface
-void InteropTestPortTypeWrapper::OnFault(IMessageData *pMsg)
+static void InteropTestPortTypeWrapper_OnFault(InteropTestPortTypeWrapper* object, IMessageData *pMsg)
 {
+	object->OnFault(pMsg);
+}
+
+void InteropTestPortTypeWrapper::OnFault(void *pMsg)
+{
+}
+
+static int InteropTestPortTypeWrapper_Init(InteropTestPortTypeWrapper* object)
+{
+	return object->Init();
 }
 
 int InteropTestPortTypeWrapper::Init()
@@ -32,17 +42,37 @@ int InteropTestPortTypeWrapper::Init()
 	return AXIS_SUCCESS;
 }
 
+static int InteropTestPortTypeWrapper_Fini(InteropTestPortTypeWrapper* object)
+{
+	return object->Fini();
+}
+
 int InteropTestPortTypeWrapper::Fini()
 {
 	return AXIS_SUCCESS;
 }
 
+static int InteropTestPortTypeWrapper_Invoke(InteropTestPortTypeWrapper* object, IMessageData *mc)
+{
+	return object->Invoke(mc);
+}
+
+static AXIS_BINDING_STYLE AXISCALL InteropTestPortTypeWrapper_GetBindingStyle(InteropTestPortTypeWrapper* object)
+{
+	return object->GetBindingStyle();
+}
+
+AXIS_BINDING_STYLE AXISCALL InteropTestPortTypeWrapper::GetBindingStyle()
+{
+	return RPC_ENCODED;
+}
 
 /////////////////////////////////////////////////////////////////
 // This method invokes the right service method 
 //////////////////////////////////////////////////////////////////
-int InteropTestPortTypeWrapper::Invoke(IMessageData *mc)
+int InteropTestPortTypeWrapper::Invoke(void *pMsg)
 {
+	IMessageData* mc = (IMessageData*)pMsg;
 	const AxisChar *method = mc->GetOperationName();
 	if (0 == strcmp(method, "echoString"))
 		return echoString(mc);
@@ -74,7 +104,6 @@ int InteropTestPortTypeWrapper::Invoke(IMessageData *mc)
 		return echoBoolean(mc);
 	else return AXIS_FAIL;
 }
-
 
 //Methods corresponding to the web service methods
 

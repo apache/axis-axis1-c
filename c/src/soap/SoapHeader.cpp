@@ -65,6 +65,10 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+#ifdef WIN32
+#pragma warning (disable : 4786)
+#endif
+
 #include <axis/soap/SoapHeader.h>
 #include <axis/soap/SoapSerializer.h>
 #include <axis/common/GDefine.h>

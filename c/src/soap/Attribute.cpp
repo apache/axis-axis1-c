@@ -65,6 +65,10 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+#ifdef WIN32
+#pragma warning (disable : 4786)
+#endif
+
 #include <axis/soap/Attribute.h>
 #include <axis/common/GDefine.h>
 #include <axis/soap/SoapSerializer.h>
@@ -194,6 +198,7 @@ bool Attribute::isSerializable() const
 	return bStatus;
 }
 
+#ifdef UNIT_TESTING_BUILD
 int Attribute::initializeForTesting()
 {
 	m_prefix = "pr";
@@ -203,3 +208,5 @@ int Attribute::initializeForTesting()
 
 	return AXIS_SUCCESS;
 }
+#endif
+

@@ -93,13 +93,13 @@ typedef struct {
 	void (AXISCALL* SerializeEndElementOfType)(void* pObj, const AxisChar* pName);
 }IWrapperSoapSerializerFunctions;
 
-#ifndef __cplusplus
-
 typedef struct { 
-	void* unused; /* this corresponds to C++ virtual function pointer which is ignored in C */ 
-	IWrapperSoapSerializerFunctions* __vfptr;
-} IWrapperSoapSerializer;
+	void* _object; /* this will be C++ SoapSerializer Object */
+	IWrapperSoapSerializerFunctions* _functions; /* this is the static function table */
+} IWrapperSoapSerializer_C;
 
+#ifndef __cplusplus
+typedef IWrapperSoapSerializer_C IWrapperSoapSerializer;
 #else
 /**
     @class IWrapperSoapSerializer
@@ -112,8 +112,6 @@ typedef struct {
 */
 class IWrapperSoapSerializer : public ISoapSerializer
 {
-protected:
-	void* __vfptr;
 public:
 	virtual ~IWrapperSoapSerializer(){};
 	virtual int AXISCALL CreateSoapMethod(const AxisChar* sLocalName, const AxisChar* sURI)=0;
