@@ -32,8 +32,6 @@
 					<!-- Files to compile -->
 					<fileset dir="${dir.src}">
 						<include name="transport/${transport}/*.cpp"/>
-						<!-- The following files need to be excluded -->
-						<exclude name="transport/${transport}/SecureChannel.cpp"/>
 					</fileset>
 				</cc>
 			</then>
@@ -47,8 +45,6 @@
 					<!-- Files to compile -->
 					<fileset dir="${dir.src}">
 						<include name="transport/${transport}/*.cpp"/>
-						<!-- The following files need to be excluded -->
-						<exclude name="transport/${transport}/SecureChannel.cpp"/>
 					</fileset>
 				</cc>
 			</else>
