@@ -553,6 +553,7 @@ public class WSDL2Ws {
 			if (CUtils.isBasicType(qn)) return null;
 			QName newqn = new QName(type.getQName().getNamespaceURI(), qn.getLocalPart()+"_Array");
 			typedata = new Type(newqn, newqn.getLocalPart(), true, targetLanguage);
+                        typedata.setElementType(type.getRefType().getRefType().getQName().getLocalPart());
 			typeMap.addType(newqn, typedata);
 		}else {
 			typedata = new Type(type.getQName(), type.getQName().getLocalPart(), true, targetLanguage);

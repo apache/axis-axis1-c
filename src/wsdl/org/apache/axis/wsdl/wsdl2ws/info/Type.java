@@ -80,6 +80,9 @@ public class Type {
     private boolean isreferenced = false;
     
     private String language;
+    //Samisa: element type
+    private String elementType;
+    
 
     public Type(QName name, String languageSpecificName, boolean hasOrder,String language) {
         this.languageSpecificName = languageSpecificName;
@@ -340,8 +343,9 @@ public class Type {
 	       	str =str +"isArray ="+isArray+"\n";
 	       	str = str + "Elements[\n";
 	       	Iterator c = elements.values().iterator();
+	       	java.util.Enumeration k = elements.keys();//.iterator();
 			while(c.hasNext())	
-			str = str +","+ c.next()+"\n";
+			str = str +"," + k.toString() + ":"+ c.next()+"\n";
          	       	str = str + "]\n";
 	       	
 			c = attributes.keySet().iterator();
@@ -403,6 +407,14 @@ public class Type {
 	 */
 	public void setBaseType(QName baseType) {
 		this.baseType = baseType;
+	}
+
+	public void setElementType(String type) {
+		elementType = type;
+	}
+	
+	public String getElementType() {
+		return elementType;
 	}
 
 }

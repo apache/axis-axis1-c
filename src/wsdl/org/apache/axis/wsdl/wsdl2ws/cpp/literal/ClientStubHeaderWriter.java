@@ -188,11 +188,25 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 			Type atype;
 			Iterator types = this.wscontext.getTypemap().getTypes().iterator();
 			HashSet typeSet = new HashSet();
+                        HashSet removeSet = new HashSet();
 			while(types.hasNext()){
 				atype = (Type)types.next();
+                        if( atype.isArray() ) {
+				if( atype.getElementType().equals("string") )
+					removeSet.add( atype.getLanguageSpecificName() );
+			}
+                        if( atype.getBaseType() != null ){
+				if( atype.getBaseType().getLocalPart().equals( "string" ) ){
+					removeSet.add( atype.getLanguageSpecificName() + "_Array" );
+                                 }
+}
 				if (atype.getLanguageSpecificName().startsWith(">")) continue;				
 				typeSet.add(atype.getLanguageSpecificName());
 			}
+                        Iterator ritr = removeSet.iterator();
+                        while( ritr.hasNext() )
+                             typeSet.remove( ritr.next() );
+
 			Iterator itr = typeSet.iterator();
 			while(itr.hasNext())
 			{

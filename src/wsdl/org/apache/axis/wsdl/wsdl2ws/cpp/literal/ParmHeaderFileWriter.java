@@ -81,6 +81,7 @@ public class ParmHeaderFileWriter extends ParamWriter{
 			writer.write("typedef ");
 			if ("string".equals(baseType.getLocalPart()) || "NMTOKEN".equals(baseType.getLocalPart())){
 				writer.write(langTypeName + " " + classname + ";\n");
+				writer.write("typedef " + langTypeName + "_Array " + classname + "_Array;\n");
 				for(int i=1; i<restrictionData.size();i++){
 					QName value = (QName)restrictionData.elementAt(i);
 					if ("enumeration".equals(value.getLocalPart())){
