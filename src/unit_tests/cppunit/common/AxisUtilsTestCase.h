@@ -18,8 +18,8 @@
  *
  */
 
-#if !defined(AFX_AXISUTILSTESTCASE_H__66F92899_F038_457B_8122_08196CA935C6__OF_AXIS_INCLUDED_)
-#define AFX_AXISUTILSTESTCASE_H__66F92899_F038_457B_8122_08196CA935C6__OF_AXIS_INCLUDED_
+#if !defined(AXIS_AXISUTILSTESTCASE_H__OF_AXIS_INCLUDED_)
+#define AXIS_AXISUTILSTESTCASE_H__OF_AXIS_INCLUDED_
 
 #include "cppunit\TestCase.h"
 #include "cppunit\TestSuite.h"
@@ -39,16 +39,16 @@ using namespace std;
 class AxisUtilsTestCase : public TestCase
 {
 public:
-	void testLowerCaseString();
-	void testtoLowerCase();
-	void testToAxisXMLCh();
-	void isCharacterAvailableref();
-	void testIsCharacterAvailable();
-	static Test* suite();
-	void testClearArray();
-	AxisUtilsTestCase();
-	AxisUtilsTestCase(string sName): TestCase(sName) {}
-	virtual ~AxisUtilsTestCase();
+    void testLowerCaseString();
+    void testtoLowerCase();
+    void testToAxisXMLCh();
+    void isCharacterAvailableref();
+    void testIsCharacterAvailable();
+    static Test* suite();
+    void testClearArray();
+    AxisUtilsTestCase();
+    AxisUtilsTestCase(string sName): TestCase(sName) {}
+    virtual ~AxisUtilsTestCase();
 };
 
-#endif // !defined(AFX_AXISUTILSTESTCASE_H__66F92899_F038_457B_8122_08196CA935C6__OF_AXIS_INCLUDED_)
+#endif
