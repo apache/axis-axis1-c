@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
 
 		longType->longType = (xsd__long)35;
 		longTypeReturn = ws->getDataLong(longType);
-		cout << "long=" << longTypeReturn->longType << endl;
+		cout << "long=" << (int)(longTypeReturn->longType) << endl;
 
 		unsignedLongType->unsignedLongType = (xsd__unsignedLong)42;
 		unsignedLongTypeReturn = ws->getDataUnsignedLong(unsignedLongType);
@@ -130,7 +130,7 @@ int main(int argc, char* argv[])
 
 		integerType->integerType = (xsd__integer) 919191919;
 		integerTypeReturn = ws->getDataInteger(integerType);
-		cout << "integer=" << integerTypeReturn->integerType << endl;
+		cout << "integer=" << (int)(integerTypeReturn->integerType) << endl;
 
 		decimalType->decimalType = (xsd__decimal)929292929.5555555555555;
 		decimalTypeReturn = ws->getDataDecimal(decimalType);
@@ -176,7 +176,7 @@ int main(int argc, char* argv[])
 	}
 	catch(exception& e)
 	{
-	    cout << "Unknown exception has occured" << endl;
+	    cout << "Unknown exception has occured" << e.what() << endl;
 	}
 	catch(...)
 	{

@@ -15,8 +15,8 @@ int main(int argc, char* argv[])
 	const char* p1 = 0;
 	const char* p2 = 0;
 	int i1=0, i2=0;
-        int iResult;
-        char* pcDetail;
+    int iResult;
+
 
 	url = argv[1];
 
@@ -44,14 +44,11 @@ int main(int argc, char* argv[])
                 }
                 catch(AxisException& e)
                 {
-                    printf("%s\n", e.what());
-                }
-                catch(AxisException& e)
-                {
                     printf("Exception : %s\n", e.what());
                 }
                 catch(exception& e)
                 {
+                    printf("Exception : %s\n", e.what());
                 }
                 catch(...)
                 {
