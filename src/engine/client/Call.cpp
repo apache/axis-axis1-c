@@ -339,16 +339,23 @@ int Call::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char
 	{
 		try
 		{
-			iSuccess = m_pTransport->setTransportProperty(type, value);
+			iSuccess = m_pTransport->setTransportProperty( type, value);
 		}
-		catch(AxisException& e)
+		catch( AxisException& e)
 		{
 			char *	pszError = new char[strlen( e.what()) + 1];
-
 			strcpy( pszError, e.what());
 
 			throw AxisGenException(e.getExceptionCode(), const_cast<char*>(pszError));
 		}
+	}
+
+	if( iSuccess < 0)
+	{
+		string	sError = m_pTransport->getLastChannelError();
+		char *	pszError = new char[sError.length() + 1];
+		strcpy( pszError, sError.c_str());
+		throw AxisGenException( -iSuccess, const_cast<char*>(pszError));
 	}
 
     return iSuccess;
@@ -392,12 +399,12 @@ int Call::openConnection()
 
         if( pcChannelHTTPLibraryPath)
 		{
-			m_pTransport->setTransportProperty( CHANNEL_HTTP_DLL_NAME, pcChannelHTTPLibraryPath);
+			m_nStatus = m_pTransport->setTransportProperty( CHANNEL_HTTP_DLL_NAME, pcChannelHTTPLibraryPath);
 		}
 
         if( strcmp( "Unknown", pcChannelHTTPSSLLibraryPath) != 0)
 		{
-			m_pTransport->setTransportProperty( CHANNEL_HTTP_SSL_DLL_NAME, pcChannelHTTPSSLLibraryPath);
+			m_nStatus = m_pTransport->setTransportProperty( CHANNEL_HTTP_SSL_DLL_NAME, pcChannelHTTPSSLLibraryPath);
 		}
 
         m_pTransport->setEndpointUri( m_pcEndPointUri);
@@ -424,7 +431,7 @@ int Call::openConnection()
 				}
 			}
 
-			m_pTransport->setTransportProperty( SECURE_PROPERTIES, (const char *) &sArguments);
+			m_nStatus = m_pTransport->setTransportProperty( SECURE_PROPERTIES, (const char *) &sArguments);
 		}
 
         //if use proxy then set proxy

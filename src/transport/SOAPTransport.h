@@ -486,6 +486,12 @@ public:
     */
     virtual void setMaintainSession(bool bSession) {};
 
+  /**
+    * Get the last channel error string from the active channel.
+    * @return string - Last active channel error string.
+    */
+	virtual const char * getLastChannelError() {return NULL;};
+
 protected:
     /**
      * Outgoing endpoint URI

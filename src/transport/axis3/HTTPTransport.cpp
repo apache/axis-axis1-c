@@ -25,6 +25,7 @@
 #endif
 
 #include "HTTPTransport.hpp"
+#include "../../common/AxisGenException.h"
 
 #include <stdio.h>
 #include <iostream>
@@ -1488,3 +1489,12 @@ const char * HTTPTransport::getSessionId()
     return m_strSessionKey.c_str();
 }
 
+const char * HTTPTransport::getLastChannelError()
+{
+	if( m_pActiveChannel != NULL)
+	{
+		return m_pActiveChannel->GetLastErrorMsg().c_str();
+	}
+
+	return NULL;
+}

@@ -89,8 +89,9 @@ class HTTPTransport:public SOAPTransport
     virtual void			setMaintainSession( bool bSession);
 
     void					setAttachment( const char * pcAttachmentId, const char * pcAttachment) {};
-	ISoapAttachment*	getAttachment( const char * pcAttachmentId) { return NULL;};
-    char* getIncomingSOAPMimeHeaders() {return NULL;}
+	ISoapAttachment *		getAttachment( const char * pcAttachmentId) { return NULL;};
+    char *					getIncomingSOAPMimeHeaders() {return NULL;}
+	const char *			getLastChannelError();
 
   protected:
     void					processResponseHTTPHeaders() throw (HTTPTransportException);
@@ -204,9 +205,9 @@ class HTTPTransport:public SOAPTransport
   /**
     * Channel used for communication
     */
-    IChannel *	m_pNormalChannel;	
-    IChannel *	m_pSecureChannel;	
-    IChannel *	m_pActiveChannel;	
+    IChannel *	m_pNormalChannel;
+    IChannel *	m_pSecureChannel;
+    IChannel *	m_pActiveChannel;
     bool		m_bChannelSecure;
 
   /**
