@@ -77,24 +77,13 @@ public class AxisCppServlet extends HttpServlet {
         throws IOException, ServletException
     {
 		int bodySize = request.getContentLength();
-		PrintWriter pw = new PrintWriter(response.getWriter());
+		OutputStream bodyWriter = response.getOutputStream();
 		response.setContentType("text/xml"); //change this according to the SOAP 1.2
 			
 		if(0 != bodySize)
 		{
-			byte [] bodyContent = new byte[bodySize+1];
-			ServletInputStream bodyReader = request.getInputStream();
-			try{
-				bodyReader.read(bodyContent, 0, bodySize); 
-			}
-			catch(IOException ex)
-			{
-				pw.write("<error>");
-				pw.write("bdy size: "+bodySize+" \nContent : "+ex.getMessage());
-				pw.write("</error>");
-				return;
-			}
-						
+			InputStream bodyReader = request.getInputStream();
+			int contentLength = request.getContentLength();
 			//String contentType = request.getContentType();
 			int headerCount = 0;
 			Vector headers = new Vector();
@@ -106,15 +95,12 @@ public class AxisCppServlet extends HttpServlet {
 				headers.addElement(headerName);//Add the name
 				headers.addElement(request.getHeader(headerName)); //add the value
 			}
-
+			
 			if(bodySize > 0)
-				AxisCppContentHandler.processContent(bodyContent, bodyContent.length, 
-												 headers, headerCount);
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			out.write(bodyContent);
-			pw.write(out.toString());
+				AxisCppContentHandler.processContent(bodyReader, headers, 
+													 bodyWriter, contentLength);	
 		}
-		
+		PrintWriter pw = new PrintWriter(response.getWriter());
 		//setup the response
 		pw.write("<error>");
 		pw.write("Error - body content empty");
