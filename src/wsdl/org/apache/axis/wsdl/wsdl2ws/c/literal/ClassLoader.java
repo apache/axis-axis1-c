@@ -105,6 +105,7 @@ public class ClassLoader implements SourceWriter{
 	  writer.write("\t\tpBHX->OnFault = OnFault;\n");
 	  writer.write("\t\tpBHX->Init = Init;\n");
 	  writer.write("\t\tpBHX->Fini = Fini;\n");
+	  writer.write("\t\tpBHX->GetBindingStyle = GetBindingStyle;\n");
 	  writer.write("\t\tpBH->__vfptr = pBHX;\n");
 	  writer.write("\t\t*inst = pBH;\n");
 	  writer.write("\t\treturn AXIS_SUCCESS;\n");

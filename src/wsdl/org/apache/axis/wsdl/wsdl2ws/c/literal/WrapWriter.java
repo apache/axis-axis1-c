@@ -64,6 +64,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
@@ -290,7 +291,7 @@ public class WrapWriter extends CFileWriter{
 		writer.write("\tif (!pDZ) return AXIS_FAIL;\n");
 		writer.write("\tpDZX = pDZ->__vfptr;\n");
 		writer.write("\tif (!pDZX) return AXIS_FAIL;\n");
-		writer.write("\tif (AXIS_SUCCESS != pDZX->CheckMessageBody(pSZ, \""+minfo.getInputMessage().getLocalPart()+"\", \""+minfo.getInputMessage().getNamespaceURI()+"\")) return AXIS_FAIL;\n");
+		writer.write("\tif (AXIS_SUCCESS != pDZX->CheckMessageBody(pDZ, \""+minfo.getInputMessage().getLocalPart()+"\", \""+minfo.getInputMessage().getNamespaceURI()+"\")) return AXIS_FAIL;\n");
 		writer.write("\tpSZX->CreateSoapMethod(pSZ, \""+minfo.getOutputMessage().getLocalPart()+"\", \""+minfo.getOutputMessage().getNamespaceURI()+"\");\n");
 		//create and populate variables for each parameter
 		for (int i = 0; i < paramsB.size(); i++) {
@@ -374,6 +375,7 @@ public class WrapWriter extends CFileWriter{
 	 */
 	protected void writeGlobalCodes() throws WrapperFault {
 		Iterator types = wscontext.getTypemap().getTypes().iterator();
+		HashSet typeSet = new HashSet();
 		String typeName;
 		Type type;
 		try {
@@ -382,8 +384,14 @@ public class WrapWriter extends CFileWriter{
 				if (type.isArray()) continue;
 				typeName = type.getLanguageSpecificName();
 				if (typeName.startsWith(">")) continue;
+				typeSet.add(typeName);
+			}
+			Iterator itr = typeSet.iterator();
+			while(itr.hasNext())
+			{
+				typeName = itr.next().toString();
 				writer.write("extern int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer *pDZ);\n");
-				writer.write("extern void* Axis_Create_"+typeName+"(bool bArray, int nSize);\n");
+				writer.write("extern void* Axis_Create_"+typeName+"("+typeName+" *Obj, bool bArray, int nSize);\n");
 				writer.write("extern void Axis_Delete_"+typeName+"("+typeName+"* param, bool bArray, int nSize);\n");
 				writer.write("extern int Axis_Serialize_"+typeName+"("+typeName+"* param, IWrapperSoapSerializer* pSZ, bool bArray);\n");
 				writer.write("extern int Axis_GetSize_"+typeName+"();\n\n");

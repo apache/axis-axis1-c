@@ -63,6 +63,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
@@ -352,6 +353,7 @@ public class ClientStubWriter extends CPPClassWriter{
 	 */
 	protected void writeGlobalCodes() throws WrapperFault {
 		Iterator types = wscontext.getTypemap().getTypes().iterator();
+		HashSet typeSet = new HashSet();
 		String typeName;
 		Type type;
 		try {
@@ -360,8 +362,14 @@ public class ClientStubWriter extends CPPClassWriter{
 				if (type.isArray()) continue;
 				typeName = type.getLanguageSpecificName();
 				if (typeName.startsWith(">")) continue;
+				typeSet.add(typeName);
+			}
+			Iterator itr = typeSet.iterator();
+			while(itr.hasNext())
+			{
+				typeName = itr.next().toString();
 				writer.write("extern int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer *pDZ);\n");
-				writer.write("extern void* Axis_Create_"+typeName+"("+typeName+" pObj, bool bArray = false, int nSize=0);\n");
+				writer.write("extern void* Axis_Create_"+typeName+"("+typeName+" *Obj, bool bArray = false, int nSize=0);\n");
 				writer.write("extern void Axis_Delete_"+typeName+"("+typeName+"* param, bool bArray = false, int nSize=0);\n");
 				writer.write("extern int Axis_Serialize_"+typeName+"("+typeName+"* param, IWrapperSoapSerializer* pSZ, bool bArray = false);\n");
 				writer.write("extern int Axis_GetSize_"+typeName+"();\n\n");
