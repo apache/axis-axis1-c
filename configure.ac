@@ -191,7 +191,7 @@ AC_ARG_ENABLE(log, [  --enable-log    enable log facility.],
   ENABLELOGGING="-DENABLE_AXISTRACE"
 )
 
-AC_MSG_CHECKING(whether to build ssh transport channellibrary.)
+AC_MSG_CHECKING(whether to build axis2 ssh transport channellibrary.)
 AC_ARG_WITH(axis2-ssl,
 [  --with-axis2-ssl[=PATH]      build transport channellibrary.],
 [ case "$withval" in
@@ -216,6 +216,37 @@ AC_ARG_WITH(axis2-ssl,
   SSLBUILD=""
 )
 
+AC_MSG_CHECKING(whether to axis3 build ssh transport channellibrary.)
+AC_ARG_WITH(axis3-ssl,
+[  --with-axis3-ssl[=PATH]      build axis3 ssh transport channellibrary.],
+[ case "$withval" in
+  no)
+    AC_MSG_RESULT(no)
+    AXIS3SSLBUILD=""
+    ;;
+  *)
+    AC_MSG_RESULT(yes)
+    dnl test whether axis3 build enabled
+    if test  axis3 != "$AXIS3BUILD"; then
+        AC_MSG_ERROR("Axis3 transport is not enabled. stop")
+    fi
+
+    dnl test for  ssl directory
+    if test -d $withval; then
+        axis3sslinc="-I$withval/include"
+        axis3ssllib="-L$withval/lib -lssl -L$withval/lib -lcrypto -ldl"
+    else
+        AC_MSG_ERROR(could not find ssl. stop)
+    fi
+    AXIS3SSLBUILD="HTTPSSLChannel"
+  
+  ;;
+  esac ],
+  AC_MSG_RESULT(no)
+  AXIS3SSLBUILD=""
+)
+
+
 APACHE2INC=$apache2inc
 APACHEINC=$apacheinc
 XERCESCINC=$xercescinc
@@ -226,6 +257,8 @@ EXPATINC=$expatinc
 EXPATLIB=$expatlib
 SSLINC=$sslinc
 SSLLIB=$ssllib
+AXIS3SSLINC=$axis3sslinc
+AXIS3SSLLIB=$axis3ssllib
 LINKCLIENTLIB="-L${AXISCPP_HOME}/src/engine/client -laxiscpp_client -ldl"
 AC_SUBST(APACHE2INC)
 AC_SUBST(APACHEINC)
@@ -237,6 +270,8 @@ AC_SUBST(EXPATINC)
 AC_SUBST(EXPATLIB)
 AC_SUBST(SSLINC)
 AC_SUBST(SSLLIB)
+AC_SUBST(AXIS3SSLINC)
+AC_SUBST(AXIS3SSLLIB)
 AC_SUBST(XERCESCBUILD)
 AC_SUBST(EXPATBUILD)
 AC_SUBST(APACHE2BUILD)
@@ -248,6 +283,7 @@ AC_SUBST(SAMPLESBUILD)
 AC_SUBST(AXIS3BUILD)
 AC_SUBST(TSPPBUILD)
 AC_SUBST(SSLBUILD)
+AC_SUBST(AXIS3SSLBUILD)
 
 CFLAGS="-Wall -Wshadow ${ENABLELOGGING}"
 CPPFLAGS="-Wall -Wshadow ${ENABLELOGGING}"

@@ -1,5 +1,5 @@
 lib_LTLIBRARIES = libaxis3_transport.la
-SUBDIRS = HTTPChannel HTTPSSLChannel
+SUBDIRS = HTTPChannel @AXIS3SSLBUILD@
 AM_CPPFLAGS = $(CPPFLAGS) -DAXISTRACE_LIBRARY
 libaxis3_transport_la_SOURCES = ChannelFactory.cpp \
 				 HTTPTransport.cpp \
