@@ -1,0 +1,89 @@
+ <project name="axis-mora" default="jar" basedir=".">
+	<description>
+   Build file for Axis
+
+Notes:
+   This is a build file for use with the Jakarta Ant build tool.
+   
+
+Prerequisites:
+   jakarta-ant        from http://jakarta.apache.org/ant/
+   wsdl4j             from http://www-124.ibm.com/developerworks/projects/wsdl4j/
+   commons-logging    from http://jakarta.apache.org/commons/logging.html
+   commons-discovery  from http://jakarta.apache.org/commons/discovery.html
+   log4j              from http://jakarta.apache.org/log4j
+   activation         from http://java.sun.com/products/javabeans/glasgow/jaf.html
+   axis.jar (axis1.1) from http://ws.apache.org/axis/releases.html
+   axis-ant.jar 	  from http://ws.apache.org/axis/releases.html	
+   xercesImpl.jar , xmlApis.jar and xmlParserAPIs.jar from http://xml.apache.org/xerces-j/.
+
+Build Instructions:
+   To build, run
+
+     ant "target"
+
+   on the directory where this file is located with the target you want.
+
+Most useful targets:
+	compile - compile the source
+	
+Authors:
+  Srianth Perera  hemapani@opensource.lk
+  
+Copyright:
+  Copyright (c) 2001-2003 Apache Software Foundation.
+</description>
+	
+	<property name ="src" value="src"/>
+	<property name ="lib" value="lib"/>
+	<property name ="test" value="test"/>
+	<property name ="classes" value="build/classes"/>
+	
+
+	<property name="packages" value="org.apache.axis.*" />
+	<path id ="cp">
+		<fileset dir="${lib}" includes="*.jar"/>
+	</path>
+
+
+	<target name="init">
+		<mkdir dir="${classes}"/>
+		<tstamp>
+	      		<format property="build.time" pattern="MMM dd, yyyy (hh:mm:ss z)"/>
+    		</tstamp>
+	</target>
+	
+ <!-- =================================================================== -->
+  <!-- Compiles the source directory                                       -->
+  <!-- =================================================================== -->
+  <target name="compile"  depends="init">
+     <javac  srcdir="${src}" destdir="${classes}"  listfiles="true">
+      <classpath refid="cp"/>
+    </javac>
+  </target>     
+    
+  
+  <!-- =================================================================== -->
+  <!-- clear output directory     -->
+  <!-- =================================================================== -->
+  <target name="clear">
+  		<delete dir="${classes}"></delete>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- create the Jar file     -->
+  <!-- =================================================================== -->
+  <target name="jar" depends="compile">
+   <mkdir dir="./build/lib"/>
+   <jar jarfile="build/lib/wsdl2ws.jar" basedir="${classes}" >
+      <include name="org/**" />
+     <manifest>
+        <section name="org/apache/axis">
+          <attribute name="Implementation-Title" value="Apache Axis C++"/>
+          <attribute name="Implementation-Version" value="version 1.0 ${TSTAMP} ${TODAY}"/> 
+          <attribute name="Implementation-Vendor" value="Apache Web Services"/>
+        </section>
+      </manifest>
+    </jar>
+    </target>	
+</project>
