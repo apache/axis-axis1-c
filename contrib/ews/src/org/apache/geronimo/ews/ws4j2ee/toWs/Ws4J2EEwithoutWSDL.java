@@ -77,87 +77,91 @@ import org.apache.geronimo.ews.ws4j2ee.context.wsdl.impl.AxisEmitterBasedWSDLCon
 import org.apache.geronimo.ews.ws4j2ee.parsers.EJBDDParser;
 import org.apache.geronimo.ews.ws4j2ee.parsers.WebDDParser;
 import org.apache.geronimo.ews.ws4j2ee.toWs.wsdl.WSDLGenerator;
-import org.apache.geronimo.ews.ws4j2ee.utils.JarFileLoader;
 import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
+import org.apache.geronimo.ews.ws4j2ee.utils.packager.load.PackageModule;
+import org.apache.geronimo.ews.ws4j2ee.utils.packager.load.PackageModuleFactory;
 
 /**
  * <p>this class genarate the code when the WSDL does not presents.</p>
  */
 public class Ws4J2EEwithoutWSDL implements Generator {
     protected static Log log =
-            LogFactory.getLog(Ws4J2EEwithWSDL.class.getName());
-	private String implbean;
-	private String wscffile;
+        LogFactory.getLog(Ws4J2EEwithWSDL.class.getName());
+    private String implbean;
+    private String wscffile;
     private Vector genarators;
     private String[] args;
     private J2EEWebServiceContext wscontext;
     private boolean verbose = false;
     private Ws4J2eeWtihoutWSDLCLOptionParser clparser;
-	private File jarfile;
-	private JarFileLoader jarfileLoader;
-    
+    private File jarfile;
+    private PackageModule jarfileLoader;
+
     private InputStream ejbddin;
     private InputStream webddin;
     private Emitter emitter;
-	
-	public Ws4J2EEwithoutWSDL(){
-		emitter = new Emitter();	
-	}
 
-
-    public Ws4J2EEwithoutWSDL(String[] args, boolean useSEI) throws GenerationFault {
-		this();
-		try{
-			
-			this.args = args;
-	        genarators = new Vector();
-			
-			
-			//create the context
-	        this.wscontext = ContextFactory.getJ2EEWsContext(false);
-	        this.wscontext.setMiscInfo(ContextFactory.createMiscInfo());
-			wscontext.getMiscInfo().setVerbose(verbose);
-			
-			//parse the arguments 
-			clparser = new Ws4J2eeWtihoutWSDLCLOptionParser(args,emitter);
-			this.wscffile = clparser.getWSCFFileLocation();
-			wscontext.getMiscInfo().setWsConfFileLocation(clparser.getOutPutLocation());
-			wscontext.getMiscInfo().setOutputPath(clparser.getOutPutLocation());
-			
-			//create the wscf context
-			WSCFContext wscfcontext = ContextFactory.createWSCFContext(new FileInputStream(wscffile));
-			wscontext.setWSCFContext(wscfcontext);
-			if (verbose)
-				log.info(wscffile + " parsed ..");
-		}catch(FileNotFoundException e){
-			throw GenerationFault.createGenerationFault(e);
-		}	
+    public Ws4J2EEwithoutWSDL() {
+        emitter = new Emitter();
     }
 
-	public Ws4J2EEwithoutWSDL(String jarFile,String outputDirOption) throws GenerationFault {
-			this();
-			jarfile = new File(jarFile);
-			genarators = new Vector();
+    public Ws4J2EEwithoutWSDL(String[] args, boolean useSEI)
+        throws GenerationFault {
+        this();
+        try {
 
-			
-			jarfileLoader = new JarFileLoader(jarFile);
-			ejbddin = jarfileLoader.getEjbJarfile();
-			webddin = jarfileLoader.getWebddfile();
-			
-			//create the context
-			this.wscontext = ContextFactory.getJ2EEWsContext(false);
-			this.wscontext.setMiscInfo(ContextFactory.createMiscInfo());
-			wscontext.getMiscInfo().setVerbose(verbose);
-			wscontext.getMiscInfo().setJarFileName(jarfile.getAbsolutePath());
-			
-			//parse the arguments 
-			wscontext.getMiscInfo().setWsConfFileLocation(outputDirOption);
-			wscontext.getMiscInfo().setOutputPath(outputDirOption);
-			
-			//create the wscf context
-			WSCFContext wscfcontext = ContextFactory.createWSCFContext(jarfileLoader.getWscfFile());
-			wscontext.setWSCFContext(wscfcontext);
-	}
+            this.args = args;
+            genarators = new Vector();
+
+            //create the context
+            this.wscontext = ContextFactory.getJ2EEWsContext(false);
+            this.wscontext.setMiscInfo(ContextFactory.createMiscInfo());
+            wscontext.getMiscInfo().setVerbose(verbose);
+
+            //parse the arguments 
+            clparser = new Ws4J2eeWtihoutWSDLCLOptionParser(args, emitter);
+            this.wscffile = clparser.getWSCFFileLocation();
+            wscontext.getMiscInfo().setWsConfFileLocation(
+                clparser.getOutPutLocation());
+            wscontext.getMiscInfo().setOutputPath(clparser.getOutPutLocation());
+
+            //create the wscf context
+            WSCFContext wscfcontext =
+                ContextFactory.createWSCFContext(new FileInputStream(wscffile));
+            wscontext.setWSCFContext(wscfcontext);
+            if (verbose)
+                log.info(wscffile + " parsed ..");
+        } catch (FileNotFoundException e) {
+            throw GenerationFault.createGenerationFault(e);
+        }
+    }
+
+    public Ws4J2EEwithoutWSDL(String jarFile, String outputDirOption)
+        throws GenerationFault {
+        this();
+        jarfile = new File(jarFile);
+        genarators = new Vector();
+
+        jarfileLoader = PackageModuleFactory.createPackageModule(jarFile, true);
+        ejbddin = jarfileLoader.getEjbJarfile();
+        webddin = jarfileLoader.getWebddfile();
+        
+
+        //create the context
+        this.wscontext = ContextFactory.getJ2EEWsContext(false);
+        this.wscontext.setMiscInfo(ContextFactory.createMiscInfo());
+        wscontext.getMiscInfo().setVerbose(verbose);
+        wscontext.getMiscInfo().setJarFileName(jarfile.getAbsolutePath());
+		wscontext.getMiscInfo().setClassPathElements(jarfileLoader.getClassPathElements());
+        //parse the arguments 
+        wscontext.getMiscInfo().setWsConfFileLocation(outputDirOption);
+        wscontext.getMiscInfo().setOutputPath(outputDirOption);
+
+        //create the wscf context
+        WSCFContext wscfcontext =
+            ContextFactory.createWSCFContext(jarfileLoader.getWscfFile());
+        wscontext.setWSCFContext(wscfcontext);
+    }
 
     /**
      * genarate. what is genarated is depend on genarators included.
@@ -165,191 +169,240 @@ public class Ws4J2EEwithoutWSDL implements Generator {
      * @see org.apache.geronimo.ews.ws4j2ee.toWs.Generator#genarate()
      */
     public void generate() throws GenerationFault {
-		WSCFWebserviceDescription[] wscfwsdiss = wscontext.getWSCFContext().getWebServicesDescription();
-		//TODO fix this to handle multiple discriptions let us take the first discription
-		if (wscfwsdiss == null || wscfwsdiss.length == 0)
-			throw new UnrecoverableGenerationFault("no webservice discription found in the" +
-							"webservice.xml file");
-		genarate(wscfwsdiss[0]);
+        WSCFWebserviceDescription[] wscfwsdiss =
+            wscontext.getWSCFContext().getWebServicesDescription();
+        //TODO fix this to handle multiple discriptions let us take the first discription
+        if (wscfwsdiss == null || wscfwsdiss.length == 0)
+            throw new UnrecoverableGenerationFault(
+                "no webservice discription "
+                    + "found in the webservice.xml file");
+        genarate(wscfwsdiss[0]);
     }
-    
-	public void genarate(WSCFWebserviceDescription wscfwsdis) throws GenerationFault {
-		wscontext.getMiscInfo().setWscfdWsDescription(wscfwsdis);
+
+    public void genarate(WSCFWebserviceDescription wscfwsdis)
+        throws GenerationFault {
+        wscontext.getMiscInfo().setWscfdWsDescription(wscfwsdis);
+		wscontext.getMiscInfo().setSEIExists(true);
         try {
-        	
-			WSCFPortComponent[] ports = wscfwsdis.getPortComponent();
-			//TODO how to create the correct port type 
-			if (ports == null || ports.length == 0)
-				throw new UnrecoverableGenerationFault("no port discription found in the" +
-						"webservice.xml file");
-			WSCFPortComponent port = ports[0];
-			
-			wscontext.getMiscInfo().setWscfport(port);
-			String ejbLink = port.getServiceImplBean().getEjblink();
-			String seiName = port.getServiceEndpointInterface();        	
-			wscontext.getMiscInfo().setJaxrpcSEI(seiName);
-			wscontext.getMiscInfo().setHandlers(port.getHandlers());
-			
-			
-			String wsdlFile = Utils.getAbsolutePath(wscfwsdis.getWsdlFile(),wscontext.getMiscInfo().getWsConfFileLocation());
-			wscontext.getMiscInfo().setWsdlFile(wsdlFile);
-			wscontext.getMiscInfo().setJaxrpcfile(Utils.getAbsolutePath(wscfwsdis.getJaxrpcMappingFile(),wscontext.getMiscInfo().getOutPutPath()));
-			
-			
-			File file = new File(wscontext.getMiscInfo().getOutPutPath()+"/META-INF");
-			if (!file.exists())
-				file.mkdirs();
-			
-			//generate the wsdl file
-			InputStream wsdlfile = null;
-			if(jarfile != null){
-				ClassUtils.setDefaultClassLoader(ClassUtils.createClassLoader(
-						jarfile.getAbsolutePath(),this.getClass().getClassLoader()));
-				//wsdlfile = jarfileLoader.getInputStreamForJarEntry(wsdlFile);		
-			}
+
+            WSCFPortComponent[] ports = wscfwsdis.getPortComponent();
+            //TODO how to create the correct port type 
+            if (ports == null || ports.length == 0)
+                throw new UnrecoverableGenerationFault(
+                    "no port discription"
+                        + " found in the webservice.xml file");
+            WSCFPortComponent port = ports[0];
+
+            wscontext.getMiscInfo().setWscfport(port);
+            String ejbLink = port.getServiceImplBean().getEjblink();
+            String seiName = port.getServiceEndpointInterface();
+            wscontext.getMiscInfo().setJaxrpcSEI(seiName);
+            wscontext.getMiscInfo().setHandlers(port.getHandlers());
+
+            String wsdlFile =
+                Utils.getAbsolutePath(
+                    wscfwsdis.getWsdlFile(),
+                    wscontext.getMiscInfo().getWsConfFileLocation());
+            wscontext.getMiscInfo().setWsdlFile(
+                ContextFactory.getInputFile(wsdlFile));
+            wscontext.getMiscInfo().setJaxrpcfile(
+                ContextFactory.getInputFile(
+                    Utils.getAbsolutePath(
+                        wscfwsdis.getJaxrpcMappingFile(),
+                        wscontext.getMiscInfo().getOutPutPath())));
+
+            File file =
+                new File(wscontext.getMiscInfo().getOutPutPath() + "/META-INF");
+            if (!file.exists())
+                file.mkdirs();
+
+            //generate the wsdl file
+            InputStream wsdlfile = null;
+            if (jarfile != null) {
+                ClassUtils.setDefaultClassLoader(
+                    jarfileLoader.getClassLoaderWithPackageLoaded());
+                //wsdlfile = jarfileLoader.getInputStreamForJarEntry(wsdlFile);		
+            }
 
             if (verbose)
                 log.info("calling Java2WSDL to genarated wsdl ...........");
-            WSDLGenerator wsdlgen = (WSDLGenerator) GeneratorFactory.createGenerator(wscontext, GenerationConstants.WSDL_GENERATOR);
+            WSDLGenerator wsdlgen =
+                (WSDLGenerator) GeneratorFactory.createGenerator(
+                    wscontext,
+                    GenerationConstants.WSDL_GENERATOR);
 
-			emitter.setLocationUrl("http://127.0.0.1");
-			emitter.setServicePortName(port.getWsdlPort().getLocalpart());
-			String wsdlImplFilename = null;
-			int mode = Emitter.MODE_ALL;
-			if(clparser != null){
-				wsdlImplFilename = clparser.getWsdlImplFilename();
-				mode = clparser.getMode();
-			}
+            emitter.setLocationUrl("http://127.0.0.1");
+            emitter.setServicePortName(port.getWsdlPort().getLocalpart());
+            String wsdlImplFilename = null;
+            int mode = Emitter.MODE_ALL;
+            if (clparser != null) {
+                wsdlImplFilename = clparser.getWsdlImplFilename();
+                mode = clparser.getMode();
+            }
 
-			 // Find the class using the name
-			 emitter.setCls(seiName);
-			 // Generate a full wsdl, or interface & implementation wsdls
-			 if (wsdlImplFilename == null) {
-				 emitter.emit(wsdlFile,mode);
-			 } else {
-				 emitter.emit(wsdlFile, wsdlImplFilename);
-			 }
-			 
-			//initiate the wsdlContext
-			this.wscontext.setWSDLContext(new AxisEmitterBasedWSDLContext(emitter.getWSDL()));
-			//parse the ejb-jar.xml here
-			ContextValidator validator = new ContextValidator(wscontext);
-			//initiate the jaxrpcmapping context 
-			this.wscontext.setJAXRPCMappingContext(new AxisEmitterBasedJaxRpcMapperContext(emitter, wscontext));
-			//initiate the wscf context 
-			this.wscontext.setWSCFContext(new AxisEmitterBasedWSCFContext(emitter, wscontext));
-			//validate the j2ee context
-			validator.validateWithOutWSDL(emitter);
+            // Find the class using the name
+            emitter.setCls(seiName);
+            // Generate a full wsdl, or interface & implementation wsdls
+            if (wsdlImplFilename == null) {
+                emitter.emit(wsdlFile, mode);
+            } else {
+                emitter.emit(wsdlFile, wsdlImplFilename);
+            }
 
-	
-				 // everything is good
+            //initiate the wsdlContext
+            this.wscontext.setWSDLContext(
+                new AxisEmitterBasedWSDLContext(emitter.getWSDL()));
+            //parse the ejb-jar.xml here
+            ContextValidator validator = new ContextValidator(wscontext);
+            //initiate the jaxrpcmapping context 
+            this.wscontext.setJAXRPCMappingContext(
+                new AxisEmitterBasedJaxRpcMapperContext(emitter, wscontext));
+            //initiate the wscf context 
+            this.wscontext.setWSCFContext(
+                new AxisEmitterBasedWSCFContext(emitter, wscontext));
+            //validate the j2ee context
+            validator.validateWithOutWSDL(emitter);
+
+            // everything is good
             if (verbose)
                 log.info("genarating jaxrpc-mapper.xml ..............");
-			Generator jaxrpcfilegen = GeneratorFactory.createGenerator(wscontext,
+            Generator jaxrpcfilegen =
+                GeneratorFactory.createGenerator(
+                    wscontext,
                     GenerationConstants.JAXRPCMAPPER_GENERATOR);
-			jaxrpcfilegen.generate();
-			
-			Generator seiAndTypegen = GeneratorFactory.createGenerator(wscontext,
+            jaxrpcfilegen.generate();
+
+            Generator seiAndTypegen =
+                GeneratorFactory.createGenerator(
+                    wscontext,
                     GenerationConstants.SEI_AND_TYPES_GENERATOR);
-			seiAndTypegen.generate();
-			
-			ContextValidator cvalidater = new ContextValidator(wscontext);
-			cvalidater.validateWithWSDL();        
+            seiAndTypegen.generate();
 
-			//remove the repeting SEI. TODO is this required to remove or not                     
-			String repeatingSEIName = wscontext.getMiscInfo().getOutPutPath()+"/"+seiName.replace('.','/')+".java"; 
-			file = new File(repeatingSEIName);
-			if(file.exists()){
-				file.delete();
-				System.out.println(repeatingSEIName + " deleted..............");
-			}
+            ContextValidator cvalidater = new ContextValidator(wscontext);
+            cvalidater.validateWithWSDL();
 
-			if(ejbLink != null){
-				wscontext.getMiscInfo().setEjbName(ejbLink);
-				EJBDDParser ejbDDparser = new EJBDDParser(wscontext);
-				 
-				if(ejbddin == null){
-					file = new File(clparser.getEjbConfFileLocation());
-					if(file.exists()){
-						ejbddin = new FileInputStream(file);
-					}else{
-						ejbddin = Ws4J2EEwithoutWSDL.class.getResourceAsStream("META-INF/ejb-jar.xml");
-					}
-				}
+//            //remove the repeting SEI. TODO is this required to remove or not                     
+//            String repeatingSEIName =
+//                wscontext.getMiscInfo().getOutPutPath()
+//                    + "/"
+//                    + seiName.replace('.', '/')
+//                    + ".java";
+//            file = new File(repeatingSEIName);
+//            if (file.exists()) {
+//                file.delete();
+//                System.out.println(repeatingSEIName + " deleted..............");
+//            }
 
-				if (ejbddin != null) {
-					ejbDDparser.parse(ejbddin);
-					ejbddin.close();
-				}else
-					throw new GenerationFault("file "+clparser.getWebConfFileLocation()+"does not exsits");
-				wscontext.getMiscInfo().setImplAvalible(true);				
-				if (verbose)
-						log.info("genarating ejb >>");
-				GeneratorFactory.createGenerator(wscontext,
-					GenerationConstants.EJB_GENERATOR).generate();
-			}else{
-				wscontext.getMiscInfo().setImplwithEJB(false);
-				//parse the web.xml file and gereratre wrapper
-				WebDDParser webddp = new WebDDParser(wscontext);
-				file = new File(clparser.getWebConfFileLocation());
-				if(webddin == null){				
-					if(file.exists()){
-							webddin = new FileInputStream(file);
-					}else{
-						webddin = Ws4J2EEwithoutWSDL.class.getResourceAsStream("META-INF/web.xml");				
-					}
-				}
-				if(webddin != null){
-					webddp.parse(webddin);
-				}else
-					throw new GenerationFault("file "+clparser.getWebConfFileLocation()+"does not exsits");
-				
-				wscontext.getMiscInfo().setEndpointImplbean(webddp.getServletClass());
-			}
-			Generator wrapgen = GeneratorFactory.createGenerator(wscontext,
-				GenerationConstants.AXIS_WEBSERVICE_WRAPPER_GENERATOR);
-			wrapgen.generate();
-			
-			Generator handlerGen = GeneratorFactory.createGenerator(wscontext,
-							GenerationConstants.HANDLER_GENERATOR);
-						handlerGen.generate();
-			
-			Generator buildFileGen = GeneratorFactory.createGenerator(wscontext, GenerationConstants.BUILD_FILE_GENERATOR);
-			buildFileGen.generate();
-//uncomment this to run the build file programatically
-//			AntExecuter executer = new AntExecuter();
-//			executer.execute(wscontext.getMiscInfo().getOutPutPath() + "/build.xml");
+            if (ejbLink != null) {
+                wscontext.getMiscInfo().setEjbName(ejbLink);
+                EJBDDParser ejbDDparser = new EJBDDParser(wscontext);
+
+                if (ejbddin == null) {
+                    file = new File(clparser.getEjbConfFileLocation());
+                    if (file.exists()) {
+                        ejbddin = new FileInputStream(file);
+                    } else {
+                        ejbddin =
+                            Ws4J2EEwithoutWSDL.class.getResourceAsStream(
+                                "META-INF/ejb-jar.xml");
+                    }
+                }
+
+                if (ejbddin != null) {
+                    ejbDDparser.parse(ejbddin);
+                    ejbddin.close();
+                } else
+                    throw new GenerationFault(
+                        "file "
+                            + clparser.getWebConfFileLocation()
+                            + "does not exsits");
+                wscontext.getMiscInfo().setImplAvalible(true);
+                if (verbose)
+                    log.info("genarating ejb >>");
+                GeneratorFactory
+                    .createGenerator(
+                        wscontext,
+                        GenerationConstants.EJB_GENERATOR)
+                    .generate();
+            } else {
+                wscontext.getMiscInfo().setImplwithEJB(false);
+                //parse the web.xml file and gereratre wrapper
+                WebDDParser webddp = new WebDDParser(wscontext);
+
+                if (webddin == null) {
+    					file = new File(clparser.getWebConfFileLocation());
+                        if (file.exists()) {
+                            webddin = new FileInputStream(file);
+                        } else {
+							throw new GenerationFault("web.xml file not found");
+//                            webddin =
+//                                Ws4J2EEwithoutWSDL.class.getResourceAsStream(
+//                                    "META-INF/web.xml");
+                        }
+                }
+                if (webddin != null) {
+                    webddp.parse(webddin);
+                } else
+                    throw new GenerationFault(
+                        "file "
+                            + clparser.getWebConfFileLocation()
+                            + "does not exsits");
+
+                wscontext.getMiscInfo().setEndpointImplbean(
+                    webddp.getServletClass());
+            }
+            Generator wrapgen =
+                GeneratorFactory.createGenerator(
+                    wscontext,
+                    GenerationConstants.AXIS_WEBSERVICE_WRAPPER_GENERATOR);
+            wrapgen.generate();
+
+            Generator handlerGen =
+                GeneratorFactory.createGenerator(
+                    wscontext,
+                    GenerationConstants.HANDLER_GENERATOR);
+            handlerGen.generate();
+
+            Generator buildFileGen =
+                GeneratorFactory.createGenerator(
+                    wscontext,
+                    GenerationConstants.BUILD_FILE_GENERATOR);
+            buildFileGen.generate();
+            //uncomment this to run the build file programatically
+			org.apache.geronimo.ews.ws4j2ee.utils.AntExecuter executer 
+				= new org.apache.geronimo.ews.ws4j2ee.utils.AntExecuter();
+            executer.execute(wscontext.getMiscInfo().getOutPutPath() + "/build.xml");
         } catch (Exception e) {
-        	e.printStackTrace();
+            e.printStackTrace();
             throw GenerationFault.createGenerationFault(e);
         }
     }
-	/**
-	 * args is String array s.t.
-	 * 1)first argument is webservice.xml file 
-	 * 2)Other arguments are any option that can given to Java2WSDL
-	 * 3)the SEI and the service Implementation bean should be avalible on the class path
-	 * 4)the ws4j2ee will search for the web.xml or ejb-jar.xml 
-	 * 		a)same directory as the webservice.xml file 
-	 * 		b)file should be in the class path s.t META-INF/web.xml or META-INF/ejb-jar.xml
-	 * 5)if no file found at the #4 the ws4j2ee continue assuming the Impl bean and the 
-	 * DD is not avalible. This is additional to spec.
-	 * @param args
-	 * @throws Exception
-	 */
+    /**
+     * args is String array s.t.
+     * 1)first argument is webservice.xml file 
+     * 2)Other arguments are any option that can given to Java2WSDL
+     * 3)the SEI and the service Implementation bean should be avalible on the class path
+     * 4)the ws4j2ee will search for the web.xml or ejb-jar.xml 
+     * 		a)same directory as the webservice.xml file 
+     * 		b)file should be in the class path s.t META-INF/web.xml or META-INF/ejb-jar.xml
+     * 5)if no file found at the #4 the ws4j2ee continue assuming the Impl bean and the 
+     * DD is not avalible. This is additional to spec.
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
-		Ws4J2EEwithoutWSDL gen = null;
-    	if(args.length == 1){
-    		 //means a jar file option given 
-			 gen = new Ws4J2EEwithoutWSDL(args[0],"-o.");
-    	}else if(args.length == 2){
-    		//means jar file option and output dir given
-    		if(args[1].startsWith("-o"))
-				args[1] = args[1].substring(2);
-			gen = new Ws4J2EEwithoutWSDL(args[0],args[1]);
-    	}else{
-			gen = new Ws4J2EEwithoutWSDL(args,false);    	
-    	}
+        Ws4J2EEwithoutWSDL gen = null;
+        if (args.length == 1) {
+            //means a jar file option given 
+            gen = new Ws4J2EEwithoutWSDL(args[0], "-o.");
+        } else if (args.length == 2) {
+            //means jar file option and output dir given
+            if (args[1].startsWith("-o"))
+                args[1] = args[1].substring(2);
+            gen = new Ws4J2EEwithoutWSDL(args[0], args[1]);
+        } else {
+            gen = new Ws4J2EEwithoutWSDL(args, false);
+        }
         gen.generate();
     }
 }

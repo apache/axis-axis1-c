@@ -101,11 +101,20 @@ public class J2eeEmitter extends Emitter {
     private QName serviceQName;
     private JaxRpcMapper jaxRpcMapper;
     private SymbolTable symbolTable;
+    private boolean usedbyws4j2ee = false;
+    private boolean seiNeeded = true;
 
-    public J2eeEmitter() {
-        J2eeGeneratorFactory factory = new J2eeGeneratorFactory();
+	public J2eeEmitter() {
+	   J2eeGeneratorFactory factory = new J2eeGeneratorFactory();
+	   setFactory(factory);
+	   factory.setEmitter(this);
+	} // ctor
+    public J2eeEmitter(boolean usedByws4j2ee,boolean needSei) {
+    	this.usedbyws4j2ee = usedByws4j2ee;
+    	this.seiNeeded = needSei;
+        J2eeGeneratorFactory factory = new J2eeGeneratorFactory(this);
         setFactory(factory);
-        factory.setEmitter(this);
+
     } // ctor
 
     public void setMappingFilePath(String mappingFilePath) {
@@ -539,6 +548,34 @@ public class J2eeEmitter extends Emitter {
      */
     public void setJaxRpcMapper(JaxRpcMapper jaxRpcMapper) {
         this.jaxRpcMapper = jaxRpcMapper;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isSeiNeeded() {
+        return seiNeeded;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isUsedbyws4j2ee() {
+        return usedbyws4j2ee;
+    }
+
+    /**
+     * @param b
+     */
+    public void setSeiNeeded(boolean b) {
+        seiNeeded = b;
+    }
+
+    /**
+     * @param b
+     */
+    public void setUsedbyws4j2ee(boolean b) {
+        usedbyws4j2ee = b;
     }
 
 } // class MyEmitter

@@ -89,51 +89,55 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class ServerSideWsGenerator implements Generator {
-	private J2EEWebServiceContext j2eewscontext;
-	protected static Log log =
-			LogFactory.getLog(ServerSideWsGenerator.class.getName());
+    private J2EEWebServiceContext j2eewscontext;
+    protected static Log log =
+        LogFactory.getLog(ServerSideWsGenerator.class.getName());
 
-	public ServerSideWsGenerator(J2EEWebServiceContext j2eewscontext) {
-		this.j2eewscontext = j2eewscontext;
-	}
+    public ServerSideWsGenerator(J2EEWebServiceContext j2eewscontext) {
+        this.j2eewscontext = j2eewscontext;
+    }
 
-	public void generate() throws GenerationFault {
-		try {
+    public void generate() throws GenerationFault {
+        try {
 
-			String mappingfile = j2eewscontext.getMiscInfo().getJaxrpcfile();
-			String wsdlfile = j2eewscontext.getMiscInfo().getWsdlFile();
-			J2eeEmitter j2ee = new J2eeEmitter();
+            String mappingfile =
+                j2eewscontext.getMiscInfo().getJaxrpcfile().fileName();
+            String wsdlfile =
+                j2eewscontext.getMiscInfo().getWsdlFile().fileName();
+            J2eeEmitter j2ee = new J2eeEmitter(true,!j2eewscontext.getMiscInfo().isSEIExists());
 
-			if (j2eewscontext.getMiscInfo().isVerbose()) {
-				log.info("wsdl file = " + wsdlfile);
-				log.info("jaxrpc mapping file = " + mappingfile);
-				log.info("calling the jaxrpcmapper >> ");
-			}
+            if (j2eewscontext.getMiscInfo().isVerbose()) {
+                log.info("wsdl file = " + wsdlfile);
+                log.info("jaxrpc mapping file = " + mappingfile);
+                log.info("calling the jaxrpcmapper >> ");
+            }
 
-			j2ee.setMappingFilePath(mappingfile);
-			j2ee.setOutputDir(j2eewscontext.getMiscInfo().getOutPutPath());
-			j2ee.setServerSide(true);
-			j2ee.setVerbose(j2eewscontext.getMiscInfo().isVerbose());
-			j2ee.setHelperWanted(true);
-			j2ee.runServerSide(wsdlfile);
-			
-//			J2eeDeployWriter deploywriter = new J2eeDeployWriter(j2ee,j2eewscontext);
-//			deploywriter.generate();
-			
-			SymbolTable axisSymboltable = j2ee.getSymbolTable();
-			j2eewscontext.setWSDLContext(ContextFactory.createWSDLContext(axisSymboltable));
+            j2ee.setMappingFilePath(mappingfile);
+            j2ee.setOutputDir(j2eewscontext.getMiscInfo().getOutPutPath());
+            j2ee.setServerSide(true);
+            j2ee.setVerbose(j2eewscontext.getMiscInfo().isVerbose());
+			j2ee.setUsedbyws4j2ee(true);
+            j2ee.setHelperWanted(true);
+            
+            j2ee.runServerSide(wsdlfile);
 
-			JaxRpcMapper mapper = j2ee.getJaxRpcMapper();
-			j2eewscontext.setJAXRPCMappingContext(ContextFactory.createJaxRpcMapperContext(new Object[]{mapper,j2ee}));
+            SymbolTable axisSymboltable = j2ee.getSymbolTable();
+            j2eewscontext.setWSDLContext(
+                ContextFactory.createWSDLContext(axisSymboltable));
 
-		} catch (Exception e) {
-			if(e instanceof RuntimeException){
-				throw (RuntimeException)e;
-			}else{
-				e.printStackTrace();
-				throw GenerationFault.createGenerationFault(e);
-			}
-		}
-	}
+            JaxRpcMapper mapper = j2ee.getJaxRpcMapper();
+            j2eewscontext.setJAXRPCMappingContext(
+                ContextFactory.createJaxRpcMapperContext(
+                    new Object[] { mapper, j2ee }));
+
+        } catch (Exception e) {
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException) e;
+            } else {
+                e.printStackTrace();
+                throw GenerationFault.createGenerationFault(e);
+            }
+        }
+    }
 
 }

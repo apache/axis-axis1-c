@@ -95,7 +95,7 @@ public class Ws4J2EEClientwithWSDL implements Generator {
 			wscontext.setMiscInfo(misc);
 
             String wscfClientfile = clparser.getWscffile();
-			misc.setWsconffile(wscfClientfile);
+			misc.setWsconffile(ContextFactory.getInputFile(wscfClientfile));
             misc.setOutputPath(clparser.getOutputDirectory());
             misc.setWsConfFileLocation(Utils.getRootDirOfFile(wscfClientfile));
 			wscontext.getMiscInfo().setImplStyle(clparser.getImplStyle());
@@ -112,8 +112,12 @@ public class Ws4J2EEClientwithWSDL implements Generator {
 				log.info(ref.getWsdlFile());
            }
 
-            wscontext.getMiscInfo().setJaxrpcfile(Utils.getAbsolutePath(ref.getJaxrpcmappingFile(),misc.getWsConfFileLocation()));
-            wscontext.getMiscInfo().setWsdlFile(Utils.getAbsolutePath(ref.getWsdlFile(), misc.getWsConfFileLocation()));
+            wscontext.getMiscInfo().setJaxrpcfile(ContextFactory.getInputFile(
+            	Utils.getAbsolutePath(ref.getJaxrpcmappingFile(),
+            		misc.getWsConfFileLocation())));
+            wscontext.getMiscInfo().setWsdlFile(ContextFactory.getInputFile(
+            	Utils.getAbsolutePath(ref.getWsdlFile(), 
+            		misc.getWsConfFileLocation())));
 			wscontext.getMiscInfo().setVerbose(verbose);
 			wscontext.getMiscInfo().setHandlers(ref.getHandlers()); 
 			

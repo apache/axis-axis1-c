@@ -56,12 +56,14 @@
 package org.apache.geronimo.ews.ws4j2ee.context.impl;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.wsdl.Port;
 
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
 import org.apache.axis.wsdl.symbolTable.ServiceEntry;
+import org.apache.geronimo.ews.ws4j2ee.context.InputOutputFile;
 import org.apache.geronimo.ews.ws4j2ee.context.MiscInfo;
 import org.apache.geronimo.ews.ws4j2ee.context.SEIOperation;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFHandler;
@@ -100,11 +102,16 @@ public class MiscInfoImpl implements MiscInfo {
     private ArrayList operations;
     private boolean verbose = false;
     private String wsConfFileLocation;
-    private String wsdlFile;
-    private String jaxrpcfile;
-    private String wsconffile;
+    
+    private InputOutputFile wsdlFile;
+    private InputOutputFile jaxrpcfile;
+    private InputOutputFile wsconffile;
+    
     private String targetJ2EEContainer = GenerationConstants.JBOSS_CONTAINER;
     private String implStyle = GenerationConstants.USE_LOCAL_AND_REMOTE;
+    private boolean seiExists = false;
+    private Vector classpathelements;
+    
     private WSCFHandler[] handlers;
     public MiscInfoImpl() {
         operations = new ArrayList();
@@ -281,28 +288,28 @@ public class MiscInfoImpl implements MiscInfo {
     /**
      * @return 
      */
-    public String getJaxrpcfile() {
+    public InputOutputFile getJaxrpcfile() {
         return jaxrpcfile;
     }
 
     /**
      * @return 
      */
-    public String getWsdlFile() {
+    public InputOutputFile getWsdlFile() {
         return wsdlFile;
     }
 
     /**
      * @param string 
      */
-    public void setJaxrpcfile(String string) {
+    public void setJaxrpcfile(InputOutputFile string) {
         jaxrpcfile = string;
     }
 
     /**
      * @param string 
      */
-    public void setWsdlFile(String string) {
+    public void setWsdlFile(InputOutputFile string) {
         wsdlFile = string;
     }
 
@@ -421,14 +428,14 @@ public class MiscInfoImpl implements MiscInfo {
 	/**
 	 * @return
 	 */
-	public String getWsconffile() {
+	public InputOutputFile getWsconffile() {
 		return wsconffile;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setWsconffile(String string) {
+	public void setWsconffile(InputOutputFile string) {
 		wsconffile = string;
 	}
 
@@ -458,6 +465,35 @@ public class MiscInfoImpl implements MiscInfo {
      */
     public void setJarFileName(String string) {
         jarFileName = string;
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#isSEIExists()
+     */
+    public boolean isSEIExists() {
+        return seiExists;
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#setSEIExists()
+     */
+    public void setSEIExists(boolean seiExists) {
+		this.seiExists = seiExists;
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#getClasspathElements()
+     */
+    public Vector getClasspathElements() {
+        return classpathelements;
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#setClassPathElements()
+     */
+    public void setClassPathElements(Vector classpathelements) {
+		this.classpathelements = classpathelements;
+
     }
 
 }

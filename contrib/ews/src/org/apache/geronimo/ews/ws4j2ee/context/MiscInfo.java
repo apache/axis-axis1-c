@@ -56,6 +56,7 @@
 package org.apache.geronimo.ews.ws4j2ee.context;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.wsdl.Port;
 
@@ -107,6 +108,9 @@ public interface MiscInfo {
 	 */
 	public ArrayList getSEIOperations();
 	public void setSEIOperations(SEIOperation operation);
+	
+	public void setSEIExists(boolean seiExists);
+	public boolean isSEIExists();
 
 	/**
 	 * Names of the classes corresponding to SEI, Implementation bean and the 
@@ -167,15 +171,15 @@ public interface MiscInfo {
 	 * a set of Web services. The location is relative to the root of the module
 	 * and must be specified by the developer.
 	 */
-    public String getJaxrpcfile();
-	public void setJaxrpcfile(String string);
+    public InputOutputFile getJaxrpcfile();
+	public void setJaxrpcfile(InputOutputFile string);
 	/**
 	 * The wsdl-file specifies a location of the WSDL description of
 	 * a set of Web services. The location is relative to the root of the module
 	 * and must be specified by the developer.
 	 */
-    public String getWsdlFile();
-    public void setWsdlFile(String string);
+    public InputOutputFile getWsdlFile();
+    public void setWsdlFile(InputOutputFile string);
 
 	/**
 	 * <p>One of the following values and specify how the ejb based web service 
@@ -219,8 +223,8 @@ public interface MiscInfo {
 	 * a set of Web services. The location is relative to the root of the module
 	 * and must be specified by the developer.
 	 */
-	public String getWsconffile(); 
-	public void setWsconffile(String string);
+	public InputOutputFile getWsconffile(); 
+	public void setWsconffile(InputOutputFile string);
 
 	/**
 	 * Handlers. A developer may optionally specify handlers associated with the 
@@ -234,4 +238,10 @@ public interface MiscInfo {
 	 */
 	public String getJarFileName();
     public void setJarFileName(String string);
+    /**
+     * the class path elemnts added via jar,war,ear files this is a Vector of
+     * java.io.File
+     */
+    public Vector getClasspathElements();
+    public void setClassPathElements(Vector classpathelements);
 }

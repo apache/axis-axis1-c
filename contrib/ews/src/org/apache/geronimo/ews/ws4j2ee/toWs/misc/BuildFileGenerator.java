@@ -57,6 +57,7 @@
 
 import org.apache.axis.components.logger.LogFactory;
 import org.apache.commons.logging.Log;
+import org.apache.geronimo.ews.ws4j2ee.context.InputOutputFile;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
@@ -67,7 +68,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 /**
  * @author Srinath Perera(hemapani@opensource.lk)
@@ -102,8 +105,13 @@ public class BuildFileGenerator implements Generator {
 			out.write("	<path id=\"classpath\">\n");
 			StringTokenizer tok = getClasspathComponets();
 			String jarfile = j2eewscontext.getMiscInfo().getJarFileName();
-			if(jarfile != null){
-				out.write("		<pathelement location=\"" + jarfile + "\"/>\n");
+			
+			Vector classpathelements = j2eewscontext.getMiscInfo().getClasspathElements();
+			if(classpathelements != null){
+				for(int i = 0;i<classpathelements.size();i++){
+					out.write("		<pathelement location=\"" 
+						+ ((File)classpathelements.get(i)).getAbsolutePath() + "\"/>\n");				
+				}
 			}
 			while (tok.hasMoreTokens()) {
 				out.write("		<pathelement location=\"" + tok.nextToken() + "\"/>\n");
@@ -122,20 +130,9 @@ public class BuildFileGenerator implements Generator {
 			out.write("	<target name=\"jar\" depends=\"compile\">\n");
 			out.write("		<mkdir dir=\"${build.classes}/META-INF/\"/>\n");
 			
-			File jaxrpcFile = new File(j2eewscontext.getMiscInfo().getJaxrpcfile());
-			File wsdlfile = new File(j2eewscontext.getMiscInfo().getWsdlFile());
-			File wscffile = null;
-
-			if(jaxrpcFile.exists())
-				out.write("		<copy file =\""+jaxrpcFile.getAbsolutePath()+"\" todir=\"${build.classes}/META-INF\"/>\n");
-			if(wsdlfile.exists())	
-				out.write("		<copy file =\""+wsdlfile.getAbsolutePath()+"\" todir=\"${build.classes}/META-INF\"/>\n");
-
-			if(j2eewscontext.getMiscInfo().getWsconffile()!= null){
-				wscffile = new File(j2eewscontext.getMiscInfo().getWsconffile());
-				if(wscffile.exists())	
-					out.write("		<copy file =\""+wscffile.getAbsolutePath()+"\" todir=\"${build.classes}/META-INF\"/>\n");
-			}
+			writeFileCopyStatement(j2eewscontext.getMiscInfo().getJaxrpcfile(),out);
+			writeFileCopyStatement(j2eewscontext.getMiscInfo().getWsdlFile(),out);
+			writeFileCopyStatement(j2eewscontext.getMiscInfo().getWsconffile(),out);
 			
 			if(j2eewscontext.getMiscInfo().isImplwithEJB()){
 				File ejbDD = 	new File(j2eewscontext.getMiscInfo().getOutPutPath()+"/META-INF/ejb-jar.xml");
@@ -176,18 +173,19 @@ public class BuildFileGenerator implements Generator {
 			out.write("			</section>\n");
 			out.write("		</manifest>\n");
 			out.write("		</jar>\n");
-			out.write("     <java classname=\"org.apache.geronimo.ews.ws4j2ee.utils.packager.Packager\" fork=\"yes\" >\n");
-			out.write("     	<classpath refid=\"classpath\" />\n");
-			out.write("     	<arg value=\""+jarName+".jar\"/> \n");
-			out.write("     	<arg value=\"${build}/lib/"
-					+ jarName + "-impl.jar\"/>\n"); 
-			out.write("     	<arg value=\""+jarfile+"\"/>\n"); 
-			out.write("     </java>\n");
-
-			out.write("		<delete dir=\"${build}\"/>\n");
-//			out.write("		<delete dir=\"${build.classes}/META-INF/\"/>\n");
-//			out.write("		<delete file=\"${build}/lib/"
-//					+ jarName + "-impl.jar\"/>\n");
+			if(jarfile != null){
+				out.write("     <java classname=\"org.apache.geronimo.ews.ws4j2ee.utils.packager.Packager\" fork=\"no\" >\n");
+				out.write("     	<arg value=\""+jarName+".jar\"/>\n");
+				out.write("     	<classpath refid=\"classpath\" />\n");
+				for(int i = 0;i<classpathelements.size();i++){
+					out.write("     	<arg value=\""
+						+ ((File)classpathelements.get(i)).getAbsolutePath() + "\"/>\n");				
+				}
+				out.write("     	<arg value=\"${build}/lib/"
+						+ jarName + "-impl.jar\"/>\n"); 
+				out.write("     </java>\n");
+			}
+//			out.write("		<delete dir=\"${build}\"/>\n");
 			out.write("	</target>\n");
 
 
@@ -197,6 +195,40 @@ public class BuildFileGenerator implements Generator {
 			out.write("		<delete dir=\"${build}\"/>\n");
 			out.write("	</target>\n");
 
+			Properties p = GenerationConstants.getProperties();
+			String webappsLib = p.getProperty(GenerationConstants.AXIS_WEBAPPS_LIB);
+			String ejbDeploy =  p.getProperty(GenerationConstants.EJB_DEPLOY_DIR);
+			String host = p.getProperty(GenerationConstants.AXIS_HOST);
+			String port = p.getProperty(GenerationConstants.AXIS_PORT);
+			
+			if(jarfile != null){
+				out.write("	<target name=\"deploy\" depends=\"jar\">\n");
+				if(webappsLib != null){
+					out.write("		<copy file=\""+ jarName + 
+						".jar\" todir=\""+webappsLib+"\"/>\n");
+				}
+				if(ejbDeploy != null){
+					out.write("		<copy file=\""+ jarName + 
+						".jar\" todir=\""+ejbDeploy+"\"/>\n");
+				}
+					
+				out.write("		<java classname=\"org.apache.axis.client.AdminClient\" fork=\"no\" >\n");
+				out.write("			<classpath refid=\"classpath\" />\n");
+				if(host != null){
+					out.write("			<arg value=\"-h\"/>\n");
+					out.write("			<arg value=\""+host+"\"/>\n");
+				}			
+				if(port != null){
+					out.write("			<arg value=\"-p\"/>\n");
+					out.write("			<arg value=\""+port+"\"/>\n"); 
+				}
+				out.write("			<arg value=\"deploy.wsdd\"/>\n");
+				out.write("		</java>\n");
+	
+				out.write("	</target>\n");
+			}else{
+				out.write("<!-- deploy task can be automated IFF the input is a jar -->\n");
+			}
 			out.write("</project>\n");
 			out.close();
 		} catch (IOException e) {
@@ -214,6 +246,18 @@ public class BuildFileGenerator implements Generator {
 		}
 
 		return new StringTokenizer(classpath, spearator);
+	}
+	
+	private void writeFileCopyStatement(InputOutputFile file,PrintWriter out) throws GenerationFault{
+		if(file != null){
+			String fileName = file.fileName();
+			if(fileName != null){
+				File absFile = new File(fileName);
+				if(absFile.exists())
+					out.write("		<copy file =\""+absFile.getAbsolutePath()+"\" todir=\"${build.classes}/META-INF\"/>\n");
+			} 
+		}
+
 	}
 
 }

@@ -56,8 +56,10 @@
 package org.apache.geronimo.ews.ws4j2ee.utils.packager;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 
@@ -92,167 +94,27 @@ public class Packager {
         jaxrpcjar.addJarEntry(jentry3);
     }
 
-//    public void loadFromDir(String ejbDir,
-//                            String jaxrpcDir) {
-//        //get EJBClass files							
-//        FileSerachAgent searcher = new FileSerachAgent(ejbDir);
-//        searcher.addAcceptedFile(".class");
-//        ArrayList ejbClassFiles = searcher.serach();
-//
-//        for (int i = 0; i < ejbClassFiles.size(); i++) {
-//            String filename = (String) ejbClassFiles.get(i);
-//            JARFileEntry jentry =
-//                    new JARFileEntry(filename, getOutClassFileName(filename, ejbDir));
-//            ejbjar.addJarEntry(jentry);
-//            jaxrpcjar.addJarEntry(jentry);
-//        }
-//
-//        searcher = new FileSerachAgent(ejbDir);
-//        searcher.addRejectedFile(".class");
-//        searcher.setDefaultForUnspsecified(true);
-//        ArrayList ejbDDFiles = searcher.serach();
-//
-//        for (int i = 0; i < ejbDDFiles.size(); i++) {
-//            String filename = (String) ejbDDFiles.get(i);
-//            JARFileEntry jentry =
-//                    new JARFileEntry(filename, getOutDDName(filename));
-//            ejbjar.addJarEntry(jentry);
-//        }
-//
-//        searcher = new FileSerachAgent(jaxrpcDir);
-//        searcher.addAcceptedFile(".class");
-//        ArrayList jaxrpcClassFiles = searcher.serach();
-//
-//        for (int i = 0; i < jaxrpcClassFiles.size(); i++) {
-//            String filename = (String) jaxrpcClassFiles.get(i);
-//            JARFileEntry jentry =
-//                    new JARFileEntry(filename, getOutClassFileName(filename, jaxrpcDir));
-//            jaxrpcjar.addJarEntry(jentry);
-//            ejbjar.addJarEntry(jentry);
-//        }
-//
-//        searcher = new FileSerachAgent(jaxrpcDir);
-//        searcher.addRejectedFile(".class");
-//        searcher.setDefaultForUnspsecified(true);
-//        ArrayList jaxrpcDDFiles = searcher.serach();
-//
-//        for (int i = 0; i < jaxrpcDDFiles.size(); i++) {
-//            String filename = (String) jaxrpcDDFiles.get(i);
-//            JARFileEntry jentry =
-//                    new JARFileEntry(filename, getOutDDName(filename));
-//            jaxrpcjar.addJarEntry(jentry);
-//        }
-//    }
-
-//    public void loadFromCL(String[] args) {
-//        try {
-//            BufferedReader reader = new BufferedReader(new FileReader(JARCONF_FILE));
-//            String line = null;
-//            String inputfilename = null;
-//            String outfilename = null;
-//            InputStream inputStream = null;
-//
-//            for (int i = 0; i < args.length; i++) {
-//                line = args[i];
-//                if (line.length() < 2)
-//                    continue;
-//                if (!(line.endsWith(".xml") || line.endsWith(".wsdl") || line.endsWith(".class"))) {
-//                    inputfilename = (line.substring(line.indexOf(':') + 1)).replace('.', '/') + ".class";
-//                    outfilename = (line.substring(line.indexOf(':') + 1)).replace('.', '/') + ".class";
-//                } else {
-//                    inputfilename = (line.substring(line.indexOf(':') + 1));
-//                    outfilename = "META-INF/" + (line.substring(line.indexOf(':') + 1));
-//                }
-//
-//                JARFileEntry jentry = new JARFileEntry(outfilename, inputfilename);
-//
-//                if (line.startsWith("ejb:")) {
-//                    ejbjar.addJarEntry(jentry);
-//                } else if (line.startsWith("jaxrpc:")) {
-//                    jaxrpcjar.addJarEntry(jentry);
-//                }
-//            }
-//        } catch (FileNotFoundException e) {
-//            throw new UnrecoverableGenarationFault(e.getMessage());
-//        }
-//    }
-//
-//    private void loadFromFile() {
-//        try {
-//            BufferedReader reader = new BufferedReader(new FileReader(JARCONF_FILE));
-//            String line = null;
-//            String inputfilename = null;
-//            String outfilename = null;
-//            InputStream inputStream = null;
-//
-//            while ((line = reader.readLine()) != null) {
-//                if (line.length() < 2)
-//                    continue;
-//                if (!(line.endsWith(".xml") || line.endsWith(".wsdl") || line.endsWith(".class"))) {
-//                    inputfilename = (line.substring(line.indexOf(':') + 1)).replace('.', '/') + ".class";
-//                    outfilename = (line.substring(line.indexOf(':') + 1)).replace('.', '/') + ".class";
-//                } else {
-//                    inputfilename = (line.substring(line.indexOf(':') + 1));
-//                    outfilename = "META-INF/" + (line.substring(line.indexOf(':') + 1));
-//                }
-//
-//                File file = new File(inputfilename);
-//                if (file.exists())
-//                    inputStream = new FileInputStream(file);
-//                else
-//                    inputStream = Packager.class.getClassLoader().getResourceAsStream(inputfilename);
-//
-//                JARFileEntry jentry = new JARFileEntry(outfilename, inputfilename);
-//
-//                if (line.startsWith("ejb:")) {
-//                    ejbjar.addJarEntry(jentry);
-//                } else if (line.startsWith("jaxrpc:")) {
-//                    jaxrpcjar.addJarEntry(jentry);
-//                }
-//            }
-//
-//        } catch (FileNotFoundException e) {
-//            throw new UnrecoverableGenarationFault(e.getMessage());
-//        } catch (IOException e) {
-//            throw new UnrecoverableGenarationFault(e.getMessage());
-//        }
-//
-//    }
-//
-//    public void createNewJarFile() throws IOException {
-//        ejbjar.createNewJarFile();
-//        jaxrpcjar.createNewJarFile();
-//    }
-//
-//    private String getOutClassFileName(String filename, String dir) {
-//        String out = filename.substring(dir.length());
-//        if (out.startsWith("/"))
-//            out = out.substring(1);
-//        return out;
-//    }
-//
-//    private String getOutDDName(String filename) {
-//        String out = "META-INF/" + filename.substring(filename.lastIndexOf("/"));
-//        return out;
-//    }
-//
     public static void main(String[] args) {
-//        Packager packager = new Packager();
-//		if(args.length > 0)
-//			packager.loadFromCL(args);
-//		else
-//			packager.loadFromFile();
-//		packager.createNewJarFile();
-//        packager.loadFromDir();	
-//		
-//		File file = new File(JARCONF_FILE);
-//		if(file.exists()){
-//			file.delete();
-//		}
         try {
             JARFile jfile = new JARFile(new File(args[0]));
             for(int i = 1;i<args.length;i++){
-            	jfile.addJarFile(args[i]);
+            	if(args[i].endsWith(".jar")){
+					jfile.addJarFile(args[i]);            	
+            	}else{
+            		File file = new File(args[i]);
+            		if(file.isDirectory()){
+            			ArrayList list = new ArrayList();
+						getSourceFiles(list,file);
+						for(int j = 1;j<list.size();j++){
+							File temp = new File((String)list.get(i));
+							JARFileEntry newEntry =
+								new JARFileEntry(temp.getName(),
+													new FileInputStream(temp));
+							jfile.addJarEntry(newEntry);
+						}	
+            		}
+            	}
+
             	System.out.println(args[i]);
             }
             jfile.createNewJarFile();
@@ -265,4 +127,20 @@ public class Packager {
             e.printStackTrace();
         }
     }
+	private static void getSourceFiles(ArrayList list, File location) {
+		String[] dirs = location.list();
+		if (dirs == null)
+			return;
+		for (int i = 0; i < dirs.length; i++) {
+			String filename = location.getAbsolutePath() + "/" + dirs[i];
+			File file = new File(filename);
+			if (file.isFile()) {
+				list.add(filename);
+			} else {
+					getSourceFiles(list, new File(filename));
+			}
+
+		}
+	}
+
 }

@@ -96,16 +96,20 @@ public class JARFile {
         this.path = path;
         jarEntries = new HashMap();
     }
-    
-    public void addJarFile(String jarFile) throws GenerationFault{
+
+    public void addJarFile(String jarFile) throws GenerationFault {
         try {
-    		JarFile file = new JarFile(jarFile);
-    		Enumeration e = file.entries();
-    		while(e.hasMoreElements()){
-    			ZipEntry entry = (ZipEntry)e.nextElement();
-    			JARFileEntry newEntry = new JARFileEntry(entry.getName(),file.getInputStream(entry));
-				this.jarEntries.put(entry.getName(),newEntry);
-    		}
+			System.out.println("%%%%%%%%%%%%"+jarFile);
+            JarFile file = new JarFile(jarFile);
+            Enumeration e = file.entries();
+            while (e.hasMoreElements()) {
+                ZipEntry entry = (ZipEntry) e.nextElement();
+                JARFileEntry newEntry =
+                    new JARFileEntry(
+                        entry.getName(),
+                        file.getInputStream(entry));
+                this.jarEntries.put(entry.getName(), newEntry);
+            }
         } catch (IOException e) {
             e.printStackTrace();
             throw GenerationFault.createGenerationFault(e);
@@ -113,7 +117,7 @@ public class JARFile {
     }
 
     public void addJarEntry(JARFileEntry entry) {
-        this.jarEntries.put(entry.getJarEntry().getName(),entry);
+        this.jarEntries.put(entry.getJarEntry().getName(), entry);
     }
 
     public void createNewJarFile() throws IOException {
@@ -122,23 +126,24 @@ public class JARFile {
 
         System.out.println("creating " + path.getAbsolutePath() + ".......");
 
-        BufferedOutputStream bo = new BufferedOutputStream(new FileOutputStream(path));
+        BufferedOutputStream bo =
+            new BufferedOutputStream(new FileOutputStream(path));
         JarOutputStream jo = new JarOutputStream(bo);
-		Iterator it = jarEntries.values().iterator();
+        Iterator it = jarEntries.values().iterator();
         for (; it.hasNext();) {
 
             JARFileEntry jarentry = (JARFileEntry) it.next();
             System.out.println(jarentry.getSource() + " adding ..");
-			InputStream instream = null;
-//            File input = new File(jarentry.getSource());
+            InputStream instream = null;
+            //            File input = new File(jarentry.getSource());
 
-//
-//            if (input.exists())
-//                instream = new FileInputStream(input);
-//            else
-//                instream = JARFile.class.getClassLoader()
-//                        .getResourceAsStream(jarentry.getSource());
-			instream = jarentry.getSource();           
+            //
+            //            if (input.exists())
+            //                instream = new FileInputStream(input);
+            //            else
+            //                instream = JARFile.class.getClassLoader()
+            //                        .getResourceAsStream(jarentry.getSource());
+            instream = jarentry.getSource();
 
             BufferedInputStream source = new BufferedInputStream(instream);
 

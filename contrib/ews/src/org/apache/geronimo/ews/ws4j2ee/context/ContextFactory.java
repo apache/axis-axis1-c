@@ -60,6 +60,7 @@ import java.io.InputStream;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.geronimo.ews.jaxrpcmapping.J2eeEmitter;
 import org.apache.geronimo.ews.jaxrpcmapping.JaxRpcMapper;
+import org.apache.geronimo.ews.ws4j2ee.context.impl.InputOutputFileImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.impl.J2EEWebServiceContextImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.impl.JaxRpcMapperImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.impl.MiscInfoImpl;
@@ -77,7 +78,7 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenerationFault;
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class ContextFactory {
-	private static J2EEWebServiceContext currentContext;
+    private static J2EEWebServiceContext currentContext;
     public static WSDLContext createWSDLContext(Object info) {
         if (info instanceof SymbolTable)
             return new AxisWSDLContext((SymbolTable) info);
@@ -85,12 +86,17 @@ public class ContextFactory {
     }
 
     public static JaxRpcMapperContext createJaxRpcMapperContext(Object[] info) {
-        if (info.length == 2 && info[0] instanceof JaxRpcMapper && info[1] instanceof J2eeEmitter)
-            return new JaxRpcMapperImpl((JaxRpcMapper) info[0],(J2eeEmitter)info[1]);
+        if (info.length == 2
+            && info[0] instanceof JaxRpcMapper
+            && info[1] instanceof J2eeEmitter)
+            return new JaxRpcMapperImpl(
+                (JaxRpcMapper) info[0],
+                (J2eeEmitter) info[1]);
         throw new UnrecoverableGenerationFault("unknown mapper type");
     }
 
-    public static WSCFContext createWSCFContext(InputStream in) throws GenerationFault {
+    public static WSCFContext createWSCFContext(InputStream in)
+        throws GenerationFault {
         try {
             return new WSCFContextImpl(in);
         } catch (WSCFException e) {
@@ -102,13 +108,27 @@ public class ContextFactory {
     public static MiscInfo createMiscInfo() {
         return new MiscInfoImpl();
     }
-    
-    public static J2EEWebServiceContext getCurrentJ2EEWsContext(){
-		return currentContext;
+
+    public static J2EEWebServiceContext getCurrentJ2EEWsContext() {
+        return currentContext;
     }
-	public static J2EEWebServiceContext getJ2EEWsContext(boolean hasWSDL){
-		currentContext = new J2EEWebServiceContextImpl(hasWSDL);
-		return currentContext;
-	} 
- 
+    public static J2EEWebServiceContext getJ2EEWsContext(boolean hasWSDL) {
+        currentContext = new J2EEWebServiceContextImpl(hasWSDL);
+        return currentContext;
+    }
+
+    public static InputOutputFile getInputFile(
+        String fileName,
+        InputStream instream) {
+        return new InputOutputFileImpl(fileName, instream);
+    }
+    
+	public static InputOutputFile getInputFile(
+		String fileName) throws GenerationFault {
+		return new InputOutputFileImpl(fileName);
+	}
+	public static InputOutputFile getInputFile(
+		InputStream instream) {
+		return new InputOutputFileImpl(instream);
+	}	
 }

@@ -1,5 +1,3 @@
-
-
 /*
  * The Apache Software License, Version 1.1
  *
@@ -153,9 +151,10 @@ public class J2eeDeployWriter  extends JavaWriter{
 	 * @return 
 	 */
 	protected String getFileName() {
-
+//		String dir =
+//				emitter.getNamespaces().getAsDir(definition.getTargetNamespace());
 		String dir =
-				emitter.getNamespaces().getAsDir(definition.getTargetNamespace());
+				emitter.getNamespaces().getAsDir("");
 		return dir + "deploy.wsdd"; 
 	}    // getFileName
 
@@ -448,7 +447,7 @@ public class J2eeDeployWriter  extends JavaWriter{
 		writeDeployBinding(pw, bEntry);
 		writeDeployTypes(pw, bEntry.getBinding(), hasLiteral, hasMIME, use);
 		
-		WSCFHandler[] handlers = wscontext.getMiscInfo().getHandlers();
+		WSCFHandler[] handlers = this.wscontext.getMiscInfo().getHandlers();
 		if(handlers != null){
 			for(int i = 0;i<handlers.length;i++){
 				writeHandler(pw,handlers[i]);
@@ -719,6 +718,7 @@ public class J2eeDeployWriter  extends JavaWriter{
 	}
 	
 	private void writeHandler(PrintWriter pw,WSCFHandler handler){
+		System.out.println("handler written");
 		pw.println("      <handler name=\""+handler.getHandlerName()+"\"type=\""+handler.getHandlerClass()+"\">");
 		WSCFInitParam[] param = handler.getInitParam();
 		for(int i = 0;i<param.length;i++){
