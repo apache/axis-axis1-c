@@ -5,7 +5,7 @@ rm ../lib/libaxis_xmlparser.so
 cp -f ../lib/libaxiscpp_mod2.so /usr/local/apache2/modules/
 cp -f ../lib/libaxis_expat.so ../lib/libaxis_xmlparser.so
 if test -d ../log; then
-    echo "check whether log folder exists"
+    echo "Checking log folder..."
 else
     mkdir ../log
 fi
