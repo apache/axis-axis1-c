@@ -21,6 +21,7 @@ public:
 	AxisClientException(int iExceptionCode);
 	AxisClientException(exception* e);
 	AxisClientException(exception* e, int iExceptionCode);
+	AxisClientException(string sMessage);
 	virtual ~AxisClientException() throw();
 	 const char* what() throw();
 	 const int getExceptionCode();

@@ -39,6 +39,11 @@ AxisClientException::AxisClientException(exception* e,int iExceptionCode)
 	processException (e, iExceptionCode);
 }
 
+AxisClientException::AxisClientException(string sMessage)
+{
+   m_sMessage = sMessage;
+}
+
 AxisClientException::~AxisClientException() throw () 
 {
 	m_sMessage ="";

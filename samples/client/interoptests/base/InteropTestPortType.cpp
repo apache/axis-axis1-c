@@ -65,7 +65,7 @@ xsd__string InteropTestPortType::echoString(xsd__string Value0)
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
 			m_pCall->unInitialize();
-			throw;
+			throw AxisClientException(e.what());
 		}
 		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://localhost/axis/base" );
 		if(pSoapFault)
