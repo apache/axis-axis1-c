@@ -33,7 +33,7 @@ InteropTestPortTypeB::InteropTestPortTypeB()
 {
 	m_pCall = new Call();
 	m_pCall->SetProtocol(APTHTTP);
-	m_pCall->SetEndpointURI("http://localhost:5555/axis/InteropGroupB");
+	m_pCall->SetEndpointURI("http://localhost/axis/groupb");
 }
 
 InteropTestPortTypeB::~InteropTestPortTypeB()
