@@ -76,6 +76,7 @@
 						<sleep seconds="3"/>
 						<echo message="Running Test ${testName} ${clientArgs}"/>
 						<!-- Run the client test -->
+						<stopwatch name="${testName}.timer" action="start"/>
 						<exec dir="${test.directory}"
 						 executable="${test.directory}/${testName}"
 						 output="${results.stdout}" error="${results.stderr}"
@@ -86,6 +87,11 @@
 							<env key="LIBPATH" path="${dir.libraries}${path.separator}${dir.xmlParser}${path.separator}${dir.gskit}/lib"/>
 							<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}"/>
 						</exec>
+						<stopwatch name="${testName}.timer" action="total"/>
+						<propertycopy property="timer1" from="${testName}.timer"/>
+ 						<echo file="${results.log}" append="true"
+ 		 				      message="${testName} - Execution Time - ${timer1}${line.separator}"/>
+						<echo message="${testName} - Execution Time - ${timer1}"/>
 						<java classname="org.apache.test.StopTCPMonitor">
 							<arg line="-p ${monitorPort}"/>
 							<arg line="-h localhost"/>
