@@ -69,7 +69,7 @@ public class CUtils {
 	
 	static{	
 		class2QNamemapCpp.put("xsd__int",new QName(WrapperConstants.SCHEMA_NAMESPACE,				"int"));
-		class2QNamemapCpp.put("xsd__unsignedByte", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"byte"));
+		class2QNamemapCpp.put("xsd__byte", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"byte"));
 		class2QNamemapCpp.put("xsd__float", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"float"));
 		class2QNamemapCpp.put("xsd__long", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"long"));
 		class2QNamemapCpp.put("xsd__long", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"integer"));
@@ -95,7 +95,7 @@ public class CUtils {
 		class2QNamemapCpp.put("xsd__NMTOKEN", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"NMTOKEN"));
 
 		class2QNamemapC.put("xsdc__int",new QName(WrapperConstants.SCHEMA_NAMESPACE,				"int"));
-		class2QNamemapC.put("xsdc__unsignedByte", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"byte"));
+		class2QNamemapC.put("xsdc__byte", new QName(WrapperConstants.SCHEMA_NAMESPACE,	"byte"));
 		class2QNamemapC.put("xsdc__float", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"float"));
 		class2QNamemapC.put("xsdc__long", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"long"));
 		class2QNamemapC.put("xsdc__long", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"integer"));
@@ -121,7 +121,7 @@ public class CUtils {
 		class2QNamemapC.put("xsdc__NMTOKEN", new QName(WrapperConstants.SCHEMA_NAMESPACE,			"NMTOKEN"));
 
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"),				"xsd__int");
-		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"),			"xsd__unsignedByte");
+		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"),			"xsd__byte");
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"),			"xsd__float");
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"),			"xsd__long");
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"),			"xsd__long");
@@ -146,7 +146,7 @@ public class CUtils {
 		qname2classmapCpp.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"),			"xsd__NMTOKEN");
 		
 		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"),				"xsdc__int");
-		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"),			"xsdc__unsignedByte");
+		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"),			"xsdc__byte");
 		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"),			"xsdc__float");
 		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"),			"xsdc__long");
 		qname2classmapC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"),			"xsdc__long");
@@ -175,7 +175,7 @@ public class CUtils {
 		 * 	-> http://marc.theaimsgroup.com/?t=107907748000002&r=1&w=2 
 		 */
 		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "int"),			"xsd__int");
-		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"),			"xsd__unsignedByte");
+		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"),			"xsd__byte");
 		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "float"),			"xsd__float");
 		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "long"),			"xsd__long");
 		qname2classmapCpp.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "integer"),		"xsd__long");
@@ -209,7 +209,7 @@ public class CUtils {
 		 * 	-> http://marc.theaimsgroup.com/?t=107907748000002&r=1&w=2 
 		 */
 		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "int"),			"xsdc__int");
-		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"),			"xsdc__unsignedByte");
+		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"),			"xsdc__byte");
 		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "float"),			"xsdc__float");
 		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "long"),			"xsdc__long");
 		qname2classmapC.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "integer"),		"xsdc__long");
@@ -245,7 +245,7 @@ public class CUtils {
 		type2getValueMethodNameCpp.put("xsd__short",			"Short");
 		type2getValueMethodNameCpp.put("xsd__char",			"Char");
 		type2getValueMethodNameCpp.put("xsd__double",			"Double");
-		type2getValueMethodNameCpp.put("xsd__unsignedByte",	"Byte");			
+		type2getValueMethodNameCpp.put("xsd__byte",	"Byte");			
 		type2getValueMethodNameCpp.put("xsd__unsignedLong",	"UnsignedLong");
 		type2getValueMethodNameCpp.put("xsd__unsignedInt",		"UnsignedInt");
 		type2getValueMethodNameCpp.put("xsd__unsignedShort",	"UnsignedShort");
@@ -269,7 +269,7 @@ public class CUtils {
 		type2getValueMethodNameC.put("xsdc__short",			"Short");
 		type2getValueMethodNameC.put("xsdc__char",			"Char");
 		type2getValueMethodNameC.put("xsdc__double",			"Double");
-		type2getValueMethodNameC.put("xsdc__unsignedByte",	"Byte");			
+		type2getValueMethodNameC.put("xsdc__byte",	"Byte");			
 		type2getValueMethodNameC.put("xsdc__unsignedLong",	"UnsignedLong");
 		type2getValueMethodNameC.put("xsdc__unsignedInt",		"UnsignedInt");
 		type2getValueMethodNameC.put("xsdc__unsignedShort",	"UnsignedShort");
@@ -337,7 +337,7 @@ public class CUtils {
 		basicType2EnumMapCpp.put("xsd__string",				"XSD_STRING");
 		basicType2EnumMapCpp.put("xsd__long",					"XSD_LONG");
 		basicType2EnumMapCpp.put("xsd__short",					"XSD_SHORT");
-		basicType2EnumMapCpp.put("xsd__unsignedByte",			"XSD_BYTE");
+		basicType2EnumMapCpp.put("xsd__byte",			"XSD_BYTE");
 		basicType2EnumMapCpp.put("xsd__double",				"XSD_DOUBLE");
 		basicType2EnumMapCpp.put("xsd__unsignedLong",			"XSD_UNSIGNEDLONG");
 		basicType2EnumMapCpp.put("xsd__unsignedInt",			"XSD_UNSIGNEDINT");
@@ -360,7 +360,7 @@ public class CUtils {
 		basicType2EnumMapC.put("xsdc__string",				"XSD_STRING");
 		basicType2EnumMapC.put("xsdc__long",					"XSD_LONG");
 		basicType2EnumMapC.put("xsdc__short",					"XSD_SHORT");
-		basicType2EnumMapC.put("xsdc__unsignedByte",			"XSD_BYTE");
+		basicType2EnumMapC.put("xsdc__byte",			"XSD_BYTE");
 		basicType2EnumMapC.put("xsdc__double",				"XSD_DOUBLE");
 		basicType2EnumMapC.put("xsdc__unsignedLong",			"XSD_UNSIGNEDLONG");
 		basicType2EnumMapC.put("xsdc__unsignedInt",			"XSD_UNSIGNEDINT");
