@@ -281,6 +281,11 @@ int SoapEnvelope::addStandardNamespaceDecl(const Attribute *pAttribute)
     return AXIS_SUCCESS;
 }
 
+void SoapEnvelope::clearStandardNamespaceDecl()
+{
+    m_StandardNamespaceDecls.clear();
+}
+
 int SoapEnvelope::serializeStandardNamespaceDecl(SoapSerializer &pSZ)
 {
     list<const Attribute*>::iterator itCurrNamespaceDecl= 

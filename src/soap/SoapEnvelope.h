@@ -37,6 +37,7 @@ friend class SoapSerializer;
 private:
     int serializeStandardNamespaceDecl(SoapSerializer& pSZ);
     int addStandardNamespaceDecl(const Attribute* pAttribute);
+    void clearStandardNamespaceDecl();
     int serializeNamespaceDecl(SoapSerializer& pSZ);
     /* int serializeNamespaceDecl(string&); */
     int serializeAttributes(SoapSerializer& pSZ);

@@ -335,6 +335,9 @@ int SoapSerializer::init()
 int SoapSerializer::setSoapVersion(SOAP_VERSION nSoapVersion)
 {
     m_iSoapVersion = nSoapVersion;
+
+    m_pSoapEnvelope->clearStandardNamespaceDecl(); // Samisa : AXISCPP-368
+
     /* here the default namespaces of the SoapEnvelop should be added and 
      * intialized as well. 
      */
