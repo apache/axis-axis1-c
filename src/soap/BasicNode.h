@@ -74,6 +74,8 @@
 
 #include <string>
 
+class SoapSerializer;
+
 using namespace std;
 
 enum NODE_TYPE { ELEMENT_NODE=1, CHARACTER_NODE};
@@ -81,7 +83,7 @@ enum NODE_TYPE { ELEMENT_NODE=1, CHARACTER_NODE};
 class BasicNode
 {
 public:
-	virtual int serialize(string&) =0;
+	virtual int serialize(SoapSerializer& pSZ) =0;
 	BasicNode();
 	virtual ~BasicNode();
 

@@ -66,6 +66,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "SoapHeader.h"
+#include "SoapSerializer.h"
 #include "../common/GDefine.h"
 
 //////////////////////////////////////////////////////////////////////
@@ -105,6 +106,47 @@ void SoapHeader::addHeaderBlock(HeaderBlock* headerBlock)
 	m_headerBlocks.push_back(headerBlock);
 }
 
+int SoapHeader::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
+{	
+	int iStatus= SUCCESS;
+
+	do {
+		
+		pSZ << "<" << g_sObjSoapEnvVersionsStruct[eSoapVersion].pchEnvelopePrefix << ":" << g_sObjSoapEnvVersionsStruct[eSoapVersion].pcharWords[SKW_HEADER];
+
+		iStatus= serializeNamespaceDecl(pSZ);
+		iStatus= serializeAttributes(pSZ);
+
+		if(iStatus==FAIL) {
+			break;
+		}
+		
+		pSZ<< ">";
+
+		list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
+
+		while(itCurrHeaderBlock != m_headerBlocks.end()) {
+			iStatus= (*itCurrHeaderBlock)->serialize(pSZ);
+			if(iStatus==FAIL) {
+				break;
+			}
+			itCurrHeaderBlock++;			
+		}
+
+		if(iStatus==FAIL) {
+			break;
+		}
+		
+		pSZ<< "</" << g_sObjSoapEnvVersionsStruct[eSoapVersion].pchEnvelopePrefix << ":" << g_sObjSoapEnvVersionsStruct[eSoapVersion].pcharWords[SKW_HEADER] << ">";
+		
+	} while(0);
+
+	return iStatus;
+
+}
+
+/*
+commented on 10/7/2003 3.50pm
 int SoapHeader::serialize(string& sSerialized, SOAP_VERSION eSoapVersion)
 {	
 	int iStatus= SUCCESS;
@@ -143,26 +185,7 @@ int SoapHeader::serialize(string& sSerialized, SOAP_VERSION eSoapVersion)
 	return iStatus;
 
 }
-
-/*string& SoapHeader::serialize()
-{	
-
-	m_strHeaderSerialized="";
-
-	m_strHeaderSerialized= "<SOAP-ENV:Header>";
-
-	list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
-
-	while(itCurrHeaderBlock != m_headerBlocks.end()) {
-		m_strHeaderSerialized= m_strHeaderSerialized + (*itCurrHeaderBlock)->serialize();
-		itCurrHeaderBlock++;
-	}
-
-	m_strHeaderSerialized= m_strHeaderSerialized + "</SOAP-ENV:Header>";
-
-	return m_strHeaderSerialized;
-
-}*/
+*/
 
 int SoapHeader::addAttribute(Attribute *pAttribute)
 {
@@ -171,6 +194,21 @@ int SoapHeader::addAttribute(Attribute *pAttribute)
 	return SUCCESS;
 }
 
+
+int SoapHeader::serializeAttributes(SoapSerializer& pSZ)
+{
+	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+
+	while(itCurrAttribute != m_attributes.end()) {		
+		(*itCurrAttribute)->serialize(pSZ);
+		itCurrAttribute++;		
+	}	
+
+	return SUCCESS;	
+}
+
+/*
+comm on 10/7/2003 3.55pm
 int SoapHeader::serializeAttributes(string& sSerialized)
 {
 	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
@@ -182,6 +220,7 @@ int SoapHeader::serializeAttributes(string& sSerialized)
 
 	return SUCCESS;	
 }
+*/
 
 int SoapHeader::addNamespaceDecl(Attribute *pAttribute)
 {
@@ -190,6 +229,21 @@ int SoapHeader::addNamespaceDecl(Attribute *pAttribute)
 	return SUCCESS;
 }
 
+int SoapHeader::serializeNamespaceDecl(SoapSerializer& pSZ)
+{
+	list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
+
+	while(itCurrNamespaceDecl != m_namespaceDecls.end()) {			
+
+		(*itCurrNamespaceDecl)->serialize(pSZ);
+		itCurrNamespaceDecl++;		
+	}	
+
+	return SUCCESS;
+}
+
+/*
+comm on 10/7/2003 3.55pm
 int SoapHeader::serializeNamespaceDecl(string& sSerialized)
 {
 	list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
@@ -202,3 +256,4 @@ int SoapHeader::serializeNamespaceDecl(string& sSerialized)
 
 	return SUCCESS;
 }
+*/
