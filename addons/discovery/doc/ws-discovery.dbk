@@ -87,7 +87,12 @@
           an endpoint being valid, and thus the limit of its cacheability.
           Again, caching is an effective way to scale, and scoping could be
           convenient to prevent accidental binding to the wrong
-          implementation.</para>
+          implementation. The protocol includes some DHCP integration, the 
+          idea being that services should receive scope information from the
+          DHCP service -devices autoscope themselves from the network. of
+          course, if the network does not provide scope, then the service is
+          unscoped. 
+          </para>
 
           <para>SLP addresses scalability with advertising of directory
           servers, and a URL based query mechanism to specify searches on the
@@ -96,6 +101,9 @@
           effectively create an emergent directory of all located devices,
           which current UDDI implementations do not.</para>
 
+          <para>
+          Scoping is essential for scalability. 
+          </para>
           <para>What may be an interesting project would be to provide a UDDI
           interface to a network of self-advertising web services; letting
           programs use UDDI interfaces to find services in a dynamic network.</para>
