@@ -30,12 +30,11 @@ fi
 
 . testcases/platform/linux/setAxis.sh 
 
-rm -rf $OUTPUT_DIR
+#rm -rf $OUTPUT_DIR
 
 passed=0
 num_tests=21
 
-# inserted Adrian Dick by
 #test1 
 runTestCase.sh testcases/wsdls/RpcHttpHeaderTest1.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
@@ -100,6 +99,7 @@ runTestCase.sh testcases/wsdls/ExtensibilityQuery.wsdl c++
 runTestCase.sh testcases/wsdls/Calculator.wsdl c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
 
+# inserted Adrian Dick by
 #runTestCase.sh testcases/wsdls/SimpleTypeArray.wsdl c++
 #[[ $? -eq 0 ]] && passed=$(($passed + 1))
 #runTestCase.sh testcases/wsdls/SimpleTypeInnerUnbounded.wsdl c++

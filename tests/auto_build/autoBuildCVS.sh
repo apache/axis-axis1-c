@@ -11,6 +11,18 @@ SOURCE_BUILD_ERRORS=${HOME_DIR}/log_source_build_errors_`date +%Y-%m-%d@%H:%M:%S
 
 export CVSROOT HOME_DIR CHECKOUT_DIR LOG ERROR_LOG SOURCE_BUILD_MESSAGES SOURCE_BUILD_ERRORS
 
+#Setting environment variables. User may change the default values to fit his own environment
+
+XERCESC_HOME=${XERCESC_HOME:-/usr/local/xerces-c-src2_2_0}
+EXPAT_HOME=${EXPAT_HOME:-/usr/local/expat1957}
+APACHE2_HOME=${APACHE2_HOME:-/usr/local/apache2}
+APACHE_HOME=${APACHE_HOME:-/usr/local/apache}
+AXISCPP_HOME=${HOME_DIR}/${CHECKOUT_DIR}
+AXISCPP_DEPLOY=${AXISCPP_DEPLOY:-/usr/local/axiscpp_deploy}
+LD_LIBRARY_PATH=${AXISCPP_DEPLOY}/lib 
+PATH="/usr/local/bin:$PATH"
+export LD_LIBRARY_PATH AXISCPP_DEPLOY XERCESC_HOME EXPAT_HOME APACHE2_HOME APACHE_HOME AXISCPP_HOME PATH
+
 #get command line options
 GET_CVS="true"
 USE_APACHE="1"
@@ -46,13 +58,6 @@ else
 fi
 
 
-XERCESC_HOME=${XERCESC_HOME:-/usr/local/xerces-c-src2_2_0}
-EXPAT_HOME=${EXPAT_HOME:-/usr/local/expat1957}
-APACHE2_HOME=${APACHE2_HOME:-/usr/local/apache2}
-APACHE_HOME=${APACHE_HOME:-/usr/local/apache}
-AXISCPP_HOME=${HOME_DIR}/${CHECKOUT_DIR}
-PATH="/usr/local/bin:$PATH"
-export XERCESC_HOME EXPAT_HOME APACHE2_HOME APACHE_HOME AXISCPP_HOME PATH
 
 # *** Build Source ***
 echo Starting Source Build
@@ -81,10 +86,9 @@ echo "	Build messages 			:${SOURCE_BUILD_MESSAGES}"
 echo "	Build errors/warnings 		:${SOURCE_BUILD_ERRORS}"
 
 
-AXISCPP_DEPLOY=${AXISCPP_DEPLOY:-/usr/local/axiscpp_deploy}
-LD_LIBRARY_PATH=${AXISCPP_DEPLOY}/lib
-export AXISCPP_DEPLOY LD_LIBRARY_PATH
 cd ${HOME_DIR}
+rm -f testcases/build/buildTestCase.log
+rm -f testcases/build/runTestCase.log
 
 # *** Deploy with Apache 2 ***
 echo Start deploy with apache2 using expat parser library
