@@ -69,6 +69,7 @@ import org.apache.axismora.soap.XMLTextData;
 import org.apache.axis.AxisFault;
 import org.apache.axis.deployment.wsdd.WSDDService;
 import org.apache.axis.encoding.SerializationContext;
+import org.apache.axis.enum.Use;
 import org.apache.axis.message.SOAPEnvelope;
 import org.apache.axis.message.SOAPFault;
 import org.apache.axis.message.SOAPHeaderElement;
@@ -115,7 +116,7 @@ public interface MessageContext extends javax.xml.rpc.handler.MessageContext {
 	/**
 	 * Tells the serializer to use literal encoding. 
 	 */
-	public void setLitereal(boolean boo);
+	public void setUse(Use t);
     
     public int getVersion();
     /**
@@ -125,16 +126,7 @@ public interface MessageContext extends javax.xml.rpc.handler.MessageContext {
      * @return
      */
     
-	/**
-		* This method takes care of serializing of body according to the style.
-		* Style specific serialization is handled in the java classes in the package
-		* provider.serializers.
-		* 
-		* @param styleProvider Manages serialization of the body acording to the style.
-		* @throws AxisFault
-		*/ 
-	   public void setSoapBodyContents(Serializable styleProvider) throws AxisFault;
-	   
+	
     public boolean setSoapBodyContent(Object result) throws AxisFault;
     /**
      * get the name of the method (wsdl operation) invoke by this requst
