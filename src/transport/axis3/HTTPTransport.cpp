@@ -127,6 +127,8 @@ void HTTPTransport::setEndpointUri( const char * pcEndpointUri) throw (HTTPTrans
 		{
 			if( m_pSecureChannel != NULL)
 			{
+				m_pNormalChannel->close();
+
 				m_pActiveChannel = m_pSecureChannel;
 
 				m_pActiveChannel->setURL( pcEndpointUri);
@@ -148,6 +150,8 @@ void HTTPTransport::setEndpointUri( const char * pcEndpointUri) throw (HTTPTrans
 			{
 				if( m_pNormalChannel != NULL)
 				{
+					m_pSecureChannel->close();
+
 					m_pActiveChannel = m_pNormalChannel;
 					m_pActiveChannel->setURL( pcEndpointUri);
 					m_bChannelSecure = false;

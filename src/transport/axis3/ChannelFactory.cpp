@@ -82,63 +82,72 @@ IChannel * ChannelFactory::LoadChannelLibrary( g_ChannelType eChannelType, const
 		iLibCount = 1;
 	}
 
-    sLibHandler = PLATFORM_LOADLIB( pcLibraryName);
-
-    if( !sLibHandler)
-    {
-        throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED);
-    }
-	else
+// Additional code added to block reloading of DLL if name has not changed.
+	if( m_pLibName[iLibCount] == NULL ||
+		strcmp( pcLibraryName, m_pLibName[iLibCount]) != 0)
 	{
-        CREATE_OBJECT3 sCreate = (CREATE_OBJECT3) PLATFORM_GETPROCADDR( sLibHandler, CREATE_FUNCTION3);
-        DELETE_OBJECT3 sDelete = (DELETE_OBJECT3) PLATFORM_GETPROCADDR( sLibHandler, DELETE_FUNCTION3);
+		sLibHandler = PLATFORM_LOADLIB( pcLibraryName);
 
-        if (!sCreate || !sDelete)
-        {
-		    PLATFORM_UNLOADLIB( sLibHandler);
+		if( !sLibHandler)
+		{
+			throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED);
+		}
+		else
+		{
+			CREATE_OBJECT3 sCreate = (CREATE_OBJECT3) PLATFORM_GETPROCADDR( sLibHandler, CREATE_FUNCTION3);
+			DELETE_OBJECT3 sDelete = (DELETE_OBJECT3) PLATFORM_GETPROCADDR( sLibHandler, DELETE_FUNCTION3);
 
-            char * pszErrorInfo = new char[ strlen( pcLibraryName) + 1];
+			if (!sCreate || !sDelete)
+			{
+				PLATFORM_UNLOADLIB( sLibHandler);
 
-            strcpy( pszErrorInfo, pcLibraryName);
+				char * pszErrorInfo = new char[ strlen( pcLibraryName) + 1];
 
-            throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, pszErrorInfo);
-        }
+				strcpy( pszErrorInfo, pcLibraryName);
+
+				throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, pszErrorInfo);
+			}
 
 #ifdef ENABLE_AXISTRACE
 // Load function to do lib level inits
-		void (*initializeLibrary) (AxisTraceEntrypoints&);
-		initializeLibrary = (void (*)(AxisTraceEntrypoints&))PLATFORM_GETPROCADDR(sLibHandler, "initializeLibrary");
+			void (*initializeLibrary) (AxisTraceEntrypoints&);
+			initializeLibrary = (void (*)(AxisTraceEntrypoints&))PLATFORM_GETPROCADDR(sLibHandler, "initializeLibrary");
 
-		AxisTraceEntrypoints ep;
-		AxisTrace::getTraceEntrypoints( ep);
+			AxisTraceEntrypoints ep;
+			AxisTrace::getTraceEntrypoints( ep);
 
-		if( initializeLibrary)
-		{
-			(*initializeLibrary) ( ep);
-		}
+			if( initializeLibrary)
+			{
+				(*initializeLibrary) ( ep);
+			}
 #endif
 
 // Additional code added to that when the user wants to load a different
 // library from that which is already loaded, it will now allow the change.
-		if( m_pLibName[iLibCount] != NULL)
-		{
-			delete m_pLibName[iLibCount];
+			if( m_pLibName[iLibCount] != NULL)
+			{
+				delete m_pLibName[iLibCount];
+			}
+
+			m_pLibName[iLibCount] = new char[ strlen( pcLibraryName) + 1];
+
+			strcpy( m_pLibName[iLibCount], pcLibraryName);
+
+			UnLoadChannelLibrary( eChannelType, m_pChannel[iLibCount]);
+
+			m_LibHandler[iLibCount] = sLibHandler;
+
+			if( sCreate)
+			{
+				sCreate( &pChannel);
+
+				m_pChannel[iLibCount] = pChannel;
+			}
 		}
-
-		m_pLibName[iLibCount] = new char[ strlen( pcLibraryName) + 1];
-
-		strcpy( m_pLibName[iLibCount], pcLibraryName);
-
-		UnLoadChannelLibrary( eChannelType, m_pChannel[iLibCount]);
-
-		m_LibHandler[iLibCount] = sLibHandler;
-
-		if( sCreate)
-		{
-			sCreate( &pChannel);
-
-			m_pChannel[iLibCount] = pChannel;
-		}
+	}
+	else
+	{
+		pChannel = m_pChannel[iLibCount];
 	}
 
 	return pChannel;
