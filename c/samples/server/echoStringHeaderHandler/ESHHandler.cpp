@@ -18,6 +18,14 @@
  *
  */
 
+/*
+ * Revision 1.1  2004/06/14 roshan
+ * Removed the implementations of getOption(const string& sArg) and 
+ *  setOptionList(const map<string, string>* OptionList), because these methods
+ *  are not needed to be implemented by the users. These are generic methods.
+ *  Added the implementations of these methods to the Handler base class.
+ */
+
 #include "ESHHandler.h"
 #include <axis/server/GDefine.h>
 #include <axis/server/IHandlerSoapSerializer.h>
@@ -33,29 +41,10 @@
 
 ESHHandler::ESHHandler()
 {
-    m_pOption = NULL;
-    m_sEmpty = "";
-
 }
 
 ESHHandler::~ESHHandler()
 {
-
-}
-
-const string& ESHHandler::getOption(const string& sArg)
-{
-  map<string, string>::const_iterator it = m_pOption->find(sArg);
-  if (it != m_pOption->end())
-  {
-      return (*it).second;
-  }
-  return m_sEmpty;	
-}
-
-void ESHHandler::setOptionList(const map<string, string>* OptionList)
-{
-   m_pOption = OptionList;
 }
 
 int ESHHandler::invoke(void *pvIMsg)

@@ -17,6 +17,14 @@
  *
  */
 
+/*
+ * Revision 1.1  2004/06/14 roshan
+ * Removed the declarations of getOption(const string& sArg) and 
+ *  setOptionList(const map<string, string>* OptionList), because these methods
+ *  are not needed to be implemented by the users. These are generic methods.
+ *  Added the implementations of these methods to the Handler base class.
+ */
+
 #if !defined(_ESHHANDLER_H____OF_AXIS_INCLUDED_)
 #define _ESHHANDLER_H____OF_AXIS_INCLUDED_
 
@@ -29,14 +37,8 @@ public:
 	int AXISCALL init();
 	void AXISCALL onFault(void* pvIMsg);
 	int AXISCALL invoke(void* pvIMsg);
-	void setOptionList(const map<string, string>* OptionList);
-	const string& getOption(const string& sArg);
 	ESHHandler();
-	virtual ~ESHHandler();
-
-protected:
-    string m_sEmpty;    
-
+	virtual ~ESHHandler();    
 };
 
 #endif // !defined(_ESHHANDLER_H____OF_AXIS_INCLUDED_)
