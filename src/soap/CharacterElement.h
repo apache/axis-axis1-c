@@ -51,31 +51,40 @@ class CharacterElement : public BasicNode
 public:
 
     /**
+      * This method is overridden to always return NULL because this is a 
+      * CharacterElement. A user of a CharacterElement should not use this 
+      * method.
+      */
+    IAttribute* getAttribute(AxisChar* pachPrefix, AxisChar* pachURI,
+	    AxisChar* pachLocalname)
+	{return NULL;}
+
+    /**
       * This method is overridden to always return NULL because this is a CharacterElement.
       * A user of a CharacterElement should not use this method
       */
-    virtual IAttribute* getFirstAttribute()
+    IAttribute* getFirstAttribute()
     { return NULL; }
                                                                                                                                                                             
     /**
       * This method is overridden to always return NULL because this is a CharacterElement.
       * A user of a CharacterElement should not use this method
       */    
-    virtual IAttribute* getLastAttribute()
+    IAttribute* getLastAttribute()
     { return NULL; }
                                                                                                                                                                             
     /**
       * This method is overridden to always return NULL because this is a CharacterElement.
       * A user of a CharacterElement should not use this method
       */    
-    virtual IAttribute* getNextAttribute()
+    IAttribute* getNextAttribute()
     { return NULL; }
 
     /**
       * This method is overridden to always return NULL because this is a CharacterElement.
       * A user of a CharacterElement should not use this method
       */
-    virtual IAttribute* getCurrentAttribute()
+    IAttribute* getCurrentAttribute()
     { return NULL; }
 
     /** 
@@ -229,6 +238,22 @@ public:
       * @return Returns NULL.
       */
     const AxisChar* getLocalName() {return NULL;}
+
+    /**
+      * This method is overridden to return NULL always. A user of a
+      *  CharacterElement should not use this method.
+      *
+      * @return Returns NULL.
+      */
+    const AxisChar* getURI() {return NULL;}
+
+    /**
+      * This method is overridden to return NULL always. A user of a
+      *  CharacterElement should not use this method.
+      *
+      * @return Returns NULL.
+      */
+    const AxisChar* getPrefix() {return NULL;}
 
     /**
       * The Constructor.

@@ -68,6 +68,21 @@ public:
     ComplexElement(AxisChar* pachLocalName, AxisChar* pachPrefix, AxisChar* pachUri);
 
     /**
+      * Returns the Attribute of this node, corresponding to the given
+      * prefix/localname pair or the given namespace URI/localname pair.
+      * The users could get the attributes with the
+      * following combinations of pairs.
+      *  1. by prefix and localname pair (here the namespace URI(i.e pachURI
+      *      has to be a empty string)) or
+      *  2. by namespace URI and localname pair (here the prefix
+      *      (i.e pachPrefix has to be a empty string)).
+      * 
+      * If not found returns NULL.
+      */
+    IAttribute* getAttribute(AxisChar* pachPrefix, AxisChar* pachURI,
+	    AxisChar* pachLocalname);
+                                                                                                                                                                            
+    /**
       * Returns the first Attribute of this node. NOTE: When traversing the 
       *  attributes this has to be called first, before calling the 
       *  getNextAttribute() mthod.
@@ -232,6 +247,20 @@ public:
       * @return The localname of this element.
       */
     const AxisChar* getLocalName();
+
+    /**
+      * Returns the namespace URI of this node.
+      *
+      * @return The namespace URI of this element.
+      */
+    const AxisChar* getURI();
+                                                                                                                                                                            
+    /**
+      * Returns the prefix  of this node.
+      *
+      * @return The prefix of this element.
+      */
+    const AxisChar* getPrefix();
 
 private:
     int iNoOfChildren;

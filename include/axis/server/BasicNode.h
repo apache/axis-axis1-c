@@ -77,6 +77,19 @@ class BasicNode
 public:
 
     /**
+      * Returns the Attribute of this node, corresponding to the given 
+      * prefix/localname pair or the given namespace URI/localname pair. 
+      * The users could get the attributes with the 
+      * following combinations of pairs.
+      *  1. by prefix and localname pair (here the namespace URI(i.e pachURI
+      *      has to be a empty string)) or
+      *  2. by namespace URI and localname pair (here the prefix
+      *      (i.e pachPrefix has to be a empty string)).
+      * The operation behavior depends on the TYPE of the node.
+      */
+    virtual IAttribute* getAttribute(AxisChar* pachPrefix, AxisChar* pachLocalname, AxisChar* pachLocalname) = 0;
+
+    /**
       * Returns the first Attribute of this node. The operation
       * behavior depends on the TYPE of the node.
       */
@@ -228,6 +241,18 @@ public:
       * @return AXIS_SUCCESS to indicate successfull operation.
       */
     virtual int setPrefix(const AxisChar* sPrefix) =0;
+
+    /**
+      * Returns the namespace URI of this node.  The operation behavior
+      * depends on the TYPE of the node.
+      */
+    virtual const AxisChar* getURI() = 0;
+
+    /**
+      * Returns the prefix  of this node.  The operation behavior
+      * depends on the TYPE of the node.
+      */
+    virtual const AxisChar* getPrefix() = 0;
 
     virtual int serialize(SoapSerializer& pSZ) =0;
     virtual int serialize(SoapSerializer& pSZ, 

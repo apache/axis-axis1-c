@@ -449,6 +449,14 @@ const AxisChar* ComplexElement::getLocalName() {
     return m_pachLocalName; 
 }
 
+const AxisChar* ComplexElement::getURI() {
+    return m_pachURI;
+}
+
+const AxisChar* ComplexElement::getPrefix() {
+    return m_pachPrefix;
+}
+
 IAttribute* ComplexElement::getFirstAttribute()
 {
     m_viCurrentAttribute = m_attributes.begin();
@@ -501,3 +509,31 @@ IAttribute* ComplexElement::getCurrentAttribute()
         return ((IAttribute*)*m_viCurrentAttribute);
 }
 
+IAttribute* ComplexElement::getAttribute(AxisChar* pachPrefix,
+	AxisChar* pachURI, AxisChar* pachLocalname)
+{
+    list<Attribute*>::iterator it_m_attributes = m_attributes.begin();
+
+    if ( (pachPrefix != NULL) && (strlen(pachPrefix) > 0)) {
+	/* Here user has requested to traverse using prefix and localname*/
+    	while (it_m_attributes != m_attributes.end()) {
+	    if ( (strcmp((*it_m_attributes)->getPrefix(), pachPrefix) == 0) &&
+		    (strcmp((*it_m_attributes)->getLocalName(), pachLocalname) == 0))
+	    	return (IAttribute*)(*it_m_attributes);
+	    else
+	    	it_m_attributes++;
+    	}
+    } else {
+ 	/* Here user has requested to traverse using namespace URI and 
+	localname*/
+	while (it_m_attributes != m_attributes.end()) {
+            if ( (strcmp((*it_m_attributes)->getUri(), pachURI) == 0) &&
+                    (strcmp((*it_m_attributes)->getLocalName(), pachLocalname) == 0))
+            	return (IAttribute*)(*it_m_attributes);
+            else
+            	it_m_attributes++;
+    	}	
+    }
+
+    return NULL;
+}
