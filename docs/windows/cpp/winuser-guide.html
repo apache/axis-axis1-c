@@ -324,9 +324,9 @@ XMLParser:[APACHE_HOME]\Axis\libs\AxisXMLParser_D.dll <br></p>
 <p><b>Note: If you are using Client side Handlers you need to enter the following entry to the AXIS_FOLDER/axiscpp.conf configuration file.</b></p>
 <p>ClientWSDDFilePath:Axis\conf\client.wsdd</p>
 <p>After entering this entry  to your AXIS_FOLDER/axiscpp.conf configuration file will look like:</p>
-<p>LogPath:Axis\logs\AxisLog.txt
-<br>WSDDFilePath:Axis\conf\server.wsdd
-<br>ClientWSDDFilePath:Axis\conf\client.wsdd</p>
+<p>ClientWSDDFilePath:Axis\conf\client.wsdd <br> <br>
+Keep in mind that you have to give the absolute path to the client.wsdd file. <br>
+for example : C:\Program Files\Apache Group\Apache2\Axis\conf\client.wsdd </p>
 <b>Testing the sample Handlers</b>
 <p>We have included the following sample Handlers for your reference.</p>
 <p>1)	echoStringHeaderHandler (A server side handler sample)
@@ -376,7 +376,7 @@ Restart the Apache server.</p>
 <p><b>testHandler</b></p>
 <p><b>Building the Sample Handlers in VC</b></p>
 <p>Building testHandler (A client side handler sample)</p>
-<p>The VC dsw file (ServerHandlers.dsw) is available at AXIS_EXTRACT/vc/samples/client/ClientHandlers.dsw. Open this file and build the project TestHandler. Once the build is successful you will find the DLL (testHandler.dll) at AXIS_EXTRACT/bin. If you see this DLL at the above location you are done with the first step.</p>
+<p>The VC dsw file (ClientHandlers.dsw) is available at AXIS_EXTRACT/vc/samples/client/ClientHandlers.dsw. Open this file and build the project TestHandler. Once the build is successful you will find the DLL (testHandler.dll) at AXIS_EXTRACT/bin. If you see this DLL at the above location you are done with the first step.</p>
 <p><b>Configuring the Handler</b></p>
 <p>Now edit the AXIS_FOLDER /conf/client.wsdd to include the handler for a particular service.</p>
 <p>&lt;service name="Calculator" provider="CPP:DOCUMENT" description="Calculator web service"&gt
