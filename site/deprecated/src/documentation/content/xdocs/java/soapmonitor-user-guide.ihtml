@@ -21,7 +21,7 @@
  </ul>
  <LI><a href="#usage">Usage</a>
  <ul>
-   <LI><a href="#prepare">Prepareation</a>
+   <LI><a href="#prepare">Preparation</a>
    <LI><a href="#howto">How to use it ?</a>
  </ul>
  <LI><a href="#appendix">Appendixes</a>
@@ -48,7 +48,7 @@ It's a utility what can be found in the org.apache.axis.utils package. It provid
 <h3>When should I use it ?</h3>
 <dl><dd>
 It's a good opportunity for using this utility that you hope to monitor the SOAP messages for debugging. You can see all SOAP messages of what you want to monitor without any additional developments, special configurations or restarting of the application server.<p>
-<strong>Please note that it desn't display any protocol specific data such as HTTP protocol headers. In case of the usage, you have to use the TCP Monitor (tcpmon). Please see the <a href="user-guide.html">Axis User's Guide<a> also</strong>.
+<strong>Please note that it doesn't display any protocol specific data such as HTTP protocol headers. In case of the usage, you have to use the TCP Monitor (tcpmon). Please see the <a href="user-guide.html">Axis User's Guide<a> also</strong>.
 </dl>
 
 <p><a name="Usage"></a></p>
@@ -89,7 +89,7 @@ It's a good opportunity for using this utility that you hope to monitor the SOAP
 
   <b>step 2:</b> Login
   <dl><dd>
-       Please login with the account which you specified as an administorator.
+       Please login with the account which you specified as an administrator.
        <img src="images/LoginDialog.jpg"><br>
   </dl><p>
 
@@ -175,7 +175,7 @@ It's a good opportunity for using this utility that you hope to monitor the SOAP
     <img src="images/UnknownHost.jpg"><p>
     <b>In case of "Port mismatch":</b><br>
     <img src="images/ConnectionRefused.jpg"><p>
-    <b>In case of "Authrization failure":</b><br>
+    <b>In case of "Authorization failure":</b><br>
     <img src="images/Unauthorized.jpg"><p>
   </dl>
 </dl>
