@@ -95,7 +95,7 @@ private:
     char strLine[4];
     char sFileName[200];
     FILE* fileTrace;
-    const FILE* ConfFile; 
+    FILE* ConfFile; 
 
 };
 
