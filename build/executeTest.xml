@@ -105,16 +105,7 @@
 			<catch>
 			</catch>
 			<finally>
-<!--
-				<java classname="org.apache.test.StopTCPMonitor">
-					<arg line="-p ${monitorPort}"/>
-					<arg line="-h localhost"/>
-					<classpath>
-						<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
-					</classpath>
-				</java>
-				<sleep seconds="3"/>
--->
+				<sleep seconds="1"/>
 			</finally>
 		</trycatch>
 	</target>
