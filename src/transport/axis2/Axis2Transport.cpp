@@ -204,6 +204,9 @@ AXIS_TRANSPORT_STATUS Axis2Transport::getBytes( char* pcBuffer, int* pSize )
                 m_strResponseHTTPHeaders = m_strReceived.substr(0 ,m_strReceived.find ("\r\n\r\n") + 2 );
                 processResponseHTTPHeaders();
 
+                if (m_iResponseHTTPStatusCode != 200)
+                    throw AxisTransportException(SERVER_TRANSPORT_HTTP_EXCEPTION, 
+                        const_cast <char*>(m_strResponseHTTPStatusMessage.c_str()));
                 // Done with HTTP headers, get payload
                 m_strReceived = m_strReceived.substr(m_strReceived.find ("\r\n\r\n") + 4 );
             }
@@ -345,6 +348,7 @@ AXIS_TRANSPORT_STATUS Axis2Transport::getBytes( char* pcBuffer, int* pSize )
 
                     // Append the data of new chunk to data from previous chunk
                     m_strReceived = strTemp + m_strReceived;
+                    
                 } // End of if (m_strReceived.length() >= m_iContentLength) 
                 // If we have not reached end of current chunk, nothing to be done
             }
@@ -474,7 +478,9 @@ AXIS_PROTOCOL_TYPE Axis2Transport::getProtocol()
 int Axis2Transport::getSubProtocol()
 {
     //TODO
-    return 0;
+    // for SimpleAxisServer assume POST
+    return AXIS_HTTP_POST;
+    //return 0;
 }
 
 void
@@ -611,7 +617,13 @@ void Axis2Transport::processResponseHTTPHeaders()
         while( m_strResponseHTTPHeaders.substr()[iPosition] != ' ' )
             iPosition++;
 
-        m_strResponseHTTPStatusCode = m_strResponseHTTPHeaders.substr( iStartPosition, iPosition - iStartPosition );
+        std::string strResponseHTTPStatusCode = m_strResponseHTTPHeaders.substr( iStartPosition, iPosition - iStartPosition );
+        m_iResponseHTTPStatusCode = atoi (strResponseHTTPStatusCode.c_str ());
+   
+        iStartPosition = ++iPosition;
+        iPosition = m_strResponseHTTPHeaders.find("\n");
+        m_strResponseHTTPStatusMessage = m_strResponseHTTPHeaders.substr( iStartPosition, iPosition - iStartPosition -1 );
+
         // reached the end of the first line
         iStartPosition = m_strResponseHTTPHeaders.find("\n");
         iStartPosition++;
@@ -639,3 +651,8 @@ void Axis2Transport::processResponseHTTPHeaders()
     }
 }
 
+// This is used by SimpleAxisServer
+void Axis2Transport::setSocket(unsigned int uiNewSocket)
+{
+    m_Channel.setSocket( uiNewSocket );
+}

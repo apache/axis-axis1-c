@@ -126,7 +126,8 @@ class Axis2Transport:public SOAPTransport
 
     const char *getHTTPHeaders ();
 
-
+    // This is used by SimpleAxisServer
+    void setSocket(unsigned int uiNewSocket);
 
   private:
    
@@ -220,7 +221,11 @@ class Axis2Transport:public SOAPTransport
   /**
     * HTTP status code 
     */
-    std::string m_strResponseHTTPStatusCode;
+    int m_iResponseHTTPStatusCode;
+  /**
+    * HTTP status code 
+    */
+    std::string m_strResponseHTTPStatusMessage;
   /**
     * Vector to hold response HTTP header key/value pairs
     */
