@@ -45,6 +45,7 @@ AxisEngineException::AxisEngineException (exception* e)
 
 AxisEngineException::AxisEngineException (exception* e, int iExceptionCode)
 {
+    m_iExceptionCode = iExceptionCode;
     processException (e, iExceptionCode);
 }
 

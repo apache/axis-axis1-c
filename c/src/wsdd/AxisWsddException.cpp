@@ -45,6 +45,7 @@ AxisWsddException::AxisWsddException (exception* e)
 
 AxisWsddException::AxisWsddException (exception* e, int iExceptionCode)
 {
+    m_iExceptionCode = iExceptionCode;
     processException (e, iExceptionCode);
 }
 
