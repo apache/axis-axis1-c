@@ -113,7 +113,7 @@ public class ClientStubWriter extends CPPClassWriter{
 		writer.write("\tm_pCall = new Call();\n");
 		//TODO get TransportURI from WrapInfo and check what the transport is and do the following line accordingly
 		writer.write("\tm_pCall->SetProtocol(APTHTTP);\n");
-		writer.write("\tm_pCall->SetHeader(\"SOAPAction\", \""+classname+"\");\n");
+		writer.write("\tm_pCall->SetHeader(\"SOAPAction\", \""+wscontext.getSerInfo().getServicename()+"\");\n");
 		writer.write("\tm_pCall->SetEndpointURI(\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\");\n");
 		writer.write("}\n\n");
 		}catch(IOException e){

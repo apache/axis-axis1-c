@@ -281,14 +281,14 @@ public class WrapWriter extends CFileWriter{
 				}
 				else{
 					containedType = qname.getLocalPart();
-					writer.write("\t"+paraTypeName+" v"+i+" = ("+paraTypeName+"&)pIWSDZ->GetArray((AXIS_DESERIALIZE_FUNCT)Axis_DeSerialize_"+containedType+ 
-						"\n\t\t, (AXIS_OBJECT_CREATE_FUNCT)Axis_Create_"+containedType+", (AXIS_OBJECT_DELETE_FUNCT)Axis_Delete_"+containedType+
-						"\n\t\t, (AXIS_OBJECT_SIZE_FUNCT)Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+");\n");
+					writer.write("\t"+paraTypeName+" v"+i+" = ("+paraTypeName+"&)pIWSDZ->GetArray((void*)Axis_DeSerialize_"+containedType+ 
+						"\n\t\t, (void*)Axis_Create_"+containedType+", (void*)Axis_Delete_"+containedType+
+						"\n\t\t, (void*)Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+");\n");
 				}
 			}else{
 				//for complex types 
-				writer.write("\t"+paraTypeName+" *v"+i+" = ("+paraTypeName+"*)pIWSDZ->GetObject((AXIS_DESERIALIZE_FUNCT)Axis_DeSerialize_"+paraTypeName+
-					"\n\t\t, (AXIS_OBJECT_CREATE_FUNCT)Axis_Create_"+paraTypeName+", (AXIS_OBJECT_DELETE_FUNCT)Axis_Delete_"+paraTypeName+
+				writer.write("\t"+paraTypeName+" *v"+i+" = ("+paraTypeName+"*)pIWSDZ->GetObject((void*)Axis_DeSerialize_"+paraTypeName+
+					"\n\t\t, (void*)Axis_Create_"+paraTypeName+", (void*)Axis_Delete_"+paraTypeName+
 					"\n\t\t, Axis_TypeName_"+paraTypeName+", Axis_URI_"+paraTypeName+");\n");				
 			}
 		}
