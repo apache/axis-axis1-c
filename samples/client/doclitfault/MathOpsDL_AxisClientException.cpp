@@ -58,6 +58,48 @@ void MathOpsDL_AxisClientException:: processException(exception* e, int iExcepti
 void MathOpsDL_AxisClientException::processException (ISoapFault* pFault)
 {
 	/*User can do something like deserializing the struct into a string*/
+        /*User can do something like deserializing the struct into a string*/
+        const char* pcCmplxFaultName;
+	const char* pcDetail;
+        if(pFault)
+        {
+            m_sMessage = "Fault Code:";
+            m_sMessage = pFault->getFaultcode();
+            m_sMessage += "\n";
+            m_sMessage += "Fault String:";
+            m_sMessage += pFault->getFaultstring();
+            m_sMessage += "\n";
+            m_sMessage += "Fault Actor:";
+            m_sMessage += pFault->getFaultactor();
+            m_sMessage += "\n";
+
+
+            pcDetail = pFault->getSimpleFaultDetail().c_str();
+	    if(NULL != pcDetail, 0 != strcmp("", pcDetail))
+                m_sMessage += pcDetail;
+	    else
+            {
+                pcCmplxFaultName = pFault->getCmplxFaultObjectName().c_str();
+		//printf("pcCmplxFaultName:%s\n", pcCmplxFaultName);
+            }
+            if(0 == strcmp("DivByZero", pcCmplxFaultName))
+            {
+                DivByZeroStruct* pFaultDetail = NULL;
+                pFaultDetail = (DivByZeroStruct*)pFault->
+                    getCmplxFaultObject();
+
+                char* carrTempBuff =new char[4 * sizeof(char)];
+                sprintf(carrTempBuff, "%d", pFaultDetail->varInt);
+                m_sMessage += string(carrTempBuff);
+                m_sMessage += "\n";
+
+                sprintf(carrTempBuff, "%f", pFaultDetail->varFloat);
+                m_sMessage += string(carrTempBuff);
+                m_sMessage += "\n";
+
+                m_sMessage += pFaultDetail->varString;
+            }
+        }
 }
 
 void MathOpsDL_AxisClientException::processException(exception* e)
