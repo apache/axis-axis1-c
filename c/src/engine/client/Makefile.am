@@ -1,6 +1,6 @@
 lib_LTLIBRARIES = libclient_engine.la
-AM_CPPFLAGS = -Wall -DUSE_EXPAT_PARSER -DUSE_LTDL
-libclient_engine_la_SOURCES = Axis.cpp \
+AM_CPPFLAGS = -Wall -DUSE_EXPAT_PARSER -DUSE_LTDL -DAXIS_CLIENT_LIB
+libclient_engine_la_SOURCES = ../Axis.cpp \
 		ClientAxisEngine.cpp \
 		../server/ServerAxisEngine.cpp \
 		../AxisEngine.cpp \
