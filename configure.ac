@@ -111,6 +111,35 @@ AC_ARG_ENABLE(testcases, [  --enable-testcases    build test cases. default=no],
   TESTCASESBUILD=""
 )
 
+AC_MSG_CHECKING(whether to build cppunit tests.)
+AC_ARG_WITH(cppunit,
+[  --with-cppunit[=PATH]      build cppunit tests.],
+[ case "$withval" in
+  no)
+    AC_MSG_RESULT(no)
+    CPPUNITBUILD=""
+    ;;
+  *)
+    AC_MSG_RESULT(yes)
+    dnl test whether testcases build enabled
+    if test  tests != "$TESTCASESBUILD"; then
+        AC_MSG_ERROR("Tetcases are not enabled. stop")
+    fi
+    dnl test for  cppunit directory
+    if test -d $withval; then
+        cppunitinc="-I$withval/include"
+        cppunitlib="-L$withval/lib -lcppunit -ldl"
+       echo "$cppunitinc"    
+    else
+        AC_MSG_ERROR(could not find cppunit. stop)
+    fi
+    CPPUNITBUILD="unit_tests"
+  
+  ;;
+  esac ],
+  AC_MSG_RESULT(no)
+)
+
 AC_MSG_CHECKING(whether to build samples)
 AC_ARG_ENABLE(samples, [  --enable-samples    build samples. default=yes],
 [ case "${enableval}" in
@@ -174,6 +203,8 @@ APACHE2INC=$apache2inc
 APACHEINC=$apacheinc
 XERCESCINC=$xercescinc
 XERCESCLIB=$xercesclib
+CPPUNITINC=$cppunitinc
+CPPUNITLIB=$cppunitlib
 EXPATINC=$expatinc
 EXPATLIB=$expatlib
 SSLINC=$sslinc
@@ -183,6 +214,8 @@ AC_SUBST(APACHE2INC)
 AC_SUBST(APACHEINC)
 AC_SUBST(XERCESCINC)
 AC_SUBST(XERCESCLIB)
+AC_SUBST(CPPUNITINC)
+AC_SUBST(CPPUNITLIB)
 AC_SUBST(EXPATINC)
 AC_SUBST(EXPATLIB)
 AC_SUBST(SSLINC)
@@ -193,6 +226,7 @@ AC_SUBST(APACHE2BUILD)
 AC_SUBST(APACHEBUILD)
 AC_SUBST(LINKCLIENTLIB)
 AC_SUBST(TESTCASESBUILD)
+AC_SUBST(CPPUNITBUILD)
 AC_SUBST(SAMPLESBUILD)
 AC_SUBST(LIBWWWBUILD)
 AC_SUBST(TSPPBUILD)

@@ -1,10 +1,10 @@
 #include <cppunit/Asserter.h>
 #include <cppunit/CompilerOutputter.h>
 #include <cppunit/config-auto.h>
-#include <cppunit/config-bcb5.h>
+//#include <cppunit/config-bcb5.h>
  //config-msvc6.h
 #include <cppunit/Exception.h>
-#include <cppunit/NotEqualException.h>
+//#include <cppunit/NotEqualException.h>
 #include <cppunit/Outputter.h>
 #include <cppunit/Portability.h>
 #include <cppunit/SourceLine.h>
@@ -18,7 +18,7 @@
 #include <cppunit/TestListener.h>
 #include <cppunit/TestResultCollector.h>
 #include <cppunit/TestResult.h>
-#include <cppunit/TestSucessListener.h>
+#include <cppunit/TestSuccessListener.h>
 #include <cppunit/TestSuite.h>
 #include <cppunit/TextOutputter.h>
 #include <cppunit/TextTestProgressListener.h>

@@ -1,5 +1,5 @@
 To run cppunit tests you  need to install cppunit in your matchine
-I installed cppunit-1.8.0.tar.gz
+I installed cppunit-1.10.2.tar.gz
 Then create CPPUNIT_HOME environment variable pointing to your installation location
 When you configure, by default testcases are not added to the build.
 So to build testcases and cpp unit tests you need to add the configure option

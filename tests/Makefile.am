@@ -1,1 +1,1 @@
-SUBDIRS = client server unit_tests
+SUBDIRS = client server @CPPUNITBUILD@
