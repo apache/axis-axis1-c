@@ -590,9 +590,9 @@ int SoapSerializer::addOutputParam(const AxisChar* pchName, void* pValue,
     case XSD_LONG:
 //FJP v Added
 #ifdef WIN32
-        pParam->m_Value.lValue = *((__int64*)(pValue));
+        pParam->m_Value.llValue = *((__int64*)(pValue));
 #else
-        pParam->m_Value.lValue = *((long long*)(pValue));
+        pParam->m_Value.llValue = *((long long*)(pValue));
 #endif
         break;
 //FJP ^ Added
