@@ -152,7 +152,7 @@ call this folder as WSDL2WS_FOLDER. <br>
 Now copy the wsdl file (eg.Calculator.wsdl) which you use to the folder
 WSDL2WS_FOLDER.
 <br>
-Copy the file wsdl2ws.jar from AXIS_EXTRACT\bin to  WSDL2WS_FOLDER
+Copy the file wsdl2ws.jar from AXIS_EXTRACT\lib\axis to  WSDL2WS_FOLDER
 <br>
 Now change the directory to WSDL2WS_FOLDER and run the following command to generate the server side skeletons and
 wrappers.
