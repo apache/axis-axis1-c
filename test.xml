@@ -18,7 +18,7 @@
 	 description="Build and Run all tests"/>
 
 	<target name="preInitializeTest" depends="pre-init">
-		<property file="${dir.properties}/test.properties" />
+		<property file="${dir.properties}/test.${platform}.properties" />
 	</target>
 
 	<!--
