@@ -229,20 +229,20 @@ runconfigure script.</p>
 <p> Now there is no need to seperately build client side and server  
 side.   When execute build.sh it will lookafter everything.<br>
 -----------------------------------------------------------------------</p>
-<p> <strong>NOTE: </strong>If you use apache2.0 following two small
-changes     has to be done in $AXISCPP_HOME/configure.ac and
+<p> <strong>NOTE: </strong>If you use apache1.3 following two small
+changes have to be done in $AXISCPP_HOME/configure.ac and
 $AXISCPP_HOME/src/server/Makefile.am) </p>
 <p> in $AXISCPP_HOME/configure.ac </p>
-<p> comment </p>
+<p> uncomment </p>
 <p><strong> AC_OUTPUT(Makefile src/Makefile src/common/Makefile
 src/engine/Makefile      src/soap/Makefile src/wsdd/Makefile
 src/xml/Makefile src/server/Makefile     src/server/apache/Makefile) </strong></p>
-<p> and uncomment </p>
+<p> and comment </p>
 <p><strong> #AC_OUTPUT(Makefile src/Makefile src/common/Makefile
 src/engine/Makefile      src/soap/Makefile src/wsdd/Makefile
 src/xml/Makefile src/server/Makefile     src/server/apache2/Makefile) </strong></p>
 <p> in $AXISCPP_HOME/src/server/Makefile.am </p>
-<p> change SUBDIRS = apache to SUBDIRS = apache2<br>
+<p> change SUBDIRS = apache2 to SUBDIRS = apache<br> 
 ------------------------------------------------------------------------------<br>
 <br>
 <br>
