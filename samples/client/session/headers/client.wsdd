@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:C="http://xml.apache.org/axis/wsdd/providers/c">
+
+<service name="Counter" provider="CPP:RPC" description="Counter web service"> 
+<requestFlow name="CounterHandlers"> 
+<handler name="CounterHandler" type="D:\san\works\checkouts\head3\ws-axis\c\bin\sessionHandler.dll">
+</handler> 
+</requestFlow> 
+<responseFlow name="CounterHandlers"> 
+<handler name="CounterHandler" type="D:\san\works\checkouts\head3\ws-axis\c\bin\sessionHandler.dll">
+</handler> 
+</responseFlow> 
+</service>
+
+</deployment>
+
