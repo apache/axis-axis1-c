@@ -176,7 +176,7 @@ void SoapFault::initialize()
 	}
 }
 
-char* SoapFault::getSoapString()
+const char* SoapFault::getSoapString()
 {
     return m_sFaultstring.c_str(); 
 }

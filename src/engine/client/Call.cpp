@@ -3,19 +3,14 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Call.h"
-//#include "../common/IMessageData.h"
-//#include "../common/ISoapMethod.h"
+#include <AxisConfig.h>
+#include "transport/axis/AxisTransport.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-extern "C" int initialize_module(int bServer);
-
-extern "C" int send_response_bytes(const char* res, const void* opstream);
-extern "C" int get_request_bytes(char* req, int reqsize, int* retsize, const void* ipstream);
-extern "C" int send_transport_information(void *str);
-extern "C" int receive_transport_information(void *str);
+extern "C" int initialize_module(int bServer, const char * wsddPath);
 
 Call::Call()
 {
@@ -25,7 +20,8 @@ Call::Call()
 	m_pIWSDZ = NULL;
 	m_Soap.so.http.ip_headercount = 0;
 	m_Soap.so.http.ip_headers = NULL;
-	initialize_module(0);
+	initialize_module(0, WSDDFILEPATH);
+	m_pTransport = NULL;
 }
 
 Call::~Call()
@@ -248,9 +244,8 @@ int Call::SetHeader(char *key, char *value)
  */
 int Call::OpenConnection()
 { 
-    m_pTransport = new AxisTransport(m_Soap);
-    
-	return m_Transport->OpenConnection();
+    m_pTransport = new AxisTransport(&m_Soap);
+    return m_pTransport->OpenConnection();
 }
 
 /**
@@ -259,6 +254,7 @@ int Call::OpenConnection()
 void Call::CloseConnection()
 {
     m_pTransport->CloseConnection();
+	delete m_pTransport;
 }
 
 void Call::SetSOAPVersion(SOAP_VERSION version)
