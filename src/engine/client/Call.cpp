@@ -147,7 +147,7 @@ public:
 	int len;
 };
 
-int Call::initialize (PROVIDERTYPE nStyle, int secure)
+int Call::initialize (PROVIDERTYPE nStyle)
 /* Does this mean that the stub that uses this Call object as well as all 
  * client side handlers have the same PROVIDERTYPE ? 
  */
@@ -159,7 +159,7 @@ int Call::initialize (PROVIDERTYPE nStyle, int secure)
     {
         m_nStatus = AXIS_SUCCESS;
         // remove_headers(&m_Soap);
-        if (AXIS_SUCCESS != openConnection (secure)) {
+        if (AXIS_SUCCESS != openConnection ()) {
         	m_nStatus = AXIS_FAIL;
             return AXIS_FAIL;
         }
@@ -323,7 +323,7 @@ int Call::setHandlerProperty(AxisChar* name, void* value, int len)
  * functions with those streams at any time it wants to send/receive
  * bytes to/from the server.
  */
-int Call::openConnection(int secure)
+int Call::openConnection()
 {
     try
     {

@@ -71,7 +71,7 @@ public:
 	virtual int AXISCALL setHandlerProperty(AxisChar* name, 
 		void* value, int len)=0;
     virtual int AXISCALL setProtocol(AXIS_PROTOCOL_TYPE protocol)=0;
-    virtual int AXISCALL initialize(PROVIDERTYPE nStyle, int secure)=0;
+    virtual int AXISCALL initialize(PROVIDERTYPE nStyle)=0;
     virtual int AXISCALL invoke()=0;
     virtual int AXISCALL unInitialize()=0;
 
@@ -242,7 +242,7 @@ public:
     int AXISCALL setProtocol(AXIS_PROTOCOL_TYPE protocol);
     AXIS_PROTOCOL_TYPE AXISCALL getProtocol();
     int AXISCALL unInitialize();
-    int AXISCALL initialize(PROVIDERTYPE nStyle, int secure);
+    int AXISCALL initialize(PROVIDERTYPE nStyle);
     int AXISCALL invoke();
 
     /* Method for adding complex parameters */
@@ -406,7 +406,7 @@ public:
     const AxisChar* AXISCALL getNamespacePrefix(const AxisChar* pNamespace);
 
 private:
-    int openConnection(int secure);
+    int openConnection();
     void closeConnection();
     int makeArray();
 
