@@ -59,14 +59,11 @@
  */
 package org.apache.axis.wsdl.wsdl2ws;
 
-import java.util.Enumeration;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
 import javax.xml.namespace.QName;
 
-import org.apache.axis.wsdl.wsdl2ws.Constants;
-import org.apache.axis.wsdl.wsdl2ws.cpp.CPPUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.TypeMap;

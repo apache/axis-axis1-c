@@ -71,6 +71,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
+import org.apache.axis.wsdl.wsdl2ws.c.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.cpp.CPPUtils;
 
 public class Type {
@@ -105,6 +106,8 @@ public class Type {
         if(languageSpecificName == null){
         	if(WrapperConstants.LANGUAGE_CPP.equalsIgnoreCase(this.language))
 				this.languageSpecificName = CPPUtils.getclass4qname(name);
+			else if(WrapperConstants.LANGUAGE_C.equalsIgnoreCase(this.language))
+					this.languageSpecificName = CUtils.getclass4qname(name);
 			else
 				this.languageSpecificName = TypeMap.getBasicTypeClass4qname(name);
 			 

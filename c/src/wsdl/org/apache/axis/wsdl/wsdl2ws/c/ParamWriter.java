@@ -75,7 +75,7 @@ import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
-public abstract class ParamWriter extends BasicFileWriter{	
+public abstract class ParamWriter extends BasicFileWriter{
     protected static final int INPUT_PARM = 0;
     protected static final int RETURN_PARM = 1;
     protected static final int COMMAN_PARM = 2;
@@ -89,7 +89,7 @@ public abstract class ParamWriter extends BasicFileWriter{
     protected Type type;
 
     public ParamWriter(WebServiceContext wscontext,Type type) throws WrapperFault {
-            super(WrapperUtils.getClassNameFromFullyQualifiedName(type.getLanguageSpecificName()));
+            super(WrapperUtils.getWrapperClassName4QualifiedName(type.getLanguageSpecificName()));
             this.wscontext = wscontext;
             this.type = type;
             this.attribs = this.getAttribList(wscontext.getSerInfo().getQualifiedServiceName());
@@ -139,29 +139,18 @@ public abstract class ParamWriter extends BasicFileWriter{
         return attribs;
     }
     
- 	protected String getCrroectParmNameConsideringArrays(QName name,String classname)throws WrapperFault{
-		System.out.println(name);
+ 	protected String getCorrectParmNameConsideringArraysAndComplexTypes(QName name,String classname)throws WrapperFault{
+		//System.out.println(name);
 		Type t = wscontext.getTypemap().getType(name);
-		if(t !=null && t.isArray()){
-		Enumeration e = t.getAttribNames();
-		String contentTypeName;
-		if(e.hasMoreElements()){	
-			QName elementQname = t.getTypNameForAttribName((String)e.nextElement());
-			Type type = this.wscontext.getTypemap().getType(elementQname);
-			
-			
-			if(type != null)
-				contentTypeName = type.getLanguageSpecificName();
-			else{
-				contentTypeName = CUtils.getclass4qname(elementQname);
-				if(contentTypeName == null)
-				throw new WrapperFault("if not inbuild or not in type map what is this type "+elementQname);
+		if(t !=null){ //array or complex types
+			if (t.isArray()){
+				return t.getLanguageSpecificName();
 			}
-	    }else
-			throw new WrapperFault("Array with no type ????");	
-		return contentTypeName+"[]";
+			else{
+				return classname+"*"; //All complex types will be pointers	
+			}
 		}else
-		return classname;
+			return classname;
 	}
 	
 }
