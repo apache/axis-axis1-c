@@ -159,6 +159,11 @@ public class CUtils {
 		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedLong"), "xsd__unsignedLong");
 		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedShort"), "xsd__unsignedShort");
 		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "QName"), "xsd__QName");		
+
+		/* TODO:
+		 *  Another strange issue from Axis 1.1 runtime when base64binary is in input/output operations.
+		 */	
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64"), "xsd__base64Binary");		
 		
 		type2getValueMethodName.put("int","Int");
 		type2getValueMethodName.put("float","Float");

@@ -170,7 +170,11 @@ public class TypeMap {
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedLong"), "xsd__unsignedLong");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedShort"), "xsd__unsignedShort");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "anyURI"), "xsd__anyURI");
-
+		/* TODO:
+		 *  Another strange issue from Axis 1.1 runtime when base64binary is in input/output operations.
+		 */		
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "base64"), "xsd__base64Binary");
+	
 		String[] words1 ={"abstract","default","if","private","this","boolean","do","implements",
 			"protected","throw","break","double","import","public","throws","byte","else","instanceof",
 			"return","transient","case","extends","int","short","try","catch","final","interface",
