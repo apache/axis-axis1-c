@@ -1,0 +1,14 @@
+<test>
+    <name>FourLevelTestDoc</name>
+    <description>Tests four levels of tag nesting for doc style</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>FourLevelTestDocClient.cpp</clientCode>
+    <wsdl>FourLevelTestDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            FourLevelTestDoc.expected
+        </output>
+    </expected>
+    <endpoint>http://localhost:80/axis/FourLevelTestDocService</endpoint>
+</test>
+
