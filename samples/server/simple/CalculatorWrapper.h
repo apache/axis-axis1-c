@@ -7,10 +7,10 @@
 #define __CALCULATORWRAPPER_SERVERWRAPPER_H__OF_AXIS_INCLUDED_
 
 #include "Calculator.h"
-#include <axis/server/WrapperClassHandler.h>
-#include <axis/server/IMessageData.h>
-#include <axis/server/GDefine.h>
-#include <axis/server/AxisWrapperAPI.h>
+#include <axis/server/WrapperClassHandler.hpp>
+#include <axis/server/IMessageData.hpp>
+#include <axis/server/GDefine.hpp>
+#include <axis/server/AxisWrapperAPI.hpp>
 AXIS_CPP_NAMESPACE_USE
 
 class CalculatorWrapper : public WrapperClassHandler

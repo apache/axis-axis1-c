@@ -6,9 +6,9 @@
 #if !defined(__REFTESTPORTTYPE_CLIENTSTUB_H__INCLUDED_)
 #define __REFTESTPORTTYPE_CLIENTSTUB_H__INCLUDED_
 
-#include <axis/client/Stub.h>
+#include <axis/client/Stub.hpp>
 #include "ref_AxisClientException.h"
-#include <axis/ISoapFault.h>
+#include <axis/ISoapFault.hpp>
 #include "intType.h"
 
 class RefTestPortType :public Stub

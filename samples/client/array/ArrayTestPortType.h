@@ -6,9 +6,9 @@
 #if !defined(__ARRAYTESTPORTTYPE_CLIENTSTUB_H__INCLUDED_)
 #define __ARRAYTESTPORTTYPE_CLIENTSTUB_H__INCLUDED_
 
-#include <axis/client/Stub.h>
+#include <axis/client/Stub.hpp>
 #include "array_AxisClientException.h"
-#include <axis/ISoapFault.h>
+#include <axis/ISoapFault.hpp>
 #include "intArrayType.h"
 
 class ArrayTestPortType :public Stub

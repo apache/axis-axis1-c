@@ -21,7 +21,7 @@
 #if !defined(__MATHOPS_CLIENTSTUB_H__INCLUDED_)
 #define __MATHOPS_CLIENTSTUB_H__INCLUDED_
 
-#include <axis/client/Stub.h>
+#include <axis/client/Stub.hpp>
 #include "DivByZeroStruct.h"
 #include "AxisClientException.h"
 

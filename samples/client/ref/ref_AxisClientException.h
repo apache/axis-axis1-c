@@ -8,8 +8,8 @@
 
 #include <string>
 #include <exception>
-#include <axis/server/AxisException.h>
-#include <axis/ISoapFault.h>
+#include <axis/server/AxisException.hpp>
+#include <axis/ISoapFault.hpp>
 using namespace std;
 AXIS_CPP_NAMESPACE_USE 
 

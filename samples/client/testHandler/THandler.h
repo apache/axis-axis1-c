@@ -21,7 +21,7 @@
 #if !defined(_THANDLER_H____OF_AXIS_INCLUDED_)
 #define _THANDLER_H____OF_AXIS_INCLUDED_
 
-#include <axis/server/Handler.h>
+#include <axis/server/Handler.hpp>
 
 AXIS_CPP_NAMESPACE_USE
 

@@ -21,7 +21,7 @@
 #if !defined(__MATHOPS_SERVERSKELETON_H__INCLUDED_)
 #define __MATHOPS_SERVERSKELETON_H__INCLUDED_
 
-#include <axis/server/AxisUserAPI.h>
+#include <axis/server/AxisUserAPI.hpp>
 #include "AxisServiceException.h"
 
 #include "DivByZeroStruct.h"

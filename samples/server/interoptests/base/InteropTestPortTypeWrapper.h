@@ -7,10 +7,10 @@
 #define __INTEROPTESTPORTTYPEWRAPPER_SERVERWRAPPER_H__INCLUDED_
 
 #include "InteropTestPortType.h"
-#include <axis/server/WrapperClassHandler.h>
-#include <axis/server/IMessageData.h>
-#include <axis/server/GDefine.h>
-#include <axis/server/AxisWrapperAPI.h>
+#include <axis/server/WrapperClassHandler.hpp>
+#include <axis/server/IMessageData.hpp>
+#include <axis/server/GDefine.hpp>
+#include <axis/server/AxisWrapperAPI.hpp>
 #include "AxisServiceException.h" 
 AXIS_CPP_NAMESPACE_USE 
 

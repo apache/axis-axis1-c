@@ -5,7 +5,7 @@
 
 #include <malloc.h>
 #include "intType.h"
-#include <axis/server/AxisWrapperAPI.h>
+#include <axis/server/AxisWrapperAPI.hpp>
 
 /*
  * This static method serialize a intType type of object

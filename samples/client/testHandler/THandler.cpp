@@ -19,10 +19,10 @@
  */
 
 #include "THandler.h"
-#include <axis/server/GDefine.h>
-#include <axis/server/IHandlerSoapSerializer.h>
-#include <axis/server/IHandlerSoapDeSerializer.h>
-#include <axis/server/BasicNode.h>
+#include <axis/server/GDefine.hpp>
+#include <axis/server/IHandlerSoapSerializer.hpp>
+#include <axis/server/IHandlerSoapDeSerializer.hpp>
+#include <axis/server/BasicNode.hpp>
 #include <iostream>
 
 THandler::THandler()

@@ -5,7 +5,7 @@
 
 #include "AxisServiceException.h"
 
-#include <axis/server/AxisWrapperAPI.h>
+#include <axis/server/AxisWrapperAPI.hpp>
 
 AxisServiceException::AxisServiceException()
 {

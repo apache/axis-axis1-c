@@ -1,5 +1,5 @@
 #include "Calculator.h"
-#include <axis/AxisGenException.h>
+#include <axis/AxisGenException.hpp>
 #include <iostream>
 
 bool IsNumber(const char* p);

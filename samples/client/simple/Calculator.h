@@ -6,7 +6,7 @@
 #if !defined(__CALCULATOR_CLIENTSTUB_H__OF_AXIS_INCLUDED_)
 #define __CALCULATOR_CLIENTSTUB_H__OF_AXIS_INCLUDED_
 
-#include <axis/client/Stub.h>
+#include <axis/client/Stub.hpp>
 #include <ctype.h>
 
 class Calculator 

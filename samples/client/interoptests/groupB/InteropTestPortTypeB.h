@@ -6,9 +6,9 @@
 #if !defined(__INTEROPTESTPORTTYPEB_CLIENTSTUB_H__INCLUDED_)
 #define __INTEROPTESTPORTTYPEB_CLIENTSTUB_H__INCLUDED_
 
-#include <axis/client/Stub.h>
+#include <axis/client/Stub.hpp>
 #include "AxisClientException.h"
-#include <axis/ISoapFault.h>
+#include <axis/ISoapFault.hpp>
 #include "SOAPArrayStruct.h"
 #include "SOAPStruct.h"
 #include "SOAPStructStruct.h"

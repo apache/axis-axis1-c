@@ -6,7 +6,7 @@
 #if !defined(__REFTESTPORTTYPE_SERVERSKELETON_H__INCLUDED_)
 #define __REFTESTPORTTYPE_SERVERSKELETON_H__INCLUDED_
 
-#include <axis/server/AxisUserAPI.h>
+#include <axis/server/AxisUserAPI.hpp>
 #include "AxisServiceException.h" 
 
 #include "intType.h"
