@@ -105,11 +105,16 @@ Param::Param(Param& param)
 	}
 }
 
-Param::Param(string &str)
+Param::Param(string &str, XSDTYPE type)
 {
-	m_sName = "String";
 	m_sValue = str;
-	m_Type = XSD_STRING;
+	m_Type = type;
+	switch (type)
+	{
+	case XSD_STRING: m_sName = "String"; break;
+	case XSD_BASE64BINARY: m_sName = "Base64BinaryString"; break;
+	case XSD_HEXBINARY: m_sName = "HexBinaryString"; break;
+	}
 }
 
 Param::Param(int nValue)
@@ -124,6 +129,13 @@ Param::Param(float fValue)
 	m_sName = "Float";
 	m_Value.f = fValue;
 	m_Type = XSD_FLOAT;
+}
+
+Param::Param(double dValue)
+{
+	m_sName = "Double";
+	m_Value.d = dValue;
+	m_Type = XSD_DOUBLE;
 }
 
 Param::~Param()
