@@ -79,7 +79,7 @@ public class ParmHeaderFileWriter extends ParamWriter{
 			if (!CUtils.isSimpleType(baseType)) return;
 			String langTypeName = CUtils.getclass4qname(baseType);
 			writer.write("typedef ");
-			if ("string".equals(baseType.getLocalPart())){
+			if ("string".equals(baseType.getLocalPart()) || "NMTOKEN".equals(baseType.getLocalPart())){
 				writer.write(langTypeName + " " + classname + ";\n");
 				for(int i=1; i<restrictionData.size();i++){
 					QName value = (QName)restrictionData.elementAt(i);
