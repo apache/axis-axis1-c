@@ -124,16 +124,19 @@ So if you use only Expat no need to define XERCESC_HOME vice versa.</p>
 <b>#SUBDIRS = apache adminservice</b></p>
 
 <p>Now you need to copy header files from apache and parser that  you use</p>
-<p>Install xercesc at /usr/local/xerces-c, expat at /usr/local/expat1957,apache2 at /usr/local/apache2 and apache1.3 at /usr/local/apache</p>
+<p>I have installed xercesc at /usr/local/xerces-c, expat at /usr/local/expat1957,apache2 at /usr/local/apache2 and apache1.3 at /usr/local/apache</p>
 
-<p>Building Axis C++ for apache2 and for both xercesc and expat. (better to use one)<br>Instructions to build both are given above</p>
-<p>cp -rf /usr/local/xerces-c/include/xercesc/* $AXISCPP_HOME/include/xercesc/<br>
-cp -f /usr/local/expat1957/include/expat.h $AXISCPP_HOME/include/expat/<br>
-cp -f /usr/local/apache2/include/* $AXISCPP_HOME/include/apache2_0/</p>
+<p>I'm going to build Axis C++ for apache2 and for both xercesc and expat(But I'm going to<br>
+use only one parser. But anyway I can give instructions to build both as you've seen earlier)<br></p>
+<p><b>cp -rf /usr/local/xerces-c/include/xercesc/* $AXISCPP_HOME/include/xercesc/</b><br>
+<b>cp -f /usr/local/expat1957/include/expat.h $AXISCPP_HOME/include/expat/</b><br>
+<b>cp -f /usr/local/apache2/include/* $AXISCPP_HOME/include/apache2_0/</b></p>
 
-<p>Then can build Axis C++ server, client,parser libraries, transport library and server/client samples by,
+<p>Then I can build Axis C++ server, client,parser libraries, transport library and server/client samples by,<br>
+<b>
 cd $AXISCPP_HOME<br>
 sh build.sh</p>
+</b>
 
 <p>Once you have finished, have a look at $AXISCPP_HOME/build_errors,<br> 
 $AXISCPP_HOME/samples/server/sample_server_build_errors and <br>
@@ -181,14 +184,15 @@ your log files, configuration files libraries etc</p>
 <b>#Transport_smtp:The SMTP transport library</b><br>
 <b>#XMLParser:The xml parser library.</b></p>
 
-<p>LogPath:/usr/local/Axis/logs/AxisLog<br>
+<b><p>LogPath:/usr/local/Axis/logs/AxisLog<br>
 WSDDFilePath:/usr/local/Axis/conf/server.wsdd<br>
 ClientLogPath:/usr/local/Axis/logs/AxisClientLog<br>
 XMLParser:/usr/local/Axis/libs/libaxis_xmlparser.so<br>
 Transport_http:/usr/local/Axis/libs/libaxis_transport.so</p>
+</b>
 
 <p>Now we need to copy neccessary libraries to the correct places and start apache. To do that you can find scripts written in $AXIS_HOME.<br>
-cd $AXIS_HOME</p>
+<b>cd $AXIS_HOME</b></p>
 
 <p>To deploy on apache2<br>
 <b>sh deploy_apache2.sh</b></p>
@@ -200,7 +204,7 @@ cd $AXIS_HOME</p>
 libaxiscpp_mod2.so is copied to <your apache home>/modules folder.<br>
 libserver_engine.so and libaxis_expat.so is copied to $AXIS_HOME/libs folder(and renamed
 libaxis_xmlparser.so). Also apache is started and libaxiscpp_mod2.so is loaded into apache.<br>
-libaxiscpp_mod2.so is the apache module for Axis C++. This will in term load Axis C++ server engine (libserver_engine.so<br>
+libaxiscpp_mod2.so is the apache module for Axis C++. This will in term load Axis C++ server engine (libserver_engine.so)<br>
 <b>Note that libaxis_xmlparser.so is loaded by the engine dynamically as parsing is required from the engine.</b></p>
 
 
@@ -212,11 +216,11 @@ If we use xerces we need to change libaxis_xercesc.so to libaxis_xmlparser.so</b
 that the libraries corresponding to these services are deployed yet. It merely lists whatever in the server.wsdd.</b></p>
 
 <p>To run interop samples</p>
-<p><b>cd $AXISCPP_HOME/samples/client<br>
-sh run_interoptests.sh</b><br>
+<p><b>cd $AXISCPP_HOME/samples/client</b><br>
+<b>sh run_interoptests.sh</b><br>
 By default this script assumes that apache is running in the localhost at port 80<br>
 If you want other<br>
-sh run_interoptests.sh &lt;server&gt; &lt;port&gt;<br>
+<b>sh run_interoptests.sh &lt;server&gt; &lt;port&gt;</b><br>
 eg: sh run_interoptests.sh -u localhost -p 80<br></p>
 
 <p><b>Note for people who downloaded Axis C++ binary.<br>
@@ -229,3 +233,4 @@ In this case all the libraries are already generated for you in $AXISCPP_HOME/bi
           PDF</a>
 </body>
 </html>
+
