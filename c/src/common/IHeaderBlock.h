@@ -72,7 +72,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "BasicNode.h"
+#include "../soap/BasicNode.h"
 
 class IHeaderBlock
 {
