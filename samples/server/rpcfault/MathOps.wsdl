@@ -22,7 +22,7 @@ xmlns:s="http://soapinterop.org/xsd">
         </complexType>
         <complexType name="SOAPStructFault">
             <sequence>
-                <element name="soapStruct" type="tns:SOAPStruct"/>
+                <element name="soapStruct" type="intf:SOAPStruct"/>
             </sequence>
         </complexType>
     </schema>
@@ -35,13 +35,13 @@ xmlns:s="http://soapinterop.org/xsd">
         <wsdl:part name="addReturn" type="xsd:int"/>
     </wsdl:message>
     <message name="SOAPStructFault">
-        <part name="part1" type="s:SOAPStructFault"/>
+        <part name="faultstruct" type="s:SOAPStructFault"/>
     </message>
     <wsdl:portType name="MathOps">
         <wsdl:operation name="div" parameterOrder="in0 in1">
             <wsdl:input message="intf:divRequest" name="divRequest"/>
             <wsdl:output message="intf:divResponse" name="divResponse"/>
-            <fault name="DivByZeroFault" message="tns:SOAPStructFault"/>
+            <fault name="DivByZeroFault" message="intf:SOAPStructFault"/>
         </wsdl:operation>
     </wsdl:portType>
     <wsdl:binding name="MathOpsSoapBinding" type="intf:MathOps">
@@ -61,7 +61,7 @@ xmlns:s="http://soapinterop.org/xsd">
                         namespace="http://localhost/axis/MathOps" 
                         use="encoded"/>
                 </wsdl:output>
-                <fault name="ComplexFault">
+                <fault name="DivByZeroFault">
                     <soap:fault name="DivByZeroFault" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
                         namespace="http://soapinterop.org/wsdl"/>
                 </fault>

@@ -65,7 +65,7 @@ int HandlerPool::getHandler (BasicHandler** ppHandler, string & sSessionId,
                 {
                     return Status;
                 }
-                else if (Status == HANDLER_BEING_USED)
+                else if (Status == SERVER_ENGINE_HANDLERBEINGUSED)
                 {             //block this thread not this object
                     Ax_Sleep (0);
                 }
@@ -73,7 +73,7 @@ int HandlerPool::getHandler (BasicHandler** ppHandler, string & sSessionId,
                 {
                     return Status;
                 }
-            } while (Status == HANDLER_BEING_USED);
+            } while (Status == SERVER_ENGINE_HANDLERBEINGUSED);
             break;
         case AH_SESSION:
             return g_pSessionScopeHandlerPool->getInstance (sSessionId,
@@ -236,7 +236,7 @@ int HandlerPool::getHandlerChain (string &sSessionId, HandlerChain** ppChain,
              * }
              * else
              * {
-             *     Status = WRONG_HANDLER_TYPE;
+             *     Status = SERVER_ENGINE_WRONGHANDLERTYPE;
              *     break;
              * }
              */
@@ -256,7 +256,7 @@ int HandlerPool::getHandlerChain (string &sSessionId, HandlerChain** ppChain,
                 }
                 else
                 {
-                    Status = WRONG_HANDLER_TYPE;
+                    Status = SERVER_ENGINE_WRONGHANDLERTYPE;
                     break;
                 }
             }

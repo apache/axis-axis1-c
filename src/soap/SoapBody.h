@@ -18,7 +18,7 @@
 #define AXIS_SOAPBODY_H__OF_AXIS_INCLUDED_
 
 #include "SoapMethod.h"
-#include <axis/server/SoapFault.h>
+#include "SoapFault.h"
 #include <axis/server/SoapEnvVersions.h>
 
 class Attribute;
@@ -77,7 +77,7 @@ public:
     /* string& serialize(); */
     int serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion);
     /* int serialize(string&, SOAP_VERSION eSoapVersion); */
-    void setSoapFault(SoapFault* ptrSoapFault);
+    void setSoapFault(SoapFault* pSoapFault);
     void setSoapMethod(SoapMethod* ptrSoapMethod);
     SoapBody();
     virtual ~SoapBody();
