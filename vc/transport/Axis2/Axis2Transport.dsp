@@ -112,6 +112,10 @@ SOURCE=..\..\..\src\transport\axis2\SecureChannel.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\transport\axis2\SSLChannelFactory.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\transport\axis2\URL.cpp
 # End Source File
 # End Group
@@ -137,6 +141,14 @@ SOURCE=..\..\..\src\transport\axis2\Platform.h
 # Begin Source File
 
 SOURCE=..\..\..\src\transport\axis2\SecureChannel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\transport\SSLChannel.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\transport\axis2\SSLChannelFactory.hpp
 # End Source File
 # Begin Source File
 
