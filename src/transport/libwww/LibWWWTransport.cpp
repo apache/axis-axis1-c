@@ -35,16 +35,6 @@
 int terminate_handler (HTRequest * request, HTResponse * response,
                                void * param, int status)
 {
-    /*if (status == HT_LOADED && m_pResult ) {
-        HTPrint("%s\n", HTChunk_m_pcData(m_pResult));
-        HTChunk_delete(m_pResult);
-    }*/
-    //if (HTNet_isIdle())
-    //if (HTNet_idle())
-    //if (HTNet_isEmpty())
-    HTRequest_forceFlush(request);
-    HTPrint("req count %d\n",HTNet_count());
-    HTEventList_stopLoop();
     return status;
 }
 
@@ -71,7 +61,8 @@ LibWWWTransport::LibWWWTransport()
 :m_pRequest(NULL), m_pResult(NULL), m_pcData(NULL), m_pcProxy(NULL), m_iBytesLeft(0), m_pcReceived(NULL)
 
 {
-    //Create a new premptive client 
+    //Samisa moveed to initializeLibrary
+    /*//Create a new premptive client 
     HTProfile_newNoCacheClient("AxisCpp", "1.3");
     //Disable interactive mode, could be useful when debugging
     HTAlert_setInteractive(NO);
@@ -79,7 +70,7 @@ LibWWWTransport::LibWWWTransport()
     HTNet_addAfter(terminate_handler, NULL, NULL, HT_ALL, HT_FILTER_LAST);
     //How long we are going to wait for a response
     HTHost_setEventTimeout(20000);
-
+    */
     m_pRequest = HTRequest_new();
 
 }
@@ -165,7 +156,7 @@ AXIS_TRANSPORT_STATUS LibWWWTransport::getBytes(char* pcBuffer, int* piRetSize)
      
 int LibWWWTransport::openConnection()
 {
-    //Samisa: I wonder is this should be an API call.
+    //Samisa: I wonder this should be an API call.
     //It should not be the job of the upper layers to tell the trasport 
     //to open and close connections. Rather the transport should determine 
     //when to do that, when sendBytes is called
@@ -312,7 +303,6 @@ AXIS_TRANSPORT_STATUS LibWWWTransport::flushOutput()
     if (m_pResult)
         HTChunk_delete(m_pResult);
     m_pResult = HTLoadToChunk(m_pcEndpointUri, m_pRequest);
-    HTEventList_loop(m_pRequest);
     
     if (m_pcReceived)
         free(m_pcReceived);
@@ -330,9 +320,7 @@ AXIS_TRANSPORT_STATUS LibWWWTransport::flushOutput()
     }
     else
         return TRANSPORT_FAILED;
-//#endif //ifdef HT_EXT
 #else    
-//#if !defined(HT_EXT)
 
     HTParentAnchor* src = NULL;
     HTAnchor * dst = NULL;
@@ -364,7 +352,7 @@ AXIS_TRANSPORT_STATUS LibWWWTransport::flushOutput()
     else
         return TRANSPORT_FAILED;
 
-#endif //!defined(HT_EXT)
+#endif 
 }
      
 void LibWWWTransport::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
@@ -409,6 +397,33 @@ int DestroyInstance(SOAPTransport *inst)
                 return AXIS_SUCCESS;
         }
         return AXIS_FAIL;
+}
+}
+
+extern "C" {
+STORAGE_CLASS_INFO
+void initializeLibrary(void)
+{
+    //Create a new non-premptive client
+    //HTProfile_newNoCacheClient("AxisCpp", "1.3");
+    //Create a new non-premptive client (in this case no event loop is required)
+    HTProfile_newPreemptiveClient("AxisCpp", "1.3");
+    //Disable interactive mode, could be useful when debugging
+    HTAlert_setInteractive(NO);
+    // Add our own filter to do the clean up after response received
+    HTNet_addAfter(terminate_handler, NULL, NULL, HT_ALL, HT_FILTER_LAST);
+    //How long we are going to wait for a response
+    HTHost_setEventTimeout(50000);
+
+}
+}
+
+extern "C" {
+STORAGE_CLASS_INFO
+void uninitializeLibrary(void)
+{
+    //Terminate libwww 
+    HTProfile_delete();
 }
 }
 
