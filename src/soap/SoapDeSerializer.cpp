@@ -51,7 +51,7 @@
 #include "SoapFault.h"
 #include "ComplexElement.h"
 #include "CharacterElement.h"
-#include <axis/server/GDefine.hpp>
+#include <axis/GDefine.hpp>
 #include "../common/AxisTrace.h"
 #include "apr_base64.h"
 #include "HexCoder.h"
