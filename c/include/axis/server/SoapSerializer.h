@@ -96,7 +96,7 @@ private:
 	int m_iSoapVersion;
 
 	/* Table that keeps all allocated buffers */
-	volatile SerializeBuffers* m_SZBuffers;
+	volatile SerializeBuffers* m_pSZBuffers;
 	/* Size of the initial buffer created.*/
 	int m_nInitialBufferSize;
 	/* Size of the m_SZBuffers array.*/
@@ -148,7 +148,7 @@ public:
 private:
 	int AddOutputParamHelper(const AxisChar* pchName, XSDTYPE nType, uParamValue Value);
 	int flushSerializedBuffer();
-	int SetNextSerilizeBuffer()
+	int SetNextSerilizeBuffer();
 	IArrayBean* makeArrayBean(XSDTYPE nType, void* pArray);
 	IArrayBean* makeArrayBean(void* pObject, void* pSZFunct, void* pDelFunct, void* pSizeFunct);
 
