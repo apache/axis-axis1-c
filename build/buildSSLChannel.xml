@@ -6,6 +6,18 @@
 	 <target name="compileAxisHTTPTransportSSLChannel">
       <mkdir dir="${dir.objects}"/>
       <mkdir dir="${dir.bin}"/>
+	  <!-- the ssl library is in a different place on windows ! -->
+	  <if>
+		<isset property="windows"/>
+		<then>
+			<property name="HTTP.SSLChannel.inc.dir" value="inc32"/>
+		</then>
+		<else>
+			<property name="HTTP.SSLChannel.inc.dir" value="include"/>
+			<property name="HTTP.SSLChannel.libs" value="crypto,ssl"/>
+		</else>
+      </if>
+		
       <if>
          <not>
             <isset property="aix"/>
@@ -18,7 +30,7 @@
             <cc outfile="${dir.bin}/${channelLibraryName}" objdir="${dir.objects}" 
              exceptions="true" outtype="shared" multithreaded="true">
                <!-- Compilers -->
-               <includepath path="${HTTP.SSLChannel.dir}"/>
+               <includepath path="${HTTP.SSLChannel.dir}/${HTTP.SSLChannel.inc.dir}"/>
                <compiler refid="SolarisCC"/>
                <compiler refid="Linuxgcc"/>
                <compiler extends="VisualC++">
@@ -56,12 +68,15 @@
          <else>
             <cc outfile="${dir.bin}/${libraryPrefix}${channelLibraryName}${librarySuffix}" objdir="${dir.objects}"
              exceptions="true" multithreaded="true">
+				<includepath path="${HTTP.SSLChannel.dir}/${HTTP.SSLChannel.inc.dir}"/>
                <!-- Compilers -->
                <compiler refid="AIXxlc"/>
                <defineset>
                   <define name="ENABLE_AXISTRACE" if="trace"/>
                   <define name="AXISTRACE_LIBRARY"/>
                </defineset>
+				<!-- required libraries -->
+				<syslibset libs="${HTTP.SSLChannel.libs}" dir="${HTTP.SSLChannel.dir}/lib"/>
 
                <!-- Linkers -->
                <linker refid="AIXLinker"/>
