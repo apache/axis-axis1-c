@@ -958,7 +958,6 @@ void* SoapDeSerializer::getCmplxObject(void* pDZFunct, void* pCreFunct,
         void* pObject = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)(NULL, false, 0);
         if (pObject && pDZFunct)
         {
-            AXISTRACE1("came1", INFO);
             if (C_RPC_PROVIDER == getCurrentProviderType())
             {
                 IWrapperSoapDeSerializer_C cWSD;
@@ -968,12 +967,10 @@ void* SoapDeSerializer::getCmplxObject(void* pDZFunct, void* pCreFunct,
             }
             else
             {
-                AXISTRACE1("came2", INFO);
                 m_nStatus = ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pObject, this);
             }
             if (AXIS_SUCCESS == m_nStatus)
             {
-                AXISTRACE1("came3", INFO);
                 m_pParser->next(); /* skip end node too */
                 return pObject;
             }
