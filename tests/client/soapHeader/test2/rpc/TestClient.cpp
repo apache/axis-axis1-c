@@ -133,7 +133,7 @@ main(int argc, char *argv[])
     ws.deleteSOAPHeaderBlock(header);
 
     header = NULL;
-    header = ws.getNextSOAPHeaderBlock();
+    header = ws.getFirstSOAPHeaderBlock();
     ws.deleteSOAPHeaderBlock(header);
 
     //now the request should have no SOAP headers
