@@ -1,9 +1,9 @@
-<project name="Axis C Transport" default="compileAxisTransport" basedir="..">
+<project name="Axis C Transport IPV6" default="compileAxisTransportIPV6" basedir="..">
 
 	<!--
 	  Compile the Axis Transport Library
 	  -->
-	<target name="compileAxisTransport">
+	<target name="compileAxisTransportIPV6">
 		<mkdir dir="${dir.objects}"/>
 		<mkdir dir="${dir.bin}"/>
 		<if>
@@ -31,7 +31,12 @@
                               <linker refid="OS400Linker"/>
 					<!-- Files to compile -->
 					<fileset dir="${dir.src}">
-						<include name="transport/${transport}/*.cpp"/>
+						<include name="transport/${transport.root}/Channel.cpp"/>
+						<include name="transport/${transport.root}/URL.cpp"/>
+						<include name="transport/${transport.root}/Axis2Transport.cpp"/> 
+						<include name="transport/${transport.root}/AxisTransportException.cpp"/> 
+						<include name="transport/${transport.root}/ChannelFactory.cpp"/>
+						<include name="transport/${transport.root}/${transport}/*.cpp"/>
 					</fileset>
 				</cc>
 			</then>
