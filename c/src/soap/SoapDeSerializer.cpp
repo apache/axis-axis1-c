@@ -18,7 +18,7 @@
  *
  * @author Susantha Kumara (skumara@virtusa.com)
  * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
- *
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  *
  */
 
@@ -28,6 +28,13 @@
  * Revision 1.1  2004/06/10 roshan
  * Fixed the bug AXISCPP-95 at JIRA.
  */
+
+/*
+ * Revision 1.2  2004/07/22 roshan
+ * Changed code to support proper parsing of incoming SOAP Headers. The 
+ *  SoapDeSerializer::getHeader() method was completely rewriten.
+ */
+
 
 #ifdef WIN32
 #pragma warning (disable : 4101)
