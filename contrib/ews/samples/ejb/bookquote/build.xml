@@ -23,8 +23,13 @@
 		<include name="**" />
 		</jar>
 
-		<copy file ="${basedir}/META-INF/webservice.xml" todir="${build.classes}/META-INF"/>
-		<copy file ="${basedir}/META-INF/application.xml" todir="${build.classes}/META-INF"/>
+            <copy todir="${build.classes}/META-INF">
+			<fileset dir="${basedir}/META-INF/">
+			<include name="**/*.xml"/>
+			<exclude name="build.xml"/>
+			</fileset>
+		</copy>
+
 		<copy file ="${jar.dir}/bookquote.jar" todir="${build.classes}"/>
 		<jar jarfile="${jar.dir}/bookquote.ear" basedir="${build.classes}">
 			<include name="**/webservice.xml" />
