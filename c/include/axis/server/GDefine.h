@@ -116,22 +116,22 @@ extern void ModuleUnInitialize();
  */
 
 #ifdef __cplusplus
-#define AXISAPI(M, P) AXISCALL M P = 0;
-#define APIHASPARAMS
-#define APINOPARAMS 
+    #define AXISAPI(M, P) AXISCALL M P = 0;
+    #define APIHASPARAMS
+    #define APINOPARAMS 
 #else 
-#define virtual 
-#if !defined(bool)
-#define bool unsigned char
-#define false 0
-#define true 1
-#endif
-#if !defined(NULL)
-#define NULL 0
-#endif
-#define AXISAPI(M, P) (AXISCALL* M) P;
-#define APIHASPARAMS void*p,
-#define APINOPARAMS void*p
+    #define virtual 
+    #if !defined(bool)
+        #define bool unsigned char
+        #define false 0
+        #define true 1
+    #endif
+    #if !defined(NULL)
+        #define NULL 0
+    #endif
+    #define AXISAPI(M, P) (AXISCALL* M) P;
+    #define APIHASPARAMS void*p,
+    #define APINOPARAMS void*p
 #endif
 
 #if defined (__GNUC__)

@@ -3,6 +3,7 @@
 
 #include "InteropTestPortType.h" 
 #include <stdio.h>
+#include <string.h>
 
 #define ARRAYSIZE 2
 

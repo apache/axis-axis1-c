@@ -23,7 +23,7 @@ xsd__string echoString(xsd__string Value0)
 	int nStatus;
 	CallFunctions* pCall;
 	xsd__string Ret;
-	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost:5555/axis/InteropBase");
+	if (!g_pInteropTestPortType) g_pInteropTestPortType = GetCallObject(APTHTTP, "http://localhost:80/axis/InteropBase");
 	if (!g_pInteropTestPortType || !g_pInteropTestPortType->__vfptr) return Ret;
 	pCall = g_pInteropTestPortType->__vfptr;
 	/* Following will establish the connections with the server too */
