@@ -29,7 +29,7 @@
   #define AXISTRACE3(X) g_pAT->trace(X);
   
 #endif
-#if !defined(__AXISTRACE__)
+#if !defined(ENABLE_AXISTRACE)
   #define AXISTRACE1(X,Y) "";
   #define AXISTRACE2(X,Y,Z) "";
   #define AXISTRACE3(X) "";
@@ -43,7 +43,7 @@ using namespace std;
  * @brief This is class is used to log messages when AXISTRACE is defined.
  *
  * writing to the log could be disabled by commenting the line 
- * #define __AXISTRACE__
+ * #define ENABLE_AXISTRACE
  * of Axisconfig.h.   
  * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  */

@@ -52,9 +52,15 @@ int main(int argc, char* argv[])
             try
             {
 		iResult = ws.div(i1, i2);		
+                printf("Result is:%d\n", iResult);
+            }
+            catch(AxisDivByZeroException& e)
+            {
+                printf("Exception : %s\n", e.what());
             }
             catch(AxisException& e)
             {
+                printf("Exception : %s\n", e.what());
             }
             catch(exception& e)
             {

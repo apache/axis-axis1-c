@@ -10,8 +10,8 @@
 #include <axis/server/AxisUserAPI.h>
 
 /*Local name and the URI for the type*/
-static const char* Axis_URI_SOAPStructFault = "http://soapinterop.org/xsd";
-static const char* Axis_TypeName_SOAPStructFault = "SOAPStructFault";
+static const char* Axis_URI_SOAPStructFault = "http://localhost/axis/MathOps";
+static const char* Axis_TypeName_SOAPStructFault = "DivByZeroFault";
 
 class SOAPStructFault
 {

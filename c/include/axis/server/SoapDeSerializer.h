@@ -56,7 +56,7 @@ private:
     /* Provider type of current service that uses this DeSerializer object */
     PROVIDERTYPE m_ProviderType;
     char* m_pcFaultDetail;
-	SOAPTransport* m_pInputStream;
+    SOAPTransport* m_pInputStream;
 
 private:
     int AXISCALL getArraySize(const AnyElement* pElement);
@@ -80,6 +80,8 @@ public:
     bool isAnyMustUnderstandHeadersLeft();
     int getFault();
     int AXISCALL checkMessageBody(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    int AXISCALL checkForFault(const AxisChar* pName, 
         const AxisChar* pNamespace);
     /* to get any header blocks left in the Deserializer */
     HeaderBlock* getHeaderBlock();

@@ -29,7 +29,7 @@ volatile bool SoapFault::m_bInit = false;
 
 SoapFault::SoapFault()
 {
-
+    m_bIsSimpleDetail = false;
 }
 
 SoapFault::~SoapFault()
@@ -44,23 +44,42 @@ int SoapFault::serialize(SoapSerializer& pSZ)
     int iStatus= AXIS_SUCCESS;
         
     pSZ.serialize("<SOAP-ENV:Fault>", NULL);    
-    pSZ.serialize("<faultcode>", m_sFaultcode.c_str(), "</faultcode>", NULL);
-    pSZ.serialize("<faultstring>", m_sFaultstring.c_str(), "</faultstring>", NULL);
+    AXISTRACE1("came11", INFO);
+    m_pFaultcodeParam->serialize(pSZ);
+    //pSZ.serialize("<faultcode>", m_sFaultcode.c_str(), "</faultcode>", NULL);
+    AXISTRACE1("came12", INFO);
+    m_pFaultstringParam->serialize(pSZ);
+    //pSZ.serialize("<faultstring>", m_sFaultstring.c_str(), "</faultstring>", NULL);
+    AXISTRACE1("came13", INFO);
 
-    if(!m_sFaultactor.empty())
+    if(m_pFaultactorParam)
     {        
-        pSZ.serialize("<faultactor>", m_sFaultactor.c_str(), "</faultactor>", NULL);
-    }
+        AXISTRACE1("came14", INFO);
+        m_pFaultactorParam->serialize(pSZ);
+        //pSZ.serialize("<faultactor>", m_sFaultactor.c_str(), "</faultactor>", NULL);
+    } 
 
-    if(!m_sFaultDetail.empty())
+    /*if(!m_sFaultDetail.empty())
     {        
         pSZ.serialize("<detail>", m_sFaultDetail.c_str(), "</detail>", NULL);
-    }
+    }*/
 
     if(m_pFaultDetail)
     {
-        pSZ.serialize("<detail>", m_pFaultDetail->serialize(pSZ), "</detail>", NULL);
+        if(m_bIsSimpleDetail)
+        {
+            m_pFaultDetail->serialize(pSZ);
+            AXISTRACE1("came161", INFO);
+        }
+        else
+        {
+            pSZ.serialize("<faultdetail>", NULL);
+            AXISTRACE1("came162", INFO);
+            m_pFaultDetail->serialize(pSZ);
+            pSZ.serialize("</faultdetail>", NULL);
+        }
     }
+    AXISTRACE1("came17", INFO);
     
     pSZ.serialize("</SOAP-ENV:Fault>", NULL);
 
@@ -134,11 +153,12 @@ SoapFault* SoapFault::getSoapFault(int iFaultCode)
     /* the soap envelope namespace prefix to be obtained from 
      * gs_SoapEnvVersionsStruct should depend on the relevant SOAP VERSION
      */
-     pSoapFault->m_sFaultcode= string(gs_SoapEnvVersionsStruct[SOAP_VER_1_1].pchPrefix) + 
-         ":" + s_parrSoapFaultStruct[iFaultCode].pcFaultcode;
-     pSoapFault->m_sFaultstring= s_parrSoapFaultStruct[iFaultCode].pcFaultstring;
-     pSoapFault->m_sFaultactor= s_parrSoapFaultStruct[iFaultCode].pcFaultactor;
-     pSoapFault->m_sFaultDetail= s_parrSoapFaultStruct[iFaultCode].pcFaultDetail;        
+     pSoapFault->setFaultcode(string(gs_SoapEnvVersionsStruct[SOAP_VER_1_1].pchPrefix) + 
+         ":" + s_parrSoapFaultStruct[iFaultCode].pcFaultcode);
+     pSoapFault->setFaultstring(s_parrSoapFaultStruct[iFaultCode].pcFaultstring);
+     //pSoapFault->setFaultactor(s_parrSoapFaultStruct[iFaultCode].pcFaultactor);
+     pSoapFault->setFaultactor("http://endpoint/url");
+     pSoapFault->setFaultDetail(s_parrSoapFaultStruct[iFaultCode].pcFaultDetail);
     
     return pSoapFault;
 }
@@ -151,8 +171,19 @@ SoapFault::SoapFault(string sFaultcode, string sFaultstring, string sFaultactor,
     m_sFaultDetail= sDetail;    
 }
 
+int SoapFault::setParam(Param* pParam, const AxisChar* pchName, const void* pValue, XSDTYPE type)
+{
+    if (!pParam) return AXIS_FAIL;
+    pParam->m_Type = type;
+    pParam->m_sName = pchName;
+    pParam->m_Value.pStrValue = *((char**)(pValue));
+    return AXIS_SUCCESS;
+}
+
 int SoapFault::setFaultcode(const string& sFaultcode)
 {
+    m_pFaultcodeParam = new Param();
+    setParam(m_pFaultcodeParam, "faultcode", &sFaultcode, XSD_STRING); 
     m_sFaultcode= sFaultcode;
 
     return AXIS_SUCCESS;
@@ -160,12 +191,16 @@ int SoapFault::setFaultcode(const string& sFaultcode)
 
 int SoapFault::setFaultstring(const string& sFaultstring)
 {
+    m_pFaultstringParam = new Param();
+    setParam(m_pFaultstringParam, "faultstring", &sFaultstring, XSD_STRING); 
     m_sFaultstring= sFaultstring;
 
     return AXIS_SUCCESS;
 }
 int SoapFault::setFaultactor(const string& sFaultactor)
 {
+    m_pFaultactorParam = new Param();
+    setParam(m_pFaultactorParam, "faultactor", &sFaultactor, XSD_STRING); 
     m_sFaultactor = sFaultactor;
     
     return AXIS_SUCCESS;
@@ -173,13 +208,17 @@ int SoapFault::setFaultactor(const string& sFaultactor)
 
 int SoapFault::setFaultDetail(const string& sFaultDetail)
 {
+    m_pFaultDetail = new Param();
+    setParam(m_pFaultDetail, "faultdetail", &sFaultDetail, XSD_STRING);
     m_sFaultDetail = sFaultDetail;
+    m_bIsSimpleDetail = true;
 
     return AXIS_SUCCESS;
 }
 
 int SoapFault::setFaultDetail(const Param* pFaultDetail)
 {
+    AXISTRACE1("came10", INFO);
     m_pFaultDetail = (Param*) pFaultDetail;
 
     return AXIS_SUCCESS;

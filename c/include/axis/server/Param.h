@@ -39,6 +39,7 @@ class ArrayBean;
 class Param : public IParam
 {
     friend class SoapSerializer;
+    friend class SoapFault;
 public:
     Param(){ m_Type = USER_TYPE;}; 
     /* if there is no attribute that says the type */
