@@ -124,7 +124,7 @@ public:
     virtual const Channel& operator >> (std::string& msg);
     
     /* Read from socket in non bloking more in msg */
-    virtual const Channel& readNonBlocking(std::string& msg);
+    virtual const Channel& readNonBlocking(std::string& msg, bool bBlockingRequired);
 
     /* Write a given message (msg) to the end-point using the open socket */
     virtual const Channel& operator << (const char* msg);

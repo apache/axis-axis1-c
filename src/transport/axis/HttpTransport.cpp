@@ -249,15 +249,48 @@ HttpTransport::operator >> (const char **pPayLoad)
             /* TODO */
 
             // There are other places m_channel is used and needs to have same loop.
+
+//Initially, set the reading of the message to non-blocking.
+			bool bBlockingRequired = false;
+			int	iterationCount = 0;
+
             do
             {
 	         //*m_Channel >> tmpCompletePacket;
 	         //have read from channel once
 	         //hence read the rest in non bloking mode
-	         m_Channel->readNonBlocking (tmpCompletePacket);
-	         tmpPacket.append (tmpCompletePacket);
-            }
-            while (tmpCompletePacket.length ());
+		        m_Channel->readNonBlocking( tmpCompletePacket, bBlockingRequired);
+		        tmpPacket.append( tmpCompletePacket);
+
+// If a full buffer was read, then we need to implement blocking, so set the
+// 'blocking' flag for the remainder of the message.
+// Else, if a full buffer was not read, then do not set blocking, but wait a
+// short period of time to allow the buffer to fill (if the message has more
+// data).
+				if( !bBlockingRequired)
+				{
+					if( tmpCompletePacket.length() == 1023)
+					{
+						bBlockingRequired = true;
+					}
+					else
+					{
+#ifdef WIN32
+						Sleep( 100);	// Sleep for 100ms Allow the message to build
+#else
+						usleep( 100000);	// Sleep for 100000us Allow the message to build
+#endif
+					}
+				}
+
+				iterationCount++;
+			}
+// Continue to loop unless the length of the recieved data packet is zero or this
+// is the first time through the loop (if the data packet was zero, it could have
+// been because not enough time had elapsed to allow more data to arrive at the
+// socket.  By putting in the sleep whilst not in blocking mode, it is hoped that
+// in this period, more of the message would have had time to arrive).
+            while( tmpCompletePacket.length() || iterationCount == 1);
 
 #ifdef _DEBUG
         std::cout << "\n\n\nGot the message:\r\n\r\n" << tmpPacket << "\n\n";

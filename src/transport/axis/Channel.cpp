@@ -282,7 +282,7 @@ Channel::operator >> (std::string & msg)
 }
 
 const Channel &
-Channel::readNonBlocking (std::string & msg)
+Channel::readNonBlocking( std::string & msg, bool bBlockingRequired)
 {
     msg = "";
     if (INVALID_SOCKET == m_Sock)
@@ -301,18 +301,33 @@ Channel::readNonBlocking (std::string & msg)
     int flags = 0;
 
 #if defined WIN32
-    // Set the socket I/O mode; iMode = 0 for blocking; iMode != 0 for non-blocking
-    int iMode = 1;
-    ioctlsocket(m_Sock, FIONBIO, (u_long FAR*) &iMode);
-    flags = 0;
+      // Set the socket I/O mode; iMode = 0 for blocking; iMode != 0 for non-blocking
+      int iMode = 1;
+ 
+ 	if( bBlockingRequired)
+ 	{
+ 		iMode = 0;
+ 	}
+ 
+     ioctlsocket( m_Sock, FIONBIO, (u_long FAR*) &iMode);
+ 
+      flags = 0;
 #elif defined AIX
+	flags=MSG_WAITALL;
+	if (!bBlockingRequired)
+	{
         flags=MSG_NONBLOCK;
+	}
 #elif defined( __OS400__ )
    fcntl(m_Sock, F_SETFL, (int)O_NONBLOCK);
    flags = 0;
 #else
     //for linux
-    flags = MSG_DONTWAIT;
+ 	if( !bBlockingRequired)
+ 	{
+ 	    flags = MSG_DONTWAIT;
+ 	}
+ 
     //TODO: define flags (or other means) to enable non blocking for other operating systems
 #endif
 
