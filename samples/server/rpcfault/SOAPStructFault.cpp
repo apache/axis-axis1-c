@@ -41,13 +41,7 @@ int Axis_DeSerialize_SOAPStructFault(SOAPStructFault* param, IWrapperSoapDeSeria
 	param->varString = pIWSDZ->getElementAsString("varString",0);
 	param->varInt = pIWSDZ->getElementAsInt("varInt",0);
 	param->varFloat = pIWSDZ->getElementAsFloat("varFloat",0);
-	if(AXIS_FAIL == pIWSDZ->getStatus())
-        {
-            param->varString = "Division by zero exception";
-            param->varInt = 1;
-            param->varFloat = 10.52;
-            return AXIS_SUCCESS;
-        }
+
 	return pIWSDZ->getStatus();
 }
 
