@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 	}
 	printf("Sending Requests to Server http://%s:%s ........\n\n", server, port);
 	sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
-	MathOps ws;
+	MathOps ws(endpoint);
 
 	op = argv[3];
 	p1 = argv[4];
