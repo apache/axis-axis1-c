@@ -207,7 +207,7 @@ int HandlerPool::GetRequestFlowHandlerChain(HandlerChain** ppChain, string& sSes
 	else
 	{
 		*ppChain = NULL;
-        AXISTRACE1("No handlers configured", INFO);        
+        	/*AXISTRACE1("No handlers configured", INFO);*/
 		return AXIS_SUCCESS; //NO_HANDLERS_CONFIGURED
 	}
 }
