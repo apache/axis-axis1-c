@@ -154,7 +154,7 @@ SOURCE=..\src\common\AxisTrace.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\transport\axis\AxisTransportException.cpp
+SOURCE=..\src\transport\axis2\AxisTransportException.cpp
 # End Source File
 # Begin Source File
 
