@@ -51,7 +51,7 @@ public class ExceptionWriter extends CPPExceptionClassWriter{
 				targetOutputLocation = targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
 			new File(targetOutputLocation).mkdirs();
 			String fileName = targetOutputLocation + "/" + faultInfoName + ".cpp";
-			this.wscontext.addGeneratedFile(faultInfoName + ".cpp");
+		//	this.wscontext.addGeneratedFile(faultInfoName + ".cpp");
 			return new File(fileName);
 		}	
 
@@ -67,7 +67,7 @@ public class ExceptionWriter extends CPPExceptionClassWriter{
 		{
 			fileName = targetOutputLocation + "/" + this.wscontext.getSerInfo().getServicename() + "_" + faultInfoName + ".cpp";
 		}
-		
+		this.wscontext.addGeneratedFile( this.wscontext.getSerInfo().getServicename()+"_"+faultInfoName + ".cpp");
 		return new File(fileName);
 	}
 		
