@@ -76,8 +76,8 @@ extern void ModuleUnInitialize();
 #endif
 
 #if defined(__GNUC__)
-//replaced stdcall with cdecl to make it work on some platforms with older libraries - Samisa
-//#define AXISCALL __attribute__((stdcall))
+/*replaced stdcall with cdecl to make it work on some platforms with older libraries - Samisa*/
+/*#define AXISCALL __attribute__((stdcall))*/
 #define AXISCALL __attribute__((cdecl))
 #else
 #define AXISCALL __stdcall
