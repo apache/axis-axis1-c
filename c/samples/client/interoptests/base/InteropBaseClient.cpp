@@ -21,8 +21,7 @@ int main(int argc, char* argv[])
 	}
 	printf("Usage :\n %s <server> <port>\n\n", argv[0]);
 	printf("Sending Requests to Server http://%s:%s ........\n\n", server, port);
-	//sprintf(endpoint, "http://%s:%s/axis/base", server, port);
-	sprintf(endpoint, "http://%s:%s/axis/services/echo", server, port);
+	sprintf(endpoint, "http://%s:%s/axis/base", server, port);
 	InteropTestPortType ws(endpoint);
 
 	printf("invoking echoString...\n");
