@@ -133,5 +133,10 @@ fi
 echo "running the tests"
 sh runAllTests.sh
 
-
-
+#Only if there is a file called mailto in the current folder, do the step.
+#If you need to mail results create a file called mailto in the current
+#folder. This file has no meaning except this purpose
+if test -f mailto; then
+cd testcases/build
+cat runTestCase.log | mutt -s "Please ignore: this is a test" -a "buildTestCase.log" -x damitha@opensource.lk
+fi
