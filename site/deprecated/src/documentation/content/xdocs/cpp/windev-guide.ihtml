@@ -27,11 +27,11 @@ line</a><br>
 
 <p><a name="buildaxis"></a></p>
 
-<h1>Building and Deploying Axis C++</a></h1>
+<h1>Building and Deploying Axis C++</h1>
 
 <p><a name="cvscheckout"></a></p>
 
-<h2>Getting a cvs checkout</a></h2>
+<h2>Getting a cvs checkout</h2>
 
 <p>Visit http://ws.apache.org/ click on “axis” and then on “CVS Repository”
 to find details on accessing the CVS Repository. It will have instructions
@@ -82,17 +82,17 @@ Download the Xerces-C ( 32 bit binary release)from:
 http://xml.apache.org/xerces-c/download.cgi<br>
 <br>
 <b>Apache web server</b><br>
-Download the Apache web server from www.apache.org. Currently Axis
-supports apache 1.3.x Web server and not versions 2.0 or above. This
-documentation was tested with Apache1.3.28 and it is recommended that you
-download this version.</p>
+Download the Apache web server from www.apache.org. Currently Axis supports
+apache 1.3.x and 2.X. This documentation was tested with Apache 1.3.28 and
+Apache 2.0.44.</p>
 
 <p><a name="installapachexerces"></a></p>
 
 <h2>Installing Apache and extracting Xerces-C</h2>
 
-<p>Install Apache1.3.28.By default Apache is installed in C:\Program
-Files\Apache Group\Apache. This location will be referred as [APACHE_HOME]
+<p>Install the Apache web server. By default Apache 1.3.X is installed in
+"C:\Program Files\Apache Group\Apache" and Apache 2.X in "C:\Program
+Files\Apache Group\Apache2". This location will be referred as [APACHE_HOME]
 from this point onwards.</p>
 
 <p><br>
@@ -106,34 +106,50 @@ referred to as [XERCES_EXTRACT] from this point onwards. <br>
 
 <h2>Setting up the build environment</h2>
 
-<p>1)copy the contents inside the "[XERCES_EXTRACT] \include\xercesc “ <br>
+<p>1)copy the contents inside the "[XERCES_EXTRACT] \include\xercesc" <br>
 to [CHECKOUT_HOME]\c\include\xercesc<br>
-2) Copy the content of the [APACHE_HOME] \ include directory to
-[CHECKOUT_HOME] \c\include\apache1_3\<br>
-3) Copy the lib files from “[XERCES_EXTRACT] \lib” to
-“[CHECKOUT_HOME]\c\lib\win32\xercesc”<br>
-4) Copy the lib files from the “[APACHE_HOME] \libexec” to
-“[CHECKOUT_HOME]\c\lib\win32\apache1_3”<br>
-5) In Visual C++ (The version used for this documentation was Visual C++
-6.0)open the file Axis.dsw which is in [CHECKOUT_HOME]\ws-axis \c\ vc. In the
-workspace window “File View”, right click on the project Apache1_3 and click
-on the “Set as Active Project” to make it the Active Project.<br>
-6) Again in Visual C++ right click on the project Apache1_3 in the workspace
-window “File View” and then click on “Settings…” on the popup menu. Select
-the “link” tab. Select “General” from the Category drop down list. In the
-“Output file name” text box put the value
-“[APACHE_HOME]\modules\mod_axis.dll” and click “OK”.</p>
+2) Copy the include files.</p>
+
+<p><b>For apache 1.3.X:</b></p>
+
+<p>Copy the include files in "[APACHE_HOME]\include" directory to</p>
+
+<p>"[CHECKOUT_HOME] \c\include\apache1_3\"</p>
+
+<p><b>For apache 2.X:</b></p>
+
+<p>Copy the include files in "[APACHE_HOME]\include" directory to
+"[CHECKOUT_HOME] \c\include\apache2_0\"<br>
+3) Copy the lib files from "[XERCES_EXTRACT] \lib" to
+"[CHECKOUT_HOME]\c\lib\win32\xercesc"<br>
+4) Copy the lib files.</p>
+
+<p><b>For apache 1.3.X:</b> copy the ApacheCore.lib file from [APACHE_HOME]
+\libexec to [CHECKOUT_HOME]\c\lib\win32\apache1_3.</p>
+
+<p><b>For apache 2.X:</b> copy libapr.lib, libhttpd.lib files from
+"[APACHE_HOME]\lib" to "[CHECKOUT_HOME]\c\lib\win32\apache2_0".<br>
+5) In Visual C++ (The version used for this documentation was Visual C++ 6.0)
+open the file Axis.dsw which is in "[CHECKOUT_HOME]\ws-axis \c\ vc". In the
+workspace window File View, right click on either the project "Apache1_3" or
+"Apache2_0" and click on the "Set as Active Project" to make it the Active
+Project.<br>
+6) Again in Visual C++ right click on either the project "Apache1_3" or
+"Apache2_0" in the workspace window File View and then click on Settings on
+the popup menu. Select the link tab. Select General from the Category drop
+down list. In the Output file name text box put the value
+[APACHE_HOME]\modules\mod_axis.dll and click OK.</p>
 
 <p><img border="0" src="images/c/mod_axis.jpg" width="577" height="372"></p>
 
-<p>7) In Visual C++ Go to “Build -&gt; Rebuild All “ to build mod_axis.dll<br>
+<p>7) In Visual C++ Go to "Build -&gt; Rebuild All"“ to build mod_axis.dll<br>
 &nbsp;</p>
 
 <p><a name="deployaxis"></a></p>
 
 <h2>Deploying Axis in Apache</h2>
 
-<p>1) Create a directory structure called “Axis” inside [APACHE_HOME] as
+<p>1) Create a directory structure called "Axis" inside [APACHE_HOME] as
 follows<br>
 <br>
 Axis<br>
@@ -148,7 +164,7 @@ NOTE: If you copy xerces dll files to [APACHE_HOME]\Axis\libs from a version
 other than the one you used to build the Axis source with, you may have
 trouble starting up the Apache web server.<br>
 <br>
-2) Set the “PATH” environment variable to the following directories.<br>
+2) Set the "PATH" environment variable to the following directories.<br>
 [APACHE_HOME]<br>
 [APACHE_HOME]\Axis\libs<br>
 <br>
@@ -161,7 +177,7 @@ SetHandler axis<br>
 &lt;/Location&gt;<br>
 <br>
 <br>
-4)create a file in [APACHE_HOME]\Axis named “axiscpp.conf “ which should
+4)create a file in [APACHE_HOME]\Axis named "axiscpp.conf" which should
 contain the following lines.<br>
 <br>
 AXISLOGPATH:XXXX<br>
@@ -171,8 +187,8 @@ Where XXXX will be the path to a file named AxisLog (The log file)and YYYY
 will be the path to the server.wsdd file.<br>
 <br>
 i.e.<br>
-AXISLOGPATH: [APACHE_HOME]\Axis\logs\AxisLog // <br>
-WSDDFILEPATH: [APACHE_HOME]\Axis\conf\server.wsdd // <br>
+AXISLOGPATH: [APACHE_HOME]\Axis\logs\AxisLog <br>
+WSDDFILEPATH: [APACHE_HOME]\Axis\conf\server.wsdd <br>
 <br>
 5)Set an environment variable named AXIS_HOME and give [APACHE_HOME]\Axis as
 the value.<br>
@@ -186,7 +202,7 @@ Open up a DOS terminal and give the command "apache -k start" to start
 apache<br>
 (IT IS IMPORTANT TO START APACHE THIS WAY.)<br>
 <br>
-(NOTE:If a 126 error occurs check whether the “path” variable has been set
+(NOTE:If a 126 error occurs check whether the "path" variable has been set
 correctly as mentioned <br>
 before and whether the correct versions of the xerces dlls have been copied
 as instructed before)<br>
@@ -196,6 +212,7 @@ the machines ip as http://xxx.xxx.xxx.xxx/). If apache is running you will
 see the Apache start page in the browser.&nbsp;</p>
 
 <p><a name="deploywebservice"></a></p>
+
 <h1>Deploying a web service in Axis C++</h1>
 
 <p><a name="generatefiles"></a></p>
@@ -206,7 +223,7 @@ see the Apache start page in the browser.&nbsp;</p>
 
 <h3>Using eclipse to build and run WSDL2Ws</h3>
 
-<p>In the checked out source code there is a tool “wsdl2ws” (i.e. wsdl-to-web
+<p>In the checked out source code there is a tool "wsdl2ws" (i.e. wsdl-to-web
 services) written in java that generates server side Skeletons/wrappers and
 client side stubs using a given WSDL file. This Section describes how this is
 done.<br>
@@ -218,14 +235,14 @@ below 1.4.0.<br>
 1)Start the eclipse platform IDE.<br>
 Go to File-&gt;New-&gt;Project.<br>
 <br>
-Select java in the “New Project” dialog and click “Next”.<br>
+Select java in the "New Project" dialog and click "Next".<br>
 <br>
-In the “New” dialog that appears give a project Name (e.g. test). In the “New
-dialog” keep the “use default” Tick Box checked.<br>
-Note down the path in the “Directory” Text Box. This location will be
-referred to as [SKELSTUB_HOME] from this point onwards. Click “Next”.<br>
+In the "New" dialog that appears give a project Name (e.g. test). In the "New
+dialog" keep the "use default" Tick Box checked.<br>
+Note down the path in the "Directory" Text Box. This location will be
+referred to as [SKELSTUB_HOME] from this point onwards. Click "Next".<br>
 <br>
-Another dialog named “New” will appear. Select the “Source” tab. Select the
+Another dialog named "New” will appear. Select the “Source” tab. Select the
 project that you created (i.e. test).<br>
 Click on “Add Folder…”. In the “Source Folder Selection” dialog that appears
 select the project that you created (i.e. test) and click “Create New
@@ -287,7 +304,7 @@ WSDL2Ws is as follows.<br>
 Java org.apache.axis.wsdl.wsdl2ws.WSDL2Ws &lt;wsdl file&gt; -o&lt;output
 directory&gt; <br>
 -l&lt;c|c++&gt; -s&lt;(server|client)&gt;.<br>
-Also note that there cannot be any spaces after a switch (i.e. –o, -l).<br>
+Also note that there cannot be any spaces after a switch (i.e. -o, -l).<br>
 <br>
 Click “Run”.<br>
 Now the Skeletons/Wrappers will be generated and you will see messages in the
@@ -354,9 +371,10 @@ The generated client stubs will be in [SKELSTUB_HOME]\ClientOut<br>
 &nbsp;</p>
 
 <p><a name="builddeployws"></a></p>
+
 <h2>Building and Deploying the web service</h2>
-<p>
-1) Start Visual C++.<br>
+
+<p>1) Start Visual C++.<br>
 2) Go to File-&gt;Open and open the workspace file “Axis.dsw” in
 [CHECKOUT_HOME]\ \c\vc.<br>
 3) Go to Project-&gt;Add To Project-&gt;New…<br>
@@ -374,7 +392,8 @@ Project” dialog select the generated .cpp and .h files in
 10) Right click on the project (i.e. ws1)again and click on “Settings…” on
 the menu that appears. Click the C/C++ tab and select “Preprocessor” from the
 “Category” Drop down list.<br>
-In the “Additional include directories” give “../../include”<br></p>
+In the “Additional include directories” give “../../include”<br>
+</p>
 <img border="0" src="images/c/new_config_include.jpg" width="577"
 height="372">
 
@@ -397,7 +416,7 @@ now.<br>
 <br>
 14) The ws1.dll will be build in [CHECKOUT_HOME]\c\vc\ws1\Debug by Visual
 C++<br>
-15) Place the built ws1.dll file in [APACHE_HOME] \ Axis \webservices<br>
+15) Place the built ws1.dll file in [APACHE_HOME]\Axis \webservices<br>
 16) In addition to this you have to create sever.wsdd file in
 [APACHE_HOME]\Axis\conf<br>
 <br>
@@ -415,9 +434,9 @@ value="[APACHE_HOME]\Axis\webservices\ws1.dll"/&gt;
 <br>
 
 
-<p>In this file [APACHE_HOME] should
-be replaced with the actual value of [APACHE_HOME] (i.e. For this case
-C:\Program Files\Apache Group\Apache )<br>
+<p>In this file [APACHE_HOME] should be replaced with the actual value of
+[APACHE_HOME] (i.e. For this case "C:\Program Files\Apache Group\Apache" for
+apache 1.3.x and "C:\Program Files\Apache Group\Apache2" for apache 2.x)<br>
 <br>
 Description of the server.wsdd file<br>
 <br>
@@ -434,8 +453,8 @@ value, the methods exposed by the web service (i.e. subtract and add).<br>
 <b>Note: A trailing space should be put after every allowed method.</b><br>
 &lt;parameter name="allowedMethods" value="subtract add "/&gt;<br>
 <br>
-17) Now start the apache web server by typing “apache –k start”. If it is
-running type “apache –k restart”<br>
+17) Now start the apache web server by typing “apache -k start”. If it is
+running type “apache -k restart”<br>
 <br>
 18) Now type http://localhost/axis/ in a browser and you will see the
 “Welcome to Axis C++” page with a listing of deployed services (In this case
@@ -449,24 +468,17 @@ the Calculator service only).<br>
 <p><a name="runclient"></a></p>
 
 <h2>Coding and Running the client</h2>
-<p>
-1) Start Visual C++. 2) Go to File-&gt;Open and open the workspace file
+
+<p>1) Start Visual C++. 2) Go to File-&gt;Open and open the workspace file
 “Axis.dsw” in [CHECKOUT_HOME]\ \c\vc.<br>
-
-3) Go to Project-&gt;Add To
-Project-&gt;New…<br>
-
+3) Go to Project-&gt;Add To Project-&gt;New…<br>
 4) Select the “Projects” tab<br>
-
 5) Select “Win 32 Console Application”<br>
-
-6) Give a project
-name (e.g. calclient) and click “OK”.
-</p>
+6) Give a project name (e.g. calclient) and click “OK”. </p>
 
 <p><img src="images/c/new_config_clientEXE.jpg"></p>
-<p>
-7) In the dialog that appears select “An empty project” click “Finish” and
+
+<p>7) In the dialog that appears select “An empty project” click “Finish” and
 then “OK”.<br>
 <br>
 8) When this procedure is followed the calclient project files are created in
@@ -484,8 +496,7 @@ In the “Additional include directories” give “../../include”<br>
 <p><img border="0" src="images/c/new_config_client_include.jpg" width="577"
 height="372"></p>
 
-<p>
-11) Click the “Link” tab and select “Input” from the “Category” Drop down
+<p>11) Click the “Link” tab and select “Input” from the “Category” Drop down
 list. <br>
 Remove the contents of the “Object/library modules” and add the following
 libs to it.<br>
@@ -517,11 +528,12 @@ int result = cal.add(22, 33);
 printf("The result is : %d", result);
 }</pre>
 <br>
-<p>
-Right click on the project and click “Build” on the menu that appears.<br>
+
+
+<p>Right click on the project and click “Build” on the menu that appears.<br>
 If Visual C++ complains about missing libs go to Build-&gt;Rebuild All (Do
 make sure that the apache server is stopped). Now the client exe is built.<br>
-Start the apache by typing apache –k start and run the exe from Visual C++ by
+Start the apache by typing apache -k start and run the exe from Visual C++ by
 going to Build-&gt;Execute calclient.exe. Now you will see the SOAP Request,
 SOAP Response and the result printed by the main method that we coded.</p>
 </body>
