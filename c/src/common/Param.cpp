@@ -83,31 +83,30 @@ Param::Param(const Param& param)
 {
 	m_sName = param.m_sName.c_str();
 	m_sValue = param.m_sValue.c_str();
-	m_Type = param.m_Type;	
-	if (m_Type == USER_TYPE) 
+	m_Type = param.m_Type;
+	switch(m_Type)
 	{
-		m_Value.pCplxObj = new ComplexObjectHandler();
-		m_Value.pCplxObj->m_TypeName = param.m_Value.pCplxObj->m_TypeName.c_str();
-		m_Value.pCplxObj->m_URI = param.m_Value.pCplxObj->m_URI.c_str();
-	}
-	else if(m_Type == XSD_ARRAY)
-	{
-		m_Value.pArray = new ArrayBean();
-		m_Value.pArray->m_TypeName = param.m_Value.pArray->m_TypeName.c_str();
-		m_Value.pArray->m_URI = param.m_Value.pArray->m_URI.c_str();
-		m_Value.pArray->m_type = param.m_Value.pArray->m_type;
-		m_Value.pArray->m_size = param.m_Value.pArray->m_size;
-		m_Value.pArray->m_ItemName = param.m_Value.pArray->m_ItemName.c_str();
-		//copy constructor is not intended to use to copy the array in
-		//union v
-	}
-    else if (m_Type == XSD_DURATION || m_Type == XSD_DATETIME)
-	{
-        m_uAxisTime.setType(m_Type);
-	}	
-	else 
-	{
-		m_Value = param.m_Value;
+	case USER_TYPE: 
+		{
+			m_Value.pCplxObj = new ComplexObjectHandler();
+			m_Value.pCplxObj->m_TypeName = param.m_Value.pCplxObj->m_TypeName.c_str();
+			m_Value.pCplxObj->m_URI = param.m_Value.pCplxObj->m_URI.c_str();
+		}
+		break;
+	case XSD_ARRAY:
+		{
+			m_Value.pArray = new ArrayBean();
+			m_Value.pArray->m_TypeName = param.m_Value.pArray->m_TypeName.c_str();
+			m_Value.pArray->m_URI = param.m_Value.pArray->m_URI.c_str();
+			m_Value.pArray->m_type = param.m_Value.pArray->m_type;
+			m_Value.pArray->m_size = param.m_Value.pArray->m_size;
+			m_Value.pArray->m_ItemName = param.m_Value.pArray->m_ItemName.c_str();
+			//copy constructor is not intended to use to copy the array in
+			//union v
+		}
+		break;
+	default: 
+			m_Value = param.m_Value;
 	}
 }
 
@@ -137,12 +136,15 @@ Param::Param(const AxisChar* str, XSDTYPE type)
 
 Param::Param(time_t time)
 {
-    m_uAxisTime = AxisTime(time);
+    //m_uAxisTime = AxisTime(time);
 }
 
-Param::Param(struct tm timeStruct)
+Param::Param(struct tm tValue)
 {
-    m_uAxisTime = AxisTime(timeStruct);
+	m_sName = "DateTime";
+	m_Value.tValue = tValue;
+	m_Type = XSD_DATETIME;
+    //m_uAxisTime = AxisTime(timeStruct);
 }
 
 Param::Param(int nValue)
@@ -352,7 +354,7 @@ struct tm Param::GetDateTime()
 	{
 		//exception
 	}
-	return m_uAxisTime.getDateTime();
+	return m_Value.tValue;
 }
 
 struct tm Param::GetDate()
@@ -371,7 +373,7 @@ struct tm Param::GetDate()
 	{
 		//exception
 	}
-	return m_uAxisTime.getDate();
+	return m_Value.tValue;
 }
 
 struct tm Param::GetTime()
@@ -390,7 +392,7 @@ struct tm Param::GetTime()
 	{
 		//exception
 	}
-	return m_uAxisTime.getTime();
+	return m_Value.tValue;
 }
 
 long Param::GetDuration()
@@ -409,7 +411,7 @@ long Param::GetDuration()
 	{
 		//exception
 	}
-	return m_uAxisTime.getDuration();
+	return m_Value.lDuration;
 }
 
 unsigned int Param::GetUnsignedInt()
@@ -620,53 +622,53 @@ int Param::serialize(IWrapperSoapSerializer& pSZ)
 	switch (m_Type){
 	case XSD_INT:
 	case XSD_BOOLEAN:
-        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.nValue, m_Type);
+        pSZ << pSZ.SerializeBasicType(m_sName.c_str(), m_Value.nValue, m_Type);
 		break; 
     case XSD_UNSIGNEDINT:
-        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.unValue, m_Type);
+        pSZ << pSZ.SerializeBasicType(m_sName.c_str(), m_Value.unValue, m_Type);
 		break;           
     case XSD_SHORT:
-        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.sValue, m_Type);
+        pSZ << pSZ.SerializeBasicType(m_sName.c_str(), m_Value.sValue, m_Type);
 		break; 
     case XSD_UNSIGNEDSHORT:
-        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.usValue, m_Type);
+        pSZ << pSZ.SerializeBasicType(m_sName.c_str(), m_Value.usValue, m_Type);
 		break;         
     case XSD_BYTE:
-        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.cValue, m_Type);
+        pSZ << pSZ.SerializeBasicType(m_sName.c_str(), m_Value.cValue, m_Type);
 		break; 
     case XSD_UNSIGNEDBYTE:
-        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.ucValue, m_Type);
+        pSZ << pSZ.SerializeBasicType(m_sName.c_str(), m_Value.ucValue, m_Type);
 		break;
     case XSD_LONG:
     case XSD_INTEGER:
-        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.lValue, m_Type);
+        pSZ << pSZ.SerializeBasicType(m_sName.c_str(), m_Value.lValue, m_Type);
 		break;        
     case XSD_UNSIGNEDLONG:
-        pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.ulValue, m_Type);
+        pSZ << pSZ.SerializeBasicType(m_sName.c_str(), m_Value.ulValue, m_Type);
 		break;
 	case XSD_FLOAT:
-		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.fValue, m_Type);
+		pSZ << pSZ.SerializeBasicType(m_sName.c_str(), m_Value.fValue, m_Type);
 		break;
     case XSD_DOUBLE:
     case XSD_DECIMAL:
-		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_Value.dValue, m_Type);
+		pSZ << pSZ.SerializeBasicType(m_sName.c_str(), m_Value.dValue, m_Type);
 		break;              
 	case XSD_STRING:
-		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_sValue.c_str(), m_Type);
+		pSZ << pSZ.SerializeBasicType(m_sName.c_str(), m_sValue.c_str(), m_Type);
 		break;
 	case XSD_HEXBINARY:
-		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_sValue.c_str(), XSD_HEXBINARY);
+		pSZ << pSZ.SerializeBasicType(m_sName.c_str(), m_sValue.c_str(), m_Type);
 		break;
 	case XSD_BASE64BINARY:
-		pSZ << m_BTSZ.serialize(m_sName.c_str(), m_sValue.c_str(), XSD_BASE64BINARY);
+		pSZ << pSZ.SerializeBasicType(m_sName.c_str(), m_sValue.c_str(), m_Type);
 		break;
 	case XSD_DURATION:
-        pSZ << m_uAxisTime.serialize(m_sName, m_Value.lDuration).c_str();
+        pSZ << pSZ.SerializeBasicType(m_sName.c_str(), m_Value.lDuration, m_Type);
         break;
     case XSD_DATETIME:
     case XSD_DATE:
     case XSD_TIME:
-            pSZ << m_uAxisTime.serialize(m_sName, m_Value.tValue).c_str();            
+            pSZ << pSZ.SerializeBasicType(m_sName.c_str(), m_Value.tValue, m_Type);
         break;        
 	case XSD_ARRAY:
 		//pSZ << "<abc:ArrayOfPhoneNumbers xmlns:abc="http://example.org/2001/06/numbers"
@@ -699,7 +701,7 @@ int Param::serialize(IWrapperSoapSerializer& pSZ)
 		else //basic type array
 		{
 			pSZ << "xsd:";
-			pSZ << m_BTSZ.BasicTypeStr(m_Value.pArray->m_type);
+			pSZ << BasicTypeSerializer::BasicTypeStr(m_Value.pArray->m_type);
 		}
 		{
 			char Buf[10]; //maximum array dimension is 99999999
@@ -779,13 +781,15 @@ int Param::SetValue(const AxisChar* sValue)
 	case XSD_NOTATION:			
 		m_sValue = sValue;
 		break;
-    case XSD_DURATION:
     case XSD_DATETIME:
     case XSD_DATE:
     case XSD_TIME:
-		m_uAxisTime.setValue(sValue);
+		m_Value.tValue = AxisTime::Deserialize(sValue, m_Type);
 		break;        
-	//Continue this for all basic types
+    case XSD_DURATION:
+		m_Value.lDuration = AxisTime::DeserializeDuration(sValue, m_Type);
+		break;
+		//Continue this for all basic types
 	case XSD_ARRAY:
 	case USER_TYPE:
 		//this is an error situation - probably something wrong with the soap
@@ -845,7 +849,7 @@ int Param::SetValue(XSDTYPE nType, uParamValue Value)
     case XSD_DATE:
     case XSD_TIME:
         m_Value.tValue = Value.tValue;
-        m_uAxisTime.setValue(nType, m_Value);
+    //    m_uAxisTime.setValue(nType, m_Value);
 	//Continue this for all basic types
 	case XSD_ARRAY:
 		m_Value.pArray = Value.pArray;
