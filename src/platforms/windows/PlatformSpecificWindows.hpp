@@ -27,13 +27,15 @@
 // =============================================================
 #ifdef _DEBUG
   #define PLATFORM_XMLPARSER_PATH      "AxisXMLParser_D.dll"
-  #define PLATFORM_TRANSPORTHTTP_PATH  "AxisTransport_D.dll"
+  #define PLATFORM_TRANSPORTHTTP_PATH  "HTTPTransport_D.dll"
+  #define PLATFORM_CHANNEL_PATH		   "HTTPChannel_D.dll"
+  #define PLATFORM_SSLCHANNEL_PATH	   "HTTPSSLChannel_D.dll"
 #else
   #define PLATFORM_XMLPARSER_PATH      "AxisXMLParser.dll"
-  #define PLATFORM_TRANSPORTHTTP_PATH  "AxisTransport.dll"
+  #define PLATFORM_TRANSPORTHTTP_PATH  "HTTPTransport.dll"
+  #define PLATFORM_CHANNEL_PATH		   "HTTPChannel.dll"
+  #define PLATFORM_SSLCHANNEL_PATH	   "HTTPSSLChannel.dll"
 #endif
-#define PLATFORM_CHANNEL_PATH		   "????"
-#define PLATFORM_SSLCHANNEL_PATH	   "????"
 
 #define PLATFORM_LOG_PATH            ""
 #define PLATFORM_CLIENTLOG_PATH      ""
