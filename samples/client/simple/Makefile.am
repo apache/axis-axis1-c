@@ -1,6 +1,6 @@
-bin_PROGRAMS = mathops
+bin_PROGRAMS = calculator
 SUBDIRS =
 AM_CPPFLAGS = $(CPPFLAGS)
-mathops_SOURCES = MathOps.cpp MathOpsClient.cpp
-mathops_LDADD   =  $(LDFLAGS)
+calculator_SOURCES = Calculator.cpp CalcClient.cpp
+calculator_LDADD   =  $(LDFLAGS)
 INCLUDES = -I$(AXISCPP_HOME)/include
