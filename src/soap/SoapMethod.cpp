@@ -66,7 +66,6 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "SoapMethod.h"
-#include "SoapSerializer.h"
 #include "Attribute.h"
 #include "../common/GDefine.h"
 
@@ -111,9 +110,12 @@ void SoapMethod::addInputParam(Param *param)
 	m_inputParams.push_back(param);
 }
 
-void SoapMethod::setOutputParam(Param &param)
+void SoapMethod::setOutputParam(Param *param)
 {
-	*m_pOutputParam = param;
+	if (param)
+	{
+		*m_pOutputParam = *param;
+	}
 }
 
 /*
@@ -215,11 +217,7 @@ int SoapMethod::serialize(string& sSerialized)
 
 int SoapMethod::serializeOutputParam(SoapSerializer& pSZ)
 {	
-	//serialization sould come here
-	//return m_pOutputParam->serialize(pSZ);
-
-	pSZ<<"serialization of output param";
-	return SUCCESS;
+	return m_pOutputParam->serialize(pSZ);
 }
 
 /*

@@ -65,9 +65,9 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+#include "SoapEnvelope.h"
 #include "SoapSerializer.h"
 #include "../common/GDefine.h"
-#include <iostream>
 
 extern "C" int sendSoapResponse(char *cSerializedStream);
 
@@ -130,7 +130,7 @@ int SoapSerializer::setSoapMethod(SoapMethod *pSoapMethod)
 	return intStatus;
 }
 
-int SoapSerializer::setResponseParam(Param &param)
+int SoapSerializer::setResponseParam(Param *param)
 {
 	int intStatus= FAIL;
 
@@ -205,23 +205,19 @@ int SoapSerializer::setSoapVersion(SOAP_VERSION eSOAP_VERSION)
 	return SUCCESS;
 }
 
-string SoapSerializer::getNewNamespacePrefix()
+const char* SoapSerializer::getNewNamespacePrefix()
 {
 	iCounter++;
-	
-	char cCounter[64];
-	sprintf(cCounter, "%d", iCounter);
-	
-	return string("ns")+ cCounter;
+	sprintf(cCounter, "ns%d", iCounter);
+	return cCounter;
 }
 
-SoapSerializer& SoapSerializer::operator <<(const char *cSerialized)
+ISoapSerializer& SoapSerializer::operator <<(const char *cSerialized)
 {
 	int iTmpSerBufferSize= strlen(cSerialized);
 	if((m_iCurrentSerBufferSize+iTmpSerBufferSize)>1023) {
 		flushSerializedBuffer();		
 	}
-	cout<<cSerialized;
 	strcat(m_cSerializedBuffer, cSerialized);
 	//cout<<m_cSerializedBuffer<<"END@@";
 

@@ -72,13 +72,20 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "SoapEnvelope.h"
 #include "../common/ISoapSerializer.h"
+#include "SoapEnvVersions.h"
+
+class SoapEnvelope;
+class SoapHeader;
+class SoapMethod;
+class SoapBody;
+class SoapFault;
 
 class SoapSerializer : public ISoapSerializer							  
 {
 private:
 	static int iCounter;
+	char cCounter[64];
 	SoapEnvelope* m_pSoapEnvelope;	
 	int m_iSoapVersion;
 	char m_cSerializedBuffer[1024];
@@ -86,8 +93,8 @@ private:
 public:
 	ISoapMethod* createSoapMethod();	
 	int flushSerializedBuffer();
-	SoapSerializer& operator<<(const char *cSerialized);
-	static string getNewNamespacePrefix();
+	ISoapSerializer& operator<<(const char *cSerialized);
+	const char* getNewNamespacePrefix();
 	int setSoapVersion(SOAP_VERSION);
 	void init();
 	int getStream();
@@ -98,7 +105,7 @@ public:
 	int setSoapEnvelope(SoapEnvelope* pSoapEnvelope);
 	SoapSerializer();
 	virtual ~SoapSerializer();
-	int setResponseParam(Param& param);
+	int setResponseParam(Param* param);
 };
 
 #endif // !defined(AFX_SOAPSERIALIZER_H__C37229AD_BD54_430D_9619_E4574CF95334__INCLUDED_)

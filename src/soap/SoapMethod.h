@@ -74,6 +74,7 @@
 
 #include "../common/Param.h"
 #include "../common/ISoapMethod.h"
+#include "SoapSerializer.h"
 #include <list>
 
 class Attribute;
@@ -123,7 +124,7 @@ public:
 	string& getMethodName();	
 	int serialize(SoapSerializer& pSZ);
 	//int serialize(string&);
-	void setOutputParam(Param &param);
+	void setOutputParam(Param *param);
 	void addInputParam(Param* param);
 	void setUri(const string &uri);
 	void setLocalName(const string &localname);
