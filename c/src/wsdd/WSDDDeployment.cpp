@@ -58,6 +58,7 @@
  *
  *
  * @author Sanjaya Singharage
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
 
@@ -68,6 +69,7 @@
 #include "WSDDDeployment.h"
 #include "WSDDDocument.h"
 #include "../common/GDefine.h"
+#include "../common/AxisConfig.h"
 
 extern unsigned char chEBuf[1024];
 //////////////////////////////////////////////////////////////////////
@@ -147,9 +149,153 @@ int WSDDDeployment::LoadWSDD(const AxisChar* sWSDD)
 	return SUCCESS;
 }
 
-int WSDDDeployment::UpdateWSDD(const AxisChar* sWSDDNew)
+int WSDDDeployment::UpdateWSDD(const AxisChar* sWSDDNew, string sServiceName, string sDllPath, Axis_ArrayTag inAllowedMethodsArray)
 {
-	//TODO
+	printf("entered again to UpdateWSDD \n");
+	printf("sServiceName = %s \n", sServiceName.c_str());
+	printf("sDllPath = %s \n", sDllPath.c_str());	
+
+	const AxisChar* pAchServiceName;
+	const AxisChar* pAchLibName;
+	list<AxisString> lstAllowedMethods;
+
+	WSDDServiceMap::iterator itCurrService;
+
+	FILE* file;
+	int iStatus = SUCCESS;
+
+	do {
+		file = fopen("C:/Axis/conf/server.wsdd", "w");
+		if(file) {
+			printf("opened the file successfully\n");
+		} else {
+			printf("FAILED: couldn't open the file successfully\n\n");
+			iStatus = FAIL;
+			break;
+		}
+
+		int iWriteResult = 0;
+		
+		iWriteResult = fputs("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", file);
+		if (iWriteResult<0) {
+			printf("writing to the file is UNSUCCESSFULL\n");
+			iStatus = FAIL;
+			break;
+		} else {
+			printf("writing to the file is SUCCESSFULL\n");
+		}
+
+		iWriteResult = fputs("<deployment xmlns=\"http://xml.apache.org/axis/wsdd/\" xmlns:java=\"http://xml.apache.org/axis/wsdd/providers/java\">\n", file);
+		if (iWriteResult<0) {
+			printf("writing to the file is UNSUCCESSFULL\n");
+			iStatus = FAIL;
+			break;
+		} else {
+			printf("writing to the file is SUCCESSFULL\n");
+		}
+
+		if(m_DeployedServices)
+		{
+			for(itCurrService=m_DeployedServices->begin()
+					;itCurrService!=m_DeployedServices->end();itCurrService++)
+			{
+				const WSDDService* pWSDDService = (*itCurrService).second;
+				AxisChar achTmpChar[1000] = {0};
+				pAchServiceName = pWSDDService->GetServiceName();
+				pAchLibName = pWSDDService->GetLibName();
+				lstAllowedMethods = pWSDDService->getAllowedMethods();				
+								
+				printf("pAchServiceName = %s\n", pAchServiceName);
+				printf("pAchLibName = %s\n", pAchLibName);
+				
+				strcat(achTmpChar, " <service name=\"");
+				strcat(achTmpChar, pAchServiceName);
+				strcat(achTmpChar, "\" provider=\"java:RPC\">\n");
+				strcat(achTmpChar, "  <parameter name=\"className\" value=\"");
+				strcat(achTmpChar, pAchLibName);
+				strcat(achTmpChar, "\"/>\n");
+				strcat(achTmpChar, "  <parameter name=\"allowedMethods\" value=\"");	
+				
+				list<AxisString>::iterator iteAllowedMethods = lstAllowedMethods.begin();
+				while (iteAllowedMethods != lstAllowedMethods.end()) {	
+					
+					printf("sAllowedMethod = %s\n", (*iteAllowedMethods).c_str());					
+					const AxisChar* tmpChar = (*iteAllowedMethods).c_str();
+					strcat(achTmpChar, tmpChar);
+					if(iteAllowedMethods != lstAllowedMethods.end()) {
+						strcat(achTmpChar, " ");
+					}
+										
+					iteAllowedMethods++;
+				}
+
+				strcat(achTmpChar, "\"/>\n </service>\n");
+
+				iWriteResult = fputs(achTmpChar, file);
+				if (iWriteResult<0) {
+					printf("writing to the file is UNSUCCESSFULL\n");
+					iStatus = FAIL;
+					break;
+				} else {
+					printf("writing to the file is SUCCESSFULL\n");
+				}				
+			}
+		}
+
+		/*
+		 *New web service details which is to deploy
+		 */
+		AxisChar achTmpChar[1000] = {0};
+		strcat(achTmpChar, " <service name=\"");
+		strcat(achTmpChar, sServiceName.c_str());
+		strcat(achTmpChar, "\" provider=\"java:RPC\">\n");
+		strcat(achTmpChar, "  <parameter name=\"className\" value=\"");
+		strcat(achTmpChar, sDllPath.c_str());
+		strcat(achTmpChar, "\"/>\n");
+		strcat(achTmpChar, "  <parameter name=\"allowedMethods\" value=\"");
+
+		string* sAllowedMethods = (string*)inAllowedMethodsArray.m_Array;
+		for (int i=0; i<inAllowedMethodsArray.m_Size; i++ ) {
+			printf("Allowed method = %s\n", (sAllowedMethods[i]).c_str());
+			strcat(achTmpChar, (sAllowedMethods[i]).c_str());
+			if(i != ((inAllowedMethodsArray.m_Size)-1)) {
+				strcat(achTmpChar, " ");
+			}
+			i++;
+		}
+
+		strcat(achTmpChar, "\"/>\n </service>\n");
+
+		iWriteResult = fputs(achTmpChar, file);
+		if (iWriteResult<0) {
+			printf("writing to the file is UNSUCCESSFULL\n");
+			iStatus = FAIL;
+			break;
+		} else {
+			printf("writing to the file is SUCCESSFULL\n");
+		}		
+		
+		/*
+		 *--------------------------------------------
+		 */
+
+		
+		iWriteResult = fputs("</deployment>", file);
+		if (iWriteResult<0) {
+			printf("writing to the file is UNSUCCESSFULL\n");
+			iStatus = FAIL;
+			break;
+		} else {
+			printf("writing to the file is SUCCESSFULL\n");
+		}
+		
+		
+	} while (0);
+
+	fclose(file);
+
+	LoadWSDD("C:/Axis/conf/server.wsdd");
+
 	return SUCCESS;
 }
 
