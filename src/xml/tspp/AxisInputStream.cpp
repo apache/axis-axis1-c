@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
  
- #include "AxisInputStream.hpp"
+#include "AxisInputStream.hpp"
 
 AxisInputStream::AxisInputStream(AxisIOStream* pInputStream)
 {

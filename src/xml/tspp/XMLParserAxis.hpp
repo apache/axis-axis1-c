@@ -29,7 +29,7 @@
 // #include <axis/server/Packet.hpp>
 // #include "../QName.h"
 // #include "../Event.h"
- #include "XMLParser.h"
+#include "../XMLParser.h"
 // #include "../AxisParseException.h"
 
 #include "XmlPullParser.hpp"

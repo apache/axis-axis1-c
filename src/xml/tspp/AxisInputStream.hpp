@@ -18,7 +18,7 @@
 #define AXISINPUTSTREAM_HPP
 
 #include "InputStream.hpp"
-#include "SOAPTransport.h"
+#include "../../transport/SOAPTransport.h"
 
 AXIS_CPP_NAMESPACE_USE
 /**
