@@ -432,12 +432,12 @@ int Call::Initialize()
 	}
 	catch (ChannelException e)
 	{
-		printf(e.GetErr().c_str());
+		/*printf(e.GetErr().c_str());*/
 		return FAIL;
 	}
 	catch (...)
 	{
-		printf("Unknown exception occured in the client");
+		/*printf("Unknown exception occured in the client");*/
 		return FAIL;
 	}
 }
