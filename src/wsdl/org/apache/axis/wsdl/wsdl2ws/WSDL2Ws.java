@@ -32,11 +32,12 @@ import javax.xml.rpc.holders.IntHolder;
 
 import org.apache.axis.wsdl.gen.Parser;
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
+import org.apache.axis.wsdl.symbolTable.CElementDecl;
 import org.apache.axis.wsdl.symbolTable.CollectionType;
 import org.apache.axis.wsdl.symbolTable.Element;
 import org.apache.axis.wsdl.symbolTable.ElementDecl;
 import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
-import org.apache.axis.wsdl.symbolTable.SchemaUtils;
+import org.apache.axis.wsdl.symbolTable.CSchemaUtils;
 import org.apache.axis.wsdl.symbolTable.ServiceEntry;
 import org.apache.axis.wsdl.symbolTable.SymTabEntry;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
@@ -581,7 +582,7 @@ public class WSDL2Ws {
 		Vector restrictdata = null;
 		if(type.isSimpleType()){
 			//check for extended types
-			TypeEntry base = SchemaUtils.getComplexElementExtensionBase(type.getNode(),symbolTable);
+			TypeEntry base = CSchemaUtils.getComplexElementExtensionBase(type.getNode(),symbolTable);
 			if (base != null){
 				String localpart = type.getQName().getLocalPart()+ "_value";
 				QName typeName = new QName(type.getQName().getNamespaceURI(),localpart);
@@ -598,7 +599,7 @@ public class WSDL2Ws {
 			}
 			// There can be attributes in this extended basic type
 			// Process the attributes
-			Vector attributes = SchemaUtils.getContainedAttributeTypes(
+			Vector attributes = CSchemaUtils.getContainedAttributeTypes(
 				type.getNode(), symbolTable);
 			if (attributes != null) {
 				for (int j=0; j<attributes.size(); j+=2) {
@@ -614,13 +615,13 @@ public class WSDL2Ws {
 		}else{
 			//is this a SOAPEnc array type	
 			QName arrayType =
-				SchemaUtils.getArrayComponentQName(node, new IntHolder(0),symbolTable);
+				CSchemaUtils.getArrayComponentQName(node, new IntHolder(0),symbolTable);
 			if (arrayType != null) {
 				typedata.setTypeNameForElementName(new ElementInfo(new QName("item"),
 						createTypeInfo(arrayType,targetLanguage)));
 				typedata.setArray(true);
 			} else if (
-				(arrayType = SchemaUtils.getCollectionComponentQName(node))
+				(arrayType = CSchemaUtils.getCollectionComponentQName(node))
 					!= null) {
 				typedata.setTypeNameForElementName(new ElementInfo(new QName("item"),
 						createTypeInfo(arrayType,targetLanguage)));
@@ -631,11 +632,11 @@ public class WSDL2Ws {
 				// get all extended types
 				Vector extendList = new Vector();
 				extendList.add(type);
-				TypeEntry parent = SchemaUtils.getComplexElementExtensionBase(
+				TypeEntry parent = CSchemaUtils.getComplexElementExtensionBase(
 														type.getNode(),symbolTable);
 				while(parent != null) {
 					extendList.add(parent);
-					parent = SchemaUtils.getComplexElementExtensionBase(
+					parent = CSchemaUtils.getComplexElementExtensionBase(
 												parent.getNode(),symbolTable);
 				}
 		
@@ -658,7 +659,7 @@ public class WSDL2Ws {
 					//}
 					
 					// Process the attributes
-					Vector attributes = SchemaUtils.getContainedAttributeTypes(
+					Vector attributes = CSchemaUtils.getContainedAttributeTypes(
 						te.getNode(), symbolTable);
 					if (attributes != null) {
 						for (int j=0; j<attributes.size(); j+=2) {
@@ -668,12 +669,12 @@ public class WSDL2Ws {
 						}
 					}
 					// Process the elements
-					Vector elements = SchemaUtils.getContainedElementDeclarations(
+					Vector elements = CSchemaUtils.getContainedElementDeclarations(
 											te.getNode(), symbolTable);
 					if (elements != null) {
 						for (int j=0; j<elements.size(); j++) {
 							ElementInfo eleinfo = null;
-							ElementDecl elem = (ElementDecl)elements.get(j);
+							CElementDecl elem = (CElementDecl)elements.get(j);
 							if (elem.getAnyElement()){
 							
 								Type anyType = new Type(CUtils.anyTypeQname, CUtils.anyTypeQname.getLocalPart(), true, targetLanguage);
@@ -695,7 +696,7 @@ public class WSDL2Ws {
 									eleinfo = new ElementInfo(elem.getName(),createTypeInfo(typeName,targetLanguage));								
 								}
 							}
-							eleinfo.setMinOccurs(elem.getMinOccrs());
+							eleinfo.setMinOccurs(elem.getMinOccurs());
 							eleinfo.setMaxOccurs(elem.getMaxOccurs());
 							typedata.setTypeNameForElementName(eleinfo);
 						}			
@@ -816,7 +817,7 @@ public class WSDL2Ws {
 		catch(NoSuchMethodError noSuchMethodError)
             {
             	// catch the no such method error that occurs when they have put this class after axis java 1.2
-            	if(noSuchMethodError.getMessage().indexOf("org.apache.axis.wsdl.symbolTable.ElementDecl.getMinOccrs")>-1)
+            	if(noSuchMethodError.getMessage().indexOf("org.apache.axis.wsdl.symbolTable.CElementDecl.getMinOccrs")>-1)
             	{
             		System.out.println("We have caught the following error - "+noSuchMethodError);
 					System.out.println("");
