@@ -131,7 +131,7 @@
 
 #line 1 "cpp.y"
 
-   #include "actions.h"
+   #include <axis/wcg/actions.h>
    #include <iostream>
 
    extern int yyerror(char *);

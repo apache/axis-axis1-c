@@ -65,10 +65,10 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "SoapFault.h"
-#include "SoapSerializer.h"
-#include "SoapEnvVersions.h"
-#include "../common/GDefine.h"
+#include <axis/soap/SoapFault.h>
+#include <axis/soap/SoapSerializer.h>
+#include <axis/soap/SoapEnvVersions.h>
+#include <axis/common/GDefine.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

@@ -66,7 +66,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include <stdio.h>
-#include "BasicTypeSerializer.h"
+#include <axis/common/BasicTypeSerializer.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -169,6 +169,12 @@ const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, const Axis
 	m_Type = type;
 	HelpSerialize(sName, sValue);
 	return m_sSZ.c_str();
+}
+
+const AxisChar* BasicTypeSerializer::serialize(const AxisChar* sName, tm datetime, XSDTYPE type)
+{
+	m_Type = type;
+	return ""; //TODO: Damitha could you please look in to this.
 }
 
 void BasicTypeSerializer::HelpSerialize(const AxisChar* sName, const AxisChar* sValue)

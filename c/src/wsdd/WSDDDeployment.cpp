@@ -66,10 +66,10 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "WSDDDeployment.h"
-#include "WSDDDocument.h"
-#include "../common/GDefine.h"
-#include "../common/AxisConfig.h"
+#include <axis/wsdd/WSDDDeployment.h>
+#include <axis/wsdd/WSDDDocument.h>
+#include <axis/common/GDefine.h>
+#include <axis/common/AxisConfig.h>
 
 extern unsigned char chEBuf[1024];
 //////////////////////////////////////////////////////////////////////

@@ -66,7 +66,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <malloc.h>
-#include "../common/Packet.h"
+#include <axis/common/Packet.h>
 
 extern int process_request(Ax_soapstream *str);
 

@@ -65,8 +65,8 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "WSDDService.h"
-#include "../common/AxisTrace.h"
+#include <axis/wsdd/WSDDService.h>
+#include <axis/common/AxisTrace.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -76,6 +76,7 @@ WSDDService::WSDDService()
 {
 	m_RequestHandlers = NULL;
 	m_ResponseHandlers = NULL;
+	m_Provider = UNKNOWN_PROVIDER;
 }
 
 WSDDService::~WSDDService()
@@ -105,7 +106,35 @@ void WSDDService::SetServiceName(const AxisChar* sServiceName)
 
 void WSDDService::SetProvider(const AxisChar* sProvider)
 {
-	m_sProvider = sProvider;
+	if (0 == strcmp(sProvider, "C:RPC"))
+	{
+		m_Provider = C_RPC_PROVIDER;
+	}
+	else if (0 == strcmp(sProvider, "CPP:RPC"))
+	{
+		m_Provider = CPP_RPC_PROVIDER;
+	}
+	else if (0 == strcmp(sProvider, "C:DOCUMENT"))
+	{
+		m_Provider = C_DOC_PROVIDER;
+	}
+	else if (0 == strcmp(sProvider, "CPP:DOCUMENT"))
+	{
+		m_Provider = CPP_DOC_PROVIDER;
+	}
+	else if (0 == strcmp(sProvider, "COM"))
+	{
+		m_Provider = COM_PROVIDER;
+	}
+	else
+	{
+		m_Provider = UNKNOWN_PROVIDER;
+	}
+}
+
+PROVIDERTYPE WSDDService::GetProvider()
+{
+	return m_Provider;
 }
 
 const AxisChar* WSDDService::GetServiceName() const

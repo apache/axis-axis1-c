@@ -65,16 +65,15 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "HandlerPool.h"
-#include "AppScopeHandlerPool.h"
-#include "RequestScopeHandlerPool.h"
-#include "SessionScopeHandlerPool.h"
-#include "../wsdd/WSDDDeployment.h"
-#include "../common/AxisTrace.h"
+#include <axis/engine/HandlerPool.h>
+#include <axis/engine/AppScopeHandlerPool.h>
+#include <axis/engine/RequestScopeHandlerPool.h>
+#include <axis/engine/SessionScopeHandlerPool.h>
+#include <axis/wsdd/WSDDDeployment.h>
+#include <axis/common/AxisTrace.h>
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-//#include "../common/AxisTrace.h"
 
 extern AppScopeHandlerPool* g_pAppScopeHandlerPool;
 extern RequestScopeHandlerPool* g_pRequestScopeHandlerPool;

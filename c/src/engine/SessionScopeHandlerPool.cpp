@@ -65,9 +65,9 @@
 #pragma warning (disable : 4503)
 #endif
 
-#include "SessionScopeHandlerPool.h"
-#include "HandlerLoader.h"
-#include "../common/AxisTrace.h"
+#include <axis/engine/SessionScopeHandlerPool.h>
+#include <axis/engine/HandlerLoader.h>
+#include <axis/common/AxisTrace.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

@@ -63,8 +63,8 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "AxisSocketUtils.h"
-#include "GDefine.h"
+#include <axis/common/AxisSocketUtils.h>
+#include <axis/common/GDefine.h>
 #include <stdio.h>
 #ifdef WIN32
 #include <winsock.h>    /* for socket(),... */

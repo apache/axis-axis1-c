@@ -1,5 +1,5 @@
 %{
-   #include "actions.h"
+   #include <axis/wcg/actions.h>
    #include <iostream>
 
    extern int yyerror(char *);

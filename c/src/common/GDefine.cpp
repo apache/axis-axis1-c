@@ -59,5 +59,5 @@
  *
  */
 
-#include "GDefine.h"
+#include <axis/common/GDefine.h>
 
