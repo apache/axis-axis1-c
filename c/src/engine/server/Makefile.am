@@ -1,7 +1,7 @@
 lib_LTLIBRARIES = libserver_engine.la
 AM_CPPFLAGS = -Wall -DUSE_EXPAT_PARSER -DUSE_LTDL
-libserver_engine_la_SOURCES = Axis.cpp \
-                ServerAxisEngine.cpp \
+libserver_engine_la_SOURCES = ../Axis.cpp \
+		ServerAxisEngine.cpp \
 		../AxisEngine.cpp \
                 ../HandlerChain.cpp \
                 ../HandlerLoader.cpp \
