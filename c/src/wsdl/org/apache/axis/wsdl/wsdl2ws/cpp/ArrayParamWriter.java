@@ -94,7 +94,8 @@ public class ArrayParamWriter extends ParamWriter{
 			QName qname = WrapperUtils.getArrayType(type).getName(); 
 			
 			if (!CUtils.isSimpleType(qname)){
-				writer.write("#include \""+attribs[0].getTypeName()+".h\"\n\n");
+				/* This is a must for complex schemas (includes cycle)*/
+				writer.write("class "+attribs[0].getTypeName()+";\n\n");
 			}
 			else{
 				writer.write("#include <axis/server/AxisUserAPI.h>\n\n");
