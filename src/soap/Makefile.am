@@ -40,6 +40,7 @@ libsoap_la_SOURCES = Attribute.cpp \
         xsd/Time.cpp \
         xsd/XSD_QName.cpp \
         xsd/Short.cpp \
+        xsd/Byte.cpp \
         xsd/constraints/WhiteSpace.cpp \
         xsd/constraints/Pattern.cpp \
         xsd/constraints/MinLength.cpp \

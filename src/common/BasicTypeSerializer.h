@@ -47,6 +47,7 @@
 #include "../soap/xsd/Long.hpp"
 #include "../soap/xsd/Int.hpp"
 #include "../soap/xsd/Short.hpp"
+#include "../soap/xsd/Byte.hpp"
 
 using namespace std;
 

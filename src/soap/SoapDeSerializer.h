@@ -38,6 +38,7 @@
 #include "xsd/Long.hpp"
 #include "xsd/Int.hpp"
 #include "xsd/Short.hpp"
+#include "xsd/Byte.hpp"
 #include "../platforms/PlatformAutoSense.hpp"
 
 AXIS_CPP_NAMESPACE_START

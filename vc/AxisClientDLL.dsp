@@ -190,6 +190,10 @@ SOURCE=..\src\soap\xsd\Boolean.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\Byte.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\engine\client\Call.cpp
 # End Source File
 # Begin Source File
@@ -331,6 +335,10 @@ SOURCE=..\src\engine\SessionScopeHandlerPool.cpp
 # Begin Source File
 
 SOURCE=..\src\engine\SharedObject.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\Short.cpp
 # End Source File
 # Begin Source File
 
