@@ -35,17 +35,10 @@ class XercesHandler : public XERCES_CPP_NAMESPACE::DefaultHandler
 public :
     void freeElement();
     int getStatus(){return m_nStatus;};
-    /* -----------------------------------------------------------------------
-     *  Constructors
-     * -----------------------------------------------------------------------
-     */
     XercesHandler();
     ~XercesHandler();
-
-
-
-    const XML_Ch* XercesHandler::ns4Prefix(const XML_Ch* prefix);
-
+    const XML_Ch* ns4Prefix(const XML_Ch* prefix);
+    const XML_Ch* prefix4NS(const XML_Ch* pcNS);
     AnyElement* getAnyElement()
     {
         return m_pCurrElement;
