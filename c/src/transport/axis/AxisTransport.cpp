@@ -54,7 +54,7 @@
  *
  *
  *
- * @author Damitha Kumarage (damitha@opensource.lk)
+ * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  *
  */
