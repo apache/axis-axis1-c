@@ -67,7 +67,10 @@
 #define AFX_SHAREDOBJECT_H__0805D25C_2F7E_4B19_BECE_0A8BFE9F0830__INCLUDED_
 
 #include "../common/GDefine.h"
+#ifdef WIN32
+#else //Linux
 #include "pthread.h"
+#endif
 
 class SharedObject  
 {
@@ -85,5 +88,4 @@ private:
     #endif
 };
 
-static pthread_mutex_t mut = PTHREAD_MUTEX_INITIALIZER;
 #endif // !defined(AFX_SHAREDOBJECT_H__0805D25C_2F7E_4B19_BECE_0A8BFE9F0830__INCLUDED_)
