@@ -52,7 +52,9 @@ main(int argc, char *argv[])
     InteropTestPortType ws(endpoint, APTHTTP1_1);
 
     //set HTTP headers
-     ws.setTransportProperty(NULL, "lang2");
+    ws.setTransportProperty(NULL, "lang2"); // invalid - key null
+    ws.setTransportProperty("Accept-Language", " da, en-gb;q=0.8, en;q=0.7"); // valid
+    ws.setTransportProperty("Accept-Language", NULL); // invalid - value null
 
     printf("Sending Requests to end point %s \n\n", endpoint);
     printf("invoking echoString...\n");
@@ -88,6 +90,7 @@ main(int argc, char *argv[])
 
     //test removing HTTP headers
     ws.deleteTrasportProperty("Accept-Language");
+    ws.deleteTrasportProperty("Accept-Language"); // delete non existant header
 
     //now the request should not have these removed headers
     try
