@@ -32,6 +32,7 @@
 #define AXIS_SOAPTRANSPORT_H__OF_AXIS_INCLUDED_
 
 #include <axis/GDefine.hpp>
+#include <axis/ISoapAttachment.hpp>
 
 /**
  * @file SOAPTransport.h
@@ -286,8 +287,11 @@ public:
      *        to locate the corresponding attachment.
      * @return The attachment if available. Returns null if the attachment
      *         corresponding to the pcAttachmentid is not found.
-     */
-    virtual const char* getAttachment(const char* pcAttachmentid)=0;
+     */    
+	virtual ISoapAttachment* getAttachment(const char* pcAttachmentid)=0;
+
+	virtual char* getIncomingSOAPMimeHeaders()=0;
+
     /**
      * Sets the the remote endpoint for tranport to connect to. This URI
      * depends on the the transport type. 

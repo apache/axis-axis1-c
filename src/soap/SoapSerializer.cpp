@@ -244,11 +244,19 @@ int SoapSerializer::setOutputStream(SOAPTransport* pStream)
     {
     if(m_pSoapEnvelope)
     {
+		if (checkAttachmentAvailability()) {
+			serialize("\n------=MIME BOUNDARY\n", NULL);
+			serialize(pStream->getIncomingSOAPMimeHeaders(), "\n\n", NULL);
+		}
+
         serialize("<?xml version='1.0' encoding='utf-8' ?>", NULL);
         iStatus= m_pSoapEnvelope->serialize(*this, 
             (SOAP_VERSION)m_iSoapVersion);		
 		
-		serializeAttachments(*this);
+		if (checkAttachmentAvailability()) {
+			serialize("\n------=MIME BOUNDARY\n", NULL);
+			serializeAttachments(*this);
+		}
 
     }
     }
@@ -938,6 +946,8 @@ void SoapSerializer::serializeAttachments(SoapSerializer &pSZ)
     {        
         ((SoapAttachment*)((*itCurrAttach).second))->serialize(pSZ);
 
+		pSZ.serialize("\n------=MIME BOUNDARY\n", NULL);
+
         itCurrAttach++;
     }
 }
@@ -989,9 +999,19 @@ ISoapAttachment* SoapSerializer::createSoapAttachement()
 	return pSAttch;
 }
 
+bool SoapSerializer::checkAttachmentAvailability()
+{
+	map<AxisXMLString, ISoapAttachment*>::iterator itCurrAttach= m_SoapAttachments.begin();
+
+	if(itCurrAttach != m_SoapAttachments.end())
+		return true;
+	else
+		return false;
+
+}
+
 IHeaderBlock* SoapSerializer::getCurrentHeaderBlock()
 {
 	return m_pSoapEnvelope->m_pSoapHeader->getCurrentHeaderBlock();
 }
-
 AXIS_CPP_NAMESPACE_END

@@ -152,9 +152,11 @@ public: /* Basic Type Serializing methods */
     IHeaderBlock* createHeaderBlock();
     
 private:
+	bool checkAttachmentAvailability();
 	void serializeAttachments(SoapSerializer &pSZ);
     BasicTypeSerializer m_BTSZ;
     SOAPTransport* m_pOutputStream;
+
 public:
 	IHeaderBlock* getCurrentHeaderBlock();
 	ISoapAttachment* createSoapAttachement();

@@ -47,11 +47,15 @@
 #include <string.h>
 #endif
 
+#include "AttachmentHelper.h"
+#include <axis/ISoapAttachment.hpp>
+
 AXIS_CPP_NAMESPACE_USE
 
 class Apache2Transport : public SOAPTransport  
 {
 public:
+	char* getIncomingSOAPMimeHeaders();
 	Apache2Transport(void* pContext);
 	virtual ~Apache2Transport();
     int openConnection(){return AXIS_SUCCESS;};
@@ -66,7 +70,7 @@ public:
     void setTransportProperty(const char* pcKey, const char* pcValue);
     const char* getTransportProperty(const char* pcKey);
 	void setAttachment(const char* pcAttachmentid, const char* pcAttachment){};
-	const char* getAttachment(const char* pcAttachmentid){return "value";};
+	ISoapAttachment* getAttachment(const char* pcAttachmentid);
 	void setEndpointUri(const char* pcEndpointUri)
 	{m_pcEndpointUri = new char[strlen(pcEndpointUri)+1]; strcpy(m_pcEndpointUri,pcEndpointUri);};
 	void setSessionId(const char* pcSessionId);
@@ -85,10 +89,12 @@ public:
     void setTimeout(const long lSeconds) {};
 
 private:
+	AttachmentHelper* pAttachmentHelper;
 	void* m_pContext;
 #ifndef CHUNCKED_DATA_SUPPORTED
     BufferInfo* m_pBuffers;
 #endif
+	
 };
 
 #endif 

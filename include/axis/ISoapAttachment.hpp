@@ -36,7 +36,7 @@
 
 AXIS_CPP_NAMESPACE_START
 
-class ISoapAttachment  
+class STORAGE_CLASS_INFO ISoapAttachment  
 {
 public:
 

@@ -20,7 +20,7 @@
 #include "AxisUserAPI.hpp"
 #include "TypeMapping.hpp"
 #include "WSDDDefines.hpp"
-
+#include "ISoapAttachment.hpp"
 /**
     @class IWrapperSoapDeSerializer
     @brief interface for the IWrapperSoapDeSerializer class.
@@ -101,6 +101,7 @@ public:
     virtual long AXISCALL getElementAsDuration(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
 
+
     virtual int AXISCALL getAttributeAsInt(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
     virtual xsd__boolean AXISCALL getAttributeAsBoolean(const AxisChar* pName, 
@@ -158,6 +159,7 @@ public:
     virtual int getHeader()=0;    
 	virtual AnyType* AXISCALL getAnyObject()=0;            
     virtual void getChardataAs(void* pValue, XSDTYPE type)=0;
+	virtual ISoapAttachment* getAttachment(const char* pcAttachmentid)=0;
 };
 
 AXIS_CPP_NAMESPACE_END

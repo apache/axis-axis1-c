@@ -35,6 +35,8 @@ Apache2Transport::Apache2Transport(void* pContext)
     m_pBuffers = new BufferInfo[NO_OF_SERIALIZE_BUFFERS];
 	memset((void*)m_pBuffers, 0, sizeof(BufferInfo)*NO_OF_SERIALIZE_BUFFERS);
 #endif
+
+	
 }
 
 Apache2Transport::~Apache2Transport()
@@ -145,13 +147,28 @@ AXIS_TRANSPORT_STATUS Apache2Transport::flushOutput()
 
 AXIS_TRANSPORT_STATUS Apache2Transport::getBytes(char* pBuffer, int* piSize)
 {
-    int nBufSize = *piSize;
+	
+	int nBufSize = *piSize;
     int len_read;
     len_read = ap_get_client_block((request_rec*) m_pContext, pBuffer, *piSize);
+	
+ 	if (strstr(pBuffer, "Content-Id")) {
+		pAttachmentHelper = new AttachmentHelper();
+		char *pAttachBuffer = (char*)malloc(1000);
+		char *mimeBoundary = (char*)malloc(1000);		
+
+		pAttachmentHelper->extract_Attachment(pBuffer);		
+		pAttachmentHelper->extract_SOAPMimeHeaders(pBuffer);	
+		pAttachmentHelper->extract_Soap(pBuffer);
+				
+	}
+
     *piSize = len_read;
+
     if (len_read < nBufSize)
     {
         pBuffer[len_read] = '\0';
+
         return TRANSPORT_FINISHED;
     }
     else
@@ -275,4 +292,15 @@ int Apache2Transport::getSubProtocol()
         default:
             return AXIS_HTTP_UNSUPPORTED;
     }
+}
+
+ISoapAttachment*  Apache2Transport::getAttachment(const char* pcAttachmentid)
+{		
+	ISoapAttachment* pAttch = pAttachmentHelper->getAttachment(pcAttachmentid);
+	return pAttch;
+};
+
+char* Apache2Transport::getIncomingSOAPMimeHeaders()
+{
+	return pAttachmentHelper->getIncomingSOAPMimeHeaders();
 }

@@ -3846,6 +3846,7 @@ SoapDeSerializer::flushInputStream ()
 	return AXIS_FAIL;
     while (TRANSPORT_IN_PROGRESS ==
 	   m_pInputStream->getBytes (pBuffer, &nChars));
+	
     return AXIS_SUCCESS;
 }
 
@@ -4243,5 +4244,9 @@ SoapDeSerializer::DeSerializerMemBufInputStream::getBytes (char *pcBuffer,
     return TRANSPORT_IN_PROGRESS;
 }
 
+ISoapAttachment* SoapDeSerializer::getAttachment(const char* pcAttachmentid)	
+{    		
+    return m_pInputStream->getAttachment(pcAttachmentid);	 	
+}	
 
 AXIS_CPP_NAMESPACE_END

@@ -63,7 +63,7 @@ class Axis2Transport:public SOAPTransport
 	throw (AxisTransportException);
     void setAttachment (const char *pcAttachmentId, const char *pcAttachment) {};
     
-    const char *getAttachment (const char *pcAttachmentId) { return NULL;};
+    ISoapAttachment* getAttachment (const char *pcAttachmentId) { return NULL;};
     
     void setSessionId (const char *pcSessionId);
     
@@ -206,6 +206,8 @@ class Axis2Transport:public SOAPTransport
     * @param bSession - true is session should be maintained. False otherwise.
     */
     virtual void setMaintainSession(bool bSession);
+
+    char* getIncomingSOAPMimeHeaders() {return NULL;}
 
 
   protected:
