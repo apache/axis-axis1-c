@@ -68,13 +68,14 @@ the      environment variables</b></p>
 apache mirror sites<a href="http://ws.apache.org/axis/cpp/download.html">
 http://ws.apache.org/axis/cpp/download.html</a> </p>
 <p></p>
-<p>Your downloaded source distribution is <span
- style="font-weight: bold;">axis-c-src-1-1-linux.tar.gz</span>. Binary
-distribution is <span style="font-weight: bold;">axis-c-1-1-linux.tar.gz</span>.
-After you      extracting it as, <strong>/home/axisuser/projects/</strong><span
- style="font-weight: bold;">axis-c-src-1-1-linux</span> or <span
- style="font-weight: bold;">/home/axisuser/projects/</span><span
- style="font-weight: bold;">axis-c-1-1-linux</span> you can rename it as <strong>axis_c</strong></p>
+<p>Your downloaded source distribution is
+ <b>axis-c-src-1-1-linux.tar.gz</b>. 
+ <br> Binary
+   distribution is <b>axis-c-1-1-linux.tar.gz.</b>
+ <br>After you      extracting it as, <b>/home/axisuser/projects/</b>
+ <b>axis-c-src-1-1-linux</b> or 
+ <b>/home/axisuser/projects/</b>
+ <b>axis-c-1-1-linux</b> you can rename it as <b>axis_c</b></p>
 <p></p>
 <p>You have to set the environment variable $AXISCPP_HOME to the
 directory      where you extracted the tar ball.. We further assume
@@ -163,13 +164,10 @@ directory.<br>
 <br>
 <b>AXIS_HOME="/usr/local/apache/Axis"</b> <br>
 </p>
-<p>You also need to rename the following files<br>
-<span style="font-weight: bold;">mv $AXIS_HOME/axiscpp.conf_linux
-$AXIS_HOME/axiscpp.conf</span><br style="font-weight: bold;">
-<span style="font-weight: bold;">mv $AXIS_HOME/conf/server.wsdd_linux
-$AXIS_HOME/conf/server.wsdd</span><br style="font-weight: bold;">
-<span style="font-weight: bold;">mv $AXIS_HOME/conf/client.wsdd_linux
-$AXIS_HOME/conf/client.wsdd</span><br>
+<p>You also need to rename the following files
+<br><b>mv $AXIS_HOME/axiscpp.conf_linux $AXIS_HOME/axiscpp.conf</b>
+<br><b>mv $AXIS_HOME/conf/server.wsdd_linux $AXIS_HOME/conf/server.wsdd</b>
+<br><b>mv $AXIS_HOME/conf/client.wsdd_linux $AXIS_HOME/conf/client.wsdd</b>
 </p>
 <p>If you are using expat parser do the following<br>
 </p>
@@ -261,10 +259,10 @@ libaxiscpp_mod2.so)</strong></p>
 <br>
 <p><b>cd /usr/local/apache/libexec (If apache2
 /usr/local/apache2/modules)</b></p>
-<p><b>cp -f $AXIS_HOME/deploy.sh_apache &nbsp;./deploy.sh<br>
-(if apache2)<br>
-cp -f &nbsp;$AXIS_HOME/deploy.sh_apache2 &nbsp;./deploy.sh<br>
-</b></p>
+<p><b>cp -f $AXIS_HOME/deploy.sh_apache ./deploy.sh</b>
+<br>(if apache2)
+<b>cp -f $AXIS_HOME/deploy.sh_apache2 ./deploy.sh </b>
+</p>
 <p><b>sh deploy.sh</b></p>
 <p></p>
 <br>
@@ -303,6 +301,11 @@ Now set the environment variable <b>AXIS_HOME </b>pointing to this
 directory.<br>
 <br>
 <b>AXIS_HOME="/usr/local/apache/Axis"</b></p>
+<p>You also need to rename the following files
+<br><b>mv $AXIS_HOME/axiscpp.conf_linux $AXIS_HOME/axiscpp.conf</b>
+<br><b>mv $AXIS_HOME/conf/server.wsdd_linux $AXIS_HOME/conf/server.wsdd</b>
+<br><b>mv $AXIS_HOME/conf/client.wsdd_linux $AXIS_HOME/conf/client.wsdd</b>
+</p>
 <p><br>
 -----------------------------------------------------------------------</p>
 <p><b>NOTE:&nbsp;</b> Binary distribution is built to work with expat
@@ -327,9 +330,9 @@ libaxiscpp_mod2.so)</strong></p>
 <br>
 <p><b>cd /usr/local/apache/libexec (If apache2
 /usr/local/apache2/modules)</b></p>
-<p><b>cp -f $AXIS_HOME/deploy.sh_apache &nbsp;./deploy.sh<br>
-</b><b>(if apache2)<br>
-cp -f &nbsp;$AXIS_HOME/deploy.sh_apache2 &nbsp;./deploy.sh</b><br>
+<p><b>cp -f $AXIS_HOME/deploy.sh_apache &nbsp;./deploy.sh</b>
+<br><b>(if apache2)
+<br>cp -f $AXIS_HOME/deploy.sh_apache2 ./deploy.sh</b>
 </p>
 <p><b>sh deploy.sh</b></p>
 <br>
