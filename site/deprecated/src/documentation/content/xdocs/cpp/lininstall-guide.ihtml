@@ -21,7 +21,7 @@ font-weight: bold}</style>
   <li><a href="#Introducti">Introduction</a></li>
   <li><a href="#What">What You Need</a></li>
   <li><a href="#Installati">Installing On Linux</a></li>
-  <li><a href="#Installing">Installing Xercesc</a></li>
+  <li><a href="#Installing">Installing expat</a></li>
   <li><a href="#Installing1">Installing Apache</a></li>
   <li><a href="#Installing2">Installing AxisC++</a></li>
   <li><a href="#Validating">Validating The Installation</a></li>
@@ -45,7 +45,7 @@ install Axis C++ on Linux and Windows</p>
 <p>It needs a few helper libraries, for logging, WSDL processing and
 introspection. You need to have following in order to run Axis C++ engine.</p>
 <ul>
-  <li>XercesC</li>
+  <li>expat parser</li>
   <li>Apache</li>
 </ul>
 
@@ -57,7 +57,7 @@ introspection. You need to have following in order to run Axis C++ engine.</p>
 <ul>
   <li>Redhat Linux 8.0(2.4.18-14) RedhatLinux9.0(2.4.20-8), Mandrake8.0(2.4.8-26)</li>
   <li>Apache 1.3 [apache_1.3.27.tar .gz, apache_1.3.28.tar.gz)] (Source), Apache2.0 (source)</li>
-  <li>Xerces C++ [xerces-c-src2_2_0.tar.gz](Source) &gt;(Source)</li>
+  <li>expat [expat-1.95.7.tar.gz](Source) &gt;(Source)</li>
 </ul>
 
 <p></p>
@@ -83,16 +83,14 @@ installation and has the linux user account axisuser. For example I have my
 
 <p>/home/axisuser/projects</p>
 <p><a name="Installing"></a></p>
-<h1>Installing Xercesc</h1>
+<h1>Installing expat</h1>
 
-<p>You can get the Binary Version and the Source Version of xercesc2_2_0 from
-the uri <a href="http://www.xerces.org/">www.xerces.org</a></p>
+<p>You can get expat from
+the uri <a href="http://sourceforge.net/projects/expat/">http://sourceforge.net/projects/expat/</a></p>
 
 <p></p>
 
-<p>If it is source you need to follow the xerces_c Installation guide
-documentation.(warning: This must be strictly followed. Otherwise if you type
-usual configure,make, make install, it may not work.)</p>
+<p>You have to follow the expat installation guide to install it </p>
 
 <p></p>
 <p><a name="Installing1"></a></p>
@@ -161,14 +159,14 @@ apache_1.3.27.tar.gz). Build it with sharable module support.</p>
 
 <p class="command"><span class="command"></span></p>
 
-<p>Copy xerces_c include files</p>
+<p>Copy expat.h include file</p>
 
-<p><strong>$ cp -f &lt;xercesinstdirectory&gt;/include/xercesc/*
-$AXISCPP_HOME /include/xercesc/</strong></p>
+<p><strong>$ cp -f &lt;expat  instdirectory&gt;/include/expat.h/*
+$AXISCPP_HOME /include/expat/</strong></p>
 
-<p>Copy the xercesc libraries</p>
+<p>Copy the expat libraries</p>
 
-<p><strong>$ cp -f &lt;xercesinstdirectory&gt;/lib/* /usr/lib/</strong></p>
+<p><strong>$ cp -f &lt;expatinstdirectory&gt;/lib/* /usr/lib/</strong></p>
 
 <p class="command"><span class="command"></span></p>
 
@@ -233,8 +231,7 @@ SUBDIRS = apache2
 </p>
 
 <p>Now libaxiscpp_mod.so (If you built for apache2 this is libaxiscpp_mod2.so) should have been created in $AXISCPP_HOME/bin directory. Note:- you can give the install path inside the runconfigure
-script.There will be link errors if you don't use correct version of
-xerces-c.</p>
+script.</p>
 
 <p></p>
 
