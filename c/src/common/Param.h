@@ -114,6 +114,7 @@ private:
 	AxisString m_strUri; //needed in serialization only
 
 public: //Conversion functions
+	const AxisString & GetTypeName();
 	int SetValue(const AxisChar* sValue);
 	int SetValue(XSDTYPE nType, uParamValue Value);
 	XSDTYPE GetType() const;	
