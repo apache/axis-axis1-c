@@ -162,22 +162,22 @@ IHeaderBlock* SoapDeSerializer::GetHeaderBlock(const AxisChar* pName, const Axis
 	return NULL;
 }
 											   
-ISoapHeader* SoapDeSerializer::GetHeader()
+int SoapDeSerializer::GetHeader()
 {
-	if (m_pHeader) return m_pHeader;
+	if (m_pHeader) return m_nStatus;
 	m_pNode = m_pParser->Next();
 	if (!m_pNode) {
 		m_nStatus = AXIS_FAIL;
-		return NULL;
+		return m_nStatus;
 	}
 	if ((START_ELEMENT != m_pNode->m_type) && (0 == strcmp(m_pNode->m_pchNameOrValue, SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_HEADER])))
 	{
 		m_pHeader = new SoapHeader();
 		/* Set any attributes/namspaces to the SoapHeader object */
 		m_pNode = NULL; /*This is to indicate that node is identified and used */
-		return m_pHeader;
+		return m_nStatus;
 	}
-	return NULL;
+	return m_nStatus;
 }
 
 int SoapDeSerializer::GetBody()
@@ -696,6 +696,7 @@ void* SoapDeSerializer::GetCmplxObject(void* pDZFunct, void* pCreFunct, void* pD
 			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <result>*/
 		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
 		{
+			m_pNode = NULL;
 			void* pObject = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)(NULL, false, 0);
 			if (pObject)
 			{
