@@ -73,47 +73,67 @@
 #include "TypeMapping.h"
 #include "ISoapSerializer.h"
 
+#endif
+
+typedef struct {
+	int (AXISCALL* createSoapMethod)(void* pObj, const AxisChar* sLocalName, const AxisChar* sPrefix, const AxisChar* sURI);
+	const AxisChar* (AXISCALL* getNewNamespacePrefix)(void* pObj);
+	/* for basic types */
+	int (AXISCALL* AddOutputParam)(void* pObj, const AxisChar* pchName, void* pValue, XSDTYPE type);
+	/* for arrays */
+	int (AXISCALL* AddOutputCmplxArrayParam)(void* pObj, const AxisChar* pchName, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI);
+	int (AXISCALL* AddOutputBasicArrayParam)(void* pObj, const AxisChar* pchName, const Axis_Array* pArray, XSDTYPE nType);
+	/* for complex types */
+	int (AXISCALL* AddOutputCmplxParam)(void* pObj, const AxisChar* pchName, void* pObject, void* pDZFunct, void* pDelFunct);
+	/* Methods used to serialize arrays */
+	int (AXISCALL* SerializeCmplxArray)(void* pObj, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI, const AxisChar* pchArrayName);
+	int (AXISCALL* SerializeBasicArray)(void* pObj, const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pchArrayName);
+	/* Basic Type Serializing methods */
+	int (AXISCALL* SerializeBasicType)(void* pObj, const AxisChar* sName, void* pValue, XSDTYPE type);
+	void (AXISCALL* Serialize)(void* pObj, const char* pFirst, ...);
+}IWrapperSoapSerializerBaseFunctions;
+
+#ifndef __cplusplus
+
+typedef struct { 
+	void* unused; /* this corresponds to C++ virtual function pointer which is ignored in C */ 
+	IWrapperSoapSerializerBaseFunctions* __vfptr;
+} IWrapperSoapSerializerBase;
+
+#else
+
 class IWrapperSoapSerializerBase : public ISoapSerializer
 {
+protected:
+	void* __vfptr;
 public:
 	virtual ~IWrapperSoapSerializerBase(){};
-
-#else
-
-typedef struct IWrapperSoapSerializerTag
-{
-	void* __vfptr;
-} IWrapperSoapSerializer;
-
-typedef struct IWrapperSoapSerializerXTag
-{
-	AXISDESTRUCTOR
-
-#endif
-	
-	virtual int AXISAPI(createSoapMethod,(APIHASPARAMS const AxisChar* sLocalName, const AxisChar* sPrefix, const AxisChar* sURI))
-	virtual const AxisChar* AXISAPI(getNewNamespacePrefix,(APINOPARAMS))
+	virtual int AXISCALL createSoapMethod(const AxisChar* sLocalName, const AxisChar* sPrefix, const AxisChar* sURI)=0;
+	virtual const AxisChar* AXISCALL getNewNamespacePrefix()=0;
 	/* for basic types */
-	virtual int AXISAPI(AddOutputParam,(APIHASPARAMS const AxisChar* pchName, void* pValue, XSDTYPE type))
+	virtual int AXISCALL AddOutputParam(const AxisChar* pchName, void* pValue, XSDTYPE type)=0;
 	/* for arrays */
-	virtual int AXISAPI(AddOutputCmplxArrayParam,(APIHASPARAMS const AxisChar* pchName, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI))
-	virtual int AXISAPI(AddOutputBasicArrayParam,(APIHASPARAMS const AxisChar* pchName, const Axis_Array* pArray, XSDTYPE nType))
+	virtual int AXISCALL AddOutputCmplxArrayParam(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
+	virtual int AXISCALL AddOutputBasicArrayParam(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName)=0;
 	/* for complex types */
-	virtual int AXISAPI(AddOutputCmplxParam,(APIHASPARAMS const AxisChar* pchName, void* pObject, void* pDZFunct, void* pDelFunct))
+	virtual int AXISCALL AddOutputCmplxParam(void* pObject, void* pDZFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
 	/* Methods used to serialize arrays */
-	virtual int AXISAPI(SerializeCmplxArray,(APIHASPARAMS const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI, const AxisChar* pchArrayName))
-	virtual int AXISAPI(SerializeBasicArray,(APIHASPARAMS const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pchArrayName))
+	virtual int AXISCALL SerializeCmplxArray(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
+	virtual int AXISCALL SerializeBasicArray(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName)=0;
 	/* Basic Type Serializing methods */
-	virtual int AXISAPI(SerializeBasicType,(APIHASPARAMS const AxisChar* sName, void* pValue, XSDTYPE type))
-	virtual void AXISAPI(Serialize, (APIHASPARAMS const char* pFirst, ...))
-
-#ifdef __cplusplus
+	virtual int AXISCALL SerializeBasicType(const AxisChar* sName, void* pValue, XSDTYPE type)=0;
+	virtual void AXISCALL Serialize(const char* pFirst, ...)=0;
+	/* following stuff is needed to provide the interface for C web services */
+public:
+	static IWrapperSoapSerializerBaseFunctions ms_VFtable;
+	static int AXISCALL s_createSoapMethod(void* pObj, const AxisChar* sLocalName, const AxisChar* sPrefix, const AxisChar* sURI)
+	{ return ((IWrapperSoapSerializerBase*)pObj)->createSoapMethod(sLocalName, sPrefix, sURI);};
+	static void s_Initialize()
+	{
+		ms_VFtable.createSoapMethod = s_createSoapMethod;
+	}
 };
-#else
-} IWrapperSoapSerializerX;
-#endif
 
-#ifdef __cplusplus
 class IWrapperSoapSerializer : public IWrapperSoapSerializerBase
 {
 public:

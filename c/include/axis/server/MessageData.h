@@ -92,9 +92,11 @@ public:
 public:
 	string& getProperty(string& sName);
 	int setProperty(string& sName, string& sValue);
+	void SetOperationName(const AxisChar* pchOperation){m_sOperationName = pchOperation;};
 	void getSoapDeSerializer(IHandlerSoapDeSerializer** pIHandlerSoapDeSerializer);
-	void AXISCALL getSoapSerializer(IWrapperSoapSerializer** pIWSS);
-	void AXISCALL getSoapDeSerializer(IWrapperSoapDeSerializer** pIWSDS);
+	const AxisChar* AXISCALL GetOperationName(){return m_sOperationName.c_str();};
+	void AXISCALL GetSoapSerializer(IWrapperSoapSerializer** pIWSS);
+	void AXISCALL GetSoapDeSerializer(IWrapperSoapDeSerializer** pIWSDS);
 	void getSoapSerializer(IHandlerSoapSerializer** pIHandlerSoapSerializer);
 	IWrapperSoapDeSerializer* getSoapDeserializer();
 	int setPastPivotState(bool bState);
@@ -109,6 +111,7 @@ public:
 	
 protected:
   string m_sUserName;
+  string m_sOperationName;
   const WSDDService* m_Service;
 
 private:

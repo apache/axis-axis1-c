@@ -2,6 +2,8 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+#include <axis/soap/SoapBody.h>
+#include <axis/soap/SoapMethod.h>
 #include <axis/engine/ServerAxisEngine.h>
 #include <stdio.h>
 #include <axis/common/AxisException.h>
@@ -30,7 +32,7 @@ ServerAxisEngine::~ServerAxisEngine()
 int ServerAxisEngine::Process(Ax_soapstream* stream) 
 {
 	int Status = 0;
-//	AXIS_TRY
+	/*AXIS_TRY*/
 		AXISTRACE1("ServerAxisEngine::Process");
 		const WSDDService* pService = NULL;
 		string sSessionId = stream->sessionid;
@@ -42,7 +44,7 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 			return AXIS_FAIL;
 
 		do {
-			//populate MessageData with transport information
+			/* populate MessageData with transport information */
 			m_pMsgData->m_Protocol = stream->trtype;
     
 			if (AXIS_SUCCESS != m_pDZ->SetInputStream(stream))
@@ -61,7 +63,6 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 				break; //do .. while(0)
 			}
 			AxisString service = (cService == NULL)? "" : cService;
-			//AxisUtils::convert(service, (cService == NULL)? "" : cService);
 		  
 			AXISTRACE2("string service = ",service.c_str());
      
@@ -73,12 +74,13 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPACTIONEMPTY));
 				break; //do .. while(0)
 			}
-			if (service.find('\"') != string::npos) //if there are quotes remove them.
+			/* if there are quotes remove them. */
+			if (service.find('\"') != string::npos) 
 			{
 				service = service.substr(1, service.length() - 2);
 			}
 
-			//get service description object from the WSDD
+			/* get service description object from the WSDD Deployment object */
 			pService = g_pWSDDDeployment->GetService(service.c_str());
 			if (!pService) 
 			{
@@ -90,61 +92,77 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 			}
 
 			m_pMsgData->SetService(pService);
-			
-			//check for stream version in the request and decide whether we support it or not
-			//if we do not support send a soapfault with version mismatch.		  
-			nSoapVersion = m_pMsgData->m_pDZ->GetVersion();
-			if (nSoapVersion == VERSION_LAST) //version not supported
+
+			switch(pService->GetProvider())
+			{
+				case RPC_PROVIDER:
+					m_pSZ->SetStyle(RPC_ENCODED);
+					m_pDZ->SetStyle(RPC_ENCODED);
+					break;
+				case DOC_PROVIDER:
+					m_pSZ->SetStyle(DOC_LITERAL);
+					m_pDZ->SetStyle(DOC_LITERAL);
+					break;
+				case COM_PROVIDER: 
+					//TODO: ??
+					break;
+				default:;
+					//TODO: ??
+			}
+	
+			/* check for stream version in the request and decide whether we support it or not
+			 * if we do not support send a soapfault with version mismatch.	*/	  
+			nSoapVersion = m_pDZ->GetVersion();
+			if (nSoapVersion == VERSION_LAST) /* version not supported */
 			{
 				m_pSZ->setSoapVersion(SOAP_VER_1_2);
 				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_VERSION_MISMATCH));
 				break; //do .. while(0)		
-			}		  
-
-
-			//Set Soap version in the Serializer and the envelope
-			if (AXIS_SUCCESS != m_pSZ->setSoapVersion((SOAP_VERSION)nSoapVersion))
-			{
-			  m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
-			  break; //do .. while(0)
 			}
 
-			SoapMethod* pSm = m_pDZ->GetMethod();
-			if (pSm) 
+			/* Set Soap version in the Serializer and the envelope */
+			if (AXIS_SUCCESS != m_pSZ->setSoapVersion((SOAP_VERSION)nSoapVersion))
 			{
-				const AxisChar* pMethod = pSm->getMethodName();
-				AXISTRACE2("pSm->getMethodName(); :", pMethod);
-				if (pMethod)
+				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
+				break; //do .. while(0)
+			}
+
+			/* get the operation name from transport information Ex: from SOAPAction header */
+			AxisString sOperation = stream->transport.pGetTrtFunct(OPERATION_NAME, stream);
+			if (sOperation.empty())
+			{
+				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_NOSOAPMETHOD));
+				break; //do .. while(0)
+			}
+			/* remove any quotes in the operation name */
+			if (sOperation.rfind('\"') != string::npos) 
+			{
+				sOperation = sOperation.substr(0, sOperation.length() - 1);
+			}
+
+			m_pMsgData->SetOperationName(sOperation.c_str());
+
+			if (pService->IsAllowedMethod(sOperation.c_str()))
+			{          
+				/* load actual web service handler */
+				if (AXIS_SUCCESS != g_pHandlerPool->GetWebService(&m_pWebService, sSessionId, pService))
 				{
-					if (pService->IsAllowedMethod(pMethod))
-					{          
-						//load actual web service handler
-						if (AXIS_SUCCESS != g_pHandlerPool->GetWebService(&m_pWebService, sSessionId, pService))
-						{
-            				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADSRV));
-							//Error couldnot load web service
-							break; //do .. while(0)
-						}
-					}
-					else
-					{
-						m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_METHODNOTALLOWED));
-						//method is not an exposed allowed method
-						break; //do .. while(0)
-					}
+					/* error : couldnot load web service */
+            		m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_COULDNOTLOADSRV));
+					break; //do .. while(0)
 				}
-				else
+				/* check whether the provider type in the wsdd matchs the service's binding style */
+				if (m_pSZ->GetStyle() != m_pWebService->GetBindingStyle())
 				{
-					m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_NOSOAPMETHOD));
-					//no method to be invoked
+					m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_SOAPCONTENTERROR));
 					break; //do .. while(0)
 				}
 			}
-            else
+			else
 			{
-                m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_NOSOAPMETHOD));
-                //no method to be invoked
-                break; //do .. while(0)
+				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_METHODNOTALLOWED));
+				//method is not an exposed allowed method
+				break; //do .. while(0)
 			}
 			//Get Global and Transport Handlers
 			if(AXIS_SUCCESS != (Status = InitializeHandlers(sSessionId, stream->trtype)))
@@ -267,7 +285,7 @@ int ServerAxisEngine::Invoke(MessageData* pMsg)
 
 	/*
 	The case clauses in this switch statement have no breaks.
-	Hence, if Everything up to web service invokation was successful
+	Hence, if Everything up to web service invocation was successful
 	then all response handlers are invoked. If there was a failure
 	at some point the response handlers from that point onwards
 	are invoked.

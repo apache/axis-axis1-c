@@ -68,75 +68,99 @@
 #define AFX_SOAPDESERIALIZER_H__FD0E7C3B_B887_480A_9E2A_20736A88B09B__INCLUDED_
 
 #include <axis/common/IHandlerSoapDeSerializer.h>
+#include <axis/soap/SoapEnvVersions.h>
+
+#ifdef USE_EXPAT_PARSER
+#include "SoapParserExpat.h"
+#define SoapParser SoapParserExpat
+#elif USE_XERCES_PARSER
+#include "SoapParserXerces.h"
+#define SoapParser SoapParserXerces
+#else
 #include "SoapParser.h"
+#endif
+
+#include <axis/xml/AnyElement.h>
+
 #include <string>
 
-#define HUGE_BUFFER_SIZE 8192
-
-class SoapEnvelope;
-class SoapHeader;
+class SoapFault;
 class SoapMethod;
 class SoapBody;
-class SoapFault;
+class SoapEnvelope;
+class SoapHeader;
+class IHeaderBlock;
 
 class SoapDeSerializer : public IHandlerSoapDeSerializer
 {
 private:
+	SoapEnvelope* m_pEnv;
+	SoapHeader* m_pHeader;
     SoapParser* m_pParser;
-	const Ax_soapstream* m_pInputStream;
-	const char* m_pCurrentBuffer;
-	Param* m_pLastArrayParam;
+	/* Current Serialization Style */
+	AXIS_BINDING_STYLE m_nStyle;
+	/* Last procesed node needed when the attributes are processed */
+	const AnyElement* m_pCurrNode;
+	const AnyElement* m_pNode;
+	SOAP_VERSION m_nSoapVersion;
+	AxisChar* m_pEndptr; /* used as a parameter to strtoXX conversion functionss */
+	int m_nStatus;
+
+private:
+	int AXISCALL GetArraySize(const AnyElement* pElement);
 public:
 	int GetVersion();
-	const AxisChar* AXISCALL GetMethodName();
 	int Init();
-	IParam* AXISCALL GetParam();
-	int AXISCALL Deserialize(IParam* pIParam, int bHref);
 	SoapFault* GetFault();
-	SoapMethod* GetMethod();
-	SoapBody* GetBody();
+	int AXISCALL CheckMessageBody(const AxisChar* pName, const AxisChar* pNamespace);
+	int GetBody();
 	ISoapHeader* GetHeader();
+	IHeaderBlock* GetHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace);
 	SoapEnvelope* GetEnvelope();
 	int SetInputStream(const Ax_soapstream* pInputStream);
 	SoapDeSerializer();
 	virtual ~SoapDeSerializer();
 	/* Method used by wrappers to get a deserialized Array of complex types */
-	Axis_Array AXISCALL GetCmplxArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI);
+	Axis_Array AXISCALL GetCmplxArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace);
 	/* Method used by wrappers to get a deserialized Array of basic types */
-	Axis_Array AXISCALL GetBasicArray(XSDTYPE nType);
-	int AXISCALL GetArraySize();
-	int AXISCALL GetArray(Axis_Array* pArray, XSDTYPE nType);
+	Axis_Array AXISCALL GetBasicArray(XSDTYPE nType, const AxisChar* pName, const AxisChar* pNamespace);
 	/* Method used by wrappers to get a deserialized single object of complex type */
-	void* AXISCALL GetObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pchTypeName, const AxisChar* pchURI);
+	void* AXISCALL GetCmplxObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
 	
 	/* Methods used by wrappers to get a deserialized value of basic types */
-	int AXISCALL GetInt();
-    unsigned int AXISCALL GetUnsignedInt();
-    short AXISCALL GetShort();
-    unsigned short AXISCALL GetUnsignedShort();
-    char AXISCALL GetByte();
-    unsigned char AXISCALL GetUnsignedByte();
-    long AXISCALL GetLong();
-    long AXISCALL GetInteger();
-    unsigned long AXISCALL GetUnsignedLong();
-	float AXISCALL GetFloat();
-    double AXISCALL GetDouble();
-    double AXISCALL GetDecimal();
-	const AxisChar* AXISCALL GetString();
-    const AxisChar* AXISCALL GetAnyURI();
-    const AxisChar* AXISCALL GetQName();
-	const AxisChar* AXISCALL GetHexString();
-	const AxisChar* AXISCALL GetBase64String();
+	int AXISCALL GetElementAsInt(const AxisChar* pName, const AxisChar* pNamespace);
+    unsigned int AXISCALL GetElementAsUnsignedInt(const AxisChar* pName, const AxisChar* pNamespace);
+    short AXISCALL GetElementAsShort(const AxisChar* pName, const AxisChar* pNamespace);
+    unsigned short AXISCALL GetElementAsUnsignedShort(const AxisChar* pName, const AxisChar* pNamespace);
+    char AXISCALL GetElementAsByte(const AxisChar* pName, const AxisChar* pNamespace);
+    unsigned char AXISCALL GetElementAsUnsignedByte(const AxisChar* pName, const AxisChar* pNamespace);
+    long AXISCALL GetElementAsLong(const AxisChar* pName, const AxisChar* pNamespace);
+    long AXISCALL GetElementAsInteger(const AxisChar* pName, const AxisChar* pNamespace);
+    unsigned long AXISCALL GetElementAsUnsignedLong(const AxisChar* pName, const AxisChar* pNamespace);
+	float AXISCALL GetElementAsFloat(const AxisChar* pName, const AxisChar* pNamespace);
+    double AXISCALL GetElementAsDouble(const AxisChar* pName, const AxisChar* pNamespace);
+    double AXISCALL GetElementAsDecimal(const AxisChar* pName, const AxisChar* pNamespace);
+	AxisChar* AXISCALL GetElementAsString(const AxisChar* pName, const AxisChar* pNamespace);
+    AxisChar* AXISCALL GetElementAsAnyURI(const AxisChar* pName, const AxisChar* pNamespace);
+    AxisChar* AXISCALL GetElementAsQName(const AxisChar* pName, const AxisChar* pNamespace);
+	AxisChar* AXISCALL GetElementAsHexString(const AxisChar* pName, const AxisChar* pNamespace);
+	AxisChar* AXISCALL GetElementAsBase64String(const AxisChar* pName, const AxisChar* pNamespace);
     /*return a tm struct which contain year-month-date-hour-
       minute-second*/
-    struct tm AXISCALL GetDateTime();
-    struct tm AXISCALL GetDate();
-    struct tm AXISCALL GetTime();
+    struct tm AXISCALL GetElementAsDateTime(const AxisChar* pName, const AxisChar* pNamespace);
+    struct tm AXISCALL GetElementAsDate(const AxisChar* pName, const AxisChar* pNamespace);
+    struct tm AXISCALL GetElementAsTime(const AxisChar* pName, const AxisChar* pNamespace);
     /*return a tm struct which contain years-months-dates-hours-
       minutes-seconds which represents a duration*/
-    long AXISCALL GetDuration();
+    long AXISCALL GetElementAsDuration(const AxisChar* pName, const AxisChar* pNamespace);
+
+	int GetAttributeAsInt(const AxisChar* pName, const AxisChar* pNamespace);
+	
 	void* CreateArray(XSDTYPE nType, int nSize);
 	void DeleteArray(Axis_Array* pArray , XSDTYPE nType);
+	void SetStyle(AXIS_BINDING_STYLE nStyle){ m_nStyle = nStyle;};
+	XSDTYPE GetXSDType(const AnyElement* pElement);
+	int GetElementForAttributes(const AxisChar* pName, const AxisChar* pNamespace);
 };
 
 #endif // !defined(AFX_SOAPDESERIALIZER_H__FD0E7C3B_B887_480A_9E2A_20736A88B09B__INCLUDED_)

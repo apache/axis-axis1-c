@@ -196,9 +196,13 @@ void BasicTypeSerializer::HelpSerialize(const AxisChar* sName, const AxisChar* s
 {
 	m_sSZ = "<";
 	m_sSZ += sName;
-	m_sSZ += " xsi:type=\"xsd:";
-	m_sSZ += BasicTypeStr(m_Type);
-	m_sSZ += "\">";
+	if (RPC_ENCODED == m_nStyle)
+	{
+		m_sSZ += " xsi:type=\"xsd:";
+		m_sSZ += BasicTypeStr(m_Type);
+		m_sSZ += "\"";
+	}
+	m_sSZ += ">";
 	switch (m_Type)
 	{
 	case XSD_STRING:

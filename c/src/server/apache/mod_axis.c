@@ -137,7 +137,10 @@ static AXIS_TRANSPORT_STATUS AXISCALL get_request_bytes(const char** req, int* r
 	*req = g_buffer;
 	*retsize =  len_read;
 	if (len_read < SIZEOFMODULEBUFFER)
+	{
+		g_buffer[len_read] = '\0';
 		return TRANSPORT_FINISHED;
+	}
 	else
 		return TRANSPORT_IN_PROGRESS;
 }

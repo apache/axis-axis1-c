@@ -84,7 +84,7 @@ class HeaderBlock;
 
 class SoapSerializer : public IHandlerSoapSerializer
 {
-	typedef struct SerializeBuffersTag
+	typedef struct
 	{
 		volatile unsigned char inuse;
 		volatile char* buffer;
@@ -94,7 +94,8 @@ private:
 	AxisChar cCounter[64];
 	SoapEnvelope* m_pSoapEnvelope;	
 	int m_iSoapVersion;
-
+	/* Current Serialization Style */
+	AXIS_BINDING_STYLE m_nStyle;
 	/* Table that keeps all allocated buffers */
 	volatile SerializeBuffers* m_pSZBuffers;
 	/* Size of the initial buffer created.*/
@@ -139,13 +140,13 @@ public:
 	int AddOutputParam(const AxisChar* pchName, const AxisChar* pStrValue, XSDTYPE type);
 	int AddOutputParam(const AxisChar* pchName, const string& sStrValue, XSDTYPE type);
 	//for arrays of basic types
-	int AXISCALL AddOutputBasicArrayParam(const AxisChar* pchName, const Axis_Array* pArray, XSDTYPE nType);
+	int AXISCALL AddOutputBasicArrayParam(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName);
 	//for arrays of complex types
-	int AXISCALL AddOutputCmplxArrayParam(const AxisChar* pchName, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI);
+	int AXISCALL AddOutputCmplxArrayParam(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace);
 	//for complex types
-	int AXISCALL AddOutputCmplxParam(const AxisChar* pchName, void* pObject, void* pDZFunct, void* pDelFunct);
-	int AXISCALL SerializeCmplxArray(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI, const AxisChar* pchArrayName);
-	int AXISCALL SerializeBasicArray(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pchArrayName);
+	int AXISCALL AddOutputCmplxParam(void* pObject, void* pSZFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	int AXISCALL SerializeCmplxArray(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	int AXISCALL SerializeBasicArray(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName);
 
 private:
 	int AddOutputParamHelper(const AxisChar* pchName, XSDTYPE nType, uParamValue Value);
@@ -180,6 +181,8 @@ public:
 	int AXISCALL AddOutputParam(const AxisChar* pchName, void* pValue, XSDTYPE type);
 	int AXISCALL SerializeBasicType(const AxisChar* pchName, void* pValue, XSDTYPE type);
 	void AXISCALL Serialize(const char* pFirst, ...);
+	void SetStyle(AXIS_BINDING_STYLE nStyle){ m_nStyle = nStyle; m_BTSZ.SetStyle(nStyle);};
+	AXIS_BINDING_STYLE GetStyle(){return m_nStyle;};
 };
 
 #endif // !defined(AFX_SOAPSERIALIZER_H__C37229AD_BD54_430D_9619_E4574CF95334__INCLUDED_)

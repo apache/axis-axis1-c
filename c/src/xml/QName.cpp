@@ -82,12 +82,12 @@ QName::~QName()
 
 }
 
-void QName::SplitQNameString(const XMLCh* qname)
+void QName::SplitQNameString(const XMLCh* qname, XMLCh sep)
 {
 	XMLCh *p = const_cast<XMLCh*>(qname);
 	while (*p)
 	{
-		if (*p == NAMESPACESEPARATOR)
+		if (*p == sep)
 		{
 			*p = '\0'; //put null to separate local name from namespace
 			localname = ++p; //now p points to localpart
@@ -101,11 +101,11 @@ void QName::SplitQNameString(const XMLCh* qname)
 	uri = 0; //no uri
 }
 
-void QName::MergeQNameString()
+void QName::MergeQNameString(XMLCh sep)
 {
 	if (uri)
 	{
 		XMLCh* p = const_cast<XMLCh*>(localname);
-		*(--p) = NAMESPACESEPARATOR;
+		*(--p) = sep;
 	}
 }

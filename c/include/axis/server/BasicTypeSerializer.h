@@ -83,6 +83,8 @@ const AxisChar ENCODED_SGL_QUOTE_STR[]		= "&apos;";	// Encoded string for double
 class BasicTypeSerializer
 {
 public:
+	BasicTypeSerializer();
+	virtual ~BasicTypeSerializer();
 	const AxisString& GetEntityReferenced(const AxisString& str);
 	const AxisChar* serialize(const AxisChar* sName, const AxisChar* sValue, XSDTYPE type);
 	const AxisChar* serialize(const AxisChar* sName, float fValue, XSDTYPE type);
@@ -96,10 +98,8 @@ public:
     const AxisChar* serialize(const AxisChar* sName, long lValue, XSDTYPE type);
     const AxisChar* serialize(const AxisChar* sName, unsigned long ulValue, XSDTYPE type);
     const AxisChar* serialize(const AxisChar* sName, tm datetime, XSDTYPE type);
+	void SetStyle(AXIS_BINDING_STYLE nStyle){ m_nStyle = nStyle;};
 	static const AxisChar* BasicTypeStr(XSDTYPE type);
-
-	BasicTypeSerializer();
-	virtual ~BasicTypeSerializer();
 
 private:
 	enum
@@ -118,6 +118,8 @@ private:
 	AxisChar m_Buf[BTS_BUFFSIZE]; //used for numeric to string conversions with sprintf
 	XSDTYPE m_Type; //used to temporarily set the type of item being serialized.
 	AxisTime m_AxisTime;
+	/* Current Serialization Style */
+	AXIS_BINDING_STYLE m_nStyle;
 };
 
 #endif // !defined(AFX_BASICTYPESERIALIZER_H__7ECDFED3_F3D5_48A1_A7EF_1E30B93BDB2C__INCLUDED_)

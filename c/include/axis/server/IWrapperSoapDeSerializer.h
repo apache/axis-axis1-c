@@ -75,68 +75,104 @@
 #include "ISoapDeSerializer.h"
 #include <string>
 using namespace std;
-class IParam;
+#endif
+
+typedef struct {
+	int (AXISCALL* CheckMessageBody)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+	/* Method used by wrappers to get a deserialized Array of complex types */
+	Axis_Array (AXISCALL* GetCmplxArray)(void* pObj, void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	/* Method used by wrappers to get a deserialized Array of basic types */
+	Axis_Array (AXISCALL* GetBasicArray)(void* pObj, XSDTYPE nType, const AxisChar* pName, const AxisChar* pNamespace);
+	/* Method used by wrappers to get a deserialized single object of complex type */
+	void* (AXISCALL* GetCmplxObject)(void* pObj, void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	
+	/* Methods used by wrappers to get a deserialized value of basic types */
+	int (AXISCALL* GetElementAsInt)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+    unsigned int (AXISCALL* GetElementAsUnsignedInt)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+    short (AXISCALL* GetElementAsShort)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+    unsigned short (AXISCALL* GetElementAsUnsignedShort)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+    char (AXISCALL* GetElementAsByte)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+    unsigned char (AXISCALL* GetElementAsUnsignedByte)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+    long (AXISCALL* GetElementAsLong)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+    long (AXISCALL* GetElementAsInteger)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+    unsigned long (AXISCALL* GetElementAsUnsignedLong)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+	float (AXISCALL* GetElementAsFloat)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+    double (AXISCALL* GetElementAsDouble)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+    double (AXISCALL* GetElementAsDecimal)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+	AxisChar* (AXISCALL* GetElementAsString)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+    AxisChar* (AXISCALL* GetElementAsAnyURI)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+    AxisChar* (AXISCALL* GetElementAsQName)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+	AxisChar* (AXISCALL* GetElementAsHexString)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+	AxisChar* (AXISCALL* GetElementAsBase64String)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+    struct tm (AXISCALL* GetElementAsDateTime)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+    struct tm (AXISCALL* GetElementAsDate)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+    struct tm (AXISCALL* GetElementAsTime)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+    long (AXISCALL* GetElementAsDuration)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+} IWrapperSoapDeSerializerFunctions;
+
+#ifndef __cplusplus
+
+typedef struct { 
+	void* unused; /* this corresponds to C++ virtual function pointer which is ignored in C */ 
+	IWrapperSoapDeSerializerFunctions* __vfptr;
+} IWrapperSoapDeSerializer;
+
+#else
 
 class IWrapperSoapDeSerializer : public ISoapDeSerializer
 {
+protected:
+	void* __vfptr;
 public:
 	virtual ~IWrapperSoapDeSerializer(){};
 
-#else
-
-typedef struct IWrapperSoapDeSerializerTag
-{
-	void* __vfptr;
-} IWrapperSoapDeSerializer;
-
-typedef struct IWrapperSoapDeSerializerXTag
-{
-	AXISDESTRUCTOR
-
-#endif
-	
-	virtual const AxisChar* AXISAPI(GetMethodName,(APINOPARAMS))
-/*	virtual int AXISAPI(Deserialize,(APIHASPARAMS IParam* pIParam, int bHref));*/
+	virtual int AXISCALL CheckMessageBody(const AxisChar* pName, const AxisChar* pNamespace)=0;
 
 	/* Method used by wrappers to get a deserialized Array of complex types */
-	virtual Axis_Array AXISAPI(GetCmplxArray,(APIHASPARAMS void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI))
+	virtual Axis_Array AXISCALL GetCmplxArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
 	/* Method used by wrappers to get a deserialized Array of basic types */
-	virtual Axis_Array AXISAPI(GetBasicArray,(APIHASPARAMS XSDTYPE nType))
-	virtual int AXISAPI(GetArraySize,(APINOPARAMS))
-	virtual int AXISAPI(GetArray,(APIHASPARAMS Axis_Array* pArray, XSDTYPE nType))
+	virtual Axis_Array AXISCALL GetBasicArray(XSDTYPE nType, const AxisChar* pName, const AxisChar* pNamespace)=0;
 	/* Method used by wrappers to get a deserialized single object of complex type */
-	virtual void* AXISAPI(GetObject,(APIHASPARAMS void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pchTypeName, const AxisChar* pchURI))
+	virtual void* AXISCALL GetCmplxObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
 	
 	/* Methods used by wrappers to get a deserialized value of basic types */
-	virtual int AXISAPI(GetInt,(APINOPARAMS))
-    virtual unsigned int AXISAPI(GetUnsignedInt,(APINOPARAMS))
-    virtual short AXISAPI(GetShort,(APINOPARAMS))
-    virtual unsigned short AXISAPI(GetUnsignedShort,(APINOPARAMS))
-    virtual char AXISAPI(GetByte,(APINOPARAMS))
-    virtual unsigned char AXISAPI(GetUnsignedByte,(APINOPARAMS))
-    virtual long AXISAPI(GetLong,(APINOPARAMS))
-    virtual long AXISAPI(GetInteger,(APINOPARAMS))
-    virtual unsigned long AXISAPI(GetUnsignedLong,(APINOPARAMS))
-	virtual float AXISAPI(GetFloat,(APINOPARAMS))
-    virtual double AXISAPI(GetDouble,(APINOPARAMS))
-    virtual double AXISAPI(GetDecimal,(APINOPARAMS))
-	virtual const AxisChar* AXISAPI(GetString,(APINOPARAMS))
-    virtual const AxisChar* AXISAPI(GetAnyURI,(APINOPARAMS))
-    virtual const AxisChar* AXISAPI(GetQName,(APINOPARAMS))
-	virtual const AxisChar* AXISAPI(GetHexString,(APINOPARAMS))
-	virtual const AxisChar* AXISAPI(GetBase64String,(APINOPARAMS))
-    /*return a tm struct which contain year-month-date-hour-
-      minute-second*/
-    virtual struct tm AXISAPI(GetDateTime,(APINOPARAMS))
-    virtual struct tm AXISAPI(GetDate,(APINOPARAMS))
-    virtual struct tm AXISAPI(GetTime,(APINOPARAMS))
-    virtual long AXISAPI(GetDuration,(APINOPARAMS))
-/*	virtual IParam* AXISAPI(GetParam,(APINOPARAMS))*/
-
-#ifdef __cplusplus
+	virtual int AXISCALL GetElementAsInt(const AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual unsigned int AXISCALL GetElementAsUnsignedInt(const AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual short AXISCALL GetElementAsShort(const AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual unsigned short AXISCALL GetElementAsUnsignedShort(const AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual char AXISCALL GetElementAsByte(const AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual unsigned char AXISCALL GetElementAsUnsignedByte(const AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual long AXISCALL GetElementAsLong(const AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual long AXISCALL GetElementAsInteger(const AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual unsigned long AXISCALL GetElementAsUnsignedLong(const AxisChar* pName, const AxisChar* pNamespace)=0;
+	virtual float AXISCALL GetElementAsFloat(const AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual double AXISCALL GetElementAsDouble(const AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual double AXISCALL GetElementAsDecimal(const AxisChar* pName, const AxisChar* pNamespace)=0;
+	virtual AxisChar* AXISCALL GetElementAsString(const AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual AxisChar* AXISCALL GetElementAsAnyURI(const AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual AxisChar* AXISCALL GetElementAsQName(const AxisChar* pName, const AxisChar* pNamespace)=0;
+	virtual AxisChar* AXISCALL GetElementAsHexString(const AxisChar* pName, const AxisChar* pNamespace)=0;
+	virtual AxisChar* AXISCALL GetElementAsBase64String(const AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual struct tm AXISCALL GetElementAsDateTime(const AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual struct tm AXISCALL GetElementAsDate(const AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual struct tm AXISCALL GetElementAsTime(const AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual long AXISCALL GetElementAsDuration(const AxisChar* pName, const AxisChar* pNamespace)=0;
+	/* following stuff is needed to provide the interface for C web services */
+public:
+	static IWrapperSoapDeSerializerFunctions ms_VFtable;
+	static int AXISCALL s_GetElementAsInt(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsInt(pName, pNamespace);};
+	static unsigned int AXISCALL s_GetElementAsUnsignedInt(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsUnsignedInt(pName, pNamespace);};
+	static short AXISCALL s_GetElementAsShort(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((IWrapperSoapDeSerializer*)pObj)->GetElementAsShort(pName, pNamespace);};
+	static void s_Initialize()
+	{
+		ms_VFtable.GetElementAsInt = s_GetElementAsInt;
+		ms_VFtable.GetElementAsUnsignedInt = s_GetElementAsUnsignedInt;
+		ms_VFtable.GetElementAsShort = s_GetElementAsShort;
+	}
 };
-#else
-} IWrapperSoapDeSerializerX;
 #endif
 
 #endif /* !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_) */

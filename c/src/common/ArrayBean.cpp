@@ -83,11 +83,9 @@ ArrayBean::~ArrayBean()
 	{
 		if (m_value.cta)
 		{
-			list<int>::iterator it = m_size.begin();
-			int blocksize = GetArrayBlockSize(it);
 			if (m_value.cta->pObject)
 			{
-				m_value.cta->pDelFunct(m_value.cta->pObject, true, blocksize);
+				m_value.cta->pDelFunct(m_value.cta->pObject, true, m_nSize);
 				/* make sure that the ComplexObjectHandler's destructor does not try to delete the objects again */
 				m_value.cta->pObject = NULL;
 			}
@@ -149,8 +147,13 @@ ArrayBean::~ArrayBean()
 		case XSD_QNAME:
 		case XSD_NOTATION:			
 			{
-				string* a = (string*)m_value.sta;
-				delete [] a;
+				AxisChar** a = (AxisChar**)m_value.sta;
+				for (int ix=0;ix<m_nSize;ix++)
+				{
+					free(*a);
+					a++;
+				}
+				free(m_value.sta);
 			}
 			break;
 		case XSD_DATETIME:
@@ -173,38 +176,21 @@ ArrayBean::~ArrayBean()
 }
 
 int ArrayBean::GetArraySize()
-{
-	list<int>::iterator it = m_size.begin();	
-	return GetArrayBlockSize(it);
+{	
+	return m_nSize;
 }
-
-int ArrayBean::GetArrayBlockSize(list<int>::iterator it)
-{
-	int size = *it;
-	it++;
-	if (it != m_size.end())
-	{
-		return size*GetArrayBlockSize(it);	
-	}
-	else
-	{
-		return size;
-	}
-}
-
+/*
 int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 {
 	Param* p;
-	if ((XSD_UNKNOWN == m_type) ||(0==m_size.size())||(!m_value.sta)) return AXIS_FAIL;
+	if ((XSD_UNKNOWN == m_type) ||(0==m_nSize)||(!m_value.sta)) return AXIS_FAIL;
 	switch (m_type)
 	{
 	case XSD_BYTE:
 	case XSD_UNSIGNEDBYTE:
 		{
 			char* a = (char*)m_value.sta;
-			list<int>::iterator it = m_size.begin();
-			int blocksize = GetArrayBlockSize(it);
-			for (int ix=0;ix<blocksize;ix++)
+			for (int ix=0;ix<m_nSize;ix++)
 			{
 				p = (Param*)pDZ->GetParam();
 				if (!p) return AXIS_FAIL;
@@ -216,9 +202,7 @@ int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 	case XSD_UNSIGNEDSHORT:
 		{
 			short* a = (short*)m_value.sta;
-			list<int>::iterator it = m_size.begin();
-			int blocksize = GetArrayBlockSize(it);
-			for (int ix=0;ix<blocksize;ix++)
+			for (int ix=0;ix<m_nSize;ix++)
 			{
 				p = (Param*)pDZ->GetParam();
 				if (!p) return AXIS_FAIL;
@@ -232,9 +216,7 @@ int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 	case XSD_DURATION:		
 		{
 			long* a = (long*)m_value.sta;
-			list<int>::iterator it = m_size.begin();
-			int blocksize = GetArrayBlockSize(it);
-			for (int ix=0;ix<blocksize;ix++)
+			for (int ix=0;ix<m_nSize;ix++)
 			{
 				p = (Param*)pDZ->GetParam();
 				if (!p) return AXIS_FAIL;
@@ -246,9 +228,7 @@ int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 	case XSD_DECIMAL:
 		{
 			double* a = (double*)m_value.sta;
-			list<int>::iterator it = m_size.begin();
-			int blocksize = GetArrayBlockSize(it);
-			for (int ix=0;ix<blocksize;ix++)
+			for (int ix=0;ix<m_nSize;ix++)
 			{
 				p = (Param*)pDZ->GetParam();
 				if (!p) return AXIS_FAIL;
@@ -266,9 +246,7 @@ int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 	case XSD_MONTH:
 		{
 			tm* a = (tm*)m_value.sta;
-			list<int>::iterator it = m_size.begin();
-			int blocksize = GetArrayBlockSize(it);
-			for (int ix=0;ix<blocksize;ix++)
+			for (int ix=0;ix<m_nSize;ix++)
 			{
 				p = (Param*)pDZ->GetParam();
 				if (!p) return AXIS_FAIL;
@@ -281,9 +259,7 @@ int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 	case XSD_BOOLEAN:
 		{
 			int* a = (int*)m_value.sta;
-			list<int>::iterator it = m_size.begin();
-			int blocksize = GetArrayBlockSize(it);
-			for (int ix=0;ix<blocksize;ix++)
+			for (int ix=0;ix<m_nSize;ix++)
 			{
 				p = (Param*)pDZ->GetParam();
 				if (!p) return AXIS_FAIL;
@@ -294,9 +270,7 @@ int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 	case XSD_FLOAT:
 		{
 			float* a = (float*)m_value.sta;
-			list<int>::iterator it = m_size.begin();
-			int blocksize = GetArrayBlockSize(it);
-			for (int ix=0;ix<blocksize;ix++)
+			for (int ix=0;ix<m_nSize;ix++)
 			{
 				p = (Param*)pDZ->GetParam();
 				if (!p) return AXIS_FAIL;
@@ -312,9 +286,7 @@ int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 	case XSD_NOTATION:			
 		{
 			AxisString* a = (AxisString*)m_value.sta;
-			list<int>::iterator it = m_size.begin();
-			int blocksize = GetArrayBlockSize(it);
-			for (int ix=0;ix<blocksize;ix++)
+			for (int ix=0;ix<m_nSize;ix++)
 			{
 				p = (Param*)pDZ->GetParam();
 				if (!p) return AXIS_FAIL;
@@ -327,10 +299,8 @@ int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 		{
 			void* pItem;
 			int itemsize = m_value.cta->pSizeFunct();
-			list<int>::iterator it = m_size.begin();
-			int blocksize = GetArrayBlockSize(it);
 			unsigned long ptrval = reinterpret_cast<unsigned long>(m_value.cta->pObject);
-			for (int x=0; x<blocksize; x++)
+			for (int x=0; x<m_nSize; x++)
 			{
 				pDZ->GetParam(); //discard outer param corresponding to custom type - get only inner members
 				pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
@@ -342,7 +312,7 @@ int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
 	}
 	return AXIS_SUCCESS;
 }
-
+*/
 int ArrayBean::Serialize(SoapSerializer& pSZ)
 {	
 	switch (m_type)
@@ -351,9 +321,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
 	case XSD_UNSIGNEDBYTE:
 		{
 			char* p = (char*)m_value.sta;
-			list<int>::iterator it = m_size.begin();
-			int blocksize = GetArrayBlockSize(it);
-			for (int ix=0;ix<blocksize;ix++)
+			for (int ix=0;ix<m_nSize;ix++)
 			{
 				pSZ.Serialize(m_BTSZ.serialize(m_ItemName.c_str(), *p, m_type), NULL);
 				p++;
@@ -364,9 +332,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
 	case XSD_UNSIGNEDSHORT:
 		{
 			short* p = (short*)m_value.sta;
-			list<int>::iterator it = m_size.begin();
-			int blocksize = GetArrayBlockSize(it);
-			for (int ix=0;ix<blocksize;ix++)
+			for (int ix=0;ix<m_nSize;ix++)
 			{
 				pSZ.Serialize(m_BTSZ.serialize(m_ItemName.c_str(), *p, m_type), NULL);
 				p++;
@@ -379,9 +345,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
 	case XSD_DURATION:		
 		{
 			long* p = (long*)m_value.sta;
-			list<int>::iterator it = m_size.begin();
-			int blocksize = GetArrayBlockSize(it);
-			for (int ix=0;ix<blocksize;ix++)
+			for (int ix=0;ix<m_nSize;ix++)
 			{
 				pSZ.Serialize(m_BTSZ.serialize(m_ItemName.c_str(), *p, m_type), NULL);
 				p++;
@@ -392,9 +356,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
 	case XSD_DECIMAL:
 		{
 			double* p = (double*)m_value.sta;
-			list<int>::iterator it = m_size.begin();
-			int blocksize = GetArrayBlockSize(it);
-			for (int ix=0;ix<blocksize;ix++)
+			for (int ix=0;ix<m_nSize;ix++)
 			{
 				pSZ.Serialize(m_BTSZ.serialize(m_ItemName.c_str(), *p, m_type), NULL);
 				p++;
@@ -411,9 +373,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
 	case XSD_MONTH:
 		{
 			tm* p = (tm*)m_value.sta;
-			list<int>::iterator it = m_size.begin();
-			int blocksize = GetArrayBlockSize(it);
-			for (int ix=0;ix<blocksize;ix++)
+			for (int ix=0;ix<m_nSize;ix++)
 			{
 				pSZ.Serialize(m_BTSZ.serialize(m_ItemName.c_str(), *p, m_type), NULL);
 				p++;
@@ -425,9 +385,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
 	case XSD_BOOLEAN:
 		{
 			int* pInt = (int*)m_value.sta;
-			list<int>::iterator it = m_size.begin();
-			int blocksize = GetArrayBlockSize(it);
-			for (int ix=0;ix<blocksize;ix++)
+			for (int ix=0;ix<m_nSize;ix++)
 			{
 				pSZ.Serialize(m_BTSZ.serialize(m_ItemName.c_str(), *pInt, m_type), NULL);
 				pInt++;
@@ -437,9 +395,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
 	case XSD_FLOAT:
 		{
 			float* pFloat = (float*)m_value.sta;
-			list<int>::iterator it = m_size.begin();
-			int blocksize = GetArrayBlockSize(it);
-			for (int ix=0;ix<blocksize;ix++)
+			for (int ix=0;ix<m_nSize;ix++)
 			{
 				pSZ.Serialize(m_BTSZ.serialize(m_ItemName.c_str(), *pFloat, m_type), NULL);
 				pFloat++;
@@ -453,12 +409,10 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
 	case XSD_QNAME:
 	case XSD_NOTATION:			
 		{
-			AxisString* pStr = (AxisString*)m_value.sta;
-			list<int>::iterator it = m_size.begin();
-			int blocksize = GetArrayBlockSize(it);
-			for (int ix=0;ix<blocksize;ix++)
+			AxisChar** pStr = (AxisChar**)m_value.sta;
+			for (int ix=0;ix<m_nSize;ix++)
 			{
-				pSZ.Serialize(m_BTSZ.serialize(m_ItemName.c_str(), pStr->c_str(), m_type), NULL);
+				pSZ.Serialize(m_BTSZ.serialize(m_ItemName.c_str(), *pStr, m_type), NULL);
 				pStr++;
 			}
 		}
@@ -466,14 +420,26 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
 	case USER_TYPE:
 		{
 			void* pItem;
+			AXIS_BINDING_STYLE nStyle = pSZ.GetStyle();
 			int itemsize = m_value.cta->pSizeFunct();
-			list<int>::iterator it = m_size.begin();
-			int blocksize = GetArrayBlockSize(it);
 			unsigned long ptrval = reinterpret_cast<unsigned long>(m_value.cta->pObject);
-			for (int x=0; x<blocksize; x++)
+			if (DOC_LITERAL == nStyle) 
 			{
-				pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
-				m_value.cta->pSZFunct(pItem, &pSZ, true);
+				for (int x=0; x<m_nSize; x++)
+				{
+					pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
+					pSZ.Serialize("<", m_ItemName.c_str(), ">", NULL);
+					m_value.cta->pSZFunct(pItem, &pSZ, true);
+					pSZ.Serialize("</", m_ItemName.c_str(), ">", NULL);
+				}
+			}
+			else
+			{
+				for (int x=0; x<m_nSize; x++)
+				{
+					pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
+					m_value.cta->pSZFunct(pItem, &pSZ, true);
+				}
 			}
 		}
 		break;
@@ -482,9 +448,9 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
 	return AXIS_SUCCESS;
 }
 
-void ArrayBean::AddDimension(int nDim)
+void ArrayBean::SetDimension(int nDim)
 {
-	m_size.push_back(nDim);
+	m_nSize = nDim;
 }
 
 void ArrayBean::SetItemName(const AxisChar* sName)
