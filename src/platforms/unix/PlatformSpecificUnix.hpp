@@ -73,6 +73,7 @@
 // =============================================================
 #include <sys/time.h>
 #include <unistd.h>
+#include <errno.h>
 #define PLATFORM_SLEEP(x) sleep(0);
 
 /**
