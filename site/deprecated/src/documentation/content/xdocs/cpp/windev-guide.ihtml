@@ -500,10 +500,6 @@ saaj.jar
 <br>
 wsdl4j.jar<br>
 xml-apis.jar
-
-<br><br>In adition to above jars You have to create the wsdl2ws.jar which is the jar file for the tool.
-<br>
-The CLASSPATH Environment Variable should have the absolute paths of the jars (including the jar file name) given as a semicolon separated list.
 <br><br>
 Open a command window.<br>
 Change directory to [CHECKOUT_HOME]\c\src\wsdl.<br>
@@ -511,7 +507,7 @@ We will refer to this directory as [SKELSTUB_HOME] as we did during generating S
 <br>
 Run the following command to build the java tool.
 <br><b>
-javac -sourcepath . org\apache\axis\wsdl\wsdl2ws\WSDL2Ws.java</b>
+javac -sourcepath . org\apache\axis\wsdl\wsdl2ws\WSDL2Ws*.java</b>
 <br>
 NOTE: Notice the spaces between the "dot" after the -sourcepath switch
 
@@ -525,9 +521,10 @@ which we use in this example to [SKELSTUB_HOME]<br>
 Now run the following command to generate the server side skeletons and
 wrappers in the same [SKELSTUB_HOME].<br>
 <br>
-Java -classpath %classpath%;. org.apache.axis.wsdl.wsdl2ws.WSDL2Ws
-Calculator.wsdl -o./ServerOut -lc++ -sserver<br>
+Java -classpath .;%classpath% org.apache.axis.wsdl.wsdl2ws.WSDL2Ws Calculator.wsdl -o./ServerOut -lc++ -sserver<br>
 <br>
+You must give the class path exactly as above in that order.
+<br><br>
 If the tool is successful the tool will display the files it has
 generated. The skeletons and stubs will be generated in
 [SKELSTUB_HOME]\ServerOut.<br>
