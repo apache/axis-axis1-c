@@ -70,7 +70,7 @@ public class TestClient {
 
     public static void main(String[] args) throws Exception {
         try {
-            String endpoint = "http://127.0.0.1:8080/axis2/servlet/AxisServlet";
+            String endpoint = "http://127.0.0.1:8080/axismora/servlet/AxisServlet";
 
             String SOAPAction = "Echo";
             //you have to specify the service name as SOAPAction
