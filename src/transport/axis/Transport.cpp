@@ -55,12 +55,6 @@
  * <http://www.apache.org/>.
  */
 
-/*
- *
- *
- * @author Lilantha Darshana (lilantha@virtusa.com)
- *
- */
 
 #include <axis/client/transport/axis/Transport.hpp>
 #include <axis/client/transport/axis/Platform.hpp>

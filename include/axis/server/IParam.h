@@ -53,12 +53,8 @@
  * <http://www.apache.org/>.
  *
  *
- *
- *
- * @author Susantha Kumara (skumara@virtusa.com)
- *
  */
-// IParam.h: interface for the IParam class.
+// IParam.h:
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -72,7 +68,12 @@
 
 #include <string>
 using namespace std;
+/**
+    @class ComplexObjectHandler
+    @brief
 
+    @author Susantha Kumara (skumara@virtusa.com)
+*/
 class ComplexObjectHandler
 {
 public:

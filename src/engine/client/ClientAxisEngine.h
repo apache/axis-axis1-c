@@ -6,7 +6,13 @@
 #define AFX_CLIENTAXISENGINE_H__4DA1EBC5_C7D8_4747_8069_C3E8B6A2E929__INCLUDED_
 
 #include "AxisEngine.h"
+/**
+    @class ClientAxisEngine
+    @brief
 
+
+    @author Susantha Kumara (skumara@virtusa.com)
+*/
 class ClientAxisEngine : public AxisEngine  
 {
 public:

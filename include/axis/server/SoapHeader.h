@@ -54,14 +54,9 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  *
- *
- *
- *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- *
  */
 
-// SoapHeader.h: interface for the SoapHeader class.
+// SoapHeader.h:
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -73,19 +68,22 @@
 #include "../common/ISoapHeader.h"
 
 /**
- *	The Header element information item according to SOAP 1.2 specification.
- *
- *	The Header element information item has:
- *   1) A [local name] of Header. 
- *   2) A [namespace name] of "http://www.w3.org/2003/05/soap-envelope".
- *   3) Zero or more namespace qualified attribute information items in its [attributes] property.
- *   4) Zero or more namespace qualified element information items in its [children] property.
- *
- *	Each child element information item of the SOAP Header is called a SOAP header block.
- *
- *
- *	@brief	The Header element information item according to SOAP 1.2 specification
- */
+    @class SoapHeader
+    @brief	The Header element information item according to SOAP 1.2 specification
+
+
+    The Header element information item according to SOAP 1.2 specification.
+ 	The Header element information item has:
+    1) A [local name] of Header.
+    2) A [namespace name] of "http://www.w3.org/2003/05/soap-envelope".
+    3) Zero or more namespace qualified attribute information items in its [attributes] property.
+    4) Zero or more namespace qualified element information items in its [children] property.
+
+ 	Each child element information item of the SOAP Header is called a SOAP header block.
+
+
+    @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+*/ 
 
 class SoapHeader : public ISoapHeader
 {
