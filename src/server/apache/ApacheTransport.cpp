@@ -232,7 +232,7 @@ int ApacheTransport::setTransportProperty(const char* pcKey, const char* pcValue
 
 }
 
-const char* ApacheTransport::getTransportProperty(const char* pcKey)
+const char* ApacheTransport::getTransportProperty(const char* pcKey, bool response)
 {
     /* ap_table_elts returns an array_header struct. The nelts element of that 
      * struct contains the number of input header elements. Finally assigns that

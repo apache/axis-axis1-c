@@ -68,7 +68,7 @@ public:
     int setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value);
     const char* getTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE eType);
     int setTransportProperty(const char* pcKey, const char* pcValue);
-    const char* getTransportProperty(const char* pcKey);
+    const char* getTransportProperty(const char* pcKey, bool response=true);
 	void setAttachment(const char* pcAttachmentid, const char* pcAttachment){};
 	ISoapAttachment* getAttachment(const char* pcAttachmentid);
 	void setEndpointUri(const char* pcEndpointUri)

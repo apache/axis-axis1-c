@@ -272,7 +272,7 @@ SimpleAxisTransport::setTransportProperty (const char *pcKey,
 }
 
 const char *
-SimpleAxisTransport::getTransportProperty (const char *pcKey)
+SimpleAxisTransport::getTransportProperty (const char *pcKey, bool response)
 {
     return 0;
 }

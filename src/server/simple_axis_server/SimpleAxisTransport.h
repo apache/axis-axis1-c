@@ -55,7 +55,7 @@ AXIS_CPP_NAMESPACE_USE class SimpleAxisTransport:public SOAPTransport
 			       const char *value);
     const char *getTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE eType);
     int setTransportProperty (const char *pcKey, const char *pcValue);
-    const char *getTransportProperty (const char *pcKey);
+    const char *getTransportProperty (const char *pcKey, bool response=true);
     void setAttachment (const char *pcAttachmentid, const char *pcAttachment)
     {
     };
