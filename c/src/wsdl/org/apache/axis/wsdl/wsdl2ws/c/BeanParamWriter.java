@@ -56,7 +56,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 			while(itr.hasNext())
 			{
 				typeName = itr.next().toString();
-				writer.write("extern int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer *pDZ);\n");
+				writer.write("extern int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer* pDZ);\n");
 				writer.write("extern void* Axis_Create_"+typeName+"("+typeName+"* pObj, bool bArray, int nSize);\n");
 				writer.write("extern void Axis_Delete_"+typeName+"("+typeName+"* param, bool bArray, int nSize);\n");
 				writer.write("extern int Axis_Serialize_"+typeName+"("+typeName+"* param, IWrapperSoapSerializer* pSZ, bool bArray);\n");
@@ -93,25 +93,25 @@ public class BeanParamWriter extends ParamCFileWriter{
 		writer.write("\tconst AxisChar* sPrefix;\n");
 		writer.write("\tif (bArray)\n");
 		writer.write("\t{\n");
-		writer.write("\t\tpSZ->_functions->SerializeStartElementOfType(pSZ->_object, Axis_TypeName_"+classname+", 0, 0);\n");
+		writer.write("\t\tpSZ->_functions->serialize StartElementOfType(pSZ->_object, Axis_TypeName_"+classname+", 0, 0);\n");
 		writer.write("\t}\n");
 		writer.write("\telse\n");
 		writer.write("\t{\n");
 		writer.write("\t\tsPrefix = pSZ->_functions->getNamespacePrefix(pSZ->_object, Axis_URI_"+classname+");\n");
-		writer.write("\t\tpSZ->_functions->SerializeStartElementOfType(pSZ->_object, Axis_TypeName_"+classname+", Axis_URI_"+classname+", sPrefix);\n");
+		writer.write("\t\tpSZ->_functions->serialize StartElementOfType(pSZ->_object, Axis_TypeName_"+classname+", Axis_URI_"+classname+", sPrefix);\n");
 		writer.write("\t}\n\n");
 		String arrayType = null;
 		for(int i = 0; i< attribs.length;i++){
 			if(attribs[i].isArray()){
 				if(attribs[i].isSimpleType()){
-					writer.write("\tpSZ->_functions->SerializeBasicArray(pSZ->_object, (Axis_Array*)(&param->"+attribs[i].getParamName()+"),"+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+", \""+attribs[i].getParamName()+"\");\n"); 
+					writer.write("\tpSZ->_functions->serialize BasicArray(pSZ->_object, (Axis_Array*)(&param->"+attribs[i].getParamName()+"),"+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+", \""+attribs[i].getParamName()+"\");\n"); 
 				}
 				else{
 					String elm = attribs[i].getParamName();
 					if ( attribs[i].isReference() )
 						elm = attribs[i].getTypeName();					
 					arrayType = attribs[i].getTypeName();
-					writer.write("\tpSZ->_functions->SerializeCmplxArray(pSZ->_object, (Axis_Array*)(&param->"+attribs[i].getParamName()+"),\n"); 
+					writer.write("\tpSZ->_functions->serialize CmplxArray(pSZ->_object, (Axis_Array*)(&param->"+attribs[i].getParamName()+"),\n"); 
 					writer.write("\t\t(void*) Axis_Serialize_"+arrayType+", (void*) Axis_Delete_"+arrayType+", (void*) Axis_GetSize_"+arrayType+",\n"); 
 					writer.write("\t\t\""+elm+"\", Axis_TypeName_"+arrayType+");\n");
 				}
@@ -120,13 +120,13 @@ public class BeanParamWriter extends ParamCFileWriter{
 				if(attribs[i].isAttribute()){
 					if(attribs[i].isOptional()){
 						writer.write("\tif(0 != param->"+attribs[i].getParamName()+")\n");
-						writer.write("\t\tpSZ->_functions->SerializeAsAttribute(pSZ->_object, \""+attribs[i].getParamName()+"\", 0, (void*)(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+						writer.write("\t\tpSZ->_functions->serialize AsAttribute(pSZ->_object, \""+attribs[i].getParamName()+"\", 0, (void*)(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 					}else{
-						writer.write("\tpSZ->_functions->SerializeAsAttribute(pSZ->_object, \""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+						writer.write("\tpSZ->_functions->serialize AsAttribute(pSZ->_object, \""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 					}
 				}
 				else{
-					writer.write("\tpSZ->_functions->serializeAsElement(pSZ->_object, \""+attribs[i].getParamName()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+					writer.write("\tpSZ->_functions->serialize AsElement(pSZ->_object, \""+attribs[i].getParamName()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 				}
 			}
 			else{
@@ -134,7 +134,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 				writer.write("\tAxis_Serialize_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+", pSZ, false);\n");
 			}			
 		}
-		writer.write("\n\tpSZ->_functions->SerializeEndElementOfType(pSZ->_object, Axis_TypeName_"+classname+");\n");
+		writer.write("\n\tpSZ->_functions->serialize EndElementOfType(pSZ->_object, Axis_TypeName_"+classname+");\n");
 		writer.write("\treturn AXIS_SUCCESS;\n");
 		writer.write("}\n\n");
 	
@@ -145,7 +145,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 		writer.write(" * This static method deserialize a "+classname+" type of object\n");
 		writer.write(" */\n");
 		
-		writer.write("int Axis_DeSerialize_"+classname+"("+classname+"* param, IWrapperSoapDeSerializer *pDZ)\n{\n");
+		writer.write("int Axis_DeSerialize_"+classname+"("+classname+"* param, IWrapperSoapDeSerializer* pDZ)\n{\n");
 		if (attribs.length == 0) {
 			 System.out.println("possible error calss with no attributes....................");
 			 writer.write("\t}\n\n");

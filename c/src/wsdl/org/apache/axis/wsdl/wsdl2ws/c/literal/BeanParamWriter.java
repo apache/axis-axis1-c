@@ -48,7 +48,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 			HashSet typeSet = new HashSet();
 			String typeName;
 			for(int i = 0; i< attribs.length;i++){
-				if(!attribs[i].isSimpleType()){
+				if(!(attribs[i].isSimpleType() || attribs[i].isAnyType())){
 					typeSet.add(attribs[i].getTypeName());
 				}
 			}
@@ -68,13 +68,13 @@ public class BeanParamWriter extends ParamCFileWriter{
 				*/				
 				typeName = itr.next().toString();
 				if ( ! typeName.equals(type.getName().getLocalPart())) {
-					writer.write("extern int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer *pDZ);\n");
+					writer.write("extern int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer* pDZ);\n");
 					writer.write("extern void* Axis_Create_"+typeName+"("+typeName+"* pObj, bool bArray, int nSize);\n");
 					writer.write("extern void Axis_Delete_"+typeName+"("+typeName+"* param, bool bArray, int nSize);\n");
 					writer.write("extern int Axis_Serialize_"+typeName+"("+typeName+"* param, IWrapperSoapSerializer* pSZ, bool bArray);\n");
 					writer.write("extern int Axis_GetSize_"+typeName+"();\n\n");
 				} else {
-					writer.write("int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer *pDZ);\n");
+					writer.write("int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer* pDZ);\n");
 					writer.write("void* Axis_Create_"+typeName+"(void* pObj, bool bArray, int nSize);\n");
 					writer.write("void Axis_Delete_"+typeName+"("+typeName+"* param, bool bArray, int nSize);\n");
 					writer.write("int Axis_Serialize_"+typeName+"("+typeName+"* param, IWrapperSoapSerializer* pSZ, bool bArray);\n");
@@ -104,16 +104,16 @@ public class BeanParamWriter extends ParamCFileWriter{
 		writer.write("int Axis_Serialize_"+classname+"("+classname+"* param, IWrapperSoapSerializer* pSZ, bool bArray)\n{\n");
 		if (attribs.length == 0) {
 			System.out.println("possible error class with no attributes....................");
-			writer.write("\tpSZ->_functions->Serialize(pSZ->_object, \">\");\n");
+			writer.write("\tpSZ->_functions->serialize (pSZ->_object, \">\");\n");
 			writer.write("\treturn AXIS_SUCCESS;\n");
 			writer.write("}\n\n");				 
 			return;
 		 }
 		writer.write("\tif ( param == NULL ) {\n");
-		writer.write("\t/* TODO : may need to check nillable value*/\n"); 
-		writer.write("\tpSZ->_functions->SerializeAsAttribute(pSZ->_object,\"xsi:nil\", 0, (void*)&(xsd_boolean_true), XSD_BOOLEAN);\n");
-		writer.write("\tpSZ->_functions->Serialize(pSZ->_object, \">\");\n");
-		writer.write("\treturn AXIS_SUCCESS;\n");
+		writer.write("\t\t/* TODO : may need to check nillable value*/\n"); 
+		writer.write("\t\tpSZ->_functions->serialize AsAttribute(pSZ->_object,\"xsi:nil\", 0, (void*)&(xsd_boolean_true), XSD_BOOLEAN);\n");
+		writer.write("\t\tpSZ->_functions->serialize (pSZ->_object, \">\");\n");
+		writer.write("\t\treturn AXIS_SUCCESS;\n");
 		writer.write("\t}\n");		
 		String arrayType = null;
 		writer.write("\t/* first serialize attributes if any*/\n");
@@ -123,37 +123,40 @@ public class BeanParamWriter extends ParamCFileWriter{
 			}
 			else{
 				writer.write("\tif (0 != param->"+attribs[i].getParamName()+")\n");
-				writer.write("\t\tpSZ->_functions->SerializeAsAttribute(pSZ->_object, \""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+				writer.write("\t\tpSZ->_functions->serialize AsAttribute(pSZ->_object, \""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 				if (!attribs[i].isOptional()){
 					/* TODO : AxisTrace need to be adpated for used in C */
 				}
 			}
 		}
-		writer.write("\tpSZ->_functions->Serialize(pSZ->_object, \">\");\n");
+		writer.write("\tpSZ->_functions->serialize (pSZ->_object, \">\");\n");
 		writer.write("\t/* then serialize elements if any*/\n");
 		for(int i = attributeParamCount; i< attribs.length;i++){
-			if(attribs[i].isArray()){
+			if(attribs[i].isAnyType()){
+				writer.write("\tpSZ->_functions->serializeAnyObject(pSZ->_object, param->any);\n");
+			}
+			else if(attribs[i].isArray()){
 				//if Array
 				arrayType = attribs[i].getTypeName();
 				if (attribs[i].isSimpleType()){
-					writer.write("\tpSZ->_functions->SerializeBasicArray(pSZ->_object, (Axis_Array*)(&param->"+attribs[i].getParamName()+"),"+CUtils.getXSDTypeForBasicType(arrayType)+", \""+attribs[i].getElementName().getLocalPart()+"\");\n"); 
+					writer.write("\tpSZ->_functions->serialize BasicArray(pSZ->_object, (Axis_Array*)(&param->"+attribs[i].getParamName()+"),"+CUtils.getXSDTypeForBasicType(arrayType)+", \""+attribs[i].getElementName().getLocalPart()+"\");\n"); 
 				}
 				else{
-					writer.write("\tpSZ->_functions->SerializeCmplxArray(pSZ->_object, (Axis_Array*)(&param->"+attribs[i].getParamName()+"),\n"); 
+					writer.write("\tpSZ->_functions->serialize CmplxArray(pSZ->_object, (Axis_Array*)(&param->"+attribs[i].getParamName()+"),\n"); 
 					writer.write("\t\t(void*) Axis_Serialize_"+arrayType+", (void*) Axis_Delete_"+arrayType+", (void*) Axis_GetSize_"+arrayType+",\n"); 
 					writer.write("\t\t\""+attribs[i].getElementName().getLocalPart()+"\", Axis_URI_"+arrayType+");\n");
 				}
 			}
 			else if (attribs[i].isSimpleType()){
-				writer.write("\tpSZ->_functions->serializeAsElement(pSZ->_object, \""+attribs[i].getElementName().getLocalPart()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+				writer.write("\tpSZ->_functions->serialize AsElement(pSZ->_object, \""+attribs[i].getElementName().getLocalPart()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 			}else{
 				//if complex type
 				String elm = attribs[i].getParamName();
 				if ( attribs[i].isReference() )
 					elm = attribs[i].getTypeName();
-				writer.write("\tpSZ->_functions->Serialize(pSZ->_object, \"<"+elm+"\");\n");
+				writer.write("\tpSZ->_functions->serialize (pSZ->_object, \"<"+elm+"\");\n");
 				writer.write("\tAxis_Serialize_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+", pSZ, false);\n");
-				writer.write("\tpSZ->_functions->Serialize(pSZ->_object, \"</"+elm+">\");\n");				
+				writer.write("\tpSZ->_functions->serialize (pSZ->_object, \"</"+elm+">\");\n");				
 			}			
 		}
 		writer.write("\treturn AXIS_SUCCESS;\n");
@@ -165,7 +168,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 		writer.write(" * This static method deserialize a "+classname+" type of object\n");
 		writer.write(" */\n");
 		
-		writer.write("int Axis_DeSerialize_"+classname+"("+classname+"* param, IWrapperSoapDeSerializer *pDZ)\n{\n");
+		writer.write("int Axis_DeSerialize_"+classname+"("+classname+"* param, IWrapperSoapDeSerializer* pDZ)\n{\n");
 		if (attribs.length == 0) {
 			 //nothing to print if this is simple type we have inbuild types
 			 System.out.println("possible error calss with no attributes....................");
@@ -186,7 +189,10 @@ public class BeanParamWriter extends ParamCFileWriter{
 		writer.write("\t/* first deserialize attributes if any*/\n");
 		for(int i = 0; i< attribs.length;i++){ 
 			if (i == attributeParamCount)writer.write("\t/* then deserialize elements if any*/\n");
-			if(attribs[i].isArray()){
+			if(attribs[i].isAnyType()){
+				writer.write("\tparam->any = pDZ->_functions->getAnyObject(pDZ->_object);\n");
+			}
+			else if(attribs[i].isArray()){
 				//if Array
 				String containedType = attribs[i].getTypeName();
 				if (attribs[i].isSimpleType()){
@@ -226,7 +232,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 		writer.write("void* Axis_Create_"+classname+"(void* pObj, bool bArray, int nSize)\n{\n");
 		writer.write("\t"+classname+"* pTemp;\n");		
 		writer.write("\tif (bArray && (nSize > 0))\n\t{\n");
-		writer.write("\t\tif (pObj)\n\t{\n");
+		writer.write("\t\tif (pObj)\n\t\t{\n");
 		writer.write("\t\t\tpObj = (void *)  realloc(pObj, sizeof("+classname+")*nSize);\n");
 		writer.write("\t\t\tpTemp = pObj;\n");		
 		writer.write("\t\t\tpTemp += nSize/2;\n");		
@@ -250,7 +256,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 		}
 		writer.write("\t}\n\treturn pObj;\n}\n");
 	}
-
+	
 	private void writeDeleteGlobalMethod()throws IOException{
 		writer.write("/**\n");
 		writer.write(" * This static method to deallocate a "+classname+" type of object\n");
@@ -274,7 +280,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 			}	
 		}
 		if (hasComplexTypeOrArray){
-			writer.write("\tint x;\n");
+			writer.write("\tint x, i;\n");
 			writer.write("\t"+classname+"* pTemp;\n");	
 		}			
 		writer.write("\tif (bArray)\n");
@@ -292,6 +298,14 @@ public class BeanParamWriter extends ParamCFileWriter{
 					else{
 						writer.write("\t\t\tif (pTemp->"+attribs[i].getParamName()+".m_Array) Axis_Delete_"+attribs[i].getTypeName()+"(pTemp->"+attribs[i].getParamName()+".m_Array, true, pTemp->"+attribs[i].getParamName()+".m_Size);\n");
 					}
+				}
+				else if(attribs[i].isAnyType()){
+					writer.write("\t\t\tif (pTemp->"+attribs[i].getParamName()+") \n\t\t\t{ \n");
+					writer.write("\t\t\t\tfor (i=0; i<pTemp->"+attribs[i].getParamName()+"->_size; i++)\n\t\t\t\t{\n");
+					writer.write("\t\t\t\t\tif (pTemp->"+attribs[i].getParamName()+"->_array[i]) free(pTemp->"+attribs[i].getParamName()+"->_array[i]);\n");
+					writer.write("\t\t\t\t}\n");
+					writer.write("\t\t\t\tfree(pTemp->"+attribs[i].getParamName()+");\n");
+					writer.write("\t\t\t}\n");
 				}
 				else if(!attribs[i].isSimpleType()){
 					writer.write("\t\t\tif (pTemp->"+attribs[i].getParamName()+") Axis_Delete_"+attribs[i].getTypeName()+"(pTemp->"+attribs[i].getParamName()+", false, 0);\n");					
@@ -325,6 +339,14 @@ public class BeanParamWriter extends ParamCFileWriter{
 				else{
 					writer.write("\t\tif (param->"+attribs[i].getParamName()+".m_Array) Axis_Delete_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+".m_Array, true, param->"+attribs[i].getParamName()+".m_Size);\n");
 				}
+			}
+			else if(attribs[i].isAnyType()){
+				writer.write("\t\tif (param->"+attribs[i].getParamName()+") \n\t\t{ \n");
+				writer.write("\t\t\tfor (i=0; i<param->"+attribs[i].getParamName()+"->_size; i++)\n\t\t\t{\n");
+				writer.write("\t\t\t\tif (param->"+attribs[i].getParamName()+"->_array[i]) free(param->"+attribs[i].getParamName()+"->_array[i]);\n");
+				writer.write("\t\t\t}\n");
+				writer.write("\t\t\tfree(param->"+attribs[i].getParamName()+");\n");
+				writer.write("\t\t}\n");
 			}
 			else if(!attribs[i].isSimpleType()){
 				writer.write("\t\tif (param->"+attribs[i].getParamName()+") Axis_Delete_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+", false, 0);\n");

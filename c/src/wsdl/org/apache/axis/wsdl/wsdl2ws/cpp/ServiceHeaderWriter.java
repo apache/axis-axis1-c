@@ -56,10 +56,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter{
 	/* (non-Javadoc)
 	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeAttributes()
 	 */
-	protected void writeAttributes() throws WrapperFault {
-		// TODO Auto-generated method stub
-
-	}
+	protected void writeAttributes() throws WrapperFault {}
 
 	/* (non-Javadoc)
 	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writeClassComment()
