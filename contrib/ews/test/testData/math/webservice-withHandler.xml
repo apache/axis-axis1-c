@@ -6,15 +6,29 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
 http://www.ibm.com/standards/xml/webservices/j2ee/j2ee_web_services_1_1.xsd" version="1.1">
 <webservice-description>
 	<webservice-description-name>MathFaceService</webservice-description-name>
-	<wsdl-file>META-INF/math.wsdl</wsdl-file>
-	<jaxrpc-mapping-file>META-INF/jaxrpc-mapping.xml</jaxrpc-mapping-file>
+	<wsdl-file>math.wsdl</wsdl-file>
+	<jaxrpc-mapping-file>jaxrpc-mapping.xml</jaxrpc-mapping-file>
 	<port-component>
 		<port-component-name>MathFace</port-component-name>
 		<wsdl-port xmlns:ns1="http://math.testData">ns1:math</wsdl-port>
 		<service-endpoint-interface>testData.math.MathFace</service-endpoint-interface>
 		<service-impl-bean>
-			<servlet-link>MathFace</servlet-link>
+			<ejb-link >MathFace</ejb-link>
 		</service-impl-bean>
+		<handler>
+          <handler-name>sample.ValidationHandler</handler-name>
+          <handler-class>sample.ValidationHandler</handler-class>
+        </handler>
+        <handler>
+          <handler-name>sample.LoggingHandler</handler-name>
+          <handler-class>sample.LoggingHandler</handler-class>
+          <init-param>
+            <param-name>level</param-name>
+            <param-value>warning</param-value>
+          </init-param>
+          <soap-header xmlns:ns="http://sample">ns:GetQuote</soap-header>
+          <soap-role>LoggingHandler</soap-role>
+        </handler>
 	</port-component>
 	</webservice-description>
 </webservices>
