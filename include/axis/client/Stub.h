@@ -160,6 +160,8 @@ class STORAGE_CLASS_INFO Stub
 
   /**
    * Default Constructor.
+   */
+   
   /**
     * Destructor.
     */

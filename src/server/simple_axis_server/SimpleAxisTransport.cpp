@@ -128,7 +128,7 @@ SimpleAxisTransport::getBytes (char *pBuffer, int *piSize)
 	(*piSize) = 0;
 	return TRANSPORT_FINISHED;
     }
-    if (m_strReceived.length () < (*piSize))
+    if ((int) m_strReceived.length () < (*piSize))
     {
 	pBuffer[0] = '\0';
 	strcat (pBuffer, m_strReceived.c_str ());

@@ -160,7 +160,6 @@ AXIS_TRANSPORT_STATUS AXISCALL AxisTransport::s_Send_bytes(const char*
 
 AXIS_TRANSPORT_STATUS AxisTransport::flushOutput()
 {
-    int index;
     char buff[8];
     sprintf(buff, "%d", m_sBytesToSend.length()); 
     m_pSender->SetProperty("Content-Length" , buff);

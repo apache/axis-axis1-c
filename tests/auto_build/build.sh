@@ -24,10 +24,7 @@ echo "----------------------------------"
 echo "run configure"
 ./configure --prefix=/usr/local/axiscpp_deploy \
     --with-apache2=/usr/local/apache2 \
-    --with-apache=/usr/local/apache \
-    --with-expat=/usr/local/expat1957 \
-    --with-xercesc=/usr/local/xerces-c \
-    --enable-libwww=no
+    --with-xercesc=/usr/local/xerces-c
 echo "make"
 make 2> build_errors
 
