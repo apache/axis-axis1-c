@@ -1,6 +1,7 @@
 // File.cpp: implementation of the File class.
 //
 //////////////////////////////////////////////////////////////////////
+#pragma warning (disable : 4786)
 
 #include "File.h"
 
