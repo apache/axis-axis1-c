@@ -52,7 +52,7 @@ class SoapSerializer;
 
 typedef struct {
 	void (AXISCALL* setValue)(void* pObj, const AxisChar* value);
-	//add all other API functions here
+	/*add all other API functions here*/
 } AttributeFunctions;
 
 #ifdef __cplusplus

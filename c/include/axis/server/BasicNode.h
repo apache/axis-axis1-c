@@ -54,7 +54,7 @@ enum NODE_TYPE { ELEMENT_NODE=1, CHARACTER_NODE};
 
 typedef struct {
 	int (AXISCALL* getNoOfChildren)(void* pObj);
-	//add akk itger aou fybctuibs gere.
+	/*add akk itger aou fybctuibs gere.*/
 } BasicNodeFunctions;
 
 #ifdef __cplusplus

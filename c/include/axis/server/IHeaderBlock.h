@@ -57,7 +57,7 @@ enum HEADER_BLOCK_STD_ATTR_TYPE
 
 typedef struct {
 	const BasicNode* (AXISCALL* getFirstChild)(void* pObj);
-	//add all other API functions here
+	/*add all other API functions here*/
 } HeaderBlockFunctions;
 
 #ifdef __cplusplus
