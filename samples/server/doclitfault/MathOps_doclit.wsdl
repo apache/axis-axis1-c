@@ -60,7 +60,7 @@
 	<binding name="MathOpsBinding" type="tns:MathOps">
 		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 		<operation name="div">
-			  <soap:operation soapAction="MathOps#div"/>
+			  <soap:operation soapAction="MathOpsDL#div"/>
                 <input name="divRequest">
                     <soap:body
                         use="literal"/>
@@ -74,9 +74,9 @@
 			</fault>
 			</operation>
 		</binding>
-	<service name="MathOpsDLService">
+	<service name="MathOpsDL">
 		<port name="MathOpsPort" binding="tns:MathOpsBinding">
-			<soap:address location="http://localhost/axis/MathOpsPort"/>
+			<soap:address location="http://localhost/axis/MathOpsDL"/>
 		</port>
 	</service>
 </definitions>
