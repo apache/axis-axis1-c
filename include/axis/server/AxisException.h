@@ -239,7 +239,7 @@ public:
       * @example throw AxisException(AXISC_NODE_VALUE_MISMATCH_EXCEPTION, 
             "Some additional exception info");
       */
-    AxisException(const int iExceptionCode, const char* pcMessage);
+    AxisException(const int iExceptionCode, char* pcMessage);
 
     /** This can be used to throw an exception with another exception as a
       * parameter. One situation in which this can be used is when we catch
@@ -290,7 +290,7 @@ private:
     void processException(const exception* e);
     void processException(const exception* e, const int iExceptionCode);
     void processException(const int iExceptionCode);
-    void processException(const int iExceptionCode, const char* pcMessage);
+    void processException(const int iExceptionCode, char* pcMessage);
     string m_sMessage; //Holds the exception messae
     int m_iExceptionCode; //Holds the exception code
 };

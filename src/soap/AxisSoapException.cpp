@@ -38,7 +38,7 @@ AxisSoapException::AxisSoapException (const int iExceptionCode)
     processException (iExceptionCode);
 }
 
-AxisSoapException::AxisSoapException(const int iExceptionCode, const char* pcMessage)
+AxisSoapException::AxisSoapException(const int iExceptionCode, char* pcMessage)
 {
     m_iExceptionCode = iExceptionCode;
     processException(iExceptionCode, pcMessage);
@@ -75,7 +75,7 @@ void AxisSoapException::processException(const int iExceptionCode)
     m_sMessage = getMessage (iExceptionCode);
 }
 
-void AxisSoapException::processException(const int iExceptionCode, const char* pcMessage)
+void AxisSoapException::processException(const int iExceptionCode, char* pcMessage)
 {
     AxisString sMessage = strdup(pcMessage);
     m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
