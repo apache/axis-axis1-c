@@ -36,11 +36,8 @@
 <h3>What You Need</h3>
 </div>
 <p>
-&nbsp &nbsp &nbsp RedHat 9 (2.4.20-8) <br>
-&nbsp &nbsp &nbsp expat-1.95.7 (source) <br>
-&nbsp &nbsp &nbsp xerces-c-src2_2_0 (I build xerces from source) <br>
-&nbsp &nbsp &nbsp httpd-2.0.48 (source)<br>
-&nbsp &nbsp &nbsp apache_1.3.27 (source) </p>
+&nbsp &nbsp &nbsp Expat or Xercesc <br>
+&nbsp &nbsp &nbsp Apache2 or Apache1<br>
 
 <p><b>Note: </b> If you are using provided configure and Makefile.in's you don't 
 need to run autogen.sh script to generate them for your platform.
@@ -48,10 +45,10 @@ In any case if you need to run it then following versions are recommended
 to be installed in your environment. </p>
 
 <p> 
-autoconf 2.57 <br> 
-automake 1.6.3 <br>
-libtool 1.4.3 <br> 
-gcc 3.2.2</b></p>
+autoconf <br> 
+automake <br>
+libtool <br> 
+gcc</b></p>
 <p> You can download the Axis C++ source or binary from one of the apache mirror sites <br>
     <a href="http://ws.apache.org/axis/cpp/download.html">http://ws.apache.org/axis/cpp/download.html</a><br> <br>
 You can get expat from the uri <a href="http://sourceforge.net/projects/expat/">http://sourceforge.net/projects/expat/</a><br> <br>
@@ -136,11 +133,9 @@ libaxis_xercesc.so is the xercesc parser library implmentation for Axis C++ </b>
 
 <p><b>$AXISCPP_HOME/samples/client </b> samples are built and executables are in <b>$AXISCPP_DEPLOY/bin</b> </p>
 
-<p>Now you need to add to <b>$&lt;apache install directory&gt/conf/httpd.conf <br>
-$ vi &lt;apache install directory&gt/conf/httpd.conf </b> </p>
+<p>Add the following into <b>$&lt;apache install directory&gt/conf/httpd.conf <br>
 <br>
-<p>At the bottom of the file you have to include following lines and save it.</p>
-<p><b>LoadModule axis_module modules/libaxiscpp_mod2.so</b> (in apache1.3 replace modules with libexec and libaxiscpp_mod2.so with libaxiscpp_mod.so)<br> 
+<p><b>LoadModule axis_module modules/libaxiscpp_mod2.so</b> (in apache1.3 replace modules with libexec and libaxiscpp_mod2.so with libaxiscpp_mod.so)</b><br> 
 <b>&lt;Location /axis&gt;</b><br>
 <b>SetHandler axis</b><br>
 <b>&lt;/Location&gt;</b></p>
@@ -149,26 +144,6 @@ $ vi &lt;apache install directory&gt/conf/httpd.conf </b> </p>
 <p>By default there is a deployment descripter in <b>$AXISCPP_DEPLOY/conf</b> to deploy samples </p>
  
 <p>In <b>$AXISCPP_DEPLOY/etc/axiscpp.conf</b> file you can give paths to your log files, configuration files, libraries etc. </p>
-
-<br>
-
-<p><p><b># The comment character is '#'</b><br>
-<b>#Available directives are as follows</b><br>
-<b>#(Some of these directives may not be implemented yet)</b><br>
-<b>#</b><br>
-<b>#WSDDFilePath:The path to the server wsdd</b><br>
-<b>#LogPath:The path to the axis log</b><br>
-<b>#ClientLogPath:The path to the axis client log</b><br>
-<b>#ClientWSDDFilePath:The path to the client wsdd</b><br>
-<b>#Transport_http:The HTTP transport library</b><br>
-<b>#Transport_smtp:The SMTP transport library</b><br>
-<b>#XMLParser:The xml parser library</b></p>
-
-<p><b>LogPath:/usr/local/axiscpp_deploy/log/AxisLog</b><br>
-<b>WSDDFilePath:/usr/local/axiscpp_deploy/etc/server.wsdd</b><br>
-<b>ClientLogPath:/usr/local/axiscpp_deploy/log/AxisClientLog</b><br>
-<b>XMLParser:/usr/local/axiscpp_deploy/lib/libaxis_xmlparser.so</b><br>
-<b>Transport_http:/usr/local/axiscpp_deploy/lib/libaxis_transport.so</b></p>
 
 <br>
 
@@ -278,10 +253,7 @@ of the provided one's you need to run autogen.sh </p>
 <b>make install</b> <br> <br>
 This will put sample libraries into <b> $AXISCPP_DEPLOY/lib</b> and
 sample executables into<b> $AXISCPP_DEPLOY/bin </b> <br> <br>
-Now you need to add to <b>$&lt;apache install directory&gt/conf/httpd.conf</b> <br>
-<b>$ vi &gt;apache install directory&lt/conf/httpd.conf </b> </p>
-
-<p>At the bottom of the file you have to include following lines and save it.</p>
+Add the following into <b>$&lt;apache install directory&gt/conf/httpd.conf</b> <br>
 
 <p><b>LoadModule axis_module modules/libaxiscpp_mod2.so</b> (in apache1.3 replace modules with libexec and libaxiscpp_mod2.so with libaxiscpp_mod.so) <br>
 <b>&lt;Location /axis&gt</b> <br> 
@@ -292,23 +264,6 @@ Now you need to add to <b>$&lt;apache install directory&gt/conf/httpd.conf</b> <
 By default there is a deployment descripter in <b> $AXISCPP_DEPLOY/conf </b> to deploy samples </p>
 
 <p>In <b> $AXISCPP_DEPLOY/etc/axiscpp.conf </b> file you can give paths to your log files, configuration files, libraries etc.</p>
-
-<p><b># The comment character is '#'</b> <br>
-<b>#Available directives are as follows </b> <br>
-<b>#(Some of these directives may not be implemented yet) </b> <br>
-<b>#</b> <br>
-<b>#WSDDFilePath:The path to the server wsdd </b> <br>
-<b>#LogPath:The path to the axis log </b> <br>
-<b>#ClientLogPath:The path to the axis client log </b> <br>
-<b>#ClientWSDDFilePath:The path to the client wsdd </b> <br>
-<b>#Transport_http:The HTTP transport library </b> <br>
-<b>#Transport_smtp:The SMTP transport library</b> <br>
-<b>#XMLParser:The xml parser library </b> <br>  <br>
-<b>LogPath:/usr/local/axiscpp_deploy/log/AxisLog </b> <br>
-<b>WSDDFilePath:/usr/local/axiscpp_deploy/etc/server.wsdd </b> <br>
-<b>ClientLogPath:/usr/local/axiscpp_deploy/log/AxisClientLog </b> <br>
-<b>XMLParser:/usr/local/axiscpp_deploy/lib/libaxis_xmlparser.so </b> <br>
-<b>Transport_http:/usr/local/axiscpp_deploy/lib/libaxis_transport.so </b> </p>
 
 <p>Now we need to copy apache module(libaxiscpp_mod2.so for apache2 and libaxiscpp_mod.so for apache)
 to the correct places and start apache. <br>
