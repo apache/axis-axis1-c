@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar>
+	<display-name>BookQuoteService</display-name>
+	<enterprise-beans>
+		<session>
+			<display-name>echo</display-name>
+			<ejb-name>echo</ejb-name>
+			<home>org.apache.ws.echosample.EchoHome</home>
+			<remote>org.apache.ws.echosample.EchoEJB</remote>
+			<ejb-class>org.apache.ws.echosample.EchoBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Bean</transaction-type>
+		</session>
+	</enterprise-beans>
+</ejb-jar>
