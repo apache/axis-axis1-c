@@ -121,9 +121,9 @@ private:
 	/* Provider type of current service that uses this Serializer object */
 	PROVIDERTYPE m_ProviderType;
 public:
-#ifdef UNIT_TESTING_BUILD
+
 	int setOutputStreamForTesting(const Ax_soapstream* pStream);
-#endif
+
 	int AXISCALL CreateSoapMethod(const AxisChar* sLocalName, const AxisChar* sURI);	
 
 //	IWrapperSoapSerializer& operator<<(const char* cSerialized);
@@ -185,6 +185,7 @@ private:
 	BasicTypeSerializer m_BTSZ;
 	const Ax_soapstream* m_pOutputStream;
 public:
+	IHeaderBlock* createHeaderBlock(AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri);
 	/* to add a header block to the Serializer. Probably by a handler */
 	int AXISCALL AddHeaderBlock(IHeaderBlock* pBlk);
 	int AXISCALL AddOutputParam(const AxisChar* pchName, void* pValue, XSDTYPE type);

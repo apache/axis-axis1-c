@@ -83,6 +83,15 @@ using namespace std;
 
     @author Susantha Kumara (skumara@virtusa.com)
 */
+
+struct ltstr
+{
+  bool operator()(const char* s1, const char* s2) const
+  {
+    return strcmp(s1, s2) < 0;
+  }
+};
+
 class MessageData : public IMessageData
 {
 public:
@@ -92,8 +101,8 @@ public:
 	SoapSerializer* m_pSZ;
 	SoapDeSerializer* m_pDZ;
 public:
-	string& getProperty(string& sName);
-	int setProperty(string& sName, string& sValue);
+	const AxisChar* getProperty(AxisChar* pachName);
+	int setProperty(AxisChar* pachName, const AxisChar* pachValue);
 	void SetOperationName(const AxisChar* pchOperation){m_sOperationName = pchOperation;};
 	void getSoapDeSerializer(IHandlerSoapDeSerializer** pIHandlerSoapDeSerializer);
 	const AxisChar* AXISCALL GetOperationName(){return m_sOperationName.c_str();};
@@ -119,8 +128,8 @@ protected:
 private:
 	void getWSDDDeployment(IDeployerUtils** pIDeployerUtils);
 	bool m_bPastPivotState;
-	map <string, string> m_Properties;
-	static string m_sBlankPropertyValue;
+	map <AxisChar*, AxisChar*, ltstr> m_Properties;
+	static const AxisChar* m_pachBlankPropertyValue;
 };
 
 #endif // !defined(AFX_MESSAGEDATA_H__8B839E07_3D23_46C6_8743_543B4917D202__INCLUDED_)

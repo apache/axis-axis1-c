@@ -72,6 +72,7 @@ using namespace std;
 
 class BasicNode;
 #include "../common/IHeaderBlock.h"
+#include "../soap/SoapEnvVersions.h"
 
 /**
     @class BasicNode
@@ -106,43 +107,139 @@ class HeaderBlock : public IHeaderBlock
 friend class SoapHeader;
 
 private:	
+	/**
+	 * Returns the number of child elements of this HeaderBlock.
+	 * @return The number of child elements of this HeaderBlock.
+	 */
+	int iNoOFChildren;
+	
 	int serializeNamespaceDecl(SoapSerializer& pSZ);
 	int serializeChildren(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack);
-	//int serializeChildren(string& sSerialized);
 	list<BasicNode*> m_children;
-	bool isSerializable();		
+	bool isSerializable();
 	int attrSerialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack);
-	//int attrSerialize(string&);
 	AxisString m_localname;
 	AxisString m_prefix;
 	AxisString m_uri;
 	list<Attribute*> m_attributes;
 	list<Attribute*> m_namespaceDecls;
 
-	/* I think that now this member varialble is not needed, i.e m_value roshan 
-	AxisString m_value;
-	*/
-
-
 public:
-	bool operator ==( const HeaderBlock &objHeaderBlock);
-#ifdef UNIT_TESTING_BUILD
-	int initializeForTesting();
-#endif
-	BasicNode* createChild(NODE_TYPE eNODE_TYPE);
 	BasicNode* getFirstChild();
-	int addNamespaceDecl(Attribute *pAttribute);
+	int getNoOfChildren();
+	BasicNode* createChild(NODE_TYPE eNODE_TYPE,  AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri, AxisChar* pachValue);
+
+	int initializeForTesting();
+
+	/**
+	 * Creates a child node depending on the given type. If the type is 
+	 *  CHARACTER_NODE a CharacterElement is created. If the type is 
+	 *  ELEMENT_NODE a ComplexElement is created. After creating the child it
+	 *  will be added as a immediate child to the header block.
+	 *  It is important to note that if the type is CHARACTER_NODE only the
+	 *  NODE_TYPE and value (pachValue) parameters will be usefull.If the type
+	 *  is ELEMENT_NODE the parameters NODE_TYPE, pachLocalName, pachPrefix, 
+	 *  pachUri will be usefull.
+	 * @param eNODE_TYPE The type of the child to be created, it should be either 
+	 *  CHARACTER_NODE for CharacterElements or ELEMENT_NODE for 
+	 *  ComplexElements.
+	 * @param pachLocalName The local name of the complex element to be created.
+	 * @param pachPrefix The prefix of the complex element to be created.
+	 * @param pachUri The namespace uri of the complex element to be created.
+	 * @param pachValue The value of the character element to be created.
+	 * @return The child node created will be returned if the creation is
+	 *  successfull. If the creation is unsccessfull it will return NULL.
+	 */
+	BasicNode* createImmediateChild(NODE_TYPE eNODE_TYPE, AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri, AxisChar* pachValue);
+
+	/**
+	 * A user can use this method to create a standard HeaderBlock attribute. 
+	 *  The types of HEADER_BLOCK_STD_ATTR_TYPE are:
+	 *		ROLE_NEXT : To create the role attribute to point to next.
+	 *		ROLE_NONE : To create the role attribute to point to none.
+	 *		ROLE_ULTIMATE_RECEIVER : To create the role attribute to point to 
+	 *		 ultimate receiver.
+	 *		ACTOR : To create the actor attribute to point to next.
+	 *		MUST_UNDERSTAND_TRUE : To create the mustUnderstand attribute to 
+	 *		 point to true.
+	 *		MUST_UNDERSTAND_FALSE : To create the mustUnderstand attribute to 
+	 *		 point to false.
+	 *  To use ROLE_NEXT, ROLE_NONE, ROLE_ULTIMATE_RECEIVER, MUST_UNDERSTAND_TRUE,
+	 *   MUST_UNDERSTAND_FALSE the user has to pass SOAP_VER_1_2 as the 
+	 *   SOAP_VERSION.
+	 *  To use ACTOR, MUST_UNDERSTAND_TRUE, MUST_UNDERSTAND_FALSE the user has 
+	 *   to pass SOAP_VER_1_1 as the SOAP_VERSION.
+	 * @param eStdAttrType The standard attribute to be created.
+	 *  The current values that can be passes are: ROLE_NEXT, ROLE_NONE, 
+	 *  ROLE_ULTIMATE_RECEIVER, ACTOR, MUST_UNDERSTAND_TRUE,
+	 *  MUST_UNDERSTAND_FALSE.
+	 * @param eSOAP_VERSION The related soap version. The vallues which could be
+	 *  passes are SOAP_VER_1_1 and SOAP_VER_1_2.
+	 */
+	Attribute* createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE eStdAttrType, SOAP_VERSION eSOAP_VERSION);
+
+	Attribute* createAttribute(const AxisChar* localname, const AxisChar* prefix, const AxisChar* uri, const AxisChar* value);
+	Attribute* createAttribute(const AxisChar* localname, const AxisChar* prefix, const AxisChar* value);
+
+	/**
+	 * Creates a child node depending on the given type. If the type is 
+	 *  CHARACTER_NODE a CharacterElement is created. If the type is 
+	 *  ELEMENT_NODE a ComplexElement is created. After creating the child it
+	 *  will be added as a immediate child to the header block.
+	 * @param The type of the child to be created, it should be either 
+	 *  CHARACTER_NODE for CharacterElements or ELEMENT_NODE for 
+	 *  ComplexElements.
+	 * @return The child node created will be returned if the creation is
+	 *  successfull. If the creation is unsccessfull it will return NULL.
+	 */
+	BasicNode* createImmediateChild(NODE_TYPE eNODE_TYPE);
+
+	/**
+	 * Creates a child node depending on the given type. If the type is 
+	 *  CHARACTER_NODE a CharacterElement is created. If the type is 
+	 *  ELEMENT_NODE a ComplexElement is created. After creating the child it
+	 *  will not be added as a child to the header block. The user has to add
+	 *  the created child to the appropriate locaion as his wish.
+	 * @param eNODE_TYPE The type of the child to be created, it should be either 
+	 *  CHARACTER_NODE for CharacterElements or ELEMENT_NODE for 
+	 *  ComplexElements.
+	 * @return The child node created will be returned if the creation is
+	 *  successfull. If the creation is unsccessfull it will return NULL.
+	 */
+	BasicNode* createChild(NODE_TYPE eNODE_TYPE);
+
+	
+
+	/**
+	 * Returns the last child element. The user has to check whether the
+	 *  method return NULL before proceding.
+	 * @return The last child element is returned if it exists. If the child element 
+	 *  doesn't exsist this method returns NULL.
+	 */
+	BasicNode* getLastChild();
+
+	/**
+	 * Returns the child element at the given postion. The user has to check whether the
+	 *  method return NULL before proceding.
+	 * @param iChildPosition The positon of the required child element.
+	 * @return The required child element is returned if it exists. If the child element 
+	 *  doesn't exsist this method returns NULL.
+	 */
+	BasicNode* getChild(int iChildPosition);
 	int addChild(BasicNode* pBasicNode);
 
-	int serialize(SoapSerializer& pSZ);
-	//int serialize(string&);
-	void setValue(const AxisChar* value);
-	void addAttribute(Attribute* attr);
+	void setLocalName(const AxisChar* localname);
 	void setUri(const AxisChar* uri);
 	void setPrefix(const AxisChar* prefix);
-	void setLocalName(const AxisChar* localname);
+
+	HeaderBlock(AxisChar* pachLocalName, AxisChar* pachPrefix, AxisChar* pachUri);
 	HeaderBlock();
 	virtual ~HeaderBlock();
+
+	bool operator ==( const HeaderBlock &objHeaderBlock);
+	int addNamespaceDecl(Attribute *pAttribute);
+	int serialize(SoapSerializer& pSZ);
+	void addAttribute(Attribute* attr);
 
 };
 

@@ -482,3 +482,8 @@ IHeaderBlock* Call::createHeaderBlock()
 {
 	return (m_pIWSSZ->createHeaderBlock());
 }
+
+IHeaderBlock* Call::createHeaderBlock(AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri)
+{
+	return (m_pIWSSZ->createHeaderBlock(pachLocalName, pachPrefix, pachUri));
+}

@@ -560,14 +560,13 @@ int SoapSerializer::SerializeBasicArray(const Axis_Array* pArray, XSDTYPE nType,
 	return AXIS_SUCCESS;
 }
 
-#ifdef UNIT_TESTING_BUILD
 int SoapSerializer::setOutputStreamForTesting(const Ax_soapstream* pStream)
 {
 	m_pOutputStream = pStream;
 
 	return AXIS_SUCCESS;
 }
-#endif
+
 /**
  * Basic output parameter going to be serialized as an Element later
  */
@@ -761,4 +760,11 @@ void axis_buffer_release(const char* buffer, const void* bufferid, const void* s
 	*pInt = 0; /* set that the buffer is not in use */
 	char *pChar = const_cast<char*>(buffer);
 	pChar[0] = '\0'; /* set nul */ 
+}
+
+IHeaderBlock* SoapSerializer::createHeaderBlock(AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri)
+{
+	HeaderBlock* pHeaderBlock= new HeaderBlock(pachLocalName, pachPrefix, pachUri);
+	setHeaderBlock(pHeaderBlock);
+	return pHeaderBlock;	
 }

@@ -75,29 +75,60 @@
 
 ComplexElement::ComplexElement()
 {
+	m_pachPrefix = '\0';
+	m_pachLocalName = '\0';
+	m_pachURI = '\0';
+
 	m_iNodeType= ELEMENT_NODE;
+	iNoOfChildren = 0;
 }
+
+ComplexElement::ComplexElement(AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri)
+{
+	m_pachLocalName = (AxisChar*) malloc(strlen(pachLocalName)+1);
+	strcpy(m_pachLocalName, pachLocalName);
+	m_pachPrefix = (AxisChar*) malloc(strlen(pachPrefix)+1);
+	strcpy(m_pachPrefix, pachPrefix);
+	m_pachURI = (AxisChar*) malloc(strlen(pachUri)+1);
+	strcpy(m_pachURI, pachUri);
+}
+
 
 ComplexElement::~ComplexElement()
 {
+	free(m_pachPrefix);
+	free(m_pachLocalName);
+	free(m_pachURI);
 
+	/*
+	 *Clear the children
+	 */
+	list<BasicNode*>::iterator itCurrChild= m_children.begin();
+	while(itCurrChild != m_children.end()) {		
+		delete (*itCurrChild);
+		itCurrChild++;		
+	}
+	m_children.clear();
 }
 
-int ComplexElement::setPrefix(const AxisChar* sPrefix)
+int ComplexElement::setPrefix(const AxisChar* pachPrefix)
 {
-	m_sPrefix= sPrefix;
+	m_pachPrefix = (AxisChar*) malloc(strlen(pachPrefix)+1);
+	strcpy(m_pachPrefix, pachPrefix);
 	return AXIS_SUCCESS;
 }
 
-int ComplexElement::setLocalName(const AxisChar* sLocalName)
+int ComplexElement::setLocalName(const AxisChar* pachLocalName)
 {
-	m_sLocalName= sLocalName;
+	m_pachLocalName = (AxisChar*) malloc(strlen(pachLocalName)+1);
+	strcpy(m_pachLocalName, pachLocalName);
 	return AXIS_SUCCESS;
 }
 
 int ComplexElement::addChild(BasicNode *pBasicNode)
 {
 	m_children.push_back(pBasicNode);
+	iNoOfChildren++;
 	return AXIS_SUCCESS;
 }
 
@@ -108,12 +139,12 @@ int ComplexElement::serialize(SoapSerializer& pSZ)
 		if(isSerializable()) 
 		{	
 			pSZ.Serialize("<", NULL);	
-			if(m_sPrefix.length() != 0) {				
-				pSZ.Serialize(m_sPrefix.c_str(), ":", NULL);
+			if(strlen(m_pachPrefix) != 0) {				
+				pSZ.Serialize(m_pachPrefix, ":", NULL);
 			}
-			pSZ.Serialize(m_sLocalName.c_str(), NULL);
-			if((m_sPrefix.length() != 0) && (m_sURI.length() != 0)) {
-				pSZ.Serialize(" xmlns:", m_sPrefix.c_str(), "=\"", m_sURI.c_str(), "\"", NULL);
+			pSZ.Serialize(m_pachLocalName, NULL);
+			if((strlen(m_pachPrefix) != 0) && (strlen(m_pachURI) != 0)) {
+				pSZ.Serialize(" xmlns:", m_pachPrefix, "=\"", m_pachURI, "\"", NULL);
 			}
 			pSZ.Serialize(">", NULL);
 			iStatus= serializeChildren(pSZ);
@@ -121,10 +152,10 @@ int ComplexElement::serialize(SoapSerializer& pSZ)
 				break;
 			}
 			pSZ.Serialize("</", NULL);
-			if(m_sPrefix.length() != 0) {				
-				pSZ.Serialize(m_sPrefix.c_str(), ":", NULL);
+			if(strlen(m_pachPrefix) != 0) {				
+				pSZ.Serialize(m_pachPrefix, ":", NULL);
 			}
-			pSZ.Serialize(m_sLocalName.c_str(), ">", NULL);
+			pSZ.Serialize(m_pachLocalName, ">", NULL);
 			iStatus= AXIS_SUCCESS;
 		} 
 		else
@@ -144,20 +175,25 @@ int ComplexElement::serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSp
 			bool blnIsNewNamespace = false;
 
 			pSZ.Serialize("<", NULL);	
-			if(m_sPrefix.length() != 0) {				
-				pSZ.Serialize(m_sPrefix.c_str(), ":", NULL);
-			} else if (m_sURI.length() != 0) {
-				m_sPrefix = pSZ.GetNamespacePrefix(m_sURI.c_str(), blnIsNewNamespace);
+			if( (m_pachPrefix != NULL) && (strlen(m_pachPrefix) != 0)) {				
+				pSZ.Serialize(m_pachPrefix, ":", NULL);
+			} else if ( (m_pachURI != NULL) && (strlen(m_pachURI) != 0)) {
+				const AxisChar* pachTmp = pSZ.GetNamespacePrefix(m_pachURI, blnIsNewNamespace);
+				m_pachPrefix = (AxisChar*) malloc(strlen(pachTmp)+1);
+				strcpy(m_pachPrefix , pachTmp);
+
 				if (blnIsNewNamespace) {
-					lstTmpNameSpaceStack.push_back((AxisChar*)m_sURI.c_str());
+					lstTmpNameSpaceStack.push_back(m_pachURI);
 				}
-				pSZ.Serialize(m_sPrefix.c_str(), ":", NULL);
+				pSZ.Serialize(m_pachPrefix, ":", NULL);
 			}
 
-			pSZ.Serialize(m_sLocalName.c_str(), NULL);
+			pSZ.Serialize(m_pachLocalName, NULL);
 
-			if((m_sPrefix.length() != 0) && (m_sURI.length() != 0) && (blnIsNewNamespace)) {
-				pSZ.Serialize(" xmlns:", m_sPrefix.c_str(), "=\"", m_sURI.c_str(), "\"", NULL);
+			if(((m_pachPrefix != NULL) && (strlen(m_pachPrefix) != 0)) && 
+					( (m_pachURI != NULL) && (strlen(m_pachURI) != 0)) && 
+					(blnIsNewNamespace)) {
+				pSZ.Serialize(" xmlns:", m_pachPrefix, "=\"", m_pachURI, "\"", NULL);
 			}
 			pSZ.Serialize(">", NULL);
 
@@ -166,10 +202,10 @@ int ComplexElement::serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSp
 				break;
 			}
 			pSZ.Serialize("</", NULL);
-			if(m_sPrefix.length() != 0) {				
-				pSZ.Serialize(m_sPrefix.c_str(), ":", NULL);
+			if((m_pachPrefix!=NULL) && (strlen(m_pachPrefix) != 0)) {				
+				pSZ.Serialize(m_pachPrefix, ":", NULL);
 			}
-			pSZ.Serialize(m_sLocalName.c_str(), ">", NULL);
+			pSZ.Serialize(m_pachLocalName, ">", NULL);
 			iStatus= AXIS_SUCCESS;
 		} 
 		else
@@ -180,58 +216,12 @@ int ComplexElement::serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSp
 	return iStatus;
 }
 
-/*
-comm on 10/7/2003 6.20pm
-int ComplexElement::serialize(string &sSerialized)
-{
-	int iStatus= AXIS_SUCCESS;
-
-	do {
-		if(isSerializable()) {
-
-			sSerialized+= "<";
-			
-			if(m_sPrefix.length() != 0) {
-				sSerialized+= m_sPrefix+ ":";
-			}
-
-			sSerialized+= m_sLocalName;						  
-
-			if((m_sPrefix.length() != 0) && (m_sURI.length() != 0)) {
-				sSerialized+= " xmlns:"+ m_sPrefix+ "=\""+ m_sURI+ "\"";
-			}
-
-			sSerialized+= ">";
-
-			iStatus= serializeChildren(sSerialized);
-			if(iStatus==AXIS_FAIL) {
-				break;
-			}
-
-			sSerialized+= "</";
-
-			if(m_sPrefix.length() != 0) {
-				sSerialized+= m_sPrefix+ ":";			
-			}
-
-			sSerialized+= m_sLocalName+ ">"+ "\n";
-
-			iStatus= AXIS_SUCCESS;
-		} else {
-			iStatus= AXIS_FAIL;
-		}
-	} while(0);
-			
-	return iStatus;
-}
-*/
-
 bool ComplexElement::isSerializable()
 {
 	bool bStatus= true;
 
 	do {
-		if(m_sLocalName.length()==0) {
+		if(strlen(m_pachLocalName) == 0) {
 			bStatus= false;
 			break;
 		}
@@ -240,9 +230,10 @@ bool ComplexElement::isSerializable()
 	return bStatus;
 }
 
-int ComplexElement::setURI(const AxisChar* sURI)
+int ComplexElement::setURI(const AxisChar* pachURI)
 {
-	m_sURI= sURI;
+	m_pachURI = (AxisChar*) malloc(strlen(pachURI)+1);
+	strcpy(m_pachURI, pachURI);
 	return AXIS_SUCCESS;
 }
 
@@ -277,47 +268,56 @@ int ComplexElement::serializeChildren(SoapSerializer& pSZ, list<AxisChar*>& lstT
 	return AXIS_SUCCESS;
 }
 
-/*
-comm on 10/7/2003 6.20pm
-int ComplexElement::serializeChildren(string &sSerialized)
-{
-
-	list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
-
-	while(itCurrBasicNode != m_children.end()) {		
-		(*itCurrBasicNode)->serialize(sSerialized);
-		itCurrBasicNode++;		
-	}	
-
-	return AXIS_SUCCESS;
-}
-*/
-
 NODE_TYPE ComplexElement::getNodeType()
 {
 	return m_iNodeType;
 }
 
-/*
- *This method is overridden to return a blank string always because this is 
- * a Complex Element. Instead of using this method, a user of a 
- * ComplexElement must get the childeren of this ComplexElement and
- * has to traverse through the childrean in a appropriate manner
- * in order to get there values.
- */
-const AxisString& ComplexElement::getValue()
+BasicNode* ComplexElement::getFirstChild()
 {
-	return m_sValue;
+	list<BasicNode*>::iterator itCurrChild= m_children.begin();
+
+	if (itCurrChild != m_children.end()) {		
+		return (*itCurrChild);
+	}	
+
+	return NULL;
 }
 
-/*
- *This method is overridden to do nothing always because this is 
- * a Complex Element. Instead of using this method, a user of a 
- * ComplexElement must get the childeren of this ComplexElement and
- * has to traverse through the childrean in a appropriate manner
- * in order to set there values.
- */
-int ComplexElement::setValue(const AxisChar* sValue)
+BasicNode* ComplexElement::getLastChild()
 {
-	return AXIS_SUCCESS;
+	list<BasicNode*>::reverse_iterator ritCurrChild= m_children.rbegin();
+
+	if (ritCurrChild != m_children.rend()) {		
+		return (*ritCurrChild);
+	}	
+
+	return NULL;
+}
+
+BasicNode* ComplexElement::getChild(int iChildPosition)
+{
+	if (iChildPosition > iNoOfChildren) {
+		return NULL;
+	} else {
+		list<BasicNode*>::iterator itCurrChild= m_children.begin();
+		/*The following is done since the previous line already takes the iterator one step forward */
+		iChildPosition--;
+
+		/*Takes the iterator to the relavent positon*/
+		for (int i=0; i<iChildPosition; i++) {
+			itCurrChild++;
+		}
+
+		if (itCurrChild != m_children.end()) {
+			return *itCurrChild;
+		} else {
+			return NULL;
+		}
+	}
+}
+
+int ComplexElement::getNoOfChildren()
+{
+	return iNoOfChildren;
 }

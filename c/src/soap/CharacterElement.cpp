@@ -76,17 +76,19 @@
 CharacterElement::CharacterElement()
 {	
 	m_iNodeType= CHARACTER_NODE;
+	m_pachValue = '\0';
 }
 
-CharacterElement::CharacterElement(const AxisChar* sValue)
+CharacterElement::CharacterElement(const AxisChar* pachValue)
 {
-	m_sValue= sValue;
+	m_pachValue = (AxisChar*) malloc(strlen(pachValue)+1);
+	strcpy(m_pachValue, pachValue);
 	m_iNodeType= CHARACTER_NODE;
 }
 
 CharacterElement::~CharacterElement()
 {
-
+	free(m_pachValue);
 }
 
 NODE_TYPE CharacterElement::getNodeType()
@@ -96,40 +98,30 @@ NODE_TYPE CharacterElement::getNodeType()
 
 int CharacterElement::serialize(SoapSerializer& pSZ)
 {
-
-	//the serialization code should come here	
-	pSZ.Serialize(m_sValue.c_str(), NULL);
-	
-	return AXIS_SUCCESS;
+	if (m_pachValue != NULL) {
+		pSZ.Serialize(m_pachValue, NULL);
+		return AXIS_SUCCESS;
+	} else {
+		return AXIS_FAIL;
+	}
 }
 
-/*
-comm on 10/7/2003 6.10pm
-int CharacterElement::serialize(string &sSerialized)
+const AxisChar* CharacterElement::getValue()
 {
-
-	//the serialization code should come here
-	sSerialized+= m_sValue;
-	
-	return AXIS_SUCCESS;
-}
-*/
-
-const AxisString& CharacterElement::getValue()
-{
-	return m_sValue;
+	return m_pachValue;
 }
 
-int CharacterElement::setValue(const AxisChar* sValue)
+int CharacterElement::setValue(const AxisChar* pachValue)
 {
-	m_sValue= sValue;
+	m_pachValue = (AxisChar*) malloc(strlen(pachValue)+1);
+	strcpy(m_pachValue, pachValue);
 
 	return AXIS_SUCCESS;
 }
 
 bool CharacterElement::operator ==( const CharacterElement &objChEle) 
 {
-	if (objChEle.m_sValue == m_sValue) {
+	if (strcmp(objChEle.m_pachValue , m_pachValue) == 0) {
 		return true;
 	}
 	else {

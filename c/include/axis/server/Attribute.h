@@ -78,7 +78,7 @@ class SoapSerializer;
 
 
 
-    @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+    @author Roshan Weerasuriya (roshan@opensource.lk, roshan@jkcs.slt.lk)
 */
 class Attribute  
 {
@@ -88,16 +88,15 @@ private:
 	AxisString m_prefix;
 	AxisString m_uri;
 	AxisString m_value;
-	//string m_strAttrSerialized;
+	
 public:		
-#ifdef UNIT_TESTING_BUILD
 	int initializeForTesting();
-#endif
 	int serialize(SoapSerializer& pSZ) const;
 	int serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack);
-	//int serialize(string&);
+
 	Attribute();	
 	Attribute(const AxisChar* localname, const AxisChar* prefix, const AxisChar* uri, const AxisChar* value);
+	Attribute(const AxisChar* localname, const AxisChar* prefix, const AxisChar* value);
 	virtual ~Attribute();
 
 	void setValue(const AxisChar* value);

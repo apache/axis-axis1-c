@@ -300,7 +300,6 @@ int SoapMethod::reset()
 	return AXIS_SUCCESS;
 }
 
-#ifdef UNIT_TESTING_BUILD
 int SoapMethod::initializeForTesting()
 {
 	m_strPrefix = "mn";
@@ -318,6 +317,5 @@ int SoapMethod::initializeForTesting()
 
 	return AXIS_SUCCESS;
 }
-#endif
 
 

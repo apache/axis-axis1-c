@@ -82,20 +82,49 @@
 
 HeaderBlock::HeaderBlock()
 {
+	iNoOFChildren = 0;
+}
 
+HeaderBlock::HeaderBlock(AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri)
+{
+	iNoOFChildren = 0;
+
+	m_localname = pachLocalName;
+	m_prefix = pachPrefix;
+	m_uri = pachUri;
 }
 
 HeaderBlock::~HeaderBlock()
 {
+	/*
+	 *Clear the Attributes
+	 */
 	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
-
 	while(itCurrAttribute != m_attributes.end()) {		
-
 		delete (*itCurrAttribute);
 		itCurrAttribute++;		
 	}
-	
 	m_attributes.clear();
+
+	/*
+	 *Clear the Namespaces
+	 */
+	list<Attribute*>::iterator itCurrNamespace= m_namespaceDecls.begin();
+	while(itCurrNamespace != m_namespaceDecls.end()) {		
+		delete (*itCurrNamespace);
+		itCurrNamespace++;		
+	}
+	m_namespaceDecls.clear();
+
+	/*
+	 *Clear the children
+	 */
+	list<BasicNode*>::iterator itCurrChild= m_children.begin();
+	while(itCurrChild != m_children.end()) {		
+		delete (*itCurrChild);
+		itCurrChild++;		
+	}
+	m_children.clear();
 }
 
 void HeaderBlock::setLocalName(const AxisChar* localname)
@@ -116,13 +145,6 @@ void HeaderBlock::setUri(const AxisChar* uri)
 void HeaderBlock::addAttribute(Attribute* attr)
 {
 	m_attributes.push_back(attr);
-}
-
-void HeaderBlock::setValue(const AxisChar* value)
-{
-	//m_value= value;
-
-	/* I think that now this method is not needed, roshan */
 }
 
 int HeaderBlock::serialize(SoapSerializer& pSZ)
@@ -207,33 +229,8 @@ int HeaderBlock::attrSerialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameS
 	return iStatus;
 }
 
-/*
-comm on 10/7/2003 6.00pm
-int HeaderBlock::attrSerialize(string& sSerialized)
-{
-	int iStatus= AXIS_SUCCESS;
-
-	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
-
-	while(itCurrAttribute != m_attributes.end()) {		
-
-		iStatus= (*itCurrAttribute)->serialize(sSerialized);
-		if(iStatus==AXIS_FAIL) {
-			break;
-		}
-		itCurrAttribute++;		
-	}	
-
-	return iStatus;
-}
-*/
-
 bool HeaderBlock::isSerializable()
 {
-	//bool blnStatus= true;
-
-	//return blnStatus;
-
 	bool bStatus= true;	
 
 	if(m_localname.length() == 0) {
@@ -256,6 +253,7 @@ bool HeaderBlock::isSerializable()
 int HeaderBlock::addChild(BasicNode *pBasicNode)
 {
 	m_children.push_back(pBasicNode);
+	iNoOFChildren++;
 
 	return AXIS_SUCCESS;
 }
@@ -277,21 +275,6 @@ int HeaderBlock::serializeChildren(SoapSerializer& pSZ, list<AxisChar*>& lstTmpN
 	return AXIS_SUCCESS;
 }
 
-/*
-comm on 10/7/2003 6.00pm
-int HeaderBlock::serializeChildren(string &sSerialized)
-{
-	list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
-
-	while(itCurrBasicNode != m_children.end()) {		
-		(*itCurrBasicNode)->serialize(sSerialized);
-		itCurrBasicNode++;		
-	}	
-
-	return AXIS_SUCCESS;
-}
-*/
-
 int HeaderBlock::addNamespaceDecl(Attribute *pAttribute)
 {
 	m_namespaceDecls.push_back(pAttribute);
@@ -311,15 +294,37 @@ int HeaderBlock::serializeNamespaceDecl(SoapSerializer &pSZ)
 	return AXIS_SUCCESS;
 }
 
-BasicNode* HeaderBlock::getFirstChild()
+BasicNode* HeaderBlock::getLastChild()
 {
-	list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
+	list<BasicNode*>::reverse_iterator ritCurrBasicNode= m_children.rbegin();
 
-	if (itCurrBasicNode != m_children.end()) {		
-		return (*itCurrBasicNode);
+	if (ritCurrBasicNode != m_children.rend()) {		
+		return (*ritCurrBasicNode);
 	}	
 
 	return NULL;
+}
+
+BasicNode* HeaderBlock::getChild(int iChildPosition)
+{
+	if (iChildPosition > iNoOFChildren) {
+		return NULL;
+	} else {
+		list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
+		/*The following is done since the previous line already takes the iterator one step forward */
+		iChildPosition--;
+
+		/*Takes the iterator to the relavent positon*/
+		for (int i=0; i<iChildPosition; i++) {
+			itCurrBasicNode++;
+		}
+
+		if (itCurrBasicNode != m_children.end()) {
+			return *itCurrBasicNode;
+		} else {
+			return NULL;
+		}
+	}
 }
 
 BasicNode* HeaderBlock::createChild(NODE_TYPE eNODE_TYPE)
@@ -329,13 +334,12 @@ BasicNode* HeaderBlock::createChild(NODE_TYPE eNODE_TYPE)
 	if(eNODE_TYPE==CHARACTER_NODE) {
 		pBasicNode = new CharacterElement();
 	} else if (eNODE_TYPE==ELEMENT_NODE) {
-		//do some thing appropriate
+		pBasicNode = new ComplexElement();
 	}
 
 	return pBasicNode;
 }
 
-#ifdef UNIT_TESTING_BUILD
 int HeaderBlock::initializeForTesting()
 {
 	setPrefix("m");
@@ -370,7 +374,6 @@ int HeaderBlock::initializeForTesting()
 
 	return AXIS_SUCCESS;	
 }
-#endif
 
 bool HeaderBlock::operator ==( const HeaderBlock &objHeaderBlock)
 {
@@ -378,4 +381,161 @@ bool HeaderBlock::operator ==( const HeaderBlock &objHeaderBlock)
 	 *TODO : the logic
 	 */
 	return true;
+}
+
+BasicNode* HeaderBlock::createImmediateChild(NODE_TYPE eNODE_TYPE)
+{
+	BasicNode* pBasicNode = NULL;
+
+	do {
+
+		if(eNODE_TYPE==CHARACTER_NODE) {
+			pBasicNode = new CharacterElement();
+		} else if (eNODE_TYPE==ELEMENT_NODE) {
+			pBasicNode = new ComplexElement();
+		} else {
+			break;
+		}
+
+		m_children.push_back(pBasicNode);
+		iNoOFChildren++;
+	} while (0);
+
+	return pBasicNode;
+}
+
+Attribute* HeaderBlock::createAttribute(const AxisChar *localname, const AxisChar *prefix, const AxisChar *value)
+{
+	Attribute* pAttribute = new Attribute(localname, prefix, value);
+	m_attributes.push_back(pAttribute);
+
+	return pAttribute;
+}
+
+Attribute* HeaderBlock::createAttribute(const AxisChar *localname, const AxisChar *prefix, const AxisChar *uri, const AxisChar *value)
+{
+	Attribute* pAttribute = new Attribute(localname, prefix, uri, value);
+	m_attributes.push_back(pAttribute);
+
+	return pAttribute;
+}
+
+Attribute* HeaderBlock::createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE eStdAttrType, SOAP_VERSION eSOAP_VERSION)
+{
+	Attribute* pAttribute = NULL;
+	bool blnStatus = true;
+
+	do {
+		switch(eSOAP_VERSION) {
+			case VERSION_LAST:
+				blnStatus = false;
+				break;
+			case SOAP_VER_1_1:
+				switch(eStdAttrType) {
+					case ACTOR:
+						pAttribute = new Attribute("actor",gs_SoapEnvVersionsStruct[SOAP_VER_1_1].pchPrefix,"","http://schemas.xmlsoap.org/soap/actor/next");
+						break;
+					case MUST_UNDERSTAND_TRUE:
+						pAttribute = new Attribute("mustUnderstand",gs_SoapEnvVersionsStruct[SOAP_VER_1_1].pchPrefix,"","1");
+						break;
+					case MUST_UNDERSTAND_FALSE:
+						pAttribute = new Attribute("mustUnderstand",gs_SoapEnvVersionsStruct[SOAP_VER_1_1].pchPrefix,"","0");
+						break;
+					default:
+						blnStatus = false;
+						break;
+				}
+				break;
+
+			case SOAP_VER_1_2:
+				switch(eStdAttrType) {
+					case ROLE_NEXT:
+						pAttribute = new Attribute("role",gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,"","http://www.w3.org/2003/05/soap-envelope/role/next");
+						break;
+					case ROLE_NONE:
+						pAttribute = new Attribute("role",gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,"","http://www.w3.org/2003/05/soap-envelope/role/none");
+						break;
+					case ROLE_ULTIMATE_RECEIVER:
+						pAttribute = new Attribute("role",gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,"","http://www.w3.org/2003/05/soap-envelope/role/ultimateReceiver");
+						break;
+					case MUST_UNDERSTAND_TRUE:
+						pAttribute = new Attribute("mustUnderstand",gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,"","true");
+						break;
+					case MUST_UNDERSTAND_FALSE:
+						pAttribute = new Attribute("mustUnderstand",gs_SoapEnvVersionsStruct[SOAP_VER_1_2].pchPrefix,"","false");
+						break;
+					default:
+						blnStatus = false;
+						break;
+				}
+				break;
+
+			default:
+				blnStatus = false;
+				break;
+		}
+	} while (0);
+	
+
+	if (blnStatus) {
+		m_attributes.push_back(pAttribute);
+		return pAttribute;
+	} else {
+		return NULL;
+	}
+}
+
+BasicNode* HeaderBlock::createImmediateChild(NODE_TYPE eNODE_TYPE, AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri, AxisChar* pachValue)
+{
+	BasicNode* pBasicNode = NULL;
+
+	do {
+
+		if(eNODE_TYPE==CHARACTER_NODE) {
+			pBasicNode = new CharacterElement(pachValue);
+		} else if (eNODE_TYPE==ELEMENT_NODE) {
+			pBasicNode = new ComplexElement(pachLocalName, pachPrefix, pachUri);
+		} else {
+			break;
+		}
+
+		m_children.push_back(pBasicNode);
+		iNoOFChildren++;
+	} while (0);
+
+	return pBasicNode;
+}
+
+BasicNode* HeaderBlock::createChild(NODE_TYPE eNODE_TYPE, AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri, AxisChar *pachValue)
+{
+	BasicNode* pBasicNode = NULL;
+
+	do {
+
+		if(eNODE_TYPE==CHARACTER_NODE) {
+			pBasicNode = new CharacterElement(pachValue);
+		} else if (eNODE_TYPE==ELEMENT_NODE) {
+			pBasicNode = new ComplexElement(pachLocalName, pachPrefix, pachUri);
+		} else {
+			break;
+		}
+	} while (0);
+
+	return pBasicNode;
+}
+
+int HeaderBlock::getNoOfChildren()
+{
+	return iNoOFChildren;
+}
+
+BasicNode* HeaderBlock::getFirstChild()
+{
+	list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
+	
+	if (itCurrBasicNode != m_children.end()) {		
+		return (*itCurrBasicNode);
+	}
+
+	return NULL;
 }

@@ -107,8 +107,8 @@ public:
 private:
 	virtual void getWSDDDeployment(IDeployerUtils** pIDeployerUtils) = 0;
 public:
-	virtual int setProperty(string& sName, string& sValue)=0;
-	virtual string& getProperty(string& sName)=0;
+	virtual int setProperty(AxisChar* pachName, const AxisChar* pachValue)=0;
+	virtual const AxisChar* getProperty(AxisChar* sName)=0;
 	virtual const AxisChar* AXISCALL GetOperationName()=0;
 	virtual void AXISCALL GetSoapSerializer(IWrapperSoapSerializer** pIWSS)=0;
 	virtual void AXISCALL GetSoapDeSerializer(IWrapperSoapDeSerializer** pIWSDS)=0;
