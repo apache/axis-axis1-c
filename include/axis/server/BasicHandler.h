@@ -51,7 +51,7 @@ typedef struct
   * In the Axis Architecture there are different types of Handlers :
   *		- NORMAL_HANDLER : A Handler which is used to process SOAP Headers.
   *		- WEBSERVICE_HANDLER : A web service is also considered as a Handler.
-  *		- CHAIN_HANDLER : 
+  *		- CHAIN_HANDLER : Handler Chains are also derived from Handler.
   * Each of these handlers will inherit from this HandlerBase which serves as
   * the base point for all the different types of Handlers.
   *
@@ -218,7 +218,7 @@ public:
 	  *		- NORMAL_HANDLER : In case of a normal Handler which is used to 
 	  *						   process SOAP Headers.
 	  *		- WEBSERVICE_HANDLER : In case of a Web Service.
-	  *		- CHAIN_HANDLER
+	  *		- CHAIN_HANDLER : In case of a HandlerChain
 	  */
     virtual int AXISCALL getType()=0;
 };
