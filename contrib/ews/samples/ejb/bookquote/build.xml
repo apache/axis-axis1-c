@@ -6,7 +6,7 @@
 	<property name="build.lib" location="${build}/lib"/>
 	<property name="lib" location="lib"/>
 	<property name="jar.dir" location="../../../target/generated/samples/"/>
-	<target name="compile">
+	<target name="compile" depends="init" unless="jars.uptodate">
 	   <mkdir dir="${build.classes}"/>
 	   <mkdir dir="${build.lib}"/>
 		<javac destdir="${build.classes}" debug="on">
@@ -14,7 +14,7 @@
 			<src path="${src}"/>
 		</javac>
 	</target>
-	<target name="jar" depends="compile">
+	<target name="jar" depends="compile" unless="jars.uptodate" >
 		<mkdir dir="${build.classes}/META-INF/"/>
 		<copy file ="${basedir}/META-INF/webservice.xml" todir="${build.classes}/META-INF"/>
 		<copy file ="${basedir}/META-INF/ejb-jar.xml" todir="${build.classes}/META-INF"/>
@@ -23,7 +23,7 @@
 		<include name="**" />
 		</jar>
 
-            <copy todir="${build.classes}/META-INF">
+        <copy todir="${build.classes}/META-INF">
 			<fileset dir="${basedir}/META-INF/">
 			<include name="**/*.xml"/>
 			<exclude name="build.xml"/>
@@ -40,4 +40,16 @@
 		 
 		<delete dir="${build}"/>
 	</target>
+	<target name="init">
+		<uptodate property="jars.uptodate" targetfile="${jar.dir}/bookquote.jar">
+			<srcfiles dir="${src}">
+				<include name="**/*.java"/>
+				<include name="**/*.xml"/>
+				<include name="**/*.wsdl"/>
+				<exclude name="${build}/**"/>
+			</srcfiles>
+		</uptodate>
+		<echo message="the files are up to date = ${jars.uptodate}"></echo>
+	</target>
+	
 </project>

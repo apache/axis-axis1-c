@@ -1,12 +1,14 @@
 <project name="axis" default="war" basedir=".">
 	<property name="build" value="build"/>
+	<property name="src" value="."/>
 	<property name="jar.dir" location="../../../target/generated/samples/"/>
-	<target name="war" description="Create the web application" >
+	<target name="war" description="Create the web application" 
+		depends="init" unless="jars.uptodate">
 		<mkdir dir="${build}" />
 		<mkdir dir="${build}/WEB-INF/lib"/>
 		<mkdir dir="${build}/WEB-INF/classes"/>
 		<copy todir="${build}" >
-			<fileset dir=".">
+			<fileset dir="${src}">
 			<include name="*.html"/>
 			<include name="**/*.class"/>
 			<include name="**/*.xml"/>
@@ -25,10 +27,22 @@
 		</copy>
 		<javac destdir="${build}/WEB-INF/classes" debug="on">
 			<classpath refid="maven.dependency.classpath" />
-			<src path="."/>
+			<src path="${src}"/>
 		</javac>
 	    <jar jarfile="${jar.dir}/simple.war" basedir="${build}"/>
 	    <delete dir="${build}"/>
+	</target>
+	
+	<target name="init">
+		<uptodate property="jars.uptodate" targetfile="${jar.dir}/simple.war">
+			<srcfiles dir="${src}">
+				<include name="**/*.java"/>
+				<include name="**/*.xml"/>
+				<include name="**/*.wsdl"/>
+				<exclude name="${build}/**"/>
+			</srcfiles>
+		</uptodate>
+		<echo message="the files are upto date = ${jars.uptodate}"></echo>
 	</target>
 </project> 
 
