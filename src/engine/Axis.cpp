@@ -188,7 +188,7 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
                         // Samisa: the string continuation lines in the following
                         // code segments should *NOT* be indented
                         // in order to make sure the HTML is indented properly.
-                        pStream->sendBytes("<html> \n\ 
+                        pStream->sendBytes("<html> \n\
 \t<head>\n\
 \t\t<title>Welcome to Axis C++</title>\n\
 \t</head>\n\
