@@ -17,13 +17,13 @@ export CVSROOT HOME_DIR CHECKOUT_DIR LOG ERROR_LOG SOURCE_BUILD_MESSAGES SOURCE_
 
 #Setting environment variables. User may change the default values to fit his own environment
 
-XERCESC_HOME=${XERCESC_HOME:-/usr/local/xerces-c-src2_2_0}
+XERCESC_HOME=${XERCESC_HOME:-/usr/local/xerces-c}
 EXPAT_HOME=${EXPAT_HOME:-/usr/local/expat1957}
 APACHE2_HOME=${APACHE2_HOME:-/usr/local/apache2}
 APACHE_HOME=${APACHE_HOME:-/usr/local/apache}
 AXISCPP_HOME=${HOME_DIR}/${CHECKOUT_DIR}
 AXISCPP_DEPLOY=${AXISCPP_DEPLOY:-/usr/local/axiscpp_deploy}
-LD_LIBRARY_PATH=${AXISCPP_DEPLOY}/lib 
+LD_LIBRARY_PATH=${XERCESC_HOME}/lib:${EXPAT_HOME}/lib:${AXISCPP_DEPLOY}/lib 
 PATH="/usr/bin:/usr/local/bin:$PATH"
 export LD_LIBRARY_PATH AXISCPP_DEPLOY XERCESC_HOME EXPAT_HOME APACHE2_HOME APACHE_HOME AXISCPP_HOME PATH
 
@@ -44,7 +44,6 @@ done
 cd ${HOME_DIR}
 echo "" > testcases/build/buildTestCase.log
 echo "" > testcases/build/runTestCase.log
-echo "came"
 # *** Get the update from CVS ***
 echo Getting CVS Update from ${CVSROOT}
 cd ${HOME_DIR}
@@ -91,9 +90,6 @@ then
 else
     echo Source Build/Install Failed
     echo `date` Source Build/Install Failed >> ${LOG}
-    if test -f $HOME_DIR/mailto; then
-        cat $HOME_DIR/log_source_build_messages $HOME_DIR/log_source_install_messages $HOME_DIR/log | mutt -s "[test-results]Axis C++ Autobuild and regression test" -a "$HOME_DIR/log_source_build_errors" -a "$HOME_DIR/log_source_install_errors" -x axis-c-dev@ws.apache.org
-    fi
     exit
 fi
 
@@ -102,20 +98,20 @@ echo "	Summary log 			:${LOG}"
 echo "	Build messages 			:${SOURCE_BUILD_MESSAGES}"
 echo "	Build errors/warnings 		:${SOURCE_BUILD_ERRORS}"
 
+cd ${HOME_DIR}
 
-APACHE2_PORT=$(echo | grep APACHE2_PORT testcases/platform/linux/apache_ports.config | grep -o "[0-9]*$")
-APACHE_PORT=$(echo | grep APACHE_PORT testcases/platform/linux/apache_ports.config | grep -o "[0-9]*$")
-APACHE2_HOST=$(echo | grep APACHE2_HOST testcases/platform/linux/apache_ports.config | grep -o "=.*$"|sed "s/=//g")
-APACHE_HOST=$(echo | grep APACHE_HOST testcases/platform/linux/apache_ports.config | grep -o "=.*$"|sed "s/=//g")
-ls testcases/wsdls/*.wsdl | sed "s/testcases\/wsdls\///g" |sed "s/.wsdl/:host=localhost/g" > ${HOME_DIR}/testcases/platform/linux/test.config
-ls testcases/wsdls/*.wsdl | sed "s/testcases\/wsdls\///g" |sed "s/.wsdl/:port=80/g" >> ${HOME_DIR}/testcases/platform/linux/test.config
+APACHE2_PORT=$(echo | grep APACHE2_PORT ${HOME_DIR}/testcases/platform/linux/apache_ports.config | grep -o "[0-9]*$")
+APACHE_PORT=$(echo | grep APACHE_PORT ${HOME_DIR}/testcases/platform/linux/apache_ports.config | grep -o "[0-9]*$")
+APACHE2_HOST=$(echo | grep APACHE2_HOST ${HOME_DIR}/testcases/platform/linux/apache_ports.config | grep -o "=.*$"|sed "s/=//g")
+APACHE_HOST=$(echo | grep APACHE_HOST ${HOME_DIR}/testcases/platform/linux/apache_ports.config | grep -o "=.*$"|sed "s/=//g")
+ls ${HOME_DIR}/testcases/wsdls/*.wsdl | sed "s/testcases\/wsdls\///g" |sed "s/.wsdl/:host=localhost/g" > ${HOME_DIR}/testcases/platform/linux/test.config
+ls ${HOME_DIR}/testcases/wsdls/*.wsdl | sed "s/testcases\/wsdls\///g" |sed "s/.wsdl/:port=80/g" >> ${HOME_DIR}/testcases/platform/linux/test.config
 # *** Deploy with Apache 2 ***
-echo Start deploy with apache2 using expat parser library
-sed 's/xercesc/expat/g' ${AXISCPP_DEPLOY}/bin/deploy_apache2.sh > ${AXISCPP_DEPLOY}/bin/deploy_apache2_auto.sh
-sed "s/[port=][0-9]*$/port=${APACHE2_PORT}/g" ${HOME_DIR}/testcases/platform/linux/test.config> ./test.config
-sed "s/host=.*$/host=${APACHE2_HOST}/g" testcases/platform/linux/test.config> ./test.config
-#sed 's/9090/80/g' testcases/platform/linux/test.config > ./test.config
-cp -f test.config testcases/platform/linux
+echo Start deploy with apache2 using xerces-c parser library
+sed 's/expat/xercesc/g' ${AXISCPP_DEPLOY}/bin/deploy_apache2.sh > ${AXISCPP_DEPLOY}/bin/deploy_apache2_auto.sh
+sed "s/host=.*$/host=${APACHE2_HOST}/g" ${HOME_DIR}/testcases/platform/linux/test.config> ${HOME_DIR}/test.config_temp
+sed "s/port=[0-9]*$/port=${APACHE2_PORT}/g" ${HOME_DIR}/test.config_temp> ${HOME_DIR}/test.config
+cp -f ${HOME_DIR}/test.config ${HOME_DIR}/testcases/platform/linux
 cp -f ${AXISCPP_DEPLOY}/lib/libaxiscpp_mod2.so ${APACHE2_HOME}/modules/
 sh ${AXISCPP_DEPLOY}/bin/deploy_apache2_auto.sh
 
@@ -130,16 +126,15 @@ else
 fi
 
 echo "running the tests"
-sh ./runAllTests.sh
+. ${HOME_DIR}/runAllTests.sh
 
 # *** Deploy with Apache 1 ***
 
-echo "Start deploy with apache1 using expat parser library"
-sed 's/xercesc/expat/g' ${AXISCPP_DEPLOY}/bin/deploy_apache.sh > ${AXISCPP_DEPLOY}/bin/deploy_apache_auto.sh
-sed "s/[port=][0-9]*$/port=${APACHE_PORT}/g" ${HOME_DIR}/testcases/platform/linux/test.config> ./test.config
-sed "s/host=.*$/host=${APACHE_HOST}/g" testcases/platform/linux/test.config> ./test.config
-#sed 's/80/9090/g' ${HOME_DIR}/testcases/platform/linux/test.config > ./test.config
-cp -f test.config ${HOME_DIR}/testcases/platform/linux
+echo "Start deploy with apache1 using xerces-c parser library"
+sed 's/expat/xercesc/g' ${AXISCPP_DEPLOY}/bin/deploy_apache.sh > ${AXISCPP_DEPLOY}/bin/deploy_apache_auto.sh
+sed "s/host=.*$/host=${APACHE_HOST}/g" ${HOME_DIR}/testcases/platform/linux/test.config> ${HOME_DIR}/test.config_temp
+sed "s/port=[0-9]*$/port=${APACHE_PORT}/g" ${HOME_DIR}/test.config_temp> ${HOME_DIR}/test.config
+cp -f ${HOME_DIR}/test.config ${HOME_DIR}/testcases/platform/linux
 cp -f ${AXISCPP_DEPLOY}/lib/libaxiscpp_mod.so ${APACHE_HOME}/libexec/
 sh ${AXISCPP_DEPLOY}/bin/deploy_apache_auto.sh
 
@@ -154,7 +149,7 @@ else
 fi
 
 echo "running the tests"
-sh ./runAllTests.sh
+. ${HOME_DIR}/runAllTests.sh
 
 #Only if there is a file called mailto in the current folder, do the step.
 #If you need to mail results create a file called mailto in the current

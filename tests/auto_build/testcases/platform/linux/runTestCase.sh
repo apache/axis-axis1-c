@@ -59,7 +59,7 @@ then
 else
   TIME=$(date "+%d/%m/%Y %H:%M:%S")
   echo "${TIME}: Regression test on $TARGET: BUILD SUCCESS" |tee -a $OUTPUT_DIR/buildTestCase.log
-  export LD_LIBRARY_PATH=$AXISCPP_HOME_BIN:$LIB_XERCES_BIN
+  export LD_LIBRARY_PATH=$AXISCPP_HOME_BIN:$LIB_XERCES_BIN:$LD_LIBRARY_PATH
 
   # Pass in the URI if it has been set.
   $OUTPUT_DIR/$TARGET/client $URI > $OUTPUT_DIR/$TARGET/$OUTPUT

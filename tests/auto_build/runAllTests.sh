@@ -12,6 +12,12 @@ then
 	echo -e "Environment variable AXISCPP_HOME is not set. A default will be used"
     unset=1
 fi
+
+if [[ -z "$HOME_DIR" ]]
+then
+HOME_DIR=$PWD
+export HOME_DIR
+fi
 #if [[ -z "$AXISTEST_HOME" ]]
 #then
 #	echo -e "Environment variable AXISTEST_HOME is not set. A default will be used"
@@ -28,13 +34,12 @@ then
 	esac
 fi
 
-. testcases/platform/linux/setAxis.sh 
+. ${HOME_DIR}/testcases/platform/linux/setAxis.sh 
 
 #rm -rf $OUTPUT_DIR
-
 passed=0
 num_tests=0
-for X in testcases/wsdls/*.wsdl
+for X in ${TEST_HOME}/testcases/wsdls/*.wsdl
 do
 runTestCase.sh "$X" c++
 [[ $? -eq 0 ]] && passed=$(($passed + 1))
@@ -45,9 +50,9 @@ done
 echo -n "${passed}/${num_tests} tests passed."
 [[ $passed -eq $num_tests ]] && echo " PASSED" || echo " FAILED"
 
-exit 0
+#exit 0
 
-for file in $(find client -name "*.c" -o -name "*.cpp")
-do
- runTestCase.sh $(echo testcases/wsdls/$(basename $file) | sed "s/Client\./.wsdl /" | sed "s/pp/++/")
-done
+#for file in $(find client -name "*.c" -o -name "*.cpp")
+#do
+# runTestCase.sh $(echo testcases/wsdls/$(basename $file) | sed "s/Client\./.wsdl /" | sed "s/pp/++/")
+#done

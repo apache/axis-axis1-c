@@ -26,7 +26,7 @@ echo "run configure"
     --with-apache2=/usr/local/apache2 \
     --with-apache=/usr/local/apache \
     --with-expat=/usr/local/expat1957 \
-    --with-xercesc=/usr/local/xerces-c-src2_2_0 \
+    --with-xercesc=/usr/local/xerces-c \
     --enable-libwww=no
 echo "make"
 make 2> build_errors
