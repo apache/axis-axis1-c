@@ -28,9 +28,10 @@ LogHandler::~LogHandler()
 // Implementation of BasicHandler interface.
 int LogHandler::Invoke(MessageData* md)
 {
-#if defined( DEBUG)
-  debugger.debug("LogHandler::Invoke(MessageData* md)");
-#endif
+  try
+  {
+    DEBUG1("LogHandler::Invoke(MessageData* md)");
+
     m_iNumAccess = 0;
     string sNumAccess = "";
     string s = "logAccessCountFile";
@@ -38,9 +39,8 @@ int LogHandler::Invoke(MessageData* md)
 
     if(!sFileName.empty())
     {
-#if defined( DEBUG)
-  debugger.debug("if(!sFileName.empty())");
-#endif
+
+      DEBUG1("if(!sFileName.empty())");
 
       ifstream fin(sFileName.c_str());    // open for reading
        char ch;
@@ -66,13 +66,18 @@ int LogHandler::Invoke(MessageData* md)
       const char * FileName = sFileName.c_str();
       ofstream fout(FileName);  // open for writing
       fout << m_iNumAccess;
-
+      DEBUG1("LogHandler Invoke end");
       return SUCCESS;
     }
     else
     {
       return FAIL;
     }
+  }
+  catch (...)
+	{
+		return FAIL;
+	}
 }
 
 void LogHandler::OnFault(MessageData* mc)
