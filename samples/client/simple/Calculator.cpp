@@ -32,12 +32,12 @@ Calculator::~Calculator()
  */
 xsd__int Calculator::add(xsd__int Value0, xsd__int Value1)
 {
-	xsd__int Ret = 0;
+	xsd__int* Ret = NULL;
 	const char* pcCmplxFaultName;
 	try
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
-			return Ret;
+			return *Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "Calculator#add");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
 		m_pCall->setOperation("add", "http://localhost/axis/Calculator");
@@ -52,7 +52,7 @@ xsd__int Calculator::add(xsd__int Value0, xsd__int Value1)
 			}
 		}
 	m_pCall->unInitialize();
-		return Ret;
+		return *Ret;
 	}
 	catch(AxisException& e)
 	{
@@ -78,12 +78,12 @@ xsd__int Calculator::add(xsd__int Value0, xsd__int Value1)
  */
 xsd__int Calculator::sub(xsd__int Value0, xsd__int Value1)
 {
-	xsd__int Ret = 0;
+	xsd__int* Ret = NULL;
 	const char* pcCmplxFaultName;
 	try
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
-			return Ret;
+			return *Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "Calculator#sub");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
 		m_pCall->setOperation("sub", "http://localhost/axis/Calculator");
@@ -98,7 +98,7 @@ xsd__int Calculator::sub(xsd__int Value0, xsd__int Value1)
 			}
 		}
 	m_pCall->unInitialize();
-		return Ret;
+		return *Ret;
 	}
 	catch(AxisException& e)
 	{
@@ -124,12 +124,12 @@ xsd__int Calculator::sub(xsd__int Value0, xsd__int Value1)
  */
 xsd__int Calculator::mul(xsd__int Value0, xsd__int Value1)
 {
-	xsd__int Ret = 0;
+	xsd__int* Ret = NULL;
 	const char* pcCmplxFaultName;
 	try
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
-			return Ret;
+			return *Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "Calculator#mul");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
 		m_pCall->setOperation("mul", "http://localhost/axis/Calculator");
@@ -144,7 +144,7 @@ xsd__int Calculator::mul(xsd__int Value0, xsd__int Value1)
 			}
 		}
 	m_pCall->unInitialize();
-		return Ret;
+		return *Ret;
 	}
 	catch(AxisException& e)
 	{
@@ -170,12 +170,12 @@ xsd__int Calculator::mul(xsd__int Value0, xsd__int Value1)
  */
 xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 {
-	xsd__int Ret = 0;
+	xsd__int* Ret = NULL;
 	const char* pcCmplxFaultName;
 	try
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
-			return Ret;
+			return *Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "Calculator#div");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
 		m_pCall->setOperation("div", "http://localhost/axis/Calculator");
@@ -190,7 +190,7 @@ xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 			}
 		}
 	m_pCall->unInitialize();
-		return Ret;
+		return *Ret;
 	}
 	catch(AxisException& e)
 	{

@@ -19,10 +19,10 @@ public:
 public:
 	STORAGE_CLASS_INFO virtual ~Calculator();
 public: 
-	STORAGE_CLASS_INFO xsd__int add(xsd__int Value0,xsd__int Value1);
-	STORAGE_CLASS_INFO xsd__int sub(xsd__int Value0,xsd__int Value1);
-	STORAGE_CLASS_INFO xsd__int mul(xsd__int Value0,xsd__int Value1);
-	STORAGE_CLASS_INFO xsd__int div(xsd__int Value0,xsd__int Value1);
+	STORAGE_CLASS_INFO xsd__int add(xsd__int Value0, xsd__int Value1);
+	STORAGE_CLASS_INFO xsd__int sub(xsd__int Value0, xsd__int Value1);
+	STORAGE_CLASS_INFO xsd__int mul(xsd__int Value0, xsd__int Value1);
+	STORAGE_CLASS_INFO xsd__int div(xsd__int Value0, xsd__int Value1);
 };
 
 #endif /* !defined(__CALCULATOR_CLIENTSTUB_H__INCLUDED_)*/
