@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
  *
  */
 
@@ -279,6 +279,13 @@ int SoapEnvelope::serializeNamespaceDecl(string& sSerialized)
 	return strNamespaceDeclSerialized;
 }*/
 
+/*
+ * This method is needed in the situation where we create and fill a 
+ * SoapEnvelope object when deserializing a incoming soap request.
+ * But this method is not needed in serializing a soap request, because
+ * the version specific prefix is taken from the SoapEnvVersions.h at 
+ * that time.
+ */
 int SoapEnvelope::setPrefix(const string &prefix)
 {
 	m_sPrefix= prefix;
