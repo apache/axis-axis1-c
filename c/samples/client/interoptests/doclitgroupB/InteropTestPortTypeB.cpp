@@ -30,7 +30,7 @@ InteropTestPortTypeB::InteropTestPortTypeB()
 {
 	m_pCall = new Call();
 	m_pCall->SetProtocol(APTHTTP);
-	m_pCall->SetEndpointURI("http://localhost/axis/InteropGroupBDL");
+	m_pCall->SetEndpointURI("http://localhost:5555/axis/InteropGroupBDL");
 }
 
 InteropTestPortTypeB::~InteropTestPortTypeB()
@@ -47,7 +47,7 @@ InteropTestPortTypeB::~InteropTestPortTypeB()
 void InteropTestPortTypeB::echoStructAsSimpleTypes(SOAPStruct* Value0, AXIS_OUT_PARAM AxisChar** outValue0, AXIS_OUT_PARAM int* outValue1, AXIS_OUT_PARAM float* outValue2)
 {
 	int nStatus;
-	if (AXIS_SUCCESS != m_pCall->Initialize(DOC_LITERAL)) return;
+	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER)) return;
 	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropGroupBDL#echoStructAsSimpleTypes");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoStructAsSimpleTypes", "http://soapinterop.org/");
@@ -73,7 +73,7 @@ SOAPStruct* InteropTestPortTypeB::echoSimpleTypesAsStruct(float Value0, int Valu
 {
 	int nStatus;
 	SOAPStruct* pReturn = NULL;
-	if (AXIS_SUCCESS != m_pCall->Initialize(DOC_LITERAL)) return pReturn;
+	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER)) return pReturn;
 	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropGroupBDL#echoSimpleTypesAsStruct");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoSimpleTypesAsStruct", "http://soapinterop.org/");
@@ -110,7 +110,7 @@ SOAPStructStruct* InteropTestPortTypeB::echoNestedStruct(SOAPStructStruct* Value
 {
 	int nStatus;
 	SOAPStructStruct* pReturn = NULL;
-	if (AXIS_SUCCESS != m_pCall->Initialize(DOC_LITERAL)) return pReturn;
+	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER)) return pReturn;
 	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropGroupBDL#echoNestedStruct");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoNestedStruct", "http://soapinterop.org/");
@@ -135,7 +135,7 @@ SOAPArrayStruct* InteropTestPortTypeB::echoNestedArray(SOAPArrayStruct* Value0)
 {
 	int nStatus;
 	SOAPArrayStruct* pReturn = NULL;
-	if (AXIS_SUCCESS != m_pCall->Initialize(DOC_LITERAL)) return pReturn;
+	if (AXIS_SUCCESS != m_pCall->Initialize(CPP_DOC_PROVIDER)) return pReturn;
 	m_pCall->SetTransportProperty(SOAPACTION_HEADER, "InteropGroupBDL#echoNestedArray");
 	m_pCall->SetSOAPVersion(SOAP_VER_1_1);
 	m_pCall->SetOperation("echoNestedArray", "http://soapinterop.org/");
