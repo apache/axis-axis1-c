@@ -82,9 +82,9 @@ public:
     void (*m_traceLine)(const char *data);
     void (*m_traceEntry)(const char *className, const char *methodName, const void* that, int nParms, va_list vargs);
     void (*m_traceExit)(const char *className, const char *methodName, int returnIndex,
-		int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0);
+		int type, unsigned len, void *value);
     void (*m_traceCatch)(const char *className, const char *methodName, int catchIndex,
-		int type=TRACETYPE_UNKNOWN, unsigned len=0, void *value=0);
+		int type, unsigned len, void *value);
     bool m_traceOn;
 };
 
