@@ -79,11 +79,11 @@ int main(int argc, char* argv[])
 		printf("failed\n");
 	// testing echoIntegerArray 
 	xsd__int_Array arrint;
-	arrint.m_Array = new int[ARRAYSIZE];
-	arrint.m_Size = ARRAYSIZE;
+	*(arrint.m_Array) = new int[ARRAYSIZE];
+        arrint.m_Size = ARRAYSIZE;
 	for (x=0;x<ARRAYSIZE;x++)
 	{
-		arrint.m_Array[x] = x;
+		 *(arrint.m_Array[x]) = x;
 	}
 	printf("invoking echoIntegerArray...\n");
 	if (ws.echoIntegerArray(arrint).m_Array != NULL)
@@ -99,11 +99,11 @@ int main(int argc, char* argv[])
 		printf("failed\n");
 	// testing echoFloat 
 	xsd__float_Array arrfloat;
-	arrfloat.m_Array = new float[ARRAYSIZE];
+	 *(arrfloat.m_Array) = new float[ARRAYSIZE];
 	arrfloat.m_Size = ARRAYSIZE;
 	for (x=0;x<ARRAYSIZE;x++)
 	{
-		arrfloat.m_Array[x] = 1.1111*x;
+		 *(arrfloat.m_Array[x]) = 1.1111*x;
 	}
 	printf("invoking echoFloatArray...\n");
 	if (ws.echoFloatArray(arrfloat).m_Array != NULL)
