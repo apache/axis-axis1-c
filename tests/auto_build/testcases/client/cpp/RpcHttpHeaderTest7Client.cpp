@@ -69,7 +69,7 @@ main(int argc, char *argv[])
     printf("First transport key = %s\n", ws.getFirstTransportPropertyKey());
     printf("First transport value = %s\n",
            ws.getCurrentTransportPropertyValue()); 
-    char *key = NULL;
+    const char *key = NULL;
     int count = 1;
     while (key = ws.getNextTransportPropertyKey())
     {
