@@ -98,22 +98,12 @@ extern "C" {
 
 #define XML_TOK_PREFIXED_NAME 41
 
-#ifdef XML_DTD
-#define XML_TOK_IGNORE_SECT 42
-#endif /* XML_DTD */
 
-#ifdef XML_DTD
-#define XML_N_STATES 4
-#else /* not XML_DTD */
 #define XML_N_STATES 3
-#endif /* not XML_DTD */
 
 #define XML_PROLOG_STATE 0
 #define XML_CONTENT_STATE 1
 #define XML_CDATA_SECTION_STATE 2
-#ifdef XML_DTD
-#define XML_IGNORE_SECTION_STATE 3
-#endif /* XML_DTD */
 
 #define XML_N_LITERAL_TYPES 2
 #define XML_ATTRIBUTE_VALUE_LITERAL 0
@@ -142,12 +132,12 @@ typedef struct
 struct encoding;
 typedef struct encoding ENCODING;
 
-/* typedef int (PTRCALL *SCANNER)(int *, data_t *, const ENCODING *,
+/* typedef int (PTRCALL *SCANNER)(int *, TokDataStruct *, const ENCODING *,
  *                              const char *,
  *                              const char *,
  *                              const char **);
  */
-typedef int (PTRCALL *SCANNER)(int *, data_t *, const ENCODING *, int *, char*,
+typedef int (PTRCALL *SCANNER)(int *, TokDataStruct *, const ENCODING *, int *, char*,
     const char **);
 
 /**
@@ -159,32 +149,10 @@ typedef int (PTRCALL *SCANNER)(int *, data_t *, const ENCODING *, int *, char*,
 struct encoding 
 {
   SCANNER scanners[XML_N_STATES];
-  SCANNER literalScanners[XML_N_LITERAL_TYPES];
-  int (PTRCALL *sameName)(const ENCODING *,
-                          const char *,
-                          const char *);
   int (PTRCALL *nameMatchesAscii)(const ENCODING *,
                                   const char *,
                                   const char *,
                                   const char *);
-  int (PTRFASTCALL *nameLength)(const ENCODING *, const char *);
-  const char *(PTRFASTCALL *skipS)(const ENCODING *, const char *);
-  int (PTRCALL *getAtts)(const ENCODING *enc,
-                         const char *ptr,
-                         int attsMax,
-                         ATTRIBUTE *atts);
-  int (PTRFASTCALL *charRefNumber)(const ENCODING *enc, const char *ptr);
-  int (PTRCALL *predefinedEntityName)(const ENCODING *,
-                                      const char *,
-                                      const char *);
-  void (PTRCALL *updatePosition)(const ENCODING *,
-                                 const char *ptr,
-                                 const char *end,
-                                 POSITION *);
-  int (PTRCALL *isPublicId)(const ENCODING *enc,
-                            const char *ptr,
-                            const char *end,
-                            const char **badPtr);
   /* Converts to utf8 which is the parse output encoding which
    * is decided in
    * xpp_context_t* ct = (xpp_context_t*) parser_create("UTF-8");
@@ -227,63 +195,17 @@ struct encoding
  */
 
 
-#define XmlTok(parser_state, data, enc, state, num_chars, end, ptr) \
-  (((enc)->scanners[state])(parser_state, data, enc, num_chars, end, ptr))
+#define XmlTok(parserState, data, enc, state, numOfChars, end, ptr) \
+  (((enc)->scanners[state])(parserState, data, enc, numOfChars, end, ptr))
 
-#define XmlPrologTok(parser_state, data, enc, num_chars, end, ptr) \
-   XmlTok(parser_state, data, enc, XML_PROLOG_STATE, num_chars, end, ptr)
+#define XmlPrologTok(parserState, data, enc, numOfChars, end, ptr) \
+   XmlTok(parserState, data, enc, XML_PROLOG_STATE, numOfChars, end, ptr)
 
-#define XmlContentTok(parser_state, data, enc, num_chars, end, ptr) \
-   XmlTok(parser_state, data,enc, XML_CONTENT_STATE, num_chars, end, ptr)
-
-#define XmlCdataSectionTok(enc, end, ptr) \
-   XmlTok(parser_state, data,enc, XML_CDATA_SECTION_STATE, num_chars, end, ptr)
-
-#ifdef XML_DTD
-
-#define XmlIgnoreSectionTok(enc, ptr, end, nextTokPtr) \
-   XmlTok(parser_state,data,enc, XML_IGNORE_SECTION_STATE,num_chars, end, ptr)
-
-#endif /* XML_DTD */
-
-/* This is used for performing a 2nd-level tokenization on the content
- * of a literal that has already been returned by XmlTok.
- */
-
-#define XmlLiteralTok(enc, literalType,  end, ptr) \
-  (((enc)->literalScanners[literalType])(enc,  end, ptr))
-
-#define XmlAttributeValueTok(enc, ptr, end, nextTokPtr) \
-   XmlLiteralTok(enc, XML_ATTRIBUTE_VALUE_LITERAL, ptr, end, nextTokPtr)
-
-#define XmlEntityValueTok(enc, ptr, end, nextTokPtr) \
-   XmlLiteralTok(enc, XML_ENTITY_VALUE_LITERAL, ptr, end, nextTokPtr)
-
-#define XmlSameName(enc, ptr1, ptr2) (((enc)->sameName)(enc, ptr1, ptr2))
+#define XmlContentTok(parserState, data, enc, numOfChars, end, ptr) \
+   XmlTok(parserState, data,enc, XML_CONTENT_STATE, numOfChars, end, ptr)
 
 #define XmlNameMatchesAscii(enc, ptr1, end1, ptr2) \
   (((enc)->nameMatchesAscii)(enc, ptr1, end1, ptr2))
-
-#define XmlNameLength(enc, ptr) \
-  (((enc)->nameLength)(enc, ptr))
-
-#define XmlSkipS(enc, ptr) \
-  (((enc)->skipS)(enc, ptr))
-
-#define XmlGetAttributes(enc, ptr, attsMax, atts) \
-  (((enc)->getAtts)(enc, ptr, attsMax, atts))
-
-#define XmlCharRefNumber(enc, ptr) \
-  (((enc)->charRefNumber)(enc, ptr))
-
-#define XmlPredefinedEntityName(enc, ptr, end) \
-  (((enc)->predefinedEntityName)(enc, ptr, end))
-
-#define XmlUpdatePosition(enc, ptr, end, pos) \
-  (((enc)->updatePosition)(enc, ptr, end, pos))
-
-#define XmlIsPublicId(enc, ptr, end, badPtr) \
-  (((enc)->isPublicId)(enc, ptr, end, badPtr))
 
 #define XmlUtf8Convert(enc, fromP, fromLim, toP, toLim) \
   (((enc)->utf8Convert)(enc, fromP, fromLim, toP, toLim))
@@ -308,7 +230,7 @@ int XmlParseXmlDecl(int isGeneralTextEntity,
                     const ENCODING **namedEncodingPtr,
                     int *standalonePtr);
 
-int XmlDamConvert(const ENCODING *, const char **, const char *,
+int SppUtf8Convert(const ENCODING *, const char **, const char *,
     const char **, const char *);
 int XmlInitEncoding(INIT_ENCODING *, const ENCODING **, const char *name);
 const ENCODING *XmlGetUtf8InternalEncoding(void);

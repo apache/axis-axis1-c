@@ -47,23 +47,23 @@ static const ENCODING *NS(encodings)[] =
 };
 
 static int PTRCALL
-NS(initScanProlog)(int* parser_state, data_t* data,const ENCODING *enc, 
-                   int* num_chars, char *end,
+NS(initScanProlog)(int* parserState, TokDataStruct* data,const ENCODING *enc, 
+                   int* numOfChars, char *end,
                    const char **nextTokPtr)
 {
   /* printf("XML_PROLOG_STATE:%d\n", XML_PROLOG_STATE); */
-  return initScan(parser_state, data, NS(encodings),(const INIT_ENCODING *)enc,
-                  XML_PROLOG_STATE, num_chars, end, nextTokPtr);
+  return initScan(parserState, data, NS(encodings),(const INIT_ENCODING *)enc,
+                  XML_PROLOG_STATE, numOfChars, end, nextTokPtr);
 }
 
 static int PTRCALL
-NS(initScanContent)(int* parser_state, data_t* data,const ENCODING *enc, 
-                    int* num_chars, char *end,
+NS(initScanContent)(int* parserState, TokDataStruct* data,const ENCODING *enc, 
+                    int* numOfChars, char *end,
                     const char **nextTokPtr)
 {
   /* printf("XML_CONTENT_STATE:%d\n", XML_PROLOG_STATE); */
-  return initScan(parser_state, data, NS(encodings),(const INIT_ENCODING *)enc,
-                  XML_CONTENT_STATE, num_chars, end, nextTokPtr);
+  return initScan(parserState, data, NS(encodings),(const INIT_ENCODING *)enc,
+                  XML_CONTENT_STATE, numOfChars, end, nextTokPtr);
 }
 
 int
@@ -76,7 +76,6 @@ NS(XmlInitEncoding)(INIT_ENCODING *p, const ENCODING **encPtr,
   SET_INIT_ENC_INDEX(p, i);
   p->initEnc.scanners[XML_PROLOG_STATE] = NS(initScanProlog);
   p->initEnc.scanners[XML_CONTENT_STATE] = NS(initScanContent);
-  p->initEnc.updatePosition = initUpdatePosition;
   p->encPtr = encPtr;
   *encPtr = &(p->initEnc);
   /*printf("encoding:%d\n", i);*/
@@ -146,7 +145,7 @@ NS(XmlParseXmlDecl)(int isGeneralTextEntity,
                         standalone);
 }
 
-int NS(XmlDamConvert)(const ENCODING *enc, const char **fromPtr,
+int NS(SppUtf8Convert)(const ENCODING *enc, const char **fromPtr,
                       const char *rawNameEnd,
     const char **toPtr, const char *bufEnd)
 {

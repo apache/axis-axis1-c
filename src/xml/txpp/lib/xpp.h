@@ -73,100 +73,91 @@ typedef char ICHAR;
 #endif
 
 
-
+/** Tokenizing states*/
 enum 
 {
     S_0, S_1, S_2, S_3, S_4, S_5, S_6, S_7,
     S_8, S_9, S_10, S_11, S_12, S_13, S_14
 };        
 
+/** Special characters*/
 enum 
 {
     START_TAG, END_TAG, EMPTY_ELEMENT_TAG, PCDATA
 };
 
-
-enum XML_Error 
+/** Error codes*/
+enum SPP_Error 
 {
-    XML_ERROR_NONE,
-    XML_ERROR_NO_MEMORY,
-    XML_ERROR_SYNTAX,
-    XML_ERROR_NO_ELEMENTS,
-    XML_ERROR_INVALID_TOKEN,
-    XML_ERROR_UNCLOSED_TOKEN,
-    XML_ERROR_PARTIAL_CHAR,
-    XML_ERROR_TAG_MISMATCH,
-    XML_ERROR_DUPLICATE_ATTRIBUTE,
-    XML_ERROR_JUNK_AFTER_DOC_ELEMENT,
-    XML_ERROR_PARAM_ENTITY_REF,
-    XML_ERROR_UNDEFINED_ENTITY,
-    XML_ERROR_RECURSIVE_ENTITY_REF,
-    XML_ERROR_ASYNC_ENTITY,
-    XML_ERROR_BAD_CHAR_REF,
-    XML_ERROR_BINARY_ENTITY_REF,
-    XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF,
-    XML_ERROR_MISPLACED_XML_PI,
-    XML_ERROR_UNKNOWN_ENCODING,
-    XML_ERROR_INCORRECT_ENCODING,
-    XML_ERROR_UNCLOSED_CDATA_SECTION,
-    XML_ERROR_EXTERNAL_ENTITY_HANDLING,
-    XML_ERROR_NOT_STANDALONE,
-    XML_ERROR_UNEXPECTED_STATE,
-    XML_ERROR_ENTITY_DECLARED_IN_PE,
-    XML_ERROR_FEATURE_REQUIRES_XML_DTD,
-    XML_ERROR_CANT_CHANGE_FEATURE_ONCE_PARSING,
-    XML_ERROR_UNBOUND_PREFIX,
-    XML_TEST_ERROR
+    SPP_ERROR_NONE,
+    SPP_ERROR_NO_MEMORY,
+    SPP_ERROR_SYNTAX,
+    SPP_ERROR_NO_ELEMENTS,
+    SPP_ERROR_INVALID_TOKEN,
+    SPP_ERROR_UNCLOSED_TOKEN,
+    SPP_ERROR_TAG_MISMATCH,
+    SPP_ERROR_DUPLICATE_ATTRIBUTE,
+    SPP_ERROR_UNKNOWN_ENCODING,
+    SPP_ERROR_INCORRECT_ENCODING,
+    SPP_ERROR_NOT_STANDALONE,
+    SPP_ERROR_UNEXPECTED_STATE,
+    SPP_ERROR_TOKENIZER_FAILED,
+    SPP_ERROR_UNEXPECTED_TOKEN_CONTENT,
+    SPP_ERROR_PARSE_FAILED,
+    SPP_ERROR_READ_BLOCK,
+    SPP_ERROR_PARSER_INIT_FAILED,
+    SPP_ERROR_UNKNOWN
 };
 
+/** Memeory handling structure*/
 typedef struct mm 
 {
-  void *( *malloc_fcn)(size_t size);
-  void *( *memmove_fcn)(void *ptrto, void *ptrfrom, size_t size);
-  void *( *realloc_fcn)(void *ptr, size_t size);
-  void ( *free_fcn)(void *ptr);
-} XML_Memory_Handling_Suite;
+    void *( *mallocFcn)(size_t size);
+    void *( *memMoveFcn)(void *ptrto, void *ptrfrom, size_t size);
+    void *( *reallocFcn)(void *ptr, size_t size);
+    void ( *freeFcn)(void *ptr);
+} SppMemoryHandlingSuite;
 
-/** Struct that holds information of the tokenized stream
-  *
-  */
+/** Struct to hold ptrs to tokenized data*/
 typedef struct data
 {
-    /* Variable to hold the type of tag(eg.START_TAG) */
     int type;
-    /* Number of tokenized strings that can be held in ptrs buffer */
-    int ptrs_sz;
-    /* Number of tokenized strings that are held in prts buffer currently*/
-    int num_ptrs;
-    /* Number of ptrs pointing to the utf8 converted and tokenized strings*/
-    int num_ptrs_utf8;
-    /* The buffer to hold pointers to tokenized strings */
-    char **ptrs;
-    /* the buffer to hold pointers to utf8 converted tokenized strings */
-    char **utf8ptrs;
-} data_t;
+    int ptrBuffSize;
+    int numOfPtrs;
+    int numOfPtrsUtf8;
+    char **ptrBuff;
+    char **utf8PtrBuff;
+} TokDataStruct;
 
 /* char *tn[] = {"START_TAG", "END_TAG", "EMPTY_ELEMENT_TAG", "PCDATA"}; */
 
-struct xpp_context;
+struct SPPContext;
 
-typedef struct xpp_context xpp_context_t;
+/** SPP parser structure*/
+typedef struct SPPContext SPPParser;
 
-xpp_context_t* parser_create(const XML_Char *encodingName);
+/** Parser create with encoding*/
+SPPParser* parserCreate(const XML_Char *encodingName);
 
-xpp_context_t* parser_create_ns(const XML_Char *encodingName, XML_Char nsSep);
+/** Parser create with encoding, namspace*/
+SPPParser* parserCreate_ns(const XML_Char *encodingName, XML_Char nsSep);
 
-xpp_context_t* parser_create_mh(const XML_Char *encodingName, 
-                                const XML_Memory_Handling_Suite *memsuite,
-                                XML_Char nsSep);
+/** Parser create with encoding, external memory handling suite and namespace*/
+SPPParser* parserCreate_mh(const XML_Char *encodingName, 
+    const SppMemoryHandlingSuite *memsuite,
+    XML_Char nsSep);
+enum SPP_Error parseProlog(SPPParser* ct);
 
-void* parser_free(xpp_context_t* ct);
+void* parserFree(SPPParser* ct);
 
-data_t* next(xpp_context_t* ct);
+/** Parse the next element tag*/
+TokDataStruct* next(SPPParser* ct);
 
-int get_next_element_as_int(xpp_context_t* ct, int* parse_error);
+/** Get next element as integer*/
+int getNextElementAsInt(SPPParser* ct, int* parseError);
 
-int get_next_attribute_as_int(xpp_context_t* ct, int* parse_error);
+/** Get next attribute as integer*/
+int getNextAttributeAsInt(SPPParser* ct, int* parseError);
 
 #endif
 
