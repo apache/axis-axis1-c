@@ -171,14 +171,15 @@ int	initializeHeaderMap(const string &sHeaderLine, map<HTTP_MAP_KEYWORDS, HTTP_M
 			HTTP_MAP_TYPE* objHTTP_MAP_Value = (HTTP_MAP_TYPE*)malloc(sizeof(HTTP_MAP_TYPE));
 
 			switch (iRoundNo) {
-			/*case 0:
+			/*
+			case 0:
 				/*sTmpValue = AxisUtils::toLowerCase(sTmpValue);
 				if (sTmpValue == "post") {*/
-			/*	if (sTmpValue == "POST") {
+		/*		if (sTmpValue == "POST") {
 					objuHttpMapContent.eHTTP_KEYWORD = HK_POST;
 					
 				/*if (sTmpValue == "get") {*/
-			/*	} else if (sTmpValue == "GET") {
+		/*		} else if (sTmpValue == "GET") {
 					objuHttpMapContent.eHTTP_KEYWORD = HK_GET;
 				}
 				objHTTP_MAP_Value.eCONTENT_TYPE= HTTP_KEYWORD_TYPE;
@@ -190,9 +191,11 @@ int	initializeHeaderMap(const string &sHeaderLine, map<HTTP_MAP_KEYWORDS, HTTP_M
 				objHTTP_MAP_Value->eCONTENT_TYPE= STRING_TYPE;
 				objHTTP_MAP_Value->objuHttpMapContent =  objuHttpMapContent;
 				(*map_HTTP_Headers)[HMK_URI] = objHTTP_MAP_Value;
+				/* DEBUG INFO
 				printf("in case1 = %s\n", (*map_HTTP_Headers)[HMK_URI]->objuHttpMapContent->msValue);
+				*/
 				break;
-			/*case 2:
+		/*	case 2:
 				/*sTmpValue = AxisUtils::toLowerCase(sTmpValue);
 				if (sTmpValue == "http/1.1") {*/
 		/*		if (sTmpValue == "HTTP/1.1") {
