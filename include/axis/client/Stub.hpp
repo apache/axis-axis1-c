@@ -495,6 +495,18 @@ class STORAGE_CLASS_INFO Stub
     */
     void setMaintainSession(bool bSession);
 
+  /**
+    * Set transport protocol to be used by the transport.
+    * @param eProtocol - protocol to use
+    */
+    void setTransportProtocol(AXIS_PROTOCOL_TYPE eProtocol);
+
+  /**
+    * Get transport protocol being used by the transport.
+    * @return Protocol used by transport
+    */
+    AXIS_PROTOCOL_TYPE getTransportProtocol();
+
   protected:
   /**
     * Apply user set preferences to each call made on the Stub object.

@@ -234,6 +234,7 @@ public:
         const char* value);
 	int AXISCALL setHandlerProperty(AxisChar* name, void* value, int len);
     int AXISCALL setProtocol(AXIS_PROTOCOL_TYPE protocol);
+    AXIS_PROTOCOL_TYPE AXISCALL getProtocol();
     int AXISCALL unInitialize();
     int AXISCALL initialize(PROVIDERTYPE nStyle, int secure);
     int AXISCALL invoke();
