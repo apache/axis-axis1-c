@@ -3,6 +3,10 @@
 -compile these java source files and deploy them in Axis java (visit http://ws.apache.org/axis/java/index.html on how to 
 achieve this)
 
+-Put the following element in the <globalConfiguration> section in the server-config.wsdd to enable SOAP header based 
+session handling for Axis Java
+<handler name="session" type="java:org.apache.axis.handlers.SimpleSessionHandler"/>
+
 -The following should be put in the server-config.wsdd of Axis java for this service to behave as having session scope.
 
 <service name="CounterService" provider="java:RPC">
