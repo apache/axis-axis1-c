@@ -144,30 +144,30 @@ int SoapSerializer::setSoapMethod(SoapMethod *pSoapMethod)
 	return intStatus;
 }
 
-IParam* SoapSerializer::setResponseParam(XSDTYPE nType, uParamValue Value)
+IParam* SoapSerializer::AddOutputParam(XSDTYPE nType, uParamValue Value)
 {
 	Param* pParam = new Param();
 	pParam->SetValue(nType, Value);
 	if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
 	{
-		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->setOutputParam(pParam);
+		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->AddOutputParam(pParam);
 	}
 	return pParam;
 }
 
-IParam* SoapSerializer::setResponseParam(IArrayBean* pArrayBean)
+IParam* SoapSerializer::AddOutputParam(IArrayBean* pArrayBean)
 {
 	Param* pParam = new Param();
 	pParam->m_Value.pIArray = pArrayBean;
 	pParam->m_Type = XSD_ARRAY;
 	if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
 	{
-		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->setOutputParam(pParam);
+		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->AddOutputParam(pParam);
 	}
 	return pParam;
 }
 
-IParam* SoapSerializer::setResponseParam(void* pObject, void* pSZFunct, void* pDelFunct)
+IParam* SoapSerializer::AddOutputParam(void* pObject, void* pSZFunct, void* pDelFunct)
 { 
 	Param* pParam = new Param();
 	pParam->m_Value.pCplxObj = new ComplexObjectHandler;
@@ -176,7 +176,7 @@ IParam* SoapSerializer::setResponseParam(void* pObject, void* pSZFunct, void* pD
 	pParam->m_Value.pCplxObj->pDelFunct = (AXIS_OBJECT_DELETE_FUNCT)pDelFunct;
 	if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
 	{
-		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->setOutputParam(pParam);
+		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->AddOutputParam(pParam);
 	}
 	return pParam;
 }

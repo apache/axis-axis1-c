@@ -84,9 +84,6 @@ public:
 	int GetArraySize();
 private:
 	int GetArrayBlockSize(list<int>::iterator it);
-//	void DeleteArray(list<int>::iterator it, int nItemOffset, int nItemSize, int nDim);
-//	int SerializeArray(list<int>::iterator it, int nItemOffset, int nItemSize, int nDim, string& sSerialized);
-//	int DeSerializeArray(list<int>::iterator it, int nItemOffset, int nItemSize, int nDim, SoapDeSerializer *pDZ);
 
 public:
 	XSDTYPE m_type; //array element type

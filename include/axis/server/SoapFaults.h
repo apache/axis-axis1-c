@@ -98,6 +98,7 @@ enum SOAP_FAULTS {
 	SF_NOSOAPMETHOD,
 	SF_METHODNOTALLOWED,
 	SF_PARATYPEMISMATCH,
+	SF_CLIENTHANDLERFAILED,
 
 	//Server faults
 	SF_COULDNOTLOADSRV,
@@ -131,7 +132,7 @@ static SoapFaultStruct g_sObjSoapFaultStruct[FAULT_LAST] =
 	/*SF_NOSOAPMETHOD*/		{"Client", "No method to invoke", "none", ""},
 	/*SF_METHODNOTALLOWED*/	{"Client", "Soap method is not allowed to invoke", "none", ""},
   /*SF_PARATYPEMISMATCH*/	{"Client", "Parameter type mismatch", "none", ""},
-  
+  /*SF_CLIENTHANDLERFAILED*/{"Client", "A client handler failed", "none", ""},
 
 //Server faults
 	/*SF_COULDNOTLOADSRV*/	{"Server", "Cannot load web service", "none", ""},
