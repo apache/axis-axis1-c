@@ -6,7 +6,7 @@
 #if !defined(__SIMPLETESTSOAP_CLIENTSTUB_H__INCLUDED_)
 #define __SIMPLETESTSOAP_CLIENTSTUB_H__INCLUDED_
 
-#include <axis/client/Stub.h>
+#include <axis/client/Stub.hpp>
 /*include Exception header files here*/
 #include "SOAPStruct_Array.h"
 #include "SOAPStruct.h"
