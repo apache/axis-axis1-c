@@ -64,11 +64,11 @@ int AppScopeHandlerPool::getInstance (BasicHandler** pHandler, int nLibId)
         if (m_Handlers[nLibId].empty ())
             /* this means that the object is being used by some other thread
 	     * but we cannot create any more objects because this is an 
-	     * application scope object. So just return HANDLER_BEING_USED
+	     * application scope object. So just return SERVER_ENGINE_HANDLERBEINGUSED
 	     */
         {
             unlock ();
-            return HANDLER_BEING_USED;
+            return SERVER_ENGINE_HANDLERBEINGUSED;
         }
         else
         {

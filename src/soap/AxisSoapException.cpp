@@ -19,17 +19,17 @@
  *
  */
 
-#include <axis/server/AxisSoapException.h>
+#include "AxisSoapException.h"
 #include <exception>
 using namespace std;
 
 /**
  *    Default when no parameter passed. When thrown with no parameter
- *    more general AXISC_SOAP_EXCEPTION is assumed.
+ *    more general SERVER_SOAP_EXCEPTION is assumed.
 */
 AxisSoapException::AxisSoapException()
 {
-    processException(AXISC_SOAP_EXCEPTION);
+    processException(SERVER_SOAP_EXCEPTION);
 }
 
 AxisSoapException::AxisSoapException (int iExceptionCode)
@@ -51,5 +51,61 @@ AxisSoapException::AxisSoapException (exception* e, int iExceptionCode)
 AxisSoapException::~AxisSoapException() throw ()
 {
 
+}
+
+void AxisSoapException::processException (exception* e, int iExceptionCode)
+{
+    m_sMessage = getMessage (e) + getMessage (iExceptionCode);
+}
+
+void AxisSoapException::processException (exception* e)
+{
+    m_sMessage = getMessage (e);
+}
+
+void AxisSoapException::processException(int iExceptionCode)
+{
+    m_sMessage = getMessage (iExceptionCode);
+}
+
+const string AxisSoapException::getMessage (exception* objException)
+{
+    string sMessage = objException->what();
+
+    return sMessage;
+}
+
+const string AxisSoapException::getMessage (int iExceptionCode)
+{
+    string sMessage;
+    switch(iExceptionCode)
+    {
+
+        case CLIENT_SOAP_MESSAGEINCOMPLETE:
+            sMessage = "Received message is incomplete";
+            break;
+        case CLIENT_SOAP_SOAPACTIONEMTPY:
+            sMessage = "Soap action is empty";
+            break;
+        case CLIENT_SOAP_SOAPCONTENTERROR:
+            sMessage = "Received content is faulty";
+            break;
+        case CLIENT_SOAP_NOSOAPMETHOD:
+            sMessage = "Request method is not a soap method";
+            break;
+        default:
+            sMessage = "Unknown Soap Exception";
+    }
+    return sMessage;
+}
+
+const char* AxisSoapException::what() throw ()
+{
+    return m_sMessage.c_str ();
+}
+
+const int AxisSoapException::getExceptionCode()
+{
+    return m_iExceptionCode;
 }
 

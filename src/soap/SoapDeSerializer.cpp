@@ -29,7 +29,7 @@
 #include <axis/server/SoapHeader.h>
 #include "SoapMethod.h"
 #include "SoapBody.h"
-#include <axis/server/SoapFault.h>
+#include "SoapFault.h"
 #include "ComplexElement.h"
 #include <axis/server/CharacterElement.h>
 #include <axis/server/GDefine.h>
@@ -276,25 +276,21 @@ int SoapDeSerializer::getHeader()
 
 int SoapDeSerializer::getBody()
 {   
-    AXISTRACE1("came1", INFO); 
     if (!m_pNode) m_pNode = m_pParser->next();
     AXISTRACE1("came2", INFO); 
     /* previous header searching may have left a node unidentified */
     if (m_pNode) 
     {
-    AXISTRACE1("came3", INFO); 
         if ((START_ELEMENT == m_pNode->m_type) && 
             (0 == strcmp(m_pNode->m_pchNameOrValue, 
             SoapKeywordMapping::map(m_nSoapVersion).pchWords[SKW_BODY])))
         {
-    AXISTRACE1("came4", INFO); 
             /* Set any attributes/namspaces to the SoapBody object */
             m_pNode = NULL; /* This is to indicate that node is identified 
                              * and used */
             return AXIS_SUCCESS;
         }
     }
-    AXISTRACE1("came5", INFO); 
     m_nStatus = AXIS_FAIL;
     return AXIS_FAIL;
 }
@@ -315,10 +311,12 @@ int SoapDeSerializer::checkMessageBody(const AxisChar* pName,
         if(0 != strcmp(m_pNode->m_pchNameOrValue, "Fault"))
         {
             m_nStatus = AXIS_FAIL;
-            return AXIS_FAIL;
+            THROW_AXIS_EXCEPTION(AXISC_UNKNOWN_ELEMENT_EXCEPTION);
         }
         else//Body contains soap fault
-            iResult = getFault();
+            //iResult = getFault();
+            THROW_AXIS_EXCEPTION(AXISC_SOAP_FAULT_EXCEPTION);
+            
            
     }
     /* we can check the namespace uri too here. Should we ?*/

@@ -7,19 +7,16 @@
 #define __MATHOPS_SERVERSKELETON_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/AxisUserAPI.h>
-
+#include "AxisDivByZeroException.h"
 
 class MathOps 
 {
-	public:
-		MathOps();
-	public:
-		virtual ~MathOps();
-	public: 
-		int add(int Value0,int Value1);
-		int sub(int Value0,int Value1);
-		int mul(int Value0,int Value1);
-		int div(int Value0,int Value1);
+public:
+    MathOps();
+public:
+    virtual ~MathOps();
+public: 
+    int div(int Value0,int Value1) throw(AxisDivByZeroException);
 };
 
-#endif /* !defined(__CALCULATOR_SERVERSKELETON_H__OF_AXIS_INCLUDED_)*/
+#endif /* !defined(__MATHOPS_SERVERSKELETON_H__OF_AXIS_INCLUDED_)*/
