@@ -57,7 +57,7 @@ LINK32=link.exe
 # ADD LINK32 libexpat.lib /nologo /dll /pdb:none /machine:I386 /out:"../bin/AxisServer.dll" /libpath:"../lib/expat"
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
-PostBuild_Cmds=copy ..\bin\AxisServer.dll "%AXIS_HOME%\libs\."
+PostBuild_Cmds=copy ..\bin\AxisServer.dll "%AXISCPP_DEPLOY%\lib\."
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "AxisServer - Win32 Debug"
@@ -159,6 +159,10 @@ SOURCE=..\src\common\AxisTime.cpp
 # Begin Source File
 
 SOURCE=..\src\common\AxisTrace.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\common\AxisUserAPI.cpp
 # End Source File
 # Begin Source File
 
@@ -342,7 +346,7 @@ SOURCE=..\include\axis\ISoapFault.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\axis\server\Packet.h
+SOURCE=..\include\axis\server\Packet.hpp
 # End Source File
 # End Group
 # Begin Group "Resource Files"
