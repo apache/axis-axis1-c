@@ -48,7 +48,7 @@ bool CallBase::bInitialized = false;
 CallFunctions CallBase::ms_VFtable;
 
 Call::Call ()
-:m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false), m_bModuleInitialized(false)
+:m_pcEndPointUri(NULL), m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false), m_bModuleInitialized(false)
 {
     m_pAxisEngine = NULL;
     m_pIWSSZ = NULL;
@@ -61,21 +61,26 @@ Call::Call ()
     
     m_pTransport = NULL;
     m_nStatus = AXIS_SUCCESS;
-	m_pcEndPointUri = 0;
 }
 
 Call::~Call ()
 {
     if (m_bModuleInitialized)
         uninitialize_module();
-	if (m_pcEndPointUri)
+    if (m_pcEndPointUri)
         delete [] m_pcEndPointUri;
 }
 
 int Call::setEndpointURI (const char* pchEndpointURI)
 {
-    m_pcEndPointUri = new char[strlen(pchEndpointURI)+1];
-	strcpy(m_pcEndPointUri, pchEndpointURI);
+    if (m_pcEndPointUri)
+        delete [] m_pcEndPointUri;
+    m_pcEndPointUri = NULL;
+    if (pchEndpointURI)
+    {
+        m_pcEndPointUri = new char[strlen(pchEndpointURI)+1];
+        strcpy(m_pcEndPointUri, pchEndpointURI);
+    }
     return AXIS_SUCCESS;
 }
 
@@ -284,7 +289,8 @@ int Call::openConnection(int secure)
     {
     m_pTransport = SOAPTransportFactory::getTransportObject(m_nTransportType);
 	if (!m_pTransport) return AXIS_FAIL;
-	m_pTransport->setEndpointUri(m_pcEndPointUri);
+
+    m_pTransport->setEndpointUri(m_pcEndPointUri);
   
     //if use proxy then set proxy
     if( m_bUseProxy )
