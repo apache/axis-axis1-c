@@ -81,6 +81,9 @@ extern "C"
     STORAGE_CLASS_INFO void uninitializeLibrary (void)
     {
         // Do uninit actions
+#ifdef ENABLE_AXISTRACE
+        AxisTrace::deleteTraceEntrypoints();
+#endif
     }
 
     STORAGE_CLASS_INFO const char * WhatAmI()
