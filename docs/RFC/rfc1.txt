@@ -1,0 +1,10 @@
+OPEN ISSUES
+-----------
+1. We have to discuss about separating the code base to several dynamic link libraries. But we have to
+   consider performance bottlenecks. At the moment we have following issues due to non-separation of code
+   into several DLLs.
+	a. Each Webservice and handler deployed has its own Serializer/Deserializer code statically linked
+	   to that DLL (or .so).
+	b. If we separate apache plugin module from rest of the axis code and make axis code another shared 
+	   object, we may use the same axis .so for other web servers without rebuilding. But this can be a 
+	   a performance bottleneck too. what do you think ?.
