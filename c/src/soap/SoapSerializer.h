@@ -107,6 +107,10 @@ public:
 	virtual ~SoapSerializer();
 	IParam* setResponseParam(XSDTYPE nType, uParamValue Value);
 	IArrayBean* makeArrayBean(XSDTYPE nType, void* pArray);
+public: //Basic Type Serializing methods
+	string& SerializeBasicType(const string& sName, string& sValue, XSDTYPE type=XSD_STRING);
+	string& SerializeBasicType(const string& sName, float fValue);
+	string& SerializeBasicType(const string& sName, int nValue);
 };
 
 #endif // !defined(AFX_SOAPSERIALIZER_H__C37229AD_BD54_430D_9619_E4574CF95334__INCLUDED_)
