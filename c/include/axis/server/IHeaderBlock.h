@@ -35,7 +35,15 @@ enum HEADER_BLOCK_STD_ATTR_TYPE
  *
  *
  *  @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ *  @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ *
  */
+
+/*
+ * Revision 1.1  2004/05/26 samisa
+ * Added copy constructor and clone
+ */
+
 class IHeaderBlock
 {
 public:
@@ -85,6 +93,9 @@ public:
     virtual void setUri(const AxisChar* uri)=0;
     virtual void setPrefix(const AxisChar* prefix)=0;
     virtual int initializeForTesting() = 0;
+    IHeaderBlock(){/*empty body as there are no member variable*/};
+    IHeaderBlock(const IHeaderBlock& rCopy){/*empty body as there are no member variable*/};
+    virtual IHeaderBlock* clone() = 0;
     virtual ~IHeaderBlock() {};
 };
 

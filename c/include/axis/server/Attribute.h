@@ -31,7 +31,7 @@ class SoapSerializer;
  *   @brief interface for the Attribute class.
  *
  *   @author Roshan Weerasuriya (roshan@opensource.lk, roshan@jkcs.slt.lk)
- * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ *   @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  *
  */
 
@@ -53,7 +53,8 @@ public:
         const AxisChar* uri, const AxisChar* value);
     Attribute(const AxisChar* localname, const AxisChar* prefix, 
         const AxisChar* value);
-    Attribute(const Attribute& rCopy);    
+    Attribute(const Attribute& rCopy);   
+    Attribute* clone(); 
     virtual ~Attribute();
 
     void setValue(const AxisChar* value);
