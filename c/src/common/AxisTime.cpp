@@ -442,7 +442,7 @@ int AxisTime::mkCTime()
 
             m_TM.tm_year = 70;
             m_TM.tm_mon = 0;
-            m_TM.tm_mday = 0;
+            m_TM.tm_mday = 1;  /* Day of month (1 - 31) */
             m_TM.tm_isdst = -1;
 #if !defined(WIN32) && !defined(AIX)
             m_TM.tm_zone = NULL;
