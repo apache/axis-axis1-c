@@ -51,4 +51,13 @@ MinInclusive* Int::getMinInclusive()
     return new MinInclusive(*minInclusive);
 }
 
+MinExclusive* Int::getMinExclusive()
+{   
+  AxisChar* end;    
+  LONGLONG* minExclusive = new LONGLONG;
+  *minExclusive = strtol ("-2147483649", &end, 10);
+    
+    return new MinExclusive(*minExclusive);
+}
+
 AXIS_CPP_NAMESPACE_END

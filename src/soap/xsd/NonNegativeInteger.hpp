@@ -47,6 +47,13 @@ protected:
      */
     virtual MinInclusive* getMinInclusive();
 
+    /**
+     * Creates a MinExclusive object.  For the NonNegativeInteger type this is
+     * defined as -1.
+     * @return MinExclusive object
+     */
+    virtual MinExclusive* getMinExclusive();
+
 };
 
 AXIS_CPP_NAMESPACE_END

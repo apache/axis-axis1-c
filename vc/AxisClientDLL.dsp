@@ -302,6 +302,10 @@ SOURCE=..\src\common\MessageData.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\constraints\MinExclusive.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\xsd\constraints\MinInclusive.cpp
 # End Source File
 # Begin Source File

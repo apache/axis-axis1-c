@@ -44,6 +44,24 @@ AXIS_CPP_NAMESPACE_START
             }
         }
         delete minInclusive;
+
+        MinExclusive* minExclusive = getMinExclusive();
+        if (minExclusive->isSet())
+        {
+            if ( 0 > difftime(mktime(&(minExclusive->getMinExclusiveAsStructTM())), mktime(const_cast<struct tm*>(value))) )
+            {
+                AxisString exceptionMessage =
+                "Value to be serialized is less than or equal to MinExclusive specified for this type.  MinExclusive = ";
+                exceptionMessage += asctime(&(minExclusive->getMinExclusiveAsStructTM()));
+                exceptionMessage += ", Value = ";
+                exceptionMessage += asctime(value);
+                exceptionMessage += ".";
+                
+                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                    const_cast<AxisChar*>(exceptionMessage.c_str()));
+            }
+        }
+        delete minExclusive;
      
     	AxisChar* serializedValue = new AxisChar[80];
     	strftime (serializedValue, 80, "%Y-%m-%dT%H:%M:%SZ", value);
@@ -187,6 +205,11 @@ AXIS_CPP_NAMESPACE_START
     MinInclusive* DateTime::getMinInclusive()
     {
         return new MinInclusive();
+    }
+
+    MinExclusive* DateTime::getMinExclusive()
+    {
+        return new MinExclusive();
     }
 
     WhiteSpace* DateTime::getWhiteSpace()

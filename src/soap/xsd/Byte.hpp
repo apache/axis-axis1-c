@@ -77,6 +77,13 @@ protected:
      * @return MinInclusive object
      */
     virtual MinInclusive* getMinInclusive();
+
+    /**
+     * Creates a MinExclusive object.  For the Byte type this is defined as
+     * -129.
+     * @return MinExclusive object
+     */
+    virtual MinExclusive* getMinExclusive();
     
 private:
     char* m_Byte;

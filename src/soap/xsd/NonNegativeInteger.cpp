@@ -12,4 +12,9 @@ MinInclusive* NonNegativeInteger::getMinInclusive()
     return new MinInclusive((LONGLONG) 0);
 }
 
+MinExclusive* NonNegativeInteger::getMinExclusive()
+{   
+    return new MinExclusive((LONGLONG) -1);
+}
+
 AXIS_CPP_NAMESPACE_END

@@ -41,6 +41,27 @@ AXIS_CPP_NAMESPACE_START
         }
         delete minInclusive;
      
+        MinExclusive* minExclusive = getMinExclusive();
+        if (minExclusive->isSet())
+        {
+            if ( *value < minExclusive->getMinExclusiveAsLONGLONG() )
+            {
+                AxisString exceptionMessage =
+                "Value to be serialized is less than or equal to MinExclusive specified for this type.  MinExclusive = ";
+                AxisChar* length = new AxisChar[25];
+                sprintf(length, "%d", minExclusive->getMinExclusiveAsLONGLONG());
+                exceptionMessage += length;
+                exceptionMessage += ", Value = ";
+                sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
+                exceptionMessage += length;
+                exceptionMessage += ".";
+                delete [] length;
+                
+                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                    const_cast<AxisChar*>(exceptionMessage.c_str()));
+            }
+        }
+        delete minExclusive;
      
     	long valueToSerialize = *value;
     	AxisChar buff[4];
@@ -167,6 +188,11 @@ AXIS_CPP_NAMESPACE_START
     MinInclusive* Duration::getMinInclusive()
     {
         return new MinInclusive();
+    }
+
+    MinExclusive* Duration::getMinExclusive()
+    {
+        return new MinExclusive();
     }
     
 AXIS_CPP_NAMESPACE_END

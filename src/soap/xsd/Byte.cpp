@@ -47,4 +47,9 @@ MinInclusive* Byte::getMinInclusive()
     return new MinInclusive(static_cast<LONGLONG>(-128));
 }
 
+MinExclusive* Byte::getMinExclusive()
+{
+    return new MinExclusive(static_cast<LONGLONG>(-129));
+}
+
 AXIS_CPP_NAMESPACE_END

@@ -46,6 +46,13 @@ protected:
      * @return MinInclusive object
      */
     virtual MinInclusive* getMinInclusive();
+    
+    /**
+     * Creates a MinExclusive object.  For the Long type this is defined as
+     * -9223372036854775809.
+     * @return MinExclusive object
+     */
+    virtual MinExclusive* getMinExclusive();
 };
 
 AXIS_CPP_NAMESPACE_END

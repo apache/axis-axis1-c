@@ -72,11 +72,18 @@ public:
 protected:
 
     /**
-     * Creates a MinInclusive object.  For the Int type this is defined as
+     * Creates a MinInclusive object.  For the Short type this is defined as
      * -32768.
      * @return MinInclusive object
      */
     virtual MinInclusive* getMinInclusive();
+
+    /**
+     * Creates a MinExclusive object.  For the Short type this is defined as
+     * -32769.
+     * @return MinExclusive object
+     */
+    virtual MinExclusive* getMinExclusive();
     
 private:
     short* m_Short;

@@ -47,4 +47,9 @@ MinInclusive* Short::getMinInclusive()
     return new MinInclusive(static_cast<LONGLONG>(-32768));
 }
 
+MinExclusive* Short::getMinExclusive()
+{
+    return new MinExclusive(static_cast<LONGLONG>(-32769));
+}
+
 AXIS_CPP_NAMESPACE_END

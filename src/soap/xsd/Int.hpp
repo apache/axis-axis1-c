@@ -78,6 +78,13 @@ protected:
      */
     virtual MinInclusive* getMinInclusive();
 
+    /**
+     * Creates a MinExclusive object.  For the Int type this is defined as
+     * -2147483649.
+     * @return MinExclusive object
+     */
+    virtual MinExclusive* getMinExclusive();
+
 private:
     int* m_Int;
 };

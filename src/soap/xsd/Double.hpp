@@ -24,6 +24,7 @@
 
 #include "IAnySimpleType.hpp"
 #include "constraints/MinInclusive.hpp"
+#include "constraints/MinExclusive.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -73,6 +74,13 @@ protected:
      * @return MinInclusive object
      */
     virtual MinInclusive* getMinInclusive();
+
+    /**
+     * Creates a MinExclusive object.  For the Double type this is undefined, 
+     * so an unset MinExclusive object is created.
+     * @return MinExclusive object
+     */
+    virtual MinExclusive* getMinExclusive();
 
     /**
      * Creates a WhiteSpace object to collapse whitespace
