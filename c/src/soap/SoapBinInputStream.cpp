@@ -1,4 +1,3 @@
-/* -*- C++ -*- */
 /*
  *   Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -15,21 +14,17 @@
  *   limitations under the License.
  */
 
-// SoapBinInputStream.cpp: implementation of the SoapBinInputStream class.
-//
-//////////////////////////////////////////////////////////////////////
+/* SoapBinInputStream.cpp: implementation of the SoapBinInputStream class. */
+
 
 #include "SoapBinInputStream.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-
-SoapBinInputStream::SoapBinInputStream(AXIS_MODULE_CALLBACK_GET_MESSAGE_BYTES pReadFunct, const void* pContext)
+SoapBinInputStream::SoapBinInputStream(AXIS_MODULE_CALLBACK_GET_MESSAGE_BYTES 
+                                       pReadFunct, const void* pContext)
 {
-	m_pContext = pContext;
-	m_pReadFunct = pReadFunct;
-	m_nByteCount = 0;
+    m_pContext = pContext;
+    m_pReadFunct = pReadFunct;
+    m_nByteCount = 0;
 }
 
 SoapBinInputStream::~SoapBinInputStream()
@@ -37,17 +32,18 @@ SoapBinInputStream::~SoapBinInputStream()
 
 }
 
-/**
+/*
  * I dont really understand the use of this function
  */
 unsigned int SoapBinInputStream::curPos() const
 {
-	return m_nByteCount;
+    return m_nByteCount;
 }
 
-unsigned int SoapBinInputStream::readBytes(XMLByte* const toFill, const unsigned int maxToRead)
+unsigned int SoapBinInputStream::readBytes(XMLByte* const toFill,
+                                           const unsigned int maxToRead)
 {
-	int nRead = maxToRead;
-	m_pReadFunct((const char**)&toFill, (int*)&nRead, m_pContext);
-	return nRead;
+    int nRead = maxToRead;
+    m_pReadFunct((const char**)&toFill, (int*)&nRead, m_pContext);
+    return nRead;
 }
