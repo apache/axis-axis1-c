@@ -81,8 +81,8 @@ public class ParmHeaderFileWriter extends ParamWriter{
 			this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
 			writeClassComment();
 			// if this headerfile not defined define it 
-			this.writer.write("#if !defined(__"+classname.toUpperCase()+"_H__INCLUDED_)\n");
-			this.writer.write("#define __"+classname.toUpperCase()+"_H__INCLUDED_\n\n");
+			this.writer.write("#if !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)\n");
+			this.writer.write("#define __"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_\n\n");
 			writePreprocssorStatements();
 			this.writer.write("class "+classname+"\n{\n");
 			writeAttributes();
@@ -91,7 +91,7 @@ public class ParmHeaderFileWriter extends ParamWriter{
 			//writeDistructors();
 			//writeMethods();
 			//cleanup
-			this.writer.write("#endif // !defined(__"+classname.toUpperCase()+"_H__INCLUDED_)\n");
+			this.writer.write("#endif // !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)\n");
 			writer.flush();
 			writer.close();
 			System.out.println(getFilePath().getAbsolutePath() + " created.....");
@@ -159,5 +159,9 @@ public class ParmHeaderFileWriter extends ParamWriter{
 	  }catch(IOException e){
 	  	throw new WrapperFault(e);
 	  }
+	}
+	protected String getFileType()
+	{
+		return "Param";	
 	}
 }

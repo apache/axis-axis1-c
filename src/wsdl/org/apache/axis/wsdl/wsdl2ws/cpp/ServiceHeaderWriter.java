@@ -191,6 +191,9 @@ public class ServiceHeaderWriter extends HeaderFileWriter{
 			throw new WrapperFault(e);
 		}
 	}
-
+	protected String getFileType()
+	{
+		return "ServerSkeleton";	
+	}
 }
 

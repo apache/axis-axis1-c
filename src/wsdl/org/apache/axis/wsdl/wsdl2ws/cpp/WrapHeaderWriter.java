@@ -170,4 +170,8 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 			throw new WrapperFault(e);
 		}			
 	}
+	protected String getFileType()
+	{
+		return "ServerWrapper";	
+	}
 }

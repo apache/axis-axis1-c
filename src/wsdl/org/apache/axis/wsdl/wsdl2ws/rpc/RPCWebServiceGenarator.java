@@ -87,17 +87,18 @@ public class RPCWebServiceGenarator implements WebServiceGenarator{
 			(new Genarator(WrapperConstants.GENERATOR_SERVICE_JAVA, wscontext)).genarate();
 			(new Genarator(WrapperConstants.GENERATOR_PARAM_JAVA, wscontext)).genarate();
 		}else if(WrapperConstants.LANGUAGE_CPP.equalsIgnoreCase(language)){
-			//if(WrapperConstants.SERVER.equals(wscontext.getWrapInfo().getTargetEngine())){
-				 (new Genarator(WrapperConstants.GENERATOR_WRAPPER_CPP, wscontext)).genarate();
-				 (new Genarator(WrapperConstants.GENERATOR_WRAPPER_HPP, wscontext)).genarate();
-			 //}else{
-				 //(new Genarator(WrapperConstants.GENERATOR_CLIENT_WRAPPER_CPP, wscontext)).genarate();
-				 //(new Genarator(WrapperConstants.GENERATOR_CLIENT_WRAPPER_HPP, wscontext)).genarate();
-				 //}
-				 (new Genarator(WrapperConstants.GENERATOR_SERVICE_CPP, wscontext)).genarate();
-				 (new Genarator(WrapperConstants.GENERATOR_SERVICE_HPP, wscontext)).genarate();
-				 (new Genarator(WrapperConstants.GENERATOR_PARAM_CPP_ALL, wscontext)).genarate();	
-				 (new Genarator(WrapperConstants.GENERATOR_CLASSLOADER_CPP, wscontext)).genarate();				 				 	
+			if(WrapperConstants.SERVER.equals(wscontext.getWrapInfo().getTargetEngine())){
+				(new Genarator(WrapperConstants.GENERATOR_WRAPPER_CPP, wscontext)).genarate();
+				(new Genarator(WrapperConstants.GENERATOR_WRAPPER_HPP, wscontext)).genarate();
+				(new Genarator(WrapperConstants.GENERATOR_SERVICE_CPP, wscontext)).genarate();
+				(new Genarator(WrapperConstants.GENERATOR_SERVICE_HPP, wscontext)).genarate();
+				(new Genarator(WrapperConstants.GENERATOR_PARAM_CPP_ALL, wscontext)).genarate();	
+				(new Genarator(WrapperConstants.GENERATOR_CLASSLOADER_CPP, wscontext)).genarate();				 				 	
+			}else{
+				(new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_CPP, wscontext)).genarate();
+				(new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_HPP, wscontext)).genarate();
+				(new Genarator(WrapperConstants.GENERATOR_PARAM_CPP_ALL, wscontext)).genarate();	
+			}
 		}else if(WrapperConstants.LANGUAGE_C.equalsIgnoreCase(language)){
 			//if(WrapperConstants.SERVER.equals(wscontext.getWrapInfo().getTargetEngine())){
 				 (new Genarator(WrapperConstants.GENERATOR_WRAPPER_C, wscontext)).genarate();
