@@ -20,7 +20,7 @@ InteropTestPortType::InteropTestPortType()
 {
 	m_pCall = new Call();
 	m_pCall->SetProtocol(APTHTTP);
-	m_pCall->SetEndpointURI("http://localhost/axis/base");
+	m_pCall->SetEndpointURI("http://192.168.101.10/axis/base");
 }
 
 InteropTestPortType::~InteropTestPortType()

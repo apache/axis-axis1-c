@@ -22,7 +22,8 @@ int main(int argc, char* argv[])
 	{
 		bigstring += "hello world ";
 	}
-	printf(ws.echoString(bigstring.begin()));
+	strcpy(buffer1, bigstring.c_str());
+	printf(ws.echoString(buffer1));
 	if (0 == strcmp(ws.echoString("hello world"), "hello world"))
 		printf("successful\n");
 	else
