@@ -227,8 +227,7 @@ public class ClientStubWriter extends CPPClassWriter{
 		writer.write("\tm_pCall->setSOAPVersion(SOAP_VER_1_1);\n"); //TODO check which version is it really.
 		writer.write("\tm_pCall->setOperation(\""+minfo.getMethodname()+"\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\");\n");
 		//new calls from stub base
-		writer.write("\tsetTransportProperties();\n");
-		writer.write("\tsetSOAPHeaders();\n");
+		writer.write("\tapplyUserPreferences();\n");
 		
 		for (int i = 0; i < paramsB.size(); i++) {
 			type = wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName());
