@@ -61,10 +61,10 @@
  * @author Damitha Kumarage (damitha@jkcsworld.com, damitha@opensource.lk)
  *
  */
-#include <axis/client/transport/axis/Platform.hpp>
-#include <axis/client/transport/axis/Channel.hpp>
+#include <client/transport/axis/Platform.hpp>
+#include <client/transport/axis/Channel.hpp>
 #include <iostream>
-#include <axis/client/transport/axis/Transport.hpp>
+#include <client/transport/axis/Transport.hpp>
 
 using namespace std;
 /**
