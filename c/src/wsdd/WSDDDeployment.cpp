@@ -124,7 +124,6 @@ WSDDDeployment::~WSDDDeployment()
 			delete ((*iter2).second);
 		}
 	}
-
 }
 
 void WSDDDeployment::SetLibIdMap(map<AxisString, int>* pLibNameIdMap)
@@ -146,23 +145,77 @@ const WSDDHandlerList* WSDDDeployment::GetGlobalResponseFlowHandlers()
 int WSDDDeployment::LoadWSDD(const AxisChar* sWSDD)
 {
 	m_sWSDDPath = string(sWSDD);
-
 	WSDDDocument* doc = new WSDDDocument();
 	if (AXIS_SUCCESS != doc->GetDeployment(sWSDD, this))
-
-
 	{
+#ifdef _DEBUG
         printf("server.wsdd loading failed\n");
+#endif
 		return AXIS_FAIL;
 	}
+#ifdef _DEBUG
     printf("server.wsdd loading successful\n");
+#endif
 	return AXIS_SUCCESS;
 }
 
 int WSDDDeployment::UpdateWSDD()
 {
-	/* Do we need this method ? */
+	FILE* file;
+	int Status = AXIS_FAIL;
+	/* TODO we have to rename the existing server.wsdd to server.wsdd.old
+	 * and if anything went wrong we have to rename it back to server.wsdd
+	 */
+	file = fopen(m_sWSDDPath.c_str(), "w");
+	if(!file) return AXIS_FAIL;
+	while(true)
+	{
+		if (fputs("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", file) < 0) break;
+		if (fputs("<deployment xmlns=\"http://xml.apache.org/axis/wsdd/\" xmlns:C=\"http://xml.apache.org/axis/wsdd/providers/C\" xmlns:CPP=\"http://xml.apache.org/axis/wsdd/providers/CPP\">\n", file) < 0) break;
+		if (fputs("\t<globalConfiguration>\n", file) < 0) break;
+		WSDDHandlerList::iterator iter;
+		if(m_GlobalRequestHandlers)
+		{
+			if (fputs("\t\t<requestFlow>\n", file) < 0) break;
+			for(iter=m_GlobalRequestHandlers->begin(); iter!=m_GlobalRequestHandlers->end(); iter++)
+			{
+				(*iter)->UpdateWSDD(file, 3);
+			}
+			if (fputs("\t\t</requestFlow>\n", file) < 0) break;
+		}
 
+		if(m_GlobalResponseHandlers)
+		{
+			if (fputs("\t\t<responseFlow>\n", file) < 0) break;
+			for(iter=m_GlobalResponseHandlers->begin(); iter!=m_GlobalResponseHandlers->end(); iter++)
+			{
+				(*iter)->UpdateWSDD(file, 3);
+			}
+			if (fputs("\t\t</responseFlow>\n", file) < 0) break;
+		}
+
+		if (fputs("\t</globalConfiguration>\n", file) < 0) break;
+
+		if(m_pTransportHandlers)
+		{
+			m_pTransportHandlers->UpdateWSDD(file, 3);
+		}
+
+		WSDDServiceMap::iterator iter2;
+		if(m_DeployedServices)
+		{
+			for(iter2=m_DeployedServices->begin(); iter2!=m_DeployedServices->end(); iter2++)
+			{
+				((*iter2).second)->UpdateWSDD(file, 3);
+			}
+		}
+		
+		if (fputs("</deployment>", file) < 0) break;
+	}
+	if (AXIS_SUCCESS != Status)
+	{
+		/*TODO use the previous server.wsdd file itself. Undo renaming*/
+	}
 	return AXIS_SUCCESS;
 }
 
@@ -170,7 +223,6 @@ int WSDDDeployment::UpdateWSDD()
 const WSDDService* WSDDDeployment::GetService(const AxisChar* sServiceName)
 {
 	WSDDServiceMap::iterator iter;
-
 	iter = m_DeployedServices->find(sServiceName);
 	if (iter != m_DeployedServices->end())
 	{

@@ -95,7 +95,9 @@ public:
 	const list<AxisString>& GetAllowedRoles();
 	WSDDService();
 	virtual ~WSDDService();
-
+	int UpdateWSDD(FILE* wsddfile, int tabcount);
+private:
+	const char* GetProviderString();
 private:
 	PROVIDERTYPE m_Provider;
 	list<AxisString> m_AllowedMethods;

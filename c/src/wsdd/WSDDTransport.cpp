@@ -103,7 +103,6 @@ WSDDTransport::~WSDDTransport()
 			}
 		}
 	}
-
 }
 
 const WSDDHandlerList* WSDDTransport::GetRequestFlowHandlers(AXIS_PROTOCOL_TYPE Protocol)
@@ -133,4 +132,40 @@ void WSDDTransport::AddHandler(bool bRequestFlow, AXIS_PROTOCOL_TYPE protocol, W
 		if (!m_ResponseHandlers) m_ResponseHandlers = new map<AXIS_PROTOCOL_TYPE, WSDDHandlerList>;
 		(*m_ResponseHandlers)[protocol].push_back(pHandler);
 	}
+}
+
+int WSDDTransport::UpdateWSDD(FILE* wsddfile, int tabcount)
+{
+	WSDDHandlerList::iterator iter2;
+	const char* trtype = 0;
+	for (int type = APTHTTP; type < APTOTHER; type++)
+	{
+		if(m_RequestHandlers && (m_RequestHandlers->find((AXIS_PROTOCOL_TYPE)type) != m_RequestHandlers->end()))
+		{
+			trtype = (APTHTTP == type) ? "http" : ((APTSMTP == type) ? "smtp" : "unsupported");
+			if (fputs("\t<transport name=\"", wsddfile) < 0) return AXIS_FAIL;
+			if (fputs(trtype, wsddfile) < 0) return AXIS_FAIL;
+			if (fputs("\" >\n", wsddfile) < 0) return AXIS_FAIL;
+			/* Write request flow handler configuration */
+			WSDDHandlerList &list = (*m_RequestHandlers)[(AXIS_PROTOCOL_TYPE)type];
+			if (fputs("\t\t<requestFlow>\n", wsddfile) < 0) return AXIS_FAIL;
+			for(iter2 = list.begin(); iter2 != list.end(); iter2++)
+			{
+				if (AXIS_SUCCESS != (*iter2)->UpdateWSDD(wsddfile, tabcount+2)) return AXIS_FAIL;
+			}			
+			if (fputs("\t\t</requestFlow>\n", wsddfile) < 0) return AXIS_FAIL;
+
+			/* Write response flow handler configuration */
+			WSDDHandlerList &list1 = (*m_ResponseHandlers)[(AXIS_PROTOCOL_TYPE)type];
+			if (fputs("\t\t<responseFlow>\n", wsddfile) < 0) return AXIS_FAIL;
+			for(iter2 = list1.begin(); iter2 != list.end(); iter2++)
+			{
+				if (AXIS_SUCCESS != (*iter2)->UpdateWSDD(wsddfile, tabcount+2)) return AXIS_FAIL;
+			}			
+			if (fputs("\t\t</responseFlow>\n", wsddfile) < 0) return AXIS_FAIL;
+			if (fputs("\t</transport>\n", wsddfile) < 0) return AXIS_FAIL;
+		}
+
+	}
+	return AXIS_SUCCESS;
 }

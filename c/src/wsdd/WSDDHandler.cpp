@@ -77,6 +77,7 @@ WSDDHandler::WSDDHandler()
 	m_nScope = AH_REQUEST; //default
 	m_Params = NULL;
 	m_sDescription = "No description provided";
+	m_file = 0;
 }
 
 WSDDHandler::~WSDDHandler()
@@ -147,5 +148,30 @@ const AxisChar* WSDDHandler::GetDescription() const
 	return m_sDescription.c_str();
 }
 
+int WSDDHandler::UpdateWSDD(FILE* wsddfile, int tabcount)
+{
+	m_file = wsddfile;
+	PrintTabs(tabcount); *this << "<handler name=\"" << m_sName.c_str() << "\" type=\"" << m_sLibName.c_str() << "\">\n";
+	if (m_Params)
+	{
+		map<AxisString, AxisString>::iterator itr;
+		for (itr = m_Params->begin(); itr != m_Params->end(); itr++)
+		{
+			PrintTabs(tabcount+1); *this << "<parameter name=\"" << (*itr).first.c_str() << "\" value=\"" << (*itr).second.c_str() << "\" />";
+		}
+	}
+	PrintTabs(tabcount); *this << "<handler>\n";
+	m_file = 0;
+	return AXIS_SUCCESS;
+}
 
+WSDDHandler& WSDDHandler::operator << (const char* str)
+{
+	fputs(str, m_file);
+	return *this;
+}
 
+void WSDDHandler::PrintTabs(int count)
+{
+	for (int x=0; x<count; x++) *this << "\t";
+}
