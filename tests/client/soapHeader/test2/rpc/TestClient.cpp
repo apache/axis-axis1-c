@@ -43,7 +43,6 @@ main(int argc, char *argv[])
 	port = argv[2];
     }
     printf("Usage :\n %s <server> <port>\n\n", argv[0]);
-    //sprintf(endpoint, "http://%s:%s/axis/base", server, port);
     //endpoint for Axis CPP sample
     sprintf(endpoint, "http://%s:%s/axis/base", server, port);
     InteropTestPortType ws(endpoint, APTHTTP);
@@ -108,6 +107,15 @@ main(int argc, char *argv[])
     valueNode->setValue("Test Password");
     childNode->addChild(valueNode);
     parentNode->addChild(childNode);
+
+    //add another node set
+    childNode = phb->createChild(ELEMENT_NODE);
+    childNode->setLocalName("Key");
+    valueNode = phb->createChild(CHARACTER_NODE);
+    valueNode->setValue("Test Key");
+    childNode->addChild(valueNode);
+    parentNode->addChild(childNode);
+
     phb->addChild(parentNode);
 
 
@@ -123,6 +131,11 @@ main(int argc, char *argv[])
     IHeaderBlock *header = NULL;
     header = ws.getFirstSOAPHeaderBlock();
     ws.deleteSOAPHeaderBlock(header);
+
+    header = NULL;
+    header = ws.getNextSOAPHeaderBlock();
+    ws.deleteSOAPHeaderBlock(header);
+
     //now the request should have no SOAP headers
 
     if (0 == strcmp(ws.echoString("hello world"), "hello world"))
