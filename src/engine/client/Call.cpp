@@ -442,11 +442,12 @@ int Call::openConnection()
 
         m_nStatus = m_pTransport->openConnection();
     }
-    catch(AxisException& e)
+    catch( AxisException& e)
     {
-        e = e;
+		char *	pszError = new char[strlen( e.what()) + 1];
+		strcpy( pszError, e.what());
 
-        throw;
+		throw AxisGenException( e.getExceptionCode(), const_cast<char*>(pszError));
     }
     catch(...)
     {

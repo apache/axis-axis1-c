@@ -400,7 +400,14 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 
 		    if( !m_bReadPastHTTPHeaders)
 		    {
-				unsigned int start = std::string::npos;
+				unsigned int	start = std::string::npos;
+// getBytes needs to be able to exit any of the following loops if the expected
+// character sequence is never detected.  This is done using a simple counter.
+// If the loop has not exited on its own accord after say 100 tries, it is safe
+// to assume that it never will...  To make the test less likely to cause
+// problems with very long messages, the countdown is only decremented when no
+// data has been received.
+				int				iIterationCountdown = 100;
 
 				do
 				{
@@ -409,9 +416,22 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 						if (m_strReceived.find( "\r\n\r\n") == std::string::npos)
 						{
 							*m_pActiveChannel >> m_pszRxBuffer;
-						    m_strReceived += m_pszRxBuffer;
+
+// If data has been received, then add the data to the received message buffer
+// and reset the countdown.  Otherwise, decrement the countdown.
+							if( strlen( m_pszRxBuffer) > 0)
+							{
+							    m_strReceived += m_pszRxBuffer;
+								iIterationCountdown = 100;
+							}
+							else
+							{
+								iIterationCountdown--;
+							}
 						}
-					} while( m_strReceived.find( "\r\n\r\n") == std::string::npos);
+					} while( m_strReceived.find( "\r\n\r\n") == std::string::npos && iIterationCountdown > 0);
+
+					iIterationCountdown = 100;
 
 					if( m_strReceived.find ("HTTP") == std::string::npos)
 					{
@@ -424,9 +444,20 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 							if( m_strReceived.find( "\r\n\r\n") == std::string::npos)
 							{
 								*m_pActiveChannel >> m_pszRxBuffer;
-								m_strReceived += m_pszRxBuffer;
+
+// If data has been received, then add the data to the received message buffer
+// and reset the countdown.  Otherwise, decrement the countdown.
+								if( strlen( m_pszRxBuffer) > 0)
+								{
+									m_strReceived += m_pszRxBuffer;
+									iIterationCountdown = 100;
+								}
+								else
+								{
+									iIterationCountdown--;
+								}
 							}
-						} while( m_strReceived.find( "\r\n\r\n") == std::string::npos);
+						} while( m_strReceived.find( "\r\n\r\n") == std::string::npos && iIterationCountdown > 0);
 			// now this must contain HTTP. Else there is a conent error.
 					}
 
@@ -476,7 +507,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 						*m_pActiveChannel >> m_pszRxBuffer;
 						m_strReceived = m_pszRxBuffer;
 					}
-				} while( m_iResponseHTTPStatusCode == 100);
+				} while( m_iResponseHTTPStatusCode == 100 && iIterationCountdown > 0);
 
                 if ( m_iResponseHTTPStatusCode != 500 &&
                     ( m_iResponseHTTPStatusCode < 200 || m_iResponseHTTPStatusCode >= 300 ))
