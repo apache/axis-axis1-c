@@ -76,16 +76,53 @@
 #include "SoapFault.h"
 #include "SoapEnvVersions.h"
 
+class Attribute;
+
+/**
+ *	The SOAP Body of a SOAP Envelope according to SOAP 1.2 specification.
+ *
+ *	A SOAP body provides a mechanism for transmitting information to an ultimate SOAP receiver.
+ *  The Body element information item has:
+ *		- A [local name] of Body .
+ *		- A [namespace name] of "http://www.w3.org/2003/05/soap-envelope".
+ *		- Zero or more namespace qualified attribute information items in its [attributes] property.
+ *		- Zero or more namespace qualified element information items in its [children] property.
+ *  
+ *  The Body element information item MAY have any number of character information item children whose 
+ *  character code is amongst the white space characters as defined by XML 1.0 [XML 1.0]. These are 
+ *  considered significant.
+ *
+ *  SOAP Body child Element:
+ *  All child element information items of the SOAP Body element information item:
+ *		- SHOULD have a [namespace name] property which has a value, that is the name of the element 
+ *		  SHOULD be namespace qualified.
+ *		- MAY have any number of character information item children. Child character information 
+ *		  items whose character code is amongst the white space characters as defined by XML 1.0 [XML 1.0] 
+ *		  are considered significant.
+ *		- MAY have any number of element information item children. Such element information items MAY be 
+ *		  namespace qualified.
+ *		- MAY have zero or more attribute information items in its [attributes] property. Among these MAY 
+ *		  be the following, which has special significance for SOAP processing:
+ *			- encodingStyle attribute information item
+ *  SOAP defines one particular direct child of the SOAP body, the SOAP fault, which is used for reporting 
+ *  errors 
+ *	
+ *	@brief	The SOAP Body of a SOAP Envelope according to SOAP 1.2 specification.
+ */
+
 class SoapBody  
 {
 friend class SoapSerializer;
 
 private:
+	int serializeAttributes(string& sSerialized);
+	list<Attribute*> m_attributes;
 	SoapMethod *m_pSoapMethod;
 	SoapFault *m_pSoapFault;
 	//string m_strBodySerialized;
 
 public:
+	void addAttribute(Attribute* attr);
 	//string& serialize();
 	int serialize(string&, SOAP_VERSION eSoapVersion);
 	void setSoapFault(SoapFault* ptrSoapFault);

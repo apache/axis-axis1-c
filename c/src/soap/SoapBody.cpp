@@ -67,6 +67,7 @@
 
 #include "SoapBody.h"
 #include "../common/GDefine.h"
+#include "Attribute.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -104,7 +105,12 @@ int SoapBody::serialize(string& sSerialized, SOAP_VERSION eSoapVersion)
 	int iStatus= SUCCESS;
 
 	do {
-		sSerialized= sSerialized+ "<"+ g_sObjSoapEnvVersionsStruct[eSoapVersion].pchEnvelopePrefix+ ":" + g_sObjSoapEnvVersionsStruct[eSoapVersion].pcharWords[SKW_BODY]+ ">"+ "\n";
+		sSerialized= sSerialized+ "<"+ g_sObjSoapEnvVersionsStruct[eSoapVersion].pchEnvelopePrefix+ ":" + g_sObjSoapEnvVersionsStruct[eSoapVersion].pcharWords[SKW_BODY];
+		iStatus= serializeAttributes(sSerialized);
+		if(iStatus==FAIL) {
+			break;
+		}
+		sSerialized= sSerialized+ ">"+ "\n";
 
 		if(m_pSoapMethod!=NULL) {
 			iStatus= m_pSoapMethod->serialize(sSerialized);
@@ -141,3 +147,26 @@ int SoapBody::serialize(string& sSerialized, SOAP_VERSION eSoapVersion)
 
 	return m_strBodySerialized;
 }*/
+
+void SoapBody::addAttribute(Attribute *attr)
+{
+	m_attributes.push_back(attr);
+}
+
+int SoapBody::serializeAttributes(string &sSerialized)
+{
+	int iStatus= SUCCESS;
+
+	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+
+	while(itCurrAttribute != m_attributes.end()) {		
+
+		iStatus= (*itCurrAttribute)->serialize(sSerialized);
+		if(iStatus==FAIL) {
+			break;
+		}
+		itCurrAttribute++;		
+	}	
+
+	return iStatus;
+}

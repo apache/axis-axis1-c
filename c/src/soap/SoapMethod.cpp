@@ -66,6 +66,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "SoapMethod.h"
+#include "Attribute.h"
 #include "../common/GDefine.h"
 
 //////////////////////////////////////////////////////////////////////
@@ -135,16 +136,22 @@ int SoapMethod::serialize(string& sSerialized)
 	do {
 		if(isSerializable()) {
 
-			sSerialized+= "<";
+			sSerialized+= "<" + m_strPrefix+ ":"+ m_strLocalname+ " xmlns:"+ m_strPrefix+ 
+				"=\""+ m_strUri+ "\"";
 			
-			if(m_strPrefix.length() != 0) {
-				sSerialized+= m_strPrefix+ ":";
-			}
+//			if(m_strPrefix.length() != 0) {
+//				sSerialized+= m_strPrefix+ ":";
+//			}
 
-			sSerialized+= m_strLocalname;
+//			sSerialized+= m_strLocalname;
 
-			if(m_strPrefix.length() != 0) {
-				sSerialized+= " xmlns:"+ m_strPrefix+ "=\""+ m_strUri+ "\"";
+//			if(m_strPrefix.length() != 0) {
+//				sSerialized+= " xmlns:"+ m_strPrefix+ "=\""+ m_strUri+ "\"";
+//			}
+
+			iStatus= serializeAttributes(sSerialized);
+			if(iStatus==FAIL) {
+				break;
 			}
 
 			sSerialized+= ">";
@@ -210,15 +217,35 @@ bool SoapMethod::isSerializable()
 {
 	bool bStatus= true;	
 
-	if(m_strPrefix.length() == 0) {
-		if(m_strUri.length() != 0) {
+	//checking whether namespace qualified, if not return FAIL
+	do {
+		if(m_strPrefix.length() == 0) {			
+			bStatus= false;		
+			break;
+		} else if(m_strUri.length() == 0) {
 			bStatus= false;
+			break;
 		}
-	} else {
-		if(m_strUri.length() == 0) {
-			bStatus= false;
-		}
-	}
+	} while(0);
 
 	return bStatus;
+}
+
+int SoapMethod::addAttribute(Attribute *pAttribute)
+{
+	m_attributes.push_back(pAttribute);
+
+	return SUCCESS;
+}
+
+int SoapMethod::serializeAttributes(string &sSerialized)
+{
+	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+
+	while(itCurrAttribute != m_attributes.end()) {		
+		(*itCurrAttribute)->serialize(sSerialized);
+		itCurrAttribute++;		
+	}	
+
+	return SUCCESS;	
 }
