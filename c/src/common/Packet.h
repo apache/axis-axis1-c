@@ -73,6 +73,7 @@ char* getheader(Ax_soapstream* soap, char* pchkey);
 #ifdef __cplusplus
 extern "C"
 {
+#endif
 	//This function is implemented in axis
 	int initialize_module();
 
@@ -89,18 +90,8 @@ extern "C"
 
 	//This fucntion should be implemented by module authors
 	int send_transport_information(Ax_soapstream *str);
+#ifdef __cplusplus
 }
-
-#else
-	int initialize_module();
-
-	int process_request(Ax_soapstream *str);
-
-	int send_response_bytes(char * res, void* opsteam);
-
-	int get_request_bytes(char * req, int reqsize, int* retsize, void* ipstream);
-
-	int send_transport_information(Ax_soapstream *str);
 #endif
 
 #endif
