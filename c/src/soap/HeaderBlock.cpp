@@ -55,6 +55,11 @@ HeaderBlock::HeaderBlock(AxisChar *pachLocalName, AxisChar *pachPrefix,
     m_uri = pachUri;
 }
 
+HeaderBlock::HeaderBlock(const HeaderBlock& rCopy)
+{
+
+}
+
 HeaderBlock::~HeaderBlock()
 {
     /*
