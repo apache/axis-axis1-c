@@ -1,0 +1,20 @@
+# The comment character is '#'
+#Available directives are as follows
+#(Some of these directives may not be implemented yet)
+#
+#WSDDFilePath:The path to the server wsdd
+#LogPath:The path to the axis log
+#ClientLogPath:The path to the axis client log
+#ClientWSDDFilePath:The path to the client wsdd
+#Transport_http:The HTTP transport library
+#Transport_smtp:The SMTP transport library
+#XMLParser:The xml parser library
+#NodeName:Node name
+#ListenPort:Listening port
+#Channel_ssl:/usr/local/axiscpp_deploy/lib/libaxis2_ssl_channel.so
+
+LogPath:/home/damitha/programs/axiscpp_deploy/log/AxisLog
+WSDDFilePath:/home/damitha/programs/axiscpp_deploy/etc/server.wsdd
+ClientLogPath:/home/damitha/programs/axiscpp_deploy/log/AxisClientLog
+XMLParser:/home/damitha/programs/axiscpp_deploy/lib/libaxis_xmlparser.so
+Transport_http:/home/damitha/programs/axiscpp_deploy/lib/libaxis2_transport.so

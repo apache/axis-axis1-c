@@ -18,12 +18,11 @@ export CVSROOT HOME_DIR CHECKOUT_DIR LOG ERROR_LOG SOURCE_BUILD_MESSAGES SOURCE_
 #Setting environment variables. User may change the default values to fit his own environment
 
 XERCESC_HOME=${XERCESC_HOME:-/usr/local/xerces-c}
-EXPAT_HOME=${EXPAT_HOME:-/usr/local/expat1957}
-APACHE2_HOME=${APACHE2_HOME:-/usr/local/apache2}
+APACHE2_HOME=${APACHE2_HOME:-/home/damitha/programs/apache2}
 APACHE_HOME=${APACHE_HOME:-/usr/local/apache}
 AXISCPP_HOME=${HOME_DIR}/${CHECKOUT_DIR}
-AXISCPP_DEPLOY=${AXISCPP_DEPLOY:-/usr/local/axiscpp_deploy}
-LD_LIBRARY_PATH=${XERCESC_HOME}/lib:${EXPAT_HOME}/lib:${AXISCPP_DEPLOY}/lib 
+AXISCPP_DEPLOY=${AXISCPP_DEPLOY:-/home/damitha/programs/axiscpp_deploy}
+LD_LIBRARY_PATH=${XERCESC_HOME}/lib:${AXISCPP_DEPLOY}/lib 
 PATH="/usr/bin:/usr/local/bin:$PATH"
 export LD_LIBRARY_PATH AXISCPP_DEPLOY XERCESC_HOME EXPAT_HOME APACHE2_HOME APACHE_HOME AXISCPP_HOME PATH
 
@@ -53,7 +52,8 @@ then
     if test -d ./cvsautobuild; then
         cvs -d ${CVSROOT} update -dC ${CHECKOUT_DIR}
     else
-        cvs -d ${CVSROOT} checkout -d ${CHECKOUT_DIR} ws-axis/c
+#        cvs -d ${CVSROOT} checkout -d ${CHECKOUT_DIR} ws-axis/c
+        cvs -d ${CVSROOT} checkout -d ${CHECKOUT_DIR} -r release1-4-final-branch ws-axis/c
     fi
 fi
 
@@ -73,10 +73,16 @@ fi
 # *** Build Source ***
 echo Starting Source Build
 cd ${AXISCPP_HOME}
+cp -f ../axiscpp.conf_linux ./deploy/etc/
+cp -f ../server.wsdd_linux ./deploy/etc/
+cp -f ../deploy_apache2.sh ./deploy/bin/
 echo Build messages of build @ `date` > ${SOURCE_BUILD_MESSAGES}
 echo Build errors/warnings of build @ `date` > ${SOURCE_BUILD_ERRORS}
-cp -f ../build.sh ./build.sh
-sh build.sh >> ${SOURCE_INSTALL_MESSAGES} 2>>${SOURCE_INSTALL_ERRORS}
+cp -f ../autogen.sh ./autogen.sh
+cp -f ../runconfig.sh ./runconfig.sh
+sh autogen.sh
+sh runconfig.sh
+make >> ${SOURCE_INSTALL_MESSAGES} 2>>${SOURCE_INSTALL_ERRORS}
 
 echo Installing...
 echo Install messages of build @ `date` > ${SOURCE_INSTALL_MESSAGES}
@@ -108,12 +114,12 @@ ls ${HOME_DIR}/testcases/wsdls/*.wsdl | sed "s/testcases\/wsdls\///g" |sed "s/.w
 ls ${HOME_DIR}/testcases/wsdls/*.wsdl | sed "s/testcases\/wsdls\///g" |sed "s/.wsdl/:port=80/g" >> ${HOME_DIR}/testcases/platform/linux/test.config
 # *** Deploy with Apache 2 ***
 echo Start deploy with apache2 using xerces-c parser library
-sed 's/expat/xercesc/g' ${AXISCPP_DEPLOY}/bin/deploy_apache2.sh > ${AXISCPP_DEPLOY}/bin/deploy_apache2_auto.sh
+#sed 's/expat/xercesc/g' ${AXISCPP_DEPLOY}/bin/deploy_apache2.sh > ${AXISCPP_DEPLOY}/bin/deploy_apache2_auto.sh
 sed "s/host=.*$/host=${APACHE2_HOST}/g" ${HOME_DIR}/testcases/platform/linux/test.config> ${HOME_DIR}/test.config_temp
 sed "s/port=[0-9]*$/port=${APACHE2_PORT}/g" ${HOME_DIR}/test.config_temp> ${HOME_DIR}/test.config
 cp -f ${HOME_DIR}/test.config ${HOME_DIR}/testcases/platform/linux
 cp -f ${AXISCPP_DEPLOY}/lib/libaxiscpp_mod2.so ${APACHE2_HOME}/modules/
-sh ${AXISCPP_DEPLOY}/bin/deploy_apache2_auto.sh
+sh ${AXISCPP_DEPLOY}/bin/deploy_apache2.sh
 
 if [ $? = 0 ]
 then
