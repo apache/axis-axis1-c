@@ -18,7 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "internal.h"
-#include <spp.h>
+#include "spp.h"
 #include "spp_converter.h"
 #include "tag.h"
 

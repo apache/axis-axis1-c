@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-#include "../../include/spp.h"
+#include "../../src/spp.h"
 
 char *tn[] = {"START_TAG", "END_TAG", "EMPTY_ELEMENT_TAG", "PCDATA"};
 

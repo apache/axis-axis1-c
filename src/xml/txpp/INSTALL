@@ -1,33 +1,30 @@
 create environment variable TXPP_HOME to point where
-txpp is.
-TXPP_HOME="/home/damitha/txpp"
+txpp source is.
+TXPP_HOME="/home/foo/txpp"
 
 export TXPP_HOME
 
 Now
-cd $TXPP_HOME/lib
+cd $TXPP_HOME
 
 to build
 
-sh build.sh
+./configure --prefix=<your install dir, say inst-dir>
+
+make
+
+make install
 
 This will install libtxpp.so in $TXPP_HOME/lib
 
-To build and run the samples
+By default tests are also built and installed in
+$TXPP_HOME/bin. If you don't want tests to build,
+give the configure option 
+configure --enable-tests=no
 
-set environment variable LD_LIBRARY_PATH to point to
-TXPP_HOME/lib
+To run the tests
 
-LD_LIBRARY_PATH="$TXPP_HOME/lib:$LD_LIBRARY_PATH"
-
-export LD_LIBRARY_PATH
-
-cd $TXPP_HOME/examples
-
-sh build_test1.sh
-sh build_test2.sh
-
-to run
+cd inst-dir/bin
 
 sh run_test1.sh
 sh run_test2.sh

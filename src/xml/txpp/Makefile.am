@@ -1,2 +1,2 @@
 SUBDIRS=src @TESTS@
-include_HEADERS = include/spp.h
+include_HEADERS = src/spp.h
