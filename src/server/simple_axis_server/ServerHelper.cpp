@@ -61,11 +61,19 @@
  *
  */
 
+#ifdef WIN32
+#pragma warning (disable : 4786)
+#endif
+
 #include <iostream>
 #include <stdio.h>
+#include <map>
 #include "ServerHelper.h"
+#include "../../common/AxisUtils.h"
 
-int getSeperatedHTTPParts(string sClientReqStream, string& sHTTPHeaders, string& sHTTPBody) {
+using namespace std;
+
+int getSeperatedHTTPParts(string sClientReqStream, string& sHTTPHeaders, string& sHTTPBody, map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> *map_HTTP_Headers) {
 			
 	int iFindStartLocation=0;
 	string sTmpHttpHeader= "";
@@ -93,13 +101,19 @@ int getSeperatedHTTPParts(string sClientReqStream, string& sHTTPHeaders, string&
 		
 		if(sTmpHttpHeader.size() == 1) {					
 			bContinue= false;
-		} else {										
+		} else {	
+			
+			/*------------do we need this now ? ------------------*/
 			if(bFirstTime) {
 				sHTTPHeaders += sTmpHttpHeader;
 				bFirstTime = false;
 			} else {
 				sHTTPHeaders += "|" + sTmpHttpHeader;
-			}													
+			}	
+			/*-------------end-----------------*/
+			
+			initializeHeaderMap(sTmpHttpHeader, map_HTTP_Headers);
+			//initializeHeaderMap(map_HTTP_Headers);
 		}
 
 		iFindStartLocation = iLocation+1;
@@ -113,4 +127,110 @@ int getSeperatedHTTPParts(string sClientReqStream, string& sHTTPHeaders, string&
 
 	// return a status code : 1- SUCCESS
 	return 1;
+}
+
+int	initializeHeaderMap(const string &sHeaderLine, map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> *map_HTTP_Headers) {
+
+	bool bIsHttpHeader = true;
+	int iHeaderLineLength = sHeaderLine.size();
+	
+	if (!AxisUtils::isCharacterAvailable(sHeaderLine, ':')) {
+		bIsHttpHeader = false;
+	}
+	
+	if (!bIsHttpHeader) {
+		/* 
+		Here we expect a Header line with the pattern "POST axis/Calculatoer HTTP/1.1". 
+		The logic is based on this pattern
+		*/
+
+		int iLocation = 0;
+		int iFindStartLocation = 0;
+		int iGap= 0;		
+
+		for (int iRoundNo= 0; iRoundNo<3; iRoundNo++) {
+			/*
+			 *Seperate the Method, URI, and HTTP Version from the string HeaderLine and add them to the map
+			 */
+			
+			string *sTmpValue = new string("");
+			
+			if (iRoundNo == 2) {
+				iGap = (iHeaderLineLength) - iFindStartLocation;
+			} else {
+				iLocation = sHeaderLine.find(' ', iFindStartLocation);
+			
+				iGap = iLocation-iFindStartLocation;
+			}
+			if (iGap == 0) {
+				*sTmpValue = sHeaderLine.substr(iFindStartLocation, 1);		
+			} else {
+				*sTmpValue = sHeaderLine.substr(iFindStartLocation, iGap);		
+			}
+
+			iFindStartLocation = iLocation+1;
+
+			uHttpMapContent* objuHttpMapContent = (uHttpMapContent*)malloc(sizeof(uHttpMapContent));
+			HTTP_MAP_TYPE* objHTTP_MAP_Value = (HTTP_MAP_TYPE*)malloc(sizeof(HTTP_MAP_TYPE));
+
+			switch (iRoundNo) {
+			/*case 0:
+				/*sTmpValue = AxisUtils::toLowerCase(sTmpValue);
+				if (sTmpValue == "post") {*/
+			/*	if (sTmpValue == "POST") {
+					objuHttpMapContent.eHTTP_KEYWORD = HK_POST;
+					
+				/*if (sTmpValue == "get") {*/
+			/*	} else if (sTmpValue == "GET") {
+					objuHttpMapContent.eHTTP_KEYWORD = HK_GET;
+				}
+				objHTTP_MAP_Value.eCONTENT_TYPE= HTTP_KEYWORD_TYPE;
+				objHTTP_MAP_Value.objuHttpMapContent =  objuHttpMapContent;
+				(*map_HTTP_Headers)[HMK_METHOD] = objHTTP_MAP_Value;
+				break;*/
+			case 1:
+				objuHttpMapContent->msValue = sTmpValue->c_str();
+				objHTTP_MAP_Value->eCONTENT_TYPE= STRING_TYPE;
+				objHTTP_MAP_Value->objuHttpMapContent =  objuHttpMapContent;
+				(*map_HTTP_Headers)[HMK_URI] = objHTTP_MAP_Value;
+				printf("in case1 = %s\n", (*map_HTTP_Headers)[HMK_URI]->objuHttpMapContent->msValue);
+				break;
+			/*case 2:
+				/*sTmpValue = AxisUtils::toLowerCase(sTmpValue);
+				if (sTmpValue == "http/1.1") {*/
+		/*		if (sTmpValue == "HTTP/1.1") {
+					objuHttpMapContent.eHTTP_KEYWORD = HK_HTTP_1_1;
+					
+				} else {
+					objuHttpMapContent.eHTTP_KEYWORD = HK_HTTP_UNKNOWN_VERSION;
+				}
+				objHTTP_MAP_Value.eCONTENT_TYPE= HTTP_KEYWORD_TYPE;
+				objHTTP_MAP_Value.objuHttpMapContent =  objuHttpMapContent;
+				(*map_HTTP_Headers)[HMK_VERSION] = objHTTP_MAP_Value;
+				break;*/
+			}			
+		}
+	} else {
+		/*
+		 *	Seperate the Header name and value from ":" and put them to the map
+		 */
+		//map_HTTP_Headers[HK_URI] = "extracted Value";
+	}
+
+	return 1;
+}
+
+int getHttpHeader(HTTP_MAP_KEYWORDS eKeyWord, map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> *map_HTTP_Headers, HTTP_MAP_TYPE *objMapContent) {
+	
+	int iStatus = FAIL;
+
+	if (map_HTTP_Headers->find(eKeyWord) != map_HTTP_Headers->end()) {
+		printf("debgu 1 = %s\n", (*map_HTTP_Headers)[eKeyWord]->objuHttpMapContent->msValue);
+		objMapContent = (HTTP_MAP_TYPE*) malloc(sizeof((*map_HTTP_Headers)[eKeyWord]));
+		objMapContent = (*map_HTTP_Headers)[eKeyWord];
+
+		iStatus = SUCCESS;
+	}
+	
+	return iStatus;
 }
