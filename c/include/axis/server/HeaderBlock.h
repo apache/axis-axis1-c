@@ -103,6 +103,7 @@ class BasicNode;
 
 class HeaderBlock : public IHeaderBlock
 {
+friend class SoapHeader;
 
 private:	
 	int serializeNamespaceDecl(SoapSerializer& pSZ);
@@ -117,8 +118,11 @@ private:
 	AxisString m_uri;
 	list<Attribute*> m_attributes;
 	list<Attribute*> m_namespaceDecls;
+
+	/* I think that now this member varialble is not needed, i.e m_value roshan 
 	AxisString m_value;
-	//string m_strSerialized;
+	*/
+
 
 public:
 	bool operator ==( const HeaderBlock &objHeaderBlock);
