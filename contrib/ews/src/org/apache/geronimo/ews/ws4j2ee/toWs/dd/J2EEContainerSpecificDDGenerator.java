@@ -31,6 +31,7 @@ public class J2EEContainerSpecificDDGenerator implements Generator {
     }
 
     public void genarate() throws GenerationFault {
-        writer.writeCode();
+    	if(writer != null)
+			writer.writeCode();
     }
 }
