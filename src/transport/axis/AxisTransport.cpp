@@ -2,6 +2,8 @@
 #include <string.h>
 #include <iostream.h>
 #include "../../../common/Packet.h"
+#include "AxisTransport.h"
+
 AxisTransport::AxisTransport(Ax_soapstream* pSoap)
 {
     m_pSoap = pSoap;
@@ -68,8 +70,16 @@ int AxisTransport::Get_bytes(char* pRecvBuffer, int nBuffSize, int* pRecvSize, c
 {
     Receiver* pReceiver = (Receiver*) pStream;
     const string& strReceive =  pReceiver->Recv();
+    int nLen = strlen(strReceive.c_str());
+    if(nLen < nBuffSize)
+    {
+        strcpy(pRecvBuffer, strReceive.c_str());
+        *pRecvSize = nLen;
+        return SUCCESS;
+    }
+    else
+        return FAIL;
     
-    strcpy(pRecvBuffer, strReceive.c_str());
 }
 
 int AxisTransport::Send_transport_information(void* pSoapStream)
