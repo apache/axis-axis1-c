@@ -2401,13 +2401,21 @@ AxisChar* SoapDeSerializer::getElementAsString(const AxisChar* pName,
         if (XSD_STRING == getXSDType(m_pNode))
         {
             m_pNode = m_pParser->next(true); /* charactor node */
-            if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+            if( m_pNode )
             {
-                ret = strdup(m_pNode->m_pchNameOrValue);
-                /* this is because the string may not be available later */
-                m_pNode = m_pParser->next(); /* skip end element node too */
-                return ret;
-            }
+                if ((CHARACTER_ELEMENT == m_pNode->m_type))
+                {
+                    ret = strdup(m_pNode->m_pchNameOrValue);
+                    /* this is because the string may not be available later */
+                    m_pNode = m_pParser->next(); /* skip end element node too */
+                    return ret;
+                }
+                else if (END_ELEMENT == m_pNode->m_type) // We have an empty string - Jira AXISCPP-93
+                {
+                    ret = strdup("");
+                    return ret;
+                }
+             }
         }
         else
         {
