@@ -125,6 +125,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 		if (attribs.length == 0) {
 			 //nothing to print if this is simple type we have inbuild types
 			 System.out.println("possible error calss with no attributes....................");
+			 writer.write("\t}\n\n");			 
 			 return;
 		}
 		writer.write("\tconst AxisChar* sPrefix;\n");
@@ -144,10 +145,13 @@ public class BeanParamWriter extends ParamCFileWriter{
 					writer.write("\tpSZ->_functions->SerializeBasicArray(pSZ->_object, (Axis_Array*)(&param->"+attribs[i].getParamName()+"),"+CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+", \""+attribs[i].getParamName()+"\");\n"); 
 				}
 				else{
+					String elm = attribs[i].getParamName();
+					if ( attribs[i].isReference() )
+						elm = attribs[i].getTypeName();					
 					arrayType = attribs[i].getTypeName();
 					writer.write("\tpSZ->_functions->SerializeCmplxArray(pSZ->_object, (Axis_Array*)(&param->"+attribs[i].getParamName()+"),\n"); 
 					writer.write("\t\t(void*) Axis_Serialize_"+arrayType+", (void*) Axis_Delete_"+arrayType+", (void*) Axis_GetSize_"+arrayType+",\n"); 
-					writer.write("\t\tAxis_TypeName_"+arrayType+", Axis_URI_"+arrayType+", \""+attribs[i].getParamName()+"\");\n");
+					writer.write("\t\t\""+elm+"\", Axis_TypeName_"+arrayType+");\n");
 				}
 			}
 			else if(attribs[i].isSimpleType()){
@@ -182,6 +186,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 		writer.write("int Axis_DeSerialize_"+classname+"("+classname+"* param, IWrapperSoapDeSerializer *pDZ)\n{\n");
 		if (attribs.length == 0) {
 			 System.out.println("possible error calss with no attributes....................");
+			 writer.write("\t}\n\n");
 			 return;
 		}
 		boolean aretherearrayattribs = false;
@@ -233,13 +238,26 @@ public class BeanParamWriter extends ParamCFileWriter{
 	
 	private void writeCreateGlobalMethod()throws IOException{
 		writer.write("void* Axis_Create_"+classname+"("+classname+"* pObj, bool bArray, int nSize)\n{\n");
+		writer.write("\t"+classname+"* pTemp;\n");			
 		writer.write("\tif (bArray && (nSize > 0))\n\t{\n");
 		writer.write("\t\tpObj = malloc(sizeof("+classname+")*nSize);\n");
-		writer.write("\t\tmemset(pObj, 0, sizeof("+classname+")*nSize);\n");
+		writer.write("\t\t\tpTemp = pObj;\n");		
+		writer.write("\t\t\tpTemp += nSize/2;\n");
+		writer.write("\t\t\tmemset(pTemp, 0, sizeof("+classname+")*nSize/2);\n");
 		writer.write("\t}\n\telse\n\t{\n");
 		writer.write("\t\tpObj = malloc(sizeof("+classname+"));\n");
-		writer.write("\t\tmemset(pObj, 0, sizeof("+classname+"));\n\t}\n");
-		writer.write("\treturn pObj;\n}\n");
+		writer.write("\t\tmemset(pObj, 0, sizeof("+classname+"));\n\n");
+		writer.write("\t\tpTemp = pObj;\n");
+		for(int i = 0; i< attribs.length;i++){
+			if (attribs[i].isArray()){
+				writer.write("\t\tpTemp->"+attribs[i].getParamName()+".m_Array = 0;\n");
+				writer.write("\t\tpTemp->"+attribs[i].getParamName()+".m_Size = 0;\n");
+			}
+			else if (!attribs[i].isSimpleType()){
+				writer.write("\t\tpTemp->"+attribs[i].getParamName()+"=0;\n");
+			}	
+		}
+		writer.write("\t}\n\treturn pObj;\n}\n");
 	}
 
 	private void writeDeleteGlobalMethod()throws IOException{
