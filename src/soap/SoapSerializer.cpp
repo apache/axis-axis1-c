@@ -549,14 +549,18 @@ int SoapSerializer::serializeCmplxArray(const Axis_Array* pArray,
     }
     pParam->m_Value.pIArray = pAb;
     pParam->m_Type = XSD_ARRAY;
-	    if (pNamespace != NULL) {
-		const AxisChar* np = getNamespacePrefix(pNamespace);
-		pParam->setPrefix(np);
-		setNamespace(pNamespace);
+	if (pNamespace != NULL)
+    {
+        const AxisChar* np = getNamespacePrefix(pNamespace);
+        const AxisChar* originalNamespace = getNamespace(); // Store original namespace
+        pParam->setPrefix(np);
+        setNamespace(pNamespace);
+        pParam->serialize(*this);
+        setNamespace(originalNamespace); // Revert back original namespace
     }
-    pParam->serialize(*this);
-	if (pNamespace != NULL) {
-		setNamespace(NULL);
+    else
+    {
+        pParam->serialize(*this);
     }
     /* Remove pointer to the array from the ArrayBean to avoid deleting the 
      * array when ArrayBean is deleted. Array will be deleted when the complex
