@@ -5,7 +5,7 @@
     <stringAttribute
         key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-cvf wsdl2ws.jar -C ..\src\wsdl\bin\ org"/>
     <stringAttribute
-        key="org.eclipse.ui.externaltools.ATTR_RUN_BUILD_KINDS" value="full,incremental,auto,"/>
+        key="org.eclipse.ui.externaltools.ATTR_RUN_BUILD_KINDS" value="full,incremental,"/>
     <stringAttribute
         key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="C:\susantha\ws-axis\c\bin"/>
     <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="C:\j2sdk1.4.1_01\bin\jar.exe"/>
