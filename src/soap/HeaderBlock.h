@@ -85,16 +85,16 @@ class BasicNode;
  *
  *	Each child element information item of the SOAP Header is called a SOAP header block.
  *  Each SOAP header block element information item:
- *   1) MUST have a [namespace name] property which has a value, that is the name of the 
- *      element MUST be namespace qualified.
- *   2) MAY have any number of character information item children. Child character 
-        information items whose character code is amongst the white space characters 
-		as defined by XML 1.0 [XML 1.0] are considered significant.
- *   3) MAY have any number of element information item children. Such element information 
- *      items MAY be namespace qualified.
- *   4) MAY have zero or more attribute information items in its [attributes] property. Among 
- *      these MAY be any or all of the following, which have special significance for SOAP 
- *      processing:
+ *		- MUST have a [namespace name] property which has a value, that is the name of the 
+ *		  element MUST be namespace qualified.
+ *		- MAY have any number of character information item children. Child character 
+ *		  information items whose character code is amongst the white space characters 
+ *		  as defined by XML 1.0 [XML 1.0] are considered significant.
+ *		- MAY have any number of element information item children. Such element information 
+ *		  items MAY be namespace qualified.
+ *		- MAY have zero or more attribute information items in its [attributes] property. Among 
+ *		  these MAY be any or all of the following, which have special significance for SOAP 
+ *		  processing:
  *			- encodingStyle attribute information item 
  *			- role attribute information item 
  *			- mustUnderstand attribute information item     
