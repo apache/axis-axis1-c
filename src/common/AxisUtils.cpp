@@ -69,6 +69,12 @@
 
 XERCES_CPP_NAMESPACE_USE
 
+const AxisXMLCh* AxisUtils::m_strEmpty = NULL;
+const AxisXMLCh* AxisUtils::m_strLeftSqBracket = NULL;
+const AxisXMLCh* AxisUtils::m_strRightSqBracket = NULL;
+const AxisXMLCh* AxisUtils::m_strColon = NULL;
+
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -83,20 +89,15 @@ AxisUtils::~AxisUtils()
 
 }
 
-bool AxisUtils::convert(AxisString &wstr, const char *str)
+AxisXMLCh* AxisUtils::ToAxisXMLCh(const AxisChar* pch)
 {
-	AxisChar* pWchar = (wchar_t*) XMLString::transcode(str);
-	if (!pWchar) return false;
-	wstr = pWchar;
-	XMLString::release((XMLCh**) &pWchar);
-	return true;
+	return XMLString::transcode(pch); //this is ok as long as we use xerces library.
 }
 
-bool AxisUtils::convert(string &str, const AxisChar *wstr)
+void AxisUtils::Initialize()
 {
-	char* pChar = XMLString::transcode((const XMLCh*) wstr);
-	if (!pChar) return false;
-	str = pChar;
-	XMLString::release(&pChar);
-	return true;
+	m_strEmpty = ToAxisXMLCh("");
+	m_strLeftSqBracket = ToAxisXMLCh("[");
+	m_strRightSqBracket = ToAxisXMLCh("]");
+	m_strColon = ToAxisXMLCh(":");
 }

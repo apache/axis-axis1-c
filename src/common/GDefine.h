@@ -71,13 +71,17 @@ typedef enum { SUCCESS=0, FAIL = -1, OBJECT_ALREADY_EXISTS=1} AXIS_GLOBAL_ERROR;
 typedef enum { APTHTTP=1, APTFTP, APTSMTP, APTOTHER } AXIS_PROTOCOL_TYPE;
 
 #define SOAPACTIONHEADER "SOAPAction"
-#define AxisChar wchar_t //Wide charactor used in Axis
-#define AxisString wstring //Wide string used in Axis
+
+#define AxisChar char //Charactor used in Axis
+#define AxisString basic_string<char> //String used in Axis
+
+#define AxisXMLCh	unsigned short //Xerces uses 16 bit char always.
+#define AxisXMLString basic_string<AxisXMLCh>
 
 #ifdef WIN32
-    #define AxisSprintf(X, Y, Z, W) swprintf(X, Z, W)        
+    #define AxisSprintf(X, Y, Z, W) sprintf(X, Z, W)        
 #else //linux
-    #define AxisSprintf(X, Y, Z, W) swprintf(X, Y, Z, W) 
+    #define AxisSprintf(X, Y, Z, W) sprintf(X, Z, W) 
 #endif
 
 extern void Ax_Sleep(int);

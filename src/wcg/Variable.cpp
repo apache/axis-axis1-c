@@ -238,7 +238,7 @@ int Variable::GenerateSerializerImpl(File &file)
 	}
 	else
 	{
-		file << "pSZ << " << "pSZ.SerializeBasicType(L\"" << m_VarName << "\", p->" << m_VarName << ");";
+		file << "pSZ << " << "pSZ.SerializeBasicType(\"" << m_VarName << "\", p->" << m_VarName << ");";
 	}
 	file << endl;
 	return 0;

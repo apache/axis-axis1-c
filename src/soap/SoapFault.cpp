@@ -189,8 +189,8 @@ SoapFault* SoapFault::getSoapFault(int intFaultNo)
 		pSoapFault= new SoapFault();
 		
 		//TO DO ************************************************
-		//the soap envelope namespace prefix to be obtained from ObjSoapEnvVersionsStructTemp shoud depend on the relavent SOAP VERSION
-		pSoapFault->m_sFaultcode= string(ObjSoapEnvVersionsStructTemp[SOAP_VER_1_1].pchPrefix) + ":" +(*itSoapFault).second.pchFaultcode;
+		//the soap envelope namespace prefix to be obtained from gs_SoapEnvVersionsStruct shoud depend on the relavent SOAP VERSION
+		pSoapFault->m_sFaultcode= string(gs_SoapEnvVersionsStruct[SOAP_VER_1_1].pchPrefix) + ":" +(*itSoapFault).second.pchFaultcode;
 		pSoapFault->m_sFaultstring= (*itSoapFault).second.pchFaultstring;
 		pSoapFault->m_sFaultactor= (*itSoapFault).second.pchFaultactor;
 		pSoapFault->m_sDetail= (*itSoapFault).second.pchDetail;		

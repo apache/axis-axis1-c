@@ -112,7 +112,7 @@ int SoapHeader::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 
 	do {
 		
-		pSZ << "<" << ObjSoapEnvVersionsStructTemp[eSoapVersion].pchPrefix << ":" << ObjSoapEnvVersionsStructTemp[eSoapVersion].pchWords[SKW_HEADER];
+		pSZ << "<" << gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix << ":" << gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_HEADER];
 
 		iStatus= serializeNamespaceDecl(pSZ);
 		iStatus= serializeAttributes(pSZ);
@@ -137,55 +137,13 @@ int SoapHeader::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 			break;
 		}
 		
-		pSZ<< "</" << ObjSoapEnvVersionsStructTemp[eSoapVersion].pchPrefix << ":" << ObjSoapEnvVersionsStructTemp[eSoapVersion].pchWords[SKW_HEADER] << ">";
+		pSZ<< "</" << gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix << ":" << gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_HEADER] << ">";
 		
 	} while(0);
 
 	return iStatus;
 
 }
-
-/*
-commented on 10/7/2003 3.50pm
-int SoapHeader::serialize(string& sSerialized, SOAP_VERSION eSoapVersion)
-{	
-	int iStatus= SUCCESS;
-
-	do {
-		sSerialized= sSerialized+ "<"+ ObjSoapEnvVersionsStructTemp[eSoapVersion].pchPrefix+ ":" + ObjSoapEnvVersionsStructTemp[eSoapVersion].pchWords[SKW_HEADER];	
-
-		iStatus= serializeNamespaceDecl(sSerialized);
-		iStatus= serializeAttributes(sSerialized);
-
-		if(iStatus==FAIL) {
-			break;
-		}
-
-		sSerialized= sSerialized+ ">"+ "\n";
-
-		list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
-
-		while(itCurrHeaderBlock != m_headerBlocks.end()) {
-			iStatus= (*itCurrHeaderBlock)->serialize(sSerialized);
-			if(iStatus==FAIL) {
-				break;
-			}
-			itCurrHeaderBlock++;
-			sSerialized+="\n";
-		}
-
-		if(iStatus==FAIL) {
-			break;
-		}
-
-		sSerialized= sSerialized + "</"+ ObjSoapEnvVersionsStructTemp[eSoapVersion].pchPrefix+ ":" + ObjSoapEnvVersionsStructTemp[eSoapVersion].pchWords[SKW_HEADER]+ ">"+ "\n";
-		
-	} while(0);
-
-	return iStatus;
-
-}
-*/
 
 int SoapHeader::addAttribute(Attribute *pAttribute)
 {
@@ -207,21 +165,6 @@ int SoapHeader::serializeAttributes(SoapSerializer& pSZ)
 	return SUCCESS;	
 }
 
-/*
-comm on 10/7/2003 3.55pm
-int SoapHeader::serializeAttributes(string& sSerialized)
-{
-	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
-
-	while(itCurrAttribute != m_attributes.end()) {		
-		(*itCurrAttribute)->serialize(sSerialized);
-		itCurrAttribute++;		
-	}	
-
-	return SUCCESS;	
-}
-*/
-
 int SoapHeader::addNamespaceDecl(Attribute *pAttribute)
 {
 	m_namespaceDecls.push_back(pAttribute);
@@ -241,22 +184,6 @@ int SoapHeader::serializeNamespaceDecl(SoapSerializer& pSZ)
 
 	return SUCCESS;
 }
-
-/*
-comm on 10/7/2003 3.55pm
-int SoapHeader::serializeNamespaceDecl(string& sSerialized)
-{
-	list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
-
-	while(itCurrNamespaceDecl != m_namespaceDecls.end()) {			
-
-		(*itCurrNamespaceDecl)->serialize(sSerialized);
-		itCurrNamespaceDecl++;		
-	}	
-
-	return SUCCESS;
-}
-*/
 
 IHeaderBlock* SoapHeader::getHeaderBlock()
 {

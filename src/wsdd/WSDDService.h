@@ -78,15 +78,15 @@ using namespace std;
 class WSDDService : public WSDDHandler 
 {
 public:
-	void SetServiceName(const AxisString& sServiceName);
-	void SetProvider(const AxisString& sProvider);
-	const AxisString& GetServiceName();
-	bool IsAllowedMethod(const AxisString& sMethodName) const;
-	void AddAllowedMethod(const AxisString& sMethodName);
+	void SetServiceName(const AxisChar* sServiceName);
+	void SetProvider(const AxisChar* sProvider);
+	const AxisChar* GetServiceName();
+	bool IsAllowedMethod(const AxisChar* sMethodName) const;
+	void AddAllowedMethod(const AxisChar* sMethodName);
 	const WSDDHandlerList* GetResponseFlowHandlers() const;
 	void AddHandler(bool bRequestFlow, WSDDHandler* pHandler);
 	const WSDDHandlerList* GetRequestFlowHandlers() const;
-	void AddAllowedRole(const AxisString& sRole);
+	void AddAllowedRole(const AxisChar* sRole);
 	const list<AxisString>& GetAllowedRoles();
 	WSDDService();
 	virtual ~WSDDService();

@@ -84,9 +84,9 @@ enum XSDTYPE { XSD_UNKNOWN=1, XSD_INT, XSD_FLOAT, XSD_STRING, XSD_LONG, XSD_SHOR
 class TypeMapping  
 {
 public:
-	static XSDTYPE Map(AxisString& sType);
+	static XSDTYPE Map(const AxisXMLCh* sType);
 	static void Initialize();
-	static map<AxisString, XSDTYPE> m_sTypeMap;
+	static map<const AxisXMLCh*, XSDTYPE> m_sTypeMap;
 	static volatile bool m_bInit;
 	TypeMapping();
 	virtual ~TypeMapping();
