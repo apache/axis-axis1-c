@@ -55,67 +55,71 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
 
     try
     {
-    if (!pSoap)
-    {
-        AXISTRACE1 ("Transport is null", CRITICAL);
-        return AXIS_FAIL;
-    }
-    m_pSoap = pSoap;
+	    if (!pSoap)
+	    {
+	        return AXIS_FAIL;
+	    }
+	    m_pSoap = pSoap;
+	    string sSessionId = m_pSoap->getSessionId();
+	
+	    do
+	    {
+	        const char* pchService = pSoap->getServiceName();
+	        
+	        if (pchService == NULL || strchr(pchService,'#') == NULL)
+	        {
+	        	pService = g_pWSDDDeployment->getService (pchService);
+	        }
+	        else
+	        {
+		        char * pchTempService = new char [strlen(pchService)+1];
+				// Skip the starting double quote
+		        strcpy(pchTempService, pchService+1);
+		
+		        /* The String returned as the service name has the format "Calculator#add".
+		        So null terminate string at #.  */
+		        *(strchr(pchTempService, '#')) = '\0';
 
-    string sSessionId = m_pSoap->getSessionId();
+		        /* get service description object from the WSDD Deployment object */
+		        pService = g_pWSDDDeployment->getService (pchTempService);
+		        delete pchTempService;
+	        }
 
-    do
-    {
-        const char* pchService = pSoap->getServiceName();
-        char * pchTempService = new char [strlen(pchService)+1];
-        strcpy(pchTempService, pchService);
-        /* 
-        The String returned as the service name has the format "Calculator#add".
-        So null terminate string at #.
-        */
-        *(strchr(pchTempService, '#')) = '\0';
-        /* Skip the starting double quote */
-        strcpy(pchTempService, pchTempService+1);
-
-        /* get service description object from the WSDD Deployment object */
-        pService = g_pWSDDDeployment->getService (pchTempService);
-        delete pchTempService;
-
-        //Get Global and Transport Handlers
-        
-        Status = initializeHandlers (sSessionId, pSoap->getProtocol());
-        if (AXIS_SUCCESS != Status)
-        {
-            throw AxisEngineException(SERVER_ENGINE_HANDLER_INIT_FAILED);
-            break;          //do .. while(0)
-        }
-        //Get Service specific Handlers from the pool if configured any
-        if (pService != NULL)
-        {
-            Status = g_pHandlerPool-> getRequestFlowHandlerChain (&m_pSReqFChain, 
-                sSessionId, pService);
-            if (AXIS_SUCCESS != Status)
-            {
-                break;    //do .. while(0)
-            }
-            Status = g_pHandlerPool->
-                getResponseFlowHandlerChain (&m_pSResFChain, sSessionId,
-                pService);
-            if (AXIS_SUCCESS != Status)
-            {
-                break;    //do .. while(0)
-            }
-        }
-
-        // Invoke all handlers and then the remote webservice
-        Status = invoke (m_pMsgData); /* we generate response in the same way 
-                                       * even if this has failed
-				       */ 
-    }
-    while (0);
-
-    //release the handlers
-    releaseHandlers(sSessionId);	     
+	        //Get Global and Transport Handlers
+	
+	        Status = initializeHandlers (sSessionId, pSoap->getProtocol());
+	        if (AXIS_SUCCESS != Status)
+	        {
+	            throw AxisEngineException(SERVER_ENGINE_HANDLER_INIT_FAILED);
+	            break;          //do .. while(0)
+	        }
+	        //Get Service specific Handlers from the pool if configured any
+	        if (pService != NULL)
+	        {
+	            Status = g_pHandlerPool-> getRequestFlowHandlerChain (&m_pSReqFChain, 
+	                sSessionId, pService);
+	            if (AXIS_SUCCESS != Status)
+	            {
+	                break;    //do .. while(0)
+	            }
+	            Status = g_pHandlerPool->
+	                getResponseFlowHandlerChain (&m_pSResFChain, sSessionId,
+	                pService);
+	            if (AXIS_SUCCESS != Status)
+	            {
+	                break;    //do .. while(0)
+	            }
+	        }
+	
+	        // Invoke all handlers and then the remote webservice
+	        Status = invoke (m_pMsgData); /* we generate response in the same way 
+	                                       * even if this has failed
+					       */ 
+	    }
+	    while (0);
+	
+	    //release the handlers
+	    releaseHandlers(sSessionId);	     
     }
     catch(AxisException& e)
     {
