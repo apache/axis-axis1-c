@@ -336,10 +336,10 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 						writer.write("\t"+attribs[i].getTypeName()+" *	p"+i+" = ("+attribs[i].getTypeName()+" *) array.m_Array;\n\n");
 						writer.write("\tfor( int iCount"+i+" = 0; iCount"+i+" < array.m_Size; iCount"+i+"++)\n");
 						writer.write("\t{\n");
-						writer.write("\t\t*pp"+i+" = p"+i+";\n\n");
-						writer.write("\t\tpp"+i+"++;\n");
-						writer.write("\t\tp"+i+"++;\n");
+						writer.write("\t\tpp"+i+"[iCount"+i+"] = new "+attribs[i].getTypeName()+"();\n");
+						writer.write("\t\t*(pp"+i+"[iCount"+i+"]) = p"+i+"[iCount"+i+"];\n");
 						writer.write("\t}\n");
+						writer.write("\tdelete p"+i+";\n");
 					}
 					else
 					{
