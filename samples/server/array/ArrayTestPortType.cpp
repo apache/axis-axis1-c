@@ -17,7 +17,7 @@
  * This file contains definitions of the web service
  */
 
-#include "ArrayTestPortType.h"
+#include "ArrayTestPortType.hpp"
 
 
 ArrayTestPortType::ArrayTestPortType()
