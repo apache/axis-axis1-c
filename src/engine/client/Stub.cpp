@@ -14,6 +14,7 @@
  *   limitations under the License.
  *
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */
 
 /*
@@ -24,6 +25,16 @@
 /*
  * Revision 1.1  2004/05/31 samisa
  * Added setProxy
+ */
+
+/*
+ * Revision 1.2  2004/05/31 roshan
+ * Added calling conventions
+ */
+
+/*
+ * Revision 1.3  2004/06/01 roshan
+ * Added setSOAPMethodAttribute
  */
 
 #include <axis/client/Stub.h>
@@ -137,6 +148,7 @@ Stub::applyUserPreferences ()
 {
     setSOAPHeaders ();
     setTransportProperties ();
+	setSOAPMethodAttributes();
 }
 
 void Stub::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
@@ -159,4 +171,30 @@ void Stub::setProxy()
             pTrasport->setProxy(m_strProxyHost, m_uiProxyPort);
         }
     }*/
+}
+
+void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue)
+{
+	Attribute* pAttribute = new Attribute(pLocalname, pPrefix, pValue);
+	m_vSOAPMethodAttributes.push_back(pAttribute);
+}
+
+void Stub::setSOAPMethodAttributes()
+{
+    SoapSerializer *pSerializer = NULL;
+    if (m_pCall)
+	pSerializer = m_pCall->getSOAPSerializer ();
+    if (pSerializer)
+    {
+	for (unsigned int i = 0; i < m_vSOAPMethodAttributes.size (); i++)
+	{
+		pSerializer->setSOAPMethodAttribute(m_vSOAPMethodAttributes[i]->clone());
+	}
+    }	
+}
+
+void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pUri, const AxisChar *pValue)
+{
+    Attribute* pAttribute = new Attribute(pLocalname, pPrefix, pUri, pValue);
+	m_vSOAPMethodAttributes.push_back(pAttribute);
 }

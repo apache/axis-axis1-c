@@ -15,7 +15,7 @@
  */
 
 /*
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  *
  */
@@ -117,8 +117,11 @@ int SoapSerializer::setSoapMethod(SoapMethod *pSoapMethod)
 
     if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody))
     {
-        m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod= pSoapMethod;
-        intStatus= AXIS_SUCCESS;
+		if (!(m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) {
+			m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod= pSoapMethod;
+		}
+			
+		intStatus= AXIS_SUCCESS;
     }
 
     return intStatus;
@@ -827,4 +830,21 @@ IHeaderBlock* SoapSerializer::createHeaderBlock(AxisChar *pachLocalName,
         pachUri);
     setHeaderBlock(pHeaderBlock);
     return pHeaderBlock;    
+}
+
+SoapMethod* SoapSerializer::getSOAPMethod()
+{
+	/*
+	 *TODO
+	 * return the SOAPMethod object if one is available. If not available create a SOAPMethod and set it and return it.
+	 */
+
+	return NULL;
+}
+
+int SoapSerializer::setSOAPMethodAttribute(Attribute *pAttribute)
+{
+	m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->addAttribute(pAttribute);
+
+	return AXIS_SUCCESS;
 }

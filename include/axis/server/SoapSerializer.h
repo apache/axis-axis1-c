@@ -169,6 +169,8 @@ private:
     BasicTypeSerializer m_BTSZ;
     SOAPTransport* m_pOutputStream;
 public:
+	int setSOAPMethodAttribute(Attribute* pAttribute);
+	SoapMethod* getSOAPMethod();
     IHeaderBlock* createHeaderBlock(AxisChar *pachLocalName, 
         AxisChar *pachPrefix, AxisChar *pachUri);
     /* to add a header block to the Serializer. Probably by a handler */

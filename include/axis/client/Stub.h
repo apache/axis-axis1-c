@@ -14,6 +14,7 @@
  *   limitations under the License.
  *
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */
 
 /*
@@ -26,6 +27,16 @@
 /*
  * Revision 1.1  2004/05/31 samisa
  * Added setProxy
+ */
+
+/*
+ * Revision 1.2  2004/05/31 roshan
+ * Added calling conventions
+ */
+
+/*
+ * Revision 1.3  2004/06/01 roshan
+ * Added setSOAPMethodAttribute
  */
 
 #if !defined(_STUB_H____OF_AXIS_INCLUDED_)
@@ -53,7 +64,18 @@ class STORAGE_CLASS_INFO Stub
     */
     void setProxy(const char* pcProxyHost, unsigned int uiProxyPort);
 
+	/**
+	 * Sets a Attribute to the SOAPMethod, using the given Attribute data.
+	 */
+	void setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue);
+
+	/**
+	 * Sets a Attribute to the SOAPMethod, using the given Attribute data.
+	 */
+	void setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar* pUri, const AxisChar *pValue);
+
   protected:
+	void setSOAPMethodAttributes();
     void applyUserPreferences();
     void setTransportProperties();
     void setSOAPHeaders();
@@ -77,6 +99,11 @@ class STORAGE_CLASS_INFO Stub
     */
     bool m_bUseProxy;
 
+  private:
+	/**
+	 * List of SOAPMethod Attributes
+	 */
+    vector <Attribute*> m_vSOAPMethodAttributes;
 
 };
 
