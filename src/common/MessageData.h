@@ -55,12 +55,9 @@ public:
     int setProperty(AxisChar* pachName, const AxisChar* pachValue);
     int setProperty(AxisChar* pachName, const void* pachValue, int len);
     void setComplexProperty(AxisChar* pachName, void* pachValue, int iObjectSize);
-    void setOperationName(const AxisChar* pchOperation)
-    {m_sOperationName = pchOperation;};
-    void getSoapDeSerializer
-        (IHandlerSoapDeSerializer** pIHandlerSoapDeSerializer);
-    const AxisChar* AXISCALL getOperationName()
-    {return m_sOperationName.c_str();};
+    const AxisChar* AXISCALL getOperationName();
+    void setOperationName(const AxisChar* pchOperation);
+    void getSoapDeSerializer(IHandlerSoapDeSerializer** pIHandlerSoapDeSerializer);
     void AXISCALL getSoapSerializer(IWrapperSoapSerializer** pIWSS);
     void AXISCALL getSoapDeSerializer(IWrapperSoapDeSerializer** pIWSDS);
     void getSoapSerializer(IHandlerSoapSerializer** pIHandlerSoapSerializer);

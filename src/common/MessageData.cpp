@@ -64,6 +64,15 @@ void MessageData::setDeSerializer (IWrapperSoapDeSerializer* pDZ)
     m_pDZ = pDZ;
 }
 
+void MessageData::setOperationName(const AxisChar* pchOperation)
+{
+	m_sOperationName = pchOperation;
+}
+const AxisChar* MessageData::getOperationName()
+{
+	return m_sOperationName.c_str();
+}
+
 void MessageData::setUserName (string &sUserName)
 {
     m_sUserName = sUserName;
@@ -136,6 +145,8 @@ void MessageData::getSoapDeSerializer (IHandlerSoapDeSerializer**
         static_cast < IHandlerSoapDeSerializer * >(m_pDZ);
 }
 
+
+
 int MessageData::setProperty (AxisChar* pachName, const AxisChar* pachValue)
 {
     AxisChar* pachTmpName = new AxisChar[strlen (pachName) + 1];
@@ -199,4 +210,6 @@ void MessageData::getAdminUtils (IAdminUtils** pIAdminUtils)
 {
     *pIAdminUtils = &m_AdminUtil;
 }
+
+
 AXIS_CPP_NAMESPACE_END
