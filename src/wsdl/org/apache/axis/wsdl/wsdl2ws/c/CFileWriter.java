@@ -14,7 +14,6 @@
  *   limitations under the License.
  */
 
- 
 /**
  * @author Srinath Perera(hemapani@openource.lk)
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
@@ -23,39 +22,109 @@
 package org.apache.axis.wsdl.wsdl2ws.c;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
 import org.apache.axis.wsdl.wsdl2ws.BasicFileWriter;
-import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
+import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
+import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
-public abstract class CFileWriter extends BasicFileWriter{
-	public CFileWriter(String classname)throws WrapperFault{
-		super(classname);
-	}
-	public void writeSource()throws WrapperFault{
-	   try{
-		   this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
-		   writeClassComment();
-		   writePreprocessorStatements();
-		   writeGlobalCodes();
-		  // this.writer.write("public class "+servicename+getExtendsPart()+"{\n");
-		   writeAttributes();
-		   writeMethods();
-		   //this.writer.write("}\n");
-		   //cleanup
-		   writer.flush();
-		   writer.close();
-		    if (WSDL2Ws.verbose)
-		        System.out.println(getFilePath().getAbsolutePath() + " created.....");
-	   } catch (IOException e) {
-			e.printStackTrace();
-			throw new WrapperFault(e);
-		}
+public abstract class CFileWriter extends BasicFileWriter
+{
+    protected WebServiceContext wscontext;
 
-	}
-	protected void writeGlobalCodes()throws WrapperFault{}
+    /**
+     * @param classname
+     * @throws WrapperFault
+     */
+    public CFileWriter(String classname) throws WrapperFault
+    {
+        super(classname);
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.SourceWriter#writeSource()
+     */
+    public void writeSource() throws WrapperFault
+    {
+        try
+        {
+            this.writer =
+                new BufferedWriter(new FileWriter(getFilePath(), false));
+            writeClassComment();
+            writePreprocessorStatements();
+            writeGlobalCodes();
+            // this.writer.write("public class "+servicename+getExtendsPart()+"{\n");
+            writeAttributes();
+            writeMethods();
+            //this.writer.write("}\n");
+            //cleanup
+            writer.flush();
+            writer.close();
+            if (WSDL2Ws.verbose)
+                System.out.println(
+                    getFilePath().getAbsolutePath() + " created.....");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            throw new WrapperFault(e);
+        }
+
+    }
+
+    /**
+     * @throws WrapperFault
+     */
+    protected void writeGlobalCodes() throws WrapperFault
+    {}
+
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath()
+     */
+    protected File getFilePath() throws WrapperFault
+    {
+        return this.getFilePath(false);
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath(boolean)
+     */
+    protected File getFilePath(boolean useServiceName) throws WrapperFault
+    {
+        String targetOutputLocation =
+            this.wscontext.getWrapInfo().getTargetOutputLocation();
+        if (targetOutputLocation.endsWith("/"))
+        {
+            targetOutputLocation =
+                targetOutputLocation.substring(
+                    0,
+                    targetOutputLocation.length() - 1);
+        }
+        new File(targetOutputLocation).mkdirs();
+
+        String fileName = targetOutputLocation + "/" + classname + ".c";
+
+        if (useServiceName)
+        {
+            String serviceName = this.wscontext.getSerInfo().getServicename();
+            fileName =
+                targetOutputLocation
+                    + "/"
+                    + serviceName
+                    + "_"
+                    + classname
+                    + ".c";
+            this.wscontext.addGeneratedFile(
+                serviceName + "_" + classname + ".c");
+        }
+        else
+        {
+            this.wscontext.addGeneratedFile(classname + ".c");
+        }
+
+        return new File(fileName);
+    }
 }
-
-
-

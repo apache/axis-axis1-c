@@ -21,7 +21,6 @@
 
 package org.apache.axis.wsdl.wsdl2ws.c;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -36,7 +35,6 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class ClientStubHeaderWriter extends HeaderFileWriter
 {
-    private WebServiceContext wscontext;
     protected ArrayList methods;
 
     /**
@@ -51,44 +49,6 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                 wscontext.getSerInfo().getQualifiedServiceName()));
         this.wscontext = wscontext;
         this.methods = wscontext.getSerInfo().getMethods();
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath()
-     */
-    protected File getFilePath() throws WrapperFault
-    {
-        return this.getFilePath(false);
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath(boolean)
-     */
-    protected File getFilePath(boolean useServiceName) throws WrapperFault
-    {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
-        new File(targetOutputLocation).mkdirs();
-
-        String fileName = targetOutputLocation + "/" + classname + ".h";
-
-        if (useServiceName)
-        {
-            fileName =
-                targetOutputLocation
-                    + "/"
-                    + this.wscontext.getSerInfo().getServicename()
-                    + "_"
-                    + classname
-                    + ".h";
-        }
-
-        return new File(fileName);
     }
 
     /* (non-Javadoc)

@@ -30,8 +30,6 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 public class ClientStubHeaderWriter
     extends org.apache.axis.wsdl.wsdl2ws.c.ClientStubHeaderWriter
 {
-    private WebServiceContext wscontext;
-
     /**
      * @param wscontext
      * @throws WrapperFault

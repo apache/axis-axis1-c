@@ -21,7 +21,6 @@
 
 package org.apache.axis.wsdl.wsdl2ws.c;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,8 +39,6 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class WrapWriter extends CFileWriter
 {
-    protected WebServiceContext wscontext;
-
     protected ArrayList methods;
 
     protected String bindingStyle;
@@ -59,51 +56,6 @@ public class WrapWriter extends CFileWriter
         this.wscontext = wscontext;
         this.methods = wscontext.getSerInfo().getMethods();
         this.bindingStyle = "RPC_ENCODED";
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath()
-     */
-    protected File getFilePath() throws WrapperFault
-    {
-        return this.getFilePath(false);
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath(boolean)
-     */
-    protected File getFilePath(boolean useServiceName) throws WrapperFault
-    {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
-        new File(targetOutputLocation).mkdirs();
-
-        String fileName = targetOutputLocation + "/" + classname + ".c";
-
-        if (useServiceName)
-        {
-            String serviceName = this.wscontext.getSerInfo().getServicename();
-            fileName =
-                targetOutputLocation
-                    + "/"
-                    + serviceName
-                    + "_"
-                    + classname
-                    + ".c";
-            this.wscontext.addGeneratedFile(
-                serviceName + "_" + classname + ".c");
-        }
-        else
-        {
-            this.wscontext.addGeneratedFile(classname + ".c");
-        }
-
-        return new File(fileName);
     }
 
     /* (non-Javadoc)
