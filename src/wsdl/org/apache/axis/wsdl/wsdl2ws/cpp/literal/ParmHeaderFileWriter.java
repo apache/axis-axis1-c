@@ -151,7 +151,7 @@ public class ParmHeaderFileWriter extends ParamWriter{
 			  for(int i=0;i<attribs.length;i++){
 				  writer.write("\t"+getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])+" "+attribs[i].getParamName()+";\n");
 			  }    
-			  if (extensionBaseAttrib != null)
+			  if (extensionBaseAttrib != null && getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib) != null)
 			  	writer.write("\t"+getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib)+" "+extensionBaseAttrib.getParamName()+";\n");
 		  } catch (IOException e) {
 			   throw new WrapperFault(e);

@@ -149,7 +149,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			}
 		}
 		writer.write("\tpSZ->serialize(\">\", 0);\n");
-		if (extensionBaseAttrib != null){
+		if (extensionBaseAttrib != null && extensionBaseAttrib.getTypeName() != null){
 			writer.write("\tpSZ->serializeAsChardata((void*)&(param->"+extensionBaseAttrib.getParamName()+"), "+CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName())+");\n");
 		}
 		writer.write("\t/* then serialize elements if any*/\n");
@@ -256,7 +256,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 					"\n\t\t, \""+ soapTagName +"\", Axis_URI_"+attribs[i].getTypeName()+");\n");				
 			}		
 		}
-		if (extensionBaseAttrib != null){
+		if (extensionBaseAttrib != null && extensionBaseAttrib.getTypeName() != null){
 			writer.write("\tpIWSDZ->getChardataAs((void*)&(param->"+extensionBaseAttrib.getParamName()+"), "+CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName())+");\n");
 		}
 		writer.write("\treturn pIWSDZ->getStatus();\n");

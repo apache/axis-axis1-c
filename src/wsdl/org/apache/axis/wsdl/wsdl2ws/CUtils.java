@@ -75,6 +75,7 @@ public class CUtils {
 		class2QNamemap.put("xsd__unsignedLong", new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"));
 		class2QNamemap.put("xsd__unsignedShort", new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"));
 		class2QNamemap.put("xsd__QName", new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"));
+		class2QNamemap.put("xsd__NCName", new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"));
 		class2QNamemap.put("xsd__NMTOKEN", new QName(WrapperConstants.SCHEMA_NAMESPACE,"NMTOKEN"));
 
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"), "int");
@@ -99,6 +100,7 @@ public class CUtils {
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"), "xsd__unsignedLong");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"), "xsd__unsignedShort");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"), "xsd__QName");
+		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"), "xsd__NCName");
 		qname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"), "xsd__NMTOKEN");
 		
 		/* TODO:
@@ -127,6 +129,7 @@ public class CUtils {
 		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedLong"), "xsd__unsignedLong");
 		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedShort"), "xsd__unsignedShort");
 		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "QName"), "xsd__QName");		
+		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NCName"), "xsd__NCName");		
 
 
 		/* TODO:
@@ -155,6 +158,7 @@ public class CUtils {
 		type2getValueMethodName.put("xsd__boolean","Boolean");
 		type2getValueMethodName.put("xsd__anyURI","String");
 		type2getValueMethodName.put("xsd__QName","String");
+		type2getValueMethodName.put("xsd__NCName","String");
 		type2getValueMethodName.put("xsd__NMTOKEN","String");
 		type2BasicArrayName.put("int","xsd__int_Array");
 		type2BasicArrayName.put("float","xsd__float_Array");
@@ -176,6 +180,7 @@ public class CUtils {
 		type2BasicArrayName.put("xsd__boolean","xsd__boolean_Array");
 		type2BasicArrayName.put("xsd__anyURI","xsd__anyURI_Array");
 		type2BasicArrayName.put("xsd__QName","xsd__QName_Array");
+		type2BasicArrayName.put("xsd__NCName","xsd__NCName_Array");
 		type2BasicArrayName.put("xsd__NMTOKEN","xsd__NMTOKEN_Array");
 		basicType2EnumMap.put("int","XSD_INT");
 		basicType2EnumMap.put("float","XSD_FLOAT");
@@ -197,6 +202,7 @@ public class CUtils {
 		basicType2EnumMap.put("xsd__boolean","XSD_BOOLEAN");
 		basicType2EnumMap.put("xsd__anyURI","XSD_ANYURI");
 		basicType2EnumMap.put("xsd__QName","XSD_QNAME");
+		basicType2EnumMap.put("xsd__NCName","XSD_NCNAME");
 		basicType2EnumMap.put("xsd__NMTOKEN","XSD_NMTOKEN");
 
 
@@ -223,6 +229,7 @@ public class CUtils {
 		initValues.put("xsd__unsignedLong", "0"); 
 		initValues.put("xsd__unsignedShort", "0"); 
 		initValues.put("xsd__QName", "NULL"); 
+		initValues.put("xsd__NCName", "NULL"); 
 		initValues.put("xsd__NMTOKEN", "NULL"); 
 	}
 	

@@ -82,7 +82,7 @@ public abstract class ParamWriter extends BasicFileWriter{
 			extensionBaseAttrib.setTypeName(CUtils.getclass4qname(elemi.getType().getName()));
 			extensionBaseAttrib.setType(elemi.getType());
 			extensionBaseAttrib.setElementName(elemi.getName());
- 		}
+ 		} 
 		ArrayList attribfeilds = new ArrayList();
 		ArrayList elementfeilds = new ArrayList();
 
