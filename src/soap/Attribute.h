@@ -50,7 +50,7 @@ public:
     int initializeForTesting();
 #endif
     int serialize(SoapSerializer& pSZ) const;
-    int serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack);
+    int serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack, const AxisChar *uri=NULL);
 
     Attribute();    
     Attribute(const AxisChar* localname, const AxisChar* prefix, 

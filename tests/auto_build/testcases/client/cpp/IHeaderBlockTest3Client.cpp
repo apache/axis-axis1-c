@@ -31,11 +31,18 @@ int main(int argc, char* argv[])
 		IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader","http://ws.apache.org/");
 		INamespace *Insp1=phb->createNamespaceDecl(prefix,uri);			
 		INamespace *Insp2=phb->createNamespaceDecl("np1","http://axis.apache.org/");
+
+		IAttribute *attr1=phb->createAttribute(NULL,NULL,NULL,NULL);
+        IAttribute *attr2=phb->createAttribute(NULL,NULL,NULL);
+		if(attr1 || attr2)
+			cout << "Attribute returned for NULL arguments in createAttribute"<<endl;
+
 		const AxisChar *temp="apache";
 		const AxisChar *localname="name";	
 		IAttribute *Iattr1=phb->createAttribute(localname,prefix,temp);		
 		IAttribute *Iattr2=phb->createAttribute(localname,"np1","","Axis");		
 		IAttribute *Iattr3=phb->createAttribute(localname,"","","");		
+
 		cout << "np:name=" << phb->getAttributeValue(localname,prefix)<<endl;
 		cout << "np1:name=" << phb->getAttributeValue("name","np1")<<endl;
 		cout <<"name=" << phb->getAttributeValue("name","")<<endl;

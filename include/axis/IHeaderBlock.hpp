@@ -174,11 +174,10 @@ public:
       * We expect that the server side will fail.
       * e.g. If creating more than one attribute with the same name the outcome is undefined
       * 
-      *
-      * @param localname The local name of the attribute.
-      * @param prefix The prefix of the attribute.
-      * @param uri The namespace uri of the attribute.
-      * @param value The value of the attribute.
+      * @param localname The local name of the attribute. (mandatory)
+      * @param prefix The prefix of the attribute. (optional)
+      * @param uri The namespace uri of the attribute. (optional)
+      * @param value The value of the attribute. (optional)
       *
       * @return A pointer to the created Attribute will be returned.
       */
@@ -192,9 +191,9 @@ public:
       * We expect that the server side will fail.
       * e.g. If creating more than one attribute with the same name the outcome is undefined
       *
-      * @param localname The local name of the attribute.
-      * @param prefix The prefix of the attribute.
-      * @param value The value of the attribute.
+      * @param localname The local name of the attribute. (mandatory)
+      * @param prefix The prefix of the attribute. (optional)
+      * @param value The value of the attribute. (optional)
       *
       * @return A pointer to the created Attribute will be returned.
       */

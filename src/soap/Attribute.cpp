@@ -175,11 +175,12 @@ int Attribute::serialize(SoapSerializer& pSZ) const
 }
 
 int Attribute::serialize(SoapSerializer& pSZ, 
-                         list<AxisChar*>& lstTmpNameSpaceStack)
+                         list<AxisChar*>& lstTmpNameSpaceStack,
+						 const AxisChar *uri)
 {    
     int intStatus= AXIS_FAIL;
 
-    if (isSerializable() && !pSZ.getNamespaceURL( m_prefix).empty())
+    if (isSerializable() && (!pSZ.getNamespaceURL( m_prefix).empty() || NULL!=uri))
     {        
         pSZ.serialize(" ", NULL);
 
@@ -188,7 +189,7 @@ int Attribute::serialize(SoapSerializer& pSZ,
 		 *  not worry to declare the namespace at all. Because it is the users
 		 *  responsibiltiy to add his/her namespace declaration seperately.
          */
-        if(!m_prefix.empty())
+        if(!m_prefix.empty() || NULL!=uri)
         {            
             pSZ.serialize(m_prefix.c_str(), ":", NULL);
         }

@@ -312,8 +312,26 @@ int HeaderBlock::attrSerialize(SoapSerializer& pSZ,
     list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
     while(itCurrAttribute != m_attributes.end())
-    {        
-        iStatus= (*itCurrAttribute)->serialize(pSZ, lstTmpNameSpaceStack);
+    {    
+		// See if this prefix matches a namespace within this headerblock
+		const AxisChar *uri = NULL;
+		Attribute *attr = *itCurrAttribute;
+		const AxisChar *attrPrefix = attr->getPrefix();
+		if (NULL != attrPrefix)
+		{
+			list<Namespace*>::iterator itNs = m_namespaceDecls.begin();
+			while (itNs != m_namespaceDecls.end())
+			{
+				if (0 == strcmp((*itNs)->getPrefix(), attrPrefix))
+				{
+					uri = (*itNs)->getURI();
+					break;
+				}
+				itNs++;
+			}
+		}
+
+        iStatus= (*itCurrAttribute)->serialize(pSZ, lstTmpNameSpaceStack, uri);
         if(iStatus==AXIS_FAIL)
         {
             break;
@@ -547,6 +565,9 @@ BasicNode* HeaderBlock::createImmediateChild(NODE_TYPE eNODE_TYPE)
 	return createImmediateChild(eNODE_TYPE, "", "", "", "");
 }
 
+/**
+ * The localname must be specified, but all other input parameters are optional.
+ */
 IAttribute* HeaderBlock::createAttribute(const AxisChar *localname,
                                         const AxisChar *prefix,
                                         const AxisChar *value)
@@ -554,43 +575,46 @@ IAttribute* HeaderBlock::createAttribute(const AxisChar *localname,
     return createAttribute(localname, prefix, NULL, value);
 }
 
+/**
+ * The localname must be specified, but all other input parameters are optional.
+ */
 IAttribute* HeaderBlock::createAttribute(const AxisChar *localname,
                                         const AxisChar *prefix,
                                         const AxisChar *uri,
                                         const AxisChar *value)
 {
 	Attribute* pAttribute=NULL;
-  if(!localname)
-   {
-      localname="";
-   }
-   if(!prefix)
-   {
-      prefix="";
-   }
-   if(!uri)
-   {
-      uri="";
-   }
-   if(!value)
-   {
-      value = "";
-   }
+	if(!localname)
+	{
+		return NULL;
+	}
+	if(!prefix)
+	{
+		prefix="";
+	}
+	if(!uri)
+	{
+		uri="";
+	}
+	if(!value)
+	{
+		value = "";
+	}
    
-    pAttribute = new Attribute(localname, prefix, uri, value);
-//	    m_attributes.push_back(pAttribute);
 	
-       list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
-       while(itCurrAttribute != m_attributes.end())
-       {        
-         if ((strcmp((*itCurrAttribute)->getLocalName(), localname) ==0) && (strcmp((*itCurrAttribute)->getPrefix(), prefix) ==0))
-                return NULL;                 
-            else
-                itCurrAttribute++;        
-        }    
+	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+	while(itCurrAttribute != m_attributes.end())
+	{        
+		if ((strcmp((*itCurrAttribute)->getLocalName(), localname) ==0) && 
+			(strcmp((*itCurrAttribute)->getPrefix(), prefix) ==0))
+			return NULL;
+		else
+			itCurrAttribute++;        
+	}    
         
-        m_attributes.push_back(pAttribute);
-    return pAttribute;
+	pAttribute = new Attribute(localname, prefix, uri, value);
+	m_attributes.push_back(pAttribute);
+	return pAttribute;
 }
 
 IAttribute* HeaderBlock::createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE 
