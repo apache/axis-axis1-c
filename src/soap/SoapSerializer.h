@@ -210,7 +210,7 @@ public:
 	int addOutputAnyObject(AnyType* pAnyObject);
 	int serializeAnyObject(AnyType* pAnyObject);
     int serializeAsChardata(void* pValue, XSDTYPE type);
-
+	AxisXMLString getNamespaceURL( string sNameSpace);
 };
 
 AXIS_CPP_NAMESPACE_END

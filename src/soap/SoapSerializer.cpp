@@ -243,60 +243,75 @@ int SoapSerializer::setSoapFault(SoapFault *pSoapFault)
 
 int SoapSerializer::setOutputStream(SOAPTransport* pStream)
 {
+    int	iStatus= AXIS_SUCCESS;
+
     m_pOutputStream = pStream;
-    int iStatus= AXIS_SUCCESS;
+
     try
     {
-    if(m_pSoapEnvelope)
-    {
-		if (checkAttachmentAvailability()) {
+	    if( m_pSoapEnvelope)
+		{
+			if( checkAttachmentAvailability())
+			{
+				string	asStartID;
+				string	asSOAPMimeHeaders;
 
-            string asStartID;
-            string asSOAPMimeHeaders;
-            asSOAPMimeHeaders   = pStream->getIncomingSOAPMimeHeaders();
-            int start= asSOAPMimeHeaders.find("Content-Type");
-            int startPosIdValue = asSOAPMimeHeaders.find ("<",start+strlen("Content-Id:"))+1;
-            int endPosIdValue   = asSOAPMimeHeaders.find(">", start+strlen("Content-Type"));
-            int length          = endPosIdValue - startPosIdValue ;
-            asStartID           = asSOAPMimeHeaders.substr (startPosIdValue,length); 
-        
-            string * asContentType = new string("multipart/related; type=\"text/xml\"; start=\"<");
-            *asContentType=*asContentType + asStartID + ">\"";
-            *asContentType=*asContentType +";  boundary=\"------=MIME BOUNDARY\"";
-            pStream->setTransportProperty(CONTENT_TYPE, (*asContentType).c_str()); 
+				asSOAPMimeHeaders = pStream->getIncomingSOAPMimeHeaders();
 
-			serialize("\n------=MIME BOUNDARY\n", NULL);
-			serialize(pStream->getIncomingSOAPMimeHeaders(), "\n\n", NULL);
+				int		start			= asSOAPMimeHeaders.find( "Content-Type");
+				int		startPosIdValue = asSOAPMimeHeaders.find( "<", start + strlen( "Content-Id:")) + 1;
+				int		endPosIdValue   = asSOAPMimeHeaders.find( ">", start + strlen( "Content-Type"));
+				int		length          = endPosIdValue - startPosIdValue ;
+
+				asStartID = asSOAPMimeHeaders.substr (startPosIdValue,length); 
+
+				string *	asContentType = new string( "multipart/related; type=\"text/xml\"; start=\"<");
+
+				*asContentType = *asContentType + asStartID + ">\"";
+				*asContentType = *asContentType + ";  boundary=\"------=MIME BOUNDARY\"";
+
+				pStream->setTransportProperty( CONTENT_TYPE, (*asContentType).c_str()); 
+
+				serialize( "\n------=MIME BOUNDARY\n", NULL);
+				serialize( pStream->getIncomingSOAPMimeHeaders(), "\n\n", NULL);
+			}
+
+			serialize( "<?xml version='1.0' encoding='utf-8' ?>", NULL);
+
+			if( (iStatus = m_pSoapEnvelope->serialize( *this, (SOAP_VERSION) m_iSoapVersion)) == AXIS_FAIL)
+			{
+				char * pszMsg = new char[128];
+
+				strcpy( pszMsg, "The SOAP serialiser has detected errors in the header or envelope.  Transmission has been aborted.");
+
+				throw AxisSoapException( CLIENT_SOAP_MESSAGE_INCOMPLETE, pszMsg);
+			}
+
+			if( checkAttachmentAvailability())
+			{
+				serialize( "\n------=MIME BOUNDARY\n", NULL);
+				serializeAttachments( *this);
+			}
 		}
+	}
+	catch( AxisSoapException& e)
+	{
+		e = e;
 
-        serialize("<?xml version='1.0' encoding='utf-8' ?>", NULL);
-        iStatus= m_pSoapEnvelope->serialize(*this, 
-            (SOAP_VERSION)m_iSoapVersion);		
-		
-		if (checkAttachmentAvailability()) {
-			serialize("\n------=MIME BOUNDARY\n", NULL);
-			serializeAttachments(*this);
-		}
+		throw;
+	}
+	catch( AxisException& e)
+	{
+		e = e;
 
-    }
-    }
-    catch(AxisSoapException& e)
-    {
-        e = e;
+		throw;
+	}
+	catch( ...)
+	{
+		throw;
+	}
 
-        throw;
-    }
-    catch(AxisException& e)
-    {
-        e = e;
-
-        throw;
-    }
-    catch(...)
-    {
-        throw;
-    }
-    return iStatus;
+	return iStatus;
 }
 
 /*
@@ -1163,4 +1178,81 @@ IHeaderBlock* SoapSerializer::getCurrentHeaderBlock()
 {
 	return m_pSoapEnvelope->m_pSoapHeader->getCurrentHeaderBlock();
 }
+
+AxisXMLString SoapSerializer::getNamespaceURL( string sNameSpace)
+{
+// Check that the namespace value is not empty.  If it is then return as
+// there is nothing to do!
+	if( sNameSpace.empty())
+	{
+		return "nothing to do";
+	}
+
+// Iterate through the namespace stack.  If the namespace can be found, then
+// return the associated uri.
+	map <AxisXMLString, AxisXMLString>::iterator	iterator = m_NsStack.begin();
+
+	while( iterator != m_NsStack.end())
+	{
+		AxisXMLString	sIt_URI = iterator->first;
+		AxisXMLString	sIt_NameSpace = iterator->second;
+
+		if( sNameSpace == sIt_NameSpace)
+		{
+			return iterator->first;
+		}
+		else
+		{
+			iterator++;
+		}
+	}
+
+// Couldn't find the namespace in the namespace list.  Try trawling through the
+// SOAP headers looking to see if any of their children have defined any
+// namespaces.
+	IHeaderBlock *	pHeaderBlock = m_pSoapEnvelope->m_pSoapHeader->getFirstHeaderBlock();
+
+	while( pHeaderBlock != NULL)
+	{
+		for( int iChildIndex = 0; iChildIndex < pHeaderBlock->getNoOfChildren(); iChildIndex++)
+		{
+			BasicNode *	pChild = pHeaderBlock->getChild( iChildIndex + 1);
+
+			if( pChild != NULL)
+			{
+				if( !strcmp( sNameSpace.c_str(), pChild->getPrefix()))
+				{
+					return pChild->getURI();
+				}
+			}
+		}
+
+		pHeaderBlock = m_pSoapEnvelope->m_pSoapHeader->getNextHeaderBlock();
+	}
+
+// Couldn't find the namespace in the namespace list or in children.  Try
+// trawling through the SOAP headers looking to see if any of their attributes
+// have defined any namespaces.
+	char *	pszNameSpace = (char *) sNameSpace.c_str();
+	char *	pszValue = NULL;
+
+	pHeaderBlock = m_pSoapEnvelope->m_pSoapHeader->getFirstHeaderBlock();
+
+	while( pHeaderBlock != NULL && pszValue == NULL)
+	{
+		pszValue = (char *) pHeaderBlock->getAttributeUri( "", pszNameSpace);
+
+		pHeaderBlock = m_pSoapEnvelope->m_pSoapHeader->getNextHeaderBlock();
+	}
+
+	if( pszValue == NULL)
+	{
+		return "";
+	}
+	else
+	{
+		return pszValue;
+	}
+}
+
 AXIS_CPP_NAMESPACE_END

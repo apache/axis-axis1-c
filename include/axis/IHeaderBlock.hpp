@@ -208,6 +208,8 @@ public:
      virtual const AxisChar* getAttributeValue(const AxisChar* localname,
          const AxisChar* prefix) = 0;
  
+     virtual const AxisChar* getAttributeUri( const AxisChar * localname,
+         const AxisChar* prefix) = 0;
 
     /**
      * Creates a child node depending on the given type. If the type is 

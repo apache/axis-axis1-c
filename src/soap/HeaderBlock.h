@@ -125,6 +125,8 @@ public:
 
     virtual const AxisChar* getAttributeValue(const AxisChar* localname,
          const AxisChar* prefix);
+    virtual const AxisChar* getAttributeUri( const AxisChar * localname,
+         const AxisChar* prefix);
     BasicNode* createImmediateChild(NODE_TYPE eNODE_TYPE);
     BasicNode* createChild(NODE_TYPE eNODE_TYPE);
     BasicNode* getLastChild();

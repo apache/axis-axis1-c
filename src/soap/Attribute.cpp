@@ -179,7 +179,7 @@ int Attribute::serialize(SoapSerializer& pSZ,
 {    
     int intStatus= AXIS_FAIL;
 
-    if (isSerializable())
+    if (isSerializable() && !pSZ.getNamespaceURL( m_prefix).empty())
     {        
         pSZ.serialize(" ", NULL);
 

@@ -369,26 +369,30 @@ int HeaderBlock::addChild(BasicNode *pBasicNode)
 }
 
 int HeaderBlock::serializeChildren(SoapSerializer& pSZ,
-                                   list<AxisChar*>& lstTmpNameSpaceStack)
+                                   list<AxisChar *>& lstTmpNameSpaceStack)
 {
-	// soapserialiser does not have an == operator so can't check it
-    list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
+    int iStatus = AXIS_SUCCESS;
 
-    while(itCurrBasicNode != m_children.end())
+// SOAP serialiser does not have an == operator so can't check it
+    list<BasicNode*>::iterator itCurrBasicNode = m_children.begin();
+
+    while( itCurrBasicNode != m_children.end() && iStatus == AXIS_SUCCESS)
     {
         if ((*itCurrBasicNode)->getNodeType() == ELEMENT_NODE)
         {
-            (*itCurrBasicNode)->serialize(pSZ, lstTmpNameSpaceStack);
+// Processing for ELEMENT_NODE types
+            iStatus = (*itCurrBasicNode)->serialize( pSZ, lstTmpNameSpaceStack);
         }
         else
         {
-            /* for CHARACTER_NODE types */
-            (*itCurrBasicNode)->serialize(pSZ);
+// Processing for CHARACTER_NODE types
+            iStatus = (*itCurrBasicNode)->serialize( pSZ);
         }
+
         itCurrBasicNode++;
     }
 
-    return AXIS_SUCCESS;
+    return iStatus;
 }
 
 INamespace* HeaderBlock::createNamespaceDecl(const AxisChar *prefix,
@@ -726,7 +730,32 @@ const AxisChar* HeaderBlock::getAttributeValue(const AxisChar *localname,
     return NULL;
 }
  
+const AxisChar * HeaderBlock::getAttributeUri( const AxisChar * localname,
+											   const AxisChar * prefix)
+{
+	list<Attribute*>::iterator itAttr = m_attributes.begin();
 
+	while( itAttr != m_attributes.end()) 
+	{
+		Attribute * pAttribute = *itAttr;
+
+		if( !strcmp( pAttribute->getLocalName(),localname) &&
+			!strcmp( pAttribute->getPrefix(),prefix)) 
+		{
+			return pAttribute->getURI();
+		}
+		
+		if( strlen( localname) == 0 &&
+			!strcmp( pAttribute->getPrefix(), prefix)) 
+		{
+			return pAttribute->getURI();
+		}
+
+		itAttr++;
+	}
+
+	return NULL;
+}
 
 BasicNode* HeaderBlock::createImmediateChild(NODE_TYPE eNODE_TYPE,
                                              AxisChar *pachLocalName,
