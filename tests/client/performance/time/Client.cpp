@@ -86,13 +86,20 @@ main (int argc, char *argv[])
 
 	InteropTestPortType ws (endpoint);
 
-        ws.setTransportTimeout(2);
+        //ws.setTransportTimeout(2);
 
         // Prepare the string to be sent 
-        char* buffer = new char[ length * strlen(STRING_TO_SEND) + 1];
-        buffer[0] = '\0';
-        for (int i = 0; i < length; i++ )
-            strcat(buffer, STRING_TO_SEND);
+        char* buffer = new char[ length + 1];
+        char c = 'A';
+        memset(buffer, c, length);
+        buffer[length] = '\0';
+        
+        //printf("%s\n", buffer);
+
+        //char* buffer = new char[ length * strlen(STRING_TO_SEND) + 1];
+        //buffer[0] = '\0';
+        //for (int i = 0; i < length; i++ )
+        //    strcat(buffer, STRING_TO_SEND);
 	
 	// Time mesurement stuff
 	time_t startTime;
@@ -101,6 +108,8 @@ main (int argc, char *argv[])
 	time( &startTime );
 
         char* echoStringResult = ws.echoString(buffer);
+
+        //printf("%s\n", echoStringResult);
 
 	time( &endTime );
         printf( "Time spent to invoke method ws.echoString(buffer); = %lf s\n", difftime( endTime, startTime ) );
