@@ -147,12 +147,15 @@ typedef struct encoding ENCODING;
  *                              const char *,
  *                              const char **);
  */
-typedef int (PTRCALL *SCANNER)(int *, data_t *, const ENCODING *,
-                               int *,
-                   char*,
-                               const char **);
+typedef int (PTRCALL *SCANNER)(int *, data_t *, const ENCODING *, int *, char*,
+    const char **);
 
-
+/**
+ * This struct is the type which represents encoding. This is struct is assigned
+ * values in xmltok.c.
+ * @see for examplestatic const struct normal_encoding internal_utf8_encoding_ns 
+ *  in xmltok.c
+ */
 struct encoding 
 {
   SCANNER scanners[XML_N_STATES];
@@ -182,6 +185,10 @@ struct encoding
                             const char *ptr,
                             const char *end,
                             const char **badPtr);
+  /* Converts to utf8 which is the parse output encoding which
+   * is decided in
+   * xpp_context_t* ct = (xpp_context_t*) parser_create("UTF-8");
+   */
   void (PTRCALL *utf8Convert)(const ENCODING *enc,
                               const char **fromP,
                               const char *fromLim,

@@ -79,7 +79,26 @@ NS(XmlInitEncoding)(INIT_ENCODING *p, const ENCODING **encPtr,
   p->initEnc.updatePosition = initUpdatePosition;
   p->encPtr = encPtr;
   *encPtr = &(p->initEnc);
-  initEncTable(encPtr); /* this is temporary solution by damitha */
+  /*printf("encoding:%d\n", i);*/
+  /** This is where the encoding table(defined in xmltol.c
+    * eg:
+    *     #ifdef XML_NS
+    *     static const struct normal_encoding utf8_encoding_ns =
+    *     {
+    *         { VTABLE1, utf8_toUtf8, utf8_toUtf16, 1, 1, 0 },
+    *         {
+    *             #include "asciitab.h"
+    *             #include "utf8tab.h"
+    *         },
+    *         STANDARD_VTABLE(sb_) NORMAL_VTABLE(utf8_)
+    *      };
+    *      #endif)
+    *
+    * is assigned to the encoding pointer.
+    *
+    */
+  *encPtr = NS(encodings)[i];
+
   return 1;
 }
 
@@ -133,8 +152,7 @@ int NS(XmlDamConvert)(const ENCODING *enc, const char **fromPtr,
 {
     /* printf("fromPtr:%s\n", *fromPtr); */
     /* printf("rawNameEnd:%s\n", rawNameEnd); */
-                    XmlUtf8Convert(enc,
-                               fromPtr, rawNameEnd,
-                               toPtr, bufEnd);
+    /*This method is defined in xmltok.h*/
+    XmlUtf8Convert(enc, fromPtr, rawNameEnd, toPtr, bufEnd);
 }
 
