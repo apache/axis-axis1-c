@@ -76,7 +76,9 @@ extern void ModuleUnInitialize();
 #endif
 
 #if defined(__GNUC__)
-#define AXISCALL __attribute__((stdcall))
+//replaced stdcall with cdecl to make it work on some platforms with older libraries - Samisa
+//#define AXISCALL __attribute__((stdcall))
+#define AXISCALL __attribute__((cdecl))
 #else
 #define AXISCALL __stdcall
 #endif
@@ -117,6 +119,7 @@ extern void ModuleUnInitialize();
     #define APINOPARAMS void*p
 #endif
 
+/*This was a hack to work around gcc version problems; hence commented out - samisa
 #if defined (__GNUC__)
 #if __GNUC_VERSION__ > 30000
 #define AXISDESTRUCTOR void* unused; void AXISAPI(destructor,(APINOPARAMS))
@@ -127,5 +130,8 @@ void AXISAPI(destructor,(APINOPARAMS))
 #else 
 #define AXISDESTRUCTOR void AXISAPI(destructor,(APINOPARAMS))
 #endif
+*/
+
 #endif 
+
 
