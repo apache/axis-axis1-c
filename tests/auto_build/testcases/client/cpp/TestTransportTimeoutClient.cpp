@@ -18,21 +18,21 @@ int main(int argc, char* argv[])
 		ws.setTransportTimeout(2);	
 
 		iResult = ws.add(2,3);
-		printf("%d\n", iResult);
+		cout << iResult << endl;
 		rc=0;
 	}
 	catch(AxisException& e)
 	{
 	    cout << "in AxisException block"  << endl;
-	    printf("Exception : %s\n", e.what());
+	    cout << "Exception : " << e.what() << endl;
 	}
 	catch(exception& e)
 	{
-	    printf("Unknown exception has occured\n" );
+	    cout << "Unknown exception has occured" << endl;
 	}
 	catch(...)
 	{
-	    printf("Unknown exception has occured\n" );
+	    cout << "Unknown exception has occured" << endl;
 	}
 	return rc;
 }

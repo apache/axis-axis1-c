@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 		printProperties(&ws);
 		
 		iResult = ws.add(2,3);
-		printf("%d\n", iResult);
+		cout << iResult << endl;
 		rc=0;
 	}
 	catch(AxisException& e)
