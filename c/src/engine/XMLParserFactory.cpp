@@ -24,6 +24,9 @@
 #include "XMLParserFactory.h"
 #include <axis/server/XMLParser.h>
 #include <stdio.h>
+#include <axis/server/AxisConfig.h>
+
+extern AxisConfig* g_pConfig;
 
 const char* XMLParserFactory::m_pcLibraryPath = 0;
 DLHandler XMLParserFactory::m_LibHandler = 0;
@@ -45,11 +48,14 @@ int XMLParserFactory::initialize()
 #ifdef WIN32
 #ifdef _DEBUG
 	m_pcLibraryPath = "AxisXMLParser_D.dll"; //this will be taken from configuration file
+	//m_pcLibraryPath = g_pConfig->getAxConfProperty(AXCONF_XMLPARSER);
 #else
 	m_pcLibraryPath = "AxisXMLParser.dll"; //this will be taken from configuration file
+	//m_pcLibraryPath = g_pConfig->getAxConfProperty(AXCONF_XMLPARSER);
 #endif
 #else
 	m_pcLibraryPath = "/usr/local/Axis/libs/libaxis_xmlparser.so"; //this will be taken from configuration file
+	//m_pcLibraryPath = g_pConfig->getAxConfProperty(AXCONF_XMLPARSER);
 #endif
 	if (!loadLib())
 	{
