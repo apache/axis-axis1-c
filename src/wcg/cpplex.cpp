@@ -570,9 +570,9 @@ char *yytext;
 
   int line_number = 1;
   
-	#define MAX_INCLUDE_DEPTH 10
-	YY_BUFFER_STATE include_stack[MAX_INCLUDE_DEPTH];
-	int include_stack_ptr = 0;  
+  #define MAX_INCLUDE_DEPTH 10
+  YY_BUFFER_STATE include_stack[MAX_INCLUDE_DEPTH];
+  int include_stack_ptr = 0;  
 /***** Start state for comments *****/
 #define COMMENT 1
 
@@ -1804,7 +1804,6 @@ FILE *file;
 	b->yy_is_interactive = 0;
 #else
 	b->yy_is_interactive = 1;
-	//b->yy_is_interactive = file ? (isatty( fileno(file) ) > 0) : 0;
 #endif
 #endif
 	}
@@ -2232,10 +2231,3 @@ int yyerror(char * msg)
   printf(yytext);
   return 0;
 }
-/*
-int main()
-{
-  init_keyword_map();
-  yyparse();
-}
-*/
