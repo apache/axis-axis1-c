@@ -125,6 +125,7 @@ public class CUtils {
 		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedShort"), "xsd__unsignedShort");
 		qname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "QName"), "xsd__QName");		
 
+
 		/* TODO:
 		 *  Another strange issue from Axis 1.1 runtime when base64binary is in input/output operations.
 		 */	
@@ -259,9 +260,15 @@ public class CUtils {
 	}
 	public static String getXSDTypeForBasicType(String stype){
 		String enumName;
+		//Samisa 23/08/2004
+		System.out.println( "Could not find the type " + stype );
+		//Samisa
 		if((enumName = (String)basicType2EnumMap.get(stype))!= null){
 			return enumName;
 		}
+		//Samisa 23/08/2004
+		System.out.println( "Could not find the type " + stype );
+		//Samisa
 		return null;	
 	}
 	public static String getCmplxArrayNameforType(QName qname){
@@ -360,6 +367,12 @@ public class CUtils {
 							/*if (value != null) {
 								v.add(value);
 							}*/
+							//Samisa 23/08/2004
+                                                        // HACK wollsch
+                                                        if (value.indexOf(':')>0) {                                                        
+                                                                value=value.substring(value.indexOf(':')+1,value.length());
+                                                        }
+							//Samisa
 							v.add(new QName(value, enumKind.getLocalPart()));
 					}
 				}

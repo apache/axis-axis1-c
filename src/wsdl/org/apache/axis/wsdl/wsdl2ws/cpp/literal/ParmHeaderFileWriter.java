@@ -85,7 +85,10 @@ public class ParmHeaderFileWriter extends ParamWriter{
 				for(int i=1; i<restrictionData.size();i++){
 					QName value = (QName)restrictionData.elementAt(i);
 					if ("enumeration".equals(value.getLocalPart())){
+						//writer.write("static const "+classname+" "+classname+"_"+value.getNamespaceURI()+" = \""+ value.getNamespaceURI()+"\";\n");
+						//Samisa 23/08/2004
 						writer.write("static const "+classname+" "+classname+"_"+value.getNamespaceURI()+" = \""+ value.getNamespaceURI()+"\";\n");
+						//Samisa
 					}else if("maxLength".equals(value.getLocalPart())){
 						writer.write("static const int "+classname+"_MaxLength = "+value.getNamespaceURI()+";\n");
 					}else if("minLength".equals(value.getLocalPart())){
@@ -126,7 +129,10 @@ public class ParmHeaderFileWriter extends ParamWriter{
 				for(int i=1; i<restrictionData.size();i++){
 					QName value = (QName)restrictionData.elementAt(i);
 					if ("enumeration".equals(value.getLocalPart())){
-						writer.write("static const "+classname+" "+classname+"_"+value.getNamespaceURI()+" = "+ value.getNamespaceURI()+";\n");
+						//writer.write("static const "+classname+" "+classname+"_"+value.getNamespaceURI()+" = "+ value.getNamespaceURI()+";\n");
+						//Samisa 23/08/2004
+						writer.write("static const "+classname+" "+classname+"_"+value.getNamespaceURI()+" = \""+ value.getNamespaceURI()+"\";\n");
+						//Samisa
 					}
 				}
 			}	
