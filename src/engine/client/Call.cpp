@@ -38,6 +38,7 @@
 #include "../../soap/HeaderBlock.h"
 
 extern "C" int initialize_module (int bServer);
+extern "C" int uninitialize_module ();
 
 bool CallBase::bInitialized = false;
 CallFunctions CallBase::ms_VFtable;
@@ -57,7 +58,7 @@ Call::Call ()
 
 Call::~Call ()
 {
-	
+    uninitialize_module();	
 }
 
 int Call::setEndpointURI (const char* pchEndpointURI)
