@@ -225,7 +225,7 @@ public class WSDL2Ws {
                                     ((com.ibm.wsdl.extensions.soap.SOAPBodyImpl) soapbodies
                                         .get(j))
                                         .getEncodingStyles();
-                                if (encodings == null && encodings.size() > 0)
+                                if (encodings != null && encodings.size() > 0)
                                     this.encodingStyle = (String) encodings.get(0);
                                 break;
                             }
