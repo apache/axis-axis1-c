@@ -646,7 +646,7 @@ int SoapDeSerializer::getArraySize(const AnyElement* pElement)
     if (START_ELEMENT != pElement->m_type) return nSize;
     for (int i=0; pElement->m_pchAttributes[i]; i+=3)
     {
-        if (URI_ENC == URIMapping::map(pElement->m_pchAttributes[i+1]) &&
+        if (URI_ENC == URIMapping::getURI(pElement->m_pchAttributes[i+1]) &&
             (0 == strcmp(pElement->m_pchAttributes[i],
             SoapKeywordMapping::map(m_nSoapVersion).pchWords[SKW_ARRAYTYPE])))
         {
@@ -3015,7 +3015,7 @@ XSDTYPE SoapDeSerializer::getXSDType(const AnyElement* pElement)
     if (START_ELEMENT != pElement->m_type) return XSD_UNKNOWN;
     for (int i=0; pElement->m_pchAttributes[i]; i+=3)
     {
-        if (URI_XSI == URIMapping::map(pElement->m_pchAttributes[i+1]))
+        if (URI_XSI == URIMapping::getURI(pElement->m_pchAttributes[i+1]))
         {
             ::QName qn;
             XSDTYPE type = XSD_UNKNOWN;
@@ -3023,7 +3023,7 @@ XSDTYPE SoapDeSerializer::getXSDType(const AnyElement* pElement)
             const char* pNS = m_pParser->getNS4Prefix(qn.uri);
             if (pNS)
             {
-                if (URI_XSD == URIMapping::map(pNS))
+                if (URI_XSD == URIMapping::getURI(pNS))
                 {
                     type = TypeMapping::map(qn.localname);
                 }

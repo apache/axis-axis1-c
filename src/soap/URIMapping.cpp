@@ -55,7 +55,7 @@ void URIMapping::initialize()
     }
 }
 
-URITYPE URIMapping::map(const AxisXMLCh* uri)
+URITYPE URIMapping::getURI(const AxisXMLCh* uri)
 {
     if (m_sURIMap.find(uri) != m_sURIMap.end())
     {

@@ -45,7 +45,7 @@ public:
     static volatile bool m_bInit;
     URIMapping();
     virtual ~URIMapping();
-    static URITYPE map(const AxisXMLCh* uri);
+    static URITYPE getURI(const AxisXMLCh* uri);
 };
 
 AXIS_CPP_NAMESPACE_END
