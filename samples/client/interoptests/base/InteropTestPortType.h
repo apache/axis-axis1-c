@@ -22,7 +22,7 @@ public:
 public:
 	virtual ~InteropTestPortType();
 public: 
-	AxisChar* echoString(AxisChar* Value0);
+	AxisChar* echoString(const AxisChar* Value0);
 	ArrayOfstring echoStringArray(ArrayOfstring Value0);
 	int echoInteger(int Value0);
 	ArrayOfint echoIntegerArray(ArrayOfint Value0);
