@@ -41,7 +41,7 @@ class AxisUtils
     friend class TypeMapping;
     friend class URIMapping;
     public:
-	    xsd__base64Binary decodeFromBase64Binary(const AxisChar* pValue);
+	    static xsd__base64Binary decodeFromBase64Binary(const AxisChar* pValue);
         /*
 	 * Converts the given character pointer value to lowercase.
 	 * @param pchWord The character pointer to be converted.
