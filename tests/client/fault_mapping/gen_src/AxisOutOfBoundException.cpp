@@ -53,6 +53,8 @@ void AxisOutOfBoundException::processException (OutOfBoundStruct* pFault)
 {
 	/*User can do something like deserializing the struct into a string*/
         int iSize = strlen(pFault->varString) + 8;
+        SpecialDetailStruct* pFaultDetail = pFault->specialDetail;
+        iSize += strlen(pFaultDetail->varString);
         char* sMessage = new char[iSize];
         m_sMessage = new char[iSize];
         char* carrTempBuff =new char[4 * sizeof(char)];
@@ -62,7 +64,6 @@ void AxisOutOfBoundException::processException (OutOfBoundStruct* pFault)
         sprintf(carrTempBuff, "%d", pFault->varInt);
         strcat(sMessage, carrTempBuff);
         strcat(sMessage, "\n");
-        SpecialDetailStruct* pFaultDetail = pFault->specialDetail;
         strcat(sMessage, pFaultDetail->varString);
 
         m_sMessage = sMessage;

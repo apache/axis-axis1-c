@@ -101,7 +101,14 @@ int MathOps::div(int Value0, int Value1)
                                         printf("faultstring:%s\n", cFaultstring);
                                         printf("faultactor:%s\n", cFaultactor);
 					m_pCall->unInitialize();
-					throw AxisOutOfBoundException(pFaultDetail);
+                                        if(pFaultDetail)
+                                        {
+					    throw AxisOutOfBoundException(pFaultDetail);
+                                        }
+                                        else
+                                        {
+                                            throw AxisGenException(SERVER_UNKNOWN_ERROR);
+                                        }
 				}
 			}
 			else if(0 == strcmp("DivByZeroStruct", cFaultstring))
@@ -135,13 +142,19 @@ int MathOps::div(int Value0, int Value1)
                                         printf("faultstring:%s\n", cFaultstring);
                                         printf("faultactor:%s\n", cFaultactor);
 					m_pCall->unInitialize();
-					throw AxisNormalDetailException(pFaultDetail);
+                                        if(pFaultDetail)
+					    throw AxisNormalDetailException(pFaultDetail);
+                                        else
+                                            throw AxisGenException(SERVER_UNKNOWN_ERROR);
 				}
 			}
 			else
 			{
 				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisGenException(cFaultdetail);
+                                  if(cFaultdetail)
+				      throw AxisGenException(cFaultdetail);
+                                  else
+                                      throw AxisGenException(SERVER_UNKNOWN_ERROR);
 			}
 		}
 		else throw;
