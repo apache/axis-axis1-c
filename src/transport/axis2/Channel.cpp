@@ -33,9 +33,9 @@ using namespace std;
 
 /** Channel::Channel() Constructor
  */
-Channel::Channel ():m_Sock (INVALID_SOCKET), m_iMsgLength( 0), m_sMsg(NULL), m_lTimeoutSeconds(0)
+Channel::Channel ():m_Sock (INVALID_SOCKET), m_iMsgLength( 0), m_sMsg(NULL), m_lTimeoutSeconds(0), m_bUseProxy(false)
 {
-
+	
 #ifdef WIN32
 	m_lTimeoutSeconds = 10;
 #endif
@@ -154,6 +154,7 @@ throw (AxisTransportException&)
                 {
                     port = m_uiProxyPort;
                     host = m_strProxyHost.c_str();
+                    cout << "Using proxy " << "host = "<<host << " port = "<< port << "htons = " << htons(port) << "\n";
                 }
 		svAddr.sin_family = AF_INET;
 		svAddr.sin_port = htons (port);
@@ -181,6 +182,15 @@ throw (AxisTransportException&)
 			// That way we could have e.g. char* Windows#getLastErrorMessage()
 			long dw = GetLastError();
 #endif
+#ifdef _AIX
+                cout << "Error connecting: Host = "<<host<<" port = "<< port;
+	int errNumber = errno;
+	cout << " Errno = "<<errNumber<< "\n";
+	char errStringBuffer[200];
+	char* errorString = strerror(errNumber);
+	
+	cout <<"error string = " << errorString << "\n";
+#endif 
 			closeChannel();
 
 #ifdef WIN32
@@ -673,7 +683,8 @@ void Channel::hexOutput( char * psData, int iDataLength)
 
 void Channel::setProxy (const char *pcProxyHost, unsigned int uiProxyPort)
 {
+	cout << "Setting proxy "<<pcProxyHost<< ":"<<uiProxyPort<< "\n";
     m_strProxyHost = pcProxyHost;
-    m_uiProxyPort = uiProxyPort;
+   m_uiProxyPort = uiProxyPort;
     m_bUseProxy = true;
 }
