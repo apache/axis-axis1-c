@@ -35,6 +35,7 @@ class ServerAxisEngine:public AxisEngine
         virtual ~ ServerAxisEngine ();
     public:
         int process (Ax_soapstream* soap);
+        int setFaultOutputStream(int iFaultCode, Ax_soapstream* soap);
     protected:
         virtual int invoke (MessageData* pMsg);
         virtual void onFault (MessageData* pMsg);

@@ -390,7 +390,7 @@ void HttpTransport::HTTPValidate(const std::string& p_HttpPacket)
                 if (!m_bStatus)
                 {
                     Error(m_sHeader.c_str());
-                    throw AxisException(HTTP_ERROR);
+                    throw AxisException(AXISC_HTTP_ERROR);
                 }
             }
         }

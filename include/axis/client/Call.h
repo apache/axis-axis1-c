@@ -79,7 +79,7 @@ typedef struct {
      * as basic types 
      */
 	int (AXISCALL* getElementAsInt)(void* pObj, const AxisChar* pName, 
-        const AxisChar* pNamespace);
+        const AxisChar* pNamespace, int& iResult);
 	xsd__boolean (AXISCALL* getElementAsBoolean)(void* pObj, 
         const AxisChar* pName, const AxisChar* pNamespace);
     unsigned int (AXISCALL* getElementAsUnsignedInt)(void* pObj, 
@@ -226,7 +226,7 @@ public:
      * as basic types 
      */
 	virtual int AXISCALL getElementAsInt(const AxisChar* pName, 
-        const AxisChar* pNamespace)=0;
+        const AxisChar* pNamespace, int& iResult)=0;
 	virtual xsd__boolean AXISCALL getElementAsBoolean(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
     virtual unsigned int AXISCALL getElementAsUnsignedInt(const AxisChar* 
@@ -381,8 +381,8 @@ public:
     pNamespace);};
 
 	static int AXISCALL s_GetElementAsInt(void* pObj, const AxisChar* pName, 
-        const AxisChar* pNamespace)
-	{ return ((CallBase*)pObj)->getElementAsInt(pName, pNamespace);};
+        const AxisChar* pNamespace, int& iResult)
+	{ return ((CallBase*)pObj)->getElementAsInt(pName, pNamespace, iResult);};
 	static xsd__boolean AXISCALL s_GetElementAsBoolean(void* pObj, 
         const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsBoolean(pName, pNamespace);};
@@ -650,7 +650,8 @@ public:
      * as basic types 
      */
 	int AXISCALL getElementAsInt(const AxisChar* pName, 
-        const AxisChar* pNamespace);
+        const AxisChar* pNamespace, int& iResult);
+        int AXISCALL getFaultDetail(char** ppcDetail);
 	xsd__boolean AXISCALL getElementAsBoolean(const AxisChar* pName, 
         const AxisChar* pNamespace);
     unsigned int AXISCALL getElementAsUnsignedInt(const AxisChar* pName, 

@@ -21,6 +21,7 @@
 
 #include <axis/server/AxisConfig.h>
 #include <axis/server/GDefine.h>
+#include <axis/server/AxisFile.h>
 #include "AxisUtils.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -28,86 +29,82 @@
 
 AxisConfig::AxisConfig ()
 {
-    m_sWsddFilePath = 0;
-    m_sAxisLogPath = 0;
-    m_sAxisClientLogPath = 0;
-    m_sClientWsddFilePath = 0;
-    m_sAxisHome = 0;
-    m_sValue = NULL;
+    m_pcWsddFilePath = 0;
+    m_pcAxisLogPath = 0;
+    m_pcAxisClientLogPath = 0;
+    m_pcClientWsddFilePath = 0;
+    m_pcAxisHome = 0;
 }
 
 AxisConfig::~AxisConfig ()
 {
-    if (m_sWsddFilePath)
-        free(m_sWsddFilePath);
-    if (m_sAxisLogPath)
-        free(m_sAxisLogPath);
-    if (m_sAxisClientLogPath)
-        free(m_sAxisClientLogPath);
-    if (m_sClientWsddFilePath)
-        free(m_sClientWsddFilePath);
-    if (m_sAxisHome)
-        free(m_sAxisHome);
-    if (m_sValue)
-        free(m_sValue);
+    if (m_pcWsddFilePath)
+        free(m_pcWsddFilePath);
+    if (m_pcAxisLogPath)
+        free(m_pcAxisLogPath);
+    if (m_pcAxisClientLogPath)
+        free(m_pcAxisClientLogPath);
+    if (m_pcClientWsddFilePath)
+        free(m_pcClientWsddFilePath);
+    if (m_pcAxisHome)
+        free(m_pcAxisHome);
 }
 
 int AxisConfig::readConfFile ()
 {
-    FILE* fileConfig = NULL;
+    char carrLine[CONFBUFFSIZE];
+    char* pcValue;
+    AxisFile fileConfig; /*AxisFile is AxisC++ resource for file manipulation */
     char* sConfPath = NULL;
-    char sNewConfPath[CONFBUFFSIZE] = { 0 };
-    //char key[CONFBUFFSIZE] = {0};
+    char* sNewConfPath = (char*) malloc(CONFBUFFSIZE);
     char* key;
-    //char m_sLine[CONFBUFFSIZE] = {0};
-    //char value[CONFBUFFSIZE] = {0};
 
 
     sConfPath = getenv ("AXIS_HOME");
     if (!sConfPath)
         return AXIS_FAIL;
-    m_sAxisHome = (char*) malloc (CONFBUFFSIZE);
-    strcpy (m_sAxisHome, sConfPath);
+    m_pcAxisHome = (char*) malloc (CONFBUFFSIZE);
+    strcpy (m_pcAxisHome, sConfPath);
 
     strcpy (sNewConfPath, sConfPath);
     strcat (sNewConfPath, "/axiscpp.conf");
-    if ((fileConfig = fopen (sNewConfPath, "r")) == NULL)
+    if (AXIS_SUCCESS != fileConfig.fileOpen(sNewConfPath, "r"))
         return AXIS_FAIL;
 
-    while (fgets (m_sLine, CONFBUFFSIZE, fileConfig) != NULL)
+    while (AXIS_SUCCESS == fileConfig.fileGet(carrLine, CONFBUFFSIZE)) 
     {
-        int linesize = strlen (m_sLine);
-        m_sValue = strpbrk (m_sLine, ":");
-        if (!m_sValue)
+        int linesize = strlen (carrLine);
+        pcValue = strpbrk (carrLine, ":");
+        if (!pcValue)
             break;
-        key = (char*) malloc (strlen (m_sValue));
-        m_sValue[0] = '\0';
-        sscanf (m_sLine, "%s", key);
+        key = (char*) malloc (strlen (pcValue));
+        pcValue[0] = '\0';
+        sscanf (carrLine, "%s", key);
 
         if (strcmp (key, "WSDDFILEPATH") == 0)
         {
-            m_sWsddFilePath = (char*) malloc (CONFBUFFSIZE);
-            strncpy (m_sWsddFilePath, m_sValue + 1, linesize - strlen (key) - 2);
-            m_sWsddFilePath[linesize - strlen (key) - 2] = '\0';
+            m_pcWsddFilePath = (char*) malloc (CONFBUFFSIZE);
+            strncpy (m_pcWsddFilePath, pcValue + 1, linesize - strlen (key) - 2);
+            m_pcWsddFilePath[linesize - strlen (key) - 2] = '\0';
         }
         if (strcmp (key, "AXISLOGPATH") == 0)
         {
-            m_sAxisLogPath = (char*) malloc (CONFBUFFSIZE);
-            strncpy (m_sAxisLogPath, m_sValue + 1, linesize - strlen (key) - 2);
-            m_sAxisLogPath[linesize - strlen (key) - 2] = '\0';
+            m_pcAxisLogPath = (char*) malloc (CONFBUFFSIZE);
+            strncpy (m_pcAxisLogPath, pcValue + 1, linesize - strlen (key) - 2);
+            m_pcAxisLogPath[linesize - strlen (key) - 2] = '\0';
         }
         if (strcmp (key, "AXISCLIENTLOGPATH") == 0)
         {
-            m_sAxisClientLogPath = (char*) malloc (CONFBUFFSIZE);
-            strncpy (m_sAxisClientLogPath, m_sValue + 1, linesize - strlen (key) - 2);
-            m_sAxisClientLogPath[linesize - strlen (key) - 2] = '\0';
+            m_pcAxisClientLogPath = (char*) malloc (CONFBUFFSIZE);
+            strncpy (m_pcAxisClientLogPath, pcValue + 1, linesize - strlen (key) - 2);
+            m_pcAxisClientLogPath[linesize - strlen (key) - 2] = '\0';
         }
         if (strcmp (key, "CLIENTWSDDFILEPATH") == 0)
         {
-            m_sClientWsddFilePath = (char*) malloc (CONFBUFFSIZE);
-            strncpy (m_sClientWsddFilePath, m_sValue + 1,
+            m_pcClientWsddFilePath = (char*) malloc (CONFBUFFSIZE);
+            strncpy (m_pcClientWsddFilePath, pcValue + 1,
                 linesize - strlen (key) - 2);
-            m_sClientWsddFilePath[linesize - strlen (key) - 2] = '\0';
+            m_pcClientWsddFilePath[linesize - strlen (key) - 2] = '\0';
         }
     }
 
@@ -117,27 +114,27 @@ int AxisConfig::readConfFile ()
 
 char* AxisConfig::getWsddFilePath ()
 {
-    return m_sWsddFilePath;
+    return m_pcWsddFilePath;
 }
 
 char* AxisConfig::getAxisLogPath ()
 {
-    return m_sAxisLogPath;
+    return m_pcAxisLogPath;
 }
 
 char* AxisConfig::getAxisClientLogPath ()
 {
-    return m_sAxisClientLogPath;
+    return m_pcAxisClientLogPath;
 }
 
 char* AxisConfig::getClientWsddFilePath ()
 {
-    return m_sClientWsddFilePath;
+    return m_pcClientWsddFilePath;
 }
 
 char* AxisConfig::getAxisHomePath ()
 {
-    return m_sAxisHome;
+    return m_pcAxisHome;
 }
 
 /*int main(void)
