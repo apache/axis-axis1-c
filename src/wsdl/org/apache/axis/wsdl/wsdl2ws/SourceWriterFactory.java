@@ -101,11 +101,11 @@ public class SourceWriterFactory {
 			else if(genaratorType == WrapperConstants.GENERATOR_WRAPPER_C)
 				return new org.apache.axis.wsdl.wsdl2ws.c.literal.WrapWriter(wscontext);
 			else if(genaratorType == WrapperConstants.GENERATOR_WRAPPER_H)
-				return new org.apache.axis.wsdl.wsdl2ws.c.literal.WrapHeaderWriter(wscontext);
+				return new org.apache.axis.wsdl.wsdl2ws.c.WrapHeaderWriter(wscontext);
 			else if(genaratorType == WrapperConstants.GENERATOR_SERVICE_C)
 				return new org.apache.axis.wsdl.wsdl2ws.c.literal.ServiceWriter(wscontext);
 			else if(genaratorType == WrapperConstants.GENERATOR_CLASSLOADER_C)
-				return new org.apache.axis.wsdl.wsdl2ws.c.literal.ClassLoader(wscontext);
+				return new org.apache.axis.wsdl.wsdl2ws.c.ClassLoader(wscontext);
 			else if(genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_H)
 				return new org.apache.axis.wsdl.wsdl2ws.c.literal.ClientStubHeaderWriter(wscontext);
 			else if(genaratorType == WrapperConstants.GENERATOR_CLIENT_STUB_C)
