@@ -135,10 +135,6 @@ SOURCE=..\..\src\soap\SoapSerializer.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\soap\TypeMapping.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\soap\URIMapping.cpp
 # End Source File
 # Begin Source File
@@ -204,10 +200,6 @@ SOURCE=..\..\src\soap\SoapMethod.h
 # Begin Source File
 
 SOURCE=..\..\src\soap\SoapSerializer.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\soap\TypeMapping.h
 # End Source File
 # Begin Source File
 
