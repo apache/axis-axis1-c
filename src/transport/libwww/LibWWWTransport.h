@@ -41,20 +41,18 @@
  *
  */
 
-AXIS_CPP_NAMESPACE_USE
-
-class LibWWWTransport : public SOAPTransport
+AXIS_CPP_NAMESPACE_USE class LibWWWTransport:public SOAPTransport
 {
-public:
+  public:
     /**
      * Constructor.
      */
-    LibWWWTransport();
+    LibWWWTransport ();
 
     /**
      * Destructor.
      */
-    ~LibWWWTransport();
+    ~LibWWWTransport ();
 
     /**
      * Sends a buffer to the transport layer. A Caller may call this method
@@ -90,8 +88,8 @@ public:
      *       for each buffer for which this function returned the status
      *       code TRANSPORT_IN_PROGRESS.
      */
-    AXIS_TRANSPORT_STATUS sendBytes(const char* pcSendBuffer, 
-		const void* pBufferid);
+    AXIS_TRANSPORT_STATUS sendBytes (const char *pcSendBuffer,
+				     const void *pBufferid);
     /**
      * Gets a part of or full SOAP message. A Caller may call this method
      * multiple times to get parts of the SOAP message until the function
@@ -123,7 +121,7 @@ public:
      *                               data in the pcBuffer are not reliable and
      *                               should not be used.
      */
-     AXIS_TRANSPORT_STATUS getBytes(char* pcBuffer, int* piRetSize);
+    AXIS_TRANSPORT_STATUS getBytes (char *pcBuffer, int *piRetSize);
     /**
      * Opens a connection with the provided endpoint URI. The connection
      * type (protocol) is decided by the implementation and the protocol
@@ -136,12 +134,12 @@ public:
      * @return Returns AXIS_SUCCESS if connection established successfully.
      *         Else returns AXIS_FAIL
      */
-     int openConnection();
+    int openConnection ();
     /**
      * @brief Closes the connection established with OpenConnection.
      * @example AxisTransport.h
      */
-     void closeConnection();
+    void closeConnection ();
     /**
      * Registers the callback function which is used by transport layer to
      * inform the caller that a buffer given to be sent was sent and it can
@@ -151,8 +149,8 @@ public:
      * @param pFunct Function pointer to caller's function signature of
      *        this function is defined in Packet.h
      */
-     void registerReleaseBufferCallback(
-                    AXIS_ENGINE_CALLBACK_RELEASE_SEND_BUFFER pFunct);
+    void registerReleaseBufferCallback
+	(AXIS_ENGINE_CALLBACK_RELEASE_SEND_BUFFER pFunct);
     /**
      * Sets a predefined transport property to be included in the outgoing
      * message. This transport property is not persistent in the transport
@@ -164,8 +162,8 @@ public:
      *        for predefined transport property types.
      * @param pcValue Transport property value to be set.
      */
-     void setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE eType,
-                    const char* pcValue);
+    void setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE eType,
+			       const char *pcValue);
     /**
      * @brief Gets a predefined transport property in the arrived message
      *
@@ -174,8 +172,7 @@ public:
      * @return Value of the transport property if available. Returns null
      *         if unavailable.
      */
-     const char* getTransportProperty(
-                    AXIS_TRANSPORT_INFORMATION_TYPE eType);
+    const char *getTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE eType);
     /**
      * Sets any transport property to be included in the outgoing message.
      * This transport property is not persistent in the transport layer.
@@ -185,7 +182,7 @@ public:
      * @param pcKey Key for the transport property to be set.
      * @param pcValue Value for transport property to be set.
      */
-     void setTransportProperty(const char* pcKey, const char* pcValue);
+    void setTransportProperty (const char *pcKey, const char *pcValue);
     /**
      * @brief Gets any transport property in the arrived message
      *
@@ -193,7 +190,7 @@ public:
      * @return Value of the transport property if available. Returns null
      *         if unavailable.
      */
-     const char* getTransportProperty(const char* pcKey);
+    const char *getTransportProperty (const char *pcKey);
     /**
      * Sets a SOAP attachment to be sent with outgoing message. This
      * attachment is usually the base64 or hex encoded character buffer
@@ -206,7 +203,7 @@ public:
      * @param pcAttachment The attachment. This is usually a null terminated string
      *        encoded to base64 or hex binary.
      */
-     void setAttachment(const char* pcAttachmentid, const char* pcAttachment);
+    void setAttachment (const char *pcAttachmentid, const char *pcAttachment);
     /**
      * Gets an attachment arrived in the inbound message. Usually the SOAP message will
      * contain the information indicating that there is an attachment arrived at the
@@ -222,7 +219,7 @@ public:
      * @return The attachment if available. Returns null if the attachment
      *         corresponding to the pcAttachmentid is not found.
      */
-     const char* getAttachment(const char* pcAttachmentid);
+    const char *getAttachment (const char *pcAttachmentid);
     /**
      * Sets the the remote endpoint for tranport to connect to. This URI
      * depends on the the transport type. 
@@ -236,7 +233,7 @@ public:
      * @brief Sets the remote endpoint for tranport to connect to.
      * @param pcEndpointUri Endpoint URI to connect to.
      */
-     void setEndpointUri(const char* pcEndpointUri);
+    void setEndpointUri (const char *pcEndpointUri);
     /**
      * Sets the session id for the transport session. Actual usage of this
      * session id is depend on the implementation of the transport.
@@ -244,7 +241,7 @@ public:
      * @brief Sets the session id for the transport session.
      * @param pcSessionId The session id.
      */
-     void setSessionId(const char* pcSessionId);
+    void setSessionId (const char *pcSessionId);
     /**
      * Gets the session id of the transport session sent by the remote end if
      * any. 
@@ -252,7 +249,7 @@ public:
      * @brief  Sets the session id for the transport session.
      * @return Session id if available. Returns null otherwise.
      */
-     const char* getSessionId();
+    const char *getSessionId ();
     /**
      * Gets the service name of the web service to be invoked. How this
      * service name is found is upto the type of the transport layer. For
@@ -263,7 +260,7 @@ public:
      * @brief  Gets the service name of the web service to be invoked.
      * @return Service name if available and null otherwise.
      */
-     const char* getServiceName();
+    const char *getServiceName ();
     /**
      * Gets the protocol type of the transport library. The caller should
      * use this function to check the protocol of the transport layer and
@@ -272,7 +269,7 @@ public:
      * @brief Gets the protocol type of the transport library.
      * @return The type of the transport. See AXIS_PROTOCOL_TYPE in Packet.h
      */
-     AXIS_PROTOCOL_TYPE getProtocol();
+    AXIS_PROTOCOL_TYPE getProtocol ();
     /**
      * Gets the sub protocol. The usefulness of this method and the return
      * values depend on the particular implementation. For example HTTP
@@ -282,14 +279,14 @@ public:
      * @brief Gets the sub protocol. 
      * @return Type of the sub protocol (Ex: GET, POST, UNSUPPORTED for HTTP).
      */
-     int getSubProtocol();
+    int getSubProtocol ();
     /**
      * @brief Forces transport to send any remaining data of the outgoing message.
      * @return Transport status. Two return status are possible. They are,
      *         TRANSPORT_FAILED   - Sending data has failed.
      *         TRANSPORT_FINISHED - Sending finished and successful.
      */
-     AXIS_TRANSPORT_STATUS flushOutput();
+    AXIS_TRANSPORT_STATUS flushOutput ();
   /**
     * Set proxy server and port for transport.
     *
@@ -303,16 +300,16 @@ public:
     * @param pcProxyHost Host name of proxy server
     * @param uiProxyPort Port of proxy server
     */
-     void setProxy(const char* pcProxyHost, unsigned int uiProxyPort); 
+    void setProxy (const char *pcProxyHost, unsigned int uiProxyPort);
 
   /**
     * Set transport timeout.
     *
     * @param lSeconds Timeout in seconds
     */
-     void setTimeout(const long lSeconds);
+    void setTimeout (const long lSeconds);
 
-protected:
+  protected:
     //Handler that terminate the event loop and clean up
     //int terminate_handler (HTRequest * request, HTResponse * response,
     //                           void * param, int status);
@@ -321,18 +318,18 @@ protected:
     //Request object
     HTRequest * m_pRequest;
     //Chunk to hold the result
-    HTChunk * m_pResult;
+    HTChunk *m_pResult;
     //data to be posted
-    char* m_pcData;
+    char *m_pcData;
     //proxy
-    char* m_pcProxy;
+    char *m_pcProxy;
     //getting bytes
     int m_iBytesLeft;
-    char* m_pcReceived;
+    char *m_pcReceived;
 
-public:
+  public:
     // The object that acquires the lock to start event loop
-    static LibWWWTransport* m_spLockingObject;
+    static LibWWWTransport *m_spLockingObject;
 
 };
 

@@ -23,7 +23,8 @@
 #include "WWWInit.h"
 
 // The object that acquires the lock to start event loop
-LibWWWTransport* LibWWWTransport::m_spLockingObject = NULL;
+LibWWWTransport *
+    LibWWWTransport::m_spLockingObject = NULL;
 
 int
 terminate_handler (HTRequest * request, HTResponse * response,
@@ -32,12 +33,12 @@ terminate_handler (HTRequest * request, HTResponse * response,
     if (status == HT_LOADED)
     {
 	//HTChunk *chunk = (HTChunk *) HTRequest_context (request);
-        //HTPrint("In Handler %s\n", HTChunk_data(chunk) );
-    if (HTNet_isEmpty ())
-    {
-	HTEventList_stopLoop ();
-        LibWWWTransport::m_spLockingObject = NULL;
-    }
+	//HTPrint("In Handler %s\n", HTChunk_data(chunk) );
+	if (HTNet_isEmpty ())
+	{
+	    HTEventList_stopLoop ();
+	    LibWWWTransport::m_spLockingObject = NULL;
+	}
 
     }
 #ifdef HT_EXT_CONTINUE
@@ -53,8 +54,10 @@ HTPostAnchorToChunk (HTParentAnchor * source,
 {
     if (source && destination && request)
     {
-	HTChunk *chunk = NULL;
-	HTStream *target = HTStreamToChunk (request, &chunk, 0);
+	HTChunk *
+	    chunk = NULL;
+	HTStream *
+	    target = HTStreamToChunk (request, &chunk, 0);
 	HTRequest_setOutputStream (request, target);
 	if (HTPostAnchor (source, destination, request) == YES)
 	    return chunk;
@@ -108,7 +111,8 @@ LibWWWTransport::~LibWWWTransport ()
 }
 
 AXIS_TRANSPORT_STATUS
-LibWWWTransport::sendBytes (const char *pcSendBuffer, const void *pBufferid)
+    LibWWWTransport::sendBytes (const char *pcSendBuffer,
+				const void *pBufferid)
 {
     //Samisa: Why do I have to go through the buffers of Serializer?
     //If I am the transport, I would like the serializer 
@@ -154,7 +158,7 @@ LibWWWTransport::sendBytes (const char *pcSendBuffer, const void *pBufferid)
 }
 
 AXIS_TRANSPORT_STATUS
-LibWWWTransport::getBytes (char *pcBuffer, int *piRetSize)
+    LibWWWTransport::getBytes (char *pcBuffer, int *piRetSize)
 {
     if (m_iBytesLeft > 0)
     {
@@ -307,8 +311,7 @@ LibWWWTransport::getServiceName ()
 
 }
 
-AXIS_PROTOCOL_TYPE
-LibWWWTransport::getProtocol ()
+AXIS_PROTOCOL_TYPE LibWWWTransport::getProtocol ()
 {
     return APTHTTP;		//HTTP
 }
@@ -319,8 +322,7 @@ LibWWWTransport::getSubProtocol ()
     return 0;			//TODO:Should return POST
 }
 
-AXIS_TRANSPORT_STATUS
-LibWWWTransport::flushOutput ()
+AXIS_TRANSPORT_STATUS LibWWWTransport::flushOutput ()
 {
 
 
@@ -328,7 +330,7 @@ LibWWWTransport::flushOutput ()
     //without using 100-continue
 
     //HTRequest_clear(m_pRequest);
-    HTRequest_setFlush(m_pRequest, YES);
+    HTRequest_setFlush (m_pRequest, YES);
     //HTRequest_setOutputFormat(m_pRequest, WWW_SOURCE);
     HTRequest_setOutputFormat (m_pRequest, HTAtom_for ("text/xml"));
     HTRequest_setMethod (m_pRequest, METHOD_EXT_0);
@@ -343,28 +345,32 @@ LibWWWTransport::flushOutput ()
 
     //m_pResult = HTLoadToChunk(m_pcEndpointUri, m_pRequest);
 
-    HTStream *target = HTStreamToChunk (m_pRequest, &m_pResult, 0);
+    HTStream *
+	target = HTStreamToChunk (m_pRequest, &m_pResult, 0);
     HTRequest_setOutputStream (m_pRequest, target);
 
     HTRequest_setContext (m_pRequest, m_pResult);
 
-    HTAnchor *anchor = HTAnchor_findAddress (m_pcEndpointUri);
+    HTAnchor *
+	anchor = HTAnchor_findAddress (m_pcEndpointUri);
     HTRequest_setAnchor (m_pRequest, anchor);
 
-    BOOL status = HTLoadToStream (m_pcEndpointUri, target, m_pRequest);
+    BOOL
+	status = HTLoadToStream (m_pcEndpointUri, target, m_pRequest);
 
-    if (LibWWWTransport::m_spLockingObject == NULL) 
+    if (LibWWWTransport::m_spLockingObject == NULL)
     {
-        LibWWWTransport::m_spLockingObject = this;
+	LibWWWTransport::m_spLockingObject = this;
     }
-    if (LibWWWTransport::m_spLockingObject == this) 
+    if (LibWWWTransport::m_spLockingObject == this)
     {
-        HTEventList_loop (m_pRequest);
-    } 
+	HTEventList_loop (m_pRequest);
+    }
     //if (m_pcReceived)
-//	free (m_pcReceived);
+//      free (m_pcReceived);
 
-    int count = 0;
+    int
+	count = 0;
     do
     {
 	if (m_pResult)
@@ -381,29 +387,29 @@ LibWWWTransport::flushOutput ()
 	else
 	    sleep (1);
     }
-    while (count++ < 2 && (HTRequest_bodyRead(m_pRequest) == 0 ));
+    while (count++ < 2 && (HTRequest_bodyRead (m_pRequest) == 0));
 
-    if (count == 2 ) // possible deadlock
+    if (count == 2)		// possible deadlock
     {
-        //stop loop
-        if (HTNet_isEmpty ())
-    {
-        HTEventList_stopLoop ();
-        LibWWWTransport::m_spLockingObject = NULL;
-    }
-        //start loop
-        if (LibWWWTransport::m_spLockingObject == NULL)
-    {
-        LibWWWTransport::m_spLockingObject = this;
-    }
-    if (LibWWWTransport::m_spLockingObject == this)
-    {
-        HTEventList_loop (m_pRequest);
-    }
+	//stop loop
+	if (HTNet_isEmpty ())
+	{
+	    HTEventList_stopLoop ();
+	    LibWWWTransport::m_spLockingObject = NULL;
+	}
+	//start loop
+	if (LibWWWTransport::m_spLockingObject == NULL)
+	{
+	    LibWWWTransport::m_spLockingObject = this;
+	}
+	if (LibWWWTransport::m_spLockingObject == this)
+	{
+	    HTEventList_loop (m_pRequest);
+	}
 
 
     }
-    
+
     if (m_pResult)
     {
 	m_pcReceived = HTChunk_data (m_pResult);
@@ -419,8 +425,10 @@ LibWWWTransport::flushOutput ()
     return TRANSPORT_FAILED;
 #else
 
-    HTParentAnchor *src = NULL;
-    HTAnchor *dst = NULL;
+    HTParentAnchor *
+	src = NULL;
+    HTAnchor *
+	dst = NULL;
 
     dst = HTAnchor_findAddress (m_pcEndpointUri);
     src = HTTmpAnchor (NULL);
@@ -507,7 +515,7 @@ extern "C"
 {
     STORAGE_CLASS_INFO void initializeLibrary (void)
     {
-	if (g_bLibWWWinitialized)		//make sure the lib is initialized only once per client
+	if (g_bLibWWWinitialized)	//make sure the lib is initialized only once per client
 	    return;
 #ifdef HT_EXT_CONTINUE
 	//Create a new non-premptive client
@@ -557,4 +565,3 @@ extern "C"
     }
 }
 */
-
