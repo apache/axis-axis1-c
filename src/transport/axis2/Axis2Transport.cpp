@@ -472,8 +472,8 @@ throw (AxisException, AxisTransportException)
 		}
 		while (m_iResponseHTTPStatusCode == 100);
 
-		if (m_iResponseHTTPStatusCode < 200
-		    || m_iResponseHTTPStatusCode >= 300)
+		if ( m_iResponseHTTPStatusCode != 500 &&
+            ( m_iResponseHTTPStatusCode < 200 || m_iResponseHTTPStatusCode >= 300 ))
 		{
 		    throw
 			AxisTransportException

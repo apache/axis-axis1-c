@@ -456,7 +456,8 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 					}
 				} while( m_iResponseHTTPStatusCode == 100);
 
-				if (m_iResponseHTTPStatusCode < 200 || m_iResponseHTTPStatusCode >= 300)
+                if ( m_iResponseHTTPStatusCode != 500 &&
+                    ( m_iResponseHTTPStatusCode < 200 || m_iResponseHTTPStatusCode >= 300 ))
 				{
 				    throw HTTPTransportException( SERVER_TRANSPORT_HTTP_EXCEPTION,
 												  const_cast <char *> (m_strResponseHTTPStatusMessage.c_str()));
