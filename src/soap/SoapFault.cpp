@@ -94,23 +94,9 @@ int SoapFault::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         //pSZ.serialize("<faultactor>", m_sFaultactor.c_str(), "</faultactor>", NULL);
     } 
 
-    /*if(!m_sFaultDetail.empty())
-    {        
-        pSZ.serialize("<detail>", m_sFaultDetail.c_str(), "</detail>", NULL);
-    }*/
-
     if(m_pFaultDetail)
     {
-        /*if(m_bIsSimpleDetail)
-        {*/
             m_pFaultDetail->serialize(pSZ);
-        /*}
-        else
-        {
-            pSZ.serialize("<faultdetail>", NULL);
-            m_pFaultDetail->serialize(pSZ);
-            pSZ.serialize("</faultdetail>", NULL);
-        }*/
     }
     
 	pSZ.serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":",
@@ -132,10 +118,6 @@ int SoapFault::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         //pSZ.serialize("<faultactor>", m_sFaultactor.c_str(), "</faultactor>", NULL);
     }
 
-    /*if(!m_sFaultDetail.empty())
-    {
-        pSZ.serialize("<detail>", m_sFaultDetail.c_str(), "</detail>", NULL);
-    }*/
     if(m_pFaultDetail)
     {
         /*if(m_bIsSimpleDetail)
@@ -144,9 +126,9 @@ int SoapFault::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         }
         else
         {*/
-            pSZ.serialize("<faultdetail>", NULL);
+            pSZ.serialize("<detail>", NULL);
             m_pFaultDetail->serialize(pSZ);
-            pSZ.serialize("</faultdetail>\n", NULL);
+            pSZ.serialize("</detail>\n", NULL);
         //}
     }
 
@@ -314,7 +296,7 @@ int SoapFault::setFaultactor(const string& sFaultactor)
 int SoapFault::setFaultDetail(const string& sFaultDetail)
 {
     m_pFaultDetail = new Param();
-    setParam(m_pFaultDetail, "faultdetail", sFaultDetail.c_str(), XSD_STRING);
+    setParam(m_pFaultDetail, "detail", sFaultDetail.c_str(), XSD_STRING);
     m_sFaultDetail = sFaultDetail;
     m_bIsSimpleDetail = true;
 
