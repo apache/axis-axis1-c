@@ -74,12 +74,7 @@ int MathOps::div(int Value0, int Value1)
             cFaultcode = m_pCall->getElementAsString("faultcode", 0);
             cFaultstring = m_pCall->getElementAsString("faultstring", 0); 
             cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-            if(0 != strcmp("service_exception", cFaultstring))
-            {
-                cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-                throw AxisException(cFaultdetail);
-            }
-            else
+            if(0 == strcmp("SOAPStructFault", cFaultstring))
             {
                 if(AXIS_SUCCESS == m_pCall->checkFault("faultdetail",
                     "http://localhost/axis/MathOps"))
@@ -90,9 +85,9 @@ int MathOps::div(int Value0, int Value1)
                         (void*) Axis_Create_SOAPStructFault, 
                         (void*) Axis_Delete_SOAPStructFault,"faultstruct", 0);
 
+                    /*start user code*/
                     char* temp = pFaultDetail->varString;
                     printf("%s\n", temp);
-                    /*start user code*/
                     printf("faultcode:%s\n", cFaultcode);
                     printf("faultstring:%s\n", cFaultstring);
                     printf("faultactor:%s\n", cFaultactor);
@@ -100,6 +95,11 @@ int MathOps::div(int Value0, int Value1)
                     m_pCall->unInitialize();
                     throw AxisDivByZeroException(pFaultDetail);
                 }
+            }
+            else//fault detail consists of a simple string
+            {
+                cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
+                throw AxisException(cFaultdetail);
             }
         }
         else throw;
