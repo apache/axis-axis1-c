@@ -23,13 +23,6 @@ echo "-----------------------------"
 
 echo "-----------------------------"
 
-echo "running cbase..."
-echo "-----------------------------"
-./cbase ${GET_URL} ${GET_PORT}
-
-echo "-----------------------------"
-
-
 echo "running groupB..."
 echo "-----------------------------"
 ./groupB ${GET_URL} ${GET_PORT}
