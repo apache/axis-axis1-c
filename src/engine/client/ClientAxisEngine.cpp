@@ -109,6 +109,8 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
     }
     catch(AxisException& e)
     {
+        e = e;
+
         throw;
     }
     return Status;

@@ -79,7 +79,7 @@ int AxisTransport::openConnection()
     Url objUrl(m_pcEndpointUri);
     try
     {
-    m_pHttpTransport = TransportFactory::GetTransport(objUrl, secure);
+		m_pHttpTransport = TransportFactory::GetTransport(objUrl, (secure == 0 ? false : true));
     //set the proxy
     if(m_bUseProxy)
         m_pHttpTransport->setProxy(m_strProxyHost.c_str(), m_uiProxyPort);

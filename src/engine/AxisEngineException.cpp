@@ -90,8 +90,9 @@ void AxisEngineException::processException(const int iExceptionCode, char* pcMes
 }
 const string& AxisEngineException::getMessage (const exception* objException)
 {
-    return objException->what();
+    static string objExDetail = objException->what();
 
+    return objExDetail;
 }
 
 const string& AxisEngineException::getMessage (const int iExceptionCode)

@@ -90,7 +90,9 @@ void AxisSoapException::processException(const int iExceptionCode, char* pcMessa
 }
 const string& AxisSoapException::getMessage (const exception* objException)
 {
-    return objException->what();
+    static string objExDetail = objException->what();
+
+    return objExDetail;
 }
 
 const string& AxisSoapException::getMessage (const int iExceptionCode)

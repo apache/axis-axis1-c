@@ -49,6 +49,8 @@ bool Sender::Send(const char* what)
     }
     catch(AxisException& e)
     {
+		e = e;
+
         throw;
     }
     catch(...)

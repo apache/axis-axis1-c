@@ -193,6 +193,7 @@ int Call::initialize (PROVIDERTYPE nStyle, int secure)
     }
     catch (AxisException& e)
     {
+        e = e;
         /* printf(e.GetErr().c_str()); */
         m_nStatus = AXIS_FAIL;
         throw;
@@ -275,6 +276,8 @@ int Call::openConnection(int secure)
     }
     catch(AxisException& e)
     {
+        e = e;
+
         throw;
     }
     catch(...)

@@ -68,7 +68,7 @@ m_Typ (POST), m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false), m_lTimeo
     m_Url = url;
     m_IsHttpHeader = 0;
     m_HttpBindDone = false;
-    m_Secure = secure;
+    m_Secure = (secure == 0 ? false : true);
 
     if (SECURE == secure)
     {

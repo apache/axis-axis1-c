@@ -86,7 +86,9 @@ void AxisParseException::processException(const int iExceptionCode, char* pcMess
 }
 const string& AxisParseException::getMessage (const exception* objException)
 {
-    return objException->what();
+	static string objExDetail = objException->what();
+
+    return objExDetail;
 }
 
 const string& AxisParseException::getMessage (const int iExceptionCode)

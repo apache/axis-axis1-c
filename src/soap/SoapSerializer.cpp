@@ -242,10 +242,14 @@ int SoapSerializer::setOutputStream(SOAPTransport* pStream)
     }
     catch(AxisSoapException& e)
     {
+        e = e;
+
         throw;
     }
     catch(AxisException& e)
     {
+        e = e;
+
         throw;
     }
     catch(...)
@@ -356,10 +360,14 @@ IWrapperSoapSerializer& SoapSerializer::operator <<(const AxisChar*
     }
     catch(AxisSoapException& e)
     {
+        e = e;
+
         throw;
     }
     catch(AxisException& e)
     {
+        e = e;
+
         throw;
     }
     catch(...)

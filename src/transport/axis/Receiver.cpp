@@ -96,6 +96,8 @@ const char* Receiver::Recv()
     }
     catch(AxisTransportException& e)
     {
+		e = e;
+
         throw;
     }
     catch(...)
