@@ -85,10 +85,6 @@ AxisConfig::AxisConfig ()
 
 AxisConfig::~AxisConfig ()
 {
-    for(int i=0;i<AXCONF_LAST;i++)
-	{
-        free(m_pcValueArray[i]);
-	}
 }
 
 int AxisConfig::readConfFile ()
@@ -139,7 +135,7 @@ int AxisConfig::readConfFile ()
         pcValue = strpbrk (carrLine, pcSeparator);
         if (!pcValue)
             break;
-        key = (char*) malloc (strlen (pcValue));
+        key = (char*) malloc (pcValue - carrLine + 1);
         pcValue[0] = '\0';
         sscanf (carrLine, "%s", key);
 		iValueLength = linesize - strlen (key) - 1;
@@ -153,6 +149,7 @@ int AxisConfig::readConfFile ()
 			}
 		}
 
+		free(key);
     }
 
     return AXIS_SUCCESS;
