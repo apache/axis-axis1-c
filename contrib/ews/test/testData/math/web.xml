@@ -1,8 +1,0 @@
-  <web-app>
-	  <display-name>Apache-Axis</display-name> 
-	  <servlet>
-		  <servlet-name>MathFace</servlet-name> 
-		  <display-name>MathFace Servlet</display-name> 
-		  <servlet-class>testData.math.MathFaceImpl</servlet-class> 
-	  </servlet>
-  </web-app>

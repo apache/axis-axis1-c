@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:C="http://xml.apache.org/axis/wsdd/providers/C">
-	<service name="InteropBase" provider="C:RPC" description="Axis C++ web service">
-		<parameter name="className" value="/user/local/apache/axis/InteropBase.so"/>
-		<parameter name="allowedMethods" value="echoString echoStringArray echoInteger echoIntegerArray echoFloat echoFloatArray echoStruct echoStructArray echoVoid echoBase64 echoDate echoHexBinary echoDecimal echoBoolean "/>
-	</service>
-</deployment>

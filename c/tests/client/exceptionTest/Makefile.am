@@ -1,2 +1,0 @@
-SUBDIRS = gen_src
-

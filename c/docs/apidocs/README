@@ -1,4 +1,0 @@
-Here we have the doxygenconf, the doxygen configuration file.
-To generate Axis C++ api documentation type
-
-doxygen doxygenconf
