@@ -743,7 +743,10 @@ SoapDeSerializer::getCmplxArray (void *pDZFunct, void *pCreFunct,
 
 			//Jira AXISCPP-145
 			//point to next element (can be next array elemnt or different object)
-			m_pNode = m_pParser->next ();
+			if (m_pNode->m_type != END_ELEMENT)
+			{
+				m_pNode = m_pParser->next ();
+			}
 // > FJP
 
 			if (m_pNode->m_type == END_ELEMENT)
@@ -2900,6 +2903,21 @@ SoapDeSerializer::getElementAsString (const AxisChar * pName,
 	    return ret;
 	if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
 	{
+		bool	bNillFound = false;
+
+		for (int i = 0; m_pNode->m_pchAttributes[i] && !bNillFound; i += 3)
+		{
+		    string sLocalName = m_pNode->m_pchAttributes[i];
+		    string sUri =  m_pNode->m_pchAttributes[i + 1];
+			string sValue = m_pNode->m_pchAttributes[i + 2];
+
+			if( strcmp( "nil", sLocalName.c_str()) == 0 &&
+				strcmp( "true", sValue.c_str()) == 0)
+			{
+				bNillFound = true;
+			}
+		}
+
 	    m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
@@ -2949,14 +2967,24 @@ SoapDeSerializer::getElementAsString (const AxisChar * pName,
 		 */
 		return ret;
 	    }
+		else if (m_pNode && (END_ELEMENT == m_pNode->m_type))
+		{
+			if( bNillFound)
+			{
+			    m_pNode = m_pParser->next();
+
+//				m_pNode = NULL;
+			}
+
+			return ret;
+		}
 	    else
 	    {
 		/* Should be an empty string or simpleType with xsi:nil="true" */
-		//ret = new char[1]; ret[0]='\0';
+//		ret = new char[1];
+//		ret[0]='\0';
 		/* this is because the string may not be available later */
-// FJP - Put back in because when previous element is nill, need to skip to
-//		 next object.
-			m_pNode = NULL;
+//		m_pNode = NULL;
 		/* this is important in doc/lit style when deserializing arrays */
 		return ret;
 	    }
