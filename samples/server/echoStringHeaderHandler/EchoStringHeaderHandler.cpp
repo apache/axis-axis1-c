@@ -80,20 +80,30 @@ extern "C" {
 //Following describes how the export function of the handler DLLs (or .so s)
 
 STORAGE_CLASS_INFO
-int GetClassInstance(Handler **inst)
+int GetClassInstance(BasicHandler **inst)
 {
-	*inst = new ESHHandler();
-	if (*inst)
+	printf("in the GetClassInstance of ....");
+	*inst = new BasicHandler();
+	
+	ESHHandler* pESHHandler = new ESHHandler();
+	(*inst)->_functions = 0;
+	if (pESHHandler)
 	{
-		return AXIS_SUCCESS;
+		(*inst)->_object = pESHHandler;
+		return pESHHandler->Init();
 	}
+	
 	return AXIS_FAIL;
 }
+
 STORAGE_CLASS_INFO
-int DestroyInstance(Handler *inst)
+int DestroyInstance(BasicHandler *inst)
 {
 	if (inst)
 	{
+		Handler* pH = static_cast<Handler*>(inst->_object);
+		pH->Fini();
+		delete pH;
 		delete inst;
 		return AXIS_SUCCESS;
 	}
