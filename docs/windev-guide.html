@@ -168,12 +168,10 @@ from this point onwards.</p>
 <br>
 2) Copy [EXPAT_EXTRACT]\lib\libexpat.lib to [CHECKOUT_HOME]\c\lib\expat\ directory.</p>
 
-<p>3) Copy libexpat.dll file from [EXPAT_EXTRACT]\Libs  to %AXISCPP_DEPLOY%/lib/  </p>
 <br> <br>
 <p><b>For Xerces Parser</b></p>
 <p>1) Copy [XERCES_EXTRACT]\lib\xerces-c_2.lib to [CHECKOUT_HOME]\c\lib\xerces\ directory.</p>
-<p>2) Copy xerces-c_2_2_0.dll file from [XERCES_EXTRACT]\bin  to %AXISCPP_DEPLOY%/lib/ </p>
-<p>3) Copy [XERCES_EXTRACT]\include\xercesc to [CHECKOUT_HOME]\c\include\xerces\ directory. </p>
+<p>2) Copy [XERCES_EXTRACT]\include\xercesc to [CHECKOUT_HOME]\c\include\xerces\ directory. </p>
 
 
 <p><b>For apache 1.3.X:</b></p>
@@ -321,7 +319,11 @@ Transport_http:[APACHE_HOME]\Axis\lib\AxisTransport.dll <br>
 XMLParser:[APACHE_HOME]\Axis\lib\AxisXMLParser.dll</p>  
 
 <p><b>Note:If the AxisTransport.dll and AxisXMLParser.dll paths are not given in axiscpp.conf then the hardcoded values will be used.For that set the path of these two in the PATH environment variable or copy them to the same location as the Client.exe.</b></p>
-<br>
+<br> <br>
+
+<p> <b>Note:  Make sure that if you are using Expat that libexpat.dll ([EXPAT_EXTRACT]\Libs\) file is pasted in %AXISCPP_DEPLOY%/lib/ and if you are using Xerces that xerces-c_2_2_0.dll  ([XERCES_EXTRACT]\bin) is pasted in %AXISCPP_DEPLOY%/lib/ </b> </p>
+
+
 <p>6) Select start-&gt;programs-&gt;Apache HTTP server-&gt;Control Apache
 Server-&gt;stop to stop the apache server
 
@@ -761,7 +763,7 @@ the relevant web service dll given above in [APACHE_HOME]\Axis\webservices.
 
 <p><a name="transport"></a></p>
 <h2>Creating and Building your own transport layer</h2>
-<img border="0"  src="images/transport.jpg">
+<img border="0" src="images/transport.jpg">
 
 <p>When creating your own transport layer refer  SoapTransport.h header file for API.To see an example implementation refer AxisTransport.h and AxisTransport.cpp</p>
 <p>Implement SoapTransport.h interface according to rules described in the header file.
@@ -772,7 +774,7 @@ the relevant web service dll given above in [APACHE_HOME]\Axis\webservices.
 
 <p><a name="parser"></a></p>
 <h2>Creating and Building your own parser</h2>
-<img border="0"  src="images/parser.jpg">
+<img border="0" src="images/parser.jpg">
  
 <p><b>Note:Implement XMLParser.h interface according to the rules described in the header file.</b><br>
 <p>When creating your own parser refer  XMLParser.h header file for API. To see an example implementation refer SoapParserExpat.h,SoapParserExpat.cpp, SoapParserXerces.h and SoapParserXerces.cpp.
@@ -780,8 +782,10 @@ the relevant web service dll given above in [APACHE_HOME]\Axis\webservices.
 <p>CreateInstance() - Used by Axis to create an instance of your parser class<br>
    DestroyInstance() - Used by Axis to destroy the created parser class instance </p>
 <p> Compile your parser code and build a dynamic library. Add the name of your parser library to Axis configuration file (axiscpp.conf) so that Axis can find your library at runtime</p>
+
 <div id="pdf" align="right">
 <a href="windev-guide.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
           PDF</a>
+
 </body>
 </html>
