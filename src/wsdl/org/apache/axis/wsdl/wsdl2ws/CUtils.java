@@ -224,7 +224,10 @@ public class CUtils {
 		return false;	
 	} 
 
-	
+	public static boolean isDefinedSimpleType(QName name){
+		return schemaDefinedSimpleTypesMap.containsKey(name);	
+	}
+		
 	public static String getParameterGetValueMethodName(String typeName, boolean isAttrib){
 		String methodname;
 		if((methodname = (String)type2getValueMethodName.get(typeName))!= null){

@@ -19,15 +19,14 @@
 
 #ifdef __cplusplus
 
-#include "WSDDService.h"
-#include "IAdminUtils.h"
+#include "GDefine.h"
 
-#include <string>
-using namespace std;
+class WSDDService;
+#include "IAdminUtils.h"
 
 #include "IHandlerSoapDeSerializer.h"
 #include "IHandlerSoapSerializer.h"
-class IDeployerUtils;
+
 #endif
 
 #include "IWrapperSoapDeSerializer.h"

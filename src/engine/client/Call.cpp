@@ -33,6 +33,9 @@
 #include "ClientAxisEngine.h"
 #include "../SOAPTransportFactory.h"
 #include <axis/SOAPTransport.h>
+#include <axis/server/SoapSerializer.h>
+#include <axis/server/SoapDeSerializer.h>
+#include <axis/server/HeaderBlock.h>
 
 extern "C" int initialize_module (int bServer);
 
@@ -551,7 +554,7 @@ void* Call::getCmplxObject (void* pDZFunct, void* pCreFunct, void* pDelFunct,
         pNamespace);
 }
 
-int Call::setSoapHeader (SoapHeader* pSoapHeader)
+int Call::setSoapHeader (ISoapHeader* pSoapHeader)
 {
 	m_nStatus = (m_pIWSSZ->setSoapHeader (pSoapHeader));
     return m_nStatus;

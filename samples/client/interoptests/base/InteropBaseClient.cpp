@@ -4,6 +4,7 @@
 using namespace std;
 
 #include "InteropTestPortType.h" 
+#include <axis/AxisGenException.h>
 
 #define ARRAYSIZE 2
 

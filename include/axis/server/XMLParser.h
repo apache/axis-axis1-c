@@ -23,12 +23,13 @@
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  */
  
-#include "AnyElement.h"
-#include "Packet.h"
-#include <axis/SOAPTransport.h>
-
 #if !defined(__XMLPARSER_H_OF_AXIS_INCLUDED__)
 #define __XMLPARSER_H_OF_AXIS_INCLUDED__
+
+#include "AnyElement.h"
+#include <axis/SOAPTransport.h>
+
+#include "Gdefine.h"
 
 /**
  * @class XMLParser

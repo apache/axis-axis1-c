@@ -34,6 +34,8 @@
 #include "../common/ArrayBean.h"
 #include <axis/server/BasicTypeSerializer.h>
 #include "../soap/SoapKeywordMapping.h"
+#include <axis/AxisSoapException.h>
+
 #include <stdio.h>
 #include <stdarg.h>
 
@@ -77,7 +79,7 @@ int SoapSerializer::setSoapEnvelope(SoapEnvelope *pSoapEnvelope)
     return AXIS_SUCCESS;
 }
 
-int SoapSerializer::setSoapHeader(SoapHeader *pSoapHeader)
+int SoapSerializer::setSoapHeader(ISoapHeader *pSoapHeader)
 {
     int intStatus = AXIS_FAIL;
 
@@ -91,7 +93,7 @@ int SoapSerializer::setSoapHeader(SoapHeader *pSoapHeader)
         }
         else
         {
-            m_pSoapEnvelope->setSoapHeader(pSoapHeader);
+            m_pSoapEnvelope->setSoapHeader((SoapHeader*)pSoapHeader);
             intStatus= AXIS_SUCCESS;
         }
     }

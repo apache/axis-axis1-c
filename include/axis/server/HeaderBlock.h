@@ -18,15 +18,8 @@
 #if !defined(_HEADERBLOCK_H____OF_AXIS_INCLUDED_)
 #define _HEADERBLOCK_H____OF_AXIS_INCLUDED_
 
-#include "Attribute.h"
-#include <string>
-#include <list>
-
-using namespace std;
-
 class BasicNode;
 #include "IHeaderBlock.h"
-#include "SoapEnvVersions.h"
 
 /*
  *  @class BasicNode
@@ -370,11 +363,6 @@ public:
     bool operator ==( const HeaderBlock &objHeaderBlock);
 
     int serialize(SoapSerializer& pSZ);    
-
-    /**
-      * Initialized the Header Block for testing.
-      */
-    int initializeForTesting();
 
 };
 

@@ -24,11 +24,7 @@
 #ifndef __AXISLOG_H_INCLUDED_
 #define __AXISLOG_H_INCLUDED_
 
-#include "GDefine.h"
 #include "AxisFile.h"
-#include <list>
-#include <string>
-#include <stdio.h>
 
 #if defined(ENABLE_AXISTRACE)  
   #define AXISTRACE1(X, Y) g_pAT->logaxis(X,Y,__FILE__,__LINE__);
@@ -43,7 +39,7 @@
 #endif
 
 
-using namespace std;
+//using namespace std;
 
 /**
  * @class AxisTrace

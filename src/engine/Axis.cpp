@@ -31,6 +31,7 @@
 
 #ifdef AXIS_CLIENT_LIB
 #include <axis/client/Call.h>
+#include <axis/server/AxisEngine.h>
 #else
 #include "server/ServerAxisEngine.h"
 #endif

@@ -48,20 +48,25 @@
 #if !defined(_CALL_H____OF_AXIS_INCLUDED_)
 #define _CALL_H____OF_AXIS_INCLUDED_
 
-#include "../server/AxisWrapperAPI.h"
+#include "../server/GDefine.h"
+#include "../server/Packet.h"
+
+#include "../server/TypeMapping.h"
+#include "../server/AxisUserAPI.h"
 #include "../server/SoapEnvVersions.h"
 #include "../server/WSDDDefines.h"
 #include "../server/IHeaderBlock.h"
 
 #ifdef __cplusplus
-#include "../server/IParam.h"
-#include "../server/AxisEngine.h"
-#include <list>
-using namespace std;
+#include "../server/ISoapHeader.h"
+
 class ClientAxisEngine;
 class SOAPTransport;
+class MessageData;
+class SoapDeSerializer;
+class SoapSerializer;
+
 #else
-#include "../server/Packet.h"
 #endif
 
 typedef struct {
@@ -640,7 +645,7 @@ public:
     IHeaderBlock* AXISCALL createHeaderBlock(AxisChar *pachLocalName,
         AxisChar *pachUri);
     IHeaderBlock* createHeaderBlock();
-    int setSoapHeader(SoapHeader *pSoapHeader);
+    int setSoapHeader(ISoapHeader *pSoapHeader);
     /* Methods used by stubs to get a deserialized value of XML element
      * as basic types
      */
@@ -785,8 +790,8 @@ private:
        or deleted
      */
     MessageData* m_pMsgData;
-    IHandlerSoapSerializer* m_pIWSSZ;
-    IHandlerSoapDeSerializer* m_pIWSDZ;
+    SoapSerializer* m_pIWSSZ;
+    SoapDeSerializer* m_pIWSDZ;
     const char* m_pcEndPointUri;
     AXIS_PROTOCOL_TYPE m_nTransportType;
     /*

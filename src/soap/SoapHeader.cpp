@@ -33,6 +33,8 @@
 #include <axis/server/SoapHeader.h>
 #include <axis/server/SoapSerializer.h>
 #include <axis/server/GDefine.h>
+#include <axis/server/Attribute.h>
+#include <axis/server/HeaderBlock.h>
 
 SoapHeader::SoapHeader()
 {
@@ -46,7 +48,7 @@ SoapHeader::~SoapHeader()
      * either a handler or stub etc to delete any header block created by them
      */
     /*
-    list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
+    list<IHeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
 
     while(itCurrHeaderBlock != m_headerBlocks.end())
     {        
@@ -68,7 +70,7 @@ SoapHeader::~SoapHeader()
     m_attributes.clear();
 }
 
-void SoapHeader::addHeaderBlock(HeaderBlock* pHeaderBlock)
+void SoapHeader::addHeaderBlock(IHeaderBlock* pHeaderBlock)
 {
     if (pHeaderBlock)
     {
@@ -97,11 +99,11 @@ int SoapHeader::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         
         pSZ.serialize(">", NULL);
 
-        list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
+        list<IHeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
 
         while(itCurrHeaderBlock != m_headerBlocks.end())
         {
-            iStatus= (*itCurrHeaderBlock)->serialize(pSZ);
+            iStatus= ((HeaderBlock*)(*itCurrHeaderBlock))->serialize(pSZ);
             if(iStatus==AXIS_FAIL)
             {
                 break;
@@ -182,9 +184,9 @@ int SoapHeader::serializeNamespaceDecl(SoapSerializer& pSZ)
 
 IHeaderBlock* SoapHeader::getHeaderBlock(bool bRemoveOrNot)
 {
-    HeaderBlock* tmpHeaderBlock = NULL;
+    IHeaderBlock* tmpHeaderBlock = NULL;
 
-    list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
+    list<IHeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
 
     if(itCurrHeaderBlock != m_headerBlocks.end())
     {
@@ -211,12 +213,12 @@ IHeaderBlock* SoapHeader::getHeaderBlock(const AxisChar *pName,
 {
     HeaderBlock* tmpHeaderBlock = NULL;
 
-    list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
+    list<IHeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
     bool blnFoundStatus = false;
 
     while (itCurrHeaderBlock != m_headerBlocks.end())
     {
-        tmpHeaderBlock = (*itCurrHeaderBlock);
+        tmpHeaderBlock = (HeaderBlock*)(*itCurrHeaderBlock);
 
         if ((strcmp(((tmpHeaderBlock)->m_localname).c_str(), pName) == 0) && 
                 (strcmp(((tmpHeaderBlock)->m_uri).c_str(), pNamespace) == 0))

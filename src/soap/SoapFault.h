@@ -25,7 +25,7 @@
 #include <map>
 #include <axis/server/AxisException.h>
 #include <axis/server/Param.h>
-
+#include <axis/server/SoapEnvVersions.h>
 class SoapSerializer;
 
 using namespace std;

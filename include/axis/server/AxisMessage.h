@@ -36,7 +36,7 @@ class AxisMessage
 public:
     AxisMessage(){};
     virtual ~AxisMessage(){};
-    const string getMessage(int iExceptionCode);
+    const string& getMessage(int iExceptionCode);
 
 private:
     string m_sMessage;

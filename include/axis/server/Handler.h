@@ -22,9 +22,7 @@
 #define __HANDLER_OF_AXIS_INCLUDED__
 
 #include "BasicHandler.h"
-#include <map>
 
-using namespace std;
 /**
  * @class Handler
  * @brief interface for handlers.

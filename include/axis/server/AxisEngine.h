@@ -29,11 +29,8 @@
 #define __AXISENGINE_OF_AXIS_INCLUDED__
 
 
-#include "GDefine.h"
-#include "Packet.h"
 #include "SoapSerializer.h"
 #include "SoapDeSerializer.h"
-#include "BasicHandler.h"
 #include "MessageData.h"
 #include "HandlerChain.h"
 

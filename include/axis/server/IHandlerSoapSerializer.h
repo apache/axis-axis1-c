@@ -18,7 +18,9 @@
 #define _IHANDLERSOAPSERIALIZER_H____OF_AXIS_INCLUDED_
 
 #include "IWrapperSoapSerializer.h"
-#include "SoapHeader.h"
+#include "SoapEnvVersions.h"
+
+class ISoapHeader;
 class IHeaderBlock;
 /**
   * @class IHandlerSoapSerializer
@@ -88,7 +90,7 @@ public:
 	  *		- AXIS_SUCCESS : to indicate success.
 	  *		- AXIS_OBJECT_ALREADY_EXISTS : if a Soap Header already exists.
 	  */
-    virtual int setSoapHeader(SoapHeader* pSoapHeader)=0;
+    virtual int setSoapHeader(ISoapHeader* pSoapHeader)=0;
 
 	/**
 	  * Sets the SOAP Version.

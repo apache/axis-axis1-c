@@ -116,10 +116,11 @@ typedef enum
  * Note: if the bufferid is NULL that indicates the buffer is a 
  *       temporary buffer and should not be retained.
  *         So in this case the buffer should be immediately sent.
- */
+ 
 typedef AXIS_TRANSPORT_STATUS 
 (AXISCALL * AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES)
 (const char*, const void*, const void*);
+*/
 
 /*
  * This function is provided by the transport modules. 
@@ -139,10 +140,11 @@ typedef AXIS_TRANSPORT_STATUS
  *                          buffers. Buffer should be present.
  *  TRANSPORT_FAILED - Transport has failed and no use of trying to get any
  *                     more bytes. Better to abort.
- */
+ 
 typedef AXIS_TRANSPORT_STATUS 
 (AXISCALL * AXIS_MODULE_CALLBACK_GET_MESSAGE_BYTES)
 (const char**, int*, const void*);
+ */
 
 /*
  * This function is provided by the transport modules. 
@@ -152,9 +154,10 @@ typedef AXIS_TRANSPORT_STATUS
  * @param 
  *        1st - buffer that Axis got from the transport layer.
  *        2nd - Ax_soapstream object which act like a thread id
- */
+
 typedef void (AXISCALL * AXIS_MODULE_CALLBACK_RELEASE_RECEIVE_BUFFER)
 (const char*, const void*);
+ */
 
 /**
  * This function is provided by the transport modules. 
@@ -166,10 +169,10 @@ typedef void (AXISCALL * AXIS_MODULE_CALLBACK_RELEASE_RECEIVE_BUFFER)
  *        1st - Transport information type to set
  *        2nd - Information value
  *        3rd - Ax_soapstream object which act like a thread id
- */
+ 
 typedef void (AXISCALL * AXIS_MODULE_CALLBACK_SET_TRANSPORT_INFORMATION)
 (AXIS_TRANSPORT_INFORMATION_TYPE, const char*, const void*);
-
+ */
 /*
  * This function is provided by the transport modules. 
  * Called by Axis engine when it needs to get any
@@ -178,10 +181,10 @@ typedef void (AXISCALL * AXIS_MODULE_CALLBACK_SET_TRANSPORT_INFORMATION)
  * @param
  *        1st - Transport information type to get
  *        2nd - Ax_soapstream object which act like a thread id
- */
+
 typedef const char* (AXISCALL * AXIS_MODULE_CALLBACK_GET_TRANSPORT_INFORMATION)
 (AXIS_TRANSPORT_INFORMATION_TYPE, const void*);
-
+ */
 /*
  * Function pointer definitions for axis call backs 
  */
@@ -201,7 +204,7 @@ typedef const char* (AXISCALL * AXIS_MODULE_CALLBACK_GET_TRANSPORT_INFORMATION)
  */
 typedef void (AXISCALL * AXIS_ENGINE_CALLBACK_RELEASE_SEND_BUFFER)
 (const char*, const void*);
-
+ 
 /*
  * Each transport module on the server side should populate following struct with 
  * their transport function pointers in order for the Axis Engine to work properly.

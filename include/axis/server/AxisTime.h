@@ -24,8 +24,6 @@
 #ifndef __AXISTIME_H_OF_AXIS_INCLUDED_
 #define __AXISTIME_H_OF_AXIS_INCLUDED_
 
-#include <time.h>
-#include <string>
 #include "TypeMapping.h"
 #include "IParam.h"
 

@@ -201,9 +201,6 @@ public class WSDL2Ws {
             //setting the faults
             Map faults = op.getFaults();
 			addFaultInfo(faults,minfo);
-            
-            
-            
             Iterator paramlist = null;
             //add each parameter to parameter list
             if ("document".equals(bindingEntry.getBindingStyle().getName())){
@@ -247,7 +244,10 @@ public class WSDL2Ws {
 								minfo.addInputParameter(pinfo);		
 							}
 							//remove the type that represents the wrapping element so that such type is not created.
-							this.typeMap.removeType(qname);
+							//following is commented for the moment because the same element can be refered by more
+							//than one message. Also this complex type may be used as a type while it is the wrapping 
+							//element here 
+							//this.typeMap.removeType(qname);
 						}
 					}
 					else{
@@ -316,7 +316,10 @@ public class WSDL2Ws {
 									minfo.addOutputParameter(pinfo);		
 								}							
 								//remove the type that represents the wrapping element so that such type is not created.							
-								this.typeMap.removeType(qname);
+								//following is commented for the moment because the same element can be refered by more
+								//than one message. Also this complex type may be used as a type while it is the wrapping 
+								//element here 
+								//this.typeMap.removeType(qname);
 							}
 						}
 						else{
@@ -506,9 +509,21 @@ public class WSDL2Ws {
 
 		Vector restrictdata = null;
 		if(type.isSimpleType()){
+			//extended types and types declared as simpleType
 			restrictdata = CUtils.getRestrictionBaseAndValues(node,symbolTable);
 			if(restrictdata != null)
 				typedata.setRestrictiondata(restrictdata);
+			// There can be attributes in this extended basic type
+			// Process the attributes
+			Vector attributes = SchemaUtils.getContainedAttributeTypes(
+				type.getNode(), symbolTable);
+			if (attributes != null) {
+				for (int j=0; j<attributes.size(); j+=2) {
+					typedata.setTypeForAttributeName(
+						((QName)attributes.get(j + 1)).getLocalPart(),
+					createTypeInfo(((TypeEntry) attributes.get(j)).getQName(),targetLanguage));
+				}
+			}			
 		}else if(type instanceof CollectionType){
 			typedata.setTypeNameForElementName(new ElementInfo(type.getQName(),
 					createTypeInfo(type.getRefType().getQName(),targetLanguage)));

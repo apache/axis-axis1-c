@@ -55,7 +55,7 @@ int SerializerPool::getInstance (IWrapperSoapSerializer** ppSZ)
 #endif
         
     }
-    if (AXIS_SUCCESS != (*ppSZ)->init ())
+    if (AXIS_SUCCESS != ((SoapSerializer*)(*ppSZ))->init ())
     {
         delete *ppSZ;
         *ppSZ = NULL;

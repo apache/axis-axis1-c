@@ -20,7 +20,7 @@
  
 #include <axis/server/AxisMessage.h>
 
-const string AxisMessage::getMessage(int iExceptionCode)
+const string& AxisMessage::getMessage(int iExceptionCode)
 {
     switch(iExceptionCode)
     {

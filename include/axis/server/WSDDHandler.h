@@ -22,7 +22,6 @@
 #define _WSDDHANDLER_H__NCLUDED_
 
 #include "GDefine.h"
-#include <stdio.h>
 #include <string>
 #include <map>
 #include <list>

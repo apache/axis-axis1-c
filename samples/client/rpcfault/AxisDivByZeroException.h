@@ -38,8 +38,8 @@ public:
 	virtual ~AxisDivByZeroException() throw();
 	 const char* what() throw();
 	 const int getExceptionCode();
-	 const string getMessage(exception* e);
-	 const string getMessage(int iExceptionCode);
+	 const string& getMessage(exception* e);
+	 const string& getMessage(int iExceptionCode);
 private:
 	 void processException(exception* e);
 	 void processException(DivByZeroStruct* pFault);

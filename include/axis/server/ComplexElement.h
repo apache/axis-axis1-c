@@ -42,9 +42,6 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include <list>
-#include <axis/server/BasicNode.h>
-
 using namespace std;
 
 /**

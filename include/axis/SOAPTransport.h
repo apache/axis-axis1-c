@@ -90,7 +90,8 @@ public:
      *       for each buffer for which this function returned the status
      *       code TRANSPORT_IN_PROGRESS.
      */
-    virtual AXIS_TRANSPORT_STATUS sendBytes(const char* pcSendBuffer, const void* pBufferid)=0;
+    virtual AXIS_TRANSPORT_STATUS sendBytes(const char* pcSendBuffer, 
+		const void* pBufferid)=0;
     /**
      * Gets a part of or full SOAP message. A Caller may call this method
      * multiple times to get parts of the SOAP message until the function

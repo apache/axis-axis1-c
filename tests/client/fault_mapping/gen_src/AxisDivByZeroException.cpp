@@ -78,13 +78,13 @@ void AxisDivByZeroException::processException(int iExceptionCode)
 	m_sMessage = getMessage (iExceptionCode);
 }
 
-const string AxisDivByZeroException::getMessage (exception* objException)
+const string& AxisDivByZeroException::getMessage (exception* objException)
 {
 	string sMessage = objException->what();
 	return sMessage;
 }
 
-const string AxisDivByZeroException::getMessage (int iExceptionCode)
+const string& AxisDivByZeroException::getMessage (int iExceptionCode)
 {
 	string sMessage;
 	switch(iExceptionCode)

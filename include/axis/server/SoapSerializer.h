@@ -18,12 +18,10 @@
 #define _SOAPSERIALIZER_H____OF_AXIS_INCLUDED_
 
 #include "IHandlerSoapSerializer.h"
+#include <axis/SOAPTransport.h>
+
 #include "BasicTypeSerializer.h"
-#include "AxisTime.h"
-#include "Packet.h"
 #include "WSDDDefines.h"
-#include "SoapEnvVersions.h"
-#include <axis/AxisSoapException.h>
 
 class SoapEnvelope;
 class SoapHeader;
@@ -31,9 +29,7 @@ class SoapMethod;
 class SoapBody;
 class SoapFault;
 class HeaderBlock;
-
-#include <map>
-using namespace std;
+class IArrayBean;
 
 /**
  *  @class SoapSerializer
@@ -119,7 +115,7 @@ public:
     int setSoapMethod(SoapMethod* pSoapMethod);
     int setSoapFault(SoapFault* pSoapFault);
     int setSoapBody(SoapBody* pSoapBody);
-    int setSoapHeader(SoapHeader* pSoapHeader);
+    int setSoapHeader(ISoapHeader* pSoapHeader);
     int setSoapEnvelope(SoapEnvelope* pSoapEnvelope);
     SoapSerializer();
     virtual ~SoapSerializer();

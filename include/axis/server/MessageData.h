@@ -17,19 +17,9 @@
 #if !defined(_MESSAGEDATA_H____OF_AXIS_INCLUDED_)
 #define _MESSAGEDATA_H____OF_AXIS_INCLUDED_
 
-#include "GDefine.h"
 #include "IMessageData.h"
-#include "WSDDService.h"
-#include "SoapSerializer.h"
-#include "SoapDeSerializer.h"
-#include "Param.h"
 #include "AdminUtils.h"
 
-#include <string>
-#include <list>
-#include <map>
-
-using namespace std;
 /*
  *  @class MessageData
  *  @brief interface for the MessageData class.

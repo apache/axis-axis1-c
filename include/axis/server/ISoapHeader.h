@@ -23,6 +23,8 @@
  *
  *  @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  */
+#include "../server/IHeaderBlock.h"
+
 class ISoapHeader  
 {
 public:
