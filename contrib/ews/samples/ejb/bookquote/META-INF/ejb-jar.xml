@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ejb-jar>
-<display-name>BookQuoteService</display-name>
+	<display-name>BookQuoteService</display-name>
 	<enterprise-beans>
 		<session>
 			<display-name>BookQuoteService</display-name>
