@@ -1,2 +1,0 @@
-#!/bin/bash
-./configure --libdir=$TXPP_HOME/lib
