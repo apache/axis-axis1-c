@@ -131,6 +131,11 @@ int send_transport_information(Ax_soapstream* sSoapstream)
 	return 0;
 }
 
+int receive_transport_information(Ax_soapstream *str) {
+
+	return 0;
+}
+
 int executeWork() {
 
 	Ax_soapstream* str = (Ax_soapstream*)malloc(sizeof(Ax_soapstream));
@@ -158,10 +163,12 @@ int executeWork() {
 	str->transport.pSendFunct = send_response_bytes;
 	str->transport.pGetFunct = get_request_bytes;
 	str->transport.pSendTrtFunct = (AXIS_SEND_TRANSPORT_INFORMATION)send_transport_information;
+	str->transport.pGetTrtFunct = (AXIS_GET_TRANSPORT_INFORMATION)receive_transport_information;
+
 	//DEBUG line
 	//printf("soap request :\n %s\n", echoBuffer);
 //	wprintf(L"soap request :\n %s\n", ip);
-
+	printf("\nbefore process_request(str)\n");
 	process_request(str);	
 
 	free(str->so.http.ip_headers);
