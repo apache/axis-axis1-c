@@ -244,7 +244,7 @@ public class WSDL2Ws {
             //add each parameter to parameter list
             if ("document".equals(bindingEntry.getBindingStyle().getName())){
 				Part part = (Part) paramlist.next();
-				if ("parameters".equals(part.getName())){
+				/* if ("parameters".equals(part.getName())){ */ //to have "parameters" is not a must. Ref : WS-I Basic profile 1.0
 					element = symbolTable.getElement(part.getElementName());
 					qname = element.getRefType().getQName();
 					if (qname != null){
@@ -252,7 +252,7 @@ public class WSDL2Ws {
 						type = this.typeMap.getType(qname);				
 						if(type == null)
 							 throw new WrapperFault("unregisterd type "+qname+" refered");
-						if(type.getLanguageSpecificName().startsWith(">")){ //anonymous type - the message element
+						/* if(type.getLanguageSpecificName().startsWith(">")){*/ //anyway skip the wrapping element type even if it is a named type.
 							//get inner attributes and elements and add them as parameters
 							ArrayList elementlist = new ArrayList();
 							Iterator names = type.getElementnames();
@@ -267,17 +267,17 @@ public class WSDL2Ws {
 								pinfo.setElementName(type.getElementForElementName(elementname).getName());
 								minfo.addInputParameter(pinfo);		
 							}
-						}
+						/*}
 						else{
 							pinfo = new ParameterInfo(type,element.getQName().getLocalPart());
 							pinfo.setElementName(element.getQName());
 							minfo.addInputParameter(pinfo);
-						}
+						}*/
 					}
-				}
+				/*}
 				else{
 					throw new WrapperFault("A message name of document literal style WSDL is not \"parameters\"");
-				}
+				}*/
 	    	}
     	   	else{
 	    	  	while (paramlist.hasNext()) {
@@ -290,7 +290,7 @@ public class WSDL2Ws {
             Iterator returnlist = op.getOutput().getMessage().getParts().values().iterator();
 			if ("document".equals(bindingEntry.getBindingStyle().getName())){
 				Part part = (Part) returnlist.next();
-				if ("parameters".equals(part.getName())){
+				/*if ("parameters".equals(part.getName())){*///to have "parameters" is not a must. Ref : WS-I Basic profile 1.0
 					element = symbolTable.getElement(part.getElementName());
 					qname = element.getRefType().getQName();
 					if (qname != null){
@@ -298,7 +298,7 @@ public class WSDL2Ws {
 						type = this.typeMap.getType(qname);				
 						if(type == null)
 							 throw new WrapperFault("unregisterd type "+qname+" refered");
-						if(type.getLanguageSpecificName().startsWith(">")){
+						/*if(type.getLanguageSpecificName().startsWith(">")){*///anyway skip the wrapping element type even if it is a named type.
 							//get inner attributes and elements and add them as parameters 
 							ArrayList elementlist = new ArrayList();
 							Iterator names = type.getElementnames();
@@ -313,18 +313,18 @@ public class WSDL2Ws {
 								pinfo.setElementName(type.getElementForElementName(elementname).getName());
 								minfo.addOutputParameter(pinfo);		
 							}							
-						}
+						/*}
 						else{
 							pinfo = new ParameterInfo(type,element.getQName().getLocalPart());
 							pinfo.setElementName(element.getQName());
 							minfo.addOutputParameter(pinfo);							
-						}
+						}*/
 						pinfo = new ParameterInfo(type,part.getName());
 						pinfo.setElementName(part.getElementName());					}
-				}
+				/*}
 				else{
 					throw new WrapperFault("A message name of document literal style WSDL is not \"parameters\"");
-				}
+				}*/
 			}
 			else{
 	            if (returnlist.hasNext()) {
@@ -456,8 +456,7 @@ public class WSDL2Ws {
 			//type is a inbild type or a already created type
 			return typedata;  
 		}
-		System.out.println(
-			"############## the type found =" + type.getQName());
+		System.out.println("############## the type found =" + type.getQName());
 		if (-1 != type.getQName().getLocalPart().indexOf('[')) {/* it seems that this is an array */
 			if (null == type.getRefType())throw new WrapperFault("Array type found without a Ref type");
 			QName qn = type.getRefType().getQName();
@@ -466,7 +465,7 @@ public class WSDL2Ws {
 			QName newqn = new QName(type.getQName().getNamespaceURI(), qn.getLocalPart()+"_Array");
 			typedata = new Type(newqn, newqn.getLocalPart(), true, targetLanguage);
 		}else {
-			typedata = new Type(type.getQName(), type.getName(), true, targetLanguage);
+			typedata = new Type(type.getQName(), type.getQName().getLocalPart(), true, targetLanguage);
 		}
 		typeMap.addType(type.getQName(), typedata);
 			
@@ -625,7 +624,7 @@ public class WSDL2Ws {
         System.out.println(data.getArgumentCount());
         if (data.getArgumentCount() != 1)
             System.out.println(
-                "java WSDL2ws <wsdlfile> -<optionChar><value>\n"
+                "java WSDL2Ws <wsdlfile> -<optionChar><value>\n"
                     + "-o target output folder - default is current folder\n"
                     + "-l target language(c|c++) - default is c++\n"
                     + "-s (client|server) - default is server\n");

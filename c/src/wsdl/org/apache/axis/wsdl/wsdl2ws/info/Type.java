@@ -111,7 +111,7 @@ public class Type {
     private boolean canThisOccuredmoreThanOnceAllTheTime = false;
     //to handle <xsd:element name="three" type="typens:enum" maxOccurs="unbounded" />
     //types at the top level. But this is not allowed in the Schema spec. 
-    
+    private boolean isreferenced = false;
     
     private String language;
 
@@ -343,4 +343,20 @@ public class Type {
         return str;
     }
 
+	/**
+	 * @return boolean
+	 */
+	public boolean isIsreferenced() {
+		return isreferenced;
+	}
+
+	/**
+	 * Sets the isreferenced.
+	 * @param isreferenced The isreferenced to set
+	 */
+	public void setIsreferenced(boolean isreferenced) {
+		this.isreferenced = isreferenced;
+		/* TODO also make the inner type of this be referenced*/
+		
+	}
 }

@@ -180,7 +180,10 @@ public abstract class ParamWriter extends BasicFileWriter{
 
  	protected String getCorrectParmNameConsideringArraysAndComplexTypes(AttributeInfo attrib)throws WrapperFault{
 		if (attrib.isArray()){
-			return attrib.getTypeName()+"_Array";
+			if (attrib.isSimpleType())
+				return CUtils.getBasicArrayNameforType(attrib.getTypeName());
+			else
+				return CUtils.getCmplxArrayNameforType(attrib.getSchemaName());
 		}
 		else if (!attrib.isSimpleType()){
 			return attrib.getTypeName()+" *";	

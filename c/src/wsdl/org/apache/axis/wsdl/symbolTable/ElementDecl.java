@@ -153,7 +153,7 @@ public class ElementDecl {
     /**
      * @param i
      */
-    public void setMinOccrs(int i) {
+    public void setMinOccurs(int i) {
         minOccrs = i;
     }
 

@@ -109,6 +109,10 @@ public class ArrayParamWriter extends ParamWriter{
 			throw new WrapperFault(e);
 		}
 	}
+	public boolean isSimpleTypeArray()throws WrapperFault{
+		QName qname = WrapperUtils.getArrayType(type).getName(); 
+		return CUtils.isSimpleType(qname);
+	}
 	protected File getFilePath() throws WrapperFault {
 		String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
 		if(targetOutputLocation.endsWith("/"))

@@ -288,8 +288,8 @@ public class WrapWriter extends CPPClassWriter{
 			}
 		}
 		writer.write("\tif (AXIS_SUCCESS != (nStatus = pIWSDZ->GetStatus())) return nStatus;\n");
-		if(returntype != null){				
-			/* Invoke the service when return type not void */
+		if(returntype != null){	/* Invoke the service when return type not void */
+			String returnParamName = returntype.getElementName().getLocalPart();
 			writer.write("\t"+outparamType+((returntypeisarray || returntypeissimple)?" ":" *")+ "ret = "+"pWs->"+methodName+"(");
 			if (0<paramsB.size()){
 				for (int i = 0; i <  paramsB.size() - 1; i++) {
@@ -300,23 +300,23 @@ public class WrapWriter extends CPPClassWriter{
 			writer.write(");\n");
 			/* set the result */
 			if (returntypeissimple){
-				writer.write("\treturn pIWSSZ->AddOutputParam(\""+methodName+"Return\", (void*)&ret, "+CUtils.getXSDTypeForBasicType(outparamType)+");\n");
+				writer.write("\treturn pIWSSZ->AddOutputParam(\""+returnParamName+"\", (void*)&ret, "+CUtils.getXSDTypeForBasicType(outparamType)+");\n");
 			}else if(returntypeisarray){
 				QName qname = WrapperUtils.getArrayType(retType).getName();
 				String containedType = null;
 				if (CUtils.isSimpleType(qname)){
 					containedType = CUtils.getclass4qname(qname);
-					writer.write("\treturn pIWSSZ->AddOutputBasicArrayParam(\""+methodName+"Return\", (Axis_Array*)(&ret),"+CUtils.getXSDTypeForBasicType(containedType)+");\n");
+					writer.write("\treturn pIWSSZ->AddOutputBasicArrayParam(\""+returnParamName+"\", (Axis_Array*)(&ret),"+CUtils.getXSDTypeForBasicType(containedType)+");\n");
 				}
 				else{
 					containedType = qname.getLocalPart();
-					writer.write("\treturn pIWSSZ->AddOutputParam(\""+methodName+"Return\", (Axis_Array*)(&ret),"+ 
+					writer.write("\treturn pIWSSZ->AddOutputParam(\""+returnParamName+"\", (Axis_Array*)(&ret),"+ 
 					"(void*) Axis_Serialize_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+");\n");
 				}
 			}
 			else{
 				//complex type
-				writer.write("\treturn pIWSSZ->AddOutputParam(\""+methodName+"Return\", ret, (void*)Axis_Serialize_"+outparamType+", (void*)Axis_Delete_"+outparamType+");\n");
+				writer.write("\treturn pIWSSZ->AddOutputParam(\""+returnParamName+"\", ret, (void*)Axis_Serialize_"+outparamType+", (void*)Axis_Delete_"+outparamType+");\n");
 			}
 		}else{//method does not return anything
 			/* Invoke the service when return type is void */
