@@ -129,6 +129,7 @@ int HandlerLoader::UnloadLib(HandlerInformation* pHandlerInfo)
 
 int HandlerLoader::CreateHandler(BasicHandler** pHandler, int nLibId)
 {
+	DEBUG1("inside CreateHandler\n");
 	lock();
 	*pHandler = NULL;
 	HandlerInformation* pHandlerInfo = NULL;

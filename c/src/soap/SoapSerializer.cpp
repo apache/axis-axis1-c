@@ -221,6 +221,7 @@ int SoapSerializer::Init()
 int SoapSerializer::setSoapVersion(SOAP_VERSION nSoapVersion)
 {
 	//here the default namespaces of the SoapEnvelop should be added and intialized as well.
+/*
 	Attribute* pNS = new Attribute(g_sObjSoapEnvVersionsStruct[nSoapVersion].pchEnvelopePrefix,
 	  "xmlns","",g_sObjSoapEnvVersionsStruct[nSoapVersion].pchEnvelopeNamespaceUri);
 	m_pSoapEnvelope->addNamespaceDecl(pNS);
@@ -229,7 +230,10 @@ int SoapSerializer::setSoapVersion(SOAP_VERSION nSoapVersion)
 	m_pSoapEnvelope->addNamespaceDecl(pNS);
 	pNS = new Attribute("xsi","xmlns","","http://www.w3.org/2001/XMLSchema-instance");
 	m_pSoapEnvelope->addNamespaceDecl(pNS);
-
+*/
+	m_pSoapEnvelope->addStandardNamespaceDecl(g_sObjSoapEnvVersionsStruct[nSoapVersion].pEnv);
+	m_pSoapEnvelope->addStandardNamespaceDecl(g_sObjSoapEnvVersionsStruct[nSoapVersion].pXsd);
+	m_pSoapEnvelope->addStandardNamespaceDecl(g_sObjSoapEnvVersionsStruct[nSoapVersion].pXsi);
 	return SUCCESS;
 }
 
@@ -242,15 +246,13 @@ const char* SoapSerializer::getNewNamespacePrefix()
 
 IWrapperSoapSerializer& SoapSerializer::operator <<(const char *cSerialized)
 {
-	int iTmpSerBufferSize= strlen(cSerialized);
-	if((m_iCurrentSerBufferSize+iTmpSerBufferSize)>1023) {
+	int iTmpSerBufferSize = strlen(cSerialized);
+	if((m_iCurrentSerBufferSize + iTmpSerBufferSize)>= SERIALIZE_BUFFER_SIZE) 
+	{
 		flushSerializedBuffer();		
 	}
 	strcat(m_cSerializedBuffer, cSerialized);
-	//cout<<m_cSerializedBuffer<<"END@@";
-
-	m_iCurrentSerBufferSize+= iTmpSerBufferSize;
-
+	m_iCurrentSerBufferSize += iTmpSerBufferSize;
 	return *this;
 	//call the ruputs to send this soap response
 	//ruputs(m_cSerializedBuffer);
@@ -258,13 +260,10 @@ IWrapperSoapSerializer& SoapSerializer::operator <<(const char *cSerialized)
 
 int SoapSerializer::flushSerializedBuffer()
 {
-	//cout<<"++++++++++++++++"<<"flushed"<<endl;
-	//cout<<"++++++++++++++++"<<m_cSerializedBuffer<<endl;
 	//sendSoapResponse(m_cSerializedBuffer);
 	send_response_bytes(m_cSerializedBuffer, m_pOutputStream);
 	m_cSerializedBuffer[0]= '\0';
 	m_iCurrentSerBufferSize=0;
-
 	return SUCCESS;
 }
 
