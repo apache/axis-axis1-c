@@ -81,10 +81,10 @@ const string AxisConfigException::getMessage (int iExceptionCode)
     string sMessage;
     switch(iExceptionCode)
     {
-        case SERVER_CONFIG_TRANSPORTCONFFAILED:
+        case SERVER_CONFIG_TRANSPORT_CONF_FAILED:
             sMessage = "Transport layer is not configured properly";
             break;
-        case SERVER_CONFIG_LIBRARYPATHEMPTY:
+        case SERVER_CONFIG_LIBRARY_PATH_EMPTY:
             sMessage = "Library path is empty(Not in server.wsdd file)";
             break;
         default:

@@ -80,14 +80,20 @@ const string AxisTransportException::getMessage (int iExceptionCode)
     string sMessage;
     switch(iExceptionCode)
     {
-       case SERVER_TRANSPORT_RECEPTIONEXCEPTION:
+       case SERVER_TRANSPORT_RECEPTION_EXCEPTION:
             sMessage = "Problem occured when receiving the stream";
             break;
-        case SERVER_TRANSPORT_SENDINGEXCEPTION:
+        case SERVER_TRANSPORT_SENDING_EXCEPTION:
             sMessage = "Problem occured when sending the stream";
             break;
         case SERVER_TRANSPORT_HTTP_EXCEPTION:
             sMessage = "HTTP transport error";
+            break;
+        case SERVER_TRANSPORT_PROCESS_EXCEPTION:
+            m_sMessage = "HTTP Error, cannot process response message";
+            break;
+        case SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE:
+            m_sMessage = "Unknow HTTP response, cannot process response message";
             break;
         default:
             sMessage = "Unknown Transport Exception"; 

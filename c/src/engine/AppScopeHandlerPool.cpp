@@ -68,7 +68,7 @@ int AppScopeHandlerPool::getInstance (BasicHandler** pHandler, int nLibId)
 	     */
         {
             unlock ();
-            return SERVER_ENGINE_HANDLERBEINGUSED;
+             THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_HANDLER_BEING_USED);
         }
         else
         {
