@@ -68,6 +68,7 @@ import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
+import org.apache.axis.wsdl.symbolTable.BaseType;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
@@ -77,7 +78,14 @@ public class Type {
     /* max no of attribs expected in a type */
     private static final int MAXIMUM_NO_ATTRIBS = 101;
     private QName name;
+    /**
+     * Indicate whether this is a schema defined simpleType
+     */
 	private boolean isSimpleType=false;
+	/**
+	 * In case this is schema defined simpleType, this is the base type.
+	 */
+	private QName baseType;
 	/**
 	  * If the specified node represents a supported JAX-RPC restriction,
 	  * a Vector is returned which contains the base type and the values.
@@ -107,9 +115,6 @@ public class Type {
     /* weather the type is Array */
     private boolean isArray;
     
-    private boolean canThisOccuredmoreThanOnceAllTheTime = false;
-    //to handle <xsd:element name="three" type="typens:enum" maxOccurs="unbounded" />
-    //types at the top level. But this is not allowed in the Schema spec. 
     private boolean isreferenced = false;
     
     private String language;
@@ -283,21 +288,7 @@ public class Type {
 		}		
 		return false;
 	}
-    /**
-     * @return
-     */
-    public boolean isCanThisOccuredmoreThanOnceAllTheTime() {
-        return canThisOccuredmoreThanOnceAllTheTime;
-    }
-
-    /**
-     * @param b
-     */
-    public void setCanThisOccuredmoreThanOnceAllTheTime(boolean b) {
-        canThisOccuredmoreThanOnceAllTheTime = b;
-    }
-    
-
+  
     /**
 	  * If the specified node represents a supported JAX-RPC enumeration,
 	  * a Vector is returned which contains the base type and the enumeration values.
@@ -314,8 +305,13 @@ public class Type {
      * @param vector
      */
     public void setRestrictiondata(Vector vector) {
-		isSimpleType = true;
-        enumerationdata = vector;
+		if (vector != null){
+			isSimpleType = true;
+			BaseType basetype = (BaseType)vector.firstElement();
+			if (basetype != null)
+				setBaseType(basetype.getQName());
+	        enumerationdata = vector;
+		}
     }
 
     /* (non-Javadoc)
@@ -381,6 +377,21 @@ public class Type {
 	 */
 	public void setSimpleType(boolean isSimpleType) {
 		this.isSimpleType = isSimpleType;
+	}
+
+	/**
+	 * @return QName
+	 */
+	public QName getBaseType() {
+		return baseType;
+	}
+
+	/**
+	 * Sets the baseType.
+	 * @param baseType The baseType to set
+	 */
+	public void setBaseType(QName baseType) {
+		this.baseType = baseType;
 	}
 
 }
