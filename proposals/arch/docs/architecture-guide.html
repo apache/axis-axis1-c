@@ -122,9 +122,11 @@ no use of onFault.</strong>
 <h3>Message Context</h3>
 
 The MessageContext interface provides access to request and response
-messages in terms of a Message abstract class which extends the
-javax.xml.soap.SOAPMessage abstract class hence limiting Axis to SOAP
-messages.
+messages in terms of a Message marker interface.
+<p>
+The alternative of an abstract Marker class extending the
+javax.xml.soap.SOAPMessage abstract class would limit Axis to SOAP
+messages and bias the flow subsystem towards the SAAJ interface style.
 
 </body>
 </html>

@@ -59,5 +59,4 @@ package org.apache.axis.flow;
  * Interface for messages that pass in message contexts through sequence
  * of handlers.
  */
-public abstract class Message extends javax.xml.soap.SOAPMessage {
-}
+public interface Message {}
