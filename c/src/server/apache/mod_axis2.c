@@ -67,6 +67,7 @@
 #include <apache2_0/http_protocol.h>
 #include <apache2_0/http_log.h>
 #include <apache2_0/ap_compat.h>
+#include <apache2_0/apr_tables.h>
 #include <axis/common/Packet.h>
 #include <malloc.h>
 
@@ -78,21 +79,18 @@ extern int process_request(Ax_soapstream* str);
 //extern int process(soapstream *);
 extern unsigned char chEBuf[1024];
 
+//Should dispatch the headers from within this method
+int send_transport_information(Ax_soapstream* hdr)
+{
+      ap_send_http_header((request_rec*)hdr->str.op_stream);
+	  return 0;
+}
+
 //Call initialize_module() [of Packet.h] from within this method
 void module_init(server_rec *svr_rec, apr_pool_t* p)
 {
-	initialize_module(1);
+	initialize_module(1, "");
 }
-
-
-//Call initialize_process() [of Packet.h] from within this method
-void  axis_Init(server_rec *svr_rec, apr_pool_t* p)
-{}
-//Call finalize_process() [of Packet.h] from within this method
-void axis_Fini(server_rec *svr_rec, apr_pool_t* p)
-{}
-
-
 
 int send_response_bytes(char* res, void* opstream)
 {
@@ -100,14 +98,12 @@ int send_response_bytes(char* res, void* opstream)
 	return 0;
 }
 
-
-
-//Should dispatch the headers from within this method
-int send_transport_information(Ax_soapstream* hdr)
-{
-      ap_send_http_header((request_rec*)hdr->str.op_stream);
-	  return 0;
-}
+//Call initialize_process() [of Packet.h] from within this method
+void  axis_Init(server_rec *svr_rec, apr_pool_t* p)
+{}
+//Call finalize_process() [of Packet.h] from within this method
+void axis_Fini(server_rec *svr_rec, apr_pool_t* p)
+{}
 
 int get_request_bytes(char* req, int reqsize, int* retsize, void* ipstream)
 {
@@ -123,10 +119,24 @@ int get_request_bytes(char* req, int reqsize, int* retsize, void* ipstream)
 static int mod_axis_method_handler (request_rec *req_rec)
 {
 	int rc;
+	int ix;
 	Ax_soapstream* sstr;
 	apr_array_header_t* arr;
+	apr_table_entry_t* pHeaderTable;
+	Ax_header* pAx_Headers;
+
+	if ((!req_rec->handler) || strcmp(req_rec->handler, "axis") != 0)
+	{
+        return DECLINED;
+	}
 
 	sstr = malloc(sizeof(Ax_soapstream));
+
+	sstr->transport.pSendFunct = send_response_bytes;
+	sstr->transport.pGetFunct = get_request_bytes;
+	sstr->transport.pSendTrtFunct = send_transport_information;
+	sstr->transport.pGetTrtFunct = send_transport_information; /*isn't there a get transport information function for apache module ?*/
+
 	sstr->trtype = APTHTTP;
 	//req_rec is used as both input and output streams
 	sstr->str.ip_stream = req_rec;
@@ -134,7 +144,7 @@ static int mod_axis_method_handler (request_rec *req_rec)
 	//just add some sessionid
 	sstr->sessionid = "this is temporary session id";
 
-	req_rec->content_type = "text/xml"; //for SOAP 1.2 this this should be "application/soap+xml" but keep this for the moment
+
 	//set up the read policy from the client.
 	if ((rc = ap_setup_client_block(req_rec, REQUEST_CHUNKED_ERROR)) != OK)
 	{
@@ -149,20 +159,32 @@ static int mod_axis_method_handler (request_rec *req_rec)
 	//input header elements. Finally assigns that to the axis soap data structure. 
 	sstr->so.http.ip_headercount = ap_table_elts(req_rec->headers_in)->nelts;  
 
-	//casting req_rec->headers_in to axis header struct and assigning that to the axis soap structure. Hope this is ok
 
-	//obtain the array_header from the headers_in table and assign it to the axis soap structure
-	arr = ap_table_elts(req_rec->headers_in);
-	sstr->so.http.ip_headers = (Ax_header*)arr->elts;
-
+	if (sstr->so.http.ip_headercount > 0)
+	{
+		//obtain the array_header from the headers_in table and assign it to the axis soap structure
+		arr = ap_table_elts(req_rec->headers_in);
+		pHeaderTable = arr->elts;
+		sstr->so.http.ip_headers = malloc(sizeof(Ax_header)*sstr->so.http.ip_headercount);
+		pAx_Headers = sstr->so.http.ip_headers;
+		for (ix = 0; ix < sstr->so.http.ip_headercount; ix++)
+		{
+			(pAx_Headers+ix)->headername = (pHeaderTable+ix)->key;
+			(pAx_Headers+ix)->headervalue = (pHeaderTable+ix)->val;
+		}	
+	}
 	//Determine the http method and assign it to the axis soap structure
 	switch (req_rec->method_number)
 	{
 	case M_GET:
       sstr->so.http.ip_method = AXIS_HTTP_GET;
+	  req_rec->content_type = "text/html"; 
       break;
 	case M_POST:
       sstr->so.http.ip_method = AXIS_HTTP_POST;
+	  req_rec->content_type = "text/xml"; 
+	//for SOAP 1.2 this this should be "application/soap+xml" 
+	//but keep this for the moment
       break;
 	default:
       sstr->so.http.ip_method = AXIS_HTTP_UNSUPPORTED;   
@@ -184,38 +206,24 @@ static int mod_axis_method_handler (request_rec *req_rec)
 	return OK;
 }
 
-/*
- * This function is a callback and it declares what other functions
- * should be called for request processing and configuration requests.
- * This callback function declares the Handlers for other events.
- */
 static void mod_axis_register_hooks (apr_pool_t *p)
 {
-	// I think this is the call to make to register a handler for method calls (GET PUT et. al.).
-	// We will ask to be last so that the comment has a higher tendency to
-	// go at the end.
+	ap_hook_child_init(module_init, NULL, NULL, APR_HOOK_REALLY_FIRST);
+	//ap_hook_pre_connection(axis_Init, NULL, NULL, APR_HOOK_FIRST);
 	ap_hook_handler(mod_axis_method_handler, NULL, NULL, APR_HOOK_LAST);
+	//ap_hook_process_connection(axis_Fini, NULL, NULL, APR_HOOK_REALLY_LAST);
 }
 
-/*
- * Declare and populate the module's data structure.  The
- * name of this structure ('tut1_module') is important - it
- * must match the name of the module.  This structure is the
- * only "glue" between the httpd core and the module.
- */
-module AP_MODULE_DECLARE_DATA mod_axis =
+
+module AP_MODULE_DECLARE_DATA axis_module =
 {
-	// Only one callback function is provided.  Real
-	// modules will need to declare callback functions for
-	// server/directory configuration, configuration merging
-	// and other tasks.
+
 	STANDARD20_MODULE_STUFF,
 	NULL,
 	NULL,
 	NULL,
 	NULL,
 	NULL,
-	mod_axis_register_hooks,			/* callback for registering hooks */
-	//	mod_tut1_register_hooks
+	mod_axis_register_hooks,
 };
 
