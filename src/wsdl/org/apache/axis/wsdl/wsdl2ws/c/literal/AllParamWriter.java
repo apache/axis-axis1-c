@@ -24,7 +24,6 @@ package org.apache.axis.wsdl.wsdl2ws.c.literal;
 import java.util.Iterator;
 
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
-import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;

@@ -8,8 +8,6 @@ Byte::Byte():m_Byte(NULL)
 
 Byte::~Byte()
 {
-    if (m_Byte)
-        delete m_Byte;
 }
 
 AxisChar* Byte::serialize(const void* value) throw (AxisSoapException)

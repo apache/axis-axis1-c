@@ -8,8 +8,6 @@ Integer::Integer():m_Integer(NULL)
 
 Integer::~Integer()
 {
-    if (m_Integer)
-        delete m_Integer;
 }
 
 AxisChar* Integer::serialize(const void* value) throw (AxisSoapException)

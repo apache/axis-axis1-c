@@ -887,139 +887,139 @@ SoapDeSerializer::getArraySize (const AnyElement * pElement)
 #define CONV_STRTOQNAME(str) AxisSoapDeSerializerStringToQName(str)
 #define CONV_STRTONOTATION(str) AxisSoapDeSerializerStringToNotation(str)
 
-unsigned char AxisSoapDeSerializerStringToUnsignedByte(const char *valueAsChar)
+xsd__unsignedByte * AxisSoapDeSerializerStringToUnsignedByte(const char *valueAsChar)
 {
     UnsignedByte unsignedByteDeserializer;
-    return *( unsignedByteDeserializer.deserializeUnsignedByte(valueAsChar));
+    return unsignedByteDeserializer.deserializeUnsignedByte(valueAsChar);
 }
 
-unsigned short AxisSoapDeSerializerStringToUnsignedShort(const char *valueAsChar)
+xsd__unsignedShort * AxisSoapDeSerializerStringToUnsignedShort(const char *valueAsChar)
 {
     UnsignedShort unsignedShortDeserializer;
-    return *( unsignedShortDeserializer.deserializeUnsignedShort(valueAsChar));
+    return unsignedShortDeserializer.deserializeUnsignedShort(valueAsChar);
 }
 
-unsigned int AxisSoapDeSerializerStringToUnsignedInt(const char *valueAsChar)
+xsd__unsignedInt * AxisSoapDeSerializerStringToUnsignedInt(const char *valueAsChar)
 {
     UnsignedInt unsignedIntDeserializer;
-    return *( unsignedIntDeserializer.deserializeUnsignedInt(valueAsChar));
+    return unsignedIntDeserializer.deserializeUnsignedInt(valueAsChar);
 }
 
-unsigned long AxisSoapDeSerializerStringToUnsignedLong(const char *valueAsChar)
+xsd__unsignedLong * AxisSoapDeSerializerStringToUnsignedLong(const char *valueAsChar)
 {
     UnsignedLong unsignedLongDeserializer;
-    return *(unsignedLongDeserializer.deserializeUnsignedLong(valueAsChar));
+    return unsignedLongDeserializer.deserializeUnsignedLong(valueAsChar);
 }
 
-LONGLONG AxisSoapDeSerializerStringToNonNegativeInteger(const char *valueAsChar)
+unsigned LONGLONG * AxisSoapDeSerializerStringToNonNegativeInteger(const char *valueAsChar)
 {
     NonNegativeInteger nonNegativeIntegerDeserializer;
-    return *(nonNegativeIntegerDeserializer.deserializeNonNegativeInteger(valueAsChar));
+    return nonNegativeIntegerDeserializer.deserializeNonNegativeInteger(valueAsChar);
 }
 
-char AxisSoapDeSerializerStringToByte(const char *valueAsChar)
+xsd__byte * AxisSoapDeSerializerStringToByte(const char *valueAsChar)
 {
     Byte byteDeserializer;
-    return *(byteDeserializer.deserializeByte(valueAsChar));
+    return byteDeserializer.deserializeByte(valueAsChar);
 }
 
-short AxisSoapDeSerializerStringToShort(const char *valueAsChar)
+xsd__short * AxisSoapDeSerializerStringToShort(const char *valueAsChar)
 {
     Short shortDeserializer;
-    return *(shortDeserializer.deserializeShort(valueAsChar));
+    return shortDeserializer.deserializeShort(valueAsChar);
 }
 
-int AxisSoapDeSerializerStringToInt(const char *valueAsChar)
+xsd__int * AxisSoapDeSerializerStringToInt(const char *valueAsChar)
 {
     Int intDeserializer;
-    return *(intDeserializer.deserializeInt(valueAsChar));
+    return intDeserializer.deserializeInt(valueAsChar);
 }
 
-LONGLONG AxisSoapDeSerializerStringToLong(const char *valueAsChar)
+xsd__long * AxisSoapDeSerializerStringToLong(const char *valueAsChar)
 {
     Long longDeserializer;
-    return *(longDeserializer.deserializeLong(valueAsChar));
+    return longDeserializer.deserializeLong(valueAsChar);
 }
 
-LONGLONG AxisSoapDeSerializerStringToInteger(const char *valueAsChar)
+xsd__integer * AxisSoapDeSerializerStringToInteger(const char *valueAsChar)
 {
     Integer integerDeserializer;
-    return *( integerDeserializer.deserializeInteger(valueAsChar));
+    return integerDeserializer.deserializeInteger(valueAsChar);
 }
 
-double AxisSoapDeSerializerStringToDecimal(const char *valueAsChar)
+xsd__decimal * AxisSoapDeSerializerStringToDecimal(const char *valueAsChar)
 {
 	Decimal decimalDeserializer;
-	return *( decimalDeserializer.deserializeDecimal(valueAsChar));
+	return decimalDeserializer.deserializeDecimal(valueAsChar);
 }
 
-double AxisSoapDeSerializerStringToDouble(const char *valueAsChar)
+xsd__double * AxisSoapDeSerializerStringToDouble(const char *valueAsChar)
 {
 	Double doubleDeserializer;
-	return *( doubleDeserializer.deserializeDouble(valueAsChar));
+	return doubleDeserializer.deserializeDouble(valueAsChar);
 }
 
-float AxisSoapDeSerializerStringToFloat(const char *valueAsChar)
+xsd__float * AxisSoapDeSerializerStringToFloat(const char *valueAsChar)
 {
 	Float floatDeserializer;
-	return *( floatDeserializer.deserializeFloat(valueAsChar));
+	return floatDeserializer.deserializeFloat(valueAsChar);
 }
 
-struct tm AxisSoapDeSerializerStringToTime(const char *valueAsChar)
+xsd__time * AxisSoapDeSerializerStringToTime(const char *valueAsChar)
 {
 	Time timeDeserializer;
-	return *(timeDeserializer.deserializeTime(valueAsChar));
+	return timeDeserializer.deserializeTime(valueAsChar);
 }
 
-struct tm AxisSoapDeSerializerStringToDate(const char *valueAsChar)
+xsd__date * AxisSoapDeSerializerStringToDate(const char *valueAsChar)
 {
 	Date dateDeserializer;
-	return *(dateDeserializer.deserializeDate(valueAsChar));
+	return dateDeserializer.deserializeDate(valueAsChar);
 }
 
-struct tm AxisSoapDeSerializerStringToDateTime(const char *valueAsChar)
+xsd__dateTime * AxisSoapDeSerializerStringToDateTime(const char *valueAsChar)
 {
 	DateTime dateTimeDeserializer;
-	return *(dateTimeDeserializer.deserializeDateTime(valueAsChar));
+	return dateTimeDeserializer.deserializeDateTime(valueAsChar);
 }
 
-long AxisSoapDeSerializerStringToDuration(const char *valueAsChar)
+xsd__duration * AxisSoapDeSerializerStringToDuration(const char *valueAsChar)
 {
 	Duration durationDeserializer;
-	return *(durationDeserializer.deserializeDuration(valueAsChar));
+	return durationDeserializer.deserializeDuration(valueAsChar);
 }
 
-xsd__hexBinary AxisSoapDeSerializerStringToHexBinary(const char *valueAsChar)
+xsd__hexBinary * AxisSoapDeSerializerStringToHexBinary(const char *valueAsChar)
 {
 	HexBinary hexBinaryDeserializer;
-	return *( hexBinaryDeserializer.deserializeHexBinary(valueAsChar) );
+	return hexBinaryDeserializer.deserializeHexBinary(valueAsChar);
 }
 
-xsd__base64Binary AxisSoapDeSerializerStringToBase64Binary(const char *valueAsChar)
+xsd__base64Binary * AxisSoapDeSerializerStringToBase64Binary(const char *valueAsChar)
 {
 	Base64Binary base64BinaryDeserializer;
-	return *( base64BinaryDeserializer.deserializeBase64Binary(valueAsChar) );
+	return base64BinaryDeserializer.deserializeBase64Binary(valueAsChar);
 }
 
-AxisChar* AxisSoapDeSerializerStringToAnyURI(const char *valueAsChar)
+xsd__anyURI AxisSoapDeSerializerStringToAnyURI(const char *valueAsChar)
 {
 	AnyURI anyURIDeserializer;
 	return anyURIDeserializer.deserializeAnyURI(valueAsChar);
 }
 
-AxisChar* AxisSoapDeSerializerStringToString(const char *valueAsChar)
+xsd__string AxisSoapDeSerializerStringToString(const char *valueAsChar)
 {
 	String stringDeserializer;
 	return stringDeserializer.deserializeString(valueAsChar);
 }
 
-AxisChar* AxisSoapDeSerializerStringToQName(const char *valueAsChar)
+xsd__QName AxisSoapDeSerializerStringToQName(const char *valueAsChar)
 {
 	XSD_QName qnameDeserializer;
 	return qnameDeserializer.deserializeQName(valueAsChar);
 }
 
-AxisChar* AxisSoapDeSerializerStringToNotation(const char *valueAsChar)
+xsd__notation AxisSoapDeSerializerStringToNotation(const char *valueAsChar)
 {
 	NOTATION notationDeserializer;
 	return notationDeserializer.deserializeNOTATION(valueAsChar);
@@ -1055,6 +1055,36 @@ for (; nIndex < Array.m_Size; nIndex++)\
     if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))\
     {\
         ((cpp_type*)Array.m_Array)[nIndex] = \
+        *conv_func(m_pNode->m_pchNameOrValue);\
+        m_pNode = m_pParser->next(); /* skip end element node too */\
+        continue;\
+    }\
+    /* error : unexpected element type or end of stream */\
+    m_nStatus = AXIS_FAIL;\
+    delete [] (cpp_type*)Array.m_Array;\
+    Array.m_Array = 0;\
+    Array.m_Size = 0;\
+    return Array;\
+}\
+m_pNode = m_pParser->next(); /* skip end element node too */\
+return Array;
+
+#define DESERIALIZE_ENCODED_POINTER_ARRAY_BLOCK(cpp_type, conv_func) \
+Array.m_Array = new cpp_type[Array.m_Size];\
+if (!Array.m_Array)\
+{\
+    Array.m_Size = 0;\
+    m_nStatus = AXIS_FAIL;\
+    return Array;\
+}\
+for (; nIndex < Array.m_Size; nIndex++)\
+{\
+    /* wrapper node without type info  Ex: <item>*/\
+    m_pNode = m_pParser->next(); \
+    m_pNode = m_pParser->next(true); /* charactor node */\
+    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))\
+    {\
+        ((cpp_type*)Array.m_Array)[nIndex] = \
         conv_func(m_pNode->m_pchNameOrValue);\
         m_pNode = m_pParser->next(); /* skip end element node too */\
         continue;\
@@ -1070,6 +1100,80 @@ m_pNode = m_pParser->next(); /* skip end element node too */\
 return Array;
 
 #define DESERIALIZE_LITERAL_ARRAY_BLOCK(cpp_type, conv_func) \
+            Array.m_Array = new cpp_type[INITIAL_ARRAY_SIZE];\
+            if (!Array.m_Array) return Array;\
+            Array.m_Size = INITIAL_ARRAY_SIZE;\
+            while(true)\
+            {\
+                for (; nIndex < Array.m_Size; nIndex++)\
+                {\
+                    if (!m_pNode) \
+                    /* if there is an unprocessed node that may be one left */\
+                    /* from last array deserialization */\
+                        m_pNode = m_pParser->next();\
+                        /* wrapper node without type info Ex: <phonenumbers>*/\
+                    if (!m_pNode)\
+                    {\
+                        m_nStatus = AXIS_FAIL;\
+                        delete [] (cpp_type*)Array.m_Array;\
+                        Array.m_Array = 0;\
+                        Array.m_Size = 0;\
+                        return Array;\
+                    }\
+                    if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))\
+                    {\
+                        m_pNode = m_pParser->next(true); /* charactor node */\
+                        if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))\
+                        {\
+                            ((cpp_type*)(Array.m_Array))[nIndex] = \
+                            *(conv_func(m_pNode->m_pchNameOrValue));\
+                            m_pNode = m_pParser->next(); \
+                            /* skip end element node too */\
+                            m_pNode = NULL; \
+                            /* this is important in doc/lit style when */\
+                            /* deserializing arrays */\
+                            continue;\
+                        }\
+                        /* error : unexpected element type or */\
+                        /* end of the stream */\
+                    }\
+                    else\
+                    {\
+                        if (nIndex > 0)\
+                        {\
+                            Array.m_Size = nIndex; \
+                            /* put the actual deserialized item size */\
+                            /* note we do not make m_pNode = NULL because */\
+                            /* this node doesnot belong to this array */\
+                            return Array;\
+                        }\
+                        /* error : no elements deserialized */\
+                    }\
+                    /* if we come here it is an error situation */\
+                    m_nStatus = AXIS_FAIL;\
+                    m_pNode = NULL;\
+                    delete [] (cpp_type*)Array.m_Array;\
+                    Array.m_Array = 0;\
+                    Array.m_Size = 0;\
+                    return Array;\
+                }\
+                /* if we come here that means the array allocated is */\
+                /* not enough. So double it */\
+                void *tmp=Array.m_Array;\
+                Array.m_Array = new cpp_type[Array.m_Size*2];\
+                if (!Array.m_Array) \
+                {\
+                    Array.m_Size = 0;\
+                    return Array;\
+                }\
+                memcpy(Array.m_Array,tmp,Array.m_Size*sizeof(cpp_type));\
+                delete [] (cpp_type*)tmp;\
+                Array.m_Size *= 2;\
+                /*Array.m_RealSize = Array.m_Size;*/\
+            }\
+            break;
+
+#define DESERIALIZE_LITERAL_POINTER_ARRAY_BLOCK(cpp_type, conv_func) \
             Array.m_Array = new cpp_type[INITIAL_ARRAY_SIZE];\
             if (!Array.m_Array) return Array;\
             Array.m_Size = INITIAL_ARRAY_SIZE;\
@@ -1176,51 +1280,50 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 		    switch (nType)
 		    {
 		    case XSD_INT:
-                DESERIALIZE_ENCODED_ARRAY_BLOCK (int, CONV_STRTOINT)
+                DESERIALIZE_ENCODED_ARRAY_BLOCK (xsd__int, CONV_STRTOINT)
 		    case XSD_UNSIGNEDINT:
-				DESERIALIZE_ENCODED_ARRAY_BLOCK (unsigned int, CONV_STRTOUNSIGNEDINT)
+				DESERIALIZE_ENCODED_ARRAY_BLOCK (xsd__unsignedInt, CONV_STRTOUNSIGNEDINT)
 		    case XSD_SHORT:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (short,CONV_STRTOSHORT)
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (xsd__short,CONV_STRTOSHORT)
 		    case XSD_UNSIGNEDSHORT:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK(unsigned short, CONV_STRTOUNSIGNEDSHORT)
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK(xsd__unsignedShort, CONV_STRTOUNSIGNEDSHORT)
 		    case XSD_BYTE:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (char, CONV_STRTOBYTE)
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (xsd__byte, CONV_STRTOBYTE)
 		    case XSD_UNSIGNEDBYTE:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (unsigned char, CONV_STRTOUNSIGNEDBYTE)
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (xsd__unsignedByte, CONV_STRTOUNSIGNEDBYTE)
 		    case XSD_LONG:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (LONGLONG, CONV_STRTOLONG)
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (xsd__long, CONV_STRTOLONG)
 		    case XSD_INTEGER:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (LONGLONG, CONV_STRTOINTEGER)
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (xsd__integer, CONV_STRTOINTEGER)
 		    case XSD_UNSIGNEDLONG:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (unsigned long, CONV_STRTOUNSIGNEDLONG)
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (xsd__unsignedLong, CONV_STRTOUNSIGNEDLONG)
 		    case XSD_FLOAT:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (float, CONV_STRTOFLOAT)
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (xsd__float, CONV_STRTOFLOAT)
 		    case XSD_DOUBLE:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (double, CONV_STRTODOUBLE)
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (xsd__double, CONV_STRTODOUBLE)
 		    case XSD_DECIMAL:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (double, CONV_STRTODECIMAL)
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (xsd__decimal, CONV_STRTODECIMAL)
 		    case XSD_ANYURI:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (AxisChar *, CONV_STRTOANYURI)
+		    	DESERIALIZE_ENCODED_POINTER_ARRAY_BLOCK (xsd__anyURI, CONV_STRTOANYURI)
 		    case XSD_STRING:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (AxisChar *, CONV_STRTOSTRING)
+		    	DESERIALIZE_ENCODED_POINTER_ARRAY_BLOCK (xsd__string, CONV_STRTOSTRING)
 		    case XSD_QNAME:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (AxisChar *, CONV_STRTOQNAME)
+		    	DESERIALIZE_ENCODED_POINTER_ARRAY_BLOCK (xsd__QName, CONV_STRTOQNAME)
 		    case XSD_NOTATION:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (AxisChar *, CONV_STRTONOTATION)
+		    	DESERIALIZE_ENCODED_POINTER_ARRAY_BLOCK (xsd__notation, CONV_STRTONOTATION)
 		    case XSD_BASE64BINARY:
 		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (xsd__base64Binary, CONV_STRTOBASE64BINARY)
 		    case XSD_HEXBINARY:
 		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (xsd__hexBinary, CONV_STRTOHEXBINARY)
 		    case XSD_DATETIME:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (struct tm, CONV_STRTODATETIME)
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (xsd__dateTime, CONV_STRTODATETIME)
 		    case XSD_DATE:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (struct tm, CONV_STRTODATE)
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (xsd__date, CONV_STRTODATE)
 		    case XSD_TIME:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (struct tm, CONV_STRTOTIME)
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (xsd__time, CONV_STRTOTIME)
 		    case XSD_DURATION:
-		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (long, CONV_STRTODURATION)
+		    	DESERIALIZE_ENCODED_ARRAY_BLOCK (xsd__duration, CONV_STRTODURATION)
 		    case XSD_BOOLEAN:
-				// DESERIALIZE_ENCODED_ARRAY_BLOCK(long, CONV_STRTOL)
 				Array.m_Array = new long[Array.m_Size];
 		
 				if (!Array.m_Array)
@@ -1240,7 +1343,7 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 				    {
 				    	Boolean booleanDeserializer;
 				    	((long *) Array.m_Array)[nIndex] =
-				    		booleanDeserializer.deserializeBoolean(m_pNode->m_pchNameOrValue);
+				    		*(booleanDeserializer.deserializeBoolean(m_pNode->m_pchNameOrValue));
 						m_pNode = m_pParser->next ();	/* skip end element node too */
 			
 						continue;
@@ -1263,49 +1366,119 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 		switch (nType)
 		{
 		case XSD_INT:
-            DESERIALIZE_LITERAL_ARRAY_BLOCK (int, CONV_STRTOINT)	
+            DESERIALIZE_LITERAL_ARRAY_BLOCK (xsd__int, CONV_STRTOINT)	
 		case XSD_UNSIGNEDINT:
-		    DESERIALIZE_LITERAL_ARRAY_BLOCK (unsigned int, CONV_STRTOUNSIGNEDINT)
+		    DESERIALIZE_LITERAL_ARRAY_BLOCK (xsd__unsignedInt, CONV_STRTOUNSIGNEDINT)
 		case XSD_SHORT:
-			DESERIALIZE_LITERAL_ARRAY_BLOCK (short, CONV_STRTOSHORT)
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (xsd__short, CONV_STRTOSHORT)
 		case XSD_UNSIGNEDSHORT:
-			DESERIALIZE_LITERAL_ARRAY_BLOCK (unsigned short, CONV_STRTOUNSIGNEDSHORT)
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (xsd__unsignedShort, CONV_STRTOUNSIGNEDSHORT)
 		case XSD_BYTE:
-			DESERIALIZE_LITERAL_ARRAY_BLOCK (char, CONV_STRTOBYTE)
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (xsd__byte, CONV_STRTOBYTE)
 		case XSD_UNSIGNEDBYTE:
-			DESERIALIZE_LITERAL_ARRAY_BLOCK (unsigned char, CONV_STRTOUNSIGNEDBYTE)
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (xsd__unsignedByte, CONV_STRTOUNSIGNEDBYTE)
 		case XSD_LONG:
-			DESERIALIZE_ENCODED_ARRAY_BLOCK (LONGLONG, CONV_STRTOLONG)
+            Array.m_Array = new xsd__long[INITIAL_ARRAY_SIZE];
+            if (!Array.m_Array) return Array;
+            Array.m_Size = INITIAL_ARRAY_SIZE;
+            while(true)
+            {
+                for (; nIndex < Array.m_Size; nIndex++)
+                {
+                    if (!m_pNode) 
+                    /* if there is an unprocessed node that may be one left */
+                    /* from last array deserialization */
+                        m_pNode = m_pParser->next();
+                        /* wrapper node without type info Ex: <phonenumbers>*/
+                    if (!m_pNode)
+                    {
+                        m_nStatus = AXIS_FAIL;
+                        delete [] (xsd__long*)Array.m_Array;
+                        Array.m_Array = 0;
+                        Array.m_Size = 0;
+                        return Array;
+                    }
+                    if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
+                    {
+                        m_pNode = m_pParser->next(true); /* charactor node */
+                        if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+                        {
+                            ((xsd__long*)(Array.m_Array))[nIndex] = 
+                            *(CONV_STRTOLONG(m_pNode->m_pchNameOrValue));
+                            m_pNode = m_pParser->next(); 
+                            /* skip end element node too */
+                            m_pNode = NULL; 
+                            /* this is important in doc/lit style when */
+                            /* deserializing arrays */
+                            continue;
+                        }
+                        /* error : unexpected element type or */
+                        /* end of the stream */
+                    }
+                    else
+                    {
+                        if (nIndex > 0)
+                        {
+                            Array.m_Size = nIndex; 
+                            /* put the actual deserialized item size */
+                            /* note we do not make m_pNode = NULL because */
+                            /* this node doesnot belong to this array */
+                            return Array;
+                        }
+                        /* error : no elements deserialized */
+                    }
+                    /* if we come here it is an error situation */
+                    m_nStatus = AXIS_FAIL;
+                    m_pNode = NULL;
+                    delete [] (xsd__long*)Array.m_Array;
+                    Array.m_Array = 0;
+                    Array.m_Size = 0;
+                    return Array;
+                }
+                /* if we come here that means the array allocated is */
+                /* not enough. So double it */
+                void *tmp=Array.m_Array;
+                Array.m_Array = new xsd__long[Array.m_Size*2];
+                if (!Array.m_Array) 
+                {
+                    Array.m_Size = 0;
+                    return Array;
+                }
+                memcpy(Array.m_Array,tmp,Array.m_Size*sizeof(xsd__long));
+                delete [] (xsd__long*)tmp;
+                Array.m_Size *= 2;
+            }
+            break;
 		case XSD_INTEGER:
-		    DESERIALIZE_LITERAL_ARRAY_BLOCK (LONGLONG, CONV_STRTOINTEGER)
+		    DESERIALIZE_LITERAL_ARRAY_BLOCK (xsd__integer, CONV_STRTOINTEGER)
 		case XSD_UNSIGNEDLONG:
-			DESERIALIZE_LITERAL_ARRAY_BLOCK (unsigned long, CONV_STRTOUNSIGNEDLONG)
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (xsd__unsignedLong, CONV_STRTOUNSIGNEDLONG)
 		case XSD_FLOAT:
-			DESERIALIZE_LITERAL_ARRAY_BLOCK (float, CONV_STRTOFLOAT)
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (xsd__float, CONV_STRTOFLOAT)
 		case XSD_DOUBLE:
-			DESERIALIZE_LITERAL_ARRAY_BLOCK (double, CONV_STRTODOUBLE)
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (xsd__double, CONV_STRTODOUBLE)
 		case XSD_DECIMAL:
-			DESERIALIZE_LITERAL_ARRAY_BLOCK (double, CONV_STRTODECIMAL)
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (xsd__decimal, CONV_STRTODECIMAL)
 		case XSD_ANYURI:
-			DESERIALIZE_LITERAL_ARRAY_BLOCK (AxisChar *, CONV_STRTOANYURI)
+			DESERIALIZE_LITERAL_POINTER_ARRAY_BLOCK (xsd__anyURI, CONV_STRTOANYURI)
 		case XSD_STRING:
-			DESERIALIZE_LITERAL_ARRAY_BLOCK (AxisChar *, CONV_STRTOSTRING)
+			DESERIALIZE_LITERAL_POINTER_ARRAY_BLOCK (xsd__string, CONV_STRTOSTRING)
 		case XSD_QNAME:
-			DESERIALIZE_LITERAL_ARRAY_BLOCK (AxisChar *, CONV_STRTOQNAME)
+			DESERIALIZE_LITERAL_POINTER_ARRAY_BLOCK (xsd__QName, CONV_STRTOQNAME)
 		case XSD_NOTATION:
-			DESERIALIZE_LITERAL_ARRAY_BLOCK (AxisChar *, CONV_STRTONOTATION)
+			DESERIALIZE_LITERAL_POINTER_ARRAY_BLOCK (xsd__notation, CONV_STRTONOTATION)
 		case XSD_HEXBINARY:
 			DESERIALIZE_LITERAL_ARRAY_BLOCK (xsd__hexBinary, CONV_STRTOHEXBINARY)
 		case XSD_BASE64BINARY:
 			DESERIALIZE_LITERAL_ARRAY_BLOCK (xsd__base64Binary, CONV_STRTOBASE64BINARY)
 	    case XSD_DATETIME:
-	    	DESERIALIZE_LITERAL_ARRAY_BLOCK (struct tm, CONV_STRTODATETIME)
+	    	DESERIALIZE_LITERAL_ARRAY_BLOCK (xsd__dateTime, CONV_STRTODATETIME)
 	    case XSD_DATE:
-	    	DESERIALIZE_LITERAL_ARRAY_BLOCK (struct tm, CONV_STRTODATE)
+	    	DESERIALIZE_LITERAL_ARRAY_BLOCK (xsd__date, CONV_STRTODATE)
 	    case XSD_TIME:
-	    	DESERIALIZE_LITERAL_ARRAY_BLOCK (struct tm, CONV_STRTOTIME)
+	    	DESERIALIZE_LITERAL_ARRAY_BLOCK (xsd__time, CONV_STRTOTIME)
 		case XSD_DURATION:
-			DESERIALIZE_LITERAL_ARRAY_BLOCK (long, CONV_STRTODURATION)
+			DESERIALIZE_LITERAL_ARRAY_BLOCK (xsd__duration, CONV_STRTODURATION)
 		case XSD_BOOLEAN:
 	//          DESERIALIZE_LITERAL_ARRAY_BLOCK(long, CONV_STRTOL)
 	// Originally, The above macro was all that was required, but because boolean
@@ -1350,7 +1523,7 @@ SoapDeSerializer::getBasicArray (XSDTYPE nType,
 				{
 				    Boolean booleanDeserializer;
 				    ((long *) Array.m_Array)[nIndex] =
-				   		booleanDeserializer.deserializeBoolean(m_pNode->m_pchNameOrValue);
+				   		*(booleanDeserializer.deserializeBoolean(m_pNode->m_pchNameOrValue));
 	
 				    m_pNode = m_pParser->next ();
 				    /* skip end element node too */
@@ -1485,16 +1658,20 @@ SoapDeSerializer::getCmplxObject (void *pDZFunct, void *pCreFunct,
 	     */
 	    if (0 != m_pNode->m_pchAttributes[0])
 	    {
-		m_pCurrNode = m_pNode;
-		/*
-		 * Need to verify if the return value is NULL.
-		 */
-		if (getAttributeAsBoolean ("nil", 0) == true_)
-		{
-		    m_pParser->next ();
-		    m_pNode = NULL;
-		    return NULL;
-		}
+    		m_pCurrNode = m_pNode;
+    		/*
+    		 * Need to verify if the return value is NULL.
+    		 */
+            xsd__boolean * isNill = getAttributeAsBoolean("nil", 0);
+            if (NULL != isNill)
+            {
+                if(true_ == *isNill)
+        		{
+        		    m_pParser->next ();
+        		    m_pNode = NULL;
+        		    return NULL;
+        		}
+            }
 	    }
 	    m_pNode = NULL;	/* node identified and used */
 	    void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct)
@@ -1630,7 +1807,7 @@ SoapDeSerializer::getCmplxFaultObject (void *pDZFunct, void *pCreFunct,
 		/*
 		 * Need to verify if the return value is NULL.
 		 */
-		if (getAttributeAsBoolean ("nil", 0) == true_)
+		if (*(getAttributeAsBoolean ("nil", 0)) == true_)
 		{
 		    m_pParser->next ();
 		    m_pNode = NULL;
@@ -1745,11 +1922,11 @@ SoapDeSerializer::getElementForAttributes (const AxisChar * pName,
  * Before calling any of getAttributeAs... API functions the user should move 
  * current Element to the right Element by calling GetElementForAttributes(..)
  */
-int
+xsd__int *
 SoapDeSerializer::getAttributeAsInt (const AxisChar * pName,
 				     const AxisChar * pNamespace)
 {
-    int ret = 0;
+    xsd__int * ret = NULL;
     if (!m_pCurrNode)
     {
 	/* Optional attributes :  _ m_nStatus = AXIS_FAIL; */
@@ -1763,7 +1940,7 @@ SoapDeSerializer::getAttributeAsInt (const AxisChar * pName,
 	    if (0 == strcmp (m_pCurrNode->m_pchAttributes[i], pName))
 	    {
             Int intDeserializer;
-            ret = *(intDeserializer.deserializeInt(m_pCurrNode->m_pchAttributes[i + 2]));
+            ret = intDeserializer.deserializeInt(m_pCurrNode->m_pchAttributes[i + 2]);
 		return ret;
 	    }
 	}
@@ -1776,11 +1953,11 @@ SoapDeSerializer::getAttributeAsInt (const AxisChar * pName,
     return ret;
 }
 
-xsd__boolean
+xsd__boolean *
     SoapDeSerializer::getAttributeAsBoolean (const AxisChar * pName,
 					     const AxisChar * pNamespace)
 {
-    xsd__boolean ret = false_;
+    xsd__boolean * ret = NULL;
     if (!m_pCurrNode)
     {
 	/* Optional attributes :  _ m_nStatus = AXIS_FAIL; */
@@ -1806,131 +1983,131 @@ xsd__boolean
     return ret;
 }
 
-unsigned int
+xsd__unsignedInt *
 SoapDeSerializer::getAttributeAsUnsignedInt (const AxisChar * pName,
 					     const AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (unsigned int, CONV_STRTOUNSIGNEDINT,
+DESERIALIZE_GET_ATTRIBUTE_AS (xsd__unsignedInt *, CONV_STRTOUNSIGNEDINT,
 				  INIT_VALUE_NUMBER)}
-short
+xsd__short *
 SoapDeSerializer::getAttributeAsShort (const AxisChar * pName,
 				       const AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (short, CONV_STRTOSHORT, INIT_VALUE_NUMBER)}
-unsigned short
+DESERIALIZE_GET_ATTRIBUTE_AS (xsd__short *, CONV_STRTOSHORT, INIT_VALUE_NUMBER)}
+xsd__unsignedShort *
 SoapDeSerializer::getAttributeAsUnsignedShort (const AxisChar *
 					       pName,
 					       const AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (unsigned short, CONV_STRTOUNSIGNEDSHORT,
+DESERIALIZE_GET_ATTRIBUTE_AS (xsd__unsignedShort *, CONV_STRTOUNSIGNEDSHORT,
 				  INIT_VALUE_NUMBER)}
-char
+xsd__byte *
 SoapDeSerializer::getAttributeAsByte (const AxisChar * pName, const
 				      AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (char, CONV_STRTOBYTE, INIT_VALUE_NUMBER)}
-unsigned char
+DESERIALIZE_GET_ATTRIBUTE_AS (xsd__byte *, CONV_STRTOBYTE, INIT_VALUE_NUMBER)}
+xsd__unsignedByte *
 SoapDeSerializer::getAttributeAsUnsignedByte (const AxisChar *
 					      pName, const
 					      AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (unsigned char, CONV_STRTOUNSIGNEDBYTE,
+DESERIALIZE_GET_ATTRIBUTE_AS (xsd__unsignedByte *, CONV_STRTOUNSIGNEDBYTE,
 				  INIT_VALUE_NUMBER)}
-LONGLONG
+xsd__long *
 SoapDeSerializer::getAttributeAsLong (const AxisChar * pName, const
 				      AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (LONGLONG, CONV_STRTOLONG, INIT_VALUE_NUMBER)}
-long
+DESERIALIZE_GET_ATTRIBUTE_AS (xsd__long *, CONV_STRTOLONG, INIT_VALUE_NUMBER)}
+xsd__integer *
 SoapDeSerializer::getAttributeAsInteger (const AxisChar * pName, const
 					 AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (LONGLONG, CONV_STRTOINTEGER, INIT_VALUE_NUMBER)}
-unsigned long
+DESERIALIZE_GET_ATTRIBUTE_AS (xsd__integer *, CONV_STRTOINTEGER, INIT_VALUE_NUMBER)}
+xsd__unsignedLong *
 SoapDeSerializer::getAttributeAsUnsignedLong (const AxisChar *
 					      pName, const
 					      AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (unsigned long, CONV_STRTOUNSIGNEDLONG,
+DESERIALIZE_GET_ATTRIBUTE_AS (xsd__unsignedLong *, CONV_STRTOUNSIGNEDLONG,
 				  INIT_VALUE_NUMBER)}
-float
+xsd__float *
 SoapDeSerializer::getAttributeAsFloat (const AxisChar * pName, const
 				       AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (float, CONV_STRTOFLOAT, INIT_VALUE_NUMBER)}
-double
+DESERIALIZE_GET_ATTRIBUTE_AS (xsd__float *, CONV_STRTOFLOAT, INIT_VALUE_NUMBER)}
+xsd__double *
 SoapDeSerializer::getAttributeAsDouble (const AxisChar * pName, const
 					AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (double, CONV_STRTODOUBLE, INIT_VALUE_NUMBER)}
-double
+DESERIALIZE_GET_ATTRIBUTE_AS (xsd__double *, CONV_STRTODOUBLE, INIT_VALUE_NUMBER)}
+xsd__decimal *
 SoapDeSerializer::getAttributeAsDecimal (const AxisChar * pName, const
 					 AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (double, CONV_STRTODECIMAL, INIT_VALUE_NUMBER)}
-AxisChar *
+DESERIALIZE_GET_ATTRIBUTE_AS (xsd__decimal *, CONV_STRTODECIMAL, INIT_VALUE_NUMBER)}
+xsd__string
 SoapDeSerializer::getAttributeAsString (const AxisChar * pName, const
 					AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (AxisChar *, CONV_STRTOSTRING,
+DESERIALIZE_GET_ATTRIBUTE_AS (xsd__string, CONV_STRTOSTRING,
 				  INIT_VALUE_NUMBER)}
-AxisChar *
+xsd__anyURI
 SoapDeSerializer::getAttributeAsAnyURI (const AxisChar * pName, const
 					AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (AxisChar *, CONV_STRTOANYURI,
+DESERIALIZE_GET_ATTRIBUTE_AS (xsd__anyURI, CONV_STRTOANYURI,
 				  INIT_VALUE_NUMBER)}
-AxisChar *
+xsd__QName
 SoapDeSerializer::getAttributeAsQName (const AxisChar * pName, const
 				       AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (AxisChar *, CONV_STRTOQNAME,
+DESERIALIZE_GET_ATTRIBUTE_AS (xsd__QName, CONV_STRTOQNAME,
 				  INIT_VALUE_NUMBER)}
-xsd__hexBinary
+xsd__hexBinary *
     SoapDeSerializer::getAttributeAsHexBinary (const AxisChar * pName,
 					       const AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (xsd__hexBinary, CONV_STRTOHEXBINARY,
-				  INIT_VALUE_XSDBINARY)}
-xsd__base64Binary
+DESERIALIZE_GET_ATTRIBUTE_AS (xsd__hexBinary *, CONV_STRTOHEXBINARY,
+				  INIT_VALUE_NUMBER)}
+xsd__base64Binary *
     SoapDeSerializer::getAttributeAsBase64Binary (const AxisChar *
 						  pName, const
 						  AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (xsd__base64Binary, CONV_STRTOBASE64BINARY,
-				  INIT_VALUE_XSDBINARY)}
-struct tm
+DESERIALIZE_GET_ATTRIBUTE_AS (xsd__base64Binary *, CONV_STRTOBASE64BINARY,
+				  INIT_VALUE_NUMBER)}
+xsd__dateTime *
 SoapDeSerializer::getAttributeAsDateTime (const AxisChar * pName,
 					  const AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (struct tm, CONV_STRTODATETIME,
-				  INIT_VALUE_DATETIME)}
-struct tm
+DESERIALIZE_GET_ATTRIBUTE_AS (xsd__dateTime *, CONV_STRTODATETIME,
+				  INIT_VALUE_NUMBER)}
+xsd__date *
 SoapDeSerializer::getAttributeAsDate (const AxisChar * pName, const
 				      AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (struct tm, CONV_STRTODATE,
-				  INIT_VALUE_DATETIME)}
-struct tm
+DESERIALIZE_GET_ATTRIBUTE_AS (xsd__date *, CONV_STRTODATE,
+				  INIT_VALUE_NUMBER)}
+xsd__time *
 SoapDeSerializer::getAttributeAsTime (const AxisChar * pName, const
 				      AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (struct tm, CONV_STRTOTIME,
-				  INIT_VALUE_DATETIME)}
-long
+DESERIALIZE_GET_ATTRIBUTE_AS (xsd__time *, CONV_STRTOTIME,
+				  INIT_VALUE_NUMBER)}
+xsd__duration *
 SoapDeSerializer::getAttributeAsDuration (const AxisChar * pName, const
 					  AxisChar * pNamespace)
 {
-DESERIALIZE_GET_ATTRIBUTE_AS (long, CONV_STRTODURATION, INIT_VALUE_NUMBER)}
+DESERIALIZE_GET_ATTRIBUTE_AS (xsd__duration *, CONV_STRTODURATION, INIT_VALUE_NUMBER)}
 
 /*
  * Deserializing Elements as values directly. 
  */
-xsd__boolean
+xsd__boolean *
 SoapDeSerializer::getElementAsBoolean (const AxisChar * pName,
 				       const AxisChar * pNamespace)
 {
-    xsd__boolean ret = false_;
+    xsd__boolean * ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
 	return ret;
     if (RPC_ENCODED == m_nStyle)
@@ -2000,11 +2177,11 @@ SoapDeSerializer::getElementAsBoolean (const AxisChar * pName,
     return ret;
 }
 
-int
+xsd__int *
 SoapDeSerializer::getElementAsInt (const AxisChar * pName,
 				   const AxisChar * pNamespace)
 {
-    int ret = 0;
+    xsd__int * ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
 	return ret;
     if (RPC_ENCODED == m_nStyle)
@@ -2019,7 +2196,7 @@ SoapDeSerializer::getElementAsInt (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
             Int intDeserializer;
-            ret = *(intDeserializer.deserializeInt(m_pNode->m_pchNameOrValue));
+            ret = intDeserializer.deserializeInt(m_pNode->m_pchNameOrValue);
     		m_pNode = m_pParser->next ();	/* skip end element node too */
     		return ret;
 	    }
@@ -2047,7 +2224,7 @@ SoapDeSerializer::getElementAsInt (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
             Int intDeserializer;
-            ret = *(intDeserializer.deserializeInt(m_pNode->m_pchNameOrValue));
+            ret = intDeserializer.deserializeInt(m_pNode->m_pchNameOrValue);
     		m_pNode = m_pParser->next ();	/* skip end element node too */
     		m_pNode = NULL;
 		/*
@@ -2072,17 +2249,17 @@ SoapDeSerializer::getElementAsInt (const AxisChar * pName,
 	    /* Not a must : m_nStatus = AXIS_FAIL; unexpected SOAP stream */
 	}
     }
-    m_nStatus = ret;		/* unexpected SOAP stream */
+    m_nStatus = 0;		/* unexpected SOAP stream */
 
     return ret;
 }
 
 
-unsigned int
+xsd__unsignedInt *
 SoapDeSerializer::getElementAsUnsignedInt (const AxisChar * pName,
 					   const AxisChar * pNamespace)
 {
-    unsigned int ret = 0;
+    xsd__unsignedInt * ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
 	return ret;
     if (RPC_ENCODED == m_nStyle)
@@ -2097,7 +2274,7 @@ SoapDeSerializer::getElementAsUnsignedInt (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
             UnsignedInt unsignedIntDeserializer;
-            ret = *( unsignedIntDeserializer.deserializeUnsignedInt(m_pNode->m_pchNameOrValue) );
+            ret = unsignedIntDeserializer.deserializeUnsignedInt(m_pNode->m_pchNameOrValue);
     		m_pNode = m_pParser->next ();	/* skip end element node too */
     		return ret;
 	    }
@@ -2123,7 +2300,7 @@ SoapDeSerializer::getElementAsUnsignedInt (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
             UnsignedInt unsignedIntDeserializer;
-            ret = *( unsignedIntDeserializer.deserializeUnsignedInt(m_pNode->m_pchNameOrValue) );
+            ret = unsignedIntDeserializer.deserializeUnsignedInt(m_pNode->m_pchNameOrValue);
     		m_pNode = m_pParser->next ();	/* skip end element node too */
     		m_pNode = NULL;
     		/* this is important in doc/lit style when deserializing
@@ -2152,11 +2329,11 @@ SoapDeSerializer::getElementAsUnsignedInt (const AxisChar * pName,
     return ret;
 }
 
-short
+xsd__short *
 SoapDeSerializer::getElementAsShort (const AxisChar * pName,
 				     const AxisChar * pNamespace)
 {
-    short ret = 0;
+    xsd__short * ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
 	return ret;
     if (RPC_ENCODED == m_nStyle)
@@ -2171,7 +2348,7 @@ SoapDeSerializer::getElementAsShort (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
             Short shortDeserializer;
-            ret = *( shortDeserializer.deserializeShort(m_pNode->m_pchNameOrValue));
+            ret = shortDeserializer.deserializeShort(m_pNode->m_pchNameOrValue);
     		m_pNode = m_pParser->next ();	/* skip end element node too */
     		return ret;
 	    }
@@ -2197,7 +2374,7 @@ SoapDeSerializer::getElementAsShort (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
             Short shortDeserializer;
-            ret = *( shortDeserializer.deserializeShort(m_pNode->m_pchNameOrValue));
+            ret = shortDeserializer.deserializeShort(m_pNode->m_pchNameOrValue);
     		m_pNode = m_pParser->next ();	/* skip end element node too */
     		m_pNode = NULL;
 		/* this is important in doc/lit style when deserializing
@@ -2228,12 +2405,12 @@ SoapDeSerializer::getElementAsShort (const AxisChar * pName,
     return ret;
 }
 
-unsigned short
+xsd__unsignedShort *
 SoapDeSerializer::getElementAsUnsignedShort (const AxisChar *
 					     pName, const
 					     AxisChar * pNamespace)
 {
-    unsigned short ret = 0;
+    xsd__unsignedShort * ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
 	return ret;
     if (RPC_ENCODED == m_nStyle)
@@ -2248,7 +2425,7 @@ SoapDeSerializer::getElementAsUnsignedShort (const AxisChar *
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
             UnsignedShort unsignedShortDeserializer;
-            ret = *( unsignedShortDeserializer.deserializeUnsignedShort(m_pNode->m_pchNameOrValue));
+            ret = unsignedShortDeserializer.deserializeUnsignedShort(m_pNode->m_pchNameOrValue);
     		m_pNode = m_pParser->next ();	/* skip end element node too */
     		return ret;
 	    }
@@ -2274,7 +2451,7 @@ SoapDeSerializer::getElementAsUnsignedShort (const AxisChar *
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
             UnsignedShort unsignedShortDeserializer;
-            ret = *( unsignedShortDeserializer.deserializeUnsignedShort(m_pNode->m_pchNameOrValue));
+            ret = unsignedShortDeserializer.deserializeUnsignedShort(m_pNode->m_pchNameOrValue);
     		m_pNode = m_pParser->next ();	/* skip end element node too */
     		m_pNode = NULL;
     		/* this is important in doc/lit style when deserializing 
@@ -2303,11 +2480,11 @@ SoapDeSerializer::getElementAsUnsignedShort (const AxisChar *
     return ret;
 }
 
-char
+xsd__byte *
 SoapDeSerializer::getElementAsByte (const AxisChar * pName,
 				    const AxisChar * pNamespace)
 {
-    char ret = 0;
+    xsd__byte * ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
 	return ret;
     if (RPC_ENCODED == m_nStyle)
@@ -2322,7 +2499,7 @@ SoapDeSerializer::getElementAsByte (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
             Byte byteDeserializer;
-            ret = *( byteDeserializer.deserializeByte(m_pNode->m_pchNameOrValue));
+            ret = byteDeserializer.deserializeByte(m_pNode->m_pchNameOrValue);
     		m_pNode = m_pParser->next ();	/* skip end element node too */
     		return ret;
 	    }
@@ -2348,7 +2525,7 @@ SoapDeSerializer::getElementAsByte (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
             Byte byteDeserializer;
-            ret = *( byteDeserializer.deserializeByte(m_pNode->m_pchNameOrValue));
+            ret = byteDeserializer.deserializeByte(m_pNode->m_pchNameOrValue);
     		m_pNode = m_pParser->next ();	/* skip end element node too */
     		m_pNode = NULL;
     		/* this is important in doc/lit style when deserializing
@@ -2377,11 +2554,11 @@ SoapDeSerializer::getElementAsByte (const AxisChar * pName,
     return ret;
 }
 
-unsigned char
+xsd__unsignedByte *
 SoapDeSerializer::getElementAsUnsignedByte (const AxisChar * pName,
 					    const AxisChar * pNamespace)
 {
-    unsigned char ret = 0;
+    xsd__unsignedByte * ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
 	return ret;
     if (RPC_ENCODED == m_nStyle)
@@ -2396,7 +2573,7 @@ SoapDeSerializer::getElementAsUnsignedByte (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
             UnsignedByte unsignedByteDeserializer;
-            ret = *( unsignedByteDeserializer.deserializeUnsignedByte(m_pNode->m_pchNameOrValue));
+            ret = unsignedByteDeserializer.deserializeUnsignedByte(m_pNode->m_pchNameOrValue);
     		m_pNode = m_pParser->next ();	/* skip end element node too */
     		return ret;
 	    }
@@ -2422,7 +2599,7 @@ SoapDeSerializer::getElementAsUnsignedByte (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
             UnsignedByte unsignedByteDeserializer;
-            ret = *( unsignedByteDeserializer.deserializeUnsignedByte(m_pNode->m_pchNameOrValue));
+            ret = unsignedByteDeserializer.deserializeUnsignedByte(m_pNode->m_pchNameOrValue);
     		m_pNode = m_pParser->next ();	/* skip end element node too */
     		m_pNode = NULL;
     		/* this is important in doc/lit style when deserializing
@@ -2451,11 +2628,11 @@ SoapDeSerializer::getElementAsUnsignedByte (const AxisChar * pName,
     return ret;
 }
 
-LONGLONG
+xsd__long *
     SoapDeSerializer::getElementAsLong (const AxisChar * pName,
 					const AxisChar * pNamespace)
 {
-    LONGLONG ret = 0;
+    xsd__long * ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
 	return ret;
     if (RPC_ENCODED == m_nStyle)
@@ -2470,7 +2647,7 @@ LONGLONG
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
             Long longDeserializer;
-            ret = *(longDeserializer.deserializeLong(m_pNode->m_pchNameOrValue));
+            ret = longDeserializer.deserializeLong(m_pNode->m_pchNameOrValue);
     		m_pNode = m_pParser->next ();	/* skip end element node too */
     		return ret;
 	    }
@@ -2496,7 +2673,7 @@ LONGLONG
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
             Long longSerializer;
-            ret = *(longSerializer.deserializeLong(m_pNode->m_pchNameOrValue));
+            ret = longSerializer.deserializeLong(m_pNode->m_pchNameOrValue);
     		m_pNode = m_pParser->next ();	/* skip end element node too */
     		m_pNode = NULL;
     		/* this is important in doc/lit style when deserializing 
@@ -2525,13 +2702,13 @@ LONGLONG
     return ret;
 }
 
-long
+xsd__integer *
 SoapDeSerializer::getElementAsInteger (const AxisChar * pName,
 				       const AxisChar * pNamespace)
 {
-    LONGLONG ret = 0;
+    xsd__integer * ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
-	return ret;
+    	return ret;
     if (RPC_ENCODED == m_nStyle)
     {
 	m_pNode = m_pParser->next ();
@@ -2544,7 +2721,7 @@ SoapDeSerializer::getElementAsInteger (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
             Integer integerDeserializer;
-    		ret = *(integerDeserializer.deserializeInteger(m_pNode->m_pchNameOrValue));
+    		ret = integerDeserializer.deserializeInteger(m_pNode->m_pchNameOrValue);
     	   	m_pNode = m_pParser->next ();	/* skip end element node too */
     		return ret;
 	    }
@@ -2570,7 +2747,7 @@ SoapDeSerializer::getElementAsInteger (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
     		Integer integerDeserializer;
-            ret = *(integerDeserializer.deserializeInteger(m_pNode->m_pchNameOrValue));
+            ret = integerDeserializer.deserializeInteger(m_pNode->m_pchNameOrValue);
     		m_pNode = m_pParser->next ();	/* skip end element node too */
     		m_pNode = NULL;
     		/* this is important in doc/lit style when deserializing
@@ -2599,13 +2776,13 @@ SoapDeSerializer::getElementAsInteger (const AxisChar * pName,
     return ret;
 }
 
-unsigned long
+xsd__unsignedLong *
 SoapDeSerializer::getElementAsUnsignedLong (const AxisChar * pName,
 					    const AxisChar * pNamespace)
 {
-    unsigned long ret = 0;
+    xsd__unsignedLong * ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
-	return ret;
+    	return ret;
     if (RPC_ENCODED == m_nStyle)
     {
 	m_pNode = m_pParser->next ();
@@ -2618,7 +2795,7 @@ SoapDeSerializer::getElementAsUnsignedLong (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
             UnsignedLong unsignedLongDeserializer;
-            ret = *( unsignedLongDeserializer.deserializeUnsignedLong(m_pNode->m_pchNameOrValue) );
+            ret = unsignedLongDeserializer.deserializeUnsignedLong(m_pNode->m_pchNameOrValue);
     		m_pNode = m_pParser->next ();	/* skip end element node too */
     		return ret;
 	    }
@@ -2644,7 +2821,7 @@ SoapDeSerializer::getElementAsUnsignedLong (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
             UnsignedLong unsignedLongDeserializer;
-            ret = *( unsignedLongDeserializer.deserializeUnsignedLong(m_pNode->m_pchNameOrValue) );
+            ret = unsignedLongDeserializer.deserializeUnsignedLong(m_pNode->m_pchNameOrValue);
     		m_pNode = m_pParser->next ();	/* skip end element node too */
     		m_pNode = NULL;
     		/* this is important in doc/lit style when deserializing 
@@ -2673,13 +2850,13 @@ SoapDeSerializer::getElementAsUnsignedLong (const AxisChar * pName,
     return ret;
 }
 
-float
+xsd__float *
 SoapDeSerializer::getElementAsFloat (const AxisChar * pName,
 				     const AxisChar * pNamespace)
 {
-    float ret = 0;
+    xsd__float * ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
-	return ret;
+    	return ret;
     if (RPC_ENCODED == m_nStyle)
     {
 	m_pNode = m_pParser->next ();
@@ -2692,7 +2869,7 @@ SoapDeSerializer::getElementAsFloat (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
 	    	Float floatDeserializer;
-			ret = *(floatDeserializer.deserializeFloat(m_pNode->m_pchNameOrValue));
+			ret = floatDeserializer.deserializeFloat(m_pNode->m_pchNameOrValue);
 			m_pNode = m_pParser->next ();	/* skip end element node too */
 			return ret;
 	    }
@@ -2718,7 +2895,7 @@ SoapDeSerializer::getElementAsFloat (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
 	    	Float floatDeserializer;
-			ret = *(floatDeserializer.deserializeFloat(m_pNode->m_pchNameOrValue));
+			ret = floatDeserializer.deserializeFloat(m_pNode->m_pchNameOrValue);
 			m_pNode = m_pParser->next ();	/* skip end element node too */
 			m_pNode = NULL;
 			/* this is important in doc/lit style when deserializing 
@@ -2747,13 +2924,13 @@ SoapDeSerializer::getElementAsFloat (const AxisChar * pName,
     return ret;
 }
 
-double
+xsd__double *
 SoapDeSerializer::getElementAsDouble (const AxisChar * pName,
 				      const AxisChar * pNamespace)
 {
-    double ret = 0;
+    xsd__double * ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
-	return ret;
+	   return ret;
     if (RPC_ENCODED == m_nStyle)
     {
 	m_pNode = m_pParser->next ();
@@ -2766,7 +2943,7 @@ SoapDeSerializer::getElementAsDouble (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
 	    	Double doubleDeserializer;
-			ret = *( doubleDeserializer.deserializeDouble(m_pNode->m_pchNameOrValue) );
+			ret = doubleDeserializer.deserializeDouble(m_pNode->m_pchNameOrValue);
 			m_pNode = m_pParser->next ();	/* skip end element node too */
 			return ret;
 	    }
@@ -2792,7 +2969,7 @@ SoapDeSerializer::getElementAsDouble (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
 	    	Double doubleDeserializer;
-			ret = *( doubleDeserializer.deserializeDouble(m_pNode->m_pchNameOrValue) );
+			ret = doubleDeserializer.deserializeDouble(m_pNode->m_pchNameOrValue);
 			m_pNode = m_pParser->next ();	/* skip end element node too */
 			m_pNode = NULL;
 			/* this is important in doc/lit style when deserializing 
@@ -2821,11 +2998,11 @@ SoapDeSerializer::getElementAsDouble (const AxisChar * pName,
     return ret;
 }
 
-double
+xsd__decimal *
 SoapDeSerializer::getElementAsDecimal (const AxisChar * pName,
 				       const AxisChar * pNamespace)
 {
-    double ret = 0;
+    xsd__decimal * ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
 	return ret;
     if (RPC_ENCODED == m_nStyle)
@@ -2840,7 +3017,7 @@ SoapDeSerializer::getElementAsDecimal (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
 	    	Decimal decimalDeserializer;
-	    	ret = *( decimalDeserializer.deserializeDecimal(m_pNode->m_pchNameOrValue));
+	    	ret = decimalDeserializer.deserializeDecimal(m_pNode->m_pchNameOrValue);
 
 			m_pNode = m_pParser->next ();	/* skip end element node too */
 			return ret;
@@ -2867,7 +3044,7 @@ SoapDeSerializer::getElementAsDecimal (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
 			Decimal decimalDeserializer;
-	    	ret = *( decimalDeserializer.deserializeDecimal(m_pNode->m_pchNameOrValue));
+	    	ret = decimalDeserializer.deserializeDecimal(m_pNode->m_pchNameOrValue);
 			m_pNode = m_pParser->next ();	/* skip end element node too */
 			m_pNode = NULL;
 			/* this is important in doc/lit style when deserializing 
@@ -2896,11 +3073,11 @@ SoapDeSerializer::getElementAsDecimal (const AxisChar * pName,
     return ret;
 }
 
-AxisChar *
+xsd__string
 SoapDeSerializer::getElementAsString (const AxisChar * pName,
 				      const AxisChar * pNamespace)
 {
-    AxisChar *ret = 0;
+    xsd__string ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
 	return ret;
     if (RPC_ENCODED == m_nStyle)
@@ -3046,11 +3223,11 @@ SoapDeSerializer::getElementAsString (const AxisChar * pName,
     return ret;
 }
 
-AxisChar *
+xsd__anyURI
 SoapDeSerializer::getElementAsAnyURI (const AxisChar * pName,
 				      const AxisChar * pNamespace)
 {
-    AxisChar *ret = 0;
+    xsd__anyURI ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
 	return ret;
     if (RPC_ENCODED == m_nStyle)
@@ -3112,11 +3289,11 @@ SoapDeSerializer::getElementAsAnyURI (const AxisChar * pName,
     return ret;
 }
 
-AxisChar *
+xsd__QName
 SoapDeSerializer::getElementAsQName (const AxisChar * pName,
 				     const AxisChar * pNamespace)
 {
-    AxisChar *ret = 0;
+    xsd__QName ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
 	return ret;
     if (RPC_ENCODED == m_nStyle)
@@ -3179,11 +3356,11 @@ SoapDeSerializer::getElementAsQName (const AxisChar * pName,
     return ret;
 }
 
-xsd__hexBinary
+xsd__hexBinary *
     SoapDeSerializer::getElementAsHexBinary (const AxisChar * pName,
 					     const AxisChar * pNamespace)
 {
-    xsd__hexBinary ret;
+    xsd__hexBinary * ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
 	return ret;
     if (RPC_ENCODED == m_nStyle)
@@ -3198,7 +3375,7 @@ xsd__hexBinary
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
 	    	HexBinary hexBinaryDeserializer;
-	    	ret = *( hexBinaryDeserializer.deserializeHexBinary(m_pNode->m_pchNameOrValue) );
+	    	ret = hexBinaryDeserializer.deserializeHexBinary(m_pNode->m_pchNameOrValue);
 
 			m_pNode = m_pParser->next ();	/* skip end element node too */
 			return ret;
@@ -3221,19 +3398,38 @@ xsd__hexBinary
 	    return ret;
 	if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
 	{
-	    m_pNode = m_pParser->next (true);	/* charactor node */
-	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
-	    {
-			HexBinary hexBinaryDeserializer;
-	    	ret = *( hexBinaryDeserializer.deserializeHexBinary(m_pNode->m_pchNameOrValue) );
+        /*
+         * if this node contain attributes check if this elemet is nil.
+         */
+        if (0 != m_pNode->m_pchAttributes[0])
+        {
+            m_pCurrNode = m_pNode;
+            /*
+             * Need to verify if the return value is NULL.
+             */
+            xsd__boolean * isNill = getAttributeAsBoolean("nil", 0);
+            if (NULL != isNill && true_ == *isNill)
+            {
+                m_pNode = m_pParser->next();
+                m_pNode = NULL;
+                return ret;
+            }
+        }
 
-			m_pNode = m_pParser->next ();	/* skip end element node too */
-			m_pNode = NULL;
-			/* this is important in doc/lit style when deserializing 
-			 * arrays 
-			 */
-			return ret;
-	    }
+        m_pNode = m_pParser->next (true);    /* charactor node */
+        if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
+        {
+            HexBinary hexBinaryDeserializer;
+            ret = hexBinaryDeserializer.deserializeHexBinary(m_pNode->m_pchNameOrValue);
+            m_pNode = m_pParser->next ();   /* skip end element node too */
+        }
+        else
+        {
+            HexBinary hexBinaryDeserializer;
+            ret = hexBinaryDeserializer.deserializeHexBinary("");
+        }
+        m_pNode = NULL;
+        return ret;
 	}
 	else
 	{
@@ -3275,11 +3471,11 @@ xsd__hexBinary SoapDeSerializer::decodeFromHexBinary (const AxisChar * pValue)
     return value;
 }
 
-xsd__base64Binary
+xsd__base64Binary *
     SoapDeSerializer::getElementAsBase64Binary (const AxisChar * pName,
 						const AxisChar * pNamespace)
 {
-    xsd__base64Binary ret;
+    xsd__base64Binary * ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
 	return ret;
     if (RPC_ENCODED == m_nStyle)
@@ -3294,7 +3490,7 @@ xsd__base64Binary
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
 	    	Base64Binary base64BinaryDeserializer;
-	    	ret = *(base64BinaryDeserializer.deserializeBase64Binary(m_pNode->m_pchNameOrValue));
+	    	ret = base64BinaryDeserializer.deserializeBase64Binary(m_pNode->m_pchNameOrValue);
 			m_pNode = m_pParser->next ();	/* skip end element node too */
 			return ret;
 	    }
@@ -3316,19 +3512,38 @@ xsd__base64Binary
 	    return ret;
 	if (0 == strcmp (pName, m_pNode->m_pchNameOrValue))
 	{
-	    m_pNode = m_pParser->next (true);	/* charactor node */
+        /*
+         * if this node contain attributes check if this elemet is nil.
+         */
+        if (0 != m_pNode->m_pchAttributes[0])
+        {
+            m_pCurrNode = m_pNode;
+            /*
+             * Need to verify if the return value is NULL.
+             */
+            xsd__boolean * isNill = getAttributeAsBoolean("nil", 0);
+            if (NULL != isNill && true_ == *isNill)
+            {
+                m_pNode = m_pParser->next();
+                m_pNode = NULL;
+                return ret;
+            }
+        }
+
+        m_pNode = m_pParser->next (true);	/* charactor node */
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
 			Base64Binary base64BinaryDeserializer;
-	    	ret = *(base64BinaryDeserializer.deserializeBase64Binary(m_pNode->m_pchNameOrValue));
-
-			m_pNode = m_pParser->next ();	/* skip end element node too */
-			m_pNode = NULL;
-			/* this is important in doc/lit style when deserializing 
-			 * arrays 
-			 */
-			return ret;
+	    	ret = base64BinaryDeserializer.deserializeBase64Binary(m_pNode->m_pchNameOrValue);
+            m_pNode = m_pParser->next ();   /* skip end element node too */
 	    }
+        else
+        {
+            Base64Binary base64BinaryDeserializer;
+            ret = base64BinaryDeserializer.deserializeBase64Binary("");
+        }
+        m_pNode = NULL;
+        return ret;
 	}
 	else
 	{
@@ -3341,11 +3556,11 @@ xsd__base64Binary
     return ret;
 }
 
-struct tm
+xsd__dateTime *
 SoapDeSerializer::getElementAsDateTime (const AxisChar * pName,
 					const AxisChar * pNamespace)
 {
-    struct tm ret INIT_VALUE_DATETIME;
+    xsd__dateTime * ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
 	return ret;
     if (RPC_ENCODED == m_nStyle)
@@ -3360,7 +3575,7 @@ SoapDeSerializer::getElementAsDateTime (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
 	    	DateTime dateTimeDeSerializer;
-			ret = *(dateTimeDeSerializer.deserializeDateTime (m_pNode->m_pchNameOrValue));
+			ret = dateTimeDeSerializer.deserializeDateTime (m_pNode->m_pchNameOrValue);
 
 			m_pNode = m_pParser->next ();	/* skip end element node too */
 			return ret;
@@ -3389,7 +3604,7 @@ SoapDeSerializer::getElementAsDateTime (const AxisChar * pName,
 		/*
 		 * Need to verify if the return value is NULL.
 		 */
-		if (getAttributeAsBoolean ("nil", 0) == true_)
+		if (*(getAttributeAsBoolean ("nil", 0)) == true_)
 		{
 		    m_pParser->next ();
 		    m_pNode = NULL;
@@ -3400,7 +3615,7 @@ SoapDeSerializer::getElementAsDateTime (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
 	    	DateTime dateTimeDeserializer;
-	    	ret = *(dateTimeDeserializer.deserializeDateTime(m_pNode->m_pchNameOrValue));
+	    	ret = dateTimeDeserializer.deserializeDateTime(m_pNode->m_pchNameOrValue);
     
 			m_pNode = m_pParser->next ();	/* skip end element node too */
 			m_pNode = NULL;
@@ -3421,13 +3636,13 @@ SoapDeSerializer::getElementAsDateTime (const AxisChar * pName,
     return ret;
 }
 
-struct tm
+xsd__date *
 SoapDeSerializer::getElementAsDate (const AxisChar * pName,
 				    const AxisChar * pNamespace)
 {
-    struct tm ret INIT_VALUE_DATETIME;
+    xsd__date * ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
-	return ret;
+    	return ret;
     if (RPC_ENCODED == m_nStyle)
     {
 	m_pNode = m_pParser->next ();
@@ -3440,7 +3655,7 @@ SoapDeSerializer::getElementAsDate (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
 	    	Date dateDeserializer;
-	    	ret = *(dateDeserializer.deserializeDate (m_pNode->m_pchNameOrValue));
+	    	ret = dateDeserializer.deserializeDate (m_pNode->m_pchNameOrValue);
 			m_pNode = m_pParser->next ();	/* skip end element node too */
 			return ret;
 	    }
@@ -3468,7 +3683,7 @@ SoapDeSerializer::getElementAsDate (const AxisChar * pName,
 		/*
 		 * Need to verify if the return value is NULL.
 		 */
-		if (getAttributeAsBoolean ("nil", 0) == true_)
+		if (*(getAttributeAsBoolean ("nil", 0)) == true_)
 		{
 		    m_pParser->next ();
 		    m_pNode = NULL;
@@ -3479,7 +3694,7 @@ SoapDeSerializer::getElementAsDate (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
 	    	Date dateDeserializer;
-	    	ret = *(dateDeserializer.deserializeDate (m_pNode->m_pchNameOrValue));
+	    	ret = dateDeserializer.deserializeDate (m_pNode->m_pchNameOrValue);
 			m_pNode = m_pParser->next ();	/* skip end element node too */
 			m_pNode = NULL;
 			/* this is important in doc/lit style when deserializing
@@ -3499,11 +3714,11 @@ SoapDeSerializer::getElementAsDate (const AxisChar * pName,
     return ret;
 }
 
-struct tm
+xsd__time *
 SoapDeSerializer::getElementAsTime (const AxisChar * pName,
 				    const AxisChar * pNamespace)
 {
-    struct tm ret INIT_VALUE_DATETIME;
+    xsd__time * ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
 	return ret;
     if (RPC_ENCODED == m_nStyle)
@@ -3518,7 +3733,7 @@ SoapDeSerializer::getElementAsTime (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
 	    	Time timeDeserializer;
-	    	ret = *( timeDeserializer.deserializeTime(m_pNode->m_pchNameOrValue) );
+	    	ret = timeDeserializer.deserializeTime(m_pNode->m_pchNameOrValue);
 	    	
 			m_pNode = m_pParser->next ();	/* skip end element node too */
 			return ret;
@@ -3547,7 +3762,7 @@ SoapDeSerializer::getElementAsTime (const AxisChar * pName,
 		/*
 		 * Need to verify if the return value is NULL.
 		 */
-		if (getAttributeAsBoolean ("nil", 0) == true_)
+		if (*(getAttributeAsBoolean ("nil", 0)) == true_)
 		{
 		    m_pParser->next ();
 		    m_pNode = NULL;
@@ -3558,7 +3773,7 @@ SoapDeSerializer::getElementAsTime (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
 	    	Time timeDeserializer;
-			ret = *( timeDeserializer.deserializeTime(m_pNode->m_pchNameOrValue) );
+			ret = timeDeserializer.deserializeTime(m_pNode->m_pchNameOrValue);
 	
 			m_pNode = m_pParser->next ();	/* skip end element node too */
 			m_pNode = NULL;
@@ -3579,11 +3794,11 @@ SoapDeSerializer::getElementAsTime (const AxisChar * pName,
     return ret;
 }
 
-long
+xsd__duration *
 SoapDeSerializer::getElementAsDuration (const AxisChar * pName,
 					const AxisChar * pNamespace)
 {
-    long ret = 0;
+    xsd__duration * ret = NULL;
     if (AXIS_SUCCESS != m_nStatus)
 	return ret;
     if (RPC_ENCODED == m_nStyle)
@@ -3598,7 +3813,7 @@ SoapDeSerializer::getElementAsDuration (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
 			Duration durationDeserializer;
-	    	ret = *(durationDeserializer.deserializeDuration(m_pNode->m_pchNameOrValue));
+	    	ret = durationDeserializer.deserializeDuration(m_pNode->m_pchNameOrValue);
 
 			m_pNode = m_pParser->next ();	/* skip end element node too */
 			return ret;
@@ -3625,7 +3840,7 @@ SoapDeSerializer::getElementAsDuration (const AxisChar * pName,
 	    if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 	    {
 	    	Duration durationDeserializer;
-	    	ret = *(durationDeserializer.deserializeDuration(m_pNode->m_pchNameOrValue));
+	    	ret = durationDeserializer.deserializeDuration(m_pNode->m_pchNameOrValue);
 
 			m_pNode = m_pParser->next ();	/* skip end element node too */
 			m_pNode = NULL;
@@ -3806,8 +4021,7 @@ SoapDeSerializer::addHeaderBlock (IHeaderBlock * pBlk)
 xsd__hexBinary SoapDeSerializer::getBodyAsHexBinary ()
 {
     /* TODO */
-    xsd__hexBinary
-	hb;
+    xsd__hexBinary hb;
     return hb;
 }
 

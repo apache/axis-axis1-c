@@ -148,7 +148,18 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				//end remove _Ref sufix and _ prefix in SOAP tag name
 				writer.write("\tif (0 != param->"+attribs[i].getParamNameAsMember()+")\n");
 				//writer.write("\t\tpSZ->serializeAsAttribute(\""+attribs[i].getParamName()+"\", 0, (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");				
-				writer.write("\t\tpSZ->serializeAsAttribute(\""+ soapTagName +"\", 0, (void*)&(param->"+attribs[i].getParamNameAsMember()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");				
+				
+				if (attribs[i].getTypeName().equals("xsd__string")
+ 						|| attribs[i].getTypeName().equals("xsd__anyURI")
+						|| attribs[i].getTypeName().equals("xsd__QName")
+						|| attribs[i].getTypeName().equals("xsd__notation"))
+				{
+					writer.write("\t\tpSZ->serializeAsAttribute(\""+ soapTagName +"\", 0, (void*)(param->"+attribs[i].getParamNameAsMember()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+				}
+				else
+				{
+					writer.write("\t\tpSZ->serializeAsAttribute(\""+ soapTagName +"\", 0, (void*)&(param->"+attribs[i].getParamNameAsMember()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+				}
 				if (!attribs[i].isOptional()){
 					/* This avoid segmentation fault at runtime */
 					/*writer.write("\telse\n");
@@ -248,7 +259,17 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				//Samisa 22/08/2004
  				// writer.write("\tpSZ->serializeAsElement( \""+attribs[i].getElementNameAsString()+"\", (void*)&(param->"+attribs[i].getParamNameAsMember()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
  				// cblecken 17/01/2005
- 				writer.write("\tpSZ->serializeAsElement(\""+attribs[i].getElementNameAsString()+"\", Axis_URI_" + classname + ", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+ 				if (attribs[i].getTypeName().equals("xsd__string")
+ 						|| attribs[i].getTypeName().equals("xsd__anyURI")
+						|| attribs[i].getTypeName().equals("xsd__QName")
+						|| attribs[i].getTypeName().equals("xsd__notation"))
+ 				{
+ 					writer.write("\tpSZ->serializeAsElement(\""+attribs[i].getElementNameAsString()+"\", Axis_URI_" + classname + ", (void*)(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");	
+ 				}
+ 				else
+ 				{
+ 					writer.write("\tpSZ->serializeAsElement(\""+attribs[i].getElementNameAsString()+"\", Axis_URI_" + classname + ", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
+ 				}
  
 			}else{
 				//if complex type
@@ -366,8 +387,18 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 					soapTagName = soapTagName.substring(1, soapTagName.length() );
 				}
 				//end remove _Ref sufix and _ prefix in SOAP tag name
-				writer.write("\tparam->"+attribs[i].getParamNameAsMember()+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute())+"( \""+ soapTagName +"\",0);\n");
-				//Samisa
+				if (attribs[i].isNillable()
+						|| attribs[i].getTypeName().equals("xsd__string")
+						|| attribs[i].getTypeName().equals("xsd__anyURI")
+						|| attribs[i].getTypeName().equals("xsd__QName")
+						|| attribs[i].getTypeName().equals("xsd__notation"))				{
+					writer.write("\tparam->"+attribs[i].getParamNameAsMember()+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute())+"( \""+ soapTagName +"\",0);\n");
+					//Samisa
+				}
+				else
+				{
+					writer.write("\tparam->"+attribs[i].getParamNameAsMember()+" = *(pIWSDZ->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), attribs[i].isAttribute())+"( \""+ soapTagName +"\",0));\n");
+				}
 			}
 			else
 			{

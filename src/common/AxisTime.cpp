@@ -59,11 +59,11 @@ void AxisTime::setValue (XSDTYPE type, ParamValue Value)
     m_Type = type;
     if (type == XSD_DURATION)
     {
-        m_Duration = Value.lDuration;
+        m_Duration = *(Value.lDuration);
     }
     else
     {
-        m_TM = Value.tValue;
+        m_TM = *(Value.tValue);
     }
 }
 

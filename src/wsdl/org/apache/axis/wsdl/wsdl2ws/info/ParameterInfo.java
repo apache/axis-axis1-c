@@ -32,7 +32,19 @@ public class ParameterInfo
     private boolean isAnyType = false;
     protected boolean isArray = false;
     private boolean isAttribute = false;
+	private boolean isNillable = false;
 
+	
+	public boolean isNillable()
+	{
+		return isNillable;
+	}
+	
+	public void setNillable(boolean nillable)
+	{
+		isNillable = nillable;
+	}
+	
     /**
      * @return boolean
      */

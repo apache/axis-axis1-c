@@ -65,14 +65,14 @@ public:
 	 * @param value The Base64Binary value to be serialized.
 	 * @return Serialized form of Base64Binary value.
 	 */
-    AxisChar* serialize(const xsd__base64Binary* value) throw (AxisSoapException);
+    AxisChar* serialize(const xsd__base64Binary * value) throw (AxisSoapException);
 	
 	/**
 	 * Deserialized Base64Binary value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of Base64Binary value.
 	 * @return Deserialized Base64Binary value.
 	 */
-    xsd__base64Binary* deserializeBase64Binary(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__base64Binary * deserializeBase64Binary(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 

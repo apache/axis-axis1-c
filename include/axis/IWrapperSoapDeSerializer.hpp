@@ -55,95 +55,95 @@ public:
         void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
     
     /* Methods used by wrappers to get a deserialized value of basic types */
-    virtual int AXISCALL getElementAsInt(const AxisChar* pName, 
+    virtual xsd__int * AXISCALL getElementAsInt(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual xsd__boolean AXISCALL getElementAsBoolean(const AxisChar* pName, 
+    virtual xsd__boolean * AXISCALL getElementAsBoolean(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual unsigned int AXISCALL getElementAsUnsignedInt(const AxisChar* 
+    virtual xsd__unsignedInt * AXISCALL getElementAsUnsignedInt(const AxisChar* 
         pName, const AxisChar* pNamespace)=0;
-    virtual short AXISCALL getElementAsShort(const AxisChar* pName, 
+    virtual xsd__short * AXISCALL getElementAsShort(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual unsigned short AXISCALL getElementAsUnsignedShort(const AxisChar* 
+    virtual xsd__unsignedShort * AXISCALL getElementAsUnsignedShort(const AxisChar* 
         pName, const AxisChar* pNamespace)=0;
-    virtual char AXISCALL getElementAsByte(const AxisChar* pName, 
+    virtual xsd__byte * AXISCALL getElementAsByte(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual unsigned char AXISCALL getElementAsUnsignedByte(const AxisChar* 
+    virtual xsd__unsignedByte * AXISCALL getElementAsUnsignedByte(const AxisChar* 
         pName, const AxisChar* pNamespace)=0;
-    virtual xsd__long AXISCALL getElementAsLong(const AxisChar* pName, 
+    virtual xsd__long * AXISCALL getElementAsLong(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual long AXISCALL getElementAsInteger(const AxisChar* pName, 
+    virtual xsd__integer * AXISCALL getElementAsInteger(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual unsigned long AXISCALL getElementAsUnsignedLong(const AxisChar* 
+    virtual xsd__unsignedLong * AXISCALL getElementAsUnsignedLong(const AxisChar* 
         pName, const AxisChar* pNamespace)=0;
-    virtual float AXISCALL getElementAsFloat(const AxisChar* pName, 
+    virtual xsd__float * AXISCALL getElementAsFloat(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual double AXISCALL getElementAsDouble(const AxisChar* pName, 
+    virtual xsd__double * AXISCALL getElementAsDouble(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual double AXISCALL getElementAsDecimal(const AxisChar* pName, 
+    virtual xsd__decimal * AXISCALL getElementAsDecimal(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual AxisChar* AXISCALL getElementAsString(const AxisChar* pName, 
+    virtual xsd__string AXISCALL getElementAsString(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual AxisChar* AXISCALL getElementAsAnyURI(const AxisChar* pName, 
+    virtual xsd__anyURI AXISCALL getElementAsAnyURI(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual AxisChar* AXISCALL getElementAsQName(const AxisChar* pName, 
+    virtual xsd__QName AXISCALL getElementAsQName(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual xsd__hexBinary AXISCALL getElementAsHexBinary(const AxisChar* 
+    virtual xsd__hexBinary * AXISCALL getElementAsHexBinary(const AxisChar* 
         pName, const AxisChar* pNamespace)=0;
-    virtual xsd__base64Binary AXISCALL getElementAsBase64Binary(const AxisChar*
+    virtual xsd__base64Binary * AXISCALL getElementAsBase64Binary(const AxisChar*
         pName, const AxisChar* pNamespace)=0;
-    virtual struct tm AXISCALL getElementAsDateTime(const AxisChar* pName, 
+    virtual xsd__dateTime * AXISCALL getElementAsDateTime(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual struct tm AXISCALL getElementAsDate(const AxisChar* pName, 
+    virtual xsd__date * AXISCALL getElementAsDate(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual struct tm AXISCALL getElementAsTime(const AxisChar* pName, 
+    virtual xsd__time * AXISCALL getElementAsTime(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual long AXISCALL getElementAsDuration(const AxisChar* pName, 
+    virtual xsd__duration * AXISCALL getElementAsDuration(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
 
 
-    virtual int AXISCALL getAttributeAsInt(const AxisChar* pName, 
+    virtual xsd__int * AXISCALL getAttributeAsInt(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual xsd__boolean AXISCALL getAttributeAsBoolean(const AxisChar* pName, 
+    virtual xsd__boolean * AXISCALL getAttributeAsBoolean(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual unsigned int AXISCALL getAttributeAsUnsignedInt(const AxisChar* 
+    virtual xsd__unsignedInt * AXISCALL getAttributeAsUnsignedInt(const AxisChar* 
         pName, const AxisChar* pNamespace)=0;
-    virtual short AXISCALL getAttributeAsShort(const AxisChar* pName, 
+    virtual xsd__short * AXISCALL getAttributeAsShort(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual unsigned short AXISCALL getAttributeAsUnsignedShort(const AxisChar*
+    virtual xsd__unsignedShort * AXISCALL getAttributeAsUnsignedShort(const AxisChar*
         pName, const AxisChar* pNamespace)=0;
-    virtual char AXISCALL getAttributeAsByte(const AxisChar* pName, 
+    virtual xsd__byte * AXISCALL getAttributeAsByte(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual unsigned char AXISCALL getAttributeAsUnsignedByte(const AxisChar* 
+    virtual xsd__unsignedByte * AXISCALL getAttributeAsUnsignedByte(const AxisChar* 
         pName, const AxisChar* pNamespace)=0;
-    virtual xsd__long AXISCALL getAttributeAsLong(const AxisChar* pName, 
+    virtual xsd__long * AXISCALL getAttributeAsLong(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual long AXISCALL getAttributeAsInteger(const AxisChar* pName, 
+    virtual xsd__integer * AXISCALL getAttributeAsInteger(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual unsigned long AXISCALL getAttributeAsUnsignedLong(const AxisChar* 
+    virtual xsd__unsignedLong * AXISCALL getAttributeAsUnsignedLong(const AxisChar* 
         pName, const AxisChar* pNamespace)=0;
-    virtual float AXISCALL getAttributeAsFloat(const AxisChar* pName, 
+    virtual xsd__float * AXISCALL getAttributeAsFloat(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual double AXISCALL getAttributeAsDouble(const AxisChar* pName, 
+    virtual xsd__double * AXISCALL getAttributeAsDouble(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual double AXISCALL getAttributeAsDecimal(const AxisChar* pName, 
+    virtual xsd__decimal * AXISCALL getAttributeAsDecimal(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual AxisChar* AXISCALL getAttributeAsString(const AxisChar* pName, 
+    virtual xsd__string AXISCALL getAttributeAsString(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual AxisChar* AXISCALL getAttributeAsAnyURI(const AxisChar* pName, 
+    virtual xsd__anyURI AXISCALL getAttributeAsAnyURI(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual AxisChar* AXISCALL getAttributeAsQName(const AxisChar* pName, 
+    virtual xsd__QName AXISCALL getAttributeAsQName(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual xsd__hexBinary AXISCALL getAttributeAsHexBinary(const AxisChar* 
+    virtual xsd__hexBinary * AXISCALL getAttributeAsHexBinary(const AxisChar* 
         pName, const AxisChar* pNamespace)=0;
-    virtual xsd__base64Binary AXISCALL getAttributeAsBase64Binary(const 
+    virtual xsd__base64Binary * AXISCALL getAttributeAsBase64Binary(const 
         AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual struct tm AXISCALL getAttributeAsDateTime(const AxisChar* pName, 
+    virtual xsd__dateTime * AXISCALL getAttributeAsDateTime(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual struct tm AXISCALL getAttributeAsDate(const AxisChar* pName, 
+    virtual xsd__date * AXISCALL getAttributeAsDate(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual struct tm AXISCALL getAttributeAsTime(const AxisChar* pName, 
+    virtual xsd__time * AXISCALL getAttributeAsTime(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
-    virtual long AXISCALL getAttributeAsDuration(const AxisChar* pName, 
+    virtual xsd__duration * AXISCALL getAttributeAsDuration(const AxisChar* pName, 
         const AxisChar* pNamespace)=0;
     virtual int AXISCALL getStatus()=0;
     

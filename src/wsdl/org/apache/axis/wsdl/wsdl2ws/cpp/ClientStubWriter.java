@@ -31,7 +31,6 @@ import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
-import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
@@ -256,7 +255,20 @@ public class ClientStubWriter extends CPPClassWriter
         }
         else
         {
-            writer.write(outparamTypeName);
+        	if (returntypeissimple
+					&& returntype.isNillable()
+					&& !(outparamTypeName.equals("xsd__string")
+							|| outparamTypeName.equals("xsd__anyURI")
+							|| outparamTypeName.equals("xsd__QName")
+							|| outparamTypeName.equals("xsd__notation")))
+        	{
+        		writer.write(outparamTypeName + " *");        		
+        	}
+        	else
+        	{
+        		writer.write(outparamTypeName);
+        	}
+            
             if (WSDL2Ws.verbose)
             {
                 System.out.println(
@@ -275,7 +287,20 @@ public class ClientStubWriter extends CPPClassWriter
             {
                 writer.write(", ");
             }
-            writer.write(paramTypeName + " Value" + i);
+            typeissimple = CUtils.isSimpleType(paramTypeName);
+        	if (typeissimple
+					&& ((ParameterInfo) paramsB.get(i)).isNillable()
+					&& !(paramTypeName.equals("xsd__string")
+							|| paramTypeName.equals("xsd__anyURI")
+							|| paramTypeName.equals("xsd__QName")
+							|| paramTypeName.equals("xsd__notation")))
+        	{
+        		writer.write(paramTypeName + " * Value" + i);
+        	}
+        	else
+        	{
+        		writer.write(paramTypeName + " Value" + i);
+        	}
         }
         // Multiples parameters so fill the methods prototype
         ArrayList paramsC = (ArrayList) minfo.getOutputParameterTypes();
@@ -316,28 +341,39 @@ public class ClientStubWriter extends CPPClassWriter
                 else
                 {
                     //for simple types
-                    String initValue = CUtils.getInitValue(outparamTypeName);
-                    if (initValue != null)
-                    {
-                        writer.write(
-                            outparamTypeName + " Ret = " + initValue + ";\n");
-                    }
-                    else
-                    {
-                        if (outparamTypeName.equals("xsd__base64Binary")
-                            || outparamTypeName.equals("xsd__hexBinary"))
-                        {
-                            writer.write(outparamTypeName + " Ret;\n");
-                            writer.write("\tRet.__ptr = NULL;\n");
-                            writer.write("\tRet.__size = 0;\n");
-                        }
-
-                        else
-                        {
-                            writer.write(outparamTypeName + " Ret;\n");
-                        }
-                    }
-                    //TODO initialize return parameter appropriately.
+                	if (returntype.isNillable()
+							&& !(outparamTypeName.equals("xsd__string")
+									|| outparamTypeName.equals("xsd__anyURI")
+									|| outparamTypeName.equals("xsd__QName")
+									|| outparamTypeName.equals("xsd__notation")))
+                	{
+                		writer.write(outparamTypeName + "* Ret = NULL;\n");
+                	}
+                	else
+                	{
+	                    String initValue = CUtils.getInitValue(outparamTypeName);
+	                    if (initValue != null)
+	                    {
+	                        writer.write(
+	                            outparamTypeName + " Ret = " + initValue + ";\n");
+	                    }
+	                    else
+	                    {
+	                        if (outparamTypeName.equals("xsd__base64Binary")
+	                            || outparamTypeName.equals("xsd__hexBinary"))
+	                        {
+	                            writer.write(outparamTypeName + " Ret;\n");
+	                            writer.write("\tRet.__ptr = NULL;\n");
+	                            writer.write("\tRet.__size = 0;\n");
+	                        }
+	
+	                        else
+	                        {
+	                            writer.write(outparamTypeName + " Ret;\n");
+	                        }
+	                    }
+	                    //TODO initialize return parameter appropriately.
+                	}
                 }
             }
         }
@@ -435,15 +471,34 @@ public class ClientStubWriter extends CPPClassWriter
             {
                 if (typeissimple)
                 {
+                	
                     //for simple types	
-                    writer.write("\t\tm_pCall->addParameter(");
-                    writer.write(
-                        "(void*)&Value"
-                            + i
-                            + ", \""
-                            + ((ParameterInfo) paramsB.get(i)).getParamName()
-                            + "\", "
-                            + CUtils.getXSDTypeForBasicType(paramTypeName));
+                	if (((ParameterInfo) paramsB.get(i)).isNillable()
+                			|| paramTypeName.equals("xsd__string")
+							|| paramTypeName.equals("xsd__anyURI")
+							|| paramTypeName.equals("xsd__QName")
+							|| paramTypeName.equals("xsd__notation"))
+                	{
+                		writer.write("\t\tm_pCall->addParameter(");
+	                    writer.write(
+	                        "(void*)Value"
+	                            + i
+	                            + ", \""
+	                            + ((ParameterInfo) paramsB.get(i)).getParamName()
+	                            + "\", "
+	                            + CUtils.getXSDTypeForBasicType(paramTypeName));
+                	}
+                	else
+                	{
+	                    writer.write("\t\tm_pCall->addParameter(");
+	                    writer.write(
+	                        "(void*)&Value"
+	                            + i
+	                            + ", \""
+	                            + ((ParameterInfo) paramsB.get(i)).getParamName()
+	                            + "\", "
+	                            + CUtils.getXSDTypeForBasicType(paramTypeName));
+                	}
                 }
                 else
                 {

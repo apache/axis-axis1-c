@@ -8,11 +8,6 @@ AXIS_CPP_NAMESPACE_START
 
     HexBinary::~HexBinary()
     {
-        if (m_HexBinary)
-        {
-            delete m_HexBinary;
-            m_HexBinary = NULL;
-        }
     }
 
     AxisChar* HexBinary::serialize(const void* value) throw (AxisSoapException)
@@ -25,7 +20,7 @@ AXIS_CPP_NAMESPACE_START
     	return (void*) deserializeHexBinary(valueAsChar);
     }
 	
-    AxisChar* HexBinary::serialize(const xsd__hexBinary* value) throw (AxisSoapException)
+    AxisChar* HexBinary::serialize(const xsd__hexBinary * value) throw (AxisSoapException)
     {
         MinLength* minLength= getMinLength();
         if (minLength->isSet())
@@ -102,7 +97,7 @@ AXIS_CPP_NAMESPACE_START
 	    return m_Buf;
     }
 	
-    xsd__hexBinary* HexBinary::deserializeHexBinary(const AxisChar* valueAsChar) throw (AxisSoapException)
+    xsd__hexBinary * HexBinary::deserializeHexBinary(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
         if (m_HexBinary) // Samisa : memory management BP
         {

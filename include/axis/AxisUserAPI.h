@@ -37,7 +37,11 @@ typedef AxiscChar * xsdc__string;
  * @typedef xsdc__integer
  * Axis C++ defined type for xml basic type integer
  */
-typedef int xsdc__integer;
+#ifdef WIN32
+typedef __int64 xsdc__integer;
+#else
+typedef long long xsdc__integer;
+#endif
 
 /**
  * @typedef xsdc__int
@@ -84,12 +88,11 @@ typedef double xsdc__double;
  * Axis C++ defined type for xml basic type boolean
  */
 typedef enum { false_=0, true_ } xsdc__boolean;
-
 /**
  * @typedef xsdc__byte
  * Axis C++ defined type for xml basic type byte
  */
-typedef signed char xsdc__byte;
+typedef char xsdc__byte;
 
 /**
  * @typedef xsdc__QName
@@ -122,6 +125,12 @@ typedef struct tm xsdc__date;
 typedef struct tm xsdc__time;
 
 /**
+ * @typedef xsdc__duration
+ * Axis C++ defined type for xml basic type duration
+ */
+typedef long xsdc__duration;
+
+/**
  * @typedef xsdc__unsignedByte
  * Axis C++ defined type for xml basic type unsignedByte
  */
@@ -150,7 +159,7 @@ typedef unsigned short xsdc__unsignedShort;
  * Axis C++ defined type for xml basic type base64Binary
  */
 typedef struct {
-    xsdc__unsignedByte * __ptr;
+    xsdc__unsignedByte __ptr;
     xsdc__int __size;
 } xsdc__base64Binary;
 
@@ -159,10 +168,9 @@ typedef struct {
  * Axis C++ defined type for xml basic type hexBinary
  */
 typedef struct {
-    xsdc__unsignedByte * __ptr;
+    xsdc__unsignedByte __ptr;
     xsdc__int __size;
 } xsdc__hexBinary;
-
 /**
  * @typedef xsdc__anyURI
  * Axis C++ defined type for xml basic type anyURI

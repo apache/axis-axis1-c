@@ -68,7 +68,7 @@ AXISC_STORAGE_CLASS_INFO void * axiscGetCmplxObjectIWrapperSoapDeSerializer(AXIS
 	return dz->getCmplxObject(pDZFunct,pCreFunct,pDelFunct,pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO int axiscGetElementAsIntIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__int * axiscGetElementAsIntIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getElementAsInt(pName,pNamespace);
@@ -79,271 +79,271 @@ AXISC_STORAGE_CLASS_INFO int axiscGetElementAsIntIWrapperSoapDeSerializer(AXISCH
 	return dz->getFaultDetail(ppcDetail);
 }*/
 
-AXISC_STORAGE_CLASS_INFO xsdc__boolean axiscGetElementAsBooleanIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__boolean * axiscGetElementAsBooleanIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
-	return (xsdc__boolean)(dz->getElementAsBoolean(pName,pNamespace));
+	return (xsdc__boolean *)(dz->getElementAsBoolean(pName,pNamespace));
 }
 
-AXISC_STORAGE_CLASS_INFO unsigned int axiscGetElementAsUnsignedIntIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__unsignedInt * axiscGetElementAsUnsignedIntIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getElementAsUnsignedInt(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO short axiscGetElementAsShortIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__short * axiscGetElementAsShortIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getElementAsShort(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO unsigned short axiscGetElementAsUnsignedShortIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__unsignedShort * axiscGetElementAsUnsignedShortIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getElementAsUnsignedShort(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO char axiscGetElementAsByteIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__byte * axiscGetElementAsByteIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getElementAsByte(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO unsigned char axiscGetElementAsUnsignedByteIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__unsignedByte * axiscGetElementAsUnsignedByteIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getElementAsUnsignedByte(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO xsdc__long axiscGetElementAsLongIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__long * axiscGetElementAsLongIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getElementAsLong(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO long axiscGetElementAsIntegerIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__integer * axiscGetElementAsIntegerIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getElementAsInteger(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO unsigned long axiscGetElementAsUnsignedLongIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__unsignedLong * axiscGetElementAsUnsignedLongIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getElementAsUnsignedLong(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO float axiscGetElementAsFloatIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__float * axiscGetElementAsFloatIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getElementAsFloat(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO double axiscGetElementAsDoubleIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__double * axiscGetElementAsDoubleIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getElementAsDouble(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO double axiscGetElementAsDecimalIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__decimal * axiscGetElementAsDecimalIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getElementAsDecimal(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO AxiscChar * axiscGetElementAsStringIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__string axiscGetElementAsStringIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getElementAsString(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO AxiscChar * axiscGetElementAsAnyURIIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__anyURI axiscGetElementAsAnyURIIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getElementAsAnyURI(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO AxiscChar * axiscGetElementAsQNameIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__QName axiscGetElementAsQNameIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getElementAsQName(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO xsdc__hexBinary axiscGetElementAsHexBinaryIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__hexBinary * axiscGetElementAsHexBinaryIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	// TODO: not implemented yet
-	xsdc__hexBinary hb;
-	memset(&hb,0,sizeof(hb));
+	xsdc__hexBinary * hb = new xsdc__hexBinary();
+	memset(hb,0,sizeof(hb));
 	return hb;
 }
 
-AXISC_STORAGE_CLASS_INFO xsdc__base64Binary axiscGetElementAsBase64BinaryIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__base64Binary * axiscGetElementAsBase64BinaryIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	// TODO: not implemented yet
-	xsdc__base64Binary bb;
-	memset(&bb,0,sizeof(bb));
+	xsdc__base64Binary * bb = new xsdc__base64Binary();
+	memset(bb,0,sizeof(bb));
 	return bb;
 }
 
-AXISC_STORAGE_CLASS_INFO struct tm axiscGetElementAsDateTimeIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__dateTime * axiscGetElementAsDateTimeIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getElementAsDateTime(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO struct tm axiscGetElementAsDateIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__date * axiscGetElementAsDateIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getElementAsDate(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO struct tm axiscGetElementAsTimeIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__time * axiscGetElementAsTimeIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getElementAsTime(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO long axiscGetElementAsDurationIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__duration * axiscGetElementAsDurationIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getElementAsDuration(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO int axiscGetAttributeAsIntIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__int * axiscGetAttributeAsIntIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getAttributeAsInt(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO xsdc__boolean axiscGetAttributeAsBooleanIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__boolean * axiscGetAttributeAsBooleanIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
-	return (xsdc__boolean)(dz->getAttributeAsBoolean(pName,pNamespace));
+	return (xsdc__boolean *)(dz->getAttributeAsBoolean(pName,pNamespace));
 }
 
-AXISC_STORAGE_CLASS_INFO unsigned int axiscGetAttributeAsUnsignedIntIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__unsignedInt * axiscGetAttributeAsUnsignedIntIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getAttributeAsUnsignedInt(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO short axiscGetAttributeAsShortIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__short * axiscGetAttributeAsShortIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getAttributeAsShort(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO unsigned short axiscGetAttributeAsUnsignedShortIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__unsignedShort * axiscGetAttributeAsUnsignedShortIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getAttributeAsUnsignedShort(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO char axiscGetAttributeAsByteIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__byte * axiscGetAttributeAsByteIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getAttributeAsByte(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO unsigned char axiscGetAttributeAsUnsignedByteIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__unsignedByte * axiscGetAttributeAsUnsignedByteIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getAttributeAsUnsignedByte(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO xsdc__long axiscGetAttributeAsLongIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__long * axiscGetAttributeAsLongIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getAttributeAsLong(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO long axiscGetAttributeAsIntegerIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__integer * axiscGetAttributeAsIntegerIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getAttributeAsInteger(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO unsigned long axiscGetAttributeAsUnsignedLongIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__unsignedLong * axiscGetAttributeAsUnsignedLongIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getAttributeAsUnsignedLong(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO float axiscGetAttributeAsFloatIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__float * axiscGetAttributeAsFloatIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getAttributeAsFloat(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO double axiscGetAttributeAsDoubleIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__double * axiscGetAttributeAsDoubleIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getAttributeAsDouble(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO double axiscGetAttributeAsDecimalIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__decimal * axiscGetAttributeAsDecimalIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getAttributeAsDecimal(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO AxiscChar * axiscGetAttributeAsStringIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__string axiscGetAttributeAsStringIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getAttributeAsString(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO AxiscChar * axiscGetAttributeAsAnyURIIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__anyURI axiscGetAttributeAsAnyURIIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getAttributeAsAnyURI(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO AxiscChar * axiscGetAttributeAsQNameIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__QName axiscGetAttributeAsQNameIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getAttributeAsQName(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO xsdc__hexBinary axiscGetAttributeAsHexBinaryIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__hexBinary * axiscGetAttributeAsHexBinaryIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	// TODO not implemented yet
-	xsdc__hexBinary hb;
-	memset(&hb,0,sizeof(hb));
+	xsdc__hexBinary * hb = new xsdc__hexBinary();
+	memset(hb,0,sizeof(hb));
 	return hb;
 }
 
-AXISC_STORAGE_CLASS_INFO xsdc__base64Binary axiscGetAttributeAsBase64BinaryIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__base64Binary * axiscGetAttributeAsBase64BinaryIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	// TODO not implemented yet
-	xsdc__base64Binary bb;
-	memset(&bb,0,sizeof(bb));
+	xsdc__base64Binary * bb = new xsdc__base64Binary();
+	memset(bb,0,sizeof(bb));
 	return bb;
 }
 
-AXISC_STORAGE_CLASS_INFO struct tm axiscGetAttributeAsDateTimeIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__dateTime * axiscGetAttributeAsDateTimeIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getAttributeAsDateTime(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO struct tm axiscGetAttributeAsDateIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__date * axiscGetAttributeAsDateIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getAttributeAsDate(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO struct tm axiscGetAttributeAsTimeIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__time * axiscGetAttributeAsTimeIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getAttributeAsTime(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO long axiscGetAttributeAsDurationIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__duration * axiscGetAttributeAsDurationIWrapperSoapDeSerializer(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 	return dz->getAttributeAsDuration(pName,pNamespace);

@@ -35,7 +35,6 @@ import java.util.Iterator;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
-import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
@@ -251,8 +250,14 @@ public class ClientStubWriter
         }
         else
         {
-            if (returntypeissimple || returntypeisarray)
-            {
+        	if (returntypeisarray
+					|| (returntypeissimple
+							&& (!returntype.isNillable()
+									|| outparamType.equals("xsd__string")
+									|| outparamType.equals("xsd__anyURI")
+									|| outparamType.equals("xsd__QName")
+									|| outparamType.equals("xsd__notation"))))
+        	{
                 writer.write(outparamType);
             }
             else
@@ -285,7 +290,13 @@ public class ClientStubWriter
                 typeisarray = false;
             }
             typeissimple = CUtils.isSimpleType(paraTypeName);
-            if (typeisarray || typeissimple)
+        	if (typeisarray
+					|| (typeissimple
+							&& (!((ParameterInfo) paramsB.get(0)).isNillable()
+									|| paraTypeName.equals("xsd__string")
+									|| paraTypeName.equals("xsd__anyURI")
+									|| paraTypeName.equals("xsd__QName")
+									|| paraTypeName.equals("xsd__notation"))))
             {
                 writer.write(paraTypeName + " Value0");
             }
@@ -318,7 +329,13 @@ public class ClientStubWriter
                     typeisarray = false;
                 }
                 typeissimple = CUtils.isSimpleType(paraTypeName);
-                if (typeisarray || typeissimple)
+            	if (typeisarray
+    					|| (typeissimple
+    							&& (!((ParameterInfo) paramsB.get(i)).isNillable()
+    									|| paraTypeName.equals("xsd__string")
+    									|| paraTypeName.equals("xsd__anyURI")
+    									|| paraTypeName.equals("xsd__QName")
+    									|| paraTypeName.equals("xsd__notation"))))
                 {
                     writer.write(", " + paraTypeName + " Value" + i);
                 }
@@ -369,27 +386,38 @@ public class ClientStubWriter
                 else
                 {
                     //for simple types
-                    String initValue = CUtils.getInitValue(outparamType);
-                    if (initValue != null)
-                    {
-                        writer.write(
-                            outparamType + " Ret = " + initValue + ";\n");
-                    }
-                    else
-                    {
-
-                        if (outparamType.equals("xsd__base64Binary")
-                            || outparamType.equals("xsd__hexBinary"))
-                        {
-                            writer.write(outparamType + " Ret;\n");
-                            writer.write("\tRet.__ptr = NULL;\n");
-                            writer.write("\tRet.__size = 0;\n");
-                        }
-                        else
-                        {
-                            writer.write(outparamType + " Ret;\n");
-                        }
-                    }
+                	if (returntype.isNillable()
+							&& !(outparamType.equals("xsd__string")
+									|| outparamType.equals("xsd__anyURI")
+									|| outparamType.equals("xsd__QName")
+									|| outparamType.equals("xsd__notation")))
+                	{
+						writer.write(outparamType + "* Ret = NULL;\n");
+					}
+                	else
+                	{
+	                    String initValue = CUtils.getInitValue(outparamType);
+	                    if (initValue != null)
+	                    {
+	                        writer.write(
+	                            outparamType + " Ret = " + initValue + ";\n");
+	                    }
+	                    else
+	                    {
+	
+	                        if (outparamType.equals("xsd__base64Binary")
+	                            || outparamType.equals("xsd__hexBinary"))
+	                        {
+	                            writer.write(outparamType + " Ret;\n");
+	                            writer.write("\tRet.__ptr = NULL;\n");
+	                            writer.write("\tRet.__size = 0;\n");
+	                        }
+	                        else
+	                        {
+	                            writer.write(outparamType + " Ret;\n");
+	                        }
+	                    }
+                	}
                 }
                 //TODO initialize return parameter appropriately.
             }
@@ -606,16 +634,36 @@ public class ClientStubWriter
                     {
                         if (CUtils.isSimpleType(paraTypeName))
                         {
+                        	
                             // Simple Type
-                            writer.write("\tm_pCall->addParameter(");
-                            writer.write(
-                                "(void*)&Value"
-                                    + i
-                                    + ", cPrefixAndParamName"
-                                    + i
-                                    + ", "
-                                    + CUtils.getXSDTypeForBasicType(
-                                        paraTypeName));
+                        	if (param.isNillable()
+                        			|| paraTypeName.equals("xsd__string")
+									|| paraTypeName.equals("xsd__anyURI")
+									|| paraTypeName.equals("xsd__QName")
+									|| paraTypeName.equals("xsd__notation"))
+                        	{
+                        		writer.write("\tm_pCall->addParameter(");
+	                            writer.write(
+	                                "(void*)Value"
+	                                    + i
+	                                    + ", cPrefixAndParamName"
+	                                    + i
+	                                    + ", "
+	                                    + CUtils.getXSDTypeForBasicType(
+	                                        paraTypeName));
+                        	}
+                        	else
+                        	{
+	                            writer.write("\tm_pCall->addParameter(");
+	                            writer.write(
+	                                "(void*)&Value"
+	                                    + i
+	                                    + ", cPrefixAndParamName"
+	                                    + i
+	                                    + ", "
+	                                    + CUtils.getXSDTypeForBasicType(
+	                                        paraTypeName));
+                        	}
                         }
                         else
                         {
@@ -864,14 +912,45 @@ public class ClientStubWriter
 
                     if (returntypeissimple)
                     {
-                        writer.write(
-                            "\t\t\tRet = m_pCall->"
-                                + CUtils.getParameterGetValueMethodName(
-                                    outparamType,
-                                    false)
-                                + "(\""
-                                + returntype.getParamName()
-                                + "\", 0);\n\t\t}\n");
+                    	if (returntype.isNillable())
+                    	{
+                        writer.write("\t\t\tRet = m_pCall->"
+									+ CUtils.getParameterGetValueMethodName(
+											outparamType, false) + "(\""
+									+ returntype.getParamName()
+									+ "\", 0);\n\t\t}\n");
+                    	}
+                    	else
+                    	{
+                    		if (outparamType.equals("xsd__string")
+									|| outparamType.equals("xsd__anyURI")
+									|| outparamType.equals("xsd__QName")
+									|| outparamType.equals("xsd__notation"))
+                    		{
+                    			writer.write("\t\t\t" + outparamType + " pReturn = m_pCall->"
+										+ CUtils.getParameterGetValueMethodName(
+												outparamType, false) + "(\""
+										+ returntype.getParamName()
+										+ "\", 0);\n");
+	                            writer.write("\t\t\tif(pReturn)\n");
+	                            writer.write("\t\t\t\tRet = pReturn;\n");
+                    		}
+                    		else
+                    		{
+	                            writer.write("\t\t\t" + outparamType + " * pReturn = m_pCall->"
+										+ CUtils.getParameterGetValueMethodName(
+												outparamType, false) + "(\""
+										+ returntype.getParamName()
+										+ "\", 0);\n");
+	                            writer.write("\t\t\tif(pReturn)\n");
+	                            writer.write("\t\t\t\tRet = *pReturn;\n");
+                    		}
+                    		// TODO If we unexpectedly receive a nill value, when nillable="false" we should do something appropriate, perhaps as below:
+//                    		writer.write("\t\t\telse");
+//                    		writer.write("\t\t\t\tthrow new Exception(\"Unexpected use of nill\");");
+                            writer.write("\t\t}\n");
+
+                    	}
                         writer.write("\t}\n");
                         writer.write("\tm_pCall->unInitialize();\n");
                         //            writer.write("\t}\n\tm_pCall->unInitialize();\n");

@@ -135,13 +135,32 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                                 .getOutputParameterTypes()
                                 .iterator()
                                 .next();
-                        writer.write(
-                            "\t\t"
-                                + WrapperUtils
-                                    .getClassNameFromParamInfoConsideringArrays(
-                                    returntype,
-                                    wscontext)
-                                + " ");
+                        String returnTypeName = returntype.getLangName();
+                        if (CUtils.isSimpleType(returnTypeName)
+								&& returntype.isNillable()
+								& !(returnTypeName.equalsIgnoreCase("xsd__string")
+										|| returnTypeName.equalsIgnoreCase("xsd__anyURI")
+										|| returnTypeName.equalsIgnoreCase("xsd__QName")
+										|| returnTypeName.equalsIgnoreCase("xsd__notation")))
+                        {
+                        	writer.write(
+    	                            "\t\t"
+    	                                + WrapperUtils
+    	                                    .getClassNameFromParamInfoConsideringArrays(
+    	                                    returntype,
+    	                                    wscontext)
+    	                                + " * ");
+                        }
+                        else
+                        {
+	                        writer.write(
+	                            "\t\t"
+	                                + WrapperUtils
+	                                    .getClassNameFromParamInfoConsideringArrays(
+	                                    returntype,
+	                                    wscontext)
+	                                + " ");
+                        }
                     }
                     else
                     {
@@ -156,25 +175,64 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                 if (params.hasNext())
                 {
                     ParameterInfo fparam = (ParameterInfo) params.next();
-                    writer.write(
-                        WrapperUtils
-                            .getClassNameFromParamInfoConsideringArrays(
-                            fparam,
-                            wscontext)
-                            + " Value"
-                            + 0);
+                    String paramTypeName = fparam.getLangName();
+                    if (CUtils.isSimpleType(paramTypeName)
+                    		&& fparam.isNillable()
+							&& !(paramTypeName.equalsIgnoreCase("xsd__string")
+									|| paramTypeName.equalsIgnoreCase("xsd__anyURI")
+									|| paramTypeName.equalsIgnoreCase("xsd__QName")
+									|| paramTypeName.equalsIgnoreCase("xsd__notation")))
+                    {
+                    	writer.write(
+    	                        WrapperUtils
+    	                            .getClassNameFromParamInfoConsideringArrays(
+    	                            fparam,
+    	                            wscontext)
+    	                            + " * Value"
+    	                            + 0);
+                    }
+                    else
+                    {
+	                    writer.write(
+	                        WrapperUtils
+	                            .getClassNameFromParamInfoConsideringArrays(
+	                            fparam,
+	                            wscontext)
+	                            + " Value"
+	                            + 0);
+                    }
                 }
                 for (int j = 1; params.hasNext(); j++)
                 {
                     ParameterInfo nparam = (ParameterInfo) params.next();
-                    writer.write(
-                        ","
-                            + WrapperUtils
-                                .getClassNameFromParamInfoConsideringArrays(
-                                nparam,
-                                wscontext)
-                            + " Value"
-                            + j);
+                    String paramTypeName = nparam.getLangName();
+                    if (CUtils.isSimpleType(paramTypeName)
+                    		&& nparam.isNillable()
+							&& !(paramTypeName.equalsIgnoreCase("xsd__string")
+									|| paramTypeName.equalsIgnoreCase("xsd__anyURI")
+									|| paramTypeName.equalsIgnoreCase("xsd__QName")
+									|| paramTypeName.equalsIgnoreCase("xsd__notation")))
+                    {
+                    	writer.write(
+    	                        ","
+    	                            + WrapperUtils
+    	                                .getClassNameFromParamInfoConsideringArrays(
+    	                                nparam,
+    	                                wscontext)
+    	                            + " * Value"
+    	                            + j);
+                    }
+                    else
+                    {
+	                    writer.write(
+	                        ","
+	                            + WrapperUtils
+	                                .getClassNameFromParamInfoConsideringArrays(
+	                                nparam,
+	                                wscontext)
+	                            + " Value"
+	                            + j);
+                    }
                 }
                 if (isAllTreatedAsOutParams)
                 {

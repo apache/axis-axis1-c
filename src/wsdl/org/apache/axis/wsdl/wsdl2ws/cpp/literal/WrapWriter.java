@@ -188,10 +188,16 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
             elementName = param.getElementNameAsString();
             if (type != null && type.isSimpleType())
             { //schema defined simpleType possibly with restrictions
+            	if (param.isNillable() && 
+            			!(type.getLanguageSpecificName().equals("xsd__string")
+            					|| type.getLanguageSpecificName().equals("xsd__anyURI")
+								|| type.getLanguageSpecificName().equals("xsd__QName")
+								|| type.getLanguageSpecificName().equals("xsd__notation")))
+            	{
                 writer.write(
                     "\t"
                         + paraTypeName
-                        + " v"
+                        + "* v"
                         + i
                         + " = pIWSDZ->"
                         + CUtils.getParameterGetValueMethodName(
@@ -200,6 +206,22 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                         + "(\""
                         + elementName
                         + "\",0);\n");
+            	}
+            	else
+            	{
+            		writer.write(
+                            "\t"
+                                + paraTypeName
+                                + " v"
+                                + i
+                                + " = *(pIWSDZ->"
+                                + CUtils.getParameterGetValueMethodName(
+                                    paraTypeName,
+                                    false)
+                                + "(\""
+                                + elementName
+                                + "\",0));\n");
+            	}
             }
             else
             {
@@ -225,8 +247,12 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     }
                     else
                     {
-                        writer.write(
-                            "\t"
+                    	if (paraTypeName.equals("xsd__string")
+										|| paraTypeName.equals("xsd__anyURI")
+										|| paraTypeName.equals("xsd__QName")
+										|| paraTypeName.equals("xsd__notation"))
+                    	{
+                    		writer.write("\t"
                                 + paraTypeName
                                 + " v"
                                 + i
@@ -237,6 +263,38 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                                 + "(\""
                                 + elementName
                                 + "\",0);\n");
+                    	}
+                    	else
+                    	{
+                    		if (param.isNillable())
+                    		{
+                    			writer.write("\t"
+                                        + paraTypeName
+                                        + "* v"
+                                        + i
+                                        + " = pIWSDZ->"
+                                        + CUtils.getParameterGetValueMethodName(
+                                            paraTypeName,
+                                            false)
+                                        + "(\""
+                                        + elementName
+                                        + "\",0);\n");
+                    		}
+                    		else
+                    		{
+	                    		writer.write("\t"
+	                                + paraTypeName
+	                                + " v"
+	                                + i
+	                                + " = *(pIWSDZ->"
+	                                + CUtils.getParameterGetValueMethodName(
+	                                    paraTypeName,
+	                                    false)
+	                                + "(\""
+	                                + elementName
+	                                + "\",0));\n");
+                    		}
+                    	}
                     }
                 }
                 else
@@ -378,11 +436,19 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
         if (returntype != null)
         { /* Invoke the service when return type not void */
             returnParamName = returntype.getElementNameAsString();
-            writer.write(
-                "\t"
-                    + outparamType
-                    + ((returntypeisarray || returntypeissimple) ? " " : " *")
-                    + "ret = "
+            writer.write("\t" + outparamType);
+            if (!returntypeisarray 
+        		&& (!returntypeissimple
+            		|| (returntypeissimple
+        				&& returntype.isNillable()
+						&& !(retType.getLanguageSpecificName().equals("xsd__string")
+							|| retType.getLanguageSpecificName().equals("xsd__anyURI")
+							|| retType.getLanguageSpecificName().equals("xsd__QName")
+							|| retType.getLanguageSpecificName().equals("xsd__notation")))))
+            {
+            	writer.write(" *");
+            }
+            writer.write(" ret = "
                     + "pWs->"
                     + methodName
                     + "(");
@@ -411,12 +477,29 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                 }
                 else
                 {
-                    writer.write(
-                        "\treturn pIWSSZ->addOutputParam(\""
-                            + returnParamName
-                            + "\", (void*)&ret, "
-                            + CUtils.getXSDTypeForBasicType(outparamType)
-                            + ");\n");
+                	String returnParamTypeName = retType.getLanguageSpecificName();
+                	if (returntype.isNillable()
+                			|| returnParamTypeName.equals("xsd__string")
+                			|| returnParamTypeName.equals("xsd__anyURI")
+							|| returnParamTypeName.equals("xsd__QName")
+							|| returnParamTypeName.equals("xsd__notation"))
+                	{
+	                    writer.write(
+	                        "\treturn pIWSSZ->addOutputParam(\""
+	                            + returnParamName
+	                            + "\", (void*)ret, "
+	                            + CUtils.getXSDTypeForBasicType(outparamType)
+	                            + ");\n");
+                	}
+                	else
+                	{
+                		writer.write(
+    	                        "\treturn pIWSSZ->addOutputParam(\""
+    	                            + returnParamName
+    	                            + "\", (void*)&ret, "
+    	                            + CUtils.getXSDTypeForBasicType(outparamType)
+    	                            + ");\n");
+                	}
                 }
             }
             else

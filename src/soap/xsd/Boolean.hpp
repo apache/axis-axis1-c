@@ -32,6 +32,16 @@ using namespace std;
 class Boolean : public IAnySimpleType {
 public:
 
+    /**
+     * Constructor
+     */
+    Boolean();
+    
+    /**
+     * Destructor
+     */
+    ~Boolean();
+
 	/**
 	 * Serialize value to it's on-the-wire string form.
 	 * @param value The value to be serialized.
@@ -51,14 +61,14 @@ public:
 	 * @param value The boolean value to be serialized.
 	 * @return Serialized form of boolean value.
 	 */
-    AxisChar* serialize(const bool* value) throw (AxisSoapException);
+    AxisChar* serialize(const xsd__boolean * value) throw (AxisSoapException);
 	
 	/**
 	 * Deserialized boolean value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of boolean value.
 	 * @return Deserialized boolean value.
 	 */
-    xsd__boolean deserializeBoolean(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__boolean * deserializeBoolean(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 
@@ -73,6 +83,9 @@ protected:
      * @return Enumeration object set to collapse whitespace
      */
     Enumeration* getEnumeration();
+   
+private:
+    xsd__boolean * m_Boolean;
 };
 
 AXIS_CPP_NAMESPACE_END

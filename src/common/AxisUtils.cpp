@@ -135,7 +135,7 @@ char* AxisUtils::toLowerCase (const char* pchWord)
     return NULL;
 }
 
-xsd__base64Binary* AxisUtils::decodeFromBase64Binary(const AxisChar *pValue)
+xsd__base64Binary * AxisUtils::decodeFromBase64Binary(const AxisChar *pValue)
 {
     xsd__base64Binary* value = new xsd__base64Binary();
     value->__size = apr_base64_decode_len (pValue);

@@ -8,8 +8,6 @@ UnsignedInt::UnsignedInt():m_UnsignedInt(NULL)
 
 UnsignedInt::~UnsignedInt()
 {
-    if (m_UnsignedInt)
-        delete m_UnsignedInt;
 }
 
 AxisChar* UnsignedInt::serialize(const void* value) throw (AxisSoapException)

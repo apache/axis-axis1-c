@@ -121,7 +121,7 @@ AXISC_STORAGE_CLASS_INFO AXISCHANDLE axiscCreateHeaderBlockCall(AXISCHANDLE call
 	return (AXISCHANDLE)(c->createHeaderBlock(pachLocalName, pachUri, pachPrefix));
 }
 
-AXISC_STORAGE_CLASS_INFO int axiscGetElementAsIntCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__int * axiscGetElementAsIntCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getElementAsInt(pName,pNamespace);
@@ -132,267 +132,267 @@ AXISC_STORAGE_CLASS_INFO int axiscGetElementAsIntCall(AXISCHANDLE call, const Ax
 	return c->getFaultDetail(ppcDetail);
 }*/
 
-AXISC_STORAGE_CLASS_INFO xsdc__boolean axiscGetElementAsBooleanCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__boolean * axiscGetElementAsBooleanCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
-	return (xsdc__boolean)(c->getElementAsBoolean(pName,pNamespace));
+	return (xsdc__boolean* )(c->getElementAsBoolean(pName,pNamespace));
 }
 
-AXISC_STORAGE_CLASS_INFO unsigned int axiscGetElementAsUnsignedIntCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__unsignedInt * axiscGetElementAsUnsignedIntCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getElementAsUnsignedInt(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO short axiscGetElementAsShortCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__short * axiscGetElementAsShortCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getElementAsShort(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO unsigned short axiscGetElementAsUnsignedShortCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__unsignedShort * axiscGetElementAsUnsignedShortCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getElementAsUnsignedShort(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO char axiscGetElementAsByteCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__byte * axiscGetElementAsByteCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getElementAsByte(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO unsigned char axiscGetElementAsUnsignedByteCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__unsignedByte * axiscGetElementAsUnsignedByteCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getElementAsUnsignedByte(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO xsdc__long axiscGetElementAsLongCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__long * axiscGetElementAsLongCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
-	return (xsd__long)(c->getElementAsLong(pName,pNamespace));
+	return (xsd__long*)(c->getElementAsLong(pName,pNamespace));
 }
 
-AXISC_STORAGE_CLASS_INFO long axiscGetElementAsIntegerCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__integer * axiscGetElementAsIntegerCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getElementAsInteger(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO unsigned long axiscGetElementAsUnsignedLongCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__unsignedLong * axiscGetElementAsUnsignedLongCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getElementAsUnsignedLong(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO float axiscGetElementAsFloatCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__float * axiscGetElementAsFloatCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getElementAsFloat(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO double axiscGetElementAsDoubleCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__double * axiscGetElementAsDoubleCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getElementAsDouble(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO double axiscGetElementAsDecimalCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__decimal * axiscGetElementAsDecimalCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getElementAsDecimal(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO AxiscChar * axiscGetElementAsStringCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__string axiscGetElementAsStringCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getElementAsString(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO AxiscChar * axiscGetElementAsAnyURICall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__anyURI axiscGetElementAsAnyURICall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getElementAsAnyURI(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO AxiscChar * axiscGetElementAsQNameCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__QName axiscGetElementAsQNameCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getElementAsQName(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO xsdc__hexBinary axiscGetElementAsHexBinaryCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__hexBinary * axiscGetElementAsHexBinaryCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	//TODO: Unimplemented
-	xsdc__hexBinary hb;
-	memset(&hb,0,sizeof(hb));
+	xsdc__hexBinary * hb = new xsdc__hexBinary();
+	memset(hb,0,sizeof(hb));
 	return hb;
 }
 
-AXISC_STORAGE_CLASS_INFO xsdc__base64Binary axiscGetElementAsBase64BinaryCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__base64Binary * axiscGetElementAsBase64BinaryCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	//TODO: Unimplemented
-	xsdc__base64Binary bb;
-	memset(&bb,0,sizeof(bb));
+	xsdc__base64Binary * bb = new xsdc__base64Binary();
+	memset(bb,0,sizeof(bb));
 	return bb;
 }
 
-AXISC_STORAGE_CLASS_INFO struct tm axiscGetElementAsDateTimeCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__dateTime * axiscGetElementAsDateTimeCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getElementAsDateTime(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO struct tm axiscGetElementAsDateCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__date * axiscGetElementAsDateCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getElementAsDate(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO struct tm axiscGetElementAsTimeCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__time * axiscGetElementAsTimeCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getElementAsTime(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO long axiscGetElementAsDurationCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__duration * axiscGetElementAsDurationCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getElementAsDuration(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO int axiscGetAttributeAsIntCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__int * axiscGetAttributeAsIntCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getAttributeAsInt(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO xsdc__boolean axiscGetAttributeAsBooleanCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__boolean * axiscGetAttributeAsBooleanCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
-	return (xsdc__boolean)(c->getAttributeAsBoolean(pName,pNamespace));
+	return (xsdc__boolean* )(c->getAttributeAsBoolean(pName,pNamespace));
 }
 
-AXISC_STORAGE_CLASS_INFO unsigned int axiscGetAttributeAsUnsignedIntCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__unsignedInt * axiscGetAttributeAsUnsignedIntCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getAttributeAsUnsignedInt(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO short axiscGetAttributeAsShortCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__short * axiscGetAttributeAsShortCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getAttributeAsShort(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO unsigned short axiscGetAttributeAsUnsignedShortCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__unsignedShort * axiscGetAttributeAsUnsignedShortCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getAttributeAsUnsignedShort(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO char axiscGetAttributeAsByteCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__byte * axiscGetAttributeAsByteCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getAttributeAsByte(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO unsigned char axiscGetAttributeAsUnsignedByteCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__unsignedByte * axiscGetAttributeAsUnsignedByteCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getAttributeAsUnsignedByte(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO long axiscGetAttributeAsLongCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__long * axiscGetAttributeAsLongCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getAttributeAsLong(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO long axiscGetAttributeAsIntegerCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__integer * axiscGetAttributeAsIntegerCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getAttributeAsInteger(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO unsigned long axiscGetAttributeAsUnsignedLongCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__unsignedLong * axiscGetAttributeAsUnsignedLongCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getAttributeAsUnsignedLong(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO float axiscGetAttributeAsFloatCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__float * axiscGetAttributeAsFloatCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getAttributeAsFloat(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO double axiscGetAttributeAsDoubleCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__double * axiscGetAttributeAsDoubleCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getAttributeAsDouble(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO double axiscGetAttributeAsDecimalCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__decimal * axiscGetAttributeAsDecimalCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getAttributeAsDecimal(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO AxiscChar * axiscGetAttributeAsStringCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__string axiscGetAttributeAsStringCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getAttributeAsString(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO AxiscChar * axiscGetAttributeAsAnyURICall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__anyURI axiscGetAttributeAsAnyURICall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getAttributeAsAnyURI(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO AxiscChar * axiscGetAttributeAsQNameCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__QName axiscGetAttributeAsQNameCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getAttributeAsQName(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO xsdc__hexBinary axiscGetAttributeAsHexBinaryCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__hexBinary * axiscGetAttributeAsHexBinaryCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	//TODO: Unimplemented
-	xsdc__hexBinary hb;
-	memset(&hb,0,sizeof(hb));
+	xsdc__hexBinary * hb = new xsdc__hexBinary();
+	memset(hb,0,sizeof(hb));
 	return hb;
 }
 
-AXISC_STORAGE_CLASS_INFO xsdc__base64Binary axiscGetAttributeAsBase64BinaryCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__base64Binary * axiscGetAttributeAsBase64BinaryCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	//TODO: Unimplemented
-	xsdc__base64Binary bb;
-	memset(&bb,0,sizeof(bb));
+	xsdc__base64Binary *bb = new xsdc__base64Binary();
+	memset(bb,0,sizeof(bb));
 	return bb;
 }
 
-AXISC_STORAGE_CLASS_INFO struct tm axiscGetAttributeAsDateTimeCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__dateTime * axiscGetAttributeAsDateTimeCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getAttributeAsDateTime(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO struct tm axiscGetAttributeAsDateCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__date * axiscGetAttributeAsDateCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getAttributeAsDate(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO struct tm axiscGetAttributeAsTimeCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__time * axiscGetAttributeAsTimeCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getAttributeAsTime(pName,pNamespace);
 }
 
-AXISC_STORAGE_CLASS_INFO long axiscGetAttributeAsDurationCall(AXISCHANDLE call, const AxiscChar * pName, 
+AXISC_STORAGE_CLASS_INFO xsdc__duration * axiscGetAttributeAsDurationCall(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace) {
 	Call *c = (Call*)call;
 	return c->getAttributeAsDuration(pName,pNamespace);

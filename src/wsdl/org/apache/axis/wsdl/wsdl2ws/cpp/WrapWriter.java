@@ -307,22 +307,51 @@ public class WrapWriter extends CPPClassWriter
                     (ParameterInfo) paramsB.get(i),
                     wscontext);
             parameterName = ((ParameterInfo) paramsB.get(i)).getParamName();
+            ParameterInfo param = (ParameterInfo) paramsB.get(i);
             if ((CUtils
-                .isSimpleType(((ParameterInfo) paramsB.get(i)).getLangName())))
+                .isSimpleType(param.getLangName())))
             {
                 //for simple types	
-                writer.write(
-                    "\t"
-                        + paraTypeName
-                        + " v"
-                        + i
-                        + " = pIWSDZ->"
-                        + CUtils.getParameterGetValueMethodName(
-                            paraTypeName,
-                            false)
-                        + "(\""
-                        + parameterName
-                        + "\",0);\n");
+            	if (param.isNillable())
+            	{
+            		if (param.getLangName().equals("xsd__string")
+                			|| param.getLangName().equals("xsd__anyURI")
+							|| param.getLangName().equals("xsd__QName")
+							|| param.getLangName().equals("xsd__notation"))
+            		{
+
+		                writer.write("\t"
+								+ paraTypeName
+								+ " v"
+								+ i
+								+ " = pIWSDZ->"
+								+ CUtils.getParameterGetValueMethodName(paraTypeName, false)
+								+ "(\""
+								+ parameterName + "\",0);\n");
+            		}
+            		else
+            		{
+            			writer.write("\t"
+								+ paraTypeName
+								+ "* v"
+								+ i
+								+ " = pIWSDZ->"
+								+ CUtils.getParameterGetValueMethodName(paraTypeName, false)
+								+ "(\""
+								+ parameterName + "\",0);\n");
+            		}
+            	}
+            	else
+            	{
+            		writer.write("\t"
+							+ paraTypeName
+							+ " v"
+							+ i
+							+ " = *(pIWSDZ->"
+							+ CUtils.getParameterGetValueMethodName(paraTypeName, false)
+							+ "(\""
+							+ parameterName + "\",0));\n");
+            	}
             }
             else
                 if ((type =
@@ -422,11 +451,18 @@ public class WrapWriter extends CPPClassWriter
         writer.write("\ttry\n\t{\n");
         if (returntype != null)
         {
-            /* Invoke the service when return type not void */
-            writer.write(
-                "\t\t"
-                    + outparamTypeName
-                    + " ret = "
+        	/* Invoke the service when return type not void */
+        	writer.write("\t\t" + outparamTypeName);
+        	if (returntypeissimple
+        			&& returntype.isNillable()
+        			&&!(outparamTypeName.equals("xsd__string")
+        					|| outparamTypeName.equals("xsd__anyURI")
+							|| outparamTypeName.equals("xsd__QName")
+							|| outparamTypeName.equals("xsd__notation")))
+        	{
+        		writer.write(" *");
+        	}
+            writer.write(" ret = "
                     + "pWs->"
                     + methodName
                     + "(");
@@ -442,12 +478,28 @@ public class WrapWriter extends CPPClassWriter
             /* set the result */
             if (returntypeissimple)
             {
-                writer.write(
-                    "\t\treturn pIWSSZ->addOutputParam(\""
-                        + methodName
-                        + "Return\", (void*)&ret, "
-                        + CUtils.getXSDTypeForBasicType(outparamTypeName)
-                        + ");\n");
+            	if (returntype.isNillable()
+            			&& !(outparamTypeName.equals("xsd__string")
+            					|| outparamTypeName.equals("xsd__anyURI")
+								|| outparamTypeName.equals("xsd__QName")
+								|| outparamTypeName.equals("xsd__notation")))
+            	{
+            		writer.write(
+    	                    "\t\treturn pIWSSZ->addOutputParam(\""
+    	                        + methodName
+    	                        + "Return\", (void*)ret, "
+    	                        + CUtils.getXSDTypeForBasicType(outparamTypeName)
+    	                        + ");\n");
+            	}
+            	else
+            	{
+	                writer.write(
+	                    "\t\treturn pIWSSZ->addOutputParam(\""
+	                        + methodName
+	                        + "Return\", (void*)&ret, "
+	                        + CUtils.getXSDTypeForBasicType(outparamTypeName)
+	                        + ");\n");
+            	}
             }
             else
                 if (returntypeisarray)

@@ -54,7 +54,7 @@ class STORAGE_CLASS_INFO AxisUtils
 	/**
 	 * Decodes the given base64 string and returns it.
 	 */
-    static xsd__base64Binary* decodeFromBase64Binary(const AxisChar* pValue);
+    static xsd__base64Binary * decodeFromBase64Binary(const AxisChar* pValue);
 
         /*
 	 * Converts the given character pointer value to lowercase.

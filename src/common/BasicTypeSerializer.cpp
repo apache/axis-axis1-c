@@ -47,7 +47,6 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
 const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
     const AxisChar* pPrefix, const void* pValue, XSDTYPE type)
 {
-    const AxisChar* pStr;
     m_sSZ = "<";
 	if (NULL != pPrefix) { 
 		m_sSZ += pPrefix;
@@ -165,100 +164,27 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
             	}
                 break;
             case XSD_STRING:
-    	        pStr = *((char**)(pValue));
-                if (!pStr)
-                {
-                    /*
-                     * It is a null value not an empty value.
-                     */
-                    m_sSZ = "<";
-                    if (NULL != pPrefix)
-                    { 
-                        m_sSZ += pPrefix;
-                        m_sSZ += ":";
-                    }
-                    m_sSZ += pName;
-    				m_sSZ += " xsi:nil=\"true\">";
-                }
-                else
                 {
                 	String stringSerializer;
-                	m_sSZ += stringSerializer.serialize(pStr);
+                	m_sSZ += stringSerializer.serialize(pValue);
                 }
                 break;
             case XSD_ANYURI:
-                pStr = *((char**)(pValue));
-                if (!pStr)
-                {
-                    /*
-                     * It is a null value not an empty value.
-                     */
-                    m_sSZ = "<";
-                    if (NULL != pPrefix)
-                    { 
-                        m_sSZ += pPrefix;
-                        m_sSZ += ":";
-                    }
-                    m_sSZ += pName;
-               // direct return not good for maintainability 
-               //     m_sSZ += " xsi:nil=\"true\"/>\n";
-               //     return m_sSZ.c_str ();
-    				m_sSZ += " xsi:nil=\"true\">";
-                }
-                else
                 {
                 	AnyURI anyURISerializer;
-                	m_sSZ += anyURISerializer.serialize(pStr);
+                	m_sSZ += anyURISerializer.serialize(pValue);
                 }
                 break;
             case XSD_QNAME:
-    	        pStr = *((char**)(pValue));
-                if (!pStr)
-                {
-                    /*
-                     * It is a null value not an empty value.
-                     */
-                    m_sSZ = "<";
-                    if (NULL != pPrefix)
-                    { 
-                        m_sSZ += pPrefix;
-                        m_sSZ += ":";
-                    }
-                    m_sSZ += pName;
-               // direct return not good for maintainability 
-               //     m_sSZ += " xsi:nil=\"true\"/>\n";
-               //     return m_sSZ.c_str ();
-    				m_sSZ += " xsi:nil=\"true\">";
-                }
-                else
                 {
                 	XSD_QName QNameSerializer;
-                	m_sSZ += QNameSerializer.serialize(pStr);
+                	m_sSZ += QNameSerializer.serialize(pValue);
                 }
                 break;
             case XSD_NOTATION:
-                pStr = *((char**)(pValue));
-                if (!pStr)
-                {
-                    /*
-                     * It is a null value not an empty value.
-                     */
-                    m_sSZ = "<";
-                    if (NULL != pPrefix)
-                    { 
-                        m_sSZ += pPrefix;
-                        m_sSZ += ":";
-                    }
-                    m_sSZ += pName;
-               // direct return not good for maintainability 
-               //     m_sSZ += " xsi:nil=\"true\"/>\n";
-               //     return m_sSZ.c_str ();
-    				m_sSZ += " xsi:nil=\"true\">";
-                }
-                else
                 {
                 	NOTATION notationSerializer;
-                	m_sSZ += notationSerializer.serialize(pStr);
+                	m_sSZ += notationSerializer.serialize(pValue);
                 }
                 break;
             case XSD_HEXBINARY:
@@ -427,34 +353,26 @@ const AxisChar* BasicTypeSerializer::serializeAsAttribute
             break;
         case XSD_ANYURI:
             {
-            	const AxisChar* pStr;
-            	pStr = *((char**)(pValue));
            		AnyURI anyURISerializer;
-           		m_sSZ += anyURISerializer.serialize(pStr);
+           		m_sSZ += anyURISerializer.serialize(pValue);
             }
         	break;
         case XSD_STRING:
         	{
-        		const AxisChar* pStr;
-            	pStr = *((char**)(pValue));
         		String stringSerializer;
-        		m_sSZ += stringSerializer.serialize(pStr);
+        		m_sSZ += stringSerializer.serialize(pValue);
         	}
         	break;
         case XSD_QNAME:
 	        {
-        		const AxisChar* pStr;
-            	pStr = *((char**)(pValue));
         		XSD_QName QNameSerializer;
-        		m_sSZ += QNameSerializer.serialize(pStr);
+        		m_sSZ += QNameSerializer.serialize(pValue);
         	}
         	break;
         case XSD_NOTATION:
         	{
-        		const AxisChar* pStr;
-        		pStr = *((char**)(pValue));
         		NOTATION notationSerializer;
-            	m_sSZ += notationSerializer.serialize(pStr);
+            	m_sSZ += notationSerializer.serialize(pValue);
         	}
             break;
         case XSD_HEXBINARY:

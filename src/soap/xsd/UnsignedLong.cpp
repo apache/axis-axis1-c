@@ -8,8 +8,6 @@ UnsignedLong::UnsignedLong():m_UnsignedLong(NULL)
 
 UnsignedLong::~UnsignedLong()
 {
-    if (m_UnsignedLong)
-        delete m_UnsignedLong;
 }
 
 AxisChar* UnsignedLong::serialize(const void* value) throw (AxisSoapException)

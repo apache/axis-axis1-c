@@ -8,8 +8,6 @@ UnsignedByte::UnsignedByte():m_UnsignedByte(NULL)
 
 UnsignedByte::~UnsignedByte()
 {
-    if (m_UnsignedByte)
-        delete m_UnsignedByte;
 }
 
 AxisChar* UnsignedByte::serialize(const void* value) throw (AxisSoapException)

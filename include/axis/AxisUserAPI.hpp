@@ -40,7 +40,11 @@ typedef AxisChar * xsd__string;
  * @typedef xsd__integer
  * Axis C++ defined type for xml basic type integer
  */
-typedef int xsd__integer;
+#ifdef WIN32
+typedef __int64 xsd__integer;
+#else
+typedef long long xsd__integer;
+#endif
 /**
  * @typedef xsd__int
  * Axis C++ defined type for xml basic type int
@@ -86,12 +90,17 @@ typedef enum { false_=0, true_ } xsd__boolean;
  * @typedef xsd__byte
  * Axis C++ defined type for xml basic type byte
  */
-typedef signed char xsd__byte;
+typedef char xsd__byte;
 /**
  * @typedef xsd__QName
  * Axis C++ defined type for xml basic type QName
  */
 typedef AxisChar * xsd__QName;
+/**
+ * @typedef xsd__notation
+ * Axis C++ defined type for xml basic type NOTATION
+ */
+typedef AxisChar * xsd__notation;
 /**
  * @typedef xsd__NCName
  * Axis C++ defined type for xml basic type NCName
@@ -112,6 +121,11 @@ typedef struct tm xsd__date;
  * Axis C++ defined type for xml basic type time
  */
 typedef struct tm xsd__time;
+/**
+ * @typedef xsd__duration
+ * Axis C++ defined type for xml basic type duration
+ */
+typedef long xsd__duration;
 /**
  * @typedef xsd__unsignedByte
  * Axis C++ defined type for xml basic type unsignedByte

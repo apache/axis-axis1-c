@@ -30,7 +30,6 @@ import java.util.Iterator;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
-import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;

@@ -8,11 +8,6 @@ AXIS_CPP_NAMESPACE_START
     
     Base64Binary::~Base64Binary()
     {
-        if (m_Base64Binary)
-        {
-            delete  m_Base64Binary;
-            m_Base64Binary = NULL;
-        }
     }
 
     AxisChar* Base64Binary::serialize(const void* value) throw (AxisSoapException)
@@ -25,7 +20,7 @@ AXIS_CPP_NAMESPACE_START
     	return (void*) deserializeBase64Binary(valueAsChar);
     }
 	
-    AxisChar* Base64Binary::serialize(const xsd__base64Binary* value) throw (AxisSoapException)
+    AxisChar* Base64Binary::serialize(const xsd__base64Binary * value) throw (AxisSoapException)
     {
         MinLength* minLength= getMinLength();
         if (minLength->isSet())
@@ -104,7 +99,7 @@ AXIS_CPP_NAMESPACE_START
 		return m_Buf;
     }
 	
-    xsd__base64Binary* Base64Binary::deserializeBase64Binary(const AxisChar* valueAsChar) throw (AxisSoapException)
+    xsd__base64Binary * Base64Binary::deserializeBase64Binary(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
         if (m_Base64Binary)
         {

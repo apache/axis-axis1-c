@@ -65,14 +65,14 @@ public:
 	 * @param value The HexBinary value to be serialized.
 	 * @return Serialized form of HexBinary value.
 	 */
-    AxisChar* serialize(const xsd__hexBinary* value) throw (AxisSoapException);
+    AxisChar* serialize(const xsd__hexBinary * value) throw (AxisSoapException);
 	
 	/**
 	 * Deserialized HexBinary value from it's on-the-wire string form.
 	 * @param valueAsChar Serialized form of HexBinary value.
 	 * @return Deserialized HexBinary value.
 	 */
-    xsd__hexBinary* deserializeHexBinary(const AxisChar* valueAsChar) throw (AxisSoapException);
+    xsd__hexBinary * deserializeHexBinary(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 
@@ -98,7 +98,7 @@ protected:
     Length* getLength();
 
 private:
-	xsd__hexBinary* m_HexBinary;
+	xsd__hexBinary * m_HexBinary;
 };
 
 AXIS_CPP_NAMESPACE_END

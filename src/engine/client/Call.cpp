@@ -463,254 +463,261 @@ Axis_Array Call::getCmplxArray (void* pDZFunct, void* pCreFunct,
         pName, pNamespace);
 }
 
-int Call::getElementAsInt (const AxisChar* pName, const AxisChar* pNamespace)
+xsd__int * Call::getElementAsInt (const AxisChar* pName, const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsInt (pName, pNamespace);
 }
 
-xsd__boolean Call::getElementAsBoolean (const AxisChar* pName, 
+xsd__boolean * Call::getElementAsBoolean (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsBoolean (pName, pNamespace);
 }
 
-unsigned int Call::getElementAsUnsignedInt (const AxisChar* pName,
+xsd__unsignedInt * Call::getElementAsUnsignedInt (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsUnsignedInt (pName, pNamespace);
 }
 
-short Call::getElementAsShort (const AxisChar* pName, 
+xsd__short * Call::getElementAsShort (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsShort (pName, pNamespace);
 }
 
-unsigned short Call::getElementAsUnsignedShort (const AxisChar* pName,
+xsd__unsignedShort * Call::getElementAsUnsignedShort (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsUnsignedShort (pName, pNamespace);
 }
 
-char Call::getElementAsByte (const AxisChar* pName, const AxisChar* pNamespace)
+xsd__byte * Call::getElementAsByte (const AxisChar* pName, const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsByte (pName, pNamespace);
 }
-unsigned char Call::getElementAsUnsignedByte (const AxisChar* pName,
+
+xsd__unsignedByte * Call::getElementAsUnsignedByte (const AxisChar* pName,
     const AxisChar * pNamespace)
 {
     return m_pIWSDZ->getElementAsUnsignedByte (pName, pNamespace);
 }
 
-LONGLONG Call::getElementAsLong (const AxisChar* pName, const AxisChar* pNamespace)
+xsd__long * Call::getElementAsLong (const AxisChar* pName, const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsLong (pName, pNamespace);
 }
 
-long Call::getElementAsInteger (const AxisChar* pName, 
+xsd__integer * Call::getElementAsInteger (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsInteger (pName, pNamespace);
 }
 
-unsigned long Call::getElementAsUnsignedLong (const AxisChar* pName,
+xsd__unsignedLong * Call::getElementAsUnsignedLong (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsUnsignedLong (pName, pNamespace);
 }
 
-float Call::getElementAsFloat (const AxisChar* pName, 
+xsd__float * Call::getElementAsFloat (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsFloat (pName, pNamespace);
 }
 
-double Call::getElementAsDouble (const AxisChar* pName, 
+xsd__double * Call::getElementAsDouble (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsDouble (pName, pNamespace);
 }
 
-double Call::getElementAsDecimal (const AxisChar* pName, 
+xsd__decimal * Call::getElementAsDecimal (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsDecimal (pName, pNamespace);
 }
 
-AxisChar* Call::getElementAsString (const AxisChar* pName, 
+xsd__string Call::getElementAsString (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsString (pName, pNamespace);
 }
 
-AxisChar* Call::getElementAsAnyURI (const AxisChar* pName, 
+xsd__anyURI Call::getElementAsAnyURI (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsAnyURI (pName, pNamespace);
 }
 
-AxisChar* Call::getElementAsQName (const AxisChar* pName, 
+xsd__QName Call::getElementAsQName (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsQName (pName, pNamespace);
 }
 
-xsd__hexBinary Call::getElementAsHexBinary (const AxisChar* pName, 
+xsd__hexBinary * Call::getElementAsHexBinary (const AxisChar* pName, 
     const AxisChar * pNamespace)
 {
     return m_pIWSDZ->getElementAsHexBinary (pName, pNamespace);
 }
 
-xsd__base64Binary Call::getElementAsBase64Binary (const AxisChar* pName,
+xsd__base64Binary * Call::getElementAsBase64Binary (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsBase64Binary (pName, pNamespace);
 }
 
-struct tm Call::getElementAsDateTime (const AxisChar* pName,
+xsd__dateTime * Call::getElementAsDateTime (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsDateTime (pName, pNamespace);
 }
 
-struct tm Call::getElementAsDate (const AxisChar* pName, 
+xsd__date * Call::getElementAsDate (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsDate (pName, pNamespace);
 }
 
-struct tm Call::getElementAsTime (const AxisChar* pName, 
+xsd__time * Call::getElementAsTime (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsTime (pName, pNamespace);
 }
 
-long Call::getElementAsDuration (const AxisChar* pName, 
+xsd__duration * Call::getElementAsDuration (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getElementAsDuration (pName, pNamespace);
 }
 
-int Call::getAttributeAsInt (const AxisChar* pName, const AxisChar* pNamespace)
+xsd__int * Call::getAttributeAsInt (const AxisChar* pName, const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsInt (pName, pNamespace);
 }
 
-xsd__boolean Call::getAttributeAsBoolean (const AxisChar* pName,
+xsd__boolean * Call::getAttributeAsBoolean (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsBoolean (pName, pNamespace);
 }
-unsigned int Call::getAttributeAsUnsignedInt (const AxisChar* pName,
+
+xsd__unsignedInt * Call::getAttributeAsUnsignedInt (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsUnsignedInt (pName, pNamespace);
 }
 
-short Call::getAttributeAsShort (const AxisChar* pName, 
+xsd__short * Call::getAttributeAsShort (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsShort (pName, pNamespace);
 }
 
-unsigned short Call::getAttributeAsUnsignedShort (const AxisChar* pName,
+xsd__unsignedShort * Call::getAttributeAsUnsignedShort (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsUnsignedShort (pName, pNamespace);
 }
 
-char Call::getAttributeAsByte (const AxisChar* pName, 
+xsd__byte * Call::getAttributeAsByte (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsByte (pName, pNamespace);
 }
-unsigned char Call::getAttributeAsUnsignedByte (const AxisChar* pName,
+
+xsd__unsignedByte * Call::getAttributeAsUnsignedByte (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsUnsignedByte (pName, pNamespace);
 }
 
-long Call::getAttributeAsLong (const AxisChar* pName, 
+xsd__long * Call::getAttributeAsLong (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsLong (pName, pNamespace);
 }
 
-long Call::getAttributeAsInteger (const AxisChar* pName,
+xsd__integer * Call::getAttributeAsInteger (const AxisChar* pName,
     const AxisChar * pNamespace)
 {
     return m_pIWSDZ->getAttributeAsInteger (pName, pNamespace);
 }
-unsigned long Call::getAttributeAsUnsignedLong (const AxisChar* pName,
+
+xsd__unsignedLong * Call::getAttributeAsUnsignedLong (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsUnsignedLong (pName, pNamespace);
 }
 
-float Call::getAttributeAsFloat (const AxisChar* pName,
+xsd__float * Call::getAttributeAsFloat (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsFloat (pName, pNamespace);
 }
 
-double Call::getAttributeAsDouble (const AxisChar* pName,
+xsd__double * Call::getAttributeAsDouble (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsDouble (pName, pNamespace);
 }
 
-double Call::getAttributeAsDecimal (const AxisChar* pName,
+xsd__decimal * Call::getAttributeAsDecimal (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsDecimal (pName, pNamespace);
 }
 
-AxisChar* Call::getAttributeAsString (const AxisChar* pName,
+xsd__string Call::getAttributeAsString (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsString (pName, pNamespace);
 }
 
-AxisChar* Call::getAttributeAsAnyURI (const AxisChar* pName,
+xsd__anyURI Call::getAttributeAsAnyURI (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsAnyURI (pName, pNamespace);
 }
 
-AxisChar* Call::getAttributeAsQName (const AxisChar* pName,
+xsd__QName Call::getAttributeAsQName (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsQName (pName, pNamespace);
 }
 
-xsd__hexBinary Call::getAttributeAsHexBinary (const AxisChar* pName,
+xsd__hexBinary * Call::getAttributeAsHexBinary (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsHexBinary (pName, pNamespace);
 }
 
-xsd__base64Binary Call::getAttributeAsBase64Binary (const AxisChar* pName,
+xsd__base64Binary * Call::getAttributeAsBase64Binary (const AxisChar* pName,
     const AxisChar * pNamespace)
 {
     return m_pIWSDZ->getAttributeAsBase64Binary (pName, pNamespace);
 }
-struct tm Call::getAttributeAsDateTime (const AxisChar* pName,
+
+xsd__dateTime * Call::getAttributeAsDateTime (const AxisChar* pName,
     const AxisChar * pNamespace)
 {
     return m_pIWSDZ->getAttributeAsDateTime (pName, pNamespace);
 }
-struct tm Call::getAttributeAsDate (const AxisChar* pName, 
+
+xsd__date * Call::getAttributeAsDate (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsDate (pName, pNamespace);
 }
-struct tm Call::getAttributeAsTime (const AxisChar* pName, 
+
+xsd__time * Call::getAttributeAsTime (const AxisChar* pName, 
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsTime (pName, pNamespace);
 }
 
-long Call::getAttributeAsDuration (const AxisChar* pName,
+xsd__duration * Call::getAttributeAsDuration (const AxisChar* pName,
     const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsDuration (pName, pNamespace);

@@ -258,15 +258,33 @@ public class BeanParamWriter extends ParamCPPFileWriter
                                     "\tif (0 != param->"
                                         + attribs[i].getParamNameAsMember()
                                         + ")\n");
-                                writer.write(
-                                    "\t\tpSZ->serializeAsAttribute(\""
-                                        + attribs[i].getParamName()
-                                        + "\", 0, (void*)(param->"
-                                        + attribs[i].getParamNameAsMember()
-                                        + "), "
-                                        + CUtils.getXSDTypeForBasicType(
-                                            attribs[i].getTypeName())
-                                        + ");\n");
+                                if (attribs[i].getTypeName().equals("xsd__string")
+                 						|| attribs[i].getTypeName().equals("xsd__anyURI")
+                						|| attribs[i].getTypeName().equals("xsd__QName")
+                						|| attribs[i].getTypeName().equals("xsd__notation"))
+                                {
+	                                writer.write(
+	                                    "\t\tpSZ->serializeAsAttribute(\""
+	                                        + attribs[i].getParamName()
+	                                        + "\", 0, (void*)(param->"
+	                                        + attribs[i].getParamNameAsMember()
+	                                        + "), "
+	                                        + CUtils.getXSDTypeForBasicType(
+	                                            attribs[i].getTypeName())
+	                                        + ");\n");
+                                }
+                                else
+                                {
+                                	writer.write(
+	                                    "\t\tpSZ->serializeAsAttribute(\""
+	                                        + attribs[i].getParamName()
+	                                        + "\", 0, (void*)&(param->"
+	                                        + attribs[i].getParamNameAsMember()
+	                                        + "), "
+	                                        + CUtils.getXSDTypeForBasicType(
+	                                            attribs[i].getTypeName())
+	                                        + ");\n");
+                                }
                             }
                             else
                             {
@@ -282,15 +300,35 @@ public class BeanParamWriter extends ParamCPPFileWriter
                             }
                         }
                         else
-                            writer.write(
-                                "\tpSZ->serializeAsElement(\""
-                                    + attribs[i].getParamName()
-                                    + "\", (void*)&(param->"
-                                    + attribs[i].getParamNameAsMember()
-                                    + "), "
-                                    + CUtils.getXSDTypeForBasicType(
-                                        attribs[i].getTypeName())
-                                    + ");\n");
+                        {
+                        	if (attribs[i].getTypeName().equals("xsd__string")
+             						|| attribs[i].getTypeName().equals("xsd__anyURI")
+            						|| attribs[i].getTypeName().equals("xsd__QName")
+            						|| attribs[i].getTypeName().equals("xsd__notation"))
+                        	{
+                        		writer.write(
+                                        "\tpSZ->serializeAsElement(\""
+                                            + attribs[i].getParamName()
+                                            + "\", (void*)(param->"
+                                            + attribs[i].getParamNameAsMember()
+                                            + "), "
+                                            + CUtils.getXSDTypeForBasicType(
+                                                attribs[i].getTypeName())
+                                            + ");\n");
+                        	}
+                        	else
+                        	{
+	                            writer.write(
+	                                "\tpSZ->serializeAsElement(\""
+	                                    + attribs[i].getParamName()
+	                                    + "\", (void*)&(param->"
+	                                    + attribs[i].getParamNameAsMember()
+	                                    + "), "
+	                                    + CUtils.getXSDTypeForBasicType(
+	                                        attribs[i].getTypeName())
+	                                    + ");\n");
+                        	}
+                        }
                     }
                     else
                     {
@@ -392,17 +430,38 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 else
                     if (attribs[i].isSimpleType())
                     {
-                        //TODO handle optional attributes
-                        writer.write(
-                            "\tparam->"
-                                + attribs[i].getParamNameAsMember()
-                                + " = pIWSDZ->"
-                                + CUtils.getParameterGetValueMethodName(
-                                    attribs[i].getTypeName(),
-                                    attribs[i].isAttribute())
-                                + "(\""
-                                + attribs[i].getParamName()
-                                + "\",0);\n");
+                    	if (attribs[i].isNillable()
+                    			|| attribs[i].getTypeName().equals("xsd__string")
+								|| attribs[i].getTypeName().equals("xsd__anyURI")
+								|| attribs[i].getTypeName().equals("xsd__QName")
+								|| attribs[i].getTypeName().equals("xsd__notation"))
+                    	{
+	                        //TODO handle optional attributes
+	                        writer.write(
+	                            "\tparam->"
+	                                + attribs[i].getParamNameAsMember()
+	                                + " = *(pIWSDZ->"
+	                                + CUtils.getParameterGetValueMethodName(
+	                                    attribs[i].getTypeName(),
+	                                    attribs[i].isAttribute())
+	                                + "(\""
+	                                + attribs[i].getParamName()
+	                                + "\",0));\n");
+                    	}
+                    	else
+                    	{
+	                        //TODO handle optional attributes
+	                        writer.write(
+	                            "\tparam->"
+	                                + attribs[i].getParamNameAsMember()
+	                                + " = pIWSDZ->"
+	                                + CUtils.getParameterGetValueMethodName(
+	                                    attribs[i].getTypeName(),
+	                                    attribs[i].isAttribute())
+	                                + "(\""
+	                                + attribs[i].getParamName()
+	                                + "\",0);\n");
+                    	}
                     }
                     else
                     {

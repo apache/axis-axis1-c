@@ -140,94 +140,94 @@ public:
         void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
 
     /* Methods used by wrappers to get a deserialized value of basic types */
-    int AXISCALL getElementAsInt(const AxisChar* pName, 
+    xsd__int * AXISCALL getElementAsInt(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    xsd__boolean AXISCALL getElementAsBoolean(const AxisChar* pName, 
+    xsd__boolean * AXISCALL getElementAsBoolean(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    unsigned int AXISCALL getElementAsUnsignedInt(const AxisChar* pName, 
+    xsd__unsignedInt * AXISCALL getElementAsUnsignedInt(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    short AXISCALL getElementAsShort(const AxisChar* pName, 
+    xsd__short * AXISCALL getElementAsShort(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    unsigned short AXISCALL getElementAsUnsignedShort(const AxisChar* pName, 
+    xsd__unsignedShort * AXISCALL getElementAsUnsignedShort(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    char AXISCALL getElementAsByte(const AxisChar* pName, 
+    xsd__byte * AXISCALL getElementAsByte(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    unsigned char AXISCALL getElementAsUnsignedByte(const AxisChar* pName, 
+    xsd__unsignedByte * AXISCALL getElementAsUnsignedByte(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    LONGLONG AXISCALL getElementAsLong(const AxisChar* pName, 
+    xsd__long * AXISCALL getElementAsLong(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    long AXISCALL getElementAsInteger(const AxisChar* pName, 
+    xsd__integer * AXISCALL getElementAsInteger(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    unsigned long AXISCALL getElementAsUnsignedLong(const AxisChar* pName, 
+    xsd__unsignedLong * AXISCALL getElementAsUnsignedLong(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    float AXISCALL getElementAsFloat(const AxisChar* pName, 
+    xsd__float * AXISCALL getElementAsFloat(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    double AXISCALL getElementAsDouble(const AxisChar* pName, 
+    xsd__double * AXISCALL getElementAsDouble(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    double AXISCALL getElementAsDecimal(const AxisChar* pName, 
+    xsd__decimal * AXISCALL getElementAsDecimal(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    AxisChar* AXISCALL getElementAsString(const AxisChar* pName, 
+    xsd__string AXISCALL getElementAsString(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    AxisChar* AXISCALL getElementAsAnyURI(const AxisChar* pName, 
+    xsd__anyURI AXISCALL getElementAsAnyURI(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    AxisChar* AXISCALL getElementAsQName(const AxisChar* pName, 
+    xsd__QName AXISCALL getElementAsQName(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    xsd__hexBinary AXISCALL getElementAsHexBinary(const AxisChar* pName, 
+    xsd__hexBinary * AXISCALL getElementAsHexBinary(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    xsd__base64Binary AXISCALL getElementAsBase64Binary(const AxisChar* pName, 
+    xsd__base64Binary * AXISCALL getElementAsBase64Binary(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    struct tm AXISCALL getElementAsDateTime(const AxisChar* pName, 
+    xsd__dateTime * AXISCALL getElementAsDateTime(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    struct tm AXISCALL getElementAsDate(const AxisChar* pName, 
+    xsd__date * AXISCALL getElementAsDate(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    struct tm AXISCALL getElementAsTime(const AxisChar* pName, 
+    xsd__time * AXISCALL getElementAsTime(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    long AXISCALL getElementAsDuration(const AxisChar* pName, 
+    xsd__duration * AXISCALL getElementAsDuration(const AxisChar* pName, 
         const AxisChar* pNamespace);
 
-    int AXISCALL getAttributeAsInt(const AxisChar* pName, 
+    xsd__int * AXISCALL getAttributeAsInt(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    xsd__boolean AXISCALL getAttributeAsBoolean(const AxisChar* pName, 
+    xsd__boolean * AXISCALL getAttributeAsBoolean(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    unsigned int AXISCALL getAttributeAsUnsignedInt(const AxisChar* pName, 
+    xsd__unsignedInt * AXISCALL getAttributeAsUnsignedInt(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    short AXISCALL getAttributeAsShort(const AxisChar* pName, 
+    xsd__short * AXISCALL getAttributeAsShort(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    unsigned short AXISCALL getAttributeAsUnsignedShort(const AxisChar* pName, 
+    xsd__unsignedShort * AXISCALL getAttributeAsUnsignedShort(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    char AXISCALL getAttributeAsByte(const AxisChar* pName, 
+    xsd__byte * AXISCALL getAttributeAsByte(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    unsigned char AXISCALL getAttributeAsUnsignedByte(const AxisChar* pName, 
+    xsd__unsignedByte * AXISCALL getAttributeAsUnsignedByte(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    LONGLONG AXISCALL getAttributeAsLong(const AxisChar* pName, 
+    xsd__long * AXISCALL getAttributeAsLong(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    long AXISCALL getAttributeAsInteger(const AxisChar* pName, 
+    xsd__integer * AXISCALL getAttributeAsInteger(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    unsigned long AXISCALL getAttributeAsUnsignedLong(const AxisChar* pName, 
+    xsd__unsignedLong * AXISCALL getAttributeAsUnsignedLong(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    float AXISCALL getAttributeAsFloat(const AxisChar* pName, 
+    xsd__float * AXISCALL getAttributeAsFloat(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    double AXISCALL getAttributeAsDouble(const AxisChar* pName, 
+    xsd__double * AXISCALL getAttributeAsDouble(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    double AXISCALL getAttributeAsDecimal(const AxisChar* pName, 
+    xsd__decimal * AXISCALL getAttributeAsDecimal(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    AxisChar* AXISCALL getAttributeAsString(const AxisChar* pName, 
+    xsd__string AXISCALL getAttributeAsString(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    AxisChar* AXISCALL getAttributeAsAnyURI(const AxisChar* pName, 
+    xsd__anyURI AXISCALL getAttributeAsAnyURI(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    AxisChar* AXISCALL getAttributeAsQName(const AxisChar* pName, 
+    xsd__QName AXISCALL getAttributeAsQName(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    xsd__hexBinary AXISCALL getAttributeAsHexBinary(const AxisChar* pName, 
+    xsd__hexBinary * AXISCALL getAttributeAsHexBinary(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    xsd__base64Binary AXISCALL getAttributeAsBase64Binary
+    xsd__base64Binary * AXISCALL getAttributeAsBase64Binary
         (const AxisChar* pName, const AxisChar* pNamespace);
-    struct tm AXISCALL getAttributeAsDateTime(const AxisChar* pName, 
+    xsd__dateTime * AXISCALL getAttributeAsDateTime(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    struct tm AXISCALL getAttributeAsDate(const AxisChar* pName, 
+    xsd__date * AXISCALL getAttributeAsDate(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    struct tm AXISCALL getAttributeAsTime(const AxisChar* pName, 
+    xsd__time * AXISCALL getAttributeAsTime(const AxisChar* pName, 
         const AxisChar* pNamespace);
-    long AXISCALL getAttributeAsDuration(const AxisChar* pName, 
+    xsd__duration * AXISCALL getAttributeAsDuration(const AxisChar* pName, 
         const AxisChar* pNamespace);
     
 /*    void* CreateArray(XSDTYPE nType, int nSize); */

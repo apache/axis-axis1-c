@@ -404,6 +404,7 @@ public class WSDL2Ws
             {
                 pinfo.setArray(true);
             }
+            pinfo.setNillable(eleinfo.getNillable());
             pinfo.setElementName(
                 type.getElementForElementName(elementname).getName());
             if (innerType.getName().equals(CUtils.anyTypeQname))
@@ -586,6 +587,7 @@ public class WSDL2Ws
                 type.getElementForElementName(elementname).getName());
             if (innerType.getName().equals(CUtils.anyTypeQname))
                 pinfo.setAnyType(true);
+            pinfo.setNillable(eleinfo.getNillable());
             minfo.addInputParameter(pinfo);
         }
     }
@@ -650,7 +652,7 @@ public class WSDL2Ws
         methods = this.getServiceInfo(this.portTypeEntry.getPortType());
         this.getWebServiceInfo();
 
-        //TODO	chaeck weather the name at the WrapperConstant Doclit is right "doc"
+        //TODO	check whether the name at the WrapperConstant Doclit is right "doc"
 
         WebServiceGenerator wsg =
             WebServiceGeneratorFactory.createWebServiceGenerator(

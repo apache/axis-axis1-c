@@ -8,8 +8,6 @@ Short::Short():m_Short(NULL)
 
 Short::~Short()
 {
-    if (m_Short)
-        delete m_Short;
 }
 
 AxisChar* Short::serialize(const void* value) throw (AxisSoapException)

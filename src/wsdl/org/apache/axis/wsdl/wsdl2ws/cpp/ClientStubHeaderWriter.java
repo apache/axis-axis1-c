@@ -132,12 +132,22 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                                 .getOutputParameterTypes()
                                 .iterator()
                                 .next();
+                        String outParamTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returnParam, wscontext);
+                        if (CUtils.isSimpleType(outParamTypeName)
+								&& returnParam.isNillable()
+								&& !(outParamTypeName.equals("xsd__string")
+										|| outParamTypeName.equals("xsd__anyURI")
+										|| outParamTypeName.equals("xsd__QName")
+										|| outParamTypeName.equals("xsd__notation")))
+                        {
+                        	writer.write(
+                                    "\tSTORAGE_CLASS_INFO "
+                                        + outParamTypeName
+                                        + " * ");
+                        }
                         writer.write(
                             "\tSTORAGE_CLASS_INFO "
-                                + WrapperUtils
-                                    .getClassNameFromParamInfoConsideringArrays(
-                                    returnParam,
-                                    wscontext)
+                                + outParamTypeName
                                 + " ");
                     }
                     else
@@ -154,25 +164,56 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                 if (params.hasNext())
                 {
                     ParameterInfo fparam = (ParameterInfo) params.next();
-                    writer.write(
-                        WrapperUtils
-                            .getClassNameFromParamInfoConsideringArrays(
+                    String paramTypeName = WrapperUtils
+                    .getClassNameFromParamInfoConsideringArrays(
                             fparam,
-                            wscontext)
-                            + " Value"
-                            + 0);
+                            wscontext);
+                    if (CUtils.isSimpleType(paramTypeName)
+							&& fparam.isNillable()
+							&& !(paramTypeName.equals("xsd__string")
+									|| paramTypeName.equals("xsd__anyURI")
+									|| paramTypeName.equals("xsd__QName")
+									|| paramTypeName.equals("xsd__notation")))
+                    {
+                    	writer.write(
+    	                        paramTypeName
+    	                            + " * Value"
+    	                            + 0);
+                    }
+                    else
+                    {
+	                    writer.write(
+	                        paramTypeName
+	                            + " Value"
+	                            + 0);
+                    }
                 }
                 for (int j = 1; params.hasNext(); j++)
                 {
                     ParameterInfo nparam = (ParameterInfo) params.next();
-                    writer.write(
-                        ","
-                            + WrapperUtils
-                                .getClassNameFromParamInfoConsideringArrays(
-                                nparam,
-                                wscontext)
-                            + " Value"
-                            + j);
+                    String paramTypeName = WrapperUtils
+                    .getClassNameFromParamInfoConsideringArrays(
+                    		nparam,
+                            wscontext);
+                    if (CUtils.isSimpleType(paramTypeName)
+							&& nparam.isNillable()
+							&& !(paramTypeName.equals("xsd__string")
+									|| paramTypeName.equals("xsd__anyURI")
+									|| paramTypeName.equals("xsd__QName")
+									|| paramTypeName.equals("xsd__notation")))
+                    {
+                    	writer.write(", "
+                    			+ paramTypeName
+    	                        + " * Value"
+    	                        + j);
+                    }
+                    else
+                    {
+	                    writer.write(", "
+	                    		+ paramTypeName
+	                            + " Value"
+	                            + j);
+                    }
                 }
                 if (isAllTreatedAsOutParams)
                 {

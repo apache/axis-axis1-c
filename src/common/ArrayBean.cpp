@@ -338,7 +338,7 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
                 AxisChar** p = (AxisChar**)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)p, m_type);
+                    pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, (void*)*p, m_type);
                     p++;
                 }
             }

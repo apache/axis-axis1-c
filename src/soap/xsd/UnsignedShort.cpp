@@ -8,8 +8,6 @@ UnsignedShort::UnsignedShort():m_UnsignedShort(NULL)
 
 UnsignedShort::~UnsignedShort()
 {
-    if (m_UnsignedShort)
-        delete m_UnsignedShort;
 }
 
 AxisChar* UnsignedShort::serialize(const void* value) throw (AxisSoapException)

@@ -646,58 +646,58 @@ int SoapSerializer::addOutputParam(const AxisChar* pchName, void* pValue,
     {
     case XSD_INT:
     case XSD_BOOLEAN:
-        pParam->m_Value.nValue = *((int*)(pValue));
+        pParam->m_Value.nValue = (int*)(pValue);
         break; 
     case XSD_UNSIGNEDINT:
-        pParam->m_Value.unValue = *((unsigned int*)(pValue));
+        pParam->m_Value.unValue = (unsigned int*)(pValue);
         break;           
     case XSD_SHORT:
-        pParam->m_Value.sValue = *((short*)(pValue));
+        pParam->m_Value.sValue = (short*)(pValue);
         break; 
     case XSD_UNSIGNEDSHORT:
-        pParam->m_Value.usValue = *((unsigned short*)(pValue));
+        pParam->m_Value.usValue = (unsigned short*)(pValue);
         break;         
     case XSD_BYTE:
-        pParam->m_Value.cValue = *((char*)(pValue));
+        pParam->m_Value.cValue = (char*)(pValue);
         break; 
     case XSD_UNSIGNEDBYTE:
-        pParam->m_Value.ucValue = *((unsigned char*)(pValue));
+        pParam->m_Value.ucValue = (unsigned char*)(pValue);
         break;
     case XSD_LONG:
-        pParam->m_Value.llValue = *((LONGLONG*)(pValue));
+        pParam->m_Value.llValue = (LONGLONG*)(pValue);
         break;
     case XSD_INTEGER:
-        pParam->m_Value.lValue = *((long*)(pValue));
+        pParam->m_Value.lValue = (long*)(pValue);
         break;        
     case XSD_DURATION:
-        pParam->m_Value.lDuration = *((long*)(pValue));
+        pParam->m_Value.lDuration = (long*)(pValue);
         break;        
     case XSD_UNSIGNEDLONG:
-        pParam->m_Value.ulValue = *((unsigned long*)(pValue));
+        pParam->m_Value.ulValue = (unsigned long*)(pValue);
         break;
     case XSD_FLOAT:
-        pParam->m_Value.fValue = *((float*)(pValue));
+        pParam->m_Value.fValue = (float*)(pValue);
         break;
     case XSD_DOUBLE:
     case XSD_DECIMAL:
-        pParam->m_Value.dValue = *((double*)(pValue));
+        pParam->m_Value.dValue = (double*)(pValue);
         break;              
     case XSD_ANYURI:
     case XSD_QNAME:
     case XSD_NOTATION:
     case XSD_STRING:
-        pParam->m_Value.pStrValue = *((char**)(pValue));
+        pParam->m_Value.pStrValue = (char*)(pValue);
         break;
     case XSD_HEXBINARY:
-        pParam->m_Value.hbValue = *((xsd__hexBinary*)(pValue));
+        pParam->m_Value.hbValue = (xsd__hexBinary *)(pValue);
         break;
     case XSD_BASE64BINARY:
-        pParam->m_Value.b64bValue = *((xsd__base64Binary*)(pValue));
+        pParam->m_Value.b64bValue = (xsd__base64Binary *)(pValue);
         break;
     case XSD_DATETIME:
     case XSD_DATE:
     case XSD_TIME:
-        pParam->m_Value.tValue = *((struct tm*)(pValue));
+        pParam->m_Value.tValue = (struct tm*)(pValue);
         break; 
     default:
         delete pParam;

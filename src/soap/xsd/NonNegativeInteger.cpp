@@ -8,8 +8,6 @@ NonNegativeInteger::NonNegativeInteger():m_NonNegativeInteger(NULL)
 
 NonNegativeInteger::~NonNegativeInteger()
 {
-    if (m_NonNegativeInteger)
-        delete m_NonNegativeInteger;
 }
 
 AxisChar* NonNegativeInteger::serialize(const void* value) throw (AxisSoapException)

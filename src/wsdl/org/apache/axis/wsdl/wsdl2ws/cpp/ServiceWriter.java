@@ -137,12 +137,30 @@ public class ServiceWriter extends CPPClassWriter
                                 .getOutputParameterTypes()
                                 .iterator()
                                 .next();
-                        writer.write(
-                            WrapperUtils
-                                .getClassNameFromParamInfoConsideringArrays(
-                                returntype,
-                                wscontext)
-                                + " ");
+                        String returnTypeName = returntype.getLangName(); 
+                        if (CUtils.isSimpleType(returntype.getLangName())
+                        		&& returntype.isNillable()
+								&& !(returnTypeName.equals("xsd__string")
+										|| returnTypeName.equals("xsd__anyURI")
+										|| returnTypeName.equals("xsd__QName")
+										|| returnTypeName.equals("xsd__notation")))
+                        {
+                        	writer.write(
+    	                            WrapperUtils
+    	                                .getClassNameFromParamInfoConsideringArrays(
+    	                                returntype,
+    	                                wscontext)
+    	                                + " * ");
+                        }
+                        else
+                        {
+	                        writer.write(
+	                            WrapperUtils
+	                                .getClassNameFromParamInfoConsideringArrays(
+	                                returntype,
+	                                wscontext)
+	                                + " ");
+                        }
                     }
                     else
                     {
@@ -156,25 +174,64 @@ public class ServiceWriter extends CPPClassWriter
                 if (params.hasNext())
                 {
                     ParameterInfo fparam = (ParameterInfo) params.next();
-                    writer.write(
-                        WrapperUtils
-                            .getClassNameFromParamInfoConsideringArrays(
-                            fparam,
-                            wscontext)
-                            + " Value"
-                            + 0);
+                    String fparamTypeName = fparam.getLangName();
+                    if (CUtils.isSimpleType(fparamTypeName)
+							&& fparam.isNillable()
+							&& !(fparamTypeName.equals("xsd__string")
+									|| fparamTypeName.equals("xsd__anyURI")
+									|| fparamTypeName.equals("xsd__QName")
+									|| fparamTypeName.equals("xsd__notation")))
+                    {
+                    	writer.write(
+    	                        WrapperUtils
+    	                            .getClassNameFromParamInfoConsideringArrays(
+    	                            fparam,
+    	                            wscontext)
+    	                            + " * Value"
+    	                            + 0);
+                    }
+                    else
+                    {
+	                    writer.write(
+	                        WrapperUtils
+	                            .getClassNameFromParamInfoConsideringArrays(
+	                            fparam,
+	                            wscontext)
+	                            + " Value"
+	                            + 0);
+                    }
                 }
                 for (int j = 1; params.hasNext(); j++)
                 {
                     ParameterInfo nparam = (ParameterInfo) params.next();
-                    writer.write(
-                        ", "
-                            + WrapperUtils
-                                .getClassNameFromParamInfoConsideringArrays(
-                                nparam,
-                                wscontext)
-                            + " Value"
-                            + j);
+                    String nparamTypeName = nparam.getLangName();
+                    if (CUtils.isSimpleType(nparamTypeName)
+							&& nparam.isNillable()
+							&& !(nparamTypeName.equals("xsd__string")
+									|| nparamTypeName.equals("xsd__anyURI")
+									|| nparamTypeName.equals("xsd__QName")
+									|| nparamTypeName.equals("xsd__notation")))
+                    {
+                    	writer.write(
+    	                        ", "
+    	                            + WrapperUtils
+    	                                .getClassNameFromParamInfoConsideringArrays(
+    	                                nparam,
+    	                                wscontext)
+    	                            + " * Value"
+    	                            + j);
+                    }
+                    else
+                    {
+	                    writer.write(
+	                        ", "
+	                            + WrapperUtils
+	                                .getClassNameFromParamInfoConsideringArrays(
+	                                nparam,
+	                                wscontext)
+	                            + " Value"
+	                            + j);
+                    }
                 }
                 if (isAllTreatedAsOutParams)
                 {

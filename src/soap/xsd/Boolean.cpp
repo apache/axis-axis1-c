@@ -2,6 +2,14 @@
 
 AXIS_CPP_NAMESPACE_START
 
+Boolean::Boolean():m_Boolean(NULL)
+{
+}
+
+Boolean::~Boolean()
+{
+}
+
 /**
  * Serialize value to it's on-the-wire string form.
  * @param value The value to be serialized.
@@ -9,7 +17,7 @@ AXIS_CPP_NAMESPACE_START
  */
 AxisChar* Boolean::serialize(const void* value) throw (AxisSoapException)
 {
-	return serialize((bool*) value);	
+	return serialize((xsd__boolean *) value);	
 }
 
 /**
@@ -27,7 +35,7 @@ void* Boolean::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException
  * @param value The boolean value to be serialized.
  * @return Serialized form of boolean value.
  */
-AxisChar* Boolean::serialize(const bool* value) throw (AxisSoapException)
+AxisChar* Boolean::serialize(const xsd__boolean * value) throw (AxisSoapException)
 {
     AxisChar* serializedValue = new char[6];
 	AxisSprintf (serializedValue, 6, "%s",
@@ -43,16 +51,25 @@ AxisChar* Boolean::serialize(const bool* value) throw (AxisSoapException)
  * @param valueAsChar Serialized form of boolean value.
  * @return Deserialized boolean value.
  */
-xsd__boolean Boolean::deserializeBoolean(const AxisChar* valueAsChar) throw (AxisSoapException)
+xsd__boolean * Boolean::deserializeBoolean(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
+    if(m_Boolean)
+    {
+        delete m_Boolean;
+        m_Boolean = NULL;
+    }
+    m_Boolean = new xsd__boolean;
+ 
 	if ( 0 == strcmp (valueAsChar, "true") || 0 == strcmp (valueAsChar, "1"))
 	{
-		return true_;
+		*m_Boolean = true_;
 	}
 	else
 	{
-		return false_;
+		*m_Boolean =  false_;
 	}
+    
+    return m_Boolean;
 }
 
 WhiteSpace* Boolean::getWhiteSpace()

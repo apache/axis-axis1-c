@@ -8,8 +8,6 @@ Float::Float():m_Float(NULL)
 
 Float::~Float()
 {
-    if (m_Float)
-        delete m_Float;
 }
 
 AxisChar* Float::serialize(const void* value) throw (AxisSoapException)

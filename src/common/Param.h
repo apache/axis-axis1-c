@@ -31,21 +31,21 @@ class ArrayBean;
 class ParamValue
 {
 public:
-    int nValue;
-    unsigned int unValue;
-    short sValue;
-    unsigned short usValue;
-    long lValue;
-    unsigned ulValue;
-    LONGLONG llValue;
-    char cValue;
-    unsigned char ucValue;
-    float fValue;
-    double dValue;
-    struct tm tValue;/* this will hold the c type tm struct*/
-    xsd__hexBinary hbValue;
-    xsd__base64Binary b64bValue;
-    long lDuration;/* duration in seconds*/
+    int * nValue;
+    unsigned int * unValue;
+    short * sValue;
+    unsigned short * usValue;
+    long * lValue;
+    unsigned long* ulValue;
+    LONGLONG * llValue;
+    char * cValue;
+    unsigned char * ucValue;
+    float * fValue;
+    double * dValue;
+    struct tm * tValue;/* this will hold the c type tm struct*/
+    xsd__hexBinary * hbValue;
+    xsd__base64Binary * b64bValue;
+    long * lDuration;/* duration in seconds*/
     union {
         class ArrayBean* pArray; /* this is used to hold arrays */
         class IArrayBean* pIArray; /* used by wrapper classes */

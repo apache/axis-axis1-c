@@ -33,7 +33,6 @@ import javax.xml.namespace.QName;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.SourceWriter;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
-import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.cpp.ArrayParamWriter;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
