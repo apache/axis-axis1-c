@@ -50,9 +50,9 @@ AXIS_CPP_NAMESPACE_START
 
 ComplexElement::ComplexElement():m_pParent(NULL)
 {
-    m_pachPrefix = '\0';
-    m_pachLocalName = '\0';
-    m_pachURI = '\0';
+	m_pachPrefix = NULL;
+    m_pachLocalName = NULL;
+    m_pachURI = NULL;
 
     m_iNodeType= ELEMENT_NODE;
     iNoOfChildren = 0;
@@ -112,9 +112,18 @@ BasicNode* ComplexElement::clone()
 
 ComplexElement::~ComplexElement()
 {
-    delete [] m_pachPrefix;
-    delete [] m_pachLocalName;
-    delete [] m_pachURI;
+	if (NULL != m_pachPrefix)
+	    delete [] m_pachPrefix;
+	m_pachPrefix = NULL;
+
+	if (NULL != m_pachLocalName)
+	    delete [] m_pachLocalName;
+	m_pachLocalName = NULL;
+
+	if (NULL != m_pachURI)
+	    delete [] m_pachURI;
+	m_pachURI = NULL;
+
     m_pParent = NULL;
 
     /* 
@@ -171,6 +180,11 @@ IAttribute* ComplexElement::createAttribute(const AxisChar *localname,
 
 int ComplexElement::setPrefix(const AxisChar* pachPrefix)
 {
+	if (NULL==pachPrefix)
+		return AXIS_FAIL;
+
+	if (NULL != m_pachPrefix) 
+		delete [] m_pachPrefix;
     m_pachPrefix = new AxisChar[strlen(pachPrefix)+1];
     strcpy(m_pachPrefix, pachPrefix);
     return AXIS_SUCCESS;
@@ -178,6 +192,11 @@ int ComplexElement::setPrefix(const AxisChar* pachPrefix)
 
 int ComplexElement::setLocalName(const AxisChar* pachLocalName)
 {
+	if (NULL==pachLocalName)
+		return AXIS_FAIL;
+
+	if (NULL != m_pachLocalName) 
+		delete [] m_pachLocalName;
     m_pachLocalName = new AxisChar[strlen(pachLocalName)+1];
     strcpy(m_pachLocalName, pachLocalName);
     return AXIS_SUCCESS;
@@ -210,12 +229,13 @@ int ComplexElement::serialize(SoapSerializer& pSZ)
         if(isSerializable()) 
         {    
             pSZ.serialize("<", NULL);    
-            if(strlen(m_pachPrefix) != 0)
+            if((NULL!=m_pachPrefix) && (strlen(m_pachPrefix)!=0))
             {                
                 pSZ.serialize(m_pachPrefix, ":", NULL);
             }
             pSZ.serialize(m_pachLocalName, NULL);
-            if((strlen(m_pachPrefix) != 0) && (strlen(m_pachURI) != 0))
+            if ((NULL!=m_pachPrefix) && (strlen(m_pachPrefix)!=0) && 
+				(NULL!=m_pachURI) && (strlen(m_pachURI)!=0))
             {
                 pSZ.serialize(" xmlns:", m_pachPrefix, "=\"", m_pachURI, "\"",
                     NULL);
@@ -227,7 +247,7 @@ int ComplexElement::serialize(SoapSerializer& pSZ)
                 break;
             }
             pSZ.serialize("</", NULL);
-            if(strlen(m_pachPrefix) != 0)
+            if((NULL!=m_pachPrefix) && (strlen(m_pachPrefix)!=0))
             {
                 pSZ.serialize(m_pachPrefix, ":", NULL);
             }
@@ -284,6 +304,9 @@ int ComplexElement::serialize(SoapSerializer& pSZ,
             {
                 const AxisChar* pachTmp = pSZ.getNamespacePrefix(m_pachURI,
                     blnIsNewNamespace);
+
+				if (NULL!=m_pachPrefix)
+					delete [] m_pachPrefix;
                 m_pachPrefix = new AxisChar[strlen(pachTmp)+1];
                 strcpy(m_pachPrefix , pachTmp);
 
@@ -378,7 +401,7 @@ bool ComplexElement::isSerializable()
 
     do
     {
-        if(strlen(m_pachLocalName) == 0)
+        if((NULL==m_pachLocalName) || (strlen(m_pachLocalName)==0))
         {
             bStatus= false;
             break;
@@ -390,6 +413,8 @@ bool ComplexElement::isSerializable()
 
 int ComplexElement::setURI(const AxisChar* pachURI)
 {
+	if (NULL!=m_pachURI)
+		delete [] m_pachURI;
     m_pachURI = new AxisChar[strlen(pachURI)+1];
     strcpy(m_pachURI, pachURI);
     return AXIS_SUCCESS;

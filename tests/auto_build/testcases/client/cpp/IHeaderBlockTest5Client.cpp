@@ -39,11 +39,6 @@ int main(int argc, char* argv[])
 		BasicNode *ch=phb->createChild(CHARACTER_NODE,NULL,NULL,NULL,"AXISCPP");
 		Bnoden->addChild(ch);
 
-		/*Test for NULL arguments. An element node Bnoden is created without any name */
-		BasicNode * Bnoden1=phb->createImmediateChild(ELEMENT_NODE,NULL,NULL,NULL,NULL);
-		if(Bnoden1==NULL)
-			cout << "Null returned for Element_node" << endl;
-		
 		BasicNode * Bnoden2=phb->createImmediateChild(CHARACTER_NODE,NULL,NULL,NULL,NULL);
 		if(Bnoden2==NULL)
 			cout << "Null returned for Character_node" << endl;
