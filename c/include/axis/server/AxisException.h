@@ -26,7 +26,7 @@
 #include <new>
 #include <typeinfo>
 #include <stdexcept>
-#include <ios>
+//#include <ios>
 using namespace std;
 
 
@@ -49,7 +49,7 @@ using namespace std;
 #define THROW_AXIS_OUT_OF_RANGE(X) throw std::out_of_range
 #define THROW_AXIS_INVALID_ARGUMENT(X) throw std::invalid_argument
 #define THROW_AXIS_OVERFLOW_ERROR(X) throw std::overflow_error
-#define THROW_AXIS_IOS_BASE_FAILURE(X) throw std::ios_base::failure
+//#define THROW_AXIS_IOS_BASE_FAILURE(X) throw std::ios_base::failure
 
 #define AXISC_THROW_SAME throw;
 
