@@ -15,7 +15,8 @@ AxisTime::AxisTime(time_t m_Time)
 {
     if(m_Time != NULL)
     {
-        gmtime_r(&m_Time, &m_TMUTC);
+		tm* pTMUTC = gmtime(&m_Time);
+		memcpy(&m_TMUTC, pTMUTC, sizeof(tm));
     }
 }
 
@@ -136,9 +137,12 @@ void AxisTime::mkCTime()
     AxisChar buff[4];
     time_t now;
     struct tm result1, result2;
+	struct tm* pTm;
     time(&now);
-    gmtime_r(&now, &result1);
-    localtime_r(&now, &result2);
+	pTm = gmtime(&now);
+	memcpy(&result1, pTm, sizeof(tm));
+	pTm = localtime(&now);
+	memcpy(&result2, pTm, sizeof(tm));
     time_t d = mktime(&result1) - mktime(&result2);
     
     switch(m_Type)
@@ -232,13 +236,15 @@ void AxisTime::mkCTime()
             if(strZone.substr(0,1) == L"Z")
             {
                 time_t timeInSecs = mktime(&m_TM);
-                localtime_r(&timeInSecs, &m_TMUTC);                        
+				pTm = localtime(&timeInSecs);
+				memcpy(&m_TMUTC, pTm, sizeof(tm));
             }
             /*if the timezone is represented using +/-hh:mm format*/
             else if(strZone.substr(0,1) == L"+" ||strZone.substr(0,1) == L"-")
             {
                 time_t timeInSecs = mktime(&m_TM);
-                localtime_r(&timeInSecs, &m_TMUTC);
+				pTm = localtime(&timeInSecs);
+				memcpy(&m_TMUTC, pTm, sizeof(tm));
                 //intHours = atoi(strZone.substr(1,2).c_str());
                 intHours = wcstol(strZone.substr(1,2).c_str(), &endptr, 10);
                 //intMins = atoi(strZone.substr(3,2).c_str());
@@ -247,19 +253,22 @@ void AxisTime::mkCTime()
                 if(strZone.substr(0,1) == L"+")
                 {
                     timeInSecs += intSecs;
-                    localtime_r(&timeInSecs, &m_TM);
+					pTm = localtime(&timeInSecs);
+					memcpy(&m_TM, pTm, sizeof(tm));
                     time_t t = mktime(&m_TM);
                     t = abs(t - d);
-                    gmtime_r(&t, &m_TMUTC);
-                
+					pTm = gmtime(&t);
+					memcpy(&m_TMUTC, pTm, sizeof(tm));                
                 }
                 else if(strZone.substr(0,1) == L"-")
                 {
-                    timeInSecs - intSecs;
-                    localtime_r(&timeInSecs, &m_TM);
+                    timeInSecs -= intSecs;
+					pTm = localtime(&timeInSecs);
+					memcpy(&m_TM, pTm, sizeof(tm));
                     time_t t = mktime(&m_TM);
                     t = abs(t - d);
-                    gmtime_r(&t, &m_TMUTC);
+					pTm = gmtime(&t);
+					memcpy(&m_TMUTC, pTm, sizeof(tm));                
                 }
             }
             /*if the zone is not represented in the date*/
@@ -267,7 +276,8 @@ void AxisTime::mkCTime()
             {
                 /*else it is assumed that the sent time is localtime*/
                 time_t timeInSecs = mktime(&m_TM);
-                gmtime_r(&timeInSecs, &m_TMUTC);
+				pTm = gmtime(&timeInSecs);
+				memcpy(&m_TMUTC, pTm, sizeof(tm));
             }
 
             break;
@@ -311,13 +321,15 @@ void AxisTime::mkCTime()
             if(strZone.substr(0,1) == L"Z")
             {
                 time_t timeInSecs = mktime(&m_TM);
-                localtime_r(&timeInSecs, &m_TMUTC);
+				pTm = localtime(&timeInSecs);
+				memcpy(&m_TMUTC, pTm, sizeof(tm));
             }
             /*if the timezone is represented using +/-hh:mm format*/
             else if(strZone.substr(0,1) == L"+" ||strZone.substr(0,1) == L"-")
             {
                 time_t timeInSecs = mktime(&m_TM);
-                localtime_r(&timeInSecs, &m_TMUTC);
+				pTm = localtime(&timeInSecs);
+				memcpy(&m_TMUTC, pTm, sizeof(tm));
                 //intHours = atoi(strZone.substr(1,2).c_str());
                 intHours = wcstol(strZone.substr(1,2).c_str(), &endptr, 10);
                 //intMins = atoi(strZone.substr(3,2).c_str());
@@ -326,19 +338,22 @@ void AxisTime::mkCTime()
                 if(strZone.substr(0,1) == L"+")
                 {
                     timeInSecs += intSecs;
-                    localtime_r(&timeInSecs, &m_TM);
+					pTm = localtime(&timeInSecs);
+					memcpy(&m_TM, pTm, sizeof(tm));
                     time_t t = mktime(&m_TM);
                     t = abs(t - d);
-                    gmtime_r(&t, &m_TMUTC);
-
+					pTm = gmtime(&t);
+					memcpy(&m_TMUTC, pTm, sizeof(tm));                
                 }
                 else if(strZone.substr(0,1) == L"-")
                 {
-                    timeInSecs - intSecs;
-                    localtime_r(&timeInSecs, &m_TM);
+                    timeInSecs -= intSecs;
+					pTm = localtime(&timeInSecs);
+					memcpy(&m_TM, pTm, sizeof(tm));
                     time_t t = mktime(&m_TM);
                     t = abs(t - d);
-                    gmtime_r(&t, &m_TMUTC);
+					pTm = gmtime(&t);
+					memcpy(&m_TMUTC, pTm, sizeof(tm));                
                 }
             }
             /*if the zone is not represented in the date*/
@@ -346,7 +361,8 @@ void AxisTime::mkCTime()
             {
                 /*else it is assumed that the sent time is localtime*/
                 time_t timeInSecs = mktime(&m_TM);
-                gmtime_r(&timeInSecs, &m_TMUTC);
+				pTm = gmtime(&timeInSecs);
+				memcpy(&m_TMUTC, pTm, sizeof(tm));
             }
 
             break;
@@ -374,13 +390,15 @@ void AxisTime::mkCTime()
             if(strZone.substr(0,1) == L"Z")
             {
                 time_t timeInSecs = mktime(&m_TM);
-                localtime_r(&timeInSecs, &m_TMUTC);
+				pTm = localtime(&timeInSecs);
+				memcpy(&m_TMUTC, pTm, sizeof(tm));
             }
             /*if the timezone is represented using +/-hh:mm format*/
             else if(strZone.substr(0,1) == L"+" ||strZone.substr(0,1) == L"-")
             {
                 time_t timeInSecs = mktime(&m_TM);
-                localtime_r(&timeInSecs, &m_TMUTC);
+				pTm = localtime(&timeInSecs);
+				memcpy(&m_TMUTC, pTm, sizeof(tm));
                 //intHours = atoi(strZone.substr(1,2).c_str());
                 intHours = wcstol(strZone.substr(1,2).c_str(), &endptr, 10);
                 //intMins = atoi(strZone.substr(3,2).c_str());
@@ -389,19 +407,22 @@ void AxisTime::mkCTime()
                 if(strZone.substr(0,1) == L"+")
                 {
                     timeInSecs += intSecs;
-                    localtime_r(&timeInSecs, &m_TM);
+					pTm = localtime(&timeInSecs);
+					memcpy(&m_TM, pTm, sizeof(tm));
                     time_t t = mktime(&m_TM);
                     t = abs(t - d);
-                    gmtime_r(&t, &m_TMUTC);
-
+					pTm = gmtime(&t);
+					memcpy(&m_TMUTC, pTm, sizeof(tm));                
                 }
                 else if(strZone.substr(0,1) == L"-")
                 {
-                    timeInSecs - intSecs;
-                    localtime_r(&timeInSecs, &m_TM);
+                    timeInSecs -= intSecs;
+					pTm = localtime(&timeInSecs);
+					memcpy(&m_TM, pTm, sizeof(tm));
                     time_t t = mktime(&m_TM);
                     t = abs(t - d);
-                    gmtime_r(&t, &m_TMUTC);
+					pTm = gmtime(&t);
+					memcpy(&m_TMUTC, pTm, sizeof(tm));                
                 }
             }
             /*if the zone is not represented in the date*/
@@ -409,7 +430,8 @@ void AxisTime::mkCTime()
             {
                 /*else it is assumed that the sent time is localtime*/
                 time_t timeInSecs = mktime(&m_TM);
-                gmtime_r(&timeInSecs, &m_TMUTC);
+				pTm = gmtime(&timeInSecs);
+				memcpy(&m_TMUTC, pTm, sizeof(tm));
             }
 
             break;
