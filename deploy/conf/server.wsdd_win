@@ -38,5 +38,10 @@
 		<parameter name="className" value="C:\susantha\ws-axis\c\bin\RPCFault.dll"/>
 		<parameter name="allowedMethods" value="div "/>
 	</service>
+	<service name="MathOpsDL" provider="CPP:DOCUMENT" description="Simple sample to demonstrate fault mapping and exception handling">
+		<parameter name="className" value="C:\susantha\ws-axis\c\bin\DocLitFault.dll"/>
+		<parameter name="allowedMethods" value="div "/>
+	</service>
+
 
 </deployment>
