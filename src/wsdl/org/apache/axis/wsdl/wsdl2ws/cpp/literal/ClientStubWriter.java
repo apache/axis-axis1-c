@@ -43,6 +43,7 @@ import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
+import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo; 
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 	
 public class ClientStubWriter extends CPPClassWriter{
@@ -266,6 +267,13 @@ public class ClientStubWriter extends CPPClassWriter{
 		}
 		String channelSecurityType = (WrapperConstants.CHANNEL_SECURITY_SSL.equals(wscontext.getWrapInfo().getChannelSecurity()))?
 										"SSL_CHANNEL" : "NORMAL_CHANNEL";
+         //begin added Nithya		
+		 writer.write("\tchar* cFaultcode;\n");//damitha added \t
+		 writer.write("\tchar* cFaultstring;\n");//damitha \t
+		 writer.write("\tchar* cFaultactor;\n");//damitha \t
+		 writer.write("\tchar* cFaultdetail;\n");//damitha \t
+         writer.write("\ttry\n\t{");//damitha \n
+		//ended by nithya								
 		writer.write("\tif (AXIS_SUCCESS != m_pCall->initialize(CPP_DOC_PROVIDER, "+channelSecurityType+")) return ");
 		if (returntype != null){
 			writer.write((returntypeisarray?"RetArray":returntypeissimple?"Ret":"pReturn")+";\n\t");
@@ -410,9 +418,81 @@ public class ClientStubWriter extends CPPClassWriter{
 			writer.write("\t}\n\tm_pCall->unInitialize();\n");
 			writer.write("\treturn pReturn;\n");						
 		}
-		//write end of method
-		writer.write("}\n");
-	}
+		//added by nithya
+			System.out.println("Fault message ............................"+minfo.getFaultMessage());
+			writer.write("\t}\n");//damitha
+			writer.write("\tcatch(AxisException& e)\n\t{\n");//damitha
+			writer.write("\t\tif (AXIS_SUCCESS == m_pCall->checkFault(\"Fault\",\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\" ))");//damitha
+			writer.write("//Exception handling code goes here\n");
+			writer.write("\t\t{\n");//damitha
+			writer.write("\t\t\tcFaultcode = m_pCall->getElementAsString(\"faultcode\", 0);\n");//damitha
+					writer.write("\t\t\tcFaultstring = m_pCall->getElementAsString(\"faultstring\", 0);\n");//damitha
+			writer.write("\t\t\tcFaultactor = m_pCall->getElementAsString(\"faultactor\", 0);\n");//damitha
+              
+			//writer.write("\t\t\tif(0 != strcmp(\"service_exception\", cFaultstring))\n");//damitha
+					//writer.write("\t\t\t{\n");//damitha
+			//writer.write("\t\t\t\t  cFaultdetail = m_pCall->getElementAsString(\"faultdetail\", 0);\n");//damitha
+			//writer.write("\t\t\t\t  throw AxisException(cFaultdetail);\n");//damitha
+			//writer.write("\t\t\t}\n");//damitha
+			//writer.write("\t\t\telse\n");//damitha
+			//writer.write("\t\t\t{\n");//damitha
+			//writer.write("\t\t\t\tif (AXIS_SUCCESS == m_pCall->checkFault(\"faultdetail\",\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\"))\n");//damitha
+
+//			to get fault info  		
+			Iterator paramsFault = minfo.getFaultType().iterator();
+			String faultInfoName =null;
+			String faultType =null;	 
+			String langName =null;
+			String paramName =null;
+			while (paramsFault.hasNext()){
+				FaultInfo info = (FaultInfo)paramsFault.next();
+				faultInfoName =info.getFaultInfo();	     
+				ArrayList paramInfo =info.getParams();
+				for (int i= 0; i < paramInfo.size(); i++) {				
+					ParameterInfo par =(ParameterInfo)paramInfo.get(i);                                                                                                                                                           
+					paramName  = par.getParamName();
+					langName =par.getLangName();
+					faultType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(par,wscontext);
+					writeExceptions(faultType,faultInfoName,paramName,langName);
+					}
+				}
+			writer.write("\t\t\t\t  cFaultdetail = m_pCall->getElementAsString(\"faultdetail\", 0);\n");//damitha
+			writer.write("\t\t\t\t  throw AxisException(cFaultdetail);\n");//damitha
+			writer.write("\t\t}\n");//damitha
+			writer.write("\t\telse throw;\n");//damitha
+			writer.write("\t}\n");//damitha
+			//writer.write("m_pCall->unInitialize();\n");//damitha
+			//writer.write("return Ret;\n");//damitha	
+			//end of nithya add		
+			//write end of method
+			writer.write("}\n");
+		}
+	
+		/* written by Nithya to get the expections */
+		private void writeExceptions(String faulttype,String faultInfoName,String paramName,String langName) throws WrapperFault{
+			try{
+			    
+					//writer.write("else\n");//damitha
+					writer.write("\t\t\tif(0 == strcmp(\""+langName+"\", cFaultstring))\n");//damitha
+					writer.write("\t\t\t{\n");//damitha
+					writer.write("\t\t\t\tif (AXIS_SUCCESS == m_pCall->checkFault(\"faultdetail\",\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\"))\n");//damitha
+							writer.write("\t\t\t\t{\n");//damitha added
+				writer.write("\t\t\t\t\t"+faulttype+" pFaultDetail = NULL;\n");//damitha
+				writer.write("\t\t\t\t\tpFaultDetail = ("+faulttype+")m_pCall->\n");//damitha
+							writer.write("\t\t\t\t\t\tgetCmplxObject((void*) Axis_DeSerialize_"+langName+",\n");//damitha
+							writer.write("\t\t\t\t\t\t(void*) Axis_Create_"+langName+",\n");//damitha
+							writer.write("\t\t\t\t\t\t(void*) Axis_Delete_"+langName+",\""+paramName+"\", 0);\n");//damitha
+				//writer.write("char* temp = pFaultDetail->varString;");//damitha
+							writer.write("\t\t\t\t\t/*User code to handle the struct can be inserted here*/\n");//damitha
+				writer.write("\t\t\t\t\tm_pCall->unInitialize();\n");//damitha
+				writer.write("\t\t\t\t\tthrow Axis"+faultInfoName+"Exception(pFaultDetail);\n");//damitha
+				writer.write("\t\t\t\t}\n");//damitha
+				writer.write("\t\t\t}\n");//damitha
+			}		
+			catch (IOException e) {
+						throw new WrapperFault(e);
+					}
+		}
 	 
 	/* (non-Javadoc)
 	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.CPPClassWriter#writeGlobalCodes()
