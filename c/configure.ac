@@ -271,6 +271,8 @@ AC_OUTPUT(Makefile \
     tests/client/soapHeader/test6/rpc/Makefile \
     tests/client/soapHeader/test8/Makefile \
     tests/client/soapHeader/test8/rpc/Makefile \
+    tests/client/soapHeader/test9/Makefile \
+    tests/client/soapHeader/test9/rpc/Makefile \
     tests/client/xsdAnyTest1/Makefile \
     tests/client/xsdAnyTest1/gen_src/Makefile \
     tests/client/httpHeader/Makefile \
