@@ -60,7 +60,7 @@ import junit.framework.TestCase;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2EEwithoutWSDL;
 
 /**
- * this test case with no wsdl does not exists .. but the information is get by the 
+ * this test case with wsdl does not exists .. but the information is get by the 
  * SEI. This should be the prefered way for the J2EE developer. User can give a 
  * packaged application as explained by the JSR109 specification to the tool.
  * the arguments are 
