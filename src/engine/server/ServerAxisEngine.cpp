@@ -22,6 +22,7 @@
 #include "../../common/AxisUtils.h"
 #include "../../wsdd/WSDDDeployment.h"
 #include "../HandlerPool.h"
+#include <axis/server/AxisMessage.h>
 #include <axis/server/AxisTrace.h>
 extern AxisTrace* g_pAT;
 
@@ -42,7 +43,7 @@ ServerAxisEngine::~ServerAxisEngine ()
 int ServerAxisEngine::process(SOAPTransport* pStream)
 {
     int Status = 0;
-    const WSDDService* pService = NULL;
+    //const WSDDService* pService = NULL;
     int nSoapVersion;
     AXISC_TRY
     if (!pStream)
@@ -101,8 +102,8 @@ int ServerAxisEngine::process(SOAPTransport* pStream)
         }
 
         /* get service description object from the WSDD Deployment object */
-        pService = g_pWSDDDeployment->getService (service.c_str ());
-        if (!pService)
+        m_pService = g_pWSDDDeployment->getService (service.c_str ());
+        if (!m_pService)
         {
             nSoapVersion = m_pMsgData->m_pDZ->getVersion ();
             nSoapVersion =
@@ -114,9 +115,9 @@ int ServerAxisEngine::process(SOAPTransport* pStream)
             break; // do .. while(0)
         }
 
-        m_pMsgData->setService (pService);
+        m_pMsgData->setService (m_pService);
 
-        m_CurrentProviderType = pService->getProvider ();
+        m_CurrentProviderType = m_pService->getProvider ();
         m_pSZ->setCurrentProviderType (m_CurrentProviderType);
         m_pDZ->setCurrentProviderType (m_CurrentProviderType);
         switch (m_CurrentProviderType)
@@ -188,11 +189,11 @@ int ServerAxisEngine::process(SOAPTransport* pStream)
 
         m_pMsgData->setOperationName (sOperation.c_str ());
 
-        if (pService->isAllowedMethod (sOperation.c_str ()))
+        if (m_pService->isAllowedMethod (sOperation.c_str ()))
         {
             /* load actual web service handler */
             if (AXIS_SUCCESS != g_pHandlerPool->getWebService (&m_pWebService, 
-                sSessionId, pService))
+                sSessionId, m_pService))
             {
                 /* error : couldnot load web service */
                 AXISTRACE1("SERVER_ENGINE_COULDNOTLOADSRV", CRITICAL);
@@ -247,7 +248,7 @@ int ServerAxisEngine::process(SOAPTransport* pStream)
         }
         // Get Service specific Handlers from the pool if configured any
         if (AXIS_SUCCESS != (Status = g_pHandlerPool->getRequestFlowHandlerChain
-            (&m_pSReqFChain, sSessionId, pService)))
+            (&m_pSReqFChain, sSessionId, m_pService)))
         {
             AXISTRACE1("SERVER_ENGINE_COULDNOTLOADHDL", CRITICAL);
             THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_COULDNOTLOADHDL);
@@ -257,7 +258,7 @@ int ServerAxisEngine::process(SOAPTransport* pStream)
 
         if (AXIS_SUCCESS != (Status = 
             g_pHandlerPool->getResponseFlowHandlerChain (&m_pSResFChain, 
-            sSessionId, pService)))
+            sSessionId, m_pService)))
         {
             AXISTRACE1("SERVER_ENGINE_COULDNOTLOADHDL", CRITICAL);
             THROW_AXIS_ENGINE_EXCEPTION(SERVER_ENGINE_COULDNOTLOADHDL);
@@ -310,23 +311,14 @@ int ServerAxisEngine::process(SOAPTransport* pStream)
     }
     m_pSZ->setOutputStream (pStream);
 
-    // Pool back the Service specific handlers
-    if (m_pSReqFChain)
-        g_pHandlerPool->poolHandlerChain (m_pSReqFChain, sSessionId);
-    if (m_pSResFChain)
-        g_pHandlerPool->poolHandlerChain (m_pSResFChain, sSessionId);
-    /* Pool back the Global and Transport handlers
-     * UnInitializeHandlers(sSessionId, stream->trtype);
-     * Pool back the webservice
-     */ 
-    if (m_pWebService)
-        g_pHandlerPool->poolWebService (sSessionId, m_pWebService, pService);
-        //todo
-        /* An exception derived from exception which is not handled will be 
-	 * handled here. You can call a method in AxisModule which may unload 
-	 * the ServerAxisEngine from the webserver and report the error. You can
-	 * also write this in a logfile specific to axis.
-         */
+    // Pool back the handlers and services
+    releaseHandlers(pStream);
+    //todo
+    /* An exception derived from exception which is not handled will be 
+     * handled here. You can call a method in AxisModule which may unload 
+     * the ServerAxisEngine from the webserver and report the error. You can
+     * also write this in a logfile specific to axis.
+    */
     AXISC_CATCH(AxisException& e)
     /*
      * An exception which is not handled will be handled here.
@@ -338,6 +330,8 @@ int ServerAxisEngine::process(SOAPTransport* pStream)
         AXISTRACE2("Exception:", tempStr, CRITICAL);
         if(AXISC_SERVICE_THROWN_EXCEPTION == iExceptionCode)
         {
+            m_pSZ->setOutputStream (pStream);
+            releaseHandlers(pStream);
             return AXIS_SUCCESS;//Service created fault is written to the stream. 
                                 //so return success.
         }
@@ -345,6 +339,10 @@ int ServerAxisEngine::process(SOAPTransport* pStream)
             return e.getExceptionCode();
 #endif
     AXISC_CATCH(exception& e)
+#ifdef ENABLE_AXIS_EXCEPTION
+    /* Handle standerd exceptions here
+     */
+#endif
     AXISC_CATCH(...)
 #ifdef ENABLE_AXIS_EXCEPTION
         return SERVER_UNKNOWN_ERROR;
@@ -426,6 +424,7 @@ int ServerAxisEngine::invoke (MessageData* pMsg)
             {
                 Status = ((WrapperClassHandler *) m_pWebService->_object)->
                     invoke (pMsg);
+                AXISTRACE1("came", INFO);
             }
             else
                 Status = AXIS_FAIL;
@@ -486,11 +485,34 @@ void ServerAxisEngine::onFault (MessageData* pMsg)
 
 int ServerAxisEngine::setFaultOutputStream(int iFaultCode, SOAPTransport* pStream)
 {
-    AxisException objException(iFaultCode);
-    string sMessage = objException.getMessage(iFaultCode);
-    SoapFault* objSoapFault = SoapFault::getSoapFault(iFaultCode);
-    objSoapFault->setFaultDetail(sMessage);
-    m_pSZ->setSoapFault(objSoapFault);
+    AxisMessage objMessage;
+    string sMessage = objMessage.getMessage(iFaultCode);
+    SoapFault* pObjSoapFault = SoapFault::getSoapFault(iFaultCode);
+    pObjSoapFault->setFaultDetail(sMessage);
+    AXISTRACE1("came70", INFO);
+    m_pSZ->setSoapFault(pObjSoapFault);
+    AXISTRACE1("came71", INFO);
     m_pSZ->setOutputStream(pStream);
-	return AXIS_SUCCESS;
+    AXISTRACE1("came72", INFO);
+    releaseHandlers(pStream);
+    AXISTRACE1("came73", INFO);
+    return AXIS_SUCCESS;
+}
+
+int ServerAxisEngine::releaseHandlers(SOAPTransport* pStream)
+{
+    string sSessionId = pStream->getSessionId();
+    // Pool back the Service specific handlers
+    if (m_pSReqFChain)
+        g_pHandlerPool->poolHandlerChain (m_pSReqFChain, sSessionId);
+    if (m_pSResFChain)
+        g_pHandlerPool->poolHandlerChain (m_pSResFChain, sSessionId);
+    /* Pool back the Global and Transport handlers
+     * UnInitializeHandlers(sSessionId, stream->trtype);
+     * Pool back the webservice
+     */
+    if (m_pWebService)
+        g_pHandlerPool->poolWebService (sSessionId, m_pWebService, m_pService);
+
+    return AXIS_SUCCESS;
 }

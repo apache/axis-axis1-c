@@ -87,14 +87,17 @@ int MathOpsWrapper::div(void* pMsg) throw(AxisDivByZeroException)
         }
         catch(AxisDivByZeroException& e)
         {
-            pIWSSZ->createSoapFault("SOAPStructFault", "http://soapinterop.org/");                                                       SOAPStructFault* objFault = (SOAPStructFault*)pIWSDZ->
-            getCmplxObject((void*)Axis_DeSerialize_SOAPStructFault,
+            pIWSSZ->createSoapFault("SOAPStructFault", "http://soapinterop.org/");                          SOAPStructFault* objFault = (SOAPStructFault*)pIWSDZ->
+                getCmplxObject((void*)Axis_DeSerialize_SOAPStructFault,
                 (void*)Axis_Create_SOAPStructFault, (void*)Axis_Delete_SOAPStructFault,
                 "faultstruct", Axis_URI_SOAPStructFault);
-            pIWSSZ->addFaultDetail(objFault, (void*)Axis_Serialize_SOAPStructFault,
-                (void*)Axis_Delete_SOAPStructFault, "DivByZeroException", Axis_URI_SOAPStructFault);
 
-            throw AxisDivByZeroException();
+            if(objFault)
+                pIWSSZ->addFaultDetail(objFault, (void*)Axis_Serialize_SOAPStructFault,
+                    (void*)Axis_Delete_SOAPStructFault, "DivByZeroException", 
+                    Axis_URI_SOAPStructFault);
+
+            throw;
         }
 	return pIWSSZ->addOutputParam("divReturn", (void*)&ret, XSD_INT);
 }

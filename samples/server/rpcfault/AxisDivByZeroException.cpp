@@ -82,6 +82,16 @@ const string AxisDivByZeroException::getMessage (exception* objException)
 
 const string AxisDivByZeroException::getMessage (int iExceptionCode)
 {
+    string sMessage;
+    switch(iExceptionCode)
+    {
+        case AXISC_SERVICE_THROWN_EXCEPTION:
+            sMessage = "A service has thrown an exception. see detail";
+            break;
+        default:
+            sMessage = "Unknown Exception has occured";
+    }
+    return sMessage;
 }
 
 const char* AxisDivByZeroException::what() throw ()

@@ -8,7 +8,7 @@
 
 #include <axis/client/Call.h>
 #include "SOAPStructFault.h"
-#include <axis/server/AxisException.h>
+#include "AxisDivByZeroException.h"
 #include <ctype.h>
 
 class MathOps 
