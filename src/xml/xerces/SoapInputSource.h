@@ -14,27 +14,26 @@
  *   limitations under the License.
  */
 
-/* SoapBinInputStream.h: interface for the SoapBinInputStream class. */
+/*
+ *    @author sanjaya singharage (sanjayas@opensource.lk)
+ */
 
-#if !defined(AXIS_SOAPBININPUTSTREAM_H__OF_AXIS_INCLUDED_)
-#define AXIS_SOAPBININPUTSTREAM_H__OF_AXIS_INCLUDED_
+#if !defined(AXIS_SOAPINPUTSOURCE_H__OF_AXIS_INCLUDED_)
+#define AXIS_SOAPINPUTSOURCE_H__OF_AXIS_INCLUDED_
 
-#include <xercesc/util/BinInputStream.hpp>
-#include <axis/server/Packet.h>
+#include <xercesc/sax/InputSource.hpp>
+#include "SoapBinInputStream.h"
 
 XERCES_CPP_NAMESPACE_USE
 
-class SoapBinInputStream : public BinInputStream
+class SoapInputSource : public InputSource  
 {
 private:
-    AXIS_MODULE_CALLBACK_GET_MESSAGE_BYTES m_pReadFunct;
-    unsigned int m_nByteCount;
-    const void* m_pContext;
+    SoapBinInputStream* m_pInputStream;
 public:
-    SoapBinInputStream(AXIS_MODULE_CALLBACK_GET_MESSAGE_BYTES pReadFunct, const void* pContext);
-    virtual ~SoapBinInputStream();
-    unsigned int curPos() const;
-    unsigned int readBytes(XMLByte* const toFill, const unsigned int maxToRead);
+    SoapInputSource(AxisIOStream* pInputStream);
+    virtual ~SoapInputSource();
+    BinInputStream* makeStream() const;
 };
 
 #endif

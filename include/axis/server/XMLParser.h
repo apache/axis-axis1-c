@@ -24,21 +24,53 @@
 /**
  * @class XMLParser
  * @brief Interface that any parser wrapper should implement in order to be use 
- *        in Axis as a SOAP parser.
+ *        in Axis as a XML PULL parser. Its the responsibility of the implementation
+ *        class to free and memory allocated inside the class. The class should not 
+ *		  deallocate either the given input stream or any memory buffers that it gets
+ *		  from the stream.
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  */
 class XMLParser
 {
 public:
     virtual ~XMLParser(){};
-    virtual int setInputStream(SOAPTransport* pInputStream)=0;
-    virtual SOAPTransport* getInputStream()=0;
-    virtual int init()=0;
-    virtual const XML_Ch* getNS4Prefix(const XML_Ch* prefix)=0;
+	/**
+	 * Sets the input stream. Here the parser object should also be initialized
+	 * to its initial state. Axis will call this function first for each input 
+	 * stream to be parsed.
+	 *
+	 * @param pInputStream Input stream from which the data to be parsed taken
+	 *		  by calling its getBytes function. Function should not deallocate
+	 *        either pInputStream or any memory buffers that it gets.
+	 */
+    virtual int setInputStream(AxisIOStream* pInputStream)=0;
+	/**
+	 * Used to get the corresponding namespace string for a given prefix.
+	 *
+	 * @param pcPrefix Prefix for which the namespace string is requested 
+	 */
+    virtual const XML_Ch* getNS4Prefix(const XML_Ch* pcPrefix)=0;
+	/**
+	 * Used to get the parser status. Should return AXIS_SUCCESS if nothing
+	 * has gone wrong.
+	 */
     virtual int getStatus()=0;
-    virtual const AnyElement* next(bool isCharData=false)=0;
-    virtual AXIS_TRANSPORT_STATUS getTransportStatus()=0;
-    virtual void setTransportStatus(AXIS_TRANSPORT_STATUS nStatus)=0;
+	/**
+	 * Used to get the next XML event. The valid events are start element, end
+	 * element and character data. If we think of SAX events the processing 
+	 * instruction events, namespace prefix mapping events are not considered
+	 * valid. If the implementation of this interface is wrapping up a SAX 
+	 * parser it should follow the above rules.
+	 *
+	 * @param bIsCharData Indicates whether Axis is expecting a character data 
+	 *		  event or not. If Axis is not expecting a character data event 
+	 *		  (bIsCharData is false) the parser should not return a character 
+	 *		  data event. Instead it should skip all character data events 
+	 *	      until it finds a non-character data event and return it.
+	 */
+    virtual const AnyElement* next(bool bIsCharData=false)=0;
+protected:
+	AxisIOStream* m_pInputStream;
 
 };
 

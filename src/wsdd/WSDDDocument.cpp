@@ -18,8 +18,9 @@
  *
  */
 
-#include "WSDDDocumentExpat.h"
+#include "WSDDDocument.h"
 #include "WSDDKeywords.h"
+#include "../engine/XMLParserFactory.h"
 #include <axis/server/AxisTrace.h>
 
 #define NAMESPACESEPARATOR 0x03    /* Heart */
@@ -27,7 +28,7 @@
 
 extern AxisTrace* g_pAT;
 
-WSDDDocumentExpat::WSDDDocumentExpat(map<AxisString, int>* pLibNameIdMap)
+WSDDDocument::WSDDDocument(map<AxisString, int>* pLibNameIdMap)
 {
     m_lev0 = WSDD_UNKNOWN;
     m_lev1 = WSDD_UNKNOWN;
@@ -45,17 +46,17 @@ WSDDDocumentExpat::WSDDDocumentExpat(map<AxisString, int>* pLibNameIdMap)
     m_bError = false;
 }
 
-WSDDDocumentExpat::~WSDDDocumentExpat()
+WSDDDocument::~WSDDDocument()
 {
 
 }
 
-int WSDDDocumentExpat::getDeployment(const AxisChar* sWSDD,
+int WSDDDocument::getDeployment(const AxisChar* pcWSDDFileName,
                                      WSDDDeployment* pDeployment)
 {
     m_pDeployment = pDeployment;    
     /* this enables the access to Deployment object while parsing */
-    if (AXIS_SUCCESS != parseDocument(sWSDD))
+    if (AXIS_SUCCESS != parseDocument(pcWSDDFileName))
     {
         AXISTRACE1("Deployment descripter loading failed", CRITICAL);
         return AXIS_FAIL;
@@ -63,74 +64,148 @@ int WSDDDocumentExpat::getDeployment(const AxisChar* sWSDD,
     return AXIS_SUCCESS;
 }
 
-int WSDDDocumentExpat::parseDocument(const AxisChar* sWSDD)
+/* This function is never called. */
+AXIS_TRANSPORT_STATUS WSDDDocument::WSDDFileInputStream::sendBytes(const char* pcSendBuffer, const void* pBufferid)
 {
-    XML_Ch Buff[FILEBUFFSIZE];
-    XML_Parser Parser = XML_ParserCreateNS(NULL, NAMESPACESEPARATOR);
-    XML_SetUserData(Parser, this);
-    XML_SetNamespaceDeclHandler(Parser, s_startPrefixMapping,
-        s_endPrefixMapping);
-    XML_SetElementHandler(Parser, s_startElement, s_endElement);
-    XML_SetCharacterDataHandler(Parser, s_characters);
-    FILE *file = fopen(sWSDD, "r");
-    if (NULL == file) 
-    { 
-        XML_ParserFree(Parser); 
-        return AXIS_FAIL;
-    }
-    while (true) 
-    {
-        int done;
-        int len;
-        len = fread(Buff, 1, FILEBUFFSIZE, file);
-        if (ferror(file)) 
-        {
-            fclose(file);
-            XML_ParserFree(Parser); 
-            return AXIS_FAIL;
-        }
-        done = feof(file);
-        if (XML_Parse(Parser, Buff, len, done) == XML_STATUS_ERROR) 
-        {
-            fclose(file);
-            XML_ParserFree(Parser); 
-            return AXIS_FAIL;
-        }
-
-        if (done)
-            break;
-    }
-    fclose(file);
-    XML_ParserFree(Parser); 
-    return AXIS_SUCCESS;
+	return TRANSPORT_FINISHED;
 }
 
-int WSDDDocumentExpat::updateDeployment(const AxisChar* sWSDD,
+AXIS_TRANSPORT_STATUS WSDDDocument::WSDDFileInputStream::getBytes(char* pcBuffer, int* piRetSize)
+{
+	if (!m_pFile)
+		m_pFile = fopen(m_pcWSDDFileName, "r");
+    if (NULL == m_pFile) 
+    { 
+        return TRANSPORT_FAILED;
+    }
+    if (feof(m_pFile))
+	{
+		fclose(m_pFile);
+		pcBuffer[0]=0; /* put null */
+		*piRetSize = 0;
+        return TRANSPORT_FINISHED;
+	}
+    *piRetSize = fread(pcBuffer, 1, *piRetSize, m_pFile);
+    if (ferror(m_pFile)) 
+    {
+        fclose(m_pFile);
+		pcBuffer[0]=0; /* put null */
+		*piRetSize = 0;
+        return TRANSPORT_FAILED;
+    }
+	return TRANSPORT_IN_PROGRESS;
+}
+
+/* This function is never called. */
+AXIS_TRANSPORT_STATUS WSDDDocument::WSDDMemBufInputStream::sendBytes(const char* pcSendBuffer, const void* pBufferid)
+{
+	return TRANSPORT_FINISHED;
+}
+
+AXIS_TRANSPORT_STATUS WSDDDocument::WSDDMemBufInputStream::getBytes(char* pcBuffer, int* piRetSize)
+{
+	if (!m_pcWSDDMemBuffer) return TRANSPORT_FAILED;
+	int nBufLen = strlen(m_pcWSDDMemBuffer);
+	if (0 == nBufLen) return TRANSPORT_FINISHED;
+	nBufLen = ((*piRetSize - 1) < nBufLen) ? (*piRetSize - 1) : nBufLen;
+	strncpy(pcBuffer, m_pcWSDDMemBuffer, nBufLen);
+	pcBuffer[nBufLen] = 0;
+	m_pcWSDDMemBuffer+=nBufLen;
+	return TRANSPORT_IN_PROGRESS;
+}
+
+int WSDDDocument::parseDocument(const AxisChar* pcWSDDFileName)
+{
+	if (!pcWSDDFileName) return AXIS_FAIL;
+	WSDDFileInputStream stream(pcWSDDFileName);
+	XMLParser* pParser = XMLParserFactory::getParserObject();
+	if (!pParser) return AXIS_FAIL;
+	pParser->setInputStream(&stream);
+	const AnyElement* pNode;
+
+	while(true)
+	{
+		/* We are lucky as long as there is no useful data as character data
+		 * in wsdd. If there are any we are in trouble and we will not be able
+		 * to use the same parser which is used to parse SOAP. Now we never
+		 * ask for character data events. To support character data in a
+		 * wsdd this entire file will have to be re-written in true
+		 * XML PULL model
+		 */
+		pNode = pParser->next();
+		if (AXIS_FAIL == pParser->getStatus()) 
+		{
+			XMLParserFactory::destroyParserObject(pParser);
+			return AXIS_FAIL;
+		}
+		if (!pNode) break;
+		/* Now fire corresponding SAX event. This is a trick to re-use the 
+		 * already written code which uses SAX model.
+		 */
+		switch(pNode->m_type)
+		{
+		case START_ELEMENT:
+			startElement(pNode);
+			break;
+		case CHARACTER_ELEMENT:
+			/* Not used at the moment */
+			break;
+		case END_ELEMENT:
+			endElement(pNode);
+			break;
+		}
+	}
+	XMLParserFactory::destroyParserObject(pParser);
+	return AXIS_SUCCESS;
+}
+
+int WSDDDocument::updateDeployment(const AxisChar* pcWSDDMemBuffer,
                                         WSDDDeployment* pDeployment)
 {
-    m_pDeployment = pDeployment;    
-    /* this enables the access to Deployment object while parsing */
-    XML_Parser Parser = XML_ParserCreateNS(NULL, NAMESPACESEPARATOR);
-    XML_SetUserData(Parser, this);
-    XML_SetNamespaceDeclHandler(Parser, s_startPrefixMapping,
-        s_endPrefixMapping);
-    XML_SetElementHandler(Parser, s_startElement, s_endElement);
-    XML_SetCharacterDataHandler(Parser, s_characters);
-    if (XML_Parse(Parser, sWSDD, strlen(sWSDD), true) == XML_STATUS_ERROR) 
-    {
-        XML_ParserFree(Parser); 
-        AXISTRACE1("Update of wsdd failed", CRITICAL);
-        return AXIS_FAIL;
-    }
-    XML_ParserFree(Parser);
-    return AXIS_SUCCESS;
+    m_pDeployment = pDeployment;/* this enables the access to Deployment 
+								object while parsing */
+	if (!pcWSDDMemBuffer) return AXIS_FAIL;
+	WSDDMemBufInputStream stream(pcWSDDMemBuffer);
+	XMLParser* pParser = XMLParserFactory::getParserObject();
+	if (!pParser) return AXIS_FAIL;
+	pParser->setInputStream(&stream);
+	const AnyElement* pNode;
+
+	while(true)
+	{
+		/* We are lucky as long as there is no useful data as character data
+		 * in wsdd. If there are any we are in trouble and we will not be able
+		 * to use the same parser which is used to parse SOAP. Now we never
+		 * ask for character data events. To support character data in a
+		 * wsdd this entire file will have to be re-written in true
+		 * XML PULL model
+		 */
+		pNode = pParser->next();
+		if (AXIS_FAIL == pParser->getStatus()) return AXIS_FAIL;
+		if (!pNode) break;
+		/* Now fire corresponding SAX event. This is a trick to re-use the 
+		 * already written code which uses SAX model.
+		 */
+		switch(pNode->m_type)
+		{
+		case START_ELEMENT:
+			startElement(pNode);
+			break;
+		case CHARACTER_ELEMENT:
+			/* Not used at the moment */
+			break;
+		case END_ELEMENT:
+			endElement(pNode);
+			break;
+		}
+	}
+	XMLParserFactory::destroyParserObject(pParser);
+	return AXIS_SUCCESS;
 }
 
-void  WSDDDocumentExpat::endElement (const XML_Ch *qname)
+void  WSDDDocument::endElement(const AnyElement* pEvent)
 {
-    QName qn;
-    qn.splitQNameString(qname,NAMESPACESEPARATOR);
-    if (0 != strcmp(qn.localname, kw_param))   
+    if (0 != strcmp(pEvent->m_pchNameOrValue, kw_param))   
     /* just neglect endElement of parameter */
     {
         if (m_lev1 == WSDD_UNKNOWN)    
@@ -145,7 +220,7 @@ void  WSDDDocumentExpat::endElement (const XML_Ch *qname)
                 m_lev0 = WSDD_DEPLOYMENT;
                 break;
             case WSDD_SERVICE:
-                if (0 == strcmp(qn.localname, kw_srv))
+                if (0 == strcmp(pEvent->m_pchNameOrValue, kw_srv))
                 {
                     /* add service object to Deployment object */
                     if (DT_DEPLOYMENT == m_pDeployment->getDeploymentType()) 
@@ -182,7 +257,7 @@ void  WSDDDocumentExpat::endElement (const XML_Ch *qname)
         }
         else    /* inside a requestFlow or responseFlow elements */
         {
-            if(0 == strcmp(qn.localname, kw_hdl))
+            if(0 == strcmp(pEvent->m_pchNameOrValue, kw_hdl))
             {
                 m_lev2 = WSDD_UNKNOWN;
                 /* add handler in m_pHandler to the corresponding container. */
@@ -239,42 +314,43 @@ void  WSDDDocumentExpat::endElement (const XML_Ch *qname)
                 default: ;    /* this cannot happen ?? */
                 }
             }
-            else if(0 == strcmp(qn.localname, kw_rqf))
+            else if(0 == strcmp(pEvent->m_pchNameOrValue, kw_rqf))
             {  
                 m_lev1 = WSDD_UNKNOWN;
             }
-            else if(0 == strcmp(qn.localname, kw_rsf))
+            else if(0 == strcmp(pEvent->m_pchNameOrValue, kw_rsf))
             {  
                 m_lev1 = WSDD_UNKNOWN;
             }                        
         }
     }
-    qn.mergeQNameString(NAMESPACESEPARATOR);
 }
 
-void WSDDDocumentExpat::processAttributes(WSDDLevels ElementType,
-                                          const XML_Ch **attrs)
+void WSDDDocument::processAttributes(WSDDLevels eElementType,
+                                   const AnyElement* pEvent)
 {
-    QName qn;
-    const XML_Ch* value;
-    for (int i = 0; attrs[i]; i += 2) 
-    {
-        qn.splitQNameString(attrs[i],NAMESPACESEPARATOR);
-        value = attrs[i+1];
-        switch(ElementType)
+	const XML_Ch* pcLocalname;
+	const XML_Ch* pcNamespace;
+    const XML_Ch* pcValue;
+	for (int i=0; pEvent->m_pchAttributes[i]; i+=3)
+	{
+		pcLocalname = pEvent->m_pchAttributes[i];
+		pcNamespace = pEvent->m_pchAttributes[i+1];
+        pcValue = pEvent->m_pchAttributes[i+2];
+        switch(eElementType)
         {
-        case WSDD_SERVICE:   /* add this attribute to current service object */
-            if (0 == strcmp(qn.localname, kw_name))
+        case WSDD_SERVICE: /* add this attribute to current service object */
+            if (0 == strcmp(pcLocalname, kw_name))
             {
-                m_pService->setName(value);
+                m_pService->setName(pcValue);
             }
-            else if (0 == strcmp(qn.localname, kw_prv))
+            else if (0 == strcmp(pcLocalname, kw_prv))
             {
-                m_pService->setProvider(value);
+                m_pService->setProvider(pcValue);
             }
-            else if (0 == strcmp(qn.localname, kw_desc))
+            else if (0 == strcmp(pcLocalname, kw_desc))
             {
-                m_pService->setDescription(value);
+                m_pService->setDescription(pcValue);
             }
             else
             {
@@ -282,28 +358,28 @@ void WSDDDocumentExpat::processAttributes(WSDDLevels ElementType,
             }
             break;
         case WSDD_HANDLER:  /* add this attribute to current handler object */
-            if (0 == strcmp(qn.localname, kw_name))
+            if (0 == strcmp(pcLocalname, kw_name))
             {
-                m_pHandler->setName(value);
+                m_pHandler->setName(pcValue);
             }
-            else if (0 == strcmp(qn.localname, kw_type))
+            else if (0 == strcmp(pcLocalname, kw_type))
             {
                 /* we get the libname for the hanlder here ??? */
-                m_pHandler->setLibName(value);
-                if (m_pLibNameIdMap->find(value) != m_pLibNameIdMap->end())
+                m_pHandler->setLibName(pcValue);
+                if (m_pLibNameIdMap->find(pcValue) != m_pLibNameIdMap->end())
                     /* libray name already in the map */
                 {
-                    m_pHandler->setLibId((*m_pLibNameIdMap)[value]);
+                    m_pHandler->setLibId((*m_pLibNameIdMap)[pcValue]);
                 }
                 else
                 {
-                    (*m_pLibNameIdMap)[value] = ++m_nLibId;
-                    m_pHandler->setLibId((*m_pLibNameIdMap)[value]);
+                    (*m_pLibNameIdMap)[pcValue] = ++m_nLibId;
+                    m_pHandler->setLibId((*m_pLibNameIdMap)[pcValue]);
                 }
             }
-            else if (0 == strcmp(qn.localname, kw_desc))
+            else if (0 == strcmp(pcLocalname, kw_desc))
             {
-                m_pHandler->setDescription(value);
+                m_pHandler->setDescription(pcValue);
             }
             else
             {
@@ -312,7 +388,7 @@ void WSDDDocumentExpat::processAttributes(WSDDLevels ElementType,
             break;
         case WSDD_REQFLOW:
         case WSDD_RESFLOW:
-            if (0 == strcmp(qn.localname, kw_name))
+            if (0 == strcmp(pcLocalname, kw_name))
             {
                 /* usefull ? ignore for now .. TODO */
             }
@@ -322,12 +398,12 @@ void WSDDDocumentExpat::processAttributes(WSDDLevels ElementType,
             }
             break;
         case WSDD_TRANSPORT:
-            if (0 == strcmp(qn.localname, kw_name))
+            if (0 == strcmp(pcLocalname, kw_name))
             {
                 /* get tranport type */
-                if (0 == strcmp(value, kw_http))
+                if (0 == strcmp(pcValue, kw_http))
                     m_CurTrType = APTHTTP;
-                else if (0 == strcmp(value, kw_smtp))
+                else if (0 == strcmp(pcValue, kw_smtp))
                     m_CurTrType = APTSMTP;
                 else
                 {
@@ -341,81 +417,77 @@ void WSDDDocumentExpat::processAttributes(WSDDLevels ElementType,
             break;
         default:;
         }
-        qn.mergeQNameString(NAMESPACESEPARATOR);
     }
 }
 
-void WSDDDocumentExpat::getParameters(WSDDLevels ElementType,
-                                      const XML_Ch **attrs)
+void WSDDDocument::getParameters(WSDDLevels eElementType,
+                             const AnyElement* pEvent)
 {
-    QName qn;
-    const XML_Ch* value;
-    const XML_Ch* type;
-    const XML_Ch* name;
-    for (int i = 0; attrs[i]; i += 2) 
-    {
-        qn.splitQNameString(attrs[i],NAMESPACESEPARATOR);
-        value = attrs[i+1];
-        if (0 == strcmp(qn.localname, kw_name))
+	const XML_Ch* pcLocalname;
+	const XML_Ch* pcNamespace;
+    const XML_Ch* pcValue;
+    const XML_Ch* pcType;
+    const XML_Ch* pcName;
+	for (int i=0; pEvent->m_pchAttributes[i]; i+=3)
+	{
+		pcLocalname = pEvent->m_pchAttributes[i];
+		pcNamespace = pEvent->m_pchAttributes[i+1];
+        pcValue = pEvent->m_pchAttributes[i+2];
+        if (0 == strcmp(pcLocalname, kw_name))
         {
-            name = value;
+            pcName = pcValue;
         }
-        else if (0 == strcmp(qn.localname, kw_value))
+        else if (0 == strcmp(pcLocalname, kw_type))
         {
-            value = value;
+            pcType = pcValue;
         }
-        else if (0 == strcmp(qn.localname, kw_type))
-        {
-            type = value;
-        }
-        qn.mergeQNameString(NAMESPACESEPARATOR);
     }
 
-    switch(ElementType)
+    switch(eElementType)
     {
     case WSDD_GLOBCONF:    /* parameters just inside globalConfiguration */
         /* TODO */
         break;
     case WSDD_SERVICE:
-        if (0 == strcmp(name, kw_am))
+        if (0 == strcmp(pcName, kw_am))
         {
-            addAllowedMethodsToService(value);
+            addAllowedMethodsToService(pcValue);
         }
-        else if(0 == strcmp(name, kw_cn))
+        else if(0 == strcmp(pcName, kw_cn))
         {
-            m_pService->setLibName(value);
-            if (m_pLibNameIdMap->find(value) != m_pLibNameIdMap->end())  
+            m_pService->setLibName(pcValue);
+            if (m_pLibNameIdMap->find(pcValue) != m_pLibNameIdMap->end())  
                 /* libray name already in the map */
             {
-                m_pService->setLibId((*m_pLibNameIdMap)[value]);
+                m_pService->setLibId((*m_pLibNameIdMap)[pcValue]);
             }
             else
             {
-                (*m_pLibNameIdMap)[value] = ++m_nLibId;
-                m_pService->setLibId((*m_pLibNameIdMap)[value]);
+                (*m_pLibNameIdMap)[pcValue] = ++m_nLibId;
+                m_pService->setLibId((*m_pLibNameIdMap)[pcValue]);
             }
         }
-        else if (0 == strcmp(name, kw_scope))
+        else if (0 == strcmp(pcName, kw_scope))
         {
-            m_pService->setScope(value);
+            m_pService->setScope(pcValue);
         }
-        else if (0 == strcmp(name, kw_ar))
+        else if (0 == strcmp(pcName, kw_ar))
         {
-            addAllowedRolesToService(value);
+            addAllowedRolesToService(pcValue);
         }
         else
         {
-            m_pService->addParameter(name, value);
+            m_pService->addParameter(pcName, pcValue);
         }
         break;
     case WSDD_HANDLER:
-        if (0 == strcmp(name, kw_scope))
+        if (0 == strcmp(pcName, kw_scope))
         {
-            m_pHandler->setScope(value);
+            m_pHandler->setScope(pcValue);
         }
         else
         {
-            m_pHandler->addParameter(name, value);
+            m_pHandler->addParameter(pcName, pcValue);
         }
         break;
 
@@ -423,9 +495,9 @@ void WSDDDocumentExpat::getParameters(WSDDLevels ElementType,
     }
 }
 
-void WSDDDocumentExpat::addAllowedRolesToService(const AxisXMLCh* value)
+void WSDDDocument::addAllowedRolesToService(const AxisXMLCh* pcValue)
 {
-    AxisString sValue = value;
+    AxisString sValue = pcValue;
     int prepos = 0, pos = 0;
     if (sValue.find('*') == AxisString::npos)
     {
@@ -440,9 +512,9 @@ void WSDDDocumentExpat::addAllowedRolesToService(const AxisXMLCh* value)
     }
 }
 
-void WSDDDocumentExpat::addAllowedMethodsToService(const AxisXMLCh* value)
+void WSDDDocument::addAllowedMethodsToService(const AxisXMLCh* pcValue)
 {
-    AxisString sValue = value;
+    AxisString sValue = pcValue;
     int prepos = 0, pos = 0;
     if (sValue.find('*') == AxisString::npos)
     {
@@ -458,51 +530,49 @@ void WSDDDocumentExpat::addAllowedMethodsToService(const AxisXMLCh* value)
 }
 
 
-void WSDDDocumentExpat::startElement(const XML_Ch *qname,const XML_Ch **attrs)
+void WSDDDocument::startElement(const AnyElement* pEvent)
 {
-    QName qn;
-    qn.splitQNameString(qname,NAMESPACESEPARATOR);
     if (m_lev1 == WSDD_UNKNOWN)    
     /* not inside a requestFlow or responseFlow elements */
     {
         switch(m_lev0)
         {
         case WSDD_UNKNOWN:
-            if(0 == strcmp(qn.localname, kw_depl))
+            if(0 == strcmp(pEvent->m_pchNameOrValue, kw_depl))
             {  
                 m_lev0 = WSDD_DEPLOYMENT;
                 m_pDeployment->setDeploymentType(DT_DEPLOYMENT);
             }
-            else if(0 == strcmp(qn.localname, kw_undepl))
+            else if(0 == strcmp(pEvent->m_pchNameOrValue, kw_undepl))
             {  
                 m_lev0 = WSDD_DEPLOYMENT;
                 m_pDeployment->setDeploymentType(DT_UNDEPLOYMENT);
             }
             break;
         case WSDD_DEPLOYMENT:
-            if(0 == strcmp(qn.localname, kw_glconf))
+            if(0 == strcmp(pEvent->m_pchNameOrValue, kw_glconf))
             {  
                 m_lev0 = WSDD_GLOBCONF;
                 /* nothing to get */
             }
-            else if(0 == strcmp(qn.localname, kw_srv))
+            else if(0 == strcmp(pEvent->m_pchNameOrValue, kw_srv))
             {  
                 m_lev0 = WSDD_SERVICE;
                 m_pService = new WSDDService();
                 /* get service name and proider if any */
-                processAttributes(WSDD_SERVICE, attrs);
+                processAttributes(WSDD_SERVICE, pEvent);
             }
-            else if(0 == strcmp(qn.localname, kw_hdl))
+            else if(0 == strcmp(pEvent->m_pchNameOrValue, kw_hdl))
             {  
                 m_lev0 = WSDD_HANDLER;
                 m_pHandler = new WSDDHandler();
-                processAttributes(WSDD_HANDLER, attrs);
+                processAttributes(WSDD_HANDLER, pEvent);
                 /* get handler name and type if any */
             }
-            else if(0 == strcmp(qn.localname, kw_tr))
+            else if(0 == strcmp(pEvent->m_pchNameOrValue, kw_tr))
             {  
                 m_lev0 = WSDD_TRANSPORT;
-                processAttributes(WSDD_TRANSPORT, attrs);
+                processAttributes(WSDD_TRANSPORT, pEvent);
             }
             else
             {
@@ -510,19 +580,19 @@ void WSDDDocumentExpat::startElement(const XML_Ch *qname,const XML_Ch **attrs)
             }
             break;
         case WSDD_GLOBCONF:
-            if(0 == strcmp(qn.localname, kw_param))
+            if(0 == strcmp(pEvent->m_pchNameOrValue, kw_param))
             {  
-                getParameters(WSDD_GLOBCONF, attrs);
+                getParameters(WSDD_GLOBCONF, pEvent);
             }
-            else if(0 == strcmp(qn.localname, kw_rqf))
+            else if(0 == strcmp(pEvent->m_pchNameOrValue, kw_rqf))
             {  
                 m_lev1 = WSDD_REQFLOW;
-                processAttributes(WSDD_REQFLOW, attrs);
+                processAttributes(WSDD_REQFLOW, pEvent);
             }
-            else if(0 == strcmp(qn.localname, kw_rsf))
+            else if(0 == strcmp(pEvent->m_pchNameOrValue, kw_rsf))
             {  
                 m_lev1 = WSDD_RESFLOW;
-                processAttributes(WSDD_RESFLOW, attrs);
+                processAttributes(WSDD_RESFLOW, pEvent);
             }
             else
             {
@@ -530,19 +600,19 @@ void WSDDDocumentExpat::startElement(const XML_Ch *qname,const XML_Ch **attrs)
             }
         break; 
         case WSDD_SERVICE:
-            if(0 == strcmp(qn.localname, kw_param))
+            if(0 == strcmp(pEvent->m_pchNameOrValue, kw_param))
             {  
-                getParameters(WSDD_SERVICE, attrs);
+                getParameters(WSDD_SERVICE, pEvent);
             }
-            else if(0 == strcmp(qn.localname, kw_rqf))
+            else if(0 == strcmp(pEvent->m_pchNameOrValue, kw_rqf))
             {  
                 m_lev1 = WSDD_REQFLOW;
-                processAttributes(WSDD_REQFLOW, attrs);
+                processAttributes(WSDD_REQFLOW, pEvent);
             }
-            else if(0 == strcmp(qn.localname, kw_rsf))
+            else if(0 == strcmp(pEvent->m_pchNameOrValue, kw_rsf))
             {  
                 m_lev1 = WSDD_RESFLOW;
-                processAttributes(WSDD_RESFLOW, attrs);
+                processAttributes(WSDD_RESFLOW, pEvent);
             }
             else
             {
@@ -550,22 +620,22 @@ void WSDDDocumentExpat::startElement(const XML_Ch *qname,const XML_Ch **attrs)
             }
         break;
         case WSDD_HANDLER:
-            if(0 == strcmp(qn.localname, kw_param))
+            if(0 == strcmp(pEvent->m_pchNameOrValue, kw_param))
             {  
-                getParameters(WSDD_HANDLER, attrs);
+                getParameters(WSDD_HANDLER, pEvent);
             }
 
         break;
         case WSDD_TRANSPORT:
-            if(0 == strcmp(qn.localname, kw_rqf))
+            if(0 == strcmp(pEvent->m_pchNameOrValue, kw_rqf))
             {  
                 m_lev1 = WSDD_REQFLOW;
-                processAttributes(WSDD_REQFLOW, attrs);
+                processAttributes(WSDD_REQFLOW, pEvent);
             }
-            else if(0 == strcmp(qn.localname, kw_rsf))
+            else if(0 == strcmp(pEvent->m_pchNameOrValue, kw_rsf))
             {  
                 m_lev1 = WSDD_RESFLOW;
-                processAttributes(WSDD_RESFLOW, attrs);
+                processAttributes(WSDD_RESFLOW, pEvent);
             }
         break;
         default:;
@@ -573,20 +643,20 @@ void WSDDDocumentExpat::startElement(const XML_Ch *qname,const XML_Ch **attrs)
     }
     else    /* inside a requestFlow or responseFlow elements */
     {
-        if(0 == strcmp(qn.localname, kw_param))
+        if(0 == strcmp(pEvent->m_pchNameOrValue, kw_param))
         {  
-            getParameters(m_lev2, attrs);    
+            getParameters(m_lev2, pEvent);    
             /* must be parameters of a handler or a chain */
         }
 
-        else if(0 == strcmp(qn.localname, kw_hdl))
+        else if(0 == strcmp(pEvent->m_pchNameOrValue, kw_hdl))
         {  
             m_lev2 = WSDD_HANDLER;
             m_pHandler = new WSDDHandler();
-            processAttributes(WSDD_HANDLER, attrs);
+            processAttributes(WSDD_HANDLER, pEvent);
             /* get handler name and type if any */
         }
-        else if(0 == strcmp(qn.localname, kw_chain))
+        else if(0 == strcmp(pEvent->m_pchNameOrValue, kw_chain))
         {
 
         }
@@ -595,26 +665,8 @@ void WSDDDocumentExpat::startElement(const XML_Ch *qname,const XML_Ch **attrs)
             /* error : unknown element type in wsdd file */
         }
     }
-    qn.mergeQNameString(NAMESPACESEPARATOR);
 }
 
-void WSDDDocumentExpat::startPrefixMapping(const XML_Ch *prefix,
-                                           const XML_Ch *uri)
-{
-    if (prefix) m_NsStack[prefix] = uri;    /* I think the same prifix 
-    cannot repeat ??? */
-}
-
-void WSDDDocumentExpat::endPrefixMapping(const XML_Ch *prefix)
-{
-    if (prefix) m_NsStack.erase(prefix);    /* I think the same prifix 
-    cannot repeat ??? */
-}
-
-void  WSDDDocumentExpat::characters (const XML_Ch* chars,int length)
-{
-    /* cout<<"==="<<XMLString::transcode(chars)<<"==="<<endl; */
-}
 
 
 

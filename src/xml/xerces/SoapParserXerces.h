@@ -23,12 +23,12 @@
 #pragma warning (disable : 4786)
 #endif
 
-#if !defined(__SoapParserXerces_H_OF_AXIS_INCLUDED__)
-#define __SoapParserXerces_H_OF_AXIS_INCLUDED__
+#if !defined(__SOAPPARSERXERCES_H_OF_AXIS_INCLUDED__)
+#define __SOAPPARSERXERCES_H_OF_AXIS_INCLUDED__
 
 #include <axis/server/Packet.h>
-#include "../xml/QName.h"
-#include "../xml/Event.h"
+#include "../QName.h"
+#include "../Event.h"
 #include <axis/server/AnyElement.h>
 #include <axis/server/XMLParser.h>
 #include "XercesHandler.h"
@@ -37,7 +37,7 @@
 #include <xercesc/parsers/SAXParser.hpp>
 #include <xercesc/framework/XMLPScanToken.hpp>
 #include "SoapInputSource.h"
-/* using namespace std; */
+
 XERCES_CPP_NAMESPACE_USE
 
 class SoapParserXerces: public XMLParser
@@ -47,28 +47,16 @@ public:
     SoapParserXerces();
     ~SoapParserXerces();
 
-    int setInputStream(const Ax_soapstream* pInputStream);
-    const Ax_soapstream* getInputStream(){return m_pInputStream;};
-    int init();
-    const XML_Ch* getNS4Prefix(const XML_Ch* prefix);
+    int setInputStream(AxisIOStream* pInputStream);
+    const XML_Ch* getNS4Prefix(const XML_Ch* pcPrefix);
     int getStatus();
-    const AnyElement* next(bool isCharData=false);
-    AXIS_TRANSPORT_STATUS getTransportStatus(){ return m_nTransportStatus;};
-    void setTransportStatus(AXIS_TRANSPORT_STATUS nStatus)
-    { m_nTransportStatus = nStatus;};
-
-
-    const Ax_soapstream* m_pInputStream;
-
+    const AnyElement* next(bool bIsCharData=false);
 private:
-    int m_nStatus;
     SAX2XMLReader* m_pParser;
-    /* SAXParser* m_pParser; */
-    AXIS_TRANSPORT_STATUS m_nTransportStatus;
-    XMLPScanToken token;
-    XercesHandler Xhandler;
-    bool firstParsed;
-    SoapInputSource* is;
+    XMLPScanToken m_ScanToken;
+    XercesHandler m_Xhandler;
+    bool m_bFirstParsed;
+    SoapInputSource* m_pInputSource;
 
 
 };

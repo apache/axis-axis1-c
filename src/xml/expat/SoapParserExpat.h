@@ -14,62 +14,70 @@
  *   limitations under the License.
  */
 
+/*
+ * @author Susantha Kumara (skumara@virtusa.com)
+ *
+ */
 #ifdef WIN32
-#pragma warning(disable : 4786)
+#pragma warning (disable : 4786)
 #endif
 
-#if !defined(__WSDDDOCUMENTEXPAT_H_OF_AXIS_INCLUDED__)
-#define __WSDDDOCUMENTEXPAT_H_OF_AXIS_INCLUDED__
+#if !defined(__SoapParserExpat_H_OF_AXIS_INCLUDED__)
+#define __SoapParserExpat_H_OF_AXIS_INCLUDED__
 
-#include "WSDDDocument.h"
 #include <expat/expat.h>
-#include <string>
+#include <axis/server/Packet.h>
+
+#include "../QName.h"
+#include <axis/server/AnyElement.h>
+#include "../Event.h"
+#include <axis/server/XMLParser.h>
+
+#include <queue>
 #include <map>
+#include <string>
 
 using namespace std;
 
-/*
- *  @class WSDDDocumentExpat
- *  @brief
- *  @author sanjaya sinharage(sanjaya@opensource.lk)
- *  @author Suasntha Kumara (skumara@virtusa.com, susantha@opensource.lk)
- */
-class WSDDDocumentExpat : public WSDDDocument
+class SoapParserExpat: public XMLParser
 {
-private:
-    void processAttributes(WSDDLevels ElementType, const XML_Ch **attrs);
-    void getParameters(WSDDLevels ElementType, const XML_Ch **attrs);
-    void addAllowedRolesToService(const AxisXMLCh* value);
-    void addAllowedMethodsToService(const AxisXMLCh* value);
-    int parseDocument(const AxisChar* sWSDD);
-
 public:
-    WSDDDocumentExpat(map<AxisString, int>* pLibNameIdMap);
-    ~WSDDDocumentExpat();
-    int getDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment);
-    int updateDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment);
+    SoapParserExpat();
+    ~SoapParserExpat();
+    int setInputStream(AxisIOStream* pInputStream);
+    const XML_Ch* getNS4Prefix(const XML_Ch* prefix);
+    int getStatus();
+    const AnyElement* next(bool isCharData=false);
 
+private:
+    XML_Parser m_Parser;
+    char* m_pCurrentBuffer;
+    Event* m_pLastEvent;
+    AnyElement m_Element;
+    queue<Event*> m_Events;
+    map<AxisXMLString, AxisXMLString> m_NsStack;
+    int m_nStatus;
     void startElement(const XML_Ch *qname,const XML_Ch **attrs);
     void endElement(const XML_Ch *qname);
     void characters(const XML_Ch *chars,int length);
     void startPrefixMapping(const XML_Ch *prefix, const XML_Ch *uri);
     void endPrefixMapping(const XML_Ch *prefix);
+    int parseNext();
 
     inline static void XMLCALL s_startElement(void* p, const XML_Ch *qname,
         const XML_Ch **attrs)
-    {((WSDDDocumentExpat*)p)->startElement(qname,attrs);};
+    {((SoapParserExpat*)p)->startElement(qname,attrs);};
     inline static void XMLCALL s_endElement(void* p, const XML_Ch *qname)
-    {((WSDDDocumentExpat*)p)->endElement(qname);};
+    {((SoapParserExpat*)p)->endElement(qname);};
     inline static void XMLCALL s_characters(void* p, const XML_Ch *chars,
         int length)
-    {((WSDDDocumentExpat*)p)->characters(chars,length);};
-    inline static void XMLCALL s_startPrefixMapping(void* p, 
+    {((SoapParserExpat*)p)->characters(chars,length);};
+    inline static void XMLCALL s_startPrefixMapping(void* p,
         const XML_Ch *prefix, const XML_Ch *uri)
-    {((WSDDDocumentExpat*)p)->startPrefixMapping(prefix, uri);};
-    inline static void XMLCALL s_endPrefixMapping(void* p, 
+    {((SoapParserExpat*)p)->startPrefixMapping(prefix, uri);};
+    inline static void XMLCALL s_endPrefixMapping(void* p,
         const XML_Ch *prefix)
-    {((WSDDDocumentExpat*)p)->endPrefixMapping(prefix);};
+    {((SoapParserExpat*)p)->endPrefixMapping(prefix);};
 };
 
 #endif
- 
