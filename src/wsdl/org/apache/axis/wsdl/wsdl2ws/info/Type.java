@@ -111,6 +111,7 @@ public class Type {
         else{
         	//remove any funny Charactors
 			this.languageSpecificName = this.languageSpecificName.replaceAll("/","_");  
+
 			this.languageSpecificName = this.languageSpecificName.replaceAll(":","_");
 			// JBY : add this one more clean?
 			// This arrived in case of inner type declaration. And for compilation
@@ -175,6 +176,10 @@ public class Type {
  */
 	public void setTypeNameForElementName(ElementInfo element) {
 		String attribName = TypeMap.resoleveWSDL2LanguageNameClashes(element.getName().getLocalPart(),this.language);
+		if (attribName.lastIndexOf('>') > 1 )
+            	{
+ 		    attribName =attribName.substring(attribName.lastIndexOf('>')+1,attribName.length());	
+		}                		
 		if (hasOrder)
 			this.attribOrder.add(attribName);
 		this.elements.put(attribName, element);
@@ -182,9 +187,8 @@ public class Type {
 	}
 
 	public ElementInfo getElementForElementName(String attribName) {
-		return (ElementInfo) this.elements.get(attribName);
+	       return (ElementInfo) this.elements.get(attribName);
 	}
-
 
     public void setAttribOrder(Vector order) {
         this.attribOrder = order;
@@ -281,8 +285,7 @@ public class Type {
      * @see java.lang.Object#toString()
      */
     public String toString() {
-       String str = "---------"+this.name+"------------\n" +
-       	"languageSpecificName = " + this.languageSpecificName +"\n";
+       String str = "---------"+this.name+"------------\n" +	"languageSpecificName = " + this.languageSpecificName +"\n";
        	if(enumerationdata != null){
 			str = str + "enumerationType = "+((TypeEntry)enumerationdata.get(0)).getQName()+"\n(";
 			for(int i = 1;i<enumerationdata.size();i++)	
@@ -293,15 +296,15 @@ public class Type {
 	       	str = str + "Elements[\n";
 	       	Iterator c = elements.values().iterator();
 			while(c.hasNext())	
-					str = str +","+ c.next()+"\n";
-	       	str = str + "]\n";
+			str = str +","+ c.next()+"\n";
+         	       	str = str + "]\n";
 	       	
 			c = attributes.keySet().iterator();
 			str = str + "Attributes[\n";
 
 			while(c.hasNext()){	
 				String name = (String)c.next();
-					str = str +",("+ name+","+attributes.get(name)+")";
+				str = str +",("+ name+","+attributes.get(name)+")";
 			}		
 			str = str + "]\n";
 	       	
