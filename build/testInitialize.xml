@@ -25,7 +25,7 @@
 			<istrue value="${testconf.client.parser.xerces}"/>
 		</condition>
 		<!-- make a copy of the parser specfic library with the general parser library name -->
-		<copy file="${dir.bin}/${selectedClientParserLib}" tofile="${dir.bin}/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}"/>
+		<copy failonerror="false" file="${dir.bin}/${selectedClientParserLib}" tofile="${dir.bin}/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}"/>
 
 </target>
 
