@@ -306,9 +306,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				writer.write("\t"+attribs[i].getParamNameAsMember()+"=0;\n");
 			} else {
 				/* Needed for shared libraries */
-				   writer.write("\tmemset( &" + attribs[i].getParamNameAsMember() + ", 0, sizeof( " + attribs[i].getTypeName() + "));\n");
-//FJP				if ("xsd__string".equals(attribs[i].getTypeName()))
-//FJP				   writer.write("\t"+attribs[i].getParamName()+" = 0;\n");
+			      writer.write("\tmemset( &" + attribs[i].getParamNameAsMember() + ", 0, sizeof( " + attribs[i].getTypeName() + "));\n");
 			}
 		}			
 		writer.write("}\n");

@@ -236,6 +236,9 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			}
 			else if (!attribs[i].isSimpleType()){
 				writer.write("\t"+attribs[i].getParamNameAsMember()+"=0;\n");
+			} else {
+				/* Needed for shared libraries */
+			      writer.write("\tmemset( &" + attribs[i].getParamNameAsMember() + ", 0, sizeof( " + attribs[i].getTypeName() + "));\n");
 			}
 		}			
 		writer.write("}\n");
