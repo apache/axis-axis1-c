@@ -146,16 +146,12 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				if( soapTagName.charAt(0) == '_' )
 					soapTagName = soapTagName.substring(1, soapTagName.length() );
 				//end remove _Ref sufix and _ prefix in SOAP tag name
-				if (attribs[i].isOptional())
-				{
-					writer.write("\tif (0 != param->"+attribs[i].getParamNameAsMember()+")\n");
-				}				
-				
 				if (attribs[i].getTypeName().equals("xsd__string")
  						|| attribs[i].getTypeName().equals("xsd__anyURI")
 						|| attribs[i].getTypeName().equals("xsd__QName")
 						|| attribs[i].getTypeName().equals("xsd__notation"))
 				{
+					writer.write("\tif (0 != param->"+attribs[i].getParamNameAsMember()+")\n");
 					writer.write("\t\tpSZ->serializeAsAttribute(\""+ soapTagName +"\", 0, (void*)(param->"+attribs[i].getParamNameAsMember()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 				}
 				else
