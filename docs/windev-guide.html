@@ -102,7 +102,7 @@ cvs -d :pserver:anoncvs@cvs.apache.org:/home/cvspublic checkout ws-axis <br>
 The checkout of the repository will be created in the current directory in a
 folder named “ws-axis”<br>
 <br>
-The checked out folder ws-axis will be referred to as [CHECKOUT_HOME] from
+The checked out folder ws-axis will be referred to as [Checkout_Folder] from
 this point on.<br></p>
 
 <p><a name="getapacheexpat"></a></p>
@@ -137,7 +137,7 @@ Apache 2.0.44.</p>
 <br>
 <p>Run the file
 xerces-c2_2_0-win32.The folder to which Xerces is unzipped will be
-referred to as [XERCES_EXTRACT] from this point onwards.</p>
+referred to as [Xerces_Folder] from this point onwards.</p>
 
 <br>
 
@@ -145,14 +145,14 @@ referred to as [XERCES_EXTRACT] from this point onwards.</p>
 <br>
 <p>Run the file
 expat_win32bin_1_95_7.exe . The folder to which Expat is unzipped will be
-referred to as [EXPAT_EXTRACT] from this point onwards.</p>
+referred to as [Expat_Folder] from this point onwards.</p>
 
 <br>
 <p><b>Apache</b></p>
 <br>
 <p>Install the Apache web server. By default Apache 1.3.X is installed in
 "C:\Program Files\Apache Group\Apache" and Apache 2.X in "C:\Program
-Files\Apache Group\Apache2". These locations will be referred to as [APACHE_HOME]
+Files\Apache Group\Apache2". These locations will be referred to as [Apache_Folder]
 from this point onwards.</p>
 
 
@@ -164,42 +164,42 @@ from this point onwards.</p>
 <h2>Setting up the build environment and building Axis</h2>
 <br>
 <P><b>For Expat Parser</b></p>
-<p>1) Copy [EXPAT_EXTRACT]\source\lib\expat.h from expat binary distribution to [CHECKOUT_HOME]\c\include\expat\ directory <br>
+<p>1) Copy [Expat_Folder]\source\lib\expat.h from expat binary distribution to [Checkout_Folder]\c\include\expat\ directory <br>
 <br>
-2) Copy [EXPAT_EXTRACT]\lib\libexpat.lib to [CHECKOUT_HOME]\c\lib\expat\ directory.</p>
+2) Copy [Expat_Folder]\lib\libexpat.lib to [Checkout_Folder]\c\lib\expat\ directory.</p>
 
 <br> <br>
 <p><b>For Xerces Parser</b></p>
-<p>1) Copy [XERCES_EXTRACT]\lib\xerces-c_2.lib to [CHECKOUT_HOME]\c\lib\xerces\ directory.</p>
-<p>2) Copy [XERCES_EXTRACT]\include\xercesc to [CHECKOUT_HOME]\c\include\xerces\ directory. </p>
+<p>1) Copy [Xerces_Folder]\lib\xerces-c_2.lib to [Checkout_Folder]\c\lib\xerces\ directory.</p>
+<p>2) Copy [Xerces_Folder]\include\xercesc to [Checkout_Folder]\c\include\xerces\ directory. </p>
 
 
 <p><b>For apache 1.3.X:</b></p>
 
 
-<p>1) Copy the include files in "[APACHE_HOME]\include" directory to
-"[CHECKOUT_HOME] \c\include\apache1_3\"
+<p>1) Copy the include files in "[Apache_Folder]\include" directory to
+"[Checkout_Folder]\c\include\apache1_3\"
 
 <br><br>
-2) Copy the ApacheCore.lib file from [APACHE_HOME]\libexec
-to [CHECKOUT_HOME]\c\lib\apache1_3.</p>
+2) Copy the ApacheCore.lib file from [Apache_Folder]\libexec
+to [Checkout_Folder]\c\lib\apache1_3.</p>
 <br>
 
 <p><b>For apache 2.X:</b></p>
 
 
 
-<p>1) Copy the include files in "[APACHE_HOME]\include" directory to
-"[CHECKOUT_HOME]\c\include\apache2_0\"<br><br>
+<p>1) Copy the include files in "[Apache_Folder]\include" directory to
+"[Checkout_Folder]\c\include\apache2_0\"<br><br>
 
  2) Copy the following lib files libapr.lib, libhttpd.lib files from
-"[APACHE_HOME]\lib" to "[CHECKOUT_HOME]\c\lib\apache2_0".<br>
+"[Apache_Folder]\lib" to "[Checkout_Folder]\c\lib\apache2_0".<br>
 </p>
 <br>
 
 <p><b>Building the AxisServer and AxisClient dlls </b> </p>
 <br>
-<p>Build the AxisServer and AxisClient projects.(Click on file in Visual C++ ,open Visual C++ Distribution workspace (Distribution.dsw) at [CHECKOUT_HOME]\c\vc\.
+<p>Build the AxisServer and AxisClient projects.(Click on file in Visual C++ ,open Visual C++ Distribution workspace (Distribution.dsw) at [Checkout_Folder]\c\vc\.
 In the workspace window, File View, right click on  the AxisServer project and AxisClient project ).Which will build the AxisServer.dll and AxisClient.dll </p>
 
 <br>
@@ -207,7 +207,7 @@ In the workspace window, File View, right click on  the AxisServer project and A
 <p>
  In Visual C++ (The version used for this documentation was Visual C++ 6.0)
 click on file ,open Visual C++ Distribution workspace (Distribution.dsw) at
-[CHECKOUT_HOME]\c\vc\.
+[Checkout_Folder]\c\vc\.
 In the workspace window, File View, right click on either the project "Apache1_3Module files" or
 "Apache2_0Module files" and click on the "Set as Active Project" to make it the Active
 Project.<br> <br>
@@ -216,14 +216,14 @@ Project.<br> <br>
 "Apache2_0Module" in the workspace window, File View, and then click on Settings in
 the popup menu. Select the link tab. Select General from the Category drop
 down list. In the Output file name text box put the value
-[APACHE_HOME]\modules\mod_axis.dll and click OK.(To build a Apache Module, AxisServer.lib should be in the settings Link tab ) </p>
+[Checkout_Folder]\modules\mod_axis.dll and click OK.(To build a Apache Module, AxisServer.lib should be in the settings Link tab ) </p>
 
 <p>Build either Apache1_3Module or Apache2_0Module project.
 In Visual C++ right click on either the project "Apache1_3Module" or
 "Apache2_0Module" in the workspace window, File View and click "build (selection only)"
 to build mod_axis.dll for Apache1_3Module or mod_axis2.dll for Apache2_0Module.
 <br><br>
-(From here onwards we refer to these modules as APACHE_MODULE. Replace it 
+(From here onwards we refer to these modules as Apache_Module. Replace it 
 with the correct module for the Apache server version that you have installed). Then build SimpleAxisServer.  
 
 &nbsp;</p>
@@ -235,37 +235,37 @@ with the correct module for the Apache server version that you have installed). 
 
 <br>
 <p><b> Building AxisTransport.dll  and AxisXMLParser.dll</b>
-<br>Build the AxisTransport and AxisXMLParser projects. Which will build the AxisTransport.dll and AxisXMLParser.dll in [CHECKOUT_HOME]\c\bin. </p>
+<br>Build the AxisTransport and AxisXMLParser projects. Which will build the AxisTransport.dll and AxisXMLParser.dll in [Checkout_Folder]\c\bin. </p>
 <p>(When the projects are built in Debug mode then the Dlls will appear as AxisTransport_D and AxisXMLParser_D.dll)</p> 
 <p><a name="deployaxis"></a></p>
 
 
 <h2>Deploying Axis in Apache</h2>
 <br>
-<p>1) Create a directory structure called "Axis" inside [APACHE_HOME] as
+<p>1) Create a directory structure called "Axis" inside [Apache_Folder] as
 follows.
 <br>
-(Instead, you can copy the folder [CHECKOUT_HOME]\c\deploy to [APACHE_HOME] and rename it to 
+(Instead, you can copy the folder [Checkout_Folder]\c\deploy to [Apache_Folder] and rename it to 
 "Axis" and you will find some of the files that you are asked to create in this guide,
 already existing in that folder)
 <br>
 <br>
 Axis<br>
-|__ lib (Copy [EXPAT_EXTRACT]\Libs\libexpat.dll or <br> &nbsp &nbsp [XERCES_EXTRACT]\bin\xerces-c_2_2_0.dll and paste it inside)<br>
+|__ lib (Copy [Expat_Folder]\Libs\libexpat.dll or <br> &nbsp &nbsp [Xerces_Folder]\bin\xerces-c_2_2_0.dll and paste it inside)<br>
 |__ logs (log files are located here)<br>
 |__ conf (server.wsdd file is located here)<br>
 |__ webservices (The place to put webservice dlls)<br>
 |__ wsdls (wsdl files of the deployed web services are located here)<br>
 
 <br>
-2) Set an environment variable named AXISCPP_DEPLOY and give [APACHE_HOME]\Axis as
+2) Set an environment variable named AXISCPP_DEPLOY and give [Apache_Folder]\Axis as
 the value.
 <br>
 
 <br>
-i)You will find AxisServer.dll and APACHE_MODULE in [CHECKOUT_HOME]\c\bin directory.
+i)You will find AxisServer.dll and Apache_Module in [Checkout_Folder]\c\bin directory.
 <br>
-ii)Copy APACHE_MODULE to [APACHE_HOME]\modules directory of your apache installation.
+ii)Copy Apache_Module to [Apache_Folder]\modules directory of your apache installation.
 <br>
 <p>Copy AxisServer.dll ,AxisTransport.dll and AxisXMLParser.dll to [AXISCPP_DEPLOY]\lib\ directory and add that directory to your PATH environment variable.Or to any location specified by your PATH environment variable.</p>    
 
@@ -273,16 +273,16 @@ ii)Copy APACHE_MODULE to [APACHE_HOME]\modules directory of your apache installa
 <p>3) Set the "PATH" environment variable to the following directories.
 
 <br>
-[APACHE_HOME]<br>
-[APACHE_HOME]\Axis\lib<br>
+[Apache_Folder]<br>
+[Apache_Folder]\Axis\lib<br>
 <br> 
 
-4) Include the following lines at the bottom of the apache configuration file [APACHE_HOME]\conf\httpd.conf 
+4) Include the following lines at the bottom of the apache configuration file [Apache_Folder]\conf\httpd.conf 
 <br>
 
 
 <br>
-LoadModule axis_module modules/APACHE_MODULE
+LoadModule axis_module modules/Apache_Module 
 
 <br>
 &lt;Location /axis&gt;
@@ -294,7 +294,7 @@ SetHandler axis
 &lt;/Location&gt;
 <br>
 <br>
-5) Create a file in [APACHE_HOME]\Axis named "axiscpp.conf" which should
+5) Create a file in [Apache_Folder]\Axis named "axiscpp.conf" which should
 contain the following lines.
 
 <br>
@@ -311,17 +311,17 @@ XXXX is the path to a file named AxisLog (The log file)and YYYY
 is the path to the server.wsdd file.ZZZZ is the path to AxisTransport.dll if it's a HTTP(if the selected transport is SMTP then should give that path.)WWWW is the path to AxisXMLParser.dll<br>
 <br>
 i.e.<br>
-LogPath:[APACHE_HOME]\Axis\logs\AxisLog.log  
+LogPath:[Apache_Folder]\Axis\logs\AxisLog.log  
 
 <br>
-WSDDFilePath:[APACHE_HOME]\Axis\conf\server.wsdd <br>
-Transport_http:[APACHE_HOME]\Axis\lib\AxisTransport.dll <br>
-XMLParser:[APACHE_HOME]\Axis\lib\AxisXMLParser.dll</p>  
+WSDDFilePath:[Apache_Folder]\Axis\conf\server.wsdd <br>
+Transport_http:[Apache_Folder]\Axis\lib\AxisTransport.dll <br>
+XMLParser:[Apache_Folder]\Axis\lib\AxisXMLParser.dll</p>  
 
 <p><b>Note:If the AxisTransport.dll and AxisXMLParser.dll paths are not given in axiscpp.conf then the hardcoded values will be used.For that set the path of these two in the PATH environment variable or copy them to the same location as the Client.exe.</b></p>
 <br> <br>
 
-<p> <b>Note:  Make sure that if you are using Expat that libexpat.dll ([EXPAT_EXTRACT]\Libs\) file is pasted in %AXISCPP_DEPLOY%/lib/ and if you are using Xerces that xerces-c_2_2_0.dll  ([XERCES_EXTRACT]\bin) is pasted in %AXISCPP_DEPLOY%/lib/ </b> </p>
+<p> <b>Note:  Make sure that if you are using Expat that libexpat.dll ([Expat_Folder]\Libs\) file is pasted in %AXISCPP_DEPLOY%/lib/ and if you are using Xerces that xerces-c_2_2_0.dll  ([Xerces_Folder]\bin) is pasted in %AXISCPP_DEPLOY%/lib/ </b> </p>
 
 
 <p>6) Select start-&gt;programs-&gt;Apache HTTP server-&gt;Control Apache
@@ -385,7 +385,7 @@ In the "New" dialog that appears give a project Name (e.g. test). In the "New
 dialog" keep the "use default" Tick Box checked.
 <br>
 Note down the path in the "Directory" Text Box. This location will be
-referred to as [SKELSTUB_HOME] from this point onwards. Click "Next".<br>
+referred to as [Skelstub_Folder] from this point onwards. Click "Next".<br>
 
 
 <br>
@@ -421,8 +421,8 @@ Click “Open”.<br>
 <br>
 Click “Finish” on the “New” dialog.<br>
 <br>
-2) Copy the “org” folder inside [CHECKOUT_HOME]\c\src\wsdl to
-[SKELSTUB_HOME]\src. The “org” folder contains the package structure for the
+2) Copy the “org” folder inside [Checkout_Folder]\c\src\wsdl to
+[Skelstub_Folder]\src. The “org” folder contains the package structure for the
 WSDL2Ws java tool.<br><br>
 3) Go to eclipse and right click on the “Package Explorer” window and click
 on “Refresh” in the popup menu that appears. Now you should be able to see
@@ -432,10 +432,10 @@ would have built the WSDL2Ws tool.<br>
 
 <br>
 For this demonstration we will use a Calculator web service and the WSDL file
-the web service is located at [CHECKOUT_HOME]\c\samples\server\simple.<br>
+the web service is located at [Checkout_Folder]\c\samples\server\simple.<br>
 
 <br>
-Copy the Calculator.wsdl to [SKELSTUB_HOME]<br>
+Copy the Calculator.wsdl to [Skelstub_Folder]<br>
 
 
 <br>
@@ -451,7 +451,7 @@ In the “Main Class” text box give the class as
 <br>
 &nbsp;</p>
 
-<p><img border="0" src="images/main_class.jpg" width="627" height="340"></p>
+<p><img border="0" src="images/c/main_class.jpg" width="627" height="340"></p>
 
 <p>Select the “Arguments” tab.</p>
 
@@ -461,7 +461,7 @@ box give the following argument.</p>
 <p>“Calculator.wsdl -o./ServerOut
 -lc++ -sserver”.</p>
 
-<p><img border="0" src="images/argument.jpg" width="626" height="272"></p>
+<p><img border="0" src="images/c/argument.jpg" width="626" height="272"></p>
 
 <p><b>NOTE: These are the arguments for the java tool WSDL2Ws. The usage of the
 WSDL2Ws is as follows.</b><br>
@@ -474,13 +474,13 @@ Click “Run”.<br>
 Now the Skeletons/Wrappers will be generated and you will see messages in the
 eclipse console displaying the generated files. The generated
 Skeletons/Wrappers will be created in a folder named
-[SKELSTUB_HOME]\ServerOut as given in the arguments when you  run the tool.<br>
+[Skelstub_Folder]\ServerOut as given in the arguments when you  run the tool.<br>
 <br>
 Similarly to generate the client stubs use the following arguments in eclipse
 and run.<br>
 “Calculator.wsdl -o./ClientOut -lc++ -sclient”.<br>
 The generated Stubs will be created in a folder named
-[SKELSTUB_HOME]\ClientOut.<br>
+[Skelstub_Folder]\ClientOut.<br>
 &nbsp;</p>
 
 <p><a name="commandline"></a></p>
@@ -512,8 +512,8 @@ wsdl4j.jar<br>
 xml-apis.jar
 <br><br>
 Open a command window.<br> <br>
-Change directory to [CHECKOUT_HOME]\c\src\wsdl.<br>
-We will refer to this directory as [SKELSTUB_HOME] as we did during generating Skeletons/Wrappers and Stubs with eclipse.
+Change directory to [Checkout_Folder]\c\src\wsdl.<br>
+We will refer to this directory as [Skelstub_Folder] as we did during generating Skeletons/Wrappers and Stubs with eclipse.
 <br> <br>
 Run the following command to build the java tool.
 <br><b>
@@ -525,11 +525,11 @@ javac -sourcepath . org\apache\axis\wsdl\wsdl2ws\*.java</b>
 If the command finishes without any output then the java tool has been
 built.<br>
 <br>
-Now copy the Calculator.wsdl file in [CHECKOUT_HOME]\c\samples\server\simple, 
-which we use in this example to [SKELSTUB_HOME]<br>
+Now copy the Calculator.wsdl file in [Checkout_Folder]\c\samples\server\simple, 
+which we use in this example to [Skelstub_Folder]<br>
 <br>
 Now run the following command to generate the server side skeletons and
-wrappers in the same [SKELSTUB_HOME].<br>
+wrappers in the same [Skelstub_Folder].<br>
 <br>
 Java -classpath .;%classpath% org.apache.axis.wsdl.wsdl2ws.WSDL2Ws Calculator.wsdl -o./ServerOut -lc++ -sserver<br>
 <br>
@@ -537,13 +537,13 @@ Give the class path exactly the same order as given above.
 <br><br>
 If the tool is successful it will display the files it has
 generated. The skeletons and stubs will be generated in
-[SKELSTUB_HOME]\ServerOut.<br>
+[Skelstub_Folder]\ServerOut.<br>
 <br>
 Run the following command to generate the client stubs.<br>
 <br>
 Java -classpath .;%classpath% org.apache.axis.wsdl.wsdl2ws.WSDL2Ws Calculator.wsdl -o./ClientOut -lc++ -sclient<br>
 <br>
-The generated client stubs will be in [SKELSTUB_HOME]\ClientOut<br>
+The generated client stubs will be in [Skelstub_Folder]\ClientOut<br>
 
 </p>
 
@@ -571,11 +571,11 @@ side Skeletons and Wrappers for the Calculator.wsdl
 8) Right click on the project that you created (i.e. ws1) and click “Add
 Files to Project…” on the menu that appears. In the “Insert Files into
 Project” dialog select the generated .cpp and .h files in
-[SKELSTUB_HOME]\ServerOut and click “OK”.<br>
+[Skelstub_Folder]\ServerOut and click “OK”.<br>
 <br>9) Right click on the project (i.e. ws1)again and click on “Settings…” on
 the menu that appears. Click the C/C++ tab and select “Preprocessor” from the
 “Category” Drop down list.
-Add Axis include directory [CHECKOUT_HOME]c\include\ to the project In the 
+Add Axis include directory [Checkout_Folder]c\include\ to the project In the 
 “Additional include directories”<br>
 
 <br>10) Now add the business logic to the generated Skeletons. The Skeletons in this case are Calculator.h
@@ -597,9 +597,9 @@ now.<br>
 <br>
 13) The ws1.dll will be built in "ws1\Debug" by Visual
 C++<br><br>
-14) Place the built ws1.dll file in [APACHE_HOME]\Axis\webservices<br><br>
+14) Place the built ws1.dll file in [Apache_Folder]\Axis\webservices<br><br>
 15) In addition to this create server.wsdd file in
-[APACHE_HOME]\Axis\conf<br>
+[Apache_Folder]\Axis\conf<br>
 <br>
 The server.wsdd file for this example is
 given below</p>
@@ -613,8 +613,8 @@ value="[APACHE_HOME]\Axis\webservices\ws1.dll"/&gt;
 &lt;/service&gt;
 &lt;/deployment&gt;</pre>
 
-<p>In this file [APACHE_HOME] has to be replaced with the actual value of
-[APACHE_HOME] (i.e. In this case "C:\Program Files\Apache Group\Apache" for
+<p>In this file [Apache_Folder] has to be replaced with the actual value of
+[Apache_Folder] (i.e. In this case "C:\Program Files\Apache Group\Apache" for
 apache 1.3.x and "C:\Program Files\Apache Group\Apache2" for apache 2.x)<br>
 <br>
 <b>Description of the server.wsdd file</b><br>
@@ -671,13 +671,13 @@ Give a project name (e.g. calclient), give a folder ( For e.g: "wsclient") as th
 then “OK”.
 <br> <br>
 8) Right click on the project that you created (i.e. ws1) and click “Add
-Files to Project…” on the menu that appears.Then Add the generated .cpp and .h files from the [SKELSTUB_HOME]\ClientOut to the project and click “OK”.
+Files to Project…” on the menu that appears.Then Add the generated .cpp and .h files from the [Skelstub_Folder]\ClientOut to the project and click “OK”.
 
 <br> <br>
 9) Right click on the project (i.e. calclient) again and click on
 “Settings…” on the menu that appears. Click the “C/C++” tab and select
 “Preprocessor” from the “Category” Drop down list.<br>
-In the “Additional include directories” give [CHECKOUT_HOME]c\include as the include path.<br>
+In the “Additional include directories” give [Checkout_Folder]c\include as the include path.<br>
 </p>
 
 
@@ -686,7 +686,7 @@ list.
 
 
 <br>Add AxisClient.lib to the “Object/library modules” and in the “Additional library path” give the path.
-AxisClient.lib can be found in [CHECKOUT_HOME]\c\bin once you build the AxisClient,AxisTransport,AxisXMLParserXerces or AxisXMLParserExpat  projects
+AxisClient.lib can be found in [Checkout_Folder]\c\bin once you build the AxisClient,AxisTransport,AxisXMLParserXerces or AxisXMLParserExpat  projects
 of the "Distribution" VC workspace.
 <br>
 
@@ -730,28 +730,28 @@ SOAP Response and the result printed by calclient.exe.</p>
 <P><a name="providedservices"></a></p>
 <h2>Building and deploying the provided samples of interop web services</h2>
 <p>
-<br>1) Open the Visual C++ workspace (interoptests.dsw) at [CHECKOUT_HOME]\c\vc\samples\server\interoptests\  and do a batch build of all projects.<br>
-<br>2) You will find the built dynamic libraries at [CHECKOUT_HOME]\c\bin directory. Following are the built DLLs.<br>
+<br>1) Open the Visual C++ workspace (interoptests.dsw) at [Checkout_Folder]\c\vc\samples\server\interoptests\  and do a batch build of all projects.<br>
+<br>2) You will find the built dynamic libraries at [Checkout_Folder]\c\bin directory. Following are the built DLLs.<br>
 <br>base.dll
 <br>cbase.dll
 <br>cGroupB.dll
 <br>doclitbase.dll
 <br>doclitgroupB.dll
 <br>groupB.dll <br>
-<br>3) Copy these dlls to [APACHE_HOME]\Axis\webservices <br>
-<br>4) Add the required entries to the server.wsdd file in [APACHE_HOME]\Axis\conf to deploy these
+<br>3) Copy these dlls to [Apache_Folder]\Axis\webservices <br>
+<br>4) Add the required entries to the server.wsdd file in [Apache_Folder]\Axis\conf to deploy these
 interop services.
-You can find the required entries in the [CHECKOUT_HOME]\c\deploy\conf\server.wsdd_win file.
+You can find the required entries in the [Checkout_Folder]\c\deploy\conf\server.wsdd_win file.
 You will need to modify the "value" of the "classname" parameter of each service to point to
-the relevant web service dll given above in [APACHE_HOME]\Axis\webservices.
+the relevant web service dll given above in [Apache_Folder]\Axis\webservices.
 </p>
 
 <p><a name="providedclients"></a></p>
 <h2>Building and running the provided interop client applications</h2>
 <p>
-<br>1) Open the Visual C++ workspace (interoptests.dsw) at [CHECKOUT_HOME]\c\vc\samples\client\interoptests\ and do a batch build of all projects.<br>
-<br>2) You need to build the AxisClient project in the "Distribution" workspace at [CHECKOUT_HOME]\c\vc\, because you need the AxisClient.lib to compile client applications and AxisClient.dll to run them.<br>
-<br>3) You will find the built console applications and AxisClient.dll at [CHECKOUT_HOME]\c\bin directory. Following are the built .exe files. <br> <br>
+<br>1) Open the Visual C++ workspace (interoptests.dsw) at [Checkout_Folder]\c\vc\samples\client\interoptests\ and do a batch build of all projects.<br>
+<br>2) You need to build the AxisClient project in the "Distribution" workspace at [Checkout_Folder]\c\vc\, because you need the AxisClient.lib to compile client applications and AxisClient.dll to run them.<br>
+<br>3) You will find the built console applications and AxisClient.dll at [Checkout_Folder]\c\bin directory. Following are the built .exe files. <br> <br>
 	base.exe <br>
 	cbase.exe<br>
 	cgroupB.exe<br>
@@ -763,7 +763,7 @@ the relevant web service dll given above in [APACHE_HOME]\Axis\webservices.
 
 <p><a name="transport"></a></p>
 <h2>Creating and Building your own transport layer</h2>
-<img border="0" src="images/transport.jpg">
+<img border="0" src="images/c/parserd/transport.jpg">
 
 <p>When creating your own transport layer refer  SoapTransport.h header file for API.To see an example implementation refer AxisTransport.h and AxisTransport.cpp</p>
 <p>Implement SoapTransport.h interface according to rules described in the header file.
@@ -774,18 +774,20 @@ the relevant web service dll given above in [APACHE_HOME]\Axis\webservices.
 
 <p><a name="parser"></a></p>
 <h2>Creating and Building your own parser</h2>
-<img border="0" src="images/parser.jpg">
+<img border="0" src="images/c/parserd/parser.jpg">
  
 <p><b>Note:Implement XMLParser.h interface according to the rules described in the header file.</b><br>
 <p>When creating your own parser refer  XMLParser.h header file for API. To see an example implementation refer SoapParserExpat.h,SoapParserExpat.cpp, SoapParserXerces.h and SoapParserXerces.cpp.
 <p>Axis loads the parser dynamic library through following export functions which you also have to implement.</p>
 <p>CreateInstance() - Used by Axis to create an instance of your parser class<br>
    DestroyInstance() - Used by Axis to destroy the created parser class instance </p>
-<p> Compile your parser code and build a dynamic library. Add the name of your parser library to Axis configuration file (axiscpp.conf) so that Axis can find your library at runtime</p>
+<p> Compile your parser code and build a dynamic library. Add the name of your parser library to Axis configuration file (axiscpp.conf) so that Axis can find your library at runtime
 
 <div id="pdf" align="right">
 <a href="windev-guide.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
           PDF</a>
+
+</p>
 
 </body>
 </html>

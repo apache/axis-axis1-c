@@ -69,7 +69,7 @@ Axis C++.</a><br>
 <p><a name="#parser1"> </a> </p>
 <h1>Installing the Expat XML parser </h1>
 <p>If you decide to use the Expat parser you need to install the Expat parser. Download the Expat-1.95.7 binary version from <a href="http://sourceforge.net/projects/expat/">http://sourceforge.net/projects/expat/</a> <br> <br>
-Extract the Expat binaries to a folder Called Expat ,we will refer to this folder as [EXPAT_EXTRACT].</p> <br> <br>
+Extract the Expat binaries to a folder Called Expat ,we will refer to this folder as [Expat_Folder].</p> <br> <br>
 
 <p><a name="#parser2"> </a> </p>
 
@@ -78,7 +78,7 @@ Extract the Expat binaries to a folder Called Expat ,we will refer to this folde
 <p>If you decide to use the Xerces parser you need to install the Xerces parser. Download the Xerces-C 2.2.0 ( 32 bit binary release) from:
 <a href="http://xml.apache.org/xerces-c/download.cgi">http://xml.apache.org/xerces-c/download.cgi</a> <br> <br>
 
-Extract the Xerces-C 2.2.0 binary version. We will refer to this folder as [XERCES_EXTRACT].</p>
+Extract the Xerces-C 2.2.0 binary version. We will refer to this folder as [Xerces_Folder].</p>
 
 <p><a name=#apache"></a></p>  
 <h1> Installation with Apache 1.3.X/2.X web server</h1>
@@ -86,50 +86,50 @@ Extract the Xerces-C 2.2.0 binary version. We will refer to this folder as [XERC
 <p>Steps: <br>
 <br>
 
-1. Install apache web server and locate the installation folder(For the default installation (apache 1.3.X) the path is "C:\Program Files\Apache Group\Apache"  and for apache 2.X the path is  "C:\Program Files\Apache Group\Apache2" ). Lets say this folder is APACHE_FOLDER. <br>
+1. Install apache web server and locate the installation folder(For the default installation (apache 1.3.X) the path is "C:\Program Files\Apache Group\Apache"  and for apache 2.X the path is  "C:\Program Files\Apache Group\Apache2" ). Lets say this folder is [Apache_Folder]. <br>
 <br>
 
-2. Unzip the binary distribution to a folder of your choice. Say this folder is AXIS_EXTRACT.<br>
+2. Unzip the binary distribution to a folder of your choice. Say this folder is Axis_Extract.<br>
 <br>
 
-3. Inside the extracted folder AXIS_EXTRACT there is a sub folder called deploy. Copy the whole deploy folder to APACHE_FOLDER.<br>
+3. Inside the extracted folder Axis_Extract there is a sub folder called deploy. Copy the whole deploy folder to [Apache_Folder].<br>
 <br>
 
-4. Rename copied "deploy" folder to "Axis". Lets say this folder is  AXIS_FOLDER.<br>
+4. Rename copied "deploy" folder to "Axis". Lets say this folder is  [Axis_Folder].<br>
 <br>
 
 5. Set environment variable AXISCPP_DEPLOY to point to above folder.<br>
 <br>
 
-6. Add AXIS_FOLDER/lib to the PATH environment variable.<br>
+6. Add [Axis_Folder]/lib to the PATH environment variable.<br>
 <br>
 
-7. Add the following lines to the bottom of Apache configuration file httpd.conf located in APACHE_FOLDER/conf <br> 
+7. Add the following lines to the bottom of Apache configuration file httpd.conf located in [Apache_Folder]/conf <br> 
 <br>
-LoadModule axis_module modules/AXISMODULE<br>
+LoadModule axis_module modules/[Axis_Module]<br>
 &lt;Location /axis&gt;<br>
 SetHandler axis <br>
 &lt;/Location&gt;<br> <br>
 
-AXISMODULE is either mod_axis.dll for apache 1.3.X or mod_axis2.dll for apache 2.X. <br>
+[Axis_Module] is either mod_axis.dll for apache 1.3.X or mod_axis2.dll for apache 2.X. <br>
 <br>
 
-8. Copy AXISMODULE from AXIS_EXTRACT/bin folder to APACHE_FOLDER/modules folder.<br> <br>
+8. Copy [Axis_Module]  from Axis_Extract/bin folder to [Apache_Folder]/modules folder.<br> <br>
 
-9. Copy AxisServer.dll and AxisTransport.dll from AXIS_EXTRACT/bin folder  to AXIS_FOLDER/lib <br>
+9. Copy AxisServer.dll and AxisTransport.dll from Axis_Extract/bin folder  to [Axis_Folder]/lib <br>
 <br>
 
-10.If you want to use the Expat parser with Axis C++, rename AxisXMLParser_Expat.dll (which is located at AXIS_EXTRACT/bin) to AxisXMLParser.dll and copy it to AXIS_FOLDER/lib <br>
+10.If you want to use the Expat parser with Axis C++, rename AxisXMLParser_Expat.dll (which is located at Axis_Extract/bin ) to AxisXMLParser.dll and copy it to [Axis_Folder]/lib <br>
 <br> 
 
-11.If you want to use the Xerces parser with Axis C++, rename AxisXMLParser_Xerces.dll (which is located at AXIS_EXTRACT/bin) to AxisXMLParser.dll and copy it to AXIS_FOLDER/lib </p>
+11.If you want to use the Xerces parser with Axis C++, rename AxisXMLParser_Xerces.dll (which is located at Axis_Extract/bin ) to AxisXMLParser.dll and copy it to [Axis_Folder]/lib </p>
 <br>
-<p><li>Copy libexpat.dll file from [EXPAT_EXTRACT]\Libs to AXIS_FOLDER/lib/ </li> 
- <li>Copy xerces-c_2_2_0.dll from [XERCES_EXTRACT]/bin/ to AXIS_FOLDER/lib/ </li> 
+<p><li>Copy libexpat.dll file from [Expat_Folder]\Libs to [Axis_Folder]/lib/ </li> 
+ <li>Copy xerces-c_2_2_0.dll from [Xerces_Folder]/bin/ to [Axis_Folder]/lib/ </li> 
  </p> <br> <br>
 <p><b>Note:</b> This could also be done by editing the axiscpp.conf. <br>
 
-12. Open the AXIS_FOLDER/axiscpp.conf_win for editing. The contents of the file will look as follows.<br> <br>
+12. Open the [Axis_Folder]/axiscpp.conf_win for editing. The contents of the file will look as follows.<br> <br>
 
 LogPath:XXXX <br>
 WSDDFilePath:YYYY <br>
@@ -140,17 +140,17 @@ Transport_http:AAAA <br>
 
 i.e. <br> <br>
 
-LogPath: [APACHE_HOME]\Axis\logs\AxisLog <br>
-WSDDFilePath: [APACHE_HOME]\Axis\conf\server.wsdd <br>
-XMLParser:[APACHE_HOME]\Axis\lib\AxisXMLParser.dll <br>
-Transport_http:[APACHE_HOME]\Axis\lib\AxisTransport.dll<br> <br>
+LogPath: [Apache_Folder]\Axis\logs\AxisLog <br>
+WSDDFilePath: [Apache_Folder]\Axis\conf\server.wsdd <br>
+XMLParser:[Apache_Folder]\Axis\lib\AxisXMLParser.dll <br>
+Transport_http:[Apache_Folder]\Axis\lib\AxisTransport.dll<br> <br>
 
-server.wsdd is located at [APACHE_HOME]\Axis\conf\ for Apache 1.3 and Apache 2. (There will be three wsdd files in the [APACHE_HOME]\Axis\conf\ rename the relevant wsdd file of your platform to server.wsdd).<br> <br>
+server.wsdd is located at [Apache_Folder]\Axis\conf\ for Apache 1.3 and Apache 2. (There will be three wsdd files in the [Apache_Folder]\Axis\conf\ rename the relevant wsdd file of your platform to server.wsdd).<br> <br>
 
 Also in order to run the provided samples do the following.<br> <br>
 Open server.wsdd for editing. For each service element, locate the element "parameter name", which has the value "classname". <br>
 Give the absolute path of the indicated webservice.dll  in the "value" attribute <br>  <br>
-Rename axiscpp.conf_win which is in AXIS_FOLDER to axiscpp.conf <br> <br>
+Rename axiscpp.conf_win which is in [Axis_Folder] to axiscpp.conf <br> <br>
 
 13. Restart the apache web server. If you have done correctly apache server will start without giving any error.</p> 
 <br> 
@@ -179,22 +179,22 @@ It could happen with some other apache 2 versions or in different service packs.
 
 <p>STEPS:</p>
 <p>
-1. Create a folder of your choice. We will call this folder as SIMPLE_AXIS_SERVER_FOLDER.<br> <br>
-2. Unzip the binary distribution to a folder of your choice. Say this folder is AXIS_EXTRACT.<br> <br>
-3. Inside the extracted folder AXIS_EXTRACT there is a sub folder called deploy. Copy the whole deploy folder to  SIMPLE_AXIS_SERVER_FOLDER.<br> <br>
-4. Rename copied "deploy" folder to "Axis". Lets say this folder is AXIS_FOLDER.<br> <br>
-5. Set environment variable AXISCPP_DEPLOY to point to above AXIS_FOLDER.<br> <br>
-6. Add AXIS_FOLDER/lib to the PATH environment variable.<br> <br>
-7. Copy the SimpleAxisServer.exe from AXIS_EXTRACT/bin to the SIMPLE_AXIS_SERVER_FOLDER.<br> <br>
-8. Copy AxisServer.dll and AxisTransport.dll from AXIS_EXTRACT/bin folder to AXIS_FOLDER/lib <br> <br>
-9.If you want to use the Expat parser with Axis C++, rename AxisXMLParser_Expat.dll (which is located at  AXIS_EXTRACT/bin) to AxisXMLParser.dll and copy it to AXIS_FOLDER/lib <br> <br>
-10.If you want to use the Xerces parser with Axis C++, rename AxisXMLParser_Xerces.dll (which is located at  AXIS_EXTRACT/bin) to AxisXMLParser.dll and copy it to AXIS_FOLDER/lib <br> <br>
-11.If you are using Expat parser then copy libexpat.dll from [EXPAT_EXTRACT]/Libs and paste it in AXIS_FOLDER/lib.<br> <br>
-If you are using Xerces parser then copy xerces-c_2_2_0.dll from [XERCES_EXTRACT]/bin and paste it in AXIS_FOLDER/lib. <br> <br>  
+1. Create a folder of your choice. We will call this folder as Simple_Axis_Server_Folder.<br> <br>
+2. Unzip the binary distribution to a folder of your choice. Say this folder is Axis_Extract.<br> <br>
+3. Inside the extracted folder Axis_Extract there is a sub folder called deploy. Copy the whole deploy folder to  Simple_Axis_Server_Folder.<br> <br>
+4. Rename copied "deploy" folder to "Axis". Lets say this folder is [Axis_Folder].<br> <br>
+5. Set environment variable AXISCPP_DEPLOY to point to above [Axis_Folder].<br> <br>
+6. Add [Axis_Folder]/lib to the PATH environment variable.<br> <br>
+7. Copy the SimpleAxisServer.exe from Axis_Extract/bin to the Simple_Axis_Server_Folder.<br> <br>
+8. Copy AxisServer.dll and AxisTransport.dll from Axis_Extract/bin folder to [Axis_Folder]/lib <br> <br>
+9.If you want to use the Expat parser with Axis C++, rename AxisXMLParser_Expat.dll (which is located at  Axis_Extract/bin) to AxisXMLParser.dll and copy it to [Axis_Folder]/lib <br> <br>
+10.If you want to use the Xerces parser with Axis C++, rename AxisXMLParser_Xerces.dll (which is located at  Axis_Extract/bin) to AxisXMLParser.dll and copy it to [Axis_Folder]/lib <br> <br>
+11.If you are using Expat parser then copy libexpat.dll from [Expat_Folder]/Libs and paste it in [Axis_Folder]/lib.<br> <br>
+If you are using Xerces parser then copy xerces-c_2_2_0.dll from [Xerces_Folder]/bin and paste it in [Axis_Folder]/lib. <br> <br>  
 </p>
 <p><b>Note:</b> This could also be done by editing the axiscpp.conf. <br>
 
-12. Open the AXIS_FOLDER/axiscpp.conf_win for editing. The contents of the file will look as follows.<br> <br>
+12. Open the [Axis_Folder]/axiscpp.conf_win for editing. The contents of the file will look as follows.<br> <br>
 
 LogPath:XXXX <br>
 WSDDFilePath:YYYY <br>
@@ -205,10 +205,10 @@ Transport_http:AAAA <br>
 
 i.e. <br> <br>
 
-LogPath: [APACHE_HOME]\Axis\logs\AxisLog <br>
-WSDDFilePath: [APACHE_HOME]\Axis\conf\server.wsdd <br>
-XMLParser:[AXIS_FOLDER]\lib\AxisXMLParser.dll<br>
-Transport_http:[AXIS_FOLDER]\lib\AxisTransport.dll<br> <br>
+LogPath: [Apache_Folder]\Axis\logs\AxisLog <br>
+WSDDFilePath: [Apache_Folder]\Axis\conf\server.wsdd <br>
+XMLParser:[Axis_Folder]\lib\AxisXMLParser.dll<br>
+Transport_http:[Axis_Folder]\lib\AxisTransport.dll<br> <br>
 
 Rename axiscpp.conf_win to axiscpp.conf.
 
@@ -219,7 +219,7 @@ Rename axiscpp.conf_win to axiscpp.conf.
 <br> <br>
 
 Also in order to run the provided samples do the following.<br> <br>
-Open server.wsdd for editing. server.wsdd is located at [AXIS_FOLDER]\conf\ rename the wsdd file of your platform to server.wsdd. For each service element, locate the element "parameter name", which has the value "classname". <br>
+Open server.wsdd for editing. server.wsdd is located at [Axis_Folder]\conf\ rename the wsdd file of your platform to server.wsdd. For each service element, locate the element "parameter name", which has the value "classname". <br>
 Give the absolute path of the indicated webservice.dll  in the "value" attribute <br>  <br>
 
 14. Restart the SimpleAxisServer.If you have done correctly then SimpleAxisServer will start without giving any error. <br>
@@ -232,7 +232,7 @@ Give the absolute path of the indicated webservice.dll  in the "value" attribute
 
 <p>If Axis installation is a complete success, then the following sample web services and handlers have been installed successfully. Please click on the following link to see the deployed web services. <a href="http://localhost/axis">http://localhost/axis</a> <br> <br>
 
-You will find the built console applications at AXIS/bin directory. Following are the built .exe files. <br> <br>
+You will find the built console applications at [Axis_Folder]/bin directory. Following are the built .exe files. <br> <br>
 1.base.exe <br>
 2.cbase.exe <br>
 3.doclitbase.exe <br>
@@ -244,7 +244,7 @@ You will find the built console applications at AXIS/bin directory. Following ar
 In order to run these samples you should have AxisClient.dll in the PATH environment variable or in the same directory where the client .exe is located.<br> <br>
 
 You can run the provided client programs to confirm whether the Axis cpp server and clients are working fine. <br> <br>
-To run these sample client applications you need to have the path to libexpat.dll in the "PATH" environment variable or libexpat.dll should be placed where the apache.exe is.(libexpat.dll can be found in [EXPAT_EXTRACT\libs)<br> <br>
+To run these sample client applications you need to have the path to libexpat.dll in the "PATH" environment variable or libexpat.dll should be placed where the apache.exe is.(libexpat.dll can be found in [Expat_Folder]\libs)<br> <br>
 <b> Note: These sample clients are compiled with the assumption that server is running at localhost port 80.</b><br>
 <br>
 
@@ -252,9 +252,9 @@ To run these sample client applications you need to have the path to libexpat.dl
 
 <h1>Using Visual C++ to play with provided samples.</h1>
 
-<p>In your AXIS_EXTRACT/samples folder you have the samples.<br> <br>
- If you are using Visual C++ you can open the workspace file for client applications which are in AXIS_EXTRACT\c\samples\client\interoptests\interoptests.dsw <br> <br>
- Deployable webservices are in AXIS_EXTRACT\c\samples\server\interoptests\interoptests.dsw and you can play with them. <br> <br>
+<p>In your Axis_Extract/samples folder you have the samples.<br> <br>
+ If you are using Visual C++ you can open the workspace file for client applications which are in Axis_Extract\c\samples\client\interoptests\interoptests.dsw <br> <br>
+ Deployable webservices are in Axis_Extract\c\samples\server\interoptests\interoptests.dsw and you can play with them. <br> <br>
 There are seven projects in the workspace.
 <br> <br> </p>
 
