@@ -135,10 +135,6 @@ public class ClientStubWriter extends CPPClassWriter
                 this.writeMethodInWrapper(minfo);
                 writer.write("\n");
             }
-            writer.write(
-                "int "
-                    + classname
-                    + "::getFaultDetail(char** ppcDetail)\n{\n\treturn m_pCall->getFaultDetail(ppcDetail);\n}\n\n");
             //damitha
         }
         catch (IOException e)

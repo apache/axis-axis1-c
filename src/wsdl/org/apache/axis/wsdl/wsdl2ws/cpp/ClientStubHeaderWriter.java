@@ -192,7 +192,6 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                 }
                 writer.write(");\n");
             }
-            writer.write("\tint getFaultDetail(char** ppcDetail);\n");
             //damitha
         }
         catch (Exception e)
