@@ -69,6 +69,17 @@
 #include "IWrapperSoapDeSerializer.h"
 #include "IWrapperSoapSerializer.h"
 
+#ifdef __cplusplus
+#define AXISAPI_CPP(M, P) M P;
+#define AXISAPI_C(M, P)
+#define AXISCALL(M) __stdcall M
+#else
+#define virtual 
+#define AXISAPI_CPP(M, P)
+#define AXISAPI_C(M, P) M P;
+#define AXISCALL(M) (__stdcall* M)
+#endif
+
 /**
  * Function that deserializes a custom type 
  */
