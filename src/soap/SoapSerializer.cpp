@@ -958,4 +958,19 @@ void SoapSerializer::addAttachmentBody(const AxisChar* achId, xsd__base64Binary 
 	m_SoapAttachments[achId]->addBody(pAttchBody);
 }
 
+void SoapSerializer::addNamespaceToEnvelope(AxisChar *pachNamespaceURI, AxisChar* pachPrefix)
+{
+	Attribute *pNameSpace = new Attribute(pachPrefix, "xmlns", pachNamespaceURI);
+
+	m_pSoapEnvelope->addNamespaceDecl(pNameSpace);
+
+	addNamespaceToNamespaceList(pachNamespaceURI, pachPrefix);
+
+}
+
+void SoapSerializer::addNamespaceToNamespaceList(AxisChar *pachNamespaceURI, AxisChar* pachPrefix)
+{
+	m_NsStack[pachNamespaceURI] = pachPrefix;
+}
+
 AXIS_CPP_NAMESPACE_END

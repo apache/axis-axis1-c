@@ -155,6 +155,8 @@ private:
     BasicTypeSerializer m_BTSZ;
     SOAPTransport* m_pOutputStream;
 public:
+	void addNamespaceToNamespaceList(AxisChar *pachNamespaceURI, AxisChar* pachPrefix);
+	void addNamespaceToEnvelope(AxisChar *pachNamespaceURI, AxisChar* pachPrefix);
 	void addAttachmentBody(const AxisChar* achId, xsd__base64Binary* pAttchBody);
 	void addAttachmentHeader(const AxisChar* achId, const AxisChar* achHeaderName, const AxisChar* achHeaderValue);
 	void addAttachment(AxisString id, SoapAttachment* objAttach);

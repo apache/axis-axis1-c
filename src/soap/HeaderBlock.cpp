@@ -212,8 +212,11 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
             }
         }
 
-        pSZ.serialize(m_sPrefix.c_str(), ":", m_localname.c_str(),
-            " xmlns:", m_sPrefix.c_str(), "=\"", m_uri.c_str(), "\"", NULL);
+        pSZ.serialize(m_sPrefix.c_str(), ":", m_localname.c_str(), NULL);
+		
+		if (blnIsNewNamespace) {
+			pSZ.serialize(" xmlns:", m_sPrefix.c_str(), "=\"", m_uri.c_str(), "\"", NULL);
+		}
 
         iStatus= attrSerialize(pSZ, lstTmpNameSpaceStack);
         if(iStatus==AXIS_FAIL)
