@@ -74,15 +74,21 @@ public abstract class ParamCFileWriter extends ParamWriter{
 	public ParamCFileWriter(WebServiceContext wscontext,Type type)throws WrapperFault{
 		super(wscontext,type);
 	}
+	protected abstract void writeRestrictionCheckerFunction() throws WrapperFault;
 	   
 	public void writeSource()throws WrapperFault{
 	   try{
 	  		this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
 			writeClassComment();
 	   		writePreprocssorStatements();
-	   		writeGlobalCodes();
-	   		writeAttributes();
-	   		writeMethods();
+			if (type.isSimpleType()){
+				writeRestrictionCheckerFunction();
+			}
+			else{
+		   		writeGlobalCodes();
+		   		writeAttributes();
+		   		writeMethods();
+			}
 	   		//cleanup
 	   		writer.flush();
 	   		writer.close();

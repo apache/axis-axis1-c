@@ -119,11 +119,7 @@ public class ArrayParamWriter extends ParamWriter{
 	protected void writeArrayStruct()throws WrapperFault{
 		try{			
 			writer.write("typedef struct "+classname+"Tag\n{\n");
-			if(attribs[0].isSimpleType()){
-				throw new WrapperFault("Error : no need to synthesis arrays for simple types");				
-			}else{
-				writer.write("\t"+attribs[0].getTypeName()+"* m_Array;\n\tint m_Size;\n} "+classname+";\n\n");
-			}
+			writer.write("\t"+attribs[0].getTypeName()+"* m_Array;\n\tint m_Size;\n} "+classname+";\n\n");
 		} catch (IOException e) {
 			 throw new WrapperFault(e);
 		}

@@ -247,7 +247,12 @@ public class ClientStubWriter extends CFileWriter{
 		for (int i = 0; i < paramsB.size(); i++) {
 			type = wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName());
 			if (type != null){
-				paramTypeName = type.getLanguageSpecificName();
+				if (type.isSimpleType()){//schema defined simpleType possibly with restrictions
+					paramTypeName = CUtils.getclass4qname(type.getBaseType());
+				}
+				else{
+					paramTypeName = type.getLanguageSpecificName();
+				}
 				typeisarray = type.isArray();
 			}
 			else {
@@ -262,21 +267,21 @@ public class ClientStubWriter extends CFileWriter{
 				if (CUtils.isSimpleType(qname)){
 					containedType = CUtils.getclass4qname(qname);
 					writer.write("\tpCall->_functions->AddBasicArrayParameter(pCall->_object, ");			
-					writer.write("(Axis_Array*)(&Value"+i+"), "+CUtils.getXSDTypeForBasicType(containedType)+", \""+((ParameterInfo)paramsB.get(i)).getParamName()+"\"");
+					writer.write("(Axis_Array*)(&Value"+i+"), "+CUtils.getXSDTypeForBasicType(containedType)+", \""+((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart()+"\"");
 				}
 				else{
 					containedType = qname.getLocalPart();
 					writer.write("\tpCall->_functions->AddCmplxArrayParameter(pCall->_object, ");
-					writer.write("(Axis_Array*)(&Value"+i+"), (void*)Axis_Serialize_"+containedType+", (void*)Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+((ParameterInfo)paramsB.get(i)).getParamName()+"\", Axis_URI_"+containedType);
+					writer.write("(Axis_Array*)(&Value"+i+"), (void*)Axis_Serialize_"+containedType+", (void*)Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart()+"\", Axis_URI_"+containedType);
 				}
 			}else if(typeissimple){
 				//for simple types	
 				writer.write("\tpCall->_functions->AddParameter(pCall->_object, ");			
-				writer.write("(void*)&Value"+i+", \"" + ((ParameterInfo)paramsB.get(i)).getParamName()+"\", "+CUtils.getXSDTypeForBasicType(paramTypeName));
+				writer.write("(void*)&Value"+i+", \"" + ((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart()+"\", "+CUtils.getXSDTypeForBasicType(paramTypeName));
 			}else{
 				//for complex types 
 				writer.write("\tpCall->_functions->AddCmplxParameter(pCall->_object, ");			
-				writer.write("Value"+i+", (void*)Axis_Serialize_"+paramTypeName+", (void*)Axis_Delete_"+paramTypeName+", \"" + ((ParameterInfo)paramsB.get(i)).getParamName()+"\", Axis_URI_"+paramTypeName);
+				writer.write("Value"+i+", (void*)Axis_Serialize_"+paramTypeName+", (void*)Axis_Delete_"+paramTypeName+", \"" + ((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart()+"\", Axis_URI_"+paramTypeName);
 			}
 			writer.write(");\n");
 		}
@@ -289,7 +294,12 @@ public class ClientStubWriter extends CFileWriter{
 				ParameterInfo currentType = (ParameterInfo)paramsC.get(i);
 				type = wscontext.getTypemap().getType(currentType.getSchemaName());
 				if (type != null){
-					currentParaType = type.getLanguageSpecificName();
+					if (type.isSimpleType()){
+						currentParaType = CUtils.getclass4qname(type.getBaseType());
+					}
+					else{
+						currentParaType = type.getLanguageSpecificName();
+					}
 					typeisarray = type.isArray();
 				}
 				else {
@@ -349,7 +359,7 @@ public class ClientStubWriter extends CFileWriter{
 			writer.write("\treturn RetArray;\n");
 		}
 		else if(returntypeissimple){
-			writer.write("\t\t\tRet = pCall->_functions->"+ CUtils.getParameterGetValueMethodName(outparamType, false)+"(pCall->_object, \""+ returntype.getParamName()+"\", 0);\n");
+			writer.write("\t\t\tRet = pCall->_functions->"+ CUtils.getParameterGetValueMethodName(outparamType, false)+"(pCall->_object, \""+ returntype.getElementName().getLocalPart()+"\", 0);\n");
 			writer.write("\t\t}\n");
 			writer.write("\t}\n\tpCall->_functions->UnInitialize(pCall->_object);\n");
 			writer.write("\treturn Ret;\n");
@@ -375,6 +385,7 @@ public class ClientStubWriter extends CFileWriter{
 		try {
 			while(types.hasNext()){
 				type = (Type)types.next();
+				if (type.isSimpleType()) continue;
 				if (type.isArray()) continue;
 				typeName = type.getLanguageSpecificName();
 				if (typeName.startsWith(">")) continue;

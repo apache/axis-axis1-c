@@ -342,4 +342,14 @@ public class BeanParamWriter extends ParamCFileWriter{
 		writer.write("\t}\n");
 		writer.write("}\n");
 	}	
+	protected void writeRestrictionCheckerFunction() throws WrapperFault {
+		try{
+			writer.write("int Check_Restrictions_"+classname+"("+classname+" value)\n");
+			writer.write("{\n");
+			//TODO write code to check the restrictions
+			writer.write("}\n");					
+		}catch(IOException e){
+			throw new WrapperFault(e);
+		}
+	}	
 }
