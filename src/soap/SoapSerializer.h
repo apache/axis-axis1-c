@@ -156,6 +156,7 @@ private:
     BasicTypeSerializer m_BTSZ;
     SOAPTransport* m_pOutputStream;
 public:
+	IHeaderBlock* getCurrentHeaderBlock();
 	ISoapAttachment* createSoapAttachement();
 	void addNamespaceToNamespaceList(const AxisChar *pachNamespaceURI, const AxisChar* pachPrefix);
 	void addNamespaceToEnvelope(AxisChar *pachNamespaceURI, AxisChar* pachPrefix);
@@ -163,7 +164,10 @@ public:
 	void addAttachmentHeader(const AxisChar* achId, const AxisChar* achHeaderName, const AxisChar* achHeaderValue);
 	void addAttachment(const AxisChar* achId, ISoapAttachment* pAttach);
 	IHeaderBlock* getHeaderBlock(const AxisChar* pcName, const AxisChar* pcNamespace);
+	/*
+	* TODO: Have to remove this method. Date logged 13Jan2005
 	IHeaderBlock* getHeaderBlock();
+	*/
 	IHeaderBlock* getFirstHeaderBlock();
 	IHeaderBlock* getNextHeaderBlock();
 

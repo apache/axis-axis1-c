@@ -796,9 +796,14 @@ SoapMethod* SoapSerializer::getSOAPMethod()
 
 int SoapSerializer::setSOAPMethodAttribute(Attribute *pAttribute)
 {
-	m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->addAttribute(pAttribute);
+	if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->
+        m_pSoapBody->m_pSoapMethod))
+    {
+		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->addAttribute(pAttribute);
+		return AXIS_SUCCESS;
+	}
 
-	return AXIS_SUCCESS;
+	return AXIS_FAIL;
 }
 
 int SoapSerializer::serializeAnyObject(AnyType* pAnyObject)
@@ -824,13 +829,16 @@ int SoapSerializer::addOutputAnyObject(AnyType* pAnyObject)
     return AXIS_SUCCESS;
 }
 
-
+/*
+ * TODO: Have to remove this method. Date logged 13Jan2005
+ 
 IHeaderBlock* SoapSerializer::getHeaderBlock()
 {
     if ((!m_pSoapEnvelope) || (!m_pSoapEnvelope->m_pSoapHeader)) return NULL;
 
     return (HeaderBlock*)m_pSoapEnvelope->m_pSoapHeader->getHeaderBlock(false);	
 }
+*/
 
 IHeaderBlock* SoapSerializer::getHeaderBlock(const AxisChar *pcName, 
 											 const AxisChar *pcNamespace)
@@ -991,6 +999,11 @@ ISoapAttachment* SoapSerializer::createSoapAttachement()
 	SoapAttachment* pSAttch = new SoapAttachment();
 
 	return pSAttch;
+}
+
+IHeaderBlock* SoapSerializer::getCurrentHeaderBlock()
+{
+	return m_pSoapEnvelope->m_pSoapHeader->getCurrentHeaderBlock();
 }
 
 AXIS_CPP_NAMESPACE_END

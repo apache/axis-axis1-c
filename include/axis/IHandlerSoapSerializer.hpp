@@ -93,7 +93,11 @@ public:
 	  * Serializer.The caller of this method should not delete the returned 
 	  * pointer object.
 	  */
+	/*
+	 * TO DO: Have to remove this method from this api. Logged this msg on
+	 *  13Jan2005.
 	virtual IHeaderBlock* getHeaderBlock() = 0;
+	*/
 
 	/**
 	  * Gets and returns the Header Block of the given local name and 
@@ -115,6 +119,14 @@ public:
       * or NULL if there are no headers.
       */
      virtual IHeaderBlock* getNextHeaderBlock()=0;
+
+	 /**
+      * Used with getFirstHeaderBlock, it returns the current header block,
+      * or NULL if:
+	  *  - there are no headers, 
+	  *  - or if the getFirstHeaderBlock method is not called at least once.
+      */
+     virtual IHeaderBlock* getCurrentHeaderBlock()=0;
 
     /*
      * A handler may get the entire soap body and encrypt/compress 
