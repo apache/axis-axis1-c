@@ -1,3 +1,5 @@
+#pragma warning (disable : 4786)
+
 #if !defined(__HANDLER_INCLUDED__)
 #define __HANDLER_INCLUDED__
 
