@@ -97,6 +97,9 @@ main (int argc, char *argv[])
 
   phb->addChild (parentNode);
 
+  //set timeout
+  ws.setTransportTimeout(4);
+
   printf ("Sending Requests to end point %s \n\n", endpoint);
   printf ("invoking echoString...\n");
   //testing echoString 
