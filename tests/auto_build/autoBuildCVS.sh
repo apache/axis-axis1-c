@@ -142,5 +142,5 @@ sh runAllTests.sh
 #folder. This file has no meaning except this purpose
 if test -f mailto; then
 cd testcases/build
-cat runTestCase.log | mutt -s "Please ignore: this is a test" -a "buildTestCase.log" -x axis-c-dev@ws.apache.org
+cat runTestCase.log | mutt -s "[test-results]Axis C++ Autobuild" -a "buildTestCase.log" -x axis-c-dev@ws.apache.org
 fi
