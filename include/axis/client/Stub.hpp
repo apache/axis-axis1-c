@@ -524,12 +524,6 @@ class STORAGE_CLASS_INFO Stub
     void updateStateAfterResponse();
     
   /**
-    * Set transport properties stored in m_vKeys and m_vValues vectors.
-    * Called by applyUserPreferences for each and every method invocation. 
-    */
-    void setTransportProperties();
-  
-  /**
     * Set SOAP Headers stored in m_vSOAPHeaderBlock vector.
     * Called by applyUserPreferences for each and every method invocation. 
     */
@@ -542,41 +536,10 @@ class STORAGE_CLASS_INFO Stub
     void setSOAPMethodAttributes();
 
   /**
-    * Set transport timeout stored in mm_lTimeoutSeconds
-    * Called by applyUserPreferences for each and every method invocation. 
-    */
-    void setTransportTimeout();
-  
-  /**
-    * Get Set-Cookie header value from transport.
-    */
-    void getCookieValue();
-
-  /**
     * Call object of the Stub. This is the point of access to the internals
     * of the Axis engine.
     */
     Call *m_pCall;
-
-  /**
-    * Trasport property keys
-    */
-//    vector < char *>m_vKeys;
-
-  /**
-    * Trasport keys iterator
-    */
-//    vector <char*>::iterator m_viCurrentKey;
-
-  /**
-    * Trasport property values 
-    */
-//    vector < char *>m_vValues;
-  
-  /**
-    * Trasport keys iterator
-    */
-//    vector <char*>::iterator m_viCurrentValue;
 
   /**
     * Vector of Header Blok pointers
@@ -598,21 +561,6 @@ class STORAGE_CLASS_INFO Stub
     */
     vector <IAttribute*>::iterator m_viCurrentSOAPMethodAttribute;
 
-  /**
-    * Timeout in seconds
-    */
-    long m_lTimeoutSeconds;
-
-  /**
-    * Should the Stub maintain session with service?
-    */
-    bool m_bMaintainSession;
-
-  /**
-    * Session key sent by service 
-    */
-    std::string m_strSessionKey;
-    
   /**
     * Transport object
     */

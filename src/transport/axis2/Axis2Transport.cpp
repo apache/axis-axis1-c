@@ -34,11 +34,11 @@
  * Axis2Transport constuctor
  */
 Axis2Transport::Axis2Transport ():m_bReopenConnection (false),
-m_strHTTPProtocol ("HTTP/1.1"),
-m_strHTTPMethod ("POST"),
-m_bChunked (false),
-m_bReadPastHTTPHeaders (false),
-m_strProxyHost (""), m_uiProxyPort (0), m_bUseProxy (false)
+        m_strHTTPProtocol ("HTTP/1.1"),
+        m_strHTTPMethod ("POST"),
+        m_bChunked (false),
+        m_bReadPastHTTPHeaders (false),
+        m_strProxyHost (""), m_uiProxyPort (0), m_bUseProxy (false), m_bMaintainSession(false)
 {
     m_pcEndpointUri = NULL;
     m_pReleaseBufferCallback = 0;
@@ -60,7 +60,7 @@ Axis2Transport::~Axis2Transport ()
 {
     if (m_pcEndpointUri)
     {
-	delete [] m_pcEndpointUri;
+        delete [] m_pcEndpointUri;
     }
 
     delete m_pChannel;
@@ -83,16 +83,16 @@ throw (AxisTransportException)
     // Get the current channel URI
     if (m_pChannel->getURL ())
     {
-	// Does the new URI equal the existing channel URI?
-	if (strcmp (m_pChannel->getURL (), pcEndpointUri) != 0)
-	{
-	    // There is a new URI.
-	    bUpdateURL = true;
-	}
+        // Does the new URI equal the existing channel URI?
+        if (strcmp (m_pChannel->getURL (), pcEndpointUri) != 0)
+        {
+            // There is a new URI.
+            bUpdateURL = true;
+        }
     }
     else
     {
-	bUpdateURL = true;
+        bUpdateURL = true;
     }
 
 
@@ -102,46 +102,46 @@ throw (AxisTransportException)
     // a secure connection then an exeption will be thrown.
     if (bUpdateURL)
     {
-	m_pChannel->setURL (pcEndpointUri);
+        m_pChannel->setURL (pcEndpointUri);
 
-	m_bReopenConnection = true;
+        m_bReopenConnection = true;
 
-	// Check if the new URI requires SSL (denoted by the https prefix).
-	if ((m_pChannel->getURLObject ()).getProtocol () == URL::https)
-	{
-	    m_bChannelSecure = false;
+        // Check if the new URI requires SSL (denoted by the https prefix).
+        if ((m_pChannel->getURLObject ()).getProtocol () == URL::https)
+        {
+            m_bChannelSecure = false;
 
-	    // URI requires a secure channel.  Delete the existing channel
-	    // (as it may not be secure) and create a new secure channel.
-	    delete m_pChannel;
+            // URI requires a secure channel.  Delete the existing channel
+            // (as it may not be secure) and create a new secure channel.
+            delete m_pChannel;
 
-	    m_pChannel = (Channel *) new SecureChannel ();
+            m_pChannel = (Channel *) new SecureChannel ();
 
-	    m_pChannel->setURL (pcEndpointUri);
+            m_pChannel->setURL (pcEndpointUri);
 
-	    m_bChannelSecure = true;
+            m_bChannelSecure = true;
 
-	    if (!m_bChannelSecure)
-	    {
-		throw
-		    AxisTransportException
-		    (CLIENT_TRANSPORT_HAS_NO_SECURE_TRANSPORT_LAYER);
-	    }
-	}
-	else
-	{
-	    // URI does not require a secure channel.  Delete the existing
-	    // channel if it is secure and create a new unsecure
-	    // channel.
+            if (!m_bChannelSecure)
+            {
+                throw
+                AxisTransportException
+                (CLIENT_TRANSPORT_HAS_NO_SECURE_TRANSPORT_LAYER);
+            }
+        }
+        else
+        {
+            // URI does not require a secure channel.  Delete the existing
+            // channel if it is secure and create a new unsecure
+            // channel.
             if (m_bChannelSecure)
             {
-	        delete m_pChannel;
+                delete m_pChannel;
 
                 m_pChannel = new Channel ();
                 m_pChannel->setURL (pcEndpointUri);
                 m_bChannelSecure = false;
             }
-	}
+        }
     }
 }
 
@@ -193,19 +193,20 @@ throw (AxisTransportException)
     if (m_bReopenConnection)
     {
         m_bReopenConnection = false;
-	if (!m_pChannel->open ())
-	{
-	    int iStringLength = m_pChannel->GetLastError ().length () + 1;
-	    const char *pszLastError = new char[iStringLength];
+        if (!m_pChannel->open ())
+        {
+            int iStringLength = m_pChannel->GetLastError ().length () + 1;
+            const char *pszLastError = new char[iStringLength];
 
-	    memcpy ((void *) pszLastError,
-		    m_pChannel->GetLastError ().c_str (), iStringLength);;
+            memcpy ((void *) pszLastError,
+                    m_pChannel->GetLastError ().c_str (), iStringLength);
+            ;
 
-	    throw
-		AxisTransportException
-		(CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,
-		 (char *) pszLastError);
-	}
+            throw
+            AxisTransportException
+            (CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,
+             (char *) pszLastError);
+        }
     }
 
     // In preperation for sending the message, calculate the size of the message
@@ -223,20 +224,20 @@ throw (AxisTransportException)
     // transmitted.
     try
     {
-	*m_pChannel << this->getHTTPHeaders ();
-	*m_pChannel << this->m_strBytesToSend.c_str ();
+        *m_pChannel << this->getHTTPHeaders ();
+        *m_pChannel << this->m_strBytesToSend.c_str ();
     }
     catch (AxisTransportException & e)
     {
-	throw;
+        throw;
     }
     catch (AxisException & e)
     {
-	throw;
+        throw;
     }
     catch (...)
     {
-	throw;
+        throw;
     }
 
     // Empty the bytes to send string.
@@ -275,10 +276,19 @@ Axis2Transport::getHTTPHeaders ()
     // Set other HTTP headers
     for (unsigned int i = 0; i < m_vHTTPHeaders.size (); i++)
     {
-	m_strHeaderBytesToSend += m_vHTTPHeaders[i].first;
-	m_strHeaderBytesToSend += ": ";
-	m_strHeaderBytesToSend += m_vHTTPHeaders[i].second;
-	m_strHeaderBytesToSend += "\r\n";
+        m_strHeaderBytesToSend += m_vHTTPHeaders[i].first;
+        m_strHeaderBytesToSend += ": ";
+        m_strHeaderBytesToSend += m_vHTTPHeaders[i].second;
+        m_strHeaderBytesToSend += "\r\n";
+    }
+    
+    // Set session cookie
+    if (m_bMaintainSession && (m_strSessionKey.size() > 0) )
+    {
+        m_strHeaderBytesToSend += "Cookie";
+        m_strHeaderBytesToSend += ": ";
+        m_strHeaderBytesToSend += m_strSessionKey;
+        m_strHeaderBytesToSend += "\r\n";        
     }
 
     m_strHeaderBytesToSend += "\r\n";
@@ -346,285 +356,285 @@ throw (AxisException, AxisTransportException)
 {
     if (0 <= m_iBytesLeft)
     {
-	try
-	{
-	    *m_pChannel >> m_strReceived;
+        try
+        {
+            *m_pChannel >> m_strReceived;
 
-	    if (!m_bReadPastHTTPHeaders)
-	    {
-		do
-		{
-		    if (m_strReceived.find ("\r\n\r\n") == std::string::npos)
-		    {
-			std::string strTempReceived = "";
-			*m_pChannel >> strTempReceived;	// Assume non blocking here
-			m_strReceived += strTempReceived;
-		    }
-		}
-		while (m_strReceived.find ("\r\n\r\n") == std::string::npos);
+            if (!m_bReadPastHTTPHeaders)
+            {
+                do
+                {
+                    if (m_strReceived.find ("\r\n\r\n") == std::string::npos)
+                    {
+                        std::string strTempReceived = "";
+                        *m_pChannel >> strTempReceived;	// Assume non blocking here
+                        m_strReceived += strTempReceived;
+                    }
+                }
+                while (m_strReceived.find ("\r\n\r\n") == std::string::npos);
 
-		//now we have found the end of headers
-		m_bReadPastHTTPHeaders = true;
+                //now we have found the end of headers
+                m_bReadPastHTTPHeaders = true;
 
-		unsigned int pos = 0;
+                unsigned int pos = 0;
 
-		// Look for content lenght
-		if ((pos =
-		     m_strReceived.find ("Content-Length: ")) !=
-		    std::string::npos)
-		{
-		    m_iContentLength =
-			atoi (m_strReceived.
-			      substr (pos + strlen ("Content-Length: "),
-				      m_strReceived.find ("\n",
-							  pos)).c_str ());
-		}
+                // Look for content lenght
+                if ((pos =
+                            m_strReceived.find ("Content-Length: ")) !=
+                        std::string::npos)
+                {
+                    m_iContentLength =
+                        atoi (m_strReceived.
+                              substr (pos + strlen ("Content-Length: "),
+                                      m_strReceived.find ("\n",
+                                                          pos)).c_str ());
+                }
 
-		// Check if the message is chunked
-		if ((pos =
-		     m_strReceived.find ("Transfer-Encoding: chunked")) !=
-		    std::string::npos)
-		{
-		    m_bChunked = true;
-		}
-		else
-		{
-		    m_bChunked = false;
-		}
+                // Check if the message is chunked
+                if ((pos =
+                            m_strReceived.find ("Transfer-Encoding: chunked")) !=
+                        std::string::npos)
+                {
+                    m_bChunked = true;
+                }
+                else
+                {
+                    m_bChunked = false;
+                }
 
-		// Extract HTTP headers and process them
-		m_strResponseHTTPHeaders = m_strReceived.substr (0,
-								 m_strReceived.
-								 find
-								 ("\r\n\r\n")
-								 + 2);
-		processResponseHTTPHeaders ();
+                // Extract HTTP headers and process them
+                m_strResponseHTTPHeaders = m_strReceived.substr (0,
+                                           m_strReceived.
+                                           find
+                                           ("\r\n\r\n")
+                                           + 2);
+                processResponseHTTPHeaders ();
 
-		if (m_iResponseHTTPStatusCode != 200)
-		{
-		    throw
-			AxisTransportException
-			(SERVER_TRANSPORT_HTTP_EXCEPTION,
-			 const_cast <
-			 char *>(m_strResponseHTTPStatusMessage.c_str ()));
-		}
+                if (m_iResponseHTTPStatusCode != 200)
+                {
+                    throw
+                    AxisTransportException
+                    (SERVER_TRANSPORT_HTTP_EXCEPTION,
+                     const_cast <
+                     char *>(m_strResponseHTTPStatusMessage.c_str ()));
+                }
 
-		// Done with HTTP headers, get payload
-		m_strReceived =
-		    m_strReceived.substr (m_strReceived.find ("\r\n\r\n") +
-					  4);
-	    }
+                // Done with HTTP headers, get payload
+                m_strReceived =
+                    m_strReceived.substr (m_strReceived.find ("\r\n\r\n") +
+                                          4);
+            }
 
-	    // Read past headers. Deal with payload
+            // Read past headers. Deal with payload
 
-	    // make sure we have a message with some content
-	    if (m_strReceived.length () == 0)
-	    {
-		*m_pChannel >> m_strReceived;
-	    }
+            // make sure we have a message with some content
+            if (m_strReceived.length () == 0)
+            {
+                *m_pChannel >> m_strReceived;
+            }
 
-	    if (m_bChunked && m_iContentLength < 1)	// Read first chunk
-	    {
-		/*
-		 *Chunked data looks like ->
-		 *      Chunked-Body   = *chunk
-		 *                       "0" CRLF
-		 *                       footer
-		 *                       CRLF
-		 *
-		 *      chunk          = chunk-size [ chunk-ext ] CRLF
-		 *                         chunk-data CRLF
-		 *
-		 *      hex-no-zero    = <HEX excluding "0">
-		 *
-		 *      chunk-size     = hex-no-zero *HEX
-		 *      chunk-ext      = *( ";" chunk-ext-name [ "=" chunk-ext-value ] )
-		 *      chunk-ext-name = token
-		 *      chunk-ext-val  = token | quoted-string
-		 *      chunk-data     = chunk-size(OCTET)
-		 *
-		 *      footer         = *entity-header
-		 */
-		// firstly read in the chunk size line.
-		//There might be chunk extensions in there too but we may not need them
-		unsigned int endOfChunkData = m_strReceived.find ("\r\n");
+            if (m_bChunked && m_iContentLength < 1)	// Read first chunk
+            {
+                /*
+                 *Chunked data looks like ->
+                 *      Chunked-Body   = *chunk
+                 *                       "0" CRLF
+                 *                       footer
+                 *                       CRLF
+                 *
+                 *      chunk          = chunk-size [ chunk-ext ] CRLF
+                 *                         chunk-data CRLF
+                 *
+                 *      hex-no-zero    = <HEX excluding "0">
+                 *
+                 *      chunk-size     = hex-no-zero *HEX
+                 *      chunk-ext      = *( ";" chunk-ext-name [ "=" chunk-ext-value ] )
+                 *      chunk-ext-name = token
+                 *      chunk-ext-val  = token | quoted-string
+                 *      chunk-data     = chunk-size(OCTET)
+                 *
+                 *      footer         = *entity-header
+                 */
+                // firstly read in the chunk size line.
+                //There might be chunk extensions in there too but we may not need them
+                unsigned int endOfChunkData = m_strReceived.find ("\r\n");
 
-		// make sure we have read at least some part of the message
-		if (endOfChunkData == std::string::npos)
-		{
-		    do
-		    {
-			*m_pChannel >> m_strReceived;
-			endOfChunkData = m_strReceived.find ("\r\n");
-		    }
-		    while (endOfChunkData == std::string::npos);
-		}
+                // make sure we have read at least some part of the message
+                if (endOfChunkData == std::string::npos)
+                {
+                    do
+                    {
+                        *m_pChannel >> m_strReceived;
+                        endOfChunkData = m_strReceived.find ("\r\n");
+                    }
+                    while (endOfChunkData == std::string::npos);
+                }
 
-		int endOfChunkSize = endOfChunkData;
+                int endOfChunkSize = endOfChunkData;
 
-		// now get the size of the chunk from the data
-		// look to see if there are any extensions - these are put in brackets so look for those
-		if (m_strReceived.substr (0, endOfChunkData).find ("(") !=
-		    string::npos)
-		{
-		    endOfChunkSize = m_strReceived.find ("(");
-		}
+                // now get the size of the chunk from the data
+                // look to see if there are any extensions - these are put in brackets so look for those
+                if (m_strReceived.substr (0, endOfChunkData).find ("(") !=
+                        string::npos)
+                {
+                    endOfChunkSize = m_strReceived.find ("(");
+                }
 
-		// convert the hex String into the length of the chunk
-		m_iContentLength = axtoi ((char *) m_strReceived.substr (0,
-									 endOfChunkSize).
-					  c_str ());
-		// if the chunk size is zero then we have reached the footer
-		// If we have reached the footer then we can throw it away because we don't need it
-		if (m_iContentLength > 0)
-		{
-		    // now get the chunk without the CRLF
-		    // check if we have read past chunk length
-		    if (m_strReceived.length () >=
-			(endOfChunkData + 2 + m_iContentLength))
-		    {
-			m_strReceived =
-			    m_strReceived.substr (endOfChunkData + 2,
-						  m_iContentLength);
-		    }
-		    else	// we have read lesser than chunk length
-		    {
-			m_strReceived =
-			    m_strReceived.substr (endOfChunkData + 2);
-		    }
-		}
-		else
-		{
-		    m_strReceived = "";
-		}
-	    }
-	    else if (m_bChunked)	// read continued portions of a chunk
-	    {
-		// Samisa - NOTE: It looks as if there is some logic duplication 
-		// in this block, where we read continued chunks and the block 
-		// above, where we read the first chunk. However, there are slight
-		// logical differences here, and that is necessary to enable the 
-		// pull model used by the parser - this logic makes pulling more
-		// efficient (30th Sept 2004)
-		if (m_strReceived.length () >= m_iContentLength)	// We have reached end of current chunk
-		{
-		    // Get remainder of current chunk
-		    std::string strTemp =
-			m_strReceived.substr (0, m_iContentLength);
+                // convert the hex String into the length of the chunk
+                m_iContentLength = axtoi ((char *) m_strReceived.substr (0,
+                                          endOfChunkSize).
+                                          c_str ());
+                // if the chunk size is zero then we have reached the footer
+                // If we have reached the footer then we can throw it away because we don't need it
+                if (m_iContentLength > 0)
+                {
+                    // now get the chunk without the CRLF
+                    // check if we have read past chunk length
+                    if (m_strReceived.length () >=
+                            (endOfChunkData + 2 + m_iContentLength))
+                    {
+                        m_strReceived =
+                            m_strReceived.substr (endOfChunkData + 2,
+                                                  m_iContentLength);
+                    }
+                    else	// we have read lesser than chunk length
+                    {
+                        m_strReceived =
+                            m_strReceived.substr (endOfChunkData + 2);
+                    }
+                }
+                else
+                {
+                    m_strReceived = "";
+                }
+            }
+            else if (m_bChunked)	// read continued portions of a chunk
+            {
+                // Samisa - NOTE: It looks as if there is some logic duplication
+                // in this block, where we read continued chunks and the block
+                // above, where we read the first chunk. However, there are slight
+                // logical differences here, and that is necessary to enable the
+                // pull model used by the parser - this logic makes pulling more
+                // efficient (30th Sept 2004)
+                if (m_strReceived.length () >= m_iContentLength)	// We have reached end of current chunk
+                {
+                    // Get remainder of current chunk
+                    std::string strTemp =
+                        m_strReceived.substr (0, m_iContentLength);
 
-		    // Start looking for the next chunk
-		    unsigned int endOfChunkData = m_strReceived.find ("\r\n");	// Skip end of previous chunk
-		    m_strReceived = m_strReceived.substr (endOfChunkData + 2);
+                    // Start looking for the next chunk
+                    unsigned int endOfChunkData = m_strReceived.find ("\r\n");	// Skip end of previous chunk
+                    m_strReceived = m_strReceived.substr (endOfChunkData + 2);
 
-		    endOfChunkData = m_strReceived.find ("\r\n");	// Locate start of next chunk
+                    endOfChunkData = m_strReceived.find ("\r\n");	// Locate start of next chunk
 
-		    // Make sure we have the starting line of next chunk
-		    while (endOfChunkData == std::string::npos)
-		    {
-			std::string strTempRecv = "";
-			*m_pChannel >> strTempRecv;
-			m_strReceived += strTempRecv;
-			endOfChunkData = m_strReceived.find ("\r\n");
-		    }
+                    // Make sure we have the starting line of next chunk
+                    while (endOfChunkData == std::string::npos)
+                    {
+                        std::string strTempRecv = "";
+                        *m_pChannel >> strTempRecv;
+                        m_strReceived += strTempRecv;
+                        endOfChunkData = m_strReceived.find ("\r\n");
+                    }
 
-		    int endOfChunkSize = endOfChunkData;
+                    int endOfChunkSize = endOfChunkData;
 
-		    // look to see if there are any extensions - these are put in brackets so look for those
-		    if (m_strReceived.substr (0, endOfChunkData).find ("(") !=
-			string::npos)
-		    {
-			endOfChunkSize = m_strReceived.find ("(");
-		    }
+                    // look to see if there are any extensions - these are put in brackets so look for those
+                    if (m_strReceived.substr (0, endOfChunkData).find ("(") !=
+                            string::npos)
+                    {
+                        endOfChunkSize = m_strReceived.find ("(");
+                    }
 
-		    // convert the hex String into the length of the chunk
-		    int iTempContentLength =
-			axtoi ((char *) m_strReceived.substr (0,
-							      endOfChunkSize).
-			       c_str ());
+                    // convert the hex String into the length of the chunk
+                    int iTempContentLength =
+                        axtoi ((char *) m_strReceived.substr (0,
+                                                              endOfChunkSize).
+                               c_str ());
 
-		    // if the chunk size is zero then we have reached the footer
-		    // If we have reached the footer then we can throw it away because we don't need it
-		    if (iTempContentLength > 0)
-		    {
-			// Update the content lenght to be remainde of previous chunk and lenght of new chunk
-			m_iContentLength += iTempContentLength;
+                    // if the chunk size is zero then we have reached the footer
+                    // If we have reached the footer then we can throw it away because we don't need it
+                    if (iTempContentLength > 0)
+                    {
+                        // Update the content lenght to be remainde of previous chunk and lenght of new chunk
+                        m_iContentLength += iTempContentLength;
 
-			// now get the chunk without the CRLF
-			// check if we have read past chunk length
-			if (m_strReceived.length () >=
-			    (endOfChunkData + 2 + iTempContentLength))
-			{
-			    m_strReceived =
-				m_strReceived.substr (endOfChunkData + 2,
-						      iTempContentLength);
-			}
-			else
-			{
-			    m_strReceived =
-				m_strReceived.substr (endOfChunkData + 2);
-			}
-		    }
-		    else
-		    {
-			m_strReceived = "";
-		    }
+                        // now get the chunk without the CRLF
+                        // check if we have read past chunk length
+                        if (m_strReceived.length () >=
+                                (endOfChunkData + 2 + iTempContentLength))
+                        {
+                            m_strReceived =
+                                m_strReceived.substr (endOfChunkData + 2,
+                                                      iTempContentLength);
+                        }
+                        else
+                        {
+                            m_strReceived =
+                                m_strReceived.substr (endOfChunkData + 2);
+                        }
+                    }
+                    else
+                    {
+                        m_strReceived = "";
+                    }
 
-		    // Append the data of new chunk to data from previous chunk
-		    m_strReceived = strTemp + m_strReceived;
+                    // Append the data of new chunk to data from previous chunk
+                    m_strReceived = strTemp + m_strReceived;
 
-		}		// End of if (m_strReceived.length() >= m_iContentLength) 
-		// If we have not reached end of current chunk, nothing to be done
-	    }
-	    else		// Not chunked
-	    {
-		//nothing to do here
-	    }
+                }		// End of if (m_strReceived.length() >= m_iContentLength)
+                // If we have not reached end of current chunk, nothing to be done
+            }
+            else		// Not chunked
+            {
+                //nothing to do here
+            }
 
-	    m_pcReceived = m_strReceived.c_str ();
+            m_pcReceived = m_strReceived.c_str ();
 
-	    if (m_pcReceived)
-	    {
-		m_iBytesLeft = strlen (m_pcReceived);
-	    }
-	    else
-	    {
-		throw AxisTransportException (SERVER_TRANSPORT_BUFFER_EMPTY,
-					      "Reveved null");
-	    }
+            if (m_pcReceived)
+            {
+                m_iBytesLeft = strlen (m_pcReceived);
+            }
+            else
+            {
+                throw AxisTransportException (SERVER_TRANSPORT_BUFFER_EMPTY,
+                                              "Reveved null");
+            }
 
-	    m_iContentLength -= m_iBytesLeft;
-	}
-	catch (AxisTransportException & e)
-	{
-	    throw;
-	}
-	catch (AxisException & e)
-	{
-	    throw;
-	}
-	catch (...)
-	{
-	    throw;
-	}
+            m_iContentLength -= m_iBytesLeft;
+        }
+        catch (AxisTransportException & e)
+        {
+            throw;
+        }
+        catch (AxisException & e)
+        {
+            throw;
+        }
+        catch (...)
+        {
+            throw;
+        }
     }
     if (m_pcReceived)
     {
-	int iToCopy = (*pSize < m_iBytesLeft) ? *pSize : m_iBytesLeft;
+        int iToCopy = (*pSize < m_iBytesLeft) ? *pSize : m_iBytesLeft;
 
-	strncpy (pcBuffer, m_pcReceived, iToCopy);
+        strncpy (pcBuffer, m_pcReceived, iToCopy);
 
-	m_iBytesLeft -= iToCopy;
-	m_pcReceived += iToCopy;
-	*pSize = iToCopy;
+        m_iBytesLeft -= iToCopy;
+        m_pcReceived += iToCopy;
+        *pSize = iToCopy;
 
-	return TRANSPORT_IN_PROGRESS;
+        return TRANSPORT_IN_PROGRESS;
     }
     else
     {
-	m_bReadPastHTTPHeaders = false;	// get ready for a new message
-	m_strReceived = "";	//clear the message buffer in preperation of the next read
+        m_bReadPastHTTPHeaders = false;	// get ready for a new message
+        m_strReceived = "";	//clear the message buffer in preperation of the next read
 
-	return TRANSPORT_FINISHED;
+        return TRANSPORT_FINISHED;
     }
 }
 
@@ -639,7 +649,7 @@ throw (AxisException, AxisTransportException)
  */
 void
 Axis2Transport::setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type,
-				      const char *value)
+                                      const char *value)
 throw (AxisTransportException)
 {
     const char *key = NULL;
@@ -647,45 +657,45 @@ throw (AxisTransportException)
     switch (type)
     {
     case SOAPACTION_HEADER:
-	{
-	    key = "SOAPAction";
-	    break;
-	}
+        {
+            key = "SOAPAction";
+            break;
+        }
 
     case SERVICE_URI:		// need to set ?
-	{
-	    break;
-	}
+        {
+            break;
+        }
 
     case OPERATION_NAME:	// need to set ?
-	{
-	    break;
-	}
+        {
+            break;
+        }
 
     case SOAP_MESSAGE_LENGTH:
-	{
-	    key = "Content-Length";	// this Axis transport handles only HTTP
-	    break;
-	}
+        {
+            key = "Content-Length";	// this Axis transport handles only HTTP
+            break;
+        }
 
     case SECURE_PROPERTIES:
-	{
-	    if (m_bChannelSecure)
-	    {
-		((SecureChannel *) m_pChannel)->setSecureProperties (value);
-	    }
-	    break;
-	}
+        {
+            if (m_bChannelSecure)
+            {
+                ((SecureChannel *) m_pChannel)->setSecureProperties (value);
+            }
+            break;
+        }
 
     default:
-	{
-	    break;
-	}
+        {
+            break;
+        }
     }
 
     if (key)
     {
-	setTransportProperty (key, value);
+        setTransportProperty (key, value);
     }
 }
 
@@ -705,27 +715,27 @@ throw (AxisTransportException)
     bool b_KeyFound = false;
 
     if (strcmp (pcKey, "SOAPAction") == 0
-	|| strcmp (pcKey, "Content-Length") == 0)
+            || strcmp (pcKey, "Content-Length") == 0)
     {
-	std::string strKeyToFind = std::string (pcKey);
+        std::string strKeyToFind = std::string (pcKey);
 
-	for (unsigned int i = 0; i < m_vHTTPHeaders.size (); i++)
-	{
-	    if (m_vHTTPHeaders[i].first == strKeyToFind)
-	    {
-		m_vHTTPHeaders[i].second = (string) pcValue;
+        for (unsigned int i = 0; i < m_vHTTPHeaders.size (); i++)
+        {
+            if (m_vHTTPHeaders[i].first == strKeyToFind)
+            {
+                m_vHTTPHeaders[i].second = (string) pcValue;
 
-		b_KeyFound = true;
+                b_KeyFound = true;
 
-		break;
-	    }
-	}
+                break;
+            }
+        }
     }
 
     if (!b_KeyFound)
     {
-	m_vHTTPHeaders.
-	    push_back (std::make_pair ((string) pcKey, (string) pcValue));
+        m_vHTTPHeaders.
+        push_back (std::make_pair ((string) pcKey, (string) pcValue));
     }
 }
 
@@ -748,43 +758,43 @@ throw (AxisTransportException)
     switch (eType)
     {
     case SOAPACTION_HEADER:
-	{
-	    int iIndex = FindTransportPropertyIndex ("SOAPAction");
+        {
+            int iIndex = FindTransportPropertyIndex ("SOAPAction");
 
-	    if (iIndex > -1)
-	    {
-		pszPropValue = m_vHTTPHeaders[iIndex].second.c_str ();
-	    }
+            if (iIndex > -1)
+            {
+                pszPropValue = m_vHTTPHeaders[iIndex].second.c_str ();
+            }
 
-	    break;
-	}
+            break;
+        }
 
     case SERVICE_URI:
-	break;
+        break;
 
     case OPERATION_NAME:
-	break;
+        break;
 
     case SOAP_MESSAGE_LENGTH:
-	{
-	    int iIndex = FindTransportPropertyIndex ("Content-Length");
+        {
+            int iIndex = FindTransportPropertyIndex ("Content-Length");
 
-	    if (iIndex > -1)
-	    {
-		pszPropValue = m_vHTTPHeaders[iIndex].second.c_str ();
-	    }
-	    break;
-	}
+            if (iIndex > -1)
+            {
+                pszPropValue = m_vHTTPHeaders[iIndex].second.c_str ();
+            }
+            break;
+        }
 
     case SECURE_PROPERTIES:
-	{
-	    if (m_bChannelSecure)
-	    {
-		pszPropValue =
-		    ((SecureChannel *) m_pChannel)->getSecureProperties ();
-	    }
-	    break;
-	}
+        {
+            if (m_bChannelSecure)
+            {
+                pszPropValue =
+                    ((SecureChannel *) m_pChannel)->getSecureProperties ();
+            }
+            break;
+        }
     }
 
     return pszPropValue;
@@ -807,20 +817,20 @@ Axis2Transport::FindTransportPropertyIndex (string sKey)
 
     do
     {
-	if (!m_vHTTPHeaders[iIndex].first.compare (sKey))
-	{
-	    bKeyFound = true;
-	}
-	else
-	{
-	    iIndex++;
-	}
+        if (!m_vHTTPHeaders[iIndex].first.compare (sKey))
+        {
+            bKeyFound = true;
+        }
+        else
+        {
+            iIndex++;
+        }
     }
     while ((unsigned int) iIndex < m_vHTTPHeaders.size () && !bKeyFound);
 
     if (!bKeyFound)
     {
-	iIndex = -1;
+        iIndex = -1;
     }
 
     return iIndex;
@@ -840,7 +850,7 @@ Axis2Transport::getServiceName ()
 
     if (iIndex > -1)
     {
-	return m_vHTTPHeaders[iIndex].second.c_str ();
+        return m_vHTTPHeaders[iIndex].second.c_str ();
     }
 
     return NULL;
@@ -862,11 +872,11 @@ int Axis2Transport::setProtocol(AXIS_PROTOCOL_TYPE eProtocol)
 {
     if( eProtocol == APTHTTP1_1 || eProtocol == APTHTTP1_0 )
     {
-       m_eProtocolType = eProtocol;
-       m_strHTTPProtocol = (m_eProtocolType == APTHTTP1_1 )? "HTTP/1.1": "HTTP/1.0";
-       return AXIS_SUCCESS; 
+        m_eProtocolType = eProtocol;
+        m_strHTTPProtocol = (m_eProtocolType == APTHTTP1_1 )? "HTTP/1.1": "HTTP/1.0";
+        return AXIS_SUCCESS;
     }
-    else 
+    else
         return AXIS_FAIL;
 }
 
@@ -925,43 +935,43 @@ Axis2Transport::getHTTPProtocol ()
 
 extern "C"
 {
-/* CreateInstance() Is a C interface.
- */
+    /* CreateInstance() Is a C interface.
+     */
     STORAGE_CLASS_INFO int CreateInstance (SOAPTransport ** inst)
     {
-	*inst = new Axis2Transport ();
-	if (*inst)
-	{
-	    return AXIS_SUCCESS;
-	}
-	return AXIS_FAIL;
+        *inst = new Axis2Transport ();
+        if (*inst)
+        {
+            return AXIS_SUCCESS;
+        }
+        return AXIS_FAIL;
     }
 
-/* DestroyInstance() Is a C interface.
- */
+    /* DestroyInstance() Is a C interface.
+     */
     STORAGE_CLASS_INFO int DestroyInstance (SOAPTransport * inst)
     {
-	if (inst)
-	{
-	    delete inst;
+        if (inst)
+        {
+            delete inst;
 
-	    return AXIS_SUCCESS;
-	}
-	return AXIS_FAIL;
+            return AXIS_SUCCESS;
+        }
+        return AXIS_FAIL;
     }
 
-/*  initializeLibrary() Is a C interface.
- */
+    /*  initializeLibrary() Is a C interface.
+     */
     STORAGE_CLASS_INFO void initializeLibrary (void)
     {
-	// Do init actions
+        // Do init actions
     }
 
-/*  uninitializeLibrary() Is a C interface. 
- */
+    /*  uninitializeLibrary() Is a C interface.
+     */
     STORAGE_CLASS_INFO void uninitializeLibrary (void)
     {
-	// Do uninit actions
+        // Do uninit actions
     }
 }
 
@@ -977,29 +987,29 @@ axtoi (char *hexStg)
     int digit[32];		// hold values to convert
     while (n < 32)
     {
-	if (hexStg[n] == '\0')
-	    break;
-	if (hexStg[n] > 0x29 && hexStg[n] < 0x40)	//if 0 to 9
-	    digit[n] = hexStg[n] & 0x0f;	//convert to int
-	else if (hexStg[n] >= 'a' && hexStg[n] <= 'f')	//if a to f
-	    digit[n] = (hexStg[n] & 0x0f) + 9;	//convert to int
-	else if (hexStg[n] >= 'A' && hexStg[n] <= 'F')	//if A to F
-	    digit[n] = (hexStg[n] & 0x0f) + 9;	//convert to int
-	else
-	    break;
-	n++;
+        if (hexStg[n] == '\0')
+            break;
+        if (hexStg[n] > 0x29 && hexStg[n] < 0x40)	//if 0 to 9
+            digit[n] = hexStg[n] & 0x0f;	//convert to int
+        else if (hexStg[n] >= 'a' && hexStg[n] <= 'f')	//if a to f
+            digit[n] = (hexStg[n] & 0x0f) + 9;	//convert to int
+        else if (hexStg[n] >= 'A' && hexStg[n] <= 'F')	//if A to F
+            digit[n] = (hexStg[n] & 0x0f) + 9;	//convert to int
+        else
+            break;
+        n++;
     }
     count = n;
     m = n - 1;
     n = 0;
     while (n < count)
     {
-	// digit[n] is value of hex digit at position n
-	// (m << 2) is the number of positions to shift
-	// OR the bits into return value
-	intValue = intValue | (digit[n] << (m << 2));
-	m--;			// adjust the position to set
-	n++;			// next digit to process
+        // digit[n] is value of hex digit at position n
+        // (m << 2) is the number of positions to shift
+        // OR the bits into return value
+        intValue = intValue | (digit[n] << (m << 2));
+        m--;			// adjust the position to set
+        n++;			// next digit to process
     }
     return (intValue);
 }
@@ -1014,73 +1024,73 @@ Axis2Transport::processResponseHTTPHeaders ()
     unsigned int iStartPosition = iPosition;
 
     if ((iPosition =
-	 m_strResponseHTTPHeaders.find ("HTTP")) != std::string::npos)
+                m_strResponseHTTPHeaders.find ("HTTP")) != std::string::npos)
     {
-	m_strResponseHTTPProtocol =
-	    m_strResponseHTTPHeaders.substr (iPosition, strlen ("HTTP/1.x"));
-	iPosition += strlen ("HTTP/1.x");
+        m_strResponseHTTPProtocol =
+            m_strResponseHTTPHeaders.substr (iPosition, strlen ("HTTP/1.x"));
+        iPosition += strlen ("HTTP/1.x");
 
-	while (m_strResponseHTTPHeaders.substr ()[iPosition] == ' ')
-	{
-	    iPosition++;
-	}
+        while (m_strResponseHTTPHeaders.substr ()[iPosition] == ' ')
+        {
+            iPosition++;
+        }
 
-	iStartPosition = iPosition;
+        iStartPosition = iPosition;
 
-	while (m_strResponseHTTPHeaders.substr ()[iPosition] != ' ')
-	{
-	    iPosition++;
-	}
+        while (m_strResponseHTTPHeaders.substr ()[iPosition] != ' ')
+        {
+            iPosition++;
+        }
 
-	std::string strResponseHTTPStatusCode =
-	    m_strResponseHTTPHeaders.substr (iStartPosition,
-					     iPosition - iStartPosition);
-	m_iResponseHTTPStatusCode = atoi (strResponseHTTPStatusCode.c_str ());
+        std::string strResponseHTTPStatusCode =
+            m_strResponseHTTPHeaders.substr (iStartPosition,
+                                             iPosition - iStartPosition);
+        m_iResponseHTTPStatusCode = atoi (strResponseHTTPStatusCode.c_str ());
 
-	iStartPosition = ++iPosition;
-	iPosition = m_strResponseHTTPHeaders.find ("\n");
-	m_strResponseHTTPStatusMessage =
-	    m_strResponseHTTPHeaders.substr (iStartPosition,
-					     iPosition - iStartPosition - 1);
+        iStartPosition = ++iPosition;
+        iPosition = m_strResponseHTTPHeaders.find ("\n");
+        m_strResponseHTTPStatusMessage =
+            m_strResponseHTTPHeaders.substr (iStartPosition,
+                                             iPosition - iStartPosition - 1);
 
-	// reached the end of the first line
-	iStartPosition = m_strResponseHTTPHeaders.find ("\n");
+        // reached the end of the first line
+        iStartPosition = m_strResponseHTTPHeaders.find ("\n");
 
-	iStartPosition++;
+        iStartPosition++;
 
-	// read header fields and add to vector
-	do
-	{
-	    m_strResponseHTTPHeaders =
-		m_strResponseHTTPHeaders.substr (iStartPosition);
-	    iPosition = m_strResponseHTTPHeaders.find ("\n");
+        // read header fields and add to vector
+        do
+        {
+            m_strResponseHTTPHeaders =
+                m_strResponseHTTPHeaders.substr (iStartPosition);
+            iPosition = m_strResponseHTTPHeaders.find ("\n");
 
-	    if (iPosition == std::string::npos)
-	    {
-		break;
-	    }
+            if (iPosition == std::string::npos)
+            {
+                break;
+            }
 
-	    std::string strHeaderLine =
-		m_strResponseHTTPHeaders.substr (0, iPosition);
-	    unsigned int iSeperator = strHeaderLine.find (":");
+            std::string strHeaderLine =
+                m_strResponseHTTPHeaders.substr (0, iPosition);
+            unsigned int iSeperator = strHeaderLine.find (":");
 
-	    if (iSeperator == std::string::npos)
-	    {
-		break;
-	    }
+            if (iSeperator == std::string::npos)
+            {
+                break;
+            }
 
-	    iStartPosition = iPosition + 1;
+            iStartPosition = iPosition + 1;
 
             string key = strHeaderLine.substr (0, iSeperator);
             string value = strHeaderLine.substr (iSeperator + 1,
-                                                            strHeaderLine.
-                                                            length () -
-                                                            iSeperator - 1 -
-                                                            1);
-	    m_vResponseHTTPHeaders.push_back (std::make_pair (key, value));
+                                                 strHeaderLine.
+                                                 length () -
+                                                 iSeperator - 1 -
+                                                 1);
+            m_vResponseHTTPHeaders.push_back (std::make_pair (key, value));
 
             // if HTTP/1.0 we have to always close the connection by default
-            if (m_eProtocolType == APTHTTP1_0) 
+            if (m_eProtocolType == APTHTTP1_0)
                 m_bReopenConnection = true;
 
             // if HTTP/1.1 we have to assume persistant connection by default
@@ -1088,22 +1098,41 @@ Axis2Transport::processResponseHTTPHeaders ()
             // We need to close the connection and open a new one if we have 'Connection: close'
             if (key == "Connection" && value == " close" )
                 m_bReopenConnection = true;
-                
+
             // For both HTTP/1.0 and HTTP/1.1,
             // We need to keep the connection if we have 'Connection: Keep-Alive'
             if (key == "Connection" && value == " Keep-Alive" )
                 m_bReopenConnection = false;
-	}
-	while (iPosition != std::string::npos);
+
+            // Look for cookies
+            if(m_bMaintainSession && !(m_strSessionKey.size() > 0) )
+            {                
+                if (key == "Set-Cookie")
+                {
+                    m_strSessionKey = value;
+
+                    // Spec syntax : Set-Cookie: NAME=VALUE; expires=DATE; path=PATH; domain=DOMAIN_NAME; secure
+                    // This code assumes it to be : Set-Cookie: NAME=VALUE; Anything_else
+                    // And discards stuff after first ';'
+                    // This is the same assumption used in Axis Java
+                    unsigned long ulKeyEndsAt = m_strSessionKey.find(";");
+                    if (ulKeyEndsAt != std::string::npos)
+                    {
+                        m_strSessionKey = m_strSessionKey.substr(0, ulKeyEndsAt);
+                    }
+                }
+
+            }
+        }
+        while (iPosition != std::string::npos);
     }
     else
     {
-	throw AxisTransportException (SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE,
-				      "Protocol is not HTTP.");
+        throw AxisTransportException (SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE,
+                                      "Protocol is not HTTP.");
     }
 }
 
-// This is used by SimpleAxisServer
 void
 Axis2Transport::setSocket (unsigned int uiNewSocket)
 {
@@ -1131,7 +1160,7 @@ throw (AxisTransportException)
 const char* Axis2Transport::getFirstTrasportPropertyKey()
 {
     m_viCurrentHeader = m_vHTTPHeaders.begin();
-    
+
     if (m_viCurrentHeader == m_vHTTPHeaders.end())
         return NULL;
     else
@@ -1141,16 +1170,16 @@ const char* Axis2Transport::getFirstTrasportPropertyKey()
 const char* Axis2Transport::getNextTrasportPropertyKey()
 {
     //already at the end?
-     if (m_viCurrentHeader == m_vHTTPHeaders.end())
+    if (m_viCurrentHeader == m_vHTTPHeaders.end())
         return NULL;
-    
+
     m_viCurrentHeader++;
-    
+
     if (m_viCurrentHeader == m_vHTTPHeaders.end())
         return NULL;
     else
         return (*m_viCurrentHeader).first.c_str();
-        
+
 }
 
 const char* Axis2Transport::getCurrentTrasportPropertyKey()
@@ -1186,15 +1215,20 @@ void Axis2Transport::deleteTrasportProperty(char* pcKey, unsigned int uiOccuranc
     {
         if(strcmp(pcKey, (*currentHeader).first.c_str() ) == 0)
         {
-             if(uiCount == uiOccurance)
-             {                 
-                 m_vHTTPHeaders.erase(currentHeader);
-                 break;
-             }
-             uiCount++;
+            if(uiCount == uiOccurance)
+            {
+                m_vHTTPHeaders.erase(currentHeader);
+                break;
+            }
+            uiCount++;
         }
         currentHeader++;
-    
+
     }
+}
+
+void Axis2Transport::setMaintainSession(bool bSession)
+{
+    m_bMaintainSession = bSession;
 }
 

@@ -353,7 +353,7 @@ public:
     * @return First transport property key. If there are no trasport 
     * properties set, returns NULL.
     */
-    virtual const char* getFirstTrasportPropertyKey() {};
+    virtual const char* getFirstTrasportPropertyKey() { return 0; };
 
   /**
     * Iterator for trasport property keys
@@ -367,7 +367,7 @@ public:
     * @return Next transport property key. If there are no trasport 
     * properties set or if iterator is at the end of the list, returns NULL.
     */
-    virtual const char* getNextTrasportPropertyKey() {};
+    virtual const char* getNextTrasportPropertyKey() { return 0; };
 
   /**
     * Accessor for trasport property keys.
@@ -385,7 +385,7 @@ public:
     * @return Current transport property key. If there are no trasport 
     * properties set or if iterator is at the end of the list, returns NULL.
     */
-    virtual const char* getCurrentTrasportPropertyKey() {};
+    virtual const char* getCurrentTrasportPropertyKey() { return 0; };
     
   /**
     * Accessor for trasport property values.
@@ -405,7 +405,7 @@ public:
     * @return Current transport property value. If there are no trasport 
     * properties set or if iterator is at the end of the list, returns NULL.
     */
-    virtual const char* getCurrentTrasportPropertyValue() {};
+    virtual const char* getCurrentTrasportPropertyValue() { return 0; };
 
   /**
     * Deletes the trasport property key:value pair currently pointed to by 
@@ -432,7 +432,12 @@ public:
     *                    Count starts from 1.
     */
     virtual void deleteTrasportProperty(char* pcKey, unsigned int uiOccurance = 1) {};
-
+    
+  /**
+    * Set whether to Maitain session with service ot not.
+    * @param bSession - true is session should be maintained. False otherwise.
+    */
+    virtual void setMaintainSession(bool bSession) {};
 
 protected:
     /**
@@ -446,7 +451,7 @@ protected:
      */ 
     AXIS_ENGINE_CALLBACK_RELEASE_SEND_BUFFER m_pReleaseBufferCallback;
  
-    AXIS_PROTOCOL_TYPE m_eProtocolType;
+    AXIS_PROTOCOL_TYPE m_eProtocolType;  
 
 };
 

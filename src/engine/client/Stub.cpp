@@ -27,7 +27,6 @@
 AXIS_CPP_NAMESPACE_USE
 
 Stub::Stub(const char *pcEndPointUri, AXIS_PROTOCOL_TYPE eProtocol) 
-: m_lTimeoutSeconds(0), m_bMaintainSession(false), m_strSessionKey("")
 {
     m_pCall = new Call();
     m_pCall->setProtocol(eProtocol);
@@ -42,12 +41,6 @@ Stub::Stub(const char *pcEndPointUri, AXIS_PROTOCOL_TYPE eProtocol)
 Stub::~Stub()
 {
     delete m_pCall;
-    /*for (unsigned int i = 0; i < m_vKeys.size(); i++)
-    {
-	    delete [] m_vKeys[i];
-	    delete [] m_vValues[i];
-    }
-*/
     for (unsigned int j = 0; j < m_vSOAPHeaderBlocks.size(); j++)
     {
 	    delete m_vSOAPHeaderBlocks[j];
@@ -65,16 +58,6 @@ void Stub::setTransportProperty(const char *pcKey, const char *pcValue)
         m_pTrasport->setTransportProperty(pcKey, pcValue);
 }
 
-void Stub::setTransportProperties()
-{
-    if (m_pTrasport)
-    {
-        if(m_bMaintainSession && (m_strSessionKey.size() > 0) )
-        {
-            m_pTrasport->setTransportProperty("Cookie", m_strSessionKey.c_str());
-        }
-    }
-}
 
 const char* Stub::getFirstTrasportPropertyKey()
 {
@@ -192,7 +175,6 @@ void Stub::deleteSOAPHeaderBlock(IHeaderBlock* pHeaderBlock)
             m_vSOAPHeaderBlocks.erase(currentSOAPHeaderBlock);
             bDone = true;
         }
-//        if(currentSOAPHeaderBlock != m_vSOAPHeaderBlocks.end())
             currentSOAPHeaderBlock++;
     }
 }
@@ -214,13 +196,11 @@ void Stub::setSOAPHeaders()
 void Stub::applyUserPreferences()
 {
     setSOAPHeaders();
-    setTransportProperties();
     setSOAPMethodAttributes();
-    setTransportTimeout();
 }
+
 void Stub::updateStateAfterResponse()
 {
-    getCookieValue();
 }
 
 void Stub::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
@@ -336,21 +316,10 @@ void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pP
 
 void Stub::setTransportTimeout(const long lSeconds)
 {
-    m_lTimeoutSeconds = lSeconds;
-}
-
-void Stub::setTransportTimeout()
-{
-    if(m_lTimeoutSeconds)
+    if (m_pTrasport)
     {
-        SOAPTransport *pTrasport = NULL;
-        if (m_pCall)
-            pTrasport = m_pCall->getTransport();
-        if (pTrasport)
-        {
-            pTrasport->setTimeout(m_lTimeoutSeconds);
-        }
-    }    
+        m_pTrasport->setTimeout(lSeconds);
+    }
 }
 
 int Stub::getStatus()
@@ -366,39 +335,13 @@ const AxisChar* Stub::getNamespacePrefix(const AxisChar* pNamespace)
     return m_pCall->getNamespacePrefix(pNamespace);
 }
 
-void Stub::getCookieValue() 
-{
-    if(m_bMaintainSession && !(m_strSessionKey.size() > 0) )
-    {
-        SOAPTransport *pTrasport = NULL;
-        if (m_pCall)
-            pTrasport = m_pCall->getTransport();
-        if (pTrasport)
-        {            
-            const char* pcSessionKey = pTrasport->getTransportProperty("Set-Cookie");
-            if (pcSessionKey)
-                m_strSessionKey = pcSessionKey;
-            else 
-                return;
-            
-            // Spec syntax : Set-Cookie: NAME=VALUE; expires=DATE; path=PATH; domain=DOMAIN_NAME; secure
-            // This code assumes it to be : Set-Cookie: NAME=VALUE; Anything_else
-            // And discards stuff after first ';'
-            // This is the same assumption used in Axis Java
-            unsigned long ulKeyEndsAt = m_strSessionKey.find(";");
-            if (ulKeyEndsAt != std::string::npos)
-            {
-                m_strSessionKey = m_strSessionKey.substr(0, ulKeyEndsAt);
-            }
-            
-        }
-    }  
-
-}
 
 void Stub::setMaintainSession(bool bSession)
 {
-    m_bMaintainSession = bSession;
+    if (m_pTrasport)
+    {
+        m_pTrasport->setMaintainSession(bSession);
+    }
 }
 
 

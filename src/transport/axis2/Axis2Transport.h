@@ -210,6 +210,12 @@ class Axis2Transport:public SOAPTransport
     */
     void deleteTrasportProperty(char* pcKey, unsigned int uiOccurance = 1);
 
+  /**
+    * Set whether to Maitain session with service ot not.
+    * @param bSession - true is session should be maintained. False otherwise.
+    */
+    virtual void setMaintainSession(bool bSession);
+
 
   private:
     void processResponseHTTPHeaders ();
@@ -316,9 +322,28 @@ class Axis2Transport:public SOAPTransport
     std::vector < std::pair < std::string,
 	std::string > >m_vResponseHTTPHeaders;
 
-    Channel *m_pChannel;	// Channel used for communication
+  /**
+    * Channel used for communication
+    */
+    Channel *m_pChannel;	
+    
     bool m_bChannelSecure;
-    std::string m_strHeaderBytesToSend;	// Message header string to be sent.
+    
+  /**
+    * Message header string to be sent.
+    */
+    std::string m_strHeaderBytesToSend;	
+    
+  /**
+    * Should the Stub maintain session with service?
+    */
+    bool m_bMaintainSession;
+
+  /**
+    * Session key sent by service 
+    */
+    std::string m_strSessionKey;
+
     
 };
 
