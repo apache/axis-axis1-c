@@ -322,7 +322,7 @@ public class ClientStubWriter extends CPPClassWriter{
 						writer.write("\t\t\t\t" + currentParamName + " = ("+currentParaType+"&)m_pCall->getBasicArray("+CUtils.getXSDTypeForBasicType(containedType)+", \""+currentType.getParamName()+"\", 0);\n");
 					}
 					else{
-						containedType = qname.getLocalPart();
+						//containedType = qname.getLocalPart();
 						writer.write("\t\t\t\t" + currentParamName + " = ("+currentParaType+"&)m_pCall->getCmplxArray((void*) Axis_DeSerialize_"+containedType);
 						writer.write("\t\t\t\t, (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+currentType.getParamName()+"\", Axis_URI_"+containedType+");\n");
 					}

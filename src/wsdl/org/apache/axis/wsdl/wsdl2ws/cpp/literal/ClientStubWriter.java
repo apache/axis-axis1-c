@@ -476,7 +476,8 @@ public class ClientStubWriter extends CPPClassWriter{
 					else{
 						containedType = qname.getLocalPart();
 						writer.write("\t\t\t" + currentParamName + " = ("+currentParaType+"&)m_pCall->getCmplxArray((void*) Axis_DeSerialize_"+containedType);
-						writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+currentType.getElementName().getLocalPart()+"\", Axis_URI_"+containedType+");\n");
+						//writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+currentType.getElementName().getLocalPart()+"\", Axis_URI_"+containedType+");\n");
+						writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+currentType.getElementNameAsString()+"\", Axis_URI_"+containedType+");\n");
 					}
 				}
 				else if(typeissimple){
@@ -509,7 +510,8 @@ public class ClientStubWriter extends CPPClassWriter{
 			else{
 				containedType = qname.getLocalPart();
 				writer.write("\tRetArray = ("+outparamType+"&)m_pCall->getCmplxArray((void*) Axis_DeSerialize_"+containedType);
-				writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+returntype.getElementName().getLocalPart()+"\", Axis_URI_"+containedType+");\n\t\t}\n");
+				//writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+returntype.getElementName().getLocalPart()+"\", Axis_URI_"+containedType+");\n\t\t}\n");
+				writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+returntype.getElementNameAsString()+"\", Axis_URI_"+containedType+");\n\t\t}\n");
 			}
 			writer.write("\t}\n\tm_pCall->unInitialize();\n");
 			writer.write("\treturn RetArray;\n");

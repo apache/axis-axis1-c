@@ -144,6 +144,20 @@ public class Type {
     }
 
     /**
+     * @return String 
+     */
+    public String getLocalPartOfName() {
+        String attribName = name.getLocalPart();
+        if (attribName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1 )
+        {
+            attribName =attribName.substring(attribName.lastIndexOf(SymbolTable.ANON_TOKEN)+1,attribName.length());
+        }
+        attribName = TypeMap.resoleveWSDL2LanguageNameClashes(attribName,this.language);
+
+        return attribName;
+    }
+
+    /**
      * Sets the name.
      * @param name The name to set
      */

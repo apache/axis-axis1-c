@@ -45,6 +45,15 @@ public class ParameterInfo {
 		// TODO: design review needed
 		// 		- If type and name are equals add "_Ref" ie : ref="..."
 		String result;
+
+                if (attribName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1 )
+                {
+                    attribName =attribName.substring(attribName.lastIndexOf(SymbolTable.ANON_TOKEN)+1,attribName.length());
+                }
+                // Samisa: This second call to TypeMap.resoleveWSDL2LanguageNameClashes
+                // is made to make sure after replacinf ANON_TOKEN it is still not a keyword
+                attribName = TypeMap.resoleveWSDL2LanguageNameClashes(attribName, WrapperConstants.LANGUAGE_CPP);
+
 		if (isReference())
 			result = attribName + "_Ref";
 		else
