@@ -3,11 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "SharedObject.h"
-#ifdef WIN32
-#include <Windows.h>
-#else
 
-#endif
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -27,11 +23,7 @@ int SharedObject::lock()
 {
 	while (m_bLocked)
 	{
-#ifdef WIN32
-		Sleep(0);
-#else
-		sleep(0);
-#endif
+		Ax_Sleep(0);
 	}
 	m_bLocked = true;
 	return 0;
@@ -42,3 +34,4 @@ int SharedObject::unlock()
 	m_bLocked = false;
 	return 0;
 }
+
