@@ -194,6 +194,9 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write("int Axis_DeSerialize_"+classname+"("+classname+"* param, IWrapperSoapDeSerializer* pIWSDZ)\n{\n");
 		if (attribs.length == 0) {
 			System.out.println("Possible error in class "  + classname + ": class with no attributes....................");
+			if (extensionBaseAttrib != null){
+				writer.write("\tpIWSDZ->getChardataAs((void*)&(param->"+extensionBaseAttrib.getParamName()+"), "+CUtils.getXSDTypeForBasicType(extensionBaseAttrib.getTypeName())+");\n");
+			}
 			writer.write("\treturn AXIS_SUCCESS;\n");
 			writer.write("}\n\n");
 			return;
