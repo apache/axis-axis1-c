@@ -39,30 +39,12 @@ public:
     /* Open a socket to a given remote node/server address with remote port */
     virtual bool  open() throw (AxisTransportException&);
 
-    /* Read from a open socket and store read message in msg */
-    //virtual const Channel& operator >> (std::string& msg);
-    
-    /* Read from socket in non bloking more in msg */
-    //virtual const Channel& readNonBlocking(std::string& msg, bool bBlockingRequired);
-
-    /* Write a given message (msg) to the end-point using the open socket */
-    //virtual const Channel& operator << (const char* msg);
-    
-
 protected:
     /* OS specific initilization */
     virtual bool init();
 
 
-    /* Close & clean-up the open socket/system resources */
-    virtual void closeChannel();
-
-	virtual void hexOutput( char * psData, int iDataLength);
-
-  /**
-    * @return 0 if timeout, 1 if input available, -1 if error.
-    */
-    int applyTimeout();
+   
 };
 
 #endif

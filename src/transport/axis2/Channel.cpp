@@ -403,7 +403,6 @@ printf( "<Channel::operator >> exception=SERVER_TRANSPORT_INVALID_SOCKET\n");
     }
 
     int nByteRecv = 0;
-    const int BUF_SIZE = 1024;
     char buf[BUF_SIZE];
 	int	iBufSize = BUF_SIZE;
 
@@ -521,7 +520,6 @@ const Channel &Channel::readNonBlocking( std::string & msg, bool bBlockingRequir
     }
 
     int nByteRecv = 0;
-    const int BUF_SIZE = 1024;
     char buf[BUF_SIZE];
 
     //Samisa: I want to set the socket to non blocking mode here

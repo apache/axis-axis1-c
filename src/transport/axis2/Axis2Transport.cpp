@@ -359,8 +359,8 @@ throw (AxisException, AxisTransportException)
         try
         {
             *m_pChannel >> m_strReceived;
-
-            if (!m_bReadPastHTTPHeaders)
+             
+             if (!m_bReadPastHTTPHeaders)
             {
                 do
                 {
@@ -464,7 +464,9 @@ throw (AxisException, AxisTransportException)
                 {
                     do
                     {
-                        *m_pChannel >> m_strReceived;
+                        std::string strTempReceived = "";
+                        *m_pChannel >> strTempReceived; // Assume non blocking here
+                        m_strReceived += strTempReceived;
                         endOfChunkData = m_strReceived.find ("\r\n");
                     }
                     while (endOfChunkData == std::string::npos);
@@ -524,6 +526,14 @@ throw (AxisException, AxisTransportException)
 
                     // Start looking for the next chunk
                     unsigned int endOfChunkData = m_strReceived.find ("\r\n");	// Skip end of previous chunk
+                    while (endOfChunkData == std::string::npos)
+                    {
+                        std::string strTempRecv = "";
+                        *m_pChannel >> strTempRecv;
+                        m_strReceived += strTempRecv;
+                        endOfChunkData = m_strReceived.find ("\r\n");
+                    }
+
                     m_strReceived = m_strReceived.substr (endOfChunkData + 2);
 
                     endOfChunkData = m_strReceived.find ("\r\n");	// Locate start of next chunk
@@ -622,7 +632,7 @@ throw (AxisException, AxisTransportException)
         int iToCopy = (*pSize < m_iBytesLeft) ? *pSize : m_iBytesLeft;
 
         strncpy (pcBuffer, m_pcReceived, iToCopy);
-
+        pcBuffer[iToCopy] = '\0';
         m_iBytesLeft -= iToCopy;
         m_pcReceived += iToCopy;
         *pSize = iToCopy;
