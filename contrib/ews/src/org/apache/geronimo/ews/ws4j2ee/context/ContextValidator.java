@@ -73,7 +73,9 @@ import org.apache.axis.wsdl.symbolTable.Parameters;
 import org.apache.axis.wsdl.symbolTable.PortEntry;
 import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
 import org.apache.axis.wsdl.symbolTable.ServiceEntry;
+import org.apache.geronimo.ews.ws4j2ee.context.impl.EJBDDContextImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.impl.SEIOperationImpl;
+import org.apache.geronimo.ews.ws4j2ee.context.j2eeDD.EJBContext;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
@@ -114,7 +116,7 @@ public class ContextValidator {
             Service service = null;
             if (services.hasNext()) {
                 service = ((Service) services.next());
-                context.getMiscInfo().settargetService(new ServiceEntry(service));
+                context.getWSDLContext().settargetService(new ServiceEntry(service));
             }
             
 			//get the service ports 
@@ -127,41 +129,57 @@ public class ContextValidator {
             Port wsdlport = null;
             while (portList.hasNext()) {
 				wsdlport = (Port) portList.next();
-                context.getMiscInfo().setTargetPort(wsdlport);
+                context.getWSDLContext().setTargetPort(wsdlport);
             }
 
 		  if (wsdlport == null)
 			  throw new UnrecoverableGenerationFault("no port discription not match with the wsdl file");
 		  QName bindingName = wsdlport.getBinding().getQName();
 		  BindingEntry wsdlbinding = context.getWSDLContext().getBinding(bindingName);
-		  context.getMiscInfo().settargetBinding(wsdlbinding);
+		  context.getWSDLContext().settargetBinding(wsdlbinding);
 		  QName portTypename = wsdlbinding.getBinding().getPortType().getQName();
 		  PortTypeEntry port = context.getWSDLContext().getPortType(portTypename);
 		  if(port == null)
 		  		throw new UnrecoverableGenerationFault("port type must exits");
-		  context.getMiscInfo().setTargetPortType(port);
+		  context.getWSDLContext().setTargetPortType(port);
         } catch (Exception e) {
             throw GenerationFault.createGenerationFault(e);
         }
     }
 
     public void validateWithWSDL() {
-        WSCFWebserviceDescription wscfwsdis = context.getMiscInfo().getWscfdWsDesxription();
+        WSCFWebserviceDescription wscfwsdis = context.getWSCFContext().getWscfdWsDesxription();
         WSCFPortComponent[] ports = wscfwsdis.getPortComponent();
         if (ports == null || ports.length == 0)
             throw new UnrecoverableGenerationFault("no port discription found in the" +
                     "webservice.xml file");
         WSCFPortComponent port = ports[0];
-        context.getMiscInfo().setWscfport(port);
+        context.getWSCFContext().setWscfport(port);
 		String ejbLink = port.getServiceImplBean().getEjblink();
         // context.getMiscInfo().setJaxrpcSEI(port.getServiceEndpointInterface());
         if(ejbLink != null){
-	        context.getMiscInfo().setEndpointImplbean(port.getServiceEndpointInterface() + "Bean");
-	        context.getMiscInfo().setEjbhome(port.getServiceEndpointInterface() + "Home");
-	        context.getMiscInfo().setEjbsei(port.getServiceEndpointInterface() + "EJB");
-			context.getMiscInfo().setEjblocalhome(port.getServiceEndpointInterface() + "LocalHome");
-			context.getMiscInfo().setEjblocalsei(port.getServiceEndpointInterface() + "LocalEJB");
-	        context.getMiscInfo().setEjbName(port.getServiceImplBean().getEjblink());
+        	String bean = port.getServiceEndpointInterface() + "Bean";
+        	String home = port.getServiceEndpointInterface() + "Home";
+        	String remote = port.getServiceEndpointInterface() + "EJB";
+        	String local = port.getServiceEndpointInterface() + "LocalEJB";
+			String localHome = port.getServiceEndpointInterface() + "LocalHome";
+        	
+        	EJBContext ejbcontext = context.getEJBDDContext();
+        	if(ejbcontext == null){
+				ejbcontext = new EJBDDContextImpl(ejbLink,bean,home,remote,localHome,local);
+        	}
+//TODO remove this if not needed
+			if(ejbcontext.getImplBean() == null)
+				ejbcontext.setImplBean(bean);
+			if(ejbcontext.getEjbhomeInterface() == null)
+				ejbcontext.setEjbhomeInterface(home);
+			if(ejbcontext.getEjbRemoteInterface() == null)
+				ejbcontext.setEjbRemoteInterface(remote);
+			if(ejbcontext.getEjbLocalHomeInterfce() == null)
+				ejbcontext.setEjbLocalHomeInterfce(localHome);
+			if(ejbcontext.getEjbLocalInterface() == null)
+				ejbcontext.setEjbLocalHomeInterfce(local);
+	        context.getMiscInfo().setJ2eeComponetLink(port.getServiceImplBean().getEjblink());
 	    }else{
 			context.getMiscInfo().setImplwithEJB(false);
 	    }
@@ -178,7 +196,7 @@ public class ContextValidator {
             Iterator portList = service.getService().getPorts().values().iterator();
             while (portList.hasNext()) {
                 if (((Port) portList.next()) == wsdlport.getPort()) {
-                    context.getMiscInfo().settargetService(service);
+                    context.getWSDLContext().settargetService(service);
                     break;
                 }
             }
@@ -190,25 +208,25 @@ public class ContextValidator {
         QName bindingName = wsdlport.getPort().getBinding().getQName();
 
         BindingEntry wsdlbinding = context.getWSDLContext().getBinding(bindingName);
-        context.getMiscInfo().settargetBinding(wsdlbinding);
+        context.getWSDLContext().settargetBinding(wsdlbinding);
 
         QName portTypename = wsdlbinding.getBinding().getPortType().getQName();
-        context.getMiscInfo().setTargetPortType(context.getWSDLContext().getPortType(portTypename));
+        context.getWSDLContext().setTargetPortType(context.getWSDLContext().getPortType(portTypename));
 
         context.validate();
 			
             //find and populate the information about the SEI in the 
             //MiscInfo
 		String seiName = context.getJAXRPCMappingContext()
-			.getServiceEndpointInterfaceName(context.getMiscInfo().getTargetPortType(),context.getMiscInfo().gettargetBinding());
+			.getServiceEndpointInterfaceName(context.getWSDLContext().getTargetPortType(),context.getWSDLContext().gettargetBinding());
 		context.getMiscInfo().setJaxrpcSEI(seiName);	    
 			
-        List operations = context.getMiscInfo().getTargetPortType().getPortType().getOperations();
+        List operations = context.getWSDLContext().getTargetPortType().getPortType().getOperations();
         for (int i = 0; i < operations.size(); i++) {
             SEIOperation seiOp = new SEIOperationImpl();
 
             Operation op = (Operation) operations.get(i);
-            BindingEntry binding = context.getMiscInfo().gettargetBinding();
+            BindingEntry binding = context.getWSDLContext().gettargetBinding();
             
 			//got to get the same parameter order as the JAXRPC mapper does
 			//So I am using the same methods. Can somebody find something better?? 

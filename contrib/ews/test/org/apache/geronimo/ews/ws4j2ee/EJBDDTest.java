@@ -61,9 +61,13 @@ import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.JaxRpcMapperContext;
 import org.apache.geronimo.ews.ws4j2ee.context.MiscInfo;
 import org.apache.geronimo.ews.ws4j2ee.context.impl.MiscInfoImpl;
+import org.apache.geronimo.ews.ws4j2ee.context.j2eeDD.EJBContext;
+import org.apache.geronimo.ews.ws4j2ee.context.j2eeDD.WebContext;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.ServiceReferanceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
 import org.apache.geronimo.ews.ws4j2ee.parsers.EJBDDParser;
+import org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2eeFactory;
 
 /**
  * @author hemapani
@@ -88,6 +92,28 @@ public class EJBDDTest extends AbstractTestCase{
 				public MiscInfo getMiscInfo() {return new MiscInfoImpl();}
 				public void setMiscInfo(MiscInfo info) {}
 				public void validate() {
+				}
+				public void setFactory(Ws4J2eeFactory factory){}
+				public Ws4J2eeFactory getFactory(){
+					return null;
+				}
+
+				public EJBContext getEJBDDContext(){
+					return null;
+				}
+				public void setEJBDDContext(EJBContext context){}
+
+				public WebContext getWebDDContext(){
+					return null;
+				}
+				public void setWebDDContext(WebContext context){}
+
+				public ServiceReferanceContext getServiceReferanceContext(int index){
+					return null;
+				}
+				public void addServiceReferanceContext(ServiceReferanceContext context){}
+				public int getServiceReferanceContextCount(){
+					return 0;
 				}
 			};
 		   EJBDDParser pars = new EJBDDParser(con);

@@ -79,6 +79,6 @@ public class WrapperWsGenerator implements Generator {
 	}
     
 	public void generate() throws GenerationFault {
-		writer.writeCode();
+		writer.write();
 	}
 }

@@ -9,7 +9,7 @@ import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSC
  * client schema. this elemet may in the web.xml or ejb-jar.xml.   
  * @author Srinath Perera(hemapani@opensource.lk)
  */
-public interface ServiceReferance {
+public interface ServiceReferanceContext {
 	/**
 	 * Service type: The service-interface element defines the
 	 * fully qualified name of the JAXRPC Service Interface class

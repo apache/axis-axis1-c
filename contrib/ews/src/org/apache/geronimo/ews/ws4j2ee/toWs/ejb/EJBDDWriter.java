@@ -62,6 +62,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException; */
 
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
+import org.apache.geronimo.ews.ws4j2ee.context.j2eeDD.EJBContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.AbstractWriter;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
@@ -74,28 +75,27 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class EJBDDWriter extends AbstractWriter {
+	protected EJBContext ejbcontext;
 	/**
 	 * @param j2eewscontext 
 	 * @throws GenerationFault 
 	 */
-	public EJBDDWriter(J2EEWebServiceContext j2eewscontext)
+	public EJBDDWriter(J2EEWebServiceContext j2eewscontext,EJBContext ejbcontext)
 			throws GenerationFault {
-		super(j2eewscontext);
+		super(j2eewscontext,j2eewscontext.getMiscInfo().getOutPutPath() + "/META-INF/ejb-jar.xml");
+		this.ejbcontext =  ejbcontext;
 	}
 
-	public String getFileName() {
-		return j2eewscontext.getMiscInfo().getOutPutPath() + "/META-INF/ejb-jar.xml";
-	}
+	
 
 	public void writeCode() throws GenerationFault {
-		super.writeCode();
 		if(out != null)
 			writeSessionDD();
 	}
 
 	public void writeSessionDD() throws GenerationFault {
     	
-		String ejbname = j2eewscontext.getMiscInfo().getTargetPortType().getName().toLowerCase();
+		String ejbname = j2eewscontext.getWSDLContext().getTargetPortType().getName().toLowerCase();
 		int index = ejbname.lastIndexOf(".");
 		if(index>0){
 		  ejbname = ejbname.substring(index+1);
@@ -113,26 +113,26 @@ public class EJBDDWriter extends AbstractWriter {
 		}
 		
 
-		out.write("<display-name>" + j2eewscontext.getMiscInfo().getWscfdWsDesxription().getDisplayName() + "</display-name>\n");
+		out.write("<display-name>" + j2eewscontext.getWSCFContext().getWscfdWsDesxription().getDisplayName() + "</display-name>\n");
 		out.write("\t<enterprise-beans>\n");
 		out.write("\t\t<session>\n");
-		out.write("\t\t\t<display-name>" + j2eewscontext.getMiscInfo().getWscfdWsDesxription().getDisplayName() + "</display-name>\n");
+		out.write("\t\t\t<display-name>" + j2eewscontext.getWSCFContext().getWscfdWsDesxription().getDisplayName() + "</display-name>\n");
 		out.write("\t\t\t<ejb-name>" + ejbname + "</ejb-name>\n");
 		
 		
 		String implStyle = j2eewscontext.getMiscInfo().getImplStyle();
 		if(GenerationConstants.USE_LOCAL_AND_REMOTE.equals(implStyle) 
 			|| GenerationConstants.USE_REMOTE.equals(implStyle)){
-			out.write("\t\t\t<home>" + j2eewscontext.getMiscInfo().getEjbhome() + "</home>\n");
-			out.write("\t\t\t<remote>" + j2eewscontext.getMiscInfo().getEjbsei() + "</remote>\n");
+			out.write("\t\t\t<home>" + ejbcontext.getEjbhomeInterface() + "</home>\n");
+			out.write("\t\t\t<remote>" + ejbcontext.getEjbRemoteInterface() + "</remote>\n");
 	
 		}
 		if(GenerationConstants.USE_LOCAL_AND_REMOTE.equals(implStyle) 
 			|| GenerationConstants.USE_LOCAL.equals(implStyle)){
-			out.write("\t\t\t<local-home>"+j2eewscontext.getMiscInfo().getEjblocalhome()+"</local-home>");
-			out.write("\t\t\t<local>"+j2eewscontext.getMiscInfo().getEjblocalsei()+"</local>");
+			out.write("\t\t\t<local-home>"+ejbcontext.getEjbLocalHomeInterfce()+"</local-home>");
+			out.write("\t\t\t<local>"+ejbcontext.getEjbLocalInterface()+"</local>");
 		}
-		out.write("\t\t\t<ejb-class>" + j2eewscontext.getMiscInfo().getEndpointImplbean() + "</ejb-class>\n");
+		out.write("\t\t\t<ejb-class>" + ejbcontext.getImplBean() + "</ejb-class>\n");
 		out.write("\t\t\t<session-type>Stateless</session-type>\n");
 		out.write("\t\t\t<transaction-type>Bean</transaction-type>\n");
 		out.write("\t\t\t<security-identity>\n");
@@ -142,7 +142,6 @@ public class EJBDDWriter extends AbstractWriter {
 		out.write("\t\t</session\n>");
 		out.write("\t</enterprise-beans>\n");
 		out.write("</ejb-jar>\n");
-		out.close();
 //	   try {
 //				 JAXBContext jc =
 //					  JAXBContext.newInstance("org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd");
@@ -221,5 +220,4 @@ public class EJBDDWriter extends AbstractWriter {
 //			throw new GenerationFault(e);
 //		  }
 	}
-
 }

@@ -86,7 +86,7 @@ public class InternalBasedWrapperClassWriter extends JavaClassWriter {
 	}
 
 	private static String getName(J2EEWebServiceContext j2eewscontext) {
-		String name = j2eewscontext.getMiscInfo().gettargetBinding().getName();
+		String name = j2eewscontext.getWSDLContext().gettargetBinding().getName();
 		if (name == null) {
 			name = j2eewscontext.getMiscInfo().getJaxrpcSEI();
 		}
@@ -112,24 +112,12 @@ public class InternalBasedWrapperClassWriter extends JavaClassWriter {
 
 	protected void writeConstructors() throws GenerationFault {
 		out.write("\tpublic " + classname + "(){\n");
-		out.write("\t\tString containerID = \""+j2eewscontext.getMiscInfo().getEjbName()+"\";\n"); // get container id (aka deployment id) from request
+		out.write("\t\tString containerID = \""+j2eewscontext.getMiscInfo().getJ2eeComponetLink()+"\";\n"); // get container id (aka deployment id) from request
 		out.write("\t\torg.openejb.ContainerIndex index = org.openejb.ContainerIndex.getInstance();\n");
 		out.write("\t\tthis.container = index.getContainer(containerID);\n");
 		out.write("\t}\n");
 	}
 
-	public String getFileName() {
-		String filename =
-			j2eewscontext.getMiscInfo().getOutPutPath()
-				+ "/"
-				+ getName(j2eewscontext).replace('.', '/')
-				+ "Impl.java";
-		//j2eewscontext.getMiscInfo().getJaxrpcSEI().replace('.','/')+"BindingImpl.java";
-		if(j2eewscontext.getMiscInfo().isVerbose()){
-			log.info(filename + " generating.....................");
-		}
-		return filename;
-	}
 		protected void writeMethods() throws GenerationFault {
 		String parmlistStr = null;
 		 ArrayList operations = j2eewscontext.getMiscInfo().getSEIOperations();

@@ -93,6 +93,19 @@ public interface WSCFContext {
 	public WSCFWebserviceDescription[] getWebServicesDescription();
 	
 	public void serialize(java.io.Writer out) throws GenerationFault;
+	
+	/**
+	 * WSCF artifacts correponds to the current WSCF file.
+	 * If one element is in the wsdl theu are used. How to select them 
+	 * if there is more than one is still to do.   
+	 * @return
+	 */
+	public WSCFWebserviceDescription getWscfdWsDesxription();
+	public void setWscfdWsDescription(WSCFWebserviceDescription description);
+
+	public WSCFPortComponent getWscfport();
+	public void setWscfport(WSCFPortComponent component);
+
 
 	
 

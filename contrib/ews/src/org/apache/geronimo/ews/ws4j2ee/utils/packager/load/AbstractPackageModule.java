@@ -118,5 +118,9 @@ public abstract class AbstractPackageModule implements PackageModule {
     public void setWscfFile(InputStream stream) {
         wscfFile = stream;
     }
+    
+	public InputStream findFileInModule(String path)throws GenerationFault  {
+		return getInputStreamForJarEntry(path);
+	}
 
 }

@@ -61,8 +61,10 @@ import org.apache.axis.components.logger.LogFactory;
 import org.apache.commons.logging.Log;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.SEIOperation;
+import org.apache.geronimo.ews.ws4j2ee.context.j2eeDD.WebContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.JavaClassWriter;
+import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenerationFault;
 
 /**
  * <h4>WebEndpoint Based Serivce Implementation Bean</h4> 
@@ -103,12 +105,17 @@ public class WebEndpointWrapperClassWriter extends JavaClassWriter {
 		throws GenerationFault {
 		super(j2eewscontext, getName(j2eewscontext) + "Impl");
 		seiName = j2eewscontext.getMiscInfo().getJaxrpcSEI();
-		implBean = j2eewscontext.getMiscInfo().getEndpointImplbean();
+		WebContext webcontext = j2eewscontext.getWebDDContext();
+		if(webcontext == null){
+			throw new UnrecoverableGenerationFault("for webbased Impl" +
+				" the WebDDContext must not be null");
+		} 
+		implBean = webcontext.getServletClass();
 
 	}
 
 	private static String getName(J2EEWebServiceContext j2eewscontext) {
-		String name = j2eewscontext.getMiscInfo().gettargetBinding().getName();
+		String name = j2eewscontext.getWSDLContext().gettargetBinding().getName();
 		if (name == null) {
 			name = j2eewscontext.getMiscInfo().getJaxrpcSEI();
 		}
@@ -131,15 +138,7 @@ public class WebEndpointWrapperClassWriter extends JavaClassWriter {
 		out.write("\t}\n");
 	}
 
-	public String getFileName() {
-		String filename =
-			j2eewscontext.getMiscInfo().getOutPutPath()
-				+ "/"
-				+ getName(j2eewscontext).replace('.', '/')
-				+ "Impl.java";
-		//j2eewscontext.getMiscInfo().getJaxrpcSEI().replace('.','/')+"BindingImpl.java";
-		return filename;
-	}
+
 	/* (non-Javadoc)
 	 * @see org.apache.geronimo.ews.ws4j2ee.toWs.JavaClassWriter#writeMethods()
 	 */

@@ -103,7 +103,6 @@ public class BuildFileGenerator implements Generator {
 			out.write("	<property name=\"lib\" location=\"lib\"/>\n");
 
 			out.write("	<path id=\"classpath\" >\n");
-			String jarfile = j2eewscontext.getMiscInfo().getJarFileName();
 			File tempfile = new File("./target/classes");
 			out.write("		<pathelement location=\"/"+tempfile.getAbsolutePath()+"\"/>");
 			tempfile = new File("target/test-classes");
@@ -152,7 +151,7 @@ public class BuildFileGenerator implements Generator {
 
 			out.write("	<target name=\"jar\" depends=\"compile\">\n");
 			out.write("		<mkdir dir=\"${build.classes}/META-INF/\"/>\n");
-			
+	
 			writeFileCopyStatement(j2eewscontext.getMiscInfo().getJaxrpcfile(),out);
 			writeFileCopyStatement(j2eewscontext.getMiscInfo().getWsdlFile(),out);
 			writeFileCopyStatement(j2eewscontext.getMiscInfo().getWsconffile(),out);
@@ -183,7 +182,7 @@ public class BuildFileGenerator implements Generator {
 			}
 
 
-			String jarName = j2eewscontext.getMiscInfo().getTargetPortType().getName().toLowerCase();
+			String jarName = j2eewscontext.getWSDLContext().getTargetPortType().getName().toLowerCase();
 			int index = jarName.lastIndexOf(".");
 			if(index>0){
 				jarName = jarName.substring(index+1);
@@ -202,17 +201,16 @@ public class BuildFileGenerator implements Generator {
 			out.write("			</section>\n");
 			out.write("		</manifest>\n");
 			out.write("		</jar>\n");
-			if(jarfile != null){
-				out.write("     <java classname=\"org.apache.geronimo.ews.ws4j2ee.utils.packager.Packager\" fork=\"no\" >\n");
-				out.write("     	<arg value=\""+jarFile.getAbsolutePath()+"\"/>\n");
-				out.write("     	<classpath refid=\"classpath\" />\n");
-				for(int i = 0;i<classpathelements.size();i++){
-					out.write("     	<arg value=\""
-						+ ((File)classpathelements.get(i)).getAbsolutePath() + "\"/>\n");				
-				}
-				out.write("     	<arg value=\""	+ tempFile + "\"/>\n"); 
-				out.write("     </java>\n");
+			
+			out.write("     <java classname=\"org.apache.geronimo.ews.ws4j2ee.utils.packager.Packager\" fork=\"no\" >\n");
+			out.write("     	<arg value=\""+jarFile.getAbsolutePath()+"\"/>\n");
+			out.write("     	<classpath refid=\"classpath\" />\n");
+			for(int i = 0;i<classpathelements.size();i++){
+				out.write("     	<arg value=\""
+					+ ((File)classpathelements.get(i)).getAbsolutePath() + "\"/>\n");				
 			}
+			out.write("     	<arg value=\""	+ tempFile + "\"/>\n"); 
+			out.write("     </java>\n");
 //			out.write("		<delete dir=\"${build}\"/>\n");
 			out.write("	</target>\n");
 
@@ -228,34 +226,30 @@ public class BuildFileGenerator implements Generator {
 			String host = GenerationConstants.getProperty(GenerationConstants.AXIS_HOST);
 			String port = GenerationConstants.getProperty(GenerationConstants.AXIS_PORT);
 			
-			if(jarfile != null){
-				out.write("	<target name=\"deploy\" depends=\"jar\">\n");
-				if(webappsLib != null){
-					out.write("		<copy file=\""+ jarName + 
-						".jar\" todir=\""+webappsLib+"\"/>\n");
-				}
-				if(ejbDeploy != null){
-					out.write("		<copy file=\""+ jarName + 
-						".jar\" todir=\""+ejbDeploy+"\"/>\n");
-				}
-					
-				out.write("		<java classname=\"org.apache.axis.client.AdminClient\" fork=\"no\" >\n");
-				out.write("			<classpath refid=\"classpath\" />\n");
-				if(host != null){
-					out.write("			<arg value=\"-h\"/>\n");
-					out.write("			<arg value=\""+host+"\"/>\n");
-				}			
-				if(port != null){
-					out.write("			<arg value=\"-p\"/>\n");
-					out.write("			<arg value=\""+port+"\"/>\n"); 
-				}
-				out.write("			<arg value=\"deploy.wsdd\"/>\n");
-				out.write("		</java>\n");
-	
-				out.write("	</target>\n");
-			}else{
-				out.write("<!-- deploy task can be automated IFF the input is a jar -->\n");
+			out.write("	<target name=\"deploy\" depends=\"jar\">\n");
+			if(webappsLib != null){
+				out.write("		<copy file=\""+ jarName + 
+					".jar\" todir=\""+webappsLib+"\"/>\n");
 			}
+			if(ejbDeploy != null){
+				out.write("		<copy file=\""+ jarName + 
+					".jar\" todir=\""+ejbDeploy+"\"/>\n");
+			}
+				
+			out.write("		<java classname=\"org.apache.axis.client.AdminClient\" fork=\"no\" >\n");
+			out.write("			<classpath refid=\"classpath\" />\n");
+			if(host != null){
+				out.write("			<arg value=\"-h\"/>\n");
+				out.write("			<arg value=\""+host+"\"/>\n");
+			}			
+			if(port != null){
+				out.write("			<arg value=\"-p\"/>\n");
+				out.write("			<arg value=\""+port+"\"/>\n"); 
+			}
+			out.write("			<arg value=\"deploy.wsdd\"/>\n");
+			out.write("		</java>\n");
+
+			out.write("	</target>\n");
 			out.write("</project>\n");
 			out.close();
 		} catch (IOException e) {
@@ -271,15 +265,15 @@ public class BuildFileGenerator implements Generator {
 	}
 	
 	private void writeFileCopyStatement(InputOutputFile file,PrintWriter out) throws GenerationFault{
-		if(file != null){
-			String fileName = file.fileName();
-			if(fileName != null){
-				File absFile = new File(fileName);
-				if(absFile.exists())
-					out.write("		<copy file =\""+absFile.getAbsolutePath()+"\" todir=\"${build.classes}/META-INF\"/>\n");
-			} 
-		}
-
+		try{
+			if(file != null){
+				String fileName = file.fileName();
+				if(fileName != null){
+					File absFile = new File(fileName);
+					if(absFile.exists())
+						out.write("		<copy file =\""+absFile.getAbsolutePath()+"\" todir=\"${build.classes}/META-INF\"/>\n");
+				} 
+			}
+		}catch(Exception e){}
 	}
-
 }

@@ -55,80 +55,33 @@
 
 package org.apache.geronimo.ews.ws4j2ee.context;
 
-import java.io.InputStream;
-
-import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.geronimo.ews.jaxrpcmapping.J2eeEmitter;
 import org.apache.geronimo.ews.jaxrpcmapping.JaxRpcMapper;
-import org.apache.geronimo.ews.ws4j2ee.context.impl.InputOutputFileImpl;
-import org.apache.geronimo.ews.ws4j2ee.context.impl.J2EEWebServiceContextImpl;
-import org.apache.geronimo.ews.ws4j2ee.context.impl.JaxRpcMapperImpl;
-import org.apache.geronimo.ews.ws4j2ee.context.impl.MiscInfoImpl;
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.WSCFContextImpl;
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.WSCFException;
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
-import org.apache.geronimo.ews.ws4j2ee.context.wsdl.impl.AxisWSDLContext;
-import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
-import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenerationFault;
 
 /**
  * <p>This class decouple the concreate implementations of the
  * class from the rest of the code</p>
  * @author Srinath Perera(hemapani@opensource.lk)
  */
-public class ContextFactory {
-    private static J2EEWebServiceContext currentContext;
-    public static WSDLContext createWSDLContext(Object info) {
-        if (info instanceof SymbolTable)
-            return new AxisWSDLContext((SymbolTable) info);
-        throw new UnrecoverableGenerationFault("unknown context type");
-    }
-
-    public static JaxRpcMapperContext createJaxRpcMapperContext(Object[] info) {
-        if (info.length == 2
-            && info[0] instanceof JaxRpcMapper
-            && info[1] instanceof J2eeEmitter)
-            return new JaxRpcMapperImpl(
-                (JaxRpcMapper) info[0],
-                (J2eeEmitter) info[1]);
-        throw new UnrecoverableGenerationFault("unknown mapper type");
-    }
-
-    public static WSCFContext createWSCFContext(InputStream in)
-        throws GenerationFault {
-        try {
-            return new WSCFContextImpl(in);
-        } catch (WSCFException e) {
-            e.printStackTrace();
-            throw new GenerationFault(e.getMessage());
-        }
-    }
-
-    public static MiscInfo createMiscInfo() {
-        return new MiscInfoImpl();
-    }
-
-    public static J2EEWebServiceContext getCurrentJ2EEWsContext() {
-        return currentContext;
-    }
-    public static J2EEWebServiceContext getJ2EEWsContext(boolean hasWSDL) {
-        currentContext = new J2EEWebServiceContextImpl(hasWSDL);
-        return currentContext;
-    }
-
-    public static InputOutputFile getInputFile(
-        String fileName,
-        InputStream instream) {
-        return new InputOutputFileImpl(fileName, instream);
-    }
+public interface ContextFactory {
     
-	public static InputOutputFile getInputFile(
-		String fileName) throws GenerationFault {
-		return new InputOutputFileImpl(fileName);
-	}
-	public static InputOutputFile getInputFile(
-		InputStream instream) {
-		return new InputOutputFileImpl(instream);
-	}	
+    public WSDLContext createWSDLContext(Object info);
+
+	public JaxRpcMapperContext createJaxRpcMapperContext(JaxRpcMapper mapper,J2eeEmitter emitter);
+
+//    public WSCFContext createWSCFContext(InputStream in)throws GenerationFault;
+
+    public MiscInfo createMiscInfo();
+
+    public J2EEWebServiceContext getJ2EEWsContext(boolean hasWSDL);
+
+//    public InputOutputFile getInputFile(
+//        String fileName,
+//        InputStream instream) ;
+//    
+//	public  InputOutputFile getInputFile(
+//		String fileName) throws GenerationFault ;
+//	public  InputOutputFile getInputFile(
+//		InputStream instream);
 }

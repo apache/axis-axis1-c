@@ -58,14 +58,7 @@ package org.apache.geronimo.ews.ws4j2ee.context;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import javax.wsdl.Port;
-
-import org.apache.axis.wsdl.symbolTable.BindingEntry;
-import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
-import org.apache.axis.wsdl.symbolTable.ServiceEntry;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFHandler;
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
 
 /**
  * <p>This class interface the importent information about the webservice
@@ -85,23 +78,6 @@ public interface MiscInfo {
     public void setOutputPath(String outputpath);
     public String getOutPutPath();
     
-    /**
-     * WSDL artifacts correponds to the current WSCF port.
-     * If one element is in the wsdl theu are used. How to select them 
-     * if there is more than one is still to do.   
-     * @return
-     */
-    public ServiceEntry gettargetService();
-	public void settargetService(ServiceEntry service);
-
-    public BindingEntry gettargetBinding();
-	public void settargetBinding(BindingEntry binding);
-
-    public PortTypeEntry getTargetPortType();
-	public void setTargetPortType(PortTypeEntry port);
-
-	public void setTargetPort(Port port);
-	public Port getTargetPort();
     
 	/**
 	 * @return ArrayList of SEIOperations
@@ -117,39 +93,14 @@ public interface MiscInfo {
 	 * web service and the sessionless EJB. 
 	 * @return
 	 */    
-	public String getEjbName();
-	public void setEjbName(String string);
 
 	public String getJaxrpcSEI();
 	public void setJaxrpcSEI(String string);
-    
-	public String getEjblocalhome();
-	public void setEjblocalhome(String string);
 
-	public String getEjblocalsei();
-	public void setEjblocalsei(String string);
-	
-	public String getEjbsei();
-	public void setEjbsei(String string);
-
-	public void setEndpointImplbean(String string);
-	public String getEndpointImplbean();
-
-	public String getEjbhome();
-	public void setEjbhome(String string);
+	public String getJ2eeComponetLink();
+	public void setJ2eeComponetLink(String string);
 
 
-	/**
-	 * WSCF artifacts correponds to the current WSCF file.
-	 * If one element is in the wsdl theu are used. How to select them 
-	 * if there is more than one is still to do.   
-	 * @return
-	 */
-    public WSCFWebserviceDescription getWscfdWsDesxription();
-	public void setWscfdWsDescription(WSCFWebserviceDescription description);
-
-    public WSCFPortComponent getWscfport();
-    public void setWscfport(WSCFPortComponent component);
 
 	/**
 	 * Validate the Content of the Misc Info
@@ -159,12 +110,6 @@ public interface MiscInfo {
     public boolean isVerbose();
 	public void setVerbose(boolean b);
 	
-	/**
-	 * the root directory of the webservice.xml file.
-	 * @return
-	 */
-    public String getWsConfFileLocation();
-    public void setWsConfFileLocation(String string);
     
 	/**
 	 * The jaxrpc-file specifies a location of the WSDL description of
@@ -233,15 +178,13 @@ public interface MiscInfo {
 	public WSCFHandler[] getHandlers();
 	public void setHandlers(WSCFHandler[] handlers);
 	
-	/**
-	 * Name of the Input jar file
-	 */
-	public String getJarFileName();
-    public void setJarFileName(String string);
     /**
      * the class path elemnts added via jar,war,ear files this is a Vector of
      * java.io.File
      */
     public Vector getClasspathElements();
     public void setClassPathElements(Vector classpathelements);
+    
+	public ClassLoader getClassloader();
+	public void setClassloader(ClassLoader loader);
 }

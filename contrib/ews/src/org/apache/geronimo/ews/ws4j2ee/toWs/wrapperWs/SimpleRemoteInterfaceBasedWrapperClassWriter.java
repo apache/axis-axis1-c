@@ -64,7 +64,7 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 /**
  * @author Srinath Perera(hemapani@opensource.lk)
  */
-public abstract class SimpleRemoteInterfaceBasedWrapperClassWriter extends WrapperClassWriter{
+public abstract class SimpleRemoteInterfaceBasedWrapperClassWriter extends EJBBasedWrapperClassWriter{
 
 	/**
 	 * @param j2eewscontext
@@ -73,6 +73,7 @@ public abstract class SimpleRemoteInterfaceBasedWrapperClassWriter extends Wrapp
 	public SimpleRemoteInterfaceBasedWrapperClassWriter(J2EEWebServiceContext j2eewscontext)
 		throws GenerationFault {
 		super(j2eewscontext);
+		seiName = context.getEjbRemoteInterface();
 	}
     
 	protected abstract String getJNDIInitialContextFactory();
@@ -175,13 +176,13 @@ public abstract class SimpleRemoteInterfaceBasedWrapperClassWriter extends Wrapp
 //  			"ploader.loadProperties(\"jndi.properties\");\n");
 		
 	   out.write("\t\t\tjavax.naming.Context initial = new javax.naming.InitialContext(env);\n");		
-	   String ejbname = j2eewscontext.getMiscInfo().getTargetPortType().getName().toLowerCase();
+	   String ejbname = j2eewscontext.getWSDLContext().getTargetPortType().getName().toLowerCase();
 		int index = ejbname.lastIndexOf(".");
 		if(index>0){
 		  ejbname = ejbname.substring(index+1);
 		} 
 	   out.write("\t\t\tObject objref = initial.lookup(\"ejb/"+ejbname+"\");\n");
-	   String ejbhome = j2eewscontext.getMiscInfo().getEjbhome();
+	   String ejbhome = j2eewscontext.getEJBDDContext().getEjbhomeInterface();
 	   out.write("\t\t\t"+ejbhome+" home = \n\t\t\t\t("+ejbhome
 		   +")javax.rmi.PortableRemoteObject.narrow(objref,"+ejbhome+".class);\n");
 	   out.write("\t\t\treturn home.create();\n");

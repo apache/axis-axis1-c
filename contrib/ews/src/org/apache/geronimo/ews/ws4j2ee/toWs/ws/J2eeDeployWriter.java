@@ -96,7 +96,7 @@ import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.toJava.Emitter;
 import org.apache.axis.wsdl.toJava.JavaWriter;
 import org.apache.axis.wsdl.toJava.Utils;
-import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
+import org.apache.geronimo.ews.jaxrpcmapping.J2eeEmitter;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFHandler;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFInitParam;
@@ -106,7 +106,7 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
  * This is Wsdl2java's deploy Writer.  It writes the deploy.wsdd file.
  */
 public class J2eeDeployWriter  extends JavaWriter{
-
+	
 	/** Field definition */
 	protected Definition definition;
 
@@ -127,7 +127,10 @@ public class J2eeDeployWriter  extends JavaWriter{
 		super(emitter, "deploy");
 		this.definition = definition;
 		this.symbolTable = symbolTable;
-		this.wscontext = ContextFactory.getCurrentJ2EEWsContext();
+		wscontext =((J2eeEmitter)emitter).getWscontext();
+		if(wscontext == null){
+			throw new RuntimeException("wscontext can not be null");
+		} 
 	}    // ctor
 
 	/**

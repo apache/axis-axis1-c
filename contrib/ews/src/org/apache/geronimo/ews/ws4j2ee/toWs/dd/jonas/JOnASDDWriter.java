@@ -64,20 +64,12 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
  */
 public class JOnASDDWriter extends AbstractWriter {
 	public JOnASDDWriter(J2EEWebServiceContext j2eewscontext) throws GenerationFault {
-		super(j2eewscontext);
+		super(j2eewscontext,j2eewscontext.getMiscInfo().getOutPutPath() +
+			"/ejb/META-INF/JonAs.xml");
 	}
 
-	public String getFileName() {
-		return j2eewscontext.getMiscInfo().getOutPutPath() +
-				"/ejb/META-INF/JonAs.xml";
-	}
-
-	/* (non-Javadoc)
-	 * @see org.apache.geronimo.ews.ws4j2ee.toWs.Writer#writeCode()
-	 */
 	public void writeCode() throws GenerationFault {
-		super.writeCode();
-		String ejbname = j2eewscontext.getMiscInfo().getTargetPortType().getName().toLowerCase();
+		String ejbname = j2eewscontext.getWSDLContext().getTargetPortType().getName().toLowerCase();
 		int index = ejbname.lastIndexOf(".");
 		if(index>0){
 		  ejbname = ejbname.substring(index+1);
@@ -88,11 +80,11 @@ public class JOnASDDWriter extends AbstractWriter {
 		out.write("               xsi:schemaLocation=\"http://www.objectweb.org/jonas/ns\"\n");
 		out.write("                                    http://www.objectweb.org/jonas/ns/jonas-ejb-jar_4_0.xsd\">\n");
 		out.write("	<jonas-session>\n");
-		out.write("	  <ejb-name>" + j2eewscontext.getMiscInfo().getEjbName() + "</ejb-name>\n");
+		out.write("	  <ejb-name>" + j2eewscontext.getMiscInfo().getJ2eeComponetLink() + "</ejb-name>\n");
 		String implStyle = j2eewscontext.getMiscInfo().getImplStyle();
 		if( GenerationConstants.USE_LOCAL_AND_REMOTE.equals(implStyle)
 				|| GenerationConstants.USE_REMOTE.equals(implStyle)){
-				out.write("	  <jndi-name>" + j2eewscontext.getMiscInfo().getEjbName() + "</jndi-name>\n");
+				out.write("	  <jndi-name>" + j2eewscontext.getMiscInfo().getJ2eeComponetLink() + "</jndi-name>\n");
 		}
 		if(GenerationConstants.USE_LOCAL_AND_REMOTE.equals(implStyle)
 			|| GenerationConstants.USE_LOCAL.equals(implStyle)){
@@ -101,6 +93,5 @@ public class JOnASDDWriter extends AbstractWriter {
 		}
 		out.write("	</jonas-session>\n");
 		out.write("</jonas-ejb-jar>\n");
-		out.close();
 	}
 }

@@ -58,60 +58,48 @@ package org.apache.geronimo.ews.ws4j2ee.context.impl;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import javax.wsdl.Port;
-
-import org.apache.axis.wsdl.symbolTable.BindingEntry;
-import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
-import org.apache.axis.wsdl.symbolTable.ServiceEntry;
 import org.apache.geronimo.ews.ws4j2ee.context.InputOutputFile;
 import org.apache.geronimo.ews.ws4j2ee.context.MiscInfo;
 import org.apache.geronimo.ews.ws4j2ee.context.SEIOperation;
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFHandler;
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
+import org
+    .apache
+    .geronimo
+    .ews
+    .ws4j2ee
+    .context
+    .webservices
+    .server
+    .interfaces
+    .WSCFHandler;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
-import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenerationFault;
 
 /**
  * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class MiscInfoImpl implements MiscInfo {
-    private WSCFWebserviceDescription wscfdWsDesxription;
-    private WSCFPortComponent wscfport;
+    private ClassLoader classloader;
     private boolean implwithEJB = true;
-	/* if Impl is avalible the class need not to be created agaien*/
-	private boolean implAvalible = false;
-	private String jarFileName;
-	
+    /* if Impl is avalible the class need not to be created agaien*/
+    private boolean implAvalible = true;
+
     private String outputPath = ".";
+    private String j2eelink;
+    private String seiname;
 
-    private ServiceEntry service;
-    private BindingEntry binding;
-    private PortTypeEntry portType;
-    private Port port;
-
-    private String ejbsei = null;
-    private String ejbbean = null;
-    private String ejbhome = null;
-	private String ejblocalsei = null;
-	//private String ejblocalbean = null;
-	private String ejblocalhome = null;
-    private String ejbName = null;
-    private String axisSEI;
     private ArrayList operations;
     private boolean verbose = false;
     private String wsConfFileLocation;
-    
+
     private InputOutputFile wsdlFile;
     private InputOutputFile jaxrpcfile;
     private InputOutputFile wsconffile;
-    
+
     private String targetJ2EEContainer = GenerationConstants.JBOSS_CONTAINER;
     private String implStyle = GenerationConstants.USE_LOCAL_AND_REMOTE;
     private boolean seiExists = false;
     private Vector classpathelements;
-    
+
     private WSCFHandler[] handlers;
     public MiscInfoImpl() {
         operations = new ArrayList();
@@ -127,107 +115,12 @@ public class MiscInfoImpl implements MiscInfo {
         outputPath = string;
     }
 
-    public BindingEntry gettargetBinding() {
-        return binding;
-    }
-
-    public PortTypeEntry getTargetPortType() {
-        return portType;
-    }
-
-    public ServiceEntry gettargetService() {
-        return service;
-    }
-
-    public void settargetBinding(BindingEntry binding) {
-        this.binding = binding;
-    }
-
-    public void setTargetPortType(PortTypeEntry port) {
-        this.portType = port;
-    }
-
-    public void settargetService(ServiceEntry service) {
-        this.service = service;
-    }
-
     public void validate() {
-        if (portType == null || binding == null
-                //|| ejbbean == null || ejbsei == null || ejbhome == null
-                 ) {
-            throw new UnrecoverableGenerationFault("validation of MiscInfo failed");
-        }
     }
 
     /**
      * @return 
      */
-    public String getEndpointImplbean() {
-        return ejbbean;
-    }
-
-    /**
-     * @return 
-     */
-    public String getEjbsei() {
-        return ejbsei;
-    }
-
-    /**
-     * @param string 
-     */
-    public void setEndpointImplbean(String string) {
-        ejbbean = string;
-    }
-
-    /**
-     * @param string 
-     */
-    public void setEjbsei(String string) {
-        ejbsei = string;
-    }
-
-    /**
-     * @return 
-     */
-    public String getEjbhome() {
-        return ejbhome;
-    }
-
-    /**
-     * @param string 
-     */
-    public void setEjbhome(String string) {
-        ejbhome = string;
-    }
-
-    /**
-     * @return 
-     */
-    public WSCFWebserviceDescription getWscfdWsDesxription() {
-        return wscfdWsDesxription;
-    }
-
-    /**
-     * @return 
-     */
-    public WSCFPortComponent getWscfport() {
-        return wscfport;
-    }
-
-    /**
-     * @param description 
-     */
-    public void setWscfdWsDescription(WSCFWebserviceDescription description) {
-        wscfdWsDesxription = description;
-    }
-
-    /**
-     * @param component 
-     */
-    public void setWscfport(WSCFPortComponent component) {
-        wscfport = component;
-    }
 
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#getSEIOperations()
@@ -274,15 +167,15 @@ public class MiscInfoImpl implements MiscInfo {
     /**
      * @return 
      */
-    public String getEjbName() {
-        return ejbName;
+    public String getJ2eeComponetLink() {
+        return j2eelink;
     }
 
     /**
      * @param string 
      */
-    public void setEjbName(String string) {
-        ejbName = string;
+    public void setJ2eeComponetLink(String string) {
+        j2eelink = string;
     }
 
     /**
@@ -313,32 +206,18 @@ public class MiscInfoImpl implements MiscInfo {
         wsdlFile = string;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#getTargetPort()
-     */
-    public Port getTargetPort() {
-        return port;
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#setTargetPort(javax.wsdl.Port)
-     */
-    public void setTargetPort(Port port) {
-        this.port = port;
-    }
-
     /**
      * @return 
      */
     public String getJaxrpcSEI() {
-        return axisSEI;
+        return seiname;
     }
 
     /**
      * @param string 
      */
     public void setJaxrpcSEI(String string) {
-        axisSEI = string;
+        seiname = string;
     }
 
     /**
@@ -372,34 +251,6 @@ public class MiscInfoImpl implements MiscInfo {
     /**
      * @return
      */
-    public String getEjblocalhome() {
-        return ejblocalhome;
-    }
-
-    /**
-     * @return
-     */
-    public String getEjblocalsei() {
-        return ejblocalsei;
-    }
-
-    /**
-     * @param string
-     */
-    public void setEjblocalhome(String string) {
-        ejblocalhome = string;
-    }
-
-    /**
-     * @param string
-     */
-    public void setEjblocalsei(String string) {
-        ejblocalsei = string;
-    }
-
-    /**
-     * @return
-     */
     public boolean isImplwithEJB() {
         return implwithEJB;
     }
@@ -425,19 +276,19 @@ public class MiscInfoImpl implements MiscInfo {
         this.implAvalible = b;
     }
 
-	/**
-	 * @return
-	 */
-	public InputOutputFile getWsconffile() {
-		return wsconffile;
-	}
+    /**
+     * @return
+     */
+    public InputOutputFile getWsconffile() {
+        return wsconffile;
+    }
 
-	/**
-	 * @param string
-	 */
-	public void setWsconffile(InputOutputFile string) {
-		wsconffile = string;
-	}
+    /**
+     * @param string
+     */
+    public void setWsconffile(InputOutputFile string) {
+        wsconffile = string;
+    }
 
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#getHandlers()
@@ -450,21 +301,7 @@ public class MiscInfoImpl implements MiscInfo {
      * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#setHandlers(org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFHandler[])
      */
     public void setHandlers(WSCFHandler[] handlers) {
-		this.handlers = handlers;        
-    }
-
-    /**
-     * @return
-     */
-    public String getJarFileName() {
-        return jarFileName;
-    }
-
-    /**
-     * @param string
-     */
-    public void setJarFileName(String string) {
-        jarFileName = string;
+        this.handlers = handlers;
     }
 
     /* (non-Javadoc)
@@ -478,7 +315,7 @@ public class MiscInfoImpl implements MiscInfo {
      * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#setSEIExists()
      */
     public void setSEIExists(boolean seiExists) {
-		this.seiExists = seiExists;
+        this.seiExists = seiExists;
     }
 
     /* (non-Javadoc)
@@ -492,8 +329,20 @@ public class MiscInfoImpl implements MiscInfo {
      * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#setClassPathElements()
      */
     public void setClassPathElements(Vector classpathelements) {
-		this.classpathelements = classpathelements;
+        this.classpathelements = classpathelements;
+    }
+    /**
+     * @return
+     */
+    public ClassLoader getClassloader() {
+        return classloader;
+    }
 
+    /**
+     * @param loader
+     */
+    public void setClassloader(ClassLoader loader) {
+        classloader = loader;
     }
 
 }

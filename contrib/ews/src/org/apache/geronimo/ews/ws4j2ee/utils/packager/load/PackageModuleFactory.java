@@ -16,7 +16,10 @@
 
 package org.apache.geronimo.ews.ws4j2ee.utils.packager.load;
 
+import java.io.File;
+
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
+import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenerationFault;
 
 /**
  * @author Srinath Perera(hemapani@opensource.lk)
@@ -30,17 +33,26 @@ public class PackageModuleFactory {
      * @throws GenerationFault
      */
     public static PackageModule createPackageModule(
-        String path,boolean firstmodule)throws GenerationFault {
-        if (path != null) {
-            if (path.endsWith(".jar") || path.endsWith(".JAR"))
-                return new JarPackageModule(path, firstmodule);
-            else if (path.endsWith(".war") || path.endsWith(".WAR"))
-                return new WARPackageModule(path, firstmodule);
-            else if (path.endsWith(".ear") || path.endsWith(".EAR"))
-                return new EARPackageModule(path, firstmodule);
-            else
-                throw new GenerationFault("unknown type of file");
+        String path,boolean firstmodule)throws UnrecoverableGenerationFault{
+        try {
+            if (path != null) {
+            	File file = new File(path);
+            	if(file.isDirectory()){
+            		return new DirPackageModule(path);
+            	}else if (path.endsWith(".jar") || path.endsWith(".JAR"))
+                    return new JarPackageModule(path, firstmodule);
+                else if (path.endsWith(".war") || path.endsWith(".WAR"))
+                    return new WARPackageModule(path, firstmodule);
+                else if (path.endsWith(".ear") || path.endsWith(".EAR"))
+                    return new EARPackageModule(path, firstmodule);
+                else if(path.endsWith(".xml"))
+					return new DirPackageModule(new File(path));
+                else
+					throw new UnrecoverableGenerationFault("unknown type of file");
+            }
+        } catch (GenerationFault e) {
+            throw new UnrecoverableGenerationFault(e);
         }
-        throw new GenerationFault("path is null");
+        throw new UnrecoverableGenerationFault("path is null");
     }
 }

@@ -62,6 +62,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
+import org.apache.geronimo.ews.ws4j2ee.context.impl.EJBDDContextImpl;
+import org.apache.geronimo.ews.ws4j2ee.context.j2eeDD.EJBContext;
 import org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd.EjbJar;
 import org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd.EjbJarType.EnterpriseBeansType.Session;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
@@ -73,6 +75,7 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 public class EJBDDParser {
 	private J2EEWebServiceContext j2eewscontext;
 	private String ejbName = null;
+	private EJBContext context;
 
 	public EJBDDParser(J2EEWebServiceContext j2eewscontext) {
 		this.j2eewscontext = j2eewscontext;
@@ -91,11 +94,24 @@ public class EJBDDParser {
 				return;
 			Session session = (Session) sessions.get(0);
 			ejbName = session.getEjbName().getValue();
-			j2eewscontext.getMiscInfo().setEjbName(ejbName);
-			j2eewscontext.getMiscInfo().setEndpointImplbean(session.getEjbClass().getValue());
-			j2eewscontext.getMiscInfo().setEjbhome(session.getHome().getValue());
+			
+			context = new EJBDDContextImpl(ejbName,session.getEjbClass().getValue(),session.getHome().getValue(),null,null,null);
 		} catch (Exception e) {
 			throw GenerationFault.createGenerationFault(e);
 		}
 	}
+    /**
+     * @return
+     */
+    public EJBContext getContext() {
+        return context;
+    }
+
+    /**
+     * @param context
+     */
+    public void setContext(EJBContext context) {
+        this.context = context;
+    }
+
 }

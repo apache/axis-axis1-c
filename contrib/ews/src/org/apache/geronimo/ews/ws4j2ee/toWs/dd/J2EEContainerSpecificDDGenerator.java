@@ -85,6 +85,6 @@ public class J2EEContainerSpecificDDGenerator implements Generator {
 
     public void generate() throws GenerationFault {
     	if(writer != null)
-			writer.writeCode();
+			writer.write();
     }
 }

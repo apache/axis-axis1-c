@@ -59,10 +59,10 @@ import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.commons.logging.Log;
 import org.apache.geronimo.ews.jaxrpcmapping.J2eeEmitter;
 import org.apache.geronimo.ews.jaxrpcmapping.JaxRpcMapper;
-import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
+import org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2eeFactory;
 
 /**
  * <p>This genarated the Server side SEI and other classes required in the
@@ -90,11 +90,13 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
  */
 public class ServerSideWsGenerator implements Generator {
     private J2EEWebServiceContext j2eewscontext;
+	private Ws4J2eeFactory factory;
     protected static Log log =
         LogFactory.getLog(ServerSideWsGenerator.class.getName());
 
     public ServerSideWsGenerator(J2EEWebServiceContext j2eewscontext) {
         this.j2eewscontext = j2eewscontext;
+		factory = j2eewscontext.getFactory();
     }
 
     public void generate() throws GenerationFault {
@@ -104,7 +106,9 @@ public class ServerSideWsGenerator implements Generator {
                 j2eewscontext.getMiscInfo().getJaxrpcfile().fileName();
             String wsdlfile =
                 j2eewscontext.getMiscInfo().getWsdlFile().fileName();
-            J2eeEmitter j2ee = new J2eeEmitter(true,!j2eewscontext.getMiscInfo().isSEIExists());
+			
+            J2eeEmitter j2ee = new J2eeEmitter(true,
+            	!j2eewscontext.getMiscInfo().isSEIExists(),j2eewscontext);
 
             if (j2eewscontext.getMiscInfo().isVerbose()) {
                 log.info("wsdl file = " + wsdlfile);
@@ -123,12 +127,12 @@ public class ServerSideWsGenerator implements Generator {
 
             SymbolTable axisSymboltable = j2ee.getSymbolTable();
             j2eewscontext.setWSDLContext(
-                ContextFactory.createWSDLContext(axisSymboltable));
+				factory.getContextFactory().createWSDLContext(axisSymboltable));
 
             JaxRpcMapper mapper = j2ee.getJaxRpcMapper();
             j2eewscontext.setJAXRPCMappingContext(
-                ContextFactory.createJaxRpcMapperContext(
-                    new Object[] { mapper, j2ee }));
+				factory.getContextFactory().createJaxRpcMapperContext(
+                   mapper, j2ee));
 
         } catch (Exception e) {
             if (e instanceof RuntimeException) {

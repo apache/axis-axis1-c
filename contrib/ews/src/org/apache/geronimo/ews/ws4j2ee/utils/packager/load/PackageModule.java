@@ -36,4 +36,5 @@ public interface PackageModule {
     public void setWscfFile(InputStream stream) throws GenerationFault;
     public ClassLoader getClassLoaderWithPackageLoaded() throws GenerationFault;
     public Vector getClassPathElements() throws GenerationFault;
+    public InputStream findFileInModule(String path)throws GenerationFault;
 }

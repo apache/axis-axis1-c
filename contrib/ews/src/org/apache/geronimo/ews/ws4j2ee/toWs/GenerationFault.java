@@ -55,8 +55,6 @@
 
 package org.apache.geronimo.ews.ws4j2ee.toWs;
 
-import java.io.FileWriter;
-import java.io.PrintWriter;
 
 /**
  * <p>This denotes the Exception occured at the code genaration.
@@ -77,17 +75,8 @@ public class GenerationFault extends Exception {
 
     private GenerationFault(Exception e) {
         initCause(null); // Disallow subsequent initCause
-//        setStackTrace(e.getStackTrace());
+        setStackTrace(e.getStackTrace());
         detail = e;
-        try{
-			PrintWriter w = new PrintWriter(new FileWriter("error.log"));
-			e.printStackTrace(w);
-			w.flush();
-			w.close();
-        }catch(Exception e1){
-	        
-        }
-
     }
 
     public GenerationFault(String message) {
@@ -104,7 +93,7 @@ public class GenerationFault extends Exception {
     public GenerationFault(String s, Throwable ex) {
         initCause(null); // Disallow subsequent initCause
 		detail = ex;
-//		setStackTrace(ex.getStackTrace());
+		setStackTrace(ex.getStackTrace());
     }
 
     /**
@@ -117,8 +106,7 @@ public class GenerationFault extends Exception {
         if (detail == null) {
             return super.getMessage();
         } else {
-			return super.getMessage() +
-                    detail.getMessage();
+			return detail.getMessage();
         }
     }
 
@@ -135,8 +123,6 @@ public class GenerationFault extends Exception {
     public static GenerationFault createGenerationFault(Exception e) {
         if (e instanceof GenerationFault) {
             return (GenerationFault) e;
-//        }else if(e instanceof RuntimeException){
-//        	return (RuntimeException)e;
         } else
             return new GenerationFault(e);
     }

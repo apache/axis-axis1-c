@@ -55,7 +55,6 @@
 
 package org.apache.geronimo.ews.ws4j2ee.toWs;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
@@ -68,32 +67,25 @@ import org.apache.axis.utils.CLOptionDescriptor;
 import org.apache.axis.utils.CLUtil;
 import org.apache.axis.utils.ClassUtils;
 import org.apache.axis.wsdl.fromJava.Emitter;
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
-import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
+import org.apache.geronimo.ews.ws4j2ee.utils.packager.load.PackageModule;
+import org.apache.geronimo.ews.ws4j2ee.utils.packager.load.PackageModuleFactory;
 
 
 
 /**
  * @author hemapani
  */
-public class Ws4J2eeWtihoutWSDLCLOptionParser {
-	private String wscfFileLocation;
-	private String wjbConfFileLocation;
-	private String webConfFileLocation;
+public class Ws4J2eeServerCLOptionParser {
+	private PackageModule module;
 	private String outPutLocation;
-	private WSCFWebserviceDescription[] wscfwsdis;
+	private String moduleLocation = null;
+	private String implStyle = GenerationConstants.USE_LOCAL_AND_REMOTE;
+	private String contanier = GenerationConstants.JBOSS_CONTAINER;
+
+
 	private String[] args;
 	private int indexToChange = -1;
 	 
-	public String getWSCFFileLocation(){
-		return wscfFileLocation;
-	}
-	public String getEjbConfFileLocation(){
-		return wjbConfFileLocation;
-	}
-	public String getWebConfFileLocation(){
-		return webConfFileLocation;
-	}
     /**
      * @return
      */
@@ -186,6 +178,10 @@ public class Ws4J2eeWtihoutWSDLCLOptionParser {
 
 	 /** Field STYLE_OPT */
 	 protected static final int STYLE_OPT = 'y';
+	 
+	protected static final int IMPL_STYLE_OPT = 'E';
+	protected static final int CONTAINER_OPT = 'J';
+
 
 	 /**
 	  * Define the understood options. Each CLOptionDescriptor contains:
@@ -295,7 +291,16 @@ public class Ws4J2eeWtihoutWSDLCLOptionParser {
 		 new CLOptionDescriptor("classpath",
 				 CLOptionDescriptor.ARGUMENT_OPTIONAL,
 				 CLASSPATH_OPT,
-				 Messages.getMessage("optionClasspath"))
+				 Messages.getMessage("optionClasspath")),
+		new CLOptionDescriptor("implStyle",
+					   CLOptionDescriptor.ARGUMENT_REQUIRED,
+					   IMPL_STYLE_OPT,
+					   "impelemtation Style"),  
+		new CLOptionDescriptor("container",
+							   CLOptionDescriptor.ARGUMENT_REQUIRED,
+							   CONTAINER_OPT,
+							   "the J2EE contianer")   					         
+
 	 };
 
 	 /** Field emitter */
@@ -322,7 +327,7 @@ public class Ws4J2eeWtihoutWSDLCLOptionParser {
 	 /**
 	  * Instantiate a Java2WSDL emitter.
 	  */
-	 public Ws4J2eeWtihoutWSDLCLOptionParser(String[] args,Emitter emitter) {
+	 public Ws4J2eeServerCLOptionParser(String[] args,Emitter emitter) {
 		 this.emitter = emitter;
 		// Parse the arguments
 		CLArgsParser argsParser = new CLArgsParser(args, options);
@@ -355,19 +360,9 @@ public class Ws4J2eeWtihoutWSDLCLOptionParser {
 			if (!namespaceMap.isEmpty()) {
 				emitter.setNamespaceMap(namespaceMap);
 			}
-		if(outPutLocation == null)
-			outPutLocation = Utils.getRootDirOfFile(wscfFileLocation);
-		
-		File file = new File(outPutLocation+"/META-INF");
-		if (!file.exists())
-			file.mkdirs();
-		//the other two files are considered to be at the same directory as the 
-		 //wscf file	
-		wjbConfFileLocation = Utils.getRootDirOfFile(wscfFileLocation)+"/ejb-jar.xml";
-		webConfFileLocation = Utils.getRootDirOfFile(wscfFileLocation)+"/web.xml";
 	 }    // ctor
 
-	public Ws4J2eeWtihoutWSDLCLOptionParser(Emitter emitter) {
+	public Ws4J2eeServerCLOptionParser(Emitter emitter) {
 		this.emitter = emitter;
 		emitter.setLocationUrl("http://127.0.0.1");
 	}
@@ -407,7 +402,7 @@ public class Ws4J2eeWtihoutWSDLCLOptionParser {
 
 		 switch (option.getId()) {
 			 case CLOption.TEXT_ARGUMENT:
-				 if (wscfFileLocation != null) {
+				 if (moduleLocation != null) {
 					 System.out.println(
 							 Messages.getMessage(
 									 "j2wDuplicateClass00", className,
@@ -417,9 +412,9 @@ public class Ws4J2eeWtihoutWSDLCLOptionParser {
 					 status = false;    // error
 				 }
 
-			     wscfFileLocation = option.getArgument();
-				 
-				 break;
+				moduleLocation = option.getArgument();
+				module = PackageModuleFactory.createPackageModule(moduleLocation,true); 
+				break;
 
 			 case METHODS_ALLOWED_OPT:
 				 emitter.setAllowedMethods(option.getArgument());
@@ -599,6 +594,13 @@ public class Ws4J2eeWtihoutWSDLCLOptionParser {
 						 option.getArgument(),
 						 this.getClass().getClassLoader()));
 				 break;
+			case IMPL_STYLE_OPT: 
+				this.implStyle = option.getArgument();
+				break;	 
+			case CONTAINER_OPT: 
+				this.contanier = option.getArgument();
+				break;	 	 
+	 
 
 			 default :
 				 break;
@@ -624,14 +626,14 @@ public class Ws4J2eeWtihoutWSDLCLOptionParser {
 //			 return false;
 //		 }
 
-		 if (!locationSet
-				 && ((mode == Emitter.MODE_ALL)
-				 || (mode == Emitter.MODE_IMPLEMENTATION))) {
-			 System.out.println(Messages.getMessage("j2wMissingLocation00"));
-			 printUsage();
-
-			 return false;
-		 }
+//		 if (!locationSet
+//				 && ((mode == Emitter.MODE_ALL)
+//				 || (mode == Emitter.MODE_IMPLEMENTATION))) {
+//			 System.out.println(Messages.getMessage("j2wMissingLocation00"));
+//			 printUsage();
+//
+//			 return false;
+//		 }
 
 		 // Default to SOAP 1.2 JAX-RPC mapping
 		 if (emitter.getDefaultTypeMapping() == null) {
@@ -719,6 +721,62 @@ public class Ws4J2eeWtihoutWSDLCLOptionParser {
      */
     public void setWsdlImplFilename(String string) {
         wsdlImplFilename = string;
+    }
+
+    /**
+     * @return
+     */
+    public PackageModule getModule() {
+        return module;
+    }
+
+    /**
+     * @return
+     */
+    public String getModuleLocation() {
+        return moduleLocation;
+    }
+
+    /**
+     * @param module
+     */
+    public void setModule(PackageModule module) {
+        this.module = module;
+    }
+
+    /**
+     * @param string
+     */
+    public void setModuleLocation(String string) {
+        moduleLocation = string;
+    }
+
+    /**
+     * @return
+     */
+    public String getContanier() {
+        return contanier;
+    }
+
+    /**
+     * @return
+     */
+    public String getImplStyle() {
+        return implStyle;
+    }
+
+    /**
+     * @param string
+     */
+    public void setContanier(String string) {
+        contanier = string;
+    }
+
+    /**
+     * @param string
+     */
+    public void setImplStyle(String string) {
+        implStyle = string;
     }
 
 }

@@ -68,5 +68,5 @@ public interface Writer {
      * The method writeCode() of the Writer should write the file Associated
      * with this writer.
      */
-    public abstract void writeCode() throws GenerationFault;
+    public abstract void write() throws GenerationFault;
 }

@@ -69,7 +69,7 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
  * to the element tree which is rooted at WSCFDocument.
  *
  */
-public class WSCFContextImpl implements WSCFContext {
+public class WSCFContextImpl extends AbstractWSCFContext implements WSCFContext {
 	
 	/**
 	 * This reference will be the pointer to the element tree.

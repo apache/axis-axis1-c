@@ -60,12 +60,9 @@ import junit.framework.Assert;
 
 import org.apache.geronimo.ews.AbstractTestCase;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
-import org.apache.geronimo.ews.ws4j2ee.context.JaxRpcMapperContext;
-import org.apache.geronimo.ews.ws4j2ee.context.MiscInfo;
-import org.apache.geronimo.ews.ws4j2ee.context.impl.MiscInfoImpl;
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext;
-import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
 import org.apache.geronimo.ews.ws4j2ee.parsers.WebDDParser;
+
+import testData.MockWs4J2eeContext;
 
 /**
  * @author hemapani
@@ -79,18 +76,7 @@ public class WebDDTest extends AbstractTestCase{
     }
 
 	public void testWebDD() throws Exception{
-		J2EEWebServiceContext con = new J2EEWebServiceContext() {
-			public WSDLContext getWSDLContext() {return null;}
-			public void setWSDLContext(WSDLContext wsdlcontext) {}
-			public WSCFContext getWSCFContext() {return null;}
-			public void setWSCFContext(WSCFContext wscfcontext) {}
-			public JaxRpcMapperContext getJAXRPCMappingContext() {return null;}
-			public void setJAXRPCMappingContext(JaxRpcMapperContext context) {}
-			public MiscInfo getMiscInfo() {return new MiscInfoImpl();}
-			public void setMiscInfo(MiscInfo info) {}
-			public void validate() {
-			}
-		};
+	   J2EEWebServiceContext con = new MockWs4J2eeContext();
 	   WebDDParser pars = new WebDDParser(con);
 	   pars.parse(new FileInputStream(getTestFile(sampleDir + "servlet/math/web.xml")));
 	   Assert.assertEquals("org.apache.axis.transport.http.AxisServlet",pars.getServletClass()); 

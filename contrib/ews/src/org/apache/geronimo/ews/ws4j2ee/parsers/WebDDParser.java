@@ -60,6 +60,8 @@ import java.io.InputStream;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
+import org.apache.geronimo.ews.ws4j2ee.context.impl.WebDDContextImpl;
+import org.apache.geronimo.ews.ws4j2ee.context.j2eeDD.WebContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 import org.w3c.dom.Document;
@@ -83,6 +85,7 @@ import org.w3c.dom.NodeList;
  */
 public class WebDDParser {
 	private J2EEWebServiceContext j2eewscontext;
+	private WebContext context;
 	private String servletClass = null;
 	private String servletName = null;
 
@@ -105,6 +108,7 @@ public class WebDDParser {
 				servName = serv.getElementsByTagName("servlet-name");
 				servletName = Utils.getElementValue(servName.item(0));
 			}
+			context = new WebDDContextImpl(servletClass,servletName);
 		} catch (Exception e) {
 			throw GenerationFault.createGenerationFault(e);
 		}
@@ -124,5 +128,19 @@ public class WebDDParser {
 	public void setServletClass(String string) {
 		servletClass = string;
 	}
+
+    /**
+     * @return
+     */
+    public WebContext getContext() {
+        return context;
+    }
+
+    /**
+     * @param context
+     */
+    public void setContext(WebContext context) {
+        this.context = context;
+    }
 
 }

@@ -58,89 +58,70 @@ package org.apache.geronimo.ews.ws4j2ee.utils.packager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 
-/**
- * <p>Package the ws4j2ee genarated classes. For the time been a file
- * with the list of classes should be given as input and the compilation of the
- * class should be done by the user. Let us see what is the best way.</p>
- * 
- * @author Srinath Perera(hemapani@opensorce.lk)
- */
 public class Packager {
-    public static String JARCONF_FILE = "jarinfo.txt";
-    private JARFile ejbjar = null;
-    private JARFile jaxrpcjar = null;
+    private String[] args;
 
-    public Packager() {
-        ejbjar = new JARFile(new File("x-ejb.jar"));
-        jaxrpcjar = new JARFile(new File("x-jaxrpc.jar"));
-		InputStream in = Packager.class.getClassLoader()
-					.getResourceAsStream("org.apache.axis.deployment.wsdd.Provider");
-        JARFileEntry jentry1 
-        	= new JARFileEntry("META-INF/services/org.apache.axis.deployment.wsdd.Provider",in);
-		in = Packager.class.getClassLoader()
-					.getResourceAsStream("org/apache/axis/deployment/wsdd/WSDDJavaJ2EEProvider.class");
-        JARFileEntry jentry2 = new JARFileEntry("org.apache.axis.deployment.wsdd.WSDDJavaJ2EEProvider.class",in);
-		in = Packager.class.getClassLoader()
-					.getResourceAsStream("org/apache/axis/J2EEProvider.class");
-        JARFileEntry jentry3 = new JARFileEntry("org.apache.axis.J2EEProvider.class",in);
-
-        jaxrpcjar.addJarEntry(jentry1);
-        jaxrpcjar.addJarEntry(jentry2);
-        jaxrpcjar.addJarEntry(jentry3);
+    public Packager(String[] args) throws GenerationFault {
+        this.args = args;
     }
 
-    public static void main(String[] args) {
+    public void createJar() throws GenerationFault {
         try {
             JARFile jfile = new JARFile(new File(args[0]));
-            for(int i = 1;i<args.length;i++){
-            	if(args[i].endsWith(".jar")){
-					jfile.addJarFile(args[i]);            	
-            	}else{
-            		File file = new File(args[i]);
-            		if(file.isDirectory()){
-            			ArrayList list = new ArrayList();
-						getSourceFiles(list,file);
-						for(int j = 1;j<list.size();j++){
-							File temp = new File((String)list.get(i));
-							JARFileEntry newEntry =
-								new JARFileEntry(temp.getName(),
-													new FileInputStream(temp));
-							jfile.addJarEntry(newEntry);
-						}	
-            		}
-            	}
+			
+			System.out.println("######### creating the jar "+args[0]+"############");
+            for (int i = 1; i < args.length; i++) {
+                if (args[i].endsWith(".jar")) {
+                    jfile.addJarFile(args[i]);
+                } else {
+                    File file = new File(args[i]);
+                    if (file.isDirectory()) {
+                        ArrayList list = new ArrayList();
+                        getSourceFiles(list, file);
+                        for (int j = 0; j < list.size(); j++) {
+                            File temp = new File((String) list.get(i));
+                            JARFileEntry newEntry =
+                                new JARFileEntry(
+                                    temp.getName(),
+                                    new FileInputStream(temp));
+                            jfile.addJarEntry(newEntry);
+							
+                        }
+                    }
+                }
 
-            	System.out.println(args[i]);
+                
             }
+			System.out.println("####################### JAR FILE CREATED ###########################");
             jfile.createNewJarFile();
-            
-        } catch (GenerationFault e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw GenerationFault.createGenerationFault(e);
+        }
+
+    }
+
+    public static void main(String[] args) throws GenerationFault {
+		Packager packger = new Packager(args);
+		packger.createJar();
+    }
+    private void getSourceFiles(ArrayList list, File location) {
+        String[] dirs = location.list();
+        if (dirs == null)
+            return;
+        for (int i = 0; i < dirs.length; i++) {
+            String filename = location.getAbsolutePath() + "/" + dirs[i];
+            File file = new File(filename);
+            if (file.isFile()) {
+                list.add(filename);
+            } else {
+                getSourceFiles(list, new File(filename));
+            }
+
         }
     }
-	private static void getSourceFiles(ArrayList list, File location) {
-		String[] dirs = location.list();
-		if (dirs == null)
-			return;
-		for (int i = 0; i < dirs.length; i++) {
-			String filename = location.getAbsolutePath() + "/" + dirs[i];
-			File file = new File(filename);
-			if (file.isFile()) {
-				list.add(filename);
-			} else {
-					getSourceFiles(list, new File(filename));
-			}
-
-		}
-	}
 
 }

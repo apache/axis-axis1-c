@@ -55,6 +55,13 @@
 
 package org.apache.geronimo.ews.ws4j2ee.context.wsdl;
 
+import java.util.Collection;
+import java.util.Map;
+
+import javax.wsdl.Port;
+import javax.wsdl.Service;
+import javax.xml.namespace.QName;
+
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.Element;
 import org.apache.axis.wsdl.symbolTable.PortEntry;
@@ -62,11 +69,6 @@ import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
 import org.apache.axis.wsdl.symbolTable.ServiceEntry;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.type.SchemaType;
-
-import javax.wsdl.Service;
-import javax.xml.namespace.QName;
-import java.util.Collection;
-import java.util.Map;
 
 /**
  * <p>This interface expose the information contains in the WSDL.
@@ -152,4 +154,24 @@ public interface WSDLContext {
     public PortEntry getPort(QName name);
 
     public String getTargetNSURI();
+    
+	/**
+	 * WSDL artifacts correponds to the current WSCF port.
+	 * If one element is in the wsdl theu are used. How to select them 
+	 * if there is more than one is still to do.   
+	 * @return
+	 */
+	public ServiceEntry gettargetService();
+	public void settargetService(ServiceEntry service);
+
+	public BindingEntry gettargetBinding();
+	public void settargetBinding(BindingEntry binding);
+
+	public PortTypeEntry getTargetPortType();
+	public void setTargetPortType(PortTypeEntry port);
+
+	public void setTargetPort(Port port);
+	public Port getTargetPort();
+	public void validate();
+
 }

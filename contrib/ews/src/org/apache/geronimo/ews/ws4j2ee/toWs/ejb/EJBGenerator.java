@@ -56,11 +56,13 @@
  package org.apache.geronimo.ews.ws4j2ee.toWs.ejb;
 
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
+import org.apache.geronimo.ews.ws4j2ee.context.j2eeDD.EJBContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
+import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Writer;
-import org.apache.geronimo.ews.ws4j2ee.toWs.WriterFactory;
+import org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2eeFactory;
 
 /**
  * <p>This class crete the nessacsaary EJB artifacts</p>
@@ -74,41 +76,49 @@ public class EJBGenerator implements Generator {
 	private Writer ddwriter;
 	private Writer localwriter;
 	private Writer localhomewriter;
+	protected EJBContext ejbcontext;
+	private Ws4J2eeFactory factory;
 
 	public EJBGenerator(J2EEWebServiceContext context) throws GenerationFault {
 		this.context = context;
+		ejbcontext =  context.getEJBDDContext();
+		if(ejbcontext == null){
+			throw new UnrecoverableGenerationFault("for ejbbased Impl" +
+							" the EJBDDContext must not be null");
+		}
+		factory = context.getFactory();
 		String implStyle = context.getMiscInfo().getImplStyle();
-			if(GenerationConstants.USE_LOCAL_AND_REMOTE.equals(implStyle) 
-				|| GenerationConstants.USE_REMOTE.equals(implStyle)){
-				homewriter = WriterFactory.createWriter(context, GenerationConstants.EJB_HOME_INTERFACE_WRITER);
-				remotewriter = WriterFactory.createWriter(context, GenerationConstants.EJB_REMOTE_INTERFACE_WRITER);
-			}else if(GenerationConstants.USE_LOCAL_AND_REMOTE.equals(implStyle) 
-				|| GenerationConstants.USE_LOCAL.equals(implStyle)){
-				localhomewriter = WriterFactory.createWriter(context, GenerationConstants.EJB_LOCAL_HOME_INTERFACE_WRITER);
-				localwriter = WriterFactory.createWriter(context, GenerationConstants.EJB_LOCAL_INTERFACE_WRITER);
-			}else if(GenerationConstants.USE_INTERNALS.equals(implStyle)){
-				//when we use the internals we do not want create anything   
-			}
-			if(!context.getMiscInfo().isImplAvalible()){
-				beanwriter = WriterFactory.createWriter(context, GenerationConstants.EJB_IMPLEMENTATION_BEAN_WRITER);
-			}	
-		ddwriter = WriterFactory.createWriter(context, GenerationConstants.EJB_DD_WRITER);
+		if(GenerationConstants.USE_LOCAL_AND_REMOTE.equals(implStyle) 
+			|| GenerationConstants.USE_REMOTE.equals(implStyle)){
+			homewriter = factory.getGenerationFactory().createEJBWriter(context, ejbcontext,GenerationConstants.EJB_HOME_INTERFACE_WRITER);
+			remotewriter = factory.getGenerationFactory().createEJBWriter(context, ejbcontext, GenerationConstants.EJB_REMOTE_INTERFACE_WRITER);
+		}else if(GenerationConstants.USE_LOCAL_AND_REMOTE.equals(implStyle) 
+			|| GenerationConstants.USE_LOCAL.equals(implStyle)){
+			localhomewriter = factory.getGenerationFactory().createEJBWriter(context, ejbcontext, GenerationConstants.EJB_LOCAL_HOME_INTERFACE_WRITER);
+			localwriter = factory.getGenerationFactory().createEJBWriter(context, ejbcontext, GenerationConstants.EJB_LOCAL_INTERFACE_WRITER);
+		}else if(GenerationConstants.USE_INTERNALS.equals(implStyle)){
+			//when we use the internals we do not want create anything   
+		}
+		if(!context.getMiscInfo().isImplAvalible()){
+			beanwriter = factory.getGenerationFactory().createEJBWriter(context, ejbcontext, GenerationConstants.EJB_IMPLEMENTATION_BEAN_WRITER);
+		}	
+		ddwriter = factory.getGenerationFactory().createEJBWriter(context, ejbcontext, GenerationConstants.EJB_DD_WRITER);
 	}
 
 	public void generate() throws GenerationFault {
 		if(homewriter != null)
-			homewriter.writeCode();
+			homewriter.write();
 		if(remotewriter != null)	
-			remotewriter.writeCode();
+			remotewriter.write();
 		if(beanwriter != null)
-			beanwriter.writeCode();
+			beanwriter.write();
 		if(ddwriter!=null)	
-			ddwriter.writeCode();
+			ddwriter.write();
 		if(localwriter != null){
-			localwriter.writeCode();
+			localwriter.write();
 		}
 		if(localhomewriter!=null){
-			localhomewriter.writeCode();
+			localhomewriter.write();
 		}
 	}
 

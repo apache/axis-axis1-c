@@ -9,7 +9,7 @@
 		<javac destdir="${out}" debug="on">
 			<classpath refid="classpath" />
 			<src path=".."/>
-			<include name="testData/*"/>
+			<include name="testData/BuildTestSample*"/>
 		</javac>
 		<echo message="finished compile ${out}"/>
 	</target>

@@ -29,7 +29,7 @@ import org.apache.tools.ant.taskdefs.Ant;
  * @author hemapani
  */
 public class AntExecuter{
-    public void execute(String buildFile) throws Exception {
+    public void execute(String buildFile) {
         //wait till the ant jar added
         try{
 			Class.forName("com.sun.tools.javac.Main");
@@ -51,7 +51,7 @@ public class AntExecuter{
 				"prgramatically add that jar to classpath");
         }catch(BuildException e){
 			System.out.println(e.getMessage() +
-			"if it is a compile error you may not have set the mavem reposiroty " +
+			"if it is a compile error you may not have set the maven reposiroty " +
 			"directory in the conf/ws4j2ee.propertites Build fill ignore the faliure");
         }
     }

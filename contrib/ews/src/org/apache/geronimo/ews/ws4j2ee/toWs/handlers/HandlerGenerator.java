@@ -85,8 +85,7 @@ public class HandlerGenerator implements Generator {
 			if(handlers!= null){
 				writers = new Writer[handlers.length];
 				for (int i = 0; i < handlers.length; i++) {
-					if(!handlermap.containsKey(handlers[i].getHandlerClass())
-						&& j2eewscontext.getMiscInfo().getJarFileName() == null){
+					if(!handlermap.containsKey(handlers[i].getHandlerClass())){
 						writers[i] = new HandlerWriter(j2eewscontext, handlers[i]);
 					}
 				}
@@ -99,7 +98,7 @@ public class HandlerGenerator implements Generator {
 	public void generate() throws GenerationFault {
 		for (int i = 0; i < writers.length; i++) {
 			if(writers[i] != null){
-				writers[i].writeCode();			
+				writers[i].write();			
 			}
 		}
 	}

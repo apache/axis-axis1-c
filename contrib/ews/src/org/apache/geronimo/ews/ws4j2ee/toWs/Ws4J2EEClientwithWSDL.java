@@ -59,29 +59,33 @@ import java.io.FileInputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.ContextValidator;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.MiscInfo;
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.ServiceReferance;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.ServiceReferanceContext;
 import org.apache.geronimo.ews.ws4j2ee.parsers.ServiceReferanceParser;
+import org.apache.geronimo.ews.ws4j2ee.toWs.impl.Ws4J2eeFactoryImpl;
+import org.apache.geronimo.ews.ws4j2ee.utils.MiscFactory;
 import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 
 /**
  * <p>this class genarate the code when the WSDL presents.</p>
  */
 public class Ws4J2EEClientwithWSDL implements Generator {
+	private String wsConfFileLocation;
     private boolean verbose = false;
     private Ws4J2eeCLOptionParser clparser;
+	private Ws4J2eeFactory factory;
     protected static Log log =
             LogFactory.getLog(Ws4J2EEClientwithWSDL.class.getName());
+     
 
 
     private MiscInfo misc;
 
     public Ws4J2EEClientwithWSDL(String[] args) throws Exception {
         clparser = new Ws4J2eeCLOptionParser(args);
-        misc = ContextFactory.createMiscInfo();
+        
     }
 
     /**
@@ -91,46 +95,50 @@ public class Ws4J2EEClientwithWSDL implements Generator {
      */
     public void generate() throws GenerationFault {
         try {
-			J2EEWebServiceContext wscontext = ContextFactory.getJ2EEWsContext(true);
+			factory = new Ws4J2eeFactoryImpl(); 
+			J2EEWebServiceContext wscontext = factory.getContextFactory().getJ2EEWsContext(true);
+			wscontext.setFactory(factory);			
+			misc = factory.getContextFactory().createMiscInfo();
+
 			wscontext.setMiscInfo(misc);
 
             String wscfClientfile = clparser.getWscffile();
-			misc.setWsconffile(ContextFactory.getInputFile(wscfClientfile));
+			misc.setWsconffile(MiscFactory.getInputFile(wscfClientfile));
             misc.setOutputPath(clparser.getOutputDirectory());
-            misc.setWsConfFileLocation(Utils.getRootDirOfFile(wscfClientfile));
+			wsConfFileLocation = Utils.getRootDirOfFile(wscfClientfile);
 			wscontext.getMiscInfo().setImplStyle(clparser.getImplStyle());
 			wscontext.getMiscInfo().setTargetJ2EEContainer(clparser.getContanier());
             
             
             //parsing of the webservice.xml happen here 
-            ServiceReferanceParser parser 
-            	= new ServiceReferanceParser(new FileInputStream(wscfClientfile));
-			ServiceReferance ref = parser.getRef();
+            ServiceReferanceContext serviceContext = 
+            	factory.getParserFactory().parseServiceReferance(wscontext,
+            		new FileInputStream(wscfClientfile));
             if (verbose){
 				log.info(wscfClientfile + " parsed ..");
-				log.info(ref.getJaxrpcmappingFile());       
-				log.info(ref.getWsdlFile());
+				log.info(serviceContext.getJaxrpcmappingFile());       
+				log.info(serviceContext.getWsdlFile());
            }
 
-            wscontext.getMiscInfo().setJaxrpcfile(ContextFactory.getInputFile(
-            	Utils.getAbsolutePath(ref.getJaxrpcmappingFile(),
-            		misc.getWsConfFileLocation())));
-            wscontext.getMiscInfo().setWsdlFile(ContextFactory.getInputFile(
-            	Utils.getAbsolutePath(ref.getWsdlFile(), 
-            		misc.getWsConfFileLocation())));
+            wscontext.getMiscInfo().setJaxrpcfile(
+				MiscFactory.getInputFile(
+					Utils.getAbsolutePath(serviceContext.getJaxrpcmappingFile(),
+					wsConfFileLocation)));
+            wscontext.getMiscInfo().setWsdlFile(
+				MiscFactory.getInputFile(
+            		Utils.getAbsolutePath(serviceContext.getWsdlFile(), 
+					wsConfFileLocation)));
 			wscontext.getMiscInfo().setVerbose(verbose);
-			wscontext.getMiscInfo().setHandlers(ref.getHandlers()); 
+			wscontext.getMiscInfo().setHandlers(serviceContext.getHandlers()); 
 			
             //JAX-RPC mapper calling
             if (verbose)
                 log.info("starting client side code genaration .. ");
-			Generator clientStubGen = GeneratorFactory.createGenerator(wscontext,
-                    GenerationConstants.CLIENT_STUB_GENERATOR);
+			Generator clientStubGen = factory.getGenerationFactory().createClientSideWsGenerator(wscontext);
 			clientStubGen.generate();
 			ContextValidator cvalidator = new ContextValidator(wscontext);
 			//cvalidator.validateWithWSDL();
-			Generator handlerGen = GeneratorFactory.createGenerator(wscontext,
-                    GenerationConstants.HANDLER_GENERATOR);
+			Generator handlerGen = factory.getGenerationFactory().createHandlerGenerator(wscontext);
 			handlerGen.generate();
         } catch (Exception e) {
             e.printStackTrace();

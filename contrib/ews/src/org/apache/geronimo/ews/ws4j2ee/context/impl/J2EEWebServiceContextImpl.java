@@ -55,12 +55,18 @@
 
 package org.apache.geronimo.ews.ws4j2ee.context.impl;
 
+import java.util.Vector;
+
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.JaxRpcMapperContext;
 import org.apache.geronimo.ews.ws4j2ee.context.MiscInfo;
+import org.apache.geronimo.ews.ws4j2ee.context.j2eeDD.EJBContext;
+import org.apache.geronimo.ews.ws4j2ee.context.j2eeDD.WebContext;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.ServiceReferanceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenerationFault;
+import org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2eeFactory;
 
 /**
  * <p>Code should use parsers and create runtime representation
@@ -83,9 +89,15 @@ public class J2EEWebServiceContextImpl implements J2EEWebServiceContext {
     private WSDLContext wsdlcontext;
     private JaxRpcMapperContext jaxrpcmappingcontext;
     private MiscInfo miscInfo;
+    private Ws4J2eeFactory factory;
+    private Vector srcontext;
+    private EJBContext ejbcontext;
+    private WebContext webcontext;
+    
 
     public J2EEWebServiceContextImpl(boolean hasWSDL) {
         this.hasWSDL = hasWSDL;
+		srcontext = new Vector();
     }
 
     /* (non-Javadoc)
@@ -140,14 +152,45 @@ public class J2EEWebServiceContextImpl implements J2EEWebServiceContext {
         this.miscInfo = info;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext#validate()
-     */
     public void validate() {
         if (wscfcontext == null || miscInfo == null ||
                 (hasWSDL && wsdlcontext == null) || jaxrpcmappingcontext == null)
             throw new UnrecoverableGenerationFault("valdation of the j2ee context failed");
         miscInfo.validate();
+    }
+    
+	public void setFactory(Ws4J2eeFactory factory){
+		this.factory = factory;
+	}
+	public Ws4J2eeFactory getFactory(){
+		return this.factory;
+	}
+
+    public void addServiceReferanceContext(ServiceReferanceContext context) {
+		srcontext.add(context);
+    }
+
+    public EJBContext getEJBDDContext() {
+        return ejbcontext;
+    }
+
+    public ServiceReferanceContext getServiceReferanceContext(int index) {
+        return (ServiceReferanceContext)srcontext.get(index);
+    }
+
+    public int getServiceReferanceContextCount() {
+        return srcontext.size();
+    }
+
+    public WebContext getWebDDContext() {
+        return webcontext;
+    }
+
+    public void setEJBDDContext(EJBContext context) {
+		this.ejbcontext = context;
+    }
+    public void setWebDDContext(WebContext context) {
+		webcontext = context;
     }
 
 }

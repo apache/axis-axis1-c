@@ -64,22 +64,14 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
  */
 public class JBossDDWriter extends AbstractWriter {
 	public JBossDDWriter(J2EEWebServiceContext j2eewscontext) throws GenerationFault {
-		super(j2eewscontext);
+		super(j2eewscontext,j2eewscontext.getMiscInfo().getOutPutPath() +
+			"/META-INF/jboss.xml");
 	}
 
-	public String getFileName() {
-		return j2eewscontext.getMiscInfo().getOutPutPath() +
-				"/META-INF/jboss.xml";
-	}
-
-	/* (non-Javadoc)
-	 * @see org.apache.geronimo.ews.ws4j2ee.toWs.Writer#writeCode()
-	 */
 	public void writeCode() throws GenerationFault {
-		super.writeCode();
 		if(out == null)
 			return;
-		String ejbname = j2eewscontext.getMiscInfo().getTargetPortType().getName().toLowerCase();
+		String ejbname = j2eewscontext.getWSDLContext().getTargetPortType().getName().toLowerCase();
 			int index = ejbname.lastIndexOf(".");
 			if(index>0){
 			  ejbname = ejbname.substring(index+1);
@@ -101,6 +93,5 @@ public class JBossDDWriter extends AbstractWriter {
 		out.write("	</session>\n");
 		out.write("  </enterprise-beans>\n");
 		out.write("</jboss>\n");
-		out.close();
 	}
 }

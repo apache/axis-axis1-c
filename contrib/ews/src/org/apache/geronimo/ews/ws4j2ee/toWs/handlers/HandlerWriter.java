@@ -94,7 +94,6 @@ public class HandlerWriter extends AbstractWriter {
      * just print it out
      */
     public void writeCode() throws GenerationFault {
-        super.writeCode();
         if(out == null)
         	return;
         out.write("package " + packageName + ";\n");
@@ -124,10 +123,5 @@ public class HandlerWriter extends AbstractWriter {
         out.write("\t}\n");
 
         out.write("}");
-        out.flush();
-        out.close();
     }
-    
-    
-
 }

@@ -65,7 +65,7 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
  * @see org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext
  * @author Srinath Perera(hemapani@opensource.lk)
  */
-public class AxisEmitterBasedWSCFContext implements WSCFContext {
+public class AxisEmitterBasedWSCFContext extends AbstractWSCFContext implements WSCFContext {
     private Emitter emitter;
     private J2EEWebServiceContext j2eeweserviceContext;
 
@@ -124,14 +124,14 @@ public class AxisEmitterBasedWSCFContext implements WSCFContext {
             out.write("<port-component>\n");
             out.write("<port-component-name>" + emitter.getPortTypeName() + "</port-component-name>\n");
             out.write("<wsdl-port xmlns:ns1=\""+ j2eeweserviceContext.getWSDLContext().getTargetNSURI() + "\">\n");
-            out.write("ns1:" + j2eeweserviceContext.getMiscInfo().getTargetPort().getName());
+            out.write("ns1:" + j2eeweserviceContext.getWSDLContext().getTargetPort().getName());
             out.write("</wsdl-port>\n");
             out.write("<service-endpoint-interface>" + emitter.getCls().getName() + "</service-endpoint-interface>\n");
             out.write("<service-impl-bean>\n");
 			
             //TODO let usprint the port type name for now here
             //we got to print the ejb name here parsing the ejb-jar.xml
-            String ejbName = j2eeweserviceContext.getMiscInfo().getEjbName();
+            String ejbName = j2eeweserviceContext.getMiscInfo().getJ2eeComponetLink();
             if (ejbName == null)
                 ejbName = emitter.getPortTypeName();
             out.write("<ejb-link >" + ejbName + "</ejb-link>\n");

@@ -282,7 +282,7 @@ public class AxisEmitterBasedJaxRpcMapperContext implements JaxRpcMapperContext 
             
 //adding Service mappings
 ///////////////////////////
-            Service service = j2eewscontext.getMiscInfo().gettargetService().getService();
+            Service service = j2eewscontext.getWSDLContext().gettargetService().getService();
             org.apache.geronimo.ews.jaxrpcmapping.descriptor.JavaWsdlMappingType.ServiceInterfaceMapping servciemaping = objFactory.createJavaWsdlMappingTypeServiceInterfaceMapping();
 			
             	
@@ -305,7 +305,7 @@ public class AxisEmitterBasedJaxRpcMapperContext implements JaxRpcMapperContext 
             servciemaping.setServiceInterface(serviceJavaName);
             jaxrpcmap.getServiceInterfaceMappingAndServiceEndpointInterfaceMapping().add(servciemaping);
 
-            Port wsdlport = j2eewscontext.getMiscInfo().getTargetPort();
+            Port wsdlport = j2eewscontext.getWSDLContext().getTargetPort();
             Binding binding = wsdlport.getBinding();
          	
             //create a portmap

@@ -65,24 +65,16 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
  */
 public class GeronimoDDWriter extends AbstractWriter {
 	public GeronimoDDWriter(J2EEWebServiceContext j2eewscontext) throws GenerationFault {
-		super(j2eewscontext);
+		super(j2eewscontext,
+		(j2eewscontext.getMiscInfo().isImplwithEJB()
+			?j2eewscontext.getMiscInfo().getOutPutPath() +
+				"/META-INF/"+ GenerationConstants.GERONIMO_DD
+			:j2eewscontext.getMiscInfo().getOutPutPath() +
+				"/META-INF/"+ GenerationConstants.GERONIMO_WEB_DD));
 	}
 
-	public String getFileName() {
-		if(j2eewscontext.getMiscInfo().isImplwithEJB()){
-			return j2eewscontext.getMiscInfo().getOutPutPath() +
-						"/META-INF/"+ GenerationConstants.GERONIMO_DD;
-		}else{
-			return j2eewscontext.getMiscInfo().getOutPutPath() +
-									"/META-INF/"+ GenerationConstants.GERONIMO_WEB_DD;
-		}				
-	}
-
-	/* (non-Javadoc)
-	 * @see org.apache.geronimo.ews.ws4j2ee.toWs.Writer#writeCode()
-	 */
+	
 	public void writeCode() throws GenerationFault {
-		super.writeCode();
 		if(out == null)
 			return;
 		if(j2eewscontext.getMiscInfo().isImplwithEJB()){
@@ -106,7 +98,7 @@ public class GeronimoDDWriter extends AbstractWriter {
 //		</enterprise-beans>
 //	</openejb-jar>
 	public void writeEJBDD(){		
-		String ejbname = j2eewscontext.getMiscInfo().getTargetPortType().getName().toLowerCase();
+		String ejbname = j2eewscontext.getWSDLContext().getTargetPortType().getName().toLowerCase();
 			int index = ejbname.lastIndexOf(".");
 			if(index>0){
 			  ejbname = ejbname.substring(index+1);
@@ -132,7 +124,6 @@ public class GeronimoDDWriter extends AbstractWriter {
 		out.write("         </session>\n");
 		out.write("     </enterprise-beans>\n");
 		out.write("</openejb-jar>\n");
-		out.close();
 	}
 	
 
@@ -146,7 +137,7 @@ public class GeronimoDDWriter extends AbstractWriter {
 //		<context-priority-classloader>false</context-priority-classloader>
 //	</web-app>
 	public void writeWebDD(){		
-		String ejbname = j2eewscontext.getMiscInfo().getTargetPortType().getName().toLowerCase();
+		String ejbname = j2eewscontext.getWSDLContext().getTargetPortType().getName().toLowerCase();
 			int index = ejbname.lastIndexOf(".");
 			if(index>0){
 			  ejbname = ejbname.substring(index+1);
@@ -159,7 +150,6 @@ public class GeronimoDDWriter extends AbstractWriter {
 		out.write("    <context-root>/axis</context-root>");
 		out.write("    <context-priority-classloader>false</context-priority-classloader>");
 		out.write("</web-app>");
-		out.close();
 	}
 
 }

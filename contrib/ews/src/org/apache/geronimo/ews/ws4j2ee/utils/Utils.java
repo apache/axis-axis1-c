@@ -56,6 +56,7 @@
 package org.apache.geronimo.ews.ws4j2ee.utils;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -78,6 +79,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.axis.Constants;
 import org.apache.axis.encoding.Base64;
 import org.apache.axis.utils.JavaUtils;
+import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.wsutils.J2EEFault;
 import org.w3c.dom.Attr;
@@ -989,6 +991,20 @@ public class Utils {
 			return pkg;
 		}
 	}
+	
+	public static String getFileNamefromClass(J2EEWebServiceContext j2eewscontext,String qulifiedName) {
+		String outdir = j2eewscontext.getMiscInfo().getOutPutPath();
+		if (!outdir.endsWith("/"))
+			outdir = outdir + "/";
+			return outdir + qulifiedName.replace('.', '/') + ".java";
+	}
+	
+	public static void prepareTheDir(String fileName){
+		File file = new File(fileName);
+		File parent = file.getParentFile();
+		parent.mkdirs();
+	}
+	
 
 
 }

@@ -55,15 +55,10 @@
 
 package org.apache.geronimo.ews.ws4j2ee.toWs.wsdl;
 
-import java.util.List;
-
 import org.apache.axis.components.logger.LogFactory;
-import org.apache.axis.encoding.TypeMapping;
-import org.apache.axis.encoding.TypeMappingImpl;
-import org.apache.axis.utils.CLArgsParser;
-import org.apache.axis.utils.CLOption;
-import org.apache.axis.utils.Messages;
+import org.apache.axis.utils.ClassUtils;
 import org.apache.axis.wsdl.Java2WSDL;
+import org.apache.axis.wsdl.fromJava.Emitter;
 import org.apache.commons.logging.Log;
 import org.apache.geronimo.ews.ws4j2ee.context.ContextValidator;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
@@ -72,6 +67,8 @@ import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.AxisEmitterBas
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.impl.AxisEmitterBasedWSDLContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
+import org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2eeServerCLOptionParser;
+import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 
 /**
  * <p>This genarated theWrapper WS required in the
@@ -80,95 +77,63 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class WSDLGenerator extends Java2WSDL implements Generator {
-	private J2EEWebServiceContext j2eewscontext;
-	private String[] args;
+	private J2EEWebServiceContext wscontext;
+	private Ws4J2eeServerCLOptionParser clparser;
+	private Emitter emitter;
+	private String wsdlFile;
+	private boolean verbose;
 
 	protected static Log log =
 			LogFactory.getLog(WSDLGenerator.class.getName());
 
-	public WSDLGenerator(J2EEWebServiceContext j2eewscontext) {
-		this.j2eewscontext = j2eewscontext;
-	}
+	public WSDLGenerator(J2EEWebServiceContext wscontext,
+			Emitter emitter,
+			Ws4J2eeServerCLOptionParser clparser)throws GenerationFault {
+		this.wscontext = wscontext;
+		this.emitter = emitter;
+		this.clparser = clparser;
+		this.wsdlFile = wscontext.getMiscInfo().getWsdlFile().fileName();
+	}	
 
-	public void setArgs(String[] args) {
-		this.args = args;
-	}
-
-	/**
-	 * run
-	 * checks the command-line arguments and runs the tool.
-	 * 
-	 * @param args String[] command-line arguments.
-	 */
-	protected int run(String[] args) {
-		// Parse the arguments
-		CLArgsParser argsParser = new CLArgsParser(args, options);
-
-		// Print parser errors, if any
-		if (null != argsParser.getErrorString()) {
-			System.err.println(Messages.getMessage("j2werror00", argsParser.getErrorString()));
-			printUsage();
-			return (1);
-		}
-
-		// Get a list of parsed options
-		List clOptions = argsParser.getArguments();
-		int size = clOptions.size();
-
-		try {
-			// Parse the options and configure the emitter as appropriate.
-			for (int i = 0; i < size; i++) {
-				if (parseOption((CLOption) clOptions.get(i)) == false) {
-					return (1);
-				}
-			}
-
-			// validate argument combinations
-			if (validateOptions() == false)
-				return (1);
-
-			// Set the namespace map
-			if (!namespaceMap.isEmpty()) {
-				emitter.setNamespaceMap(namespaceMap);
-			}
-            
-			TypeMapping tm = new TypeMappingImpl(emitter.getDefaultTypeMapping());
-			emitter.setTypeMapping(tm);
-            
-			// Find the class using the name
-			emitter.setCls(className);
-			// Generate a full wsdl, or interface & implementation wsdls
-			if (wsdlImplFilename == null) {
-				emitter.emit(wsdlFilename, mode);
-			} else {
-				emitter.emit(wsdlFilename, wsdlImplFilename);
-			}
-
-			// everything is good
-			return (0);
-		} catch (Throwable t) {
-			t.printStackTrace();
-			return (1);
-		}
-	} // run
 
 	public void generate() throws GenerationFault {
 		try {
-			//write the WSDLFile
-			this.run(args);
-			//initiate the wsdlContext
-			this.j2eewscontext.setWSDLContext(new AxisEmitterBasedWSDLContext(emitter.getWSDL()));
+			if (verbose)
+				log.info("calling Java2WSDL to genarated wsdl ...........");
+			//generate the wsdl file
+			ClassUtils.setDefaultClassLoader(wscontext.getMiscInfo().getClassloader());
+			emitter.setLocationUrl("http://127.0.0.1");
+			emitter.setServicePortName(
+				wscontext.getWSCFContext().getWscfport().getWsdlPort().getLocalpart());
+    		
+			int mode = Emitter.MODE_ALL;
+			mode = clparser.getMode();
+			
+			// Find the class using the name
+			String seiName = wscontext.getMiscInfo().getJaxrpcSEI();
+			emitter.setCls(seiName);
+			// Generate a full wsdl, or interface & implementation wsdls
+			Utils.prepareTheDir(wsdlFile);    
+			if (wsdlImplFilename == null) {
+				emitter.emit(wsdlFile, mode);
+			} else {
+				emitter.emit(wsdlFile, wsdlImplFilename);
+			}
+//			//initiate the wsdlContext
+			this.wscontext.setWSDLContext(
+				new AxisEmitterBasedWSDLContext(emitter.getWSDL()));
 			//parse the ejb-jar.xml here
-			ContextValidator validator = new ContextValidator(j2eewscontext);
+			ContextValidator validator = new ContextValidator(wscontext);
 			//initiate the jaxrpcmapping context 
-			this.j2eewscontext.setJAXRPCMappingContext(new AxisEmitterBasedJaxRpcMapperContext(emitter, j2eewscontext));
-			//initiate the wscf context 
-			this.j2eewscontext.setWSCFContext(new AxisEmitterBasedWSCFContext(emitter, j2eewscontext));
-
+			this.wscontext.setJAXRPCMappingContext(
+				new AxisEmitterBasedJaxRpcMapperContext(emitter, wscontext));
+//			//initiate the wscf context 
+//			this.wscontext.setWSCFContext( new AxisEmitterBasedWSCFContext(emitter, wscontext));
 			//validate the j2ee context
 			validator.validateWithOutWSDL(emitter);
 		} catch (Exception e) {
 			throw GenerationFault.createGenerationFault(e);
-		}
+		} 
+
 	}
 }

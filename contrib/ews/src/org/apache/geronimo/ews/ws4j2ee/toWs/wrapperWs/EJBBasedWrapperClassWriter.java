@@ -1,8 +1,7 @@
 /*
  * The Apache Software License, Version 1.1
  *
- *
- * Copyright (c) 2001-2004 The Apache Software Foundation.  All rights
+ * Copyright (c) 2002-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -17,20 +16,20 @@
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
- * 3. The end-user documentation included with the redistribution,
- *    if any, must include the following acknowledgment:
+ * 3. The end-user documentation included with the redistribution, if
+ *    any, must include the following acknowledgment:
  *       "This product includes software developed by the
  *        Apache Software Foundation (http://www.apache.org/)."
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "Axis" and "Apache Software Foundation" must
- *    not be used to endorse or promote products derived from this
- *    software without prior written permission. For written
+ * 4. The names "The Jakarta Project", "Commons", and "Apache Software
+ *    Foundation" must not be used to endorse or promote products derived
+ *    from this software without prior written permission. For written
  *    permission, please contact apache@apache.org.
  *
- * 5. Products derived from this software may not be called "Apache",
- *    nor may "Apache" appear in their name, without prior written
+ * 5. Products derived from this software may not be called "Apache"
+ *    nor may "Apache" appear in their names without prior written
  *    permission of the Apache Software Foundation.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -51,44 +50,62 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
+ *
  */
-
-package org.apache.geronimo.ews.ws4j2ee.toWs.dd;
+package org.apache.geronimo.ews.ws4j2ee.toWs.wrapperWs;
 
 import org.apache.axis.components.logger.LogFactory;
 import org.apache.commons.logging.Log;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
+import org.apache.geronimo.ews.ws4j2ee.context.j2eeDD.EJBContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
-import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import org.apache.geronimo.ews.ws4j2ee.toWs.JavaClassWriter;
+import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenerationFault;
+import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 
 /**
- * This class genarate the webservice.xml file.
- * 
+ * This class genarate the wrapper Webservice.
  * @author Srinath Perera(hemapani@opensource.lk)
  */
-public class WebServiceDDGenerator implements Generator {
-	private J2EEWebServiceContext j2eewscontext;
-
+public abstract class EJBBasedWrapperClassWriter extends JavaClassWriter{
 	protected static Log log =
-			LogFactory.getLog(JaxrpcMapperGenerator.class.getName());
-
-	public WebServiceDDGenerator(J2EEWebServiceContext j2eewscontext) {
-		this.j2eewscontext = j2eewscontext;
+						LogFactory.getLog(WrapperWsGenerator.class.getName());
+	protected String seiName = null;
+	protected EJBContext context;
+	/**
+	 * @param j2eewscontext
+	 * @param qulifiedName
+	 * @throws GenerationFault
+	 */
+	public EJBBasedWrapperClassWriter(J2EEWebServiceContext j2eewscontext)
+		throws GenerationFault {
+		super(j2eewscontext, getName(j2eewscontext) +"Impl");
+		context =  j2eewscontext.getEJBDDContext();
+		if(context == null){
+			throw new UnrecoverableGenerationFault("for ejbbased Impl" +
+							" the EJBDDContext must not be null");
+		}
+	}
+	
+	private static String getName(J2EEWebServiceContext j2eewscontext){
+		String name = j2eewscontext.getWSDLContext().gettargetBinding().getName();
+		if(name == null){
+			name = Utils.qName2JavaName(j2eewscontext.getWSDLContext().gettargetBinding().getQName());
+		}
+		return name;
 	}
 
-	public void generate() throws GenerationFault {
-		try {
-			if(j2eewscontext.getMiscInfo().isVerbose())
-				log.info(j2eewscontext.getMiscInfo().getWsConfFileLocation()+" generated ....");
-			PrintWriter out = new PrintWriter(new FileWriter(j2eewscontext.getMiscInfo().getWsConfFileLocation()));
-			j2eewscontext.getWSCFContext().serialize(out);
-			out.close();
-		} catch (IOException e) {
-			throw GenerationFault.createGenerationFault(e);
-		}
+	protected String getimplementsPart() {
+		return " implements "+ j2eewscontext.getMiscInfo().getJaxrpcSEI()+",org.apache.geronimo.ews.ws4j2ee.wsutils.ContextAccssible";
+	}
+
+	protected void writeAttributes() throws GenerationFault {
+		
+		out.write("private "+seiName+" ejb = null;\n");
+		out.write("private org.apache.axis.MessageContext msgcontext;\n");
+	}
+
+	protected void writeConstructors() throws GenerationFault {
+		out.write("\tpublic "+classname+"(){}\n");
 	}
 }

@@ -73,6 +73,7 @@ import org.apache.axis.wsdl.toJava.Utils;
 import org.apache.geronimo.ews.jaxrpcmapping.descriptor.FullyQualifiedClassType;
 import org.apache.geronimo.ews.jaxrpcmapping.descriptor.PackageMappingType;
 import org.apache.geronimo.ews.jaxrpcmapping.descriptor.XsdAnyURIType;
+import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 
 import javax.wsdl.Binding;
 import javax.wsdl.Definition;
@@ -103,14 +104,16 @@ public class J2eeEmitter extends Emitter {
     private SymbolTable symbolTable;
     private boolean usedbyws4j2ee = false;
     private boolean seiNeeded = true;
+	protected J2EEWebServiceContext wscontext;
 
 	public J2eeEmitter() {
 	   J2eeGeneratorFactory factory = new J2eeGeneratorFactory(this);
 	   setFactory(factory);
 	} // ctor
-    public J2eeEmitter(boolean usedByws4j2ee,boolean needSei) {
+    public J2eeEmitter(boolean usedByws4j2ee,boolean needSei,J2EEWebServiceContext wscontext) {
     	this.usedbyws4j2ee = usedByws4j2ee;
     	this.seiNeeded = needSei;
+		this.wscontext = wscontext;
         J2eeGeneratorFactory factory = new J2eeGeneratorFactory(this);
         setFactory(factory);
 
@@ -575,6 +578,20 @@ public class J2eeEmitter extends Emitter {
      */
     public void setUsedbyws4j2ee(boolean b) {
         usedbyws4j2ee = b;
+    }
+
+    /**
+     * @return
+     */
+    public J2EEWebServiceContext getWscontext() {
+        return wscontext;
+    }
+
+    /**
+     * @param context
+     */
+    public void setWscontext(J2EEWebServiceContext context) {
+        wscontext = context;
     }
 
 } // class MyEmitter

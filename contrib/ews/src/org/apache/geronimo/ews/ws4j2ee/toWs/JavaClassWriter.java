@@ -64,13 +64,15 @@ import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
  * @author Srianth Perera(hemapani@opensource.lk)
  */
 public abstract class JavaClassWriter extends AbstractWriter {
+	protected String qulifiedName;
     protected String classname;
     protected String packageName;
     private String pacakgesatement;
     private String targetDirectory;
 
     public JavaClassWriter(J2EEWebServiceContext j2eewscontext, String qulifiedName) throws GenerationFault {
-        super(j2eewscontext);
+		super(j2eewscontext,Utils.getFileNamefromClass(j2eewscontext,qulifiedName));
+		this.qulifiedName = qulifiedName;
         packageName = Utils.getPackageNameFromQuallifiedName(qulifiedName);
         classname = Utils.getClassNameFromQuallifiedName(qulifiedName);
     }
@@ -91,9 +93,6 @@ public abstract class JavaClassWriter extends AbstractWriter {
         writeConstructors();
         writeMethods();
         out.write("}\n");
-        //cleanup
-        out.flush();
-        out.close();
     }
 
     protected String getExtendsPart() {

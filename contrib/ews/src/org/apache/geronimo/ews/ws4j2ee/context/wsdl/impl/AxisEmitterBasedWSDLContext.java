@@ -79,12 +79,14 @@ import org.apache.geronimo.ews.ws4j2ee.context.wsdl.type.SchemaType;
  * @see org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext
  * @author Srinath Perera(hemapani@opensource.lk)
  */
-public class AxisEmitterBasedWSDLContext implements WSDLContext {
+public class AxisEmitterBasedWSDLContext extends AbstractWSDLContext implements WSDLContext {
     private Definition definition;
     private HashMap services;
     private HashMap bindings;
     private HashMap portetypes;
     private HashMap ports;
+    
+
 
     public AxisEmitterBasedWSDLContext(Definition definition) {
         this.definition = definition;
@@ -180,5 +182,4 @@ public class AxisEmitterBasedWSDLContext implements WSDLContext {
     public String getTargetNSURI() {
         return definition.getTargetNamespace();
     }
-
 }

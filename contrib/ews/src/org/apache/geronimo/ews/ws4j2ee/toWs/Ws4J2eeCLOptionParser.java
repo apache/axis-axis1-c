@@ -80,8 +80,8 @@ public class Ws4J2eeCLOptionParser {
     protected static final int HELPER_CLASS_OPT = 'H';
     protected static final int USERNAME_OPT = 'U';
     protected static final int PASSWORD_OPT = 'P';
-	protected static final int IMPL_STYLE_OPT = 'I';
-	protected static final int CONTAINER_OPT = 'C';
+	protected static final int IMPL_STYLE_OPT = 'E';
+	protected static final int CONTAINER_OPT = 'J';
 
     private String wscffile;
     private String outputDirectory = ".";

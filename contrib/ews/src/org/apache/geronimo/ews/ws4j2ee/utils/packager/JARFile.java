@@ -99,7 +99,8 @@ public class JARFile {
 
     public void addJarFile(String jarFile) throws GenerationFault {
         try {
-            System.out.println("adding "+jarFile);
+			System.out.println("# " + jarFile + " added ....");
+            
             JarFile file = new JarFile(jarFile);
             Enumeration e = file.entries();
             while (e.hasMoreElements()) {
@@ -124,7 +125,7 @@ public class JARFile {
         if (!path.exists())
             path.createNewFile();
 
-        System.out.println("creating " + path.getAbsolutePath() + ".......");
+        System.out.println("  creating " + path.getAbsolutePath() + ".......");
 
         BufferedOutputStream bo =
             new BufferedOutputStream(new FileOutputStream(path));
@@ -133,7 +134,7 @@ public class JARFile {
         for (; it.hasNext();) {
 
             JARFileEntry jarentry = (JARFileEntry) it.next();
-            System.out.println(jarentry.getJarEntry().getName() + " adding ..");
+            System.out.println("## "+jarentry.getJarEntry().getName() + " adding ..");
             InputStream instream = null;
             //            File input = new File(jarentry.getSource());
 

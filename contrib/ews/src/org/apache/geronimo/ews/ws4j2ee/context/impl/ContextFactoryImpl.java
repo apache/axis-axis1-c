@@ -53,36 +53,57 @@
  * <http://www.apache.org/>.
  */
 
-package org.apache.geronimo.ews.ws4j2ee.toWs;
+package org.apache.geronimo.ews.ws4j2ee.context.impl;
 
+import org.apache.axis.wsdl.symbolTable.SymbolTable;
+import org.apache.geronimo.ews.jaxrpcmapping.J2eeEmitter;
+import org.apache.geronimo.ews.jaxrpcmapping.JaxRpcMapper;
+import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
-import org.apache.geronimo.ews.ws4j2ee.toWs.ejb.EJBDDWriter;
-import org.apache.geronimo.ews.ws4j2ee.toWs.ejb.EJBHomeWriter;
-import org.apache.geronimo.ews.ws4j2ee.toWs.ejb.EJBLocalHomeWriter;
-import org.apache.geronimo.ews.ws4j2ee.toWs.ejb.EJBRemoteWriter;
-import org.apache.geronimo.ews.ws4j2ee.toWs.ejb.SessionBeanWriter;
+import org.apache.geronimo.ews.ws4j2ee.context.JaxRpcMapperContext;
+import org.apache.geronimo.ews.ws4j2ee.context.MiscInfo;
+import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
+import org.apache.geronimo.ews.ws4j2ee.context.wsdl.impl.AxisWSDLContext;
+import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenerationFault;
 
 /**
- * <p>This class is for keep the interface and the concreate implementation of the
- * <code>Writer</code> separate. It is go without saying that the only place where
- * the concrete implementation of the Writer class can refernce is this class.</p>
+ * <p>This class decouple the concreate implementations of the
+ * class from the rest of the code</p>
+ * @author Srinath Perera(hemapani@opensource.lk)
  */
-public class WriterFactory {
-    public static Writer createWriter(J2EEWebServiceContext j2eewscontext,
-                                      int writerType) throws GenerationFault {
-        if (GenerationConstants.EJB_DD_WRITER == writerType)
-            return new EJBDDWriter(j2eewscontext);
-        else if (GenerationConstants.EJB_HOME_INTERFACE_WRITER == writerType)
-            return new EJBHomeWriter(j2eewscontext);
-        else if (GenerationConstants.EJB_REMOTE_INTERFACE_WRITER == writerType)
-            return new EJBRemoteWriter(j2eewscontext);
-        else if (GenerationConstants.EJB_LOCAL_HOME_INTERFACE_WRITER == writerType)
-            return new EJBLocalHomeWriter(j2eewscontext);
-		else if (GenerationConstants.EJB_LOCAL_INTERFACE_WRITER == writerType)
-			return new EJBLocalHomeWriter(j2eewscontext);
-		else if (GenerationConstants.EJB_IMPLEMENTATION_BEAN_WRITER == writerType)
-			return new SessionBeanWriter(j2eewscontext);    
-        else
-            throw new GenerationFault("the writer not found");
+public class ContextFactoryImpl implements ContextFactory{
+    private J2EEWebServiceContext currentContext;
+    public WSDLContext createWSDLContext(Object info) {
+        if (info instanceof SymbolTable)
+            return new AxisWSDLContext((SymbolTable) info);
+        throw new UnrecoverableGenerationFault("unknown context type");
     }
+
+    public JaxRpcMapperContext createJaxRpcMapperContext(JaxRpcMapper mapper,J2eeEmitter emitter) {
+            return new JaxRpcMapperImpl(mapper,emitter);
+    }
+
+//    public WSCFContext createWSCFContext(InputStream in)
+//        throws GenerationFault {
+//        try {
+//            return new WSCFContextImpl(in);
+//        } catch (WSCFException e) {
+//            e.printStackTrace();
+//            throw new GenerationFault(e.getMessage());
+//        }
+//    }
+
+    public MiscInfo createMiscInfo() {
+        return new MiscInfoImpl();
+    }
+
+//    public static J2EEWebServiceContext getCurrentJ2EEWsContext() {
+//        return currentContext;
+//    }
+    public J2EEWebServiceContext getJ2EEWsContext(boolean hasWSDL) {
+        currentContext = new J2EEWebServiceContextImpl(hasWSDL);
+        return currentContext;
+    }
+
+    
 }

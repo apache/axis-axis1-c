@@ -60,7 +60,7 @@ import java.io.InputStream;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.client.ServiceReferanceImpl;
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.ServiceReferance;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.ServiceReferanceContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 import org.w3c.dom.Document;
@@ -87,7 +87,7 @@ import org.w3c.dom.NodeList;
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class ServiceReferanceParser {
-	private ServiceReferance ref; 
+	private ServiceReferanceContext ref; 
 	
 	public ServiceReferanceParser(InputStream inputStream) throws GenerationFault{
 		try {
@@ -156,7 +156,7 @@ public class ServiceReferanceParser {
     /**
      * @return
      */
-    public ServiceReferance getRef() {
+    public ServiceReferanceContext getRef() {
         return ref;
     }
 

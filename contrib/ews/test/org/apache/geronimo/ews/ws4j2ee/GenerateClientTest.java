@@ -92,7 +92,7 @@ public class GenerateClientTest
 	{
 		//client side
 		String args[] = new String[]{getTestFile(sampleDir + "jaxrpc/book/webserviceClient.xml"),
-									 "-o" + getTestFile(outDir+"withWSDL/client/book/"),"-Iuse-remote"};
+									 "-o" + getTestFile(outDir+"withWSDL/client/book/"),"-Euse-remote"};
 		Ws4J2EEClientwithWSDL.main(args);
 	}
 

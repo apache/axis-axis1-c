@@ -4,14 +4,14 @@ import java.util.Vector;
 
 import javax.xml.namespace.QName;
 
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.ServiceReferance;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.ServiceReferanceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFHandler;
 
 /**
  * @see org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.ServiceReferance;
  * @author Srinath Perera(hemapani@opensource.lk)
  */
-public class ServiceReferanceImpl implements ServiceReferance{
+public class ServiceReferanceImpl implements ServiceReferanceContext{
 		/**
 		 * Service Reference Name. This defines a logical name for the 
 		 * reference that is used in the client source code. It is recommended,

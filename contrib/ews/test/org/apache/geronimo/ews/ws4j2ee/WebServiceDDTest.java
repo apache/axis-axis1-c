@@ -59,27 +59,34 @@ import java.io.FileInputStream;
 import junit.framework.Assert;
 
 import org.apache.geronimo.ews.AbstractTestCase;
-import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
+import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFHandler;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
+import org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2eeFactory;
+import org.apache.geronimo.ews.ws4j2ee.toWs.impl.Ws4J2eeFactoryImpl;
+
+import testData.MockWs4J2eeContext;
 
 /**
  * @author hemapani
  */
 public class WebServiceDDTest extends AbstractTestCase{
+	private Ws4J2eeFactory factory;
+	private J2EEWebServiceContext context;
     /**
      * @param testName
      */
     public WebServiceDDTest(String testName) {
         super(testName);
-        // TODO Auto-generated constructor stub
+		factory = new Ws4J2eeFactoryImpl();
     }
 
 	public void testGoogleDD() throws Exception{
+		context = new MockWs4J2eeContext();
 		WSCFContext wscfcontext 
-			= ContextFactory.createWSCFContext(
+			= factory.getParserFactory().parseWSCF(context,
 				new FileInputStream(getTestFile(sampleDir 
 				+ "mapper/google/webservices.xml")));
 		Assert.assertNull(wscfcontext.getDescription());
@@ -116,7 +123,7 @@ public class WebServiceDDTest extends AbstractTestCase{
 	
 	public void testHandlerDD() throws Exception{
 		WSCFContext wscfcontext 
-			= ContextFactory.createWSCFContext(
+			= factory.getParserFactory().parseWSCF(context,
 				new FileInputStream(
 					getTestFile(testDir + "testData/math/webservice-withHandler.xml")));
 		WSCFWebserviceDescription[] wsarray = wscfcontext.getWebServicesDescription();

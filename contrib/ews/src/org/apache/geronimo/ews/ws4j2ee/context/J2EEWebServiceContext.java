@@ -55,8 +55,12 @@
 
 package org.apache.geronimo.ews.ws4j2ee.context;
 
+import org.apache.geronimo.ews.ws4j2ee.context.j2eeDD.EJBContext;
+import org.apache.geronimo.ews.ws4j2ee.context.j2eeDD.WebContext;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.ServiceReferanceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
+import org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2eeFactory;
 
 /**
  * <p>This interface has all the information about the J2EE webservice that is
@@ -110,4 +114,22 @@ public interface J2EEWebServiceContext {
 	 * validate the context
 	 */
     public void validate();
+    
+    /**
+     * Information about which implementation should used for by the tool
+     * Changing this one can change how the tool behave.
+     * @param factory
+     */
+    public void setFactory(Ws4J2eeFactory factory);
+	public Ws4J2eeFactory getFactory();
+	
+	public EJBContext getEJBDDContext();
+	public void setEJBDDContext(EJBContext context);
+	
+	public WebContext getWebDDContext();
+	public void setWebDDContext(WebContext context);
+
+	public ServiceReferanceContext getServiceReferanceContext(int index);
+	public void addServiceReferanceContext(ServiceReferanceContext context);
+	public int getServiceReferanceContextCount();
 }

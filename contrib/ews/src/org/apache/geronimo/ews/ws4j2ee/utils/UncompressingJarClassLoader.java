@@ -157,5 +157,4 @@ public class UncompressingJarClassLoader {
     public void setDir(String string) {
         dir = string;
     }
-
 }

@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import junit.framework.Assert;
 
 import org.apache.geronimo.ews.AbstractTestCase;
-import org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.ServiceReferance;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.ServiceReferanceContext;
 import org.apache.geronimo.ews.ws4j2ee.parsers.ServiceReferanceParser;
 
 /**
@@ -25,7 +25,7 @@ public class ServiceRefTest extends AbstractTestCase{
 				= new ServiceReferanceParser(new FileInputStream(
 					getTestFile(testDir+"org/apache/geronimo/ews/" +
 						"ws4j2ee/seviceRef/service-ref1.xml")));
-			ServiceReferance ref = 	parser.getRef();
+			ServiceReferanceContext ref = 	parser.getRef();
 			Assert.assertEquals("service/Joe",ref.getServicerefName());
 			Assert.assertEquals("javax.xml.rpc.Service",ref.getServiceInterface());
 			Assert.assertEquals("WEB-INF/joe.xml",ref.getJaxrpcmappingFile());
@@ -42,7 +42,7 @@ public class ServiceRefTest extends AbstractTestCase{
 				= new ServiceReferanceParser(new FileInputStream(
 					getTestFile(testDir+"org/apache/geronimo/ews/ws4j2ee/" +
 						"seviceRef/service-ref2.xml")));
-			ServiceReferance ref = 	parser.getRef();
+			ServiceReferanceContext ref = 	parser.getRef();
 			Assert.assertEquals("service/Joe",ref.getServicerefName());
 			Assert.assertEquals("javax.xml.rpc.Service",ref.getServiceInterface());
 			//System.out.println(ref.getJaxrpcmappingFile());

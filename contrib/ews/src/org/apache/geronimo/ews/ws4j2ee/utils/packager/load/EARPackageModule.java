@@ -83,18 +83,11 @@ public class EARPackageModule extends AbstractPackageModule {
             throw new GenerationFault("wscf file must not be null");
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.geronimo.ews.ws4j2ee.utils.packager.load.PackageModule#getClassLoaderWithPackageLoaded()
-     */
     public ClassLoader getClassLoaderWithPackageLoaded() throws GenerationFault {
         return cl.getClassLoader();
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.geronimo.ews.ws4j2ee.utils.packager.load.PackageModule#getClassPathElements()
-     */
     public Vector getClassPathElements() {
         return cl.getURLs();
     }
-
 }

@@ -88,7 +88,7 @@ import org.apache.geronimo.ews.ws4j2ee.context.wsdl.type.SchemaType;
  * @see org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext
  * @author Srinath Perera(hemapani@opensource.lk)
  */
-public class AxisWSDLContext implements WSDLContext {
+public class AxisWSDLContext extends AbstractWSDLContext implements WSDLContext {
 	protected static Log log =
 				LogFactory.getLog(AxisWSDLContext.class.getName());
     private SymbolTable symbolTable;
@@ -96,6 +96,7 @@ public class AxisWSDLContext implements WSDLContext {
     private HashMap bindings;
     private HashMap portetypes;
     private HashMap ports;
+    
     private boolean verbose = false;
 
     public AxisWSDLContext(SymbolTable axisSymbltable) {
@@ -231,10 +232,7 @@ public class AxisWSDLContext implements WSDLContext {
         return (PortEntry) obj;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext#getTargetNSURI()
-     */
-    public String getTargetNSURI() {
+   public String getTargetNSURI() {
         return symbolTable.getDefinition().getTargetNamespace();
     }
 }

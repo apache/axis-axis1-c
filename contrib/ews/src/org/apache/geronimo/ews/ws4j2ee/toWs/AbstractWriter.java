@@ -81,43 +81,20 @@ public abstract class AbstractWriter implements Writer {
     protected J2EEWebServiceContext j2eewscontext;
     /* this is used to write the file */
     protected PrintWriter out;
-    
-
-    public AbstractWriter(J2EEWebServiceContext j2eewscontext)
-            throws GenerationFault {
-        this.j2eewscontext = j2eewscontext;
-		boolean verbose = j2eewscontext.getMiscInfo().isVerbose();
-        try {
-            File file = new File(getFileName());
-			if(verbose){
-				log.info("genarating ... " + file.getAbsolutePath());
-			}
-            if (!isOverWrite() && file.exists()) {
-            	out = null;
-				if(verbose){
-					log.info("the file already exists .. tool will not overwrite it ");
-				}
-
-            } else {
-                File parent = file.getParentFile();
-                if (parent != null)
-                    parent.mkdirs();
-                file.createNewFile();
-				out = new PrintWriter(new FileWriter(file, false));
-            }
-
-        } catch (IOException e) {
-            throw GenerationFault.createGenerationFault(e);
-        }
-
-    }
+    private String fileName;
+    private boolean verbose;
     
 	public AbstractWriter(J2EEWebServiceContext j2eewscontext,String filename)
 			throws GenerationFault {
 		this.j2eewscontext = j2eewscontext;
-		boolean verbose = j2eewscontext.getMiscInfo().isVerbose();
+		this.fileName = filename;
+		verbose = j2eewscontext.getMiscInfo().isVerbose();
+	}
+	
+    protected abstract void writeCode() throws GenerationFault;
+    protected final void prepare()throws GenerationFault{
 		try {
-			File file = new File(filename);
+			File file = new File(this.fileName);
 			if(verbose){
 				log.info("genarating ... " + file.getAbsolutePath());
 			}
@@ -138,24 +115,22 @@ public abstract class AbstractWriter implements Writer {
 		} catch (IOException e) {
 			throw GenerationFault.createGenerationFault(e);
 		}
-
-	}
-
-
-    /**
-     * return complete path for the file associated with this writer
-     * 
-     * @return 
-     */
-    public abstract String getFileName();
-
-    /* (non-Javadoc)
-     * @see org.apache.geronimo.ews.ws4j2ee.toWs.Writer#writeCode()
-     */
-    public void writeCode() throws GenerationFault {
     }
+	protected final void cleanUp()throws GenerationFault{
+		if(out != null)
+			out.close();
+	}
+    
     protected boolean isOverWrite(){
     	return true;
     }
-
+    
+    public final void write() throws GenerationFault {
+    	try{
+			prepare();
+			writeCode();
+    	}finally{
+			cleanUp();    	
+    	}
+    }
 }

@@ -62,24 +62,27 @@ import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.PortEntry;
 import org.apache.geronimo.ews.AbstractTestCase;
 import org.apache.geronimo.ews.jaxrpcmapping.J2eeEmitter;
-import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
+import org.apache.geronimo.ews.ws4j2ee.toWs.Ws4J2eeFactory;
+import org.apache.geronimo.ews.ws4j2ee.toWs.impl.Ws4J2eeFactoryImpl;
 
 /**
  * @author hemapani
  */
 public class WSDLTest extends AbstractTestCase {
+	private Ws4J2eeFactory factory;
     /**
      * @param testName
      */
     public WSDLTest(String testName) {
         super(testName);
+		factory = new Ws4J2eeFactoryImpl();
     }
 
     public void testGoogleWSDL() throws Exception {
-        J2EEWebServiceContext context = ContextFactory.getJ2EEWsContext(true);
-        context.setMiscInfo(ContextFactory.createMiscInfo());
+        J2EEWebServiceContext context = factory.getContextFactory().getJ2EEWsContext(true);
+        context.setMiscInfo(factory.getContextFactory().createMiscInfo());
         String mappingfile = getTestFile(sampleDir + "mapper/google/GoogleSearch.xml");
         String wsdlfile = getTestFile(sampleDir + "mapper/google/GoogleSearch.wsdl");
         J2eeEmitter j2ee = new J2eeEmitter();
@@ -91,7 +94,7 @@ public class WSDLTest extends AbstractTestCase {
         System.out.println();
         j2ee.runServerSide(wsdlfile);
         WSDLContext wscontext =
-            ContextFactory.createWSDLContext(j2ee.getSymbolTable());
+			factory.getContextFactory().createWSDLContext(j2ee.getSymbolTable());
         PortEntry port = wscontext.getPort(new QName("GoogleSearchPort"));
         BindingEntry be =
             wscontext.getBinding(
