@@ -53,7 +53,7 @@ public:
      * @param valueAsChar Serialized form of value.
      * @return Deserialized value.
      */  
-    void* deserializer(const AxisChar* valueAsChar) throw (AxisSoapException);
+    void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
 
     /**
      * Serialize UnsignedLong value to it's on-the-wire string form.

@@ -141,19 +141,4 @@ MinInclusive* NonNegativeInteger::getMinInclusive()
     return new MinInclusive((unsigned LONGLONG) 0);
 }
 
-MinExclusive* NonNegativeInteger::getMinExclusive()
-{   
-    return new MinExclusive((unsigned LONGLONG) -1);
-}
-
-MaxInclusive* NonNegativeInteger::getMaxInclusive()
-{   
-    return new MaxInclusive();
-}
-
-MaxExclusive* NonNegativeInteger::getMaxExclusive()
-{   
-    return new MaxExclusive();
-}
-
 AXIS_CPP_NAMESPACE_END

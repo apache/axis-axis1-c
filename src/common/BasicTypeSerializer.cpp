@@ -90,9 +90,10 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
             }
             break;
         case XSD_UNSIGNEDBYTE:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%u", 
-                *((unsigned char*)(pValue)));
-            m_sSZ += m_Buf;
+            {
+                UnsignedByte unsignedByteSerializer;
+                m_sSZ += unsignedByteSerializer.serialize(pValue);
+            }
             break;
         case XSD_LONG:
             {
@@ -317,9 +318,10 @@ const AxisChar* BasicTypeSerializer::serializeAsAttribute
             }
             break;
         case XSD_UNSIGNEDBYTE:
-            AxisSprintf (m_Buf, BTS_BUFFSIZE, "%c", 
-                *((unsigned char*)(pValue)));
-            m_sSZ += m_Buf;
+            {
+                UnsignedByte unsignedByteSerializer;
+                m_sSZ += unsignedByteSerializer.serialize(pValue);
+            }
             break;
         case XSD_LONG:
             {

@@ -17,7 +17,7 @@ AxisChar* UnsignedLong::serialize(const void* value) throw (AxisSoapException)
     return serialize((unsigned long*) value);
 }
 
-void* UnsignedLong::deserializer(const AxisChar* valueAsChar) throw (AxisSoapException)
+void* UnsignedLong::deserialize(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
     return (void*) deserializeUnsignedLong(valueAsChar);
 }

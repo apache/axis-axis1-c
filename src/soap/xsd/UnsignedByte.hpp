@@ -19,27 +19,27 @@
  *
  */
 
-#if !defined(_UNSIGNEDSHORT_HPP____OF_AXIS_INCLUDED_)
-#define _UNSIGNEDSHORT_HPP____OF_AXIS_INCLUDED_
+#if !defined(_UNSIGNEDBYTE_HPP____OF_AXIS_INCLUDED_)
+#define _UNSIGNEDBYTE_HPP____OF_AXIS_INCLUDED_
 
-#include "UnsignedInt.hpp"
+#include "UnsignedShort.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
 using namespace std;
 
-class UnsignedShort : public UnsignedInt {
+class UnsignedByte : public UnsignedShort {
 public:
     
     /**
      * Constructor
      */
-    UnsignedShort();
+    UnsignedByte();
     
     /**
      * Destructor
      */
-    ~UnsignedShort();
+    ~UnsignedByte();
 
     /**
      * Serialize value to it's on-the-wire string form.
@@ -56,30 +56,30 @@ public:
     void* deserialize(const AxisChar* valueAsChar) throw (AxisSoapException);
 
     /**
-     * Serialize UnsignedShort value to it's on-the-wire string form.
-     * @param value The UnsignedShort value to be serialized.
-     * @return Serialized form of UnsignedShort value.
+     * Serialize UnsignedByte value to it's on-the-wire string form.
+     * @param value The UnsignedByte value to be serialized.
+     * @return Serialized form of UnsignedByte value.
      */  
-    AxisChar* serialize(const unsigned short* value) throw (AxisSoapException);
+    AxisChar* serialize(const unsigned char* value) throw (AxisSoapException);
   
   /**
-   * Deserialized UnsignedShort value from it's on-the-wire string form.
-   * @param valueAsChar Serialized form of UnsignedShort value.
-   * @return Deserialized UnsignedShort value.
+   * Deserialized UnsignedByte value from it's on-the-wire string form.
+   * @param valueAsChar Serialized form of UnsignedByte value.
+   * @return Deserialized UnsignedByte value.
    */
-    unsigned short* deserializeUnsignedShort(const AxisChar* valueAsChar) throw (AxisSoapException);
+    unsigned char* deserializeUnsignedByte(const AxisChar* valueAsChar) throw (AxisSoapException);
 
 protected:
 
     /**
-     * Creates a MaxInclusive object.  For the UnsignedShort type this is
-     * defined as 65535.
+     * Creates a MaxInclusive object.  For the UnsignedByte type this is
+     * defined as 255.
      * @return MaxInclusive object
      */
     virtual MaxInclusive* getMaxInclusive();
     
 private:
-    unsigned short *m_UnsignedShort;
+    unsigned char *m_UnsignedByte;
 };
 
 AXIS_CPP_NAMESPACE_END

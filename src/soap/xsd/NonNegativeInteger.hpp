@@ -78,27 +78,6 @@ protected:
      */
     virtual MinInclusive* getMinInclusive();
 
-    /**
-     * Creates a MinExclusive object.  For the NonNegativeInteger type this is
-     * defined as -1.
-     * @return MinExclusive object
-     */
-    virtual MinExclusive* getMinExclusive();
-
-    /**
-     * Creates a MaxInclusive object.  For the NonNegativeInteger type this is
-     * undefined, so an unset MaxExclusive object is returned.
-     * @return MaxInclusive object
-     */
-    virtual MaxInclusive* getMaxInclusive();
-
-    /**
-     * Creates a MaxExclusive object.  For the NonNegativeInteger type this is
-     * undefined, so an unset MaxExclusive object is returned.
-     * @return MaxExclusive object
-     */
-    virtual MaxExclusive* getMaxExclusive();
-
 private:
    unsigned LONGLONG* m_NonNegativeInteger;
 

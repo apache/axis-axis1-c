@@ -52,6 +52,7 @@
 #include "../soap/xsd/UnsignedLong.hpp"
 #include "../soap/xsd/UnsignedInt.hpp"
 #include "../soap/xsd/UnsignedShort.hpp"
+#include "../soap/xsd/UnsignedByte.hpp"
 
 using namespace std;
 

@@ -43,6 +43,7 @@
 #include "xsd/UnsignedLong.hpp"
 #include "xsd/UnsignedInt.hpp"
 #include "xsd/UnsignedShort.hpp"
+#include "xsd/UnsignedByte.hpp"
 #include "../platforms/PlatformAutoSense.hpp"
 
 AXIS_CPP_NAMESPACE_START
