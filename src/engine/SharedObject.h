@@ -67,6 +67,7 @@
 #define AFX_SHAREDOBJECT_H__0805D25C_2F7E_4B19_BECE_0A8BFE9F0830__INCLUDED_
 
 #include "../common/GDefine.h"
+#include "pthread.h"
 
 class SharedObject  
 {
@@ -77,7 +78,9 @@ protected:
 	int unlock();
 	int lock();
 private:
-	volatile bool m_bLocked;
+	bool m_bLocked;
+    pthread_mutex_t* mut;
 };
 
+static pthread_mutex_t mut = PTHREAD_MUTEX_INITIALIZER;
 #endif // !defined(AFX_SHAREDOBJECT_H__0805D25C_2F7E_4B19_BECE_0A8BFE9F0830__INCLUDED_)
