@@ -73,5 +73,15 @@
             </xjc>
         </j:jelly>
     </goal>
+    
+    <preGoal name="test:test">
+        <j:jelly xmlns="jelly:ant">
+		<ant:ant antfile="build.xml" inheritall="true" inheritrefs="true" dir="samples/ejb/bookquote"/>
+		<ant:ant antfile="build.xml" inheritall="true" inheritrefs="true" dir="samples/ejb/google"/>
+		<ant:ant antfile="build.xml" inheritall="true" inheritrefs="true" dir="samples/ejb/time"/>
+		<ant:ant antfile="build.xml" inheritall="true" inheritrefs="true" dir="samples/ejb/zip"/>
+        </j:jelly>
+    </preGoal> 
+    
 
 </project>
