@@ -65,34 +65,63 @@
 #include "libAxiscpp.h"
 #include "../../common/Packet.h"
 #include <new>
+#include <exception>
+
+#if defined (_DEBUG)
+	#include <iostream>
+	#define Trace(x)	std::cout << x << std::endl;
+#else
+	#define Trace(x)
+#endif
 
 
 
-JNIEXPORT void JNICALL Java_AxisCppContentHandler_Delegate
-  (JNIEnv *p_Env, jclass, jcharArray p_jBody, jint p_nBodySize, jobject p_jvHeaders, 
-  jint p_nHeaderCount)
+JNIEXPORT void JNICALL Java_AxisCppContentHandler_processContent
+  (JNIEnv *p_Env, 
+   jclass, 
+   jbyteArray p_jBody, 
+   jint p_nBodySize, 
+   jobject p_jvHeaders, 
+   jint p_nHeaderCount)
 {
 	//TODO: populate soapstream with the headers & the body;
 	// invoke to process the contents
-	soapstream* str = new soapstream;
-	str->trtype = APTHTTP;
-	str->so.http.ip_soap = new char[p_nBodySize*sizeof(jchar)];
-	p_Env->GetCharArrayRegion(p_jBody, 0, p_nBodySize, (jchar*)str->so.http.ip_soap);
-	str->so.http.ip_soapcount = p_nBodySize;
+	HTTP_PACKET* pHttpPkt = new HTTP_PACKET;
+	pHttpPkt->pchContent = new char[p_nBodySize+1];
+	
+	p_Env->GetByteArrayRegion(p_jBody, 0, p_nBodySize, (jbyte*)pHttpPkt->pchContent);
+
+	Trace(pHttpPkt->pchContent);
+	
+	pHttpPkt->nContentLen = p_nBodySize;
 	//set method name as a http header.
-	str->so.http.ip_headers = new header[p_nHeaderCount*2];
+	pHttpPkt->pHeaders    = new HTTP_HEADER[p_nHeaderCount];
 
 	JNIVector jvHeader(p_Env, p_jvHeaders);
 	for(int i=0;i < p_nHeaderCount; i++)
 	{
-		str->so.http.ip_headers[i].headername  = jvHeader[i];
-		str->so.http.ip_headers[i].headervalue = jvHeader[i+1];
+		pHttpPkt->pHeaders[i].name  = jvHeader[i*2];
+		pHttpPkt->pHeaders[i].value = jvHeader[i*2+1];
+		Trace(pHttpPkt->pHeaders[i].name );
+		Trace(pHttpPkt->pHeaders[i].value);
 	}
-	str->so.http.ip_headercount = p_nHeaderCount;
+	pHttpPkt->nHeaderCount = p_nHeaderCount;
+	pHttpPkt->enMethod = POST;
 
+	jvHeader.clear();
+	jvHeader.push_back("Name_p1"); // Name_p1
+	jvHeader.push_back("Value_p1");
+	jvHeader.push_back("Name_p2");
+	jvHeader.push_back("Value_p2");
 
-	delete [] str->so.http.ip_headers;
-	delete str;
+	delete [] pHttpPkt->pchContent;
+	p_jBody = p_Env->NewByteArray(strlen(pHttpPkt->pchContent)+1);
+	p_Env->SetByteArrayRegion(p_jBody, 0, strlen(pHttpPkt->pchContent), 
+								(jbyte*)pHttpPkt->pchContent);
+
+	delete [] pHttpPkt->pHeaders;
+	delete [] pHttpPkt->pchContent;
+	delete pHttpPkt;
 }
 
 
@@ -106,11 +135,24 @@ JNIVector::JNIVector(JNIEnv* p_Env, jobject p_jVector)
 					 "java/lang/IllegalArgumentException",
 					 "p_jVector not a java.util.Vector object!");
 
-	m_jmGet = p_Env->GetMethodID(clazz, "get", "(I)Ljava/lang/Object");
+	m_jmGet = p_Env->GetMethodID(clazz, "get", "(I)Ljava/lang/Object;");
 
 	JNI_ASSERT(m_jmGet != NULL,
                  "java/lang/NoSuchMethodError",
                  "method 'public Object get(int index)' not found!");
+
+	m_jmAdd = p_Env->GetMethodID(clazz, "addElement", "(Ljava/lang/Object;)V");
+
+	JNI_ASSERT(m_jmGet != NULL,
+                 "java/lang/NoSuchMethodError",
+                 "method 'public void addElement(Object obj)' not found!");
+
+	m_jmClear = p_Env->GetMethodID(clazz, "clear", "()V");
+
+	JNI_ASSERT(m_jmGet != NULL,
+                 "java/lang/NoSuchMethodError",
+                 "method 'public void clear()' not found!");
+
 }
 	///Destructor
 JNIVector::~JNIVector()
@@ -131,7 +173,68 @@ char* JNIVector::operator [] (int i) const
 
 void JNIVector::push_back(const char* str) 
 {
+	m_pEnv->CallVoidMethod(m_jVector, m_jmAdd, m_pEnv->NewStringUTF(str));
+	if (m_pEnv->ExceptionOccurred())
+		throw std::bad_exception("can't push_back"); //need to set up a exception
+}
 
+void JNIVector::clear()
+{
+	m_pEnv->CallVoidMethod(m_jVector, m_jmClear);
+	if (m_pEnv->ExceptionOccurred())
+		throw std::bad_exception("Can't clear the vector"); //need to set up a exception
+}
+
+
+/*
+JNIString::JNIString(JNIEnv* p_Env, jstring p_jStr) throw(std::bad_alloc)
+        : m_pEnv(p_Env), m_jStr(p_jStr)
+{
+    m_pch = (m_jStr == NULL)? NULL : m_pEnv->GetStringUTFChars(m_jStr, NULL);
+    if (m_pEnv->ExceptionOccurred())
+        throw std::bad_alloc();
+}
+
+JNIString::~JNIString()
+{
+    if (m_pch != NULL)
+        m_pEnv->ReleaseStringUTFChars(m_jStr, m_pch);
+}
+
+JNIString::operator const char* () const
+{
+    return m_pch;
+}
+
+JNIString& JNIString::operator = (const char* p_pch)
+{
+	if (m_pch != NULL)
+        m_pEnv->ReleaseStringUTFChars(m_jStr, m_pch);
+
+	m_pch = p_pch;
+	m_pch = (m_jStr == NULL)? NULL : m_pEnv->GetStringUTFChars(m_jStr, NULL);
+    if (m_pEnv->ExceptionOccurred())
+        throw std::bad_alloc();
+	return *this;
+}
+
+jstring JNIString::getJNIString()
+{
+	return m_pEnv->NewStringUTF(m_pch);
+}
+*/
+
+
+JNIEXPORT jint JNICALL
+JNI_OnLoad( JavaVM *jvm, void *reserved )
+{
+    return JNI_VERSION_1_2;
+}
+
+
+JNIEXPORT void JNICALL
+JNI_OnUnload( JavaVM *jvm, void *reserved )
+{
 }
 
 
