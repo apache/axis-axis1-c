@@ -18,14 +18,15 @@
 #
 #   @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
 #
-
-rm /usr/local/apache/libexec/libaxiscpp_mod.so
-rm ../lib/libaxis_xmlparser.so
-cp -f ../lib/libaxiscpp_mod.so /usr/local/apache/libexec/
-cp -f ../lib/libaxis_expat.so ../lib/libaxis_xmlparser.so
-cp -f ../etc/server.wsdd_linux ../etc/server.wsdd
-cp -f ../etc/client.wsdd_linux ../etc/client.wsdd
-cp -f ../etc/axiscpp.conf_linux ../etc/axiscpp.conf
+APACHE_HOME=${APACHE_HOME:-/usr/local/apache}
+export APACHE_HOME
+rm ${APACHE_HOME}/libexec/libaxiscpp_mod.so
+rm ${AXISCPP_DEPLOY}/lib/libaxis_xmlparser.so
+cp -f ${AXISCPP_DEPLOY}/lib/libaxiscpp_mod.so ${APACHE_HOME}/libexec/
+cp -f ${AXISCPP_DEPLOY}/lib/libaxis_expat.so ${AXISCPP_DEPLOY}/lib/libaxis_xmlparser.so
+cp -f ${AXISCPP_DEPLOY}/etc/server.wsdd_linux ${AXISCPP_DEPLOY}/etc/server.wsdd
+cp -f ${AXISCPP_DEPLOY}/etc/client.wsdd_linux ${AXISCPP_DEPLOY}/etc/client.wsdd
+cp -f ${AXISCPP_DEPLOY}/etc/axiscpp.conf_linux ${AXISCPP_DEPLOY}/etc/axiscpp.conf
 /usr/local/apache/bin/apachectl stop
 sleep 2
 /usr/local/apache/bin/apachectl start
