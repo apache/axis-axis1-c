@@ -96,6 +96,7 @@ public:
 
 	static AxisEngine* GetAxisEngine();
 	int Process(soapstream* soap);
+	WSDDDeployment* getWSDDDeployment();
 };
 
 #endif
