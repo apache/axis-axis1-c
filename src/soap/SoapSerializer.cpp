@@ -860,8 +860,7 @@ void SoapSerializer::releaseBufferCallBack(const char* buffer, const void* buffe
 IHeaderBlock* SoapSerializer::createHeaderBlock(AxisChar *pachLocalName, 
                                                 AxisChar *pachUri)
 {
-    HeaderBlock* pHeaderBlock= new HeaderBlock(pachLocalName, 
-        getNamespacePrefix(pachUri), pachUri);
+    HeaderBlock* pHeaderBlock= new HeaderBlock(pachLocalName, pachUri);
     setHeaderBlock(pHeaderBlock);
     return pHeaderBlock;    
 }

@@ -258,12 +258,16 @@ public:
       */
     virtual void setUri(const AxisChar* uri)=0;
 
-    /**
+    /*
       * Sets the prefix of this Header Block.
       *
       * @param prefix The prefix to set in.
       */
+	/* Commented by Susantha - 21/06/2004
+	 * The prefix should be decided by the Serializer at runtime
+	 *
     virtual void setPrefix(const AxisChar* prefix)=0;
+	*/
 #ifdef UNIT_TESTING_ON
     /**
       * Initialized the Header Block for testing.
