@@ -54,7 +54,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 /nologo /dll /machine:I386 /out:"../../../../../bin/interopGroupB.dll"
+# ADD LINK32 /nologo /dll /machine:I386 /out:"../../../../../bin/groupB.dll"
 
 !ELSEIF  "$(CFG)" == "groupB - Win32 Debug"
 
@@ -81,7 +81,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 /nologo /dll /debug /machine:I386 /out:"../../../../../bin/interopGroupB.dll" /pdbtype:sept
+# ADD LINK32 /nologo /dll /debug /machine:I386 /out:"../../../../../bin/groupB.dll" /pdbtype:sept
 
 !ENDIF 
 
@@ -120,26 +120,6 @@ SOURCE=..\..\..\..\..\samples\server\interoptests\groupB\SOAPStructStruct.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=..\..\..\..\..\samples\server\interoptests\groupB\ArrayOffloat.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\..\samples\server\interoptests\groupB\ArrayOfint.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\..\samples\server\interoptests\groupB\ArrayOfSOAPStruct.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\..\samples\server\interoptests\groupB\ArrayOfstring.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\..\samples\server\interoptests\groupB\ArrayOfString2D.h
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\..\..\..\samples\server\interoptests\groupB\InteropTestPortTypeB.h

@@ -112,22 +112,6 @@ SOURCE=..\..\..\..\..\samples\server\interoptests\doclitbase\SOAPStruct.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\..\..\..\samples\server\interoptests\doclitbase\ArrayOffloat.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\..\samples\server\interoptests\doclitbase\ArrayOfint.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\..\samples\server\interoptests\doclitbase\ArrayOfSOAPStruct.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\..\samples\server\interoptests\doclitbase\ArrayOfstring.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\..\..\samples\server\interoptests\doclitbase\InteropTestPortType.h
 # End Source File
 # Begin Source File

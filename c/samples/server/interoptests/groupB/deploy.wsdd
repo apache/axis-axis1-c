@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:CPP="http://xml.apache.org/axis/wsdd/providers/CPP">
+	<service name="InteropGroupB" provider="CPP:RPC" description="Axis C++ web service">
+		<parameter name="className" value="/user/local/apache/axis/InteropGroupB.so"/>
+		<parameter name="allowedMethods" value="echoStructAsSimpleTypes echoSimpleTypesAsStruct echoNestedStruct echoNestedArray "/>
+	</service>
+</deployment>
