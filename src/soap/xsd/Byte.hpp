@@ -84,6 +84,20 @@ protected:
      * @return MinExclusive object
      */
     virtual MinExclusive* getMinExclusive();
+
+    /**
+     * Creates a MaxInclusive object.  For the Byte type this is defined as
+     * 127.
+     * @return MaxInclusive object
+     */
+    virtual MaxInclusive* getMaxInclusive();
+
+    /**
+     * Creates a Maxexclusive object.  For the Byte type this is defined as
+     * 128.
+     * @return Maxexclusive object
+     */
+    virtual MaxExclusive* getMaxExclusive();
     
 private:
     char* m_Byte;

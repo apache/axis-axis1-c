@@ -42,4 +42,9 @@ unsigned long* UnsignedLong::deserializeUnsignedLong(const AxisChar* valueAsChar
     return m_UnsignedLong;
 }
 
+MaxInclusive* UnsignedLong::getMaxInclusive()
+{   
+    return new MaxInclusive((LONGLONG) 18446744073709551615);
+}
+
 AXIS_CPP_NAMESPACE_END

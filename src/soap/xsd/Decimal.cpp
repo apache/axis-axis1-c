@@ -72,6 +72,52 @@ AxisChar* Decimal::serialize(const double* value) throw (AxisSoapException)
     }
     delete minExclusive;
 
+
+MaxInclusive* maxInclusive = getMaxInclusive();
+    if (maxInclusive->isSet())
+    {
+        if ( *value < maxInclusive->getMaxInclusiveAsDouble() )
+        {
+            AxisString exceptionMessage =
+            "Value to be serialized is greater than MaxInclusive specified for this type.  MaxInclusive = ";
+            AxisChar* length = new AxisChar[25];
+            sprintf(length, "%f", maxInclusive->getMaxInclusiveAsDouble());
+            exceptionMessage += length;
+            exceptionMessage += ", Value = ";
+            sprintf(length, "%f", *value);
+            exceptionMessage += length;
+            exceptionMessage += ".";
+            delete [] length;
+            
+            throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                const_cast<AxisChar*>(exceptionMessage.c_str()));
+        }
+    }
+    delete maxInclusive;
+
+    MaxExclusive* maxExclusive = getMaxExclusive();
+    if (maxExclusive->isSet())
+    {
+        if ( *value < maxExclusive->getMaxExclusiveAsDouble() )
+        {
+            AxisString exceptionMessage =
+            "Value to be serialized is greater than or equal to MaxExclusive specified for this type.  MaxExclusive = ";
+            AxisChar* length = new AxisChar[25];
+            sprintf(length, "%f", maxExclusive->getMaxExclusiveAsDouble());
+            exceptionMessage += length;
+            exceptionMessage += ", Value = ";
+            sprintf(length, "%f", *value);
+            exceptionMessage += length;
+            exceptionMessage += ".";
+            delete [] length;
+            
+            throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                const_cast<AxisChar*>(exceptionMessage.c_str()));
+        }
+    }
+    delete maxExclusive;
+
+
     AxisChar* serializedValue = new char[80];
 	AxisSprintf (serializedValue, 80, "%f", *value);
 	
@@ -108,6 +154,16 @@ MinInclusive* Decimal::getMinInclusive()
 MinExclusive* Decimal::getMinExclusive()
 {
     return new MinExclusive();
+}
+
+MaxInclusive* Decimal::getMaxInclusive()
+{
+    return new MaxInclusive();
+}
+
+MaxExclusive* Decimal::getMaxExclusive()
+{
+    return new MaxExclusive();
 }
 
 AXIS_CPP_NAMESPACE_END

@@ -52,4 +52,14 @@ MinExclusive* Short::getMinExclusive()
     return new MinExclusive(static_cast<LONGLONG>(-32769));
 }
 
+MaxInclusive* Short::getMaxInclusive()
+{
+    return new MaxInclusive(static_cast<LONGLONG>(32767));
+}
+
+MaxExclusive* Short::getMaxExclusive()
+{
+    return new MaxExclusive(static_cast<LONGLONG>(32768));
+}
+
 AXIS_CPP_NAMESPACE_END

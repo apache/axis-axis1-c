@@ -84,6 +84,20 @@ protected:
      * @return MinExclusive object
      */
     virtual MinExclusive* getMinExclusive();
+
+    /**
+     * Creates a MaxInclusive object.  For the Short type this is defined as
+     * 32767.
+     * @return MaxInclusive object
+     */
+    virtual MaxInclusive* getMaxInclusive();
+
+    /**
+     * Creates a MaxExclusive object.  For the Short type this is defined as
+     * 32768.
+     * @return MaxExclusive object
+     */
+    virtual MaxExclusive* getMaxExclusive();
     
 private:
     short* m_Short;

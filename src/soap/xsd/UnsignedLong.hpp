@@ -68,6 +68,15 @@ public:
    * @return Deserialized UnsignedLong value.
    */
     unsigned long* deserializeUnsignedLong(const AxisChar* valueAsChar) throw (AxisSoapException);
+
+protected:
+
+    /**
+     * Creates a MaxInclusive object.  For the UnsignedLong type this is
+     * defined as 18446744073709551615.
+     * @return MaxInclusive object
+     */
+    virtual MaxInclusive* getMaxInclusive();
     
 private:
     unsigned long *m_UnsignedLong;

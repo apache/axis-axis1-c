@@ -53,6 +53,42 @@ AXIS_CPP_NAMESPACE_START
             }
         }
         delete minExclusive;
+
+        MaxInclusive* maxInclusive = getMaxInclusive();
+        if (maxInclusive->isSet())
+        {
+            if ( 0 > difftime(mktime(&(maxInclusive->getMaxInclusiveAsStructTM())), mktime(const_cast<struct tm*>(value))) )
+            {
+                AxisString exceptionMessage =
+                "Value to be serialized is greater than MaxInclusive specified for this type.  MaxInclusive = ";
+                exceptionMessage += asctime(&(maxInclusive->getMaxInclusiveAsStructTM()));
+                exceptionMessage += ", Value = ";
+                exceptionMessage += asctime(value);
+                exceptionMessage += ".";
+                
+                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                    const_cast<AxisChar*>(exceptionMessage.c_str()));
+            }
+        }
+        delete maxInclusive;
+
+        MaxExclusive* maxExclusive = getMaxExclusive();
+        if (maxExclusive->isSet())
+        {
+            if ( 0 > difftime(mktime(&(maxExclusive->getMaxExclusiveAsStructTM())), mktime(const_cast<struct tm*>(value))) )
+            {
+                AxisString exceptionMessage =
+                "Value to be serialized is greater than or equal to MaxExclusive specified for this type.  MaxExclusive = ";
+                exceptionMessage += asctime(&(maxExclusive->getMaxExclusiveAsStructTM()));
+                exceptionMessage += ", Value = ";
+                exceptionMessage += asctime(value);
+                exceptionMessage += ".";
+                
+                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                    const_cast<AxisChar*>(exceptionMessage.c_str()));
+            }
+        }
+        delete maxExclusive;
      
     	AxisChar* serializedValue = new AxisChar[80];
     	strftime (serializedValue, 80, "%H:%M:%SZ", value);
@@ -201,6 +237,16 @@ AXIS_CPP_NAMESPACE_START
     MinExclusive* Time::getMinExclusive()
     {
         return new MinExclusive();
+    }
+
+    MaxInclusive* Time::getMaxInclusive()
+    {
+        return new MaxInclusive();
+    }
+
+    MaxExclusive* Time::getMaxExclusive()
+    {
+        return new MaxExclusive();
     }
 
     WhiteSpace* Time::getWhiteSpace()

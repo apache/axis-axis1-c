@@ -52,4 +52,14 @@ MinExclusive* Byte::getMinExclusive()
     return new MinExclusive(static_cast<LONGLONG>(-129));
 }
 
+MaxInclusive* Byte::getMaxInclusive()
+{
+    return new MaxInclusive(static_cast<LONGLONG>(127));
+}
+
+MaxExclusive* Byte::getMaxExclusive()
+{
+    return new MaxExclusive(static_cast<LONGLONG>(128));
+}
+
 AXIS_CPP_NAMESPACE_END

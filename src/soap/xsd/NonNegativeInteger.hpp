@@ -54,6 +54,20 @@ protected:
      */
     virtual MinExclusive* getMinExclusive();
 
+    /**
+     * Creates a MaxInclusive object.  For the NonNegativeInteger type this is
+     * undefined, so an unset MaxExclusive object is returned.
+     * @return MaxInclusive object
+     */
+    virtual MaxInclusive* getMaxInclusive();
+
+    /**
+     * Creates a MaxExclusive object.  For the NonNegativeInteger type this is
+     * undefined, so an unset MaxExclusive object is returned.
+     * @return MaxExclusive object
+     */
+    virtual MaxExclusive* getMaxExclusive();
+
 };
 
 AXIS_CPP_NAMESPACE_END

@@ -62,6 +62,51 @@ AXIS_CPP_NAMESPACE_START
             }
         }
         delete minExclusive;
+
+
+        MaxInclusive* maxInclusive = getMaxInclusive();
+        if (maxInclusive->isSet())
+        {
+            if ( *value < maxInclusive->getMaxInclusiveAsLONGLONG() )
+            {
+                AxisString exceptionMessage =
+                "Value to be serialized is greater than MaxInclusive specified for this type.  MaxInclusive = ";
+                AxisChar* length = new AxisChar[25];
+                sprintf(length, "%d", maxInclusive->getMaxInclusiveAsLONGLONG());
+                exceptionMessage += length;
+                exceptionMessage += ", Value = ";
+                sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
+                exceptionMessage += length;
+                exceptionMessage += ".";
+                delete [] length;
+                
+                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                    const_cast<AxisChar*>(exceptionMessage.c_str()));
+            }
+        }
+        delete maxInclusive;
+     
+        MaxExclusive* maxExclusive = getMaxExclusive();
+        if (maxExclusive->isSet())
+        {
+            if ( *value < maxExclusive->getMaxExclusiveAsLONGLONG() )
+            {
+                AxisString exceptionMessage =
+                "Value to be serialized is greater than or equal to MaxExclusive specified for this type.  MaxExclusive = ";
+                AxisChar* length = new AxisChar[25];
+                sprintf(length, "%d", maxExclusive->getMaxExclusiveAsLONGLONG());
+                exceptionMessage += length;
+                exceptionMessage += ", Value = ";
+                sprintf(length, PRINTF_LONGLONG_FORMAT_SPECIFIER, *value);
+                exceptionMessage += length;
+                exceptionMessage += ".";
+                delete [] length;
+                
+                throw new AxisSoapException(CLIENT_SOAP_SOAP_CONTENT_ERROR,
+                    const_cast<AxisChar*>(exceptionMessage.c_str()));
+            }
+        }
+        delete maxExclusive;
      
     	long valueToSerialize = *value;
     	AxisChar buff[4];
@@ -193,6 +238,16 @@ AXIS_CPP_NAMESPACE_START
     MinExclusive* Duration::getMinExclusive()
     {
         return new MinExclusive();
+    }
+
+    MaxInclusive* Duration::getMaxInclusive()
+    {
+        return new MaxInclusive();
+    }
+
+    MaxExclusive* Duration::getMaxExclusive()
+    {
+        return new MaxExclusive();
     }
     
 AXIS_CPP_NAMESPACE_END

@@ -25,6 +25,8 @@
 #include "IAnySimpleType.hpp"
 #include "constraints/MinInclusive.hpp"
 #include "constraints/MinExclusive.hpp"
+#include "constraints/MaxInclusive.hpp"
+#include "constraints/MaxExclusive.hpp"
 #include <string>
 
 AXIS_CPP_NAMESPACE_START
@@ -82,6 +84,20 @@ protected:
      * @return MinExclusive object
      */
     MinExclusive* getMinExclusive();
+
+    /**
+     * Creates a MaxInclusive object.  For the Duration type this is undefined, 
+     * so an unset MaxInclusive object is created.
+     * @return MaxInclusive object
+     */
+    MaxInclusive* getMaxInclusive();
+
+    /**
+     * Creates a MaxExclusive object.  For the Duration type this is undefined, 
+     * so an unset MaxExclusive object is created.
+     * @return MaxExclusive object
+     */
+    MaxExclusive* getMaxExclusive();
 
     /**
      * Creates a WhiteSpace object to collapse whitespace

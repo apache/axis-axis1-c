@@ -60,4 +60,22 @@ MinExclusive* Int::getMinExclusive()
     return new MinExclusive(*minExclusive);
 }
 
+MaxInclusive* Int::getMaxInclusive()
+{   
+  AxisChar* end;    
+  LONGLONG* maxInclusive = new LONGLONG;
+  *maxInclusive = strtol ("2147483647", &end, 10);
+    
+    return new MaxInclusive(*maxInclusive);
+}
+
+MaxExclusive* Int::getMaxExclusive()
+{   
+  AxisChar* end;    
+  LONGLONG* maxExclusive = new LONGLONG;
+  *maxExclusive = strtol ("2147483648", &end, 10);
+    
+    return new MaxExclusive(*maxExclusive);
+}
+
 AXIS_CPP_NAMESPACE_END

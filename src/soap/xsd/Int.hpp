@@ -85,6 +85,20 @@ protected:
      */
     virtual MinExclusive* getMinExclusive();
 
+    /**
+     * Creates a MaxInclusive object.  For the Int type this is defined as
+     * 2147483647.
+     * @return MaxInclusive object
+     */
+    virtual MaxInclusive* getMaxInclusive();
+
+    /**
+     * Creates a MaxExclusive object.  For the Int type this is defined as
+     * 2147483648.
+     * @return MaxExclusive object
+     */
+    virtual MaxExclusive* getMaxExclusive();
+
 private:
     int* m_Int;
 };

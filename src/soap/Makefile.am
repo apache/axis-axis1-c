@@ -49,7 +49,9 @@ libsoap_la_SOURCES = Attribute.cpp \
         xsd/constraints/MinLength.cpp \
         xsd/constraints/MaxLength.cpp \
         xsd/constraints/MinInclusive.cpp \
-        xsd/constraints/MinExclusive.cpp
+        xsd/constraints/MinExclusive.cpp \
+        xsd/constraints/MaxInclusive.cpp \
+        xsd/constraints/MaxExclusive.cpp
 
 libsoap_la_LIBADD = $(LDFLAGS)
 INCLUDES = -I../../include

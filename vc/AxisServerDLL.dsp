@@ -290,6 +290,14 @@ SOURCE=..\src\soap\xsd\Long.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\constraints\MaxExclusive.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\xsd\constraints\MaxInclusive.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\xsd\constraints\MaxLength.cpp
 # End Source File
 # Begin Source File
