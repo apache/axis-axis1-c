@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<java-wsdl-mapping xmlns="http://java.sun.com/xml/ns/j2ee"
+				   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+				   http://www.ibm.com/webservices/xsd/j2ee_jaxrpc_mapping_1_1.xsd"
+				   version="1.1">
+    <package-mapping>
+        <package-type>X</package-type>
+        <namespaceURI>X</namespaceURI>
+    </package-mapping>
+
+    <!-- CASE 1 RULE 1A -->
+    <java-xml-type-mapping>
+        <java-type>X.Root</java-type>
+        <root-type-qname>X:root</root-type-qname>
+        <qname-scope>complexType</qname-scope>
+        <variable-mapping>
+            <java-variable-name>data</java-variable-name>
+            <xml-element-name>data</xml-element-name>
+        </variable-mapping>
+    </java-xml-type-mapping>
+
+    <!-- CASE 2 RULE 2A -->
+    <java-xml-type-mapping>
+        <java-type>X.Root[]</java-type>
+        <root-type-qname>X:root</root-type-qname>
+        <qname-scope>element</qname-scope>
+    </java-xml-type-mapping>
+
+    <!-- CASE 3 RULE 3A -->
+    <java-xml-type-mapping>
+        <java-type>X.Root[]</java-type>
+        <anonymous-type-qname> X:root[0,unbounded] </anonymous-type-qname>
+        <qname-scope>complexType</qname-scope>
+    </java-xml-type-mapping>
+
+    <!-- CASE 4 RULE 1b -->
+    <java-xml-type-mapping>
+        <java-type>X.Root</java-type>
+        <anonymous-type-qname> X:&gt;root </anonymous-type-qname>
+        <qname-scope>complexType</qname-scope>
+        <variable-mapping>
+            <java-variable-name>inside</java-variable-name>
+            <xml-element-name>inside</xml-element-name>
+        </variable-mapping>
+        <variable-mapping>
+            <java-variable-name>someOtherElement</java-variable-name>
+            <xml-element-name>someOtherElement</xml-element-name>
+        </variable-mapping>
+    </java-xml-type-mapping>
+
+    <!-- CASE 5 RULE 2B -->
+    <java-xml-type-mapping>
+        <java-type>X.Inside</java-type>
+        <anonymous-type-qname> X:&gt;root&gt;inside </anonymous-type-qname>
+        <qname-scope>element</qname-scope>
+    </java-xml-type-mapping>
+
+    <!-- CASE 6 RULE 3A -->
+    <java-xml-type-mapping>
+        <java-type>X.Inside[]</java-type>
+        <anonymous-type-qname> X:&gt;root&gt;inside[,10] </anonymous-type-qname>
+        <qname-scope>complexType</qname-scope>
+    </java-xml-type-mapping>
+
+    <!-- CASE 9 RULE 2A -->
+    <java-xml-type-mapping>
+        <java-type>int</java-type>
+        <root-type-qname> X:someOtherElement </root-type-qname>
+        <qname-scope>element</qname-scope>
+    </java-xml-type-mapping>
+ 
+    <!-- CASE 8 RULE 3B -->
+    <java-xml-type-mapping>
+        <java-type>int[]</java-type>
+        <anonymous-type-qname> X:someOtherElement[,20] </anonymous-type-qname>
+        <qname-scope>element</qname-scope>
+    </java-xml-type-mapping>
+
+    <!-- CASE 7 RULE 1B-->
+    <java-xml-type-mapping>
+        <java-type>X.Inside</java-type>
+        <anonymous-type-qname> X:&gt;&gt;root&gt;inside </anonymous-type-qname>
+        <qname-scope>complexType</qname-scope>
+        <variable-mapping>
+            <java-variable-name>data2</java-variable-name>
+            <xml-element-name>data2</xml-element-name>
+        </variable-mapping>
+    </java-xml-type-mapping>
+</java-wsdl-mapping>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="ews:AnonymousMappingTest"
+                  xmlns="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:apachesoap="http://xml.apache.org/xml-soap"
+                  xmlns:impl="ews:AnonymousMappingTest" xmlns:intf="ews:AnonymousMappingTest"
+                  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+   <wsdl:types>
+      <xsd:schema targetNamespace="X" xmlns:x="X">
+        <!-- use case 1 -->
+        <xsd:complexType name="root">
+           <xsd:sequence>
+             <xsd:element name="data" type="xsd:string"/>
+           </xsd:sequence>
+        </xsd:complexType>
+        <!-- use case 2 --> <!-- use case 3 -->
+        <xsd:element name="root" minOccurs="0" maxOccurs="unbounded">
+           <!-- use case 4 -->
+           <xsd:complexType>
+             <xsd:sequence>
+                <!-- use case 5 --> <!-- use case 6 -->
+                <xsd:element name="inside" maxOccurs="10">
+                  <!-- use case 7 -->
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element name="data2" type="xsd:string"/>
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+                <!-- use case 8 -->
+                <xsd:element ref="x:someOtherElement" maxOccurs="20"/>
+              </xsd:sequence>
+           </xsd:complexType>
+        </xsd:element>
+
+        <!-- use case 9 -->
+        <xsd:element name="someOtherElement" type="xsd:int"/>
+
+      </xsd:schema>
+   </wsdl:types>
+</wsdl:definitions>
