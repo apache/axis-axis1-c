@@ -332,8 +332,8 @@ extern "C" int initialize_module (int bServer)
 
 extern "C" int uninitialize_module ()
 {
-	SOAPTransportFactory::uninitialize();
-    ModuleUnInitialize ();
+    SOAPTransportFactory::uninitialize();
+    //ModuleUnInitialize ();
     SoapKeywordMapping::uninitialize ();
     return AXIS_SUCCESS;
 }

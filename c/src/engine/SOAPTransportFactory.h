@@ -30,6 +30,11 @@
 #define CREATE_FUNCTION1 "CreateInstance"
 #define DELETE_FUNCTION1 "DestroyInstance"
 
+//function to do lib level init jobs
+#define INIT_FUNCTION "initializeLibrary"
+//function to do lib level uninit jobs
+#define UNINIT_FUNCTION "uninitializeLibrary"
+
 #if defined(USE_LTDL)
 #include <ltdl.h>
 #define DLHandler lt_dlhandle

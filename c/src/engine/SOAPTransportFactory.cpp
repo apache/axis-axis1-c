@@ -36,6 +36,7 @@ DLHandler SOAPTransportFactory::m_LibHandler = 0;
 CREATE_OBJECT1 SOAPTransportFactory::m_Create = 0;
 DELETE_OBJECT1 SOAPTransportFactory::m_Delete = 0;
 
+
 SOAPTransportFactory::SOAPTransportFactory()
 {
 	m_LibHandler = 0;
@@ -71,6 +72,10 @@ int SOAPTransportFactory::initialize()
         }
         else
         {
+            void (*initializeLibrary) (void);
+            initializeLibrary = (void (*)(void))dlsym(m_LibHandler, INIT_FUNCTION);
+            if (initializeLibrary)
+                 (*initializeLibrary)();
             return AXIS_SUCCESS;
         }		
 	}
@@ -85,6 +90,10 @@ int SOAPTransportFactory::initialize()
 
 int SOAPTransportFactory::uninitialize()
 {
+            void (*uninitializeLibrary) (void);
+            uninitializeLibrary = (void (*)(void))dlsym(m_LibHandler, UNINIT_FUNCTION);
+            if (uninitializeLibrary)
+                 (*uninitializeLibrary)();
 	return unloadLib();
 }
 
