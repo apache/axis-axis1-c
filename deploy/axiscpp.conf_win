@@ -2,18 +2,18 @@
 #Available directives are as follows
 #(Some of these directives may not be implemented yet)
 #
-#WSDDFILEPATH:The path to the server wsdd
-#AXISLOGPATH:The path to the axis log 
-#AXISCLIENTLOGPATH:The path to the axis client log
-#CLIENTWSDDFILEPATH:The path to the client wsdd
-#AXISTRANSPORT_HTTP:The HTTP transport library
-#AXISTRANSPORT_SMTP:The SMTP transport library
-#AXISXMLPARSER:The xml parser library
+#WSDDFilePath:The path to the server wsdd
+#LogPath:The path to the axis log 
+#ClientLogPath:The path to the axis client log
+#ClientWSDDFilePath:The path to the client wsdd
+#Transport_http:The HTTP transport library
+#Transport_smtp:The SMTP transport library
+#XMLParser:The xml parser library
 
 
-#AXISLOGPATH:Axis\logs\AxisLog.txt
-#WSDDFILEPATH:Axis\conf\server.wsdd
-AXISLOGPATH:C:\Program Files\Apache Group\Apache\Axis\logs\AxisLog.txt
-WSDDFILEPATH:C:\Program Files\Apache Group\Apache\Axis\conf\server.wsdd
-AXISXMLPARSER:AxisXMLParser.dll
-AXISTRANSPORT_HTTP:AxisTransport.dll
+#LogPath:Axis\logs\AxisLog.txt
+#WSDDFilePath:Axis\conf\server.wsdd
+LogPath:C:\Program Files\Apache Group\Apache\Axis\logs\AxisLog.txt
+WSDDFilePath:C:\Program Files\Apache Group\Apache\Axis\conf\server.wsdd
+XMLParser:AxisXMLParser.dll
+Transport_http:AxisTransport.dll
