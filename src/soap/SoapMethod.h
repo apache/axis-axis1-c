@@ -73,6 +73,7 @@
 #endif // _MSC_VER > 1000
 
 #include "../common/Param.h"
+#include "../common/ISoapMethod.h"
 #include <list>
 
 class Attribute;
@@ -99,14 +100,16 @@ using namespace std;
  *	@brief	The SOAP Body of a SOAP Envelope according to SOAP 1.2 specification.
  */
 
-class SoapMethod  
+class SoapMethod : public ISoapMethod
 {
 
 private:
+	int serializeAttributes(SoapSerializer& pSZ);
+	//int serializeAttributes(string& sSerialized);
 	list<Attribute*> m_attributes;
-	bool isSerializable();
-	//string serializeOutputParam();
-	int serializeOutputParam(string&);
+	bool isSerializable();	
+	int serializeOutputParam(SoapSerializer& pSZ);
+	//int serializeOutputParam(string&);
 	string m_strPrefix;
 	string m_strLocalname;
 	string m_strUri;
@@ -115,12 +118,11 @@ private:
 	//string m_strMethodSerialized;
 	//test line
 
-public:	
-	int serializeAttributes(string& sSerialized);
+public:			
 	int addAttribute(Attribute* pAttribute);
-	string& getMethodName();
-	//string& serialize();
-	int serialize(string&);
+	string& getMethodName();	
+	int serialize(SoapSerializer& pSZ);
+	//int serialize(string&);
 	void setOutputParam(Param &param);
 	void addInputParam(Param* param);
 	void setUri(const string &uri);
