@@ -36,27 +36,31 @@ public class MapperTest
     /**
      * Rigourous Test :-)
      */
-    public void testHeavyWeight()
-    {
+    public void testHeavyWeight() throws Exception {
         String args[] = new String[]{"-m", getTestFile("src/samples/mapper/heavyweight/BookQuote.xml"),
                                      "-o", getTestFile("target/generated/samples/mapper/heavyweight"),
                                      getTestFile("src/samples/mapper/heavyweight/BookQuote.wsdl")};
         WsdlToJ2ee.main(args);
     }
 
-    public void testLightWeight()
-    {
+    public void testLightWeight() throws Exception {
         String args[] = new String[]{"-m", getTestFile("src/samples/mapper/lightweight/BookQuote.xml"),
                                      "-o", getTestFile("target/generated/samples/mapper/lightweight"),
                                      getTestFile("src/samples/mapper/lightweight/BookQuote.wsdl")};
         WsdlToJ2ee.main(args);
     }
 
-    public void testGoogle()
-    {
+    public void testGoogle() throws Exception {
         String args[] = new String[]{"-m",getTestFile("src/samples/mapper/google/GoogleSearch.xml"),
                                      "-o", getTestFile("target/generated/samples/mapper/google"),
                                      getTestFile("src/samples/mapper/google/GoogleSearch.wsdl")};
+        WsdlToJ2ee.main(args);
+    }
+
+    public void testFrenchZip() throws Exception {
+        String args[] = new String[]{"-m",getTestFile("src/samples/mapper/frenchzip/FrenchZipMapping.xml"),
+                                     "-o", getTestFile("target/generated/samples/mapper/frenchzip"),
+                                     getTestFile("src/samples/mapper/frenchzip/FrenchZip.wsdl")};
         WsdlToJ2ee.main(args);
     }
 }
