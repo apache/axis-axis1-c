@@ -37,7 +37,6 @@
 /**
  * @enum XML_NODE_TYPE
  * Enumeration that defines the SAX events that the AnyElement may contain
- * But a parser should never return AnyElements with START_PREFIX or END_PREFIX
  */
 typedef enum { START_ELEMENT=0, CHARACTER_ELEMENT, END_ELEMENT, 
     START_PREFIX, END_PREFIX} XML_NODE_TYPE;
@@ -46,10 +45,10 @@ typedef enum { START_ELEMENT=0, CHARACTER_ELEMENT, END_ELEMENT,
  * @struct AnyElement
  *
  * This structure can represent any xml element that a SOAP message contains.
- * Any parser implementation's next(..) method will return a constant instance
- * of this struct that will contain a xml element. In SAX parser perspective
- * this structure can contain information of StartElement, EndElement or
- * Character data element.
+ * Any parser implementation's next(..) or anyNext() methods will return a 
+ * constant instance of this struct that will contain a xml element. In SAX 
+ * parser perspective this structure can contain information of StartElement, 
+ * EndElement, Character data element or a prefix mapping event.
  *
  * @brief Struct that represents any XML element.
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
@@ -62,11 +61,13 @@ typedef struct
     XML_NODE_TYPE m_type;
     /**
      * Local name in case of StartElement or EndElement event. Character data
-     * in case of character data event.
+     * in case of character data event. Namespace prefix in case of prefix 
+	 * prefix mapping event.
      */
     const char* m_pchNameOrValue;
     /**
-     * Namespace of StartElemnt or EndElement tag. Can be NULL.
+     * Namespace of StartElemnt or EndElement tag. In case there is no 
+	 * namespace this should be NULL (not pointing to empty string "" even)
      */
     const char* m_pchNamespace;
     /**
