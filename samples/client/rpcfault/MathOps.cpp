@@ -77,19 +77,11 @@ int MathOps::div(int Value0, int Value1)
             if(AXIS_SUCCESS == m_pCall->checkFault("faultdetail",
                 "http://localhost/axis/MathOps"))
             {
-                printf("came\n");
                 m_pCall->getFaultDetail(&cFaultdetail);
-                printf("came1\n");
                 throw AxisException(cFaultdetail);
             }
             else
             {
-                //cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-                //if(NULL != cFaultdetail)
-                //{
-                   // printf("came1\n");
-                   // throw AxisException(cFaultdetail);
-                //}
                 SOAPStructFault* pFaultDetail = NULL;
                 pFaultDetail = (SOAPStructFault*)m_pCall->
                     getCmplxObject((void*) Axis_DeSerialize_SOAPStructFault, 
