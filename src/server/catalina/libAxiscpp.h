@@ -67,6 +67,7 @@
 #define _AXIS_LIBAXISCPP_HPP
 
 #include "AxisCppContentHandler.h"
+#include <strstream>
 
 #ifdef LIBAXISCPP_EXPORTS
 #define LIBAXIS_DLL_API __declspec(dllexport)
@@ -100,11 +101,11 @@ jni_throw(JNIEnv* env, const char* exception, const char* msg)
 #define JNI_ASSERT(assert, name, msg) \
     do \
     { \
-        if (p_Env->ExceptionOccurred()) \
+        if (m_pEnv->ExceptionOccurred()) \
             return; \
         if (! assert) \
         { \
-            jni_throw(p_Env, name, msg); \
+            jni_throw(m_pEnv, name, msg); \
             return; \
         } \
     } while (0)
@@ -122,6 +123,7 @@ public:
     char* operator [] (int i) const;
 	void push_back(const char* str);
 	void clear();
+	int  size();
 
 private:
 
@@ -130,27 +132,67 @@ private:
 	jmethodID m_jmGet;
 	jmethodID m_jmClear;
 	jmethodID m_jmAdd;
+	jmethodID m_jmSize;
 };
 
-/*
 
 
-class JNIString
+class JNIOutputStream : public std::strstreambuf
 {
 public:
-    JNIStringBuffer(JNIEnv* p_Env, jobject p_jStr);
-    ~JNIStringBuffer();
 
-    operator const char* () const;
-	JNIStringBuffer& operator = (const char* p_pch);
-	jstring getJNIString();
+    /// jobject writer must be a java.io.OutputStream object
+    JNIOutputStream(JNIEnv* env, jobject stream, unsigned bufsize = 16300);
+
+    virtual ~JNIOutputStream();
+
+protected:
+
+    virtual int overflow(int c);
+    virtual int sync();
 
 private:
 
-    JNIEnv*		m_pEnv;
-    jobject		m_jStr;
-    const char* m_pch;
+    JNIEnv* m_pEnv;
+
+    jobject   _output;
+    jmethodID _write;
+    jmethodID _flush;
+
+    unsigned _bufsize;
+    jbyteArray _jbuf;
 };
-*/
+
+
+class JNIInputStream
+    : public std::strstreambuf
+{
+public:
+
+    /// jobject writer must be a java.io.InputStream object
+    JNIInputStream(JNIEnv* env, jobject stream, unsigned bufsize = 16300);
+
+    virtual ~JNIInputStream();
+
+    int available();
+
+protected:
+
+    virtual int underflow();
+
+private:
+
+    JNIEnv* m_pEnv;
+
+    jobject _input;
+    jmethodID _read;
+    jmethodID _close;
+    jmethodID _available;
+
+    unsigned _bufsize;
+    jbyteArray _jbuf;
+    char* _buf;
+};
+
 #endif //_AXIS_LIBAXISCPP_HPP
 
