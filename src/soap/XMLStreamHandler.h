@@ -74,6 +74,7 @@
 
 #include "../common/Param.h"
 #include "../common/AccessBean.h"
+#include "../common/ArrayBean.h"
 #include "SoapEnvelope.h"
 #include "SoapHeader.h"
 #include "SoapMethod.h"
@@ -115,6 +116,7 @@ private:
 	int Success();
 	Param m_Param; //Param to which each parameter data is extracted
 	ArrayBean m_ArrayBean;
+	AccessBean m_AccessBean;
 	int m_Success;
 	SOAP_PARSE_LEVEL m_PL0;
 	SOAP_PARSE_LEVEL m_PL1;

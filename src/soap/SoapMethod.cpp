@@ -75,7 +75,7 @@
 
 SoapMethod::SoapMethod()
 {
-	m_pOutputParam= new Param();
+	m_pOutputParam = NULL;
 }
 
 SoapMethod::~SoapMethod()
@@ -114,7 +114,7 @@ void SoapMethod::setOutputParam(Param *param)
 {
 	if (param)
 	{
-		*m_pOutputParam = *param;
+		m_pOutputParam = param;
 	}
 }
 

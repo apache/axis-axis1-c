@@ -105,7 +105,8 @@ public:
 	int setSoapEnvelope(SoapEnvelope* pSoapEnvelope);
 	SoapSerializer();
 	virtual ~SoapSerializer();
-	int setResponseParam(Param* param);
+	IParam* setResponseParam(XSDTYPE nType, uParamValue Value);
+	IArrayBean* makeArrayBean(XSDTYPE nType, void* pArray);
 };
 
 #endif // !defined(AFX_SOAPSERIALIZER_H__C37229AD_BD54_430D_9619_E4574CF95334__INCLUDED_)

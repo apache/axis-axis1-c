@@ -89,8 +89,8 @@ public:
 	int GetVersion();
 	string& GetMethodName();
 	void Init();
-	Param* GetParam();
-	int Deserialize(Param* pParam, int bHref);
+	IParam* GetParam();
+	int Deserialize(IParam* pIParam, int bHref);
 	SoapFault* GetFault();
 	SoapMethod* GetMethod();
 	SoapBody* GetBody();
