@@ -803,7 +803,20 @@ public class WSDL2Ws {
 		    	    data.getOptionBykey("w"));
 		    	    
 				System.out.println( "\nCode generation completed.\n");
-            } catch (Exception e) {            	
+            } 
+		catch(NoSuchMethodError noSuchMethodError)
+            {
+            	// catch the no such method error that occurs when they have put this class after axis java 1.2
+            	if(noSuchMethodError.getMessage().indexOf("org.apache.axis.wsdl.symbolTable.ElementDecl.getMinOccrs")>-1)
+            	{
+            		System.out.println("We have caught the following error - "+noSuchMethodError);
+					System.out.println("");
+					System.out.println("This usually occurs when axis java jar file comes before WSDL2ws.jar in your classpath.");
+					System.out.println("Please verify that WSDL2ws.jar comes first in your classpath and correct if necessary");
+					System.out.println("If it does and you still get this error then please raise an issue with the supplier of your code");
+            	}
+
+            }catch (Exception e) {            	
             	e.printStackTrace();
 				System.out.println( "\nCode generation failed. Please see errors above.\n");
             }
