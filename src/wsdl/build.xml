@@ -57,7 +57,7 @@ Copyright:
   <!-- Compiles the source directory                                       -->
   <!-- =================================================================== -->
   <target name="compile"  depends="init">
-     <javac  srcdir="${src}" destdir="${classes}"  listfiles="true">
+     <javac  srcdir="${src}" destdir="${classes}"  listfiles="true" debug="true">
       <classpath refid="cp"/>
     </javac>
   </target>     

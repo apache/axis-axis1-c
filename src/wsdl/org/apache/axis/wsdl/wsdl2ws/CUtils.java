@@ -260,15 +260,9 @@ public class CUtils {
 	}
 	public static String getXSDTypeForBasicType(String stype){
 		String enumName;
-		//Samisa 23/08/2004
-		System.out.println( "Could not find the type " + stype );
-		//Samisa
 		if((enumName = (String)basicType2EnumMap.get(stype))!= null){
 			return enumName;
 		}
-		//Samisa 23/08/2004
-		System.out.println( "Could not find the type " + stype );
-		//Samisa
 		return null;	
 	}
 	public static String getCmplxArrayNameforType(QName qname){
