@@ -161,7 +161,7 @@ void XMLStreamHandler::startElement(const XMLCh *const uri,const XMLCh *const lo
 		case SOAP_UNKNOWN:
 			if (XMLString::equals(localname,SoapKeywordMapping::Map(m_nSoapVersion).pchWords[SKW_MULTIREF]))
 			{
-				m_sLastElement = (wchar_t*) localname;
+				m_sLastElement = localname;
 				SetParamType(attrs); 
 				m_PL1 = SOAP_PARAM;
 			}
@@ -175,18 +175,18 @@ void XMLStreamHandler::startElement(const XMLCh *const uri,const XMLCh *const lo
 		case SOAP_METHOD: //now comes parameters
 			//Get Param name and type
 			//m_Param.m_sName = localname;
-			m_sLastElement = (wchar_t*) localname;
+			m_sLastElement = localname;
 			SetParamType(attrs); 
 			m_PL1 = SOAP_PARAM;
 			m_nParamNestingLevel++;
 			break;
 		case SOAP_PARAM: //Custom types
-			if (m_sLastElement != (wchar_t*) localname)
+			if (!(m_sLastElement == localname))
 			{
 				m_Params.push_back(new Param(m_Param)); //parent param
 			}
 			//m_Param.m_sName = localname;
-			m_sLastElement = (wchar_t*) localname;
+			m_sLastElement = localname;
 			SetParamType(attrs); 
 			m_nParamNestingLevel++;
 			break;
@@ -215,7 +215,7 @@ void XMLStreamHandler::endElement (const XMLCh *const uri,const XMLCh *const loc
 		break;
 	case SOAP_PARAM: //end of a parameter
 		//Add parameter to list
-		if (m_sLastElement == (wchar_t*) localname)
+		if (m_sLastElement == localname)
 		{
 			m_Params.push_back(new Param(m_Param)); //current param
 		}
@@ -284,12 +284,12 @@ void  XMLStreamHandler::characters (const XMLCh *const chars,const unsigned int 
 
 void XMLStreamHandler::startPrefixMapping(const XMLCh* const prefix, const XMLCh* const uri)
 {
-	m_NsStack[(wchar_t*) prefix] = (wchar_t*) uri; //I think the same prifix cannot repeat ???
+	m_NsStack[prefix] = uri; //I think the same prifix cannot repeat ???
 }
 
 void XMLStreamHandler::endPrefixMapping(const XMLCh* const prefix)
 {
-	m_NsStack.erase((wchar_t*) prefix); //I think the same prifix cannot repeat ???
+	m_NsStack.erase(prefix); //I think the same prifix cannot repeat ???
 }
 
 void XMLStreamHandler::warning(const SAXParseException& exception)
@@ -335,7 +335,7 @@ void XMLStreamHandler::SetParamType(const Attributes &attrs)
 					sType = sValue.substr(colonindex+1,AxisXMLString::npos);
 					if (m_NsStack.find(sPrefix) != m_NsStack.end())
 					{
-						if(URIMapping::Map(m_NsStack[sPrefix]) == URI_XSD)
+						if(URIMapping::Map(m_NsStack[sPrefix].c_str()) == URI_XSD)
 						{
 							//check for xml data types
 							m_Param.m_Type = TypeMapping::Map(sType.c_str());
@@ -384,7 +384,7 @@ void XMLStreamHandler::SetParamType(const Attributes &attrs)
 
 					if (m_NsStack.find(sPrefix) != m_NsStack.end())
 					{
-						if(URIMapping::Map(m_NsStack[sPrefix]) == URI_XSD)
+						if(URIMapping::Map(m_NsStack[sPrefix].c_str()) == URI_XSD)
 						{
 							//check for xml data types
 							m_Param.m_Value.pArray->m_type = TypeMapping::Map(sType.c_str());
@@ -500,7 +500,7 @@ void XMLStreamHandler::FillEnvelope(const XMLCh *const uri, const XMLCh *const l
 {
 	AxisXMLString str;
 	Attribute* pAttr;
-	str = (wchar_t*) qname;
+	str = qname;
 	pAttr = new Attribute();
 	if (str.find(AxisUtils::m_strColon) != AxisXMLString::npos) 
 	{

@@ -75,6 +75,7 @@
 #include "../common/ArrayBean.h"
 #include "../common/BasicTypeSerializer.h"
 #include "SoapKeywordMapping.h"
+#include <stdio.h>
 
 extern "C" int sendSoapResponse(char *cSerializedStream);
 
