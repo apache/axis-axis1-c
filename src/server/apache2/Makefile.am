@@ -5,4 +5,4 @@ libaxiscpp_mod2_la_SOURCES = mod_axis2.cpp Apache2Transport.cpp
 libaxiscpp_mod2_la_LIBADD   = $(LDFLAGS) -L$(AXISCPP_HOME)/src/engine/server -lserver_engine -ldl
 
 
-INCLUDES = @APACHE2INC@ -I$(AXISCPP_HOME)/include
+INCLUDES = @APACHE2INC@ -I../../../include

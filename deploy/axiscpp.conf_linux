@@ -13,7 +13,7 @@
 #ListenPort:Listening port
 
 LogPath:/usr/local/axiscpp_deploy/log/AxisLog
-WSDDFilePath:/usr/local/axiscpp_deploy/conf/server.wsdd
+WSDDFilePath:/usr/local/axiscpp_deploy/etc/server.wsdd
 ClientLogPath:/usr/local/axiscpp_deploy/log/AxisClientLog
 XMLParser:/usr/local/axiscpp_deploy/lib/libaxis_xmlparser.so
 Transport_http:/usr/local/axiscpp_deploy/lib/libaxis_transport.so

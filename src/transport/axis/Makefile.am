@@ -10,5 +10,5 @@ libaxis_transport_la_SOURCES = Channel.cpp \
                                AxisTransportException.cpp
 
 libaxis_transport_la_LIBADD = -lstdc++
-INCLUDES = -I$(AXISCPP_HOME)/include
+INCLUDES = -I../../../include
 

@@ -20,4 +20,4 @@ libsoap_la_SOURCES = Attribute.cpp \
         AxisSoapException.cpp
 
 libsoap_la_LIBADD = $(LDFLAGS)
-INCLUDES = -I$(AXISCPP_HOME)/include
+INCLUDES = -I../../include
