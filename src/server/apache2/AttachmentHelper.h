@@ -9,6 +9,11 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#ifdef strtoul
+#undef strtoul
+#endif
+#define strtoul strtoul
+
 #pragma warning( disable : 4786 )
 
 #include <string>
@@ -35,7 +40,6 @@ class AttachmentHelper
 {
 private:
 	map<const string, ISoapAttachment*> mymap;
-//	map<const string, ISoapAttachment*>::iterator iter;
 	char* pMime;
 public:
 	char* getIncomingSOAPMimeHeaders();
@@ -46,7 +50,6 @@ public:
 	void extract_Attachment (char* pBuffer);
 	AttachmentHelper();
 	virtual ~AttachmentHelper();
-
 };
 
 #endif // !defined(AFX_ATTACHMENTHELPER_H__F133843A_6A8F_4443_9DCC_850C7DEEFB7E__INCLUDED_)
