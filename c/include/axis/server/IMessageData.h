@@ -58,14 +58,14 @@
  */
 /* IMessageData.h:*/
 
-
-
 #if !defined(AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_)
 #define AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_
 
 #ifdef __cplusplus
 
 #include "WSDDService.h"
+#include "IAdminUtils.h"
+
 #include <string>
 using namespace std;
 
@@ -95,17 +95,17 @@ typedef IMessageData_C IMessageData;
 /**
     @class IMessageData
     @brief interface for the IMessageData class.
-
     @author Susantha Kumara (skumara@virtusa.com, susantha@opensource.lk)
     @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
 */
 class IMessageData
 {
-	friend class CPP_DeploymentWrapper;
+	/* Allow AxisAdminService access to the private methods */
+	friend class AxisAdminServiceWrapper; 
 public:
     virtual ~IMessageData(){};
 private:
-	virtual void getWSDDDeployment(IDeployerUtils** pIDeployerUtils) = 0;
+	virtual void GetAdminUtils(IAdminUtils** pIAdminUtils)=0;
 public:
 	virtual int setProperty(AxisChar* pachName, const AxisChar* pachValue)=0;
 	virtual const AxisChar* getProperty(AxisChar* sName)=0;
