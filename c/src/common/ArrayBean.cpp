@@ -85,7 +85,10 @@ ArrayBean::~ArrayBean()
 		{
 			if (m_value.cta->pObject)
 			{
-				m_value.cta->pDelFunct(m_value.cta->pObject, true, m_nSize);
+				if (AxisEngine::m_bServer)
+				{
+					m_value.cta->pDelFunct(m_value.cta->pObject, true, m_nSize);
+				}
 				/* make sure that the ComplexObjectHandler's destructor does not try to delete the objects again */
 				m_value.cta->pObject = NULL;
 			}
@@ -141,8 +144,6 @@ ArrayBean::~ArrayBean()
 			}
 			break;
 		case XSD_STRING:
-		case XSD_HEXBINARY:
-		case XSD_BASE64BINARY:
 		case XSD_ANYURI:
 		case XSD_QNAME:
 		case XSD_NOTATION:			
@@ -151,6 +152,28 @@ ArrayBean::~ArrayBean()
 				for (int ix=0;ix<m_nSize;ix++)
 				{
 					free(*a);
+					a++;
+				}
+				free(m_value.sta);
+			}
+			break;
+		case XSD_HEXBINARY:
+			{
+				xsd__hexBinary* a = (xsd__hexBinary*)m_value.sta;
+				for (int ix=0;ix<m_nSize;ix++)
+				{
+					free(a->__ptr);
+					a++;
+				}
+				free(m_value.sta);
+			}
+			break;
+		case XSD_BASE64BINARY:
+			{
+				xsd__base64Binary* a = (xsd__base64Binary*)m_value.sta;
+				for (int ix=0;ix<m_nSize;ix++)
+				{
+					free(a->__ptr);
 					a++;
 				}
 				free(m_value.sta);
@@ -179,271 +202,168 @@ int ArrayBean::GetArraySize()
 {	
 	return m_nSize;
 }
-/*
-int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
-{
-	Param* p;
-	if ((XSD_UNKNOWN == m_type) ||(0==m_nSize)||(!m_value.sta)) return AXIS_FAIL;
-	switch (m_type)
-	{
-	case XSD_BYTE:
-	case XSD_UNSIGNEDBYTE:
-		{
-			char* a = (char*)m_value.sta;
-			for (int ix=0;ix<m_nSize;ix++)
-			{
-				p = (Param*)pDZ->GetParam();
-				if (!p) return AXIS_FAIL;
-				a[ix] = p->GetByte();
-			}		
-		}
-		break;
-	case XSD_SHORT:
-	case XSD_UNSIGNEDSHORT:
-		{
-			short* a = (short*)m_value.sta;
-			for (int ix=0;ix<m_nSize;ix++)
-			{
-				p = (Param*)pDZ->GetParam();
-				if (!p) return AXIS_FAIL;
-				a[ix] = p->GetShort();
-			}		
-		}
-		break;
-	case XSD_LONG:
-	case XSD_UNSIGNEDLONG:
-	case XSD_INTEGER:
-	case XSD_DURATION:		
-		{
-			long* a = (long*)m_value.sta;
-			for (int ix=0;ix<m_nSize;ix++)
-			{
-				p = (Param*)pDZ->GetParam();
-				if (!p) return AXIS_FAIL;
-				a[ix] = p->GetLong();
-			}		
-		}
-		break;
-	case XSD_DOUBLE:
-	case XSD_DECIMAL:
-		{
-			double* a = (double*)m_value.sta;
-			for (int ix=0;ix<m_nSize;ix++)
-			{
-				p = (Param*)pDZ->GetParam();
-				if (!p) return AXIS_FAIL;
-				a[ix] = p->GetDouble();
-			}		
-		}
-		break;
-	case XSD_DATETIME:
-	case XSD_TIME:
-	case XSD_DATE:
-	case XSD_YEARMONTH:
-	case XSD_YEAR:
-	case XSD_MONTHDAY:
-	case XSD_DAY:
-	case XSD_MONTH:
-		{
-			tm* a = (tm*)m_value.sta;
-			for (int ix=0;ix<m_nSize;ix++)
-			{
-				p = (Param*)pDZ->GetParam();
-				if (!p) return AXIS_FAIL;
-				a[ix] = p->GetDate();
-			}		
-		}
-		break;	
-	case XSD_INT:
-	case XSD_UNSIGNEDINT:
-	case XSD_BOOLEAN:
-		{
-			int* a = (int*)m_value.sta;
-			for (int ix=0;ix<m_nSize;ix++)
-			{
-				p = (Param*)pDZ->GetParam();
-				if (!p) return AXIS_FAIL;
-				a[ix] = p->GetInt();
-			}
-		}
-		break;
-	case XSD_FLOAT:
-		{
-			float* a = (float*)m_value.sta;
-			for (int ix=0;ix<m_nSize;ix++)
-			{
-				p = (Param*)pDZ->GetParam();
-				if (!p) return AXIS_FAIL;
-				a[ix] = p->GetFloat();
-			}
-		}
-		break;
-	case XSD_STRING:
-	case XSD_HEXBINARY:
-	case XSD_BASE64BINARY:
-	case XSD_ANYURI:
-	case XSD_QNAME:
-	case XSD_NOTATION:			
-		{
-			AxisString* a = (AxisString*)m_value.sta;
-			for (int ix=0;ix<m_nSize;ix++)
-			{
-				p = (Param*)pDZ->GetParam();
-				if (!p) return AXIS_FAIL;
-				a[ix] = p->GetString();
-			}
-		}
-		break;
-		//continue this for all basic types
-	case USER_TYPE: //array of user types
-		{
-			void* pItem;
-			int itemsize = m_value.cta->pSizeFunct();
-			unsigned long ptrval = reinterpret_cast<unsigned long>(m_value.cta->pObject);
-			for (int x=0; x<m_nSize; x++)
-			{
-				pDZ->GetParam(); //discard outer param corresponding to custom type - get only inner members
-				pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
-				m_value.cta->pDZFunct(pItem, pDZ);
-			}
-		}
-		break;
-	default:;
-	}
-	return AXIS_SUCCESS;
-}
-*/
+
 int ArrayBean::Serialize(SoapSerializer& pSZ)
 {	
-	switch (m_type)
+	if (USER_TYPE == m_type)
 	{
-	case XSD_BYTE:
-	case XSD_UNSIGNEDBYTE:
+		void* pItem;
+		AXIS_BINDING_STYLE nStyle = pSZ.GetStyle();
+		int itemsize = m_value.cta->pSizeFunct();
+		unsigned long ptrval = reinterpret_cast<unsigned long>(m_value.cta->pObject);
+		if (DOC_LITERAL == nStyle) 
+		/* Serialize functions for doc/lit services do not know the instance name and 
+		will not serialize outer element for the type */ 
 		{
-			char* p = (char*)m_value.sta;
-			for (int ix=0;ix<m_nSize;ix++)
+			for (int x=0; x<m_nSize; x++)
 			{
-				pSZ.Serialize(m_BTSZ.serialize(m_ItemName.c_str(), *p, m_type), NULL);
-				p++;
+				pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
+				pSZ.Serialize("<", m_ItemName.c_str(), ">", NULL);
+				m_value.cta->pSZFunct(pItem, &pSZ, true); /* no matter true or false is passed */
+				pSZ.Serialize("</", m_ItemName.c_str(), ">", NULL);
 			}
 		}
-		break;
-	case XSD_SHORT:
-	case XSD_UNSIGNEDSHORT:
+		else 
+		/* Serialize functions for RPC-encoded services will serialize outer element 
+		for the type. Also the type information is not added to the outer element as
+		this object is part of an array (serialize function knows that when the 3rd
+		parameter is 'true'. */
 		{
-			short* p = (short*)m_value.sta;
-			for (int ix=0;ix<m_nSize;ix++)
+			for (int x=0; x<m_nSize; x++)
 			{
-				pSZ.Serialize(m_BTSZ.serialize(m_ItemName.c_str(), *p, m_type), NULL);
-				p++;
+				pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
+				m_value.cta->pSZFunct(pItem, &pSZ, true);
 			}
 		}
-		break;
-	case XSD_LONG:
-	case XSD_UNSIGNEDLONG:
-	case XSD_INTEGER:
-	case XSD_DURATION:		
+	}
+	else
+	{
+		AXIS_BINDING_STYLE nStyle = pSZ.GetStyle();
+		/* this is to prevent serializing type information for basic array elements */ 
+		if (RPC_ENCODED == nStyle) pSZ.SetStyle(RPC_LITERAL); 
+		switch (m_type)
 		{
-			long* p = (long*)m_value.sta;
-			for (int ix=0;ix<m_nSize;ix++)
+		case XSD_BYTE:
+		case XSD_UNSIGNEDBYTE:
 			{
-				pSZ.Serialize(m_BTSZ.serialize(m_ItemName.c_str(), *p, m_type), NULL);
-				p++;
-			}
-		}
-		break;
-	case XSD_DOUBLE:
-	case XSD_DECIMAL:
-		{
-			double* p = (double*)m_value.sta;
-			for (int ix=0;ix<m_nSize;ix++)
-			{
-				pSZ.Serialize(m_BTSZ.serialize(m_ItemName.c_str(), *p, m_type), NULL);
-				p++;
-			}
-		}
-		break;
-	case XSD_DATETIME:
-	case XSD_TIME:
-	case XSD_DATE:
-	case XSD_YEARMONTH:
-	case XSD_YEAR:
-	case XSD_MONTHDAY:
-	case XSD_DAY:
-	case XSD_MONTH:
-		{
-			tm* p = (tm*)m_value.sta;
-			for (int ix=0;ix<m_nSize;ix++)
-			{
-				pSZ.Serialize(m_BTSZ.serialize(m_ItemName.c_str(), *p, m_type), NULL);
-				p++;
-			}
-		}
-		break;
-	case XSD_INT:
-	case XSD_UNSIGNEDINT:
-	case XSD_BOOLEAN:
-		{
-			int* pInt = (int*)m_value.sta;
-			for (int ix=0;ix<m_nSize;ix++)
-			{
-				pSZ.Serialize(m_BTSZ.serialize(m_ItemName.c_str(), *pInt, m_type), NULL);
-				pInt++;
-			}
-		}
-		break;
-	case XSD_FLOAT:
-		{
-			float* pFloat = (float*)m_value.sta;
-			for (int ix=0;ix<m_nSize;ix++)
-			{
-				pSZ.Serialize(m_BTSZ.serialize(m_ItemName.c_str(), *pFloat, m_type), NULL);
-				pFloat++;
-			}
-		}
-		break;
-	case XSD_STRING:
-	case XSD_HEXBINARY:
-	case XSD_BASE64BINARY:
-	case XSD_ANYURI:
-	case XSD_QNAME:
-	case XSD_NOTATION:			
-		{
-			AxisChar** pStr = (AxisChar**)m_value.sta;
-			for (int ix=0;ix<m_nSize;ix++)
-			{
-				pSZ.Serialize(m_BTSZ.serialize(m_ItemName.c_str(), *pStr, m_type), NULL);
-				pStr++;
-			}
-		}
-		break;
-	case USER_TYPE:
-		{
-			void* pItem;
-			AXIS_BINDING_STYLE nStyle = pSZ.GetStyle();
-			int itemsize = m_value.cta->pSizeFunct();
-			unsigned long ptrval = reinterpret_cast<unsigned long>(m_value.cta->pObject);
-			if (DOC_LITERAL == nStyle) 
-			{
-				for (int x=0; x<m_nSize; x++)
+				char* p = (char*)m_value.sta;
+				for (int ix=0;ix<m_nSize;ix++)
 				{
-					pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
-					pSZ.Serialize("<", m_ItemName.c_str(), ">", NULL);
-					m_value.cta->pSZFunct(pItem, &pSZ, true);
-					pSZ.Serialize("</", m_ItemName.c_str(), ">", NULL);
+					pSZ.SerializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+					p++;
 				}
 			}
-			else
+			break;
+		case XSD_SHORT:
+		case XSD_UNSIGNEDSHORT:
 			{
-				for (int x=0; x<m_nSize; x++)
+				short* p = (short*)m_value.sta;
+				for (int ix=0;ix<m_nSize;ix++)
 				{
-					pItem = reinterpret_cast<void*>(ptrval+x*itemsize);
-					m_value.cta->pSZFunct(pItem, &pSZ, true);
+					pSZ.SerializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+					p++;
 				}
 			}
+			break;
+		case XSD_LONG:
+		case XSD_UNSIGNEDLONG:
+		case XSD_INTEGER:
+		case XSD_DURATION:		
+			{
+				long* p = (long*)m_value.sta;
+				for (int ix=0;ix<m_nSize;ix++)
+				{
+					pSZ.SerializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+					p++;
+				}
+			}
+			break;
+		case XSD_DOUBLE:
+		case XSD_DECIMAL:
+			{
+				double* p = (double*)m_value.sta;
+				for (int ix=0;ix<m_nSize;ix++)
+				{
+					pSZ.SerializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+					p++;
+				}
+			}
+			break;
+		case XSD_DATETIME:
+		case XSD_TIME:
+		case XSD_DATE:
+		case XSD_YEARMONTH:
+		case XSD_YEAR:
+		case XSD_MONTHDAY:
+		case XSD_DAY:
+		case XSD_MONTH:
+			{
+				tm* p = (tm*)m_value.sta;
+				for (int ix=0;ix<m_nSize;ix++)
+				{
+					pSZ.SerializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+					p++;
+				}
+			}
+			break;
+		case XSD_INT:
+		case XSD_UNSIGNEDINT:
+		case XSD_BOOLEAN:
+			{
+				int* p = (int*)m_value.sta;
+				for (int ix=0;ix<m_nSize;ix++)
+				{
+					pSZ.SerializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+					p++;
+				}
+			}
+			break;
+		case XSD_FLOAT:
+			{
+				float* p = (float*)m_value.sta;
+				for (int ix=0;ix<m_nSize;ix++)
+				{
+					pSZ.SerializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+					p++;
+				}
+			}
+			break;
+		case XSD_STRING:
+		case XSD_ANYURI:
+		case XSD_QNAME:
+		case XSD_NOTATION:			
+			{
+				AxisChar** p = (AxisChar**)m_value.sta;
+				for (int ix=0;ix<m_nSize;ix++)
+				{
+					pSZ.SerializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+					p++;
+				}
+			}
+			break;
+		case XSD_HEXBINARY:
+			{
+				xsd__hexBinary* p = (xsd__hexBinary*)m_value.sta;
+				for (int ix=0;ix<m_nSize;ix++)
+				{
+					pSZ.SerializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+					p++;
+				}
+			}
+			break;
+		case XSD_BASE64BINARY:
+			{
+				xsd__base64Binary* p = (xsd__base64Binary*)m_value.sta;
+				for (int ix=0;ix<m_nSize;ix++)
+				{
+					pSZ.SerializeAsElement(m_ItemName.c_str(), (void*)p, m_type);
+					p++;
+				}
+			}
+			break;
 		}
-		break;
-	default:;
+		/* restore Serializer's style after array serialization is finished */
+		if (RPC_ENCODED == nStyle) pSZ.SetStyle(RPC_ENCODED);
 	}
 	return AXIS_SUCCESS;
 }

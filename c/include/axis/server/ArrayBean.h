@@ -102,8 +102,6 @@ public: //IArrayBean Interface
 	void SetTypeName(const AxisChar* sName);
 	void SetUri(const AxisChar* sURI);
 	void RemoveArrayPointer();
-private:
-	BasicTypeSerializer m_BTSZ;
 };
 
 #endif // !defined(AFX_ARRAYBEAN_H__374BEDCF_E850_4907_9CF0_F2EBC61E54CF__INCLUDED_)

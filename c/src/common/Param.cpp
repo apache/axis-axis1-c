@@ -89,12 +89,20 @@ Param::~Param()
 		delete m_Value.pCplxObj;
 		break;
 	case XSD_STRING:
-	case XSD_HEXBINARY:
-	case XSD_BASE64BINARY:
 	case XSD_ANYURI:
 	case XSD_QNAME:
 	case XSD_NOTATION:
-		free((void*)m_Value.pStrValue);
+		if (AxisEngine::m_bServer) 
+		{
+			free((void*)m_Value.pStrValue);
+		}
+		break;
+	case XSD_BASE64BINARY:
+	case XSD_HEXBINARY:
+		if (AxisEngine::m_bServer) 
+		{
+			free((void*)(m_Value.hbValue.__ptr));
+		}
 		break;
 	default:;
 	}
@@ -104,56 +112,6 @@ int Param::serialize(SoapSerializer& pSZ)
 {
 	AxisString ATprefix;
 	switch (m_Type){
-	case XSD_INT:
-	case XSD_BOOLEAN:
-        pSZ.Serialize(pSZ.SerializeBasicType(m_sName.c_str(), m_Value.nValue, m_Type), NULL);
-		break; 
-    case XSD_UNSIGNEDINT:
-        pSZ.Serialize(pSZ.SerializeBasicType(m_sName.c_str(), m_Value.unValue, m_Type), NULL);
-		break;           
-    case XSD_SHORT:
-        pSZ.Serialize(pSZ.SerializeBasicType(m_sName.c_str(), m_Value.sValue, m_Type), NULL);
-		break; 
-    case XSD_UNSIGNEDSHORT:
-        pSZ.Serialize(pSZ.SerializeBasicType(m_sName.c_str(), m_Value.usValue, m_Type), NULL);
-		break;         
-    case XSD_BYTE:
-        pSZ.Serialize(pSZ.SerializeBasicType(m_sName.c_str(), m_Value.cValue, m_Type), NULL);
-		break; 
-    case XSD_UNSIGNEDBYTE:
-        pSZ.Serialize(pSZ.SerializeBasicType(m_sName.c_str(), m_Value.ucValue, m_Type), NULL);
-		break;
-    case XSD_LONG:
-    case XSD_INTEGER:
-        pSZ.Serialize(pSZ.SerializeBasicType(m_sName.c_str(), m_Value.lValue, m_Type), NULL);
-		break;        
-    case XSD_UNSIGNEDLONG:
-        pSZ.Serialize(pSZ.SerializeBasicType(m_sName.c_str(), m_Value.ulValue, m_Type), NULL);
-		break;
-	case XSD_FLOAT:
-		pSZ.Serialize(pSZ.SerializeBasicType(m_sName.c_str(), m_Value.fValue, m_Type), NULL);
-		break;
-    case XSD_DOUBLE:
-    case XSD_DECIMAL:
-		pSZ.Serialize(pSZ.SerializeBasicType(m_sName.c_str(), m_Value.dValue, m_Type), NULL);
-		break;              
-	case XSD_STRING:
-		pSZ.Serialize(pSZ.SerializeBasicType(m_sName.c_str(), m_Value.pStrValue, m_Type), NULL);
-		break;
-	case XSD_HEXBINARY:
-		pSZ.Serialize(pSZ.SerializeBasicType(m_sName.c_str(), m_Value.pStrValue, m_Type), NULL);
-		break;
-	case XSD_BASE64BINARY:
-		pSZ.Serialize(pSZ.SerializeBasicType(m_sName.c_str(), m_Value.pStrValue, m_Type), NULL);
-		break;
-	case XSD_DURATION:
-        pSZ.Serialize(pSZ.SerializeBasicType(m_sName.c_str(), m_Value.lDuration, m_Type), NULL);
-        break;
-    case XSD_DATETIME:
-    case XSD_DATE:
-    case XSD_TIME:
-            pSZ.Serialize(pSZ.SerializeBasicType(m_sName.c_str(), m_Value.tValue, m_Type), NULL);
-        break;        
 	case XSD_ARRAY:
 		//pSZ.Serialize("<abc:ArrayOfPhoneNumbers xmlns:abc="http://example.org/2001/06/numbers"
 		//				xmlns:enc="http://www.w3.org/2001/06/soap-encoding" 
@@ -171,7 +129,7 @@ int Param::serialize(SoapSerializer& pSZ)
 				pSZ.Serialize(m_sName.c_str(), "Array", NULL);
 			}
 			//get a prefix from Serializer
-			ATprefix = pSZ.getNewNamespacePrefix();
+			ATprefix = pSZ.GetNamespacePrefix(m_Value.pArray->m_URI.c_str());
 
 			pSZ.Serialize(" xmlns:enc", NULL); 
 			pSZ.Serialize("=\"http://www.w3.org/2001/06/soap-encoding\" ", NULL);
@@ -205,6 +163,7 @@ int Param::serialize(SoapSerializer& pSZ)
 			{
 				pSZ.Serialize(m_sName.c_str(), "Array", NULL);
 			}
+			pSZ.RemoveNamespacePrefix(m_Value.pArray->m_URI.c_str());
 			pSZ.Serialize(">", NULL);
 		}
 		else /* no wrapper element in doc/lit style. So directly call Array Serializer */
@@ -224,7 +183,9 @@ int Param::serialize(SoapSerializer& pSZ)
 			pSZ.Serialize("</", m_sName.c_str(), ">", NULL);
 		}
 		break;
-	default:;
+	default: 
+		/* all basic types */
+		pSZ.SerializeAsElement(m_sName.c_str(), &(m_Value.nValue), m_Type);
 	}
 	return AXIS_SUCCESS;
 }
@@ -268,9 +229,16 @@ int Param::SetValue(XSDTYPE nType, uParamValue Value)
 		m_Value.dValue = Value.dValue;
 		break;        
 	case XSD_STRING:
-	case XSD_HEXBINARY:
-	case XSD_BASE64BINARY:
+	case XSD_ANYURI:
+	case XSD_QNAME:
+	case XSD_NOTATION:
 		m_Value.pStrValue = Value.pStrValue;
+		break;
+	case XSD_HEXBINARY:
+		m_Value.hbValue = Value.hbValue;
+		break;
+	case XSD_BASE64BINARY:
+		m_Value.b64bValue = Value.b64bValue;
 		break;
   case XSD_DURATION:
         m_Value.lDuration = Value.lDuration;

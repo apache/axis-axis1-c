@@ -392,7 +392,7 @@ int WSDDDeployment::unDeploy(string sServiceName)
 /**
  * Performs the deployment.
  */
-int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_ArrayTag inAllowedMethodsArray)
+int WSDDDeployment::deploy(string sServiceName, string sDllPath, Axis_Array inAllowedMethodsArray)
 {
 	AXISTRACE3("entered to WSDDDeployment::deploy");
 	AXISTRACE3(strcat("WSDDDeployment::deploy, sServiceName = ", sServiceName.c_str()));

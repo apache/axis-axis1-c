@@ -65,6 +65,7 @@
 #if !defined(AFX_IPARAM_H__25C278BB_5875_49E6_A3EC_B6AD3E543D69__INCLUDED_)
 #define AFX_IPARAM_H__25C278BB_5875_49E6_A3EC_B6AD3E543D69__INCLUDED_
 
+#include "AxisUserAPI.h"
 #include "AxisWrapperAPI.h"
 #include "TypeMapping.h"
 #include "time.h"
@@ -102,6 +103,8 @@ typedef union uParamValue
 	float fValue;
 	double dValue;
     struct tm tValue;/* this will hold the c type tm struct*/
+	xsd__hexBinary hbValue;
+	xsd__base64Binary b64bValue;
     long lDuration;/* duration in seconds*/
 	class ArrayBean* pArray; //this is used to hold arrays
 	class IArrayBean* pIArray; //used by wrapper classes
