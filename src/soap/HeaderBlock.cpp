@@ -150,6 +150,10 @@ void HeaderBlock::setLocalName(const AxisChar* localname)
     m_localname= localname;
 }
 
+const AxisChar * HeaderBlock::getLocalName()
+{
+    return m_localname.c_str();
+}
 /*
  *  Commented by Susantha - 21/06/2004
  * The prefix should be decided by the Serializer at runtime
