@@ -82,7 +82,7 @@ int SSLChannelFactory::uninitialize()
 }
 
 /**
- * Should create an instance of transport of type given by eProtocol
+ * Should create an instance of SSL Channel
  */
 SSLChannel* SSLChannelFactory::getSSLChannelObject()
 {
