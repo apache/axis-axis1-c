@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
 	}
 	else 
 	{
-		printf("Invalid operation %s\n\n", op);
+		cout << "Invalid operation " << op << endl;
 	}
 	return 0;
 }
