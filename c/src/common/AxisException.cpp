@@ -96,34 +96,32 @@ void AxisException::processException(int exceptionCode)
 
 string AxisException::getMessage(exception* e)
 {
-  string sMessage;
-  exception *objType = static_cast<std::bad_alloc*> (e);
+  string sMessage = "to do";
+  /* to do */
+/*  exception *objType = static_cast<std::bad_alloc*> (e);
   if(objType != NULL)
   {
-    //cout << "bad_alloc" << endl;
     sMessage = "thrown by new";
   }
 
   objType = static_cast<std::bad_cast*> (e);
   if(objType != NULL)
   {
-    //cout << "bad_cast" << endl;
     sMessage = "thrown by dynamic_cast when fails with a referenced type";
   }
 
   objType = static_cast<bad_exception*> (e);
   if(objType != NULL)
   {
-    //cout << "bad_exception" << endl;
     sMessage = "thrown when an exception doesn't match any catch";
   }
 
   objType = static_cast<bad_typeid*> (e);
   if(objType != NULL)
   {
-    //cout << "bad_typeid" << endl;
     sMessage = "thrown by typeid";
   }
+*/
 
    return sMessage;
 }
@@ -133,7 +131,6 @@ string AxisException::getMessage(int e)
   string sMessage;
   if(e == 1)
   sMessage = "AXIS_TEST_ERROR";
-  //cout <<  "AXIS_TEST_ERROR" << endl;
 
   return sMessage;
 

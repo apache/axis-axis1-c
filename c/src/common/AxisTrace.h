@@ -65,15 +65,15 @@
 #include "GDefine.h"
 #include <list>
 #include <string>
-#include <fstream>
+#include <stdio.h>
 
 #ifdef WIN32
-    #define TRACE_PATH "E:\\Program Files\\Apache Group\\Apache\\Axis\\logs\\Debug.txt";
+    #define TRACE_PATH "E:\\Program Files\\Apache Group\\Apache\\Axis\\logs\\AxisLog";
 #else //linux
-    #define TRACE_PATH "/usr/local/axiscpp/axis/AxisLog";
+    #define TRACE_PATH "/usr/local/apache/Axis/logs/AxisLog";
 #endif
 
-//#define AXISTRACE
+#define AXISTRACE
 #if defined(AXISTRACE)
   #define AXISTRACE1(X) tracer.trace(X,__FILE__,__LINE__);
   #define AXISTRACE2(X,Y) tracer.trace(X,Y,__FILE__,__LINE__);
@@ -88,14 +88,15 @@ using namespace std;
 class AxisTrace
 {
 public:
-	AxisTrace();
+    AxisTrace();
 	virtual ~AxisTrace();
-  string sFileName;
-  const char * FileName;
-  ofstream* fout;
-
-  int trace(const string &sLog, string arg2, int arg3);
-  int trace(const string &sLog1, const string &sLog2, string arg3, int arg4);
+    int trace(const char* sLog, char* arg2, int arg3);
+    int trace(const char* sLog1, const char* sLog2, char* arg3, int arg4);
+  
+private:
+    char strLine[4];
+    char* sFileName;
+    FILE* fileTrace;  
 
 };
 
