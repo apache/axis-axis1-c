@@ -26,11 +26,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "AxisUtils.h"
+#include <axis/server/AxisUserAPI.h>
 
 int AxisEngine::m_bServer;
 
 Param::~Param ()
 {
+	int i;
+    XML_String pStr = 0;
+	AnyType* pAny = 0;
     switch (m_Type)
     {
         case XSD_ARRAY:
@@ -57,9 +61,8 @@ Param::~Param ()
             }
             break;
         case XSD_ANY:
-            AnyType* pAny = (AnyType*)m_Value.pAnyObject;
-            XML_String pStr = 0;
-            for (int i=0; i<pAny->_size; i++)
+            pAny = (AnyType*)m_Value.pAnyObject;
+            for (i=0; i<pAny->_size; i++)
             {
                 pStr = pAny->_array[i];
                 if (pStr) free(pStr);
