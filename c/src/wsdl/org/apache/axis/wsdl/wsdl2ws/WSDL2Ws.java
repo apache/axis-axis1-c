@@ -554,19 +554,23 @@ public class WSDL2Ws {
 						for (int j=0; j<elements.size(); j++) {
 							ElementDecl elem = (ElementDecl)elements.get(j);
 							QName typeName = elem.getType().getQName();
+							ElementInfo eleinfo = null;
 							if(typeName.getLocalPart().indexOf('[')>0){
 								String localpart = typeName.getLocalPart().substring(0,typeName.getLocalPart().indexOf('['));
 								typeName = new QName(typeName.getNamespaceURI(),localpart);
-								ElementInfo eleinfo = new ElementInfo(elem.getName(),createTypeInfo(elem.getType(),targetLanguage));
-								eleinfo.setMinOccurs(elem.getMinOccrs());
-								eleinfo.setMaxOccurs(elem.getMaxOccurs());
-								typedata.setTypeNameForElementName(eleinfo);
-							}else{
-								ElementInfo eleinfo = new ElementInfo(elem.getName(),createTypeInfo(typeName,targetLanguage));
-								eleinfo.setMinOccurs(elem.getMinOccrs());
-								eleinfo.setMaxOccurs(elem.getMaxOccurs());
-								typedata.setTypeNameForElementName(eleinfo);
+								if (CUtils.isBasicType(typeName)){
+									eleinfo = new ElementInfo(elem.getName(),createTypeInfo(typeName,targetLanguage));
+								}
+								else{
+									eleinfo = new ElementInfo(elem.getName(),createTypeInfo(elem.getType(),targetLanguage)); 
+								}
 							}
+							else{
+								eleinfo = new ElementInfo(elem.getName(),createTypeInfo(typeName,targetLanguage));								
+							}
+							eleinfo.setMinOccurs(elem.getMinOccrs());
+							eleinfo.setMaxOccurs(elem.getMaxOccurs());
+							typedata.setTypeNameForElementName(eleinfo);
 						}			
 					}
 				}

@@ -326,26 +326,26 @@ public class ClientStubWriter extends CPPClassWriter{
 				if (CUtils.isSimpleType(qname)){
 					containedType = CUtils.getclass4qname(qname);
 					writer.write("\tm_pCall->AddBasicArrayParameter(");			
-					writer.write("(Axis_Array*)(&Value"+i+"), "+CUtils.getXSDTypeForBasicType(containedType)+", \""+((ParameterInfo)paramsB.get(i)).getParamName()+"\"");					
+					writer.write("(Axis_Array*)(&Value"+i+"), "+CUtils.getXSDTypeForBasicType(containedType)+", \""+((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart()+"\"");					
 				}
 				else if (arrayType.isSimpleType()){//SimpleType in the schema 
 					containedType = CUtils.getclass4qname(arrayType.getBaseType());
 					writer.write("\tm_pCall->AddBasicArrayParameter(");			
-					writer.write("(Axis_Array*)(&Value"+i+"), "+CUtils.getXSDTypeForBasicType(containedType)+", \""+((ParameterInfo)paramsB.get(i)).getParamName()+"\"");					
+					writer.write("(Axis_Array*)(&Value"+i+"), "+CUtils.getXSDTypeForBasicType(containedType)+", \""+((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart()+"\"");					
 				}
 				else{
 					containedType = qname.getLocalPart();
 					writer.write("\tm_pCall->AddCmplxArrayParameter(");			
-					writer.write("(Axis_Array*)(&Value"+i+"), (void*)Axis_Serialize_"+containedType+", (void*)Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+((ParameterInfo)paramsB.get(i)).getParamName()+"\", Axis_URI_"+containedType);
+					writer.write("(Axis_Array*)(&Value"+i+"), (void*)Axis_Serialize_"+containedType+", (void*)Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart()+"\", Axis_URI_"+containedType);
 				}
 			}else if(typeissimple){
 				//for simple types	
 				writer.write("\tm_pCall->AddParameter(");			
-				writer.write("(void*)&Value"+i+", \"" + ((ParameterInfo)paramsB.get(i)).getParamName()+"\", "+CUtils.getXSDTypeForBasicType(paraTypeName));
+				writer.write("(void*)&Value"+i+", \"" + ((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart()+"\", "+CUtils.getXSDTypeForBasicType(paraTypeName));
 			}else{
 				//for complex types 
 				writer.write("\tm_pCall->AddCmplxParameter(");			
-				writer.write("Value"+i+", (void*)Axis_Serialize_"+paraTypeName+", (void*)Axis_Delete_"+paraTypeName+", \"" + ((ParameterInfo)paramsB.get(i)).getParamName()+"\", Axis_URI_"+paraTypeName);
+				writer.write("Value"+i+", (void*)Axis_Serialize_"+paraTypeName+", (void*)Axis_Delete_"+paraTypeName+", \"" + ((ParameterInfo)paramsB.get(i)).getElementName().getLocalPart()+"\", Axis_URI_"+paraTypeName);
 			}
 			writer.write(");\n");
 		}
