@@ -4,6 +4,7 @@
 
 <project default="jar"
     xmlns:j="jelly:core"
+    xmlns:maven="jelly:maven"
     xmlns:ant="jelly:ant">
 
     <goal name="setclasspath">
@@ -14,18 +15,15 @@
 
     <preGoal name="java:compile">
         <attainGoal name="generate:jaxb"/>
+
+        <path id="ews.beans.compile.src.set"
+              location="${basedir}/target/src"/>
+
+        <maven:addPath id="maven.compile.src.set"
+                       refid="ews.beans.compile.src.set"/>
+
     </preGoal>
 
-    <!--
-    <goal name="xjc:compile" prereqs="setclasspath"
-        description="Runs XJC task">
-        <taskdef name="groovyc" classname="org.codehaus.groovy.ant.Groovyc" classpathref="test.classpath"/>
-        <groovyc destdir="${basedir}/target/classes" srcdir="${basedir}/src/java" listfiles="false">
-            <classpath refid="test.classpath"/>
-        </groovyc>
-    </goal>
-    -->
-    
     <goal name="generate:jaxb"
         description="Generates the XML beans using JAXB">
 
@@ -43,10 +41,6 @@
             <xjc target="${dir}" package="org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd" schema="${basedir}/src/schema/ejb-jar.xsd" extension="true" />
 
             <xjc target="${dir}" schema="${basedir}/src/schema/j2ee_jaxrpc_mapping_1_1.xsd" package="org.apache.geronimo.ews.jaxrpcmapping.descriptor" extension="true" />
-
-            <ant:copy todir="${dir}">
-                <ant:fileset dir="${src.dir}" includes="**/*.java"/>
-            </ant:copy>
 
         </j:jelly>
     </goal>
