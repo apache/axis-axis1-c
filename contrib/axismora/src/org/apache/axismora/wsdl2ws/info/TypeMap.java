@@ -2,7 +2,7 @@
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -20,7 +20,7 @@
  * 3. The end-user documentation included with the redistribution,
  *    if any, must include the following acknowledgment:
  *       "This product includes software developed by the
- *    Apache Software Foundation (http://www.apache.org/)."
+ *        Apache Software Foundation (http://www.apache.org/)."
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
@@ -53,16 +53,6 @@
  * <http://www.apache.org/>.
  */
 
-package org.apache.axismora.wsdl2ws.info;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Hashtable;
-
-import javax.xml.namespace.QName;
-
-import org.apache.axismora.wsdl2ws.WrapperConstants;
-
 /**
  * Type map has information about all the custom types in the webservice and it has the
  * Information about inbuild datatypes as well. The Type map class does not know about the
@@ -75,9 +65,27 @@ import org.apache.axismora.wsdl2ws.WrapperConstants;
  * @author hemapani  
  */
 
+package org.apache.axismora.wsdl2ws.info;
+
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Vector;
+
+import javax.xml.namespace.QName;
+
+import org.apache.axismora.wsdl2ws.WrapperConstants;
+import org.apache.axismora.wsdl2ws.WrapperFault;
+import org.apache.axismora.wsdl2ws.WrapperUtils;
+
+
+
 public class TypeMap {
     public static final int SIMPLE_PARAM_GEN = 0;
     public static final int BEAN_PARAM_GEN = 1;
+    private static String language = WrapperConstants.LANGUAGE_JAVA; 
 
     /* this map maps the classname -> QName */
     private static Hashtable basicTypeClass2QNamemap = new Hashtable();
@@ -85,300 +93,95 @@ public class TypeMap {
     private static Hashtable basicTypeQname2classmap = new Hashtable();
     /* this map stores Types keyed by the parameter name */
     private Hashtable typeInfo;
-    /* 
-     * There are two QNames associated with a type in wsdl. the QName given with the
-     * element tag and the QName given with the complex type. (I am not very
-     * Confident about the diiferance between two). So I Use the QName at complex type
-     * I use this map to locate it when the element QName is given. 
-     */
+	/* 
+	 * There are two QNames associated with a type in wsdl. the QName given with the
+	 * element tag and the QName given with the complex type. (I am not very
+	 * Confident about the diiferance between two). So I Use the QName at complex type
+	 * I use this map to locate it when the element QName is given. 
+	 */
     private static HashMap elementQName2ComplexTypeQName = new HashMap();
-    private static Hashtable javakeywords = new Hashtable();
-    private static Hashtable cppkeywords = new Hashtable();
+	private static Hashtable javakeywords = new Hashtable();
+	private static Hashtable cppkeywords = new Hashtable();
 
-    static {
-        // java -> xml type mapping
+	static {
+		// java -> xml type mapping
+		
+		basicTypeClass2QNamemap.put("int", new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"));
+		basicTypeClass2QNamemap.put("byte", new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"));
+		basicTypeClass2QNamemap.put("float", new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"));
+		basicTypeClass2QNamemap.put("long", new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"));
+		basicTypeClass2QNamemap.put("double", new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"));
+		basicTypeClass2QNamemap.put("boolean", new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
+		basicTypeClass2QNamemap.put("char", new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"));
+		basicTypeClass2QNamemap.put("short", new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"));
+		basicTypeClass2QNamemap.put("java.lang.String", new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"));
+		basicTypeClass2QNamemap.put("java.math.BigDecimal", new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
+		basicTypeClass2QNamemap.put("java.math.BigInteger", new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"));
+		basicTypeClass2QNamemap.put("java.utils.Calendar", new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
+		basicTypeClass2QNamemap.put("java.utils.Date", new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
+		
+		// xml -> java type mapping 
+	
+		basicTypeQname2classmap.put("int", "int");
+		basicTypeQname2classmap.put("byte", "byte");
+		basicTypeQname2classmap.put("float", "float");
+		basicTypeQname2classmap.put("long", "long");
+		basicTypeQname2classmap.put("double", "double");
+		basicTypeQname2classmap.put("boolean", "boolean");
+		basicTypeQname2classmap.put("char", "char");
+		basicTypeQname2classmap.put("short", "short");
+		basicTypeQname2classmap.put("string", "java.lang.String");
+		basicTypeQname2classmap.put("decimal", "java.math.BigDecimal");
+		basicTypeQname2classmap.put("Qname", "javax.xml.namespace.QName");
+		basicTypeQname2classmap.put("dateTime", "java.utils.Date");
+		basicTypeQname2classmap.put("base64Binary", "byte[]");
+		basicTypeQname2classmap.put("hexBinary", "byte[]");
+		
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "int"), "java.lang.Integer");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"), "java.lang.Byte");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "float"), "java.lang.Float");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "long"), "java.lang.Long");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "double"), "java.lang.Double");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "boolean"), "java.lang.Boolean");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "char"), "java.lang.Charcter");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "short"), "java.lang.Short");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "string"), "java.lang.String");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"), "java.math.BigDecimal");
 
-        basicTypeClass2QNamemap.put(
-            "int",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "int"));
-        basicTypeClass2QNamemap.put(
-            "byte",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "byte"));
-        basicTypeClass2QNamemap.put(
-            "float",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "float"));
-        basicTypeClass2QNamemap.put(
-            "long",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "long"));
-        basicTypeClass2QNamemap.put(
-            "double",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "double"));
-        basicTypeClass2QNamemap.put(
-            "boolean",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "boolean"));
-        basicTypeClass2QNamemap.put(
-            "char",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "char"));
-        basicTypeClass2QNamemap.put(
-            "short",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "short"));
-        basicTypeClass2QNamemap.put(
-            "java.lang.String",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"));
-        basicTypeClass2QNamemap.put(
-            "java.math.BigDecimal",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"));
-        basicTypeClass2QNamemap.put(
-            "java.math.BigInteger",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "integer"));
-        basicTypeClass2QNamemap.put(
-            "java.util.Calendar",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
-        basicTypeClass2QNamemap.put(
-            "java.util.Date",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
-        basicTypeClass2QNamemap.put(
-            "org.apache.axismora.wrappers.simpleType.Base64ByteArrayParam",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
-        basicTypeClass2QNamemap.put(
-            "byte[]",
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
-        // xml -> java type mapping 
-        // Schema version http://www.w3.org/2001/XMLSchema
+		String[] words1 ={"abstract","default","if","private","this","boolean","do","implements",
+			"protected","throw","break","double","import","public","throws","byte","else","instanceof",
+			"return","transient","case","extends","int","short","try","catch","final","interface",
+			"static","void","char","finally","long","strictfp","volatile","class","float","native",
+			"super","while","const","for","new","switch","continue","goto","package","synchronized",
+			"return","false","null"};
+		for(int i = 0;i<words1.length;i++){
+				javakeywords.put(words1[i],words1[i]);
+		}
+		String[] words2 ={"and","and_eq","asm","auto","bitand","bitor","bool","break"
+			,"case","catch","char","class","compl","const","const_cast","continue","default"
+			,"delete","do","double","dynamic_cast","else","enum","explicit","export"
+			,"extern","false","float","for","friend","goto","if","inline","int","long","mutable","namespace","new","not"
+			,"not_eq","operator","or","or_eq","private","protected","public","register"
+			,"reinterpret_cast","return","short","signed","sizeof","static","static_cast"
+			,"struct","switch","template","this","throw","true","try","typedef","typeid"
+			,"typename","union","unsigned","using","virtual","void","volatile"
+			,"wchar_t","while","xor","xor_eq","string"};
+		for(int i = 0;i<words2.length;i++){
+			cppkeywords.put(words2[i],words2[i]);
+		}
 
-        basicTypeQname2classmap.put("int", "int");
-        basicTypeQname2classmap.put("byte", "byte");
-        basicTypeQname2classmap.put("float", "float");
-        basicTypeQname2classmap.put("long", "long");
-        basicTypeQname2classmap.put("double", "double");
-        basicTypeQname2classmap.put("boolean", "boolean");
-        basicTypeQname2classmap.put("char", "char");
-        basicTypeQname2classmap.put("short", "short");
-        basicTypeQname2classmap.put("string", "java.lang.String");
-        basicTypeQname2classmap.put("decimal", "java.math.BigDecimal");
-        basicTypeQname2classmap.put("Qname", "javax.xml.namespace.QName");
-        basicTypeQname2classmap.put("dateTime", "java.util.Date");
-        basicTypeQname2classmap.put(
-            "base64Binary",
-            "org.apache.axismora.wrappers.simpleType.Base64ByteArrayParam");
-        basicTypeQname2classmap.put(
-            "hexBinary",
-            "org.apache.axismora.wrappers.simpleType.HexBinaryParam");
-
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "int"),
-            "java.lang.Integer");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "byte"),
-            "java.lang.Byte");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "float"),
-            "java.lang.Float");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "long"),
-            "java.lang.Long");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "double"),
-            "java.lang.Double");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "boolean"),
-            "java.lang.Boolean");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "char"),
-            "java.lang.Charcter");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "short"),
-            "java.lang.Short");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SOAPENC_NAMESPACE, "string"),
-            "java.lang.String");
-        basicTypeQname2classmap.put(
-            new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"),
-            "java.math.BigDecimal");
-
-        // TODO support types - 
-        //	1)duration
-        //  2)ENTITIES		
-        basicTypeQname2classmap.put("time", "java.util.Date");
-        basicTypeQname2classmap.put("date", "java.util.Date");
-        basicTypeQname2classmap.put("gYearMonth", "java.util.Date");
-        basicTypeQname2classmap.put("gYear", "java.util.Date");
-        basicTypeQname2classmap.put("gMonthDay", "java.util.Date");
-        basicTypeQname2classmap.put("gDay", "java.util.Date");
-        basicTypeQname2classmap.put("gMonth", "java.util.Date");
-
-        basicTypeQname2classmap.put("anyURI", "java.lang.String");
-        basicTypeQname2classmap.put("normalizedString", "java.lang.String");
-        basicTypeQname2classmap.put("token", "java.lang.String");
-        basicTypeQname2classmap.put("language", "java.lang.String");
-
-        basicTypeQname2classmap.put("NMTOKEN", "java.lang.String");
-        basicTypeQname2classmap.put("NMTOKENS", "java.lang.String");
-        basicTypeQname2classmap.put("Name", "java.lang.String");
-        basicTypeQname2classmap.put("NCName", "java.lang.String");
-        basicTypeQname2classmap.put("ID", "java.lang.String");
-        basicTypeQname2classmap.put("IDREF", "java.lang.String");
-        basicTypeQname2classmap.put("IDREFS", "java.lang.String");
-        basicTypeQname2classmap.put("ENTITY", "java.lang.String");
-
-        basicTypeQname2classmap.put("integer", "int");
-        basicTypeQname2classmap.put("nonPositiveInteger", "int");
-        basicTypeQname2classmap.put("negativeInteger", "int");
-
-        basicTypeQname2classmap.put("nonNegativeInteger", "int");
-        basicTypeQname2classmap.put("unsignedLong", "long");
-        basicTypeQname2classmap.put("unsignedInt", "int");
-        basicTypeQname2classmap.put("unsignedShort", "short");
-        basicTypeQname2classmap.put("unsignedByte", "byte");
-        basicTypeQname2classmap.put("positiveInteger", "int");
-
-        String[] words1 =
-            {
-                "abstract",
-                "default",
-                "if",
-                "private",
-                "this",
-                "boolean",
-                "do",
-                "implements",
-                "protected",
-                "throw",
-                "break",
-                "double",
-                "import",
-                "public",
-                "throws",
-                "byte",
-                "else",
-                "instanceof",
-                "return",
-                "transient",
-                "case",
-                "extends",
-                "int",
-                "short",
-                "try",
-                "catch",
-                "final",
-                "interface",
-                "static",
-                "void",
-                "char",
-                "finally",
-                "long",
-                "strictfp",
-                "volatile",
-                "class",
-                "float",
-                "native",
-                "super",
-                "while",
-                "const",
-                "for",
-                "new",
-                "switch",
-                "continue",
-                "goto",
-                "package",
-                "synchronized",
-                "return",
-                "false",
-                "null" };
-        for (int i = 0; i < words1.length; i++) {
-            javakeywords.put(words1[i], words1[i]);
-        }
-        String[] words2 =
-            {
-                "and",
-                "and_eq",
-                "asm",
-                "auto",
-                "bitand",
-                "bitor",
-                "bool",
-                "break",
-                "case",
-                "catch",
-                "char",
-                "class",
-                "compl",
-                "const",
-                "const_cast",
-                "continue",
-                "default",
-                "delete",
-                "do",
-                "double",
-                "dynamic_cast",
-                "else",
-                "enum",
-                "explicit",
-                "export",
-                "extern",
-                "false",
-                "float",
-                "for",
-                "friend",
-                "goto",
-                "if",
-                "inline",
-                "int",
-                "long",
-                "mutable",
-                "namespace",
-                "new",
-                "not",
-                "not_eq",
-                "operator",
-                "or",
-                "or_eq",
-                "private",
-                "protected",
-                "public",
-                "register",
-                "reinterpret_cast",
-                "return",
-                "short",
-                "signed",
-                "sizeof",
-                "static",
-                "static_cast",
-                "struct",
-                "switch",
-                "template",
-                "this",
-                "throw",
-                "true",
-                "try",
-                "typedef",
-                "typeid",
-                "typename",
-                "union",
-                "unsigned",
-                "using",
-                "virtual",
-                "void",
-                "volatile",
-                "wchar_t",
-                "while",
-                "xor",
-                "xor_eq",
-                "string" };
-        for (int i = 0; i < words2.length; i++) {
-            cppkeywords.put(words2[i], words2[i]);
-        }
-
-    }
-    public TypeMap() {
+	
+	}
+    public TypeMap(String language) {
+		TypeMap.language = language;
         this.typeInfo = new Hashtable();
     }
 
     public static QName getBasicTypeQname4class(String classname) {
-        Object val = basicTypeClass2QNamemap.get(classname);
-        return val != null ? (QName) val : null;
+    	Object val = basicTypeClass2QNamemap.get(classname); 	
+       	return val!=null?(QName)val:null;
     }
-
+	
     public static String getBasicTypeClass4qname(QName qname) {
         Object val = null;
         if (org.apache.axis.Constants.URI_1999_SCHEMA_XSD.equals(qname.getNamespaceURI())
@@ -388,28 +191,31 @@ public class TypeMap {
             val = basicTypeQname2classmap.get(qname.getLocalPart());
         else if (WrapperConstants.SOAPENC_NAMESPACE.equals(qname.getNamespaceURI()))
             val = basicTypeQname2classmap.get(qname);
-        return val != null ? (String) val : null;
-    } //
-
+		return val!=null?(String)val:null;
+	}//
+	
     public static boolean isSimpleType(String type) {
         return (
             type.startsWith("org.apache.axismora.wrappers.simpleType")
                 || basicTypeClass2QNamemap.containsKey(type));
     }
 
-    public static boolean isSimpleType(QName type) {
+     public static boolean isSimpleType(QName type) {
         if (org.apache.axis.Constants.URI_1999_SCHEMA_XSD.equals(type.getNamespaceURI())
             || org.apache.axis.Constants.URI_2000_SCHEMA_XSD.equals(type.getNamespaceURI())
             || org.apache.axis.Constants.URI_2001_SCHEMA_XSD.equals(type.getNamespaceURI()))
             return basicTypeQname2classmap.containsKey(type.getLocalPart());
         else if (WrapperConstants.SOAPENC_NAMESPACE.equals(type.getNamespaceURI()))
-            return basicTypeQname2classmap.containsKey(type);
+			return basicTypeQname2classmap.containsKey(type);    
         return false;
     }
 
     public Type getType(QName name) {
+    	if(isSimpleType(name))
+    		return new Type(name,null,false,TypeMap.language);
         return (Type) this.typeInfo.get(name);
     }
+
 
     public void addType(QName wsdlname, Type type) {
         this.typeInfo.put(wsdlname, type);
@@ -418,28 +224,45 @@ public class TypeMap {
     /* get all the custom types in the typeMap */
     public Collection getTypes() {
         return this.typeInfo.values();
+    } 
+	
+   /**
+     * The wsdl support the attributes names that are not allowed by the program langage.
+     * e.g. use keyword 
+     * This method resolved those clashes by adding "_" to the front. This is a 
+     * JAX_RPC recomendation of the situation.  
+     * @param name
+     * @param language
+     * @return
+     */
+    public static String resoleveWSDL2LanguageNameClashes(String name,String language){
+		Hashtable keywords;
+	  	if(WrapperConstants.LANGUAGE_JAVA.equalsIgnoreCase(language)){
+			keywords = javakeywords;
+	  	}else{
+			keywords = cppkeywords;
+	  	}	
+    	
+    	if(keywords.containsKey(name))
+    		return "_"+name;
+    	
+    	return name;
     }
-
-    /**
-      * The wsdl support the attributes names that are not allowed by the program langage.
-      * e.g. use keyword 
-      * This method resolved those clashes by adding "_" to the front. This is a 
-      * JAX_RPC recomendation of the situation.  
-      * @param name
-      * @param language
-      * @return
-      */
-    public static String resoleveWSDL2LanguageNameClashes(String name, String language) {
-        Hashtable keywords;
-        if (WrapperConstants.LANGUAGE_JAVA.equalsIgnoreCase(language)) {
-            keywords = javakeywords;
-        } else {
-            keywords = cppkeywords;
-        }
-
-        if (keywords.containsKey(name))
-            return "_" + name;
-
-        return name;
+    
+    private static Hashtable unregisterdArrayTypes = new Hashtable();
+    
+    public static String regestorArrayTypeToCreate(Type type)throws WrapperFault{
+    	QName arrayType = WrapperUtils.getArrayType(type).getName();
+		Object obj = unregisterdArrayTypes.get(arrayType);
+		if(obj != null)
+			return ((Type)obj).getLanguageSpecificName();
+		else{
+			unregisterdArrayTypes.put(arrayType,type);
+			return type.getLanguageSpecificName();
+		}	
+    }
+    
+    public static Iterator getUnregisterdArrayTypes(){
+		return unregisterdArrayTypes.values().iterator();
     }
 }

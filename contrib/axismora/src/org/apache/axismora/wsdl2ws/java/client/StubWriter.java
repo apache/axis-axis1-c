@@ -170,7 +170,7 @@ public class StubWriter extends JavaClassWriter {
                 writer.write(minfo.getMethodname() + "(");
 
                 //write parameter names 
-                Iterator params = minfo.getParameterTypess().iterator();
+                Iterator params = minfo.getParameterTypes().iterator();
                 if (params.hasNext())
                     writer.write(
                         WrapperUtils.getClassNameFromParamInfoConsideringArrays(
@@ -197,7 +197,7 @@ public class StubWriter extends JavaClassWriter {
                     "\n\t\torg.apache.axismora.client.Call call = (org.apache.axismora.client.Call)service.createCall();");
                 writer.write("\n\t\tcall.setOperationName(methodName);");
                 writer.write("\n\t\tcall.setPortTypeName(SOAPAction);");
-                Iterator params1 = minfo.getParameterTypess().iterator();
+                Iterator params1 = minfo.getParameterTypes().iterator();
                 if (params1.hasNext()) {
                     obj = params1.next();
                     paramType =

@@ -86,7 +86,7 @@ public class WrapWriter extends CPPClassWriter{
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
 					 minfo = (MethodInfo)methods.get(i);
-					 this.writeMethodInWrapper(minfo.getMethodname(), minfo.getParameterTypess(),minfo.getReturnType());
+					 this.writeMethodInWrapper(minfo.getMethodname(), minfo.getParameterTypes(),minfo.getReturnType());
 					 writer.write("\n");
 				 }
      
@@ -211,7 +211,7 @@ public class WrapWriter extends CPPClassWriter{
 			Type type;
 			if ((type = this.wscontext.getTypemap().getType(returntype.getSchemaName())) != null ){
 				if (isArray = type.isArray()){
-					outparam = type.getTypNameForAttribName("item")+"[]";
+					outparam = type.getTypForAttribName("item")+"[]";
 				}
 			}	
 			// -------------------------------------------------------------------//

@@ -55,6 +55,7 @@
 
 package org.apache.axismora.wsdl2ws;
 
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Stack;
 import java.util.StringTokenizer;
@@ -62,6 +63,7 @@ import java.util.StringTokenizer;
 import javax.xml.namespace.QName;
 
 import org.apache.axismora.wsdl2ws.cpp.CPPUtils;
+import org.apache.axismora.wsdl2ws.info.ElementInfo;
 import org.apache.axismora.wsdl2ws.info.ParameterInfo;
 import org.apache.axismora.wsdl2ws.info.Type;
 import org.apache.axismora.wsdl2ws.info.TypeMap;
@@ -266,10 +268,12 @@ public class WrapperUtils {
             return "void";
         Type type = wscontext.getTypemap().getType(param.getSchemaName());
         if (type != null && type.isArray()) {
-            Iterator e = type.getAttribNames();
-            if (e.hasNext()) {
-                QName qname = type.getTypNameForAttribName((String) e.next());
-                Type t = wscontext.getTypemap().getType(qname);
+            Enumeration e = type.getElementnames();
+            
+            if (e.hasMoreElements()) {
+ 
+                Type t = type.getElementForElementName((String) e.nextElement()).getType();
+				QName qname = t.getName();
                 String name;
 
                 if (t != null)
@@ -292,5 +296,16 @@ public class WrapperUtils {
                 throw new WrapperFault("enumeration no type is given ?????");
         } else
             return param.getLangName();
+    }
+    
+    public static Type getArrayType(Type type)throws WrapperFault{
+    	if(!type.isArray())
+    		return null;
+    	Enumeration elements = type.getElementnames();
+    	if(elements.hasMoreElements()){
+    		return type.getElementForElementName(
+    			(String)elements.nextElement()).getType();
+    	}
+    	throw new WrapperFault("Array type do not have any attibutes");
     }
 }

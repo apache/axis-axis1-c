@@ -2,6 +2,7 @@ package org.apache.axismora.wsdl2ws.c;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
@@ -60,9 +61,9 @@ public abstract class ParamWriter extends BasicFileWriter{
         String[][] attribs;
         ArrayList feilds = new ArrayList();
 
-        Iterator names = type.getAttribNames();
-        while (names.hasNext()){
-            feilds.add(names.next());
+        Enumeration names = type.getAttributeNames();
+        while (names.hasMoreElements()){
+            feilds.add(names.nextElement());
 
         }
         //get all the fields
@@ -72,7 +73,7 @@ public abstract class ParamWriter extends BasicFileWriter{
             attribs[i] = new String[4];
             attribs[i][0] = ((String) feilds.get(i));
    
-            QName name = type.getTypNameForAttribName(attribs[i][0]);
+            QName name = type.getTypForAttribName(attribs[i][0]).getName();
             
             if(CUtils.isSimpleType(name))
                 attribs[i][1] = CUtils.getclass4qname(name);
@@ -90,10 +91,10 @@ public abstract class ParamWriter extends BasicFileWriter{
 		System.out.println(name);
 		Type t = wscontext.getTypemap().getType(name);
 		if(t !=null && t.isArray()){
-		Iterator e = t.getAttribNames();
+		Enumeration e = t.getAttributeNames();
 		String contentTypeName;
-		if(e.hasNext()){	
-			QName elementQname = t.getTypNameForAttribName((String)e.next());
+		if(e.hasMoreElements()){	
+			QName elementQname = t.getTypForAttribName((String)e.nextElement()).getName();
 			Type type = this.wscontext.getTypemap().getType(elementQname);
 			
 			

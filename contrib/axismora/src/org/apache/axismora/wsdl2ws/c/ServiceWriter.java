@@ -76,7 +76,7 @@ public class ServiceWriter extends CFileWriter{
 			  writer.write(minfo.getMethodname()+"(");
 			  //write parameter names 
 			//write parameter names 
-			Iterator params = minfo.getParameterTypess().iterator();
+			Iterator params = minfo.getParameterTypes().iterator();
 			if(params.hasNext()){
 				ParameterInfo fparam = (ParameterInfo)params.next();
 				isSimpleType = CUtils.isSimpleType(fparam.getLangName());

@@ -149,7 +149,7 @@ public class MSGWrapWriter extends JavaClassWriter {
                 minfo = (MethodInfo) methods.get(i);
                 this.writeMethodInWrapper(
                     minfo.getMethodname(),
-                    minfo.getParameterTypess(),
+                    minfo.getParameterTypes(),
                     minfo.getReturnType().getLangName());
                 writer.write("\n");
             }

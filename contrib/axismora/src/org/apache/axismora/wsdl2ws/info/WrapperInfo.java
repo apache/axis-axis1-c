@@ -68,7 +68,7 @@ public class WrapperInfo {
     // programming language
     private String wrapperLanguage;
     //encoding style
-    private String encodingStyle;
+//    private String encodingStyle;
     // use getvalue or get TAG or SIMPlE
     private String implStyle;
     //serverside or client side
@@ -85,7 +85,7 @@ public class WrapperInfo {
     public WrapperInfo(
         String wrapperStyle,
         String wrapperLanguage,
-        String encodingStyle,
+//        String encodingStyle,
         String targetOutputLocation,
         String implStyle,
         String targetEngine,
@@ -94,7 +94,7 @@ public class WrapperInfo {
         String targetNameSpaceOfWSDL) {
         this.wrapperStyle = wrapperStyle;
         this.wrapperLanguage = wrapperLanguage;
-        this.encodingStyle = encodingStyle;
+ //       this.encodingStyle = encodingStyle;
         this.targetOutputLocation = targetOutputLocation;
         this.implStyle = implStyle;
 
@@ -114,9 +114,9 @@ public class WrapperInfo {
         else
             this.wrapperStyle = this.wrapperStyle.toLowerCase();
 
-        if (encodingStyle == null
-            || encodingStyle.equals(WrapperConstants.ENCODING_STYLE_SOAP))
-            this.encodingStyle = WrapperConstants.ENCODING_STYLE_SOAP;
+//        if (encodingStyle == null
+//            || encodingStyle.equals(WrapperConstants.ENCODING_STYLE_SOAP))
+//            this.encodingStyle = WrapperConstants.ENCODING_STYLE_SOAP;
         if (targetOutputLocation == null)
             this.targetOutputLocation = ".";
 
@@ -174,20 +174,20 @@ public class WrapperInfo {
         this.wrapperStyle = wrapperStyle;
     }
 
-    /**
-     * @return int
-     */
-    public String getEncodingStyle() {
-        return encodingStyle;
-    }
-
-    /**
-     * Sets the encodingStyle.
-     * @param encodingStyle The encodingStyle to set
-     */
-    public void setEncodingStyle(String encodingStyle) {
-        this.encodingStyle = encodingStyle;
-    }
+//    /**
+//     * @return int
+//     */
+//    public String getEncodingStyle() {
+//        return encodingStyle;
+//    }
+//
+//    /**
+//     * Sets the encodingStyle.
+//     * @param encodingStyle The encodingStyle to set
+//     */
+//    public void setEncodingStyle(String encodingStyle) {
+//        this.encodingStyle = encodingStyle;
+//    }
 
     /**
      * @return String

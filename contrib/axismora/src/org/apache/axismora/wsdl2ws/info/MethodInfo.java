@@ -2,7 +2,7 @@
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -20,7 +20,7 @@
  * 3. The end-user documentation included with the redistribution,
  *    if any, must include the following acknowledgment:
  *       "This product includes software developed by the
- *    Apache Software Foundation (http://www.apache.org/)."
+ *        Apache Software Foundation (http://www.apache.org/)."
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
@@ -53,19 +53,24 @@
  * <http://www.apache.org/>.
  */
 
-package org.apache.axismora.wsdl2ws.info;
-
-import java.util.ArrayList;
-import java.util.Collection;
 /**
  * This Class represents a method (operation is wsdl) in a web service 
  * class.
  * @author Srinath Perera(hemapani@opensource.lk)
  */
+package org.apache.axismora.wsdl2ws.info;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 public class MethodInfo {
     private String methodname;
     private ArrayList parameters;
     private ParameterInfo returnType;
+    private String soapAction;
+    private List inputEncoding;
+    private List outputEncoding;
 
     public MethodInfo() {
         this.returnType = null;
@@ -94,23 +99,66 @@ public class MethodInfo {
     public void setReturnType(ParameterInfo returnType) {
         this.returnType = returnType;
     }
-
-    /* public Enumeration getParameters() {
-         return this.parameters.keys();
-     }*/
-
-    public Collection getParameterTypess() {
+/*
+    public Enumeration getParameters() {
+        return this.parameters.keys();
+    }
+*/
+    public Collection getParameterTypes() {
         return this.parameters;
     }
 
     public void addParameter(ParameterInfo type) {
         this.parameters.add(type);
     }
-
-    /*public ParameterInfo getParameter(String paramName) {
+/*
+    public ParameterInfo getParameter(String paramName) {
         Object obj = this.parameters.get(paramName);
         if (obj != null)
             return (ParameterInfo) obj;
         return null;
-    }*/
+    }
+*/
+    /**
+     * @return
+     */
+    public List getInputEncoding() {
+        return inputEncoding;
+    }
+
+    /**
+     * @return
+     */
+    public List getOutputEncoding() {
+        return outputEncoding;
+    }
+
+    /**
+     * @return
+     */
+    public String getSoapAction() {
+        return soapAction;
+    }
+
+    /**
+     * @param string
+     */
+    public void setInputEncoding(List string) {
+        inputEncoding = string;
+    }
+
+    /**
+     * @param string
+     */
+    public void setOutputEncoding(List string) {
+        outputEncoding = string;
+    }
+
+    /**
+     * @param string
+     */
+    public void setSoapAction(String string) {
+        soapAction = string;
+    }
+
 }
