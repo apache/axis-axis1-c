@@ -113,7 +113,7 @@ SetHandler axis <br>
 
 8. Copy [Axis_Module]  from Axis_Extract/bin folder to [Apache_Folder]/modules folder.<br> <br>
 
-9. Copy AxisServer.dll and AxisTransport.dll from Axis_Extract/bin folder  to [Axis_Folder]/lib <br>
+9. Copy AxisServer.dll,HTTPTransport.dll and HTTPChannel.dll from Axis_Extract/bin folder  to [Axis_Folder]/lib <br>
 <br>
 
 10.Rename AxisXMLParser_Xerces.dll (which is located at Axis_Extract/bin ) to AxisXMLParser.dll and copy it to [Axis_Folder]/lib </p>
@@ -129,15 +129,18 @@ LogPath:XXXX <br>
 WSDDFilePath:YYYY <br>
 XMLParser:ZZZZ <br>
 Transport_http:AAAA <br>
+Channel_HTTP:BBBB <br>
 <br>
- XXXX is the path to a file named AxisLog (The log file)and YYYY is the path to the server.wsdd file. Give the appropriate values for XXXX and YYYY as follows.ZZZZ is the path to the XMLParser and AAAA is the path to the Transport used.<br> <br>
+ XXXX is the path to a file named AxisLog (The log file)and YYYY is the path to the server.wsdd file. Give the appropriate values for XXXX and YYYY as follows.ZZZZ is the path to the XMLParser and AAAA is the path to the Transport used and BBBB is the path to the Channel used.<br> <br>
 
 i.e. <br> <br>
 
 LogPath: [Apache_Folder]\Axis\logs\AxisLog <br>
 WSDDFilePath: [Apache_Folder]\Axis\conf\server.wsdd <br>
 XMLParser:[Apache_Folder]\Axis\lib\AxisXMLParser.dll <br>
-Transport_http:[Apache_Folder]\Axis\lib\AxisTransport.dll<br> <br>
+Transport_http:[Apache_Folder]\Axis\lib\HTTPTransport.dll<br>
+Channel_HTTP:[Apache_Folder]\Axis\lib\HTTPChannel.dll<br> <br>
+
 
 server.wsdd is located at [Apache_Folder]\Axis\conf\ for Apache 1.3 and Apache 2. (There will be three wsdd files in the [Apache_Folder]\Axis\conf\ rename the relevant wsdd file of your platform to server.wsdd).<br> <br>
 
@@ -180,7 +183,7 @@ It could happen with some other apache 2 versions or in different service packs.
 5. Set environment variable AXISCPP_DEPLOY to point to above [Axis_Folder].<br> <br>
 6. Add [Axis_Folder]/lib to the PATH environment variable.<br> <br>
 7. Copy the SimpleAxisServer.exe from Axis_Extract/bin to the Simple_Axis_Server_Folder.<br> <br>
-8. Copy AxisServer.dll and AxisTransport.dll from Axis_Extract/bin folder to [Axis_Folder]/lib <br> <br>
+8. Copy AxisServer.dll,HTTPTransport.dll and HTTPChannel.dll from Axis_Extract/bin folder to [Axis_Folder]/lib <br> <br>
 
 9.Rename AxisXMLParser_Xerces.dll (which is located at  Axis_Extract/bin) to AxisXMLParser.dll and copy it to [Axis_Folder]/lib <br> <br>
 10.Copy xerces-c_2_2_0.dll from [Xerces_Folder]/bin and paste it in [Axis_Folder]/lib. <br> <br>  
@@ -193,15 +196,17 @@ LogPath:XXXX <br>
 WSDDFilePath:YYYY <br>
 XMLParser:ZZZZ <br>
 Transport_http:AAAA <br>
+Channel_HTTP:BBBB <br>
 <br>
- XXXX is the path to a file named AxisLog (The log file)and YYYY is the path to the server.wsdd file. Give the appropriate values for XXXX and YYYY as follows.ZZZZ is the path to the XMLParser and AAAA is the path to the used Transport.<br> <br>
+ XXXX is the path to a file named AxisLog (The log file)and YYYY is the path to the server.wsdd file. Give the appropriate values for XXXX and YYYY as follows.ZZZZ is the path to the XMLParser and AAAA is the path to the used Transport and BBBB is the path to the Channel used.<br> <br>
 
 i.e. <br> <br>
 
 LogPath: [Apache_Folder]\Axis\logs\AxisLog <br>
 WSDDFilePath: [Apache_Folder]\Axis\conf\server.wsdd <br>
 XMLParser:[Axis_Folder]\lib\AxisXMLParser.dll<br>
-Transport_http:[Axis_Folder]\lib\AxisTransport.dll<br> <br>
+Transport_http:[Apache_Folder]\Axis\lib\HTTPTransport.dll<br>
+Channel_HTTP:[Apache_Folder]\Axis\lib\HTTPChannel.dll<br> <br>
 
 Rename axiscpp.conf_win to axiscpp.conf.
 
@@ -257,12 +262,9 @@ There are seven projects in the workspace.
 
 <p>For writing your own web services and client applications see the <a href="winuser-guide.html"><b>Windows User Guide</a></b> </p>
 
-<p>
-<div id="pdf" align="right">
+<p><div id="pdf" align="right">
 <a href="wininstall-guide.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
           PDF</a> </p>
-
-
 
 
 

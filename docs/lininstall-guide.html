@@ -116,7 +116,7 @@ export AXISCPP_HOME AXISCPP_DEPLOY LD_LIBRARY_PATH</b> </p>
 <b>cd $AXISCPP_HOME </b> <br> <br>
 
 <b>./configure --prefix=$AXISCPP_DEPLOY --with-apache2=/path/to/Apache2 \<br>
-&nbsp;&nbsp;&nbsp;&nbsp;--with-xercesc=/path/to/xerces-c </b> <br>
+&nbsp;&nbsp;&nbsp;&nbsp;--with-xercesc=/path/to/xerces-c --enable-axis3=yes</b> <br>
 <b> make </b> <br>
 <b> make install</b><br>
 <br>
@@ -189,6 +189,7 @@ ClientWSDDFilePath - Path to the client wsdd<br>
 LogPath - Path to the Axis C++ server log<br> 
 ClientLogPath - Path to the Axis C++ client log<br>
 Transport_http - HTTP transport library<br>
+Channel_HTTP - Channel transport library <br>
 XMLParser - XML parser library
 </p>
 <br>
@@ -200,7 +201,9 @@ LogPath:/usr/local/axiscpp_deploy/log/AxisLog
 WSDDFilePath:/usr/local/axiscpp_deploy/etc/server.wsdd
 ClientLogPath:/usr/local/axiscpp_deploy/log/AxisClientLog
 XMLParser:/usr/local/axiscpp_deploy/lib/libaxis_xercesc.so
-Transport_http:/usr/local/axiscpp_deploy/lib/libaxis2_transport.so
+Transport_http:/usr/local/axiscpp_deploy/lib/libaxis3_transport.so
+Channel_HTTP:/usr/local/axiscpp_deploy/lib/libaxis3_transport_channel.so
+
 </pre>
 
 <h2>9. Deploying with Apache Web Server </h2>

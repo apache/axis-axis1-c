@@ -215,14 +215,14 @@ with the correct module for the Apache server version that you have installed). 
 
 &nbsp;</p>
 <br>
-<p><b>Axis Transport Library</b></p>
-<p>In VC++ distribution workspace build AxisTransport project.Then AxisTransport.dll will be built.</p> <br>
+<p><b>Axis HTTPTransport Library and Axis HTTPChannel Library</b></p>
+<p>In VC++ Axis3 workspace build AxisHTTPTransport project and in HTTPChannel workspace build AxisHTTPChannel project.Then HTTPTransport.dll and HTTPChannel.dll will be built.</p> <br>
 <p><b>Xerces Parser Library</b></p>
 <p>In VC++ distribution workspace build AxisXMLParserXerces project.Then AxisXMLParser.dll will be built.</p>  
 
 <br>
-<p><b> Building AxisTransport.dll  and AxisXMLParser.dll</b>
-<br>Build the AxisTransport and AxisXMLParser project. Which will build the AxisTransport.dll and AxisXMLParser.dll in [Checkout_Folder]\c\bin. </p>
+<p><b> Building HTTPTransport.dll,HTTPChannel.dll and AxisXMLParser.dll</b>
+<br>Build the AxisHTTPTransport project AxisHTTPChannel project, and AxisXMLParser project. Which will build the HTTPTransport.dll ,HTTPChannel.dll and AxisXMLParser.dll in [Checkout_Folder]\c\bin. </p>
 <p>(When the projects are built in Debug mode then the Dlls will appear as AxisTransport_D and AxisXMLParser_D.dll)</p> 
 <p><a name="deployaxis"></a></p>
 
@@ -254,7 +254,7 @@ i)You will find AxisServer.dll and Apache_Module in [Checkout_Folder]\c\bin dire
 <br>
 ii)Copy Apache_Module to [Apache_Folder]\modules directory of your apache installation.
 <br>
-<p>Copy AxisServer.dll ,AxisTransport.dll and AxisXMLParser.dll to [AXISCPP_DEPLOY]\lib\ directory and add that directory to your PATH environment variable.Or to any location specified by your PATH environment variable.</p>    
+<p>Copy AxisServer.dll ,HTTPTransport.dll,HTTPChannel.dll and AxisXMLParser.dll to [AXISCPP_DEPLOY]\lib\ directory and add that directory to your PATH environment variable.Or to any location specified by your PATH environment variable.</p>    
 
 <br> <br>
 <p>3) Set the "PATH" environment variable to the following directories.
@@ -290,22 +290,24 @@ contain the following lines.
 <br>
 LogPath:XXXX<br>
 WSDDFilePath:YYYY<br>
-Transport_http:ZZZZ (Not necessary)<br>
-XMLParser:WWWW<br>
+XMLParser:ZZZZ <br>
+Transport_http:AAAA <br>
+Channel_HTTP:BBBB <br>
 
 <br>
 XXXX is the path to a file named AxisLog (The log file)and YYYY 
-is the path to the server.wsdd file.ZZZZ is the path to AxisTransport.dll if it's a HTTP(if the selected transport is SMTP then should give that path.)WWWW is the path to AxisXMLParser.dll<br>
+is the path to the server.wsdd file.ZZZZ is the path to AxisTransport.dll if it's a HTTP(if the selected transport is SMTP then should give that path.)WWWW is the path to AxisXMLParser.dll. AAAA is the path to the used Transport and BBBB is the path to the Channel used<br>
 <br>
 i.e.<br>
 LogPath:[Apache_Folder]\Axis\logs\AxisLog.log  
 
 <br>
 WSDDFilePath:[Apache_Folder]\Axis\conf\server.wsdd <br>
-Transport_http:[Apache_Folder]\Axis\lib\AxisTransport.dll <br>
+Transport_http:[Apache_Folder]\Axis\lib\HTTPTransport.dll<br>
+Channel_HTTP:[Apache_Folder]\Axis\lib\HTTPChannel.dll<br> <br>
 XMLParser:[Apache_Folder]\Axis\lib\AxisXMLParser.dll</p>  
 
-<p><b>Note:If the AxisTransport.dll and AxisXMLParser.dll paths are not given in axiscpp.conf then the hardcoded values will be used.For that set the path of these two in the PATH environment variable or copy them to the same location as the Client.exe.</b></p>
+<p><b>Note:If the HTTPTransport.dll, HTTPChannel.dll and AxisXMLParser.dll paths are not given in axiscpp.conf then the hardcoded values will be used.For that set the path of these two in the PATH environment variable or copy them to the same location as the Client.exe.</b></p>
 <br> <br>
 
 <p><b>Note:Make sure that xerces-c_2_2_0.dll  ([Xerces_Folder]\bin) is pasted in %AXISCPP_DEPLOY%/lib/ </b> </p>
@@ -673,7 +675,7 @@ list.
 
 
 <br>Add AxisClient.lib to the “Object/library modules” and in the “Additional library path” give the path.
-AxisClient.lib can be found in [Checkout_Folder]\c\bin once you build the AxisClient,AxisTransport,AxisXMLParserXerces projects of the "Distribution" VC workspace.
+AxisClient.lib can be found in [Checkout_Folder]\c\bin once you build the AxisClient and AxisXMLParserXerces projects of the "Distribution" VC workspace and build AxisHTTPTransport project and AxisHTTPChannel project in VC++ Axis3 workspace  and  HTTPChannel workspace. 
 <br>
 
 <br>
@@ -694,7 +696,7 @@ printf("The result is : %d", result);
 }</pre>
 <br>
 
-<p>It is better to have the path to your AxisXMLParser.dll and AxisTransport.dll in axiscpp.conf or have the dlls where the client exe is.</p>
+<p>It is better to have the path to your AxisXMLParser.dll , HTTPTransport.dll and HTTPChannel.dll in axiscpp.conf or have the dlls where the client exe is.</p>
 <p>Right click on the project and click “Build” on the menu that appears.
 
 <p>When the XMLParser is running these steps would occur.<br>
@@ -768,10 +770,9 @@ the relevant web service dll given above in [Apache_Folder]\Axis\webservices.
 <p>CreateInstance() - Used by Axis to create an instance of your parser class<br>
    DestroyInstance() - Used by Axis to destroy the created parser class instance </p>
 <p> Compile your parser code and build a dynamic library. Add the name of your parser library to Axis configuration file (axiscpp.conf) so that Axis can find your library at runtime</p>
-<p>
+
 <div id="pdf" align="right">
 <a href="windev-guide.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
           PDF</a> </p>
-
 </body>
 </html>

@@ -32,6 +32,9 @@
 
 <a href="#IPV6"> IPV6</a> <br> <br> <br>
 
+<a href="#axis3"> Axis 3 Transport</a> <br> <br> <br>
+
+
 <b>Before you follow this guide, please make sure that you have followed the</b> <a
 href="wininstall-guide.html"><b>Windows Installation guide</b>
 </p>
@@ -297,7 +300,7 @@ int main()
 
 <h2>Transport Library and Parser Library</h2>
 
-<p>AxisTransport.dll (Which can be found at Axis_Extract/bin) should be placed in the path, and should be specified as the value to the key "Transport_http" in axiscpp.conf [Axis_Folder]/axiscpp.conf Or in the same place as the client.exe. </p> 
+<p>HTTPTransport.dll and HTTPChannel.dll (Which can be found at Axis_Extract/bin) should be placed in the path, and should be specified as the value to the keys "Transport_http" and "Channel_HTTP" respectively in axiscpp.conf [Axis_Folder]/axiscpp.conf Or in the same place as the client.exe. </p> 
 <p>Rename AxisXMLParser_Xerces.dll to AxisXMLParser.dll  and give the path of the AxisXMLParser.dll as the value of the key XMLParser in axiscpp.conf Or in the  same place as the client.exe. 
 <br> xerces-c_2_2_0.dll should be given in the path.
 <br>
@@ -307,7 +310,8 @@ int main()
 <p><b>Axiscpp.conf file contains the following paths</b><br> <br>
 LogPath:XXXX<br>
 WSDDFilePath:YYYY<br>
-Transport_http:ZZZZ (Not necessary)<br>
+Transport_http:ZZZZ<br>
+Channel_HTTP:BBBB <br>
 XMLParser:WWWW<br>
 
 <br>
@@ -319,8 +323,9 @@ LogPath:[Apache_Folder]\Axis\logs\AxisLog.log
 
 <br>
 WSDDFilePath:[Apache_Folder]\Axis\conf\server.wsdd <br>
-Transport_http:[Apache_Folder]\Axis\libs\AxisTransport_D.dll <br>
-XMLParser:[Apache_Folder]\Axis\libs\AxisXMLParser_D.dll <br></p>
+Transport_http:[Apache_Folder]\Axis\libs\HTTPTransport.dll <br>
+Channel_HTTP:[Apache_Folder]\Axis\libs\HTTPChannel.dll <br>
+XMLParser:[Apache_Folder]\Axis\libs\AxisXMLParser.dll <br></p>
 
 <p><a name="handlers"></a></p>
 
@@ -503,8 +508,7 @@ Can be downloaded from <a href="http://msdn.microsoft.com/downloads/sdks/platfor
 Extract the package and copy the tpipv6.h and wspiapi.h headers in inc folder to $AXISCPP_HOME/include. <br> <br>
  That would compile the axis2ipv6 VC++ project. </p>
 
-<p>
-<div id="pdf" align="right">
+<p><div id="pdf" align="right">
 <a href="winuser-guide.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
           PDF</a> </p>
 </body>
