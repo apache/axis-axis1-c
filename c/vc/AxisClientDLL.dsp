@@ -102,6 +102,10 @@ SOURCE=..\src\engine\AppScopeHandlerPool.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\apr_base64.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\common\ArrayBean.cpp
 # End Source File
 # Begin Source File
@@ -199,6 +203,10 @@ SOURCE=..\src\engine\HandlerPool.cpp
 # Begin Source File
 
 SOURCE=..\src\soap\HeaderBlock.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\soap\HexCoder.cpp
 # End Source File
 # Begin Source File
 
