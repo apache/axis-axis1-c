@@ -107,7 +107,7 @@
 		
 					<sequential>
 						<!-- Wait for jvm to start monitor program -->
-						<sleep seconds="3"/>
+						<sleep seconds="10"/>
 						<echo message="Running Test ${testName} ${clientArgs}"/>
 						<!-- Run the client test -->
 						<stopwatch name="${testName}.timer" action="start"/>
