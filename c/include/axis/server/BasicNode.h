@@ -28,10 +28,10 @@ class SoapSerializer;
 
 enum NODE_TYPE { ELEMENT_NODE=1, CHARACTER_NODE};
 /*
- *   @class BasicNode
- *   @brief interface for the BasicNode class.
+ * @class BasicNode
+ * @brief interface for the BasicNode class.
  *
- *   @author Roshan Weerasuriya (roshan@jkcsworld.com, roshan@opensource.lk)
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  *
  */
@@ -73,7 +73,6 @@ public:
 
 protected:
     NODE_TYPE m_iNodeType;
-    /* string m_sPrefix; */
     AxisChar* m_pachValue;
 };
 
