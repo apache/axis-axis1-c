@@ -33,9 +33,9 @@
   #define AXISTRACE2(X, Y, Z) AxisTrace::logaxis(X,Y,Z,__FILE__,__LINE__);
   #define AXISTRACE3(X) AxisTrace::trace(X);
 #else
-  #define AXISTRACE1(X,Y) "";
-  #define AXISTRACE2(X,Y,Z) "";
-  #define AXISTRACE3(X) "";
+  #define AXISTRACE1(X,Y)
+  #define AXISTRACE2(X,Y,Z)
+  #define AXISTRACE3(X)
 #endif
 
 typedef enum 
