@@ -66,11 +66,14 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "MessageData.h"
+#include "IDeployerUtils.h"
+#include "../wsdd/WSDDDeployment.h"
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
 string MessageData::m_sBlankPropertyValue="";
+extern WSDDDeployment* g_pWSDDDeployment;
 
 MessageData::MessageData()
 {
@@ -181,4 +184,9 @@ string& MessageData::getProperty(string &sName)
 	
 
 	return m_sBlankPropertyValue;
+}
+
+void MessageData::getWSDDDeployment(IDeployerUtils **pIDeployerUtils)
+{
+	*pIDeployerUtils= static_cast<IDeployerUtils*>(g_pWSDDDeployment);
 }
