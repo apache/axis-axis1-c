@@ -138,6 +138,9 @@ class STORAGE_CLASS_INFO Stub
     * 
     * @param pcEndPointURI End point URI of the service to connect to. 
     *                       e.g. http://localhost:8080/axis/services/echo
+    * @param eProtocol The protocol that this stub should use to communicate
+    *        with the endpoint. See AXIS_PROTOCOL_TYPE in GDefine.h for
+    *        possible values for eProtocol.
     */
     Stub(const char *pcEndPointURI, AXIS_PROTOCOL_TYPE eProtocol);
 
