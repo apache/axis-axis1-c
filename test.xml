@@ -48,7 +48,7 @@ Notes:
 	  included within the property files
 	  -->
 	<property name="dir.src" value="${basedir}/tests/auto_build/testcases"/>
-	<property name="test.list" value="${dir.src}/wsdls/test.properties"/>
+	<property name="test.list" value="${dir.src}/test.list"/>
 
 	<!--
 	  Compiler definitions
