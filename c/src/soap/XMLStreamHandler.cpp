@@ -366,7 +366,7 @@ void XMLStreamHandler::SetParamType(const Attributes &attrs)
 						if(URIMapping::Map(m_NsStack[sPrefix]) == URI_XSD)
 						{
 							//check for xml data types
-							m_Param.m_Value.a->t = TypeMapping::Map(sType);
+							m_Param.m_Value.a->m_type = TypeMapping::Map(sType);
 						}
 						else
 						{
@@ -415,8 +415,14 @@ void XMLStreamHandler::SetParamType(const Attributes &attrs)
 // being parsed. 
 int XMLStreamHandler::SetArrayDimensions(string &sDimensions)
 {
-	//For the moment assumed only one dimensional arrays eg : "[8]"
-	m_Param.m_Value.a->s = atoi((sDimensions.substr(1, sDimensions.find(']'))).c_str());
+	int si=0;
+	int ei=0;
+	do
+	{
+		si = sDimensions.find('[',ei);
+		ei = sDimensions.find(']',si);
+		m_Param.m_Value.a->m_size.push_back(atoi((sDimensions.substr(si+1,ei)).c_str()));
+	} while (sDimensions.find('[',ei) != string::npos);
 	return SUCCESS;
 }
 
