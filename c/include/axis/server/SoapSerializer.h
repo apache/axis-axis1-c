@@ -33,7 +33,8 @@ class HeaderBlock;
 
 #include <map>
 using namespace std;
-/*
+
+/**
  *  @class SoapSerializer
  *  @brief interface for the SoapSerializer class.
  *
@@ -42,6 +43,7 @@ using namespace std;
  *  @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *  @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  */
+
 class SoapSerializer : public IHandlerSoapSerializer
 {
     typedef struct
@@ -87,13 +89,13 @@ public:
 
 /*    IWrapperSoapSerializer& operator<<(const char* cSerialized); */
     IWrapperSoapSerializer& operator<<(const AxisChar* cSerialized);
-    /*
+    /**
      * Returns the corrosponding namespace prefix.
      * @param pNamespace The namespace.
      * @return The corrosponding prefix.
      */
     const AxisChar* AXISCALL getNamespacePrefix(const AxisChar* pNamespace);
-    /*
+    /**
      * Returns the corrosponding namespace prefix. This method is 
      * called when the caller also wants to know whether this is a new 
      * namespace or not as appose to its overloaded other member.
