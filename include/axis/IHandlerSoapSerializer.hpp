@@ -141,6 +141,19 @@ public:
     virtual int AXISCALL setBodyAsBase64Binary(xsd__base64Binary body)=0;
     virtual const AxisChar* AXISCALL getBodyAsString()=0;
 
+
+/**
+*Used to delete a header block
+*
+*/
+
+virtual int deleteHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace)=0;
+/**
+*Used to delete all the header block
+*
+*/
+virtual int removeSoapHeader()=0;
+
 	/**
 	  * Adds the namespace declaration to the SOAP Envelope.
 	  */

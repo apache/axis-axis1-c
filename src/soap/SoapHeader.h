@@ -141,6 +141,15 @@ public:
       */
     void addHeaderBlock(IHeaderBlock* headerBlock);
 
+/**
+      * Deletes a header block.
+      *
+      * 
+      */
+
+int deleteHeaderBlock(const AxisChar *pName,
+                                         const AxisChar *pNamespace);
+
     /**
       * The Constructor.
       */

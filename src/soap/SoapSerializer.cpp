@@ -1287,4 +1287,22 @@ AxisXMLString SoapSerializer::getNamespaceURL( string sNameSpace)
 	}
 }
 
+
+int SoapSerializer::deleteHeaderBlock(const AxisChar* pName, 
+									   const AxisChar* pNamespace)
+{
+   
+    int iStatus = AXIS_SUCCESS;
+    iStatus = m_pSoapEnvelope->m_pSoapHeader->deleteHeaderBlock(pName,pNamespace);
+    //No remaining soap header blocks, so will delete the SoapHeader    
+    if (iStatus == AXIS_NO_REMAINING_SOAP_HEADERS)     
+    {
+        delete m_pSoapEnvelope->m_pSoapHeader;
+        m_pSoapEnvelope->m_pSoapHeader = NULL;
+        iStatus = AXIS_SUCCESS;
+    }
+
+    return iStatus;    
+}
+
 AXIS_CPP_NAMESPACE_END

@@ -276,4 +276,38 @@ IHeaderBlock* SoapHeader::getCurrentHeaderBlock()
 	return tmpIHeaderBlock;
 }
 
+
+int SoapHeader::deleteHeaderBlock(const AxisChar *pName,
+                                         const AxisChar *pNamespace)
+{
+    int iStatus = AXIS_SUCCESS;
+    HeaderBlock* tmpHeaderBlock = NULL;
+
+    list<IHeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
+    
+    while (itCurrHeaderBlock != m_headerBlocks.end())
+    {
+        tmpHeaderBlock = (HeaderBlock*)(*itCurrHeaderBlock);
+
+        if ((strcmp(((tmpHeaderBlock)->m_localname).c_str(), pName) == 0) && 
+                (strcmp(((tmpHeaderBlock)->m_uri).c_str(), pNamespace) == 0))
+        {
+            m_headerBlocks.remove(tmpHeaderBlock);            
+            break; 
+        }
+        else
+        {
+            itCurrHeaderBlock++;
+        }
+    
+    }
+
+    if (m_headerBlocks.empty())
+    {
+        iStatus = AXIS_NO_REMAINING_SOAP_HEADERS;                     
+    }
+    
+    return iStatus;
+}
+
 AXIS_CPP_NAMESPACE_END

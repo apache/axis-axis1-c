@@ -211,6 +211,7 @@ public:
 	int serializeAnyObject(AnyType* pAnyObject);
     int serializeAsChardata(void* pValue, XSDTYPE type);
 	AxisXMLString getNamespaceURL( string sNameSpace);
+    int deleteHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace);    
 };
 
 AXIS_CPP_NAMESPACE_END
