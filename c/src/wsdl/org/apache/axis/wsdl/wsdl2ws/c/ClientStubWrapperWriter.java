@@ -124,21 +124,18 @@ public class ClientStubWrapperWriter extends CFileWriter{
 			  	writer.write("void ");
 		  	else {
 				String outparam = minfo.getReturnType().getLangName();
-				isSimpleType = CUtils.isSimpleType(outparam);
-				writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(minfo.getReturnType(),wscontext)+(isSimpleType?" ":" *"));
+				writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(minfo.getReturnType(),wscontext)+" ");
 		  	}
 		  	writer.write(minfo.getMethodname()+"(");
 		  	//write parameter names 
 			Iterator params = minfo.getParameterTypes().iterator();
 			if(params.hasNext()){
 				ParameterInfo fparam = (ParameterInfo)params.next();
-				isSimpleType = CUtils.isSimpleType(fparam.getLangName());
-				writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+(isSimpleType?" Value":" *pValue")+0);
+				writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
 			}
 			for(int j =1; params.hasNext();j++){
 				ParameterInfo nparam = (ParameterInfo)params.next();
-				isSimpleType = CUtils.isSimpleType(nparam.getLangName());
-				writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+(isSimpleType?" Value":" *pValue")+j);
+				writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
 			}
 			writer.write(")\n{\n");
 			writer.write("\tif (NULL == "+sGlobalInstanceName+")\n"); 
@@ -146,14 +143,10 @@ public class ClientStubWrapperWriter extends CFileWriter{
 			writer.write("\treturn "+sGlobalInstanceName+"->" + minfo.getMethodname()+"(");
 			params = minfo.getParameterTypes().iterator();
 			if(params.hasNext()){
-				ParameterInfo fparam = (ParameterInfo)params.next();
-				isSimpleType = CUtils.isSimpleType(fparam.getLangName());
-				writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+(isSimpleType?" Value":" *pValue")+0);
+				writer.write(" Value"+0);
 			}
 			for(int j =1; params.hasNext();j++){
-				ParameterInfo nparam = (ParameterInfo)params.next();
-				isSimpleType = CUtils.isSimpleType(nparam.getLangName());
-				writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+(isSimpleType?" Value":" *pValue")+j);
+				writer.write(", Value"+j);
 			}
 			writer.write(");\n}\n\n");
 	  	}			
