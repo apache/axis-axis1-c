@@ -1,6 +1,6 @@
 #include "gen_src/ExtensibilityQueryPortType.h"
 
-void main()
+int main(void)
 {
     AnyType* pAny = new AnyType();
     pAny->_size = 2;
@@ -24,4 +24,6 @@ void main()
     {
         e.getExceptionCode();
     }
+
+    return 0;
 }
