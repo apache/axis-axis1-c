@@ -63,6 +63,10 @@ class BasicNode;
  * Added doxygen comments to help autobuild API docs
  */
 
+#include <string>
+
+using namespace std;
+
 class HeaderBlock : public IHeaderBlock
 {
 friend class SoapHeader;
