@@ -14,25 +14,14 @@
  *   limitations under the License.
  */
 
- 
-
 package org.apache.axis.wsdl.wsdl2ws;
 
-import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
-import org.apache.axis.wsdl.wsdl2ws.rpc.RPCWebServiceGenarator;
-import org.apache.axis.wsdl.wsdl2ws.doclit.DocLitWebServiceGenarator;
 /**
- * Create the concreate WebService Genarator depends on the options.
+ * Abstract webservice Generator
  * @author Srinath Perera (hemapani@opensource.lk)
  * @author Dimuthu Leelarathne (muthulee@opensource.lk)
  */
-public class WebServiceGenaratorFactory {
-	public static WebServiceGenarator createWebServiceGenarator(WebServiceContext wscontext){
-		if(wscontext.getWrapInfo().getWrapperStyle() == WrapperConstants.STYLE_RPC)
-			return new 	RPCWebServiceGenarator(wscontext);	
-		else if(wscontext.getWrapInfo().getWrapperStyle() == WrapperConstants.STYLE_DOCUMENT)										
-			return new 	DocLitWebServiceGenarator(wscontext);
-		else	
-			return null;
-	}
+public interface WebServiceGenerator
+{
+    public void generate() throws WrapperFault;
 }

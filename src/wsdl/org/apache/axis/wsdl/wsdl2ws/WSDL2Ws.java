@@ -476,8 +476,8 @@ public class WSDL2Ws {
         
         //TODO	chaeck weather the name at the WrapperConstant Doclit is right "doc"
 
-        WebServiceGenarator wsg =
-            WebServiceGenaratorFactory.createWebServiceGenarator(
+        WebServiceGenerator wsg =
+            WebServiceGeneratorFactory.createWebServiceGenerator(
                 new WebServiceContext(
                     new WrapperInfo(
                         serviceStyle,
@@ -499,7 +499,7 @@ public class WSDL2Ws {
         		System.out.println(it.next());
         	}
         }    
- 		wsg.genarate();
+ 		wsg.generate();
     }
     
     /**
