@@ -357,7 +357,7 @@ int Param::SetValue(XSDTYPE nType, uParamValue Value)
 	case XSD_STRING:
 	case XSD_HEXBINARY:
 	case XSD_BASE64BINARY:
-		m_sValue = Value.pStrValue->c_str();
+		m_sValue = Value.pStrValue;
 		break;
 	//Continue this for all basic types
 	case XSD_ARRAY:

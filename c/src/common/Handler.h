@@ -2,6 +2,8 @@
 #define __HANDLER_INCLUDED__
 
 #include "BasicHandler.h"
+#include <map>
+using namespace std;
 
 class Handler : public BasicHandler
 {
