@@ -68,8 +68,6 @@ public:
     void setSerializer(IWrapperSoapSerializer* pSZ);
     void setUserName(string& m_sUserName);
     string& getUserName();
-    void setService(const WSDDService* argService);
-    const WSDDService* getService();  
     AXIS_PROTOCOL_TYPE m_Protocol;
     
 protected:

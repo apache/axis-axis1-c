@@ -58,8 +58,6 @@ public:
         (IHandlerSoapDeSerializer** pIHandlerSoapDeSerializer)=0;
     virtual void setUserName(string& m_sUserName)=0;
     virtual string& getUserName()=0;
-    virtual void setService(const WSDDService* argService) = 0;
-    virtual const WSDDService* getService() = 0; 
     virtual bool isPastPivot()=0;
     virtual int setPastPivotState(bool bState)=0;
 };

@@ -84,16 +84,6 @@ string &MessageData::getUserName ()
     // return "damitha kumarage"; 
 }
 
-void MessageData::setService (const WSDDService* argService)
-{
-    m_Service = argService;
-}
-
-const WSDDService* MessageData::getService ()
-{
-    return m_Service;
-}
-
 /*
  *    comm on 25Jul2003 at 10.00am
  *    ISoapSerializer* MessageData::getSoapSerializer()
