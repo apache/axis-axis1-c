@@ -38,10 +38,6 @@ SimpleTestSoap::~SimpleTestSoap()
  */
 void SimpleTestSoap::echoVoid()
 {
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
 	try
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
@@ -66,13 +62,11 @@ void SimpleTestSoap::echoVoid()
 		{
 			throw;
 		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://127.0.0.1:8080/" ))//Exception handling code goes here
+		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://127.0.0.1:8080/" );
+		if(pSoapFault)
 		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisGenException(cFaultdetail);
+	                m_pCall->unInitialize();
+		        throw AxisClientException(pSoapFault);
 		}
 		else throw;
 	}
@@ -85,10 +79,6 @@ void SimpleTestSoap::echoVoid()
 int SimpleTestSoap::echoInteger(int Value0)
 {
 	int Ret;
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
 	try
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
@@ -115,13 +105,11 @@ int SimpleTestSoap::echoInteger(int Value0)
 		{
 			throw;
 		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://127.0.0.1:8080/" ))//Exception handling code goes here
+		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://127.0.0.1:8080/" );
+		if(pSoapFault)
 		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisGenException(cFaultdetail);
+	                m_pCall->unInitialize();
+		        throw AxisClientException(pSoapFault);
 		}
 		else throw;
 	}
@@ -134,10 +122,6 @@ int SimpleTestSoap::echoInteger(int Value0)
 float SimpleTestSoap::echoFloat(float Value0)
 {
 	float Ret;
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
 	try
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
@@ -164,13 +148,11 @@ float SimpleTestSoap::echoFloat(float Value0)
 		{
 			throw;
 		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://127.0.0.1:8080/" ))//Exception handling code goes here
+		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://127.0.0.1:8080/" );
+		if(pSoapFault)
 		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisGenException(cFaultdetail);
+	                m_pCall->unInitialize();
+		        throw AxisClientException(pSoapFault);
 		}
 		else throw;
 	}
@@ -183,10 +165,6 @@ float SimpleTestSoap::echoFloat(float Value0)
 xsd__string SimpleTestSoap::echoString(xsd__string Value0)
 {
 	xsd__string Ret;
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
 	try
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
@@ -213,13 +191,11 @@ xsd__string SimpleTestSoap::echoString(xsd__string Value0)
 		{
 			throw;
 		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://127.0.0.1:8080/" ))//Exception handling code goes here
+		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://127.0.0.1:8080/" );
+		if(pSoapFault)
 		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisGenException(cFaultdetail);
+	                m_pCall->unInitialize();
+		        throw AxisClientException(pSoapFault);
 		}
 		else throw;
 	}
@@ -232,10 +208,6 @@ xsd__string SimpleTestSoap::echoString(xsd__string Value0)
 xsd__base64Binary SimpleTestSoap::echoBase64(xsd__base64Binary Value0)
 {
 	xsd__base64Binary Ret;
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
 	try
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
@@ -262,15 +234,12 @@ xsd__base64Binary SimpleTestSoap::echoBase64(xsd__base64Binary Value0)
 		{
 			throw;
 		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://127.0.0.1:8080/" ))//Exception handling code goes here
+		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://127.0.0.1:8080/" );
+		if(pSoapFault)
 		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisGenException(cFaultdetail);
+	                m_pCall->unInitialize();
+		        throw AxisClientException(pSoapFault);
 		}
-		else throw;
 	}
 }
 
@@ -281,10 +250,6 @@ xsd__base64Binary SimpleTestSoap::echoBase64(xsd__base64Binary Value0)
 xsd__dateTime SimpleTestSoap::echoDate(xsd__dateTime Value0)
 {
 	xsd__dateTime Ret;
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
 	try
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
@@ -311,13 +276,11 @@ xsd__dateTime SimpleTestSoap::echoDate(xsd__dateTime Value0)
 		{
 			throw;
 		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://127.0.0.1:8080/" ))//Exception handling code goes here
+		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://127.0.0.1:8080/" );
+		if(pSoapFault)
 		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisGenException(cFaultdetail);
+	                m_pCall->unInitialize();
+		        throw AxisClientException(pSoapFault);
 		}
 		else throw;
 	}
@@ -330,10 +293,6 @@ xsd__dateTime SimpleTestSoap::echoDate(xsd__dateTime Value0)
 SOAPStruct* SimpleTestSoap::echoStruct(SOAPStruct* Value0)
 {
 	SOAPStruct* pReturn = NULL;
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
 	try
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
@@ -360,13 +319,11 @@ SOAPStruct* SimpleTestSoap::echoStruct(SOAPStruct* Value0)
 		{
 			throw;
 		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://127.0.0.1:8080/" ))//Exception handling code goes here
+		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://127.0.0.1:8080/" );
+		if(pSoapFault)
 		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisGenException(cFaultdetail);
+	                m_pCall->unInitialize();
+		        throw AxisClientException(pSoapFault);
 		}
 		else throw;
 	}
@@ -379,10 +336,6 @@ SOAPStruct* SimpleTestSoap::echoStruct(SOAPStruct* Value0)
 xsd__int_Array SimpleTestSoap::echoIntegerArray(xsd__int_Array Value0)
 {
 	xsd__int_Array RetArray = {NULL, 0};
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
 	try
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
@@ -409,13 +362,11 @@ xsd__int_Array SimpleTestSoap::echoIntegerArray(xsd__int_Array Value0)
 		{
 			throw;
 		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://127.0.0.1:8080/" ))//Exception handling code goes here
+		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://127.0.0.1:8080/" );
+		if(pSoapFault)
 		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisGenException(cFaultdetail);
+	                m_pCall->unInitialize();
+		        throw AxisClientException(pSoapFault);
 		}
 		else throw;
 	}
@@ -428,10 +379,6 @@ xsd__int_Array SimpleTestSoap::echoIntegerArray(xsd__int_Array Value0)
 xsd__float_Array SimpleTestSoap::echoFloatArray(xsd__float_Array Value0)
 {
 	xsd__float_Array RetArray = {NULL, 0};
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
 	try
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
@@ -458,13 +405,11 @@ xsd__float_Array SimpleTestSoap::echoFloatArray(xsd__float_Array Value0)
 		{
 			throw;
 		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://127.0.0.1:8080/" ))//Exception handling code goes here
+		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://127.0.0.1:8080/" );
+		if(pSoapFault)
 		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisGenException(cFaultdetail);
+	                m_pCall->unInitialize();
+		        throw AxisClientException(pSoapFault);
 		}
 		else throw;
 	}
@@ -477,10 +422,6 @@ xsd__float_Array SimpleTestSoap::echoFloatArray(xsd__float_Array Value0)
 xsd__string_Array SimpleTestSoap::echoStringArray(xsd__string_Array Value0)
 {
 	xsd__string_Array RetArray = {NULL, 0};
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
 	try
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
@@ -507,13 +448,11 @@ xsd__string_Array SimpleTestSoap::echoStringArray(xsd__string_Array Value0)
 		{
 			throw;
 		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://127.0.0.1:8080/" ))//Exception handling code goes here
+		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://127.0.0.1:8080/" );
+		if(pSoapFault)
 		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisGenException(cFaultdetail);
+	                m_pCall->unInitialize();
+		        throw AxisClientException(pSoapFault);
 		}
 		else throw;
 	}
@@ -526,10 +465,6 @@ xsd__string_Array SimpleTestSoap::echoStringArray(xsd__string_Array Value0)
 SOAPStruct_Array SimpleTestSoap::echoStructArray(SOAPStruct_Array Value0)
 {
 	SOAPStruct_Array RetArray = {NULL, 0};
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
 	try
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
@@ -556,13 +491,11 @@ SOAPStruct_Array SimpleTestSoap::echoStructArray(SOAPStruct_Array Value0)
 		{
 			throw;
 		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://127.0.0.1:8080/" ))//Exception handling code goes here
+		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://127.0.0.1:8080/" );
+		if(pSoapFault)
 		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisGenException(cFaultdetail);
+	                m_pCall->unInitialize();
+		        throw AxisClientException(pSoapFault);
 		}
 		else throw;
 	}
@@ -575,10 +508,6 @@ SOAPStruct_Array SimpleTestSoap::echoStructArray(SOAPStruct_Array Value0)
 xsd__decimal SimpleTestSoap::echoDecimal(xsd__decimal Value0)
 {
 	xsd__decimal Ret;
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
 	try
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
@@ -605,13 +534,11 @@ xsd__decimal SimpleTestSoap::echoDecimal(xsd__decimal Value0)
 		{
 			throw;
 		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://127.0.0.1:8080/" ))//Exception handling code goes here
+		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://127.0.0.1:8080/" );
+		if(pSoapFault)
 		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisGenException(cFaultdetail);
+	                m_pCall->unInitialize();
+		        throw AxisClientException(pSoapFault);
 		}
 		else throw;
 	}
@@ -624,10 +551,6 @@ xsd__decimal SimpleTestSoap::echoDecimal(xsd__decimal Value0)
 xsd__boolean SimpleTestSoap::echoBoolean(xsd__boolean Value0)
 {
 	xsd__boolean Ret;
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
 	try
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
@@ -654,13 +577,11 @@ xsd__boolean SimpleTestSoap::echoBoolean(xsd__boolean Value0)
 		{
 			throw;
 		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://127.0.0.1:8080/" ))//Exception handling code goes here
+		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://127.0.0.1:8080/" );
+		if(pSoapFault)
 		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisGenException(cFaultdetail);
+	                m_pCall->unInitialize();
+		        throw AxisClientException(pSoapFault);
 		}
 		else throw;
 	}
@@ -673,10 +594,6 @@ xsd__boolean SimpleTestSoap::echoBoolean(xsd__boolean Value0)
 xsd__hexBinary SimpleTestSoap::echoHexBinary(xsd__hexBinary Value0)
 {
 	xsd__hexBinary Ret;
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
 	try
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
@@ -703,13 +620,11 @@ xsd__hexBinary SimpleTestSoap::echoHexBinary(xsd__hexBinary Value0)
 		{
 			throw;
 		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://127.0.0.1:8080/" ))//Exception handling code goes here
+		ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault","http://127.0.0.1:8080/" );
+		if(pSoapFault)
 		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-				  throw AxisGenException(cFaultdetail);
+	                m_pCall->unInitialize();
+		        throw AxisClientException(pSoapFault);
 		}
 		else throw;
 	}

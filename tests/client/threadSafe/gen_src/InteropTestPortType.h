@@ -10,20 +10,7 @@
 /*include Exception header files here*/
 #include "SOAPStruct_Array.h"
 #include "SOAPStruct.h"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#include "AxisClientException.h"
 
 class InteropTestPortType :public Stub
 {

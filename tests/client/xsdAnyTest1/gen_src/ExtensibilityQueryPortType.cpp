@@ -38,10 +38,6 @@ ExtensibilityQueryPortType::~ExtensibilityQueryPortType()
 AnyType* ExtensibilityQueryPortType::query(AnyType* Value0)
 {
 	AnyType* pReturn = NULL;
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
 	try
 	{	if (AXIS_SUCCESS != m_pCall->initialize(CPP_DOC_PROVIDER, NORMAL_CHANNEL)) return pReturn;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "testXSDANY#query");
@@ -66,17 +62,13 @@ AnyType* ExtensibilityQueryPortType::query(AnyType* Value0)
 		{
 			throw;
 		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://localhost:8080/axis/ExtensibilityQuery" ))//Exception handling code goes here
-		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-			cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-			if(cFaultdetail)
-			    throw AxisGenException(cFaultdetail);
-			else
-			    throw AxisGenException(SERVER_UNKNOWN_ERROR);
-		}
+                ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault",
+		    "http://localhost:8080/axis/ExtensibilityQuery");
+		if(pSoapFault)
+                {   
+		    m_pCall->unInitialize();
+                    throw AxisClientException(pSoapFault);     
+                }
 		else throw;
 	}
 }

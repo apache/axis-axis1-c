@@ -8,6 +8,7 @@
 
 #include <axis/client/Stub.h>
 #include "ExtensibilityType.h"
+#include "AxisClientException.h"
 
 
 class ExtensibilityQueryPortType  :public Stub
