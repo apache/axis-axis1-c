@@ -77,6 +77,7 @@ WSDDDeployment::~WSDDDeployment()
         {
             delete ((*iter2).second);
         }
+        delete m_DeployedServices;
     }
     delete m_pLibNameIdMap;
 }
@@ -106,7 +107,7 @@ int WSDDDeployment::updateWSDD(const AxisChar* sWSDD)
 
 int WSDDDeployment::loadWSDD(const AxisChar* sWSDD)
 {
-    m_sWSDDPath = string(sWSDD);
+    m_sWSDDPath = std::string(sWSDD);
     WSDDDocument* doc = new WSDDDocument(m_pLibNameIdMap);
     if (AXIS_SUCCESS != doc->getDeployment(sWSDD, this))
     {

@@ -42,6 +42,7 @@ WSDDService::~WSDDService()
         {
             delete (*iter);
         }
+        delete m_RequestHandlers;
     }
 
     if(m_ResponseHandlers)
