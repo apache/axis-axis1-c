@@ -62,6 +62,12 @@ SoapSerializer::SoapSerializer()
 SoapSerializer::~SoapSerializer()
 {
     if (m_pSoapEnvelope) delete m_pSoapEnvelope;
+  
+       for (int x=0; x<m_nMaxBuffersToCreate; x++)
+          {
+              delete [] m_pSZBuffers[x].buffer;
+           }
+       delete [] m_pSZBuffers;		    
 }
 
 int SoapSerializer::setSoapEnvelope(SoapEnvelope *pSoapEnvelope)

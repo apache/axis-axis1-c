@@ -36,6 +36,7 @@ SharedObject::~SharedObject ()
 #ifdef WIN32
 #else //Linux
     pthread_mutex_destroy (mut);
+    delete mut;
 #endif
 }
 
