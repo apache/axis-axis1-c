@@ -94,13 +94,13 @@ public:
 	 *  depends on the TYPE of the node.
 	 */
 	virtual int getNoOfChildren() = 0;
-	virtual BasicNode* getFirstChild() = 0;
-	virtual BasicNode* getLastChild() = 0;
-	virtual BasicNode* getChild(int iChildPosition) = 0;
+	virtual const BasicNode* getFirstChild() const = 0;
+	virtual const BasicNode* getLastChild() const = 0;
+	virtual const BasicNode* getChild(int iChildPosition) const = 0;
 	//virtual bool operator ==( const BasicNode &objChEle)=0;
-	virtual const AxisChar* getValue()=0;
+	virtual const AxisChar* getValue() const =0;
 	virtual int setValue(const AxisChar* pachValue)=0;
-	virtual NODE_TYPE getNodeType()=0;
+	virtual NODE_TYPE getNodeType() const =0;
 	virtual int setURI(const AxisChar* sURI) =0;
 	virtual int addChild(BasicNode* pBasicNode) =0;
 	virtual int setLocalName(const AxisChar* sLocalName) =0;
