@@ -67,14 +67,13 @@
 
 #include "Param.h"
 #include "AccessBean.h"
-#include "../common/AxisException.h"
 #include "BasicTypeSerializer.h"
 #include <stdlib.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-string Param::m_sSZ = "";
+//string Param::m_sSZ = "";
 //string ArrayBean::m_sSZ = "";
 char Param::m_Buf[64];
 
@@ -94,8 +93,8 @@ Param::Param(Param& param)
 		m_Value.a = new ArrayBean();
 		m_Value.a->m_TypeName = param.m_Value.a->m_TypeName;
 		m_Value.a->m_URI = param.m_Value.a->m_URI;
-		m_Value.a->t = param.m_Value.a->t;
-		m_Value.a->s = param.m_Value.a->s;
+		m_Value.a->m_type = param.m_Value.a->m_type;
+		m_Value.a->m_size = param.m_Value.a->m_size;
 		m_Value.a->m_ItemName = param.m_Value.a->m_ItemName;
 		//copy constructor is not intended to use to copy the array in
 		//union v
@@ -161,7 +160,7 @@ const string& Param::GetString()
 	}
 	else 
 	{
-		throw new AxisException(SF_PARATYPEMISMATCH); 
+		//exception
 	}
 	return m_sValue;
 }
@@ -175,7 +174,7 @@ const string& Param::GetHexString()
 	}
 	else 
 	{
-		throw new AxisException(SF_PARATYPEMISMATCH); 
+		//exception
 	}
 	return m_sValue;
 }
@@ -189,7 +188,7 @@ const string& Param::GetBase64String()
 	}
 	else 
 	{
-		throw new AxisException(SF_PARATYPEMISMATCH); 
+		//exception
 	}
 	return m_sValue;
 }
@@ -208,7 +207,7 @@ int Param::GetInt()
 	}
 	else 
 	{
-    throw new AxisException(SF_PARATYPEMISMATCH); 
+		//exception
 	}
 	return m_Value.n;
 }
@@ -223,7 +222,7 @@ float Param::GetFloat()
 	}
 	else
 	{
-		throw new AxisException(SF_PARATYPEMISMATCH); 
+		//exception
 	}
 	return m_Value.f;
 }
@@ -233,83 +232,83 @@ XSDTYPE Param::GetType() const
 	return m_Type;
 }
 
-int Param::serialize(string& sSerialized, SoapSerializer& pSZ)
+int Param::serialize(ISoapSerializer& pSZ)
 {
-	return SUCCESS;
-}
-
-int Param::serialize(string& sSerialized)
-{
+	string ATprefix;
 	switch (m_Type){
 	case XSD_INT:
-		m_sSZ = BasicTypeSerializer::serialize(m_sName, m_Value.n);
+		pSZ << BasicTypeSerializer::serialize(m_sName, m_Value.n).c_str();
 		break;
 	case XSD_FLOAT:
-		m_sSZ = BasicTypeSerializer::serialize(m_sName, m_Value.f);
+		pSZ << BasicTypeSerializer::serialize(m_sName, m_Value.f).c_str();
 		break;
 	case XSD_STRING:
-		m_sSZ = BasicTypeSerializer::serialize(m_sName, m_sValue);
+		pSZ << BasicTypeSerializer::serialize(m_sName, m_sValue).c_str();
 		break;
 	case XSD_HEXBINARY:
-		m_sSZ = BasicTypeSerializer::serialize(m_sName, m_sValue, XSD_HEXBINARY);
+		pSZ << BasicTypeSerializer::serialize(m_sName, m_sValue, XSD_HEXBINARY).c_str();
 		break;
 	case XSD_BASE64BINARY:
-		m_sSZ = BasicTypeSerializer::serialize(m_sName, m_sValue, XSD_BASE64BINARY);
+		pSZ << BasicTypeSerializer::serialize(m_sName, m_sValue, XSD_BASE64BINARY).c_str();
 		break;
 	case XSD_ARRAY:
-		//m_sSZ = "<abc:ArrayOfPhoneNumbers xmlns:abc="http://example.org/2001/06/numbers"
+		//pSZ << "<abc:ArrayOfPhoneNumbers xmlns:abc="http://example.org/2001/06/numbers"
 		//				xmlns:enc="http://www.w3.org/2001/06/soap-encoding" 
         //              enc:arrayType="abc:phoneNumberType[2]" >";
 		if (!m_Value.a) return FAIL; //error condition
-		m_sSZ = "<";
+		pSZ << "<";
 		if (!m_strPrefix.empty())
 		{
-			m_sSZ += m_strPrefix + ":" + m_sName + " xmlns:" + m_strPrefix + "=\"" + m_strUri + "\"";
+			pSZ << m_strPrefix.c_str() << ":" << m_sName.c_str() << " xmlns:" << m_strPrefix.c_str() << "=\"" << m_strUri.c_str() << "\"";
 		}
 		else
 		{
-			m_sSZ += m_sName ;
+			pSZ << m_sName.c_str();
 		}
+		//get a prefix from Serializer
+		ATprefix = pSZ.getNewNamespacePrefix();
 
-		m_sSZ += " xmlns:enc"; 
-		m_sSZ += "=\"http://www.w3.org/2001/06/soap-encoding\"";
-		if (m_Value.a->t == USER_TYPE)
+		pSZ << " xmlns:enc"; 
+		pSZ << "=\"http://www.w3.org/2001/06/soap-encoding\"";
+		if (m_Value.a->m_type == USER_TYPE)
 		{
-			m_sSZ += " xmlns:def=" + m_Value.a->m_URI; //this prefix should be dynamically taken from serializer.
+			pSZ << " xmlns:" << ATprefix.c_str() << "=" << m_Value.a->m_URI.c_str(); //this prefix should be dynamically taken from serializer.
 		}
-		m_sSZ += "enc:arrayType=";
-		if (m_Value.a->t == USER_TYPE)
+		pSZ << "enc:arrayType=";
+		if (m_Value.a->m_type == USER_TYPE)
 		{
-			m_sSZ += "def:" + m_Value.a->m_TypeName; //this prefix should be dynamically taken from serializer.
+			pSZ << ATprefix.c_str() << ":" << m_Value.a->m_TypeName.c_str(); //this prefix should be dynamically taken from serializer.
 		}
 		else //basic type array
 		{
-			m_sSZ += "xsd:";
-			m_sSZ += BasicTypeSerializer::BasicTypeStr(m_Value.a->t);
+			pSZ << "xsd:";
+			pSZ << BasicTypeSerializer::BasicTypeStr(m_Value.a->m_type);
 		}
-
-		sprintf(m_Buf,"[%d]", m_Value.a->s);
-
-		m_sSZ += m_Buf;
-		m_sSZ += ">";
-		m_sSZ += m_Value.a->Serialize(); //Only serializes the inner items
-		m_sSZ += "</";
+		{
+			for (list<int>::iterator it=m_Value.a->m_size.begin(); it!=m_Value.a->m_size.end(); it++)
+			{
+				sprintf(m_Buf,"[%d]", *it);
+				pSZ << m_Buf;
+			}
+		}
+		pSZ << ">";
+		m_Value.a->Serialize(pSZ); //Only serializes the inner items
+		pSZ << "</";
 		if (!m_strPrefix.empty())
 		{
-			m_sSZ += m_strPrefix + ":" + m_sName; 
+			pSZ << m_strPrefix.c_str() << ":" << m_sName.c_str(); 
 		}
 		else
 		{
-			m_sSZ += m_sName;
+			pSZ << m_sName.c_str();
 		}
-		m_sSZ += ">";
+		pSZ << ">";
 		break;
 	case USER_TYPE:
-		m_sSZ = m_Value.o->Serialize();
+		m_Value.o->Serialize(pSZ);
 		break;
 	default:;
 	}
-	sSerialized += m_sSZ;
 	return SUCCESS;
 }
 
@@ -335,7 +334,6 @@ int Param::SetValue(string &sValue)
 	//Continue this for all basic types
 	case XSD_ARRAY:
 	case USER_TYPE:
-    throw new AxisException(SF_PARATYPEMISMATCH);
 		//this is an error situation - probably something wrong with the soap
 		break;
 	default:

@@ -68,13 +68,15 @@
 #define AFX_ISOAPSERIALIZER_H__4F8E4E72_56C8_4F1C_A488_350FDEFF9028__INCLUDED_
 
 #include "ISoapMethod.h"
-#include "Param.h"
+class Param;
 
 class ISoapSerializer
 {
 public:	
-	virtual int setResponseParam(Param& param)=0;
+	virtual int setResponseParam(Param* pParam)=0;
 	virtual ISoapMethod* createSoapMethod()=0;
+	virtual ISoapSerializer& operator<<(const char *cSerialized)=0;
+	virtual const char* getNewNamespacePrefix()=0;
 };
 
 #endif // !defined(AFX_ISOAPSERIALIZER_H__4F8E4E72_56C8_4F1C_A488_350FDEFF9028__INCLUDED_)
