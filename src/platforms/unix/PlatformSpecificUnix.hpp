@@ -50,7 +50,8 @@
  #define DLHandler void*
 
  #define PLATFORM_LOADLIBINIT()
- #define PLATFORM_LOADLIB(_lib)     dlopen(_lib, RTLD_LAZY)
+ #define PLATFORM_LOADLIB(_lib)     dlopen(_lib, RTLD_LAZY|RTLD_GLOBAL)
+
  #define PLATFORM_UNLOADLIB         dlclose
  #define PLATFORM_GETPROCADDR       dlsym
  #define PLATFORM_LOADLIBEXIT()
