@@ -52,7 +52,7 @@ int WSDDDocumentXerces::getDeployment(const AxisChar* sWSDD,
 {
     m_pDeployment = pDeployment;   
     /* this enables the access to Deployment object while parsing */
-    if (AXIS_SUCCESS != ParseDocument(sWSDD)) 
+    if (AXIS_SUCCESS != parseDocument(sWSDD)) 
     {
         AXISTRACE1("Deployment descripter loading failed", CRITICAL);
         return AXIS_FAIL;
@@ -130,14 +130,14 @@ void  WSDDDocumentXerces::endElement (const XMLCh *const uri,
                 if (XMLString::equals(lname, kw_srv))
                 {
                     /* add service object to Deployment object */
-                    if (DT_DEPLOYMENT == m_pDeployment->GetDeploymentType())
+                    if (DT_DEPLOYMENT == m_pDeployment->getDeploymentType())
                         /* deployment */
                     {
-                        m_pDeployment->AddService(m_pService);
+                        m_pDeployment->addService(m_pService);
                     }
                     else
                     {
-                        m_pDeployment->RemoveService(m_pService);
+                        m_pDeployment->removeService(m_pService);
                     }
                     m_pService = NULL;
                     m_lev0 = WSDD_DEPLOYMENT;
@@ -173,14 +173,14 @@ void  WSDDDocumentXerces::endElement (const XMLCh *const uri,
                 case WSDD_GLOBCONF:
                     {
                         if (DT_DEPLOYMENT ==
-                            m_pDeployment->GetDeploymentType())/* deployment */
+                            m_pDeployment->getDeploymentType())/* deployment */
                         {
-                            m_pDeployment->AddHandler(true,
+                            m_pDeployment->addHandler(true,
                                 (m_lev1 == WSDD_REQFLOW) , m_pHandler);
                         }
                         else
                         {
-                            m_pDeployment->RemoveHandler(true,
+                            m_pDeployment->removeHandler(true,
                                 (m_lev1 == WSDD_REQFLOW) , m_pHandler);
                         }
                         m_pHandler = NULL;
@@ -189,15 +189,15 @@ void  WSDDDocumentXerces::endElement (const XMLCh *const uri,
                 case WSDD_TRANSPORT:
                     {
                         if (DT_DEPLOYMENT == 
-                            m_pDeployment->GetDeploymentType()) /* deployment */
+                            m_pDeployment->getDeploymentType()) /* deployment */
                         {
-                            m_pDeployment->AddHandler(false,
+                            m_pDeployment->addHandler(false,
                                 (m_lev1 == WSDD_REQFLOW) , m_pHandler,
                                 m_CurTrType);
                         }
                         else
                         {
-                            m_pDeployment->RemoveHandler(false,
+                            m_pDeployment->removeHandler(false,
                                 (m_lev1 == WSDD_REQFLOW) , m_pHandler,
                                 m_CurTrType);
                         }
@@ -207,14 +207,14 @@ void  WSDDDocumentXerces::endElement (const XMLCh *const uri,
                 case WSDD_SERVICE:
                     {
                         if (DT_DEPLOYMENT == 
-                            m_pDeployment->GetDeploymentType()) /* deployment */
+                            m_pDeployment->getDeploymentType()) /* deployment */
                         {
-                            m_pService->AddHandler((m_lev1 == WSDD_REQFLOW) ,
+                            m_pService->addHandler((m_lev1 == WSDD_REQFLOW) ,
                                 m_pHandler);
                         }
                         else
                         {
-                            m_pService->RemoveHandler((m_lev1 == WSDD_REQFLOW) ,
+                            m_pService->removeHandler((m_lev1 == WSDD_REQFLOW) ,
                                 m_pHandler);
                         }
                         m_pHandler = NULL;
@@ -253,15 +253,15 @@ void WSDDDocumentXerces::processAttributes(WSDDLevels ElementType,
         case WSDD_SERVICE: /* add this attribute to current service object */
             if (XMLString::equals(local, kw_name))
             {
-                m_pService->SetName(value);
+                m_pService->setName(value);
             }
             else if (XMLString::equals(local, kw_prv))
             {
-                m_pService->SetProvider(value);
+                m_pService->setProvider(value);
             }
             else if (XMLString::equals(local, kw_desc))
             {
-                m_pService->SetDescription(value);
+                m_pService->setDescription(value);
             }
             else
             {
@@ -271,27 +271,27 @@ void WSDDDocumentXerces::processAttributes(WSDDLevels ElementType,
         case WSDD_HANDLER: /* add this attribute to current handler object */
             if (XMLString::equals(local, kw_name))
             {
-                m_pHandler->SetName(value);
+                m_pHandler->setName(value);
             }
             else if (XMLString::equals(local, kw_type))
             {
                 /* we get the libname for the hanlder here ??? */
-                m_pHandler->SetLibName(value);
+                m_pHandler->setLibName(value);
                 if (m_pLibNameIdMap->find(value) != 
                     m_pLibNameIdMap->end()) 
                     /* libray name already in the map */
                 {
-                    m_pHandler->SetLibId((*m_pLibNameIdMap)[value]);
+                    m_pHandler->setLibId((*m_pLibNameIdMap)[value]);
                 }
                 else
                 {
                     (*m_pLibNameIdMap)[value] = ++m_nLibId;
-                    m_pHandler->SetLibId((*m_pLibNameIdMap)[value]);
+                    m_pHandler->setLibId((*m_pLibNameIdMap)[value]);
                 }
             }
             else if (XMLString::equals(local, kw_desc))
             {
-                m_pHandler->SetDescription(value);
+                m_pHandler->setDescription(value);
             }
             else
             {
@@ -369,43 +369,43 @@ void WSDDDocumentXerces::getParameters(WSDDLevels ElementType,
     case WSDD_SERVICE:
         if (XMLString::equals(name, kw_am))
         {
-            AddAllowedMethodsToService(value);
+            addAllowedMethodsToService(value);
         }
         else if(XMLString::equals(name, kw_cn))
         {
-            m_pService->SetLibName(value);
+            m_pService->setLibName(value);
             if (m_pLibNameIdMap->find(value) != m_pLibNameIdMap->end()) 
                 /* libray name already in the map */
             {
-                m_pService->SetLibId((*m_pLibNameIdMap)[value]);
+                m_pService->setLibId((*m_pLibNameIdMap)[value]);
             }
             else
             {
                 (*m_pLibNameIdMap)[value] = ++m_nLibId;
-                m_pService->SetLibId((*m_pLibNameIdMap)[value]);
+                m_pService->setLibId((*m_pLibNameIdMap)[value]);
             }
         }
         else if (XMLString::equals(name, kw_scope))
         {
-            m_pService->SetScope(value);
+            m_pService->setScope(value);
         }
         else if (XMLString::equals(name, kw_ar))
         {
-            AddAllowedRolesToService(value);
+            addAllowedRolesToService(value);
         }
         else
         {
-            m_pService->AddParameter(name, value);
+            m_pService->addParameter(name, value);
         }
         break;
     case WSDD_HANDLER:
         if (XMLString::equals(name, kw_scope))
         {
-            m_pHandler->SetScope(value);
+            m_pHandler->setScope(value);
         }
         else
         {
-            m_pHandler->AddParameter(name, value);
+            m_pHandler->addParameter(name, value);
         }
         break;
 
@@ -423,7 +423,7 @@ void WSDDDocumentXerces::addAllowedRolesToService(const AxisXMLCh* value)
         {
             pos = sValue.find(ROLENAME_SEPARATOR, prepos);
             if (AxisString::npos == pos) break;
-            m_pService->AddAllowedRole(sValue.
+            m_pService->addAllowedRole(sValue.
                 substr(prepos, pos-prepos).c_str());
             prepos = pos + 1;
         } while (true);
@@ -450,7 +450,7 @@ void WSDDDocumentXerces::addAllowedMethodsToService(const AxisXMLCh* value)
 
             if((AxisString::npos != pos) && (pos!=prepos))
             {
-                m_pService->AddAllowedMethod(sValue.substr(prepos,
+                m_pService->addAllowedMethod(sValue.substr(prepos,
                     pos-prepos).c_str());
             }
             else if (AxisString::npos != pos)
@@ -460,7 +460,7 @@ void WSDDDocumentXerces::addAllowedMethodsToService(const AxisXMLCh* value)
             else if (strchr(sValue.substr(prepos, len-(prepos+1)).c_str(), 
                 METHODNAME_SEPARATOR)==NULL && (len!=prepos))
             {
-                m_pService->AddAllowedMethod(sValue.substr(prepos,
+                m_pService->addAllowedMethod(sValue.substr(prepos,
                     len-(prepos-1)).c_str());
                 break;
             }
@@ -493,12 +493,12 @@ void WSDDDocumentXerces::startElement(const XMLCh *const uri,
             if(XMLString::equals(lname, kw_depl))
             {  
                 m_lev0 = WSDD_DEPLOYMENT;
-                m_pDeployment->SetDeploymentType(DT_DEPLOYMENT);
+                m_pDeployment->setDeploymentType(DT_DEPLOYMENT);
             }
             else if(XMLString::equals(lname, kw_undepl))
             {  
                 m_lev0 = WSDD_DEPLOYMENT;
-                m_pDeployment->SetDeploymentType(DT_UNDEPLOYMENT);
+                m_pDeployment->setDeploymentType(DT_UNDEPLOYMENT);
             }
             break;
         case WSDD_DEPLOYMENT:
@@ -512,19 +512,19 @@ void WSDDDocumentXerces::startElement(const XMLCh *const uri,
                 m_lev0 = WSDD_SERVICE;
                 m_pService = new WSDDService();
                 /* get service name and proider if any */
-                ProcessAttributes(WSDD_SERVICE, attrs);
+                processAttributes(WSDD_SERVICE, attrs);
             }
             else if(XMLString::equals(lname, kw_hdl))
             {  
                 m_lev0 = WSDD_HANDLER;
                 m_pHandler = new WSDDHandler();
-                ProcessAttributes(WSDD_HANDLER, attrs);
+                processAttributes(WSDD_HANDLER, attrs);
                 /* get handler name and type if any */
             }
             else if(XMLString::equals(lname, kw_tr))
             {  
                 m_lev0 = WSDD_TRANSPORT;
-                ProcessAttributes(WSDD_TRANSPORT, attrs);
+                processAttributes(WSDD_TRANSPORT, attrs);
             }
             else
             {
@@ -534,17 +534,17 @@ void WSDDDocumentXerces::startElement(const XMLCh *const uri,
         case WSDD_GLOBCONF:
             if(XMLString::equals(lname, kw_param))
             {  
-                GetParameters(WSDD_GLOBCONF, attrs);
+                getParameters(WSDD_GLOBCONF, attrs);
             }
             else if(XMLString::equals(lname, kw_rqf))
             {  
                 m_lev1 = WSDD_REQFLOW;
-                ProcessAttributes(WSDD_REQFLOW, attrs);
+                processAttributes(WSDD_REQFLOW, attrs);
             }
             else if(XMLString::equals(lname, kw_rsf))
             {  
                 m_lev1 = WSDD_RESFLOW;
-                ProcessAttributes(WSDD_RESFLOW, attrs);
+                processAttributes(WSDD_RESFLOW, attrs);
             }
             else
             {
@@ -554,17 +554,17 @@ void WSDDDocumentXerces::startElement(const XMLCh *const uri,
         case WSDD_SERVICE:
             if(XMLString::equals(lname, kw_param))
             {  
-                GetParameters(WSDD_SERVICE, attrs);
+                getParameters(WSDD_SERVICE, attrs);
             }
             else if(XMLString::equals(lname, kw_rqf))
             {  
                 m_lev1 = WSDD_REQFLOW;
-                ProcessAttributes(WSDD_REQFLOW, attrs);
+                processAttributes(WSDD_REQFLOW, attrs);
             }
             else if(XMLString::equals(lname, kw_rsf))
             {  
                 m_lev1 = WSDD_RESFLOW;
-                ProcessAttributes(WSDD_RESFLOW, attrs);
+                processAttributes(WSDD_RESFLOW, attrs);
             }
             else
             {
@@ -574,7 +574,7 @@ void WSDDDocumentXerces::startElement(const XMLCh *const uri,
         case WSDD_HANDLER:
             if(XMLString::equals(lname, kw_param))
             {  
-                GetParameters(WSDD_HANDLER, attrs);
+                getParameters(WSDD_HANDLER, attrs);
             }
 
         break;
@@ -582,12 +582,12 @@ void WSDDDocumentXerces::startElement(const XMLCh *const uri,
             if(XMLString::equals(lname, kw_rqf))
             {  
                 m_lev1 = WSDD_REQFLOW;
-                ProcessAttributes(WSDD_REQFLOW, attrs);
+                processAttributes(WSDD_REQFLOW, attrs);
             }
             else if(XMLString::equals(lname, kw_rsf))
             {  
                 m_lev1 = WSDD_RESFLOW;
-                ProcessAttributes(WSDD_RESFLOW, attrs);
+                processAttributes(WSDD_RESFLOW, attrs);
             }
         break;
         default:;
@@ -597,7 +597,7 @@ void WSDDDocumentXerces::startElement(const XMLCh *const uri,
     {
         if(XMLString::equals(lname, kw_param))
         {  
-            GetParameters(m_lev2, attrs); 
+            getParameters(m_lev2, attrs); 
             /* must be parameters of a handler or a chain */
         }
 
@@ -605,7 +605,7 @@ void WSDDDocumentXerces::startElement(const XMLCh *const uri,
         {  
             m_lev2 = WSDD_HANDLER;
             m_pHandler = new WSDDHandler();
-            ProcessAttributes(WSDD_HANDLER, attrs);
+            processAttributes(WSDD_HANDLER, attrs);
             /* get handler name and type if any */
         }
         else if(XMLString::equals(lname, kw_chain))
