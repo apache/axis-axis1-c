@@ -1078,9 +1078,20 @@ Axis2Transport::processResponseHTTPHeaders ()
                                                             1);
 	    m_vResponseHTTPHeaders.push_back (std::make_pair (key, value));
 
-            if (key == "Connection" && value == " close" ) // We need to close the connection and open a new one
+            // if HTTP/1.0 we have to always close the connection by default
+            if (m_eProtocolType == APTHTTP1_0) 
+                m_bURIChanged = true;
+
+            // if HTTP/1.1 we have to assume persistant connection by default
+
+            // We need to close the connection and open a new one if we have 'Connection: close'
+            if (key == "Connection" && value == " close" )
                 m_bURIChanged = true;
                 
+            // For both HTTP/1.0 and HTTP/1.1,
+            // We need to keep the connection if we have 'Connection: Keep-Alive'
+            if (key == "Connection" && value == " Keep-Alive" )
+                m_bURIChanged = false;
 	}
 	while (iPosition != std::string::npos);
     }
