@@ -152,23 +152,6 @@ AC_ARG_ENABLE(samples, [  --enable-samples    build samples.],
   SAMPLESBUILD="samples"
 )
 
-AC_MSG_CHECKING(whether to build libwww client transport library)
-AC_ARG_ENABLE(libwww, [  --enable-libwww    build libwww client transport library.],
-[ case "${enableval}" in
-  no)
-    AC_MSG_RESULT(no)
-    LIBWWWBUILD=""
-    ;;
-  *)
-    AC_MSG_RESULT(yes)
-    LIBWWWBUILD="libwww"
-    
-    ;;
-  esac ],
-  AC_MSG_RESULT(no)
-  LIBWWWBUILD=""
-)
-
 AC_MSG_CHECKING(whether write to log)
 AC_ARG_ENABLE(log, [  --enable-log    enable log facility.],
 [ case "${enableval}" in
@@ -226,7 +209,6 @@ AC_OUTPUT(Makefile \
     src/transport/Makefile \
     src/transport/axis2/Makefile \
     src/transport/axis2/ipv6/Makefile \
-    src/transport/libwww/Makefile \
     src/engine/Makefile \
     src/engine/server/Makefile \
     src/engine/client/Makefile  \
