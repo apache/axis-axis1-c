@@ -54,7 +54,8 @@ AXIS_CPP_NAMESPACE_USE
 bool CallBase::bInitialized = false;
 
 Call::Call ()
-:m_pcEndPointUri(NULL), m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false), m_bModuleInitialized(false)
+:m_pcEndPointUri(NULL), m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false), m_bModuleInitialized(false),
+m_bCallInitialized(false)
 {
     m_pAxisEngine = NULL;
     m_pIWSSZ = NULL;
@@ -74,12 +75,21 @@ Call::Call ()
 
 Call::~Call ()
 {
-	    SOAPTransportFactory::destroyTransportObject(m_pTransport);
+    // Samisa: we have to cover the case of initialize has been called
+    // but no matching unitialize. We have to ensure memory deallocation when
+    // there is an exception, after initialize has been called.
+    // could have been coverd though a matching call to uninitialize within 
+    // generated code, but it is easier to cover it here
+    // because it requires a lengthy conditional block to cover all cases
+    // in generated code
+     if (m_bCallInitialized) 
+        unInitialize();
+	 SOAPTransportFactory::destroyTransportObject(m_pTransport);
 		m_pTransport = NULL;
     if (m_bModuleInitialized)
         uninitialize_module();
     if (m_pcEndPointUri)
-        delete [] m_pcEndPointUri;
+        delete [] m_pcEndPointUri;   
 }
 
 int Call::setEndpointURI (const char* pchEndpointURI)
@@ -153,6 +163,8 @@ int Call::initialize(PROVIDERTYPE nStyle)
  * client side handlers have the same PROVIDERTYPE ? 
  */
 {
+    m_bCallInitialized = true;
+
     /* Initialize re-usable objects of this instance (objects may have been 
      * populated by the previous call.)
      */
@@ -242,6 +254,7 @@ int Call::initialize(PROVIDERTYPE nStyle)
 
 int Call::unInitialize ()
 {
+    m_bCallInitialized = false;
     if (m_pAxisEngine)
     {
 		/* Initialization,serialization, invokation or check message success */
