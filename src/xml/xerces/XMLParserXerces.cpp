@@ -105,6 +105,7 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
         else if (AXIS_FAIL == m_Xhandler.getStatus()) return NULL;
 		else if (!bCanParseMore) return NULL;
     }
+    }
     catch(AxisParseException& e)
     {
         throw;
@@ -116,6 +117,5 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
     catch(...)
     {
         throw;
-    }
     }
 }
