@@ -42,6 +42,8 @@ public class Exclusions {
 			"apr_base64.h",
 			"apr_xlate.h",
 			"Channel.hpp",
+			"Channel.h",
+			"Channel.cpp",
 			"Call.h",
 			"AxisConfig.h",
 			"AxisTransport.h",
