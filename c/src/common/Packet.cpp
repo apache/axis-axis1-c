@@ -61,8 +61,23 @@
 
 #include "Packet.h"
 #include <string.h>
-
+#include <stdlib.h>
 #include <stdio.h>
+
+
+int set_header(Ax_soapstream* soap, char * pchkey, char * pchvalue)
+{
+	int y = soap->so.http.ip_headercount;
+	Ax_header * temp = soap->so.http.ip_headers;
+	soap->so.http.ip_headers = (Ax_header*)realloc(temp, 
+										(sizeof(Ax_header)*(y+1)));
+	soap->so.http.ip_headers[y].headername = pchkey;
+	soap->so.http.ip_headers[y].headervalue = pchvalue;
+	soap->so.http.ip_headercount = y+1;
+
+	return 0;
+}
+
 
 const char* get_header(const Ax_soapstream* soap,const char* pchkey)
 {
@@ -91,7 +106,7 @@ const char* get_header(const Ax_soapstream* soap,const char* pchkey)
 	for (int ix=0; ix<count; ix++)
 	{
 		//header* hdr = hdrs + ix;
-		if (strcmp((hdrs+ix)->headername, SOAPACTIONHEADER) == 0)
+		if (strcmp((hdrs+ix)->headername, pchkey) == 0)
 		{
 			return (hdrs+ix)->headervalue;
 		}
