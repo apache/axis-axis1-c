@@ -90,8 +90,7 @@ extern AxisTrace* g_pAT;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 // Following values should come from axis configuration files.
-#define INITIAL_SERIALIZE_BUFFER_SIZE 4096
-#define NO_OF_SERIALIZE_BUFFERS 10
+#define INITIAL_SERIALIZE_BUFFER_SIZE 1024
 
 IWrapperSoapSerializerFunctions IWrapperSoapSerializer::ms_VFtable;
 

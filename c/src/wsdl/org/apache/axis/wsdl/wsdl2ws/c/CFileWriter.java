@@ -62,6 +62,7 @@ package org.apache.axis.wsdl.wsdl2ws.c;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import org.apache.axis.wsdl.wsdl2ws.BasicFileWriter;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 
@@ -71,19 +72,18 @@ public abstract class CFileWriter extends BasicFileWriter{
 	}
 	public void writeSource()throws WrapperFault{
 	   try{
-	  this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
-	   writeClassComment();
-	   writePreprocssorStatements();
-	   writeGlobalCodes();
-	  // this.writer.write("public class "+servicename+getExtendsPart()+"{\n");
-	   writeAttributes();
-	   writeMethods();
-	   //this.writer.write("}\n");
-	   //cleanup
-	   writer.flush();
-	   writer.close();
-	   System.out.println(getFilePath().getAbsolutePath() + " created.....");
-
+		   this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+		   writeClassComment();
+		   writePreprocssorStatements();
+		   writeGlobalCodes();
+		  // this.writer.write("public class "+servicename+getExtendsPart()+"{\n");
+		   writeAttributes();
+		   writeMethods();
+		   //this.writer.write("}\n");
+		   //cleanup
+		   writer.flush();
+		   writer.close();
+		   System.out.println(getFilePath().getAbsolutePath() + " created.....");
 	   } catch (IOException e) {
 			e.printStackTrace();
 			throw new WrapperFault(e);

@@ -74,12 +74,13 @@ import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 
 public class WrapWriter extends CPPClassWriter{
 	private WebServiceContext wscontext;
 	private ArrayList methods;	
 	public WrapWriter(WebServiceContext wscontext)throws WrapperFault{
-		super(WrapperUtils.getClassNameFromFullyQualifiedName(wscontext.getSerInfo().getQualifiedServiceName()+CPPUtils.WRAPPER_NAME_APPENDER));
+		super(WrapperUtils.getClassNameFromFullyQualifiedName(wscontext.getSerInfo().getQualifiedServiceName()+CUtils.WRAPPER_NAME_APPENDER));
 		this.wscontext = wscontext;
 		this.methods = wscontext.getSerInfo().getMethods();
 	}
@@ -110,7 +111,7 @@ public class WrapWriter extends CPPClassWriter{
 	protected void writeConstructors() throws WrapperFault {
 		try{
 		writer.write(classname+"::"+classname+"()\n{\n");
-		writer.write("\tpWs = new "+CPPUtils.getWebServiceNameFromWrapperName(classname)+ "();\n");
+		writer.write("\tpWs = new "+CUtils.getWebServiceNameFromWrapperName(classname)+ "();\n");
 		writer.write("}\n\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
@@ -235,7 +236,7 @@ public class WrapWriter extends CPPClassWriter{
 			else{
 				outparamType = returntype.getLangName();
 			}
-			returntypeissimple = CPPUtils.isSimpleType(outparamType);
+			returntypeissimple = CUtils.isSimpleType(outparamType);
 		}
 		writer.write("\n/*\n");
 		writer.write(" * This method wrap the service method \n");
@@ -259,15 +260,15 @@ public class WrapWriter extends CPPClassWriter{
 			paraTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();
 			parameterName = ((ParameterInfo)paramsB.get(i)).getParamName();
 			Type type;
-			if((CPPUtils.isSimpleType(((ParameterInfo)paramsB.get(i)).getLangName()))){
+			if((CUtils.isSimpleType(((ParameterInfo)paramsB.get(i)).getLangName()))){
 				//for simple types	
-				writer.write("\t"+paraTypeName+" v"+i+" = pIWSDZ->"+CPPUtils.getParameterGetValueMethodName(paraTypeName, false)+"(\""+parameterName+"\",0);\n");
+				writer.write("\t"+paraTypeName+" v"+i+" = pIWSDZ->"+CUtils.getParameterGetValueMethodName(paraTypeName, false)+"(\""+parameterName+"\",0);\n");
 			}else if((type = this.wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName())) != null && type.isArray()){
 				QName qname = WrapperUtils.getArrayType(type).getName();
 				String containedType = null;
-				if (CPPUtils.isSimpleType(qname)){
-					containedType = CPPUtils.getclass4qname(qname);
-					writer.write("\t"+paraTypeName+" v"+i+" = ("+CPPUtils.getBasicArrayNameforType(containedType)+"&)pIWSDZ->GetBasicArray("+CPPUtils.getXSDTypeForBasicType(containedType)+ ", \""+parameterName+"\",0);\n");
+				if (CUtils.isSimpleType(qname)){
+					containedType = CUtils.getclass4qname(qname);
+					writer.write("\t"+paraTypeName+" v"+i+" = ("+CUtils.getBasicArrayNameforType(containedType)+"&)pIWSDZ->GetBasicArray("+CUtils.getXSDTypeForBasicType(containedType)+ ", \""+parameterName+"\",0);\n");
 				}
 				else{
 					containedType = qname.getLocalPart();
@@ -295,13 +296,13 @@ public class WrapWriter extends CPPClassWriter{
 			writer.write(");\n");
 			/* set the result */
 			if (returntypeissimple){
-				writer.write("\treturn pIWSSZ->AddOutputParam(\""+methodName+"Return\", (void*)&ret, "+CPPUtils.getXSDTypeForBasicType(outparamType)+");\n");
+				writer.write("\treturn pIWSSZ->AddOutputParam(\""+methodName+"Return\", (void*)&ret, "+CUtils.getXSDTypeForBasicType(outparamType)+");\n");
 			}else if(returntypeisarray){
 				QName qname = WrapperUtils.getArrayType(retType).getName();
 				String containedType = null;
-				if (CPPUtils.isSimpleType(qname)){
-					containedType = CPPUtils.getclass4qname(qname);
-					writer.write("\treturn pIWSSZ->AddOutputBasicArrayParam(\""+methodName+"Return\", (Axis_Array*)(&ret),"+CPPUtils.getXSDTypeForBasicType(containedType)+");\n");
+				if (CUtils.isSimpleType(qname)){
+					containedType = CUtils.getclass4qname(qname);
+					writer.write("\treturn pIWSSZ->AddOutputBasicArrayParam(\""+methodName+"Return\", (Axis_Array*)(&ret),"+CUtils.getXSDTypeForBasicType(containedType)+");\n");
 				}
 				else{
 					containedType = qname.getLocalPart();

@@ -67,6 +67,7 @@ import java.io.IOException;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
+import org.apache.axis.wsdl.wsdl2ws.ParamWriter;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public abstract class ParamCFileWriter extends ParamWriter{

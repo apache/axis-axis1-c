@@ -69,12 +69,13 @@ import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 
 public class WrapHeaderWriter extends HeaderFileWriter{
 	private WebServiceContext wscontext;
 	private ArrayList methods;	
 	public WrapHeaderWriter(WebServiceContext wscontext)throws WrapperFault{
-		super(WrapperUtils.getClassNameFromFullyQualifiedName(wscontext.getSerInfo().getQualifiedServiceName()+CPPUtils.WRAPPER_NAME_APPENDER));
+		super(WrapperUtils.getClassNameFromFullyQualifiedName(wscontext.getSerInfo().getQualifiedServiceName()+CUtils.WRAPPER_NAME_APPENDER));
 		this.wscontext = wscontext;
 		this.methods = wscontext.getSerInfo().getMethods();
 	}
@@ -150,7 +151,7 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 	 */
 	protected void writePreprocssorStatements() throws WrapperFault {
 		try{
-			writer.write("#include \""+CPPUtils.getWebServiceNameFromWrapperName(classname)+".h\"\n");
+			writer.write("#include \""+CUtils.getWebServiceNameFromWrapperName(classname)+".h\"\n");
 			writer.write("#include <axis/common/WrapperClassHandler.h>\n");
 			writer.write("#include <axis/common/IMessageData.h>\n");
 			writer.write("#include <axis/common/GDefine.h>\n");
@@ -162,7 +163,7 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 	protected String getExtendsPart(){return " : public WrapperClassHandler";}
 	protected void writeAttributes()throws WrapperFault{
 		try{
-			writer.write("private:/* Actual web service object*/\n\t"+CPPUtils.getWebServiceNameFromWrapperName(classname)+" *pWs;\n");
+			writer.write("private:/* Actual web service object*/\n\t"+CUtils.getWebServiceNameFromWrapperName(classname)+" *pWs;\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}			

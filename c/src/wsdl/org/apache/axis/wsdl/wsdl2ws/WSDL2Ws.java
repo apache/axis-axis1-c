@@ -459,9 +459,20 @@ public class WSDL2Ws {
 		}
 		System.out.println(
 			"############## the type found =" + type.getQName());
-		typedata =
-			new Type(type.getQName(), type.getName(), true, targetLanguage);
-		typeMap.addType(type.getQName(), typedata);
+		if(!"".equals(type.getDimensions())){ //is an array
+			if (!CUtils.isSimpleType(type.getRefType().getQName())){
+				QName refTypeQname = type.getRefType().getQName();
+				QName newArrayQname = new QName(refTypeQname.getNamespaceURI(), (refTypeQname.getLocalPart()+"_Array"));
+				typedata = new Type(newArrayQname, newArrayQname.getLocalPart(), true, targetLanguage);
+				typeMap.addType(type.getQName(), typedata);				
+			}
+			else{
+				typedata = new Type(type.getRefType().getQName(), type.getRefType().getName(), true, targetLanguage);
+			}
+		}else{
+			typedata = new Type(type.getQName(), type.getName(), true, targetLanguage);
+			typeMap.addType(type.getQName(), typedata);
+		}
 			
 		Node node = type.getNode();
 
@@ -568,7 +579,6 @@ public class WSDL2Ws {
 				faultinfo.addParam(createParameterInfo((Part)partIt.next()));
 			}			  
 		}	 
-	
 	}
 	
 	private ParameterInfo createParameterInfo(Part part)throws WrapperFault{

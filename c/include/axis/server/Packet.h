@@ -244,7 +244,7 @@ typedef struct
 } sendbuffers;
 
 /* NO_OF_SERIALIZE_BUFFERS should be equal to the corresponding value in the axis configuration file */
-#define NO_OF_SERIALIZE_BUFFERS 10
+#define NO_OF_SERIALIZE_BUFFERS 20
 
 #ifdef __cplusplus
 extern "C"

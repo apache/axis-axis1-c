@@ -86,18 +86,23 @@ public class AllParamWriter implements SourceWriter{
 		String generator = wscontext.getWrapInfo().getImplStyle();
 		Type type;
 		while(enu.hasNext()){	
-		try{	
-			type = (Type)enu.next();
-			if(wscontext.getWrapInfo().getImplStyle().equals(WrapperConstants.IMPL_STYLE_STRUCT)){
+			try{	
+				type = (Type)enu.next();
+				if(wscontext.getWrapInfo().getImplStyle().equals(WrapperConstants.IMPL_STYLE_STRUCT)){
 					if(type.isArray()){
 						System.out.println("Array writer called ......");
-						(new org.apache.axis.wsdl.wsdl2ws.c.ArrayParamWriter(wscontext,type)).writeSource();	
+						(new ArrayParamWriter(wscontext,type)).writeSource();	
 					}	
-					else{	
-						System.out.println("struct writer called ......");
-						(new org.apache.axis.wsdl.wsdl2ws.c.BeanParamWriter(wscontext,type)).writeSource();
-						(new ParmHeaderFileWriter(wscontext,type)).writeSource();	
-					}	
+					else{
+						if (type.getLanguageSpecificName().startsWith(">")){
+							System.out.println("ignoring anonymous type "+ type.getLanguageSpecificName()+"\n");	
+						}
+						else{
+							System.out.println("struct writer called ......");
+							(new BeanParamWriter(wscontext,type)).writeSource();
+							(new ParmHeaderFileWriter(wscontext,type)).writeSource();	
+						}
+					}
 				}	
 			}catch(Exception e){
 				System.out.println("Error occured yet we continue to genarate other classes ... you should check the error");

@@ -68,6 +68,7 @@ import java.util.Iterator;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
@@ -148,42 +149,42 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 		try{
 		  	writer.write("public: \n");	
 		  	for(int i = 0; i < methods.size(); i++){
+				minfo = (MethodInfo)this.methods.get(i);
 				boolean isAllTreatedAsOutParams = false;
-			  	minfo = (MethodInfo)this.methods.get(i);
 				int noOfOutParams = minfo.getOutputParameterTypes().size();
 				//write return type
 				if(0==noOfOutParams)
-				writer.write("\tvoid ");
+					writer.write("\tvoid ");
 				else if(1==noOfOutParams){
 					ParameterInfo returnParam = (ParameterInfo)minfo.getOutputParameterTypes().iterator().next();
 					String outparam = returnParam.getLangName();
 					writer.write("\t"+WrapperUtils.getClassNameFromParamInfoConsideringArrays(returnParam,wscontext)+" ");
 				}
 				else{
-			  		isAllTreatedAsOutParams = true;
+					isAllTreatedAsOutParams = true;
 					writer.write("\tvoid ");
 				}
-			  	writer.write(minfo.getMethodname()+"(");
+			  //write return type
+			  writer.write(minfo.getMethodname()+"(");
             
-			  	//write parameter names 
-			  	Iterator params = minfo.getInputParameterTypes().iterator();
-			  	if(params.hasNext()){
-			  	  	ParameterInfo fparam = (ParameterInfo)params.next();
-				  	writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
-			  	}
-			  	for(int j =1; params.hasNext();j++){
-				  	ParameterInfo nparam = (ParameterInfo)params.next();
-				  	writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
-			  	}
-				if (isAllTreatedAsOutParams){
-					params = minfo.getOutputParameterTypes().iterator();
-					for(int j =0; params.hasNext();j++){
-						ParameterInfo nparam = (ParameterInfo)params.next();
-						writer.write(", AXIS_OUT_PARAM"+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" *OutValue"+j);
-					}
-				}
-			  		
-			  	writer.write(");\n");
+			  //write parameter names 
+			  Iterator params = minfo.getInputParameterTypes().iterator();
+			  if(params.hasNext()){
+			  	  ParameterInfo fparam = (ParameterInfo)params.next();
+				  writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
+			  }
+			  for(int j =1; params.hasNext();j++){
+				  ParameterInfo nparam = (ParameterInfo)params.next();
+				  writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
+			  }
+			  if (isAllTreatedAsOutParams){
+				  params = minfo.getOutputParameterTypes().iterator();
+				  for(int j =0; params.hasNext();j++){
+					  ParameterInfo nparam = (ParameterInfo)params.next();
+					  writer.write(", AXIS_OUT_PARAM"+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" *OutValue"+j);
+				  }
+			  }			  
+			  writer.write(");\n");
 		  }
 		}catch (Exception e) {
 			  e.printStackTrace();
@@ -201,6 +202,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 			HashSet typeSet = new HashSet();
 			while(types.hasNext()){
 				atype = (Type)types.next();
+				if (atype.getLanguageSpecificName().startsWith(">")) continue;				
 				typeSet.add(atype.getLanguageSpecificName());
 			}
 			Iterator itr = typeSet.iterator();

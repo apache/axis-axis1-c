@@ -106,7 +106,8 @@ public class ServiceWriter extends CPPClassWriter{
 	 */
 	protected void writeConstructors() throws WrapperFault {
 		try{
-		writer.write("\n"+classname+"::"+classname+"()\n{\n}\n");
+		writer.write("\n"+classname+"::"+classname+"()\n{\n");
+		writer.write("}\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}
@@ -117,7 +118,8 @@ public class ServiceWriter extends CPPClassWriter{
 	 */
 	protected void writeDistructors() throws WrapperFault {
 		try{
-		writer.write("\n"+classname+"::~"+classname+"()\n{\n}\n");
+		writer.write("\n"+classname+"::~"+classname+"()\n{\n");
+		writer.write("}\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}
@@ -132,7 +134,7 @@ public class ServiceWriter extends CPPClassWriter{
 		try{
 		  	writer.write("\n");	
 		  	for(int i = 0; i < methods.size(); i++){
-			  	minfo = (MethodInfo)this.methods.get(i);
+				minfo = (MethodInfo)this.methods.get(i);
 				boolean isAllTreatedAsOutParams = false;
 				ParameterInfo returntype = null;
 				int noOfOutParams = minfo.getOutputParameterTypes().size();
@@ -146,10 +148,10 @@ public class ServiceWriter extends CPPClassWriter{
 					writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype,wscontext)+" ");
 				}
 				else{
-					isAllTreatedAsOutParams = true;
-					writer.write("void ");
+				  	isAllTreatedAsOutParams = true;
+				  	writer.write("void ");
 				}
-			  	writer.write(classname+"::"+minfo.getMethodname()+"(");
+				writer.write(classname+"::"+minfo.getMethodname()+"(");
 				//write parameter names 
 				Iterator params = minfo.getInputParameterTypes().iterator();
 				if(params.hasNext()){
@@ -166,13 +168,14 @@ public class ServiceWriter extends CPPClassWriter{
 						ParameterInfo nparam = (ParameterInfo)params.next();
 						writer.write(", AXIS_OUT_PARAM"+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" *OutValue"+j);
 					}
-				}			  	
+				}
 				writer.write(")\n{\n}\n");
-		  }
+			}
 		}catch (Exception e) {
-			  e.printStackTrace();
-			  throw new WrapperFault(e);
-		}	}
+			e.printStackTrace();
+			throw new WrapperFault(e);
+		}	
+	}
 
 	/* (non-Javadoc)
 	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writePreprocssorStatements()

@@ -302,6 +302,11 @@ Axis_Array SoapDeSerializer::GetCmplxArray(void* pDZFunct, void* pCreFunct, void
 					m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <phonenumbers>*/
 				if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
 				{
+					/* if this node contain attributes let them be used by the complex type's deserializer */
+					if (0 != m_pNode->m_pchAttributes[0])
+					{
+						m_pCurrNode = m_pNode;
+					}
 					m_pNode = NULL; /* recognized and used the node */
 					pItem = reinterpret_cast<void*>(ptrval+nIndex*itemsize);
 					if (AXIS_SUCCESS == ((AXIS_DESERIALIZE_FUNCT)pDZFunct)(pItem, this))
@@ -683,7 +688,12 @@ void* SoapDeSerializer::GetCmplxObject(void* pDZFunct, void* pCreFunct, void* pD
 			m_pNode = m_pParser->Next(); /* wrapper node without type info  Ex: <result>*/
 		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
 		{
-			m_pNode = NULL;
+			/* if this node contain attributes let them be used by the complex type's deserializer */
+			if (0 != m_pNode->m_pchAttributes[0])
+			{
+				m_pCurrNode = m_pNode;
+			}
+			m_pNode = NULL; /* node identified and used */
 			void* pObject = ((AXIS_OBJECT_CREATE_FUNCT)pCreFunct)(NULL, false, 0);
 			if (pObject)
 			{
@@ -709,6 +719,11 @@ void* SoapDeSerializer::GetCmplxObject(void* pDZFunct, void* pCreFunct, void* pD
 
 int SoapDeSerializer::GetElementForAttributes(const AxisChar* pName, const AxisChar* pNamespace)
 {
+	if (m_pCurrNode) 
+	{
+		if (0 == strcmp(pName, m_pCurrNode->m_pchNameOrValue))
+			return m_nStatus;
+	}
 	if (!m_pNode)
 	{
 		m_pNode = m_pParser->Next();

@@ -67,6 +67,7 @@ import java.util.ArrayList;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
@@ -108,6 +109,7 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 			writer.write("void AXISCALL OnFault(void*p, IMessageData* mc);\n");
 			writer.write("int AXISCALL Init(void*p);\n");
 			writer.write("int AXISCALL Fini(void*p);\n");
+			writer.write("AXIS_BINDING_STYLE AXISCALL GetBindingStyle(void*p);\n");
 			writer.write("/*Methods corresponding to the web service methods*/\n");
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {

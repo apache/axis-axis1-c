@@ -84,7 +84,6 @@ class ArrayBean : public IArrayBean
 public:
 	ArrayBean();
 	virtual ~ArrayBean();
-//	virtual int DeSerialize(SoapDeSerializer *pDZ);
 	virtual int Serialize(SoapSerializer& pSZ);
 	int GetArraySize();
 
