@@ -358,9 +358,10 @@ Channel::readNonBlocking( std::string & msg, bool bBlockingRequired)
 void
 Channel::CloseChannel ()
 {
+    if (INVALID_SOCKET == m_Sock) // Check if socket already closed : AXISCPP-185
+        return;
 #ifdef WIN32
-    if (INVALID_SOCKET != m_Sock)
-	closesocket (m_Sock);
+    closesocket (m_Sock);
 
     /* Check for any possible error conditions from WSACleanup() and report
      * them before exiting, as this information might indicate a network
@@ -369,10 +370,9 @@ Channel::CloseChannel ()
 
     WSACleanup ();
 #else
-    if (INVALID_SOCKET != m_Sock)
-	close (m_Sock);
-
+    close (m_Sock);
 #endif
+    m_Sock = INVALID_SOCKET; // fix for AXISCPP-185
 }
 
 /*
