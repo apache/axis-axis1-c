@@ -99,6 +99,10 @@ SOURCE=..\..\src\wsdd\WSDDHandler.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\wsdd\WSDDKeywords.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\wsdd\WSDDService.cpp
 # End Source File
 # Begin Source File
@@ -120,6 +124,10 @@ SOURCE=..\..\src\wsdd\WSDDDocument.h
 # Begin Source File
 
 SOURCE=..\..\src\wsdd\WSDDHandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\wsdd\WSDDKeywords.h
 # End Source File
 # Begin Source File
 

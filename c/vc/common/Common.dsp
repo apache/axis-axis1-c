@@ -99,15 +99,15 @@ SOURCE=..\..\src\common\AxisTime.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\AxisTrace.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\AxisUtils.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\common\BasicTypeSerializer.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\common\Debug.cpp
 # End Source File
 # Begin Source File
 
@@ -143,6 +143,10 @@ SOURCE=..\..\src\common\AxisTime.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\AxisTrace.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\AxisUtils.h
 # End Source File
 # Begin Source File
@@ -152,10 +156,6 @@ SOURCE=..\..\src\common\BasicHandler.h
 # Begin Source File
 
 SOURCE=..\..\src\common\BasicTypeSerializer.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\common\Debug.h
 # End Source File
 # Begin Source File
 
