@@ -15,6 +15,12 @@
  */
 
 
+/**
+ * @file BasicNode.h
+ *
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com) *
+ */
+  
 #if !defined(_BASICNODE_H____OF_AXIS_INCLUDED_)
 #define _BASICNODE_H____OF_AXIS_INCLUDED_
 
