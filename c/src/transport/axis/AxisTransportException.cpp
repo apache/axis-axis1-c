@@ -38,7 +38,7 @@ AxisTransportException::AxisTransportException (const int iExceptionCode)
     processException (iExceptionCode);
 }
 
-AxisTransportException::AxisTransportException(const int iExceptionCode, const char* pcMessage)
+AxisTransportException::AxisTransportException(const int iExceptionCode, char* pcMessage)
 {
     m_iExceptionCode = iExceptionCode;
     processException(iExceptionCode, pcMessage);
@@ -74,7 +74,7 @@ void AxisTransportException::processException(const int iExceptionCode)
     m_sMessage = getMessage (iExceptionCode);
 }
 
-void AxisTransportException::processException(const int iExceptionCode, const char* pcMessage)
+void AxisTransportException::processException(const int iExceptionCode, char* pcMessage)
 {
     AxisString sMessage = strdup(pcMessage);
     m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
