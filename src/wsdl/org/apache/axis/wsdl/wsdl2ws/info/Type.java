@@ -86,6 +86,9 @@ public class Type
     private String language;
     //Samisa: element type
     private String elementType;
+    
+    /* is this type going to be thrown as a soap fault? */
+    private boolean isFault = false;
 
     public Type(
         QName name,
@@ -569,4 +572,13 @@ public class Type
         this.extensionBaseType = extensionBaseType;
     }
 
+    public void setAsFault(boolean isFault) 
+    {
+    	this.isFault = isFault;
+    }
+    
+    public boolean isFault() 
+    {
+    	return isFault;
+    }
 }

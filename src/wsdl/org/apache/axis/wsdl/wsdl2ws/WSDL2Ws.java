@@ -1034,7 +1034,9 @@ public class WSDL2Ws
             while (partIt.hasNext())
             {
 
-                faultinfo.addParam(createParameterInfo((Part) partIt.next()));
+                ParameterInfo pinfo = createParameterInfo((Part) partIt.next());
+                pinfo.getType().setAsFault(true);
+                faultinfo.addParam(pinfo);
             }
             //add by nithya
             methodinfo.addFaultType(faultinfo);

@@ -74,7 +74,10 @@ public class ParmHeaderFileWriter extends ParamWriter
             else
             {
                 writePreprocessorStatements();
-                this.writer.write("class STORAGE_CLASS_INFO " + classname + "\n{\n");
+                this.writer.write("class STORAGE_CLASS_INFO " + classname);
+                if (this.type.isFault())
+                	this.writer.write(" : public SoapFaultException");
+                this.writer.write("\n{\n");
                 writeAttributes();
                 writeConstructors();
                 writeDestructors();
@@ -398,6 +401,8 @@ public class ParmHeaderFileWriter extends ParamWriter
         try
         {
             writer.write("#include <axis/AxisUserAPI.hpp>\n");
+            if (this.type.isFault())
+                writer.write("#include <axis/SoapFaultException.hpp>\n");
             writer.write("AXIS_CPP_NAMESPACE_USE \n\n");
             HashSet typeSet = new HashSet();
             for (int i = 0; i < attribs.length; i++)

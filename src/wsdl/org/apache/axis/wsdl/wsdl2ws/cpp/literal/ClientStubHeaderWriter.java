@@ -160,13 +160,9 @@ public class ClientStubHeaderWriter
         try
         {
             writer.write("#include <axis/client/Stub.hpp>\n");
+            writer.write("#include <axis/SoapFaultException.hpp>\n");
             writer.write("#include <axis/ISoapFault.hpp>\n");
-            writer.write(
-                "#include \""
-                    + wscontext.getSerInfo().getServicename()
-                    + "_AxisClientException"
-                    + CUtils.CPP_HEADER_SUFFIX
-                    + "\"\n");
+            writer.write("AXIS_CPP_NAMESPACE_USE\n");
             Type atype;
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
             HashSet typeSet = new HashSet();

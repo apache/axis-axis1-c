@@ -926,13 +926,12 @@ public class ClientStubWriter
         writer.write(
             "\t\tif(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)\n");
         writer.write("\t\t{\n");
-        writer.write(
-            "\t\t\tthrow "
-                + wscontext.getSerInfo().getServicename()
-                + "_AxisClientException(e.what());\n");
+        writer.write("\t\t\tm_pCall->unInitialize();\n");
+        writer.write("\t\t\tthrow SoapFaultException(e);\n");
         writer.write("\t\t}\n");
         writer.write(
-            "\t\tISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault(\"Fault\",\""
+            "\t\tISoapFault* pSoapFault = (ISoapFault*)\n");
+        writer.write("\t\t\tm_pCall->checkFault(\"Fault\",\""
                 + wscontext.getWrapInfo().getTargetEndpointURI()
                 + "\" );\n");
         writer.write("\t\tif(pSoapFault)\n");
@@ -948,12 +947,8 @@ public class ClientStubWriter
         int j = 0;
         if (!paramsFault.hasNext())
         {
-            writer.write("\tm_pCall->unInitialize();\n");
-            //writer.write("\t\t\tm_pCall->unInitialize();\n");
-            writer.write(
-                "\t\t\tthrow "
-                    + wscontext.getSerInfo().getServicename()
-                    + "_AxisClientException(pSoapFault);\n");
+            writer.write("\t\t\tm_pCall->unInitialize();\n");
+            writer.write("\t\t\tthrow SoapFaultException(e);\n");
         }
         else
         {
@@ -1023,13 +1018,10 @@ public class ClientStubWriter
         }
         if (flag == true)
         {
-            writer.write("\t\t\telse\n\t\t\t{\n");
-            writer.write("\tm_pCall->unInitialize();\n");
-            //writer.write("\t\t\t\t  m_pCall->unInitialize();\n");
-            writer.write(
-                "\t\t\t\t  throw "
-                    + wscontext.getSerInfo().getServicename()
-                    + "_AxisClientException(pSoapFault);\n");
+            writer.write("\t\t\telse\n");
+            writer.write("\t\t\t{\n");
+            writer.write("\t\t\t\tm_pCall->unInitialize();\n");
+            writer.write("\t\t\t\tthrow SoapFaultException(e);\n");
             writer.write("\t\t\t}\n");
         }
         writer.write("\t\t}\n");
@@ -1050,28 +1042,26 @@ public class ClientStubWriter
             writer.write(
                 "(0 == strcmp(\"" + faultInfoName + "\", pcCmplxFaultName))\n");
             writer.write("\t\t\t{\n");
-            writer.write("\t\t\t\t" + faulttype + " pFaultDetail = NULL;\n");
+            writer.write("\t\t\t\t" + faulttype + " pFaultDetail = \n");
             writer.write(
-                "\t\t\t\tpFaultDetail = (" + faulttype + ")pSoapFault->\n");
+                "\t\t\t\t\t(" + faulttype + ")pSoapFault->getCmplxFaultObject(\n");
             writer.write(
-                "\t\t\t\t\tgetCmplxFaultObject((void*) Axis_DeSerialize_"
-                    + langName
-                    + ",\n");
-            writer.write("\t\t\t\t\t(void*) Axis_Create_" + langName + ",\n");
+                "\t\t\t\t\t\t(void*) Axis_DeSerialize_" + langName + ",\n");
+            writer.write("\t\t\t\t\t\t(void*) Axis_Create_" + langName + ",\n");
+            writer.write("\t\t\t\t\t\t(void*) Axis_Delete_" + langName + ",\n");
+            writer.write("\t\t\t\t\t\t\"" + faultInfoName + "\",\n");
+            writer.write("\t\t\t\t\t\t0);\n\n");
             writer.write(
-                "\t\t\t\t\t(void*) Axis_Delete_"
-                    + langName
-                    + ",\""
-                    + faultInfoName
-                    + "\", 0);\n");
+            	"\t\t\t\tpFaultDetail->setFaultCode(pSoapFault->getFaultcode().c_str());\n");
             writer.write(
-                "\t\t\t\tpSoapFault->setCmplxFaultObject(pFaultDetail);\n");
-            writer.write("\tm_pCall->unInitialize();\n");
-            //writer.write("\t\t\t\tm_pCall->unInitialize();\n");
+            	"\t\t\t\tpFaultDetail->setFaultString(pSoapFault->getFaultstring().c_str());\n");
             writer.write(
-                "\t\t\t\tthrow "
-                    + wscontext.getSerInfo().getServicename()
-                    + "_AxisClientException(pSoapFault);\n");
+            	"\t\t\t\tpFaultDetail->setFaultActor(pSoapFault->getFaultactor().c_str());\n");
+            writer.write(
+            	"\t\t\t\tpFaultDetail->setExceptionCode(e.getExceptionCode());\n");
+            writer.write("\t\t\t\tm_pCall->unInitialize();\n");
+            writer.write(
+                "\t\t\t\tthrow *pFaultDetail;\n");
             writer.write("\t\t\t}\n");
         }
         catch (IOException e)
