@@ -62,7 +62,7 @@
 #include <axis/common/AxisTrace.h>
 #include <time.h>
 #include <stdio.h>
-#include <axis/common/AxisUtils.h>
+#include "AxisUtils.h"
 #include <axis/common/GDefine.h>
 #include <axis/common/AxisConfig.h>
 
