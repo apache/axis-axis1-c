@@ -731,7 +731,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 		}
     }
 
-    if( m_pcReceived)
+    if( (m_pcReceived) && (*m_pcReceived) )
     {
 		int iToCopy = (*pSize < m_iBytesLeft) ? *pSize : m_iBytesLeft;
 
