@@ -72,7 +72,11 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
+#ifndef AIX
 map<const AxisXMLString, XSDTYPE> TypeMapping::m_sTypeMap;
+#else
+map<AxisXMLString, XSDTYPE> TypeMapping::m_sTypeMap;
+#endif
 volatile bool TypeMapping::m_bInit = false;
 
 TypeMapping::TypeMapping()
