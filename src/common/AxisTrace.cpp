@@ -34,6 +34,7 @@ using namespace std;
 
 AxisTrace::AxisTrace ()
 {
+	m_bLoggingOn = false;
 }
 
 AxisTrace::~AxisTrace ()
@@ -43,28 +44,26 @@ AxisTrace::~AxisTrace ()
 int AxisTrace::openFile ()
 {
     char* sFileName = g_pConfig->getAxisLogPath ();
-    //if ((m_fileTrace = fopen (sFileName, "a")) == NULL)
-    //    return AXIS_FAIL;
-    //fclose (m_fileTrace);
+	if (!sFileName) return AXIS_FAIL;
+#ifndef WIN32
     setFilePerm(sFileName);
-    //if ((m_fileTrace = fopen (sFileName, "a")) == NULL)
-    //    return AXIS_FAIL;
+#endif
     if(AXIS_FAIL == m_fileTrace.fileOpen(sFileName, "a"))
-        return AXIS_FAIL;                                                                                                    
-    return AXIS_SUCCESS;
+        return AXIS_FAIL;
+	m_bLoggingOn = true;
+	return AXIS_SUCCESS;
 }
 
 int AxisTrace::openFileByClient ()
 {
     char* sFileName = g_pConfig->getAxisClientLogPath ();
-    //if ((m_fileTrace = fopen (sFileName, "a")) == NULL)
-    //    return AXIS_FAIL;
-    //fclose (m_fileTrace);
+	if (!sFileName) return AXIS_FAIL;
+#ifndef WIN32
     setFilePerm(sFileName);
-    //if ((m_fileTrace = fopen (sFileName, "a")) == NULL)
-    //    return AXIS_FAIL; 
+#endif
     if(AXIS_FAIL == m_fileTrace.fileOpen(sFileName, "a"))
         return AXIS_FAIL;
+	m_bLoggingOn = true;
     return AXIS_SUCCESS;
 }
 
@@ -90,6 +89,8 @@ int AxisTrace::setFilePerm(const char* sFileName)
 
 int AxisTrace::logthis (const char* sLog, int level, char* arg2, int arg3)
 {
+	if (!m_bLoggingOn) return AXIS_FAIL;
+
     time_t ltime;
     time (&ltime);
 
@@ -144,12 +145,12 @@ int AxisTrace::logthis (const char* sLog, int level, char* arg2, int arg3)
     m_fileTrace.filePuts (sLog);
     m_fileTrace.filePuts (":");
 
-
     return AXIS_SUCCESS;
 
 }
 int AxisTrace::logaxis (const char* sLog, int level, char* arg2, int arg3)
 {
+	if (!m_bLoggingOn) return AXIS_FAIL;
     int intResult = logthis(sLog, level, arg2, arg3);
    /* fputs ("\n", m_fileTrace);
     fputs ("-------------------------------------------------", m_fileTrace);
@@ -168,6 +169,7 @@ int AxisTrace::logaxis (const char* sLog, int level, char* arg2, int arg3)
 int AxisTrace::logaxis (const char* sLog1, const char* sLog2, int level,
     char* arg3, int arg4)
 {
+	if (!m_bLoggingOn) return AXIS_FAIL;
     int intResult = logthis(sLog1, level, arg3, arg4);
     if(AXIS_SUCCESS == intResult)
     {
@@ -193,6 +195,7 @@ int AxisTrace::logaxis (const char* sLog1, const char* sLog2, int level,
 int AxisTrace::logaxis (const char* sLog1, const long nLog2, int level,
     char* arg3, int arg4)
 {
+	if (!m_bLoggingOn) return AXIS_FAIL;
     char* convToLong = (char*) malloc(4 * sizeof(char));
     int intResult = logthis(sLog1, level, arg3, arg4);
     if(AXIS_SUCCESS == intResult)
@@ -220,6 +223,7 @@ int AxisTrace::logaxis (const char* sLog1, const long nLog2, int level,
 int AxisTrace::logaxis (const char* sLog1, const double dLog2, int level,
     char* arg3, int arg4)
 {
+	if (!m_bLoggingOn) return AXIS_FAIL;
     char* convToDouble = (char*) malloc(4 * sizeof(char));
     int intResult = logthis(sLog1, level, arg3, arg4);
     if(AXIS_SUCCESS == intResult)

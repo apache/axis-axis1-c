@@ -162,6 +162,7 @@ public:
     int openFileByClient();
   
 private:
+	bool m_bLoggingOn;
     char m_acLine[4];
     char* m_pcLevel;
     AxisFile m_fileTrace;
