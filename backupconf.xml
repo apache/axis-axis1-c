@@ -1,0 +1,81 @@
+<project name=""  basedir=".">
+	<import file="${basedir}/build/buildInitialize.xml"/>
+
+	<target name="backup" depends="backupInitialize">
+	<mkdir dir="${bckDir}"/>	
+	<mkdir dir="${bckServiceXMLDir}"/>
+	<mkdir dir="${bckClientXMLDir}"/>
+	<!-- backup the service XMLs-->
+	<copy  toDir="${bckServiceXMLDir}">
+		<fileset dir="${srcServiceXMLDir}">
+			<include name="*.xml"/>
+		</fileset>
+	</copy>
+	<!-- backup the Client XMLs-->
+	<copy  toDir="${bckClientXMLDir}">
+		<fileset dir="${srcClientXMLDir}">
+			<include name="*.xml"/>
+		</fileset>
+	</copy>
+	<!-- backup the server.wsdd template -->
+	<copy file="${srcServerWSDD}" todir="${bckDir}"/>
+	<!-- backup the build.PLATFORM.properties file -->
+	<copy file="${srcBuildPropertyFile}" todir="${bckDir}"/>
+	</target>
+
+
+
+	<target name="restore" depends="backupInitialize">
+
+	<!-- restore the service XMLs-->
+	<copy  toDir="${srcServiceXMLDir}">
+		<fileset dir="${bckServiceXMLDir}">
+			<include name="**/*"/>
+		</fileset>
+	</copy>
+	<!-- restore the Client XMLs-->
+	<copy  toDir="${srcClientXMLDir}">
+		<fileset dir="${bckClientXMLDir}">
+			<include name="**/*"/>
+		</fileset>
+	</copy>
+	<!-- restore the server.wsdd template -->
+	<copy file="${bckServerWSDD}/" tofile="${srcServerWSDD}" />
+	<!-- restore the build.PLATFORM.properties file -->
+	<copy file="${bckBuildPropertyFile}" tofile="${srcBuildPropertyFile}"/>
+
+
+
+	</target>
+
+
+
+	<target name="backupInitialize" depends="initialize">
+		<property name="bckDir" value="${basedir}/../../../confbackup/"/>
+		<property name="srcServiceXMLDir" value="${basedir}/tests/auto_build/testcases/tests/server"/>
+		<property name="srcClientXMLDir" value="${basedir}/tests/auto_build/testcases/tests"/>
+		<property name="bckServiceXMLDir" value="${bckDir}/servicexmldir"/>
+		<property name="bckClientXMLDir" value="${bckDir}/clientxmldir"/>
+
+
+		<if>
+			<equals arg1="${platform}" arg2="Win32"/>
+			<then>
+	<echo message="in windows"/>
+			<property name="srcServerWSDD" value="${basedir}/build/server.wsdd.win32"/>
+			<property name="srcBuildPropertyFile" value="${basedir}/build/build.Win32.properties"/>
+			<property name="bckServerWSDD" value="${bckDir}/server.wsdd.win32"/>
+			<property name="bckBuildPropertyFile" value="${bckDir}/build.Win32.properties"/>
+			</then>
+
+			<else>
+			<property name="srcServerWSDD" value="${basedir}/build/server.wsdd.linux"/>
+	<echo message="in linuxxx"/>
+			<property name="srcBuildPropertyFile" value="${basedir}/build/build.Linux.properties"/>
+			<property name="bckServerWSDD" value="${bckDir}/server.wsdd.linux"/>
+			<property name="bckBuildPropertyFile" value="${bckDir}/build.Linux.properties"/>
+			</else>
+		</if>
+	</target>
+
+</project>
