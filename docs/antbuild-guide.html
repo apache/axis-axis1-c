@@ -133,6 +133,13 @@ build is simply a matter of typing the following at a command prompt:</p>
 <p>To remove artefacts from a previous build use the following command:
 </p>
 <blockquote><code>ant clean</code></blockquote>
+<h2>Enabling trace</h2>
+<p>By default, tracing is not enabled. To enable trace set trace=true in your platform properties
+file or in your build.xml. When enabled, the ant build adds in trace entry and exit statements into 
+many of the methods in Axis C++. Then at runtime, in axiscpp.conf, set ClientLogPath to a file in a 
+directory somewhere and Axis C++ will write out trace to that file. Omitting ClientLogPath from 
+axiscpp.conf switches trace off.
+</p>
 <h2><a name="addingExtraPlatform"></a>Adding an extra platform</h2>
 <p>The AXIS community would greatly appreciate your input, if you're
 working on a platform not currently supported by the ANT scripts.<br>
