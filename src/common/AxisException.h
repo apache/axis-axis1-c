@@ -58,6 +58,9 @@
  * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  *
  */
+ 
+#ifndef __AXISEXCEPTION_H_INCLUDED_
+#define __AXISEXCEPTION_H_INCLUDED_
 
 #include <string>
 #include <exception>
@@ -97,3 +100,5 @@ class AxisException :public exception
     string getMessage(int e);    
     string m_sMessage;
 };
+
+#endif
