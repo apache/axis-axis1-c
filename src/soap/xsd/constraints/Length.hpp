@@ -37,7 +37,7 @@ public:
 
     Length();
     
-    Length(int maxLength);
+    Length(int length);
 
     int getLength();
     
