@@ -63,12 +63,13 @@ import org.apache.axis.wsdl.symbolTable.PortEntry;
 import org.apache.geronimo.ews.AbstractTestCase;
 import org.apache.geronimo.ews.jaxrpcmapping.J2eeEmitter;
 import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
+import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
 
 /**
  * @author hemapani
  */
-public class WSDLTest extends AbstractTestCase{
+public class WSDLTest extends AbstractTestCase {
     /**
      * @param testName
      */
@@ -76,25 +77,31 @@ public class WSDLTest extends AbstractTestCase{
         super(testName);
     }
 
-	public void testGoogleWSDL() throws Exception{
-		   String mappingfile = sampleDir +"mapper/google/GoogleSearch.xml";
-		   String wsdlfile = sampleDir + "mapper/google/GoogleSearch.wsdl";
-		   J2eeEmitter j2ee = new J2eeEmitter();
-		   j2ee.setMappingFilePath(mappingfile);
-		   j2ee.setOutputDir(outDir);
-		   j2ee.setServerSide(true);
-		   j2ee.setVerbose(false);
-		   j2ee.setHelperWanted(true);
-		   System.out.println();
-		   j2ee.runServerSide(wsdlfile);
-		   WSDLContext wscontext = ContextFactory.createWSDLContext(j2ee.getSymbolTable());
-		   PortEntry port = wscontext.getPort(new QName("GoogleSearchPort"));
-		   BindingEntry be = wscontext.getBinding(new QName("urn:GoogleSearch","GoogleSearchBinding"));
-		   
-		   Assert.assertEquals(wscontext.getTargetNSURI(),"urn:GoogleSearch");
-		   Assert.assertNotNull(port);
-		   Assert.assertNotNull(be);
-		   Assert.assertNotNull(wscontext.getService(
-				new QName("urn:GoogleSearch","GoogleSearchService")));
-	}
+    public void testGoogleWSDL() throws Exception {
+        J2EEWebServiceContext context = ContextFactory.getJ2EEWsContext(true);
+        context.setMiscInfo(ContextFactory.createMiscInfo());
+        String mappingfile = sampleDir + "mapper/google/GoogleSearch.xml";
+        String wsdlfile = sampleDir + "mapper/google/GoogleSearch.wsdl";
+        J2eeEmitter j2ee = new J2eeEmitter();
+        j2ee.setMappingFilePath(mappingfile);
+        j2ee.setOutputDir(outDir);
+        j2ee.setServerSide(true);
+        j2ee.setVerbose(false);
+        j2ee.setHelperWanted(true);
+        System.out.println();
+        j2ee.runServerSide(wsdlfile);
+        WSDLContext wscontext =
+            ContextFactory.createWSDLContext(j2ee.getSymbolTable());
+        PortEntry port = wscontext.getPort(new QName("GoogleSearchPort"));
+        BindingEntry be =
+            wscontext.getBinding(
+                new QName("urn:GoogleSearch", "GoogleSearchBinding"));
+
+        Assert.assertEquals(wscontext.getTargetNSURI(), "urn:GoogleSearch");
+        Assert.assertNotNull(port);
+        Assert.assertNotNull(be);
+        Assert.assertNotNull(
+            wscontext.getService(
+                new QName("urn:GoogleSearch", "GoogleSearchService")));
+    }
 }

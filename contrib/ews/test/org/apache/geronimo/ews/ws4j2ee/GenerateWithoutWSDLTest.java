@@ -112,4 +112,12 @@ public class GenerateWithoutWSDLTest extends AbstractTestCase {
 		String[] args2 = new String[]{"target/generated/samples/zip.jar","-o"+outDir+"withoutWSDL/zip-jar/"};
 		Ws4J2EEwithoutWSDL.main(args2);
 	}
+	public void testBookSampleWar() throws Exception{
+		String[] args2 = new String[]{"target/generated/samples/simple.war","-o"+outDir+"withoutWSDL/bookquote-war/"};
+		Ws4J2EEwithoutWSDL.main(args2);
+	}
+	public void testBookSampleEar() throws Exception{
+		String[] args2 = new String[]{"target/generated/samples/bookquote.ear","-o"+outDir+"withoutWSDL/bookquote-ear/"};
+		Ws4J2EEwithoutWSDL.main(args2);
+	}
 }

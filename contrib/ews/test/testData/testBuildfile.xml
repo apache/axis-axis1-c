@@ -1,14 +1,11 @@
 <project basedir="." default="compile">
 	<path id="classpath">
 	    <pathelement location="../../lib/junit-3.8.1.jar"/>
-		<pathelement location="H:/j2sdk1.4.1_01/lib/tools.jar"/>
+		<pathelement location="C:/j2sdk1.4.2_02/lib/tools.jar"/>
 	</path>
 	<target name="compile">
-		<echo ref="classpath"/>
 		<mkdir dir="../../target/generated/samples/buildfileTest"/>
-		
-		<javac destdir="../../target/generated/samples/buildfileTest" debug="on"
-			executable="H:/j2sdk1.4.1_01/bin/javac">
+		<javac destdir="../../target/generated/samples/buildfileTest" debug="on">
 			<classpath refid="classpath" />
 			<src path=".."/>
 			<include name="testData/BuildTestSample*"/>
