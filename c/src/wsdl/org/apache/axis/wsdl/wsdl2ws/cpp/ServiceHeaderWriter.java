@@ -183,7 +183,5 @@ public class ServiceHeaderWriter extends HeaderFileWriter{
 	{
 		return "ServerSkeleton";	
 	}
-	
-	protected String getExtendsPart(){return " ";}
 }
 

@@ -194,14 +194,15 @@ public class WSDL2Ws {
         while (oplist.hasNext()) {
             minfo = new MethodInfo();
             methods.add(minfo);
-
             //add operation to operation List
             Operation op = (Operation) oplist.next();
             minfo.setMethodname(op.getName());
-            
+            System.out.println(op.getName()+"operation name .......................&&&&&&&&&&&");
             //setting the faults
             Map faults = op.getFaults();
 			addFaultInfo(faults,minfo);
+            
+            
             
             Iterator paramlist = null;
             //add each parameter to parameter list
@@ -221,6 +222,7 @@ public class WSDL2Ws {
 				}
 				if (qname != null){
 					minfo.setInputMessage(minfoqname);
+					System.out.println(minfoqname.getLocalPart()+"setInputMessage.............?????????????");
 					type = this.typeMap.getType(qname);
 					boolean wrapped = true; //TODO take this from a commandline argument
 					if (wrapped){
@@ -251,7 +253,8 @@ public class WSDL2Ws {
 					}
 				}
 	    	}
-    	   	else{
+    	  	else{
+				minfo.setInputMessage(op.getInput().getMessage().getQName());
     	   		if (op.getParameterOrdering() != null){
 	    	   		for (int ix=0; ix < op.getParameterOrdering().size(); ix++){
 						Part p = (Part)(op.getInput().getMessage().getParts().get((String)op.getParameterOrdering().get(ix)));
@@ -268,7 +271,7 @@ public class WSDL2Ws {
 						if (null != pinfo) minfo.addInputParameter(pinfo);
 					}    	   			
     	   		}
-            }
+           }
             //get the return type
 			if(op.getOutput()!=null){
 	            Iterator returnlist = op.getOutput().getMessage().getParts().values().iterator();
@@ -319,7 +322,12 @@ public class WSDL2Ws {
 					}
 				}
 				else{
+			//added on 1-jun-2004
+				    minfo.setInputMessage(op.getInput().getMessage().getQName()); 
+				    minfo.setOutputMessage(op.getOutput().getMessage().getQName());
+				   // minfo.setFaultMessage();
 					if (op.getParameterOrdering() != null){
+						 
 						for (int ix=0; ix < op.getParameterOrdering().size(); ix++){
 							Part p = (Part)(op.getOutput().getMessage().getParts().get((String)op.getParameterOrdering().get(ix)));
 							if (p == null) continue;
@@ -598,12 +606,16 @@ public class WSDL2Ws {
 		while(faultIt.hasNext()){
 			Fault fault = (Fault)faultIt.next();
 			FaultInfo faultinfo = new FaultInfo(fault.getName());
+			System.out.println(fault.getName()+"Fault NAME   @@@@@@@@@@@@@@@@@");
 			Map parts = fault.getMessage().getParts();
 			Iterator partIt = parts.values().iterator();
 			while(partIt.hasNext()){
+				System.out.println(" fault part name *********"+partIt.toString()  );
 				faultinfo.addParam(createParameterInfo((Part)partIt.next()));
-			}			  
-		}	 
+			}	
+			//add by nithya
+			methodinfo.addFaultType(faultinfo) ;
+	     	}	 
 	}
 	
 	private ParameterInfo createParameterInfo(Part part)throws WrapperFault{
@@ -618,7 +630,7 @@ public class WSDL2Ws {
 			throw new WrapperFault("unregisterd type "+qname+" refered");
 		ParameterInfo parainfo = 
 			new ParameterInfo(type,part.getName());
-		parainfo.setElementName(part.getElementName());
+		parainfo.setElementName(part.getElementName());		
 		return parainfo;
 	}
 
