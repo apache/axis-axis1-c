@@ -66,16 +66,16 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "ESHHandler.h"
-#include <axis/common/GDefine.h>
-#include <axis/common/IHandlerSoapSerializer.h>
-#include <axis/common/IHandlerSoapDeSerializer.h>
-#include <axis/soap/HeaderBlock.h>
-#include <axis/soap/SoapHeader.h>
-#include <axis/soap/BasicNode.h>
-#include <axis/common/AxisTrace.h>
+#include <axis/server/GDefine.h>
+#include <axis/server/IHandlerSoapSerializer.h>
+#include <axis/server/IHandlerSoapDeSerializer.h>
+#include <axis/server/HeaderBlock.h>
+#include <axis/server/SoapHeader.h>
+#include <axis/server/BasicNode.h>
+#include <axis/server/AxisTrace.h>
 #include <iostream>
 
-#include <axis/soap/CharacterElement.h>
+#include <axis/server/CharacterElement.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -143,8 +143,8 @@ int ESHHandler::Invoke(void *pvIMsg)
 		
 		if (pIHeaderBlock != NULL) {
 
-			BasicNode* pBasicNode= pIHeaderBlock->getFirstChild();
-			BasicNode* pBasicNode2= pBasicNode->getFirstChild();
+			const BasicNode* pBasicNode= pIHeaderBlock->getFirstChild();
+			const BasicNode* pBasicNode2= pBasicNode->getFirstChild();
 						
 			const AxisChar* pachHeaderValue;
 			const AxisChar* pachHeaderValue2;
@@ -154,8 +154,8 @@ int ESHHandler::Invoke(void *pvIMsg)
 				pachHeaderValue = "This was not the expected value Ros";
 			}
 
-			BasicNode* pBasicNode3= pIHeaderBlock->getLastChild();
-			BasicNode* pBasicNode4 =pBasicNode3->getFirstChild();
+			const BasicNode* pBasicNode3= pIHeaderBlock->getLastChild();
+			const BasicNode* pBasicNode4 =pBasicNode3->getFirstChild();
 			if((pBasicNode4->getNodeType()) == CHARACTER_NODE) {
 				pachHeaderValue2= pBasicNode4->getValue();
 			} else {
@@ -171,6 +171,7 @@ int ESHHandler::Invoke(void *pvIMsg)
 			pIMsg->setProperty(pachTemp, pachTmpValue);
 
 			free(pachTmpValue);
+			
 			
 		} else {
 			//do some thing
