@@ -13,7 +13,7 @@
 class InteropTestPortType :public Stub 
 {
 public:
-	InteropTestPortType(const char* pchEndpointUri);
+	InteropTestPortType(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol=APTHTTP);
 	virtual ~InteropTestPortType();
 public: 
 	xsd__string echoString(xsd__string Value0);
