@@ -80,6 +80,9 @@ class IDeployerUtils;
 
 class IMessageData
 {
+	friend class CPP_DeploymentWrapper;
+private:
+	virtual void getWSDDDeployment(IDeployerUtils** pIDeployerUtils) = 0;
 public:
     virtual ~IMessageData(){};
 	virtual int setProperty(string& sName, string& sValue)=0;
@@ -95,8 +98,6 @@ public:
 
 	virtual void getSoapDeSerializer(IWrapperSoapDeSerializer** pIWrapperSoapDeSerializer)=0;
 	virtual void getSoapDeSerializer(IHandlerSoapDeSerializer** pIHandlerSoapDeSerializer)=0;
-
-	virtual void getWSDDDeployment(IDeployerUtils** pIDeployerUtils) = 0;
 
 	virtual void SetUserName(string& m_sUserName)=0;
 	virtual string& GetUserName()=0;
