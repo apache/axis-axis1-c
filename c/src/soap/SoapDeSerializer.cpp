@@ -2022,26 +2022,26 @@ xsd__hexBinary SoapDeSerializer::GetElementAsHexBinary(const AxisChar* pName, co
 
 xsd__base64Binary SoapDeSerializer::DecodeFromBase64Binary(const AxisChar* pValue)
 {
-	xsd__base64Binary value;
-	value.__size = apr_base64_decode_len(pValue);
-	value.__ptr = (unsigned char*) malloc(value.__size+1);
-	value.__size = apr_base64_decode_binary(value.__ptr, pValue);
-	/* put null at the end because it enables the decoded string to be used
-	 * as a string */
-	value.__ptr[value.__size] = 0;
-	return value;
+  xsd__base64Binary value;
+  value.__size = apr_base64_decode_len(pValue);
+  value.__ptr = (unsigned char*) malloc(value.__size+1);
+  value.__size = apr_base64_decode_binary(value.__ptr, pValue);
+  /* put null at the end because it enables the decoded string to be used
+   * as a string */
+  value.__ptr[value.__size] = 0;
+  return value;
 }
 
 xsd__hexBinary SoapDeSerializer::DecodeFromHexBinary(const AxisChar* pValue)
 {
-	xsd__hexBinary value;
-	value.__size = strlen(pValue)/2;
-	value.__ptr = (unsigned char*) malloc(value.__size+1);
-	Hex_Decode(value.__ptr, pValue);
-	/* put null at the end because it enables the decoded string to be used
-	 * as a string */
-	value.__ptr[value.__size] = 0;
-	return value;
+  xsd__hexBinary value;
+  value.__size = strlen(pValue)/2;
+  value.__ptr = (unsigned char*) malloc(value.__size+1);
+  Hex_Decode(value.__ptr, pValue);
+  /* put null at the end because it enables the decoded string to be used
+   * as a string */
+  value.__ptr[value.__size] = 0;
+  return value;
 }
 
 xsd__base64Binary SoapDeSerializer::GetElementAsBase64Binary(const AxisChar* pName, const AxisChar* pNamespace)
@@ -2122,6 +2122,18 @@ struct tm SoapDeSerializer::GetElementAsDateTime(const AxisChar* pName, const Ax
 		if (!m_pNode) return ret;
 		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
 		{
+			if (0 != m_pNode->m_pchAttributes[0])
+			{
+				m_pCurrNode = m_pNode;
+		        /**
+		         * Need to verify if the return value is NULL.
+		         */
+		        if ( GetAttributeAsBoolean("nil",0) == true_ ) {
+		            m_pParser->Next();
+		            m_pNode = NULL;
+		            return ret;
+		          }
+			}			
 			m_pNode = m_pParser->Next(); /* charactor node */
 			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 			{
@@ -2170,6 +2182,18 @@ struct tm SoapDeSerializer::GetElementAsDate(const AxisChar* pName, const AxisCh
 		if (!m_pNode) return ret;
 		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
 		{
+			if (0 != m_pNode->m_pchAttributes[0])
+			{
+				m_pCurrNode = m_pNode;
+		        /**
+		         * Need to verify if the return value is NULL.
+		         */
+		        if ( GetAttributeAsBoolean("nil",0) == true_ ) {
+		            m_pParser->Next();
+		            m_pNode = NULL;
+		            return ret;
+		          }
+			}			
 			m_pNode = m_pParser->Next(); /* charactor node */
 			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 			{
@@ -2218,6 +2242,18 @@ struct tm SoapDeSerializer::GetElementAsTime(const AxisChar* pName, const AxisCh
 		if (!m_pNode) return ret;
 		if (0 == strcmp(pName, m_pNode->m_pchNameOrValue))
 		{
+			if (0 != m_pNode->m_pchAttributes[0])
+			{
+				m_pCurrNode = m_pNode;
+		        /**
+		         * Need to verify if the return value is NULL.
+		         */
+		        if ( GetAttributeAsBoolean("nil",0) == true_ ) {
+		            m_pParser->Next();
+		            m_pNode = NULL;
+		            return ret;
+		          }
+			}			
 			m_pNode = m_pParser->Next(); /* charactor node */
 			if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 			{
