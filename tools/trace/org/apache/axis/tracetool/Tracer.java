@@ -85,7 +85,7 @@ class Tracer extends BufferedWriter {
 		String line =
 			"\n"
 				+ "    #ifdef ENABLE_AXISTRACE\n"
-				+ "    if (g_pAT) {\n"
+				+ "    if (g_pAT) try {\n"
 				+ "        char traceLine[256];\n"
 				+ "        sprintf(traceLine,\"> ";
 		if (null != signature.getClassName())
@@ -113,7 +113,9 @@ class Tracer extends BufferedWriter {
 
 		line += ");\n";
 		line += "        AXISTRACE1(traceLine,INFO);" + SIGNATURE + "\n";
-		line += "    }\n";
+		line += "    } catch (...) {\n";
+            line += "        AXISTRACE1(\"Unknown exception caught during trace entry\",INFO);\n";
+            line += "    }\n";
 		line += "    #endif\n";
 		write(line);
 		flush();
@@ -190,7 +192,7 @@ class Tracer extends BufferedWriter {
 			+ " traceRet = ("
 			+ value
 			+ ");\n";
-		line += "            if (g_pAT) {\n";
+		line += "            if (g_pAT) try {\n";
 		line += "                char traceLine[256];\n";
 		line += "                sprintf(traceLine,\"< "
 			+ methodName
@@ -200,6 +202,8 @@ class Tracer extends BufferedWriter {
 			+ retValue
 			+ ");\n";
 		line += "                AXISTRACE1(traceLine,INFO);" + SIGNATURE + "\n";
+		line += "            } catch (...) {\n";
+            line += "                AXISTRACE1(\"Unknown exception caught during trace exit\",INFO);\n";
 		line += "            }\n";
 		line += "            return traceRet;\n";
 		line += "        #else\n";
