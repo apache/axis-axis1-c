@@ -47,6 +47,9 @@ main(int argc, char *argv[])
     //sprintf(endpoint, "http://%s:%s/axis/base", server, port);
     //endpoint for Axis Java sample
     sprintf(endpoint, "http://%s:%s/axis/base", server, port);
+
+    try
+    {
     InteropTestPortType ws(endpoint);
 
     //set end point (optional) 
@@ -134,21 +137,10 @@ main(int argc, char *argv[])
     }
     strcpy(buffer1, bigstring.c_str());
     //printf(ws.echoString(buffer1));
-    try
-    {
     if (0 == strcmp(ws.echoString("hello world"), "hello world"))
 	printf("successful\n");
     else
 	printf("failed\n");
-    }
-    catch(AxisException& e)
-    {
-        printf("%s\n", e.what());
-    }
-    catch(...)
-    {
-        printf("Unknown exception\n");
-    }
 
     printf("Test trasport property accessors\n");
     printf("First trasport key = %s\n", ws.getFirstTrasportPropertyKey());
@@ -204,5 +196,18 @@ main(int argc, char *argv[])
 	printf("failed\n");
 
     printf("Stub Base class test end\n");
+    }
+    catch(AxisException& e)
+    {
+        printf("Exception : %s\n", e.what());
+    }
+    catch(exception& e)
+    {
+        printf("Unknown exception has occured\n");
+    }
+    catch(...)
+    {
+        printf("Unknown exception has occured\n");
+    }
     return 0;
 }
