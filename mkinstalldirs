@@ -13,6 +13,9 @@ fi
 if test ! -d "${AXISCPP_DEPLOY}/samples"; then
     cp -rf "${AXISCPP_HOME}/samples" "${AXISCPP_DEPLOY}"
 fi
+if test ! -d "${AXISCPP_DEPLOY}/wsdls"; then
+    cp -rf "${AXISCPP_HOME}/deploy/wsdls" "${AXISCPP_DEPLOY}"
+fi
 if test -d "${AXISCPP_DEPLOY}/log"; then
     chmod 777 "${AXISCPP_DEPLOY}/log"
 else
