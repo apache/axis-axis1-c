@@ -1238,6 +1238,7 @@ void* SoapDeSerializer::getCmplxFaultObject(void* pDZFunct, void* pCreFunct,
         }
     }
     m_nStatus = AXIS_FAIL; /* unexpected SOAP stream */
+    return NULL;
 }
 
 int SoapDeSerializer::getElementForAttributes(const AxisChar* pName,

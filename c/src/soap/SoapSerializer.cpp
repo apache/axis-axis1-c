@@ -43,9 +43,6 @@
 extern AxisTrace* g_pAT;
 extern AxisConfig* g_pConfig;
 
-/* Following values should come from axis configuration files. */
-#define INITIAL_SERIALIZE_BUFFER_SIZE 1024
-
 IWrapperSoapSerializerFunctions IWrapperSoapSerializer::ms_VFtable;
 
 SoapSerializer::SoapSerializer()
@@ -53,24 +50,11 @@ SoapSerializer::SoapSerializer()
     m_pSoapEnvelope = NULL;
     m_iSoapVersion = SOAP_VER_1_1;
     m_pOutputStream = NULL;
-    m_nMaxBuffersToCreate = NO_OF_SERIALIZE_BUFFERS;
-    m_nInitialBufferSize = INITIAL_SERIALIZE_BUFFER_SIZE;
-    m_pSZBuffers = new SerializeBuffers[m_nMaxBuffersToCreate];
-    for (int x=0; x<m_nMaxBuffersToCreate; x++)
-    {
-        m_pSZBuffers[x].inuse = 0;
-        m_pSZBuffers[x].buffer = NULL;
-    }
 }
 
 SoapSerializer::~SoapSerializer()
 {
     if (m_pSoapEnvelope) delete m_pSoapEnvelope;
-   for (int x=0; x<m_nMaxBuffersToCreate; x++)
-   {
-       delete [] (char*)m_pSZBuffers[x].buffer;
-   }
-   delete [] (SerializeBuffers*)m_pSZBuffers;		    
 }
 
 int SoapSerializer::setSoapEnvelope(SoapEnvelope *pSoapEnvelope)
@@ -246,14 +230,11 @@ int SoapSerializer::setOutputStream(SOAPTransport* pStream)
     int iStatus= AXIS_SUCCESS;
     try
     {
-    m_pOutputStream->registerReleaseBufferCallback(releaseBufferCallBack);
-
     if(m_pSoapEnvelope)
     {
         serialize("<?xml version='1.0' encoding='utf-8' ?>", NULL);
         iStatus= m_pSoapEnvelope->serialize(*this, 
             (SOAP_VERSION)m_iSoapVersion);
-        sendSerializedBuffer();
     }
     }
     catch(AxisSoapException& e)
@@ -299,8 +280,6 @@ int SoapSerializer::init()
     m_pSoapEnvelope = new SoapEnvelope();
     m_pSoapEnvelope->setSoapBody(new SoapBody());
     
-    setNextSerilizeBuffer();
-
     m_nCounter=0;
     m_NsStack.clear();
     return AXIS_SUCCESS;
@@ -366,51 +345,11 @@ IWrapperSoapSerializer& SoapSerializer::operator <<(const AxisChar*
         return *this;
     }
 
-    int iTmpSerBufferSize = strlen(cSerialized);
-    if((m_nFilledSize + iTmpSerBufferSize)>= m_nCurrentBufferSize) 
-    {
-        /*
-         * Send the current buffer to the transport and get
-         * another buffer to be filled
-         */
-        if (AXIS_SUCCESS == sendSerializedBuffer())
-        {
-            if (AXIS_SUCCESS == setNextSerilizeBuffer())
-            {
-                strcat((char*)m_pSZBuffers[m_nCurrentBufferIndex].buffer,
-                    cSerialized);
-                m_nFilledSize += iTmpSerBufferSize;
-            }
-        }
-    }
-    else
-    {
-        strcat((char*)m_pSZBuffers[m_nCurrentBufferIndex].buffer, cSerialized);
-        m_nFilledSize += iTmpSerBufferSize;
-    }
-    return *this;
-}
-
-int SoapSerializer::sendSerializedBuffer()
-{
-    int nStatus;
     try
     {
-    nStatus = m_pOutputStream->sendBytes((char*)
-    m_pSZBuffers[m_nCurrentBufferIndex].buffer, (void*)(&(m_pSZBuffers
-    [m_nCurrentBufferIndex].inuse)));
-    if (TRANSPORT_FINISHED == nStatus) 
-    /* transport layer has done with the buffer.So same buffer 
-     * can be re-used
-     */
-    {
-        m_pSZBuffers[m_nCurrentBufferIndex].buffer[0] = '\0'; /* put nul */
-        m_pSZBuffers[m_nCurrentBufferIndex].inuse = 0; /* not in use */
-    }
-    else if (TRANSPORT_FAILED == nStatus) 
-    {
-        return AXIS_FAIL;
-    }
+      /* send everything to transport layer, it should handle bufferization itself */
+      int nStatus = m_pOutputStream->sendBytes(cSerialized, 0);
+      // FIXME: should we process nStatus somehow?
     }
     catch(AxisSoapException& e)
     {
@@ -425,49 +364,7 @@ int SoapSerializer::sendSerializedBuffer()
         throw;
     }
 
-    
-    return AXIS_SUCCESS;
-}
-
-/*
- * This method sets the next buffer to be used for serialization.
- *
- */
-int SoapSerializer::setNextSerilizeBuffer()
-{
-    for (int x=0;x<m_nMaxBuffersToCreate;x++)
-    {
-        if (m_pSZBuffers[x].buffer) /* a buffer has been created */
-        {
-            if (0 == m_pSZBuffers[x].inuse) /* buffer is not being used */ 
-            {
-                m_nCurrentBufferIndex = x;
-                m_pSZBuffers[m_nCurrentBufferIndex].inuse = 1;
-                m_pSZBuffers[m_nCurrentBufferIndex].buffer[0] = '\0';
-                m_nFilledSize = 0;
-                m_nCurrentBufferSize = m_nInitialBufferSize*
-                    (1 << m_nCurrentBufferIndex);
-                return AXIS_SUCCESS;
-            }
-        }
-        else
-        /* a buffer is not yet created at this array index.
-         * So create one and use it 
-         */
-        {
-            m_nCurrentBufferIndex = x;
-            m_nCurrentBufferSize = m_nInitialBufferSize*
-                (1 << m_nCurrentBufferIndex);           
-            m_pSZBuffers[m_nCurrentBufferIndex].buffer = 
-                new char[m_nCurrentBufferSize];
-            m_pSZBuffers[m_nCurrentBufferIndex].inuse = 1;
-            m_pSZBuffers[m_nCurrentBufferIndex].buffer[0] = '\0';
-            m_nFilledSize = 0;
-            return AXIS_SUCCESS;
-        }
-    }
-    
-    return AXIS_FAIL;
+    return *this;
 }
 
 int SoapSerializer::createSoapMethod(const AxisChar* sLocalName, 
@@ -842,30 +739,6 @@ void SoapSerializer::serializeEndElementOfType(const AxisChar* pName)
     serialize("</", pName, ">", NULL);
 }
 
-/*
- * Callback function that should be called by the transport module to release
- * a buffer passed to it by a Serializer.
- * @param 
- *        buffer - Same buffer passed to transport by calling transport's 
- *                 AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES 
- *                 callback
- *        buffer - Same bufferid passed to transport by calling transport's 
- *                 AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES 
- *                 callback
- *        stream - Same stream object passed to transport by calling 
- *                 transport's AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES 
- *                 callback
- */
- 
-#ifndef USER_SERIALIZER 
-void SoapSerializer::releaseBufferCallBack(const char* buffer, const void* bufferid)
-{
-    int* pInt = (int*)bufferid;
-    *pInt = 0; /* set that the buffer is not in use */
-    char *pChar = const_cast<char*>(buffer);
-    pChar[0] = '\0'; /* set nul */ 
-}
-#endif
 
 IHeaderBlock* SoapSerializer::createHeaderBlock(AxisChar *pachLocalName, 
                                                 AxisChar *pachUri)
