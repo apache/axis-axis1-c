@@ -18,8 +18,7 @@ AC_ARG_ENABLE(apache2, [  --enable-apache2        use apache2 as server transpor
     elif test -d ${APACHE2_HOME}; then
         apache2inc="-I${APACHE2_HOME}/include"
     else
-        echo "could not find apache2. stop"
-	exit
+        AC_MSG_ERROR(could not find apache2. stop)
     fi
     APACHE2BUILD="apache2"
     ;;
@@ -43,7 +42,7 @@ AC_ARG_ENABLE(apache, [  --enable-apache        use apache as server transport.]
     elif test -d ${APACHE_HOME}; then
         apacheinc="-I${APACHE_HOME}/include"
     else
-        echo "could not find apache. stop"
+        AC_MSG_ERROR(could not find apache. stop)
         exit
     fi
     APACHEBUILD="apache"
@@ -66,7 +65,7 @@ AC_ARG_ENABLE(xercesc, [  --enable-xercesc    build xercesc parser library.],
         xercescinc="-I${XERCESC_HOME}/include"
         xercesclib="-L${XERCESC_HOME}/lib"
     else
-        echo "could not find xercesc. stop"
+        AC_MSG_ERROR(could not find xercesc. stop)
 	exit
     fi
     XERCESCBUILD="xerces"
@@ -90,7 +89,7 @@ AC_ARG_ENABLE(expat, [  --enable-expat        build expat parser library.],
         expatinc="-I${EXPAT_HOME}/include"
         expatlib="-I${EXPAT_HOME}/lib"
     else
-        echo "could not find expat. stop"
+        AC_MSG_ERROR(could not find expat. stop)
 	exit
     fi
     EXPATBUILD="expat"
