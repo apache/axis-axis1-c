@@ -12,7 +12,6 @@ libaxiscpp_client_la_SOURCES = ../Axis.cpp \
                 ../SerializerPool.cpp \
                 ../SessionScopeHandlerPool.cpp \
                 ../SharedObject.cpp \
-                ../../transport/SOAPTransportFactory.cpp \
 		Call.cpp \
                 ../AxisEngineException.cpp \
                 ../SOAPTransportFactory.cpp \
