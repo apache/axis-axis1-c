@@ -395,6 +395,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
     {
 		try
 		{
+			m_pszRxBuffer [0] = '\0';
 			*m_pActiveChannel >> m_pszRxBuffer;
 			m_strReceived = m_pszRxBuffer;
 
@@ -415,6 +416,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 					{
 						if (m_strReceived.find( "\r\n\r\n") == std::string::npos)
 						{
+							m_pszRxBuffer [0] = '\0';
 							*m_pActiveChannel >> m_pszRxBuffer;
 
 // If data has been received, then add the data to the received message buffer
@@ -443,6 +445,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 						{
 							if( m_strReceived.find( "\r\n\r\n") == std::string::npos)
 							{
+								m_pszRxBuffer [0] = '\0';
 								*m_pActiveChannel >> m_pszRxBuffer;
 
 // If data has been received, then add the data to the received message buffer
@@ -504,6 +507,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 			// Samisa: We found Continue. Keep on reading and processing headers
 			// till we get a HTTP code other than 100
 			// Here it is assumed that the whole of the request is already sent
+						m_pszRxBuffer [0] = '\0';
 						*m_pActiveChannel >> m_pszRxBuffer;
 						m_strReceived = m_pszRxBuffer;
 					}
@@ -525,9 +529,13 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 	    // make sure we have a message with some content
 		    if( m_strReceived.length () == 0)
 			{
+				m_pszRxBuffer [0] = '\0';
 				*m_pActiveChannel >> m_pszRxBuffer;
 				m_strReceived = m_pszRxBuffer;
 			}
+
+		if( m_strReceived.length () > 0) 
+		{
 
 		    if( m_bChunked && m_iContentLength < 1)	// Read first chunk
 		    {
@@ -560,6 +568,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 				{
 					do
 					{
+						m_pszRxBuffer [0] = '\0';
 						*m_pActiveChannel >> m_pszRxBuffer;
 						m_strReceived = m_pszRxBuffer;
 						endOfChunkData = m_strReceived.find( "\r\n");
@@ -627,6 +636,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 		    // Make sure that we have the found the end of previous chunk
 					while( endOfChunkData == std::string::npos)
 					{
+						m_pszRxBuffer [0] = '\0';
 						*m_pActiveChannel >> m_pszRxBuffer;
 						m_strReceived += m_pszRxBuffer;
 						endOfChunkData = m_strReceived.find( "\r\n");
@@ -639,6 +649,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 		    // Make sure that we have the starting line of next chunk
 					while( endOfChunkData == std::string::npos)
 					{
+						m_pszRxBuffer [0] = '\0';
 						*m_pActiveChannel >> m_pszRxBuffer;
 						m_strReceived += m_pszRxBuffer;
 						endOfChunkData = m_strReceived.find( "\r\n");
@@ -703,6 +714,7 @@ AXIS_TRANSPORT_STATUS HTTPTransport::getBytes( char *pcBuffer, int *pSize) throw
 					processRootMimeBody();
 				}
 			}
+		}
 
 		    m_pcReceived = m_strReceived.c_str();
 
@@ -1291,6 +1303,7 @@ void HTTPTransport::processRootMimeBody()
 		{
 			if( m_strReceived.find( "\r\n\r\n") == std::string::npos)
 			{
+				m_pszRxBuffer [0] = '\0';
 				*m_pActiveChannel >> m_pszRxBuffer;
 				m_strReceived += m_pszRxBuffer;
 			}
@@ -1396,6 +1409,7 @@ void HTTPTransport::processMimeBody ()
 
 void HTTPTransport::getAttachment( char * pStrAttachment, int * pIntSize, int intAttachmentId)
 {
+	m_pszRxBuffer [0] = '\0';
 	*m_pActiveChannel >> m_pszRxBuffer;
     m_strMimeReceived += m_pszRxBuffer;
 
@@ -1403,6 +1417,7 @@ void HTTPTransport::getAttachment( char * pStrAttachment, int * pIntSize, int in
     {
 		if( m_strMimeReceived.find( "\r\n\r\n") == std::string::npos)
 		{
+			m_pszRxBuffer [0] = '\0';
 			*m_pActiveChannel >> m_pszRxBuffer;
 		    m_strMimeReceived += m_pszRxBuffer;
 		}
