@@ -467,4 +467,11 @@ AXISC_STORAGE_CLASS_INFO const AxiscChar * axiscGetNamespacePrefixCall(AXISCHAND
 	return c->getNamespacePrefix(pNamespace);
 }
 
+AXISC_STORAGE_CLASS_INFO void axiscSetSOAPMethodAttribute(AXISCHANDLE call, const AxiscChar * pLocalname, 
+    const AxiscChar * pPrefix, const AxiscChar * pUri, 
+   const AxiscChar * pValue) {
+   Call *c = (Call*)call;
+    c->setSOAPMethodAttribute(pLocalname,pPrefix,pUri,pValue);
+}
+
 }

@@ -42,6 +42,7 @@
 #include "../../soap/SoapDeSerializer.h"
 #include "../../soap/HeaderBlock.h"
 #include "../../common/AxisGenException.h"
+#include "../../soap/Attribute.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 
@@ -816,3 +817,22 @@ const AxisChar* Call::getNamespacePrefix(const AxisChar* pNamespace)
     return m_pIWSSZ->getNamespacePrefix(pNamespace);
 }
 
+void Call::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue)
+{
+    setSOAPMethodAttribute(pLocalname,pPrefix,NULL,pValue);
+}
+
+void Call::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, 
+                                  const AxisChar *pUri, const AxisChar *pValue)
+{
+    IAttribute* pAttribute;
+    if (NULL!=pUri)
+    {
+        pAttribute = new Attribute((std::list<Attribute*>)NULL, pLocalname, pPrefix, pUri, pValue);
+    }
+    else
+    {
+        pAttribute = new Attribute((std::list<Attribute*>)NULL, pLocalname, pPrefix, pValue);
+    }
+    m_pIWSSZ->setSOAPMethodAttribute(((Attribute*)pAttribute)->clone());
+}

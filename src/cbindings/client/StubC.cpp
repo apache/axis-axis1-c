@@ -25,7 +25,6 @@ public :
 	Call* getCallStubC() { return getCall(); }
 	void applyUserPreferencesStubC() { applyUserPreferences(); }
 	void setSOAPHeadersStubC() { setSOAPHeaders(); }
-	void setSOAPMethodAttributesStubC() { setSOAPMethodAttributes(); }
 };
 AXIS_CPP_NAMESPACE_END
 
@@ -138,38 +137,6 @@ AXISC_STORAGE_CLASS_INFO void axiscSetProxyStub(AXISCHANDLE stub, const char * p
 	s->setProxy(pcProxyHost,uiProxyPort);
 }
 
-AXISC_STORAGE_CLASS_INFO void axiscSetSOAPMethodAttribute(AXISCHANDLE stub, const AxiscChar * pLocalname, 
-	const AxiscChar * pPrefix, const AxiscChar * pUri, 
-	const AxiscChar * pValue) {
-	Stub *s = (Stub*)stub;
-	s->setSOAPMethodAttribute(pLocalname,pPrefix,pUri,pValue);
-}
-
-AXISC_STORAGE_CLASS_INFO AXISCHANDLE axiscGetFirstSOAPMethodAttribute(AXISCHANDLE stub) {
-	Stub *s = (Stub*)stub;
-	return (AXISCHANDLE)s->getFirstSOAPMethodAttribute();
-}
-
-AXISC_STORAGE_CLASS_INFO AXISCHANDLE axiscGetNextSOAPMethodAttribute(AXISCHANDLE stub) {
-	Stub *s = (Stub*)stub;
-	return (AXISCHANDLE)s->getNextSOAPMethodAttribute();
-}
-
-AXISC_STORAGE_CLASS_INFO AXISCHANDLE axiscGetCurrentSOAPMethodAttribute(AXISCHANDLE stub) {
-	Stub *s = (Stub*)stub;
-	return (AXISCHANDLE)s->getCurrentSOAPMethodAttribute();
-}
-
-AXISC_STORAGE_CLASS_INFO void axiscDeleteCurrentSOAPMethodAttribute(AXISCHANDLE stub) {
-	Stub *s = (Stub*)stub;
-	s->deleteCurrentSOAPMethodAttribute();
-}
-
-AXISC_STORAGE_CLASS_INFO void axiscDeleteSOAPMethodAttribute(AXISCHANDLE stub, AXISCHANDLE pAttribute) {
-	Stub *s = (Stub*)stub;
-	s->deleteSOAPMethodAttribute((IAttribute*)pAttribute);
-}
-
 AXISC_STORAGE_CLASS_INFO void axiscSetTransportTimeout(AXISCHANDLE stub, const long lSeconds) {
 	Stub *s = (Stub*)stub;
 	s->setTransportTimeout(lSeconds);
@@ -208,11 +175,6 @@ AXISC_STORAGE_CLASS_INFO void axiscApplyUserPreferences(AXISCHANDLE stub) {
 AXISC_STORAGE_CLASS_INFO void axiscSetSOAPHeaders(AXISCHANDLE stub) { 
 	StubC *s = (StubC*)stub;
 	s->setSOAPHeadersStubC(); 
-}
-
-AXISC_STORAGE_CLASS_INFO void axiscSetSOAPMethodAttributes(AXISCHANDLE stub) { 
-	StubC *s = (StubC*)stub;
-	s->setSOAPMethodAttributesStubC(); 
 }
 
 }

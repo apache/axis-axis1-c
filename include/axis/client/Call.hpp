@@ -252,6 +252,28 @@ public:
     int AXISCALL initialize(PROVIDERTYPE nStyle);
     int AXISCALL invoke();
 
+    /**
+     * Sets an Attribute to the SOAPMethod, using the given Attribute data.
+     * You must ensure the prefix has a valid namespace declared, otherwise an
+     * invalid SOAP message will be produced.
+     * It is safer to use setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar* pUri, const AxisChar *pValue)
+     * 
+     * @param pLocalname The local name of the Attribute.
+     * @param pPrefix The prefix of the Attribute.
+     * @param pValue The value of the Attribute.
+     */
+    void setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue);
+
+    /**
+     * Sets an Attribute to the SOAPMethod, using the given Attribute data.
+     *
+     * @param pLocalname The local name of the Attribute.
+     * @param pPrefix The prefix of the Attribute.
+     * @param pUri The namespace uri of the Attribute.
+     * @param pValue The value of the Attribute.
+     */
+    void setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar* pUri, const AxisChar *pValue);
+
     /* Method for adding complex parameters */
     void AXISCALL addCmplxParameter(void* pObject, void* pSZFunct,
         void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);

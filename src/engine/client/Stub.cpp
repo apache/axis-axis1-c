@@ -227,117 +227,11 @@ void Stub::setSOAPHeaders()
 void Stub::applyUserPreferences()
 {
     setSOAPHeaders();
-    setSOAPMethodAttributes();
 }
 
 void Stub::setProxy(const char* pcProxyHost, unsigned int uiProxyPort)
 {
     m_pCall->setProxy(pcProxyHost, uiProxyPort);
-}
-
-void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue)
-{
-	setSOAPMethodAttribute(pLocalname,pPrefix,NULL,pValue);
-}
-
-void Stub::setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, 
-                                  const AxisChar *pUri, const AxisChar *pValue)
-{
-    //Check if there is an attribute with the same local name is already set
-    IAttribute* pAttribute = this->getFirstSOAPMethodAttribute();
-    while( pAttribute )
-    {
-        if( strcmp(pAttribute->getLocalName(), pLocalname) == 0 )
-        {
-            //found an attibute alredy set with same name
-            if(strcmp(pAttribute->getPrefix(), pPrefix) == 0 ) 
-            {
-                this->deleteCurrentSOAPMethodAttribute();
-                break;
-            }
-        }
-        pAttribute = this->getNextSOAPMethodAttribute();
-    }
-
-	if (NULL!=pUri)
-		pAttribute = new Attribute((std::list<Attribute*>)NULL, pLocalname, pPrefix, pUri, pValue);
-	else
-		pAttribute = new Attribute((std::list<Attribute*>)NULL, pLocalname, pPrefix, pValue);
-	m_vSOAPMethodAttributes.push_back(pAttribute);
-    m_viCurrentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin();
-}
-
-IAttribute* Stub::getFirstSOAPMethodAttribute()
-{
-    m_viCurrentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin();
-    if (m_viCurrentSOAPMethodAttribute == m_vSOAPMethodAttributes.end())
-        return NULL;
-    else
-        return (*m_viCurrentSOAPMethodAttribute);
-}
-
-IAttribute* Stub::getNextSOAPMethodAttribute()
-{
-    //already at the end?
-    if (m_viCurrentSOAPMethodAttribute == m_vSOAPMethodAttributes.end())
-        return NULL;
-
-    m_viCurrentSOAPMethodAttribute++;
-    
-    if (m_viCurrentSOAPMethodAttribute == m_vSOAPMethodAttributes.end())
-        return NULL;
-    else
-        return (*m_viCurrentSOAPMethodAttribute);
-}
-
-IAttribute* Stub::getCurrentSOAPMethodAttribute()
-{
-    if (m_viCurrentSOAPMethodAttribute == m_vSOAPMethodAttributes.end())
-        return NULL;
-    else
-        return (*m_viCurrentSOAPMethodAttribute);
-}
-
-
-void Stub::setSOAPMethodAttributes()
-{
-    SoapSerializer *pSerializer = NULL;
-    if (m_pCall)
-	pSerializer = m_pCall->getSOAPSerializer();
-    if (pSerializer)
-    {
-       for (unsigned int i = 0; i < m_vSOAPMethodAttributes.size(); i++)
-	   {
-           pSerializer->setSOAPMethodAttribute(((Attribute*)m_vSOAPMethodAttributes[i])->clone());
-	   }
-    }	
-}
-
-void Stub::deleteCurrentSOAPMethodAttribute()
-{
-    if (m_viCurrentSOAPMethodAttribute != m_vSOAPMethodAttributes.end())
-    {
-        delete(*m_viCurrentSOAPMethodAttribute);
-        m_vSOAPMethodAttributes.erase(m_viCurrentSOAPMethodAttribute);
-        m_viCurrentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin();
-    }
-}
-
-void Stub::deleteSOAPMethodAttribute(IAttribute* pAttribute)
-{
-    vector <IAttribute*>::iterator currentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin();
-    bool bDone = false;
-    while( !bDone && currentSOAPMethodAttribute != m_vSOAPMethodAttributes.end())
-    {
-        if(pAttribute == *currentSOAPMethodAttribute)
-        {
-            delete (*currentSOAPMethodAttribute);
-            m_vSOAPMethodAttributes.erase(currentSOAPMethodAttribute);
-            m_viCurrentSOAPMethodAttribute = m_vSOAPMethodAttributes.begin();
-            bDone = true;
-        }
-        currentSOAPMethodAttribute++;
-    }
 }
 
 void Stub::setTransportTimeout(const long lSeconds)

@@ -479,7 +479,7 @@ public class ClientStubWriter
                 if ("string".equals(elementType))
                 {
                     writer.write(
-                        "\tsetSOAPMethodAttribute(\""
+                        "\tm_pCall->setSOAPMethodAttribute(\""
                             + param.getParamName()
                             + "\", \"\", Value"
                             + i
@@ -494,7 +494,7 @@ public class ClientStubWriter
                         writer.write(
                             "\t\tsprintf(buffer,\"%d\", Value" + i + ");\n");
                         writer.write(
-                            "\t\tsetSOAPMethodAttribute(\""
+                            "\t\tm_pCall->setSOAPMethodAttribute(\""
                                 + param.getParamName()
                                 + "\", \"\", buffer);\n");
                         writer.write("\t}\n");
