@@ -141,69 +141,56 @@ const char* BasicTypeSerializer::BasicTypeStr(XSDTYPE type)
 	}
 }
 
-string& BasicTypeSerializer::GetEntityReferenced(const string &str)
+/// Encode XML entities if any found in user data.
+string BasicTypeSerializer::GetEntityReferenced(const string &strVal)
 {
-	int pos;
-	//replace "&" with "&amp;" if any
-	m_AuxStr = str;
-	pos = 0;
-	while (true)
-	{
-		pos = m_AuxStr.find('&', pos);
-		if (pos < m_AuxStr.length())
-		{
-			m_AuxStr = m_AuxStr.replace(pos, 1, "&amp;");
+	if (strVal.empty())
+		return strVal;
+
+	// Find entity reference characters and returns the first any of chars find position
+    int nPos = strVal.find_first_of(XML_ENTITY_REFERENCE_CAHRS);	
+
+	// Check for position validity
+	if (std::string::npos == nPos)
+		return strVal;
+
+	std::string strReturnVal;
+
+	int nOldIdx = 0;	// Counter value
+	while(std::string::npos != nPos)
+	{	// Get pointered character
+		switch(strVal.at(nPos))
+		{	
+			case LESSER_THAN_CHAR  : // Process < character
+				strReturnVal.append(strVal.substr(nOldIdx, nPos - nOldIdx));
+				strReturnVal.append(ENCODED_LESSER_STR);
+				break;
+			case GREATOR_THAN_CHAR  : // Process > character
+				strReturnVal.append(strVal.substr(nOldIdx, nPos - nOldIdx));
+				strReturnVal.append(ENCODED_GREATOR_STR);
+				break;
+			case AMPERSAND_CHAR  : // Process & character
+				strReturnVal.append(strVal.substr(nOldIdx, nPos - nOldIdx));
+				strReturnVal.append(ENCODED_AMPERSAND_STR);
+				break;
+			case DOUBLE_QUOTE_CHAR : // Process " character
+				strReturnVal.append(strVal.substr(nOldIdx, nPos - nOldIdx));
+				strReturnVal.append(ENCODED_DBL_QUOTE_STR);
+				break;
+			case SINGLE_QUOTE_CHAR : // Process ' character
+				strReturnVal.append(strVal.substr(nOldIdx, nPos - nOldIdx));
+				strReturnVal.append(ENCODED_SGL_QUOTE_STR);
+				break;
 		}
-		else break;
-		pos++;
-	}
-	//replace "<" with "&lt;" if any
-	pos = 0;
-	while (true)
-	{
-		pos = m_AuxStr.find('<', pos);
-		if (pos < m_AuxStr.length())
-		{
-			m_AuxStr = m_AuxStr.replace(pos, 1, "&lt;");
-		}
-		else break;
-		pos++;
-	}
-	//replace ">" with "&gt;" if any
-	pos = 0;
-	while (true)
-	{
-		pos = m_AuxStr.find('>', pos);
-		if (pos < m_AuxStr.length())
-		{
-			m_AuxStr = m_AuxStr.replace(pos, 1, "&gt;");
-		}
-		else break;
-		pos++;
-	}
-	//replace "'" with "&apos;" if any
-	pos = 0;
-	while (true)
-	{
-		pos = m_AuxStr.find('\'', pos);
-		if (pos < m_AuxStr.length())
-		{
-			m_AuxStr = m_AuxStr.replace(pos, 1, "&apos;");
-		}
-		else break;
-		pos++;
-	}
-	//replace """ with "&quot;" if any
-	pos = 0;
-	while (true)
-	{
-		pos = m_AuxStr.find('"', pos);
-		if (pos < m_AuxStr.length())
-		{
-			m_AuxStr = m_AuxStr.replace(pos, 1, "&quot;");
-		}
-		else break;
-		pos++;
-	}
-	return m_AuxStr;
+		nOldIdx = ++nPos; // Get old position
+		// Find the next entity reference characters from previous found position,
+		nPos = strVal.find_first_of(XML_ENTITY_REFERENCE_CAHRS, nPos);		
+	}	
+
+	int nDataLen = strVal.length();		// Get the length of the field value
+	int nLen =  nDataLen - nOldIdx;		// Get remaining number of characters	
+	if (nLen > 0)
+		strReturnVal += strVal.substr(nOldIdx, nLen);// Apend the remaining data		
+
+	return strReturnVal;
 }
