@@ -21,7 +21,7 @@
 #include "SoapEnvVersions.h"
 #include "ISoapHeader.h"
 
-/*
+/**
  * @class SoapHeader
  * @brief    The Header element information item according to SOAP 
  *           1.2 specification
@@ -63,9 +63,10 @@ public:
     IHeaderBlock* getHeaderBlock(const AxisChar* pName, 
         const AxisChar* pNamespace);
     int setPrefix(const char* pcPrefix);
-    /*
+    /**
      * Removes the next HeaderBlock from the list and returns it. 
-     * But will not delete it. @return The removed HeaderBlock of the list.
+     * But will not delete it.
+     * @return The removed HeaderBlock of the list.
      */
     IHeaderBlock* getHeaderBlock();
     int addNamespaceDecl(Attribute* pAttribute);

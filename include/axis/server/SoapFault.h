@@ -47,7 +47,7 @@ typedef struct
  */
 static SoapFaultStruct s_arrSoapFaultStruct[FAULT_LAST];
 
-/*
+/**
  *  @class SoapFault
  *  @brief interface for the SoapFault class.
  *
