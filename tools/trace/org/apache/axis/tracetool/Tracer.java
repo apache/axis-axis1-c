@@ -65,7 +65,7 @@ class Tracer extends BufferedWriter {
 			for (int i = 1; i < depth; i++)
 				prefix += "../";
 
-		write(
+		writeTrace(
 			"#ifdef ENABLE_AXISTRACE\n"
 				+ "/* TRACE ADDED BY THE AXISCPP TRACE TOOL */\n"
 				+ "#include \""
@@ -106,7 +106,7 @@ class Tracer extends BufferedWriter {
 			line += getTypeParms(parms[i]);
 		line += ");\t" + SIGNATURE + "\n";
 		line += "\t#endif\n";
-		write(line);
+		writeTrace(line);
 		flush();
 	}
 
@@ -138,7 +138,7 @@ class Tracer extends BufferedWriter {
 		// now print out the return line itself
 		line += "\t\treturn;\n";
 		line += "\t}\n";
-		write(line);
+		writeTrace(line);
 		flush();
 	}
 
@@ -188,7 +188,7 @@ class Tracer extends BufferedWriter {
 		line += "\t\t\treturn " + value + ";\n";
 		line += "\t\t#endif\n";
 		line += "\t}\n";
-		write(line);
+		writeTrace(line);
 		flush();
 	}
 
@@ -209,12 +209,25 @@ class Tracer extends BufferedWriter {
                         + getTypeParms(value);
 		line += ");\t" + SIGNATURE + "\n";
 		line += "\t#endif\n";
-		write(line);
+		writeTrace(line);
 		flush();
 	}
 
-	public void write(String s) throws IOException {
-		super.write(s);
+      /*
+       * This method is careful to get the line separators because other
+       * other methods have been careless assuming that the line separator
+       * is always only \n, whereas it maybe \r\n.
+       */
+	public void writeTrace(String s) throws IOException {
+            if (s.startsWith("\n") || s.startsWith("\r"))
+                super.newLine();
+            StringTokenizer st = new StringTokenizer(s,"\n\r");
+            while (st.hasMoreTokens()) {
+                super.write(st.nextToken());
+                if (st.hasMoreTokens()) super.newLine();
+            }
+            if (s.endsWith("\n") || s.endsWith("\r"))
+                super.newLine();
 		if (AddEntryAndExitTrace.verbose)
 			System.out.print(s);
 	}
