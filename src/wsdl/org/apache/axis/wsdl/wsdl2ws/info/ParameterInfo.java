@@ -1,9 +1,8 @@
-/* -*- C++ -*- */
 /*
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,7 +24,7 @@
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "SOAP" and "Apache Software Foundation" must
+ * 4. The names "Axis" and "Apache Software Foundation" must
  *    not be used to endorse or promote products derived from this
  *    software without prior written permission. For written
  *    permission, please contact apache@apache.org.
@@ -52,35 +51,48 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- *
- *
- *
- *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- *
  */
+/**
+ * this class represents Parameter(message in the wsdl) 
+ * @author Srinath Perera(hemapani@opensource.lk)
+ */
+package org.apache.axis.wsdl.wsdl2ws.info;
 
-// IWrapperSoapDeSerializer.h: interface for the IWrapperSoapDeSerializer class.
-//
-//////////////////////////////////////////////////////////////////////
+import javax.xml.namespace.QName;
 
-#if !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)
-#define AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_
+public class ParameterInfo {
+    private Type type;
+    private String attribName;
 
-#include "ISoapDeSerializer.h"
-#include "GDefine.h"
-#include <string>
-using namespace std;
-class IParam;
+    public String getLangName() {
+        return type.getLanguageSpecificName();
+    }
 
-class IWrapperSoapDeSerializer : public virtual ISoapDeSerializer
-{
-public:
-	virtual const AxisChar* GetMethodName()=0;
-	virtual IParam* GetParam()=0;
-	virtual int Deserialize(IParam* pIParam, int bHref)=0;
-	virtual ~IWrapperSoapDeSerializer() {};
+    public void setLangName(String langName) {
+        this.type.setLanguageSpecificName(langName);
+    }
 
-};
+    public QName getSchemaName() {
+        return this.type.getName();
+    }
 
-#endif // !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)
+    public void setSchemaName(QName schemaName) {
+        this.type.setName(schemaName);
+    }
+
+    public String getParamName() {
+        return attribName;
+    }
+
+    public void setParamName(String paramName) {
+        this.attribName = paramName;
+    }
+
+    public ParameterInfo(String langName, QName schemaName, String attribName,String language) {
+        this.type = new Type(schemaName,langName,false,language);
+        this.attribName = attribName;
+    }
+    public Type getType(){
+    	return type;
+    }
+}

@@ -1,9 +1,8 @@
-/* -*- C++ -*- */
 /*
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2002 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,7 +24,7 @@
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
- * 4. The names "SOAP" and "Apache Software Foundation" must
+ * 4. The names "Axis" and "Apache Software Foundation" must
  *    not be used to endorse or promote products derived from this
  *    software without prior written permission. For written
  *    permission, please contact apache@apache.org.
@@ -52,35 +51,55 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- *
- *
- *
- *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- *
+ */
+ 
+/**
+ * @author Srinath Perera(hemapani@openource.lk)
+ * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
  */
 
-// IWrapperSoapDeSerializer.h: interface for the IWrapperSoapDeSerializer class.
-//
-//////////////////////////////////////////////////////////////////////
+package org.apache.axis.wsdl.wsdl2ws.c;
 
-#if !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)
-#define AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
-#include "ISoapDeSerializer.h"
-#include "GDefine.h"
-#include <string>
-using namespace std;
-class IParam;
+import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 
-class IWrapperSoapDeSerializer : public virtual ISoapDeSerializer
-{
-public:
-	virtual const AxisChar* GetMethodName()=0;
-	virtual IParam* GetParam()=0;
-	virtual int Deserialize(IParam* pIParam, int bHref)=0;
-	virtual ~IWrapperSoapDeSerializer() {};
+public abstract class HeaderFileWriter extends BasicFileWriter {
+	public HeaderFileWriter(String classname)throws WrapperFault{
+		super(classname);
+	}
+	public void writeSource()throws WrapperFault{
+	   try{
+	  this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+	   writeClassComment();
+	   // if this headerfile not defined define it 
+	   this.writer.write("#if !defined(__"+classname.toUpperCase()+"_H__INCLUDED_)\n");
+	   this.writer.write("#define __"+classname.toUpperCase()+"_H__INCLUDED_\n\n");
+	   //includes
+	   writePreprocssorStatements();
+		//class
+	   this.writer.write("class "+classname+getExtendsPart()+"\n{\n");
+	   writeAttributes();
+	   writeConstructors();
+	   writeDistructors();
+	   writeMethods();
+	   this.writer.write("};\n\n");
+	   this.writer.write("#endif // !defined(__"+classname.toUpperCase()+"_H__INCLUDED_)\n");
+	   //cleanup
+	   writer.flush();
+	   writer.close();
+	   System.out.println(getFilePath().getAbsolutePath() + " created.....");
 
-};
+	   } catch (IOException e) {
+			e.printStackTrace();
+			throw new WrapperFault(e);
+		}
 
-#endif // !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)
+	}
+	protected String getExtendsPart(){return " ";}
+	protected abstract File getFilePath()throws WrapperFault;
+
+}
