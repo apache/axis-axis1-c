@@ -73,6 +73,7 @@ public class TypeMap {
 		basicTypeClass2QNamemap.put("xsd__dateTime", new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"));
 		basicTypeClass2QNamemap.put("xsd__time", new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"));
 		basicTypeClass2QNamemap.put("xsd__QName", new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"));
+		basicTypeClass2QNamemap.put("xsd__NCName", new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"));
 		basicTypeClass2QNamemap.put("xsd__date", new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"));
 		basicTypeClass2QNamemap.put("xsd__base64Binary", new QName(WrapperConstants.SCHEMA_NAMESPACE, "base64Binary"));
 		basicTypeClass2QNamemap.put("xsd__hexBinary", new QName(WrapperConstants.SCHEMA_NAMESPACE, "hexBinary"));
@@ -89,6 +90,7 @@ public class TypeMap {
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "string"), "xsd__string");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "decimal"), "xsd__decimal");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"), "xsd__QName");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NCName"), "xsd__NCName");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "dateTime"), "xsd__dateTime");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "date"), "xsd__date");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "time"), "xsd__time");
@@ -116,6 +118,7 @@ public class TypeMap {
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "string"), "xsd__string");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "decimal"), "xsd__decimal");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "QName"), "xsd__QName");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NCName"), "xsd__NCName");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "dateTime"), "xsd__dateTime");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "date"), "xsd__date");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "time"), "xsd__time");
