@@ -646,6 +646,12 @@ class STORAGE_CLASS_INFO Stub
     */
     const char* getPassword();
 
+  /**
+    * Call object of the Stub. This is the point of access to the internals
+    * of the Axis engine.
+    */
+    Call *getCall() { return m_pCall; }
+
   protected:
   /**
     * Apply user set preferences to each call made on the Stub object.
@@ -667,12 +673,6 @@ class STORAGE_CLASS_INFO Stub
     * Called by applyUserPreferences for each and every method invocation. 
     */
     void setSOAPMethodAttributes();
-
-  /**
-    * Call object of the Stub. This is the point of access to the internals
-    * of the Axis engine.
-    */
-    Call *getCall() { return m_pCall; }
 
   /**
     * Set Authorization header for basic authentication
