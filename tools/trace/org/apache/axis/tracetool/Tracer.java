@@ -183,6 +183,26 @@ class Tracer extends BufferedWriter {
 		flush();
 	}
 
+	void traceCatch(Parameter value) throws Exception {
+		if (!signature.traceable())
+			return;
+
+		String line =
+			"\n"
+				+ "\t#ifdef ENABLE_AXISTRACE\n"
+				+ "\t\tif (g_pAT && g_pAT->isTraceOn())\n"
+				+ "\t\t\tg_pAT->traceCatch("
+				+ getClassName()
+				+ ", \""
+				+ signature.getMethodName()
+				+ "\""
+                        + getTypeParms(value);
+		line += ");\t" + SIGNATURE + "\n";
+		line += "\t#endif\n";
+		write(line);
+		flush();
+	}
+
 	public void write(String s) throws IOException {
 		super.write(s);
 		if (AddEntryAndExitTrace.verbose)
@@ -193,6 +213,9 @@ class Tracer extends BufferedWriter {
 	// TODO cope with pointers to primitives
 	// TODO cope with references
 	private String getTypeParms(Parameter p) {
+            // copes with catch (...)
+            if ("...".equals(p.getType())) return " ";
+
 		String parms = ",\n\t\t\t\t\tAXIS_CPP_NAMESPACE_PREFIX TRACETYPE_";
 		String name = p.getName();
 		if (null == name)

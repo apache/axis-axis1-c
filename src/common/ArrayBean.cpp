@@ -110,10 +110,10 @@ ArrayBean::~ArrayBean()
                 AxisChar** a = (AxisChar**)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    free(*a);
+                    delete [] *a;
                     a++;
                 }
-                free(m_value.sta);
+                delete [] m_value.sta;
             }
                 break;
             case XSD_HEXBINARY:
@@ -121,10 +121,10 @@ ArrayBean::~ArrayBean()
                 xsd__hexBinary* a = (xsd__hexBinary*)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    free(a->__ptr);
+                    delete [] a->__ptr;
                     a++;
                 }
-                free(m_value.sta);
+                delete [] m_value.sta;
             }
                 break;
             case XSD_BASE64BINARY:
@@ -132,10 +132,10 @@ ArrayBean::~ArrayBean()
                 xsd__base64Binary* a = (xsd__base64Binary*)m_value.sta;
                 for (int ix=0;ix<m_nSize;ix++)
                 {
-                    free(a->__ptr);
+                    delete [] a->__ptr;
                     a++;
                 }
-                free(m_value.sta);
+                delete [] m_value.sta;
             }
                 break;
             case XSD_DATETIME:

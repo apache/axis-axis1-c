@@ -329,9 +329,9 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			else if (attribs[i].isAnyType()){
 				writer.write("\tif ("+attribs[i].getParamNameAsMember()+") \n\t{ \n");
 				writer.write("\t\tfor (int i=0; i<"+attribs[i].getParamNameAsMember()+"->_size; i++)\n\t\t{\n");
-				writer.write("\t\t\tif ("+attribs[i].getParamNameAsMember()+"->_array[i]) free("+attribs[i].getParamNameAsMember()+"->_array[i]);\n");
+				writer.write("\t\t\tif ("+attribs[i].getParamNameAsMember()+"->_array[i]) delete "+attribs[i].getParamNameAsMember()+"->_array[i];\n");
 				writer.write("\t\t}\n");
-				writer.write("\t\tfree("+attribs[i].getParamNameAsMember()+");\n");
+				writer.write("\t\tdelete "+attribs[i].getParamNameAsMember()+";\n");
 				writer.write("\t}\n");
 				
 			}

@@ -791,13 +791,15 @@ return Array;
                 }\
                 /* if we come here that means the array allocated is */\
                 /* not enough. So double it */\
-                Array.m_Array = realloc(Array.m_Array, \
-                    sizeof(cpp_type)*(Array.m_Size*2));\
+                void *tmp=Array.m_Array;\
+                Array.m_Array = new cpp_type[Array.m_Size*2];\
                 if (!Array.m_Array) \
                 {\
                     Array.m_Size = 0;\
                     return Array;\
                 }\
+                memcpy(Array.m_Array,tmp,Array.m_Size*sizeof(cpp_type));\
+                delete [] tmp;\
                 Array.m_Size *= 2;\
                 /*Array.m_RealSize = Array.m_Size;*/\
             }\
@@ -995,13 +997,15 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
                 /* if we come here that means the array allocated is not enough
                  * So double it
                  */
-                Array.m_Array = realloc(Array.m_Array, 
-                    sizeof(int)*(Array.m_Size*2));
+                void *tmp=Array.m_Array;
+                Array.m_Array = new int[Array.m_Size*2];
                 if (!Array.m_Array) 
                 {
                     Array.m_Size = 0;
                     return Array;
                 }
+                memcpy(Array.m_Array,tmp,Array.m_Size*sizeof(int));
+                delete [] tmp;
                 Array.m_Size *= 2;
                 /* Array.m_RealSize = Array.m_Size;*/
             }
@@ -1115,13 +1119,15 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
                 }
                 /* if we come here that means the array allocated is */
                 /* not enough. So double it */
-                Array.m_Array = realloc(Array.m_Array, 
-                    sizeof(long)*(Array.m_Size*2));
+                void *tmp=Array.m_Array;
+                Array.m_Array = new long[Array.m_Size*2];
                 if (!Array.m_Array) 
                 {
                     Array.m_Size = 0;
                     return Array;
                 }
+                memcpy(Array.m_Array,tmp,Array.m_Size*sizeof(long));
+                delete [] tmp;
                 Array.m_Size *= 2;
                 /*Array.m_RealSize = Array.m_Size;*/
             }

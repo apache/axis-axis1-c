@@ -44,6 +44,7 @@ public class Exclusions {
 			"Channel.hpp",
 			"Channel.h",
 			"Channel.cpp",
+			"SoapSerializer.cpp",
 		// Axis.cpp contains a copyright sign (circle with a "C" in it) which 
 		// makes readline throw a MalformedInputException on linux possibly due to 
 		// locale/charset problems.

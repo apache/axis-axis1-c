@@ -45,8 +45,8 @@ MessageData::~MessageData ()
 
     while (itCurrentItem != m_Properties.end ())
     {
-        free ((*itCurrentItem).first);
-        free ((*itCurrentItem).second);
+        delete [] (*itCurrentItem).first;
+        delete [] (*itCurrentItem).second;
 
         itCurrentItem++;
     }
@@ -138,9 +138,9 @@ void MessageData::getSoapDeSerializer (IHandlerSoapDeSerializer**
 
 int MessageData::setProperty (AxisChar* pachName, const AxisChar* pachValue)
 {
-    AxisChar* pachTmpName = (AxisChar*) malloc (strlen (pachName) + 1);
+    AxisChar* pachTmpName = new AxisChar[strlen (pachName) + 1];
     strcpy (pachTmpName, pachName);
-    AxisChar* pachTmpValue = (AxisChar*) malloc (strlen (pachValue) + 1);
+    AxisChar* pachTmpValue = new AxisChar[strlen (pachValue) + 1];
     strcpy (pachTmpValue, pachValue);
 
     m_Properties[pachTmpName] = pachTmpValue;
@@ -150,9 +150,9 @@ int MessageData::setProperty (AxisChar* pachName, const AxisChar* pachValue)
 
 int MessageData::setProperty (AxisChar* pachName, const void* pachValue, int len)
 {
-     AxisChar* pachTmpName = (AxisChar*) malloc (strlen (pachName) + 1);
+     AxisChar* pachTmpName = new AxisChar[strlen (pachName) + 1];
      strcpy (pachTmpName, pachName);
-     AxisChar* pachTmpValue = (AxisChar*) malloc (len);
+     AxisChar* pachTmpValue = new AxisChar[len];
      memcpy (pachTmpValue, pachValue, len);
  
      m_Properties[pachTmpName] = pachTmpValue;

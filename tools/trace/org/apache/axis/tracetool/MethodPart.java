@@ -51,14 +51,28 @@ class MethodPart extends FilePart {
 
         // Add in trace exit at all the return statements in the method.
 		ArrayList al = new ArrayList();
-		int idx;
-		while (-1 != (idx = Utils.indexOf(b, "return"))) {
-			String frag = b.substring(0, idx);
-			String rest = b.substring(idx + "return".length());
-			String retVal = rest.substring(0, Utils.indexOf(rest, ';'));
-			BodyPart bp = new BodyPart(frag, retVal);
-			al.add(bp);
-			b = b.substring(idx + "return".length() + retVal.length() + 1);
+		int idxR = Utils.indexOf(b, "return");
+		int idxC = Utils.indexOf(b, "catch");
+		while (-1 != idxR || -1 != idxC) {
+                  if (-1 == idxC || (-1 != idxR && idxR < idxC)) {
+				String frag = b.substring(0, idxR);
+				String rest = b.substring(idxR + "return".length());
+				String retVal = rest.substring(0, Utils.indexOf(rest, ';'));
+				BodyPart bp = new BodyPart(frag, retVal);
+				al.add(bp);
+				b = b.substring(idxR + "return".length() + retVal.length() + 1);
+                  } else {
+				String frag = b.substring(0, idxC);
+				String rest = b.substring(idxC);
+                        int brace = Utils.indexOf(rest, "{");
+                        Signature signature = new Signature(rest.substring(0,brace));
+                        frag = frag + rest.substring(0,brace+1);
+				BodyPart bp = new BodyPart(frag, signature.getParameters()[0]);
+				al.add(bp);
+				b = rest.substring(brace+1);
+                  }
+		      idxR = Utils.indexOf(b, "return");
+		      idxC = Utils.indexOf(b, "catch");
 		}
 
         // Add in trace exit before the last } if there are no returns in 
@@ -82,12 +96,12 @@ class MethodPart extends FilePart {
 			&& null == signature.getReturnType().getType()) {
 			int last = b.lastIndexOf('}');
 			String b2 = b.substring(0, last);
-			al.add(new BodyPart(b2, null));
+			al.add(new BodyPart(b2));
 			b = b.substring(last);
 		}
 
         // The final body part is the last }
-		al.add(new BodyPart(b, null));
+		al.add(new BodyPart(b));
 
 		BodyPart[] bps = new BodyPart[al.size()];
 		System.arraycopy(al.toArray(), 0, bps, 0, al.size());

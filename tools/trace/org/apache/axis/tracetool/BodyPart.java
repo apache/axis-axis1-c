@@ -20,17 +20,48 @@ package org.apache.axis.tracetool;
  * statement, this body part also contains the return value.
  */
 public class BodyPart {
-	String codeFragment;
-	String returnValue = null;
+      public final static int TRAILING = 0;
+      public final static int RETURN = 1;
+      public final static int CATCH = 2;
+
+	private String codeFragment;
+	private String returnValue = null;
+      private Parameter caughtValue = null;
+      private int type;
+
+	BodyPart(String cf) {
+		codeFragment = cf;
+            type = TRAILING;
+	}
 
 	BodyPart(String cf, String rv) {
 		codeFragment = cf;
-		if (null != rv && !Utils.isSpace(rv))
+		if (null != rv && !Utils.isSpace(rv)) {
+                  type = RETURN;
 			returnValue = rv;
+            } else type = TRAILING;
+	}
+
+	BodyPart(String cf, Parameter cv) {
+		codeFragment = cf;
+		caughtValue = cv;
+            type = CATCH;
 	}
 
 	String getCodeFragment() {
 		return codeFragment;
+	}
+
+	boolean isTrailing() {
+		return TRAILING==type;
+	}
+
+	boolean isReturn() {
+		return RETURN==type;
+	}
+
+	boolean isCatch() {
+		return CATCH==type;
 	}
 
 	String getReturnValue() {
@@ -38,5 +69,9 @@ public class BodyPart {
 			return returnValue.trim();
 		else
 			return null;
+	}
+
+	Parameter getCaughtValue() {
+		return caughtValue;
 	}
 }

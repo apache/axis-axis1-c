@@ -139,8 +139,10 @@ public class AddEntryAndExitTrace {
 				BodyPart[] bps = mp.getBodyParts();
 				for (int i = 0; i < bps.length; i++) {
 					outputFile.write(bps[i].getCodeFragment());
-					if (bps[i].getReturnValue() != null)
+					if (bps[i].isReturn())
 						outputFile.traceExit(bps[i].getReturnValue());
+					else if (bps[i].isCatch())
+						outputFile.traceCatch(bps[i].getCaughtValue());
 					else if (i < bps.length - 1)
 						outputFile.traceExit();
 				}

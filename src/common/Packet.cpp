@@ -46,12 +46,14 @@ extern "C"
             case APTHTTP:
                 count = stream->so.http->op_headercount;
                 temp = stream->so.http->op_headers;
-                if (stream->so.http->op_headers)
-                    stream->so.http->op_headers = (Ax_header*) realloc(temp,
-                        (sizeof(Ax_header) * (count + 1)));
+                if (stream->so.http->op_headers) 
+                {
+                    stream->so.http->op_headers = new Ax_header[count + 1];
+                    memcpy(stream->so.http->op_headers,temp,sizeof(Ax_header)*(count+1));
+                    delete [] temp;
+                }
                 else
-                    stream->so.http->op_headers = (Ax_header *)
-                        malloc ((sizeof (Ax_header) * (count + 1)));
+                    stream->so.http->op_headers = new Ax_header[count + 1];
                 stream->so.http->op_headers[count].headername = pchkey;
                 stream->so.http->op_headers[count].headervalue = pchvalue;
                 stream->so.http->op_headercount = count + 1;
@@ -74,13 +76,13 @@ extern "C"
                 if (stream->so.http->ip_headercount > 0)
                 {
                     stream->so.http->ip_headercount = 0;
-                    free (stream->so.http->ip_headers);
+                    delete [] stream->so.http->ip_headers;
                     stream->so.http->ip_headers = NULL;
                 }
                 if (stream->so.http->op_headercount > 0)
                 {
                     stream->so.http->op_headercount = 0;
-                    free (stream->so.http->op_headers);
+                    delete [] stream->so.http->op_headers;
                     stream->so.http->op_headers = NULL;
                 }
                 break;

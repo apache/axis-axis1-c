@@ -78,11 +78,12 @@ int AxisTrace::openFileByClient ()
 int AxisTrace::setFilePerm(const char* sFileName)
 {
 /*    int length = strlen (sFileName) + 12;
-    char* setPerm = (char *) malloc (length);
+    char* setPerm = new char[length];
     if (setPerm)
     {
         strcpy (setPerm, "chmod 766 ");
         strcat (setPerm, sFileName);
+        delete [] setPerm;
     }
     else
         return AXIS_FAIL;
@@ -353,7 +354,7 @@ void AxisTrace::traceCatch(const char *className, const char *methodName,
 
 		string line;
 		for (int is=0; is<m_stack.size(); is++) line += " ";
-		line += "!";
+		line += "! ";
 		if (NULL!=className) {
 			line += className;
 			line += "::";

@@ -53,14 +53,14 @@ Param::~Param ()
         case XSD_NOTATION:
             if (AxisEngine::m_bServer)
             {
-                free ((void*) m_Value.pStrValue);
+                delete [] const_cast<char*>(m_Value.pStrValue);
             }
             break;
         case XSD_BASE64BINARY:
         case XSD_HEXBINARY:
             if (AxisEngine::m_bServer)
             {
-                free ((void*) (m_Value.hbValue.__ptr));
+                delete [] m_Value.hbValue.__ptr;
             }
             break;
         case XSD_ANY:
@@ -68,9 +68,9 @@ Param::~Param ()
             for (i=0; i<pAny->_size; i++)
             {
                 pStr = pAny->_array[i];
-                if (pStr) free(pStr);
+                if (pStr) delete [] pStr;
             }
-            free(pAny);
+            delete [] pAny;
         default:;
     }
 }

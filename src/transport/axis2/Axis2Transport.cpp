@@ -59,7 +59,7 @@ Axis2Transport::~Axis2Transport ()
 {
     if (m_pcEndpointUri)
     {
-	free (m_pcEndpointUri);
+	delete [] m_pcEndpointUri;
     }
 
     delete m_pChannel;

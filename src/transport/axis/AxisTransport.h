@@ -58,7 +58,7 @@ public:
 	void setAttachment(const char* pcAttachmentId, const char* pcAttachment){};
 	const char* getAttachment(const char* pcAttachmentId){return "value";};
 	void setEndpointUri(const char* pcEndpointUri)
-	{m_pcEndpointUri = strdup(pcEndpointUri);};
+	{m_pcEndpointUri = new char[strlen(pcEndpointUri)+1]; strcpy(m_pcEndpointUri,pcEndpointUri);};
 	void setSessionId(const char* pcSessionId){};
 	const char* getSessionId(){return "some session id";};
 	const char* getServiceName();
