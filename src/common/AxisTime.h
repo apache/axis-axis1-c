@@ -25,7 +25,6 @@
 #define __AXISTIME_H_OF_AXIS_INCLUDED_
 
 #include <axis/server/TypeMapping.hpp>
-#include <axis/server/IParam.hpp>
 #include "Param.h"
 
 using namespace std;
