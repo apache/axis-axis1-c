@@ -1,2 +1,3 @@
-Exception : HTTPTransportException:Unknown Transport Exception (GSKit Error 408 - GSK_ERROR_BAD_KEYFILE_PASSWORD)
----------------------- TEST COMPLETE -----------------------------
+(GSKit Error 408 - GSK_ERROR_BAD_KEYFILE_PASSWORD)
+(GSKit Error 5 - GSK_INVALID_STATE)
+(GSKit Error 1 - GSK_INVALID_HANDLE-Invalid handle passed to function)
