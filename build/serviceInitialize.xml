@@ -83,7 +83,7 @@
 			<property name="serverenv.env1.value" value="${basedir}/../../../Axis"/>
 			<property name="serverenv.env2" value="LD_LIBRARY_PATH"/>
 			<property name="serverenv.env2.value"
-				value="${basedir}/../../../Axis/lib;${basedir}/../../../Axis/webservices;${env.LD_LIBRARY_PATH}"/>
+				value="${basedir}/../../../Axis/lib:${basedir}/../../../Axis/webservices:${env.LD_LIBRARY_PATH}"/>
 			<!-- The path to axiscpp.conf -->
 			<property name="axiscppconffile" value="${basedir}/../../../Axis/etc/axiscpp.conf" />
 			<property name="serverwsddpath" value="${basedir}/../../../Axis/etc/server.wsdd"/>
