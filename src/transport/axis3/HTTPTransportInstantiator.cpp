@@ -83,9 +83,10 @@ extern "C"
 
 		strcpy( szWhatAmI, "LibraryName: HTTPTransport\n");
 
+#ifdef WIN32
 		sprintf( szInfo, "Built: %s\n", __TIMESTAMP__);
 		strcat( szWhatAmI, szInfo);
-
+#endif
 		return pszWhatAmI;
 	}
 }

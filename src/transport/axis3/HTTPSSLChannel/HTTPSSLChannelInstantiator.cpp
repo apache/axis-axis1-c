@@ -93,10 +93,10 @@ extern "C"
 		memset( szWhatAmI, 0, sizeof( szWhatAmI));
 
 		strcpy( szWhatAmI, "LibraryName: HTTPSSLChannel (OpenSSL)\n");
-
+#ifdef WIN32
 		sprintf( szInfo, "Built: %s\n", __TIMESTAMP__);
 		strcat( szWhatAmI, szInfo);
-
+#endif
 #ifdef IPV6
 		sprintf( szInfo, "TCPIP: Built with IPV6\n");
 #else
