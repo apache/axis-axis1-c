@@ -114,9 +114,6 @@ int WSDDDeployment::loadWSDD(const AxisChar* sWSDD)
         //return AXIS_FAIL;
         throw AxisWsddException(SERVER_WSDD_FILE_NOT_FOUND);
     }
-#ifdef _DEBUG
-    printf("wsdd loading successful\n");
-#endif
     delete doc;
     return AXIS_SUCCESS;
 }
