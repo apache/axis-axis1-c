@@ -68,7 +68,7 @@
 #define AFX_BASICTYPESERIALIZER_H__7ECDFED3_F3D5_48A1_A7EF_1E30B93BDB2C__INCLUDED_
 
 #include "TypeMapping.h"
-
+#include "AxisTime.h"
 #include <string>
 using namespace std;
 
@@ -96,7 +96,7 @@ public:
     const AxisChar* serialize(const AxisChar* sName, long lValue, XSDTYPE type);
     const AxisChar* serialize(const AxisChar* sName, unsigned long ulValue, XSDTYPE type);
     const AxisChar* serialize(const AxisChar* sName, tm datetime, XSDTYPE type);
-	const AxisChar* BasicTypeStr(XSDTYPE type);
+	static const AxisChar* BasicTypeStr(XSDTYPE type);
 
 	BasicTypeSerializer();
 	virtual ~BasicTypeSerializer();
@@ -117,6 +117,7 @@ private:
 	AxisString m_strReturnVal;
 	AxisChar m_Buf[BTS_BUFFSIZE]; //used for numeric to string conversions with sprintf
 	XSDTYPE m_Type; //used to temporarily set the type of item being serialized.
+	AxisTime m_AxisTime;
 };
 
 #endif // !defined(AFX_BASICTYPESERIALIZER_H__7ECDFED3_F3D5_48A1_A7EF_1E30B93BDB2C__INCLUDED_)

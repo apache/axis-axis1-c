@@ -161,7 +161,6 @@ public: //Basic Type Serializing methods
 private:
 	BasicTypeSerializer m_BTSZ;
 	const Ax_soapstream* m_pOutputStream;
-    AxisTime m_uAxisTime;
 };
 
 #endif // !defined(AFX_SOAPSERIALIZER_H__C37229AD_BD54_430D_9619_E4574CF95334__INCLUDED_)
