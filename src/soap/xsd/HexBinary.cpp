@@ -2,6 +2,27 @@
 
 AXIS_CPP_NAMESPACE_START
 
+HexBinary::HexBinary()
+:m_Buf(NULL), m_hexBinary(NULL)
+{
+}
+
+HexBinary::~HexBinary()
+{
+    if (m_Buf)
+    {
+        delete [] m_Buf;
+        m_Buf = NULL;
+    }
+
+    if (m_hexBinary)
+    {
+        delete [] m_hexBinary;
+        m_hexBinary = NULL;
+    }
+}
+
+
     AxisChar* HexBinary::serialize(const void* value) throw (AxisSoapException)
     {
     	return serialize((xsd__hexBinary*) value);
@@ -18,6 +39,12 @@ AXIS_CPP_NAMESPACE_START
 	    Hex_Encode (serializedValue, value->__ptr, value->__size);
 	    serializedValue[value->__size * 2] = 0;
 	    
+        if (m_Buf) // Samisa : memory management BP
+        {
+            delete [] m_Buf;
+            m_Buf = NULL;
+        }
+
 	    m_Buf = new char[strlen (serializedValue) + 1];
 	    strcpy (m_Buf, serializedValue);
 	    return m_Buf;
@@ -25,6 +52,12 @@ AXIS_CPP_NAMESPACE_START
 	
     xsd__hexBinary* HexBinary::deserializeHexBinary(const AxisChar* valueAsChar) throw (AxisSoapException)
     {
+        if (m_hexBinary) // Samisa : memory management BP
+        {
+            delete [] m_hexBinary;
+            m_hexBinary = NULL;
+        }
+
     	m_hexBinary = new xsd__hexBinary();    	
 	    m_hexBinary->__size = strlen (valueAsChar) / 2;
 	    m_hexBinary->__ptr = new unsigned char[m_hexBinary->__size + 1];

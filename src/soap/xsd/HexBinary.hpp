@@ -32,6 +32,15 @@ using namespace std;
 
 class HexBinary : public IAnySimpleType {
 public:
+   /**
+    * Constructor.
+    */
+    HexBinary();
+
+   /**
+    * Destructor.
+    */
+    virtual ~HexBinary();
 
 	/**
 	 * Serialize value to it's on-the-wire string form.
