@@ -54,8 +54,15 @@
  */
 
 /*
- * Revision 1.13  2004/06/13 susantha
+ * Revision 1.7  2004/06/13 susantha
  * Added support for writing C web services and handlers
+ */
+
+/*
+ * Revision 1.8  2005/01/06 roshan
+ * Added the method:
+ *  IHeaderBlock* createSOAPHeaderBlock(AxisChar * pachLocalName,
+ *   AxisChar * pachUri, AxisChar * pachPrefix);
  */
 
 #if !defined(_STUB_H____OF_AXIS_INCLUDED_)
@@ -88,6 +95,7 @@ AXIS_CPP_NAMESPACE_START
 class STORAGE_CLASS_INFO Stub
 {
   public:
+	  
   /**
     * Constructor.
     * 
@@ -394,8 +402,71 @@ class STORAGE_CLASS_INFO Stub
     * </PRE>
     * the following code segment coule be used
     * <PRE>
-    *  IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader", "th",
+    *  IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader",
     *                                   "http://ws.apache.org/axisCppTest/");
+    *  //Note: The prefix will be added automaticaly.
+    *  //create parent node
+    *  BasicNode *parentNode = phb->createChild(ELEMENT_NODE);
+    *  parentNode->setLocalName("Credentials");
+    *  //create child node
+    *  BasicNode *childNode = phb->createChild(ELEMENT_NODE);
+    *  childNode->setLocalName("username");
+    *  //create char node for value
+    *  BasicNode *valueNode = phb->createChild(CHARACTER_NODE);
+    *  valueNode->setValue("Test User");
+    *  //buld node tree
+    *  childNode->addChild(valueNode);
+    *  parentNode->addChild(childNode);
+    *
+    *  //add another node set
+    *  childNode = phb->createChild(ELEMENT_NODE);
+    *  childNode->setLocalName("password");
+    *
+    *  valueNode = phb->createChild(CHARACTER_NODE);
+    *  valueNode->setValue("Test Password");
+    *
+    *  childNode->addChild(valueNode);
+    *  parentNode->addChild(childNode);
+    *
+    *  phb->addChild(parentNode);
+    * </PRE>
+    *
+    * @param pachLocalName Local tag name of the SOAP header. e.g. TestHeader    
+    * @param pachUri Namespace URI to be used in SOAP header.
+                     e.g http://ws.apache.org/axisCppTestHeader/
+    *
+    * @return Pointer to the creater SOAP header block.
+    */
+    IHeaderBlock * AXISCALL createSOAPHeaderBlock(AxisChar * pachLocalName,
+                     AxisChar * pachUri);
+
+  /**
+    * Create and add a SOAP header block to the Stub.
+    * 
+    * This will create a header block that would look like the following when 
+    * serialized:
+    * <PRE>
+    *   <th:TestHeader xmlns:th="http://ws.apache.org/axisCppTest/">
+    *   </th:TestHeader>
+    * </PRE>
+    *
+    * User must use the IHeaderBlock pointer returned and fill in the header structure.
+    * e.g. To make the SOAP header look like
+    * <PRE>
+    * <SOAP-ENV:Header>
+    *   <th:TestHeader xmlns:th="http://ws.apache.org/axisCppTest/">
+    *       <Credentials>
+    *            <username>Test User</username>
+    *            <password>Test Password</password>
+    *       </Credentials>
+    *   </th:TestHeader>
+    * </SOAP-ENV:Header>
+    * </PRE>
+    * the following code segment coule be used
+    * <PRE>
+    *  IHeaderBlock *phb = ws.createSOAPHeaderBlock("TestHeader", 
+    *                                   "http://ws.apache.org/axisCppTest/",
+    *                                   "th");
     *  //create parent node
     *  BasicNode *parentNode = phb->createChild(ELEMENT_NODE);
     *  parentNode->setLocalName("Credentials");
@@ -430,8 +501,8 @@ class STORAGE_CLASS_INFO Stub
     *
     * @return Pointer to the creater SOAP header block.
     */
-    IHeaderBlock * AXISCALL createSOAPHeaderBlock(AxisChar * pachLocalName,
-                     AxisChar * pachUri);
+    IHeaderBlock* AXISCALL createSOAPHeaderBlock(AxisChar * pachLocalName,
+        AxisChar * pachUri, AxisChar * pachPrefix);
 
   /**
     * Iterator initiatior for SOAP header blocks

@@ -968,7 +968,7 @@ void SoapSerializer::addNamespaceToEnvelope(AxisChar *pachNamespaceURI, AxisChar
 
 }
 
-void SoapSerializer::addNamespaceToNamespaceList(AxisChar *pachNamespaceURI, AxisChar* pachPrefix)
+void SoapSerializer::addNamespaceToNamespaceList(const AxisChar *pachNamespaceURI, const AxisChar* pachPrefix)
 {
 	m_NsStack[pachNamespaceURI] = pachPrefix;
 }

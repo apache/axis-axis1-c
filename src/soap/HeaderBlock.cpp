@@ -210,7 +210,23 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
             {
                 lstTmpNameSpaceStack.push_back((AxisChar*)m_uri.c_str());
             }
-        }
+        } else {
+			/* The use has specified his/her own prefix. Therefore this is 
+			taken as a new namespace and will be declared as a namespace 
+			declaration.
+			*/
+			blnIsNewNamespace = true;
+			/* Adding to the Serializers namespace list b'cas the child 
+			elements of this HeaderBlock might use this namespace, so that they
+			can get the correct corrosponding prefix from the Serializer.
+			 */
+			pSZ.addNamespaceToNamespaceList(m_uri.c_str(), m_sPrefix.c_str());
+			/* Adding this namespace to the temprory namespace list b'cas we
+			have to remove this namespce from the Serializer at the end of this
+			HeaderBlock serialization.
+			*/
+			lstTmpNameSpaceStack.push_back((AxisChar*)m_uri.c_str());
+		}
 
         pSZ.serialize(m_sPrefix.c_str(), ":", m_localname.c_str(), NULL);
 		
@@ -733,5 +749,12 @@ BasicNode* HeaderBlock::getFirstChild()
     return NULL;
 }
 
-AXIS_CPP_NAMESPACE_END
+HeaderBlock::HeaderBlock(const AxisChar *pachLocalName, const AxisChar *pachUri, const AxisChar *pachPrefix)
+{
+	iNoOFChildren = 0;
+    m_localname = pachLocalName;
+    m_uri = pachUri;
+    m_sPrefix = pachPrefix;
+}
 
+AXIS_CPP_NAMESPACE_END

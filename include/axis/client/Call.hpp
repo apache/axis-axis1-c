@@ -223,6 +223,9 @@ public:
     virtual IHeaderBlock* AXISCALL createHeaderBlock(AxisChar *pachLocalName,
         AxisChar *pachUri)=0;
 
+    virtual IHeaderBlock* AXISCALL createHeaderBlock(AxisChar *pachLocalName,
+        AxisChar *pachUri, AxisChar *pachPrefix)=0;
+
     static bool bInitialized;
 };
 
@@ -263,6 +266,8 @@ public:
 public:
     IHeaderBlock* AXISCALL createHeaderBlock(AxisChar *pachLocalName,
         AxisChar *pachUri);
+    IHeaderBlock* AXISCALL createHeaderBlock(AxisChar *pachLocalName,
+        AxisChar *pachUri, AxisChar *pachPrefix);
     IHeaderBlock* createHeaderBlock();
     /* Methods used by stubs to get a deserialized value of XML element
      * as basic types

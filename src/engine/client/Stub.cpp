@@ -358,3 +358,15 @@ AXIS_PROTOCOL_TYPE Stub::getTransportProtocol()
     else
        return APT_UNKNOWN;
 }
+
+IHeaderBlock* Stub::createSOAPHeaderBlock(AxisChar *pachLocalName, AxisChar *pachUri, AxisChar *pachPrefix)
+{
+    if (pachLocalName && pachUri && pachPrefix)
+    {
+	    IHeaderBlock *pNewSoapheader = m_pCall->createHeaderBlock(pachLocalName, pachUri, pachPrefix);
+	    m_vSOAPHeaderBlocks.push_back(pNewSoapheader);
+	    return pNewSoapheader;
+    }
+    else
+	    return NULL;
+}

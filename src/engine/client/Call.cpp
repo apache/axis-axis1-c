@@ -25,6 +25,12 @@
  * Added setProxy
  */
 
+/*
+ * Revision 1.2  2005/01/06 Roshan
+ * Added IHeaderBlock* Call::createHeaderBlock(AxisChar* pachLocalName, 
+ *                                      AxisChar* pachUri, AxisChar* pachPrefix)
+ */
+
 
 #include <axis/client/Call.hpp>
 #include <axis/AxisException.hpp>
@@ -672,6 +678,12 @@ IHeaderBlock* Call::createHeaderBlock(AxisChar* pachLocalName,
                                        AxisChar* pachUri)
 {
  	return new HeaderBlock(pachLocalName, pachUri);
+}
+
+IHeaderBlock* Call::createHeaderBlock(AxisChar* pachLocalName, 
+                                       AxisChar* pachUri, AxisChar* pachPrefix)
+{
+ 	return new HeaderBlock(pachLocalName, pachUri, pachPrefix);
 }
 
 int Call::getStatus() 

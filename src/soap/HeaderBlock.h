@@ -92,7 +92,7 @@ private:
     std::list<Attribute*> m_attributes;
     std::list<Attribute*> m_namespaceDecls;
 
-public:
+public:	
 
     /** 
       * Creates a Attribute and adds it to this Header Block as a namespace. 
@@ -352,11 +352,19 @@ public:
       */
     int addNamespaceDecl(IAttribute *pAttribute);
 
-    /**
+	/**
       * The Constructor.
       *
       * @param pachLocalName The local name of this Header Block.
       * @param pachPrefix The prefix of this Header Block.
+      * @param pachUri The namespace uri of this Header Block.
+      */
+	HeaderBlock(const AxisChar *pachLocalName, const AxisChar *pachUri, const AxisChar *pachPrefix);
+
+    /**
+      * The Constructor.
+      *
+      * @param pachLocalName The local name of this Header Block.      
       * @param pachUri The namespace uri of this Header Block.
       */
     HeaderBlock(const AxisChar* pachLocalName, const AxisChar* pachUri);
