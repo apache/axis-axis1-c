@@ -33,10 +33,6 @@ InteropTestPortType::~InteropTestPortType()
  */
 xsd__string InteropTestPortType::echoString(xsd__string Value0)
 {
-    char* cFaultcode;
-        char* cFaultstring;
-        char* cFaultactor;
-        char* cFaultdetail;
 	xsd__string Ret;
     try
     {
@@ -62,15 +58,12 @@ xsd__string InteropTestPortType::echoString(xsd__string Value0)
                 {
                     throw;
                 }
-                else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://localhost/axis/MathOps" ))//Exception handling code goes here
-                {
-                        cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-                        cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-                        cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-                   
-                                  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-                                  throw AxisGenException(cFaultdetail);
-                      
+                ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault",
+		    "http://localhost/axis/MathOps");
+		if(pSoapFault)
+                {   
+		    m_pCall->unInitialize();
+                    throw AxisClientException(pSoapFault);     
                 }
                 else throw;
         }
