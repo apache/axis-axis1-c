@@ -226,7 +226,7 @@ Notes:
 
 	<target name="compileSamples">
 		
-                <for list="base,groupB" param="samplename">
+                <for list="base,array,calculator,bench,element,enumeration,transportProperties" param="samplename">
                     <sequential>
 			<property name="clientSampleDir" value="client"/>		
                         <!--Generate Client-->
