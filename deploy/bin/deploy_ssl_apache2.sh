@@ -28,4 +28,4 @@ cp -f ${AXISCPP_DEPLOY}/etc/client.wsdd_linux ${AXISCPP_DEPLOY}/etc/client.wsdd
 cp -f ${AXISCPP_DEPLOY}/etc/axiscpp.conf_linux ${AXISCPP_DEPLOY}/etc/axiscpp.conf
 ${APACHE2_HOME}/bin/apachectl stop
 sleep 2
-${APACHE2_HOME}/bin/apachectl start
+${APACHE2_HOME}/bin/apachectl startssl

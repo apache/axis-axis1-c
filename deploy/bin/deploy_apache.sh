@@ -27,6 +27,6 @@ cp -f ${AXISCPP_DEPLOY}/lib/libaxis_xercesc.so ${AXISCPP_DEPLOY}/lib/libaxis_xml
 cp -f ${AXISCPP_DEPLOY}/etc/server.wsdd_linux ${AXISCPP_DEPLOY}/etc/server.wsdd
 cp -f ${AXISCPP_DEPLOY}/etc/client.wsdd_linux ${AXISCPP_DEPLOY}/etc/client.wsdd
 cp -f ${AXISCPP_DEPLOY}/etc/axiscpp.conf_linux ${AXISCPP_DEPLOY}/etc/axiscpp.conf
-/usr/local/apache/bin/apachectl stop
+${APACHE_HOME}/bin/apachectl stop
 sleep 2
-/usr/local/apache/bin/apachectl start
+${APACHE_HOME}/bin/apachectl start
