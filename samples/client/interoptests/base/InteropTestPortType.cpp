@@ -705,8 +705,9 @@ xsd__boolean InteropTestPortType::echoBoolean(xsd__boolean Value0)
 	}
 }
 
-int InteropTestPortType::getFaultDetail(char** ppcDetail)
+/*int InteropTestPortType::getFaultDetail(char** ppcDetail)
 {
 	return m_pCall->getFaultDetail(ppcDetail);
 }
+*/
 

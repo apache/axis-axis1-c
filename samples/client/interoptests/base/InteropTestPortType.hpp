@@ -34,7 +34,7 @@ public:
 	STORAGE_CLASS_INFO xsd__hexBinary echoHexBinary(xsd__hexBinary Value0);
 	STORAGE_CLASS_INFO xsd__decimal echoDecimal(xsd__decimal Value0);
 	STORAGE_CLASS_INFO xsd__boolean echoBoolean(xsd__boolean Value0);
-	int getFaultDetail(char** ppcDetail);
+	//int getFaultDetail(char** ppcDetail);
 };
 
 #endif /* !defined(__INTEROPTESTPORTTYPE_CLIENTSTUB_H__INCLUDED_)*/

@@ -222,8 +222,8 @@ xsd__int Calculator::div(xsd__int Value0, xsd__int Value1)
 	}
 }
 
-int Calculator::getFaultDetail(char** ppcDetail)
+/*int Calculator::getFaultDetail(char** ppcDetail)
 {
 	return m_pCall->getFaultDetail(ppcDetail);
 }
-
+*/
