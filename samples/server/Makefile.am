@@ -1,1 +1,1 @@
-SUBDIRS = interoptests simple
+SUBDIRS = interoptests simple rpcfault
