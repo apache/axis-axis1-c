@@ -142,7 +142,7 @@ HttpTransport::Fini ()
 void
 HttpTransport::SetProperty (const char *p_Property, const char *p_Value)
 {
-    m_AdditionalHeader.push_back (std::make_pair (p_Property, p_Value));
+    m_AdditionalHeader.push_back (std::make_pair ((string)p_Property,(string) p_Value));
 }
 
 
