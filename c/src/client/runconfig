@@ -1,2 +1,2 @@
 #!/bin/bash
-./configure --libdir=$AXISCPP_HOME/src/client/lib
+./configure --libdir=$AXISCPP_HOME/lib/axis
