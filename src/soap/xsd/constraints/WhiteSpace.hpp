@@ -59,6 +59,10 @@ private:
 
     const AxisString& collapseWhiteSpace(AxisString& value);
 
+    const AxisString& stripLeadingWhiteSpace(AxisString& value);
+    
+    const AxisString& stripTrailingWhiteSpace(AxisString& value);
+
     enum
     {
         TAB_CHARACTER = '\t',

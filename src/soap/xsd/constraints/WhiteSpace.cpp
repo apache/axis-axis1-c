@@ -124,7 +124,14 @@ AXIS_CPP_NAMESPACE_START
 
         AxisString replacedValue = replaceWhiteSpace(value);
 
-        /* Find space character and returns the first any of chars find
+        /*
+         * Strip leading and trailing space
+         */
+        AxisString leadingStripped = stripLeadingWhiteSpace(replacedValue);
+        replacedValue = stripTrailingWhiteSpace(leadingStripped);
+
+        /*
+         * Find space character and returns the first any of chars find
          * position
          */ 
         unsigned int nPos = replacedValue.find_first_of (' ');
@@ -170,8 +177,39 @@ AXIS_CPP_NAMESPACE_START
         }
 
         return m_strReturnVal;
-
-        
     }
+    
+    const AxisString& WhiteSpace::stripLeadingWhiteSpace(AxisString& value)
+    {
+        while (value.size() > 0)
+        {
+            if ( isspace (value.at(0)))
+            {
+                value.erase(0, 1);
+            }
+            else
+            {
+                break;
+            }
+        }
+
+		return value;
+    }
+
+	const AxisString& WhiteSpace::stripTrailingWhiteSpace(AxisString& value)
+	{
+		while (value.size() > 0)
+		{
+            if ( isspace (value.at( value.size() - 1)))
+            {
+                value.erase(value.size() - 1, 1);
+            }
+            else
+            {
+                break;
+            }
+		}
+        return value;
+	}
 
 AXIS_CPP_NAMESPACE_END
