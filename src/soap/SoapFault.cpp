@@ -176,6 +176,11 @@ void SoapFault::initialize()
 	}
 }
 
+char* SoapFault::getSoapString()
+{
+    return m_sFaultstring.c_str(); 
+}
+
 /*the caller of the SoapFault::getSoapFault(int) has to delete the 
  * returned SoapFault pointer
  */

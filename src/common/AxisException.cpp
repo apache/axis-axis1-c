@@ -128,11 +128,27 @@ string AxisException::getMessage(exception* e)
 
 string AxisException::getMessage(int e)
 {
-  string sMessage;
-  if(e == 1)
-  sMessage = "AXIS_TEST_ERROR";
+    SoapFault* objSoap = SoapFault::getSoapFault(e);
+    char* sMessage = objSoap->getSoapString();
+    if (sMessage == NULL)
+    {
+        switch(e)
+        {
+            case TEST_EXCEPTION:
+                sMessage = "Axis test exception";
+            case RECEPTION_ERROR:
+                sMessage = "Exception on receiving the message";
+            case SENDING_ERROR:
+                sMessage = "Exception on sending the message";
+            case HTTP_ERROR:
+                sMessage = "HTTP Error, cannot process response message...";
 
-  return sMessage;
+            default:
+                sMessage = "Undefined exception";
+         }
+     }
+         
+     return sMessage;
 
 }
 
