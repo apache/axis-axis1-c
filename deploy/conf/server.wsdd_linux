@@ -35,6 +35,10 @@
  	   <parameter name="allowedMethods" value="echoIntArray "/>
            <parameter name="className" value="/usr/local/axiscpp_deploy/lib/libarray.so" />
 	</service>
+	<service name="ref" provider="CPP:RPC" description="">
+	   <parameter name="allowedMethods" value="echoInt "/>
+	   <parameter name="className" value="/usr/local/axiscpp_deploy/lib/libref.so" />
+	</service>
 	<service name="cbase" provider="C:RPC" description="SOAPBuilders Interoperability Lab Round 2 base test suite described at http://www.whitemesa.com/interop/proposal2.html ">
 		<parameter name="allowedMethods" value="echoString EchoInt echoStringArray echoInteger echoIntegerArray echoFloat echoFloatArray echoStruct echoStructArray echoVoid echoBase64 echoDate echoHexBinary echoDecimal echoBoolean "/>
 		<parameter name="className" value="/usr/local/axiscpp_deploy/lib/libcbase.so" />
