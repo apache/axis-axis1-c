@@ -79,6 +79,7 @@ public abstract class SimpleRemoteInterfaceBasedWrapperClassWriter extends Wrapp
 	protected abstract String getJNDIHostAndPort();
 	
 	protected void writeMethods() throws GenerationFault {
+		
 		out.write("\tpublic void setMessageContext(org.apache.axis.MessageContext msgcontext){;\n");
 		out.write("\t\tthis.msgcontext = msgcontext;\n");
 		out.write("\t}\n");
@@ -132,6 +133,10 @@ public abstract class SimpleRemoteInterfaceBasedWrapperClassWriter extends Wrapp
 	private void writeGetRemoteRef(String classname){
 	   out.write("\tpublic "+seiName+" getRemoteRef()throws org.apache.axis.AxisFault{\n");
 	   out.write("\t\ttry {\n");
+	   out.write("\t\tif(msgcontext == null){\n");
+	   out.write("\t\t		msgcontext = org.apache.axis.MessageContext.getCurrentContext();\n");
+	   out.write("\t\t}\n");
+
 	   out.write("\t\t    javax.security.auth.callback.CallbackHandler handler\n");
 	   out.write("\t\t        = org.apache.geronimo.ews.ws4j2ee.wsutils.security.jaasmodules.\n");
 	   out.write("\t\t            AutenticationCallbackHandlerFactory.createCallbackHandler(msgcontext);\n");
@@ -146,9 +151,14 @@ public abstract class SimpleRemoteInterfaceBasedWrapperClassWriter extends Wrapp
 	   out.write("\t\t}\n");
    	
 	   out.write("\t\ttry{\n");
-	   out.write("\t\t\tjava.util.Properties env = new java.util.Properties();\n");
-	   out.write("\t\t\tenv.put(javax.naming.Context.INITIAL_CONTEXT_FACTORY,\""+getJNDIInitialContextFactory()+"\");\n");
-	   out.write("\t\t\tenv.put(javax.naming.Context.PROVIDER_URL, \""+getJNDIHostAndPort()+"\");\n");
+//	   use the properties set
+//	   out.write("\t\t\tjava.util.Properties env = new java.util.Properties();\n");
+//	   out.write("\t\t\tenv.put(javax.naming.Context.INITIAL_CONTEXT_FACTORY,\""+getJNDIInitialContextFactory()+"\");\n");
+//	   out.write("\t\t\tenv.put(javax.naming.Context.PROVIDER_URL, \""+getJNDIHostAndPort()+"\");\n");
+
+//use the propertyfile
+  	   out.write("\t\t\tjava.util.Properties env = " +
+  			"org.apache.geronimo.ews.ws4j2ee.wsutils.PropertyLoader.loadProperties(\"jndi.properties\");\n");
 		
 	   out.write("\t\t\tjavax.naming.Context initial = new javax.naming.InitialContext(env);\n");		
 	   String ejbname = j2eewscontext.getMiscInfo().getTargetPortType().getName().toLowerCase();

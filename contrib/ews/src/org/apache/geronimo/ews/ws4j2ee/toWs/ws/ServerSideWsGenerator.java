@@ -88,43 +88,43 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
  * 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
-public class ServerSideWsGenarator implements Generator {
-    private J2EEWebServiceContext j2eewscontext;
-    protected static Log log =
-            LogFactory.getLog(ServerSideWsGenarator.class.getName());
+public class ServerSideWsGenerator implements Generator {
+	private J2EEWebServiceContext j2eewscontext;
+	protected static Log log =
+			LogFactory.getLog(ServerSideWsGenerator.class.getName());
 
-    public ServerSideWsGenarator(J2EEWebServiceContext j2eewscontext) {
-        this.j2eewscontext = j2eewscontext;
-    }
+	public ServerSideWsGenerator(J2EEWebServiceContext j2eewscontext) {
+		this.j2eewscontext = j2eewscontext;
+	}
 
-    public void genarate() throws GenerationFault {
-        try {
+	public void genarate() throws GenerationFault {
+		try {
 
-            String mappingfile = j2eewscontext.getMiscInfo().getJaxrpcfile();
-            String wsdlfile = j2eewscontext.getMiscInfo().getWsdlFile();
-            J2eeEmitter j2ee = new J2eeEmitter();
+			String mappingfile = j2eewscontext.getMiscInfo().getJaxrpcfile();
+			String wsdlfile = j2eewscontext.getMiscInfo().getWsdlFile();
+			J2eeEmitter j2ee = new J2eeEmitter();
 
-            if (j2eewscontext.getMiscInfo().isVerbose()) {
-                log.info("wsdl file = " + wsdlfile);
-                log.info("jaxrpc mapping file = " + mappingfile);
-                log.info("calling the jaxrpcmapper >> ");
-            }
-            j2ee.setMappingFilePath(mappingfile);
-            j2ee.setOutputDir(j2eewscontext.getMiscInfo().getOutPutPath());
-            j2ee.setServerSide(true);
-            j2ee.setVerbose(j2eewscontext.getMiscInfo().isVerbose());
-            j2ee.setHelperWanted(true);
-            j2ee.runServerSide(wsdlfile);
-            SymbolTable axisSymboltable = j2ee.getSymbolTable();
-            j2eewscontext.setWSDLContext(ContextFactory.createWSDLContext(axisSymboltable));
+			if (j2eewscontext.getMiscInfo().isVerbose()) {
+				log.info("wsdl file = " + wsdlfile);
+				log.info("jaxrpc mapping file = " + mappingfile);
+				log.info("calling the jaxrpcmapper >> ");
+			}
+			j2ee.setMappingFilePath(mappingfile);
+			j2ee.setOutputDir(j2eewscontext.getMiscInfo().getOutPutPath());
+			j2ee.setServerSide(true);
+			j2ee.setVerbose(j2eewscontext.getMiscInfo().isVerbose());
+			j2ee.setHelperWanted(true);
+			j2ee.runServerSide(wsdlfile);
+			SymbolTable axisSymboltable = j2ee.getSymbolTable();
+			j2eewscontext.setWSDLContext(ContextFactory.createWSDLContext(axisSymboltable));
 
-            JaxRpcMapper mapper = j2ee.getJaxRpcMapper();
-            j2eewscontext.setJAXRPCMappingContext(ContextFactory.createJaxRpcMapperContext(new Object[]{mapper,j2ee}));
+			JaxRpcMapper mapper = j2ee.getJaxRpcMapper();
+			j2eewscontext.setJAXRPCMappingContext(ContextFactory.createJaxRpcMapperContext(new Object[]{mapper,j2ee}));
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new GenerationFault(e);
-        }
-    }
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new GenerationFault(e);
+		}
+	}
 
 }

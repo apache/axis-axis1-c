@@ -77,7 +77,7 @@ import org.apache.geronimo.ews.ws4j2ee.context.impl.SEIOperationImpl;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
-import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenarationFault;
+import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenerationFault;
 
 /**
  * <p>Before the code genaration this class is used to analyis the parse inforemation
@@ -109,7 +109,7 @@ public class ContextValidator {
         try {
             Collection servicesCollection = context.getWSDLContext().getServices();
             if (servicesCollection.size() > 1)
-                throw new UnrecoverableGenarationFault("we are supporting one service yet");
+                throw new UnrecoverableGenerationFault("we are supporting one service yet");
             Iterator services = servicesCollection.iterator();
             Service service = null;
             if (services.hasNext()) {
@@ -122,7 +122,7 @@ public class ContextValidator {
 			//just as before if there are more than one servie just let
 			//it failed
             if (servicesCollection.size() > 1)
-                throw new UnrecoverableGenarationFault("we are supporting one port yet");
+                throw new UnrecoverableGenerationFault("we are supporting one port yet");
             Iterator portList = portCollecton.iterator();
             Port wsdlport = null;
             while (portList.hasNext()) {
@@ -131,14 +131,14 @@ public class ContextValidator {
             }
 
 		  if (wsdlport == null)
-			  throw new UnrecoverableGenarationFault("no port discription not match with the wsdl file");
+			  throw new UnrecoverableGenerationFault("no port discription not match with the wsdl file");
 		  QName bindingName = wsdlport.getBinding().getQName();
 		  BindingEntry wsdlbinding = context.getWSDLContext().getBinding(bindingName);
 		  context.getMiscInfo().settargetBinding(wsdlbinding);
 		  QName portTypename = wsdlbinding.getBinding().getPortType().getQName();
 		  PortTypeEntry port = context.getWSDLContext().getPortType(portTypename);
 		  if(port == null)
-		  		throw new UnrecoverableGenarationFault("port type must exits");
+		  		throw new UnrecoverableGenerationFault("port type must exits");
 		  context.getMiscInfo().setTargetPortType(port);
         } catch (Exception e) {
             throw GenerationFault.createGenerationFault(e);
@@ -149,7 +149,7 @@ public class ContextValidator {
         WSCFWebserviceDescription wscfwsdis = context.getMiscInfo().getWscfdWsDesxription();
         WSCFPortComponent[] ports = wscfwsdis.getPortComponent();
         if (ports == null || ports.length == 0)
-            throw new UnrecoverableGenarationFault("no port discription found in the" +
+            throw new UnrecoverableGenerationFault("no port discription found in the" +
                     "webservice.xml file");
         WSCFPortComponent port = ports[0];
         context.getMiscInfo().setWscfport(port);
@@ -170,7 +170,7 @@ public class ContextValidator {
         PortEntry wsdlport = context.getWSDLContext().getPort(portName);
 
 		if (wsdlport == null)
-			throw new UnrecoverableGenarationFault("wsdl port can not be null, you may have the " +
+			throw new UnrecoverableGenerationFault("wsdl port can not be null, you may have the " +
 				"wsdlport define wrongly on the webservice.xml");
         Iterator services = context.getWSDLContext().getServices().iterator();
         while (services.hasNext()) {
@@ -186,7 +186,7 @@ public class ContextValidator {
         }
 
         if (wsdlport == null)
-            throw new UnrecoverableGenarationFault("no port discription not match with the wsdl file");
+            throw new UnrecoverableGenerationFault("no port discription not match with the wsdl file");
         QName bindingName = wsdlport.getPort().getBinding().getQName();
 
         BindingEntry wsdlbinding = context.getWSDLContext().getBinding(bindingName);

@@ -174,7 +174,7 @@ public class Ws4J2eeCLOptionParser {
 
             case CLOption.TEXT_ARGUMENT:
                 if (wscffile != null) {
-                    throw new UnrecoverableGenarationFault("Only one arguement allowed ");
+                    throw new UnrecoverableGenerationFault("Only one arguement allowed ");
                     //printUsage();
                 }
                 wscffile = option.getArgument();
@@ -186,7 +186,7 @@ public class Ws4J2eeCLOptionParser {
 				this.contanier = option.getArgument();
 				break;	 	 
             default:
-                throw new UnrecoverableGenarationFault("unknown option");
+                throw new UnrecoverableGenerationFault("unknown option");
         }
     } // parseOption
 

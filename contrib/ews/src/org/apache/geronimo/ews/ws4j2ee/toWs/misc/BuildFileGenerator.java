@@ -61,8 +61,9 @@ import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
-import org.apache.geronimo.ews.ws4j2ee.toWs.dd.JaxrpcMapperGenarator;
+import org.apache.geronimo.ews.ws4j2ee.toWs.dd.JaxrpcMapperGenerator;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -75,7 +76,7 @@ public class BuildFileGenerator implements Generator {
 	private J2EEWebServiceContext j2eewscontext;
 
 	protected static Log log =
-			LogFactory.getLog(JaxrpcMapperGenarator.class.getName());
+			LogFactory.getLog(JaxrpcMapperGenerator.class.getName());
 
 	public BuildFileGenerator(J2EEWebServiceContext j2eewscontext) throws GenerationFault {
 		this.j2eewscontext = j2eewscontext;
@@ -100,6 +101,10 @@ public class BuildFileGenerator implements Generator {
 
 			out.write("	<path id=\"classpath\">\n");
 			StringTokenizer tok = getClasspathComponets();
+			String jarfile = j2eewscontext.getMiscInfo().getJarFileName();
+			if(jarfile != null){
+				out.write("		<pathelement location=\"" + jarfile + "\"/>\n");
+			}
 			while (tok.hasMoreTokens()) {
 				out.write("		<pathelement location=\"" + tok.nextToken() + "\"/>\n");
 			}
@@ -117,19 +122,39 @@ public class BuildFileGenerator implements Generator {
 			out.write("	<target name=\"jar\" depends=\"compile\">\n");
 			out.write("		<mkdir dir=\"${build.classes}/META-INF/\"/>\n");
 			
-			out.write("		<copy file =\""+j2eewscontext.getMiscInfo().getJaxrpcfile()+"\" todir=\"${build.classes}/META-INF\"/>\n");
-			out.write("		<copy file =\""+j2eewscontext.getMiscInfo().getWsdlFile()+"\" todir=\"${build.classes}/META-INF\"/>\n");
-			out.write("		<copy file =\""+j2eewscontext.getMiscInfo().getWsconffile()+"\" todir=\"${build.classes}/META-INF\"/>\n");
+			File jaxrpcFile = new File(j2eewscontext.getMiscInfo().getJaxrpcfile());
+			File wsdlfile = new File(j2eewscontext.getMiscInfo().getWsdlFile());
+			File wscffile = null;
+
+			if(jaxrpcFile.exists())
+				out.write("		<copy file =\""+jaxrpcFile.getAbsolutePath()+"\" todir=\"${build.classes}/META-INF\"/>\n");
+			if(wsdlfile.exists())	
+				out.write("		<copy file =\""+wsdlfile.getAbsolutePath()+"\" todir=\"${build.classes}/META-INF\"/>\n");
+
+			if(j2eewscontext.getMiscInfo().getWsconffile()!= null){
+				wscffile = new File(j2eewscontext.getMiscInfo().getWsconffile());
+				if(wscffile.exists())	
+					out.write("		<copy file =\""+wscffile.getAbsolutePath()+"\" todir=\"${build.classes}/META-INF\"/>\n");
+			}
 			
 			if(j2eewscontext.getMiscInfo().isImplwithEJB()){
-				out.write("		<copy file =\"${src}/META-INF/ejb-jar.xml\" todir=\"${build.classes}/META-INF\"/>\n");
-				if(GenerationConstants.JBOSS_CONTAINER.equals(j2eewscontext.getMiscInfo().getTargetJ2EEContainer()))
-					out.write("		<copy file =\"${src}/META-INF/jboss.xml\" todir=\"${build.classes}/META-INF\"/>\n ");
-				else if(GenerationConstants.JONAS_CONTAINER.equals(j2eewscontext.getMiscInfo().getTargetJ2EEContainer())){
-					out.write("		<copy file =\"${src}/META-INF/jboss.xml\" todir=\"${build.classes}/META-INF\"/>\n ");
+				File ejbDD = 	new File(j2eewscontext.getMiscInfo().getOutPutPath()+"/META-INF/ejb-jar.xml");
+				if(ejbDD.exists())
+					out.write("		<copy file =\""+ejbDD.getAbsolutePath()+"\" todir=\"${build.classes}/META-INF\"/>\n");
+				
+				File contianerDD = null;	
+				if(GenerationConstants.JBOSS_CONTAINER.equals(j2eewscontext.getMiscInfo().getTargetJ2EEContainer())){
+					contianerDD = new File(j2eewscontext.getMiscInfo().getOutPutPath()+"/META-INF/"+GenerationConstants.JBOSS_DD);
+				}else if(GenerationConstants.JONAS_CONTAINER.equals(j2eewscontext.getMiscInfo().getTargetJ2EEContainer())){
+					contianerDD = new File(j2eewscontext.getMiscInfo().getOutPutPath()+"/META-INF/"+GenerationConstants.JONAS_DD);
 				}else if(GenerationConstants.GERONIMO_CONTAINER.equals(j2eewscontext.getMiscInfo().getTargetJ2EEContainer())){
-					out.write("		<copy file =\"${src}/META-INF/geranimo.xml\" todir=\"${build.classes}/META-INF\"/>\n ");
-				}						
+					contianerDD = new File(j2eewscontext.getMiscInfo().getOutPutPath()+"/META-INF/"+GenerationConstants.GERONIMO_DD);
+				}	
+				if(contianerDD.exists()){
+						out.write("		<copy file =\""+contianerDD.getAbsolutePath()+"\" todir=\"${build.classes}/META-INF\"/>\n ");
+				}
+				
+									
 			}else{
 				out.write("		<copy file =\"${src}/META-INF/web.xml\" todir=\"${build.classes}/META-INF\"/>\n ");
 			}
@@ -142,7 +167,7 @@ public class BuildFileGenerator implements Generator {
 			} 
             
 			out.write("		<jar jarfile=\"${build}/lib/"
-					+ jarName + ".jar\" basedir=\"${build.classes}\" >\n");
+					+ jarName + "-impl.jar\" basedir=\"${build.classes}\" >\n");
 			out.write("		<include name=\"**\" />\n");
 			out.write("		<manifest>\n");
 			out.write("			<section name=\"org/apache/ws4j2ee\">\n");
@@ -151,7 +176,18 @@ public class BuildFileGenerator implements Generator {
 			out.write("			</section>\n");
 			out.write("		</manifest>\n");
 			out.write("		</jar>\n");
-			out.write("		<delete dir=\"${build.classes}/META-INF/\"/>\n");
+			out.write("     <java classname=\"org.apache.geronimo.ews.ws4j2ee.utils.packager.Packager\" fork=\"yes\" >\n");
+			out.write("     	<classpath refid=\"classpath\" />\n");
+			out.write("     	<arg value=\""+jarName+".jar\"/> \n");
+			out.write("     	<arg value=\"${build}/lib/"
+					+ jarName + "-impl.jar\"/>\n"); 
+			out.write("     	<arg value=\""+jarfile+"\"/>\n"); 
+			out.write("     </java>\n");
+
+			out.write("		<delete dir=\"${build}\"/>\n");
+//			out.write("		<delete dir=\"${build.classes}/META-INF/\"/>\n");
+//			out.write("		<delete file=\"${build}/lib/"
+//					+ jarName + "-impl.jar\"/>\n");
 			out.write("	</target>\n");
 
 

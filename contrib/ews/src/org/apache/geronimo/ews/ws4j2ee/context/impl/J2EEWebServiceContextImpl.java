@@ -60,7 +60,7 @@ import org.apache.geronimo.ews.ws4j2ee.context.JaxRpcMapperContext;
 import org.apache.geronimo.ews.ws4j2ee.context.MiscInfo;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext;
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
-import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenarationFault;
+import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenerationFault;
 
 /**
  * <p>Code should use parsers and create runtime representation
@@ -146,7 +146,7 @@ public class J2EEWebServiceContextImpl implements J2EEWebServiceContext {
     public void validate() {
         if (wscfcontext == null || miscInfo == null ||
                 (hasWSDL && wsdlcontext == null) || jaxrpcmappingcontext == null)
-            throw new UnrecoverableGenarationFault("valdation of the j2ee context failed");
+            throw new UnrecoverableGenerationFault("valdation of the j2ee context failed");
         miscInfo.validate();
     }
 

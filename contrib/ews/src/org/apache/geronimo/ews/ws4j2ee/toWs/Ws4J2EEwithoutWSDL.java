@@ -77,7 +77,8 @@ import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSC
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.impl.AxisEmitterBasedWSDLContext;
 import org.apache.geronimo.ews.ws4j2ee.parsers.EJBDDParser;
 import org.apache.geronimo.ews.ws4j2ee.parsers.WebDDParser;
-import org.apache.geronimo.ews.ws4j2ee.toWs.wsdl.WSDLGenarator;
+import org.apache.geronimo.ews.ws4j2ee.toWs.wsdl.WSDLGenerator;
+//import org.apache.geronimo.ews.ws4j2ee.utils.AntExecuter;
 import org.apache.geronimo.ews.ws4j2ee.utils.JarFileLoader;
 import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 
@@ -95,6 +96,7 @@ public class Ws4J2EEwithoutWSDL implements Generator {
     private boolean verbose = true;
     private Ws4J2eeWtihoutWSDLCLOptionParser clparser;
 	private File jarfile;
+	private JarFileLoader jarfileLoader;
     
     private InputStream ejbddin;
     private InputStream webddin;
@@ -138,8 +140,9 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 			this();
 			jarfile = new File(jarFile);
 			genarators = new Vector();
+
 			
-			JarFileLoader jarfileLoader = new JarFileLoader(jarFile);
+			jarfileLoader = new JarFileLoader(jarFile);
 			ejbddin = jarfileLoader.getEjbJarfile();
 			webddin = jarfileLoader.getWebddfile();
 			
@@ -147,6 +150,7 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 			this.wscontext = new J2EEWebServiceContextImpl(false);
 			this.wscontext.setMiscInfo(ContextFactory.createMiscInfo());
 			wscontext.getMiscInfo().setVerbose(verbose);
+			wscontext.getMiscInfo().setJarFileName(jarfile.getAbsolutePath());
 			
 			//parse the arguments 
 			wscontext.getMiscInfo().setWsConfFileLocation(outputDirOption);
@@ -166,7 +170,7 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 		WSCFWebserviceDescription[] wscfwsdiss = wscontext.getWSCFContext().getWebServicesDescription();
 		//TODO fix this to handle multiple discriptions let us take the first discription
 		if (wscfwsdiss == null || wscfwsdiss.length == 0)
-			throw new UnrecoverableGenarationFault("no webservice discription found in the" +
+			throw new UnrecoverableGenerationFault("no webservice discription found in the" +
 							"webservice.xml file");
 		genarate(wscfwsdiss[0]);
     }
@@ -178,7 +182,7 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 			WSCFPortComponent[] ports = wscfwsdis.getPortComponent();
 			//TODO how to create the correct port type 
 			if (ports == null || ports.length == 0)
-				throw new UnrecoverableGenarationFault("no port discription found in the" +
+				throw new UnrecoverableGenerationFault("no port discription found in the" +
 						"webservice.xml file");
 			WSCFPortComponent port = ports[0];
 			
@@ -193,19 +197,22 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 			wscontext.getMiscInfo().setWsdlFile(wsdlFile);
 			wscontext.getMiscInfo().setJaxrpcfile(Utils.getAbsolutePath(wscfwsdis.getJaxrpcMappingFile(),wscontext.getMiscInfo().getOutPutPath()));
 			
+			
 			File file = new File(wscontext.getMiscInfo().getOutPutPath()+"/META-INF");
 			if (!file.exists())
 				file.mkdirs();
 			
 			//generate the wsdl file
+			InputStream wsdlfile = null;
 			if(jarfile != null){
 				ClassUtils.setDefaultClassLoader(ClassUtils.createClassLoader(
 						jarfile.getAbsolutePath(),this.getClass().getClassLoader()));
+				//wsdlfile = jarfileLoader.getInputStreamForJarEntry(wsdlFile);		
 			}
 
             if (verbose)
                 log.info("calling Java2WSDL to genarated wsdl ...........");
-            WSDLGenarator wsdlgen = (WSDLGenarator) GeneratorFactory.createGenerator(wscontext, GenerationConstants.WSDL_GENERATOR);
+            WSDLGenerator wsdlgen = (WSDLGenerator) GeneratorFactory.createGenerator(wscontext, GenerationConstants.WSDL_GENERATOR);
 
 			emitter.setLocationUrl("http://127.0.0.1");
 			emitter.setServicePortName(port.getWsdlPort().getLocalpart());
@@ -304,7 +311,12 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 			Generator wrapgen = GeneratorFactory.createGenerator(wscontext,
 				GenerationConstants.AXIS_WEBSERVICE_WRAPPER_GENERATOR);
 			wrapgen.genarate();
-
+			
+			Generator buildFileGen = GeneratorFactory.createGenerator(wscontext, GenerationConstants.BUILD_FILE_GENERATOR);
+			buildFileGen.genarate();
+//uncomment this to run the build file programatically
+//			AntExecuter executer = new AntExecuter();
+//			executer.execute(wscontext.getMiscInfo().getOutPutPath() + "/build.xml");
         } catch (Exception e) {
         	e.printStackTrace();
             throw GenerationFault.createGenerationFault(e);
@@ -330,6 +342,8 @@ public class Ws4J2EEwithoutWSDL implements Generator {
 			 gen = new Ws4J2EEwithoutWSDL(args[0],"-o.");
     	}else if(args.length == 2){
     		//means jar file option and output dir given
+    		if(args[1].startsWith("-o"))
+				args[1] = args[1].substring(2);
 			gen = new Ws4J2EEwithoutWSDL(args[0],args[1]);
     	}else{
 			gen = new Ws4J2EEwithoutWSDL(args,false);    	

@@ -228,4 +228,10 @@ public interface MiscInfo {
 	 */
 	public WSCFHandler[] getHandlers();
 	public void setHandlers(WSCFHandler[] handlers);
+	
+	/**
+	 * Name of the Input jar file
+	 */
+	public String getJarFileName();
+    public void setJarFileName(String string);
 }

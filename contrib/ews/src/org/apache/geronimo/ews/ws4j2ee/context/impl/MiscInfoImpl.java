@@ -68,7 +68,7 @@ import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSC
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
-import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenarationFault;
+import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenerationFault;
 
 /**
  * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo
@@ -80,7 +80,8 @@ public class MiscInfoImpl implements MiscInfo {
     private boolean implwithEJB = true;
 	/* if Impl is avalible the class need not to be created agaien*/
 	private boolean implAvalible = false;
-
+	private String jarFileName;
+	
     private String outputPath = ".";
 
     private ServiceEntry service;
@@ -147,7 +148,7 @@ public class MiscInfoImpl implements MiscInfo {
         if (portType == null || binding == null
                 //|| ejbbean == null || ejbsei == null || ejbhome == null
                  ) {
-            throw new UnrecoverableGenarationFault("validation of MiscInfo failed");
+            throw new UnrecoverableGenerationFault("validation of MiscInfo failed");
         }
     }
 
@@ -443,6 +444,20 @@ public class MiscInfoImpl implements MiscInfo {
      */
     public void setHandlers(WSCFHandler[] handlers) {
 		this.handlers = handlers;        
+    }
+
+    /**
+     * @return
+     */
+    public String getJarFileName() {
+        return jarFileName;
+    }
+
+    /**
+     * @param string
+     */
+    public void setJarFileName(String string) {
+        jarFileName = string;
     }
 
 }
