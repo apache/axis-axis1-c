@@ -69,6 +69,8 @@
 // =============================================================
 // Miscellaneous
 // =============================================================
+#include <sys/time.h>
+#include <unistd.h>
 #define PLATFORM_SLEEP(x) sleep(0);
 
 #endif
