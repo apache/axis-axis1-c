@@ -119,9 +119,9 @@ public class WrapperInfo {
             this.implStyle = this.implStyle.toLowerCase();
         
         if(targetEngine == null || !WrapperConstants.CLIENT.equalsIgnoreCase(targetEngine))
-            targetEngine = WrapperConstants.SERVER;
+            this.targetEngine = WrapperConstants.SERVER;
         else
-           targetEngine = WrapperConstants.CLIENT;
+           this.targetEngine = WrapperConstants.CLIENT;
         
         if(trasportUri== null)
         	this.trasportUri = WrapperConstants.TRANSPORT_HTTP;
