@@ -74,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 AxisClient_D.lib /nologo /subsystem:console /debug /machine:I386 /out:"../../../../bin/Test2._D.exe" /pdbtype:sept /libpath:"../../../../bin"
+# ADD LINK32 AxisClient_D.lib /nologo /subsystem:console /debug /machine:I386 /out:"../../../../bin/Test2_D.exe" /pdbtype:sept /libpath:"../../../../bin"
 
 !ENDIF 
 
