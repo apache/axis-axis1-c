@@ -47,8 +47,9 @@ public:
 private:
     void getAdminUtils(IAdminUtils** pIAdminUtils);
 public:
-    const AxisChar* getProperty(AxisChar* pachName);
+	const void* getProperty(AxisChar* pachName);
     int setProperty(AxisChar* pachName, const AxisChar* pachValue);
+    int setProperty(AxisChar* pachName, const void* pachValue, int len);
     void setOperationName(const AxisChar* pchOperation)
     {m_sOperationName = pchOperation;};
     void getSoapDeSerializer

@@ -64,9 +64,10 @@ public:
     virtual ~IMessageData(){};
 private:
     virtual void getAdminUtils(IAdminUtils** pIAdminUtils)=0;
-public:
-    virtual int setProperty(AxisChar* pachName, const AxisChar* pachValue)=0;
-    virtual const AxisChar* getProperty(AxisChar* sName)=0;
+public:      
+	virtual int setProperty(AxisChar* pachName, const AxisChar* pachValue)=0;
+    virtual int setProperty(AxisChar* pachName, const void* pachValue, int len)=0;
+    virtual const void* getProperty(AxisChar* sName)=0;
     virtual const AxisChar* AXISCALL getOperationName()=0;
     virtual void AXISCALL getSoapSerializer(IWrapperSoapSerializer** pIWSS)=0;
     virtual void AXISCALL getSoapDeSerializer
