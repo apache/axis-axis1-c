@@ -5,6 +5,8 @@
 	<property name="build.classes" location="${build}/classes"/>
 	<property name="build.lib" location="${build}/lib"/>
 	<property name="lib" location="lib"/>
+	<property name="jar.dir" location="../../../target/generated/samples/"/>
+	
 	<target name="compile">
 	   <mkdir dir="${build.classes}"/>
 	   <mkdir dir="${build.lib}"/>
@@ -18,7 +20,7 @@
 		<copy file ="${src}/META-INF/webservice.xml" todir="${build.classes}/META-INF"/>
 		<copy file ="${src}/META-INF/ejb-jar.xml" todir="${build.classes}/META-INF"/>
 
- 		<jar jarfile="../../../target/generated/samples/time.jar" basedir="${build.classes}" >
+ 		<jar jarfile="${jar.dir}/time.jar" basedir="${build.classes}" >
 		<include name="**" />
 		<manifest>
 			<section name="org/apache/ws4j2ee">
