@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//APACHE//DTD Documentation V1.2//EN" "./dtd/document-v12.dtd">
+<document> 
+  <header> 
+    <title>WebServices - Axis</title> 
+  </header> 
+  <body> 
+    <section>
+      <title>WebServices - Axis - News</title>
+<p>(September 10, 2003) : Axis CVS Repository has moved from xml-axis to <link href="http://cvs.apache.org/viewcvs/ws-axis/">ws-axis</link></p>
+<p>(June 16, 2003) : Axis <link href="http://ws.apache.org/axis/download.cgi">1.1</link> is now available!</p>
+<p>(March 5, 2003) : Axis <link href="http://archive.apache.org/dist/ws/axis/1_1rc2/">1.1 RC2 release</link> is now available!</p>
+<p>(February 9, 2003) : Axis <link href="http://archive.apache.org/dist/ws/axis/1_1RC1/">1.1 RC1 release</link> is now available!</p>
+<p>(October 7, 2002) : Axis <link href="http://archive.apache.org/dist/ws/axis/1_0rc2/">1.0</link> is now available!</p>
+<p>(September 30, 2002) : Axis <link href="http://archive.apache.org/dist/ws/axis/1_0rc2/">1.0 RC2 release</link> is now available!</p>
+<p>(September 6, 2002) : Axis <link href="http://archive.apache.org/dist/ws/axis/1_0rc1/">1.0 RC1 release</link> is now available!</p>
+<p>(July 9, 2002) : The Axis <link href="http://archive.apache.org/dist/ws/axis/beta3/">beta 3 release</link> is available!</p>
+<p>See the <link href="mail.html">Mailing Lists</link> for more information.
+</p>
+<p>
+The Axis Development Team
+</p>
+    </section>
+  </body>
+</document>
