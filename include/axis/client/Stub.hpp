@@ -584,8 +584,11 @@ class STORAGE_CLASS_INFO Stub
     void setProxy(const char* pcProxyHost, unsigned int uiProxyPort);
 
   /**
-    * Sets a Attribute to the SOAPMethod, using the given Attribute data.
-    *
+    * Sets an Attribute to the SOAPMethod, using the given Attribute data.
+    * You must ensure the prefix has a valid namespace declared, otherwise an
+    * invalid SOAP message will be produced.
+    * It is safer to use setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar* pUri, const AxisChar *pValue)
+    * 
     * @param pLocalname The local name of the Attribute.
     * @param pPrefix The prefix of the Attribute.
     * @param pValue The value of the Attribute.
@@ -593,7 +596,7 @@ class STORAGE_CLASS_INFO Stub
     void setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue);
 
   /**
-    * Sets a Attribute to the SOAPMethod, using the given Attribute data.
+    * Sets an Attribute to the SOAPMethod, using the given Attribute data.
     *
     * @param pLocalname The local name of the Attribute.
     * @param pPrefix The prefix of the Attribute.
