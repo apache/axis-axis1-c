@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
  *
  */
 
@@ -72,18 +72,24 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "HeaderEntry.h"
+#include "HeaderBlock.h"
 #include "SoapEnvVersions.h"
 
 class SoapHeader  
 {
 private:
-	list<HeaderEntry*> m_headerEntries;
+	int serializeNamespaceDecl(string&);
+	int serializeAttributes(string&);
+	list<Attribute*> m_attributes;
+	list<Attribute*> m_namespaceDecls;
+	list<HeaderBlock*> m_headerEntries;
 	//string m_strHeaderSerialized;
 public:
+	int addNamespaceDecl(Attribute* pAttribute);
+	int addAttribute(Attribute* pAttribute);
 	//string& serialize();
 	int serialize(string&, SOAP_VERSION eSoapVersion);
-	void addHeaderEntry(HeaderEntry* headerEntry);
+	void addHeaderBlock(HeaderBlock* headerBlock);
 	SoapHeader();
 	virtual ~SoapHeader();
 
