@@ -27,9 +27,8 @@
 #include "SSLChannelFactory.hpp"
 #include "../SSLChannel.hpp"
 #include <stdio.h>
-#include "../../common/AxisConfig.h"
 #include "../../engine/AxisEngineException.h"
-#include "../../common/AxisTrace.h"
+//#include "../../common/AxisTrace.h"
                                                                                                                              
 //extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
 //extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
@@ -63,7 +62,6 @@ int SSLChannelFactory::initialize(const char* pcLibraryName)
         if (!m_Create || !m_Delete)
         {
             unloadLib();
-            AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
             char *s = new char[strlen(m_pcLibraryName)+1];
             strcpy(s,m_pcLibraryName);
             throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, s);
@@ -71,7 +69,6 @@ int SSLChannelFactory::initialize(const char* pcLibraryName)
 	}
 	else
 	{
-        AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
         char *s = new char[strlen(m_pcLibraryName)+1];
         strcpy(s,m_pcLibraryName);
         throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, s);
@@ -104,7 +101,6 @@ int SSLChannelFactory::loadLib()
     m_LibHandler = PLATFORM_LOADLIB(m_pcLibraryName);
     if (!m_LibHandler)
     {
-        AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
         throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED);
     }
 
