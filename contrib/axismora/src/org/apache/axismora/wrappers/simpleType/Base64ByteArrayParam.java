@@ -62,6 +62,7 @@ import org.apache.axis.encoding.Base64;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
+import org.apache.axismora.wsdl2ws.testing.TestUtils;
 
 /**
  * TODO the encoding of base 64 gives trouble yet ... FIXIT 
@@ -133,6 +134,10 @@ public class Base64ByteArrayParam implements InOutParameter {
 	 */
 	public String toString() {
 		return new String(param);
+	}
+	
+	public void init(){
+		this.param = TestUtils.getRandomBytes();
 	}
 
 }

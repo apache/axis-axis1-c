@@ -210,7 +210,7 @@ public class ArrayParamWriter extends ParmWriter {
 //                    "\t\t\t\torg.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten = true;\n");
                 writer.write("\t\t\t\tparam[i].serialize(context);\n");
             } else
-                writer.write("\t\t\t\tcontext.writeString(java.lang.String.valueOf(param[i]));\n");
+                writer.write("\t\t\t\tcontext.writeSafeString(java.lang.String.valueOf(param[i]));\n");
             writer.write(JavaUtils.isJavaSimpleType(arrtype) ? "" : "\t\t\t}\n");
             writer.write("\t\t\tcontext.writeString(\"</item\"+i+ \">\");\n\t\t}\n");
 //            writer.write("\t\t//name of parameter will be written by upper level\n");

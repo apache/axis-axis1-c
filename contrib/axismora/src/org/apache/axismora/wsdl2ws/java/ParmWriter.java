@@ -68,6 +68,7 @@ import org.apache.axismora.wsdl2ws.info.ElementInfo;
 import org.apache.axismora.wsdl2ws.info.Type;
 import org.apache.axismora.wsdl2ws.info.TypeMap;
 import org.apache.axismora.wsdl2ws.info.WebServiceContext;
+import org.apache.axismora.wsdl2ws.testing.TestUtils;
 
 /**
  * This class has the basic logic of the genarating Param classes (Type wrappers).
@@ -183,6 +184,7 @@ public abstract class ParmWriter extends JavaClassWriter {
             writeSerializeMethod();
             writer.write("\n");
             writeGettersAndSetter();
+			writeInitializer();
             //writeEqual();
         } catch (IOException e) {
             throw new WrapperFault(e);
@@ -401,45 +403,93 @@ public abstract class ParmWriter extends JavaClassWriter {
     //TODO remove this is for ease of testing 
 
     public void writeInitializer() throws IOException, WrapperFault {
-        String temp = null;
-        if (type.isArray())
-            return;
+    	int var = 0;
+    	
+    	if(this.type.isArray())
+    		return;
+		writer.write("\tpublic void init(){\n");
 
-        for (int i = 0; i < attribs.length; i++) {
-            String name =attribs[i][1];
-            writer.write("this." + attribs[i][0] + " =");
+		for (int i = 0; i < attribs.length; i++) {    
+		if(attribs[i][1].endsWith("[]") && !attribs[i][0].equals("byte[]")){
+			String arrayType = attribs[i][1];
+						
+			int length = TestUtils.getRandomInt(20);
+			String arrstr = "";
+			
+			for(int l = 0;l<length;l++){
+				String javaType = arrayType.substring(0,arrayType.indexOf('['));
+				String wrappername = TypeMap.getWrapperCalssNameForJavaClass(javaType);
+							
+				if(javaType.equals(wrappername)){
+					writer.write("\t\t"+javaType + " aparam"+var+" = new "+ javaType + "();\n");
+					writer.write("\t\taparam"+var+".init();\n");
+				}else{
+					writer.write("\t\t"+wrappername + " atparam"+var+" = new "+ wrappername + "();\n");
+					writer.write("\t\tatparam"+var+".init();\n");
+					writer.write("\t\t"+javaType + " aparam"+var+" = atparam"+var+".getParam();\n");
+				}
+				
+				if(l == 0){
+					arrstr = "aparam"+var;
+				}else
+					arrstr = arrstr + ",aparam"+var;	
+				var++;
+			}
+						
+			writer.write("\t\t"+attribs[i][0]+" = new "+arrayType+"{");
+			writer.write(arrstr);
+			writer.write("};\n");
+						
+		}else{
+			String javaType = attribs[i][1];
+			String wrappername = TypeMap.getWrapperCalssNameForJavaClass(javaType);
+			if(javaType.equals(wrappername)){
+				writer.write("\t\t"+attribs[i][0]+" = new "+ javaType + "();\n");
+				writer.write("\t\t"+attribs[i][0]+".init();\n");
+			}else{
+				writer.write("\t\t"+wrappername + " tparam"+i+" = new "+ wrappername + "();\n");
+				writer.write("\t\ttparam"+i+".init();\n");
+				writer.write("\t\t"+attribs[i][0]+" = tparam"+i+".getParam();\n");
+			}	
+		}
+		}
+		writer.write("\t}\n");
 
-            if (name.endsWith("[]")) {
-                writer.write(!"byte[]".equals(name) ? (" new " + name + "{") : "");
-                temp = attribs[i][1];
-                attribs[i][1] = name.substring(0, name.length() - 2);
-            }
-
-            if ("boolean".equals(attribs[i][1]))
-                writer.write("false");
-            else if (
-                "int".equals(attribs[i][1])
-                    || "long".equals(attribs[i][1])
-                    || "float".equals(attribs[i][1])
-                    || "double".equals(attribs[i][1])
-                    || "short".equals(attribs[i][1]))
-                writer.write(String.valueOf(i));
-            else if ("byte".equals(attribs[i][1]))
-                writer.write("\"string" + i + "\".getBytes();\n");
-            else if ("char".equals(attribs[i][1]))
-                writer.write("\'" + i + "\'");
-            else if ("java.lang.String".equals(attribs[i][1]))
-                writer.write("\"string" + i + "\"");
-            else
-                writer.write("new " + attribs[i][1] + "()");
-            if (name.endsWith("[]")) {
-                writer.write(!"byte[]".equals(name) ? "}" : "");
-                attribs[i][1] = temp;
-            }
-            writer.write(";\n");
-
-        }
-
+//        for (int i = 0; i < attribs.length; i++) {
+//            String name =attribs[i][1];
+//            writer.write("this." + attribs[i][0] + " =");
+//
+//            if (name.endsWith("[]")) {
+//                writer.write(!"byte[]".equals(name) ? (" new " + name + "{") : "");
+//                temp = attribs[i][1];
+//                attribs[i][1] = name.substring(0, name.length() - 2);
+//            }
+//
+//            if ("boolean".equals(attribs[i][1]))
+//                writer.write("false");
+//            else if (
+//                "int".equals(attribs[i][1])
+//                    || "long".equals(attribs[i][1])
+//                    || "float".equals(attribs[i][1])
+//                    || "double".equals(attribs[i][1])
+//                    || "short".equals(attribs[i][1]))
+//                writer.write(String.valueOf(i));
+//            else if ("byte".equals(attribs[i][1]))
+//                writer.write("\"string" + i + "\".getBytes();\n");
+//            else if ("char".equals(attribs[i][1]))
+//                writer.write("\'" + i + "\'");
+//            else if ("java.lang.String".equals(attribs[i][1]))
+//                writer.write("\"string" + i + "\"");
+//            else
+//                writer.write("new " + attribs[i][1] + "()");
+//            if (name.endsWith("[]")) {
+//                writer.write(!"byte[]".equals(name) ? "}" : "");
+//                attribs[i][1] = temp;
+//            }
+//            writer.write(";\n");
+//
+//        }
+//		writer.write("\t}\n");
     }
 
     public void writeEqual() throws IOException, WrapperFault {

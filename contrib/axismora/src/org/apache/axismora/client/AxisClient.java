@@ -71,6 +71,7 @@ import org.apache.axismora.soap.SOAPNodeInfo;
 
 import org.apache.axis.AxisFault;
 import org.apache.axis.deployment.wsdd.WSDDService;
+import org.apache.axis.enum.Style;
 import org.apache.axis.message.SOAPFault;
 
 /**
@@ -147,7 +148,9 @@ public class AxisClient extends AxisEngine {
             data.setAtServerSide(false);
             
             //TODO:below line should be handled inside SOAPBodyContentFactory.
-            //data.setMethodName(requestContext.getMethodName()); 
+            if(Style.RPC.equals(requestContext.getStyle()))
+            	data.setMethodName(requestContext.getMethodName()); 
+            	
             data.setSoapBodyContent(SOAPBodyContentFactory.getSOAPBodyContent(requestContext));
             
             //set http user detail

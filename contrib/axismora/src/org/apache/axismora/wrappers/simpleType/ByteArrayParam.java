@@ -61,6 +61,7 @@ import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
+import org.apache.axismora.wsdl2ws.testing.TestUtils;
 
 /**
  * @author Srianth Perera (hemapani@opensource.lk)
@@ -117,6 +118,9 @@ public class ByteArrayParam implements InOutParameter {
 	 */
 	public String toString() {
 		return new String(param);
+	}
+	public void init(){
+			this.param = TestUtils.getRandomBytes();
 	}
 
 }

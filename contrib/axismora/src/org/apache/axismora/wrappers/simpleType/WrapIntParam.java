@@ -61,6 +61,7 @@ import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
+import org.apache.axismora.wsdl2ws.testing.TestUtils;
 /**
  * @author VTpavan
  */
@@ -119,6 +120,10 @@ public class WrapIntParam implements InOutParameter {
 	 */
 	public String toString() {
 		return Integer.toString(param.intValue());
+	}
+	
+	public void init(){
+		this.param = new Integer(TestUtils.getRandomInt());
 	}
 
 }

@@ -65,6 +65,7 @@ import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
+import org.apache.axismora.wsdl2ws.testing.TestUtils;
 
 public class WrapFloatParam implements InOutParameter {
 	public Float param;
@@ -120,4 +121,7 @@ public class WrapFloatParam implements InOutParameter {
 		return Float.toString(param.floatValue());
 	}
 
+	public void init(){
+		this.param = new Float(TestUtils.getRandomFloat());
+	}
 }

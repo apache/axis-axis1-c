@@ -62,6 +62,7 @@ import java.io.IOException;
 
 import org.apache.axismora.wsdl2ws.SourceWriter;
 import org.apache.axismora.wsdl2ws.WrapperFault;
+import org.apache.axismora.wsdl2ws.WrapperUtils;
 /**
  * abstract class writer
  * @author Srianth Perera(hemapani@opensource.lk)
@@ -89,6 +90,23 @@ public abstract class JavaClassWriter implements SourceWriter {
         
      
     }
+    
+	public JavaClassWriter(String qualifiedName,String targetDirectory) throws WrapperFault {
+		this.classname = WrapperUtils.getClassNameFromFullyQualifiedName(qualifiedName);		
+		int arrayIndex = classname.indexOf('[');  
+		if( arrayIndex >0) 
+			this.classname = 
+				classname.substring(0,arrayIndex)+"Array";
+		this.packageName = WrapperUtils.getPackegeName4QualifiedName(qualifiedName);
+		if (packageName != null && !packageName.trim().equals(""))
+			this.pacakgesatement = "package " + packageName + ";\n";
+		else
+			this.pacakgesatement = "";
+		this.targetDirectory = targetDirectory;
+        
+     
+	}
+    
     public void writeSource() throws WrapperFault {
         try {
         	File file = getJavaFilePath();

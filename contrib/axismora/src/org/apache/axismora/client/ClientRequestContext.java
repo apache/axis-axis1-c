@@ -79,7 +79,7 @@ public class ClientRequestContext {
     /*This object would serialize the body, specific to different modes.*/
     private Serializable bodySerializer;
     
-    private Style style;
+    private Style style = Style.RPC;
     private String encoding;
     private Use use;
     
@@ -121,7 +121,6 @@ public class ClientRequestContext {
      * @return
      */
     public Style getStyle() {
-        this.style= Style.DOCUMENT;
         return style;
     }
 

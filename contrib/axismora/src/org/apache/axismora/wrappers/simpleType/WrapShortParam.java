@@ -65,6 +65,7 @@ import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
+import org.apache.axismora.wsdl2ws.testing.TestUtils;
 
 public class WrapShortParam implements InOutParameter {
 	public Short param;
@@ -122,5 +123,7 @@ public class WrapShortParam implements InOutParameter {
 	public String toString() {
 		return Short.toString(param.shortValue());
 	}
-
+	public void init(){
+		this.param = new Short(TestUtils.getRandomShort());
+	}
 }

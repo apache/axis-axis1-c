@@ -65,6 +65,7 @@ import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
+import org.apache.axismora.wsdl2ws.testing.TestUtils;
 
 public class DoubleParam implements InOutParameter {
     public double param;
@@ -124,6 +125,10 @@ public class DoubleParam implements InOutParameter {
 	 */
 	public String toString() {
 		return Double.toString(param);
+	}
+	
+	public void init(){
+			this.param = TestUtils.getRandomDouble();
 	}
 
 }

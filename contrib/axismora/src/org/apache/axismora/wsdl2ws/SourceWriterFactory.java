@@ -71,6 +71,7 @@ import org.apache.axismora.wsdl2ws.java.WrapWriter;
 import org.apache.axismora.wsdl2ws.java.client.LocatorWriter;
 import org.apache.axismora.wsdl2ws.java.client.ServiceInterfaceWriter;
 import org.apache.axismora.wsdl2ws.java.client.StubWriter;
+import org.apache.axismora.wsdl2ws.testing.RPCTestCaseWriter;
 /**
  * Genarate a SourceFactory depend on the reqirements. 
  * @author Srinath Perera (hemapani@opensource.lk)
@@ -106,7 +107,8 @@ public class SourceWriterFactory {
 				return new AllDocLitParamWriter(wscontext);
 		else if(genaratorType == WrapperConstants.GENERATOR_DOCLIT_STUB_JAVA)
 			return new DocLitStubWriter(wscontext); 
-        
+		else if(genaratorType == WrapperConstants.GENERATOR_RPC_TESTCASE)
+			return new RPCTestCaseWriter(wscontext); 	
         //C++	
         else if (genaratorType == WrapperConstants.GENERATOR_PARAM_CPP_ALL)
             return new org.apache.axismora.wsdl2ws.cpp.AllParamWriter(wscontext);

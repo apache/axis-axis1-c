@@ -65,6 +65,7 @@ import org.apache.axis.AxisFault;
 import org.apache.axis.encoding.SerializationContext;
 import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
+import org.apache.axismora.wsdl2ws.testing.TestUtils;
 
 public class FloatParam implements InOutParameter {
     public float param;
@@ -122,6 +123,9 @@ public class FloatParam implements InOutParameter {
 	 */
 	public String toString() {
 		return Float.toString(param);
+	}
+	public void init(){
+			this.param = TestUtils.getRandomFloat();
 	}
 
 }

@@ -210,5 +210,9 @@ public class YearParam implements InOutParameter {
     public YearParam getParam() {
         return this;
     }
+    
+	public void init(){
+	
+	}
 
 }

@@ -67,6 +67,7 @@ import org.apache.axismora.MessageContext;
 import org.apache.axismora.encoding.InOutParameter;
 import org.apache.axismora.encoding.InParameter;
 import org.apache.axismora.encoding.OutParameter;
+import org.apache.axismora.wsdl2ws.testing.TestUtils;
 
 public class StringParam implements InOutParameter, OutParameter, InParameter {
     public String param;
@@ -118,6 +119,10 @@ public class StringParam implements InOutParameter, OutParameter, InParameter {
 	 */
 	public String toString() {
 		return param;
+	}
+	
+	public void init(){
+		this.param = new String(TestUtils.getRandomString());
 	}
 
 }

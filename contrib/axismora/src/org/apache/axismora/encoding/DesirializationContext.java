@@ -236,7 +236,7 @@ public class DesirializationContext {
             }
 
             //If RPC I should read the method as well
-            if (this.style.equals("rpc")) {
+            if (this.style.equals(Style.RPC)) {
                 log.info("It's rpc.... Parsing body");
 				this.state = this.xpp.next();
                 //this two lines are to make sure we are dealing with the start tag
@@ -247,6 +247,7 @@ public class DesirializationContext {
                 this.method = new QName(this.xpp.getNamespace(), this.xpp.getName());
 
                 this.messageData.setMethodName(this.method);
+				log.info("method found "+this.method);
 				axispullparser.next();
             }
             //ok sounds perfect, the control is passed to wrapper		
