@@ -490,4 +490,6 @@ int ServerAxisEngine::setFaultOutputStream(int iFaultCode, Ax_soapstream* stream
     objSoapFault->setFaultDetail(sMessage);
     m_pSZ->setSoapFault (objSoapFault);
     m_pSZ->setOutputStream (stream);
+   
+    return AXIS_SUCCESS;
 }
