@@ -71,12 +71,19 @@
 
 #ifdef __cplusplus
 #include "../server/IParam.h"
-#include "../server/ClientAxisEngine.h"
+#include "../server/AxisEngine.h"
 #include <list>
 using namespace std;
+class ClientAxisEngine;
 class AxisTransport;
 #else
 #include "../server/Packet.h"
+#endif
+
+#if defined(WIN32) 
+#define STORAGE_CLASS_INFO __declspec(dllexport)
+#else
+#define STORAGE_CLASS_INFO 
 #endif
 
 typedef struct {
@@ -160,7 +167,7 @@ typedef struct {
 
 #ifdef __cplusplus
 
-class CallBase
+class STORAGE_CLASS_INFO CallBase
 {	
 public:
 	virtual void AXISCALL SetSOAPVersion(SOAP_VERSION version)=0;
@@ -559,8 +566,8 @@ typedef struct {
 #ifdef __cplusplus
 extern "C" { 
 #endif
-void* GetStubObject(AXIS_PROTOCOL_TYPE nProtocol, AxisChar* pchEndpointURI); 
-void DestroyStubObject(void* pCall); 
+STORAGE_CLASS_INFO void* GetStubObject(AXIS_PROTOCOL_TYPE nProtocol, AxisChar* pchEndpointURI); 
+STORAGE_CLASS_INFO void DestroyStubObject(void* pCall); 
 #ifdef __cplusplus
 } 
 #endif
