@@ -183,8 +183,8 @@ int TranslationUnit::GenerateWrapperClassImpl()
 		file << "#include \"" << m_pWSClass->GetName() << ".hpp\"" << endl;
 		file << endl;
 		//add includes
-		file << "#include \"common/ISoapDeserializer.h\"" << endl;
-		file << "#include \"common/ISoapSerializer.h\"" << endl;
+		file << "#include \"common/IWrapperSoapDeSerializer.h\"" << endl;
+		file << "#include \"common/IWrapperSoapSerializer.h\"" << endl;
 		file << "#include \"common/ISoapMethod.h\"" << endl;
 		file << "#include \"common/IParam.h\"" << endl;
 
