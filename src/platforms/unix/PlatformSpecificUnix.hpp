@@ -24,7 +24,7 @@
 // =============================================================
 #define PLATFORM_XMLPARSER_PATH      "libaxis_xmlparser.so"
 #define PLATFORM_TRANSPORTHTTP_PATH  "libaxis_transport.so"
-#define PLATFORM_SSLCHANNEL_PATH  "/usr/local/axiscpp_deploy/lib/libaxis2_ssl_channel.so"
+#define PLATFORM_SSLCHANNEL_PATH  "libaxis2_ssl_channel.so"
 
 #define PLATFORM_LOG_PATH            "/usr/local/axiscpp_deploy/log/AxisLog"
 #define PLATFORM_CLIENTLOG_PATH      "/usr/local/axiscpp_deploy/log/AxisClientLog"
