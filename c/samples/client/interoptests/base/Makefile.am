@@ -1,7 +1,7 @@
-bin_PROGRAMS = base
+bin_PROGRAMS = stubBase
 SUBDIRS =
 AM_CPPFLAGS = $(CPPFLAGS)
-base_SOURCES = InteropBaseClient.cpp InteropTestPortType.cpp  SOAPStruct.cpp 
+stubBase_SOURCES = Stub.cpp InteropBaseClient.cpp InteropTestPortType.cpp  SOAPStruct.cpp 
 
-base_LDADD   =  $(LDFLAGS)
+stubBase_LDADD   =  $(LDFLAGS)
 INCLUDES = -I$(AXISCPP_HOME)/include
