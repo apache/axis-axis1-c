@@ -448,7 +448,7 @@ const AnyElement* XMLParserExpat::anyNext()
 
 const XML_Ch* XMLParserExpat::getPrefix4NS(const XML_Ch* pcNS)
 {
-    for (map<AxisXMLString, AxisXMLString>::iterator it;
+    for (map<AxisXMLString, AxisXMLString>::iterator it=m_NsStack.begin();
          it!=m_NsStack.end(); it++)
     {
         if ((*it).second == pcNS)
