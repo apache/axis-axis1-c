@@ -36,7 +36,7 @@
 					<libset dir="${apache20.dir.server}/lib" libs="libapr, libhttpd" if="windows"/>
 					<libset dir="${dir.bin}" libs="${serverEngineLibraryName}"/>
 					<!-- Files to be compiled -->
-					<fileset dir="${dir.src.instrumented}">
+					<fileset dir="${dir.src}">
 						<include name="server/apache2/*.cpp"/>
 					</fileset>
 				</cc>
@@ -57,7 +57,7 @@
 					</linker>
 					<libset dir="${dir.bin}" libs="${serverEngineLibraryName}"/>
 					<!-- Files to be compiled -->
-					<fileset dir="${dir.src.instrumented}">
+					<fileset dir="${dir.src}">
 						<include name="server/apache2/*.cpp"/>
 					</fileset>
 				</cc>

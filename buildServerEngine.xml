@@ -30,7 +30,7 @@
 					<linker refid="LinuxLinker"/>
 					<linker refid="VisualC++Linker"/>
 					<!-- Files to be compiled -->
-					<fileset dir="${dir.src.instrumented}">
+					<fileset dir="${dir.src}">
 						<include name="common/*.cpp"/>
 						<include name="engine/*.cpp"/>
 						<include name="engine/server/*.cpp"/>
@@ -56,7 +56,7 @@
 					<!-- Linkers -->
 					<linker refid="AIXLinker"/>
 					<!-- Files to be compiled -->
-					<fileset dir="${dir.src.instrumented}">
+					<fileset dir="${dir.src}">
 						<include name="common/*.cpp"/>
 						<include name="engine/*.cpp"/>
 						<include name="engine/server/*.cpp"/>
