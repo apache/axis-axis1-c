@@ -62,8 +62,8 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include <client/transport/AxisTransport.h>
-#include <client/transport/axis/TransportFactory.hpp>
+#include "AxisTransport.h"
+#include "TransportFactory.hpp"
 
 AxisTransport::AxisTransport(Ax_soapstream* pSoap)
 {

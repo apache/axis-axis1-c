@@ -64,7 +64,7 @@
 
 #include <string>
 #include <exception>
-#include "../soap/SoapFault.h"
+#include "SoapFault.h"
 using namespace std;
 
 #define TEST_EXCEPTION FAULT_LAST+1

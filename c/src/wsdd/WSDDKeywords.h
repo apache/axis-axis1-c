@@ -5,7 +5,7 @@
 #if !defined(AFX_WSDDKEYWORDS_H__870A488E_084E_4EAB_8162_25A1DDF2CD74__INCLUDED_)
 #define AFX_WSDDKEYWORDS_H__870A488E_084E_4EAB_8162_25A1DDF2CD74__INCLUDED_
 
-#include <axis/common/GDefine.h>
+#include <axis/server/GDefine.h>
 
 //keywords used in the wsdd file
 extern const AxisXMLCh* kw_depl;

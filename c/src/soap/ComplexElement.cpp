@@ -66,8 +66,8 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "ComplexElement.h"
-#include <axis/soap/SoapSerializer.h>
-#include <axis/common/GDefine.h>
+#include <axis/server/SoapSerializer.h>
+#include <axis/server/GDefine.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

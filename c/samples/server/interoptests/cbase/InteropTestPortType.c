@@ -3,7 +3,7 @@
  * InteropTestPortType.c
  *
  */
-#include <axis/common/AxisUserAPI.h>
+#include <axis/server/AxisUserAPI.h>
 #include "SOAPStruct_Array.h"
 #include "SOAPStruct.h"
 

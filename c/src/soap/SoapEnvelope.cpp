@@ -70,8 +70,8 @@
 #endif
 
 #include "SoapEnvelope.h"
-#include <axis/common/GDefine.h>
-#include <axis/soap/SoapSerializer.h>
+#include <axis/server/GDefine.h>
+#include <axis/server/SoapSerializer.h>
 
 #include <stdio.h>
 

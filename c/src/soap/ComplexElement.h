@@ -69,7 +69,7 @@
 #endif
 
 #include <list>
-#include <axis/soap/BasicNode.h>
+#include <axis/server/BasicNode.h>
 
 using namespace std;
 /**

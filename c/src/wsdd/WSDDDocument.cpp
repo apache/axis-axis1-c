@@ -65,7 +65,7 @@
 #include "WSDDDocument.h"
 #include "WSDDKeywords.h"
 #include <string>
-#include <axis/common/AxisTrace.h>
+#include <axis/server/AxisTrace.h>
 
 #define NAMESPACESEPARATOR 0x03 /*Heart*/
 #define FILEBUFFSIZE 1024

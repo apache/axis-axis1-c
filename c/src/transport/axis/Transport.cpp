@@ -56,8 +56,8 @@
  */
 
 
-#include <client/transport/axis/Transport.hpp>
-#include <client/transport/axis/Platform.hpp>
+#include "Transport.hpp"
+#include "Platform.hpp"
 
 Transport::Transport()
 {
