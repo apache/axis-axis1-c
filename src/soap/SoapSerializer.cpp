@@ -282,17 +282,6 @@ int SoapSerializer::setSoapFault(SoapFault *pSoapFault)
 	return intStatus;
 }
 
-/*string& SoapSerializer::getStream()
-{
-	m_sSerializedStream= "";
-
-	if(m_pSoapEnvelope) {
-		m_sSerializedStream= m_pSoapEnvelope->serialize();
-	}
-
-	return m_sSerializedStream;
-}*/
-
 int SoapSerializer::SetOutputStream(const Ax_soapstream* pStream)
 {
 	m_pOutputStream = pStream;
@@ -300,15 +289,7 @@ int SoapSerializer::SetOutputStream(const Ax_soapstream* pStream)
 
 	if(m_pSoapEnvelope) {
 		iStatus= m_pSoapEnvelope->serialize(*this, (SOAP_VERSION)m_iSoapVersion);
-		//cout<<endl<<"after getStream"<<endl;
-		//SoapSerializer tmp_sz;
-		//iStatus= m_pSoapEnvelope->serialize(sSerialized, tmp_sz, (SOAP_VERSION)m_iSoapVersion);
-		//does this need to be handled here or at the top level. Discuss this.
-		//if(iStatus==FAIL) {
-		//	sSerialized="";
-		//}
 	}
-	//flushSerializedBuffer();
 	return iStatus;
 }
 

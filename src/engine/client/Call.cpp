@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Call.h"
-#include <iostream>
+
 //#include "../../../common/IMessageData.h"
 //#include "../../../common/ISoapMethod.h"
 
@@ -11,14 +11,17 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-extern "C" int initialize_module();
+extern "C" int initialize_module(int bServer);
 
 Call::Call()
 {
 	m_pAxisEngine = NULL;
+	m_pMsgData = NULL;
+	m_pIWSSZ = NULL;
+	m_pIWSDZ = NULL;
 	m_Soap.so.http.ip_headercount = 0;
 	m_Soap.so.http.ip_headers = NULL;
-	m_Param = new Param();
+	initialize_module(0);
 }
 
 Call::~Call()
@@ -28,6 +31,7 @@ Call::~Call()
 
 int Call::SetEndpointURI(const char *pchEndpointURI)
 {
+	m_Soap.so.http.uri_path = pchEndpointURI;
 	return SUCCESS;
 }
 
@@ -38,68 +42,73 @@ void Call::SetOperation(const char *pchOperation, const char* pchNamespace)
 	pMethod->setPrefix(m_pIWSSZ->getNewNamespacePrefix());
 	pMethod->setUri(pchNamespace);
 }
-/*
-void Call::AddParameter(XSDTYPE nType, uParamValue Value, const char* pchName)
-{
-	IParam* pRetParam = m_pIWSSZ->AddOutputParam(nType, Value);
-	pRetParam->SetName(pchName);
-}
-*/
+
 void Call::AddParameter(int nValue,const char* pchName)
 {
 	IParam* pRetParam = m_pIWSSZ->AddOutputParam(nValue);
 	pRetParam->SetName(pchName);
 }
+
 void Call::AddParameter(unsigned int unValue,const char* pchName)
 {
 	IParam* pRetParam = m_pIWSSZ->AddOutputParam(unValue);
 	pRetParam->SetName(pchName);
 }
+
 void Call::AddParameter(short sValue,const char* pchName)
 {
 	IParam* pRetParam = m_pIWSSZ->AddOutputParam(sValue);
 	pRetParam->SetName(pchName);
 }
+
 void Call::AddParameter(unsigned short usValue,const char* pchName)
 {
 	IParam* pRetParam = m_pIWSSZ->AddOutputParam(usValue);
 	pRetParam->SetName(pchName);
 }
+
 void Call::AddParameter(long lValue,const char* pchName)
 {
 	IParam* pRetParam = m_pIWSSZ->AddOutputParam(lValue);
 	pRetParam->SetName(pchName);
 }
+
 void Call::AddParameter(unsigned long ulValue,const char* pchName)
 {
 	IParam* pRetParam = m_pIWSSZ->AddOutputParam(ulValue);
 	pRetParam->SetName(pchName);
 }
+
 void Call::AddParameter(char cValue,const char* pchName)
 {
 	IParam* pRetParam = m_pIWSSZ->AddOutputParam(cValue);
 	pRetParam->SetName(pchName);
 }
+
 void Call::AddParameter(unsigned char ucValue,const char* pchName)
 {
 	IParam* pRetParam = m_pIWSSZ->AddOutputParam(ucValue);
 	pRetParam->SetName(pchName);
 }
+
 void Call::AddParameter(float fValue,const char* pchName)
 {
 	IParam* pRetParam = m_pIWSSZ->AddOutputParam(fValue);
 	pRetParam->SetName(pchName);
 }
+
 void Call::AddParameter(double dValue,const char* pchName)
 {
 	IParam* pRetParam = m_pIWSSZ->AddOutputParam(dValue);
 	pRetParam->SetName(pchName);
 }
+
 void Call::AddParameter(struct tm tValue,const char* pchName)
 {
 	IParam* pRetParam = m_pIWSSZ->AddOutputParam(tValue);
 	pRetParam->SetName(pchName);
 }
+
 void Call::AddParameter(const AxisChar* pStrValue,const char* pchName)
 {
 	IParam* pRetParam = m_pIWSSZ->AddOutputParam(pStrValue);
@@ -121,22 +130,22 @@ void Call::AddParameter(void *pObject, void *pSZFunct, void *pDelFunct, const ch
 void Call::SetReturnType(XSDTYPE nType)
 {
 	m_nReturnType = nType;
-	m_Param->SetValue(m_nReturnType, m_uReturnValue);
 }
 
-void Call::SetReturnType(void *pObject, void *pDZFunct, void *pDelFunct, const char* theType, const char * uri)
+void Call::SetReturnType(void *pObject, void *pDZFunct, void *pDelFunct, const char* pchTypeName, const char * pchUri)
 {
 	m_nReturnType = USER_TYPE;
 	m_ReturnCplxObj.pObject = pObject;
 	m_ReturnCplxObj.pDZFunct = (AXIS_DESERIALIZE_FUNCT)pDZFunct;
 	m_ReturnCplxObj.pDelFunct = (AXIS_OBJECT_DELETE_FUNCT)pDelFunct;
-	m_ReturnCplxObj.m_TypeName = theType;
-	m_ReturnCplxObj.m_URI = uri;
+	m_ReturnCplxObj.m_TypeName = pchTypeName;
+	m_ReturnCplxObj.m_URI = pchUri;
 }
 
 int Call::Invoke()
 {
 	int nStatus;
+	Param *pParam = NULL;
 	if (SUCCESS == (nStatus = m_pAxisEngine->Process(&m_Soap)))
 	{
 		if (m_nReturnType == USER_TYPE)
@@ -147,9 +156,9 @@ int Call::Invoke()
 			the return type can be checked. So need to call GetParam
 			on the deserializer before getting the actual params
 			*/
-			m_Param = (Param*)m_pIWSDZ->GetParam();
+			pParam = (Param*)m_pIWSDZ->GetParam();
 
-			if(m_ReturnCplxObj.m_TypeName == m_Param->GetTypeName())
+			if (pParam && (m_ReturnCplxObj.m_TypeName == pParam->GetTypeName()))
 			{
 				m_ReturnCplxObj.pDZFunct(m_ReturnCplxObj.pObject, m_pMsgData->m_pDZ);
 			}
@@ -165,21 +174,22 @@ int Call::Invoke()
 		}
 		else //basic type
 		{
-			m_Param = (Param*)m_pIWSDZ->GetParam();
+			pParam = (Param*)m_pIWSDZ->GetParam();
+			if (pParam) m_uReturnValue = pParam->GetValue();
 		}
 	}
 	return nStatus;
 }
 
-Param* Call::GetResult()
+uParamValue Call::GetResult()
 {
-	return m_Param;
+	return m_uReturnValue;
 }
 
 int Call::Initialize()
 {
-	initialize_module();
 	m_Soap.sessionid = "somesessionid1234";
+	if (SUCCESS != OpenConnection()) return FAIL;
 	if (m_pAxisEngine) delete m_pAxisEngine;
 	m_pAxisEngine = new ClientAxisEngine();
 	if (!m_pAxisEngine) return FAIL;
@@ -208,6 +218,7 @@ int Call::UnInitialize()
 		delete m_pAxisEngine;
 		m_pAxisEngine = NULL;
 	}
+	CloseConnection();
 	return SUCCESS;
 }
 
@@ -221,4 +232,24 @@ int Call::SetHeader(char *key, char *value)
 {
 	set_header(&m_Soap, key, value);
 	return 0;
+}
+
+/**
+ * This method takes a look at the m_Soap structure
+ * and open connection to the server then this adds the 
+ * relevant pointers to the m_Soap structure
+ */
+int Call::OpenConnection()
+{
+	
+	return SUCCESS;
+}
+
+/**
+ * This method closes the connection of this object to
+ * the server
+ */
+void Call::CloseConnection()
+{
+	
 }

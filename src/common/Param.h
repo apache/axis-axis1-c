@@ -150,6 +150,7 @@ public: //Conversion functions
 //	int SetUserType(IAccessBean* pObject);
 	int SetUserType(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct);
 	void SetName(const AxisChar* sName);
+	uParamValue GetValue(){ return m_Value;};
 private:
 	BasicTypeSerializer m_BTSZ;
     AxisTime m_uAxisTime;

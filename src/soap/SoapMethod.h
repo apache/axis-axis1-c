@@ -110,7 +110,6 @@ private:
 	AxisString m_strPrefix;
 	AxisString m_strLocalname;
 	AxisString m_strUri;
-	list<Param*> m_InputParams;
 	list<Param*> m_OutputParams;
 	//string m_strMethodSerialized;
 	//test line
@@ -121,7 +120,6 @@ public:
 	int serialize(SoapSerializer& pSZ);
 	//int serialize(string&);
 	void AddOutputParam(Param *param);
-	void addInputParam(Param* param);
 	void setUri(const AxisChar* uri);
 	void setLocalName(const AxisChar* localname);
 	void setPrefix(const AxisChar* prefix);

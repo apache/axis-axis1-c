@@ -137,6 +137,9 @@ extern "C" int process_request(Ax_soapstream *str)
 	WSDDServiceMap::const_iterator iter;
 	WSDDService* pService = NULL;
 
+	/* If there is no send function given in the Ax_soapstream struct */
+	if (!str->transport.pSendFunct) return FAIL;
+
 	switch (str->trtype)
 	{
 		case APTHTTP:
@@ -178,7 +181,7 @@ extern "C" int process_request(Ax_soapstream *str)
 				if (sUriWOAxis.empty())
 				{
 					pSrvMap = g_pWSDDDeployment->GetWSDDServiceMap();
-					send_response_bytes("<html><body>\
+					str->transport.pSendFunct("<html><body>\
 						<h1 align=\"center\">Welcome to Axis C++</h1>\
 						<br>\
 						<h2>List of Deployed Web services<br></h2>\
@@ -189,16 +192,16 @@ extern "C" int process_request(Ax_soapstream *str)
 					for (iter = pSrvMap->begin();iter != pSrvMap->end();iter++)
 					{
 						pService = (*iter).second;
-						send_response_bytes("<tr><td width=\"200\">", str->str.op_stream);
-						send_response_bytes((char *)pService->GetServiceName(), str->str.op_stream);
-						send_response_bytes("</td><td width=\"200\"><a href=\"./", str->str.op_stream);
-						if (bNoSlash) send_response_bytes("axis/", str->str.op_stream); 
-						send_response_bytes((char *)pService->GetServiceName(), str->str.op_stream);
-						send_response_bytes("?wsdl", str->str.op_stream);
-						send_response_bytes("\">wsdl</a></td>", str->str.op_stream);
-						send_response_bytes("</tr>", str->str.op_stream);
+						str->transport.pSendFunct("<tr><td width=\"200\">", str->str.op_stream);
+						str->transport.pSendFunct((char *)pService->GetServiceName(), str->str.op_stream);
+						str->transport.pSendFunct("</td><td width=\"200\"><a href=\"./", str->str.op_stream);
+						if (bNoSlash) str->transport.pSendFunct("axis/", str->str.op_stream); 
+						str->transport.pSendFunct((char *)pService->GetServiceName(), str->str.op_stream);
+						str->transport.pSendFunct("?wsdl", str->str.op_stream);
+						str->transport.pSendFunct("\">wsdl</a></td>", str->str.op_stream);
+						str->transport.pSendFunct("</tr>", str->str.op_stream);
 					}
-					send_response_bytes("</table></body></html>", str->str.op_stream);
+					str->transport.pSendFunct("</table></body></html>", str->str.op_stream);
 					Status = SUCCESS;
 				}
 				else 
@@ -207,7 +210,7 @@ extern "C" int process_request(Ax_soapstream *str)
 					//check whether wsdl file is available
 					if((WsddFile = fopen(sServiceName.c_str(),"r"))==NULL)
 					{
-						send_response_bytes("<h3>Url not available</h3>", str->str.op_stream);
+						str->transport.pSendFunct("<h3>Url not available</h3>", str->str.op_stream);
 						Status = SUCCESS;
 						//handle the error
 					}
@@ -217,7 +220,7 @@ extern "C" int process_request(Ax_soapstream *str)
 						while((charcount = fread(ReadBuffer, 1, BYTESTOREAD-1, WsddFile)) != 0)
 						{
 							*(ReadBuffer + charcount) = '\0';
-							send_response_bytes(ReadBuffer, str->str.op_stream);
+							str->transport.pSendFunct(ReadBuffer, str->str.op_stream);
   						}
 						Status = SUCCESS;
 						fclose(WsddFile);
@@ -227,17 +230,18 @@ extern "C" int process_request(Ax_soapstream *str)
 		break;
 
 		default:
-			send_response_bytes("Unknown Protocol", str->str.op_stream);
+			str->transport.pSendFunct("Unknown Protocol", str->str.op_stream);
 		break;
 	}
 	return Status;
 }
 
-extern "C" int initialize_module()
+extern "C" int initialize_module(int bServer)
 {
 	//order of these initialization method invocation should not be changed
 //	AXISTRACE1("inside initialize_module\n");
 	XMLPlatformUtils::Initialize();
+	AxisEngine::m_bServer = bServer;
 	AxisUtils::Initialize();
 	WSDDKeywords::Initialize();
 	SoapKeywordMapping::Initialize();
