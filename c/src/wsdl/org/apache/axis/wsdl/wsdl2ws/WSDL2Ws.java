@@ -283,7 +283,7 @@ public class WSDL2Ws {
 	    	  	while (paramlist.hasNext()) {
 	        	 	Part p = (Part) paramlist.next();
 	            	pinfo = createParameterInfo(p);
-	               	minfo.addInputParameter(pinfo);
+					if (null != pinfo) minfo.addInputParameter(pinfo);
 	           	}
             }
             //get the return type
@@ -327,9 +327,10 @@ public class WSDL2Ws {
 				}*/
 			}
 			else{
-	            if (returnlist.hasNext()) {
+	            while (returnlist.hasNext()) {
 	                Part p = ((Part) returnlist.next());
-	   		        minfo.addOutputParameter(createParameterInfo(p));
+					pinfo = createParameterInfo(p);
+					if (null != pinfo) minfo.addOutputParameter(pinfo);
 	            }
 			}
         }
