@@ -73,47 +73,67 @@
 
 WSDDHandler::WSDDHandler()
 {
-  m_Option = new map<string, string>;
   m_nLibId = 0;
+  m_nScope = AH_REQUEST; //default
+  m_sAux = "";
+  m_Params = NULL;
 }
 
 WSDDHandler::~WSDDHandler()
 {
-  delete(m_Option);
+  if (m_Params) delete m_Params;
 }
 
-void WSDDHandler::SetLibName(string& sLibName)
+void WSDDHandler::SetLibName(const string& sLibName)
 {
 	m_sLibName = sLibName;
 }
 
-int WSDDHandler::GetLibID()
+void WSDDHandler::SetLibId(int nLibId)
+{
+	m_nLibId = nLibId;
+}
+
+int WSDDHandler::GetLibId() const
 {
 	return m_nLibId;
 }
 
-string& WSDDHandler::GetLibName()
+const string& WSDDHandler::GetLibName() const
 {
 	return m_sLibName;
 }
 
-int WSDDHandler::GetScope()
+int WSDDHandler::GetScope() const
 {
 	return m_nScope;
 }
 
-string WSDDHandler::GetOption(string sArg)
+void WSDDHandler::SetScope(const string& sScope)
 {
-  return (*m_Option)[sArg]; 
+	if (sScope == kw_scope_app)
+		m_nScope = AH_APPLICATION;	
+	else if (sScope == kw_scope_ses)
+		m_nScope = AH_SESSION;	
+	else
+		m_nScope = AH_REQUEST;	
 }
 
-void WSDDHandler::SetOption(string sOption, string sValue)
+const string& WSDDHandler::GetParameter(const string& sKey) const
 {
-  (*m_Option)[sOption] = sValue; 
+	if (m_Params->find(sKey) != m_Params->end())
+		return (*m_Params)[sKey];
+	return m_sAux;
 }
 
-map<string, string>* WSDDHandler::GetOptionList()
+void WSDDHandler::AddParameter(const string& sKey, const string& sValue)
 {
-  return m_Option;
+	if (!m_Params) m_Params = new map<string, string>;
+	(*m_Params)[sKey] = sValue; 
+}
+
+const map<string, string>* WSDDHandler::GetParameterList() const
+{
+  return m_Params;
 }
 

@@ -83,25 +83,32 @@ using namespace std;
 
 class WSDDDeployment  
 {
+	friend class WSDDDocument;
 public:
-	string& GetLibName(int nLibId);
-	int SetServices(WSDDServiceMap * svs);
-	WSDDService* GetService(string& sServiceName);
 	int LoadWSDD(string& sWSDD);
-	int SetTransport(WSDDTransport * trans);
-	WSDDTransport* GetTransport();
-	int SetGlobalRequestFlowHandlers(WSDDHandlerList * greqflow);
-	WSDDHandlerList* GetGlobalRequestFlowHandlers();
-	int SetGlobalResponseFlowHandlers(WSDDHandlerList * gresflow);
-	WSDDHandlerList* GetGlobalResponseFlowHandlers();
+	int UpdateWSDD(string& sWSDDNew);
+	const string& GetLibName(int nLibId);
+	const WSDDService* GetService(const string& sServiceName);
+	const WSDDHandlerList* GetGlobalRequestFlowHandlers();
+	const WSDDHandlerList* GetGlobalResponseFlowHandlers();
+	const WSDDHandlerList* GetTransportRequestFlowHandlers(AXIS_PROTOCOL_TYPE protocol);
+	const WSDDHandlerList* GetTransportResponseFlowHandlers(AXIS_PROTOCOL_TYPE protocol);
 	const WSDDServiceMap* GetWSDDServiceMap();
 	WSDDDeployment();
 	virtual ~WSDDDeployment();
+private: //methods that only be used by WSDDDepolyment.
+	void SetLibIdMap(map<string, int>* pLibNameIdMap);
+	int AddService(WSDDService* pService);
+	int AddHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL_TYPE protocol=APTHTTP);
+	int RemoveService(WSDDService* pService);
+	int RemoveHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL_TYPE protocol=APTHTTP);
 private:
-	WSDDServiceMap * m_DeployedServices;
-	WSDDHandlerList * m_GlobalRequestHandlers;
-	WSDDHandlerList * m_GlobalResponseHandlers;
+	WSDDServiceMap* m_DeployedServices;
+	WSDDHandlerList* m_GlobalRequestHandlers;
+	WSDDHandlerList* m_GlobalResponseHandlers;
 	WSDDTransport* m_pTransportHandlers;
+	map<string, int>* m_pLibNameIdMap;
+	string m_sAux;
 };
 
 #endif // !defined(AFX_WSDDDEPLOYMENT_H__2B3E0205_06F3_47C1_8D9C_479CBFB8ACC2__INCLUDED_)

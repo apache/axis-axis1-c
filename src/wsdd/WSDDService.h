@@ -82,29 +82,25 @@ using namespace std;
 class WSDDService : public WSDDHandler 
 {
 public:
-	void SetServiceName(string& sServiceName);
-	string& GetServiceName();
-	bool IsAllowedMethod(string& sServiceName);
-	void SetAllowedMethod(string& sMethodName);
-	WSDDHandlerList* GetResponseFlowHandlers();
-	void SetRequestFlowHandlers(WSDDHandlerList * reqFlowHList);
-	void SetResponseFlowHandlers(WSDDHandlerList * resFlowHList);
-
-	WSDDHandlerList* GetRequestFlowHandlers();
-  void SetAllowedRoles(string& sRole);
-  list<string> GetAllowedRoles();
-  void SetIsServiceAllowed(int m_IsServiceAllowed);
-	int GetIsServiceAllowed();
-
+	void SetServiceName(const string& sServiceName);
+	void SetProvider(const string& sProvider);
+	const string& GetServiceName();
+	bool IsAllowedMethod(const string& sMethodName) const;
+	void AddAllowedMethod(const string& sMethodName);
+	const WSDDHandlerList* GetResponseFlowHandlers() const;
+	void AddHandler(bool bRequestFlow, WSDDHandler* pHandler);
+	const WSDDHandlerList* GetRequestFlowHandlers() const;
+	void AddAllowedRole(const string& sRole);
+	const list<string>& GetAllowedRoles();
 	WSDDService();
 	virtual ~WSDDService();
+
 private:
 	string m_sProvider;
 	list<string> m_AllowedMethods;
-	WSDDHandlerList * m_RequestHandlers;
-	WSDDHandlerList * m_ResponseHandlers;
-  list<string> m_AllowedRoles;
-  int m_IsServiceAllowed;
+	WSDDHandlerList* m_RequestHandlers;
+	WSDDHandlerList* m_ResponseHandlers;
+	list<string> m_AllowedRoles;
 };
 
 typedef map<string, WSDDService*> WSDDServiceMap;
