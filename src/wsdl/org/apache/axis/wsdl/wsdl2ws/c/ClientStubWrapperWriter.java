@@ -144,9 +144,11 @@ public class ClientStubWrapperWriter extends CFileWriter{
 			params = minfo.getParameterTypes().iterator();
 			if(params.hasNext()){
 				writer.write(" Value"+0);
+				params.next();
 			}
 			for(int j =1; params.hasNext();j++){
 				writer.write(", Value"+j);
+				params.next();
 			}
 			writer.write(");\n}\n\n");
 	  	}			
