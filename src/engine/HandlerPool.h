@@ -23,11 +23,11 @@
 #if !defined(AXIS_HANDLERPOOL_H__OF_AXIS_INCLUDED_)
 #define AXIS_HANDLERPOOL_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/WSDDHandler.h>
-#include <axis/server/WSDDService.h>
+#include "../wsdd/WSDDHandler.h"
+#include "../wsdd/WSDDService.h"
 #include <axis/server/BasicHandler.h>
 #include "HandlerLoader.h"
-#include <axis/server/HandlerChain.h>
+#include "HandlerChain.h"
 #include "SharedObject.h"
 
 #include <list>

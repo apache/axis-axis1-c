@@ -20,7 +20,7 @@
  */
 
 
-#include <axis/server/MessageData.h>
+#include "../common/MessageData.h"
 #include "IDeployerUtils.h"
 #include "../wsdd/WSDDDeployment.h"
 

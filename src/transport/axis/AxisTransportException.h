@@ -18,33 +18,32 @@
  *
  */
  
-#ifndef __AXISENGINEEXCEPTION_H_OF_AXIS_INCLUDED_
-#define __AXISENGINEEXCEPTION_H_OF_AXIS_INCLUDED_
+#ifndef __AXISTRANSPORTEXCEPTION_H_OF_AXIS_INCLUDED_
+#define __AXISTRANSPORTEXCEPTION_H_OF_AXIS_INCLUDED_
 
 #include <string>
-#include <exception>
 #include <axis/server/AxisException.h>
 using namespace std;
 
-class STORAGE_CLASS_INFO AxisEngineException :public AxisException
+class STORAGE_CLASS_INFO AxisTransportException :public AxisException
 {
 
 public:
-    AxisEngineException();
-    AxisEngineException(const int iExceptionCode);
-    AxisEngineException(const int iExceptionCode, char* pcMessage);
-    AxisEngineException(const exception* e);
-    AxisEngineException(const exception* e, const int iExceptionCode);
-    virtual ~AxisEngineException() throw();
+    AxisTransportException();
+    AxisTransportException(const int iExceptionCode);
+    AxisTransportException(const int iExceptionCode, char* pcMessage);
+    AxisTransportException(const exception* e);
+    AxisTransportException(const exception* e, const int iExceptionCode);
+    virtual ~AxisTransportException() throw();
     const char* what() throw();
     const int getExceptionCode();
                                                                                                                              
 private:
-    const string getMessage(const exception* e);
-    const string getMessage(const int iExceptionCode);
+    const string& getMessage(const exception* e);
+    const string& getMessage(const int iExceptionCode);
     void processException(const exception* e);
     void processException(const exception* e, const int iExceptionCode);
-    void processException (const exception* e, char* pcMessage);
+	void processException (const exception* e, char* pcMessage);
     void processException(const int iExceptionCode);
     void processException(const int iExceptionCode, char* pcMessage);                                                                                                                           
     string m_sMessage;

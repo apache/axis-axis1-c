@@ -21,7 +21,7 @@
 #if !defined(_PARAM_H____OF_AXIS_INCLUDED_)
 #define _PARAM_H____OF_AXIS_INCLUDED_
 
-#include "IParam.h"
+#include <axis/server/IParam.h>
 
 class ArrayBean;
 /*

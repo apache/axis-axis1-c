@@ -41,12 +41,12 @@
  */
 
 #include "SoapFault.h"
-#include <axis/server/SoapSerializer.h>
+#include "SoapSerializer.h"
+#include "SoapDeSerializer.h"
 #include <axis/server/SoapEnvVersions.h>
 #include <axis/server/GDefine.h>
-#include <axis/server/AxisConfig.h>
-#include <axis/server/AxisTrace.h>
-
+#include "../common/AxisTrace.h"
+#include "../common/AxisConfig.h"
 extern AxisTrace* g_pAT;
 extern AxisConfig* g_pConfig;
 
@@ -63,7 +63,6 @@ SoapFault::~SoapFault()
     delete m_pFaultstringParam;
     delete m_pFaultactorParam;
     delete m_pFaultDetail;
-
     m_pFaultcodeParam = NULL;
     m_pFaultstringParam = NULL;
     m_pFaultactorParam = NULL;

@@ -26,7 +26,7 @@
 #define AXIS_XMLPARSERFACTORY_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/GDefine.h>
-#include <axis/server/XMLParser.h>
+#include "../xml/XMLParser.h"
 
 #define CREATE_FUNCTION2 "CreateInstance"
 #define DELETE_FUNCTION2 "DestroyInstance"

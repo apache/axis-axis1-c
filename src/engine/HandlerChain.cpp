@@ -20,8 +20,8 @@
  */
 
 
-#include <axis/server/HandlerChain.h>
-#include <axis/server/AxisTrace.h>
+#include "HandlerChain.h"
+#include "../common/AxisTrace.h"
 extern AxisTrace* g_pAT;
 
 HandlerChain::HandlerChain ()

@@ -21,15 +21,15 @@
 #if !defined(_SOAPFAULT_H____OF_AXIS_INCLUDED_)
 #define _SOAPFAULT_H____OF_AXIS_INCLUDED_
 
+#include <axis/server/AxisException.h>
+#include <axis/ISoapFault.h>
+#include "../common/Param.h"
+#include <axis/server/SoapEnvVersions.h>
+class SoapSerializer;
+class SoapDeSerializer;
+
 #include <string>
 #include <map>
-#include <axis/server/AxisException.h>
-#include <axis/server/Param.h>
-#include <axis/server/SoapDeSerializer.h>
-#include <axis/ISoapFault.h>
-
-class SoapSerializer;
-//class SoapDeSerializer;
 
 using namespace std;
     

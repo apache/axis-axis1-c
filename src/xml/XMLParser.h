@@ -27,9 +27,9 @@
 #define __XMLPARSER_H_OF_AXIS_INCLUDED__
 
 #include "AnyElement.h"
-#include <axis/SOAPTransport.h>
+#include "../transport/SOAPTransport.h"
 
-#include "GDefine.h"
+#include <axis/server/GDefine.h>
 
 /**
  * @class XMLParser

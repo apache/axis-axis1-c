@@ -23,8 +23,9 @@
 #include "WSDDDocument.h"
 
 #include <axis/server/GDefine.h>
-#include <axis/server/AxisConfig.h>
-#include <axis/server/AxisTrace.h>
+#include "../common/AxisConfig.h"
+#include "../common/AxisTrace.h"
+#include "AxisWsddException.h"
 
 extern AxisTrace* g_pAT;
 

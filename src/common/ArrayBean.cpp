@@ -20,10 +20,10 @@
  *
  */
 
-#include <axis/server/Param.h>
+#include "Param.h"
 #include "ArrayBean.h"
-#include <axis/server/BasicTypeSerializer.h>
-#include <axis/server/AxisEngine.h>
+#include "BasicTypeSerializer.h"
+#include "../engine/AxisEngine.h"
 
 
 ArrayBean::ArrayBean()

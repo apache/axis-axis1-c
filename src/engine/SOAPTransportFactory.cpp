@@ -22,11 +22,11 @@
  */
 
 #include "SOAPTransportFactory.h"
-#include <axis/SOAPTransport.h>
+#include "../transport/SOAPTransport.h"
 #include <stdio.h>
-#include <axis/server/AxisConfig.h>
-#include <axis/AxisEngineException.h>
-#include <axis/server/AxisTrace.h>
+#include "../common/AxisConfig.h"
+#include "AxisEngineException.h"
+#include "../common/AxisTrace.h"
                                                                                                                              
 extern AxisTrace* g_pAT;
 extern AxisConfig* g_pConfig;

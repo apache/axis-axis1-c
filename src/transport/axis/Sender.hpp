@@ -26,8 +26,8 @@
 #if !defined(_AXIS_SENDER_HPP)
 #define _AXIS_SENDER_HPP
 
-#include <axis/AxisTransportException.h>
-#include <axis/server/AxisTrace.h>
+#include "AxisTransportException.h"
+#include "../../common/AxisTrace.h"
 extern AxisTrace* g_pAT;
 
 #include "Transport.hpp"

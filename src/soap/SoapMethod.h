@@ -18,9 +18,9 @@
 #if !defined(AXIS_SOAPMETHOD_H__OF_AXIS_INCLUDED_)
 #define AXIS_SOAPMETHOD_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/Param.h>
+#include "../common/Param.h"
 #include "../common/ISoapMethod.h"
-#include <axis/server/SoapSerializer.h>
+#include "SoapSerializer.h"
 #include <list>
 
 class Attribute;

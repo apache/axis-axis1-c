@@ -27,19 +27,19 @@
 #endif
 
 #include "SoapEnvelope.h"
-#include <axis/server/SoapSerializer.h>
-#include <axis/server/HeaderBlock.h>
+#include "SoapSerializer.h"
+#include "HeaderBlock.h"
 #include <axis/server/GDefine.h>
 #include <axis/server/Packet.h>
 #include "../common/ArrayBean.h"
-#include <axis/server/BasicTypeSerializer.h>
+#include "../common/BasicTypeSerializer.h"
 #include "../soap/SoapKeywordMapping.h"
-#include <axis/AxisSoapException.h>
-#include <axis/server/AxisConfig.h>
+#include "AxisSoapException.h"
 #include <stdio.h>
 #include <stdarg.h>
 
-#include <axis/server/AxisTrace.h>
+#include "../common/AxisTrace.h"
+#include "../common/AxisConfig.h"
 extern AxisTrace* g_pAT;
 extern AxisConfig* g_pConfig;
 

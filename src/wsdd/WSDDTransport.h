@@ -18,7 +18,7 @@
 #if !defined(AXIS_WSDDTRANSPORT_H__OF_AXIS_INCLUDED_)
 #define AXIS_WSDDTRANSPORT_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/WSDDHandler.h>
+#include "WSDDHandler.h"
 #include <map>
 /*
  *   @class WSDDTransport

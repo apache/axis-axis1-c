@@ -20,8 +20,8 @@
 
 
 
-#include <axis/server/WSDDService.h>
-#include <axis/server/AxisTrace.h>
+#include "WSDDService.h"
+#include "../common/AxisTrace.h"
 
 
 

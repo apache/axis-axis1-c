@@ -18,7 +18,7 @@
  *
  */
  
-#include <axis/server/AxisMessage.h>
+#include "AxisMessage.h"
 
 const string& AxisMessage::getMessage(int iExceptionCode)
 {

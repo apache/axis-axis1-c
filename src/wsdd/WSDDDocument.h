@@ -22,10 +22,10 @@
 #define __WSDDDOCUMENT_H_OF_AXIS_INCLUDED__
 
 #include "WSDDDocument.h"
-#include <axis/SOAPTransport.h>
-#include <axis/server/AnyElement.h>
+#include "../transport/SOAPTransport.h"
+#include "../xml/AnyElement.h"
 #include "WSDDDeployment.h"
-#include <axis/server/WSDDService.h>
+#include "WSDDService.h"
 #include "../xml/QName.h"
 
 #include <string>

@@ -39,7 +39,7 @@
 
 #include <axis/server/Attribute.h>
 #include <axis/server/GDefine.h>
-#include <axis/server/SoapSerializer.h>
+#include "SoapSerializer.h"
 
 AttributeFunctions Attribute::ms_VFtable;
 bool Attribute::bInitialized = false;

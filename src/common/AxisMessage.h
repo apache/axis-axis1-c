@@ -26,7 +26,7 @@
 #define __AXISMESSAGE_H_OF_AXIS_INCLUDED_
 
 #include <string>
-#include "AxisException.h"
+#include <axis/server/AxisException.h>
 
 using namespace std;
 

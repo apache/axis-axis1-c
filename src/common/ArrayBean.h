@@ -21,7 +21,7 @@
 
 #include "IArrayBean.h"
 #include <axis/server/IParam.h>
-#include <axis/server/BasicTypeSerializer.h>
+#include "BasicTypeSerializer.h"
 
 #include <list>
 using namespace std;

@@ -19,7 +19,7 @@
 
 
 
-#include <axis/server/WSDDHandler.h>
+#include "WSDDHandler.h"
 
 
 WSDDHandler::WSDDHandler()

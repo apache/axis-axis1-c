@@ -20,9 +20,9 @@
  *
  */
 
-#include <axis/server/AxisConfig.h>
+#include "AxisConfig.h"
 #include <axis/server/GDefine.h>
-#include <axis/server/AxisFile.h>
+#include "../common/AxisFile.h"
 #include "AxisUtils.h"
 #include <stdlib.h>
 #include <stdio.h>

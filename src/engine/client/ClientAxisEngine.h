@@ -18,7 +18,7 @@
 #if !defined(AXIS_CLIENTAXISENGINE_H__OF_AXIS_INCLUDED_)
 #define AXIS_CLIENTAXISENGINE_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/AxisEngine.h>
+#include "../AxisEngine.h"
 /*
  *   @class ClientAxisEngine
  *   @brief

@@ -17,9 +17,9 @@
 #if !defined(_SOAPDESERIALIZER_H____OF_AXIS_INCLUDED_)
 #define _SOAPDESERIALIZER_H____OF_AXIS_INCLUDED_
 
-#include "IHandlerSoapDeSerializer.h"
+#include <axis/server/IHandlerSoapDeSerializer.h>
 #include "HeaderBlock.h"
-#include "XMLParser.h"
+#include "../xml/XMLParser.h"
 
 class SoapFault;
 class SoapMethod;
@@ -100,11 +100,11 @@ public:
      */
     void* AXISCALL getCmplxObject(void* pDZFunct, void* pCreFunct, 
         void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
-
+    
     const char* AXISCALL getCmplxFaultObjectName();
     void* AXISCALL getCmplxFaultObject(void* pDZFunct, void* pCreFunct,
         void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
-    
+
     /* Methods used by wrappers to get a deserialized value of basic types */
     int AXISCALL getElementAsInt(const AxisChar* pName, 
         const AxisChar* pNamespace);

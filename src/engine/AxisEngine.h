@@ -29,9 +29,9 @@
 #define __AXISENGINE_OF_AXIS_INCLUDED__
 
 
-#include "SoapSerializer.h"
-#include "SoapDeSerializer.h"
-#include "MessageData.h"
+#include "../soap/SoapSerializer.h"
+#include "../soap/SoapDeSerializer.h"
+#include "../common/MessageData.h"
 #include "HandlerChain.h"
 
 /*

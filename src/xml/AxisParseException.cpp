@@ -19,9 +19,7 @@
  *
  */
 
-#include <axis/AxisParseException.h>
-#include <exception>
-using namespace std;
+#include "AxisParseException.h"
 
 /**
  *    Default when no parameter passed. When thrown with no parameter
@@ -86,12 +84,12 @@ void AxisParseException::processException(const int iExceptionCode, char* pcMess
     if(pcMessage)
         delete pcMessage;
 }
-const string AxisParseException::getMessage (const exception* objException)
+const string& AxisParseException::getMessage (const exception* objException)
 {
     return objException->what();
 }
 
-const string AxisParseException::getMessage (const int iExceptionCode)
+const string& AxisParseException::getMessage (const int iExceptionCode)
 {
     switch(iExceptionCode)
     {

@@ -22,7 +22,7 @@
 #include "GDefine.h"
 
 class WSDDService;
-#include "IAdminUtils.h"
+class IAdminUtils;
 
 #include "IHandlerSoapDeSerializer.h"
 #include "IHandlerSoapSerializer.h"
