@@ -81,12 +81,19 @@ using namespace std;
 class HeaderFile  
 {
 public:
+	void AddBeanClass(BeanClass* pClass);
+	void SetWSClass(WSClass* pClass);
+	void AddNSDecl(string& sNSDecl);
+	void AddInclude(string& sInclude);
+	int GenerateWrapperClassImpl();
+	int GenerateWrapperClassDef();
+	int GenerateWSDL();
 	HeaderFile();
 	virtual ~HeaderFile();
 private:
 	list<string> m_includes;
 	list<string> m_nsdecls;
-	WSClass m_WSClass; //there can be only one web service class per header file.
+	WSClass *m_pWSClass; //there can be only one web service class per header file.
 	list<BeanClass*> m_Beans;
 };
 

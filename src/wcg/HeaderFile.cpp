@@ -65,17 +65,88 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "HeaderFile.h"
+#include "File.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
+#define WCID(X) "__WRAPPER_CLASS_" << X << "_INCLUDED__"
 
 HeaderFile::HeaderFile()
 {
-
+	m_pWSClass = NULL;
 }
 
 HeaderFile::~HeaderFile()
 {
+	if (m_pWSClass) delete m_pWSClass;
+	for (list<BeanClass*>::iterator it = m_Beans.begin(); it != m_Beans.end(); it++)
+	{
+		delete *it;
+	}
+}
 
+int HeaderFile::GenerateWSDL()
+{
+	try {
+
+	
+	}
+	catch(...) //any exception
+	{
+		return 1;
+	}
+	return 0; //success
+}
+
+int HeaderFile::GenerateWrapperClassDef()
+{
+	try {
+		if (!m_pWSClass) return 1;
+		string fname = m_pWSClass->GetName() + "Wrapper.hpp"; 
+		File file(fname);
+		file << "#if !defined " << WCID(m_pWSClass->GetName().c_str()) << endl;
+		file << "#define " << WCID(m_pWSClass->GetName().c_str()) << endl;
+		//add includes
+		m_pWSClass->GenerateClassDef(file);
+		file << "#endif" << endl;
+	}
+	catch(...) //any exception
+	{
+		return 1;
+	}
+	return 0; //success
+}
+
+int HeaderFile::GenerateWrapperClassImpl()
+{
+	try {
+
+	
+	}
+	catch(...) //any exception
+	{
+		return 1;
+	}
+	return 0; //success
+}
+
+void HeaderFile::AddInclude(string &sInclude)
+{
+	m_includes.push_back(sInclude);
+}
+
+void HeaderFile::AddNSDecl(string &sNSDecl)
+{
+	m_nsdecls.push_back(sNSDecl);
+}
+
+void HeaderFile::SetWSClass(WSClass *pClass)
+{
+	m_pWSClass = pClass;
+}
+
+void HeaderFile::AddBeanClass(BeanClass *pClass)
+{
+	m_Beans.push_back(pClass);
 }
