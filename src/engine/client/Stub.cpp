@@ -24,10 +24,12 @@
 #include "../../soap/SoapSerializer.h"
 #include "../../soap/Attribute.h"
 #include "../../common/AxisUtils.h"
+#include "../../soap/apr_base64.h"
 
 AXIS_CPP_NAMESPACE_USE
 
 Stub::Stub(const char *pcEndPointUri, AXIS_PROTOCOL_TYPE eProtocol) 
+:m_pcUsername(NULL), m_pcPassword(NULL)
 {
     m_pCall = new Call();
     m_pCall->setProtocol(eProtocol);
@@ -56,6 +58,11 @@ Stub::~Stub()
 	    delete m_vSOAPMethodAttributes[j];
 	    m_vSOAPMethodAttributes[j] = NULL;
     }
+    
+    if(m_pcUsername)
+        delete [] m_pcUsername;
+    if(m_pcPassword)
+        delete [] m_pcPassword;
 }
 
 void Stub::setEndPoint(const char *pcEndPoint)
@@ -388,3 +395,75 @@ IHeaderBlock* Stub::createSOAPHeaderBlock(AxisChar *pachLocalName, AxisChar *pac
 	    return NULL;
     }
 }
+
+void Stub::setUsername(const char* pcUsername)
+{
+    if(m_pcUsername) 
+    {
+        delete [] m_pcUsername;
+        m_pcUsername = NULL;
+    }
+
+    if(!pcUsername)
+        return;
+
+    m_pcUsername = new char[strlen(pcUsername) + 1];
+    strcpy(m_pcUsername, pcUsername);
+
+    if (m_pcPassword)
+    {
+        setAuthorizationHeader();
+    }
+}
+
+void Stub::setPassword(const char* pcPassword)
+{
+    if(m_pcPassword)
+    {
+        delete [] m_pcPassword;
+        m_pcPassword = NULL;
+    }
+    
+    if(!pcPassword)
+        return;
+
+    m_pcPassword = new char[strlen(pcPassword) + 1];
+    strcpy(m_pcPassword, pcPassword);
+
+    if (m_pcUsername)
+    {
+        setAuthorizationHeader();
+    }
+}
+
+const char* Stub::getUsername()
+{
+    return m_pcUsername;
+}
+
+const char* Stub::getPassword()
+{
+    return m_pcPassword;
+}
+
+void Stub::setAuthorizationHeader()
+{
+    char* cpUsernamePassword = new char[strlen(m_pcUsername) + strlen(m_pcPassword) + 2];
+    strcpy( cpUsernamePassword, m_pcUsername );
+    strcat( cpUsernamePassword, ":" );
+    strcat( cpUsernamePassword, m_pcPassword );
+
+    int len = apr_base64_encode_len (strlen(cpUsernamePassword));
+    AxisChar* base64Value = new AxisChar[len + 1];
+    len = apr_base64_encode_binary (base64Value, (const unsigned char*)cpUsernamePassword, strlen(cpUsernamePassword));
+
+    std::string strValue = "Basic ";
+    strValue += base64Value;
+
+    if (m_pTransport)
+        m_pTransport->setTransportProperty("Authorization", strValue.c_str());
+
+    delete [] cpUsernamePassword;
+    delete [] base64Value;
+}
+

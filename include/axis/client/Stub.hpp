@@ -708,6 +708,26 @@ class STORAGE_CLASS_INFO Stub
     */
     AXIS_PROTOCOL_TYPE getTransportProtocol();
 
+  /**
+    * Sets the username to be used for basic authentication
+    */
+    void setUsername(const char* pcUsername);
+
+  /**
+    * Sets the password to be used for basic authentication
+    */
+    void setPassword(const char* pcPassword);
+
+  /**
+    * Gets the username used for basic authentication
+    */
+    const char* getUsername();
+
+  /**
+    * Gets the password used for basic authentication
+    */
+    const char* getPassword();
+
   protected:
   /**
     * Apply user set preferences to each call made on the Stub object.
@@ -735,6 +755,12 @@ class STORAGE_CLASS_INFO Stub
     * of the Axis engine.
     */
     Call *getCall() { return m_pCall; }
+
+  /**
+    * Set Authorization header for basic authentication
+    */
+    void setAuthorizationHeader();
+
     Call *m_pCall;
 
   /**
@@ -772,6 +798,16 @@ class STORAGE_CLASS_INFO Stub
     */
     SOAPTransport* m_pTransport;
 
+
+  /**
+    * Username
+    */
+   char* m_pcUsername;
+
+  /**
+    * Password
+    */
+   char* m_pcPassword;
 };
 
 AXIS_CPP_NAMESPACE_END
