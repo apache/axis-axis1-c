@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+    ==================  [AXIS CPP SITE BUILDER]  ==================
+
+    * This is an ant build-file for building the C web-site and ensuring that
+    * all the files are copied into the correct places.
+    * This version supports only Windows platforms.
+    * You must have a "path" variable set up on ANT (using -D option) 
+    * before running this script which includes
+    * <forrest_install_dir>/bin and <java_install_dir>/bin
+    *
+    * There are several properties below which you must ensure are correct.
+    * you must also have the ws-site and ws-axis/site tree available.
+    * ws-axis must have both the ws-axis/site and ws-axis/c/docs directories under it.
+    *
+    * In order to change the Axis-C web-site:
+    * 1. Change the files that you need to in ws-axis/site. 
+    * Run this script
+    * The changes will then be reflected for you in in ws-site and ws-axis/c/src/docs
+    *
+    * After you are happy with all your changes you need to manually
+    * commit your updates to the following three places -
+    * 'ws-axis/site/src'    - your ihtml changes
+    * 'ws-site/target/axis' - the html output and the pdf files will be changed in here
+    * 'ws-axis/c/docs'      - A copy of the c tree is kept here.
+-->
+
+<project name="BuildAxisCSite" default="build-C-site" basedir="../../site">
+	<!-- include the if task from ant-contrib -->
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+
+  <property name="version" value="0.1"/>
+  <!-- vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv -->
+  <!--                   CHANGE THE FOLLOWING PROPERTIES                      -->
+  
+  <property name="IEPath" location="C:\Program Files\Internet Explorer"/>
+  
+  <!-- Where the ws-site root directory is on your machine -->
+  <property name="dir.root.ws-site" value="C:\Documents and Settings\Administrator\My Documents\projects\CWSS\WSAD Workspace\ws-site"/>
+  
+  <!--                                                                        -->
+  <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
+
+  <!-- Where the ws-axis root directory is on your machine. We can derive this from the basedir -->
+  <property name="dir.root.ws-axis" value="${basedir}/.."/>
+
+  <!-- need to import the main build.xml file from ws-axis/site -->
+  <import file="${dir.root.ws-axis}/site/build.xml"/>
+  
+  <description>
+    *=======================================================*
+    |                 Axis-C Site Builder                   |
+    |                     ${version}                        |
+    |                                                       |
+    |                   $Date: 2004/12/16                   |
+    *=======================================================*
+  </description>
+  
+  <target name="build-C-site" depends="checkConfiguration">
+  	<antcall target="build-site"/>
+  	<antcall target="copyIntoAxisCDocs" />
+  	
+  </target>
+  <target name="checkConfiguration">
+	<!-- Check that ws-axis/site and ws-axis/c/docs are available -->
+	<!-- check IE setup -->
+	<available property="exploreAvailable" file="${IEPath}\IEXPLORE.EXE"/>
+	<if>
+	 	<equals arg1="${exploreAvailable}" arg2="true" />
+	 <then>
+	   <echo message="IEPath variable set correctly" />
+	 </then>
+	<else>
+	   <fail message="IEPath variable '${IEPath}\IEXPLORE.EXE' is not correct" />
+	</else>
+	</if>
+    <!-- Check that both ws-axis branches are available -->
+	<available property="ws-AxisSiteCorrect" file="${dir.root.ws-axis}/site"/>
+	<if>
+	 	<equals arg1="${ws-AxisSiteCorrect}" arg2="true" />
+	 <then>
+	   <echo message="ws-axis/Site verified as being there" />
+	 </then>
+	<else>
+	   <fail message="ws-axis/site is not there '${dir.root.ws-axis}' is not correct?" />
+	</else>
+	</if>
+
+	<available property="ws-AxisCDocsCorrect" file="${dir.root.ws-axis}/c/docs"/>
+	<if>
+	 	<equals arg1="${ws-AxisCDocsCorrect}" arg2="true" />
+	 <then>
+	   <echo message="ws-axis/c/docs verified as being there" />
+	 </then>
+	<else>
+	   <fail message="ws-axis/c/docs is not there '${dir.root.ws-axis}' is not correct?" />
+	</else>
+	</if>
+
+	<available property="ws-siteCorrect" file="${dir.root.ws-site}/targets/axis"/>
+	<if>
+	 	<equals arg1="${ws-siteCorrect}" arg2="true" />
+	 <then>
+	   <echo message="ws-site set correctly" />
+	 </then>
+	<else>
+	   <fail message="ws-site does not have axis under it '${dir.root.ws-site}' is not correct?" />
+	</else>
+	</if>
+    
+
+    <!-- TODO: Check that Forrest can be started -->
+    <!-- TODO: Check that Java is available to forrest -->
+  </target>
+
+
+  <target name="copyIntoAxisCDocs">
+    <echo>
+    => Copying the updated contents  from ws-site/targets/axis/cpp
+    	to ws-axis/c/docs
+    </echo>
+    <copy todir="${dir.root.ws-axis}/c/docs">
+      <fileset dir="${dir.root.ws-site}/targets/axis/cpp">
+        <different targetdir="${dir.root.ws-axis}/c/docs" ignoreFileTimes="true"/>
+      </fileset>
+    </copy>
+    <echo message="=> DONE !!"/>
+  		
+  </target>
+
+
+  <target name="putmessage">
+    <echo>
+      (If you are a committer,) please commit your updates that have just been done in
+      'ws-axis/site/src', 'ws-axis/c/docs' and 'ws-site/target/axis' !!
+    </echo>
+  </target>
+</project>
