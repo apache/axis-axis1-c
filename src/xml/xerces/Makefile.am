@@ -5,6 +5,6 @@ libaxis_xercesc_la_SOURCES = SoapBinInputStream.cpp \
                            SoapParserXerces.cpp \
                            XercesHandler.cpp 
 
-libaxis_xercesc_la_LIBADD = -lstdc++
+libaxis_xercesc_la_LIBADD =  -L$(XERCESC_HOME)/lib -lxerces-c -lstdc++
 INCLUDES = -I$(AXISCPP_HOME)/include
 
