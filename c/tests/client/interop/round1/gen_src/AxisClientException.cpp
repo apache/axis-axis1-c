@@ -52,7 +52,6 @@ void AxisClientException:: processException(exception* e, int iExceptionCode)
 void AxisClientException::processException (ISoapFault* pFault)
 {
 	/*User can do something like deserializing the struct into a string*/
-        
 	m_sMessage += "Fault Code:";
         m_sMessage += pFault->getFaultcode();
         m_sMessage += "\n";
