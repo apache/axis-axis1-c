@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<project name="wsm" basedir="." default="run">
+
+    <property file="build.properties"/>
+
+    <path id="classpath">
+        <fileset dir="${jwsdp.home}" includes="jaxb/lib/*.jar" />
+        <fileset dir="${jwsdp.home}" includes="jwsdp-shared/lib/*.jar" />
+        <fileset dir="${jwsdp.home}" includes="jaxp/lib/**/*.jar" />
+        <pathelement location="bin"/>
+        <pathelement location="classes"/>
+        <fileset dir="${axis.home}" includes="lib/*.jar" />
+    </path>
+
+    <target name="clean">
+        <delete>
+            <fileset dir="bin" includes="**/*"/>
+        </delete>
+    </target>
+
+    <target name="compile">
+        <javac srcdir="src:samples" destdir="bin" debug="on" fork="yes" 
+        executable="${tiger.home}/bin/javac" source="1.5">
+            <classpath refid="classpath"/>
+            <compilerarg value="-Xlint:unchecked"/>
+        </javac>
+    </target>
+
+    <target name="run" depends="compile">
+        <java jvm="${tiger.home}/bin/java" classname="org.apache.axis.metadata.JaxRpcMappingGenerator" fork="true">
+            <classpath refid="classpath"/>
+             <arg value="test.YourService"/>
+        </java>
+        <java jvm="${tiger.home}/bin/java" classname="org.apache.axis.metadata.JaxRpcMappingGenerator" fork="true">
+            <classpath refid="classpath"/>
+             <arg value="MyService"/>
+        </java>
+        <java jvm="${tiger.home}/bin/java" classname="org.apache.axis.metadata.Java2WsdlWithMetadata" fork="true">
+            <classpath refid="classpath"/>
+             <arg value="test.YourService"/>
+        </java>
+        <java jvm="${tiger.home}/bin/java" classname="org.apache.axis.metadata.Java2WsdlWithMetadata" fork="true">
+            <classpath refid="classpath"/>
+             <arg value="MyService"/>
+        </java>
+    </target>
+</project>
