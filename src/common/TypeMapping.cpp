@@ -27,11 +27,11 @@
 AXIS_CPP_NAMESPACE_START
 using namespace std;
 
-#if !defined( AIX ) && !defined( __OS400__ )
-std::map < const std::AxisXMLString, XSDTYPE > 
+#if (defined(AIX) || defined( __OS400__ ) || (defined(_MSC_VER) && _MSC_VER >= 1300) || defined(__sun))
+    std::map < AxisXMLString, XSDTYPE > 
     AXIS_CPP_NAMESPACE_PREFIX TypeMapping::m_sTypeMap;
 #else
-std::map < std::AxisXMLString, XSDTYPE > 
+    std::map < const AxisXMLString, XSDTYPE > 
     AXIS_CPP_NAMESPACE_PREFIX TypeMapping::m_sTypeMap;
 #endif
 volatile bool TypeMapping::m_bInit = false;

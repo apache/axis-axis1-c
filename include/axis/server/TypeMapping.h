@@ -61,7 +61,7 @@ public:
     static XSDTYPE map(const AxisXMLCh* sType);
     static void initialize();
 
-#if (defined(AIX) || (defined(_MSC_VER) && _MSC_VER >= 1300) || defined( __OS400__ ))
+#if (defined(AIX) || (defined(_MSC_VER) && _MSC_VER >= 1300) || defined( __OS400__ ) || defined(__sun))
     static std::map<std::AxisXMLString, XSDTYPE> m_sTypeMap;
 #else
     static std::map<const std::AxisXMLString, XSDTYPE> m_sTypeMap;
