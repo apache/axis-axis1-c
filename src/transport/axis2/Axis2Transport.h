@@ -209,6 +209,10 @@ class Axis2Transport:public SOAPTransport
 
   protected:
     void processResponseHTTPHeaders ();
+    void processRootMimeBody ();
+    void processMimeHeader ();
+    void processMimeBody();
+    void getAttachment(char* pStrAttachment, int* pIntSize, int intAttachmentId);
     int FindTransportPropertyIndex (std::string);
 
   /**
@@ -333,8 +337,38 @@ class Axis2Transport:public SOAPTransport
     * Session key sent by service 
     */
     std::string m_strSessionKey;
+  
+  /** 
+    * Content-Type holder
+    */
+    std::string m_strContentType;
 
-    
+  /**
+    * Mime Boundary value
+    */
+    std::string m_strMimeBoundary;
+
+  /**
+    * Mime type value
+    */
+    std::string m_strMimeType;
+
+  /**
+    * Mime start value
+    */
+    std::string m_strMimeStart;
+
+  /**
+    * Received payload is a mime struct
+    */
+    bool m_bMimeTrue;
+
+    bool m_bReadPastRootMimeHeader;
+    std::string m_strMimeContentType;
+    std::string m_strMimeContentTransferEncoding;
+    std::string m_strMimeContentID;
+    std::string m_strMimeContentLocation; 
+    std::string m_strMimeReceived; 
 };
 
 #endif

@@ -36,6 +36,8 @@
 #include "../../soap/SoapDeSerializer.h"
 #include "../../soap/HeaderBlock.h"
 
+extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
+
 extern "C" int initialize_module (int bServer);
 extern "C" int uninitialize_module ();
 
@@ -309,12 +311,16 @@ int Call::openConnection(int secure)
             m_pTransport = SOAPTransportFactory::getTransportObject(m_nTransportType);
 	if (!m_pTransport) return AXIS_FAIL;
 
-    m_pTransport->setEndpointUri(m_pcEndPointUri);
-  
-    //if use proxy then set proxy
-    if( m_bUseProxy )
-    	m_pTransport->setProxy(m_strProxyHost.c_str(), m_uiProxyPort);
-    m_nStatus = m_pTransport->openConnection();
+        m_pTransport->setEndpointUri(m_pcEndPointUri);
+        /* damitha:SSLChannelFactory needs the ssl channel library name to load the 
+           optional ssl channel library*/
+        char* pcLibraryPath = g_pConfig->getAxisConfProperty(AXCONF_SSLCHANNEL);
+        m_pTransport->setTransportProperty(DLL_NAME, pcLibraryPath);
+    
+        //if use proxy then set proxy
+        if( m_bUseProxy )
+    	    m_pTransport->setProxy(m_strProxyHost.c_str(), m_uiProxyPort);
+        m_nStatus = m_pTransport->openConnection();
     }
     catch(AxisException& e)
     {

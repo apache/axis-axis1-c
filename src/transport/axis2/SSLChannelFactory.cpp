@@ -31,12 +31,12 @@
 #include "../../engine/AxisEngineException.h"
 #include "../../common/AxisTrace.h"
                                                                                                                              
-extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
-extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
+//extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;
+//extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 
 AXIS_CPP_NAMESPACE_START
 
-const char* SSLChannelFactory::m_pcLibraryPath = 0;
+const char* SSLChannelFactory::m_pcLibraryName = 0;
 DLHandler SSLChannelFactory::m_LibHandler = 0;
 CREATE_OBJECT3 SSLChannelFactory::m_Create = 0;
 DELETE_OBJECT3 SSLChannelFactory::m_Delete = 0;
@@ -51,9 +51,10 @@ SSLChannelFactory::~SSLChannelFactory()
 
 }
 
-int SSLChannelFactory::initialize()
+int SSLChannelFactory::initialize(const char* pcLibraryName)
 {
-    m_pcLibraryPath = g_pConfig->getAxisConfProperty(AXCONF_SSLCHANNEL);
+    //m_pcLibraryName = g_pConfig->getAxisConfProperty(AXCONF_SSLCHANNEL);
+      m_pcLibraryName = pcLibraryName;
 
 	if (!loadLib())
 	{
@@ -63,16 +64,16 @@ int SSLChannelFactory::initialize()
         {
             unloadLib();
             AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
-            char *s = new char[strlen(m_pcLibraryPath)+1];
-            strcpy(s,m_pcLibraryPath);
+            char *s = new char[strlen(m_pcLibraryName)+1];
+            strcpy(s,m_pcLibraryName);
             throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, s);
         }
 	}
 	else
 	{
         AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);
-        char *s = new char[strlen(m_pcLibraryPath)+1];
-        strcpy(s,m_pcLibraryPath);
+        char *s = new char[strlen(m_pcLibraryName)+1];
+        strcpy(s,m_pcLibraryName);
         throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, s);
 	}
    return AXIS_SUCCESS;
@@ -100,7 +101,7 @@ void SSLChannelFactory::destroySSLChannelObject(SSLChannel* pObject)
 
 int SSLChannelFactory::loadLib()
 {
-    m_LibHandler = PLATFORM_LOADLIB(m_pcLibraryPath);
+    m_LibHandler = PLATFORM_LOADLIB(m_pcLibraryName);
     if (!m_LibHandler)
     {
         AXISTRACE1("SERVER_ENGINE_LOADING_PARSER_FAILED" , CRITICAL);

@@ -359,8 +359,8 @@ throw (AxisException, AxisTransportException)
         try
         {
             *m_pChannel >> m_strReceived;
-             
-             if (!m_bReadPastHTTPHeaders)
+
+            if (!m_bReadPastHTTPHeaders)
             {
                 do
                 {
@@ -464,9 +464,7 @@ throw (AxisException, AxisTransportException)
                 {
                     do
                     {
-                        std::string strTempReceived = "";
-                        *m_pChannel >> strTempReceived; // Assume non blocking here
-                        m_strReceived += strTempReceived;
+                        *m_pChannel >> m_strReceived;
                         endOfChunkData = m_strReceived.find ("\r\n");
                     }
                     while (endOfChunkData == std::string::npos);
@@ -504,6 +502,11 @@ throw (AxisException, AxisTransportException)
                         m_strReceived =
                             m_strReceived.substr (endOfChunkData + 2);
                     }
+                    /* We have received part of chunk data. If received payload
+                     *  is a mime struct, process it
+                     */
+                    if(m_bMimeTrue)
+                        processRootMimeBody();
                 }
                 else
                 {
@@ -526,14 +529,6 @@ throw (AxisException, AxisTransportException)
 
                     // Start looking for the next chunk
                     unsigned int endOfChunkData = m_strReceived.find ("\r\n");	// Skip end of previous chunk
-                    while (endOfChunkData == std::string::npos)
-                    {
-                        std::string strTempRecv = "";
-                        *m_pChannel >> strTempRecv;
-                        m_strReceived += strTempRecv;
-                        endOfChunkData = m_strReceived.find ("\r\n");
-                    }
-
                     m_strReceived = m_strReceived.substr (endOfChunkData + 2);
 
                     endOfChunkData = m_strReceived.find ("\r\n");	// Locate start of next chunk
@@ -583,6 +578,11 @@ throw (AxisException, AxisTransportException)
                             m_strReceived =
                                 m_strReceived.substr (endOfChunkData + 2);
                         }
+                        /* We have received part of chunk data. If received payload
+                         *  is a mime struct, process it
+                         */
+                        if(m_bMimeTrue)
+                            processRootMimeBody();
                     }
                     else
                     {
@@ -598,6 +598,11 @@ throw (AxisException, AxisTransportException)
             else		// Not chunked
             {
                 //nothing to do here
+                /* We have received part of chunk data. If received payload
+                 *  is a mime struct, process it
+                 */
+                 if(m_bMimeTrue)
+                    processRootMimeBody();
             }
 
             m_pcReceived = m_strReceived.c_str ();
@@ -632,10 +637,12 @@ throw (AxisException, AxisTransportException)
         int iToCopy = (*pSize < m_iBytesLeft) ? *pSize : m_iBytesLeft;
 
         strncpy (pcBuffer, m_pcReceived, iToCopy);
-        pcBuffer[iToCopy] = '\0';
+
         m_iBytesLeft -= iToCopy;
         m_pcReceived += iToCopy;
         *pSize = iToCopy;
+        if(m_iBytesLeft == 0)
+            return TRANSPORT_FINISHED;
 
         return TRANSPORT_IN_PROGRESS;
     }
@@ -689,13 +696,22 @@ throw (AxisTransportException)
         }
 
     case SECURE_PROPERTIES:
+    {
+        if (m_bChannelSecure)
         {
-            if (m_bChannelSecure)
-            {
-                ((SecureChannel *) m_pChannel)->setSecureProperties (value);
-            }
-            break;
+             ((SecureChannel *) m_pChannel)->setSecureProperties (value);
         }
+        break;
+    }
+
+    case DLL_NAME:
+    {
+        if (m_bChannelSecure)
+        {
+             ((SecureChannel *) m_pChannel)->setTransportProperty (type, value);
+        }
+        break;
+    }
 
     default:
         {
@@ -1091,6 +1107,40 @@ Axis2Transport::processResponseHTTPHeaders ()
                 }
 
             }
+
+            /* If Content-Type: Multipart/Related; boundary=<MIME_boundary>; type=text/xml;
+                   start="<content id>"*/
+            if (key == "Content-Type")
+            {
+                m_strContentType = value;
+                unsigned long ulMimePos = m_strContentType.find(";");
+                std::string strTypePart;
+                if (ulMimePos != std::string::npos)
+                {
+                    strTypePart = m_strContentType.substr(1, ulMimePos - 1);
+                }
+                if("Multipart/Related" == strTypePart)  
+                {
+                    m_bMimeTrue = true;
+                    m_strContentType = m_strContentType.substr(ulMimePos + 1,
+                        m_strContentType.length());
+
+                    ulMimePos = m_strContentType.find("boundary=");
+                    m_strMimeBoundary = m_strContentType.substr(ulMimePos);
+                    ulMimePos = m_strMimeBoundary.find(";");
+                    m_strMimeBoundary = m_strMimeBoundary.substr(9, ulMimePos - 9);
+ 
+                    ulMimePos = m_strContentType.find("type=");
+                    m_strMimeType = m_strContentType.substr(ulMimePos);
+                    ulMimePos = m_strMimeType.find(";");
+                    m_strMimeType = m_strMimeType.substr(5, ulMimePos - 5);
+
+                    ulMimePos = m_strContentType.find("start=");
+                    m_strMimeStart = m_strContentType.substr(ulMimePos);
+                    ulMimePos = m_strMimeStart.find(";");
+                    m_strMimeStart = m_strMimeStart.substr(6, ulMimePos - 6);
+                }
+            }
         }
         while (iPosition != std::string::npos);
     }
@@ -1099,6 +1149,159 @@ Axis2Transport::processResponseHTTPHeaders ()
         throw AxisTransportException (SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE,
                                       "Protocol is not HTTP.");
     }
+}
+
+/* Axis2Transport::processRootMimeBody() Is a public method used to
+ * parse the mime attachments.
+ */
+void
+Axis2Transport::processRootMimeBody ()
+{
+    if (false == m_bReadPastRootMimeHeader)
+    {
+        do
+        {
+            if (m_strReceived.find ("\r\n\r\n") == std::string::npos)
+            {
+                std::string strTempReceived = "";
+                *m_pChannel >> strTempReceived;	// Assume non blocking here
+                 m_strReceived += strTempReceived;
+            }
+        }
+        while (m_strReceived.find ("\r\n\r\n") == std::string::npos);
+
+        //now we have found the end of root mime header
+        m_bReadPastRootMimeHeader = true;
+        //processMimeHeader(); For the time being we don't process this
+        // Done with root mime body headers, get rest of the payload 
+        // which contain the soap message
+        m_strReceived =
+            m_strReceived.substr (m_strReceived.find ("\r\n\r\n") +
+                                          4);
+        int intMimeTemp = m_strReceived.find(m_strMimeBoundary);
+        if (intMimeTemp != std::string::npos)
+        {
+             m_strReceived = m_strReceived.substr(0, intMimeTemp); 
+             m_strMimeReceived = m_strReceived.substr(intMimeTemp);
+             /* Using m_strMimeReceived will be 
+              * continued when getAttachment is called.
+              */
+             m_bMimeTrue = false;
+        }
+    }
+    else
+    {
+        int intMimeTemp = m_strReceived.find(m_strMimeBoundary);
+        if (intMimeTemp != std::string::npos)
+        {
+             m_strReceived = m_strReceived.substr(0, intMimeTemp); 
+             m_strMimeReceived = m_strReceived.substr(intMimeTemp);
+             /* Using m_strMimeReceived will be 
+              * continued when getAttachment is called.
+              */
+             m_bMimeTrue = false;
+        }
+        return;
+    }
+}
+
+/* Axis2Transport::processMimeHeaders() Is a public method used to
+ * parse the Mime headers of the response message.
+ */
+void
+Axis2Transport::processMimeHeader ()
+{
+    unsigned int pos = 0;
+    unsigned int temppos = 0;
+
+    // Look for content lenght
+    if ((pos =
+        m_strMimeReceived.find ("Content-Type: ")) !=
+        std::string::npos)
+    {
+        m_strMimeContentType =
+        m_strMimeReceived.
+        substr (pos + strlen ("Content-Type: "),
+            m_strMimeReceived.find ("\n",
+            pos));
+        pos = m_strMimeContentType.find(";");
+        temppos = m_strMimeContentType.find("\r\n");
+        if(pos < temppos)
+            m_strMimeContentType = m_strMimeContentType.substr(0, pos);
+        else
+            m_strMimeContentType = m_strMimeContentType.substr(0, temppos);
+    }
+
+    // Look for mime root body's content transfer encoding
+    if ((pos =
+        m_strMimeReceived.find ("Content-Transfer-Encoding: ")) !=
+        std::string::npos)
+    {
+        m_strMimeContentTransferEncoding =
+            m_strMimeReceived.
+            substr (pos + strlen ("Content-Transfer-Encoding: "),
+            m_strMimeReceived.find ("\n",
+            pos));
+        temppos = m_strMimeContentTransferEncoding.find("\r\n");
+        m_strMimeContentTransferEncoding = m_strMimeContentTransferEncoding.substr(0, temppos);
+    }
+
+    // Look for mime root body's content id
+    if ((pos =
+         m_strMimeReceived.find ("Content-ID: ")) !=
+         std::string::npos)
+     {
+         m_strMimeContentID =
+         m_strMimeReceived.
+         substr (pos + strlen ("Content-ID: "),
+         m_strMimeReceived.find ("\n",
+         pos));
+        temppos = m_strMimeContentID.find("\r\n");
+        m_strMimeContentID = m_strMimeContentID.substr(0, temppos);
+     }
+              
+     // Look for mime root body's content location
+     if ((pos =
+         m_strMimeReceived.find ("Content-Location: ")) !=
+         std::string::npos)
+     {
+         m_strMimeContentLocation =
+         atoi (m_strMimeReceived.
+         substr (pos + strlen ("Content-Location: "),
+         m_strMimeReceived.find ("\n",
+         pos)).c_str ());
+        temppos = m_strMimeContentLocation.find("\r\n");
+        m_strMimeContentLocation = m_strMimeContentLocation.substr(0, temppos);
+     }
+}
+
+void
+Axis2Transport::processMimeBody()
+{
+}
+
+void
+Axis2Transport::getAttachment(char* pStrAttachment, int* pIntSize,
+    int intAttachmentId)
+{
+    std::string strTempReceived = "";
+    *m_pChannel >> strTempReceived;	// Assume non blocking here
+    m_strMimeReceived += strTempReceived;
+    do
+    {
+         if (m_strMimeReceived.find ("\r\n\r\n") == std::string::npos)
+         {
+              strTempReceived = "";
+              *m_pChannel >> strTempReceived;	// Assume non blocking here
+              m_strMimeReceived += strTempReceived;
+         }
+    }
+    while (m_strMimeReceived.find ("\r\n\r\n") == std::string::npos);
+    //now we have found the end of next mime header
+    processMimeHeader();
+    m_strMimeReceived = m_strMimeReceived.substr(m_strMimeReceived.
+        find("\r\n\r\n"));
+    processMimeBody();
 }
 
 void
@@ -1209,3 +1412,4 @@ const char* Axis2Transport::getSessionId ()
 {
 	return m_strSessionKey.c_str();
 }
+

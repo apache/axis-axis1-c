@@ -49,7 +49,7 @@ public:
      * 3. Get the function pointers of the exported functions
      * 4. Get any other information about the library.
      */
-	static int initialize();
+	static int initialize(const char* pcLibraryName);
 	/** 
 	 * Used to uninitialize the global object.
 	 * 1. Unloads dynamic parser library.
@@ -68,7 +68,7 @@ public:
 	static int unloadLib();
 
 private:
-	static const char* m_pcLibraryPath;
+	static const char* m_pcLibraryName;
 	static DLHandler m_LibHandler;
     static CREATE_OBJECT3 m_Create;
     static DELETE_OBJECT3 m_Delete;

@@ -24,6 +24,8 @@ public:
 
 	void			setSecureProperties( const char *);
 	const char *	getSecureProperties();
+        int setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE
+            type, const char* value);
 
 private:
 	bool	openConnection();
