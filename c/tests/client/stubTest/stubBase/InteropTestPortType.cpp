@@ -16,8 +16,8 @@ extern void Axis_Delete_SOAPStruct(SOAPStruct* param, bool bArray = false, int n
 extern int Axis_Serialize_SOAPStruct(SOAPStruct* param, IWrapperSoapSerializer* pSZ, bool bArray = false);
 extern int Axis_GetSize_SOAPStruct();
 
-InteropTestPortType::InteropTestPortType(const char* pchEndpointUri)
-:Stub(pchEndpointUri)
+InteropTestPortType::InteropTestPortType(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol)
+:Stub(pchEndpointUri, eProtocol)
 {
 }
 

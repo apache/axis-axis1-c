@@ -1,4 +1,3 @@
-/* -*- C++ -*- */
 /*
  *   Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -577,7 +576,7 @@ IHeaderBlock* Call::createHeaderBlock ()
 IHeaderBlock* Call::createHeaderBlock(AxisChar* pachLocalName, 
                                        AxisChar* pachUri)
 {
-    return (m_pIWSSZ->createHeaderBlock (pachLocalName, pachUri));
+ 	return new HeaderBlock(pachLocalName, pachUri);
 }
 
 int Call::getStatus() 

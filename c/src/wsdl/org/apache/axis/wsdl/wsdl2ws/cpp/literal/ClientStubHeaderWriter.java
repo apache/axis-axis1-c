@@ -91,7 +91,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 	 */
 	protected void writeConstructors() throws WrapperFault {
 		try{
-			writer.write("public:\n\t"+classname+"(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol);\n");
+			writer.write("public:\n\t"+classname+"(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol=APTHTTP);\n");
 			writer.write("\t"+classname+"();\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);

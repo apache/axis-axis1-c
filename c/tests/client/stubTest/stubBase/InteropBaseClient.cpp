@@ -46,7 +46,7 @@ main(int argc, char *argv[])
     printf("Usage :\n %s <server> <port>\n\n", argv[0]);
     //sprintf(endpoint, "http://%s:%s/axis/base", server, port);
     //endpoint for Axis Java sample
-    sprintf(endpoint, "http://%s:%s/axis/services/echo", server, port);
+    sprintf(endpoint, "http://%s:%s/axis/base", server, port);
     InteropTestPortType ws(endpoint);
 
     //set end point (optional) 
