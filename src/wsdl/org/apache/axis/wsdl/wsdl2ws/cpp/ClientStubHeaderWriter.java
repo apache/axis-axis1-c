@@ -51,18 +51,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
 
     protected File getFilePath() throws WrapperFault
     {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-        {
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
-        }
-        new File(targetOutputLocation).mkdirs();
-        String fileName = targetOutputLocation + "/" + classname + ".h";
-        return new File(fileName);
+        return this.getFilePath(false);
     }
 
     protected File getFilePath(boolean useServiceName) throws WrapperFault

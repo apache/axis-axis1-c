@@ -55,18 +55,9 @@ public class ClientStubWriter extends CPPClassWriter
     }
     protected File getFilePath() throws WrapperFault
     {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
-        new File(targetOutputLocation).mkdirs();
-        String fileName = targetOutputLocation + "/" + classname + ".cpp";
-        this.wscontext.addGeneratedFile(classname + ".cpp");
-        return new File(fileName);
+        return this.getFilePath(false);
     }
+
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
         String targetOutputLocation =
@@ -82,13 +73,20 @@ public class ClientStubWriter extends CPPClassWriter
 
         if (useServiceName)
         {
+            String serviceName = this.wscontext.getSerInfo().getServicename();
             fileName =
                 targetOutputLocation
                     + "/"
-                    + this.wscontext.getSerInfo().getServicename()
+                    + serviceName
                     + "_"
                     + classname
                     + ".cpp";
+            this.wscontext.addGeneratedFile(
+                serviceName + "_" + classname + ".cpp");
+        }
+        else
+        {
+            this.wscontext.addGeneratedFile(classname + ".cpp");
         }
 
         return new File(fileName);

@@ -14,7 +14,6 @@
  *   limitations under the License.
  */
 
- 
 /**
  * @author Srinath Perera(hemapani@openource.lk)
  * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
@@ -34,71 +33,100 @@ import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 
-public abstract class ParamCPPFileWriter extends ParamWriter{
-	public ParamCPPFileWriter(WebServiceContext wscontext,Type type)throws WrapperFault{
-		super(wscontext,type);
-	}
-	
-	protected void writeConstructors()throws WrapperFault{}
-	protected void writeDistructors() throws WrapperFault {}
-   
-	public void writeSource()throws WrapperFault{
-	   try{
-	  		this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
-			writeClassComment();
-	   		writePreprocssorStatements();
-	   		writeGlobalCodes();
-	   		writeAttributes();
-	   		writeConstructors();
-	   		writeDistructors();
-	   		writeMethods();
-	   		//cleanup
-	   		writer.flush();
-	   		writer.close();
-		    if (WSDL2Ws.verbose)
-	   		    System.out.println(getFilePath().getAbsolutePath() + " created.....");
-	    } catch (IOException e) {
-			e.printStackTrace();
-			throw new WrapperFault(e);
-		}
-	}
-	   
-	protected void writeMethods()throws WrapperFault{}
-   protected  abstract void writeGlobalCodes()throws WrapperFault; 
-   protected File getFilePath() throws WrapperFault {
-	   String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
-	   if(targetOutputLocation.endsWith("/"))
-		   targetOutputLocation = targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
-	   new File(targetOutputLocation).mkdirs();
-	   String fileName = targetOutputLocation + "/" + this.classname + ".cpp";
-		this.wscontext.addGeneratedFile(classname + ".cpp");
-	   return new File(fileName);
-   }
+public abstract class ParamCPPFileWriter extends ParamWriter
+{
+    public ParamCPPFileWriter(WebServiceContext wscontext, Type type)
+        throws WrapperFault
+    {
+        super(wscontext, type);
+    }
 
-   protected File getFilePath(boolean useServiceName) throws WrapperFault {
-	   String targetOutputLocation = this.wscontext.getWrapInfo().getTargetOutputLocation();
-	   if(targetOutputLocation.endsWith("/"))
-		   targetOutputLocation = targetOutputLocation.substring(0, targetOutputLocation.length() - 1);
-	   new File(targetOutputLocation).mkdirs();
+    protected void writeConstructors() throws WrapperFault
+    {}
+    protected void writeDistructors() throws WrapperFault
+    {}
 
-	   String fileName = targetOutputLocation + "/" + classname + ".cpp";
-		
-	   if( useServiceName)
-	   {
-		   fileName = targetOutputLocation + "/" + this.wscontext.getSerInfo().getServicename() + "_" + classname + ".cpp";
-	   }
-		
-	   return new File(fileName);
-   }
-   
-   protected void writePreprocssorStatements()throws WrapperFault{
-	try {
-		writer.write("#include <malloc.h>\n");
-		writer.write("#include \""+this.classname + ".h\"\n");
-		writer.write("#include <axis/server/AxisWrapperAPI.hpp>\n\n");
-	} catch (IOException e) {
-		e.printStackTrace();
-		throw new WrapperFault(e);
-	}
-   }
+    public void writeSource() throws WrapperFault
+    {
+        try
+        {
+            this.writer =
+                new BufferedWriter(new FileWriter(getFilePath(), false));
+            writeClassComment();
+            writePreprocssorStatements();
+            writeGlobalCodes();
+            writeAttributes();
+            writeConstructors();
+            writeDistructors();
+            writeMethods();
+            //cleanup
+            writer.flush();
+            writer.close();
+            if (WSDL2Ws.verbose)
+                System.out.println(
+                    getFilePath().getAbsolutePath() + " created.....");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            throw new WrapperFault(e);
+        }
+    }
+
+    protected void writeMethods() throws WrapperFault
+    {}
+    protected abstract void writeGlobalCodes() throws WrapperFault;
+    protected File getFilePath() throws WrapperFault
+    {
+        return this.getFilePath(false);
+    }
+
+    protected File getFilePath(boolean useServiceName) throws WrapperFault
+    {
+        String targetOutputLocation =
+            this.wscontext.getWrapInfo().getTargetOutputLocation();
+        if (targetOutputLocation.endsWith("/"))
+            targetOutputLocation =
+                targetOutputLocation.substring(
+                    0,
+                    targetOutputLocation.length() - 1);
+        new File(targetOutputLocation).mkdirs();
+
+        String fileName = targetOutputLocation + "/" + classname + ".cpp";
+
+        if (useServiceName)
+        {
+            String serviceName = this.wscontext.getSerInfo().getServicename();
+            fileName =
+                targetOutputLocation
+                    + "/"
+                    + serviceName
+                    + "_"
+                    + classname
+                    + ".cpp";
+            this.wscontext.addGeneratedFile(
+                serviceName + "_" + classname + ".cpp");
+        }
+        else
+        {
+            this.wscontext.addGeneratedFile(classname + ".cpp");
+        }
+
+        return new File(fileName);
+    }
+
+    protected void writePreprocssorStatements() throws WrapperFault
+    {
+        try
+        {
+            writer.write("#include <malloc.h>\n");
+            writer.write("#include \"" + this.classname + ".h\"\n");
+            writer.write("#include <axis/server/AxisWrapperAPI.hpp>\n\n");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            throw new WrapperFault(e);
+        }
+    }
 }
