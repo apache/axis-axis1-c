@@ -19,6 +19,9 @@
  *
  */
 
+#define AXISTRACE_LIBRARY_MAINENTRYPOINT
+#include "../../common/AxisTrace.h"
+
 #include "XMLParserXerces.h"
 #include <xercesc/util/PlatformUtils.hpp>
 
@@ -49,4 +52,19 @@ int DestroyInstance(XMLParser *inst)
 	}
 	return AXIS_FAIL;
 }
+
+STORAGE_CLASS_INFO void initializeLibrary (AxisTraceEntrypoints& ep)
+{
+      // Do init actions
+#ifdef ENABLE_AXISTRACE
+      AxisTrace::setTraceEntrypoints(ep);
+#endif
+}
+
+//  uninitializeLibrary() Is a C interface.
+STORAGE_CLASS_INFO void uninitializeLibrary (void)
+{
+      // Do uninit actions
+}
+
 }

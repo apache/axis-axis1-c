@@ -64,7 +64,20 @@ int XMLParserFactory::initialize()
             char *s = new char[strlen(m_pcLibraryPath)+1];
             strcpy(s,m_pcLibraryPath);
             throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, s);
-        }
+        } 
+	  else
+	  {
+#ifdef ENABLE_AXISTRACE
+            // Load function to do lib level inits
+            void (*initializeLibrary) (AxisTraceEntrypoints&);
+            initializeLibrary = (void (*)(AxisTraceEntrypoints&))PLATFORM_GETPROCADDR(m_LibHandler, "initializeLibrary");
+
+            AxisTraceEntrypoints ep;
+            AxisTrace::getTraceEntrypoints(ep);
+            if (initializeLibrary)
+                 (*initializeLibrary)(ep);
+#endif
+	  }
 	}
 	else
 	{

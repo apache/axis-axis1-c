@@ -1,6 +1,6 @@
 lib_LTLIBRARIES = libaxis3_transport.la
 SUBDIRS = HTTPChannel HTTPSSLChannel
-AM_CPPFLAGS = $(CPPFLAGS)
+AM_CPPFLAGS = $(CPPFLAGS) -DAXISTRACE_LIBRARY
 libaxis3_transport_la_SOURCES = ChannelFactory.cpp \
 				 HTTPTransport.cpp \
 				 HTTPTransportException.cpp \
