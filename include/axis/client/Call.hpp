@@ -410,7 +410,15 @@ private:
 
 private:
     ClientAxisEngine* m_pAxisEngine;
+
+#ifdef WIN32
+  #pragma warning (disable : 4251)
+#endif
 	list<void*> m_handlerProperties;
+
+#ifdef WIN32
+  #pragma warning (default : 4251)
+#endif
 
     /*
        Following are pointers to relevant objects of the ClientAxisEngine

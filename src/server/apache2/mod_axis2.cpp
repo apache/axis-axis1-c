@@ -55,7 +55,7 @@ int axis_handler_helper(request_rec* req_rec)
      * client will send content. control will pass to this block only if there is
      * body content in the request 
      */
-    if (ap_should_client_block(req_rec));
+    ap_should_client_block(req_rec);
 
     if (0 != process_request(pTransport))
     {

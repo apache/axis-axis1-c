@@ -347,6 +347,7 @@ int ServerAxisEngine::process(SOAPTransport* pStream)
     }
     catch(exception& e)
     {
+    	e=e;
     /* Handle standerd exceptions here
      */
     }

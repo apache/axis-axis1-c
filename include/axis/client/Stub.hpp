@@ -544,8 +544,13 @@ class STORAGE_CLASS_INFO Stub
   /**
     * Vector of Header Blok pointers
     */
+#ifdef WIN32
+  #pragma warning (disable : 4251)
+#endif
     vector < IHeaderBlock * >m_vSOAPHeaderBlocks;
-
+#ifdef WIN32
+  #pragma warning (default : 4251)
+#endif
   /**
     * Trasport keys iterator
     */
@@ -554,8 +559,13 @@ class STORAGE_CLASS_INFO Stub
   /**
     * List of SOAPMethod Attributes
     */
+#ifdef WIN32
+  #pragma warning (disable : 4251)
+#endif
     vector <IAttribute*> m_vSOAPMethodAttributes;
-
+#ifdef WIN32
+  #pragma warning (default : 4251)
+#endif
   /**
     * Trasport keys iterator
     */
