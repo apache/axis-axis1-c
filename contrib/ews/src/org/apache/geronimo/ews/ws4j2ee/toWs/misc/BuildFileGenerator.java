@@ -177,6 +177,12 @@ public class BuildFileGenerator implements Generator {
 
 			out.write("	<target name=\"compile\">\n");
 			out.write("	   <mkdir dir=\"${build.classes}\"/>\n");
+            out.write("    <delete>\n");
+            out.write("         <fileset dir=\"${build.classes}\">\n");
+            out.write("             <include name=\"**\"/>\n");
+            out.write("         </fileset>\n");
+            out.write("    </delete>\n");
+
 			out.write("	   <mkdir dir=\"${build.lib}\"/>\n");
 			out.write("		<javac destdir=\"${build.classes}\" debug=\"on\">\n");
 			out.write("			<classpath refid=\"classpath\" />\n");
@@ -215,13 +221,17 @@ public class BuildFileGenerator implements Generator {
 //					out.write("		<copy file =\"${src}/WEB-INF/web.xml\" todir=\"${build.classes}/META-INF\"/>\n ");				
 //				}
 //			}
-			
 			out.write("		<copy todir=\"${build.classes}\">\n");
 			out.write("			<fileset dir=\"${src}\">\n");
 			out.write("				<include name=\"META-INF/*.xml\"/>\n");
 			out.write("				<include name=\"WEB-INF/*.xml\"/>\n");
-			out.write("				<include name=\"**/*.wsdl\"/>\n");
-			out.write("				<include name=\"**/*.wsdd\"/>\n");
+			out.write("				<include name=\"META-INF/*.wsdl\"/>\n");
+			out.write("				<include name=\"META-INF/*.wsdd\"/>\n");
+            out.write("             <include name=\"WEB-INF/*.wsdl\"/>\n");
+            out.write("             <include name=\"WEB-INF/*.wsdd\"/>\n");
+            out.write("             <include name=\"*.wsdl\"/>\n");
+            out.write("             <include name=\"*.wsdd\"/>\n");
+            out.write("             <exclude name=\"build**\"/>\n");
 			out.write("			</fileset>\n");
 			out.write("		</copy>\n");
 
