@@ -39,6 +39,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "LargeStringClient"=".\client\performance\large_string\LargeStringClient.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "StubBase"=".\CLIENT\STUBTEST\StubBase\StubBase.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -51,7 +63,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "client"=".\client\xsdAnyTest1\client.dsp" - Package Owner=<4>
+Project: "xsdAnyTest1client"=".\client\xsdAnyTest1\client.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -63,7 +75,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "server"=".\server\xsdAnyTest1\server.dsp" - Package Owner=<4>
+Project: "xsdAnyTest1server"=".\server\xsdAnyTest1\server.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
