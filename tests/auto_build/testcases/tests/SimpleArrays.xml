@@ -1,0 +1,14 @@
+<test>
+    <name>SimpleArrays</name>
+    <description>SimpleArrays</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>SimpleArraysClient.cpp</clientCode>
+    <wsdl>SimpleArrays.wsdl</wsdl>
+    <expected>
+        <output>
+            SimpleArrayDoc.cpp.out
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/SimpleArrays/services/SimpleArrays</endpoint>
+</test>
+
