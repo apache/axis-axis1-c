@@ -195,5 +195,24 @@ public abstract class ParamWriter extends BasicFileWriter{
 				return attrib.getTypeName();
 		}
 	}
+ 	
+ 	/* This is a must for complex wsdl file (cycle in includes)*/
+ 	protected String getCHeaderFileCorrectParmNameConsideringArraysAndComplexTypes(AttributeInfo attrib)throws WrapperFault{
+		if (attrib.isArray()){
+			if (attrib.isSimpleType())
+				return CUtils.getBasicArrayNameforType(attrib.getTypeName());
+			else
+				return "struct " +CUtils.getCmplxArrayNameforType(attrib.getSchemaName())+"Tag";
+		}
+		else if (!attrib.isSimpleType()){
+			return "struct " +attrib.getTypeName()+"Tag *";	
+		}else{
+			if (attrib.isAttribute() && attrib.isOptional()){ //variables corresponding to optional attributes are pointer types
+				return attrib.getTypeName()+" *";	
+			}
+			else
+				return attrib.getTypeName();
+		}
+	} 	
 
 }

@@ -237,6 +237,21 @@ public class ParmHeaderFileWriter extends ParamWriter{
 		writer.write("/*Local name and the URI for the type*/\n");
 		writer.write("static const char* Axis_URI_"+classname+" = \""+type.getName().getNamespaceURI()+"\";\n");
 		writer.write("static const char* Axis_TypeName_"+classname+" = \""+type.getName().getLocalPart()+"\";\n\n");
+		
+		// Define class to avoid compilation issues (cycle in includes).
+		// This is a must for complex wsdl files.
+		typeSet =  new HashSet();
+		for (int i=0;i<attribs.length; i++)
+		{
+			if (!attribs[i].isArray() && !attribs[i].isSimpleType())
+				typeSet.add(attribs[i].getTypeName());
+		}		
+		itr = typeSet.iterator();
+		while(itr.hasNext())
+		{
+			writer.write("class "+itr.next().toString()+";\n");
+		}	
+		
 	  }catch(IOException e){
 	  	throw new WrapperFault(e);
 	  }
