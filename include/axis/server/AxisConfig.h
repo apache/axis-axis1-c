@@ -89,6 +89,13 @@ class AxisConfig
 	     * @return the AxisLog file path.
 	     */
         char* GetAxisLogPath();
+		
+		/**
+	     * This is called to get the client.wsdd file path.
+         * 
+	     * @return the client.wsdd file path 
+	     */
+        char* GetClientWsddFilePath();
 
         /**
 	     * This method will read from the configuration file called axiscpp.conf
@@ -108,6 +115,7 @@ class AxisConfig
 		char* m_sAxisHome;
         char* m_sWsddFilePath;
         char* m_sAxisLogPath;
+		char* m_sClientWsddFilePath;
         char* m_sValue;
         char m_sLine[CONFBUFFSIZE];
 };
