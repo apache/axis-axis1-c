@@ -111,7 +111,7 @@ int WSDDDocument::ParseDocument(const string& sWSDD)
 
 void  WSDDDocument::endElement (const XMLCh *const uri, const XMLCh *const localname, const XMLCh *const qname)
 {
-	if (0 != wcscmp((wchar_t*) localname, kw_param)) //just neglect endElement of parameter
+	if (0 != wcscmp(localname, kw_param)) //just neglect endElement of parameter
 	{
 		if (m_lev1 == WSDD_UNKNOWN) //not inside a requestFlow or responseFlow elements
 		{
@@ -124,7 +124,7 @@ void  WSDDDocument::endElement (const XMLCh *const uri, const XMLCh *const local
 				m_lev0 = WSDD_DEPLOYMENT;
 				break;
 			case WSDD_SERVICE:
-				if (0 == wcscmp((wchar_t*) localname, kw_srv))
+				if (0 == wcscmp(localname, kw_srv))
 				{
 					//add service object to Deployment object
 					m_pDeployment->AddService(m_pService);
@@ -151,7 +151,7 @@ void  WSDDDocument::endElement (const XMLCh *const uri, const XMLCh *const local
 		}
 		else // inside a requestFlow or responseFlow elements
 		{
-			if(0 == wcscmp((wchar_t*) localname, kw_hdl))
+			if(0 == wcscmp(localname, kw_hdl))
 			{
 				m_lev2 = WSDD_UNKNOWN;
 				//add handler in m_pHandler to the corresponding container.
@@ -178,11 +178,11 @@ void  WSDDDocument::endElement (const XMLCh *const uri, const XMLCh *const local
 					default: ; //this cannot happen ?? 
 				}
 			}
-			else if(0 == wcscmp((wchar_t*) localname, kw_rqf))
+			else if(0 == wcscmp(localname, kw_rqf))
 			{  
 				m_lev1 = WSDD_UNKNOWN;
 			}
-			else if(0 == wcscmp((wchar_t*) localname, kw_rsf))
+			else if(0 == wcscmp(localname, kw_rsf))
 			{  
 				m_lev1 = WSDD_UNKNOWN;
 			}						
@@ -194,8 +194,8 @@ void WSDDDocument::ProcessAttributes(WSDDLevels ElementType, const Attributes &a
 {
 	for (int i = 0; i < attrs.getLength(); i++) 
 	{
-		AxisString local = (wchar_t*) attrs.getLocalName(i);
-		AxisString value = (wchar_t*) attrs.getValue(i);
+		AxisString local = attrs.getLocalName(i);
+		AxisString value = attrs.getValue(i);
 		switch(ElementType)
 		{
 		case WSDD_SERVICE: //add this attribute to current service object
@@ -276,8 +276,8 @@ void WSDDDocument::GetParameters(WSDDLevels ElementType, const Attributes &attrs
 	AxisString Localname, Value;
 	for (int i = 0; i < attrs.getLength(); i++) 
 	{
-		Localname = (wchar_t*) attrs.getLocalName(i);
-		Value = (wchar_t*) attrs.getValue(i);
+		Localname = attrs.getLocalName(i);
+		Value = attrs.getValue(i);
 		if (Localname == kw_name)
 		{
 			name = Value;
@@ -377,33 +377,33 @@ void WSDDDocument::startElement(const XMLCh *const uri,	const XMLCh *const local
 		switch(m_lev0)
 		{
 		case WSDD_UNKNOWN:
-			if(0 == wcscmp((wchar_t*) localname, kw_depl))
+			if(0 == wcscmp(localname, kw_depl))
 			{  
 				m_lev0 = WSDD_DEPLOYMENT;
 				//nothing to get
 			}
 			break;
 		case WSDD_DEPLOYMENT:
-			if(0 == wcscmp((wchar_t*) localname, kw_glconf))
+			if(0 == wcscmp(localname, kw_glconf))
 			{  
 				m_lev0 = WSDD_GLOBCONF;
 				//nothing to get
 			}
-			else if(0 == wcscmp((wchar_t*) localname, kw_srv))
+			else if(0 == wcscmp(localname, kw_srv))
 			{  
 				m_lev0 = WSDD_SERVICE;
 				m_pService = new WSDDService();
 				//get service name and proider if any
 				ProcessAttributes(WSDD_SERVICE, attrs);
 			}
-			else if(0 == wcscmp((wchar_t*) localname, kw_hdl))
+			else if(0 == wcscmp(localname, kw_hdl))
 			{  
 				m_lev0 = WSDD_HANDLER;
 				m_pHandler = new WSDDHandler();
 				ProcessAttributes(WSDD_HANDLER, attrs);
 				//get handler name and type if any
 			}
-			else if(0 == wcscmp((wchar_t*) localname, kw_tr))
+			else if(0 == wcscmp(localname, kw_tr))
 			{  
 				m_lev0 = WSDD_TRANSPORT;
 				ProcessAttributes(WSDD_TRANSPORT, attrs);
@@ -414,16 +414,16 @@ void WSDDDocument::startElement(const XMLCh *const uri,	const XMLCh *const local
 			}
 			break;
 		case WSDD_GLOBCONF:
-			if(0 == wcscmp((wchar_t*) localname, kw_param))
+			if(0 == wcscmp(localname, kw_param))
 			{  
 				GetParameters(WSDD_GLOBCONF, attrs);
 			}
-			else if(0 == wcscmp((wchar_t*) localname, kw_rqf))
+			else if(0 == wcscmp(localname, kw_rqf))
 			{  
 				m_lev1 = WSDD_REQFLOW;
 				ProcessAttributes(WSDD_REQFLOW, attrs);
 			}
-			else if(0 == wcscmp((wchar_t*) localname, kw_rsf))
+			else if(0 == wcscmp(localname, kw_rsf))
 			{  
 				m_lev1 = WSDD_RESFLOW;
 				ProcessAttributes(WSDD_RESFLOW, attrs);
@@ -434,16 +434,16 @@ void WSDDDocument::startElement(const XMLCh *const uri,	const XMLCh *const local
 			}
 		break; 
 		case WSDD_SERVICE:
-			if(0 == wcscmp((wchar_t*) localname, kw_param))
+			if(0 == wcscmp(localname, kw_param))
 			{  
 				GetParameters(WSDD_SERVICE, attrs);
 			}
-			else if(0 == wcscmp((wchar_t*) localname, kw_rqf))
+			else if(0 == wcscmp(localname, kw_rqf))
 			{  
 				m_lev1 = WSDD_REQFLOW;
 				ProcessAttributes(WSDD_REQFLOW, attrs);
 			}
-			else if(0 == wcscmp((wchar_t*) localname, kw_rsf))
+			else if(0 == wcscmp(localname, kw_rsf))
 			{  
 				m_lev1 = WSDD_RESFLOW;
 				ProcessAttributes(WSDD_RESFLOW, attrs);
@@ -454,19 +454,19 @@ void WSDDDocument::startElement(const XMLCh *const uri,	const XMLCh *const local
 			}
 		break;
 		case WSDD_HANDLER:
-			if(0 == wcscmp((wchar_t*) localname, kw_param))
+			if(0 == wcscmp(localname, kw_param))
 			{  
 				GetParameters(WSDD_HANDLER, attrs);
 			}
 
 		break;
 		case WSDD_TRANSPORT:
-			if(0 == wcscmp((wchar_t*) localname, kw_rqf))
+			if(0 == wcscmp(localname, kw_rqf))
 			{  
 				m_lev1 = WSDD_REQFLOW;
 				ProcessAttributes(WSDD_REQFLOW, attrs);
 			}
-			else if(0 == wcscmp((wchar_t*) localname, kw_rsf))
+			else if(0 == wcscmp(localname, kw_rsf))
 			{  
 				m_lev1 = WSDD_RESFLOW;
 				ProcessAttributes(WSDD_RESFLOW, attrs);
@@ -476,19 +476,19 @@ void WSDDDocument::startElement(const XMLCh *const uri,	const XMLCh *const local
 	}
 	else // inside a requestFlow or responseFlow elements
 	{
-		if(0 == wcscmp((wchar_t*) localname, kw_param))
+		if(0 == wcscmp(localname, kw_param))
 		{  
 			GetParameters(m_lev2, attrs); //must be parameters of a handler or a chain
 		}
 
-		else if(0 == wcscmp((wchar_t*) localname, kw_hdl))
+		else if(0 == wcscmp(localname, kw_hdl))
 		{  
 			m_lev2 = WSDD_HANDLER;
 			m_pHandler = new WSDDHandler();
 			ProcessAttributes(WSDD_HANDLER, attrs);
 			//get handler name and type if any
 		}
-		else if(0 == wcscmp((wchar_t*) localname, kw_chain))
+		else if(0 == wcscmp(localname, kw_chain))
 		{
 
 		}
@@ -503,14 +503,14 @@ void WSDDDocument::startElement(const XMLCh *const uri,	const XMLCh *const local
 void WSDDDocument::startPrefixMapping(const XMLCh* const prefix, const XMLCh* const uri)
 {
 //	AxisString sPrifix = prefix;
-	AxisString sUri = (wchar_t*) uri;
-	m_NsStack[(wchar_t*) prefix] = (wchar_t*)  uri; //I think the same prifix cannot repeat ???
+	AxisString sUri = uri;
+	m_NsStack[prefix] = uri; //I think the same prifix cannot repeat ???
 }
 
 void WSDDDocument::endPrefixMapping(const XMLCh* const prefix)
 {
 //	string sPrifix = prefix;
-	m_NsStack.erase((wchar_t*) prefix); //I think the same prifix cannot repeat ???
+	m_NsStack.erase(prefix); //I think the same prifix cannot repeat ???
 }
 
 void  WSDDDocument::characters (const XMLCh *const chars, const unsigned int length)

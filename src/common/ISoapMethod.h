@@ -73,9 +73,9 @@ using namespace std;
 class ISoapMethod
 {
 public:
-	virtual void setLocalName(const AxisString &localname)=0;
-	virtual void setUri(const AxisString &uri)=0;
-	virtual void setPrefix(const AxisString &prefix)=0;
+	virtual void setLocalName(const AxisChar* localname)=0;
+	virtual void setUri(const AxisChar* uri)=0;
+	virtual void setPrefix(const AxisChar* prefix)=0;
 	virtual ~ISoapMethod() {};
 };
 

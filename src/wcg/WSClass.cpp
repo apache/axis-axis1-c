@@ -143,7 +143,7 @@ int WSClass::GenerateClassDef(File &file)
 		file << "\tint Init();" << endl; 		
 		file << "\tint Fini();" << endl; 	
 		file << "private:" << "//Methods corresponding to the web service methods" << endl;
-		file << "\tint SetResponseMethod(IMessageData* mc, const char* name);" << endl; 			
+		file << "\tint SetResponseMethod(IMessageData* mc, const AxisChar* name);" << endl; 			
 		//wrapper methods for each webservice method
 		for (list<Method*>::iterator it = m_Methods.begin(); it != m_Methods.end(); it++)
 		{
@@ -183,13 +183,13 @@ int WSClass::GenerateClassImpl(File &file)
 		file << "\tIWrapperSoapDeSerializer* pIWSDZ = NULL;" << endl;
 		file << "\tmc->getSoapDeSerializer(&pIWSDZ);" << endl;
 		file << "\tif (!pIWSDZ) return FAIL;" << endl;
-		file << "\tstring method = pIWSDZ->GetMethodName();" << endl;
+		file << "\tconst AxisChar* method = pIWSDZ->GetMethodName();" << endl;
 		bool tab = true;
 		list<Method*>::iterator it;
 		for (it = m_Methods.begin(); it != m_Methods.end(); it++)
-		{
+		{	
 			if (tab) { file << "\t"; tab = false;} 
-			file << "if (method == \"" << (*it)->GetName() << "\")" << endl;
+			file << "if (0 == wcscmp(method, L\"" << (*it)->GetName() << "\"))" << endl;
 			file << "\t\treturn " << (*it)->GetName() << "(mc);" << endl;
 			file << "\telse ";
 		}
@@ -214,16 +214,16 @@ int WSClass::GenerateClassImpl(File &file)
 		file << "}" << endl;
 		file << endl;
 
-		file << "int " << m_Name << "::SetResponseMethod(IMessageData* mc, const char* name)" << endl; 			
+		file << "int " << m_Name << "::SetResponseMethod(IMessageData* mc, const AxisChar* name)" << endl; 			
 		file << "{" << endl;
-		file << "\tstring method = name;" << endl;
+		file << "\tAxisString method = name;" << endl;
 		file << "\tIWrapperSoapSerializer* pIWSSZ = NULL;" << endl;
 		file << "\tmc->getSoapSerializer(&pIWSSZ);" << endl;
 		file << "\tif (!pIWSSZ) return FAIL;" << endl;
 		file << "\tISoapMethod* pMethod = pIWSSZ->createSoapMethod();" << endl;
-		file << "\tpMethod->setLocalName(method + \"Response\");" << endl;
-		file << "\tpMethod->setPrefix(" << "pIWSSZ->getNewNamespacePrefix()" << ");"<< endl; //amp - axis method prefix :)
-		file << "\tpMethod->setUri(\"" << g_ClassNamespaces[m_AWSName] << "\");"<< endl; //http://www.opensource.lk will come from wsdd
+		file << "\tpMethod->setLocalName(name);" << endl;
+		file << "\tpMethod->setPrefix(pIWSSZ->getNewNamespacePrefix());"<< endl; 
+		file << "\tpMethod->setUri(L\"" << g_ClassNamespaces[m_AWSName] << "\");"<< endl; //http://www.opensource.lk will come from wsdd
 		file << "\treturn SUCCESS;" << endl; 
 		file << "}" << endl;
 		file << endl;

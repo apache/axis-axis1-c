@@ -58,7 +58,7 @@
 %token INTEGER_LITERAL CHARACTER_LITERAL FLOATING_LITERAL STRING_LITERAL 
 
 /*** Axis specific ***/
-%token ACCESSBEAN_MACRO
+/* %token ACCESSBEAN_MACRO */
 
 /*** Single-Character Operators ***/
 %token LEFTPAREN  RIGHTPAREN        // ( )
@@ -1237,27 +1237,27 @@ class_specifier
 	  if (!is_defined_class($1->class_name->c_str()))
 	  {
 		  //check if this class should be wrapped or not depending on wsdd information
-		  if (is_bean_class($1->baselist)) //bean class
+		  if (!is_webservice_class($1->class_name->c_str())) //bean class
 		  {
 					BeanClass* pBeanClass = new BeanClass();
 					pBeanClass->SetClassName(*($1->class_name));
 					g_pTranslationUnit->AddBeanClass(pBeanClass);
 					g_pCurrentBeanClass = pBeanClass;
 					g_currentclasstype = BEANCLASS;
-					g_baccessbeanmacrofound = false;
+//					g_baccessbeanmacrofound = false;
 					//following line adds default namespace for this complex type. 
 					//This should be removed when we get the namespace from the wsdd.
 					string defns = "http://www.opensource.lk/" + (*($1->class_name));
 					g_ClassNamespaces[*($1->class_name)] = defns;
 		  }
-		  else // we assume that this is the webservice class - there cannot be 2 web service classes
+		  else // this is the webservice class - there cannot be 2 web service classes
 		  {
 					WSClass* pWSClass = new WSClass();
 					pWSClass->SetClassName(*($1->class_name));
 					g_pTranslationUnit->SetWSClass(pWSClass);
 					g_pCurrentWSClass = pWSClass;
 					g_currentclasstype = WSCLASS;
-					g_baccessbeanmacrofound = false;
+//					g_baccessbeanmacrofound = false;
 					//following line adds default namespace for this web service. 
 					//This should be removed when we get the namespace from the wsdd.
 					string defns = "http://www.opensource.lk/" + (*($1->class_name));
@@ -1327,8 +1327,8 @@ member_declaration
  // | template_declaration
  //   {}
  // ************** Axis Specific *************
-	| ACCESSBEAN_MACRO
-	  { g_baccessbeanmacrofound = true;}
+ //	| ACCESSBEAN_MACRO
+ //	  { g_baccessbeanmacrofound = true;}
   ;
 
 semi_opt
