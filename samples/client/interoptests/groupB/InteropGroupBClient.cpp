@@ -2,24 +2,48 @@
 //
 #include "InteropTestPortTypeB.h"
 #include <axis/AxisGenException.h>
+#include <iostream>
 
 #define ARRAYSIZE 5
+
+static void
+usage (char *programName, char *defaultURL)
+{
+    cout << "\nUsage:\n"
+	<< programName << " [-? | service_url] " << endl
+	<< "    -?             Show this help.\n"
+	<< "    service_url    URL of the service.\n"
+	<< "    Default service URL is assumed to be " << defaultURL
+	<<
+	"\n    Could use http://localhost:8080/axis/services/echo to test with Axis Java."
+	<< endl;
+}
 
 int main(int argc, char* argv[])
 {
 	int x;
 	char endpoint[256];
-	const char* server="localhost";
-	const char* port="80";
-	if (argc == 3)
+
+    // Set default service URL
+    sprintf (endpoint, "http://localhost/axis/groupB");
+    // Could use http://localhost:8080/axis/services/echo to test with Axis Java
+
+	if (argc > 1)
 	{
-		server = argv[1];
-		port = argv[2];
+	    // Watch for special case help request
+	    if (!strncmp (argv[1], "-", 1)) // Check for - only so that it works for 
+                                            //-?, -h or --help; -anything 
+	    {
+		usage (argv[0], endpoint);
+		return 2;
+	    }
+	    sprintf (endpoint, argv[1]);
 	}
-	printf("Usage :\n %s <server> <port>\n\n", argv[0]);
-	printf("Sending Requests to Server http://%s:%s ........\n\n", server, port);
-	sprintf(endpoint, "http://%s:%s/axis/groupB", server, port);	
-        try
+
+
+	cout << endl << " Using service at " << endpoint << endl << endl;
+    
+    try
 	{
 	InteropTestPortTypeB ws(endpoint);
 	/*we do not support multi-dimensional arrays.*/

@@ -7,6 +7,17 @@
 
 #define ARRAYSIZE 2
 
+static void
+usage (char *programName, char *defaultURL)
+{
+    printf("\nUsage:\n");
+    printf("programName  [-? | service_url] \n");
+    printf("    -?             Show this help.\n");
+    printf("    service_url    URL of the service.\n");
+    printf("    Default service URL is assumed to be %s\n", defaultURL);
+    printf("Could use http://localhost:8080/axis/services/echo to test with Axis Java.\n");
+}
+
 int main(int argc, char* argv[])
 {
 	int x;
@@ -24,18 +35,27 @@ int main(int argc, char* argv[])
 	xsd__hexBinary hb;
 	const char* bstr = "some string that is sent encoded to either base64Binary or hexBinary";
 	void* pstub;
+
 	char endpoint[256];
-	const char* server="localhost";
-	const char* port="80";
-	if (argc == 3)
+
+    // Set default service URL
+    sprintf (endpoint, "http://localhost/axis/cbase");
+    // Could use http://localhost:8080/axis/services/echo to test with Axis Java
+
+	if (argc > 1)
 	{
-		server = argv[1];
-		port = argv[2];
+	    // Watch for special case help request
+	    if (!strncmp (argv[1], "-", 1)) // Check for - only so that it works for 
+                                            //-?, -h or --help; -anything 
+	    {
+		usage (argv[0], endpoint);
+		return 2;
+	    }
+	    sprintf (endpoint, argv[1]);
 	}
-	printf("Usage :\n %s <server> <port>\n\n", argv[0]);
-	printf("Sending Requests to Server http://%s:%s ........\n\n", server, port);
-	sprintf(endpoint, "http://%s:%s/axis/cbase", server, port);
-	pstub = get_InteropTestPortType_stub(endpoint);
+    printf(" Using service at %s\n", endpoint);
+
+    pstub = get_InteropTestPortType_stub(endpoint);
 	printf("invoking echoString...\n");
 	/*testing echoString */
 	if (0 == strcmp(echoString(pstub, "hello world"), "hello world"))
