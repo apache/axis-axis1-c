@@ -128,10 +128,10 @@
 </div>
 <p>- Speed: Axis uses SAX (event-based) parsing to acheive significantly greater speed</p>
 <p>- Flexibility</p>
-<p>- Stability , Component oriented Deployment</p>
+<p>- Stability , Component Oriented Deployment</p>
 <p>- Transport Framework</p>
 <p>- WSDL support</p>
-<p>AxisC++ 1.1 supports the Web Service Description Language, version 1.1, which allows you to easily build stubs to access remote services, and also to automatically export machine-readable descriptions of your deployed services from Axis. We hope you enjoy using Axis c++ 1.1. Please note that this is an open-source effort - if you feel the code could use some new features or fixes, please get involved and lend a hand! The Axis developer community welcomes your participation. Let us know what you think! Please send feedback about the package to <a href="mailto:axis-user@xml.apache.org">axis-user@xml.apache.org</a>
+<p>Axis C++ 1.1 supports the Web Service Description Language, version 1.1, which allows you to easily build stubs to access remote services, and also to automatically export machine-readable descriptions of your deployed services from Axis. We hope you enjoy using Axis c++ 1.1. Please note that this is an open-source effort - if you feel the code could use some new features or fixes, please get involved and lend a hand! The Axis developer community welcomes your participation. Let us know what you think! Please send feedback about the package to <a href="mailto:axis-user@xml.apache.org">axis-user@xml.apache.org</a>
 </p>
 <p>
 <a name="What1"></a>
@@ -140,8 +140,8 @@
 <div class="h3">
 <h3>Installing Axis and Using this Guide</h3>
 </div>
-<p>See the Axis Installation Guide for instructions on installing Axis C++</p>
-<p>Before running the examples in this guide, you'll need to make sure that your environment variables and other configurations are set correctly as described in Installation guide. That is you need</p>
+<p>Look at the Axis Installation Guide for instructions to install Axis C++</p>
+<p>Before running the examples in this guide, you need to make sure that your environment variables and other configurations are set correctly as described in Installation guide. That is you need</p>
 <p>- Axis C++</p>
 <p>- Apache1.3 (or Apache2.0)</p>
 <p>- expat</p>
@@ -185,7 +185,7 @@
 <strong>PATH="$PATH:$JAVA_HOME/bin:."</strong>
 </p>
 <p>
-<strong>CLASSPATH="$CLASSPATH:./:$JAVA_HOME/lib:$AXIS_JARS:"</strong>
+<strong>CLASSPATH="$CLASSPATH:./:$JAVA_HOME/lib:$AXIS_JARS:"</strong>(Refer the Note given below)
 </p>
 <p>
 <strong>export PATH USER LOGNAME MAIL HOSTNAME HISTSIZE INPUTRC AXIS_JARS_HOME</strong>
@@ -212,7 +212,7 @@
 <p>
 <strong>$cp -f wsdl2ws.jar $AXISCPP_HOME/lib/axis</strong>
 </p>
-<p>add this jar as the first entry into the classpath as well.(In the binary distribution you don't need to create this jar. It is already in $AXISCPP_HOME/lib/axis)</p>
+<p><b>Note:</b>Add this jar as the first entry into the classpath as well.(In the binary distribution you don't need to create this jar. It is already in $AXISCPP_HOME/lib/axis)</p>
 <p>
 <a name="Server"></a>
 </p>
@@ -229,7 +229,7 @@
 </strong>
 </p>
 <p>We use this sample to demonstrate the generation of serverside skeletons and how to deploy a web service using it.</p>
-<p>Inside this folder you will find Calculator.wsdl file using which we generate skeleton and Wrappers. Here is the command line arguments to generate the skeleton.</p>
+<p>Inside this folder you will find Calculator.wsdl file using which, we generate skeleton and Wrappers. Here is the command line arguments to generate the skeleton.</p>
 <p>
 <strong>*important:In this sample we generate the skeltons using Calculator.wsdl and wsdl2ws tool. But in the folder you will find already generated files. If you wish to use those without generating new ones you can do so. We recommend that you deploy the sample with the already generated files in the first round and<br> later do the same with code generated from Calcuator.wsdl.<br>
 </strong>
@@ -241,7 +241,7 @@
 <p>
 <strong>% java org.apache.axis.wsdl.wsdl2ws.WSDL2Ws Calculator.wsdl -lc++ -sserver</strong>
 </p>
-<p>Note: If you give <strong>-o. /GenClassesServer</strong> then the server create a folder named GenClassServer and put the source there. Otherwise the source is put in the current folder where the tool is run.</p>
+<p><b>Note:</b> If you give <strong>-o. /GenClassesServer</strong> then the server creates a folder named GenClassServer and put the source there. Otherwise the source is put in the current folder where the tool is run.</p>
 <p>
 <a name="Deploying"></a>
 </p>
@@ -318,7 +318,7 @@
 </p>
 <p>
 <strong>
-<br>Note:</strong> again if you specify <strong>-o./GenClassesClient</strong> you will have source generated inside GenClassClient folder instead of current folder where the tool is run. Before compiling the client you have to write a class which contain a main method in which Calculator instance is created and its methods are called.</p>
+<br>Note:</strong> again if you specify <strong>-o./GenClassesClient</strong> you will have source generated inside GenClassClient folder instead of current folder where the tool is run. Before compiling the client you have to write a class which contains a main method in which Calculator instance is created and its methods are called.</p>
 <p>Then fill the samples with the relevant business logics .</p>
 <p>Then fill the main method in a file as follows</p>
 <p>
@@ -455,7 +455,7 @@
 <h3>Handlers</h3>
 </div>
 <p>Handlers are pluggable components to Axis C++. We have included a set of sample handlers for your reference. You could write your own handlers by following the instructions which are given for the sample Handlers.</p>
-<p>Note: If you are using Client side Handlers you need to enter the following entry in the AXIS_HOME/axiscpp.conf configuration file.</p>
+<p><b>Note:</b> If you are using Client side Handlers you need to enter the following entry in the AXIS_HOME/axiscpp.conf configuration file.</p>
 <p>CLIENTWSDDFILEPATH:Axis\conf\client.wsdd</p>
 <p>After entering this entry your AXIS_HOME/axiscpp.conf configuration file will look like:</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;AXISLOGPATH:Axis\logs\AxisLog.txt</p>
@@ -483,7 +483,7 @@
 <p>
 <strong><strong>Building echoStringHeaderHandler (A server side handler sample)</strong></strong>
 </p>
-<p>The build files are available at AXISCPP_HOME/samples/server/echoStringHeaderHandler. Change your current directory to this direcotory and then you could execute the following.</p>
+<p>The build files are available at AXISCPP_HOME/samples/server/echoStringHeaderHandler. Change your current directory to this directory and then you could execute the following.</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp; sh autogen.sh</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp; sh runconfig</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp; make</p>
@@ -507,9 +507,9 @@
 <p>&lt;parameter name="className" value="Axis\webservices\Calculator.dll" /&gt;</p>
 <p>&lt;/service&gt;</p>
 <br>
-<p>Note: Make sure you specify the correct path of the handler so in the server.wsdd file. Replace the AXIS_HOME with the exact relative path which AXIS_HOME points to. (eg: type="/usr/local/apache2/Axis/handlers/custom/echoStringHeaderHandler/libeshhandler.so )</p>
+<p><b>Note:</b> Make sure you specify the correct path of the handler so in the server.wsdd file. Replace the AXIS_HOME with the exact relative path which AXIS_HOME points to. (eg: type="/usr/local/apache2/Axis/handlers/custom/echoStringHeaderHandler/libeshhandler.so )</p>
 <p>Now you are almost done to run your server side handler.</p>
-<p>Restart the Apache server and that is it.</p>
+<p>Restart the Apache server and thats it.</p>
 <p>
 <strong><strong>Running the Handler</strong></strong>
 </p>
@@ -543,9 +543,9 @@
 <p>&lt;/requestFlow&gt;</p>
 <p>&lt;/service&gt;</p>
 <br>
-<p>Note: Make sure you specify the correct path of the handler so in the client.wsdd file. Replace the AXIS_HOME with the exact relative path which AXIS_HOME points to. (eg: type="/usr/local/apache2/Axis/handlers/client/test_handler/libtest_client_handler.so)</p>
+<p><b>Note:</b> Make sure you specify the correct path of the handler so in the client.wsdd file. Replace the AXIS_HOME with the exact relative path which AXIS_HOME points to. (eg: type="/usr/local/apache2/Axis/handlers/client/test_handler/libtest_client_handler.so)</p>
 <p>Now you are almost done to run your client side handler.</p>
-<p>Note: If you are using Client side Handlers you need to enter the CLIENTWSDDFILEPATH entry in the AXIS_HOME/axiscpp.conf configuration file. (See above)</p>
+<p><b>Note:</b> If you are using Client side Handlers you need to enter the CLIENTWSDDFILEPATH entry in the AXIS_HOME/axiscpp.conf configuration file. (See above)</p>
 <p>
 <strong><strong>Running the Handler</strong></strong>
 </p>
@@ -582,8 +582,11 @@
 </p>
 <br>
 <br>
+
 <div id="pdf" align="right">
 <a href="linuser-guide.pdf"><img alt="PDF" src="../skin/images/pdfdoc.gif" class="skin"><br>
           PDF</a>
 </body>
 </html>
+
+
