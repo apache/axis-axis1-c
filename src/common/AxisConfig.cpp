@@ -94,7 +94,8 @@ AxisConfig::~AxisConfig ()
 {
     for (int i = 0; i < AXCONF_LAST; i++)
     {
-	free(m_pcValueArray[i]);
+        if (m_pcValueArray[i])
+	    free(m_pcValueArray[i]);
     }
 
     if (m_pcAxisHome)
@@ -115,7 +116,7 @@ AxisConfig::readConfFile ()
     const char pcComment = '#';
 
     sConfPath = getenv ("AXISCPP_DEPLOY");
-    m_pcValueArray[AXCONF_AXISHOME] = sConfPath;
+    m_pcValueArray[AXCONF_AXISHOME] = strdup(sConfPath);
     /*
        Even if the AXISCPP_DEPLOY environment variable is not set default values 
        will be used. Therefore return AXIS_SUCCESS
