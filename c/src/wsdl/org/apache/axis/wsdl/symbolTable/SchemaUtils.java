@@ -363,9 +363,9 @@ public class SchemaUtils {
 			}
 			if(minOccurs == null){}
 			else if("unbounded".equals(minOccurs))
-				elem.setMinOccrs(ElementInfo.UNBOUNDED);
+				elem.setMinOccurs(ElementInfo.UNBOUNDED);
 			else{	
-				elem.setMinOccrs(Integer.parseInt(minOccurs));
+				elem.setMinOccurs(Integer.parseInt(minOccurs));
 			}
 
 			

@@ -319,7 +319,7 @@ public class WrapWriter extends CFileWriter{
 		}
 		writer.write("\tif (AXIS_SUCCESS != (nStatus = DZ._functions->GetStatus(DZ._object))) return nStatus;\n");				
 		if(returntype != null){
-			String returnParamName = returntype.getParamName();
+			String returnParamName = returntype.getElementName().getLocalPart();
 			/* Invoke the service when return type not void */
 			writer.write("\tret = "+methodName+"(");
 			if (0<paramsB.size()){
