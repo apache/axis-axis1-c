@@ -52,6 +52,11 @@
  * Added doxygen comments to help autobuild API docs
  */
 
+/*
+ * Revision 1.6  2004/06/13 roshan
+ * Added doxygen comments to help autobuild API docs
+ */
+
 #if !defined(_STUB_H____OF_AXIS_INCLUDED_)
 #define _STUB_H____OF_AXIS_INCLUDED_
 
@@ -341,11 +346,20 @@ class STORAGE_CLASS_INFO Stub
 
   /**
     * Sets a Attribute to the SOAPMethod, using the given Attribute data.
+    *
+    * @param pLocalname The local name of the Attribute.
+    * @param pPrefix The prefix of the Attribute.
+    * @param pValue The value of the Attribute.
     */
     void setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue);
 
   /**
     * Sets a Attribute to the SOAPMethod, using the given Attribute data.
+    *
+    * @param pLocalname The local name of the Attribute.
+    * @param pPrefix The prefix of the Attribute.
+    * @param pUri The namespace uri of the Attribute.
+    * @param pValue The value of the Attribute.
     */
     void setSOAPMethodAttribute(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar* pUri, const AxisChar *pValue);
   
