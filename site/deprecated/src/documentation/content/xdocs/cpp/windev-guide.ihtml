@@ -7,7 +7,7 @@
 <body>
 <h1>Axis C++ Windows Developers Guide</h1>
 
-<p><a href="#buildaxis">BUILDING AND DEPLOYING AXIS C++</a><br>
+<p><a href="#buildaxis">Building and Deploying Axis C++</a><br>
 <a href="#cvscheckout">Getting a cvs checkout</a>
 
 <br>
@@ -24,7 +24,7 @@ Axis</a>
 <a href="#deployaxis">Deploying Axis in Apache</a>
 
 <br>
-<a href="#deploywebservice">DEPLOYING A WEB SERVICE IN AXIS C++</a><br>
+<a href="#deploywebservice">Deploying a web service in Axis C++</a><br>
 
 <a href="#generatefiles">Generating Serverside Skeletons/ wrappers and client
 side stubs</a><br>
@@ -38,13 +38,15 @@ side stubs</a><br>
 <br><a href="#providedclients">Building and deploying the provided interop client applications</a>
 
 <br>
-<a href="#consumews">CONSUMING THE WEB SERVICE WITH AXIS C++ CLIENT</a><br>
+<a href="#consumews">Consuming the web service with Axis C++ client</a><br>
 
 
 <a href="#runclient">Coding and Running the client</a>
 
-<br><br>
-<a href="#usingxerces">BUILDING AXIS C++ WITH THE XERCES PARSER</a>
+<br>
+<a href="#transport">Creating and Building your own transport layer</a>
+<br>
+<a href="#parser">Creating and Building your own parser</a>
 
 </p>
 
@@ -128,7 +130,7 @@ Apache 2.0.44.</p>
 
 <p><a name="installapacheexpat"></a></p>
 
-<h2>Installing Apache and EXpat </h2>
+<h2>Installing Apache and Expat </h2>
 
 <br>
 
@@ -211,12 +213,24 @@ with the correct module for the Apache server version that you have installed)
 <br><br>
 &nbsp;</p>
 
+<p><b>Axis Transport Library</b></p>
+<p>In VC++ distribution workspace build AxisTransport project.Then AxisTransport.dll will be built.</p>
+<p><b>Xerces Parser Library</b></p>
+<p>In VC++ distribution workspace build AxisXMLParserXerces project. Then AxisXMLParserXerces.dll will be built.</p>  
+<p><b>Expat Parser Library</b></p>
+<p>In VC++ distribution workspace build AxisXMLParserExpat project. Then AxisXMLParserExpat.dll will be built</p> 
+
+<p><b> Building AxisTransport.dll and AxisXMLParser.dll</b>
+<br>Build the AxisTransport and AxisXMLParser projects,Which will build the AxisTransport.dll and AxisXMLParser.dll and also AxisTransport.lib and AxisXMLParser.lib
+in [CHECKOUT_HOME]\c\bin.</p>
+
 <p><b>Building the AxisServer and AxisClient dlls </b> </p>
 
 
 <p>Similarly as you built the Apache modules, build the AxisServer and AxisClient projects,
 Which will build the AxisServer.dll and AxisClient.dll and also AxisServer.lib and AxisClient.lib
 in [CHECKOUT_HOME]\c\bin.</p>
+
 
 
 <p><a name="deployaxis"></a></p>
@@ -250,8 +264,12 @@ i)You will find AxisServer.dll and APACHE_MODULE in [CHECKOUT_HOME]\c\bin direct
 ii)Copy APACHE_MODULE to [APACHE_HOME]\modules directory of your apache installation.
 <br>
 iii)Copy AxisServer.dll to any location specified by your PATH environment variable 
+<br>
+iv)Copy AxisTransport.dll to any location specified by your PATH environment variable 
+<br>
+v)Copy AxisXMLParser.dll to any location specified by your PATH environment variable 
 <p>
-<b>NOTE:</b>Usually it is a best practice to copy AxisServer.dll to [AXIS_HOME]\libs\ directory and
+<b>NOTE:</b>Usually it is a best practice to copy AxisServer.dll,AxisTransport.dll and AxisXMLParser.dll to [AXIS_HOME]\libs\ directory and
 add that directory to your PATH environment variable.
 
 
@@ -289,22 +307,24 @@ contain the following lines.
 <br>
 AXISLOGPATH:XXXX<br>
 WSDDFILEPATH:YYYY<br>
-
+AXISTRANSPORT_HTTP:ZZZZ<br>
+AXISXMLPARSER:WWWW<br>
 
 <br>
 Where XXXX will be the path to a file named AxisLog (The log file)and YYYY
-will be the path to the server.wsdd file.<br>
+will be the path to the server.wsdd file.ZZZZ will be the path to AxisTransport.dll if it's a HTTP(if the selected transport is SMTP then should give that path.WWWW will be the path to AxisXMLParser.dll<br>
 <br>
 i.e.<br>
-AXISLOGPATH: [APACHE_HOME]\Axis\logs\AxisLog.log  
+AXISLOGPATH:[APACHE_HOME]\Axis\logs\AxisLog.log  
 
 <br>
-WSDDFILEPATH: [APACHE_HOME]\Axis\conf\server.wsdd <br>
+WSDDFILEPATH:[APACHE_HOME]\Axis\conf\server.wsdd <br>
+AXISTRANSPORT_HTTP:[APACHE_HOME]\Axis\libs\AxisTransport.dll <br>
+AXISXMLPARSER:[APACHE_HOME]\Axis\libs\AxisXMLParser.dll <br>
 
-
-
+<p><b>Note:If the AxisTransport.dll and AxisXMLParser.dll paths are not given in axiscpp.conf then the hardcoded values will be used.For that set the path of these 2 in the PATH environment variable or copy them to the same location as the Client.exe.</b></p>
 <br>
-6)Select start-&gt;programs-&gt;Apache HTTP server-&gt;Control Apache
+<p>6)Select start-&gt;programs-&gt;Apache HTTP server-&gt;Control Apache
 Server-&gt;stop to stop the apache server
 
 <br>
@@ -320,9 +340,6 @@ apache (If Apache 2.0 server does not seem to respond when started this way, try
 open a browser and verify whether you can browse http://localhost/ (or give
 the machines ip as http://xxx.xxx.xxx.xxx/). If apache is running you will
 see the Apache start page in the browser.&nbsp;</p>
-
-
-
 <p><a name="deploywebservice"></a></p>
 
 
@@ -675,7 +692,7 @@ list.
 
 
 <br>Add AxisClient.lib to the “Object/library modules” and in the “Additional library path” give the path.
-AxisClient.lib can be found in [CHECKOUT_HOME]\c\bin once you build the AxisClient project
+AxisClient.lib can be found in [CHECKOUT_HOME]\c\bin once you build the AxisClient,AxisTransport,AxisXMLParserXerces or AxisXMLParserExpat  projects
 of the "Distribution" VC workspace.
 <br>
 
@@ -697,12 +714,20 @@ printf("The result is : %d", result);
 }</pre>
 <br>
 
-
+<p>It is better to have the path to your AxisXMLParser.dll and AxisTransport.dll in axiscpp.conf or have the dlls where the client exe is.</p>
 <p>Right click on the project and click “Build” on the menu that appears.
 
-<br>
-If Visual C++ complains about missing libs go to Build-&gt;Rebuild All (Do
+<p>When the XMLParser is running these steps occur.<br>
+1. Locate Parser dll.<br>
+2. Create Parser instance by CreateInstance() method.<br>
+3. Give the stream to parser by setInputStream() method.<br>
+4. Call next() method multiple times.<br>
+5. getStatus() to see if the streams are properly passed.<br>
+6. Destroy parser object by DestroyInstance().<br>
+</p>
+<p>If Visual C++ complains about missing libs go to Build-&gt;Rebuild All (Do
 make sure that the apache server is stopped). Now the client exe is built.<br>
+
 Start the Apache server by typing apache -k start and run the exe from Visual C++ by
 going to Build-&gt;Execute calclient.exe. If all went well now you should see the SOAP Request,
 SOAP Response and the result printed by calclient.exe.</p>
@@ -742,60 +767,27 @@ the relevant web service dll given above in [APACHE_HOME]\Axis\webservices.
 <br>4) In order to run these samples you should have AxisClient.dll in the PATH environment variable or in the same directory where the .exe is.
 </p>
 
-<p><a name="usingxerces"></a></p>
-<h2>BUILDING AXIS C++ WITH THE XERCES PARSER</h2>
+<p><a name="transport"></a></p>
+<h2>Creating and Building your own transport layer</h2>
+<img border="0" src="images/c/parserd/transport.jpg">
 
-<p><b>Xerces-C</b>
+<p>When creating your own transport layer refer  SoapTransport.h header file for API.To see an example implementation refer AxisTransport.h and AxisTransport.cpp</p>
+<p>Implement SoapTransport.h interface according to rules described in the header file.
+<br>Transport layer is built separately from Axis. Then Axis loads transport dynamic library through following export functions which you also have to implement. 
+<p>CreateInstance (SoapTransport *pOut)- Used by Axis to create an instance of your transport class<br>
+   DestroyInstance (SoapTransport *pIn) - Used by Axis to destroy the created transport class instance</p>
+<p>Compile your transport code and build a dynamic library. Add the name of your transport library to axis configuration file (axiscpp.conf) so that Axis can find your library at runtime.</p>
 
-<p>A developer can use xerces-C parser as an  alternative parser for the Expat.  Once you have got Axis c++ built and deployed with EXpat using the above instructions, by following the instructions given below, you will be able to build and deploy Axis c++ with the Xerces parser.</p>
-
-<br>
-Download the Xerces-C 2.2.0( 32 bit binary release)from:
-http://xml.apache.org/xerces-c/download.cgi<br>
-
-
-
-
-
-<p><B>How to use xerces as the parser for Axis C++</B></p>
-
-<p>In windows using Visual C++ 6.0 open the workspace "distribution" from vc++ at
-[CHECKOUT_HOME]\c\vc\
-
-<p>1)Remove the files SoapParserExpat.cpp and WSDDDocumentExpat.cpp from the "AxisServer"
-project and the "AxisClient" project.</P>
-
-<p>2)Add the files "SoapBinInputStream.cpp", "SoapInputSource.cpp", "SoapParserXerces.cpp",
-"XercesHandler.cpp" (which will be located in  [CHECKOUT_HOME]\c\src\soap) and "WSDDDocumentXerces.cpp" (which will be located in [CHECKOUT_HOME]\c\src\wsdd) to the "AxisServer"
-project and the "AxisClient" project.</p>
-
-
-<p>3)change the compiler directive "USE_EXPAT_PARSER" to "USE_XERCES_PARSER" (This setting is
-in "project-&gt;settings-&gt;C/C++-&gt;prepocessor-&gt;Preprocessor Definitions")
-in all the projects that this directive is used.</P>
-
-<p>4)Add the Xerces header files from xerces binary distribution to [CHECKOUT_HOME]\c\include\xercesc folder </p>
-
-<p>5)Add the required Xerces libs (xerces-c_2.lib for release builds, xerces-c_2D.lib for
-debug builds) from the Xerces binary distribution to [CHECKOUT_HOME]\c\lib\xerces-c folder and give either
-xerces-c_2.lib or xerces-c_2D.lib as appropriate in
-"project-&gt;settings-&gt;link-&gt;input-&gt;object/library modules"
-and give the path to those libs in "project->settings->link->additional library path"</p>
-
-<p>6)Remove libexpat.lib from the settings of the projects.</p>
-
-<p>If you are using any other vc workspaces (e.g AxisDevelopment) do the same modifications
-to the projects of those workspaces.</p>
-
-<p>Now you can build the source. Once the source is built the dlls AxisServer.dll, AxisClient.dll, mod_axis.dll or mod_axis2.dll will be generated in [CHECKOUT_HOME]\c\bin.<br>
-You will need to put the xerces dlls somewhere pointed to by the PATH environment variable
-(xerces-c_2_2_0.dll for release builds, xerces-c_2_2_0D.dll for debug builds) to run the
-server and the client. (The recommended way of achieving this is to put the Xerces dlls in to [CHECKOUT_HOME]\Axis\libs to which you should have set the PATH environment variable already).
-<br><br>
-<br>
-NOTE: If you copy xerces dll files to [APACHE_HOME]\Axis\libs from a version
-other than the one you used to build the Axis source with, you may have
-trouble starting up the Apache web server.<br></p>
+<p><a name="parser"></a></p>
+<h2>Creating and Building your own parser</h2>
+<img border="0" src="images/c/parserd/parser.jpg">
+ 
+<p><b>Note:Implement XMLParser.h interface according to rules described there.</b><br>
+<p>When creating your own parser refer  XMLParser.h header file for API. To see an example implementation refer SoapParserExpat.h,SoapParserExpat.cpp, SoapParserXerces.h and SoapParserXerces.cpp.
+<p>Axis loads the parser dynamic library through following export functions which you also have to implement.</p>
+<p>CreateInstance() - Used by Axis to create an instance of your parser class<br>
+   DestroyInstance() - Used by Axis to destroy the created parser class instance </p>
+<p> Compile your parser code and build a dynamic library. Add the name of your parser library to Axis configuration file (axiscpp.conf) so that Axis can find your library at runtime</p>
 
 </body>
 </html>
