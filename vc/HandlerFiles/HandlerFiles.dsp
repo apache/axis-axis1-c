@@ -71,5 +71,13 @@ SOURCE=..\..\include\axis\server\Handler.h
 
 SOURCE=..\..\include\axis\server\HandlerChain.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\include\axis\server\IHandlerSoapDeSerializer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\axis\server\IHandlerSoapSerializer.h
+# End Source File
 # End Target
 # End Project
