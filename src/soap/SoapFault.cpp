@@ -153,8 +153,11 @@ SoapFault* SoapFault::getSoapFault(int iFaultCode)
     /* the soap envelope namespace prefix to be obtained from 
      * gs_SoapEnvVersionsStruct should depend on the relevant SOAP VERSION
      */
-     pSoapFault->setFaultcode(string(gs_SoapEnvVersionsStruct[SOAP_VER_1_1].pchPrefix) + 
-         ":" + s_parrSoapFaultStruct[iFaultCode].pcFaultcode);
+     string strFaultcode = s_parrSoapFaultStruct[iFaultCode].pcFaultcode;
+     string strSoapEnvVerStruct = gs_SoapEnvVersionsStruct[SOAP_VER_1_1].pchPrefix;
+     pSoapFault->setFaultcode(strSoapEnvVerStruct + ":" + strFaultcode);
+     //pSoapFault->setFaultcode(string(gs_SoapEnvVersionsStruct[SOAP_VER_1_1].pchPrefix) + 
+     //    ":" + s_parrSoapFaultStruct[iFaultCode].pcFaultcode);
      pSoapFault->setFaultstring(s_parrSoapFaultStruct[iFaultCode].pcFaultstring);
      //pSoapFault->setFaultactor(s_parrSoapFaultStruct[iFaultCode].pcFaultactor);
      pSoapFault->setFaultactor("http://endpoint/url");
