@@ -113,18 +113,6 @@ public class JaxRpcMapper {
         }
     }
 
-    /*
-     * public JavaWsdlMapping getMappingFromArchive( String archivePath, String path) { JAXBContext
-     * jc = null; try { jc = JAXBContext.newInstance("org.apache.geronimo.ews.jaxrpcmapping.descriptor"); }
-     * catch (JAXBException e1) { e1.printStackTrace(); } Unmarshaller u = null; try { u =
-     * jc.createUnmarshaller(); } catch (JAXBException e) { e.printStackTrace(); } JavaWsdlMapping
-     * mapping = null; try { jeus.deploy.archivist.AbstractArchive jar =
-     * jeus.deploy.archivist.JarArchiveFactory.openArchiveStatic(archivePath); java.io.InputStream
-     * jis = new java.io.BufferedInputStream(jar.getEntry(path)); mapping = (JavaWsdlMapping)
-     * u.unmarshal(jis); } catch (FileNotFoundException e2) { e2.printStackTrace(); } catch
-     * (JAXBException e2) { e2.printStackTrace(); } catch (java.io.IOException ioe) {
-     * ioe.printStackTrace(); } return mapping; }
-     */
     /**
      * @return Returns the mapping.
      */
@@ -133,6 +121,9 @@ public class JaxRpcMapper {
     }
 
     public String getJavaType(QName typeQName) {
+        if (mapping == null) {
+            return null;
+        }
         List typeList = mapping.getJavaXmlTypeMapping();
         for (Iterator i = typeList.iterator(); i.hasNext();) {
             JavaXmlTypeMappingType typeMapping = (JavaXmlTypeMappingType) i.next();
@@ -156,6 +147,9 @@ public class JaxRpcMapper {
     }
 
     public String getExceptionType(QName messageQName) {
+        if (mapping == null) {
+            return null;
+        }
         List exceptionMappingList = mapping.getExceptionMapping();
         for (Iterator j = exceptionMappingList.iterator(); j.hasNext();) {
             ExceptionMappingType exceptionMapping = (ExceptionMappingType) j.next();
@@ -167,6 +161,9 @@ public class JaxRpcMapper {
     }
 
     public String getPortName(Port port) {
+        if (mapping == null) {
+            return null;
+        }
         List serviceList = mapping.getServiceInterfaceMappingAndServiceEndpointInterfaceMapping();
         String portName = port.getName();
         for (Iterator i = serviceList.iterator(); i.hasNext();) {
@@ -188,6 +185,9 @@ public class JaxRpcMapper {
     }
 
     public String getServiceInterfaceName(ServiceEntry entry) {
+        if (mapping == null) {
+            return null;
+        }
         List serviceList = mapping.getServiceInterfaceMappingAndServiceEndpointInterfaceMapping();
         QName entryQName = entry.getQName();
         for (Iterator i = serviceList.iterator(); i.hasNext();) {
@@ -202,6 +202,9 @@ public class JaxRpcMapper {
     }
 
     public String getServiceEndpointInterfaceName(PortTypeEntry ptEntry, BindingEntry bEntry) {
+        if (mapping == null) {
+            return null;
+        }
         List serviceList = mapping.getServiceInterfaceMappingAndServiceEndpointInterfaceMapping();
         Binding binding = bEntry.getBinding();
         PortType portType = ptEntry.getPortType();
@@ -232,6 +235,9 @@ public class JaxRpcMapper {
      * @return 
      */
     public String getJavaMethodParamType(BindingEntry bEntry, Operation operation, int position) {
+        if (mapping == null) {
+            return null;
+        }
         List serviceList = mapping.getServiceInterfaceMappingAndServiceEndpointInterfaceMapping();
         Binding binding = bEntry.getBinding();
         QName bindingQName = binding.getQName();
@@ -275,6 +281,9 @@ public class JaxRpcMapper {
      * @return 
      */
     public String getJavaMethodReturnType(BindingEntry bEntry, Operation operation) {
+        if (mapping == null) {
+            return null;
+        }
         List serviceList = mapping.getServiceInterfaceMappingAndServiceEndpointInterfaceMapping();
         Binding binding = bEntry.getBinding();
         QName bindingQName = binding.getQName();
@@ -315,6 +324,9 @@ public class JaxRpcMapper {
      * @return 
      */
     public String getJavaMethodName(BindingEntry bEntry, Operation operation) {
+        if (mapping == null) {
+            return null;
+        }
         List serviceList = mapping.getServiceInterfaceMappingAndServiceEndpointInterfaceMapping();
         Binding binding = bEntry.getBinding();
         QName bindingQName = binding.getQName();
