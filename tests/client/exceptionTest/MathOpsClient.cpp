@@ -59,6 +59,14 @@ int main(int argc, char* argv[])
             {
                 printf("Exception : %s\n", e.what());
             }
+            catch(AxisOutOfBoundException& e)
+            {
+                printf("Exception : %s\n", e.what());
+            }
+            catch(AxisNormalDetailException& e)
+            {
+                printf("Exception : %s\n", e.what());
+            }
             catch(AxisException& e)
             {
                 printf("Exception : %s\n", e.what());
@@ -86,7 +94,7 @@ void PrintUsage()
 
 bool IsNumber(const char* p)
 {
-	for (int x=0; x < strlen(p); x++)
+	for (int x=1; x < strlen(p); x++)
 	{
 		if (!isdigit(p[x])) return false;
 	}
