@@ -48,81 +48,143 @@ class AxisTransport;
 
 typedef struct {
 	void (AXISCALL* setSOAPVersion)(void* pObj, SOAP_VERSION version);
-	int (AXISCALL* setTransportProperty)(void* pObj, AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value);
+	int (AXISCALL* setTransportProperty)(void* pObj, 
+        AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value);
 	int (AXISCALL* setProtocol)(void* pObj, AXIS_PROTOCOL_TYPE protocol);
 	int (AXISCALL* initialize)(void* pObj, PROVIDERTYPE nStyle, int secure);
 	int (AXISCALL* invoke)(void* pObj);
 	int (AXISCALL* unInitialize)(void* pObj);
 
 	/* Method that set the remote method name */
-	void (AXISCALL* setOperation)(void* pObj, const char* pchOperation, const char* pchNamespace);
+	void (AXISCALL* setOperation)(void* pObj, const char* pchOperation, 
+        const char* pchNamespace);
 	int (AXISCALL* setEndpointURI)(void* pObj, const char* pchEndpointURI);
 
 	/* Method for adding complex parameters */
-	void (AXISCALL* addCmplxParameter)(void* pObj, void* pObject, void* pSZFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	void (AXISCALL* addCmplxParameter)(void* pObj, void* pObject, 
+        void* pSZFunct, void* pDelFunct, const AxisChar* pName, 
+        const AxisChar* pNamespace);
 	/* Method for adding complex type array parameters */
-	void (AXISCALL* addCmplxArrayParameter)(void* pObj, Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	void (AXISCALL* addCmplxArrayParameter)(void* pObj, Axis_Array* pArray,
+        void* pSZFunct, void* pDelFunct, void* pSizeFunct,
+        const AxisChar* pName, const AxisChar* pNamespace);
 	/* Method for adding basic type array parameters */
-	void (AXISCALL* addBasicArrayParameter)(void* pObj, Axis_Array* pArray, XSDTYPE nType, const char* pName);
+	void (AXISCALL* addBasicArrayParameter)(void* pObj, Axis_Array* pArray,
+        XSDTYPE nType, const char* pName);
 	/* Method for adding parameters of basic types */
-	void (AXISCALL* addParameter)(void* pObj, void* pValue,const char* pName, XSDTYPE nType);
+	void (AXISCALL* addParameter)(void* pObj, void* pValue,const char* pName,
+        XSDTYPE nType);
 
-	/* Methods used by stubs to get a deserialized value of an XML element as basic types */
-	int (AXISCALL* getElementAsInt)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-	xsd__boolean (AXISCALL* getElementAsBoolean)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned int (AXISCALL* getElementAsUnsignedInt)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    short (AXISCALL* getElementAsShort)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned short (AXISCALL* getElementAsUnsignedShort)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    char (AXISCALL* getElementAsByte)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned char (AXISCALL* getElementAsUnsignedByte)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    long (AXISCALL* getElementAsLong)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    long (AXISCALL* getElementAsInteger)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned long (AXISCALL* getElementAsUnsignedLong)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-	float (AXISCALL* getElementAsFloat)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    double (AXISCALL* getElementAsDouble)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    double (AXISCALL* getElementAsDecimal)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-	AxisChar* (AXISCALL* getElementAsString)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    AxisChar* (AXISCALL* getElementAsAnyURI)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    AxisChar* (AXISCALL* getElementAsQName)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-	xsd__hexBinary (AXISCALL* getElementAsHexBinary)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-	xsd__base64Binary (AXISCALL* getElementAsBase64Binary)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    struct tm (AXISCALL* getElementAsDateTime)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    struct tm (AXISCALL* getElementAsDate)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    struct tm (AXISCALL* getElementAsTime)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    long (AXISCALL* getElementAsDuration)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+	/* Methods used by stubs to get a deserialized value of an XML element 
+     * as basic types 
+     */
+	int (AXISCALL* getElementAsInt)(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
+	xsd__boolean (AXISCALL* getElementAsBoolean)(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace);
+    unsigned int (AXISCALL* getElementAsUnsignedInt)(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace);
+    short (AXISCALL* getElementAsShort)(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    unsigned short (AXISCALL* getElementAsUnsignedShort)(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace);
+    char (AXISCALL* getElementAsByte)(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    unsigned char (AXISCALL* getElementAsUnsignedByte)(void* pObj,
+        const AxisChar* pName, const AxisChar* pNamespace);
+    long (AXISCALL* getElementAsLong)(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    long (AXISCALL* getElementAsInteger)(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    unsigned long (AXISCALL* getElementAsUnsignedLong)(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace);
+	float (AXISCALL* getElementAsFloat)(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    double (AXISCALL* getElementAsDouble)(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    double (AXISCALL* getElementAsDecimal)(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
+	AxisChar* (AXISCALL* getElementAsString)(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    AxisChar* (AXISCALL* getElementAsAnyURI)(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    AxisChar* (AXISCALL* getElementAsQName)(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
+	xsd__hexBinary (AXISCALL* getElementAsHexBinary)(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace);
+	xsd__base64Binary (AXISCALL* getElementAsBase64Binary)(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace);
+    struct tm (AXISCALL* getElementAsDateTime)(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace);
+    struct tm (AXISCALL* getElementAsDate)(void* pObj, const AxisChar* pName,
+        const AxisChar* pNamespace);
+    struct tm (AXISCALL* getElementAsTime)(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    long (AXISCALL* getElementAsDuration)(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
 
-	/* Methods used by stubs to get a deserialized value of an XML attribute basic types */
-	int (AXISCALL* getAttributeAsInt)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-	xsd__boolean (AXISCALL* getAttributeAsBoolean)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned int (AXISCALL* getAttributeAsUnsignedInt)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    short (AXISCALL* getAttributeAsShort)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned short (AXISCALL* getAttributeAsUnsignedShort)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    char (AXISCALL* getAttributeAsByte)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned char (AXISCALL* getAttributeAsUnsignedByte)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    long (AXISCALL* getAttributeAsLong)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    long (AXISCALL* getAttributeAsInteger)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned long (AXISCALL* getAttributeAsUnsignedLong)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-	float (AXISCALL* getAttributeAsFloat)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    double (AXISCALL* getAttributeAsDouble)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    double (AXISCALL* getAttributeAsDecimal)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-	AxisChar* (AXISCALL* getAttributeAsString)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    AxisChar* (AXISCALL* getAttributeAsAnyURI)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    AxisChar* (AXISCALL* getAttributeAsQName)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-	xsd__hexBinary (AXISCALL* getAttributeAsHexBinary)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-	xsd__base64Binary (AXISCALL* getAttributeAsBase64Binary)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    struct tm (AXISCALL* getAttributeAsDateTime)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    struct tm (AXISCALL* getAttributeAsDate)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    struct tm (AXISCALL* getAttributeAsTime)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
-    long (AXISCALL* getAttributeAsDuration)(void* pObj, const AxisChar* pName, const AxisChar* pNamespace);
+	/* Methods used by stubs to get a deserialized value of an XML attribute 
+     * basic types 
+     */
+	int (AXISCALL* getAttributeAsInt)(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
+	xsd__boolean (AXISCALL* getAttributeAsBoolean)(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace);
+    unsigned int (AXISCALL* getAttributeAsUnsignedInt)(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace);
+    short (AXISCALL* getAttributeAsShort)(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    unsigned short (AXISCALL* getAttributeAsUnsignedShort)(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace);
+    char (AXISCALL* getAttributeAsByte)(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    unsigned char (AXISCALL* getAttributeAsUnsignedByte)(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace);
+    long (AXISCALL* getAttributeAsLong)(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    long (AXISCALL* getAttributeAsInteger)(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    unsigned long (AXISCALL* getAttributeAsUnsignedLong)(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace);
+	float (AXISCALL* getAttributeAsFloat)(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    double (AXISCALL* getAttributeAsDouble)(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    double (AXISCALL* getAttributeAsDecimal)(void* pObj, const AxisChar* pName,
+        const AxisChar* pNamespace);
+	AxisChar* (AXISCALL* getAttributeAsString)(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace);
+    AxisChar* (AXISCALL* getAttributeAsAnyURI)(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace);
+    AxisChar* (AXISCALL* getAttributeAsQName)(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace);
+	xsd__hexBinary (AXISCALL* getAttributeAsHexBinary)(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace);
+	xsd__base64Binary (AXISCALL* getAttributeAsBase64Binary)(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace);
+    struct tm (AXISCALL* getAttributeAsDateTime)(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace);
+    struct tm (AXISCALL* getAttributeAsDate)(void* pObj, const AxisChar* pName,
+        const AxisChar* pNamespace);
+    struct tm (AXISCALL* getAttributeAsTime)(void* pObj, const AxisChar* pName,
+        const AxisChar* pNamespace);
+    long (AXISCALL* getAttributeAsDuration)(void* pObj, const AxisChar* pName,
+        const AxisChar* pNamespace);
 
 	/* Method used by stubs to get a deserialized value of complex types */
-	void* (AXISCALL* getCmplxObject)(void* pObj, void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	void* (AXISCALL* getCmplxObject)(void* pObj, void* pDZFunct, 
+        void* pCreFunct, void* pDelFunct, const AxisChar* pName, 
+        const AxisChar* pNamespace);
 	/* Method used by stubs to get a deserialized Array of complex types */
-	Axis_Array (AXISCALL* getCmplxArray)(void* pObj, void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	Axis_Array (AXISCALL* getCmplxArray)(void* pObj, void* pDZFunct, 
+        void* pCreFunct, void* pDelFunct, void* pSizeFunct, 
+        const AxisChar* pName, const AxisChar* pNamespace);
 	/* Method used by stubs to get a deserialized Array of basic types */
-	Axis_Array (AXISCALL* getBasicArray)(void* pObj, XSDTYPE nType, const AxisChar* pName, const AxisChar* pNamespace);
+	Axis_Array (AXISCALL* getBasicArray)(void* pObj, XSDTYPE nType, 
+        const AxisChar* pName, const AxisChar* pNamespace);
 
-	int (AXISCALL* checkMessage)(void *pObj, const AxisChar* pName, const AxisChar* pNamespace);
+	int (AXISCALL* checkMessage)(void *pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace);
 	
 	/* Minimal error check */
 	 int (AXISCALL* getStatus)(void *pObj);
@@ -134,81 +196,141 @@ class STORAGE_CLASS_INFO CallBase
 {	
 public:
 	virtual void AXISCALL setSOAPVersion(SOAP_VERSION version)=0;
-	virtual int AXISCALL setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)=0;
+	virtual int AXISCALL setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE 
+        type, const char* value)=0;
 	virtual int AXISCALL setProtocol(AXIS_PROTOCOL_TYPE protocol)=0;
 	virtual int AXISCALL initialize(PROVIDERTYPE nStyle, int secure)=0;
 	virtual int AXISCALL invoke()=0;
 	virtual int AXISCALL unInitialize()=0;
 
 	/* Method that set the remote method name */
-	virtual void AXISCALL setOperation(const char* pchOperation, const char* pchNamespace)=0;
+	virtual void AXISCALL setOperation(const char* pchOperation, 
+        const char* pchNamespace)=0;
 	virtual int AXISCALL setEndpointURI(const char* pchEndpointURI)=0;
 
 	/* Method for adding complex parameters */
-	virtual void AXISCALL addCmplxParameter(void* pObject, void* pSZFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
+	virtual void AXISCALL addCmplxParameter(void* pObject, void* pSZFunct, 
+        void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
 	/* Method for adding complex type array parameters */
-	virtual void AXISCALL addCmplxArrayParameter(Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
+	virtual void AXISCALL addCmplxArrayParameter(Axis_Array* pArray, 
+        void* pSZFunct, void* pDelFunct, void* pSizeFunct, 
+        const AxisChar* pName, const AxisChar* pNamespace)=0;
 	/* Method for adding basic type array parameters */
-	virtual void AXISCALL addBasicArrayParameter(Axis_Array* pArray, XSDTYPE nType, const char* pName)=0;
+	virtual void AXISCALL addBasicArrayParameter(Axis_Array* pArray, 
+        XSDTYPE nType, const char* pName)=0;
 	/* Method for adding parameters of basic types */
-	virtual void AXISCALL addParameter(void* pValue,const char* pName, XSDTYPE nType)=0;
+	virtual void AXISCALL addParameter(void* pValue,const char* pName, 
+        XSDTYPE nType)=0;
 
-	/* Methods used by stubs to get a deserialized value of an XML element as basic types */
-	virtual int AXISCALL getElementAsInt(const AxisChar* pName, const AxisChar* pNamespace)=0;
-	virtual xsd__boolean AXISCALL getElementAsBoolean(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual unsigned int AXISCALL getElementAsUnsignedInt(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual short AXISCALL getElementAsShort(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual unsigned short AXISCALL getElementAsUnsignedShort(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual char AXISCALL getElementAsByte(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual unsigned char AXISCALL getElementAsUnsignedByte(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual long AXISCALL getElementAsLong(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual long AXISCALL getElementAsInteger(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual unsigned long AXISCALL getElementAsUnsignedLong(const AxisChar* pName, const AxisChar* pNamespace)=0;
-	virtual float AXISCALL getElementAsFloat(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual double AXISCALL getElementAsDouble(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual double AXISCALL getElementAsDecimal(const AxisChar* pName, const AxisChar* pNamespace)=0;
-	virtual AxisChar* AXISCALL getElementAsString(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual AxisChar* AXISCALL getElementAsAnyURI(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual AxisChar* AXISCALL getElementAsQName(const AxisChar* pName, const AxisChar* pNamespace)=0;
-	virtual xsd__hexBinary AXISCALL getElementAsHexBinary(const AxisChar* pName, const AxisChar* pNamespace)=0;
-	virtual xsd__base64Binary AXISCALL getElementAsBase64Binary(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual struct tm AXISCALL getElementAsDateTime(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual struct tm AXISCALL getElementAsDate(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual struct tm AXISCALL getElementAsTime(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual long AXISCALL getElementAsDuration(const AxisChar* pName, const AxisChar* pNamespace)=0;
+	/* Methods used by stubs to get a deserialized value of an XML element 
+     * as basic types 
+     */
+	virtual int AXISCALL getElementAsInt(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+	virtual xsd__boolean AXISCALL getElementAsBoolean(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual unsigned int AXISCALL getElementAsUnsignedInt(const AxisChar* 
+        pName, const AxisChar* pNamespace)=0;
+    virtual short AXISCALL getElementAsShort(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual unsigned short AXISCALL getElementAsUnsignedShort(const AxisChar* 
+        pName, const AxisChar* pNamespace)=0;
+    virtual char AXISCALL getElementAsByte(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual unsigned char AXISCALL getElementAsUnsignedByte(const AxisChar* 
+        pName, const AxisChar* pNamespace)=0;
+    virtual long AXISCALL getElementAsLong(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual long AXISCALL getElementAsInteger(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual unsigned long AXISCALL getElementAsUnsignedLong(const AxisChar* 
+        pName, const AxisChar* pNamespace)=0;
+	virtual float AXISCALL getElementAsFloat(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual double AXISCALL getElementAsDouble(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual double AXISCALL getElementAsDecimal(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+	virtual AxisChar* AXISCALL getElementAsString(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual AxisChar* AXISCALL getElementAsAnyURI(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual AxisChar* AXISCALL getElementAsQName(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+	virtual xsd__hexBinary AXISCALL getElementAsHexBinary(const AxisChar* 
+        pName, const AxisChar* pNamespace)=0;
+	virtual xsd__base64Binary AXISCALL getElementAsBase64Binary(const 
+        AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual struct tm AXISCALL getElementAsDateTime(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual struct tm AXISCALL getElementAsDate(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual struct tm AXISCALL getElementAsTime(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual long AXISCALL getElementAsDuration(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
 
-	/* Methods used by stubs to get a deserialized value of XML attribute as basic types */
-	virtual int AXISCALL getAttributeAsInt(const AxisChar* pName, const AxisChar* pNamespace)=0;
-	virtual xsd__boolean AXISCALL getAttributeAsBoolean(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual unsigned int AXISCALL getAttributeAsUnsignedInt(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual short AXISCALL getAttributeAsShort(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual unsigned short AXISCALL getAttributeAsUnsignedShort(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual char AXISCALL getAttributeAsByte(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual unsigned char AXISCALL getAttributeAsUnsignedByte(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual long AXISCALL getAttributeAsLong(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual long AXISCALL getAttributeAsInteger(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual unsigned long AXISCALL getAttributeAsUnsignedLong(const AxisChar* pName, const AxisChar* pNamespace)=0;
-	virtual float AXISCALL getAttributeAsFloat(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual double AXISCALL getAttributeAsDouble(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual double AXISCALL getAttributeAsDecimal(const AxisChar* pName, const AxisChar* pNamespace)=0;
-	virtual AxisChar* AXISCALL getAttributeAsString(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual AxisChar* AXISCALL getAttributeAsAnyURI(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual AxisChar* AXISCALL getAttributeAsQName(const AxisChar* pName, const AxisChar* pNamespace)=0;
-	virtual xsd__hexBinary AXISCALL getAttributeAsHexBinary(const AxisChar* pName, const AxisChar* pNamespace)=0;
-	virtual xsd__base64Binary AXISCALL getAttributeAsBase64Binary(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual struct tm AXISCALL getAttributeAsDateTime(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual struct tm AXISCALL getAttributeAsDate(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual struct tm AXISCALL getAttributeAsTime(const AxisChar* pName, const AxisChar* pNamespace)=0;
-    virtual long AXISCALL getAttributeAsDuration(const AxisChar* pName, const AxisChar* pNamespace)=0;
+	/* Methods used by stubs to get a deserialized value of XML attribute 
+     * as basic types 
+     */
+	virtual int AXISCALL getAttributeAsInt(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+	virtual xsd__boolean AXISCALL getAttributeAsBoolean(const AxisChar* pName,
+        const AxisChar* pNamespace)=0;
+    virtual unsigned int AXISCALL getAttributeAsUnsignedInt(const AxisChar* 
+        pName, const AxisChar* pNamespace)=0;
+    virtual short AXISCALL getAttributeAsShort(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual unsigned short AXISCALL getAttributeAsUnsignedShort(const 
+        AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual char AXISCALL getAttributeAsByte(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual unsigned char AXISCALL getAttributeAsUnsignedByte(const AxisChar* 
+        pName, const AxisChar* pNamespace)=0;
+    virtual long AXISCALL getAttributeAsLong(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual long AXISCALL getAttributeAsInteger(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual unsigned long AXISCALL getAttributeAsUnsignedLong(const AxisChar* 
+        pName, const AxisChar* pNamespace)=0;
+	virtual float AXISCALL getAttributeAsFloat(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual double AXISCALL getAttributeAsDouble(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual double AXISCALL getAttributeAsDecimal(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+	virtual AxisChar* AXISCALL getAttributeAsString(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual AxisChar* AXISCALL getAttributeAsAnyURI(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual AxisChar* AXISCALL getAttributeAsQName(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+	virtual xsd__hexBinary AXISCALL getAttributeAsHexBinary(const AxisChar* 
+        pName, const AxisChar* pNamespace)=0;
+	virtual xsd__base64Binary AXISCALL getAttributeAsBase64Binary(const 
+        AxisChar* pName, const AxisChar* pNamespace)=0;
+    virtual struct tm AXISCALL getAttributeAsDateTime(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual struct tm AXISCALL getAttributeAsDate(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual struct tm AXISCALL getAttributeAsTime(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
+    virtual long AXISCALL getAttributeAsDuration(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
 
 	/* Method used by stubs to get a deserialized value of complex types */
-	virtual void* AXISCALL getCmplxObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
+	virtual void* AXISCALL getCmplxObject(void* pDZFunct, void* pCreFunct, 
+        void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
 	/* Method used by stubs to get a deserialized Array of complex types */
-	virtual Axis_Array AXISCALL getCmplxArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)=0;
+	virtual Axis_Array AXISCALL getCmplxArray(void* pDZFunct, void* pCreFunct, 
+        void* pDelFunct, void* pSizeFunct, const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
 	/* Method used by stubs to get a deserialized Array of basic types */
-	virtual Axis_Array AXISCALL getBasicArray(XSDTYPE nType, const AxisChar* pName, const AxisChar* pNamespace)=0;
+	virtual Axis_Array AXISCALL getBasicArray(XSDTYPE nType, 
+        const AxisChar* pName, const AxisChar* pNamespace)=0;
 
-	virtual int AXISCALL checkMessage(const AxisChar* pName, const AxisChar* pNamespace)=0;
+	virtual int AXISCALL checkMessage(const AxisChar* pName, 
+        const AxisChar* pNamespace)=0;
 
 	/* Minimal error check */
 	virtual int AXISCALL getStatus()=0;
@@ -220,11 +342,13 @@ public:
 	/* add static functions for all interface functions here */
 	static void AXISCALL s_SetSOAPVersion(void* pObj, SOAP_VERSION version)
 	{((CallBase*)pObj)->setSOAPVersion(version);};
-	static int AXISCALL s_SetTransportProperty(void* pObj, AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)
+	static int AXISCALL s_SetTransportProperty(void* pObj, 
+        AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)
 	{ return ((CallBase*)pObj)->setTransportProperty(type,value);};
 	static int AXISCALL s_SetProtocol(void* pObj, AXIS_PROTOCOL_TYPE protocol)
 	{ return ((CallBase*)pObj)->setProtocol(protocol);};
-	static int AXISCALL s_InitializeCall(void* pObj, PROVIDERTYPE nStyle, int secure)
+	static int AXISCALL s_InitializeCall(void* pObj, PROVIDERTYPE nStyle, 
+        int secure)
 	{ return ((CallBase*)pObj)->initialize(nStyle, secure);};
 	static int AXISCALL s_Invoke(void* pObj)
 	{ return ((CallBase*)pObj)->invoke();};
@@ -232,118 +356,184 @@ public:
 	{ return ((CallBase*)pObj)->unInitialize();};
 
 	/* Method that set the remote method name */
-	static void AXISCALL s_SetOperation(void* pObj, const char* pchOperation, const char* pchNamespace)
+	static void AXISCALL s_SetOperation(void* pObj, const char* pchOperation, 
+        const char* pchNamespace)
 	{ ((CallBase*)pObj)->setOperation(pchOperation, pchNamespace);};
-	static int AXISCALL s_SetEndpointURI(void* pObj, const char* pchEndpointURI)
+	static int AXISCALL s_SetEndpointURI(void* pObj, 
+        const char* pchEndpointURI)
 	{ return ((CallBase*)pObj)->setEndpointURI(pchEndpointURI);};
 
-	static void AXISCALL s_AddParameter(void* pObj, void* pValue, const AxisChar* pchName, XSDTYPE type)
+	static void AXISCALL s_AddParameter(void* pObj, void* pValue, 
+        const AxisChar* pchName, XSDTYPE type)
 	{ ((CallBase*)pObj)->addParameter(pValue, pchName, type);};
-	static void AXISCALL s_AddCmplxArrayParameter(void* pObj, Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)
-	{ ((CallBase*)pObj)->addCmplxArrayParameter(pArray, pSZFunct, pDelFunct, pSizeFunct, pName, pNamespace);};
-	static void AXISCALL s_AddBasicArrayParameter(void* pObj, Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName)
+	static void AXISCALL s_AddCmplxArrayParameter(void* pObj, 
+        Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct,
+        const AxisChar* pName, const AxisChar* pNamespace)
+	{ ((CallBase*)pObj)->addCmplxArrayParameter(pArray, pSZFunct, pDelFunct, 
+    pSizeFunct, pName, pNamespace);};
+	static void AXISCALL s_AddBasicArrayParameter(void* pObj, 
+        Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName)
 	{ ((CallBase*)pObj)->addBasicArrayParameter(pArray, nType, pName);};
-	static void AXISCALL s_AddCmplxParameter(void* pObj, void* pObject, void* pDZFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace)
-	{ ((CallBase*)pObj)->addCmplxParameter(pObject, pDZFunct, pDelFunct, pName, pNamespace);};
+	static void AXISCALL s_AddCmplxParameter(void* pObj, void* pObject, 
+        void* pDZFunct, void* pDelFunct, const AxisChar* pName, 
+        const AxisChar* pNamespace)
+	{ ((CallBase*)pObj)->addCmplxParameter(pObject, pDZFunct, pDelFunct, pName,
+    pNamespace);};
 
-	static int AXISCALL s_GetElementAsInt(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	static int AXISCALL s_GetElementAsInt(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsInt(pName, pNamespace);};
-	static xsd__boolean AXISCALL s_GetElementAsBoolean(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	static xsd__boolean AXISCALL s_GetElementAsBoolean(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsBoolean(pName, pNamespace);};
-    static unsigned int AXISCALL s_GetElementAsUnsignedInt(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static unsigned int AXISCALL s_GetElementAsUnsignedInt(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsUnsignedInt(pName, pNamespace);};
-    static short AXISCALL s_GetElementAsShort(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static short AXISCALL s_GetElementAsShort(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsShort(pName, pNamespace);};
-    static unsigned short AXISCALL s_GetElementAsUnsignedShort(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static unsigned short AXISCALL s_GetElementAsUnsignedShort(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsUnsignedShort(pName, pNamespace);};
-    static char AXISCALL s_GetElementAsByte(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static char AXISCALL s_GetElementAsByte(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsByte(pName, pNamespace);};
-    static unsigned char AXISCALL s_GetElementAsUnsignedByte(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static unsigned char AXISCALL s_GetElementAsUnsignedByte(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsUnsignedByte(pName, pNamespace);};
-    static long AXISCALL s_GetElementAsLong(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static long AXISCALL s_GetElementAsLong(void* pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsLong(pName, pNamespace);};
-    static long AXISCALL s_GetElementAsInteger(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static long AXISCALL s_GetElementAsInteger(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsInteger(pName, pNamespace);};
-    static unsigned long AXISCALL s_GetElementAsUnsignedLong(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static unsigned long AXISCALL s_GetElementAsUnsignedLong(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsUnsignedLong(pName, pNamespace);};
-	static float AXISCALL s_GetElementAsFloat(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	static float AXISCALL s_GetElementAsFloat(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsFloat(pName, pNamespace);};
-    static double AXISCALL s_GetElementAsDouble(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static double AXISCALL s_GetElementAsDouble(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsDouble(pName, pNamespace);};
-    static double AXISCALL s_GetElementAsDecimal(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static double AXISCALL s_GetElementAsDecimal(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsDouble(pName, pNamespace);};
-	static AxisChar* AXISCALL s_GetElementAsString(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	static AxisChar* AXISCALL s_GetElementAsString(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsString(pName, pNamespace);};
-    static AxisChar* AXISCALL s_GetElementAsAnyURI(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static AxisChar* AXISCALL s_GetElementAsAnyURI(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsAnyURI(pName, pNamespace);};
-    static AxisChar* AXISCALL s_GetElementAsQName(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static AxisChar* AXISCALL s_GetElementAsQName(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsQName(pName, pNamespace);};
-	static xsd__hexBinary AXISCALL s_GetElementAsHexBinary(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	static xsd__hexBinary AXISCALL s_GetElementAsHexBinary(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsHexBinary(pName, pNamespace);};
-	static xsd__base64Binary AXISCALL s_GetElementAsBase64Binary(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	static xsd__base64Binary AXISCALL s_GetElementAsBase64Binary(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsBase64Binary(pName, pNamespace);};
-    static struct tm AXISCALL s_GetElementAsDateTime(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static struct tm AXISCALL s_GetElementAsDateTime(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsDateTime(pName, pNamespace);};
-    static struct tm AXISCALL s_GetElementAsDate(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static struct tm AXISCALL s_GetElementAsDate(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsDate(pName, pNamespace);};
-    static struct tm AXISCALL s_GetElementAsTime(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static struct tm AXISCALL s_GetElementAsTime(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsTime(pName, pNamespace);};
-    static long AXISCALL s_GetElementAsDuration(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static long AXISCALL s_GetElementAsDuration(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getElementAsDuration(pName, pNamespace);};
 
-	static int AXISCALL s_GetAttributeAsInt(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	static int AXISCALL s_GetAttributeAsInt(void* pObj, const AxisChar* pName,
+        const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsInt(pName, pNamespace);};
-	static xsd__boolean AXISCALL s_GetAttributeAsBoolean(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	static xsd__boolean AXISCALL s_GetAttributeAsBoolean(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsBoolean(pName, pNamespace);};
-    static unsigned int AXISCALL s_GetAttributeAsUnsignedInt(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static unsigned int AXISCALL s_GetAttributeAsUnsignedInt(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsUnsignedInt(pName, pNamespace);};
-    static short AXISCALL s_GetAttributeAsShort(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static short AXISCALL s_GetAttributeAsShort(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsShort(pName, pNamespace);};
-    static unsigned short AXISCALL s_GetAttributeAsUnsignedShort(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
-	{ return ((CallBase*)pObj)->getAttributeAsUnsignedShort(pName, pNamespace);};
-    static char AXISCALL s_GetAttributeAsByte(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static unsigned short AXISCALL s_GetAttributeAsUnsignedShort(void* pObj,
+        const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((CallBase*)pObj)->getAttributeAsUnsignedShort(pName, 
+    pNamespace);};
+    static char AXISCALL s_GetAttributeAsByte(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsByte(pName, pNamespace);};
-    static unsigned char AXISCALL s_GetAttributeAsUnsignedByte(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
-	{ return ((CallBase*)pObj)->getAttributeAsUnsignedByte(pName, pNamespace);};
-    static long AXISCALL s_GetAttributeAsLong(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static unsigned char AXISCALL s_GetAttributeAsUnsignedByte(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((CallBase*)pObj)->getAttributeAsUnsignedByte(pName, 
+    pNamespace);};
+    static long AXISCALL s_GetAttributeAsLong(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsLong(pName, pNamespace);};
-    static long AXISCALL s_GetAttributeAsInteger(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static long AXISCALL s_GetAttributeAsInteger(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsInteger(pName, pNamespace);};
-    static unsigned long AXISCALL s_GetAttributeAsUnsignedLong(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
-	{ return ((CallBase*)pObj)->getAttributeAsUnsignedLong(pName, pNamespace);};
-	static float AXISCALL s_GetAttributeAsFloat(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static unsigned long AXISCALL s_GetAttributeAsUnsignedLong(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((CallBase*)pObj)->getAttributeAsUnsignedLong(pName, 
+    pNamespace);};
+	static float AXISCALL s_GetAttributeAsFloat(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsFloat(pName, pNamespace);};
-    static double AXISCALL s_GetAttributeAsDouble(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static double AXISCALL s_GetAttributeAsDouble(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsDouble(pName, pNamespace);};
-    static double AXISCALL s_GetAttributeAsDecimal(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static double AXISCALL s_GetAttributeAsDecimal(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsDecimal(pName, pNamespace);};
-	static AxisChar* AXISCALL s_GetAttributeAsString(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	static AxisChar* AXISCALL s_GetAttributeAsString(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsString(pName, pNamespace);};
-    static AxisChar* AXISCALL s_GetAttributeAsAnyURI(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static AxisChar* AXISCALL s_GetAttributeAsAnyURI(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsAnyURI(pName, pNamespace);};
-    static AxisChar* AXISCALL s_GetAttributeAsQName(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static AxisChar* AXISCALL s_GetAttributeAsQName(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsQName(pName, pNamespace);};
-	static xsd__hexBinary AXISCALL s_GetAttributeAsHexBinary(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	static xsd__hexBinary AXISCALL s_GetAttributeAsHexBinary(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsHexBinary(pName, pNamespace);};
-	static xsd__base64Binary AXISCALL s_GetAttributeAsBase64Binary(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
-	{ return ((CallBase*)pObj)->getAttributeAsBase64Binary(pName, pNamespace);};
-    static struct tm AXISCALL s_GetAttributeAsDateTime(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	static xsd__base64Binary AXISCALL s_GetAttributeAsBase64Binary(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
+	{ return ((CallBase*)pObj)->getAttributeAsBase64Binary(pName, 
+    pNamespace);};
+    static struct tm AXISCALL s_GetAttributeAsDateTime(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsDateTime(pName, pNamespace);};
-    static struct tm AXISCALL s_GetAttributeAsDate(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static struct tm AXISCALL s_GetAttributeAsDate(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsDate(pName, pNamespace);};
-    static struct tm AXISCALL s_GetAttributeAsTime(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static struct tm AXISCALL s_GetAttributeAsTime(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsTime(pName, pNamespace);};
-    static long AXISCALL s_GetAttributeAsDuration(void* pObj, const AxisChar* pName, const AxisChar* pNamespace)
+    static long AXISCALL s_GetAttributeAsDuration(void* pObj, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{ return ((CallBase*)pObj)->getAttributeAsDuration(pName, pNamespace);};
 
-	static Axis_Array AXISCALL s_GetCmplxArray(void* pObj, void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)
-	{return ((CallBase*)pObj)->getCmplxArray(pDZFunct, pCreFunct, pDelFunct, pSizeFunct, pName, pNamespace);};
-	static Axis_Array AXISCALL s_GetBasicArray(void* pObj, XSDTYPE nType, const AxisChar* pName, const AxisChar* pNamespace)
+	static Axis_Array AXISCALL s_GetCmplxArray(void* pObj, void* pDZFunct, 
+        void* pCreFunct, void* pDelFunct, void* pSizeFunct, 
+        const AxisChar* pName, const AxisChar* pNamespace)
+	{return ((CallBase*)pObj)->getCmplxArray(pDZFunct, pCreFunct, pDelFunct,
+    pSizeFunct, pName, pNamespace);};
+	static Axis_Array AXISCALL s_GetBasicArray(void* pObj, XSDTYPE nType, 
+        const AxisChar* pName, const AxisChar* pNamespace)
 	{return ((CallBase*)pObj)->getBasicArray(nType, pName, pNamespace);};
-	static void* AXISCALL s_GetCmplxObject(void* pObj, void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace)
-	{return ((CallBase*)pObj)->getCmplxObject(pDZFunct, pCreFunct, pDelFunct, pName, pNamespace);};
+	static void* AXISCALL s_GetCmplxObject(void* pObj, void* pDZFunct, 
+        void* pCreFunct, void* pDelFunct, const AxisChar* pName, 
+        const AxisChar* pNamespace)
+	{return ((CallBase*)pObj)->getCmplxObject(pDZFunct, pCreFunct, pDelFunct, 
+    pName, pNamespace);};
 
-	static int AXISCALL s_CheckMessage(void *pObj, const AxisChar* pName, const AxisChar* pNamespace)
+	static int AXISCALL s_CheckMessage(void *pObj, const AxisChar* pName, 
+        const AxisChar* pNamespace)
 	{return ((CallBase*)pObj)->checkMessage(pName, pNamespace);};
 	
 	/* Minimal error check */
@@ -425,85 +615,146 @@ class STORAGE_CLASS_INFO Call : public CallBase
 public:
 	virtual ~Call();
 	void AXISCALL setSOAPVersion(SOAP_VERSION version);
-	int AXISCALL setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value);
+	int AXISCALL setTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type,
+        const char* value);
 	int AXISCALL setProtocol(AXIS_PROTOCOL_TYPE protocol);
 	int AXISCALL unInitialize();
 	int AXISCALL initialize(PROVIDERTYPE nStyle, int secure);
 	int AXISCALL invoke();
 
 	/* Method for adding complex parameters */
-	void AXISCALL addCmplxParameter(void* pObject, void* pSZFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	void AXISCALL addCmplxParameter(void* pObject, void* pSZFunct, 
+        void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
 	/* Method for adding complex type array parameters */
-	void AXISCALL addCmplxArrayParameter(Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	void AXISCALL addCmplxArrayParameter(Axis_Array* pArray, void* pSZFunct, 
+        void* pDelFunct, void* pSizeFunct, const AxisChar* pName, 
+        const AxisChar* pNamespace);
 	/* Method for adding basic type array parameters */
-	void AXISCALL addBasicArrayParameter(Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName);
+	void AXISCALL addBasicArrayParameter(Axis_Array* pArray, XSDTYPE nType, 
+        const AxisChar* pName);
 	/* Method for adding parameters of basic types */
-	void AXISCALL addParameter(void* pValue,const char* pchName, XSDTYPE nType);
+	void AXISCALL addParameter(void* pValue,const char* pchName, 
+        XSDTYPE nType);
 
 	/* Method that set the remote method name */
-	void AXISCALL setOperation(const char* pchOperation, const char* pchNamespace);
+	void AXISCALL setOperation(const char* pchOperation, 
+        const char* pchNamespace);
 	int AXISCALL setEndpointURI(const char* pchEndpointURI);
 	Call();
 public:
-	IHeaderBlock* createHeaderBlock(AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri);
+	IHeaderBlock* createHeaderBlock(AxisChar *pachLocalName, 
+        AxisChar *pachPrefix, AxisChar *pachUri);
 	IHeaderBlock* createHeaderBlock();
 	int setSoapHeader(SoapHeader *pSoapHeader);
-	/* Methods used by stubs to get a deserialized value of XML element as basic types */
-	int AXISCALL getElementAsInt(const AxisChar* pName, const AxisChar* pNamespace);
-	xsd__boolean AXISCALL getElementAsBoolean(const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned int AXISCALL getElementAsUnsignedInt(const AxisChar* pName, const AxisChar* pNamespace);
-    short AXISCALL getElementAsShort(const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned short AXISCALL getElementAsUnsignedShort(const AxisChar* pName, const AxisChar* pNamespace);
-    char AXISCALL getElementAsByte(const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned char AXISCALL getElementAsUnsignedByte(const AxisChar* pName, const AxisChar* pNamespace);
-    long AXISCALL getElementAsLong(const AxisChar* pName, const AxisChar* pNamespace);
-    long AXISCALL getElementAsInteger(const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned long AXISCALL getElementAsUnsignedLong(const AxisChar* pName, const AxisChar* pNamespace);
-	float AXISCALL getElementAsFloat(const AxisChar* pName, const AxisChar* pNamespace);
-    double AXISCALL getElementAsDouble(const AxisChar* pName, const AxisChar* pNamespace);
-    double AXISCALL getElementAsDecimal(const AxisChar* pName, const AxisChar* pNamespace);
-	AxisChar* AXISCALL getElementAsString(const AxisChar* pName, const AxisChar* pNamespace);
-    AxisChar* AXISCALL getElementAsAnyURI(const AxisChar* pName, const AxisChar* pNamespace);
-    AxisChar* AXISCALL getElementAsQName(const AxisChar* pName, const AxisChar* pNamespace);
-	xsd__hexBinary AXISCALL getElementAsHexBinary(const AxisChar* pName, const AxisChar* pNamespace);
-	xsd__base64Binary AXISCALL getElementAsBase64Binary(const AxisChar* pName, const AxisChar* pNamespace);
-    struct tm AXISCALL getElementAsDateTime(const AxisChar* pName, const AxisChar* pNamespace);
-    struct tm AXISCALL getElementAsDate(const AxisChar* pName, const AxisChar* pNamespace);
-    struct tm AXISCALL getElementAsTime(const AxisChar* pName, const AxisChar* pNamespace);
-    long AXISCALL getElementAsDuration(const AxisChar* pName, const AxisChar* pNamespace);
+	/* Methods used by stubs to get a deserialized value of XML element 
+     * as basic types 
+     */
+	int AXISCALL getElementAsInt(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+	xsd__boolean AXISCALL getElementAsBoolean(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    unsigned int AXISCALL getElementAsUnsignedInt(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    short AXISCALL getElementAsShort(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    unsigned short AXISCALL getElementAsUnsignedShort(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    char AXISCALL getElementAsByte(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    unsigned char AXISCALL getElementAsUnsignedByte(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    long AXISCALL getElementAsLong(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    long AXISCALL getElementAsInteger(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    unsigned long AXISCALL getElementAsUnsignedLong(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+	float AXISCALL getElementAsFloat(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    double AXISCALL getElementAsDouble(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    double AXISCALL getElementAsDecimal(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+	AxisChar* AXISCALL getElementAsString(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    AxisChar* AXISCALL getElementAsAnyURI(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    AxisChar* AXISCALL getElementAsQName(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+	xsd__hexBinary AXISCALL getElementAsHexBinary(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+	xsd__base64Binary AXISCALL getElementAsBase64Binary(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    struct tm AXISCALL getElementAsDateTime(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    struct tm AXISCALL getElementAsDate(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    struct tm AXISCALL getElementAsTime(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    long AXISCALL getElementAsDuration(const AxisChar* pName, 
+        const AxisChar* pNamespace);
 
-	/* Methods used by stubs to get a deserialized value of a XML attribute as basic types */
-	int AXISCALL getAttributeAsInt(const AxisChar* pName, const AxisChar* pNamespace);
-	xsd__boolean AXISCALL getAttributeAsBoolean(const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned int AXISCALL getAttributeAsUnsignedInt(const AxisChar* pName, const AxisChar* pNamespace);
-    short AXISCALL getAttributeAsShort(const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned short AXISCALL getAttributeAsUnsignedShort(const AxisChar* pName, const AxisChar* pNamespace);
-    char AXISCALL getAttributeAsByte(const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned char AXISCALL getAttributeAsUnsignedByte(const AxisChar* pName, const AxisChar* pNamespace);
-    long AXISCALL getAttributeAsLong(const AxisChar* pName, const AxisChar* pNamespace);
-    long AXISCALL getAttributeAsInteger(const AxisChar* pName, const AxisChar* pNamespace);
-    unsigned long AXISCALL getAttributeAsUnsignedLong(const AxisChar* pName, const AxisChar* pNamespace);
-	float AXISCALL getAttributeAsFloat(const AxisChar* pName, const AxisChar* pNamespace);
-    double AXISCALL getAttributeAsDouble(const AxisChar* pName, const AxisChar* pNamespace);
-    double AXISCALL getAttributeAsDecimal(const AxisChar* pName, const AxisChar* pNamespace);
-	AxisChar* AXISCALL getAttributeAsString(const AxisChar* pName, const AxisChar* pNamespace);
-    AxisChar* AXISCALL getAttributeAsAnyURI(const AxisChar* pName, const AxisChar* pNamespace);
-    AxisChar* AXISCALL getAttributeAsQName(const AxisChar* pName, const AxisChar* pNamespace);
-	xsd__hexBinary AXISCALL getAttributeAsHexBinary(const AxisChar* pName, const AxisChar* pNamespace);
-	xsd__base64Binary AXISCALL getAttributeAsBase64Binary(const AxisChar* pName, const AxisChar* pNamespace);
-    struct tm AXISCALL getAttributeAsDateTime(const AxisChar* pName, const AxisChar* pNamespace);
-    struct tm AXISCALL getAttributeAsDate(const AxisChar* pName, const AxisChar* pNamespace);
-    struct tm AXISCALL getAttributeAsTime(const AxisChar* pName, const AxisChar* pNamespace);
-    long AXISCALL getAttributeAsDuration(const AxisChar* pName, const AxisChar* pNamespace);
+	/* Methods used by stubs to get a deserialized value of a XML attribute 
+     * as basic types 
+     */
+	int AXISCALL getAttributeAsInt(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+	xsd__boolean AXISCALL getAttributeAsBoolean(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    unsigned int AXISCALL getAttributeAsUnsignedInt(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    short AXISCALL getAttributeAsShort(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    unsigned short AXISCALL getAttributeAsUnsignedShort(const AxisChar* pName,
+        const AxisChar* pNamespace);
+    char AXISCALL getAttributeAsByte(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    unsigned char AXISCALL getAttributeAsUnsignedByte(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    long AXISCALL getAttributeAsLong(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    long AXISCALL getAttributeAsInteger(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    unsigned long AXISCALL getAttributeAsUnsignedLong(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+	float AXISCALL getAttributeAsFloat(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    double AXISCALL getAttributeAsDouble(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    double AXISCALL getAttributeAsDecimal(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+	AxisChar* AXISCALL getAttributeAsString(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    AxisChar* AXISCALL getAttributeAsAnyURI(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    AxisChar* AXISCALL getAttributeAsQName(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+	xsd__hexBinary AXISCALL getAttributeAsHexBinary(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+	xsd__base64Binary AXISCALL getAttributeAsBase64Binary(const AxisChar* 
+        pName, const AxisChar* pNamespace);
+    struct tm AXISCALL getAttributeAsDateTime(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    struct tm AXISCALL getAttributeAsDate(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    struct tm AXISCALL getAttributeAsTime(const AxisChar* pName, 
+        const AxisChar* pNamespace);
+    long AXISCALL getAttributeAsDuration(const AxisChar* pName, 
+        const AxisChar* pNamespace);
 
 	/* Method used by stubs to get a deserialized value of complex types */
-	void* AXISCALL getCmplxObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	void* AXISCALL getCmplxObject(void* pDZFunct, void* pCreFunct, 
+        void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
 	/* Method used by stubs to get a deserialized Array of complex types */
-	Axis_Array AXISCALL getCmplxArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	Axis_Array AXISCALL getCmplxArray(void* pDZFunct, void* pCreFunct, 
+        void* pDelFunct, void* pSizeFunct, const AxisChar* pName, 
+        const AxisChar* pNamespace);
 	/* Method used by stubs to get a deserialized Array of basic types */
-	Axis_Array AXISCALL getBasicArray(XSDTYPE nType, const AxisChar* pName, const AxisChar* pNamespace);
+	Axis_Array AXISCALL getBasicArray(XSDTYPE nType, const AxisChar* pName, 
+        const AxisChar* pNamespace);
 
-	int AXISCALL checkMessage(const AxisChar* pName, const AxisChar* pNamespace);
+	int AXISCALL checkMessage(const AxisChar* pName, 
+        const AxisChar* pNamespace);
 
 	int AXISCALL getStatus();
 		
@@ -515,15 +766,16 @@ private:
 private:
 	ClientAxisEngine* m_pAxisEngine;
 	/* 
-	   Following are pointers to relevant objects of the ClientAxisEngine instance 
-	   So they do not belong to this object and are not created or deleted 
+	   Following are pointers to relevant objects of the ClientAxisEngine
+	   instance. So they do not belong to this object and are not created 
+       or deleted 
 	 */
 	MessageData* m_pMsgData;
 	IHandlerSoapSerializer* m_pIWSSZ;
 	IHandlerSoapDeSerializer* m_pIWSDZ;
 	/* 
-	   m_Soap contains transport related information and function pointers to manipulate
-	   transport layer.
+	   m_Soap contains transport related information and function pointers 
+	   to manipulate transport layer.
 	 */
 	Ax_soapstream m_Soap;
 	/*
@@ -545,7 +797,8 @@ typedef struct {
 #ifdef __cplusplus
 extern "C" { 
 #endif
-STORAGE_CLASS_INFO void* getStubObject(AXIS_PROTOCOL_TYPE nProtocol, AxisChar* pchEndpointURI); 
+STORAGE_CLASS_INFO void* getStubObject(AXIS_PROTOCOL_TYPE nProtocol, 
+                                       AxisChar* pchEndpointURI); 
 STORAGE_CLASS_INFO void destroyStubObject(void* pCall); 
 #ifdef __cplusplus
 } 
@@ -555,4 +808,4 @@ STORAGE_CLASS_INFO void destroyStubObject(void* pCall);
 typedef Call_C Call; 
 #endif
 
-#endif /* !defined(_CALL_H____OF_AXIS_INCLUDED_)*/
+#endif
