@@ -12,13 +12,15 @@
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
+ *
+ * @author Susantha Kumara (skumara@virtusa.com, susantha@opensource.lk)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ *
  */
 
 /*
- *
- *
- * @author Susantha Kumara (skumara@virtusa.com, susantha@opensource.lk)
- *
+ * Revision 1.1  2004/05/31 samisa
+ * Added setProxy
  */
 
 #if !defined(AXIS_SOAPTRANSPORT_H__OF_AXIS_INCLUDED_)
@@ -80,6 +82,21 @@ public:
 	virtual AXIS_PROTOCOL_TYPE getProtocol()=0;
 	virtual int getSubProtocol()=0; /* is this appropriate name ? */
 	virtual AXIS_TRANSPORT_STATUS flushOutput()=0;
+  /**
+    * Set proxy server and port for transport.
+    *
+    * Setting the proxy is useful for users who are behind proxies.
+    *
+    * For some trasports this method may not make sense. 
+    * Hence this method is not pure virtual.
+    * Those trasports that implement this interface, that wish to use proxy, must provide an implementation.
+    * Also, the hadling of the proxy is the responsibility of the deriving classes
+    * 
+    * @param pcProxyHost Host name of proxy server
+    * @param uiProxyPort Port of proxy server
+    */
+    virtual void setProxy(const char* pcProxyHost, unsigned int uiProxyPort) {}
+
 protected:
 	char* m_pcEndpointUri; /* Outgoing endpoint URI */
 	AXIS_ENGINE_CALLBACK_RELEASE_SEND_BUFFER m_pReleaseBufferCallback;

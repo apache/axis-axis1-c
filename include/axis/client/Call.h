@@ -30,6 +30,11 @@
  * Added accesser to SOAP serializer 
  */
 
+/*
+ * Revision 1.3  2004/05/31 samisa
+ * Added setProxy
+ */
+
 
 
 /* Call.h: interface for the Call class.*/
@@ -788,6 +793,15 @@ public:
 	
 	SOAPTransport* getTransport() { return m_pTransport; }
 	SoapSerializer* getSOAPSerializer() { return (SoapSerializer*)m_pIWSSZ; }
+	
+  /**
+    * Set proxy server and port for transport.
+    *
+    * @param pcProxyHost Host name of proxy server
+    * @param uiProxyPort Port of proxy server
+    */
+    void setProxy(const char* pcProxyHost, unsigned int uiProxyPort); 
+
 		
 private:
 	int openConnection(int secure);
@@ -818,6 +832,19 @@ private:
 	
 	/* Minimal error check */
 	int m_nStatus;
+  /**
+    * Proxy server name.
+    */
+    std::string m_strProxyHost;
+  /**
+    * Proxy server port.
+    */
+    unsigned int m_uiProxyPort;
+  /**
+    * Use Proxy or not?
+    */
+    bool m_bUseProxy;
+
 };
 
 #endif
