@@ -3,7 +3,7 @@
  * This file contains definitions of the web service
  */
 
-#include "InteropTestPortType.h"
+#include "InteropTestPortType.hpp"
 
 
 InteropTestPortType::InteropTestPortType()

@@ -6,12 +6,12 @@
 #if !defined(__INTEROPTESTPORTTYPEWRAPPER_SERVERWRAPPER_H__INCLUDED_)
 #define __INTEROPTESTPORTTYPEWRAPPER_SERVERWRAPPER_H__INCLUDED_
 
-#include "InteropTestPortType.h"
+#include "InteropTestPortType.hpp"
 #include <axis/server/WrapperClassHandler.hpp>
 #include <axis/IMessageData.hpp>
 #include <axis/GDefine.hpp>
 #include <axis/AxisWrapperAPI.hpp>
-#include "AxisServiceException.h" 
+#include "AxisServiceException.hpp" 
 AXIS_CPP_NAMESPACE_USE 
 
 class InteropTestPortTypeWrapper : public WrapperClassHandler
