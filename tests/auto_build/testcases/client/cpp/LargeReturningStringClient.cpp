@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 
-#define WSDL_DEFAULT_ENDPOINT "http://bora.hursley.ibm.com:9080/DSServiceWebProject/services/LargeReturningString"
+#define WSDL_DEFAULT_ENDPOINT "http://bora.hursley.ibm.com:9080/LargeReturningString/services/LargeReturningString"
 
 // If we re-direct cout it will be to this ofstream
 ofstream output_file;
@@ -32,13 +32,13 @@ int main(int argc, char* argv[])
     } else
       ws = new LargeReturningString();
 
-    int input = 20000;
+    int input = 2*1024*1024;
     xsd__string result = "";
     result = ws->getLargeString(input);
 
-    cout << "Result" << endl
+    cout << "Result" << endl;
     if ( result == NULL ) {
-      cout << "NULL" << endl
+      cout << "NULL" << endl;
     } else {
       cout << strlen(result) << endl;
       returnValue = 0; // Success

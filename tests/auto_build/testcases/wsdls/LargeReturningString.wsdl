@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions targetNamespace="http://test.axisc.hursley.ibm.com" xmlns:impl="http://test.axisc.hursley.ibm.com" xmlns:intf="http://test.axisc.hursley.ibm.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<wsdl:definitions targetNamespace="http://largereturningstring.test.apache.org" xmlns:impl="http://largereturningstring.test.apache.org" xmlns:intf="http://largereturningstring.test.apache.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
  <wsdl:types>
-  <schema elementFormDefault="qualified" targetNamespace="http://test.axisc.hursley.ibm.com" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:impl="http://test.axisc.hursley.ibm.com" xmlns:intf="http://test.axisc.hursley.ibm.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <schema elementFormDefault="qualified" targetNamespace="http://largereturningstring.test.apache.org" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:impl="http://largereturningstring.test.apache.org" xmlns:intf="http://largereturningstring.test.apache.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
    <element name="getLargeString">
     <complexType>
      <sequence>
@@ -71,7 +71,7 @@
 
       <wsdl:port binding="intf:LargeReturningStringSoapBinding" name="LargeReturningString">
 
-         <wsdlsoap:address location="http://bora.hursley.ibm.com:9080/DSServiceWebProject/services/LargeReturningString"/>
+         <wsdlsoap:address location="http://localhost:9080/LargeReturningString/services/LargeReturningString"/>
 
       </wsdl:port>
 
