@@ -137,11 +137,11 @@ public class ParmHeaderFileWriter extends ParamWriter{
 					for(int i=1; i<restrictionData.size();i++){
 						QName value = (QName)restrictionData.elementAt(i);
 						if ("enumeration".equals(value.getLocalPart())){
-							if (i>2) writer.write(", ");
+							if (i>1) writer.write(", ");
 							writer.write(value.getNamespaceURI());		
 						}
 					}
-					writer.write("};\n");
+					writer.write("} "+classname+";\n");
 				}
 			}
 			else{
