@@ -94,15 +94,9 @@ int AxisConfig::readConfFile ()
     if (AXIS_SUCCESS != fileConfig.fileOpen (sNewConfPath, "r"))
     {
 	
-
-#ifdef _DEBUG
-		printf("Warning - The configuration file was not found (%s).\n", sNewConfPath);
-		printf("          Using the following default file paths.\n");
-		OutputConfigInfo ();
-#else
 		printf ("Warning - The configuration file was not found (%s).\n",
 		sNewConfPath);
-#endif
+		printf("Using default values\n");
 	    return AXIS_SUCCESS;
     }
 
@@ -160,11 +154,6 @@ int AxisConfig::readConfFile ()
 
     }
 
-#ifdef _DEBUG
-    printf ("The AXIS configuration has now been set to:-\n");
-
-    OutputConfigInfo ();
-#endif
     return AXIS_SUCCESS;
 }
 
@@ -198,90 +187,6 @@ int main(void)
 
 */
 
-void
-AxisConfig::OutputConfigInfo ()
-{
-    if (m_pcValueArray[AXCONF_WSDDFILEPATH].length() == 0)
-    {
-	printf ("WSDD           (null)\n");
-    }
-    else
-    {
-	printf ("WSDD           %s\n", m_pcValueArray[AXCONF_WSDDFILEPATH].c_str());
-    }
-    if (m_pcValueArray[AXCONF_LOGPATH].length() == 0)
-    {
-	printf ("Log            (null)\n");
-    }
-    else
-    {
-	printf ("Log            %s\n", m_pcValueArray[AXCONF_LOGPATH].c_str());
-    }
-    if (m_pcValueArray[AXCONF_CLIENTLOGPATH].length() == 0)
-    {
-	printf ("Client Log     (null)\n");
-    }
-    else
-    {
-	printf ("Client Log     %s\n", m_pcValueArray[AXCONF_CLIENTLOGPATH].c_str());
-    }
-    if (m_pcValueArray[AXCONF_CLIENTWSDDFILEPATH].length() == 0)
-    {
-	printf ("ClientWSDD     (null)\n");
-    }
-    else
-    {
-	printf ("ClientWSDD     %s\n",
-		m_pcValueArray[AXCONF_CLIENTWSDDFILEPATH].c_str());
-    }
-    if (m_pcValueArray[AXCONF_AXISHOME].length() == 0)
-    {
-	printf ("AXIS HOME      (null)\n");
-    }
-    else
-    {
-	printf ("AXIS HOME      %s\n", m_pcValueArray[AXCONF_AXISHOME].c_str());
-    }
-    if (m_pcValueArray[AXCONF_TRANSPORTHTTP].length() == 0)
-    {
-	printf ("Transport HTTP (null)\n");
-    }
-    else
-    {
-	printf ("Transport HTTP %s\n", m_pcValueArray[AXCONF_TRANSPORTHTTP].c_str());
-    }
-    if (m_pcValueArray[AXCONF_TRANSPORTSMTP].length() == 0)
-    {
-	printf ("Transport SMTP (null)\n");
-    }
-    else
-    {
-	printf ("Transport SMTP %s\n", m_pcValueArray[AXCONF_TRANSPORTSMTP].c_str());
-    }
-    if (m_pcValueArray[AXCONF_XMLPARSER].length() == 0)
-    {
-	printf ("XML Parser     (null)\n");
-    }
-    else
-    {
-	printf ("XML Parser     %s\n", m_pcValueArray[AXCONF_XMLPARSER].c_str());
-    }
-    if (m_pcValueArray[AXCONF_NODENAME].length() == 0)
-    {
-	printf ("Node Name      (null)\n");
-    }
-    else
-    {
-	printf ("Node Name      %s\n", m_pcValueArray[AXCONF_NODENAME].c_str());
-    }
-    if (m_pcValueArray[AXCONF_LISTENPORT].length() == 0)
-    {
-	printf ("Listen Port    (null)\n");
-    }
-    else
-    {
-	printf ("Listen Port    %s\n", m_pcValueArray[AXCONF_LISTENPORT].c_str());
-    }
-}
+
 
 AXIS_CPP_NAMESPACE_END

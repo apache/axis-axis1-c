@@ -158,16 +158,61 @@ void AxisTrace::traceHeader()
     char *envVars[]={"PATH","LIBPATH","LD_LIBRARY_PATH","AXISCPP_DEPLOY","PWD",
         "CLASSPATH","INCLUDE","LIB","NLSPATH","OS","COMPUTERNAME","USERNAME",
         "HOSTNAME","LANG","LOGIN","LOGNAME","MACHTYPE","OSTYPE","UID","USER"};
-    for (unsigned i=0; i<sizeof(envVars)/4; i++) {
+    for (unsigned i=0; i<sizeof(envVars)/4; i++) 
+	{
         text = envVars[i];
         const char *value = getenv(envVars[i]);
-        if (NULL==value) text += " was not set";
-        else {
+        if (NULL==value)
+		{
+			text += " was not set";
+		}
+        else 
+		{
             text += "=";
             text += value;
         }
         traceLine(text.c_str());
     }
+
+	// Write out the config settings
+	traceLine("-------------- Config File settings START ----------------");
+	string confLine="";
+
+	// Note these must be kept up to date if the config enum changes - I couldn't work out how to do it automagically :-(
+    char *confProps[]={"AXCONF_WSDDFILEPATH",
+					 "AXCONF_LOGPATH",
+					 "AXCONF_CLIENTLOGPATH",
+					 "AXCONF_CLIENTWSDDFILEPATH",
+					 "AXCONF_AXISHOME",
+					 "AXCONF_TRANSPORTHTTP",
+					 "AXCONF_TRANSPORTSMTP",
+					 "AXCONF_XMLPARSER",
+					 "AXCONF_NODENAME",
+					 "AXCONF_LISTENPORT",
+					 "AXCONF_SSLCHANNEL"};
+
+    for (unsigned j=0; j<sizeof(confProps)/4; j++) 
+	{
+        confLine ="";
+		confLine += confProps[j];
+		confLine += " = ";
+
+	    const char *value = g_pConfig->getAxisConfProperty((g_axconfig)j);
+        if (NULL==value)
+		{
+			confLine += "NULL";
+		}
+        else 
+		{
+            confLine += value;
+        }
+        traceLine(confLine.c_str());
+    }
+
+	
+	traceLine("-------------- Config File settings END OF ----------------");
+
+
 }
 
 void AxisTrace::traceLine(const char *data) 
