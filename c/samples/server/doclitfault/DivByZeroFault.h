@@ -20,7 +20,7 @@ public:
 	int varInt;
 	float varFloat;
 	DivByZeroFault();
-	~DivByZeroFault();
+	virtual ~DivByZeroFault();
 };
 
 #endif /* !defined(__DIVBYZEROFAULT_PARAM_H__INCLUDED_)*/

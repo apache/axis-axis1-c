@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 		port = argv[2];
 	}
 	printf("Sending Requests to Server http://%s:%s ........\n\n", server, port);
-	sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
+	sprintf(endpoint, "http://%s:%s/axis/MathOpsDL", server, port);
 	MathOps ws(endpoint);
 
 	op = argv[3];
@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
 
 void PrintUsage()
 {
-	printf("Usage :\n MathOps <server> <port> <operation> <parameter> <parameter>\n\n");
+	printf("Usage :\n doclitmathops <server> <port> <operation> <parameter> <parameter>\n\n");
 	exit(1);
 }
 

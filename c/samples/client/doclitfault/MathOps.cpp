@@ -43,8 +43,8 @@ int MathOps::div(int Value0, int Value1)
     char* cFaultdetail;
     try
     {
-	if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) return Ret;
-	m_pCall->setTransportProperty(SOAPACTION_HEADER , "MathOps#div");
+	if (AXIS_SUCCESS != m_pCall->initialize(CPP_DOC_PROVIDER, NORMAL_CHANNEL)) return Ret;
+	m_pCall->setTransportProperty(SOAPACTION_HEADER , "MathOpsDL#div");
 	m_pCall->setSOAPVersion(SOAP_VER_1_1);
 	m_pCall->setOperation("div", "http://soapinterop.org/wsdl");
 	m_pCall->addParameter((void*)&Value0, "int0", XSD_INT);
