@@ -145,7 +145,7 @@ main (int argc, char *argv[])
 
     int iPort;
     int noPorts = 1;		/* Number of ports is argument count minus 2 */
-    servSock = (int *) malloc (noPorts * sizeof (int));
+    servSock = new int[noPorts];
     /* Initialize maxDescriptor for use by select() */
     maxDescriptor = -1;
 
@@ -237,7 +237,7 @@ main (int argc, char *argv[])
     }
 
     /* Free list of sockets */
-    free (servSock);
+    delete [] servSock;
 
 #ifdef WIN32
     WSACleanup ();		/* Cleanup Winsock */

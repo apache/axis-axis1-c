@@ -77,7 +77,7 @@ SoapDeSerializer::SoapDeSerializer()
 	m_pParser = XMLParserFactory::getParserObject();
     m_pEnv = NULL;
     m_pHeader = NULL;
-    m_pcFaultDetail = (char*) malloc(sizeof(char) * 100);
+    m_pcFaultDetail = new char[100];
 	m_pInputStream = 0;
 	m_nStatus = AXIS_SUCCESS;
 }
@@ -93,7 +93,7 @@ SoapDeSerializer::~SoapDeSerializer()
         XMLParserFactory::destroyParserObject(m_pParser);
         //delete m_pParser;
     }
-    free(m_pcFaultDetail);
+    delete [] m_pcFaultDetail;
 }
 
 int SoapDeSerializer::setInputStream(SOAPTransport* pInputStream)
@@ -236,7 +236,7 @@ int SoapDeSerializer::getHeader()
                 }
             }
                                                                                                                                                                             
-                BasicNode** pNodeList = (BasicNode**) malloc(sizeof(BasicNode*) * 10);
+                BasicNode** pNodeList = new BasicNode*[10];
                 int iListPos = 0;
                 int iLevel = 0;
             bool bContinue = true;
@@ -509,7 +509,7 @@ Axis_Array SoapDeSerializer::getCmplxArray(void* pDZFunct, void* pCreFunct,
                 /* wrapper node without type info  Ex: <item> */
                 if (!m_pNode) 
                 {
-                    free(Array.m_Array);
+                    delete [] Array.m_Array;
                     Array.m_Size = 0;
                     return Array;
                 }
@@ -530,7 +530,7 @@ Axis_Array SoapDeSerializer::getCmplxArray(void* pDZFunct, void* pCreFunct,
                 m_pNode = m_pParser->next(); /* skip end element node too */
                 if (!m_pNode) 
                 {
-                    free(Array.m_Array);
+                    delete [] Array.m_Array;
                     Array.m_Size = 0;
                     return Array;
                 }
@@ -558,7 +558,7 @@ Axis_Array SoapDeSerializer::getCmplxArray(void* pDZFunct, void* pCreFunct,
                     /* wrapper node without type info  Ex: <phonenumbers> */
                 if (!m_pNode) 
                 {
-                    free(Array.m_Array);
+                    delete [] Array.m_Array;
                     Array.m_Size = 0;
                     return Array;
                 }
@@ -692,7 +692,7 @@ int SoapDeSerializer::getArraySize(const AnyElement* pElement)
 #define CONV_STRTOD(str) strtod(str,  &m_pEndptr)
 #define CONV_STRTODATETIME(str) AxisTime::deserialize(str, nType)
 #define CONV_STRTODURATION(str) AxisTime::deserializeDuration(str, nType)
-#define CONV_STRDUP(str) AxisSoapDeSerializerStringCopy(str)
+#define CONV_STRINGCOPY(str) AxisSoapDeSerializerStringCopy(str)
 #define CONV_STRTOBASE64BINARY(str) decodeFromBase64Binary(str)
 #define CONV_STRTOHEXBINARY(str) decodeFromHexBinary(str)
 
@@ -703,7 +703,7 @@ char *AxisSoapDeSerializerStringCopy(const char *s1) { char *s2=new char[strlen(
 #define INIT_VALUE_XSDBINARY {0,0}
 
 #define DESERIALIZE_ENCODED_ARRAY_BLOCK(cpp_type, conv_func) \
-Array.m_Array = malloc(sizeof(cpp_type)*Array.m_Size);\
+Array.m_Array = new cpp_type[Array.m_Size];\
 if (!Array.m_Array)\
 {\
     Array.m_Size = 0;\
@@ -724,7 +724,7 @@ for (; nIndex < Array.m_Size; nIndex++)\
     }\
     /* error : unexpected element type or end of stream */\
     m_nStatus = AXIS_FAIL;\
-    free(Array.m_Array);\
+    delete [] Array.m_Array;\
     Array.m_Array = 0;\
     Array.m_Size = 0;\
     return Array;\
@@ -732,7 +732,7 @@ for (; nIndex < Array.m_Size; nIndex++)\
 return Array;
 
 #define DESERIALIZE_LITERAL_ARRAY_BLOCK(cpp_type, conv_func) \
-            Array.m_Array = malloc(sizeof(cpp_type)*INITIAL_ARRAY_SIZE);\
+            Array.m_Array = new cpp_type[INITIAL_ARRAY_SIZE];\
             if (!Array.m_Array) return Array;\
             Array.m_Size = INITIAL_ARRAY_SIZE;\
             while(true)\
@@ -747,7 +747,7 @@ return Array;
                     if (!m_pNode)\
                     {\
                         m_nStatus = AXIS_FAIL;\
-                        free(Array.m_Array);\
+                        delete [] Array.m_Array;\
                         Array.m_Array = 0;\
                         Array.m_Size = 0;\
                         return Array;\
@@ -784,7 +784,7 @@ return Array;
                     /* if we come here it is an error situation */\
                     m_nStatus = AXIS_FAIL;\
                     m_pNode = NULL;\
-                    free(Array.m_Array);\
+                    delete [] Array.m_Array;\
                     Array.m_Array = 0;\
                     Array.m_Size = 0;\
                     return Array;\
@@ -824,7 +824,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
             switch(nType)
             {
             case XSD_INT:
-                Array.m_Array = malloc(sizeof(int)*Array.m_Size);
+                Array.m_Array = new int[Array.m_Size];
                 if (!Array.m_Array)
                 {
                     Array.m_Size = 0;
@@ -846,7 +846,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
                     }
                     /* error : unexpected element type or end of stream */
                     m_nStatus = AXIS_FAIL;
-                    free(Array.m_Array);
+                    delete [] Array.m_Array;
                     Array.m_Array = 0;
                     Array.m_Size = 0;
                     return Array;
@@ -878,7 +878,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
             case XSD_ANYURI:
             case XSD_QNAME:
             case XSD_NOTATION:            
-                DESERIALIZE_ENCODED_ARRAY_BLOCK(char*, CONV_STRDUP)
+                DESERIALIZE_ENCODED_ARRAY_BLOCK(char*, CONV_STRINGCOPY)
             case XSD_DATETIME:
             case XSD_DATE:
             case XSD_TIME:
@@ -887,7 +887,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
                 DESERIALIZE_ENCODED_ARRAY_BLOCK(long, CONV_STRTODURATION)
             case XSD_BOOLEAN:
 //              DESERIALIZE_ENCODED_ARRAY_BLOCK(long, CONV_STRTOL)
-				Array.m_Array = malloc(sizeof(long)*Array.m_Size);
+				Array.m_Array = new long[Array.m_Size];
 				if (!Array.m_Array)
 				{
 					Array.m_Size = 0;
@@ -919,7 +919,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
 					}
 					/* error : unexpected element type or end of stream */
 					m_nStatus = AXIS_FAIL;
-					free(Array.m_Array);
+					delete [] Array.m_Array;
 					Array.m_Array = 0;
 					Array.m_Size = 0;
 					return Array;
@@ -934,7 +934,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
         switch(nType)
         {
         case XSD_INT:
-            Array.m_Array = malloc(sizeof(int)*INITIAL_ARRAY_SIZE);
+            Array.m_Array = new int[INITIAL_ARRAY_SIZE];
             if (!Array.m_Array) return Array;
             Array.m_Size = INITIAL_ARRAY_SIZE;
             while(true)
@@ -950,7 +950,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
                     if (!m_pNode) 
                     {
                         m_nStatus = AXIS_FAIL;
-                        free(Array.m_Array);
+                        delete [] Array.m_Array;
                         Array.m_Array = 0;
                         Array.m_Size = 0;
                         return Array;
@@ -987,7 +987,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
                     /* if we come here it is an error situation */
                     m_nStatus = AXIS_FAIL;
                     m_pNode = NULL;
-                    free(Array.m_Array);
+                    delete [] Array.m_Array;
                     Array.m_Array = 0;
                     Array.m_Size = 0;
                     return Array;
@@ -1032,7 +1032,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
         case XSD_ANYURI:
         case XSD_QNAME:
         case XSD_NOTATION:            
-            DESERIALIZE_LITERAL_ARRAY_BLOCK(char*, CONV_STRDUP)
+            DESERIALIZE_LITERAL_ARRAY_BLOCK(char*, CONV_STRINGCOPY)
         case XSD_DATETIME:
         case XSD_DATE:
         case XSD_TIME:
@@ -1045,7 +1045,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
 // can have any of the following values '0', '1', 'false' or 'true', special,
 // non-standard processing is required.  Thus the standard macro has had to be
 // expanded and extended to cover the additional tests, unique to this type.
-            Array.m_Array = malloc(sizeof(long)*INITIAL_ARRAY_SIZE);
+            Array.m_Array = new long[INITIAL_ARRAY_SIZE];
             if (!Array.m_Array) return Array;
             Array.m_Size = INITIAL_ARRAY_SIZE;
             while(true)
@@ -1060,7 +1060,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
                     if (!m_pNode)
                     {
                         m_nStatus = AXIS_FAIL;
-                        free(Array.m_Array);
+                        delete [] Array.m_Array;
                         Array.m_Array = 0;
                         Array.m_Size = 0;
                         return Array;
@@ -1108,7 +1108,7 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
                     /* if we come here it is an error situation */
                     m_nStatus = AXIS_FAIL;
                     m_pNode = NULL;
-                    free(Array.m_Array);
+                    delete [] Array.m_Array;
                     Array.m_Array = 0;
                     Array.m_Size = 0;
                     return Array;
@@ -1573,17 +1573,17 @@ double SoapDeSerializer::getAttributeAsDecimal(const AxisChar* pName, const
 AxisChar* SoapDeSerializer::getAttributeAsString(const AxisChar* pName, const 
                                                  AxisChar* pNamespace)
 {
-    DESERIALIZE_GET_ATTRIBUTE_AS(AxisChar*,CONV_STRDUP,INIT_VALUE_NUMBER)
+    DESERIALIZE_GET_ATTRIBUTE_AS(AxisChar*,CONV_STRINGCOPY,INIT_VALUE_NUMBER)
 }
 AxisChar* SoapDeSerializer::getAttributeAsAnyURI(const AxisChar* pName, const 
                                                  AxisChar* pNamespace)
 {
-    DESERIALIZE_GET_ATTRIBUTE_AS(AxisChar*,CONV_STRDUP,INIT_VALUE_NUMBER)
+    DESERIALIZE_GET_ATTRIBUTE_AS(AxisChar*,CONV_STRINGCOPY,INIT_VALUE_NUMBER)
 }
 AxisChar* SoapDeSerializer::getAttributeAsQName(const AxisChar* pName, const 
                                                 AxisChar* pNamespace)
 {
-    DESERIALIZE_GET_ATTRIBUTE_AS(AxisChar*,CONV_STRDUP,INIT_VALUE_NUMBER)
+    DESERIALIZE_GET_ATTRIBUTE_AS(AxisChar*,CONV_STRINGCOPY,INIT_VALUE_NUMBER)
 }
 xsd__hexBinary SoapDeSerializer::getAttributeAsHexBinary(const AxisChar* pName,
                                                          const AxisChar* 
@@ -2540,14 +2540,16 @@ AxisChar* SoapDeSerializer::getElementAsString(const AxisChar* pName,
             {
                 if ((CHARACTER_ELEMENT == m_pNode->m_type))
                 {
-                    ret = strdup(m_pNode->m_pchNameOrValue);
+                    ret = new char[strlen(m_pNode->m_pchNameOrValue)+1];
+                    strcpy(ret,m_pNode->m_pchNameOrValue);
                     /* this is because the string may not be available later */
                     m_pNode = m_pParser->next(); /* skip end element node too */
                     return ret;
                 }
                 else if (END_ELEMENT == m_pNode->m_type) // We have an empty string - Jira AXISCPP-93
                 {
-                    ret = strdup("");
+                    ret = new char[1];
+                    ret[0] = '\0';
                     return ret;
                 }
              }
@@ -2571,7 +2573,8 @@ AxisChar* SoapDeSerializer::getElementAsString(const AxisChar* pName,
             m_pNode = m_pParser->next(true); /* charactor node */
             if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
             {
-                ret = strdup(m_pNode->m_pchNameOrValue);
+                ret = new char[strlen(m_pNode->m_pchNameOrValue)+1];
+                strcpy(ret,m_pNode->m_pchNameOrValue);
                 /* this is because the string may not be available later */
 
 				// FJP Added this code for fault finding.  If detail is
@@ -2614,7 +2617,7 @@ AxisChar* SoapDeSerializer::getElementAsString(const AxisChar* pName,
             else 
             {
             /* Should be an empty string or simpleType with xsi:nil="true" */
-            //ret = strdup("");
+            //ret = new char[1]; ret[0]='\0';
             /* this is because the string may not be available later */
             //m_pNode = NULL;
             /* this is important in doc/lit style when deserializing arrays */
@@ -2647,7 +2650,8 @@ AxisChar* SoapDeSerializer::getElementAsAnyURI(const AxisChar* pName,
             m_pNode = m_pParser->next(true); /* charactor node */
             if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
             {
-                ret = strdup(m_pNode->m_pchNameOrValue);
+                ret = new char[strlen(m_pNode->m_pchNameOrValue)+1];
+                strcpy(ret,m_pNode->m_pchNameOrValue);
                 /* this is because the string may not be available later */
                 m_pNode = m_pParser->next(); /* skip end element node too */
                 return ret;
@@ -2672,7 +2676,8 @@ AxisChar* SoapDeSerializer::getElementAsAnyURI(const AxisChar* pName,
             m_pNode = m_pParser->next(true); /* charactor node */
             if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
             {
-                ret = strdup(m_pNode->m_pchNameOrValue);
+                ret = new char[strlen(m_pNode->m_pchNameOrValue)+1];
+                strcpy(ret,m_pNode->m_pchNameOrValue);
                 /* this is because the string may not be available later */
                 m_pNode = m_pParser->next(); /* skip end element node too */
                 m_pNode = NULL;
@@ -2708,7 +2713,8 @@ AxisChar* SoapDeSerializer::getElementAsQName(const AxisChar* pName,
             m_pNode = m_pParser->next(true); /* charactor node */
             if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
             {
-                ret = strdup(m_pNode->m_pchNameOrValue);
+                ret = new char[strlen(m_pNode->m_pchNameOrValue)+1];
+                strcpy(ret,m_pNode->m_pchNameOrValue);
                 /* this is because the string may not be available later */
                 m_pNode = m_pParser->next(); /* skip end element node too */
                 return ret;
@@ -2733,7 +2739,8 @@ AxisChar* SoapDeSerializer::getElementAsQName(const AxisChar* pName,
             m_pNode = m_pParser->next(true); /* charactor node */
             if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
             {
-                ret = strdup(m_pNode->m_pchNameOrValue);
+                ret = new char[strlen(m_pNode->m_pchNameOrValue)+1];
+                strcpy(ret,m_pNode->m_pchNameOrValue);
                 /* this is because the string may not be available later */
                 m_pNode = m_pParser->next(); /* skip end element node too */
                 m_pNode = NULL;
@@ -2821,7 +2828,7 @@ xsd__base64Binary SoapDeSerializer::decodeFromBase64Binary(const AxisChar*
 {
   xsd__base64Binary value;
   value.__size = apr_base64_decode_len(pValue);
-  value.__ptr = (unsigned char*) malloc(value.__size+1);
+  value.__ptr = new unsigned char[value.__size+1];
   value.__size = apr_base64_decode_binary(value.__ptr, pValue);
   /* put null at the end because it enables the decoded string to be used
    * as a string 
@@ -2835,7 +2842,7 @@ xsd__hexBinary SoapDeSerializer::decodeFromHexBinary(const AxisChar* pValue)
 {
   xsd__hexBinary value;
   value.__size = strlen(pValue)/2;
-  value.__ptr = (unsigned char*) malloc(value.__size+1);
+  value.__ptr = new unsigned char[value.__size+1];
   Hex_Decode(value.__ptr, pValue);
   /* put null at the end because it enables the decoded string to be used
    * as a string 
@@ -3443,7 +3450,10 @@ AnyType* SoapDeSerializer::getAnyObject()
 
     for (i=lstXML.begin(); i != lstXML.end(); i++)
     {
-        pAny->_array[pAny->_size++] = strdup((*i).c_str());
+        const char *s = (*i).c_str();
+        pAny->_array[pAny->_size] = new char[strlen(s)+1];
+        strcpy(pAny->_array[pAny->_size], s);
+        pAny->_size++;
     }
 
     return pAny;
@@ -3598,7 +3608,8 @@ void SoapDeSerializer::getChardataAs(void* pValue, XSDTYPE type)
         case XSD_ANYURI:
         case XSD_QNAME:
         case XSD_NOTATION:
-            *((char**)(pValue)) = strdup(m_pNode->m_pchNameOrValue);
+            *((char**)(pValue)) = new char[strlen(m_pNode->m_pchNameOrValue)+1];
+            strcpy(*((char**)(pValue)), m_pNode->m_pchNameOrValue);
             break;
         case XSD_HEXBINARY:
             *(xsd__hexBinary*)(pValue) = decodeFromHexBinary(m_pNode->m_pchNameOrValue);

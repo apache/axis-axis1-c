@@ -65,7 +65,8 @@ AXIS_CPP_NAMESPACE_USE class SimpleAxisTransport:public SOAPTransport
     };
     void setEndpointUri (const char *pcEndpointUri)
     {
-	m_pcEndpointUri = strdup (pcEndpointUri);
+      m_pcEndpointUri = new char[strlen(pcEndpointUri)+1]; 
+      strcpy(m_pcEndpointUri,pcEndpointUri);
     };
     void setSessionId (const char *pcSessionId);
     const char *getSessionId ();

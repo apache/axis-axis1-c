@@ -76,7 +76,9 @@ JNIEXPORT void JNICALL Java_AxisCppContentHandler_processContent
     paxstream->m_pExtendedInfo->infHttp.enMethod = axstream::HTTP_INFO::POST;
 
     // just add some sessionid
-    paxstream->m_pchSessionId = strdup ("tmp session id");
+    char *s = "tmp session id";
+    paxstream->m_pchSessionId = new char[strlen(s)+1];
+    strcpy(paxstream->m_pchSessionId,s);
 
     AxisContentHandler::Init ();
     if (0 != AxisContentHandler::HandleContent (*paxstream))
