@@ -78,6 +78,7 @@ import org.apache.axismora.wsdl2ws.info.WebServiceContext;
 import org.apache.axismora.wsdl2ws.info.WrapperInfo;
 
 import org.apache.axis.wsdl.gen.Parser;
+import org.apache.axis.wsdl.symbolTable.Element;
 import org.apache.axis.wsdl.symbolTable.ElementDecl;
 import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
 import org.apache.axis.wsdl.symbolTable.SchemaUtils;
@@ -226,7 +227,7 @@ public class WSDL2Ws {
                                     ((com.ibm.wsdl.extensions.soap.SOAPBodyImpl) soapbodies
                                         .get(j))
                                         .getEncodingStyles();
-                                if (encodings == null && encodings.size() > 0)
+                                if (encodings != null && encodings.size() > 0)
                                     this.encodingStyle = (String) encodings.get(0);
                                 break;
                             }
@@ -256,6 +257,7 @@ public class WSDL2Ws {
     /**
      * get Service data .. service data is given as the fully qualified names
      * When possible the user can have the schema QName if he like
+     * @author Dimuthu Leelarathne.
      */
 
     private ArrayList getServiceInfo(PortType porttype, String language) {
@@ -264,54 +266,59 @@ public class WSDL2Ws {
         ArrayList methods = new ArrayList();
         MethodInfo minfo;
         ParameterInfo pinfo;
-        org.apache.axis.wsdl.symbolTable.Type ptype;
+        org.apache.axis.wsdl.symbolTable.Type ptype = null;
+        
         //for each operation
         while (oplist.hasNext()) {
-
             minfo = new MethodInfo();
             methods.add(minfo);
 
             //add operation to operation List
             Operation op = (Operation) oplist.next();
             minfo.setMethodname(op.getName());
-
+ 
             Iterator paramlist =
                 op.getInput().getMessage().getParts().values().iterator();
+            
             //add each parameter to parameter list
             while (paramlist.hasNext()) {
                 Part p = (Part) paramlist.next();
-
-                //TODO some types type name is null we neglect them is that right??
-                if (p.getTypeName() == null) {
-                    continue;
+                
+                // the below if statements obtain the Type of the parameters.
+	            if (p.getTypeName() != null) {
+                      ptype = symbolTable.getType(p.getTypeName());
+                }else if (p.getElementName()!=null){
+				    Element ele = this.symbolTable.getElement(p.getElementName());
+					ptype = symbolTable.getType(ele.getRefType().getQName());
+				}else{
+                 //TODO .... mmm .... looks like some other type of parameters are there as well.
                 }
+                if(ptype!=null){                
+                	pinfo =  new ParameterInfo(ptype.getName(), ptype.getQName(), p.getName(), language);
+ 			    	System.out.println("***** read "+ptype.getName()+"  "+ptype.getQName()+"  "+p.getName()+language);
+					minfo.addParameter(pinfo);
+                }   
+            } // while ---- end of paramlist 
 
-                ptype = symbolTable.getType(p.getTypeName());
-                pinfo =
-                    new ParameterInfo(
-                        ptype.getName(),
-                        ptype.getQName(),
-                        p.getName(),
-                        language);
-
-                minfo.addParameter(pinfo);
-            }
-
-            //get the return type
+            //now dealing with the return type
             Iterator returnlist =
                 op.getOutput().getMessage().getParts().values().iterator();
             if (returnlist.hasNext()) {
                 Part p = ((Part) returnlist.next());
 
-                //TODO some types type name is null we neglect them is that right??
-                if (p.getTypeName() == null)
-                    continue;
-
-                ptype = symbolTable.getType(p.getTypeName());
+                if (p.getTypeName()!=null){
+                          ptype = symbolTable.getType(p.getTypeName());
+                }else if(p.getElementName()!=null){
+					Element ele = this.symbolTable.getElement(p.getElementName());
+					ptype = symbolTable.getType(ele.getRefType().getQName());
+                }else{
+				//	TODO :: Check for complex anonymous types
+                } 
+                
                 minfo.setReturnType(
                     new ParameterInfo(ptype.getName(), ptype.getQName(), null, language));
             }
-        }
+        }// end of while for each operation
         return methods;
     }
 
@@ -330,7 +337,7 @@ public class WSDL2Ws {
             type = (TypeEntry) it.next();
             Node node = type.getNode();
             if (node != null) {
-					typedata = parseAType(type,targetLanguage);
+					typedata = getTypeInfo(type,targetLanguage);
 	                System.out.println(
                         "############## the type found =" + type.getQName());
                     typeMap.addType(type.getQName(), typedata);
@@ -340,7 +347,7 @@ public class WSDL2Ws {
     } //end of method
 
     public void genarateWrappers(
-        String servicename,
+      //  String servicename,
         String targetoutputLocation,
         String targetLanguage,
         String targetImplementationStyle,
@@ -364,7 +371,7 @@ public class WSDL2Ws {
                         transportURI,
                         targetEndpointURI,
                         targetNameSpaceOfWSDL),
-                    new ServiceInfo(servicename, qualifiedServiceName, methods),
+                    new ServiceInfo(qualifiedServiceName, methods),
                     typeMap));
         if (wsg == null)
             throw new WrapperFault("does not support the option combination");
@@ -401,7 +408,7 @@ public class WSDL2Ws {
      * @return
      */
 
-	public Type parseAType(TypeEntry type,String targetLanguage){
+	public Type getTypeInfo(TypeEntry type,String targetLanguage){
 		if(type == null)
 			return null;
 			
@@ -510,7 +517,6 @@ public class WSDL2Ws {
         else {
             WSDL2Ws gen = new WSDL2Ws(data);
             gen.genarateWrappers(
-                args[2],
                 data.getParameterValueBykey("o"),
                 data.getParameterValueBykey("l"),
                 data.getParameterValueBykey("i"),
