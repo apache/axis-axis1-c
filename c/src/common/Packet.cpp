@@ -63,6 +63,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <axis/common/AxisTrace.h>
+extern AxisTrace* g_pAT;
 
 extern "C"
 {

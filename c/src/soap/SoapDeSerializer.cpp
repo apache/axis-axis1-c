@@ -76,6 +76,7 @@
 #include <axis/common/Packet.h>
 
 #include <axis/common/AxisTrace.h>
+extern AxisTrace* g_pAT;
 
 #define INITIAL_ARRAY_SIZE 1
 
@@ -108,8 +109,7 @@ int SoapDeSerializer::SetInputStream(const Ax_soapstream* pInputStream)
 
 SoapEnvelope* SoapDeSerializer::GetEnvelope()
 {
-	Attribute *pAttr = NULL;
-    AXISTRACE1("SoapDeSerializer::GetEnvelope");
+	Attribute *pAttr = NULL;    
 	if (!m_pNode) m_pNode = m_pParser->Next();
 	if (!m_pNode || (START_ELEMENT != m_pNode->m_type)) return NULL;
 	if (0 == strcmp(m_pNode->m_pchNameOrValue, SoapKeywordMapping::Map(SOAP_VER_1_2).pchWords[SKW_ENVELOPE]))
@@ -181,8 +181,7 @@ int SoapDeSerializer::GetHeader()
 }
 
 int SoapDeSerializer::GetBody()
-{
-    AXISTRACE1("SoapDeSerializer::GetBody");
+{    
 	if (!m_pNode) m_pNode = m_pParser->Next(); /* previous header searching may have left a node unidentified */
 	if (m_pNode) 
 	{
@@ -200,8 +199,7 @@ int SoapDeSerializer::GetBody()
 int SoapDeSerializer::CheckMessageBody(const AxisChar* pName, const AxisChar* pNamespace)
 {
 	/* check and skip the soap body tag */
-	if (AXIS_SUCCESS != GetBody()) return AXIS_FAIL;
-    AXISTRACE1("SoapDeSerializer::CheckMessageBody");
+	if (AXIS_SUCCESS != GetBody()) return AXIS_FAIL;    
 	if (!m_pNode) m_pNode = m_pParser->Next();
 	if (!m_pNode || (START_ELEMENT != m_pNode->m_type)) return AXIS_FAIL;
 	if (0 != strcmp(m_pNode->m_pchNameOrValue, pName)) return AXIS_FAIL;

@@ -66,92 +66,128 @@
 #include <axis/common/GDefine.h>
 #include <axis/common/AxisConfig.h>
 
+
 extern AxisConfig* g_pConfig;
+
 
 using namespace std;
 
 AxisTrace::AxisTrace()
 {
-    m_sFileName = NULL;
-    //GetConfPath();
 }
 
 AxisTrace::~AxisTrace()
 {
+    fclose(fileTrace);
 }
 
-int AxisTrace::trace(const char* sLog,char* arg2, int arg3)
+int AxisTrace::openFile()
 {
-    //system("echo 'came here' >> __damtemp");
-    m_sFileName =  g_pConfig->GetAxisLogPath();
-    if ((fileTrace = fopen(m_sFileName, "a")) == NULL)
+    char* sFileName =  g_pConfig->GetAxisLogPath();
+    if((fileTrace = fopen(sFileName, "a")) == NULL)
         return AXIS_FAIL;
-    else
+    fclose(fileTrace);
+    int length = strlen(sFileName) + 12;
+    char* setPerm = (char*) malloc(length);
+    if(setPerm)
     {
-        time_t ltime;
-        time(&ltime);
-        
-        fputs("time : ", fileTrace);
-        fputs(ctime(&ltime), fileTrace);
-        fputs("file : ", fileTrace);
-        fputs(arg2, fileTrace);
-        fputs("\n", fileTrace);
-        fputs("line : ", fileTrace);
-        sprintf(strLine,"%d", arg3);
-        fputs(strLine, fileTrace);
-        fputs("\n", fileTrace);        
-        fputs(sLog, fileTrace);        
-        fputs("\n", fileTrace);
-        fputs("-------------------------------------------------", fileTrace);
-        fputs("\n", fileTrace);
-        
-        fclose(fileTrace);    
-    /*
-        *fout << "time:" << ctime(&ltime)
-        << " :file:"<< arg2 << " :line:" << arg3 << ":" << endl
-        << sLog.c_str() << endl
-        << "-------------------------------------------------" << endl;
-    */
-        return AXIS_SUCCESS;
+        strcpy(setPerm, "chmod 766 ");
+        strcat(setPerm, sFileName);
     }
+
+#ifdef __GNUC__
+    system(setPerm);
+#endif
+    if((fileTrace = fopen(sFileName, "a")) == NULL)
+        return AXIS_FAIL;
+                
+    return AXIS_SUCCESS;
 }
 
-int AxisTrace::trace(const char* sLog1, const char* sLog2,char* arg3, int arg4)
+int AxisTrace::openFileByClient()
 {
-    //system("echo 'came here2' >> __damtemp");
-  m_sFileName =  g_pConfig->GetAxisLogPath();
-  if ((fileTrace = fopen(m_sFileName, "a")) == NULL)
+    char* sFileName =  "./ClientAxisLog";
+    
+    if((fileTrace = fopen(sFileName, "a")) == NULL)
         return AXIS_FAIL;
-  else
-  {
-      time_t ltime;
-      time(&ltime);
 
-      fputs("time : ", fileTrace);
-      fputs(ctime(&ltime), fileTrace);
-      fputs("file : ", fileTrace);
-      fputs(arg3, fileTrace);
-      fputs("\n", fileTrace);
-      fputs("line : ", fileTrace);
-      sprintf(strLine,"%d", arg4);
-      fputs(strLine, fileTrace);
-      fputs("\n", fileTrace);
-      fputs(sLog1, fileTrace);
-      fputs(" ", fileTrace);
-      fputs(sLog2, fileTrace);
-      fputs("\n", fileTrace);
-      fputs("-------------------------------------------------", fileTrace);
-      fputs("\n", fileTrace);
-      fclose(fileTrace);
-        
-    /**fout << "time:" << ctime(&ltime)
-    << " :file:"<< arg3 << " :line:" << arg4 << endl
-    << sLog1.c_str() << " " << sLog2.c_str() << endl
-    << "-------------------------------------------------" << endl;
-    */
+    return AXIS_SUCCESS;
+}
 
-        return AXIS_SUCCESS;
+int AxisTrace::logaxis(const char* sLog, int level, char* arg2, int arg3)
+{
+    time_t ltime;
+    time(&ltime);
+
+    fputs("Severity Level : ", fileTrace);
+
+    switch(level)
+    {
+        case 1: strLevel = "CRITICAL"; break;
+        case 2: strLevel = "WARN"; break;
+        case 3: strLevel = "INFO"; break;
+        case 4: strLevel = "TRIVIAL"; break;
     }
+        
+    fputs(strLevel, fileTrace);
+    fputs("\n", fileTrace);
+ 
+    fputs("time : ", fileTrace);
+    fputs(ctime(&ltime), fileTrace);
+    fputs("file : ", fileTrace);
+    fputs(arg2, fileTrace);
+    fputs("\n", fileTrace);
+    fputs("line : ", fileTrace);
+    sprintf(strLine,"%d", arg3);
+    fputs(strLine, fileTrace);
+    fputs("\n", fileTrace);        
+    fputs(sLog, fileTrace);        
+    fputs("\n", fileTrace);
+    fputs("-------------------------------------------------", fileTrace);
+    fputs("\n", fileTrace);
+
+    fflush(fileTrace);
+            
+    return AXIS_SUCCESS;
+   
+}
+
+int AxisTrace::logaxis(const char* sLog1, const char* sLog2, int level, char* arg3, int arg4)
+{
+    time_t ltime;
+    time(&ltime);
+
+    fputs("Severity Level : ", fileTrace);
+    switch(level)
+    {
+        case 1: strLevel = "CRITICAL"; break;
+        case 2: strLevel = "WARN"; break;
+        case 3: strLevel = "INFO"; break;
+        case 4: strLevel = "TRIVIAL"; break;
+    }
+    fputs(strLevel, fileTrace);
+    fputs("\n", fileTrace);
+
+    fputs("time : ", fileTrace);
+    fputs(ctime(&ltime), fileTrace);
+    fputs("file : ", fileTrace);
+    fputs(arg3, fileTrace);
+    fputs("\n", fileTrace);
+    fputs("line : ", fileTrace);
+    sprintf(strLine,"%d", arg4);
+    fputs(strLine, fileTrace);
+    fputs("\n", fileTrace);
+    fputs(sLog1, fileTrace);
+    fputs(" ", fileTrace);
+    fputs(sLog2, fileTrace);
+    fputs("\n", fileTrace);
+    fputs("-------------------------------------------------", fileTrace);
+    fputs("\n", fileTrace);
+
+    fflush(fileTrace);
+    
+    return AXIS_SUCCESS;
+    
 }
 
 int AxisTrace::trace(const char *pchLog)
@@ -164,7 +200,7 @@ int AxisTrace::trace(const char *pchLog)
 /*
 int main(int argc, char* argv[])
 {
-  tracer.trace("damitha");
+  tracer.trace("test");
   return 0;
 }
 */
