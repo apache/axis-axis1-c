@@ -30,7 +30,7 @@ SerializerPool::SerializerPool ()
 
 SerializerPool::~SerializerPool ()
 {
-    for (list <SoapSerializer*>::iterator it = m_SZList.begin ();
+    for (list <IWrapperSoapSerializer*>::iterator it = m_SZList.begin ();
          it != m_SZList.end (); it++)
     {
         delete (*it);
@@ -38,7 +38,7 @@ SerializerPool::~SerializerPool ()
 }
 
 // Pooling should be implemented
-int SerializerPool::GetInstance (SoapSerializer** ppSZ)
+int SerializerPool::GetInstance (IWrapperSoapSerializer** ppSZ)
 {
     lock ();
     if (!m_SZList.empty ())
@@ -48,7 +48,12 @@ int SerializerPool::GetInstance (SoapSerializer** ppSZ)
     }
     else
     {
+#ifdef USER_SERIALIZER
+        *ppSZ = (IWrapperSoapSerializer*)GetUserSerializer();
+#else
         *ppSZ = new SoapSerializer ();
+#endif
+        
     }
     if (AXIS_SUCCESS != (*ppSZ)->Init ())
     {
@@ -62,7 +67,7 @@ int SerializerPool::GetInstance (SoapSerializer** ppSZ)
     return AXIS_SUCCESS;
 }
 
-int SerializerPool::PutInstance (SoapSerializer* pSZ)
+int SerializerPool::PutInstance (IWrapperSoapSerializer* pSZ)
 {
     lock ();
     m_SZList.push_back (pSZ);

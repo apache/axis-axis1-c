@@ -65,6 +65,8 @@
 #include "GDefine.h"
 #include "AxisUserAPI.h"
 #include "TypeMapping.h"
+#include "WSDDDefines.h"
+#include "Packet.h"
 
 #ifdef __cplusplus
 
@@ -207,6 +209,17 @@ public:
     virtual struct tm AXISCALL GetAttributeAsTime(const AxisChar* pName, const AxisChar* pNamespace)=0;
     virtual long AXISCALL GetAttributeAsDuration(const AxisChar* pName, const AxisChar* pNamespace)=0;
 	virtual int AXISCALL GetStatus()=0;
+	
+	/* Externalization of deserializer API */
+	virtual int AXISCALL SetInputStream(const Ax_soapstream* pInputStream)=0;
+	virtual int AXISCALL GetVersion()=0;
+	virtual int AXISCALL GetHeader()=0;
+	virtual	int AXISCALL Init()=0;
+	virtual PROVIDERTYPE AXISCALL GetCurrentProviderType()=0;
+	virtual void AXISCALL SetCurrentProviderType(PROVIDERTYPE nType)=0;	
+	virtual void AXISCALL SetStyle(AXIS_BINDING_STYLE nStyle)=0;
+	virtual AXIS_BINDING_STYLE AXISCALL GetStyle()=0;	
+	    	
 
 	/* following stuff is needed to provide the interface for C web services */
 public:
