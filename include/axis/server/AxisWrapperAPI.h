@@ -14,10 +14,6 @@
  *   limitations under the License.
  *
  *
- *
- * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
- *
- * AxisWrapperAPI.h: interface for the AxisUserAPI class. 
  */
 
 #if !defined(_AXISWRAPPERAPI_H____OF_AXIS_INCLUDED_)
@@ -29,28 +25,43 @@
 #include "IWrapperSoapSerializer.h"
 #include "BasicHandler.h"
 
-/*
+/**
+ * @file AxisWrapperAPI.h
+ * This file contains the API functions that are implemented by the WSDL2Ws
+ * tool generated code to manipulate C/C++ type for each complex type in a xml
+ * schema.
+ * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
+ */
+ 
+/**
+ * @fn AXIS_DESERIALIZE_FUNCT
  * Function that deserializes a custom type 
  */
 typedef int (* AXIS_DESERIALIZE_FUNCT)(void*, void*);
-/*
+
+/**
+ * @fn AXIS_OBJECT_CREATE_FUNCT
  * Function used to create a custom type. bArray is true if array of 
- * objects to be
- * created. Then nSize is the size of that array.
+ * objects to be created. Then nSize is the size of that array.
  */
 typedef void* (* AXIS_OBJECT_CREATE_FUNCT)(void*, bool bArray, int nSize);
-/*
+
+/**
+ * @fn AXIS_OBJECT_DELETE_FUNCT
  * Function used to delete a custom type. bArray is true if void* is a 
- * pointer to an array. 
- * Then nSize is the size of that array.
+ * pointer to an array. Then nSize is the size of that array.
  */
 typedef void (* AXIS_OBJECT_DELETE_FUNCT)(void*, bool bArray, int nSize);
-/*
+
+/**
+ * @fn AXIS_SERIALIZE_FUNCT
  * Function that serializes a custom type. bArray indicates that the object 
  * in void is an element of an array (note that void* is not itself an array).
  */
 typedef int (* AXIS_SERIALIZE_FUNCT)(void*, void*, bool bArray);
-/*
+
+/**
+ * @fn AXIS_OBJECT_SIZE_FUNCT
  * Function that is used to get the size of an object of a custom type.
  */
 typedef int (* AXIS_OBJECT_SIZE_FUNCT)(void);

@@ -34,17 +34,24 @@
 #include <axis/server/Packet.h>
 
 /**
- * 
+ * @file SOAPTransport.h
  *
- * Each thread should have a different transport object
+ * Contains the interfaces that any transport layer should implemnt in order
+ * for using in Axis. The implementation should be at lease thread safe. The
+ * Axis Engine creates a separate transport object for each thread.
  */
 
 #ifdef __cplusplus
 
 /**
  * @interface AxisIOStream
- * @brief Interface of the input/output stream of Axis transport. ISOAPTransport is derived
- *        from this interface
+ *
+ * Interface of the input/output stream of Axis transport. The use of this
+ * interface is to avoid the parser being provided the full functionalies
+ * of SOAPTransport interface
+ *
+ * @brief Interface of the input/output stream of Axis transport. ISOAPTransport is
+ *        derived from this interface
  */
 class AxisIOStream
 {
@@ -117,15 +124,18 @@ public:
      */
     virtual AXIS_TRANSPORT_STATUS getBytes(char* pcBuffer, int* piRetSize)=0;
 };
-    /**
-     * @brief
-     * @pre
-     * @post
-     * @example <file name>
-     * @see
-     * @param
-     * @return
-     */
+
+/**
+ * @interface SOAPTransport
+ *
+ * Interface of any Axis transport. Every transpor layer should implement this
+ * interface in order to be used with Axis Engine. This interface contain the
+ * functionalities independent of the type of transport (whether HTTP, SMTP,
+ * etc).
+ *
+ * @brief Interface of any Axis transport layer.
+ *
+ */
 class SOAPTransport : public AxisIOStream
 {
 public:

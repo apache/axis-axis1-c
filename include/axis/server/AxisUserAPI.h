@@ -13,11 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- *
- * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
- *
  */
-/* AxisUserAPI.h: interface for the AxisUserAPI class.*/
 
 #if !defined(_AXISUSERAPI_H____OF_AXIS_INCLUDED_)
 #define _AXISUSERAPI_H____OF_AXIS_INCLUDED_
@@ -25,36 +21,131 @@
 #include <time.h>
 #include <string.h>
 
+ /**
+  * @file AxisUserAPI.h
+  * This file contains types defined in Axis C++. The mapping of basic xsd types
+  * to the C language types.
+  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
+  */
 #define AxisChar char
 
+/**
+ * @typedef xsd__string
+ * Axis C++ defined type for xml basic type string
+ */
 typedef AxisChar * xsd__string;
+/**
+ * @typedef xsd__integer
+ * Axis C++ defined type for xml basic type integer
+ */
 typedef int xsd__integer;
+/**
+ * @typedef xsd__int
+ * Axis C++ defined type for xml basic type int
+ */
 typedef int xsd__int;
+/**
+ * @typedef xsd__long
+ * Axis C++ defined type for xml basic type long
+ */
 typedef long xsd__long;
+/**
+ * @typedef xsd__short
+ * Axis C++ defined type for xml basic type short
+ */
 typedef short xsd__short;
+/**
+ * @typedef xsd__decimal
+ * Axis C++ defined type for xml basic type decimal
+ */
 typedef double xsd__decimal;
+/**
+ * @typedef xsd__float
+ * Axis C++ defined type for xml basic type float
+ */
 typedef float xsd__float;
+/**
+ * @typedef xsd__double
+ * Axis C++ defined type for xml basic type double
+ */
 typedef double xsd__double;
+/**
+ * @typedef xsd__boolean
+ * Axis C++ defined type for xml basic type boolean
+ */
 typedef enum { false_=0, true_ } xsd__boolean;
+/**
+ * @typedef xsd__byte
+ * Axis C++ defined type for xml basic type byte
+ */
 typedef unsigned char xsd__byte;
+/**
+ * @typedef xsd__QName
+ * Axis C++ defined type for xml basic type QName
+ */
 typedef AxisChar * xsd__QName;
+/**
+ * @typedef xsd__dateTime
+ * Axis C++ defined type for xml basic type dateTime
+ */
 typedef struct tm xsd__dateTime;
+/**
+ * @typedef xsd__date
+ * Axis C++ defined type for xml basic type date
+ */
 typedef struct tm xsd__date;
+/**
+ * @typedef xsd__time
+ * Axis C++ defined type for xml basic type time
+ */
 typedef struct tm xsd__time;
+/**
+ * @typedef xsd__unsignedByte
+ * Axis C++ defined type for xml basic type unsignedByte
+ */
 typedef unsigned char xsd__unsignedByte;
+/**
+ * @typedef xsd__unsignedInt
+ * Axis C++ defined type for xml basic type unsignedInt
+ */
 typedef unsigned int xsd__unsignedInt;
+/**
+ * @typedef xsd__unsignedLong
+ * Axis C++ defined type for xml basic type unsignedLong
+ */
 typedef unsigned long xsd__unsignedLong;
+/**
+ * @typedef xsd__unsignedShort
+ * Axis C++ defined type for xml basic type unsignedShort
+ */
 typedef unsigned short xsd__unsignedShort;
+/**
+ * @struct xsd__base64Binary
+ * Axis C++ defined type for xml basic type base64Binary
+ */
 typedef struct {
     xsd__unsignedByte * __ptr;
     xsd__int __size;
 } xsd__base64Binary;
+/**
+ * @struct xsd__hexBinary
+ * Axis C++ defined type for xml basic type hexBinary
+ */
 typedef struct{
     xsd__unsignedByte * __ptr;
     xsd__int __size;
 } xsd__hexBinary;
+/**
+ * @typedef xsd__anyURI
+ * Axis C++ defined type for xml basic type anyURI
+ */
 typedef AxisChar * xsd__anyURI;
 
+/**
+ * @enum AXIS_BINDING_STYLE
+ * Enumeration for the different wsdl styles. This is used by the Axis
+ * engine to identify the web service or client style.
+ */
 typedef enum {
     RPC_ENCODED, /*default*/
     DOC_LITERAL,
@@ -97,12 +188,26 @@ typedef enum {
     SSL_CHANNEL
 } AXIS_CHANNEL_TYPE;
 
+/**
+ * @typedef XML_String
+ * Axis C++ defined type for xml encoded string. This is used only in AnyType.
+ */
 typedef char* XML_String;
 
+/**
+ * @struct AnyType
+ * Axis C++ defined type for handling xsd:any.
+ */
 typedef struct 
 {
-	XML_String* _array;
-	int _size;
+    /**
+     * @var _array Contains an array of xml encoded strings.
+     */
+    XML_String* _array;
+    /**
+     * @var _size Contains how many xml strings are there in _array
+     */
+    int _size;
 } AnyType;
 
 #endif
