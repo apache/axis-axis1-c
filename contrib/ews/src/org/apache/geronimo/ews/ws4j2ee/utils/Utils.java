@@ -901,7 +901,12 @@ public class Utils {
 		int index = file.lastIndexOf('/');
 		if(index < 0)
 			index = file.lastIndexOf('\\');
-		return file.substring(0, index);
+		if(index>-1){
+			return file.substring(0, index);		
+		}else{
+			return file;
+		}	
+
 	}
 
 }
