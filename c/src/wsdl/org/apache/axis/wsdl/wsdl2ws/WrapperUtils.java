@@ -213,7 +213,7 @@ public class WrapperUtils {
 	
 	public static String getClassNameFromParamInfoConsideringArrays(ParameterInfo param,WebServiceContext wscontext)throws WrapperFault{
 		Type type = wscontext.getTypemap().getType(param.getSchemaName());
-		if(type !=null){ //array or complex types
+		if(!TypeMap.isSimpleType(param.getSchemaName())){ //array or complex types
 			if (type.isArray()){
 				return type.getLanguageSpecificName();
 			}
