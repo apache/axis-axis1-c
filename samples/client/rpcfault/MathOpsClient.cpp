@@ -1,4 +1,4 @@
-#include "MathOps.h"
+#include "MathOps.hpp"
 #include <axis/AxisException.hpp>
 #include <ctype.h>
 #include <iostream>

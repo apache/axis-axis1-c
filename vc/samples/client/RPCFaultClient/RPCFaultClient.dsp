@@ -88,15 +88,15 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\..\..\..\samples\client\rpcfault\AxisClientException.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\..\samples\client\rpcfault\DivByZeroStruct.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\..\samples\client\rpcfault\MathOps.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\samples\client\rpcfault\MathOps_AxisClientException.cpp
 # End Source File
 # Begin Source File
 
@@ -108,15 +108,15 @@ SOURCE=..\..\..\..\samples\client\rpcfault\MathOpsClient.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\..\..\samples\client\rpcfault\AxisClientException.h
+SOURCE=..\..\..\..\samples\client\rpcfault\DivByZeroStruct.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\samples\client\rpcfault\DivByZeroStruct.h
+SOURCE=..\..\..\..\samples\client\rpcfault\MathOps.hpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\samples\client\rpcfault\MathOps.h
+SOURCE=..\..\..\..\samples\client\rpcfault\MathOps_AxisClientException.hpp
 # End Source File
 # End Group
 # Begin Group "Resource Files"
