@@ -12,21 +12,22 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.dd.jboss.JBossDDWriter;
 /**
  * @author Srinath perera(hemapani@opesnource.lk)
  */
-public class J2EEContainerSpecificDDGenerator implements Generator{
-	private J2EEWebServiceContext j2eewscontext;
+public class J2EEContainerSpecificDDGenerator implements Generator {
+    private J2EEWebServiceContext j2eewscontext;
     private Writer writer;
     protected static Log log =
-					   LogFactory.getLog(JaxrpcMapperGenarator.class.getName());
-    
-	   public J2EEContainerSpecificDDGenerator(J2EEWebServiceContext j2eewscontext) throws GenerationFault {
-		   this.j2eewscontext = j2eewscontext;
-		   String ddName = j2eewscontext.getMiscInfo().getJ2eeContainerDDName();
-		   if(GenerationConstants.JBOSS_DD.equals(ddName))
-				writer = new JBossDDWriter(j2eewscontext);
-		   else
-		   		new GenerationFault("unsupported j2ee container DD "+ ddName);  
-	   }
+            LogFactory.getLog(JaxrpcMapperGenarator.class.getName());
+
+    public J2EEContainerSpecificDDGenerator(J2EEWebServiceContext j2eewscontext) throws GenerationFault {
+        this.j2eewscontext = j2eewscontext;
+        String ddName = j2eewscontext.getMiscInfo().getJ2eeContainerDDName();
+        if (GenerationConstants.JBOSS_DD.equals(ddName))
+            writer = new JBossDDWriter(j2eewscontext);
+        else
+            new GenerationFault("unsupported j2ee container DD " + ddName);
+    }
+
     public void genarate() throws GenerationFault {
-		writer.writeCode();
+        writer.writeCode();
     }
 }

@@ -35,21 +35,9 @@
  */
 package org.apache.geronimo.ews.jaxrpcmapping;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.wsdl.Binding;
-import javax.wsdl.Operation;
-import javax.wsdl.Port;
-import javax.wsdl.PortType;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.namespace.QName;
-
+import org.apache.axis.wsdl.symbolTable.BindingEntry;
+import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
+import org.apache.axis.wsdl.symbolTable.ServiceEntry;
 import org.apache.geronimo.ews.jaxrpcmapping.descriptor.ExceptionMappingType;
 import org.apache.geronimo.ews.jaxrpcmapping.descriptor.JavaWsdlMapping;
 import org.apache.geronimo.ews.jaxrpcmapping.descriptor.JavaXmlTypeMappingType;
@@ -60,9 +48,20 @@ import org.apache.geronimo.ews.jaxrpcmapping.descriptor.ServiceEndpointMethodMap
 import org.apache.geronimo.ews.jaxrpcmapping.descriptor.ServiceInterfaceMappingType;
 import org.apache.geronimo.ews.jaxrpcmapping.descriptor.WsdlReturnValueMappingType;
 import org.apache.geronimo.ews.jaxrpcmapping.descriptor.XsdQNameType;
-import org.apache.axis.wsdl.symbolTable.BindingEntry;
-import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
-import org.apache.axis.wsdl.symbolTable.ServiceEntry;
+
+import javax.wsdl.Binding;
+import javax.wsdl.Operation;
+import javax.wsdl.Port;
+import javax.wsdl.PortType;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.namespace.QName;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Ias (iasandcb@tmax.co.kr)
@@ -214,12 +213,12 @@ public class JaxRpcMapper {
                 continue;
             }
             ServiceEndpointInterfaceMappingType endpointInterfaceMapping =
-                (ServiceEndpointInterfaceMappingType) object;
+                    (ServiceEndpointInterfaceMappingType) object;
             QName wsdlBinging = endpointInterfaceMapping.getWsdlBinding().getValue();
             QName wsdlPortType = endpointInterfaceMapping.getWsdlPortType().getValue();
             if ((bindingQName.equals(wsdlBinging)) && (portTypeQName.equals(wsdlPortType))) {
                 String endpointServiceName =
-                    endpointInterfaceMapping.getServiceEndpointInterface().getValue();
+                        endpointInterfaceMapping.getServiceEndpointInterface().getValue();
                 return endpointServiceName;
             }
         }
@@ -227,10 +226,10 @@ public class JaxRpcMapper {
     }
 
     /**
-     * @param entry
-     * @param operation
-     * @param i
-     * @return
+     * @param entry     
+     * @param operation 
+     * @param i         
+     * @return 
      */
     public String getJavaMethodParamType(BindingEntry bEntry, Operation operation, int position) {
         List serviceList = mapping.getServiceInterfaceMappingAndServiceEndpointInterfaceMapping();
@@ -244,7 +243,7 @@ public class JaxRpcMapper {
                 continue;
             }
             ServiceEndpointInterfaceMappingType endpointInterfaceMapping =
-                (ServiceEndpointInterfaceMappingType) object;
+                    (ServiceEndpointInterfaceMappingType) object;
             QName wsdlBinging = endpointInterfaceMapping.getWsdlBinding().getValue();
             QName wsdlPortType = endpointInterfaceMapping.getWsdlPortType().getValue();
             if ((bindingQName.equals(wsdlBinging)) && (portTypeQName.equals(wsdlPortType))) {
@@ -252,13 +251,13 @@ public class JaxRpcMapper {
                 String operationName = operation.getName();
                 for (Iterator k = methodList.iterator(); k.hasNext();) {
                     ServiceEndpointMethodMappingType methodMapping =
-                        (ServiceEndpointMethodMappingType) k.next();
+                            (ServiceEndpointMethodMappingType) k.next();
                     String mappedOperationName = methodMapping.getWsdlOperation().getValue();
                     if (operationName.equals(mappedOperationName)) {
                         List paramList = methodMapping.getMethodParamPartsMapping();
                         for (Iterator l = paramList.iterator(); l.hasNext();) {
                             MethodParamPartsMappingType paramPart =
-                                (MethodParamPartsMappingType) l.next();
+                                    (MethodParamPartsMappingType) l.next();
                             if (paramPart.getParamPosition().getValue().intValue() == position) {
                                 return paramPart.getParamType().getValue();
                             }
@@ -271,9 +270,9 @@ public class JaxRpcMapper {
     }
 
     /**
-     * @param entry
-     * @param operation
-     * @return
+     * @param entry     
+     * @param operation 
+     * @return 
      */
     public String getJavaMethodReturnType(BindingEntry bEntry, Operation operation) {
         List serviceList = mapping.getServiceInterfaceMappingAndServiceEndpointInterfaceMapping();
@@ -287,7 +286,7 @@ public class JaxRpcMapper {
                 continue;
             }
             ServiceEndpointInterfaceMappingType endpointInterfaceMapping =
-                (ServiceEndpointInterfaceMappingType) object;
+                    (ServiceEndpointInterfaceMappingType) object;
             QName wsdlBinging = endpointInterfaceMapping.getWsdlBinding().getValue();
             QName wsdlPortType = endpointInterfaceMapping.getWsdlPortType().getValue();
             if ((bindingQName.equals(wsdlBinging)) && (portTypeQName.equals(wsdlPortType))) {
@@ -295,11 +294,11 @@ public class JaxRpcMapper {
                 String operationName = operation.getName();
                 for (Iterator k = methodList.iterator(); k.hasNext();) {
                     ServiceEndpointMethodMappingType methodMapping =
-                        (ServiceEndpointMethodMappingType) k.next();
+                            (ServiceEndpointMethodMappingType) k.next();
                     String mappedOperationName = methodMapping.getWsdlOperation().getValue();
                     if (operationName.equals(mappedOperationName)) {
                         WsdlReturnValueMappingType returnValueMapping =
-                            methodMapping.getWsdlReturnValueMapping();
+                                methodMapping.getWsdlReturnValueMapping();
                         if (returnValueMapping != null) {
                             return returnValueMapping.getMethodReturnValue().getValue();
                         }
@@ -311,9 +310,9 @@ public class JaxRpcMapper {
     }
 
     /**
-     * @param entry
-     * @param operation
-     * @return
+     * @param entry     
+     * @param operation 
+     * @return 
      */
     public String getJavaMethodName(BindingEntry bEntry, Operation operation) {
         List serviceList = mapping.getServiceInterfaceMappingAndServiceEndpointInterfaceMapping();
@@ -327,7 +326,7 @@ public class JaxRpcMapper {
                 continue;
             }
             ServiceEndpointInterfaceMappingType endpointInterfaceMapping =
-                (ServiceEndpointInterfaceMappingType) object;
+                    (ServiceEndpointInterfaceMappingType) object;
             QName wsdlBinging = endpointInterfaceMapping.getWsdlBinding().getValue();
             QName wsdlPortType = endpointInterfaceMapping.getWsdlPortType().getValue();
             if ((bindingQName.equals(wsdlBinging)) && (portTypeQName.equals(wsdlPortType))) {
@@ -335,7 +334,7 @@ public class JaxRpcMapper {
                 String operationName = operation.getName();
                 for (Iterator k = methodList.iterator(); k.hasNext();) {
                     ServiceEndpointMethodMappingType methodMapping =
-                        (ServiceEndpointMethodMappingType) k.next();
+                            (ServiceEndpointMethodMappingType) k.next();
                     String mappedOperationName = methodMapping.getWsdlOperation().getValue();
                     if (operationName.equals(mappedOperationName)) {
                         return methodMapping.getJavaMethodName().getValue();

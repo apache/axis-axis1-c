@@ -54,15 +54,6 @@
  */
 package org.apache.geronimo.ews.jaxrpcmapping;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.wsdl.Binding;
-import javax.wsdl.Port;
-import javax.wsdl.Service;
-
 import org.apache.axis.utils.JavaUtils;
 import org.apache.axis.utils.Messages;
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
@@ -71,8 +62,17 @@ import org.apache.axis.wsdl.symbolTable.ServiceEntry;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.toJava.Utils;
 
+import javax.wsdl.Binding;
+import javax.wsdl.Port;
+import javax.wsdl.Service;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.Map;
+
 /**
  * This is Wsdl2java's service writer.  It writes the <serviceName>.java file.
+ * 
  * @author Ias (iasandcb@tmax.co.kr)
  * @deprecated no more used by J2eeGeneratorFactory
  */
@@ -83,10 +83,9 @@ public class J2eeServiceIfaceWriter extends J2eeClassWriter {
     /**
      * Constructor.
      */
-    protected J2eeServiceIfaceWriter(
-            J2eeEmitter emitter,
-            ServiceEntry sEntry,
-            SymbolTable symbolTable) {
+    protected J2eeServiceIfaceWriter(J2eeEmitter emitter,
+                                     ServiceEntry sEntry,
+                                     SymbolTable symbolTable) {
         super(emitter, emitter.getJaxRpcMapper().getServiceInterfaceName(sEntry), "service");
         this.service = sEntry.getService();
         this.symbolTable = symbolTable;
@@ -106,13 +105,12 @@ public class J2eeServiceIfaceWriter extends J2eeClassWriter {
         return "extends javax.xml.rpc.Service ";
     } // getExtendsText
 
-
     /**
      * Write the body of the service file.
      */
     protected void writeFileBody(PrintWriter pw) throws IOException {
         // output comments
-        writeComment(pw, service.getDocumentationElement(),false);
+        writeComment(pw, service.getDocumentationElement(), false);
 
         // get ports
         Map portMap = service.getPorts();
@@ -124,22 +122,19 @@ public class J2eeServiceIfaceWriter extends J2eeClassWriter {
             Binding binding = p.getBinding();
             if (binding == null) {
                 throw new IOException(Messages.getMessage("emitFailNoBinding01",
-                        new String[] {p.getName()}));
+                        new String[]{p.getName()}));
             }
-            
+
             BindingEntry bEntry =
                     symbolTable.getBindingEntry(binding.getQName());
             if (bEntry == null) {
-                throw new IOException(Messages.getMessage(
-                        "emitFailNoBindingEntry01",
-                        new String[] {binding.getQName().toString()}));
+                throw new IOException(Messages.getMessage("emitFailNoBindingEntry01",
+                        new String[]{binding.getQName().toString()}));
             }
 
-            PortTypeEntry ptEntry = symbolTable.getPortTypeEntry(
-                    binding.getPortType().getQName());
+            PortTypeEntry ptEntry = symbolTable.getPortTypeEntry(binding.getPortType().getQName());
             if (ptEntry == null) {
-                throw new IOException(Messages.getMessage(
-                        "emitFailNoPortType01",
+                throw new IOException(Messages.getMessage("emitFailNoPortType01",
                         new String[]
                         {binding.getPortType().getQName().toString()}));
             }
@@ -165,7 +160,7 @@ public class J2eeServiceIfaceWriter extends J2eeClassWriter {
             // If there is not literal use, the interface name is the portType name.
             // Otherwise it is the binding name.
             //String bindingType = (String) bEntry.getDynamicVar(J2eeBindingWriter.INTERFACE_NAME);
-			String bindingType = jaxRpcMapper.getServiceEndpointInterfaceName(ptEntry, bEntry);
+            String bindingType = jaxRpcMapper.getServiceEndpointInterfaceName(ptEntry, bEntry);
             // Write out the get<PortName> methods
             pw.println("    public java.lang.String get" + portName + "Address();");
             pw.println();

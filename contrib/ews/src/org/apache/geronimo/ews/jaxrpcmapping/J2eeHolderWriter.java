@@ -54,15 +54,16 @@
  */
 package org.apache.geronimo.ews.jaxrpcmapping;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.toJava.JavaClassWriter;
 import org.apache.axis.wsdl.toJava.Utils;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
 /**
  * This is Wsdl2java's Holder Writer.  It writes the <typeName>Holder.java file.
+ * 
  * @author Ias (iasandcb@tmax.co.kr)
  * @deprecated no more used by J2eeGeneratorFactory
  */

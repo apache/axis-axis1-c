@@ -55,64 +55,100 @@
 
 package org.apache.geronimo.ews.ws4j2ee.context;
 
-import java.util.ArrayList;
-
-import javax.wsdl.Port;
-
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
 import org.apache.axis.wsdl.symbolTable.ServiceEntry;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFPortComponent;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
 
+import javax.wsdl.Port;
+import java.util.ArrayList;
+
 /**
  * <p>This class interface the importent information about the webservice
  * under consideration. E.g. the webservice DD may have one or more
- * WebserviceDescriptions, WSDLportType's WSDLBindings ect. This type of object 
+ * WebserviceDescriptions, WSDLportType's WSDLBindings ect. This type of object
  * provide acsess to the instance's under the consideration. It is recomended to
- * acscess these instances over MiscInfo snd It will make sure everybody is 
+ * acscess these instances over MiscInfo snd It will make sure everybody is
  * acsessing same port type ect.
+ * 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public interface MiscInfo {
-	public void setOutputPath(String outputpath);
-	public String getOutPutPath();
-	public ServiceEntry gettargetService();
-	public BindingEntry gettargetBinding();
-	public PortTypeEntry getTargetPortType();
-	public void settargetService(ServiceEntry service);
-	public void settargetBinding(BindingEntry binding);
-	public void setTargetPortType(PortTypeEntry port);
-	public String getEjbsei();
-	public void setEjbbean(String string);
-	public String getEjbbean();
-	public void setEjbsei(String string);
-	public String getEjbhome();
-	public void setEjbhome(String string);
-	public WSCFWebserviceDescription getWscfdWsDesxription();
-	public WSCFPortComponent getWscfport();
-	public void setWscfdWsDescription(WSCFWebserviceDescription description);
-	public void setWscfport(WSCFPortComponent component);
-	/**
-	 * @return ArrayList of SEIOperations
-	 */
-	public ArrayList getSEIOperations();
-	public void setSEIOperations(SEIOperation operation);
-	public void validate();
-	public boolean isVerbose();
-	public String getWsConfFileLocation();
-	public void setVerbose(boolean b);
-	public void setWsConfFileLocation(String string);
-	public String getEjbName();
-	public void setEjbName(String string);
-	public String getJaxrpcfile();
-	public String getWsdlFile();
-	public void setJaxrpcfile(String string);
-	public void setWsdlFile(String string);
-	public void setTargetPort(Port port);
-	public Port getTargetPort();
-	public String getJaxrpcSEI();
-	public void setJaxrpcSEI(String string);
-	public String getJ2eeContainerDDName();
-	public void setJ2eeContainerDDName(String string); 
+    public void setOutputPath(String outputpath);
+
+    public String getOutPutPath();
+
+    public ServiceEntry gettargetService();
+
+    public BindingEntry gettargetBinding();
+
+    public PortTypeEntry getTargetPortType();
+
+    public void settargetService(ServiceEntry service);
+
+    public void settargetBinding(BindingEntry binding);
+
+    public void setTargetPortType(PortTypeEntry port);
+
+    public String getEjbsei();
+
+    public void setEjbbean(String string);
+
+    public String getEjbbean();
+
+    public void setEjbsei(String string);
+
+    public String getEjbhome();
+
+    public void setEjbhome(String string);
+
+    public WSCFWebserviceDescription getWscfdWsDesxription();
+
+    public WSCFPortComponent getWscfport();
+
+    public void setWscfdWsDescription(WSCFWebserviceDescription description);
+
+    public void setWscfport(WSCFPortComponent component);
+
+    /**
+     * @return ArrayList of SEIOperations
+     */
+    public ArrayList getSEIOperations();
+
+    public void setSEIOperations(SEIOperation operation);
+
+    public void validate();
+
+    public boolean isVerbose();
+
+    public String getWsConfFileLocation();
+
+    public void setVerbose(boolean b);
+
+    public void setWsConfFileLocation(String string);
+
+    public String getEjbName();
+
+    public void setEjbName(String string);
+
+    public String getJaxrpcfile();
+
+    public String getWsdlFile();
+
+    public void setJaxrpcfile(String string);
+
+    public void setWsdlFile(String string);
+
+    public void setTargetPort(Port port);
+
+    public Port getTargetPort();
+
+    public String getJaxrpcSEI();
+
+    public void setJaxrpcSEI(String string);
+
+    public String getJ2eeContainerDDName();
+
+    public void setJ2eeContainerDDName(String string);
 }

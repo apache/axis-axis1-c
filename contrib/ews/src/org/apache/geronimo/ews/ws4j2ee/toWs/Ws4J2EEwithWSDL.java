@@ -55,8 +55,6 @@
 
 package org.apache.geronimo.ews.ws4j2ee.toWs;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.geronimo.ews.ws4j2ee.context.ContextFactory;
@@ -69,116 +67,111 @@ import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSC
 import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 import org.w3c.dom.Document;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+
 /**
  * <p>this class genarate the code when the WSDL presents.</p>
  */
 public class Ws4J2EEwithWSDL implements Generator {
-  	private boolean verbose = true; 
-  	private Ws4J2eeCLOptionParser clparser;
-	protected static Log log =
-			LogFactory.getLog(Ws4J2EEwithWSDL.class.getName());
+    private boolean verbose = true;
+    private Ws4J2eeCLOptionParser clparser;
+    protected static Log log =
+            LogFactory.getLog(Ws4J2EEwithWSDL.class.getName());
 
     /* indicate code to genarate is server side or the client side*/
     private boolean isSeverSideCodeGenaration = true;
-    
-    private MiscInfo misc; 
 
-    public Ws4J2EEwithWSDL(String[] args)throws Exception {
-		clparser = new Ws4J2eeCLOptionParser(args);
-		misc = ContextFactory.createMiscInfo();
-     }
+    private MiscInfo misc;
+
+    public Ws4J2EEwithWSDL(String[] args) throws Exception {
+        clparser = new Ws4J2eeCLOptionParser(args);
+        misc = ContextFactory.createMiscInfo();
+    }
 
     /**
-     * genarate. what is genarated is depend on genarators included. 
+     * genarate. what is genarated is depend on genarators included.
+     * 
      * @see org.apache.geronimo.ews.ws4j2ee.toWs.Generator#genarate()
      */
     public void genarate() throws GenerationFault {
         try {
-    		String wscffile = clparser.getWscffile();
-			misc.setOutputPath(clparser.getOutputDirectory());
-			misc.setWsConfFileLocation(wscffile.substring(0,wscffile.lastIndexOf('/')));
-    		isSeverSideCodeGenaration = clparser.isServerSide();
+            String wscffile = clparser.getWscffile();
+            misc.setOutputPath(clparser.getOutputDirectory());
+            misc.setWsConfFileLocation(wscffile.substring(0, wscffile.lastIndexOf('/')));
+            isSeverSideCodeGenaration = clparser.isServerSide();
     
-    		//we may need to pass few parameters to the J2EEWebServiceContextImpl they are TODO
-    		J2EEWebServiceContext wscontext = new J2EEWebServiceContextImpl(true);
-			wscontext.setMiscInfo(misc);
-    		//parsing of the webservice.xml happen here 
-    		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-    		dbf.setNamespaceAware(true);
-    		Document wscfdoc = dbf.newDocumentBuilder().parse(wscffile);
-    		WSCFContext wscfcontext = ContextFactory.createWSCFContext(wscfdoc); 
-			wscontext.setWSCFContext(wscfcontext);
-			if(verbose)
-				log.info(wscffile+" parsed ..");
+            //we may need to pass few parameters to the J2EEWebServiceContextImpl they are TODO
+            J2EEWebServiceContext wscontext = new J2EEWebServiceContextImpl(true);
+            wscontext.setMiscInfo(misc);
+            //parsing of the webservice.xml happen here 
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            dbf.setNamespaceAware(true);
+            Document wscfdoc = dbf.newDocumentBuilder().parse(wscffile);
+            WSCFContext wscfcontext = ContextFactory.createWSCFContext(wscfdoc);
+            wscontext.setWSCFContext(wscfcontext);
+            if (verbose)
+                log.info(wscffile + " parsed ..");
 
-    		WSCFWebserviceDescription[] wscfwsdiss = wscfcontext.getWebServicesDescription();
-    		//let us take the first discription
-    		if(wscfwsdiss == null || wscfwsdiss.length == 0)
-    			throw new UnrecoverableGenarationFault("no webservice discription found in the" +
-    				"webservice.xml file");
-			wscontext.getMiscInfo().setWscfdWsDescription(wscfwsdiss[0]);
-			
-			wscontext.getMiscInfo().setJaxrpcfile(Utils.getAbsolutePath(wscfwsdiss[0].getJaxrpcMappingFile(),wscffile.substring(0,wscffile.lastIndexOf('/'))));
-			wscontext.getMiscInfo().setWsdlFile(Utils.getAbsolutePath(wscfwsdiss[0].getWsdlFile(),wscffile.substring(0,wscffile.lastIndexOf('/'))));  
-    		if (isSeverSideCodeGenaration) {
-				//JAX-RPC mapper calling       
-				 GeneratorFactory.createGenerator(
-					 wscontext,
-					 GenerationConstants.SEI_AND_TYPES_GENERATOR).genarate();
-				(new ContextValidator(wscontext)).validateWithWSDL();
-    			//get and populate the symbol table 
-    			if(verbose)
-    					log.info("genarating ejb >>");
-   				GeneratorFactory.createGenerator(wscontext,
-    					GenerationConstants.EJB_GENERATOR).genarate();
-    			if(verbose)
-    					log.info("genarating web service wrapper >>");
-            
-    			GeneratorFactory.createGenerator(
-    					wscontext,
-    					GenerationConstants.AXIS_WEBSERVICE_WRAPPER_GENERATOR).genarate();
-				if(verbose)
-						log.info("genarating j2ee dd >>");
-				GeneratorFactory.createGenerator(
-						wscontext,GenerationConstants.J2EE_CONTAINER_DD_GENERATOR).genarate();
-				GeneratorFactory.createGenerator(
-						wscontext,GenerationConstants.BUILD_FILE_GENERATOR).genarate();
-		
-    	 } else {
-    		//JAX-RPC mapper calling
-    			if(verbose)
-    				log.info("starting client side code genaration .. ");
-    
-    			GeneratorFactory.createGenerator(
-    					wscontext,
-    					GenerationConstants.CLIENT_STUB_GENERATOR).genarate();
-				(new ContextValidator(wscontext)).validateWithWSDL();		
-    
-    		}
-    		
-			GeneratorFactory.createGenerator(
-						wscontext,
-						GenerationConstants.HANDLER_GENERATOR).genarate();
-    		
-        }  catch (Exception e) {
+            WSCFWebserviceDescription[] wscfwsdiss = wscfcontext.getWebServicesDescription();
+            //let us take the first discription
+            if (wscfwsdiss == null || wscfwsdiss.length == 0)
+                throw new UnrecoverableGenarationFault("no webservice discription found in the" +
+                        "webservice.xml file");
+            wscontext.getMiscInfo().setWscfdWsDescription(wscfwsdiss[0]);
+
+            wscontext.getMiscInfo().setJaxrpcfile(Utils.getAbsolutePath(wscfwsdiss[0].getJaxrpcMappingFile(), wscffile.substring(0, wscffile.lastIndexOf('/'))));
+            wscontext.getMiscInfo().setWsdlFile(Utils.getAbsolutePath(wscfwsdiss[0].getWsdlFile(), wscffile.substring(0, wscffile.lastIndexOf('/'))));
+            if (isSeverSideCodeGenaration) {
+                //JAX-RPC mapper calling       
+                GeneratorFactory.createGenerator(wscontext,
+                        GenerationConstants.SEI_AND_TYPES_GENERATOR).genarate();
+                (new ContextValidator(wscontext)).validateWithWSDL();
+                //get and populate the symbol table 
+                if (verbose)
+                    log.info("genarating ejb >>");
+                GeneratorFactory.createGenerator(wscontext,
+                        GenerationConstants.EJB_GENERATOR).genarate();
+                if (verbose)
+                    log.info("genarating web service wrapper >>");
+
+                GeneratorFactory.createGenerator(wscontext,
+                        GenerationConstants.AXIS_WEBSERVICE_WRAPPER_GENERATOR).genarate();
+                if (verbose)
+                    log.info("genarating j2ee dd >>");
+                GeneratorFactory.createGenerator(wscontext, GenerationConstants.J2EE_CONTAINER_DD_GENERATOR).genarate();
+                GeneratorFactory.createGenerator(wscontext, GenerationConstants.BUILD_FILE_GENERATOR).genarate();
+
+            } else {
+                //JAX-RPC mapper calling
+                if (verbose)
+                    log.info("starting client side code genaration .. ");
+
+                GeneratorFactory.createGenerator(wscontext,
+                        GenerationConstants.CLIENT_STUB_GENERATOR).genarate();
+                (new ContextValidator(wscontext)).validateWithWSDL();
+
+            }
+
+            GeneratorFactory.createGenerator(wscontext,
+                    GenerationConstants.HANDLER_GENERATOR).genarate();
+
+        } catch (Exception e) {
             e.printStackTrace();
             throw new GenerationFault(e);
         }
     }
-    
-    private String getAbsolutePath(String path,String confFileLocation){
-    	if(path.indexOf(":/")>-1||path.indexOf(":\\")>-1)
-			return path;
-    	return confFileLocation+"/"+path;
-    		
-    }
-    
 
-    
-    public static void main(String[] args)throws Exception{
-		//String wscffile  = "./samples/book/webservice.xml";
-		Ws4J2EEwithWSDL gen = new Ws4J2EEwithWSDL(args);
-		gen.genarate();
+    private String getAbsolutePath(String path, String confFileLocation) {
+        if (path.indexOf(":/") > -1 || path.indexOf(":\\") > -1)
+            return path;
+        return confFileLocation + "/" + path;
+
+    }
+
+    public static void main(String[] args) throws Exception {
+        //String wscffile  = "./samples/book/webservice.xml";
+        Ws4J2EEwithWSDL gen = new Ws4J2EEwithWSDL(args);
+        gen.genarate();
 
     }
 }

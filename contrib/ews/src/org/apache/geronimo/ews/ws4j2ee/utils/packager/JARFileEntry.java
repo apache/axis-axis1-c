@@ -59,30 +59,31 @@ import java.util.jar.JarEntry;
 
 /**
  * <p>reprsent the information about a entry added to the JAR file.
- * the Entry reprsent a Jar entry and the the source represent the file 
+ * the Entry reprsent a Jar entry and the the source represent the file
  * going to be added to the jar file.</p>
+ * 
  * @author Srinath perera(hemapani@opensource.lk)
  */
 public class JARFileEntry {
-	private JarEntry jarEntry;
-	private String source;
-	
-	public JARFileEntry(String jarfilePath,String source){
-		this.jarEntry = new JarEntry(jarfilePath);
-		this.source = source;
-		if(this.source == null || this.jarEntry == null)
-			throw new RuntimeException("source or jar entry can't be null");
-	}
+    private JarEntry jarEntry;
+    private String source;
+
+    public JARFileEntry(String jarfilePath, String source) {
+        this.jarEntry = new JarEntry(jarfilePath);
+        this.source = source;
+        if (this.source == null || this.jarEntry == null)
+            throw new RuntimeException("source or jar entry can't be null");
+    }
 
     /**
-     * @return
+     * @return 
      */
     public JarEntry getJarEntry() {
         return jarEntry;
     }
 
     /**
-     * @return
+     * @return 
      */
     public String getSource() {
         return source;

@@ -64,13 +64,14 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 /**
  * @author hemapani
  */
-public class AxisEmitterBasedWSCFContext implements WSCFContext{
-	private Emitter emitter;
-	private J2EEWebServiceContext j2eeweserviceContext;
-	public AxisEmitterBasedWSCFContext(Emitter emitter,J2EEWebServiceContext j2eeweserviceContext){
-		this.emitter = emitter;
-		this.j2eeweserviceContext = j2eeweserviceContext;
-	}
+public class AxisEmitterBasedWSCFContext implements WSCFContext {
+    private Emitter emitter;
+    private J2EEWebServiceContext j2eeweserviceContext;
+
+    public AxisEmitterBasedWSCFContext(Emitter emitter, J2EEWebServiceContext j2eeweserviceContext) {
+        this.emitter = emitter;
+        this.j2eeweserviceContext = j2eeweserviceContext;
+    }
 
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFContext#getDescription()
@@ -111,39 +112,39 @@ public class AxisEmitterBasedWSCFContext implements WSCFContext{
         // TODO Auto-generated method stub
         return null;
     }
-    
-    public void serialize(java.io.Writer out)throws GenerationFault{
-    	try{
-			out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-			out.write("<!DOCTYPE webservices PUBLIC \"-//IBM Corporation, Inc.//DTD J2EE Web services 1.0//EN\" \"http://www.ibm.com/webservices/dtd/j2ee_web_services_1_0.dtd\">\n");
-  			out.write("<webservices>\n");
-  			out.write("<webservice-description>\n");
-			out.write("<webservice-description-name>"+emitter.getServiceElementName()+"</webservice-description-name>\n");
-			out.write("<wsdl-file>"+j2eeweserviceContext.getMiscInfo().getWsdlFile()+"</wsdl-file>\n");
-			out.write("<jaxrpc-mapping-file>"+j2eeweserviceContext.getMiscInfo().getJaxrpcfile()+"</jaxrpc-mapping-file>\n");
-			out.write("<port-component>\n");
-			out.write("<port-component-name>"+emitter.getPortTypeName()+"</port-component-name>\n");
-			out.write("<wsdl-port>\n");
-			out.write("<namespaceURI>"+j2eeweserviceContext.getWSDLContext().getTargetNSURI()+"</namespaceURI>\n");
-			out.write("<localpart>"+j2eeweserviceContext.getMiscInfo().getTargetPort().getName()+"</localpart>\n");
-			out.write("</wsdl-port>\n");
-			out.write("<service-endpoint-interface>"+emitter.getCls().getName()+"</service-endpoint-interface>\n");
-			out.write("<service-impl-bean>\n");
+
+    public void serialize(java.io.Writer out) throws GenerationFault {
+        try {
+            out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+            out.write("<!DOCTYPE webservices PUBLIC \"-//IBM Corporation, Inc.//DTD J2EE Web services 1.0//EN\" \"http://www.ibm.com/webservices/dtd/j2ee_web_services_1_0.dtd\">\n");
+            out.write("<webservices>\n");
+            out.write("<webservice-description>\n");
+            out.write("<webservice-description-name>" + emitter.getServiceElementName() + "</webservice-description-name>\n");
+            out.write("<wsdl-file>" + j2eeweserviceContext.getMiscInfo().getWsdlFile() + "</wsdl-file>\n");
+            out.write("<jaxrpc-mapping-file>" + j2eeweserviceContext.getMiscInfo().getJaxrpcfile() + "</jaxrpc-mapping-file>\n");
+            out.write("<port-component>\n");
+            out.write("<port-component-name>" + emitter.getPortTypeName() + "</port-component-name>\n");
+            out.write("<wsdl-port>\n");
+            out.write("<namespaceURI>" + j2eeweserviceContext.getWSDLContext().getTargetNSURI() + "</namespaceURI>\n");
+            out.write("<localpart>" + j2eeweserviceContext.getMiscInfo().getTargetPort().getName() + "</localpart>\n");
+            out.write("</wsdl-port>\n");
+            out.write("<service-endpoint-interface>" + emitter.getCls().getName() + "</service-endpoint-interface>\n");
+            out.write("<service-impl-bean>\n");
 			
-			//TODO let usprint the port type name for now here
-			//we got to print the ejb name here parsing the ejb-jar.xml
-			String ejbName =  j2eeweserviceContext.getMiscInfo().getEjbName();
-			if(ejbName == null)
-				ejbName = emitter.getPortTypeName();
-			out.write("<ejb-link >"+ejbName+"</ejb-link>\n");
-			
-			out.write("</service-impl-bean>\n");
-			out.write("</port-component>\n");
-			out.write("<port-component>\n");
-			out.write("</webservice-description>\n");
-			out.write("</webservices>\n");
-    	}catch(Exception e){
-		}
+            //TODO let usprint the port type name for now here
+            //we got to print the ejb name here parsing the ejb-jar.xml
+            String ejbName = j2eeweserviceContext.getMiscInfo().getEjbName();
+            if (ejbName == null)
+                ejbName = emitter.getPortTypeName();
+            out.write("<ejb-link >" + ejbName + "</ejb-link>\n");
+
+            out.write("</service-impl-bean>\n");
+            out.write("</port-component>\n");
+            out.write("<port-component>\n");
+            out.write("</webservice-description>\n");
+            out.write("</webservices>\n");
+        } catch (Exception e) {
+        }
     }
 
 }

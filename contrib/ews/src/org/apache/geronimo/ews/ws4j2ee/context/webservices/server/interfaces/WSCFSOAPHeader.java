@@ -56,19 +56,20 @@ package org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces;
 
 /**
  * This interface is published to abstract the SOAP header element in the webservices.xml which is a layer 4 elment.
- *
  */
 public interface WSCFSOAPHeader {
-	
-	/**
-	 * gets the local part of the soap header
-	 * @return local part
-	 */
-	public String getLocalpart() ;
-	
-	/**
-	 * Gets teh namespace of the SOAP header
-	 * @return namespace
-	 */
-	public String getNamespaceURI() ;
+
+    /**
+     * gets the local part of the soap header
+     * 
+     * @return local part
+     */
+    public String getLocalpart();
+
+    /**
+     * Gets teh namespace of the SOAP header
+     * 
+     * @return namespace
+     */
+    public String getNamespaceURI();
 }

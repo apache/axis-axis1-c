@@ -66,77 +66,77 @@ import java.util.Vector;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 
-
 /**
  * create a jar file with given set of jar entries.
  * It works like
- * <ol> 
- * 		<li>if no extension given the .class is added to the extenstion</li>
- * 		<li>then file with the given name is tried</li>
- * 		<li>if that failed the name is tired to load as a stream form the 
- * 			class path</li>
+ * <ol>
+ * <li>if no extension given the .class is added to the extenstion</li>
+ * <li>then file with the given name is tried</li>
+ * <li>if that failed the name is tired to load as a stream form the
+ * class path</li>
  * </ol>
+ * 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class JARFile {
-	private Vector jarEntries;
-	private File path; 
-	public JARFile(String path,Vector entries){
-		jarEntries = entries;
-		this.path = new File(path);
-	}
-	
-	public JARFile(File path){
-		this.path = path;
-		jarEntries = new Vector();
-	}
-	
-	public void addJarEntry(JARFileEntry entry){
-		this.jarEntries.add(entry);
-	}
-	
-	public void createNewJarFile()throws IOException{
-		if(!path.exists())
-			path.createNewFile();
-			
-		System.out.println("creating "+path.getAbsolutePath()+".......");	
+    private Vector jarEntries;
+    private File path;
 
-		BufferedOutputStream bo = new BufferedOutputStream(new FileOutputStream(path));
-		JarOutputStream jo = new JarOutputStream(bo);
+    public JARFile(String path, Vector entries) {
+        jarEntries = entries;
+        this.path = new File(path);
+    }
 
-		for(int i = 0;i<jarEntries.size();i++){
+    public JARFile(File path) {
+        this.path = path;
+        jarEntries = new Vector();
+    }
 
-			JARFileEntry jarentry = (JARFileEntry)jarEntries.get(i);
-			System.out.println(jarentry.getSource()+" adding ..");	
-			
-			File input = new File(jarentry.getSource());
-			InputStream instream = null;
-			
-			if(input.exists())
-				instream = new FileInputStream(input);
-			else
-				instream = JARFile.class.getClassLoader()
-					.getResourceAsStream(jarentry.getSource());	
-			
-			
-			BufferedInputStream source = new BufferedInputStream(instream);
-	
-			JarEntry je = jarentry.getJarEntry();
-			jo.putNextEntry(je);
-	
-			byte[] buf = new byte[1024];
-			int anz;
-	     
-			while ((anz = source.read(buf)) != -1) {
-			  jo.write(buf, 0, anz);
-			}
-			jo.flush();
-			jo.closeEntry();
-			instream.close();
-			source.close();
-		}	
-		jo.close();
-		bo.close();	
-	}
+    public void addJarEntry(JARFileEntry entry) {
+        this.jarEntries.add(entry);
+    }
+
+    public void createNewJarFile() throws IOException {
+        if (!path.exists())
+            path.createNewFile();
+
+        System.out.println("creating " + path.getAbsolutePath() + ".......");
+
+        BufferedOutputStream bo = new BufferedOutputStream(new FileOutputStream(path));
+        JarOutputStream jo = new JarOutputStream(bo);
+
+        for (int i = 0; i < jarEntries.size(); i++) {
+
+            JARFileEntry jarentry = (JARFileEntry) jarEntries.get(i);
+            System.out.println(jarentry.getSource() + " adding ..");
+
+            File input = new File(jarentry.getSource());
+            InputStream instream = null;
+
+            if (input.exists())
+                instream = new FileInputStream(input);
+            else
+                instream = JARFile.class.getClassLoader()
+                        .getResourceAsStream(jarentry.getSource());
+
+            BufferedInputStream source = new BufferedInputStream(instream);
+
+            JarEntry je = jarentry.getJarEntry();
+            jo.putNextEntry(je);
+
+            byte[] buf = new byte[1024];
+            int anz;
+
+            while ((anz = source.read(buf)) != -1) {
+                jo.write(buf, 0, anz);
+            }
+            jo.flush();
+            jo.closeEntry();
+            instream.close();
+            source.close();
+        }
+        jo.close();
+        bo.close();
+    }
 
 }

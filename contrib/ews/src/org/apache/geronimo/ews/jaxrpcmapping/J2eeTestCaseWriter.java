@@ -54,19 +54,6 @@
  */
 package org.apache.geronimo.ews.jaxrpcmapping;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.wsdl.Binding;
-import javax.wsdl.Fault;
-import javax.wsdl.Operation;
-import javax.wsdl.OperationType;
-import javax.wsdl.Port;
-import javax.wsdl.PortType;
-import javax.xml.rpc.holders.BooleanHolder;
-
 import org.apache.axis.utils.JavaUtils;
 import org.apache.axis.utils.Messages;
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
@@ -78,8 +65,21 @@ import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.toJava.JavaClassWriter;
 import org.apache.axis.wsdl.toJava.Utils;
 
+import javax.wsdl.Binding;
+import javax.wsdl.Fault;
+import javax.wsdl.Operation;
+import javax.wsdl.OperationType;
+import javax.wsdl.Port;
+import javax.wsdl.PortType;
+import javax.xml.rpc.holders.BooleanHolder;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.Map;
+
 /**
  * This is Wsdl2java's TestCase writer.  It writes the <serviceName>TestCase.java file.
+ * 
  * @author Ias (iasandcb@tmax.co.kr)
  * @deprecated no more used by J2eeGeneratorFactory
  */
@@ -90,10 +90,9 @@ public class J2eeTestCaseWriter extends JavaClassWriter {
     /**
      * Constructor.
      */
-    protected J2eeTestCaseWriter(
-            J2eeEmitter emitter,
-            ServiceEntry sEntry,
-            SymbolTable symbolTable) {
+    protected J2eeTestCaseWriter(J2eeEmitter emitter,
+                                 ServiceEntry sEntry,
+                                 SymbolTable symbolTable) {
         super(emitter, sEntry.getName() + "TestCase", "testCase");
         this.sEntry = sEntry;
         this.symbolTable = symbolTable;
@@ -146,7 +145,7 @@ public class J2eeTestCaseWriter extends JavaClassWriter {
 
             PortType portType = binding.getPortType();
 
-            writeComment(pw, p.getDocumentationElement(),true);
+            writeComment(pw, p.getDocumentationElement(), true);
             writeServiceTestCode(pw, portName, portType, bEntry);
         }
     } // writeFileBody
@@ -158,8 +157,8 @@ public class J2eeTestCaseWriter extends JavaClassWriter {
     private int counter = 1;
 
     private final void writeServiceTestCode(PrintWriter pw,
-            String portName, PortType portType,
-            BindingEntry bEntry) throws IOException {
+                                            String portName, PortType portType,
+                                            BindingEntry bEntry) throws IOException {
         Iterator ops = portType.getOperations().iterator();
         while (ops.hasNext()) {
             Operation op = (Operation) ops.next();
@@ -183,7 +182,6 @@ public class J2eeTestCaseWriter extends JavaClassWriter {
             String bindingType = bEntry.getName() + "Stub";
             writeBindingAssignment(pw, bindingType, portName);
 
-            
             pw.println("        // Test operation");
             String indent = "";
             Map faultMap = op.getFaults();
@@ -210,7 +208,7 @@ public class J2eeTestCaseWriter extends JavaClassWriter {
                 }
             }
 
-            pw.print  ("        " + indent);
+            pw.print("        " + indent);
 
             if (params.returnParam != null) {
                 pw.print("value = ");
@@ -262,15 +260,14 @@ public class J2eeTestCaseWriter extends JavaClassWriter {
                     count++;
                     Fault f = (Fault) i.next();
                     pw.print("        catch (");
-                    pw.print(Utils.getFullExceptionName(
-                            f.getMessage(), symbolTable));
+                    pw.print(Utils.getFullExceptionName(f.getMessage(), symbolTable));
                     pw.println(" e" + count + ") {");
                     pw.print("            ");
                     pw.println("throw new junit.framework.AssertionFailedError(\"" + f.getName() + " Exception caught: \" + e" + count + ");");
                     pw.println("        }");
                 }
             }
-            
+
             pw.println("        " + indent + "// TBD - validate results");
 
             /*
@@ -290,7 +287,7 @@ public class J2eeTestCaseWriter extends JavaClassWriter {
     } // writeServiceTestCode
 
     public final void writeBindingAssignment(PrintWriter pw,
-            String bindingType, String portName) throws IOException {
+                                             String bindingType, String portName) throws IOException {
         pw.println("        " + bindingType + " binding;");
         pw.println("        try {");
         pw.println("            binding = (" + bindingType + ")");
@@ -298,7 +295,7 @@ public class J2eeTestCaseWriter extends JavaClassWriter {
         pw.println("Locator" + "().get" + portName + "();");
         pw.println("        }");
         pw.println("        catch (" + javax.xml.rpc.ServiceException.class.getName() + " jre) {");
-        pw.println("            if(jre.getLinkedCause()!=null)"); 
+        pw.println("            if(jre.getLinkedCause()!=null)");
         pw.println("                jre.getLinkedCause().printStackTrace();");
         pw.println("            throw new junit.framework.AssertionFailedError(\"JAX-RPC ServiceException caught: \" + jre);");
         pw.println("        }");

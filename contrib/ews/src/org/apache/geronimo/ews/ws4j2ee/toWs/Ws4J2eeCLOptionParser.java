@@ -55,191 +55,188 @@
 
 package org.apache.geronimo.ews.ws4j2ee.toWs;
 
-import java.util.List;
-
 import org.apache.axis.utils.CLArgsParser;
 import org.apache.axis.utils.CLOption;
 import org.apache.axis.utils.CLOptionDescriptor;
+
+import java.util.List;
 
 /**
  * @author hemapani
  */
 public class Ws4J2eeCLOptionParser {
-	// Define our short one-letter option identifiers.
-	protected static final int SERVER_OPT = 's';
-	protected static final int SKELETON_DEPLOY_OPT = 'S';
-	protected static final int NAMESPACE_OPT = 'N';
-	protected static final int NAMESPACE_FILE_OPT = 'f';
-	protected static final int OUTPUT_OPT = 'o';
-	protected static final int SCOPE_OPT = 'd';
-	protected static final int TEST_OPT = 't';
-	protected static final int PACKAGE_OPT = 'p';
-	protected static final int ALL_OPT = 'a';
-	protected static final int TYPEMAPPING_OPT = 'T';
-	protected static final int FACTORY_CLASS_OPT = 'F';
-	protected static final int HELPER_CLASS_OPT = 'H';
-	protected static final int USERNAME_OPT = 'U';
-	protected static final int PASSWORD_OPT = 'P';
-	
-	private String wscffile;
-	private String outputDirectory = ".";
-	private boolean isServerSide = false; 
-	private String userName;
-	private String password;
-	
-	protected static final CLOptionDescriptor[] options = new CLOptionDescriptor[]{
-		new CLOptionDescriptor("server-side",
-				CLOptionDescriptor.ARGUMENT_OPTIONAL,
-				SERVER_OPT,
-				"Genarate Server side codes"),
-		new CLOptionDescriptor("output",
-				CLOptionDescriptor.ARGUMENT_REQUIRED,
-				OUTPUT_OPT,
-				"output Directory "),
-		new CLOptionDescriptor("user",
-				CLOptionDescriptor.ARGUMENT_REQUIRED,
-				USERNAME_OPT,
-				"user name"),
-		new CLOptionDescriptor("password",
-				CLOptionDescriptor.ARGUMENT_REQUIRED,
-				PASSWORD_OPT,
-				"password"),
-	};
-	
-	public Ws4J2eeCLOptionParser(String[] args){
-    
-		CLArgsParser argsParser = new CLArgsParser(args, options);
+    // Define our short one-letter option identifiers.
+    protected static final int SERVER_OPT = 's';
+    protected static final int SKELETON_DEPLOY_OPT = 'S';
+    protected static final int NAMESPACE_OPT = 'N';
+    protected static final int NAMESPACE_FILE_OPT = 'f';
+    protected static final int OUTPUT_OPT = 'o';
+    protected static final int SCOPE_OPT = 'd';
+    protected static final int TEST_OPT = 't';
+    protected static final int PACKAGE_OPT = 'p';
+    protected static final int ALL_OPT = 'a';
+    protected static final int TYPEMAPPING_OPT = 'T';
+    protected static final int FACTORY_CLASS_OPT = 'F';
+    protected static final int HELPER_CLASS_OPT = 'H';
+    protected static final int USERNAME_OPT = 'U';
+    protected static final int PASSWORD_OPT = 'P';
 
-		// Print parser errors, if any
-		if (null != argsParser.getErrorString()) {
-			System.err.println(argsParser.getErrorString());
-			//printUsage();
-		}
+    private String wscffile;
+    private String outputDirectory = ".";
+    private boolean isServerSide = false;
+    private String userName;
+    private String password;
 
-		// Get a list of parsed options
-		List clOptions = argsParser.getArguments();
-		int size = clOptions.size();
+    protected static final CLOptionDescriptor[] options = new CLOptionDescriptor[]{
+        new CLOptionDescriptor("server-side",
+                CLOptionDescriptor.ARGUMENT_OPTIONAL,
+                SERVER_OPT,
+                "Genarate Server side codes"),
+        new CLOptionDescriptor("output",
+                CLOptionDescriptor.ARGUMENT_REQUIRED,
+                OUTPUT_OPT,
+                "output Directory "),
+        new CLOptionDescriptor("user",
+                CLOptionDescriptor.ARGUMENT_REQUIRED,
+                USERNAME_OPT,
+                "user name"),
+        new CLOptionDescriptor("password",
+                CLOptionDescriptor.ARGUMENT_REQUIRED,
+                PASSWORD_OPT,
+                "password"),
+    };
 
-		try {
-			// Parse the options and configure the emitter as appropriate.
-			for (int i = 0; i < size; i++) {
-				parseOption((CLOption)clOptions.get(i));
-			}
+    public Ws4J2eeCLOptionParser(String[] args) {
 
-			// validate argument combinations
-			//
-			//validateOptions();
+        CLArgsParser argsParser = new CLArgsParser(args, options);
 
-			//parser.run(wsdlURI);
+        // Print parser errors, if any
+        if (null != argsParser.getErrorString()) {
+            System.err.println(argsParser.getErrorString());
+            //printUsage();
+        }
 
-			// everything is good
-			//System.exit(0);
-		}
-		catch (Throwable t) {
-			t.printStackTrace();
-			System.exit(1);
-		}
+        // Get a list of parsed options
+        List clOptions = argsParser.getArguments();
+        int size = clOptions.size();
 
-	}
+        try {
+            // Parse the options and configure the emitter as appropriate.
+            for (int i = 0; i < size; i++) {
+                parseOption((CLOption) clOptions.get(i));
+            }
 
-	protected void parseOption(CLOption option) {
-		switch (option.getId()) {
-			 case SERVER_OPT:
-			 	 isServerSide = true;	
+            // validate argument combinations
+            //
+            //validateOptions();
 
-				 break;
+            //parser.run(wsdlURI);
 
-			 case OUTPUT_OPT:
-			 	 outputDirectory = option.getArgument();
-				 break;
+            // everything is good
+            //System.exit(0);
+        } catch (Throwable t) {
+            t.printStackTrace();
+            System.exit(1);
+        }
 
+    }
 
-			 case USERNAME_OPT:
-				userName = option.getArgument();
-				 break;
+    protected void parseOption(CLOption option) {
+        switch (option.getId()) {
+            case SERVER_OPT:
+                isServerSide = true;
 
-			 case PASSWORD_OPT:
-				 password = option.getArgument();
-				 break;
+                break;
 
-				case CLOption.TEXT_ARGUMENT:
-				if (wscffile != null) {
-					throw new UnrecoverableGenarationFault("Only one arguement allowed ");
-					//printUsage();
-				}
-				wscffile = option.getArgument();
-				break;
-			default:
-				throw new UnrecoverableGenarationFault("unknown option");	
-		 }
-	} // parseOption
+            case OUTPUT_OPT:
+                outputDirectory = option.getArgument();
+                break;
 
+            case USERNAME_OPT:
+                userName = option.getArgument();
+                break;
+
+            case PASSWORD_OPT:
+                password = option.getArgument();
+                break;
+
+            case CLOption.TEXT_ARGUMENT:
+                if (wscffile != null) {
+                    throw new UnrecoverableGenarationFault("Only one arguement allowed ");
+                    //printUsage();
+                }
+                wscffile = option.getArgument();
+                break;
+            default:
+                throw new UnrecoverableGenarationFault("unknown option");
+        }
+    } // parseOption
 
     /**
-     * @return
+     * @return 
      */
     public String getWscffile() {
         return wscffile;
     }
 
     /**
-     * @param string
+     * @param string 
      */
     public void setWscffile(String string) {
         wscffile = string;
     }
 
     /**
-     * @return
+     * @return 
      */
     public boolean isServerSide() {
         return isServerSide;
     }
 
     /**
-     * @return
+     * @return 
      */
     public String getOutputDirectory() {
         return outputDirectory;
     }
 
     /**
-     * @return
+     * @return 
      */
     public String getPassword() {
         return password;
     }
 
     /**
-     * @return
+     * @return 
      */
     public String getUserName() {
         return userName;
     }
 
     /**
-     * @param b
+     * @param b 
      */
     public void setServerSide(boolean b) {
         isServerSide = b;
     }
 
     /**
-     * @param string
+     * @param string 
      */
     public void setOutputDirectory(String string) {
         outputDirectory = string;
     }
 
     /**
-     * @param string
+     * @param string 
      */
     public void setPassword(String string) {
         password = string;
     }
 
     /**
-     * @param string
+     * @param string 
      */
     public void setUserName(String string) {
         userName = string;

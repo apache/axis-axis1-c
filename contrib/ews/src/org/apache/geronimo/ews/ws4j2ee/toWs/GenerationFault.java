@@ -54,6 +54,7 @@
  */
 
 package org.apache.geronimo.ews.ws4j2ee.toWs;
+
 /**
  * <p>This denotes the Exception occured at the code genaration.
  * There is a isssue of wrapping the Exception such that JDK1.3 compatibility.
@@ -62,18 +63,18 @@ package org.apache.geronimo.ews.ws4j2ee.toWs;
 public class GenerationFault extends Exception {
     /**
      * Nested Exception to hold wrapped exception.
-     *
+     * <p/>
      * <p>This field predates the general-purpose exception chaining facility.
      * The {@link Throwable#getCause()} method is now the preferred means of
      * obtaining this information.
-     *
+     * 
      * @serial
      */
     public Throwable detail;
 
     public GenerationFault(Exception e) {
-		initCause(null); // Disallow subsequent initCause
-		detail = e;
+        initCause(null); // Disallow subsequent initCause
+        detail = e;
     }
 
     public GenerationFault(String message) {
@@ -83,8 +84,8 @@ public class GenerationFault extends Exception {
     /**
      * Constructs a <code>Exception</code> with the specified
      * detail message and nested exception.
-     *
-     * @param s the detail message
+     * 
+     * @param s  the detail message
      * @param ex the nested exception
      */
     public GenerationFault(String s, Throwable ex) {
@@ -104,24 +105,24 @@ public class GenerationFault extends Exception {
             return super.getMessage();
         } else {
             return super.getMessage()
-                + "; nested exception is: \n\t"
-                + detail.toString();
+                    + "; nested exception is: \n\t"
+                    + detail.toString();
         }
     }
 
     /**
      * Returns the wrapped exception (the <i>cause</i>).
-     *
-     * @return  the wrapped exception, which may be <tt>null</tt>.
+     * 
+     * @return the wrapped exception, which may be <tt>null</tt>.
      */
     public Throwable getCause() {
         return detail;
     }
-    
-    public static GenerationFault createGenerationFault(Exception e){
-    	if(e instanceof GenerationFault){
-    		return (GenerationFault)e;
-    	}else
-    		return new GenerationFault(e);
+
+    public static GenerationFault createGenerationFault(Exception e) {
+        if (e instanceof GenerationFault) {
+            return (GenerationFault) e;
+        } else
+            return new GenerationFault(e);
     }
 }

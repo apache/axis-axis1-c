@@ -56,20 +56,21 @@ package org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces;
 
 /**
  * @author Chathura Herath
- *
  */
 public interface WSCFWSDLPort {
-	
-	/**
-	 * Gets the local part of the WSDL port element
-	 * @return local part
-	 */
-	public String getLocalpart();
-	
-	/**
-	 * Gets the namespace URI of the WSDL port element
-	 * @return
-	 */
-	public String getNamespaceURI();
+
+    /**
+     * Gets the local part of the WSDL port element
+     * 
+     * @return local part
+     */
+    public String getLocalpart();
+
+    /**
+     * Gets the namespace URI of the WSDL port element
+     * 
+     * @return 
+     */
+    public String getNamespaceURI();
 
 }

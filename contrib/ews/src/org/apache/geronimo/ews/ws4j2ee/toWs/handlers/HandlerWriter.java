@@ -62,67 +62,65 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 
 /**
- * <p>Simpley print the Handler without much mess.</p> 
+ * <p>Simpley print the Handler without much mess.</p>
+ * 
  * @author Srinath perera(hemapani@opensource.lk)
  */
 public class HandlerWriter extends AbstractWriter {
-	private WSCFHandler handler;
-	private String className = null;
-	private String packageName = null;
-	
+    private WSCFHandler handler;
+    private String className = null;
+    private String packageName = null;
+
     /**
-     * @param j2eewscontext
-     * @throws GenerationFault
+     * @param j2eewscontext 
+     * @throws GenerationFault 
      */
-    public HandlerWriter(J2EEWebServiceContext j2eewscontext,WSCFHandler handler)
-        throws GenerationFault {
+    public HandlerWriter(J2EEWebServiceContext j2eewscontext, WSCFHandler handler)
+            throws GenerationFault {
         super(j2eewscontext);
         this.handler = handler;
-        
+
         className = Utils.getClassNameFromQuallifiedName(handler.getHandlerClass());
-		packageName = Utils.getPackageNameFromQuallifiedName(handler.getHandlerClass());
+        packageName = Utils.getPackageNameFromQuallifiedName(handler.getHandlerClass());
     }
 
     public String getFileName() {
         return j2eewscontext.getMiscInfo().getOutPutPath()
-        	+"/jaxrpc/"+packageName.replace('.','/')+"/"+className+".java";
+                + "/jaxrpc/" + packageName.replace('.', '/') + "/" + className + ".java";
     }
 
     /**
      * just print it out
      */
     public void writeCode() throws GenerationFault {
-    	super.writeCode();
-		out.write("package "+packageName+";\n");
-    	out.write("public class "+ className+" extends org.apache.axis.handlers.BasicHandler{\n");
+        super.writeCode();
+        out.write("package " + packageName + ";\n");
+        out.write("public class " + className + " extends org.apache.axis.handlers.BasicHandler{\n");
 
-		out.write("\tpublic class "+ className+"(){");
-		out.write("\t\tsetName(\""+handler.getHandlerName()+"\");\n");
-		out.write("\t}\n");
+        out.write("\tpublic class " + className + "(){");
+        out.write("\t\tsetName(\"" + handler.getHandlerName() + "\");\n");
+        out.write("\t}\n");
 
+        out.write("\tpublic void init(){}\n");
+        out.write("\tpublic void cleanup(){}\n");
+        out.write("\tpublic void onFault(MessageContext msgContext){}");
+        out.write("\tpublic abstract void invoke(MessageContext msgContext) throws AxisFault{\n");
+        out.write("\t\t//write your implementation here\n");
+        out.write("\t}\n");
 
-		out.write("\tpublic void init(){}\n");
-		out.write("\tpublic void cleanup(){}\n");
-		out.write("\tpublic void onFault(MessageContext msgContext){}");
-		out.write("\tpublic abstract void invoke(MessageContext msgContext) throws AxisFault{\n");
-		out.write("\t\t//write your implementation here\n");
-		out.write("\t}\n");
-		
-		out.write("\tpublic java.util.List getUnderstoodHeaders() {\n");
-		out.write("\t\t	java.util.List list = new java.util.ArrayList();\n");
-		String[] headers = handler.getSoapHeader();
-		for(int i = 0;i<headers.length;i++){
-			out.write("\t\tjavax.xml.namespace.QName name"+i+" = new javax.xml.namespace.QName(\""+headers[i]+"\");\n");
-			out.write("\t\tlist.add(name"+i+");\n");
-		}
-		out.write("\t\treturn list;\n");
-		out.write("\t}\n");
-		
-		out.write("}");
-		out.flush();
-		out.close();
+        out.write("\tpublic java.util.List getUnderstoodHeaders() {\n");
+        out.write("\t\t	java.util.List list = new java.util.ArrayList();\n");
+        String[] headers = handler.getSoapHeader();
+        for (int i = 0; i < headers.length; i++) {
+            out.write("\t\tjavax.xml.namespace.QName name" + i + " = new javax.xml.namespace.QName(\"" + headers[i] + "\");\n");
+            out.write("\t\tlist.add(name" + i + ");\n");
+        }
+        out.write("\t\treturn list;\n");
+        out.write("\t}\n");
+
+        out.write("}");
+        out.flush();
+        out.close();
     }
-    
-
 
 }

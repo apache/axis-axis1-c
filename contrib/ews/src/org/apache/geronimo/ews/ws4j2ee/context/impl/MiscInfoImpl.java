@@ -55,10 +55,6 @@
 
 package org.apache.geronimo.ews.ws4j2ee.context.impl;
 
-import java.util.ArrayList;
-
-import javax.wsdl.Port;
-
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
 import org.apache.axis.wsdl.symbolTable.ServiceEntry;
@@ -68,16 +64,19 @@ import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSC
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFWebserviceDescription;
 import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenarationFault;
 
+import javax.wsdl.Port;
+import java.util.ArrayList;
+
 /**
  * @author hemapani
  */
 public class MiscInfoImpl implements MiscInfo {
-	private WSCFWebserviceDescription wscfdWsDesxription;
-	private WSCFPortComponent wscfport;
-	private String j2eeContainerDDName;
-	
+    private WSCFWebserviceDescription wscfdWsDesxription;
+    private WSCFPortComponent wscfport;
+    private String j2eeContainerDDName;
+
     private String outputPath = ".";
-    
+
     private ServiceEntry service;
     private BindingEntry binding;
     private PortTypeEntry portType;
@@ -85,20 +84,20 @@ public class MiscInfoImpl implements MiscInfo {
 
     private String ejbsei = null;
     private String ejbbean = null;
-	private String ejbhome = null;
-	private String ejbName = null;
-	private String axisSEI;
-	private ArrayList operations;
-	private boolean verbose = true;
-	private String wsConfFileLocation; 
-	private String wsdlFile;
-	private String jaxrpcfile;
+    private String ejbhome = null;
+    private String ejbName = null;
+    private String axisSEI;
+    private ArrayList operations;
+    private boolean verbose = true;
+    private String wsConfFileLocation;
+    private String wsdlFile;
+    private String jaxrpcfile;
 
     /**
      * 
      */
     public MiscInfoImpl() {
-		operations = new ArrayList();
+        operations = new ArrayList();
     }
 
     public String getOutPutPath() {
@@ -134,166 +133,166 @@ public class MiscInfoImpl implements MiscInfo {
     }
 
     public void validate() {
-        if (portType == null || binding == null 
-        	|| ejbbean == null || ejbsei == null || ejbhome == null) {
+        if (portType == null || binding == null
+                || ejbbean == null || ejbsei == null || ejbhome == null) {
             throw new UnrecoverableGenarationFault("validation of MiscInfo failed");
         }
     }
+
     /**
-     * @return
+     * @return 
      */
     public String getEjbbean() {
         return ejbbean;
     }
 
     /**
-     * @return
+     * @return 
      */
     public String getEjbsei() {
         return ejbsei;
     }
 
     /**
-     * @param string
+     * @param string 
      */
     public void setEjbbean(String string) {
         ejbbean = string;
     }
 
     /**
-     * @param string
+     * @param string 
      */
     public void setEjbsei(String string) {
         ejbsei = string;
     }
 
     /**
-     * @return
+     * @return 
      */
     public String getEjbhome() {
         return ejbhome;
     }
 
     /**
-     * @param string
+     * @param string 
      */
     public void setEjbhome(String string) {
         ejbhome = string;
     }
 
     /**
-     * @return
+     * @return 
      */
     public WSCFWebserviceDescription getWscfdWsDesxription() {
         return wscfdWsDesxription;
     }
 
     /**
-     * @return
+     * @return 
      */
     public WSCFPortComponent getWscfport() {
         return wscfport;
     }
 
     /**
-     * @param description
+     * @param description 
      */
     public void setWscfdWsDescription(WSCFWebserviceDescription description) {
         wscfdWsDesxription = description;
     }
 
     /**
-     * @param component
+     * @param component 
      */
     public void setWscfport(WSCFPortComponent component) {
         wscfport = component;
     }
-    
-    
 
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#getSEIOperations()
      */
     public ArrayList getSEIOperations() {
-       return operations;
+        return operations;
     }
 
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#setSEIOperations(java.util.ArrayList)
      */
     public void setSEIOperations(SEIOperation operation) {
- 		this.operations.add(operation);
+        this.operations.add(operation);
     }
 
     /**
-     * @return
+     * @return 
      */
     public boolean isVerbose() {
         return verbose;
     }
 
     /**
-     * @return
+     * @return 
      */
     public String getWsConfFileLocation() {
         return wsConfFileLocation;
     }
 
     /**
-     * @param b
+     * @param b 
      */
     public void setVerbose(boolean b) {
         verbose = b;
     }
 
     /**
-     * @param string
+     * @param string 
      */
     public void setWsConfFileLocation(String string) {
         wsConfFileLocation = string;
     }
 
     /**
-     * @return
+     * @return 
      */
     public String getEjbName() {
         return ejbName;
     }
 
     /**
-     * @param string
+     * @param string 
      */
     public void setEjbName(String string) {
         ejbName = string;
     }
 
     /**
-     * @return
+     * @return 
      */
     public String getJaxrpcfile() {
         return jaxrpcfile;
     }
 
     /**
-     * @return
+     * @return 
      */
     public String getWsdlFile() {
         return wsdlFile;
     }
 
     /**
-     * @param string
+     * @param string 
      */
     public void setJaxrpcfile(String string) {
         jaxrpcfile = string;
     }
 
     /**
-     * @param string
+     * @param string 
      */
     public void setWsdlFile(String string) {
         wsdlFile = string;
     }
+
     /* (non-Javadoc)
      * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#getTargetPort()
      */
@@ -305,32 +304,32 @@ public class MiscInfoImpl implements MiscInfo {
      * @see org.apache.geronimo.ews.ws4j2ee.context.MiscInfo#setTargetPort(javax.wsdl.Port)
      */
     public void setTargetPort(Port port) {
-		this.port = port;
+        this.port = port;
     }
 
     /**
-     * @return
+     * @return 
      */
     public String getJaxrpcSEI() {
         return axisSEI;
     }
 
     /**
-     * @param string
+     * @param string 
      */
     public void setJaxrpcSEI(String string) {
         axisSEI = string;
     }
 
     /**
-     * @return
+     * @return 
      */
     public String getJ2eeContainerDDName() {
         return j2eeContainerDDName;
     }
 
     /**
-     * @param string
+     * @param string 
      */
     public void setJ2eeContainerDDName(String string) {
         j2eeContainerDDName = string;

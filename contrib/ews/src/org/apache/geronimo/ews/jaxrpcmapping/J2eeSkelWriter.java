@@ -54,11 +54,15 @@
  */
 package org.apache.geronimo.ews.jaxrpcmapping;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import org.apache.axis.Constants;
+import org.apache.axis.utils.Messages;
+import org.apache.axis.wsdl.symbolTable.BindingEntry;
+import org.apache.axis.wsdl.symbolTable.FaultInfo;
+import org.apache.axis.wsdl.symbolTable.Parameter;
+import org.apache.axis.wsdl.symbolTable.Parameters;
+import org.apache.axis.wsdl.symbolTable.SymbolTable;
+import org.apache.axis.wsdl.toJava.JavaClassWriter;
+import org.apache.axis.wsdl.toJava.Utils;
 
 import javax.wsdl.Binding;
 import javax.wsdl.BindingInput;
@@ -71,20 +75,16 @@ import javax.wsdl.extensions.UnknownExtensibilityElement;
 import javax.wsdl.extensions.soap.SOAPBody;
 import javax.wsdl.extensions.soap.SOAPOperation;
 import javax.xml.namespace.QName;
-
-import org.apache.axis.Constants;
-import org.apache.axis.utils.Messages;
-import org.apache.axis.wsdl.symbolTable.BindingEntry;
-import org.apache.axis.wsdl.symbolTable.FaultInfo;
-import org.apache.axis.wsdl.symbolTable.Parameter;
-import org.apache.axis.wsdl.symbolTable.Parameters;
-import org.apache.axis.wsdl.symbolTable.SymbolTable;
-import org.apache.axis.wsdl.toJava.JavaClassWriter;
-import org.apache.axis.wsdl.toJava.Utils;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * This is Wsdl2java's skeleton writer.  It writes the <BindingName>Skeleton.java
  * file which contains the <bindingName>Skeleton class.
+ * 
  * @author Ias (iasandcb@tmax.co.kr)
  * @deprecated no more used by J2eeGeneratorFactory
  */
@@ -96,10 +96,9 @@ public class J2eeSkelWriter extends JavaClassWriter {
     /**
      * Constructor.
      */
-    protected J2eeSkelWriter(
-            J2eeEmitter emitter,
-            BindingEntry bEntry,
-            SymbolTable symbolTable) {
+    protected J2eeSkelWriter(J2eeEmitter emitter,
+                             BindingEntry bEntry,
+                             SymbolTable symbolTable) {
         super(emitter, bEntry.getName() + "Skeleton", "skeleton");
         this.bEntry = bEntry;
         this.binding = bEntry.getBinding();
@@ -157,7 +156,7 @@ public class J2eeSkelWriter extends JavaClassWriter {
                     || type == OperationType.SOLICIT_RESPONSE) {
                 continue;
             }
-            
+
             Parameters parameters =
                     bEntry.getParameters(bindingOper.getOperation());
 
@@ -167,7 +166,7 @@ public class J2eeSkelWriter extends JavaClassWriter {
                 String javaOpName = Utils.xmlNameToJava(opName);
                 pw.println("        _params = new org.apache.axis.description.ParameterDesc [] {");
 
-                for (int j=0; j < parameters.list.size(); j++) {
+                for (int j = 0; j < parameters.list.size(); j++) {
                     Parameter p = (Parameter) parameters.list.get(j);
                     String modeStr;
                     switch (p.getMode()) {
@@ -181,9 +180,8 @@ public class J2eeSkelWriter extends JavaClassWriter {
                             modeStr = "org.apache.axis.description.ParameterDesc.INOUT";
                             break;
                         default:
-                            throw new IOException(
-                                Messages.getMessage("badParmMode00", 
-                                        (new Byte(p.getMode())).toString()));
+                            throw new IOException(Messages.getMessage("badParmMode00",
+                                    (new Byte(p.getMode())).toString()));
                     }
 
                     // Get the QNames representing the parameter name and type
@@ -194,13 +192,13 @@ public class J2eeSkelWriter extends JavaClassWriter {
                     String inHeader = p.isInHeader() ? "true" : "false";
                     String outHeader = p.isOutHeader() ? "true" : "false";
                     pw.println("            " +
-                        "new org.apache.axis.description.ParameterDesc(" +
-                        Utils.getNewQName(paramName) +
-                        ", " + modeStr +
-                        ", " + Utils.getNewQName(paramType) +
-                        ", " + Utils.getParameterTypeName(p) + ".class" +
-                        ", " + inHeader +
-                        ", " + outHeader + "), ");
+                            "new org.apache.axis.description.ParameterDesc(" +
+                            Utils.getNewQName(paramName) +
+                            ", " + modeStr +
+                            ", " + Utils.getNewQName(paramType) +
+                            ", " + Utils.getParameterTypeName(p) + ".class" +
+                            ", " + inHeader +
+                            ", " + outHeader + "), ");
                 }
 
                 pw.println("        };");
@@ -220,13 +218,13 @@ public class J2eeSkelWriter extends JavaClassWriter {
                     returnStr = "null";
                 }
                 pw.println("        _oper = new org.apache.axis.description.OperationDesc(\"" +
-                           javaOpName + "\", _params, " + returnStr + ");");
+                        javaOpName + "\", _params, " + returnStr + ");");
 
                 if (retType != null) {
                     pw.println("        _oper.setReturnType(" +
-                               Utils.getNewQName(retType) + ");");
+                            Utils.getNewQName(retType) + ");");
                     if (parameters.returnParam != null &&
-                        parameters.returnParam.isOutHeader()) {
+                            parameters.returnParam.isOutHeader()) {
                         pw.println("        _oper.setReturnHeader(true);");
                     }
                 }
@@ -234,8 +232,8 @@ public class J2eeSkelWriter extends JavaClassWriter {
                 // If we need to know the QName (if we have a namespace or
                 // the actual method name doesn't match the XML we expect),
                 // record it in the OperationDesc
-                QName elementQName = 
-                    Utils.getOperationQName(bindingOper, bEntry, symbolTable);
+                QName elementQName =
+                        Utils.getOperationQName(bindingOper, bEntry, symbolTable);
                 if (elementQName != null) {
                     pw.println("        _oper.setElementQName(" +
                             Utils.getNewQName(elementQName) + ");");
@@ -258,14 +256,14 @@ public class J2eeSkelWriter extends JavaClassWriter {
                         //TODO: After WSDL4J supports soap12, change this code
                         UnknownExtensibilityElement unkElement = (UnknownExtensibilityElement) elem;
                         QName name = unkElement.getElementType();
-                        if(name.getNamespaceURI().equals(Constants.URI_WSDL12_SOAP) && 
-                           name.getLocalPart().equals("operation")){
+                        if (name.getNamespaceURI().equals(Constants.URI_WSDL12_SOAP) &&
+                                name.getLocalPart().equals("operation")) {
                             String action = unkElement.getElement().getAttribute("soapAction");
                             if (action != null) {
                                 pw.println("        _oper.setSoapAction(\"" + action + "\");");
                                 found = true;
                             }
-                        }                    
+                        }
                     }
                 }
 
@@ -286,9 +284,9 @@ public class J2eeSkelWriter extends JavaClassWriter {
                         String opName = bindingOper.getOperation().getName();
                         String javaOpName = Utils.xmlNameToJava(opName);
                         pw.println("        _oper = " +
-                                   "new org.apache.axis.description.OperationDesc();");
+                                "new org.apache.axis.description.OperationDesc();");
                         pw.println("        _oper.setName(\"" +
-                                   javaOpName + "\");");
+                                javaOpName + "\");");
                     }
                     // Create FaultDesc items for each fault
                     Iterator it = faults.iterator();
@@ -297,26 +295,25 @@ public class J2eeSkelWriter extends JavaClassWriter {
                         QName faultQName = faultInfo.getQName();
                         QName faultXMLType = faultInfo.getXMLType();
                         String faultName = faultInfo.getName();
-                        String className = 
-                            Utils.getFullExceptionName(
-                               faultInfo.getMessage(), symbolTable);
+                        String className =
+                                Utils.getFullExceptionName(faultInfo.getMessage(), symbolTable);
                         pw.println("        _fault = " +
-                                   "new org.apache.axis.description.FaultDesc();");
+                                "new org.apache.axis.description.FaultDesc();");
                         if (faultName != null) {
                             pw.println("        _fault.setName(\"" +
-                                       faultName + "\");");
+                                    faultName + "\");");
                         }
                         if (faultQName != null) {
                             pw.println("        _fault.setQName(" +
-                                       Utils.getNewQName(faultQName)  + ");");
+                                    Utils.getNewQName(faultQName) + ");");
                         }
                         if (className != null) {
                             pw.println("        _fault.setClassName(\"" +
-                                       className + "\");");
+                                    className + "\");");
                         }
                         if (faultXMLType != null) {
                             pw.println("        _fault.setXmlType(" +
-                                       Utils.getNewQName(faultXMLType)  + ");");
+                                    Utils.getNewQName(faultXMLType) + ");");
                         }
                         pw.println("        _oper.addFault(_fault);");
                     }
@@ -353,12 +350,12 @@ public class J2eeSkelWriter extends JavaClassWriter {
                     //TODO: After WSDL4J supports soap12, change this code
                     UnknownExtensibilityElement unkElement = (UnknownExtensibilityElement) obj;
                     QName name = unkElement.getElementType();
-                    if(name.getNamespaceURI().equals(Constants.URI_WSDL12_SOAP) && 
-                       name.getLocalPart().equals("operation")){
+                    if (name.getNamespaceURI().equals(Constants.URI_WSDL12_SOAP) &&
+                            name.getLocalPart().equals("operation")) {
                         if (unkElement.getElement().getAttribute("soapAction") != null) {
                             soapAction = unkElement.getElement().getAttribute("soapAction");
                         }
-                    }                    
+                    }
                 }
             }
             // Get the namespace for the operation from the <soap:body>
@@ -370,8 +367,7 @@ public class J2eeSkelWriter extends JavaClassWriter {
             if (input != null) {
                 bindingMsgIterator =
                         input.getExtensibilityElements().iterator();
-            }
-            else {
+            } else {
                 output = operation.getBindingOutput();
                 if (output != null) {
                     bindingMsgIterator =
@@ -393,8 +389,8 @@ public class J2eeSkelWriter extends JavaClassWriter {
                         //TODO: After WSDL4J supports soap12, change this code
                         UnknownExtensibilityElement unkElement = (UnknownExtensibilityElement) obj;
                         QName name = unkElement.getElementType();
-                        if(name.getNamespaceURI().equals(Constants.URI_WSDL12_SOAP) && 
-                           name.getLocalPart().equals("body")){
+                        if (name.getNamespaceURI().equals(Constants.URI_WSDL12_SOAP) &&
+                                name.getLocalPart().equals("body")) {
                             namespace = unkElement.getElement().getAttribute("namespace");
                             if (namespace == null) {
                                 namespace = symbolTable.getDefinition().getTargetNamespace();
@@ -402,7 +398,7 @@ public class J2eeSkelWriter extends JavaClassWriter {
                             if (namespace == null)
                                 namespace = "";
                             break;
-                        }                    
+                        }
                     }
                 }
             }
@@ -415,8 +411,7 @@ public class J2eeSkelWriter extends JavaClassWriter {
                     || type == OperationType.SOLICIT_RESPONSE) {
                 pw.println(parameters.signature);
                 pw.println();
-            }
-            else {
+            } else {
                 writeOperation(pw,
                         operation, parameters, soapAction, namespace);
             }
@@ -426,14 +421,12 @@ public class J2eeSkelWriter extends JavaClassWriter {
     /**
      * Write the skeleton code for the given operation.
      */
-    private void writeOperation(
-            PrintWriter pw,
-            BindingOperation operation,
-            Parameters parms,
-            String soapAction,
-            String namespace
-            ) {
-        writeComment(pw, operation.getDocumentationElement(),true);
+    private void writeOperation(PrintWriter pw,
+                                BindingOperation operation,
+                                Parameters parms,
+                                String soapAction,
+                                String namespace) {
+        writeComment(pw, operation.getDocumentationElement(), true);
 
         // The skeleton used to have specialized operation signatures.
         // now the same signature is used as the portType

@@ -54,10 +54,6 @@
  */
 package org.apache.geronimo.ews.jaxrpcmapping;
 
-import java.io.IOException;
-
-import javax.wsdl.Binding;
-
 import org.apache.axis.utils.Messages;
 import org.apache.axis.wsdl.gen.Generator;
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
@@ -65,9 +61,13 @@ import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.toJava.Utils;
 
+import javax.wsdl.Binding;
+import java.io.IOException;
+
 /**
  * This is Wsdl2java's Binding Writer.  It writes the following files, as appropriate:
  * <bindingName>Stub.java, <bindingName>Skeleton.java, <bindingName>Impl.java.
+ * 
  * @author Ias (iasandcb@tmax.co.kr)
  * @deprecated no more used by J2eeGeneratorFactory
  */
@@ -90,10 +90,9 @@ public class J2eeBindingWriter implements Generator {
     /**
      * Constructor.
      */
-    public J2eeBindingWriter(
-            J2eeEmitter emitter,
-            Binding binding,
-            SymbolTable symbolTable) {
+    public J2eeBindingWriter(J2eeEmitter emitter,
+                             Binding binding,
+                             SymbolTable symbolTable) {
         this.emitter = emitter;
         this.binding = binding;
         this.symbolTable = symbolTable;
@@ -101,32 +100,35 @@ public class J2eeBindingWriter implements Generator {
 
     /**
      * getJavaInterfaceWriter
-     **/
+     */
     protected Generator getJavaInterfaceWriter(J2eeEmitter emitter,
                                                PortTypeEntry ptEntry,
                                                BindingEntry bEntry,
                                                SymbolTable st) {
         return new J2eeInterfaceWriter(emitter, ptEntry, bEntry, st);
     }
+
     /**
      * getJavaStubWriter
-     **/
+     */
     protected Generator getJavaStubWriter(J2eeEmitter emitter,
                                           BindingEntry bEntry,
                                           SymbolTable st) {
         return new J2eeStubWriter(emitter, bEntry, st);
     }
+
     /**
      * getJavaSkelWriter
-     **/
+     */
     protected Generator getJavaSkelWriter(J2eeEmitter emitter,
                                           BindingEntry bEntry,
                                           SymbolTable st) {
         return new J2eeSkelWriter(emitter, bEntry, st);
     }
+
     /**
      * getJavaImplWriter
-     **/
+     */
     protected Generator getJavaImplWriter(J2eeEmitter emitter,
                                           BindingEntry bEntry,
                                           SymbolTable st) {
@@ -152,7 +154,7 @@ public class J2eeBindingWriter implements Generator {
         }
     } // generate
 
-    /** 
+    /**
      * setGenerators
      * Logic to set the generators that are based on the Binding
      * This logic was moved from the constructor so extended interfaces
@@ -163,12 +165,11 @@ public class J2eeBindingWriter implements Generator {
         
         // Interface writer
         PortTypeEntry ptEntry =
-            symbolTable.getPortTypeEntry(binding.getPortType().getQName());
+                symbolTable.getPortTypeEntry(binding.getPortType().getQName());
         if (ptEntry.isReferenced()) {
-            interfaceWriter = getJavaInterfaceWriter(
-                                 emitter, ptEntry, bEntry, symbolTable);
+            interfaceWriter = getJavaInterfaceWriter(emitter, ptEntry, bEntry, symbolTable);
         }
-        
+
         if (bEntry.isReferenced()) {
             // Stub writer
             stubWriter = getJavaStubWriter(emitter, bEntry, symbolTable);
@@ -184,19 +185,14 @@ public class J2eeBindingWriter implements Generator {
                     if (Utils.fileExists(fileName,
                             binding.getQName().getNamespaceURI(),
                             emitter.getNamespaces())) {
-                        System.out.println(Messages.getMessage(
-                                "wontOverwrite", fileName));
+                        System.out.println(Messages.getMessage("wontOverwrite", fileName));
+                    } else {
+                        implWriter = getJavaImplWriter(emitter, bEntry, symbolTable);
                     }
-                    else {
-                        implWriter = getJavaImplWriter(
-                                emitter, bEntry, symbolTable);
-                    }
-                }
-                catch (IOException ioe) {
-                    System.err.println(
-                            Messages.getMessage("fileExistError00", fileName));
+                } catch (IOException ioe) {
+                    System.err.println(Messages.getMessage("fileExistError00", fileName));
                 }
             }
         }
-}
+    }
 } // class JavaBindingWriter

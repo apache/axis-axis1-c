@@ -55,11 +55,11 @@
 
 package org.apache.geronimo.ews.ws4j2ee.context.wsdl.type;
 
-import java.util.Iterator;
-
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.ElementInfo;
 import org.apache.geronimo.ews.ws4j2ee.parsers.ParserFault;
 import org.apache.xml.utils.QName;
+
+import java.util.Iterator;
 
 /**
  * ,p>This class represent a Schema Type.</p>
@@ -83,16 +83,17 @@ public interface SchemaType extends Type {
     public boolean isArray();
 
     public void setArray(boolean b);
+
     /**
      * @return the restricion base of this type or return null.
-     * @throws SAXException
+     * @throws SAXException 
      */
 
     public QName getRestrictionBase() throws ParserFault;
 
     /**
      * @return get the extension type if this is extended or null
-     * @throws SAXException
+     * @throws SAXException 
      */
 
     public QName getExtentionBase() throws ParserFault;

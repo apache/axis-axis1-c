@@ -60,30 +60,30 @@ import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 
 /**
  * abstract class writer
+ * 
  * @author Srianth Perera(hemapani@opensource.lk)
  */
 public abstract class JavaClassWriter extends AbstractWriter {
     protected String classname;
-    protected String packageName;  
+    protected String packageName;
     private String pacakgesatement;
     private String targetDirectory;
 
-    public JavaClassWriter(J2EEWebServiceContext j2eewscontext,String qulifiedName) throws GenerationFault{
-    	super(j2eewscontext);
-		packageName = Utils.getPackageNameFromQuallifiedName(qulifiedName);
-		classname = Utils.getClassNameFromQuallifiedName(qulifiedName);
+    public JavaClassWriter(J2EEWebServiceContext j2eewscontext, String qulifiedName) throws GenerationFault {
+        super(j2eewscontext);
+        packageName = Utils.getPackageNameFromQuallifiedName(qulifiedName);
+        classname = Utils.getClassNameFromQuallifiedName(qulifiedName);
     }
-    
+
     public void writeCode() throws GenerationFault {
-		out.write((packageName != null)?("package "+packageName + ";\n"):"");
+        out.write((packageName != null) ? ("package " + packageName + ";\n") : "");
         writeImportStatements();
         writeClassComment();
-        out.write(
-               "public class "
-                    + classname
-                    + getExtendsPart()
-                    + getimplementsPart()
-                    + "{\n");
+        out.write("public class "
+                + classname
+                + getExtendsPart()
+                + getimplementsPart()
+                + "{\n");
 
         writeAttributes();
         writeConstructors();
@@ -93,17 +93,24 @@ public abstract class JavaClassWriter extends AbstractWriter {
         out.flush();
         out.close();
     }
+
     protected String getExtendsPart() {
         return " ";
     }
+
     protected String getimplementsPart() {
         return " ";
     }
-    protected void writeClassComment() throws GenerationFault{
+
+    protected void writeClassComment() throws GenerationFault {
     }
-    protected void writeImportStatements() throws GenerationFault{
+
+    protected void writeImportStatements() throws GenerationFault {
     }
+
     protected abstract void writeAttributes() throws GenerationFault;
+
     protected abstract void writeConstructors() throws GenerationFault;
+
     protected abstract void writeMethods() throws GenerationFault;
 }

@@ -60,56 +60,57 @@ import org.w3c.dom.Element;
 
 /**
  * This encapsulates the Qname wsdlport name and this is the concrete implementation of the WSCFWSDLPort
- *
  */
 public class WSCFWSDLPortImpl extends WSCFElement implements WSCFWSDLPort {
-	
-	/**
-	 * WSDL Port namespace URI
-	 */
-	private String namespaceURI;
-	
-	/**
-	 * WSDL port local part
-	 */
-	private String localpart;
-	
-	
-	/**
-	 * The constructor. this will get the naspace and the lacalpart extracted from the element.
-	 * @param e
-	 * @throws WSCFException
-	 */
-	public WSCFWSDLPortImpl(Element e) throws WSCFException{
-		super(e);
-		//extract the namespace URI
-		Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_NAMESPACE_URI);
-		if(null != element){
-			this.namespaceURI = element.getChildNodes().item(0).toString();
-		}
-		
-		//extract the local part
-		element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_LOCALPART);
-		if(null != element){
-			this.localpart = element.getChildNodes().item(0).toString();
-		}		
-		
-	}
 
-	/**
-	 * Gets the local part of the WSDL port element
-	 * @return local part
-	 */
-	public String getLocalpart() {
-		return localpart;
-	}
+    /**
+     * WSDL Port namespace URI
+     */
+    private String namespaceURI;
 
-	/**
-	 * Gets the namespace URI of the WSDL port element
-	 * @return
-	 */
-	public String getNamespaceURI() {
-		return namespaceURI;
-	}
+    /**
+     * WSDL port local part
+     */
+    private String localpart;
+
+    /**
+     * The constructor. this will get the naspace and the lacalpart extracted from the element.
+     * 
+     * @param e 
+     * @throws WSCFException 
+     */
+    public WSCFWSDLPortImpl(Element e) throws WSCFException {
+        super(e);
+        //extract the namespace URI
+        Element element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_NAMESPACE_URI);
+        if (null != element) {
+            this.namespaceURI = element.getChildNodes().item(0).toString();
+        }
+		
+        //extract the local part
+        element = this.getChildElement(e, WSCFConstants.ELEM_WSCF_LOCALPART);
+        if (null != element) {
+            this.localpart = element.getChildNodes().item(0).toString();
+        }
+
+    }
+
+    /**
+     * Gets the local part of the WSDL port element
+     * 
+     * @return local part
+     */
+    public String getLocalpart() {
+        return localpart;
+    }
+
+    /**
+     * Gets the namespace URI of the WSDL port element
+     * 
+     * @return 
+     */
+    public String getNamespaceURI() {
+        return namespaceURI;
+    }
 
 }

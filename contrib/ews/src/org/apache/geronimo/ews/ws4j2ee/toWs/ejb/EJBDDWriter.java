@@ -7,65 +7,57 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException; */
 
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
-/*
-import org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd.DescriptionType;
-import org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd.EjbClassType;
-import org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd.EjbJar;
-import org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd.EjbJarType;
-import org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd.EjbNameType;
-import org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd.Home;
-import org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd.ObjectFactory;
-import org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd.Remote;*/
 import org.apache.geronimo.ews.ws4j2ee.toWs.AbstractWriter;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 
 /**
- * We are plan to use the JAXB to genarate and parse the 
- * ejb-jar.xml file. this code is just for the get very simple 
- * DD created 
+ * We are plan to use the JAXB to genarate and parse the
+ * ejb-jar.xml file. this code is just for the get very simple
+ * DD created
+ * 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class EJBDDWriter extends AbstractWriter {
-	/**
-	 * @param j2eewscontext
-	 * @throws GenerationFault
-	 */
-	public EJBDDWriter(J2EEWebServiceContext j2eewscontext)
-		throws GenerationFault {
-		super(j2eewscontext);
-	}
+    /**
+     * @param j2eewscontext 
+     * @throws GenerationFault 
+     */
+    public EJBDDWriter(J2EEWebServiceContext j2eewscontext)
+            throws GenerationFault {
+        super(j2eewscontext);
+    }
 
-	public String getFileName() {
-		return j2eewscontext.getMiscInfo().getOutPutPath() + "/ejb/META-INF/ejb-jar.xml";
-	}
+    public String getFileName() {
+        return j2eewscontext.getMiscInfo().getOutPutPath() + "/ejb/META-INF/ejb-jar.xml";
+    }
 
-	public void writeCode() throws GenerationFault {
-		super.writeCode();
-		writeSessionDD();
-	}
+    public void writeCode() throws GenerationFault {
+        super.writeCode();
+        writeSessionDD();
+    }
 
-	public void writeSessionDD()throws GenerationFault {
-				out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-				out.write("<!DOCTYPE ejb-jar PUBLIC '-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN' 'http://java.sun.com/dtd/ejb-jar_2_0.dtd'>\n");
-				out.write("<ejb-jar>\n");
-				out.write("<display-name>"+ j2eewscontext.getMiscInfo().getWscfdWsDesxription().getDisplayName()+"</display-name>\n");
-				out.write("\t<enterprise-beans>\n");
-				out.write("\t\t<session>\n");
-				out.write("\t\t\t<display-name>"+j2eewscontext.getMiscInfo().getWscfdWsDesxription().getDisplayName()+"</display-name>\n");
-				out.write("\t\t\t<ejb-name>"+j2eewscontext.getMiscInfo().getEjbName()+"</ejb-name>\n");
-				out.write("\t\t\t<home>"+j2eewscontext.getMiscInfo().getEjbhome()+"</home>\n");
-				out.write("\t\t\t<remote>"+j2eewscontext.getMiscInfo().getEjbsei()+"</remote>\n");
-				out.write("\t\t\t<ejb-class>"+j2eewscontext.getMiscInfo().getEjbbean()+"</ejb-class>\n");
-				out.write("\t\t\t<session-type>Stateless</session-type>\n");
-				out.write("\t\t\t<transaction-type>Bean</transaction-type>\n");
-				out.write("\t\t\t<security-identity>\n");
-				out.write("\t\t\t\t<description></description>\n");
-				out.write("\t\t\t\t<use-caller-identity></use-caller-identity>\n");
-				out.write("\t\t\t</security-identity>\n");
-				out.write("\t\t</session\n>");
-				out.write("\t</enterprise-beans>\n");
-				out.write("</ejb-jar>\n");
-				out.close();
+    public void writeSessionDD() throws GenerationFault {
+        out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        out.write("<!DOCTYPE ejb-jar PUBLIC '-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN' 'http://java.sun.com/dtd/ejb-jar_2_0.dtd'>\n");
+        out.write("<ejb-jar>\n");
+        out.write("<display-name>" + j2eewscontext.getMiscInfo().getWscfdWsDesxription().getDisplayName() + "</display-name>\n");
+        out.write("\t<enterprise-beans>\n");
+        out.write("\t\t<session>\n");
+        out.write("\t\t\t<display-name>" + j2eewscontext.getMiscInfo().getWscfdWsDesxription().getDisplayName() + "</display-name>\n");
+        out.write("\t\t\t<ejb-name>" + j2eewscontext.getMiscInfo().getEjbName() + "</ejb-name>\n");
+        out.write("\t\t\t<home>" + j2eewscontext.getMiscInfo().getEjbhome() + "</home>\n");
+        out.write("\t\t\t<remote>" + j2eewscontext.getMiscInfo().getEjbsei() + "</remote>\n");
+        out.write("\t\t\t<ejb-class>" + j2eewscontext.getMiscInfo().getEjbbean() + "</ejb-class>\n");
+        out.write("\t\t\t<session-type>Stateless</session-type>\n");
+        out.write("\t\t\t<transaction-type>Bean</transaction-type>\n");
+        out.write("\t\t\t<security-identity>\n");
+        out.write("\t\t\t\t<description></description>\n");
+        out.write("\t\t\t\t<use-caller-identity></use-caller-identity>\n");
+        out.write("\t\t\t</security-identity>\n");
+        out.write("\t\t</session\n>");
+        out.write("\t</enterprise-beans>\n");
+        out.write("</ejb-jar>\n");
+        out.close();
 //	   try {
 //				 JAXBContext jc =
 //					  JAXBContext.newInstance("org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd");
@@ -143,6 +135,6 @@ public class EJBDDWriter extends AbstractWriter {
 //			  e.printStackTrace();
 //			throw new GenerationFault(e);
 //		  }
-	}
+    }
 
 }

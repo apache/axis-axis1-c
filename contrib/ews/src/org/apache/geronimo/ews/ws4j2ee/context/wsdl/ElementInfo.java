@@ -58,11 +58,11 @@ package org.apache.geronimo.ews.ws4j2ee.context.wsdl;
 import javax.xml.namespace.QName;
 
 /**
- *  <p>This is basically the org.apache.axis.ElementDecl (code cut and pasted).
- *  this represent a &lt;element&gt; entry in the schema.</p>
+ * <p>This is basically the org.apache.axis.ElementDecl (code cut and pasted).
+ * this represent a &lt;element&gt; entry in the schema.</p>
  */
 public class ElementInfo {
-	/* name of the element */
+    /* name of the element */
     private QName name;
     /* type of the element can be from anonymous|type|ref */
     private QName type;
@@ -113,28 +113,28 @@ public class ElementInfo {
     }
 
     /**
-     * @return
+     * @return 
      */
     public int getMaxOccurs() {
         return maxOccurs;
     }
 
     /**
-     * @return
+     * @return 
      */
     public int getMinOccurs() {
         return minOccurs;
     }
 
     /**
-     * @param i
+     * @param i 
      */
     public void setMaxOccurs(int i) {
         maxOccurs = i;
     }
 
     /**
-     * @param i
+     * @param i 
      */
     public void setMinOccurs(int i) {
         minOccurs = i;

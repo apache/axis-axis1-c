@@ -59,39 +59,39 @@ import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSC
 import org.apache.geronimo.ews.ws4j2ee.context.wsdl.WSDLContext;
 
 /**
- * <p>This interface has all the information about the J2EE webservice that is 
- * going to be genarated. from this interface onward all the codes are 
- * ws4j2ee. If we using any class from the geronimo deployment we should 
- * wrap them. This is a Code whith runing once. It is worth keeping the 
+ * <p>This interface has all the information about the J2EE webservice that is
+ * going to be genarated. from this interface onward all the codes are
+ * ws4j2ee. If we using any class from the geronimo deployment we should
+ * wrap them. This is a Code whith runing once. It is worth keeping the
  * code independent.<p>
- * 
- * <p>This interface and related interfaces has both getter and setter methods 
+ * <p/>
+ * <p>This interface and related interfaces has both getter and setter methods
  * but who ever implements this interface might not need the both.
  * e.g. there can be two concreate implementations for this class
- * for the cases 
+ * for the cases
  * <ol>
- *  <li>have WSDL</li>
- *  <li>do not have WSDL</li>
+ * <li>have WSDL</li>
+ * <li>do not have WSDL</li>
  * </ol>
- * if some method is not requried please throw java.lang.UnsupportedOperationException</p>     
+ * if some method is not requried please throw java.lang.UnsupportedOperationException</p>
  */
 
-
 public interface J2EEWebServiceContext {
-	public  WSDLContext getWSDLContext();
-	public void setWSDLContext(WSDLContext wsdlcontext);
+    public WSDLContext getWSDLContext();
 
-	public WSCFContext getWSCFContext();
-	
-	public void setWSCFContext(WSCFContext wscfcontext);
-	
-	public JaxRpcMapperContext getJAXRPCMappingContext();
+    public void setWSDLContext(WSDLContext wsdlcontext);
 
-	public void setJAXRPCMappingContext(JaxRpcMapperContext context); 
-	
-	public MiscInfo getMiscInfo();
+    public WSCFContext getWSCFContext();
 
-	public void setMiscInfo(MiscInfo info); 
-	
-	public void validate();
+    public void setWSCFContext(WSCFContext wscfcontext);
+
+    public JaxRpcMapperContext getJAXRPCMappingContext();
+
+    public void setJAXRPCMappingContext(JaxRpcMapperContext context);
+
+    public MiscInfo getMiscInfo();
+
+    public void setMiscInfo(MiscInfo info);
+
+    public void validate();
 }

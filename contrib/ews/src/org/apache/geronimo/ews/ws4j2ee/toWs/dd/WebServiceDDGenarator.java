@@ -55,40 +55,39 @@
 
 package org.apache.geronimo.ews.ws4j2ee.toWs.dd;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import org.apache.axis.components.logger.LogFactory;
 import org.apache.commons.logging.Log;
 import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.Generator;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * This class genarate the webservice.xml file.
+ * 
  * @author hemapani
  */
-public class WebServiceDDGenarator implements Generator{
-	private J2EEWebServiceContext j2eewscontext;
-    
-	protected static Log log =
-					   LogFactory.getLog(JaxrpcMapperGenarator.class.getName());
-					   
-	public WebServiceDDGenarator(J2EEWebServiceContext j2eewscontext) {
-		   this.j2eewscontext = j2eewscontext;
-	 }
-					   
+public class WebServiceDDGenarator implements Generator {
+    private J2EEWebServiceContext j2eewscontext;
+
+    protected static Log log =
+            LogFactory.getLog(JaxrpcMapperGenarator.class.getName());
+
+    public WebServiceDDGenarator(J2EEWebServiceContext j2eewscontext) {
+        this.j2eewscontext = j2eewscontext;
+    }
+
     public void genarate() throws GenerationFault {
         try {
-            PrintWriter out = new PrintWriter(
-            	new FileWriter(j2eewscontext.getMiscInfo().getWsConfFileLocation()));
+            PrintWriter out = new PrintWriter(new FileWriter(j2eewscontext.getMiscInfo().getWsConfFileLocation()));
             j2eewscontext.getWSCFContext().serialize(out);
             out.close();
         } catch (IOException e) {
-			throw GenerationFault.createGenerationFault(e);
-        } 
+            throw GenerationFault.createGenerationFault(e);
+        }
     }
 
 }

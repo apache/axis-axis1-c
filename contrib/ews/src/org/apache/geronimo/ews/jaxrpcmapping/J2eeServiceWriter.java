@@ -54,17 +54,17 @@
  */
 package org.apache.geronimo.ews.jaxrpcmapping;
 
-import java.io.IOException;
-
-import javax.wsdl.Service;
-
 import org.apache.axis.wsdl.gen.Generator;
 import org.apache.axis.wsdl.symbolTable.ServiceEntry;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 
+import javax.wsdl.Service;
+import java.io.IOException;
+
 /**
  * This is Wsdl2java's Service Writer.  It writes the following files, as appropriate:
  * <serviceName>.java, <serviceName>TestCase.java.
+ * 
  * @author Ias (iasandcb@tmax.co.kr)
  * @deprecated no more used by J2eeGeneratorFactory
  */
@@ -76,10 +76,9 @@ public class J2eeServiceWriter implements Generator {
     /**
      * Constructor.
      */
-    public J2eeServiceWriter(
-            J2eeEmitter emitter,
-            Service service,
-            SymbolTable symbolTable) {
+    public J2eeServiceWriter(J2eeEmitter emitter,
+                             Service service,
+                             SymbolTable symbolTable) {
         ServiceEntry sEntry = symbolTable.getServiceEntry(service.getQName());
         if (sEntry.isReferenced()) {
             serviceIfaceWriter =

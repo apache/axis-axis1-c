@@ -51,40 +51,34 @@
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- */ 
+ */
 package org.apache.geronimo.ews.jaxrpcmapping;
 
 /**
  * @author Ias (iasandcb@tmax.co.kr)
  */
-public class J2eeUtils
-{
+public class J2eeUtils {
     /**
      * @deprecated no more used by JaxRpcMapper
      */
-    public static String convertArrayExpression(String arrayParameter)
-	{
-		int bracketOpen = arrayParameter.indexOf('[');
-		if (bracketOpen < 0)
-		{
-			return arrayParameter;
-		}
-		String beforeBracket = arrayParameter.substring(0, bracketOpen);
-		String afterBracket = arrayParameter.substring(bracketOpen);
-		int countBracket = 0;
-		for (int i = 0; i < afterBracket.length(); i++)
-		{
-			if (afterBracket.charAt(i) == '[')
-			{
-				countBracket++;
-			}
-		}
-		String convertedBrackets = "";
-		for (int i = 0; i < countBracket; i++)
-		{
-			convertedBrackets += "\\[\\]";
-		}
-		return beforeBracket + convertedBrackets;
-	}
+    public static String convertArrayExpression(String arrayParameter) {
+        int bracketOpen = arrayParameter.indexOf('[');
+        if (bracketOpen < 0) {
+            return arrayParameter;
+        }
+        String beforeBracket = arrayParameter.substring(0, bracketOpen);
+        String afterBracket = arrayParameter.substring(bracketOpen);
+        int countBracket = 0;
+        for (int i = 0; i < afterBracket.length(); i++) {
+            if (afterBracket.charAt(i) == '[') {
+                countBracket++;
+            }
+        }
+        String convertedBrackets = "";
+        for (int i = 0; i < countBracket; i++) {
+            convertedBrackets += "\\[\\]";
+        }
+        return beforeBracket + convertedBrackets;
+    }
 
 }

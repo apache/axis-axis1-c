@@ -62,123 +62,125 @@ import java.util.ArrayList;
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public class FileSerachAgent {
-	private ArrayList acceptedFiles;
-	private ArrayList rejectedFiles;
-	private boolean selectAll;
-	private String startingDir = ".";
-	private boolean recursive = true;
-	
-	//this says what to do with the files that are not in 
-	//acccpeted or rejected lists
-	private boolean defaultForUnspsecified = false;
-	
-	public FileSerachAgent(String startingDir){
-		this.startingDir = startingDir;
-		acceptedFiles = new ArrayList();
-		rejectedFiles = new ArrayList();
-	}
-	
-	/**
-	 * add file to be accepted
-	 * @param extension e.g. ".class"
-	 */
-	public void addAcceptedFile(String extension){
-		acceptedFiles.add(extension);
-	}
-	
-	public void addRejectedFile(String extension){
-		rejectedFiles.add(extension);
-	}
+    private ArrayList acceptedFiles;
+    private ArrayList rejectedFiles;
+    private boolean selectAll;
+    private String startingDir = ".";
+    private boolean recursive = true;
 
-	/**
-	 * @return
-	 */
-	public boolean isSelectAll() {
-		return selectAll;
-	}
+    //this says what to do with the files that are not in 
+    //acccpeted or rejected lists
+    private boolean defaultForUnspsecified = false;
 
-	/**
-	 * @param b
-	 */
-	public void setSelectAll(boolean b) {
-		selectAll = b;
-	}
-    
-	public ArrayList serach(){
-		ArrayList result = new ArrayList();
-		getSourceFiles(result,new File(startingDir));
-		return result;
-	}
-    
-	/**
-	 * fill the supplied vector with the selected files
-	 * @param list
-	 * @param location
-	 */
-	private void getSourceFiles(ArrayList list,File location){
+    public FileSerachAgent(String startingDir) {
+        this.startingDir = startingDir;
+        acceptedFiles = new ArrayList();
+        rejectedFiles = new ArrayList();
+    }
 
-		String[] dirs = location.list();
-		if(dirs == null)
-			return;
-			
-		for(int i = 0;i<dirs.length;i++){
-			String filename = location.getAbsolutePath()+"/"+dirs[i];		
-			File file = new File(filename);
+    /**
+     * add file to be accepted
+     * 
+     * @param extension e.g. ".class"
+     */
+    public void addAcceptedFile(String extension) {
+        acceptedFiles.add(extension);
+    }
+
+    public void addRejectedFile(String extension) {
+        rejectedFiles.add(extension);
+    }
+
+    /**
+     * @return 
+     */
+    public boolean isSelectAll() {
+        return selectAll;
+    }
+
+    /**
+     * @param b 
+     */
+    public void setSelectAll(boolean b) {
+        selectAll = b;
+    }
+
+    public ArrayList serach() {
+        ArrayList result = new ArrayList();
+        getSourceFiles(result, new File(startingDir));
+        return result;
+    }
+
+    /**
+     * fill the supplied vector with the selected files
+     * 
+     * @param list     
+     * @param location 
+     */
+    private void getSourceFiles(ArrayList list, File location) {
+
+        String[] dirs = location.list();
+        if (dirs == null)
+            return;
+
+        for (int i = 0; i < dirs.length; i++) {
+            String filename = location.getAbsolutePath() + "/" + dirs[i];
+            File file = new File(filename);
 //			System.out.println(file.getAbsolutePath());
-			if(file.isFile()){
-				if(!isAcceptedFile(filename))
-					continue;
-				list.add(filename);
-			}else{
-				if(recursive)
-					getSourceFiles(list,new File(filename));
-			}
-	
-		}	
-	}
-	
-	private boolean isAcceptedFile(String filename){
-		if(!(new File(filename)).isFile())
-			return true;
-		if(selectAll)
-			return true;
-		for(int i = 0;i<rejectedFiles.size();i++){	
-			if(filename.endsWith((String)rejectedFiles.get(i)))
-				return false;
-		}
-		for(int i = 0;i<acceptedFiles.size();i++){	
-			if(filename.endsWith((String)acceptedFiles.get(i)))
-				return true;
-		}
-		return defaultForUnspsecified;	
-	}
+            if (file.isFile()) {
+                if (!isAcceptedFile(filename))
+                    continue;
+                list.add(filename);
+            } else {
+                if (recursive)
+                    getSourceFiles(list, new File(filename));
+            }
 
-	/**
-	 * @return
-	 */
-	public boolean isDefaultForUnspsecified() {
-		return defaultForUnspsecified;
-	}
+        }
+    }
 
-	/**
-	 * @param b
-	 */
-	public void setDefaultForUnspsecified(boolean b) {
-		defaultForUnspsecified = b;
-	}
+    private boolean isAcceptedFile(String filename) {
+        if (!(new File(filename)).isFile())
+            return true;
+        if (selectAll)
+            return true;
+        for (int i = 0; i < rejectedFiles.size(); i++) {
+            if (filename.endsWith((String) rejectedFiles.get(i)))
+                return false;
+        }
+        for (int i = 0; i < acceptedFiles.size(); i++) {
+            if (filename.endsWith((String) acceptedFiles.get(i)))
+                return true;
+        }
+        return defaultForUnspsecified;
+    }
 
-	/**
-	 * @return
-	 */
-	public boolean isRecursive() {
-		return recursive;
-	}
+    /**
+     * @return 
+     */
+    public boolean isDefaultForUnspsecified() {
+        return defaultForUnspsecified;
+    }
 
-	/**
-	 * @param b
-	 */
-	public void setRecursive(boolean b) {
-		recursive = b;
-	}
+    /**
+     * @param b 
+     */
+    public void setDefaultForUnspsecified(boolean b) {
+        defaultForUnspsecified = b;
+    }
+
+    /**
+     * @return 
+     */
+    public boolean isRecursive() {
+        return recursive;
+    }
+
+    /**
+     * @param b 
+     */
+    public void setRecursive(boolean b) {
+        recursive = b;
+    }
 
 }

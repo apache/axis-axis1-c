@@ -57,13 +57,13 @@ package org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces;
 /**
  * This will interface the webservices.xml document itself. it represents teh he
  * webservices.xml document and will give an interface to the document element:the webservices element; where the element tree begins
- *
  */
 public interface WSCFDocument {
-	
-	/**
-	 * The is the getter for the document element thus the gateway to all teh elements in the webservices.xml
-	 * @return webservices Element
-	 */
-	public WSCFWebservices getWebservices()  ;
+
+    /**
+     * The is the getter for the document element thus the gateway to all teh elements in the webservices.xml
+     * 
+     * @return webservices Element
+     */
+    public WSCFWebservices getWebservices();
 }

@@ -54,18 +54,19 @@
  */
 package org.apache.geronimo.ews.jaxrpcmapping;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Vector;
-
 import org.apache.axis.utils.JavaUtils;
 import org.apache.axis.utils.Messages;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.toJava.JavaClassWriter;
 import org.apache.axis.wsdl.toJava.Utils;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Vector;
+
 /**
  * This is Wsdl2java's Complex Type Writer.  It writes the <typeName>.java file.
+ * 
  * @author Ias (iasandcb@tmax.co.kr)
  * @deprecated no more used by J2eeGeneratorFactory
  */
@@ -76,9 +77,8 @@ public class J2eeEnumTypeWriter extends JavaClassWriter {
     /**
      * Constructor.
      */
-    protected J2eeEnumTypeWriter(
-            J2eeEmitter emitter,
-            TypeEntry type, Vector elements) {
+    protected J2eeEnumTypeWriter(J2eeEmitter emitter,
+                                 TypeEntry type, Vector elements) {
         super(emitter, type.getName(), "enumType");
         this.elements = elements;
         this.type = type;
@@ -91,7 +91,7 @@ public class J2eeEnumTypeWriter extends JavaClassWriter {
         return "implements java.io.Serializable ";
     } // getImplementsText
 
-   /**
+    /**
      * Generate the binding for the given enumeration type.
      * The values vector contains the base type (first index) and
      * the values (subsequent Strings)
@@ -116,33 +116,29 @@ public class J2eeEnumTypeWriter extends JavaClassWriter {
             baseClass = "java.lang.Double";
         } else if (baseType.indexOf("float") == 0) {
             baseClass = "java.lang.Float";
-        }else if (baseType.indexOf("byte") == 0) {
+        } else if (baseType.indexOf("byte") == 0) {
             baseClass = "java.lang.Byte";
         }
         
         // Create a list of the literal values.
         Vector values = new Vector();
-        for (int i=1; i < elements.size(); i++) {
+        for (int i = 1; i < elements.size(); i++) {
             String value = (String) elements.get(i);
             if (baseClass.equals("java.lang.String")) {
                 value = "\"" + value + "\"";  // Surround literal with double quotes
-            } 
-            else if (baseClass.equals("java.lang.Character")) {
+            } else if (baseClass.equals("java.lang.Character")) {
                 value = "'" + value + "'";
-            }
-            else if (baseClass.equals("java.lang.Float")) {
-                if (!value.endsWith("F") &&   // Indicate float literal so javac
-                    !value.endsWith("f"))     // doesn't complain about precision.
+            } else if (baseClass.equals("java.lang.Float")) {
+                if (!value.endsWith("F") && // Indicate float literal so javac
+                        !value.endsWith("f"))     // doesn't complain about precision.
                     value += "F";
-            }
-            else if (baseClass.equals("java.lang.Long")) {
-                if (!value.endsWith("L") &&   // Indicate float literal so javac
-                    !value.endsWith("l"))     // doesn't complain about precision.
+            } else if (baseClass.equals("java.lang.Long")) {
+                if (!value.endsWith("L") && // Indicate float literal so javac
+                        !value.endsWith("l"))     // doesn't complain about precision.
                     value += "L";
-            }
-            else if (baseClass.equals(baseType)) {
+            } else if (baseClass.equals(baseType)) {
                 // Construct baseClass object with literal string
-                value = "new "+baseClass +"(\"" + value + "\")"; 
+                value = "new " + baseClass + "(\"" + value + "\")";
             }
             values.add(value);
         }
@@ -161,8 +157,8 @@ public class J2eeEnumTypeWriter extends JavaClassWriter {
         pw.println("    // " + Messages.getMessage("ctor00"));
         pw.println("    protected " + javaName + "(" + baseType + " value) {");
         pw.println("        _value_ = value;");
-        if (baseClass.equals("java.lang.String") || 
-            baseClass.equals(baseType)) {
+        if (baseClass.equals("java.lang.String") ||
+                baseClass.equals(baseType)) {
             pw.println("        _table_.put(_value_,this);");
         } else {
             pw.println("        _table_.put(new " + baseClass + "(_value_),this);");
@@ -172,26 +168,26 @@ public class J2eeEnumTypeWriter extends JavaClassWriter {
 
         // A public static variable of the base type is generated for each enumeration value.
         // Each variable is preceded by an _.
-        for (int i=0; i < ids.size(); i++) {
+        for (int i = 0; i < ids.size(); i++) {
             pw.println("    public static final " + baseType + " _" + ids.get(i)
-                           + " = " + values.get(i) + ";");
+                    + " = " + values.get(i) + ";");
         }
 
         // A public static variable is generated for each enumeration value.
-        for (int i=0; i < ids.size(); i++) {
+        for (int i = 0; i < ids.size(); i++) {
             pw.println("    public static final " + javaName + " " + ids.get(i)
-                           + " = new " + javaName + "(_" + ids.get(i) + ");");
+                    + " = new " + javaName + "(_" + ids.get(i) + ");");
         }
 
         // Getter that returns the base value of the enumeration value
-        pw.println("    public " + baseType+ " getValue() { return _value_;}");
+        pw.println("    public " + baseType + " getValue() { return _value_;}");
 
         // FromValue returns the unique enumeration value object from the table
-        pw.println("    public static " + javaName+ " fromValue(" + baseType +" value)");
+        pw.println("    public static " + javaName + " fromValue(" + baseType + " value)");
         pw.println("          throws java.lang.IllegalStateException {");
-        pw.println("        "+javaName+" enumeration = ("+javaName+")");
-        if (baseClass.equals("java.lang.String") || 
-            baseClass.equals(baseType)) {
+        pw.println("        " + javaName + " enumeration = (" + javaName + ")");
+        if (baseClass.equals("java.lang.String") ||
+                baseClass.equals(baseType)) {
             pw.println("            _table_.get(value);");
         } else {
             pw.println("            _table_.get(new " + baseClass + "(value));");
@@ -201,7 +197,7 @@ public class J2eeEnumTypeWriter extends JavaClassWriter {
         pw.println("    }");
         
         // FromString returns the unique enumeration value object from a string representation
-        pw.println("    public static " + javaName+ " fromString(java.lang.String value)");
+        pw.println("    public static " + javaName + " fromString(java.lang.String value)");
         pw.println("          throws java.lang.IllegalStateException {");
         if (baseClass.equals("java.lang.String")) {
             pw.println("        return fromValue(value);");
@@ -209,24 +205,24 @@ public class J2eeEnumTypeWriter extends JavaClassWriter {
             pw.println("        try {");
             pw.println("            return fromValue(new " + baseClass + "(value));");
             pw.println("        } catch (Exception e) {");
-            pw.println("            throw new java.lang.IllegalStateException();"); 
+            pw.println("            throw new java.lang.IllegalStateException();");
             pw.println("        }");
         } else if (baseClass.equals("java.lang.Character")) {
-            pw.println("        if (value != null && value.length() == 1);");  
-            pw.println("            return fromValue(value.charAt(0));");                     
-            pw.println("        throw new java.lang.IllegalStateException();"); 
+            pw.println("        if (value != null && value.length() == 1);");
+            pw.println("            return fromValue(value.charAt(0));");
+            pw.println("        throw new java.lang.IllegalStateException();");
         } else if (baseClass.equals("java.lang.Integer")) {
             pw.println("        try {");
             pw.println("            return fromValue(java.lang.Integer.parseInt(value));");
             pw.println("        } catch (Exception e) {");
-            pw.println("            throw new java.lang.IllegalStateException();"); 
+            pw.println("            throw new java.lang.IllegalStateException();");
             pw.println("        }");
         } else {
-            String parse = "parse" + baseClass.substring(baseClass.lastIndexOf(".")+1);
+            String parse = "parse" + baseClass.substring(baseClass.lastIndexOf(".") + 1);
             pw.println("        try {");
-            pw.println("            return fromValue("+baseClass+"." + parse+"(value));");
+            pw.println("            return fromValue(" + baseClass + "." + parse + "(value));");
             pw.println("        } catch (Exception e) {");
-            pw.println("            throw new java.lang.IllegalStateException();"); 
+            pw.println("            throw new java.lang.IllegalStateException();");
             pw.println("        }");
         }
 
@@ -244,33 +240,33 @@ public class J2eeEnumTypeWriter extends JavaClassWriter {
             pw.println("    public java.lang.String toString() { return _value_;}");
         } else if (baseClass.equals(baseType)) {
             pw.println("    public java.lang.String toString() { return _value_.toString();}");
-        } else {                            
+        } else {
             pw.println("    public java.lang.String toString() { return java.lang.String.valueOf(_value_);}");
         }
-        
-       pw.println("    public java.lang.Object readResolve() throws java.io.ObjectStreamException { return fromValue(_value_);}");
 
-       pw.println("    public static org.apache.axis.encoding.Serializer getSerializer(");
-       pw.println("           java.lang.String mechType, ");
-       pw.println("           java.lang.Class _javaType,  ");
-       pw.println("           javax.xml.namespace.QName _xmlType) {");
-       pw.println("        return ");
-       pw.println("          new org.apache.axis.encoding.ser.EnumSerializer(");
-       pw.println("            _javaType, _xmlType);");
-       pw.println("    }");
-       pw.println("    public static org.apache.axis.encoding.Deserializer getDeserializer(");
-       pw.println("           java.lang.String mechType, ");
-       pw.println("           java.lang.Class _javaType,  ");
-       pw.println("           javax.xml.namespace.QName _xmlType) {");
-       pw.println("        return ");
-       pw.println("          new org.apache.axis.encoding.ser.EnumDeserializer(");
-       pw.println("            _javaType, _xmlType);");
-       pw.println("    }");
+        pw.println("    public java.lang.Object readResolve() throws java.io.ObjectStreamException { return fromValue(_value_);}");
+
+        pw.println("    public static org.apache.axis.encoding.Serializer getSerializer(");
+        pw.println("           java.lang.String mechType, ");
+        pw.println("           java.lang.Class _javaType,  ");
+        pw.println("           javax.xml.namespace.QName _xmlType) {");
+        pw.println("        return ");
+        pw.println("          new org.apache.axis.encoding.ser.EnumSerializer(");
+        pw.println("            _javaType, _xmlType);");
+        pw.println("    }");
+        pw.println("    public static org.apache.axis.encoding.Deserializer getDeserializer(");
+        pw.println("           java.lang.String mechType, ");
+        pw.println("           java.lang.Class _javaType,  ");
+        pw.println("           javax.xml.namespace.QName _xmlType) {");
+        pw.println("        return ");
+        pw.println("          new org.apache.axis.encoding.ser.EnumDeserializer(");
+        pw.println("            _javaType, _xmlType);");
+        pw.println("    }");
 
         pw.println("    // " + Messages.getMessage("typeMeta"));
         pw.println("    private static org.apache.axis.description.TypeDesc typeDesc =");
         pw.println("        new org.apache.axis.description.TypeDesc(" +
-                   Utils.getJavaLocalName(type.getName()) + ".class);");
+                Utils.getJavaLocalName(type.getName()) + ".class);");
         pw.println();
 
         pw.println("    static {");
@@ -290,26 +286,26 @@ public class J2eeEnumTypeWriter extends JavaClassWriter {
      * Get the enumeration names for the values.
      * The name is affected by whether all of the values of the enumeration
      * can be expressed as valid java identifiers.
+     * 
      * @param bv Vector base and values vector from getEnumerationBaseAndValues
      * @return Vector names of enum value identifiers.
      */
     public static Vector getEnumValueIds(Vector bv) {
         boolean validJava = true;  // Assume all enum values are valid ids
         // Walk the values looking for invalid ids
-        for (int i=1; i < bv.size() && validJava; i++) {
+        for (int i = 1; i < bv.size() && validJava; i++) {
             String value = (String) bv.get(i);
             if (!JavaUtils.isJavaId(value))
                 validJava = false;
         }
         // Build the vector of ids
         Vector ids = new Vector();
-        for (int i=1; i < bv.size(); i++) {
+        for (int i = 1; i < bv.size(); i++) {
             // If any enum values are not valid java, then
             // all of the ids are of the form value<1..N>.
-            if (!validJava) { 
+            if (!validJava) {
                 ids.add("value" + i);
-            }
-            else {
+            } else {
                 ids.add((String) bv.get(i));
             }
         }

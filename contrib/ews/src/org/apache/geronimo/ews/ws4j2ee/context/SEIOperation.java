@@ -60,21 +60,29 @@ import java.util.Map;
 
 /**
  * represent a operation in the SEI.
+ * 
  * @author Srinath Perera(hemapani@opensource.lk)
  */
 public interface SEIOperation {
-	public String getMethodName();
-	/**
-	 * @return a Map in which key is the parameter name and the Type is the value.
-	 */
-	public Map getParameters();
-	/**
-	 * @return ArrayList of Strings
-	 */
-	public ArrayList getFaults();
-	public void setMethodName(String methodName);
-	public void addParameter(String type,String name);
-	public void addFault(String name);
-	public String getReturnType();
-	public void setReturnType(String returnType);
+    public String getMethodName();
+
+    /**
+     * @return a Map in which key is the parameter name and the Type is the value.
+     */
+    public Map getParameters();
+
+    /**
+     * @return ArrayList of Strings
+     */
+    public ArrayList getFaults();
+
+    public void setMethodName(String methodName);
+
+    public void addParameter(String type, String name);
+
+    public void addFault(String name);
+
+    public String getReturnType();
+
+    public void setReturnType(String returnType);
 }

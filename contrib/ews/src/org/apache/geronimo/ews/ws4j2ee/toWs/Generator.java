@@ -57,12 +57,12 @@ package org.apache.geronimo.ews.ws4j2ee.toWs;
 
 /**
  * <p>Instance of the Genarator represents an entity that genarates a
- * Module. for e.g. EJB classes or JAX-RPC wrapper class and WSDD file genarator.</p>   
+ * Module. for e.g. EJB classes or JAX-RPC wrapper class and WSDD file genarator.</p>
  */
 public interface Generator {
     /**
      * <p>at the call of the genarate method the Genarator will genarate what
-     * it is suppose to be genarate. Usally the Genarator is a assembly of 
+     * it is suppose to be genarate. Usally the Genarator is a assembly of
      * One or more writers.</p>
      */
     public abstract void genarate() throws GenerationFault;

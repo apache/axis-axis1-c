@@ -54,12 +54,6 @@
  */
 package org.apache.geronimo.ews.jaxrpcmapping;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Vector;
-
-import javax.xml.namespace.QName;
-
 import org.apache.axis.utils.Messages;
 import org.apache.axis.wsdl.symbolTable.DefinedType;
 import org.apache.axis.wsdl.symbolTable.ElementDecl;
@@ -67,8 +61,14 @@ import org.apache.axis.wsdl.symbolTable.SchemaUtils;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.toJava.Utils;
 
+import javax.xml.namespace.QName;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Vector;
+
 /**
  * This is Wsdl2java's Helper Type Writer.  It writes the <typeName>.java file.
+ * 
  * @author Ias (iasandcb@tmax.co.kr)
  * @deprecated no more used by J2eeGeneratorFactory
  */
@@ -83,18 +83,18 @@ public class J2eeBeanHelperWriter extends J2eeClassWriter {
 
     /**
      * Constructor.
-     * @param emitter
-     * @param type        The type representing this class
-     * @param elements    Vector containing the Type and name of each property
-     * @param extendType  The type representing the extended class (or null)
-     * @param attributes  Vector containing the attribute types and names
+     * 
+     * @param emitter    
+     * @param type       The type representing this class
+     * @param elements   Vector containing the Type and name of each property
+     * @param extendType The type representing the extended class (or null)
+     * @param attributes Vector containing the attribute types and names
      */
-    protected J2eeBeanHelperWriter(
-        J2eeEmitter emitter,
-        TypeEntry type,
-        Vector elements,
-        TypeEntry extendType,
-        Vector attributes) {
+    protected J2eeBeanHelperWriter(J2eeEmitter emitter,
+                                   TypeEntry type,
+                                   Vector elements,
+                                   TypeEntry extendType,
+                                   Vector attributes) {
         super(emitter, type.getName() + "_Helper", "helper");
         this.type = type;
         this.elements = elements;
@@ -109,13 +109,13 @@ public class J2eeBeanHelperWriter extends J2eeClassWriter {
         // all of the types (and only those types) allowed in
         // the restricted derivation.
         if (null != extendType
-            && null != SchemaUtils.getComplexElementRestrictionBase(type.getNode(),
-                                                                    emitter.getSymbolTable())) {
+                && null != SchemaUtils.getComplexElementRestrictionBase(type.getNode(),
+                        emitter.getSymbolTable())) {
             this.canSearchParents = false;
         } else {
             this.canSearchParents = true;
         }
-        
+
     } // ctor
 
     /**
@@ -211,7 +211,7 @@ public class J2eeBeanHelperWriter extends J2eeClassWriter {
         // Collect elementMetaData
         if (elements != null) {
             for (int i = 0; i < elements.size(); i++) {
-                ElementDecl elem = (ElementDecl)elements.get(i);
+                ElementDecl elem = (ElementDecl) elements.get(i);
                 // String elemName = elem.getName().getLocalPart();
                 // String javaName = Utils.xmlNameToJava(elemName);
 
@@ -245,11 +245,11 @@ public class J2eeBeanHelperWriter extends J2eeClassWriter {
         }
         pw.println("    // " + Messages.getMessage("typeMeta"));
         pw.println("    private static org.apache.axis.description.TypeDesc typeDesc =");
-        pw.println("        new org.apache.axis.description.TypeDesc(" 
-                   + Utils.getJavaLocalName(jaxRpcMapper.getJavaType(type.getQName()))
-                   + ".class, "
-                   + (this.canSearchParents ? "true" : "false")
-                   + ");");
+        pw.println("        new org.apache.axis.description.TypeDesc("
+                + Utils.getJavaLocalName(jaxRpcMapper.getJavaType(type.getQName()))
+                + ".class, "
+                + (this.canSearchParents ? "true" : "false")
+                + ");");
         pw.println();
 
         pw.println("    static {");
@@ -284,8 +284,8 @@ public class J2eeBeanHelperWriter extends J2eeClassWriter {
 
             if (elementMetaData != null) {
                 boolean wroteElemDecl = false;
-                
-                for (int i=0; i<elementMetaData.size(); i++) {
+
+                for (int i = 0; i < elementMetaData.size(); i++) {
                     ElementDecl elem = (ElementDecl) elementMetaData.elementAt(i);
 
                     if (elem.getAnyElement()) {
@@ -302,7 +302,7 @@ public class J2eeBeanHelperWriter extends J2eeClassWriter {
                     QName xmlType = null;
 
                     if (elemType.getDimensions().length() > 1 &&
-                        (elemType.getClass() == DefinedType.class)) {
+                            (elemType.getClass() == DefinedType.class)) {
                         // If we have a DefinedType with dimensions, it must
                         // be a SOAP array derived type.  In this case, use
                         // the refType's QName for the metadata.
@@ -315,7 +315,7 @@ public class J2eeBeanHelperWriter extends J2eeClassWriter {
                         }
                         xmlType = elemType.getQName();
                     }
-                    
+
                     pw.print("        ");
                     if (!wroteElemDecl) {
                         pw.print("org.apache.axis.description.ElementDesc ");
@@ -362,7 +362,7 @@ public class J2eeBeanHelperWriter extends J2eeClassWriter {
         // bean property name will have a capitalized first character
         // (because setURL() maps to a property named "URL", not "uRL")
         if (fieldName.length() > 1 &&
-            Character.isUpperCase(fieldName.charAt(1))) {
+                Character.isUpperCase(fieldName.charAt(1))) {
             return Utils.capitalizeFirstChar(fieldName);
         }
 
@@ -387,7 +387,7 @@ public class J2eeBeanHelperWriter extends J2eeClassWriter {
         pw.println("           java.lang.Class _javaType,  ");
         pw.println("           javax.xml.namespace.QName _xmlType) {");
         pw.println("        return ");
-        pw.println("          new " + ser +"(");
+        pw.println("          new " + ser + "(");
         pw.println("            _javaType, _xmlType, " + typeDesc + ");");
         pw.println("    }");
         pw.println();
@@ -397,7 +397,7 @@ public class J2eeBeanHelperWriter extends J2eeClassWriter {
      * write Deserializer getter code and pass in meta data to avoid
      * undo introspection.
      */
-    protected void writeDeserializer(PrintWriter pw)  throws IOException {
+    protected void writeDeserializer(PrintWriter pw) throws IOException {
         String typeDesc = "typeDesc";
         String dser = " org.apache.axis.encoding.ser.BeanDeserializer";
         if (type.isSimpleType()) {

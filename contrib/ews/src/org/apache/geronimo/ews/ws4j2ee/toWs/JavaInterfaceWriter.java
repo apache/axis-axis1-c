@@ -60,29 +60,29 @@ import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 
 /**
  * abstract class writer
+ * 
  * @author Srianth Perera(hemapani@opensource.lk)
  */
 public abstract class JavaInterfaceWriter extends AbstractWriter {
     protected String classname;
-    protected String packageName;  
+    protected String packageName;
     private String pacakgesatement;
     private String targetDirectory;
 
-    public JavaInterfaceWriter(J2EEWebServiceContext j2eewscontext,String qulifiedName) throws GenerationFault{
-    	super(j2eewscontext);
-		packageName = Utils.getPackageNameFromQuallifiedName(qulifiedName);
-		classname = Utils.getClassNameFromQuallifiedName(qulifiedName);
+    public JavaInterfaceWriter(J2EEWebServiceContext j2eewscontext, String qulifiedName) throws GenerationFault {
+        super(j2eewscontext);
+        packageName = Utils.getPackageNameFromQuallifiedName(qulifiedName);
+        classname = Utils.getClassNameFromQuallifiedName(qulifiedName);
     }
-    
+
     public void writeCode() throws GenerationFault {
-		out.write((packageName != null)?("package "+packageName + ";\n"):"");
+        out.write((packageName != null) ? ("package " + packageName + ";\n") : "");
         writeImportStatements();
         writeClassComment();
-        out.write(
-               "public interface "
-                    + classname
-                    + getExtendsPart()
-                    + "{\n");
+        out.write("public interface "
+                + classname
+                + getExtendsPart()
+                + "{\n");
 
         writeAttributes();
         writeMethods();
@@ -91,13 +91,18 @@ public abstract class JavaInterfaceWriter extends AbstractWriter {
         out.flush();
         out.close();
     }
+
     protected String getExtendsPart() {
         return " ";
     }
-    protected void writeClassComment() throws GenerationFault{
+
+    protected void writeClassComment() throws GenerationFault {
     }
-    protected void writeImportStatements() throws GenerationFault{
+
+    protected void writeImportStatements() throws GenerationFault {
     }
+
     protected abstract void writeAttributes() throws GenerationFault;
+
     protected abstract void writeMethods() throws GenerationFault;
 }

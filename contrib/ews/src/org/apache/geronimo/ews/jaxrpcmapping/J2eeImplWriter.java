@@ -54,17 +54,6 @@
  */
 package org.apache.geronimo.ews.jaxrpcmapping;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.wsdl.Binding;
-import javax.wsdl.BindingOperation;
-import javax.wsdl.Operation;
-import javax.wsdl.OperationType;
-import javax.xml.rpc.holders.BooleanHolder;
-
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.Parameter;
 import org.apache.axis.wsdl.symbolTable.Parameters;
@@ -73,9 +62,20 @@ import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.toJava.JavaClassWriter;
 import org.apache.axis.wsdl.toJava.Utils;
 
+import javax.wsdl.Binding;
+import javax.wsdl.BindingOperation;
+import javax.wsdl.Operation;
+import javax.wsdl.OperationType;
+import javax.xml.rpc.holders.BooleanHolder;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * This is Wsdl2java's implementation template writer.  It writes the <BindingName>Impl.java
  * file which contains the <bindingName>Impl class.
+ * 
  * @author Ias (iasandcb@tmax.co.kr)
  * @deprecated no more used by J2eeGeneratorFactory
  */
@@ -87,10 +87,9 @@ public class J2eeImplWriter extends JavaClassWriter {
     /**
      * Constructor.
      */
-    protected J2eeImplWriter(
-            J2eeEmitter emitter,
-            BindingEntry bEntry,
-            SymbolTable symbolTable) {
+    protected J2eeImplWriter(J2eeEmitter emitter,
+                             BindingEntry bEntry,
+                             SymbolTable symbolTable) {
         super(emitter, bEntry.getName() + "Impl", "templateImpl");
         this.binding = bEntry.getBinding();
         this.symbolTable = symbolTable;
@@ -115,8 +114,7 @@ public class J2eeImplWriter extends JavaClassWriter {
                     || type == OperationType.SOLICIT_RESPONSE) {
                 pw.println(parameters.signature);
                 pw.println();
-            }
-            else {
+            } else {
                 writeOperation(pw, parameters);
             }
         }
@@ -124,6 +122,7 @@ public class J2eeImplWriter extends JavaClassWriter {
 
     /**
      * Returns the appropriate implements text
+     * 
      * @return " implements <classes>"
      */
     protected String getImplementsText() {
@@ -146,13 +145,13 @@ public class J2eeImplWriter extends JavaClassWriter {
                 // write a constructor for each of the parameters
                 
                 BooleanHolder bThrow = new BooleanHolder(false);
-                String constructorString = 
-                       Utils.getConstructorForParam(param, symbolTable, bThrow);
+                String constructorString =
+                        Utils.getConstructorForParam(param, symbolTable, bThrow);
                 if (bThrow.value) {
                     pw.println("        try {");
                 }
                 pw.println("        " + Utils.xmlNameToJava(param.getName())
-                         + ".value = " + constructorString + ";");
+                        + ".value = " + constructorString + ";");
                 if (bThrow.value) {
                     pw.println("        } catch (Exception e) {");
                     pw.println("        }");
