@@ -4,9 +4,9 @@
 
 #ifdef WIN32
 #ifdef AXIS_APACHE1_3
-#define WSDDFILEPATH "C:/Program Files/Apache Group/Apache/Axis/conf/server.wsdd"
+#define WSDDFILEPATH "./Axis/conf/server.wsdd"
 #else
-#define WSDDFILEPATH "e:/Axis/server.wsdd"
+#define WSDDFILEPATH "C:/Axis/conf/server.wsdd"
 #endif
 #else //For linux
 #ifdef AXIS_APACHE1_3
