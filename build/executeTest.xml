@@ -155,6 +155,24 @@
 		<dirname file="${axiscpp.conf}" property="confFileDirectory"/>
 
 		<mkdir dir="${confFileDirectory}"/>
+
+		<!-- Select which parser library to use -->
+		<condition property="ClientParserLib" value="${libraryPrefix}${xml4c.xmlParserLibraryName}${librarySuffix}">
+			<istrue value="${testconf.client.parser.xml4c}"/>
+		</condition>
+		<condition property="ClientParserLib" value="${libraryPrefix}${xerces.xmlParserLibraryName}${librarySuffix}">
+			<istrue value="${testconf.client.parser.xerces}"/>
+		</condition>
+
+		<!-- Decide whether the Channel_HTTP_SSL directive should be 
+		commented according to build.PLATFORM.properties -->
+		<condition property="commentSSLDirective" value="#">
+				<isfalse value="${HTTP.SSLChannel}"/>
+		</condition>
+		<condition property="commentSSLDirective" value="">
+				<istrue value="${HTTP.SSLChannel}"/>
+		</condition>
+
 		<echo file="${axiscpp.conf}">#Available directives are as follows:
 #
 # ClientLogPath:	 The path to the client log
@@ -179,9 +197,10 @@ ClientLogPath:${test.directory}/ClientLog.taw
         </if>   
         <echo file="${axiscpp.conf}" append="true">
 Transport_http:${dir.libraries}/${libraryPrefix}${transportLibraryName}${librarySuffix}
-XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}
+#XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffix}
+XMLParser:${dir.libraries}/${ClientParserLib}
 Channel_HTTP:${dir.libraries}/${libraryPrefix}${HTTP.ChannelLibraryName}${librarySuffix}
-Channel_HTTP_SSL:${dir.libraries}/${libraryPrefix}${HTTP.SecureChannelLibraryName}${librarySuffix}
+${commentSSLDirective}Channel_HTTP_SSL:${dir.libraries}/${libraryPrefix}${HTTP.SecureChannelLibraryName}${librarySuffix}
 
 </echo>
 	</target>
