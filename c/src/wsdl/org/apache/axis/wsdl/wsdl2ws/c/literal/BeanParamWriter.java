@@ -388,6 +388,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 		try{
 			writer.write("int Check_Restrictions_"+classname+"("+classname+" value)\n");
 			writer.write("{\n");
+			writer.write("\treturn 0;\n");				
 			//TODO write code to check the restrictions
 			writer.write("}\n");					
 		}catch(IOException e){
