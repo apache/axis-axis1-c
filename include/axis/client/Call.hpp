@@ -452,6 +452,9 @@ private:
     * It is possible that initialize_module could have been called already.
     */
     bool m_bModuleInitialized;
+  
+    // Samisa m_pchSessionID was misssing and there was a compile error due to this
+    char* m_pchSessionID;
 
 };
 AXIS_CPP_NAMESPACE_END
