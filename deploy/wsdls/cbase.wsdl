@@ -185,7 +185,7 @@
 	<binding name="InteropTestSoapBinding" type="tns:InteropTestPortType">
 		<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
 		<operation name="echoString">
-			<soap:operation soapAction="InteropBase#echoString"/>
+			<soap:operation soapAction="cbase#echoString"/>
 			<input>
 				<soap:body use="encoded" namespace="http://soapinterop.org/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
 			</input>
@@ -194,7 +194,7 @@
 			</output>
 		</operation>
 		<operation name="echoStringArray">
-			<soap:operation soapAction="InteropBase#echoStringArray"/>
+			<soap:operation soapAction="cbase#echoStringArray"/>
 			<input>
 				<soap:body use="encoded" namespace="http://soapinterop.org/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
 			</input>
@@ -203,7 +203,7 @@
 			</output>
 		</operation>
 		<operation name="echoInteger">
-			<soap:operation soapAction="InteropBase#echoInteger"/>
+			<soap:operation soapAction="cbase#echoInteger"/>
 			<input>
 				<soap:body use="encoded" namespace="http://soapinterop.org/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
 			</input>
@@ -212,7 +212,7 @@
 			</output>
 		</operation>
 		<operation name="echoIntegerArray">
-			<soap:operation soapAction="InteropBase#echoIntegerArray"/>
+			<soap:operation soapAction="cbase#echoIntegerArray"/>
 			<input>
 				<soap:body use="encoded" namespace="http://soapinterop.org/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
 			</input>
@@ -221,7 +221,7 @@
 			</output>
 		</operation>
 		<operation name="echoFloat">
-			<soap:operation soapAction="InteropBase#echoFloat"/>
+			<soap:operation soapAction="cbase#echoFloat"/>
 			<input>
 				<soap:body use="encoded" namespace="http://soapinterop.org/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
 			</input>
@@ -230,7 +230,7 @@
 			</output>
 		</operation>
 		<operation name="echoFloatArray">
-			<soap:operation soapAction="InteropBase#echoFloatArray"/>
+			<soap:operation soapAction="cbase#echoFloatArray"/>
 			<input>
 				<soap:body use="encoded" namespace="http://soapinterop.org/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
 			</input>
@@ -239,7 +239,7 @@
 			</output>
 		</operation>
 		<operation name="echoStruct">
-			<soap:operation soapAction="InteropBase#echoStruct"/>
+			<soap:operation soapAction="cbase#echoStruct"/>
 			<input>
 				<soap:body use="encoded" namespace="http://soapinterop.org/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
 			</input>
@@ -248,7 +248,7 @@
 			</output>
 		</operation>
 		<operation name="echoStructArray">
-			<soap:operation soapAction="InteropBase#echoStructArray"/>
+			<soap:operation soapAction="cbase#echoStructArray"/>
 			<input>
 				<soap:body use="encoded" namespace="http://soapinterop.org/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
 			</input>
@@ -257,7 +257,7 @@
 			</output>
 		</operation>
 		<operation name="echoVoid">
-			<soap:operation soapAction="InteropBase#echoVoid"/>
+			<soap:operation soapAction="cbase#echoVoid"/>
 			<input>
 				<soap:body use="encoded" namespace="http://soapinterop.org/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
 			</input>
@@ -266,7 +266,7 @@
 			</output>
 		</operation>
 		<operation name="echoBase64">
-			<soap:operation soapAction="InteropBase#echoBase64"/>
+			<soap:operation soapAction="cbase#echoBase64"/>
 			<input>
 				<soap:body use="encoded" namespace="http://soapinterop.org/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
 			</input>
@@ -275,7 +275,7 @@
 			</output>
 		</operation>
 		<operation name="echoDate">
-			<soap:operation soapAction="InteropBase#echoDate"/>
+			<soap:operation soapAction="cbase#echoDate"/>
 			<input>
 				<soap:body use="encoded" namespace="http://soapinterop.org/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
 			</input>
@@ -284,7 +284,7 @@
 			</output>
 		</operation>
 		<operation name="echoHexBinary">
-			<soap:operation soapAction="InteropBase#echoHexBinary"/>
+			<soap:operation soapAction="cbase#echoHexBinary"/>
 			<input>
 				<soap:body use="encoded" namespace="http://soapinterop.org/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
 			</input>
@@ -293,7 +293,7 @@
 			</output>
 		</operation>
 		<operation name="echoDecimal">
-			<soap:operation soapAction="InteropBase#echoDecimal"/>
+			<soap:operation soapAction="cbase#echoDecimal"/>
 			<input>
 				<soap:body use="encoded" namespace="http://soapinterop.org/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
 			</input>
@@ -302,7 +302,7 @@
 			</output>
 		</operation>
 		<operation name="echoBoolean">
-			<soap:operation soapAction="InteropBase#echoBoolean"/>
+			<soap:operation soapAction="cbase#echoBoolean"/>
 			<input>
 				<soap:body use="encoded" namespace="http://soapinterop.org/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
 			</input>
@@ -311,9 +311,9 @@
 			</output>
 		</operation>
 	</binding>
- 	<service name="InteropBase">
+ 	<service name="cbase">
     		<port binding="tns:InteropTestSoapBinding" name="InteropBaseTest">
-      		<soap:address location="http://localhost/axis/InteropBase"/>
+      		<soap:address location="http://localhost/axis/cbase"/>
     		</port>
   	</service>
 </definitions>

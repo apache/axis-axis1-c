@@ -108,7 +108,7 @@
 	<binding name="InteropTestSoapBindingB" type="tns:InteropTestPortTypeB">
 		<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
 		<operation name="echoStructAsSimpleTypes">
-			<soap:operation soapAction="InteropGroupB#echoStructAsSimpleTypes"/>
+			<soap:operation soapAction="cgroupB#echoStructAsSimpleTypes"/>
 			<input>
 				<soap:body use="encoded" namespace="http://soapinterop.org/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
 			</input>
@@ -117,7 +117,7 @@
 			</output>
 		</operation>
 		<operation name="echoSimpleTypesAsStruct">
-			<soap:operation soapAction="InteropGroupB#echoSimpleTypesAsStruct"/>
+			<soap:operation soapAction="cgroupB#echoSimpleTypesAsStruct"/>
 			<input>
 				<soap:body use="encoded" namespace="http://soapinterop.org/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
 			</input>
@@ -126,7 +126,7 @@
 			</output>
 		</operation>
 		<operation name="echoNestedStruct">
-			<soap:operation soapAction="InteropGroupB#echoNestedStruct"/>
+			<soap:operation soapAction="cgroupB#echoNestedStruct"/>
 			<input>
 				<soap:body use="encoded" namespace="http://soapinterop.org/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
 			</input>
@@ -135,7 +135,7 @@
 			</output>
 		</operation>
 		<operation name="echoNestedArray">
-			<soap:operation soapAction="InteropGroupB#echoNestedArray"/>
+			<soap:operation soapAction="cgroupB#echoNestedArray"/>
 			<input>
 				<soap:body use="encoded" namespace="http://soapinterop.org/" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
 			</input>
@@ -144,9 +144,9 @@
 			</output>
 		</operation>
 	</binding>
- 	<service name="InteropGroupB">
+ 	<service name="cgroupB">
     		<port binding="tns:InteropTestSoapBindingB" name="InteropGroupBTest">
-      		<soap:address location="http://localhost/axis/InteropGroupB"/>
+      		<soap:address location="http://localhost/axis/cgroupB"/>
     		</port>
   	</service>
 </definitions>
