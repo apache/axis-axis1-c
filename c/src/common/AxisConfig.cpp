@@ -38,7 +38,7 @@ AxisConfig::AxisConfig ()
 	The value for this is taken from the environment variable "AXIS_HOME".
 	So no need for a key for AXCONF_AXISHOME
 	*/
-	m_pcKeyArray[AXCONF_AXISHOME] = 0;
+	m_pcKeyArray[AXCONF_AXISHOME] = "";
 	m_pcKeyArray[AXCONF_TRANSPORTHTTP]="AXISTRANSPORT_HTTP";
 	m_pcKeyArray[AXCONF_TRANSPORTSMTP]="AXISTRANSPORT_SMTP";
 	m_pcKeyArray[AXCONF_XMLPARSER] = "AXISXMLPARSER";
@@ -81,8 +81,11 @@ int AxisConfig::readConfFile ()
 
     sConfPath = getenv ("AXIS_HOME");
 	m_pcValueArray[AXCONF_AXISHOME] = sConfPath;
+	/*
+	Even if the AXIS_HOME environment variable is not set it is handled.
+	Therefore return AXIS_SUCCESS
+	*/
     if (!sConfPath)
-        //return AXIS_FAIL;
 		return AXIS_SUCCESS;
     m_pcAxisHome = (char*) malloc (CONFBUFFSIZE);
     strcpy (m_pcAxisHome, sConfPath);
@@ -108,35 +111,14 @@ int AxisConfig::readConfFile ()
         sscanf (carrLine, "%s", key);
 		iValueLength = linesize - strlen (key) - 1;
 
-        //if (strcmp (key, "WSDDFILEPATH") == 0)
-		if (strcmp (key, m_pcKeyArray[AXCONF_WSDDFILEPATH]) == 0)
+        for(int i=0;i<=NOOFPROPERTIES;i++)
 		{
-			setValue(iValueLength, AXCONF_WSDDFILEPATH, pcValue+1);
-        }
-        if (strcmp (key, "AXISLOGPATH") == 0)
-        {
-			setValue(iValueLength, AXCONF_LOGPATH, pcValue+1);
-        }
-        if (strcmp (key, "AXISCLIENTLOGPATH") == 0)
-        {
-			setValue(iValueLength, AXCONF_CLIENTLOGPATH, pcValue+1);
-        }
-        if (strcmp (key, "CLIENTWSDDFILEPATH") == 0)
-        {
-			setValue(iValueLength, AXCONF_CLIENTWSDDFILEPATH, pcValue+1);
-        }
-        if (strcmp (key, "AXISTRANSPORT_HTTP") == 0)
-        {
-			setValue(iValueLength, AXCONF_TRANSPORTHTTP, pcValue+1);
-        }
-        if (strcmp (key, "AXISTRANSPORT_SMTP") == 0)
-        {
-			setValue(iValueLength, AXCONF_TRANSPORTSMTP, pcValue+1);
-        }
-        if (strcmp (key, "AXISXMLPARSER") == 0)
-        {
-			setValue(iValueLength, AXCONF_XMLPARSER, pcValue+1);
-        }
+			if(strcmp(key, m_pcKeyArray[i]) == 0)
+			{
+				setValue(iValueLength, (g_axconfig)i, pcValue+1);
+				break;
+			}
+		}
 
     }
 
