@@ -24,6 +24,12 @@
  * Revision 1.1  2004/05/24 samisa
  * Added accesser to transport 
  */
+ 
+/*
+ * Revision 1.2  2004/05/25 samisa
+ * Added accesser to SOAP serializer 
+ */
+
 
 
 /* Call.h: interface for the Call class.*/
@@ -781,6 +787,7 @@ public:
 	int AXISCALL getStatus();
 	
 	SOAPTransport* getTransport() { return m_pTransport; }
+	SoapSerializer* getSOAPSerializer() { return (SoapSerializer*)m_pIWSSZ; }
 		
 private:
 	int openConnection(int secure);
