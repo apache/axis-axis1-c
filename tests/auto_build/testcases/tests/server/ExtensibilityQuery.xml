@@ -1,0 +1,8 @@
+<service>
+    <name>ExtensibilityQuery</name>
+    <description>ExtensibilityQuery Service</description>
+    <serviceLang>cpp</serviceLang>
+    <serviceCode>ExtensibilityQueryPortType.cpp</serviceCode>
+    <wsdl>ExtensibilityQuery.wsdl</wsdl>
+	<servicename></servicename>
+</service>
