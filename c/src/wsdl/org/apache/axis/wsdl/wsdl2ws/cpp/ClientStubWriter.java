@@ -246,7 +246,7 @@ public class ClientStubWriter extends CPPClassWriter{
 		}
 		writer.write("\tif (SUCCESS != m_pCall->Initialize()) return ");
 		writer.write((returntypeisarray?"RetArray":returntypeissimple?"Ret":"pReturn")+";\n\t");
-		writer.write("m_pCall->SetSOAPVersion(SOAP_VER_1_2);\n"); //TODO check which version is it really.
+		writer.write("m_pCall->SetSOAPVersion(SOAP_VER_1_1);\n"); //TODO check which version is it really.
 		writer.write("\tm_pCall->SetOperation(\""+methodName+"\", \""+ wscontext.getWrapInfo().getTargetNameSpaceOfWSDL() +"\");\n");
 		for (int i = 0; i < paramsB.size(); i++) {
 			type = wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName());
