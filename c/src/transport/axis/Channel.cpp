@@ -245,7 +245,7 @@ const Channel& Channel::operator >> (std::string& msg)
         }
 
         int nByteRecv = 0;
-        const int BUF_SIZE = 512;
+        const int BUF_SIZE = 1024;
         char buf[BUF_SIZE];
 
         if ((nByteRecv = recv(m_Sock, (char *) &buf, BUF_SIZE - 1, 0)) 
