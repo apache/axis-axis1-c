@@ -1,0 +1,171 @@
+How to build and use Axis C++ from cvs source.
+=============================================
+
+This guide will help you to start with Axis C++. I'll explain the minimum
+steps needed to build and run Axis C++, and warn you about the common 
+pitfalls.
+The environment I'm using
+RedHat 9(2.4.20-8)
+expat-1.95.7
+xerces-c-src2_2_0(I build xerces from source)
+httpd-2.0.48
+apache_1.3.27
+
+You must define some environment variables in order to build.
+#AXISCPP_HOME is where you checkout Axis C++
+AXISCPP_HOME="/home/damitha/projects/cvshead"
+AXIS_HOME="/home/damitha/Axis"
+EXPAT_HOME="/usr/local/expat1957"
+XERCESC_HOME="/usr/local/xerces-c"
+LD_LIBRARY_PATH="$XERCESC_HOME/lib:$EXPAT_HOME/lib:$AXISCPP_HOME/bin:$AXIS_HOME/libs:$LD_LIBRARY_PATH"
+export AXISCPP_HOME AXIS_HOME XERCESC_HOME EXPAT_HOME LD_LIBRARY_PATH
+
+Axis C++ core is independant of the parser layer and transport layer.
+You can write your own transport or parser library according to the APIs provided. Currently Axis C++
+provides API implementations for Xerces-c and Expat. It also provides it's own client side transport
+library implementation. In the server side deployment, Axis C++ provides two modules that can be loaded
+into apache1.3 and apache 2 as shared libraries.
+So this sums upto two posibilities.
+You can deploy Axis C++ server 
+    on Apache2 with xercesc parser or expat parser(Only one parser at a time)
+    on Apache1.3 with xercesc parer or expat parser
+
+So if you use only Expat no need to define XERCESC_HOME vice versa.
+
+When you build Axis C++ you can give options
+1) Build for Apache2
+   with Expat parser support only
+   with Xerces paresr support only
+   with both parser support
+2) Build for Apache1.3
+   with Expat parser support only
+   with Xerces parser support only
+   with both parser support
+
+You can choose these selections on $AXISCPP_HOME/configure.ac
+
+------------------------------------------------------------
+#{apache2 block starts
+#if you use apache2
+#if you need to build both axis_expat and axis_xerces libraries
+                                                                                                                             
+AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile src/transport/Makefile src/transport/axis/Makefile src/engine/Makefile src/engine/server/Makefile src/engine/client/Makefile  src/server/Makefile src/server/apache2/Makefile src/server/simple_axis_server/Makefile src/server/adminservice/Makefile src/client/Makefile src/client/adminclient/Makefile src/xml/expat/Makefile src/xml/xerces/Makefile)
+                                                                                                                             
+#if you need to build only axis_expat
+                                                                                                                             
+#AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile src/transport/Makefile src/transport/axis/Makefile src/engine/Makefile src/engine/server/Makefile src/engine/client/Makefile  src/server/Makefile src/server/apache2/Makefile src/server/simple_axis_server/Makefile src/server/adminservice/Makefile src/client/Makefile src/client/adminclient/Makefile src/xml/expat/Makefile)
+
+#if you need to build only axis_xerces
+                                                                                                                             
+#AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile src/transport/Makefile src/transport/axis/Makefile src/engine/Makefile src/engine/server/Makefile src/engine/client/Makefile  src/server/Makefile src/server/apache2/Makefile src/server/simple_axis_server/Makefile src/server/adminservice/Makefile src/client/Makefile src/client/adminclient/Makefile src/xml/xerces/Makefile)
+                                                                                                                             
+#}apache2 block ends
+                                                                                                                             
+#{apache1.3 block starts
+#if you use apache1.3
+                                                                                                                             
+#if you need to build both axis_expat and axis_xerces libraries
+                                                                                                                             
+#AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile src/transport/Makefile src/transport/axis/Makefile src/engine/Makefile src/engine/server/Makefile src/engine/client/Makefile  src/server/Makefile src/server/apache/Makefile src/server/simple_axis_server/Makefile src/server/adminservice/Makefile src/client/Makefile src/client/adminclient/Makefile src/xml/expat/Makefile src/xml/xerces/Makefile)
+                                                                                                                             
+#if you need to build only axis_expat
+#AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile src/transport/Makefile src/transport/axis/Makefile src/engine/Makefile src/engine/server/Makefile src/engine/client/Makefile  src/server/Makefile src/server/apache/Makefile src/server/simple_axis_server/Makefile src/server/adminservice/Makefile src/client/Makefile src/client/adminclient/Makefile src/xml/expat/Makefile)
+                                                                                                                             
+#if you need to build only axis_xerces
+                                                                                                                             
+#AC_OUTPUT(Makefile src/Makefile src/common/Makefile src/soap/Makefile src/wsdd/Makefile src/xml/Makefile src/transport/Makefile src/transport/axis/Makefile src/engine/Makefile src/engine/server/Makefile src/engine/client/Makefile  src/server/Makefile src/server/apache/Makefile src/server/simple_axis_server/Makefile src/server/adminservice/Makefile src/client/Makefile src/client/adminclient/Makefile src/xml/xerces/Makefile)
+                                                                                                                             
+#}apache1.3 block ends
+------------------------------------------------------------
+
+You need also do a selection at $AXISCPP_HOME/src/xml/Makefile.am
+
+-----------------------------------------------------------
+SUBDIRS = expat xerces #Here I build both expat and xerces libraries
+#SUBDIRS = expat
+#SUBDIRS = xerces
+---------------------------------------------------------
+
+And again in $AXISCPP_HOME/src/server/Makefile.am
+
+---------------------------------------------------------
+#if you use apache2
+SUBDIRS = apache2 adminservice #Here I build for Apache2
+                                                                                                                             
+#if you use apache1.3
+#SUBDIRS = apache adminservice
+---------------------------------------------------------
+
+Now
+#cd $AXISCPP_HOME
+#sh build.sh
+
+It will build Axis C++ server, Client and samples
+
+#ls $AXISCPP_HOME/bin
+adminclient               libaxiscpp_client.so.0.0.0  libaxis_expat.a             libaxis_xercesc.la
+CVS                       libaxiscpp_mod2.a           libaxis_expat.la            libaxis_xercesc.so
+libAdminService.a         libaxiscpp_mod2.la          libaxis_expat.so            libaxis_xercesc.so.0
+libAdminService.la        libaxiscpp_mod2.so          libaxis_expat.so.0          libaxis_xercesc.so.0.0.0
+libAdminService.so        libaxiscpp_mod2.so.0        libaxis_expat.so.0.0.0      libserver_engine.a
+libAdminService.so.0      libaxiscpp_mod2.so.0.0.0    libaxis_transport.a         libserver_engine.la
+libAdminService.so.0.0.0  libaxiscpp_mod.a            libaxis_transport.la        libserver_engine.so
+libaxiscpp_client.a       libaxiscpp_mod.la           libaxis_transport.so        libserver_engine.so.0
+libaxiscpp_client.la      libaxiscpp_mod.so           libaxis_transport.so.0      libserver_engine.so.0.0.0
+libaxiscpp_client.so      libaxiscpp_mod.so.0         libaxis_transport.so.0.0.0  README.TXT
+libaxiscpp_client.so.0    libaxiscpp_mod.so.0.0.0     libaxis_xercesc.a
+
+libaxis_mod.so is apache module which is loaded when apache loads
+libaxis_mod2.so is apache2 module which is loaded when apache2 loads
+libserver_engine.so is the Axis C++ server engine which is loaded by libaxis_mod(2).so module
+libaxiscpp_client.so is Axis C++ client library
+libaxis_transport.so is the Axis C++ client transport library
+libaxis_expat.so is the expat parser library implementation for Axis C++
+libaxis_xercesc.so is the xercesc parser library implmentation for Axis C++
+
+Also $AXISCPP_HOME/sampels/server samples are built and installed in
+$AXIS_HOME/web_services
+#ls $AXIS_HOME/
+
+libcalculator.so        libcgroupB.so           libdoclitgroupB.so         libgroupB.so
+libAdminService.so    libcalculator.so.0      libcgroupB.so.0         libdoclitgroupB.so.0       libgroupB.so.0
+libAdminService.so.0  libcalculator.so.0.0.0  libcgroupB.so.0.0.0     libdoclitgroupB.so.0.0.0   libgroupB.so.0.0.0
+libbase.a             libcbase.a              libdoclitbase.a         libdoclitmathops.a         libmathops.a
+libbase.la            libcbase.la             libdoclitbase.la        libdoclitmathops.la        libmathops.la
+libbase.so            libcbase.so             libdoclitbase.so        libdoclitmathops.so        libmathops.so
+libbase.so.0          libcbase.so.0           libdoclitbase.so.0      libdoclitmathops.so.0      libmathops.so.0
+libbase.so.0.0.0      libcbase.so.0.0.0       libdoclitbase.so.0.0.0  libdoclitmathops.so.0.0.0  libmathops.so.0.0.0
+libcalculator.a       libcgroupB.a            libdoclitgroupB.a       libgroupB.a                README.txt
+libcalculator.la      libcgroupB.la           libdoclitgroupB.la      libgroupB.la
+
+$AXISCPP_HOME/samples/client samples are built and executable are in $AXISCPP_HOME/samples/client
+
+parser and transport layer both is loaded in to axis engine when it is
+loaded by apache.
+
+So when you run the following script from $AXIS_HOME(eg:/usr/local/Axis)
+
+rm /usr/local/apache/libexec/libaxiscpp_mod.so
+rm webservices/libAdminService.so
+rm libs/libserver_engine.so
+rm libs/libaxis_transport.so
+rm libs/libaxis_xmlparser.so
+cp -f $AXISCPP_HOME/bin/libAdminService.so webservices/
+cp -f $AXISCPP_HOME/bin/libserver_engine.so libs/
+cp -f $AXISCPP_HOME/bin/libaxiscpp_mod.so /usr/local/apache/libexec/ cp -f
+$AXISCPP_HOME/bin/libaxis_transport.so libs/
+cp -f $AXISCPP_HOME/bin/libaxis_expat.so libs/libaxis_xmlparser.so
+/usr/local/apache/bin/apachectl stop
+sleep 2
+/usr/local/apache/bin/apachectl start
+
+all the libraries are loaded.
+
+Note that in the line no. 10 of the script above we change
+the name libaxis_expat.so to libaxis_xmlparser.so.
+If we use xerces we need to change
+libaxis_xercesc.so to libaxis_xmlparser.so.
+
+To run interop samples
+#cd $AXISCPP_HOME/samples/client
+#sh run_interoptests.sh
