@@ -69,6 +69,7 @@ import java.util.Iterator;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.ParamWriter;
+import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
@@ -131,14 +132,16 @@ public class ParmHeaderFileWriter extends ParamWriter{
 		Iterator types = this.wscontext.getTypemap().getTypes().iterator();
 		writer.write("#include <axis/common/AxisUserAPI.h>\n\n");
 		HashSet typeSet = new HashSet();
+		String typeName = null;
 		while(types.hasNext()){
 			atype = (Type)types.next();
 			if(!(atype.equals(this.type))){
 				if (this.type.isContainedType(atype)){ 
-					typeSet.add(atype.getLanguageSpecificName());
+					typeName = WrapperUtils.getLanguageTypeName4Type(atype);
+					if (null != typeName) typeSet.add(typeName);
 				}
 			}
-		}		
+		}	
 		Iterator itr = typeSet.iterator();
 		while(itr.hasNext())
 		{

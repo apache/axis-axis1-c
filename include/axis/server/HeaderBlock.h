@@ -122,7 +122,9 @@ private:
 
 public:
 	bool operator ==( const HeaderBlock &objHeaderBlock);
+#ifdef UNIT_TESTING_BUILD
 	int initializeForTesting();
+#endif
 	BasicNode* createChild(NODE_TYPE eNODE_TYPE);
 	BasicNode* getFirstChild();
 	int addNamespaceDecl(Attribute *pAttribute);
