@@ -11,7 +11,7 @@ public class AxisCppHandler
 	static {
              System.loadLibrary("axis_cpp");
          }
-	static native void Delegate(InputStream in, OutputStream out);
+	public static native void Delegate(InputStream in, OutputStream out);
 	
 }
 
