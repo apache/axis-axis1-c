@@ -182,14 +182,31 @@ void axis_Fini(server_rec *svr_rec, apr_pool_t* p)
  */
 static AXIS_TRANSPORT_STATUS AXISCALL get_request_bytes(const char** req, int* retsize, const Ax_soapstream* stream)
 {
+#ifdef USE_XERCES_PARSER
+	int nBufSize = *retsize;
+	int len_read;
+	char* pBuffer = *req;
+	if (!(*req)) return TRANSPORT_FAILED;
+	/* ap_hard_timeout("util_read", (request_rec*)stream->str.ip_stream); */
+	len_read = ap_get_client_block((request_rec*)stream->str.ip_stream, *req, nBufSize);
+	/* ap_reset_timeout((request_rec*)stream->str.ip_stream); */
+	*retsize =  len_read;
+	if (len_read < nBufSize)
+	{
+		pBuffer[len_read] = '\0';
+		return TRANSPORT_FINISHED;
+	}
+	else
+		return TRANSPORT_IN_PROGRESS;
+#else
 	 /*How can I detect an error when reading stream ? Sanjaya ?
 	 In case of an error set buffer to null, size 0 and return TRANSPORT_FAILED*/
 	int len_read;
 	char* pBuffer = stream->reserved2;
 	if (!pBuffer) return TRANSPORT_FAILED;
-	/* ap_hard_timeout("util_read", (request_rec*)stream->str.ip_stream);*/
+	/* ap_hard_timeout("util_read", (request_rec*)stream->str.ip_stream); */
 	len_read = ap_get_client_block((request_rec*)stream->str.ip_stream, pBuffer, SIZEOFMODULEBUFFER);
-	/*ap_reset_timeout((request_rec*)stream->str.ip_stream);*/
+	/* ap_reset_timeout((request_rec*)stream->str.ip_stream); */
 	*req = pBuffer;
 	*retsize =  len_read;
 	if (len_read < SIZEOFMODULEBUFFER)
@@ -199,6 +216,7 @@ static AXIS_TRANSPORT_STATUS AXISCALL get_request_bytes(const char** req, int* r
 	}
 	else
 		return TRANSPORT_IN_PROGRESS;
+#endif
 }
 
 static void AXISCALL release_receive_buffer(const char* buffer, const Ax_soapstream* stream)
@@ -286,14 +304,18 @@ static int mod_axis_method_handler (request_rec *req_rec)
 	sstr->reserved2 = NULL;
 #else
 	sstr->reserved1 = calloc(NO_OF_SERIALIZE_BUFFERS, sizeof(sendbuffers));
+#ifdef USE_EXPAT_PARSER
 	sstr->reserved2 = malloc(SIZEOFMODULEBUFFER);
+#endif
 #endif
 
 	/*set up the read policy from the client.*/
 	if ((rc = ap_setup_client_block(req_rec, REQUEST_CHUNKED_ERROR)) != OK)
 	{
 		if (sstr->reserved1) free(sstr->reserved1); 
+#ifdef USE_EXPAT_PARSER
         if (sstr->reserved2) free(sstr->reserved2); 
+#endif
         free(sstr->so.http); 
         free(sstr); 
 
@@ -346,7 +368,9 @@ static int mod_axis_method_handler (request_rec *req_rec)
 	if(0 != process_request(sstr))
 	{
 		if (sstr->reserved1) free(sstr->reserved1); 
+#ifdef USE_EXPAT_PARSER
         if (sstr->reserved2) free(sstr->reserved2); 
+#endif
         free(sstr->so.http); 
         free(sstr); 
 
@@ -383,7 +407,11 @@ static int mod_axis_method_handler (request_rec *req_rec)
 	}
 	/*Free the array */
 	if (sstr->reserved1) free(sstr->reserved1);
+
+#ifdef USE_EXPAT_PARSER
 	if (sstr->reserved2) free(sstr->reserved2);
+#endif
+
 #endif
 
 	free(sstr);
