@@ -78,8 +78,23 @@ union uParamValue;
 class IWrapperSoapSerializer  : public virtual ISoapSerializer
 {
 public:	
-	virtual IParam* AddOutputParam(XSDTYPE nType, uParamValue Value)=0;
+	virtual IParam* AddOutputParam(XSDTYPE nType, long lValue)=0;
+	//for basic types
+	virtual IParam* AddOutputParam(int nValue)=0;
+	virtual IParam* AddOutputParam(unsigned int unValue)=0;
+	virtual IParam* AddOutputParam(short sValue)=0;
+	virtual IParam* AddOutputParam(unsigned short usValue)=0;
+	virtual IParam* AddOutputParam(long lValue)=0;
+	virtual IParam* AddOutputParam(unsigned long ulValue)=0;
+	virtual IParam* AddOutputParam(char cValue)=0;
+	virtual IParam* AddOutputParam(unsigned char ucValue)=0;
+	virtual IParam* AddOutputParam(float fValue)=0;
+	virtual IParam* AddOutputParam(double dValue)=0;
+	virtual IParam* AddOutputParam(struct tm tValue)=0;
+	virtual IParam* AddOutputParam(const AxisChar* pStrValue)=0;
+	//for arrays
 	virtual IParam* AddOutputParam(IArrayBean* pArrayBean)=0;
+	//for complex types
 	virtual IParam* AddOutputParam(void* pObject, void* pDZFunct, void* pDelFunct)=0;
 	virtual ISoapMethod* createSoapMethod()=0;
 //	virtual IWrapperSoapSerializer& operator<<(const char *cSerialized)=0;
