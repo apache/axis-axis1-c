@@ -1,9 +1,9 @@
 
-using namespace std;
-
 #include "SimpleArrays.hpp"
 #include <axis/AxisException.hpp>
 #include <iostream>
+
+using namespace std;
 
 #define ARRAYSIZE 2
 
@@ -41,7 +41,8 @@ int main(int argc, char* argv[])
 		/* Test a boolean array */
 		boolean_in.m_Array = new xsd__boolean[ARRAYSIZE];
 		boolean_in.m_Size = ARRAYSIZE;
-		for (int x=0; x<ARRAYSIZE; x++)
+        int x = 0;
+		for (x=0; x<ARRAYSIZE; x++)
 		{
 			boolean_in.m_Array[x] = (xsd__boolean)x;
 		}
@@ -58,7 +59,7 @@ int main(int argc, char* argv[])
 		/* Test a byte array - that is directly rather than as base64Binary */
 		/*byte_in.m_Array = new xsd__byte[ARRAYSIZE];
 		byte_in.m_Size = ARRAYSIZE;
-		for (int x=0; x<ARRAYSIZE; x++)
+		for (x=0; x<ARRAYSIZE; x++)
 		{
 			byte_in.m_Array[x] = (xsd__byte)x+31;
 		}
@@ -76,7 +77,7 @@ int main(int argc, char* argv[])
                 /*
 		short_in.m_Array = new xsd__short[ARRAYSIZE];
 		short_in.m_Size = ARRAYSIZE;
-		for (int x=0; x<ARRAYSIZE; x++)
+		for (x=0; x<ARRAYSIZE; x++)
 		{
 			short_in.m_Array[x] = x+250;
 		}
@@ -93,7 +94,7 @@ int main(int argc, char* argv[])
 		/* Test an int array */
 		int_in.m_Array = new xsd__int[ARRAYSIZE];
 		int_in.m_Size = ARRAYSIZE;
-		for (int x=0; x<ARRAYSIZE; x++)
+		for (x=0; x<ARRAYSIZE; x++)
 		{
 			int_in.m_Array[x] = x+1;
 		}
@@ -110,7 +111,7 @@ int main(int argc, char* argv[])
 		/* Test a long array */
 		long_in.m_Array = new xsd__long[ARRAYSIZE];
 		long_in.m_Size = ARRAYSIZE;
-		for (int x=0; x<ARRAYSIZE; x++)
+		for (x=0; x<ARRAYSIZE; x++)
 		{
 			long_in.m_Array[x] = (xsd__long)x+200001;
 		}
@@ -128,7 +129,7 @@ int main(int argc, char* argv[])
 		/* Test a float array */
 		float_in.m_Array = new xsd__float[ARRAYSIZE];
 		float_in.m_Size = ARRAYSIZE;
-		for (int x=0; x<ARRAYSIZE; x++)
+		for (x=0; x<ARRAYSIZE; x++)
 		{
 			float_in.m_Array[x] = (xsd__float)x+11.111;
 		}
@@ -145,7 +146,7 @@ int main(int argc, char* argv[])
 		/* Test a double array */
 		double_in.m_Array = new xsd__double[ARRAYSIZE];
 		double_in.m_Size = ARRAYSIZE;
-		for (int x=0; x<ARRAYSIZE; x++)
+		for (x=0; x<ARRAYSIZE; x++)
 		{
 			double_in.m_Array[x] = (xsd__double)x+71.15656;
 		}
