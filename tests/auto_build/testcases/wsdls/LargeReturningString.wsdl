@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://test.axisc.hursley.ibm.com" xmlns:impl="http://test.axisc.hursley.ibm.com" xmlns:intf="http://test.axisc.hursley.ibm.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://test.axisc.hursley.ibm.com" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:impl="http://test.axisc.hursley.ibm.com" xmlns:intf="http://test.axisc.hursley.ibm.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <element name="getLargeString">
+    <complexType>
+     <sequence>
+      <element name="size" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getLargeStringResponse">
+    <complexType>
+     <sequence>
+      <element name="getLargeStringReturn" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="getLargeStringRequest">
+
+      <wsdl:part element="intf:getLargeString" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getLargeStringResponse">
+
+      <wsdl:part element="intf:getLargeStringResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="LargeReturningString">
+
+      <wsdl:operation name="getLargeString">
+
+         <wsdl:input message="intf:getLargeStringRequest" name="getLargeStringRequest"/>
+
+         <wsdl:output message="intf:getLargeStringResponse" name="getLargeStringResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="LargeReturningStringSoapBinding" type="intf:LargeReturningString">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="getLargeString">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getLargeStringRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getLargeStringResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="LargeReturningStringService">
+
+      <wsdl:port binding="intf:LargeReturningStringSoapBinding" name="LargeReturningString">
+
+         <wsdlsoap:address location="http://bora.hursley.ibm.com:9080/DSServiceWebProject/services/LargeReturningString"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

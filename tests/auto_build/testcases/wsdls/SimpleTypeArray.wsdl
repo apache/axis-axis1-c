@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions targetNamespace="http://www.sample.com/SimpleTypeArray.wsdl" xmlns:wsi="http://ws-i.org/schemas/conformanceClaim/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.sample.com/SimpleTypeArray.wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema targetNamespace="http://www.sample.com/SimpleTypeArray.wsdl" xmlns:tns="http://www.sample.com/SimpleTypeArray.wsdl" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+			<xsd:element name="getInput">
+	 				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="input" type="tns:Type"/>
+					</xsd:sequence>
+				</xsd:complexType>  					
+			</xsd:element>			
+
+			<xsd:complexType name="Type">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="item" type="xsd:int"/>
+				</xsd:sequence>
+			</xsd:complexType>  					
+
+				
+			<xsd:element name="getInputResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="input" type="tns:Type"/>
+					</xsd:sequence>
+				</xsd:complexType>				
+			</xsd:element>			
+
+		</xsd:schema>
+  </types>
+  <message name="output">
+    <part name="parameters" element="tns:getInputResponse"/>
+  </message>
+  <message name="input">
+    <part name="parameters" element="tns:getInput"/>
+  </message>
+  <portType name="SimpleTypeArrayWS">
+    <operation name="getInput">
+      <input message="tns:input"/>
+      <output message="tns:output"/>
+    </operation>
+  </portType>
+  <binding name="SimpleTypeArrayWSBinding" type="tns:SimpleTypeArrayWS">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="getInput">
+      <soap:operation/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="SimpleTypeArrayWSService">
+    <port name="sampleWS" binding="tns:SimpleTypeArrayWSBinding">
+      <soap:address location="http://localhost:9080/SimpleTypeArray/services/sampleWS"/>
+    </port>
+  </service>
+</definitions>

@@ -1,0 +1,17 @@
+#include <stdio.h>
+#include "StockService.h" 
+
+int main(int argc, char* argv[])
+{ 
+
+  StockService *ws = new StockService ();
+
+  ws->SetEndpointURI ("http://localhost:9080/SOAPHeaderStockService/services/StockService");
+
+  time_t tim;
+  time(&tim);
+  tm* lt = gmtime(&tim);
+
+  printf ("Result = %f\n",ws->getLastSellPrice("Token", *lt  , *lt ));
+  return 0;
+}

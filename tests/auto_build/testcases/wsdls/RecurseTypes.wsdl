@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions 
+	targetNamespace="http://www.sample.com/RecurseTypes.wsdl"
+	xmlns:wsi="http://ws-i.org/schemas/conformanceClaim/" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://www.sample.com/RecurseTypes.wsdl" 
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+	xmlns="http://schemas.xmlsoap.org/wsdl/">
+	<types>
+		<xsd:schema elementFormDefault="qualified"  
+				targetNamespace="http://www.sample.com/RecurseTypes.wsdl" 
+				xmlns="http://www.w3.org/2001/XMLSchema" 
+				>
+			<xsd:element name="getInput">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="type" type="tns:Type1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="getInputResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="type" type="tns:Type1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:complexType name="Type1">
+				<xsd:sequence>
+					<xsd:element name="followings" maxOccurs="unbounded" minOccurs="0" type="tns:Type1" />
+					<xsd:element name="kind" type="xsd:string" />
+					<xsd:element name="index" type="xsd:int" />
+				</xsd:sequence>
+				<xsd:attribute name="att_kind" type="tns:Kind" />
+			</xsd:complexType>
+
+			<xsd:simpleType name="Kind">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="CHEQUE" />
+					<xsd:enumeration value="CREDIT_CARD" />
+					<xsd:enumeration value="TRANSFER" />
+					<xsd:enumeration value="WITHDRAWAL" />
+					<xsd:enumeration value="AUTOMATIC" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+		</xsd:schema>
+	</types>
+
+
+	<message name="input">
+		<part name="parameters" element="tns:getInput" />
+	</message>
+
+	<message name="output">
+		<part name="parameters" element="tns:getInputResponse" />
+	</message>
+
+	<portType name="RecurseTypesWS">
+		<operation name="getInput">
+			<input message="tns:input" />
+			<output message="tns:output" />
+		</operation>
+	</portType>
+
+	<binding name="RecurseTypesWSBinding" type="tns:RecurseTypesWS">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+		<operation name="getInput">
+			<soap:operation />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+		</operation>
+	</binding>
+
+	<service name="RecurseTypesWSService">
+		<port name="sampleWS" binding="tns:RecurseTypesWSBinding">
+			<soap:address location="http://localhost:9080/RecurseTypes/services/sampleWS" />
+		</port>
+	</service>
+</definitions>
