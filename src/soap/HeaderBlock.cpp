@@ -544,28 +544,7 @@ bool HeaderBlock::operator ==( const HeaderBlock &objHeaderBlock)
 
 BasicNode* HeaderBlock::createImmediateChild(NODE_TYPE eNODE_TYPE)
 {
-	
-    BasicNode* pBasicNode = NULL;
-
-    do
-    {
-        if(eNODE_TYPE==CHARACTER_NODE)
-        {
-            pBasicNode = new CharacterElement();
-        }
-        else if (eNODE_TYPE==ELEMENT_NODE)
-        {
-            pBasicNode = new ComplexElement();
-        }
-        else
-        {
-            break;
-        }
-
-        m_children.push_back(pBasicNode);
-        iNoOFChildren++;
-    } while (0);
-    return pBasicNode;
+	return createImmediateChild(eNODE_TYPE, "", "", "", "");
 }
 
 IAttribute* HeaderBlock::createAttribute(const AxisChar *localname,
@@ -764,6 +743,23 @@ BasicNode* HeaderBlock::createImmediateChild(NODE_TYPE eNODE_TYPE,
                                              AxisChar* pachValue)
 {
     BasicNode* pBasicNode = NULL;
+    if(!pachLocalName)
+    {
+     pachLocalName="";
+    }
+    if(!pachPrefix)
+    {
+     pachPrefix="";
+    }
+    if(!pachUri)
+    {
+     pachUri="";
+    }
+    if(!pachValue)
+    {
+     pachValue="";
+    }
+    
 
     do
     {
