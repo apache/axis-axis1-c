@@ -1,6 +1,5 @@
 #include "AccessBean.h"
 #include "Param.h"
-#include "../soap/SoapDeSerializer.h"
 #include "BasicTypeSerializer.h"
 
 AccessBean::AccessBean()
@@ -9,7 +8,7 @@ AccessBean::AccessBean()
 }
 
 //this is never called. just default method
-int AccessBean::DeSerialize(SoapDeSerializer *pDZ)
+int AccessBean::DeSerialize(ISoapDeSerializer *pDZ)
 {
 	return SUCCESS;
 }
@@ -66,7 +65,7 @@ ArrayBean::~ArrayBean()
 	}	
 }
 
-int ArrayBean::DeSerialize(SoapDeSerializer *pDZ)
+int ArrayBean::DeSerialize(ISoapDeSerializer *pDZ)
 {
 	Param* p;
 	if ((XSD_UNKNOWN == t) ||(s<=0)||(!v.so)) return FAIL;
