@@ -68,18 +68,14 @@
 #include <string>
 using namespace std;
 
-namespace axisxml {
-
-class Attribute  
+class SimpleAttribute  
 {
 public:
-	Attribute();
-	virtual ~Attribute();
+	SimpleAttribute();
+	virtual ~SimpleAttribute();
 	string m_Namespace;
 	string m_Name;
 	string m_Value;
-};
-
 };
 
 #endif // !defined(AFX_ATTRIBUTE_H__93C9B708_3BA1_4933_BE5F_BEABABD92E0C__INCLUDED_)
