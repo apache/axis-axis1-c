@@ -197,7 +197,7 @@ AXIS_TRANSPORT_STATUS AXISCALL AxisTransport::s_Get_bytes(const char** res,
 
 AXIS_TRANSPORT_STATUS AxisTransport::getBytes(char* pcBuffer, int* pSize)
 {
-    if (0 <= m_iBytesLeft)
+    if (0 >= m_iBytesLeft)
     {
         try
         {
@@ -222,12 +222,13 @@ AXIS_TRANSPORT_STATUS AxisTransport::getBytes(char* pcBuffer, int* pSize)
     }
     if (m_pcReceived)
     {
-		int iToCopy = (*pSize < m_iBytesLeft) ? *pSize : m_iBytesLeft;
+        int iToCopy = (*pSize < m_iBytesLeft) ? *pSize : m_iBytesLeft;
         strncpy(pcBuffer, m_pcReceived, iToCopy);
-		m_iBytesLeft -= iToCopy;
-		m_pcReceived += iToCopy;
+        m_iBytesLeft -= iToCopy;
+        m_pcReceived += iToCopy;
         *pSize = iToCopy;
         return TRANSPORT_IN_PROGRESS;
+
     }
     else
     {
