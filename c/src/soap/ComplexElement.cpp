@@ -24,7 +24,13 @@
  *
  *
  * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  *
+ */
+
+/*
+ * Revision 1.1  2004/05/25 samisa
+ * Added copy constructure and clone for copy constructing derived classes
  */
 
 /* ComplexElement.cpp: implementation of the ComplexElement class. */
@@ -53,6 +59,45 @@ ComplexElement::ComplexElement(AxisChar *pachLocalName, AxisChar *pachPrefix,
     strcpy(m_pachPrefix, pachPrefix);
     m_pachURI = (AxisChar*) malloc(strlen(pachUri)+1);
     strcpy(m_pachURI, pachUri);
+}
+
+ComplexElement::ComplexElement(const ComplexElement& rCopy):BasicNode(rCopy)
+{
+    this->iNoOfChildren = rCopy.iNoOfChildren;
+    
+    list<BasicNode*>::const_iterator itCurrBasicNode= rCopy.m_children.begin();
+
+    while(itCurrBasicNode != rCopy.m_children.end())
+    {
+        this->m_children.push_back((*itCurrBasicNode)->clone());	
+        itCurrBasicNode++;        
+    } 
+    
+    /*for( unsigned int i = 0; i < rCopy.m_children.size(); i++ )
+       this->m_children.push_back( rCopy.m_children[i]->clone());*/
+       
+    if(this->m_pachPrefix)
+    	free(m_pachPrefix);
+    this->m_pachPrefix = NULL;
+    if(rCopy.m_pachPrefix)
+    	this->m_pachPrefix = strdup(rCopy.m_pachPrefix);
+
+    if(this->m_pachLocalName)
+    	free(m_pachLocalName);
+    this->m_pachLocalName = NULL;
+    if(rCopy.m_pachLocalName)
+    	this->m_pachLocalName = strdup(rCopy.m_pachLocalName);
+	
+    if(this->m_pachURI)
+    	free(m_pachURI);
+    this->m_pachURI = NULL;
+    if(rCopy.m_pachURI)
+    	this->m_pachURI = strdup(rCopy.m_pachURI);
+}
+
+BasicNode* ComplexElement::clone()
+{
+    return new ComplexElement(*this);
 }
 
 

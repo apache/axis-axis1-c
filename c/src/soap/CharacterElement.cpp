@@ -24,9 +24,17 @@
  *
  *
  * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  *
  */
 
+/*
+ * Revision 1.1  2004/05/25 samisa
+ * Added copy constructure and clone for copy constructing derived classes
+ * Also changed the constructor to call the base class constructer, 
+ * rahter than working on base class attribute from derived class
+ */
+ 
 /* haracterElement.cpp: implementation of the CharacterElement class. */
 
 
@@ -34,22 +42,34 @@
 #include <axis/server/SoapSerializer.h>
 #include <axis/server/GDefine.h>
 
-CharacterElement::CharacterElement()
+CharacterElement::CharacterElement():BasicNode( NULL, CHARACTER_NODE) 
 {
-    m_iNodeType= CHARACTER_NODE;
+/*    m_iNodeType= CHARACTER_NODE;
     m_pachValue = '\0';
+    */
 }
 
-CharacterElement::CharacterElement(const AxisChar* pachValue)
+CharacterElement::CharacterElement(const AxisChar* pachValue):BasicNode(pachValue, CHARACTER_NODE) 
 {
+    /*
     m_pachValue = (AxisChar*) malloc(strlen(pachValue)+1);
     strcpy(m_pachValue, pachValue);
     m_iNodeType= CHARACTER_NODE;
+    */
 }
+
+CharacterElement::CharacterElement(const CharacterElement& rCopy):BasicNode(rCopy)
+{}
+
+BasicNode* CharacterElement::clone()
+{
+    return new CharacterElement(*this);
+}
+
 
 CharacterElement::~CharacterElement()
 {
-    free(m_pachValue);
+    //free(m_pachValue);
 }
 
 NODE_TYPE CharacterElement::getNodeType() const
