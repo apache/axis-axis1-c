@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:element name="description">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="id" type="xs:ID"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="display-name">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="id" type="xs:ID"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ejb-class">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="id" type="xs:ID"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ejb-jar">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="description" minOccurs="0"/>
+				<xs:element ref="display-name" minOccurs="0"/>
+				<xs:element ref="small-icon" minOccurs="0"/>
+				<xs:element ref="large-icon" minOccurs="0"/>
+				<xs:element name="enterprise-beans">
+					<xs:complexType>
+						<xs:choice maxOccurs="unbounded">
+							<xs:element name="session">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="description" minOccurs="0"/>
+										<xs:element ref="display-name" minOccurs="0"/>
+										<xs:element ref="small-icon" minOccurs="0"/>
+										<xs:element ref="large-icon" minOccurs="0"/>
+										<xs:element ref="ejb-name"/>
+										<xs:element ref="home"/>
+										<xs:element ref="remote"/>
+										<xs:element ref="ejb-class"/>
+										<xs:element name="session-type">
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:string">
+														<xs:attribute name="id" type="xs:ID"/>
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="transaction-type">
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:string">
+														<xs:attribute name="id" type="xs:ID"/>
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element ref="env-entry" minOccurs="0" maxOccurs="unbounded"/>
+										<xs:element ref="ejb-ref" minOccurs="0" maxOccurs="unbounded"/>
+										<xs:element ref="security-role-ref" minOccurs="0" maxOccurs="unbounded"/>
+										<xs:element ref="resource-ref" minOccurs="0" maxOccurs="unbounded"/>
+									</xs:sequence>
+									<xs:attribute name="id" type="xs:ID"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="entity">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="description" minOccurs="0"/>
+										<xs:element ref="display-name" minOccurs="0"/>
+										<xs:element ref="small-icon" minOccurs="0"/>
+										<xs:element ref="large-icon" minOccurs="0"/>
+										<xs:element ref="ejb-name"/>
+										<xs:element ref="home"/>
+										<xs:element ref="remote"/>
+										<xs:element ref="ejb-class"/>
+										<xs:element name="persistence-type">
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:string">
+														<xs:attribute name="id" type="xs:ID"/>
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="prim-key-class">
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:string">
+														<xs:attribute name="id" type="xs:ID"/>
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="reentrant">
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:string">
+														<xs:attribute name="id" type="xs:ID"/>
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="cmp-field" minOccurs="0" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element ref="description" minOccurs="0"/>
+													<xs:element name="field-name">
+														<xs:complexType>
+															<xs:simpleContent>
+																<xs:extension base="xs:string">
+																	<xs:attribute name="id" type="xs:ID"/>
+																</xs:extension>
+															</xs:simpleContent>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+												<xs:attribute name="id" type="xs:ID"/>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="primkey-field" minOccurs="0">
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:string">
+														<xs:attribute name="id" type="xs:ID"/>
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element ref="env-entry" minOccurs="0" maxOccurs="unbounded"/>
+										<xs:element ref="ejb-ref" minOccurs="0" maxOccurs="unbounded"/>
+										<xs:element ref="security-role-ref" minOccurs="0" maxOccurs="unbounded"/>
+										<xs:element ref="resource-ref" minOccurs="0" maxOccurs="unbounded"/>
+									</xs:sequence>
+									<xs:attribute name="id" type="xs:ID"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:choice>
+						<xs:attribute name="id" type="xs:ID"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="assembly-descriptor" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="security-role" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="description" minOccurs="0"/>
+										<xs:element ref="role-name"/>
+									</xs:sequence>
+									<xs:attribute name="id" type="xs:ID"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="method-permission" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="description" minOccurs="0"/>
+										<xs:element ref="role-name" maxOccurs="unbounded"/>
+										<xs:element ref="method" maxOccurs="unbounded"/>
+									</xs:sequence>
+									<xs:attribute name="id" type="xs:ID"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="container-transaction" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="description" minOccurs="0"/>
+										<xs:element ref="method" maxOccurs="unbounded"/>
+										<xs:element name="trans-attribute">
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:string">
+														<xs:attribute name="id" type="xs:ID"/>
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="id" type="xs:ID"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="id" type="xs:ID"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="ejb-client-jar" minOccurs="0">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="id" type="xs:ID"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:ID"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ejb-name">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="id" type="xs:ID"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ejb-ref">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="description" minOccurs="0"/>
+				<xs:element name="ejb-ref-name">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="id" type="xs:ID"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="ejb-ref-type">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="id" type="xs:ID"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element ref="home"/>
+				<xs:element ref="remote"/>
+				<xs:element name="ejb-link" minOccurs="0">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="id" type="xs:ID"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:ID"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="env-entry">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="description" minOccurs="0"/>
+				<xs:element name="env-entry-name">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="id" type="xs:ID"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="env-entry-type">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="id" type="xs:ID"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="env-entry-value" minOccurs="0">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="id" type="xs:ID"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:ID"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="home">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="id" type="xs:ID"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="large-icon">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="id" type="xs:ID"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="method">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="description" minOccurs="0"/>
+				<xs:element ref="ejb-name"/>
+				<xs:element name="method-intf" minOccurs="0">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="id" type="xs:ID"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="method-name">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="id" type="xs:ID"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="method-params" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="method-param" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:simpleContent>
+										<xs:extension base="xs:string">
+											<xs:attribute name="id" type="xs:ID"/>
+										</xs:extension>
+									</xs:simpleContent>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="id" type="xs:ID"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:ID"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="remote">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="id" type="xs:ID"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="resource-ref">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="description" minOccurs="0"/>
+				<xs:element name="res-ref-name">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="id" type="xs:ID"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="res-type">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="id" type="xs:ID"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="res-auth">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="id" type="xs:ID"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:ID"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="role-name">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="id" type="xs:ID"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="security-role-ref">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="description" minOccurs="0"/>
+				<xs:element ref="role-name"/>
+				<xs:element name="role-link" minOccurs="0">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="id" type="xs:ID"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:ID"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="small-icon">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="id" type="xs:ID"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
