@@ -61,38 +61,72 @@
  *
  */
 
-// SoapBody.h: interface for the SoapBody class.
+// HeaderBlock.h: interface for the HeaderBlock class.
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_SOAPBODY_H__D1A60F04_287F_4688_A8F0_10BE0EA25775__INCLUDED_)
-#define AFX_SOAPBODY_H__D1A60F04_287F_4688_A8F0_10BE0EA25775__INCLUDED_
+#if !defined(AFX_HEADERBLOCK_H__F21C94A8_40D1_4CFC_9240_DD617494CF40__INCLUDED_)
+#define AFX_HEADERBLOCK_H__F21C94A8_40D1_4CFC_9240_DD617494CF40__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "SoapMethod.h"
-#include "SoapFault.h"
-#include "SoapEnvVersions.h"
+#include "Attribute.h"
+#include <string>
+#include <list>
 
-class SoapBody  
+using namespace std;
+
+class BasicNode;
+
+/**
+ *	The header entry of a SOAP Header according to SOAP 1.1 specification.
+ *
+ *	All immediate child elements of the Header element are called header
+ *  entries.
+ *  The encoding rules for header entries are as follows: 
+ *   1) A header entry is identified by its fully qualified element name, 
+ *      which consists of the namespace URI and the local name. All 
+ *      immediate child elements of the SOAP Header element MUST be 
+ *      namespace-qualified. 
+ *   2) The SOAP encodingStyle attribute MAY be used to indicate the 
+ *      encoding style used for the header entries. 
+ *   3) The SOAP mustUnderstand attribute and SOAP actor attribute MAY 
+ *      be used to indicate how to process the entry and by whom. 
+ *
+ *	
+ *	@brief	The header entry of a SOAP Header according to SOAP 1.1 specification
+ */
+
+class HeaderBlock  
 {
-friend class SoapSerializer;
 
 private:
-	SoapMethod *m_pSoapMethod;
-	SoapFault *m_pSoapFault;
-	//string m_strBodySerialized;
+	int serializeChildren(string& sSerialized);
+	list<BasicNode*> m_children;
+	bool isSerializable();
+	//string attrSerialize();
+	int attrSerialize(string&);
+	string m_localname;
+	string m_prefix;
+	string m_uri;
+	list<Attribute*> m_attributes;
+	string m_value;
+	//string m_strSerialized;
 
 public:
+	int addChild(BasicNode* pBasicNode);
 	//string& serialize();
-	int serialize(string&, SOAP_VERSION eSoapVersion);
-	void setSoapFault(SoapFault* ptrSoapFault);
-	void setSoapMethod(SoapMethod* ptrSoapMethod);
-	SoapBody();
-	virtual ~SoapBody();
+	int serialize(string&);
+	void setValue(const string &value);
+	void addAttribute(Attribute* attr);
+	void setUri(const string &uri);
+	void setPrefix(const string &prefix);
+	void setLocalName(const string &localname);
+	HeaderBlock();
+	virtual ~HeaderBlock();
 
 };
 
-#endif // !defined(AFX_SOAPBODY_H__D1A60F04_287F_4688_A8F0_10BE0EA25775__INCLUDED_)
+#endif // !defined(AFX_HEADERBLOCK_H__F21C94A8_40D1_4CFC_9240_DD617494CF40__INCLUDED_)
