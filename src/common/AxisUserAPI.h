@@ -65,13 +65,33 @@
 #if !defined(AFX_AXISUSERAPI_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_)
 #define AFX_AXISUSERAPI_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_
 
-#include "GDefine.h"
-#include "TypeMapping.h"
-
 typedef struct Axis_ArrayTag
 {
 	void* m_Array;
 	int m_Size;
 } Axis_Array;
+
+typedef struct tm Axis_Time;
+typedef struct tm Axis_Date;
+typedef struct tm Axis_DateTime;
+typedef double Axis_Decimal;
+typedef int Axis_Boolean;
+
+#ifdef __cplusplus
+
+#include <string>
+using namespace std;
+
+typedef string Axis_Base64Binary;
+typedef string Axis_HexBinary;
+typedef string Axis_AnyURI;
+
+#else
+
+typedef char* Axis_Base64Binary;
+typedef char* Axis_HexBinary;
+typedef char* Axis_AnyURI;
+
+#endif
 
 #endif // !defined(AFX_AXISUSERAPI_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_)
