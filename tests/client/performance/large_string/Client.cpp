@@ -26,7 +26,7 @@
 #else
 #endif
 
-#include <axis/AxisGenException.h>
+#include <axis/AxisException.h>
 #include "./gen_src/InteropTestPortType.h"
 
 using namespace std;

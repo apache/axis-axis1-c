@@ -1,5 +1,5 @@
 #include "Calculator.hpp"
-#include <axis/AxisGenException.hpp>
+#include <axis/AxisException.hpp>
 #include <ctype.h>
 
 void PrintUsage();

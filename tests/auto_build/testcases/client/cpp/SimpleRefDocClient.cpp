@@ -4,7 +4,7 @@
 using namespace std;
 
 #include "RefTestPortType.hpp" 
-#include <axis/AxisGenException.hpp>
+#include <axis/AxisException.hpp>
 
 #define ARRAYSIZE 2
 

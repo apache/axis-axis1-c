@@ -2,7 +2,7 @@
 //
 
 #include "InteropTestPortType.h" 
-#include <axis/AxisGenException.hpp>
+#include <axis/AxisException.hpp>
 #include <iostream>
 
 #define ARRAYSIZE 2

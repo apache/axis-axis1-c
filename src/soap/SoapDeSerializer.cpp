@@ -59,7 +59,7 @@
 #include "../xml/XMLParser.h"
 #include "../xml/QName.h"
 #include "AxisSoapException.h"
-#include <axis/AxisGenException.hpp>
+#include "../common/AxisGenException.h"
 
 #include <list>
 #include <iostream>

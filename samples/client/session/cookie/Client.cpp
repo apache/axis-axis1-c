@@ -18,7 +18,7 @@
  */
 
 #include <iostream>
-#include <axis/AxisGenException.hpp>
+#include <axis/AxisException.hpp>
 #include "./gen_src/Total.hpp"
 
 using namespace std;

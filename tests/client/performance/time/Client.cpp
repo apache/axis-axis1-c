@@ -31,7 +31,7 @@
 #endif
 
 
-#include <axis/AxisGenException.hpp>
+#include <axis/AxisException.hpp>
 #include "./gen_src/InteropTestPortType.hpp"
 
 using namespace std;

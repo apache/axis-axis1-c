@@ -23,7 +23,7 @@
 #include <string>
 #include <iostream>
 
-#include <axis/AxisGenException.hpp>
+#include <axis/AxisException.hpp>
 #include "InteropTestPortType.h"
 
 using namespace std;

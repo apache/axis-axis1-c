@@ -6,7 +6,7 @@
 #include "InteropTestPortType.h"
 
 #include <axis/AxisWrapperAPI.hpp>
-#include <axis/AxisGenException.hpp>
+#include <axis/AxisException.hpp>
 #include <axis/ISoapFault.hpp>
 #include "AxisClientException.h"
 
@@ -61,7 +61,7 @@ xsd__string InteropTestPortType::echoString(xsd__string Value0)
 		m_pCall->unInitialize();
 		return Ret;
 	}
-	catch(AxisGenException& e)
+	catch(AxisException& e)
 	{
             int iExceptionCode = e.getExceptionCode();
                 if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
@@ -104,7 +104,7 @@ xsd__string_Array InteropTestPortType::echoStringArray(xsd__string_Array Value0)
 		m_pCall->unInitialize();
 		return RetArray;
 	}
-	catch(AxisGenException& e)
+	catch(AxisException& e)
 	{
             int iExceptionCode = e.getExceptionCode();
                 if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
@@ -147,7 +147,7 @@ int InteropTestPortType::echoInteger(int Value0)
 		m_pCall->unInitialize();
 		return Ret;
 	}
-	catch(AxisGenException& e)
+	catch(AxisException& e)
 	{
             int iExceptionCode = e.getExceptionCode();
                 if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
@@ -190,7 +190,7 @@ xsd__int_Array InteropTestPortType::echoIntegerArray(xsd__int_Array Value0)
 		m_pCall->unInitialize();
 		return RetArray;
 	}
-	catch(AxisGenException& e)
+	catch(AxisException& e)
 	{
             int iExceptionCode = e.getExceptionCode();
                 if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
@@ -233,7 +233,7 @@ float InteropTestPortType::echoFloat(float Value0)
 		m_pCall->unInitialize();
 		return Ret;
 	}
-	catch(AxisGenException& e)
+	catch(AxisException& e)
 	{
             int iExceptionCode = e.getExceptionCode();
                 if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
@@ -276,7 +276,7 @@ xsd__float_Array InteropTestPortType::echoFloatArray(xsd__float_Array Value0)
 		m_pCall->unInitialize();
 		return RetArray;
 	}
-	catch(AxisGenException& e)
+	catch(AxisException& e)
 	{
             int iExceptionCode = e.getExceptionCode();
                 if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
@@ -319,7 +319,7 @@ SOAPStruct* InteropTestPortType::echoStruct(SOAPStruct* Value0)
 		m_pCall->unInitialize();
 		return pReturn;
 	}
-	catch(AxisGenException& e)
+	catch(AxisException& e)
 	{
             int iExceptionCode = e.getExceptionCode();
                 if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
@@ -362,7 +362,7 @@ SOAPStruct_Array InteropTestPortType::echoStructArray(SOAPStruct_Array Value0)
 		m_pCall->unInitialize();
 		return RetArray;
 	}
-	catch(AxisGenException& e)
+	catch(AxisException& e)
 	{
             int iExceptionCode = e.getExceptionCode();
                 if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
@@ -402,7 +402,7 @@ void InteropTestPortType::echoVoid()
 		}
 		m_pCall->unInitialize();
 	}
-	catch(AxisGenException& e)
+	catch(AxisException& e)
 	{
             int iExceptionCode = e.getExceptionCode();
                 if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
@@ -445,7 +445,7 @@ xsd__base64Binary InteropTestPortType::echoBase64(xsd__base64Binary Value0)
 		m_pCall->unInitialize();
 		return Ret;
 	}
-	catch(AxisGenException& e)
+	catch(AxisException& e)
 	{
             int iExceptionCode = e.getExceptionCode();
                 if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
@@ -488,7 +488,7 @@ xsd__dateTime InteropTestPortType::echoDate(xsd__dateTime Value0)
 		m_pCall->unInitialize();
 		return Ret;
 	}
-	catch(AxisGenException& e)
+	catch(AxisException& e)
 	{
             int iExceptionCode = e.getExceptionCode();
                 if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
@@ -531,7 +531,7 @@ xsd__hexBinary InteropTestPortType::echoHexBinary(xsd__hexBinary Value0)
 		m_pCall->unInitialize();
 		return Ret;
 	}
-	catch(AxisGenException& e)
+	catch(AxisException& e)
 	{
             int iExceptionCode = e.getExceptionCode();
                 if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
@@ -574,7 +574,7 @@ xsd__decimal InteropTestPortType::echoDecimal(xsd__decimal Value0)
 		m_pCall->unInitialize();
 		return Ret;
 	}
-	catch(AxisGenException& e)
+	catch(AxisException& e)
 	{
             int iExceptionCode = e.getExceptionCode();
                 if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
@@ -617,7 +617,7 @@ xsd__boolean InteropTestPortType::echoBoolean(xsd__boolean Value0)
 		m_pCall->unInitialize();
 		return Ret;
 	}
-	catch(AxisGenException& e)
+	catch(AxisException& e)
 	{
             int iExceptionCode = e.getExceptionCode();
                 if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
