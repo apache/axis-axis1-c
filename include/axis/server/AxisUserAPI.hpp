@@ -140,7 +140,9 @@ typedef unsigned short xsd__unsignedShort;
  */
 class STORAGE_CLASS_INFO xsd__base64Binary {
 public:
-    //AXISCALL xsd__base64Binary();
+    xsd__base64Binary();
+    xsd__base64Binary(xsd__base64Binary&);
+    ~xsd__base64Binary();
     xsd__unsignedByte * __ptr;
     xsd__int __size;
 };
@@ -151,7 +153,9 @@ public:
  */
 class STORAGE_CLASS_INFO xsd__hexBinary {
 public:
-    //AXISCALL xsd__hexBinary();
+    xsd__hexBinary();
+    xsd__hexBinary(xsd__hexBinary&);
+    ~xsd__hexBinary();
     xsd__unsignedByte * __ptr;
     xsd__int __size;
 };
@@ -228,7 +232,9 @@ typedef char* XML_String;
 class STORAGE_CLASS_INFO AnyType
 {
 public:
-    //AXISCALL AnyType();
+    AnyType();
+    AnyType(AnyType&);
+    ~AnyType();
 
     /**
      * @var _array Contains an array of xml encoded strings.

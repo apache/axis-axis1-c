@@ -698,9 +698,9 @@ int SoapDeSerializer::getArraySize(const AnyElement* pElement)
 
 char *AxisSoapDeSerializerStringCopy(const char *s1) { char *s2=new char[strlen(s1)+1]; strcpy(s2,s1); return s2; }
 
-#define INIT_VALUE_DATETIME {0,0,0,0,0,0,0,0,0}
-#define INIT_VALUE_NUMBER 0
-#define INIT_VALUE_XSDBINARY {0,0}
+#define INIT_VALUE_DATETIME = {0,0,0,0,0,0,0,0,0}
+#define INIT_VALUE_NUMBER = 0
+#define INIT_VALUE_XSDBINARY
 
 #define DESERIALIZE_ENCODED_ARRAY_BLOCK(cpp_type, conv_func) \
 Array.m_Array = new cpp_type[Array.m_Size];\
@@ -1440,7 +1440,7 @@ int SoapDeSerializer::getElementForAttributes(const AxisChar* pName,
 }
 
 #define DESERIALIZE_GET_ATTRIBUTE_AS(cpp_type, conv_func, init_value) \
-    cpp_type ret = init_value;\
+    cpp_type ret init_value;\
     if(!m_pCurrNode) \
     {\
         /**\
@@ -2785,7 +2785,7 @@ xsd__hexBinary SoapDeSerializer::getElementAsHexBinary(const AxisChar* pName,
                                                        const AxisChar* 
                                                        pNamespace)
 {
-    xsd__hexBinary ret = {0,0};
+    xsd__hexBinary ret;
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -2875,7 +2875,7 @@ xsd__base64Binary SoapDeSerializer::getElementAsBase64Binary(const AxisChar* pNa
                                                              const AxisChar* 
                                                              pNamespace)
 {
-    xsd__base64Binary ret = {0,0};
+    xsd__base64Binary ret;
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -2936,7 +2936,7 @@ xsd__base64Binary SoapDeSerializer::getElementAsBase64Binary(const AxisChar* pNa
 struct tm SoapDeSerializer::getElementAsDateTime(const AxisChar* pName, 
                                                  const AxisChar* pNamespace)
 {
-    struct tm ret = INIT_VALUE_DATETIME;
+    struct tm ret INIT_VALUE_DATETIME;
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -3009,7 +3009,7 @@ struct tm SoapDeSerializer::getElementAsDateTime(const AxisChar* pName,
 struct tm SoapDeSerializer::getElementAsDate(const AxisChar* pName, 
                                              const AxisChar* pNamespace)
 {
-    struct tm ret = INIT_VALUE_DATETIME;
+    struct tm ret INIT_VALUE_DATETIME;
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -3083,7 +3083,7 @@ struct tm SoapDeSerializer::getElementAsDate(const AxisChar* pName,
 struct tm SoapDeSerializer::getElementAsTime(const AxisChar* pName, 
                                              const AxisChar* pNamespace)
 {
-    struct tm ret = INIT_VALUE_DATETIME;
+    struct tm ret INIT_VALUE_DATETIME;
     if (AXIS_SUCCESS != m_nStatus) return ret;
     if (RPC_ENCODED == m_nStyle)
     {
@@ -3366,14 +3366,14 @@ int AXISCALL SoapDeSerializer::addHeaderBlock(IHeaderBlock* pBlk)
 xsd__hexBinary SoapDeSerializer::getBodyAsHexBinary()
 {
     /* TODO */
-    xsd__hexBinary hb = {0,0};
+    xsd__hexBinary hb;
     return hb;
 }
 
 xsd__base64Binary SoapDeSerializer::getBodyAsBase64Binary()
 {
     /* TODO */
-    xsd__base64Binary bb = {0,0};
+    xsd__base64Binary bb;
     return bb;
 }
 
