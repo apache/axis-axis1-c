@@ -11,13 +11,14 @@
 class Call  
 {
 public:
+	void SetSOAPVersion(SOAP_VERSION version);
 	int SetHeader(char * key, char* value);
 	int SetProtocol(AXIS_PROTOCOL_TYPE protocol);
 	int UnInitialize();
 	int Initialize();
 	Param * GetResult();
 	int Invoke();
-	void SetReturnType(void* pObject, void* pDZFunct, void* pDelFunct);
+	void SetReturnType(void* pObject, void* pDZFunct, void* pDelFunct, const char * theType, const char * uri);
 	void SetReturnType(XSDTYPE nType);
 
 	void AddParameter(void* pObject, void* pSZFunct, void* pDelFunct, const char* pchName);
