@@ -1,1 +1,1 @@
-SUBDIRS = stubTest interop threadSafe exceptionTest
+SUBDIRS = stubTest interop threadSafe exceptionTest fault_mapping
