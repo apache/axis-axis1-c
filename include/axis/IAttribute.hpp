@@ -65,9 +65,25 @@ public:
 	 * @return AXIS_SUCCESS if succeeded, AXIS_Fail otherwise. NOTE: Passing NULL will result in a AXIS_FAIL
 	 */
     virtual int setLocalName(const AxisChar* localname) = 0;    
+    /**
+     * Get the value of this attribute.
+     * @return The value of this attribute.
+     */
     virtual const AxisChar* getValue() = 0;
+    /**
+     * Get the URI of this attribute
+     * @return The URI of this attribute
+     */
     virtual const AxisChar* getURI() = 0;
+    /**
+     * Get the prefix of this attribute
+     * @return The prefix of this attribute
+     */
     virtual const AxisChar* getPrefix() = 0;
+    /**
+     * Get the local name of this attribute
+     * @return The local name of this attribute
+     */
     virtual const AxisChar* getLocalName() = 0;
 };
 
