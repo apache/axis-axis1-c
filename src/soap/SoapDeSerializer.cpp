@@ -2990,7 +2990,7 @@ SoapDeSerializer::getElementAsString (const AxisChar * pName,
 		//     it is not a simple object.  As added protection against
 		//     false findings, the namespace has been set to an invalid
 		//     value of a single space character.
-		if (strlen (ret) < 3 && *pNamespace == ' ')
+		if (strlen (ret) < 3 && pNamespace != NULL && *pNamespace == ' ')
 		{
 		    bool bReturn = false;
 
