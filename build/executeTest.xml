@@ -51,19 +51,23 @@
 	</target>
 
 	<target name="setForNoMonitor" depends="checkIfEndpointSet" if="endpoint.ok">
-		<propertyregex property="protocol" input="${test.endpoint}"
-			           regexp="(.*)://" select="\1"/>
 
         <propertyregex property="restOfURL" input="${test.endpoint}"
                        regexp="://(.*)" select="\1"/>
 
+		<propertyregex property="protocol" input="${test.endpoint}"
+			           regexp="(.*)://${restOfURL}" select="\1"/>
         <propertyregex property="context" input="${restOfURL}"
                        regexp="/(.*)" select="\1"/>
 
 		<property name="clientArgs" value="${protocol}://${testHost}:${testPort}/${context}"/>
 	</target>
 
-	<target name="checkIfEndpointSet">
+	<target name="setVerbatim" if="test.verbatim">
+		<property name="clientArgs" value="${testHost} ${testPort} ${test.endpoint}"/>
+	</target>
+
+	<target name="checkIfEndpointSet" depends="setVerbatim">
 		<condition property="endpoint.ok">
 			<isset property="test.endpoint"/>
 		</condition>
