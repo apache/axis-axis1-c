@@ -92,15 +92,7 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\gen_src\AxisDivByZeroException.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\gen_src\AxisNormalDetailException.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\gen_src\AxisOutOfBoundException.cpp
+SOURCE=.\gen_src\AxisServiceException.cpp
 # End Source File
 # Begin Source File
 
@@ -141,6 +133,10 @@ SOURCE=.\gen_src\AxisNormalDetailException.h
 # Begin Source File
 
 SOURCE=.\gen_src\AxisOutOfBoundException.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\gen_src\AxisServiceException.h
 # End Source File
 # Begin Source File
 
