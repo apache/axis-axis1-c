@@ -26,6 +26,9 @@
 						</defineset>
 					</compiler>
                               <compiler refid="OS400icc"/>
+					<defineset>
+			                  <define name="AXISTRACE_LIBRARY"/>
+					</defineset>
 					<!-- Linkers -->
 					<linker refid="SolarisLinker"/>
 					<linker refid="LinuxLinker"/>
@@ -49,6 +52,9 @@
 				 exceptions="true" multithreaded="true">
 					<!-- Compilers -->
 					<compiler refid="AIXxlc"/>
+					<defineset>
+			                  <define name="AXISTRACE_LIBRARY"/>
+					</defineset>
 					<!-- Linkers -->
 					<linker refid="AIXLinker"/>
 					<!-- Files to compile -->

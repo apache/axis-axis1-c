@@ -72,7 +72,7 @@ class Tracer extends BufferedWriter {
 	/**
 	 * @param writer a writer to the output file.
 	 */
-	Tracer(Writer writer, int depth, Headers headers, boolean isInLib) throws IOException {
+	Tracer(Writer writer, int depth, Headers headers) throws IOException {
 		super(writer);
 		this.headers = headers;
 		namespace = Configuration.getConfigured("namespace");
@@ -98,9 +98,6 @@ class Tracer extends BufferedWriter {
 		else
 			module = ""; // C-style function
 
-            String libDirDef = "";
-            if (isInLib) libDirDef = "#define AXISTRACE_LIBRARY\n";
-
 		String include = Configuration.getConfigured("include");
 		String includefile = "";
 		if (null == include) {
@@ -122,7 +119,6 @@ class Tracer extends BufferedWriter {
 		String line =
 			hashifdef
 				+ "/* TRACE ADDED BY THE TRACE INSTRUMENTOR TOOL */\n"
-                        + libDirDef
 				+ "#include "
 				+ includefile
 				+ "\n"

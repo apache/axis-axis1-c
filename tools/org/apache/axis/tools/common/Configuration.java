@@ -33,7 +33,6 @@ public class Configuration {
 	private static Set macros = new HashSet();
 	private static Set defines = new HashSet();
 	private static Set attributes = new HashSet();
-	private static Set librarydirs = new HashSet();
 	private static Map others = new HashMap();
 
     /**
@@ -82,8 +81,6 @@ public class Configuration {
 				defines.add(value);
 			} else if ("attribute".equals(key)) {
 				attributes.add(value);
-			} else if ("librarydir".equals(key)) {
-				librarydirs.add(value);
 			} else {
 				others.put(key, value);
 			}
@@ -112,10 +109,6 @@ public class Configuration {
 
 	public static boolean isAttribute(String s) {
 		return attributes.contains(s);
-	}
-
-	public static Set getLibraryDirs() {
-		return librarydirs;
 	}
 
 	public static String getConfigured(String key) {

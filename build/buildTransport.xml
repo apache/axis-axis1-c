@@ -27,6 +27,7 @@
                </compiler>
                <defineset>
                   <define name="ENABLE_AXISTRACE" if="trace"/>
+                  <define name="AXISTRACE_LIBRARY"/>
                </defineset>
                               <compiler refid="OS400icc"/>
                <!-- Linkers -->
@@ -50,6 +51,7 @@
                <compiler refid="AIXxlc"/>
                <defineset>
                   <define name="ENABLE_AXISTRACE" if="trace"/>
+                  <define name="AXISTRACE_LIBRARY"/>
                </defineset>
 
                <!-- Linkers -->

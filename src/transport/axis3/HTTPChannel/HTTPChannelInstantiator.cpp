@@ -19,7 +19,6 @@
  *
  */
 
-#define AXISTRACE_LIBRARY
 #define AXISTRACE_LIBRARY_MAINENTRYPOINT
 #include "../../../common/AxisTrace.h"
 
