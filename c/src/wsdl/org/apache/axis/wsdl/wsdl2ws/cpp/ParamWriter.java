@@ -67,12 +67,14 @@ package org.apache.axis.wsdl.wsdl2ws.cpp;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
+import org.apache.axis.wsdl.wsdl2ws.info.TypeMap;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public abstract class ParamWriter extends BasicFileWriter{
@@ -114,21 +116,23 @@ public abstract class ParamWriter extends BasicFileWriter{
 		ArrayList attribfeilds = new ArrayList();
 		ArrayList elementfeilds = new ArrayList();
 
-		Enumeration names = type.getAttributeNames();
-		while (names.hasMoreElements()){
-			attribfeilds.add(names.nextElement());
+		Iterator names = type.getAttributeNames();
+		while (names.hasNext()){
+			attribfeilds.add(names.next());
 		}
         
 		names = type.getElementnames();
-				while (names.hasMoreElements()){
-					elementfeilds.add(names.nextElement());
+				while (names.hasNext()){
+					elementfeilds.add(names.next());
 		}
         
         
 		//get all the fields
-  
-		attribs = new String[attribfeilds.size()+elementfeilds.size()][];
-		for (int i = 0; i < attribfeilds.size(); i++) {
+		int intAttrFieldSz = attribfeilds.size();
+		int intEleFieldSz = elementfeilds.size();
+		attribs = new String[intAttrFieldSz+intEleFieldSz][];
+
+		for (int i = 0 ; i < intAttrFieldSz; i++) {
 			//[variablename,typename,typeQNameURI,typeQNamelocalpart,attributeTypeURI,attributeTypeLocalpart]
 			attribs[i] = new String[6];
 			attribs[i][0] = ((String) attribfeilds.get(i));
@@ -146,8 +150,8 @@ public abstract class ParamWriter extends BasicFileWriter{
 			attribs[i][4] = null;
 			attribs[i][5] = null;
 		}
-        
-		for (int i = attribfeilds.size(); i < elementfeilds.size()+attribfeilds.size(); i++) {
+
+		for (int i = intAttrFieldSz ; i < intAttrFieldSz+intEleFieldSz; i++) {
 			attribs[i] = new String[6];
 			attribs[i][0] = ((String) elementfeilds.get(i));
    
@@ -177,7 +181,7 @@ public abstract class ParamWriter extends BasicFileWriter{
  	protected String getCorrectParmNameConsideringArraysAndComplexTypes(QName name,String classname)throws WrapperFault{
 		//System.out.println(name);
 		Type t = wscontext.getTypemap().getType(name);
-		if(t !=null){ //array or complex types
+		if(!TypeMap.isSimpleType(name)){ //array or complex types
 			if (t.isArray()){
 				return t.getLanguageSpecificName();
 			}
