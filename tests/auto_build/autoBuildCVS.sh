@@ -52,8 +52,7 @@ then
     if test -d ./cvsautobuild; then
         cvs -d ${CVSROOT} update -dC ${CHECKOUT_DIR}
     else
-#        cvs -d ${CVSROOT} checkout -d ${CHECKOUT_DIR} ws-axis/c
-        cvs -d ${CVSROOT} checkout -d ${CHECKOUT_DIR} -r release1-4-final-branch ws-axis/c
+        cvs -d ${CVSROOT} checkout -d ${CHECKOUT_DIR} ws-axis/c
     fi
 fi
 
