@@ -92,7 +92,9 @@ void AxisConfigException::processException(const int iExceptionCode, char* pcMes
 
 const string& AxisConfigException::getMessage (const exception* objException)
 {
-    return objException->what();
+    static string objExDetail = objException->what();
+
+    return objExDetail;
 }
 
 const string& AxisConfigException::getMessage (const int iExceptionCode)

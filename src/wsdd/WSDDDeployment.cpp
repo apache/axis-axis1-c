@@ -212,6 +212,8 @@ const WSDDService* WSDDDeployment::getService(const AxisChar* sServiceName)
     }
     catch(exception& e)
     {
+        e = e;
+
         throw AxisWsddException(SERVER_WSDD_EXCEPTION);
     }
 }

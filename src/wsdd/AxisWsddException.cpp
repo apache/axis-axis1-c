@@ -90,7 +90,9 @@ void AxisWsddException::processException(const int iExceptionCode, char* pcMessa
 }
 const string& AxisWsddException::getMessage (const exception* objException)
 {
-    return objException->what();
+    static string objExDetail = objException->what();
+
+    return objExDetail;
 }
 
 const string& AxisWsddException::getMessage (const int iExceptionCode)
