@@ -101,9 +101,8 @@ install_sh = @install_sh@
 bin_PROGRAMS = groupB
 SUBDIRS = 
 AM_CPPFLAGS = $(CPPFLAGS)
-groupB_SOURCES = InteropGroupBClient.cpp InteropTestPortTypeB.cpp SOAPArrayStruct.cpp SOAPStruct.cpp SOAPStructStruct.cpp
-
-groupB_LDADD = @LINKCLIENTLIB@
+groupB_SOURCES = SOAPStruct.cpp SOAPArrayStruct.cpp SOAPStructStruct.cpp AxisClientException.cpp InteropTestPortTypeB.cpp InteropGroupBClient.cpp
+groupB_LDADD = @LINKCLIENTLIB@ 
 INCLUDES = -I$(AXISCPP_HOME)/include
 subdir = samples/client/interoptests/groupB
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -112,9 +111,9 @@ CONFIG_CLEAN_FILES =
 bin_PROGRAMS = groupB$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS)
 
-am_groupB_OBJECTS = InteropGroupBClient.$(OBJEXT) \
-	InteropTestPortTypeB.$(OBJEXT) SOAPArrayStruct.$(OBJEXT) \
-	SOAPStruct.$(OBJEXT) SOAPStructStruct.$(OBJEXT)
+am_groupB_OBJECTS = SOAPStruct.$(OBJEXT) SOAPArrayStruct.$(OBJEXT) \
+	SOAPStructStruct.$(OBJEXT) AxisClientException.$(OBJEXT) \
+	InteropTestPortTypeB.$(OBJEXT) InteropGroupBClient.$(OBJEXT)
 groupB_OBJECTS = $(am_groupB_OBJECTS)
 groupB_DEPENDENCIES =
 groupB_LDFLAGS =
@@ -126,7 +125,8 @@ LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/InteropGroupBClient.Po \
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/AxisClientException.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/InteropGroupBClient.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/InteropTestPortTypeB.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/SOAPArrayStruct.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/SOAPStruct.Po \
@@ -198,6 +198,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AxisClientException.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/InteropGroupBClient.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/InteropTestPortTypeB.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SOAPArrayStruct.Po@am__quote@

@@ -101,9 +101,8 @@ install_sh = @install_sh@
 bin_PROGRAMS = base
 SUBDIRS = 
 AM_CPPFLAGS = $(CPPFLAGS)
-base_SOURCES = InteropBaseClient.cpp InteropTestPortType.cpp  SOAPStruct.cpp 
-
-base_LDADD = @LINKCLIENTLIB@
+base_SOURCES = SOAPStruct.cpp InteropTestPortType.cpp AxisClientException.cpp InteropBaseClient.cpp
+base_LDADD = @LINKCLIENTLIB@ 
 INCLUDES = -I$(AXISCPP_HOME)/include
 subdir = samples/client/interoptests/base
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -112,8 +111,8 @@ CONFIG_CLEAN_FILES =
 bin_PROGRAMS = base$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS)
 
-am_base_OBJECTS = InteropBaseClient.$(OBJEXT) \
-	InteropTestPortType.$(OBJEXT) SOAPStruct.$(OBJEXT)
+am_base_OBJECTS = SOAPStruct.$(OBJEXT) InteropTestPortType.$(OBJEXT) \
+	AxisClientException.$(OBJEXT) InteropBaseClient.$(OBJEXT)
 base_OBJECTS = $(am_base_OBJECTS)
 base_DEPENDENCIES =
 base_LDFLAGS =
@@ -125,7 +124,8 @@ LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/InteropBaseClient.Po \
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/AxisClientException.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/InteropBaseClient.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/InteropTestPortType.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/SOAPStruct.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -195,6 +195,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AxisClientException.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/InteropBaseClient.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/InteropTestPortType.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SOAPStruct.Po@am__quote@
