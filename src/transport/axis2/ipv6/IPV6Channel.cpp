@@ -86,8 +86,17 @@ throw (AxisTransportException&)
     hints.ai_socktype = SOCK_STREAM;
 
     char port[7];
-    sprintf(port, "%hd", m_URL.getPort());
-    int err = getaddrinfo(m_URL.getHostName(), port, &hints, &addrInfo0);
+   
+    const char* host = m_URL.getHostName();
+    unsigned int uiPort = m_URL.getPort();
+    if (m_bUseProxy)
+    {
+        uiPort = m_uiProxyPort;
+        host = m_strProxyHost.c_str();
+    }
+ 
+    sprintf(port, "%hd", uiPort);
+    int err = getaddrinfo(host, port, &hints, &addrInfo0);
     if (err)
     {
 
