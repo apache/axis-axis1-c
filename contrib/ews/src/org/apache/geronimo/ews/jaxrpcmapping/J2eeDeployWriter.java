@@ -57,10 +57,8 @@
 package org.apache.geronimo.ews.jaxrpcmapping;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -68,7 +66,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Vector;
 
 import javax.wsdl.Binding;
@@ -89,7 +86,6 @@ import org.apache.axis.enum.Style;
 import org.apache.axis.enum.Use;
 import org.apache.axis.utils.JavaUtils;
 import org.apache.axis.utils.Messages;
-import org.apache.axis.wsdl.toJava.Emitter;
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
 import org.apache.axis.wsdl.symbolTable.CollectionTE;
 import org.apache.axis.wsdl.symbolTable.Element;
@@ -99,6 +95,7 @@ import org.apache.axis.wsdl.symbolTable.Parameters;
 import org.apache.axis.wsdl.symbolTable.SchemaUtils;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
+import org.apache.axis.wsdl.toJava.Emitter;
 import org.apache.axis.wsdl.toJava.JavaWriter;
 import org.apache.axis.wsdl.toJava.Utils;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
@@ -380,14 +377,9 @@ public class J2eeDeployWriter  extends JavaWriter {
 				bEntry.getBinding().getExtensibilityElements().iterator();
 
 		//get the Name of the provider needed in the deploy.wsdd
-		Properties pro = new Properties();
 		String provider = null;
-		File file = new File("src/conf/"+GenerationConstants.WS4J2EE_PROPERTY_FILE);
-		if(file.exists()){
-			InputStream ws4j2eein = new FileInputStream(file); 
-			pro.load(ws4j2eein);
-			provider = pro.getProperty(GenerationConstants.WS4J2EE_PROVIDER); 
-		}
+		provider = GenerationConstants.getProperties()
+			.getProperty(GenerationConstants.WS4J2EE_PROVIDER); 
 
 		while (iterator.hasNext()) {
 			Object obj = iterator.next();
