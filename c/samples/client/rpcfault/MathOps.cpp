@@ -20,11 +20,11 @@ extern void Axis_Delete_DivByZeroStruct(DivByZeroStruct* param, bool bArray = fa
 extern int Axis_Serialize_DivByZeroStruct(DivByZeroStruct* param, IWrapperSoapSerializer* pSZ, bool bArray = false);
 extern int Axis_GetSize_DivByZeroStruct();
 
-MathOps::MathOps()
+MathOps::MathOps(const char* pchEndpointUri)
 {
 	m_pCall = new Call();
 	m_pCall->setProtocol(APTHTTP);
-	m_pCall->setEndpointURI("http://localhost/axis/MathOps");
+	m_pCall->setEndpointURI(pchEndpointUri);
 }
 
 MathOps::~MathOps()
