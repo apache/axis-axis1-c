@@ -32,16 +32,16 @@ int main(int argc, char* argv[])
 		printProperties(&ws);
 
 		//deleting the transport with specific key value
-		ws.deleteTrasportProperty("Accept-Language",2);
+		ws.deleteTransportProperty("Accept-Language",2);
 
 		cout << "After deleteTransportProperty(key,int) method  " << endl;
 		printProperties(&ws);
 
 		//Go to the last property and delete
-		ws.getFirstTrasportPropertyKey();
-		ws.getNextTrasportPropertyKey();
-		ws.getNextTrasportPropertyKey();
-		ws.deleteCurrentTrasportProperty();
+		ws.getFirstTransportPropertyKey();
+		ws.getNextTransportPropertyKey();
+		ws.getNextTransportPropertyKey();
+		ws.deleteCurrentTransportProperty();
 		cout << "After deleteCurrentProperty method " << endl;
 		printProperties(&ws);
 		
@@ -66,15 +66,15 @@ int main(int argc, char* argv[])
 void printProperties(Calculator *obj)
 {
 	const char* transprop1;
-	transprop1 = obj->getFirstTrasportPropertyKey();
+	transprop1 = obj->getFirstTransportPropertyKey();
 	do
 	{
-		transprop1 = obj->getCurrentTrasportPropertyKey();
+		transprop1 = obj->getCurrentTransportPropertyKey();
 		cout << "current transport property key = " << transprop1 ;
-		transprop1 = obj->getCurrentTrasportPropertyValue();
+		transprop1 = obj->getCurrentTransportPropertyValue();
 		cout << " value = " << transprop1 << endl;
 	}
-	while ( (transprop1 = obj->getNextTrasportPropertyKey()) != NULL);
+	while ( (transprop1 = obj->getNextTransportPropertyKey()) != NULL);
 	cout << "****************************************************** " << endl;
 	return ;	
 }
