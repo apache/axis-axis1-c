@@ -67,13 +67,7 @@
 #include <string>
 #include <stdio.h>
 
-#ifdef WIN32
-    #define TRACE_PATH "E:\\Program Files\\Apache Group\\Apache\\Axis\\logs\\AxisLog";
-#else //linux
-    #define TRACE_PATH "/usr/local/apache/Axis/logs/AxisLog";
-#endif
-
-#define AXISTRACE
+//#define AXISTRACE
 #if defined(AXISTRACE)
   #define AXISTRACE1(X) tracer.trace(X,__FILE__,__LINE__);
   #define AXISTRACE2(X,Y) tracer.trace(X,Y,__FILE__,__LINE__);
@@ -85,6 +79,9 @@
 
 //extern unsigned char chEBuf[1024];
 using namespace std;
+/**
+This is class is used to log messages when AXISTRACE is defined.
+*/
 class AxisTrace
 {
 public:
@@ -92,11 +89,13 @@ public:
 	virtual ~AxisTrace();
     int trace(const char* sLog, char* arg2, int arg3);
     int trace(const char* sLog1, const char* sLog2, char* arg3, int arg4);
+    int GetConfPath();
   
 private:
     char strLine[4];
-    char* sFileName;
-    FILE* fileTrace;  
+    char sFileName[200];
+    FILE* fileTrace;
+    const FILE* ConfFile; 
 
 };
 

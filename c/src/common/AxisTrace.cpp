@@ -61,13 +61,15 @@
 
 #include "AxisTrace.h"
 #include <time.h>
+#include "AxisUtils.h"
+#include "GDefine.h"
 
 using namespace std;
 
 
 AxisTrace::AxisTrace()
 {
-  sFileName = TRACE_PATH;
+    GetConfPath();
 }
 
 AxisTrace::~AxisTrace()
@@ -142,6 +144,32 @@ int AxisTrace::trace(const char* sLog1, const char* sLog2,char* arg3, int arg4)
 
         return SUCCESS;
     }
+}
+
+int AxisTrace::GetConfPath()
+{
+    int key;
+    int intItr = 0;
+    if ((ConfFile = fopen(CONFFILENAME, "r")) == NULL)
+        return FAIL;
+    else
+    {
+        //fgets(str,200,ConfFile);
+        while (!feof(ConfFile))
+        {
+            key = fgetc(ConfFile);
+            /* The last character read is the end of file marker */
+            /* so don't print it                                 */
+            if (!feof(ConfFile))
+            {
+                sFileName[intItr] = key;
+                intItr++;
+            }
+        }
+        sFileName[intItr] = '\0';
+    }
+    fclose(ConfFile);
+    return SUCCESS;
 }
 
 /*
