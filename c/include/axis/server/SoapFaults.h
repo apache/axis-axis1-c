@@ -92,6 +92,7 @@ enum SOAP_FAULTS {
 	SF_MUST_UNDERSTAND,
 
 	//Client faults
+	SF_MESSAGEINCOMPLETE,
 	SF_SOAPACTIONEMPTY,
 	SF_SERVICENOTFOUND,
 	SF_SOAPCONTENTERROR,
@@ -126,6 +127,7 @@ static SoapFaultStruct g_sObjSoapFaultStruct[FAULT_LAST] =
 	/*SF_MUST_UNDERSTAND*/	{"MustUnderstand", "Soap Must Understand  error", "none", ""},
 
 //Client faults
+	/*SF_MESSAGEINCOMPLETE*/{"Client", "Soap message is incorrect or incomplete", "none", ""},
 	/*SF_SOAPACTIONEMPTY*/	{"Client", "Soap Action header empty", "none", ""},
 	/*SF_SERVICENOTFOUND*/	{"Client", "Requested service is not registerd at the server", "none", ""},
 	/*SF_SOAPCONTENTERROR*/ {"Client", "Soap content is not valid", "none", ""},

@@ -122,6 +122,12 @@ int ServerAxisEngine::Process(Ax_soapstream* stream)
 			/* check for stream version in the request and decide whether we support it or not
 			 * if we do not support send a soapfault with version mismatch.	*/	  
 			nSoapVersion = m_pDZ->GetVersion();
+			if (m_pDZ->GetStatus() != AXIS_SUCCESS)
+			{
+				m_pSZ->setSoapFault(SoapFault::getSoapFault(SF_MESSAGEINCOMPLETE));
+				break; //do .. while(0)
+			}
+
 			if (nSoapVersion == VERSION_LAST) /* version not supported */
 			{
 				m_pSZ->setSoapVersion(SOAP_VER_1_2);
