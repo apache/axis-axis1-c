@@ -178,7 +178,7 @@ int Param::serialize(SoapSerializer& pSZ)
 		}
 		else
 		{
-			pSZ.Serialize("<", m_sName.c_str(), ">", NULL);
+			pSZ.Serialize("<", m_sName.c_str(), NULL);/* note : ">" is not serialized to enable the type's serializer to add attributes */
 			m_Value.pCplxObj->pSZFunct(m_Value.pCplxObj->pObject, &pSZ, false);			
 			pSZ.Serialize("</", m_sName.c_str(), ">", NULL);
 		}

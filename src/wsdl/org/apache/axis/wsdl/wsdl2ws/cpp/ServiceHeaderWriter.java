@@ -147,22 +147,23 @@ public class ServiceHeaderWriter extends HeaderFileWriter{
 		  	for(int i = 0; i < methods.size(); i++){
 			  	minfo = (MethodInfo)this.methods.get(i);
 				boolean isAllTreatedAsOutParams = false;
-				minfo = (MethodInfo)this.methods.get(i);
+				ParameterInfo returntype = null;
 				int noOfOutParams = minfo.getOutputParameterTypes().size();
-				//write return type
-				if(0==noOfOutParams)
-				writer.write("\t\tvoid ");
-				else if(1==noOfOutParams){
-					ParameterInfo returnParam = (ParameterInfo)minfo.getOutputParameterTypes().iterator().next();
-					String outparam = returnParam.getLangName();
-					writer.write("\t\t"+WrapperUtils.getClassNameFromParamInfoConsideringArrays(returnParam,wscontext)+" ");
+				if (0==noOfOutParams){
+					returntype = null;
+					writer.write("\t\tvoid ");
+				}
+				else if (1==noOfOutParams){
+					returntype = (ParameterInfo)minfo.getOutputParameterTypes().iterator().next();
+					String outparam = returntype.getLangName();
+					writer.write("\t\t"+WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype,wscontext)+" ");
 				}
 				else{
 					isAllTreatedAsOutParams = true;
 					writer.write("\t\tvoid ");
 				}
+			  	//write return type
 			  	writer.write(minfo.getMethodname()+"(");
-            
 			  	//write parameter names 
 			  	Iterator params = minfo.getInputParameterTypes().iterator();
 			  	if(params.hasNext()){
@@ -182,10 +183,11 @@ public class ServiceHeaderWriter extends HeaderFileWriter{
 				}			  	
 			  	writer.write(");\n");
 		  	}
-		}catch (Exception e) {
-			  e.printStackTrace();
-			  throw new WrapperFault(e);
-		}	}
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new WrapperFault(e);
+		}	
+	}
 
 	/* (non-Javadoc)
 	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writePreprocssorStatements()
@@ -198,6 +200,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter{
 			writer.write("#include <axis/common/AxisUserAPI.h>\n\n");
 			while(types.hasNext()){
 				atype = (Type)types.next();
+				if (atype.getLanguageSpecificName().startsWith(">")) continue;				
 				typeSet.add(atype.getLanguageSpecificName());
 			}		
 			Iterator itr = typeSet.iterator();

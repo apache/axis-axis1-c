@@ -71,6 +71,7 @@ import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
+import org.apache.axis.wsdl.wsdl2ws.ParamWriter;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class ParmHeaderFileWriter extends ParamWriter{
@@ -103,7 +104,7 @@ public class ParmHeaderFileWriter extends ParamWriter{
 		  try{
 			  for(int i=0;i<attribs.length;i++){
 				  //if((t = wscontext.getTypemap().getType(new QName(attribs[i][2],attribs[i][3])))!= null && t.isArray()) continue;
-				  writer.write("\t"+getCorrectParmNameConsideringArraysAndComplexTypes(new QName(attribs[i][2],attribs[i][3]),attribs[i][1])+" "+attribs[i][0]+";\n");
+				  writer.write("\t"+getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])+" "+attribs[i].getParamName()+";\n");
 			  }    
 		  } catch (IOException e) {
 			   throw new WrapperFault(e);

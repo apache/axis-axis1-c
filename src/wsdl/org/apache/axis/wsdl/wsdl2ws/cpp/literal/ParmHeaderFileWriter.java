@@ -67,11 +67,10 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import javax.xml.namespace.QName;
-
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
+import org.apache.axis.wsdl.wsdl2ws.ParamWriter;
 
 public class ParmHeaderFileWriter extends ParamWriter{
 	public ParmHeaderFileWriter(WebServiceContext wscontext,Type type)throws WrapperFault{
@@ -105,8 +104,7 @@ public class ParmHeaderFileWriter extends ParamWriter{
 		  try{
 			writer.write("public:\n");
 			  for(int i=0;i<attribs.length;i++){
-				  //if((t = wscontext.getTypemap().getType(new QName(attribs[i][2],attribs[i][3])))!= null && t.isArray()) continue;
-				  writer.write("\t"+getCorrectParmNameConsideringArraysAndComplexTypes(new QName(attribs[i][2],attribs[i][3]),attribs[i][1])+" "+attribs[i][0]+";\n");
+				  writer.write("\t"+getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])+" "+attribs[i].getParamName()+";\n");
 			  }    
 		  } catch (IOException e) {
 			   throw new WrapperFault(e);
@@ -148,14 +146,13 @@ public class ParmHeaderFileWriter extends ParamWriter{
 		Iterator types = this.wscontext.getTypemap().getTypes().iterator();
 		writer.write("#include <axis/common/AxisUserAPI.h>\n\n");
 		HashSet typeSet = new HashSet();
-		while(types.hasNext()){
-			atype = (Type)types.next();
-			if(!(atype.equals(this.type))){
-				if (this.type.isContainedType(atype)){ 
-					typeSet.add(atype.getLanguageSpecificName());
-				}
-			}
-		}		
+		for (int i=0;i<attribs.length; i++)
+		{
+			if ((attribs[i].isArray()) && (!attribs[i].isSimpleType()))
+				typeSet.add(attribs[i].getTypeName()+"_Array");
+			if (!attribs[i].isSimpleType())
+				typeSet.add(attribs[i].getTypeName());
+		}
 		Iterator itr = typeSet.iterator();
 		while(itr.hasNext())
 		{

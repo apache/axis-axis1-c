@@ -63,6 +63,7 @@ import java.util.Iterator;
 import org.apache.axis.wsdl.wsdl2ws.SourceWriter;
 import org.apache.axis.wsdl.wsdl2ws.WrapperConstants;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
@@ -86,9 +87,9 @@ public class AllParamWriter implements SourceWriter{
 		String generator = wscontext.getWrapInfo().getImplStyle();
 		Type type;
 		while(enu.hasNext()){	
-		try{	
-			type = (Type)enu.next();
-			if(wscontext.getWrapInfo().getImplStyle().equals(WrapperConstants.IMPL_STYLE_STRUCT)){
+			try{	
+				type = (Type)enu.next();
+				if(wscontext.getWrapInfo().getImplStyle().equals(WrapperConstants.IMPL_STYLE_STRUCT)){
 					if(type.isArray()){
 						System.out.println("Array writer called ......");
 						(new ArrayParamWriter(wscontext,type)).writeSource();	

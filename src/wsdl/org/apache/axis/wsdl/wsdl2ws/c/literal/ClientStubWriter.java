@@ -70,11 +70,11 @@ import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
-	//import org.apache.axis.wsdl.wsdl2ws.info.WrapperInfo;
 	
 public class ClientStubWriter extends CFileWriter{
 	private WebServiceContext wscontext;
@@ -226,7 +226,6 @@ public class ClientStubWriter extends CFileWriter{
 			}
 		}
 		writer.write(")\n{\n");
-		writer.write("\tint nStatus;\n");
 		if(returntypeisarray){
 			writer.write("\tAxis_Array array;\n");				
 		}
@@ -252,7 +251,7 @@ public class ClientStubWriter extends CFileWriter{
 			writer.write((returntypeisarray?"RetArray":returntypeissimple?"Ret":"pReturn")+";\n");
 		}
 		writer.write("\tpCall = "+globalobjectname+"->__vfptr;\n");
-		writer.write("/* Following will establish the connections with the server too */\n");
+		writer.write("\t/* Following will establish the connections with the server too */\n");
 		writer.write("\tif (AXIS_SUCCESS != pCall->Initialize("+globalobjectname+", DOC_LITERAL)) return ");
 		if (returntype != null){
 			writer.write((returntypeisarray?"RetArray":returntypeissimple?"Ret":"pReturn")+";\n");
@@ -299,9 +298,8 @@ public class ClientStubWriter extends CFileWriter{
 			}
 			writer.write(");\n");
 		}
-		writer.write("\tnStatus = pCall->Invoke("+globalobjectname+");\n");
-		writer.write("\tif (AXIS_SUCCESS == nStatus)\n\t{\n");
-		writer.write("\t\tif(AXIS_SUCCESS != pCall->CheckMessage("+globalobjectname+", \""+minfo.getOutputMessage().getLocalPart()+"\", \""+minfo.getOutputMessage().getNamespaceURI()+"\"))\n\t\t{\n");
+		writer.write("\tif (AXIS_SUCCESS == pCall->Invoke("+globalobjectname+"))\n\t{\n");
+		writer.write("\t\tif(AXIS_SUCCESS == pCall->CheckMessage("+globalobjectname+", \""+minfo.getOutputMessage().getLocalPart()+"\", \""+minfo.getOutputMessage().getNamespaceURI()+"\"))\n\t\t{\n");
 		if (returntype == null){
 			writer.write("\t\t\t/*not successful*/\n\t\t}\n");
 			writer.write("\t}\n\tpCall->UnInitialize("+globalobjectname+");\n");
