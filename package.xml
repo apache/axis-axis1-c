@@ -9,7 +9,8 @@ Ant is available from: http://ant.apache.org/
 You will require the ant-contrib extensions to ANT, within:
 	[ant install dir]/lib
 These are available from: http://ant-contrib.sourceforge.net/
-
+{Note: You will require both the cpptasks (v1.0beta3) and ant-contrib (v0.6) downloads }
+        
 It is intended that the default target be used, produces the complete source and
 binary deliverables.
 

@@ -9,7 +9,7 @@ Ant is available from: http://ant.apache.org/
 To compile C/C++ code you will require the ant-contrib and cpptasks extensions to ANT, within:
 	[ant install dir]/lib
 These are available from: http://ant-contrib.sourceforge.net/
-{Note: You will require both the cpptasks and ant-contrib downloads }
+        {Note: You will require both the cpptasks (v1.0beta3) and ant-contrib (v0.6) downloads }
 
 It is intended that the default target be used, which compiles and links all code
 and generates documentation.

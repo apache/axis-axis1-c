@@ -41,7 +41,7 @@ compilation of C/C++.
     <ul>
       <li>Available from <a href="http://ant-contrib.sourceforge.net">http://ant-contrib.sourceforge.net</a></li>
       <li>Place JARs into <code>[ANT INSTALL DIR]/lib</code>.</li>
-      <li>Require both ant-contrib and cpptasks</li>
+      <li>Require both ant-contrib (v0.6) and cpptasks (v1.0beta3)</li>
     </ul>
   </li>
   <li>Doxygen - Used for generating API documentation
@@ -60,16 +60,14 @@ compilation of C/C++.
 
 <h2><a name="thirdPartySoftware"></a>Getting necessary third party
 software</h2>
-<p>Axis Cpp Developers can use either Xerces-c or the Expat XML Parsers
-to build the Axis Cpp. Additionally, you can opt to build Apache mod files for Apache 1.3 or 2.0.</p>
-<p><b>Expat XML Parser</b></p>
-<p>You can get expat binaries from <a
- href="http://sourceforge.net/projects/expat/">http://sourceforge.net/projects/expat/</a>.</p>
-<p><b>Xerces-C XML Parser</b></p>
+<p>Axis Cpp Developers can use either the Xerces-c or XML4C Parsers
+to build the Axis Cpp. If building the SSL library you will require Open SSL. Additionally, you can opt to build Apache mod files for Apache 1.3 or 2.0.</p><p><b>Xerces-C XML Parser</b></p>
 <p>You can get Xerces-C binaries from <a
  href="http://xerces.apache.org">http://xerces.apache.org</a>.</p>
 <P><B>Apache</B></P><P>You can get Apache 1.3 or 2.0 from <A
 	href="http://httpd.apache.org/">http://httpd.apache.org/</A></P>
+<P><B>Open SSL</B></P>
+<P>You can get Open SSL from <A href="http://www.openssl.org/">http://www.openssl.org/</A></P>
 <H2><A name="PropertyFiles"></A>Property Files</H2>
 <P>To aid in the portability of the ANT scripts, a number of property
 files are used. The script will decide which to use based on the
@@ -86,15 +84,13 @@ software dependencies and target packaging structure.</P>
 	<UL>
 		<LI>For each one to be built, set the following to true:<BR>
 		<CODE>xmlParser.xml4c</CODE><BR>
-		<CODE>xmlParser.xerces</CODE><BR>
-		<CODE>xmlParser.expat</CODE></LI>
+		<CODE>xmlParser.xerces</CODE></LI>
 		</UL>
 	</LI>
 	<LI>Select which transport implementation to use:<UL>
 		<LI>For each one to be built, set the following to true:<BR>
-		<CODE>transport.axis</CODE><BR>
 		<CODE>transport.axis2</CODE><BR>
-		<CODE>transport.libwww</CODE></LI>
+		<CODE>transport.HTTP</CODE></LI>
 	</UL>
 	</LI>
 	<LI>Select which Apache module to produce:
@@ -130,12 +126,13 @@ set:</P>
 <P>The default property files make use of the following environment variables to locate the various third party software dependencies.</P>
 <UL>
 	<LI><CODE>AXISJAVA_LIB</CODE> - location of Axis Java JAR files, as required for WSDL2Ws tool</LI>
-	<LI><CODE>EXPAT_HOME</CODE> - location of Expat installation <I>(if
-	using Expat</I>)</LI>
+	<LI><CODE>IPV6_HOME</CODE> - location of Microsoft IPv6 Header files (<I>Windows only</I>)</LI>
 	<LI><CODE>XERCES_HOME</CODE> - location of Xerces installation (<I>if
 	using Xerces</I>)</LI>
 	<LI><CODE>XML4C_HOME</CODE> - location of XML4C installation (<I>if
 	using XML4C</I>)</LI>
+	<LI><CODE>OPENSSL_HOME</CODE> - location of OpenSSL installation (<I>if building SSL
+	library</I>)</LI>
 	<LI><CODE>APACHE_HOME</CODE> - location of Apache 1.3 installation (<I>if
 	building Apache 1.3 module</I>)</LI>
 	<LI><CODE>APACHE2_HOME</CODE> - location of Apache 2.0 installation (<I>if
@@ -173,12 +170,12 @@ from this point on.</p>
   <li>Build Axis C Client library</li>
   <li>Build Axis C Transport library
 	<UL>
-		<LI>Axis, axis2, libwww configurable through the property files</LI>
+		<LI>Axis2,  HTTP configurable through the property files</LI>
 	</UL>
 	</li>
   <li>Build Axis C XML Parser library
     <ul>
-      <li>Expat, Xerces-C, etc configurable through the property files</li>
+      <li>Xerces-C, XML4C configurable through the property files</li>
     </ul>
   </li>
   <li>Build Axis C Server library</li>
