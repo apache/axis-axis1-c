@@ -89,6 +89,7 @@ AxisEngine::AxisEngine()
 	m_pSReqFChain = NULL;
 	m_pSResFChain = NULL;
 	m_pMsgData = NULL;
+    
 }
 
 AxisEngine::~AxisEngine()
@@ -107,7 +108,8 @@ int AxisEngine::Initialize()
 	if (SUCCESS != (Status = g_pSerializerPool->GetInstance(&m_pSZ))) return Status;
 	if (SUCCESS != (Status = g_pDeserializerPool->GetInstance(&m_pDZ))) return Status;
 	m_pMsgData->SetSerializer(m_pSZ);
-	m_pMsgData->SetDeSerializer(m_pDZ);
+	m_pMsgData->SetDeSerializer(m_pDZ);   
+    
 	return SUCCESS;
 }
 

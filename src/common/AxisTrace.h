@@ -67,7 +67,7 @@
 #include <string>
 #include <stdio.h>
 
-//#define AXISTRACE
+/*#define AXISTRACE*/
 #if defined(AXISTRACE)
   #define AXISTRACE1(X) tracer.trace(X,__FILE__,__LINE__);
   #define AXISTRACE2(X,Y) tracer.trace(X,Y,__FILE__,__LINE__);
@@ -93,7 +93,7 @@ public:
   
 private:
     char strLine[4];
-    char sFileName[200];
+    char* m_sFileName;
     FILE* fileTrace;
     FILE* ConfFile; 
 

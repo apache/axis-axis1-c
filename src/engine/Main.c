@@ -222,27 +222,6 @@ extern int process_request(Ax_soapstream *str);
 		</soapenv:Body> \
 		</soapenv:Envelope>";
 
-int send_response_bytes(const char * res, const void* opstream) 
-{
-	printf("%s", res);
-	return 0;
-}
-
-int get_request_bytes(char * req, int reqsize, int* retsize, const void* ipstream) 
-{
-	req[0]= '\0';
-	strcat(req, ip);
-	*retsize= strlen(ip);
-//	*retsize = wcslen(ip)*2;
-//	memcpy(req, ip, *retsize);
-	return 0;
-}
-
-int send_transport_information(Ax_soapstream* sSoapstream) 
-{
-	return 0;
-}
-
 int main() 
 {		
 	int xx;
