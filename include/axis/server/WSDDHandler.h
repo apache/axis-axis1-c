@@ -102,7 +102,10 @@ public:
 	virtual ~WSDDHandler();
 	void SetDescription(const AxisChar* sDescription);
 	const AxisChar* GetDescription() const;
-
+	virtual int UpdateWSDD(FILE* wsddfile, int tabcount);
+public:
+	void PrintTabs(int count);
+	WSDDHandler& operator << (const char* str);
 protected:
 	int m_nLibId;
 	int m_nScope;
@@ -110,6 +113,7 @@ protected:
 	AxisString m_sLibName;
 	AxisString m_sDescription;
 	map<AxisString, AxisString>* m_Params;
+	FILE* m_file; /* temporary file handler to wsdd file */
 };
 
 typedef list<WSDDHandler*> WSDDHandlerList;
