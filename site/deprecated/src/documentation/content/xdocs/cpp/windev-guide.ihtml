@@ -1,11 +1,11 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html">
-  <title></title>
+  <title>Axis C++ Windows Developers Guide</title>
 </head>
 
 <body>
-<h1>Axis C++ Windows Developers Guide (Alpha)</h1>
+<h1>Axis C++ Windows Developers Guide</h1>
 
 <p><a href="#buildaxis">BUILDING AND DEPLOYING AXIS C++</a><br>
 <a href="#cvscheckout">Getting a cvs checkout</a><br>
