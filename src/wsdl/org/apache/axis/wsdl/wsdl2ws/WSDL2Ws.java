@@ -402,7 +402,8 @@ public class WSDL2Ws {
 		String targetoutputLocation,
 		String targetLanguage,
 		String targetImplementationStyle,
-        String targetEngine)
+        String targetEngine,
+        String targetNameSpaceOfWSDL)
 		throws WrapperFault {
 
 
@@ -414,7 +415,7 @@ public class WSDL2Ws {
 			WebServiceGenaratorFactory.createWebServiceGenarator(
 				new WebServiceContext(
 					new WrapperInfo(serviceStyle,targetLanguage,encodingStyle,
-                                        targetoutputLocation,targetImplementationStyle,targetEngine,transportURI,targetEndpointURI),
+                                        targetoutputLocation,targetImplementationStyle,targetEngine,transportURI,targetEndpointURI,targetNameSpaceOfWSDL),
 					new ServiceInfo(servicename,qualifiedServiceName,methods),
 					typeMap));
 		if (wsg == null)
@@ -454,7 +455,8 @@ public class WSDL2Ws {
 				data.getOptionBykey("o"),
 				data.getOptionBykey("l"),
 				data.getOptionBykey("i"),
-                data.getOptionBykey("s"));
+                data.getOptionBykey("s"),
+                args[1]);
 		}
 	}
 }
