@@ -78,7 +78,7 @@ class AxisUtils
 	friend class URIMapping;
 public:
 	static void Initialize();
-	static AxisXMLCh* ToAxisXMLCh(const AxisChar* pch);
+	static const AxisXMLCh* ToAxisXMLCh(const AxisChar* pch);
 	AxisUtils();
 	virtual ~AxisUtils();
 	// any usefull static const AxisXMLCh strings. 

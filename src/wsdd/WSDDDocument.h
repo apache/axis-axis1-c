@@ -107,6 +107,7 @@ private:
 	AxisChar m_Buffer[TRANSCODE_BUFFER_SIZE]; //used to transcode XMLCh to AxisChar
 
 private:
+	const AxisChar* __XTRC(const XMLCh* pChar);
 	void ProcessAttributes(WSDDLevels ElementType, const Attributes &attrs);
 	void GetParameters(WSDDLevels ElementType, const Attributes &attrs);
 	void AddAllowedRolesToService(const AxisXMLCh* value);
