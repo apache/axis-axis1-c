@@ -22,37 +22,21 @@ package org.apache.axis.tracetool;
  * TODO: Many of these methods would perform better using StringBuffer not String
  */
 final class Utils {
-	public static final String whitespace =
-		" \t" + System.getProperty("line.separator");
-	private static final String letters =
-		"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	private static final String alphanumerics =
-		"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-	/** Never instantiate this class */
+	/** 
+	 * Never instantiate this class 
+	 */
 	private Utils() {
-	}
-
-	static boolean isSpace(char c) {
-		return whitespace.indexOf(c) != -1;
 	}
 
 	/**
 	 * Is this string all whitespace?
 	 */
 	static boolean isSpace(String s) {
-		for (int i = 0; i < s.length(); i++)
-			if (-1 != whitespace.indexOf(s.charAt(i)))
+		for (int i = 0; i < s.length(); i++) 
+			if (!Character.isWhitespace(s.charAt(i)))
 				return false;
 		return true;
-	}
-
-	static boolean startsWithALetter(String s) {
-		return letters.indexOf(s.charAt(0)) != -1;
-	}
-
-	static boolean isAlphaNumeric(char c) {
-		return alphanumerics.indexOf(c) != -1;
 	}
 
 	// TODO look for other trailing chars like { (because of class{)
@@ -63,7 +47,7 @@ final class Utils {
 			return false;
 		if (source.length() == target.length())
 			return true;
-		if (isSpace(source.charAt(target.length())))
+		if (Character.isWhitespace(source.charAt(target.length())))
 			return true;
 		return false;
 	}
@@ -97,9 +81,9 @@ final class Utils {
 		for (int i = 0; i < s.length(); i++) {
 			if (s.charAt(i) == t0
 				&& s.substring(i).startsWith(t)
-				&& (0 == i || !Utils.isAlphaNumeric(s.charAt(i - 1)))
+				&& (0 == i || !Character.isLetterOrDigit(s.charAt(i - 1)))
 				&& (s.length() == (i + t.length())
-					|| !Utils.isAlphaNumeric(s.charAt(i + t.length()))))
+					|| !Character.isLetterOrDigit(s.charAt(i + t.length()))))
 				return i;
 
 			i = skip(s.substring(i), i);
@@ -167,6 +151,27 @@ final class Utils {
 		rude(reason, null, 0, null);
 	}
 
+	/**
+	 * Escapes special characters like " so that they can be output 
+	 * in a C string literal. Also removes newlines, since C string
+	 * literals can't be split over lines.
+	 */
+	String pretty(String s) {
+		StringBuffer sb = new StringBuffer(s);
+		for (int i = 0; i < sb.length(); i++)
+			switch (sb.charAt(i)) {
+				case '"' :
+					sb = sb.insert(i, '\\');
+					i++;
+					break;
+				case '\n' :
+					sb = sb.deleteCharAt(i);
+					i--;
+					break;
+			}
+		return sb.toString();
+	}
+
 	private static boolean startsWithComment(String s) {
 		if (null == s || s.length() < 2)
 			return false;
@@ -207,13 +212,20 @@ final class Utils {
 				
 			// \" or \' does not end the literal
 			if ('\\' == s.charAt(i))
-				escape = true;
+			    // Escaping a \ should switch escape off so \\' does end 
+			    // the literal
+				escape = !escape;
 			else
 				escape = false;
 		}
 		return -1;
 	}
 
+    /**
+     * If the String s starts with a string literal or a comment, return
+     * i plus the index of the end of the literal or comment. String literals
+     * are enclosed in " or ' and comments start with /* or //.
+     */
 	private static int skip(String s, int i) {
 		int j = 0;
 		if (startsWithStringLiteral(s)) {

@@ -59,10 +59,10 @@ class InputCppSourceCode {
 		for (int idx = 0; idx < str.length(); /* No idx++ */
 			) {
 			rest = str.substring(idx);
-			if (Utils.isSpace(rest.charAt(0))) {
+			if (Character.isWhitespace(rest.charAt(0))) {
 				int ridx = 0;
 				while (ridx < rest.length()
-					&& Utils.isSpace(rest.charAt(ridx)))
+					&& Character.isWhitespace(rest.charAt(ridx)))
 					ridx++;
 				text = rest.substring(0, ridx);
 				FilePart fp = new FilePart(text, FilePart.WHITESPACE);
@@ -112,7 +112,7 @@ class InputCppSourceCode {
 				idx++;
 
 			} else if (
-				!Utils.startsWithALetter(rest) && '~' != rest.charAt(0)) {
+				!Character.isLetter(rest.charAt(0)) && '~' != rest.charAt(0)) {
 				Utils.rude(
 					"Lines must start with a letter ",
 					name,

@@ -15,6 +15,7 @@
  */
 package org.apache.axis.tracetool;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,58 +24,69 @@ import java.util.List;
  * name but not its value. 
  */
 class Parameter {
-	private String type = null;
+	private ArrayList type = new ArrayList();
 	private String name = null;
 	private boolean failed = false;
 
+	/**
+	 *  Defaults to a parameter in a parameter list so it HAS a parameter name in it
+	 */
 	Parameter(List parts) {
 		this(parts, false);
 	}
 
+	/**
+	 * A parameter which is a return type does not have a parameter name.
+	 * Parameters in a parameter list do have parameter names embedded in them 
+	 */
 	Parameter(List parts, boolean isRetType) {
 		if (parts == null || parts.size() == 0)
 			return;
 
 		if (!isRetType && parts.size() == 1) {
-			if (!"void".equals(parts.get(0)))
+			if ("...".equals(parts.get(0))) {
+				type.add("...");
+				name = "";
+			} else if (!"void".equals(parts.get(0)))
 				failed = true; // Seems like bad C++ code here
 			return;
 		}
 
 		if (isRetType) {
 			Iterator it = parts.iterator();
-			while (it.hasNext()) {
-				String next = (String) it.next();
-				if (null == type)
-					type = next;
-				else if ("*".equals(next) || "&".equals(next))
-					type += next;
-				else
-					type += " " + next;
-			}
-			
+			while (it.hasNext())
+				type.add(it.next());
+
 			// Some methods return have void on their signature and others
 			// have nothing. So to make them both the same, if a method 
 			// doesn't return anything make type null.
-			if ("void".equals(type))
-				type = null;
+			if (1 == type.size() && "void".equals(type.get(0)))
+				type = new ArrayList();
 
 		} else {
-			// Keeping track of next and prev ensures we don't append the
-			// parameter name onto the type. 
-			Iterator it = parts.iterator();
-			String next = null, prev = (String) it.next();
-			while (it.hasNext()) {
-				next = (String) it.next();
-				if (null == type)
-					type = prev;
-				else if ("*".equals(prev) || "&".equals(prev))
-					type += prev;
-				else
-					type += " " + prev;
-				prev = next;
+			// Cope with array subscripts [] after the name
+			int arrIdx = -1;
+			for (int i = 0; i < parts.size(); i++) {
+				String tok = (String) parts.get(i);
+				if ("[".equals(tok)) {
+					arrIdx = i;
+					break;
+				}
 			}
-			name = next;
+
+			// Find the name			
+			int nameIdx = parts.size() - 1;
+			if (-1 != arrIdx)
+				nameIdx = arrIdx - 1;
+
+			// Construct the type
+			for (int i = 0; i < nameIdx; i++)
+				type.add(parts.get(i));
+
+			name = (String) parts.get(nameIdx);
+			if (-1 != arrIdx)
+				for (int i = arrIdx; i < parts.size(); i++)
+					type.add(parts.get(i));
 		}
 	}
 
@@ -83,7 +95,35 @@ class Parameter {
 	}
 
 	String getType() {
-		return type;
+		String s = null;
+		Iterator it = type.iterator();
+		while (it.hasNext()) {
+			String next = (String) it.next();
+			if (null == s)
+				s = next;
+			else if ("*".equals(next) || "&".equals(next))
+				s += next;
+			else
+				s += " " + next;
+		}
+		return s;
+	}
+
+	String getTypeWithoutConst() {
+		String s = null;
+		Iterator it = type.iterator();
+		while (it.hasNext()) {
+			String next = (String) it.next();
+			if ("const".equals(next))
+				continue;
+			else if (null == s)
+				s = next;
+			else if ("*".equals(next) || "&".equals(next))
+				s += next;
+			else
+				s += " " + next;
+		}
+		return s;
 	}
 
 	String getName() {
@@ -91,14 +131,14 @@ class Parameter {
 	}
 
 	boolean isVoid() {
-		return null == type;
+		return 0 == type.size();
 	}
 
 	public String toString() {
-		if (null == type)
+		if (0 == type.size())
 			return "void";
 		if (null == name)
-			return type;
-		return type + " " + name;
+			return getType();
+		return getType() + " " + name;
 	}
 }

@@ -32,6 +32,8 @@ public class Exclusions {
 			"iasciitab.h",
 			"latin1tab.h",
 			"spp_converter.h",
+			"spp_converter.c",
+			"spp_tokenizer.c",
 			"utf8tab.h",
 			"SoapBinInputStream.h",
 			"SoapInputSource.h",
@@ -39,10 +41,24 @@ public class Exclusions {
 			"apr_base64.c",
 			"apr_base64.h",
 			"apr_xlate.h",
-                  // Axis.cpp contains a copyright sign (circle with a "C" in it) which 
-                  // makes readline throw a MalformedInputException on linux possibly due to 
-                  // locale/charset problems.
-                  "Axis.cpp",
+			"Channel.hpp",
+			"Call.h",
+			"AxisConfig.h",
+			"AxisTransport.h",
+			"ClientAxisEngine.h",
+			"SOAPTransportFactory.h",
+			"SOAPTransport.h",
+			"SoapSerializer.h",
+			"SoapDeSerializer.h",
+			"HeaderBlock.h",
+
+		// Axis.cpp contains a copyright sign (circle with a "C" in it) which 
+		// makes readline throw a MalformedInputException on linux possibly due to 
+		// locale/charset problems.
+		"Axis.cpp",
+		// spp.c contains a bad return statement that looks like it 
+		// shouldn't compile
+		"spp.c",
 		//Don't trace trace
 		"AxisTrace.cpp", "AxisTrace.h", "GDefine.h", "AxisFile.h" }));
 

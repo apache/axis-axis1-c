@@ -128,7 +128,7 @@ public class AddEntryAndExitTrace {
 	 * @throws IOException if htere is a problem dealing with the files.
 	 */
 	private void parseFile(InputCppSourceCode inputFile, Tracer outputFile)
-		throws IOException, ParsingException {
+		throws Exception {
 		Iterator it = inputFile.getPartIterator();
 		while (it.hasNext()) {
 			FilePart fp = (FilePart) (it.next());

@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * A C or C++ method signature 
+ * A C or C++ method signature with the ability to parse it.
  * TODO: support variable length argument lists using "..."
  * TODO: passing or returning function pointers (hopefully not needed)
  * TODO: Cope with ~<space>Classname()
@@ -47,14 +47,29 @@ class Signature {
 					"private",
 					"extern",
 					"\"C\"",
-					"virtual" }));
+					"virtual",
+					"static",
+					"inline",
+					"STORAGE_CLASS_INFO",
+					"AXISCALL" }));
+
+	private final static Set spuriousAttrs =
+		new HashSet(
+			Arrays.asList(
+				new Object[] {
+					"AXISCALL" }));
 
 	private final static Set specialOperators =
-		new HashSet(Arrays.asList(new Object[] { "(", ")", "*", ",", "&" }));
+		new HashSet(
+			Arrays.asList(new Object[] { "(", ")", "*", ",", "&", "]", "[" }));
 
-	// TODO: Should optionally pass in the className here in case it's an 
-	// inline method implementation inside the class{}. Just so the className
-	// comes out in the trace.
+	/**
+	 * Takes an unparsed signature string and parses it.
+	 *
+	 * TODO: Should optionally pass in the className here in case it's an 
+	 * inline method implementation inside the class{}. Just so the className
+	 * comes out in the trace.
+	 */
 	Signature(String s) {
 		originalText = s;
 
@@ -93,7 +108,7 @@ class Signature {
 
 	/**
 	 * Parse the signature into tokens. This removes whitespace and comments
-	 * and separates out "*", ",", "(", ")" and "&".
+	 * and separates out "*", ",", "(", ")", "&", "[" and "]".
 	 */
 	private static List tokenise(String s) {
 		ArrayList tokens = new ArrayList();
@@ -101,7 +116,7 @@ class Signature {
 		boolean space = true;
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
-			if (Utils.isSpace(c)) {
+			if (Character.isWhitespace(c)) {
 				space = true;
 				continue;
 			}
@@ -168,6 +183,8 @@ class Signature {
 		List trailAttrs,
 		List inits) {
 
+        // nameStart points to the start of the return type if there is one
+        // else the start of the method name
 		int nameStart;
 		for (nameStart = 0; nameStart < tokens.size(); nameStart++)
 			if (!knownAttrs.contains(tokens.get(nameStart)))
@@ -175,11 +192,15 @@ class Signature {
 		if (nameStart == tokens.size())
 			return false;
 
+        // initStart points to the initialisers, or thrown exceptions after 
+        // the parameter list. throw is a keyword so we can safely search for it.
 		int initStart = tokens.size();
-		for (int i = nameStart; i < tokens.size(); i++)
-			if (((String) tokens.get(i)).startsWith(":")
-				&& !((String) tokens.get(i)).startsWith("::"))
+		for (int i = nameStart; i < tokens.size(); i++) {
+			String tok = (String) tokens.get(i);
+			if ((tok.startsWith(":") && !tok.startsWith("::"))
+				|| "throw".equals(tok))
 				initStart = i;
+		}
 
 		int parmEnd;
 		for (parmEnd = initStart - 1; parmEnd > nameStart; parmEnd--)
@@ -195,7 +216,7 @@ class Signature {
 
 		for (int i = 0; i < tokens.size(); i++) {
 			Object tok = tokens.get(i);
-			if (i < nameStart)
+			if (i < nameStart || spuriousAttrs.contains(tok))
 				attrs.add(tok);
 			else if (i < parmStart)
 				nameAndRet.add(tok);
@@ -238,14 +259,17 @@ class Signature {
 			idx = size - 1;
 		}
 
-        // The class name comes before the method name
-		if (idx > 0 && ((String) list.get(idx - 1)).endsWith("::")) {
-			className = (String) list.get(idx - 1);
+            // The class name comes before the method name
+		while (idx > 0 && ((String) list.get(idx - 1)).endsWith("::")) {
+                  if (null == className)
+			      className = (String) list.get(idx - 1);
+                  else
+			      className = (String) list.get(idx - 1) + className;
 			idx--;
 		}
 
-        // Whatever's left before the classname/methodname must be the 
-        // return type
+            // Whatever's left before the classname/methodname must be the 
+            // return type
 		ArrayList retParm = new ArrayList();
 		for (int i = 0; i < idx; i++)
 			retParm.add(list.get(i));
@@ -259,9 +283,9 @@ class Signature {
 	private void parseParameters(List list) {
 		ArrayList alParams = new ArrayList();
 		Iterator it = list.iterator();
-		it.next(); // step over the (
-		while (it.hasNext()) {
-			String token = (String) it.next();
+		String token = (String) it.next(); // step over the (
+		while (it.hasNext() && !")".equals(token)) {
+			token = (String) it.next();
 
 			int template = 0; // Depth of template scope
 			ArrayList parm = new ArrayList();
@@ -274,7 +298,9 @@ class Signature {
 					template--;
 				token = (String) it.next();
 			}
-			if (token.equals(")"))
+			
+			// No parameters so break out
+			if (token.equals(")") && 0 == parm.size())
 				break;
 
 			Parameter p = new Parameter(parm);
@@ -282,6 +308,8 @@ class Signature {
 				failed = true;
 				return;
 			}
+			
+			// Copes with void func(void)
 			if (!p.isVoid())
 				alParams.add(p);
 		}

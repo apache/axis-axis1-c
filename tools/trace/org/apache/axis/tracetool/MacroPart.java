@@ -88,7 +88,7 @@ class MacroPart extends FilePart {
 	private static String getName(String s) {
 		int i;
 		for (i = 0; i < s.length(); i++)
-			if (!Utils.isAlphaNumeric(s.charAt(i)) && '_' != s.charAt(i))
+			if (!Character.isLetterOrDigit(s.charAt(i)) && '_' != s.charAt(i))
 				break;
 		if (s.length() == i)
 			return null;
