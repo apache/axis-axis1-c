@@ -32,7 +32,7 @@ AXIS_CPP_NAMESPACE_START
  *   @author Adrian Dick (adrian.dick@uk.ibm.com)
  *
  */
-class Pattern : IConstrainingFacet {
+class Pattern : private IConstrainingFacet {
 
 public:
 

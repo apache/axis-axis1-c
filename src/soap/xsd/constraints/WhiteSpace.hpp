@@ -38,7 +38,7 @@ typedef enum
  *   @author Adrian Dick (adrian.dick@uk.ibm.com)
  *
  */
-class WhiteSpace : IConstrainingFacet {
+class WhiteSpace : private IConstrainingFacet {
 
 public:
 

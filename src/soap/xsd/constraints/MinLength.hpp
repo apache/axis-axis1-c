@@ -31,7 +31,7 @@ AXIS_CPP_NAMESPACE_START
  *   @author Adrian Dick (adrian.dick@uk.ibm.com)
  *
  */
-class MinLength : IConstrainingFacet {
+class MinLength : private IConstrainingFacet {
 
 public:
 
