@@ -219,9 +219,13 @@ public class ClientStubWriter
             }
             else
             {
-                outparamType = retType.getLanguageSpecificName();
+                outparamType =  WrapperUtils.getClassNameFromParamInfoConsideringArrays(
+                    returntype,
+                    wscontext);
+//retType.getLanguageSpecificName();
+            returntypeisarray = (outparamType.lastIndexOf("Array") > 0);
             }
-            returntypeisarray = retType.isArray();
+            returntypeisarray |= retType.isArray();
         }
         else
         {
@@ -260,6 +264,10 @@ public class ClientStubWriter
         	{
                 writer.write(outparamType);
             }
+            else if(outparamType.lastIndexOf("*") > 0)
+        	{
+                writer.write(outparamType);
+            }
             else
             { //for AnyType too
                 writer.write(outparamType + "*");
@@ -280,9 +288,15 @@ public class ClientStubWriter
                 }
                 else
                 {
-                    paraTypeName = type.getLanguageSpecificName();
+                    //paraTypeName = type.getLanguageSpecificName();
+                    paraTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(
+                    returntype,
+                    wscontext);
+//type.getLanguageSpecificName();
+                //typeisarray = true;
+            typeisarray= (outparamType.lastIndexOf("Array") > 0);
                 }
-                typeisarray = type.isArray();
+                typeisarray |= type.isArray();
             }
             else
             {
@@ -298,6 +312,10 @@ public class ClientStubWriter
 									|| paraTypeName.equals("xsd__QName")
 									|| paraTypeName.equals("xsd__notation"))))
             {
+                writer.write(paraTypeName + " Value0");
+            }
+            else if(paraTypeName.lastIndexOf("*") > 0)
+        	{
                 writer.write(paraTypeName + " Value0");
             }
             else
@@ -318,9 +336,13 @@ public class ClientStubWriter
                     }
                     else
                     {
-                        paraTypeName = type.getLanguageSpecificName();
+                        ///paraTypeName = type.getLanguageSpecificName();
+                    paraTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(
+                    returntype,
+                    wscontext);
+            typeisarray= (outparamType.lastIndexOf("Array") > 0);
                     }
-                    typeisarray = type.isArray();
+                    typeisarray |= type.isArray();
                 }
                 else
                 {
@@ -339,6 +361,10 @@ public class ClientStubWriter
                 {
                     writer.write(", " + paraTypeName + " Value" + i);
                 }
+            else if(paraTypeName.lastIndexOf("*") > 0)
+        	{
+                writer.write(", " + paraTypeName + " Value" + i );
+            }
                 else
                 { //for AnyType too
                     writer.write(", " + paraTypeName + "* Value" + i);
@@ -380,6 +406,10 @@ public class ClientStubWriter
 
                 if (!returntypeissimple)
                 { //for AnyType too
+            if(outparamType.lastIndexOf("*") > 0)
+        	{
+                    writer.write(outparamType + " pReturn = NULL;\n");
+            }else
                     writer.write(outparamType + "* pReturn = NULL;\n");
                     //for complex types
                 }
@@ -525,8 +555,9 @@ public class ClientStubWriter
                     else
                     {
                         paraTypeName = type.getLanguageSpecificName();
+            typeisarray= (outparamType.lastIndexOf("Array") > 0);
                     }
-                    typeisarray = type.isArray();
+                    typeisarray |= type.isArray();
                 }
                 else
                 {
@@ -586,7 +617,12 @@ public class ClientStubWriter
                     {
                         // Array
                         Type arrayType = WrapperUtils.getArrayType(type);
-                        QName qname = arrayType.getName();
+                        
+                        QName qname = null;
+                        if (arrayType != null)
+                             qname = arrayType.getName();
+                        else
+ 			     qname = type.getName();
                         if (CUtils.isSimpleType(qname))
                         {
                             // Array of simple type
@@ -766,7 +802,7 @@ public class ClientStubWriter
                                 + "&)m_pCall->getBasicArray("
                                 + CUtils.getXSDTypeForBasicType(containedType)
                                 + ", \""
-                                + currentType.getElementName().getLocalPart()
+                                + currentType.getParamName()//getElementName().getLocalPart()
                                 + "\", 0);\n");
                     }
                     else
@@ -785,7 +821,7 @@ public class ClientStubWriter
                                     + CUtils.getXSDTypeForBasicType(
                                         containedType)
                                     + ", \""
-                                    + currentType.getElementName().getLocalPart()
+                                    + currentType.getParamName()//getElementName().getLocalPart()
                                     + "\", 0);\n");
                         }
                         else
@@ -847,6 +883,26 @@ public class ClientStubWriter
                         {
                             //writer.write("\t\t\t" + currentParamName + " = ("+currentParaType+"*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"+currentParaType+", (void*) Axis_Create_"+currentParaType+", (void*) Axis_Delete_"+currentParaType+",\""+currentType.getElementName().getLocalPart()+"\", 0);\n"); 
                             //Samisa 22/08/2004
+
+		System.out.println("currentParaType = " + currentParaType);
+            if(currentParaType.lastIndexOf("*") > 0)
+        	{
+writer.write(
+                                "\t\t\t"
+                                    + currentParamName
+                                    + " = ("
+                                    + currentParaType
+                                    + ")m_pCall->getCmplxObject((void*) Axis_DeSerialize_"
+                                    + currentParaType
+                                    + ", (void*) Axis_Create_"
+                                    + currentParaType
+                                    + ", (void*) Axis_Delete_"
+                                    + currentParaType
+                                    + ",\""
+                                    + currentType.getElementNameAsString()
+                                    + "\", 0);\n");
+
+            }else
                             writer.write(
                                 "\t\t\t"
                                     + currentParamName
@@ -887,7 +943,11 @@ public class ClientStubWriter
 
                 if (returntypeisarray)
                 {
-                    QName qname = WrapperUtils.getArrayType(retType).getName();
+                    QName qname = null;
+		    if( WrapperUtils.getArrayType(retType) != null)
+                        qname = WrapperUtils.getArrayType(retType).getName();
+		    else
+			qname = retType.getName();
                     String containedType = null;
                     if (CUtils.isSimpleType(qname))
                     {
@@ -898,7 +958,7 @@ public class ClientStubWriter
                                 + "&)m_pCall->getBasicArray("
                                 + CUtils.getXSDTypeForBasicType(containedType)
                                 + ", \""
-                                + returntype.getElementName().getLocalPart()
+                                + returntype.getParamName()//getElementName().getLocalPart()
                                 + "\", 0);\n\t\t}\n");
                     }
                     else
@@ -996,6 +1056,23 @@ public class ClientStubWriter
                         {
                             //writer.write("\t\t\tpReturn = ("+outparamType+"*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"+outparamType+", (void*) Axis_Create_"+outparamType+", (void*) Axis_Delete_"+outparamType+",\""+returntype.getElementName().getLocalPart()+"\", 0);\n\t\t}\n"); 
                             //Samisa 22/08/2004
+		System.out.println("currentParaType = " + outparamType);
+            if(outparamType.lastIndexOf("*") > 0)
+        	{
+                                String outparamTypeBase = outparamType.substring(0, outparamType.lastIndexOf("*") );
+				writer.write(
+                                "\t\t\tpReturn = ("
+                                    + outparamType
+                                    + ")m_pCall->getCmplxObject((void*) Axis_DeSerialize_"
+                                    + outparamTypeBase
+                                    + ", (void*) Axis_Create_"
+                                    + outparamTypeBase
+                                    + ", (void*) Axis_Delete_"
+                                    + outparamTypeBase
+                                    + ",\""
+                                    + returntype.getElementNameAsString()
+                                    + "\", 0);\n\t\t}\n");
+		}else
                             writer.write(
                                 "\t\t\tpReturn = ("
                                     + outparamType
