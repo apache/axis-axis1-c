@@ -99,7 +99,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter{
 			  writer.write(minfo.getMethodname()+"(");
             
 			  //write parameter names 
-			  Iterator params = minfo.getParameterTypess().iterator();
+			  Iterator params = minfo.getParameterTypes().iterator();
 			  if(params.hasNext()){
 			  	  ParameterInfo fparam = (ParameterInfo)params.next();
 				  isSimpleType = CPPUtils.isSimpleType(fparam.getLangName());

@@ -145,7 +145,7 @@ public class WrapWriter extends JavaClassWriter {
                 minfo = (MethodInfo) methods.get(i);
                 this.writeMethodInWrapper(
                     minfo.getMethodname(),
-                    minfo.getParameterTypess(),
+                    minfo.getParameterTypes(),
                     minfo.getReturnType());
                 writer.write("\n");
             }

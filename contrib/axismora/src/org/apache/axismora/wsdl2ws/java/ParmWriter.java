@@ -58,13 +58,16 @@ package org.apache.axismora.wsdl2ws.java;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
 import org.apache.axismora.soap.XMLTextData;
+import org.apache.axismora.wsdl2ws.WrapperConstants;
 import org.apache.axismora.wsdl2ws.WrapperFault;
 import org.apache.axismora.wsdl2ws.WrapperUtils;
+import org.apache.axismora.wsdl2ws.info.ElementInfo;
 import org.apache.axismora.wsdl2ws.info.Type;
 import org.apache.axismora.wsdl2ws.info.TypeMap;
 import org.apache.axismora.wsdl2ws.info.WebServiceContext;
@@ -149,9 +152,7 @@ public abstract class ParmWriter extends JavaClassWriter {
                 //if((t = wscontext.getTypemap().getType(new QName(attribs[i][2],attribs[i][3])))!= null && t.isArray()) continue;
                 writer.write(
                     "\tprivate "
-                        + getCrroectParmNameConsideringArrays(
-                            new QName(attribs[i][2], attribs[i][3]),
-                            attribs[i][1])
+                        + attribs[i][1]
                         + " "
                         + attribs[i][0]
                         + ";\n");
@@ -222,33 +223,18 @@ public abstract class ParmWriter extends JavaClassWriter {
 
     public void writeArrayTypeAdditionalCode() throws WrapperFault {
         try {
-            Iterator e = type.getAttribNames();
-
-            if (e.hasNext()) {
-                QName elementQname = type.getTypNameForAttribName((String) e.next());
-                Type type = this.wscontext.getTypemap().getType(elementQname);
-                String contentTypeName;
-
-                if (type != null)
-                    contentTypeName = type.getLanguageSpecificName();
-                else {
-                    contentTypeName = TypeMap.getBasicTypeClass4qname(elementQname);
-                    if (contentTypeName == null)
-                        throw new WrapperFault(
-                            "if not inbuild or not in type map what is this type "
-                                + elementQname);
-                }
-
-                writer.write("\tprivate " + contentTypeName + "[] param;\n");
-                writer.write(
-                    "\tpublic "
-                        + contentTypeName
-                        + "[] getParam(){\n\t\treturn this.param;\n\t}\n");
-                writer.write(
-                    "\tpublic void setParam("
-                        + contentTypeName
-                        + "[] param){\n\t\tthis.param = param;\n\t}\n");
-            }
+			Type contenttype = WrapperUtils.getArrayType(type);
+            String contentTypeName = contenttype.getLanguageSpecificName();
+    
+            writer.write("\tprivate " + contentTypeName + "[] param;\n");
+            writer.write(
+                "\tpublic "
+                    + contentTypeName
+                    + "[] getParam(){\n\t\treturn this.param;\n\t}\n");
+            writer.write(
+                "\tpublic void setParam("
+                    + contentTypeName
+                    + "[] param){\n\t\tthis.param = param;\n\t}\n");
         } catch (IOException e) {
             e.printStackTrace();
             throw new WrapperFault(e);
@@ -274,41 +260,80 @@ public abstract class ParmWriter extends JavaClassWriter {
                 + "/"
                 + type.getLanguageSpecificName().replace('.', '/')
                 + ".java";
-        System.out.println(fileName);
         return new File(fileName);
     }
     /* genarate the arrtibs array */
     public String[][] getAttribList(String Qualifiedname) throws WrapperFault {
         String[][] attribs;
-        ArrayList feilds = new ArrayList();
+        ArrayList attribfeilds = new ArrayList();
+		ArrayList elementfeilds = new ArrayList();
 
-        Iterator names = type.getAttribNames();
-        while (names.hasNext()) {
-            feilds.add(names.next());
-
+        //this is for encoded stuff afford to consider the 
+        //attributes and elemnts equal
+        
+        Enumeration names = type.getAttributeNames();
+        while (names.hasMoreElements()) {
+			attribfeilds.add(names.nextElement());
         }
+		names = type.getElementnames();
+		while (names.hasMoreElements()) {
+			elementfeilds.add(names.nextElement());
+		}       
+        
         //get all the fields
 
-        attribs = new String[feilds.size()][];
-        for (int i = 0; i < feilds.size(); i++) {
-            attribs[i] = new String[4];
-            attribs[i][0] = ((String) feilds.get(i));
+        attribs = new String[attribfeilds.size()+elementfeilds.size()][];
+        for (int i = 0; i < attribfeilds.size(); i++) {
+            attribs[i] = new String[7];
+            attribs[i][0] = ((String) attribfeilds.get(i));
 
-            QName name = type.getTypNameForAttribName(attribs[i][0]);
-
-            if (TypeMap.isSimpleType(name))
-                attribs[i][1] = TypeMap.getBasicTypeClass4qname(name);
-            else {
-
-                Type t = this.wscontext.getTypemap().getType(name);
-                attribs[i][1] = t.getLanguageSpecificName();
-                System.out.println(name + " = " + attribs[i][1]);
-            }
+			Type t = type.getTypForAttribName(attribs[i][0]);
+            attribs[i][1] = t.getLanguageSpecificName();
+            QName name = t.getName();
 
             attribs[i][2] = name.getNamespaceURI();
             attribs[i][3] = name.getLocalPart();
-
+			attribs[i][4] = attribs[i][1];
+			attribs[i][5] = null;
+			attribs[i][6] = null;
         }
+        
+		for (int i = attribfeilds.size(); i < attribfeilds.size()+elementfeilds.size(); i++) {
+			attribs[i] = new String[7];
+			attribs[i][0] = ((String) elementfeilds.get(i - attribfeilds.size()));
+			
+			ElementInfo element = type.getElementForElementName(attribs[i][0]);
+			Type t = element.getType();
+			attribs[i][1] = t.getLanguageSpecificName();
+			QName name = t.getName();
+
+			attribs[i][2] = name.getNamespaceURI();
+			attribs[i][3] = name.getLocalPart();
+			
+			attribs[i][4] = attribs[i][1];
+			
+			if(t.isArray()){
+				attribs[i][4] = attribs[i][1];
+				Type arrayType = WrapperUtils.getArrayType(t);
+				attribs[i][1] = arrayType.getLanguageSpecificName()+"[]";
+				attribs[i][5] = arrayType.getName().getNamespaceURI();
+				attribs[i][6] = arrayType.getName().getLocalPart();
+ 
+			}
+			
+			if(element.getMaxOccurs() > 1){
+				attribs[i][1] = attribs[i][1] + "[]";
+				Type typedata = new Type(new QName(name.getNamespaceURI(),name.getLocalPart()+"Array")
+					,null,false,WrapperConstants.LANGUAGE_JAVA);
+				typedata.setTypeNameForElementName(new ElementInfo(new QName("item"),t));
+				typedata.setArray(true);
+				attribs[i][4] = TypeMap.regestorArrayTypeToCreate(typedata);
+				attribs[i][5] = t.getName().getNamespaceURI();
+				attribs[i][6] = t.getName().getLocalPart();
+
+			}
+		}
+
         return attribs;
     }
 
@@ -320,9 +345,7 @@ public abstract class ParmWriter extends JavaClassWriter {
                 "\tpublic void set"
                     + WrapperUtils.capitalizeFirstCaractor(attribs[i][0])
                     + "("
-                    + getCrroectParmNameConsideringArrays(
-                        new QName(attribs[i][2], attribs[i][3]),
-                        attribs[i][1])
+                    + attribs[i][1]
                     + " "
                     + attribs[i][0]
                     + "){\n\t\tthis."
@@ -332,9 +355,7 @@ public abstract class ParmWriter extends JavaClassWriter {
                     + ";\n\t}\n");
             writer.write(
                 "\tpublic "
-                    + getCrroectParmNameConsideringArrays(
-                        new QName(attribs[i][2], attribs[i][3]),
-                        attribs[i][1])
+                    + attribs[i][1]
                     + " get"
                     + WrapperUtils.capitalizeFirstCaractor(attribs[i][0])
                     + "(){\n\t\treturn "
@@ -352,18 +373,11 @@ public abstract class ParmWriter extends JavaClassWriter {
                         type.getLanguageSpecificName())
                     + "(");
             if (attribs.length > 0) {
-                writer.write(
-                    getCrroectParmNameConsideringArrays(
-                        new QName(attribs[0][2], attribs[0][3]),
-                        attribs[0][1])
+                writer.write(attribs[0][1]
                         + " "
                         + attribs[0][0]);
                 for (int i = 1; i < this.attribs.length; i++)
-                    writer.write(
-                        ","
-                            + getCrroectParmNameConsideringArrays(
-                                new QName(attribs[i][2], attribs[i][3]),
-                                attribs[i][1])
+                    writer.write(attribs[i][1]
                             + " "
                             + attribs[i][0]);
             }
@@ -375,32 +389,23 @@ public abstract class ParmWriter extends JavaClassWriter {
             throw new WrapperFault(e);
         }
     }
-    private String getCrroectParmNameConsideringArrays(QName name, String classname)
-        throws WrapperFault {
-        System.out.println(name);
-        Type t = wscontext.getTypemap().getType(name);
-        if (t != null && t.isArray()) {
-            Iterator e = t.getAttribNames();
-            String contentTypeName;
-            if (e.hasNext()) {
-                QName elementQname = t.getTypNameForAttribName((String) e.next());
-                Type type = this.wscontext.getTypemap().getType(elementQname);
-
-                if (type != null)
-                    contentTypeName = type.getLanguageSpecificName();
-                else {
-                    contentTypeName = TypeMap.getBasicTypeClass4qname(elementQname);
-                    if (contentTypeName == null)
-                        throw new WrapperFault(
-                            "if not inbuild or not in type map what is this type "
-                                + elementQname);
-                }
-            } else
-                throw new WrapperFault("Array with no type ????");
-            return contentTypeName + "[]";
-        } else
-            return classname;
-    }
+//    private String getCrroectParmNameConsideringArrays(QName name, String classname)
+//        throws WrapperFault {
+//        System.out.println(name);
+//        Type t = wscontext.getTypemap().getType(name);
+//        if (t != null && t.isArray()) {
+//            Enumeration e = t.getElementnames();
+//            String contentTypeName;
+//            if (e.hasMoreElements()) {
+//                ElementInfo element = t.getElementForElementName((String) e.nextElement());
+//                Type type = element.getType();
+//                contentTypeName = type.getLanguageSpecificName();
+//            } else
+//                throw new WrapperFault("Array with no type ????");
+//            return contentTypeName + "[]";
+//        } else
+//            return classname;
+//    }
 
     //TODO remove this is for ease of testing 
 
@@ -410,10 +415,7 @@ public abstract class ParmWriter extends JavaClassWriter {
             return;
 
         for (int i = 0; i < attribs.length; i++) {
-            String name =
-                getCrroectParmNameConsideringArrays(
-                    new QName(attribs[i][2], attribs[i][3]),
-                    attribs[i][1]);
+            String name =attribs[i][1];
             writer.write("this." + attribs[i][0] + " =");
 
             if (name.endsWith("[]")) {
@@ -465,10 +467,7 @@ public abstract class ParmWriter extends JavaClassWriter {
                 + ")obj;\n");
 
         for (int i = 0; i < attribs.length; i++) {
-            String name =
-                getCrroectParmNameConsideringArrays(
-                    new QName(attribs[i][2], attribs[i][3]),
-                    attribs[i][1]);
+            String name = attribs[i][1];
 
             //if array		
             if (name.endsWith("[]")) {

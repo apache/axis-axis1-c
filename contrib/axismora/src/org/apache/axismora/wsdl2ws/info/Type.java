@@ -2,7 +2,7 @@
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
+ * Copyright (c) 2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -20,7 +20,7 @@
  * 3. The end-user documentation included with the redistribution,
  *    if any, must include the following acknowledgment:
  *       "This product includes software developed by the
- *    Apache Software Foundation (http://www.apache.org/)."
+ *        Apache Software Foundation (http://www.apache.org/)."
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
@@ -53,18 +53,6 @@
  * <http://www.apache.org/>.
  */
 
-package org.apache.axismora.wsdl2ws.info;
-
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Vector;
-
-import javax.xml.namespace.QName;
-
-import org.apache.axismora.wsdl2ws.WrapperConstants;
-import org.apache.axismora.wsdl2ws.WrapperUtils;
-import org.apache.axismora.wsdl2ws.cpp.CPPUtils;
-
 /**
  * This calss represent the Custom Complex type in the service.
  * This Class is the  representation of the WSDL Schema type. The class name is given in the
@@ -72,60 +60,90 @@ import org.apache.axismora.wsdl2ws.cpp.CPPUtils;
  * 
  * @author Srianth Perera (hemapani@opensource.lk)
  */
+package org.apache.axismora.wsdl2ws.info;
+
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Set;
+import java.util.Vector;
+import java.util.Iterator;
+
+import javax.xml.namespace.QName;
+
+import org.apache.axis.wsdl.symbolTable.TypeEntry;
+import org.apache.axismora.wsdl2ws.WrapperConstants;
+import org.apache.axismora.wsdl2ws.WrapperUtils;
+import org.apache.axismora.wsdl2ws.c.CUtils;
+import org.apache.axismora.wsdl2ws.cpp.CPPUtils;
 
 public class Type {
     /* max no of attribs expected in a type */
     private static final int MAXIMUM_NO_ATTRIBS = 101;
     private QName name;
 
+	/**
+	  * If the specified node represents a supported JAX-RPC enumeration,
+	  * a Vector is returned which contains the base type and the enumeration values.
+	  * The first element in the vector is the base type (an TypeEntry).
+	  * Subsequent elements are values (Strings).
+	  * If this is not an enumeration, null is value.
+	  */
+    private Vector enumerationdata;
+
     /* This can be null */
     private String languageSpecificName;
-    /* attribute names and the type of the attributes */
-    private Hashtable types;
+	/* element names and the type of the elements (QName,ElementInfo)*/
+    private Hashtable elements;
+	/* attribute names and the type of the attributes (QName,QName)*/
+    private Hashtable attributes;
     /* has the attributes are specified with order <sequence> in the schema */
     private boolean hasOrder;
     /*if order presents the order is set in the vector */
     private Vector attribOrder;
     /* weather the type is Array */
     private boolean isArray;
-
+    
+    private boolean canThisOccuredmoreThanOnceAllTheTime = false;
+    //to handle <xsd:element name="three" type="typens:enum" maxOccurs="unbounded" />
+    //types at the top level. But this is not allowed in the Schema spec. 
+    
+    
     private String language;
 
-    public Type(
-        QName name,
-        String languageSpecificName,
-        boolean hasOrder,
-        String language) {
+    public Type(QName name, String languageSpecificName, boolean hasOrder,String language) {
         this.languageSpecificName = languageSpecificName;
         this.hasOrder = hasOrder;
         this.name = name;
-        types = new Hashtable();
-        if (language == null)
-            this.language = WrapperConstants.LANGUAGE_JAVA;
+		elements = new Hashtable();
+		attributes = new Hashtable();
+        if(language == null)
+			this.language = WrapperConstants.LANGUAGE_JAVA;
         else
-            this.language = language;
-
+        	this.language = language;
+        	
         // if the language specific name does not specified try weather is it a simple type  	 
-        if (languageSpecificName == null) {
-            if (WrapperConstants.LANGUAGE_CPP.equalsIgnoreCase(this.language))
-                this.languageSpecificName = CPPUtils.getclass4qname(name);
-            else
-                this.languageSpecificName = TypeMap.getBasicTypeClass4qname(name);
+        if(languageSpecificName == null){
+        	if(WrapperConstants.LANGUAGE_CPP.equalsIgnoreCase(this.language))
+				this.languageSpecificName = CPPUtils.getclass4qname(name);
+			else if(WrapperConstants.LANGUAGE_C.equalsIgnoreCase(this.language))
+					this.languageSpecificName = CUtils.getclass4qname(name);
+			else
+				this.languageSpecificName = TypeMap.getBasicTypeClass4qname(name);
+			 
+			
         }
-
+        
         //if it is not a simple type genarate the name using usual QName -> language specific name mapping
-        if (this.languageSpecificName == null)
-            this.languageSpecificName = qname2LSN();
-        else {
-            //remove any funny Charactors
-            this.languageSpecificName.replaceAll("/", "_");
-            this.languageSpecificName.replaceAll(":", "_");
-
-        }
-        //give it A GOOD java look :)
-        this.languageSpecificName =
-            WrapperUtils.firstCharacterToLowercase(this.languageSpecificName);
-        this.attribOrder = new Vector();
+        if(this.languageSpecificName == null)
+            	this.languageSpecificName = qname2LSN();
+        else{
+        	//remove any funny Charactors
+			this.languageSpecificName.replaceAll("/","_");  
+			this.languageSpecificName.replaceAll(":","_");   
+			
+        }    
+       	this.attribOrder = new Vector();
     }
 
     /**
@@ -143,33 +161,54 @@ public class Type {
         this.name = name;
     }
 
-    public Iterator getAttribNames() {
-        return this.attribOrder.iterator();
+    public Enumeration getAttributeNames() {
+       	return this.attributes.keys();
     }
 
-    /*    public void setTypeNameForAttribName(String attribName, String typeName) {
-            if (hasOrder)
-                this.attribOrder.add(typeName);
-            this.types.put(attribName, typeName);
-        }*/
 
-    /**
-     * The Type take the attributes name to lowercase when add, If there is two names like "Name" and "name"
-     * they will convert to "name"  Is that acceptable ....  
-     */
-    public void setTypeNameForAttribName(String attribName, QName typeName) {
-        attribName = TypeMap.resoleveWSDL2LanguageNameClashes(attribName, this.language);
-        this.attribOrder.add(attribName);
-        this.types.put(attribName, typeName);
+/**
+ * The Type take the attributes name to lowercase when add, If there is two names like "Name" and "name"
+ * they will convert to "name"  Is that acceptable ....  
+ */
+    public void setTypeForAttributeName(String attribName, Type type) {
+		attribName = TypeMap.resoleveWSDL2LanguageNameClashes(attribName,this.language);
+        if (hasOrder)
+            this.attribOrder.add(attribName);
+        this.attributes.put(attribName, type);
     }
+
+	public Type getTypForAttribName(String attribName) {
+		return (Type) this.attributes.get(attribName);
+	}
+
+	public Enumeration getElementnames() {
+		return this.elements.keys();
+	}
+
+
+/**
+ * The Type take the attributes name to lowercase when add, If there is two names like "Name" and "name"
+ * they will convert to "name"  Is that acceptable ....  
+ */
+	public void setTypeNameForElementName(ElementInfo element) {
+		String attribName = TypeMap.resoleveWSDL2LanguageNameClashes(element.getName().getLocalPart(),this.language);
+		if (hasOrder)
+			this.attribOrder.add(attribName);
+		this.elements.put(attribName, element);
+	}
+
+	public ElementInfo getElementForElementName(String attribName) {
+		return (ElementInfo) this.elements.get(attribName);
+	}
+
 
     public void setAttribOrder(Vector order) {
         this.attribOrder = order;
     }
 
-    public QName getTypNameForAttribName(String attribName) {
-        return (QName) this.types.get(attribName);
-    }
+
+
+
 
     public boolean hasOrder() {
         return this.hasOrder;
@@ -182,36 +221,120 @@ public class Type {
     public void setLanguageSpecificName(String languageSpecificName) {
         this.languageSpecificName = languageSpecificName;
     }
-    /**
-     *  This mrthod define the standread conversion from qname to language spesific name
-     *  @return language specific name 
-     */
-    protected String qname2LSN() {
-        String nsuri = this.name.getNamespaceURI();
-        if (nsuri == null)
-            return this.name.getLocalPart();
-
-        if (language.equalsIgnoreCase(WrapperConstants.LANGUAGE_CPP)) {
-            /* if it is CPP the namespace is neglected fr time been */
-            return this.name.getLocalPart();
-        } else
-            return WrapperUtils.firstCharacterToLowercase(
-                WrapperUtils.nsURI2packageName(nsuri))
-                + "."
-                + WrapperUtils.capitalizeFirstCaractor(this.name.getLocalPart());
+	/**
+	 *  This mrthod define the standread conversion from qname to language spesific name
+	 *  @return language specific name 
+	 */ 
+    protected String qname2LSN(){
+       String nsuri = this.name.getNamespaceURI();
+       if(nsuri == null) return  this.name.getLocalPart();
+ 	
+	   if(language.equalsIgnoreCase(WrapperConstants.LANGUAGE_CPP)){
+	   	 /* if it is CPP the namespace is neglected fr time been */
+		 return this.name.getLocalPart(); 
+	   }else if (language.equalsIgnoreCase(WrapperConstants.LANGUAGE_C)){
+		 return this.name.getLocalPart();
+	   }else			   
+         return WrapperUtils.firstCharacterToLowercase(WrapperUtils.nsURI2packageName(nsuri)) +"."+ WrapperUtils.capitalizeFirstCaractor(this.name.getLocalPart());
     }
+	/**
+	 * @return
+	 */
+	public boolean isArray() {
+		return isArray;
+	}
+
+	/**
+	 * @param b
+	 */
+	public void setArray(boolean b) {
+		isArray = b;
+	}
+
+	public boolean isContainedType(Type containedType){
+		Iterator ntype = this.attributes.values().iterator();
+		QName typeName;
+		while(ntype.hasNext()){
+			typeName = (QName)ntype.next();
+			if(typeName.equals(containedType.name)){
+				return true;
+			}
+		}	
+		Iterator nelements = this.elements.values().iterator();
+		while(nelements.hasNext()){
+			typeName = (QName)nelements.next();
+			if(typeName.equals(containedType.name)){
+				return true;
+			}
+		}		
+		return false;
+	}
     /**
      * @return
      */
-    public boolean isArray() {
-        return isArray;
+    public boolean isCanThisOccuredmoreThanOnceAllTheTime() {
+        return canThisOccuredmoreThanOnceAllTheTime;
     }
 
     /**
      * @param b
      */
-    public void setArray(boolean b) {
-        isArray = b;
+    public void setCanThisOccuredmoreThanOnceAllTheTime(boolean b) {
+        canThisOccuredmoreThanOnceAllTheTime = b;
+    }
+    
+
+    /**
+	  * If the specified node represents a supported JAX-RPC enumeration,
+	  * a Vector is returned which contains the base type and the enumeration values.
+	  * The first element in the vector is the base type (an TypeEntry).
+	  * Subsequent elements are values (Strings).
+	  * If this is not an enumeration, null is value.
+      * @return
+      */
+    public Vector getEnumerationdata() {
+        return enumerationdata;
+    }
+
+    /**
+     * @param vector
+     */
+    public void setEnumerationdata(Vector vector) {
+        enumerationdata = vector;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    public String toString() {
+       String str = "---------"+this.name+"------------\n" +
+       	"languageSpecificName = " + this.languageSpecificName +"\n";
+       	if(enumerationdata != null){
+			str = str + "enumerationType = "+((TypeEntry)enumerationdata.get(0)).getQName()+"\n(";
+			for(int i = 1;i<enumerationdata.size();i++)	
+				str = str +","+ enumerationdata.get(i);
+			str = str + ")\n";
+       	}else{
+	       	str =str +"isArray ="+isArray+"\n";
+	       	str = str + "Elements[\n";
+	       	Iterator c = elements.values().iterator();
+			while(c.hasNext())	
+					str = str +","+ c.next()+"\n";
+	       	str = str + "]\n";
+	       	
+			c = attributes.keySet().iterator();
+			str = str + "Attributes[\n";
+
+			while(c.hasNext()){	
+				String name = (String)c.next();
+					str = str +",("+ name+","+attributes.get(name)+")";
+			}		
+			str = str + "]\n";
+	       	
+        }
+		str = str + "------------------------------------------------------\n";
+       
+        return str;
     }
 
 }

@@ -61,6 +61,7 @@ import org.apache.axismora.wsdl2ws.SourceWriter;
 import org.apache.axismora.wsdl2ws.WrapperConstants;
 import org.apache.axismora.wsdl2ws.WrapperFault;
 import org.apache.axismora.wsdl2ws.info.Type;
+import org.apache.axismora.wsdl2ws.info.TypeMap;
 import org.apache.axismora.wsdl2ws.info.WebServiceContext;
 
 /**
@@ -82,16 +83,22 @@ public class AllParamWriter implements SourceWriter {
         Iterator enu = wscontext.getTypemap().getTypes().iterator();
         String generator = wscontext.getWrapInfo().getImplStyle();
         Type type;
+        
         while (enu.hasNext()) {
             try {
                 type = (Type) enu.next();
+                if(TypeMap.isSimpleType(type.getName()))
+                	break;
+                
                 if (wscontext
                     .getWrapInfo()
                     .getImplStyle()
                     .equals(WrapperConstants.IMPL_STYLE_STRUCT)) {
-                    if (type.isArray()) {
-                        System.out.println("Array writer called ......");
-                        (new ArrayParamWriter(wscontext, type)).writeSource();
+                    if(type.getEnumerationdata() != null){
+                    
+                    }else if (type.isArray()) {
+  //                      (new ArrayParamWriter(wscontext, type)).writeSource();
+  						TypeMap.regestorArrayTypeToCreate(type);
                     } else {
                         System.out.println("struct writer called ......");
                         (new BeanParamWriter(wscontext, type)).writeSource();
@@ -102,6 +109,12 @@ public class AllParamWriter implements SourceWriter {
                     "Error occured yet we continue to genarate other classes ... you should check the error");
                 e.printStackTrace();
             }
+        }
+        
+        Iterator arrayTypes = TypeMap.getUnregisterdArrayTypes();
+        while(arrayTypes.hasNext()){
+			System.out.println("Array writer called ......");
+			(new ArrayParamWriter(wscontext, (Type)arrayTypes.next())).writeSource();
         }
     }
 }

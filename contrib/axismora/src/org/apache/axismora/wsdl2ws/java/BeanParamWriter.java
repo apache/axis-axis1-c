@@ -142,14 +142,9 @@ public class BeanParamWriter extends ParmWriter {
                                 + attribs[i][0]
                                 + "));\n");
 
-                } else if (
-                    (t =
-                        wscontext.getTypemap().getType(
-                            new QName(attribs[i][2], attribs[i][3])))
-                        != null
-                        && t.isArray()) {
+                } else if (attribs[i][1].endsWith("[]")){
                     //for array type
-                    QName arrayType = t.getTypNameForAttribName("item");
+                    QName arrayType = new QName(attribs[i][5],attribs[i][6]);
                     String arrTypeAdditionalString =
                         " xsi:type=\\\"soapenc:Array\\\" soapenc:arrayType=\\\"ns2:"
                             + arrayType.getLocalPart()
@@ -167,8 +162,8 @@ public class BeanParamWriter extends ParmWriter {
                             : "");
                     writer.write("\t\t\tcontext.writeString(\"\\n\");\n");
                     writer.write("\t\t\t"
-                            + attribs[i][1]+ " item" + i
-                            + " = new " + attribs[i][1] + "();\n");
+                            + attribs[i][4]+ " item" + i
+                            + " = new " + attribs[i][4] + "();\n");
                     writer.write(
                         "\t\t\titem" + i + ".setParam(" + attribs[i][0] + ");\n");
                     writer.write(
@@ -270,17 +265,12 @@ public class BeanParamWriter extends ParmWriter {
                             + WrapperUtils.getWrapperName4FullyQualifiedName(attribs[0][1])
                             + "(msgdata).getParam();\n");
                 }
-            } else if (
-                (t =
-                    wscontext.getTypemap().getType(
-                        new QName(attribs[0][2], attribs[0][3])))
-                    != null
-                    && t.isArray()) {
+            } else if (attribs[0][1].endsWith("[]")) {
                 writer.write(
                     "\t\t\t\t\t"
-                        + WrapperUtils.getWrapperName4FullyQualifiedName(attribs[0][1])
+                        + attribs[0][4]
                         + " arrayT0 = (new "
-                        + WrapperUtils.getWrapperName4FullyQualifiedName(attribs[0][1])
+                        + attribs[0][4]
                         + "());\n");
                 writer.write("\t\t\t\t\tarrayT0.desierialize(msgdata);\n");
                 writer.write(
@@ -319,19 +309,14 @@ public class BeanParamWriter extends ParmWriter {
                                 + WrapperUtils.getWrapperName4FullyQualifiedName(
                                     attribs[i][1])
                                 + "(msgdata)).getParam();\n");
-                } else if (
-                    (t =
-                        wscontext.getTypemap().getType(
-                            new QName(attribs[i][2], attribs[i][3])))
-                        != null
-                        && t.isArray()) {
+                } else if (attribs[0][1].endsWith("[]")) {
                     writer.write(
                         "\t\t\t\t\t"
-                            + WrapperUtils.getWrapperName4FullyQualifiedName(attribs[i][1])
+                            + attribs[i][4]
                             + " arrayT"
                             + i
                             + " = (new "
-                            + WrapperUtils.getWrapperName4FullyQualifiedName(attribs[i][1])
+                            + attribs[i][4]
                             + "());\n");
                     writer.write(
                         "\t\t\t\t\tarrayT" + i + ".desierialize(msgdata);\n");

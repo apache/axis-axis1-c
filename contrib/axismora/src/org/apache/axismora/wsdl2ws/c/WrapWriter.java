@@ -85,7 +85,7 @@ public class WrapWriter extends CFileWriter{
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
 					 minfo = (MethodInfo)methods.get(i);
-					 this.writeMethodInWrapper(minfo.getMethodname(), minfo.getParameterTypess(),minfo.getReturnType());
+					 this.writeMethodInWrapper(minfo.getMethodname(), minfo.getParameterTypes(),minfo.getReturnType());
 					 writer.write("\n");
 				 }
      
@@ -172,7 +172,7 @@ public class WrapWriter extends CFileWriter{
 		Type rettype;
 		if ((rettype = this.wscontext.getTypemap().getType(returntype.getSchemaName())) != null ){
 			if(isArray = rettype.isArray()){
-				outparam = rettype.getTypNameForAttribName("item")+"[]";
+				outparam = rettype.getTypForAttribName("item")+"[]";
 			}
 		}	
 		

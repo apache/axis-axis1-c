@@ -56,6 +56,7 @@
 package org.apache.axismora.wsdl2ws.java;
 
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Iterator;
 
 import javax.xml.namespace.QName;
@@ -87,23 +88,9 @@ public class ArrayParamWriter extends ParmWriter {
 
         this.isDirectReturn =
             this.wscontext.getSerInfo().isDirectReturn(type.getLanguageSpecificName());
-
-        Iterator enu = type.getAttribNames();
-        if (!enu.hasNext())
-            throw new WrapperFault("Parameter with no types ???? Array Writer");
-
-        qname = type.getTypNameForAttribName((String) enu.next());
-
-        Type t = wscontext.getTypemap().getType(qname);
-        if (t != null)
-            this.arrtype = t.getLanguageSpecificName();
-        else {
-            //the type should be inbuild simple type
-            this.arrtype = TypeMap.getBasicTypeClass4qname(qname);
-            if (this.arrtype == null)
-                throw new WrapperFault(
-                    "if not inbuild or not in type map what is this type " + qname);
-        }
+		Type t = WrapperUtils.getArrayType(type);
+		qname = t.getName();
+		this.arrtype = t.getLanguageSpecificName();
     }
 
     public void writeDesireializeCode() throws WrapperFault {

@@ -129,7 +129,7 @@ public class ServiceInterfaceWriter extends JavaInterfaceWriter {
                 writer.write(minfo.getMethodname() + "(");
 
                 //write parameter names 
-                Iterator params = minfo.getParameterTypess().iterator();
+                Iterator params = minfo.getParameterTypes().iterator();
                 if (params.hasNext())
                     writer.write(
                         WrapperUtils.getClassNameFromParamInfoConsideringArrays(
