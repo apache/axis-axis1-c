@@ -239,7 +239,7 @@ public class WrapWriter extends CFileWriter{
 				writer.write(paraTypeName+"*");
 			}
 		}
-
+		writer.write(");\n");
 		writer.write("\n/////////////////////////////////////////////////////////////////\n");
 		writer.write("// This method wrap the service method \n");
 		writer.write("//////////////////////////////////////////////////////////////////\n");
