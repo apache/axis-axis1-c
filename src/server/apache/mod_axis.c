@@ -124,7 +124,7 @@ static int axis_handler(request_rec *req_rec)
 
 	if(0 != process_request(sstr))
 	{
-		//ap_rputs("SOAP Engine failed to response",req_rec);
+		/*ap_rputs("SOAP Engine failed to response",req_rec);*/
 		return OK;
 	}
 
