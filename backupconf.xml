@@ -70,7 +70,6 @@
 
 			<else>
 			<property name="srcServerWSDD" value="${basedir}/build/server.wsdd.linux"/>
-	<echo message="in linuxxx"/>
 			<property name="srcBuildPropertyFile" value="${basedir}/build/build.Linux.properties"/>
 			<property name="bckServerWSDD" value="${bckDir}/server.wsdd.linux"/>
 			<property name="bckBuildPropertyFile" value="${bckDir}/build.Linux.properties"/>
