@@ -199,6 +199,7 @@ main(int argc, char *argv[])
 	port = argv[2];
     }
 
+    InteropTestPortType *ws = NULL;;
     if (argc > 3)
     {
 	printf("Usage :\n %s <server> <port>\n\n", argv[0]);
@@ -208,7 +209,7 @@ main(int argc, char *argv[])
 	//sprintf(endpoint, "http://%s:%s/axis/base", server, port);
 	//endpoint for Axis Java sample
 	sprintf(endpoint, "http://%s:%s/axis/services/echo", server, port);
-	InteropTestPortType *ws = new InteropTestPortType(endpoint);
+	ws = new InteropTestPortType(endpoint);
     }
 
     pthread_t thread[NUM_THREADS];
@@ -222,7 +223,7 @@ main(int argc, char *argv[])
     for (t = 0; t < NUM_THREADS; t++)
     {
 	printf("Creating thread %d\n", t);
-	rc = pthread_create(&thread[t], &attr, run, NULL);
+	rc = pthread_create(&thread[t], &attr, run, (void*)ws);
 	if (rc)
 	{
 	    printf("ERROR; return code from pthread_create() is %d\n", rc);

@@ -56,6 +56,8 @@ main (int argc, char *argv[])
 
   //set HTTP headers
   ws.setTransportProperty ("Accept-Language", " da, en-gb;q=0.8, en;q=0.7");
+  ws.setTransportProperty ("Accept-Language", "lang2");
+  ws.setTransportProperty ("Accept-Language", "lang3");
 
   /*create a header of the form:
      <SOAP-ENV:Header>
@@ -114,6 +116,16 @@ main (int argc, char *argv[])
     printf ("successful\n");
   else
     printf ("failed\n");
+  
+  printf( "Test trasport property accessors\n" );
+  printf( "First trasport key = %s\n", ws.getFirstTrasportPropertyKey() );
+  printf( "First trasport value = %s\n", ws.getCurrentTrasportPropertyValue() );
+  char* key = NULL;
+  while( key =  ws.getNextTrasportPropertyKey() )
+  {
+    printf( "Next trasport key = %s\n", key );
+    printf( "Next trasport value = %s\n", ws.getCurrentTrasportPropertyValue() );
+  }
 
   // testing echoStringArray 
   xsd__string_Array arrstr;
