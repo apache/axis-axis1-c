@@ -3,6 +3,42 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
+Project: "ExceptionTestClient"=".\client\exceptionTest\ExceptionTestClient.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "ExceptionTestServer"=".\server\exceptionTest\ExceptionTestServer.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "FaultMappingClient"=".\client\fault_mapping\FaultMappingClient.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "StubBase"=".\CLIENT\STUBTEST\StubBase\StubBase.dsp" - Package Owner=<4>
 
 Package=<5>
