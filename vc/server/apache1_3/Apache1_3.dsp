@@ -38,7 +38,7 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "../../../release/win32"
+# PROP Output_Dir ""
 # PROP Intermediate_Dir "../../../bin/win32/apache1_3"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
@@ -54,7 +54,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 Common.lib Soap.lib wsdd.lib Engine.lib xerces-c_2.lib ApacheCore.lib /nologo /dll /machine:I386 /out:"../../../release/win32/mod_axis.dll" /libpath:"../../../lib/win32/axis" /libpath:"../../../lib/win32/xercesc" /libpath:"../../../lib/win32/apache1_3"
+# ADD LINK32 Common.lib Soap.lib wsdd.lib Engine.lib xerces-c_2.lib ApacheCore.lib /nologo /dll /machine:I386 /out:"C:\Program Files\Apache Group\Apache\modules\mod_axis.dll" /libpath:"../../../lib/win32/axis" /libpath:"../../../lib/win32/xercesc" /libpath:"../../../lib/win32/apache1_3"
 # SUBTRACT LINK32 /profile
 
 !ELSEIF  "$(CFG)" == "Apache1_3 - Win32 Debug"
