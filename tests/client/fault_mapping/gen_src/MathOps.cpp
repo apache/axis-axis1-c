@@ -7,13 +7,19 @@
 
 #include <axis/server/AxisWrapperAPI.h>
 
-using namespace std;
-
- extern int Axis_DeSerialize_DivByZeroStruct(DivByZeroStruct* param, IWrapperSoapDeSerializer* pDZ);
+extern int Axis_DeSerialize_DivByZeroStruct(DivByZeroStruct* param, IWrapperSoapDeSerializer* pDZ);
 extern void* Axis_Create_DivByZeroStruct(DivByZeroStruct *Obj, bool bArray = false, int nSize=0);
 extern void Axis_Delete_DivByZeroStruct(DivByZeroStruct* param, bool bArray = false, int nSize=0);
 extern int Axis_Serialize_DivByZeroStruct(DivByZeroStruct* param, IWrapperSoapSerializer* pSZ, bool bArray = false);
 extern int Axis_GetSize_DivByZeroStruct();
+
+
+extern int Axis_DeSerialize_OutOfBoundStruct(OutOfBoundStruct* param, IWrapperSoapDeSerializer* pDZ);
+extern void* Axis_Create_OutOfBoundStruct(OutOfBoundStruct *Obj, bool bArray = false, int nSize=0);
+extern void Axis_Delete_OutOfBoundStruct(OutOfBoundStruct* param, bool bArray = false, int nSize=0);
+extern int Axis_Serialize_OutOfBoundStruct(OutOfBoundStruct* param, IWrapperSoapSerializer* pSZ, bool bArray = false);
+extern int Axis_GetSize_OutOfBoundStruct();
+
 
 extern int Axis_DeSerialize_SpecialDetailStruct(SpecialDetailStruct* param, IWrapperSoapDeSerializer* pDZ);
 extern void* Axis_Create_SpecialDetailStruct(SpecialDetailStruct *Obj, bool bArray = false, int nSize=0);
@@ -21,11 +27,8 @@ extern void Axis_Delete_SpecialDetailStruct(SpecialDetailStruct* param, bool bAr
 extern int Axis_Serialize_SpecialDetailStruct(SpecialDetailStruct* param, IWrapperSoapSerializer* pSZ, bool bArray = false);
 extern int Axis_GetSize_SpecialDetailStruct();
 
-extern int Axis_DeSerialize_OutOfBoundStruct(OutOfBoundStruct* param, IWrapperSoapDeSerializer* pDZ);
-extern void* Axis_Create_OutOfBoundStruct(OutOfBoundStruct *Obj, bool bArray = false, int nSize=0);
-extern void Axis_Delete_OutOfBoundStruct(OutOfBoundStruct* param, bool bArray = false, int nSize=0);
-extern int Axis_Serialize_OutOfBoundStruct(OutOfBoundStruct* param, IWrapperSoapSerializer* pSZ, bool bArray = false);
-extern int Axis_GetSize_OutOfBoundStruct();
+
+using namespace std;
 
 MathOps::MathOps(const char* pchEndpointUri, AXIS_PROTOCOL_TYPE eProtocol)
 :Stub(pchEndpointUri, eProtocol)
@@ -51,10 +54,7 @@ MathOps::~MathOps()
 int MathOps::div(int Value0, int Value1)
 {
 	int Ret;
-	char* cFaultcode;
-	char* cFaultstring;
-	char* cFaultactor;
-	char* cFaultdetail;
+	const char* pcCmplxFaultName;
 	try
 	{
 		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
@@ -80,83 +80,60 @@ int MathOps::div(int Value0, int Value1)
 		int iExceptionCode = e.getExceptionCode();
 		if(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)
 		{
+                        m_pCall->unInitialize();
 			throw;
 		}
-		else if (AXIS_SUCCESS == m_pCall->checkFault("Fault","http://localhost/axis/MathOps" ))//Exception handling code goes here
+                
+                ISoapFault* pSoapFault = (ISoapFault*) m_pCall->checkFault("Fault", "http://localhost/axis/MathOps");
+                if(pSoapFault)
 		{
-			cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-			cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-			cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-			if(0 == strcmp("OutOfBoundStruct", cFaultstring))
-			{
-				if (AXIS_SUCCESS == m_pCall->checkFault("faultdetail","http://localhost/axis/MathOps"))
-				{
-					OutOfBoundStruct* pFaultDetail = NULL;
-					pFaultDetail = (OutOfBoundStruct*)m_pCall->
-						getCmplxObject((void*) Axis_DeSerialize_OutOfBoundStruct,
-						(void*) Axis_Create_OutOfBoundStruct,
-						(void*) Axis_Delete_OutOfBoundStruct,"faultstruct1", 0);
-					/*User code to handle the struct can be inserted here*/
-                                        printf("faultcode:%s\n", cFaultcode);
-                                        printf("faultstring:%s\n", cFaultstring);
-                                        printf("faultactor:%s\n", cFaultactor);
-					m_pCall->unInitialize();
-                                        if(pFaultDetail)
-                                        {
-					    throw AxisOutOfBoundException(pFaultDetail);
-                                        }
-                                        else
-                                        {
-                                            throw AxisGenException(SERVER_UNKNOWN_ERROR);
-                                        }
-				}
-			}
-			else if(0 == strcmp("DivByZeroStruct", cFaultstring))
-			{
-				if (AXIS_SUCCESS == m_pCall->checkFault("faultdetail","http://localhost/axis/MathOps"))
-				{
-					DivByZeroStruct* pFaultDetail = NULL;
-					pFaultDetail = (DivByZeroStruct*)m_pCall->
-						getCmplxObject((void*) Axis_DeSerialize_DivByZeroStruct,
-						(void*) Axis_Create_DivByZeroStruct,
-						(void*) Axis_Delete_DivByZeroStruct,"faultstruct1", 0);
-					/*User code to handle the struct can be inserted here*/
-                                        printf("faultcode:%s\n", cFaultcode);
-                                        printf("faultstring:%s\n", cFaultstring);
-                                        printf("faultactor:%s\n", cFaultactor);
-					m_pCall->unInitialize();
-					throw AxisDivByZeroException(pFaultDetail);
-				}
-			}
-			else if(0 == strcmp("SpecialDetailStruct", cFaultstring))
-			{
-				if (AXIS_SUCCESS == m_pCall->checkFault("faultdetail","http://localhost/axis/MathOps"))
-				{
-					SpecialDetailStruct* pFaultDetail = NULL;
-					pFaultDetail = (SpecialDetailStruct*)m_pCall->
-						getCmplxObject((void*) Axis_DeSerialize_SpecialDetailStruct,
-						(void*) Axis_Create_SpecialDetailStruct,
-						(void*) Axis_Delete_SpecialDetailStruct,"faultstruct1", 0);
-					/*User code to handle the struct can be inserted here*/
-                                        printf("faultcode:%s\n", cFaultcode);
-                                        printf("faultstring:%s\n", cFaultstring);
-                                        printf("faultactor:%s\n", cFaultactor);
-					m_pCall->unInitialize();
-                                        if(pFaultDetail)
-					    throw AxisNormalDetailException(pFaultDetail);
-                                        else
-                                            throw AxisGenException(SERVER_UNKNOWN_ERROR);
-				}
-			}
-			else
-			{
-				  cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-                                  if(cFaultdetail)
-				      throw AxisGenException(cFaultdetail);
-                                  else
-                                      throw AxisGenException(SERVER_UNKNOWN_ERROR);
-			}
-		}
+		    pcCmplxFaultName = pSoapFault->getCmplxFaultObjectName().c_str();
+		    //printf("pcCmplxFaultName:%s\n", pcCmplxFaultName);
+                    if(0 == strcmp("DivByZeroStruct", pcCmplxFaultName))
+                    {
+                        DivByZeroStruct* pFaultDetail = NULL;
+                        pFaultDetail = (DivByZeroStruct*)pSoapFault->
+                            getCmplxFaultObject((void*) Axis_DeSerialize_DivByZeroStruct,
+                            (void*) Axis_Create_DivByZeroStruct,
+                            (void*) Axis_Delete_DivByZeroStruct,"DivByZeroStruct", 0);
+
+			pSoapFault->setCmplxFaultObject(pFaultDetail);
+			
+		        m_pCall->unInitialize();
+                        throw AxisClientException(pSoapFault);
+		    }
+                    if(0 == strcmp("OutOfBoundStruct", pcCmplxFaultName))
+                    {
+                        OutOfBoundStruct* pFaultDetail = NULL;
+                        pFaultDetail = (OutOfBoundStruct*)pSoapFault->
+                            getCmplxFaultObject((void*) Axis_DeSerialize_OutOfBoundStruct,
+                            (void*) Axis_Create_OutOfBoundStruct,
+                            (void*) Axis_Delete_OutOfBoundStruct,"OutOfBoundStruct", 0);
+
+			pSoapFault->setCmplxFaultObject(pFaultDetail);
+			
+		        m_pCall->unInitialize();
+                        throw AxisClientException(pSoapFault);
+		    }
+                    if(0 == strcmp("SpecialDetailStruct", pcCmplxFaultName))
+                    {
+                        SpecialDetailStruct* pFaultDetail = NULL;
+                        pFaultDetail = (SpecialDetailStruct*)pSoapFault->
+                            getCmplxFaultObject((void*) Axis_DeSerialize_SpecialDetailStruct,
+                            (void*) Axis_Create_SpecialDetailStruct,
+                            (void*) Axis_Delete_SpecialDetailStruct,"SpecialDetailStruct", 0);
+
+			pSoapFault->setCmplxFaultObject(pFaultDetail);
+			
+		        m_pCall->unInitialize();
+                        throw AxisClientException(pSoapFault);
+		    } 
+		    else
+		    {
+                        m_pCall->unInitialize();
+                        throw AxisClientException(pSoapFault);
+		    }
+                }
 		else throw;
 	}
 }

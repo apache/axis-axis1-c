@@ -26,7 +26,7 @@
 #include <axis/server/IMessageData.h>
 #include <axis/server/GDefine.h>
 #include <axis/server/AxisWrapperAPI.h>
-#include "AxisDivByZeroException.h"
+#include "AxisServiceException.h"
 
 class MathOpsWrapper : public WrapperClassHandler
 {

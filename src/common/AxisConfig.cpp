@@ -43,6 +43,8 @@ AxisConfig::AxisConfig ()
 	m_pcKeyArray[AXCONF_TRANSPORTHTTP]="Transport_http";
 	m_pcKeyArray[AXCONF_TRANSPORTSMTP]="Transport_smtp";
 	m_pcKeyArray[AXCONF_XMLPARSER] = "XMLParser";
+	m_pcKeyArray[AXCONF_NODENAME] = "NodeName";
+	m_pcKeyArray[AXCONF_LISTENPORT] = "ListenPort";
 
     for(int i=0;i<AXCONF_LAST;i++)
 	{
@@ -68,6 +70,8 @@ AxisConfig::AxisConfig ()
         m_pcValueArray[AXCONF_CLIENTLOGPATH] = "/usr/local/Axis/logs/AxisClientLog";
         m_pcValueArray[AXCONF_WSDDFILEPATH] = "/usr/local/Axis/conf/server.wsdd";
         m_pcValueArray[AXCONF_CLIENTWSDDFILEPATH] = "/usr/local/Axis/conf/client.wsdd";
+        m_pcValueArray[AXCONF_NODENAME] = "<server name>";
+        m_pcValueArray[AXCONF_LISTENPORT] = "<listen port>";
 #endif
 #endif
 

@@ -191,6 +191,7 @@ const WSDDService* WSDDDeployment::getService(const AxisChar* sServiceName)
 {
     WSDDServiceMap::iterator iter;
     if (!m_DeployedServices) return NULL;
+    AXISC_TRY
     iter = m_DeployedServices->find(sServiceName);
     if (iter != m_DeployedServices->end())
     {
@@ -199,7 +200,11 @@ const WSDDService* WSDDDeployment::getService(const AxisChar* sServiceName)
     else
     {
         return NULL;
+	//THROW_AXIS_WSDD_EXCEPTION_NULL(CLIENT_WSDD_SERVICE_NOT_FOUND);
     }
+    AXISC_CATCH(exception& e)
+        THROW_AXIS_WSDD_EXCEPTION(SERVER_WSDD_EXCEPTION);
+    AXISC_ENDCATCH
 }
 
 const WSDDServiceMap* WSDDDeployment::getWSDDServiceMap() const

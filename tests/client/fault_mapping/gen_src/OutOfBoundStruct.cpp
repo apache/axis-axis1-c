@@ -47,7 +47,7 @@ int Axis_DeSerialize_OutOfBoundStruct(OutOfBoundStruct* param, IWrapperSoapDeSer
 	param->varInt = pIWSDZ->getElementAsInt("varInt",0);
 	param->specialDetail = (SpecialDetailStruct*)pIWSDZ->getCmplxObject((void*)Axis_DeSerialize_SpecialDetailStruct
 		, (void*)Axis_Create_SpecialDetailStruct, (void*)Axis_Delete_SpecialDetailStruct
-		, "specialDetail", Axis_URI_SpecialDetailStruct);
+		, "SpecialDetailStruct", Axis_URI_SpecialDetailStruct);
 	return pIWSDZ->getStatus();
 }
 void* Axis_Create_OutOfBoundStruct(OutOfBoundStruct* pObj, bool bArray = false, int nSize=0)

@@ -12,9 +12,7 @@
 #include <axis/server/GDefine.h>
 #include <axis/server/AxisWrapperAPI.h>
 
-#include "AxisOutOfBoundException.h"
-#include "AxisDivByZeroException.h"
-#include "AxisNormalDetailException.h"
+#include "AxisServiceException.h"
 
 class MathOpsWrapper : public WrapperClassHandler
 {

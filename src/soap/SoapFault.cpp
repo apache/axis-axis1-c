@@ -44,8 +44,11 @@
 #include <axis/server/SoapSerializer.h>
 #include <axis/server/SoapEnvVersions.h>
 #include <axis/server/GDefine.h>
+#include <axis/server/AxisConfig.h>
 #include <axis/server/AxisTrace.h>
+
 extern AxisTrace* g_pAT;
+extern AxisConfig* g_pConfig;
 
 volatile bool SoapFault::m_bInit = false;
 
@@ -56,13 +59,15 @@ SoapFault::SoapFault()
 
 SoapFault::~SoapFault()
 {
-	delete m_pFaultcodeParam;
-	delete m_pFaultstringParam;
+    delete m_pFaultcodeParam;
+    delete m_pFaultstringParam;
     delete m_pFaultactorParam;
     delete m_pFaultDetail;
+    if(m_pDZ)
+        delete(m_pDZ);
 
-	m_pFaultcodeParam = NULL;
-	m_pFaultstringParam = NULL;
+    m_pFaultcodeParam = NULL;
+    m_pFaultstringParam = NULL;
     m_pFaultactorParam = NULL;
     m_pFaultDetail = NULL;
 }
@@ -70,10 +75,10 @@ SoapFault::~SoapFault()
 int SoapFault::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 {
     /* written according to SOAP Version 1.1 */
-
     int iStatus= AXIS_SUCCESS;
-    /*Soap Faults are always serialized as doc literal*/
-    pSZ.setStyle(DOC_LITERAL);	
+    if(m_bIsSimpleDetail)
+    {
+        pSZ.setStyle(DOC_LITERAL);
     pSZ.serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":",
         gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">", NULL); 
 	
@@ -95,23 +100,61 @@ int SoapFault::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 
     if(m_pFaultDetail)
     {
-        if(m_bIsSimpleDetail)
-        {
+        /*if(m_bIsSimpleDetail)
+        {*/
             m_pFaultDetail->serialize(pSZ);
-        }
+        /*}
         else
         {
             pSZ.serialize("<faultdetail>", NULL);
             m_pFaultDetail->serialize(pSZ);
             pSZ.serialize("</faultdetail>", NULL);
-        }
+        }*/
     }
     
 	pSZ.serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":",
 		gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">", NULL); 
+    }
+    else
+    {
+        pSZ.serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":",
+        gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">", NULL);
 
+    m_pFaultcodeParam->serialize(pSZ);
+    //pSZ.serialize("<faultcode>", m_sFaultcode.c_str(), "</faultcode>", NULL);
+    m_pFaultstringParam->serialize(pSZ);
+    //pSZ.serialize("<faultstring>", m_sFaultstring.c_str(), "</faultstring>", NULL);
+
+    if(m_pFaultactorParam)
+    {
+        m_pFaultactorParam->serialize(pSZ);
+        //pSZ.serialize("<faultactor>", m_sFaultactor.c_str(), "</faultactor>", NULL);
+    }
+
+    /*if(!m_sFaultDetail.empty())
+    {
+        pSZ.serialize("<detail>", m_sFaultDetail.c_str(), "</detail>", NULL);
+    }*/
+    if(m_pFaultDetail)
+    {
+        /*if(m_bIsSimpleDetail)
+        {
+            m_pFaultDetail->serialize(pSZ);
+        }
+        else
+        {*/
+            pSZ.serialize("<faultdetail>", NULL);
+            m_pFaultDetail->serialize(pSZ);
+            pSZ.serialize("</faultdetail>", NULL);
+        //}
+    }
+
+        pSZ.serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":",
+                gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">", NULL);
+    }
     return iStatus;
 }
+
 
 
 void SoapFault::initialize()
@@ -205,10 +248,19 @@ SoapFault* SoapFault::getSoapFault(int iFaultCode)
      //    ":" + s_parrSoapFaultStruct[iFaultCode].pcFaultcode);
      pSoapFault->setFaultstring(s_parrSoapFaultStruct[iFaultCode].pcFaultstring);
      //pSoapFault->setFaultactor(s_parrSoapFaultStruct[iFaultCode].pcFaultactor);
-     pSoapFault->setFaultactor("http://endpoint/url");
-     pSoapFault->setFaultDetail(s_parrSoapFaultStruct[iFaultCode].pcFaultDetail);
+     /* Fault actor should be set to the node url in which Axis C++ running.
+      * Currently it is hardcoded to localhost
+      */
+
+    char* pcNodeName = g_pConfig->getAxisConfProperty(AXCONF_NODENAME);
+    char* pcPort = g_pConfig->getAxisConfProperty(AXCONF_LISTENPORT);
+    string strUrl = pcNodeName;
+    strUrl += ":";
+    strUrl += string(pcPort);
+    pSoapFault->setFaultactor(strUrl);			 
+    pSoapFault->setFaultDetail(s_parrSoapFaultStruct[iFaultCode].pcFaultDetail);
     
-    return pSoapFault;
+return pSoapFault;
 }
 
 SoapFault::SoapFault(string sFaultcode, string sFaultstring, string sFaultactor, string sDetail) 
@@ -273,6 +325,19 @@ int SoapFault::setFaultDetail(const Param* pFaultDetail)
     return AXIS_SUCCESS;
 }
 
+int SoapFault::setCmplxFaultObjectName(const string& sCmplxFaultObjectName)
+{
+    m_sCmplxFaultObjectName = sCmplxFaultObjectName;
+    return AXIS_SUCCESS;
+}
+
+int SoapFault::setCmplxFaultObject(const void* pCmplxFaultObject)
+{
+    m_pCmplxFaultObject = pCmplxFaultObject;
+
+    return AXIS_SUCCESS;
+}
+
 void SoapFault::setPrefix(const AxisChar* prefix)
 {
     m_strPrefix = prefix;
@@ -286,6 +351,11 @@ void SoapFault::setLocalName(const AxisChar* localname)
 void SoapFault::setUri(const AxisChar* uri)
 {
     m_strUri = uri;
+}
+
+void SoapFault::setDeSerializer(SoapDeSerializer* pDZ)
+{
+    m_pDZ = pDZ;
 }
 
 const char* SoapFault::getSoapString()
@@ -308,9 +378,26 @@ string SoapFault::getFaultactor()
     return m_sFaultactor;
 }
 
-string SoapFault::getFaultDetail()
+string SoapFault::getSimpleFaultDetail()
 {
     return m_sFaultDetail;
+}
+
+string SoapFault::getCmplxFaultObjectName()
+{
+    return m_sCmplxFaultObjectName;
+}
+
+void* SoapFault::getCmplxFaultObject(void* pDZFunct, void* pCreFunct, void* pDelFunct,
+        const AxisChar* pName, const AxisChar* pNamespace)
+{ 
+    return m_pDZ->getCmplxFaultObject (pDZFunct, pCreFunct, pDelFunct, pName,
+        pNamespace);
+}
+
+const void* SoapFault::getCmplxFaultObject()
+{
+	return m_pCmplxFaultObject;
 }
 
 bool SoapFault::operator ==(const SoapFault &objSoapFault)

@@ -1,8 +1,6 @@
 lib_LTLIBRARIES = libmathops.la
 SUBDIRS =
-libmathops_la_SOURCES = AxisDivByZeroException.cpp \
-                        AxisNormalDetailException.cpp \
-                        AxisOutOfBoundException.cpp \
+libmathops_la_SOURCES = AxisServiceException.cpp \
                         OutOfBoundStruct.cpp \
                         SpecialDetailStruct.cpp \
                         DivByZeroStruct.cpp \

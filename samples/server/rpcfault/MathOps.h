@@ -22,7 +22,7 @@
 #define __MATHOPS_SERVERSKELETON_H__INCLUDED_
 
 #include <axis/server/AxisUserAPI.h>
-#include "AxisDivByZeroException.h"
+#include "AxisServiceException.h"
 
 #include "DivByZeroStruct.h"
 
