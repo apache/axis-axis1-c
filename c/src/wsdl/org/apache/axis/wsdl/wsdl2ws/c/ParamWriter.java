@@ -67,12 +67,14 @@ package org.apache.axis.wsdl.wsdl2ws.c;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.cpp.CPPUtils;
+import org.apache.axis.wsdl.wsdl2ws.c.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
@@ -115,14 +117,14 @@ public abstract class ParamWriter extends BasicFileWriter{
         ArrayList attribfeilds = new ArrayList();
 		ArrayList elementfeilds = new ArrayList();
 
-        Enumeration names = type.getAttributeNames();
-        while (names.hasMoreElements()){
-			attribfeilds.add(names.nextElement());
+        Iterator names = type.getAttributeNames();
+        while (names.hasNext()){
+			attribfeilds.add(names.next());
         }
         
 		names = type.getElementnames();
-				while (names.hasMoreElements()){
-					elementfeilds.add(names.nextElement());
+				while (names.hasNext()){
+					elementfeilds.add(names.next());
 		}
         
         
@@ -178,7 +180,7 @@ public abstract class ParamWriter extends BasicFileWriter{
  	protected String getCorrectParmNameConsideringArraysAndComplexTypes(QName name,String classname)throws WrapperFault{
 		//System.out.println(name);
 		Type t = wscontext.getTypemap().getType(name);
-		if(t !=null){ //array or complex types
+		if(!CUtils.isSimpleType(name)){ //array or complex types
 			if (t.isArray()){
 				return t.getLanguageSpecificName();
 			}
