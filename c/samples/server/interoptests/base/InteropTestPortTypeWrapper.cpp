@@ -238,7 +238,7 @@ int InteropTestPortTypeWrapper::echoStruct(void* pMsg)
 		, "inputStruct", Axis_URI_SOAPStruct);
 	if (AXIS_SUCCESS != (nStatus = pIWSDZ->GetStatus())) return nStatus;
 	SOAPStruct* ret = pWs->echoStruct(v0);
-	return pIWSSZ->AddOutputCmplxParam(ret, (void*)Axis_Serialize_SOAPStruct, (void*)Axis_Delete_SOAPStruct, "echoStructReturn", 0);
+	return pIWSSZ->AddOutputCmplxParam(ret, (void*)Axis_Serialize_SOAPStruct, (void*)Axis_Delete_SOAPStruct, "echoStructReturn", Axis_URI_SOAPStruct);
 }
 
 
@@ -263,7 +263,7 @@ int InteropTestPortTypeWrapper::echoStructArray(void* pMsg)
 		, (void*)Axis_GetSize_SOAPStruct, "inputStructArray", Axis_URI_SOAPStruct);
 	if (AXIS_SUCCESS != (nStatus = pIWSDZ->GetStatus())) return nStatus;
 	SOAPStruct_Array ret = pWs->echoStructArray(v0);
-	return pIWSSZ->AddOutputCmplxArrayParam((Axis_Array*)(&ret),(void*) Axis_Serialize_SOAPStruct, (void*) Axis_Delete_SOAPStruct, (void*) Axis_GetSize_SOAPStruct, "echoStructArrayReturn", 0);
+	return pIWSSZ->AddOutputCmplxArrayParam((Axis_Array*)(&ret),(void*) Axis_Serialize_SOAPStruct, (void*) Axis_Delete_SOAPStruct, (void*) Axis_GetSize_SOAPStruct, "echoStructArrayReturn", Axis_URI_SOAPStruct);
 }
 
 

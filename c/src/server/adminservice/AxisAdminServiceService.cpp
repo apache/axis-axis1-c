@@ -25,7 +25,7 @@ int DestroyInstance(BasicHandler *inst)
 {
 	if (inst)
 	{
-		WrapperClassHandler* pWCH = static_cast<WrapperClassHandler*>(inst);
+		WrapperClassHandler* pWCH = reinterpret_cast<WrapperClassHandler*>(inst);
 		pWCH->Fini();
 		delete pWCH;
 		delete inst;

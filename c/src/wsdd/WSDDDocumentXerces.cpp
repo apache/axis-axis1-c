@@ -275,7 +275,7 @@ void WSDDDocumentXerces::ProcessAttributes(WSDDLevels ElementType, const Attribu
 		case WSDD_SERVICE: //add this attribute to current service object
 			if (XMLString::equals(local, kw_name))
 			{
-				m_pService->SetServiceName(value);
+				m_pService->SetName(value);
 			}
 			else if (XMLString::equals(local, kw_prv))
 			{
@@ -293,7 +293,7 @@ void WSDDDocumentXerces::ProcessAttributes(WSDDLevels ElementType, const Attribu
 		case WSDD_HANDLER: //add this attribute to current handler object
 			if (XMLString::equals(local, kw_name))
 			{
-				//usefull ? ignore for now .. //TODO
+				m_pHandler->SetName(value);
 			}
 			else if (XMLString::equals(local, kw_type))
 			{

@@ -92,6 +92,7 @@ public:
 	void SetScope(const AxisChar* sScope);
 	void SetLibName(const AxisChar* sLibName);
 	void SetLibId(int nLibId);
+	void SetName(const AxisChar* sName);
 	const AxisChar* GetParameter(const AxisChar* sKey) const;
 	void AddParameter(const AxisChar* sKey, const AxisChar* sValue);
 	const map<AxisString, AxisString>* GetParameterList() const; 

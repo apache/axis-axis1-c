@@ -93,6 +93,11 @@ void WSDDHandler::SetLibId(int nLibId)
 	m_nLibId = nLibId;
 }
 
+void WSDDHandler::SetName(const AxisChar* sName)
+{
+	m_sName = sName;
+}
+
 int WSDDHandler::GetLibId() const
 {
 	return m_nLibId;
@@ -155,10 +160,10 @@ int WSDDHandler::UpdateWSDD(FILE* wsddfile, int tabcount)
 		map<AxisString, AxisString>::iterator itr;
 		for (itr = m_Params->begin(); itr != m_Params->end(); itr++)
 		{
-			PrintTabs(tabcount+1); *this << "<parameter name=\"" << (*itr).first.c_str() << "\" value=\"" << (*itr).second.c_str() << "\" />";
+			PrintTabs(tabcount+1); *this << "<parameter name=\"" << (*itr).first.c_str() << "\" value=\"" << (*itr).second.c_str() << "\" />\n";
 		}
 	}
-	PrintTabs(tabcount); *this << "<handler>\n";
+	PrintTabs(tabcount); *this << "</handler>\n";
 	m_file = 0;
 	return AXIS_SUCCESS;
 }

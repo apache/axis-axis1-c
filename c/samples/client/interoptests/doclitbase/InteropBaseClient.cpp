@@ -22,7 +22,6 @@ int main(int argc, char* argv[])
 	else
 		printf("failed\n");
 	
-/*
 	// testing echoStringArray 
 	ArrayOfstring arrstr;
 	arrstr.m_Array = new char*[ARRAYSIZE];
@@ -139,12 +138,20 @@ int main(int argc, char* argv[])
 	
 	
 	//testing echo base 64 binary
-//	printf("invoking echoBase64...\n");
-//	if (0 == strcmp(ws.echoBase64("BCDF675E234242WHRTKMJDGKGUEJ898636JFJFHEJDGWTDHFJRURYGBCDHTWRSG"),
-//		"BCDF675E234242WHRTKMJDGKGUEJ898636JFJFHEJDGWTDHFJRURYGBCDHTWRSG"))
-//		printf("successful\n");
-//	else
-//		printf("failed\n");
+	printf("invoking echoBase64...\n");
+	const char* bstr = "some string that is sent encoded to either base64Binary or hexBinary";
+
+	xsd__base64Binary bb;
+	bb.__ptr = (unsigned char*)strdup(bstr);
+	bb.__size = strlen(bstr);
+	if (bb.__size == ws.echoBase64(bb).__size)
+	{
+		printf("successful\n");
+		printf("Returned String :\n%s\n", bb.__ptr);
+	}
+	else
+		printf("failed\n");
+
 	time_t tim;
 	time(&tim);
 	tm* lt = gmtime(&tim);
@@ -153,15 +160,19 @@ int main(int argc, char* argv[])
 		printf("successful\n");
 	else
 		printf("failed\n");
-	
-	
 	//testing echo hex binary
-//	printf("invoking echoHexBinary...\n");
-//	if (0 == strcmp(ws.echoHexBinary("CCCFFA46552BC7D5A09BC5F23DE9E0FE7862AD45BC87D02FEE"),
-//		"CCCFFA46552BC7D5A09BC5F23DE9E0FE7862AD45BC87D02FEE"))
-//		printf("successful\n");
-//	else
-//		printf("failed\n");
+
+	printf("invoking echoHexBinary...\n");
+	xsd__hexBinary hb;
+	hb.__ptr = (unsigned char*)strdup(bstr);
+	hb.__size = strlen(bstr);
+	if (hb.__size == ws.echoHexBinary(hb).__size)
+	{
+		printf("successful\n");
+		printf("Returned String :\n%s\n", hb.__ptr);
+	}
+	else
+		printf("failed\n");
 	//testing echo decimal
 	printf("invoking echoDecimal...\n");
 	if (ws.echoDecimal(1234.567890) > 1234.56)
@@ -176,8 +187,7 @@ int main(int argc, char* argv[])
 		printf("successful\n");
 	else
 		printf("failed\n");
-	
-*/	
+		
 	getchar();
 	return 0;
 }

@@ -98,11 +98,6 @@ WSDDService::~WSDDService()
 	}
 }
 
-void WSDDService::SetServiceName(const AxisChar* sServiceName)
-{
-	m_sName = sServiceName;
-}
-
 void WSDDService::SetProvider(const AxisChar* sProvider)
 {
 	if (0 == strcmp(sProvider, "CPP:RPC"))
@@ -228,41 +223,41 @@ int WSDDService::UpdateWSDD(FILE* wsddfile, int tabcount)
 	PrintTabs(tabcount); *this << "<service name=\"" << m_sName.c_str() << "\" provider=\"" << GetProviderString() << "\" description=\"" << m_sDescription.c_str() << "\">\n";
 	if (m_Params)
 	{
-		WSDDHandlerList::iterator iter;
-		if(m_RequestHandlers)
-		{
-			*this << "\t\t<requestFlow>\n";
-			for(iter=m_RequestHandlers->begin(); iter!=m_RequestHandlers->end(); iter++)
-			{
-				(*iter)->UpdateWSDD(wsddfile, 3);
-			}
-			*this << "\t\t</requestFlow>\n";
-		}
-
-		if(m_ResponseHandlers)
-		{
-			*this << "\t\t<responseFlow>\n";
-			for(iter=m_ResponseHandlers->begin(); iter!=m_ResponseHandlers->end(); iter++)
-			{
-				(*iter)->UpdateWSDD(wsddfile, 3);
-			}
-			*this << "\t\t</responseFlow>\n";
-		}
-		PrintTabs(tabcount+1); *this << "<parameter name=\"allowedMethods\" value=\"";
-		//for looop
-		for (list<AxisString>::iterator itrs = m_AllowedMethods.begin(); itrs != m_AllowedMethods.end(); itrs++)
-		{
-			*this << (*itrs).c_str() << " ";
-		}
-		*this << "\"/>\n"; 
-		PrintTabs(tabcount+1); *this << "<parameter name=\"className\" value=\"" << m_sLibName.c_str();
-		*this << "\" />\n"; 
 		map<AxisString, AxisString>::iterator itr;
 		for (itr = m_Params->begin(); itr != m_Params->end(); itr++)
 		{
 			PrintTabs(tabcount+1); *this << "<parameter name=\"" << (*itr).first.c_str() << "\" value=\"" << (*itr).second.c_str() << "\" />";
 		}
 	}
+	WSDDHandlerList::iterator iter;
+	if(m_RequestHandlers)
+	{
+		*this << "\t\t<requestFlow>\n";
+		for(iter=m_RequestHandlers->begin(); iter!=m_RequestHandlers->end(); iter++)
+		{
+			(*iter)->UpdateWSDD(wsddfile, 3);
+		}
+		*this << "\t\t</requestFlow>\n";
+	}
+
+	if(m_ResponseHandlers)
+	{
+		*this << "\t\t<responseFlow>\n";
+		for(iter=m_ResponseHandlers->begin(); iter!=m_ResponseHandlers->end(); iter++)
+		{
+			(*iter)->UpdateWSDD(wsddfile, 3);
+		}
+		*this << "\t\t</responseFlow>\n";
+	}
+	PrintTabs(tabcount+1); *this << "<parameter name=\"allowedMethods\" value=\"";
+	//for looop
+	for (list<AxisString>::iterator itrs = m_AllowedMethods.begin(); itrs != m_AllowedMethods.end(); itrs++)
+	{
+		*this << (*itrs).c_str() << " ";
+	}
+	*this << "\"/>\n"; 
+	PrintTabs(tabcount+1); *this << "<parameter name=\"className\" value=\"" << m_sLibName.c_str();
+	*this << "\" />\n"; 
 	PrintTabs(tabcount); *this << "</service>\n";
 	m_file = 0;
 	return AXIS_SUCCESS;

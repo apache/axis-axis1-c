@@ -8,16 +8,14 @@
 
 AxisAdminServiceWrapper::AxisAdminServiceWrapper()
 {
-	pWs = new AxisAdminService();
 }
 
 AxisAdminServiceWrapper::~AxisAdminServiceWrapper()
 {
-	delete pWs;
 }
 
 /*implementation of WrapperClassHandler interface*/
-void AxisAdminServiceWrapper::OnFault(IMessageData *pMsg)
+void AxisAdminServiceWrapper::OnFault(void *pMsg)
 {
 }
 
@@ -35,13 +33,12 @@ int AxisAdminServiceWrapper::Fini()
 /*
  * This method invokes the right service method 
  */
-int AxisAdminServiceWrapper::Invoke(IMessageData *mc)
+int AxisAdminServiceWrapper::Invoke(void *pMsg)
 {
+	IMessageData* mc = (IMessageData*)pMsg;
 	const AxisChar *method = mc->GetOperationName();
-	if (0 == strcmp(method, "deploy"))
-		return deploy(mc);
-	else if (0 == strcmp(method, "undeploy"))
-		return undeploy(mc);
+	if (0 == strcmp(method, "updateWSDD"))
+		return updateWSDD(mc);
 	else return AXIS_FAIL;
 }
 
@@ -51,8 +48,9 @@ int AxisAdminServiceWrapper::Invoke(IMessageData *mc)
 /*
  * This method wrap the service method 
  */
-int AxisAdminServiceWrapper::deploy(IMessageData* mc)
+int AxisAdminServiceWrapper::updateWSDD(void* pMsg)
 {
+	IMessageData* mc = (IMessageData*)pMsg;
 	int nStatus;
 	IWrapperSoapSerializer *pIWSSZ = NULL;
 	mc->GetSoapSerializer(&pIWSSZ);
@@ -61,33 +59,17 @@ int AxisAdminServiceWrapper::deploy(IMessageData* mc)
 	mc->GetSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
 	/* check whether we have got correct message */
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("deploy", "http://www.opensource.lk/xsd")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("deployResponse", "http://www.opensource.lk/xsd");
+	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("updateWSDD", "http://www.opensource.lk/xsd")) return AXIS_FAIL;
+	pIWSSZ->CreateSoapMethod("updateWSDDResponse", "http://www.opensource.lk/xsd");
 	xsd__base64Binary v0 = pIWSDZ->GetElementAsBase64Binary("wsdd",0);
 	if (AXIS_SUCCESS != (nStatus = pIWSDZ->GetStatus())) return nStatus;
-	xsd__boolean ret = pWs->deploy(v0);
-	return pIWSSZ->AddOutputParam("return", (void*)&ret, XSD_BOOLEAN);
-}
-
-
-/*
- * This method wrap the service method 
- */
-int AxisAdminServiceWrapper::undeploy(IMessageData* mc)
-{
-	int nStatus;
-	IWrapperSoapSerializer *pIWSSZ = NULL;
-	mc->GetSoapSerializer(&pIWSSZ);
-	if (!pIWSSZ) return AXIS_FAIL;
-	IWrapperSoapDeSerializer *pIWSDZ = NULL;
-	mc->GetSoapDeSerializer(&pIWSDZ);
-	if (!pIWSDZ) return AXIS_FAIL;
-	/* check whether we have got correct message */
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("undeploy", "http://www.opensource.lk/xsd")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("undeployResponse", "http://www.opensource.lk/xsd");
-	xsd__base64Binary v0 = pIWSDZ->GetElementAsBase64Binary("wsdd",0);
-	if (AXIS_SUCCESS != (nStatus = pIWSDZ->GetStatus())) return nStatus;
-	xsd__boolean ret = pWs->undeploy(v0);
+	xsd__boolean ret = false_; 
+	IAdminUtils* pAdminUtils;
+	mc->GetAdminUtils(&pAdminUtils);
+	if (pAdminUtils) 
+	{
+		if (AXIS_SUCCESS == pAdminUtils->UpdateWSDD((char*)v0.__ptr)) ret = true_;
+	}
 	return pIWSSZ->AddOutputParam("return", (void*)&ret, XSD_BOOLEAN);
 }
 

@@ -13,12 +13,11 @@ class AxisAdminService
 private:
 	Call* m_pCall;
 public:
-	AxisAdminService();
+	AxisAdminService(const char* pchUri);
 public:
 	virtual ~AxisAdminService();
 public: 
-	xsd__boolean deploy(xsd__base64Binary Value0);
-	xsd__boolean undeploy(xsd__base64Binary Value0);
+	xsd__boolean updateWSDD(xsd__base64Binary Value0);
 };
 
 #endif /* !defined(__AXISADMINSERVICE_CLIENTSTUB_H__INCLUDED_)*/

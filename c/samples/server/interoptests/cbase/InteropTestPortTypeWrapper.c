@@ -224,7 +224,7 @@ int echoStructWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer SZ)
 		, Axis_TypeName_SOAPStruct, Axis_URI_SOAPStruct);
 	if (AXIS_SUCCESS != (nStatus = DZ._functions->GetStatus(DZ._object))) return nStatus;
 	ret = echoStruct(v0);
-	return SZ._functions->AddOutputCmplxParam(SZ._object, ret, (void*)Axis_Serialize_SOAPStruct, (void*)Axis_Delete_SOAPStruct, "echoStructReturn", 0);
+	return SZ._functions->AddOutputCmplxParam(SZ._object, ret, (void*)Axis_Serialize_SOAPStruct, (void*)Axis_Delete_SOAPStruct, "echoStructReturn", Axis_URI_SOAPStruct);
 }
 
 

@@ -80,7 +80,6 @@ class WSDDService : public WSDDHandler
 {
 public:
 	const list<AxisString> getAllowedMethods() const;
-	void SetServiceName(const AxisChar* sServiceName);
 	void SetProvider(const AxisChar* sProvider);
 	PROVIDERTYPE GetProvider() const;
 	const AxisChar* GetServiceName() const;
