@@ -198,6 +198,10 @@ SOURCE=..\..\include\axis\server\IHandlerSoapSerializer.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\axis\server\IHeaderBlock.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\axis\server\IMessageData.h
 # End Source File
 # Begin Source File
