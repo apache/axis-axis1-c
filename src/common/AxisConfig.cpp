@@ -45,21 +45,25 @@ AxisConfig::AxisConfig ()
      */
     m_pcKeyArray[AXCONF_AXISHOME]		= "\0";
     m_pcKeyArray[AXCONF_TRANSPORTHTTP]	= "Transport_http";
-    m_pcKeyArray[AXCONF_SSLCHANNEL]		= "Channel_ssl";
-    m_pcKeyArray[AXCONF_CHANNEL]		= "Channel";
+//	m_pcKeyArray[AXCONF_SSLCHANNEL]		= "Channel_ssl";
+//	m_pcKeyArray[AXCONF_CHANNEL]		= "Channel";
+    m_pcKeyArray[AXCONF_SSLCHANNEL_HTTP]= "Channel_HTTP_SSL";
+    m_pcKeyArray[AXCONF_CHANNEL_HTTP]	= "Channel_HTTP";
     m_pcKeyArray[AXCONF_TRANSPORTSMTP]	= "Transport_smtp";
     m_pcKeyArray[AXCONF_XMLPARSER]		= "XMLParser";
     m_pcKeyArray[AXCONF_NODENAME]		= "NodeName";
     m_pcKeyArray[AXCONF_LISTENPORT]		= "ListenPort";
+    m_pcKeyArray[AXCONF_SECUREINFO]		= "SecureInfo";
 
-    m_pcValueArray[AXCONF_NODENAME]      = "server name";
-    m_pcValueArray[AXCONF_LISTENPORT]    = "listen port";
-    m_pcValueArray[AXCONF_XMLPARSER]     = PLATFORM_XMLPARSER_PATH;
-    m_pcValueArray[AXCONF_TRANSPORTHTTP] = PLATFORM_TRANSPORTHTTP_PATH;
-    m_pcValueArray[AXCONF_LOGPATH]       = PLATFORM_LOG_PATH;
-    m_pcValueArray[AXCONF_CLIENTLOGPATH] = PLATFORM_CLIENTLOG_PATH;
-    m_pcValueArray[AXCONF_SSLCHANNEL]	 = PLATFORM_SSLCHANNEL_PATH;
-    m_pcValueArray[AXCONF_CHANNEL]		 = PLATFORM_CHANNEL_PATH;
+    m_pcValueArray[AXCONF_NODENAME]			 = "server name";
+    m_pcValueArray[AXCONF_LISTENPORT]		 = "listen port";
+    m_pcValueArray[AXCONF_XMLPARSER]		 = PLATFORM_XMLPARSER_PATH;
+    m_pcValueArray[AXCONF_TRANSPORTHTTP]	 = PLATFORM_TRANSPORTHTTP_PATH;
+    m_pcValueArray[AXCONF_LOGPATH]			 = PLATFORM_LOG_PATH;
+    m_pcValueArray[AXCONF_CLIENTLOGPATH]	 = PLATFORM_CLIENTLOG_PATH;
+    m_pcValueArray[AXCONF_SSLCHANNEL_HTTP]	 = PLATFORM_SSLCHANNEL_PATH;
+    m_pcValueArray[AXCONF_CHANNEL_HTTP]		 = PLATFORM_CHANNEL_PATH;
+    m_pcValueArray[AXCONF_SECUREINFO]		 = PLATFORM_SECUREINFO;
 }
 
 int AxisConfig::readConfFile ()

@@ -337,8 +337,9 @@ int Call::openConnection()
 			}
 		}
 
-        char * pcChannelHTTPLibraryPath = g_pConfig->getAxisConfProperty( AXCONF_CHANNEL);
-        char * pcChannelHTTPSSLLibraryPath = g_pConfig->getAxisConfProperty( AXCONF_SSLCHANNEL);
+        char * pcChannelHTTPLibraryPath = g_pConfig->getAxisConfProperty( AXCONF_CHANNEL_HTTP);
+        char * pcChannelHTTPSSLLibraryPath = g_pConfig->getAxisConfProperty( AXCONF_SSLCHANNEL_HTTP);
+        char * pcSSLChannelInfo = g_pConfig->getAxisConfProperty( AXCONF_SECUREINFO);
 
         if( pcChannelHTTPLibraryPath)
 		{
@@ -351,7 +352,32 @@ int Call::openConnection()
 		}
 
         m_pTransport->setEndpointUri( m_pcEndPointUri);
-    
+
+		if( strlen( pcSSLChannelInfo) > 0)
+		{
+			char *	pszArgPtr = NULL;
+			int		iArgIndex = 0;
+			string	sArguments[8];
+
+			pszArgPtr = strtok( pcSSLChannelInfo, ",");
+
+			while( pszArgPtr != NULL && iArgIndex < 8)
+			{
+				sArguments[iArgIndex] = pszArgPtr;
+
+				iArgIndex++;
+
+				pszArgPtr = strtok( NULL, ",");
+
+				while( pszArgPtr != NULL && *pszArgPtr == ' ' && *pszArgPtr != '\0')
+				{
+					pszArgPtr++;
+				}
+			}
+
+			m_pTransport->setTransportProperty( SECURE_PROPERTIES, (const char *) &sArguments);
+		}
+
         //if use proxy then set proxy
         if( m_bUseProxy)
 		{

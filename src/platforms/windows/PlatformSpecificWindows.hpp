@@ -38,6 +38,7 @@
 #define PLATFORM_LOG_PATH            ""
 #define PLATFORM_CLIENTLOG_PATH      ""
 #define PLATFORM_CONFIG_PATH         "/axiscpp.conf"
+#define PLATFORM_SECUREINFO			 ""
 
 // =============================================================
 // Library loading and procedure resolution

@@ -30,6 +30,7 @@
 #define PLATFORM_CONFIG_PATH         "/etc/axiscpp.conf"
 #define PLATFORM_CHANNEL_PATH        "????"
 #define PLATFORM_SSLCHANNEL_PATH     "????"
+#define PLATFORM_SECUREINFO			 ""
 
 // =============================================================
 // Library loading and procedure resolution
