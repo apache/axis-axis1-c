@@ -109,8 +109,24 @@ public:
 	int setSoapEnvelope(SoapEnvelope* pSoapEnvelope);
 	SoapSerializer();
 	virtual ~SoapSerializer();
-	IParam* AddOutputParam(XSDTYPE nType, uParamValue Value);
+	IParam* AddOutputParam(XSDTYPE nType, long lValue);
+	IParam* AddOutputParamHelper(XSDTYPE nType, uParamValue Value);
+	//for basic types
+	IParam* AddOutputParam(int nValue);
+	IParam* AddOutputParam(unsigned int unValue);
+	IParam* AddOutputParam(short sValue);
+	IParam* AddOutputParam(unsigned short usValue);
+	IParam* AddOutputParam(long lValue);
+	IParam* AddOutputParam(unsigned long ulValue);
+	IParam* AddOutputParam(char cValue);
+	IParam* AddOutputParam(unsigned char ucValue);
+	IParam* AddOutputParam(float fValue);
+	IParam* AddOutputParam(double dValue);
+	IParam* AddOutputParam(struct tm tValue);
+	IParam* AddOutputParam(const AxisChar* pStrValue);
+	//for arrays
 	IParam* AddOutputParam(IArrayBean* pArrayBean);
+	//for complex types
 	IParam* AddOutputParam(void* pObject, void* pDZFunct, void* pDelFunct);
 	IArrayBean* makeArrayBean(XSDTYPE nType, void* pArray);
 	IArrayBean* makeArrayBean(void* pObject, void* pSZFunct, void* pDelFunct, void* pSizeFunct);
