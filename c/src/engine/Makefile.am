@@ -15,5 +15,5 @@ libengine_la_SOURCES = Axis.cpp \
 		SharedObject.cpp
 		
 
-libengine_la_LIBADD = -L$(AXISCPP_HOME)/lib/expat -lexpat -lstdc++
+libengine_la_LIBADD = -L$(AXISCPP_HOME)/lib/expat -lexpat -lstdc++ -L$(AXISCPP_HOME)/lib/axis -laxiscpp_client
 INCLUDES = -I$(AXISCPP_HOME)/include
