@@ -17,7 +17,7 @@
 #if !defined(__WRAPPERCLASSHANDLER_OF_AXIS_INCLUDED__)
 #define __WRAPPERCLASSHANDLER_OF_AXIS_INCLUDED__
 
-#include <axis/server/BasicHandler.h>
+#include <axis/server/BasicHandler.hpp>
 
 /**
  * @class WrapperClassHandler

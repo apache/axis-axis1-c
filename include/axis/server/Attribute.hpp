@@ -23,7 +23,7 @@
 #if !defined(_ATTRIBUTE_H____OF_AXIS_INCLUDED_)
 #define _ATTRIBUTE_H____OF_AXIS_INCLUDED_
 
-#include "GDefine.h"
+#include "GDefine.hpp"
 
 #ifdef __cplusplus
 #include <list>
@@ -34,7 +34,7 @@ AXIS_CPP_NAMESPACE_START
 using namespace std;
 
 class SoapSerializer;
-#include <axis/IAttribute.h>
+#include <axis/IAttribute.hpp>
 
 #endif
 

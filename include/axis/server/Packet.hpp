@@ -25,7 +25,7 @@
 #if !defined(__PACKET_H_OF_AXIS_INCLUDED__)
 #define __PACKET_H_OF_AXIS_INCLUDED__
 
-#include "GDefine.h"
+#include "GDefine.hpp"
 
 typedef enum 
 {

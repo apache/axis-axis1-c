@@ -19,7 +19,7 @@
 
 #ifdef __cplusplus
 
-#include "GDefine.h"
+#include "GDefine.hpp"
 
 AXIS_CPP_NAMESPACE_START
 
@@ -28,13 +28,13 @@ class IAdminUtils;
 
 AXIS_CPP_NAMESPACE_END
 
-#include "IHandlerSoapDeSerializer.h"
-#include "IHandlerSoapSerializer.h"
+#include "IHandlerSoapDeSerializer.hpp"
+#include "IHandlerSoapSerializer.hpp"
 
 #endif
 
-#include "IWrapperSoapDeSerializer.h"
-#include "IWrapperSoapSerializer.h"
+#include "IWrapperSoapDeSerializer.hpp"
+#include "IWrapperSoapSerializer.hpp"
 
 typedef struct 
 {

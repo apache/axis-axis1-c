@@ -24,7 +24,7 @@
 #if !defined(_BASICNODE_H____OF_AXIS_INCLUDED_)
 #define _BASICNODE_H____OF_AXIS_INCLUDED_
 
-#include "GDefine.h"
+#include "GDefine.hpp"
 
 #ifdef __cplusplus
 
@@ -40,7 +40,7 @@ AXIS_CPP_NAMESPACE_END
 
 #endif
 
-#include <axis/IAttribute.h>
+#include <axis/IAttribute.hpp>
 
 enum NODE_TYPE { ELEMENT_NODE=1, CHARACTER_NODE};
 

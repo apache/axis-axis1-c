@@ -22,7 +22,7 @@
 #if !defined(_TYPEMAPPING_H____OF_AXIS_INCLUDED_)
 #define _TYPEMAPPING_H____OF_AXIS_INCLUDED_
 
-#include "GDefine.h"
+#include "GDefine.hpp"
 
 typedef enum XSDTYPETag 
 { XSD_UNKNOWN=1, XSD_INT, XSD_FLOAT, XSD_STRING, XSD_LONG, XSD_SHORT, \

@@ -17,9 +17,9 @@
 #if !defined(_IPARAM_H____OF_AXIS_INCLUDED_)
 #define _IPARAM_H____OF_AXIS_INCLUDED_
 
-#include "AxisUserAPI.h"
-#include "AxisWrapperAPI.h"
-#include "TypeMapping.h"
+#include "AxisUserAPI.hpp"
+#include "AxisWrapperAPI.hpp"
+#include "TypeMapping.hpp"
 #include "time.h"
 
 #include <string>

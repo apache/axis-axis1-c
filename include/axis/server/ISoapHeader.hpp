@@ -23,7 +23,7 @@
  *
  *  @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  */
-#include "../server/IHeaderBlock.h"
+#include "../server/IHeaderBlock.hpp"
 
 AXIS_CPP_NAMESPACE_START
 

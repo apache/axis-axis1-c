@@ -18,9 +18,9 @@
 #if !defined(_IHANDLERSOAPDESERIALIZER_H____OF_AXIS_INCLUDED_)
 #define _IHANDLERSOAPDESERIALIZER_H____OF_AXIS_INCLUDED_
 
-#include "IWrapperSoapDeSerializer.h"
-#include "IHeaderBlock.h"
-#include "AxisUserAPI.h"
+#include "IWrapperSoapDeSerializer.hpp"
+#include "IHeaderBlock.hpp"
+#include "AxisUserAPI.hpp"
 /*
  *  @class IHandlerSoapDeSerializer
  *  @brief interface for the IHandlerSoapDeSerializer class.

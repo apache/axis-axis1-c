@@ -18,7 +18,7 @@
 #if !defined(_AXISUSERAPI_H____OF_AXIS_INCLUDED_)
 #define _AXISUSERAPI_H____OF_AXIS_INCLUDED_
 
-#include <axis/server/GDefine.h>
+#include <axis/server/GDefine.hpp>
 #include <time.h>
 #include <string.h>
 

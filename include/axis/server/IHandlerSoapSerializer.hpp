@@ -17,8 +17,8 @@
 #if !defined(_IHANDLERSOAPSERIALIZER_H____OF_AXIS_INCLUDED_)
 #define _IHANDLERSOAPSERIALIZER_H____OF_AXIS_INCLUDED_
 
-#include "IWrapperSoapSerializer.h"
-#include "SoapEnvVersions.h"
+#include "IWrapperSoapSerializer.hpp"
+#include "SoapEnvVersions.hpp"
 
 AXIS_CPP_NAMESPACE_START
 

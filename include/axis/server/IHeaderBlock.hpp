@@ -17,9 +17,9 @@
 #if !defined(_IHEADERBLOCK_H____OF_AXIS_INCLUDED_)
 #define _IHEADERBLOCK_H____OF_AXIS_INCLUDED_
 
-#include "BasicNode.h"
-#include "SoapEnvVersions.h"
-#include <axis/IAttribute.h>
+#include "BasicNode.hpp"
+#include "SoapEnvVersions.hpp"
+#include <axis/IAttribute.hpp>
 
 #ifdef __cplusplus
 

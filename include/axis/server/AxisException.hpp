@@ -27,7 +27,7 @@
 #ifndef __AXISEXCEPTION_H_OF_AXIS_INCLUDED_
 #define __AXISEXCEPTION_H_OF_AXIS_INCLUDED_
 
-#include <axis/server/GDefine.h>
+#include <axis/server/GDefine.hpp>
 
 #include <string>
 #include <exception>

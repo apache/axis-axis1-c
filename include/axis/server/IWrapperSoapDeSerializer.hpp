@@ -17,13 +17,13 @@
 #if !defined(_IWRAPPERSOAPDESERIALIZER_H____OF_AXIS_INCLUDED_)
 #define _IWRAPPERSOAPDESERIALIZER_H____OF_AXIS_INCLUDED_
 
-#include "AxisUserAPI.h"
-#include "TypeMapping.h"
-#include "WSDDDefines.h"
+#include "AxisUserAPI.hpp"
+#include "TypeMapping.hpp"
+#include "WSDDDefines.hpp"
 
 #ifdef __cplusplus
 
-#include "ISoapDeSerializer.h"
+#include "ISoapDeSerializer.hpp"
 
 #endif
 
