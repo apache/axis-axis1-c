@@ -78,7 +78,7 @@ AC_ARG_WITH(xercesc,
 )
 
 AC_MSG_CHECKING(whether to build tspp xml parser library)
-AC_ARG_ENABLE(tspp, [  --enable-tspp    build tspp xml parser library.],
+AC_ARG_ENABLE(tspp, [  --enable-tspp    build tspp xml parser library. default=yes],
 [ case "${enableval}" in
   no)
     AC_MSG_RESULT(no)
@@ -95,7 +95,7 @@ AC_ARG_ENABLE(tspp, [  --enable-tspp    build tspp xml parser library.],
 )
 
 AC_MSG_CHECKING(whether to build test cases)
-AC_ARG_ENABLE(testcases, [  --enable-testcases    build test cases.],
+AC_ARG_ENABLE(testcases, [  --enable-testcases    build test cases. default=no],
 [ case "${enableval}" in
   no)
     AC_MSG_RESULT(no)
@@ -108,11 +108,11 @@ AC_ARG_ENABLE(testcases, [  --enable-testcases    build test cases.],
     ;;
   esac ],
   AC_MSG_RESULT(no)
-  TESTCASESBUILD="tests"
+  TESTCASESBUILD=""
 )
 
 AC_MSG_CHECKING(whether to build samples)
-AC_ARG_ENABLE(samples, [  --enable-samples    build samples.],
+AC_ARG_ENABLE(samples, [  --enable-samples    build samples. default=yes],
 [ case "${enableval}" in
   no)
     AC_MSG_RESULT(no)
@@ -255,6 +255,8 @@ AC_OUTPUT(Makefile \
     samples/client/doclitfault/Makefile \
     samples/client/testHandler/Makefile \
     tests/Makefile \
+    tests/unit_tests/Makefile \
+    tests/unit_tests/cppunit/Makefile \
     tests/client/Makefile \
     tests/client/stubTest/Makefile \
     tests/client/stubTest/stubBase/Makefile \
