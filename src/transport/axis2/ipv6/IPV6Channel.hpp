@@ -25,6 +25,11 @@
 
 #include "../Channel.h"
 
+#ifdef WIN32
+#include <ws2tcpip.h>
+#include <tpipv6.h>  // For IPv6 Tech Preview.
+#endif
+
 class IPV6Channel: public Channel
 {
 public:

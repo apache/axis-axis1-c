@@ -164,7 +164,7 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-SUBDIRS = axis2 @LIBWWWBUILD@
+SUBDIRS = axis2 
 all: all-recursive
 
 .SUFFIXES:
