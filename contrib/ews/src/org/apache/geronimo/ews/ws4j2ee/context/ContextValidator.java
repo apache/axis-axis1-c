@@ -55,7 +55,24 @@
 
 package org.apache.geronimo.ews.ws4j2ee.context;
 
-import org.apache.axis.AxisProperties;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.wsdl.Fault;
+import javax.wsdl.Operation;
+import javax.wsdl.Part;
+import javax.wsdl.Port;
+import javax.wsdl.Service;
+import javax.xml.namespace.QName;
+
 import org.apache.axis.Constants;
 import org.apache.axis.wsdl.fromJava.Emitter;
 import org.apache.axis.wsdl.symbolTable.BindingEntry;
@@ -69,23 +86,6 @@ import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationConstants;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenarationFault;
 import org.apache.geronimo.ews.ws4j2ee.utils.packager.Packager;
-
-import javax.wsdl.Fault;
-import javax.wsdl.Operation;
-import javax.wsdl.Part;
-import javax.wsdl.Port;
-import javax.wsdl.Service;
-import javax.xml.namespace.QName;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * <p>Before the code genaration this class is used to analyis the parse ifnoremation
