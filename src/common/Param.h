@@ -119,13 +119,14 @@ private:
 public: //Conversion functions
 	int SetValue(string& sValue);
 	XSDTYPE GetType() const;
-	const string& ToString();
 	int serialize(string& sSerialized);
 
 	//Following functions are used by wrapper class methods making sure of the valid type.
 	int GetInt();
 	float GetFloat();
 	const string& GetString();
+	const string& GetHexString();
+	const string& GetBase64String();
 	const AccessBean* GetUserType() const;
 	void setPrefix(const string &prefix);
 	void setUri(const string &uri);
