@@ -1,0 +1,14 @@
+<test>
+    <name>LargeReturningString_TTest</name>
+    <description>LargeReturningString_TTest</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>LargeReturningString_TTestClient.cpp</clientCode>
+    <wsdl>LargeReturningString.wsdl</wsdl>
+    <expected>
+        <output>
+            LargeReturningString_TTest.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:9080/LargeReturningString/services/LargeReturningString</endpoint>
+	<nomonitor>true</nomonitor>
+</test>

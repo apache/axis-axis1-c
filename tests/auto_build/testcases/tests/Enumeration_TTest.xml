@@ -1,0 +1,14 @@
+<test>
+    <name>Enumeration_TTest</name>
+    <description>Enumeration_TTest</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>Enumeration_TTestClient.cpp</clientCode>
+    <wsdl>Enumeration.wsdl</wsdl>
+    <expected>
+        <output>
+            Enumeration_TTest.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:9080/Enumeration/services/sampleWS</endpoint>
+	<nomonitor>true</nomonitor>
+</test>

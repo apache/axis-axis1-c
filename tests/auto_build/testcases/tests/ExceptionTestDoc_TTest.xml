@@ -1,0 +1,14 @@
+<test>
+    <name>ExceptionTestDoc_TTest</name>
+    <description>ExceptionTestDoc_TTest</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>ExceptionTestDoc_TTestClient.cpp</clientCode>
+    <wsdl>ExceptionTestDoc.wsdl</wsdl>
+    <expected>
+        <output>
+            ExceptionTestDoc_TTest.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/ExceptionTest/services/MathOps</endpoint>
+	<nomonitor>true</nomonitor>
+</test>
