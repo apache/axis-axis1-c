@@ -74,29 +74,32 @@ int MathOps::div(int Value0, int Value1)
             cFaultcode = m_pCall->getElementAsString("faultcode", 0);
             cFaultstring = m_pCall->getElementAsString("faultstring", 0); 
             cFaultactor = m_pCall->getElementAsString("faultactor", 0);
-            if(AXIS_SUCCESS == m_pCall->checkFault("faultdetail",
-                "http://localhost/axis/MathOps"))
+            if(0 != strcmp("service_exception", cFaultstring))
             {
-                m_pCall->getFaultDetail(&cFaultdetail);
+                cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
                 throw AxisException(cFaultdetail);
             }
             else
             {
-                SOAPStructFault* pFaultDetail = NULL;
-                pFaultDetail = (SOAPStructFault*)m_pCall->
+                if(AXIS_SUCCESS == m_pCall->checkFault("faultdetail",
+                    "http://localhost/axis/MathOps"))
+                {
+                    SOAPStructFault* pFaultDetail = NULL;
+                    pFaultDetail = (SOAPStructFault*)m_pCall->
                     getCmplxObject((void*) Axis_DeSerialize_SOAPStructFault, 
-                    (void*) Axis_Create_SOAPStructFault, 
-                    (void*) Axis_Delete_SOAPStructFault,"faultstruct", 0);
+                        (void*) Axis_Create_SOAPStructFault, 
+                        (void*) Axis_Delete_SOAPStructFault,"faultstruct", 0);
 
-                char* temp = pFaultDetail->varString;
-                printf("%s\n", temp);
-                /*start user code*/
-                printf("faultcode:%s\n", cFaultcode);
-                printf("faultstring:%s\n", cFaultstring);
-                printf("faultactor:%s\n", cFaultactor);
-                /*end user code*/
-                m_pCall->unInitialize();
-                throw AxisDivByZeroException(pFaultDetail);
+                    char* temp = pFaultDetail->varString;
+                    printf("%s\n", temp);
+                    /*start user code*/
+                    printf("faultcode:%s\n", cFaultcode);
+                    printf("faultstring:%s\n", cFaultstring);
+                    printf("faultactor:%s\n", cFaultactor);
+                    /*end user code*/
+                    m_pCall->unInitialize();
+                    throw AxisDivByZeroException(pFaultDetail);
+                }
             }
         }
         else throw;
