@@ -80,7 +80,7 @@ class IDeployerUtils
 public:
 	virtual int UpdateWSDD() =0;
 	virtual int unDeploy(string sServiceName) = 0;
-	virtual int deploy(string sServiceName, string sDllPath, Axis_ArrayTag inArray) = 0;
+	virtual int deploy(string sServiceName, string sDllPath, Axis_Array inArray) = 0;
 	virtual ~IDeployerUtils() {};
 };
 

@@ -121,10 +121,9 @@ public abstract class ParamWriter extends BasicFileWriter{
 		}
         
 		names = type.getElementnames();
-				while (names.hasNext()){
-					elementfeilds.add(names.next());
+		while (names.hasNext()){
+			elementfeilds.add(names.next());
 		}
-        
         
 		//get all the fields
 		int intAttrFieldSz = attribfeilds.size();

@@ -143,7 +143,7 @@ public class WrapWriter extends CPPClassWriter{
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
 				 minfo = (MethodInfo)methods.get(i);
-				 this.writeMethodInWrapper(minfo.getMethodname(), minfo.getParameterTypes(),minfo.getReturnType());
+				 this.writeMethodInWrapper(minfo);
 				 writer.write("\n");
 			 }
      
@@ -205,7 +205,23 @@ public class WrapWriter extends CPPClassWriter{
 	 * @throws IOException
 	 */
 
-	public void writeMethodInWrapper(String methodName, Collection params, ParameterInfo returntype) throws WrapperFault,IOException {
+	public void writeMethodInWrapper(MethodInfo minfo) throws WrapperFault,IOException {
+		boolean isAllTreatedAsOutParams = false;
+		ParameterInfo returntype = null;
+		int noOfOutParams = minfo.getOutputParameterTypes().size();
+		if (0==noOfOutParams){
+			returntype = null;
+		}
+		else if (1==noOfOutParams){
+			returntype = (ParameterInfo)minfo.getOutputParameterTypes().iterator().next();
+		}
+		else{
+			isAllTreatedAsOutParams = true;
+			//TODO make all outparams when there are more than one return params
+			throw new WrapperFault("WSDL2Ws does not still handle more than one return parameters");
+		}
+		Collection params = minfo.getInputParameterTypes();
+		String methodName = minfo.getMethodname();
 		Type retType = null;
 		String outparamType = null;
 		boolean returntypeissimple = false;
@@ -233,8 +249,8 @@ public class WrapWriter extends CPPClassWriter{
 		writer.write("\tmc->GetSoapDeSerializer(&pIWSDZ);\n");
 		writer.write("\tif (!pIWSDZ) return AXIS_FAIL;\n");
 		writer.write("\t/* check whether we have got correct message */\n");
-		writer.write("\tif (AXIS_SUCCESS != pIWSDZ->CheckMessageBody(\""+methodName+"\", \"\")) return AXIS_FAIL;\n");
-		writer.write("\tpIWSSZ->CreateSoapMethod(\""+methodName+"Response\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\");\n");
+		writer.write("\tif (AXIS_SUCCESS != pIWSDZ->CheckMessageBody(\""+minfo.getInputMessage().getLocalPart()+"\", \""+minfo.getInputMessage().getNamespaceURI()+"\")) return AXIS_FAIL;\n");
+		writer.write("\tpIWSSZ->CreateSoapMethod(\""+minfo.getInputMessage().getLocalPart()+"\", \""+minfo.getOutputMessage().getNamespaceURI()+"\");\n");
 		//create and populate variables for each parameter
 		String paraTypeName;
 		String parameterName;
@@ -324,6 +340,7 @@ public class WrapWriter extends CPPClassWriter{
 				type = (Type)types.next();
 				if (type.isArray()) continue;
 				typeName = type.getLanguageSpecificName();
+				if (typeName.startsWith(">")) continue;
 				writer.write("extern int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer *pDZ);\n");
 				writer.write("extern void* Axis_Create_"+typeName+"(bool bArray = false, int nSize=0);\n");
 				writer.write("extern void Axis_Delete_"+typeName+"("+typeName+"* param, bool bArray = false, int nSize=0);\n");

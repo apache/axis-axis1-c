@@ -162,7 +162,9 @@ public class BeanParamWriter extends ParamCFileWriter{
 				}
 			}else{
 				//if complex type
+				writer.write("\tpSZX->Serialize(pSZ, \"<"+attribs[i][0]+">\", 0);\n");
 				writer.write("\tAxis_Serialize_"+attribs[i][1]+"(param->"+attribs[i][0]+", pSZ);\n");
+				writer.write("\tpSZX->Serialize(pSZ, \"</"+attribs[i][0]+">\", 0);\n");
 			}
 		}
 		writer.write("\treturn AXIS_SUCCESS;\n");
@@ -194,7 +196,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 		for(int i = 0; i< attribs.length;i++){
 			if(CUtils.isSimpleType(attribs[i][1])){
 				//if symple type
-				writer.write("\tparam->"+attribs[i][0]+" = pDZX->"+CUtils.getParameterGetValueMethodName(attribs[i][1], false)+"(pDZ);\n");
+				writer.write("\tparam->"+attribs[i][0]+" = pDZX->"+CUtils.getParameterGetValueMethodName(attribs[i][1], false)+"(pDZ, \""+attribs[i][0]+"\", 0);\n");
 			}else if((t = wscontext.getTypemap().getType(new QName(attribs[i][2],attribs[i][3])))!= null && t.isArray()){
 				//if Array
 				QName qname = WrapperUtils.getArrayType(t).getName(); 

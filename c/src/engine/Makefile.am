@@ -1,5 +1,5 @@
 noinst_LTLIBRARIES = libengine.la
-AM_CPPFLAGS = -Wshadow -Wall -pedantic -ansi
+AM_CPPFLAGS = -Wall
 libengine_la_SOURCES = Axis.cpp \
 		AxisEngine.cpp \
                 ServerAxisEngine.cpp \
@@ -15,5 +15,5 @@ libengine_la_SOURCES = Axis.cpp \
 		SharedObject.cpp
 		
 
-libengine_la_LIBADD = -L$(AXISCPP_HOME)/lib/xerces-c -lxerces-c -lstdc++
+libengine_la_LIBADD = -L$(AXISCPP_HOME)/lib/expat -lexpat -lstdc++
 INCLUDES = -I$(AXISCPP_HOME)/include

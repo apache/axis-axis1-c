@@ -142,8 +142,21 @@ public class ClientStubWriter extends CFileWriter{
 	 */
 
 	public void writeMethodInWrapper(MethodInfo minfo) throws WrapperFault,IOException {
-		ParameterInfo returntype = minfo.getReturnType();
-		Collection params = minfo.getParameterTypes();
+		boolean isAllTreatedAsOutParams = false;
+		ParameterInfo returntype = null;
+		int noOfOutParams = minfo.getOutputParameterTypes().size();
+		if (0==noOfOutParams){
+			returntype = null;
+		}
+		else if (1==noOfOutParams){
+			returntype = (ParameterInfo)minfo.getOutputParameterTypes().iterator().next();
+		}
+		else{
+			isAllTreatedAsOutParams = true;
+			//TODO make all outparams when there are more than one return params
+			throw new WrapperFault("WSDL2Ws does not still handle more than one return parameters");
+		}
+		Collection params = minfo.getInputParameterTypes();
 		String methodName = minfo.getMethodname();
 		Type retType = null;
 		boolean returntypeissimple = false;
@@ -249,7 +262,7 @@ public class ClientStubWriter extends CFileWriter{
 		}
 		writer.write("\tm_pCall->SetTransportProperty("+globalobjectname+",SOAPACTION_HEADER , \""+minfo.getSoapAction()+"\");\n");		
 		writer.write("\tpCall->SetSOAPVersion("+globalobjectname+", SOAP_VER_1_1);\n"); //TODO check which version is it really.
-		writer.write("\tpCall->SetOperation("+globalobjectname+", \""+methodName+"\", \""+ wscontext.getWrapInfo().getTargetNameSpaceOfWSDL() +"\");\n");
+		writer.write("\tpCall->SetOperation("+globalobjectname+", \""+minfo.getInputMessage().getLocalPart()+"\", \""+ minfo.getInputMessage().getNamespaceURI()+"\");\n");
 		for (int i = 0; i < paramsB.size(); i++) {
 			type = wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName());
 			if (type != null){
@@ -288,7 +301,7 @@ public class ClientStubWriter extends CFileWriter{
 		}
 		writer.write("\tnStatus = pCall->Invoke("+globalobjectname+");\n");
 		writer.write("\tif (AXIS_SUCCESS == nStatus)\n\t{\n");
-		writer.write("\t\tif(AXIS_SUCCESS != pCall->CheckMessage("+globalobjectname+", \""+methodName+"Response\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\"))\n\t\t{\n");
+		writer.write("\t\tif(AXIS_SUCCESS != pCall->CheckMessage("+globalobjectname+", \""+minfo.getOutputMessage().getLocalPart()+"\", \""+minfo.getOutputMessage().getNamespaceURI()+"\"))\n\t\t{\n");
 		if (returntype == null){
 			writer.write("\t\t\t/*not successful*/\n\t\t}\n");
 			writer.write("\t}\n\tpCall->UnInitialize("+globalobjectname+");\n");
@@ -307,16 +320,19 @@ public class ClientStubWriter extends CFileWriter{
 				writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+returntype.getParamName()+"\", Axis_URI_"+containedType+");\n");
 				writer.write("\tmemcpy(&RetArray, &array, sizeof(Axis_Array));\n");
 			}
+			writer.write("\t\t}\n");
 			writer.write("\t}\n\tpCall->UnInitialize("+globalobjectname+");\n");
 			writer.write("\treturn RetArray;\n");
 		}
 		else if(returntypeissimple){
 			writer.write("\t\t\tRet = pCall->"+ CUtils.getParameterGetValueMethodName(CUtils.getXSDTypeForBasicType(outparamType), false)+"("+globalobjectname+", \""+ returntype.getParamName()+"\", 0)\n");
+			writer.write("\t\t}\n");
 			writer.write("\t}\n\tpCall->UnInitialize("+globalobjectname+");\n");
 			writer.write("\treturn Ret;\n");
 		}
 		else{
 			writer.write("\t\t\tpReturn = ("+outparamType+"*)pCall->GetCmplxObject("+globalobjectname+", (void*) Axis_DeSerialize_"+outparamType+", (void*) Axis_Create_"+outparamType+", (void*) Axis_Delete_"+outparamType+",\""+returntype.getParamName()+"\", 0)\n"); 
+			writer.write("\t\t}\n");
 			writer.write("\t}\n\tpCall->UnInitialize("+globalobjectname+");\n");
 			writer.write("\treturn pReturn;\n");						
 		}
@@ -336,6 +352,7 @@ public class ClientStubWriter extends CFileWriter{
 				type = (Type)types.next();
 				if (type.isArray()) continue;
 				typeName = type.getLanguageSpecificName();
+				if (typeName.startsWith(">")) continue;
 				writer.write("extern int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer *pDZ);\n");
 				writer.write("extern void* Axis_Create_"+typeName+"(bool bArray, int nSize);\n");
 				writer.write("extern void Axis_Delete_"+typeName+"("+typeName+"* param, bool bArray, int nSize);\n");

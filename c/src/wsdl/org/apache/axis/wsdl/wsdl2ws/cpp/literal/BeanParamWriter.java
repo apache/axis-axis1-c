@@ -161,7 +161,9 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				}
 			}else{
 				//if complex type
+				writer.write("\tpSZ->Serialize(\"<"+attribs[i][0]+">\", 0);\n");
 				writer.write("\tAxis_Serialize_"+attribs[i][1]+"(param->"+attribs[i][0]+", pSZ);\n");
+				writer.write("\tpSZ->Serialize(\"<"+attribs[i][0]+">\", 0);\n");
 			}
 		}
 		writer.write("\treturn AXIS_SUCCESS;\n");

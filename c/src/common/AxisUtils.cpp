@@ -67,10 +67,6 @@
 #include <axis/common/AxisUtils.h>
 #include <axis/common/GDefine.h>
 
-#include <xercesc/util/XMLString.hpp>
-
-XERCES_CPP_NAMESPACE_USE
-
 AxisXMLCh AxisUtils::m_Buffer[CONVERT_BUFFER_SIZE]; 
 
 //////////////////////////////////////////////////////////////////////

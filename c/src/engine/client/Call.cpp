@@ -79,334 +79,68 @@ Call::Call()
 	m_pMsgData = NULL;
 	m_pIWSSZ = NULL;
 	m_pIWSDZ = NULL;
-	m_Soap.so.http.ip_headercount = 0;
-	m_Soap.so.http.ip_headers = NULL;
 	initialize_module(0);
 	m_pTransport = NULL;
-	m_nReturnType = XSD_UNKNOWN;
-	m_nArrayType = XSD_UNKNOWN;
-	m_pReturnValue = NULL;
 }
 
 Call::~Call()
 {
-
+	switch(m_Soap.trtype)
+	{
+	case APTHTTP:
+		delete m_Soap.so.http;
+		/* do for other protocols too */
+	}
 }
 
 int Call::SetEndpointURI(const char *pchEndpointURI)
 {
-	m_Soap.so.http.uri_path = pchEndpointURI;
+	m_Soap.so.http->uri_path = pchEndpointURI;
 	return AXIS_SUCCESS;
 }
 
 void Call::SetOperation(const char *pchOperation, const char* pchNamespace)
 {
-	m_pIWSSZ->createSoapMethod(pchOperation, m_pIWSSZ->getNewNamespacePrefix(), pchNamespace);
+	m_pIWSSZ->CreateSoapMethod(pchOperation, pchNamespace);
 }
 
-void Call::AddParameter(int nValue,const char* pchName, XSDTYPE nType)
+void Call::AddParameter(void* pValue,const char* pchName, XSDTYPE nType)
 {
-	m_pIWSSZ->AddOutputParam(pchName, nValue, nType);
-}
-
-void Call::AddParameter(unsigned int unValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, unValue, nType);
-}
-
-void Call::AddParameter(short sValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, sValue, nType);
-}
-
-void Call::AddParameter(unsigned short usValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, usValue, nType);
-}
-
-void Call::AddParameter(long lValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, lValue, nType);
-}
-
-void Call::AddParameter(unsigned long ulValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, ulValue, nType);
-}
-
-void Call::AddParameter(char cValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, cValue, nType);
-}
-
-void Call::AddParameter(unsigned char ucValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, ucValue, nType);
-}
-
-void Call::AddParameter(float fValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, fValue, nType);
-}
-
-void Call::AddParameter(double dValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, dValue, nType);
-}
-
-void Call::AddParameter(struct tm tValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, tValue, nType);
-}
-
-void Call::AddParameter(const AxisChar* pStrValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, pStrValue, nType);
-}
-
-void Call::AddParameter(const AxisString& sStrValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, sStrValue.c_str(), nType);	
+	m_pIWSSZ->AddOutputParam(pchName, pValue, nType);
 }
 
 /**
  * Method used to add arrays of basic types as parameters
  */
-void Call::AddParameter(Axis_Array* pArray, XSDTYPE nType, const char* pchName)
+void Call::AddBasicArrayParameter(Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName)
 {
-	m_pIWSSZ->AddOutputParam(pchName, pArray, nType);
+	m_pIWSSZ->AddOutputBasicArrayParam(pArray, nType, pName);
 }
 
-void Call::AddParameter(Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName, const char* pchURI, const char* pchName)
+void Call::AddCmplxArrayParameter(Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)
 {
-	m_pIWSSZ->AddOutputParam(pchName, pArray, pSZFunct, pDelFunct, pSizeFunct, pchTypeName, pchURI);
+	m_pIWSSZ->AddOutputCmplxArrayParam(pArray, pSZFunct, pDelFunct, pSizeFunct, pName, pNamespace);
 }
 
-void Call::AddParameter(void *pObject, void *pSZFunct, void *pDelFunct, const char* pchName)
+void Call::AddCmplxParameter(void* pObject, void* pSZFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace)
 {
-	m_pIWSSZ->AddOutputParam(pchName, pObject, pSZFunct, pDelFunct);
-}
-
-/**
- * This function is used to set that the return type is a basic type
- */
-void Call::SetReturnType(XSDTYPE nType)
-{
-	m_nReturnType = nType;
-}
-
-/**
- * This function is used to set that the return type is a complex type
- */
-void Call::SetReturnType(void *pDZFunct, void* pCreFunct, void *pDelFunct, const char* pchTypeName, const char * pchUri)
-{
-	m_nReturnType = USER_TYPE;
-	m_ReturnCplxObj.pObject = NULL;
-	m_ReturnCplxObj.pDZFunct = (AXIS_DESERIALIZE_FUNCT)pDZFunct;
-	m_ReturnCplxObj.pCreFunct = (AXIS_OBJECT_CREATE_FUNCT)pCreFunct;
-	m_ReturnCplxObj.pDelFunct = (AXIS_OBJECT_DELETE_FUNCT)pDelFunct;
-	m_ReturnCplxObj.m_TypeName = pchTypeName;
-	m_ReturnCplxObj.m_URI = pchUri;
-}
-
-/**
- * This function is used to set that the return type is an array of complex types
- */
-void Call::SetReturnType(Axis_Array* pArray, void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName, const char* pchUri)
-{
-	m_pArray = pArray;
-	m_nReturnType = XSD_ARRAY;
-	m_nArrayType = USER_TYPE;
-	m_ReturnCplxObj.pDZFunct = (AXIS_DESERIALIZE_FUNCT)pDZFunct;
-	m_ReturnCplxObj.pCreFunct = (AXIS_OBJECT_CREATE_FUNCT)pCreFunct;
-	m_ReturnCplxObj.pDelFunct = (AXIS_OBJECT_DELETE_FUNCT)pDelFunct;
-	m_ReturnCplxObj.pSizeFunct = (AXIS_OBJECT_SIZE_FUNCT)pSizeFunct;
-	m_ReturnCplxObj.m_TypeName = pchTypeName;
-	m_ReturnCplxObj.m_URI = pchUri;
-}
-
-/**
- * This function is used to set that the return type is an array of basic types.
- * @param pArray Array to which the deserialized object array is set an returned
- *				 to the client application.
- * @param nType Basic type of the array elements
- */
-void Call::SetReturnType(Axis_Array* pArray, XSDTYPE nType)
-{
-	m_pArray = pArray;
-	m_nReturnType = XSD_ARRAY;
-	m_nArrayType = nType;
+	m_pIWSSZ->AddOutputCmplxParam(pObject, pSZFunct, pDelFunct, pName, pNamespace);
 }
 
 int Call::Invoke()
 {
-	int nStatus;
-	Param *pParam = NULL;
-	if (AXIS_SUCCESS == (nStatus = m_pAxisEngine->Process(&m_Soap)))
-	{
-		//Get return type if it returns
-		if (USER_TYPE == m_nReturnType)
-		{
-			/*
-			The second element of the soap message (after the method element) 
-			is taken as a parameter. But if it is a custom type remove the 
-			wrapper element that describes the type. Optionally you can check
-			whether the returned type is of expected type.
-			on the deserializer before getting the actual params
-			*/
-			pParam = (Param*)m_pIWSDZ->GetParam();
-			/*
-			Following lines check whether the returned type is expected type or not.
-			But this type checking is optional. So commented.
-			if (pParam && (m_ReturnCplxObj.m_TypeName == pParam->GetTypeName()))
-			{
-				m_ReturnCplxObj.pDZFunct(m_ReturnCplxObj.pObject, m_pMsgData->m_pDZ);
-			}
-			else
-			{
-				return AXIS_FAIL;
-			}
-			*/
-			if (!m_ReturnCplxObj.pCreFunct || !m_ReturnCplxObj.pDZFunct)
-				return AXIS_FAIL; 
-			m_ReturnCplxObj.pObject = m_ReturnCplxObj.pCreFunct();
-			if (!m_ReturnCplxObj.pObject)
-				return AXIS_FAIL;
-			m_ReturnCplxObj.pDZFunct(m_ReturnCplxObj.pObject, m_pMsgData->m_pDZ);
-
-		}
-		else if (XSD_ARRAY == m_nReturnType)
-		{
-			IParam *param0 = m_pIWSDZ->GetParam(); 
-			/* now we know that this is an array. if needed we can check that too */
-			if (!m_pArray) return AXIS_FAIL; //No array expected ?
-			m_pArray->m_Size = param0->GetArraySize();
-			if (AXIS_SUCCESS == MakeArray()) //Array is allocated successfully
-			{
-				if (USER_TYPE == m_nArrayType)
-					param0->SetArrayElements((void*)(m_pArray->m_Array), m_ReturnCplxObj.pDZFunct, m_ReturnCplxObj.pDelFunct, m_ReturnCplxObj.pSizeFunct);
-				else
-					param0->SetArrayElements((void*)(m_pArray->m_Array));
-				m_pIWSDZ->Deserialize(param0,0);
-			}
-			else 
-				return AXIS_FAIL; //CF_ZERO_ARRAY_SIZE_ERROR
-		}
-		else if (XSD_UNKNOWN != m_nReturnType)//basic type
-		{
-			m_pReturnValue = (Param*)m_pIWSDZ->GetParam();
-		}
-		else if (!m_OutParams.empty()) //there are out parameters
-		{
-			OutParamHolder* pOutParam = NULL;
-			// do for each parameter.
-			for (list<OutParamHolder*>::iterator it = m_OutParams.begin(); it != m_OutParams.end(); it++)
-			{
-				pOutParam = (*it);
-				if (USER_TYPE == pOutParam->m_nOutType)
-				{
-					/*
-					If it is a custom type remove the wrapper element that describes 
-					the type. Optionally you can check whether the returned type is of expected type
-					*/
-					pParam = (Param*)m_pIWSDZ->GetParam();
-					/*
-					Following lines check whether the returned type is expected type or not.
-					But this type checking is optional. So commented.
-					if (pParam && (pOutParam->m_OutCplxObj.m_TypeName == pParam->GetTypeName()))
-					{
-						pOutParam->m_OutCplxObj.pDZFunct(pOutParam->m_OutCplxObj.pObject, m_pMsgData->m_pDZ);
-					}
-					else
-					{
-						return AXIS_FAIL;
-					}
-					*/
-					if (!pOutParam->m_OutCplxObj.pCreFunct || !pOutParam->m_OutCplxObj.pDZFunct)
-						return AXIS_FAIL; 
-					pOutParam->m_OutCplxObj.pObject = pOutParam->m_OutCplxObj.pCreFunct();
-					if (!pOutParam->m_OutCplxObj.pObject)
-						return AXIS_FAIL;
-					pOutParam->m_OutCplxObj.pDZFunct(pOutParam->m_OutCplxObj.pObject, m_pMsgData->m_pDZ);
-
-				}
-				else if (XSD_ARRAY == pOutParam->m_nOutType)
-				{
-					IParam *param0 = m_pIWSDZ->GetParam(); 
-					/* now we know that this is an array. if needed we can check that too */
-					if (!pOutParam->m_pArray) return AXIS_FAIL; //No array expected ?
-					pOutParam->m_pArray->m_Size = param0->GetArraySize();
-					if (pOutParam->m_pArray->m_Size < 1) return AXIS_FAIL;
-					if (USER_TYPE == pOutParam->m_nArrayType)
-					{
-						pOutParam->m_pArray->m_Array = pOutParam->m_OutCplxObj.pCreFunct(true, pOutParam->m_pArray->m_Size);
-					}
-					else
-					{
-						pOutParam->m_pArray->m_Array = m_pIWSDZ->CreateArray(pOutParam->m_nArrayType, pOutParam->m_pArray->m_Size); 
-					}
-					if (pOutParam->m_pArray->m_Array) //Array is allocated successfully
-					{
-						if (USER_TYPE == pOutParam->m_nArrayType)
-							param0->SetArrayElements((void*)(pOutParam->m_pArray->m_Array), pOutParam->m_OutCplxObj.pDZFunct, pOutParam->m_OutCplxObj.pDelFunct, pOutParam->m_OutCplxObj.pSizeFunct);
-						else
-							param0->SetArrayElements((void*)(pOutParam->m_pArray->m_Array));
-						m_pIWSDZ->Deserialize(param0,0);
-					}
-					else 
-						return AXIS_FAIL; //CF_ZERO_ARRAY_SIZE_ERROR
-				}
-				else if (XSD_UNKNOWN != pOutParam->m_nOutType)//basic type
-				{
-					pOutParam->m_pOutValue = (Param*)m_pIWSDZ->GetParam();
-				}
-				else // this is an unexpected situation
-				{
-					return AXIS_FAIL;
-				}			
-			}
-		}
-		else //returns void
-		{
-			//nothing to do
-		}
-	}
-	return nStatus;
+	return m_pAxisEngine->Process(&m_Soap);
 }
 
-/**
- * Used to get the corresponding Param when the return type is basic type
- */
-Param* Call::GetResult()
-{
-	return m_pReturnValue;
-}
-
-/**
- * Used to get deserialized return object when the return type is complex type
- */
-void Call::GetResult(void** pReturn)
-{
-	if (m_ReturnCplxObj.pObject)
-	{
-		*pReturn = m_ReturnCplxObj.pObject;
-		m_ReturnCplxObj.pObject = NULL; //note that returned object is handed over to the client.
-	}
-	else
-	{
-		*pReturn = NULL;
-	}
-}
-
-int Call::Initialize()
+int Call::Initialize(AXIS_BINDING_STYLE nStyle)
 {
 	/* 
 	   Initialize re-usable objects of this instance (objects may have been populated by
 	   the previous call.
 	 */
 	try {
-		InitializeObjects();
 		m_Soap.sessionid = "somesessionid1234";
+		//remove_headers(&m_Soap);
 		if (AXIS_SUCCESS != OpenConnection()) return AXIS_FAIL;
 		if (m_pAxisEngine) delete m_pAxisEngine;
 		m_pAxisEngine = new ClientAxisEngine();
@@ -416,10 +150,12 @@ int Call::Initialize()
 			m_pMsgData = m_pAxisEngine->GetMessageData();
 			if (m_pMsgData)
 			{
-				m_pMsgData->getSoapSerializer((IWrapperSoapSerializer**)(&m_pIWSSZ));
-				m_pMsgData->getSoapDeSerializer((IWrapperSoapDeSerializer**)(&m_pIWSDZ));
+				m_pMsgData->GetSoapSerializer((IWrapperSoapSerializer**)(&m_pIWSSZ));
+				m_pMsgData->GetSoapDeSerializer((IWrapperSoapDeSerializer**)(&m_pIWSDZ));
 				if (m_pIWSSZ && m_pIWSDZ)
 				{
+					m_pIWSSZ->SetStyle(nStyle);
+					m_pIWSDZ->SetStyle(nStyle);
 					return AXIS_SUCCESS;
 				}
 			}
@@ -429,29 +165,14 @@ int Call::Initialize()
 	}
 	catch (ChannelException e)
 	{
-		printf(e.GetErr().c_str());
+		/*printf(e.GetErr().c_str());*/
 		return AXIS_FAIL;
 	}
 	catch (...)
 	{
-		printf("Unknown exception occured in the client");
+		/*printf("Unknown exception occured in the client");*/
 		return AXIS_FAIL;
 	}
-}
-
-void Call::InitializeObjects()
-{
-	m_nReturnType = XSD_UNKNOWN;
-	m_pArray = NULL;
-	m_nArrayType = XSD_UNKNOWN;
-	m_ReturnCplxObj.m_TypeName = "";
-	m_ReturnCplxObj.m_URI = "";
-	m_ReturnCplxObj.pCreFunct = NULL;
-	m_ReturnCplxObj.pDelFunct = NULL;
-	m_ReturnCplxObj.pObject = NULL;
-	m_ReturnCplxObj.pSizeFunct = NULL;
-	m_ReturnCplxObj.pSZFunct = NULL;
-	m_CurItr = NULL;
 }
 
 int Call::UnInitialize()
@@ -469,12 +190,23 @@ int Call::UnInitialize()
 int Call::SetProtocol(AXIS_PROTOCOL_TYPE protocol)
 {
 	m_Soap.trtype = protocol;
+	switch(protocol)
+	{
+	case APTHTTP:
+		m_Soap.so.http = new Ax_stream_http; 
+		m_Soap.so.http->ip_headercount = 0;
+		m_Soap.so.http->ip_headers = NULL;
+		m_Soap.so.http->op_headercount = 0;
+		m_Soap.so.http->op_headers = NULL;
+		break;
+		/* do for other protocols too */
+	}
 	return 0;
 }
 
-int Call::SetHeader(char *key, char *value)
+int Call::SetTransportProperty(AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)
 {
-	set_header(&m_Soap, key, value);
+	m_pTransport->SetTransportInformation(type, value, &m_Soap);
 	return 0;
 }
 
@@ -506,143 +238,206 @@ void Call::SetSOAPVersion(SOAP_VERSION version)
 	m_pIWSSZ->setSoapVersion(version);
 }
 
-/**
- * This function will create (allocate memory) to an array of objects depending on
- * the information available in m_pArray and m_nArrayType. Basically it gets the 
- * array size from m_pArray->m_Size and element type from m_nArrayType. In case of 
- * complex types it uses the Create function provided in m_ReturnCplxObj structure
- */
-int Call::MakeArray()
+Axis_Array Call::GetBasicArray(XSDTYPE nType, const AxisChar* pName, const AxisChar* pNamespace)
 {
-	if (m_pArray->m_Size < 1) return AXIS_FAIL;
-
-	if (USER_TYPE == m_nArrayType)
-	{
-		m_pArray->m_Array = m_ReturnCplxObj.pCreFunct(true, m_pArray->m_Size);
-	}
-	else
-	{
-		m_pArray->m_Array = m_pIWSDZ->CreateArray(m_nArrayType, m_pArray->m_Size); 
-	}
-	return (NULL != m_pArray->m_Array)?AXIS_SUCCESS:AXIS_FAIL;
+	return m_pIWSDZ->GetBasicArray(nType, pName, pNamespace);
 }
 
-Call::OutParamHolder::OutParamHolder()
+Axis_Array Call::GetCmplxArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)
 {
-	m_nOutType = XSD_UNKNOWN;
-	m_nArrayType = XSD_UNKNOWN;
-	m_pArray = NULL;
-	m_pOutValue = NULL;
+	return m_pIWSDZ->GetCmplxArray(pDZFunct, pCreFunct, pDelFunct, pSizeFunct, pName, pNamespace);
+}
+int Call::GetElementAsInt(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsInt(pName, pNamespace);
+}
+xsd__boolean Call::GetElementAsBoolean(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsBoolean(pName, pNamespace);
+}
+unsigned int Call::GetElementAsUnsignedInt(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsUnsignedInt(pName, pNamespace);
+}
+short Call::GetElementAsShort(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsShort(pName, pNamespace);
+}
+unsigned short Call::GetElementAsUnsignedShort(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsUnsignedShort(pName, pNamespace);
+}
+char Call::GetElementAsByte(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsByte(pName, pNamespace);
+}
+unsigned char Call::GetElementAsUnsignedByte(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsUnsignedByte(pName, pNamespace);
+}
+long Call::GetElementAsLong(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsLong(pName, pNamespace);
+}
+long Call::GetElementAsInteger(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsInteger(pName, pNamespace);
+}
+unsigned long Call::GetElementAsUnsignedLong(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsUnsignedLong(pName, pNamespace);
+}
+float Call::GetElementAsFloat(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsFloat(pName, pNamespace);
+}
+double Call::GetElementAsDouble(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsDouble(pName, pNamespace);
+}
+double Call::GetElementAsDecimal(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsDecimal(pName, pNamespace);
+}
+AxisChar* Call::GetElementAsString(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsString(pName, pNamespace);
+}
+AxisChar* Call::GetElementAsAnyURI(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsAnyURI(pName, pNamespace);
+}
+AxisChar* Call::GetElementAsQName(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsQName(pName, pNamespace);
+}
+xsd__hexBinary Call::GetElementAsHexBinary(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsHexBinary(pName, pNamespace);
+}
+xsd__base64Binary Call::GetElementAsBase64Binary(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsBase64Binary(pName, pNamespace);
+}
+struct tm Call::GetElementAsDateTime(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsDateTime(pName, pNamespace);
+}
+struct tm Call::GetElementAsDate(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsDate(pName, pNamespace);
+}
+struct tm Call::GetElementAsTime(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsTime(pName, pNamespace);
+}
+long Call::GetElementAsDuration(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsDuration(pName, pNamespace);
+}
+int Call::GetAttributeAsInt(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsInt(pName, pNamespace);
+}
+xsd__boolean Call::GetAttributeAsBoolean(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsBoolean(pName, pNamespace);
+}
+unsigned int Call::GetAttributeAsUnsignedInt(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsUnsignedInt(pName, pNamespace);
+}
+short Call::GetAttributeAsShort(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsShort(pName, pNamespace);
+}
+unsigned short Call::GetAttributeAsUnsignedShort(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsUnsignedShort(pName, pNamespace);
+}
+char Call::GetAttributeAsByte(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsByte(pName, pNamespace);
+}
+unsigned char Call::GetAttributeAsUnsignedByte(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsUnsignedByte(pName, pNamespace);
+}
+long Call::GetAttributeAsLong(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsLong(pName, pNamespace);
+}
+long Call::GetAttributeAsInteger(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsInteger(pName, pNamespace);
+}
+unsigned long Call::GetAttributeAsUnsignedLong(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsUnsignedLong(pName, pNamespace);
+}
+float Call::GetAttributeAsFloat(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsFloat(pName, pNamespace);
+}
+double Call::GetAttributeAsDouble(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsDouble(pName, pNamespace);
+}
+double Call::GetAttributeAsDecimal(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsDecimal(pName, pNamespace);
+}
+AxisChar* Call::GetAttributeAsString(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsString(pName, pNamespace);
+}
+AxisChar* Call::GetAttributeAsAnyURI(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsAnyURI(pName, pNamespace);
+}
+AxisChar* Call::GetAttributeAsQName(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsQName(pName, pNamespace);
+}
+xsd__hexBinary Call::GetAttributeAsHexBinary(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsHexBinary(pName, pNamespace);
+}
+xsd__base64Binary Call::GetAttributeAsBase64Binary(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsBase64Binary(pName, pNamespace);
+}
+struct tm Call::GetAttributeAsDateTime(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsDateTime(pName, pNamespace);
+}
+struct tm Call::GetAttributeAsDate(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsDate(pName, pNamespace);
+}
+struct tm Call::GetAttributeAsTime(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsTime(pName, pNamespace);
+}
+long Call::GetAttributeAsDuration(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsDuration(pName, pNamespace);
+}
+int Call::CheckMessage(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->CheckMessageBody(pName, pNamespace);
+}
+void* Call::GetCmplxObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetCmplxObject(pDZFunct, pCreFunct, pDelFunct, pName, pNamespace);
 }
 
-Call::OutParamHolder::~OutParamHolder()
+/*global function to be used in C stubs */
+extern "C" Call* GetCallObject(AXIS_PROTOCOL_TYPE nProtocol, AxisChar* pchEndpointURI)
 {
-
+	Call* pCall = new Call();
+	pCall->SetProtocol(nProtocol);
+	pCall->SetEndpointURI(pchEndpointURI);
+	return pCall;
 }
 
-Call::OutParamHolder* Call::AddOutParam()
-{
-	OutParamHolder* pNew = new OutParamHolder();
-	if (pNew)
-		m_OutParams.push_back(pNew);
-	return pNew;
-}
-
-/**
- * This function is used to set that the return type is a basic type
- */
-void Call::AddOutParamType(XSDTYPE nType)
-{
-	OutParamHolder* pOPH = AddOutParam();
-	if (pOPH)
-	{
-		pOPH->m_nOutType = nType;
-	}
-}
-
-/**
- * This function is used to set that the return type is a complex type
- */
-void Call::AddOutParamType(void *pDZFunct, void* pCreFunct, void *pDelFunct, const char* pchTypeName, const char * pchUri)
-{
-	OutParamHolder* pOPH = AddOutParam();
-	if (pOPH)
-	{
-		pOPH->m_nOutType = USER_TYPE;
-		pOPH->m_OutCplxObj.pObject = NULL;
-		pOPH->m_OutCplxObj.pDZFunct = (AXIS_DESERIALIZE_FUNCT)pDZFunct;
-		pOPH->m_OutCplxObj.pCreFunct = (AXIS_OBJECT_CREATE_FUNCT)pCreFunct;
-		pOPH->m_OutCplxObj.pDelFunct = (AXIS_OBJECT_DELETE_FUNCT)pDelFunct;
-		pOPH->m_OutCplxObj.m_TypeName = pchTypeName;
-		pOPH->m_OutCplxObj.m_URI = pchUri;
-	}
-}
-
-/**
- * This function is used to set that the return type is an array of complex types
- */
-void Call::AddOutParamType(Axis_Array* pArray, void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName, const char* pchUri)
-{
-	OutParamHolder* pOPH = AddOutParam();
-	if (pOPH)
-	{
-		pOPH->m_pArray = pArray;
-		pOPH->m_nOutType = XSD_ARRAY;
-		pOPH->m_nArrayType = USER_TYPE;
-		pOPH->m_OutCplxObj.pDZFunct = (AXIS_DESERIALIZE_FUNCT)pDZFunct;
-		pOPH->m_OutCplxObj.pCreFunct = (AXIS_OBJECT_CREATE_FUNCT)pCreFunct;
-		pOPH->m_OutCplxObj.pDelFunct = (AXIS_OBJECT_DELETE_FUNCT)pDelFunct;
-		pOPH->m_OutCplxObj.pSizeFunct = (AXIS_OBJECT_SIZE_FUNCT)pSizeFunct;
-		pOPH->m_OutCplxObj.m_TypeName = pchTypeName;
-		pOPH->m_OutCplxObj.m_URI = pchUri;
-	}
-}
-
-/**
- * This function is used to set that the return type is an array of basic types.
- * @param pArray Array to which the deserialized object array is set an returned
- *				 to the client application.
- * @param nType Basic type of the array elements
- */
-void Call::AddOutParamType(Axis_Array* pArray, XSDTYPE nType)
-{
-	OutParamHolder* pOPH = AddOutParam();
-	if (pOPH)
-	{
-		pOPH->m_pArray = pArray;
-		pOPH->m_nOutType = XSD_ARRAY;
-		pOPH->m_nArrayType = nType;
-	}
-}
-
-/**
- * Used to get the corresponding Param when the out param type is basic type
- */
-Param* Call::GetOutParam()
-{
-	if (m_CurItr == NULL) m_CurItr = m_OutParams.begin();
-	else m_CurItr++;
-	if (m_CurItr == m_OutParams.end()) return NULL; //something wrong
-	OutParamHolder* pOutParam = (*m_CurItr);
-	return pOutParam->m_pOutValue;
-}
-
-/**
- * Used to get the deserialized object when the out param type is of complex type
- */
-void Call::GetOutParam(void** pOut)
-{
-	if (m_CurItr == NULL) m_CurItr = m_OutParams.begin();
-	else m_CurItr++;
-	if (m_CurItr == m_OutParams.end()) return; //something wrong
-	OutParamHolder* pOutParam = (*m_CurItr);
-	if (pOutParam->m_OutCplxObj.pObject)
-	{
-		*pOut = pOutParam->m_OutCplxObj.pObject;
-		pOutParam->m_OutCplxObj.pObject = NULL; //note that returned object is handed over to the client.
-	}
-	else
-	{
-		*pOut = NULL;
-	}
-}

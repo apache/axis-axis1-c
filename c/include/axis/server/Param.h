@@ -82,32 +82,13 @@ class ArrayBean;
 
 class Param : public IParam
 {
-	friend class SoapDeSerializer;
 	friend class SoapSerializer;
-	friend class XMLStreamHandler;
 public:
 	Param(){ m_Type = USER_TYPE;}; //if there is no attribute that says the type
-
-    Param(time_t time);
-    Param(struct tm timeStruct);
-	Param(const Param& param);
-	Param(const AxisChar* str, XSDTYPE type = XSD_STRING);
-	Param(int nValue);
-    Param(unsigned int unValue);   
-    Param(short sValue);
-    Param(unsigned short usValue);
-    Param(char cValue);
-    Param(unsigned char ucValue);
-    Param(long lValue, XSDTYPE type=XSD_LONG);
-    Param(unsigned long ulValue);
-	Param(float fValue);
-	Param(double dValue, XSDTYPE type=XSD_DOUBLE);
 	virtual ~Param();
-	void operator=(const Param &param);
 
 private:
 	uParamValue m_Value;
-	AxisString m_sValue; //value in case of XSD_STRING, XSD_HEXBINARY and XSD_BASE64BINARY
 	AxisString m_sName; //Name of the parameter
 	XSDTYPE m_Type; //Type of the parameter
 
@@ -115,43 +96,15 @@ private:
 	AxisString m_strPrefix; //needed in serialization only
 	AxisString m_strUri; //needed in serialization only
 
-public: //Conversion functions
-	const AxisString& GetTypeName();
-	int SetValue(const AxisChar* sValue);
+public: 
 	int SetValue(XSDTYPE nType, uParamValue Value);
-	XSDTYPE GetType() const;	
-	int serialize(IWrapperSoapSerializer& pSZ);
-
-	//Following functions are used by wrapper class methods making sure of the valid type.
-	int GetInt();
-    unsigned int GetUnsignedInt();    
-    short GetShort();
-    unsigned short GetUnsignedShort();
-    char GetByte();
-    unsigned char GetUnsignedByte();
-    long GetLong();
-    long GetInteger();
-    unsigned long GetUnsignedLong();
-	float GetFloat();
-    double GetDouble();
-    double GetDecimal();
-    const AxisChar* GetAnyURI();
-    const AxisChar* GetQName();
-    struct tm GetDateTime();
-    struct tm GetDate();
-    struct tm GetTime();
-    long GetDuration();
-	const AxisChar* GetString();
-	const AxisChar* GetHexString();
-	const AxisChar* GetBase64String();
+	int serialize(SoapSerializer& pSZ);
 	void setPrefix(const AxisChar* prefix);
 	void setUri(const AxisChar* uri);
-	int GetArraySize();
 	int SetArrayElements(void* pElements);
 	int SetArrayElements(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct, AXIS_OBJECT_SIZE_FUNCT pSizeFunct);
 	int SetUserType(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct);
 	void SetName(const AxisChar* sName);
-	uParamValue GetValue(){ return m_Value;};
 };
 
 #endif // !defined(AFX_PARAM_H__351B13BB_5D03_40C5_93F5_56D17295A8BD__INCLUDED_)

@@ -139,7 +139,7 @@ public class ClientStubWriter extends CPPClassWriter{
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
 				minfo = (MethodInfo)methods.get(i);
-				this.writeMethodInWrapper(minfo, minfo.getParameterTypes(),minfo.getReturnType());
+				this.writeMethodInWrapper(minfo);
 				writer.write("\n");
 			}
      
@@ -168,7 +168,22 @@ public class ClientStubWriter extends CPPClassWriter{
 	 * @throws IOException
 	 */
 
-	public void writeMethodInWrapper(MethodInfo minfo, Collection params, ParameterInfo returntype) throws WrapperFault,IOException {
+	public void writeMethodInWrapper(MethodInfo minfo) throws WrapperFault,IOException {
+		boolean isAllTreatedAsOutParams = false;
+		ParameterInfo returntype = null;
+		int noOfOutParams = minfo.getOutputParameterTypes().size();
+		if (0==noOfOutParams){
+			returntype = null;
+		}
+		else if (1==noOfOutParams){
+			returntype = (ParameterInfo)minfo.getOutputParameterTypes().iterator().next();
+		}
+		else{
+			isAllTreatedAsOutParams = true;
+			//TODO make all outparams when there are more than one return params
+			throw new WrapperFault("WSDL2Ws does not still handle more than one return parameters");
+		}
+		Collection params = minfo.getInputParameterTypes();
 		String methodName = minfo.getMethodname();
 		Type retType = null;
 		boolean returntypeissimple = false;
@@ -262,7 +277,7 @@ public class ClientStubWriter extends CPPClassWriter{
 		}
 		writer.write("\tm_pCall->SetTransportProperty(SOAPACTION_HEADER , \""+minfo.getSoapAction()+"\");\n");
 		writer.write("m_pCall->SetSOAPVersion(SOAP_VER_1_1);\n"); //TODO check which version is it really.
-		writer.write("\tm_pCall->SetOperation(\""+methodName+"\", \""+ wscontext.getWrapInfo().getTargetNameSpaceOfWSDL() +"\");\n");
+		writer.write("\tm_pCall->SetOperation(\""+minfo.getInputMessage().getLocalPart()+"\", \""+ minfo.getInputMessage().getNamespaceURI()+"\");\n");
 		for (int i = 0; i < paramsB.size(); i++) {
 			type = wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName());
 			if (type != null){
@@ -301,7 +316,7 @@ public class ClientStubWriter extends CPPClassWriter{
 		}
 		writer.write("\tnStatus = m_pCall->Invoke();\n");
 		writer.write("\tif (AXIS_SUCCESS == nStatus)\n\t{\n");
-		writer.write("\t\tif(AXIS_SUCCESS != m_pCall->CheckMessage(\""+methodName+"Response\", \""+wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()+"\"))\n\t\t{\n");
+		writer.write("\t\tif(AXIS_SUCCESS != m_pCall->CheckMessage(\""+minfo.getOutputMessage().getLocalPart()+"\", \""+minfo.getOutputMessage().getNamespaceURI()+"\"))\n\t\t{\n");
 		if (returntype == null){
 			writer.write("\t\t\t/*not successful*/\n\t\t}\n");
 			writer.write("\t}\n\tm_pCall->UnInitialize();\n");
@@ -346,6 +361,7 @@ public class ClientStubWriter extends CPPClassWriter{
 				type = (Type)types.next();
 				if (type.isArray()) continue;
 				typeName = type.getLanguageSpecificName();
+				if (typeName.startsWith(">")) continue;
 				writer.write("extern int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer *pDZ);\n");
 				writer.write("extern void* Axis_Create_"+typeName+"("+typeName+" pObj, bool bArray = false, int nSize=0);\n");
 				writer.write("extern void Axis_Delete_"+typeName+"("+typeName+"* param, bool bArray = false, int nSize=0);\n");

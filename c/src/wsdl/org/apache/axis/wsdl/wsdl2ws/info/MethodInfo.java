@@ -64,26 +64,30 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.xml.namespace.QName;
+
 public class MethodInfo {
     private String methodname;
-    private ArrayList parameters;
-    private ParameterInfo returnType;
+    private ArrayList inputParameters;
+    private ArrayList outputParameters;
     private String soapAction;
     private List inputEncoding;
     private List outputEncoding;
     private String inputUse;
     private String outputUse;
+    private QName inputMessage;
+    private QName outputMessage;
 
     public MethodInfo() {
-        this.returnType = null;
         this.methodname = null;
-        parameters = new ArrayList(101);
+        inputParameters = new ArrayList(101);
+		outputParameters = new ArrayList(101);
     }
 
-    public MethodInfo(ParameterInfo returnType, String methodname) {
-        this.returnType = returnType;
+    public MethodInfo(String methodname) {
         this.methodname = methodname;
-        parameters = new ArrayList(101);
+        inputParameters = new ArrayList(101);
+		outputParameters = new ArrayList(101);
     }
 
     public String getMethodname() {
@@ -93,26 +97,27 @@ public class MethodInfo {
     public void setMethodname(String methodname) {
         this.methodname = methodname;
     }
-
-    public ParameterInfo getReturnType() {
-        return returnType;
-    }
-
-    public void setReturnType(ParameterInfo returnType) {
-        this.returnType = returnType;
-    }
 /*
     public Enumeration getParameters() {
         return this.parameters.keys();
     }
 */
-    public Collection getParameterTypes() {
-        return this.parameters;
+    public Collection getInputParameterTypes() {
+        return this.inputParameters;
     }
 
-    public void addParameter(ParameterInfo type) {
-        this.parameters.add(type);
+    public void addInputParameter(ParameterInfo type) {
+        this.inputParameters.add(type);
     }
+
+	public Collection getOutputParameterTypes() {
+		return this.outputParameters;
+	}
+
+	public void addOutputParameter(ParameterInfo type) {
+		this.outputParameters.add(type);
+	}
+    
 /*
     public ParameterInfo getParameter(String paramName) {
         Object obj = this.parameters.get(paramName);
@@ -168,7 +173,7 @@ public class MethodInfo {
      */
     public String getInputUse() {
         return inputUse;
-}
+	}
     /**
      * @return
      */
@@ -189,5 +194,34 @@ public class MethodInfo {
     public void setOutputUse(String string) {
         outputUse = string;
     }
+	/**
+	 * @return QName
+	 */
+	public QName getInputMessage() {
+		return inputMessage;
+	}
+
+	/**
+	 * @return QName
+	 */
+	public QName getOutputMessage() {
+		return outputMessage;
+	}
+
+	/**
+	 * Sets the inputMessage.
+	 * @param inputMessage The inputMessage to set
+	 */
+	public void setInputMessage(QName inputMessage) {
+		this.inputMessage = inputMessage;
+	}
+
+	/**
+	 * Sets the ouputMessage.
+	 * @param ouputMessage The ouputMessage to set
+	 */
+	public void setOutputMessage(QName ouputMessage) {
+		this.outputMessage = ouputMessage;
+	}
 
 }

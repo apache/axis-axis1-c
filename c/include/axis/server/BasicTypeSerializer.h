@@ -83,23 +83,15 @@ const AxisChar ENCODED_SGL_QUOTE_STR[]		= "&apos;";	// Encoded string for double
 class BasicTypeSerializer
 {
 public:
-	const AxisString& GetEntityReferenced(const AxisString& str);
-	const AxisChar* serialize(const AxisChar* sName, const AxisChar* sValue, XSDTYPE type);
-	const AxisChar* serialize(const AxisChar* sName, float fValue, XSDTYPE type);
-    const AxisChar* serialize(const AxisChar* sName, double dValue, XSDTYPE type);    
-	const AxisChar* serialize(const AxisChar* sName, int nValue, XSDTYPE type);
-    const AxisChar* serialize(const AxisChar* sName, unsigned int unValue, XSDTYPE type);
-    const AxisChar* serialize(const AxisChar* sName, short sValue, XSDTYPE type);
-    const AxisChar* serialize(const AxisChar* sName, unsigned short usValue, XSDTYPE type);
-    const AxisChar* serialize(const AxisChar* sName, char cValue, XSDTYPE type);
-    const AxisChar* serialize(const AxisChar* sName, unsigned char ucValue, XSDTYPE type);
-    const AxisChar* serialize(const AxisChar* sName, long lValue, XSDTYPE type);
-    const AxisChar* serialize(const AxisChar* sName, unsigned long ulValue, XSDTYPE type);
-    const AxisChar* serialize(const AxisChar* sName, tm datetime, XSDTYPE type);
-	static const AxisChar* BasicTypeStr(XSDTYPE type);
-
 	BasicTypeSerializer();
 	virtual ~BasicTypeSerializer();
+	const AxisString& GetEntityReferenced(const AxisString& str);
+	const AxisChar* SerializeAsElement(const AxisChar* pName, const void* pValue, XSDTYPE type);
+	const AxisChar* SerializeAsAttribute(const AxisChar* pName, const AxisChar* pPrefix, const void* pValue, XSDTYPE type);
+	const AxisChar* EncodeToHexBinary(const xsd__hexBinary* pBinary);
+	const AxisChar* EncodeToBase64Binary(const xsd__base64Binary* pBinary);
+	void SetStyle(AXIS_BINDING_STYLE nStyle){ m_nStyle = nStyle;};
+	static const AxisChar* BasicTypeStr(XSDTYPE type);
 
 private:
 	enum
@@ -111,13 +103,13 @@ private:
 		AMPERSAND_CHAR		=	L'&'	// Ampersand character
 	};
 private:
-	void HelpSerialize(const AxisChar* sName, const AxisChar* sValue);
 	AxisString m_sSZ;
 	AxisString m_AuxStr;
 	AxisString m_strReturnVal;
 	AxisChar m_Buf[BTS_BUFFSIZE]; //used for numeric to string conversions with sprintf
-	XSDTYPE m_Type; //used to temporarily set the type of item being serialized.
 	AxisTime m_AxisTime;
+	/* Current Serialization Style */
+	AXIS_BINDING_STYLE m_nStyle;
 };
 
 #endif // !defined(AFX_BASICTYPESERIALIZER_H__7ECDFED3_F3D5_48A1_A7EF_1E30B93BDB2C__INCLUDED_)

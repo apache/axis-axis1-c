@@ -59,13 +59,11 @@
  *
  *
  * @author Lilantha Darshana (lilantha@virtusa.com)
- * @author Damitha Kumarage (damitha@jkcsworld.com, damitha@opensource.lk)
  *
  */
 
 #include <axis/client/transport/axis/Platform.hpp>
 #include <axis/client/transport/axis/Receiver.hpp>
-#include <axis/client/transport/axis/HttpTransport.hpp>
 #include <iostream>
 
 
@@ -74,70 +72,25 @@ Receiver::~Receiver()
 
 }
 
-const char* Receiver::Recv(int nMaxToRead) throw (AxisException)
+const char* Receiver::Recv() throw (AxisException)
 {
-  int bodyLength;
-  int isHttpHeader;
-	const char* pToReturn = NULL;
-  isHttpHeader = m_pTrChannel->getIsHttpHeader();
-  bodyLength = m_pTrChannel->getBodyLength();
-  //printf("bodyLength:%d\n", bodyLength);
-  //printf("isHttpHeader:%d\n", isHttpHeader);
-  if(isHttpHeader == 1 && bodyLength == 0)
-    return NULL;
-	if (0 == m_BytesRead)
+	if (m_pMsg) return NULL; //this has been read earlier.
+	try
 	{
-		try
-		{
-            //printf("try\n");
-			*m_pTrChannel >> (&m_pMsg);
-            if(m_pMsg == NULL)
-                return NULL;
-            
-			m_MsgSize = strlen(m_pMsg);        
-		}
-		catch(AxisException& ex)
-		{
-      printf("catch\n");
-			// Get the fault message.
-			*m_pTrChannel >> (&m_pMsg);
-			m_MsgSize = strlen(m_pMsg);
-			#ifdef _DEBUG
-			//	std::cerr << ex.GetErrorMsg() << std::endl;
-			#endif
-		}
-		catch(...)
-		{
-      printf("catch(...)\n");
-			throw AxisException(RECEPTION_ERROR);
-		}
+		*m_pTrChannel >> (&m_pMsg);
 	}
-    //printf("m_MsgSize:%d\n", m_MsgSize);
-	if (m_MsgSize > 0)
+	catch(AxisException& ex)
 	{
-    bodyLength = m_pTrChannel->getBodyLength();
-    //printf("m_MsgSize:%d\n", m_MsgSize);
-    //printf("bodyLength:%d\n", bodyLength);
-    bodyLength -= m_MsgSize;
-    m_pTrChannel->setBodyLength(bodyLength);    
-		pToReturn = m_pMsg;
-		m_BytesRead = (m_MsgSize < nMaxToRead) ? m_MsgSize : nMaxToRead;
-        //printf("m_BytesRead:%d\n", m_BytesRead);
-		m_MsgSize -= m_BytesRead;
-		m_pMsg += m_BytesRead;
-    m_BytesRead = 0;
-    
-		return pToReturn;		
+		// Get the fault message.
+		*m_pTrChannel >> (&m_pMsg);
+		#ifdef _DEBUG
+		//	std::cerr << ex.GetErrorMsg() << std::endl;
+		#endif
 	}
-	else
+	catch(...)
 	{
-        printf("m_MsgSize == 0, so return NULL\n");
-		return NULL;
+		throw AxisException(RECEPTION_ERROR);
 	}
-}
-
-int Receiver::getBytesRead()
-{
-  return m_BytesRead;
+	return m_pMsg;
 }
 

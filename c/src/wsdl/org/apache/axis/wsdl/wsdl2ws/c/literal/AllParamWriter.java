@@ -93,10 +93,15 @@ public class AllParamWriter implements SourceWriter{
 						System.out.println("Array writer called ......");
 						(new ArrayParamWriter(wscontext,type)).writeSource();	
 					}	
-					else{	
-						System.out.println("struct writer called ......");
-						(new BeanParamWriter(wscontext,type)).writeSource();
-						(new ParmHeaderFileWriter(wscontext,type)).writeSource();	
+					else{
+						if (type.getLanguageSpecificName().startsWith(">")){
+							System.out.println("ignoring anonymous type "+ type.getLanguageSpecificName()+"\n");	
+						}
+						else{
+							System.out.println("struct writer called ......");
+							(new BeanParamWriter(wscontext,type)).writeSource();
+							(new ParmHeaderFileWriter(wscontext,type)).writeSource();	
+						}
 					}	
 				}	
 			}catch(Exception e){

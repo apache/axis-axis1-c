@@ -61,9 +61,7 @@
  *
  */
 
-// BasicHandler.h: interface for the BasicHandler class.
-//
-//////////////////////////////////////////////////////////////////////
+/* BasicHandler.h: interface for the BasicHandler class.*/
 
 #if !defined(AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_)
 #define AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_
@@ -73,16 +71,75 @@
 
 enum HANDLER_TYPE { NORMAL_HANDLER, WEBSERVICE_HANDLER, CHAIN_HANDLER };
 
+
+/*
+With following technique we can remove the compiler dependancy of supporting
+C services ???
+
+#ifndef __cplusplus
+typedef struct {
+	void* unused; // present only for interfaces passed from C to C++ (eg:BasicHandler) 
+	BasicHanlerFunctionsX* __vfptr;
+} BasicHandler;
+#endif
+
+typedef struct {
+	int (* Invoke)(BasicHandler* pThis, IMessageData* pMsg);
+} BasicHanlerFunctionsX;
+
+#ifdef __cplusplus
+
 class BasicHandler  
 {
 public:
-	BasicHandler(){};
 	virtual ~BasicHandler(){};
-	virtual int Invoke(IMessageData* pMsg) = 0;
-	virtual void OnFault(IMessageData* pMsg) = 0;
-	virtual int GetType() = 0;
-	virtual int Init() = 0;
-	virtual int Fini() = 0;	
-};
+	void* __vfptr;
+	virtual int Invoke(IMessageData* pMsg);
 
-#endif // !defined(AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_)
+
+	static BasicHanlerFunctionsX ms_VFtable;
+	static int s_Invoke(BasicHandler* pThis, IMessageData* pMsg) 
+	{
+		pThis->Invoke(pMsg);
+	}
+	static void s_Initialize()
+	{
+		ms_VFtable.Invoke = s_Invoke;
+		__vfptr = &ms_VFtable;
+	}
+
+#endif
+*/
+
+#ifdef __cplusplus
+
+class BasicHandler  
+{
+public:
+	virtual ~BasicHandler(){};
+
+#else
+
+typedef struct BasicHandlerTag
+{
+	void* __vfptr;
+} BasicHandler;
+typedef struct BasicHandlerXTag
+{
+	AXISDESTRUCTOR
+
+#endif
+
+	virtual int AXISAPI(Invoke, (APIHASPARAMS IMessageData* pMsg))
+	virtual void AXISAPI(OnFault, (APIHASPARAMS IMessageData* mMsg))
+	virtual int AXISAPI(GetType, (APINOPARAMS))
+	virtual int AXISAPI(Init, (APINOPARAMS))
+	virtual int AXISAPI(Fini, (APINOPARAMS))
+	virtual AXIS_BINDING_STYLE AXISAPI(GetBindingStyle, (APINOPARAMS))
+
+#ifdef __cplusplus
+};
+#else
+} BasicHandlerX;
+#endif
+#endif /* !defined(AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_) */

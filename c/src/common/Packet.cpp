@@ -64,30 +64,77 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
-int set_header(Ax_soapstream* soap, char * pchkey, char * pchvalue)
+extern "C"
 {
-	int count = soap->so.http.ip_headercount;
-	Ax_header * temp = soap->so.http.ip_headers;
-	soap->so.http.ip_headers = (Ax_header*)realloc(temp, 
-										(sizeof(Ax_header)*(count+1)));
-	soap->so.http.ip_headers[count].headername = pchkey;
-	soap->so.http.ip_headers[count].headervalue = pchvalue;
-	soap->so.http.ip_headercount = count+1;
 
-	return 0;
+/**
+ * This method is used to add a transport specific property to a stream object for Axis supported protocols
+ * such as http. For an example "Content-Length" for http. For other protocols there should be a way to
+ * set these properties and its upto the transport module implementation to have those required methods. 
+ */ 
+int set_property(Ax_soapstream* stream, char * pchkey, char * pchvalue)
+{
+	int count;
+	Ax_header *temp;
+	switch (stream->trtype)
+	{
+	case APTHTTP:
+		count = stream->so.http->op_headercount;
+		temp = stream->so.http->op_headers;
+		if(stream->so.http->op_headers)
+			stream->so.http->op_headers = (Ax_header*)realloc(temp, 
+											(sizeof(Ax_header)*(count+1)));
+		else
+			stream->so.http->op_headers = (Ax_header*)malloc((sizeof(Ax_header)*(count+1)));        
+		stream->so.http->op_headers[count].headername = pchkey;
+		stream->so.http->op_headers[count].headervalue = pchvalue;
+		stream->so.http->op_headercount = count+1;
+		return 0;
+	case APTSMTP:
+		return -1;
+	default:
+		return -1;
+	}
 }
 
+/**
+ * This method is used to remove all transport specific properties from a stream object for Axis supported protocols
+ * such as http. For an example "SOAPAction" for http. 
+ */ 
+void remove_all_properties(Ax_soapstream* stream)
+{
+	switch (stream->trtype)
+	{
+	case APTHTTP:
+		if (stream->so.http->ip_headercount > 0)
+		{
+			stream->so.http->ip_headercount = 0;
+			free(stream->so.http->ip_headers);
+			stream->so.http->ip_headers = NULL;
+		}
+		if (stream->so.http->op_headercount > 0)
+		{
+			stream->so.http->op_headercount = 0;
+			free(stream->so.http->op_headers);
+			stream->so.http->op_headers = NULL;
+		}
+		break;
+	case APTSMTP:
+		break;
+	default:
+		break;
+	}
+}
 
-const char* get_header(const Ax_soapstream* soap,const char* pchkey)
+const char* get_property(const Ax_soapstream* stream,const char* pchkey)
 {
 	const Ax_header* hdrs = NULL;
 	int count = 0;
-	switch (soap->trtype)
+	switch (stream->trtype)
 	{
 	case APTHTTP:
-		hdrs = soap->so.http.ip_headers;
-		count = soap->so.http.ip_headercount;
+		hdrs = stream->so.http->ip_headers;
+		count = stream->so.http->ip_headercount;
 		break;
 	case APTFTP:
 		//TODO
@@ -105,7 +152,6 @@ const char* get_header(const Ax_soapstream* soap,const char* pchkey)
 
 	for (int ix=0; ix<count; ix++)
 	{
-		//header* hdr = hdrs + ix;
 		if (strcmp((hdrs+ix)->headername, pchkey) == 0)
 		{
 			return (hdrs+ix)->headervalue;
@@ -115,28 +161,4 @@ const char* get_header(const Ax_soapstream* soap,const char* pchkey)
 	return NULL;
 }
 
-const char* get_service_from_uri(const Ax_soapstream* soap)
-{
-	const char* uri = NULL;
-	switch (soap->trtype)
-	{
-	case APTHTTP:
-		uri = soap->so.http.uri_path;
-		break;
-	case APTFTP:
-		//TODO
-		break;
-	case APTSMTP:
-		//TODO
-		break;
-	default:; //some error condition
-	}
-	
-	const char* service;
-	if (uri)
-	{
-		service = strstr(uri, AXIS_URI_EXTENSION) + strlen(AXIS_URI_EXTENSION);
-		return service;
-	}
-	return NULL;
 }

@@ -141,7 +141,7 @@ public class ClientStubWriter extends CPPClassWriter{
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
 				minfo = (MethodInfo)methods.get(i);
-				this.writeMethodInWrapper(minfo.getMethodname(), minfo.getParameterTypes(),minfo.getReturnType());
+				this.writeMethodInWrapper(minfo);
 				writer.write("\n");
 			}
      
@@ -170,7 +170,23 @@ public class ClientStubWriter extends CPPClassWriter{
 	 * @throws IOException
 	 */
 
-	public void writeMethodInWrapper(String methodName, Collection params, ParameterInfo returntype) throws WrapperFault,IOException {
+	public void writeMethodInWrapper(MethodInfo minfo) throws WrapperFault,IOException {
+		boolean isAllTreatedAsOutParams = false;
+		ParameterInfo returntype = null;
+		int noOfOutParams = minfo.getOutputParameterTypes().size();
+		if (0==noOfOutParams){
+			returntype = null;
+		}
+		else if (1==noOfOutParams){
+			returntype = (ParameterInfo)minfo.getOutputParameterTypes().iterator().next();
+		}
+		else{
+			isAllTreatedAsOutParams = true;
+			//TODO make all outparams when there are more than one return params
+			throw new WrapperFault("WSDL2Ws does not still handle more than one return parameters");
+		}
+		Collection params = minfo.getInputParameterTypes();
+		String methodName = minfo.getMethodname();
 		Type retType = null;
 		boolean returntypeissimple = false;
 		boolean returntypeisarray = false;

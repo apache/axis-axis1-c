@@ -68,6 +68,10 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+#ifdef WIN32
+#pragma warning (disable : 4786)
+#endif
+
 #include <axis/soap/SoapEnvelope.h>
 #include <axis/soap/SoapSerializer.h>
 #include <axis/soap/HeaderBlock.h>
@@ -77,16 +81,33 @@
 #include <axis/common/BasicTypeSerializer.h>
 #include <axis/soap/SoapKeywordMapping.h>
 #include <stdio.h>
+#include <stdarg.h>
+
+#include <axis/common/AxisTrace.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
+// Following values should come from axis configuration files.
+#define INITIAL_SERIALIZE_BUFFER_SIZE 4096
+#define NO_OF_SERIALIZE_BUFFERS 10
+
+IWrapperSoapSerializerFunctions IWrapperSoapSerializer::ms_VFtable;
 
 SoapSerializer::SoapSerializer()
 {
+	__vfptr = &ms_VFtable;
 	m_pSoapEnvelope = NULL;
 	m_iSoapVersion = SOAP_VER_1_1;
 	m_pOutputStream = NULL;
+	m_nMaxBuffersToCreate = NO_OF_SERIALIZE_BUFFERS;
+	m_nInitialBufferSize = INITIAL_SERIALIZE_BUFFER_SIZE;
+	m_pSZBuffers = new SerializeBuffers[m_nMaxBuffersToCreate];
+	for (int x=0; x<m_nMaxBuffersToCreate; x++)
+	{
+		m_pSZBuffers[x].inuse = 0;
+		m_pSZBuffers[x].buffer = NULL;
+	}
 }
 
 SoapSerializer::~SoapSerializer()
@@ -143,144 +164,58 @@ int SoapSerializer::setSoapMethod(SoapMethod *pSoapMethod)
 	return intStatus;
 }
 
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, int nValue, XSDTYPE type)
-{
-	uParamValue uValue;
-	uValue.nValue = nValue;
-	return AddOutputParamHelper(pchName, type, uValue);
-}
-
-int SoapSerializer::AddOutputParamHelper(const AxisChar* pchName, XSDTYPE nType, uParamValue uValue)
-{
-	Param* pParam = new Param();
-	pParam->SetValue(nType, uValue);
-	if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
-	{
-		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->AddOutputParam(pParam);
-	}
-	pParam->SetName(pchName);
-	return AXIS_SUCCESS;
-}
-
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, unsigned int unValue, XSDTYPE type)
-{
-	uParamValue uValue;
-	uValue.unValue = unValue;
-	return AddOutputParamHelper(pchName, type, uValue);
-}
-
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, short sValue, XSDTYPE type)
-{
-	uParamValue uValue;
-	uValue.sValue = sValue;
-	return AddOutputParamHelper(pchName, type, uValue);
-}
-
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, unsigned short usValue, XSDTYPE type)
-{
-	uParamValue uValue;
-	uValue.usValue = usValue;
-	return AddOutputParamHelper(pchName, type, uValue);
-}
-
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, long lValue, XSDTYPE type)
-{
-	uParamValue uValue;
-	uValue.lValue = lValue;
-	return AddOutputParamHelper(pchName, type, uValue);
-}
-
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, unsigned long ulValue, XSDTYPE type)
-{
-	uParamValue uValue;
-	uValue.ulValue = ulValue;
-	return AddOutputParamHelper(pchName, type, uValue);
-}
-
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, char cValue, XSDTYPE type)
-{
-	uParamValue uValue;
-	uValue.cValue = cValue;
-	return AddOutputParamHelper(pchName, type, uValue);
-}
-
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, unsigned char ucValue, XSDTYPE type)
-{
-	uParamValue uValue;
-	uValue.ucValue = ucValue;
-	return AddOutputParamHelper(pchName, type, uValue);
-}
-
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, float fValue, XSDTYPE type)
-{
-	uParamValue uValue;
-	uValue.fValue = fValue;
-	return AddOutputParamHelper(pchName, type, uValue);
-}
-
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, double dValue, XSDTYPE type)
-{
-	uParamValue uValue;
-	uValue.dValue = dValue;
-	return AddOutputParamHelper(pchName, type, uValue);
-}
-
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, struct tm tValue, XSDTYPE type)
-{
-	uParamValue uValue;
-	uValue.tValue = tValue;
-	return AddOutputParamHelper(pchName, type, uValue);
-}
-
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, const AxisChar* pStrValue, XSDTYPE type)
-{
-	uParamValue uValue;
-	uValue.pStrValue = pStrValue;
-	return AddOutputParamHelper(pchName, type, uValue);
-}
-
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, const string& sStrValue, XSDTYPE type)
-{
-	uParamValue uValue;
-	uValue.pStrValue = sStrValue.c_str();
-	return AddOutputParamHelper(pchName, type, uValue);
-}
-
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, const Axis_Array* pArray, XSDTYPE nType)
+int SoapSerializer::AddOutputBasicArrayParam(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName)
 {
 	IArrayBean* pAb = makeArrayBean(nType, (void*)(pArray->m_Array));
-	pAb->AddDimension(pArray->m_Size);
-	pAb->SetItemName("item");
+	pAb->SetDimension(pArray->m_Size);
 	Param* pParam = new Param();
+	if (RPC_ENCODED == m_nStyle)
+	{
+		pAb->SetItemName("item");
+		pParam->SetName(pName);
+	}
+	else
+	{
+		pAb->SetItemName(pName);
+		pParam->SetName("array");		
+	}
 	pParam->m_Value.pIArray = pAb;
 	pParam->m_Type = XSD_ARRAY;
 	if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
 	{
 		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->AddOutputParam(pParam);
 	}
-	pParam->SetName(pchName);
-	return AXIS_SUCCESS;	
-}
-
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)
-{
-	IArrayBean* pAb = makeArrayBean((void*)(pArray->m_Array), pSZFunct, pDelFunct, pSizeFunct);
-	pAb->AddDimension(pArray->m_Size);
-	pAb->SetItemName("item");
-	pAb->SetTypeName(pchTypeName);
-	pAb->SetUri(pchURI);
-	Param* pParam = new Param();
-	pParam->m_Value.pIArray = pAb;
-	pParam->m_Type = XSD_ARRAY;
-	if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
-	{
-		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->AddOutputParam(pParam);
-	}
-	pParam->SetName(pchName);
 	return AXIS_SUCCESS;
 }
 
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, void* pObject, void* pSZFunct, void* pDelFunct)
+int SoapSerializer::AddOutputCmplxArrayParam(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)
+{
+	IArrayBean* pAb = makeArrayBean((void*)(pArray->m_Array), pSZFunct, pDelFunct, pSizeFunct);
+	pAb->SetDimension(pArray->m_Size);
+	Param* pParam = new Param();
+	if (RPC_ENCODED == m_nStyle)
+	{
+		pAb->SetItemName("item");
+		pAb->SetTypeName(pName);
+		pAb->SetUri(pNamespace);
+		pParam->SetName(pName);
+	}
+	else
+	{
+		pAb->SetItemName(pName);
+		pParam->SetName("array");		
+	}
+	pParam->m_Value.pIArray = pAb;
+	pParam->m_Type = XSD_ARRAY;
+	if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
+	{
+		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->AddOutputParam(pParam);
+	}
+	pParam->SetName(pName);
+	return AXIS_SUCCESS;
+}
+
+int SoapSerializer::AddOutputCmplxParam(void* pObject, void* pSZFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace )
 { 
 	Param* pParam = new Param();
 	pParam->m_Value.pCplxObj = new ComplexObjectHandler;
@@ -291,7 +226,7 @@ int SoapSerializer::AddOutputParam(const AxisChar* pchName, void* pObject, void*
 	{
 		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->AddOutputParam(pParam);
 	}
-	pParam->SetName(pchName);
+	pParam->SetName(pName);
 	return AXIS_SUCCESS;
 }
 
@@ -313,31 +248,44 @@ int SoapSerializer::SetOutputStream(const Ax_soapstream* pStream)
 	int iStatus= AXIS_SUCCESS;
 
 	if(m_pSoapEnvelope) {
-		*this << "<?xml version='1.0' encoding='utf-8' ?>";
+		Serialize("<?xml version='1.0' encoding='utf-8' ?>", NULL);
 		iStatus= m_pSoapEnvelope->serialize(*this, (SOAP_VERSION)m_iSoapVersion);
-		flushSerializedBuffer();
+		SendSerializedBuffer();
 	}
 	return iStatus;
 }
 
+/**
+ * Some client side transport layer may wait until the end of buffers is acknowladged
+ * Use this function to do that.
+ */
+void SoapSerializer::MarkEndOfStream()
+{
+	m_pOutputStream->transport.pSendFunct((char*)NULL, NULL, m_pOutputStream);
+}
+
+/**
+ * Initializing the members of the class. This is needed since
+ * the same object instance of this class, may be used to server
+ * several SOAP requests.
+ */
 int SoapSerializer::Init()
 {
-	//initializing the members of the class. This is needed since
-	// the same object instance of this class, may be used to server
-	// several SOAP requests.
+	m_nStatus = AXIS_SUCCESS;
 
 	if(m_pSoapEnvelope) {
 		delete m_pSoapEnvelope;
 		m_pSoapEnvelope= NULL;
 	}
 
-	//Adding SoapEnvelop and SoapBody to Serializer
+	/* Adding SoapEnvelop and SoapBody to Serializer */
 	m_pSoapEnvelope = new SoapEnvelope();
 	m_pSoapEnvelope->setSoapBody(new SoapBody());
+	
+	SetNextSerilizeBuffer();
 
-	iCounter=0;
-	m_iCurrentSerBufferSize=0;
-	m_cSerializedBuffer[0]='\0'; //make buffer to empty content (as a char*)
+	m_nCounter=0;
+	m_NsStack.clear();
 	return AXIS_SUCCESS;
 }
 
@@ -350,55 +298,123 @@ int SoapSerializer::setSoapVersion(SOAP_VERSION nSoapVersion)
 	m_pSoapEnvelope->addStandardNamespaceDecl(SoapKeywordMapping::Map(nSoapVersion).pXsi);
 	return AXIS_SUCCESS;
 }
-
-const AxisChar* SoapSerializer::getNewNamespacePrefix()
+void SoapSerializer::RemoveNamespacePrefix(const AxisChar* pNamespace)
 {
-	iCounter++;
-    AxisSprintf(cCounter, 64, "ns%d", iCounter);
-	return cCounter;
+	if (m_NsStack.find(pNamespace) != m_NsStack.end())
+	{
+		m_NsStack.erase(pNamespace);
+	}
+}
+
+const AxisChar* SoapSerializer::GetNamespacePrefix(const AxisChar* pNamespace)
+{
+	if (m_NsStack.find(pNamespace) == m_NsStack.end())
+	{
+		m_nCounter++;
+		AxisSprintf(m_Buf, 8, "ns%d", m_nCounter);
+		m_NsStack[pNamespace] = m_Buf;
+	}
+	return m_NsStack[pNamespace].c_str();
 }
 
 IWrapperSoapSerializer& SoapSerializer::operator <<(const AxisChar* cSerialized)
 {
+	if (AXIS_SUCCESS != m_nStatus) 
+	{
+		/* some thing has gone wrong. So do nothing */
+		return *this;
+	}
+
 	int iTmpSerBufferSize = strlen(cSerialized);
-	if((m_iCurrentSerBufferSize + iTmpSerBufferSize)>= SERIALIZE_BUFFER_SIZE) 
+	if((m_nFilledSize + iTmpSerBufferSize)>= m_nCurrentBufferSize) 
 	{
-		flushSerializedBuffer();		
+		/*
+		 * Send the current buffer to the transport and get
+		 * another buffer to be filled
+		 */
+		if (AXIS_SUCCESS == SendSerializedBuffer())
+		{
+			if (AXIS_SUCCESS == SetNextSerilizeBuffer())
+			{
+				strcat((char*)m_pSZBuffers[m_nCurrentBufferIndex].buffer, cSerialized);
+				m_nFilledSize += iTmpSerBufferSize;
+			}
+		}
 	}
-	strcat(m_cSerializedBuffer, cSerialized);
-	m_iCurrentSerBufferSize += iTmpSerBufferSize;
+	else
+	{
+		strcat((char*)m_pSZBuffers[m_nCurrentBufferIndex].buffer, cSerialized);
+		m_nFilledSize += iTmpSerBufferSize;
+	}
 	return *this;
 }
-/*
-IWrapperSoapSerializer& SoapSerializer::operator<<(const AxisChar* cSerialized)
+
+int SoapSerializer::SendSerializedBuffer()
 {
-	flushSerializedBuffer();
-	//following is done for the time being
-	int slen = wcslen(cSerialized);
-	for (m_iCurrentSerBufferSize=0; m_iCurrentSerBufferSize < slen; m_iCurrentSerBufferSize++)
-	{
-		m_cSerializedBuffer[m_iCurrentSerBufferSize] = (char) cSerialized[m_iCurrentSerBufferSize];
-	}
-	m_cSerializedBuffer[m_iCurrentSerBufferSize] = '\0';
-	return *this;
-}
-*/
-int SoapSerializer::flushSerializedBuffer()
-{
-	//sendSoapResponse(m_cSerializedBuffer);
+	int nStatus;
 	if (NULL != m_pOutputStream->transport.pSendFunct)
-		m_pOutputStream->transport.pSendFunct(m_cSerializedBuffer, m_pOutputStream->str.op_stream);
-	m_cSerializedBuffer[0]= '\0';
-	m_iCurrentSerBufferSize=0;
+	{
+		nStatus = m_pOutputStream->transport.pSendFunct((char*)
+		m_pSZBuffers[m_nCurrentBufferIndex].buffer, (void*)(&(m_pSZBuffers[m_nCurrentBufferIndex].inuse)), m_pOutputStream);
+		if (TRANSPORT_FINISHED == nStatus) 
+		/* transport layer has done with the buffer.So same buffer can be re-used*/
+		{
+			m_pSZBuffers[m_nCurrentBufferIndex].buffer[0] = '\0'; /* put nul */
+			m_pSZBuffers[m_nCurrentBufferIndex].inuse = 0; /* not in use */
+		}
+		else if (TRANSPORT_FAILED == nStatus) 
+		{
+			return AXIS_FAIL;
+		}
+	}
+	else
+	{
+		return AXIS_FAIL;
+	}
 	return AXIS_SUCCESS;
 }
 
-int SoapSerializer::createSoapMethod(const AxisChar* sLocalName, const AxisChar* sPrefix, const AxisChar* sURI)
+/**
+ * This method sets the next buffer to be used for serialization.
+ *
+ */
+int SoapSerializer::SetNextSerilizeBuffer()
+{
+	for (int x=0;x<m_nMaxBuffersToCreate;x++)
+	{
+		if (m_pSZBuffers[x].buffer) /* a buffer has been created */
+		{
+			if (0 == m_pSZBuffers[x].inuse) /* buffer is not being used */ 
+			{
+				m_nCurrentBufferIndex = x;
+				m_pSZBuffers[m_nCurrentBufferIndex].inuse = 1;
+				m_pSZBuffers[m_nCurrentBufferIndex].buffer[0] = '\0';
+				m_nFilledSize = 0;
+				m_nCurrentBufferSize = m_nInitialBufferSize*(1 << m_nCurrentBufferIndex);
+				return AXIS_SUCCESS;
+			}
+		}
+		else /* a buffer is not yet created at this array index. So create one and use it */
+		{
+			m_nCurrentBufferIndex = x;
+			m_nCurrentBufferSize = m_nInitialBufferSize*(1 << m_nCurrentBufferIndex);			
+			m_pSZBuffers[m_nCurrentBufferIndex].buffer = new char[m_nCurrentBufferSize];
+			m_pSZBuffers[m_nCurrentBufferIndex].inuse = 1;
+			m_pSZBuffers[m_nCurrentBufferIndex].buffer[0] = '\0';
+			m_nFilledSize = 0;
+			return AXIS_SUCCESS;
+		}
+	}
+	AXISTRACE1("No buffers left for serialization");
+	return AXIS_FAIL;
+}
+
+int SoapSerializer::CreateSoapMethod(const AxisChar* sLocalName, const AxisChar* sURI)
 {
 	SoapMethod* pMethod = new SoapMethod();
 	setSoapMethod(pMethod);
 	pMethod->setLocalName(sLocalName);
-	pMethod->setPrefix(sPrefix);
+	pMethod->setPrefix(GetNamespacePrefix(sURI));
 	pMethod->setUri(sURI);
 	return AXIS_SUCCESS;
 }
@@ -430,72 +446,6 @@ IArrayBean* SoapSerializer::makeArrayBean(void* pObject, void* pSZFunct, void* p
 	pAb->m_value.cta->pObject = pObject;
 	return pAb;
 }
-
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, const AxisChar* sValue, XSDTYPE type)
-{
-	return m_BTSZ.serialize(sName, sValue, type);
-}
-
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, const string sValue, XSDTYPE type)
-{
-	return m_BTSZ.serialize(sName, sValue.c_str(), type);
-}
-
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, int nValue, XSDTYPE type)
-{
-	return m_BTSZ.serialize(sName, nValue, type);		
-}
-
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, struct tm tValue, XSDTYPE type)
-{
-    return m_BTSZ.serialize(sName, tValue, type);
-}
-
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, unsigned int unValue, XSDTYPE type)
-{
-    return m_BTSZ.serialize(sName, unValue, type);
-}
-
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, short sValue, XSDTYPE type)
-{
-    return m_BTSZ.serialize(sName, sValue, type);
-}
-
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, unsigned short usValue, XSDTYPE type)
-{
-    return m_BTSZ.serialize(sName, usValue, type);
-}
-
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, char cValue, XSDTYPE type)
-{
-    return m_BTSZ.serialize(sName, cValue, type);
-}
-
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, unsigned char ucValue, XSDTYPE type)
-{
-    return m_BTSZ.serialize(sName, ucValue, type);
-}
-
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, long lValue, XSDTYPE type)
-{
-    return m_BTSZ.serialize(sName, lValue, type);
-}
-
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, unsigned long ulValue, XSDTYPE type)
-{
-    return m_BTSZ.serialize(sName, ulValue, type);
-}
-
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, float fValue, XSDTYPE type)
-{
-    return m_BTSZ.serialize(sName, fValue, type);
-}
-
-const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* sName, double dValue, XSDTYPE type)
-{
-    return m_BTSZ.serialize(sName, dValue, type);
-}
-
 
 IHeaderBlock* SoapSerializer::createHeaderBlock()
 {
@@ -539,17 +489,25 @@ int SoapSerializer::removeSoapHeader()
  * Used to Serialize an array of complex types inside a complex type. Called from within the Serialize wrapper
  * method of the complex type.
  */
-int SoapSerializer::SerializeArray(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI, const AxisChar* pchArrayName)
+int SoapSerializer::SerializeCmplxArray(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace)
 {
 	ArrayBean* pAb = (ArrayBean*)makeArrayBean((void*)(pArray->m_Array), pSZFunct, pDelFunct, pSizeFunct);
-	pAb->AddDimension(pArray->m_Size);
-	pAb->SetItemName("item");
-	pAb->SetTypeName(pchTypeName);
-	pAb->SetUri(pchURI);
+	pAb->SetDimension(pArray->m_Size);
 	Param* pParam = new Param();
+	if (RPC_ENCODED == m_nStyle)
+	{
+		pAb->SetItemName("item");
+		pAb->SetTypeName(pName);
+		pAb->SetUri(pNamespace);
+		pParam->SetName(pName);
+	}
+	else
+	{
+		pAb->SetItemName(pName);
+		pParam->SetName("array");		
+	}
 	pParam->m_Value.pIArray = pAb;
 	pParam->m_Type = XSD_ARRAY;
-	pParam->SetName(pchArrayName);
 	pParam->serialize(*this);
 	/* Remove pointer to the array from the ArrayBean to avoid deleting the array when ArrayBean is deleted 
 	   Array will be deleted when the complex type that contains this array is deleted */
@@ -562,15 +520,23 @@ int SoapSerializer::SerializeArray(const Axis_Array* pArray, void* pSZFunct, voi
  * Used to Serialize an array of basic types inside a complex type. Called from within the Serialize wrapper
  * method of the complex type.
  */
-int SoapSerializer::SerializeArray(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pchArrayName)
+int SoapSerializer::SerializeBasicArray(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName)
 {
 	ArrayBean* pAb = (ArrayBean*)makeArrayBean(nType, (void*)(pArray->m_Array));
-	pAb->AddDimension(pArray->m_Size);
-	pAb->SetItemName("item");
+	pAb->SetDimension(pArray->m_Size);
 	Param* pParam = new Param();
+	if (RPC_ENCODED == m_nStyle)
+	{
+		pAb->SetItemName("item");
+		pParam->SetName(pName);
+	}
+	else
+	{
+		pAb->SetItemName(pName);
+		pParam->SetName("array");		
+	}
 	pParam->m_Value.pIArray = pAb;
 	pParam->m_Type = XSD_ARRAY;
-	pParam->SetName(pchArrayName);
 	pParam->serialize(*this);
 	/* Remove pointer to the array from the ArrayBean to avoid deleting the array when ArrayBean is deleted 
 	   Array will be deleted when the complex type that contains this array is deleted */
@@ -578,3 +544,182 @@ int SoapSerializer::SerializeArray(const Axis_Array* pArray, XSDTYPE nType, cons
 	delete pParam;
 	return AXIS_SUCCESS;
 }
+
+/**
+ * Basic output parameter going to be serialized as an Element later
+ */
+int SoapSerializer::AddOutputParam(const AxisChar* pchName, void* pValue, XSDTYPE type)
+{
+	Param* pParam = new Param();
+	if (!pParam) return AXIS_FAIL;
+	pParam->m_Type = type;
+	pParam->m_sName = pchName;
+	switch(type)
+	{
+	case XSD_INT:
+	case XSD_BOOLEAN:
+		pParam->m_Value.nValue = *((int*)(pValue));
+		break; 
+    case XSD_UNSIGNEDINT:
+		pParam->m_Value.unValue = *((unsigned int*)(pValue));
+		break;           
+    case XSD_SHORT:
+		pParam->m_Value.sValue = *((short*)(pValue));
+		break; 
+    case XSD_UNSIGNEDSHORT:
+		pParam->m_Value.usValue = *((unsigned short*)(pValue));
+		break;         
+    case XSD_BYTE:
+		pParam->m_Value.cValue = *((char*)(pValue));
+		break; 
+    case XSD_UNSIGNEDBYTE:
+		pParam->m_Value.ucValue = *((unsigned char*)(pValue));
+		break;
+    case XSD_LONG:
+    case XSD_INTEGER:
+	case XSD_DURATION:
+		pParam->m_Value.lValue = *((long*)(pValue));
+		break;        
+    case XSD_UNSIGNEDLONG:
+		pParam->m_Value.ulValue = *((unsigned long*)(pValue));
+		break;
+	case XSD_FLOAT:
+		pParam->m_Value.fValue = *((float*)(pValue));
+		break;
+    case XSD_DOUBLE:
+    case XSD_DECIMAL:
+		pParam->m_Value.dValue = *((double*)(pValue));
+		break;              
+	case XSD_STRING:
+		pParam->m_Value.pStrValue = *((char**)(pValue));
+		break;
+	case XSD_HEXBINARY:
+		pParam->m_Value.hbValue = *((xsd__hexBinary*)(pValue));
+		break;
+	case XSD_BASE64BINARY:
+		pParam->m_Value.b64bValue = *((xsd__base64Binary*)(pValue));
+		break;
+    case XSD_DATETIME:
+    case XSD_DATE:
+    case XSD_TIME:
+		pParam->m_Value.tValue = *((struct tm*)(pValue));
+        break; 
+	default:
+		delete pParam;
+		return AXIS_FAIL;
+	}
+	if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
+	{
+		m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->AddOutputParam(pParam);
+	}
+	else
+	{
+		delete pParam;
+		return AXIS_FAIL;
+	}	
+	return AXIS_SUCCESS;
+}
+
+int SoapSerializer::SerializeAsElement(const AxisChar* pName, void* pValue, XSDTYPE type)
+{
+	const AxisChar* pSerialized = m_BTSZ.SerializeAsElement(pName, pValue, type);
+	if (pSerialized)
+	{
+		*this << pSerialized;
+		return AXIS_SUCCESS;
+	}
+	else
+	{
+		return AXIS_FAIL;
+	}
+}
+
+int SoapSerializer::SerializeAsAttribute(const AxisChar* pName, const AxisChar* pNamespace, void* pValue, XSDTYPE type)
+{
+	const AxisChar* pPrefix = NULL;
+	if (pNamespace)
+	{
+		pPrefix = GetNamespacePrefix(pNamespace);
+	}
+	const AxisChar* pSerialized = m_BTSZ.SerializeAsAttribute(pName, pPrefix, pValue, type);
+	if (pSerialized)
+	{
+		*this << pSerialized;
+		return AXIS_SUCCESS;
+	}
+	else
+	{
+		return AXIS_FAIL;
+	}
+}
+
+void SoapSerializer::Serialize(const char* pFirst, ...)
+{
+	va_list vList;
+	const char* pArg;
+	if (pFirst) *this << pFirst;
+	va_start( vList, pFirst );     /* Initialize variable arguments. */
+	do
+	{
+		pArg = va_arg( vList, const char*);
+		if (pArg)
+			*this << pArg;
+	}
+	while (pArg != NULL);
+	va_end( vList);              /* Reset variable arguments.      */
+}
+
+/**
+ * Used probably by a handler to add a header block to the Serializer. 
+ */
+int SoapSerializer::AddHeaderBlock(IHeaderBlock* pBlk)
+{
+	if (m_pSoapEnvelope)
+	{
+		if(!m_pSoapEnvelope->m_pSoapHeader) m_pSoapEnvelope->m_pSoapHeader = new SoapHeader();
+	}
+	else /* error : by this time there should be an envelope */
+	{
+		return AXIS_FAIL;
+	}
+	m_pSoapEnvelope->m_pSoapHeader->addHeaderBlock((HeaderBlock*)pBlk);
+	return AXIS_SUCCESS;
+}
+
+int SoapSerializer::SetBodyAsHexBinary(xsd__hexBinary body)
+{
+	/*TODO*/
+	return AXIS_SUCCESS;
+}
+
+int SoapSerializer::SetBodyAsBase64Binary(xsd__base64Binary body)
+{
+	/*TODO*/	
+	return AXIS_SUCCESS;
+}
+
+const AxisChar* SoapSerializer::GetBodyAsString()
+{
+	/*TODO*/	
+	return NULL;
+}
+
+/**
+ * Callback function that should be called by the transport module to release a buffer passed to it by a Serializer. 
+ * @param 
+ *		buffer - Same buffer passed to transport by calling transport's AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES 
+ *				 callback
+ *		buffer - Same bufferid passed to transport by calling transport's AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES 
+ *				 callback
+ *		stream - Same stream object passed to transport by calling transport's AXIS_MODULE_CALLBACK_SEND_MESSAGE_BYTES 
+ *				 callback
+ */
+void axis_buffer_release(const char* buffer, const void* bufferid, const void* stream)
+{
+	int* pInt = (int*)bufferid;
+	*pInt = 0; /* set that the buffer is not in use */
+	char *pChar = const_cast<char*>(buffer);
+	pChar[0] = '\0'; /* set nul */ 
+}
+
+

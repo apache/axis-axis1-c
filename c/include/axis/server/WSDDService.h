@@ -82,7 +82,7 @@ public:
 	const list<AxisString> getAllowedMethods() const;
 	void SetServiceName(const AxisChar* sServiceName);
 	void SetProvider(const AxisChar* sProvider);
-	PROVIDERTYPE GetProvider();
+	PROVIDERTYPE GetProvider() const;
 	const AxisChar* GetServiceName() const;
 	bool IsAllowedMethod(const AxisChar* sMethodName) const;
 	void AddAllowedMethod(const AxisChar* sMethodName);

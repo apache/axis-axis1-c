@@ -142,35 +142,52 @@ public class ServiceHeaderWriter extends HeaderFileWriter{
 	protected void writeMethods() throws WrapperFault {
 		MethodInfo minfo;
 		boolean isSimpleType;
-		 try{
-		  writer.write("\tpublic: \n");	
-		  for(int i = 0; i < methods.size(); i++){
-			  minfo = (MethodInfo)this.methods.get(i);
-			  //write return type
-			  if(minfo.getReturnType()==null)
-				  writer.write("\t\tvoid ");
-			  else {
-			  	  String outparam = minfo.getReturnType().getLangName();
-				  writer.write("\t\t"+WrapperUtils.getClassNameFromParamInfoConsideringArrays(minfo.getReturnType(),wscontext));
-			  }
-			  writer.write(" "+minfo.getMethodname()+"(");
-            
-			  //write parameter names 
-			  Iterator params = minfo.getParameterTypes().iterator();
-			  if(params.hasNext()){
-			  	  ParameterInfo fparam = (ParameterInfo)params.next();
-				  writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
-			  }
-			  for(int j =1; params.hasNext();j++){
-				  ParameterInfo nparam = (ParameterInfo)params.next();
-				  writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
-			  }
-			  writer.write(");\n");
-		  }
-		}catch (Exception e) {
-			  e.printStackTrace();
-			  throw new WrapperFault(e);
-		}	}
+		try{
+		  	writer.write("\tpublic: \n");	
+		  	for(int i = 0; i < methods.size(); i++){
+			  	minfo = (MethodInfo)this.methods.get(i);
+				boolean isAllTreatedAsOutParams = false;
+				ParameterInfo returntype = null;
+				int noOfOutParams = minfo.getOutputParameterTypes().size();
+				if (0==noOfOutParams){
+					returntype = null;
+					writer.write("\t\tvoid ");
+				}
+				else if (1==noOfOutParams){
+					returntype = (ParameterInfo)minfo.getOutputParameterTypes().iterator().next();
+					String outparam = returntype.getLangName();
+					writer.write("\t\t"+WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype,wscontext)+" ");
+				}
+				else{
+					isAllTreatedAsOutParams = true;
+					writer.write("\t\tvoid ");
+				}
+			  	//write return type
+			  	writer.write(minfo.getMethodname()+"(");
+			  	//write parameter names 
+			  	Iterator params = minfo.getInputParameterTypes().iterator();
+			  	if(params.hasNext()){
+			  	  	ParameterInfo fparam = (ParameterInfo)params.next();
+				  	writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
+			  	}
+			  	for(int j =1; params.hasNext();j++){
+				  	ParameterInfo nparam = (ParameterInfo)params.next();
+				  	writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
+			  	}
+				if (isAllTreatedAsOutParams){
+					params = minfo.getOutputParameterTypes().iterator();
+					for(int j =0; params.hasNext();j++){
+						ParameterInfo nparam = (ParameterInfo)params.next();
+						writer.write(", AXIS_OUT_PARAM"+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" *OutValue"+j);
+					}
+				}			  	
+			  	writer.write(");\n");
+		  	}
+		}catch (Exception e){
+			e.printStackTrace();
+			throw new WrapperFault(e);
+		}	
+	}
 
 	/* (non-Javadoc)
 	 * @see org.apache.axis.wsdl.wsdl2ws.cpp.HeaderFileWriter#writePreprocssorStatements()
@@ -183,6 +200,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter{
 			writer.write("#include <axis/common/AxisUserAPI.h>\n\n");
 			while(types.hasNext()){
 				atype = (Type)types.next();
+				if (atype.getLanguageSpecificName().startsWith(">")) continue;				
 				typeSet.add(atype.getLanguageSpecificName());
 			}		
 			Iterator itr = typeSet.iterator();

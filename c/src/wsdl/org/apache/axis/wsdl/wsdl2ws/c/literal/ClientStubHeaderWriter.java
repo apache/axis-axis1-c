@@ -123,33 +123,44 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 	protected void writeMethods() throws WrapperFault {
 		MethodInfo minfo;
 		boolean isSimpleType;
-		 try{
-		  for(int i = 0; i < methods.size(); i++){
-			  minfo = (MethodInfo)this.methods.get(i);
-			  //write return type
-			  if(minfo.getReturnType()==null)
-				  writer.write("extern void ");
-			  else {
-			  	  String outparam = minfo.getReturnType().getLangName();
-				  isSimpleType = CUtils.isSimpleType(outparam);
-				  writer.write("extern "+WrapperUtils.getClassNameFromParamInfoConsideringArrays(minfo.getReturnType(),wscontext)+" ");
-			  }
-			  writer.write(minfo.getMethodname()+"(");
+		try{
+		  	for(int i = 0; i < methods.size(); i++){
+			  	minfo = (MethodInfo)this.methods.get(i);
+				boolean isAllTreatedAsOutParams = false;
+			  	int noOfOutParams = minfo.getOutputParameterTypes().size();
+			  	//write return type
+			  	if(0==noOfOutParams)
+				  	writer.write("extern void ");
+			  	else if(1==noOfOutParams){
+			  	  	ParameterInfo returnParam = (ParameterInfo)minfo.getOutputParameterTypes().iterator().next();
+			  	  	String outparam = returnParam.getLangName();
+					writer.write("extern "+WrapperUtils.getClassNameFromParamInfoConsideringArrays(returnParam,wscontext)+" ");
+			  	}
+			  	else{
+					isAllTreatedAsOutParams = true;
+					writer.write("extern void ");
+			  	}
+			  	writer.write(minfo.getMethodname()+"(");
             
-			  //write parameter names 
-			  Iterator params = minfo.getParameterTypes().iterator();
-			  if(params.hasNext()){
-			  	  ParameterInfo fparam = (ParameterInfo)params.next();
-				  isSimpleType = CUtils.isSimpleType(fparam.getLangName());
-				  writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
-			  }
-			  for(int j =1; params.hasNext();j++){
-				  ParameterInfo nparam = (ParameterInfo)params.next();
-				  isSimpleType = CUtils.isSimpleType(nparam.getLangName());
-				  writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
-			  }
-			  writer.write(");\n");
-		  }
+			  	//write parameter names 
+			  	Iterator params = minfo.getInputParameterTypes().iterator();
+			  	if(params.hasNext()){
+			  	  	ParameterInfo fparam = (ParameterInfo)params.next();
+				  	writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
+			  	}
+			  	for(int j =1; params.hasNext();j++){
+				  	ParameterInfo nparam = (ParameterInfo)params.next();
+				  	writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
+			  	}
+			  	if (isAllTreatedAsOutParams){
+					params = minfo.getOutputParameterTypes().iterator();
+					for(int j =0; params.hasNext();j++){
+						ParameterInfo nparam = (ParameterInfo)params.next();
+						writer.write(", AXIS_OUT_PARAM"+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" *OutValue"+j);
+					}
+			  	}
+			  	writer.write(");\n");
+		  	}
 		}catch (Exception e) {
 			  e.printStackTrace();
 			  throw new WrapperFault(e);
@@ -168,6 +179,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter{
 			HashSet typeSet = new HashSet();
 			while(types.hasNext()){
 				atype = (Type)types.next();
+				if (atype.getLanguageSpecificName().startsWith(">")) continue;
 				typeSet.add(atype.getLanguageSpecificName());
 			}
 			Iterator itr = typeSet.iterator();

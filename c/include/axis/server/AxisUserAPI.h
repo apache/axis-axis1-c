@@ -58,42 +58,73 @@
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  *
  */
-// AxisUserAPI.h: interface for the AxisUserAPI class.
-//
-//////////////////////////////////////////////////////////////////////
+/* AxisUserAPI.h: interface for the AxisUserAPI class.*/
 
 #if !defined(AFX_AXISUSERAPI_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_)
 #define AFX_AXISUSERAPI_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_
 
-typedef struct Axis_ArrayTag
-{
-	void* m_Array;
-	int m_Size;
-} Axis_Array;
+#include <time.h>
 
-typedef struct tm Axis_Time;
-typedef struct tm Axis_Date;
-typedef struct tm Axis_DateTime;
-typedef double Axis_Decimal;
-typedef int Axis_Boolean;
+#define AxisChar char
 
-#define AXIS_OUT_PARAM //nothing
+typedef AxisChar * xsd__string;
+typedef int xsd__integer;
+typedef int xsd__int;
+typedef long xsd__long;
+typedef short xsd__short;
+typedef double xsd__decimal;
+typedef float xsd__float;
+typedef double xsd__double;
+typedef enum { false_=0, true_ } xsd__boolean;
+typedef unsigned char xsd__byte;
+typedef AxisChar * xsd__QName;
+typedef struct tm xsd__dateTime;
+typedef unsigned char xsd__unsignedByte;
+typedef unsigned int xsd__unsignedInt;
+typedef unsigned long xsd__unsignedLong;
+typedef unsigned short xsd__unsignedShort;
+typedef struct {
+	xsd__unsignedByte * __ptr;
+    xsd__int __size;
+} xsd__base64Binary;
+typedef struct{
+	xsd__unsignedByte * __ptr;
+    xsd__int __size;
+} xsd__hexBinary;
+typedef AxisChar * xsd__anyURI;
 
-#ifdef __cplusplus
+typedef enum {
+	RPC_ENCODED, //default
+	DOC_LITERAL,
+	RPC_LITERAL
+} AXIS_BINDING_STYLE;
 
-#include <string>
-using namespace std;
+#define AXIS_DEFINED_ARRAY(type) \
+	struct {\
+		type * m_Array;\
+		int m_Size;\
+	}
 
-typedef string Axis_Base64Binary;
-typedef string Axis_HexBinary;
-typedef string Axis_AnyURI;
+typedef AXIS_DEFINED_ARRAY(void) Axis_Array;
+typedef AXIS_DEFINED_ARRAY(xsd__string) xsd__string_Array;
+typedef AXIS_DEFINED_ARRAY(xsd__integer) xsd__integer_Array;
+typedef AXIS_DEFINED_ARRAY(xsd__int) xsd__int_Array;
+typedef AXIS_DEFINED_ARRAY(xsd__long) xsd__long_Array;
+typedef AXIS_DEFINED_ARRAY(xsd__short) xsd__short_Array;
+typedef AXIS_DEFINED_ARRAY(xsd__decimal) xsd__decimal_Array;
+typedef AXIS_DEFINED_ARRAY(xsd__float) xsd__float_Array;
+typedef AXIS_DEFINED_ARRAY(xsd__double) xsd__double_Array;
+typedef AXIS_DEFINED_ARRAY(xsd__boolean) xsd__boolean_Array;
+typedef AXIS_DEFINED_ARRAY(xsd__QName) xsd__QName_Array;
+typedef AXIS_DEFINED_ARRAY(xsd__dateTime) xsd__dateTime_Array;
+typedef AXIS_DEFINED_ARRAY(xsd__unsignedByte) xsd__unsignedByte_Array;
+typedef AXIS_DEFINED_ARRAY(xsd__unsignedInt) xsd__unsignedInt_Array;
+typedef AXIS_DEFINED_ARRAY(xsd__unsignedLong) xsd__unsignedLong_Array;
+typedef AXIS_DEFINED_ARRAY(xsd__unsignedShort) xsd__unsignedShort_Array;
+typedef AXIS_DEFINED_ARRAY(xsd__base64Binary) xsd__base64Binary_Array;
+typedef AXIS_DEFINED_ARRAY(xsd__hexBinary) xsd__hexBinary_Array;
+typedef AXIS_DEFINED_ARRAY(xsd__anyURI) xsd__anyURI_Array;
+ 
+#define AXIS_OUT_PARAM 
 
-#else
-
-typedef char* Axis_Base64Binary;
-typedef char* Axis_HexBinary;
-typedef char* Axis_AnyURI;
-
-#endif
-
-#endif // !defined(AFX_AXISUSERAPI_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_)
+#endif /* !defined(AFX_AXISUSERAPI_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_) */

@@ -69,15 +69,11 @@
 #if !defined(AFX_SOAPSERIALIZER_H__C37229AD_BD54_430D_9619_E4574CF95334__INCLUDED_)
 #define AFX_SOAPSERIALIZER_H__C37229AD_BD54_430D_9619_E4574CF95334__INCLUDED_
 
-#include "../common/IWrapperSoapSerializer.h"
 #include "../common/IHandlerSoapSerializer.h"
 #include "../common/BasicTypeSerializer.h"
 #include "../common/AxisTime.h"
 #include "../common/Packet.h"
 #include "SoapEnvVersions.h"
-
-
-#define SERIALIZE_BUFFER_SIZE 8192
 
 class SoapEnvelope;
 class SoapHeader;
@@ -86,23 +82,50 @@ class SoapBody;
 class SoapFault;
 class HeaderBlock;
 
-class SoapSerializer : public IWrapperSoapSerializer, public IHandlerSoapSerializer /*: public ISoapSerializer*/
+#include <map>
+using namespace std;
+
+class SoapSerializer : public IHandlerSoapSerializer
 {
+	typedef struct
+	{
+		volatile unsigned char inuse;
+		volatile char* buffer;
+	} SerializeBuffers;
 private:
-	int iCounter;
-	AxisChar cCounter[64];
+	int m_nCounter;
+	AxisChar m_Buf[8];
 	SoapEnvelope* m_pSoapEnvelope;	
 	int m_iSoapVersion;
-	char m_cSerializedBuffer[SERIALIZE_BUFFER_SIZE];
-	int m_iCurrentSerBufferSize;
+	/* Current Serialization Style */
+	AXIS_BINDING_STYLE m_nStyle;
+	/* Table that keeps all allocated buffers */
+	volatile SerializeBuffers* m_pSZBuffers;
+	/* Size of the initial buffer created.*/
+	int m_nInitialBufferSize;
+	/* Size of the m_SZBuffers array.*/
+	int m_nMaxBuffersToCreate;
+	/* Maximum size of the buffer that is being filled */
+	int m_nCurrentBufferSize;
+	/* How much charators has been filled to the currently selected buffer */
+	int m_nFilledSize;
+	/* Currently selected buffer index*/
+	int m_nCurrentBufferIndex;
+	/* Overall status of Serializer. If anything goes wrong this is not AXIS_SUCCESS */
+	int m_nStatus;
+	/* Map that contains pairs of currently available namespaces and prefixes */ 
+	map<AxisXMLString, AxisXMLString> m_NsStack;
+
 public:
-	int createSoapMethod(const AxisChar* sLocalName, const AxisChar* sPrefix, const AxisChar* sURI);	
+	int AXISCALL CreateSoapMethod(const AxisChar* sLocalName, const AxisChar* sURI);	
 //	IWrapperSoapSerializer& operator<<(const char* cSerialized);
 	IWrapperSoapSerializer& operator<<(const AxisChar* cSerialized);
-	const AxisChar* getNewNamespacePrefix();
+	const AxisChar* AXISCALL GetNamespacePrefix(const AxisChar* pNamespace);
+	void AXISCALL RemoveNamespacePrefix(const AxisChar* pNamespace);
 	int setSoapVersion(SOAP_VERSION);
 	int Init();
 	int SetOutputStream(const Ax_soapstream* pStream);
+	void MarkEndOfStream();
 	int setSoapFault(SoapFault* pSoapFault);
 	int setSoapMethod(SoapMethod* pSoapMethod);
 	int setSoapBody(SoapBody* pSoapBody);
@@ -110,32 +133,18 @@ public:
 	int setSoapEnvelope(SoapEnvelope* pSoapEnvelope);
 	SoapSerializer();
 	virtual ~SoapSerializer();
-	//for basic types
-	int AddOutputParam(const AxisChar* pchName, int nValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, unsigned int unValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, short sValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, unsigned short usValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, long lValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, unsigned long ulValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, char cValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, unsigned char ucValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, float fValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, double dValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, struct tm tValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, const AxisChar* pStrValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, const string& sStrValue, XSDTYPE type);
 	//for arrays of basic types
-	int AddOutputParam(const AxisChar* pchName, const Axis_Array* pArray, XSDTYPE nType);
+	int AXISCALL AddOutputBasicArrayParam(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName);
 	//for arrays of complex types
-	int AddOutputParam(const AxisChar* pchName, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI);
+	int AXISCALL AddOutputCmplxArrayParam(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace);
 	//for complex types
-	int AddOutputParam(const AxisChar* pchName, void* pObject, void* pDZFunct, void* pDelFunct);
-	int SerializeArray(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI, const AxisChar* pchArrayName);
-	int SerializeArray(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pchArrayName);
+	int AXISCALL AddOutputCmplxParam(void* pObject, void* pSZFunct, void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	int AXISCALL SerializeCmplxArray(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pName, const AxisChar* pNamespace);
+	int AXISCALL SerializeBasicArray(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName);
 
 private:
-	int AddOutputParamHelper(const AxisChar* pchName, XSDTYPE nType, uParamValue Value);
-	int flushSerializedBuffer();
+	int SendSerializedBuffer();
+	int SetNextSerilizeBuffer();
 	IArrayBean* makeArrayBean(XSDTYPE nType, void* pArray);
 	IArrayBean* makeArrayBean(void* pObject, void* pSZFunct, void* pDelFunct, void* pSizeFunct);
 
@@ -143,24 +152,22 @@ public: //Basic Type Serializing methods
 	int removeSoapHeader();
 	int setHeaderBlock(HeaderBlock* pHeaderBlock);
 	IHeaderBlock* createHeaderBlock();
-
-	const AxisChar* SerializeBasicType(const AxisChar* sName, const AxisChar* sValue, XSDTYPE type);
-	const AxisChar* SerializeBasicType(const AxisChar* sName, const string sValue, XSDTYPE type);
-	const AxisChar* SerializeBasicType(const AxisChar* sName, int nValue, XSDTYPE type);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, struct tm tValue, XSDTYPE type);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned int unValue, XSDTYPE type);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, short sValue, XSDTYPE type);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned short usValue, XSDTYPE type);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, char cValue, XSDTYPE type);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned char ucValue, XSDTYPE type);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, long lValue, XSDTYPE type);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned long ulValue, XSDTYPE type);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, float fValue, XSDTYPE type);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, double dValue, XSDTYPE type);
     
 private:
 	BasicTypeSerializer m_BTSZ;
 	const Ax_soapstream* m_pOutputStream;
+public:
+	/* to add a header block to the Serializer. Probably by a handler */
+	int AXISCALL AddHeaderBlock(IHeaderBlock* pBlk);
+	int AXISCALL AddOutputParam(const AxisChar* pchName, void* pValue, XSDTYPE type);
+	int AXISCALL SerializeAsElement(const AxisChar* pchName, void* pValue, XSDTYPE type);
+	int AXISCALL SerializeAsAttribute(const AxisChar* pName, const AxisChar* pNamespace, void* pValue, XSDTYPE type);
+	void AXISCALL Serialize(const char* pFirst, ...);
+	void SetStyle(AXIS_BINDING_STYLE nStyle){ m_nStyle = nStyle; m_BTSZ.SetStyle(nStyle);};
+	AXIS_BINDING_STYLE GetStyle(){return m_nStyle;};
+	int AXISCALL SetBodyAsHexBinary(xsd__hexBinary body);
+	int AXISCALL SetBodyAsBase64Binary(xsd__base64Binary body);
+	const AxisChar* AXISCALL GetBodyAsString();
 };
 
 #endif // !defined(AFX_SOAPSERIALIZER_H__C37229AD_BD54_430D_9619_E4574CF95334__INCLUDED_)

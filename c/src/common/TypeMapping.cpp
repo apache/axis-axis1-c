@@ -102,11 +102,19 @@ void TypeMapping::Initialize()
         m_sTypeMap[__TRC("double")] = XSD_DOUBLE;
         m_sTypeMap[__TRC("decimal")] = XSD_DECIMAL;
 		m_sTypeMap[__TRC("string")] = XSD_STRING;
+		m_sTypeMap[__TRC("base64Binary")] = XSD_BASE64BINARY;
+		m_sTypeMap[__TRC("hexBinary")] = XSD_HEXBINARY;
+		m_sTypeMap[__TRC("anyURI")] = XSD_ANYURI;
+		m_sTypeMap[__TRC("QName")] = XSD_QNAME;
         m_sTypeMap[__TRC("duration")] = XSD_DURATION;
         m_sTypeMap[__TRC("dateTime")] = XSD_DATETIME;
         m_sTypeMap[__TRC("date")] = XSD_DATE;
         m_sTypeMap[__TRC("time")] = XSD_TIME;
-        
+        m_sTypeMap[__TRC("gYearMonth")] = XSD_YEARMONTH;
+        m_sTypeMap[__TRC("gYear")] = XSD_YEAR;
+        m_sTypeMap[__TRC("gMonthDay")] = XSD_MONTHDAY;
+        m_sTypeMap[__TRC("gDay")] = XSD_DAY;
+        m_sTypeMap[__TRC("gMonth")] = XSD_MONTH;    
 		m_bInit = true;
 	}
 }

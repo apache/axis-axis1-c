@@ -112,7 +112,7 @@ int SoapHeader::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 
 	do {
 		
-		pSZ << "<" << gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix << ":" << gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_HEADER];
+		pSZ.Serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_HEADER], NULL);
 
 		iStatus= serializeNamespaceDecl(pSZ);
 		iStatus= serializeAttributes(pSZ);
@@ -121,7 +121,7 @@ int SoapHeader::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 			break;
 		}
 		
-		pSZ<< ">";
+		pSZ.Serialize(">", NULL);
 
 		list<HeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
 
@@ -137,7 +137,7 @@ int SoapHeader::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 			break;
 		}
 		
-		pSZ<< "</" << gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix << ":" << gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_HEADER] << ">";
+		pSZ.Serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_HEADER], ">", NULL);
 		
 	} while(0);
 
