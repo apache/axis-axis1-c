@@ -234,3 +234,32 @@ int WSClass::GenerateClassImpl(File &file)
 	}
 	return 0; //success}
 }
+
+int WSClass::GenerateWSDLMessages(File &file)
+{
+	for (list<Method*>::iterator it = m_Methods.begin(); it != m_Methods.end(); it++)
+	{
+		if ((*it)->GenerateWSDLMessages(file)) return 1; //error occured;
+	}
+	return 0; //success;
+}
+
+int WSClass::GenerateWSDLPortTypes(File &file, string& sServiceName)
+{
+	file << "<portType name=\"" << sServiceName << "PortType\">" << endl;
+	for (list<Method*>::iterator it = m_Methods.begin(); it != m_Methods.end(); it++)
+	{
+		if ((*it)->GenerateWSDLOperationInPortType(file)) return 1; //error occured;
+	}
+	file << "</portType>" << endl;
+	return 0; //success;
+}
+
+
+int WSClass::GenerateOperationsInBinding(File &file, string &sServiceName, int nBinding, int nStyle, string &sURI)
+{
+	for (list<Method*>::iterator it = m_Methods.begin(); it != m_Methods.end(); it++)
+	{
+		if ((*it)->GenerateOperationInBinding(file, sServiceName, nBinding, nStyle, sURI)) return 1; //error occured;
+	}
+}

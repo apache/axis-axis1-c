@@ -39,8 +39,13 @@ bool got_all_options();
 bool is_parameters_valid();
 bool is_webservice_header_compilable();
 
-const char* VCCOMPILECOMMAND = "cl *.cpp /c /ML /W3 /GX /O2 /D \"WIN32\" ";
-const char* VCLINKERCOMMAND = "link *.obj /dll /pdb:none /machine:I386 ";
+#ifdef WIN32
+const char* COMPILECOMMAND = "cl *.cpp /c /ML /W3 /GX /O2 /D \"WIN32\" ";
+const char* LINKERCOMMAND = "link *.obj /dll /pdb:none ";
+#else
+const char* COMPILECOMMAND = "gcc *.cpp -c -Wall -Wshadow -fPIC -O2";
+const char* LINKERCOMMAND = "gcc -lstdc++ -shared -Wl,-soname,";
+#endif
 
 #ifdef WIN32
 #define OPTIONTAG '/'
@@ -159,10 +164,20 @@ int main(int argc, char* argv[])
 		exit(0);
 	}
 	cout << "Done" << endl;
+
+	cout << "Generating WSDL file for the service ...";
+	string sURI = "www.opensource.lk"; //this should be taken from the WSDD file
+	if (g_pTranslationUnit->GenerateWSDL(g_sServiceFile,sURI))
+	{
+		cout << "Failed" << endl;
+		exit(0);
+	}
+	cout << "Done" << endl;
+
 	string command;
 	list<string>::iterator sit;
 
-	command = VCCOMPILECOMMAND;
+	command = COMPILECOMMAND;
 	for (sit = g_sAxisIncludePaths.begin(); sit != g_sAxisIncludePaths.end(); sit++)
 	{
 		command += "-I" + (*sit) + " ";
@@ -176,12 +191,20 @@ int main(int argc, char* argv[])
 	}
 	cout << "Done" << endl;
 	
-	command = VCLINKERCOMMAND;
+	command = LINKERCOMMAND;
+#ifdef WIN32
+	command += "/out:\"" + g_sServiceFile + ".dll\" ";
+#else
+	command += g_sServiceFile + ".so -o " + g_sServiceFile + ".so *.o ";
+#endif
 	for (sit = g_sLibraryPaths.begin(); sit != g_sLibraryPaths.end(); sit++)
 	{
+#ifdef WIN32
 		command += "/libpath:\"" + (*sit) + "\" ";
+#else
+		command += "-L " + (*sit) + " ";
+#endif
 	}
-	command += "/out:\"" + g_sServiceFile + ".dll\" ";
 	for (sit = g_sCompiledLibs.begin(); sit != g_sCompiledLibs.end(); sit++)
 	{
 		command += (*sit) + " ";
@@ -196,7 +219,11 @@ int main(int argc, char* argv[])
 
 	cout << "Deleting temporary files ...";
 	command = DELETECOMMAND;
+#ifdef WIN32
 	command += "*.obj *.exp *.lib ";
+#else
+	command += "*.o *.a ";
+#endif
 	if (!bDontDeleteSourceFiles)
 	{
 		command += "*.cpp *.hpp";
@@ -227,15 +254,21 @@ int parse_header_file(const char *filename)
 
 void usage()
 {
-	cout << "Generates the depoyable web services for Axis C++" << endl;
+	cout << "Generates the depoyable web services for Axis C++ using webservice's header file(s) and the static libraries" << endl;
 	cout << "Usage: wcg " << endl;
 //	cout << "\t/c<Compiler to use>" << endl;
-	cout << "\t/I<path to axis include directory>" << endl;
-	cout << "\t/L<path to web service library directory" << endl;
-	cout << "\t/l<web service library file>" << endl;
-	cout << "\t/o<output file>" << endl;
+	cout << "\t" << OPTIONTAG << "I<path to axis include directory>" << endl;
+	cout << "\t" << OPTIONTAG << "L<path to web service static library directory" << endl;
+	cout << "\t" << OPTIONTAG << "l<web service static library file>" << endl;
+	cout << "\t" << OPTIONTAG << "D<do not delete intermediate source files>" << endl;
+	cout << "\t" << OPTIONTAG << "o<output file (service name)>" << endl;
 	cout << "\t<web service header file>" << endl;
 	cout << endl;
+#ifdef WIN32
+	cout << "Make sure you have setup environment for Visual C++ compiler and linker" << endl; 
+#else
+	cout << "Make sure you have setup environment for GNU compiler gcc" << endl; 	
+#endif
 	cout << "Axis Wrapper Class Generator (www.opensource.lk)" << endl;
 	exit(0);
 }
@@ -268,7 +301,12 @@ bool is_webservice_header_compilable()
 	file << "class Opensource { public: int axis;};" << endl;
 	file.close();
 
-	string command = "cl /c /w ";
+	string command="";
+#ifdef WIN32
+	command = "cl /c /w ";
+#else
+	command = "gcc -c "
+#endif
 
 	for (list<string>::iterator sit = g_sAxisIncludePaths.begin(); sit != g_sAxisIncludePaths.end(); sit++)
 	{
@@ -276,6 +314,7 @@ bool is_webservice_header_compilable()
 	}	
 
 	command += filename + ".cpp";
+	cout << "Command :" << command << endl;
 	if (system(command.c_str()) == COMPLILER_FAILED)
 	{
 		command = DELETECOMMAND;
