@@ -221,17 +221,17 @@ IHeaderBlock* SoapHeader::getHeaderBlock(const AxisChar *pName, const AxisChar *
 	while (itCurrHeaderBlock != m_headerBlocks.end()) {			
 		tmpHeaderBlock = (*itCurrHeaderBlock);
 
-		if ((strcmp((tmpHeaderBlock->m_localname).c_str(), pName) == 0) && 
-				(strcmp((tmpHeaderBlock->m_uri).c_str(), pNamespace) == 0)) {
+		if ((strcmp(((tmpHeaderBlock)->m_localname).c_str(), pName) == 0) && 
+				(strcmp(((tmpHeaderBlock)->m_uri).c_str(), pNamespace) == 0)) {
 			blnFoundStatus = true;
 			m_headerBlocks.remove(tmpHeaderBlock);
 			break;
+		} else {
+			itCurrHeaderBlock++;
 		}
-
-		itCurrHeaderBlock++;
 	}
 
-	if (blnFoundStatus) {
+	if (blnFoundStatus == true) {
 		return tmpHeaderBlock;
 	} else {
 		return NULL;

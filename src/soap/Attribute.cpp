@@ -144,6 +144,9 @@ int Attribute::serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceSt
 	if (isSerializable()) {		
 		pSZ.Serialize(" ", NULL);
 
+		/*
+		 *Following code figures out the prefix to be serialized and serialize it.
+		 */
 		if(!m_prefix.empty()) {			
 			pSZ.Serialize(m_prefix.c_str(), ":", NULL);
 		} else if (!m_uri.empty()) {
@@ -164,29 +167,6 @@ int Attribute::serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceSt
 	return intStatus;	
 }
 
-/*
-commented on 10Jul2003 3.30 pm
-int Attribute::serialize(string& sSerialized)
-{	
-	int intStatus= AXIS_FAIL;
-
-	if (isSerializable()) {
-		sSerialized+= " ";
-
-		if(!m_prefix.empty()) {
-			sSerialized= sSerialized+ m_prefix+ ":";
-		}
-
-		sSerialized= sSerialized + m_localname +
-			"=\""+ m_value+ "\"";
-
-		intStatus= AXIS_SUCCESS;
-	}
-
-	return intStatus;	
-}
-*/
-
 bool Attribute::isSerializable() const
 {
 	bool bStatus= true;
@@ -198,7 +178,6 @@ bool Attribute::isSerializable() const
 	return bStatus;
 }
 
-#ifdef UNIT_TESTING_BUILD
 int Attribute::initializeForTesting()
 {
 	m_prefix = "pr";
@@ -208,5 +187,11 @@ int Attribute::initializeForTesting()
 
 	return AXIS_SUCCESS;
 }
-#endif
 
+
+Attribute::Attribute(const AxisChar *localname, const AxisChar *prefix, const AxisChar *value)
+{
+	m_localname= localname;
+	m_prefix= prefix;
+	m_value= value;
+}

@@ -72,7 +72,7 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-string MessageData::m_sBlankPropertyValue="";
+const AxisChar* MessageData::m_pachBlankPropertyValue = "";
 extern WSDDDeployment* g_pWSDDDeployment;
 IMessageDataFunctions IMessageData::ms_VFtable;
 
@@ -85,7 +85,16 @@ MessageData::MessageData()
 
 MessageData::~MessageData()
 {
-	//nothing to do
+	map <AxisChar*, AxisChar*, ltstr>::iterator itCurrentItem= m_Properties.begin();
+
+	while (itCurrentItem != m_Properties.end()) {
+		free((*itCurrentItem).first);
+		free((*itCurrentItem).second);
+
+		itCurrentItem++;
+	}
+
+	m_Properties.clear();
 }
 
 void MessageData::SetSerializer(SoapSerializer *pSZ)
@@ -164,9 +173,15 @@ void MessageData::getSoapDeSerializer(IHandlerSoapDeSerializer **pIHandlerSoapDe
 	*pIHandlerSoapDeSerializer= static_cast<IHandlerSoapDeSerializer*>(m_pDZ);
 }
 
-int MessageData::setProperty(string &sName, string &sValue)
+int MessageData::setProperty(AxisChar* pachName, const AxisChar* pachValue)
 {
-	m_Properties[sName.c_str()]= sValue;
+	AxisChar* pachTmpName = (AxisChar*) malloc(strlen(pachName)+1);
+	strcpy(pachTmpName, pachName);
+	AxisChar* pachTmpValue = (AxisChar*) malloc(strlen(pachValue)+1);
+	strcpy(pachTmpValue, pachValue);
+
+	m_Properties[pachTmpName]= pachTmpValue;
+
 	return AXIS_SUCCESS;
 }
 
@@ -175,16 +190,14 @@ int MessageData::setProperty(string &sName, string &sValue)
  * not. If it is empty then the idea is that the property is not 
  * available.
  */
-string& MessageData::getProperty(string &sName)
-{
-	
-	if (m_Properties.find(sName) != m_Properties.end())
+const AxisChar* MessageData::getProperty(AxisChar* pachName)
+{	
+	if (m_Properties.find(pachName) != m_Properties.end())
 	{
-		return m_Properties[sName];
+		return m_Properties[pachName];
 	}
 	
-
-	return m_sBlankPropertyValue;
+	return m_pachBlankPropertyValue;
 }
 
 void MessageData::getWSDDDeployment(IDeployerUtils **pIDeployerUtils)
