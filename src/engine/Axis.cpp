@@ -68,8 +68,11 @@
 #include <unistd.h>
 #endif
 
-
+#ifdef AXIS_CLIENT_LIB
+#include <axis/client/Call.h>
+#else
 #include "ServerAxisEngine.h"
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
@@ -93,8 +96,6 @@
 #include "../wsdd/WSDDKeywords.h"
 #include <axis/server/AxisTrace.h>
 
-#include <axis/client/Call.h>
-
 #define BYTESTOREAD 64
 //the relative location of the wsdl files hardcoded
 #define WSDLDIRECTORY "/wsdls/"
@@ -117,6 +118,8 @@ WSDDDeployment* g_pWSDDDeployment;
 AxisConfig* g_pConfig;
 AxisTrace* g_pAT;
 
+
+#ifdef AXIS_CLIENT_LIB
 
 extern "C" int process_request(Ax_soapstream *stream)
 {
@@ -235,6 +238,8 @@ extern "C" int process_request(Ax_soapstream *stream)
         
 	return Status;
 }
+
+#endif
 
 extern "C" int initialize_module(int bServer)
 {
