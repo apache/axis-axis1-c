@@ -22,6 +22,11 @@
 
 /* SoapDeSerializer.cpp: implementation of the SoapDeSerializer class. */
 
+/*
+ * Revision 1.1  2004/06/10 roshan
+ * Fixed the bug AXISCPP-95 at JIRA.
+ */
+
 #include <axis/server/SoapDeSerializer.h>
 #include "SoapEnvelope.h"
 #include "SoapKeywordMapping.h"
@@ -1316,9 +1321,9 @@ xsd__boolean SoapDeSerializer::getElementAsBoolean(const AxisChar* pName,
             if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
             {
                 /* Some web services server returns 1 */
-                ret = (0 == strcmp(m_pNode->m_pchNameOrValue, "true") || 
-                    0 != strcmp(m_pNode->m_pchNameOrValue, "0" )) 
-                    ? true_: false_;
+                ret = (0 == strcmp(m_pNode->m_pchNameOrValue, "false") || 
+                    0 == strcmp(m_pNode->m_pchNameOrValue, "0" )) 
+                    ? false_: true_;
                 m_pNode = m_pParser->next(); /* skip end element node too */
                 m_pNode = NULL;
                 /* this is important in doc/lit style when deserializing 
