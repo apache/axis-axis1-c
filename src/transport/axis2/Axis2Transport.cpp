@@ -1232,3 +1232,12 @@ void Axis2Transport::setMaintainSession(bool bSession)
     m_bMaintainSession = bSession;
 }
 
+void Axis2Transport::setSessionId (const char *pcSessionId)
+{
+    m_strSessionKey = std::string(pcSessionId);
+}
+
+const char* Axis2Transport::getSessionId ()
+{
+	return m_strSessionKey.c_str();
+};

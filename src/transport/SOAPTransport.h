@@ -164,17 +164,7 @@ public:
      * @example AxisTransport.h
      */
     virtual void closeConnection()=0;
-    /**
-     * Registers the callback function which is used by transport layer to
-     * inform the caller that a buffer given to be sent was sent and it can
-     * be re-used by the caller.
-     *
-     * @brief Registers the m_pReleaseBufferCallback callback function.
-     * @param pFunct Function pointer to caller's function signature of
-     *        this function is defined in Packet.h
-     */
-    virtual void registerReleaseBufferCallback(
-    AXIS_ENGINE_CALLBACK_RELEASE_SEND_BUFFER pFunct)=0;
+    
     /**
      * Sets a predefined transport property to be included in the outgoing
      * message. This transport property is not persistent in the transport

@@ -49,11 +49,7 @@ class Axis2Transport:public SOAPTransport
     int openConnection ();
     void closeConnection ();
     AXIS_TRANSPORT_STATUS sendBytes (const char *, const void *);
-    void registerReleaseBufferCallback
-	(AXIS_ENGINE_CALLBACK_RELEASE_SEND_BUFFER pFunct)
-    {
-	m_pReleaseBufferCallback = pFunct;
-    };
+    
     AXIS_TRANSPORT_STATUS getBytes (char *, int *) throw (AxisException,
 							  AxisTransportException);
     void setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE,
@@ -64,20 +60,14 @@ class Axis2Transport:public SOAPTransport
 			       const char *) throw (AxisTransportException);
     const char *getTransportProperty (const char *pcKey)
 	throw (AxisTransportException);
-    void setAttachment (const char *pcAttachmentId, const char *pcAttachment)
-    {
-    };
-    const char *getAttachment (const char *pcAttachmentId)
-    {
-	return "value";
-    };
-    void setSessionId (const char *pcSessionId)
-    {
-    };
-    const char *getSessionId ()
-    {
-	return "some session id";
-    };
+    void setAttachment (const char *pcAttachmentId, const char *pcAttachment) {};
+    
+    const char *getAttachment (const char *pcAttachmentId) {};
+    
+    void setSessionId (const char *pcSessionId);
+    
+    const char *getSessionId ();
+    
     const char *getServiceName ();
     AXIS_PROTOCOL_TYPE getProtocol ();
     int setProtocol(AXIS_PROTOCOL_TYPE eProtocol);

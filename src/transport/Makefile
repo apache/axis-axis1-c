@@ -99,7 +99,7 @@ LDFLAGS = -lstdc++
 LIBOBJS = 
 LIBS = 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
-LIBWWWBUILD = 
+LIBWWWBUILD = libwww
 LINKCLIENTLIB = -L/home/samisa/autoCVS/cvsAutoBuild/src/engine/client -laxiscpp_client -ldl
 LN_S = ln -s
 LTLIBOBJS = 
@@ -118,6 +118,7 @@ SET_MAKE =
 SHELL = /bin/sh
 STRIP = strip
 TESTCASESBUILD = tests
+TSPPBUILD = tspp
 VERSION = 1-3-beta-linux
 XERCESCBUILD = xerces
 XERCESCINC = -I/home/samisa/cpp/xerces-c-src2_2_0/include
@@ -163,7 +164,7 @@ sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 sysconfdir = ${prefix}/etc
 target_alias = 
-SUBDIRS = axis2 
+SUBDIRS = axis2 libwww
 all: all-recursive
 
 .SUFFIXES:
