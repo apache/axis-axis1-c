@@ -94,6 +94,7 @@ public class InputParameterInfo implements Serializable {
     public void serialize(SerializationContext sc) throws IOException {
         ParamWriter.tagWritten = true;
         sc.writeString("<" + parameterName + ">\n");
+		org.apache.axismora.wsdl2ws.java.ParmWriter.tagWritten = true;
         outparam.serialize(sc);
         sc.writeString("\n</" + parameterName + ">\n");
         ParamWriter.tagWritten = true;
