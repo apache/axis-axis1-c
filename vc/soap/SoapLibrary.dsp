@@ -222,6 +222,10 @@ SOURCE=..\..\include\axis\server\BasicNode.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\axis\BasicNode.hpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\soap\CharacterElement.h
 # End Source File
 # Begin Source File
@@ -239,10 +243,6 @@ SOURCE=..\..\src\soap\HexCoder.h
 # Begin Source File
 
 SOURCE=..\..\src\xml\xerces\SoapBinInputStream.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\soap\SoapBody.h
 # End Source File
 # Begin Source File
 
