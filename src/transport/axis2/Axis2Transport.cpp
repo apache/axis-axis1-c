@@ -174,8 +174,11 @@ AXIS_TRANSPORT_STATUS Axis2Transport::getBytes( char* pcBuffer, int* pSize )
             {
                 do
                 {
-                    if (m_strReceived.find ("\r\n\r\n") == std::string::npos)
-                        m_Channel >> m_strReceived;    // Assume non blocking here
+                    if (m_strReceived.find ("\r\n\r\n") == std::string::npos) {
+                        std::string strTempReceived = "";
+                        m_Channel >> strTempReceived;    // Assume non blocking here
+                        m_strReceived += strTempReceived;
+                    }
                 }
                 while (m_strReceived.find ("\r\n\r\n") == std::string::npos);
                 //now we have found the end of headers
