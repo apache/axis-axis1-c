@@ -94,9 +94,11 @@ public:
 	SoapSerializer* m_pSZ;
 	SoapDeSerializer* m_pDZ;
 public:
+	void getSoapDeSerializer(IHandlerSoapDeSerializer** pIHandlerSoapDeSerializer);
+	void getSoapDeSerializer(IWrapperSoapDeSerializer** pIWrapperSoapDeSerializer);
 	void getSoapSerializer(IHandlerSoapSerializer** pIHandlerSoapSerializer);
 	void getSoapSerializer(IWrapperSoapSerializer** pIWrapperSoapSerializer);	
-	ISoapDeSerializer* getSoapDeserializer();
+	IWrapperSoapDeSerializer* getSoapDeserializer();
 	/*
 	comm on 25Jul2003 at 10.00am
 	ISoapSerializer* getSoapSerializer();
