@@ -6,7 +6,10 @@
 #   arg 2 : language (c/c++)
 
 mkdir -p $OUTPUT_DIR
-
+SERVICE_HOST=$(echo $(basename $1 .wsdl):host=)
+SERVICE_PORT=$(echo $(basename $1 .wsdl):port=)
+echo $SERVICE_HOST > service_host
+echo $SERVICE_PORT > service_port
 URI=
 # If a config file exists then alter the endpoint to use the config data
 if [ -f "$SERVICE_CONFIG" ]
@@ -15,8 +18,10 @@ then
   # point to a different server and/or port
   URI=$(grep -F soap:address $1 | cut -d\" -f2)
   CONTEXT=$(echo $URI | cut -d\" -f2 | cut -d/ -f4-)
-  URI_HOST=$(grep -E "^host=" $SERVICE_CONFIG | cut -d= -f2)
-  URI_PORT=$(grep -E "^port=" $SERVICE_CONFIG | cut -d= -f2)
+  URI_HOST=$(grep -f "service_host" $SERVICE_CONFIG | cut -d= -f2)
+  URI_PORT=$(grep -f "service_port" $SERVICE_CONFIG | cut -d= -f2)
+  #URI_HOST=$(grep -E "^host=" $SERVICE_CONFIG | cut -d= -f2)
+  #URI_PORT=$(grep -E "^port=" $SERVICE_CONFIG | cut -d= -f2)
   if [ -n "$URI_HOST" -a -n "$URI_PORT" ]
   then
     #echo "WSDL URI = $URI"

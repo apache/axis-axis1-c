@@ -111,13 +111,6 @@ fi
 echo "running the tests"
 sh ./runAllTests.sh
 
-echo "running the uddi_inquire test"
-sed -e 's/localhost/www-3.ibm.com/g' -e 's/9090/80/g' testcases/platform/linux/test.config > ./test.config
-cp -f test.config testcases/platform/linux
-sh runTest.sh testcases/wsdls/inquire_v2.wsdl c++
-sed 's/www-3.ibm.com/localhost/g' testcases/platform/linux/test.config > ./test.config
-cp -f test.config testcases/platform/linux
-
 # *** Deploy with Apache 1 ***
 
 echo "Start deploy with apache1 using expat parser library"
@@ -140,13 +133,5 @@ fi
 echo "running the tests"
 sh runAllTests.sh
 
-echo "running the uddi_inquire test"
-sed -e 's/localhost/www-3.ibm.com/g' -e 's/9090/80/g' testcases/platform/linux/test.config > ./test.config
-cp -f test.config testcases/platform/linux
-sh runTest.sh testcases/wsdls/inquire_v2.wsdl c++
-sed 's/www-3.ibm.com/localhost/g' testcases/platform/linux/test.config > ./test.config
-cp -f test.config testcases/platform/linux
-
-#done
 
 

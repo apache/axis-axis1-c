@@ -78,15 +78,6 @@ Example of using the test framework
 Linux
 -----
 
-Snippet from a script
------------------------
-  runTest.sh testcases/wsdls/MathOps.wsdl c++
------------------------
-
-  Should result in:
-   "Regression test on wsdls/MathOps.wsdl for c++ success"
-
-
 When you want to add a new test please be aware of the following simple steps.
 
 1. Write the cpp file containing your main method of access and put
@@ -98,26 +89,25 @@ When you want to add a new test please be aware of the following simple steps.
 2. Put the wsdl you hope to test in
    testcases/wsdls
 
-3. Give the server and port running the webservice in 
-   testcases/platform/linux/test.config file
+3. Add the server and port running the webservice in 
+   testcases/platform/linux/test.config file. The format is
+   <wsdl file name (without .wsdl part)>:host=<your host>
+   <wsdl file name (without .wsdl part)>:port=<your port>
 
-4. Add the following entry into the testcases/runAllTests.sh
-
-   runTestCase.sh wsdls/<your-wsdl-name.wsdl c++
-   [[ $? -eq 0 ]] && passed=$(($passed + 1))
-
-5. cd to testcases and run runAllTests.sh
+4. cd to auto_build and run autoBuildCVS.sh
+   This will first checkout from cvs and then build the source.
+   Then generate samples from each wsdl.
    You will have a new folder creaed in testcases/build folder with the 
    same name as the client cpp file name.
    First time you should get run FAIL message. That's because you still
    does not have a .out file indicating your expected result. We will
    create this in the next step
 
-7. in testcases/build/<automaticall creaed your client folder> you will
+5. in testcases/build/<automaticall creaed your client folder> you will
    see a file named <Your client file name>.cpp.out
    Copy this file into testcases/output
 
-8. run runAllTests.sh again. This time you should get your test passed
-   with SUCCESS.
+6. Next time you should get your test passed
+   with SUCCESS.
    This time the build/<Your client file name>.cpp.out matchs correctly
    with the pre created output in testcases/output
