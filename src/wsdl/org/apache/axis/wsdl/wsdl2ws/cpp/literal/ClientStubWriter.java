@@ -481,7 +481,7 @@ public class ClientStubWriter extends CPPClassWriter{
 					}
 				}
 				else if(typeissimple){
-				   writer.write("\t\t\t" + currentParamName + " = m_pCall->"+ CUtils.getParameterGetValueMethodName(currentParaType, false)+"(\""+currentType.getElementName().getLocalPart()+"\", 0);\n");
+				   writer.write("\t\t\t" + currentParamName + " = m_pCall->"+ CUtils.getParameterGetValueMethodName(currentParaType, false)+"(\""+currentType.getParamName()+"\", 0);\n");
 				}else if (currentType.isAnyType()){
 					//for anyTtype 
 					writer.write("\t\t\t" + currentParamName + " = ("+currentParaType+"*)m_pCall->getAnyObject();\n");
@@ -517,7 +517,7 @@ public class ClientStubWriter extends CPPClassWriter{
 			writer.write("\treturn RetArray;\n");
 		}
 		else if(returntypeissimple){
-			writer.write("\t\t\tRet = m_pCall->"+ CUtils.getParameterGetValueMethodName(outparamType, false)+"(\""+returntype.getElementName().getLocalPart()+"\", 0);\n\t\t}\n");
+			writer.write("\t\t\tRet = m_pCall->"+ CUtils.getParameterGetValueMethodName(outparamType, false)+"(\""+returntype.getParamName()+"\", 0);\n\t\t}\n");
 			writer.write("\t}\n\tm_pCall->unInitialize();\n");
 			writer.write("\treturn Ret;\n");
 		}else if (returntype.isAnyType()){
