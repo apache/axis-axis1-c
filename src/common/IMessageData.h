@@ -67,7 +67,7 @@
 #if !defined(AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_)
 #define AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_
 
-#include "ISoapDeserializer.h"
+#include "ISoapDeSerializer.h"
 #include "ISoapSerializer.h"
 
 class IMessageData
