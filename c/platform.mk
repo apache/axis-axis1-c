@@ -112,7 +112,7 @@ AX_LIB_APACHE=$(AX_LIB_DIR)/apache.a
 AX_LIB_SECURITY=$(AX_LIB_DIR)/security.a
 AX_LIB_HANDLERS=$(AX_LIB_DIR)/handlers.a
 AX_SO_ENGINE=$(AX_DIR_RELEASE)/libaxiscpp_mod.so
-AX_SO_HANDLERS=$(AX_DIR_AXIS)/handlers/custom/libcount.so
+AX_SO_HANDLERS=$(AX_DIR_AXIS)/handlers
 AX_SO_WEBSERVICEWRAPPER=$(AX_DIR_AXIS)/webservices/libwebservice.so
 AX_LNK = -L$(AX_LIB_DIR) -l.
 

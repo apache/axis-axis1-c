@@ -51,10 +51,6 @@ $(AX_OBJ_DIR_APACHE)/%.o: %.c
 	$(COMPILE.gcc) -o $@ $<
 	@touch $(AX_OBJ_DIR_APACHE)/timestamp
 
-$(AX_OBJ_DIR_HANDLERS)/%.o: %.cpp
-	$(COMPILE.gcc) -o $@ $<
-	@touch $(AX_OBJ_DIR_HANDLERS)/timestamp
-
 $(AX_OBJ_DIR_SECURITY)/%.o: %.cpp
 	$(COMPILE.gcc) -o $@ $<
 	@touch $(AX_OBJ_DIR_SECURITY)/timestamp
