@@ -63,5 +63,3 @@ xsd__boolean echoBoolean(xsd__boolean Value0)
 {
 	return Value0;
 }
-
-
