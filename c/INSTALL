@@ -178,11 +178,24 @@ mv server.wsdd_linux server.wsdd
 In $AXIS_HOME/axiscpp.conf file you can give paths to
 your log files, configuration files libraries etc.
 ------------------------------------------------------------------------------------------
-AXISLOGPATH:/usr/local/Axis/logs/AxisLog    #Server side log file
-WSDDFILEPATH:/usr/local/Axis/conf/server.wsdd    #Server side service deployment descriptor
-AXISCLIENTLOGPATH:/usr/local/Axis/logs/AxisClientLog    #Client log file
-AXISXMLPARSER:/usr/local/Axis/libs/libaxis_xmlparser.so    #Path to xml parser library
-AXISTRANSPORT_HTTP:/usr/local/Axis/libs/libaxis_transport.so    #Path to transport library
+# The comment character is '#'
+#Available directives are as follows
+#(Some of these directives may not be implemented yet)
+#
+#WSDDFilePath:The path to the server wsdd
+#LogPath:The path to the axis log
+#ClientLogPath:The path to the axis client log
+#ClientWSDDFilePath:The path to the client wsdd
+#Transport_http:The HTTP transport library
+#Transport_smtp:The SMTP transport library
+#XMLParser:The xml parser library
+
+LogPath:/usr/local/Axis/logs/AxisLog
+WSDDFilePath:/usr/local/Axis/conf/server.wsdd
+ClientLogPath:/usr/local/Axis/logs/AxisClientLog
+XMLParser:/usr/local/Axis/libs/libaxis_xmlparser.so
+Transport_http:/usr/local/Axis/libs/libaxis_transport.so
+
 -----------------------------------------------------------------------------------------
 Now we need to copy neccessary libraries to the correct places and start apache. To
 do that you can find scripts written in $AXIS_HOME.
@@ -209,7 +222,8 @@ To run interop samples
 cd $AXISCPP_HOME/samples/client
 sh run_interoptests.sh
 By default this script assumes that apache is running in the localhost at port 80
-if you have different url type
-sh run_interoptests.sh -u <url> -p <port>
+if you want other
+sh run_interoptests.sh <server> <port>
+eg: sh run_interoptests.sh -u localhost -p 80
 
 
