@@ -20,7 +20,7 @@ APACHE_HOME=${APACHE_HOME:-/usr/local/apache}
 AXISCPP_HOME=${HOME_DIR}/${CHECKOUT_DIR}
 AXISCPP_DEPLOY=${AXISCPP_DEPLOY:-/usr/local/axiscpp_deploy}
 LD_LIBRARY_PATH=${AXISCPP_DEPLOY}/lib 
-PATH="/usr/local/bin:$PATH"
+PATH="/usr/bin:/usr/local/bin:$PATH"
 export LD_LIBRARY_PATH AXISCPP_DEPLOY XERCESC_HOME EXPAT_HOME APACHE2_HOME APACHE_HOME AXISCPP_HOME PATH
 
 #get command line options
@@ -43,7 +43,7 @@ cd ${HOME_DIR}
 
 if [ ${GET_CVS} = "true" ]
 then
-	/usr/bin/cvs -d ${CVSROOT} checkout -d ${CHECKOUT_DIR} ws-axis/c
+	cvs -d ${CVSROOT} checkout -d ${CHECKOUT_DIR} ws-axis/c
 fi
 
 #if [ $? = 0 ]
