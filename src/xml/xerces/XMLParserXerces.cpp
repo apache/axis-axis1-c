@@ -76,6 +76,8 @@ int XMLParserXerces::getStatus()
 const AnyElement* XMLParserXerces::next(bool isCharData)
 {
 	bool bCanParseMore = false;
+    try
+    {
     if(!m_bFirstParsed)
     {
         m_pParser->parseFirst(*m_pInputSource, m_ScanToken);
@@ -102,5 +104,18 @@ const AnyElement* XMLParserXerces::next(bool isCharData)
 		}
         else if (AXIS_FAIL == m_Xhandler.getStatus()) return NULL;
 		else if (!bCanParseMore) return NULL;
+    }
+    catch(AxisParseException& e)
+    {
+        throw;
+    }
+    catch(AxisException& e)
+    {
+        throw;
+    }
+    catch(...)
+    {
+        throw;
+    }
     }
 }
