@@ -95,7 +95,11 @@ class TypeMapping
 public:
 	static XSDTYPE Map(const AxisXMLCh* sType);
 	static void Initialize();
-	static map<const AxisXMLString, XSDTYPE> m_sTypeMap;
+#ifndef AIX
+        static map<const AxisXMLString, XSDTYPE> m_sTypeMap;
+#else
+        static map<AxisXMLString, XSDTYPE> TypeMapping::m_sTypeMap;
+#endif
 	static volatile bool m_bInit;
 	TypeMapping();
 	virtual ~TypeMapping();
