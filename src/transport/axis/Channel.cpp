@@ -62,10 +62,10 @@
  *
  */
 
-#include "Platform.hpp"
-#include "Channel.hpp"
+#include <axis/client/transport/axis/Platform.hpp>
+#include <axis/client/transport/axis/Channel.hpp>
 #include <iostream>
-#include "Transport.hpp"
+#include <axis/client/transport/axis/Transport.hpp>
 
 using namespace std;
 /**

@@ -150,13 +150,13 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 	protected void writePreprocssorStatements() throws WrapperFault {
 		try{
 			writer.write("#include \""+CPPUtils.getWebServiceNameFromWrapperName(classname)+".h\"\n");
-			writer.write("#include <WrapperClassHandler.h>\n");
-			writer.write("#include <IMessageData.h>\n");
-			writer.write("#include <GDefine.h>\n");
-			writer.write("#include <IWrapperSoapDeSerializer.h>\n");
-			writer.write("#include <IWrapperSoapSerializer.h>\n");
-			writer.write("#include <ISoapMethod.h>\n");
-			writer.write("#include <IParam.h>\n\n");
+			writer.write("#include <axis/common/WrapperClassHandler.h>\n");
+			writer.write("#include <axis/common/IMessageData.h>\n");
+			writer.write("#include <axis/common/GDefine.h>\n");
+			writer.write("#include <axis/common/IWrapperSoapDeSerializer.h>\n");
+			writer.write("#include <axis/common/IWrapperSoapSerializer.h>\n");
+			writer.write("#include <axis/common/ISoapMethod.h>\n");
+			writer.write("#include <axis/common/IParam.h>\n\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}

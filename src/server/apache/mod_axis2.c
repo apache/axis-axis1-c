@@ -67,7 +67,7 @@
 #include <apache2_0/http_protocol.h>
 #include <apache2_0/http_log.h>
 #include <apache2_0/ap_compat.h>
-#include "../../../src/common/Packet.h"
+#include <axis/common/Packet.h>
 #include <malloc.h>
 
 /*
