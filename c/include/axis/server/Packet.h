@@ -237,6 +237,15 @@ typedef struct
 	void* reserved2; /* usage depend on the tranport module */
 } Ax_soapstream;
 
+typedef struct
+{
+	const void* bufferid ;
+	const char* buffer;
+} sendbuffers;
+
+/* NO_OF_SERIALIZE_BUFFERS should be equal to the corresponding value in the axis configuration file */
+#define NO_OF_SERIALIZE_BUFFERS 10
+
 #ifdef __cplusplus
 extern "C"
 {

@@ -256,6 +256,15 @@ int SoapSerializer::SetOutputStream(const Ax_soapstream* pStream)
 }
 
 /**
+ * Some client side transport layer may wait until the end of buffers is acknowladged
+ * Use this function to do that.
+ */
+void SoapSerializer::MarkEndOfStream()
+{
+	m_pOutputStream->transport.pSendFunct((char*)NULL, NULL, m_pOutputStream);
+}
+
+/**
  * Initializing the members of the class. This is needed since
  * the same object instance of this class, may be used to server
  * several SOAP requests.

@@ -125,6 +125,7 @@ public:
 	int setSoapVersion(SOAP_VERSION);
 	int Init();
 	int SetOutputStream(const Ax_soapstream* pStream);
+	void MarkEndOfStream();
 	int setSoapFault(SoapFault* pSoapFault);
 	int setSoapMethod(SoapMethod* pSoapMethod);
 	int setSoapBody(SoapBody* pSoapBody);
