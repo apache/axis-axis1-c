@@ -1,9 +1,9 @@
-#include <apache/httpd.h>
-#include <apache/http_config.h>
-#include <apache/http_core.h>
-#include <apache/http_log.h>
-#include <apache/http_protocol.h>
-#include <apache/http_main.h>
+#include <apache1_3/httpd.h>
+#include <apache1_3/http_config.h>
+#include <apache1_3/http_core.h>
+#include <apache1_3/http_log.h>
+#include <apache1_3/http_protocol.h>
+#include <apache1_3/http_main.h>
 #include "../../common/Packet.h"
 #include <string.h>
 #include <malloc.h>
