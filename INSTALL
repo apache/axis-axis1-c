@@ -28,8 +28,8 @@ pitfalls.
 
 What you need
 =============
-expat-1.95.7 or xerces-c-src2_2_0
-httpd-2.0.48 or apache_1.3.27
+Expat or Xerces-c
+Apache2 or Apache1
 
 Note:
 If you are using provided configure and Makefile.in's you don't
