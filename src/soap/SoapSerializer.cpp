@@ -239,8 +239,10 @@ int SoapSerializer::setSoapFault(SoapFault *pSoapFault)
 int SoapSerializer::setOutputStream(SOAPTransport* pStream)
 {
     m_pOutputStream = pStream;
-	m_pOutputStream->registerReleaseBufferCallback(releaseBufferCallBack);
     int iStatus= AXIS_SUCCESS;
+    try
+    {
+    m_pOutputStream->registerReleaseBufferCallback(releaseBufferCallBack);
 
     if(m_pSoapEnvelope)
     {
@@ -248,6 +250,19 @@ int SoapSerializer::setOutputStream(SOAPTransport* pStream)
         iStatus= m_pSoapEnvelope->serialize(*this, 
             (SOAP_VERSION)m_iSoapVersion);
         sendSerializedBuffer();
+    }
+    }
+    catch(AxisSoapException& e)
+    {
+        throw;
+    }
+    catch(AxisException& e)
+    {
+        throw;
+    }
+    catch(...)
+    {
+        throw;
     }
     return iStatus;
 }
@@ -375,6 +390,8 @@ IWrapperSoapSerializer& SoapSerializer::operator <<(const AxisChar*
 int SoapSerializer::sendSerializedBuffer()
 {
     int nStatus;
+    try
+    {
     nStatus = m_pOutputStream->sendBytes((char*)
     m_pSZBuffers[m_nCurrentBufferIndex].buffer, (void*)(&(m_pSZBuffers
     [m_nCurrentBufferIndex].inuse)));
@@ -390,6 +407,21 @@ int SoapSerializer::sendSerializedBuffer()
     {
         return AXIS_FAIL;
     }
+    }
+    catch(AxisSoapException& e)
+    {
+        throw;
+    }
+    catch(AxisException& e)
+    {
+        throw;
+    }
+    catch(...)
+    {
+        throw;
+    }
+
+    
     return AXIS_SUCCESS;
 }
 
