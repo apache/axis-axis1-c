@@ -48,11 +48,11 @@
 #if !defined(_CALL_H____OF_AXIS_INCLUDED_)
 #define _CALL_H____OF_AXIS_INCLUDED_
 
-#include "../server/GDefine.hpp"
-#include "../server/TypeMapping.hpp"
-#include "../server/AxisUserAPI.hpp"
-#include "../server/WSDDDefines.hpp"
-#include "../server/IHeaderBlock.hpp"
+#include "../GDefine.hpp"
+#include "../TypeMapping.hpp"
+#include "../AxisUserAPI.hpp"
+#include "../WSDDDefines.hpp"
+#include "../IHeaderBlock.hpp"
 
 AXIS_CPP_NAMESPACE_START
 

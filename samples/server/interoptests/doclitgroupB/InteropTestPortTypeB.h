@@ -6,7 +6,7 @@
 #if !defined(__INTEROPTESTPORTTYPEB_SERVERSKELETON_H__OF_AXIS_INCLUDED_)
 #define __INTEROPTESTPORTTYPEB_SERVERSKELETON_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/AxisUserAPI.hpp>
+#include <axis/AxisUserAPI.hpp>
 
 #include "SOAPArrayStruct.h"
 #include "SOAPStruct.h"

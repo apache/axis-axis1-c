@@ -8,9 +8,9 @@
 
 #include "Calculator.h"
 #include <axis/server/WrapperClassHandler.hpp>
-#include <axis/server/IMessageData.hpp>
-#include <axis/server/GDefine.hpp>
-#include <axis/server/AxisWrapperAPI.hpp>
+#include <axis/IMessageData.hpp>
+#include <axis/GDefine.hpp>
+#include <axis/AxisWrapperAPI.hpp>
 AXIS_CPP_NAMESPACE_USE
 
 class CalculatorWrapper : public WrapperClassHandler

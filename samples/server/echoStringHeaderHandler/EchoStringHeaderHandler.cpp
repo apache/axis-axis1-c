@@ -19,7 +19,7 @@
  */
 
 #include "ESHHandler.h"
-#include <axis/server/GDefine.hpp>
+#include <axis/GDefine.hpp>
 
 extern "C" {
 //the two export functions////////////////////////////////////////////

@@ -7,7 +7,7 @@
 #if !defined(__SOAPSTRUCTSTRUCT_PARAM_H__OF_AXIS_INCLUDED_)
 #define __SOAPSTRUCTSTRUCT_PARAM_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/AxisUserAPI.hpp>
+#include <axis/AxisUserAPI.hpp>
 
 #include "SOAPStruct.h"
 

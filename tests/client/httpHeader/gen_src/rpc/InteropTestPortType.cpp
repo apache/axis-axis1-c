@@ -5,7 +5,7 @@
 
 #include "InteropTestPortType.h"
 
-#include <axis/server/AxisWrapperAPI.hpp>
+#include <axis/AxisWrapperAPI.hpp>
 #include <axis/AxisGenException.hpp>
 #include <axis/ISoapFault.hpp>
 #include "AxisClientException.h"

@@ -27,7 +27,7 @@
 using namespace std;
 
 #include "InteropTestPortType.hpp"
-#include <axis/server/AxisException.hpp>
+#include <axis/AxisException.hpp>
 #include <stdio.h>
 
 #define ARRAYSIZE 2

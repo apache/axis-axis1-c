@@ -6,7 +6,7 @@
 #if !defined(__ARRAYTESTPORTTYPE_SERVERSKELETON_H__INCLUDED_)
 #define __ARRAYTESTPORTTYPE_SERVERSKELETON_H__INCLUDED_
 
-#include <axis/server/AxisUserAPI.hpp>
+#include <axis/AxisUserAPI.hpp>
 #include "AxisServiceException.h" 
 
 #include "intArrayType.h"

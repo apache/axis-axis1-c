@@ -5,7 +5,7 @@
 
 #include "ref_AxisClientException.h"
 
-#include <axis/server/AxisWrapperAPI.hpp>
+#include <axis/AxisWrapperAPI.hpp>
 
 ref_AxisClientException::ref_AxisClientException()
 {

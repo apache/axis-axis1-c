@@ -1,5 +1,5 @@
 #include "gen_src/MathOps.h"
-#include <axis/server/AxisException.hpp>
+#include <axis/AxisException.hpp>
 #include <ctype.h>
 
 void PrintUsage();

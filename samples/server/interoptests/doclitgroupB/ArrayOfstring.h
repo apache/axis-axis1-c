@@ -7,7 +7,7 @@
 #if !defined(__ARRAYOFSTRING_ARRAY_H__OF_AXIS_INCLUDED_)
 #define __ARRAYOFSTRING_ARRAY_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/AxisUserAPI.hpp>
+#include <axis/AxisUserAPI.hpp>
 
 typedef struct ArrayOfstringTag
 {

@@ -27,10 +27,10 @@
  */
 
 #include "ESHHandler.h"
-#include <axis/server/GDefine.hpp>
-#include <axis/server/IHandlerSoapSerializer.hpp>
-#include <axis/server/IHandlerSoapDeSerializer.hpp>
-#include <axis/server/BasicNode.hpp>
+#include <axis/GDefine.hpp>
+#include <axis/IHandlerSoapSerializer.hpp>
+#include <axis/IHandlerSoapDeSerializer.hpp>
+#include <axis/BasicNode.hpp>
 #include <iostream>
 
 

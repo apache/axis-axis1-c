@@ -367,9 +367,12 @@ void AxisTrace::addParameter(string& line, int type, unsigned len, void *value)
 	case TRACETYPE_STRING:	
 		try {
                   pcValue = *((char**)pcValue);
-			line += "\"";	
-			line += ((NULL==pcValue)?"<null>":pcValue);	
-			line += "\"";	
+                  if (NULL==pcValue) line += "<null>";
+                  else {
+			    line += "\"";	
+			    line += pcValue;	
+			    line += "\"";
+                  }	
 		} catch (...) {
 			line += "<BADPOINTER>";
 		}

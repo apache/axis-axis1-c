@@ -8,9 +8,9 @@
 
 #include "MathOps.h"
 #include <axis/server/WrapperClassHandler.hpp>
-#include <axis/server/IMessageData.hpp>
-#include <axis/server/GDefine.hpp>
-#include <axis/server/AxisWrapperAPI.hpp>
+#include <axis/IMessageData.hpp>
+#include <axis/GDefine.hpp>
+#include <axis/AxisWrapperAPI.hpp>
 
 #include "AxisServiceException.h"
 

@@ -5,7 +5,7 @@
 
 #include <malloc.h>
 #include "SOAPArrayStruct.h"
-#include <axis/server/AxisWrapperAPI.hpp>
+#include <axis/AxisWrapperAPI.hpp>
 
 /*
  * This static method serialize a SOAPArrayStruct type of object

@@ -5,7 +5,7 @@
 
 #include <malloc.h>
 #include "SOAPStructStruct.h"
-#include <axis/server/AxisWrapperAPI.hpp>
+#include <axis/AxisWrapperAPI.hpp>
 
 extern int Axis_DeSerialize_SOAPStruct(SOAPStruct* param, IWrapperSoapDeSerializer* pDZ);
 extern void* Axis_Create_SOAPStruct(SOAPStruct* pObj, bool bArray = false, int nSize=0);

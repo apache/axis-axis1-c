@@ -4,7 +4,7 @@
  */
 
 #include <malloc.h>
-#include <axis/server/AxisWrapperAPI.hpp>
+#include <axis/AxisWrapperAPI.hpp>
 
 #include "ExtensibilityType.h"
 /*

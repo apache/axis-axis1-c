@@ -5,7 +5,7 @@
 
 #include "array_AxisClientException.h"
 
-#include <axis/server/AxisWrapperAPI.hpp>
+#include <axis/AxisWrapperAPI.hpp>
 
 array_AxisClientException::array_AxisClientException()
 {

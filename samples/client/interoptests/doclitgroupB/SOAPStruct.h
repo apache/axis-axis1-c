@@ -7,7 +7,7 @@
 #if !defined(__SOAPSTRUCT_PARAM_H__OF_AXIS_INCLUDED_)
 #define __SOAPSTRUCT_PARAM_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/AxisUserAPI.hpp>
+#include <axis/AxisUserAPI.hpp>
 
 AXIS_CPP_NAMESPACE_USE
 

@@ -6,7 +6,7 @@
 
 #include "Calculator.h"
 
-#include <axis/server/AxisWrapperAPI.hpp>
+#include <axis/AxisWrapperAPI.hpp>
 
 AXIS_CPP_NAMESPACE_USE
 

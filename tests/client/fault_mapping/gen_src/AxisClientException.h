@@ -8,7 +8,7 @@
 
 #include <string>
 #include <exception>
-#include <axis/server/AxisException.hpp>
+#include <axis/AxisException.hpp>
 #include <axis/ISoapFault.hpp>
 #include "DivByZeroStruct.h"
 #include "OutOfBoundStruct.h"

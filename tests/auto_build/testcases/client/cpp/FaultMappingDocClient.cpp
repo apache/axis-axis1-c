@@ -1,5 +1,5 @@
 #include "MathOps.hpp"
-#include <axis/server/AxisException.hpp>
+#include <axis/AxisException.hpp>
 #include <ctype.h>
 #include <iostream>
 

@@ -6,7 +6,7 @@
 #if !defined(__EXTENSIBILITYQUERYPORTTYPE_SERVERSKELETON_H__INCLUDED_)
 #define __EXTENSIBILITYQUERYPORTTYPE_SERVERSKELETON_H__INCLUDED_
 
-#include <axis/server/AxisUserAPI.hpp>
+#include <axis/AxisUserAPI.hpp>
 
 #include "ExtensibilityType.h"
 
