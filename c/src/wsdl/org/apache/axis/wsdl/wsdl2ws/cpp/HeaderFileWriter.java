@@ -62,7 +62,7 @@ public abstract class HeaderFileWriter extends BasicFileWriter {
 		}
 
 	}
-	protected String getExtendsPart(){return " ";}
+	protected abstract String getExtendsPart();//{return " ";}
 	protected abstract File getFilePath()throws WrapperFault;
 	protected abstract String getFileType(); //will return "Param", "Server" or "Client"
 
