@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Susantha Kumara (skumara@virtusa.com)
+ * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  *
  */
 // SoapDeSerializer.h: interface for the SoapDeSerializer class.
@@ -86,6 +86,7 @@ private:
 	SAX2XMLReader* m_pParser;
 	const Ax_soapstream* m_pInputStream;
 	char m_hugebuffer[HUGE_BUFFER_SIZE];
+	Param* m_pLastArrayParam;
 public:
 	int GetVersion();
 	const AxisChar* GetMethodName();
@@ -104,6 +105,8 @@ public:
 	Axis_Array GetArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI);
 	/* Method used by wrappers to get a deserialized Array of basic types */
 	Axis_Array GetArray(XSDTYPE nType);
+	int GetArraySize();
+	int GetArray(Axis_Array* pArray, XSDTYPE nType);
 	/* Method used by wrappers to get a deserialized single object of complex type */
 	void* GetObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pchTypeName, const AxisChar* pchURI);
 	
@@ -134,7 +137,7 @@ public:
       minutes-seconds which represents a duration*/
     long GetDuration();
 	void* CreateArray(XSDTYPE nType, int nSize);
-	void DeleteArray(void* pArray, XSDTYPE nType);
+	void DeleteArray(Axis_Array* pArray , XSDTYPE nType);
 };
 
 #endif // !defined(AFX_SOAPDESERIALIZER_H__FD0E7C3B_B887_480A_9E2A_20736A88B09B__INCLUDED_)
