@@ -97,13 +97,13 @@ AXISC_STORAGE_CLASS_INFO int axiscSerializeCmplxArray(AXISCHANDLE wrapperSoapSer
 }
 
 AXISC_STORAGE_CLASS_INFO int axiscSerializeBasicArray(AXISCHANDLE wrapperSoapSerializer, const Axisc_Array * pArray, 
-	AXISC_XSDTYPE nType, const AxiscChar * pName) {
+	const AxiscChar * pNamespace,AXISC_XSDTYPE nType, const AxiscChar * pName) {
 	IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
-	return sz->serializeBasicArray((const Axis_Array*)pArray,(XSDTYPE)nType,pName);
+	return sz->serializeBasicArray((const Axis_Array*)pArray,pNamespace,(XSDTYPE)nType,pName);
 }
 
 AXISC_STORAGE_CLASS_INFO int axiscSerializeAsElement(AXISCHANDLE wrapperSoapSerializer, const AxiscChar * sName, 
-	void * pValue, AXISC_XSDTYPE type) {
+	const AxiscChar * pNamespace, void * pValue, AXISC_XSDTYPE type) {
 	IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
 	return sz->serializeAsElement(sName,pValue,(XSDTYPE)type);
 }
