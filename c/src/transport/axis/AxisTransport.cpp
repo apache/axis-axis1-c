@@ -84,11 +84,11 @@ AxisTransport::~AxisTransport()
         delete m_pHttpTransport;
 }
 
-int AxisTransport::OpenConnection()
+int AxisTransport::OpenConnection(bool secure)
 {
     //Step 1 - Open Transport layer connection taking into account protocol and endpoint URI in m_Soap
     Url objUrl(m_pSoap->so.http->uri_path);
-    m_pHttpTransport = TransportFactory::GetTransport(objUrl, false);
+    m_pHttpTransport = TransportFactory::GetTransport(objUrl, secure);
 	memset(&m_SendBuffers, 0, sizeof(sendbuffers)*NO_OF_SERIALIZE_BUFFERS); 
     if(m_pHttpTransport->Init())
     {
