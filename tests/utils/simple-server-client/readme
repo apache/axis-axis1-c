@@ -1,0 +1,37 @@
+We have a test server and client here
+The purpose of the test server is to provide a testing environment
+for a soap client engine. It just accept whatever the request
+sent to it, dicard it and then send back a hard coded soap message
+read from a file. This is very useful to test a client engine with
+different soap messages.
+
+The purpose of the test client is to provide a testing environment
+for a soap server engine. Client can send arbirtray messages read from
+a file and send it to a server. It then read the response sent from the
+server
+
+to build the test server 
+sh build_server.sh
+
+to run the server
+./serv
+
+Then this will listen to client request
+Once a request comes it just receive it and discard it.
+It read from the serv_message.txt file and 
+this is what it returns as the response.
+
+So you need to paste properly formatted soap message that you 
+need to test ,into serv_message.txt, before you start the server.
+
+Before you build the client just change the host
+and port against which you need to test it with.
+Also paste your message to test into cli_message.txt file.
+
+to build the client
+sh build_client.sh
+
+to run the client
+./cli
+
+

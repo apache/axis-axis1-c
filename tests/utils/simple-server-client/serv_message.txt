@@ -1,0 +1,27 @@
+HTTP/1.1 200 OK
+Date: Sat, 27 Nov 2004 11:59:29 GMT
+Server: Apache/2.0.52 (Unix) mod_ssl/2.0.52 OpenSSL/0.9.7e
+Content-Type: Multipart/Related; boundary=mime-bound; type=text/xml; start=\"mimeroot-start\"
+Content-Length: 400
+Content-Type: text/xml
+
+--mime-bound
+Content-Type: text/xml; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Content-ID: mimeroot-start
+
+<?xml version='1.0' encoding='utf-8' ?><SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><SOAP-ENV:Body><ns1:addResponse xmlns:ns1=\"http://localhost/axis/Calculator\"><addReturn xsi:type=\"xsd:int\">15</addReturn></ns1:addResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>
+
+--mime-bound
+Content-Type: image/tiff
+Content-Transfer-Encoding: base64
+Content-ID: cont1
+
+dfdsfsdfowesdfsdfowefsdfslsdfffffffffffffffowefsdfoefhosdfwoehdsfoiwefhodsfwefnodsiftwefnweo
+--mime-bound
+Content-Type: image/jpeg
+Content-Transfer-Encoding: base64
+Content-ID: cont2
+
+fsdffffffffffffffffffdswodfowefhdosfwefhosdfwehosdfhloewofhdsofwefosdfwefbowewefnow
+--mime-bound--
