@@ -118,28 +118,16 @@ public class WrapperUtils {
 	 *  the Wrapper Class name(service.0 wrapper class name) eg int -> Int ect
 	 *  
 	 */
-    public static String getWrapperClassName4QualifiedName(String fullyQualifiedName) {
-        String classname = getClassNameFromFullyQualifiedName(fullyQualifiedName);
-        String paramclass;
-        if (classname.equals("boolean")) {
-            paramclass = "Boolean";
-        } else if (classname.equals("byte")) {
-            paramclass = "Byte";
-        } else if (classname.equals("char")) {
-            paramclass = "Char";
-        } else if (classname.equals("short")) {
-            paramclass = "Short";
-        } else if (classname.equals("int")) {
-            paramclass = "Int";
-        } else if (classname.equals("long")) {
-            paramclass = "Long";
-        } else if (classname.equals("float")) {
-            paramclass = "Float";
-        } else if (classname.equals("double")) {
-            paramclass = "Double";
-        } else
-            paramclass = classname;
-        return paramclass;
+    public static String getLanguageTypeName4Type(Type type)throws WrapperFault{
+    	if (type.isArray()){
+			QName qname = getArrayType(type).getName(); 
+			//this can never be a simple type
+			return CUtils.getCmplxArrayNameforType(qname);
+    	}
+    	else{
+			String fullyQualifiedName = type.getLanguageSpecificName();
+        	return getClassNameFromFullyQualifiedName(fullyQualifiedName);
+    	}
     }
 
 	/**
@@ -215,7 +203,11 @@ public class WrapperUtils {
 		Type type = wscontext.getTypemap().getType(param.getSchemaName());
 		if(!TypeMap.isSimpleType(param.getSchemaName())){ //array or complex types
 			if (type.isArray()){
-				return type.getLanguageSpecificName();
+				String arrayName = CUtils.getCmplxArrayNameforType(getArrayType(type).getName());
+				if (null == arrayName){//simple type array
+					arrayName = CUtils.getBasicArrayNameforType(CUtils.getclass4qname(getArrayType(type).getName()));
+				}
+				return arrayName;
 			}
 			else{
 				return param.getLangName()+"*"; //All complex types will be pointers	

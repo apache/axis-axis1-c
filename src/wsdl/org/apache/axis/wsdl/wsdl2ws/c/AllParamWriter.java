@@ -91,7 +91,8 @@ public class AllParamWriter implements SourceWriter{
 				if(wscontext.getWrapInfo().getImplStyle().equals(WrapperConstants.IMPL_STYLE_STRUCT)){
 					if(type.isArray()){
 						System.out.println("Array writer called ......");
-						(new ArrayParamWriter(wscontext,type)).writeSource();	
+						ArrayParamWriter writer = (new ArrayParamWriter(wscontext,type));	
+						if (!writer.isSimpleTypeArray()) writer.writeSource();
 					}	
 					else{
 						if (type.getLanguageSpecificName().startsWith(">")){
