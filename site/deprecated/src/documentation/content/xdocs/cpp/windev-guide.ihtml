@@ -566,7 +566,7 @@ the menu that appears. Click the C/C++ tab and select “Preprocessor” from the
 Add Axis include directory [CHECKOUT_HOME]c\include\ to the project In the 
 “Additional include directories”<br>
 
-<br>10).Now business logic should be
+<br>10)Now business logic should be
 added to the generated Skeletons. The Skeletons in this case are Calculator.h
 and Calculator.cpp
 <br><br>
@@ -670,12 +670,12 @@ In the “Additional include directories” give [CHECKOUT_HOME]c\include as the inc
 </p>
 
 
-<p>11) Click the “Link” tab and select “Input” from the “Category” Drop down
-list. 
+<p>10) Click the “Link” tab and select “Input” from the “Category” Drop down
+list.
 
 
 <br>Add AxisClient.lib to the “Object/library modules” and in the “Additional library path” give the path.
-AxisClient.lib can be found in [CHECKOUT_HOME]\c\bin once you build the AxisClient project 
+AxisClient.lib can be found in [CHECKOUT_HOME]\c\bin once you build the AxisClient project
 of the "Distribution" VC workspace.
 <br>
 
@@ -711,16 +711,16 @@ SOAP Response and the result printed by calclient.exe.</p>
 <P><a name="providedservices"></a></p>
 <h2>Building and deploying the provided interop web services samples</h2>
 <p>
-<br>1.) Open the Visual C++ workspace (interoptests.dsw) at [CHECKOUT_HOME]\c\vc\samples\server\interoptests\  and do a batch build of all projects.
-<br>2.) You will find the built dynamic libraries at [CHECKOUT_HOME]\c\bin directory. Following are the built DLLs.
+<br>1) Open the Visual C++ workspace (interoptests.dsw) at [CHECKOUT_HOME]\c\vc\samples\server\interoptests\  and do a batch build of all projects.
+<br>2) You will find the built dynamic libraries at [CHECKOUT_HOME]\c\bin directory. Following are the built DLLs.
 <br>base.dll
 <br>cbase.dll
 <br>cGroupB.dll
 <br>doclitbase.dll
 <br>doclitgroupB.dll
 <br>groupB.dll
-<br>3.)copy these dlls to [APACHE_HOME]\Axis\webservices
-<br>4.)Add the required entries to the server.wsdd file in [APACHE_HOME]\Axis\conf to deploy these
+<br>3)copy these dlls to [APACHE_HOME]\Axis\webservices
+<br>4)Add the required entries to the server.wsdd file in [APACHE_HOME]\Axis\conf to deploy these
 interop services.
 You can find the required entries in the [CHECKOUT_HOME]\c\deploy\conf\server.wsdd_win file.
 You will need to modify the "value" of the "classname" parameter of each service to to point to
@@ -730,16 +730,16 @@ the relevant web service dll given above in [APACHE_HOME]\Axis\webservices.
 <p><a name="providedclients"></a></p>
 <h2>Building and running the provided interop client applications</h2>
 <p>
-<br>1.) Open the Visual C++ workspace (interoptests.dsw) at [CHECKOUT_HOME]\c\vc\samples\client\interoptests\ and do a batch build of all projects.
-<br>2.) You need to build the AxisClient project in the "Distribution" workspace at [CHECKOUT_HOME]\c\vc\, because you need the AxisClient.lib to complile client applications and AxisClient.dll to run them.
-<br>3.) You will find the built console applications and AxisClient.dll at [CHECKOUT_HOME]\c\bin directory. Following are the built .exe files.
+<br>1) Open the Visual C++ workspace (interoptests.dsw) at [CHECKOUT_HOME]\c\vc\samples\client\interoptests\ and do a batch build of all projects.
+<br>2) You need to build the AxisClient project in the "Distribution" workspace at [CHECKOUT_HOME]\c\vc\, because you need the AxisClient.lib to complile client applications and AxisClient.dll to run them.
+<br>3) You will find the built console applications and AxisClient.dll at [CHECKOUT_HOME]\c\bin directory. Following are the built .exe files.
 	base.exe
 	cbase.exe
 	cgroupB.exe
 	doclitbase.exe
 	doclitgroupB.exe
 	groupB.exe
-<br>4.) In order to run these samples you should have AxisClient.dll in the PATH environment variable or in the same directory where the .exe is.
+<br>4) In order to run these samples you should have AxisClient.dll in the PATH environment variable or in the same directory where the .exe is.
 </p>
 
 <p><a name="usingxerces"></a></p>
@@ -762,27 +762,27 @@ http://xml.apache.org/xerces-c/download.cgi<br>
 <p>In windows using Visual C++ 6.0 open the workspace "distribution" from vc++ at
 [CHECKOUT_HOME]\c\vc\
 
-<p>1.)Remove the files SoapParserExpat.cpp and WSDDDocumentExpat.cpp from the "AxisServer"
+<p>1)Remove the files SoapParserExpat.cpp and WSDDDocumentExpat.cpp from the "AxisServer"
 project and the "AxisClient" project.</P>
 
-<p>2.)Add the files "SoapBinInputStream.cpp", "SoapInputSource.cpp", "SoapParserXerces.cpp",
+<p>2)Add the files "SoapBinInputStream.cpp", "SoapInputSource.cpp", "SoapParserXerces.cpp",
 "XercesHandler.cpp" (which will be located in  [CHECKOUT_HOME]\c\src\soap) and "WSDDDocumentXerces.cpp" (which will be located in [CHECKOUT_HOME]\c\src\wsdd) to the "AxisServer"
 project and the "AxisClient" project.</p>
 
 
-<p>3.)change the compiler directive "USE_EXPAT_PARSER" to "USE_XERCES_PARSER" (This setting is
+<p>3)change the compiler directive "USE_EXPAT_PARSER" to "USE_XERCES_PARSER" (This setting is
 in "project-&gt;settings-&gt;C/C++-&gt;prepocessor-&gt;Preprocessor Definitions")
 in all the projects that this directive is used.</P>
 
-<p>4.)Add the Xerces header files from xerces binary distribution to [CHECKOUT_HOME]\c\include\xercesc folder </p>
+<p>4)Add the Xerces header files from xerces binary distribution to [CHECKOUT_HOME]\c\include\xercesc folder </p>
 
-<p>5.)Add the required Xerces libs (xerces-c_2.lib for release builds, xerces-c_2D.lib for
+<p>5)Add the required Xerces libs (xerces-c_2.lib for release builds, xerces-c_2D.lib for
 debug builds) from the Xerces binary distribution to [CHECKOUT_HOME]\c\lib\xerces-c folder and give either
 xerces-c_2.lib or xerces-c_2D.lib as appropriate in
 "project-&gt;settings-&gt;link-&gt;input-&gt;object/library modules"
 and give the path to those libs in "project->settings->link->additional library path"</p>
 
-<p>6.)Remove libexpat.lib from the settings of the projects.</p>
+<p>6)Remove libexpat.lib from the settings of the projects.</p>
 
 <p>If you are using any other vc workspaces (e.g AxisDevelopment) do the same modifications
 to the projects of those workspaces.</p>

@@ -267,13 +267,13 @@ the relevant wsdd file for your platform to server.wsdd)</p>
 
 
 <p><b> Installing the Expat XML parser</b></p>
-The Axis cpp binary uses Expat as the XML parser.You need to download the Expat-1.95.7 binary version from <a href="http://sourceforge.net/projects/expat/" >http://sourceforge.net/projects/expat/</a>
+<p>The Axis cpp binary uses Expat as the XML parser.You need to download the Expat-1.95.7 binary version from <a href="http://sourceforge.net/projects/expat/" >http://sourceforge.net/projects/expat/</a>
 
 <br>Extract the Expat binaries to a folder Called Expat ,we will refer this folder as [EXPAT_EXTRACT].
 
 <br>Copy libexpat.dll file from [EXPAT_EXTRACT]\Libs to [AXIS_HOME]/libs/
 
-
+</p>
 
 <p>10. Restart the apache web server. If you have done correctly apache server
 should start without giving any error.</p>
