@@ -78,7 +78,8 @@ class HTTPTransport:public SOAPTransport
     virtual void			setMaintainSession( bool bSession);
 
     void					setAttachment( const char * pcAttachmentId, const char * pcAttachment) {};
-	const char *			getAttachment( const char * pcAttachmentId) { return NULL;};
+	ISoapAttachment*	getAttachment( const char * pcAttachmentId) { return NULL;};
+    char* getIncomingSOAPMimeHeaders() {return NULL;}
 
   protected:
     void					processResponseHTTPHeaders() throw (HTTPTransportException);

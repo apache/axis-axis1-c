@@ -64,7 +64,21 @@ public:
     void setTransportProperty(const char* pcKey, const char* pcValue);
     const char* getTransportProperty(const char* pcKey);
 	void setAttachment(const char* pcAttachmentid, const char* pcAttachment){};
-	const char* getAttachment(const char* pcAttachmentid){return "value";};
+	
+	/**
+	 * fixing build breaks: Start
+	 */
+	
+	// hawkeye: This should return something ? Asking on mailing list what !
+	char* getIncomingSOAPMimeHeaders(){return NULL;}
+	
+	// hawkeyeThis used to return "value" but now fails because of the changed signature
+	// What should it be ?
+	ISoapAttachment* getAttachment(const char* pcAttachmentid){return NULL;};
+	
+	/** 
+	 * end of fixing build breaks
+	 */
 	void setEndpointUri(const char* pcEndpointUri)
 	{m_pcEndpointUri = new char[strlen(pcEndpointUri)+1]; strcpy(m_pcEndpointUri,pcEndpointUri);};
 	void setSessionId(const char* pcSessionId);
