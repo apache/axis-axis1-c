@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Roshan Weerasuriya (roshan@jkcsworld.com, roshan@opensource.lk)
  *
  */
 
@@ -70,13 +70,3 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-
-BasicNode::BasicNode()
-{
-
-}
-
-BasicNode::~BasicNode()
-{
-
-}

@@ -76,7 +76,7 @@
 using namespace std;
 class IParam;
 
-class IWrapperSoapDeSerializer : public ISoapDeSerializer
+class IWrapperSoapDeSerializer : public virtual ISoapDeSerializer
 {
 public:
 	virtual string& GetMethodName()=0;

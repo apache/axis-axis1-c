@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
 
@@ -81,6 +81,9 @@ using namespace std;
 class ComplexElement : public BasicNode
 {
 public:
+	int setValue(string& sValue);
+	string& getValue();
+	NODE_TYPE getNodeType();
 	int setURI(const string& sURI);
 	int serialize(SoapSerializer& pSZ);
 	int addChild(BasicNode* pBasicNode);

@@ -71,6 +71,7 @@
 #include "SoapFault.h"
 #include "SoapDeSerializer.h"
 #include "../common/GDefine.h"
+class ISoapHeader;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -102,9 +103,12 @@ SoapEnvelope* SoapDeSerializer::GetEnvelope()
 	return m_pHandler->m_pEnv;
 }
 
-SoapHeader* SoapDeSerializer::GetHeader()
+ISoapHeader* SoapDeSerializer::GetHeader()
 {
-	return m_pHandler->m_pHead;
+	//actually here a dynamic cast is not needed. But it is
+	// done for safe side, incase SoapHeader derives from 
+	// more that one interface and the deriving order changes.
+	return dynamic_cast<ISoapHeader*>(m_pHandler->m_pHead);
 }
 
 SoapBody* SoapDeSerializer::GetBody()

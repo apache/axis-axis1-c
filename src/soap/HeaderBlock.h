@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
+ * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
 
@@ -109,6 +109,7 @@ class HeaderBlock : public IHeaderBlock
 {
 
 private:	
+	int serializeNamespaceDecl(SoapSerializer& pSZ);
 	int serializeChildren(SoapSerializer& pSZ);
 	//int serializeChildren(string& sSerialized);
 	list<BasicNode*> m_children;
@@ -119,11 +120,16 @@ private:
 	string m_prefix;
 	string m_uri;
 	list<Attribute*> m_attributes;
+	list<Attribute*> m_namespaceDecls;
 	string m_value;
 	//string m_strSerialized;
 
 public:
-	int addChild(BasicNode* pBasicNode);		
+	BasicNode* createChild(NODE_TYPE eNODE_TYPE);
+	BasicNode* getFirstChild();
+	int addNamespaceDecl(Attribute *pAttribute);
+	int addChild(BasicNode* pBasicNode);
+
 	int serialize(SoapSerializer& pSZ);
 	//int serialize(string&);
 	void setValue(const string &value);

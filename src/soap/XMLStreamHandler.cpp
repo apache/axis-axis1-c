@@ -67,6 +67,7 @@
 #include "URIMapping.h"
 #include "Attribute.h"
 #include "SoapEnvVersions.h"
+#include "CharacterElement.h"
 
 #define __TRC(X) XMLString::transcode(X)
 #define __REL(X) XMLString::release(X)
@@ -150,6 +151,8 @@ void XMLStreamHandler::startElement(const XMLCh *const uri,const XMLCh *const lo
 		break;
 		case SOAP_HEADER:
 			//Soap header entry
+			createHeaderBlock(uri, localname, qname, attrs);
+			m_PL1= SOAP_HEADER_BLOCK;
 			break;
 		case SOAP_FAULT:
 			//Soap fault sub element
@@ -200,13 +203,16 @@ void XMLStreamHandler::startElement(const XMLCh *const uri,const XMLCh *const lo
 	}
 }
 
-void  XMLStreamHandler::endElement (const XMLCh *const uri,const XMLCh *const localname,const XMLCh *const qname)
+void XMLStreamHandler::endElement (const XMLCh *const uri,const XMLCh *const localname,const XMLCh *const qname)
 {
 	char *pcLocalName = __TRC(localname);
 	if (pcLocalName) {
 		switch (m_PL1)
 		{
 		case SOAP_UNKNOWN: 
+			if(m_PL0==SOAP_HEADER) {
+				m_PL0= SOAP_ENVELOP;
+			}
 			break;
 		case SOAP_METHOD: //end of method element
 			if (m_nParamNestingLevel == 0)
@@ -221,6 +227,12 @@ void  XMLStreamHandler::endElement (const XMLCh *const uri,const XMLCh *const lo
 			}
 			m_PL1 = SOAP_METHOD; //next parameter can be Nth parameter just within the Method element.
 			m_nParamNestingLevel--;
+			break;
+		case SOAP_HEADER_BLOCK: //enf of a HeaderBlock
+			//Add HeaderBlock to Header
+			m_pHead->addHeaderBlock(pHeaderBlock);
+
+			m_PL1= SOAP_UNKNOWN;
 			break;
 		default:
 			m_Success = FAIL;
@@ -240,6 +252,14 @@ void  XMLStreamHandler::characters (const XMLCh *const chars,const unsigned int 
 			string str = value;
 			m_Param.SetValue(str);
 			__REL(&value);
+		}
+	} else if ((m_PL0 == SOAP_HEADER) && (m_PL1 == SOAP_HEADER_BLOCK)) {
+		//Get the value of the header entry
+		char *value = __TRC(chars);
+		if(value) {
+			string str= value;
+			CharacterElement* pCharacterElement= new CharacterElement(str);
+			pHeaderBlock->addChild(pCharacterElement);
 		}
 	}
 }
@@ -601,4 +621,36 @@ void XMLStreamHandler::FillMethod(const XMLCh *const uri, const XMLCh *const loc
 		m_pMethod->addAttribute(pAttr);	
 	}
 */
+}
+
+void XMLStreamHandler::createHeaderBlock(const XMLCh *const uri, const XMLCh *const localname, const XMLCh *const qname, const Attributes &attrs)
+{
+	pHeaderBlock= new HeaderBlock();
+	//pHeaderBlock->setPrefix("A");
+	//pHeaderBlock->setLocalName("A");
+	pHeaderBlock->setUri("A");
+
+
+	char* pc; 
+	string str;	
+	pc = __TRC(qname);
+	str = pc;
+	__REL(&pc);
+	
+	if (str.find(':') != string::npos) 
+	{
+		str = str.substr(0, str.find(':'));
+		pHeaderBlock->setPrefix(str);		
+	}
+
+	pc = __TRC(localname);
+	str = pc;
+	__REL(&pc);
+	pHeaderBlock->setLocalName(str);
+
+	pc = __TRC(uri);
+	str = pc;
+	__REL(&pc);
+	pHeaderBlock->setUri(str);
+
 }
