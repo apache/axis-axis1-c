@@ -71,7 +71,7 @@
 #include "../common/IHandlerSoapDeSerializer.h"
 #include "XMLStreamHandler.h"
 
-#define HUGE_BUFFER_SIZE 1000
+#define HUGE_BUFFER_SIZE 8192
 
 class SoapEnvelope;
 class SoapHeader;

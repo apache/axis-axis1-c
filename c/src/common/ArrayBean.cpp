@@ -104,10 +104,13 @@ ArrayBean::~ArrayBean()
 			if (m_value.cta)
 			{
 				list<int>::iterator it = m_size.begin();
-				int blocksize = GetArrayBlockSize(it);		
-				m_value.cta->pDelFunct(m_value.cta->pObject, true, blocksize);
-				/* make sure that the ComplexObjectHandler's destructor does not try to delete the objects again */
-				m_value.cta->pObject = NULL; 
+				int blocksize = GetArrayBlockSize(it);
+				if (m_value.cta->pObject)
+				{
+					m_value.cta->pDelFunct(m_value.cta->pObject, true, blocksize);
+					/* make sure that the ComplexObjectHandler's destructor does not try to delete the objects again */
+					m_value.cta->pObject = NULL;
+				}
 				delete m_value.cta;
 			}
 		}
@@ -279,4 +282,22 @@ void ArrayBean::SetTypeName(const AxisChar* sName)
 void ArrayBean::SetUri(const AxisChar* sURI)
 {
 	m_URI = sURI;
+}
+/**
+ * Used to remove the pointer to the object array. Mostly to avoid deletion
+ * by the destructor.
+ */
+void ArrayBean::RemoveArrayPointer()
+{
+	if (USER_TYPE == m_type)
+	{
+		if (m_value.cta)
+		{
+			m_value.cta->pObject = NULL;	
+		}
+	}
+	else
+	{
+		m_value.sta = NULL;
+	}
 }

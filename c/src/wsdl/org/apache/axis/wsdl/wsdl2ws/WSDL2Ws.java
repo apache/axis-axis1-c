@@ -2,7 +2,7 @@
  * The Apache Software License, Version 1.1
  *
  *
- * Copyright (c) 2003 The Apache Software Foundation.  All rights
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
  * reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -20,7 +20,7 @@
  * 3. The end-user documentation included with the redistribution,
  *    if any, must include the following acknowledgment:
  *       "This product includes software developed by the
- *        Apache Software Foundation (http://www.apache.org/)."
+ *    Apache Software Foundation (http://www.apache.org/)."
  *    Alternately, this acknowledgment may appear in the software itself,
  *    if and wherever such third-party acknowledgments normally appear.
  *
@@ -52,10 +52,7 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
- 
-/**
- * @author Srinath Perera(hemapani@openource.lk)
- */
+
 package org.apache.axis.wsdl.wsdl2ws;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -71,7 +68,6 @@ import javax.wsdl.PortType;
 import javax.xml.namespace.QName;
 import javax.xml.rpc.holders.IntHolder;
 
-import org.apache.axis.wsdl.wsdl2ws.CLArgParser;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ServiceInfo;
@@ -85,6 +81,7 @@ import org.apache.axis.wsdl.symbolTable.ElementDecl;
 import org.apache.axis.wsdl.symbolTable.PortTypeEntry;
 import org.apache.axis.wsdl.symbolTable.SchemaUtils;
 import org.apache.axis.wsdl.symbolTable.ServiceEntry;
+import org.apache.axis.wsdl.symbolTable.SymTabEntry;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.w3c.dom.Node;
@@ -98,130 +95,160 @@ import org.w3c.dom.Node;
  *  3) create TypeMap parsing the  Symbol Table
  *  4) create Service Info parsing the Symbol table
  *  5) create WebServiceContext using above three classes and start execution 
+ * 
+ * @author hemapani@opensource.lk
  */
-
 public class WSDL2Ws {
-	private PortType porttype ;
+    private PortType porttype;
 
-	private String qualifiedServiceName;
-    private SymbolTable tb;
-	private boolean hasOrder = false;
-	private String typeval;
+    private String qualifiedServiceName;
+    private SymbolTable symbolTable;
+    private boolean hasOrder = false;
+    private String typeval;
 
-	private String serviceStyle = null;
-	private String encodingStyle = null;
-	private String targetEndpointURI = null;
-	private String transportURI = null;
-    private TypeMap typeMap;    
-    
-	public WSDL2Ws(CLArgParser cmdLineArgs) throws WrapperFault {
-		try {
+    private String serviceStyle = null;
+    private String encodingStyle = null;
+    private String targetEndpointURI = null;
+    private String transportURI = null;
+    private String targetNameSpaceOfWSDL = null;
+    private TypeMap typeMap;
+
+    public WSDL2Ws(CLArgParser cmdLineArgs) throws WrapperFault {
+        try {
             typeMap = new TypeMap();
-			Parser wsdlParser = new Parser();
-			String wsdlfile =  cmdLineArgs.getArgument(0);
-            String serviceuri = cmdLineArgs.getArgument(1);
-            String servicelocalpart = cmdLineArgs.getArgument(2);
-
-            if(wsdlfile == null || servicelocalpart == null)
-              throw new WrapperFault("not enough arguments ");
+            Parser wsdlParser = new Parser();
+            //get the commandline arguments
+            String wsdlfile = cmdLineArgs.getArgument(0);
             wsdlParser.run(wsdlfile);
 
-			tb = wsdlParser.getSymbolTable();
-            // tb.dump(System.out);
-		   porttype = this.getWebServiceInfo(serviceuri,servicelocalpart);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new WrapperFault(e);
-		}
-	}
+            symbolTable = wsdlParser.getSymbolTable();
+            // symbolTable.dump(System.out);
+            
+            //get the target namespace
+			targetNameSpaceOfWSDL = symbolTable.getDefinition().getTargetNamespace();
+            porttype = this.getWebServiceInfo();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new WrapperFault(e);
+        }
+    }
 
     /**
      * This method exteact the service,binding,encoding information and return a PortType of the
      * webservice to publish.
      * @return port type the webservice based on
      */
-    private PortType getWebServiceInfo(String serviceuri,String servicelocalpart)throws WrapperFault{
-        //get the service
-           ServiceEntry sentry = tb.getServiceEntry(new QName(serviceuri,servicelocalpart));
-		   Iterator ports = sentry.getService().getPorts().values().iterator();
-		   
-		   //if the targetEndPointURI not specifed we continue having it null
-		   //The WrapperInfo will set a default value for the targetEndPointURI
-		   if(ports.hasNext()){
-		   		Port port = (Port)ports.next();
-				List adresslist = port.getExtensibilityElements();
-				if(adresslist != null && adresslist.size() != 0 && (adresslist.get(0) instanceof com.ibm.wsdl.extensions.soap.SOAPAddressImpl) )
-					this.targetEndpointURI = ((com.ibm.wsdl.extensions.soap.SOAPAddressImpl)adresslist.get(0)).getLocationURI();
-		   }
-           
-           //get the binding
-           Iterator portmap = sentry.getService().getPorts().values().iterator();
-           //TODO resolve this
-           /*
-               this code support only the service with onebindings it will not care about the
-               second binding if exists.. if the NO binding specified it will failed
-            */
-           Binding binding = null;
-           if(portmap.hasNext())
-               binding = ((Port)portmap.next()).getBinding();
+    private PortType getWebServiceInfo()
+        throws WrapperFault {
+		//get the service 
+		//there seem to be a neater way to get the service,
+		// use this instead of follows       	
+		ServiceEntry sentry = getServiceEntry();	 	   
+        
+        
+        //ServiceEntry sentry = symbolTable.getServiceEntry(new QName(serviceuri, servicelocalpart));
+        
+        
+        Iterator ports = sentry.getService().getPorts().values().iterator();
+        
+        //if the targetEndPointURI not specifed we continue having it null
+        //The WrapperInfo will set a default value for the targetEndPointURI
+        if (ports.hasNext()) {
+            Port port = (Port) ports.next();
+            List adresslist = port.getExtensibilityElements();
+            if (adresslist != null
+                && adresslist.size() != 0
+                && (adresslist.get(0)
+                    instanceof com.ibm.wsdl.extensions.soap.SOAPAddressImpl))
+                this.targetEndpointURI =
+                    ((com.ibm.wsdl.extensions.soap.SOAPAddressImpl) adresslist.get(0))
+                        .getLocationURI();
+        }
 
-          if(binding == null)
-           	throw new WrapperFault("No binding specified");
-           	
-            //the service style (rpc|doc|msg)
-			this.serviceStyle = tb.getBindingEntry(binding.getQName()).getBindingStyle().getName();
-			
-			//extract the trasport type as a uri
-			List soapbinding = binding.getExtensibilityElements();
-		    if(soapbinding!= null && soapbinding.size() > 0 && (soapbinding.get(0) instanceof com.ibm.wsdl.extensions.soap.SOAPBindingImpl))
-				this.transportURI = ((com.ibm.wsdl.extensions.soap.SOAPBindingImpl)soapbinding.get(0)).getTransportURI();
-               
-			/**
-			 * --- Get the encoding style ---
-			 * The WSDL file specified the encoding for the each operation in the binding.
-			 * but tool can not genarate the stub/skeltons/types which each has different 
-			 * encoding styles. So the encoding style given in the FIRST OPERATION will be used 
-			 * as THE ENCODED style for all the operations.
-			 * # if the more than one encoding style define for the first operation the 
-			 * # first among them will be used.   
-			 */
-			
-			List operations = binding.getBindingOperations();
-			if(operations!= null){
-			
-			for(int i =0; i <operations.size(); i++){
-				//for the first binding operation found
-			 	 if(operations.get(i) instanceof com.ibm.wsdl.BindingOperationImpl){
-					BindingInput input;
-					
-					if((input = ((com.ibm.wsdl.BindingOperationImpl)operations.get(i)).getBindingInput()) == null)
-						break;
-					List soapbodies = input.getExtensibilityElements();
-					
-					if(soapbodies!= null){
-				 		for(int j =0; j <operations.size(); j++){
-					 		if(soapbodies.get(i) instanceof com.ibm.wsdl.extensions.soap.SOAPBodyImpl){
-								List encodings  = ((com.ibm.wsdl.extensions.soap.SOAPBodyImpl)soapbodies.get(j)).getEncodingStyles();
-					 			if(encodings == null && encodings.size() > 0)
-					 				this.encodingStyle = (String)encodings.get(0);
-					 			break;
-					 		}
-				 		}
-					}		
-					break;	
-			 	 }
-				}
-			 }		
-				
-           PortTypeEntry classinfo = tb.getPortTypeEntry(binding.getPortType().getQName());
-         if (classinfo == null)
-				throw new WrapperFault("Service not found");
-			this.qualifiedServiceName = classinfo.getName();
-        if(this.qualifiedServiceName == null){
+        //get the binding
+        Iterator portmap = sentry.getService().getPorts().values().iterator();
+        //TODO resolve this
+        /*
+            this code support only the service with onebindings it will not care about the
+            second binding if exists.. if the NO binding specified it will failed
+         */
+        Binding binding = null;
+        if (portmap.hasNext())
+            binding = ((Port) portmap.next()).getBinding();
+
+        if (binding == null)
+            throw new WrapperFault("No binding specified");
+
+        //the service style (rpc|doc|msg)
+        this.serviceStyle =
+            symbolTable.getBindingEntry(binding.getQName()).getBindingStyle().getName();
+
+        //extract the trasport type as a uri
+        List soapbinding = binding.getExtensibilityElements();
+        if (soapbinding != null
+            && soapbinding.size() > 0
+            && (soapbinding.get(0) instanceof com.ibm.wsdl.extensions.soap.SOAPBindingImpl))
+            this.transportURI =
+                ((com.ibm.wsdl.extensions.soap.SOAPBindingImpl) soapbinding.get(0))
+                    .getTransportURI();
+
+        /**
+         * --- Get the encoding style ---
+         * The WSDL file specified the encoding for the each operation in the binding.
+         * but tool can not genarate the stub/skeltons/types which each has different 
+         * encoding styles. So the encoding style given in the FIRST OPERATION will be used 
+         * as THE ENCODED style for all the operations.
+         * # if the more than one encoding style define for the first operation the 
+         * # first among them will be used.   
+         */
+
+        List operations = binding.getBindingOperations();
+        if (operations != null) {
+
+            for (int i = 0; i < operations.size(); i++) {
+                //for the first binding operation found
+                if (operations.get(i) instanceof com.ibm.wsdl.BindingOperationImpl) {
+                    BindingInput input;
+
+                    if ((input =
+                        ((com.ibm.wsdl.BindingOperationImpl) operations.get(i))
+                            .getBindingInput())
+                        == null)
+                        break;
+                    List soapbodies = input.getExtensibilityElements();
+
+                    if (soapbodies != null) {
+                        for (int j = 0; j < operations.size(); j++) {
+                            if (soapbodies.get(i)
+                                instanceof com.ibm.wsdl.extensions.soap.SOAPBodyImpl) {
+                                List encodings =
+                                    ((com.ibm.wsdl.extensions.soap.SOAPBodyImpl) soapbodies
+                                        .get(j))
+                                        .getEncodingStyles();
+                                if (encodings == null && encodings.size() > 0)
+                                    this.encodingStyle = (String) encodings.get(0);
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+        PortTypeEntry classinfo = symbolTable.getPortTypeEntry(binding.getPortType().getQName());
+        if (classinfo == null)
+            throw new WrapperFault("Service not found");
+        this.qualifiedServiceName = classinfo.getName();
+        if (this.qualifiedServiceName == null) {
             qualifiedServiceName = classinfo.getQName().getNamespaceURI();
-            qualifiedServiceName = WrapperUtils.firstCharacterToLowercase(WrapperUtils.nsURI2packageName(qualifiedServiceName)) +"."+ classinfo.getQName().getLocalPart();
-        	}
-		return classinfo.getPortType();
+            qualifiedServiceName =
+                WrapperUtils.firstCharacterToLowercase(
+                    WrapperUtils.nsURI2packageName(qualifiedServiceName))
+                    + "."
+                    + classinfo.getQName().getLocalPart();
+        }
+        return classinfo.getPortType();
 
     }
 
@@ -230,7 +257,7 @@ public class WSDL2Ws {
      * When possible the user can have the schema QName if he like
      */
 
-    private  ArrayList getServiceInfo(PortType porttype,String language){
+    private ArrayList getServiceInfo(PortType porttype, String language) {
         //get opeation list
         Iterator oplist = porttype.getOperations().iterator();
         ArrayList methods = new ArrayList();
@@ -252,221 +279,241 @@ public class WSDL2Ws {
             //add each parameter to parameter list
             while (paramlist.hasNext()) {
                 Part p = (Part) paramlist.next();
-                ptype = tb.getType(p.getTypeName());
-                pinfo = new ParameterInfo(ptype.getName(),ptype.getQName(),p.getName(),language);
+
+                //TODO some types type name is null we neglect them is that right??
+                if (p.getTypeName() == null) {
+                    continue;
+                }
+
+                ptype = symbolTable.getType(p.getTypeName());
+                pinfo =
+                    new ParameterInfo(
+                        ptype.getName(),
+                        ptype.getQName(),
+                        p.getName(),
+                        language);
+
                 minfo.addParameter(pinfo);
             }
 
             //get the return type
             Iterator returnlist =
                 op.getOutput().getMessage().getParts().values().iterator();
-            if (returnlist.hasNext()){
-                ptype = tb.getType(((Part) returnlist.next()).getTypeName());
-                        minfo.setReturnType(new ParameterInfo(ptype.getName(),ptype.getQName(),null,language));
-                }
+            if (returnlist.hasNext()) {
+                Part p = ((Part) returnlist.next());
+
+                //TODO some types type name is null we neglect them is that right??
+                if (p.getTypeName() == null)
+                    continue;
+
+                ptype = symbolTable.getType(p.getTypeName());
+                minfo.setReturnType(
+                    new ParameterInfo(ptype.getName(), ptype.getQName(), null, language));
+            }
         }
         return methods;
     }
-
-	
 
     /**
      * This method extract the custom complex type info fom the symbol table
      * @return the type map with type info
      */
-	private TypeMap getTypeInfo(String targetLanguage){
-		Iterator it = tb.getTypeIndex().values().iterator();	
-		TypeEntry type;
-		Iterator elements;
-		Type typedata;
-		
-		boolean hasElements; 
-		while(it.hasNext()){
-			type = (TypeEntry)it.next();
-			Node node = type.getNode();
-			if(node!= null){
-				//get information about all the element declaration
-				Vector elementsV = SchemaUtils.getContainedElementDeclarations(node,tb);
+    private TypeMap getTypeInfo(String targetLanguage) {
+        Iterator it = symbolTable.getTypeIndex().values().iterator();
+        TypeEntry type;
+        Iterator elements;
+        Type typedata;
 
-				if(elementsV!= null){
-					elements = elementsV.iterator();
-					typedata = new Type(type.getQName(),type.getName(),true,targetLanguage);
-					hasElements = false;	
-					
-					//is this a SOAPEnc array type	
-					QName arrayType = SchemaUtils.getArrayComponentQName(node,new IntHolder(0));
-					if(arrayType !=  null){
-						typedata.setTypeNameForAttribName("item",arrayType);
-						System.out.println("ArrayType =" + arrayType);
-						typedata.setArray(true);
-					}else if((arrayType = SchemaUtils.getCollectionComponentQName(node)) !=  null){
-							typedata.setTypeNameForAttribName("item",arrayType);
-							typedata.setArray(true);
-							System.out.println("ArrayType =" + arrayType);
-					}else{
-						while(elements.hasNext()){
-							ElementDecl ed =(ElementDecl)elements.next();
-							typedata.setTypeNameForAttribName(ed.getName().getLocalPart(),ed.getType().getQName());
+        boolean hasElements;
+        while (it.hasNext()) {
+            type = (TypeEntry) it.next();
+            Node node = type.getNode();
+            if (node != null) {
+					typedata = getTypeInfo(type,targetLanguage);
+	                System.out.println(
+                        "############## the type found =" + type.getQName());
+                    typeMap.addType(type.getQName(), typedata);
+            }
+        } //end of type while
+        return typeMap;
+    } //end of method
+
+    public void genarateWrappers(
+        String servicename,
+        String targetoutputLocation,
+        String targetLanguage,
+        String targetImplementationStyle,
+        String targetEngine)
+        throws WrapperFault {
+
+        ArrayList methods = this.getServiceInfo(this.porttype, targetLanguage);
+        TypeMap typeMap = this.getTypeInfo(targetLanguage);
+        //TODO	chaeck weather the name at the WrapperConstant Doclit is right "doc"
+
+        WebServiceGenarator wsg =
+            WebServiceGenaratorFactory.createWebServiceGenarator(
+                new WebServiceContext(
+                    new WrapperInfo(
+                        serviceStyle,
+                        targetLanguage,
+                        encodingStyle,
+                        targetoutputLocation,
+                        targetImplementationStyle,
+                        targetEngine,
+                        transportURI,
+                        targetEndpointURI,
+                        targetNameSpaceOfWSDL),
+                    new ServiceInfo(servicename, qualifiedServiceName, methods),
+                    typeMap));
+        if (wsg == null)
+            throw new WrapperFault("does not support the option combination");
+        wsg.genarate();
+
+    }
+    
+    /**
+     * This code is taken from the org.apache.axis.wsdl.gen.Parser Class.
+     * WSDL file should have only one service, The first service 
+     * find is utilized.
+     * @return
+     * @throws WrapperFault
+     */
+    public ServiceEntry getServiceEntry()throws WrapperFault{
+		Iterator it = symbolTable.getHashMap().values().iterator();
+		 while (it.hasNext()) {
+			Vector v = (Vector) it.next();
+			  for (int i = 0; i < v.size(); ++i) {
+				  SymTabEntry entry = (SymTabEntry) v.elementAt(i);
+   
+			 if (entry instanceof ServiceEntry) {
+					return (ServiceEntry)entry;
+				 }
+			}
+		 }
+		 throw new WrapperFault("the service does not exists");
+    }
+    
+    /**
+     * This code is borrowd from the JavaBeanWriter#writeFullConstructor().
+     * @param type
+     * @param targetLanguage
+     * @return
+     */
+
+	public Type getTypeInfo(TypeEntry type,String targetLanguage){
+		if(type == null)
+			return null;
+			
+		Node node = type.getNode();
+		Type typedata =
+			new Type(type.getQName(), type.getName(), true, targetLanguage);
+
+		//is this a SOAPEnc array type	
+		QName arrayType =
+			SchemaUtils.getArrayComponentQName(node, new IntHolder(0));
+		if (arrayType != null) {
+			typedata.setTypeNameForAttribName("item", arrayType);
+			typedata.setArray(true);
+		} else if (
+			(arrayType = SchemaUtils.getCollectionComponentQName(node))
+				!= null) {
+			typedata.setTypeNameForAttribName("item", arrayType);
+			typedata.setArray(true);
+		} 
+		//Note in a array the parameter type is stored as under the name item all the time  
+		else {
+			// get all extended types
+			Vector extendList = new Vector();
+			extendList.add(type);
+			TypeEntry parent = SchemaUtils.getComplexElementExtensionBase(
+													type.getNode(),symbolTable);
+			while(parent != null) {
+				extendList.add(parent);
+				parent = SchemaUtils.getComplexElementExtensionBase(
+											parent.getNode(),symbolTable);
+			}
+	
+			// Now generate a list of names and types starting with
+			// the oldest parent.  (Attrs are considered before elements).
+			for (int i=extendList.size()-1; i >= 0; i--) {
+				TypeEntry te = (TypeEntry) extendList.elementAt(i);
+	
 				
-							//see weather the type extend from SOAPEnc ArrayType
-						/*	
-						 //TODO this code fragement might not needed .... the unbound case of the arrray is
-						 //not controlled by the SchemaUtils   top twoif conditions 
-						    
-						  
-						 if(ed.getMaxoccurs()!= null){
-								try{
-									if(ed.getMaxoccurs().equals("unbound") || Integer.parseInt(ed.getMaxoccurs()) >1){
-										if(hasElements)
-											throw new WrapperFault("maxOccurs can not be with other element in complex type");
-											//if maxOccurs is threre no way other element exit in the complextype (we are not support 
-											// that type of combinations) 
-											typedata.setArray(true);			
-									}
-								}catch(Exception e){
-									// do nothing value is not unbound nor integer 
-								}
-							}*/
-							
-							//say now the type has elements
-							if(!hasElements) hasElements = false;				
-						}//end of elements it while
-					}		
-					//add the type to type map.
-					System.out.println("############## the type found ="+type.getQName());
-					typeMap.addType(type.getQName(),typedata);
-					
+				//TODO the code require the attributes name at extension base types
+				//different, the WSDL2Ws do not support it having same name at up and below.
+				
+				// The names of the inherited parms are mangled
+				// in case they interfere with local parms.
+				String mangle = "";
+				//if (i > 0) {
+				//	mangle = "_" +
+				//		Utils.xmlNameToJava(te.getQName().getLocalPart()) +
+				//		"_";
+				//}
+				
+				// Process the attributes
+				Vector attributes = SchemaUtils.getContainedAttributeTypes(
+					te.getNode(), symbolTable);
+				if (attributes != null) {
+					for (int j=0; j<attributes.size(); j+=2) {
+						typedata.setTypeNameForAttribName(
+							((QName)attributes.get(j + 1)).getLocalPart(),
+							((TypeEntry) attributes.get(j)).getQName());
+					}
+				}
+				// Process the elements
+				Vector elements = SchemaUtils.getContainedElementDeclarations(
+										te.getNode(), symbolTable);
+				if (elements != null) {
+					for (int j=0; j<elements.size(); j++) {
+						ElementDecl elem = (ElementDecl)elements.get(j);
+						typedata.setTypeNameForAttribName(
+								elem.getName().getLocalPart(),
+								elem.getType().getQName());
+					}			
 				}
 			}
-		}//end of type while
-		return typeMap;
-	}//end of method
-    
-    
-    
-    
- /*   private TypeMap getTypeInfoR(){
-      //get the type information
-      Vector v = tb.getTypes();  //TODO remove the depricated method
-      NodeList nl;
-      Node t;
-      Node node;
-      NodeList params;
-      TypeEntry entry;
-      String name;
-      //for each type in the WSDL file do ..
-      for (int i = 0; i < v.size(); i++) {
-         entry = (TypeEntry) v.get(i);
-          //get the node element
-            t = entry.getNode();
-
-          //ignore the entries not relevent .. e.g.<element>
-            if (t == null) continue;
-                if(!t.getLocalName().equalsIgnoreCase(WrapperConstants.ELEMENT_COMPLEX_TYPE)){
-                if(t.getLocalName().equalsIgnoreCase(WrapperConstants.ELEMENT_ELEMENT)){
-                    TypeMap.setQnameTras(Utils.getTypeQName(t,new BooleanHolder(false),false),Utils.getNodeNameQName(t));
-                }
-                continue;
-            }
-            
-			nl = ((Element) t).getElementsByTagName(WrapperConstants.ELEMENT_ELEMENT);
-            if(nl != null && nl.getLength() != 0){
-				//get child elements inside the complex type
-				params = ((Element)t).getChildNodes();
-            }else{
-            	nl = ((Element) t).getElementsByTagName(WrapperConstants.ELEMENT_SEQUENCE);
-            	if (nl == null || nl.getLength() != 0) {
-               		nl = ((Element) t).getElementsByTagName(WrapperConstants.ELEMENT_ALL);
-               		hasOrder = true;
-               		if (nl == null || nl.getLength() != 0) {
-               	    	//what todo?? ;
-               		}
-            	}
-				params = nl.item(0).getChildNodes();
-            } 	
-         //create type ...
-         org.apache.axis.wsdl.wsdl2ws.info.Type type =
-               new org.apache.axis.wsdl.wsdl2ws.info.Type(entry.getQName(),entry.getName(),hasOrder);
-         
-         for (int j = 0; j < params.getLength(); j++) {
-			//get child elements inside the complex type
-         	node = params.item(j);
-            if (!WrapperConstants.ELEMENT_ELEMENT.equals(node.getLocalName()))
-               continue;
-            name = node.getAttributes().getNamedItem(WrapperConstants.ATTRIBUTE_NAME).getNodeValue();
-
-            QName typeqnameG = Utils.getTypeQName(node,new BooleanHolder(false),false);
-            QName typeqname = TypeMap.getNameTrans(typeqnameG);
-            if(typeqname == null)
-              typeqname =typeqnameG;
-              type.setTypeNameForAttribName(name, typeqname);
-            }
-            typeMap.addType(entry.getQName(),type);
-       }
-      return typeMap;
-    }*/
-
-
-	public void genarateWrappers(
-		String servicename,
-		String targetoutputLocation,
-		String targetLanguage,
-		String targetImplementationStyle,
-        String targetEngine,
-        String targetNameSpaceOfWSDL)
-		throws WrapperFault {
-
-
-        ArrayList methods = this.getServiceInfo(this.porttype,targetLanguage);
-        TypeMap typeMap = this.getTypeInfo(targetLanguage);
-		//TODO	chaeck weather the name at the WrapperConstant Doclit is right "doc"
-
-		WebServiceGenarator wsg =
-			WebServiceGenaratorFactory.createWebServiceGenarator(
-				new WebServiceContext(
-					new WrapperInfo(serviceStyle,targetLanguage,encodingStyle,
-                                        targetoutputLocation,targetImplementationStyle,targetEngine,transportURI,targetEndpointURI,targetNameSpaceOfWSDL),
-					new ServiceInfo(servicename,qualifiedServiceName,methods),
-					typeMap));
-		if (wsg == null)
-			throw new WrapperFault("does not support the option combination");
-		wsg.genarate();
-
+		}	
+		return typedata;
 	}
 
-	/**
-	 * Usage
-	 * =====
-	 * java WSDL2ws <wsdlfile> <serviceuri> <serviceLocalpart> -<optionChar><value>
-	 * 
-	 * Options and Values 
-	 * ======= === ======
-	 * -o target output folder
-	 * -l target language(c|java|c++) default is java
-	 * -h help (later ???? not emplemented)
-	 * -i implementation style (struct|order|simple) default is struct--- (usergetvalue() with PP or use getTag() ect ....)
-     * -s (client|server)  default is server
+
+    /**
+     * Usage
+     * =====
+     * java WSDL2ws <wsdlfile> -<optionChar><value>
+     * 
+     * Options and Values 
+     * ======= === ======
+     * -o target output folder
+     * -l target language(c|java|c++) default is java
+     * --help (later ???? not emplemented)
+     * -i implementation style (struct|order|simple) default is struct--- (usergetvalue() with PP or use getTag() ect ....)
+     * -s (client|server|both)  
      * 
      * Note:  PP - pull parser
-	 * @param args
-	 * @throws Exception
-	 */
+     * @param args
+     * @throws Exception
+     */
 
-	public static void main(String[] args) throws Exception {
-		CLArgParser data = new CLArgParser(args);
-		System.out.println(data.getArgumentCount());
-		if (data.getArgumentCount() != 3)
-			System.out.println(
-				"usage WSDL2Wrapper <wsdlfile> <uri> <localpart> -o <target output folder> -p <target output package>");
-		else {
-			WSDL2Ws gen = new WSDL2Ws(data);
-			gen.genarateWrappers(
-				args[2],
-				data.getOptionBykey("o"),
-				data.getOptionBykey("l"),
-				data.getOptionBykey("i"),
-                data.getOptionBykey("s"),
-                args[1]);
-		}
-	}
+    public static void main(String[] args) throws Exception {
+        CLArgParser data = new CLArgParser(args);
+        System.out.println(data.getArgumentCount());
+        if (data.getArgumentCount() != 1)
+            System.out.println(
+                "java WSDL2ws <wsdlfile> -<optionChar><value>\n"
+                    + "-o target output folder\n"
+                    + "-l target language(c|java|c++) default is java\n"
+                    + "-i implementation style (struct|order|simple) default is struct--- (usergetvalue() with PP or use getTag() ect ....)\n"
+                    + "-s (client|server|both)  default is server\n");
+        else {
+            WSDL2Ws gen = new WSDL2Ws(data);
+            gen.genarateWrappers(
+                args[2],
+                data.getOptionBykey("o"),
+                data.getOptionBykey("l"),
+                data.getOptionBykey("i"),
+                data.getOptionBykey("s"));
+        }
+    }
 }

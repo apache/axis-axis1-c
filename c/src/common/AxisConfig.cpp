@@ -16,69 +16,42 @@ AxisConfig::~AxisConfig()
 int AxisConfig::ReadConfFile()
 {
     FILE* fileConfig = NULL;
-    FILE* fileConfig2 = NULL;
-    char sConfPath[CONFBUFFSIZE] = {0};
+    char* sConfPath = NULL;
     char sNewConfPath[CONFBUFFSIZE] = {0};
     char line[CONFBUFFSIZE] = {0};
     char key[CONFBUFFSIZE] = {0};
     char value[CONFBUFFSIZE] = {0};
-    int i=0;
-	char* echocmd;
-	char* delcmd;
-    #ifdef WIN32
-		echocmd = "echo %AXIS_HOME% > ./__temp__axis";
-		delcmd = "del __temp__axis";
-    #else //linux
-	    echocmd = "echo $AXIS_HOME>./__temp__axis";
-		delcmd = "rm -f __temp__axis";
-	#endif
-    system(echocmd);
-    if ((fileConfig = fopen("__temp__axis", "rb")) == NULL)
-        return FAIL;
 
-    else
+	sConfPath = getenv("AXIS_HOME");
+	if (!sConfPath) return FAIL;
+	strcpy(sNewConfPath, sConfPath);
+    strcat(sNewConfPath, "/axiscpp.conf");
+    if ((fileConfig = fopen(sNewConfPath, "rt")) == NULL)
+		return FAIL;
+
+    while(fgets(line, CONFBUFFSIZE, fileConfig) != NULL)
     {
-        fgets(sConfPath, CONFBUFFSIZE, fileConfig);
-        while(true)
+        int k=0;
+        while(line[k] != ':')
         {
-            sNewConfPath[i] = sConfPath[i];
-            i = i + 1;
-            if(sConfPath[i] == '\n' || sConfPath[i] == EOF)
-            break;
-        }
-
-        strcat(sNewConfPath, "/axiscpp.conf");
-        if ((fileConfig2 = fopen(sNewConfPath, "rb")) == NULL)
-        return FAIL;
-
-        while(fgets(line, CONFBUFFSIZE, fileConfig2) != NULL)
-        {
-            int k=0;
-            while(line[k] != ':')
-            {
-                key[k]=line[k];
-                k += 1;
-
-            }
+            key[k]=line[k];
             k += 1;
-            int j=0;
-            while(line[k] != '\n')
-            {
-                value[j]=line[k];
-                k += 1;
-                j += 1;
 
-            }
-            if(strcmp(key, "WSDDFILEPATH") == 0)
-                strcpy(m_sWsddFilePath, value);
-            if(strcmp(key, "AXISLOGPATH") == 0)
-                strcpy(m_sAxisLogPath, value);
         }
-        fclose(fileConfig2);
+        k += 1;
+        int j=0;
+        while(line[k] != '\n')
+        {
+            value[j]=line[k];
+            k += 1;
+            j += 1;
 
+        }
+        if(strcmp(key, "WSDDFILEPATH") == 0)
+            strcpy(m_sWsddFilePath, value);
+        if(strcmp(key, "AXISLOGPATH") == 0)
+            strcpy(m_sAxisLogPath, value);
     }
-    fclose(fileConfig);
-    system(delcmd);
     return SUCCESS;
 }
 

@@ -84,14 +84,10 @@ public class ParmHeaderFileWriter extends ParamWriter{
 			this.writer.write("#if !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)\n");
 			this.writer.write("#define __"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_\n\n");
 			writePreprocssorStatements();
+			this.writer.write("\n");
 			this.writer.write("class "+classname+"\n{\n");
 			writeAttributes();
 			this.writer.write("};\n\n");
-			writeArrayStruct();
-			//writeConstructors();
-			//writeDistructors();
-			//writeMethods();
-			//cleanup
 			this.writer.write("#endif // !defined(__"+classname.toUpperCase()+"_"+getFileType().toUpperCase()+"_H__INCLUDED_)\n");
 			writer.flush();
 			writer.close();
@@ -101,15 +97,6 @@ public class ParmHeaderFileWriter extends ParamWriter{
 			throw new WrapperFault(e);
 		}
 	}
-
-	protected void writeArrayStruct()throws WrapperFault{
-		try{
-			writer.write("typedef struct Axis_"+classname+"_ArrayTag\n{\n");
-			writer.write("\t"+classname+"* m_Array;\n\tint m_Size;\n} Axis_"+classname+"_Array;\n\n");
-		} catch (IOException e) {
-			 throw new WrapperFault(e);
-		}
-	}
 	
 	protected void writeAttributes()throws WrapperFault{
 		  if(type.isArray()) return;
@@ -117,7 +104,7 @@ public class ParmHeaderFileWriter extends ParamWriter{
 			writer.write("public:\n");
 			  for(int i=0;i<attribs.length;i++){
 				  //if((t = wscontext.getTypemap().getType(new QName(attribs[i][2],attribs[i][3])))!= null && t.isArray()) continue;
-				  writer.write("\t"+getCrroectParmNameConsideringArrays(new QName(attribs[i][2],attribs[i][3]),attribs[i][1])+" "+attribs[i][0]+";\n");
+				  writer.write("\t"+getCorrectParmNameConsideringArraysAndComplexTypes(new QName(attribs[i][2],attribs[i][3]),attribs[i][1])+" "+attribs[i][0]+";\n");
 			  }    
 		  } catch (IOException e) {
 			   throw new WrapperFault(e);
@@ -145,10 +132,11 @@ public class ParmHeaderFileWriter extends ParamWriter{
 	  try{
 		Type atype;
 		Iterator types = this.wscontext.getTypemap().getTypes().iterator();
-		writer.write("#include <string>\nusing namespace std;\n");
+		writer.write("#include <string>\nusing namespace std;\n\n");
 		while(types.hasNext()){
-			if(!(atype = (Type)types.next()).equals(this.type)){
-				if (false){ //TODO check if this class has a member of the type in this include file. otherwise do not include
+			atype = (Type)types.next();
+			if(!(atype.equals(this.type))){
+				if (this.type.isContainedType(atype)){ 
 					writer.write("#include \""+atype.getLanguageSpecificName()+".h\"\n");
 				}
 			}

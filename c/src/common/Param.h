@@ -114,7 +114,7 @@ private:
 	AxisString m_strUri; //needed in serialization only
 
 public: //Conversion functions
-	const AxisString & GetTypeName();
+	const AxisString& GetTypeName();
 	int SetValue(const AxisChar* sValue);
 	int SetValue(XSDTYPE nType, uParamValue Value);
 	XSDTYPE GetType() const;	
@@ -133,15 +133,15 @@ public: //Conversion functions
 	float GetFloat();
     double GetDouble();
     double GetDecimal();
-    const AxisString& GetAnyURI();
-    const AxisString& GetQName();
+    const AxisChar* GetAnyURI();
+    const AxisChar* GetQName();
     struct tm GetDateTime();
     struct tm GetDate();
     struct tm GetTime();
     long GetDuration();
-	const AxisString& GetString();
-	const AxisString& GetHexString();
-	const AxisString& GetBase64String();
+	const AxisChar* GetString();
+	const AxisChar* GetHexString();
+	const AxisChar* GetBase64String();
 	void setPrefix(const AxisChar* prefix);
 	void setUri(const AxisChar* uri);
 	int GetArraySize();
