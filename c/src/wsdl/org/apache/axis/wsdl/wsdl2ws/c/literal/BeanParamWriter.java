@@ -93,12 +93,31 @@ public class BeanParamWriter extends ParamCFileWriter{
 			Iterator itr = typeSet.iterator();
 			while(itr.hasNext())
 			{
+				/*
+				 * Needed for self referenced  array.
+				* <xsd:complexType name="Type1">
+				*	<xsd:sequence>
+				*		<xsd:element name="followings" maxOccurs="unbounded" minOccurs="0" type="tns:Type1" />
+				*		<xsd:element name="kind" type="xsd:string" />
+				*		<xsd:element name="index" type="xsd:int" />
+				*	</xsd:sequence>
+				*	<xsd:attribute name="att_kind" type="tns:Kind" />
+				* </xsd:complexType>
+				*/				
 				typeName = itr.next().toString();
-				writer.write("extern int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer *pDZ);\n");
-				writer.write("extern void* Axis_Create_"+typeName+"("+typeName+"* pObj, bool bArray, int nSize);\n");
-				writer.write("extern void Axis_Delete_"+typeName+"("+typeName+"* param, bool bArray, int nSize);\n");
-				writer.write("extern int Axis_Serialize_"+typeName+"("+typeName+"* param, IWrapperSoapSerializer* pSZ, bool bArray);\n");
-				writer.write("extern int Axis_GetSize_"+typeName+"();\n\n");			
+				if ( ! typeName.equals(type.getName().getLocalPart())) {
+					writer.write("extern int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer *pDZ);\n");
+					writer.write("extern void* Axis_Create_"+typeName+"("+typeName+"* pObj, bool bArray, int nSize);\n");
+					writer.write("extern void Axis_Delete_"+typeName+"("+typeName+"* param, bool bArray, int nSize);\n");
+					writer.write("extern int Axis_Serialize_"+typeName+"("+typeName+"* param, IWrapperSoapSerializer* pSZ, bool bArray);\n");
+					writer.write("extern int Axis_GetSize_"+typeName+"();\n\n");
+				} else {
+					writer.write("int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer *pDZ);\n");
+					writer.write("void* Axis_Create_"+typeName+"(void* pObj, bool bArray, int nSize);\n");
+					writer.write("void Axis_Delete_"+typeName+"("+typeName+"* param, bool bArray, int nSize);\n");
+					writer.write("int Axis_Serialize_"+typeName+"("+typeName+"* param, IWrapperSoapSerializer* pSZ, bool bArray);\n");
+					writer.write("int Axis_GetSize_"+typeName+"();\n\n");
+				}		
 			}
 			writeSerializeGlobalMethod();
 			writeDeSerializeGlobalMethod();

@@ -94,7 +94,7 @@ public class ParmHeaderFileWriter extends ParamWriter{
 			}
 			else{
 				writePreprocssorStatements();
-				this.writer.write("typedef struct {\n");
+				this.writer.write("typedef struct "+classname+ "Tag {\n");
 				writeAttributes();
 				this.writer.write("} "+classname+";\n\n");
 			}
