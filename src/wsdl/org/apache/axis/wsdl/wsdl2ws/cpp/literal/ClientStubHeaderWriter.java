@@ -90,7 +90,7 @@ public class ClientStubHeaderWriter
                     else
                     {
                         isAllTreatedAsOutParams = true;
-                        writer.write("\tvoid ");
+                        writer.write("\tSTORAGE_CLASS_INFO void ");
                     }
                 }
                 //write return type

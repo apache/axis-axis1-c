@@ -74,7 +74,7 @@ public class ParmHeaderFileWriter extends ParamWriter
             else
             {
                 writePreprocessorStatements();
-                this.writer.write("class " + classname + "\n{\n");
+                this.writer.write("class STORAGE_CLASS_INFO " + classname + "\n{\n");
                 writeAttributes();
                 writeConstructors();
                 writeDestructors();
