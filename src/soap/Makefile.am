@@ -48,6 +48,7 @@ libsoap_la_SOURCES = Attribute.cpp \
         xsd/UnsignedByte.cpp \
         xsd/PositiveInteger.cpp \
         xsd/NonPositiveInteger.cpp \
+        xsd/NegativeInteger.cpp \
         xsd/constraints/IConstrainingFacet.cpp \
         xsd/constraints/WhiteSpace.cpp \
         xsd/constraints/Pattern.cpp \

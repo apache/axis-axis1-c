@@ -326,6 +326,10 @@ SOURCE=..\src\soap\Namespace.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\NegativeInteger.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\xsd\NonNegativeInteger.cpp
 # End Source File
 # Begin Source File
