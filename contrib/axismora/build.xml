@@ -1,4 +1,4 @@
- <project name="axis-mora" default="build-all" basedir=".">
+ <project name="axis-mora" default="compile" basedir=".">
 	<description>
    Build file for Axis
 
@@ -54,18 +54,6 @@ Copyright:
 	<property name ="debug" value="false"/>
 	<property name ="config-file" value="docs/conf-bak"/>
 	
-	<property name ="activationJar" value="activation.jar"/>
-	<property name ="axis-antJar" value="axis-ant.jar"/>
-	<property name ="junitJar" value="junit3.8.1.jar"/>
-	<property name ="xppJar" value="xpp3-1.1.3.2.jar"/>
-	<property name ="log4jJar" value="log4j-1.2.4.jar"/>
-	<property name ="saajJar" value="saaj.jar"/>
-	<property name ="wsdl4jJar" value="wsdl4j.jar"/>
-	<property name ="jaxrpcJar" value="jaxrpc.jar"/>
-	<property name ="discoveryJar" value="commons-discovery.jar"/>	
-	<property name ="loggingJar" value="commons-logging.jar"/>	
-	<property name ="axisJar" value="axis.jar"/>	
-
 	<property name="packages" value="org.apache.axis.*" />
 	<path id ="cp">
 		<fileset dir="${lib}" includes="*.jar"/>
@@ -90,29 +78,37 @@ Copyright:
      <javac  srcdir="${src}" destdir="${build-classes}" debug="${debug}"
       deprecation="${deprecation}" listfiles="false">
       <classpath refid="cp"/>
-    </javac>
-    <copy file="${src}/log4j.properties" todir="${build-classes}"/>
-    <copy file="${src}/simplelog.properties" todir="${build-classes}"/>
-    <copy file="${src}/org/apache/axismora/server/mora-server.wsdd" todir="${build-classes}/org/apache/axismora/server"/>
-    <copy file="${src}/org/apache/axismora/client/mora-client.wsdd" todir="${build-classes}/org/apache/axismora/client"/>   
-    <copy file="mora-server.wsdd" todir="${web-inf}"/>
-    <copy file="users.lst" todir="${web-inf}"/>
-    <copy file="${config-file}/web.xml" todir="${web-inf}"/>
+     </javac>
+     <copy file="${src}/log4j.properties" todir="${build-classes}"/>
+     <copy file="${src}/simplelog.properties" todir="${build-classes}"/>
+     <copy file="${src}/org/apache/axismora/server/mora-server.wsdd" todir="${build-classes}/org/apache/axismora/server"/>
+     <copy file="${src}/org/apache/axismora/client/mora-client.wsdd" todir="${build-classes}/org/apache/axismora/client"/>   
+     <copy file="mora-server.wsdd" todir="${web-inf}"/>
+     <copy file="users.lst" todir="${web-inf}"/>
+     <copy file="${config-file}/web.xml" todir="${web-inf}"/>
     
-    <mkdir dir="${web-inf}/lib"/>
-    <copy file ="${lib}/${activationJar}" todir="${web-inf}/lib"/>
-	<copy file ="${lib}/${axis-antJar}" todir="${web-inf}/lib"/>
-	<copy file ="${lib}/${junitJar}" todir="${web-inf}/lib"/>
-	<copy file ="${lib}/${xppJar}" todir="${web-inf}/lib"/>
-	<copy file ="${lib}/${log4jJar}" todir="${web-inf}/lib"/>
-	<copy file ="${lib}/${saajJar}" todir="${web-inf}/lib"/>
-	<copy file ="${lib}/${wsdl4jJar}" todir="${web-inf}/lib"/>
-	<copy file ="${lib}/${jaxrpcJar}" todir="${web-inf}/lib"/>
-	<copy file ="${lib}/${discoveryJar}" todir="${web-inf}/lib"/>	
-	<copy file ="${lib}/${loggingJar}" todir="${web-inf}/lib"/>	
-	<copy file ="${lib}/${axisJar}" todir="${web-inf}/lib"/>	
-    
-    </target>     
+     <mkdir dir="${web-inf}/lib"/>
+ 	<copy todir="${web-inf}/lib">
+		<fileset dir="${lib}" casesensitive="yes" >
+  			<include name="**/*.jar"/>
+			<exclude name="**/servlet*"/>
+			<exclude name="**/junit*"/>
+		</fileset>
+    </copy>
+   	<jar jarfile="${web-inf}/lib/aAxismora.jar" basedir="${web-inf}/classes" >
+      <include name="AxisServlet.class"/>
+      <include name="org/apache/**" />
+      <include name="log4j.properties"/>
+      <include name="simplelog.properties"/>
+      <include name="${web-inf}/mora-server.wsdd"/>
+      <manifest>
+        <section name="org/apache/axis">
+          <attribute name="Implementation-Title" value="Apache Axismora"/>
+           <attribute name="Implementation-Vendor" value="Apache Web Services"/>
+        </section>
+      </manifest>
+    </jar>
+  </target>     
     
   <!-- =================================================================== -->
   <!-- compile tests                                       -->
@@ -139,17 +135,11 @@ Copyright:
   <!-- =================================================================== -->
   <!-- compile usage tests                           -->
   <!-- =================================================================== -->
-  <!--
-  usage tests are removed as keeping the genarated code in the 
-  cvs is have no point. The tests basesd on set fo WSDL's will comming soon.
- <target name="compile-usage" depends="init">
-     <javac  srcdir="${usageTest}" destdir="${build-classes}" debug="${debug}"
-      deprecation="${deprecation}" listfiles="false">
-      <classpath refid="cp"/>
-    </javac>
-  </target>
+ 	<target name="usage-tests" depends="compile">
+		<ant antfile="usagetests.xml" target="usage-tests" inheritall="false" inheritrefs="false" dir="."/>
+	</target>
   
-  -->
+
   
 
   <!-- =================================================================== -->
@@ -172,8 +162,10 @@ Copyright:
   <!-- =================================================================== -->
   <!-- clear output directory     -->
   <!-- =================================================================== -->
-  <target name="clear">
+  <target name="clean">
   		<delete dir="${build-classes}"></delete>
+  		<delete dir="testresults"></delete>
+		<ant antfile="usagetests.xml" target="clean" inheritall="false" inheritrefs="false" dir="."/>
   </target>
   
   <!-- =================================================================== -->
@@ -183,7 +175,7 @@ Copyright:
   <!-- =================================================================== -->
   <!-- rebuild all     -->
   <!-- =================================================================== -->
-   <target name="rebuild-all" depends="clear,build-all"></target>
+   <target name="rebuild-all" depends="clean,build-all"></target>
   
   <!-- =================================================================== -->
   <!-- java doc cretation     -->
@@ -209,21 +201,6 @@ Copyright:
 			</javadoc>
     </target>
     
-    <target name="jar" depends="compile">
-   	<jar jarfile="${web-inf}/lib/axismora.jar" basedir="${web-inf}/classes" >
-      <include name="AxisServlet.class"/>
-      <include name="org/apache/**" />
-      <include name="log4j.properties"/>
-      <include name="simplelog.properties"/>
-      <include name="${web-inf}/mora-server.wsdd"/>
-      <manifest>
-        <section name="org/apache/axis">
-          <attribute name="Implementation-Title" value="Apache Axismora"/>
-           <attribute name="Implementation-Vendor" value="Apache Web Services"/>
-        </section>
-      </manifest>
-    </jar>
-    </target>
     <!--
     TODO followings 
     1) task to run the tests when server is ready 
