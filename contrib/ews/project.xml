@@ -60,8 +60,7 @@
   
   <!-- build information for the project -->
   <build>
-    <nagEmailAddress>turbine-maven-dev@jakarta.apache.org</nagEmailAddress>
-    <sourceDirectory>src/java</sourceDirectory>
+    <nagEmailAddress>geronimo-dev@jakarta.apache.org</nagEmailAddress>
     <sourceDirectory>${basedir}/target/src</sourceDirectory>
     <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
 

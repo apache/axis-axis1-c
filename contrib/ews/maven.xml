@@ -31,6 +31,7 @@
 
         <j:jelly xmlns="jelly:ant">
 
+            <j:set var="src.dir" value="${basedir}/src/java"/>
             <j:set var="dir" value="${basedir}/target/src"/>
 
             <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
@@ -43,15 +44,10 @@
 
             <xjc target="${dir}" schema="${basedir}/src/schema/j2ee_jaxrpc_mapping_1_1.xsd" package="org.apache.geronimo.ews.jaxrpcmapping.descriptor" extension="true" />
 
+            <ant:copy todir="${dir}">
+                <ant:fileset dir="${src.dir}" includes="**/*.java"/>
+            </ant:copy>
 
-            <!--            
-            <xjc target="${dir}" package="org.apache.geronimo.xmlbeans.ejb" extension="true">
-                <arg value="-nv"/>
-
-                <schema dir="${basedir}/src/schema" includes="j2ee_1*.xsd,ejb-jar*.xsd"/>
-                <binding dir="${basedir}/src/etc" includes="*.xjb"/>
-            </xjc>
-            -->
         </j:jelly>
     </goal>
 
