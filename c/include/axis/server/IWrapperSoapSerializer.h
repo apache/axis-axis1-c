@@ -57,9 +57,8 @@
  *
  */
 
-// IWrapperSoapSerializer.h:
-//
-//////////////////////////////////////////////////////////////////////
+/* IWrapperSoapSerializer.h:*/
+
 
 #if !defined(AFX_IWRAPPERSOAPSERIALIZER_H__D3E794EC_8A67_4E0E_BE28_583DCDCE1C42__INCLUDED_)
 #define AFX_IWRAPPERSOAPSERIALIZER_H__D3E794EC_8A67_4E0E_BE28_583DCDCE1C42__INCLUDED_
