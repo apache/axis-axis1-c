@@ -98,12 +98,15 @@ public:
 	const map<AxisString, AxisString>* GetParameterList() const; 
 	WSDDHandler();
 	virtual ~WSDDHandler();
+	void SetDescription(const AxisChar* sDescription);
+	const AxisChar* GetDescription() const;
 
 protected:
 	int m_nLibId;
 	int m_nScope;
 	AxisString m_sName;
 	AxisString m_sLibName;
+	AxisString m_sDescription;
 	map<AxisString, AxisString>* m_Params;
 };
 
