@@ -98,6 +98,10 @@ SOURCE=..\..\..\..\..\samples\server\interoptests\groupB\AxisServiceException.cp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\..\src\common\AxisUserAPI.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\..\samples\server\interoptests\base\InteropTestPortType.cpp
 # End Source File
 # Begin Source File
