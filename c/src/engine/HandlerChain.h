@@ -85,8 +85,8 @@ public:
 	HandlerChain();
 	virtual ~HandlerChain();
 
-	int Invoke(MessageData* pMsg);
-	void OnFault(MessageData* pMsg);
+	int Invoke(IMessageData* pMsg);
+	void OnFault(IMessageData* pMsg);
 
 private:
 	list<Handler*> m_HandlerList;
