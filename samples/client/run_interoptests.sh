@@ -1,8 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 
 #get command line options
 GET_URL=""
 GET_PORT=""
+BIN_PREFIX=${AXISCPP_DEPLOY}/bin
 while getopts u:p:h o
 do      case "$o" in
         u)      GET_URL=$OPTARG;;
@@ -19,31 +20,31 @@ echo "-----------------------------"
 
 echo "running base..."
 echo "-----------------------------"
-./base ${GET_URL} ${GET_PORT}
+${BIN_PREFIX}/base ${GET_URL} ${GET_PORT}
 
 echo "-----------------------------"
 
 echo "running groupB..."
 echo "-----------------------------"
-./groupB ${GET_URL} ${GET_PORT}
+${BIN_PREFIX}/groupB ${GET_URL} ${GET_PORT}
 
 echo "-----------------------------"
 
 #echo "running cgroupB..."
 #echo "-----------------------------"
-#./cgroupB ${GET_URL} ${GET_PORT}
+#${BIN_PREFIX}/cgroupB ${GET_URL} ${GET_PORT}
 
 echo "-----------------------------"
 
 echo "running doclitbase..."
 echo "-----------------------------"
-./doclitbase ${GET_URL} ${GET_PORT}
+${BIN_PREFIX}/doclitbase ${GET_URL} ${GET_PORT}
 
 echo "-----------------------------"
 
 echo "running doclitgroupB..."
 echo "-----------------------------"
-./doclitgroupB ${GET_URL} ${GET_PORT}
+${BIN_PREFIX}/doclitgroupB ${GET_URL} ${GET_PORT}
 
 echo "-----------------------------"
 
