@@ -187,6 +187,21 @@ public class ParameterInfo
     }
     //Samisa
 
+    //Samisa 16/03/2005
+    public String getSOAPElementNameAsString()
+    {
+        String paramName = elementName.getLocalPart();
+        if (paramName.lastIndexOf(SymbolTable.ANON_TOKEN) > 1)
+        {
+            paramName =
+                paramName.substring(
+                    paramName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
+                    paramName.length());
+        }
+        return paramName;
+    }
+    //Samisa
+
     /**
      * @param name
      */
