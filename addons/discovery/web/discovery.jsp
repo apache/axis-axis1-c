@@ -7,7 +7,7 @@
                  java.io.PrintWriter,
                  java.io.StringWriter"%>
 <html><head>
-<title>Axis Mir location</title>
+<title>Axis WS-Discovery</title>
 </head><html>
 <body bgcolor="#ffffff">
 <h2>Axis Discovery</h2>
