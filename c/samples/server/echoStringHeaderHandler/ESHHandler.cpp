@@ -66,12 +66,12 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "ESHHandler.h"
-#include <GDefine.h>
-#include <IHandlerSoapSerializer.h>
-#include <IHandlerSoapDeSerializer.h>
-#include "../../../../soap/HeaderBlock.h"
-#include "../../../../soap/SoapHeader.h"
-#include "../../../../soap/BasicNode.h"
+#include <axis/common/GDefine.h>
+#include <axis/common/IHandlerSoapSerializer.h>
+#include <axis/common/IHandlerSoapDeSerializer.h>
+#include <axis/soap/HeaderBlock.h>
+#include <axis/soap/SoapHeader.h>
+#include <axis/soap/BasicNode.h>
 #include <iostream>
 
 //////////////////////////////////////////////////////////////////////

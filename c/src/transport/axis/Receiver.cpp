@@ -62,9 +62,9 @@
  *
  */
 
-#include "Platform.hpp"
-#include "Receiver.hpp"
-#include "Transport.hpp"
+#include <axis/client/transport/axis/Platform.hpp>
+#include <axis/client/transport/axis/Receiver.hpp>
+#include <axis/client/transport/axis/Transport.hpp>
 #include <iostream>
 
 
