@@ -898,11 +898,11 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
 					m_pNode = m_pParser->next(true); /* charactor node */
 					if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
 					{
-						if( !stricmp( "false", m_pNode->m_pchNameOrValue))
+						if( !strcmp( "false", m_pNode->m_pchNameOrValue) || !strcmp( "FALSE", m_pNode->m_pchNameOrValue))
 						{
 	                        ((long*)Array.m_Array)[nIndex] = 0;
 						}
-						else if( !stricmp( "true", m_pNode->m_pchNameOrValue))
+						else if( !strcmp( "true", m_pNode->m_pchNameOrValue) || !strcmp( "TRUE", m_pNode->m_pchNameOrValue))
 						{
 	                        ((long*)Array.m_Array)[nIndex] = 1;
 						}
@@ -1067,11 +1067,11 @@ Axis_Array SoapDeSerializer::getBasicArray(XSDTYPE nType,
                         m_pNode = m_pParser->next(true); /* charactor node */
                         if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
                         {
-							if( !stricmp( "false", m_pNode->m_pchNameOrValue))
+							if( !strcmp( "false", m_pNode->m_pchNameOrValue) || !strcmp( "FALSE", m_pNode->m_pchNameOrValue))
 							{
 	                            ((long*)Array.m_Array)[nIndex] = 0;
 							}
-							else if( !stricmp( "true", m_pNode->m_pchNameOrValue))
+							else if( !strcmp( "true", m_pNode->m_pchNameOrValue) || !strcmp( "TRUE", m_pNode->m_pchNameOrValue))
 							{
 	                            ((long*)Array.m_Array)[nIndex] = 1;
 							}
