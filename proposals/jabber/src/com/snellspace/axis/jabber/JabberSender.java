@@ -37,19 +37,25 @@ public class JabberSender
           createRequestPacketFromMessage(
             context.getRequestMessage(), 
             context);
+        boolean waitForResponse = 
+          ((Boolean)context.getProperty(
+            JabberTransport.JABBER_WAIT_FOR_RESPONSE))
+              .booleanValue();
         connection.send(request, this);
-        try {
-          synchronized(this) {
-            while (packet == null) {
-              wait(1000);
+        if (waitForResponse) {
+          try {
+            synchronized(this) {
+              while (packet == null) {
+                wait(1000);
+              }
             }
-          }
-        } catch (InterruptedException e) {}
-        Packet response = packet;
-        context.setResponseMessage(
-          createResponseMessageFromPacket(
-            response, 
-            context));
+          } catch (InterruptedException e) {}
+          Packet response = packet;
+          context.setResponseMessage(
+            createResponseMessageFromPacket(
+              response, 
+              context));
+        }
         connection.disconnect();
         connection = null;
   }
