@@ -55,10 +55,12 @@ public class DocLitWebServiceGenarator implements WebServiceGenarator{
 				(new Genarator(WrapperConstants.GENERATOR_CLASSLOADER_CPP, wscontext)).genarate();				 				 	
 				(new Genarator(WrapperConstants.GENERATOR_DEPLOYMENT, wscontext)).genarate();
 				(new Genarator(WrapperConstants.GENERATOR_UNDEPLOYMENT, wscontext)).genarate();
+				(new Genarator(WrapperConstants.GENERATOR_EXCEPTION_ALL, wscontext)).genarate(); //nithya
 			}else{
 				(new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_CPP, wscontext)).genarate();
 				(new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_HPP, wscontext)).genarate();
-				(new Genarator(WrapperConstants.GENERATOR_PARAM_CPP_ALL, wscontext)).genarate();	
+				(new Genarator(WrapperConstants.GENERATOR_PARAM_CPP_ALL, wscontext)).genarate();
+				(new Genarator(WrapperConstants.GENERATOR_EXCEPTION_ALL, wscontext)).genarate();//nithya
 			}
 		}else if(WrapperConstants.LANGUAGE_C.equalsIgnoreCase(language)){
 			if(WrapperConstants.SERVER.equals(wscontext.getWrapInfo().getTargetEngine())){
