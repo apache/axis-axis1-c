@@ -15,6 +15,11 @@
     <td><b>Description</b></td>
   </tr>
   <tr>
+    <td><link href="http://archive.apache.org/dist/ws/axis/1_2alpha/">1.2alpha</link></td>
+    <td>December 1, 2003</td>
+    <td>Alpha Version 1.2.</td>
+  </tr>
+  <tr>
     <td><link href="http://ws.apache.org/axis/download.cgi">1.1</link> (from mirror)</td>
     <td>June 16, 2003</td>
     <td>Final Version 1.1.</td>

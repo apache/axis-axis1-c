@@ -33,16 +33,12 @@
         &lt;<a href="mailto:Andras.Avar@nokia.com">andras.avar@nokia.com</a>&gt;
       </li>
       <li>
-        <b>Russell Butek</b>
-        &lt;<a href="mailto:butek@us.ibm.com">butek@us.ibm.com</a>&gt;
-      </li>
-      <li>
         <b>David Chappell</b>
         &lt;<a href="mailto:chappell@sonicsoftware.com">chappell@sonicsoftware.com</a>&gt;
       </li>
       <li>
         <b>Glen Daniels</b>
-        &lt;<a href="mailto:gdaniels@macromedia.com">gdaniels@macromedia.com</a>&gt;
+        &lt;<a href="mailto:gdaniels@apache.org">gdaniels@apache.org</a>&gt;
       </li>
       <li>
         <b>Doug Davis</b>
@@ -82,42 +78,16 @@
         &lt;<a href="mailto:nakamury@apache.org">nakamury@apache.org</a>&gt;
       </li>
       <li>
-        <b><a href="http://www.intertwingly.net/blog/">Sam
-        Ruby</a></b>
-        &lt;<a href="mailto:rubys@us.ibm.com">rubys@us.ibm.com</a>&gt;
-      </li>
-      <li>
-        <b>Rick Rineholt
-        &lt;</b><a href="mailto:rineholt@us.ibm.com">rineholt@us.ibm.com</a>
-        <b>&gt;</b>
-      </li>
-      <li>
         <b>Thomas Sandholm</b>
         &lt;<a href="mailto:sandholm@mcs.anl.gov">sandholm@mcs.anl.gov</a>&gt;
-      </li>
-      <li>
-        <b>Rich Scheuerle</b>
-        &lt;<a href="mailto:scheu@us.ibm.com">scheu@us.ibm.com</a>&gt;
       </li>
       <li>
         <b>Igor Sedukhin</b>
         &lt;<a href="mailto:igors@apache.org">igors@apache.org</a>&gt;
       </li>
       <li>
-        <b>Matt Seibert</b>
-        &lt;<a href="mailto:mseibert@us.ibm.com">mseibert@us.ibm.com</a>&gt;
-      </li>
-      <li>
-        <b>Richard Sitze</b>
-        &lt;<a href="mailto:rsitze@apache.org">rsitze@apache.org</a>&gt;
-      </li>
-      <li>
         <b>Davanum Srinivas</b>
         &lt;<a href="mailto:dims@yahoo.com">dims@yahoo.com</a>&gt;
-      </li>
-      <li>
-        <b>Vidyanand Murunikkara</b>
-        &lt;<a href="mailto:Vidyanand@infravio.com">vidyanand@infravio.com</a>&gt;
       </li>
       <li>
         <b>Sanjiva Weerawarana</b>
@@ -177,6 +147,10 @@
         &lt;<a href="mailto:avahe@apache.org">avahe@apache.org</a>&gt;
       </li>
       <li>
+        <b>Russell Butek</b>
+        &lt;<a href="mailto:butek@us.ibm.com">butek@us.ibm.com</a>&gt;
+      </li>
+      <li>
         <b>Wouter Cloetens</b>
         &lt;<a href="mailto:wouter@mind.be">wouter@mind.be</a>&gt;
       </li>
@@ -213,6 +187,10 @@
         &lt;<a href="mailto:kmitchell@apache.org">kmitchell@apache.org</a>&gt;
       </li>
       <li>
+        <b>Vidyanand Murunikkara</b>
+        &lt;<a href="mailto:Vidyanand@infravio.com">vidyanand@infravio.com</a>&gt;
+      </li>
+      <li>
         <b>Bill Nagy</b>
         &lt;<a href="mailto:wnagy@us.ibm.com">wnagy@us.ibm.com</a>&gt;
       </li>
@@ -229,6 +207,28 @@
         &lt;<a href="mailto:glyn@apache.org">glyn@apache.org</a>&gt;
         [<a href="http://cvs.apache.org/~glyn">Apache home
         page</a>]
+      </li>
+      <li>
+        <b>Rick Rineholt
+        &lt;</b><a href="mailto:rineholt@us.ibm.com">rineholt@us.ibm.com</a>
+        <b>&gt;</b>
+      </li>
+      <li>
+        <b><a href="http://www.intertwingly.net/blog/">Sam
+        Ruby</a></b>
+        &lt;<a href="mailto:rubys@us.ibm.com">rubys@us.ibm.com</a>&gt;
+      </li>
+      <li>
+        <b>Rich Scheuerle</b>
+        &lt;<a href="mailto:scheu@us.ibm.com">scheu@us.ibm.com</a>&gt;
+      </li>
+      <li>
+        <b>Matt Seibert</b>
+        &lt;<a href="mailto:mseibert@us.ibm.com">mseibert@us.ibm.com</a>&gt;
+      </li>
+      <li>
+        <b>Richard Sitze</b>
+        &lt;<a href="mailto:rsitze@apache.org">rsitze@apache.org</a>&gt;
       </li>
       <li>
         <b>James Snell</b>
