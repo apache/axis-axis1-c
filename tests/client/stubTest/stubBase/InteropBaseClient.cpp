@@ -69,7 +69,7 @@ main (int argc, char *argv[])
    */
 
   //set SOAP headers
-  IHeaderBlock *phb = ws.createHeaderBlock ("TestHeader", "th",
+  IHeaderBlock *phb = ws.createSOAPHeaderBlock ("TestHeader", "th",
 					    "http://ws.apache.org/axisCppTest/");
 
   //create parent node

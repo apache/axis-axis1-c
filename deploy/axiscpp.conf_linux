@@ -1,4 +1,19 @@
+# The comment character is '#'
+#Available directives are as follows
+#(Some of these directives may not be implemented yet)
+#
+#WSDDFILEPATH:The path to the server wsdd
+#AXISLOGPATH:The path to the axis log
+#AXISCLIENTLOGPATH:The path to the axis client log
+#CLIENTWSDDFILEPATH:The path to the client wsdd
+#AXISTRANSPORT_HTTP:The HTTP transport library
+#AXISTRANSPORT_SMTP:The SMTP transport library
+#AXISXMLPARSER:The xml parser library
+
 AXISLOGPATH:/usr/local/Axis/logs/AxisLog
 WSDDFILEPATH:/usr/local/Axis/conf/server.wsdd
 AXISCLIENTLOGPATH:/usr/local/Axis/logs/AxisClientLog
+AXISTRANSPORT_HTTP:/home/samisa/autoCVS/cvsAutoBuild/bin/libaxis_transport.so
+AXISXMLPARSER:/home/samisa/autoCVS/cvsAutoBuild/bin/libaxis_xercesc.so
+
 
