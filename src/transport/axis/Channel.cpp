@@ -282,7 +282,7 @@ Channel::readNonBlocking (std::string & msg)
 
 #ifdef WIN32
     // Set the socket I/O mode; iMode = 0 for blocking; iMode != 0 for non-blocking
-    int iMode = 0;
+    int iMode = 1;
     ioctlsocket(m_Sock, FIONBIO, (u_long FAR*) &iMode);
     flags = 0;
 #else
