@@ -82,6 +82,8 @@
 #include "../common/GDefine.h"
 #include "SoapKeywordMapping.h"
 
+#define TRANSCODE_BUFFER_SIZE 256
+
 #include <map>
 #include <list>
 #include <string>
@@ -108,25 +110,25 @@ private:
 	//After parsing all params will be in this flat list(even nested params and arrays)
 	list<Param*> m_Params;
 	list<Param*>::iterator m_it;
-	map<AxisString, AxisString> m_NsStack;
+	map<AxisXMLString, AxisXMLString> m_NsStack;
 	SOAP_VERSION m_nSoapVersion;
-
+	AxisChar m_Buffer[TRANSCODE_BUFFER_SIZE]; //used to transcode XMLCh to AxisChar
 private:
 	Param* GetParam();
 	int Success();
 	Param m_Param; //Param to which each parameter data is extracted
 	ArrayBean m_ArrayBean;
-	ComplexObjectHandler m_AccessBean;
+	ComplexObjectHandler m_CplxObj;
 	int m_Success;
 	SOAP_PARSE_LEVEL m_PL0;
 	SOAP_PARSE_LEVEL m_PL1;
 	SOAP_PARSE_LEVEL m_PL2;
-	AxisString m_sLastElement;
+	AxisXMLString m_sLastElement;
 	HeaderBlock* m_pHeaderBlock;
 private:
 	void createHeaderBlock(const XMLCh *const uri,const XMLCh *const localname,const XMLCh *const qname,const Attributes &attrs);
 	int m_nParamNestingLevel;
-	int SetArrayDimensions(AxisString& sDimensions);
+	int SetArrayDimensions(AxisXMLString& sDimensions);
 	void FillMethod(const XMLCh *const uri,const XMLCh *const localname,const XMLCh *const qname,const Attributes &attrs);
 	void FillFault(const XMLCh *const uri,const XMLCh *const localname,const XMLCh *const qname,const Attributes &attrs);
 	void FillHeader(const XMLCh *const uri,const XMLCh *const localname,const XMLCh *const qname,const Attributes &attrs);
@@ -152,7 +154,6 @@ private:
     void warning(const SAXParseException& exception);
     void error(const SAXParseException& exception);
     void fatalError(const SAXParseException& exception);
-
 	void SetParamType(const Attributes &attrs);
 };
 

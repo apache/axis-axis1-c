@@ -106,7 +106,7 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 	int iStatus= SUCCESS;
 
 	do {		
-		pSZ<< "<" << ObjSoapEnvVersionsStructTemp[eSoapVersion].pchPrefix << ":" << ObjSoapEnvVersionsStructTemp[eSoapVersion].pchWords[SKW_BODY];
+		pSZ<< "<" << gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix << ":" << gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_BODY];
 		iStatus= serializeAttributes(pSZ);
 		if(iStatus==FAIL) {
 			break;
@@ -126,44 +126,11 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 			}
 		}
 		
-		pSZ<< "</"<< ObjSoapEnvVersionsStructTemp[eSoapVersion].pchPrefix<< ":" << ObjSoapEnvVersionsStructTemp[eSoapVersion].pchWords[SKW_BODY]<< ">";
+		pSZ<< "</"<< gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix<< ":" << gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_BODY]<< ">";
 	} while(0);
 
 	return iStatus;
 }
-
-/*
-comm on 10/7/2003 9.10pm
-int SoapBody::serialize(string& sSerialized, SOAP_VERSION eSoapVersion)
-{
-	int iStatus= SUCCESS;
-
-	do {
-		sSerialized= sSerialized+ "<"+ ObjSoapEnvVersionsStructTemp[eSoapVersion].pchEnvelopePrefix+ ":" + ObjSoapEnvVersionsStructTemp[eSoapVersion].pcharWords[SKW_BODY];		
-		iStatus= serializeAttributes(sSerialized);
-		if(iStatus==FAIL) {
-			break;
-		}
-		sSerialized= sSerialized+ ">"+ "\n";
-
-		if(m_pSoapMethod!=NULL) {
-			iStatus= m_pSoapMethod->serialize(sSerialized);
-			if(iStatus==FAIL) {
-				break;
-			}
-		} else if(m_pSoapFault!=NULL) {		
-			iStatus= m_pSoapFault->serialize(sSerialized);
-			if(iStatus==FAIL) {
-				break;
-			}
-		}
-
-		sSerialized = sSerialized+ "</"+ ObjSoapEnvVersionsStructTemp[eSoapVersion].pchEnvelopePrefix+ ":" + ObjSoapEnvVersionsStructTemp[eSoapVersion].pcharWords[SKW_BODY]+ ">"+ "\n";
-	} while(0);
-
-	return iStatus;
-}
-*/
 
 void SoapBody::addAttribute(Attribute *attr)
 {
@@ -187,24 +154,3 @@ int SoapBody::serializeAttributes(SoapSerializer& pSZ)
 
 	return iStatus;
 }
-
-/*
-comm on 10/07/2003 8.50pm
-int SoapBody::serializeAttributes(string &sSerialized)
-{
-	int iStatus= SUCCESS;
-
-	list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
-
-	while(itCurrAttribute != m_attributes.end()) {		
-
-		iStatus= (*itCurrAttribute)->serialize(sSerialized);
-		if(iStatus==FAIL) {
-			break;
-		}
-		itCurrAttribute++;		
-	}	
-
-	return iStatus;
-}
-*/

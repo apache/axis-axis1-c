@@ -83,9 +83,7 @@ WSDDService::~WSDDService()
 	WSDDHandlerList::iterator iter;
 	if(m_RequestHandlers)
 	{
-		for(iter=m_RequestHandlers->begin()
-				;iter!=m_RequestHandlers->end()
-				;iter++)
+		for(iter=m_RequestHandlers->begin();iter!=m_RequestHandlers->end();iter++)
 		{
 			delete (*iter);
 		}
@@ -93,39 +91,34 @@ WSDDService::~WSDDService()
 
 	if(m_ResponseHandlers)
 	{
-		for(iter=m_ResponseHandlers->begin()
-				;iter!=m_ResponseHandlers->end()
-				;iter++)
+		for(iter=m_ResponseHandlers->begin();iter!=m_ResponseHandlers->end();iter++)
 		{
 			delete (*iter);
 		}
 	}
 }
 
-void WSDDService::SetServiceName(const AxisString& sServiceName)
+void WSDDService::SetServiceName(const AxisChar* sServiceName)
 {
 	m_sName = sServiceName;
 }
 
-void WSDDService::SetProvider(const AxisString& sProvider)
+void WSDDService::SetProvider(const AxisChar* sProvider)
 {
 	m_sProvider = sProvider;
 }
 
-const AxisString& WSDDService::GetServiceName()
+const AxisChar* WSDDService::GetServiceName()
 {
-	return m_sName;
+	return m_sName.c_str();
 }
 
-void WSDDService::AddAllowedMethod(const AxisString& sMethodName)
+void WSDDService::AddAllowedMethod(const AxisChar* sMethodName)
 {
 	m_AllowedMethods.push_back(sMethodName);
 }
 
-#include <xercesc/util/XMLString.hpp>
-XERCES_CPP_NAMESPACE_USE
-
-bool WSDDService::IsAllowedMethod(const AxisString& sServiceName) const
+bool WSDDService::IsAllowedMethod(const AxisChar* sServiceName) const
 {
 	list<AxisString>::const_iterator iter;
 	for(iter = m_AllowedMethods.begin();iter != m_AllowedMethods.end();iter++)
@@ -148,7 +141,7 @@ const WSDDHandlerList* WSDDService::GetResponseFlowHandlers() const
 	return m_ResponseHandlers;
 }
 
-void WSDDService::AddAllowedRole(const AxisString& sRole)
+void WSDDService::AddAllowedRole(const AxisChar* sRole)
 {
 	m_AllowedRoles.push_back(sRole);
 }

@@ -128,7 +128,7 @@ int SoapEnvelope::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 {	
 	int iStatus= SUCCESS;
 	do {			
-		pSZ << "<" << ObjSoapEnvVersionsStructTemp[eSoapVersion].pchPrefix << ":" << ObjSoapEnvVersionsStructTemp[eSoapVersion].pchWords[SKW_ENVELOPE];			
+		pSZ << "<" << gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix << ":" << gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_ENVELOPE];			
 		serializeStandardNamespaceDecl(pSZ);
 		serializeNamespaceDecl(pSZ);
 		serializeAttributes(pSZ);
@@ -149,7 +149,7 @@ int SoapEnvelope::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 			//iStatus = FAIL;
 		}
 				
-		pSZ << "</" << ObjSoapEnvVersionsStructTemp[eSoapVersion].pchPrefix << ":" << ObjSoapEnvVersionsStructTemp[eSoapVersion].pchWords[SKW_ENVELOPE] << ">";
+		pSZ << "</" << gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix << ":" << gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_ENVELOPE] << ">";
 		pSZ.flushSerializedBuffer();
 	} while(0);
 
@@ -164,7 +164,7 @@ int SoapEnvelope::serialize(string &sSerialized, SOAP_VERSION eSoapVersion)
 	int iStatus= SUCCESS;
 
 	do {
-		sSerialized= "<"+ string(ObjSoapEnvVersionsStructTemp[eSoapVersion].pchPrefix) + ":"+ ObjSoapEnvVersionsStructTemp[eSoapVersion].pchWords[SKW_ENVELOPE];
+		sSerialized= "<"+ string(gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix) + ":"+ gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_ENVELOPE];
 
 		serializeNamespaceDecl(sSerialized);
 		serializeAttributes(sSerialized);
@@ -188,7 +188,7 @@ int SoapEnvelope::serialize(string &sSerialized, SOAP_VERSION eSoapVersion)
 			//iStatus = FAIL;
 		}
 		
-		sSerialized+= "</"+ string(ObjSoapEnvVersionsStructTemp[eSoapVersion].pchPrefix) + ":"+ ObjSoapEnvVersionsStructTemp[eSoapVersion].pchWords[SKW_ENVELOPE]+ ">";	
+		sSerialized+= "</"+ string(gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix) + ":"+ gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_ENVELOPE]+ ">";	
 	} while(0);
 
 	return iStatus;

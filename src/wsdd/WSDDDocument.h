@@ -86,30 +86,9 @@ enum WSDDLevels {WSDD_UNKNOWN=1, WSDD_DEPLOYMENT, WSDD_UNDEPLOYMENT, WSDD_GLOBCO
 XERCES_CPP_NAMESPACE_USE;
 
 //wsdd file related defines
-#define METHODNAME_SEPARATOR L" "
-#define ROLENAME_SEPARATOR L","
-
-//keywords used in the wsdd file
-const AxisChar kw_depl[] = L"deployment";
-const AxisChar kw_srv[] = L"service";
-const AxisChar kw_glconf[] = L"globalConfiguration";
-const AxisChar kw_param[] = L"parameter"; 
-const AxisChar kw_hdl[] = L"handler";
-const AxisChar kw_chain[] = L"chain";
-const AxisChar kw_ns[] = L"namespace";
-const AxisChar kw_prv[] = L"provider";
-const AxisChar kw_cn[] = L"className"; //must be changed to libname or so
-const AxisChar kw_am[] = L"allowedMethods";
-const AxisChar kw_ar[] = L"allowedRoles";
-const AxisChar kw_rqf[] = L"requestFlow";
-const AxisChar kw_rsf[] = L"responseFlow";
-const AxisChar kw_tr[] = L"transport";
-const AxisChar kw_name[] = L"name";
-const AxisChar kw_value[] = L"value";
-const AxisChar kw_type[] = L"type"; //what about this ? change to libname ?
-const AxisChar kw_scope[] = L"scope";
-const AxisChar kw_http[] = L"http";
-const AxisChar kw_smtp[] = L"smtp";
+#define METHODNAME_SEPARATOR ' '
+#define ROLENAME_SEPARATOR ','
+#define TRANSCODE_BUFFER_SIZE 256
 
 class WSDDDocument:public DefaultHandler
 {
@@ -120,23 +99,24 @@ private:
 	WSDDLevels m_lev0;
 	WSDDLevels m_lev1; //gets values WSDD_REQFLOW or WSDD_RESFLOW
 	WSDDLevels m_lev2; //gets values WSDD_HANDLER or WSDD_CHAIN
-	map<AxisString, AxisString> m_NsStack;
+	map<AxisXMLString, AxisXMLString> m_NsStack;
 	WSDDService* m_pService; //Place holder for currently created Service object
 	WSDDHandler* m_pHandler; //Place holder for currently created Handler object
 	//map<string, string> m_GlobalConfParams;
 	AXIS_PROTOCOL_TYPE m_CurTrType; //Current transport type of transport handlers
+	AxisChar m_Buffer[TRANSCODE_BUFFER_SIZE]; //used to transcode XMLCh to AxisChar
 
 private:
 	void ProcessAttributes(WSDDLevels ElementType, const Attributes &attrs);
 	void GetParameters(WSDDLevels ElementType, const Attributes &attrs);
-	void AddAllowedRolesToService(AxisString& value);
-	void AddAllowedMethodsToService(AxisString& value);
+	void AddAllowedRolesToService(const AxisXMLCh* value);
+	void AddAllowedMethodsToService(const AxisXMLCh* value);
 
 public:
 	WSDDDocument();
 	~WSDDDocument();
-	int ParseDocument(const string& sWSDD);
-	int GetDeployment(const string& sWSDD, WSDDDeployment* pDeployment);
+	int ParseDocument(const AxisChar* sWSDD);
+	int GetDeployment(const AxisChar* sWSDD, WSDDDeployment* pDeployment);
 	void startElement(const XMLCh *const uri, const XMLCh *const localname,	const XMLCh *const qname, const Attributes &attrs);
 	void characters (const XMLCh *const chars, const unsigned int length);
 	void endElement (const XMLCh *const uri, const XMLCh *const localname,	const XMLCh *const qname);

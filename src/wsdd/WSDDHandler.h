@@ -77,21 +77,22 @@
 using namespace std;
 
 enum AXIS_HANDLER_SCOPE {AH_APPLICATION=1, AH_SESSION, AH_REQUEST};
-const AxisChar kw_scope_app[] = L"application";
-const AxisChar kw_scope_ses[] = L"session";
-const AxisChar kw_scope_req[] = L"request";
+
+const AxisChar kw_scope_app[] = "application";
+const AxisChar kw_scope_ses[] = "session";
+const AxisChar kw_scope_req[] = "request";
 
 class WSDDHandler  
 {
 public:
-	const AxisString& GetLibName() const;
+	const AxisChar* GetLibName() const;
 	int GetLibId() const;
 	int GetScope() const;
-	void SetScope(const AxisString& sScope);
-	void SetLibName(const AxisString& sLibName);
+	void SetScope(const AxisChar* sScope);
+	void SetLibName(const AxisChar* sLibName);
 	void SetLibId(int nLibId);
-	const AxisString& GetParameter(const AxisString& sKey) const;
-	void AddParameter(const AxisString& sKey, const AxisString& sValue);
+	const AxisChar* GetParameter(const AxisChar* sKey) const;
+	void AddParameter(const AxisChar* sKey, const AxisChar* sValue);
 	const map<AxisString, AxisString>* GetParameterList() const; 
 	WSDDHandler();
 	virtual ~WSDDHandler();
@@ -102,7 +103,6 @@ protected:
 	AxisString m_sName;
 	AxisString m_sLibName;
 	map<AxisString, AxisString>* m_Params;
-	AxisString m_sAux;
 };
 
 typedef list<WSDDHandler*> WSDDHandlerList;

@@ -99,8 +99,8 @@ int BeanClass::GenerateSerializerAndDeSerializerImpl(File &file)
 {
 	list<Variable*>::iterator it;
 	file << "//Parameters and wrapper methos to manipulate Point" << endl;
-	file << "static const AxisChar* Axis_URI_" << m_Name << " = L\"http://www.opensource.lk/" << m_Name << "\";" << endl;
-	file << "static const AxisChar* Axis_TypeName_" << m_Name << " = L\"" << m_Name << "\";" << endl;
+	file << "static const AxisChar* Axis_URI_" << m_Name << " = \"http://www.opensource.lk/" << m_Name << "\";" << endl;
+	file << "static const AxisChar* Axis_TypeName_" << m_Name << " = \"" << m_Name << "\";" << endl;
 	file << endl;
 	file << "int Axis_DeSerialize_" << m_Name << "(" << m_Name << "* p, IWrapperSoapDeSerializer *pDZ)" << endl;
 	file << "{" << endl;
@@ -121,7 +121,7 @@ int BeanClass::GenerateSerializerAndDeSerializerImpl(File &file)
 	file << "\telse" << endl;
 	file << "\t{" << endl;
 	file << "\t\tconst AxisChar* sPrefix = pSZ.getNewNamespacePrefix();" << endl;
-//	file << "\tm_URI = L\"" << g_ClassNamespaces[m_Name] << "\";" << endl;
+//	file << "\tm_URI = \"" << g_ClassNamespaces[m_Name] << "\";" << endl;
 	file << "\t\tpSZ << \"<\" << Axis_TypeName_" << m_Name << "<< \" xsi:type=\\\"\" << sPrefix <<\":\" << Axis_TypeName_" << m_Name << " << \" xmlns:\" << sPrefix << \"=\\\"\" << Axis_URI_" << m_Name << " << \"\\\">\";" << endl;
 	file << "\t}" << endl;
 	for (it = m_Variables.begin(); it != m_Variables.end(); it++)
