@@ -96,6 +96,7 @@ public class Ws4J2EEwithWSDL implements Generator {
         try {
             String wscffile = clparser.getWscffile();
             misc.setOutputPath(clparser.getOutputDirectory());
+            misc.setUseRemoteInterface(clparser.isUseRemoteInterface());
             int index = wscffile.lastIndexOf('/');
             if(index < 0)
             	index = wscffile.lastIndexOf('\\');

@@ -14,27 +14,29 @@ import java.util.List;
  * @author hemapani
  */
 public class EJBDDParser {
-    private J2EEWebServiceContext j2eewscontext;
+	private J2EEWebServiceContext j2eewscontext;
+	private String ejbName = null;
 
-    public EJBDDParser(J2EEWebServiceContext j2eewscontext) {
-        this.j2eewscontext = j2eewscontext;
-    }
+	public EJBDDParser(J2EEWebServiceContext j2eewscontext) {
+		this.j2eewscontext = j2eewscontext;
+	}
 
-    public void parse(InputStream inputStream) throws GenerationFault {
-        try {
-            JAXBContext jc = JAXBContext.newInstance("org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd");
+	public void parse(InputStream inputStream) throws GenerationFault {
+		try {
+			JAXBContext jc = JAXBContext.newInstance("org.apache.geronimo.ews.ws4j2ee.parsers.ejbdd");
                 
-            // create an Unmarshaller
-            Unmarshaller u = jc.createUnmarshaller();
-            EjbJar ejbJar =
-                    (EjbJar) u.unmarshal(inputStream);
-            List sessions = ejbJar.getEnterpriseBeans().getSessionOrEntity();
-            if (!(sessions.size() > 0 && sessions.get(0) instanceof Session))
-                return;
-            Session session = (Session) sessions.get(0);
-            j2eewscontext.getMiscInfo().setEjbName(session.getEjbName().getValue());
-        } catch (Exception e) {
-            throw GenerationFault.createGenerationFault(e);
-        }
-    }
+			// create an Unmarshaller
+			Unmarshaller u = jc.createUnmarshaller();
+			EjbJar ejbJar =
+					(EjbJar) u.unmarshal(inputStream);
+			List sessions = ejbJar.getEnterpriseBeans().getSessionOrEntity();
+			if (!(sessions.size() > 0 && sessions.get(0) instanceof Session))
+				return;
+			Session session = (Session) sessions.get(0);
+			ejbName = session.getEjbName().getValue();
+			j2eewscontext.getMiscInfo().setEjbName(ejbName);
+		} catch (Exception e) {
+			throw GenerationFault.createGenerationFault(e);
+		}
+	}
 }

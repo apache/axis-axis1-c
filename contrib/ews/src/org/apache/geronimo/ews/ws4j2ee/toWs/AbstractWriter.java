@@ -80,7 +80,7 @@ public abstract class AbstractWriter implements Writer {
     protected J2EEWebServiceContext j2eewscontext;
     /* this is used to write the file */
     protected PrintWriter out;
-    protected boolean overwrite = true;
+    
 
     public AbstractWriter(J2EEWebServiceContext j2eewscontext)
             throws GenerationFault {
@@ -91,15 +91,17 @@ public abstract class AbstractWriter implements Writer {
 			if(j2eewscontext.getMiscInfo().isVerbose())
             	log.info("genarating ... " + file.getAbsolutePath());
 
-            if (!overwrite && file.exists()) {
-                throw new GenerationFault("the file already exists .. tool will not overwrite it ");
+            if (!isOverWrite() && file.exists()) {
+            	out = null;
+				log.info("the file already exists .. tool will not overwrite it ");
             } else {
                 File parent = file.getParentFile();
                 if (parent != null)
                     parent.mkdirs();
                 file.createNewFile();
+				out = new PrintWriter(new FileWriter(file, false));
             }
-            out = new PrintWriter(new FileWriter(file, false));
+
         } catch (IOException e) {
             throw new GenerationFault(e);
         }
@@ -117,6 +119,9 @@ public abstract class AbstractWriter implements Writer {
      * @see org.apache.geronimo.ews.ws4j2ee.toWs.Writer#writeCode()
      */
     public void writeCode() throws GenerationFault {
+    }
+    protected boolean isOverWrite(){
+    	return true;
     }
 
 }

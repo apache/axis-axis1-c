@@ -38,11 +38,11 @@ public class GenerateTest
 	{
 		//client side
 		String args[] = new String[]{getTestFile("src/samples/jaxrpc/book/webservice.xml"),
-									 "-o" + getTestFile(outDir+"withWSDL/client/book")};
+									 "-o" + getTestFile(outDir+"withWSDL/client/book"),"-R"};
 		Ws4J2EEwithWSDL.main(args);
 		//server side
 		String args1[] = new String[]{getTestFile("src/samples/jaxrpc/book/webservice.xml"),
-									 "-o" + getTestFile(outDir+"withWSDL/server/book"),"--server-side"};
+									 "-o" + getTestFile(outDir+"withWSDL/server/book"),"--server-side","-R"};
 		Ws4J2EEwithWSDL.main(args1);
         
 //			String[] args2 = new String[]{"-o"+outDir+"withoutWSDL/server/META-INF/book1.wsdl" ,"-l" ,"http://127.0.0.1/ws4j2ee/","com.jwsbook.jaxrpc.BookQuote"};
@@ -51,31 +51,32 @@ public class GenerateTest
 
 	public void testTimeSample() throws Exception{
 		String args[] = new String[]{getTestFile("src/samples/jaxrpc/time/webservices.xml"),
-									 "-o" + getTestFile(outDir+"withWSDL/client/time")};
+									 "-o" + getTestFile(outDir+"withWSDL/client/time"),"-R"};
 		Ws4J2EEwithWSDL.main(args);
 		
 		args = new String[]{getTestFile("src/samples/jaxrpc/time/webservices.xml"),
-											 "-o" + getTestFile(outDir+"withWSDL/server/time"),"--server-side"};
+											 "-o" + getTestFile(outDir+"withWSDL/server/time"),"--server-side","-R"};
 		Ws4J2EEwithWSDL.main(args);
 	}
 	
 	public void testZipSample() throws Exception{
 			String args[] = new String[]{getTestFile("src/samples/mapper/frenchzip/webservices.xml"),
-										 "-o" + getTestFile(outDir+"withWSDL/client/zip")};
+										 "-o" + getTestFile(outDir+"withWSDL/client/zip"),"-R"};
 			Ws4J2EEwithWSDL.main(args);
 		
 			args = new String[]{getTestFile("src/samples/mapper/frenchzip/webservices.xml"),
-												 "-o" + getTestFile(outDir+"withWSDL/server/zip"),"--server-side"};
+												 "-o" + getTestFile(outDir+"withWSDL/server/zip"),"--server-side","-R"};
 			Ws4J2EEwithWSDL.main(args);
 	}
 	public void testGoogleSample() throws Exception{
 				String args[] = new String[]{getTestFile("src/samples/mapper/google/webservices.xml"),
-											 "-o" + getTestFile(outDir+"withWSDL/client/google")};
+											 "-o" + getTestFile(outDir+"withWSDL/client/google"),"-R"};
 				Ws4J2EEwithWSDL.main(args);
 		
 				args = new String[]{getTestFile("src/samples/mapper/google/webservices.xml"),
-													 "-o" + getTestFile(outDir+"withWSDL/server/google"),"--server-side"};
+													 "-o" + getTestFile(outDir+"withWSDL/server/google"),"--server-side","-R"};
 				Ws4J2EEwithWSDL.main(args);
 	}	
+	
 	
 }

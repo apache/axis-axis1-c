@@ -93,7 +93,7 @@ public class ServerSideWsGenarator implements Generator {
             }
 
             j2ee.setMappingFilePath(mappingfile);
-            j2ee.setOutputDir(j2eewscontext.getMiscInfo().getOutPutPath() + "/jaxrpc/");
+            j2ee.setOutputDir(j2eewscontext.getMiscInfo().getOutPutPath());
             j2ee.setServerSide(true);
             j2ee.setVerbose(j2eewscontext.getMiscInfo().isVerbose());
             j2ee.setHelperWanted(true);
