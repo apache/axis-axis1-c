@@ -172,17 +172,17 @@ void Call::AddParameter(const AxisString& sStrValue,const char* pchName, XSDTYPE
 /**
  * Method used to add arrays of basic types as parameters
  */
-void Call::AddParameter(Axis_Array* pArray, XSDTYPE nType, const char* pchName)
+void Call::AddBasicArrayParameter(Axis_Array* pArray, XSDTYPE nType, const char* pchName)
 {
 	m_pIWSSZ->AddOutputParam(pchName, pArray, nType);
 }
 
-void Call::AddParameter(Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName, const char* pchURI, const char* pchName)
+void Call::AddCmplxArrayParameter(Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName, const char* pchURI, const char* pchName)
 {
 	m_pIWSSZ->AddOutputCmplxArrayParam(pchName, pArray, pSZFunct, pDelFunct, pSizeFunct, pchTypeName, pchURI);
 }
 
-void Call::AddParameter(void *pObject, void *pSZFunct, void *pDelFunct, const char* pchName)
+void Call::AddCmplxParameter(void *pObject, void *pSZFunct, void *pDelFunct, const char* pchName)
 {
 	m_pIWSSZ->AddOutputCmplxParam(pchName, pObject, pSZFunct, pDelFunct);
 }
@@ -198,7 +198,7 @@ void Call::SetReturnType(XSDTYPE nType)
 /**
  * This function is used to set that the return type is a complex type
  */
-void Call::SetReturnType(void *pDZFunct, void* pCreFunct, void *pDelFunct, const char* pchTypeName, const char * pchUri)
+void Call::SetCmplxReturnType(void *pDZFunct, void* pCreFunct, void *pDelFunct, const char* pchTypeName, const char * pchUri)
 {
 	m_nReturnType = USER_TYPE;
 	m_ReturnCplxObj.pObject = NULL;
@@ -212,7 +212,7 @@ void Call::SetReturnType(void *pDZFunct, void* pCreFunct, void *pDelFunct, const
 /**
  * This function is used to set that the return type is an array of complex types
  */
-void Call::SetReturnType(Axis_Array* pArray, void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName, const char* pchUri)
+void Call::SetCmplxArrayReturnType(Axis_Array* pArray, void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName, const char* pchUri)
 {
 	m_pArray = pArray;
 	m_nReturnType = XSD_ARRAY;
@@ -231,7 +231,7 @@ void Call::SetReturnType(Axis_Array* pArray, void* pDZFunct, void* pCreFunct, vo
  *				 to the client application.
  * @param nType Basic type of the array elements
  */
-void Call::SetReturnType(Axis_Array* pArray, XSDTYPE nType)
+void Call::SetBasicArrayReturnType(Axis_Array* pArray, XSDTYPE nType)
 {
 	m_pArray = pArray;
 	m_nReturnType = XSD_ARRAY;
@@ -385,7 +385,7 @@ Param* Call::GetResult()
 /**
  * Used to get deserialized return object when the return type is complex type
  */
-void Call::GetResult(void** pReturn)
+void Call::GetCmplxResult(void** pReturn)
 {
 	if (m_ReturnCplxObj.pObject)
 	{
@@ -563,7 +563,7 @@ void Call::AddOutParamType(XSDTYPE nType)
 /**
  * This function is used to set that the return type is a complex type
  */
-void Call::AddOutParamType(void *pDZFunct, void* pCreFunct, void *pDelFunct, const char* pchTypeName, const char * pchUri)
+void Call::AddCmplxOutParamType(void *pDZFunct, void* pCreFunct, void *pDelFunct, const char* pchTypeName, const char * pchUri)
 {
 	OutParamHolder* pOPH = AddOutParam();
 	if (pOPH)
@@ -581,7 +581,7 @@ void Call::AddOutParamType(void *pDZFunct, void* pCreFunct, void *pDelFunct, con
 /**
  * This function is used to set that the return type is an array of complex types
  */
-void Call::AddOutParamType(Axis_Array* pArray, void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName, const char* pchUri)
+void Call::AddCmplxArrayOutParamType(Axis_Array* pArray, void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const char* pchTypeName, const char* pchUri)
 {
 	OutParamHolder* pOPH = AddOutParam();
 	if (pOPH)
@@ -604,7 +604,7 @@ void Call::AddOutParamType(Axis_Array* pArray, void* pDZFunct, void* pCreFunct, 
  *				 to the client application.
  * @param nType Basic type of the array elements
  */
-void Call::AddOutParamType(Axis_Array* pArray, XSDTYPE nType)
+void Call::AddBasicArrayOutParamType(Axis_Array* pArray, XSDTYPE nType)
 {
 	OutParamHolder* pOPH = AddOutParam();
 	if (pOPH)
@@ -630,7 +630,7 @@ Param* Call::GetOutParam()
 /**
  * Used to get the deserialized object when the out param type is of complex type
  */
-void Call::GetOutParam(void** pOut)
+void Call::GetCmplxOutParam(void** pOut)
 {
 	if (m_CurItr == NULL) m_CurItr = m_OutParams.begin();
 	else m_CurItr++;
@@ -645,4 +645,244 @@ void Call::GetOutParam(void** pOut)
 	{
 		*pOut = NULL;
 	}
+}
+
+void AXISCALL Call::AddParameter(void* pValue,const char* pchName, XSDTYPE nType)
+{
+	m_pIWSSZ->AddOutputParam(pchName, pValue, nType);
+}
+
+int Call::GetInt()
+{
+	if (!m_pReturnValue) return 0; //TODO this is an error situation. Should be handled.
+	return m_pReturnValue->GetInt();
+}
+unsigned int Call::GetUnsignedInt()
+{
+	if (!m_pReturnValue) return 0; //TODO this is an error situation. Should be handled.
+	return m_pReturnValue->GetUnsignedInt();
+}
+short Call::GetShort()
+{
+	if (!m_pReturnValue) return 0; //TODO this is an error situation. Should be handled.
+	return m_pReturnValue->GetShort();
+}
+unsigned short Call::GetUnsignedShort()
+{
+	if (!m_pReturnValue) return 0; //TODO this is an error situation. Should be handled.
+	return m_pReturnValue->GetUnsignedShort();
+}
+char Call::GetByte()
+{
+	if (!m_pReturnValue) return 0; //TODO this is an error situation. Should be handled.
+	return m_pReturnValue->GetByte();
+}
+unsigned char Call::GetUnsignedByte()
+{
+	if (!m_pReturnValue) return 0; //TODO this is an error situation. Should be handled.
+	return m_pReturnValue->GetUnsignedByte();
+}
+long Call::GetLong()
+{
+	if (!m_pReturnValue) return 0; //TODO this is an error situation. Should be handled.
+	return m_pReturnValue->GetLong();
+}
+long Call::GetInteger()
+{
+	if (!m_pReturnValue) return 0; //TODO this is an error situation. Should be handled.
+	return m_pReturnValue->GetInteger();
+}
+unsigned long Call::GetUnsignedLong()
+{
+	if (!m_pReturnValue) return 0; //TODO this is an error situation. Should be handled.
+	return m_pReturnValue->GetUnsignedLong();
+}
+float Call::GetFloat()
+{
+	if (!m_pReturnValue) return 0; //TODO this is an error situation. Should be handled.
+	return m_pReturnValue->GetFloat();
+}
+double Call::GetDouble()
+{
+	if (!m_pReturnValue) return 0; //TODO this is an error situation. Should be handled.
+	return m_pReturnValue->GetDouble();
+}
+double Call::GetDecimal()
+{
+	if (!m_pReturnValue) return 0; //TODO this is an error situation. Should be handled.
+	return m_pReturnValue->GetDecimal();
+}
+const AxisChar* Call::GetString()
+{
+	if (!m_pReturnValue) return NULL; //TODO this is an error situation. Should be handled.
+	return m_pReturnValue->GetString();
+}
+const AxisChar* Call::GetAnyURI()
+{
+	if (!m_pReturnValue) return NULL; //TODO this is an error situation. Should be handled.
+	return m_pReturnValue->GetAnyURI();
+}
+const AxisChar* Call::GetQName()
+{
+	if (!m_pReturnValue) return NULL; //TODO this is an error situation. Should be handled.
+	return m_pReturnValue->GetQName();
+}
+const AxisChar* Call::GetHexString()
+{
+	if (!m_pReturnValue) return NULL; //TODO this is an error situation. Should be handled.
+	return m_pReturnValue->GetHexString();
+}
+const AxisChar* Call::GetBase64String()
+{
+	if (!m_pReturnValue) return NULL; //TODO this is an error situation. Should be handled.
+	return m_pReturnValue->GetBase64String();
+}
+struct tm Call::GetDateTime()
+{
+	return m_pReturnValue->GetDateTime();
+}
+struct tm Call::GetDate()
+{
+	return m_pReturnValue->GetDate();
+}
+struct tm Call::GetTime()
+{
+	return m_pReturnValue->GetTime();
+}
+long Call::GetDuration()
+{
+	if (!m_pReturnValue) return 0; //TODO this is an error situation. Should be handled.
+	return m_pReturnValue->GetDuration();
+}
+
+/* Methods used by stubs to get a deserialized value of basic type out params */
+int Call::GetIntOutParam()
+{
+	Param* param = GetOutParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetInt();
+}
+unsigned int Call::GetUnsignedIntOutParam()
+{
+	Param* param = GetOutParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetUnsignedInt();
+}
+short Call::GetShortOutParam()
+{
+	Param* param = GetOutParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetShort();
+}
+unsigned short Call::GetUnsignedShortOutParam()
+{
+	Param* param = GetOutParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetUnsignedShort();
+}
+char Call::GetByteOutParam()
+{
+	Param* param = GetOutParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetByte();
+}
+unsigned char Call::GetUnsignedByteOutParam()
+{
+	Param* param = GetOutParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetUnsignedByte();
+}
+long Call::GetLongOutParam()
+{
+	Param* param = GetOutParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetLong();
+}
+long Call::GetIntegerOutParam()
+{
+	Param* param = GetOutParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetInteger();
+}
+unsigned long Call::GetUnsignedLongOutParam()
+{
+	Param* param = GetOutParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetUnsignedLong();
+}
+float Call::GetFloatOutParam()
+{
+	Param* param = GetOutParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetFloat();
+}
+double Call::GetDoubleOutParam()
+{
+	Param* param = GetOutParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetDouble();
+}
+double Call::GetDecimalOutParam()
+{
+	Param* param = GetOutParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetDecimal();
+}
+const AxisChar* Call::GetStringOutParam()
+{
+	Param* param = GetOutParam();
+	if (!param) return NULL; //TODO this is an error situation. Should be handled.
+	return param->GetString();
+}
+const AxisChar* Call::GetAnyURIOutParam()
+{
+	Param* param = GetOutParam();
+	if (!param) return NULL; //TODO this is an error situation. Should be handled.
+	return param->GetAnyURI();
+}
+const AxisChar* Call::GetQNameOutParam()
+{
+	Param* param = GetOutParam();
+	if (!param) return NULL; //TODO this is an error situation. Should be handled.
+	return param->GetQName();
+}
+const AxisChar* Call::GetHexStringOutParam()
+{
+	Param* param = GetOutParam();
+	if (!param) return NULL; //TODO this is an error situation. Should be handled.
+	return param->GetHexString();
+}
+const AxisChar* Call::GetBase64StringOutParam()
+{
+	Param* param = GetOutParam();
+	if (!param) return NULL; //TODO this is an error situation. Should be handled.
+	return param->GetBase64String();
+}
+struct tm Call::GetDateTimeOutParam()
+{
+	struct tm zero;
+	Param* param = GetOutParam();
+	if (!param) return zero; //TODO this is an error situation. Should be handled.
+	return param->GetDateTime();
+}
+struct tm Call::GetDateOutParam()
+{
+	struct tm zero;
+	Param* param = GetOutParam();
+	if (!param) return zero; //TODO this is an error situation. Should be handled.
+	return param->GetDate();
+}
+struct tm Call::GetTimeOutParam()
+{
+	struct tm zero;
+	Param* param = GetOutParam();
+	if (!param) return zero; //TODO this is an error situation. Should be handled.
+	return param->GetTime();
+}
+long Call::GetDurationOutParam()
+{
+	struct tm zero;
+	Param* param = GetOutParam();
+	if (!param) return 0; //TODO this is an error situation. Should be handled.
+	return param->GetDuration();
 }
