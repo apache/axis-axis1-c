@@ -1,34 +1,84 @@
-﻿The implementation of SOAPTransport interface using LibWWW.
+The implementation of SOAPTransport interface using LibWWW.
+
+Getting LibWWW transport working on Linux
+1. Install LibWWW,
+2. Build Axis C++ with libWWW support and
+3. Set
+ Transport_http:[AXIS_CPP_DEPLOY_FOLDER]/lib/libaxis_LibWWWTransport.so
+ in axiscpp.conf.
+
+1. Installing LibWWW
+You can find LibWWW build/installation instructions in LibWWW documentation.
+The following are few hints specific to Axis C++ libWWW transport.
+i. Use of 100-continue
+I observed that the transport is much faster when it is used without
+100-continue. However, to disable 100-continue, LibWWW need to be built
+with -–with-extension option  (./configure --with-extension)
+By default LibWWW comes with 100-continue enabled.
+
+ii. Thread safety
+By default, LibWWW build is not thread safe.
+If you wish to use LibWWW transport in a threaded environment
+you have to enable reentrant system calls in the LibWWW build.
+(./configure --enable-reentrant)
+
+iii. Use of Expat XML parser
+LibWWW library uses the Expat parser by default for XML related stuff.
+However, these XML related features are not required for Axis C++ transport.
+One could configure the LibWWW build with ./configure --with-expat=no.
+The set of libs required for Axis C++ LibWWW transport are:
+-lwwwinit -lwwwapp -lwwwhtml -lwwwtelnet -lwwwnews -lwwwhttp 
+-lwwwmime -lwwwgopher -lwwwftp -lwwwfile -lwwwdir -lwwwcache 
+-lwwwstream -lwwwmux -lwwwtrans -lwwwcore -lwwwutils
+(One could argue that some libs like -lwwwgopher are not required at all.
+However, -lwwwinit have references those, hence cannot be dropped while
+linking. One would need to change LibWWW code to remove those unwanted
+dependencies, which I did not want to do here.)
+I have only used only the must be used libs in src/transport/libwww/Makefile.am.
+
+In short, when building LibWWW on your system use:
+./configure --with-extension --enable-reentrant --with-expat=no \
+--prefix=[where you want LibWWW installed]
+
+For more information on LibWWW please see http://www.w3.org/Library/User/
+
+2. Building Axis C++ with LibWWW support
+You can use --enable-libwww option when configuring Axis C++.
+By default LibWWW is enabled. Use --enable-libwww=yes to enable 
+--enable-libwww=no to disable.
 
 The Axis C++ server side fails to work with 100-continue. 
-Axis Java is capable of managing 100-continue. 
+Axis Java server side is capable of managing 100-continue. 
 This is the default mode used in LibWWW. 
-I used a macro in Makefile.am to enable/disable 100-continue. 
-(use -DHT_EXT_CONTINUE to enable or -UHT_EXT_CONTINUE to disable in 
-AM_CPPFLAGS setting)
+I used a macro in src/transport/libwww/Makefile.am to enable/disable 
+100-continue.  (use -DHT_EXT_CONTINUE to enable or -UHT_EXT_CONTINUE 
+to disable in AM_CPPFLAGS setting)
 
-I observed that the transport is much faster when it is used without 
+As I mentioned earlier, the transport is much faster when it is used without 
 100-continue. However, to disable 100-continue, LibWWW need to be built 
-with -–with-extension option  (./configure --with-extension)
+with extension support. (please see section 1 above)
 
 You do not need to bother about location of LibWWW headers and libraries, 
-provided that you have done the LibWWW installation properly. 
+provided that you have done the LibWWW installation properly. (in other words
+libwww-config program need to be on your PATH)
 I have used libwww-config in the Makefile.am to pick LibWWW specific settings.
 
-Once you build the library, you could use it by speci the location of the 
+3. Using the LibWWW transport
+Once you build the library, you could use it by specifying the location of the 
 lib in $AXIS_HOME/axiscpp.conf file. 
 e.g.
 Transport_http:/usr/local/Axis/libs/libaxis_LibWWWTransport.so
 
-For more information on LibWWW please see http://www.w3.org/Library/User/
 
-Issues:
-The thread test in tests/client/threadSafe fails with this implementation. 
-Bit of surfing lead me to http://www.w3.org/Library/User/Architecture/Events.html, 
-which says “LibWWW is not posix thread safe but it uses a 'pseudo-thread' 
+Notes:
+Thread Safety:
+http://www.w3.org/Library/User/Architecture/Events.html says 
+“LibWWW is not posix thread safe but it uses a 'pseudo-thread' 
 model based on non-blocking sockets and interleaved IO.” 
-Bit of research is needed to figure out how to make this implementation 
-thread safe. It remains a TODO as of now.
+I did a bit of research and figured out how to make this implementation 
+thread safe. I was able to successfully use the 'pseudo-thread'
+model of LibWWW and achieve thread safety. You could test the thread 
+safety with the test in tests/client/threadSafe/. 
 
 - Samisa...
 
