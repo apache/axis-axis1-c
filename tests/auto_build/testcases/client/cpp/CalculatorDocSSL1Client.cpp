@@ -45,19 +45,19 @@ int main(int argc, char* argv[])
 
 
                 iResult = ws.add(2,3);
-                printf("%d\n", iResult);
+                cout << iResult <<endl;
         }
         catch(AxisException& e)
         {
-            printf("Exception : %s\n", e.what());
+            cout << "Exception : " << e.what() << endl;
         }
         catch(exception& e)
         {
-            printf("Unknown exception has occured\n" );
+            cout << "Unknown exception has occured" << endl;
         }
         catch(...)
         {
-            printf("Unknown exception has occured\n" );
+            cout << "Unknown exception has occured" << endl;
         }
         cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
         return 0;
