@@ -1,0 +1,15 @@
+<html>
+<head>
+<title>Client Implementation of EWS</title>
+<link rel="stylesheet" type="text/css" href="../ews.css">
+</head>
+<body>
+<h1>Client Side Implementation</h1>
+<ol>
+<li>The <a href="service-ref1.xml">Service reference</a> tags in the web.xml or ejb-jar.xml are parsed and the information about the web service is obtained.(This part is loosely implemented with DOM to parse the service reference).<li>
+<li>Using the WSDL file given the tool will generate the stubs to accesses the web service. This is done with Web service Client Stub generator tool with jaxrpcmapping file support which is implemented on the org.apache.geronimo.ews.jaxrpcmapping package. If WSDL does not exists wsdl should be generated from the SEI.<li>
+<li>The WSDL should be published in a registry (This part is not implemented).<li>
+<li>The generated Stubs should be bound to the JNDI name as specified in the service reference. This part is not implemented).</li>
+
+</body>
+</html>
