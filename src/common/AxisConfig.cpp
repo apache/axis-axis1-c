@@ -117,6 +117,8 @@ AxisConfig::readConfFile ()
     const char pcComment = '#';
 
     sConfPath = getenv ("AXISCPP_DEPLOY");
+    if (!sConfPath)
+        sConfPath = "";
     m_pcValueArray[AXCONF_AXISHOME] = strdup(sConfPath);
     /*
        Even if the AXISCPP_DEPLOY environment variable is not set default values 
