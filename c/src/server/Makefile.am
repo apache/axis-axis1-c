@@ -1,8 +1,2 @@
-#if you use apache2
-SUBDIRS = @APACHE2BUILD@
-#SUBDIRS = apache2 adminservice simple_axis_server
-#SUBDIRS = apache2 adminservice
+SUBDIRS = @APACHE2BUILD@ @APACHEBUILD@
 
-#if you use apache1.3
-#SUBDIRS = apache adminservice simple_axis_server
-#SUBDIRS = apache adminservice
