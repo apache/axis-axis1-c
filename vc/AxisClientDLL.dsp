@@ -430,6 +430,10 @@ SOURCE=..\src\soap\xsd\constraints\Pattern.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\platforms\windows\PlatformSpecificWindows.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\soap\xsd\PositiveInteger.cpp
 # End Source File
 # Begin Source File
