@@ -23,7 +23,7 @@ STORAGE_CLASS_INFO
 int GetClassInstance(BasicHandler **inst)
 {
 	*inst = malloc(sizeof(BasicHandler));
-	(*inst)->_object = 0;	/* instantiate and provide the context object if needed */
+	(*inst)->_object = 0;	/* instantiate and provide the context object if needed */ 
 	(*inst)->_functions = &InteropTestPortTypeWrapper_functions;
 	return (*inst)->_functions->Init((*inst)->_object);
 }
@@ -34,9 +34,42 @@ int DestroyInstance(BasicHandler *inst)
 	if (inst)
 	{
 		inst->_functions->Fini(inst->_object);
-		/* destroy the context object set to inst->_object if any here */
+		/*destroy the context object set to inst->_object if any here */
 		free(inst);
 		return AXIS_SUCCESS;
 	}
 	return AXIS_FAIL;
 }
+
+/*
+#define AXIS_SERVICE_LOADER_MACRO(WCName) static \
+BasicHandlerFunctions WCName##_functions = { \
+	##WCName##_Invoke, \
+	##WCName##_OnFault, \
+	##WCName##_Init, \
+	##WCName##_Fini, \
+	##WCName##_GetType, \
+	##WCName##_GetBindingStyle \
+}; \
+STORAGE_CLASS_INFO \
+int GetClassInstance(BasicHandler **inst) \
+{ \
+	*inst = malloc(sizeof(BasicHandler)); \
+	(*inst)->_object = 0; \
+	(*inst)->_functions = &##WCName##_functions; \
+	return (*inst)->_functions->Init((*inst)->_object); \
+} \
+STORAGE_CLASS_INFO  \
+int DestroyInstance(BasicHandler *inst) \
+{ \
+	if (inst) \
+	{ \
+		inst->_functions->Fini(inst->_object); \
+		free(inst); \
+		return AXIS_SUCCESS; \
+	} \
+	return AXIS_FAIL; \
+}
+
+AXIS_SERVICE_LOADER_MACRO( InteropTestPortTypeWrapper )
+*/

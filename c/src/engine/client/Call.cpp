@@ -78,7 +78,6 @@ CallFunctions CallBase::ms_VFtable;
 
 Call::Call()
 {
-	__vfptr = &ms_VFtable;
 	m_pAxisEngine = NULL;
 	m_pMsgData = NULL;
 	m_pIWSSZ = NULL;
@@ -457,14 +456,23 @@ void* Call::GetCmplxObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, con
 }
 
 /*global function to be used in C stubs */
-extern "C" Call* GetCallObject(AXIS_PROTOCOL_TYPE nProtocol, AxisChar* pchEndpointURI)
+extern "C" void* GetStubObject(AXIS_PROTOCOL_TYPE nProtocol, AxisChar* pchEndpointURI)
 {
-	Call* pCall = new Call();
-	pCall->SetProtocol(nProtocol);
-	pCall->SetEndpointURI(pchEndpointURI);
+	Call_C* pCall = (Call_C*)malloc(sizeof(Call_C));
+	pCall->_object = new Call();
+	pCall->_functions = &Call::ms_VFtable;
+	((Call*)pCall->_object)->SetProtocol(nProtocol);
+	((Call*)pCall->_object)->SetEndpointURI(pchEndpointURI);
 	return pCall;
 }
 
+extern "C" void DestroyStubObject(void* pCall)
+{
+	Call* pObject = (Call*)((Call_C*)pCall)->_object;
+	pObject->UnInitialize();
+	delete 	pObject;
+	free(pCall);
+}
 
 int Call::SetSoapHeader(SoapHeader *pSoapHeader)
 {

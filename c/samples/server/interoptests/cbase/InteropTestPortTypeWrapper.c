@@ -8,11 +8,21 @@
 #include "SOAPStruct.h"
 #include "SOAPStruct_Array.h"
 
+#define AXIS_SERIALIZER_DESERIALIZER_FUNCTIONS_DEFINITIONS(Typename) \
+extern int Axis_DeSerialize_##Typename ( ##Typename* param, IWrapperSoapDeSerializer *pDZ);\
+extern void* Axis_Create_##Typename ( ##Typename * param, bool bArray, int nSize);\
+extern void Axis_Delete_##Typename ( ##Typename* param, bool bArray, int nSize);\
+extern int Axis_Serialize_##Typename ( ##Typename* param, IWrapperSoapSerializer* pSZ, bool bArray);\
+extern int Axis_GetSize_##Typename ();
+
+AXIS_SERIALIZER_DESERIALIZER_FUNCTIONS_DEFINITIONS(SOAPStruct)
+/*
 extern int Axis_DeSerialize_SOAPStruct(SOAPStruct* param, IWrapperSoapDeSerializer *pDZ);
 extern void* Axis_Create_SOAPStruct(SOAPStruct * param, bool bArray, int nSize);
 extern void Axis_Delete_SOAPStruct(SOAPStruct* param, bool bArray, int nSize);
 extern int Axis_Serialize_SOAPStruct(SOAPStruct* param, IWrapperSoapSerializer* pSZ, bool bArray);
 extern int Axis_GetSize_SOAPStruct();
+*/
 
 /*implementation of BasicHandler interface*/
 void AXISCALL InteropTestPortTypeWrapper_OnFault(void*p, void *pMsg)
