@@ -413,17 +413,48 @@ int HeaderBlock::serializeChildren(SoapSerializer& pSZ,
     return iStatus;
 }
 
-INamespace* HeaderBlock::createNamespaceDecl(const AxisChar *prefix,
-        const AxisChar *uri) 
+INamespace* HeaderBlock::createNamespaceDecl( const AxisChar * pPrefix, const AxisChar * pURI) 
 {
-	if(prefix==NULL || uri==NULL)
+// Check that the prefix and uri are valid pointers and that the string is not
+// empty.
+	if( pPrefix != NULL && strlen( pPrefix) > 0 &&
+		pURI != NULL && strlen( pURI) > 0)
+	{
+
+// Iterate through the namespaces checking that the prefix does not already
+// exist.
+	bool						bNameFound = false;
+    list<Namespace*>::iterator	itCurrNamespaceDecl = m_namespaceDecls.begin();
+
+	while( itCurrNamespaceDecl != m_namespaceDecls.end() && !bNameFound)
+	{
+		if( !(bNameFound = !strcmp( (*itCurrNamespaceDecl)->getPrefix(), pPrefix)))
+		{
+			itCurrNamespaceDecl++;
+		}
+	}    
+
+// If the prefix is found in the declared namespace list, then update the uri
+// for the prefix and return a pointer to that namespace.
+	if( bNameFound)
+	{
+		(*itCurrNamespaceDecl)->setURI( pURI);
+
+		return (INamespace *) *itCurrNamespaceDecl;
+	}
+
+// If the prefix was not found, then create a new namespace for the prefix/uri
+// pair and return the pointer to the new namespace.
+	Namespace *	pNamespace = new Namespace( pPrefix, pURI);
+
+	m_namespaceDecls.push_back( pNamespace);
+
+    return (INamespace *) pNamespace; 
+	}
+	else
 	{
 		return NULL;
 	}
-    Namespace* pNamespace = new Namespace(prefix, uri);
-    m_namespaceDecls.push_back(pNamespace);
-
-    return (INamespace*)pNamespace; 
 }
 
 /* TO DO: We need to remove this completely
