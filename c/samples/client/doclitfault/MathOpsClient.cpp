@@ -1,5 +1,6 @@
 #include "MathOps.h"
 #include <axis/server/AxisException.h>
+#include <ctype.h>
 
 void PrintUsage();
 bool IsNumber(const char* p);
