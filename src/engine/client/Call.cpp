@@ -66,7 +66,7 @@
 #include "Call.h"
 #include "../common/AxisConfig.h"
 #include "transport/axis/AxisTransport.h"
-
+#include "transport/axis/Channel.hpp"
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -317,27 +317,39 @@ int Call::Initialize()
 	   Initialize re-usable objects of this instance (objects may have been populated by
 	   the previous call.
 	 */
-	InitializeObjects();
-	m_Soap.sessionid = "somesessionid1234";
-	if (SUCCESS != OpenConnection()) return FAIL;
-	if (m_pAxisEngine) delete m_pAxisEngine;
-	m_pAxisEngine = new ClientAxisEngine();
-	if (!m_pAxisEngine) return FAIL;
-	if (SUCCESS == m_pAxisEngine->Initialize())
-	{
-		m_pMsgData = m_pAxisEngine->GetMessageData();
-		if (m_pMsgData)
+	try {
+		InitializeObjects();
+		m_Soap.sessionid = "somesessionid1234";
+		if (SUCCESS != OpenConnection()) return FAIL;
+		if (m_pAxisEngine) delete m_pAxisEngine;
+		m_pAxisEngine = new ClientAxisEngine();
+		if (!m_pAxisEngine) return FAIL;
+		if (SUCCESS == m_pAxisEngine->Initialize())
 		{
-			m_pMsgData->getSoapSerializer((IWrapperSoapSerializer**)(&m_pIWSSZ));
-			m_pMsgData->getSoapDeSerializer((IWrapperSoapDeSerializer**)(&m_pIWSDZ));
-			if (m_pIWSSZ && m_pIWSDZ)
+			m_pMsgData = m_pAxisEngine->GetMessageData();
+			if (m_pMsgData)
 			{
-				return SUCCESS;
+				m_pMsgData->getSoapSerializer((IWrapperSoapSerializer**)(&m_pIWSSZ));
+				m_pMsgData->getSoapDeSerializer((IWrapperSoapDeSerializer**)(&m_pIWSDZ));
+				if (m_pIWSSZ && m_pIWSDZ)
+				{
+					return SUCCESS;
+				}
 			}
+			return SUCCESS;
 		}
-		return SUCCESS;
+		return FAIL;
 	}
-	return FAIL;
+	catch (ChannelException e)
+	{
+		printf(e.GetErr().c_str());
+		return FAIL;
+	}
+	catch (...)
+	{
+		printf("Unknown exception occured in the client");
+		return FAIL;
+	}
 }
 
 void Call::InitializeObjects()

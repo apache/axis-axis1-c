@@ -119,10 +119,22 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 			if(iStatus==FAIL) {
 				break;
 			}
-		} else if(m_pSoapFault!=NULL) {		
+		} 
+		else if(m_pSoapFault!=NULL) 
+		{		
 			iStatus= m_pSoapFault->serialize(pSZ);
 			if(iStatus==FAIL) {
 				break;
+			}
+		}
+		else
+		{
+			m_pSoapFault = SoapFault::getSoapFault(SF_WEBSERVICEFAILED);
+			if(m_pSoapFault!=NULL) 
+			{		
+				iStatus= m_pSoapFault->serialize(pSZ);
+				if(iStatus==FAIL) 
+					break;
 			}
 		}
 		
