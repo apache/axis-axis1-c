@@ -86,11 +86,12 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		try{
 		HashSet typeSet = new HashSet();
 		String typeName;
-		for(int i = 1; i< attribs.length;i++){
+		for(int i = 0; i< attribs.length;i++){
 			if(!CPPUtils.isSimpleType(attribs[i][1])){
 				Type memtype = wscontext.getTypemap().getType(type.getTypNameForAttribName(attribs[i][0]));
 				if (memtype.isArray()){
 					typeName = memtype.getTypNameForAttribName("item").getLocalPart();
+					if (CPPUtils.isSimpleType(typeName)) continue; //no wrapper methods for basic types
 				}else{
 					typeName = attribs[i][1];
 				}	
@@ -152,9 +153,13 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			}else if((t = wscontext.getTypemap().getType(new QName(attribs[i][2],attribs[i][3])))!= null && t.isArray()){
 				//if Array
 				String arrayType = t.getTypNameForAttribName("item").getLocalPart();
-				writer.write("\tpSZ.SerializeArray((Axis_Array*)(&param->"+attribs[i][0]+"),\n"); 
-				writer.write("\t\t(void*) Axis_Serialize_"+arrayType+", (void*) Axis_Delete_"+arrayType+", (void*) Axis_GetSize_"+arrayType+",\n"); 
-				writer.write("\t\tAxis_TypeName_"+arrayType+", Axis_URI_"+arrayType+", \""+attribs[i][0]+"\");\n");				
+				if (CPPUtils.isSimpleType(arrayType)){
+					writer.write("\tpSZ.SerializeArray((Axis_Array*)(&param->"+attribs[i][0]+"),"+CPPUtils.getXSDTypeForBasicType(arrayType)+", \""+attribs[i][0]+"\");\n"); 
+				}else{
+					writer.write("\tpSZ.SerializeArray((Axis_Array*)(&param->"+attribs[i][0]+"),\n"); 
+					writer.write("\t\t(void*) Axis_Serialize_"+arrayType+", (void*) Axis_Delete_"+arrayType+", (void*) Axis_GetSize_"+arrayType+",\n"); 
+					writer.write("\t\tAxis_TypeName_"+arrayType+", Axis_URI_"+arrayType+", \""+attribs[i][0]+"\");\n");
+				}				
 			}else{
 				//if complex type
 				writer.write("\tAxis_Serialize_"+attribs[i][1]+"(param->"+attribs[i][0]+", pSZ);\n");
@@ -171,32 +176,31 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write("// This static method deserialize a "+classname+" type of object\n");
 		writer.write("//////////////////////////////////////////////////////////////////////\n");
 		
-		writer.write("int Axis_DeSerialize_"+classname+"("+classname+"* param, IWrapperSoapDeSerializer *pDZ)\n{\n");
+		writer.write("int Axis_DeSerialize_"+classname+"("+classname+"* param, IWrapperSoapDeSerializer *pIWSDZ)\n{\n");
 		if (attribs.length == 0) {
 			 //nothing to print if this is simple type we have inbuild types
 			 System.out.println("possible error calss with no attributes....................");
 			 return;
 		 }
-		writer.write("\tIParam* pParam;\n");		 
 		for(int i = 0; i< attribs.length;i++){
 			if(CPPUtils.isSimpleType(attribs[i][1])){
 				//if symple type
-				writer.write("\tparam->"+attribs[i][0]+" = pDZ->GetParam()->"+CPPUtils.getParameterGetValueMethodName(attribs[i][1])+";\n");
+				writer.write("\tparam->"+attribs[i][0]+" = pIWSDZ->"+CPPUtils.getParameterGetValueMethodName(attribs[i][1])+";\n");
 			}else if((t = wscontext.getTypemap().getType(new QName(attribs[i][2],attribs[i][3])))!= null && t.isArray()){
 				//if Array
 				String arrayType = t.getTypNameForAttribName("item").getLocalPart();
-				writer.write("\tpParam = pDZ->GetParam(); //now we know that this is an array.\n");
-				writer.write("\tparam->"+attribs[i][0]+".m_Size = pParam->GetArraySize();\n");
-				writer.write("\tif (param->"+attribs[i][0]+".m_Size > 0)\n");
-				writer.write("\t\tparam->"+attribs[i][0]+".m_Array = new "+arrayType+"[param->"+attribs[i][0]+".m_Size];\n");
-				writer.write("\telse\n\t\treturn FAIL; //CF_ZERO_ARRAY_SIZE_ERROR\n");
-				writer.write("\tpParam->SetArrayElements((void*)(param->"+attribs[i][0]+".m_Array), (AXIS_DESERIALIZE_FUNCT)Axis_DeSerialize_"+arrayType+", (AXIS_OBJECT_DELETE_FUNCT)Axis_Delete_"+arrayType+", (AXIS_OBJECT_SIZE_FUNCT)Axis_GetSize_"+arrayType+");\n");
-				writer.write("\tpDZ->Deserialize(pParam,0);\n");				
+				if(CPPUtils.isSimpleType(arrayType)){
+					writer.write("\tparam->"+attribs[i][0]+" = ("+attribs[i][1]+"&)pIWSDZ->GetArray("+CPPUtils.getXSDTypeForBasicType(arrayType)+");\n");
+				}else{
+					writer.write("\tparam->"+attribs[i][0]+" = ("+attribs[i][1]+"&)pIWSDZ->GetArray((AXIS_DESERIALIZE_FUNCT)Axis_DeSerialize_"+arrayType+ 
+						"\n\t\t, (AXIS_OBJECT_CREATE_FUNCT)Axis_Create_"+arrayType+", (AXIS_OBJECT_DELETE_FUNCT)Axis_Delete_"+arrayType+
+						"\n\t\t, (AXIS_OBJECT_SIZE_FUNCT)Axis_GetSize_"+arrayType+", Axis_TypeName_"+arrayType+", Axis_URI_"+arrayType+");\n");
+				}			
 			}else{
 				//if complex type
-				writer.write("\tpParam = pDZ->GetParam(); //get head param and do any validation if necessary.\n");
-				writer.write("\tparam->"+attribs[i][0]+" = new "+attribs[i][1]+"();\n");
-				writer.write("\tAxis_DeSerialize_"+attribs[i][1]+"(param->"+attribs[i][0]+ ", pDZ);\n");
+				writer.write("\tparam->"+attribs[i][0]+" = ("+attribs[i][1]+"*)pIWSDZ->GetObject((AXIS_DESERIALIZE_FUNCT)Axis_DeSerialize_"+attribs[i][1]+
+					"\n\t\t, (AXIS_OBJECT_CREATE_FUNCT)Axis_Create_"+attribs[i][1]+", (AXIS_OBJECT_DELETE_FUNCT)Axis_Delete_"+attribs[i][1]+
+					"\n\t\t, Axis_TypeName_"+attribs[i][1]+", Axis_URI_"+attribs[i][1]+");\n");				
 			}		
 		}
 		writer.write("\treturn SUCCESS;\n");
@@ -234,7 +238,11 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 					Type memtype = wscontext.getTypemap().getType(type.getTypNameForAttribName(attribs[i][0]));
 					if (memtype.isArray()){
 						String containedType = memtype.getTypNameForAttribName("item").getLocalPart();
-						writer.write("\t\t\tAxis_Delete_"+containedType+"(pTemp->"+attribs[i][0]+".m_Array, true, pTemp->"+attribs[i][0]+".m_Size);\n");
+						if (CPPUtils.isSimpleType(containedType)){
+							writer.write("\t\t\tdelete [] (("+containedType+"*)pTemp->"+attribs[i][0]+".m_Array);\n");
+						}else{
+							writer.write("\t\t\tAxis_Delete_"+containedType+"(pTemp->"+attribs[i][0]+".m_Array, true, pTemp->"+attribs[i][0]+".m_Size);\n");
+						}
 					}else{
 						writer.write("\t\t\tAxis_Delete_"+attribs[i][1]+"(pTemp->"+attribs[i][0]+");\n");
 					}
@@ -253,7 +261,11 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				Type memtype = wscontext.getTypemap().getType(type.getTypNameForAttribName(attribs[i][0]));
 				if (memtype.isArray()){
 					String containedType = memtype.getTypNameForAttribName("item").getLocalPart();
-					writer.write("\t\tAxis_Delete_"+containedType+"(param->"+attribs[i][0]+".m_Array, true, param->"+attribs[i][0]+".m_Size);\n");
+					if (CPPUtils.isSimpleType(containedType)){
+						writer.write("\t\tdelete [] (("+containedType+"*)param->"+attribs[i][0]+".m_Array);\n");
+					}else{
+						writer.write("\t\tAxis_Delete_"+containedType+"(param->"+attribs[i][0]+".m_Array, true, param->"+attribs[i][0]+".m_Size);\n");
+					}
 				}else{
 					writer.write("\t\tAxis_Delete_"+attribs[i][1]+"(param->"+attribs[i][0]+");\n");
 				}

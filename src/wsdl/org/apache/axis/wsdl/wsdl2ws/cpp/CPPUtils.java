@@ -150,18 +150,19 @@ public class CPPUtils {
 	public static String getWebServiceNameFromWrapperName(String wname){
 		return wname.substring(0, wname.length()- CPPUtils.WRAPPER_NAME_APPENDER.length());
 	}
-	public static String getUnionMemberForBasicType(String stype){
-		if ("int".equals(stype)) return "nValue";
-		else if ("unsigned int".equals(stype)) return "unValue";
-		else if ("short".equals(stype)) return "sValue";
-		else if ("unsigned short".equals(stype)) return "usValue";
-		else if ("long".equals(stype)) return "lValue";
-		else if ("unsigned long".equals(stype)) return "ulValue";
-		else if ("char".equals(stype)) return "cValue";
-		else if ("unsigned char".equals(stype)) return "ucValue";
-		else if ("float".equals(stype)) return "fValue";
-		else if ("double".equals(stype)) return "dValue";
-		else if ("struct tm".equals(stype)) return "tValue";
+	public static String getXSDTypeForBasicType(String stype){
+		if ("int".equals(stype)) return "XSD_INT";
+		else if ("string".equals(stype)) return "XSD_STRING";
+		else if ("unsigned int".equals(stype)) return "XSD_UNSIGNEDINT";
+		else if ("short".equals(stype)) return "XSD_SHORT";
+		else if ("unsigned short".equals(stype)) return "XSD_UNSIGNEDSHORT";
+		else if ("long".equals(stype)) return "XSD_LONG";
+		else if ("unsigned long".equals(stype)) return "XSD_UNSIGNEDLONG";
+		else if ("char".equals(stype)) return "XSD_BYTE";
+		else if ("unsigned char".equals(stype)) return "XSD_BYTE";
+		else if ("float".equals(stype)) return "XSD_FLOAT";
+		else if ("double".equals(stype)) return "XSD_DOUBLE";
+		else if ("struct tm".equals(stype)) return "XSD_DATETIME";
 		else return "unknown type";
 	}
 }

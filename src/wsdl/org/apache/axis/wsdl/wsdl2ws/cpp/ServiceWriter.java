@@ -139,21 +139,21 @@ public class ServiceWriter extends CPPClassWriter{
 			  else {
 				String outparam = minfo.getReturnType().getLangName();
 				isSimpleType = CPPUtils.isSimpleType(outparam);
-				writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(minfo.getReturnType(),wscontext)+(isSimpleType?" ":" *"));
+				writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(minfo.getReturnType(),wscontext));
 			  }
-			  writer.write(classname+"::"+minfo.getMethodname()+"(");
+			  writer.write(" "+classname+"::"+minfo.getMethodname()+"(");
 			  //write parameter names 
 			//write parameter names 
 			Iterator params = minfo.getParameterTypes().iterator();
 			if(params.hasNext()){
 				ParameterInfo fparam = (ParameterInfo)params.next();
 				isSimpleType = CPPUtils.isSimpleType(fparam.getLangName());
-				writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+(isSimpleType?" Value":" *pValue")+0);
+				writer.write(WrapperUtils.getClassNameFromParamInfoConsideringArrays(fparam,wscontext)+" Value"+0);
 			}
 			for(int j =1; params.hasNext();j++){
 				ParameterInfo nparam = (ParameterInfo)params.next();
 				isSimpleType = CPPUtils.isSimpleType(nparam.getLangName());
-				writer.write(","+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+(isSimpleType?" Value":" *pValue")+j);
+				writer.write(", "+WrapperUtils.getClassNameFromParamInfoConsideringArrays(nparam,wscontext)+" Value"+j);
 			}
 			writer.write(")\n{\n}\n");
 		  }
