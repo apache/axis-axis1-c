@@ -56,6 +56,13 @@ class BasicNode;
  *    
  *    
  *  @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ *  @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ *
+ */
+
+/*
+ * Revision 1.1  2004/05/26 samisa
+ * Added copy constructor and clone
  */
 
 class HeaderBlock : public IHeaderBlock
@@ -205,6 +212,7 @@ public:
         AxisChar* pachUri);
     HeaderBlock();
     HeaderBlock(const HeaderBlock& rCopy);
+    HeaderBlock* clone();
     virtual ~HeaderBlock();
 
     bool operator ==( const HeaderBlock &objHeaderBlock);
