@@ -22,6 +22,11 @@ extern int process_request(Ax_soapstream* str);
 /*extern int process(soapstream *);*/
 extern unsigned char chEBuf[1024];
 
+#define SIZEOFMODULEBUFFER 100
+
+char g_buffer[SIZEOFMODULEBUFFER];
+
+
 /*Should dispatch the headers from within this method*/
 int send_transport_information(Ax_soapstream* hdr)
 {
@@ -56,12 +61,13 @@ void axis_Fini(server_rec *svr_rec, pool* p)
  * This function is called by the Axis Engine whenever it needs to get bytes from the 
  * transport layer.
  */
-int get_request_bytes(char* req, int reqsize, int* retsize, const void* ipstream)
+int get_request_bytes(const char** req, int* retsize, const void* ipstream)
 {
 	int len_read;
 	ap_hard_timeout("util_read", (request_rec*)ipstream);
-	len_read = ap_get_client_block((request_rec*)ipstream, req, reqsize);
+	len_read = ap_get_client_block((request_rec*)ipstream, g_buffer, SIZEOFMODULEBUFFER);
 	ap_reset_timeout((request_rec*)ipstream);
+	*req = g_buffer;
 	*retsize =  len_read;
 	return 0;
 }

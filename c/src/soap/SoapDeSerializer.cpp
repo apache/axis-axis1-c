@@ -85,81 +85,31 @@
 
 SoapDeSerializer::SoapDeSerializer()
 {
-	//m_pHandler = new XMLStreamHandler();	
-//	m_pParser = XMLReaderFactory::createXMLReader();
-	
-	SAX::FeatureNames<std::string> fNames;
-	SAX::PropertyNames<std::string> pNames;
-	try
-	{
-	    m_pParser.setFeature(fNames.external_general, true);
-	    m_pParser.setFeature(fNames.validation, true);
-        m_pParser.setFeature(fNames.namespaces, true);
-        m_pParser.setFeature(fNames.namespace_prefixes, true);
-    	}
-      	catch(SAX::SAXException& e)
-        {
-            std::cerr << e.what() << std::endl;
-    	}
-
-    	m_pParser.setContentHandler(m_pHandler);
-    	m_pParser.setDTDHandler(m_pHandler);
-    	m_pParser.setErrorHandler(m_pHandler);
-    	m_pParser.setEntityResolver(m_pHandler);
-
-    	try
-	{
-	    m_pParser.setProperty(pNames.declHandler, static_cast<SAX::DeclHandler&>(m_pHandler));
-	    m_pParser.setProperty(pNames.lexicalHandler, static_cast<SAX::LexicalHandler&>(m_pHandler));
-	}
-    catch(SAX::SAXException& e)
-	{
-	    std::cout << e.what() << std::endl;
-	} // catch    
-
-    	//m_pParser->setContentHandler(m_pHandler);
-    	//m_pParser->setErrorHandler(m_pHandler);
 	m_pInputStream = NULL;
 	m_pLastArrayParam = NULL;
+	m_pParser = NULL;
 }
 
 SoapDeSerializer::~SoapDeSerializer()
 {
-	//delete m_pHandler;
-	//delete m_pParser;
+	m_pHandler.Init();
 }
 
 int SoapDeSerializer::SetInputStream(const Ax_soapstream* pInputStream)
 {
 	m_pInputStream = pInputStream;
-	//---------------------start--------------------------
-	//Deserialize
-	//---------START XERCES SAX2 SPCIFIC CODE---------//
-	//a huge buffer to store the whole soap request stream
-	//to store the number of chars returned by get_request_bytes
 	int nChars = 0;
-	//request a huge number of bytes to get the whole soap request
-	//when pull parsing is used this should change
 	if (NULL != m_pInputStream->transport.pGetFunct)
-		m_pInputStream->transport.pGetFunct(m_hugebuffer, HUGE_BUFFER_SIZE, &nChars, m_pInputStream->str.ip_stream);
-	//if no soap then quit
-
-	if (nChars <= 0) return AXIS_FAIL;
-	//MemBufInputSource Input((const unsigned char*)m_hugebuffer, nChars , "bufferid");
-
-	//Input.setEncoding("UTF-16");
-
-	//m_sHugebuffer = m_hugebuffer;
-	//SAX::InputSource Input(m_sHugebuffer);
-	//m_pParser->parse(Input);
-    //m_pParser.parse(Input);
-
-    m_pParser.parse_start();
-    m_pParser.parse_continue(m_hugebuffer, HUGE_BUFFER_SIZE);
-    m_pParser.parse_end();
-    
+	{
+		m_pParser->parse_start();
+		do {
+			m_pInputStream->transport.pGetFunct(&m_pCurrentBuffer, &nChars, m_pInputStream->str.ip_stream);
+			if ((nChars > 0) && m_pCurrentBuffer)
+				m_pParser->parse_continue(m_pCurrentBuffer, nChars);
+		} while (nChars > 0);
+		m_pParser->parse_end();
+	}
 	return AXIS_SUCCESS;
-
 }
 
 SoapEnvelope* SoapDeSerializer::GetEnvelope()
@@ -237,12 +187,25 @@ IParam* SoapDeSerializer::GetParam()
 
 int SoapDeSerializer::Init()
 {
-	m_hugebuffer[0] = '\0';
+	try
+	{
+		m_pHandler.Init();
+		if (m_pParser) delete m_pParser;
+		m_pParser = new SAX::XMLReader<std::string>;
+	    m_pParser->setFeature(fNames.external_general, true);
+        m_pParser->setFeature(fNames.namespaces, true);
+        m_pParser->setFeature(fNames.namespace_prefixes, true);
+		m_pParser->setContentHandler(m_pHandler);
+		m_pParser->setErrorHandler(m_pHandler);
+    }
+    catch(SAX::SAXException& e)
+    {
+		return AXIS_FAIL;
+    }
+	
 	m_pLastArrayParam = NULL;
 
-	m_pHandler.Init();
 	return AXIS_SUCCESS;
-
 }
 
 

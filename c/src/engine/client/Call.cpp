@@ -433,12 +433,12 @@ int Call::Initialize()
 	catch (ChannelException e)
 	{
 		/*printf(e.GetErr().c_str());*/
-		return FAIL;
+		return AXIS_FAIL;
 	}
 	catch (...)
 	{
 		/*printf("Unknown exception occured in the client");*/
-		return FAIL;
+		return AXIS_FAIL;
 	}
 }
 

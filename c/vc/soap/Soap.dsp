@@ -65,7 +65,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "../../bin/win32/soap"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../../include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FR /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../../include" /I "C:/arabica" /I "c:/arabica/arabica" /I "C:\Expat-1.95.7\Source\lib" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FR /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -142,7 +142,7 @@ SOURCE=..\..\src\soap\URIMapping.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\soap\XMLStreamHandler.cpp
+SOURCE=..\..\src\soap\XMLSimpleHandler.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -214,7 +214,7 @@ SOURCE=..\..\include\axis\soap\URIMapping.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\soap\XMLStreamHandler.h
+SOURCE=..\..\include\axis\soap\XMLSimpleHandler.h
 # End Source File
 # End Group
 # End Target
