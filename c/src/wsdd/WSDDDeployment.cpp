@@ -144,8 +144,11 @@ const WSDDHandlerList* WSDDDeployment::GetGlobalResponseFlowHandlers()
 int WSDDDeployment::LoadWSDD(const AxisChar* sWSDD)
 {
 	m_sWSDDPath = string(sWSDD);
-	WSDDDocument doc;
-	if (AXIS_SUCCESS != doc.GetDeployment(sWSDD, this))
+
+	WSDDDocument* doc = new WSDDDocument();
+	if (SUCCESS != doc->GetDeployment(sWSDD, this))
+
+
 	{
 		return AXIS_FAIL;
 	}
