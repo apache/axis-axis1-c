@@ -146,12 +146,24 @@ int MessageData::setProperty (AxisChar* pachName, const AxisChar* pachValue)
     return AXIS_SUCCESS;
 }
 
+int MessageData::setProperty (AxisChar* pachName, const void* pachValue, int len)
+{
+     AxisChar* pachTmpName = (AxisChar*) malloc (strlen (pachName) + 1);
+     strcpy (pachTmpName, pachName);
+     AxisChar* pachTmpValue = (AxisChar*) malloc (len);
+     memcpy (pachTmpValue, pachValue, len);
+ 
+     m_Properties[pachTmpName] = pachTmpValue;
+ 
+     return AXIS_SUCCESS;
+}
+
 /*
  *    The method caller has to check whether the returned string is empty or
  *    not. If it is empty then the idea is that the property is not 
  *    available.
  */
-const AxisChar* MessageData::getProperty (AxisChar* pachName)
+const void* MessageData::getProperty (AxisChar* pachName)
 {
     if (m_Properties.find (pachName) != m_Properties.end ())
     {
