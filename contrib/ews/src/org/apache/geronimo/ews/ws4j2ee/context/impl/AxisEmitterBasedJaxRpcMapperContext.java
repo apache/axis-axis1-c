@@ -98,6 +98,7 @@ import org.apache.geronimo.ews.ws4j2ee.context.J2EEWebServiceContext;
 import org.apache.geronimo.ews.ws4j2ee.context.JaxRpcMapperContext;
 import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.toWs.UnrecoverableGenerationFault;
+import org.apache.geronimo.ews.ws4j2ee.utils.Utils;
 
 /**
  * This class wrap the JAXRPCMapper and only expose a interface to
@@ -246,15 +247,34 @@ public class AxisEmitterBasedJaxRpcMapperContext implements JaxRpcMapperContext 
                     //set the package name
                     FullyQualifiedClassType packagename = objFactory.createFullyQualifiedClassType();
                     String pkg = (String) packages.next();
-                    if(pkg.equals(j2eewscontext.getMiscInfo().getJaxrpcSEI())){
+                    String jaxrpcsei = j2eewscontext.getMiscInfo().getJaxrpcSEI();
+                    if(pkg == null){
+                    	//TODO this is temporrary work around to make sure 
+                    	//the mapping is defined.
+                    	String pkgName = Utils.getPackageNameFromQuallifiedName(jaxrpcsei);
+						String val = (String)map.get(pkgName);
+						if(val == null){
+							val = Utils.javapkgToURI(pkgName);
+							packagename.setValue(pkgName);
+							pkgmap.setPackageType(packagename);
+							//set the namespace URI
+							XsdAnyURIType nsuri = objFactory.createXsdAnyURIType();
+							nsuri.setValue(val);
+							pkgmap.setNamespaceURI(nsuri);
+						}else{
+							continue;
+						}
+                    }else if(pkg.equals(jaxrpcsei)){
                    		continue;
+                    }else{
+						packagename.setValue(pkg);
+						pkgmap.setPackageType(packagename);
+						//set the namespace URI
+						XsdAnyURIType nsuri = objFactory.createXsdAnyURIType();
+						nsuri.setValue((String) map.get(pkg));
+						pkgmap.setNamespaceURI(nsuri);
+
                     }
-                    packagename.setValue(pkg);
-                    pkgmap.setPackageType(packagename);
-                    //set the namespace URI
-                    XsdAnyURIType nsuri = objFactory.createXsdAnyURIType();
-                    nsuri.setValue((String) map.get(pkg));
-                    pkgmap.setNamespaceURI(nsuri);
                     //done :) add the package type
                     jaxrpcmap.getPackageMapping().add(pkgmap);
                 }

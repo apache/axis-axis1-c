@@ -69,93 +69,93 @@ public class ServiceReferanceImpl implements ServiceReferance{
 		  */
 		private Vector handlers = new Vector(); 
 
-        /**
-         * @return
-         */
-        public String getJaxrpcmappingFile() {
-            return jaxrpcmappingFile;
-        }
+		/**
+		 * @return
+		 */
+		public String getJaxrpcmappingFile() {
+			return jaxrpcmappingFile;
+		}
 
-        /**
-         * @return
-         */
-        public QName getServcieQName() {
-            return servcieQName;
-        }
+		/**
+		 * @return
+		 */
+		public QName getServcieQName() {
+			return servcieQName;
+		}
 
-        /**
-         * @return
-         */
-        public String getServiceInterface() {
-            return serviceInterface;
-        }
+		/**
+		 * @return
+		 */
+		public String getServiceInterface() {
+			return serviceInterface;
+		}
 
-        /**
-         * @return
-         */
-        public String getServicerefName() {
-            return servicerefName;
-        }
+		/**
+		 * @return
+		 */
+		public String getServicerefName() {
+			return servicerefName;
+		}
 
-        /**
-         * @return
-         */
-        public String getWsdlFile() {
-            return wsdlFile;
-        }
+		/**
+		 * @return
+		 */
+		public String getWsdlFile() {
+			return wsdlFile;
+		}
 
-        /**
-         * @param string
-         */
-        public void setJaxrpcmappingFile(String string) {
-            jaxrpcmappingFile = string;
-        }
+		/**
+		 * @param string
+		 */
+		public void setJaxrpcmappingFile(String string) {
+			jaxrpcmappingFile = string;
+		}
 
-        /**
-         * @param name
-         */
-        public void setServcieQName(QName name) {
-            servcieQName = name;
-        }
+		/**
+		 * @param name
+		 */
+		public void setServcieQName(QName name) {
+			servcieQName = name;
+		}
 
-        /**
-         * @param string
-         */
-        public void setServiceInterface(String string) {
-            serviceInterface = string;
-        }
+		/**
+		 * @param string
+		 */
+		public void setServiceInterface(String string) {
+			serviceInterface = string;
+		}
 
-        /**
-         * @param string
-         */
-        public void setServicerefName(String string) {
-            servicerefName = string;
-        }
+		/**
+		 * @param string
+		 */
+		public void setServicerefName(String string) {
+			servicerefName = string;
+		}
 
-        /**
-         * @param string
-         */
-        public void setWsdlFile(String string) {
-            wsdlFile = string;
-        }
+		/**
+		 * @param string
+		 */
+		public void setWsdlFile(String string) {
+			wsdlFile = string;
+		}
 
-    /* (non-Javadoc)
-     * @see org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.ServiceReferance#addHandler(org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFHandler)
-     */
-    public void addHandler(WSCFHandler handler) {
-        this.handlers.add(handler);
+	/* (non-Javadoc)
+	 * @see org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.ServiceReferance#addHandler(org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFHandler)
+	 */
+	public void addHandler(WSCFHandler handler) {
+		this.handlers.add(handler);
 
-    }
+	}
 
-    /* (non-Javadoc)
-     * @see org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.ServiceReferance#getHandlers()
-     */
-    public WSCFHandler[] getHandlers() {
+	/* (non-Javadoc)
+	 * @see org.apache.geronimo.ews.ws4j2ee.context.webservices.client.interfaces.ServiceReferance#getHandlers()
+	 */
+	public WSCFHandler[] getHandlers() {
 		WSCFHandler[] wscfhandlers = new WSCFHandler[handlers.size()];
 		for(int i = 0;i<wscfhandlers.length;i++){
 			wscfhandlers[i] = (WSCFHandler)handlers.get(i);
 		}
-        return null;
-    }
+		return wscfhandlers;
+	}
 
 }

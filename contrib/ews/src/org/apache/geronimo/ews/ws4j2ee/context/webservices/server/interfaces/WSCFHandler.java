@@ -105,7 +105,7 @@ public interface WSCFHandler {
 	 * Gets the soap headers of the handler element
 	 * @return soap-headers
 	 */
-	public String[] getSoapHeader();
+	public WSCFSOAPHeader[] getSoapHeader();
 	
 	/**
 	 * Gets the soap roles of the handler element

@@ -20,7 +20,7 @@ public class PropertyLoader {
 				proIn = GenerationConstants.class.getResourceAsStream("META-INF/"+propertyFile);
 			}
 			if(proIn == null){
-				proIn = new FileInputStream("src/conf/"+propertyFile);
+				proIn = new FileInputStream("conf/"+propertyFile);
 			}
 			if(proIn == null){
 				proIn = new FileInputStream(propertyFile);
@@ -32,7 +32,7 @@ public class PropertyLoader {
 			}
 			return properties;
 		} catch (Exception e) {
-			throw new GenerationFault(e);
+			throw GenerationFault.createGenerationFault(e);
 		} 
 	}
 }

@@ -65,7 +65,9 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Stack;
+import java.util.StringTokenizer;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -76,6 +78,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.axis.Constants;
 import org.apache.axis.encoding.Base64;
 import org.apache.axis.utils.JavaUtils;
+import org.apache.geronimo.ews.ws4j2ee.toWs.GenerationFault;
 import org.apache.geronimo.ews.ws4j2ee.wsutils.J2EEFault;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CharacterData;
@@ -84,6 +87,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -781,10 +785,14 @@ public class Utils {
             return "";
     }
 
-    public static String getAbsolutePath(String path, String confFileLocation) {
-        if (path.indexOf(":/") > -1 || path.indexOf(":\\") > -1)
-            return path;
-        return confFileLocation + "/" + path;
+    public static String getAbsolutePath(String path, String confFileLocation)throws GenerationFault {
+		if(path != null){
+			if (path.indexOf(":/") > -1 || path.indexOf(":\\") > -1||path.startsWith("/"))
+				return path;
+			return confFileLocation + "/" + path;
+		}else{
+			throw new GenerationFault("the path can not be null");
+		}
 
     }
     
@@ -943,6 +951,38 @@ public class Utils {
 			returnType.substring(1,index);
 		}
 		return returnType + end;
+	}
+	
+	public static String getElementValue(Node node){
+		NodeList nodes = node.getChildNodes();
+		for(int i = 0;i<nodes.getLength();i++){
+			Node temp = nodes.item(i);
+			if(temp instanceof Text){
+				return ((Text)temp).getNodeValue();
+			}
+		}
+		return null;
+	}
+
+	public static String javapkgToURI(String pkg){
+		StringTokenizer tok = new StringTokenizer(pkg,".");
+		ArrayList tokens = new ArrayList();
+		while(tok.hasMoreElements()){
+			tokens.add(tok.nextToken());
+		}
+		int size = tokens.size();
+		if( size > 0){
+			StringBuffer uribuf = new StringBuffer();
+			uribuf.append("http://");
+			uribuf.append((String)tokens.get(size -1));
+			for(int i = size -2;i>=0;i--){
+				uribuf.append(".");
+				uribuf.append((String)tokens.get(i));
+			}
+			return uribuf.toString();
+		}else{
+			return pkg;
+		}
 	}
 
 

@@ -84,7 +84,6 @@ public class DynamicCompiler {
 
         for (int i = 0; i < srcFiles.size(); i++) {
             String src = (String) srcFiles.get(i);
-            System.out.println(src);
             comp.addFile(src);
         }
         try {

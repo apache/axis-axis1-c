@@ -61,6 +61,7 @@ import java.util.Vector;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFConstants;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFHandler;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFInitParam;
+import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.interfaces.WSCFSOAPHeader;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb.DescriptionType;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb.DisplayNameType;
 import org.apache.geronimo.ews.ws4j2ee.context.webservices.server.jaxb.IconType;
@@ -171,7 +172,7 @@ public class WSCFHandlerImpl extends WSCFElement implements WSCFHandler {
 		
 		list = jaxbHandler.getSoapRole();
 		for(int i=0; i < list.size(); i++){
-			this.soapHeader.add(((StringImpl)list.get(i)).getValue()); 
+			this.soapRole.add(((StringImpl)list.get(i)).getValue()); 
 		}		
 	
 	}
@@ -293,9 +294,12 @@ public class WSCFHandlerImpl extends WSCFElement implements WSCFHandler {
 	 * Gets the soap headers of the handler element
 	 * @return soap-headers
 	 */
-	public String[] getSoapHeader() {
-		String[] soapheader = new String[this.soapHeader.size()];
-		this.soapHeader.toArray(soapheader);
+	public WSCFSOAPHeader[] getSoapHeader() {
+		WSCFSOAPHeader[] soapheader = new WSCFSOAPHeader[this.soapHeader.size()];
+		int size = soapHeader.size();
+		for(int i = 0;i<size;i++){
+			soapheader[i] = ((WSCFSOAPHeader)soapHeader.get(i));
+		}
 		return soapheader;
 	}
 
@@ -305,7 +309,10 @@ public class WSCFHandlerImpl extends WSCFElement implements WSCFHandler {
 	 */
 	public String[] getSoapRole() {
 		String[] soaprole = new String[this.soapRole.size()];
-		this.soapRole.toArray(soaprole);
+		int size = soapRole.size();
+		for(int i = 0;i<size;i++){
+			soaprole[i] = (String)soapRole.get(i);
+		}
 		return soaprole;
 	}
 
