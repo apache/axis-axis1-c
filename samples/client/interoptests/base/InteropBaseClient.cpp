@@ -100,9 +100,9 @@ int main(int argc, char* argv[])
 		printf("failed\n");
 	// testing echo Struct
 	SOAPStruct stct;
-	stct.SOAPStruct_varFloat = 12345.7346345;
-	stct.SOAPStruct_varInt = 5000;
-	stct.SOAPStruct_varString = strdup("This is string in SOAPStruct");
+	stct.varFloat = 12345.7346345;
+	stct.varInt = 5000;
+	stct.varString = strdup("This is string in SOAPStruct");
 	printf("invoking echoStruct...\n");
 	if (ws.echoStruct(&stct) != NULL)
 		printf("successful\n");
@@ -114,10 +114,10 @@ int main(int argc, char* argv[])
 	arrstct.m_Size = ARRAYSIZE;
 	for (x=0;x<ARRAYSIZE;x++)
 	{
-		arrstct.m_Array[x].SOAPStruct_varFloat = 1.1111*x;
-		arrstct.m_Array[x].SOAPStruct_varInt = x;
-		sprintf(buffer1, "SOAPStruct_varString of %dth element of SOAPStruct array", x);
-		arrstct.m_Array[x].SOAPStruct_varString = buffer1;
+		arrstct.m_Array[x].varFloat = 1.1111*x;
+		arrstct.m_Array[x].varInt = x;
+		sprintf(buffer1, "varString of %dth element of SOAPStruct array", x);
+		arrstct.m_Array[x].varString = buffer1;
 	}
 	//testing echo Struct Array
 	printf("invoking echoStructArray...\n");
