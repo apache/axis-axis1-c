@@ -85,7 +85,7 @@ public class ParmHeaderFileWriter extends ParamWriter{
 			this.writer.write("#if !defined(__"+classname.toUpperCase()+"_H__INCLUDED_)\n");
 			this.writer.write("#define __"+classname.toUpperCase()+"_H__INCLUDED_\n\n");
 			writePreprocssorStatements();
-			this.writer.write("typedef struct {\n");
+			this.writer.write("typedef struct "+classname+ "Tag {\n");
 			writeAttributes();
 			this.writer.write("} "+classname+";\n\n");
 			this.writer.write("#endif /* !defined(__"+classname.toUpperCase()+"_H__INCLUDED_)*/\n");
@@ -101,9 +101,13 @@ public class ParmHeaderFileWriter extends ParamWriter{
 	protected void writeAttributes()throws WrapperFault{
 		  if(type.isArray()) return;
 		  try{
+		  	  if ( attribs.length == 0 ) {
+				  /* TODO : needed for Aix xlc */
+				  writer.write("\t int emptyStruct;\n");
+			  }			  	
 			  for(int i=0;i<attribs.length;i++){
 				  //if((t = wscontext.getTypemap().getType(new QName(attribs[i][2],attribs[i][3])))!= null && t.isArray()) continue;
-				  writer.write("\t"+getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])+" "+attribs[i].getParamName()+";\n");
+		  	 	writer.write("\t"+getCHeaderFileCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])+" "+attribs[i].getParamName()+";\n");
 			  }    
 		  } catch (IOException e) {
 			   throw new WrapperFault(e);
