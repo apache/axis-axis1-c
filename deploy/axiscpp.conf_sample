@@ -1,5 +1,0 @@
-AXISLOGPATH:/usr/local/axiscpp_deploy/logs/AxisLog
-WSDDFILEPATH:/usr/local/axiscpp_deploy/etc/server.wsdd
-CLIENTWSDDFILEPATH:/usr/local/axiscpp_deploy/etc/client.wsdd
-AXISCLIENTLOGPATH:/usr/local/axiscpp_deploy/logs/AxisClientLog
-
