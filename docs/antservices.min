@@ -30,6 +30,9 @@ simple_axis_server - nothing to do
 
 *. stop any servers if running
 
+*. Change the wspath entity in c/build/server.wsdd.PLATFORM to point to c/../../../Axis/webservices. Axis folder will be 
+created when services are deployed.
+
 *. you may have to change PARSER.xmlParserLibrary to the appropriate value in the build.PLATFORM.properties file
 
 *. ant -f services.xml -Ddir.release=/home/sanjaya/obj/package/axis-c-1.5.0-Linux-bin/
