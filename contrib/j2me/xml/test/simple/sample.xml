@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<?my.presentation.Program QUERY="exec, tech, all"?>
+<!DOCTYPE slideshow SYSTEM "slideshow1a.dtd">
+<!DOCTYPE slideshow [
+<!ELEMENT FOO (bar)* >
+<!ELEMENT ok (#PCDATA) >
+<!ATTLIST ok 
+	att ID #REQUIRED>
+<!ENTITY test "this is a 
+test">
+]>
+<!-- test -->
+<FOO>
+<![CDATA[Diagram ...
+....
+  .............
+  ...
+  dfjaldf
+  jfdlas
+  ]]]]
+  
+]]>
+<ok att="  a  a  "/>
+<bar>aa -a&amp;&#69; &test;</bar>
+<bar><foo></foo></bar>
+<bar>aaa<foo>bbb</foo>ccc</bar>
+<bar a="1
+2
+3"></bar>
+<bar xmlns="aaa" att="b"></bar>
+<bar xmlns:p="aaa" p:attr="c"></bar>
+<p:bar xmlns:p="aaa" xmlns:b="ttt"></p:bar>
+<bar xmlns="kkk" xmlns:p="aaa" xmlns:b="ttt"></bar>
+<p:bar xmlns:p="aaa" xmlns:b="ttt"></p:bar>
+</FOO>
