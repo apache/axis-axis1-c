@@ -216,19 +216,4 @@ Attribute::Attribute(const AxisChar *localname, const AxisChar *prefix,
     m_value= value;
 }
 
-const AxisChar* Attribute::getValue() {
-    return m_value.c_str();
-}
-
-const AxisChar* Attribute::getLocalName() {
-    return m_localname.c_str();
-}
-
-const AxisChar* Attribute::getUri() {
-    return m_uri.c_str();
-}
-
-const AxisChar* Attribute::getPrefix() {
-    return m_prefix.c_str();
-}
 
