@@ -92,6 +92,8 @@ public class DocLitWebServiceGenarator implements WebServiceGenarator{
 				(new Genarator(WrapperConstants.GENERATOR_SERVICE_HPP, wscontext)).genarate();
 				(new Genarator(WrapperConstants.GENERATOR_PARAM_CPP_ALL, wscontext)).genarate();	
 				(new Genarator(WrapperConstants.GENERATOR_CLASSLOADER_CPP, wscontext)).genarate();				 				 	
+				(new Genarator(WrapperConstants.GENERATOR_DEPLOYMENT, wscontext)).genarate();
+				(new Genarator(WrapperConstants.GENERATOR_UNDEPLOYMENT, wscontext)).genarate();
 			}else{
 				(new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_CPP, wscontext)).genarate();
 				(new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_HPP, wscontext)).genarate();
@@ -104,6 +106,8 @@ public class DocLitWebServiceGenarator implements WebServiceGenarator{
 				(new Genarator(WrapperConstants.GENERATOR_SERVICE_C, wscontext)).genarate();
 				(new Genarator(WrapperConstants.GENERATOR_PARAM_C_ALL, wscontext)).genarate();	
 				(new Genarator(WrapperConstants.GENERATOR_CLASSLOADER_C, wscontext)).genarate();				 				 	
+				(new Genarator(WrapperConstants.GENERATOR_DEPLOYMENT, wscontext)).genarate();
+				(new Genarator(WrapperConstants.GENERATOR_UNDEPLOYMENT, wscontext)).genarate();
 			}else{
 				 (new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_C, wscontext)).genarate();
 				 (new Genarator(WrapperConstants.GENERATOR_CLIENT_STUB_H, wscontext)).genarate();

@@ -114,6 +114,9 @@ public interface WrapperConstants {
 	public static final int GENERATOR_CLIENT_STUB_H = 27;
 	public static final int GENERATOR_PARAM_C_ALL = 28;
 
+	//common constants
+	public static final int GENERATOR_DEPLOYMENT = 40;
+	public static final int GENERATOR_UNDEPLOYMENT = 41;
 
 	//implementation type
 	public static final String IMPL_STYLE_STRUCT = "struct";
