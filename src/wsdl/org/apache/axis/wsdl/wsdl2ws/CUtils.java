@@ -247,7 +247,10 @@ public class CUtils {
 		return arrayName;		
 	}
 	public static String getBasicArrayNameforType(String stype){
-		return (String)type2BasicArrayName.get(stype);
+		if (type2BasicArrayName.containsKey(stype))
+			return (String)type2BasicArrayName.get(stype);
+		else
+		 	return "";
 	}
 	
 	/**
