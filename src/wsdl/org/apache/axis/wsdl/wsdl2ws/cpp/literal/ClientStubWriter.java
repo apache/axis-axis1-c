@@ -1100,7 +1100,9 @@ public class ClientStubWriter
             writer.write("\t\t\telse\n");
             writer.write("\t\t\t{\n");
             writer.write("\t\t\t\tm_pCall->unInitialize();\n");
-            writer.write("\t\t\t\tthrow SoapFaultException(e);\n");
+            writer.write("\t\t\tthrow OtherFaultException(pSoapFault->getFaultcode(),\n");
+            writer.write("\t\t\t\tpSoapFault->getFaultstring(), pSoapFault->getFaultactor(),\n");
+		writer.write("\t\t\t\tpSoapFault->getSimpleFaultDetail(), iExceptionCode);\n");
             writer.write("\t\t\t}\n");
         }
         writer.write("\t\t}\n");
