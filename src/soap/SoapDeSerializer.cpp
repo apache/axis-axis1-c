@@ -301,9 +301,13 @@ SoapDeSerializer::getHeader ()
 			{
 			    //addToHeaderBlock(pNodeList[0]);
 			    pHeaderBlock->addChild (pNodeList[0]);
-			    m_pHeader->addHeaderBlock (pHeaderBlock);
-			    m_pParser->next (true);	//To skip the end element of the HeaderBlock
-			    bContinue = false;
+                /* Commented by Rangika since with this part the logic is wrong
+			    //m_pHeader->addHeaderBlock (pHeaderBlock);
+			    //m_pParser->next (true);	//To skip the end element of the HeaderBlock
+			    //bContinue = false;
+                */
+                iListPos--;
+			    iLevel--;
 			}
 		    }
 		    else
