@@ -18,7 +18,8 @@
 #if !defined( _PLATFORM_SPECIFIC_WINDOWS_HPP )
 #define _PLATFORM_SPECIFIC_WINDOWS_HPP
 
-#define _WIN32_WINNT 0x0400
+//#define _WIN32_WINNT 0x0400
+#define _WINSOCKAPI_ /* Prevent inclusion of winsock.h in windows.h */
 #include <windows.h>
 
 // =============================================================
