@@ -422,9 +422,9 @@ public class ClientStubWriter
         //TODO check which version is it really.
         writer.write(
             "\tm_pCall->setOperation(\""
-                + minfo.getMethodname()
+                + minfo.getInputMessage().getLocalPart()
                 + "\", \""
-                + wscontext.getWrapInfo().getTargetNameSpaceOfWSDL()
+                + minfo.getInputMessage().getNamespaceURI()
                 + "\");\n");
         
         // Add attributes to soap method
