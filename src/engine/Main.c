@@ -180,7 +180,7 @@ int main() {
 
 	str->so.http.ip_headers = (header*)malloc(sizeof(header));
 	str->so.http.ip_headers->headername = SOAPACTIONHEADER;
-	str->so.http.ip_headers->headervalue = "Maths";
+	str->so.http.ip_headers->headervalue = "\"Maths\"";	
 	str->so.http.ip_headercount = 1;
 
 	printf("soap request :\n %s\n", ip);
