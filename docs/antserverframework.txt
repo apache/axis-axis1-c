@@ -35,4 +35,6 @@ Run the ant client test framework
 
 -now you can run the ant testframework against the deployed services using the anttestguide
 
--When running the client side framework you will have to change the executeTest.xml file where the axiscpp.conf file is being written to have the correct path and no mixed / and \ characters
+
+(Note: The following may be applicable. But I am not able to reproduce this problem anymore
+-When running the client side framework you will have to change the executeTest.xml file where the axiscpp.conf file is being written to have the correct path and no mixed / and \ characters)
