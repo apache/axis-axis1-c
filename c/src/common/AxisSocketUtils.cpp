@@ -66,7 +66,7 @@
 #include <axis/common/AxisSocketUtils.h>
 #include <axis/common/GDefine.h>
 #include <stdio.h>
-#ifdef WIN32
+#if defined(WIN32) && !defined(CYGWIN)
 #include <winsock.h>    /* for socket(),... */
 #else //Linux
 #endif
@@ -87,7 +87,7 @@ AxisSocketUtils::~AxisSocketUtils()
 
 int AxisSocketUtils::printSocketErrorDescription()
 {
-	#ifdef WIN32
+  #if defined(WIN32) && !defined(CYGWIN)
 		int iErrorCode = WSAGetLastError();		
 
 		if (iErrorCode == WSANOTINITIALISED) {
