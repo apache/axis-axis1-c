@@ -35,6 +35,12 @@
  * Added doxygen comments to help autobuild API docs
  */
 
+/*
+ * Revision 1.3  2004/07/28 roshan
+ * Added the method getLocalName()
+ */
+
+
 #if !defined(AXIS_COMPLEXELEMENT_H__OF_AXIS_INCLUDED_)
 #define AXIS_COMPLEXELEMENT_H__OF_AXIS_INCLUDED_
 
@@ -167,6 +173,13 @@ public:
      * @return Always return NULL to indicate unsuccessful.
      */
     const AxisChar* getValue() const {return NULL;}
+
+    /**
+      * Returns the local name of this node.
+      *
+      * @return The localname of this element.
+      */
+    const AxisChar* getLocalName();
 
 private:
     int iNoOfChildren;
