@@ -1,0 +1,36 @@
+<project name="AxisCMockServer" default="production" basedir=".">
+
+	<!--
+	  Compile monitor code
+	  -->
+	<target name="compile">
+		<javac srcdir="${basedir}" destdir="${basedir}" listfiles="true"/>
+	</target>
+	
+	<!--
+	  Package monitor code into Jar file
+	  -->
+	<target name="package">
+		<jar jarfile="${basedir}/mockserver.jar" basedir="${basedir}">
+			<include name="**/*.class"/>
+			<manifest>
+				<attribute name="Main-Class"
+				 value="org.apache.test.mockserver.MockServer"/>
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="production" depends="compile, package" description="Build and package TCPMonitor utility"/>
+	
+	<!--
+	  Remove all generated artifacts
+	  -->
+	<target name="clean">
+		<delete file="${basedir}/mockserver.jar"/>
+		<delete>
+			<fileset dir="${basedir}">
+				<include name="**/*.class"/>
+			</fileset>
+		</delete>
+	</target>
+</project>
