@@ -83,8 +83,8 @@ public:
 	BasicHandler(){};
 	virtual ~BasicHandler(){};
 
-	virtual int Invoke(MessageData* pMsg) = 0;
-	virtual void OnFault(MessageData* pMsg) = 0;
+	virtual int Invoke(IMessageData* pMsg) = 0;
+	virtual void OnFault(IMessageData* pMsg) = 0;
 };
 
 #endif // !defined(AFX_BASICHANDLER_H__FFF77AB5_015C_4B48_9BAC_D84A7C493015__INCLUDED_)
