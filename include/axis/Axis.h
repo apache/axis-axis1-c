@@ -17,29 +17,4 @@
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  *
  */
-#ifdef WIN32
-#pragma warning (disable : 4786)
-#endif
-
-#if !defined(__AXIS_H_OF_AXIS_INCLUDED__)
-#define __AXIS_H_OF_AXIS_INCLUDED__
-
-#include <axis/server/GDefine.h>
-
-AXIS_CPP_NAMESPACE_START
-
-class STORAGE_CLASS_INFO Axis
-{
-  public:
-    static void initialize(bool bIsServer);
-    static void terminate();
-};
-
-AXIS_CPP_NAMESPACE_END
-
-#endif // !defined(__AXIS_H_OF_AXIS_INCLUDED__)
-
-
-
-
-
+#error "Please include Axis.hpp instead"

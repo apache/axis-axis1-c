@@ -12,25 +12,5 @@
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
- *
- *
- *
- * @author Susantha Kumara (skumara@virtusa.com)
- *
  */
-
-#if !defined(__WSDD_DEFINES_H__OF_AXIS_INCLUDEDED__)
-#define __WSDD_DEFINES_H__OF_AXIS_INCLUDEDED__
-
-typedef enum  
-{
-    UNKNOWN_PROVIDER=0,
-    C_RPC_PROVIDER,
-    C_DOC_PROVIDER,
-    CPP_RPC_PROVIDER,
-    CPP_DOC_PROVIDER,
-    COM_PROVIDER
-} PROVIDERTYPE;
-
-#endif
-
+#error "Please include WSDDDefines.hpp instead"

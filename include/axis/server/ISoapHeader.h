@@ -14,33 +14,4 @@
  *   limitations under the License.
  */
 
-#if !defined(_ISOAPHEADER_H____OF_AXIS_INCLUDED_)
-#define _ISOAPHEADER_H____OF_AXIS_INCLUDED_
-/*
- *  @class ISoapHeader
- *  @brief interface for the ISoapHeader class.
- *
- *
- *  @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- */
-#include "../server/IHeaderBlock.h"
-
-AXIS_CPP_NAMESPACE_START
-
-class ISoapHeader  
-{
-public:
-	virtual IHeaderBlock* getHeaderBlock(const AxisChar *pName,
-                                         const AxisChar *pNamespace, 
-										 bool bRemoveOrNot) = 0;
-    virtual IHeaderBlock* getHeaderBlock(bool bRemoveOrNot)=0;
-    virtual IHeaderBlock* getFirstHeaderBlock()=0;
-    virtual IHeaderBlock* getNextHeaderBlock()=0;
-
-    virtual ~ISoapHeader() {};
-};
-
-AXIS_CPP_NAMESPACE_END
-
-#endif 
-
+#error "Please include ISoapHeader.hpp instead"

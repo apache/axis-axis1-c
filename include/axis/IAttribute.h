@@ -13,46 +13,4 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-
- /**
- * @file IAttribute.h
- *
- *
- */
- 
-#if !defined(_IATTRIBUTE_H____OF_AXIS_INCLUDED_)
-#define _IATTRIBUTE_H____OF_AXIS_INCLUDED_
-
-#include <axis/server/GDefine.h>
-
-/**
- *   @class IAttribute
- *   @brief interface for the IAttribute class.
- *
- *   @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
- *
- */
-
-#ifdef __cplusplus
-
-class IAttribute
-{
-public:        
-
-    virtual ~IAttribute() {};
-
-    virtual void setValue(const AxisChar* value) = 0;
-    virtual void setUri(const AxisChar* uri) = 0;
-    virtual void setPrefix(const AxisChar* prefix) = 0;
-    virtual void setLocalName(const AxisChar* localname) = 0;    
-    virtual const AxisChar* getValue() = 0;
-    virtual const AxisChar* getUri() = 0;
-    virtual const AxisChar* getPrefix() = 0;
-    virtual const AxisChar* getLocalName() = 0;
-
-};
-
-#endif
-
-
-#endif
+#error "Please include IAttribute.hpp instead"

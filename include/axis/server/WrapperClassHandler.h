@@ -13,31 +13,4 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-
-#if !defined(__WRAPPERCLASSHANDLER_OF_AXIS_INCLUDED__)
-#define __WRAPPERCLASSHANDLER_OF_AXIS_INCLUDED__
-
-#include <axis/server/BasicHandler.h>
-
-/**
- * @class WrapperClassHandler
- * @brief
- * @author Susantha Kumara (skumara@virtusa.com)
- *
- */
-
-AXIS_CPP_NAMESPACE_START
-
-class WrapperClassHandler : public HandlerBase 
-{
-public:
-    WrapperClassHandler(){};
-    virtual ~WrapperClassHandler(){};
-    virtual AXIS_BINDING_STYLE AXISCALL getBindingStyle()=0;
-    int AXISCALL getType(){return WEBSERVICE_HANDLER;};
-};
-
-AXIS_CPP_NAMESPACE_END
-
-#endif 
-
+#error "Please include WrapperClassHandler.hpp instead"
