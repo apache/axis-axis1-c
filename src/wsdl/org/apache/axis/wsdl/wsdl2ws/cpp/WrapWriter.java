@@ -142,7 +142,7 @@ public class WrapWriter extends CPPClassWriter{
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
 					 minfo = (MethodInfo)methods.get(i);
-					 this.writeMethodInWrapper(minfo.getMethodname(), minfo.getParameterTypess(),minfo.getReturnType());
+					 this.writeMethodInWrapper(minfo.getMethodname(), minfo.getParameterTypes(),minfo.getReturnType());
 					 writer.write("\n");
 				 }
      

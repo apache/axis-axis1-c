@@ -60,25 +60,24 @@
  */
 package org.apache.axis.wsdl.wsdl2ws.info;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Hashtable;
 
 public class MethodInfo {
     private String methodname;
-    private Hashtable parameters;
+    private ArrayList parameters;
     private ParameterInfo returnType;
 
     public MethodInfo() {
         this.returnType = null;
         this.methodname = null;
-        parameters = new Hashtable(101);
+        parameters = new ArrayList(101);
     }
 
     public MethodInfo(ParameterInfo returnType, String methodname) {
         this.returnType = returnType;
         this.methodname = methodname;
-        parameters = new Hashtable(101);
+        parameters = new ArrayList(101);
     }
 
     public String getMethodname() {
@@ -96,23 +95,24 @@ public class MethodInfo {
     public void setReturnType(ParameterInfo returnType) {
         this.returnType = returnType;
     }
-
+/*
     public Enumeration getParameters() {
         return this.parameters.keys();
     }
-
-    public Collection getParameterTypess() {
-        return this.parameters.values();
+*/
+    public Collection getParameterTypes() {
+        return this.parameters;
     }
 
-    public void addParameter(String paramName, ParameterInfo type) {
-        this.parameters.put(paramName, type);
+    public void addParameter(ParameterInfo type) {
+        this.parameters.add(type);
     }
-
+/*
     public ParameterInfo getParameter(String paramName) {
         Object obj = this.parameters.get(paramName);
         if (obj != null)
             return (ParameterInfo) obj;
         return null;
     }
+*/
 }

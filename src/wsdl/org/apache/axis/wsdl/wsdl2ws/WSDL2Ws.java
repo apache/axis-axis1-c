@@ -89,6 +89,17 @@ import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.w3c.dom.Node;
 
+/**
+ * This this the main class for the WSDL2Ws Tool. This class reuses the code in the 
+ * Axis java implementations to parse the WSDL file.
+ * the functinality of the class can be discribed as follows 
+ * 	1) create a Symbol table
+ *  2) create WrapperInfo class parsing the commandline arguments and the SymbolTable
+ *  3) create TypeMap parsing the  Symbol Table
+ *  4) create Service Info parsing the Symbol table
+ *  5) create WebServiceContext using above three classes and start execution 
+ */
+
 public class WSDL2Ws {
 	private PortType porttype ;
 
@@ -101,8 +112,7 @@ public class WSDL2Ws {
 	private String encodingStyle = null;
 	private String targetEndpointURI = null;
 	private String transportURI = null;
-    private TypeMap typeMap;
-    
+    private TypeMap typeMap;    
     
 	public WSDL2Ws(CLArgParser cmdLineArgs) throws WrapperFault {
 		try {
@@ -243,8 +253,8 @@ public class WSDL2Ws {
             while (paramlist.hasNext()) {
                 Part p = (Part) paramlist.next();
                 ptype = tb.getType(p.getTypeName());
-                pinfo = new ParameterInfo(ptype.getName(),ptype.getQName(),null,language);
-                minfo.addParameter(p.getName(),pinfo);
+                pinfo = new ParameterInfo(ptype.getName(),ptype.getQName(),p.getName(),language);
+                minfo.addParameter(pinfo);
             }
 
             //get the return type
