@@ -128,8 +128,8 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 	protected void writeMethods() throws WrapperFault {
 		try{
 			writer.write("public:/*implementation of WrapperClassHandler interface*/\n");
-			writer.write("\tint AXISCALL Invoke(IMessageData* mc);\n");
-			writer.write("\tvoid AXISCALL OnFault(IMessageData* pMsg);\n");
+			writer.write("\tint AXISCALL Invoke(void* pMsg);\n");
+			writer.write("\tvoid AXISCALL OnFault(void* pMsg);\n");
 			writer.write("\tint AXISCALL Init();\n");
 			writer.write("\tint AXISCALL Fini();\n");
 			writer.write("\tAXIS_BINDING_STYLE AXISCALL GetBindingStyle(){return RPC_ENCODED;};\n");
@@ -137,7 +137,7 @@ public class WrapHeaderWriter extends HeaderFileWriter{
 			MethodInfo minfo;
 			for (int i = 0; i < methods.size(); i++) {
 					 minfo = (MethodInfo)methods.get(i);
-					 writer.write("\tint "+minfo.getMethodname()+ "(IMessageData* mc);");
+					 writer.write("\tint "+minfo.getMethodname()+ "(void* pMsg);");
 					 writer.write("\n");
 				 }
      
