@@ -100,7 +100,7 @@ void ArrayBean::DeleteArray(list<int>::iterator it, int nItemOffset, int nItemSi
 	}
 }
 */
-int ArrayBean::DeSerialize(ISoapDeSerializer *pDZ)
+int ArrayBean::DeSerialize(IWrapperSoapDeSerializer *pDZ)
 {
 	Param* p;
 	if ((XSD_UNKNOWN == m_type) ||(0==m_size.size())||(!m_value.sta)) return FAIL;

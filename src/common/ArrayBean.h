@@ -21,7 +21,7 @@ class ArrayBean : public IArrayBean
 public:
 	ArrayBean();
 	virtual ~ArrayBean();
-	virtual int DeSerialize(ISoapDeSerializer *pDZ);
+	virtual int DeSerialize(IWrapperSoapDeSerializer *pDZ);
 	virtual int Serialize(IWrapperSoapSerializer& pSZ);
 	int GetArraySize();
 private:
