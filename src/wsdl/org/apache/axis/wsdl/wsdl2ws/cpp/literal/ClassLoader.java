@@ -65,7 +65,7 @@ public class ClassLoader implements SourceWriter{
 	  writer.write("\tif (pWCH)\n");
 	  writer.write("\t{\n");
 	  writer.write("\t\t(*inst)->_object = pWCH;\n");
-	  writer.write("\t\treturn pWCH->Init();\n");	  
+	  writer.write("\t\treturn pWCH->init();\n");	  
 	  writer.write("\t}\n");
 	  writer.write("\treturn AXIS_FAIL;\n");
 	  writer.write("}\n");
@@ -75,7 +75,7 @@ public class ClassLoader implements SourceWriter{
 	  writer.write("\tif (inst)\n"); 
 	  writer.write("\t{\n");
 	  writer.write("\t\tWrapperClassHandler* pWCH = reinterpret_cast<WrapperClassHandler*>(inst);\n");
-	  writer.write("\t\tpWCH->Fini();\n");
+	  writer.write("\t\tpWCH->fini();\n");
 	  writer.write("\t\tdelete pWCH;\n");
 	  writer.write("\t\tdelete inst;\n");
 	  writer.write("\t\treturn AXIS_SUCCESS;\n");

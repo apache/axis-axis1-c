@@ -106,7 +106,7 @@ public class ClientStubWriter extends CPPClassWriter{
 				this.writeMethodInWrapper(minfo);
 				writer.write("\n");
 			}
-			writer.write("\tint "+classname+"::GetStatus(){if ( m_pCall==NULL ) return AXIS_SUCCESS; else return m_pCall->GetStatus();}\n");     
+			writer.write("\tint "+classname+"::getStatus(){if ( m_pCall==NULL ) return AXIS_SUCCESS; else return m_pCall->getStatus();}\n");     
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}
