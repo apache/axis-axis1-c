@@ -413,9 +413,19 @@ public class ClientStubWriter
 	                            writer.write("\tRet.__size = 0;\n");
 	                        }
 	                        else
-	                        {
-	                            writer.write(outparamType + " Ret;\n");
-	                        }
+		                    {
+	                           	if (outparamType.equals("xsd__dateTime")
+		                            || outparamType.equals("xsd__date")
+									|| outparamType.equals("xsd__time"))
+		                        {
+		                        	writer.write(outparamType + " Ret;\n");
+		                        	writer.write("\tmemset(&Ret,0,sizeof(" + outparamType + "));\n");
+		                        }
+	                           	else
+	                           	{
+	                           		writer.write(outparamType + " Ret;\n");
+	                           	}
+		                    }
 	                    }
                 	}
                 }

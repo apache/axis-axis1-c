@@ -352,6 +352,7 @@ public class ClientStubWriter extends CPPClassWriter
 			else if (outparamTypeName.equals("xsd__string"))
 			{
                 		writer.write(outparamTypeName + " Ret;\n");
+						writer.write("\tmemset(&Ret,0,sizeof(" + outparamTypeName + "));\n");
 			}
                 	else
                 	{
@@ -366,14 +367,14 @@ public class ClientStubWriter extends CPPClassWriter
 	                        if (outparamTypeName.equals("xsd__base64Binary")
 	                            || outparamTypeName.equals("xsd__hexBinary"))
 	                        {
-	                            writer.write(outparamTypeName + "* Ret;\n");
+	                            writer.write(outparamTypeName + "* Ret=NULL;\n");
 	                            //writer.write("\tRet->__ptr = NULL;\n");
 	                            //writer.write("\tRet->__size = 0;\n");
 	                        }
 	
 	                        else
 	                        {
-	                            writer.write(outparamTypeName + "* Ret;\n");
+	                            writer.write(outparamTypeName + "* Ret=NULL;\n");
 	                        }
 	                    }
 	                    //TODO initialize return parameter appropriately.
