@@ -70,6 +70,10 @@ SoapDeSerializer::SoapDeSerializer()
 SoapDeSerializer::~SoapDeSerializer()
 {
     m_pParser->init();
+    if (m_pEnv)
+	 delete m_pEnv;
+    if(m_pHeader)
+      delete m_pHeader;    
     if (m_pParser) delete m_pParser;
     free(m_pcFaultDetail);
 }
@@ -157,6 +161,8 @@ int SoapDeSerializer::getHeader()
         (0 == strcmp(m_pNode->m_pchNameOrValue, 
         SoapKeywordMapping::map(m_nSoapVersion).pchWords[SKW_HEADER])))
     {
+       if(m_pHeader)
+           delete m_pHeader;
         m_pHeader = new SoapHeader();
         /* Set any attributes/namspaces to the SoapHeader object */
 
@@ -363,7 +369,10 @@ int SoapDeSerializer::getVersion()
 {
     if (VERSION_LAST == m_nSoapVersion)
     {
-        getEnvelope();
+	if (m_pEnv)
+	    delete m_pEnv;
+        m_pEnv = getEnvelope();
+	
     }
     return m_nSoapVersion;    
 }

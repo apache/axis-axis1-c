@@ -31,17 +31,25 @@ SoapParserXerces::SoapParserXerces()
     m_nStatus = NULL;
     firstParsed = false;
     m_pParser = XMLReaderFactory::createXMLReader();
-
+    is = NULL;
 }
 
 SoapParserXerces::~SoapParserXerces()
 {
     m_nStatus = NULL;
+    if(is)
+        delete is;
+    delete m_pParser;
+    
 }
 
 int SoapParserXerces::setInputStream(const Ax_soapstream* pInputStream)
 {
     m_pInputStream = pInputStream;
+    //check if memeory is already allocated for is
+    if(is)
+        delete is;
+    
     is = new SoapInputSource(m_pInputStream->transport.pGetFunct,
         m_pInputStream);
     /* SoapInputSource is(m_pInputStream->transport.pGetFunct, 

@@ -84,6 +84,7 @@ WSDDDeployment::~WSDDDeployment()
             delete ((*iter2).second);
         }
     }
+    delete m_pLibNameIdMap;
 }
 
 const WSDDHandlerList* WSDDDeployment::getGlobalRequestFlowHandlers()
