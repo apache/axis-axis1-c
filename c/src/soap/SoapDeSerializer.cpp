@@ -88,11 +88,13 @@ SoapDeSerializer::SoapDeSerializer()
 	m_pInputStream = NULL;
 	m_pLastArrayParam = NULL;
 	m_pParser = NULL;
+    m_pParser = new SAX::XMLReader<std::string>;
 }
 
 SoapDeSerializer::~SoapDeSerializer()
 {
 	m_pHandler.Init();
+    if (m_pParser) delete m_pParser;
 }
 
 int SoapDeSerializer::SetInputStream(const Ax_soapstream* pInputStream)
@@ -190,8 +192,7 @@ int SoapDeSerializer::Init()
 	try
 	{
 		m_pHandler.Init();
-		if (m_pParser) delete m_pParser;
-		m_pParser = new SAX::XMLReader<std::string>;
+		
 	    m_pParser->setFeature(fNames.external_general, true);
         m_pParser->setFeature(fNames.namespaces, true);
         m_pParser->setFeature(fNames.namespace_prefixes, true);

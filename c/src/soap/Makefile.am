@@ -17,5 +17,5 @@ libsoap_la_SOURCES = Attribute.cpp \
         XMLSimpleHandler.cpp \
 	SoapKeywordMapping.cpp
 
-libsoap_la_LIBADD = -L$(AXISCPP_HOME)/lib/arabica -lArabica
+libsoap_la_LIBADD = -L$(AXISCPP_HOME)/lib/arabica -lArabica -lexpat
 INCLUDES = -I$(AXISCPP_HOME)/include
