@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webservices>
+	<description>BookQuoteService</description>
+	<display-name>BookQuoteService</display-name>
+	<webservice-description >
+		<description>BookQuoteService</description>
+		<display-name>BookQuoteService</display-name>
+		<webservice-description-name >BookQuoteService</webservice-description-name>
+		<wsdl-file >BookQuote.wsdl</wsdl-file>
+		<jaxrpc-mapping-file >BookQuote.xml</jaxrpc-mapping-file>
+		<port-component >
+			<description >BookQuote</description>
+			<display-name >BookQuote</display-name>
+			<small-icon >BookQuoteBig.gif</small-icon>
+			<large-icon >BookQuoteIcon.gif</large-icon>
+			<port-component-name >BookQuote</port-component-name>
+			<wsdl-port >
+				<namespaceURI >http://www.Monson-Haefel.com/jwsbook/BookQuote</namespaceURI>
+				<localpart >BookQuotePort</localpart>
+			</wsdl-port>
+			<service-endpoint-interface >com.jwsbook.jaxrpc.BookQuote</service-endpoint-interface>
+			<service-impl-bean >
+				<ejb-link >com.jwsbook.jaxrpc.BookQuoteBean</ejb-link>
+			</service-impl-bean>
+		</port-component>
+	</webservice-description>
+</webservices>

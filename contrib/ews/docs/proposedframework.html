@@ -1,0 +1,53 @@
+<html>
+<body>
+<h1>Purposed Framework</h1>
+<p>folllowing is the purposed frmweork. Please help me improve this. Am willing to
+rewrite this after we brinstorm on this.</p>
+<p>The tool has two parts</p>
+<ul>
+<li>The files parsing part.</li>
+<li>Code genaration part.</li>
+</ul> 
+<h2>File parsing</h2>
+<p>The following files should be parsed and populated behind a interface so that 
+the parsing logic does not represent by the interface. the purposed interface is
+<a href="../src/org/apache/x/ws4j2ee/context/J2EEWebServiceContext.java">J2EEWebServiceContext</a></p> 
+<ol>
+	<li>WSDL File - We shall use the SymbolTable in the axis. But the SymbolTable
+	exposed too much parsing detail(DOM nodes in types ect.) to the code genaration
+	side. We shall wrap the SymbolTable behind the 
+	<a href="../src/org/apache/x/ws4j2ee/context/wsdl/WSDLContext.java"><code>org.apache.x.ws4j2ee.context.WSDLContext</code>
+	</a>interface. As most of the classes in the Symboltable implements interfaces used
+	here (javax.wsdl.*) it can be easily wrapped. </li>
+	<li>webService.xml file</li>
+	<li>JAX-RPC mapping file</li>
+	<li>servlet/ejb configaration file</li>
+</ol>
+<h2>Code Genaration</h2>
+<p>framework is done with two interfaces.</p>
+<ol>
+<li><a href="../src/org/apache/x/ws4j2ee/toWs/Generator.java">org.apache.x.ws4j2ee.toWs.Genarator</a>
+ - this interface reprsent bunch of code that genarate a module. e.g. who genarate the 
+ EJB files can give a class implement Genarator interface called EJBGenerator. When the 
+ genarate() method is called on that class EJB module should be genarated. So we can easily 
+ add remove modules.</li>  
+<li><a href="../src/org/apache/x/ws4j2ee/toWs/Writer.java">org.apache.x.ws4j2ee.toWs.Writer</a>
+ - this interface reprsent bunch of code that genarate a module. e.g. who genarate the 
+ EJB Remote interface can have EJBRemoteClassWriter in the EJBGenerator. When the 
+ writeCode() method is called on that class EJB Remote interface should be genarated. So we can easily 
+ add remove files to genaration modules.</li>  
+</ol>
+<p>Genarator has one or more writer inside it. genarate() method will call the writers one by one.</p>
+<p>The Factories <a href="../src/org/apache/x/ws4j2ee/toWs/WriterFactory.java">org.apache.x.ws4j2ee.toWs.WriterFactory</a>
+,<a href="../src/org/apache/x/ws4j2ee/toWs/GeneratorFactory.java">org.apache.x.ws4j2ee.toWs.GenaratorFactory</a> 
+and the Constants (<a href="../src/org/apache/x/ws4j2ee/toWs/GenerationConstants.java">org.apache.x.ws4j2ee.toWs.GenarationConstants</a> ) 
+are use to hide the Concreate implementations
+of the genarators and writers. New concreate Writer or Generator can added by changing 
+the Factory class. Only place the concreate classes referances are inside the Factories</p>
+</p> 
+<ol>
+</ol>
+<p></p>
+
+</body>
+</html>

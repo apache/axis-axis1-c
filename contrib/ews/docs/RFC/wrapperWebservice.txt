@@ -1,0 +1,43 @@
+this is something like the 
+com.jwsbook.jaxrpc.BookQuoteBindingImpl.java
+
+the signaure and the skelton of the class is genarated by the Ias.
+But the most important part is filing the implentation. We have to decide 
+where we going to do it. Basically Richard will decide where to do it.
+
+	I see two options 
+	1) if jaxrpc mapper is not standalone do the filing of implementation in the 
+	   Emitter inside the jaxrpc mapper.
+	2) else do it just as org.apache.x.ws4j2ee.toWs.handlers.HandlerWriter is done.
+		Basically the 
+		
+	    public class HandlerWriter extends AbstractWriter {
+	    	public HandlerWriter(J2EEWebServiceContext j2eewscontext){
+		    }
+		    public void writeCode() throws GenerationFault {
+		    	super.writeCode();
+		    	out.write("..........")
+		    	//print the file here
+    		}
+       	}
+		
+		
+		user can have J2eeWebServiceContext Object and print the file 
+		out in the writeCode()
+		
+TIPS
+====
+
+1) to acsses the MessageContext (which have the all the information about the
+current webservice that is executing in axis) org.apache.x.ws4j2ee.wsutils.JaxRpcRuntime.
+getMessageContext() static method.
+
+2) to acsess the ServiceEntry, BindingEntry and the PortTypeEntry of the 
+webservice under consideration we can use MiscInfo obect (acsess via getMiscInfo()
+of J2EEWebServiceContext)
+
+3) to get the QName -> java type mapping we can use JaxRpcMapperContext get by 
+getJAXRPCMappingContext() of the J2EEWebServiceContext. we can have all the information 
+using combination of Binding,PortType,Operations and JAXRPCMappingContext mapping methods 
+to get mapping.	
+	   	
