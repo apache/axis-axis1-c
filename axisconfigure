@@ -1,0 +1,2 @@
+#!/bin/bash
+./configure --libdir=/home/damitha/projects/axiscpp/c/release
