@@ -230,11 +230,14 @@ public class CUtils {
 		}
 		return null;	
 	}
-	public static String getBasicArrayNameforType(String stype){
-		String arrayName;
-		if((arrayName = (String)type2BasicArrayName.get(stype))!= null){
-			return arrayName;
+	public static String getCmplxArrayNameforType(QName qname){
+		String arrayName = null;
+		if(!qname2classmap.containsKey(qname)){
+			arrayName = qname.getLocalPart()+"_Array";
 		}
-		return null;		
+		return arrayName;		
+	}
+	public static String getBasicArrayNameforType(String stype){
+		return (String)type2BasicArrayName.get(stype);
 	}
 }
