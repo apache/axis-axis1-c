@@ -17,7 +17,7 @@
 #ifndef BISON_CPPYACC_HPP
 # define BISON_CPPYACC_HPP
 
-#include <axis/wcg/actions.h>
+#include "actions.h"
 
 #ifndef YYSTYPE
 typedef union

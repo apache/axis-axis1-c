@@ -77,7 +77,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 /nologo /subsystem:console /machine:I386 /pdbtype:sept
+# ADD LINK32 libcpd.lib /nologo /subsystem:console /pdb:none /machine:I386
 # SUBTRACT LINK32 /debug
 
 !ENDIF 
@@ -139,44 +139,48 @@ SOURCE=..\..\src\wcg\WSClass.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\include\axis\wcg\actions.h
+SOURCE=..\..\src\wcg\actions.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\wcg\BeanClass.h
+SOURCE=..\..\src\wcg\BeanClass.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\wcg\cppyacc.hpp
+SOURCE=..\..\src\wcg\File.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\wcg\File.h
+SOURCE=..\..\src\wcg\Method.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\wcg\Method.h
+SOURCE=..\..\src\wcg\TranslationUnit.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\wcg\TranslationUnit.h
+SOURCE=..\..\src\wcg\Variable.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\wcg\Variable.h
+SOURCE=..\..\src\wcg\WCGenerator.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\wcg\WCGenerator.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\axis\wcg\WSClass.h
+SOURCE=..\..\src\wcg\WSClass.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
 
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # End Group
+# Begin Source File
+
+SOURCE=..\..\src\wcg\cpp.l
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\wcg\cpp.y
+# End Source File
 # End Target
 # End Project
