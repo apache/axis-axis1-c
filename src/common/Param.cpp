@@ -224,7 +224,7 @@ int Param::serialize (SoapSerializer &pSZ)
       case XSD_ANYURI:
       case XSD_QNAME:
       case XSD_NOTATION:
-            pSZ.serializeAsElement(m_sName.c_str (), &(m_Value.pStrValue), m_Type);
+            pSZ.serializeAsElement(m_sName.c_str (), (void *) m_Value.pStrValue, m_Type);
             break;
 	case XSD_HEXBINARY:
             pSZ.serializeAsElement(m_sName.c_str (), m_Value.hbValue, m_Type);
