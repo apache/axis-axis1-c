@@ -73,7 +73,6 @@ public:
 protected:
     string m_sUserName;
     string m_sOperationName;
-    const WSDDService* m_Service;
 
 private:
     static AdminUtils m_AdminUtil;

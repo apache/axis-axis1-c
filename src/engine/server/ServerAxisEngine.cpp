@@ -116,8 +116,6 @@ int ServerAxisEngine::process(SOAPTransport* pStream)
             break; // do .. while(0)
         }
 
-        m_pMsgData->setService (m_pService);
-
         m_CurrentProviderType = m_pService->getProvider ();
         m_pSZ->setCurrentProviderType (m_CurrentProviderType);
         m_pDZ->setCurrentProviderType (m_CurrentProviderType);
