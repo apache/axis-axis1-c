@@ -122,10 +122,12 @@ void WSDDService::AddAllowedMethod(const AxisString& sMethodName)
 	m_AllowedMethods.push_back(sMethodName);
 }
 
+#include <xercesc/util/XMLString.hpp>
+XERCES_CPP_NAMESPACE_USE
+
 bool WSDDService::IsAllowedMethod(const AxisString& sServiceName) const
 {
 	list<AxisString>::const_iterator iter;
-
 	for(iter = m_AllowedMethods.begin();iter != m_AllowedMethods.end();iter++)
 	{
 		if((*iter) == sServiceName)

@@ -67,10 +67,6 @@
 #if !defined(AFX_SOAPMETHODBASE_H__B8E08E22_3337_442C_A0DF_19DFA020E4D5__INCLUDED_)
 #define AFX_SOAPMETHODBASE_H__B8E08E22_3337_442C_A0DF_19DFA020E4D5__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include <string>
 using namespace std;
 

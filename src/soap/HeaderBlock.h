@@ -68,10 +68,6 @@
 #if !defined(AFX_HEADERBLOCK_H__F21C94A8_40D1_4CFC_9240_DD617494CF40__INCLUDED_)
 #define AFX_HEADERBLOCK_H__F21C94A8_40D1_4CFC_9240_DD617494CF40__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include "Attribute.h"
 #include <string>
 #include <list>

@@ -68,10 +68,6 @@
 #if !defined(AFX_BASICNODE_H__623900B8_2737_4E36_8F26_97898C5BD47D__INCLUDED_)
 #define AFX_BASICNODE_H__623900B8_2737_4E36_8F26_97898C5BD47D__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include <string>
 #include "../common/GDefine.h"
 

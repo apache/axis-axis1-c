@@ -67,10 +67,6 @@
 #if !defined(AFX_SOAPDESERIALIZER_H__FD0E7C3B_B887_480A_9E2A_20736A88B09B__INCLUDED_)
 #define AFX_SOAPDESERIALIZER_H__FD0E7C3B_B887_480A_9E2A_20736A88B09B__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include "../common/IWrapperSoapDeSerializer.h"
 #include "../common/IHandlerSoapDeSerializer.h"
 #include "XMLStreamHandler.h"

@@ -68,10 +68,6 @@
 #if !defined(AFX_ATTRIBUTE_H__10ABD25E_AF15_4DE7_AA27_6AB96102087C__INCLUDED_)
 #define AFX_ATTRIBUTE_H__10ABD25E_AF15_4DE7_AA27_6AB96102087C__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include <string>
 #include "../common/GDefine.h"
 

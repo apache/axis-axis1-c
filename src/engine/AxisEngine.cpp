@@ -92,8 +92,8 @@ AxisEngine::AxisEngine()
 
 AxisEngine::~AxisEngine()
 {
-	if (m_pSZ) g_pSerializerPool->PutInstance(m_pSZ);
 	if (m_pDZ) g_pDeserializerPool->PutInstance(m_pDZ);
+	if (m_pSZ) g_pSerializerPool->PutInstance(m_pSZ);
 }
 
 int AxisEngine::Process(Ax_soapstream* soap) 
@@ -130,7 +130,11 @@ int AxisEngine::Process(Ax_soapstream* soap)
 				break; //do .. while(0)
 			}
 
-			char* cService= getheader(soap, SOAPACTIONHEADER);
+			const char* cService = get_header(soap, SOAPACTIONHEADER);
+			if (!cService) //get from URL if http
+			{
+				cService = get_service_from_uri(soap);
+			}
 			AxisString service;
 			AxisUtils::convert(service, (cService == NULL)? "" : cService);
 		  

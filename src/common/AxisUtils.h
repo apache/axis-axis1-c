@@ -65,10 +65,6 @@
 #if !defined(AFX_AXISUTILS_H__B5175A8C_0210_417D_BA43_6AAAF7E03551__INCLUDED_)
 #define AFX_AXISUTILS_H__B5175A8C_0210_417D_BA43_6AAAF7E03551__INCLUDED_
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
 #include "GDefine.h"
 
 #include <string>

@@ -64,9 +64,9 @@
 
 #include <stdio.h>
 
-char* getheader(Ax_soapstream* soap, char* pchkey)
+const char* get_header(const Ax_soapstream* soap,const char* pchkey)
 {
-	Ax_header* hdrs = NULL;
+	const Ax_header* hdrs = NULL;
 	int count = 0;
 	switch (soap->trtype)
 	{
@@ -96,6 +96,32 @@ char* getheader(Ax_soapstream* soap, char* pchkey)
 			return (hdrs+ix)->headervalue;
 		}
 
+	}
+	return NULL;
+}
+
+const char* get_service_from_uri(const Ax_soapstream* soap)
+{
+	const char* uri = NULL;
+	switch (soap->trtype)
+	{
+	case APTHTTP:
+		uri = soap->so.http.uri_path;
+		break;
+	case APTFTP:
+		//TODO
+		break;
+	case APTSMTP:
+		//TODO
+		break;
+	default:; //some error condition
+	}
+	
+	const char* service;
+	if (uri)
+	{
+		service = strstr(uri, AXIS_URI_EXTENSION) + strlen(AXIS_URI_EXTENSION);
+		return service;
 	}
 	return NULL;
 }
