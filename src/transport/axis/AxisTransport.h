@@ -56,7 +56,7 @@ public:
 	const char* getAttachment(const char* pcAttachmentId){return "value";};
 	void setEndpointUri(const char* pcEndpointUri)
 	{m_pcEndpointUri = strdup(pcEndpointUri);};
-	void setSessionId(const char* pcSessionId){};;
+	void setSessionId(const char* pcSessionId){};
 	const char* getSessionId(){return "some session id";};
 	const char* getServiceName();
 	AXIS_PROTOCOL_TYPE getProtocol();
