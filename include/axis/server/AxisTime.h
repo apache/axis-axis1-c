@@ -70,7 +70,7 @@ using namespace std;
 
 typedef struct
 {
-    int years;
+    long long years;
     int months;
     int days;
     int hours;
@@ -90,7 +90,7 @@ class AxisTime
         void setType(XSDTYPE m_Type);
         AxisString getValue();
         AxisString& serialize(const AxisChar* sName, struct tm tValue, XSDTYPE nType);
-        AxisString& serialize(const AxisChar* sName, long lDuration, XSDTYPE nType);
+        AxisString& serialize(const AxisChar* sName, long long lDuration, XSDTYPE nType);
         long getDuration();
         struct tm getDateTime();
         struct tm getDate();
@@ -120,7 +120,8 @@ class AxisTime
         int m_intSecs;
         AxisString strZone;
         uDuration duration;
-        long m_Duration;
+        long long m_longYears;
+        long long m_Duration;
         //string strXSDDuration;
         AxisString strXSDDuration;
         AxisString strXSDDate;

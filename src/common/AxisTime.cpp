@@ -117,17 +117,18 @@ AxisString AxisTime::getValue()
 * Serialize the duration in seconds into a xml duration string
 * of the format PnYnMnDTnHnMnS
 */
-AxisString& AxisTime::serialize(const AxisChar* sName, long lDuration, XSDTYPE nType)
+AxisString& AxisTime::serialize(const AxisChar* sName, long long lDuration, XSDTYPE nType)
 {
 	AxisChar buff[4];
 	strXSDDuration = "P";
 	int x = 365 * 24 * 3600;
 	int intYears = lDuration / x;
+    long long tempYears = (long long) intYears * x;
 	//sprintf((char*)buff,"%d", intYears);
 	AxisSprintf(buff, 4, "%d", intYears);
 	strXSDDuration.append(buff);
 	strXSDDuration.append("Y");
-	lDuration = lDuration - (intYears * x);
+	lDuration = lDuration - (tempYears);
 	x = 30 * 24 * 3600;
 	int intMonths = lDuration / x;
 	//sprintf((char*)buff,"%d", intMonths);
@@ -220,9 +221,9 @@ void AxisTime::mkCTime()
             /*XSD_DURATION is of the format PnYnMnDTnHnMnS*/
             intPos1 = m_sValue.find_first_of("Y");
             strYears = m_sValue.substr(1,intPos1 - 1);
-            m_intYears = atoi(strYears.c_str());
+            m_longYears = (long long) atoi(strYears.c_str());
             //m_intYears = wcstol(strYears.c_str(), &endptr, 10);
-            duration.years = m_intYears;
+            duration.years = m_longYears;
             intPos2 = m_sValue.find_first_of("M");
             strMonths = m_sValue.substr(intPos1 + 1, intPos2 - intPos1 - 1);
             m_intMonths = atoi(strMonths.c_str());
@@ -248,6 +249,14 @@ void AxisTime::mkCTime()
             m_intSecs = atoi(strSecs.c_str());
             //m_intSecs = wcstol(strSecs.c_str(), &endptr, 10);
             duration.secs = m_intSecs;
+
+            m_Duration = 0;
+            m_Duration += duration.years * 365 * 24 * 3600;
+            m_Duration += duration.months * 30 * 24 * 3600;
+            m_Duration += duration.days * 24 * 3600;
+            m_Duration += duration.hours * 3600;
+            m_Duration += duration.mins * 60;
+            m_Duration += duration.secs;
 
             break;
 
@@ -549,4 +558,57 @@ long AxisTime::DeserializeDuration(const AxisChar* strValue, XSDTYPE type)
 	return at.getDuration();
 }
 
+//int main(int)
+//{
+    //AxisTime* objTime = new AxisTime();
+    //===========================
+    //objTime->setType(XSD_DATETIME);
+    /*GMT in Z format*/
+    //objTime->setValue("2003-03-24T21:55:56Z");
+    /*GMT in +/- format*/
+    //objTime->setValue("2003-03-24T21:55:56+5:30");
+    /*no timezone specified. assumed localtime*/
+    //objTime->setValue("2003-03-24T21:55:56");
+    //struct tm x;
+    //x.tm_sec = 20;
+    //x.tm_min = 55;
+    //x.tm_hour = 21;
+    //x.tm_mday = 27;
+    //x.tm_mon = 11;
+    //x.tm_year = 103;
+    //objTime->serialize("", x);
+    //objTime->mkCTime();
+    //=============================
 
+        //===========================
+    //objTime->setType(XSD_TIME);
+    /*GMT in Z format*/
+    //objTime->setValue("2003-03-24Z");
+    /*GMT in +/- format*/
+    //objTime->setValue("2003-03-24+5:30");
+    /*no timezone specified. assumed localtime*/
+    //objTime->setValue("2003-03-24");
+    //objTime->mkCTime();
+    //=============================
+
+        //===========================
+    //objTime->setType(XSD_TIME);
+    /*GMT in Z format*/
+    //objTime->setValue("21:55:56Z");
+    /*GMT in +/- format*/
+    //objTime->setValue("T21:55:56+5:30");
+    /*no timezone specified. assumed localtime*/
+    //objTime->setValue("T21:55:56");
+    //objTime->mkCTime();
+    //===========================
+
+    //==========================
+    //objTime->setType(XSD_DURATION);
+    /*Duration in PnYnMnDTnHnMnS format*/
+    //objTime->setValue("P100000Y3M21DT11H33M44S");
+    //AxisString str = objTime->serialize("", objTime->m_Duration, XSD_DURATION);
+    //printf("serialized string is: %s\n", str.c_str());
+
+    //==============================
+    //return 0;
+//}
