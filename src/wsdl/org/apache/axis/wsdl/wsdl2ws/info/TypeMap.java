@@ -81,6 +81,7 @@ public class TypeMap {
 		basicTypeClass2QNamemap.put("xsd__unsignedLong", new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"));
 		basicTypeClass2QNamemap.put("xsd__unsignedShort", new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"));
 		basicTypeClass2QNamemap.put("xsd__anyURI", new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"));
+		basicTypeClass2QNamemap.put("xsd__NMTOKEN", new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"));
 		
 		// xml -> c type mapping 
 	
@@ -105,6 +106,7 @@ public class TypeMap {
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedLong"), "xsd__unsignedLong");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "unsignedShort"), "xsd__unsignedShort");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"), "xsd__anyURI");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NMTOKEN"),"xsd__NMTOKEN");
 		
 		/* TODO:
 		 *   Should be removed when the following issue will be fixed :
@@ -131,6 +133,7 @@ public class TypeMap {
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedLong"), "xsd__unsignedLong");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "unsignedShort"), "xsd__unsignedShort");
 		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "anyURI"), "xsd__anyURI");
+		basicTypeQname2classmap.put(new QName(WrapperConstants.SOAPENC_NAMESPACE, "NMTOKEN"), "xsd__NMTOKEN");
 		/* TODO:
 		 *  Another strange issue from Axis 1.1 runtime when base64binary is in input/output operations.
 		 */		
