@@ -191,9 +191,9 @@ AC_ARG_ENABLE(log, [  --enable-log    enable log facility.],
   ENABLELOGGING="-DENABLE_AXISTRACE"
 )
 
-AC_MSG_CHECKING(whether to build axis2 ssh transport channellibrary.)
+AC_MSG_CHECKING(whether to build axis2 secure transport channel library.)
 AC_ARG_WITH(axis2-ssl,
-[  --with-axis2-ssl[=PATH]      build transport channellibrary.],
+[  --with-axis2-ssl[=PATH]      build transport secure channel library.],
 [ case "$withval" in
   no)
     AC_MSG_RESULT(no)
@@ -216,9 +216,9 @@ AC_ARG_WITH(axis2-ssl,
   SSLBUILD=""
 )
 
-AC_MSG_CHECKING(whether to axis3 build ssh transport channellibrary.)
+AC_MSG_CHECKING(whether to axis3 build secure transport channel library.)
 AC_ARG_WITH(axis3-ssl,
-[  --with-axis3-ssl[=PATH]      build axis3 ssh transport channellibrary.],
+[  --with-axis3-ssl[=PATH]      build axis3 secure transport channel library.],
 [ case "$withval" in
   no)
     AC_MSG_RESULT(no)
