@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:C="http://xml.apache.org/axis/wsdd/providers/c">  
-<service name="InteropBaseDL" provider="CPP:DOCUMENT" description="Interop Base web service">
-<requestFlow name="InteropBaseDLHandlers">        
-<handler name="TestHandler" type="d:/axiscppdev/ws-axis/c/bin/testHandler.dll">
-<parameter name="logAccessCountFile" value="/usr/local/apache/Axis/handlers/custom/loghandler/LogAccessCountFile"/>        
-</handler>  
-</requestFlow>
-</service>
-<service name="Test" provider="CPP:DOCUMENT" description="Interop Base web service">
-<requestFlow name="TestHandler1">        
-<handler name="ESHHandler" type="d:/axiscppdev/ws-axis/c/bin/testHandler.dll">
-<parameter name="logAccessCountFile" value="/usr/local/apache/Axis/handlers/custom/loghandler/LogAccessCountFile"/>        
+<service name="Calculator" provider="CPP:DOCUMENT" description="Simple Calculator">
+<requestFlow name="test-handler-req">        
+<handler name="TestHandler" type="/usr/local/apache/Axis/handlers/client2/test_handler/libtest_client_handler.so">/>        
 </handler>  
 </requestFlow>
 </service>
