@@ -420,7 +420,9 @@ void initializeLibrary(void)
     //How long we are going to wait for a response
     HTHost_setEventTimeout(5000);
 
+#ifdef HT_EXT_CONTINUE    
     HTMethod_setExtensionMethod(METHOD_EXT_0, "POST", NO);
+#endif
 }
 }
 
