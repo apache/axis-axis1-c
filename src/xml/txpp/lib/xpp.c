@@ -10,15 +10,13 @@
 #endif
 #include "tag.h"
 
-typedef const XML_Char *KEY;
 
 #define MALLOC(s) (ct->m_mem.malloc_fcn((s)))
 #define MEMMOVE(p1, p2, s) (ct->m_mem.memmove_fcn((p1), (p2), (s)))
 #define REALLOC(p,s) (ct->m_mem.realloc_fcn((p),(s)))
 #define FREE(p) (ct->m_mem.free_fcn((p)))
-#define	MIN_BUFF_SZ	64//0x10000
-#define INIT_BUFFER_SIZE 256
-#define INIT_TAG_SIZE 64
+#define	MIN_BUFF_SZ	512//0x10000
+#define INIT_BUFFER_SIZE 512 //keep INIT_BUFFER_SIZE <= MIN_BUFF_SZ
 #define protocolEncodingName (ct->m_protocolEncodingName)
 #define initEncoding (ct->m_initEncoding)
 #define encoding (ct->m_encoding)
@@ -31,6 +29,7 @@ typedef const XML_Char *KEY;
 #define eventEndPtr (ct->m_eventEndPtr)
 #define XmlConvert XmlUtf8Convert
 #define data_counter (ct->m_data_counter)
+#define namespaceSeparator (ct->m_namespaceSeparator)
 
 
 int isDone = 0;
@@ -59,6 +58,7 @@ typedef struct xpp_context
   	const char *m_eventPtr;
   	const char *m_eventEndPtr;
 	const XML_Memory_Handling_Suite m_mem;
+	XML_Char m_namespaceSeparator;
 	
 	int (*get_block)(char *buff, int buff_sz, int *numchars);
 
@@ -138,7 +138,6 @@ int parse(xpp_context_t *ct)
 		//printf("ct->next:%s\n", ct->next);
 			if(XML_ERROR_NONE == ret_status)
 			{
-				//process_data(ct);
 				return XML_ERROR_NONE;
 			}
 		}	
@@ -157,15 +156,9 @@ int load_buffer(xpp_context_t *ct)
 	if (sz < MIN_BUFF_SZ) {
 		int ii, n, m;
 		n = (int)(ct->next - ct->dirty);
-		if (n < ct->buff_sz)
-			sz = ct->buff_sz - n;
-		else//n = ct->buff-sz
-		{
-		//return -1;//no, double the buffersize.
-			ct->buff_sz *= 2;
-			sz = ct->buff_sz - n;
-			ct->buff = REALLOC(ct->buff, ct->buff_sz);
-		}
+		ct->buff_sz *= 2;
+		sz = ct->buff_sz - n;
+		ct->buff = REALLOC(ct->buff, ct->buff_sz);
 
 		m = (int)(ct->dirty - ct->buff);
 		MEMMOVE(ct->buff, ct->dirty, n);
@@ -174,9 +167,9 @@ int load_buffer(xpp_context_t *ct)
 		ii = 0;
 		while (ii < ct->data.num_ptrs)
 			ct->data.ptrs[ii++] -= m;
-		//num_chars = n;
 	}
 	
+	//printf("ct->buff_sz:%d\n", ct->buff_sz);
 	if(!ct->get_block(ct->next, sz, &num_chars)) {
 		return XML_TEST_ERROR;
 	}
@@ -190,7 +183,7 @@ int get_block(char *buff, int buff_sz, int* numchars)
 	int done;
 	*numchars = 0;
 	len = fread(buff, 1, buff_sz, stdin);
-	//printf("len:%d\n", len);
+	printf("len:%d\n", len);
 	*numchars += len;
         if (ferror(stdin))
         {
@@ -250,7 +243,7 @@ static xpp_context_t* parser_create_in(const XML_Char *encodingName, const XML_M
   	}
 
 	ct->buff_sz = INIT_BUFFER_SIZE;
-	ct->utf8buff_sz = INIT_TAG_SIZE;
+	ct->utf8buff_sz = ct->buff_sz;
         char* buff = (char*) malloc(ct->buff_sz * sizeof(char));
         char* utf8buff = (char*) malloc(ct->utf8buff_sz * sizeof(char));
 	if(buff == NULL || utf8buff == NULL)
@@ -258,6 +251,10 @@ static xpp_context_t* parser_create_in(const XML_Char *encodingName, const XML_M
         ct->buff = buff;
 	ct->utf8buff = utf8buff;
 	
+
+	namespaceSeparator = '!';
+  	ns = XML_FALSE;
+
 
 	if(XML_ERROR_NONE == parser_init(ct, encodingName))
 		return ct;
@@ -278,11 +275,11 @@ static int parser_init(xpp_context_t* ct, const XML_Char *encodingName)
         	ct->data.ptrs = NULL;
         	ct->data.utf8ptrs = NULL;
         	ct->data.ptrs_sz = 8;
-		ct->utf8buff_sz = INIT_BUFFER_SIZE;
 		data_counter = 0;
 		eventPtr = NULL;
   		eventEndPtr = NULL;
 		protocolEncodingName = encodingName;
+
 
 		return XML_ERROR_NONE;
 	}
@@ -354,7 +351,6 @@ static int add_utf8_ptr(char *ptr, data_t *data)
                 }
                 data->utf8ptrs = ptrs;
                 data->ptrs_sz = sz;
-                //printf("sz:%d\n", sz);
         }
 
         data->utf8ptrs[data->num_ptrs_utf8++] = ptr;
@@ -371,10 +367,9 @@ static void process_data(xpp_context_t* ct)
         int totLen = 0;
 	int wordLen = 0;
 	int tempDiff;
-	XML_Char *toPtr;
-	toPtr = (XML_Char *) ct->utf8buff;	
-	XML_Char *startPtr = (XML_Char *) ct->utf8buff;
-	XML_Char *endPtr = (XML_Char *) ct->utf8buff;
+	XML_Char* toPtr = (XML_Char *) ct->utf8buff;	
+	XML_Char* startPtr = (XML_Char *) ct->utf8buff;
+	XML_Char* endPtr = (XML_Char *) ct->utf8buff;
 	while(intCount < ct->data.num_ptrs)
 	{
 		const char *rawNameEnd = &ct->data.ptrs[intCount + 1][1];
@@ -386,10 +381,15 @@ static void process_data(xpp_context_t* ct)
 		//printf("fromPtr:\n\n%s\n\n", fromPtr);
 		//printf("rawNameEnd:\n\n%s\n\n", rawNameEnd);
 		
-		/*char* mytemp = malloc(1024);
-        	XmlDamConvert(encoding, &fromPtr, rawNameEnd,
-        		(ICHAR **)&toPtr, (ICHAR *)mytemp);
-		*/
+        	if(ct->utf8buff_sz < ct->buff_sz)
+        	{
+			ct->utf8buff_sz = 2 * ct->buff_sz;
+			//printf("utf8buff_sz:%d\n", ct->utf8buff_sz);
+        		char *temp = (char *)REALLOC(ct->utf8buff, ct->utf8buff_sz);
+              		if (temp == NULL)
+                		return XML_ERROR_NO_MEMORY;
+              		ct->utf8buff = temp;
+        	}
         	XmlDamConvert(encoding, &fromPtr, rawNameEnd,
         		(ICHAR **)&toPtr, (ICHAR *)ct->utf8buff + ct->utf8buff_sz);
 		//printf("startPtr:\n%s\n", startPtr);
@@ -397,16 +397,7 @@ static void process_data(xpp_context_t* ct)
 		wordLen = toPtr - startPtr;
 		//printf("wordLen:%d\n", wordLen);
         	totLen += wordLen;
-		//printf("totLen:%d\n", totLen);
-        	if(ct->utf8buff_sz <= totLen)
-        	{
-              		ct->utf8buff_sz = 2 * ct->utf8buff_sz;
-        		char *temp = (char *)REALLOC(ct->utf8buff, ct->utf8buff_sz);
-              		if (temp == NULL)
-                		return XML_ERROR_NO_MEMORY;
-              		ct->utf8buff = temp;
-        	}
-              	//toPtr = (XML_Char *)ct->utf8buff + convLen;
+        	
 		endPtr = toPtr - 1;
 		add_utf8_ptr(startPtr, &ct->data);
 		add_utf8_ptr(endPtr, &ct->data);
