@@ -1,0 +1,20 @@
+
+JAX-RPC-MAPPER
+==============
+After the 2nd refactoring - written by Ias (iasandcb@tmax.co.kr)
+
+I've been also concerned with this issue for a long time. Jongjin, my colleague, 
+and I discussed it a lot and concluded that JAX-RPC mapper should be refactored 
+again. (The mapper on ews project is the first refactored work.)
+We agreed that Java-relevant information from SymbolTable had to be mapped from 
+and to JAX-RPC mapping file just after it was populated. In other words, 
+J2eeGeneratorFactory will handle all the mapping chores and each writer will 
+use the mapped information without individual mapping procedure. If it's 
+accomplished, J2eeXxxWriters are deprecated except J2eeDeployWriter, 
+which is not yet provided but the most wanted by Geronimo. 
+
+This second refactoring is supposed to enable you to get mapped information 
+on Java side after J2eeEmitter.run has finished.
+
+Rule:
+If there's no mapping for a given key, JaxRpcMapper returns null at the times.

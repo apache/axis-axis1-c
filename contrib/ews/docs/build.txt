@@ -1,0 +1,8 @@
+How to build
+
+written by Ias (iasandcb@tmax.co.kr) and Davanum Srinivas (dims@yahoo.com)
+
+1. Configure src/schema/sun-ri.properties
+3. Run maven from ews directory.
+
+Please see run.txt to test your JAX-RPC mapper.
