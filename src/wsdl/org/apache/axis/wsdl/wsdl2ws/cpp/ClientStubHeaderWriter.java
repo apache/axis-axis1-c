@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
@@ -212,7 +213,9 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
             writer.write(
                 "#include \""
                     + wscontext.getSerInfo().getServicename()
-                    + "_AxisClientException.h\"\n");
+                    + "_AxisClientException"
+                    + CUtils.CPP_HEADER_SUFFIX
+                    + "\"\n");
             writer.write("#include <axis/ISoapFault.hpp>\n");
             Type atype;
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
@@ -234,7 +237,11 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {
-                writer.write("#include \"" + itr.next().toString() + ".h\"\n");
+                writer.write(
+                    "#include \""
+                        + itr.next().toString()
+                        + CUtils.CPP_HEADER_SUFFIX
+                        + "\"\n");
             }
             //Method to print the Fault Exception headers
             //writeFaultHeaders();
@@ -268,7 +275,9 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                     writer.write(
                         "#include \"Axis"
                             + faultInfoName.toString()
-                            + "Exception.h\"\n");
+                            + "Exception"
+                            + CUtils.CPP_HEADER_SUFFIX
+                            + "\"\n");
                 }
                 writer.write("\n");
             }

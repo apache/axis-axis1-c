@@ -161,11 +161,16 @@ public class ClientStubWriter extends CPPClassWriter
                         + getServiceName()
                         + "_"
                         + classname
-                        + ".h\"\n\n");
+                        + CUtils.CPP_HEADER_SUFFIX
+                        + "\"\n\n");
             }
             else
             {
-                writer.write("#include \"" + classname + ".h\"\n\n");
+                writer.write(
+                    "#include \""
+                        + classname
+                        + CUtils.CPP_HEADER_SUFFIX
+                        + "\"\n\n");
             }
             writer.write("#include <axis/server/AxisWrapperAPI.hpp>\n\n");
             writer.write("using namespace std;\n\n ");

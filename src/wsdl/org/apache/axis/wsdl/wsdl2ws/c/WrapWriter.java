@@ -134,7 +134,8 @@ public class WrapWriter extends CFileWriter
         try
         {
             writer.write("#include <string.h>\n");
-            writer.write("#include \"" + classname + ".h\"\n");
+            writer.write(
+                "#include \"" + classname + CUtils.C_HEADER_SUFFIX + "\"\n");
             //As there is no service header file for C the header files for types should be included here itself
             Type atype;
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
@@ -144,7 +145,11 @@ public class WrapWriter extends CFileWriter
                 atype = (Type) types.next();
                 LangTypeName = WrapperUtils.getLanguageTypeName4Type(atype);
                 if (null != LangTypeName)
-                    writer.write("#include \"" + LangTypeName + ".h\"\n");
+                    writer.write(
+                        "#include \""
+                            + LangTypeName
+                            + CUtils.C_HEADER_SUFFIX
+                            + "\"\n");
             }
             writer.write("\n");
         }

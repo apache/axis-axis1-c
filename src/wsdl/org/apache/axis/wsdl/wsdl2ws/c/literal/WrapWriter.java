@@ -56,7 +56,8 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.c.WrapWriter
     {
         try
         {
-            writer.write("#include \"" + classname + ".h\"\n");
+            writer.write(
+                "#include \"" + classname + CUtils.C_HEADER_SUFFIX + "\"\n");
             //As there is no service header file for C the header files for types should be included here itself
             Type atype;
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
@@ -66,7 +67,10 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.c.WrapWriter
                 if (atype.getLanguageSpecificName().startsWith(">"))
                     continue;
                 writer.write(
-                    "#include \"" + atype.getLanguageSpecificName() + ".h\"\n");
+                    "#include \""
+                        + atype.getLanguageSpecificName()
+                        + CUtils.C_HEADER_SUFFIX
+                        + "\"\n");
             }
             writer.write("\n");
         }

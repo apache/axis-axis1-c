@@ -28,6 +28,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import org.apache.axis.wsdl.wsdl2ws.BasicFileWriter;
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
@@ -90,7 +91,7 @@ public abstract class CPPClassWriter extends BasicFileWriter
                     targetOutputLocation.length() - 1);
         new File(targetOutputLocation).mkdirs();
     
-        String fileName = targetOutputLocation + "/" + classname + ".cpp";
+        String fileName = targetOutputLocation + "/" + classname + CUtils.CPP_CLASS_SUFFIX;
     
         if (useServiceName)
         {
@@ -101,13 +102,13 @@ public abstract class CPPClassWriter extends BasicFileWriter
                     + serviceName
                     + "_"
                     + classname
-                    + ".cpp";
+                    + CUtils.CPP_CLASS_SUFFIX;
             this.wscontext.addGeneratedFile(
-                serviceName + "_" + classname + ".cpp");
+                serviceName + "_" + classname + CUtils.CPP_CLASS_SUFFIX);
         }
         else
         {
-            this.wscontext.addGeneratedFile(classname + ".cpp");
+            this.wscontext.addGeneratedFile(classname + CUtils.CPP_CLASS_SUFFIX);
         }
     
         return new File(fileName);

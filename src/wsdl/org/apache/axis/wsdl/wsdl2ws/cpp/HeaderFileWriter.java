@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.BasicFileWriter;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
@@ -130,7 +131,8 @@ public abstract class HeaderFileWriter extends BasicFileWriter
         }
         new File(targetOutputLocation).mkdirs();
 
-        String fileName = targetOutputLocation + "/" + classname + ".h";
+        String fileName =
+            targetOutputLocation + "/" + classname + CUtils.CPP_HEADER_SUFFIX;
 
         if (useServiceName)
         {
@@ -140,7 +142,7 @@ public abstract class HeaderFileWriter extends BasicFileWriter
                     + this.getServiceName()
                     + "_"
                     + classname
-                    + ".h";
+                    + CUtils.CPP_HEADER_SUFFIX;
         }
 
         return new File(fileName);

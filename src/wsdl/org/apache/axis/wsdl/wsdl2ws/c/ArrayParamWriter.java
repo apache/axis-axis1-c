@@ -99,7 +99,10 @@ public class ArrayParamWriter extends ParamWriter
             if (!CUtils.isSimpleType(qname))
             {
                 writer.write(
-                    "#include \"" + attribs[0].getTypeName() + ".h\"\n\n");
+                    "#include \""
+                        + attribs[0].getTypeName()
+                        + CUtils.C_HEADER_SUFFIX
+                        + "\"\n\n");
             }
             else
             {
@@ -149,7 +152,8 @@ public class ArrayParamWriter extends ParamWriter
         }
         new File(targetOutputLocation).mkdirs();
 
-        String fileName = targetOutputLocation + "/" + classname + ".h";
+        String fileName =
+            targetOutputLocation + "/" + classname + CUtils.C_HEADER_SUFFIX;
 
         if (useServiceName)
         {
@@ -159,7 +163,7 @@ public class ArrayParamWriter extends ParamWriter
                     + this.wscontext.getSerInfo().getServicename()
                     + "_"
                     + classname
-                    + ".h";
+                    + CUtils.C_HEADER_SUFFIX;
         }
 
         return new File(fileName);

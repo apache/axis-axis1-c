@@ -134,7 +134,8 @@ public class ArrayParamWriter extends ParamWriter
         }
         new File(targetOutputLocation).mkdirs();
 
-        String fileName = targetOutputLocation + "/" + classname + ".h";
+        String fileName =
+            targetOutputLocation + "/" + classname + CUtils.CPP_HEADER_SUFFIX;
 
         if (useServiceName)
         {
@@ -144,7 +145,7 @@ public class ArrayParamWriter extends ParamWriter
                     + this.wscontext.getSerInfo().getServicename()
                     + "_"
                     + classname
-                    + ".h";
+                    + CUtils.CPP_HEADER_SUFFIX;
         }
 
         return new File(fileName);

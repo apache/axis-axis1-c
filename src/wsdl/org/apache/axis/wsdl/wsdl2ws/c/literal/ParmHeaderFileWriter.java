@@ -288,7 +288,11 @@ public class ParmHeaderFileWriter
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {
-                writer.write("#include \"" + itr.next().toString() + ".h\"\n");
+                writer.write(
+                    "#include \""
+                        + itr.next().toString()
+                        + CUtils.C_HEADER_SUFFIX
+                        + "\"\n");
             }
             writer.write("/*Local name and the URI for the type*/\n");
             writer.write(

@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
@@ -209,7 +210,11 @@ public class ServiceWriter extends CPPClassWriter
     {
         try
         {
-            writer.write("#include \"" + classname + ".h\"\n\n");
+            writer.write(
+                "#include \""
+                    + classname
+                    + CUtils.CPP_HEADER_SUFFIX
+                    + "\"\n\n");
         }
         catch (IOException e)
         {

@@ -1,4 +1,4 @@
-#include "ManyTypeRefRoot.h" 
+#include "ManyTypeRefRoot.hpp" 
 #include <stdlib.h> // For malloc(), calloc(), strdup() and free()
 #include <iostream>
 #include <fstream>

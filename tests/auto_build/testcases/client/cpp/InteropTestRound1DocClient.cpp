@@ -3,7 +3,7 @@
 #include <string>
 using namespace std;
 
-#include "InteropTestPortType.h" 
+#include "InteropTestPortType.hpp" 
 
 #define ARRAYSIZE 2
 

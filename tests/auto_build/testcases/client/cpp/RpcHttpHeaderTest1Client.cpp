@@ -26,7 +26,7 @@
 #include <string>
 using namespace std;
 
-#include "InteropTestPortType.h"
+#include "InteropTestPortType.hpp"
 #include <axis/server/AxisException.hpp>
 #include <stdio.h>
 

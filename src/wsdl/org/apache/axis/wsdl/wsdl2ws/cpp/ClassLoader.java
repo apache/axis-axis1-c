@@ -61,7 +61,11 @@ public class ClassLoader implements SourceWriter
             writer.write(
                 " * This file contains the two export functions of the Web service Dynamic Library \n");
             writer.write(" */\n\n");
-            writer.write("#include \"" + wrappername + ".h\" \n");
+            writer.write(
+                "#include \""
+                    + wrappername
+                    + CUtils.CPP_HEADER_SUFFIX
+                    + "\" \n");
             writer.write("extern \"C\" {\n");
             writer.write("STORAGE_CLASS_INFO\n");
             writer.write("int GetClassInstance(BasicHandler **inst)\n");
@@ -109,19 +113,21 @@ public class ClassLoader implements SourceWriter
         String targetOutputLocation =
             this.wscontext.getWrapInfo().getTargetOutputLocation();
         if (targetOutputLocation.endsWith("/"))
+        {
             targetOutputLocation =
                 targetOutputLocation.substring(
                     0,
                     targetOutputLocation.length() - 1);
+        }
         new File(targetOutputLocation).mkdirs();
         String fileName =
             targetOutputLocation
                 + "/"
                 + classname
                 + CUtils.CLASS_LOADER_APPENDER
-                + ".cpp";
+                + CUtils.CPP_CLASS_SUFFIX;
         this.wscontext.addGeneratedFile(
-            classname + CUtils.CLASS_LOADER_APPENDER + ".cpp");
+            classname + CUtils.CLASS_LOADER_APPENDER + CUtils.CPP_CLASS_SUFFIX);
         return new File(fileName);
     }
 

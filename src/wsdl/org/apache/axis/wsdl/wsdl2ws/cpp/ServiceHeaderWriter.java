@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
@@ -59,7 +60,8 @@ public class ServiceHeaderWriter extends HeaderFileWriter
             writer.write(
                 " * "
                     + classname
-                    + ".h: interface for the "
+                    + CUtils.CPP_HEADER_SUFFIX
+                    + ": interface for the "
                     + classname
                     + "class.\n");
             writer.write(" *\n");
@@ -230,7 +232,11 @@ public class ServiceHeaderWriter extends HeaderFileWriter
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {
-                writer.write("#include \"" + itr.next().toString() + ".h\"\n");
+                writer.write(
+                    "#include \""
+                        + itr.next().toString()
+                        + CUtils.CPP_HEADER_SUFFIX
+                        + "\"\n");
             }
             //writeFaultHeaders();
             writer.write("\n");
@@ -263,7 +269,9 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                     writer.write(
                         "#include \"Axis"
                             + faultInfoName.toString()
-                            + "Exception.h\"\n");
+                            + "Exception"
+                            + CUtils.CPP_HEADER_SUFFIX
+                            + "\"\n");
                 }
             }
             writer.write("\n");

@@ -357,7 +357,7 @@ public class ParmHeaderFileWriter extends ParamWriter
     {
         return this.getFilePath(false);
     }
-    
+
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
         String targetOutputLocation =
@@ -371,7 +371,8 @@ public class ParmHeaderFileWriter extends ParamWriter
         }
         new File(targetOutputLocation).mkdirs();
 
-        String fileName = targetOutputLocation + "/" + classname + ".h";
+        String fileName =
+            targetOutputLocation + "/" + classname + CUtils.CPP_HEADER_SUFFIX;
 
         if (useServiceName)
         {
@@ -381,7 +382,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                     + this.wscontext.getSerInfo().getServicename()
                     + "_"
                     + classname
-                    + ".h";
+                    + CUtils.CPP_HEADER_SUFFIX;
         }
 
         return new File(fileName);
@@ -410,7 +411,11 @@ public class ParmHeaderFileWriter extends ParamWriter
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {
-                writer.write("#include \"" + itr.next().toString() + ".h\"\n");
+                writer.write(
+                    "#include \""
+                        + itr.next().toString()
+                        + CUtils.CPP_HEADER_SUFFIX
+                        + "\"\n");
             }
 
             //Local name and the URI for the type

@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.ParamWriter;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
@@ -92,7 +93,8 @@ public abstract class ParamCPPFileWriter extends ParamWriter
                     targetOutputLocation.length() - 1);
         new File(targetOutputLocation).mkdirs();
 
-        String fileName = targetOutputLocation + "/" + classname + ".cpp";
+        String fileName =
+            targetOutputLocation + "/" + classname + CUtils.CPP_CLASS_SUFFIX;
 
         if (useServiceName)
         {
@@ -103,13 +105,14 @@ public abstract class ParamCPPFileWriter extends ParamWriter
                     + serviceName
                     + "_"
                     + classname
-                    + ".cpp";
+                    + CUtils.CPP_CLASS_SUFFIX;
             this.wscontext.addGeneratedFile(
-                serviceName + "_" + classname + ".cpp");
+                serviceName + "_" + classname + CUtils.CPP_CLASS_SUFFIX);
         }
         else
         {
-            this.wscontext.addGeneratedFile(classname + ".cpp");
+            this.wscontext.addGeneratedFile(
+                classname + CUtils.CPP_CLASS_SUFFIX);
         }
 
         return new File(fileName);
@@ -119,7 +122,11 @@ public abstract class ParamCPPFileWriter extends ParamWriter
     {
         try
         {
-            writer.write("#include \"" + this.classname + ".h\"\n");
+            writer.write(
+                "#include \""
+                    + this.classname
+                    + CUtils.CPP_HEADER_SUFFIX
+                    + "\"\n");
             writer.write("#include <axis/server/AxisWrapperAPI.hpp>\n\n");
         }
         catch (IOException e)

@@ -133,7 +133,8 @@ public class ClientStubWriter extends CFileWriter
     {
         try
         {
-            writer.write("#include \"" + classname + ".h\"\n\n");
+            writer.write(
+                "#include \"" + classname + CUtils.C_HEADER_SUFFIX + "\"\n\n");
         }
         catch (IOException e)
         {

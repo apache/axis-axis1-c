@@ -1,4 +1,4 @@
-#include "AxisBench.h"
+#include "AxisBench.hpp"
 #include <iostream>
 #include <fstream>
 #include <time.h>

@@ -26,6 +26,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
@@ -96,7 +97,11 @@ public abstract class ParamCFileWriter
             writer.write("#include <malloc.h>\n");
             writer.write("#include <memory.h>\n");
             writer.write("#include <axis/server/AxisWrapperAPI.h>\n\n");
-            writer.write("#include \"" + this.classname + ".h\"\n");
+            writer.write(
+                "#include \""
+                    + this.classname
+                    + CUtils.C_HEADER_SUFFIX
+                    + "\"\n");
         }
         catch (IOException e)
         {

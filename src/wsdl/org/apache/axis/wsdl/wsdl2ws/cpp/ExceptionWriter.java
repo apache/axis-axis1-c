@@ -24,6 +24,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import org.apache.axis.wsdl.wsdl2ws.BasicFileWriter;
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
@@ -74,7 +75,11 @@ public class ExceptionWriter extends BasicFileWriter
         }
         new File(targetOutputLocation).mkdirs();
 
-        String fileName = targetOutputLocation + "/" + faultInfoName + ".cpp";
+        String fileName =
+            targetOutputLocation
+                + "/"
+                + faultInfoName
+                + CUtils.CPP_CLASS_SUFFIX;
 
         if (useServiceName)
         {
@@ -84,14 +89,18 @@ public class ExceptionWriter extends BasicFileWriter
                     + this.getServiceName()
                     + "_"
                     + faultInfoName
-                    + ".cpp";
+                    + CUtils.CPP_CLASS_SUFFIX;
 
             this.wscontext.addGeneratedFile(
-                this.getServiceName() + "_" + faultInfoName + ".cpp");
+                this.getServiceName()
+                    + "_"
+                    + faultInfoName
+                    + CUtils.CPP_CLASS_SUFFIX);
         }
         else
         {
-            this.wscontext.addGeneratedFile(faultInfoName + ".cpp");
+            this.wscontext.addGeneratedFile(
+                faultInfoName + CUtils.CPP_CLASS_SUFFIX);
         }
         return new File(fileName);
     }
@@ -115,11 +124,16 @@ public class ExceptionWriter extends BasicFileWriter
                         + getServiceName()
                         + "_"
                         + faultInfoName
-                        + ".h\"\n\n");
+                        + CUtils.CPP_HEADER_SUFFIX
+                        + "\"\n\n");
             }
             else
             {
-                writer.write("#include \"" + faultInfoName + ".h\"\n\n");
+                writer.write(
+                    "#include \""
+                        + faultInfoName
+                        + CUtils.CPP_HEADER_SUFFIX
+                        + "\"\n\n");
             }
             writer.write("#include <axis/server/AxisWrapperAPI.hpp>\n\n");
         }

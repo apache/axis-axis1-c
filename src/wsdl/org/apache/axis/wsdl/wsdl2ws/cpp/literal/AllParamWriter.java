@@ -60,7 +60,8 @@ public class AllParamWriter implements SourceWriter
                     targetOutputLocation.length() - 1);
         }
         new File(targetOutputLocation).mkdirs();
-        String fileName = targetOutputLocation + "/" + filename + ".h";
+        String fileName =
+            targetOutputLocation + "/" + filename + CUtils.CPP_HEADER_SUFFIX;
         return new File(fileName);
     }
 
@@ -122,7 +123,8 @@ public class AllParamWriter implements SourceWriter
                                 System.out.println(
                                     "Creating an empty "
                                         + qname.getLocalPart()
-                                        + ".h file\n");
+                                        + CUtils.CPP_HEADER_SUFFIX
+                                        + " file\n");
 
                                 BufferedWriter bw = null;
 
@@ -137,7 +139,8 @@ public class AllParamWriter implements SourceWriter
                                     bw.write(
                                         "// Header file for "
                                             + qname.getLocalPart()
-                                            + ".h\n");
+                                            + CUtils.CPP_HEADER_SUFFIX
+                                            + "\n");
                                     bw.flush();
                                     bw.close();
                                 }

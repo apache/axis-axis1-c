@@ -1,5 +1,5 @@
 #include <axis/server/AxisException.hpp>
-#include "operations.h" 
+#include "operations.hpp" 
 
 #include <stdlib.h> // For malloc(), calloc(), strdup() and free()
 #include <iostream>

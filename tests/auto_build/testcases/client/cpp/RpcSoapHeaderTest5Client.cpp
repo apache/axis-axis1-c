@@ -26,7 +26,7 @@
 #include <string>
 using namespace std;
 
-#include "../../gen_src/rpc/InteropTestPortType.h"
+#include "../../gen_src/rpc/InteropTestPortType.hpp"
 #include <axis/server/IHeaderBlock.hpp>
 #include <axis/server/AxisException.hpp>
 

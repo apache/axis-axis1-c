@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.ParamWriter;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
@@ -100,8 +101,9 @@ public abstract class ParamCFileWriter extends ParamWriter
                     targetOutputLocation.length() - 1);
         }
         new File(targetOutputLocation).mkdirs();
-        String fileName = targetOutputLocation + "/" + this.classname + ".c";
-        this.wscontext.addGeneratedFile(classname + ".c");
+        String fileName =
+            targetOutputLocation + "/" + this.classname + CUtils.C_FILE_SUFFIX;
+        this.wscontext.addGeneratedFile(classname + CUtils.C_FILE_SUFFIX);
         return new File(fileName);
     }
 
@@ -113,7 +115,11 @@ public abstract class ParamCFileWriter extends ParamWriter
         try
         {
             writer.write("#include <malloc.h>\n");
-            writer.write("#include \"" + this.classname + ".h\"\n");
+            writer.write(
+                "#include \""
+                    + this.classname
+                    + CUtils.C_HEADER_SUFFIX
+                    + "\"\n");
             writer.write("#include <axis/server/AxisWrapperAPI.h>\n\n");
         }
         catch (IOException e)

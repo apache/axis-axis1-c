@@ -153,7 +153,11 @@ public class WrapWriter extends CPPClassWriter
     {
         try
         {
-            writer.write("#include \"" + classname + ".h\"\n\n");
+            writer.write(
+                "#include \""
+                    + classname
+                    + CUtils.CPP_HEADER_SUFFIX
+                    + "\"\n\n");
         }
         catch (IOException e)
         {

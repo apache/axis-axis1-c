@@ -3,7 +3,7 @@
 #include <string>
 using namespace std;
 
-#include "RefTestPortType.h" 
+#include "RefTestPortType.hpp" 
 #include <axis/AxisGenException.hpp>
 
 #define ARRAYSIZE 2

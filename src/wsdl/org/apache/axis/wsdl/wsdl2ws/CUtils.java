@@ -41,6 +41,15 @@ public class CUtils {
 	public static final String WRAPPER_METHOD_APPENDER = "Wrapped";
 	public static final QName anyTypeQname = new QName("http://ws.apache.org/axisc/types","AnyType");
 
+	// File suffix for C++ Class files
+	public static final String CPP_CLASS_SUFFIX = ".cpp";
+	// File suffix for C++ Header files
+	public static final String CPP_HEADER_SUFFIX = ".hpp";
+	// File suffix for C Source files
+	public static final String C_FILE_SUFFIX = ".c";
+	// File suffix fr C Header files
+	public static final String C_HEADER_SUFFIX = ".h";
+
 	/* This type mapping only maps simple types the mapping for
 	   complex types are done with in the type class */
 	private static Hashtable class2QNamemap = new Hashtable();

@@ -44,7 +44,8 @@ import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
-public class ClientStubWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.ClientStubWriter
+public class ClientStubWriter
+    extends org.apache.axis.wsdl.wsdl2ws.cpp.ClientStubWriter
 {
     public ClientStubWriter(WebServiceContext wscontext) throws WrapperFault
     {
@@ -147,11 +148,16 @@ public class ClientStubWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.ClientStu
                         + getServiceName()
                         + "_"
                         + classname
-                        + ".h\"\n\n");
+                        + CUtils.CPP_HEADER_SUFFIX
+                        + "\"\n\n");
             }
             else
             {
-                writer.write("#include \"" + classname + ".h\"\n\n");
+                writer.write(
+                    "#include \""
+                        + classname
+                        + CUtils.CPP_HEADER_SUFFIX
+                        + "\"\n\n");
             }
             writer.write("#include <axis/server/AxisWrapperAPI.hpp>\n\n");
         }

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
@@ -184,7 +185,11 @@ public class ServiceWriter extends CFileWriter
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {
-                writer.write("#include \"" + itr.next().toString() + ".h\"\n");
+                writer.write(
+                    "#include \""
+                        + itr.next().toString()
+                        + CUtils.C_HEADER_SUFFIX
+                        + "\"\n");
             }
             writer.write("\n");
         }

@@ -30,8 +30,8 @@
 #include <axis/server/AxisException.hpp>
 using namespace std;
 
-#include "Inquire.h"
-#include "InquireService_AxisClientException.h"
+#include "Inquire.hpp"
+#include "InquireService_AxisClientException.hpp"
 
 #define ARRAYSIZE 1 
 

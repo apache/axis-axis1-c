@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
@@ -68,7 +69,11 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
         }
         new File(targetOutputLocation).mkdirs();
 
-        String fileName = targetOutputLocation + "/" + faultInfoName + ".h";
+        String fileName =
+            targetOutputLocation
+                + "/"
+                + faultInfoName
+                + CUtils.CPP_HEADER_SUFFIX;
 
         if (useServiceName)
         {
@@ -78,7 +83,7 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
                     + this.wscontext.getSerInfo().getServicename()
                     + "_"
                     + faultInfoName
-                    + ".h";
+                    + CUtils.CPP_HEADER_SUFFIX;
         }
 
         return new File(fileName);
@@ -233,7 +238,11 @@ public class ExceptionHeaderWriter extends HeaderFileWriter
                     {
                         ParameterInfo par = (ParameterInfo) paramInfo.get(j);
                         langName = par.getLangName();
-                        writer.write("#include \"" + langName + ".h\"\n\n");
+                        writer.write(
+                            "#include \""
+                                + langName
+                                + CUtils.CPP_HEADER_SUFFIX
+                                + "\"\n\n");
                     }
                 }
             }

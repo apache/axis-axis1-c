@@ -27,6 +27,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import org.apache.axis.wsdl.wsdl2ws.BasicFileWriter;
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
@@ -105,7 +106,8 @@ public abstract class CFileWriter extends BasicFileWriter
         }
         new File(targetOutputLocation).mkdirs();
 
-        String fileName = targetOutputLocation + "/" + classname + ".c";
+        String fileName =
+            targetOutputLocation + "/" + classname + CUtils.C_FILE_SUFFIX;
 
         if (useServiceName)
         {
@@ -116,13 +118,13 @@ public abstract class CFileWriter extends BasicFileWriter
                     + serviceName
                     + "_"
                     + classname
-                    + ".c";
+                    + CUtils.C_FILE_SUFFIX;
             this.wscontext.addGeneratedFile(
-                serviceName + "_" + classname + ".c");
+                serviceName + "_" + classname + CUtils.C_FILE_SUFFIX);
         }
         else
         {
-            this.wscontext.addGeneratedFile(classname + ".c");
+            this.wscontext.addGeneratedFile(classname + CUtils.C_FILE_SUFFIX);
         }
 
         return new File(fileName);
