@@ -96,6 +96,10 @@ SOURCE=..\..\..\src\transport\axis2\Axis2Transport.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\transport\axis2\Axis2TransportInstantiator.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\transport\axis2\AxisTransportException.cpp
 # End Source File
 # Begin Source File
