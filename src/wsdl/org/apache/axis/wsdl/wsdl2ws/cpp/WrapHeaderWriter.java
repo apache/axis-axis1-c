@@ -34,7 +34,8 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class WrapHeaderWriter extends HeaderFileWriter
 {
-    private ArrayList methods;
+	protected String bindingStyle;
+    protected ArrayList methods;
     public WrapHeaderWriter(WebServiceContext wscontext) throws WrapperFault
     {
         super(
@@ -43,6 +44,7 @@ public class WrapHeaderWriter extends HeaderFileWriter
                     + CUtils.WRAPPER_NAME_APPENDER));
         this.wscontext = wscontext;
         this.methods = wscontext.getSerInfo().getMethods();
+        this.bindingStyle = "RPC_ENCODED";
     }
 
     protected void writeClassComment() throws WrapperFault
@@ -106,7 +108,7 @@ public class WrapHeaderWriter extends HeaderFileWriter
             writer.write("\tint AXISCALL init();\n");
             writer.write("\tint AXISCALL fini();\n");
             writer.write(
-                "\tAXIS_BINDING_STYLE AXISCALL getBindingStyle(){return RPC_ENCODED;};\n");
+                "\tAXIS_BINDING_STYLE AXISCALL getBindingStyle(){return "+bindingStyle+";};\n");
             writer.write(
                 "private:/*Methods corresponding to the web service methods*/\n");
             MethodInfo minfo;
