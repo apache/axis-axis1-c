@@ -88,7 +88,7 @@ bool Sender::Send(const std::string& what) throw (AxisException)
 {
 	try
 	{
-		m_pTrChannel->Init();
+//		m_pTrChannel->Init();
 
 		*m_pTrChannel << what;
 	}
