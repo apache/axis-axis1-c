@@ -333,10 +333,14 @@ int ServerAxisEngine::process(SOAPTransport* pStream)
      */
      //m_pSZ->setSoapFault (SoapFault::getSoapFault (CLIENT_SOAP_SOAPCONTENTERROR));
 #ifdef ENABLE_AXIS_EXCEPTION
+        int iExceptionCode = e.getExceptionCode();
         char* tempStr = (char*) e.what();
-        AXISTRACE2("Error:", tempStr, CRITICAL);
-        if(strcmp(tempStr, ""))
-            return AXIS_SUCCESS; 
+        AXISTRACE2("Exception:", tempStr, CRITICAL);
+        if(AXISC_SERVICE_THROWN_EXCEPTION == iExceptionCode)
+        {
+            return AXIS_SUCCESS;//Service created fault is written to the stream. 
+                                //so return success.
+        }
         else
             return e.getExceptionCode();
 #endif

@@ -145,6 +145,7 @@ enum AXISC_EXCEPTIONS
     SERVER_UNKNOWN_ERROR,
     /*Following exceptions are not releated to soap faults
      */
+    AXISC_SERVICE_THROWN_EXCEPTION,
     AXISC_UNKNOWN_ELEMENT_EXCEPTION,
     AXISC_NODEVALUE_MISMATCH_EXCEPTION,
 
