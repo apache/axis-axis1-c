@@ -65,7 +65,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../../include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "USE_EXPAT_PARSER" /FR /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../../include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "USE_XERCES_PARSER" /FR /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -106,6 +106,10 @@ SOURCE=..\..\src\soap\HeaderBlock.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\soap\SoapBinInputStream.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\soap\SoapBody.cpp
 # End Source File
 # Begin Source File
@@ -126,6 +130,10 @@ SOURCE=..\..\src\soap\SoapHeader.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\soap\SoapInputSource.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\soap\SoapKeywordMapping.cpp
 # End Source File
 # Begin Source File
@@ -138,11 +146,19 @@ SOURCE=..\..\src\soap\SoapParserExpat.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\soap\SoapParserXerces.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\soap\SoapSerializer.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\soap\URIMapping.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\soap\XercesHandler.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -170,6 +186,10 @@ SOURCE=..\..\include\axis\server\HeaderBlock.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\soap\SoapBinInputStream.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\soap\SoapBody.h
 # End Source File
 # Begin Source File
@@ -190,6 +210,10 @@ SOURCE=..\..\include\axis\server\SoapHeader.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\soap\SoapInputSource.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\soap\SoapKeywordMapping.h
 # End Source File
 # Begin Source File
@@ -202,11 +226,19 @@ SOURCE=..\..\src\soap\SoapParserExpat.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\soap\SoapParserXerces.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\axis\server\SoapSerializer.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\soap\URIMapping.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\soap\XercesHandler.h
 # End Source File
 # End Group
 # End Target
