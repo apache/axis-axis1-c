@@ -96,7 +96,11 @@ public class RPCResult implements Serializable {
                     buf.append("\">\n");
                 } else {
                     buf.append("<").append(this.method.getLocalPart());
-                    buf.append("Response>\n");
+                  
+                    buf.append("Response");
+					buf.append(" xmlns:soapenc=\"");
+					buf.append(BasicMessageContext.SOAP_CONSTANTS.getEncodingURI());
+					buf.append("\">\n");
                 }
                 sc.writeString(buf.toString());
 
