@@ -29,9 +29,16 @@
 <b>Before you follow this guide, make sure that you have followed the</b> <a
 href="wininstall-guide.html">
 
+<p>
+</a>
+Definitions: <br>
+AXIS_EXTRACT -> The folder to which the Axis c++ binary distribution is extracted <br>
+AXIS_FOLDER -> The deploy folder from the binary distribution copied to the apache installation
+</p>
 
 
-<b>Windows Installation guide</b></a></p>
+<b>Windows Installation guide</b>
+</p>
 
 <p><a name="create"></a></p>
 
@@ -250,11 +257,6 @@ AXIS_EXTRACT/lib/axis/
 <br>
 Axisclient.lib
 <br>
-AxisServer.lib
-<br>
-AxisTransport.lib
-<br>
-AxisXMLParser.lib
 
 <br>
 6) Create a file with the main method which looks similar to the following
@@ -288,8 +290,15 @@ int main()
 <p><a name="transport"></a></p>
 
 <h2>Transport Library and Parser Library</h2>
-<p>AxisTransport.dll should be placed in the path that's specified by axiscpp.conf (AXIS_FOLDER/axiscpp.conf).Or with the client.exe.AxisTransport.lib is in [CHECKOUT_ HOME]\c\vc\transport\axis\Release</p> 
-<p>AxisXMLParser.dll should be placed in the path that's specified by axiscpp.conf.Or with the client.exe.AxisXMLParser libs (libexpat.lib and xerces-c_2.lib(Release) or xerces-c_2D.lib (Debug)) should be in [CHECKOUT_ HOME]\c\lib</p>
+<p>AxisTransport.dll (Which can be found at AXIS_EXTRACT/bin) should be placed in the path, and be specified as the value to the key "Transport_http" in axiscpp.conf (AXIS_FOLDER/axiscpp.conf) Or in the same place as the client.exe. </p> 
+<p>AxisXMLParser.dll ( Either one of AxisXMLParser_Expat.dll or AxisXMLParser_Xerces.dll should be renamed to AxisXMLParse.dll depending on which parser you want to user) should be placed in the path and given specified as the value to the key XMLParser in axiscpp.conf Or in the  same place as the client.exe. 
+<br>
+If you choose to use Expat parser the dll, libexpat.dll should be in the path.
+<br>
+If you choose to use the Xerces parser the dll, xerces-c_2_2_0.dll should be in the path.
+<br>
+
+</p>
 
 <p><b>Axiscpp.conf file contains the following paths</b><br>
 LogPath:XXXX<br>
@@ -299,7 +308,7 @@ XMLParser:WWWW<br>
 
 <br>
 Where XXXX will be the path to a file named AxisLog (The log file)and YYYY
-will be the path to the server.wsdd file.ZZZZ will be the path to AxisTransport_D.dll if it's a HTTP(if the selected transport is SMTP then should give that path.WWWW will be the path to AxisXMLParser_D.dll<br>
+will be the path to the server.wsdd file.<br>
 <br>
 i.e.<br>
 LogPath:[APACHE_HOME]\Axis\logs\AxisLog.log  
