@@ -1,2 +1,2 @@
 in AxisException block
-Exception : AxisTransportException:Channel error connection timeout before receving Channel error: connection timed out before receving
+Exception : HTTPTransportException:Channel error connection timeout before receving Channel error: connection timed out before receving
