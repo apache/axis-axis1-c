@@ -28,22 +28,23 @@ MessageData* ClientAxisEngine::GetMessageData()
 	return m_pMsgData;
 }
 
-int ClientAxisEngine::Process(Ax_soapstream* soap)
+int ClientAxisEngine::Process(Ax_soapstream* pSoap)
 {
 	int Status;
 	const WSDDService* pService = NULL;
-	string sSessionId = soap->sessionid;
 	int nSoapVersion;
 
-	do {
-		//populate MessageData with transport information
-		send_transport_information(soap);
-		const char* cService = get_header(soap, SOAPACTIONHEADER);
-		if(SUCCESS != m_pSZ->SetOutputStream(soap))
-		{
-			break;
-		}
+	if (!pSoap) return FAIL;
+	m_pSoap = pSoap;
 
+	string sSessionId = m_pSoap->sessionid;
+
+	if (!(m_pSoap->transport.pSendFunct && m_pSoap->transport.pGetFunct &&
+		m_pSoap->transport.pSendTrtFunct && m_pSoap->transport.pGetTrtFunct))
+		return FAIL;
+
+	do {
+		//const char* cService = get_header(soap, SOAPACTIONHEADER);
 /*
 		//Get Global and Transport Handlers
 		if(SUCCESS != (Status = InitializeHandlers(sSessionId, soap->trtype)))
@@ -66,12 +67,9 @@ int ClientAxisEngine::Process(Ax_soapstream* soap)
 	}
 	while(0);
 
-		receive_transport_information(soap);
-		m_pDZ->SetInputStream(soap->str.ip_stream);
-
 	//Pool back the Service specific handlers
-	if (m_pSReqFChain) g_pHandlerPool->PoolHandlerChain(m_pSReqFChain, sSessionId);
-	if (m_pSResFChain) g_pHandlerPool->PoolHandlerChain(m_pSResFChain, sSessionId);
+	//if (m_pSReqFChain) g_pHandlerPool->PoolHandlerChain(m_pSReqFChain, sSessionId);
+	//if (m_pSResFChain) g_pHandlerPool->PoolHandlerChain(m_pSResFChain, sSessionId);
 	//Pool back the Global and Transport handlers
 	//UnInitializeHandlers(sSessionId, soap->trtype);
 	return Status;
@@ -126,6 +124,16 @@ int ClientAxisEngine::Invoke(MessageData* pMsg)
 	}
 	while(0);
 	*/
+	
+	do 
+	{
+		if (SUCCESS != (Status = m_pSoap->transport.pSendTrtFunct(m_pSoap))) break;
+		if (SUCCESS != (Status = m_pSZ->SetOutputStream(m_pSoap))) break;
+		pMsg->setPastPivotState(true);
+		if (SUCCESS != (Status = m_pSoap->transport.pGetTrtFunct(m_pSoap))) break;
+		if (SUCCESS != (Status = m_pDZ->SetInputStream(m_pSoap))) break;
+	}
+	while(0);
 
 	/*
 	switch (level)
