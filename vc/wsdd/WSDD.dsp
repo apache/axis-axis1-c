@@ -115,27 +115,31 @@ SOURCE=..\..\src\wsdd\WSDDTransport.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\src\wsdd\WSDDDeployment.h
+SOURCE=..\..\include\axis\wsdd\WSDDDefines.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\wsdd\WSDDDocument.h
+SOURCE=..\..\include\axis\wsdd\WSDDDeployment.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\wsdd\WSDDHandler.h
+SOURCE=..\..\include\axis\wsdd\WSDDDocument.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\wsdd\WSDDKeywords.h
+SOURCE=..\..\include\axis\wsdd\WSDDHandler.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\wsdd\WSDDService.h
+SOURCE=..\..\include\axis\wsdd\WSDDKeywords.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\wsdd\WSDDTransport.h
+SOURCE=..\..\include\axis\wsdd\WSDDService.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\axis\wsdd\WSDDTransport.h
 # End Source File
 # End Group
 # End Target
