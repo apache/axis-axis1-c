@@ -857,6 +857,7 @@ int Axis2Transport::setProtocol(AXIS_PROTOCOL_TYPE eProtocol)
     if( eProtocol == APTHTTP1_1 || eProtocol == APTHTTP1_0 )
     {
        m_eProtocolType = eProtocol;
+       m_strHTTPProtocol = (m_eProtocolType == APTHTTP1_1 )? "HTTP/1.1": "HTTP/1.0";
        return AXIS_SUCCESS; 
     }
     else 

@@ -248,6 +248,11 @@ int Call::setProtocol (AXIS_PROTOCOL_TYPE protocol)
     return AXIS_SUCCESS;
 }
 
+AXIS_PROTOCOL_TYPE Call::getProtocol ()
+{
+	return m_nTransportType;
+}
+
 int Call::setTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE type,
     const char* value)
 {

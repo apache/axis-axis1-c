@@ -452,3 +452,18 @@ void Stub::setMaintainSession(bool bSession)
 {
     m_bMaintainSession = bSession;
 }
+
+
+void Stub::setTransportProtocol(AXIS_PROTOCOL_TYPE eProtocol)
+{
+    if (m_pCall)
+        m_pCall->setProtocol(eProtocol);
+}
+
+AXIS_PROTOCOL_TYPE Stub::getTransportProtocol()
+{
+    if (m_pCall)
+        return m_pCall->getProtocol();
+    else
+       return APT_UNKNOWN;
+}
