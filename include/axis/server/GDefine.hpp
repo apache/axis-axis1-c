@@ -50,8 +50,6 @@ typedef enum
 #define AxisXMLCh char
 #define XML_Ch AxisChar
 
-#ifdef __cplusplus
-
 #define AXIS_CPP_NAMESPACE_START namespace axiscpp {
 #define AXIS_CPP_NAMESPACE_END }
 /*
@@ -62,19 +60,8 @@ namespace axiscpp {}
 #define AXIS_CPP_NAMESPACE_USE using namespace axiscpp;
 #define AXIS_CPP_NAMESPACE_PREFIX axiscpp::
 
-
 #define AxisString basic_string<char>
 #define AxisXMLString basic_string<AxisXMLCh>
-
-#else
-
-#define AXIS_CPP_NAMESPACE_START 
-#define AXIS_CPP_NAMESPACE_END 
-
-#define AXIS_CPP_NAMESPACE_USE 
-#define AXIS_CPP_NAMESPACE_PREFIX
-
-#endif
 
 #ifdef WIN32
     #define AxisSprintf(X, Y, Z, W) sprintf(X, Z, W)
@@ -111,24 +98,9 @@ extern void ModuleUnInitialize();
  * AXISAPI(<METHOD NAME>, <PARAMETER LIST>)
  */
 
-#ifdef __cplusplus
-    #define AXISAPI(M, P) AXISCALL M P = 0;
-    #define APIHASPARAMS
-    #define APINOPARAMS 
-#else 
-    #define virtual 
-    #if !defined(bool)
-        #define bool unsigned char
-        #define false 0
-        #define true 1
-    #endif
-    #if !defined(NULL)
-        #define NULL 0
-    #endif
-    #define AXISAPI(M, P) (AXISCALL* M) P;
-    #define APIHASPARAMS void*p,
-    #define APINOPARAMS void*p
-#endif
+#define AXISAPI(M, P) AXISCALL M P = 0;
+#define APIHASPARAMS
+#define APINOPARAMS 
 
 #endif 
 
