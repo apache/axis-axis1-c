@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 		//ws.setSOAPMethodAttribute("add", "", "http://soapinteroptest.org", "value");
 		
 
-    printf("invoking MathOps div...\n");
+    cout << "invoking MathOps div..." << endl;
     
         try
         {
@@ -33,11 +33,11 @@ int main(int argc, char *argv[])
         }
         catch (AxisException& e)
         {
-                printf("%s\n", e.what());
+            cout << e.what() << endl;
         }
         catch(...)
         {
-                printf("Unknown exception\n");
+                cout << "Unknown exception" << endl;
         }
 
     cout<< "---------------------- TEST COMPLETE -----------------------------"<< endl;
