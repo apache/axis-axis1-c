@@ -44,40 +44,46 @@
    SpecialDetailStruct:The type corresponding to the complex type SpecialDetailStruct
        in the MathOps.wsdl
   
-   AxisDivByZeroException: For each fault in wsdl we generate an exception
+   AxisClientException: We generate an client side exception
        class which is derived from AxisException base class which is the root
-       class for exceptions in Axis C++. This root class in tern is derived
-       from std::exception. AxisDivByzeroException is the exception type
-       corresponding to DivByZero fault.
-  
-   AxisOutOfBountException: Exception type corresponding to OutOfBound fault.
-  
-   AxisNormalDetailException: Exception type corresponding to NormalDetail fault.
+       class for exceptions in Axis C++. This root class in term is derived
+       from std::exception.  
   
    In the server side if division by zero fault is encountered
-   in the service method it will call
+   in the service class, service method it will
+   
    ...
    ...
-   pIWSSZ->createSoapFault("DivByZeroStruct", "http://soapinterop.org/wsdl");
+  
+   DivByZeroStruct* pObjFault = new DivByZeroStruct();
+   if(pObjFault)
+   {
+       pObjFault->varString = "Division by zero exception";
+       pObjFault->varInt = 1;
+       pObjFault->varFloat = 10.52;
+       throw objFault;
+    }
+   ...
+   ...
+   Now in the service wrapper class after catching the struct thrown above
+   ...
+   ...
+   pIWSSZ->createSoapFault("DivByZeroStruct", "http://soapinterop.org/wsdl",
+       "Axis C++ Fault Code", "Custom Div By Zero Exception");
    ...
    ...
    where pIWSSZ is the soap serializer interface.
    Once this method is called
    m_pSoapEnvelope->m_pSoapBody->m_pSoapFault is assigned a new soap fault
    object. After that,
-  
-   DivByZeroStruct* pObjFault = new DivByZeroStruct();
-    //User may write code here to fill the struct
-   pObjFault->varString = "Division by zero exception";
-   pObjFault->varInt = 1;
-   pObjFault->varFloat = 10.52;
-   if (pObjFault)
+   ...
+   ...
     pIWSSZ->addFaultDetail(pObjFault, (void*) Axis_Serialize_DivByZeroStruct,
     (void*) Axis_Delete_DivByZeroStruct,"DivByZero", Axis_URI_DivByZeroStruct);
+
     ...
     ...
-   Here the service developer fills the  DivByZeroStruct with appropriate
-   values and call SoapSerialzer's addFaultDetail method with the knowledge
+   Here the it call SoapSerialzer's addFaultDetail method with the knowledge
    of serializing and deserializing. Once this method is called setFaultDetail
    method of SoapFault is called from SoapSerializer.
    ...
@@ -121,72 +127,87 @@
    When we catch that exception we knows that a soap fault has come.
    ...
    ...
-   else if (AXIS_SUCCESS == m_pCall->checkFault("Fault",
-       "http://localhost/axis/MathOps" ))
-        //Exception handling code goes here
-    {
-        cFaultcode = m_pCall->getElementAsString("faultcode", 0);
-        cFaultstring = m_pCall->getElementAsString("faultstring", 0);
-        cFaultactor = m_pCall->getElementAsString("faultactor", 0);
+       pcCmplxFaultName = pSoapFault->getCmplxFaultObjectName().c_str();
+       //printf("pcCmplxFaultName:%s\n", pcCmplxFaultName);
+       if(0 == strcmp("DivByZeroStruct", pcCmplxFaultName))
+       {
+           DivByZeroStruct* pFaultDetail = NULL;
+           pFaultDetail = (DivByZeroStruct*)pSoapFault->
+           getCmplxFaultObject((void*) Axis_DeSerialize_DivByZeroStruct,
+               (void*) Axis_Create_DivByZeroStruct,
+               (void*) Axis_Delete_DivByZeroStruct,"DivByZeroStruct", 0);
+
+	   pSoapFault->setCmplxFaultObject(pFaultDetail);
+			
+           m_pCall->unInitialize();
+           throw AxisClientException(pSoapFault);
+       }
    ...
    ...
-        else if(0 == strcmp("DivByZeroStruct", cFaultstring))
+
+   Note that we compares pcCmplxFaultName  which contains complex soap fault's name
+   with the DivByZeroStruct.
+   ...
+   ...
+
+   When the AxisClientException is thrown from the MathOps.cpp, it will be caught
+   from MathOpsClient.cpp, the file we wrote containing the main method.
+   Inside the AxisClientException class's processException(ISoapFault* pFault) method
+   we might write the code to translate the pSoapFault information into a descriptive string.
+
+   ...
+   ...
+        /*User can do something like deserializing the struct into a string*/
+        const char* pcCmplxFaultName;
+	const char* pcDetail;
+        if(pFault)
         {
-            if (AXIS_SUCCESS == m_pCall->checkFault("faultdetail",
-                "http://localhost/axis/MathOps"))
+            m_sMessage = "Fault Code:";
+            m_sMessage += pFault->getFaultcode();
+            m_sMessage += "\n";
+            m_sMessage += "Fault String:";
+            m_sMessage += pFault->getFaultstring();
+            m_sMessage += "\n";
+            m_sMessage += "Fault Actor:";
+            m_sMessage += pFault->getFaultactor();
+            m_sMessage += "\n";
+
+            pcDetail = pFault->getSimpleFaultDetail().c_str();
+	    if(NULL != pcDetail && 0 != strcmp("", pcDetail))
+                m_sMessage += pcDetail;
+	    else
+            {
+                pcCmplxFaultName = pFault->getCmplxFaultObjectName().c_str();
+		//printf("pcCmplxFaultName:%s\n", pcCmplxFaultName);
+            }
+            if(0 == strcmp("OutOfBoundStruct", pcCmplxFaultName))
+            {
+                OutOfBoundStruct* pFaultDetail = NULL;
+                pFaultDetail = (OutOfBoundStruct*)pFault->
+                    getCmplxFaultObject();
+                SpecialDetailStruct* pSpecialFaultDetail = pFaultDetail->specialDetail;
+
+                m_sMessage += pFaultDetail->varString;
+                m_sMessage += ":";
+                m_sMessage += pSpecialFaultDetail->varString;
+            }
+            else if(0 == strcmp("SpecialDetailStruct", pcCmplxFaultName))
+            {
+                SpecialDetailStruct* pFaultDetail = NULL;
+                pFaultDetail = (SpecialDetailStruct*)pFault->
+                    getCmplxFaultObject();
+
+                m_sMessage += pFaultDetail->varString;
+            }
+            else if(0 == strcmp("DivByZeroStruct", pcCmplxFaultName))
             {
                 DivByZeroStruct* pFaultDetail = NULL;
-                pFaultDetail = (DivByZeroStruct*)m_pCall->
-                    getCmplxObject((void*) Axis_DeSerialize_DivByZeroStruct,
-                    (void*) Axis_Create_DivByZeroStruct,
-                    (void*) Axis_Delete_DivByZeroStruct,"faultstruct1", 0);
-                //Client developers code goes here to handle the struct can
-                //be inserted here
-                printf("faultcode:%s\n", cFaultcode);
-                printf("faultstring:%s\n", cFaultstring);
-                printf("faultactor:%s\n", cFaultactor);
-                m_pCall->unInitialize();
-                throw AxisDivByZeroException(pFaultDetail);
-            }
-        }
-   ...
-   ...
-   Note that we compares cFaultstring which contains soap fault's faultstring
-   with the DivByZeroStruct. This is so because in the server side we set the
-   faultstring to take the fault's generated type name. If the faultdetail
-   is just a simple string
-   ...
-   ...
-   else
-   {
-       cFaultdetail = m_pCall->getElementAsString("faultdetail", 0);
-       throw AxisGenException(cFaultdetail);
-   }
-   ...
-   ...
-
-   When the AxisDivByZeroException is thrown from the MathOps.cpp will be caught
-   from MathOpsClient.cpp, the file we wrote containing the main method.
-   Inside the generated AxisDivByZeroException class we might write the 
-   code to translate the pFaultDetails information into a descriptive string.
-
-   ...
-   ...
-   /*User can do something like deserializing the struct into a string*/
-       int iSize = strlen(pFault->varString) + 8;
-       char* sMessage = new char[iSize];
-       m_sMessage = new char[iSize];
-       char* carrTempBuff =new char[4 * sizeof(char)];
-       sprintf(carrTempBuff, "%d", pFault->varInt);
-       strcpy(sMessage, carrTempBuff);
-       strcat(sMessage, "\n");
-       sprintf(carrTempBuff, "%f", pFault->varFloat);
-       strcat(sMessage, carrTempBuff);
-       strcat(sMessage, "\n");
-       strcat(sMessage, pFault->varString);
-       strcat(sMessage, "\n");
-       m_sMessage = sMessage;
-       delete(sMessage);
+                pFaultDetail = (DivByZeroStruct*)pFault->
+                    getCmplxFaultObject();
+                char* carrTempBuff =new char[4 * sizeof(char)]; 
+                sprintf(carrTempBuff, "%d", pFaultDetail->varInt);
+                m_sMessage += string(carrTempBuff);
+                m_sMessage += "\n";
    ...
    ...
 
