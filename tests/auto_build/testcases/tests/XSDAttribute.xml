@@ -1,0 +1,13 @@
+<test>
+    <name>XSDAttribute</name>
+    <description>Test sending and receiving all the xsd types as an attribute</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>XSDAttributeClient.cpp</clientCode>
+    <wsdl>XSDAttribute.wsdl</wsdl>
+    <expected>
+        <output>
+            XSDAttribute.expected
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/XSDAttribute/services/XSDAttribute</endpoint>
+</test>

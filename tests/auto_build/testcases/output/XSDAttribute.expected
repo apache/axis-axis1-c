@@ -1,0 +1,16 @@
+boolean=0
+byte=31
+unsigned byte=32
+short=7
+unsigned short=14
+int=21
+unsigned int=28
+long=35
+unsigned long=42
+float=70.35359
+double=140.71759
+string=never odd or even
+integer=919191919
+decimal=929292929.55556
+dateTime=Fri Nov 12 07:58:43 2004
+---------------------- TEST COMPLETE -----------------------------
