@@ -1,6 +1,6 @@
 lib_LTLIBRARIES = libaxis2_transport.la
 SUBDIRS = ipv6 @SSLBUILD@
-AM_CPPFLAGS = $(CPPFLAGS)
+AM_CPPFLAGS = $(CPPFLAGS) -DAXISTRACE_LIBRARY
 libaxis2_transport_la_SOURCES = SecureChannel.cpp \
 				Channel.cpp \
 				URL.cpp \
