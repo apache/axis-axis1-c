@@ -886,334 +886,340 @@ case 12:
 YY_RULE_SETUP
 #line 112 "cpp.l"
 {
-        										if (include_stack_ptr >= MAX_INCLUDE_DEPTH)
-            								{
-            										cout << "Includes nested too deeply";
-            										exit(1);
-            								}
-
-        										include_stack[include_stack_ptr++] = YY_CURRENT_BUFFER;
-                  					string incfile = yytext;
-        										yyin = fopen(incfile.substr(1,incfile.length()-2).c_str(), "r");
-        										if (!yyin)
-                  					{
-            										cout << "File included from "<< yytext << " is not found on path"<<endl;
-                      					exit(1);
-                           	}
-        										yy_switch_to_buffer(yy_create_buffer( yyin, YY_BUF_SIZE ));
-        										BEGIN(0);
-        								 }
+        					if (include_stack_ptr >= MAX_INCLUDE_DEPTH)
+            				{
+            					cout << "Includes nested too deeply";
+            					exit(1);
+            				}
+                  			string incfile = yytext;
+							if (incfile.find('<') == string::npos) //open only from local path 
+							{
+        						include_stack[include_stack_ptr++] = YY_CURRENT_BUFFER;
+        						yyin = fopen(incfile.substr(1,incfile.length()-2).c_str(), "r");
+        						if (!yyin)
+                  				{
+            						cout << "File included from "<< yytext << " is not found on path"<<endl;
+                      				exit(1);
+                           		}
+        						yy_switch_to_buffer(yy_create_buffer( yyin, YY_BUF_SIZE ));
+        						BEGIN(0);
+        					}
+							else
+							{
+								BEGIN(0);
+							}
+						}
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 case YY_STATE_EOF(PREPROCESSOR):
 case YY_STATE_EOF(INCLUDE):
-#line 131 "cpp.l"
+#line 137 "cpp.l"
 {
-        										if ( --include_stack_ptr < 0 )
-            								{
-            										yyterminate();
-            								}
-        										else
-            								{
-            										yy_delete_buffer( YY_CURRENT_BUFFER );
-            										yy_switch_to_buffer(include_stack[include_stack_ptr]);
-            								}
-        								 }
+        					if ( --include_stack_ptr < 0 )
+            				{
+            					yyterminate();
+            				}
+        					else
+            				{
+            					yy_delete_buffer( YY_CURRENT_BUFFER );
+            					yy_switch_to_buffer(include_stack[include_stack_ptr]);
+            				}
+        				}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 143 "cpp.l"
+#line 149 "cpp.l"
 { return LEFTPAREN; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 144 "cpp.l"
+#line 150 "cpp.l"
 { return RIGHTPAREN; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 145 "cpp.l"
+#line 151 "cpp.l"
 { return LEFTBRACK; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 146 "cpp.l"
+#line 152 "cpp.l"
 { return RIGHTBRACK; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 147 "cpp.l"
+#line 153 "cpp.l"
 { return LEFTARRAY; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 148 "cpp.l"
+#line 154 "cpp.l"
 { return RIGHTARRAY; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 149 "cpp.l"
+#line 155 "cpp.l"
 { return PLUS; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 150 "cpp.l"
+#line 156 "cpp.l"
 { return MINUS; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 151 "cpp.l"
+#line 157 "cpp.l"
 { return STAR; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 152 "cpp.l"
+#line 158 "cpp.l"
 { return DIVIDE; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 153 "cpp.l"
+#line 159 "cpp.l"
 { return MOD; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 154 "cpp.l"
+#line 160 "cpp.l"
 { return GREATER; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 155 "cpp.l"
+#line 161 "cpp.l"
 { return LESS; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 156 "cpp.l"
+#line 162 "cpp.l"
 { return EQUAL; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 157 "cpp.l"
+#line 163 "cpp.l"
 { return AND; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 158 "cpp.l"
+#line 164 "cpp.l"
 { return OR; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 159 "cpp.l"
+#line 165 "cpp.l"
 { return NOT; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 160 "cpp.l"
+#line 166 "cpp.l"
 { return XOR; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 161 "cpp.l"
+#line 167 "cpp.l"
 { return COMMA; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 162 "cpp.l"
+#line 168 "cpp.l"
 { return SEMI; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 163 "cpp.l"
+#line 169 "cpp.l"
 { return COLON; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 164 "cpp.l"
+#line 170 "cpp.l"
 { return COMPLEMENT; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 165 "cpp.l"
+#line 171 "cpp.l"
 { return DOT; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 166 "cpp.l"
+#line 172 "cpp.l"
 { return QUESTION; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 168 "cpp.l"
+#line 174 "cpp.l"
 { return STAREQ; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 169 "cpp.l"
+#line 175 "cpp.l"
 { return DIVEQ; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 170 "cpp.l"
+#line 176 "cpp.l"
 { return MODEQ; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 171 "cpp.l"
+#line 177 "cpp.l"
 { return PLUSEQ; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 172 "cpp.l"
+#line 178 "cpp.l"
 { return MINUSEQ; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 173 "cpp.l"
+#line 179 "cpp.l"
 { return LTLTEQ; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 174 "cpp.l"
+#line 180 "cpp.l"
 { return GTGTEQ; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 175 "cpp.l"
+#line 181 "cpp.l"
 { return ANDEQ; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 176 "cpp.l"
+#line 182 "cpp.l"
 { return XOREQ; }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 177 "cpp.l"
+#line 183 "cpp.l"
 { return OREQ; }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 178 "cpp.l"
+#line 184 "cpp.l"
 { return OROR; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 179 "cpp.l"
+#line 185 "cpp.l"
 { return ANDAND; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 180 "cpp.l"
+#line 186 "cpp.l"
 { return EQEQ; }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 181 "cpp.l"
+#line 187 "cpp.l"
 { return NOTEQ; }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 182 "cpp.l"
+#line 188 "cpp.l"
 { return LEQ; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 183 "cpp.l"
+#line 189 "cpp.l"
 { return GEQ; }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 184 "cpp.l"
+#line 190 "cpp.l"
 { return LTLT; }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 185 "cpp.l"
+#line 191 "cpp.l"
 { return GTGT; }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 186 "cpp.l"
+#line 192 "cpp.l"
 { return DOTSTAR; }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 187 "cpp.l"
+#line 193 "cpp.l"
 { return ARROWSTAR; }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 188 "cpp.l"
+#line 194 "cpp.l"
 { return PLUSPLUS; }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 189 "cpp.l"
+#line 195 "cpp.l"
 { return MINUSMINUS; }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 190 "cpp.l"
+#line 196 "cpp.l"
 { return ARROW; }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 191 "cpp.l"
+#line 197 "cpp.l"
 { return COLCOL; }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 192 "cpp.l"
+#line 198 "cpp.l"
 { return ELLIPSES; }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 194 "cpp.l"
+#line 200 "cpp.l"
 { 
 				return INTEGER_LITERAL; 
 			  }
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 197 "cpp.l"
+#line 203 "cpp.l"
 { return FLOATING_LITERAL; }
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 198 "cpp.l"
+#line 204 "cpp.l"
 { return CHARACTER_LITERAL; }
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 199 "cpp.l"
+#line 205 "cpp.l"
 { return STRING_LITERAL; }
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 201 "cpp.l"
+#line 207 "cpp.l"
 { return check_keyword(yytext); }
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 203 "cpp.l"
+#line 209 "cpp.l"
 ;
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 204 "cpp.l"
+#line 210 "cpp.l"
 { do_newline(); }
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 206 "cpp.l"
+#line 212 "cpp.l"
 { yyerror("Lexical Error"); }
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 208 "cpp.l"
+#line 214 "cpp.l"
 ECHO;
 	YY_BREAK
-#line 1217 "cpplex.cpp"
+#line 1223 "cpplex.cpp"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1797,7 +1803,8 @@ FILE *file;
 #if YY_NEVER_INTERACTIVE
 	b->yy_is_interactive = 0;
 #else
-	b->yy_is_interactive = file ? (isatty( fileno(file) ) > 0) : 0;
+	b->yy_is_interactive = 1;
+	//b->yy_is_interactive = file ? (isatty( fileno(file) ) > 0) : 0;
 #endif
 #endif
 	}
@@ -2092,7 +2099,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 208 "cpp.l"
+#line 214 "cpp.l"
 
 
 void init_keyword_map()
@@ -2206,6 +2213,10 @@ static int check_keyword(const char* name)
     	//cout << sname.c_str() << " is recognized as a class"<<endl;
 			tok = ID_class_name;
     }
+	else if (is_accessbean_macro(sname))
+	{
+		tok = ACCESSBEAN_MACRO;
+	}
   }
   return tok;
 }
