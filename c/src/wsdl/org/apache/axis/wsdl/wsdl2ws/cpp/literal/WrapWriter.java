@@ -137,7 +137,7 @@ public class WrapWriter extends CPPClassWriter{
 		try{
 			writer.write("/*implementation of WrapperClassHandler interface*/\n");
 			
-			writer.write("void "+classname+"::OnFault(IMessageData *pMsg)\n{\n}\n\n");
+			writer.write("void "+classname+"::OnFault(void *pMsg)\n{\n}\n\n");
 			writer.write("int "+classname+"::Init()\n{\n\treturn AXIS_SUCCESS;\n}\n\n");
 			writer.write("int "+classname+"::Fini()\n{\n\treturn AXIS_SUCCESS;\n}\n\n");
 			writeInvoke();
@@ -173,7 +173,8 @@ public class WrapWriter extends CPPClassWriter{
 		writer.write("\n/*\n");
 		writer.write(" * This method invokes the right service method \n");
 		writer.write(" */\n");
-		writer.write("int "+classname+"::Invoke(IMessageData *mc)\n{\n");
+		writer.write("int "+classname+"::Invoke(void *pMsg)\n{\n");
+		writer.write("\tIMessageData* mc = (IMessageData*)pMsg;\n");
 		//msgdata.setSoapFault(new SOAPFault(new AxisFault()))
 		writer.write("\tconst AxisChar *method = mc->GetOperationName();\n");
 		//if no methods in the service simply return
@@ -249,7 +250,8 @@ public class WrapWriter extends CPPClassWriter{
 		writer.write(" * This method wrap the service method \n");
 		writer.write(" */\n");
 		//method signature
-		writer.write("int "+classname+"::" + methodName + "(IMessageData* mc)\n{\n");
+		writer.write("int "+classname+"::" + methodName + "(void* pMsg)\n{\n");
+		writer.write("\tIMessageData* mc = (IMessageData*)pMsg;\n");
 		writer.write("\tint nStatus;\n");
 		writer.write("\tIWrapperSoapSerializer *pIWSSZ = NULL;\n");
 		writer.write("\tmc->GetSoapSerializer(&pIWSSZ);\n");
@@ -449,7 +451,7 @@ public class WrapWriter extends CPPClassWriter{
 				writer.write("extern int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer *pDZ);\n");
 				writer.write("extern void* Axis_Create_"+typeName+"("+typeName+" *Obj, bool bArray = false, int nSize=0);\n");
 				writer.write("extern void Axis_Delete_"+typeName+"("+typeName+"* param, bool bArray = false, int nSize=0);\n");
-				writer.write("extern int Axis_Serialize_"+typeName+"("+typeName+"* param, IWrapperSoapSerializer& pSZ, bool bArray = false);\n");
+				writer.write("extern int Axis_Serialize_"+typeName+"("+typeName+"* param, IWrapperSoapSerializer* pSZ, bool bArray = false);\n");
 				writer.write("extern int Axis_GetSize_"+typeName+"();\n\n");
 			}
 		} catch (IOException e) {

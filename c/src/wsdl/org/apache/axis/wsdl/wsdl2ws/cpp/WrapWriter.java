@@ -137,7 +137,7 @@ public class WrapWriter extends CPPClassWriter{
 		try{
 			writer.write("/*implementation of WrapperClassHandler interface*/\n");
 			
-			writer.write("void "+classname+"::OnFault(IMessageData *pMsg)\n{\n}\n\n");
+			writer.write("void "+classname+"::OnFault(void *pMsg)\n{\n}\n\n");
 			writer.write("int "+classname+"::Init()\n{\n\treturn AXIS_SUCCESS;\n}\n\n");
 			writer.write("int "+classname+"::Fini()\n{\n\treturn AXIS_SUCCESS;\n}\n\n");
 			writeInvoke();
@@ -173,7 +173,8 @@ public class WrapWriter extends CPPClassWriter{
 		writer.write("\n/*\n");
 		writer.write(" * This method invokes the right service method \n");
 		writer.write(" */\n");
-		writer.write("int "+classname+"::Invoke(IMessageData *mc)\n{\n");
+		writer.write("int "+classname+"::Invoke(void *pMsg)\n{\n");
+		writer.write("\tIMessageData* mc = (IMessageData*)pMsg;\n");
 		//msgdata.setSoapFault(new SOAPFault(new AxisFault()))
 		writer.write("\tconst AxisChar *method = mc->GetOperationName();\n");
 		//if no methods in the service simply return
@@ -208,6 +209,7 @@ public class WrapWriter extends CPPClassWriter{
 	 */
 
 	public void writeMethodInWrapper(MethodInfo minfo) throws WrapperFault,IOException {
+		Type type;
 		boolean isAllTreatedAsOutParams = false;
 		ParameterInfo returntype = null;
 		int noOfOutParams = minfo.getOutputParameterTypes().size();
@@ -223,26 +225,26 @@ public class WrapWriter extends CPPClassWriter{
 		Collection params = minfo.getInputParameterTypes();
 		String methodName = minfo.getMethodname();
 		Type retType = null;
-		Type type;
-		String outparamType = null;
+		String outparamType = null;		
+		String outparamTypeName = null;
 		boolean returntypeissimple = false;
 		boolean returntypeisarray = false;
 		if (returntype != null){
+			outparamTypeName = WrapperUtils.getClassNameFromParamInfoConsideringArrays(returntype, wscontext);
 			retType = wscontext.getTypemap().getType(returntype.getSchemaName());
 			if (retType != null){
-				outparamType = retType.getLanguageSpecificName();
 				returntypeisarray = retType.isArray();
+				if (CUtils.isSimpleType(retType.getLanguageSpecificName())){
+					returntypeissimple = true;
+				}
 			}
-			else{
-				outparamType = returntype.getLangName();
-			}
-			returntypeissimple = CUtils.isSimpleType(outparamType);
 		}
 		writer.write("\n/*\n");
 		writer.write(" * This method wrap the service method \n");
 		writer.write(" */\n");
 		//method signature
-		writer.write("int "+classname+"::" + methodName + "(IMessageData* mc)\n{\n");
+		writer.write("int "+classname+"::" + methodName + "(void* pMsg)\n{\n");
+		writer.write("\tIMessageData* mc = (IMessageData*)pMsg;\n");
 		writer.write("\tint nStatus;\n");
 		writer.write("\tIWrapperSoapSerializer *pIWSSZ = NULL;\n");
 		writer.write("\tmc->GetSoapSerializer(&pIWSSZ);\n");
@@ -257,9 +259,11 @@ public class WrapWriter extends CPPClassWriter{
 		String paraTypeName;
 		String parameterName;
 		String returnParamName;
+		String paramType;
 		ArrayList paramsB = new ArrayList(params);
 		for (int i = 0; i < paramsB.size(); i++) {
 			paraTypeName = ((ParameterInfo)paramsB.get(i)).getLangName();
+			paramType = WrapperUtils.getClassNameFromParamInfoConsideringArrays((ParameterInfo)paramsB.get(i), wscontext);
 			parameterName = ((ParameterInfo)paramsB.get(i)).getParamName();
 			if((CUtils.isSimpleType(((ParameterInfo)paramsB.get(i)).getLangName()))){
 				//for simple types	
@@ -269,11 +273,11 @@ public class WrapWriter extends CPPClassWriter{
 				String containedType = null;
 				if (CUtils.isSimpleType(qname)){
 					containedType = CUtils.getclass4qname(qname);
-					writer.write("\t"+paraTypeName+" v"+i+" = ("+CUtils.getBasicArrayNameforType(containedType)+"&)pIWSDZ->GetBasicArray("+CUtils.getXSDTypeForBasicType(containedType)+ ", \""+parameterName+"\",0);\n");
+					writer.write("\t"+paramType+" v"+i+" = ("+CUtils.getBasicArrayNameforType(containedType)+"&)pIWSDZ->GetBasicArray("+CUtils.getXSDTypeForBasicType(containedType)+ ", \""+parameterName+"\",0);\n");
 				}
 				else{
 					containedType = qname.getLocalPart();
-					writer.write("\t"+paraTypeName+" v"+i+" = ("+paraTypeName+"&)pIWSDZ->GetCmplxArray((void*)Axis_DeSerialize_"+containedType+ 
+					writer.write("\t"+paramType+" v"+i+" = ("+paramType+"&)pIWSDZ->GetCmplxArray((void*)Axis_DeSerialize_"+containedType+ 
 						"\n\t\t, (void*)Axis_Create_"+containedType+", (void*)Axis_Delete_"+containedType+
 						"\n\t\t, (void*)Axis_GetSize_"+containedType+", \""+parameterName+"\", Axis_URI_"+containedType+");\n");
 				}
@@ -295,7 +299,7 @@ public class WrapWriter extends CPPClassWriter{
 		}
 		if(returntype != null){				
 			/* Invoke the service when return type not void */
-			writer.write("\t"+outparamType+((returntypeisarray || returntypeissimple)?" ":" *")+ "ret = "+"pWs->"+methodName+"(");
+			writer.write("\t"+outparamTypeName+" ret = "+"pWs->"+methodName+"(");
 			if (0<paramsB.size()){
 				for (int i = 0; i <  paramsB.size() - 1; i++) {
 					writer.write("v" + i + ",");
@@ -305,7 +309,7 @@ public class WrapWriter extends CPPClassWriter{
 			writer.write(");\n");
 			/* set the result */
 			if (returntypeissimple){
-				writer.write("\treturn pIWSSZ->AddOutputParam(\""+methodName+"Return\", (void*)&ret, "+CUtils.getXSDTypeForBasicType(outparamType)+");\n");
+				writer.write("\treturn pIWSSZ->AddOutputParam(\""+methodName+"Return\", (void*)&ret, "+CUtils.getXSDTypeForBasicType(outparamTypeName)+");\n");
 			}else if(returntypeisarray){
 				QName qname = WrapperUtils.getArrayType(retType).getName();
 				String containedType = null;
@@ -321,7 +325,8 @@ public class WrapWriter extends CPPClassWriter{
 			}
 			else{
 				//complex type
-				writer.write("\treturn pIWSSZ->AddOutputCmplxParam(ret, (void*)Axis_Serialize_"+outparamType+", (void*)Axis_Delete_"+outparamType+", \""+methodName+"Return\", 0);\n");
+				outparamTypeName = returntype.getLangName();//need to have complex type name without *
+				writer.write("\treturn pIWSSZ->AddOutputCmplxParam(ret, (void*)Axis_Serialize_"+outparamTypeName+", (void*)Axis_Delete_"+outparamTypeName+", \""+methodName+"Return\", 0);\n");
 			}
 		}else if (isAllTreatedAsOutParams){
 			writer.write("\tpWs->" + methodName + "(");
@@ -408,7 +413,7 @@ public class WrapWriter extends CPPClassWriter{
 				writer.write("extern int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer *pDZ);\n");
 				writer.write("extern void* Axis_Create_"+typeName+"("+typeName+" *Obj, bool bArray = false, int nSize=0);\n");
 				writer.write("extern void Axis_Delete_"+typeName+"("+typeName+"* param, bool bArray = false, int nSize=0);\n");
-				writer.write("extern int Axis_Serialize_"+typeName+"("+typeName+"* param, IWrapperSoapSerializer& pSZ, bool bArray = false);\n");
+				writer.write("extern int Axis_Serialize_"+typeName+"("+typeName+"* param, IWrapperSoapSerializer* pSZ, bool bArray = false);\n");
 				writer.write("extern int Axis_GetSize_"+typeName+"();\n\n");
 			}
 		} catch (IOException e) {
