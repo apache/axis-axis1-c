@@ -71,12 +71,13 @@ void AxisDivByZeroException::processException (exception* e, int iExceptionCode)
 void AxisDivByZeroException::processException (DivByZeroFault* pFault)
 {
     /*start user code*/
+
     int iSize = strlen(pFault->varString) + 8;
-    char* sMessage = (char*) malloc(iSize);
-    m_sMessage = (char*) malloc(iSize);
-    char carrTempBuff[4];
+    char* sMessage = new char[iSize];
+    m_sMessage = new char[iSize];
+    char* carrTempBuff =new char[4 * sizeof(char)];
     sprintf(carrTempBuff, "%d", pFault->varInt);
-    strcat(sMessage, carrTempBuff);
+    strcpy(sMessage, carrTempBuff);
     strcat(sMessage, "\n");
     sprintf(carrTempBuff, "%f", pFault->varFloat);
     strcat(sMessage, carrTempBuff);
@@ -84,7 +85,8 @@ void AxisDivByZeroException::processException (DivByZeroFault* pFault)
     strcat(sMessage, pFault->varString);
     strcat(sMessage, "\n");
     m_sMessage = sMessage;
-    free(sMessage);
+    delete(sMessage);
+
     /*end user code*/
 }
 
