@@ -61,13 +61,13 @@
  *
  */
 //#include <stdlib.h>
-#include <axis/soap/XMLStreamHandler.h>
-#include <axis/common/TypeMapping.h>
-#include <axis/soap/URIMapping.h>
+#include "../soap/XMLStreamHandler.h"
+#include "../common/TypeMapping.h"
+#include "../soap/URIMapping.h"
 #include <axis/soap/Attribute.h>
 #include <axis/soap/SoapEnvVersions.h>
 #include <axis/soap/CharacterElement.h>
-#include <axis/common/AxisUtils.h>
+#include "../common/AxisUtils.h"
 
 XMLStreamHandler::XMLStreamHandler()
 {

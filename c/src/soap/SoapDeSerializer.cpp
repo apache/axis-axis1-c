@@ -65,13 +65,13 @@
 //
 //////////////////////////////////////////////////////////////////////
 #include <axis/soap/SoapDeSerializer.h>
-#include <axis/soap/SoapEnvelope.h>
-#include <axis/soap/SoapKeywordMapping.h>
-#include <axis/soap/URIMapping.h>
+#include "SoapEnvelope.h"
+#include "SoapKeywordMapping.h"
+#include "URIMapping.h"
 #include <axis/soap/SoapHeader.h>
-#include <axis/soap/SoapMethod.h>
-#include <axis/soap/SoapBody.h>
-#include <axis/soap/SoapFault.h>
+#include "SoapMethod.h"
+#include "SoapBody.h"
+#include "SoapFault.h"
 #include <axis/soap/ComplexElement.h>
 #include <axis/soap/CharacterElement.h>
 #include <axis/common/GDefine.h>
@@ -79,9 +79,9 @@
 #include <axis/common/AxisTrace.h>
 
 #ifdef USE_EXPAT_PARSER
-#include <axis/soap/SoapParserExpat.h>
+#include "SoapParserExpat.h"
 #elif USE_XERCES_PARSER
-#include <axis/soap/SoapParserXerces.h>
+#include "SoapParserXerces.h"
 #else
 #include <axis/xml/SoapParser.h>
 #endif

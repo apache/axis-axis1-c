@@ -57,38 +57,86 @@
  *
  */
 
+#if !defined(__HANDLERLOADER_H_INCLUDED__)
+#define __HANDLERLOADER_H_INCLUDED__
 
-// IDeployerUtils.h:
-//
-//////////////////////////////////////////////////////////////////////
+#include <axis/common/MessageData.h>
+#include <axis/common/GDefine.h>
+#include "../common/WrapperClassHandler.h"
+#include "SharedObject.h"
 
+#include <map>
+#include <string>
 
-// IDeployerUtils.h: interface for the IDeployerUtils class.
-//
-//////////////////////////////////////////////////////////////////////
+using namespace std;
 
-#if !defined(AFX_IDEPLOYERUTILS_H__911B3371_0BB8_4818_ACC8_6A6049E109B9__INCLUDED_)
-#define AFX_IDEPLOYERUTILS_H__911B3371_0BB8_4818_ACC8_6A6049E109B9__INCLUDED_
+#define CREATE_FUNCTION "GetClassInstance"
+#define DELETE_FUNCTION "DestroyInstance"
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+typedef int (* CREATE_OBJECT)(BasicHandler **inst);
+typedef int (* DELETE_OBJECT)(BasicHandler *inst);
 
-#include "AxisUserAPI.h"
+#if defined(USE_LTDL)
+#include "ltdl.h"
+#define DLHandler lt_dlhandle
+#elif defined(WIN32)
+#include <windows.h>
+#define DLHandler HINSTANCE
+#define RTLD_LAZY 0
+#else //Linux
+#include <dlfcn.h>
+#define DLHandler void*
+#endif
+
+//status codes
+#define HANDLER_INIT_FAIL	1
+#define CREATION_FAILED		2
+#define LOADLIBRARY_FAILED	3
+#define LIBRARY_PATH_EMPTY	4
+#define HANDLER_NOT_LOADED	5
+#define HANDLER_BEING_USED	6
+#define GET_HANDLER_FAILED	7
+#define WRONG_HANDLER_TYPE	8
+#define NO_HANDLERS_CONFIGURED	9
 /**
-    @class IDeployerUtils
-    @brief interface for the IDeployerUtils class.
+    @class HandlerLoader
+    @brief
 
 
-    @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+
+    @author Susantha Kumara (skumara@virtusa.com)
 */
-class IDeployerUtils
+class HandlerLoader : protected SharedObject
 {
+private:
+	class HandlerInformation
+	{
+	public:
+		string m_sLib;
+		int m_nLoadOptions;
+		DLHandler m_Handler;
+		CREATE_OBJECT m_Create;
+		DELETE_OBJECT m_Delete;
+		int m_nObjCount;
+	public:
+		HandlerInformation()
+		{
+			m_sLib = "";
+			m_nObjCount = 0;
+		}
+	};
+
+	map<int, HandlerInformation*> m_HandlerInfoList;
+
 public:
-	virtual int UpdateWSDD() =0;
-	virtual int unDeploy(string sServiceName) = 0;
-	virtual int deploy(string sServiceName, string sDllPath, Axis_Array inArray) = 0;
-	virtual ~IDeployerUtils() {};
+	int CreateHandler(BasicHandler** pHandler, int nLibId);
+	int DeleteHandler(BasicHandler* pHandler, int nLibId);
+	HandlerLoader();
+	~HandlerLoader();
+private:
+	int LoadLib(HandlerInformation* pHandlerInfo);
+	int UnloadLib(HandlerInformation* pHandlerInfo);
 };
 
-#endif // !defined(AFX_IDEPLOYERUTILS_H__911B3371_0BB8_4818_ACC8_6A6049E109B9__INCLUDED_)
+
+#endif //__HANDLERLOADER_H_INCLUDED__

@@ -1,3 +1,5 @@
+/* -*- C++ -*- */
+
 /*
  * The Apache Software License, Version 1.1
  *
@@ -55,83 +57,38 @@
  *
  */
 
-// AxisUtils.h:
+
+// IDeployerUtils.h:
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_AXISUTILS_H__B5175A8C_0210_417D_BA43_6AAAF7E03551__INCLUDED_)
-#define AFX_AXISUTILS_H__B5175A8C_0210_417D_BA43_6AAAF7E03551__INCLUDED_
 
-#include "GDefine.h"
+// IDeployerUtils.h: interface for the IDeployerUtils class.
+//
+//////////////////////////////////////////////////////////////////////
 
-#include <string>
-using namespace std;
+#if !defined(AFX_IDEPLOYERUTILS_H__911B3371_0BB8_4818_ACC8_6A6049E109B9__INCLUDED_)
+#define AFX_IDEPLOYERUTILS_H__911B3371_0BB8_4818_ACC8_6A6049E109B9__INCLUDED_
 
-#define CONVERT_BUFFER_SIZE 1024
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+
+#include <axis/common/AxisUserAPI.h>
 /**
-    @class AxisUtils
-    @brief interface for the AxisUtils class.
+    @class IDeployerUtils
+    @brief interface for the IDeployerUtils class.
 
-    @author Susantha Kumara (skumara@virtusa.com)
+
     @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
 */
-class AxisUtils  
+class IDeployerUtils
 {
-	friend class TypeMapping;
-	friend class URIMapping;
 public:
-	/**
-	 * Converts the given character pointer value to lowercase.
-	 * @param pchWord The character pointer to be converted.
-	 * @return The converted lowercase character value
-	 */
-	static char* toLowerCase(const char* pchWord);
-	/**
-	 * Converts the given string to lowercase.
-	 * @param pchWord The string to be converted.
-	 * @return The converted lowercase string value
-	 */
-	static string toLowerCase(const string sWord);
-	/**
-	 * Converts the given character pointer value to uppercase.
-	 * @param pchWord The character pointer to be converted.
-	 * @return The converted uppercase character value
-	 */
-	static char* toUpperCase(const char* pchWord);
-	/**
-	 * Converts the given string to uppercase.
-	 * @param pchWord The string to be converted.
-	 * @return The converted uppercase string value
-	 */
-	static string toUpperCase(const string sWord);
-	/**
-	 * Searchs for the specified character in the given character array and returns whether it is found or not.
-	 * @param pchStringToSearch The character array to be searched.
-	 * @param cCharacter The character to search.
-	 */
-	static bool isCharacterAvailable(const char *pchStringToSearch, const char cCharacter);
-	/**
-	 * Searchs for the specified character in the given string and returns whether it is found or not.
-	 * @param sString The string array to be searched.
-	 * @param cCharacter The character to search.
-	 */
-	static bool isCharacterAvailable(const string &sString, const char cCharacter);
-	/**
-	 * Clears the content of passed character array
-	 * @param arrCh The character array which is to be cleared.
-	 * @param iSize The size of the array which is to be cleared.
-	 */
-	static int clearArray(char* arrCh, int iSize);
-	static void Initialize();
-	static const AxisXMLCh* ToAxisXMLCh(const AxisChar* pch);
-	AxisUtils();
-	virtual ~AxisUtils();
-	// any usefull static const AxisXMLCh strings. 
-    
-private:
-	static const AxisXMLCh* Convert(const AxisChar* pch);
-	static AxisXMLCh m_Buffer[CONVERT_BUFFER_SIZE];   
-    
+	virtual int UpdateWSDD() =0;
+	virtual int unDeploy(string sServiceName) = 0;
+	virtual int deploy(string sServiceName, string sDllPath, Axis_Array inArray) = 0;
+	virtual ~IDeployerUtils() {};
 };
 
-#endif // !defined(AFX_AXISUTILS_H__B5175A8C_0210_417D_BA43_6AAAF7E03551__INCLUDED_)
+#endif // !defined(AFX_IDEPLOYERUTILS_H__911B3371_0BB8_4818_ACC8_6A6049E109B9__INCLUDED_)

@@ -65,10 +65,10 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <axis/engine/HandlerPool.h>
-#include <axis/engine/AppScopeHandlerPool.h>
-#include <axis/engine/RequestScopeHandlerPool.h>
-#include <axis/engine/SessionScopeHandlerPool.h>
+#include "HandlerPool.h"
+#include "AppScopeHandlerPool.h"
+#include "RequestScopeHandlerPool.h"
+#include "SessionScopeHandlerPool.h"
 #include <axis/wsdd/WSDDDeployment.h>
 #include <axis/common/AxisTrace.h>
 extern AxisTrace* g_pAT;

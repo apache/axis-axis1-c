@@ -65,10 +65,10 @@
 #pragma warning (disable : 4390) //empty controlled statement found;
 #endif
 
-#include <axis/engine/HandlerLoader.h>
+#include "HandlerLoader.h"
 #include <stdio.h>
-#include <axis/common/AxisUtils.h>
-#include <axis/wsdd/WSDDDeployment.h>
+#include "../common/AxisUtils.h"
+#include "../wsdd/WSDDDeployment.h"
 #include <axis/common/AxisTrace.h>
 extern AxisTrace* g_pAT;
 

@@ -63,7 +63,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <axis/common/AxisSocketUtils.h>
+#include "AxisSocketUtils.h"
 #include <axis/common/GDefine.h>
 #include <stdio.h>
 #if defined(WIN32) && !defined(CYGWIN)

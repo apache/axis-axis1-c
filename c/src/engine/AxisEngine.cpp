@@ -64,9 +64,9 @@
 #include <axis/engine/AxisEngine.h>
 #include <stdio.h>
 
-#include <axis/engine/HandlerPool.h>
-#include <axis/engine/DeserializerPool.h>
-#include <axis/engine/SerializerPool.h>
+#include "HandlerPool.h"
+#include "DeserializerPool.h"
+#include "SerializerPool.h"
 #include <axis/common/AxisTrace.h>
 extern AxisTrace* g_pAT;
 

@@ -54,33 +54,43 @@
  *
  *
  */
-// IArrayBean.h:
+
+// SessionScopeHandlerPool.h:
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_IARRAYBEAN_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_)
-#define AFX_IARRAYBEAN_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_
+#if !defined(AFX_SESSIONSCOPEHANDLERPOOL_H__8F0188D8_B30B_43F9_8F06_8E209D7B8ABE__INCLUDED_)
+#define AFX_SESSIONSCOPEHANDLERPOOL_H__8F0188D8_B30B_43F9_8F06_8E209D7B8ABE__INCLUDED_
 
-#include "GDefine.h"
-#include "AxisUserAPI.h"
+#define SESSIONLESSHANDLERS	"0aaaaa"
+
+#include "SharedObject.h"
+#include <axis/common/BasicHandler.h>
+
+#include <map>
+#include <list>
+#include <string>
+
+using namespace std;
 /**
-    @class IArrayBean
-    @brief interface for the IArrayBean class.
-
+    @class SessionScopeHandlerPool
+    @brief interface for the SessionScopeHandlerPool class.
 
 
     @author Susantha Kumara (skumara@virtusa.com)
 */
-class IArrayBean  
+class SessionScopeHandlerPool : protected SharedObject  
 {
 public:
-	IArrayBean(){};
-	virtual ~IArrayBean(){};
-	//API needed for the Wrapper class to manipulate ArrayBeans
-	virtual void SetDimension(int nDim)=0;
-	virtual void SetItemName(const AxisChar* sName)=0;
-	virtual void SetTypeName(const AxisChar* sName)=0;
-	virtual void SetUri(const AxisChar* sURI)=0;
+	SessionScopeHandlerPool();
+	virtual ~SessionScopeHandlerPool();
+private:
+	typedef map<string, list<BasicHandler*> > SessionHandlers;
+	map<int, SessionHandlers*> m_Handlers;
+public:
+	int GetInstance(string& sSessionId, BasicHandler** pHandler, int nLibId);
+	int PutInstance(string& sSessionId, BasicHandler* pHandler, int nLibId);
+	void EndSession(string& sSessionId);
 };
 
-#endif // !defined(AFX_IARRAYBEAN_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_)
+#endif // !defined(AFX_SESSIONSCOPEHANDLERPOOL_H__8F0188D8_B30B_43F9_8F06_8E209D7B8ABE__INCLUDED_)

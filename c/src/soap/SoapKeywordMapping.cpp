@@ -64,7 +64,7 @@
 
 #include <axis/soap/SoapKeywordMapping.h>
 #include <axis/soap/Attribute.h>
-#include <axis/common/AxisUtils.h>
+#include "../common/AxisUtils.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

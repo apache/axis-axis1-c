@@ -60,8 +60,8 @@
  */
 #include <stdio.h>
 
-#include <axis/common/AxisTime.h>
-#include <axis/common/AxisUtils.h>
+#include "AxisTime.h"
+#include "AxisUtils.h"
 
 #define TIMEBUFFSIZE 80
 

@@ -65,7 +65,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <axis/soap/SoapFault.h>
+#include "SoapFault.h"
 #include <axis/soap/SoapSerializer.h>
 #include <axis/soap/SoapEnvVersions.h>
 #include <axis/common/GDefine.h>

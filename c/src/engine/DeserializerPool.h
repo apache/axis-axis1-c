@@ -53,112 +53,37 @@
  * <http://www.apache.org/>.
  *
  *
- *
- *
- * @author Susantha Kumara (skumara@virtusa.com)
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- *
  */
-
-// AxisUtils.cpp: implementation of the AxisUtils class.
+// DeserializerPool.h:
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "AxisUtils.h"
+#if !defined(AFX_DESERIALIZERPOOL_H__702116EF_3134_4ED4_8252_BEC1FC30E825__INCLUDED_)
+#define AFX_DESERIALIZERPOOL_H__702116EF_3134_4ED4_8252_BEC1FC30E825__INCLUDED_
+
+#include "SharedObject.h"
+#include <axis/soap/SoapDeSerializer.h>
 #include <axis/common/GDefine.h>
+#include <list>
 
-AxisXMLCh AxisUtils::m_Buffer[CONVERT_BUFFER_SIZE]; 
+using namespace std;
+/**
+    @class DeserializerPool
+    @brief interface for the DeserializerPool class.
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
-AxisUtils::AxisUtils()
+    @author Susantha Kumara (skumara@virtusa.com)
+*/
+class DeserializerPool : protected SharedObject  
 {
+public:
+	DeserializerPool();
+	virtual ~DeserializerPool();
+private:
+	list<SoapDeSerializer*> m_DZList;
+public:
+	int GetInstance(SoapDeSerializer** ppDZ);
+	int PutInstance(SoapDeSerializer* pDZ);
+};
 
-}
-
-AxisUtils::~AxisUtils()
-{
-
-}
-
-const AxisXMLCh* AxisUtils::ToAxisXMLCh(const AxisChar* pch)
-{
-//	return XMLString::transcode(pch); //this is ok as long as we use xerces library.
-	return pch;
-}
-
-void AxisUtils::Initialize()
-{
-}
-
-//following functions is not thread safe and should only be used 
-//for initialization purposes.
-const AxisXMLCh* AxisUtils::Convert(const AxisChar* pch)
-{
-//	if (XMLString::transcode(pch, m_Buffer, CONVERT_BUFFER_SIZE))
-//		return m_Buffer;
-//	return NULL;
-	return pch;
-}
-
-
-int AxisUtils::clearArray(char *arrCh, int iSize)
-{
-	for(int iTmp=0; iTmp<iSize; iTmp++) {
-		arrCh[iTmp] = '\0';
-	}
-
-	return AXIS_SUCCESS;
-}
-
-bool AxisUtils::isCharacterAvailable(const string &sString, const char cCharacter)
-{
-	bool bFoundStatus = false;
-
-	if ((sString.find(cCharacter, 0)) != string::npos) {
-		bFoundStatus = true;
-	}
-
-	return bFoundStatus;
-}
-
-bool AxisUtils::isCharacterAvailable(const char *pchStringToSearch, const char cCharacter)
-{
-	bool bFoundStatus = false;
-
-	if ( strchr(pchStringToSearch, cCharacter) ) {
-		bFoundStatus = true;
-	}
-
-	return bFoundStatus;
-}
-
-string AxisUtils::toUpperCase(const string sWord)
-{
-	/*Fill the code*/
-
-	return NULL;
-}
-
-char* AxisUtils::toUpperCase(const char *pchWord)
-{
-	/*Fill the code*/
-
-	return NULL;
-}
-
-string AxisUtils::toLowerCase(const string sWord)
-{
-	/*Fill the code*/
-
-	return NULL;
-}
-
-char* AxisUtils::toLowerCase(const char *pchWord)
-{
-	/*Fill the code*/
-
-	return NULL;
-}
+#endif // !defined(AFX_DESERIALIZERPOOL_H__702116EF_3134_4ED4_8252_BEC1FC30E825__INCLUDED_)

@@ -72,14 +72,14 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include <axis/soap/SoapEnvelope.h>
+#include "SoapEnvelope.h"
 #include <axis/soap/SoapSerializer.h>
 #include <axis/soap/HeaderBlock.h>
 #include <axis/common/GDefine.h>
 #include <axis/common/Packet.h>
-#include <axis/common/ArrayBean.h>
+#include "../common/ArrayBean.h"
 #include <axis/common/BasicTypeSerializer.h>
-#include <axis/soap/SoapKeywordMapping.h>
+#include "../soap/SoapKeywordMapping.h"
 #include <stdio.h>
 #include <stdarg.h>
 

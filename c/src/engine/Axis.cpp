@@ -69,7 +69,7 @@
 #endif
 
 
-#include <axis/engine/ServerAxisEngine.h>
+#include "ServerAxisEngine.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
@@ -77,23 +77,23 @@
 #include <string>
 #include <map>
 
-#include <axis/soap/SoapFault.h>
-#include <axis/soap/URIMapping.h>
-#include <axis/soap/SoapKeywordMapping.h>
-#include <axis/engine/HandlerLoader.h>
-#include <axis/engine/AppScopeHandlerPool.h>
-#include <axis/engine/RequestScopeHandlerPool.h>
-#include <axis/engine/SessionScopeHandlerPool.h>
-#include <axis/engine/HandlerPool.h>
-#include <axis/engine/SerializerPool.h>
-#include <axis/engine/DeserializerPool.h>
-#include <axis/wsdd/WSDDDeployment.h>
-#include <axis/common/AxisUtils.h>
+#include "../soap/SoapFault.h"
+#include "../soap/URIMapping.h"
+#include "../soap/SoapKeywordMapping.h"
+#include "HandlerLoader.h"
+#include "AppScopeHandlerPool.h"
+#include "RequestScopeHandlerPool.h"
+#include "SessionScopeHandlerPool.h"
+#include "HandlerPool.h"
+#include "SerializerPool.h"
+#include "DeserializerPool.h"
+#include "../wsdd/WSDDDeployment.h"
+#include "../common/AxisUtils.h"
 #include <axis/common/AxisConfig.h>
-#include <axis/wsdd/WSDDKeywords.h>
+#include "../wsdd/WSDDKeywords.h"
 #include <axis/common/AxisTrace.h>
 
-#include <axis/client/Call.h>
+#include <client/Call.h>
 
 #define BYTESTOREAD 64
 //the relative location of the wsdl files hardcoded
