@@ -53,112 +53,85 @@
  * <http://www.apache.org/>.
  *
  *
- *
- *
- * @author Susantha Kumara (skumara@virtusa.com)
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- *
  */
 
-// AxisUtils.cpp: implementation of the AxisUtils class.
+// AxisUtils.h:
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "AxisUtils.h"
+#if !defined(AFX_AXISUTILS_H__B5175A8C_0210_417D_BA43_6AAAF7E03551__INCLUDED_)
+#define AFX_AXISUTILS_H__B5175A8C_0210_417D_BA43_6AAAF7E03551__INCLUDED_
+
 #include <axis/common/GDefine.h>
 
-AxisXMLCh AxisUtils::m_Buffer[CONVERT_BUFFER_SIZE]; 
+#include <string>
+using namespace std;
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+#define CONVERT_BUFFER_SIZE 1024
+/**
+    @class AxisUtils
+    @brief interface for the AxisUtils class.
 
-AxisUtils::AxisUtils()
+    @author Susantha Kumara (skumara@virtusa.com)
+    @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+*/
+class AxisUtils  
 {
+	friend class TypeMapping;
+	friend class URIMapping;
+public:
+	/**
+	 * Converts the given character pointer value to lowercase.
+	 * @param pchWord The character pointer to be converted.
+	 * @return The converted lowercase character value
+	 */
+	static char* toLowerCase(const char* pchWord);
+	/**
+	 * Converts the given string to lowercase.
+	 * @param pchWord The string to be converted.
+	 * @return The converted lowercase string value
+	 */
+	static string toLowerCase(const string sWord);
+	/**
+	 * Converts the given character pointer value to uppercase.
+	 * @param pchWord The character pointer to be converted.
+	 * @return The converted uppercase character value
+	 */
+	static char* toUpperCase(const char* pchWord);
+	/**
+	 * Converts the given string to uppercase.
+	 * @param pchWord The string to be converted.
+	 * @return The converted uppercase string value
+	 */
+	static string toUpperCase(const string sWord);
+	/**
+	 * Searchs for the specified character in the given character array and returns whether it is found or not.
+	 * @param pchStringToSearch The character array to be searched.
+	 * @param cCharacter The character to search.
+	 */
+	static bool isCharacterAvailable(const char *pchStringToSearch, const char cCharacter);
+	/**
+	 * Searchs for the specified character in the given string and returns whether it is found or not.
+	 * @param sString The string array to be searched.
+	 * @param cCharacter The character to search.
+	 */
+	static bool isCharacterAvailable(const string &sString, const char cCharacter);
+	/**
+	 * Clears the content of passed character array
+	 * @param arrCh The character array which is to be cleared.
+	 * @param iSize The size of the array which is to be cleared.
+	 */
+	static int clearArray(char* arrCh, int iSize);
+	static void Initialize();
+	static const AxisXMLCh* ToAxisXMLCh(const AxisChar* pch);
+	AxisUtils();
+	virtual ~AxisUtils();
+	// any usefull static const AxisXMLCh strings. 
+    
+private:
+	static const AxisXMLCh* Convert(const AxisChar* pch);
+	static AxisXMLCh m_Buffer[CONVERT_BUFFER_SIZE];   
+    
+};
 
-}
-
-AxisUtils::~AxisUtils()
-{
-
-}
-
-const AxisXMLCh* AxisUtils::ToAxisXMLCh(const AxisChar* pch)
-{
-//	return XMLString::transcode(pch); //this is ok as long as we use xerces library.
-	return pch;
-}
-
-void AxisUtils::Initialize()
-{
-}
-
-//following functions is not thread safe and should only be used 
-//for initialization purposes.
-const AxisXMLCh* AxisUtils::Convert(const AxisChar* pch)
-{
-//	if (XMLString::transcode(pch, m_Buffer, CONVERT_BUFFER_SIZE))
-//		return m_Buffer;
-//	return NULL;
-	return pch;
-}
-
-
-int AxisUtils::clearArray(char *arrCh, int iSize)
-{
-	for(int iTmp=0; iTmp<iSize; iTmp++) {
-		arrCh[iTmp] = '\0';
-	}
-
-	return AXIS_SUCCESS;
-}
-
-bool AxisUtils::isCharacterAvailable(const string &sString, const char cCharacter)
-{
-	bool bFoundStatus = false;
-
-	if ((sString.find(cCharacter, 0)) != string::npos) {
-		bFoundStatus = true;
-	}
-
-	return bFoundStatus;
-}
-
-bool AxisUtils::isCharacterAvailable(const char *pchStringToSearch, const char cCharacter)
-{
-	bool bFoundStatus = false;
-
-	if ( strchr(pchStringToSearch, cCharacter) ) {
-		bFoundStatus = true;
-	}
-
-	return bFoundStatus;
-}
-
-string AxisUtils::toUpperCase(const string sWord)
-{
-	/*Fill the code*/
-
-	return NULL;
-}
-
-char* AxisUtils::toUpperCase(const char *pchWord)
-{
-	/*Fill the code*/
-
-	return NULL;
-}
-
-string AxisUtils::toLowerCase(const string sWord)
-{
-	/*Fill the code*/
-
-	return NULL;
-}
-
-char* AxisUtils::toLowerCase(const char *pchWord)
-{
-	/*Fill the code*/
-
-	return NULL;
-}
+#endif // !defined(AFX_AXISUTILS_H__B5175A8C_0210_417D_BA43_6AAAF7E03551__INCLUDED_)

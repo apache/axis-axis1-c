@@ -63,12 +63,12 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include <axis/xml/Event.h>
+#include "../xml/Event.h"
 #include <axis/xml/Attribute.h>
-#include <axis/xml/StartElement.h>
+#include "../xml/StartElement.h"
 using namespace axisxml;
 
-#include <axis/soap/SoapParserExpat.h>
+#include "SoapParserExpat.h"
 
 SoapParserExpat::SoapParserExpat()
 {

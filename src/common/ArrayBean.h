@@ -1,5 +1,3 @@
-/* -*- C++ -*- */
-
 /*
  * The Apache Software License, Version 1.1
  *
@@ -54,58 +52,59 @@
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  *
+ *
  */
 
-// Param.h:
+
+// ArrayBean.h:
 //
 //////////////////////////////////////////////////////////////////////
-#ifdef WIN32
-#pragma warning (disable : 4786)
-#endif
 
-#if !defined(AFX_PARAM_H__351B13BB_5D03_40C5_93F5_56D17295A8BD__INCLUDED_)
-#define AFX_PARAM_H__351B13BB_5D03_40C5_93F5_56D17295A8BD__INCLUDED_
+#if !defined(AFX_ARRAYBEAN_H__374BEDCF_E850_4907_9CF0_F2EBC61E54CF__INCLUDED_)
+#define AFX_ARRAYBEAN_H__374BEDCF_E850_4907_9CF0_F2EBC61E54CF__INCLUDED_
 
-#include "IParam.h"
-#include "BasicTypeSerializer.h"
-#include "AxisTime.h"
+#include "IArrayBean.h"
+#include <axis/common/IParam.h>
+#include <axis/common/BasicTypeSerializer.h>
 
-#include <string>
+#include <list>
 using namespace std;
 
-class ArrayBean;
 /**
-    @class Param
-    @brief interface for the Param class.
+    @class ArrayBean
+    @brief interface for the ArrayBeanI class.
 
+    This class is used inside Param class and wrapper classes only.
 
     @author Susantha Kumara (skumara@virtusa.com)
 */
-class Param : public IParam
+class ArrayBean : public IArrayBean
 {
-	friend class SoapSerializer;
+	friend class Param;
 public:
-	Param(){ m_Type = USER_TYPE;}; //if there is no attribute that says the type
-	virtual ~Param();
+	ArrayBean();
+	virtual ~ArrayBean();
+	virtual int Serialize(SoapSerializer& pSZ);
+	int GetArraySize();
 
+public:
+	XSDTYPE m_type; //array element type
+	int m_nSize; //array size only one dimensional arrays
+	AxisString m_ItemName;//name of an item like <item>34</item>
+	union uAValue //this is useful only when Param is used as a return parameter
+	{
+		void* sta; //simple type array
+		ComplexObjectHandler* cta; //complex type array
+	}m_value;
 private:
-	uParamValue m_Value;
-	AxisString m_sName; //Name of the parameter
-	XSDTYPE m_Type; //Type of the parameter
-
-private:
-	AxisString m_strPrefix; //needed in serialization only
-	AxisString m_strUri; //needed in serialization only
-
-public: 
-	int SetValue(XSDTYPE nType, uParamValue Value);
-	int serialize(SoapSerializer& pSZ);
-	void setPrefix(const AxisChar* prefix);
-	void setUri(const AxisChar* uri);
-	int SetArrayElements(void* pElements);
-	int SetArrayElements(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct, AXIS_OBJECT_SIZE_FUNCT pSizeFunct);
-	int SetUserType(void* pObject, AXIS_DESERIALIZE_FUNCT pDZFunct, AXIS_OBJECT_DELETE_FUNCT pDelFunct);
-	void SetName(const AxisChar* sName);
+	AxisString m_TypeName;
+	AxisString m_URI;
+public: //IArrayBean Interface
+	void SetDimension(int nDim);
+	void SetItemName(const AxisChar* sName);
+	void SetTypeName(const AxisChar* sName);
+	void SetUri(const AxisChar* sURI);
+	void RemoveArrayPointer();
 };
 
-#endif // !defined(AFX_PARAM_H__351B13BB_5D03_40C5_93F5_56D17295A8BD__INCLUDED_)
+#endif // !defined(AFX_ARRAYBEAN_H__374BEDCF_E850_4907_9CF0_F2EBC61E54CF__INCLUDED_)

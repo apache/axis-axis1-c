@@ -66,8 +66,8 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <axis/wsdd/WSDDDeployment.h>
-#include <axis/wsdd/WSDDDocument.h>
+#include "WSDDDeployment.h"
+#include "WSDDDocument.h"
 #include <axis/common/GDefine.h>
 #include <axis/common/AxisConfig.h>
 #include <axis/common/AxisTrace.h>
