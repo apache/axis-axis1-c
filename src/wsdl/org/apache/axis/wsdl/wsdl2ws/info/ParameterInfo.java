@@ -114,6 +114,16 @@ public class ParameterInfo
                     attribName.lastIndexOf(SymbolTable.ANON_TOKEN) + 1,
                     attribName.length());
         }
+        
+        if( result.charAt(0) == '_') //  Make sure SOAP tag name is not prefixed
+				     //	 because it is a key word
+        {
+            String tagname = result.substring(1, result.length() );
+            if( result.equals( TypeMap.resolveWSDL2LanguageNameClashes(tagname,
+		                WrapperConstants.LANGUAGE_CPP)))
+		result = tagname;
+
+        }
         return result;
     }
 
@@ -140,6 +150,7 @@ public class ParameterInfo
             TypeMap.resolveWSDL2LanguageNameClashes(
                 paramName,
                 WrapperConstants.LANGUAGE_CPP);
+        
         //Samisa
         this.attribName = paramName;
     }
