@@ -73,7 +73,13 @@ int SOAPTransportFactory::initialize()
         else
         {
             void (*initializeLibrary) (void);
+#if defined(USE_LTDL)
+            initializeLibrary = (void (*)(void))lt_dlsym(m_LibHandler, INIT_FUNCTION);
+#elif defined(WIN32)
+            initializeLibrary = (void (*)(void))GetProcAddress(m_LibHandler, INIT_FUNCTION);
+#else
             initializeLibrary = (void (*)(void))dlsym(m_LibHandler, INIT_FUNCTION);
+#endif
             if (initializeLibrary)
                  (*initializeLibrary)();
             return AXIS_SUCCESS;
@@ -91,7 +97,13 @@ int SOAPTransportFactory::initialize()
 int SOAPTransportFactory::uninitialize()
 {
             void (*uninitializeLibrary) (void);
+#if defined(USE_LTDL)
+            uninitializeLibrary = (void (*)(void))lt_dlsym(m_LibHandler, UNINIT_FUNCTION);
+#elif defined(WIN32)
+            uninitializeLibrary = (void (*)(void))GetProcAddress(m_LibHandler, UNINIT_FUNCTION);
+#else
             uninitializeLibrary = (void (*)(void))dlsym(m_LibHandler, UNINIT_FUNCTION);
+#endif
             if (uninitializeLibrary)
                  (*uninitializeLibrary)();
 	return unloadLib();
