@@ -67,6 +67,7 @@
 
 #define toString(X) XMLString::transcode(X)
 #define toXMLCh(X) XMLString::transcode(X)
+#define REL(X) XMLString::release(X);
 
 
 WSDDDocument::WSDDDocument()
@@ -80,6 +81,8 @@ WSDDDocument::WSDDDocument()
 	svsMap = new WSDDServiceMap();
 	tempTr = new WSDDTransport();
 	protocol = APTOTHER;
+	ch = NULL;
+	xch = NULL;
 }
 
 WSDDDocument::~WSDDDocument()
@@ -120,22 +123,28 @@ void WSDDDocument::startElement(const XMLCh *const uri,
 							const XMLCh *const qname, 
 							const Attributes &attrs)
 {
+	ch = XMLString::transcode(localname);
+	xchName = toXMLCh("name");
+	xchValue = toXMLCh("value");
+	xchType = toXMLCh("type");
+	svsch = toString(attrs.getValue(xchName));
+
 	switch(lev0)
 	{
 		case WSDD_UNKNOWN:
-			if(strcmp(XMLString::transcode(localname), "globalConfiguration")==0)
+
+			if(strcmp(ch, "globalConfiguration")==0)
 			{
 				lev0=WSDD_GLOBCONF;
 			}
-			if(strcmp(XMLString::transcode(localname), "service")==0)
+			if(strcmp(ch, "service")==0)
 			{
 				lev0=WSDD_SERVICE;
 			}
-			if(strcmp(XMLString::transcode(localname), "transport")==0)
+			if(strcmp(ch, "transport")==0)
 			{
 				lev0=WSDD_TRANSPORT;
 			}
-
 			if(lev0==WSDD_UNKNOWN)
 			{
 				break;
@@ -148,67 +157,69 @@ void WSDDDocument::startElement(const XMLCh *const uri,
 	{
 		case WSDD_GLOBCONF:
 			//cout<<"we are in glob conf"<<endl;
-			if(strcmp(XMLString::transcode(localname), "requestFlow")==0)
+			if(strcmp(ch, "requestFlow")==0)
 			{
 				globReqFlowHanList = new WSDDHandlerList();
 				lev1=WSDD_REQFLOW;
 			}
-			if(strcmp(XMLString::transcode(localname), "responseFlow")==0)
+			if(strcmp(ch, "responseFlow")==0)
 			{
 				globResFlowHanList = new WSDDHandlerList();
 				lev1=WSDD_RESFLOW;
 			}
+
+			xch = toXMLCh("type");			
 			switch(lev1)
 			{
 				case WSDD_REQFLOW:
 					//cout<<"we are in glob conf>requestflow"<<endl;
-					if(strcmp(XMLString::transcode(localname), "handler")==0)
+					if(strcmp(ch, "handler")==0)
 					{
 						tempHandler = new WSDDHandler();
-						string sLibName = toString(attrs.getValue(toXMLCh("type")));
+						string sLibName = toString(attrs.getValue(xch));
 						tempHandler->SetLibName(sLibName);
 						globReqFlowHanList->push_back(tempHandler);
 						tempHandler = NULL;
 					}
 				break;
 				case WSDD_RESFLOW:
-					if(strcmp(XMLString::transcode(localname), "handler")==0)
+					if(strcmp(ch, "handler")==0)
 					{
 						tempHandler = new WSDDHandler();
-						string sLibName = toString(attrs.getValue(toXMLCh("type")));
+						string sLibName = toString(attrs.getValue(xch));
 						tempHandler->SetLibName(sLibName);
 						globResFlowHanList->push_back(tempHandler);
 						tempHandler = NULL;
 					}
 
 				break;
-			
 			}
+			REL(&xch);
 		break;
 
 
 		case WSDD_SERVICE:
-			if(strcmp(XMLString::transcode(localname), "service")==0)
+			if(strcmp(ch, "service")==0)
 			{
 				tempService = new WSDDService();
-				string sSrvName = toString(attrs.getValue(toXMLCh("name")));
+				string sSrvName = toString(attrs.getValue(xchName));
 				tempService->SetServiceName(sSrvName);
-				(*svsMap)[toString(attrs.getValue(toXMLCh("name")))]=tempService;
+				(*svsMap)[toString(attrs.getValue(xchName))]=tempService;
 
 				cout<<toString(attrs.getValue(toXMLCh("name")))<<endl;
 			}
 			//The check for lev1==WSDD_UNKNOWN is necessary because
 			//parameter elements can occur inside handler elements
-			if(strcmp(XMLString::transcode(localname), "parameter")==0 && (lev1==WSDD_UNKNOWN))
+			if(strcmp(ch, "parameter")==0 && (lev1==WSDD_UNKNOWN))
 			{
 				lev1=WSDD_PARAM;
 			}
-			if(strcmp(XMLString::transcode(localname), "requestFlow")==0)
+			if(strcmp(ch, "requestFlow")==0)
 			{
 				lev1=WSDD_REQFLOW;
 				tempHandlerList = new WSDDHandlerList();
 			}
-			if(strcmp(XMLString::transcode(localname), "responseFlow")==0)
+			if(strcmp(ch, "responseFlow")==0)
 			{
 				lev1=WSDD_RESFLOW;
 				tempHandlerList = new WSDDHandlerList();
@@ -216,18 +227,18 @@ void WSDDDocument::startElement(const XMLCh *const uri,
 			switch(lev1)
 			{
 				case WSDD_PARAM:
-					if(strcmp(toString(attrs.getValue(toXMLCh("name"))), "className")==0)
+					if(strcmp(svsch, "className")==0)
 					{
-						string sLibName = toString(attrs.getValue(toXMLCh("value")));
+						string sLibName = toString(attrs.getValue(xchValue));
 						tempService->SetLibName(sLibName);
 						//cout<<toString(attrs.getValue(toXMLCh("value")))<<" The class name"<<endl;
 					}
-					if(strcmp(toString(attrs.getValue(toXMLCh("name"))), "allowedMethods")==0)
+					if(strcmp(svsch, "allowedMethods")==0)
 					{
-						string sLibName = toString(attrs.getValue(toXMLCh("value")));
+						string sLibName = toString(attrs.getValue(xchValue));
 						//cout<<toString(attrs.getValue(toXMLCh("value")))<<" The class name"<<endl;
 						
-						char * x = toString(attrs.getValue(toXMLCh("value")));
+						char * x = toString(attrs.getValue(xchValue));
 						char * y;
 						if(x)
 						{
@@ -239,7 +250,7 @@ void WSDDDocument::startElement(const XMLCh *const uri,
 								y=strtok(NULL," ");
 							} 
 						}
-						XMLString::release(&x);
+						REL(&x);
 						delete y;
 						
 						x=NULL;
@@ -248,32 +259,32 @@ void WSDDDocument::startElement(const XMLCh *const uri,
 				break;
 
 				case WSDD_REQFLOW:
-					if(strcmp(XMLString::transcode(localname), "handler")==0)
+					if(strcmp(ch, "handler")==0)
 					{
 						lev2=WSDD_HANDLER;
 						tempHandler = new WSDDHandler();
-						string sLibName = toString(attrs.getValue(toXMLCh("type")));
+						string sLibName = toString(attrs.getValue(xchType));
 						tempHandler->SetLibName(sLibName);
 						tempHandlerList->push_back(tempHandler);
 					}
 					switch(lev2)
 					{
 						case WSDD_HANDLER:
-							if(strcmp(XMLString::transcode(localname), "parameter")==0)
+							if(strcmp(ch, "parameter")==0)
 							{
-								tempHandler->SetOption(toString(attrs.getValue(toXMLCh("name"))),
-														toString(attrs.getValue(toXMLCh("value"))));
+								tempHandler->SetOption(toString(attrs.getValue(xchName)),
+														toString(attrs.getValue(xchValue)));
 							}
 						break;
 					}
 				break;
 
 				case WSDD_RESFLOW:
-					if(strcmp(XMLString::transcode(localname), "handler")==0)
+					if(strcmp(ch, "handler")==0)
 					{
 						lev2=WSDD_HANDLER;
 						tempHandler = new WSDDHandler();
-						string sLibName = toString(attrs.getValue(toXMLCh("type")));
+						string sLibName = toString(attrs.getValue(xchType));
 						tempHandler->SetLibName(sLibName);
 						tempHandlerList->push_back(tempHandler);
 						//tempHandler = NULL;					
@@ -281,26 +292,27 @@ void WSDDDocument::startElement(const XMLCh *const uri,
 					switch(lev2)
 					{
 						case WSDD_HANDLER:
-							if(strcmp(XMLString::transcode(localname), "parameter")==0)
+							if(strcmp(ch, "parameter")==0)
 							{
-								tempHandler->SetOption(toString(attrs.getValue(toXMLCh("name"))),
-														toString(attrs.getValue(toXMLCh("value"))));
+								tempHandler->SetOption(toString(attrs.getValue(xchName)),
+														toString(attrs.getValue(xchValue)));
 							}
 						break;
 					}
 				break;
 			}
+
 		break;
 
 		case WSDD_TRANSPORT:
-			if(strcmp(XMLString::transcode(localname), "transport")==0)
+			if(strcmp(ch, "transport")==0)
 			{
-				tempHandlerList = new WSDDHandlerList();
-				if(strcmp(toString(attrs.getValue(toXMLCh("name"))), "http")==0)
+				//tempHandlerList = new WSDDHandlerList();
+				if(strcmp(svsch, "http")==0)
 				{
 					protocol =APTHTTP;
 				}
-				if(strcmp(toString(attrs.getValue(toXMLCh("name"))), "local")==0)
+				if(strcmp(svsch, "local")==0)
 				{
 					protocol =APTFTP;
 				}
@@ -310,35 +322,51 @@ void WSDDDocument::startElement(const XMLCh *const uri,
 				}
 
 			}
-			if(strcmp(XMLString::transcode(localname), "requestFlow")==0)
+			if(strcmp(ch, "requestFlow")==0)
 			{
 				lev1=WSDD_REQFLOW;
+				tempHandlerList = new WSDDHandlerList();
 			}
-
+			if(strcmp(ch, "responseFlow")==0)
+			{
+				lev1=WSDD_RESFLOW;
+				tempHandlerList = new WSDDHandlerList();
+			}
 			switch(lev1)
 			{
 				case WSDD_REQFLOW:
 					//cout<<"we are in glob conf>requestflow"<<endl;
-					if(strcmp(XMLString::transcode(localname), "handler")==0)
+					if(strcmp(ch, "handler")==0)
 					{
-						lev2=WSDD_HANDLER;
 						tempHandler = new WSDDHandler();
-						string sLibName = toString(attrs.getValue(toXMLCh("type")));
+						string sLibName = toString(attrs.getValue(xchType));
 						tempHandler->SetLibName(sLibName);
 						tempHandlerList->push_back(tempHandler);
-
-					}
-					switch(lev2)
-					{
-						case WSDD_HANDLER:
-						break;
+						tempHandler = NULL;
 					}
 				break;
-			
+
+				case WSDD_RESFLOW:
+					//cout<<"we are in glob conf>requestflow"<<endl;
+					if(strcmp(ch, "handler")==0)
+					{
+						tempHandler = new WSDDHandler();
+						string sLibName = toString(attrs.getValue(xchType));
+						tempHandler->SetLibName(sLibName);
+						tempHandlerList->push_back(tempHandler);
+						tempHandler = NULL;
+					}
+				break;				
+
 			}
 
 		break;
 	}
+	REL(&ch);
+	REL(&xchName);
+	REL(&xchValue);
+	REL(&xchType);
+	REL(&svsch);
 
 }	
 
@@ -346,24 +374,25 @@ void  WSDDDocument::endElement (const XMLCh *const uri,
 				  const XMLCh *const localname, 
 				  const XMLCh *const qname)
 {
+	ch = XMLString::transcode(localname);
 	switch (lev0)
 	{
 		case WSDD_GLOBCONF:
-			if(strcmp(XMLString::transcode(localname), "globalConfiguration")==0)
+			if(strcmp(ch, "globalConfiguration")==0)
 			{
 				lev0=WSDD_UNKNOWN;
 			}
 			switch(lev1)
 			{
 				case WSDD_REQFLOW:
-					if(strcmp(XMLString::transcode(localname), "requestFlow")==0)
+					if(strcmp(ch, "requestFlow")==0)
 					{
 						lev1=WSDD_UNKNOWN;
 					}
 					switch(lev2)
 					{
 						case WSDD_HANDLER:
-							if(strcmp(toString(localname), "handler")==0)
+							if(strcmp(ch, "handler")==0)
 							{
 								lev2=WSDD_UNKNOWN;
 							}
@@ -372,14 +401,14 @@ void  WSDDDocument::endElement (const XMLCh *const uri,
 					
 				break;
 				case WSDD_RESFLOW:
-					if(strcmp(XMLString::transcode(localname), "responseFlow")==0)
+					if(strcmp(ch, "responseFlow")==0)
 					{
 						lev1=WSDD_UNKNOWN;
 					}
 					switch(lev2)
 					{
 						case WSDD_HANDLER:
-							if(strcmp(toString(localname), "handler")==0)
+							if(strcmp(ch, "handler")==0)
 							{
 								lev2=WSDD_UNKNOWN;
 							}
@@ -390,14 +419,14 @@ void  WSDDDocument::endElement (const XMLCh *const uri,
 		break;
 
 		case WSDD_REQFLOW:
-			if(strcmp(XMLString::transcode(localname), "requestFlow")==0)
+			if(strcmp(ch, "requestFlow")==0)
 			{
 				lev0=WSDD_UNKNOWN;
 			}
 		break;
 
 		case WSDD_SERVICE:
-			if(strcmp(XMLString::transcode(localname), "service")==0)
+			if(strcmp(ch, "service")==0)
 			{
 				lev0=WSDD_UNKNOWN;
 				tempService = NULL;
@@ -405,13 +434,13 @@ void  WSDDDocument::endElement (const XMLCh *const uri,
 			switch(lev1)
 			{
 				case WSDD_PARAM:
-					if(strcmp(XMLString::transcode(localname), "parameter")==0)
+					if(strcmp(ch, "parameter")==0)
 					{
 						lev1=WSDD_UNKNOWN;
 					}
 				break;
 				case WSDD_REQFLOW:
-					if(strcmp(XMLString::transcode(localname), "requestFlow")==0)
+					if(strcmp(ch, "requestFlow")==0)
 					{
 						lev1=WSDD_UNKNOWN;
 						if(!tempHandlerList->empty())
@@ -428,7 +457,7 @@ void  WSDDDocument::endElement (const XMLCh *const uri,
 					switch(lev2)
 					{
 						case WSDD_HANDLER:
-							if(strcmp(XMLString::transcode(localname), "handler")==0)
+							if(strcmp(ch, "handler")==0)
 							{
 								lev2=WSDD_UNKNOWN;
 								tempHandler = NULL;
@@ -438,7 +467,7 @@ void  WSDDDocument::endElement (const XMLCh *const uri,
 					}
 				break;
 				case WSDD_RESFLOW:
-					if(strcmp(XMLString::transcode(localname), "responseFlow")==0)
+					if(strcmp(ch, "responseFlow")==0)
 					{
 						lev1=WSDD_UNKNOWN;
 						if(!tempHandlerList->empty())
@@ -455,7 +484,7 @@ void  WSDDDocument::endElement (const XMLCh *const uri,
 					switch(lev2)
 					{
 						case WSDD_HANDLER:
-							if(strcmp(XMLString::transcode(localname), "handler")==0)
+							if(strcmp(ch, "handler")==0)
 							{
 								lev2=WSDD_UNKNOWN;
 								tempHandler = NULL;
@@ -468,7 +497,7 @@ void  WSDDDocument::endElement (const XMLCh *const uri,
 		break;
 
 		case WSDD_TRANSPORT:
-			if(strcmp(XMLString::transcode(localname), "transport")==0)
+			if(strcmp(ch, "transport")==0)
 			{
 				protocol=APTOTHER;
 				lev0=WSDD_UNKNOWN;
@@ -477,16 +506,28 @@ void  WSDDDocument::endElement (const XMLCh *const uri,
 			switch(lev1)
 			{
 				case WSDD_REQFLOW:
-					if(strcmp(XMLString::transcode(localname), "requestFlow")==0)
+					if(strcmp(ch, "requestFlow")==0)
 					{
 						tempTr->SetRequestFlowHandlers(protocol, tempHandlerList);
 						tempHandlerList = NULL;
 						lev1=WSDD_UNKNOWN;
 					}
 				break;
+
+				case WSDD_RESFLOW:
+					
+					if(strcmp(ch, "responseFlow")==0)
+					{
+						tempTr->SetResponseFlowHandlers(protocol, tempHandlerList);
+						tempHandlerList = NULL;
+						lev1=WSDD_UNKNOWN;
+					}
+					
+				break;
 			}
 		break;
 	}
+	REL(&ch);
 }
 
 void  WSDDDocument::characters (const XMLCh *const chars, 
