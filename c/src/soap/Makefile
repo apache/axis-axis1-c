@@ -15,7 +15,6 @@ PACKAGE_SRCS = Attribute.cpp \
 	CharacterElement.cpp \
 	ComplexElement.cpp \
 	HeaderBlock.cpp \
-	HeaderEntry.cpp \
 	SoapBody.cpp \
 	SoapDeSerializer.cpp \
 	SoapEnvelope.cpp \
