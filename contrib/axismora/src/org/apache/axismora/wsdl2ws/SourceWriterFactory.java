@@ -58,7 +58,9 @@ package org.apache.axismora.wsdl2ws;
 import org.apache.axismora.wsdl2ws.cpp.ClassLoader;
 import org.apache.axismora.wsdl2ws.cpp.ServiceHeaderWriter;
 import org.apache.axismora.wsdl2ws.cpp.WrapHeaderWriter;
+import org.apache.axismora.wsdl2ws.doclit.AllDocLitParamWriter;
 import org.apache.axismora.wsdl2ws.doclit.DocLitServiceWriter;
+import org.apache.axismora.wsdl2ws.doclit.DocLitStubWriter;
 import org.apache.axismora.wsdl2ws.doclit.DocLitWrapWriter;
 import org.apache.axismora.wsdl2ws.info.WebServiceContext;
 import org.apache.axismora.wsdl2ws.java.AllParamWriter;
@@ -100,6 +102,10 @@ public class SourceWriterFactory {
             return new DocLitServiceWriter(wscontext);
 		else if(genaratorType == WrapperConstants.GENERATOR_DOCLIT_WRAPPER_JAVA)
 			return new DocLitWrapWriter(wscontext);     
+		else if(genaratorType == WrapperConstants.GENERATOR_DOCLIT_PARAM_JAVA)
+				return new AllDocLitParamWriter(wscontext);
+		else if(genaratorType == WrapperConstants.GENERATOR_DOCLIT_STUB_JAVA)
+			return new DocLitStubWriter(wscontext); 
         
         //C++	
         else if (genaratorType == WrapperConstants.GENERATOR_PARAM_CPP_ALL)
