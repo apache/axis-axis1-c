@@ -71,9 +71,9 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include <string>
 #include "../soap/TypeMapping.h"
 
+#include <string>
 using namespace std;
 
 const char XML_ENTITY_REFERENCE_CAHRS[]	= "<>&\"\'";// Entity reference characters
