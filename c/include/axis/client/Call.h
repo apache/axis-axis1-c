@@ -16,8 +16,15 @@
  *
  * @author Sanjaya Singharage (sanjayas@opensource.lk)
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  *
  */
+ 
+/*
+ * Revision 1.1  2004/05/24 samisa
+ * Added accesser to transport 
+ */
+
 
 /* Call.h: interface for the Call class.*/
 
@@ -772,6 +779,8 @@ public:
         const AxisChar* pNamespace);
 
 	int AXISCALL getStatus();
+	
+	SOAPTransport* getTransport() { return m_pTransport; }
 		
 private:
 	int openConnection(int secure);
