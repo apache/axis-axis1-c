@@ -75,7 +75,7 @@
 
 #ifdef WIN32
 //#define WSDDFILEPATH "./Axis/conf/server.wsdd"
-#define WSDDFILEPATH "e:/Axis/server.wsdd"
+#define WSDDFILEPATH "C:/Apache/Axis/server.wsdd"
 #else //For linux
 #define WSDDFILEPATH "/usr/local/axiscpp/axis/server.wsdd"
 #endif
