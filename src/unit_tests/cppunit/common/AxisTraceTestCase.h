@@ -18,8 +18,8 @@
  *
  */
 
-#if !defined(AFX_AXISTRACETESTCASE_H__1B84AE82_FFEA_4FA0_BB45_0F7289578559__OF_AXIS_INCLUDED_)
-#define AFX_AXISTRACETESTCASE_H__1B84AE82_FFEA_4FA0_BB45_0F7289578559__OF_AXIS_INCLUDED_
+#if !defined(AXIS_AXISTRACETESTCASE_H__OF_AXIS_INCLUDED_)
+#define AXIS_AXISTRACETESTCASE_H__OF_AXIS_INCLUDED_
 
 #include "cppunit\TestCase.h"
 #include "cppunit\TestSuite.h"
@@ -34,16 +34,16 @@ using namespace std;
 class AxisTraceTestCase  : public TestCase
 {
 private:
-	AxisTrace* pAxisTrace;
+    AxisTrace* pAxisTrace;
 
 public:
-	static Test* suite();
-	void testTraceOne();
-	void tearDown();
-	void setUp();
-	AxisTraceTestCase();
-	virtual ~AxisTraceTestCase();
+    static Test* suite();
+    void testTraceOne();
+    void tearDown();
+    void setUp();
+    AxisTraceTestCase();
+    virtual ~AxisTraceTestCase();
 
 };
 
-#endif // !defined(AFX_AXISTRACETESTCASE_H__1B84AE82_FFEA_4FA0_BB45_0F7289578559__OF_AXIS_INCLUDED_)
+#endif
