@@ -1,5 +1,4 @@
 <project name="axis" default="war" basedir=".">
-	<property name="geronimo.home" value="C:\Servers\incubator-geronimo-1.0-M1-bin\incubator-geronimo-1.0-M1"/>
 	<property name="build" value="build"/>
 	<property name="jar.dir" location="../../../target/generated/samples/"/>
 	<target name="war" description="Create the web application" >
