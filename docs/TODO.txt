@@ -41,7 +41,7 @@ DOCUMENTATION
 -------------
 * <damitha> 	writing Integration-guide
 ! <team> 	writing user-guide
-
+! <team> 	writing handler API
 
 SAMPLES
 -------
