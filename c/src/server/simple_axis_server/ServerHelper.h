@@ -57,7 +57,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  *
  */
 
@@ -68,6 +68,7 @@
 #include <map>
 
 #include "HTTP_KeyWords.h"
+#include <axis/server/Packet.h>
 
 using namespace std;
 
@@ -87,8 +88,13 @@ struct HTTP_MAP_TYPE {
 	uHttpMapContent* objuHttpMapContent;
 };
 
-int getSeperatedHTTPParts(string sClientReqStream, string& sHTTPHeaders, string& sHTTPBody, map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> *map_HTTP_Headers);
-int	initializeHeaderMap(const string &HeaderLine, map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> *map_HTTP_Headers);
+struct HttpHeaders {
+	char* header_name;
+	char* header_value;
+};
+
+int getSeperatedHTTPParts(string sClientReqStream, string& sHTTPHeaders, string& sHTTPBody, map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> *map_HTTP_Headers, Ax_soapstream* str, HttpHeaders* pHttpHeaders, int iHeaderArraySize, int* piHeaderCount);
+int	initializeHeaderMap(const string &HeaderLine, map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> *map_HTTP_Headers,  Ax_soapstream* str, HttpHeaders* pHttpHeaders, int* piHeaderCount);
 int getHttpHeader(HTTP_MAP_KEYWORDS eKeyWord, map<HTTP_MAP_KEYWORDS, HTTP_MAP_TYPE*> *map_HTTP_Headers, HTTP_MAP_TYPE *objMapContent);
 
 #endif // !defined(AFX_SERVERHELPER_H__INCLUDED_)

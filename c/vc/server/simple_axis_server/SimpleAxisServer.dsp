@@ -68,7 +68,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../../../include" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "__AXISTRACE__" /D "USE_EXPAT_PARSER" /FR /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../../../include" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "USE_EXPAT_PARSER" /FR /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -76,7 +76,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 wsock32.lib AxisServer_D.lib /nologo /subsystem:console /debug /machine:I386 /out:"../../../bin/SimpleAxisServer_D.exe" /pdbtype:sept /libpath:"../../../lib/axis" /libpath:"../../../lib/xerces-c" /libpath:"C:\Expat-1.95.7\Libs" /libpath:"C:\arabica\arabica\lib"
+# ADD LINK32 wsock32.lib AxisServer_D.lib /nologo /subsystem:console /debug /machine:I386 /out:"../../../bin/SimpleAxisServer_D.exe" /pdbtype:sept /libpath:"../../../bin"
 
 !ENDIF 
 
@@ -87,6 +87,14 @@ LINK32=link.exe
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# Begin Source File
+
+SOURCE=..\..\..\src\common\AxisSocketUtils.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\src\common\AxisUtils.cpp
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\..\src\server\simple_axis_server\ServerHelper.cpp
@@ -101,15 +109,7 @@ SOURCE=..\..\..\src\server\simple_axis_server\SimpleAxisServer.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\..\include\server\simple_axis_server\HTTP_KeyWords.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\src\server\simple_axis_server\HTTP_KeyWords.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\include\server\simple_axis_server\ServerHelper.h
 # End Source File
 # Begin Source File
 
