@@ -113,6 +113,37 @@ Stub::setTransportProperties ()
     }
 }
 
+char* Stub::getFirstTrasportPropertyKey()
+{
+    m_viCurrentKey = m_vKeys.begin();
+    m_viCurrentValue = m_vValues.begin();
+
+    if (m_viCurrentKey == m_vKeys.end())
+        return NULL;
+    else
+        return (*m_viCurrentKey);
+}
+
+char* Stub::getNextTrasportPropertyKey()
+{
+    m_viCurrentKey++;
+    m_viCurrentValue++;
+
+    if (m_viCurrentKey == m_vKeys.end())
+        return NULL;
+    else
+        return (*m_viCurrentKey);
+}
+
+char* Stub::getCurrentTrasportPropertyValue()
+{
+    if (m_viCurrentValue == m_vValues.end())
+        return NULL;
+    else
+        return (*m_viCurrentValue);
+}
+
+
 IHeaderBlock *
 Stub::createSOAPHeaderBlock (AxisChar * pachLocalName,
 			 AxisChar * pachPrefix, AxisChar * pachUri)

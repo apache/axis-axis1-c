@@ -13,15 +13,18 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
- * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */
 
-/*
- * This is the client Stub base class to be inherited by all stub classes
- * genarated by the tool WSDL2WS
+/**
+ * @class Stub
+ *
+ * @brief This is the client Stub base class to be inherited by all stub 
+ *        classes genarated by WSDL2WS tool.
  * Stub.h: interface for the Stubclass.
  *
+ * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
+
  */
 
 /*
@@ -61,10 +64,10 @@ class STORAGE_CLASS_INFO Stub
   /**
     * Constructor.
     * 
-    * @param pchEndPointURI End point URI of the service to connect to. 
+    * @param pcEndPointURI End point URI of the service to connect to. 
     *                       e.g. http://localhost:8080/axis/services/echo
     */
-    Stub (const char *pchEndPointURI);
+    Stub (const char *pcEndPointURI);
    
   /**
     * Destructor.
@@ -74,7 +77,7 @@ class STORAGE_CLASS_INFO Stub
   /**
     * Set end point of service to connect to.
     * 
-    * @param pchEndPointURI End point URI of the service to connect to. 
+    * @param pcEndPointURI End point URI of the service to connect to. 
     *                       e.g. http://localhost:8080/axis/services/echo
     */
 
@@ -90,8 +93,8 @@ class STORAGE_CLASS_INFO Stub
     * make sense to the undelying trasport.
     * 
     * Some example trasport properties:
-    *   For HTTP: "Accept-Language: da, en-gb;q=0.8, en;q=0.7"
-    *   For SMTP: "Reply-To: user@apache.org" 
+    * <BR>  For HTTP: "Accept-Language: da, en-gb;q=0.8, en;q=0.7"
+    * <BR>  For SMTP: "Reply-To: user@apache.org" 
     * 
     * @param pcKey Header name e.g. "Accept-Language". 
     *              Note that the key is not tested for uniqueness.
@@ -105,15 +108,65 @@ class STORAGE_CLASS_INFO Stub
     void AXISCALL setTransportProperty (const char *pcKey, const char *pcValue);
 
   /**
+    * Iterator initiatior for trasport property keys
+    *
+    * This method must be called first to initiate access to the list of 
+    * transport property keys.
+    *
+    * @return First transport property key. If there are no trasport 
+    * properties set, returns NULL.
+    */
+    char* getFirstTrasportPropertyKey();
+
+  /**
+    * Iterator for trasport property keys
+    *
+    * getFirstTrasportPropertyKey() method must have been called at least once
+    * before this method is called. If not behaviour is undefined.
+    *
+    * This method advances the iterator by one position.
+    * Repeated calls always retuen the next value.
+    *
+    * @return Next transport property key. If there are no trasport 
+    * properties set or if iterator is at the end of the list, returns NULL.
+    */
+    char* getNextTrasportPropertyKey();
+
+  /**
+    * Iterator for trasport property values.
+    *
+    * This method gives access to the value corresponding to the trasport key
+    * currently being pointed by trasport property key iterator.
+    * As keys and values are treated as paires, access to the value field is 
+    * based on the access to the key field.
+    *
+    * getFirstTrasportPropertyKey() method must have been called at least once
+    * before this method is called. If not behaviour is undefined.
+    *
+    * This method does not advance the iterator.
+    * Repeated calls always retuen the same value unless 
+    * getNextTrasportPropertyKey() is called in between.
+    *
+    * @return Next transport property value. If there are no trasport 
+    * properties set or if iterator is at the end of the list, returns NULL.
+    */
+    char* getCurrentTrasportPropertyValue();
+
+
+
+  /**
     * Create and add a SOAP header block to the Stub.
     * 
     * This will create a header block that would look like the following when 
     * serialized:
+    * <PRE>
     *   <th:TestHeader xmlns:th="http://ws.apache.org/axisCppTest/">
     *   </th:TestHeader>
+    * </PRE>
     *
     * User must use the IHeaderBlock pointer returned and fill in the header structure.
     * e.g. To make the SOAP header look like
+    * <PRE>
     * <SOAP-ENV:Header>
     *   <th:TestHeader xmlns:th="http://ws.apache.org/axisCppTest/">
     *       <Credentials>
@@ -122,7 +175,9 @@ class STORAGE_CLASS_INFO Stub
     *       </Credentials>
     *   </th:TestHeader>
     * </SOAP-ENV:Header>
+    * </PRE>
     * the following code segment coule be used
+    * <PRE>
     *  IHeaderBlock *phb = ws.createSOAPHeaderBlock ("TestHeader", "th",
     *                                   "http://ws.apache.org/axisCppTest/");
     *  //create parent node
@@ -149,7 +204,7 @@ class STORAGE_CLASS_INFO Stub
     *  parentNode->addChild (childNode);
     *
     *  phb->addChild (parentNode);
-
+    * </PRE>
     *
     * @param pachLocalName Local tag name of the SOAP header. e.g. TestHeader
     * @param pachPrefix Prefix to be used in XML represenation of SOAP header
@@ -236,19 +291,39 @@ class STORAGE_CLASS_INFO Stub
     vector < char *>m_vKeys;
 
   /**
+    * Trasport keys iterator
+    */
+    vector <char*>::const_iterator m_viCurrentKey;
+
+  /**
     * Trasport property values 
     */
     vector < char *>m_vValues;
   
+  /**
+    * Trasport keys iterator
+    */
+    vector <char*>::const_iterator m_viCurrentValue;
+
   /**
     * Vector of Header Blok pointers
     */
     vector < IHeaderBlock * >m_vSOAPHeaderBlocks;
 
   /**
+    * Trasport keys iterator
+    */
+    vector <IHeaderBlock *>::const_iterator m_viCurrentSOAPHeaderBlock;
+
+  /**
     * List of SOAPMethod Attributes
     */
     vector <Attribute*> m_vSOAPMethodAttributes;
+
+  /**
+    * Trasport keys iterator
+    */
+    vector <Attribute*>::const_iterator m_viCurrentSOAPMethodAttribute;
 
   /**
     * Timeout in seconds
