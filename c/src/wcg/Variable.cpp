@@ -24,6 +24,9 @@
  *       "This product includes software developed by the
  *        Apache Software Foundation (http://www.apache.org/)."
  *    Alternately, this acknowledgment may appear in the software itself,
+
+
+
  *    if and wherever such third-party acknowledgments normally appear.
  *
  * 4. The names "SOAP" and "Apache Software Foundation" must
@@ -63,6 +66,7 @@
 // Variable.cpp: implementation of the Variable class.
 //
 //////////////////////////////////////////////////////////////////////
+#pragma warning (disable : 4786)
 
 #include "Variable.h"
 
@@ -78,6 +82,14 @@ Variable::Variable()
 	m_VarName = "";
 }
 
+Variable::Variable(Variable& Var)
+{
+	m_Qualifier = Var.m_Qualifier;
+	m_Type = Var.m_Type;
+	m_TypeName = Var.m_TypeName;
+	m_VarName = Var.m_VarName;
+}
+
 Variable::~Variable()
 {
 
@@ -87,9 +99,67 @@ void Variable::SetType(int nType, string sType)
 {
 	m_Type = nType;
 	if (nType == VAR_USER) m_TypeName = sType;
+	else SetBasicTypeName();
 }
 
 void Variable::SetVarName(string &sVarName)
 {
 	m_VarName = sVarName;
+}
+
+void Variable::SetQualification(unsigned char cQualifier)
+{
+ 	m_Qualifier |= cQualifier;
+}
+
+string& Variable::GetTypeName()
+{
+	return m_TypeName;
+}
+
+string& Variable::GetVarName()
+{
+	return m_VarName;
+}
+
+void Variable::SetBasicTypeName()
+{	
+	switch (m_Type)
+	{
+		case VAR_INT: m_TypeName = "int"; break;
+		case VAR_FLOAT: m_TypeName = "float"; break;
+		case VAR_STRING: m_TypeName = "string"; break; //note that string too is taken as a basic type
+		case VAR_LONG: m_TypeName = "long"; break;
+		case VAR_SHORT: m_TypeName = "short"; break;
+		case VAR_CHAR: m_TypeName = "char"; break;
+		case VAR_DOUBLE: m_TypeName = "double"; break;
+		case VAR_BOOL: m_TypeName = "bool"; break;
+		case VAR_UNSIGNEDLONG: m_TypeName = "unsigned long"; break;
+		case VAR_UNSIGNEDINT: m_TypeName = "unsigned int"; break;
+		case VAR_UNSIGNEDSHORT: m_TypeName = "unsigned short"; break;
+		case VAR_UNSIGNED_CHAR: m_TypeName = "unsigned char"; break;
+	}
+}
+
+bool Variable::IsComplexType()
+{
+	return false;
+}
+
+bool Variable::IsArrayType()
+{
+	return false;
+}
+
+int Variable::GetType()
+{
+	return m_Type;
+}
+
+void Variable::Reset()
+{
+	m_Qualifier = 0;
+	m_Type = 0;
+	m_TypeName = "";
+	m_VarName = "";
 }
