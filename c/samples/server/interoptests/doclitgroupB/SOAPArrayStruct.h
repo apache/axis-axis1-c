@@ -4,8 +4,8 @@
 //Parameters and wrapper methos to manipulate SOAPArrayStruct
 ////////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__SOAPARRAYSTRUCT_PARAM_H__INCLUDED_)
-#define __SOAPARRAYSTRUCT_PARAM_H__INCLUDED_
+#if !defined(__SOAPARRAYSTRUCT_PARAM_H__OF_AXIS_INCLUDED_)
+#define __SOAPARRAYSTRUCT_PARAM_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/AxisUserAPI.h>
 
@@ -25,4 +25,4 @@ public:
 	~SOAPArrayStruct();
 };
 
-#endif // !defined(__SOAPARRAYSTRUCT_PARAM_H__INCLUDED_)
+#endif // !defined(__SOAPARRAYSTRUCT_PARAM_H__OF_AXIS_INCLUDED_)

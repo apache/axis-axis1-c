@@ -3,8 +3,8 @@
  * InteropTestPortType.h: interface for the InteropTestPortTypeclass.
  *
  */
-#if !defined(__INTEROPTESTPORTTYPE_H__INCLUDED_)
-#define __INTEROPTESTPORTTYPE_H__INCLUDED_
+#if !defined(__INTEROPTESTPORTTYPE_H__OF_AXIS_INCLUDED_)
+#define __INTEROPTESTPORTTYPE_H__OF_AXIS_INCLUDED_
 
 #include <axis/client/Call.h>
 #include <axis/server/AxisWrapperAPI.h>
@@ -29,4 +29,4 @@ extern xsd__decimal echoDecimal(void* pStub, xsd__decimal Value0);
 extern xsd__boolean echoBoolean(void* pStub, xsd__boolean Value0);
 
 
-#endif // !defined(__INTEROPTESTPORTTYPE_H__INCLUDED_)
+#endif // !defined(__INTEROPTESTPORTTYPE_H__OF_AXIS_INCLUDED_)

@@ -4,8 +4,8 @@
 //Parameters and wrapper methos to manipulate SOAPStructStruct
 ////////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__SOAPSTRUCTSTRUCT_PARAM_H__INCLUDED_)
-#define __SOAPSTRUCTSTRUCT_PARAM_H__INCLUDED_
+#if !defined(__SOAPSTRUCTSTRUCT_PARAM_H__OF_AXIS_INCLUDED_)
+#define __SOAPSTRUCTSTRUCT_PARAM_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/AxisUserAPI.h>
 
@@ -25,4 +25,4 @@ public:
 	~SOAPStructStruct();
 };
 
-#endif // !defined(__SOAPSTRUCTSTRUCT_PARAM_H__INCLUDED_)
+#endif // !defined(__SOAPSTRUCTSTRUCT_PARAM_H__OF_AXIS_INCLUDED_)

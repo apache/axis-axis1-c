@@ -3,8 +3,8 @@
 // InteropTestPortType.h: interface for the InteropTestPortTypeclass.
 //
 //////////////////////////////////////////////////////////////////////
-#if !defined(__INTEROPTESTPORTTYPE_CLIENTSTUB_H__INCLUDED_)
-#define __INTEROPTESTPORTTYPE_CLIENTSTUB_H__INCLUDED_
+#if !defined(__INTEROPTESTPORTTYPE_CLIENTSTUB_H__OF_AXIS_INCLUDED_)
+#define __INTEROPTESTPORTTYPE_CLIENTSTUB_H__OF_AXIS_INCLUDED_
 
 #include <axis/client/Call.h>
 #include "SOAPStruct.h"
@@ -38,4 +38,4 @@ public:
 	xsd__boolean echoBoolean(xsd__boolean Value0);
 };
 
-#endif // !defined(__INTEROPTESTPORTTYPE_CLIENTSTUB_H__INCLUDED_)
+#endif // !defined(__INTEROPTESTPORTTYPE_CLIENTSTUB_H__OF_AXIS_INCLUDED_)

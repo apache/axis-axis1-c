@@ -16,7 +16,7 @@ int GetClassInstance(BasicHandler **inst)
 	if (pWCH)
 	{
 		(*inst)->_object = pWCH;
-		return pWCH->Init();
+		return pWCH->init();
 	}
 	return AXIS_FAIL;
 }
@@ -26,7 +26,7 @@ int DestroyInstance(BasicHandler *inst)
 	if (inst)
 	{
 		WrapperClassHandler* pWCH = reinterpret_cast<WrapperClassHandler*>(inst);
-		pWCH->Fini();
+		pWCH->fini();
 		delete pWCH;
 		delete inst;
 		return AXIS_SUCCESS;

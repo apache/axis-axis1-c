@@ -3,8 +3,8 @@
  *		InteropTestPortTypeBWrapper.h: interface for the InteropTestPortTypeBWrapperclass.
  *
  */
-#if !defined(__INTEROPTESTPORTTYPEBWRAPPER_SERVERWRAPPER_H__INCLUDED_)
-#define __INTEROPTESTPORTTYPEBWRAPPER_SERVERWRAPPER_H__INCLUDED_
+#if !defined(__INTEROPTESTPORTTYPEBWRAPPER_SERVERWRAPPER_H__OF_AXIS_INCLUDED_)
+#define __INTEROPTESTPORTTYPEBWRAPPER_SERVERWRAPPER_H__OF_AXIS_INCLUDED_
 
 #include "InteropTestPortTypeB.h"
 #include <axis/server/WrapperClassHandler.h>
@@ -21,11 +21,11 @@ public:
 public:
 	virtual ~InteropTestPortTypeBWrapper();
 public:/*implementation of WrapperClassHandler interface*/
-	int AXISCALL Invoke(void* pMsg);
-	void AXISCALL OnFault(void* pMsg);
-	int AXISCALL Init();
-	int AXISCALL Fini();
-	AXIS_BINDING_STYLE AXISCALL GetBindingStyle(){return RPC_ENCODED;};
+	int AXISCALL invoke(void* pMsg);
+	void AXISCALL onFault(void* pMsg);
+	int AXISCALL init();
+	int AXISCALL fini();
+	AXIS_BINDING_STYLE AXISCALL getBindingStyle(){return RPC_ENCODED;};
 private:/*Methods corresponding to the web service methods*/
 	int echoStructAsSimpleTypes(void* pMsg);
 	int echoSimpleTypesAsStruct(void* pMsg);
@@ -33,4 +33,4 @@ private:/*Methods corresponding to the web service methods*/
 	int echoNestedArray(void* pMsg);
 };
 
-#endif /* !defined(__INTEROPTESTPORTTYPEBWRAPPER_SERVERWRAPPER_H__INCLUDED_)*/
+#endif /* !defined(__INTEROPTESTPORTTYPEBWRAPPER_SERVERWRAPPER_H__OF_AXIS_INCLUDED_)*/

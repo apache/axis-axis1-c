@@ -4,8 +4,8 @@
 //Parameters and wrapper methos to manipulate ArrayOfString2D
 ////////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__ARRAYOFSTRING2D_ARRAY_H__INCLUDED_)
-#define __ARRAYOFSTRING2D_ARRAY_H__INCLUDED_
+#if !defined(__ARRAYOFSTRING2D_ARRAY_H__OF_AXIS_INCLUDED_)
+#define __ARRAYOFSTRING2D_ARRAY_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/AxisUserAPI.h>
 
@@ -15,4 +15,4 @@ typedef struct ArrayOfString2DTag
 	int m_Size;
 } ArrayOfString2D;
 
-#endif // !defined(__ARRAYOFSTRING2D_ARRAY_H__INCLUDED_)
+#endif // !defined(__ARRAYOFSTRING2D_ARRAY_H__OF_AXIS_INCLUDED_)

@@ -23,16 +23,16 @@ InteropTestPortTypeWrapper::~InteropTestPortTypeWrapper()
 }
 
 //implementation of WrapperClassHandler interface
-void InteropTestPortTypeWrapper::OnFault(void *pMsg)
+void InteropTestPortTypeWrapper::onFault(void *pMsg)
 {
 }
 
-int InteropTestPortTypeWrapper::Init()
+int InteropTestPortTypeWrapper::init()
 {
 	return AXIS_SUCCESS;
 }
 
-int InteropTestPortTypeWrapper::Fini()
+int InteropTestPortTypeWrapper::fini()
 {
 	return AXIS_SUCCESS;
 }
@@ -41,10 +41,10 @@ int InteropTestPortTypeWrapper::Fini()
 /////////////////////////////////////////////////////////////////
 // This method invokes the right service method 
 //////////////////////////////////////////////////////////////////
-int InteropTestPortTypeWrapper::Invoke(void *pMsg)
+int InteropTestPortTypeWrapper::invoke(void *pMsg)
 {
 	IMessageData *mc = (IMessageData*)pMsg;
-	const AxisChar *method = mc->GetOperationName();
+	const AxisChar *method = mc->getOperationName();
 	if (0 == strcmp(method, "echoString"))
 		return echoString(mc);
 	else if (0 == strcmp(method, "echoStringArray"))
@@ -85,17 +85,17 @@ int InteropTestPortTypeWrapper::Invoke(void *pMsg)
 int InteropTestPortTypeWrapper::echoString(IMessageData* mc)
 {
 	IWrapperSoapSerializer *pIWSSZ = NULL;
-	mc->GetSoapSerializer(&pIWSSZ);
+	mc->getSoapSerializer(&pIWSSZ);
 	if (!pIWSSZ) return AXIS_FAIL;
 	IWrapperSoapDeSerializer *pIWSDZ = NULL;
-	mc->GetSoapDeSerializer(&pIWSDZ);
+	mc->getSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
 	/* check whether we have got correct message */
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoString", "")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("echoStringResponse", "http://soapinterop.org/");
-	AxisChar* v0 = pIWSDZ->GetElementAsString("inputString",0);
+	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoString", "")) return AXIS_FAIL;
+	pIWSSZ->createSoapMethod("echoStringResponse", "http://soapinterop.org/");
+	AxisChar* v0 = pIWSDZ->getElementAsString("inputString",0);
 	AxisChar* ret = pWs->echoString(v0);
-	return pIWSSZ->AddOutputParam("echoStringReturn", (void*)&ret, XSD_STRING);
+	return pIWSSZ->addOutputParam("echoStringReturn", (void*)&ret, XSD_STRING);
 }
 
 
@@ -105,16 +105,16 @@ int InteropTestPortTypeWrapper::echoString(IMessageData* mc)
 int InteropTestPortTypeWrapper::echoStringArray(IMessageData* mc)
 {
 	IWrapperSoapSerializer *pIWSSZ = NULL;
-	mc->GetSoapSerializer(&pIWSSZ);
+	mc->getSoapSerializer(&pIWSSZ);
 	if (!pIWSSZ) return AXIS_FAIL;
 	IWrapperSoapDeSerializer *pIWSDZ = NULL;
-	mc->GetSoapDeSerializer(&pIWSDZ);
+	mc->getSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoStringArray", "")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("echoStringArrayResponse", "http://soapinterop.org/");
-	ArrayOfstring v0 = (ArrayOfstring&)pIWSDZ->GetBasicArray(XSD_STRING,"inputStringArray",0);
+	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoStringArray", "")) return AXIS_FAIL;
+	pIWSSZ->createSoapMethod("echoStringArrayResponse", "http://soapinterop.org/");
+	ArrayOfstring v0 = (ArrayOfstring&)pIWSDZ->getBasicArray(XSD_STRING,"inputStringArray",0);
 	ArrayOfstring ret = pWs->echoStringArray(v0);
-	return pIWSSZ->AddOutputBasicArrayParam((Axis_Array*)(&ret), XSD_STRING, "echoStringArrayReturn");
+	return pIWSSZ->addOutputBasicArrayParam((Axis_Array*)(&ret), XSD_STRING, "echoStringArrayReturn");
 }
 
 
@@ -124,16 +124,16 @@ int InteropTestPortTypeWrapper::echoStringArray(IMessageData* mc)
 int InteropTestPortTypeWrapper::echoInteger(IMessageData* mc)
 {
 	IWrapperSoapSerializer *pIWSSZ = NULL;
-	mc->GetSoapSerializer(&pIWSSZ);
+	mc->getSoapSerializer(&pIWSSZ);
 	if (!pIWSSZ) return AXIS_FAIL;
 	IWrapperSoapDeSerializer *pIWSDZ = NULL;
-	mc->GetSoapDeSerializer(&pIWSDZ);
+	mc->getSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoInteger", "")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("echoIntegerResponse", "http://soapinterop.org/");
-	int v0 = pIWSDZ->GetElementAsInt("inputInteger",0);
+	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoInteger", "")) return AXIS_FAIL;
+	pIWSSZ->createSoapMethod("echoIntegerResponse", "http://soapinterop.org/");
+	int v0 = pIWSDZ->getElementAsInt("inputInteger",0);
 	int ret = pWs->echoInteger(v0);
-	return pIWSSZ->AddOutputParam("echoIntegerReturn", (void*)&ret, XSD_INT);
+	return pIWSSZ->addOutputParam("echoIntegerReturn", (void*)&ret, XSD_INT);
 }
 
 
@@ -143,16 +143,16 @@ int InteropTestPortTypeWrapper::echoInteger(IMessageData* mc)
 int InteropTestPortTypeWrapper::echoIntegerArray(IMessageData* mc)
 {
 	IWrapperSoapSerializer *pIWSSZ = NULL;
-	mc->GetSoapSerializer(&pIWSSZ);
+	mc->getSoapSerializer(&pIWSSZ);
 	if (!pIWSSZ) return AXIS_FAIL;
 	IWrapperSoapDeSerializer *pIWSDZ = NULL;
-	mc->GetSoapDeSerializer(&pIWSDZ);
+	mc->getSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoIntegerArray", "")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("echoIntegerArrayResponse", "http://soapinterop.org/");
-	ArrayOfint v0 = (ArrayOfint&)pIWSDZ->GetBasicArray(XSD_INT,"inputIntegerArray",0);
+	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoIntegerArray", "")) return AXIS_FAIL;
+	pIWSSZ->createSoapMethod("echoIntegerArrayResponse", "http://soapinterop.org/");
+	ArrayOfint v0 = (ArrayOfint&)pIWSDZ->getBasicArray(XSD_INT,"inputIntegerArray",0);
 	ArrayOfint ret = pWs->echoIntegerArray(v0);
-	return pIWSSZ->AddOutputBasicArrayParam((Axis_Array*)(&ret), XSD_INT, "echoIntegerArrayReturn");
+	return pIWSSZ->addOutputBasicArrayParam((Axis_Array*)(&ret), XSD_INT, "echoIntegerArrayReturn");
 }
 
 
@@ -162,16 +162,16 @@ int InteropTestPortTypeWrapper::echoIntegerArray(IMessageData* mc)
 int InteropTestPortTypeWrapper::echoFloat(IMessageData* mc)
 {
 	IWrapperSoapSerializer *pIWSSZ = NULL;
-	mc->GetSoapSerializer(&pIWSSZ);
+	mc->getSoapSerializer(&pIWSSZ);
 	if (!pIWSSZ) return AXIS_FAIL;
 	IWrapperSoapDeSerializer *pIWSDZ = NULL;
-	mc->GetSoapDeSerializer(&pIWSDZ);
+	mc->getSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoFloat", "")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("echoFloatResponse", "http://soapinterop.org/");
-	float v0 = pIWSDZ->GetElementAsFloat("inputFloat",0);
+	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoFloat", "")) return AXIS_FAIL;
+	pIWSSZ->createSoapMethod("echoFloatResponse", "http://soapinterop.org/");
+	float v0 = pIWSDZ->getElementAsFloat("inputFloat",0);
 	float ret = pWs->echoFloat(v0);
-	return pIWSSZ->AddOutputParam("echoFloatReturn", (void*)&ret, XSD_FLOAT);
+	return pIWSSZ->addOutputParam("echoFloatReturn", (void*)&ret, XSD_FLOAT);
 }
 
 
@@ -181,16 +181,16 @@ int InteropTestPortTypeWrapper::echoFloat(IMessageData* mc)
 int InteropTestPortTypeWrapper::echoFloatArray(IMessageData* mc)
 {
 	IWrapperSoapSerializer *pIWSSZ = NULL;
-	mc->GetSoapSerializer(&pIWSSZ);
+	mc->getSoapSerializer(&pIWSSZ);
 	if (!pIWSSZ) return AXIS_FAIL;
 	IWrapperSoapDeSerializer *pIWSDZ = NULL;
-	mc->GetSoapDeSerializer(&pIWSDZ);
+	mc->getSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoFloatArray", "")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("echoFloatArrayResponse", "http://soapinterop.org/");
-	ArrayOffloat v0 = (ArrayOffloat&)pIWSDZ->GetBasicArray(XSD_FLOAT,"inputFloatArray",0);
+	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoFloatArray", "")) return AXIS_FAIL;
+	pIWSSZ->createSoapMethod("echoFloatArrayResponse", "http://soapinterop.org/");
+	ArrayOffloat v0 = (ArrayOffloat&)pIWSDZ->getBasicArray(XSD_FLOAT,"inputFloatArray",0);
 	ArrayOffloat ret = pWs->echoFloatArray(v0);
-	return pIWSSZ->AddOutputBasicArrayParam((Axis_Array*)(&ret), XSD_FLOAT, "echoFloatArrayReturn");
+	return pIWSSZ->addOutputBasicArrayParam((Axis_Array*)(&ret), XSD_FLOAT, "echoFloatArrayReturn");
 }
 
 
@@ -200,18 +200,18 @@ int InteropTestPortTypeWrapper::echoFloatArray(IMessageData* mc)
 int InteropTestPortTypeWrapper::echoStruct(IMessageData* mc)
 {
 	IWrapperSoapSerializer *pIWSSZ = NULL;
-	mc->GetSoapSerializer(&pIWSSZ);
+	mc->getSoapSerializer(&pIWSSZ);
 	if (!pIWSSZ) return AXIS_FAIL;
 	IWrapperSoapDeSerializer *pIWSDZ = NULL;
-	mc->GetSoapDeSerializer(&pIWSDZ);
+	mc->getSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoStruct", "")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("echoStructResponse", "http://soapinterop.org/");
-	SOAPStruct *v0 = (SOAPStruct*)pIWSDZ->GetCmplxObject((void*)Axis_DeSerialize_SOAPStruct
+	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoStruct", "")) return AXIS_FAIL;
+	pIWSSZ->createSoapMethod("echoStructResponse", "http://soapinterop.org/");
+	SOAPStruct *v0 = (SOAPStruct*)pIWSDZ->getCmplxObject((void*)Axis_DeSerialize_SOAPStruct
 		, (void*)Axis_Create_SOAPStruct, (void*)Axis_Delete_SOAPStruct
 		, "structInput", "");
 	SOAPStruct *ret = pWs->echoStruct(v0);
-	return pIWSSZ->AddOutputCmplxParam(ret, (void*)Axis_Serialize_SOAPStruct, (void*)Axis_Delete_SOAPStruct, "structReturn", "");
+	return pIWSSZ->addOutputCmplxParam(ret, (void*)Axis_Serialize_SOAPStruct, (void*)Axis_Delete_SOAPStruct, "structReturn", "");
 }
 
 
@@ -221,18 +221,18 @@ int InteropTestPortTypeWrapper::echoStruct(IMessageData* mc)
 int InteropTestPortTypeWrapper::echoStructArray(IMessageData* mc)
 {
 	IWrapperSoapSerializer *pIWSSZ = NULL;
-	mc->GetSoapSerializer(&pIWSSZ);
+	mc->getSoapSerializer(&pIWSSZ);
 	if (!pIWSSZ) return AXIS_FAIL;
 	IWrapperSoapDeSerializer *pIWSDZ = NULL;
-	mc->GetSoapDeSerializer(&pIWSDZ);
+	mc->getSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoStructArray", "")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("echoStructArrayResponse", "http://soapinterop.org/");
-	ArrayOfSOAPStruct v0 = (ArrayOfSOAPStruct&)pIWSDZ->GetCmplxArray((void*)Axis_DeSerialize_SOAPStruct
+	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoStructArray", "")) return AXIS_FAIL;
+	pIWSSZ->createSoapMethod("echoStructArrayResponse", "http://soapinterop.org/");
+	ArrayOfSOAPStruct v0 = (ArrayOfSOAPStruct&)pIWSDZ->getCmplxArray((void*)Axis_DeSerialize_SOAPStruct
 		, (void*)Axis_Create_SOAPStruct, (void*)Axis_Delete_SOAPStruct
 		, (void*)Axis_GetSize_SOAPStruct, "structArray", "");
 	ArrayOfSOAPStruct ret = pWs->echoStructArray(v0);
-	return pIWSSZ->AddOutputCmplxArrayParam((Axis_Array*)(&ret),(void*) Axis_Serialize_SOAPStruct, (void*) Axis_Delete_SOAPStruct, (void*) Axis_GetSize_SOAPStruct, "structArrayReturn", "");
+	return pIWSSZ->addOutputCmplxArrayParam((Axis_Array*)(&ret),(void*) Axis_Serialize_SOAPStruct, (void*) Axis_Delete_SOAPStruct, (void*) Axis_GetSize_SOAPStruct, "structArrayReturn", "");
 }
 
 
@@ -242,13 +242,13 @@ int InteropTestPortTypeWrapper::echoStructArray(IMessageData* mc)
 int InteropTestPortTypeWrapper::echoVoid(IMessageData* mc)
 {
 	IWrapperSoapSerializer *pIWSSZ = NULL;
-	mc->GetSoapSerializer(&pIWSSZ);
+	mc->getSoapSerializer(&pIWSSZ);
 	if (!pIWSSZ) return AXIS_FAIL;
 	IWrapperSoapDeSerializer *pIWSDZ = NULL;
-	mc->GetSoapDeSerializer(&pIWSDZ);
+	mc->getSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoVoid", "")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("echoVoidResponse", "http://soapinterop.org/");
+	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoVoid", "")) return AXIS_FAIL;
+	pIWSSZ->createSoapMethod("echoVoidResponse", "http://soapinterop.org/");
 	pWs->echoVoid();
 	return AXIS_SUCCESS;
 }
@@ -260,16 +260,16 @@ int InteropTestPortTypeWrapper::echoVoid(IMessageData* mc)
 int InteropTestPortTypeWrapper::echoBase64(IMessageData* mc)
 {
 	IWrapperSoapSerializer *pIWSSZ = NULL;
-	mc->GetSoapSerializer(&pIWSSZ);
+	mc->getSoapSerializer(&pIWSSZ);
 	if (!pIWSSZ) return AXIS_FAIL;
 	IWrapperSoapDeSerializer *pIWSDZ = NULL;
-	mc->GetSoapDeSerializer(&pIWSDZ);
+	mc->getSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoBase64", "")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("echoBase64Response", "http://soapinterop.org/");
-	xsd__base64Binary v0 = pIWSDZ->GetElementAsBase64Binary("inputBase64",0);
+	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoBase64", "")) return AXIS_FAIL;
+	pIWSSZ->createSoapMethod("echoBase64Response", "http://soapinterop.org/");
+	xsd__base64Binary v0 = pIWSDZ->getElementAsBase64Binary("inputBase64",0);
 	xsd__base64Binary ret = pWs->echoBase64(v0);
-	return pIWSSZ->AddOutputParam("echoBase64Return", (void*)&ret, XSD_BASE64BINARY);
+	return pIWSSZ->addOutputParam("echoBase64Return", (void*)&ret, XSD_BASE64BINARY);
 }
 
 
@@ -279,16 +279,16 @@ int InteropTestPortTypeWrapper::echoBase64(IMessageData* mc)
 int InteropTestPortTypeWrapper::echoDate(IMessageData* mc)
 {
 	IWrapperSoapSerializer *pIWSSZ = NULL;
-	mc->GetSoapSerializer(&pIWSSZ);
+	mc->getSoapSerializer(&pIWSSZ);
 	if (!pIWSSZ) return AXIS_FAIL;
 	IWrapperSoapDeSerializer *pIWSDZ = NULL;
-	mc->GetSoapDeSerializer(&pIWSDZ);
+	mc->getSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoDate", "")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("echoDateResponse", "http://soapinterop.org/");
-	xsd__dateTime v0 = pIWSDZ->GetElementAsDateTime("inputDate",0);
+	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoDate", "")) return AXIS_FAIL;
+	pIWSSZ->createSoapMethod("echoDateResponse", "http://soapinterop.org/");
+	xsd__dateTime v0 = pIWSDZ->getElementAsDateTime("inputDate",0);
 	xsd__dateTime ret = pWs->echoDate(v0);
-	return pIWSSZ->AddOutputParam("echoDateReturn", (void*)&ret, XSD_DATETIME);
+	return pIWSSZ->addOutputParam("echoDateReturn", (void*)&ret, XSD_DATETIME);
 }
 
 
@@ -298,16 +298,16 @@ int InteropTestPortTypeWrapper::echoDate(IMessageData* mc)
 int InteropTestPortTypeWrapper::echoHexBinary(IMessageData* mc)
 {
 	IWrapperSoapSerializer *pIWSSZ = NULL;
-	mc->GetSoapSerializer(&pIWSSZ);
+	mc->getSoapSerializer(&pIWSSZ);
 	if (!pIWSSZ) return AXIS_FAIL;
 	IWrapperSoapDeSerializer *pIWSDZ = NULL;
-	mc->GetSoapDeSerializer(&pIWSDZ);
+	mc->getSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoHexBinary", "")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("echoHexBinaryResponse", "http://soapinterop.org/");
-	xsd__hexBinary v0 = pIWSDZ->GetElementAsHexBinary("inputHexBinary",0);
+	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoHexBinary", "")) return AXIS_FAIL;
+	pIWSSZ->createSoapMethod("echoHexBinaryResponse", "http://soapinterop.org/");
+	xsd__hexBinary v0 = pIWSDZ->getElementAsHexBinary("inputHexBinary",0);
 	xsd__hexBinary ret = pWs->echoHexBinary(v0);
-	return pIWSSZ->AddOutputParam("echoHexBinaryReturn", (void*)&ret, XSD_HEXBINARY);
+	return pIWSSZ->addOutputParam("echoHexBinaryReturn", (void*)&ret, XSD_HEXBINARY);
 }
 
 
@@ -317,16 +317,16 @@ int InteropTestPortTypeWrapper::echoHexBinary(IMessageData* mc)
 int InteropTestPortTypeWrapper::echoDecimal(IMessageData* mc)
 {
 	IWrapperSoapSerializer *pIWSSZ = NULL;
-	mc->GetSoapSerializer(&pIWSSZ);
+	mc->getSoapSerializer(&pIWSSZ);
 	if (!pIWSSZ) return AXIS_FAIL;
 	IWrapperSoapDeSerializer *pIWSDZ = NULL;
-	mc->GetSoapDeSerializer(&pIWSDZ);
+	mc->getSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoDecimal", "")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("echoDecimalResponse", "http://soapinterop.org/");
-	xsd__decimal v0 = pIWSDZ->GetElementAsDecimal("inputDecimal",0);
+	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoDecimal", "")) return AXIS_FAIL;
+	pIWSSZ->createSoapMethod("echoDecimalResponse", "http://soapinterop.org/");
+	xsd__decimal v0 = pIWSDZ->getElementAsDecimal("inputDecimal",0);
 	xsd__decimal ret = pWs->echoDecimal(v0);
-	return pIWSSZ->AddOutputParam("echoDecimalReturn", (void*)&ret, XSD_DECIMAL);
+	return pIWSSZ->addOutputParam("echoDecimalReturn", (void*)&ret, XSD_DECIMAL);
 }
 
 
@@ -336,15 +336,15 @@ int InteropTestPortTypeWrapper::echoDecimal(IMessageData* mc)
 int InteropTestPortTypeWrapper::echoBoolean(IMessageData* mc)
 {
 	IWrapperSoapSerializer *pIWSSZ = NULL;
-	mc->GetSoapSerializer(&pIWSSZ);
+	mc->getSoapSerializer(&pIWSSZ);
 	if (!pIWSSZ) return AXIS_FAIL;
 	IWrapperSoapDeSerializer *pIWSDZ = NULL;
-	mc->GetSoapDeSerializer(&pIWSDZ);
+	mc->getSoapDeSerializer(&pIWSDZ);
 	if (!pIWSDZ) return AXIS_FAIL;
-	if (AXIS_SUCCESS != pIWSDZ->CheckMessageBody("echoBoolean", "")) return AXIS_FAIL;
-	pIWSSZ->CreateSoapMethod("echoBooleanResponse", "http://soapinterop.org/");
-	xsd__boolean v0 = pIWSDZ->GetElementAsBoolean("inputBoolean",0);
+	if (AXIS_SUCCESS != pIWSDZ->checkMessageBody("echoBoolean", "")) return AXIS_FAIL;
+	pIWSSZ->createSoapMethod("echoBooleanResponse", "http://soapinterop.org/");
+	xsd__boolean v0 = pIWSDZ->getElementAsBoolean("inputBoolean",0);
 	xsd__boolean ret = pWs->echoBoolean(v0);
-	return pIWSSZ->AddOutputParam("echoBooleanReturn", (void*)&ret, XSD_BOOLEAN);
+	return pIWSSZ->addOutputParam("echoBooleanReturn", (void*)&ret, XSD_BOOLEAN);
 }
 

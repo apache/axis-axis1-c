@@ -3,8 +3,8 @@
  * Calculator.h: interface for the Calculatorclass.
  *
  */
-#if !defined(__CALCULATOR_SERVERSKELETON_H__INCLUDED_)
-#define __CALCULATOR_SERVERSKELETON_H__INCLUDED_
+#if !defined(__CALCULATOR_SERVERSKELETON_H__OF_AXIS_INCLUDED_)
+#define __CALCULATOR_SERVERSKELETON_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/AxisUserAPI.h>
 
@@ -22,4 +22,4 @@ class Calculator
 		int div(int Value0,int Value1);
 };
 
-#endif /* !defined(__CALCULATOR_SERVERSKELETON_H__INCLUDED_)*/
+#endif /* !defined(__CALCULATOR_SERVERSKELETON_H__OF_AXIS_INCLUDED_)*/

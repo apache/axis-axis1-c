@@ -346,15 +346,15 @@ public class ClientStubWriter extends CPPClassWriter{
 					String containedType = null;
 					if (CUtils.isSimpleType(qname)){
 						containedType = CUtils.getclass4qname(qname);
-						writer.write("\t\t\t" + currentParamName + " = ("+currentParaType+"&)m_pCall->GetBasicArray("+CUtils.getXSDTypeForBasicType(containedType)+", \""+currentType.getElementName().getLocalPart()+"\", 0);\n");
+						writer.write("\t\t\t" + currentParamName + " = ("+currentParaType+"&)m_pCall->getBasicArray("+CUtils.getXSDTypeForBasicType(containedType)+", \""+currentType.getElementName().getLocalPart()+"\", 0);\n");
 					}
 					else if (arrayType.isSimpleType()){//SimpleType in the schema 
 						containedType = CUtils.getclass4qname(arrayType.getBaseType());
-						writer.write("\t\t\t" + currentParamName + " = ("+currentParaType+"&)m_pCall->GetBasicArray("+CUtils.getXSDTypeForBasicType(containedType)+", \""+currentType.getElementName().getLocalPart()+"\", 0);\n");
+						writer.write("\t\t\t" + currentParamName + " = ("+currentParaType+"&)m_pCall->getBasicArray("+CUtils.getXSDTypeForBasicType(containedType)+", \""+currentType.getElementName().getLocalPart()+"\", 0);\n");
 					}
 					else{
 						containedType = qname.getLocalPart();
-						writer.write("\t\t\t" + currentParamName + " = ("+currentParaType+"&)m_pCall->GetCmplxArray((void*) Axis_DeSerialize_"+containedType);
+						writer.write("\t\t\t" + currentParamName + " = ("+currentParaType+"&)m_pCall->getCmplxArray((void*) Axis_DeSerialize_"+containedType);
 						writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+currentType.getElementName().getLocalPart()+"\", Axis_URI_"+containedType+");\n");
 					}
 				}
@@ -362,7 +362,7 @@ public class ClientStubWriter extends CPPClassWriter{
 				   writer.write("\t\t\t" + currentParamName + " = m_pCall->"+ CUtils.getParameterGetValueMethodName(currentParaType, false)+"(\""+currentType.getElementName().getLocalPart()+"\", 0);\n");
 				}
 				else{
-				   writer.write("\t\t\t" + currentParamName + " = ("+currentParaType+"*)m_pCall->GetCmplxObject((void*) Axis_DeSerialize_"+currentParaType+", (void*) Axis_Create_"+currentParaType+", (void*) Axis_Delete_"+currentParaType+",\""+currentType.getElementName().getLocalPart()+"\", 0);\n"); 
+				   writer.write("\t\t\t" + currentParamName + " = ("+currentParaType+"*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"+currentParaType+", (void*) Axis_Create_"+currentParaType+", (void*) Axis_Delete_"+currentParaType+",\""+currentType.getElementName().getLocalPart()+"\", 0);\n"); 
 				}				
 			}	
 			writer.write("\t\t}\n");
@@ -378,11 +378,11 @@ public class ClientStubWriter extends CPPClassWriter{
 			String containedType = null;
 			if (CUtils.isSimpleType(qname)){
 				containedType = CUtils.getclass4qname(qname);
-				writer.write("\tRetArray = ("+outparamType+"&)m_pCall->GetBasicArray("+CUtils.getXSDTypeForBasicType(containedType)+", \""+returntype.getElementName().getLocalPart()+"\", 0);\n\t\t}\n");
+				writer.write("\tRetArray = ("+outparamType+"&)m_pCall->getBasicArray("+CUtils.getXSDTypeForBasicType(containedType)+", \""+returntype.getElementName().getLocalPart()+"\", 0);\n\t\t}\n");
 			}
 			else{
 				containedType = qname.getLocalPart();
-				writer.write("\tRetArray = ("+outparamType+"&)m_pCall->GetCmplxArray((void*) Axis_DeSerialize_"+containedType);
+				writer.write("\tRetArray = ("+outparamType+"&)m_pCall->getCmplxArray((void*) Axis_DeSerialize_"+containedType);
 				writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", \""+returntype.getElementName().getLocalPart()+"\", Axis_URI_"+containedType+");\n\t\t}\n");
 			}
 			writer.write("\t}\n\tm_pCall->unInitialize();\n");
@@ -394,7 +394,7 @@ public class ClientStubWriter extends CPPClassWriter{
 			writer.write("\treturn Ret;\n");
 		}
 		else{
-			writer.write("\t\t\tpReturn = ("+outparamType+"*)m_pCall->GetCmplxObject((void*) Axis_DeSerialize_"+outparamType+", (void*) Axis_Create_"+outparamType+", (void*) Axis_Delete_"+outparamType+",\""+returntype.getElementName().getLocalPart()+"\", 0);\n\t\t}\n"); 
+			writer.write("\t\t\tpReturn = ("+outparamType+"*)m_pCall->getCmplxObject((void*) Axis_DeSerialize_"+outparamType+", (void*) Axis_Create_"+outparamType+", (void*) Axis_Delete_"+outparamType+",\""+returntype.getElementName().getLocalPart()+"\", 0);\n\t\t}\n"); 
 			writer.write("\t}\n\tm_pCall->unInitialize();\n");
 			writer.write("\treturn pReturn;\n");						
 		}

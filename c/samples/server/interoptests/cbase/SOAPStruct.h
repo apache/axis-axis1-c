@@ -4,8 +4,8 @@
  *Parameters and wrapper methos to manipulate SOAPStruct
  */
 
-#if !defined(__SOAPSTRUCT_H__INCLUDED_)
-#define __SOAPSTRUCT_H__INCLUDED_
+#if !defined(__SOAPSTRUCT_H__OF_AXIS_INCLUDED_)
+#define __SOAPSTRUCT_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/AxisUserAPI.h>
 
@@ -19,4 +19,4 @@ typedef struct {
 	float varFloat;
 } SOAPStruct;
 
-#endif /* !defined(__SOAPSTRUCT_H__INCLUDED_)*/
+#endif /* !defined(__SOAPSTRUCT_H__OF_AXIS_INCLUDED_)*/

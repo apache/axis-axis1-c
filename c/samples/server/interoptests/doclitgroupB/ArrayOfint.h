@@ -4,8 +4,8 @@
 //Parameters and wrapper methos to manipulate ArrayOfint
 ////////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__ARRAYOFINT_ARRAY_H__INCLUDED_)
-#define __ARRAYOFINT_ARRAY_H__INCLUDED_
+#if !defined(__ARRAYOFINT_ARRAY_H__OF_AXIS_INCLUDED_)
+#define __ARRAYOFINT_ARRAY_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/AxisUserAPI.h>
 
@@ -15,4 +15,4 @@ typedef struct ArrayOfintTag
 	int m_Size;
 } ArrayOfint;
 
-#endif // !defined(__ARRAYOFINT_ARRAY_H__INCLUDED_)
+#endif // !defined(__ARRAYOFINT_ARRAY_H__OF_AXIS_INCLUDED_)

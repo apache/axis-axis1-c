@@ -29,8 +29,8 @@ CallFunctions CallBase::ms_VFtable;
 AxisAdminService::AxisAdminService (const char *pchUri)
 {
     m_pCall = new Call ();
-    m_pCall->SetProtocol (APTHTTP);
-    m_pCall->SetEndpointURI (pchUri);
+    m_pCall->setProtocol (APTHTTP);
+    m_pCall->setEndpointURI (pchUri);
 }
 
 AxisAdminService::~AxisAdminService ()
@@ -47,20 +47,20 @@ AxisAdminService::~AxisAdminService ()
 xsd__boolean AxisAdminService::updateWSDD (xsd__base64Binary Value0)
 {
     xsd__boolean Ret;
-    if (AXIS_SUCCESS != m_pCall->Initialize (CPP_DOC_PROVIDER, NORMAL_CHANNEL))
+    if (AXIS_SUCCESS != m_pCall->initialize (CPP_DOC_PROVIDER, NORMAL_CHANNEL))
         return Ret;
-    m_pCall->SetTransportProperty (SOAPACTION_HEADER, "AxisAdmin#updateWSDD");
-    m_pCall->SetSOAPVersion (SOAP_VER_1_1);
-    m_pCall->SetOperation ("updateWSDD", "http://www.opensource.lk/xsd");
-    m_pCall->AddParameter ((void *) &Value0, "wsdd", XSD_BASE64BINARY);
-    if (AXIS_SUCCESS == m_pCall->Invoke ())
+    m_pCall->setTransportProperty (SOAPACTION_HEADER, "AxisAdmin#updateWSDD");
+    m_pCall->setSOAPVersion (SOAP_VER_1_1);
+    m_pCall->setOperation ("updateWSDD", "http://www.opensource.lk/xsd");
+    m_pCall->addParameter ((void *) &Value0, "wsdd", XSD_BASE64BINARY);
+    if (AXIS_SUCCESS == m_pCall->invoke ())
     {
-        if (AXIS_SUCCESS == m_pCall->CheckMessage ("updateWSDDResponse",
+        if (AXIS_SUCCESS == m_pCall->checkMessage ("updateWSDDResponse",
             "http://www.opensource.lk/xsd"))
         {
-            Ret = m_pCall->GetElementAsBoolean ("return", 0);
+            Ret = m_pCall->getElementAsBoolean ("return", 0);
         }
     }
-    m_pCall->UnInitialize ();
+    m_pCall->unInitialize ();
     return Ret;
 }

@@ -3,8 +3,8 @@
 //		InteropTestPortType.h: interface for the InteropTestPortTypeclass.
 //
 //////////////////////////////////////////////////////////////////////
-#if !defined(__INTEROPTESTPORTTYPE_SERVERSKELETON_H__INCLUDED_)
-#define __INTEROPTESTPORTTYPE_SERVERSKELETON_H__INCLUDED_
+#if !defined(__INTEROPTESTPORTTYPE_SERVERSKELETON_H__OF_AXIS_INCLUDED_)
+#define __INTEROPTESTPORTTYPE_SERVERSKELETON_H__OF_AXIS_INCLUDED_
 
 #include <axis/server/AxisUserAPI.h>
 
@@ -37,4 +37,4 @@ class InteropTestPortType
 		xsd__boolean echoBoolean(xsd__boolean Value0);
 };
 
-#endif // !defined(__INTEROPTESTPORTTYPE_SERVERSKELETON_H__INCLUDED_)
+#endif // !defined(__INTEROPTESTPORTTYPE_SERVERSKELETON_H__OF_AXIS_INCLUDED_)

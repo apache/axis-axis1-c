@@ -13,11 +13,11 @@
 int Axis_Serialize_SOAPStruct(SOAPStruct* param, IWrapperSoapSerializer* pSZ, bool bArray = false)
 {
 	/* first serialize attributes if any*/
-	pSZ->Serialize(">", 0);
+	pSZ->serialize(">", 0);
 	/* then serialize elements if any*/
-	pSZ->SerializeAsElement("varString", (void*)&(param->varString), XSD_STRING);
-	pSZ->SerializeAsElement("varInt", (void*)&(param->varInt), XSD_INT);
-	pSZ->SerializeAsElement("varFloat", (void*)&(param->varFloat), XSD_FLOAT);
+	pSZ->serializeAsElement("varString", (void*)&(param->varString), XSD_STRING);
+	pSZ->serializeAsElement("varInt", (void*)&(param->varInt), XSD_INT);
+	pSZ->serializeAsElement("varFloat", (void*)&(param->varFloat), XSD_FLOAT);
 	return AXIS_SUCCESS;
 }
 
@@ -26,9 +26,9 @@ int Axis_Serialize_SOAPStruct(SOAPStruct* param, IWrapperSoapSerializer* pSZ, bo
 //////////////////////////////////////////////////////////////////////
 int Axis_DeSerialize_SOAPStruct(SOAPStruct* param, IWrapperSoapDeSerializer *pIWSDZ)
 {
-	param->varString = pIWSDZ->GetElementAsString("varString",0);
-	param->varInt = pIWSDZ->GetElementAsInt("varInt",0);
-	param->varFloat = pIWSDZ->GetElementAsFloat("varFloat",0);
+	param->varString = pIWSDZ->getElementAsString("varString",0);
+	param->varInt = pIWSDZ->getElementAsInt("varInt",0);
+	param->varFloat = pIWSDZ->getElementAsFloat("varFloat",0);
 	return AXIS_SUCCESS;
 }
 void* Axis_Create_SOAPStruct(void* pObj, bool bArray = false, int nSize=0)

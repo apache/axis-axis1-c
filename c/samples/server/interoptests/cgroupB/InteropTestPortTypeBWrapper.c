@@ -56,9 +56,9 @@ int AXISCALL InteropTestPortTypeBWrapper_Invoke(void*p, void *pMsg){
 	const AxisChar* method = 0;
 	IWrapperSoapDeSerializer DZ = {0,0};
 	IWrapperSoapSerializer SZ = {0,0};
-	method = mc->_functions->GetOperationName(mc->_object);
-	mc->_functions->GetSoapSerializer(mc->_object, &SZ);
-	mc->_functions->GetSoapDeSerializer(mc->_object, &DZ);
+	method = mc->_functions->getOperationName(mc->_object);
+	mc->_functions->getSoapSerializer(mc->_object, &SZ);
+	mc->_functions->getSoapDeSerializer(mc->_object, &DZ);
 	if (0 == strcmp(method, "echoStructAsSimpleTypes"))
 		return echoStructAsSimpleTypesWrapped(DZ, SZ);
 	else if (0 == strcmp(method, "echoSimpleTypesAsStruct"))
@@ -86,16 +86,16 @@ int echoStructAsSimpleTypesWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSeri
 	float out0;
 	int out1;
 	xsd__string out2;
-	if (AXIS_SUCCESS != DZ._functions->CheckMessageBody(DZ._object, "echoStructAsSimpleTypes", "http://soapinterop.org/")) return AXIS_FAIL;
-	SZ._functions->CreateSoapMethod(SZ._object, "echoStructAsSimpleTypesResponse", "http://soapinterop.org/");
-	v0 = (SOAPStruct*)DZ._functions->GetCmplxObject(DZ._object, (void*)Axis_DeSerialize_SOAPStruct
+	if (AXIS_SUCCESS != DZ._functions->checkMessageBody(DZ._object, "echoStructAsSimpleTypes", "http://soapinterop.org/")) return AXIS_FAIL;
+	SZ._functions->createSoapMethod(SZ._object, "echoStructAsSimpleTypesResponse", "http://soapinterop.org/");
+	v0 = (SOAPStruct*)DZ._functions->getCmplxObject(DZ._object, (void*)Axis_DeSerialize_SOAPStruct
 		, (void*)Axis_Create_SOAPStruct, (void*)Axis_Delete_SOAPStruct
 		, Axis_TypeName_SOAPStruct, Axis_URI_SOAPStruct);
-	if (AXIS_SUCCESS != (nStatus = DZ._functions->GetStatus(DZ._object))) return nStatus;
+	if (AXIS_SUCCESS != (nStatus = DZ._functions->getStatus(DZ._object))) return nStatus;
 	echoStructAsSimpleTypes(v0,&out0,&out1,&out2);
-	SZ._functions->AddOutputParam(SZ._object, "outputFloat", (void*)&out0, XSD_FLOAT);
-	SZ._functions->AddOutputParam(SZ._object, "outputInteger", (void*)&out1, XSD_INT);
-	SZ._functions->AddOutputParam(SZ._object, "outputString", (void*)&out2, XSD_STRING);
+	SZ._functions->addOutputParam(SZ._object, "outputFloat", (void*)&out0, XSD_FLOAT);
+	SZ._functions->addOutputParam(SZ._object, "outputInteger", (void*)&out1, XSD_INT);
+	SZ._functions->addOutputParam(SZ._object, "outputString", (void*)&out2, XSD_STRING);
 	return AXIS_SUCCESS;
 }
 
@@ -113,14 +113,14 @@ int echoSimpleTypesAsStructWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSeri
 	int v1;
 	xsd__string v2;
 	SOAPStruct* ret;
-	if (AXIS_SUCCESS != DZ._functions->CheckMessageBody(DZ._object, "echoSimpleTypesAsStruct", "http://soapinterop.org/")) return AXIS_FAIL;
-	SZ._functions->CreateSoapMethod(SZ._object, "echoSimpleTypesAsStructResponse", "http://soapinterop.org/");
-	v0 = DZ._functions->GetElementAsFloat(DZ._object, 0, 0);
-	v1 = DZ._functions->GetElementAsInt(DZ._object, 0, 0);
-	v2 = DZ._functions->GetElementAsString(DZ._object, 0, 0);
-	if (AXIS_SUCCESS != (nStatus = DZ._functions->GetStatus(DZ._object))) return nStatus;
+	if (AXIS_SUCCESS != DZ._functions->checkMessageBody(DZ._object, "echoSimpleTypesAsStruct", "http://soapinterop.org/")) return AXIS_FAIL;
+	SZ._functions->createSoapMethod(SZ._object, "echoSimpleTypesAsStructResponse", "http://soapinterop.org/");
+	v0 = DZ._functions->getElementAsFloat(DZ._object, 0, 0);
+	v1 = DZ._functions->getElementAsInt(DZ._object, 0, 0);
+	v2 = DZ._functions->getElementAsString(DZ._object, 0, 0);
+	if (AXIS_SUCCESS != (nStatus = DZ._functions->getStatus(DZ._object))) return nStatus;
 	ret = echoSimpleTypesAsStruct(v0,v1,v2);
-	return SZ._functions->AddOutputCmplxParam(SZ._object, ret, (void*)Axis_Serialize_SOAPStruct, (void*)Axis_Delete_SOAPStruct, "echoSimpleTypesAsStructReturn", 0);
+	return SZ._functions->addOutputCmplxParam(SZ._object, ret, (void*)Axis_Serialize_SOAPStruct, (void*)Axis_Delete_SOAPStruct, "echoSimpleTypesAsStructReturn", 0);
 }
 
 
@@ -135,14 +135,14 @@ int echoNestedStructWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer 
 	int nStatus;
 	SOAPStructStruct* v0;
 	SOAPStructStruct* ret;
-	if (AXIS_SUCCESS != DZ._functions->CheckMessageBody(DZ._object, "echoNestedStruct", "http://soapinterop.org/")) return AXIS_FAIL;
-	SZ._functions->CreateSoapMethod(SZ._object, "echoNestedStructResponse", "http://soapinterop.org/");
-	v0 = (SOAPStructStruct*)DZ._functions->GetCmplxObject(DZ._object, (void*)Axis_DeSerialize_SOAPStructStruct
+	if (AXIS_SUCCESS != DZ._functions->checkMessageBody(DZ._object, "echoNestedStruct", "http://soapinterop.org/")) return AXIS_FAIL;
+	SZ._functions->createSoapMethod(SZ._object, "echoNestedStructResponse", "http://soapinterop.org/");
+	v0 = (SOAPStructStruct*)DZ._functions->getCmplxObject(DZ._object, (void*)Axis_DeSerialize_SOAPStructStruct
 		, (void*)Axis_Create_SOAPStructStruct, (void*)Axis_Delete_SOAPStructStruct
 		, Axis_TypeName_SOAPStructStruct, Axis_URI_SOAPStructStruct);
-	if (AXIS_SUCCESS != (nStatus = DZ._functions->GetStatus(DZ._object))) return nStatus;
+	if (AXIS_SUCCESS != (nStatus = DZ._functions->getStatus(DZ._object))) return nStatus;
 	ret = echoNestedStruct(v0);
-	return SZ._functions->AddOutputCmplxParam(SZ._object, ret, (void*)Axis_Serialize_SOAPStructStruct, (void*)Axis_Delete_SOAPStructStruct, "echoNestedStructReturn", 0);
+	return SZ._functions->addOutputCmplxParam(SZ._object, ret, (void*)Axis_Serialize_SOAPStructStruct, (void*)Axis_Delete_SOAPStructStruct, "echoNestedStructReturn", 0);
 }
 
 
@@ -157,13 +157,13 @@ int echoNestedArrayWrapped(IWrapperSoapDeSerializer DZ, IWrapperSoapSerializer S
 	int nStatus;
 	SOAPArrayStruct* v0;
 	SOAPArrayStruct* ret;
-	if (AXIS_SUCCESS != DZ._functions->CheckMessageBody(DZ._object, "echoNestedArray", "http://soapinterop.org/")) return AXIS_FAIL;
-	SZ._functions->CreateSoapMethod(SZ._object, "echoNestedArrayResponse", "http://soapinterop.org/");
-	v0 = (SOAPArrayStruct*)DZ._functions->GetCmplxObject(DZ._object, (void*)Axis_DeSerialize_SOAPArrayStruct
+	if (AXIS_SUCCESS != DZ._functions->checkMessageBody(DZ._object, "echoNestedArray", "http://soapinterop.org/")) return AXIS_FAIL;
+	SZ._functions->createSoapMethod(SZ._object, "echoNestedArrayResponse", "http://soapinterop.org/");
+	v0 = (SOAPArrayStruct*)DZ._functions->getCmplxObject(DZ._object, (void*)Axis_DeSerialize_SOAPArrayStruct
 		, (void*)Axis_Create_SOAPArrayStruct, (void*)Axis_Delete_SOAPArrayStruct
 		, Axis_TypeName_SOAPArrayStruct, Axis_URI_SOAPArrayStruct);
-	if (AXIS_SUCCESS != (nStatus = DZ._functions->GetStatus(DZ._object))) return nStatus;
+	if (AXIS_SUCCESS != (nStatus = DZ._functions->getStatus(DZ._object))) return nStatus;
 	ret = echoNestedArray(v0);
-	return SZ._functions->AddOutputCmplxParam(SZ._object, ret, (void*)Axis_Serialize_SOAPArrayStruct, (void*)Axis_Delete_SOAPArrayStruct, "echoNestedArrayReturn", 0);
+	return SZ._functions->addOutputCmplxParam(SZ._object, ret, (void*)Axis_Serialize_SOAPArrayStruct, (void*)Axis_Delete_SOAPArrayStruct, "echoNestedArrayReturn", 0);
 }
 
