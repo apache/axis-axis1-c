@@ -95,6 +95,10 @@ SOURCE=..\..\src\common\AxisTime.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\AxisTrace.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\AxisUtils.cpp
 # End Source File
 # Begin Source File
@@ -128,6 +132,10 @@ SOURCE=..\..\src\common\ArrayBean.h
 # Begin Source File
 
 SOURCE=..\..\src\common\AxisTime.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\AxisTrace.h
 # End Source File
 # Begin Source File
 
