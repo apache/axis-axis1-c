@@ -185,51 +185,69 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
                     pSrvMap = g_pWSDDDeployment->getWSDDServiceMap ();
                     if (!pSrvMap)
                     {
-                        pStream->sendBytes("<html> \
-                            <head><title>Welcome to Axis C++</title></head>\
-                            <body>\
-                            <h1 align=\"center\">Welcome to Axis C++</h1>\
-                            <br>\
-                            <h2>Deployment Descriptor Not Found</h2>\
-                            <br>\
-                            </body></html>", NULL);
+                        // Samisa: the string continuation lines in the following
+                        // code segments should *NOT* be indented
+                        // in order to make sure the HTML is indented properly.
+                        pStream->sendBytes("<html> \n\ 
+\t<head>\n\
+\t\t<title>Welcome to Axis C++</title>\n\
+\t</head>\n\
+\t<body>\n\
+\t\t<h1 align=\"center\">Welcome to Axis C++</h1>\n\
+\t\t<br>\n\
+\t\t<h2>Deployment Descriptor Not Found</h2>\n\
+\t\t<br>\n\
+\t</body>\n\
+</html>\n", NULL);
                         return AXIS_FAIL;
                     }
-                    pStream->sendBytes("<html>\
-                        <head><title>Welcome to Axis C++</title></head>\
-                        <body>\
-                        <h1 align=\"center\">Welcome to Axis C++</h1>\
-                        <br>\
-                        <h2 align=\"center\">List of Deployed Web services</h2><br>\
-                        <table width=\"100%\" border=1 align=\"center\"><tbody>", NULL);
+                    pStream->sendBytes("<html>\n\
+\t<head>\n\
+\t\t<title>Welcome to Axis C++</title>\n\
+\t</head>\n\
+\t<body>\n\
+\t\t<h1 align=\"center\">Welcome to Axis C++</h1>\n\
+\t\t<br>\n\
+\t\t<h2 align=\"center\">List of Deployed Web services</h2>\n\
+\t\t<br>\n\
+\t\t<table width=\"100%\" border=1 align=\"center\">\n\
+\t\t\t<tbody>\n", NULL);
 
                     pStream->sendBytes
-                        ("<tr><td width=\"20%\"><b>Web Service</b></td>\
-                        <td width=\"10%\" align=\"left\"><b>WSDL</b></td>\
-                        <td width=\"70%\"><b>Description</b></td></tr>", NULL);
+                        ("\t\t\t\t<tr>\n\
+\t\t\t\t\t<td width=\"20%\"><b>Web Service</b></td>\n\
+\t\t\t\t\t<td width=\"10%\" align=\"left\"><b>WSDL</b></td>\n\
+\t\t\t\t\t<td width=\"70%\"><b>Description</b></td>\n\
+\t\t\t\t</tr>\n", NULL);
                     for (iter = pSrvMap->begin (); iter != pSrvMap->end ();
                         iter++)
                     {
                         pService = (*iter).second;
-                        pStream->sendBytes("<tr><td width=\"20%\">", NULL);
+                        pStream->sendBytes("\t\t\t\t<tr>\n\
+\t\t\t\t\t<td width=\"20%\">", NULL);
                         pStream->sendBytes((char*) pService->
                             getServiceName (), NULL);
                         pStream->sendBytes
-                            ("</td><td width=\"10%\" align=\"left\"><a href=\"./",
+                            ("</td>\n\
+\t\t\t\t\t<td width=\"10%\" align=\"left\">\n\
+\t\t\t\t\t\t<a href=\"./",
                             NULL);
                         //if (bNoExt) pStream->sendBytes("axis/", NULL);
                         pStream->sendBytes((char*) pService->
                             getServiceName (), NULL);
                         pStream->sendBytes("?wsdl", NULL);
-                        pStream->sendBytes
-                            ("\">wsdl</a></td><td width=\"70%\">", NULL);
+                        pStream->sendBytes("\">wsdl</a>\n\
+\t\t\t\t\t</td>\n\
+\t\t\t\t\t<td width=\"70%\">", NULL);
                         pStream->sendBytes((char*) pService->
                             getDescription (), NULL);
-                        pStream->sendBytes("</td></tr>", NULL);
+                        pStream->sendBytes("</td>\n\
+\t\t\t\t</tr>\n", NULL);
                     }
-                    pStream->sendBytes("</tbody></table>", NULL);
+                    pStream->sendBytes("\t\t\t</tbody>\n\
+\t\t</table>\n", NULL);
                     pStream->sendBytes
-                        ("<br><p align=\"center\">Copyright  2001-2003 The Apache Software Foundation<br></p></body></html>", NULL);
+                        ("\t\t<br><p align=\"center\">Copyright  2001-2003 The Apache Software Foundation<br></p>\n\t</body>\n</html>\n", NULL);
                         Status = AXIS_SUCCESS;
                 }
                 else
@@ -384,6 +402,16 @@ int uninitialize_module ()
     return AXIS_SUCCESS;
 }
 }
+
+void Ax_Sleep (int nTime)
+{
+#ifdef WIN32
+    Sleep (0);
+#else
+    sleep (0);
+#endif
+}
+
 
 // Axis class method implementations
 
