@@ -64,7 +64,7 @@ LINK32=link.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "../../../release/win32"
+# PROP Output_Dir ""
 # PROP Intermediate_Dir "../../../bin/win32/apache2_0"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
@@ -79,7 +79,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 Common_D.lib Soap_D.lib wsdd_D.lib xerces-c_2D.lib libapr.lib libhttpd.lib /nologo /dll /debug /machine:I386 /out:"../../../release/win32/mod_axis.dll" /pdbtype:sept /libpath:"../../../lib/axis" /libpath:"../../../lib/xerces-c" /libpath:"../../../lib/apache2_0"
+# ADD LINK32 Common_D.lib Soap_D.lib wsdd_D.lib Engine_D.lib xerces-c_2D.lib libapr.lib libhttpd.lib /nologo /dll /debug /machine:I386 /out:"C:\Program Files\Apache Group\Apache2\modules\mod_axis.dll" /pdbtype:sept /libpath:"../../../lib/axis" /libpath:"../../../lib/xerces-c" /libpath:"../../../lib/apache2_0"
 
 !ENDIF 
 
@@ -90,6 +90,10 @@ LINK32=link.exe
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# Begin Source File
+
+SOURCE=..\..\..\src\server\apache\mod_axis2.c
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
