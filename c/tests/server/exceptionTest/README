@@ -38,7 +38,19 @@
    In the MathOps service class I have a div method which accepts two parameters.
    In order to demonstrate the possible exceptions I have the following scenarios.
    
-   When you generated the client side it will generate header and
+   If the second parameter is zero div method throw an AxisDivByZeroException
+   indicating that division by zero is not possible.
+
+   If the first parameter is 1000 div method throw an AxisNormalDetailException.
+   Note that this limitation is only for demonstration purposes.
+
+   If any of the parameters are negative div method throw an AxisOutOfBoundException.
+   Here too the limitation is only for demonstation purposes.
+
+   So obviously to test the fault mapping of these generated exceptions you need to
+   pass the parameters from the client side accordingly.
+   
+   When you generated the server side it will generate header and
    implementation files for the following
 
    MathOps: Service class which have a div method which may throw possible
@@ -67,5 +79,5 @@
    AxisNormalDetailException: Exception type corresponding to NormalDetail fault.
 
    
-
+   
 
