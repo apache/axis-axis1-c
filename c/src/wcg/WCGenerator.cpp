@@ -5,13 +5,13 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include "WCGenerator.h"
+#include <axis/wcg/WCGenerator.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-#include "WSClass.h"
-#include "TranslationUnit.h"
+#include <axis/wcg/WSClass.h>
+#include <axis/wcg/TranslationUnit.h>
 
 WCGenerator::WCGenerator()
 {

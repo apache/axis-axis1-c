@@ -68,7 +68,7 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include "BeanClass.h"
+#include <axis/wcg/BeanClass.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

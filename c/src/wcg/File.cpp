@@ -5,7 +5,7 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include "File.h"
+#include <axis/wcg/File.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

@@ -67,7 +67,7 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include "WSClass.h"
+#include <axis/wcg/WSClass.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

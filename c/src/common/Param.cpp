@@ -65,13 +65,13 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "../engine/AxisEngine.h"
-#include "Param.h"
-#include "ArrayBean.h"
-#include "BasicTypeSerializer.h"
+#include <axis/engine/AxisEngine.h>
+#include <axis/common/Param.h>
+#include <axis/common/ArrayBean.h>
+#include <axis/common/BasicTypeSerializer.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "AxisUtils.h"
+#include <axis/common/AxisUtils.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

@@ -1,6 +1,6 @@
-#include "AxisConfig.h"
-#include "GDefine.h"
-#include "AxisUtils.h"
+#include <axis/common/AxisConfig.h>
+#include <axis/common/GDefine.h>
+#include <axis/common/AxisUtils.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

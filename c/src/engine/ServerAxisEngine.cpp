@@ -2,13 +2,13 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "ServerAxisEngine.h"
+#include <axis/engine/ServerAxisEngine.h>
 #include <stdio.h>
-#include "../common/AxisException.h"
-#include "../common/AxisTrace.h"
-#include "../common/AxisUtils.h"
-#include "../wsdd/WSDDDeployment.h"
-#include "HandlerPool.h"
+#include <axis/common/AxisException.h>
+#include <axis/common/AxisTrace.h>
+#include <axis/common/AxisUtils.h>
+#include <axis/wsdd/WSDDDeployment.h>
+#include <axis/engine/HandlerPool.h>
 
 extern HandlerPool* g_pHandlerPool;
 extern WSDDDeployment* g_pWSDDDeployment;

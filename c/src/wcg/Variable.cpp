@@ -70,7 +70,7 @@
 #pragma warning (disable : 4786)
 #endif
 
-#include "Variable.h"
+#include <axis/wcg/Variable.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

@@ -59,12 +59,12 @@
  *
  */
 
-#include "AxisTrace.h"
+#include <axis/common/AxisTrace.h>
 #include <time.h>
 #include <stdio.h>
-#include "AxisUtils.h"
-#include "GDefine.h"
-#include "AxisConfig.h"
+#include <axis/common/AxisUtils.h>
+#include <axis/common/GDefine.h>
+#include <axis/common/AxisConfig.h>
 
 extern AxisConfig* g_pConfig;
 

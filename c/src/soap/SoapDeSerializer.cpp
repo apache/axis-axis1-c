@@ -64,14 +64,14 @@
 // SoapDeSerializer.cpp: implementation of the SoapDeSerializer class.
 //
 //////////////////////////////////////////////////////////////////////
-#include "SoapEnvelope.h"
-#include "SoapHeader.h"
-#include "SoapMethod.h"
-#include "SoapBody.h"
-#include "SoapFault.h"
-#include "SoapDeSerializer.h"
-#include "../common/GDefine.h"
-#include "../common/Packet.h"
+#include <axis/soap/SoapEnvelope.h>
+#include <axis/soap/SoapHeader.h>
+#include <axis/soap/SoapMethod.h>
+#include <axis/soap/SoapBody.h>
+#include <axis/soap/SoapFault.h>
+#include <axis/soap/SoapDeSerializer.h>
+#include <axis/common/GDefine.h>
+#include <axis/common/Packet.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

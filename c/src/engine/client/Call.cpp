@@ -63,10 +63,10 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "Call.h"
-#include "../common/AxisConfig.h"
-#include "transport/axis/AxisTransport.h"
-#include "transport/axis/Channel.hpp"
+#include <axis/client/Call.h>
+#include <axis/common/AxisConfig.h>
+#include <axis/client/transport/AxisTransport.h>
+#include <axis/client/transport/axis/Channel.hpp>
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////

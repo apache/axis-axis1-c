@@ -64,8 +64,8 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "AxisUtils.h"
-#include "GDefine.h"
+#include <axis/common/AxisUtils.h>
+#include <axis/common/GDefine.h>
 
 #include <xercesc/util/XMLString.hpp>
 
