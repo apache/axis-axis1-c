@@ -52,11 +52,29 @@ using namespace std;
 #define THROW_AXIS_IOS_BASE_FAILURE(X) throw std::ios_base::failure
 
 #define AXISC_THROW_SAME throw;
+
 #else
+
 #define AXISC_TRY 
 #define AXISC_CATCH(X) 
 #define AXISC_ENDCATCH
-#define AXISC_THROW(X) return X
+
+#define THROW_AXIS_EXCEPTION(X) throw AxisException(X) return X
+#define THROW_AXIS_CONFIG_EXCEPTION(X) throw AxisConfigException(X) return X
+#define THROW_AXIS_SOAP_EXCEPTION(X) throw AxisSoapException(X) return X
+#define THROW_AXIS_WSDD_EXCEPTION(X) throw AxisWsddException(X) return X
+#define THROW_AXIS_ENGINE_EXCEPTION(X) throw AxisEngineException(X) return X
+#define THROW_AXIS_TRANSPORT_EXCEPTION(X) throw AxisTransportException(X) return X
+
+#define THROW_AXIS_BAD_ALLOC()
+#define THROW_AXIS_BAD_CAST()
+#define THROW_AXIS_BAD_TYPEID()
+#define THROW_AXIS_BAD_EXCEPTION()
+#define THROW_AXIS_OUT_OF_RANGE(X)
+#define THROW_AXIS_INVALID_ARGUMENT(X)
+#define THROW_AXIS_OVERFLOW_ERROR(X)
+#define THROW_AXIS_IOS_BASE_FAILURE(X)
+
 #define AXISC_THROW_SAME 
 #endif
 
