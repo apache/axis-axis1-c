@@ -42,7 +42,7 @@ xsd__string InteropTestPortType::echoString(xsd__string Value0)
 	const char* pcCmplxFaultName;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "base#echoString");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -90,7 +90,7 @@ xsd__string_Array InteropTestPortType::echoStringArray(xsd__string_Array Value0)
 	const char* pcCmplxFaultName;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return RetArray;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "base#echoStringArray");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -138,7 +138,7 @@ xsd__int InteropTestPortType::echoInteger(xsd__int Value0)
 	const char* pcCmplxFaultName;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "base#echoInteger");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -186,7 +186,7 @@ xsd__int_Array InteropTestPortType::echoIntegerArray(xsd__int_Array Value0)
 	const char* pcCmplxFaultName;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return RetArray;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "base#echoIntegerArray");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -234,7 +234,7 @@ xsd__float InteropTestPortType::echoFloat(xsd__float Value0)
 	const char* pcCmplxFaultName;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "base#echoFloat");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -282,7 +282,7 @@ xsd__float_Array InteropTestPortType::echoFloatArray(xsd__float_Array Value0)
 	const char* pcCmplxFaultName;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return RetArray;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "base#echoFloatArray");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -330,7 +330,7 @@ SOAPStruct* InteropTestPortType::echoStruct(SOAPStruct* Value0)
 	const char* pcCmplxFaultName;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return pReturn;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "base#echoStruct");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -378,7 +378,7 @@ SOAPStruct_Array InteropTestPortType::echoStructArray(SOAPStruct_Array Value0)
 	const char* pcCmplxFaultName;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return RetArray;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "base#echoStructArray");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -425,7 +425,7 @@ void InteropTestPortType::echoVoid()
 	const char* pcCmplxFaultName;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return ;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "base#echoVoid");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -473,7 +473,7 @@ xsd__base64Binary InteropTestPortType::echoBase64(xsd__base64Binary Value0)
 	const char* pcCmplxFaultName;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "base#echoBase64");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -521,7 +521,7 @@ xsd__dateTime InteropTestPortType::echoDate(xsd__dateTime Value0)
 	const char* pcCmplxFaultName;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "base#echoDate");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -571,7 +571,7 @@ xsd__hexBinary InteropTestPortType::echoHexBinary(xsd__hexBinary Value0)
 	const char* pcCmplxFaultName;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "base#echoHexBinary");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -619,7 +619,7 @@ xsd__decimal InteropTestPortType::echoDecimal(xsd__decimal Value0)
 	const char* pcCmplxFaultName;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "base#echoDecimal");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
@@ -667,7 +667,7 @@ xsd__boolean InteropTestPortType::echoBoolean(xsd__boolean Value0)
 	const char* pcCmplxFaultName;
 	try
 	{
-		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER, NORMAL_CHANNEL)) 
+		if (AXIS_SUCCESS != m_pCall->initialize(CPP_RPC_PROVIDER)) 
 			return Ret;
 		m_pCall->setTransportProperty(SOAPACTION_HEADER , "base#echoBoolean");
 		m_pCall->setSOAPVersion(SOAP_VER_1_1);
