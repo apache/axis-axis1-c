@@ -1,0 +1,3 @@
+#!/bin/bash
+#./configure --bindir=/home/damitha/projects/axiscpp/c/release
+./configure --bindir=$AXISCPP_HOME/release

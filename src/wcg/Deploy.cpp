@@ -44,7 +44,7 @@ bool is_webservice_header_compilable();
 const char* COMPILECOMMAND = "cl *.cpp /c /ML /W3 /GX /O2 /D \"WIN32\" ";
 const char* LINKERCOMMAND = "link *.obj /dll /pdb:none ";
 #else
-const char* COMPILECOMMAND = "gcc *.cpp -c -Wall -Wshadow -fPIC -O2";
+const char* COMPILECOMMAND = "gcc *.cpp -c -Wall -Wshadow -fPIC -O2 ";
 const char* LINKERCOMMAND = "gcc -lstdc++ -shared -Wl,-soname,";
 #endif
 
@@ -314,7 +314,7 @@ bool is_webservice_header_compilable()
 #ifdef WIN32
 	command = "cl /c /w ";
 #else
-	command = "gcc -c "
+	command = "gcc -c ";
 #endif
 
 	for (list<string>::iterator sit = g_sAxisIncludePaths.begin(); sit != g_sAxisIncludePaths.end(); sit++)
