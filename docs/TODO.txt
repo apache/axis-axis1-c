@@ -67,8 +67,16 @@ AXISDEPLOY
 
 GENERAL / UNCATEGORIZED
 -----------------------
+! <team>	Support for internationalization require you to handle user data with unicodes so
+		replace std::string with std::wstring & char * with wchar_t* where user data is handled.
 ! <team> 	Refactor AxisEngine to make it suitable for Server side & Client side seperatly
 		so that we can derive AxisServer & AxisClient from that and no duplication result in.
+! <team>	Clean seperation would be required between XML writing & reading so that we can easily 
+		plug in different XML parsing mechanisms.
+! <team> 	Better if we can introduce namespaces to avoid collisions between names when the 
+		server/client side is link with user code. Hence, better to focus it now rather than later.		
+! <team> 	Avoid using any global variables to make the server thread safe.	
+! <team>	Pluggable provider APIs to support RPC/Document styles.
 		
 X <sanjaya>	In the WSDDDocument.cpp for each and every XMLString::transcode() you have to 
 		use a corrosponding XMLString::release() to relase the allocated memeory
@@ -77,8 +85,8 @@ X <sanjaya>	In the WSDDDocument.cpp write the code to handle the end element for
 * <sanjaya> 	Improve AxisEngine to send back the WSDL upon http GET request. Ex. http://url/service?wsdl
 ! <team> 	Support SOAP messages with attachments: defines a binding for a SOAP message to be carried 
 		within a MIME multipart/related message.
-!<lilantha>	Servlet support for server side which helps to deploy server in a servlet containers or in
-		J2EE servers & ISAPI extention for server to deploy in IIS.
+! <lilantha>	Servlet support for server side which helps to deploy server in a servlet containers or in
+		J2EE servers & ISAPI extension for server to deploy it in IIS.
 
 Session
 -------
