@@ -3250,8 +3250,13 @@ SoapDeSerializer::getFaultAsXMLString()
 	if (NULL==m_pNode) return NULL;
 
 	string xml;
-	while (NULL!=m_pNode && !(0==strcmp("detail",m_pNode->m_pchNameOrValue) && END_ELEMENT==m_pNode->m_type))
+	while (NULL!=m_pNode)
 	{
+		if ((0==strcmp("detail",m_pNode->m_pchNameOrValue) || 
+			 0==strcmp("Fault",m_pNode->m_pchNameOrValue)) && 
+			 END_ELEMENT==m_pNode->m_type) 
+			break;
+
 		string attrs;
 		for (int i=0; i<MAX_NO_OF_ATTRIBUTES; i+=3)
 		{
