@@ -1,0 +1,127 @@
+<project name="Additional framework" default="runTestFrameworks" basedir=".">
+
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+
+	<!-- set top to ws-axis/c. We are in tests/auto_build/wsi -->
+	<property name="dir.top" value="${basedir}/../../.."/>
+	<property name="dir.test" value="${dir.top}"/>
+	<property name="dir.out" value="${dir.top}/../../../obj"/>
+	<!-- <property name="dir.release" value="${dir.out}/package/wscc-1.0-Linux"/> -->
+	<property name="dir.autotests" value="../testcases"/>
+	<property name="test.list" value="${dir.autotests}/test.list"/>
+	<property name="dir.reports" value="${dir.out}/test/wsi/reports"/>
+	<property name="dir.test.obj" value="${dir.out}/test/wsi/"/>
+
+	<property environment="env"/>
+
+	<property name="dir.xmlParser" value="${env.XERCES_HOME}"/>
+	<property name="dir.axisJARs" value="${env.AXISJAVA_LIB}"/>
+	<property name="wsi.home" value="${env.WSI_HOME}"/>
+
+	<target name="setProperties">
+		<condition property="suffix" value="sh">
+			<not>
+				<os family="windows"/>
+			</not>
+		</condition>
+		<condition property="suffix" value="bat">
+			<os family="windows"/>
+		</condition>
+	</target>
+
+	<target name="runTestFrameworks" depends="setProperties, wsi, wsdl2ws"/>
+
+	<target name="wsdl2ws" />
+
+	<target name="cleanWSIReports">
+		<delete dir="${dir.reports}"/>
+		<mkdir dir="${dir.reports}"/>
+	</target>
+
+	<target name="wsi" depends="cleanWSIReports">
+		<path id="test_properties">
+			<fileset dir="${dir.autotests}/tests" includesfile="${test.list}"/>
+		</path>
+		<foreach target="runWSI" param="test.property.path" inheritall="true">
+			<path refid="test_properties"/>
+		</foreach>
+	</target>
+
+	<target name="runWSI">
+		<basename property="test.name" file="${test.property.path}" suffix="xml"/>
+		<basename property="test.property.file" file="${test.property.path}"/>
+
+		<trycatch>
+			<try>
+				<parallel timeout="70000" failonany="false">
+
+					<antcall target="startWSIMonitor" inheritall="true"/>
+
+					<sequential>
+						<!-- Wait for jvm to start monitor program -->
+						<sleep seconds="5"/>
+						<!-- Run the client test -->
+						<ant antfile="${dir.test}/test.xml" dir="${dir.top}" inheritall="false">
+<!--
+							<property name="dir.release" value="${dir.release}"/>
+							<property name="dir.include" value="${dir.release}/include"/>
+						    <property name="dir.obj" value="${dir.test.obj}"/>
+							<property name="HTTP.SSLChannel.dir" value="${env.GSKIT_HOME}"/>
+-->
+						    <property name="dir.xmlParser" value="${dir.xmlParser}"/>
+						    <property name="dir.axisJARs" value="${dir.axisJARs}"/>
+							<property name="testHost" value="localhost"/>
+							<property name="testPort" value="4040"/>
+							<property name="test.name" value="${test.name}"/>
+							<property name="test.timeout" value="100000"/>
+							<property name="test.nomonitor" value="true"/>
+						</ant>
+
+						<!-- <sleep seconds="25"/> -->
+
+					</sequential>
+				</parallel>
+			</try>
+			<catch>
+				<echo message="Exception in monitor caught it in Ant try/catch block while trying to run test ${testName}"/>
+			</catch>
+			<finally>
+				<sleep seconds="1"/>
+			</finally>
+		</trycatch>
+
+		<antcall target="startWSIAnalyzer" inheritall="true"/>
+		
+	</target>
+
+	<target name="startWSIMonitor" depends="modifyMonitorConfig">
+		<exec executable="${wsi.home}/java/bin/Monitor.${suffix}" dir="${wsi.home}/java" vmlauncher="false">
+			<env key="WSI_HOME" value="${wsi.home}"/>
+			<arg line="-config ${dir.reports}/mon_${test.name}.xml"/>
+		</exec>
+	</target>
+
+	<target name="startWSIAnalyzer" depends="modifyAnalyzerConfig">
+		<exec executable="${wsi.home}/java/bin/Analyzer.${suffix}" dir="${wsi.home}/java" vmlauncher="false">
+			<env key="WSI_HOME" value="${wsi.home}"/>
+			<arg line="-config ${dir.reports}/ana_${test.name}.xml"/>
+			<arg line="-reportFile ${dir.reports}/${test.name}.xml"/>
+			<arg line="-logFile ${dir.reports}/log_${test.name}.xml"/>
+		</exec>
+	</target>
+
+	<target name="modifyMonitorConfig">
+		<copy file="${basedir}/monitorConfig.xml" tofile="${dir.reports}/mon_${test.name}.xml"/>
+		<replace file="${dir.reports}/mon_${test.name}.xml" token="XXXXXXXX" value="${dir.reports}/log_${test.property.file}"/>
+		<replace file="${dir.reports}/mon_${test.name}.xml" token="HHHH" value="${test.host}"/>
+		<replace file="${dir.reports}/mon_${test.name}.xml" token="PPPP" value="${test.port}"/>
+	</target>
+
+	<target name="modifyAnalyzerConfig">
+		<copy file="${basedir}/analyzerConfig.xml" tofile="${dir.reports}/ana_${test.name}.xml"/>
+		<replace file="${dir.reports}/ana_${test.name}.xml" token="WWWW" value="${wsi.home}"/>
+		<replace file="${dir.reports}/ana_${test.name}.xml" token="LLLLLLLL" value="${dir.reports}/log_${test.name}.xml"/>
+	</target>
+
+</project>
+
