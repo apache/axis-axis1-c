@@ -39,7 +39,7 @@ class Sender
         Sender(Transport *pTr);
         ~Sender();
     
-        bool Send(const char* what) throw (AxisException);
+        bool Send(const char* what);
         void SetProperty(const char* sProperty, const char* sValue);
         void ClearAdditionalHeaders();
 
