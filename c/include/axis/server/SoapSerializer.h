@@ -96,10 +96,10 @@ private:
 	char m_cSerializedBuffer[SERIALIZE_BUFFER_SIZE];
 	int m_iCurrentSerBufferSize;
 public:
-	int createSoapMethod(const AxisChar* sLocalName, const AxisChar* sPrefix, const AxisChar* sURI);	
+	int AXISCALL createSoapMethod(const AxisChar* sLocalName, const AxisChar* sPrefix, const AxisChar* sURI);	
 //	IWrapperSoapSerializer& operator<<(const char* cSerialized);
 	IWrapperSoapSerializer& operator<<(const AxisChar* cSerialized);
-	const AxisChar* getNewNamespacePrefix();
+	const AxisChar* AXISCALL getNewNamespacePrefix();
 	int setSoapVersion(SOAP_VERSION);
 	int Init();
 	int SetOutputStream(const Ax_soapstream* pStream);
@@ -125,13 +125,13 @@ public:
 	int AddOutputParam(const AxisChar* pchName, const AxisChar* pStrValue, XSDTYPE type);
 	int AddOutputParam(const AxisChar* pchName, const string& sStrValue, XSDTYPE type);
 	//for arrays of basic types
-	int AddOutputParam(const AxisChar* pchName, const Axis_Array* pArray, XSDTYPE nType);
+	int AXISCALL AddOutputBasicArrayParam(const AxisChar* pchName, const Axis_Array* pArray, XSDTYPE nType);
 	//for arrays of complex types
-	int AddOutputParam(const AxisChar* pchName, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI);
+	int AXISCALL AddOutputCmplxArrayParam(const AxisChar* pchName, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI);
 	//for complex types
-	int AddOutputParam(const AxisChar* pchName, void* pObject, void* pDZFunct, void* pDelFunct);
-	int SerializeArray(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI, const AxisChar* pchArrayName);
-	int SerializeArray(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pchArrayName);
+	int AXISCALL AddOutputCmplxParam(const AxisChar* pchName, void* pObject, void* pDZFunct, void* pDelFunct);
+	int AXISCALL SerializeCmplxArray(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI, const AxisChar* pchArrayName);
+	int AXISCALL SerializeBasicArray(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pchArrayName);
 
 private:
 	int AddOutputParamHelper(const AxisChar* pchName, XSDTYPE nType, uParamValue Value);
@@ -161,6 +161,10 @@ public: //Basic Type Serializing methods
 private:
 	BasicTypeSerializer m_BTSZ;
 	const Ax_soapstream* m_pOutputStream;
+public:
+	int AXISCALL AddOutputParam(const AxisChar* pchName, void* pValue, XSDTYPE type);
+	const AxisChar* AXISCALL SerializeBasicType(const AxisChar* pchName, void* pValue, XSDTYPE type);
+	void AXISCALL Serialize(const char* pFirst, ...);
 };
 
 #endif // !defined(AFX_SOAPSERIALIZER_H__C37229AD_BD54_430D_9619_E4574CF95334__INCLUDED_)

@@ -77,6 +77,7 @@
 #include <axis/common/BasicTypeSerializer.h>
 #include <axis/soap/SoapKeywordMapping.h>
 #include <stdio.h>
+#include <stdarg.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -246,7 +247,7 @@ int SoapSerializer::AddOutputParam(const AxisChar* pchName, const string& sStrVa
 	return AddOutputParamHelper(pchName, type, uValue);
 }
 
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, const Axis_Array* pArray, XSDTYPE nType)
+int SoapSerializer::AddOutputBasicArrayParam(const AxisChar* pchName, const Axis_Array* pArray, XSDTYPE nType)
 {
 	IArrayBean* pAb = makeArrayBean(nType, (void*)(pArray->m_Array));
 	pAb->AddDimension(pArray->m_Size);
@@ -262,7 +263,7 @@ int SoapSerializer::AddOutputParam(const AxisChar* pchName, const Axis_Array* pA
 	return SUCCESS;	
 }
 
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)
+int SoapSerializer::AddOutputCmplxArrayParam(const AxisChar* pchName, const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)
 {
 	IArrayBean* pAb = makeArrayBean((void*)(pArray->m_Array), pSZFunct, pDelFunct, pSizeFunct);
 	pAb->AddDimension(pArray->m_Size);
@@ -280,7 +281,7 @@ int SoapSerializer::AddOutputParam(const AxisChar* pchName, const Axis_Array* pA
 	return SUCCESS;
 }
 
-int SoapSerializer::AddOutputParam(const AxisChar* pchName, void* pObject, void* pSZFunct, void* pDelFunct)
+int SoapSerializer::AddOutputCmplxParam(const AxisChar* pchName, void* pObject, void* pSZFunct, void* pDelFunct)
 { 
 	Param* pParam = new Param();
 	pParam->m_Value.pCplxObj = new ComplexObjectHandler;
@@ -539,7 +540,7 @@ int SoapSerializer::removeSoapHeader()
  * Used to Serialize an array of complex types inside a complex type. Called from within the Serialize wrapper
  * method of the complex type.
  */
-int SoapSerializer::SerializeArray(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI, const AxisChar* pchArrayName)
+int SoapSerializer::SerializeCmplxArray(const Axis_Array* pArray, void* pSZFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI, const AxisChar* pchArrayName)
 {
 	ArrayBean* pAb = (ArrayBean*)makeArrayBean((void*)(pArray->m_Array), pSZFunct, pDelFunct, pSizeFunct);
 	pAb->AddDimension(pArray->m_Size);
@@ -562,7 +563,7 @@ int SoapSerializer::SerializeArray(const Axis_Array* pArray, void* pSZFunct, voi
  * Used to Serialize an array of basic types inside a complex type. Called from within the Serialize wrapper
  * method of the complex type.
  */
-int SoapSerializer::SerializeArray(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pchArrayName)
+int SoapSerializer::SerializeBasicArray(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pchArrayName)
 {
 	ArrayBean* pAb = (ArrayBean*)makeArrayBean(nType, (void*)(pArray->m_Array));
 	pAb->AddDimension(pArray->m_Size);
@@ -578,3 +579,114 @@ int SoapSerializer::SerializeArray(const Axis_Array* pArray, XSDTYPE nType, cons
 	delete pParam;
 	return SUCCESS;
 }
+
+int SoapSerializer::AddOutputParam(const AxisChar* pchName, void* pValue, XSDTYPE type)
+{
+	switch(type)
+	{
+	case XSD_INT:
+	case XSD_BOOLEAN:
+		AddOutputParam(pchName,*((int*)(pValue)),type);
+		break; 
+    case XSD_UNSIGNEDINT:
+		AddOutputParam(pchName,*((unsigned int*)(pValue)),type);
+		break;           
+    case XSD_SHORT:
+		AddOutputParam(pchName,*((short*)(pValue)),type);
+		break; 
+    case XSD_UNSIGNEDSHORT:
+		AddOutputParam(pchName,*((unsigned short*)(pValue)),type);
+		break;         
+    case XSD_BYTE:
+		AddOutputParam(pchName,*((char*)(pValue)),type);
+		break; 
+    case XSD_UNSIGNEDBYTE:
+		AddOutputParam(pchName,*((unsigned char*)(pValue)),type);
+		break;
+    case XSD_LONG:
+    case XSD_INTEGER:
+	case XSD_DURATION:
+		AddOutputParam(pchName,*((long*)(pValue)),type);
+		break;        
+    case XSD_UNSIGNEDLONG:
+		AddOutputParam(pchName,*((unsigned long*)(pValue)),type);
+		break;
+	case XSD_FLOAT:
+		AddOutputParam(pchName,*((float*)(pValue)),type);
+		break;
+    case XSD_DOUBLE:
+    case XSD_DECIMAL:
+		AddOutputParam(pchName,*((double*)(pValue)),type);
+		break;              
+	case XSD_STRING:
+	case XSD_HEXBINARY:
+	case XSD_BASE64BINARY:
+		AddOutputParam(pchName,((char*)(pValue)),type);
+		break;
+    case XSD_DATETIME:
+    case XSD_DATE:
+    case XSD_TIME:
+		AddOutputParam(pchName,*((struct tm*)(pValue)),type);
+        break;        
+	}
+	return SUCCESS;
+}
+
+const AxisChar* SoapSerializer::SerializeBasicType(const AxisChar* pchName, void* pValue, XSDTYPE type)
+{
+	switch(type)
+	{
+	case XSD_INT:
+	case XSD_BOOLEAN:
+		return SerializeBasicType(pchName,*((int*)(pValue)),type);
+    case XSD_UNSIGNEDINT:
+		return SerializeBasicType(pchName,*((unsigned int*)(pValue)),type);
+    case XSD_SHORT:
+		return SerializeBasicType(pchName,*((short*)(pValue)),type);
+    case XSD_UNSIGNEDSHORT:
+		return SerializeBasicType(pchName,*((unsigned short*)(pValue)),type);
+    case XSD_BYTE:
+		return SerializeBasicType(pchName,*((char*)(pValue)),type);
+    case XSD_UNSIGNEDBYTE:
+		return SerializeBasicType(pchName,*((unsigned char*)(pValue)),type);
+    case XSD_LONG:
+    case XSD_INTEGER:
+	case XSD_DURATION:
+		return SerializeBasicType(pchName,*((long*)(pValue)),type);
+    case XSD_UNSIGNEDLONG:
+		return SerializeBasicType(pchName,*((unsigned long*)(pValue)),type);
+	case XSD_FLOAT:
+		return SerializeBasicType(pchName,*((float*)(pValue)),type);
+    case XSD_DOUBLE:
+    case XSD_DECIMAL:
+		return SerializeBasicType(pchName,*((double*)(pValue)),type);
+	case XSD_STRING:
+	case XSD_HEXBINARY:
+	case XSD_BASE64BINARY:
+		return SerializeBasicType(pchName,((char*)(pValue)),type);
+    case XSD_DATETIME:
+    case XSD_DATE:
+    case XSD_TIME:
+		return SerializeBasicType(pchName,*((struct tm*)(pValue)),type);
+	}
+	return NULL;
+}
+
+void SoapSerializer::Serialize(const char* pFirst, ...)
+{
+	va_list vList;
+	const char* pArg;
+	va_start( vList, pFirst );     /* Initialize variable arguments. */
+	do
+	{
+		pArg = va_arg( vList, const char*);
+		if (pArg)
+			*this << pArg;
+	}
+	while (pArg != NULL);
+	va_end( vList);              /* Reset variable arguments.      */
+}
+
+
+
+

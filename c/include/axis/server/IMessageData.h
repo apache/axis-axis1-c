@@ -67,38 +67,56 @@
 #if !defined(AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_)
 #define AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_
 
+#include "AxisWrapperAPI.h"
+
+#ifdef __cplusplus
+
 #include "../wsdd/WSDDService.h"
 #include <string>
 using namespace std;
 
-class IWrapperSoapDeSerializer;
-class IHandlerSoapDeSerializer;
-//class ISoapSerializer;
-class IHandlerSoapSerializer;
-class IWrapperSoapSerializer;
+#include "IWrapperSoapDeSerializer.h"
+#include "IWrapperSoapSerializer.h"
+#include "IHandlerSoapDeSerializer.h"
+#include "IHandlerSoapSerializer.h"
 class IDeployerUtils;
+
+#else
+
+#endif
+
+#ifdef __cplusplus
 
 class IMessageData
 {
+public:
+    virtual ~IMessageData(){};
+#else
+
+typedef struct IMessageDataTag
+{
+	void* __vfptr;
+} IMessageData;
+
+typedef struct IMessageDataXTag
+{
+	void AXISAPI(destructor, (APINOPARAMS))
+
+#endif
+	
+	virtual void AXISAPI(getSoapSerializer,(APIHASPARAMS IWrapperSoapSerializer** pIWSS))
+	virtual void AXISAPI(getSoapDeSerializer,(APIHASPARAMS IWrapperSoapDeSerializer** pIWSDS))
+
+#ifdef __cplusplus
+
 	friend class CPP_DeploymentWrapper;
 private:
 	virtual void getWSDDDeployment(IDeployerUtils** pIDeployerUtils) = 0;
 public:
-    virtual ~IMessageData(){};
 	virtual int setProperty(string& sName, string& sValue)=0;
 	virtual string& getProperty(string& sName)=0;
-
 	virtual void getSoapSerializer(IHandlerSoapSerializer** pIHandlerSoapSerializer)=0;
-	virtual void getSoapSerializer(IWrapperSoapSerializer** pIWrapperSoapSerializer)=0;
-	/*
-	comm on 26Jul2003 2.50pm
-	virtual ISoapSerializer* getSoapSerializer()=0;
-	*/
-	virtual IWrapperSoapDeSerializer* getSoapDeserializer()=0;
-
-	virtual void getSoapDeSerializer(IWrapperSoapDeSerializer** pIWrapperSoapDeSerializer)=0;
 	virtual void getSoapDeSerializer(IHandlerSoapDeSerializer** pIHandlerSoapDeSerializer)=0;
-
 	virtual void SetUserName(string& m_sUserName)=0;
 	virtual string& GetUserName()=0;
     virtual void SetService(const WSDDService* argService) = 0;
@@ -109,7 +127,9 @@ public:
 protected:
   string m_sUserName;  
 };
-
+#else
+} IMessageDataX;
+#endif
 #endif // !defined(AFX_IMESSAGEDATA_H__EEFDCDB4_6ABA_48CA_8B45_B4FDA6045822__INCLUDED_)
 
 

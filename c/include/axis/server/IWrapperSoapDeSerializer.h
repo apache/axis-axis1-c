@@ -56,6 +56,7 @@
  *
  *
  *
+ * @author Susantha Kumara (skumara@virtusa.com, susantha@opensource.lk)
  * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
  *
  */
@@ -67,10 +68,14 @@
 #if !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)
 #define AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_
 
-#include "ISoapDeSerializer.h"
+
 #include "GDefine.h"
 #include "AxisUserAPI.h"
 #include "TypeMapping.h"
+
+#ifdef __cplusplus
+
+#include "ISoapDeSerializer.h"
 #include <string>
 using namespace std;
 class IParam;
@@ -78,46 +83,63 @@ class IParam;
 class IWrapperSoapDeSerializer : public virtual ISoapDeSerializer
 {
 public:
-	virtual const AxisChar* GetMethodName()=0;
-	virtual IParam* GetParam()=0;
-	virtual int Deserialize(IParam* pIParam, int bHref)=0;
-	virtual ~IWrapperSoapDeSerializer() {};
+	virtual ~IWrapperSoapDeSerializer(){};
+
+#else
+
+typedef struct IWrapperSoapDeSerializerTag
+{
+	void* __vfptr;
+} IWrapperSoapDeSerializer;
+
+typedef struct IWrapperSoapDeSerializerXTag
+{
+	void AXISAPI(destructor,(APINOPARAMS))
+
+#endif
+	
+	virtual const AxisChar* AXISAPI(GetMethodName,(APINOPARAMS))
+//	virtual int AXISAPI(Deserialize,(APIHASPARAMS IParam* pIParam, int bHref));
 
 	/* Method used by wrappers to get a deserialized Array of complex types */
-	virtual Axis_Array GetArray(void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)=0;
+	virtual Axis_Array AXISAPI(GetCmplxArray,(APIHASPARAMS void* pDZFunct, void* pCreFunct, void* pDelFunct, void* pSizeFunct, const AxisChar* pchTypeName, const AxisChar* pchURI))
 	/* Method used by wrappers to get a deserialized Array of basic types */
-	virtual Axis_Array GetArray(XSDTYPE nType)=0;
-	virtual int GetArraySize()=0;
-	virtual int GetArray(Axis_Array* pArray, XSDTYPE nType)=0;
+	virtual Axis_Array AXISAPI(GetBasicArray,(APIHASPARAMS XSDTYPE nType))
+	virtual int AXISAPI(GetArraySize,(APINOPARAMS))
+	virtual int AXISAPI(GetArray,(APIHASPARAMS Axis_Array* pArray, XSDTYPE nType))
 	/* Method used by wrappers to get a deserialized single object of complex type */
-	virtual void* GetObject(void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pchTypeName, const AxisChar* pchURI)=0;
+	virtual void* AXISAPI(GetObject,(APIHASPARAMS void* pDZFunct, void* pCreFunct, void* pDelFunct, const AxisChar* pchTypeName, const AxisChar* pchURI))
 	
 	/* Methods used by wrappers to get a deserialized value of basic types */
-	virtual int GetInt() = 0;
-    virtual unsigned int GetUnsignedInt() = 0;
-    virtual short GetShort() = 0;
-    virtual unsigned short GetUnsignedShort() = 0;
-    virtual char GetByte() = 0;
-    virtual unsigned char GetUnsignedByte() = 0;
-    virtual long GetLong() = 0;
-    virtual long GetInteger() = 0;
-    virtual unsigned long GetUnsignedLong() = 0;
-	virtual float GetFloat() = 0;
-    virtual double GetDouble() = 0;
-    virtual double GetDecimal() = 0;
-	virtual const AxisChar* GetString() = 0;
-    virtual const AxisChar* GetAnyURI() = 0;
-    virtual const AxisChar* GetQName() = 0;
-	virtual const AxisChar* GetHexString() = 0;
-	virtual const AxisChar* GetBase64String() = 0;
+	virtual int AXISAPI(GetInt,(APINOPARAMS))
+    virtual unsigned int AXISAPI(GetUnsignedInt,(APINOPARAMS))
+    virtual short AXISAPI(GetShort,(APINOPARAMS))
+    virtual unsigned short AXISAPI(GetUnsignedShort,(APINOPARAMS))
+    virtual char AXISAPI(GetByte,(APINOPARAMS))
+    virtual unsigned char AXISAPI(GetUnsignedByte,(APINOPARAMS))
+    virtual long AXISAPI(GetLong,(APINOPARAMS))
+    virtual long AXISAPI(GetInteger,(APINOPARAMS))
+    virtual unsigned long AXISAPI(GetUnsignedLong,(APINOPARAMS))
+	virtual float AXISAPI(GetFloat,(APINOPARAMS))
+    virtual double AXISAPI(GetDouble,(APINOPARAMS))
+    virtual double AXISAPI(GetDecimal,(APINOPARAMS))
+	virtual const AxisChar* AXISAPI(GetString,(APINOPARAMS))
+    virtual const AxisChar* AXISAPI(GetAnyURI,(APINOPARAMS))
+    virtual const AxisChar* AXISAPI(GetQName,(APINOPARAMS))
+	virtual const AxisChar* AXISAPI(GetHexString,(APINOPARAMS))
+	virtual const AxisChar* AXISAPI(GetBase64String,(APINOPARAMS))
     /*return a tm struct which contain year-month-date-hour-
       minute-second*/
-    virtual struct tm GetDateTime() = 0;
-    virtual struct tm GetDate() = 0;
-    virtual struct tm GetTime() = 0;
-    /*return a tm struct which contain years-months-dates-hours-
-      minutes-seconds which represents a duration*/
-    virtual long GetDuration() = 0;
+    virtual struct tm AXISAPI(GetDateTime,(APINOPARAMS))
+    virtual struct tm AXISAPI(GetDate,(APINOPARAMS))
+    virtual struct tm AXISAPI(GetTime,(APINOPARAMS))
+    virtual long AXISAPI(GetDuration,(APINOPARAMS))
+//	virtual IParam* AXISAPI(GetParam,(APINOPARAMS))
+
+#ifdef __cplusplus
 };
+#else
+} IWrapperSoapDeSerializerX;
+#endif
 
 #endif // !defined(AFX_IWRAPPERSOAPDESERIALIZER_H__A6C89D23_4098_4A73_BFD7_D8F115AD9BA0__INCLUDED_)

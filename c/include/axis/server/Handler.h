@@ -81,7 +81,7 @@ public:
 
   virtual const string& GetOption(const string& sArg)=0;
   virtual void SetOptionList(const map<string, string>* OptionList)=0;
-  int GetType(){return NORMAL_HANDLER;};
+  int AXISCALL GetType(){return NORMAL_HANDLER;};
 
 
 protected:

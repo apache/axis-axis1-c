@@ -69,17 +69,6 @@
 #include "IWrapperSoapDeSerializer.h"
 #include "IWrapperSoapSerializer.h"
 
-#ifdef __cplusplus
-#define AXISAPI_CPP(M, P) M P;
-#define AXISAPI_C(M, P)
-#define AXISCALL(M) __stdcall M
-#else
-#define virtual 
-#define AXISAPI_CPP(M, P)
-#define AXISAPI_C(M, P) M P;
-#define AXISCALL(M) (__stdcall* M)
-#endif
-
 /**
  * Function that deserializes a custom type 
  */
@@ -88,17 +77,17 @@ typedef int (* AXIS_DESERIALIZE_FUNCT)(void*, IWrapperSoapDeSerializer*);
  * Function used to create a custom type. bArray is true if array of objects to be
  * created. Then nSize is the size of that array.
  */
-typedef void* (* AXIS_OBJECT_CREATE_FUNCT)(bool bArray=false, int nSize=0);
+typedef void* (* AXIS_OBJECT_CREATE_FUNCT)(bool bArray, int nSize);
 /**
  * Function used to delete a custom type. bArray is true if void* is a pointer to an array. 
  * Then nSize is the size of that array.
  */
-typedef void (* AXIS_OBJECT_DELETE_FUNCT)(void*, bool bArray=false, int nSize=0);
+typedef void (* AXIS_OBJECT_DELETE_FUNCT)(void*, bool bArray, int nSize);
 /**
  * Function that serializes a custom type. bArray indicates that the object in void* is 
  * an element of an array (note that void* is not itself an array).
  */
-typedef int (* AXIS_SERIALIZE_FUNCT)(void*, IWrapperSoapSerializer&, bool bArray=false);
+typedef int (* AXIS_SERIALIZE_FUNCT)(void*, IWrapperSoapSerializer*, bool bArray);
 /**
  * Function that is used to get the size of an object of a custom type.
  */

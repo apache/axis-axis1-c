@@ -69,7 +69,7 @@
 class WrapperClassHandler : public BasicHandler 
 {
 public:
-	int GetType(){return WEBSERVICE_HANDLER;};
+	int AXISCALL GetType(){return WEBSERVICE_HANDLER;};
 };
 
 #endif //__WRAPPERCLASSHANDLER_INCLUDED__
