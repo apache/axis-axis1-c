@@ -100,6 +100,10 @@ SOURCE=..\..\..\src\transport\axis\AxisTransport.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\transport\axis\AxisTransportException.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\transport\axis\Channel.cpp
 # End Source File
 # Begin Source File
