@@ -19,7 +19,10 @@
  *
  */
 
+#ifndef AXISTRACE_LIBRARY_MAINENTRYPOINT
 #define AXISTRACE_LIBRARY_MAINENTRYPOINT
+#endif
+
 #include "../../../common/AxisTrace.h"
 
 #ifdef WIN32
