@@ -60,6 +60,8 @@ import java.util.Vector;
 
 import junit.framework.TestCase;
 
+import org.apache.axismora.Constants;
+import org.apache.axismora.wsdl2ws.WrapperConstants;
 import org.apache.axismora.wsdl2ws.info.TypeMap;
 
 import org.apache.axis.wsdl.gen.Parser;
@@ -75,7 +77,7 @@ import org.w3c.dom.Node;
 public class Node2AttibutesTest extends TestCase {
     /** org.apache.axis.wsdl.symbolTable.SchemaUtils 360 to add the max occurances **/
     public void testNode2Atributes() throws Exception {
-        TypeMap typeMap = new TypeMap();
+        TypeMap typeMap = new TypeMap(WrapperConstants.LANGUAGE_JAVA);
         Parser wsdlParser = new Parser();
         wsdlParser.run("./samples/kumaran.wsdl");
         SymbolTable tb = wsdlParser.getSymbolTable();
