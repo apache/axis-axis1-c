@@ -64,13 +64,16 @@
 #include <stdio.h>
 #include "AxisUtils.h"
 #include "GDefine.h"
+#include "AxisConfig.h"
+
+extern AxisConfig* g_pConfig;
 
 using namespace std;
 
-
 AxisTrace::AxisTrace()
 {
-    GetConfPath();
+    m_sFileName = NULL;
+    //GetConfPath();
 }
 
 AxisTrace::~AxisTrace()
@@ -79,7 +82,8 @@ AxisTrace::~AxisTrace()
 
 int AxisTrace::trace(const char* sLog,char* arg2, int arg3)
 {
-    if ((fileTrace = fopen(sFileName, "a")) == NULL)
+    m_sFileName =  g_pConfig->GetAxisLogPath();
+    if ((fileTrace = fopen(m_sFileName, "a")) == NULL)
         return FAIL;
     else
     {
@@ -113,7 +117,8 @@ int AxisTrace::trace(const char* sLog,char* arg2, int arg3)
 
 int AxisTrace::trace(const char* sLog1, const char* sLog2,char* arg3, int arg4)
 {
-  if ((fileTrace = fopen(sFileName, "a")) == NULL)
+  m_sFileName =  g_pConfig->GetAxisLogPath();
+  if ((fileTrace = fopen(m_sFileName, "a")) == NULL)
         return FAIL;
   else
   {
@@ -145,32 +150,6 @@ int AxisTrace::trace(const char* sLog1, const char* sLog2,char* arg3, int arg4)
 
         return SUCCESS;
     }
-}
-
-int AxisTrace::GetConfPath()
-{
-    int key;
-    int intItr = 0;
-    if ((ConfFile = fopen(CONFFILENAME, "r")) == NULL)
-        return FAIL;
-    else
-    {
-        //fgets(str,200,ConfFile);
-        while (!feof(ConfFile))
-        {
-            key = fgetc(ConfFile);
-            /* The last character read is the end of file marker */
-            /* so don't print it                                 */
-            if (!feof(ConfFile))
-            {
-                sFileName[intItr] = key;
-                intItr++;
-            }
-        }
-        sFileName[intItr] = '\0';
-    }
-    fclose(ConfFile);
-    return SUCCESS;
 }
 
 /*
