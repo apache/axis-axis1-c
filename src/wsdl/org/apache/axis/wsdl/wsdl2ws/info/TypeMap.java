@@ -421,7 +421,8 @@ public class TypeMap
                 "while",
                 "xor",
                 "xor_eq",
-                "string" };
+                "string",
+			    "errno" };
         for (int i = 0; i < words2.length; i++)
         {
             cppkeywords.put(words2[i], words2[i]);
