@@ -156,15 +156,19 @@ STORAGE_CLASS_INFO int process_request(SOAPTransport* pStream)
                     pSrvMap = g_pWSDDDeployment->getWSDDServiceMap ();
                     if (!pSrvMap)
                     {
-                        pStream->sendBytes("<html><body>\
+                        pStream->sendBytes("<html> \
+                            <head><title>Welcome to Axis C++</title></head>\
+                            <body>\
                             <h1 align=\"center\">Welcome to Axis C++</h1>\
                             <br>\
-                            <h2>Deployment Descripter Not Found</h2>\
+                            <h2>Deployment Descriptor Not Found</h2>\
                             <br>\
                             </body></html>", NULL);
                         return AXIS_FAIL;
                     }
-                    pStream->sendBytes("<html><body>\
+                    pStream->sendBytes("<html>\
+                        <head><title>Welcome to Axis C++</title></head>\
+                        <body>\
                         <h1 align=\"center\">Welcome to Axis C++</h1>\
                         <br>\
                         <h2 align=\"center\">List of Deployed Web services</h2><br>\
@@ -275,7 +279,8 @@ extern "C" int initialize_module (int bServer)
             status = g_pAT->openFile ();
             if (status == AXIS_FAIL)
             {
-                return AXIS_FAIL;
+                // Samisa - make sure that we start service, even if we cannot open log file
+                //return AXIS_FAIL;
             }
 #endif
             try
