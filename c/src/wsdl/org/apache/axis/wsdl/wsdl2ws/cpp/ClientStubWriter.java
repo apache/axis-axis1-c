@@ -391,11 +391,11 @@ public class ClientStubWriter extends CPPClassWriter{
 				writeExceptions(faultType,faultInfoName,paramName,langName);
 				}
 			}
-//		writer.write("\t\t\telse\n\t\t\t{\n");//damitha
+		writer.write("\t\t\telse\n\t\t\t{\n");//damitha
 
 		writer.write("\t\t\t\t  cFaultdetail = m_pCall->getElementAsString(\"faultdetail\", 0);\n");//damitha
 		writer.write("\t\t\t\t  throw AxisException(cFaultdetail);\n");//damitha
-//		writer.write("\t\t\t}\n");//damitha
+		writer.write("\t\t\t}\n");//damitha
 
 		writer.write("\t\t}\n");//damitha
 		writer.write("\t\telse throw;\n");//damitha
