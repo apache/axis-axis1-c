@@ -1,6 +1,10 @@
-
+Null returned for NULL arguments in createNamespaceDecl
+Null returned for NULL arguments in createAttribute
 name=
 np:name=apache
 np1:name=Axis
+NULL returned for NULL argumets in getAttributeValue
+NULL returned for Non existing attribute
+NULL returned for Non existing Attribute
 5
 ---------------------- TEST COMPLETE -----------------------------

@@ -1,5 +1,9 @@
+actor = http://schemas.xmlsoap.org/soap/actor/next
 5
+mustUnderstand = 1
 5
+mustUnderstand = 0
 5
+Null returned for non supporting standard attribute 
 5
 ---------------------- TEST COMPLETE -----------------------------

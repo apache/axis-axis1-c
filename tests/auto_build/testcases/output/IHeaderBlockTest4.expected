@@ -1,7 +1,13 @@
+NULL Returned for Element_node
+NULL Returned for Character_node
 Project Type=Open Source
+0
+AddChild returned 0 For NULL Value 
 No Of Children = 3
 First Node Name = Name
 Second Node Name=Project Value = AXISCPP
+Second Node Type = 1
 Last Node Value = This is a test message
+Last Node Type = 2
 5
 ---------------------- TEST COMPLETE -----------------------------
