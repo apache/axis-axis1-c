@@ -74,9 +74,16 @@ public class TraceInstrumentor extends CParsingTool implements FileActor {
 			&& !Configuration.fileExcluded(sourceName)) {
 			Utils.outputDebugString("parsing " + source + "...");
 
+                  boolean isInLib = false;
+                  Iterator itDir = Configuration.getLibraryDirs().iterator();
+                  while (itDir.hasNext()) {
+                      String libdir= (String)(itDir.next());
+                      isInLib = isInLib || (-1 != source.getPath().indexOf(libdir));
+                  }
+
 			// create a tracer to the output file 
 			Tracer output =
-				new Tracer(new FileWriter(outputFile, false), depth, headers);
+				new Tracer(new FileWriter(outputFile, false), depth, headers, isInLib);
 
 			// OK, now we have the output file let's read in the input file !
 			FileReader fr = new FileReader(source);

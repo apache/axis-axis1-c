@@ -215,7 +215,7 @@ void AxisTrace::traceHeader()
 
 }
 
-void AxisTrace::traceLine(const char *data) 
+void AxisTrace::traceLineInternal(const char *data) 
 {
     if (!isTraceOn()) return;
     m_fileTrace->filePuts(data);
@@ -224,7 +224,8 @@ void AxisTrace::traceLine(const char *data)
     return;
 }
 
-void AxisTrace::traceEntry(const char *className, const char *methodName, const void *that, int nParms, ...)
+void AxisTrace::traceEntryInternal(const char *className, const char *methodName, 
+    const void *that, int nParms, va_list args)
 {
     if (!isTraceOn()) return;
 
@@ -247,8 +248,6 @@ void AxisTrace::traceEntry(const char *className, const char *methodName, const 
 		}
 		line += "(";
 
-		va_list args;
-		va_start(args, nParms);
 		for (int i=0; i<nParms; i++) {
 			int type = va_arg(args, int);
 			unsigned len = va_arg(args, unsigned);
@@ -256,7 +255,6 @@ void AxisTrace::traceEntry(const char *className, const char *methodName, const 
 			if (0!=i) line += ", ";
 			addParameter(line,type,len,value);
 		}
-            va_end(args);
 
 		line += ")";
 		traceLine(line.c_str());
@@ -273,7 +271,7 @@ void AxisTrace::traceEntry(const char *className, const char *methodName, const 
     m_stack.push(name);
 }
 
-void AxisTrace::traceExit(const char *className, const char *methodName, int returnIndex,
+void AxisTrace::traceExitInternal(const char *className, const char *methodName, int returnIndex,
 						  int type, unsigned len, void *value)
 {
     if (!isTraceOn()) return;
@@ -314,7 +312,7 @@ void AxisTrace::traceExit(const char *className, const char *methodName, int ret
     }
 }
 
-void AxisTrace::traceCatch(const char *className, const char *methodName, int catchIndex,
+void AxisTrace::traceCatchInternal(const char *className, const char *methodName, int catchIndex,
 						   int type, unsigned len, void *value)
 {
     if (!isTraceOn()) return;
@@ -439,6 +437,14 @@ void AxisTrace::addParameter(string& line, int type, unsigned len, void *value)
 		line += ">";
 		break;
 	}
+}
+
+void AxisTrace::getTraceEntrypoints(AxisTraceEntrypoints& entrypoints) {
+    entrypoints.m_traceLine = traceLineInternal;
+    entrypoints.m_traceEntry = traceEntryInternal;
+    entrypoints.m_traceExit = traceExitInternal;
+    entrypoints.m_traceCatch = traceCatchInternal;
+    entrypoints.m_traceOn = m_bLoggingOn;
 }
 
 /*

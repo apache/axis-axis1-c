@@ -25,6 +25,9 @@
                      <define name="AXISTRANSPORTDLL_EXPORTS"/>
                   </defineset>
                </compiler>
+               <defineset>
+                  <define name="ENABLE_AXISTRACE" if="trace"/>
+               </defineset>
                               <compiler refid="OS400icc"/>
                <!-- Linkers -->
                <linker refid="SolarisLinker"/>
@@ -45,6 +48,10 @@
              exceptions="true" multithreaded="true">
                <!-- Compilers -->
                <compiler refid="AIXxlc"/>
+               <defineset>
+                  <define name="ENABLE_AXISTRACE" if="trace"/>
+               </defineset>
+
                <!-- Linkers -->
                <linker refid="AIXLinker"/>
                <!-- Files to compile -->

@@ -71,11 +71,13 @@ int SOAPTransportFactory::initialize()
         else
         {
             // Load function to do lib level inits
-            void (*initializeLibrary) (void);
-            initializeLibrary = (void (*)(void))PLATFORM_GETPROCADDR(m_LibHandler, INIT_FUNCTION);
+            void (*initializeLibrary) (AxisTraceEntrypoints&);
+            initializeLibrary = (void (*)(AxisTraceEntrypoints&))PLATFORM_GETPROCADDR(m_LibHandler, INIT_FUNCTION);
 
+            AxisTraceEntrypoints ep;
+            AxisTrace::getTraceEntrypoints(ep);
             if (initializeLibrary)
-                 (*initializeLibrary)();
+                 (*initializeLibrary)(ep);
 
 /*
             // Load functions that does start and stop of event loop

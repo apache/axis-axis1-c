@@ -19,6 +19,9 @@
  *
  */
 
+#define AXISTRACE_LIBRARY
+#define AXISTRACE_LIBRARY_MAINENTRYPOINT
+#include "../../common/AxisTrace.h"
 
 #ifdef WIN32
 #pragma warning (disable : 4786)
@@ -60,9 +63,10 @@ extern "C"
 
     /*  initializeLibrary() Is a C interface.
      */
-    STORAGE_CLASS_INFO void initializeLibrary (void)
+    STORAGE_CLASS_INFO void initializeLibrary (AxisTraceEntrypoints& ep)
     {
         // Do init actions
+        AxisTrace::setTraceEntrypoints(ep);
     }
 
     /*  uninitializeLibrary() Is a C interface.
