@@ -21,7 +21,6 @@
 
 package org.apache.axis.wsdl.wsdl2ws.cpp;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,8 +42,7 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class ClientStubWriter extends CPPClassWriter
 {
-    private WebServiceContext wscontext;
-    private ArrayList methods;
+    protected ArrayList methods;
     public ClientStubWriter(WebServiceContext wscontext) throws WrapperFault
     {
         super(
@@ -52,44 +50,6 @@ public class ClientStubWriter extends CPPClassWriter
                 wscontext.getSerInfo().getQualifiedServiceName()));
         this.wscontext = wscontext;
         this.methods = wscontext.getSerInfo().getMethods();
-    }
-    protected File getFilePath() throws WrapperFault
-    {
-        return this.getFilePath(false);
-    }
-
-    protected File getFilePath(boolean useServiceName) throws WrapperFault
-    {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
-        new File(targetOutputLocation).mkdirs();
-
-        String fileName = targetOutputLocation + "/" + classname + ".cpp";
-
-        if (useServiceName)
-        {
-            String serviceName = this.wscontext.getSerInfo().getServicename();
-            fileName =
-                targetOutputLocation
-                    + "/"
-                    + serviceName
-                    + "_"
-                    + classname
-                    + ".cpp";
-            this.wscontext.addGeneratedFile(
-                serviceName + "_" + classname + ".cpp");
-        }
-        else
-        {
-            this.wscontext.addGeneratedFile(classname + ".cpp");
-        }
-
-        return new File(fileName);
     }
     protected String getServiceName() throws WrapperFault
     {
@@ -628,10 +588,10 @@ public class ClientStubWriter extends CPPClassWriter
             if (returntype == null)
             {
                 writer.write("\t\t\t/*not successful*/\n\t\t}\n");
-            writer.write("\t\t}\n");
-            writer.write("\tupdateStateAfterResponse();\n");
-            writer.write("\tm_pCall->unInitialize();\n");
-            //    writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");
+                writer.write("\t\t}\n");
+                writer.write("\tupdateStateAfterResponse();\n");
+                writer.write("\tm_pCall->unInitialize();\n");
+                //    writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");
             }
             else
                 if (returntypeisarray)
@@ -672,10 +632,10 @@ public class ClientStubWriter extends CPPClassWriter
                                 + containedType
                                 + ");\n\t\t\t}\n");
                     }
-            writer.write("\t\t}\n");
-            writer.write("\tupdateStateAfterResponse();\n");
-            writer.write("\tm_pCall->unInitialize();\n");
-            //        writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");
+                    writer.write("\t\t}\n");
+                    writer.write("\tupdateStateAfterResponse();\n");
+                    writer.write("\tm_pCall->unInitialize();\n");
+                    //        writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");
                     writer.write("\t\treturn RetArray;\n");
                 }
                 else
@@ -689,10 +649,10 @@ public class ClientStubWriter extends CPPClassWriter
                                 + "(\""
                                 + returntype.getParamName()
                                 + "\", 0);\n\t\t\t}\n");
-            writer.write("\t\t}\n");
-            writer.write("\tupdateStateAfterResponse();\n");
-            writer.write("\tm_pCall->unInitialize();\n");
-            //            writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");
+                        writer.write("\t\t}\n");
+                        writer.write("\tupdateStateAfterResponse();\n");
+                        writer.write("\tm_pCall->unInitialize();\n");
+                        //            writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");
                         writer.write("\t\treturn Ret;\n");
                     }
                     else
@@ -711,10 +671,10 @@ public class ClientStubWriter extends CPPClassWriter
                                 + ",\""
                                 + returntype.getParamName()
                                 + "\", 0);\n\t\t}\n");
-            writer.write("\t\t}\n");
-            writer.write("\tupdateStateAfterResponse();\n");
-            writer.write("\tm_pCall->unInitialize();\n");
-            //            writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");
+                        writer.write("\t\t}\n");
+                        writer.write("\tupdateStateAfterResponse();\n");
+                        writer.write("\tm_pCall->unInitialize();\n");
+                        //            writer.write("\t\t}\n\t\tm_pCall->unInitialize();\n");
                         writer.write("\t\treturn pReturn;\n");
 
                     }
@@ -725,8 +685,8 @@ public class ClientStubWriter extends CPPClassWriter
         writer.write(
             "\t\tif(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)\n");
         writer.write("\t\t{\n");
-            writer.write("\tupdateStateAfterResponse();\n");
-            writer.write("\tm_pCall->unInitialize();\n");
+        writer.write("\tupdateStateAfterResponse();\n");
+        writer.write("\tm_pCall->unInitialize();\n");
         //writer.write("\t\t\tm_pCall->unInitialize();\n");
         writer.write(
             "\t\t\tthrow "

@@ -23,12 +23,14 @@
 package org.apache.axis.wsdl.wsdl2ws.cpp;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
 import org.apache.axis.wsdl.wsdl2ws.BasicFileWriter;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
+import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public abstract class CPPClassWriter extends BasicFileWriter
 {
@@ -69,4 +71,45 @@ public abstract class CPPClassWriter extends BasicFileWriter
 
     protected void writeGlobalCodes() throws WrapperFault
     {}
+
+    protected WebServiceContext wscontext;
+
+    protected File getFilePath() throws WrapperFault
+    {
+        return this.getFilePath(false);
+    }
+
+    protected File getFilePath(boolean useServiceName) throws WrapperFault
+    {
+        String targetOutputLocation =
+            this.wscontext.getWrapInfo().getTargetOutputLocation();
+        if (targetOutputLocation.endsWith("/"))
+            targetOutputLocation =
+                targetOutputLocation.substring(
+                    0,
+                    targetOutputLocation.length() - 1);
+        new File(targetOutputLocation).mkdirs();
+    
+        String fileName = targetOutputLocation + "/" + classname + ".cpp";
+    
+        if (useServiceName)
+        {
+            String serviceName = this.wscontext.getSerInfo().getServicename();
+            fileName =
+                targetOutputLocation
+                    + "/"
+                    + serviceName
+                    + "_"
+                    + classname
+                    + ".cpp";
+            this.wscontext.addGeneratedFile(
+                serviceName + "_" + classname + ".cpp");
+        }
+        else
+        {
+            this.wscontext.addGeneratedFile(classname + ".cpp");
+        }
+    
+        return new File(fileName);
+    }
 }

@@ -21,7 +21,6 @@
 
 package org.apache.axis.wsdl.wsdl2ws.cpp;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,18 +29,17 @@ import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
+import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
-import org.apache.axis.wsdl.wsdl2ws.info.FaultInfo;
-import org.apache.axis.wsdl.wsdl2ws.CUtils;
 
 public class WrapWriter extends CPPClassWriter
 {
-    private WebServiceContext wscontext;
     private ArrayList methods;
     public WrapWriter(WebServiceContext wscontext) throws WrapperFault
     {
@@ -52,45 +50,6 @@ public class WrapWriter extends CPPClassWriter
         this.wscontext = wscontext;
         this.methods = wscontext.getSerInfo().getMethods();
     }
-    protected File getFilePath() throws WrapperFault
-    {
-        return this.getFilePath(false);
-    }
-
-    protected File getFilePath(boolean useServiceName) throws WrapperFault
-    {
-        String targetOutputLocation =
-            this.wscontext.getWrapInfo().getTargetOutputLocation();
-        if (targetOutputLocation.endsWith("/"))
-            targetOutputLocation =
-                targetOutputLocation.substring(
-                    0,
-                    targetOutputLocation.length() - 1);
-        new File(targetOutputLocation).mkdirs();
-
-        String fileName = targetOutputLocation + "/" + classname + ".cpp";
-
-        if (useServiceName)
-        {
-            String serviceName = this.wscontext.getSerInfo().getServicename();
-            fileName =
-                targetOutputLocation
-                    + "/"
-                    + serviceName
-                    + "_"
-                    + classname
-                    + ".cpp";
-            this.wscontext.addGeneratedFile(
-                serviceName + "_" + classname + ".cpp");
-        }
-        else
-        {
-            this.wscontext.addGeneratedFile(classname + ".cpp");
-        }
-
-        return new File(fileName);
-    }
-
     protected void writeClassComment() throws WrapperFault
     {
         try
