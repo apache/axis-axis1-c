@@ -21,6 +21,8 @@
 #include "TypeMapping.hpp"
 #include "WSDDDefines.hpp"
 #include "ISoapAttachment.hpp"
+#include <stdarg.h>
+#include <cctype>
 
 /*
  *  @class IWrapperSoapSerializer
@@ -96,6 +98,7 @@ public:
     virtual int AXISCALL serializeAsAttribute(const AxisChar* sName, 
         const AxisChar* pNamespace, void* pValue, XSDTYPE type)=0;
 
+    virtual void AXISCALL serializeVargs(const char* pFirst, va_list vargs)=0;
     virtual void AXISCALL serialize(const char* pFirst, ...)=0;
 
     /* 

@@ -15,6 +15,7 @@
  */
 
 #include <axis/IWrapperSoapSerializer.hpp>
+#include "../soap/SoapSerializer.h"
 AXIS_CPP_NAMESPACE_USE
 
 extern "C" {
@@ -171,6 +172,14 @@ AXISC_STORAGE_CLASS_INFO void axiscAddAttachmentHeader(AXISCHANDLE wrapperSoapSe
 AXISC_STORAGE_CLASS_INFO AXISCHANDLE axiscCreateSoapAttachementSoapAttachment(AXISCHANDLE wrapperSoapSerializer) {
 	IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
 	return (AXISCHANDLE)(sz->createSoapAttachement());
+}
+
+AXISC_STORAGE_CLASS_INFO void axiscSerialize(AXISCHANDLE wrapperSoapSerializer, const char *pFirst, ...) {
+	SoapSerializer *sz = (SoapSerializer*)wrapperSoapSerializer;
+	va_list vList;
+	va_start( vList, pFirst );
+	sz->serializeVargs(pFirst,vList);
+	va_end( vList);
 }
 
 }

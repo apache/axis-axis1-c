@@ -387,6 +387,8 @@ public class CBindingGenerator extends CParsingTool implements FileActor {
 			} else if (!Utils.cTypeQualifiers.contains(tok) && 
 				!Utils.cPrimitives.contains(tok) && 
 				!tok.equals("tm") && 		// Leave struct tm alone
+				!tok.equals("...") && 		// Leave ... alone
+				!tok.equals("va_list") && 	// Leave ... alone
 				!tok.startsWith("xsd")) {
 				type += "AXISC_"+tok;
 			} else {

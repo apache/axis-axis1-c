@@ -702,12 +702,10 @@ int SoapSerializer::serializeAsAttribute(const AxisChar* pName,
     }
 }
 
-void SoapSerializer::serialize(const char* pFirst, ...)
+void SoapSerializer::serializeVargs(const char* pFirst, va_list vList)
 {
-    va_list vList;
     const char* pArg;
     if (pFirst) *this << pFirst;
-    va_start( vList, pFirst );     /* Initialize variable arguments. */
     do
     {
         pArg = va_arg( vList, const char*);
@@ -715,6 +713,13 @@ void SoapSerializer::serialize(const char* pFirst, ...)
             *this << pArg;
     }
     while (pArg != NULL);
+}
+
+void SoapSerializer::serialize(const char* pFirst, ...)
+{
+    va_list vList;
+    va_start( vList, pFirst );     /* Initialize variable arguments. */
+    serializeVargs(pFirst,vList);
     va_end( vList);              /* Reset variable arguments.      */
 }
 
