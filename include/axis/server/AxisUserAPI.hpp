@@ -140,7 +140,6 @@ typedef unsigned short xsd__unsignedShort;
 class STORAGE_CLASS_INFO xsd__base64Binary {
 public:
     xsd__base64Binary();
-    xsd__base64Binary(xsd__base64Binary&);
     ~xsd__base64Binary();
     xsd__unsignedByte * __ptr;
     xsd__int __size;
@@ -153,7 +152,6 @@ public:
 class STORAGE_CLASS_INFO xsd__hexBinary {
 public:
     xsd__hexBinary();
-    xsd__hexBinary(xsd__hexBinary&);
     ~xsd__hexBinary();
     xsd__unsignedByte * __ptr;
     xsd__int __size;
@@ -238,7 +236,6 @@ class STORAGE_CLASS_INFO AnyType
 {
 public:
     AnyType();
-    AnyType(AnyType&);
     ~AnyType();
 
     /**

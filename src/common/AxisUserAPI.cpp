@@ -39,11 +39,6 @@ xsd__base64Binary::xsd__base64Binary() {
   __size = 0;
 }
 
-xsd__base64Binary::xsd__base64Binary(xsd__base64Binary& rCopy) { 
-  __size = rCopy.__size;
-  __ptr = rCopy.__ptr;
-}
-
 xsd__base64Binary::~xsd__base64Binary() { 
 }
 
@@ -52,22 +47,12 @@ xsd__hexBinary::xsd__hexBinary() {
   __size = 0;
 }
 
-xsd__hexBinary::xsd__hexBinary(xsd__hexBinary& rCopy) { 
-  __size = rCopy.__size;
-  __ptr = rCopy.__ptr;
-}
-
 xsd__hexBinary::~xsd__hexBinary() { 
 }
 
 AnyType::AnyType() { 
   _array = 0;
   _size = 0;
-}
-
-AnyType::AnyType(AnyType& rCopy) { 
-  _size = rCopy._size;
-  _array = rCopy._array;
 }
 
 AnyType::~AnyType() { 

@@ -47,6 +47,7 @@ public class Exclusions {
                   "Param.h",
                   "Array.hpp",
                   "Buffer.hpp",
+                  "SOAPTransport.h",
 		// Axis.cpp contains a copyright sign (circle with a "C" in it) which 
 		// makes readline throw a MalformedInputException on linux possibly due to 
 		// locale/charset problems.
