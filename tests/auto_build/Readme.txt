@@ -97,7 +97,9 @@ When you want to add a new test please be aware of the following simple steps.
    <wsdl file name (without .wsdl part)>:host=<your host>
    <wsdl file name (without .wsdl part)>:port=<your port>
 
-4. cd to auto_build and run autoBuildCVS.sh
+4. cd to auto_build and edit the build.sh file
+   according to your configure requirments.
+   Run autoBuildCVS.sh
    This will first checkout from cvs and then build the source.
    Then generate samples from each wsdl.
    You will have a new folder creaed in testcases/build folder with the 
