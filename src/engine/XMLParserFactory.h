@@ -25,7 +25,7 @@
 #if !defined(AXIS_XMLPARSERFACTORY_H__OF_AXIS_INCLUDED_)
 #define AXIS_XMLPARSERFACTORY_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/GDefine.h>
+#include <axis/server/GDefine.hpp>
 #include "../xml/XMLParser.h"
 
 #define CREATE_FUNCTION2 "CreateInstance"

@@ -21,12 +21,12 @@
 
 #include "SharedObject.h"
 #ifdef USER_DESERIALIZER
-#include <axis/server/IWrapperSoapDeSerializer.h>
+#include <axis/server/IWrapperSoapDeSerializer.hpp>
 extern void* GetUserDeSerializer();
 #else
 #include "../soap/SoapDeSerializer.h"
 #endif
-#include <axis/server/GDefine.h>
+#include <axis/server/GDefine.hpp>
 #include <list>
 
 AXIS_CPP_NAMESPACE_START

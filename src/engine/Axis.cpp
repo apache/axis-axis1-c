@@ -33,7 +33,7 @@
 #include <axis/Axis.hpp>
 
 #ifdef AXIS_CLIENT_LIB
-#include <axis/client/Call.h>
+#include <axis/client/Call.hpp>
 #include "AxisEngine.h"
 #else
 #include "server/ServerAxisEngine.h"
@@ -41,7 +41,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <axis/server/Packet.h>
+#include <axis/server/Packet.hpp>
 #include <string>
 #include <map>
 #include <iostream>

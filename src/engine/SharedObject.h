@@ -22,7 +22,7 @@
 #if !defined(AXIS_SHAREDOBJECT_H__OF_AXIS_INCLUDED_)
 #define AXIS_SHAREDOBJECT_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/GDefine.h>
+#include <axis/server/GDefine.hpp>
 #ifdef WIN32
 #else //Linux
 #include "pthread.h"

@@ -20,8 +20,8 @@
 #define __HANDLERLOADER_H_OF_AXIS_INCLUDED__
 
 #include "../common/MessageData.h"
-#include <axis/server/GDefine.h>
-#include <axis/server/WrapperClassHandler.h>
+#include <axis/server/GDefine.hpp>
+#include <axis/server/WrapperClassHandler.hpp>
 #include "SharedObject.h"
 #include "AxisEngineException.h"
 #include "../common/AxisConfigException.h"

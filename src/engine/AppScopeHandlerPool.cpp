@@ -22,7 +22,7 @@
 
 #include "AppScopeHandlerPool.h"
 #include "HandlerLoader.h"
-#include <axis/server/AxisException.h>
+#include <axis/server/AxisException.hpp>
 #include "../common/AxisTrace.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX AxisTrace* g_pAT;

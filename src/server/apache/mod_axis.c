@@ -21,7 +21,7 @@
 #include <apache1_3/http_log.h>
 #include <apache1_3/http_protocol.h>
 #include <apache1_3/http_main.h>
-#include <axis/server/Packet.h>
+#include <axis/server/Packet.hpp>
 #include <string.h>
 #include <malloc.h>
 

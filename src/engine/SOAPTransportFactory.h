@@ -25,7 +25,7 @@
 #if !defined(AXIS_SOAPTRANSPORTFACTORY_H__OF_AXIS_INCLUDED_)
 #define AXIS_SOAPTRANSPORTFACTORY_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/GDefine.h>
+#include <axis/server/GDefine.hpp>
 
 #define CREATE_FUNCTION1 "CreateInstance"
 #define DELETE_FUNCTION1 "DestroyInstance"

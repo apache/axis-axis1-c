@@ -37,10 +37,10 @@
  * Added setSOAPMethodAttribute
  */
 
-#include <axis/client/Stub.h>
+#include <axis/client/Stub.hpp>
 #include <stdio.h>
 #include "../../transport/SOAPTransport.h"
-#include <axis/server/AxisWrapperAPI.h>
+#include <axis/server/AxisWrapperAPI.hpp>
 #include "../../soap/SoapSerializer.h"
 
 StubFunctions Stub::ms_VFtable;

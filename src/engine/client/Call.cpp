@@ -26,7 +26,7 @@
  */
 
 
-#include <axis/client/Call.h>
+#include <axis/client/Call.hpp>
 #include "../../common/AxisConfig.h"
 #include "../../transport/axis/AxisTransport.h"
 #include "../../transport/axis/Channel.hpp"

@@ -20,7 +20,7 @@
 #define AXIS_APPSCOPEHANDLERPOOL_H__OF_AXIS_INCLUDED_
 
 #include "SharedObject.h"
-#include <axis/server/BasicHandler.h>
+#include <axis/server/BasicHandler.hpp>
 
 #include <map>
 #include <list>

@@ -23,7 +23,7 @@
 
 #include "libAxiscpp.h"
 #include "Packet.h"
-#include "Axis.h"
+#include "Axis.hpp"
 #include <new>
 #include <exception>
 

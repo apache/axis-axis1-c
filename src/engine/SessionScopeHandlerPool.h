@@ -23,7 +23,7 @@
 #define SESSIONLESSHANDLERS	"0aaaaa"
 
 #include "SharedObject.h"
-#include <axis/server/BasicHandler.h>
+#include <axis/server/BasicHandler.hpp>
 
 #include <map>
 #include <list>
