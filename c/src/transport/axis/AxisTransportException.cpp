@@ -19,7 +19,7 @@
  *
  */
 
-#include "AxisTransportException.h"
+#include <axis/AxisTransportException.h>
 #include <exception>
 using namespace std;
 
@@ -70,24 +70,23 @@ void AxisTransportException::processException(int iExceptionCode)
 
 const string AxisTransportException::getMessage (exception* objException)
 {
-    string sMessage = objException->what();
+    m_sMessage = objException->what();
 
-    return sMessage;
+    return m_sMessage;
 }
 
 const string AxisTransportException::getMessage (int iExceptionCode)
 {
-    string sMessage;
     switch(iExceptionCode)
     {
        case SERVER_TRANSPORT_RECEPTION_EXCEPTION:
-            sMessage = "Problem occured when receiving the stream";
+            m_sMessage = "Problem occured when receiving the stream";
             break;
         case SERVER_TRANSPORT_SENDING_EXCEPTION:
-            sMessage = "Problem occured when sending the stream";
+            m_sMessage = "Problem occured when sending the stream";
             break;
         case SERVER_TRANSPORT_HTTP_EXCEPTION:
-            sMessage = "HTTP transport error";
+            m_sMessage = "HTTP transport error";
             break;
         case SERVER_TRANSPORT_PROCESS_EXCEPTION:
             m_sMessage = "HTTP Error, cannot process response message";
@@ -95,10 +94,40 @@ const string AxisTransportException::getMessage (int iExceptionCode)
         case SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE:
             m_sMessage = "Unknow HTTP response, cannot process response message";
             break;
+        case SERVER_TRANSPORT_UNEXPECTED_STRING:
+            m_sMessage = "Unexpected string";
+            break;
+        case SERVER_TRANSPORT_CHANNEL_INIT_ERROR:
+            m_sMessage = "Cannot initialize a channel to the remote end";
+            break;
+        case SERVER_TRANSPORT_SOCKET_CREATE_ERROR:
+            m_sMessage = "Sockets error Couldn't create socket";
+            break;
+        case SERVER_TRANSPORT_SOCKET_CONNECT_ERROR:
+            m_sMessage = "Cannot open a channel to the remote end, shutting down the channel";
+            break;
+        case SERVER_TRANSPORT_INVALID_SOCKET:
+            m_sMessage = "Invalid socket. Socket may not be open";
+            break;
+        case SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR:
+            m_sMessage = "Output streaming error on Channel while writing data";
+            break;
+        case SERVER_TRANSPORT_INPUT_STREAMING_ERROR:
+            m_sMessage = "Input streaming error while getting data";
+            break;
+        case SERVER_TRANSPORT_TIMEOUT_EXCEPTION:
+            m_sMessage = "Channel error while waiting for timeout";
+            break;
+        case SERVER_TRANSPORT_TIMEOUT_EXPIRED:
+            m_sMessage = "Channel error connection timeout before receving";
+            break;
+        case SERVER_TRANSPORT_BUFFER_EMPTY:
+            m_sMessage = "Transport buffer is empty";
+            break;
         default:
-            sMessage = "Unknown Transport Exception"; 
+            m_sMessage = "Unknown Transport Exception"; 
     }
-    return sMessage;
+    return m_sMessage;
 }
 
 const char* AxisTransportException::what() throw ()

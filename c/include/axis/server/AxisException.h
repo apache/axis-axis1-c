@@ -41,6 +41,7 @@ using namespace std;
 #define THROW_AXIS_WSDD_EXCEPTION(X) throw AxisWsddException(X)
 #define THROW_AXIS_ENGINE_EXCEPTION(X) throw AxisEngineException(X)
 #define THROW_AXIS_TRANSPORT_EXCEPTION(X) throw AxisTransportException(X)
+#define THROW_AXIS_PARSE_EXCEPTION(X) throw AxisParseException(X)
 
 #define THROW_AXIS_BAD_ALLOC() throw std::bad_alloc
 #define THROW_AXIS_BAD_CAST() throw std::bad_cast
@@ -59,12 +60,13 @@ using namespace std;
 #define AXISC_CATCH(X) 
 #define AXISC_ENDCATCH
 
-#define THROW_AXIS_EXCEPTION(X) throw AxisException(X) return X
-#define THROW_AXIS_CONFIG_EXCEPTION(X) throw AxisConfigException(X) return X
-#define THROW_AXIS_SOAP_EXCEPTION(X) throw AxisSoapException(X) return X
-#define THROW_AXIS_WSDD_EXCEPTION(X) throw AxisWsddException(X) return X
-#define THROW_AXIS_ENGINE_EXCEPTION(X) throw AxisEngineException(X) return X
-#define THROW_AXIS_TRANSPORT_EXCEPTION(X) throw AxisTransportException(X) return X
+#define THROW_AXIS_EXCEPTION(X) return X
+#define THROW_AXIS_CONFIG_EXCEPTION(X) return X
+#define THROW_AXIS_SOAP_EXCEPTION(X) return X
+#define THROW_AXIS_WSDD_EXCEPTION(X) return X
+#define THROW_AXIS_ENGINE_EXCEPTION(X) return X
+#define THROW_AXIS_TRANSPORT_EXCEPTION(X) return X
+#define THROW_AXIS_PARSE_EXCEPTION(X) return X
 
 #define THROW_AXIS_BAD_ALLOC()
 #define THROW_AXIS_BAD_CAST()
@@ -112,6 +114,7 @@ enum AXISC_EXCEPTIONS
     CLIENT_SOAP_SOAP_ACTION_EMTPY,
     CLIENT_SOAP_SOAP_CONTENT_ERROR,
     CLIENT_SOAP_NO_SOAP_METHOD,
+    CLIENT_SOAP_CONTENT_NOT_SOAP,
     CLIENT_WSDD_SERVICE_NOT_FOUND,
     CLIENT_WSDD_METHOD_NOT_ALLOWED,
     CLIENT_WSDD_PARA_TYPE_MISMATCH,
@@ -142,6 +145,18 @@ enum AXISC_EXCEPTIONS
     SERVER_TRANSPORT_PROCESS_EXCEPTION,
     SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE,
     SERVER_TRANSPORT_HTTP_EXCEPTION,
+    SERVER_TRANSPORT_UNEXPECTED_STRING,
+    SERVER_TRANSPORT_CHANNEL_INIT_ERROR,
+    SERVER_TRANSPORT_SOCKET_CREATE_ERROR,
+    SERVER_TRANSPORT_SOCKET_CONNECT_ERROR,
+    SERVER_TRANSPORT_INVALID_SOCKET,
+    SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR,
+    SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
+    SERVER_TRANSPORT_TIMEOUT_EXCEPTION,
+    SERVER_TRANSPORT_TIMEOUT_EXPIRED,
+    SERVER_TRANSPORT_BUFFER_EMPTY,
+    SERVER_PARSE_BUFFER_EMPTY,
+    SERVER_PARSE_PARSER_FAILED, 
  
     SERVER_TEST_EXCEPTION,
     SERVER_UNKNOWN_ERROR,
@@ -160,17 +175,76 @@ enum AXISC_EXCEPTIONS
     FAULT_LAST 
 };
 
+/**
+ *   @class AxisException
+ *   @brief Base class for Axis C++ exception hierarchy.
+ *
+ *   This will act as the base class for Axis C++ exception hierarchy. 
+ *   This is class is derived from the std c++ exception class. Derived
+ *   from this class are AxisConfigExceptin, AxisSoapExceptin, AxisWsddException,
+ *   AxisEngineException, AxisTransportException and AxisParseException.
+ *
+ *   @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
+ */
 class AxisException :public exception
 {
 
 public:
+    /** No parameter constructor*/
     AxisException(){};
+
+    /** This can be used throw an exception with the exception code
+      * which is defined in the AxisException.h file, under AXISC_EXCEPTIONS
+      * type. Axis C++ exception model heavily use this.
+      *
+      * @param Exception code which is defined in the AxisException.h file, 
+      * under AXISC_EXCEPTIONS type.
+      * 
+      * @example throw AxisException(AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
+      */
     AxisException(int iExceptionCode);
+
+    /** This can be used to throw an exception with another exception as a
+      * parameter. One situation in which this can be used is when we catch
+      * a standard exception like std::bad_alloc
+      *
+      * @param An exception class derived from std::exception
+      *
+      * @example throw AxisException(std::bad_alloc);
+      */
     AxisException(exception* e);
+
+    /** This accept two parameters, both an exception code an exception object
+      * derived from std::exception
+      *
+      * @param An exception class derived from std::exception
+      * @param An exception code
+      */
     AxisException(exception* e, int iExceptionCode);
+    
+    /** This accept an exception message
+      *
+      * @param An exception message
+      */
     AxisException(char* pcMessage){m_sMessage = pcMessage;};
+    
+    /** Destructor */
     virtual ~AxisException() throw();
+
+    /** This method is defined in std::exception. AxisException and derived
+      * classes will override this to print exception messages
+      */
     virtual const char* what() throw();
+
+    /** This can be called to get the exception code which is passed
+      * in the constructor. This returns -1 value when the 
+      * constructor does not have a exception code parameter
+      * 
+      * @return the exception code if the construct have a exception code
+      * int parameter. Else return -1.
+      *
+      * @return exception message
+      */
     virtual const int getExceptionCode();
     virtual const string getMessage(exception* e);
     virtual const string getMessage(int iExceptionCode);    
@@ -179,8 +253,8 @@ private:
     void processException(exception* e);
     void processException(exception* e, int iExceptionCode);
     void processException(int iExceptionCode);
-    string m_sMessage;
-    int m_iExceptionCode;
+    string m_sMessage; //Holds the exception messae
+    int m_iExceptionCode; //Holds the exception code
 };
 
 #endif

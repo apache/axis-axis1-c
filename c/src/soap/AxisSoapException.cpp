@@ -19,7 +19,7 @@
  *
  */
 
-#include "AxisSoapException.h"
+#include <axis/AxisSoapException.h>
 #include <exception>
 using namespace std;
 
@@ -71,39 +71,41 @@ void AxisSoapException::processException(int iExceptionCode)
 
 const string AxisSoapException::getMessage (exception* objException)
 {
-    string sMessage = objException->what();
+    m_sMessage = objException->what();
 
-    return sMessage;
+    return m_sMessage;
 }
 
 const string AxisSoapException::getMessage (int iExceptionCode)
 {
-    string sMessage;
     switch(iExceptionCode)
     {
 
         case SOAP_VERSION_MISMATCH :
-            sMessage = "Soap Version mismatch fault occured";
+            m_sMessage = "Soap Version mismatch fault occured";
             break;
         case SOAP_MUST_UNDERSTAND:
-            sMessage = "Soap Must understand fault occured";
+            m_sMessage = "Soap Must understand fault occured";
             break;
         case CLIENT_SOAP_MESSAGE_INCOMPLETE:
-            sMessage = "Received message is incomplete";
+            m_sMessage = "Received message is incomplete";
             break;
         case CLIENT_SOAP_SOAP_ACTION_EMTPY:
-            sMessage = "Soap action is empty";
+            m_sMessage = "Soap action is empty";
             break;
         case CLIENT_SOAP_SOAP_CONTENT_ERROR:
-            sMessage = "Received content is faulty";
+            m_sMessage = "Received content is faulty";
             break;
         case CLIENT_SOAP_NO_SOAP_METHOD:
-            sMessage = "Request method is not a soap method";
+            m_sMessage = "Request method is not a soap method";
+            break;
+        case CLIENT_SOAP_CONTENT_NOT_SOAP:
+            m_sMessage = "Content is not a valid soap message";
             break;
         default:
-            sMessage = "Unknown Soap Exception";
+            m_sMessage = "Unknown Soap Exception";
     }
-    return sMessage;
+    return m_sMessage;
 }
 
 const char* AxisSoapException::what() throw ()

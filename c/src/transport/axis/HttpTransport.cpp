@@ -116,7 +116,8 @@ bool HttpTransport::Init ()
 {
     /* open a channel for transport */
     m_HttpBindDone = false;
-    AXISC_TRY
+    try
+    {
 	m_bStatus = true;
 	std::string host = m_Url.GetHostName();
         unsigned int port = m_Url.GetPort();
@@ -126,17 +127,24 @@ bool HttpTransport::Init ()
             port = m_uiProxyPort;
         }
 	m_Channel->Open (host, port);
-	
         m_Channel->setTimeout(m_lTimeoutSeconds);
 	m_Channel->SetTransportHandler (this);
 #ifdef _DEBUG
 	cout << "Transport:init() successfull" << endl;
 #endif
-    AXISC_CATCH(AxisTransportException & chEx)
-	 AXISC_THROW_SAME;
-    AXISC_CATCH(AxisException & chEx)
-         AXISC_THROW_SAME;
-    AXISC_ENDCATCH
+    }
+    catch(AxisTransportException & e)
+    {
+        throw;
+    }
+    catch(AxisException & e)
+    {
+        throw;
+    }
+    catch(...)
+    {
+        throw;
+    }
     return true;
 }
 
@@ -180,83 +188,88 @@ HttpTransport::operator >> (const char **pPayLoad)
 	
 	return *this;
     }
-
-    /* Http header is processed and validated. We now receive the payload */
-    /* from the channel */
-    if (m_IsHttpHeader == 1)
+    try
     {
-	*m_Channel >> m_PayLoad;
-	*pPayLoad = m_PayLoad.c_str ();
-	return *this;
-    }
-
-
-
-    do
-    {				/* process will step into this only if http validation is not done. 
-				 * That is, until the stream contain the httpd header.
+        /* Http header is processed and validated. We now receive the payload */
+        /* from the channel */
+        if (m_IsHttpHeader == 1)
+        {
+	    *m_Channel >> m_PayLoad;
+	    *pPayLoad = m_PayLoad.c_str ();
+	    return *this;
+        }
+        do
+        { /* process will step into this only if http validation is not done. 
+           * That is, until the stream contain the httpd header.
 				 */
-	*m_Channel >> tmpPacket;
+	    *m_Channel >> tmpPacket;
 
-	// When HTTP has chunked the data into packets, continue to read data
-	// from the channel until it is empty to ensure that all of the chunks
-	// associated with the message have been read.
+            // When HTTP has chunked the data into packets, continue to read data
+            // from the channel until it is empty to ensure that all of the chunks
+            // associated with the message have been read.
 
-	// Create a local string that will receive the latest http chunk.
+            // Create a local string that will receive the latest http chunk.
 
-	std::string tmpCompletePacket;
+            std::string tmpCompletePacket;
 
-	// Loop, reading the latest http data and then adding that data chunk to
-	// the tmpPacket string until the length of the latest http data chunk is
-	// zero, indicating that there is no more data to be read that is associated
-	// with this message.
-	/* TODO */
+            // Loop, reading the latest http data and then adding that data chunk to
+            // the tmpPacket string until the length of the latest http data chunk is
+            // zero, indicating that there is no more data to be read that is associated
+            // with this message.
+            /* TODO */
 
-	// There are other places m_channel is used and needs to have same loop.
-	do
-	{
-	    //*m_Channel >> tmpCompletePacket;
-	    //have read from channel once
-	    //hence read the rest in non bloking mode
-	    m_Channel->readNonBlocking (tmpCompletePacket);
-
-	    tmpPacket.append (tmpCompletePacket);
-
-	}
-	while (tmpCompletePacket.length ());
+            // There are other places m_channel is used and needs to have same loop.
+            do
+            {
+	         //*m_Channel >> tmpCompletePacket;
+	         //have read from channel once
+	         //hence read the rest in non bloking mode
+	         m_Channel->readNonBlocking (tmpCompletePacket);
+	         tmpPacket.append (tmpCompletePacket);
+            }
+            while (tmpCompletePacket.length ());
 
 #ifdef _DEBUG
-	std::cout << "\n\n\nGot the message:\r\n\r\n" << tmpPacket << "\n\n";
+        std::cout << "\n\n\nGot the message:\r\n\r\n" << tmpPacket << "\n\n";
 #endif
-
-
-	/* Validate the HTTP packet */
-	if (m_IsHttpHeader == 1)
-	    /* if header is validated but payload has zero length, process will 
-	     * step into this. 
-	     */
-	{
-	    /* printf("while,m_IsHttpHeader == 1\n"); */
-	    *pPayLoad = tmpPacket.c_str ();
-
-	    break;
-	}
-	if (m_bStatus)
-	    HTTPValidate (tmpPacket);	/* Validate the header */
-	int j = strlen (tmpPacket.c_str ());
-	if (j == 0)
-	    break;
-	*pPayLoad = m_PayLoad.c_str ();
-	int i = strlen (m_PayLoad.c_str ());
-	/* If payload has nonzero length */
-	if (i > 0)
-	{
-	    break;
-	}
+            /* Validate the HTTP packet */
+            if (m_IsHttpHeader == 1)
+            /* if header is validated but payload has zero length, process will 
+             * step into this. 
+             */
+            {
+                /* printf("while,m_IsHttpHeader == 1\n"); */
+                *pPayLoad = tmpPacket.c_str ();
+                break;
+            }
+            if (m_bStatus)
+            HTTPValidate (tmpPacket);	/* Validate the header */
+            int j = strlen (tmpPacket.c_str ());
+            if (j == 0)
+            break;
+            *pPayLoad = m_PayLoad.c_str ();
+            int i = strlen (m_PayLoad.c_str ());
+            /* If payload has nonzero length */
+            if (i > 0)
+            {
+                break;
+            }
+        }
+        while (true);
+        return *this;
     }
-    while (true);
-
-    return *this;
+    catch(AxisTransportException& e)
+    {
+        throw;
+    }
+    catch(AxisException& e)
+    {
+        throw;
+    }
+    catch(...)
+    {
+        throw;
+    }
 }
 
 
@@ -269,11 +282,26 @@ HttpTransport::operator >> (const char **pPayLoad)
 const Transport &
 HttpTransport::operator << (const char *p_Payload)
 {
-    HTTPBind ();		/* Bind the SOAP-Envelop with HTTP headers */
-    /* Write to the established channel */
-    *m_Channel << p_Payload;
-    /* *m_Channel << m_OutMsg.str(); */
-    return *this;
+    try
+    {
+        HTTPBind ();		/* Bind the SOAP-Envelop with HTTP headers */
+        /* Write to the established channel */
+        *m_Channel << p_Payload;
+        /* *m_Channel << m_OutMsg.str(); */
+        return *this;
+    }
+    catch(AxisTransportException& e)
+    {
+        throw;
+    }
+    catch(AxisException& e)
+    {
+        throw;
+    }
+    catch(...)
+    {
+        throw;
+    }
 }
 
 
@@ -553,7 +581,7 @@ HttpTransport::HTTPValidate (const std::string & p_HttpPacket)
     if (pos == std::string::npos)
     {
 	m_PayLoad = "";
-	return;			/* unexpected string */
+	THROW_AXIS_TRANSPORT_EXCEPTION(SERVER_TRANSPORT_UNEXPECTED_STRING);/* unexpected string */
     }
 
     m_IsHttpHeader = 1;		/* We have the stream until payload */
@@ -577,7 +605,8 @@ HttpTransport::HTTPValidate (const std::string & p_HttpPacket)
 		atoi (strLine.substr (pos, nxtpos - pos).c_str ()) / 100;
 	}
 	else
-	    return;
+	    THROW_AXIS_TRANSPORT_EXCEPTION(SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE);
+            //damitha_check
 
 
 	/* Status code is 2xx; so valid packet. hence go ahead and extract
