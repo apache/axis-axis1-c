@@ -37,7 +37,7 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "../../../release/win32"
+# PROP Output_Dir "../../../bin"
 # PROP Intermediate_Dir "Release"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
@@ -51,7 +51,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 Engine.lib Common.lib Soap.lib wsdd.lib xerces-c_2.lib wsock32.lib /nologo /subsystem:console /profile /machine:I386 /libpath:"../../../lib/axis" /libpath:"../../../lib/xerces-c"
+# ADD LINK32 wsock32.lib AxisServer.lib /nologo /subsystem:console /profile /machine:I386 /libpath:"../../../lib/axis" /libpath:"../../../lib/xerces-c"
 # SUBTRACT LINK32 /debug
 
 !ELSEIF  "$(CFG)" == "SimpleAxisServer - Win32 Debug"
@@ -63,7 +63,7 @@ LINK32=link.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "../../../release/win32"
+# PROP Output_Dir "../../../bin"
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
@@ -76,7 +76,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 wsock32.lib Engine_D.lib Common_D.lib Soap_D.lib wsdd_D.lib /nologo /subsystem:console /debug /machine:I386 /out:"../../../release/win32/SimpleAxisServer_D.exe" /pdbtype:sept /libpath:"../../../lib/axis" /libpath:"../../../lib/xerces-c" /libpath:"C:\Expat-1.95.7\Libs" /libpath:"C:\arabica\arabica\lib"
+# ADD LINK32 wsock32.lib AxisServer_D.lib /nologo /subsystem:console /debug /machine:I386 /out:"../../../bin/SimpleAxisServer_D.exe" /pdbtype:sept /libpath:"../../../lib/axis" /libpath:"../../../lib/xerces-c" /libpath:"C:\Expat-1.95.7\Libs" /libpath:"C:\arabica\arabica\lib"
 
 !ENDIF 
 
