@@ -58,7 +58,6 @@ typedef unsigned char XML_Bool;
 #define XML_ENCODE_MAX XML_UTF16_ENCODE_MAX
 #define XmlConvert XmlUtf16Convert
 #define XmlGetInternalEncoding XmlGetUtf16InternalEncoding
-#define XmlGetInternalEncodingNS XmlGetUtf16InternalEncodingNS
 #define XmlEncode XmlUtf16Encode
 #define MUST_CONVERT(enc, s) (!(enc)->isUtf16 || (((unsigned long)s) & 1))
 typedef unsigned short ICHAR;
@@ -66,7 +65,6 @@ typedef unsigned short ICHAR;
 #define XML_ENCODE_MAX XML_UTF8_ENCODE_MAX
 #define XmlConvert XmlUtf8Convert
 #define XmlGetInternalEncoding XmlGetUtf8InternalEncoding
-#define XmlGetInternalEncodingNS XmlGetUtf8InternalEncodingNS
 #define XmlEncode XmlUtf8Encode
 #define MUST_CONVERT(enc, s) (!(enc)->isUtf8)
 typedef char ICHAR;

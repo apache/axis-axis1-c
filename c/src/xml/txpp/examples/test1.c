@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-#include "../lib/xpp.h"
+#include "../lib/spp.h"
 
 char *tn[] = {"START_TAG", "END_TAG", "EMPTY_ELEMENT_TAG", "PCDATA"};
 
@@ -33,12 +33,12 @@ int main()
                 printf("\n%s\n", tn[data->type]);
                 int ii = 0;
         char temp;
-                while (ii < data->numOfPtrsUtf8) 
+                while (ii < data->numOfPtrs) 
                 {
-                        temp = data->utf8PtrBuff[ii+1][1];
-                        data->utf8PtrBuff[ii+1][1] = '\0';
-                        printf("%s\n", data->utf8PtrBuff[ii]);
-                        data->utf8PtrBuff[ii+1][1] = temp;
+                        temp = data->ptrBuff[ii+1][1];
+                        data->ptrBuff[ii+1][1] = '\0';
+                        printf("%s\n", data->ptrBuff[ii]);
+                        data->ptrBuff[ii+1][1] = temp;
                         
                         ii += 2;
                 }

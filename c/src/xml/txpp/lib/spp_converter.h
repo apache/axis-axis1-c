@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-#include "xpp.h"
+#include "spp.h"
 #ifndef XmlTok_OF_AXIS_INCLUDED
 #define XmlTok_OF_AXIS_INCLUDED 1
 
@@ -247,18 +247,8 @@ XmlInitUnknownEncoding(void *mem,
                        CONVERTER convert,
                        void *userData);
 
-int XmlParseXmlDeclNS(int isGeneralTextEntity,
-                      const ENCODING *enc,
-                      const char *ptr,
-                      const char *end,
-                      const char **badPtr,
-                      const char **versionPtr,
-                      const char **versionEndPtr,
-                      const char **encodingNamePtr,
-                      const ENCODING **namedEncodingPtr,
-                      int *standalonePtr);
 
-int XmlInitEncodingNS(INIT_ENCODING *, const ENCODING **, const char *name);
+int XmlInitEncoding(INIT_ENCODING *, const ENCODING **, const char *name);
 const ENCODING *XmlGetUtf8InternalEncodingNS(void);
 const ENCODING *XmlGetUtf16InternalEncodingNS(void);
 ENCODING *
