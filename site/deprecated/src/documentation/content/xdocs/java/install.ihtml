@@ -11,17 +11,17 @@
 
 <BODY>
   <TABLE cellspacing="0" width="100%" border="0">
-    <TBODY>
-      <TR>
-        <TD colspan="2">
-          <A href="http://ws.apache.org/axis"><IMG border="0"
-          align="left" src="images/axis.jpg"></A>
+ <TBODY>
+   <TR>
+  <TD colspan="2">
+    <A href="http://ws.apache.org/axis"><IMG border="0"
+    align="left" src="images/axis.jpg"></A>
 
-          <H1>Installing and deploying web applications using
-          xml-axis</H1>
-        </TD>
-      </TR>
-    </TBODY>
+    <H1>Installing and deploying web applications using
+    xml-axis</H1>
+  </TD>
+   </TR>
+ </TBODY>
   </TABLE>
   <H1>Axis installation instructions</H1>
   <HR size="1" noshade="noshade">
@@ -29,27 +29,27 @@
   <P><STRONG>Contents</STRONG></P>
 
   <UL>
-    <LI><A href="#intro">Introduction</A></LI>
+ <LI><A href="#intro">Introduction</A></LI>
 
-    <LI><A href="#webapp">Creating Webapps</A></LI>
+ <LI><A href="#webapp">Creating Webapps</A></LI>
 
-    <LI><A href="#depend">Installing Dependencies</A></LI>
+ <LI><A href="#depend">Installing Dependencies</A></LI>
 
-    <LI><A href="#websvc">Installing Web Services</A></LI>
+ <LI><A href="#websvc">Installing Web Services</A></LI>
 
-    <LI><A href="#start">Starting the web server</A></LI>
+ <LI><A href="#start">Starting the web server</A></LI>
 
-    <LI><A href="#install-test">Installation testing</A></LI>
+ <LI><A href="#install-test">Installation testing</A></LI>
 
-    <LI><A href="#deploy">Deploying web services</A></LI>
+ <LI><A href="#deploy">Deploying web services</A></LI>
 
-    <LI><A href="#test">Testing</A></LI>
+ <LI><A href="#test">Testing</A></LI>
 
-    <LI><A href="#advanced">Advanced Installation</A></LI>
+ <LI><A href="#advanced">Advanced Installation</A></LI>
 
-    <LI><A href="#broken">What if it doesn't work?</A></LI>
+ <LI><A href="#broken">What if it doesn't work?</A></LI>
 
-    <LI><A href="#summary">Summary</A></LI>
+ <LI><A href="#summary">Summary</A></LI>
   </UL>
 
   <P><A name="intro"></A></P>
@@ -83,32 +83,32 @@
   <P>Things you need to know before writing a Web Service:</P>
 
   <OL>
-    <LI>Core Java datatypes, classes and programming concepts.</LI>
+ <LI>Core Java datatypes, classes and programming concepts.</LI>
 
-    <LI>What threads are, race conditions, thread safety and
-    sychronization.</LI>
+ <LI>What threads are, race conditions, thread safety and
+ sychronization.</LI>
 
-    <LI>What a classloader is, what hierarchical classloaders are,
-    and the common causes of a "ClassNotFoundException".</LI>
+ <LI>What a classloader is, what hierarchical classloaders are,
+ and the common causes of a "ClassNotFoundException".</LI>
 
-    <LI>How to diagnose trouble from exception traces, what a
-    NullPointerException (NPE) and other common exceptions are, and
-    how to fix them.</LI>
+ <LI>How to diagnose trouble from exception traces, what a
+ NullPointerException (NPE) and other common exceptions are, and
+ how to fix them.</LI>
 
-    <LI>What a web application is; what a servlet is, where
-    classes, libraries and data go in a web application.</LI>
+ <LI>What a web application is; what a servlet is, where
+ classes, libraries and data go in a web application.</LI>
 
-    <LI>How to start your application server and deploy a web
-    application on it.</LI>
+ <LI>How to start your application server and deploy a web
+ application on it.</LI>
 
-    <LI>What a network is, the core concepts of the IP protocol
-    suite and the sockets API. Specifically, what is TCP/IP.</LI>
+ <LI>What a network is, the core concepts of the IP protocol
+ suite and the sockets API. Specifically, what is TCP/IP.</LI>
 
-    <LI>What HTTP is. The core protocol and error codes, HTTP
-    headers and perhaps the details of basic authentication.</LI>
+ <LI>What HTTP is. The core protocol and error codes, HTTP
+ headers and perhaps the details of basic authentication.</LI>
 
-    <LI>What XML is. Not necessarily how to parse it or anything,
-    just what constitutes well-formed and valid XML.</LI>
+ <LI>What XML is. Not necessarily how to parse it or anything,
+ just what constitutes well-formed and valid XML.</LI>
   </OL>
 
   <P>Axis and SOAP depends on all these details. If you don't know
@@ -313,18 +313,18 @@
   <PRE class="xml">
   &lt;?xml version="1.0" encoding="UTF-8" ?&gt; <BR>
   &lt;soapenv:Envelope <BR>
-      xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" <BR>
-      xmlns:xsd="http://www.w3.org/2001/XMLSchema" <BR>
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;<BR>
-      &lt;soapenv:Body&gt;<BR>
-      &lt;getVersionResponse <BR>
-          soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"&gt;<BR>
-          &lt;getVersionReturn <BR>
-              xsi:type="xsd:string"&gt;<BR>
-              Apache Axis version: 1.1 Built on Apr 04, 2003 (01:30:37 PST)<BR>
-          &lt;/getVersionReturn&gt; <BR>
-      &lt;/getVersionResponse&gt;<BR>
-      &lt;/soapenv:Body&gt;<BR>
+   xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" <BR>
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema" <BR>
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;<BR>
+   &lt;soapenv:Body&gt;<BR>
+   &lt;getVersionResponse <BR>
+    soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"&gt;<BR>
+    &lt;getVersionReturn <BR>
+     xsi:type="xsd:string"&gt;<BR>
+     Apache Axis version: 1.1 Built on Apr 04, 2003 (01:30:37 PST)<BR>
+    &lt;/getVersionReturn&gt; <BR>
+   &lt;/getVersionResponse&gt;<BR>
+   &lt;/soapenv:Body&gt;<BR>
   &lt;/soapenv:Envelope&gt;
 </PRE>
 
@@ -352,24 +352,24 @@
   <PRE class="xml">
 &lt;?xml version="1.0" encoding="UTF-8" ?&gt; <BR>
 &lt;soapenv:Envelope <BR>
-    xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" <BR>
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema" <BR>
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;<BR>
-    &lt;soapenv:Body&gt;<BR>
-        &lt;listResponse <BR>
-            soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"&gt;<BR>
-            &lt;listReturn xsi:type="soapenc:Array" <BR>
-                soapenc:arrayType="xsd:string[6]" <BR>
-                xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"&gt;<BR>
-                &lt;item&gt;accept:image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, */*&lt;/item&gt; <BR>
-                &lt;item&gt;accept-language:en-us&lt;/item&gt; <BR>
-                &lt;item&gt;accept-encoding:gzip, deflate&lt;/item&gt; <BR>
-                &lt;item&gt;user-agent:Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)&lt;/item&gt; <BR>
-                &lt;item&gt;host:localhost:8080&lt;/item&gt; <BR>
-                &lt;item&gt;connection:Keep-Alive&lt;/item&gt; <BR>
-            &lt;/listReturn&gt;<BR>
-        &lt;/listResponse&gt;<BR>
-    &lt;/soapenv:Body&gt;<BR>
+ xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" <BR>
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema" <BR>
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;<BR>
+ &lt;soapenv:Body&gt;<BR>
+  &lt;listResponse <BR>
+   soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"&gt;<BR>
+   &lt;listReturn xsi:type="soapenc:Array" <BR>
+    soapenc:arrayType="xsd:string[6]" <BR>
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"&gt;<BR>
+    &lt;item&gt;accept:image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, */*&lt;/item&gt; <BR>
+    &lt;item&gt;accept-language:en-us&lt;/item&gt; <BR>
+    &lt;item&gt;accept-encoding:gzip, deflate&lt;/item&gt; <BR>
+    &lt;item&gt;user-agent:Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)&lt;/item&gt; <BR>
+    &lt;item&gt;host:localhost:8080&lt;/item&gt; <BR>
+    &lt;item&gt;connection:Keep-Alive&lt;/item&gt; <BR>
+   &lt;/listReturn&gt;<BR>
+  &lt;/listResponse&gt;<BR>
+ &lt;/soapenv:Body&gt;<BR>
 &lt;/soapenv:Envelope&gt;
 </PRE><BR>
 
@@ -458,11 +458,11 @@
   often better to use WordPad to create the variable string and
   then paste it into the appropriate text field.</P>
   <PRE class="xml">
-    set AXIS_HOME=c:\axis<BR>
-    set AXIS_LIB=%AXIS_HOME%\lib<BR>
-    set AXISCLASSPATH=%AXIS_LIB%\axis.jar;%AXIS_LIB%\commons-discovery.jar;<BR>
-          %AXIS_LIB%\commons-logging.jar;%AXIS_LIB%\jaxrpc.jar;%AXIS_LIB%\saaj.jar;<BR>
-          %AXIS_LIB%\log4j-1.2.8.jar;%AXIS_LIB%\xml-apis.jar;%AXIS_LIB%\xercesImpl.jar
+ set AXIS_HOME=c:\axis<BR>
+ set AXIS_LIB=%AXIS_HOME%\lib<BR>
+ set AXISCLASSPATH=%AXIS_LIB%\axis.jar;%AXIS_LIB%\commons-discovery.jar;<BR>
+    %AXIS_LIB%\commons-logging.jar;%AXIS_LIB%\jaxrpc.jar;%AXIS_LIB%\saaj.jar;<BR>
+    %AXIS_LIB%\log4j-1.2.8.jar;%AXIS_LIB%\xml-apis.jar;%AXIS_LIB%\xercesImpl.jar
 </PRE>
 
   <P>Unix users have to do something similar. Below we have
@@ -471,12 +471,12 @@
   permenate you will need to add them to your shell's startup (dot)
   files. Again, see your shell's documentation.</P>
   <PRE class="xml">
-    set AXIS_HOME=/usr/axis<BR>
-    set AXIS_LIB=$AXIS_HOME/lib<BR>
-    set AXISCLASSPATH=$AXIS_LIB/axis.jar:$AXIS_LIB/commons-discovery.jar:<BR>
-          $AXIS_LIB/commons-logging.jar:$AXIS_LIB/jaxrpc.jar:$AXIS_LIB/saaj.jar:<BR>
-          $AXIS_LIB/log4j-1.2.8.jar:$AXIS_LIB/xml-apis.jar:$AXIS_LIB/xercesImpl.jar<BR>
-    export AXIS_HOME; export AXIS_LIB; export AXISCLASSPATH
+ set AXIS_HOME=/usr/axis<BR>
+ set AXIS_LIB=$AXIS_HOME/lib<BR>
+ set AXISCLASSPATH=$AXIS_LIB/axis.jar:$AXIS_LIB/commons-discovery.jar:<BR>
+    $AXIS_LIB/commons-logging.jar:$AXIS_LIB/jaxrpc.jar:$AXIS_LIB/saaj.jar:<BR>
+    $AXIS_LIB/log4j-1.2.8.jar:$AXIS_LIB/xml-apis.jar:$AXIS_LIB/xercesImpl.jar<BR>
+ export AXIS_HOME; export AXIS_LIB; export AXISCLASSPATH
 </PRE>
 
   <P>To use Axis client code, you can select AXISCLASSPATH when
@@ -528,16 +528,16 @@ java -cp "$AXISCLASSPATH" ...
   find the file specified)" exception.</P>
 
   <BLOCKQUOTE>
-    <B>On Windows</B><BR>
-    <CODE class="java">java -cp %AXISCLASSPATH%
-    org.apache.axis.client.AdminClient
-    -lhttp://localhost:8080/axis/services/AdminService
-    deploy.wsdd<BR></CODE>  <B><BR>
-    On UNIX</B><BR>
-    <CODE class="java">java -cp $AXISCLASSPATH
-    org.apache.axis.client.AdminClient<BR>
-    -lhttp://localhost:8080/axis/services/AdminService
-    deploy.wsdd</CODE>
+ <B>On Windows</B><BR>
+ <PRE>java -cp %AXISCLASSPATH%
+ org.apache.axis.client.AdminClient
+ -lhttp://localhost:8080/axis/services/AdminService
+ deploy.wsdd<BR></PRE>  <B><BR>
+ On UNIX</B><BR>
+ <PRE>java -cp $AXISCLASSPATH
+ org.apache.axis.client.AdminClient<BR>
+ -lhttp://localhost:8080/axis/services/AdminService
+ deploy.wsdd</PRE>
   </BLOCKQUOTE>
 
   <P>If you get some java client error (like
@@ -576,24 +576,24 @@ java -cp "$AXISCLASSPATH" ...
   deployed the stock quote demo.</P>
 
   <UL>
-    <LI>Change directory to the distribution directory for xml-axis
-    and execute the following command (or its Unix equivalent):
+ <LI>Change directory to the distribution directory for xml-axis
+ and execute the following command (or its Unix equivalent):
 
-      <BLOCKQUOTE>
-        <B>On Windows</B> <CODE class="java"><BR>
-        java -cp .;%AXISCLASSPATH% samples.stock.GetQuote<BR>
-        -lhttp://localhost:8080/axis/servlet/AxisServlet -uuser1
-        -wpass1 XXX</CODE><BR>
-        <BR>
-        <SPAN style="font-weight: bold;">On UNIX</SPAN><BR>
-        <CODE class="java">java -cp $AXISCLASSPATH
-        samples.stock.GetQuote<BR>
-        -lhttp://localhost:8080/axis/servlet/AxisServlet -uuser1
-        -wpass1 XXX</CODE> 
-      </BLOCKQUOTE><BR>
-    </LI>
+   <BLOCKQUOTE>
+  <B>On Windows</B> <PRE><BR>
+  java -cp .;%AXISCLASSPATH% samples.stock.GetQuote
+  -lhttp://localhost:8080/axis/servlet/AxisServlet -uuser1
+  -wpass1 XXX</PRE><BR>
+  <BR>
+  <SPAN style="font-weight: bold;">On UNIX</SPAN><BR>
+  <PRE>java -cp $AXISCLASSPATH
+  samples.stock.GetQuote
+  -lhttp://localhost:8080/axis/servlet/AxisServlet -uuser1
+  -wpass1 XXX</PRE> 
+   </BLOCKQUOTE><BR>
+ </LI>
 
-    <LI>You should get back "55.25" as a result.</LI>
+ <LI>You should get back "55.25" as a result.</LI>
   </UL>
 
   <P><SPAN class="note">Note:</SPAN> Again, you may need to replace
@@ -614,16 +614,16 @@ java -cp "$AXISCLASSPATH" ...
   <P>The core concepts are</P>
 
   <OL>
-    <LI>Add axis.jar, wsdl.jar, saaj.jar, jaxrpc.jar and the other
-    dependent libraries to your WAR file.</LI>
+ <LI>Add axis.jar, wsdl.jar, saaj.jar, jaxrpc.jar and the other
+ dependent libraries to your WAR file.</LI>
 
-    <LI>Copy all the Axis Servlet declarations and mappings from
-    axis/WEB-INF/web.xml and add them to your own web.xml</LI>
+ <LI>Copy all the Axis Servlet declarations and mappings from
+ axis/WEB-INF/web.xml and add them to your own web.xml</LI>
 
-    <LI>Build and deploy your webapp.</LI>
+ <LI>Build and deploy your webapp.</LI>
 
-    <LI>Run the Axis AdminClient against your own webapp, instead
-    of Axis, by changing the URL you invoke it with.</LI>
+ <LI>Run the Axis AdminClient against your own webapp, instead
+ of Axis, by changing the URL you invoke it with.</LI>
   </OL>
 
   <P>The process is also covered in Chapter 15 of <A href=
@@ -652,91 +652,91 @@ java -cp "$AXISCLASSPATH" ...
   all voluntary, so you may need to keep your expectations low!</P>
 
   <OL>
-    <LI>Post to the <A href="mailto:axis-user@ws.apache.org">user
-    mail</A> list, not the developer list. You may think the
-    developer mail list is a short cut to higher quality answers.
-    But the developers are also on the user list along with many
-    other skilled users--so more people will be able to answer your
-    questions. Also, it is helpful for all user issues to be on one
-    list to help build the searchable mailing list archive.</LI>
+ <LI>Post to the <A href="mailto:axis-user@ws.apache.org">user
+ mail</A> list, not the developer list. You may think the
+ developer mail list is a short cut to higher quality answers.
+ But the developers are also on the user list along with many
+ other skilled users--so more people will be able to answer your
+ questions. Also, it is helpful for all user issues to be on one
+ list to help build the searchable mailing list archive.</LI>
 
-    <LI>Don't ask non-Axis-related questions. The list is not the
-    place to ask about non-Axis, non-SOAP, problems. Even questions
-    about the MS Soap toolkit or .NET client side, don't get many
-    positive answers--we avoid them. That also goes for the Sun
-    Java Web Services Developer Pack, or the Jboss.net stuff that
-    they've done with Axis.</LI>
+ <LI>Don't ask non-Axis-related questions. The list is not the
+ place to ask about non-Axis, non-SOAP, problems. Even questions
+ about the MS Soap toolkit or .NET client side, don't get many
+ positive answers--we avoid them. That also goes for the Sun
+ Java Web Services Developer Pack, or the Jboss.net stuff that
+ they've done with Axis.</LI>
 
-    <LI>Never bother posting to the soapbuilders mailing list
-    either, that is only for people developing SOAP toolkits, not
-    using them--all off-topic messages are pointedly ignored.</LI>
+ <LI>Never bother posting to the soapbuilders mailing list
+ either, that is only for people developing SOAP toolkits, not
+ using them--all off-topic messages are pointedly ignored.</LI>
 
-    <LI>There is no guarantee that anyone will be able to solve
-    your problem. The usual response in such a situation is
-    silence, for a good reason: if everybody who didn't know the
-    answer to a question said "I don't know", the list would be
-    overflowed with noise. Don't take silence personally.</LI>
+ <LI>There is no guarantee that anyone will be able to solve
+ your problem. The usual response in such a situation is
+ silence, for a good reason: if everybody who didn't know the
+ answer to a question said "I don't know", the list would be
+ overflowed with noise. Don't take silence personally.</LI>
 
-    <LI>Never expect an immediate answer. Even if someone knows the
-    answer, it can take a day or two before they read their mail.
-    So if you don't get an answer in an hour or two, don't panic
-    and resend. Be patient. And put the time to use by trying to
-    solve your problems yourself.</LI>
+ <LI>Never expect an immediate answer. Even if someone knows the
+ answer, it can take a day or two before they read their mail.
+ So if you don't get an answer in an hour or two, don't panic
+ and resend. Be patient. And put the time to use by trying to
+ solve your problems yourself.</LI>
 
-    <LI>Do your homework first. This document lists the
-    foundational stuff you need to understand. It has also warned
-    you that it can take a day to get a reply. Now imagine you get
-    a HTTP Error '404' on a SOAP call. Should you rush to post a
-    'help' request, or should you try and find out what an HTTP
-    error code is, what #404 usually means and how to use a Java
-    debugger. We provide the source to make that debugging easier
-    :)</LI>
+ <LI>Do your homework first. This document lists the
+ foundational stuff you need to understand. It has also warned
+ you that it can take a day to get a reply. Now imagine you get
+ a HTTP Error '404' on a SOAP call. Should you rush to post a
+ 'help' request, or should you try and find out what an HTTP
+ error code is, what #404 usually means and how to use a Java
+ debugger. We provide the source to make that debugging easier
+ :)</LI>
 
-    <LI>Post meaningful subject lines. You want your message read,
-    not deleted unread. A subject line of 'Axis problem', 'Help
-    with Axis', etc. is not meaningful, and is not likely to get
-    many readers.</LI>
+ <LI>Post meaningful subject lines. You want your message read,
+ not deleted unread. A subject line of 'Axis problem', 'Help
+ with Axis', etc. is not meaningful, and is not likely to get
+ many readers.</LI>
 
-    <LI>Search the <A href=
-    "http://nagoya.apache.org/eyebrowse/SummarizeList?listId=49">mailing
-    list archives</A> FIRST to see if someone had the same problem.
-    This list is searchable--and may save you much time in getting
-    an answer to your problem.</LI>
+ <LI>Search the <A href=
+ "http://nagoya.apache.org/eyebrowse/SummarizeList?listId=49">mailing
+ list archives</A> FIRST to see if someone had the same problem.
+ This list is searchable--and may save you much time in getting
+ an answer to your problem.</LI>
 
-    <LI>Use the <A href=
-    "http://nagoya.apache.org/bugzilla/">bugzilla</A> database to
-    search for Axis bugs, both open and closed.</LI>
+ <LI>Use the <A href=
+ "http://nagoya.apache.org/bugzilla/">bugzilla</A> database to
+ search for Axis bugs, both open and closed.</LI>
 
-    <LI>Consult the <A href=
-    "http://nagoya.apache.org/wiki/apachewiki.cgi?AxisProjectPages">
-    Axis Wiki</A> For its Frequently Asked Questions (FAQ),
-    installation notes, interoperability issues lists, and other
-    useful information.</LI>
+ <LI>Consult the <A href=
+ "http://nagoya.apache.org/wiki/apachewiki.cgi?AxisProjectPages">
+ Axis Wiki</A> For its Frequently Asked Questions (FAQ),
+ installation notes, interoperability issues lists, and other
+ useful information.</LI>
 
-    <LI>Don't email people for help directly, unless you know them.
-    It's rude and presumptious. Messages sent over the mail list
-    benefit the whole community--both the original posters and
-    people who search the list. Personal messages just take up the
-    recipients time, and are unwelcome. Usually, if not ignored
-    outright, recipients of personal requests will just respond
-    'ask the mail list' anyway!</LI>
+ <LI>Don't email people for help directly, unless you know them.
+ It's rude and presumptious. Messages sent over the mail list
+ benefit the whole community--both the original posters and
+ people who search the list. Personal messages just take up the
+ recipients time, and are unwelcome. Usually, if not ignored
+ outright, recipients of personal requests will just respond
+ 'ask the mail list' anyway!</LI>
 
-    <LI>Know that configuration problems are hard to replicate, and
-    so can be difficult to get help on. We have tried with the
-    happyaxis.jsp demo to automate the diagnostics gathering for
-    you, but it can be hard for people to be of help here,
-    especially for obscure platforms.</LI>
+ <LI>Know that configuration problems are hard to replicate, and
+ so can be difficult to get help on. We have tried with the
+ happyaxis.jsp demo to automate the diagnostics gathering for
+ you, but it can be hard for people to be of help here,
+ especially for obscure platforms.</LI>
 
-    <LI>Keep up to date with Axis releases, even the beta copies of
-    forthcoming releases. You wouldn't want your problem to be a
-    bug that was already known and fixed in a more recent release.
-    Often the common response to any question is 'have you tried
-    the latest release'.</LI>
+ <LI>Keep up to date with Axis releases, even the beta copies of
+ forthcoming releases. You wouldn't want your problem to be a
+ bug that was already known and fixed in a more recent release.
+ Often the common response to any question is 'have you tried
+ the latest release'.</LI>
 
-    <LI>Study and use the source, and fix it when you find defects.
-    Even fix the documentation when you find defects. It is only
-    through the participation of Axis' users that it will ever get
-    better.</LI>
+ <LI>Study and use the source, and fix it when you find defects.
+ Even fix the documentation when you find defects. It is only
+ through the participation of Axis' users that it will ever get
+ better.</LI>
   </OL>
 
   <P>Has this put you off joining and participating in the Axis
@@ -761,7 +761,7 @@ java -cp "$AXISCLASSPATH" ...
   <HR size="1" noshade="noshade">
 
   <DIV class="copyright" align="center">
-    Copyright &copy; 2001-2003, Apache Software Foundation
+ Copyright &copy; 2001-2003, Apache Software Foundation
   </DIV>
 </BODY>
 </HTML>

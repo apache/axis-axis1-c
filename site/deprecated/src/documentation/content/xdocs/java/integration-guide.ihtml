@@ -13,7 +13,7 @@
 
 <BODY text="#000000" bgcolor="#FFFFFF">
   <CENTER>
-    <H1><IMG src="images/axis.jpg" height="96" width="176"></H1>
+ <H1><IMG src="images/axis.jpg" height="96" width="176"></H1>
   </CENTER>
 
   <H1>Axis System Integration Guide</H1>
@@ -71,64 +71,64 @@
   component:</P>
 
   <UL>
-    <LI>Develop implementation of components interface</LI>
+ <LI>Develop implementation of components interface</LI>
 
-    <LI style="list-style: none"><BR>
-    &nbsp;</LI>
+ <LI style="list-style: none"><BR>
+ &nbsp;</LI>
 
-    <LI>Define the implementation class to Axis by either creating
-    a service definition file (prefered) or by setting a system
-    property.
+ <LI>Define the implementation class to Axis by either creating
+ a service definition file (prefered) or by setting a system
+ property.
 
-      <UL>
-        <LI style="list-style: none"><BR></LI>
+   <UL>
+  <LI style="list-style: none"><BR></LI>
 
-        <LI><STRONG>PREFERED:</STRONG> To create a service
-        definition file:</LI>
+  <LI><STRONG>PREFERED:</STRONG> To create a service
+  definition file:</LI>
 
-        <LI style="list-style: none">
-          <UL>
-            <LI>The name of the service definition file is derived
-            from the interface or abstract class which the service
-            implements/extends:<BR>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <CODE>/META-INF/services/&lt;componentPackage&gt;.&lt;interfaceName&gt;</CODE>.</LI>
+  <LI style="list-style: none">
+    <UL>
+   <LI>The name of the service definition file is derived
+   from the interface or abstract class which the service
+   implements/extends:<BR>
+   &nbsp;&nbsp;
+   <CODE>/META-INF/services/&lt;componentPackage&gt;.&lt;interfaceName&gt;</CODE>.</LI>
 
-            <LI>Put the fully qualified class name of the
-            implementation class on a line by itself in the service
-            definition file.</LI>
-          </UL><BR>
-        </LI>
+   <LI>Put the fully qualified class name of the
+   implementation class on a line by itself in the service
+   definition file.</LI>
+    </UL><BR>
+  </LI>
 
-        <LI>Set system property:
+  <LI>Set system property:
 
-          <UL>
-            <LI>The name of the system property is the name of the
-            interface.</LI>
+    <UL>
+   <LI>The name of the system property is the name of the
+   interface.</LI>
 
-            <LI>The value of the system property is the name of the
-            implementation.</LI>
+   <LI>The value of the system property is the name of the
+   implementation.</LI>
 
-            <LI>The optional system property name (in table, below)
-            may be also be used.</LI>
+   <LI>The optional system property name (in table, below)
+   may be also be used.</LI>
 
-            <LI style="list-style: none"><BR>
-            &nbsp;</LI>
+   <LI style="list-style: none"><BR>
+   &nbsp;</LI>
 
-            <LI>Setting a system property is not prefered,
-            particularly in a J2EE or other application hosting
-            environment, because it imposes a directive across all
-            applications. This may or may not be appropriate
-            behavior. If it is to be done, it should never be done
-            from within a Web Application at runtime.</LI>
-          </UL>
-        </LI>
-      </UL><BR>
-    </LI>
+   <LI>Setting a system property is not prefered,
+   particularly in a J2EE or other application hosting
+   environment, because it imposes a directive across all
+   applications. This may or may not be appropriate
+   behavior. If it is to be done, it should never be done
+   from within a Web Application at runtime.</LI>
+    </UL>
+  </LI>
+   </UL><BR>
+ </LI>
 
-    <LI>Package the implementation class and, if used, the service
-    definition file in a JAR file and/or place it where it can be
-    picked up by a class loader (CLASSPATH).</LI>
+ <LI>Package the implementation class and, if used, the service
+ definition file in a JAR file and/or place it where it can be
+ picked up by a class loader (CLASSPATH).</LI>
   </UL>
 
   <H4>Example 1</H4>
@@ -136,30 +136,30 @@
   <P>To override the default behavior for the Java Compiler:</P>
 
   <UL>
-    <LI>An implementation of the <CODE>Compiler</CODE> interface is
-    already provided for the <CODE>Jikes</CODE> compiler.</LI>
+ <LI>An implementation of the <CODE>Compiler</CODE> interface is
+ already provided for the <CODE>Jikes</CODE> compiler.</LI>
 
-    <LI style="list-style: none"><BR>
-    &nbsp;</LI>
+ <LI style="list-style: none"><BR>
+ &nbsp;</LI>
 
-    <LI>Create the service definition file named:<BR>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <CODE>/META-INF/services/org.apache.axis.components.compiler.Compiler</CODE></LI>
+ <LI>Create the service definition file named:<BR>
+ &nbsp;&nbsp;
+ <CODE>/META-INF/services/org.apache.axis.components.compiler.Compiler</CODE></LI>
 
-    <LI style="list-style: none"><BR>
-    &nbsp;</LI>
+ <LI style="list-style: none"><BR>
+ &nbsp;</LI>
 
-    <LI>Add the following line to the service definition file:<BR>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <CODE>org.apache.axis.components.compiler.Jikes</CODE></LI>
+ <LI>Add the following line to the service definition file:<BR>
+ &nbsp;&nbsp;
+ <CODE>org.apache.axis.components.compiler.Jikes</CODE></LI>
 
-    <LI style="list-style: none"><BR>
-    &nbsp;</LI>
+ <LI style="list-style: none"><BR>
+ &nbsp;</LI>
 
-    <LI>Since
-    <CODE>org.apache.axis.components.compiler.Jikes</CODE> is
-    packaged with Axis, all that needs to be done is to ensure that
-    the service definition file is loadable by a class loader.</LI>
+ <LI>Since
+ <CODE>org.apache.axis.components.compiler.Jikes</CODE> is
+ packaged with Axis, all that needs to be done is to ensure that
+ the service definition file is loadable by a class loader.</LI>
   </UL>
 
   <H4>Example 2</H4>
@@ -170,106 +170,108 @@
   specific implementation:</P>
 
   <UL>
-    <LI>Provide an implementation of the <CODE>SocketFactory</CODE>
-    interface, for example
-    <CODE>your.package.YourSocketFactory</CODE></LI>
+ <LI>Provide an implementation of the <CODE>SocketFactory</CODE>
+ interface, for example
+ <CODE>your.package.YourSocketFactory</CODE></LI>
 
-    <LI style="list-style: none"><BR>
-    &nbsp;</LI>
+ <LI style="list-style: none"><BR>
+ &nbsp;</LI>
 
-    <LI>Set the system property named<BR>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <CODE>org.apache.axis.components.net.SocketFactory</CODE><BR>
-      to the value<BR>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <CODE>your.package.YourSocketFactory</CODE><BR>
+ <LI>Set the system property named<BR>
+   &nbsp;&nbsp;
+   <CODE>org.apache.axis.components.net.SocketFactory</CODE><BR>
+   to the value<BR>
+   &nbsp;&nbsp;
+   <CODE>your.package.YourSocketFactory</CODE><BR>
 
-      <P>This can be done by using the JVM commandline<BR>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <CODE>-Dorg.apache.axis.components.net.SocketFactory=your.package.YourSocketFactory</CODE><BR>
+   <P>This can be done by using the JVM commandline<BR>
+   &nbsp;&nbsp;
+   <CODE>-Dorg.apache.axis.components.net.SocketFactory=your.package.YourSocketFactory</CODE><BR>
 
-      &nbsp;</P>
-    </LI>
+   &nbsp;</P>
+ </LI>
 
-    <LI>Ensure that the implementation class is loadable by a class
-    loader.</LI>
+ <LI>Ensure that the implementation class is loadable by a class
+ loader.</LI>
   </UL>
 
   <H4>Reference</H4>
-
+<p>
+(Component/Package: org.apache.axis.components.*)
+</p>
   <TABLE border="1">
-    <TR>
-      <TH>Component/Package</TH>
+ <TR>
+   <TH>Component Package</TH>
 
-      <TH>Factory</TH>
+   <TH>Factory</TH>
 
-      <TH>Interface</TH>
+   <TH>Interface</TH>
 
-      <TH>Optional System Property</TH>
+   <TH>Optional System Property</TH>
 
-      <TH>Default Implementation</TH>
-    </TR>
+   <TH>Default Implementation</TH>
+ </TR>
 
-    <TR>
-      <TD><CODE>org.apache.axis.components.compiler</CODE></TD>
+ <TR>
+   <TD><TT>compiler</TT></TD>
 
-      <TD><CODE>CompilerFactory.getCompiler()</CODE></TD>
+   <TD><TT>CompilerFactory getCompiler()</TT></TD>
 
-      <TD><CODE>Compiler</CODE></TD>
+   <TD><TT>Compiler</TT></TD>
 
-      <TD><CODE>axis.Compiler</CODE></TD>
+   <TD><TT>axis.Compiler</TT></TD>
 
-      <TD><CODE>Javac</CODE></TD>
-    </TR>
+   <TD><TT>Javac</TT></TD>
+ </TR>
 
-    <TR>
-      <TD><CODE>org.apache.axis.components.image</CODE></TD>
+ <TR>
+   <TD><TT>image</TT></TD>
 
-      <TD><CODE>ImageIOFactory.getImageIO()</CODE></TD>
+   <TD><TT>ImageIOFactory getImageIO()</TT></TD>
 
-      <TD><CODE>ImageIO</CODE></TD>
+   <TD><TT>ImageIO</TT></TD>
 
-      <TD><CODE>axis.ImageIO</CODE></TD>
+   <TD><TT>axis.ImageIO</TT></TD>
 
-      <TD><CODE>MerlinIO, JimiIO, JDK13IO</CODE></TD>
-    </TR>
+   <TD><TT>MerlinIO, JimiIO, JDK13IO</TT></TD>
+ </TR>
 
-    <TR>
-      <TD><CODE>org.apache.axis.components.jms</CODE></TD>
+ <TR>
+   <TD><TT>jms</TT></TD>
 
-      <TD>
-      <CODE>JMSVendorAdapterFactory.getJMSVendorAdapter()</CODE></TD>
+   <TD>
+   <TT>JMSVendorAdapterFactory getJMSVendorAdapter()</TT></TD>
 
-      <TD><CODE>JMSVendorAdapter</CODE></TD>
+   <TD><TT>JMSVendorAdapter</TT></TD>
 
-      <TD></TD>
+   <TD></TD>
 
-      <TD><CODE>JNDIVendorAdapter</CODE></TD>
-    </TR>
+   <TD><TT>JNDIVendorAdapter</TT></TD>
+ </TR>
 
-    <TR>
-      <TD><CODE>org.apache.axis.components.net</CODE></TD>
+ <TR>
+   <TD><TT>net</TT></TD>
 
-      <TD><CODE>SocketFactoryFactory.getFactory()</CODE></TD>
+   <TD><TT>SocketFactoryFactory getFactory()</TT></TD>
 
-      <TD><CODE>SocketFactory</CODE></TD>
+   <TD><TT>SocketFactory</TT></TD>
 
-      <TD><CODE>axis.socketFactory</CODE></TD>
+   <TD><TT>axis.socketFactory</TT></TD>
 
-      <TD><CODE>DefaultSocketFactory</CODE></TD>
-    </TR>
+   <TD><TT>DefaultSocketFactory</TT></TD>
+ </TR>
 
-    <TR>
-      <TD><CODE>org.apache.axis.components.net</CODE></TD>
+ <TR>
+   <TD><TT>net</TT></TD>
 
-      <TD><CODE>SocketFactoryFactory.getSecureFactory()</CODE></TD>
+   <TD><TT>SocketFactoryFactory getSecureFactory()</TT></TD>
 
-      <TD><CODE>SecureSocketFactory</CODE></TD>
+   <TD><TT>SecureSocketFactory</TT></TD>
 
-      <TD><CODE>axis.socketSecureFactory</CODE></TD>
+   <TD><TT>axis.socketSecureFactory</TT></TD>
 
-      <TD><CODE>JSSESocketFactory</CODE></TD>
-    </TR>
+   <TD><TT>JSSESocketFactory</TT></TD>
+ </TR>
   </TABLE><!--
   <h3>
   <a NAME="System Management Plug"></a>System Management</h3>
@@ -342,143 +344,144 @@
   instantiating, a logger.</P>
 
   <UL>
-    <LI>
-      <H5>org.apache.commons.logging.Log</H5>
-    </LI>
+ <LI>
+   <H5>org.apache.commons.logging.Log</H5>
+ </LI>
 
-    <LI style="list-style: none">The <CODE>Log</CODE> interface
-    defines the following methods for use in writing log/trace
-    messages to the log:
+ <LI style="list-style: none">The <CODE>Log</CODE> interface
+ defines the following methods for use in writing log/trace
+ messages to the log:
 
-      <DIV style="margin-left: 2em">
-        <CODE><BR>
-        log.fatal(Object message);<BR>
-        log.fatal(Object message, Throwable t);<BR>
-        log.error(Object message);<BR>
-        log.error(Object message, Throwable t);<BR>
-        log.warn(Object message);<BR>
-        log.warn(Object message, Throwable t);<BR>
-        log.info(Object message);<BR>
-        log.info(Object message, Throwable t);<BR>
-        log.debug(Object message);<BR>
-        log.debug(Object message, Throwable t);<BR>
-        log.trace(Object message);<BR>
-        log.trace(Object message, Throwable t);<BR>
-        &nbsp;<BR>
-        log.isFatalEnabled();<BR>
-        log.isErrorEnabled();<BR>
-        log.isWarnEnabled();<BR>
-        log.isInfoEnabled();<BR>
-        log.isDebugEnabled();<BR>
-        log.isTraceEnabled();<BR></CODE>
-      </DIV>
+   <DIV style="margin-left: 2em">
+  <PRE>
+  log.fatal(Object message);
+  log.fatal(Object message, Throwable t);
+  log.error(Object message);
+  log.error(Object message, Throwable t);
+  log.warn(Object message);
+  log.warn(Object message, Throwable t);
+  log.info(Object message);
+  log.info(Object message, Throwable t);
+  log.debug(Object message);
+  log.debug(Object message, Throwable t);
+  log.trace(Object message);
+  log.trace(Object message, Throwable t);
+  &nbsp;
+  log.isFatalEnabled();
+  log.isErrorEnabled();
+  log.isWarnEnabled();
+  log.isInfoEnabled();
+  log.isDebugEnabled();
+  log.isTraceEnabled();
+  </PRE>
+   </DIV>
 
-      <P>Semantics for these methods are such that it is expected
-      that the severity of messages is ordered, from highest to
-      lowest:</P>
+   <P>Semantics for these methods are such that it is expected
+   that the severity of messages is ordered, from highest to
+   lowest:</P>
 
-      <UL>
-        <LI>fatal - Consider logging to console and system
-        log.</LI>
+   <UL>
+  <LI>fatal - Consider logging to console and system
+  log.</LI>
 
-        <LI>error - Consider logging to console and system
-        log.</LI>
+  <LI>error - Consider logging to console and system
+  log.</LI>
 
-        <LI>warn - Consider logging to console and system log.</LI>
+  <LI>warn - Consider logging to console and system log.</LI>
 
-        <LI>info - Consider logging to console and system log.</LI>
+  <LI>info - Consider logging to console and system log.</LI>
 
-        <LI>debug - Log to system log, if enabled.</LI>
+  <LI>debug - Log to system log, if enabled.</LI>
 
-        <LI>trace - Log to system log, if enabled.</LI>
-      </UL><BR>
-      &nbsp;
-    </LI>
+  <LI>trace - Log to system log, if enabled.</LI>
+   </UL><BR>
+   &nbsp;
+ </LI>
 
-    <LI>
-      <H5>org.apache.commons.logging.LogFactory</H5>
-    </LI>
+ <LI>
+   <H5>org.apache.commons.logging.LogFactory</H5>
+ </LI>
 
-    <LI style="list-style: none">If desired, the default
-    implementation of the
-    <CODE>org.apache.commons.logging.LogFactory</CODE> interface
-    can be overridden, allowing the JDK 1.3 Service Provider
-    discovery process to locate and create a LogFactory specific to
-    the needs of the application. Review the Javadoc for the
-    <CODE>LogFactoryImpl.java</CODE> for details.</LI>
+ <LI style="list-style: none">If desired, the default
+ implementation of the
+ <CODE>org.apache.commons.logging.LogFactory</CODE> interface
+ can be overridden, allowing the JDK 1.3 Service Provider
+ discovery process to locate and create a LogFactory specific to
+ the needs of the application. Review the Javadoc for the
+ <CODE>LogFactoryImpl.java</CODE> for details.</LI>
   </UL>
 
   <H4>Mechanism</H4>
 
   <UL>
-    <LI>
-      <H5>Life cycle</H5>
-    </LI>
+ <LI>
+   <H5>Life cycle</H5>
+ </LI>
 
-    <LI style="list-style: none">The JCL LogFactory implementation
-    must assume responsibility for either connecting/disconnecting
-    to a logging toolkit, or instantiating/initializing/destroying
-    a logging toolkit.<BR>
-    &nbsp;</LI>
+ <LI style="list-style: none">The JCL LogFactory implementation
+ must assume responsibility for either connecting/disconnecting
+ to a logging toolkit, or instantiating/initializing/destroying
+ a logging toolkit.<BR>
+ &nbsp;</LI>
 
-    <LI>
-      <H5>Exception handling</H5>
-    </LI>
+ <LI>
+   <H5>Exception handling</H5>
+ </LI>
 
-    <LI style="list-style: none">The JCL Log interface doesn't
-    specify any exceptions to be handled, the implementation must
-    catch any exceptions.<BR>
-    &nbsp;</LI>
+ <LI style="list-style: none">The JCL Log interface doesn't
+ specify any exceptions to be handled, the implementation must
+ catch any exceptions.<BR>
+ &nbsp;</LI>
 
-    <LI>
-      <H5>Multiple threads</H5>
-    </LI>
+ <LI>
+   <H5>Multiple threads</H5>
+ </LI>
 
-    <LI style="list-style: none">The JCL Log and LogFactory
-    implementations must ensure that any synchronization required
-    by the logging toolkit is met.</LI>
+ <LI style="list-style: none">The JCL Log and LogFactory
+ implementations must ensure that any synchronization required
+ by the logging toolkit is met.</LI>
   </UL>
 
   <H4>Logger Configuration</H4>
 
   <UL>
-    <LI>
-      <H5>Log</H5>
-    </LI>
+ <LI>
+   <H5>Log</H5>
+ </LI>
 
-    <LI style="list-style: none">The default
-    <CODE>LogFactory</CODE> provided by JCL can be configured to
-    instantiate a specific implementation of the
-    <CODE>org.apache.commons.logging.Log</CODE> interface by
-    setting the property
-    <CODE>org.apache.commons.logging.Log</CODE>. This property can
-    be specified as a system property, or in the
-    <CODE>commons-logging.properties</CODE> file, which must exist
-    in the CLASSPATH.<BR>
-    &nbsp;</LI>
+ <LI style="list-style: none">The default
+ <CODE>LogFactory</CODE> provided by JCL can be configured to
+ instantiate a specific implementation of the
+ <CODE>org.apache.commons.logging.Log</CODE> interface by
+ setting the property
+ <CODE>org.apache.commons.logging.Log</CODE>. This property can
+ be specified as a system property, or in the
+ <CODE>commons-logging.properties</CODE> file, which must exist
+ in the CLASSPATH.<BR>
+ &nbsp;</LI>
 
-    <LI>
-      <H5>Default logger if not plugged</H5>
-    </LI>
+ <LI>
+   <H5>Default logger if not plugged</H5>
+ </LI>
 
-    <LI style="list-style: none">The Jakarta Commons Logging SPI
-    uses the implementation of the
-    <CODE>org.apache.commons.logging.Log</CODE> interface specified
-    by the system property
-    <CODE>org.apache.commons.logging.Log</CODE>. If the property is
-    not specified or the class is not available then the JCL
-    provides access to a default logging toolkit by searching the
-    CLASSPATH for the following toolkits, in order of preference:
+ <LI style="list-style: none">The Jakarta Commons Logging SPI
+ uses the implementation of the
+ <CODE>org.apache.commons.logging.Log</CODE> interface specified
+ by the system property
+ <CODE>org.apache.commons.logging.Log</CODE>. If the property is
+ not specified or the class is not available then the JCL
+ provides access to a default logging toolkit by searching the
+ CLASSPATH for the following toolkits, in order of preference:
 
-      <UL>
-        <LI><A href=
-        "http://jakarta.apache.org/log4j/docs/index.html">Log4J</A></LI>
+   <UL>
+  <LI><A href=
+  "http://jakarta.apache.org/log4j/docs/index.html">Log4J</A></LI>
 
-        <LI>JDK 1.4</LI>
+  <LI>JDK 1.4</LI>
 
-        <LI>JCL SimpleLog</LI>
-      </UL>
-    </LI>
+  <LI>JCL SimpleLog</LI>
+   </UL>
+ </LI>
   </UL>
 
   <H3><A name="Configuration Plug"></A>Configuration</H3>
@@ -499,175 +502,175 @@
   <CODE>EngineConfigurationFactory</CODE>.</P>
 
   <UL>
-    <LI>Justification/Rationale</LI>
+ <LI>Justification/Rationale</LI>
 
-    <LI style="list-style: none"><BR>
-    While the default behaviour is sufficient for general use of
-    Axis, integrating Axis into an existing application server may
-    require an alternate deployment model. A customized
-    implementation of the EngineConfigurationFactory would map from
-    the hosts deployment model to Axis's internal deployment
-    model.<BR>
-    &nbsp;</LI>
+ <LI style="list-style: none"><BR>
+ While the default behaviour is sufficient for general use of
+ Axis, integrating Axis into an existing application server may
+ require an alternate deployment model. A customized
+ implementation of the EngineConfigurationFactory would map from
+ the hosts deployment model to Axis's internal deployment
+ model.<BR>
+ &nbsp;</LI>
 
-    <LI>Mechanism</LI>
+ <LI>Mechanism</LI>
 
-    <LI style="list-style: none">
-      <BR>
-      The relevant sequence of instructions used to obtain
-      configuration information and initialize Axis is as follows:
+ <LI style="list-style: none">
+   <BR>
+   The relevant sequence of instructions used to obtain
+   configuration information and initialize Axis is as follows:
 
-      <DIV style="margin-left: 2em">
-        <BR>
-        <CODE>EngineConfigurationFactory factory =
-        EngineConfigurationFactoryFinder(someContext);</CODE><BR>
-        <CODE>EngineCongfiguration config =
-        factory.getClientEngineConfig();</CODE><BR>
-        <CODE>AxisClient = new AxisClient(config);</CODE>
-      </DIV><BR>
-      The details may vary (server versus client, whether other
-      factories are involved, etc). Regardless, the point is that
-      integration code is responsible for calling
-      <CODE>EngineConfigurationFactoryFinder(someContext)</CODE>
-      and ensuring that the results are handed to Axis.&nbsp;
-      <CODE>someContext</CODE> is key to how the factory finder
-      locates the appropariate implementation of
-      EngineConfigurationFactory to be used, if any.
+   <DIV style="margin-left: 2em">
+  <BR>
+  <CODE>EngineConfigurationFactory factory =
+  EngineConfigurationFactoryFinder(someContext);</CODE><BR>
+  <CODE>EngineCongfiguration config =
+  factory.getClientEngineConfig();</CODE><BR>
+  <CODE>AxisClient = new AxisClient(config);</CODE>
+   </DIV><BR>
+   The details may vary (server versus client, whether other
+   factories are involved, etc). Regardless, the point is that
+   integration code is responsible for calling
+   <CODE>EngineConfigurationFactoryFinder(someContext)</CODE>
+   and ensuring that the results are handed to Axis.&nbsp;
+   <CODE>someContext</CODE> is key to how the factory finder
+   locates the appropariate implementation of
+   EngineConfigurationFactory to be used, if any.
 
-      <P>EngineConfigurationFactoryFinder works as follows:<BR>
-      &nbsp;</P>
+   <P>EngineConfigurationFactoryFinder works as follows:<BR>
+   &nbsp;</P>
 
-      <UL>
-        <LI>Obtain a list of classes that implement
-        <CODE>org.apache.axis.EngineConfigurationFactory</CODE>, in
-        the following order:
+   <UL>
+  <LI>Obtain a list of classes that implement
+  <CODE>org.apache.axis.EngineConfigurationFactory</CODE>, in
+  the following order:
 
-          <UL>
-            <LI>The value of the system property
-            <CODE>axis.EngineConfigFactory</CODE>.</LI>
+    <UL>
+   <LI>The value of the system property
+   <CODE>axis.EngineConfigFactory</CODE>.</LI>
 
-            <LI>The value of the system property
-            <CODE>org.apache.axis.EngineConfigurationFactory</CODE>.</LI>
+   <LI>The value of the system property
+   <CODE>org.apache.axis.EngineConfigurationFactory</CODE>.</LI>
 
-            <LI>Locate all resources named
-            <CODE>META-INF/services/org.apache.axis.EngineConfigurationFactory</CODE>.
-            Each line of such a resource identifies the name of a
-            class implementing the interface ('#' comments, through
-            end-of-line).</LI>
+   <LI>Locate all resources named
+   <CODE>META-INF/services/org.apache.axis.EngineConfigurationFactory</CODE>.
+   Each line of such a resource identifies the name of a
+   class implementing the interface ('#' comments, through
+   end-of-line).</LI>
 
-            <LI>
-            <CODE>org.apache.axis.configuration.EngineConfigurationFactoryServlet</CODE></LI>
+   <LI>
+   <CODE>org.apache.axis.configuration.EngineConfigurationFactoryServlet</CODE></LI>
 
-            <LI>
-            <CODE>org.apache.axis.configuration.EngineConfigurationFactoryDefault</CODE></LI>
-          </UL>
-        </LI>
+   <LI>
+   <CODE>org.apache.axis.configuration.EngineConfigurationFactoryDefault</CODE></LI>
+    </UL>
+  </LI>
 
-        <LI style="list-style: none"><BR></LI>
+  <LI style="list-style: none"><BR></LI>
 
-        <LI>Classes implementing EngineConfigurationFactory are
-        required to provide the method<BR>
-          &nbsp;
+  <LI>Classes implementing EngineConfigurationFactory are
+  required to provide the method<BR>
+    &nbsp;
 
-          <DIV style="margin-left: 2em">
-            <CODE>public static EngineConfigurationFactory
-            newFactory(Object)</CODE>
-          </DIV><BR>
-          This method is called, passing <CODE>someContext</CODE>
-          as the parameter.
-        </LI>
+    <DIV style="margin-left: 2em">
+   <CODE>public static EngineConfigurationFactory
+   newFactory(Object)</CODE>
+    </DIV><BR>
+    This method is called, passing <CODE>someContext</CODE>
+    as the parameter.
+  </LI>
 
-        <LI style="list-style: none"><BR>
-        &nbsp;</LI>
+  <LI style="list-style: none"><BR>
+  &nbsp;</LI>
 
-        <LI>The <CODE>newFactory</CODE> method is required to check
-        the <CODE>someContext</CODE> parameter to determine if it
-        is meaningfull to the class (at a minimum, verify that it
-        is of an expected type, or class) and may, in addition,
-        examine the overall runtime environment. If the environment
-        can provide information required by an
-        EngineConfigurationFactory, then the
-        <CODE>newFactory()</CODE> may return in instance of that
-        factory. Otherwise, <CODE>newFactory()</CODE> must return
-        null.</LI>
+  <LI>The <CODE>newFactory</CODE> method is required to check
+  the <CODE>someContext</CODE> parameter to determine if it
+  is meaningfull to the class (at a minimum, verify that it
+  is of an expected type, or class) and may, in addition,
+  examine the overall runtime environment. If the environment
+  can provide information required by an
+  EngineConfigurationFactory, then the
+  <CODE>newFactory()</CODE> may return in instance of that
+  factory. Otherwise, <CODE>newFactory()</CODE> must return
+  null.</LI>
 
-        <LI style="list-style: none"><BR>
-        &nbsp;</LI>
+  <LI style="list-style: none"><BR>
+  &nbsp;</LI>
 
-        <LI>EngineConfigurationFactoryFinder returns the first
-        non-null factory it obtains.</LI>
-      </UL><BR>
-      &nbsp;
-    </LI>
+  <LI>EngineConfigurationFactoryFinder returns the first
+  non-null factory it obtains.</LI>
+   </UL><BR>
+   &nbsp;
+ </LI>
 
-    <LI>Default behavior</LI>
+ <LI>Default behavior</LI>
 
-    <LI style="list-style: none">
-      <BR>
-      The default behaviour is provided by the last two elements of
-      the list of implementing classes, as described above:
+ <LI style="list-style: none">
+   <BR>
+   The default behaviour is provided by the last two elements of
+   the list of implementing classes, as described above:
 
-      <UL>
-        <LI>
-          <CODE>org.apache.axis.configuration.EngineConfigurationFactoryServlet</CODE><BR>
+   <UL>
+  <LI>
+    <CODE>org.apache.axis.configuration.EngineConfigurationFactoryServlet</CODE><BR>
 
-          <CODE>newFactory(obj)</CODE> is called. If <CODE>obj
-          instanceof javax.servlet.ServletContext</CODE> is true,
-          then an instance of this class is returned.
+    <CODE>newFactory(obj)</CODE> is called. If <CODE>obj
+    instanceof javax.servlet.ServletContext</CODE> is true,
+    then an instance of this class is returned.
 
-          <P>The default Servlet factory is expected to function as
-          a server (as a client it will incorrectly attempt to load
-          the WSDD file <CODE>client-config.wsdd</CODE> from the
-          current working directory!).</P>
+    <P>The default Servlet factory is expected to function as
+    a server (as a client it will incorrectly attempt to load
+    the WSDD file <CODE>client-config.wsdd</CODE> from the
+    current working directory!).</P>
 
-          <P>The default Servlet factory will open the Web
-          Application resource
-          <CODE>/WEB-INF/server-config.wsdd</CODE> (The name of
-          this file may be changed using the system property
-          <CODE>axis.ServerConfigFile</CODE>):</P>
+    <P>The default Servlet factory will open the Web
+    Application resource
+    <CODE>/WEB-INF/server-config.wsdd</CODE> (The name of
+    this file may be changed using the system property
+    <CODE>axis.ServerConfigFile</CODE>):</P>
 
-          <UL>
-            <LI>If it exists as an accessible file (i.e. not in a
-            JAR/WAR file), then it opens it as a file. This allows
-            changes to be saved, if changes are allowed &amp; made
-            using the Admin tools.</LI>
+    <UL>
+   <LI>If it exists as an accessible file (i.e. not in a
+   JAR/WAR file), then it opens it as a file. This allows
+   changes to be saved, if changes are allowed &amp; made
+   using the Admin tools.</LI>
 
-            <LI>If it does not exist as a file, then an attempt is
-            made to access it as a resource stream
-            (getResourceAsStream), which works for JAR/WAR file
-            contents.</LI>
+   <LI>If it does not exist as a file, then an attempt is
+   made to access it as a resource stream
+   (getResourceAsStream), which works for JAR/WAR file
+   contents.</LI>
 
-            <LI>If the resource is simply not available, an attempt
-            is made to create it as a file.</LI>
+   <LI>If the resource is simply not available, an attempt
+   is made to create it as a file.</LI>
 
-            <LI>If all above attempts fail, a final attempt is made
-            to access
-            <CODE>org.apache.axis.server.server-config.wsdd</CODE>
-            as a data stream.</LI>
-          </UL>
-        </LI>
+   <LI>If all above attempts fail, a final attempt is made
+   to access
+   <CODE>org.apache.axis.server.server-config.wsdd</CODE>
+   as a data stream.</LI>
+    </UL>
+  </LI>
 
-        <LI style="list-style: none"><BR>
-        &nbsp;</LI>
+  <LI style="list-style: none"><BR>
+  &nbsp;</LI>
 
-        <LI>
-          <CODE>org.apache.axis.configuration.EngineConfigurationFactoryDefault</CODE><BR>
+  <LI>
+    <CODE>org.apache.axis.configuration.EngineConfigurationFactoryDefault</CODE><BR>
 
-          <CODE>newFactory(obj)</CODE> is called. If
-          <CODE>obj</CODE> is null then an instance of this class
-          is returned. A non-null <CODE>obj</CODE> is presumed to
-          require a non-default factory.
+    <CODE>newFactory(obj)</CODE> is called. If
+    <CODE>obj</CODE> is null then an instance of this class
+    is returned. A non-null <CODE>obj</CODE> is presumed to
+    require a non-default factory.
 
-          <P>The default factory will load the WSDD files
-          <CODE>client-config.wsdd</CODE> or
-          <CODE>server-config.wsdd</CODE>, as appropriate, from the
-          current working directory. The names of these files may
-          be changed using the system properties
-          <CODE>axis.ClientConfigFile</CODE> and
-          <CODE>axis.ServerConfigFile</CODE>, respectively.</P>
-        </LI>
-      </UL>
-    </LI>
+    <P>The default factory will load the WSDD files
+    <CODE>client-config.wsdd</CODE> or
+    <CODE>server-config.wsdd</CODE>, as appropriate, from the
+    current working directory. The names of these files may
+    be changed using the system properties
+    <CODE>axis.ClientConfigFile</CODE> and
+    <CODE>axis.ServerConfigFile</CODE>, respectively.</P>
+  </LI>
+   </UL>
+ </LI>
   </UL>
 
   <H3><A name="Handlers Plug"></A>Handlers</H3>
@@ -687,71 +690,71 @@
   <H4><A name="Translation"></A>Translation</H4>
 
   <UL>
-    <LI>Justification/Rationale</LI>
+ <LI>Justification/Rationale</LI>
 
-    <LI style="list-style: none"><BR>
-    In order for readers of languages other than English to be
-    comfortable with Axis, we provide a mechanism for the strings
-    used in Axis to be translated. We do not provide any
-    translations in Axis; we merely provide a means by which
-    translators can easily plug in their translations.<BR>
-    &nbsp;</LI>
+ <LI style="list-style: none"><BR>
+ In order for readers of languages other than English to be
+ comfortable with Axis, we provide a mechanism for the strings
+ used in Axis to be translated. We do not provide any
+ translations in Axis; we merely provide a means by which
+ translators can easily plug in their translations.<BR>
+ &nbsp;</LI>
 
-    <LI>Mechanism</LI>
+ <LI>Mechanism</LI>
 
-    <LI style="list-style: none">
-      <BR>
-      Axis provides english messages in the Java resource named
-      org.apache.axis.i18n.resource.properties (in the source tree,
-      the file is named
-      xml-axis/java/src/org/apache/axis/i18n/resource.properties).
+ <LI style="list-style: none">
+   <BR>
+   Axis provides english messages in the Java resource named
+   org.apache.axis.i18n.resource.properties (in the source tree,
+   the file is named
+   xml-axis/java/src/org/apache/axis/i18n/resource.properties).
 
-      <P>Axis makes use of the Java internationalization mechanism
-      - i.e., a java.util.ResourceBundle backed by a properties
-      file - and the java.text.MessageFormat class to substitute
-      parameters into the message text.</P>
+   <P>Axis makes use of the Java internationalization mechanism
+   - i.e., a java.util.ResourceBundle backed by a properties
+   file - and the java.text.MessageFormat class to substitute
+   parameters into the message text.</P>
 
-      <UL>
-        <LI style="list-style: none"><BR></LI>
+   <UL>
+  <LI style="list-style: none"><BR></LI>
 
-        <LI>java.util.ResourceBundle retrieves message text from a
-        property file using a key provided by the program. Entries
-        in a message resource file are of the form
-        &lt;key&gt;=&lt;message&gt;.</LI>
+  <LI>java.util.ResourceBundle retrieves message text from a
+  property file using a key provided by the program. Entries
+  in a message resource file are of the form
+  &lt;key&gt;=&lt;message&gt;.</LI>
 
-        <LI style="list-style: none"><BR>
-        &nbsp;</LI>
+  <LI style="list-style: none"><BR>
+  &nbsp;</LI>
 
-        <LI>java.text.MessageFormat substitutes variables for
-        markers in the message text. Markers use the syntax
-        <FONT face="Courier New,Courier">"{X}"</FONT> where
-        <CODE>X</CODE> is the number of the variable, starting at
-        0.</LI>
-      </UL>
+  <LI>java.text.MessageFormat substitutes variables for
+  markers in the message text. Markers use the syntax
+  <FONT face="Courier New,Courier">"{X}"</FONT> where
+  <CODE>X</CODE> is the number of the variable, starting at
+  0.</LI>
+   </UL>
 
-      <P>For example: <CODE>myMsg00=My {0} is {1}.</CODE></P>
+   <P>For example: <CODE>myMsg00=My {0} is {1}.</CODE></P>
 
-      <P>Translation requires creating an alternate version of the
-      property file provided by Axis for a target language. The
-      JavaDoc for <CODE>java.utils.ResourceBundle</CODE> provides
-      details on how to identify different property files for
-      different locales.</P>
+   <P>Translation requires creating an alternate version of the
+   property file provided by Axis for a target language. The
+   JavaDoc for <CODE>java.utils.ResourceBundle</CODE> provides
+   details on how to identify different property files for
+   different locales.</P>
 
-      <P>For details on using Axis's internationalization tools,
-      see the <A href="developers-guide.html">Developer's
-      Guide</A>.<BR>
-      &nbsp;</P>
-    </LI>
+   <P>For details on using Axis's internationalization tools,
+   see the <A href="developers-guide.html">Developer's
+   Guide</A>.<BR>
+   &nbsp;</P>
+ </LI>
 
-    <LI>Default behavior</LI>
+ <LI>Default behavior</LI>
 
-    <LI style="list-style: none"><BR>
-    The default behavior, meaning what happens when a translated
-    file doesn't exist for a given locale, is to fall back on the
-    English-language properties file.&nbsp; If that file doesn't
-    exist (unlikely unless something is seriously wrong), Axis will
-    throw an exception with an English-language reason message.<BR>
-    &nbsp;</LI>
+ <LI style="list-style: none"><BR>
+ The default behavior, meaning what happens when a translated
+ file doesn't exist for a given locale, is to fall back on the
+ English-language properties file.&nbsp; If that file doesn't
+ exist (unlikely unless something is seriously wrong), Axis will
+ throw an exception with an English-language reason message.<BR>
+ &nbsp;</LI>
   </UL>
 
   <H4><A name="Extending Message Files"></A>Extending Message
@@ -762,104 +765,104 @@
   keys unique to the extended code.</P>
 
   <UL>
-    <LI>Justification/Rationale</LI>
+ <LI>Justification/Rationale</LI>
 
-    <LI style="list-style: none"><BR>
-    Axis provides pluggable interfaces for various Axis entities,
-    including EngineConfigurationFactory's, Provides, and Handlers.
-    Axis also provides a variety of implementations of these
-    entities. It is convenient to use Axis source code for such
-    implementations as starting points for developing extentions
-    and customizations that fulfill the unique needs of the end
-    user.<BR>
-    &nbsp;</LI>
+ <LI style="list-style: none"><BR>
+ Axis provides pluggable interfaces for various Axis entities,
+ including EngineConfigurationFactory's, Provides, and Handlers.
+ Axis also provides a variety of implementations of these
+ entities. It is convenient to use Axis source code for such
+ implementations as starting points for developing extentions
+ and customizations that fulfill the unique needs of the end
+ user.<BR>
+ &nbsp;</LI>
 
-    <LI>Procedure</LI>
+ <LI>Procedure</LI>
 
-    <LI style="list-style: none">
-      <BR>
-      To extend the Axis message file:<BR>
-      &nbsp;
+ <LI style="list-style: none">
+   <BR>
+   To extend the Axis message file:<BR>
+   &nbsp;
 
-      <UL>
-        <LI>Copy the Axis source file
-        <CODE>java/src/org/apache/axis/i18n/Messages.java</CODE> to
-        your project/package, say
-        <CODE>my/project/package/path/Messages.java</CODE>.</LI>
+   <UL>
+  <LI>Copy the Axis source file
+  <CODE>java/src/org/apache/axis/i18n/Messages.java</CODE> to
+  your project/package, say
+  <CODE>my/project/package/path/Messages.java</CODE>.</LI>
 
-        <LI style="list-style: none">
-          <UL>
-            <LI>Set the <CODE>package</CODE> declaration in the
-            copied file to the correct package name.</LI>
+  <LI style="list-style: none">
+    <UL>
+   <LI>Set the <CODE>package</CODE> declaration in the
+   copied file to the correct package name.</LI>
 
-            <LI>Set the private attribute <CODE>projectName</CODE>
-            to <CODE>"my.project"</CODE>: the portion of the
-            package name that is common to your project.
-            <CODE>projectName</CODE> must be equal to or be a
-            prefix of the copied Messages package name.</LI>
-          </UL><BR>
-          &nbsp;
-        </LI>
+   <LI>Set the private attribute <CODE>projectName</CODE>
+   to <CODE>"my.project"</CODE>: the portion of the
+   package name that is common to your project.
+   <CODE>projectName</CODE> must be equal to or be a
+   prefix of the copied Messages package name.</LI>
+    </UL><BR>
+    &nbsp;
+  </LI>
 
-        <LI>Create the file
-        <CODE>my/project/package/path/resource.properties</CODE>.
-        Add new message key/value pairs to this file.</LI>
+  <LI>Create the file
+  <CODE>my/project/package/path/resource.properties</CODE>.
+  Add new message key/value pairs to this file.</LI>
 
-        <LI style="list-style: none"><BR>
-        &nbsp;</LI>
+  <LI style="list-style: none"><BR>
+  &nbsp;</LI>
 
-        <LI>As you copy Axis source files over to your project,
-        change the <CODE>import
-        org.apache.axis.i18n.Messages</CODE> statement to
-        <CODE>import my.project.package.path.Messages</CODE>.</LI>
+  <LI>As you copy Axis source files over to your project,
+  change the <CODE>import
+  org.apache.axis.i18n.Messages</CODE> statement to
+  <CODE>import my.project.package.path.Messages</CODE>.</LI>
 
-        <LI>Use the methods provided by the class Messages, as
-        discussed in the <A href=
-        "developers-guide.html">Developer's Guide</A>, to access
-        the new messages.</LI>
-      </UL><BR>
-    </LI>
+  <LI>Use the methods provided by the class Messages, as
+  discussed in the <A href=
+  "developers-guide.html">Developer's Guide</A>, to access
+  the new messages.</LI>
+   </UL><BR>
+ </LI>
 
-    <LI>Behavior</LI>
+ <LI>Behavior</LI>
 
-    <LI style="list-style: none">
-      <UL>
-        <LI>Local Search</LI>
+ <LI style="list-style: none">
+   <UL>
+  <LI>Local Search</LI>
 
-        <LI style="list-style: none"><BR>
-        <CODE>Messages</CODE> begins looking for a key's value in
-        the <CODE>resources.properties</CODE> resource in it's
-        (Messages) package.<BR>
-        &nbsp;</LI>
+  <LI style="list-style: none"><BR>
+  <CODE>Messages</CODE> begins looking for a key's value in
+  the <CODE>resources.properties</CODE> resource in it's
+  (Messages) package.<BR>
+  &nbsp;</LI>
 
-        <LI>Hierarchical Search</LI>
+  <LI>Hierarchical Search</LI>
 
-        <LI style="list-style: none"><BR>
-        If <CODE>Messages</CODE> cannot locate either the key, or
-        the resource file, it walks up the package hierarchy until
-        it finds it. The top of the hierarchy, above which it will
-        not search, is defined by the <CODE>projectName</CODE>
-        attribute, set above.<BR>
-        &nbsp;</LI>
+  <LI style="list-style: none"><BR>
+  If <CODE>Messages</CODE> cannot locate either the key, or
+  the resource file, it walks up the package hierarchy until
+  it finds it. The top of the hierarchy, above which it will
+  not search, is defined by the <CODE>projectName</CODE>
+  attribute, set above.<BR>
+  &nbsp;</LI>
 
-        <LI>Default behavior</LI>
+  <LI>Default behavior</LI>
 
-        <LI style="list-style: none">
-          <BR>
-          If the key cannot be found in the package hierarchy then
-          a default resource is used. The default behaviour is
-          determined by the <CODE>parent</CODE> attribute of the
-          <CODE>Messages</CODE> class copied to your extensions
-          directory.
+  <LI style="list-style: none">
+    <BR>
+    If the key cannot be found in the package hierarchy then
+    a default resource is used. The default behaviour is
+    determined by the <CODE>parent</CODE> attribute of the
+    <CODE>Messages</CODE> class copied to your extensions
+    directory.
 
-          <P>Unless changed, the default behavior, meaning what
-          happens when a key isn't defined in the new properties
-          file, is to fall back to the Axis properties file
-          (org.apache.axis.i18n.resource.properties).<BR>
-          &nbsp;</P>
-        </LI>
-      </UL>
-    </LI>
+    <P>Unless changed, the default behavior, meaning what
+    happens when a key isn't defined in the new properties
+    file, is to fall back to the Axis properties file
+    (org.apache.axis.i18n.resource.properties).<BR>
+    &nbsp;</P>
+  </LI>
+   </UL>
+ </LI>
   </UL>
 
   <H3><A name="Performance Monitoring Plug"></A>Performance
@@ -961,11 +964,11 @@
   <P>There are three parts to WSDL2Java:</P>
 
   <OL>
-    <LI>The symbol table</LI>
+ <LI>The symbol table</LI>
 
-    <LI>The parser front end with a generator framework</LI>
+ <LI>The parser front end with a generator framework</LI>
 
-    <LI>The code generator back end (WSDL2Java itself)</LI>
+ <LI>The code generator back end (WSDL2Java itself)</LI>
   </OL>
 
   <H4>Symbol Table</H4>
@@ -982,16 +985,16 @@
   fields to it by using the Dynamic Variables construct:</P>
 
   <UL>
-    <LI>You must have some constant object for a dynamic variable
-    key.&nbsp; For example:&nbsp; public static final String MY_KEY
-    = "my key";</LI>
+ <LI>You must have some constant object for a dynamic variable
+ key.&nbsp; For example:&nbsp; public static final String MY_KEY
+ = "my key";</LI>
 
-    <LI>You set the value of the variable in your
-    GeneratorFactory.generatorPass:&nbsp;
-    entry.setDynamicVar(MY_KEY, myValue);</LI>
+ <LI>You set the value of the variable in your
+ GeneratorFactory.generatorPass:&nbsp;
+ entry.setDynamicVar(MY_KEY, myValue);</LI>
 
-    <LI>You get the value of the variable in your generators:&nbsp;
-    Object myValue = entry.getDynamicVar(MY_KEY);</LI>
+ <LI>You get the value of the variable in your generators:&nbsp;
+ Object myValue = entry.getDynamicVar(MY_KEY);</LI>
   </UL>
 
   <H4>Parser Front End and Generator Framework</H4>
@@ -1001,273 +1004,273 @@
   two files:</P>
 
   <UL>
-    <LI>Parser</LI>
+ <LI>Parser</LI>
 
-    <LI style="list-style: none">
-      <BR>
-      <TT>public class Parser {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public Parser();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public boolean isDebug();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public void
-      setDebug(boolean);</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public boolean isImports();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public void
-      setImports(boolean);</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public boolean isVerbose();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public void
-      setVerbose(boolean);</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public long getTimeout();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public void setTimeout(long);</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public java.lang.String
-      getUsername();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public void
-      setUsername(java.lang.String);</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public java.lang.String
-      getPassword();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public void
-      setPassword(java.lang.String);</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public GeneratorFactory
-      getFactory();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public void
-      setFactory(GeneratorFactory);</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public
-      org.apache.axis.wsdl.symbolTable.SymbolTable
-      getSymbolTable();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public javax.wsdl.Definition
-      getCurrentDefinition();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public java.lang.String
-      getWSDLURI();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public void run(String wsdl) throws
-      java.lang.Exception;</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public void run(String context,
-      org.w3c.dom.Document wsdlDoc) throws java.io.IOException,
-      javax.wsdl.WSDLException;</TT><BR>
-      <TT>}</TT>
+ <LI style="list-style: none">
+   <BR>
+   <TT>public class Parser {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public Parser();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public boolean isDebug();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public void
+   setDebug(boolean);</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public boolean isImports();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public void
+   setImports(boolean);</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public boolean isVerbose();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public void
+   setVerbose(boolean);</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public long getTimeout();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public void setTimeout(long);</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public java.lang.String
+   getUsername();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public void
+   setUsername(java.lang.String);</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public java.lang.String
+   getPassword();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public void
+   setPassword(java.lang.String);</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public GeneratorFactory
+   getFactory();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public void
+   setFactory(GeneratorFactory);</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public
+   org.apache.axis.wsdl.symbolTable.SymbolTable
+   getSymbolTable();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public javax.wsdl.Definition
+   getCurrentDefinition();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public java.lang.String
+   getWSDLURI();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public void run(String wsdl) throws
+   java.lang.Exception;</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public void run(String context,
+   org.w3c.dom.Document wsdlDoc) throws java.io.IOException,
+   javax.wsdl.WSDLException;</TT><BR>
+   <TT>}</TT>
 
-      <P>The basic behavior of this class is simple:&nbsp; you
-      instantiate a Parser, then you run it.</P>
+   <P>The basic behavior of this class is simple:&nbsp; you
+   instantiate a Parser, then you run it.</P>
 
-      <DIV style="margin-left: 2em">
-        <TT>Parser parser = new Parser();</TT><BR>
-        <TT>parser.run("myfile.wsdl");</TT>
-      </DIV>
+   <DIV style="margin-left: 2em">
+  <TT>Parser parser = new Parser();</TT><BR>
+  <TT>parser.run("myfile.wsdl");</TT>
+   </DIV>
 
-      <P><BR>
-      There are various options on the parser that have accessor
-      methods:</P>
+   <P><BR>
+   There are various options on the parser that have accessor
+   methods:</P>
 
-      <UL>
-        <LI>debug - default is false - dump the symbol table after
-        the WSDL file has been parsed</LI>
+   <UL>
+  <LI>debug - default is false - dump the symbol table after
+  the WSDL file has been parsed</LI>
 
-        <LI>imports - default is true - should imported files be
-        visited?</LI>
+  <LI>imports - default is true - should imported files be
+  visited?</LI>
 
-        <LI>verbose - default is false - list each file as it is
-        being parsed</LI>
+  <LI>verbose - default is false - list each file as it is
+  being parsed</LI>
 
-        <LI>timeout - default is 45 - the number of seconds to wait
-        before halting the parse</LI>
+  <LI>timeout - default is 45 - the number of seconds to wait
+  before halting the parse</LI>
 
-        <LI>username - no default - needed for protected URI's</LI>
+  <LI>username - no default - needed for protected URI's</LI>
 
-        <LI>password - no default - needed for protected URI's</LI>
-      </UL>
+  <LI>password - no default - needed for protected URI's</LI>
+   </UL>
 
-      <P><BR>
-      Other miscellaneous methods on the parser:</P>
+   <P><BR>
+   Other miscellaneous methods on the parser:</P>
 
-      <UL>
-        <LI>get/setFactory - get or set the GeneratorFactory on
-        this parser - see below for details.&nbsp; The default
-        generator factory is NoopFactory, which generates
-        nothing.</LI>
+   <UL>
+  <LI>get/setFactory - get or set the GeneratorFactory on
+  this parser - see below for details.&nbsp; The default
+  generator factory is NoopFactory, which generates
+  nothing.</LI>
 
-        <LI>getSymbolTable - once a run method is called, the
-        symbol table will be populated and can get queried.</LI>
+  <LI>getSymbolTable - once a run method is called, the
+  symbol table will be populated and can get queried.</LI>
 
-        <LI>getCurrentDefinition - once a run method is called, the
-        parser will contain a Definition object which represents
-        the given wsdl file.&nbsp; Definition is a WSDL4J
-        object.</LI>
+  <LI>getCurrentDefinition - once a run method is called, the
+  parser will contain a Definition object which represents
+  the given wsdl file.&nbsp; Definition is a WSDL4J
+  object.</LI>
 
-        <LI>getWSDLURI - once the run method which takes a string
-        is called, the parser will contain the string representing
-        the location of the WSDL file.&nbsp; Note that the other
-        run method - run(String context, Document wsdlDoc) - does
-        not provide a location for the wsdl file.&nbsp; If this run
-        method is used, getWSDLURI will be null.</LI>
+  <LI>getWSDLURI - once the run method which takes a string
+  is called, the parser will contain the string representing
+  the location of the WSDL file.&nbsp; Note that the other
+  run method - run(String context, Document wsdlDoc) - does
+  not provide a location for the wsdl file.&nbsp; If this run
+  method is used, getWSDLURI will be null.</LI>
 
-        <LI>There are two run methods.&nbsp; The first, as shown
-        above, takes a URI string which represents the location of
-        the WSDL file.&nbsp; If you've already parsed the WSDL file
-        into an XML Document, then you can use the second run
-        method, which takes a context and the WSDL Document.</LI>
-      </UL>
+  <LI>There are two run methods.&nbsp; The first, as shown
+  above, takes a URI string which represents the location of
+  the WSDL file.&nbsp; If you've already parsed the WSDL file
+  into an XML Document, then you can use the second run
+  method, which takes a context and the WSDL Document.</LI>
+   </UL>
 
-      <P><BR>
-      An extension of this class would ...<BR>
-      <BR>
-      <FONT color="#FF0000">NOTE:&nbsp; continue this
-      sentiment...</FONT><BR>
-      &nbsp;</P>
-    </LI>
+   <P><BR>
+   An extension of this class would ...<BR>
+   <BR>
+   <FONT color="#FF0000">NOTE:&nbsp; continue this
+   sentiment...</FONT><BR>
+   &nbsp;</P>
+ </LI>
 
-    <LI>WSDL2</LI>
+ <LI>WSDL2</LI>
 
-    <LI style="list-style: none">
-      <BR>
-      Parser is the programmatic interface into the WSDL
-      parser.&nbsp; WSDL2 is the command line tool for the
-      parser.&nbsp; It provides an extensible framework for calling
-      the Parser from the command line.&nbsp; It is named WSDL2
-      because extensions of it will likely begin with WSDL2:&nbsp;
-      <B>WSDL2</B>Java, <B>WSDL2</B>Lisp, <B>WSDL2</B>XXX.
+ <LI style="list-style: none">
+   <BR>
+   Parser is the programmatic interface into the WSDL
+   parser.&nbsp; WSDL2 is the command line tool for the
+   parser.&nbsp; It provides an extensible framework for calling
+   the Parser from the command line.&nbsp; It is named WSDL2
+   because extensions of it will likely begin with WSDL2:&nbsp;
+   <B>WSDL2</B>Java, <B>WSDL2</B>Lisp, <B>WSDL2</B>XXX.
 
-      <P><TT>public class WSDL2 {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; protected WSDL2();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; protected Parser
-      createParser();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; protected Parser getParser();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; protected void
-      addOptions(org.apache.axis.utils.CLOptionDescriptor[]);</TT><BR>
+   <P><TT>public class WSDL2 {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; protected WSDL2();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; protected Parser
+   createParser();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; protected Parser getParser();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; protected void
+   addOptions(org.apache.axis.utils.CLOptionDescriptor[]);</TT><BR>
 
-      <TT>&nbsp;&nbsp;&nbsp; protected void
-      parseOption(org.apache.axis.utils.CLOption);</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; protected void
-      validateOptions();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; protected void printUsage();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; protected void run(String[]);</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public static void
-      main(String[]);</TT><BR>
-      <TT>}</TT></P>
+   <TT>&nbsp;&nbsp;&nbsp; protected void
+   parseOption(org.apache.axis.utils.CLOption);</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; protected void
+   validateOptions();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; protected void printUsage();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; protected void run(String[]);</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public static void
+   main(String[]);</TT><BR>
+   <TT>}</TT></P>
 
-      <P>Like all good command line tools, it has a main
-      method.&nbsp; Unlike some command line tools, however, its
-      methods are not static.&nbsp; Static methods are not
-      extensible.&nbsp; WSDL2's main method constructs an instance
-      of itself and calls methods on that instance rather than
-      calling static methods.&nbsp; These methods follow a behavior
-      pattern.&nbsp; The main method is very simple:<BR>
-      &nbsp;</P>
+   <P>Like all good command line tools, it has a main
+   method.&nbsp; Unlike some command line tools, however, its
+   methods are not static.&nbsp; Static methods are not
+   extensible.&nbsp; WSDL2's main method constructs an instance
+   of itself and calls methods on that instance rather than
+   calling static methods.&nbsp; These methods follow a behavior
+   pattern.&nbsp; The main method is very simple:<BR>
+   &nbsp;</P>
 
-      <DIV style="margin-left: 2em">
-        <TT>&nbsp;&nbsp;&nbsp; public static void main(String[]
-        args) {</TT><BR>
-        <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WSDL2 wsdl2
-        = new WSDL2();</TT><BR>
-        <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        wsdl2.run(args);</TT><BR>
-        <TT>&nbsp;&nbsp;&nbsp; }</TT>
-      </DIV>
+   <DIV style="margin-left: 2em">
+  <TT>&nbsp;&nbsp;&nbsp; public static void main(String[]
+  args) {</TT><BR>
+  <TT>&nbsp;&nbsp;&nbsp;&nbsp; WSDL2 wsdl2
+  = new WSDL2();</TT><BR>
+  <TT>&nbsp;&nbsp;&nbsp;&nbsp;
+  wsdl2.run(args);</TT><BR>
+  <TT>&nbsp;&nbsp;&nbsp; }</TT>
+   </DIV>
 
-      <P><BR>
-      The constructor calls createParser to construct a Parser or
-      an extension of Parser.</P>
+   <P><BR>
+   The constructor calls createParser to construct a Parser or
+   an extension of Parser.</P>
 
-      <P>run calls:</P>
+   <P>run calls:</P>
 
-      <UL>
-        <LI>parseOption to parse each command line option and call
-        the appropriate Parser accessor.&nbsp; For example, when
-        this method parses --verbose, it calls
-        parser.setVerbose(true)</LI>
+   <UL>
+  <LI>parseOption to parse each command line option and call
+  the appropriate Parser accessor.&nbsp; For example, when
+  this method parses --verbose, it calls
+  parser.setVerbose(true)</LI>
 
-        <LI>validateOptions to make sure all the option values are
-        consistent</LI>
+  <LI>validateOptions to make sure all the option values are
+  consistent</LI>
 
-        <LI>printUsage if the usage of the tool is in error</LI>
+  <LI>printUsage if the usage of the tool is in error</LI>
 
-        <LI>parser.run(args);</LI>
-      </UL>
+  <LI>parser.run(args);</LI>
+   </UL>
 
-      <P><BR>
-      If an extension has additional options, then it is expected
-      to call addOptions before calling run.&nbsp; So extensions
-      will call, as necessary, getParser, addOptions, run.&nbsp;
-      Extensions will override, as necessary, createParser,
-      parseOption, validateOptions, printUsage.<BR>
-      &nbsp;</P>
+   <P><BR>
+   If an extension has additional options, then it is expected
+   to call addOptions before calling run.&nbsp; So extensions
+   will call, as necessary, getParser, addOptions, run.&nbsp;
+   Extensions will override, as necessary, createParser,
+   parseOption, validateOptions, printUsage.<BR>
+   &nbsp;</P>
 
-      <P>The generator framework consists of 2 files:</P>
+   <P>The generator framework consists of 2 files:</P>
 
-      <UL>
-        <LI>Generator</LI>
+   <UL>
+  <LI>Generator</LI>
 
-        <LI style="list-style: none">
-          <BR>
-          The Generator interface is very simple.&nbsp; It just
-          defines a generate method.
+  <LI style="list-style: none">
+    <BR>
+    The Generator interface is very simple.&nbsp; It just
+    defines a generate method.
 
-          <P><TT>public interface Generator</TT><BR>
-          <TT>{</TT><BR>
-          <TT>&nbsp;&nbsp;&nbsp; public void generate() throws
-          java.io.IOException;</TT><BR>
-          <TT>}</TT><BR>
-          &nbsp;</P>
-        </LI>
+    <P><TT>public interface Generator</TT><BR>
+    <TT>{</TT><BR>
+    <TT>&nbsp;&nbsp;&nbsp; public void generate() throws
+    java.io.IOException;</TT><BR>
+    <TT>}</TT><BR>
+    &nbsp;</P>
+  </LI>
 
-        <LI>GeneratorFactory</LI>
+  <LI>GeneratorFactory</LI>
 
-        <LI style="list-style: none">
-          <P><BR>
-          <TT>public interface GeneratorFactory</TT><BR>
-          <TT>{</TT><BR>
-          <TT>&nbsp;&nbsp;&nbsp; public void
-          generatorPass(javax.wsdl.Definition,
-          SymbolTable);</TT><BR>
-          <TT>&nbsp;&nbsp;&nbsp; public Generator
-          getGenerator(javax.wsdl.Message, SymbolTable);</TT><BR>
-          <TT>&nbsp;&nbsp;&nbsp; public Generator
-          getGenerator(javax.wsdl.PortType, SymbolTable);</TT><BR>
-          <TT>&nbsp;&nbsp;&nbsp; public Generator
-          getGenerator(javax.wsdl.Binding, SymbolTable);</TT><BR>
-          <TT>&nbsp;&nbsp;&nbsp; public Generator
-          getGenerator(javax.wsdl.Service, SymbolTable);</TT><BR>
-          <TT>&nbsp;&nbsp;&nbsp; public Generator
-          getGenerator(TypeEntry, SymbolTable);</TT><BR>
-          <TT>&nbsp;&nbsp;&nbsp; public Generator
-          getGenerator(javax.wsdl.Definition,
-          SymbolTable);</TT><BR>
-          <TT>&nbsp;&nbsp;&nbsp; public void
-          setBaseTypeMapping(BaseTypeMapping);</TT><BR>
-          <TT>&nbsp;&nbsp;&nbsp; public BaseTypeMapping
-          getBaseTypeMapping();</TT><BR>
-          <TT>}</TT></P>
+  <LI style="list-style: none">
+    <P><BR>
+    <TT>public interface GeneratorFactory</TT><BR>
+    <TT>{</TT><BR>
+    <TT>&nbsp;&nbsp;&nbsp; public void
+    generatorPass(javax.wsdl.Definition,
+    SymbolTable);</TT><BR>
+    <TT>&nbsp;&nbsp;&nbsp; public Generator
+    getGenerator(javax.wsdl.Message, SymbolTable);</TT><BR>
+    <TT>&nbsp;&nbsp;&nbsp; public Generator
+    getGenerator(javax.wsdl.PortType, SymbolTable);</TT><BR>
+    <TT>&nbsp;&nbsp;&nbsp; public Generator
+    getGenerator(javax.wsdl.Binding, SymbolTable);</TT><BR>
+    <TT>&nbsp;&nbsp;&nbsp; public Generator
+    getGenerator(javax.wsdl.Service, SymbolTable);</TT><BR>
+    <TT>&nbsp;&nbsp;&nbsp; public Generator
+    getGenerator(TypeEntry, SymbolTable);</TT><BR>
+    <TT>&nbsp;&nbsp;&nbsp; public Generator
+    getGenerator(javax.wsdl.Definition,
+    SymbolTable);</TT><BR>
+    <TT>&nbsp;&nbsp;&nbsp; public void
+    setBaseTypeMapping(BaseTypeMapping);</TT><BR>
+    <TT>&nbsp;&nbsp;&nbsp; public BaseTypeMapping
+    getBaseTypeMapping();</TT><BR>
+    <TT>}</TT></P>
 
-          <P>The GeneratorFactory interface defines a set of
-          methods that the parser uses to get generators.&nbsp;
-          There should be a generator for each of the WSDL
-          constructs (message, portType, etc - note that these
-          depend on the WSDL4J classes:&nbsp; javax.xml.Message,
-          javax.xml.PortType, etc); a generator for schema types;
-          and a generator for the WSDL Definition itself.&nbsp;
-          This last generator is used to generate anything that
-          doesn't fit into the previous categories</P>
+    <P>The GeneratorFactory interface defines a set of
+    methods that the parser uses to get generators.&nbsp;
+    There should be a generator for each of the WSDL
+    constructs (message, portType, etc - note that these
+    depend on the WSDL4J classes:&nbsp; javax.xml.Message,
+    javax.xml.PortType, etc); a generator for schema types;
+    and a generator for the WSDL Definition itself.&nbsp;
+    This last generator is used to generate anything that
+    doesn't fit into the previous categories</P>
 
-          <P>In addition to the getGeneratorMethods, the
-          GeneratorFactory defines a generatorPass method which
-          provides the factory implementation a chance to walk
-          through the symbol table to do any preprocessing before
-          the actual generation begins.</P>
+    <P>In addition to the getGeneratorMethods, the
+    GeneratorFactory defines a generatorPass method which
+    provides the factory implementation a chance to walk
+    through the symbol table to do any preprocessing before
+    the actual generation begins.</P>
 
-          <P>Accessors for the base type mapping are also
-          defined.&nbsp; These are used to translate QNames to base
-          types in the given target mapping.<BR>
-          &nbsp;</P>
-        </LI>
-      </UL>In addition to Parser, WSDL2, Generator, and
-      GeneratorFactory, the org.apache.axis.wsdl.gen package also
-      contains a couple of no-op classes:&nbsp; NoopGenerator and
-      NoopFactory.&nbsp; NoopGenerator is a convenience class for
-      extensions that do not need to generate artifacts for every
-      WSDL construct.&nbsp; For example, WSDL2Java does not
-      generate anything for messages, therefore its factory's
-      getGenerator(Message, SymbolTable) method returns an instance
-      of NoopGenerator.&nbsp; NoopFactory returns a NoopGenerator
-      for all getGenerator methods.&nbsp; The default factory for
-      Parser is the NoopFactory.
-    </LI>
+    <P>Accessors for the base type mapping are also
+    defined.&nbsp; These are used to translate QNames to base
+    types in the given target mapping.<BR>
+    &nbsp;</P>
+  </LI>
+   </UL>In addition to Parser, WSDL2, Generator, and
+   GeneratorFactory, the org.apache.axis.wsdl.gen package also
+   contains a couple of no-op classes:&nbsp; NoopGenerator and
+   NoopFactory.&nbsp; NoopGenerator is a convenience class for
+   extensions that do not need to generate artifacts for every
+   WSDL construct.&nbsp; For example, WSDL2Java does not
+   generate anything for messages, therefore its factory's
+   getGenerator(Message, SymbolTable) method returns an instance
+   of NoopGenerator.&nbsp; NoopFactory returns a NoopGenerator
+   for all getGenerator methods.&nbsp; The default factory for
+   Parser is the NoopFactory.
+ </LI>
   </UL>
 
   <H4>Code Generator Back End</H4>
@@ -1302,101 +1305,101 @@
   &nbsp;</P>
 
   <UL>
-    <LI>First you must create your writer that writes the new
-    artifact.&nbsp; This new class extends
-    org.apache.axis.wsdl.toJava.JavaWriter.&nbsp; JavaWriter
-    dictates behavior to its extensions; it calls writeFileHeader
-    and writeFileBody.&nbsp; Since we don't care about a file
-    header for this example, writeFileHeader is a no-op
-    method.&nbsp; writeFileBody does the real work of this
-    writer.</LI>
+ <LI>First you must create your writer that writes the new
+ artifact.&nbsp; This new class extends
+ org.apache.axis.wsdl.toJava.JavaWriter.&nbsp; JavaWriter
+ dictates behavior to its extensions; it calls writeFileHeader
+ and writeFileBody.&nbsp; Since we don't care about a file
+ header for this example, writeFileHeader is a no-op
+ method.&nbsp; writeFileBody does the real work of this
+ writer.</LI>
 
-    <LI style="list-style: none">
-      <P><BR>
-      <TT>public class MyListPortsWriter extends JavaWriter
-      {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; private Service service;</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public MyListPortsWriter(</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      Emitter emitter,</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      ServiceEntry sEntry,</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      SymbolTable symbolTable) {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      super(emitter,</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      new QName(</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      sEntry.getQName().getNamespaceURI(),</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      sEntry.getQName().getLocalPart() + "Lst"),</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      "", "lst", "Generating service port list file", "service
-      list");</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.service =
-      sEntry.getService();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; protected void writeFileHeader()
-      throws IOException {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; protected void writeFileBody() throws
-      IOException {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Map portMap =
-      service.getPorts();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Iterator
-      portIterator = portMap.values().iterator();</TT></P>
+ <LI style="list-style: none">
+   <P><BR>
+   <TT>public class MyListPortsWriter extends JavaWriter
+   {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; private Service service;</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public MyListPortsWriter(</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   Emitter emitter,</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   ServiceEntry sEntry,</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   SymbolTable symbolTable) {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;
+   super(emitter,</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   new QName(</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   sEntry.getQName().getNamespaceURI(),</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   sEntry.getQName().getLocalPart() + "Lst"),</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   "", "lst", "Generating service port list file", "service
+   list");</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; this.service =
+   sEntry.getService();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; protected void writeFileHeader()
+   throws IOException {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; protected void writeFileBody() throws
+   IOException {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; Map portMap =
+   service.getPorts();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; Iterator
+   portIterator = portMap.values().iterator();</TT></P>
 
-      <P><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while
-      (portIterator.hasNext()) {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      Port p = (Port) portIterator.next();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      pw.println(p.getName());</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      pw.close();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>}</TT><BR>
-      &nbsp;</P>
-    </LI>
+   <P><TT>&nbsp;&nbsp;&nbsp;&nbsp; while
+   (portIterator.hasNext()) {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   Port p = (Port) portIterator.next();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   pw.println(p.getName());</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;
+   pw.close();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>}</TT><BR>
+   &nbsp;</P>
+ </LI>
 
-    <LI>Then you need a main program.&nbsp; This main program
-    extends WSDL2Java so that it gets all the functionality of that
-    tool.&nbsp; The main of this tool does 3 things:</LI>
+ <LI>Then you need a main program.&nbsp; This main program
+ extends WSDL2Java so that it gets all the functionality of that
+ tool.&nbsp; The main of this tool does 3 things:</LI>
 
-    <LI style="list-style: none">
-      <UL>
-        <LI>instantiates itself</LI>
+ <LI style="list-style: none">
+   <UL>
+  <LI>instantiates itself</LI>
 
-        <LI>adds MyListPortsWriter to the list of generators for a
-        WSDL service</LI>
+  <LI>adds MyListPortsWriter to the list of generators for a
+  WSDL service</LI>
 
-        <LI>calls the run method.</LI>
-      </UL>That's it!&nbsp; The base tool does all the rest of the
-      work.
+  <LI>calls the run method.</LI>
+   </UL>That's it!&nbsp; The base tool does all the rest of the
+   work.
 
-      <P><TT>public class MyWSDL2Java extends WSDL2Java {</TT></P>
+   <P><TT>public class MyWSDL2Java extends WSDL2Java {</TT></P>
 
-      <P><TT>&nbsp;&nbsp;&nbsp; public static void main(String
-      args[]) {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MyWSDL2Java
-      myWSDL2Java = new MyWSDL2Java();</TT></P>
+   <P><TT>&nbsp;&nbsp;&nbsp; public static void main(String
+   args[]) {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; MyWSDL2Java
+   myWSDL2Java = new MyWSDL2Java();</TT></P>
 
-      <P><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      JavaGeneratorFactory factory =</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      (JavaGeneratorFactory)
-      myWSDL2Java.getParser().getFactory();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      factory.addGenerator(Service.class,
-      MyListPortsWriter.class);</TT></P>
+   <P><TT>&nbsp;&nbsp;&nbsp;&nbsp;
+   JavaGeneratorFactory factory =</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   (JavaGeneratorFactory)
+   myWSDL2Java.getParser().getFactory();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;
+   factory.addGenerator(Service.class,
+   MyListPortsWriter.class);</TT></P>
 
-      <P><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      myWSDL2Java.run(args);</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>}</TT></P>
-    </LI>
+   <P><TT>&nbsp;&nbsp;&nbsp;&nbsp;
+   myWSDL2Java.run(args);</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>}</TT></P>
+ </LI>
   </UL>
 
   <H5>Example 2 - Not quite as simple an extension of WSDL2Java -
@@ -1409,246 +1412,246 @@
   complete implementation of this example.</P>
 
   <UL>
-    <LI>First, here is the writer for the mydeploy.useless.&nbsp;
-    This new class extends
-    org.apache.axis.wsdl.toJava.JavaWriter.&nbsp; JavaWriter
-    dictates behavior to its extensions; it calls writeFileHeader
-    and writeFileBody.&nbsp; Since we don't care about a file
-    header for this example, writeFileHeader is a no-op
-    method.&nbsp; writeFileBody does the real work of this
-    writer.&nbsp; It simply writes a bit of a song, depending on
-    user input.</LI>
+ <LI>First, here is the writer for the mydeploy.useless.&nbsp;
+ This new class extends
+ org.apache.axis.wsdl.toJava.JavaWriter.&nbsp; JavaWriter
+ dictates behavior to its extensions; it calls writeFileHeader
+ and writeFileBody.&nbsp; Since we don't care about a file
+ header for this example, writeFileHeader is a no-op
+ method.&nbsp; writeFileBody does the real work of this
+ writer.&nbsp; It simply writes a bit of a song, depending on
+ user input.</LI>
 
-    <LI style="list-style: none">
-      <P><BR>
-      Note that we've also overridden the generate method.&nbsp;
-      The parser always calls generate, but since this is a
-      server-side artifact, we don't want to generate it unless we
-      are generating server-side artifacts (in other words, in
-      terms of the command line options, we've specified the
-      --serverSide option).</P>
+ <LI style="list-style: none">
+   <P><BR>
+   Note that we've also overridden the generate method.&nbsp;
+   The parser always calls generate, but since this is a
+   server-side artifact, we don't want to generate it unless we
+   are generating server-side artifacts (in other words, in
+   terms of the command line options, we've specified the
+   --serverSide option).</P>
 
-      <P><TT>public class MyDeployWriter extends JavaWriter
-      {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public MyDeployWriter(Emitter emitter,
-      Definition definition,</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      SymbolTable symbolTable) {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      super(emitter,</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      new QName(definition.getTargetNamespace(),
-      "deploy"),</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      "", "useless", "Generating deploy.useless",
-      "deploy");</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public void generate() throws
-      IOException {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if
-      (emitter.isServerSide()) {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      super.generate();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; protected void writeFileHeader()
-      throws IOException {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; protected void writeFileBody() throws
-      IOException {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MyEmitter
-      myEmitter = (MyEmitter) emitter;</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if
-      (myEmitter.getSong() == MyEmitter.RUM) {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      pw.println("Yo!&nbsp; Ho!&nbsp; Ho!&nbsp; And a bottle of
-      rum.");</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else if
-      (myEmitter.getSong() == MyEmitter.WORK) {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      pw.println("Hi ho!&nbsp; Hi ho!&nbsp; It's off to work we
-      go.");</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else
-      {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      pw.println("Feelings...&nbsp; Nothing more than
-      feelings...");</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      pw.close();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>}</TT><BR>
-      &nbsp;</P>
-    </LI>
+   <P><TT>public class MyDeployWriter extends JavaWriter
+   {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public MyDeployWriter(Emitter emitter,
+   Definition definition,</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   SymbolTable symbolTable) {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;
+   super(emitter,</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   new QName(definition.getTargetNamespace(),
+   "deploy"),</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   "", "useless", "Generating deploy.useless",
+   "deploy");</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public void generate() throws
+   IOException {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; if
+   (emitter.isServerSide()) {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   super.generate();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; protected void writeFileHeader()
+   throws IOException {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; protected void writeFileBody() throws
+   IOException {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; MyEmitter
+   myEmitter = (MyEmitter) emitter;</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; if
+   (myEmitter.getSong() == MyEmitter.RUM) {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   pw.println("Yo!&nbsp; Ho!&nbsp; Ho!&nbsp; And a bottle of
+   rum.");</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; else if
+   (myEmitter.getSong() == MyEmitter.WORK) {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   pw.println("Hi ho!&nbsp; Hi ho!&nbsp; It's off to work we
+   go.");</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; else
+   {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   pw.println("Feelings...&nbsp; Nothing more than
+   feelings...");</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;
+   pw.close();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>}</TT><BR>
+   &nbsp;</P>
+ </LI>
 
-    <LI>Since we're changing what WSDL2Java generates, rather than
-    simply adding to it like the previous example did, calling
-    addGenerator isn't good enough.&nbsp; In order to change what
-    WSDL2Java generates, you have to create a generator factory and
-    provide your own generators.&nbsp; Since we want to keep most
-    of WSDL2Java's artifacts, we can simply extend WSDL2Java's
-    factory - JavaGeneratorFactory - and override the
-    addDefinitionGenerators method.</LI>
+ <LI>Since we're changing what WSDL2Java generates, rather than
+ simply adding to it like the previous example did, calling
+ addGenerator isn't good enough.&nbsp; In order to change what
+ WSDL2Java generates, you have to create a generator factory and
+ provide your own generators.&nbsp; Since we want to keep most
+ of WSDL2Java's artifacts, we can simply extend WSDL2Java's
+ factory - JavaGeneratorFactory - and override the
+ addDefinitionGenerators method.</LI>
 
-    <LI style="list-style: none">
-      <P><BR>
-      <TT>public class MyGeneratorFactory extends
-      JavaGeneratorFactory {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; protected void
-      addDefinitionGenerators() {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      addGenerator(Definition.class, JavaDefinitionWriter.class);
-      // WSDL2Java's JavaDefinitionWriter</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      addGenerator(Definition.class, MyDeployWriter.class); // our
-      DeployWriter</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      addGenerator(Definition.class, JavaUndeployWriter.class); //
-      WSDL2Java's JavaUndeployWriter</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>}</TT><BR>
-      &nbsp;</P>
-    </LI>
+ <LI style="list-style: none">
+   <P><BR>
+   <TT>public class MyGeneratorFactory extends
+   JavaGeneratorFactory {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; protected void
+   addDefinitionGenerators() {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;
+   addGenerator(Definition.class, JavaDefinitionWriter.class);
+   // WSDL2Java's JavaDefinitionWriter</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;
+   addGenerator(Definition.class, MyDeployWriter.class); // our
+   DeployWriter</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;
+   addGenerator(Definition.class, JavaUndeployWriter.class); //
+   WSDL2Java's JavaUndeployWriter</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>}</TT><BR>
+   &nbsp;</P>
+ </LI>
 
-    <LI>Now we must write the API's to our tool.&nbsp; Since we've
-    added an option - song - we need both the programmatic API - an
-    extension of Parser (actually Emitter in this case since we're
-    extending WSDL2Java and Emitter is WSDL2Java's parser
-    extension) - and the command line API.</LI>
+ <LI>Now we must write the API's to our tool.&nbsp; Since we've
+ added an option - song - we need both the programmatic API - an
+ extension of Parser (actually Emitter in this case since we're
+ extending WSDL2Java and Emitter is WSDL2Java's parser
+ extension) - and the command line API.</LI>
 
-    <LI style="list-style: none">
-      <P><BR>
-      Here is our programmatic API.&nbsp; It adds song accessors to
-      Emitter.&nbsp; It also, in the constructor, lets the factory
-      know about the emitter and the emitter know about the
-      factory.</P>
+ <LI style="list-style: none">
+   <P><BR>
+   Here is our programmatic API.&nbsp; It adds song accessors to
+   Emitter.&nbsp; It also, in the constructor, lets the factory
+   know about the emitter and the emitter know about the
+   factory.</P>
 
-      <P><TT>public class MyEmitter extends Emitter {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public static final int RUM&nbsp; =
-      0;</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public static final int WORK =
-      1;</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; private int song = -1;</TT></P>
+   <P><TT>public class MyEmitter extends Emitter {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public static final int RUM&nbsp; =
+   0;</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public static final int WORK =
+   1;</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; private int song = -1;</TT></P>
 
-      <P><TT>&nbsp;&nbsp;&nbsp; public MyEmitter() {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      MyGeneratorFactory factory = new
-      MyGeneratorFactory();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      setFactory(factory);</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      factory.setEmitter(this);</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public int getSong() {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return
-      song;</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public void setSong(int song)
-      {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.song =
-      song;</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>}</TT></P>
+   <P><TT>&nbsp;&nbsp;&nbsp; public MyEmitter() {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;
+   MyGeneratorFactory factory = new
+   MyGeneratorFactory();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;
+   setFactory(factory);</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;
+   factory.setEmitter(this);</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public int getSong() {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; return
+   song;</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public void setSong(int song)
+   {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; this.song =
+   song;</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>}</TT></P>
 
-      <P>And here is our command line API.&nbsp; It's a bit more
-      complex that our previous example's main program, but it does
-      2 extra things:</P>
+   <P>And here is our command line API.&nbsp; It's a bit more
+   complex that our previous example's main program, but it does
+   2 extra things:</P>
 
-      <OL>
-        <LI>accept a new command line option:&nbsp; --song rum|work
-        (this is the biggest chunk of the new work).</LI>
+   <OL>
+  <LI>accept a new command line option:&nbsp; --song rum|work
+  (this is the biggest chunk of the new work).</LI>
 
-        <LI>create a new subclass of Parser</LI>
-      </OL>
+  <LI>create a new subclass of Parser</LI>
+   </OL>
 
-      <P><BR>
-      <TT>public class WSDL2Useless extends WSDL2Java {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; protected static final int SONG_OPT =
-      'g';</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; protected static final
-      CLOptionDescriptor[] options = new
-      CLOptionDescriptor[]{</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; new
-      CLOptionDescriptor("song",</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      CLOptionDescriptor.ARGUMENT_REQUIRED,</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      SONG_OPT,</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      "Choose a song for deploy.useless:&nbsp; work or
-      rum")</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; };</TT></P>
+   <P><BR>
+   <TT>public class WSDL2Useless extends WSDL2Java {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; protected static final int SONG_OPT =
+   'g';</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; protected static final
+   CLOptionDescriptor[] options = new
+   CLOptionDescriptor[]{</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; new
+   CLOptionDescriptor("song",</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   CLOptionDescriptor.ARGUMENT_REQUIRED,</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   SONG_OPT,</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   "Choose a song for deploy.useless:&nbsp; work or
+   rum")</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; };</TT></P>
 
-      <P><TT>&nbsp;&nbsp;&nbsp; public WSDL2Useless() {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      addOptions(options);</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; protected Parser createParser()
-      {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return new
-      MyEmitter();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; protected void parseOption(CLOption
-      option) {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if
-      (option.getId() == SONG_OPT) {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      String arg = option.getArgument();</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      if (arg.equals("rum")) {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      ((MyEmitter) parser).setSong(MyEmitter.RUM);</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      }</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      else if (arg.equals("work")) {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      ((MyEmitter) parser).setSong(MyEmitter.WORK);</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      }</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else
-      {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      super.parseOption(option);</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; public static void main(String args[])
-      {</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WSDL2Useless
-      useless = new WSDL2Useless();</TT></P>
+   <P><TT>&nbsp;&nbsp;&nbsp; public WSDL2Useless() {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;
+   addOptions(options);</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; protected Parser createParser()
+   {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; return new
+   MyEmitter();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; protected void parseOption(CLOption
+   option) {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; if
+   (option.getId() == SONG_OPT) {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   String arg = option.getArgument();</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   if (arg.equals("rum")) {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   ((MyEmitter) parser).setSong(MyEmitter.RUM);</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   }</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   else if (arg.equals("work")) {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   ((MyEmitter) parser).setSong(MyEmitter.WORK);</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   }</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; else
+   {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   super.parseOption(option);</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; public static void main(String args[])
+   {</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp;&nbsp; WSDL2Useless
+   useless = new WSDL2Useless();</TT></P>
 
-      <P><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      useless.run(args);</TT><BR>
-      <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
-      <TT>}</TT></P>
+   <P><TT>&nbsp;&nbsp;&nbsp;&nbsp;
+   useless.run(args);</TT><BR>
+   <TT>&nbsp;&nbsp;&nbsp; }</TT><BR>
+   <TT>}</TT></P>
 
-      <P>Let's go through this one method at a time.</P>
+   <P>Let's go through this one method at a time.</P>
 
-      <UL>
-        <LI>constructor - this constructor adds the new option
-        --song rum|work.&nbsp; (the abbreviated version of this
-        option is "-g", rather an odd abbreviation, but "-s" is the
-        abbreviation for --serverSide and "-S" is the abbreviation
-        for --skeletonDeploy.&nbsp; Bummer.&nbsp; I just picked
-        some other letter.</LI>
+   <UL>
+  <LI>constructor - this constructor adds the new option
+  --song rum|work.&nbsp; (the abbreviated version of this
+  option is "-g", rather an odd abbreviation, but "-s" is the
+  abbreviation for --serverSide and "-S" is the abbreviation
+  for --skeletonDeploy.&nbsp; Bummer.&nbsp; I just picked
+  some other letter.</LI>
 
-        <LI>createParser - we've got to provide a means by which
-        the parent class can get our Parser extension.</LI>
+  <LI>createParser - we've got to provide a means by which
+  the parent class can get our Parser extension.</LI>
 
-        <LI>parseOption - this method processes our new
-        option.&nbsp; If the given option isn't ours, just let
-        super.parseOption do its work.</LI>
+  <LI>parseOption - this method processes our new
+  option.&nbsp; If the given option isn't ours, just let
+  super.parseOption do its work.</LI>
 
-        <LI>main - this main is actually simpler than the first
-        example's main.&nbsp; The first main had to add our
-        generator to the list of generators.&nbsp; In this example,
-        the factory already did that, so all that this main must do
-        is instantiate itself and run itself.</LI>
-      </UL>
-    </LI>
+  <LI>main - this main is actually simpler than the first
+  example's main.&nbsp; The first main had to add our
+  generator to the list of generators.&nbsp; In this example,
+  the factory already did that, so all that this main must do
+  is instantiate itself and run itself.</LI>
+   </UL>
+ </LI>
   </UL>
 
   <H2><A name="Client SSL"></A>Client SSL</H2>

@@ -119,28 +119,16 @@
 
   <BLOCKQUOTE>
     <BLOCKQUOTE>
-      <TT><FONT color=
-      "#009900">D:\\xerces\\xerces-1_4_2\\xerces.jar</FONT></TT><BR>
-
-      <TT><FONT color=
-      "#009900">G:\\junit3.7\\junit.jar</FONT></TT><BR>
-      <TT><FONT color=
-      "#009900">G:\\xml-axis\\java\\build\\lib\\commons-discovery.jar</FONT></TT><BR>
-
-      <TT><FONT color=
-      "#009900">G:\\xml-axis\\java\\build\\lib\\commons-logging.jar</FONT></TT><BR>
-
-      <TT><FONT color=
-      "#009900">G:\\xml-axis\\java\\build\\lib\\wsdl4j.jar</FONT></TT><BR>
-
-      <TT><FONT color=
-      "#009900">G:\\xml-axis\\java\\build\\lib\\axis.jar</FONT></TT><BR>
-
-      <TT><FONT color=
-      "#009900">G:\\xml-axis\\java\\build\\lib\\log4j-1.2.8.jar</FONT></TT><BR>
-
-      <TT><FONT color=
-      "#009900">G:\\xml-axis\\java\\build\\classes</FONT></TT>
+<PRE>
+D:\\xerces\\xerces-1_4_2\\xerces.jar
+G:\\junit3.7\\junit.jar
+G:\\xml-axis\\java\\build\\lib\\commons-discovery.jar
+G:\\xml-axis\\java\\build\\lib\\commons-logging.jar
+G:\\xml-axis\\java\\build\\lib\\wsdl4j.jar
+G:\\xml-axis\\java\\build\\lib\\axis.jar
+G:\\xml-axis\\java\\build\\lib\\log4j-1.2.8.jar
+G:\\xml-axis\\java\\build\\classes
+</PRE>
     </BLOCKQUOTE>
   </BLOCKQUOTE>
 
@@ -150,10 +138,10 @@
 
   <BLOCKQUOTE>
     <BLOCKQUOTE>
-      <TT><FONT color=
-      "#009900">-Dhttp.proxyHost=proxy.somewhere.com
+      <PRE>
+      -Dhttp.proxyHost=proxy.somewhere.com
       -Dhttp.proxyPort=80
-      -Dhttp.nonProxyHosts="localhost"</FONT></TT>
+      -Dhttp.nonProxyHosts="localhost"</PRE>
     </BLOCKQUOTE>
   </BLOCKQUOTE>
 
@@ -205,21 +193,21 @@
   import statements:</P>
 
   <DIV style="margin-left: 2em">
-    <CODE>import org.apache.commons.logging.Log;<BR>
-    import org.apache.axis.components.logger.LogFactory;<BR>
-    &nbsp;</CODE>
+    <PRE>import org.apache.commons.logging.Log;
+    import org.apache.axis.components.logger.LogFactory;
+    &nbsp;</PRE>
   </DIV>
 
   <P>For each class definition, declare and initialize a
   <CODE>log</CODE> attribute as follows:</P>
 
   <DIV style="margin-left: 2em">
-    <CODE>public class CLASS<BR>
-    {<BR>
+    <PRE>public class CLASS
+    {
     &nbsp;&nbsp;&nbsp;private static Log log =
-    LogFactory.getLog(CLASS.class);<BR>
-    &nbsp;&nbsp;&nbsp;...<BR>
-    &nbsp;</CODE>
+    LogFactory.getLog(CLASS.class);
+    &nbsp;&nbsp;&nbsp;...
+    &nbsp;</PRE>
   </DIV>
 
   <P>Messages are logged to a <I>logger</I>, such as
@@ -229,18 +217,18 @@
   log:</P>
 
   <DIV style="margin-left: 2em">
-    <CODE>log.fatal(Object message);<BR>
-    log.fatal(Object message, Throwable t);<BR>
-    log.error(Object message);<BR>
-    log.error(Object message, Throwable t);<BR>
-    log.warn(Object message);<BR>
-    log.warn(Object message, Throwable t);<BR>
-    log.info(Object message);<BR>
-    log.info(Object message, Throwable t);<BR>
-    log.debug(Object message);<BR>
-    log.debug(Object message, Throwable t);<BR>
-    log.trace(Object message);<BR>
-    log.trace(Object message, Throwable t);</CODE>
+    <PRE>log.fatal(Object message);
+    log.fatal(Object message, Throwable t);
+    log.error(Object message);
+    log.error(Object message, Throwable t);
+    log.warn(Object message);
+    log.warn(Object message, Throwable t);
+    log.info(Object message);
+    log.info(Object message, Throwable t);
+    log.debug(Object message);
+    log.debug(Object message, Throwable t);
+    log.trace(Object message);
+    log.trace(Object message, Throwable t);</PRE>
   </DIV>
 
   <P>While semantics for these methods are ultimately defined by
@@ -251,12 +239,12 @@
   provided:</P>
 
   <DIV style="margin-left: 2em">
-    <CODE>log.isFatalEnabled();<BR>
-    log.isErrorEnabled();<BR>
-    log.isWarnEnabled();<BR>
-    log.isInfoEnabled();<BR>
-    log.isDebugEnabled();<BR>
-    log.isTraceEnabled();</CODE>
+    <PRE>log.isFatalEnabled();
+    log.isErrorEnabled();
+    log.isWarnEnabled();
+    log.isInfoEnabled();
+    log.isDebugEnabled();
+    log.isTraceEnabled();</PRE>
   </DIV>
 
   <P>These are typically used to guard code that only needs to
@@ -539,11 +527,13 @@ public void invoke (MessageContext msgContext) throws AxisFault;
 public class QSClockHandler implements QSHandler {
      public void invoke (MessageContext msgContext) throws AxisFault {
           PrintWriter out = (PrintWriter) msgContext.getProperty (HTTPConstants.PLUGIN_WRITER);
-          HttpServletResponse response = (HttpServletResponse) msgContext.getProperty (HTTPConstants.MC_HTTP_SERVLETRESPONSE);
+          HttpServletResponse response = (HttpServletResponse)
+           msgContext.getProperty (HTTPConstants.MC_HTTP_SERVLETRESPONSE);
           
           response.setContentType ("text/html");
           
-          out.println ("&lt;HTML&gt;&lt;BODY&gt;&lt;H1&gt;" + System.currentTimeMillis() + "&lt;/H1&gt;&lt;/BODY&gt;&lt;/HTML&gt;");
+          out.println ("&lt;HTML&gt;&lt;BODY&gt;&lt;H1&gt;" + System.currentTimeMillis()
+           + "&lt;/H1&gt;&lt;/BODY&gt;&lt;/HTML&gt;");
      }
 }
 </PRE>
