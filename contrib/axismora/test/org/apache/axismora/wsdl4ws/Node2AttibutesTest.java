@@ -60,7 +60,6 @@ import java.util.Vector;
 
 import junit.framework.TestCase;
 
-import org.apache.axismora.Constants;
 import org.apache.axismora.wsdl2ws.WrapperConstants;
 import org.apache.axismora.wsdl2ws.info.TypeMap;
 
