@@ -775,10 +775,27 @@ BasicNode* HeaderBlock::createImmediateChild(NODE_TYPE eNODE_TYPE,
 
 BasicNode* HeaderBlock::createChild(NODE_TYPE eNODE_TYPE,
                                     AxisChar *pachLocalName,
-                                    AxisChar *pachPrefix, AxisChar *pachUri,
+                                    AxisChar *pachPrefix, 
+                                    AxisChar *pachUri,
                                     AxisChar *pachValue)
 {
     BasicNode* pBasicNode = NULL;
+    if(!pachLocalName)
+    {
+     pachLocalName="";
+    }
+    if(!pachPrefix)
+    {
+     pachPrefix="";
+    }
+    if(!pachUri)
+    {
+     pachUri="";
+    }
+    if(!pachValue)
+    {
+     pachValue="";
+    }
 
     do
     {

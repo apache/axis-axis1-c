@@ -129,7 +129,10 @@ Attribute::Attribute(const AxisChar* localname, const AxisChar* prefix,
 Attribute::Attribute(const AxisChar *localname, const AxisChar *prefix, 
                      const AxisChar *value)
 {
-    Attribute(localname, prefix, "", value);
+    m_localname= localname;
+    m_prefix= prefix;
+    m_uri= "";
+    m_value= value;
 }
 
 Attribute::Attribute(const Attribute& rCopy)

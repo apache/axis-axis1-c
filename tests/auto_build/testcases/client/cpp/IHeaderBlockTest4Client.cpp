@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 		BasicNode * Bnode6=phb->createChild(ELEMENT_NODE);
 		Bnode6->setLocalName("Project");
 		IAttribute *a=Bnode6->createAttribute("Type","Open Source");
-			cout << "Project Type=" << a->getValue() << endl;
+        cout <<"Project Type=" << a->getValue() << endl;
 		BasicNode * Bnode7=phb->createChild(CHARACTER_NODE);
 		Bnode7->setValue("AXISCPP");
         BasicNode * Bnode4a=phb->createChild(ELEMENT_NODE,"LastPartChild","","http://ws.apache.org/", NULL);
@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
 		Bnode1->addChild(Bnode4);
 		phb->addChild(Bnode1);
 		phb->addChild(Bnode6);
-		BasicNode * Bnode8=phb->createChild(CHARACTER_NODE,"","","","This is a test message ");
+		BasicNode * Bnode8=phb->createChild(CHARACTER_NODE,"","","","This is a test message");
 		cout << phb->addChild(Bnode8)<<endl;
 		cout<<"AddChild returned "<< phb->addChild(NULL) << " For NULL Value "<< endl;
 		cout << "No Of Children = " << phb->getNoOfChildren()<<endl;
