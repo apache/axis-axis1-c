@@ -23,7 +23,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  *
  */
@@ -35,7 +35,7 @@
  * rahter than working on base class attribute from derived class
  */
  
-/* haracterElement.cpp: implementation of the CharacterElement class. */
+/* CharacterElement.cpp: implementation of the CharacterElement class. */
 
 
 #include <axis/server/CharacterElement.h>
@@ -44,18 +44,10 @@
 
 CharacterElement::CharacterElement():BasicNode( NULL, CHARACTER_NODE) 
 {
-/*    m_iNodeType= CHARACTER_NODE;
-    m_pachValue = '\0';
-    */
 }
 
 CharacterElement::CharacterElement(const AxisChar* pachValue):BasicNode(pachValue, CHARACTER_NODE) 
 {
-    /*
-    m_pachValue = (AxisChar*) malloc(strlen(pachValue)+1);
-    strcpy(m_pachValue, pachValue);
-    m_iNodeType= CHARACTER_NODE;
-    */
 }
 
 CharacterElement::CharacterElement(const CharacterElement& rCopy):BasicNode(rCopy)
@@ -69,7 +61,6 @@ BasicNode* CharacterElement::clone()
 
 CharacterElement::~CharacterElement()
 {
-    //free(m_pachValue);
 }
 
 NODE_TYPE CharacterElement::getNodeType() const

@@ -23,7 +23,7 @@
  *
  *
  *
- * @author Roshan Weerasuriya (roshan@jkcsworld.com, roshan@opensource.lk)
+ * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  *
  */
@@ -35,17 +35,17 @@
 
 
 #include <axis/server/BasicNode.h>
-BasicNode::BasicNode():m_iNodeType(ELEMENT_NODE), m_pachValue(NULL)
+BasicNode::BasicNode():m_pachValue(NULL)
 {}
 
-BasicNode::BasicNode(const AxisChar* pachValue, NODE_TYPE eNodeType):m_iNodeType(ELEMENT_NODE), m_pachValue(NULL)
+BasicNode::BasicNode(const AxisChar* pachValue, NODE_TYPE eNodeType):m_iNodeType(eNodeType), m_pachValue(NULL)
 {
     if(pachValue)
     	this->m_pachValue = strdup(pachValue);
 
 }
 
-BasicNode::BasicNode(const BasicNode& rCopy):m_iNodeType(ELEMENT_NODE), m_pachValue(NULL)
+BasicNode::BasicNode(const BasicNode& rCopy):m_iNodeType(rCopy.m_iNodeType), m_pachValue(NULL)
 {
 	if(this->m_pachValue)
 	    free(this->m_pachValue);
