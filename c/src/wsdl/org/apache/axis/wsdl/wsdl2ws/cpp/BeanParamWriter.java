@@ -216,7 +216,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write("\t\t\t"+classname+"* pNew = new "+classname+"[nSize];\n");
 		writer.write("\t\t\tmemcpy(pNew, pObj, sizeof("+classname+")*nSize/2);\n");
 		writer.write("\t\t\tmemset(pObj, 0, sizeof("+classname+")*nSize/2);\n");
-		writer.write("\t\t\tdelete [] pObj);\n");
+		writer.write("\t\t\tdelete [] pObj;\n");
 		writer.write("\t\t\treturn pNew;\n\t\t}\n\t\telse\n\t\t{\n");
 		writer.write("\t\t\treturn new "+classname+"[nSize];\n\t\t}\n\t}\n");
 		writer.write("\telse\n\t\treturn new "+classname+";\n}\n\n");
