@@ -77,6 +77,8 @@
 class ESHHandler : public Handler
 {
 public:
+	int Fini();
+	int Init();
 	void OnFault(IMessageData* pIMsg);
 	int Invoke(IMessageData* pIMsg);
 	void SetOptionList(map<string, string>* OptionList);
