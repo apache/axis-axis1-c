@@ -77,12 +77,12 @@ public class AxisCppServlet extends HttpServlet {
         throws IOException, ServletException
     {
 		int bodySize = request.getContentLength();
-		OutputStream bodyWriter = response.getOutputStream();
 		response.setContentType("text/xml"); //change this according to the SOAP 1.2
 			
 		if(0 != bodySize)
 		{
-			InputStream bodyReader = request.getInputStream();
+			OutputStream bodyWriter = response.getOutputStream();
+			InputStream bodyReader  = request.getInputStream();
 			int contentLength = request.getContentLength();
 			//String contentType = request.getContentType();
 			int headerCount = 0;
