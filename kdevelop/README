@@ -1,0 +1,60 @@
+#
+#   Copyright 2003-2004 The Apache Software Foundation.
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#
+#
+#   @author Damitha Kumarage (damitha@opensource.lk, damitha@beyondm.net)
+#
+
+
+KDevelop 2.1.5(Using KDE 3.1-10 Red Hat)
+
+I have included a kdevelop project for axis c++.
+You can use kdevelop's nice editor features and
+others to make your development easier.
+
+Do the following steps to make it work
+
+Go to the containing folder of your cvs checkout.
+eg: If your cvs checkout is in
+/home/foo/mycheckout
+$cd /home/foo
+rename mycheckout to axiscpp
+copy two files axiscpp.kdevprj  axiscpp.kdevses in axiscpp/kdevelop into /home/foo
+start kdeveop
+open the project /home/foo/axiscpp.kdevprj
+Click on Project/Options
+In the dialog that appears select the tag "Make Options"
+In the Run make in text box give the absolute path
+
+/home/foo/axiscpp/
+
+Go to the Konsolde pane(If it is not visible click
+View/Output Tool Views/Konsole
+
+In the command line in the Konsole
+$cd /home/foo/axiscpp
+$./configure --prefix=/usr/local/axiscpp_deploy \
+    --with-apache2=/usr/local/apache2 \
+    --with-xercesc=/usr/local/xerces-c
+
+(Give options according to your environment and requirements)
+
+Then axis c++ configuring
+
+To build use menu options in Kdevelop (Build/Make, build/Clean etc.)
+
+
+
+
