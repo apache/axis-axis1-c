@@ -150,15 +150,15 @@ SOURCE=..\..\src\soap\URIMapping.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\include\axis\soap\Attribute.h
+SOURCE=..\..\include\axis\server\Attribute.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\soap\BasicNode.h
+SOURCE=..\..\include\axis\server\BasicNode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\soap\CharacterElement.h
+SOURCE=..\..\include\axis\server\CharacterElement.h
 # End Source File
 # Begin Source File
 
@@ -166,7 +166,7 @@ SOURCE=..\..\src\soap\ComplexElement.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\soap\HeaderBlock.h
+SOURCE=..\..\include\axis\server\HeaderBlock.h
 # End Source File
 # Begin Source File
 
@@ -174,7 +174,7 @@ SOURCE=..\..\src\soap\SoapBody.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\soap\SoapDeSerializer.h
+SOURCE=..\..\include\axis\server\SoapDeSerializer.h
 # End Source File
 # Begin Source File
 
@@ -182,19 +182,11 @@ SOURCE=..\..\src\soap\SoapEnvelope.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\soap\SoapEnvVersions.h
+SOURCE=..\..\include\axis\server\SoapFault.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\soap\SoapFault.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\soap\SoapFaults.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\axis\soap\SoapHeader.h
+SOURCE=..\..\include\axis\server\SoapHeader.h
 # End Source File
 # Begin Source File
 
@@ -210,7 +202,7 @@ SOURCE=..\..\src\soap\SoapParserExpat.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\axis\soap\SoapSerializer.h
+SOURCE=..\..\include\axis\server\SoapSerializer.h
 # End Source File
 # Begin Source File
 

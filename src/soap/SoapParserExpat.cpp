@@ -66,7 +66,6 @@
 #include "../xml/Event.h"
 #include "../xml/SimpleAttribute.h"
 #include "../xml/StartElement.h"
-using namespace axisxml;
 
 #include "SoapParserExpat.h"
 
@@ -91,11 +90,11 @@ void SoapParserExpat::startElement(const XMLCh *qname,const XMLCh **attrs)
 	pSE->m_NameOrValue = qn.localname;
 	pSE->m_Namespace  = qn.uri ? qn.uri : "";
 	qn.MergeQNameString(NAMESPACESEPARATOR);
-	Attribute *pAt = NULL;
+	SimpleAttribute *pAt = NULL;
 	for (int i = 0; attrs[i]; i += 2) 
 	{
 		qn.SplitQNameString(attrs[i], NAMESPACESEPARATOR);
-		pAt = new Attribute();
+		pAt = new SimpleAttribute();
 		pAt->m_Name = qn.localname;
 		pAt->m_Namespace = qn.uri ? qn.uri : "";
 		qn.MergeQNameString(NAMESPACESEPARATOR);
@@ -133,7 +132,7 @@ void  SoapParserExpat::characters(const XMLCh *chars, int length)
 			return;
 		}
 	}
-	pLastEvent = new CharacterElement();
+	pLastEvent = new CharElement();
 	pLastEvent->m_NameOrValue = pTemp;
 	m_Events.push(pLastEvent);
 	pTemp[length] = replacedchar; //put back the character that was there before putting nul charactor
@@ -206,7 +205,7 @@ const AnyElement* SoapParserExpat::Next()
 				{
 				case START_ELEMENT:
 					{
-						for (list<Attribute*>::iterator it = ((StartElement*)m_pLastEvent)->m_Attributes.begin()
+						for (list<SimpleAttribute*>::iterator it = ((StartElement*)m_pLastEvent)->m_Attributes.begin()
 							; it != ((StartElement*)m_pLastEvent)->m_Attributes.end(); it++)
 						{
 							m_Element.m_pchAttributes[i+0] = (*it)->m_Name.c_str();

@@ -71,8 +71,6 @@
 #include <string>
 using namespace std;
 
-namespace axisxml {
-
 class Event  
 {
 public:
@@ -83,8 +81,6 @@ public:
 	virtual XML_NODE_TYPE GetType(){ return CHARACTER_ELEMENT;};
 };
 
-typedef Event CharacterElement;
-
-};
+typedef Event CharElement;
 
 #endif // !defined(AFX_Event_H__165AA74B_3F51_4B2E_8081_86CD8DCD86FA__INCLUDED_)
