@@ -30,7 +30,11 @@ using namespace std;
 
 AxisDivByZeroException::AxisDivByZeroException()
 {
-    m_sMessage = "";
+    /* This only serves the pupose of indicating that the 
+     * service has thrown an excpetion
+     */
+    m_iExceptionCode = AXISC_SERVICE_THROWN_EXCEPTION;
+    processException(m_iExceptionCode);
 }
 
 AxisDivByZeroException::AxisDivByZeroException (int iExceptionCode)
