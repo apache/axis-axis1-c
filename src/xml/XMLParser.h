@@ -29,7 +29,7 @@
 #include "AnyElement.h"
 #include "../transport/SOAPTransport.h"
 
-#include <axis/server/GDefine.h>
+#include <axis/server/GDefine.hpp>
 
 AXIS_CPP_NAMESPACE_USE
 

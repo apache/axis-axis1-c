@@ -22,7 +22,7 @@
 #include "WSDDDeployment.h"
 #include "WSDDDocument.h"
 
-#include <axis/server/GDefine.h>
+#include <axis/server/GDefine.hpp>
 #include "../common/AxisConfig.h"
 #include "../common/AxisTrace.h"
 #include "AxisWsddException.h"

@@ -29,7 +29,7 @@
 #else
 #include <expat.h>
 #endif
-#include <axis/server/Packet.h>
+#include <axis/server/Packet.hpp>
 
 #include "../QName.h"
 #include "../AnyElement.h"

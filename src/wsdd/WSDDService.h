@@ -18,7 +18,7 @@
 #define _WSDDSERVICE_H__OF_AXIS_INCLUDED_
 
 #include "WSDDHandler.h"
-#include <axis/server/WSDDDefines.h>
+#include <axis/server/WSDDDefines.hpp>
 
 /**
  *  @class WSDDService

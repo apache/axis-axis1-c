@@ -22,7 +22,7 @@
 #if !defined(AXIS_QNAME_H__OF_AXIS_INCLUDED_)
 #define AXIS_QNAME_H__OF_AXIS_INCLUDED_
 
-#include <axis/server/GDefine.h>
+#include <axis/server/GDefine.hpp>
 
 /*
  *    Qualified name according to "Namespaces in XML" specification.

@@ -22,7 +22,7 @@
 #define __AXISPARSEEXCEPTION_H_OF_AXIS_INCLUDED_
 
 #include <string>
-#include <axis/server/AxisException.h>
+#include <axis/server/AxisException.hpp>
 using namespace std;
 
 AXIS_CPP_NAMESPACE_USE

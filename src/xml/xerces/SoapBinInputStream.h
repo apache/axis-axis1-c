@@ -20,7 +20,7 @@
 #define AXIS_SOAPBININPUTSTREAM_H__OF_AXIS_INCLUDED_
 
 #include <xercesc/util/BinInputStream.hpp>
-#include <axis/server/Packet.h>
+#include <axis/server/Packet.hpp>
 #include "../../transport/SOAPTransport.h"
 
 XERCES_CPP_NAMESPACE_USE
