@@ -6,11 +6,22 @@
 
 int main(int argc, char* argv[])
 {
-
 	int x;
-	InteropTestPortTypeB ws;
-	//we do not support multi-dimensional arrays.
-	//ws.echo2DStringArray
+	char endpoint[256];
+	const char* server="localhost";
+	const char* port="80";
+	if (argc == 3)
+	{
+		server = argv[1];
+		port = argv[2];
+	}
+	printf("Usage :\n %s <server> <port>\n\n", argv[0]);
+	printf("Sending Requests to Server http://%s:%s ........\n\n", server, port);
+	sprintf(endpoint, "http://%s:%s/axis/groupBDL", server, port);	
+
+	InteropTestPortTypeB ws(endpoint);
+	/*we do not support multi-dimensional arrays.*/
+	/*ws.echo2DStringArray*/
 
 	//testing Nested Arrays
 	SOAPArrayStruct sas;

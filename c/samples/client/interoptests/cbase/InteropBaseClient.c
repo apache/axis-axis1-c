@@ -23,7 +23,19 @@ int main(int argc, char* argv[])
 	xsd__base64Binary bb;
 	xsd__hexBinary hb;
 	const char* bstr = "some string that is sent encoded to either base64Binary or hexBinary";
-	void* pstub = get_InteropTestPortType_stub();
+	void* pstub;
+	char endpoint[256];
+	const char* server="localhost";
+	const char* port="80";
+	if (argc == 3)
+	{
+		server = argv[1];
+		port = argv[2];
+	}
+	printf("Usage :\n %s <server> <port>\n\n", argv[0]);
+	printf("Sending Requests to Server http://%s:%s ........\n\n", server, port);
+	sprintf(endpoint, "http://%s:%s/axis/cbase", server, port);
+	pstub = get_InteropTestPortType_stub(endpoint);
 	printf("invoking echoString...\n");
 	/*testing echoString */
 	if (0 == strcmp(echoString(pstub, "hello world"), "hello world"))

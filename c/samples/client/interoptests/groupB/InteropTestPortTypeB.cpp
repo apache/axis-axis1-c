@@ -28,11 +28,11 @@ extern void Axis_Delete_SOAPStructStruct(SOAPStructStruct* param, bool bArray = 
 extern int Axis_Serialize_SOAPStructStruct(SOAPStructStruct* param, IWrapperSoapSerializer* pSZ, bool bArray = false);
 extern int Axis_GetSize_SOAPStructStruct();
 
-InteropTestPortTypeB::InteropTestPortTypeB()
+InteropTestPortTypeB::InteropTestPortTypeB(const char* pchEndPointUri)
 {
 	m_pCall = new Call();
 	m_pCall->SetProtocol(APTHTTP);
-	m_pCall->SetEndpointURI("http://localhost/axis/groupB");
+	m_pCall->SetEndpointURI(pchEndPointUri);
 }
 
 InteropTestPortTypeB::~InteropTestPortTypeB()

@@ -10,9 +10,19 @@ int main(int argc, char* argv[])
 {
 	int x;
 	char buffer1[1000];
+	char endpoint[256];
+	const char* server="localhost";
+	const char* port="80";
+	if (argc == 3)
+	{
+		server = argv[1];
+		port = argv[2];
+	}
+	printf("Usage :\n %s <server> <port>\n\n", argv[0]);
+	printf("Sending Requests to Server http://%s:%s ........\n\n", server, port);
+	sprintf(endpoint, "http://%s:%s/axis/baseDL", server, port);	
 	
-	
-	InteropTestPortType ws;
+	InteropTestPortType ws(endpoint);
 	
 	printf("invoking echoString...\n");
 	//testing echoString 
