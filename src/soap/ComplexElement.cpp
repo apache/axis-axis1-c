@@ -61,7 +61,8 @@ ComplexElement::ComplexElement(AxisChar *pachLocalName, AxisChar *pachPrefix,
     strcpy(m_pachURI, pachUri);
 }
 
-ComplexElement::ComplexElement(const ComplexElement& rCopy):BasicNode(rCopy)
+ComplexElement::ComplexElement(const ComplexElement& rCopy)
+:BasicNode(rCopy), m_pachPrefix(NULL), m_pachLocalName(NULL), m_pachURI(NULL)
 {
     this->iNoOfChildren = rCopy.iNoOfChildren;
     
@@ -73,24 +74,12 @@ ComplexElement::ComplexElement(const ComplexElement& rCopy):BasicNode(rCopy)
         itCurrBasicNode++;        
     } 
     
-    /*for( unsigned int i = 0; i < rCopy.m_children.size(); i++ )
-       this->m_children.push_back( rCopy.m_children[i]->clone());*/
-       
-    if(this->m_pachPrefix)
-    	free(m_pachPrefix);
-    this->m_pachPrefix = NULL;
     if(rCopy.m_pachPrefix)
     	this->m_pachPrefix = strdup(rCopy.m_pachPrefix);
 
-    if(this->m_pachLocalName)
-    	free(m_pachLocalName);
-    this->m_pachLocalName = NULL;
     if(rCopy.m_pachLocalName)
     	this->m_pachLocalName = strdup(rCopy.m_pachLocalName);
 	
-    if(this->m_pachURI)
-    	free(m_pachURI);
-    this->m_pachURI = NULL;
     if(rCopy.m_pachURI)
     	this->m_pachURI = strdup(rCopy.m_pachURI);
 }
