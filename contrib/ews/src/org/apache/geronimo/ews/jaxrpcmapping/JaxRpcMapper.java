@@ -130,13 +130,15 @@ public class JaxRpcMapper {
                 String localPart = typeQName.getLocalPart();
                 String revisitedTypeQName = typeQName.getNamespaceURI() + ":" + localPart;
                 if (mappedAnonymousTypeName.equals(revisitedTypeQName)) {
-                    return typeMapping.getJavaType().getValue();
+                	//TODO this is a quick fix there should be a better way to do this 
+                    return J2eeUtils.jni2javaName(typeMapping.getJavaType().getValue());
                 }
             } else {
                 QName typeName = rootType.getValue();
                 if (typeQName.equals(typeName)) {
                     String className = typeMapping.getJavaType().getValue();
-                    return className;
+					//TODO this is a quick fix there should be a better way to do this
+                    return J2eeUtils.jni2javaName(className);
                 }
             }
         }
@@ -262,7 +264,8 @@ public class JaxRpcMapper {
                             MethodParamPartsMappingType paramPart =
                                     (MethodParamPartsMappingType) l.next();
                             if (paramPart.getParamPosition().getValue().intValue() == position) {
-                                return paramPart.getParamType().getValue();
+								//TODO this is a quick fix there should be a better way to do this
+                                return J2eeUtils.jni2javaName(paramPart.getParamType().getValue());
                             }
                         }
                     }
@@ -306,7 +309,8 @@ public class JaxRpcMapper {
                         WsdlReturnValueMappingType returnValueMapping =
                                 methodMapping.getWsdlReturnValueMapping();
                         if (returnValueMapping != null) {
-                            return returnValueMapping.getMethodReturnValue().getValue();
+							//TODO this is a quick fix there should be a better way to do this
+                            return J2eeUtils.jni2javaName(returnValueMapping.getMethodReturnValue().getValue());
                         }
                     }
                 }

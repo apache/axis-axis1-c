@@ -81,5 +81,42 @@ public class J2eeUtils {
         }
         return beforeBracket + convertedBrackets;
     }
+    
+	public static String jni2javaName(String returnType){
+		if(returnType == null)
+			return null;
+		if(!returnType.startsWith("[")){
+			return returnType;		
+		}else{
+			returnType = returnType.substring(1);
+		}
+			
+		String end = "[]";	
+		while(returnType.startsWith("[")){
+			end = end + "[]";
+			returnType = returnType.substring(1);
+		}	
+		
+		if(returnType.startsWith("B")){
+			returnType = "byte";
+		}else if(returnType.startsWith("I")){
+			returnType = "int";
+		}else if(returnType.startsWith("D")){
+			returnType = "double";
+		}else if(returnType.startsWith("J")){
+			returnType = "long";
+		}else if(returnType.startsWith("Z")){
+			returnType = "boolean";
+		}else if(returnType.startsWith("F")){
+			returnType = "float";
+		}else if(returnType.startsWith("S")){
+			returnType = "short";
+		}else if(returnType.startsWith("L")){
+			int index = returnType.indexOf(";@");
+			returnType.substring(1,index);
+		}
+		return returnType + end;
+	}
+
 
 }
