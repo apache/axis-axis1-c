@@ -428,40 +428,39 @@ public class ClientStubWriter extends CPPClassWriter{
 		}
 		//added by nithya
 			
-			writer.write("\t}\n");//damitha
-			writer.write("\tcatch(AxisException& e)\n\t{\n");//damitha
+			writer.write("\t}\n");
+			writer.write("\tcatch(AxisException& e)\n\t{\n");
 			writer.write("\t\tint iExceptionCode = e.getExceptionCode();\n");
-		   writer.write("\t\tif(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)\n");
-         writer.write("\t\t{\n");
-         writer.write("\t\t\tthrow;\n");
-         writer.write("\t\t}\n");	
-			writer.write("\t\telse if (AXIS_SUCCESS == m_pCall->checkFault(\"Fault\",\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\" ))");//damitha
+		    writer.write("\t\tif(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)\n");
+            writer.write("\t\t{\n");
+            writer.write("\t\t\tthrow;\n");
+            writer.write("\t\t}\n");	
+			writer.write("\t\telse if (AXIS_SUCCESS == m_pCall->checkFault(\"Fault\",\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\" ))");
 			writer.write("//Exception handling code goes here\n");
-			writer.write("\t\t{\n");//damitha
-			writer.write("\t\t\tcFaultcode = m_pCall->getElementAsString(\"faultcode\", 0);\n");//damitha
-					writer.write("\t\t\tcFaultstring = m_pCall->getElementAsString(\"faultstring\", 0);\n");//damitha
-			writer.write("\t\t\tcFaultactor = m_pCall->getElementAsString(\"faultactor\", 0);\n");//damitha
-              
-			//writer.write("\t\t\tif(0 != strcmp(\"service_exception\", cFaultstring))\n");//damitha
-					//writer.write("\t\t\t{\n");//damitha
-			//writer.write("\t\t\t\t  cFaultdetail = m_pCall->getElementAsString(\"faultdetail\", 0);\n");//damitha
-			//writer.write("\t\t\t\t  throw AxisException(cFaultdetail);\n");//damitha
-			//writer.write("\t\t\t}\n");//damitha
-			//writer.write("\t\t\telse\n");//damitha
-			//writer.write("\t\t\t{\n");//damitha
-			//writer.write("\t\t\t\tif (AXIS_SUCCESS == m_pCall->checkFault(\"faultdetail\",\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\"))\n");//damitha
-
-//			to get fault info  		
+			writer.write("\t\t{\n");
+			writer.write("\t\t\tcFaultcode = m_pCall->getElementAsString(\"faultcode\", 0);\n");
+			writer.write("\t\t\tcFaultstring = m_pCall->getElementAsString(\"faultstring\", 0);\n");
+			writer.write("\t\t\tcFaultactor = m_pCall->getElementAsString(\"faultactor\", 0);\n");
+              			
+            //to get fault info  		
 			Iterator paramsFault = minfo.getFaultType().iterator();
 			String faultInfoName =null;
 			String faultType =null;	 
 			String langName =null;
 			String paramName =null;
-		    if (!paramsFault.hasNext()){
-					writer.write("\t\t\t\t  cFaultdetail = m_pCall->getElementAsString(\"faultdetail\", 0);\n");//damitha
-					writer.write("\t\t\t\t  throw AxisException(cFaultdetail);\n");//damitha		
-				}
+		    boolean flag =false;
+			int j =0;
+			if (!paramsFault.hasNext())
+			{
+					writer.write("\t\t\tcFaultdetail = m_pCall->getElementAsString(\"faultdetail\", 0);\n");
+					writer.write("\t\t\tthrow AxisGenException(cFaultdetail);\n");		
+			}
+			else
+			{
+					flag =true;			
+			}
 			while (paramsFault.hasNext()){
+				j =j+1;
 				FaultInfo info = (FaultInfo)paramsFault.next();
 				faultInfoName =info.getFaultInfo();	     
 				ArrayList paramInfo =info.getParams();
@@ -470,44 +469,46 @@ public class ClientStubWriter extends CPPClassWriter{
 					paramName  = par.getParamName();
 					langName =par.getLangName();
 					faultType = WrapperUtils.getClassNameFromParamInfoConsideringArrays(par,wscontext);
-					writeExceptions(faultType,faultInfoName,paramName,langName);
-					}
-				writer.write("\t\t\telse{ \n");
-				writer.write("\t\t\t\t  cFaultdetail = m_pCall->getElementAsString(\"faultdetail\", 0);\n");//damitha
-				writer.write("\t\t\t\t  throw AxisException(cFaultdetail);\n");//damitha
-				writer.write("\t\t\t}\n");
-				}
+					if ( j > 1){				  	 
+					  writer.write("\t\t\telse if");
+					  writeExceptions(faultType,faultInfoName,paramName,langName);
+				  }					 
+				  else
+				  {				  	 
+					   writer.write("\t\t\tif");
+					   writeExceptions(faultType,faultInfoName,paramName,langName);
+				  }				
+				}					     
+			}					
+			if (flag ==true)
+			{		    	    
+					writer.write("\t\t\telse\n\t\t\t{\n");
+					writer.write("\t\t\t\t  cFaultdetail = m_pCall->getElementAsString(\"faultdetail\", 0);\n");
+					writer.write("\t\t\t\t  throw AxisGenException(cFaultdetail);\n");
+					writer.write("\t\t\t}\n");		
+			}	  		
+		  writer.write("\t\t}\n");
+		  writer.write("\t\telse throw;\n");
+		  writer.write("\t}\n");		
+		  writer.write("}\n");
+	  }	
 			
-			writer.write("\t\t}\n");//damitha
-			writer.write("\t\telse throw;\n");//damitha
-			writer.write("\t}\n");//damitha
-			//writer.write("m_pCall->unInitialize();\n");//damitha
-			//writer.write("return Ret;\n");//damitha	
-			//end of nithya add		
-			//write end of method
-			writer.write("}\n");
-		}
-	
-		/* written by Nithya to get the expections */
 		private void writeExceptions(String faulttype,String faultInfoName,String paramName,String langName) throws WrapperFault{
-			try{
-			    
-					//writer.write("else\n");//damitha
-					writer.write("\t\t\tif(0 == strcmp(\""+langName+"\", cFaultstring))\n");//damitha
-					writer.write("\t\t\t{\n");//damitha
-					writer.write("\t\t\t\tif (AXIS_SUCCESS == m_pCall->checkFault(\"faultdetail\",\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\"))\n");//damitha
-							writer.write("\t\t\t\t{\n");//damitha added
-				writer.write("\t\t\t\t\t"+faulttype+" pFaultDetail = NULL;\n");//damitha
-				writer.write("\t\t\t\t\tpFaultDetail = ("+faulttype+")m_pCall->\n");//damitha
-							writer.write("\t\t\t\t\t\tgetCmplxObject((void*) Axis_DeSerialize_"+langName+",\n");//damitha
-							writer.write("\t\t\t\t\t\t(void*) Axis_Create_"+langName+",\n");//damitha
-							writer.write("\t\t\t\t\t\t(void*) Axis_Delete_"+langName+",\""+paramName+"\", 0);\n");//damitha
-				//writer.write("char* temp = pFaultDetail->varString;");//damitha
-							writer.write("\t\t\t\t\t/*User code to handle the struct can be inserted here*/\n");//damitha
-				writer.write("\t\t\t\t\tm_pCall->unInitialize();\n");//damitha
-				writer.write("\t\t\t\t\tthrow Axis"+faultInfoName+"Exception(pFaultDetail);\n");//damitha
-				writer.write("\t\t\t\t}\n");//damitha
-				writer.write("\t\t\t}\n");//damitha
+			try{				
+				writer.write("\t\t\tif(0 == strcmp(\""+langName+"\", cFaultstring))\n");
+				writer.write("\t\t\t{\n");
+				writer.write("\t\t\t\tif (AXIS_SUCCESS == m_pCall->checkFault(\"faultdetail\",\""+wscontext.getWrapInfo().getTargetEndpointURI()+"\"))\n");
+			    writer.write("\t\t\t\t{\n");
+				writer.write("\t\t\t\t\t"+faulttype+" pFaultDetail = NULL;\n");
+				writer.write("\t\t\t\t\tpFaultDetail = ("+faulttype+")m_pCall->\n");
+				writer.write("\t\t\t\t\t\tgetCmplxObject((void*) Axis_DeSerialize_"+langName+",\n");
+				writer.write("\t\t\t\t\t\t(void*) Axis_Create_"+langName+",\n");
+				writer.write("\t\t\t\t\t\t(void*) Axis_Delete_"+langName+",\""+paramName+"\", 0);\n");
+				writer.write("\t\t\t\t\t/*User code to handle the struct can be inserted here*/\n");
+				writer.write("\t\t\t\t\tm_pCall->unInitialize();\n");
+				writer.write("\t\t\t\t\tthrow Axis"+faultInfoName+"Exception(pFaultDetail);\n");
+				writer.write("\t\t\t\t}\n");
+				writer.write("\t\t\t}\n");
 			}		
 			catch (IOException e) {
 						throw new WrapperFault(e);
