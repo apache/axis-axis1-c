@@ -13,11 +13,13 @@
 		<mkdir dir="${build}" />
 		<mkdir dir="${build}/WEB-INF/lib"/>
 		<mkdir dir="${build}/WEB-INF/classes"/>
-		<copy todir="${build}">
+		<copy todir="${build}" >
 			<fileset dir=".">
 			<include name="*.html"/>
+			<include name="**/*.class"/>
 			<include name="**/*.xml"/>
 			<exclude name="build.xml"/>
+			<exclude name="${build}/**"/>
 			</fileset>
 		</copy>
 		<javac destdir="${build}/WEB-INF/classes" debug="on">

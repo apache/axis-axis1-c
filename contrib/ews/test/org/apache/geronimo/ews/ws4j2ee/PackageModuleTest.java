@@ -45,8 +45,7 @@ public class PackageModuleTest extends AbstractTestCase {
                 "target/generated/samples/simple.war",
                 true);
         ClassLoader cl = wmod.getClassLoaderWithPackageLoaded();
-        //TODO uncommnet this when the classloading fixed
-        //cl.loadClass("com.jwsbook.jaxrpc.BookQuote");
+        cl.loadClass("com.jwsbook.jaxrpc.BookQuote");
     }
     public void testLoadEarFile()
         throws GenerationFault, ClassNotFoundException {
