@@ -47,6 +47,11 @@
  * Added doxygen comments to help autobuild API docs
  */
 
+/*
+ * Revision 1.2  2004/07/01 roshan
+ * Added doxygen comments to help autobuild API docs
+ */
+
 typedef enum 
 { 
     HEADER_LEVEL=0, HEADER_BLOCK_LEVEL, HEADER_BLOCK_INSIDE_LEVEL
@@ -97,7 +102,8 @@ public:
       *
       * @param pAttribute The Attribute pointer which points to a valid 
       * namespace declartion Attribute.
-      * @return AXIS_SUCCESS to indicate successfull operation.
+      * @return AXIS_SUCCESS to indicate successfull operation. Return 
+      *  AXIS_FAIL to indicate unsuccessfull operation.
       */
     int addNamespaceDecl(Attribute* pAttribute);
 
@@ -105,6 +111,8 @@ public:
       * Adds a Attribute to this Soap Header.
       *
       * @param attr The Attribute to be added.
+      * @return AXIS_SUCCESS to indicate successfull operation. Return
+      *  AXIS_FAIL to indicate unsuccessfull operation.
       */
     int addAttribute(Attribute* pAttribute);
     
@@ -126,7 +134,6 @@ public:
       * The Destructor.
       */
     virtual ~SoapHeader();
-
 };
 
 #endif 
