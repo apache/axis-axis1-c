@@ -40,7 +40,7 @@ href="wininstall-guide.html">
 <p>Currently axis supports two methods to create and deploy a Web Service.
 <br>
 Method 1) A top down approach where you start with a WSDL. <br>
-Method 2) A bottom up apporach where you start with a pre-written web
+Method 2) A bottom up approach where you start with a pre-written web
 service. <br>
 
 
@@ -195,7 +195,7 @@ APACHE_FOLDER/Axis/webservices.
 
 <br>
 2) Go and add the following in the server.wsdd at the service level. Make
-sure you add these line at the correct place, i.e at service level.
+sure you add these lines at the correct place, i.e at service level.
 (APACHE_FOLDER/Axis/conf/server.wsdd)
 
 <br>
@@ -277,6 +277,95 @@ int main()
 <p><a name="caluculatorsample"></a></p>
 
 <br>
-SUCCESS ! If you get the result, you are done.</p>
+<p>SUCCESS ! If you get the result, you are done.</p>
+
+<h2>Handlers</h2>
+
+<p>Handlers are pluggable components in Axis C++. We have included a set of sample handlers for your reference. You could write your own handlers by following the instructions  given for the sample Handlers.</p>
+<p><b>Note: If you are using Client side Handlers you need to enter the following entry in the AXIS_FOLDER/axiscpp.conf configuration file.</b></p>
+<p>CLIENTWSDDFILEPATH:Axis\conf\client.wsdd</p>
+<p>After entering this entry  to your AXIS_FOLDER/axiscpp.conf configuration file will look like:</p>
+<p>AXISLOGPATH:Axis\logs\AxisLog.txt
+<br>WSDDFILEPATH:Axis\conf\server.wsdd
+<br>CLIENTWSDDFILEPATH:Axis\conf\client.wsdd</p>
+<b>Testing the sample Handlers</b>
+<p>We have included the following sample Handlers for your reference.</p>
+<p>1)	echoStringHeaderHandler (A server side handler sample)
+      This sample handler will simply echo (i.e send back) the string which you send in the SOAP request.
+<br>2)testHandler (A client side handler sample)</p> 
+<p>This sample handler will simply add a SOAP Header to the generated SOAP request.</p>
+<br>
+<p>Please note that these are very primitive sample handlers and are presented here to give you an idea about writing your own Handlers.</p>
+<p><b>echoStringHeaderHandler</b></p>
+<p><b>Building the Sample Handlers in VC</b></p>
+<br>
+<b>Building echoStringHeaderHandler (A server side handler sample)</b>
+<br>
+<p>The VC dsw file (ServerHandlers.dsw) is available at AXIS_EXTRACT/vc/samples/server/ ServerHandlers.dsw. Open this file and build the project echoStringHeaderHandler. Once the build is successful you will find the DLL (echoStringHeaderHandler.dll) at AXIS_EXTRACT/bin. If you see this DLL at the above location you are done with the first step.</p>
+<p><b>Configuring the Handler</b></p>
+<p>Now edit the AXIS_FOLDER /conf/server.wsdd to include the handler for a particular service.</p>
+<p>&lt;service name="Calculator" provider="CPP:RPC" description="Simple Calculator Axis C++ Service ";&gt
+<br>
+&lt;requestFlow name="CalculatorHandlers";&gt
+<br>  
+&lt;handler name="ESHHandler" type=" AXIS_EXTRACT/bin/echoStringHeaderHandler.dll";&gt
+<br>
+&lt;/handler;&gt
+<br>  
+&lt;/requestFlow;&gt
+<br> 
+&lt;responseFlow name="CalculatorHandlers";&gt
+<br>      
+&lt;handler name="ESHHandler" type=" AXIS_EXTRACT/bin/echoStringHeaderHandler.dll";&gt 
+<br>    
+&lt;/handler;&gt
+<br> 
+&lt;/responseFlow;&gt
+<br> 
+&lt;parameter name="allowedMethods" value="add sub mul div "/;&gt
+<br>
+&lt;parameter name="className" value="Axis\webservices\Calculator.dll" /;&gt
+<br>
+&lt;/service;&gt</p>
+<p><b>Note: Make sure you specify the correct path of the handler dll in the server.wsdd file.</b></p>
+<p>Now you are almost done to run your server side handler.
+<br>
+Restart the Apache server and thats it.</p>
+<br>
+<br>
+<b>Running the Handler</b>
+<p>Since this Handler is configured to the Calculator web service in the above step, this Handler will be executed when a client send a SOAP request to the Calculator web service.</p>
+<p><b>testHandler</b></p>
+<p><b>Building the Sample Handlers in VC</b></p>
+<p>Building testHandler (A client side handler sample)</p>
+<br>
+<p>The VC dsw file (ServerHandlers.dsw) is available at AXIS_EXTRACT/vc/samples/client/ClientHandlers.dsw. Open this file and build the project TestHandler. Once the build is successful you will find the DLL (testHandler.dll) at AXIS_EXTRACT/bin. If you see this DLL at the above location you are done with the first step.</p>
+<p><b>Configuring the Handler</b></p>
+<p>Now edit the AXIS_FOLDER /conf/client.wsdd to include the handler for a particular service.</p>
+<p>&lt;service name="Calculator" provider="CPP:DOCUMENT" description="Calculator web service";&gt
+<br>
+&lt;requestFlow name="CalculatorHandlers";&gt 
+<br>       
+&lt;handler name="TestHandler" type=" AXIS_EXTRACT/bin/testHandler.dll";&gt
+<br>
+&lt;/handler;&gt
+<br>  
+&lt;/requestFlow;&gt
+<br>
+&lt;/service;&gt</p>
+<p><b>Note: Make sure you specify the correct path of the handler dll in the client.wsdd file.</b></p>
+<p>Now you are almost done to run your client side handler.</p>
+<p><b>Note: If you are using Client side Handlers you need to enter the CLIENTWSDDFILEPATH  entry in the AXIS_FOLDER/axiscpp.conf configuration file. (See above)</b></p>
+<p><b>Running the Handler</b></p>
+<p>Since this Handler is configured to the Calculator web service in the above step, this Handler will be executed when you run the calculator web service client. (It is at AXIS_EXTRACT/bin/Calculator.exe)</p>
+<p>Handler Notes:</p>
+<p>1)	You can see the Handler behavior through the TCP Monitor. (TCP Monitor is a Axis Java tool)
+<br>
+2)	To get an idea of Handlers look at the Handler sample source files.
+<br>
+a.	echoStringHeaderHandler (AXIS_EXTRACT/samples/server/echoStringHeaderHandler)
+<br>
+b.	testHandler
+(AXIS_EXTRACT/samples/client/testHandler)</p>
 </body>
 </html>
