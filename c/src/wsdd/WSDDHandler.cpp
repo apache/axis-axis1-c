@@ -97,6 +97,11 @@ string& WSDDHandler::GetLibName()
 	return m_sLibName;
 }
 
+int WSDDHandler::GetScope()
+{
+	return m_nScope;
+}
+
 string WSDDHandler::GetOption(string sArg)
 {
   return (*m_Option)[sArg]; 
