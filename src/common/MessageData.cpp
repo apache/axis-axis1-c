@@ -201,22 +201,5 @@ void MessageData::getAdminUtils (IAdminUtils** pIAdminUtils)
     *pIAdminUtils = &m_AdminUtil;
 }
 
-void MessageData::setTransport(SOAPTransport* pStream)
-{
-    pSoapTransport= pStream;
-}
-
-int MessageData::setTransportProperty(const char* pcKey, const char* pcValue)
-{
-   return pSoapTransport->setTransportProperty(pcKey, pcValue);
-}
-
-const char* MessageData::getTransportProperty(const char* pcKey)
-{
-
-   return pSoapTransport->getTransportProperty(pcKey);
-}
-
-
 
 AXIS_CPP_NAMESPACE_END

@@ -22,8 +22,6 @@
 #include "IHandlerSoapSerializer.hpp"
 #include "IWrapperSoapDeSerializer.hpp"
 #include "IWrapperSoapSerializer.hpp"
-#include "../../src/transport/SOAPTransport.h"
-
 
 AXIS_CPP_NAMESPACE_START
 
@@ -62,11 +60,6 @@ public:
     virtual string& getUserName()=0;
     virtual bool isPastPivot()=0;
     virtual int setPastPivotState(bool bState)=0;
-    virtual void setTransport(SOAPTransport* pStream)=0;
-    virtual int setTransportProperty(const char* pcKey, const char* pcValue)=0;
-    virtual const char* getTransportProperty(const char* pcKey)=0;
-	    
-    
 };
 
 AXIS_CPP_NAMESPACE_END
