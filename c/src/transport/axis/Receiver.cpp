@@ -117,14 +117,15 @@ const char* Receiver::Recv() throw (AxisException)
     	//printf("m_MsgSize:%d\n", m_MsgSize);
 	if (m_MsgSize > 0)
 	{
-    		bodyLength = m_pTrChannel->getBodyLength();
-    		printf("m_MsgSize:%d\n", m_MsgSize);
-    		printf("bodyLength:%d\n", bodyLength);
-    		bodyLength -= m_MsgSize;
-    		m_pTrChannel->setBodyLength(bodyLength);    
+    	bodyLength = m_pTrChannel->getBodyLength();
+#ifdef _DEBUG
+		printf("m_MsgSize:%d\n", m_MsgSize);
+    	printf("bodyLength:%d\n", bodyLength);
+#endif
+    	bodyLength -= m_MsgSize;
+    	m_pTrChannel->setBodyLength(bodyLength);    
 		pToReturn = m_pMsg;
 		m_BytesRead = m_MsgSize;
-        	printf("m_BytesRead:%d\n", m_BytesRead);
 		m_MsgSize -= m_BytesRead;
 		m_pMsg += m_BytesRead;
     		m_BytesRead = 0;

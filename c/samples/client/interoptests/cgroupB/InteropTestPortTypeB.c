@@ -25,7 +25,7 @@ extern int Axis_Serialize_SOAPStructStruct(SOAPStructStruct* param, IWrapperSoap
 extern int Axis_GetSize_SOAPStructStruct();
 
 void* get_InteropTestPortTypeB_stub(){
-	return GetStubObject(APTHTTP, "http://localhost/axis/InteropGroupB");
+	return GetStubObject(APTHTTP, "http://localhost/axis/cgroupB");
 }
 void destroy_InteropTestPortTypeB_stub(void* p){
 	DestroyStubObject(p);
@@ -47,7 +47,7 @@ void echoStructAsSimpleTypes(void* pStub, SOAPStruct* Value0, AXIS_OUT_PARAM  fl
 	pCall->_functions->AddCmplxParameter(pCall->_object, Value0, (void*)Axis_Serialize_SOAPStruct, (void*)Axis_Delete_SOAPStruct, "inputStruct", 0);
 	if (AXIS_SUCCESS == pCall->_functions->Invoke(pCall->_object))
 	{
-		if(AXIS_SUCCESS == pCall->_functions->CheckMessage(pCall->_object, "echoStructAsSimpleTypesResponse", ""))
+		if(AXIS_SUCCESS == pCall->_functions->CheckMessage(pCall->_object, "echoStructAsSimpleTypesResponse", "http://soapinterop.org/"))
 		{
 			*OutValue0 = pCall->_functions->GetElementAsFloat(pCall->_object, "outputFloat", 0);
 			*OutValue1 = pCall->_functions->GetElementAsInt(pCall->_object, "outputInteger", 0);
@@ -75,7 +75,7 @@ SOAPStruct* echoSimpleTypesAsStruct(void* pStub, float Value0, int Value1, xsd__
 	pCall->_functions->AddParameter(pCall->_object, (void*)&Value2, "inputString", XSD_STRING);
 	if (AXIS_SUCCESS == pCall->_functions->Invoke(pCall->_object))
 	{
-		if(AXIS_SUCCESS == pCall->_functions->CheckMessage(pCall->_object, "echoSimpleTypesAsStructResponse", ""))
+		if(AXIS_SUCCESS == pCall->_functions->CheckMessage(pCall->_object, "echoSimpleTypesAsStructResponse", "http://soapinterop.org/"))
 		{
 			pReturn = (SOAPStruct*)pCall->_functions->GetCmplxObject(pCall->_object, (void*) Axis_DeSerialize_SOAPStruct, (void*) Axis_Create_SOAPStruct, (void*) Axis_Delete_SOAPStruct, 0, 0);
 		}
@@ -100,7 +100,7 @@ SOAPStructStruct* echoNestedStruct(void* pStub, SOAPStructStruct* Value0)
 	pCall->_functions->AddCmplxParameter(pCall->_object, Value0, (void*)Axis_Serialize_SOAPStructStruct, (void*)Axis_Delete_SOAPStructStruct, "inputStruct", 0);
 	if (AXIS_SUCCESS == pCall->_functions->Invoke(pCall->_object))
 	{
-		if(AXIS_SUCCESS == pCall->_functions->CheckMessage(pCall->_object, "echoNestedStructResponse", ""))
+		if(AXIS_SUCCESS == pCall->_functions->CheckMessage(pCall->_object, "echoNestedStructResponse", "http://soapinterop.org/"))
 		{
 			pReturn = (SOAPStructStruct*)pCall->_functions->GetCmplxObject(pCall->_object, (void*) Axis_DeSerialize_SOAPStructStruct, (void*) Axis_Create_SOAPStructStruct, (void*) Axis_Delete_SOAPStructStruct, 0, 0);
 		}
@@ -125,7 +125,7 @@ SOAPArrayStruct* echoNestedArray(void* pStub, SOAPArrayStruct* Value0)
 	pCall->_functions->AddCmplxParameter(pCall->_object, Value0, (void*)Axis_Serialize_SOAPArrayStruct, (void*)Axis_Delete_SOAPArrayStruct, "inputStruct", 0);
 	if (AXIS_SUCCESS == pCall->_functions->Invoke(pCall->_object))
 	{
-		if(AXIS_SUCCESS == pCall->_functions->CheckMessage(pCall->_object, "echoNestedArrayResponse", ""))
+		if(AXIS_SUCCESS == pCall->_functions->CheckMessage(pCall->_object, "echoNestedArrayResponse", "http://soapinterop.org/"))
 		{
 			pReturn = (SOAPArrayStruct*)pCall->_functions->GetCmplxObject(pCall->_object, (void*) Axis_DeSerialize_SOAPArrayStruct, (void*) Axis_Create_SOAPArrayStruct, (void*) Axis_Delete_SOAPArrayStruct, 0, 0);
 		}
