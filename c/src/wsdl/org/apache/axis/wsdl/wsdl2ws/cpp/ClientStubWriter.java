@@ -66,6 +66,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
@@ -155,7 +157,7 @@ public class ClientStubWriter extends CPPClassWriter{
 		try{
 			writer.write("#include \""+classname+".h\"\n\n");
 			writer.write("#include <IWrapperSoapDeSerializer.h>\n");
-			writer.write("#include <IWrapperSoapSerializer.h>\n");
+			writer.write("#include <IWrapperSoapSerializer.h>\n\n");
 		}catch(IOException e){
 			throw new WrapperFault(e);
 		}
@@ -170,18 +172,21 @@ public class ClientStubWriter extends CPPClassWriter{
 	 */
 
 	public void writeMethodInWrapper(String methodName, Collection params, ParameterInfo returntype) throws WrapperFault,IOException {
-		Type retType = wscontext.getTypemap().getType(returntype.getSchemaName());
-		String outparamType;
+		Type retType = null;
 		boolean returntypeissimple = false;
 		boolean returntypeisarray = false;
+		String outparamType = null;
+		if (returntype != null)
+			retType = wscontext.getTypemap().getType(returntype.getSchemaName());
 		if (retType != null){
 			outparamType = retType.getLanguageSpecificName();
 			returntypeisarray = retType.isArray();
 		}
-		else{
+		else if (returntype != null){
 			outparamType = returntype.getLangName();
 		}
-		returntypeissimple = CPPUtils.isSimpleType(outparamType);
+		if (returntype != null)
+			returntypeissimple = CPPUtils.isSimpleType(outparamType);
 		writer.write("\n/////////////////////////////////////////////////////////////////\n");
 		writer.write("// This method wrap the service method"+ methodName +"\n");
 		writer.write("//////////////////////////////////////////////////////////////////\n");
@@ -190,7 +195,10 @@ public class ClientStubWriter extends CPPClassWriter{
 		boolean typeisarray = false;
 		boolean typeissimple = false;
 		Type type;
-		if (returntypeissimple || returntypeisarray){
+		if (returntype == null){
+			writer.write("void");
+		}
+		else if (returntypeissimple || returntypeisarray){
 			writer.write(outparamType);	
 		}else{
 			writer.write(outparamType+"*");
@@ -233,16 +241,18 @@ public class ClientStubWriter extends CPPClassWriter{
 		}
 		writer.write(")\n{\n");
 		writer.write("\tint nStatus;\n\t");
-		if(returntypeisarray){
-			//for arrays
-			writer.write(outparamType+" RetArray = {NULL, 0};\n");
-		}else if(!returntypeissimple){
-			writer.write(outparamType+"* pReturn = NULL;\n");
-			//for complex types
-		}else{
-			//for simple types
-			writer.write(outparamType+" Ret;\n");
-			//TODO initialize return parameter appropriately.
+		if (returntype != null){
+			if(returntypeisarray){
+				//for arrays
+				writer.write(outparamType+" RetArray = {NULL, 0};\n");
+			}else if(!returntypeissimple){
+				writer.write(outparamType+"* pReturn = NULL;\n");
+				//for complex types
+			}else{
+				//for simple types
+				writer.write(outparamType+" Ret;\n");
+				//TODO initialize return parameter appropriately.
+			}
 		}
 		writer.write("\tif (SUCCESS != m_pCall->Initialize()) return ");
 		writer.write((returntypeisarray?"RetArray":returntypeissimple?"Ret":"pReturn")+";\n\t");
@@ -262,10 +272,14 @@ public class ClientStubWriter extends CPPClassWriter{
 			writer.write("\tm_pCall->AddParameter(");			
 			if(typeisarray){
 				//arrays
-				String containedType = type.getTypNameForAttribName("item").getLocalPart();
-				if (CPPUtils.isSimpleType(containedType)){ //array of simple types
+				QName qname = type.getTypNameForAttribName("item");
+				String containedType = null;
+				if (CPPUtils.isSimpleType(qname)){
+					containedType = CPPUtils.getclass4qname(qname);
 					writer.write("(Axis_Array*)(&Value"+i+"), "+CPPUtils.getXSDTypeForBasicType(containedType)+", \""+((ParameterInfo)paramsB.get(i)).getParamName()+"\"");					
-				}else{ //array of complex types
+				}
+				else{
+					containedType = qname.getLocalPart();
 					writer.write("(Axis_Array*)(&Value"+i+"), (void*)Axis_Serialize_"+containedType+", (void*)Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+", \""+((ParameterInfo)paramsB.get(i)).getParamName()+"\"");
 				}
 			}else if(typeissimple){
@@ -277,11 +291,21 @@ public class ClientStubWriter extends CPPClassWriter{
 			}
 			writer.write(");\n");
 		}
-		if (returntypeisarray){
-			String containedType = retType.getTypNameForAttribName("item").getLocalPart();
-			if (CPPUtils.isSimpleType(containedType)){ //array of simple types
+		if (returntype == null){
+			writer.write("\tnStatus = m_pCall->Invoke();\n");
+			writer.write("\tif (SUCCESS != nStatus)\n\t{\n");
+			writer.write("\t\t//What to do ? . Throw an exception ??? \n\t}\n");
+			writer.write("\tm_pCall->UnInitialize();\n");
+		}
+		else if (returntypeisarray){
+			QName qname = retType.getTypNameForAttribName("item");
+			String containedType = null;
+			if (CPPUtils.isSimpleType(qname)){
+				containedType = CPPUtils.getclass4qname(qname);
 				writer.write("\tm_pCall->SetReturnType((Axis_Array*)(&RetArray), "+CPPUtils.getXSDTypeForBasicType(containedType)+");\n");
-			}else{ //array of complex types
+			}
+			else{
+				containedType = qname.getLocalPart();
 				writer.write("\tm_pCall->SetReturnType((Axis_Array*)(&RetArray), (void*) Axis_DeSerialize_"+containedType);
 				writer.write(", (void*) Axis_Create_"+containedType+", (void*) Axis_Delete_"+containedType+", (void*) Axis_GetSize_"+containedType+", Axis_TypeName_"+containedType+", Axis_URI_"+containedType+");\n");
 			}
@@ -318,9 +342,12 @@ public class ClientStubWriter extends CPPClassWriter{
 	protected void writeGlobalCodes() throws WrapperFault {
 		Iterator types = wscontext.getTypemap().getTypes().iterator();
 		String typeName;
+		Type type;
 		try {
 			while(types.hasNext()){
-				typeName = ((Type)types.next()).getLanguageSpecificName();
+				type = (Type)types.next();
+				if (type.isArray()) continue;
+				typeName = type.getLanguageSpecificName();
 				writer.write("extern int Axis_DeSerialize_"+typeName+"("+typeName+"* param, IWrapperSoapDeSerializer *pDZ);\n");
 				writer.write("extern void* Axis_Create_"+typeName+"(bool bArray = false, int nSize=0);\n");
 				writer.write("extern void Axis_Delete_"+typeName+"("+typeName+"* param, bool bArray = false, int nSize=0);\n");
