@@ -72,7 +72,6 @@ import org.w3c.dom.NodeList;
 import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import javax.xml.rpc.holders.BooleanHolder;
 import org.apache.axis.wsdl.symbolTable.SchemaUtils;
-import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.TypeMap;
 
 public class CUtils {
@@ -140,6 +139,7 @@ public class CUtils {
 		type2getValueMethodName.put("short","Short");
 		type2getValueMethodName.put("char","Char");
 		type2getValueMethodName.put("double","Double");
+		type2getValueMethodName.put("unsigned char","Byte");			
 		type2getValueMethodName.put("xsd__unsignedLong","UnsignedLong");
 		type2getValueMethodName.put("xsd__unsignedInt","UnsignedInt");
 		type2getValueMethodName.put("xsd__unsignedShort","UnsignedShort");
@@ -178,7 +178,7 @@ public class CUtils {
 		basicType2EnumMap.put("xsd__string","XSD_STRING");
 		basicType2EnumMap.put("long","XSD_LONG");
 		basicType2EnumMap.put("short","XSD_SHORT");
-		basicType2EnumMap.put("char","XSD_BYTE");
+		basicType2EnumMap.put("unsigned char","XSD_BYTE");
 		basicType2EnumMap.put("double","XSD_DOUBLE");
 		basicType2EnumMap.put("xsd__unsignedLong","XSD_UNSIGNEDLONG");
 		basicType2EnumMap.put("xsd__unsignedInt","XSD_UNSIGNEDINT");
