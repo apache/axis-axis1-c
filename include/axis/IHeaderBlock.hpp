@@ -35,27 +35,12 @@ enum HEADER_BLOCK_STD_ATTR_TYPE
  *  @class IHeaderBlock
  *  @brief interface for the IHeaderBlock class.
  *
- *
  *  @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  *  @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  *  @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  *
  */
 
-/*
- * Revision 1.1  2004/05/26 samisa
- * Added copy constructor and clone
- */
-
-/*
- * Revision 1.2  2004/06/13 roshan
- * Added doxygen comments to help autobuild API docs
- */
-
-/*
- * Revision 1.12  2004/06/13 susantha
- * Added support for writing C web services and handlers
- */
 
 class IHeaderBlock
 {
@@ -80,7 +65,7 @@ public:
     virtual IAttribute* createNamespaceDecl(const AxisChar *prefix, 
             const AxisChar *uri)=0; 
 
-    virtual const BasicNode* getFirstChild() =0;
+    virtual BasicNode* getFirstChild() =0;
     /**
      * Returns the number of child elements of this HeaderBlock.
      *
@@ -250,7 +235,7 @@ public:
      * @return The last child element is returned if it exists. 
      * If the child element doesn't exsist this method returns NULL.
      */
-    virtual const BasicNode* getLastChild() = 0;
+    virtual BasicNode* getLastChild() = 0;
 
     /**
      * Returns the child element at the given postion. 
@@ -260,7 +245,7 @@ public:
      * @return The required child element is returned if it exists. 
      * If the child element doesn't exsist this method returns NULL.
      */
-    virtual const BasicNode* getChild(int iChildPosition) = 0;
+    virtual BasicNode* getChild(int iChildPosition) = 0;
 
     /**
       * Adds a child node to the Header Block.

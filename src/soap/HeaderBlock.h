@@ -52,25 +52,11 @@ class Attribute;
  *    - role attribute information item 
  *    - mustUnderstand attribute information item     
  *    - relay attribute information item 
- *
- *    
  *    
  *  @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  *  @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  *
  */
-
-/*
- * Revision 1.1  2004/05/26 samisa
- * Added copy constructor and clone
- */
-
-/*
- * Revision 1.2  2004/06/13 roshan
- * Added doxygen comments to help autobuild API docs
- */
-
-
 
 class HeaderBlock : public IHeaderBlock
 {
@@ -119,7 +105,7 @@ public:
     IAttribute* createNamespaceDecl(const AxisChar *prefix, 
             const AxisChar *uri); 
 
-    const BasicNode* getFirstChild();
+    BasicNode* getFirstChild();
 
     /**
      * Returns the number of child elements of this HeaderBlock.
@@ -306,7 +292,7 @@ public:
      * @return The last child element is returned if it exists. 
      * If the child element doesn't exsist this method returns NULL.
      */
-    const BasicNode* getLastChild();
+    BasicNode* getLastChild();
 
     /**
      * Returns the child element at the given postion. 
@@ -317,7 +303,7 @@ public:
      * @return The required child element is returned if it exists. 
      * If the child element doesn't exsist this method returns NULL.
      */
-    const BasicNode* getChild(int iChildPosition);
+    BasicNode* getChild(int iChildPosition);
 
     /**
       * Adds a child node to the Header Block.
