@@ -175,6 +175,10 @@ public class ParmHeaderFileWriter extends ParamWriter{
 	protected void writeAttributes()throws WrapperFault{
 		  if(type.isArray()) return;
 		  try{
+		  	  if ( attribs.length == 0 ) {
+				  /* TODO : needed for Aix xlc */
+				  writer.write("\t int emptyStruct;\n");
+			  }	
 			  for(int i=0;i<attribs.length;i++){
 			  	 if (  attribs[i].isArray() && !attribs[i].isSimpleType() )
 			  	 	writer.write("\tstruct "+getCorrectParmNameConsideringArraysAndComplexTypes(attribs[i])+"Tag "+attribs[i].getParamName()+";\n");
@@ -215,7 +219,8 @@ public class ParmHeaderFileWriter extends ParamWriter{
 			if(!(atype.equals(this.type))){
 				if (this.type.isContainedType(atype)){ 
 					typeName = WrapperUtils.getLanguageTypeName4Type(atype);
-					if (null != typeName) typeSet.add(typeName);
+					/* TODO : second test if for inner attributes declaration */
+					if (null != typeName && ! (typeName.charAt(0) == '>')) typeSet.add(typeName);
 				}
 			}
 		}	

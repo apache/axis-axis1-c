@@ -142,7 +142,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 		writer.write("int Axis_Serialize_"+classname+"("+classname+"* param, IWrapperSoapSerializer* pSZ, bool bArray)\n{\n");
 		if (attribs.length == 0) {
 			System.out.println("possible error class with no attributes....................");
-			writer.write("\tpSZ->_functions->Serialize(SZ._object, \">\", 0);\n");
+			writer.write("\tpSZ->_functions->Serialize(pSZ->_object, \">\");\n");
 			writer.write("\treturn AXIS_SUCCESS;\n");
 			writer.write("}\n\n");				 
 			return;
@@ -186,9 +186,12 @@ public class BeanParamWriter extends ParamCFileWriter{
 				writer.write("\tpSZ->_functions->SerializeAsElement(pSZ->_object, \""+attribs[i].getElementName().getLocalPart()+"\", (void*)&(param->"+attribs[i].getParamName()+"), "+ CUtils.getXSDTypeForBasicType(attribs[i].getTypeName())+");\n");
 			}else{
 				//if complex type
-				writer.write("\tpSZ->_functions->Serialize(pSZ->_object, \"<"+attribs[i].getParamName()+"\");\n");
+				String elm = attribs[i].getParamName();
+				if ( attribs[i].isReference() )
+					elm = attribs[i].getTypeName();
+				writer.write("\tpSZ->_functions->Serialize(pSZ->_object, \"<"+elm+"\");\n");
 				writer.write("\tAxis_Serialize_"+attribs[i].getTypeName()+"(param->"+attribs[i].getParamName()+", pSZ, false);\n");
-				writer.write("\tpSZ->_functions->Serialize(pSZ->_object, \"</"+attribs[i].getParamName()+">\");\n");
+				writer.write("\tpSZ->_functions->Serialize(pSZ->_object, \"</"+elm+">\");\n");				
 			}			
 		}
 		writer.write("\treturn AXIS_SUCCESS;\n");
@@ -204,6 +207,9 @@ public class BeanParamWriter extends ParamCFileWriter{
 		if (attribs.length == 0) {
 			 //nothing to print if this is simple type we have inbuild types
 			 System.out.println("possible error calss with no attributes....................");
+			 // compilation issue;
+			 writer.write("\treturn AXIS_SUCCESS;\n");
+			 writer.write("}\n\n");			 
 			 return;
 		}
 		boolean aretherearrayparams = false;
@@ -260,7 +266,9 @@ public class BeanParamWriter extends ParamCFileWriter{
 		writer.write("\tif (bArray && (nSize > 0))\n\t{\n");
 		writer.write("\t\tif (pObj)\n\t{\n");
 		writer.write("\t\t\tpObj = (void *)  realloc(pObj, sizeof("+classname+")*nSize);\n");
-		writer.write("\t\t\tmemset(pObj+sizeof("+classname+")*nSize/2, 0, sizeof("+classname+")*nSize/2);\n");
+		writer.write("\t\t\tpTemp = pObj;\n");		
+		writer.write("\t\t\tpTemp += nSize/2;\n");		
+		writer.write("\t\t\tmemset(pTemp, 0, sizeof("+classname+")*nSize/2);\n");
 		writer.write("\t\t}\n\t\telse\n\t\t{\n");
 		writer.write("\t\t\tpObj = (void *)  malloc(sizeof("+classname+")*nSize);\n");
 		writer.write("\t\t\tmemset(pObj, 0, sizeof("+classname+")*nSize);\n\t\t}\n");
