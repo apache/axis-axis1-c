@@ -1,8 +1,5 @@
 bin_PROGRAMS = sslclient
-SUBDIRS =
-AM_CFLAGS = $(CFLAGS)
-#sslclient_SOURCES = InteropBaseClient.c InteropTestPortType.c  SOAPStruct.c
-sslclient_SOURCES = InteropBaseClient.c InteropTestPortType.c
-
-sslclient_LDADD   =  $(LDFLAGS) -lssl
+AM_CPPFLAGS = $(CPPFLAGS)
+sslclient_SOURCES = Calculator.cpp CalcClient.cpp
+sslclient_LDADD   =  @LINKCLIENTLIB@
 INCLUDES = -I$(AXISCPP_HOME)/include
