@@ -94,6 +94,8 @@ AXIS_CPP_NAMESPACE_USE class SimpleAxisTransport:public SOAPTransport
     std::string m_strServiceURI;
     std::string m_strReceived;
     std::string m_strSOAPAction;
+    std::string m_strTransportPropertyURI;
+    std::string m_strTransportPropertyOperation;
     void readFromClient ();
 
 };

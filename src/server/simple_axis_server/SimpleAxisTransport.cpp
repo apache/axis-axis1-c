@@ -226,11 +226,11 @@ getTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE eType)
 	    unsigned int uiStartPos =
 		m_strServiceURI.find (AXIS_URI_EXTENSION) +
 		strlen (AXIS_URI_EXTENSION) + 1;
-	    const char *uri =
+                m_strTransportPropertyURI =
 		m_strServiceURI.substr (uiStartPos,
 					m_strServiceURI.length () -
-					uiStartPos).c_str ();
-	    return uri;
+					uiStartPos);
+	    return m_strTransportPropertyURI.c_str();
 	}
 	else
 	{
@@ -243,9 +243,10 @@ getTransportProperty (AXIS_TRANSPORT_INFORMATION_TYPE eType)
 	    if (uiOpStart != std::string::npos)
 	    {
 		uiOpStart += strlen (SOAPACTION_METHODNAME_SEPARATOR);
-		return m_strSOAPAction.substr (uiOpStart,
+		m_strTransportPropertyOperation = m_strSOAPAction.substr (uiOpStart,
 					       m_strSOAPAction.length () -
-					       uiOpStart).c_str ();
+					       uiOpStart);
+                return m_strTransportPropertyOperation.c_str();
 	    }
 	    else
 	    {
