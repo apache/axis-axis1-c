@@ -3,7 +3,6 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Call.h"
-
 //#include "../../../common/IMessageData.h"
 //#include "../../../common/ISoapMethod.h"
 
@@ -12,6 +11,11 @@
 //////////////////////////////////////////////////////////////////////
 
 extern "C" int initialize_module(int bServer);
+
+extern "C" int send_response_bytes(const char* res, const void* opstream);
+extern "C" int get_request_bytes(char* req, int reqsize, int* retsize, const void* ipstream);
+extern "C" int send_transport_information(void *str);
+extern "C" int receive_transport_information(void *str);
 
 Call::Call()
 {
@@ -198,8 +202,8 @@ int Call::Initialize()
 		m_pMsgData = m_pAxisEngine->GetMessageData();
 		if (m_pMsgData)
 		{
-			m_pMsgData->getSoapSerializer(&m_pIWSSZ);
-			m_pMsgData->getSoapDeSerializer(&m_pIWSDZ);
+			m_pMsgData->getSoapSerializer((IWrapperSoapSerializer**)(&m_pIWSSZ));
+			m_pMsgData->getSoapDeSerializer((IWrapperSoapDeSerializer**)(&m_pIWSDZ));
 			if (m_pIWSSZ && m_pIWSDZ)
 			{
 				return SUCCESS;
@@ -241,7 +245,10 @@ int Call::SetHeader(char *key, char *value)
  */
 int Call::OpenConnection()
 {
-	
+	m_Soap.transport.pGetFunct = get_request_bytes;
+	m_Soap.transport.pSendFunct = send_response_bytes;
+	m_Soap.transport.pGetTrtFunct = receive_transport_information;
+	m_Soap.transport.pSendTrtFunct = send_transport_information;
 	return SUCCESS;
 }
 
@@ -251,5 +258,13 @@ int Call::OpenConnection()
  */
 void Call::CloseConnection()
 {
-	
+	m_Soap.transport.pGetFunct = NULL;
+	m_Soap.transport.pSendFunct = NULL;
+	m_Soap.transport.pGetTrtFunct = NULL;
+	m_Soap.transport.pSendTrtFunct = NULL;
+}
+
+void Call::SetSOAPVersion(SOAP_VERSION version)
+{
+	m_pIWSSZ->setSoapVersion(version);
 }
