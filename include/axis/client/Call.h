@@ -805,7 +805,6 @@ private:
        instance. So they do not belong to this object and are not created
        or deleted
      */
-    MessageData* m_pMsgData;
     SoapSerializer* m_pIWSSZ;
     SoapDeSerializer* m_pIWSDZ;
     char* m_pcEndPointUri;
