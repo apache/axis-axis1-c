@@ -6,11 +6,6 @@
 
 #include "InteropTestPortType.h"
 
-extern int Axis_DeSerialize_SOAPStruct(SOAPStruct* param, IWrapperSoapDeSerializer *pDZ);
-extern void* Axis_Create_SOAPStruct(SOAPStruct *Obj, bool bArray, int nSize);
-extern void Axis_Delete_SOAPStruct(SOAPStruct* param, bool bArray, int nSize);
-extern int Axis_Serialize_SOAPStruct(SOAPStruct* param, IWrapperSoapSerializer* pSZ, bool bArray);
-extern int Axis_GetSize_SOAPStruct();
 
 void* get_InteropTestPortType_stub(){
 	return GetStubObject(APTHTTPS, "http://192.168.101.4/axis/InteropBase");
