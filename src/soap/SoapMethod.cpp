@@ -65,7 +65,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <axis/soap/SoapMethod.h>
+#include "SoapMethod.h"
 #include <axis/soap/Attribute.h>
 #include <axis/common/GDefine.h>
 

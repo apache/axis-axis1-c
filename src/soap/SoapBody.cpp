@@ -65,7 +65,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <axis/soap/SoapBody.h>
+#include "SoapBody.h"
 #include <axis/soap/SoapSerializer.h>
 #include <axis/common/GDefine.h>
 #include <axis/soap/Attribute.h>

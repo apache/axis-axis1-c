@@ -66,12 +66,12 @@
 //////////////////////////////////////////////////////////////////////
 
 #include <axis/engine/AxisEngine.h>
-#include <axis/common/Param.h>
-#include <axis/common/ArrayBean.h>
+#include "Param.h"
+#include "ArrayBean.h"
 #include <axis/common/BasicTypeSerializer.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <axis/common/AxisUtils.h>
+#include "AxisUtils.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

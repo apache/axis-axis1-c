@@ -1,5 +1,3 @@
-/* -*- C++ -*- */
-
 /*
  * The Apache Software License, Version 1.1
  *
@@ -56,24 +54,33 @@
  *
  *
  */
+// IArrayBean.h:
+//
+//////////////////////////////////////////////////////////////////////
 
-#if !defined(__WRAPPERCLASSHANDLER_INCLUDED__)
-#define __WRAPPERCLASSHANDLER_INCLUDED__
+#if !defined(AFX_IARRAYBEAN_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_)
+#define AFX_IARRAYBEAN_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_
 
-#include "BasicHandler.h"
+#include <axis/common/GDefine.h>
+#include <axis/common/AxisUserAPI.h>
 /**
-    @class WrapperClassHandler
-    @brief
-    @author Susantha Kumara (skumara@virtusa.com)
+    @class IArrayBean
+    @brief interface for the IArrayBean class.
 
+
+
+    @author Susantha Kumara (skumara@virtusa.com)
 */
-class WrapperClassHandler : public HandlerBase 
+class IArrayBean  
 {
 public:
-	WrapperClassHandler(){};
-	virtual ~WrapperClassHandler(){};
-	virtual AXIS_BINDING_STYLE AXISCALL GetBindingStyle()=0;
-	int AXISCALL GetType(){return WEBSERVICE_HANDLER;};
+	IArrayBean(){};
+	virtual ~IArrayBean(){};
+	//API needed for the Wrapper class to manipulate ArrayBeans
+	virtual void SetDimension(int nDim)=0;
+	virtual void SetItemName(const AxisChar* sName)=0;
+	virtual void SetTypeName(const AxisChar* sName)=0;
+	virtual void SetUri(const AxisChar* sURI)=0;
 };
 
-#endif //__WRAPPERCLASSHANDLER_INCLUDED__
+#endif // !defined(AFX_IARRAYBEAN_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_)

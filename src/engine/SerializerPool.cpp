@@ -63,7 +63,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include <axis/engine/SerializerPool.h>
+#include "SerializerPool.h"
 #include <axis/common/AxisTrace.h>
 extern AxisTrace* g_pAT;
 

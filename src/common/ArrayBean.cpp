@@ -62,7 +62,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 #include <axis/common/Param.h>
-#include <axis/common/ArrayBean.h>
+#include "ArrayBean.h"
 #include <axis/common/BasicTypeSerializer.h>
 #include <axis/engine/AxisEngine.h>
 

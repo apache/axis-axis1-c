@@ -1,3 +1,5 @@
+/* -*- C++ -*- */
+
 /*
  * The Apache Software License, Version 1.1
  *
@@ -53,112 +55,57 @@
  * <http://www.apache.org/>.
  *
  *
- *
- *
- * @author Susantha Kumara (skumara@virtusa.com)
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- *
  */
 
-// AxisUtils.cpp: implementation of the AxisUtils class.
-//
-//////////////////////////////////////////////////////////////////////
+#ifdef WIN32
+#pragma warning (disable : 4503)
+#endif
 
-#include "AxisUtils.h"
-#include <axis/common/GDefine.h>
+#if !defined(AFX_HANDLERPOOL_H__6C2A4C96_7115_43C6_9EFA_CDAC9247D109__INCLUDED_)
+#define AFX_HANDLERPOOL_H__6C2A4C96_7115_43C6_9EFA_CDAC9247D109__INCLUDED_
 
-AxisXMLCh AxisUtils::m_Buffer[CONVERT_BUFFER_SIZE]; 
+#include <axis/wsdd/WSDDHandler.h>
+#include <axis/wsdd/WSDDService.h>
+#include <axis/common/BasicHandler.h>
+#include "HandlerLoader.h"
+#include <axis/engine/HandlerChain.h>
+#include "SharedObject.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+#include <list>
+#include <string>
 
-AxisUtils::AxisUtils()
+using namespace std;
+/**
+    @class HandlerPool
+    @brief interface for the HandlerPool class.
+
+    HandlerPool loads, keeps and destroys all the handlers
+
+
+    @author Susantha Kumara (skumara@virtusa.com)
+*/ 
+class HandlerPool : protected SharedObject
 {
+private:
+	int GetHandler(BasicHandler** ppHandler, string& sSessionId, int nScope, int nLibId);
+	int PoolHandler(string& sSessionId, BasicHandler* pHandler, int nScope, int nLibId);
+	int GetHandlerChain(string& sSessionId, HandlerChain** pChain, const WSDDHandlerList* pHandlerList);
+public:
+	int GetGlobalRequestFlowHandlerChain(HandlerChain** ppChain, string& sSessionId);
+	int GetGlobalResponseFlowHandlerChain(HandlerChain** ppChain, string& sSessionId);
+	int GetTransportRequestFlowHandlerChain(HandlerChain** ppChain, string& sSessionId, AXIS_PROTOCOL_TYPE Protocol);
+	int GetTransportResponseFlowHandlerChain(HandlerChain** ppChain, string& sSessionId, AXIS_PROTOCOL_TYPE Protocol);
+	int GetRequestFlowHandlerChain(HandlerChain** ppChain, string& sSessionId, const WSDDService* pService);
+	int GetResponseFlowHandlerChain(HandlerChain** ppChain, string& sSessionId, const WSDDService* pService);
+	void PoolHandlerChain(HandlerChain* pChain, string& sSessionId);
 
-}
+	int GetWebService(BasicHandler** ppHandler, string& sSessionId, const WSDDHandler* pService);
+	void PoolWebService(string& sSessionId, BasicHandler* pHandler, const WSDDHandler* pHandlerInfo);
 
-AxisUtils::~AxisUtils()
-{
+	HandlerPool();
+	virtual ~HandlerPool();
+private:
+	list<HandlerChain*> m_ChainStore;
+};
 
-}
-
-const AxisXMLCh* AxisUtils::ToAxisXMLCh(const AxisChar* pch)
-{
-//	return XMLString::transcode(pch); //this is ok as long as we use xerces library.
-	return pch;
-}
-
-void AxisUtils::Initialize()
-{
-}
-
-//following functions is not thread safe and should only be used 
-//for initialization purposes.
-const AxisXMLCh* AxisUtils::Convert(const AxisChar* pch)
-{
-//	if (XMLString::transcode(pch, m_Buffer, CONVERT_BUFFER_SIZE))
-//		return m_Buffer;
-//	return NULL;
-	return pch;
-}
-
-
-int AxisUtils::clearArray(char *arrCh, int iSize)
-{
-	for(int iTmp=0; iTmp<iSize; iTmp++) {
-		arrCh[iTmp] = '\0';
-	}
-
-	return AXIS_SUCCESS;
-}
-
-bool AxisUtils::isCharacterAvailable(const string &sString, const char cCharacter)
-{
-	bool bFoundStatus = false;
-
-	if ((sString.find(cCharacter, 0)) != string::npos) {
-		bFoundStatus = true;
-	}
-
-	return bFoundStatus;
-}
-
-bool AxisUtils::isCharacterAvailable(const char *pchStringToSearch, const char cCharacter)
-{
-	bool bFoundStatus = false;
-
-	if ( strchr(pchStringToSearch, cCharacter) ) {
-		bFoundStatus = true;
-	}
-
-	return bFoundStatus;
-}
-
-string AxisUtils::toUpperCase(const string sWord)
-{
-	/*Fill the code*/
-
-	return NULL;
-}
-
-char* AxisUtils::toUpperCase(const char *pchWord)
-{
-	/*Fill the code*/
-
-	return NULL;
-}
-
-string AxisUtils::toLowerCase(const string sWord)
-{
-	/*Fill the code*/
-
-	return NULL;
-}
-
-char* AxisUtils::toLowerCase(const char *pchWord)
-{
-	/*Fill the code*/
-
-	return NULL;
-}
+#endif // !defined(AFX_HANDLERPOOL_H__6C2A4C96_7115_43C6_9EFA_CDAC9247D109__INCLUDED_)

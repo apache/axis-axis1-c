@@ -3,8 +3,8 @@
 //////////////////////////////////////////////////////////////////////
 
 #include <axis/engine/ClientAxisEngine.h>
-#include <axis/wsdd/WSDDDeployment.h>
-#include <axis/engine/HandlerPool.h>
+#include "../wsdd/WSDDDeployment.h"
+#include "HandlerPool.h"
 #include <axis/common/AxisTrace.h>
 extern AxisTrace* g_pAT;
 
