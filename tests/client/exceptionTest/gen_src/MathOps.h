@@ -6,10 +6,10 @@
 #if !defined(__MATHOPS_CLIENTSTUB_H__INCLUDED_)
 #define __MATHOPS_CLIENTSTUB_H__INCLUDED_
 
-#include <axis/client/Stub.h>
+#include <axis/client/Stub.hpp>
 /*include Exception header files here*/
 #include "AxisClientException.h"
-#include <axis/ISoapFault.h>
+#include <axis/ISoapFault.hpp>
 
 
 class MathOps :public Stub
