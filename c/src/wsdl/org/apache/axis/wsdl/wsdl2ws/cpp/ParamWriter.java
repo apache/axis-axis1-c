@@ -109,35 +109,70 @@ public abstract class ParamWriter extends BasicFileWriter{
     }
    
  	/* genarate the arrtibs array */
-    public String[][] getAttribList(String Qualifiedname) throws WrapperFault {
-        String[][] attribs;
-        ArrayList feilds = new ArrayList();
+	public String[][] getAttribList(String Qualifiedname) throws WrapperFault {
+		String[][] attribs;
+		ArrayList attribfeilds = new ArrayList();
+		ArrayList elementfeilds = new ArrayList();
 
-        Enumeration names = type.getAttribNames();
-        while (names.hasMoreElements()){
-            feilds.add(names.nextElement());
-
-        }
-        //get all the fields
+		Enumeration names = type.getAttributeNames();
+		while (names.hasMoreElements()){
+			attribfeilds.add(names.nextElement());
+		}
+        
+		names = type.getElementnames();
+				while (names.hasMoreElements()){
+					elementfeilds.add(names.nextElement());
+		}
+        
+        
+		//get all the fields
   
-        attribs = new String[feilds.size()][];
-        for (int i = 0; i < feilds.size(); i++) {
-            attribs[i] = new String[4];
-            attribs[i][0] = ((String) feilds.get(i));
+		attribs = new String[attribfeilds.size()+elementfeilds.size()][];
+		for (int i = 0; i < attribfeilds.size(); i++) {
+			//[variablename,typename,typeQNameURI,typeQNamelocalpart,attributeTypeURI,attributeTypeLocalpart]
+			attribs[i] = new String[6];
+			attribs[i][0] = ((String) attribfeilds.get(i));
    
-            QName name = type.getTypNameForAttribName(attribs[i][0]);
+			Type attribType = type.getTypForAttribName(attribs[i][0]);
             
-            if(CPPUtils.isSimpleType(name))
-                attribs[i][1] = CPPUtils.getclass4qname(name);
-            else
-           		attribs[i][1] = this.wscontext.getTypemap().getType(name).getLanguageSpecificName();
+			if(CPPUtils.isSimpleType(attribType.getName()))
+				attribs[i][1] = CPPUtils.getclass4qname(attribType.getName());
+			else
+				attribs[i][1] = attribType.getLanguageSpecificName();
 
-		   attribs[i][2] = name.getNamespaceURI();
-		   attribs[i][3] = name.getLocalPart();
+			attribs[i][2] = attribType.getName().getNamespaceURI();
+			attribs[i][3] = attribType.getName().getLocalPart();
 
-        }
-        return attribs;
-    }
+			attribs[i][4] = null;
+			attribs[i][5] = null;
+		}
+        
+		for (int i = attribfeilds.size(); i < elementfeilds.size()+attribfeilds.size(); i++) {
+			attribs[i] = new String[6];
+			attribs[i][0] = ((String) elementfeilds.get(i));
+   
+			Type elementType = type.getElementForElementName(attribs[i][0]).getType();
+            
+			if(CPPUtils.isSimpleType(elementType.getName()))
+				attribs[i][1] = CPPUtils.getclass4qname(elementType.getName());
+			else
+				attribs[i][1] = elementType.getLanguageSpecificName();
+
+		   attribs[i][2] = elementType.getName().getNamespaceURI();
+		   attribs[i][3] = elementType.getName().getLocalPart();
+		   if(elementType.isArray()){
+				Type arrayType = WrapperUtils.getArrayType(elementType);
+				attribs[i][4] = arrayType.getName().getNamespaceURI();
+				attribs[i][5] = arrayType.getName().getLocalPart();
+		   }else{
+				attribs[i][4] = null;
+				attribs[i][5] = null;
+		   }
+		}
+
+        
+		return attribs;
+	}
     
  	protected String getCorrectParmNameConsideringArraysAndComplexTypes(QName name,String classname)throws WrapperFault{
 		//System.out.println(name);

@@ -277,7 +277,7 @@ public class ClientStubWriter extends CPPClassWriter{
 			writer.write("\tm_pCall->AddParameter(");			
 			if(typeisarray){
 				//arrays
-				QName qname = type.getTypNameForAttribName("item");
+				QName qname = WrapperUtils.getArrayType(type).getName();
 				String containedType = null;
 				if (CPPUtils.isSimpleType(qname)){
 					containedType = CPPUtils.getclass4qname(qname);
@@ -303,7 +303,7 @@ public class ClientStubWriter extends CPPClassWriter{
 			writer.write("\tm_pCall->UnInitialize();\n");
 		}
 		else if (returntypeisarray){
-			QName qname = retType.getTypNameForAttribName("item");
+			QName qname = WrapperUtils.getArrayType(retType).getName();
 			String containedType = null;
 			if (CPPUtils.isSimpleType(qname)){
 				containedType = CPPUtils.getclass4qname(qname);

@@ -67,6 +67,7 @@ import java.util.Iterator;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
+import org.apache.axis.wsdl.wsdl2ws.WrapperUtils;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
@@ -88,9 +89,10 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		String typeName;
 		for(int i = 0; i< attribs.length;i++){
 			if(!CPPUtils.isSimpleType(attribs[i][1])){
-				Type memtype = wscontext.getTypemap().getType(type.getTypNameForAttribName(attribs[i][0]));
-				if (memtype.isArray()){
-					QName qname = memtype.getTypNameForAttribName("item");
+				//to understand what happens here please refer to where the 
+				//attribs[][] is created. (ParamWriter) 		
+				if (attribs[i][5] != null){
+					QName qname = new QName(attribs[i][4],attribs[i][5]);
 					if (CPPUtils.isSimpleType(qname)) continue; //no wrapper methods for basic types
 					typeName = qname.getLocalPart();
 				}else{
@@ -124,7 +126,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write(" */\n");
 		writer.write("int Axis_GetSize_"+classname+"()\n{\n\treturn sizeof("+classname+");\n}\n");
 	}
-	private void writeSerializeGlobalMethod()throws IOException{
+	private void writeSerializeGlobalMethod()throws IOException,WrapperFault{
 		Type t;
 		writer.write("/*\n");
 		writer.write(" * This static method serialize a "+classname+" type of object\n");
@@ -153,7 +155,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				writer.write("\tpSZ->Serialize(pSZ->SerializeBasicType(\""+attribs[i][0]+"\", param->"+attribs[i][0]+", "+ CPPUtils.getXSDTypeForBasicType(attribs[i][1])+"), NULL);\n");
 			}else if((t = wscontext.getTypemap().getType(new QName(attribs[i][2],attribs[i][3])))!= null && t.isArray()){
 				//if Array
-				QName qname = t.getTypNameForAttribName("item");
+				QName qname = WrapperUtils.getArrayType(t).getName();
 				String arrayType = null;
 				if (CPPUtils.isSimpleType(qname)){
 					arrayType = CPPUtils.getclass4qname(qname);
@@ -175,7 +177,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write("}\n\n");
 	
 	}
-	private void writeDeSerializeGlobalMethod()throws IOException{	
+	private void writeDeSerializeGlobalMethod()throws IOException,WrapperFault{	
 		Type t;
 		writer.write("/*\n");
 		writer.write(" * This static method deserialize a "+classname+" type of object\n");
@@ -193,7 +195,7 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 				writer.write("\tparam->"+attribs[i][0]+" = pIWSDZ->"+CPPUtils.getParameterGetValueMethodName(attribs[i][1])+";\n");
 			}else if((t = wscontext.getTypemap().getType(new QName(attribs[i][2],attribs[i][3])))!= null && t.isArray()){
 				//if Array
-				QName qname = t.getTypNameForAttribName("item");
+				QName qname = WrapperUtils.getArrayType(t).getName();
 				String arrayType = null;
 				if (CPPUtils.isSimpleType(qname)){
 					arrayType = CPPUtils.getclass4qname(qname);
@@ -247,9 +249,10 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 			writer.write("\t\t{\n");
 			for(int i = 0; i< attribs.length;i++){
 				if(!CPPUtils.isSimpleType(attribs[i][1])){ //this can be either an array or complex type
-					Type memtype = wscontext.getTypemap().getType(type.getTypNameForAttribName(attribs[i][0]));
-					if (memtype.isArray()){
-						QName qname = memtype.getTypNameForAttribName("item");
+					//to understand what happens here please refer to where the 
+					//attribs[][] is created. (ParamWriter) 		
+					if (attribs[i][5] != null){
+						QName qname = new QName(attribs[i][4],attribs[i][5]);
 						String containedType = null;
 						if (CPPUtils.isSimpleType(qname)){
 							containedType = CPPUtils.getclass4qname(qname);
@@ -274,14 +277,15 @@ public class BeanParamWriter extends ParamCPPFileWriter{
 		writer.write("\t\t/*delete any pointer members or array members of this struct here*/\n");
 		for(int i = 1; i< attribs.length;i++){
 			if(!CPPUtils.isSimpleType(attribs[i][1])){
-				Type memtype = wscontext.getTypemap().getType(type.getTypNameForAttribName(attribs[i][0]));
-				if (memtype.isArray()){
-					QName qname = memtype.getTypNameForAttribName("item");
-					String containedType = null;
-					if (CPPUtils.isSimpleType(qname)){
-						containedType = CPPUtils.getclass4qname(qname);
-						writer.write("\t\tdelete [] (("+containedType+"*)param->"+attribs[i][0]+".m_Array);\n");
-					}
+				//to understand what happens here please refer to where the 
+					//attribs[][] is created. (ParamWriter) 		
+					if (attribs[i][5] != null){
+						QName qname = new QName(attribs[i][4],attribs[i][5]);
+						String containedType = null;
+						if (CPPUtils.isSimpleType(qname)){
+							containedType = CPPUtils.getclass4qname(qname);
+							writer.write("\t\tdelete [] (("+containedType+"*)param->"+attribs[i][0]+".m_Array);\n");
+						}
 					else{
 						containedType = qname.getLocalPart();
 						writer.write("\t\tAxis_Delete_"+containedType+"(param->"+attribs[i][0]+".m_Array, true, param->"+attribs[i][0]+".m_Size);\n");

@@ -257,7 +257,7 @@ public class ClientStubWriter extends CFileWriter{
 			typeissimple = CUtils.isSimpleType(paraTypeName);
 			if(typeisarray){
 				//arrays
-				QName qname = type.getTypNameForAttribName("item");
+				QName qname = WrapperUtils.getArrayType(type).getName();
 				String containedType = null;
 				if (CUtils.isSimpleType(qname)){
 					containedType = CUtils.getclass4qname(qname);
@@ -287,7 +287,7 @@ public class ClientStubWriter extends CFileWriter{
 			writer.write("\tpCall->UnInitialize("+globalobjectname+");\n");
 		}
 		else if (returntypeisarray){
-			QName qname = retType.getTypNameForAttribName("item");
+			QName qname = WrapperUtils.getArrayType(retType).getName();
 			String containedType = null;
 			if (CUtils.isSimpleType(qname)){
 				containedType = CUtils.getclass4qname(qname);

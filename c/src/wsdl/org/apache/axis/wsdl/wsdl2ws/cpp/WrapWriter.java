@@ -246,7 +246,7 @@ public class WrapWriter extends CPPClassWriter{
 				//for simple types	
 				writer.write("\t"+paraTypeName+" v"+i+" = pIWSDZ->"+CPPUtils.getParameterGetValueMethodName(paraTypeName)+";\n");
 			}else if((type = this.wscontext.getTypemap().getType(((ParameterInfo)paramsB.get(i)).getSchemaName())) != null && type.isArray()){
-				QName qname = type.getTypNameForAttribName("item");
+				QName qname = WrapperUtils.getArrayType(type).getName();
 				String containedType = null;
 				if (CPPUtils.isSimpleType(qname)){
 					containedType = CPPUtils.getclass4qname(qname);
@@ -284,7 +284,7 @@ public class WrapWriter extends CPPClassWriter{
 			if (returntypeissimple){
 				writer.write("\treturn pIWSSZ->AddOutputParam(\""+methodName+"Return\", ret, "+CPPUtils.getXSDTypeForBasicType(outparamType)+");\n");
 			}else if(returntypeisarray){
-				QName qname = retType.getTypNameForAttribName("item");
+				QName qname = WrapperUtils.getArrayType(retType).getName();
 				String containedType = null;
 				if (CPPUtils.isSimpleType(qname)){
 					containedType = CPPUtils.getclass4qname(qname);
