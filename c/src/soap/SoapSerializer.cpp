@@ -202,6 +202,24 @@ int SoapSerializer::addOutputCmplxParam(void* pObject, void* pSZFunct,
     return AXIS_SUCCESS;
 }
 
+int SoapSerializer::addFaultDetail(void* pObject, void* pSZFunct, 
+                                        void* pDelFunct, const AxisChar* pName,
+                                        const AxisChar* pNamespace )
+{ 
+    Param* pParam = new Param();
+    pParam->m_Value.pCplxObj = new ComplexObjectHandler;
+    pParam->m_Value.pCplxObj->pObject = pObject;
+    pParam->m_Value.pCplxObj->pSZFunct = (AXIS_SERIALIZE_FUNCT)pSZFunct;
+    pParam->m_Value.pCplxObj->pDelFunct = (AXIS_OBJECT_DELETE_FUNCT)pDelFunct;
+    if(m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->
+        m_pSoapBody->m_pSoapFault)) 
+    {
+        m_pSoapEnvelope->m_pSoapBody->m_pSoapFault->setFaultDetail(pParam);
+    }
+    pParam->setName(pName);
+    return AXIS_SUCCESS;
+}
+
 int SoapSerializer::setSoapFault(SoapFault *pSoapFault)
 {
     int intStatus= AXIS_FAIL;
@@ -421,6 +439,17 @@ int SoapSerializer::createSoapMethod(const AxisChar* sLocalName,
     pMethod->setLocalName(sLocalName);
     pMethod->setPrefix(getNamespacePrefix(sURI));
     pMethod->setUri(sURI);
+    return AXIS_SUCCESS;
+}
+
+int SoapSerializer::createSoapFault(const AxisChar* sLocalName, 
+                                     const AxisChar* sURI)
+{
+    SoapFault* pFault = new SoapFault();
+    setSoapFault(pFault);
+    pFault->setLocalName(sLocalName);
+    pFault->setPrefix(getNamespacePrefix(sURI));
+    pFault->setUri(sURI);
     return AXIS_SUCCESS;
 }
 

@@ -19,17 +19,17 @@
  *
  */
 
-#include <axis/server/AxisWsddException.h>
+#include "AxisWsddException.h"
 #include <exception>
 using namespace std;
 
 /**
  *    Default when no parameter passed. When thrown with no parameter
- *    more general AXISC_WSDD_EXCEPTION is assumed.
+ *    more general SERVER_WSDD_EXCEPTION is assumed.
 */
 AxisWsddException::AxisWsddException()
 {
-    processException(AXISC_WSDD_EXCEPTION);
+    processException(SERVER_WSDD_EXCEPTION);
 }
 
 AxisWsddException::AxisWsddException (int iExceptionCode)
@@ -51,5 +51,60 @@ AxisWsddException::AxisWsddException (exception* e, int iExceptionCode)
 AxisWsddException::~AxisWsddException() throw ()
 {
 
+}
+
+void AxisWsddException::processException (exception* e, int iExceptionCode)
+{
+    m_sMessage = getMessage (e) + getMessage (iExceptionCode);
+}
+
+void AxisWsddException::processException (exception* e)
+{
+    m_sMessage = getMessage (e);
+}
+
+void AxisWsddException::processException(int iExceptionCode)
+{
+    m_sMessage = getMessage (iExceptionCode);
+}
+
+const string AxisWsddException::getMessage (exception* objException)
+{
+    string sMessage = objException->what();
+
+    return sMessage;
+}
+
+const string AxisWsddException::getMessage (int iExceptionCode)
+{
+    string sMessage;
+    switch(iExceptionCode)
+    {
+        case CLIENT_WSDD_SERVICENOTFOUND:
+            sMessage = "Requested service not found";
+            break;
+        case CLIENT_WSDD_METHODNOTALLOWED:
+            sMessage = "Requested method is not allowed";
+            break;
+        case CLIENT_WSDD_PARATYPEMISMATCH:
+            sMessage = "Parameter type mismatch";
+            break; 
+        case SERVER_WSDD_NOHANDLERSCONFIGURED:
+            sMessage = "No handlers configured in server.wsdd";
+            break;
+        default:
+            sMessage = "Unknown Wsdd Exception";
+    }
+    return sMessage;
+}
+
+const char* AxisWsddException::what() throw ()
+{
+    return m_sMessage.c_str ();
+}
+
+const int AxisWsddException::getExceptionCode()
+{
+    return m_iExceptionCode;
 }
 

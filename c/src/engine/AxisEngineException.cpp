@@ -19,17 +19,17 @@
  *
  */
 
-#include <axis/server/AxisEngineException.h>
+#include "AxisEngineException.h"
 #include <exception>
 using namespace std;
 
 /**
  *    Default when no parameter passed. When thrown with no parameter
- *    more general AXISC_ENGINE_EXCEPTION is assumed.
+ *    more general SERVER_ENGINE_EXCEPTION is assumed.
 */
 AxisEngineException::AxisEngineException()
 {
-    processException(AXISC_ENGINE_EXCEPTION);
+    processException(SERVER_ENGINE_EXCEPTION);
 }
 
 AxisEngineException::AxisEngineException (int iExceptionCode)
@@ -51,5 +51,81 @@ AxisEngineException::AxisEngineException (exception* e, int iExceptionCode)
 AxisEngineException::~AxisEngineException() throw ()
 {
 
+}
+
+void AxisEngineException::processException (exception* e, int iExceptionCode)
+{
+    m_sMessage = getMessage (e) + getMessage (iExceptionCode);
+}
+
+void AxisEngineException::processException (exception* e)
+{
+    m_sMessage = getMessage (e);
+}
+
+void AxisEngineException::processException(int iExceptionCode)
+{
+    m_sMessage = getMessage (iExceptionCode);
+}
+
+const string AxisEngineException::getMessage (exception* objException)
+{
+    string sMessage = objException->what();
+
+    return sMessage;
+}
+
+const string AxisEngineException::getMessage (int iExceptionCode)
+{
+    string sMessage;
+    switch(iExceptionCode)
+    {
+        case SERVER_ENGINE_COULDNOTLOADSRV:
+            sMessage = "Could not load service";
+            break;
+        case SERVER_ENGINE_COULDNOTLOADHDL:
+            sMessage = "Could not load handler";
+            break;
+        case SERVER_ENGINE_HANDLERFAILED:
+            sMessage = "Handler failed";
+            break;
+        case SERVER_ENGINE_WEBSERVICEFAILED:
+            sMessage = "Web Service failed";
+            break;
+        case SERVER_ENGINE_HANDLERINITFAILED:
+            sMessage = "Handler initialization failed";
+            break;
+        case SERVER_ENGINE_HANDLERCREATIONFAILED:
+            sMessage = "Handler creation failed";
+            break;
+        case SERVER_ENGINE_LIBRARYLOADINGFAILED:
+            sMessage = "Library loading failed";
+            break;
+        case SERVER_ENGINE_HANDLERNOTLOADED:
+            sMessage = "Handler is not loaded";
+            break;
+        case SERVER_ENGINE_HANDLERBEINGUSED:
+            sMessage = "Handler is being used";
+            break;
+        case SERVER_ENGINE_GETHANDLERFAILED:
+            sMessage = "Get handler failed";
+            break;
+        case SERVER_ENGINE_WRONGHANDLERTYPE:
+            sMessage = "Wrong handler type";
+            break;
+        default:
+            sMessage = "Unknown Axis C++ Engine Exception";
+    }
+    return sMessage;
+}
+
+const char* AxisEngineException::what() throw ()
+{
+    return m_sMessage.c_str ();
+}
+
+const int AxisEngineException::getExceptionCode()
+{
+    return m_iExceptionCode;
 }
 

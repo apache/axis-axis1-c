@@ -49,7 +49,7 @@ bool Sender::Send(const char* what) throw (AxisException)
     }
     catch(...)
     {
-        throw AxisException(AXISC_SENDING_ERROR);
+        throw AxisException(SERVER_TRANSPORT_SENDINGEXCEPTION);
     }
 
     return true;
