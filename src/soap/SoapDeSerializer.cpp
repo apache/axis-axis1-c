@@ -2390,7 +2390,7 @@ double SoapDeSerializer::getElementAsDouble(const AxisChar* pName,
         m_pNode = m_pParser->next();
         /* wrapper node with type info  Ex: <i xsi:type="xsd:int"> */
         if (!m_pNode) return ret;
-        if (XSD_DECIMAL == getXSDType(m_pNode))
+        if (XSD_DOUBLE == getXSDType(m_pNode))
         {
             m_pNode = m_pParser->next(true); /* charactor node */
             if (m_pNode && (CHARACTER_ELEMENT == m_pNode->m_type))
