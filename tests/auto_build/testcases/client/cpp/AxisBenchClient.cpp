@@ -52,39 +52,38 @@ int main(int argc, char* argv[])
     input->infos.m_Size = input->count;
       
     time_t tim;
-    tim = 1079010407;
+    tim = 1100246323;
     tm* lt = gmtime(&tim);
       
     buffer = (xsd__unsignedByte*)calloc (1, input->count + 1 );
+    strcpy ( (char *)buffer, "A");
 
     for ( int i = 0; i < input->count ; i++ ) {
         BenchBasicDataType *type = new BenchBasicDataType();
         type->StringType = "StringType";
-        type->IntegerType = i;
-        type->DoubleType = 1.0;
+        type->IntegerType = 10*(i+1);
+        type->DoubleType = 11.111 * (i+1);
         type->BooleanType = true_;
         type->DateTimeType = *lt ;
         type->TimeType = *lt ;
         type->DateType = *lt ;
-        
-        type->IntType = i;
+        type->IntType = (i+1);
         type->ByteType = '1';
-        type->DecimalType = 10;
-        type->FloatType = i/2;
-        type->LongType = i*100;
+        type->DecimalType = 10*(i+1);
+        type->FloatType = (float)((float)(11*(i+1))/(float)2.0);
+        type->LongType = (i+1)*10000;
         type->QNameType = "toto";
-        type->ShortType = 1;
+        type->ShortType = (i+1);
         type->Base64BinaryType.__size=i;
         type->Base64BinaryType.__ptr=buffer;
-    /*
         type->HexBinary.__size=i;
         type->HexBinary.__ptr=buffer;
-    */
-        strcat ( (char *)buffer, "A");
+
         input->infos.m_Array[i] = *type;
-        
+
+        strcat ( (char *)buffer, "A");
     }
-      
+
     int t1,t2;
 #ifndef WIN32  
     struct timeval mstart;
@@ -122,6 +121,7 @@ int main(int argc, char* argv[])
       if ( argc > 1 )
           i = output->count -1;
 
+      cout << "Input Count : " << input->count << endl;
       cout << "Count : " << output->count << endl;
       for ( ; i < output->count ; i++ ) {
           cout << " ----------------------------------------------" << endl;
@@ -129,19 +129,27 @@ int main(int argc, char* argv[])
           cout << " IntegerType " << output->infos.m_Array[i].IntegerType << endl;
           cout << " DoubleType " << output->infos.m_Array[i].DoubleType << endl;
           cout << " BooleanType " << output->infos.m_Array[i].BooleanType << endl;
-          cout << " DateTimeType " << asctime(&output->infos.m_Array[i].DateTimeType) << endl;
-          cout << " DateType " << asctime(&output->infos.m_Array[i].DateType) << endl;
-          cout << " TimeType " << asctime(&output->infos.m_Array[i].TimeType) << endl;
+          cout << " DateTimeType " << asctime(&output->infos.m_Array[i].DateTimeType);
+          cout << " DateType " << asctime(&output->infos.m_Array[i].DateType);
+          cout << " TimeType " << asctime(&output->infos.m_Array[i].TimeType);
           cout << " ByteType " << output->infos.m_Array[i].ByteType << endl;
           cout << " DecimalType " << output->infos.m_Array[i].DecimalType << endl;
           cout << " FloatType " << output->infos.m_Array[i].FloatType << endl;
           cout << " LongType " << output->infos.m_Array[i].LongType << endl;
           cout << " QNameType " << output->infos.m_Array[i].QNameType << endl;
           cout << " ShortType " << output->infos.m_Array[i].ShortType << endl;
+
           cout << " Base64BinaryType " << output->infos.m_Array[i].Base64BinaryType.__size << endl;
-          cout << " Base64BinaryType " << output->infos.m_Array[i].Base64BinaryType.__ptr << endl;
+		  if( output->infos.m_Array[i].Base64BinaryType.__size > 0)
+		  {
+	          cout << " Base64BinaryType " << output->infos.m_Array[i].Base64BinaryType.__ptr << endl;
+		  }
+
           cout << " HexBinaryType " << output->infos.m_Array[i].HexBinary.__size << endl;
-          cout << " HexBinaryType " << output->infos.m_Array[i].HexBinary.__ptr << endl;
+		  if( output->infos.m_Array[i].HexBinary.__size > 0)
+		  {
+			cout << " HexBinaryType " << output->infos.m_Array[i].HexBinary.__ptr << endl;
+		  }
       }
       returnValue = 0; // Success
     }
@@ -209,6 +217,9 @@ bool parse_args_for_endpoint(int *argc, char *argv[], char **endpoint) {
                 setLogOptions(argv[i+1]);
                 shift_args(i, argc, argv);
                 i--;
+                break;
+            case 'v':
+				verbose=true;
                 break;
             default:
                 break;

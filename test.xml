@@ -38,6 +38,8 @@ Notes:
 	<taskdef resource="cpptasks.tasks"/>
 	<typedef resource="cpptasks.types"/>
 
+	<property environment="env"/>
+
 	<!--
 	  Load definition of Additional Tasks and Types
 	  -->
@@ -50,6 +52,7 @@ Notes:
 	<property name="dir.src" value="${basedir}/tests/auto_build/testcases"/>
 	<property name="test.list" value="${dir.src}/test.list"/>
 	<property name="test.endpoints" value="${dir.src}/test.endpoints"/>
+	<property name="dir.include" value="${dir.package}/include"/>
 
 	<!--
 	  Compiler definitions
@@ -173,6 +176,25 @@ Notes:
 		<condition property="platform" value="AIX">
 			<isset property="aix"/>
 		</condition>
+
+		<condition property="dir.xmlParser" value="${env.XERCES_HOME}/bin">
+			<and>
+				<not>
+					<isset property="dir.xmlParser"/>
+				</not>
+				<isset property="windows"/>
+			</and>
+		</condition>
+		<condition property="dir.xmlParser" value="${env.XERCES_HOME}/lib">
+			<and>
+				<not>
+					<isset property="dir.xmlParser"/>
+				</not>
+				<not>
+					<isset property="windows"/>
+				</not>
+			</and>
+		</condition>
 		
 		<!-- Load properties from file -->
 		<property file="${basedir}/build/build.${platform}.properties"/>
@@ -248,6 +270,7 @@ Notes:
 	  Compile test client
 	  -->
 	<target name="compileClient" unless="runOnly">
+		<delete file="${dir.test.generated}/${client.lang}/${testName}/${testName}"/>
 		<cc failonerror="false" incremental="false" outfile="${dir.test.generated}/${client.lang}/${testName}/${testName}"
 		 objdir="${dir.test.generated}/${client.lang}/${testName}" exceptions="true"
 		 outtype="executable" subsystem="console">
@@ -508,9 +531,9 @@ XMLParser:${dir.libraries}/${libraryPrefix}${xmlParserLibraryName}${librarySuffi
 							<!-- <arg line="-p ${monitorPort}"/>
 							<arg line="-s localhost"/> -->
 							<arg line="${clientArgs}"/>
-							<env key="PATH" value="${java.library.path}${path.separator}${dir.libraries}${path.separator}${dir.xmlParser}/bin${path.separator}${dir.xmlParser}"/>
-							<env key="LD_LIBRARY_PATH" value="${dir.libraries}${path.separator}${dir.xmlParser}/lib${path.separator}${dir.xmlParser}"/>
-							<env key="LIBPATH" value="${dir.libraries}${path.separator}${dir.xmlParser}/lib${path.separator}${dir.xmlParser}"/>
+							<env key="PATH" path="${java.library.path};${dir.libraries};${dir.xmlParser};${dir.gskit}/bin"/>
+							<env key="LD_LIBRARY_PATH" path="${dir.libraries};${dir.xmlParser};${dir.gskit}/lib"/>
+							<env key="LIBPATH" path="${dir.libraries};${dir.xmlParser};${dir.gskit}/lib"/>
 							<env key="AXISCPP_DEPLOY" value="${axiscpp_deploy}"/>
 						</exec>
 						<echo message="EXEC FINISHED"/>

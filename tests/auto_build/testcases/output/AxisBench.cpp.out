@@ -1,2101 +1,1800 @@
-Count : 100 
- ----------------------------------------------
- StringType StringType 
- IntegerType 0 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 0.000000 
- LongType 0 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 0 
- Base64BinaryType (null) 
- HexBinaryType 0 
- HexBinaryType (null) 
- ----------------------------------------------
- StringType StringType 
- IntegerType 1 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 0.000000 
- LongType 100 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 1 
- Base64BinaryType A 
- HexBinaryType 1 
- HexBinaryType A 
- ----------------------------------------------
- StringType StringType 
- IntegerType 2 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 1.000000 
- LongType 200 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 2 
- Base64BinaryType AA 
- HexBinaryType 2 
- HexBinaryType AA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 3 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 1.000000 
- LongType 300 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 3 
- Base64BinaryType AAA 
- HexBinaryType 3 
- HexBinaryType AAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 4 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 2.000000 
- LongType 400 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 4 
- Base64BinaryType AAAA 
- HexBinaryType 4 
- HexBinaryType AAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 5 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 2.000000 
- LongType 500 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 5 
- Base64BinaryType AAAAA 
- HexBinaryType 5 
- HexBinaryType AAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 6 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 3.000000 
- LongType 600 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 6 
- Base64BinaryType AAAAAA 
- HexBinaryType 6 
- HexBinaryType AAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 7 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 3.000000 
- LongType 700 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 7 
- Base64BinaryType AAAAAAA 
- HexBinaryType 7 
- HexBinaryType AAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 8 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 4.000000 
- LongType 800 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 8 
- Base64BinaryType AAAAAAAA 
- HexBinaryType 8 
- HexBinaryType AAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 9 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 4.000000 
- LongType 900 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 9 
- Base64BinaryType AAAAAAAAA 
- HexBinaryType 9 
- HexBinaryType AAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 10 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 5.000000 
- LongType 1000 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 10 
- Base64BinaryType AAAAAAAAAA 
- HexBinaryType 10 
- HexBinaryType AAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 11 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 5.000000 
- LongType 1100 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 11 
- Base64BinaryType AAAAAAAAAAA 
- HexBinaryType 11 
- HexBinaryType AAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 12 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 6.000000 
- LongType 1200 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 12 
- Base64BinaryType AAAAAAAAAAAA 
- HexBinaryType 12 
- HexBinaryType AAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 13 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 6.000000 
- LongType 1300 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 13 
- Base64BinaryType AAAAAAAAAAAAA 
- HexBinaryType 13 
- HexBinaryType AAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 14 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 7.000000 
- LongType 1400 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 14 
- Base64BinaryType AAAAAAAAAAAAAA 
- HexBinaryType 14 
- HexBinaryType AAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 15 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 7.000000 
- LongType 1500 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 15 
- Base64BinaryType AAAAAAAAAAAAAAA 
- HexBinaryType 15 
- HexBinaryType AAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 16 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 8.000000 
- LongType 1600 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 16 
- Base64BinaryType AAAAAAAAAAAAAAAA 
- HexBinaryType 16 
- HexBinaryType AAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 17 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 8.000000 
- LongType 1700 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 17 
- Base64BinaryType AAAAAAAAAAAAAAAAA 
- HexBinaryType 17 
- HexBinaryType AAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 18 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 9.000000 
- LongType 1800 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 18 
- Base64BinaryType AAAAAAAAAAAAAAAAAA 
- HexBinaryType 18 
- HexBinaryType AAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 19 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 9.000000 
- LongType 1900 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 19 
- Base64BinaryType AAAAAAAAAAAAAAAAAAA 
- HexBinaryType 19 
- HexBinaryType AAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 20 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 10.000000 
- LongType 2000 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 20 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 20 
- HexBinaryType AAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 21 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 10.000000 
- LongType 2100 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 21 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 21 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 22 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 11.000000 
- LongType 2200 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 22 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 22 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 23 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 11.000000 
- LongType 2300 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 23 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 23 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 24 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 12.000000 
- LongType 2400 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 24 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 24 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 25 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 12.000000 
- LongType 2500 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 25 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 25 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 26 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 13.000000 
- LongType 2600 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 26 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 26 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 27 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 13.000000 
- LongType 2700 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 27 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 27 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 28 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 14.000000 
- LongType 2800 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 28 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 28 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 29 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 14.000000 
- LongType 2900 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 29 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 29 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 30 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 15.000000 
- LongType 3000 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 30 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 30 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 31 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 15.000000 
- LongType 3100 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 31 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 31 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 32 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 16.000000 
- LongType 3200 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 32 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 32 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 33 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 16.000000 
- LongType 3300 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 33 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 33 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 34 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 17.000000 
- LongType 3400 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 34 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 34 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 35 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 17.000000 
- LongType 3500 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 35 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 35 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 36 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 18.000000 
- LongType 3600 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 36 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 36 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 37 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 18.000000 
- LongType 3700 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 37 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 37 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 38 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 19.000000 
- LongType 3800 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 38 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 38 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 39 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 19.000000 
- LongType 3900 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 39 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 39 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 40 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 20.000000 
- LongType 4000 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 40 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 40 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 41 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 20.000000 
- LongType 4100 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 41 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 41 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 42 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 21.000000 
- LongType 4200 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 42 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 42 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 43 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 21.000000 
- LongType 4300 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 43 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 43 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 44 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 22.000000 
- LongType 4400 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 44 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 44 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 45 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 22.000000 
- LongType 4500 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 45 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 45 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 46 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 23.000000 
- LongType 4600 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 46 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 46 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 47 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 23.000000 
- LongType 4700 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 47 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 47 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 48 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 24.000000 
- LongType 4800 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 48 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 48 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 49 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 24.000000 
- LongType 4900 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 49 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 49 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 50 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 25.000000 
- LongType 5000 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 50 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 50 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 51 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 25.000000 
- LongType 5100 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 51 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 51 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 52 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 26.000000 
- LongType 5200 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 52 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 52 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 53 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 26.000000 
- LongType 5300 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 53 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 53 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 54 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 27.000000 
- LongType 5400 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 54 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 54 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 55 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 27.000000 
- LongType 5500 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 55 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 55 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 56 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 28.000000 
- LongType 5600 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 56 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 56 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 57 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 28.000000 
- LongType 5700 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 57 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 57 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 58 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 29.000000 
- LongType 5800 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 58 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 58 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 59 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 29.000000 
- LongType 5900 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 59 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 59 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 60 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 30.000000 
- LongType 6000 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 60 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 60 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 61 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 30.000000 
- LongType 6100 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 61 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 61 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 62 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 31.000000 
- LongType 6200 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 62 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 62 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 63 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 31.000000 
- LongType 6300 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 63 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 63 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 64 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 32.000000 
- LongType 6400 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 64 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 64 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 65 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 32.000000 
- LongType 6500 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 65 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 65 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 66 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 33.000000 
- LongType 6600 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 66 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 66 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 67 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 33.000000 
- LongType 6700 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 67 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 67 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 68 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 34.000000 
- LongType 6800 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 68 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 68 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 69 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 34.000000 
- LongType 6900 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 69 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 69 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 70 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 35.000000 
- LongType 7000 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 70 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 70 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 71 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 35.000000 
- LongType 7100 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 71 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 71 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 72 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 36.000000 
- LongType 7200 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 72 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 72 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 73 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 36.000000 
- LongType 7300 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 73 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 73 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 74 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 37.000000 
- LongType 7400 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 74 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 74 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 75 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 37.000000 
- LongType 7500 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 75 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 75 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 76 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 38.000000 
- LongType 7600 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 76 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 76 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 77 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 38.000000 
- LongType 7700 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 77 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 77 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 78 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 39.000000 
- LongType 7800 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 78 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 78 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 79 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 39.000000 
- LongType 7900 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 79 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 79 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 80 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 40.000000 
- LongType 8000 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 80 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 80 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 81 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 40.000000 
- LongType 8100 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 81 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 81 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 82 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 41.000000 
- LongType 8200 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 82 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 82 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 83 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 41.000000 
- LongType 8300 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 83 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 83 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 84 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 42.000000 
- LongType 8400 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 84 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 84 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 85 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 42.000000 
- LongType 8500 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 85 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 85 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 86 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 43.000000 
- LongType 8600 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 86 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 86 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 87 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 43.000000 
- LongType 8700 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 87 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 87 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 88 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 44.000000 
- LongType 8800 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 88 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 88 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 89 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 44.000000 
- LongType 8900 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 89 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 89 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 90 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 45.000000 
- LongType 9000 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 90 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 90 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 91 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 45.000000 
- LongType 9100 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 91 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 91 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 92 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 46.000000 
- LongType 9200 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 92 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 92 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 93 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 46.000000 
- LongType 9300 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 93 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 93 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 94 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 47.000000 
- LongType 9400 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 94 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 94 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 95 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 47.000000 
- LongType 9500 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 95 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 95 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 96 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 48.000000 
- LongType 9600 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 96 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 96 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 97 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 48.000000 
- LongType 9700 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 97 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 97 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 98 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 49.000000 
- LongType 9800 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 98 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 98 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- ----------------------------------------------
- StringType StringType 
- IntegerType 99 
- DoubleType 1.000000 
- BooleanType 1 
- DateTimeType Thu Mar 11 13:06:47 2004
- 
- DateType Thu Mar 11 00:00:00 2004
- 
- TimeType Thu Jan  1 13:06:47 1970
- 
- ByteType 1 
- DecimalType 10.000000 
- FloatType 49.000000 
- LongType 9900 
- QNameType toto 
- ShortType 1 
- Base64BinaryType 99 
- Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
- HexBinaryType 99 
- HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
+Input Count : 100
+Count : 100
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 10
+ DoubleType 11.111
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 10
+ FloatType 5.5
+ LongType 10000
+ QNameType toto
+ ShortType 1
+ Base64BinaryType 0
+ HexBinaryType 0
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 20
+ DoubleType 22.222
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 20
+ FloatType 11
+ LongType 20000
+ QNameType toto
+ ShortType 2
+ Base64BinaryType 1
+ Base64BinaryType A
+ HexBinaryType 1
+ HexBinaryType A
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 30
+ DoubleType 33.333
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 30
+ FloatType 16.5
+ LongType 30000
+ QNameType toto
+ ShortType 3
+ Base64BinaryType 2
+ Base64BinaryType AA
+ HexBinaryType 2
+ HexBinaryType AA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 40
+ DoubleType 44.444
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 40
+ FloatType 22
+ LongType 40000
+ QNameType toto
+ ShortType 4
+ Base64BinaryType 3
+ Base64BinaryType AAA
+ HexBinaryType 3
+ HexBinaryType AAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 50
+ DoubleType 55.555
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 50
+ FloatType 27.5
+ LongType 50000
+ QNameType toto
+ ShortType 5
+ Base64BinaryType 4
+ Base64BinaryType AAAA
+ HexBinaryType 4
+ HexBinaryType AAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 60
+ DoubleType 66.666
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 60
+ FloatType 33
+ LongType 60000
+ QNameType toto
+ ShortType 6
+ Base64BinaryType 5
+ Base64BinaryType AAAAA
+ HexBinaryType 5
+ HexBinaryType AAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 70
+ DoubleType 77.777
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 70
+ FloatType 38.5
+ LongType 70000
+ QNameType toto
+ ShortType 7
+ Base64BinaryType 6
+ Base64BinaryType AAAAAA
+ HexBinaryType 6
+ HexBinaryType AAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 80
+ DoubleType 88.888
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 80
+ FloatType 44
+ LongType 80000
+ QNameType toto
+ ShortType 8
+ Base64BinaryType 7
+ Base64BinaryType AAAAAAA
+ HexBinaryType 7
+ HexBinaryType AAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 90
+ DoubleType 99.999
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 90
+ FloatType 49.5
+ LongType 90000
+ QNameType toto
+ ShortType 9
+ Base64BinaryType 8
+ Base64BinaryType AAAAAAAA
+ HexBinaryType 8
+ HexBinaryType AAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 100
+ DoubleType 111.11
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 100
+ FloatType 55
+ LongType 100000
+ QNameType toto
+ ShortType 10
+ Base64BinaryType 9
+ Base64BinaryType AAAAAAAAA
+ HexBinaryType 9
+ HexBinaryType AAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 110
+ DoubleType 122.221
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 110
+ FloatType 60.5
+ LongType 110000
+ QNameType toto
+ ShortType 11
+ Base64BinaryType 10
+ Base64BinaryType AAAAAAAAAA
+ HexBinaryType 10
+ HexBinaryType AAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 120
+ DoubleType 133.332
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 120
+ FloatType 66
+ LongType 120000
+ QNameType toto
+ ShortType 12
+ Base64BinaryType 11
+ Base64BinaryType AAAAAAAAAAA
+ HexBinaryType 11
+ HexBinaryType AAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 130
+ DoubleType 144.443
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 130
+ FloatType 71.5
+ LongType 130000
+ QNameType toto
+ ShortType 13
+ Base64BinaryType 12
+ Base64BinaryType AAAAAAAAAAAA
+ HexBinaryType 12
+ HexBinaryType AAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 140
+ DoubleType 155.554
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 140
+ FloatType 77
+ LongType 140000
+ QNameType toto
+ ShortType 14
+ Base64BinaryType 13
+ Base64BinaryType AAAAAAAAAAAAA
+ HexBinaryType 13
+ HexBinaryType AAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 150
+ DoubleType 166.665
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 150
+ FloatType 82.5
+ LongType 150000
+ QNameType toto
+ ShortType 15
+ Base64BinaryType 14
+ Base64BinaryType AAAAAAAAAAAAAA
+ HexBinaryType 14
+ HexBinaryType AAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 160
+ DoubleType 177.776
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 160
+ FloatType 88
+ LongType 160000
+ QNameType toto
+ ShortType 16
+ Base64BinaryType 15
+ Base64BinaryType AAAAAAAAAAAAAAA
+ HexBinaryType 15
+ HexBinaryType AAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 170
+ DoubleType 188.887
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 170
+ FloatType 93.5
+ LongType 170000
+ QNameType toto
+ ShortType 17
+ Base64BinaryType 16
+ Base64BinaryType AAAAAAAAAAAAAAAA
+ HexBinaryType 16
+ HexBinaryType AAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 180
+ DoubleType 199.998
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 180
+ FloatType 99
+ LongType 180000
+ QNameType toto
+ ShortType 18
+ Base64BinaryType 17
+ Base64BinaryType AAAAAAAAAAAAAAAAA
+ HexBinaryType 17
+ HexBinaryType AAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 190
+ DoubleType 211.109
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 190
+ FloatType 104.5
+ LongType 190000
+ QNameType toto
+ ShortType 19
+ Base64BinaryType 18
+ Base64BinaryType AAAAAAAAAAAAAAAAAA
+ HexBinaryType 18
+ HexBinaryType AAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 200
+ DoubleType 222.22
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 200
+ FloatType 110
+ LongType 200000
+ QNameType toto
+ ShortType 20
+ Base64BinaryType 19
+ Base64BinaryType AAAAAAAAAAAAAAAAAAA
+ HexBinaryType 19
+ HexBinaryType AAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 210
+ DoubleType 233.331
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 210
+ FloatType 115.5
+ LongType 210000
+ QNameType toto
+ ShortType 21
+ Base64BinaryType 20
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 20
+ HexBinaryType AAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 220
+ DoubleType 244.442
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 220
+ FloatType 121
+ LongType 220000
+ QNameType toto
+ ShortType 22
+ Base64BinaryType 21
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 21
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 230
+ DoubleType 255.553
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 230
+ FloatType 126.5
+ LongType 230000
+ QNameType toto
+ ShortType 23
+ Base64BinaryType 22
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 22
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 240
+ DoubleType 266.664
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 240
+ FloatType 132
+ LongType 240000
+ QNameType toto
+ ShortType 24
+ Base64BinaryType 23
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 23
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 250
+ DoubleType 277.775
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 250
+ FloatType 137.5
+ LongType 250000
+ QNameType toto
+ ShortType 25
+ Base64BinaryType 24
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 24
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 260
+ DoubleType 288.886
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 260
+ FloatType 143
+ LongType 260000
+ QNameType toto
+ ShortType 26
+ Base64BinaryType 25
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 25
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 270
+ DoubleType 299.997
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 270
+ FloatType 148.5
+ LongType 270000
+ QNameType toto
+ ShortType 27
+ Base64BinaryType 26
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 26
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 280
+ DoubleType 311.108
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 280
+ FloatType 154
+ LongType 280000
+ QNameType toto
+ ShortType 28
+ Base64BinaryType 27
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 27
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 290
+ DoubleType 322.219
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 290
+ FloatType 159.5
+ LongType 290000
+ QNameType toto
+ ShortType 29
+ Base64BinaryType 28
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 28
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 300
+ DoubleType 333.33
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 300
+ FloatType 165
+ LongType 300000
+ QNameType toto
+ ShortType 30
+ Base64BinaryType 29
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 29
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 310
+ DoubleType 344.441
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 310
+ FloatType 170.5
+ LongType 310000
+ QNameType toto
+ ShortType 31
+ Base64BinaryType 30
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 30
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 320
+ DoubleType 355.552
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 320
+ FloatType 176
+ LongType 320000
+ QNameType toto
+ ShortType 32
+ Base64BinaryType 31
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 31
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 330
+ DoubleType 366.663
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 330
+ FloatType 181.5
+ LongType 330000
+ QNameType toto
+ ShortType 33
+ Base64BinaryType 32
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 32
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 340
+ DoubleType 377.774
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 340
+ FloatType 187
+ LongType 340000
+ QNameType toto
+ ShortType 34
+ Base64BinaryType 33
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 33
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 350
+ DoubleType 388.885
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 350
+ FloatType 192.5
+ LongType 350000
+ QNameType toto
+ ShortType 35
+ Base64BinaryType 34
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 34
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 360
+ DoubleType 399.996
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 360
+ FloatType 198
+ LongType 360000
+ QNameType toto
+ ShortType 36
+ Base64BinaryType 35
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 35
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 370
+ DoubleType 411.107
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 370
+ FloatType 203.5
+ LongType 370000
+ QNameType toto
+ ShortType 37
+ Base64BinaryType 36
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 36
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 380
+ DoubleType 422.218
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 380
+ FloatType 209
+ LongType 380000
+ QNameType toto
+ ShortType 38
+ Base64BinaryType 37
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 37
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 390
+ DoubleType 433.329
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 390
+ FloatType 214.5
+ LongType 390000
+ QNameType toto
+ ShortType 39
+ Base64BinaryType 38
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 38
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 400
+ DoubleType 444.44
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 400
+ FloatType 220
+ LongType 400000
+ QNameType toto
+ ShortType 40
+ Base64BinaryType 39
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 39
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 410
+ DoubleType 455.551
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 410
+ FloatType 225.5
+ LongType 410000
+ QNameType toto
+ ShortType 41
+ Base64BinaryType 40
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 40
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 420
+ DoubleType 466.662
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 420
+ FloatType 231
+ LongType 420000
+ QNameType toto
+ ShortType 42
+ Base64BinaryType 41
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 41
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 430
+ DoubleType 477.773
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 430
+ FloatType 236.5
+ LongType 430000
+ QNameType toto
+ ShortType 43
+ Base64BinaryType 42
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 42
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 440
+ DoubleType 488.884
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 440
+ FloatType 242
+ LongType 440000
+ QNameType toto
+ ShortType 44
+ Base64BinaryType 43
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 43
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 450
+ DoubleType 499.995
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 450
+ FloatType 247.5
+ LongType 450000
+ QNameType toto
+ ShortType 45
+ Base64BinaryType 44
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 44
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 460
+ DoubleType 511.106
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 460
+ FloatType 253
+ LongType 460000
+ QNameType toto
+ ShortType 46
+ Base64BinaryType 45
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 45
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 470
+ DoubleType 522.217
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 470
+ FloatType 258.5
+ LongType 470000
+ QNameType toto
+ ShortType 47
+ Base64BinaryType 46
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 46
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 480
+ DoubleType 533.328
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 480
+ FloatType 264
+ LongType 480000
+ QNameType toto
+ ShortType 48
+ Base64BinaryType 47
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 47
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 490
+ DoubleType 544.439
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 490
+ FloatType 269.5
+ LongType 490000
+ QNameType toto
+ ShortType 49
+ Base64BinaryType 48
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 48
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 500
+ DoubleType 555.55
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 500
+ FloatType 275
+ LongType 500000
+ QNameType toto
+ ShortType 50
+ Base64BinaryType 49
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 49
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 510
+ DoubleType 566.661
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 510
+ FloatType 280.5
+ LongType 510000
+ QNameType toto
+ ShortType 51
+ Base64BinaryType 50
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 50
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 520
+ DoubleType 577.772
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 520
+ FloatType 286
+ LongType 520000
+ QNameType toto
+ ShortType 52
+ Base64BinaryType 51
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 51
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 530
+ DoubleType 588.883
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 530
+ FloatType 291.5
+ LongType 530000
+ QNameType toto
+ ShortType 53
+ Base64BinaryType 52
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 52
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 540
+ DoubleType 599.994
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 540
+ FloatType 297
+ LongType 540000
+ QNameType toto
+ ShortType 54
+ Base64BinaryType 53
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 53
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 550
+ DoubleType 611.105
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 550
+ FloatType 302.5
+ LongType 550000
+ QNameType toto
+ ShortType 55
+ Base64BinaryType 54
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 54
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 560
+ DoubleType 622.216
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 560
+ FloatType 308
+ LongType 560000
+ QNameType toto
+ ShortType 56
+ Base64BinaryType 55
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 55
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 570
+ DoubleType 633.327
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 570
+ FloatType 313.5
+ LongType 570000
+ QNameType toto
+ ShortType 57
+ Base64BinaryType 56
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 56
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 580
+ DoubleType 644.438
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 580
+ FloatType 319
+ LongType 580000
+ QNameType toto
+ ShortType 58
+ Base64BinaryType 57
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 57
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 590
+ DoubleType 655.549
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 590
+ FloatType 324.5
+ LongType 590000
+ QNameType toto
+ ShortType 59
+ Base64BinaryType 58
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 58
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 600
+ DoubleType 666.66
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 600
+ FloatType 330
+ LongType 600000
+ QNameType toto
+ ShortType 60
+ Base64BinaryType 59
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 59
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 610
+ DoubleType 677.771
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 610
+ FloatType 335.5
+ LongType 610000
+ QNameType toto
+ ShortType 61
+ Base64BinaryType 60
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 60
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 620
+ DoubleType 688.882
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 620
+ FloatType 341
+ LongType 620000
+ QNameType toto
+ ShortType 62
+ Base64BinaryType 61
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 61
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 630
+ DoubleType 699.993
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 630
+ FloatType 346.5
+ LongType 630000
+ QNameType toto
+ ShortType 63
+ Base64BinaryType 62
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 62
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 640
+ DoubleType 711.104
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 640
+ FloatType 352
+ LongType 640000
+ QNameType toto
+ ShortType 64
+ Base64BinaryType 63
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 63
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 650
+ DoubleType 722.215
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 650
+ FloatType 357.5
+ LongType 650000
+ QNameType toto
+ ShortType 65
+ Base64BinaryType 64
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 64
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 660
+ DoubleType 733.326
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 660
+ FloatType 363
+ LongType 660000
+ QNameType toto
+ ShortType 66
+ Base64BinaryType 65
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 65
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 670
+ DoubleType 744.437
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 670
+ FloatType 368.5
+ LongType 670000
+ QNameType toto
+ ShortType 67
+ Base64BinaryType 66
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 66
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 680
+ DoubleType 755.548
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 680
+ FloatType 374
+ LongType 680000
+ QNameType toto
+ ShortType 68
+ Base64BinaryType 67
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 67
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 690
+ DoubleType 766.659
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 690
+ FloatType 379.5
+ LongType 690000
+ QNameType toto
+ ShortType 69
+ Base64BinaryType 68
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 68
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 700
+ DoubleType 777.77
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 700
+ FloatType 385
+ LongType 700000
+ QNameType toto
+ ShortType 70
+ Base64BinaryType 69
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 69
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 710
+ DoubleType 788.881
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 710
+ FloatType 390.5
+ LongType 710000
+ QNameType toto
+ ShortType 71
+ Base64BinaryType 70
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 70
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 720
+ DoubleType 799.992
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 720
+ FloatType 396
+ LongType 720000
+ QNameType toto
+ ShortType 72
+ Base64BinaryType 71
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 71
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 730
+ DoubleType 811.103
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 730
+ FloatType 401.5
+ LongType 730000
+ QNameType toto
+ ShortType 73
+ Base64BinaryType 72
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 72
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 740
+ DoubleType 822.214
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 740
+ FloatType 407
+ LongType 740000
+ QNameType toto
+ ShortType 74
+ Base64BinaryType 73
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 73
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 750
+ DoubleType 833.325
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 750
+ FloatType 412.5
+ LongType 750000
+ QNameType toto
+ ShortType 75
+ Base64BinaryType 74
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 74
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 760
+ DoubleType 844.436
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 760
+ FloatType 418
+ LongType 760000
+ QNameType toto
+ ShortType 76
+ Base64BinaryType 75
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 75
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 770
+ DoubleType 855.547
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 770
+ FloatType 423.5
+ LongType 770000
+ QNameType toto
+ ShortType 77
+ Base64BinaryType 76
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 76
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 780
+ DoubleType 866.658
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 780
+ FloatType 429
+ LongType 780000
+ QNameType toto
+ ShortType 78
+ Base64BinaryType 77
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 77
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 790
+ DoubleType 877.769
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 790
+ FloatType 434.5
+ LongType 790000
+ QNameType toto
+ ShortType 79
+ Base64BinaryType 78
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 78
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 800
+ DoubleType 888.88
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 800
+ FloatType 440
+ LongType 800000
+ QNameType toto
+ ShortType 80
+ Base64BinaryType 79
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 79
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 810
+ DoubleType 899.991
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 810
+ FloatType 445.5
+ LongType 810000
+ QNameType toto
+ ShortType 81
+ Base64BinaryType 80
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 80
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 820
+ DoubleType 911.102
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 820
+ FloatType 451
+ LongType 820000
+ QNameType toto
+ ShortType 82
+ Base64BinaryType 81
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 81
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 830
+ DoubleType 922.213
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 830
+ FloatType 456.5
+ LongType 830000
+ QNameType toto
+ ShortType 83
+ Base64BinaryType 82
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 82
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 840
+ DoubleType 933.324
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 840
+ FloatType 462
+ LongType 840000
+ QNameType toto
+ ShortType 84
+ Base64BinaryType 83
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 83
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 850
+ DoubleType 944.435
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 850
+ FloatType 467.5
+ LongType 850000
+ QNameType toto
+ ShortType 85
+ Base64BinaryType 84
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 84
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 860
+ DoubleType 955.546
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 860
+ FloatType 473
+ LongType 860000
+ QNameType toto
+ ShortType 86
+ Base64BinaryType 85
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 85
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 870
+ DoubleType 966.657
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 870
+ FloatType 478.5
+ LongType 870000
+ QNameType toto
+ ShortType 87
+ Base64BinaryType 86
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 86
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 880
+ DoubleType 977.768
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 880
+ FloatType 484
+ LongType 880000
+ QNameType toto
+ ShortType 88
+ Base64BinaryType 87
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 87
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 890
+ DoubleType 988.879
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 890
+ FloatType 489.5
+ LongType 890000
+ QNameType toto
+ ShortType 89
+ Base64BinaryType 88
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 88
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 900
+ DoubleType 999.99
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 900
+ FloatType 495
+ LongType 900000
+ QNameType toto
+ ShortType 90
+ Base64BinaryType 89
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 89
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 910
+ DoubleType 1011.1
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 910
+ FloatType 500.5
+ LongType 910000
+ QNameType toto
+ ShortType 91
+ Base64BinaryType 90
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 90
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 920
+ DoubleType 1022.21
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 920
+ FloatType 506
+ LongType 920000
+ QNameType toto
+ ShortType 92
+ Base64BinaryType 91
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 91
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 930
+ DoubleType 1033.32
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 930
+ FloatType 511.5
+ LongType 930000
+ QNameType toto
+ ShortType 93
+ Base64BinaryType 92
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 92
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 940
+ DoubleType 1044.43
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 940
+ FloatType 517
+ LongType 940000
+ QNameType toto
+ ShortType 94
+ Base64BinaryType 93
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 93
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 950
+ DoubleType 1055.55
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 950
+ FloatType 522.5
+ LongType 950000
+ QNameType toto
+ ShortType 95
+ Base64BinaryType 94
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 94
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 960
+ DoubleType 1066.66
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 960
+ FloatType 528
+ LongType 960000
+ QNameType toto
+ ShortType 96
+ Base64BinaryType 95
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 95
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 970
+ DoubleType 1077.77
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 970
+ FloatType 533.5
+ LongType 970000
+ QNameType toto
+ ShortType 97
+ Base64BinaryType 96
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 96
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 980
+ DoubleType 1088.88
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 980
+ FloatType 539
+ LongType 980000
+ QNameType toto
+ ShortType 98
+ Base64BinaryType 97
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 97
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 990
+ DoubleType 1099.99
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 990
+ FloatType 544.5
+ LongType 990000
+ QNameType toto
+ ShortType 99
+ Base64BinaryType 98
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 98
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ ----------------------------------------------
+ StringType StringType
+ IntegerType 1000
+ DoubleType 1111.1
+ BooleanType 1
+ DateTimeType Fri Nov 12 07:58:43 2004
+ DateType Fri Nov 12 00:00:00 2004
+ TimeType Thu Jan  1 07:58:43 1970
+ ByteType 1
+ DecimalType 1000
+ FloatType 550
+ LongType 1000000
+ QNameType toto
+ ShortType 100
+ Base64BinaryType 99
+ Base64BinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ HexBinaryType 99
+ HexBinaryType AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA

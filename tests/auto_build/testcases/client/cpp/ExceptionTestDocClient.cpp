@@ -88,15 +88,13 @@ int main(int argc, char* argv[])
 			    return 0;
 		    }
 		    //sprintf(endpoint, "http://%s:%s/axis/MathOps", server, port);
-		    printf("ENDPOINT = %s\n", endpoint);
 		    MathOps ws(endpoint);
 		    iResult = ws.div(i1, i2);		
 		    printf("Result is:%d\n", iResult);
 		}
 		catch(AxisException& e)
 		{
-		    //printf("%s\n", e.what());
-		    printf("AxisException has occured\n");
+		    printf("AxisException has occured: %s\n", e.what());
 		}
 		catch(exception& e)
 		{
