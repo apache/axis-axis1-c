@@ -35,21 +35,22 @@ AXIS_CPP_NAMESPACE_START
 
 AxisConfig::AxisConfig ()
 {
-    m_pcKeyArray[AXCONF_WSDDFILEPATH] = "WSDDFilePath";
-    m_pcKeyArray[AXCONF_LOGPATH] = "LogPath";
-    m_pcKeyArray[AXCONF_CLIENTLOGPATH] = "ClientLogPath";
+    m_pcKeyArray[AXCONF_WSDDFILEPATH]		= "WSDDFilePath";
+    m_pcKeyArray[AXCONF_LOGPATH]			= "LogPath";
+    m_pcKeyArray[AXCONF_CLIENTLOGPATH]		= "ClientLogPath";
     m_pcKeyArray[AXCONF_CLIENTWSDDFILEPATH] = "ClientWSDDFilePath";
     /*
        The value for this is taken from the environment variable "AXISCPP_DEPLOY".
        So no need for a key for AXCONF_AXISHOME
      */
-    m_pcKeyArray[AXCONF_AXISHOME] = "\0";
-    m_pcKeyArray[AXCONF_TRANSPORTHTTP] = "Transport_http";
-    m_pcKeyArray[AXCONF_SSLCHANNEL] = "Channel_ssl";
-    m_pcKeyArray[AXCONF_TRANSPORTSMTP] = "Transport_smtp";
-    m_pcKeyArray[AXCONF_XMLPARSER] = "XMLParser";
-    m_pcKeyArray[AXCONF_NODENAME] = "NodeName";
-    m_pcKeyArray[AXCONF_LISTENPORT] = "ListenPort";
+    m_pcKeyArray[AXCONF_AXISHOME]		= "\0";
+    m_pcKeyArray[AXCONF_TRANSPORTHTTP]	= "Transport_http";
+    m_pcKeyArray[AXCONF_SSLCHANNEL]		= "Channel_ssl";
+    m_pcKeyArray[AXCONF_CHANNEL]		= "Channel";
+    m_pcKeyArray[AXCONF_TRANSPORTSMTP]	= "Transport_smtp";
+    m_pcKeyArray[AXCONF_XMLPARSER]		= "XMLParser";
+    m_pcKeyArray[AXCONF_NODENAME]		= "NodeName";
+    m_pcKeyArray[AXCONF_LISTENPORT]		= "ListenPort";
 
     m_pcValueArray[AXCONF_NODENAME]      = "server name";
     m_pcValueArray[AXCONF_LISTENPORT]    = "listen port";
@@ -57,7 +58,8 @@ AxisConfig::AxisConfig ()
     m_pcValueArray[AXCONF_TRANSPORTHTTP] = PLATFORM_TRANSPORTHTTP_PATH;
     m_pcValueArray[AXCONF_LOGPATH]       = PLATFORM_LOG_PATH;
     m_pcValueArray[AXCONF_CLIENTLOGPATH] = PLATFORM_CLIENTLOG_PATH;
-    m_pcValueArray[AXCONF_SSLCHANNEL] = PLATFORM_SSLCHANNEL_PATH;
+    m_pcValueArray[AXCONF_SSLCHANNEL]	 = PLATFORM_SSLCHANNEL_PATH;
+    m_pcValueArray[AXCONF_CHANNEL]		 = PLATFORM_CHANNEL_PATH;
 }
 
 int AxisConfig::readConfFile ()

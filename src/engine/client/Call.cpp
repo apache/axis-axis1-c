@@ -327,15 +327,30 @@ int Call::openConnection(int secure)
 {
     try
     {
-        if (!m_pTransport) 
+        if( !m_pTransport)
+		{
             m_pTransport = SOAPTransportFactory::getTransportObject(m_nTransportType);
-	if (!m_pTransport) return AXIS_FAIL;
+
+			if( !m_pTransport)
+			{
+				return AXIS_FAIL;
+			}
+		}
+
+        char * pcChannelHTTPLibraryPath = g_pConfig->getAxisConfProperty( AXCONF_CHANNEL);
+        char * pcChannelHTTPSSLLibraryPath = g_pConfig->getAxisConfProperty( AXCONF_SSLCHANNEL);
+
+        if( pcChannelHTTPLibraryPath)
+		{
+			m_pTransport->setTransportProperty( CHANNEL_HTTP_DLL_NAME, pcChannelHTTPLibraryPath);
+		}
+
+        if( pcChannelHTTPSSLLibraryPath)
+		{
+			m_pTransport->setTransportProperty( CHANNEL_HTTP_SSL_DLL_NAME, pcChannelHTTPSSLLibraryPath);
+		}
 
         m_pTransport->setEndpointUri(m_pcEndPointUri);
-        /* damitha:SSLChannelFactory needs the ssl channel library name to load the 
-           optional ssl channel library*/
-        char* pcLibraryPath = g_pConfig->getAxisConfProperty(AXCONF_SSLCHANNEL);
-        m_pTransport->setTransportProperty(DLL_NAME, pcLibraryPath);
     
         //if use proxy then set proxy
         if( m_bUseProxy )

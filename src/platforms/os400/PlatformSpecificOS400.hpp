@@ -28,7 +28,8 @@
 #define PLATFORM_LOG_PATH            "/usr/local/axiscpp_deploy/log/AxisLog"
 #define PLATFORM_CLIENTLOG_PATH      "/usr/local/axiscpp_deploy/log/AxisClientLog"
 #define PLATFORM_CONFIG_PATH         "/etc/axiscpp.conf"
-#define PLATFORM_SSLCHANNEL_PATH  "????"
+#define PLATFORM_CHANNEL_PATH        "????"
+#define PLATFORM_SSLCHANNEL_PATH     "????"
 
 // =============================================================
 // Library loading and procedure resolution
