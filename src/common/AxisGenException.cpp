@@ -79,7 +79,7 @@ void AxisGenException::processException(const int iExceptionCode)
 void AxisGenException::processException(const int iExceptionCode, char* pcMessage)
 {
     AxisString sMessage = pcMessage;
-    m_sMessage = getMessage(iExceptionCode) + " " + sMessage;
+    m_sMessage = getMessage(iExceptionCode) + sMessage;
     if(pcMessage)
         delete pcMessage;
 }
@@ -94,16 +94,16 @@ const string AxisGenException::getMessage (const int iExceptionCode)
     switch(iExceptionCode)
     {
         case AXISC_SERVICE_THROWN_EXCEPTION:
-            m_sMessage = "A service has thrown an exception. see detail";
+            m_sMessage = "A service has thrown an exception. see detail ";
             break;
         case SERVER_TEST_EXCEPTION:
-            m_sMessage = "This is a testing error";
+            m_sMessage = "This is a testing error ";
             break;
         case AXISC_NODE_VALUE_MISMATCH_EXCEPTION:
-            m_sMessage = "Cannot deserialize the requested element";
+            m_sMessage = "Cannot deserialize the requested element ";
             break;
         default:
-            m_sMessage = "Unknown Exception has occured";
+            m_sMessage = "";
 
     }
     return m_sMessage;

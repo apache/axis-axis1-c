@@ -27,6 +27,7 @@
 #include "../HandlerPool.h"
 #include <axis/AxisException.hpp>
 #include "../../common/AxisTrace.h"
+#include "../../common/AxisGenException.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX WSDDDeployment* g_pWSDDDeployment;
 extern AXIS_CPP_NAMESPACE_PREFIX HandlerPool* g_pHandlerPool;
@@ -139,9 +140,7 @@ int ClientAxisEngine::process (SOAPTransport* pSoap)
     }
     catch(AxisException& e)
     {
-        e = e;
-
-        throw;
+		throw AxisGenException(e.getExceptionCode(), const_cast<char*>(e.what()));
     }
     return Status;
 }

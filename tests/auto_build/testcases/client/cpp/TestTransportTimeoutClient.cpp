@@ -21,7 +21,6 @@ int main(int argc, char* argv[])
 	if(argc>1)
 		url = argv[1];
 
-	Axis::initialize(false);
 	try
 	{
 		sprintf(endpoint, "%s", url);
@@ -45,7 +44,7 @@ int main(int argc, char* argv[])
 	{
 	    cout << "Unknown exception has occured" << endl;
 	}
-	Axis::terminate();
+
 	cout << "---------------------- TEST COMPLETE -----------------------------"<< endl;	
 	return rc;
 }

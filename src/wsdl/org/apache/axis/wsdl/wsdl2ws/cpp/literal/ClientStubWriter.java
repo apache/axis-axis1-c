@@ -1005,7 +1005,7 @@ public class ClientStubWriter
         writer.write(
             "\t\tif(AXISC_NODE_VALUE_MISMATCH_EXCEPTION != iExceptionCode)\n");
         writer.write("\t\t{\n");
-        writer.write("\t\t\tthrow SoapFaultException(e);\n");
+        writer.write("\t\t\tthrow;\n");
         writer.write("\t\t}\n");
         writer.write(
             "\t\tISoapFault* pSoapFault = (ISoapFault*)\n");
@@ -1025,8 +1025,7 @@ public class ClientStubWriter
         int j = 0;
         if (!paramsFault.hasNext())
         {
-            writer.write("\t\t\tm_pCall->unInitialize();\n");
-            writer.write("\t\t\tthrow SoapFaultException(e);\n");
+            writer.write("\t\t\tthrow;\n");
         }
         else
         {
