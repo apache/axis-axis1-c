@@ -22,7 +22,7 @@
 
 
 #ifdef WIN32
-#include <winsock.h>		// for socket(),... 
+#include <winsock2.h>		// for socket(),... 
 #else //Linux
 #include <sys/socket.h>
 #include <arpa/inet.h>
