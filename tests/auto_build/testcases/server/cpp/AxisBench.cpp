@@ -3,7 +3,7 @@
  * This file contains definitions of the web service
  */
 
-#include "AxisBench.h"
+#include "AxisBench.hpp"
 
 
 AxisBench::AxisBench()
