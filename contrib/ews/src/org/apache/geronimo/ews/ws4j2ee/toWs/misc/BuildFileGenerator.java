@@ -188,9 +188,12 @@ public class BuildFileGenerator implements Generator {
 			if(index>0){
 				jarName = jarName.substring(index+1);
 			} 
+			
+			
+			File jarFile = new File(j2eewscontext.getMiscInfo().getOutPutPath()+"/"+ jarName + "-ewsimpl.jar");
+			
             
-			out.write("		<jar jarfile=\"${build}/lib/"
-					+ jarName + "-impl.jar\" basedir=\"${build.classes}\" >\n");
+			out.write("		<jar jarfile=\""+jarFile.getAbsolutePath()+"\" >\n");
 			out.write("		<include name=\"**\" />\n");
 			out.write("		<manifest>\n");
 			out.write("			<section name=\"org/apache/ws4j2ee\">\n");
