@@ -77,8 +77,8 @@
 			<arg line="-l ${monitorPort}"/>
 			<arg line="-p ${testPort}"/>
 			<arg line="-h ${testHost}"/>
-			<arg line="-o ${test.directory}/tcpm.req"/>
-			<arg line="-r ${test.directory}/tcpm.res"/>
+			<arg line="-o &quot;${test.directory}/tcpm.req&quot;"/>
+			<arg line="-r &quot;${test.directory}/tcpm.res&quot;"/>
 			<classpath>
 				<pathelement location="${basedir}/tests/utils/monitor/monitor.jar"/>
 			</classpath>
