@@ -64,6 +64,7 @@
 #define AFX_AXISWRAPPERAPI_H__6E27008D_DCA0_4F28_AC82_FEEBE1A1CBBB__INCLUDED_
 
 #include "GDefine.h"
+#include "AxisUserAPI.h"
 #include "IWrapperSoapDeSerializer.h"
 #include "IWrapperSoapSerializer.h"
 #include "BasicHandler.h"

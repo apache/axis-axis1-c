@@ -82,6 +82,9 @@ class SoapBody;
 class SoapFault;
 class HeaderBlock;
 
+#include <map>
+using namespace std;
+
 class SoapSerializer : public IHandlerSoapSerializer
 {
 	typedef struct
@@ -90,8 +93,8 @@ class SoapSerializer : public IHandlerSoapSerializer
 		volatile char* buffer;
 	} SerializeBuffers;
 private:
-	int iCounter;
-	AxisChar cCounter[64];
+	int m_nCounter;
+	AxisChar m_Buf[8];
 	SoapEnvelope* m_pSoapEnvelope;	
 	int m_iSoapVersion;
 	/* Current Serialization Style */
@@ -110,11 +113,15 @@ private:
 	int m_nCurrentBufferIndex;
 	/* Overall status of Serializer. If anything goes wrong this is not AXIS_SUCCESS */
 	int m_nStatus;
+	/* Map that contains pairs of currently available namespaces and prefixes */ 
+	map<AxisXMLString, AxisXMLString> m_NsStack;
+
 public:
-	int AXISCALL createSoapMethod(const AxisChar* sLocalName, const AxisChar* sPrefix, const AxisChar* sURI);	
+	int AXISCALL CreateSoapMethod(const AxisChar* sLocalName, const AxisChar* sURI);	
 //	IWrapperSoapSerializer& operator<<(const char* cSerialized);
 	IWrapperSoapSerializer& operator<<(const AxisChar* cSerialized);
-	const AxisChar* AXISCALL getNewNamespacePrefix();
+	const AxisChar* AXISCALL GetNamespacePrefix(const AxisChar* pNamespace);
+	void AXISCALL RemoveNamespacePrefix(const AxisChar* pNamespace);
 	int setSoapVersion(SOAP_VERSION);
 	int Init();
 	int SetOutputStream(const Ax_soapstream* pStream);
@@ -125,20 +132,6 @@ public:
 	int setSoapEnvelope(SoapEnvelope* pSoapEnvelope);
 	SoapSerializer();
 	virtual ~SoapSerializer();
-	//for basic types
-	int AddOutputParam(const AxisChar* pchName, int nValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, unsigned int unValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, short sValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, unsigned short usValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, long lValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, unsigned long ulValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, char cValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, unsigned char ucValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, float fValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, double dValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, struct tm tValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, const AxisChar* pStrValue, XSDTYPE type);
-	int AddOutputParam(const AxisChar* pchName, const string& sStrValue, XSDTYPE type);
 	//for arrays of basic types
 	int AXISCALL AddOutputBasicArrayParam(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName);
 	//for arrays of complex types
@@ -149,7 +142,6 @@ public:
 	int AXISCALL SerializeBasicArray(const Axis_Array* pArray, XSDTYPE nType, const AxisChar* pName);
 
 private:
-	int AddOutputParamHelper(const AxisChar* pchName, XSDTYPE nType, uParamValue Value);
 	int SendSerializedBuffer();
 	int SetNextSerilizeBuffer();
 	IArrayBean* makeArrayBean(XSDTYPE nType, void* pArray);
@@ -159,27 +151,14 @@ public: //Basic Type Serializing methods
 	int removeSoapHeader();
 	int setHeaderBlock(HeaderBlock* pHeaderBlock);
 	IHeaderBlock* createHeaderBlock();
-
-	const AxisChar* SerializeBasicType(const AxisChar* sName, const AxisChar* sValue, XSDTYPE type);
-	const AxisChar* SerializeBasicType(const AxisChar* sName, const string sValue, XSDTYPE type);
-	const AxisChar* SerializeBasicType(const AxisChar* sName, int nValue, XSDTYPE type);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, struct tm tValue, XSDTYPE type);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned int unValue, XSDTYPE type);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, short sValue, XSDTYPE type);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned short usValue, XSDTYPE type);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, char cValue, XSDTYPE type);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned char ucValue, XSDTYPE type);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, long lValue, XSDTYPE type);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, unsigned long ulValue, XSDTYPE type);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, float fValue, XSDTYPE type);
-    const AxisChar* SerializeBasicType(const AxisChar* sName, double dValue, XSDTYPE type);
     
 private:
 	BasicTypeSerializer m_BTSZ;
 	const Ax_soapstream* m_pOutputStream;
 public:
 	int AXISCALL AddOutputParam(const AxisChar* pchName, void* pValue, XSDTYPE type);
-	int AXISCALL SerializeBasicType(const AxisChar* pchName, void* pValue, XSDTYPE type);
+	int AXISCALL SerializeAsElement(const AxisChar* pchName, void* pValue, XSDTYPE type);
+	int AXISCALL SerializeAsAttribute(const AxisChar* pName, const AxisChar* pNamespace, void* pValue, XSDTYPE type);
 	void AXISCALL Serialize(const char* pFirst, ...);
 	void SetStyle(AXIS_BINDING_STYLE nStyle){ m_nStyle = nStyle; m_BTSZ.SetStyle(nStyle);};
 	AXIS_BINDING_STYLE GetStyle(){return m_nStyle;};

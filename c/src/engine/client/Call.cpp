@@ -101,72 +101,7 @@ int Call::SetEndpointURI(const char *pchEndpointURI)
 
 void Call::SetOperation(const char *pchOperation, const char* pchNamespace)
 {
-	m_pIWSSZ->createSoapMethod(pchOperation, m_pIWSSZ->getNewNamespacePrefix(), pchNamespace);
-}
-
-void Call::AddParameter(int nValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, nValue, nType);
-}
-
-void Call::AddParameter(unsigned int unValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, unValue, nType);
-}
-
-void Call::AddParameter(short sValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, sValue, nType);
-}
-
-void Call::AddParameter(unsigned short usValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, usValue, nType);
-}
-
-void Call::AddParameter(long lValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, lValue, nType);
-}
-
-void Call::AddParameter(unsigned long ulValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, ulValue, nType);
-}
-
-void Call::AddParameter(char cValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, cValue, nType);
-}
-
-void Call::AddParameter(unsigned char ucValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, ucValue, nType);
-}
-
-void Call::AddParameter(float fValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, fValue, nType);
-}
-
-void Call::AddParameter(double dValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, dValue, nType);
-}
-
-void Call::AddParameter(struct tm tValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, tValue, nType);
-}
-
-void Call::AddParameter(const AxisChar* pStrValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, pStrValue, nType);
-}
-
-void Call::AddParameter(const AxisString& sStrValue,const char* pchName, XSDTYPE nType)
-{
-	m_pIWSSZ->AddOutputParam(pchName, sStrValue.c_str(), nType);	
+	m_pIWSSZ->CreateSoapMethod(pchOperation, pchNamespace);
 }
 
 void Call::AddParameter(void* pValue,const char* pchName, XSDTYPE nType)
@@ -312,10 +247,13 @@ Axis_Array Call::GetCmplxArray(void* pDZFunct, void* pCreFunct, void* pDelFunct,
 {
 	return m_pIWSDZ->GetCmplxArray(pDZFunct, pCreFunct, pDelFunct, pSizeFunct, pName, pNamespace);
 }
-
 int Call::GetElementAsInt(const AxisChar* pName, const AxisChar* pNamespace)
 {
 	return m_pIWSDZ->GetElementAsInt(pName, pNamespace);
+}
+xsd__boolean Call::GetElementAsBoolean(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetElementAsBoolean(pName, pNamespace);
 }
 unsigned int Call::GetElementAsUnsignedInt(const AxisChar* pName, const AxisChar* pNamespace)
 {
@@ -373,13 +311,13 @@ AxisChar* Call::GetElementAsQName(const AxisChar* pName, const AxisChar* pNamesp
 {
 	return m_pIWSDZ->GetElementAsQName(pName, pNamespace);
 }
-AxisChar* Call::GetElementAsHexString(const AxisChar* pName, const AxisChar* pNamespace)
+xsd__hexBinary Call::GetElementAsHexBinary(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	return m_pIWSDZ->GetElementAsHexString(pName, pNamespace);
+	return m_pIWSDZ->GetElementAsHexBinary(pName, pNamespace);
 }
-AxisChar* Call::GetElementAsBase64String(const AxisChar* pName, const AxisChar* pNamespace)
+xsd__base64Binary Call::GetElementAsBase64Binary(const AxisChar* pName, const AxisChar* pNamespace)
 {
-	return m_pIWSDZ->GetElementAsBase64String(pName, pNamespace);
+	return m_pIWSDZ->GetElementAsBase64Binary(pName, pNamespace);
 }
 struct tm Call::GetElementAsDateTime(const AxisChar* pName, const AxisChar* pNamespace)
 {
@@ -396,6 +334,94 @@ struct tm Call::GetElementAsTime(const AxisChar* pName, const AxisChar* pNamespa
 long Call::GetElementAsDuration(const AxisChar* pName, const AxisChar* pNamespace)
 {
 	return m_pIWSDZ->GetElementAsDuration(pName, pNamespace);
+}
+int Call::GetAttributeAsInt(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsInt(pName, pNamespace);
+}
+xsd__boolean Call::GetAttributeAsBoolean(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsBoolean(pName, pNamespace);
+}
+unsigned int Call::GetAttributeAsUnsignedInt(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsUnsignedInt(pName, pNamespace);
+}
+short Call::GetAttributeAsShort(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsShort(pName, pNamespace);
+}
+unsigned short Call::GetAttributeAsUnsignedShort(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsUnsignedShort(pName, pNamespace);
+}
+char Call::GetAttributeAsByte(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsByte(pName, pNamespace);
+}
+unsigned char Call::GetAttributeAsUnsignedByte(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsUnsignedByte(pName, pNamespace);
+}
+long Call::GetAttributeAsLong(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsLong(pName, pNamespace);
+}
+long Call::GetAttributeAsInteger(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsInteger(pName, pNamespace);
+}
+unsigned long Call::GetAttributeAsUnsignedLong(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsUnsignedLong(pName, pNamespace);
+}
+float Call::GetAttributeAsFloat(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsFloat(pName, pNamespace);
+}
+double Call::GetAttributeAsDouble(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsDouble(pName, pNamespace);
+}
+double Call::GetAttributeAsDecimal(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsDecimal(pName, pNamespace);
+}
+AxisChar* Call::GetAttributeAsString(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsString(pName, pNamespace);
+}
+AxisChar* Call::GetAttributeAsAnyURI(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsAnyURI(pName, pNamespace);
+}
+AxisChar* Call::GetAttributeAsQName(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsQName(pName, pNamespace);
+}
+xsd__hexBinary Call::GetAttributeAsHexBinary(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsHexBinary(pName, pNamespace);
+}
+xsd__base64Binary Call::GetAttributeAsBase64Binary(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsBase64Binary(pName, pNamespace);
+}
+struct tm Call::GetAttributeAsDateTime(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsDateTime(pName, pNamespace);
+}
+struct tm Call::GetAttributeAsDate(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsDate(pName, pNamespace);
+}
+struct tm Call::GetAttributeAsTime(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsTime(pName, pNamespace);
+}
+long Call::GetAttributeAsDuration(const AxisChar* pName, const AxisChar* pNamespace)
+{
+	return m_pIWSDZ->GetAttributeAsDuration(pName, pNamespace);
 }
 int Call::CheckMessage(const AxisChar* pName, const AxisChar* pNamespace)
 {
