@@ -31,7 +31,7 @@
     <p>
       Anyone can checkout source code from our anonymous CVS
       server. To do so, simply use the following commands (if you
-      are using a GUI CVS client, configure it appropriatly):
+      are using a GUI CVS client, configure it appropriately):
     </p>
     <blockquote>
       <table width="90%">
@@ -51,7 +51,7 @@ cvs -d :pserver:anoncvs@cvs.apache.org:/home/cvspublic checkout ws-axis
      If you are a <i>Committer</i> and have a login on the Apache
     development server, this section is for you. If you are not a
     Committer, but you want to submit patches or even request
-    commit privelages, please see the <link
+    commit privileges, please see the <link
     href="http://jakarta.apache.org/site/guidelines.html">Jakarta
     GuideLines</link> page (we follow the same rules) for more
     information. 
