@@ -245,7 +245,10 @@ class STORAGE_CLASS_INFO Stub
     *                 use 0.
     */
     void setTransportTimeout(const long lSeconds);
-
+  /**
+    * Get the status of the stub to see any error situation
+    */
+   	int getStatus();
   protected:
   /**
     * Apply user set preferences to each call made on the Stub object.

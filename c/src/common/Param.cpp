@@ -56,6 +56,15 @@ Param::~Param ()
                 free ((void*) (m_Value.hbValue.__ptr));
             }
             break;
+        case XSD_ANY:
+            AnyType* pAny = (AnyType*)m_Value.pAnyObject;
+            XML_String pStr = 0;
+            for (int i=0; i<pAny->_size; i++)
+            {
+                pStr = pAny->_array[i];
+                if (pStr) free(pStr);
+            }
+            free(pAny);   
         default:;
     }
 }
@@ -179,7 +188,8 @@ int Param::serialize (SoapSerializer &pSZ)
                 pSZ.serialize ("</", m_sName.c_str (), ">", NULL);
             }
             break;
-        
+  case XSD_ANY:
+             pSZ.serializeAnyObject(m_Value.pAnyObject);
 	default:
             /* all basic types */
             pSZ.serializeAsElement(m_sName.c_str (), &(m_Value.nValue), m_Type);
