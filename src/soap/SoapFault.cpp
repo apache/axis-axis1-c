@@ -34,6 +34,8 @@
  *      setParam(m_pFaultcodeParam, "faultcode", &sFaultcode, XSD_STRING); 
  *      After change:
  *      setParam(m_pFaultcodeParam, "faultcode", sFaultcode.c_str(), XSD_STRING); 
+ * Changed the "SOAP-ENV" prefix was hard-coded in the "serialize" method.
+ *  Corrected it to serialize the correct prefix.
  */
 
 #include "SoapFault.h"
@@ -63,13 +65,15 @@ SoapFault::~SoapFault()
     m_pFaultDetail = NULL;
 }
 
-int SoapFault::serialize(SoapSerializer& pSZ)
+int SoapFault::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 {
     /* written according to SOAP Version 1.1 */
 
     int iStatus= AXIS_SUCCESS;
-        
-    pSZ.serialize("<SOAP-ENV:Fault>", NULL);    
+	
+	pSZ.serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":",
+		gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">", NULL); 
+	
     m_pFaultcodeParam->serialize(pSZ);
     //pSZ.serialize("<faultcode>", m_sFaultcode.c_str(), "</faultcode>", NULL);
     m_pFaultstringParam->serialize(pSZ);

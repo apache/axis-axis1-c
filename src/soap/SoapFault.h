@@ -56,6 +56,14 @@ static SoapFaultStruct* s_parrSoapFaultStruct;
  *  @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
  *  @author damitha kumarage (damitha@jkcsworld.com, damitha@opensource.lk)
  */
+
+/*
+ * Revision 1.1  2004/June/02 roshan
+ * Changed. The "SOAP-ENV" prefix was hard-coded in the "serialize" method.
+ *  Corrected it to serialize the correct prefix. Added the parameter
+ *  "SOAP_VERSION eSoapVersion" to the "serialize" method.
+ */
+
 class SoapFault  
 {
 friend class SoapFaultsTestCase;
@@ -74,7 +82,7 @@ public:
 
     const char* getSoapString();
 
-    int serialize(SoapSerializer& pSZ);
+    int serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion);
 
     /* int serialize(string&); */
 
