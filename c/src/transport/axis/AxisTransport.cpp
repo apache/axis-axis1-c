@@ -1,8 +1,10 @@
-#include <stdio.h>
-#include <string.h>
-#include <iostream.h>
-#include "../../../common/Packet.h"
+#pragma warning (disable : 4786)
+
 #include "AxisTransport.h"
+#include "TransportFactory.hpp"
+#include "Transport.hpp"
+#include "Sender.hpp"
+#include "Receiver.hpp"
 
 AxisTransport::AxisTransport(Ax_soapstream* pSoap)
 {
@@ -26,21 +28,20 @@ int AxisTransport::OpenConnection()
 {
     //Step 1 - Open Transport layer connection taking into account protocol and endpoint URI in m_Soap
     Url objUrl(m_pSoap->so.http.uri_path);
-    TransportFactory objTransportFactory;
-    m_pHttpTransport = objTransportFactory.getTransport(objUrl);
+    m_pHttpTransport = TransportFactory::GetTransport(objUrl);
     if(m_pHttpTransport->Init())
     {
        m_pSender = new Sender(m_pHttpTransport);
        m_pReceiver = new Receiver(m_pHttpTransport);
-       //Step 2 - Set Created streams to m_Soap.str.ip_stream and m_Soap.str.op_stream
-       m_pSoap.str.op_stream = m_pSender;
-       m_pSoap.str.ip_stream = m_pReceiver;
+       //Step 2 - Set Created streams to m_pSoap->str.ip_stream and m_pSoap->str.op_stream
+       m_pSoap->str.op_stream = m_pSender;
+       m_pSoap->str.ip_stream = m_pReceiver;
        
        //Step 3 - Add function pointers to the m_Soap structure
-       m_pSoap.transport.pGetFunct = Get_bytes;
-       m_pSoap.transport.pSendFunct = Send_bytes;
-       m_pSoap.transport.pGetTrtFunct = Receive_transport_information;
-       m_pSoap.transport.pSendTrtFunct = Send_transport_information; 
+       m_pSoap->transport.pGetFunct = Get_bytes;
+       m_pSoap->transport.pSendFunct = Send_bytes;
+       m_pSoap->transport.pGetTrtFunct = Receive_transport_information;
+       m_pSoap->transport.pSendTrtFunct = Send_transport_information; 
     }
     else
         return FAIL;
@@ -51,10 +52,10 @@ void AxisTransport::CloseConnection()
 //Step 1 - Close 2 streams
 	//Step 2 - Possibly delete the streams
 	//Step 3 - Set function pointers in the m_Soap structure to NULL;
-	m_Soap.transport.pGetFunct = NULL;
-	m_Soap.transport.pSendFunct = NULL;
-	m_Soap.transport.pGetTrtFunct = NULL;
-	m_Soap.transport.pSendTrtFunct = NULL;
+	m_pSoap->transport.pGetFunct = NULL;
+	m_pSoap->transport.pSendFunct = NULL;
+	m_pSoap->transport.pGetTrtFunct = NULL;
+	m_pSoap->transport.pSendTrtFunct = NULL;
 }
 
 int AxisTransport::Send_bytes(const char* pSendBuffer, const void* pStream)
@@ -84,10 +85,11 @@ int AxisTransport::Get_bytes(char* pRecvBuffer, int nBuffSize, int* pRecvSize, c
 
 int AxisTransport::Send_transport_information(void* pSoapStream)
 {
-    Ax_soapstream* pSoapStream = (Ax_soapstream*) pSoapStream;    
-    
+    Ax_soapstream* pSStream = (Ax_soapstream*) pSoapStream;
+	return SUCCESS;
 }
 
 int AxisTransport::Receive_transport_information(void* pSoapStream)
 {
+	return SUCCESS;
 }

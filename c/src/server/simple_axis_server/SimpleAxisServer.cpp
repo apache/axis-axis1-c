@@ -13,6 +13,7 @@
 
 //#include <stdio.h>
 #include "../../common/Packet.h"
+#include "../../common/AxisConfig.h"
 #include "ServerHelper.h"
 
 #define MAXPENDING 5    /* Maximum outstanding connection requests */
@@ -45,7 +46,7 @@ int executeWork() {
 	//printf("soap request :\n %s\n", echoBuffer);
 //	wprintf(L"soap request :\n %s\n", ip);
 
-	initialize_module(1);
+	initialize_module(1, WSDDFILEPATH);
 	
 	process_request(str);	
 	

@@ -62,10 +62,8 @@
  *
  */
 
-#include "Platform.hpp"
 #include "Transport.hpp"
-
-
+#include "Platform.hpp"
 
 Transport::Transport()
 {
