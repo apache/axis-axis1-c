@@ -73,6 +73,7 @@
 #endif // _MSC_VER > 1000
 
 #include "../common/BasicHandler.h"
+#include "../common/Handler.h"
 #include <list>
 
 using namespace std;
@@ -80,7 +81,7 @@ using namespace std;
 class HandlerChain : public BasicHandler  
 {
 public:
-	int AddHandler(BasicHandler* pHandler);
+	int AddHandler(Handler* pHandler);
 	HandlerChain();
 	virtual ~HandlerChain();
 
@@ -88,8 +89,8 @@ public:
 	void OnFault(MessageData* pMsg);
 
 private:
-	list<BasicHandler*> m_HandlerList;
-	list<BasicHandler*>::iterator m_itCurrHandler;
+	list<Handler*> m_HandlerList;
+  list<Handler*>::iterator m_itCurrHandler;
 };
 
 #endif // !defined(AFX_HANDLERCHAIN_H__675E51BF_2FD7_4860_B3DE_F8B5A978EB99__INCLUDED_)

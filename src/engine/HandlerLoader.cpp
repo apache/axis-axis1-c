@@ -64,8 +64,6 @@
 #include "HandlerLoader.h"
 #include <stdio.h>
 #include "../common/Debug.h"
- 
-DEBUG_INCLUDE
 
 HandlerLoader::HandlerLoader(string &sFile, int nOptions)
 {
@@ -86,16 +84,11 @@ HandlerLoader::~HandlerLoader()
 int HandlerLoader::Initialize()
 {
 	if (0 == m_Handler)
-	{
-#if defined( DEBUG)    
-DEBUG_ONE_PARA_LEVEL("before LoadLib**************");
-#endif     
-    
+	{    
+    DEBUG1("if (0 == m_Handler):HandlerLoader::Initialize()");
+            
 		if (LoadLib())
-		{
-#if defined( DEBUG)        
-DEBUG_ONE_PARA_LEVEL("after LoadLib******************");       
-#endif      
+		{      
 			printf("LoadLib success\n");
 			m_Create = GetCreate();
 			m_Delete = GetDelete();
@@ -138,21 +131,17 @@ int HandlerLoader::Finalize()
 
 int HandlerLoader::LoadLib()
 {
-#if defined( DEBUG)
-DEBUG_TWO_PARA_LEVEL("in LoadLib Lib is :", m_sLib.c_str());
-#endif   
-	
+  
+  DEBUG2("in HandlerLoader::LoadLib(), Lib is :", m_sLib.c_str());
+   	
 #ifdef WIN32
 	m_Handler = LoadLibrary(m_sLib.c_str());
 #else //Linux
-#if defined( DEBUG)  
-DEBUG_TWO_PARA_LEVEL("dlopen not success :", m_sLib.c_str());
-#endif
   
 	m_Handler = dlopen(m_sLib.c_str(), m_nLoadOptions);
-#if defined( DEBUG)    
-DEBUG_ONE_PARA_LEVEL("after dlopen******************");
-#endif   
+  
+  DEBUG1("after m_Handler = dlopen(m_sLib.c_str(), m_nLoadOptions);");
+   
   
       	if (!m_Handler)
 	{
