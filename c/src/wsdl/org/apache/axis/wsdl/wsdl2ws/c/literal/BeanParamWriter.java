@@ -214,7 +214,7 @@ public class BeanParamWriter extends ParamCFileWriter{
 					if (attribs[i].isOptional()){
 						//TODO
 					}else{
-						writer.write("\tparam->"+attribs[i].getParamName()+" = pDZ->_functions->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), true)+"(pDZ->_object, \""+attribs[i].getElementName().getLocalPart()+"\", 0);\n");
+						writer.write("\tparam->"+attribs[i].getParamName()+" = pDZ->_functions->"+CUtils.getParameterGetValueMethodName(attribs[i].getTypeName(), true)+"(pDZ->_object, \""+attribs[i].getParamName()+"\", 0);\n");
 					}
 				}
 				else{
