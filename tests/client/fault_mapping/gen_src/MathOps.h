@@ -21,7 +21,7 @@
   * @brief A test class for fault mapping.
   *
   * This class is used to demonstrate fault mapping
-  * testing. Here I have generated the stuff using MathOps.wsdl. This wsdl
+  * testing. Here I have generated the stuff using FaultMapping.wsdl. This wsdl
   * simply have several complex types. One such type is DivByZeroStruct which 
   * consists of three simple types(xsd:int,* xsd:foat and xsd:string). 
   * For portType operation "div" we have a fault named

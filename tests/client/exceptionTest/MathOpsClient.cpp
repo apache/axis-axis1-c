@@ -49,6 +49,7 @@ int main(int argc, char* argv[])
 	i1 = atoi(p1);
 	i2 = atoi(p2);
 
+        getchar();
 	if (strcmp(op, "div") == 0)
 	{
             try
