@@ -232,6 +232,11 @@ XSDTYPE Param::GetType() const
 	return m_Type;
 }
 
+int Param::serialize(string& sSerialized, SoapSerializer& pSZ)
+{
+	return SUCCESS;
+}
+
 int Param::serialize(string& sSerialized)
 {
 	switch (m_Type){
