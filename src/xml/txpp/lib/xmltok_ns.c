@@ -1,3 +1,19 @@
+/*
+ *   Copyright 2003-2004 The Apache Software Foundation.
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+
 const ENCODING *
 NS(XmlGetUtf8InternalEncoding)(void)
 {
@@ -19,7 +35,8 @@ NS(XmlGetUtf16InternalEncoding)(void)
 #endif
 }
 
-static const ENCODING *NS(encodings)[] = {
+static const ENCODING *NS(encodings)[] = 
+{
   &ns(latin1_encoding).enc,
   &ns(ascii_encoding).enc,
   &ns(utf8_encoding).enc,
@@ -30,20 +47,22 @@ static const ENCODING *NS(encodings)[] = {
 };
 
 static int PTRCALL
-NS(initScanProlog)(int* parser_state, data_t* data,const ENCODING *enc, int* num_chars, char *end,
+NS(initScanProlog)(int* parser_state, data_t* data,const ENCODING *enc, 
+                   int* num_chars, char *end,
                    const char **nextTokPtr)
 {
-  //printf("XML_PROLOG_STATE:%d\n", XML_PROLOG_STATE);
-  return initScan(parser_state, data, NS(encodings), (const INIT_ENCODING *)enc,
+  /* printf("XML_PROLOG_STATE:%d\n", XML_PROLOG_STATE); */
+  return initScan(parser_state, data, NS(encodings),(const INIT_ENCODING *)enc,
                   XML_PROLOG_STATE, num_chars, end, nextTokPtr);
 }
 
 static int PTRCALL
-NS(initScanContent)(int* parser_state, data_t* data,const ENCODING *enc, int* num_chars, char *end,
+NS(initScanContent)(int* parser_state, data_t* data,const ENCODING *enc, 
+                    int* num_chars, char *end,
                     const char **nextTokPtr)
 {
-  //printf("XML_CONTENT_STATE:%d\n", XML_PROLOG_STATE);
-  return initScan(parser_state, data, NS(encodings), (const INIT_ENCODING *)enc,
+  /* printf("XML_CONTENT_STATE:%d\n", XML_PROLOG_STATE); */
+  return initScan(parser_state, data, NS(encodings),(const INIT_ENCODING *)enc,
                   XML_CONTENT_STATE, num_chars, end, nextTokPtr);
 }
 
@@ -60,7 +79,7 @@ NS(XmlInitEncoding)(INIT_ENCODING *p, const ENCODING **encPtr,
   p->initEnc.updatePosition = initUpdatePosition;
   p->encPtr = encPtr;
   *encPtr = &(p->initEnc);
-  initEncTable(encPtr);//this is temporary solution by damitha
+  initEncTable(encPtr); /* this is temporary solution by damitha */
   return 1;
 }
 
@@ -108,12 +127,14 @@ NS(XmlParseXmlDecl)(int isGeneralTextEntity,
                         standalone);
 }
 
-int NS(XmlDamConvert)(const ENCODING *enc, const char **fromPtr, const char *rawNameEnd,
-	const char **toPtr, const char *bufEnd)
+int NS(XmlDamConvert)(const ENCODING *enc, const char **fromPtr,
+                      const char *rawNameEnd,
+    const char **toPtr, const char *bufEnd)
 {
-	//printf("fromPtr:%s\n", *fromPtr);
-	//printf("rawNameEnd:%s\n", rawNameEnd);
-            		XmlUtf8Convert(enc,
-                       		fromPtr, rawNameEnd,
-                       		toPtr, bufEnd);
+    /* printf("fromPtr:%s\n", *fromPtr); */
+    /* printf("rawNameEnd:%s\n", rawNameEnd); */
+                    XmlUtf8Convert(enc,
+                               fromPtr, rawNameEnd,
+                               toPtr, bufEnd);
 }
+

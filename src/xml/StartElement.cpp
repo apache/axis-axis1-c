@@ -1,4 +1,3 @@
-/* -*- C++ -*- */
 /*
  *   Copyright 2003-2004 The Apache Software Foundation.
  *
@@ -16,16 +15,8 @@
  */
 
 
-//////////////////////////////////////////////////////////////////////
-// StartElement.cpp: implementation of the StartElement class.
-//
-//////////////////////////////////////////////////////////////////////
 
 #include "StartElement.h"
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
 
 StartElement::StartElement()
@@ -35,10 +26,12 @@ StartElement::StartElement()
 
 StartElement::~StartElement()
 {
-	for (list<SimpleAttribute*>::iterator it = m_Attributes.begin(); it != m_Attributes.end(); it++)
-	{
-		delete *it;
-	}
+    for (list<SimpleAttribute*>::iterator it = m_Attributes.begin(); it != 
+        m_Attributes.end(); it++)
+    {
+        delete *it;
+    }
 }
+
 
 
