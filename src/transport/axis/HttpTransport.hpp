@@ -45,7 +45,7 @@
 #endif
 #include <axis/server/AxisTrace.h>
 extern AxisTrace* g_pAT;
-#include "AxisTransportException.h"
+#include <axis/AxisTransportException.h>
 
 /*
  * Implements HTTP transport as SOAP-Envelop carrier, for sending/receiving
